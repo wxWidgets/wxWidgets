@@ -206,7 +206,8 @@ class WXDLLEXPORT wxMBConv
   const wxWCharBuffer cWX2WC(const char *psz) const { return cMB2WC(psz); }
 #endif
 };
-WXDLLEXPORT_DATA(extern wxMBConv) wxConv_libc;
+WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc;
+#define wxConv_libc wxConvLibc
 
 #define wxANOTHER_MBCONV(type) \
 class type : public wxMBConv { \
@@ -215,11 +216,14 @@ class type : public wxMBConv { \
   virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const; \
 }
 
-WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_file)) wxConv_file;
-WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_UTF7)) wxConv_UTF7;
-WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_UTF8)) wxConv_UTF8;
+WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConvFile)) wxConvFile;
+#define wxConv_file wxConvFile
+WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConvUTF7)) wxConvUTF7;
+WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConvUTF8)) wxConvUTF8;
+#define wxConv_UTF8 wxConvUTF8
 #if defined(__WXGTK__) && (GTK_MINOR_VERSION > 0)
-    WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_gdk)) wxConv_gdk;
+    WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConvGdk)) wxConvGdk;
+    #define wxConv_gdk wxConvGdk
 #endif // GTK > 1.0
 
 class wxCharacterSet;
@@ -238,9 +242,11 @@ class WXDLLEXPORT wxCSConv : public wxMBConv
   virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
 
-WXDLLEXPORT_DATA(extern wxCSConv) wxConv_local;
+WXDLLEXPORT_DATA(extern wxCSConv) wxConvLocal;
+#define wxConv_local wxConvLocal
 
-WXDLLEXPORT_DATA(extern wxMBConv *) wxConv_current;
+WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
+#define wxConv_current wxConvCurrent
 
 // filenames are multibyte on Unix and probably widechar on Windows?
 #if defined(__UNIX__) || defined(__BORLANDC__)
@@ -250,7 +256,7 @@ WXDLLEXPORT_DATA(extern wxMBConv *) wxConv_current;
 #endif
 
 #if wxMBFILES
-#define wxFNCONV(name) wxConv_file.cWX2MB(name)
+#define wxFNCONV(name) wxConvFile.cWX2MB(name)
 #define FNSTRINGCAST MBSTRINGCAST
 #else
 #define wxFNCONV(name) name
@@ -258,7 +264,7 @@ WXDLLEXPORT_DATA(extern wxMBConv *) wxConv_current;
 #endif
 #else//!wxUSE_WCHAR_T
 class WXDLLEXPORT wxMBConv {};
-WXDLLEXPORT_DATA(extern wxMBConv) wxConv_libc;
+WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc;
 #endif//wxUSE_WCHAR_T
 
 // ---------------------------------------------------------------------------
@@ -365,7 +371,7 @@ public:
     // from multibyte string
     // (NB: nLength is right now number of Unicode characters, not
     //  characters in psz! So try not to use it yet!)
-  wxString(const char *psz, wxMBConv& conv = wxConv_libc, size_t nLength = wxSTRING_MAXLEN);
+  wxString(const char *psz, wxMBConv& conv = wxConvLibc, size_t nLength = wxSTRING_MAXLEN);
     // from wxWCharBuffer (i.e. return from wxGetString)
   wxString(const wxWCharBuffer& psz)
     { InitWith(psz, 0, wxSTRING_MAXLEN); }
@@ -464,22 +470,22 @@ public:
     //
     const wxChar* GetData() const { return m_pchData; }
 #if wxUSE_UNICODE
-    const wxCharBuffer mb_str(wxMBConv& conv = wxConv_libc) const { return conv.cWC2MB(m_pchData); }
-    const wxChar* wc_str(wxMBConv& WXUNUSED(conv) = wxConv_libc) const { return m_pchData; }
+    const wxCharBuffer mb_str(wxMBConv& conv = wxConvLibc) const { return conv.cWC2MB(m_pchData); }
+    const wxChar* wc_str(wxMBConv& WXUNUSED(conv) = wxConvLibc) const { return m_pchData; }
 #if wxMBFILES
-    const wxCharBuffer fn_str() const { return mb_str(wxConv_file); }
+    const wxCharBuffer fn_str() const { return mb_str(wxConvFile); }
 #else
     const wxChar* fn_str() const { return m_pchData; }
 #endif
 #else
-    const wxChar* mb_str(wxMBConv& WXUNUSED(conv) = wxConv_libc ) const { return m_pchData; }
+    const wxChar* mb_str(wxMBConv& WXUNUSED(conv) = wxConvLibc ) const { return m_pchData; }
 #if wxUSE_WCHAR_T
     const wxWCharBuffer wc_str(wxMBConv& conv) const { return conv.cMB2WC(m_pchData); }
 #endif
     const wxChar* fn_str() const { return m_pchData; }
 #endif
     // for convenience
-    const wxWX2MBbuf mbc_str() const { return mb_str(*wxConv_current); }
+    const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
 
   // overloaded assignment
     // from another wxString

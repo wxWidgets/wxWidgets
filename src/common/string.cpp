@@ -1824,15 +1824,15 @@ size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // standard file conversion
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(wxMBConv_file) wxConv_file;
+WXDLLEXPORT_DATA(wxMBConvFile) wxConvFile;
 
 // just use the libc conversion for now
-size_t wxMBConv_file::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+size_t wxMBConvFile::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
   return wxMB2WC(buf, psz, n);
 }
 
-size_t wxMBConv_file::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+size_t wxMBConvFile::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
   return wxWC2MB(buf, psz, n);
 }
@@ -1842,11 +1842,11 @@ size_t wxMBConv_file::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // ----------------------------------------------------------------------------
 
 #if defined(__WXGTK__) && (GTK_MINOR_VERSION > 0)
-WXDLLEXPORT_DATA(wxMBConv_gdk) wxConv_gdk;
+WXDLLEXPORT_DATA(wxMBConvGdk) wxConvGdk;
 
 #include <gdk/gdk.h>
 
-size_t wxMBConv_gdk::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+size_t wxMBConvGdk::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
   if (buf) {
     return gdk_mbstowcs((GdkWChar *)buf, psz, n);
@@ -1858,7 +1858,7 @@ size_t wxMBConv_gdk::MB2WC(wchar_t *buf, const char *psz, size_t n) const
   }
 }
 
-size_t wxMBConv_gdk::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+size_t wxMBConvGdk::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
   char *mbstr = gdk_wcstombs((GdkWChar *)psz);
   size_t len = mbstr ? strlen(mbstr) : 0;
@@ -1875,7 +1875,7 @@ size_t wxMBConv_gdk::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // UTF-7
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(wxMBConv_UTF7) wxConv_UTF7;
+WXDLLEXPORT_DATA(wxMBConvUTF7) wxConvUTF7;
 
 #if 0
 static char utf7_setD[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -1888,12 +1888,12 @@ static char utf7_setB[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #endif
 
 // TODO: write actual implementations of UTF-7 here
-size_t wxMBConv_UTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+size_t wxMBConvUTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
   return 0;
 }
 
-size_t wxMBConv_UTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
   return 0;
 }
@@ -1902,11 +1902,11 @@ size_t wxMBConv_UTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // UTF-8
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(wxMBConv_UTF8) wxConv_UTF8;
+WXDLLEXPORT_DATA(wxMBConvUTF8) wxConvUTF8;
 
 static unsigned long utf8_max[]={0x7f,0x7ff,0xffff,0x1fffff,0x3ffffff,0x7fffffff,0xffffffff};
 
-size_t wxMBConv_UTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
   size_t len = 0;
 
@@ -1947,7 +1947,7 @@ size_t wxMBConv_UTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
   return len;
 }
 
-size_t wxMBConv_UTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
   size_t len = 0;
 
@@ -2026,12 +2026,8 @@ static void wxLoadCharacterSets(void)
 	wxStringTokenizer token(line);
 	wxString cmd = token.GetNextToken();
 	if (cmd == comchar) {
-	  if (token.GetNextToken() == _T("alias")) {
-	    wxStringTokenizer names(token.GetNextToken(),_T("/"));
-	    wxString name;
-	    while (!(name = names.GetNextToken()).IsEmpty())
-	      cset->names.Add(name);
-	  }
+	  if (token.GetNextToken() == _T("alias"))
+	    cset->names.Add(token.GetNextToken());
 	}
 	else if (cmd == _T("<code_set_name>"))
 	  cset->names.Add(token.GetNextToken());
@@ -2095,7 +2091,7 @@ static wxCharacterSet *wxFindCharacterSet(const wxChar *charset)
   return (wxCharacterSet *)NULL;
 }
 
-WXDLLEXPORT_DATA(wxCSConv) wxConv_local((const wxChar *)NULL);
+WXDLLEXPORT_DATA(wxCSConv) wxConvLocal((const wxChar *)NULL);
 
 wxCSConv::wxCSConv(const wxChar *charset)
 {
