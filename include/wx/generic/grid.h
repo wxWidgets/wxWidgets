@@ -1920,6 +1920,36 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxGridRangeSelectEvent)
 };
 
+
+class WXDLLEXPORT wxGridEditorCreatedEvent : public wxCommandEvent {
+public:
+    wxGridEditorCreatedEvent()
+        : wxCommandEvent()
+        {
+            m_row  = 0;
+            m_col  = 0;
+            m_ctrl = NULL;
+        }
+
+    wxGridEditorCreatedEvent(int id, wxEventType type, wxObject* obj,
+                             int row, int col, wxControl* ctrl);
+
+    int GetRow()                        { return m_row; }
+    int GetCol()                        { return m_col; }
+    wxControl* GetControl()             { return m_ctrl; }
+    void SetRow(int row)                { m_row = row; }
+    void SetCol(int col)                { m_col = col; }
+    void SetControl(wxControl* ctrl)    { m_ctrl = ctrl; }
+
+private:
+    int m_row;
+    int m_col;
+    wxControl* m_ctrl;
+
+    DECLARE_DYNAMIC_CLASS(wxGridEditorCreatedEvent)
+};
+
+
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_GRID_CELL_LEFT_CLICK, 1580)
     DECLARE_EVENT_TYPE(wxEVT_GRID_CELL_RIGHT_CLICK, 1581)
@@ -1936,12 +1966,14 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_GRID_SELECT_CELL, 1592)
     DECLARE_EVENT_TYPE(wxEVT_GRID_EDITOR_SHOWN, 1593)
     DECLARE_EVENT_TYPE(wxEVT_GRID_EDITOR_HIDDEN, 1594)
+    DECLARE_EVENT_TYPE(wxEVT_GRID_EDITOR_CREATED, 1595)
 END_DECLARE_EVENT_TYPES()
 
 
 typedef void (wxEvtHandler::*wxGridEventFunction)(wxGridEvent&);
 typedef void (wxEvtHandler::*wxGridSizeEventFunction)(wxGridSizeEvent&);
 typedef void (wxEvtHandler::*wxGridRangeSelectEventFunction)(wxGridRangeSelectEvent&);
+typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreatedEvent&);
 
 #define EVT_GRID_CELL_LEFT_CLICK(fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_LEFT_CLICK,    -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
 #define EVT_GRID_CELL_RIGHT_CLICK(fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_RIGHT_CLICK,   -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
@@ -1958,6 +1990,7 @@ typedef void (wxEvtHandler::*wxGridRangeSelectEventFunction)(wxGridRangeSelectEv
 #define EVT_GRID_SELECT_CELL(fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_SELECT_CELL,        -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
 #define EVT_GRID_EDITOR_SHOWN(fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_SHOWN,       -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
 #define EVT_GRID_EDITOR_HIDDEN(fn)       DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_HIDDEN,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_EDITOR_CREATED(fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_CREATED,     -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEditorCreatedEventFunction) &fn, NULL ),
 
 
 #if 0  // TODO: implement these ?  others ?

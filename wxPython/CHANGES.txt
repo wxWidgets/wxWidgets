@@ -2,6 +2,13 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+?????
+-----
+Added EVT_GRID_EDITOR_CREATED and wxGridEditorCreatedEvent so the user
+code can get access to the edit control when it is created, (to push
+on a custom event handler for example.)
+
+
 
 2.3.0
 -----
@@ -102,7 +109,8 @@ On other platforms it is equivallent to wxGetDisplaySize.
 
 There is now a wxObject class that most other classes derive from like
 in C++, but the methods provided don't really match but are wxPython
-specific.  It could have been added long ago but OOR required it.
+specific.  It could have been added long ago but OOR required it so it
+finally got done.
 
 Finally added wxPyLineShape.GetLineControlPoints, which has been on my
 list for a while.  The above OOR modification made this easier.
@@ -113,9 +121,9 @@ Added wxWave.
 
 Added the wxPython.lib.mixins package to the library, it is where
 useful mix-in classes can be placed.  Currently there is one to help
-makeing the columns in a wxListCtrl sortable, and the MagicIMageList
-from Mike Fletcher.  If you have any custom code that can be factored
-out of existing classes into a mix-in that would be useful to others
+make the columns in a wxListCtrl sortable, and the MagicIMageList from
+Mike Fletcher.  If you have any custom code that can be factored out
+of existing classes into a mix-in that would be useful to others
 please send it to me for inclusion in this package.
 
 Added a few little sample applications to help newbies to get started

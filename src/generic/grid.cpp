@@ -115,6 +115,7 @@ DEFINE_EVENT_TYPE(wxEVT_GRID_CELL_CHANGE)
 DEFINE_EVENT_TYPE(wxEVT_GRID_SELECT_CELL)
 DEFINE_EVENT_TYPE(wxEVT_GRID_EDITOR_SHOWN)
 DEFINE_EVENT_TYPE(wxEVT_GRID_EDITOR_HIDDEN)
+DEFINE_EVENT_TYPE(wxEVT_GRID_EDITOR_CREATED)
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -1917,7 +1918,7 @@ void wxGridCellAttr::MergeWith(wxGridCellAttr *mergefrom)
     //
     // Maybe add support for merge of Render and Editor?
     if (!HasRenderer() && mergefrom->HasRenderer() )
-    {   
+    {
         m_renderer = mergefrom->m_renderer;
         m_renderer->IncRef();
     }
@@ -2302,18 +2303,18 @@ wxGridCellAttr *wxGridCellAttrProvider::GetAttr(int row, int col,
                     //Also check merge cache, so we don't have to re-merge every time..
                     wxGridCellAttr *attrcell = (wxGridCellAttr *)NULL,
                                    *attrrow = (wxGridCellAttr *)NULL,
-                                   *attrcol = (wxGridCellAttr *)NULL; 
-                
+                                   *attrcol = (wxGridCellAttr *)NULL;
+
                     attrcell = m_data->m_cellAttrs.GetAttr(row, col);
                     attrcol = m_data->m_colAttrs.GetAttr(col);
                     attrrow = m_data->m_rowAttrs.GetAttr(row);
 
-                    if((attrcell != attrrow) && (attrrow !=attrcol) && (attrcell != attrcol)){    
+                    if((attrcell != attrrow) && (attrrow !=attrcol) && (attrcell != attrcol)){
                         // Two or move are non NULL
                         attr = new wxGridCellAttr;
                         attr->SetKind(wxGridCellAttr::Merged);
 
-                        //Order important.. 
+                        //Order important..
                         if(attrcell){
                             attr->MergeWith(attrcell);
                             attrcell->DecRef();
@@ -2335,7 +2336,7 @@ wxGridCellAttr *wxGridCellAttrProvider::GetAttr(int row, int col,
                         // one or none is non null return it or null.
                         if(attrrow) attr = attrrow;
                         if(attrcol) attr = attrcol;
-                        if(attrcell) attr = attrcell;                            
+                        if(attrcell) attr = attrcell;
                     }
                 }
             break;
@@ -3690,7 +3691,7 @@ void wxGrid::Init()
     m_gridLineColour = wxColour( 128, 128, 255 );
     m_gridLinesEnabled = TRUE;
     m_cellHighlightColour = m_gridLineColour;
-    m_cellHighlightPenWidth = 3;
+    m_cellHighlightPenWidth = 2;
     m_cellHighlightROPenWidth = 1;
 
     m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
@@ -6667,6 +6668,14 @@ void wxGrid::ShowCellEditControl()
             {
                 editor->Create(m_gridWin, -1,
                                new wxGridCellEditorEvtHandler(this, editor));
+
+                wxGridEditorCreatedEvent evt(GetId(),
+                                             wxEVT_GRID_EDITOR_CREATED,
+                                             this,
+                                             row,
+                                             col,
+                                             editor->GetControl());
+                GetEventHandler()->ProcessEvent(evt);
             }
 
             editor->Show( TRUE, attr );
@@ -8669,7 +8678,7 @@ wxRect wxGrid::BlockToDeviceRect( const wxGridCellCoords &topLeft,
 // ------ Grid event classes
 //
 
-IMPLEMENT_DYNAMIC_CLASS( wxGridEvent, wxEvent )
+IMPLEMENT_DYNAMIC_CLASS( wxGridEvent, wxNotifyEvent )
 
 wxGridEvent::wxGridEvent( int id, wxEventType type, wxObject* obj,
                           int row, int col, int x, int y, bool sel,
@@ -8690,7 +8699,7 @@ wxGridEvent::wxGridEvent( int id, wxEventType type, wxObject* obj,
 }
 
 
-IMPLEMENT_DYNAMIC_CLASS( wxGridSizeEvent, wxEvent )
+IMPLEMENT_DYNAMIC_CLASS( wxGridSizeEvent, wxNotifyEvent )
 
 wxGridSizeEvent::wxGridSizeEvent( int id, wxEventType type, wxObject* obj,
                                   int rowOrCol, int x, int y,
@@ -8709,7 +8718,7 @@ wxGridSizeEvent::wxGridSizeEvent( int id, wxEventType type, wxObject* obj,
 }
 
 
-IMPLEMENT_DYNAMIC_CLASS( wxGridRangeSelectEvent, wxEvent )
+IMPLEMENT_DYNAMIC_CLASS( wxGridRangeSelectEvent, wxNotifyEvent )
 
 wxGridRangeSelectEvent::wxGridRangeSelectEvent(int id, wxEventType type, wxObject* obj,
                                                const wxGridCellCoords& topLeft,
@@ -8727,6 +8736,20 @@ wxGridRangeSelectEvent::wxGridRangeSelectEvent(int id, wxEventType type, wxObjec
     m_meta        = meta;
 
     SetEventObject(obj);
+}
+
+
+IMPLEMENT_DYNAMIC_CLASS(wxGridEditorCreatedEvent, wxCommandEvent)
+
+wxGridEditorCreatedEvent::wxGridEditorCreatedEvent(int id, wxEventType type,
+                                                   wxObject* obj, int row,
+                                                   int col, wxControl* ctrl)
+    : wxCommandEvent(type, id)
+{
+    SetEventObject(obj);
+    m_row = row;
+    m_col = col;
+    m_ctrl = ctrl;
 }
 
 

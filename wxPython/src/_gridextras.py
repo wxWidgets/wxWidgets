@@ -5,6 +5,7 @@
 wx.wxGridEventPtr                  = wxGridEventPtr
 wx.wxGridSizeEventPtr              = wxGridSizeEventPtr
 wx.wxGridRangeSelectEventPtr       = wxGridRangeSelectEventPtr
+wx.wxGridEditorCreatedEventPtr     = wxGridEditorCreatedEventPtr
 wx.wxGridCellRendererPtr           = wxGridCellRendererPtr
 wx.wxPyGridCellRendererPtr         = wxPyGridCellRendererPtr
 wx.wxGridCellEditorPtr             = wxGridCellEditorPtr

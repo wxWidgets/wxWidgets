@@ -62,6 +62,7 @@ class SimpleGrid(wxGrid):
 
         EVT_GRID_EDITOR_SHOWN(self, self.OnEditorShown)
         EVT_GRID_EDITOR_HIDDEN(self, self.OnEditorHidden)
+        EVT_GRID_EDITOR_CREATED(self, self.OnEditorCreated)
 
 
     def OnCellLeftClick(self, evt):
@@ -168,6 +169,11 @@ class SimpleGrid(wxGrid):
         self.log.write("OnEditorHidden: (%d,%d) %s\n" %
                        (evt.GetRow(), evt.GetCol(), evt.GetPosition()))
         evt.Skip()
+
+    def OnEditorCreated(self, evt):
+        self.log.write("OnEditorCreated: (%d, %d) %s\n" %
+                       (evt.GetRow(), evt.GetCol(), evt.GetControl()))
+
 
 
 #---------------------------------------------------------------------------
