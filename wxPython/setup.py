@@ -55,6 +55,15 @@ IN_CVS_TREE = 0    # Set to true if building in a full wxWindows CVS
                    # tree, otherwise will assume all needed files are
                    # available in the wxPython source distribution
 
+UNDEF_NDEBUG = 1   # Python 2.2 on Unix/Linux by default defines NDEBUG,
+                   # and distutils will pick this up and use it on the
+                   # compile command-line for the extensions.  This could
+                   # conflict with how wxWindows was built.  If NDEBUG is
+                   # set then wxWindows' __WXDEBUG__ setting will be turned
+                   # off.  If wxWindows was actually built with it turned
+                   # on then you end up with mismatched class structures,
+                   # and wxPython will crash.
+
 WX_CONFIG = "wx-config"    # Usually you shouldn't need to touch this,
                            # but you can set it to pass an alternate
                            # version of wx-config or alternate flags,
@@ -126,9 +135,10 @@ if bcpp_compiling:
 # Check for build flags on the command line
 #----------------------------------------------------------------------
 
+# Boolean (int) flags
 for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET',
-             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE',
+             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE', 'UNDEF_NDEBUG'
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if string.find(sys.argv[x], flag) == 0:
@@ -137,7 +147,8 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
                 vars()[flag] = eval(sys.argv[x][pos:])
                 sys.argv[x] = ''
 
-for option in ['WX_CONFIG', 'WXDLLVER', ]:
+# String options
+for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE']:
     for x in range(len(sys.argv)):
         if string.find(sys.argv[x], option) == 0:
             pos = string.find(sys.argv[x], '=') + 1
@@ -289,6 +300,8 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
 
     cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1]
     cflags = string.split(cflags)
+    if UNDEF_NDEBUG:
+        cflags.append('-UNDEBUG')
 
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
     lflags = string.split(lflags)
@@ -313,6 +326,8 @@ elif os.name == 'posix':
     cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1] + ' ' + \
              os.popen('gtk-config --cflags', 'r').read()[:-1]
     cflags = string.split(cflags)
+    if UNDEF_NDEBUG:
+        cflags.append('-UNDEBUG')
 
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
     lflags = string.split(lflags)
