@@ -1615,7 +1615,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 
     if (win->m_isScrolling)
     {
-        wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
+        wxEventType command = wxEVT_SCROLLWIN_THUMBRELEASE;
         int value = -1;
         int dir = -1;
     
@@ -1632,7 +1632,6 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
         }
         
         wxScrollWinEvent event( command, value, dir );
-        event.SetScrolling( FALSE );
         event.SetEventObject( win );
         win->GetEventHandler()->ProcessEvent( event );
     }

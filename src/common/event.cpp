@@ -124,6 +124,7 @@ const wxEventType wxEVT_SCROLL_LINEDOWN =                   wxEVT_FIRST + 303;
 const wxEventType wxEVT_SCROLL_PAGEUP =                     wxEVT_FIRST + 304;
 const wxEventType wxEVT_SCROLL_PAGEDOWN =                   wxEVT_FIRST + 305;
 const wxEventType wxEVT_SCROLL_THUMBTRACK =                 wxEVT_FIRST + 306;
+const wxEventType wxEVT_SCROLL_THUMBRELEASE =               wxEVT_FIRST + 307;
 
  /*
   * Scroll events from wxWindow
@@ -135,6 +136,7 @@ const wxEventType wxEVT_SCROLLWIN_LINEDOWN =                wxEVT_FIRST + 323;
 const wxEventType wxEVT_SCROLLWIN_PAGEUP =                  wxEVT_FIRST + 324;
 const wxEventType wxEVT_SCROLLWIN_PAGEDOWN =                wxEVT_FIRST + 325;
 const wxEventType wxEVT_SCROLLWIN_THUMBTRACK =              wxEVT_FIRST + 326;
+const wxEventType wxEVT_SCROLLWIN_THUMBRELEASE =            wxEVT_FIRST + 327;
 
  /*
   * System events
@@ -419,16 +421,6 @@ wxScrollEvent::wxScrollEvent(wxEventType commandType,
 {
     m_extraLong = orient;
     m_commandInt = pos;
-    m_isScrolling = TRUE;
-}
-
-void wxScrollEvent::CopyObject(wxObject& obj_d) const
-{
-    wxScrollEvent *obj = (wxScrollEvent*)&obj_d;
-
-    wxCommandEvent::CopyObject(obj_d);
-
-    obj->m_isScrolling  = m_isScrolling;
 }
 
 /*
@@ -442,7 +434,6 @@ wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
     m_eventType = commandType;
     m_extraLong = orient;
     m_commandInt = pos;
-    m_isScrolling = TRUE;
 }
 
 void wxScrollWinEvent::CopyObject(wxObject& obj_d) const
@@ -453,7 +444,6 @@ void wxScrollWinEvent::CopyObject(wxObject& obj_d) const
 
     obj->m_extraLong    = m_extraLong;
     obj->m_commandInt   = m_commandInt;
-    obj->m_isScrolling  = m_isScrolling;
 }
 
 /*

@@ -131,7 +131,6 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
     wxEventType scrollEvent = wxEVT_NULL;
 
     int nScrollInc;
-    bool isScrolling = TRUE;
     switch ( wParam )
     {
         case SB_TOP:
@@ -165,8 +164,9 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
             break;
 
         case SB_THUMBPOSITION:
-            isScrolling = FALSE;
-            /* fall-through */
+            nScrollInc = pos - position;
+            scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
+            break;
 
         case SB_THUMBTRACK:
             nScrollInc = pos - position;
@@ -177,10 +177,10 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
             nScrollInc = 0;
     }
 
-    if (( nScrollInc == 0 ) && isScrolling )
+    // don't process the event if there is no displacement,
+    // unless this is a thumb release event.
+    if (( nScrollInc == 0 ) && ( scrollEvent != wxEVT_SCROLL_THUMBRELEASE ))
     {
-        // no event to process, so don't process it
-        // GRG: always process SB_THUMBPOSITION !
         return FALSE;
     }
 
@@ -195,7 +195,6 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
     wxScrollEvent event(scrollEvent, m_windowId);
     event.SetPosition(new_pos);
     event.SetEventObject( this );
-    event.SetScrolling(isScrolling);
 
     return GetEventHandler()->ProcessEvent(event);
 }

@@ -254,8 +254,7 @@ void MyCanvas::OnScrollWin( wxCommandEvent &WXUNUSED(event) )
 
 void MyCanvas::OnScroll( wxScrollWinEvent &event )
 {
-    if (( event.GetEventType() == wxEVT_SCROLLWIN_THUMBTRACK ) &&
-        ( !event.IsScrolling() ))
+    if (( event.GetEventType() == wxEVT_SCROLLWIN_THUMBRELEASE ))
     {
         wxLogMessage( "Thumb released; position: %u", event.GetPosition() );
     }

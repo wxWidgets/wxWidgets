@@ -120,6 +120,7 @@ extern const wxEventType wxEVT_SCROLL_LINEDOWN;
 extern const wxEventType wxEVT_SCROLL_PAGEUP;
 extern const wxEventType wxEVT_SCROLL_PAGEDOWN;
 extern const wxEventType wxEVT_SCROLL_THUMBTRACK;
+extern const wxEventType wxEVT_SCROLL_THUMBRELEASE;
 
  /*
   * Scroll events from wxWindow
@@ -131,6 +132,7 @@ extern const wxEventType wxEVT_SCROLLWIN_LINEDOWN;
 extern const wxEventType wxEVT_SCROLLWIN_PAGEUP;
 extern const wxEventType wxEVT_SCROLLWIN_PAGEDOWN;
 extern const wxEventType wxEVT_SCROLLWIN_THUMBTRACK;
+extern const wxEventType wxEVT_SCROLLWIN_THUMBRELEASE;
 
  /*
   * System events
@@ -356,6 +358,7 @@ const wxEventType wxEVT_SCROLL_LINEDOWN =                   wxEVT_FIRST + 303;
 const wxEventType wxEVT_SCROLL_PAGEUP =                     wxEVT_FIRST + 304;
 const wxEventType wxEVT_SCROLL_PAGEDOWN =                   wxEVT_FIRST + 305;
 const wxEventType wxEVT_SCROLL_THUMBTRACK =                 wxEVT_FIRST + 306;
+const wxEventType wxEVT_SCROLL_THUMBRELEASE =               wxEVT_FIRST + 307;
 
  /*
   * Scroll events from wxWindow
@@ -367,6 +370,7 @@ const wxEventType wxEVT_SCROLLWIN_LINEDOWN =                wxEVT_FIRST + 323;
 const wxEventType wxEVT_SCROLLWIN_PAGEUP =                  wxEVT_FIRST + 324;
 const wxEventType wxEVT_SCROLLWIN_PAGEDOWN =                wxEVT_FIRST + 325;
 const wxEventType wxEVT_SCROLLWIN_THUMBTRACK =              wxEVT_FIRST + 326;
+const wxEventType wxEVT_SCROLLWIN_THUMBRELEASE =            wxEVT_FIRST + 327;
 
  /*
   * System events
@@ -726,6 +730,7 @@ private:
  wxEVT_SCROLL_PAGEUP
  wxEVT_SCROLL_PAGEDOWN
  wxEVT_SCROLL_THUMBTRACK
+ wxEVT_SCROLL_THUMBRELEASE
 */
 
 class WXDLLEXPORT wxScrollEvent : public wxCommandEvent
@@ -744,14 +749,8 @@ public:
 
     int GetOrientation() const { return (int) m_extraLong ; }
     int GetPosition() const { return m_commandInt ; }
-    bool IsScrolling() const { return m_isScrolling; }
     void SetOrientation(int orient) { m_extraLong = (long) orient; }
     void SetPosition(int pos) { m_commandInt = pos; }
-    void SetScrolling(bool isScrolling) { m_isScrolling = isScrolling; }
-
-    void CopyObject(wxObject& obj) const;
-public:
-    bool m_isScrolling;
 };
 
 // ScrollWin event class, derived fom wxEvent. wxScrollWinEvents
@@ -764,6 +763,7 @@ public:
  wxEVT_SCROLLWIN_PAGEUP
  wxEVT_SCROLLWIN_PAGEDOWN
  wxEVT_SCROLLWIN_THUMBTRACK
+ wxEVT_SCROLLWIN_THUMBRELEASE
 */
 
 class WXDLLEXPORT wxScrollWinEvent : public wxEvent
@@ -781,16 +781,13 @@ public:
 
     int GetOrientation() const { return (int) m_extraLong ; }
     int GetPosition() const { return m_commandInt ; }
-    bool IsScrolling() const { return m_isScrolling; }
     void SetOrientation(int orient) { m_extraLong = (long) orient; }
     void SetPosition(int pos) { m_commandInt = pos; }
-    void SetScrolling(bool isScrolling) { m_isScrolling = isScrolling; }
 
     void CopyObject(wxObject& object_dest) const;
 public:
     int               m_commandInt;    // Additional information
     long              m_extraLong;
-    bool              m_isScrolling;
 };
 
 // Mouse event class
@@ -1893,7 +1890,8 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
   { wxEVT_SCROLLWIN_LINEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL },\
   { wxEVT_SCROLLWIN_PAGEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL },\
   { wxEVT_SCROLLWIN_PAGEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL },\
-  { wxEVT_SCROLLWIN_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL },
+  { wxEVT_SCROLLWIN_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL },\
+  { wxEVT_SCROLLWIN_THUMBRELEASE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL },
 
 #define EVT_SCROLLWIN_TOP(func) { wxEVT_SCROLLWIN_TOP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL },
 #define EVT_SCROLLWIN_BOTTOM(func) { wxEVT_SCROLLWIN_BOTTOM, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL },
@@ -1902,6 +1900,7 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_SCROLLWIN_PAGEUP(func) { wxEVT_SCROLLWIN_PAGEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL },
 #define EVT_SCROLLWIN_PAGEDOWN(func) { wxEVT_SCROLLWIN_PAGEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL },
 #define EVT_SCROLLWIN_THUMBTRACK(func) { wxEVT_SCROLLWIN_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL },
+#define EVT_SCROLLWIN_THUMBRELEASE(func) { wxEVT_SCROLLWIN_THUMBRELEASE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL },
 
 // Scrolling from wxSlider and wxScrollBar
 #define EVT_SCROLL(func) \
@@ -1911,7 +1910,8 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
   { wxEVT_SCROLL_LINEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },\
   { wxEVT_SCROLL_PAGEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },\
   { wxEVT_SCROLL_PAGEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },\
-  { wxEVT_SCROLL_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
+  { wxEVT_SCROLL_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },\
+  { wxEVT_SCROLL_THUMBRELEASE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
 
 #define EVT_SCROLL_TOP(func) { wxEVT_SCROLL_TOP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
 #define EVT_SCROLL_BOTTOM(func) { wxEVT_SCROLL_BOTTOM, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
@@ -1920,6 +1920,7 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_SCROLL_PAGEUP(func) { wxEVT_SCROLL_PAGEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
 #define EVT_SCROLL_PAGEDOWN(func) { wxEVT_SCROLL_PAGEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
 #define EVT_SCROLL_THUMBTRACK(func) { wxEVT_SCROLL_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
+#define EVT_SCROLL_THUMBRELEASE(func) { wxEVT_SCROLL_THUMBRELEASE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
 
 // Scrolling from wxSlider and wxScrollBar, with an id
 #define EVT_COMMAND_SCROLL(id, func) \
@@ -1929,7 +1930,8 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
   { wxEVT_SCROLL_LINEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },\
   { wxEVT_SCROLL_PAGEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },\
   { wxEVT_SCROLL_PAGEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },\
-  { wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
+  { wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },\
+  { wxEVT_SCROLL_THUMBRELEASE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
 
 #define EVT_COMMAND_SCROLL_TOP(id, func) { wxEVT_SCROLL_TOP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
 #define EVT_COMMAND_SCROLL_BOTTOM(id, func) { wxEVT_SCROLL_BOTTOM, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
@@ -1938,6 +1940,7 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_COMMAND_SCROLL_PAGEUP(id, func) { wxEVT_SCROLL_PAGEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
 #define EVT_COMMAND_SCROLL_PAGEDOWN(id, func) { wxEVT_SCROLL_PAGEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
 #define EVT_COMMAND_SCROLL_THUMBTRACK(id, func) { wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
+#define EVT_COMMAND_SCROLL_THUMBRELEASE(id, func) { wxEVT_SCROLL_THUMBRELEASE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL },
 
 // Convenience macros for commonly-used commands
 #define EVT_BUTTON(id, fn) { wxEVT_COMMAND_BUTTON_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
