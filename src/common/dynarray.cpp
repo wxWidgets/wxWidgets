@@ -2,7 +2,7 @@
 // Name:        dynarray.cpp
 // Purpose:     implementation of wxBaseArray class
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     12.09.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -26,6 +26,7 @@
 #include "wx/dynarray.h"
 
 #include <stdlib.h>
+#include <string.h> // for memmove
 
 #ifndef max
   #define max(a, b)   (((a) > (b)) ? (a) : (b))
@@ -57,33 +58,31 @@ wxBaseArray::wxBaseArray()
 // copy ctor
 wxBaseArray::wxBaseArray(const wxBaseArray& src)
 {
-  m_uiSize  = src.m_uiSize;
+  m_uiSize  = // not src.m_uiSize to save memory
   m_uiCount = src.m_uiCount;
 
-  if ( m_uiSize != 0 )
+  if ( m_uiSize != 0 ) {
     m_pItems = new long[m_uiSize];
+    memcpy(m_pItems, src.m_pItems, m_uiCount*sizeof(long));
+  }
   else
     m_pItems = NULL;
-
-  if ( m_uiCount != 0 )
-    memcpy(m_pItems, src.m_pItems, m_uiCount*sizeof(long));
 }
 
-// copy operator
+// assignment operator
 wxBaseArray& wxBaseArray::operator=(const wxBaseArray& src)
 {
   DELETEA(m_pItems);
 
-  m_uiSize  = src.m_uiSize;
+  m_uiSize  = // not src.m_uiSize to save memory
   m_uiCount = src.m_uiCount;
 
-  if ( m_uiSize != 0 )
+  if ( m_uiSize != 0 ) {
     m_pItems = new long[m_uiSize];
+    memcpy(m_pItems, src.m_pItems, m_uiCount*sizeof(long));
+  }
   else
     m_pItems = NULL;
-
-  if ( m_uiCount != 0 )
-    memcpy(m_pItems, src.m_pItems, m_uiCount*sizeof(long));
 
   return *this;
 }
@@ -124,7 +123,7 @@ wxBaseArray::~wxBaseArray()
 // clears the list
 void wxBaseArray::Clear()
 {
-  m_uiSize  = 
+  m_uiSize  =
   m_uiCount = 0;
 
   DELETEA(m_pItems);
@@ -169,11 +168,60 @@ int wxBaseArray::Index(long lItem, bool bFromEnd) const
   return NOT_FOUND;
 }
 
+// search for an item in a sorted array (binary search)
+int wxBaseArray::Index(long lItem, CMPFUNC fnCompare)
+{
+  uint i,
+       lo = 0,
+       hi = m_uiCount;
+  int res;
+
+  while ( lo < hi ) {
+    i = (lo + hi)/2;
+
+    res = (*fnCompare)((const void *)lItem, (const void *)m_pItems[i]);
+    if ( res < 0 )
+      hi = i;
+    else if ( res > 0 )
+      lo = i + 1;
+    else
+      return i;
+  }
+
+  return NOT_FOUND;
+}
 // add item at the end
 void wxBaseArray::Add(long lItem)
 {
   Grow();
   m_pItems[m_uiCount++] = lItem;
+}
+
+// add item assuming the array is sorted with fnCompare function
+void wxBaseArray::Add(long lItem, CMPFUNC fnCompare)
+{
+  uint i,
+       lo = 0,
+       hi = m_uiCount;
+  int res;
+
+  while ( lo < hi ) {
+    i = (lo + hi)/2;
+
+    res = (*fnCompare)((const void *)lItem, (const void *)m_pItems[i]);
+    if ( res < 0 )
+      hi = i;
+    else if ( res > 0 )
+      lo = i + 1;
+    else {
+      lo = hi = i;
+      break;
+    }
+  }
+
+  wxASSERT( lo == hi ); // I hope I got binary search right :-)
+
+  Insert(lItem, lo);
 }
 
 // add item at the given position
@@ -183,7 +231,7 @@ void wxBaseArray::Insert(long lItem, uint uiIndex)
 
   Grow();
 
-  memmove(&m_pItems[uiIndex + 1], &m_pItems[uiIndex], 
+  memmove(&m_pItems[uiIndex + 1], &m_pItems[uiIndex],
           (m_uiCount - uiIndex)*sizeof(long));
   m_pItems[uiIndex] = lItem;
   m_uiCount++;
@@ -194,7 +242,7 @@ void wxBaseArray::Remove(uint uiIndex)
 {
   wxCHECK_RET( uiIndex <= m_uiCount, "bad index in wxArray::Remove" );
 
-  memmove(&m_pItems[uiIndex], &m_pItems[uiIndex + 1], 
+  memmove(&m_pItems[uiIndex], &m_pItems[uiIndex + 1],
           (m_uiCount - uiIndex - 1)*sizeof(long));
   m_uiCount--;
 }
@@ -204,7 +252,7 @@ void wxBaseArray::Remove(long lItem)
 {
   int iIndex = Index(lItem);
 
-  wxCHECK_RET( iIndex != NOT_FOUND, 
+  wxCHECK_RET( iIndex != NOT_FOUND,
                "removing inexistent item in wxArray::Remove" );
 
   Remove((uint)iIndex);
