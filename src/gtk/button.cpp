@@ -19,6 +19,7 @@
 #if wxUSE_BUTTON
 
 #include "wx/button.h"
+#include "wx/stockitem.h"
 
 #include "wx/gtk/private.h"
 
@@ -109,8 +110,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 */
 
 #ifdef __WXGTK20__
-    if (m_widget == NULL) // may be !=NULL if stock form of Create was used
-        m_widget = gtk_button_new_with_mnemonic("");
+    m_widget = gtk_button_new_with_mnemonic("");
 #else
     m_widget = gtk_button_new_with_label("");
 #endif
@@ -135,8 +135,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
                                 x_alignment, y_alignment);
 #endif
 
-    if (!label.empty())
-        SetLabel(label);
+    SetLabel(label);
 
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
@@ -151,30 +150,6 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     return true;
 }
     
-bool wxButton::Create(wxWindow *parent, wxWindowID id, wxStockItemID stock,
-                      const wxString& descriptiveLabel,
-                      const wxPoint& pos, long style,
-                      const wxValidator& validator, const wxString& name)
-{
-#ifdef __WXGTK20__
-    const char *gtkstock = wxStockItemToGTK(stock);
-    if (gtkstock)
-    {
-        m_widget = gtk_button_new_from_stock(gtkstock);
-        return Create(parent, id, wxEmptyString,
-                      pos, wxDefaultSize, style, validator, name);
-    }
-    else
-    {
-        // not supported by this GTK+ version
-        return Create(parent, id, wxGetStockItemLabel(stock),
-                      pos, wxDefaultSize, style, validator, name);
-    }
-#else
-    return CreateStock(parent, id, stock, descriptiveLabel,
-                       pos, style, validator, name);
-#endif
-}
 
 void wxButton::SetDefault()
 {
@@ -228,17 +203,36 @@ wxSize wxButtonBase::GetDefaultSize()
 #endif
 }
 
-void wxButton::SetLabel( const wxString &label )
+void wxButton::SetLabel( const wxString &lbl )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid button") );
 
-    wxControl::SetLabel( label );
+    wxString label(lbl);
+
+#ifndef __WXGTK20__
+    if (label.empty() && wxIsStockID(m_windowId))
+        label = wxGetStockLabel(m_windowId);
+#endif
+
+    wxControl::SetLabel(label);
 
 #ifdef __WXGTK20__
-    wxString label2 = PrepareLabelMnemonics( label );
-    gtk_button_set_label( GTK_BUTTON(m_widget), wxGTK_CONV(label2) );
+    if (wxIsStockID(m_windowId) && wxIsStockLabel(m_windowId, label))
+    {
+        const char *stock = wxGetStockGtkID(m_windowId);
+        if (stock)
+        {
+            gtk_button_set_label(GTK_BUTTON(m_widget), stock);
+            gtk_button_set_use_stock(GTK_BUTTON(m_widget), TRUE);
+        }
+        return;
+    }
+
+    wxString label2 = PrepareLabelMnemonics(label);
+    gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(label2));
+    gtk_button_set_use_stock(GTK_BUTTON(m_widget), FALSE);
 #else
-    gtk_label_set( GTK_LABEL( BUTTON_CHILD(m_widget) ), wxGTK_CONV( GetLabel() ) );
+    gtk_label_set(GTK_LABEL(BUTTON_CHILD(m_widget)), wxGTK_CONV(GetLabel()));
 #endif
 }
 

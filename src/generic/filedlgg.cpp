@@ -993,8 +993,8 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
         textsizer->Add( m_choice, 1, wxCENTER|wxALL, 5 );
 
         buttonsizer = new wxBoxSizer( wxHORIZONTAL );
-        buttonsizer->Add( new wxButton( this, wxID_OK, wxSTOCK_OK ), 0, wxCENTER | wxALL, 5 );
-        buttonsizer->Add( new wxButton( this, wxID_CANCEL, wxSTOCK_CANCEL ), 0, wxCENTER | wxALL, 5 );
+        buttonsizer->Add( new wxButton( this, wxID_OK ), 0, wxCENTER | wxALL, 5 );
+        buttonsizer->Add( new wxButton( this, wxID_CANCEL ), 0, wxCENTER | wxALL, 5 );
         mainsizer->Add( buttonsizer, 0, wxALIGN_RIGHT );
     }
     else
@@ -1004,7 +1004,7 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
         wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
         m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxPROCESS_ENTER );
         textsizer->Add( m_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
-        textsizer->Add( new wxButton( this, wxID_OK, wxSTOCK_OK ), 0, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
+        textsizer->Add( new wxButton( this, wxID_OK ), 0, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
         mainsizer->Add( textsizer, 0, wxEXPAND );
 
         wxBoxSizer *choicesizer = new wxBoxSizer( wxHORIZONTAL );
@@ -1013,7 +1013,7 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
         m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden files") );
         m_check->SetValue( ms_lastShowHidden );
         choicesizer->Add( m_check, 0, wxCENTER|wxALL, 10 );
-        choicesizer->Add( new wxButton( this, wxID_CANCEL, wxSTOCK_CANCEL ), 0, wxCENTER | wxALL, 10 );
+        choicesizer->Add( new wxButton( this, wxID_CANCEL ), 0, wxCENTER | wxALL, 10 );
         mainsizer->Add( choicesizer, 0, wxEXPAND );
     }
 

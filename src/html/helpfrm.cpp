@@ -1212,9 +1212,9 @@ public:
 
         wxBoxSizer *sizer2 = new wxBoxSizer(wxHORIZONTAL);
         wxButton *ok;
-        sizer2->Add(ok = new wxButton(this, wxID_OK, wxSTOCK_OK), 0, wxALL, 10);
+        sizer2->Add(ok = new wxButton(this, wxID_OK), 0, wxALL, 10);
         ok->SetDefault();
-        sizer2->Add(new wxButton(this, wxID_CANCEL, wxSTOCK_CANCEL), 0, wxALL, 10);
+        sizer2->Add(new wxButton(this, wxID_CANCEL), 0, wxALL, 10);
         topsizer->Add(sizer2, 0, wxALIGN_RIGHT);
 
         SetSizer(topsizer);

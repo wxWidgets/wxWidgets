@@ -225,7 +225,8 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     // 1) create all controls in tab order
 
 #ifndef __SMARTPHONE__
-    wxButton *btnClose = new wxButton(this, wxID_CANCEL, wxSTOCK_CLOSE);
+    // FIXME: use stock wxID_CLOSE button here!
+    wxButton *btnClose = new wxButton(this, wxID_CANCEL, _("Close"));
 #endif
 
     m_checkbox = new wxCheckBox(this, wxID_ANY, _("&Show tips at startup"));

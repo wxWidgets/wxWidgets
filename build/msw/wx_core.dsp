@@ -476,10 +476,6 @@ SOURCE=..\..\src\common\bookctrl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\buttoncmn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\common\choiccmn.cpp
 # End Source File
 # Begin Source File
@@ -8583,10 +8579,6 @@ SOURCE=..\..\include\wx\stattext.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\statusbr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\stockitem.h
 # End Source File
 # Begin Source File
 

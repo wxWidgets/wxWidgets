@@ -41,6 +41,7 @@
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
 #include "wx/univ/colschem.h"
+#include "wx/stockitem.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -69,13 +70,17 @@ void wxButton::Init()
 bool wxButton::Create(wxWindow *parent,
                       wxWindowID id,
                       const wxBitmap& bitmap,
-                      const wxString &label,
+                      const wxString &lbl,
                       const wxPoint &pos,
                       const wxSize &size,
                       long style,
                       const wxValidator& validator,
                       const wxString &name)
 {
+    wxString label(lbl);
+    if (label.empty() && wxIsStockID(id))
+        label = wxGetStockLabel(id);
+
     // center label by default
     if ( !(style & wxALIGN_MASK) )
     {

@@ -40,7 +40,7 @@ public:
     wxButton(wxWindow *parent,
              wxWindowID id,
              const wxBitmap& bitmap,
-             const wxString& label,
+             const wxString& label = wxEmptyString,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
@@ -52,21 +52,9 @@ public:
         Create(parent, id, bitmap, label, pos, size, style, validator, name);
     }
     
-    wxButton(wxWindow *parent, wxWindowID id, wxStockItemID stock,
-           const wxString& descriptiveLabel = wxEmptyString,
-           const wxPoint& pos = wxDefaultPosition,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxButtonNameStr)
-    {
-        Init();
-
-        Create(parent, id, stock, descriptiveLabel, pos, style, validator, name);
-    }
-
     wxButton(wxWindow *parent,
              wxWindowID id,
-             const wxString& label,
+             const wxString& label = wxEmptyString,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
@@ -80,7 +68,7 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxString& label,
+                const wxString& label = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -91,21 +79,10 @@ public:
                       pos, size, style, validator, name);
     }
     
-    bool Create(wxWindow *parent, wxWindowID id, wxStockItemID stock,
-           const wxString& descriptiveLabel = wxEmptyString,
-           const wxPoint& pos = wxDefaultPosition,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxButtonNameStr)
-    {
-        return CreateStock(parent, id, stock, descriptiveLabel,
-                           pos, style, validator, name);
-    }
-
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxBitmap& bitmap,
-                const wxString& label,
+                const wxString& label = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,

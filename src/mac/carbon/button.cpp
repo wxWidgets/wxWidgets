@@ -17,6 +17,7 @@
 
 #include "wx/button.h"
 #include "wx/panel.h"
+#include "wx/stockitem.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
@@ -25,12 +26,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 #include "wx/mac/uma.h"
 // Button
 
-bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
+bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& lbl,
            const wxPoint& pos,
            const wxSize& size, long style,
            const wxValidator& validator,
            const wxString& name)
 {
+    wxString label(lbl);
+    if (label.empty() && wxIsStockID(id))
+        label = wxGetStockLabel(id);
+    
     m_macIsUserPane = FALSE ;
     
     if ( !wxButtonBase::Create(parent, id, pos, size, style, validator, name) )

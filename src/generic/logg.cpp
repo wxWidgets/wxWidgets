@@ -744,7 +744,9 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     // this "Ok" button has wxID_CANCEL id - not very logical, but this allows
     // to close the log dialog with <Esc> which wouldn't work otherwise (as it
     // translates into click on cancel button)
-    wxButton *btnOk = new wxButton(this, wxID_CANCEL, wxSTOCK_OK);
+
+    // FIXME: use stock button here!
+    wxButton *btnOk = new wxButton(this, wxID_CANCEL, _("OK"));
     sizerButtons->Add(btnOk, 0, wxCENTRE | wxBOTTOM, MARGIN/2);
     m_btnDetails = new wxButton(this, wxID_MORE, ms_details + EXPAND_SUFFIX);
     sizerButtons->Add(m_btnDetails, 0, wxCENTRE | wxTOP, MARGIN/2 - 1);
@@ -821,7 +823,7 @@ void wxLogDialog::CreateDetailsControls()
 {
     // create the save button and separator line if possible
 #if wxUSE_FILE
-    m_btnSave = new wxButton(this, wxID_SAVE, wxSTOCK_SAVE);
+    m_btnSave = new wxButton(this, wxID_SAVE);
 #endif // wxUSE_FILE
 
 #if wxUSE_STATLINE

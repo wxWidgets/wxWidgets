@@ -380,7 +380,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/artprov.cpp
     src/common/artstd.cpp
     src/common/bmpbase.cpp
-    src/common/buttoncmn.cpp
     src/common/bookctrl.cpp
     src/common/choiccmn.cpp
     src/common/clipcmn.cpp
@@ -547,7 +546,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/statbox.h
     wx/stattext.h
     wx/statusbr.h
-    wx/stockitem.h
     wx/textctrl.h
     wx/textdlg.h
     wx/toolbar.h

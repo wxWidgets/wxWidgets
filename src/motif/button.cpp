@@ -33,6 +33,7 @@
 #pragma message enable nosimpint
 #endif
 
+#include "wx/stockitem.h"
 #include "wx/motif/private.h"
 #include "wx/sysopt.h"
 
@@ -45,12 +46,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 
 // Button
 
-bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
+bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& lbl,
                       const wxPoint& pos,
                       const wxSize& size, long style,
                       const wxValidator& validator,
                       const wxString& name)
 {
+    wxString label(lbl);
+    if (label.empty() && wxIsStockID(id))
+        label = wxGetStockLabel(id);
+    
     if( !CreateControl( parent, id, pos, size, style, validator, name ) )
         return false;
 

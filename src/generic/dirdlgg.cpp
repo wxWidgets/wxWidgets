@@ -150,9 +150,9 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     buttonsizer = new wxBoxSizer( wxHORIZONTAL );
 
     // OK and Cancel button should be at the right bottom
-    wxButton* okButton = new wxButton(this, wxID_OK, wxSTOCK_OK);
+    wxButton* okButton = new wxButton(this, wxID_OK);
     buttonsizer->Add( okButton, 0, wxLEFT|wxRIGHT, 10 );
-    wxButton* cancelButton = new wxButton(this, wxID_CANCEL, wxSTOCK_CANCEL);
+    wxButton* cancelButton = new wxButton(this, wxID_CANCEL);
     buttonsizer->Add( cancelButton, 0, wxLEFT|wxRIGHT, 10 );
 
     topsizer->Add( buttonsizer, 0, wxLEFT|wxTOP|wxBOTTOM | wxALIGN_RIGHT, 10 );

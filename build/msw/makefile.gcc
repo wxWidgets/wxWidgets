@@ -975,7 +975,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_artprov.o \
 	$(OBJS)\monodll_artstd.o \
 	$(OBJS)\monodll_bmpbase.o \
-	$(OBJS)\monodll_buttoncmn.o \
 	$(OBJS)\monodll_bookctrl.o \
 	$(OBJS)\monodll_choiccmn.o \
 	$(OBJS)\monodll_clipcmn.o \
@@ -1172,7 +1171,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_artprov.o \
 	$(OBJS)\monodll_artstd.o \
 	$(OBJS)\monodll_bmpbase.o \
-	$(OBJS)\monodll_buttoncmn.o \
 	$(OBJS)\monodll_bookctrl.o \
 	$(OBJS)\monodll_choiccmn.o \
 	$(OBJS)\monodll_clipcmn.o \
@@ -1418,7 +1416,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_artprov.o \
 	$(OBJS)\monolib_artstd.o \
 	$(OBJS)\monolib_bmpbase.o \
-	$(OBJS)\monolib_buttoncmn.o \
 	$(OBJS)\monolib_bookctrl.o \
 	$(OBJS)\monolib_choiccmn.o \
 	$(OBJS)\monolib_clipcmn.o \
@@ -1615,7 +1612,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_artprov.o \
 	$(OBJS)\monolib_artstd.o \
 	$(OBJS)\monolib_bmpbase.o \
-	$(OBJS)\monolib_buttoncmn.o \
 	$(OBJS)\monolib_bookctrl.o \
 	$(OBJS)\monolib_choiccmn.o \
 	$(OBJS)\monolib_clipcmn.o \
@@ -1844,7 +1840,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_artprov.o \
 	$(OBJS)\coredll_artstd.o \
 	$(OBJS)\coredll_bmpbase.o \
-	$(OBJS)\coredll_buttoncmn.o \
 	$(OBJS)\coredll_bookctrl.o \
 	$(OBJS)\coredll_choiccmn.o \
 	$(OBJS)\coredll_clipcmn.o \
@@ -2041,7 +2036,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_artprov.o \
 	$(OBJS)\coredll_artstd.o \
 	$(OBJS)\coredll_bmpbase.o \
-	$(OBJS)\coredll_buttoncmn.o \
 	$(OBJS)\coredll_bookctrl.o \
 	$(OBJS)\coredll_choiccmn.o \
 	$(OBJS)\coredll_clipcmn.o \
@@ -2246,7 +2240,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_artprov.o \
 	$(OBJS)\corelib_artstd.o \
 	$(OBJS)\corelib_bmpbase.o \
-	$(OBJS)\corelib_buttoncmn.o \
 	$(OBJS)\corelib_bookctrl.o \
 	$(OBJS)\corelib_choiccmn.o \
 	$(OBJS)\corelib_clipcmn.o \
@@ -2443,7 +2436,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_artprov.o \
 	$(OBJS)\corelib_artstd.o \
 	$(OBJS)\corelib_bmpbase.o \
-	$(OBJS)\corelib_buttoncmn.o \
 	$(OBJS)\corelib_bookctrl.o \
 	$(OBJS)\corelib_choiccmn.o \
 	$(OBJS)\corelib_clipcmn.o \
@@ -4509,11 +4501,6 @@ $(OBJS)\monodll_bmpbase.o: ../../src/common/bmpbase.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_buttoncmn.o: ../../src/common/buttoncmn.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_bookctrl.o: ../../src/common/bookctrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
@@ -6085,11 +6072,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_bmpbase.o: ../../src/common/bmpbase.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_buttoncmn.o: ../../src/common/buttoncmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
@@ -7825,11 +7807,6 @@ $(OBJS)\coredll_bmpbase.o: ../../src/common/bmpbase.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_buttoncmn.o: ../../src/common/buttoncmn.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_bookctrl.o: ../../src/common/bookctrl.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
@@ -9053,11 +9030,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_bmpbase.o: ../../src/common/bmpbase.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_buttoncmn.o: ../../src/common/buttoncmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 

@@ -31,66 +31,127 @@
 #include "wx/stockitem.h"
 #include "wx/intl.h"
 
-wxString wxGetStockItemLabel(wxStockItemID item)
+
+bool wxIsStockID(wxWindowID id)
+{
+    switch (id)
+    {
+        case wxID_ADD:
+        case wxID_APPLY:
+        case wxID_BOLD:
+        case wxID_CANCEL:
+        case wxID_CLEAR:
+        case wxID_CLOSE:
+        case wxID_COPY:
+        case wxID_CUT:
+        case wxID_DELETE:
+        case wxID_FIND:
+        case wxID_REPLACE:
+        case wxID_BACKWARD:
+        case wxID_DOWN:
+        case wxID_FORWARD:
+        case wxID_UP:
+        case wxID_HELP:
+        case wxID_HOME:
+        case wxID_INDENT:
+        case wxID_INDEX:
+        case wxID_ITALIC:
+        case wxID_JUSTIFY_CENTER:
+        case wxID_JUSTIFY_FILL:
+        case wxID_JUSTIFY_LEFT:
+        case wxID_JUSTIFY_RIGHT:
+        case wxID_NEW:
+        case wxID_NO:
+        case wxID_OK:
+        case wxID_OPEN:
+        case wxID_PASTE:
+        case wxID_PREFERENCES:
+        case wxID_PRINT:
+        case wxID_PREVIEW:
+        case wxID_PROPERTIES:
+        case wxID_EXIT:
+        case wxID_REDO:
+        case wxID_REFRESH:
+        case wxID_REMOVE:
+        case wxID_REVERT_TO_SAVED:
+        case wxID_SAVE:
+        case wxID_SAVEAS:
+        case wxID_STOP:
+        case wxID_UNDELETE:
+        case wxID_UNDERLINE:
+        case wxID_UNDO:
+        case wxID_UNINDENT:
+        case wxID_YES:
+        case wxID_ZOOM_100:
+        case wxID_ZOOM_FIT:
+        case wxID_ZOOM_IN:
+        case wxID_ZOOM_OUT:
+            return true;
+
+        default:
+            return false;
+    };
+}
+
+wxString wxGetStockLabel(wxWindowID id)
 {
     #define STOCKITEM(stockid, label) \
         case stockid:                 \
             return label;
 
-    switch (item)
+    switch (id)
     {
-        STOCKITEM(wxSTOCK_ADD,                 _("Add"))
-        STOCKITEM(wxSTOCK_APPLY,               _("&Apply"))
-        STOCKITEM(wxSTOCK_BOLD,                _("&Bold"))
-        STOCKITEM(wxSTOCK_CANCEL,              _("&Cancel"))
-        STOCKITEM(wxSTOCK_CLEAR,               _("&Clear"))
-        STOCKITEM(wxSTOCK_CLOSE,               _("&Close"))
-        STOCKITEM(wxSTOCK_COPY,                _("&Copy"))
-        STOCKITEM(wxSTOCK_CUT,                 _("Cu&t"))
-        STOCKITEM(wxSTOCK_DELETE,              _("&Delete"))
-        STOCKITEM(wxSTOCK_FIND,                _("&Find"))
-        STOCKITEM(wxSTOCK_FIND_AND_REPLACE,    _("Find and rep&lace"))
-        STOCKITEM(wxSTOCK_GO_BACK,             _("&Back"))
-        STOCKITEM(wxSTOCK_GO_DOWN,             _("&Down"))
-        STOCKITEM(wxSTOCK_GO_FORWARD,          _("&Forward"))
-        STOCKITEM(wxSTOCK_GO_UP,               _("&Up"))
-        STOCKITEM(wxSTOCK_HELP,                _("&Help"))
-        STOCKITEM(wxSTOCK_HOME,                _("&Home"))
-        STOCKITEM(wxSTOCK_INDENT,              _("Indent"))
-        STOCKITEM(wxSTOCK_INDEX,               _("&Index"))
-        STOCKITEM(wxSTOCK_ITALIC,              _("&Italic"))
-        STOCKITEM(wxSTOCK_JUSTIFY_CENTER,      _("Centered"))
-        STOCKITEM(wxSTOCK_JUSTIFY_FILL,        _("Justified"))
-        STOCKITEM(wxSTOCK_JUSTIFY_LEFT,        _("Align Left"))
-        STOCKITEM(wxSTOCK_JUSTIFY_RIGHT,       _("Align Right"))
-        STOCKITEM(wxSTOCK_NEW,                 _("&New"))
-        STOCKITEM(wxSTOCK_NO,                  _("&No"))
-        STOCKITEM(wxSTOCK_OK,                  _("&OK"))
-        STOCKITEM(wxSTOCK_OPEN,                _("&Open"))
-        STOCKITEM(wxSTOCK_PASTE,               _("&Paste"))
-        STOCKITEM(wxSTOCK_PREFERENCES,         _("&Preferences"))
-        STOCKITEM(wxSTOCK_PRINT,               _("&Print"))
-        STOCKITEM(wxSTOCK_PRINT_PREVIEW,       _("Print previe&w"))
-        STOCKITEM(wxSTOCK_PROPERTIES,          _("&Properties"))
-        STOCKITEM(wxSTOCK_QUIT,                _("&Quit"))
-        STOCKITEM(wxSTOCK_REDO,                _("&Redo"))
-        STOCKITEM(wxSTOCK_REFRESH,             _("Refresh"))
-        STOCKITEM(wxSTOCK_REMOVE,              _("Remove"))
-        STOCKITEM(wxSTOCK_REVERT_TO_SAVED,     _("Revert to Saved"))
-        STOCKITEM(wxSTOCK_SAVE,                _("&Save"))
-        STOCKITEM(wxSTOCK_SAVE_AS,             _("Save &As..."))
-        STOCKITEM(wxSTOCK_STOP,                _("&Stop"))
-        STOCKITEM(wxSTOCK_UNDELETE,            _("Undelete"))
-        STOCKITEM(wxSTOCK_UNDERLINE,           _("&Underline"))
-        STOCKITEM(wxSTOCK_UNDO,                _("&Undo"))
-        STOCKITEM(wxSTOCK_UNINDENT,            _("&Unindent"))
-        STOCKITEM(wxSTOCK_YES,                 _("&Yes"))
-        STOCKITEM(wxSTOCK_ZOOM_100,            _("&Actual Size"))
-        STOCKITEM(wxSTOCK_ZOOM_FIT,            _("Zoom to &Fit"))
-        STOCKITEM(wxSTOCK_ZOOM_IN,             _("Zoom &In"))
-        STOCKITEM(wxSTOCK_ZOOM_OUT,            _("Zoom &Out"))
+        STOCKITEM(wxID_ADD,                 _("Add"))
+        STOCKITEM(wxID_APPLY,               _("&Apply"))
+        STOCKITEM(wxID_BOLD,                _("&Bold"))
+        STOCKITEM(wxID_CANCEL,              _("&Cancel"))
+        STOCKITEM(wxID_CLEAR,               _("&Clear"))
+        STOCKITEM(wxID_CLOSE,               _("&Close"))
+        STOCKITEM(wxID_COPY,                _("&Copy"))
+        STOCKITEM(wxID_CUT,                 _("Cu&t"))
+        STOCKITEM(wxID_DELETE,              _("&Delete"))
+        STOCKITEM(wxID_FIND,                _("&Find"))
+        STOCKITEM(wxID_REPLACE,             _("Rep&lace"))
+        STOCKITEM(wxID_BACKWARD,            _("&Back"))
+        STOCKITEM(wxID_DOWN,                _("&Down"))
+        STOCKITEM(wxID_FORWARD,             _("&Forward"))
+        STOCKITEM(wxID_UP,                  _("&Up"))
+        STOCKITEM(wxID_HELP,                _("&Help"))
+        STOCKITEM(wxID_HOME,                _("&Home"))
+        STOCKITEM(wxID_INDENT,              _("Indent"))
+        STOCKITEM(wxID_INDEX,               _("&Index"))
+        STOCKITEM(wxID_ITALIC,              _("&Italic"))
+        STOCKITEM(wxID_JUSTIFY_CENTER,      _("Centered"))
+        STOCKITEM(wxID_JUSTIFY_FILL,        _("Justified"))
+        STOCKITEM(wxID_JUSTIFY_LEFT,        _("Align Left"))
+        STOCKITEM(wxID_JUSTIFY_RIGHT,       _("Align Right"))
+        STOCKITEM(wxID_NEW,                 _("&New"))
+        STOCKITEM(wxID_NO,                  _("&No"))
+        STOCKITEM(wxID_OK,                  _("&OK"))
+        STOCKITEM(wxID_OPEN,                _("&Open"))
+        STOCKITEM(wxID_PASTE,               _("&Paste"))
+        STOCKITEM(wxID_PREFERENCES,         _("&Preferences"))
+        STOCKITEM(wxID_PRINT,               _("&Print"))
+        STOCKITEM(wxID_PREVIEW,             _("Print previe&w"))
+        STOCKITEM(wxID_PROPERTIES,          _("&Properties"))
+        STOCKITEM(wxID_EXIT,                _("&Quit"))
+        STOCKITEM(wxID_REDO,                _("&Redo"))
+        STOCKITEM(wxID_REFRESH,             _("Refresh"))
+        STOCKITEM(wxID_REMOVE,              _("Remove"))
+        STOCKITEM(wxID_REVERT_TO_SAVED,     _("Revert to Saved"))
+        STOCKITEM(wxID_SAVE,                _("&Save"))
+        STOCKITEM(wxID_SAVEAS,              _("Save &As..."))
+        STOCKITEM(wxID_STOP,                _("&Stop"))
+        STOCKITEM(wxID_UNDELETE,            _("Undelete"))
+        STOCKITEM(wxID_UNDERLINE,           _("&Underline"))
+        STOCKITEM(wxID_UNDO,                _("&Undo"))
+        STOCKITEM(wxID_UNINDENT,            _("&Unindent"))
+        STOCKITEM(wxID_YES,                 _("&Yes"))
+        STOCKITEM(wxID_ZOOM_100,            _("&Actual Size"))
+        STOCKITEM(wxID_ZOOM_FIT,            _("Zoom to &Fit"))
+        STOCKITEM(wxID_ZOOM_IN,             _("Zoom &In"))
+        STOCKITEM(wxID_ZOOM_OUT,            _("Zoom &Out"))
 
-        case wxSTOCK_NONE:
         default:
             wxFAIL_MSG( _T("invalid stock item ID") );
             break;
@@ -101,81 +162,97 @@ wxString wxGetStockItemLabel(wxStockItemID item)
     return wxEmptyString;
 }
 
+bool wxIsStockLabel(wxWindowID id, const wxString& label)
+{
+    if (label.empty())
+        return true;
+
+    wxString stock = wxGetStockLabel(id);
+
+    if (label == stock)
+        return true;
+    
+    stock.Replace(_T("&"), wxEmptyString);
+    if (label == stock)
+        return true;
+    
+    return false;
+}
+
 
 #ifdef __WXGTK20__
 
 #include <gtk/gtk.h>
 
-const char *wxStockItemToGTK(wxStockItemID item)
+const char *wxGetStockGtkID(wxWindowID id)
 {
-    #define STOCKITEM(stockid)            \
-        case wx##stockid:                 \
-            return GTK_##stockid;
+    #define STOCKITEM(wx,gtk)      \
+        case wx:                   \
+            return gtk;
     
-    #define STOCKITEM_MISSING(stockid)    \
-        case wx##stockid:                 \
+    #define STOCKITEM_MISSING(wx)  \
+        case wxid:                 \
             return NULL;
 
     #if GTK_CHECK_VERSION(2,4,0)
-        #define STOCKITEM_24(stockid) STOCKITEM(stockid)
+        #define STOCKITEM_24(wx,gtk) STOCKITEM(wx,gtk)
     #else
-        #define STOCKITEM_24(stockid) STOCKITEM_MISSING(stockid)
+        #define STOCKITEM_24(wx,gtk) STOCKITEM_MISSING(wx)
     #endif
 
-    switch (item)
+    switch (id)
     {
-        STOCKITEM(STOCK_ADD)
-        STOCKITEM(STOCK_APPLY)
-        STOCKITEM(STOCK_BOLD)
-        STOCKITEM(STOCK_CANCEL)
-        STOCKITEM(STOCK_CLEAR)
-        STOCKITEM(STOCK_CLOSE)
-        STOCKITEM(STOCK_COPY)
-        STOCKITEM(STOCK_CUT)
-        STOCKITEM(STOCK_DELETE)
-        STOCKITEM(STOCK_FIND)
-        STOCKITEM(STOCK_FIND_AND_REPLACE)
-        STOCKITEM(STOCK_GO_BACK)
-        STOCKITEM(STOCK_GO_DOWN)
-        STOCKITEM(STOCK_GO_FORWARD)
-        STOCKITEM(STOCK_GO_UP)
-        STOCKITEM(STOCK_HELP)
-        STOCKITEM(STOCK_HOME)
-        STOCKITEM_24(STOCK_INDENT)
-        STOCKITEM(STOCK_INDEX)
-        STOCKITEM(STOCK_ITALIC)
-        STOCKITEM(STOCK_JUSTIFY_CENTER)
-        STOCKITEM(STOCK_JUSTIFY_FILL)
-        STOCKITEM(STOCK_JUSTIFY_LEFT)
-        STOCKITEM(STOCK_JUSTIFY_RIGHT)
-        STOCKITEM(STOCK_NEW)
-        STOCKITEM(STOCK_NO)
-        STOCKITEM(STOCK_OK)
-        STOCKITEM(STOCK_OPEN)
-        STOCKITEM(STOCK_PASTE)
-        STOCKITEM(STOCK_PREFERENCES)
-        STOCKITEM(STOCK_PRINT)
-        STOCKITEM(STOCK_PRINT_PREVIEW)
-        STOCKITEM(STOCK_PROPERTIES)
-        STOCKITEM(STOCK_QUIT)
-        STOCKITEM(STOCK_REDO)
-        STOCKITEM(STOCK_REFRESH)
-        STOCKITEM(STOCK_REMOVE)
-        STOCKITEM(STOCK_REVERT_TO_SAVED)
-        STOCKITEM(STOCK_SAVE)
-        STOCKITEM(STOCK_SAVE_AS)
-        STOCKITEM(STOCK_STOP)
-        STOCKITEM(STOCK_UNDELETE)
-        STOCKITEM(STOCK_UNDERLINE)
-        STOCKITEM(STOCK_UNDO)
-        STOCKITEM_24(STOCK_UNINDENT)
-        STOCKITEM(STOCK_YES)
-        STOCKITEM(STOCK_ZOOM_100)
-        STOCKITEM(STOCK_ZOOM_FIT)
-        STOCKITEM(STOCK_ZOOM_IN)
-        STOCKITEM(STOCK_ZOOM_OUT)
+        STOCKITEM(wxID_ADD,              GTK_STOCK_ADD)
+        STOCKITEM(wxID_APPLY,            GTK_STOCK_APPLY)
+        STOCKITEM(wxID_BOLD,             GTK_STOCK_BOLD)
+        STOCKITEM(wxID_CANCEL,           GTK_STOCK_CANCEL)
+        STOCKITEM(wxID_CLEAR,            GTK_STOCK_CLEAR)
+        STOCKITEM(wxID_CLOSE,            GTK_STOCK_CLOSE)
+        STOCKITEM(wxID_COPY,             GTK_STOCK_COPY)
+        STOCKITEM(wxID_CUT,              GTK_STOCK_CUT)
+        STOCKITEM(wxID_DELETE,           GTK_STOCK_DELETE)
+        STOCKITEM(wxID_FIND,             GTK_STOCK_FIND)
+        STOCKITEM(wxID_REPLACE,          GTK_STOCK_FIND_AND_REPLACE)
+        STOCKITEM(wxID_BACKWARD,         GTK_STOCK_GO_BACK)
+        STOCKITEM(wxID_DOWN,             GTK_STOCK_GO_DOWN)
+        STOCKITEM(wxID_FORWARD,          GTK_STOCK_GO_FORWARD)
+        STOCKITEM(wxID_UP,               GTK_STOCK_GO_UP)
+        STOCKITEM(wxID_HELP,             GTK_STOCK_HELP)
+        STOCKITEM(wxID_HOME,             GTK_STOCK_HOME)
+        STOCKITEM_24(wxID_INDENT,        GTK_STOCK_INDENT)
+        STOCKITEM(wxID_INDEX,            GTK_STOCK_INDEX)
+        STOCKITEM(wxID_ITALIC,           GTK_STOCK_ITALIC)
+        STOCKITEM(wxID_JUSTIFY_CENTER,   GTK_STOCK_JUSTIFY_CENTER)
+        STOCKITEM(wxID_JUSTIFY_FILL,     GTK_STOCK_JUSTIFY_FILL)
+        STOCKITEM(wxID_JUSTIFY_LEFT,     GTK_STOCK_JUSTIFY_LEFT)
+        STOCKITEM(wxID_JUSTIFY_RIGHT,    GTK_STOCK_JUSTIFY_RIGHT)
+        STOCKITEM(wxID_NEW,              GTK_STOCK_NEW)
+        STOCKITEM(wxID_NO,               GTK_STOCK_NO)
+        STOCKITEM(wxID_OK,               GTK_STOCK_OK)
+        STOCKITEM(wxID_OPEN,             GTK_STOCK_OPEN)
+        STOCKITEM(wxID_PASTE,            GTK_STOCK_PASTE)
+        STOCKITEM(wxID_PREFERENCES,      GTK_STOCK_PREFERENCES)
+        STOCKITEM(wxID_PRINT,            GTK_STOCK_PRINT)
+        STOCKITEM(wxID_PREVIEW,          GTK_STOCK_PRINT_PREVIEW)
+        STOCKITEM(wxID_PROPERTIES,       GTK_STOCK_PROPERTIES)
+        STOCKITEM(wxID_EXIT,             GTK_STOCK_QUIT)
+        STOCKITEM(wxID_REDO,             GTK_STOCK_REDO)
+        STOCKITEM(wxID_REFRESH,          GTK_STOCK_REFRESH)
+        STOCKITEM(wxID_REMOVE,           GTK_STOCK_REMOVE)
+        STOCKITEM(wxID_REVERT_TO_SAVED,  GTK_STOCK_REVERT_TO_SAVED)
+        STOCKITEM(wxID_SAVE,             GTK_STOCK_SAVE)
+        STOCKITEM(wxID_SAVEAS,           GTK_STOCK_SAVE_AS)
+        STOCKITEM(wxID_STOP,             GTK_STOCK_STOP)
+        STOCKITEM(wxID_UNDELETE,         GTK_STOCK_UNDELETE)
+        STOCKITEM(wxID_UNDERLINE,        GTK_STOCK_UNDERLINE)
+        STOCKITEM(wxID_UNDO,             GTK_STOCK_UNDO)
+        STOCKITEM_24(wxID_UNINDENT,      GTK_STOCK_UNINDENT)
+        STOCKITEM(wxID_YES,              GTK_STOCK_YES)
+        STOCKITEM(wxID_ZOOM_100,         GTK_STOCK_ZOOM_100)
+        STOCKITEM(wxID_ZOOM_FIT,         GTK_STOCK_ZOOM_FIT)
+        STOCKITEM(wxID_ZOOM_IN,          GTK_STOCK_ZOOM_IN)
+        STOCKITEM(wxID_ZOOM_OUT,         GTK_STOCK_ZOOM_OUT)
 
-        case wxSTOCK_NONE:
         default:
             wxFAIL_MSG( _T("invalid stock item ID") );
             break;

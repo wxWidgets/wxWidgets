@@ -27,7 +27,8 @@ class WXDLLEXPORT wxButton: public wxButtonBase
   DECLARE_DYNAMIC_CLASS(wxButton)
  public:
   inline wxButton() {}
-  inline wxButton(wxWindow *parent, wxWindowID id, const wxString& label,
+  inline wxButton(wxWindow *parent, wxWindowID id,
+           const wxString& label = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
@@ -35,34 +36,14 @@ class WXDLLEXPORT wxButton: public wxButtonBase
   {
       Create(parent, id, label, pos, size, style, validator, name);
   }
-  
-  inline wxButton(wxWindow *parent, wxWindowID id, wxStockItemID stock,
-           const wxString& descriptiveLabel = wxEmptyString,
-           const wxPoint& pos = wxDefaultPosition,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxButtonNameStr)
-  {
-      Create(parent, id, stock, descriptiveLabel, pos, style, validator, name);
-  }
 
-  bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
+  bool Create(wxWindow *parent, wxWindowID id,
+           const wxString& label = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr);
     
-  bool Create(wxWindow *parent, wxWindowID id, wxStockItemID stock,
-           const wxString& descriptiveLabel = wxEmptyString,
-           const wxPoint& pos = wxDefaultPosition,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxButtonNameStr)
-  {
-      return CreateStock(parent, id, stock, descriptiveLabel,
-                         pos, style, validator, name);
-  }
-
     virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     static wxSize GetDefaultSize();
 
