@@ -76,6 +76,7 @@ find_wx_config_script()
         script=`echo $all_scripts | tr ' ' '\n' | grep -v '^base' | head -n 1`
         if test "x$script" != "x" ; then
             echo ${libdir}/wx/config/${script}
+	    exit 0
         fi
     fi
    
