@@ -2090,8 +2090,8 @@ if test "$wxUSE_SHARED" = "yes"; then
         fi
       ;;
       *-*-darwin* )
-        SHARED_LD="${CXX} -dynamic -dylib -o"
-        PIC_FLAG="-fPIC"
+        SHARED_LD="${CXX} -dynamiclib -o"
+        PIC_FLAG="-dynamic -fPIC"
         if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
             WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
@@ -2816,7 +2816,8 @@ fi
 
 if test "$wxUSE_MAC" = 1 ; then
   TOOLKIT_DEF="${TOOLKIT_DEF} -D__UNIX__ -D__POWERPC__ -DTARGET_CARBON"
-  TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE}"
+  CFLAGS="${CFLAGS} -fno-common -fpascal-strings"
+  CPPFLAGS="${CPPFLAGS} -fno-common -fpascal-strings"
 fi
 
 if test "$wxUSE_CYGWIN" = 1 ; then
@@ -3898,12 +3899,9 @@ dnl all additional libraries (except wxWindows itself) we link with
 dnl
 dnl note that we always link with -lm except for Mac OS X
 dnl extended.c uses floor() and is always linked in
+EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -lm"
 if test "$USE_MAC" = 1 ; then
-    EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -Llib -lxpm -framework Carbon -framework System"
-    CFLAGS="${CFLAGS} -fpascal-strings"
-    CPPFLAGS="${CPPFLAGS} -fpascal-strings"
-else
-    EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -lm"
+    EXTRA_LIBS="$EXTRA_LIBS -framework Carbon -framework System"
 fi
 if test "$wxUSE_GUI" = "yes"; then
     EXTRA_LIBS="$GUILIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $FREETYPE_LINK $EXTRA_LIBS"
