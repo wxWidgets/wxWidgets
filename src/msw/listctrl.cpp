@@ -1232,7 +1232,7 @@ bool wxListCtrl::DeleteItem(long item)
         return false;
     }
 
-    m_count -= 1;
+    m_count--;
     wxASSERT_MSG( m_count == ListView_GetItemCount(GetHwnd()),
                   wxT("m_count should match ListView_GetItemCount"));
 
@@ -1264,7 +1264,6 @@ bool wxListCtrl::DeleteItem(long item)
 // Deletes all items
 bool wxListCtrl::DeleteAllItems()
 {
-	m_count = 0;
     return ListView_DeleteAllItems(GetHwnd()) != 0;
 }
 
@@ -1819,7 +1818,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         // ignored for efficiency.  It is done here because the internal data is in the
         // process of being deleted so we don't want to try and access it below.
         if ( m_ignoreChangeMessages &&
-             ( (nmLV->hdr.code == LVN_ITEMCHANGED) || (nmLV->hdr.code == LVN_ITEMCHANGING)))
+             ( (nmLV->hdr.code == LVN_ITEMCHANGED) ||
+               (nmLV->hdr.code == LVN_ITEMCHANGING)) )
         {
             return true;
         }
