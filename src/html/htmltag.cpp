@@ -226,7 +226,8 @@ void wxHtmlTag::ScanParam(const wxString& par, char *format, ...) const
 
     va_start(argptr, format);
 
-#if defined(__MINGW32__) || defined(__CYGWIN__) || defined(__VISUALC__)
+//#if defined(__MINGW32__) || defined(__CYGWIN__) || defined(__VISUALC__)
+#ifndef HAVE_VSSCANF
     sscanf((const char*)parval, format, va_arg(argptr, void *));
 #else
     vsscanf((const char*)parval, format, argptr);
