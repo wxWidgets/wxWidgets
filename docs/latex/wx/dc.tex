@@ -807,11 +807,8 @@ when drawing into a monochrome bitmap.
 
 \func{void}{SetFont}{\param{const wxFont\& }{font}}
 
-Sets the current font for the DC.
-
-If the argument is wxNullFont, the current font is selected out of the device
-context, and the original font restored, allowing the current font to
-be destroyed safely.
+Sets the current font for the DC. It must be a valid font, in particular you
+should not pass {\tt wxNullFont} to this method.
 
 See also \helpref{wxFont}{wxfont}.
 
