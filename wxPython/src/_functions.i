@@ -13,6 +13,10 @@
 // Not a %module
 
 
+%{
+#include <wx/stockitem.h>
+%}
+
 //---------------------------------------------------------------------------
 
 MAKE_CONST_WXSTRING(FileSelectorPromptStr);
@@ -26,6 +30,18 @@ MAKE_CONST_WXSTRING(DirSelectorPromptStr);
 long wxNewId();
 void wxRegisterId(long id);
 long wxGetCurrentId();
+
+// Returns true if the ID is in the list of recognized stock actions
+bool wxIsStockID(wxWindowID id);
+ 
+// Returns true of the label is empty or label of a stock button with
+// given ID
+bool wxIsStockLabel(wxWindowID id, const wxString& label);
+
+// Returns label that should be used for given stock UI element (e.g. "&OK"
+// for wxID_OK):
+wxString wxGetStockLabel(wxWindowID id);
+ 
 
 MustHaveApp(wxBell);
 void wxBell();
