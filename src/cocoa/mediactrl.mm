@@ -51,7 +51,6 @@
 //---------------------------------------------------------------------------
 //  QT Includes
 //---------------------------------------------------------------------------
-#include "wx/timer.h"
 #include <QuickTime/QuickTime.h>
 
 #include "wx/cocoa/autorelease.h"
@@ -103,7 +102,6 @@ public:
     NSMovieView* m_movieview;       //NSMovieView instance
     wxControl* m_ctrl;              //Parent control
     bool m_bVideo;                  //Whether or not we have video
-    class _wxQTTimer* m_timer;      //Timer for streaming the movie
 
     DECLARE_DYNAMIC_CLASS(wxQTMediaBackend);
 };
@@ -117,74 +115,12 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend);
 
-//Time between timer calls
-#define MOVIE_DELAY 100
-
-// --------------------------------------------------------------------------
-//          wxQTTimer - Handle Asyncronous Playing
-// --------------------------------------------------------------------------
-class _wxQTTimer : public wxTimer
-{
-public:
-    _wxQTTimer(Movie movie, wxQTMediaBackend* parent) :
-        m_movie(movie), m_bPaused(false), m_parent(parent)
-    {
-    }
-
-    ~_wxQTTimer()
-    {
-    }
-
-    bool GetPaused() {return m_bPaused;}
-    void SetPaused(bool bPaused) {m_bPaused = bPaused;}
-
-    //-----------------------------------------------------------------------
-    // _wxQTTimer::Notify
-    //
-    // 1) Checks to see if the movie is done, and if not continues
-    //    streaming the movie
-    // 2) Sends the wxEVT_MEDIA_STOP event if we have reached the end of
-    //    the movie.
-    //-----------------------------------------------------------------------
-    void Notify()
-    {
-        if (!m_bPaused)
-        {
-            if(!IsMovieDone(m_movie))
-                MoviesTask(m_movie, MOVIE_DELAY); 
-            else
-            {
-                wxMediaEvent theEvent(wxEVT_MEDIA_STOP, 
-                                      m_parent->m_ctrl->GetId());
-                m_parent->m_ctrl->ProcessEvent(theEvent);
-
-                if(theEvent.IsAllowed())
-                {
-                    Stop();
-                    m_parent->Stop();
-                    wxASSERT(::GetMoviesError() == noErr);
-
-                    //send the event to our child
-                    wxMediaEvent theEvent(wxEVT_MEDIA_FINISHED, 
-                                          m_parent->m_ctrl->GetId());
-                    m_parent->m_ctrl->ProcessEvent(theEvent);
-                }
-            }
-        }
-    }
-
-protected:
-    Movie m_movie;                  //Our movie instance
-    bool m_bPaused;                 //Whether we are paused or not
-    wxQTMediaBackend* m_parent;     //Backend pointer
-};
-
 //---------------------------------------------------------------------------
 // wxQTMediaBackend Constructor
 //
 // Sets m_timer to NULL signifying we havn't loaded anything yet
 //---------------------------------------------------------------------------
-wxQTMediaBackend::wxQTMediaBackend() : m_timer(NULL)
+wxQTMediaBackend::wxQTMediaBackend()
 {
 }
 
@@ -199,11 +135,10 @@ wxQTMediaBackend::wxQTMediaBackend() : m_timer(NULL)
 //---------------------------------------------------------------------------
 wxQTMediaBackend::~wxQTMediaBackend()
 {
-    if(m_timer)
-        Cleanup();
+    Cleanup();
 
     //Note that ExitMovies() is not neccessary...
-    ExitMovies();
+    ::ExitMovies();
 }
 
 //---------------------------------------------------------------------------
@@ -225,11 +160,11 @@ bool wxQTMediaBackend::CreateControl(wxControl* inctrl, wxWindow* parent,
     wxMediaCtrl* ctrl = (wxMediaCtrl*) inctrl;
 
     //Create the control base
-    wxASSERT(ctrl->CreateBase(parent,wid,pos,size,style, validator, size));
+    wxASSERT(ctrl->CreateBase(parent,wid,pos,size,style, validator, name));
     
     //Create the NSMovieView
     ctrl->SetNSView(NULL);
-    NSView* theView = [[NSMovieView alloc] initWithFrame: ctrl->MakeDefaultNSRect(size)];
+    NSMovieView* theView = [[NSMovieView alloc] initWithFrame: ctrl->MakeDefaultNSRect(size)];
     ctrl->SetNSView(theView);
     [theView release];
 
@@ -240,6 +175,7 @@ bool wxQTMediaBackend::CreateControl(wxControl* inctrl, wxWindow* parent,
         ctrl->SetInitialFrameRect(pos,size);
     }
     
+    [theView showController:false adjustingSize:true];
     m_movieview = theView;
     m_ctrl = ctrl;
     return true;
@@ -267,8 +203,7 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
 //---------------------------------------------------------------------------
 bool wxQTMediaBackend::Load(const wxURI& location)
 {
-    if(m_timer)
-        Cleanup();
+    Cleanup();
 
     wxString theURI = location.BuildURI();
 
@@ -277,16 +212,6 @@ bool wxQTMediaBackend::Load(const wxURI& location)
 
     m_movie = (Movie) [[m_movieview movie] QTMovie];
 
-    //preroll movie for streaming
-    //TODO:Async this using threads?
-    TimeValue timeNow;
-    Fixed playRate;
-    timeNow = GetMovieTime(m_movie, NULL);
-    playRate = GetMoviePreferredRate(m_movie);
-    PrePrerollMovie(m_movie, timeNow, playRate, NULL, NULL);
-    PrerollMovie(m_movie, timeNow, playRate);
-    SetMovieRate(m_movie, playRate);
-
     FinishLoad();
 
     return ::GetMoviesError() == noErr;
@@ -294,20 +219,9 @@ bool wxQTMediaBackend::Load(const wxURI& location)
 
 //---------------------------------------------------------------------------
 // wxQTMediaBackend::FinishLoad
-//
-// 1) Create the movie timer
-// 2) Get real size of movie for GetBestSize/sizers
-// 3) See if there is video in the movie, and if so then either
-//    SetMovieGWorld if < 10.2 or use Native CreateMovieControl
-// 4) Set the movie time scale to something usable so that seeking
-//    etc.  will work correctly
-// 5) Refresh parent window
 //---------------------------------------------------------------------------
 void wxQTMediaBackend::FinishLoad()
 {
-    m_timer = new _wxQTTimer(m_movie, (wxQTMediaBackend*) this);
-    wxASSERT(m_timer);
-
     //get the real size of the movie
     Rect outRect;
     ::GetMovieNaturalBoundsRect (m_movie, &outRect);
@@ -339,9 +253,7 @@ void wxQTMediaBackend::FinishLoad()
 //---------------------------------------------------------------------------
 bool wxQTMediaBackend::Play()
 {
-    ::StartMovie(m_movie);
-    m_timer->SetPaused(false);
-    m_timer->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
+    [m_movieview start:NULL];
     return ::GetMoviesError() == noErr;
 }
 
@@ -353,9 +265,7 @@ bool wxQTMediaBackend::Play()
 //---------------------------------------------------------------------------
 bool wxQTMediaBackend::Pause()
 {
-    ::StopMovie(m_movie);
-    m_timer->SetPaused(true);
-    m_timer->Stop();
+    [m_movieview stop:NULL];
     return ::GetMoviesError() == noErr;
 }
 
@@ -368,14 +278,8 @@ bool wxQTMediaBackend::Pause()
 //---------------------------------------------------------------------------
 bool wxQTMediaBackend::Stop()
 {
-    m_timer->SetPaused(false);
-    m_timer->Stop();
-
-    ::StopMovie(m_movie);
-    if(::GetMoviesError() != noErr)
-        return false;
-    
-    ::GoToBeginningOfMovie(m_movie);
+    [m_movieview stop:NULL];
+    [m_movieview gotoBeginning:NULL];
     return ::GetMoviesError() == noErr;
 }
 
@@ -449,12 +353,11 @@ wxLongLong wxQTMediaBackend::GetDuration()
 //---------------------------------------------------------------------------
 wxMediaState wxQTMediaBackend::GetState()
 {
-    if ( !m_timer || (m_timer->IsRunning() == false && 
-                      m_timer->GetPaused() == false) )
-        return wxMEDIASTATE_STOPPED;
-
-    if( m_timer->IsRunning() == true )
+    if ( [m_movieview isPlaying] )
         return wxMEDIASTATE_PLAYING;
+
+    if( wxQTMediaBackend::GetPosition() == 0 )
+        return wxMEDIASTATE_STOPPED;
     else
         return wxMEDIASTATE_PAUSED;
 }
@@ -467,11 +370,11 @@ wxMediaState wxQTMediaBackend::GetState()
 //---------------------------------------------------------------------------
 void wxQTMediaBackend::Cleanup()
 {
-    delete m_timer;
-    m_timer = NULL;
-
-    [[m_movieview movie] release];
-    [m_movieview setMovie:NULL];
+    if([m_movieview movie])
+    {
+        [[m_movieview movie] release];
+        [m_movieview setMovie:NULL];
+    }
 }
 
 //---------------------------------------------------------------------------

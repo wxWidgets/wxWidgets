@@ -191,7 +191,7 @@ protected:
     wxSize DoGetBestSize() const;
 
 #ifdef __WXMAC__
-    friend class wxMediaBackend;
+    friend class wxQTMediaBackend;
 #endif
 #ifdef __WXCOCOA__
     friend class wxQTMediaBackend;
@@ -261,11 +261,6 @@ public:
 
     virtual wxMediaState GetState()
     {   return wxMEDIASTATE_STOPPED;    }
-
-#ifdef __WXMAC__
-    wxMacControl* GetControlPeer(wxControl* ctrl) 
-    {	return ((wxMediaCtrl*)ctrl)->m_peer;	}
-#endif
 
     DECLARE_CLASS(wxMediaBackend)
 };

@@ -257,16 +257,20 @@ bool wxQTMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     if ( !
     
 #if wxUSE_CREATEMOVIECONTROL    
-    ctrl->wxControl::Create(parent, id, pos, size,
-                            m_ctrl->MacRemoveBordersFromStyle(style),
-                            validator, name)
-#else
     ctrl->wxWindow::Create(parent, id, pos, size,
                             m_ctrl->MacRemoveBordersFromStyle(style),
                             name)
+#else
+    ctrl->wxControl::Create(parent, id, pos, size,
+                            m_ctrl->MacRemoveBordersFromStyle(style),
+                            validator, name)
 #endif                            
         )
         return false;
+
+#if wxUSE_VALIDATORS
+        ctrl->SetValidator(validator);
+#endif
 
     m_ctrl = ctrl;
     return true;
@@ -401,6 +405,8 @@ void wxQTMediaBackend::FinishLoad()
     //Native CreateMovieControl QT control (Thanks to Kevin Olliver's
     //wxQTMovie for some of this).
     //
+    #define GetControlPeer(whatever) ctrl->m_peer
+    wxMediaCtrl* ctrl = (wxMediaCtrl*) m_ctrl;
         Rect bounds = wxMacGetBoundsForControl(m_ctrl, 
                                                m_ctrl->GetPosition(),
                                                m_ctrl->GetSize());
@@ -419,7 +425,7 @@ void wxQTMediaBackend::FinishLoad()
     //ManuallyIdled - app handles movie idling rather than internal timer event loop
         ::CreateMovieControl( 
                     (WindowRef)
-                       m_ctrl->MacGetTopLevelWindowRef(),	//parent
+                       ctrl->MacGetTopLevelWindowRef(),	//parent
                        &bounds, 							//control bounds
                        m_movie,								//movie handle
                        kMovieControlOptionHideController 
@@ -427,10 +433,9 @@ void wxQTMediaBackend::FinishLoad()
                        | kMovieControlOptionSetKeysEnabled 
 //                       | kMovieControlOptionManuallyIdled
                        ,  									//flags
-                       GetControlPeer(m_ctrl)->GetControlRefAddr() );
+                       ctrl->m_peer->GetControlRefAddr() );
                        
-        ::EmbedControl(GetControlPeer(m_ctrl)->GetControlRef(), 
-                       (ControlRef) m_ctrl->GetParent()->GetHandle());
+        ::EmbedControl(ctrl->m_peer->GetControlRef(), (ControlRef)ctrl->GetParent()->GetHandle());
 #else
     //
     //"Emulation"
@@ -600,7 +605,7 @@ void wxQTMediaBackend::Cleanup()
     m_timer = NULL;
     
 #if wxUSE_CREATEMOVIECONTROL    
-    DisposeControl(GetControlPeer(m_ctrl)->GetControlRef());
+    DisposeControl(((wxMediaCtrl*)m_ctrl)->m_peer->GetControlRef());
 #endif
 
     StopMovie(m_movie);

@@ -51,6 +51,7 @@
 #include "wx/sizer.h"       //for positioning controls/wxBoxSizer
 #include "wx/timer.h"       //timer for updating status bar
 #include "wx/textdlg.h"     //for getting user text from OpenURL
+#include "wx/notebook.h"    //for wxNotebook and putting movies in pages
 
 // ----------------------------------------------------------------------------
 // Bail out if the user doesn't want one of the
@@ -61,9 +62,14 @@
 #error "This is a GUI sample"
 #endif
 
-#if !wxUSE_MEDIACTRL || !wxUSE_MENUS || !wxUSE_SLIDER || !wxUSE_TIMER
-#error "menus, slider, mediactrl, and timers must all enabled for this sample!"
+#if !wxUSE_MEDIACTRL || !wxUSE_MENUS || !wxUSE_SLIDER || !wxUSE_TIMER || !wxUSE_NOTEBOOK
+#error "menus, slider, mediactrl, notebook, and timers must all be enabled for this sample!"
 #endif
+
+#define MEDIASTUFF \
+        if (!m_notebook || !m_notebook->GetCurrentPage()) return; \
+        wxMediaCtrl* m_mediactrl = ((MyNotebookPage*)m_notebook->GetCurrentPage())->m_mediactrl; \
+        wxSlider* m_slider = ((MyNotebookPage*)m_notebook->GetCurrentPage())->m_slider; 
 
 // ============================================================================
 // Declarations
@@ -81,6 +87,7 @@ enum
     wxID_OPENFILE,
     wxID_PLAY,
     wxID_PAUSE,
+//    wxID_CLOSE,  [built-in to wxWidgets]
 //    wxID_STOP,   [built-in to wxWidgets]
 //    wxID_ABOUT,  [built-in to wxWidgets]
 //    wxID_EXIT,   [built-in to wxWidgets]
@@ -88,6 +95,7 @@ enum
     // id for our slider
     wxID_SLIDER,
 
+    wxID_NOTEBOOK,
     // id for our wxMediaCtrl
     wxID_MEDIACTRL
 };
@@ -124,25 +132,38 @@ public:
     void OnPlay(wxCommandEvent& event);
     void OnPause(wxCommandEvent& event);
     void OnStop(wxCommandEvent& event);
+    void OnClose(wxCommandEvent& event);
 
     // Slider event handlers
     void OnSeek(wxCommandEvent& event);
 
     // Media event handlers
     void OnMediaStop(wxMediaEvent& event);
+    
+    void OnPageChange(wxNotebookEvent& event);
+    void OnClosePage(wxCommandEvent& event);
 
 private:
     // Rebuild base status string (see Implementation)
     void ResetStatus();
 
-    wxMediaCtrl* m_mediactrl;   //Our media control
-    wxSlider* m_slider;         //The slider below our media control
     class MyTimer* m_timer;     //Timer to write info to status bar
     wxString m_basestatus;      //Base status string (see ResetStatus())
-    int m_nLoops;                //Counter, incremented each time media loops
+    wxNotebook* m_notebook;
 
     // So that mytimer can access MyFrame's members
     friend class MyTimer;
+};
+
+class MyNotebookPage : public wxPanel
+{
+    MyNotebookPage(wxNotebook* boook);
+    
+    
+public:
+    friend class MyFrame;
+    wxMediaCtrl* m_mediactrl;   //Our media control
+    wxSlider* m_slider;         //The slider below our media control
 };
 
 // ----------------------------------------------------------------------------
@@ -264,6 +285,8 @@ MyFrame::MyFrame(const wxString& title)
     menuFile->Append(wxID_PAUSE, _T("P&ause"), _T("Pause playback"));
     menuFile->Append(wxID_STOP, _T("&Stop"), _T("Stop playback"));
     menuFile->AppendSeparator();
+    menuFile->Append(wxID_CLOSE, _T("&Close"), _T("Close current notebook page"));
+    menuFile->AppendSeparator();
     menuFile->AppendCheckItem(wxID_LOOP,
                               _T("&Loop"),
                               _T("Loop Selected Media"));
@@ -278,41 +301,7 @@ MyFrame::MyFrame(const wxString& title)
 
     SetMenuBar(menuBar);
 
-    //
-    //  Create and attach the first/main sizer
-    //
-    wxBoxSizer* vertsizer = new wxBoxSizer(wxVERTICAL);
-    this->SetSizer(vertsizer);
-    this->SetAutoLayout(true);
-
-    //
-    //  Create our media control
-    //
-    m_mediactrl = new wxMediaCtrl(this, wxID_MEDIACTRL);
-    vertsizer->Add(m_mediactrl, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
-
-    //
-    //  Create our slider
-    //
-    m_slider = new wxSlider(this, wxID_SLIDER, 0, //init
-                            0, //start
-                            0, //end
-                            wxDefaultPosition, wxDefaultSize,
-                            wxSL_HORIZONTAL );
-    vertsizer->Add(m_slider, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND , 5);
-
-
-    //
-    //  Create the second sizer which will position things
-    //  vertically -
-    //
-    //  -------Menu----------
-    //  [m_mediactrl]
-    //
-    //  [m_slider]
-    //
-    wxBoxSizer* horzsizer = new wxBoxSizer(wxHORIZONTAL);
-    vertsizer->Add(horzsizer, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    m_notebook = new wxNotebook(this, wxID_NOTEBOOK);
 
     //
     //  Create our status bar
@@ -418,6 +407,9 @@ MyFrame::MyFrame(const wxString& title)
                   (wxObjectEventFunction) (wxEventFunction)
                   (wxCommandEventFunction) &MyFrame::OnStop);
 
+    this->Connect(wxID_CLOSE, wxEVT_COMMAND_MENU_SELECTED,
+                  (wxObjectEventFunction) (wxEventFunction)
+                  (wxCommandEventFunction) &MyFrame::OnClosePage);
 
     //
     // Slider events
@@ -433,14 +425,13 @@ MyFrame::MyFrame(const wxString& title)
                   (wxObjectEventFunction) (wxEventFunction)
                   (wxMediaEventFunction) &MyFrame::OnMediaStop);
 
+    this->Connect(wxID_NOTEBOOK, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
+                  (wxObjectEventFunction) (wxEventFunction)
+                  (wxNotebookEventFunction) &MyFrame::OnPageChange);
+    
     //
     // End of Events
     //
-
-    //
-    //  Set our loop counter to 0
-    //
-    m_nLoops = 0;
 
     //
     //  Create a timer to update our status bar
@@ -479,6 +470,9 @@ MyFrame::~MyFrame()
 // ----------------------------------------------------------------------------
 void MyFrame::ResetStatus()
 {
+
+    MEDIASTUFF
+
     m_basestatus = wxString::Format(_T("Size(x,y):%i,%i ")
                                     _T("Length(Seconds):%u Speed:%1.1fx"),
     m_mediactrl->GetBestSize().x,
@@ -489,7 +483,6 @@ void MyFrame::ResetStatus()
 
     m_slider->SetRange(0, (int)(m_mediactrl->Length() / 1000));
 
-    m_nLoops = 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -527,6 +520,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void MyFrame::OnLoop(wxCommandEvent& WXUNUSED(event))
 {
+    MEDIASTUFF
     m_mediactrl->Loop( !m_mediactrl->IsLooped() );
 }
 
@@ -542,6 +536,10 @@ void MyFrame::OnOpenFile(wxCommandEvent& WXUNUSED(event))
 
     if(fd.ShowModal() == wxID_OK)
     {
+        m_notebook->AddPage(new MyNotebookPage(m_notebook), fd.GetPath(), true);
+        
+        MEDIASTUFF
+        
         if( !m_mediactrl->Load(fd.GetPath()) )
             wxMessageBox(wxT("Couldn't load file!"));
 
@@ -560,6 +558,7 @@ void MyFrame::OnOpenFile(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 {
+    MEDIASTUFF
     if( !m_mediactrl->Play() )
         wxMessageBox(wxT("Couldn't play movie!"));
 }
@@ -572,6 +571,7 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void MyFrame::OnPause(wxCommandEvent& WXUNUSED(event))
 {
+    MEDIASTUFF
     if( !m_mediactrl->Pause() )
         wxMessageBox(wxT("Couldn't pause movie!"));
 }
@@ -587,6 +587,7 @@ void MyFrame::OnPause(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void MyFrame::OnStop(wxCommandEvent& WXUNUSED(event))
 {
+    MEDIASTUFF
     if( !m_mediactrl->Stop() )
         wxMessageBox(wxT("Couldn't stop movie!"));
 }
@@ -600,6 +601,7 @@ void MyFrame::OnStop(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void MyFrame::OnSeek(wxCommandEvent& WXUNUSED(event))
 {
+    MEDIASTUFF
     if( m_mediactrl->Seek( m_slider->GetValue() * 1000 ) == wxInvalidOffset )
         wxMessageBox(wxT("Couldn't seek in movie!"));
 }
@@ -608,11 +610,24 @@ void MyFrame::OnSeek(wxCommandEvent& WXUNUSED(event))
 // MyFrame::OnMediaStop
 //
 // Called when the media is about to stop playing.
-// Here we just increase our loop counter
 // ----------------------------------------------------------------------------
 void MyFrame::OnMediaStop(wxMediaEvent& WXUNUSED(event))
 {
-    ++m_nLoops;
+}
+
+void MyFrame::OnPageChange(wxNotebookEvent& WXUNUSED(event))
+{
+    ResetStatus();
+}
+
+void MyFrame::OnClosePage(wxCommandEvent& WXUNUSED(event))
+{
+        int sel = m_notebook->GetSelection();
+
+        if (sel != wxNOT_FOUND)
+        {
+            m_notebook->DeletePage(sel);
+        }    
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -631,20 +646,71 @@ void MyFrame::OnMediaStop(wxMediaEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void MyTimer::Notify()
 {
-    long lPosition = (long)( m_frame->m_mediactrl->Tell() / 1000 );
-    m_frame->m_slider->SetValue(lPosition);
+
+    if (!m_frame->m_notebook || !m_frame->m_notebook->GetCurrentPage()) return;
+        wxMediaCtrl* m_mediactrl = ((MyNotebookPage*)m_frame->m_notebook->GetCurrentPage())->m_mediactrl; 
+        wxSlider* m_slider = ((MyNotebookPage*)m_frame->m_notebook->GetCurrentPage())->m_slider; 
+        if (!m_mediactrl) return;
+
+    long lPosition = (long)( m_mediactrl->Tell() / 1000 );
+    m_slider->SetValue(lPosition);
 
 #if wxUSE_STATUSBAR
     m_frame->SetStatusText(wxString::Format(
-                     _T("%s Pos:%u State:%s Loops:%i"),
+                     _T("%s Pos:%u State:%s"),
                      m_frame->m_basestatus.c_str(),
                      (unsigned int)lPosition,
-                     wxGetMediaStateText(m_frame->m_mediactrl->GetState()),
-                     m_frame->m_nLoops
+                     wxGetMediaStateText(m_mediactrl->GetState())
+                    
                                             )
                            );
 #endif
+
 }
+
+
+MyNotebookPage::MyNotebookPage(wxNotebook* theBook) :
+    wxPanel(theBook, wxID_ANY)
+{
+
+    //
+    //  Create and attach the first/main sizer
+    //
+    wxBoxSizer* vertsizer = new wxBoxSizer(wxVERTICAL);
+    this->SetSizer(vertsizer);
+    this->SetAutoLayout(true);
+
+    //
+    //  Create our media control
+    //
+    m_mediactrl = new wxMediaCtrl(this, wxID_MEDIACTRL);
+    vertsizer->Add(m_mediactrl, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+
+    //
+    //  Create our slider
+    //
+    m_slider = new wxSlider(this, wxID_SLIDER, 0, //init
+                            0, //start
+                            0, //end
+                            wxDefaultPosition, wxDefaultSize,
+                            wxSL_HORIZONTAL );
+    vertsizer->Add(m_slider, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND , 5);
+
+
+    //
+    //  Create the second sizer which will position things
+    //  vertically -
+    //
+    //  -------Menu----------
+    //  [m_mediactrl]
+    //
+    //  [m_slider]
+    //
+    wxBoxSizer* horzsizer = new wxBoxSizer(wxHORIZONTAL);
+    vertsizer->Add(horzsizer, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+
+}
+
 
 //
 // End of MediaPlayer sample
