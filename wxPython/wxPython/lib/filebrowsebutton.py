@@ -81,6 +81,7 @@ class FileBrowseButton(wxPanel):
         # SetValue is used to disable the callback
         self.SetValue( initialValue, 0)
 
+
     def createDialog( self, parent, id, pos, size, style ):
         """Setup the graphic representation of the dialog"""
         wxPanel.__init__ (self, parent, id, pos, size, style)
@@ -134,7 +135,7 @@ class FileBrowseButton(wxPanel):
         return textControl
 
     def OnChanged(self, evt):
-        if self.callCallback:
+        if self.callCallback and self.changeCallback:
             self.changeCallback(evt)
 
     def createBrowseButton( self):
@@ -161,14 +162,13 @@ class FileBrowseButton(wxPanel):
         dlg = wxFileDialog(self, self.dialogTitle, directory, current, self.fileMask, self.fileMode)
 
         if dlg.ShowModal() == wxID_OK:
-            self.SetValue (dlg.GetPath())
+            self.SetValue(dlg.GetPath())
         dlg.Destroy()
-
 
 
     def GetValue (self):
         """ Convenient access to text control value """
-        return self.textControl.GetValue ()
+        return self.textControl.GetValue()
 
     def SetValue (self, value, callBack=1):
         """ Convenient setting of text control value """
@@ -193,6 +193,7 @@ class FileBrowseButton(wxPanel):
         rvalue = self.label.SetLabel( value )
         self.Refresh( true )
         return rvalue
+
 
 
 
@@ -230,6 +231,7 @@ class FileBrowseButtonWithHistory( FileBrowseButton ):
             self.history=None
         apply( FileBrowseButton.__init__, ( self,)+arguments, namedarguments)
 
+
     def createTextControl( self):
         """Create the text control"""
         ID = wxNewId()
@@ -245,6 +247,7 @@ class FileBrowseButtonWithHistory( FileBrowseButton ):
             self.SetHistory( history, control=textControl)
         return textControl
 
+
     def GetHistoryControl( self ):
         """Return a pointer to the control which provides (at least)
         the following methods for manipulating the history list.:
@@ -255,6 +258,7 @@ class FileBrowseButtonWithHistory( FileBrowseButton ):
         Semantics of the methods follow those for the wxComboBox control
         """
         return self.textControl
+
 
     def SetHistory( self, value=(), selectionIndex = None, control=None ):
         """Set the current history list"""
@@ -274,6 +278,7 @@ class FileBrowseButtonWithHistory( FileBrowseButton ):
         if selectionIndex is not None:
             control.SetSelection( selectionIndex )
 
+
     def GetHistory( self ):
         """Return the current history list"""
         if self.historyCallBack != None:
@@ -281,11 +286,13 @@ class FileBrowseButtonWithHistory( FileBrowseButton ):
         else:
             return list( self.history )
 
+
     def OnSetFocus(self, event):
         """When the history scroll is selected, update the history"""
         if self.historyCallBack != None:
             self.SetHistory( self.historyCallBack(), control=self.textControl)
         event.Skip()
+
 
     if wxPlatform == "__WXMSW__":
         def SetValue (self, value, callBack=1):
