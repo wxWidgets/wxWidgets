@@ -208,6 +208,9 @@ public:
         // count of items in the list
     size_t GetCount() const { return m_count; }
 
+        // return TRUE if this list is empty
+    bool IsEmpty() const { return m_count == 0; }
+
     // operations
 
         // delete all nodes
