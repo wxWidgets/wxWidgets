@@ -33,7 +33,7 @@ class wxObjectOutputStream : public wxFilterOutputStream {
  public:
   wxObjectOutputStream(wxOutputStream& s);
 
-  void AddChildren(wxObject *obj);
+  void AddChild(wxObject *obj);
   bool SaveObject(wxObject& obj);
 
   bool FirstStage() const { return m_stage == 0; }

@@ -24,9 +24,6 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// error return value for Seek() functions
-const off_t ofsInvalid = (off_t)-1;
-
 // we redefine these constants here because S_IREAD &c are _not_ standard
 // however, we do assume that the values correspond to the Unix umask bits
 #define wxS_IRUSR 00400
@@ -118,7 +115,7 @@ public:
   bool Error() const { return m_error; }
 
   // dtor closes the file if opened
- ~wxFile();
+  virtual ~wxFile(); // Temporally virtual because of wxFileStream: I'll change back in a near future.
 
 private:
   // copy ctor and assignment operator are private because

@@ -48,7 +48,7 @@ void wxObjectOutputStream::WriteObjectDef(wxObjectStreamInfo& info)
   data_s.Write8(info.children.Number());
 }
 
-void wxObjectOutputStream::AddChildren(wxObject *obj)
+void wxObjectOutputStream::AddChild(wxObject *obj)
 {
   wxObjectStreamInfo *info;
 
