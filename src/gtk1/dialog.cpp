@@ -127,6 +127,14 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
        recognized by other WM as well. not tested. */
     long decor = (long) GDK_DECOR_BORDER;
     long func = (long) GDK_FUNC_MOVE ;
+
+    /* Some WM don't display any border around the frame contents if
+       used with these hints, so we add a resize border around it,
+       without automatically allowinng it to be resized though.
+
+       This avoids the problem, but looks odd. What shall we do?
+    */
+    decor |= GDK_DECOR_RESIZEH;
     
     if ((win->GetWindowStyle() & wxCAPTION) != 0)
         decor |= GDK_DECOR_TITLE;
