@@ -376,7 +376,7 @@ fontutil.cpp	Unix	NotCocoa,NotMac,NotMGL,NotMicro
 gsocket.c	Unix	Base,NotMac
 mimetype.cpp	Unix	Base,NotMac,NotMicro
 snglinst.cpp	Unix	Base
-taskbarx11.cpp	Unix	NotMac,NotMGL,NotMicro
+taskbarx11.cpp	Unix	NotCocoa,NotMac,NotMGL,NotMicro
 threadpsx.cpp	Unix	Base,NotMac
 utilsunx.cpp	Unix	Base
 utilsx11.cpp	Unix	NotMac,NotMGL,NotMicro

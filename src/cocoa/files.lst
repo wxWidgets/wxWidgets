@@ -232,7 +232,6 @@ ALL_SOURCES = \
 		unix/gsocket.c \
 		unix/mimetype.cpp \
 		unix/snglinst.cpp \
-		unix/taskbarx11.cpp \
 		unix/threadpsx.cpp \
 		unix/utilsunx.cpp \
 		unix/utilsx11.cpp \
@@ -840,7 +839,6 @@ UNIXOBJS = \
 		gsocket.o \
 		mimetype.o \
 		snglinst.o \
-		taskbarx11.o \
 		threadpsx.o \
 		utilsunx.o \
 		utilsx11.o
