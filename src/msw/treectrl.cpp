@@ -1348,22 +1348,24 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     switch ( hdr->code )
     {
         case NM_RCLICK:
-	{
-	    if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
-		return TRUE;
-	    
-	    TV_HITTESTINFO tvhti;
-	    ::GetCursorPos(&(tvhti.pt));
-	    ::ScreenToClient(GetHwnd(),&(tvhti.pt));
-	    if ((HTREEITEM) TreeView_HitTest(GetHwnd(),&tvhti) != (HTREEITEM) NULL) {
-		if (tvhti.flags & TVHT_ONITEM) {
-		    event.m_item = (WXHTREEITEM) tvhti.hItem;
-		    eventType=wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
-		}
-	    }
-	    break;
-	}
-	
+        {
+            if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
+                return TRUE;
+
+            TV_HITTESTINFO tvhti;
+            ::GetCursorPos(&(tvhti.pt));
+            ::ScreenToClient(GetHwnd(),&(tvhti.pt));
+            if ( TreeView_HitTest(GetHwnd(),&tvhti) )
+            {
+                if( tvhti.flags & TVHT_ONITEM )
+                {
+                    event.m_item = (WXHTREEITEM) tvhti.hItem;
+                    eventType=wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
+                }
+            }
+            break;
+        }
+
         case TVN_BEGINDRAG:
             eventType = wxEVT_COMMAND_TREE_BEGIN_DRAG;
             // fall through
