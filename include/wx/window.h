@@ -1002,8 +1002,6 @@ inline wxWindow *wxWindowBase::GetGrandParent() const
 // global functions
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT extern wxWindow* wxGetActiveWindow();
-
 // Find the wxWindow at the current mouse position, also returning the mouse
 // position.
 WXDLLEXPORT extern wxWindow* wxFindWindowAtPointer(wxPoint& pt);

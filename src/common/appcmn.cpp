@@ -130,25 +130,9 @@ void wxAppBase::ProcessPendingEvents()
 
 #if wxUSE_GUI
 
-void wxAppBase::SetActive(bool active, wxWindow *lastFocus)
+void wxAppBase::SetActive(bool active, wxWindow * WXUNUSED(lastFocus))
 {
-    static wxWindow *s_lastFocus = (wxWindow *)NULL;
-
     m_isActive = active;
-
-    // if we're being deactivated remember the last focused window
-    if ( !active )
-    {
-        s_lastFocus = lastFocus;
-    }
-
-    if ( s_lastFocus )
-    {
-        // give the focused window the chance to refresh itself if its
-        // appearance depends on the app activation state
-        wxActivateEvent event(wxEVT_ACTIVATE, active);
-        s_lastFocus->GetEventHandler()->ProcessEvent(event);
-    }
 }
 
 #endif // wxUSE_GUI
