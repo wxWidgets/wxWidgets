@@ -103,6 +103,7 @@ GENERICOBJS= $(MSWDIR)\busyinfo.obj \
 		$(MSWDIR)\tbarsmpl.obj \
 		$(MSWDIR)\textdlgg.obj \
 		$(MSWDIR)\tipdlg.obj \
+		$(MSWDIR)\treectlg.obj \
 		$(MSWDIR)\treelay.obj \
 		$(MSWDIR)\wizard.obj
 
@@ -860,6 +861,8 @@ $(MSWDIR)\tbarsmpl.obj: $(GENDIR)\tbarsmpl.$(SRCSUFF)
 $(MSWDIR)\textdlgg.obj: $(GENDIR)\textdlgg.$(SRCSUFF)
 
 $(MSWDIR)\tipdlg.obj: $(GENDIR)\tipdlg.$(SRCSUFF)
+
+$(MSWDIR)\treectlg.obj: $(GENDIR)\treectlg.$(SRCSUFF)
 
 $(MSWDIR)\treelay.obj: $(GENDIR)\treelay.$(SRCSUFF)
 

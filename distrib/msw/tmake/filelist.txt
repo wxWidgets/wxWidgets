@@ -101,7 +101,7 @@ numdlgg.cpp	G
 tbarsmpl.cpp	G
 textdlgg.cpp	G
 tipdlg.cpp	G
-treectlg.cpp	G	16
+treectlg.cpp	G
 treelay.cpp	G
 wizard.cpp	G
 

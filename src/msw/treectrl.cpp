@@ -1102,7 +1102,7 @@ wxTreeItemId wxTreeCtrl::GetRootItem() const
 
 wxTreeItemId wxTreeCtrl::GetSelection() const
 {
-    wxCHECK_MSG( !(m_windowStyle & wxTR_MULTIPLE), (WXHTREEITEM)0,
+    wxCHECK_MSG( !(m_windowStyle & wxTR_MULTIPLE), (long)(WXHTREEITEM)0,
                  wxT("this only works with single selection controls") );
 
     return wxTreeItemId((WXHTREEITEM) TreeView_GetSelection(GetHwnd()));
@@ -1301,7 +1301,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                                  int image, int selectedImage,
                                  wxTreeItemData *data)
 {
-    return DoInsertItem(wxTreeItemId((WXHTREEITEM) 0), (WXHTREEITEM) 0,
+    return DoInsertItem(wxTreeItemId((long) (WXHTREEITEM) 0), (long)(WXHTREEITEM) 0,
                         text, image, selectedImage, data);
 }
 
@@ -1466,7 +1466,7 @@ void wxTreeCtrl::Unselect()
                   wxT("doesn't make sense, may be you want UnselectAll()?") );
 
     // just remove the selection
-    SelectItem(wxTreeItemId((WXHTREEITEM) 0));
+    SelectItem(wxTreeItemId((long) (WXHTREEITEM) 0));
 }
 
 void wxTreeCtrl::UnselectAll()
