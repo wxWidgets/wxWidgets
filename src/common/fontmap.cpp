@@ -51,6 +51,7 @@
 #include "wx/msgdlg.h"
 #include "wx/fontdlg.h"
 #include "wx/choicdlg.h"
+#include "wx/encinfo.h"
 
 #include "wx/encconv.h"
 
