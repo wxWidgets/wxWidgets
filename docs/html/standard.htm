@@ -764,8 +764,8 @@ the right header for given platform. Any new headers should conform to this
 setup as well to allow including <TT>&lt;wx/foo.h&gt;</TT> on any platform.<P>
 
 Note that wxWindows implementation files should use quotes when including wxWindows
-headers, not angled brackets. Applications should use angled brackets. There
-is a reason for it (can anyone remember what this is?).
+headers, not angled brackets. Applications should use angled brackets. This
+ensures that the dependencies are correctly handled by the compiler.
 
     <P><LI><A NAME="include_guards"></LI><B>Include guards</B><P>
 To minimize the compile time C++ programmers often use so called include
