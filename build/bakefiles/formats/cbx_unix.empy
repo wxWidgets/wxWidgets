@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--C++BuilderX Project-->
+<project>
+  <property category="build.config" name="active" value="0"/>
+  <property category="build.config" name="count" value="1"/>
+  <property category="build.config" name="excludedefaultforzero" value="0"/>
+  <property category="build.config.0" name="builddir" value="Debug"/>
+  <property category="build.config.0" name="key" value="Debug_Build"/>
+  <property category="build.config.0" name="name" value="Debug Build"/>
+  <property category="build.config.0" name="settings.MinGW" value="default;debug"/>
+  <property category="build.config.0" name="settings.gnuc++" value="default;debug"/>
+  <property category="build.config.0" name="settings.intellinia32" value="default;debug"/>
+  <property category="build.config.0" name="settings.mswin32" value="default;debug"/>
+  <property category="build.config.0" name="type" value="Toolset"/>
+  <property category="build.config.1" name="key" value="Release_Build"/>
+  <property category="build.config.1" name="name" value="Release Build"/>
+  <property category="build.config.1" name="settings.MinGW" value="default;release"/>
+  <property category="build.config.1" name="settings.gnuc++" value="default;release"/>
+  <property category="build.config.1" name="settings.intellinia32" value="default;release"/>
+  <property category="build.config.1" name="settings.mswin32" value="default;release"/>
+  <property category="build.config.1" name="type" value="Toolset"/>
+  <property category="build.node" name="type" value="CBMakefileProjectType"/>
+  <property category="build.platform" name="active" value="linux"/>
+  <property category="build.platform" name="linux.Debug_Build.toolset" value="gnuc++"/>
+  <property category="build.platform" name="linux.Release_Build.toolset" value="gnuc++"/>
+  <property category="build.platform" name="linux.default" value="gnuc++"/>
+  <property category="build.platform" name="linux.gnuc++.enabled" value="1"/>
+  <property category="build.platform" name="linux.mswin32.enabled" value="0"/>
+  <property category="build.platform" name="linux.win32b.enabled" value="0"/>
+  <property category="build.platform" name="solaris.default" value="gnuc++"/>
+  <property category="build.platform" name="solaris.enabled" value="0"/>
+  <property category="build.platform" name="win32.default" value="MinGW"/>
+  <property category="build.platform" name="win32.enabled" value="0"/>
+  <property category="cbproject" name="lastnodeid" value="4"/>
+  <property category="cbproject" name="version" value="X.1.0"/>
+  <property category="classbrowser" name="enable" value="0"/>
+  <property category="classbrowser" name="parser.cpp.skip_standard_directories" value="1"/>
+  <property category="linux.Debug_Build.gnuc++.g++compile" name="option.I.arg.1" value="/usr/include"/>
+  <property category="linux.Debug_Build.gnuc++.g++compile" name="option.I.arg.2" value="/usr/include/g++-3"/>
+  <property category="linux.Debug_Build.gnuc++.g++compile" name="option.I.enabled" value="1"/>
+  <property category="linux.Debug_Build.gnuc++.g++compile" name="option.MD.enabled" value="1"/>
+  <property category="linux.Debug_Build.gnuc++.g++compile" name="option.O0.enabled" value="1"/>
+  <property category="linux.Debug_Build.gnuc++.g++compile" name="option.c.enabled" value="1"/>
+  <property category="linux.Debug_Build.gnuc++.g++compile" name="option.g.arg" value="2"/>
+  <property category="linux.Debug_Build.gnuc++.g++compile" name="option.g.enabled" value="1"/>
+  <property category="linux.Debug_Build.gnuc++.g++compile" name="option.o.enabled" value="1"/>
+  <property category="linux.Debug_Build.gnuc++.g++link" name="option.o.enabled" value="1"/>
+  <property category="linux.gnuc++.Debug_Build" name="saved" value="1"/>
+  <property category="makefileproject" name="makefile.ID.1" value="1"/>
+  <property category="makefileproject" name="makefile.list.1" value="Makefile"/>
+  <property category="makefiletarget" name="makefile.1.params" value="-f Makefile"/>
+  <property category="makefiletarget" name="makefile.1.target.list.1" value="all"/>
+  <property category="makefiletarget" name="makefile.1.target.list.2" value="clean"/>
+  <property category="runtime" name="ConfigurationCount" value="@(len([t for t in targets if t.type=='exe'])-1)"/>
+@{
+ALL_EXES = [x for x in targets if x.type=='exe']
+if len(ALL_EXES) == 1:
+    DEFAULT_EXE = 0
+else:
+    DEFAULT_EXE = -1
+}@
+  <property category="runtime" name="DefaultConfiguration" value="@DEFAULT_EXE"/>
+@[for i in range(0,len(ALL_EXES))]@
+  <property category="runtime.@i" name="BuildTargetOnRun" value="com.borland.cbuilder.build.CBProjectBuilder$ProjectBuildAction;make"/>
+  <property category="runtime.@i" name="ConfigurationName" value="@ALL_EXES[i].id"/>
+  <property category="runtime.@i" name="RunnableType" value="com.borland.cbuilder.runtime.ExecutableRunner"/>
+  <property category="runtime.@i" name="native.exec.path" value="./@ALL_EXES[i].id"/>
+  <property category="runtime.@i" name="native.startdir.path" value="."/>
+  <property category="runtime.@i" name="native.target.override" value="1"/>
+@[end for]@
+  <property category="unique" name="id" value="4"/>
+  <node name="console" type="NavigationDirectory">
+    <property category="directorynode" name="showSubdirectories" value="1"/>
+    <property category="directorynode" name="url" value="."/>
+    <property category="unique" name="id" value="1"/>
+  </node>
+</project>

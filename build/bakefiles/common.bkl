@@ -157,7 +157,13 @@
         <set var="CFG_NAME_PART">
             $(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
         </set>
-        <set var="OBJS" make_var="1">$(COMPILER)_$(CFG_NAME_PART)</set>
+        <set var="OBJS" make_var="1">
+            <if cond="FORMAT!='cbuilderx'">$(COMPILER)_$(CFG_NAME_PART)</if>
+            <!-- FIXME: waiting for removal after CBX has better ../ dirs
+                 support -->
+            <if cond="FORMAT=='cbuilderx'">build_cbx_$(CFG_NAME_PART)</if>
+        </set>
+
         <set var="BUILDDIR">$(OBJS)</set>
     </if>
     
@@ -295,10 +301,10 @@
         <!-- system libraries on windows: -->
         <if cond="FORMAT!='autoconf'">
             <sys-lib>$(UNICOWS_LIB)</sys-lib>
-            <if cond="COMPILER=='bcc'">
+            <if cond="FORMAT=='borland'">
                 <sys-lib>ole2w32</sys-lib>
             </if>
-            <if cond="COMPILER!='bcc'">
+            <if cond="FORMAT!='bcc'">
                 <sys-lib>kernel32</sys-lib>
                 <sys-lib>user32</sys-lib>
                 <sys-lib>gdi32</sys-lib>
@@ -315,7 +321,7 @@
                 <sys-lib>advapi32</sys-lib>
                 <sys-lib>wsock32</sys-lib>
             </if>
-            <if cond="COMPILER=='vc' or COMPILER=='bcc'">
+            <if cond="FORMAT=='vc' or FORMAT=='bcc'">
                 <sys-lib>oleacc</sys-lib>
             </if>
         </if>        

@@ -12,6 +12,11 @@ makefiles, e.g. wx24dsp or rpmspec ones.
     <include file="win32.bkl"/>
 
     <define-rule name="__fake">
+        <template>
+            <__fake_hook/>
+        </template>
+    
+        <define-tag name="app-type"/>
         <define-tag name="sources"/>
         <define-tag name="libname"/>
         <define-tag name="dllname"/>
@@ -49,6 +54,11 @@ makefiles, e.g. wx24dsp or rpmspec ones.
         <define-tag name="sys-lib"/>
         <define-tag name="library"/>
         <define-tag name="command"/>
+        <define-tag name="mac-res"/>
+        <define-tag name="win32-res"/>
+        <define-tag name="is-phony"/>
+
+        <define-tag name="__fake_hook"/>
     </define-rule>
 
     <define-rule name="exe" extends="__fake"/>
