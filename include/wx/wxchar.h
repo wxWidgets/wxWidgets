@@ -87,12 +87,17 @@
         /* Cygwin versions, wchar.h requires sys/types.h */
         #ifdef __CYGWIN__
             #include <sys/types.h>
-            extern "C" {
+            #ifdef __cplusplus
+                extern "C" {
+            #endif
         #endif /* Cygwin */
-                #include <wchar.h>
-        #ifdef __CYGWIN__
+
+        #include <wchar.h>
+
+        #if defined(__CYGWIN__) && defined(__cplusplus)
             }
-        #endif /* Cygwin */
+        #endif /* Cygwin and C++ */
+
     #elif defined(HAVE_WCSTR_H)
         /* old compilers have relevant declarations here */
         #include <wcstr.h>
