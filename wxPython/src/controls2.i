@@ -410,7 +410,9 @@ public:
     }
 
     void SetData(PyObject* obj) {
+        bool doSave = wxPyRestoreThread();
         Py_DECREF(m_obj);
+        wxPySaveThread(doSave);
         m_obj = obj;
         Py_INCREF(obj);
     }

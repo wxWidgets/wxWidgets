@@ -170,7 +170,7 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     char** argv = new char*[argc+1];
     int x;
     for(x=0; x<argc; x++)
-        argv[x] = PyString_AsString(PyList_GetItem(sysargv, x));
+        argv[x] = copystring(PyString_AsString(PyList_GetItem(sysargv, x)));
     argv[argc] = NULL;
 
     wxPythonApp->argc = argc;
