@@ -30,7 +30,12 @@
 #include "wx/dynarray.h"
 
 // fwd decls
+#if defined(__WXMSW__)
 class WXDLLEXPORT wxIconLocation;
+#else
+class WXDLLEXPORT wxIconLocationBase;
+typedef wxIconLocationBase wxIconLocation;
+#endif //defined(__WXMSW__)
 class WXDLLEXPORT wxFileTypeImpl;
 class WXDLLEXPORT wxMimeTypesManagerImpl;
 
