@@ -11088,7 +11088,38 @@ static PyObject *_wrap_wxRegionIterator_Next(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+static bool  wxRegionIterator___nonzero__(wxRegionIterator *self) {
+            return self->operator bool();
+        }
+static PyObject *_wrap_wxRegionIterator___nonzero__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxRegionIterator * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxRegionIterator___nonzero__",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRegionIterator_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRegionIterator___nonzero__. Expected _wxRegionIterator_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxRegionIterator___nonzero__(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static PyMethodDef gdicMethods[] = {
+	 { "wxRegionIterator___nonzero__", (PyCFunction) _wrap_wxRegionIterator___nonzero__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegionIterator_Next", (PyCFunction) _wrap_wxRegionIterator_Next, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegionIterator_Reset", (PyCFunction) _wrap_wxRegionIterator_Reset, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegionIterator_HaveRects", (PyCFunction) _wrap_wxRegionIterator_HaveRects, METH_VARARGS | METH_KEYWORDS },

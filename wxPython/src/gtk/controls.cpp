@@ -4041,6 +4041,34 @@ static PyObject *_wrap_wxGauge_GetValue(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
+#define wxGauge_IsVertical(_swigobj)  (_swigobj->IsVertical())
+static PyObject *_wrap_wxGauge_IsVertical(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGauge * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGauge_IsVertical",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGauge_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGauge_IsVertical. Expected _wxGauge_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxGauge_IsVertical(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxGauge_SetBezelFace(_swigobj,_swigarg0)  (_swigobj->SetBezelFace(_swigarg0))
 static PyObject *_wrap_wxGauge_SetBezelFace(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7701,6 +7729,34 @@ static PyObject *_wrap_wxTextCtrl_SaveFile(PyObject *self, PyObject *args, PyObj
     if (_obj1)
         delete _arg1;
 }
+    return _resultobj;
+}
+
+#define wxTextCtrl_MarkDirty(_swigobj)  (_swigobj->MarkDirty())
+static PyObject *_wrap_wxTextCtrl_MarkDirty(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_MarkDirty",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_MarkDirty. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTextCtrl_MarkDirty(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -12395,6 +12451,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxTextCtrl_WriteText", (PyCFunction) _wrap_wxTextCtrl_WriteText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetMaxLength", (PyCFunction) _wrap_wxTextCtrl_SetMaxLength, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_DiscardEdits", (PyCFunction) _wrap_wxTextCtrl_DiscardEdits, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_MarkDirty", (PyCFunction) _wrap_wxTextCtrl_MarkDirty, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SaveFile", (PyCFunction) _wrap_wxTextCtrl_SaveFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_LoadFile", (PyCFunction) _wrap_wxTextCtrl_LoadFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_Remove", (PyCFunction) _wrap_wxTextCtrl_Remove, METH_VARARGS | METH_KEYWORDS },
@@ -12481,6 +12538,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxGauge_SetShadowWidth", (PyCFunction) _wrap_wxGauge_SetShadowWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGauge_SetRange", (PyCFunction) _wrap_wxGauge_SetRange, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGauge_SetBezelFace", (PyCFunction) _wrap_wxGauge_SetBezelFace, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGauge_IsVertical", (PyCFunction) _wrap_wxGauge_IsVertical, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGauge_GetValue", (PyCFunction) _wrap_wxGauge_GetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGauge_GetShadowWidth", (PyCFunction) _wrap_wxGauge_GetShadowWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGauge_GetRange", (PyCFunction) _wrap_wxGauge_GetRange, METH_VARARGS | METH_KEYWORDS },

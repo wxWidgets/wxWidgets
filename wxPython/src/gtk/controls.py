@@ -385,6 +385,9 @@ class wxGaugePtr(wxControlPtr):
     def GetValue(self, *_args, **_kwargs):
         val = controlsc.wxGauge_GetValue(self, *_args, **_kwargs)
         return val
+    def IsVertical(self, *_args, **_kwargs):
+        val = controlsc.wxGauge_IsVertical(self, *_args, **_kwargs)
+        return val
     def SetBezelFace(self, *_args, **_kwargs):
         val = controlsc.wxGauge_SetBezelFace(self, *_args, **_kwargs)
         return val
@@ -746,6 +749,9 @@ class wxTextCtrlPtr(wxControlPtr):
         return val
     def SaveFile(self, *_args, **_kwargs):
         val = controlsc.wxTextCtrl_SaveFile(self, *_args, **_kwargs)
+        return val
+    def MarkDirty(self, *_args, **_kwargs):
+        val = controlsc.wxTextCtrl_MarkDirty(self, *_args, **_kwargs)
         return val
     def DiscardEdits(self, *_args, **_kwargs):
         val = controlsc.wxTextCtrl_DiscardEdits(self, *_args, **_kwargs)

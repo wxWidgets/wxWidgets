@@ -307,7 +307,7 @@ class wxColourPtr(wxObjectPtr):
         return "<%s.%s instance; proxy of C++ wxColour instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     asTuple = Get
     def __str__(self):                  return str(self.asTuple())
-    def __repr__(self):                 return 'wxColour:' + str(self.asTuple())
+    def __repr__(self):                 return 'wxColour' + str(self.asTuple())
     def __nonzero__(self):              return self.Ok()
     def __getinitargs__(self):          return ()
     def __getstate__(self):             return self.asTuple()
@@ -1298,6 +1298,9 @@ class wxRegionIteratorPtr(wxObjectPtr):
         return val
     def Next(self, *_args, **_kwargs):
         val = gdic.wxRegionIterator_Next(self, *_args, **_kwargs)
+        return val
+    def __nonzero__(self, *_args, **_kwargs):
+        val = gdic.wxRegionIterator___nonzero__(self, *_args, **_kwargs)
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxRegionIterator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)

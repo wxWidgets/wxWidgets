@@ -9,6 +9,9 @@ class wxNativeFontInfoPtr :
     def Init(self, *_args, **_kwargs):
         val = fontsc.wxNativeFontInfo_Init(self, *_args, **_kwargs)
         return val
+    def InitFromFont(self, *_args, **_kwargs):
+        val = fontsc.wxNativeFontInfo_InitFromFont(self, *_args, **_kwargs)
+        return val
     def GetPointSize(self, *_args, **_kwargs):
         val = fontsc.wxNativeFontInfo_GetPointSize(self, *_args, **_kwargs)
         return val
@@ -532,6 +535,12 @@ wxFONTENCODING_CP1257 = fontsc.wxFONTENCODING_CP1257
 wxFONTENCODING_CP12_MAX = fontsc.wxFONTENCODING_CP12_MAX
 wxFONTENCODING_UTF7 = fontsc.wxFONTENCODING_UTF7
 wxFONTENCODING_UTF8 = fontsc.wxFONTENCODING_UTF8
+wxFONTENCODING_UTF16 = fontsc.wxFONTENCODING_UTF16
+wxFONTENCODING_UTF16BE = fontsc.wxFONTENCODING_UTF16BE
+wxFONTENCODING_UTF16LE = fontsc.wxFONTENCODING_UTF16LE
+wxFONTENCODING_UTF32 = fontsc.wxFONTENCODING_UTF32
+wxFONTENCODING_UTF32BE = fontsc.wxFONTENCODING_UTF32BE
+wxFONTENCODING_UTF32LE = fontsc.wxFONTENCODING_UTF32LE
 wxFONTENCODING_GB2312 = fontsc.wxFONTENCODING_GB2312
 wxFONTENCODING_BIG5 = fontsc.wxFONTENCODING_BIG5
 wxFONTENCODING_SHIFT_JIS = fontsc.wxFONTENCODING_SHIFT_JIS

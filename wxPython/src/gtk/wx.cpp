@@ -1789,24 +1789,6 @@ static PyObject *_wrap_wxPyApp_SetAssertMode(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-static PyObject *_wrap_wxPyApp_GetMacDefaultEncodingIsPC(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    char *_kwnames[] = {  NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacDefaultEncodingIsPC",_kwnames)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPyApp::GetMacDefaultEncodingIsPC();
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxPyApp_GetMacSupportPCMenuShortcuts(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
@@ -1903,27 +1885,6 @@ static PyObject *_wrap_wxPyApp_GetMacHelpMenuTitleName(PyObject *self, PyObject 
 {
     delete _result;
 }
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxPyApp_SetMacDefaultEncodingIsPC(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _arg0;
-    int tempbool0;
-    char *_kwnames[] = { "val", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxPyApp_SetMacDefaultEncodingIsPC",_kwnames,&tempbool0)) 
-        return NULL;
-    _arg0 = (bool ) tempbool0;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPyApp::SetMacDefaultEncodingIsPC(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -2040,13 +2001,11 @@ static PyMethodDef wxcMethods[] = {
 	 { "wxPyApp_SetMacPreferencesMenuItemId", (PyCFunction) _wrap_wxPyApp_SetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetMacAboutMenuItemId", (PyCFunction) _wrap_wxPyApp_SetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_wxPyApp_SetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyApp_SetMacDefaultEncodingIsPC", (PyCFunction) _wrap_wxPyApp_SetMacDefaultEncodingIsPC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetMacHelpMenuTitleName", (PyCFunction) _wrap_wxPyApp_GetMacHelpMenuTitleName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetMacExitMenuItemId", (PyCFunction) _wrap_wxPyApp_GetMacExitMenuItemId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetMacPreferencesMenuItemId", (PyCFunction) _wrap_wxPyApp_GetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetMacAboutMenuItemId", (PyCFunction) _wrap_wxPyApp_GetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_wxPyApp_GetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyApp_GetMacDefaultEncodingIsPC", (PyCFunction) _wrap_wxPyApp_GetMacDefaultEncodingIsPC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetAssertMode", (PyCFunction) _wrap_wxPyApp_SetAssertMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetAssertMode", (PyCFunction) _wrap_wxPyApp_GetAssertMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetUseBestVisual", (PyCFunction) _wrap_wxPyApp_SetUseBestVisual, METH_VARARGS | METH_KEYWORDS },
@@ -2387,6 +2346,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxID_HELP_PROCEDURES", PyInt_FromLong((long) wxID_HELP_PROCEDURES));
 	 PyDict_SetItemString(d,"wxID_HELP_CONTEXT", PyInt_FromLong((long) wxID_HELP_CONTEXT));
 	 PyDict_SetItemString(d,"wxID_CLOSE_ALL", PyInt_FromLong((long) wxID_CLOSE_ALL));
+	 PyDict_SetItemString(d,"wxID_PREFERENCES", PyInt_FromLong((long) wxID_PREFERENCES));
 	 PyDict_SetItemString(d,"wxID_CUT", PyInt_FromLong((long) wxID_CUT));
 	 PyDict_SetItemString(d,"wxID_COPY", PyInt_FromLong((long) wxID_COPY));
 	 PyDict_SetItemString(d,"wxID_PASTE", PyInt_FromLong((long) wxID_PASTE));

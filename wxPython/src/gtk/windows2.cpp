@@ -832,7 +832,7 @@ static PyObject *_wrap_wxBookCtrl_AddPage(PyObject *self, PyObject *args, PyObje
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
     int tempbool3 = (int) false;
-    char *_kwnames[] = { "self","page","text","bSelect","imageId", NULL };
+    char *_kwnames[] = { "self","page","text","select","imageId", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|ii:wxBookCtrl_AddPage",_kwnames,&_argo0,&_argo1,&_obj2,&tempbool3,&_arg4)) 
@@ -885,7 +885,7 @@ static PyObject *_wrap_wxBookCtrl_InsertPage(PyObject *self, PyObject *args, PyO
     PyObject * _argo2 = 0;
     PyObject * _obj3 = 0;
     int tempbool4 = (int) false;
-    char *_kwnames[] = { "self","n","page","text","bSelect","imageId", NULL };
+    char *_kwnames[] = { "self","n","page","text","select","imageId", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOO|ii:wxBookCtrl_InsertPage",_kwnames,&_argo0,&_arg1,&_argo2,&_obj3,&tempbool4,&_arg5)) 

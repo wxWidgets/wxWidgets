@@ -3135,6 +3135,36 @@ static PyObject *_wrap_wxListCtrl_GetCountPerPage(PyObject *self, PyObject *args
     return _resultobj;
 }
 
+#define wxListCtrl_GetViewRect(_swigobj)  (_swigobj->GetViewRect())
+static PyObject *_wrap_wxListCtrl_GetViewRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _result;
+    wxPyListCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxListCtrl_GetViewRect",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_GetViewRect. Expected _wxPyListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxRect (wxListCtrl_GetViewRect(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRect_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static wxListItem * wxPyListCtrl_GetItem(wxPyListCtrl *self,long  itemId,int  col) {
             wxListItem* info = new wxListItem;
             info->m_itemId = itemId;
@@ -3653,18 +3683,17 @@ static PyObject *_wrap_wxListCtrl_GetColumnCount(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
-#define wxListCtrl_GetItemSpacing(_swigobj,_swigarg0)  (_swigobj->GetItemSpacing(_swigarg0))
+#define wxListCtrl_GetItemSpacing(_swigobj)  (_swigobj->GetItemSpacing())
 static PyObject *_wrap_wxListCtrl_GetItemSpacing(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    int  _result;
+    wxSize * _result;
     wxPyListCtrl * _arg0;
-    bool  _arg1;
     PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","isSmall", NULL };
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxListCtrl_GetItemSpacing",_kwnames,&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxListCtrl_GetItemSpacing",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3673,14 +3702,14 @@ static PyObject *_wrap_wxListCtrl_GetItemSpacing(PyObject *self, PyObject *args,
         return NULL;
         }
     }
-    _arg1 = (bool ) tempbool1;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxListCtrl_GetItemSpacing(_arg0,_arg1);
+    _result = new wxSize (wxListCtrl_GetItemSpacing(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -11296,6 +11325,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListCtrl_SetStringItem", (PyCFunction) _wrap_wxListCtrl_SetStringItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_SetItem", (PyCFunction) _wrap_wxListCtrl_SetItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_GetItem", (PyCFunction) _wrap_wxListCtrl_GetItem, METH_VARARGS | METH_KEYWORDS },
+	 { "wxListCtrl_GetViewRect", (PyCFunction) _wrap_wxListCtrl_GetViewRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_GetCountPerPage", (PyCFunction) _wrap_wxListCtrl_GetCountPerPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_SetColumnWidth", (PyCFunction) _wrap_wxListCtrl_SetColumnWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_GetColumnWidth", (PyCFunction) _wrap_wxListCtrl_GetColumnWidth, METH_VARARGS | METH_KEYWORDS },
