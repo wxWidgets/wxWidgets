@@ -286,7 +286,8 @@ void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
     int nHeight = (font->GetPointSize()*ppInch/72);
 #else
     // Correct for Windows compatibility
-    int nHeight = - (font->GetPointSize()*ppInch/72);
+//    int nHeight = - (font->GetPointSize()*ppInch/72);
+    int nHeight = - (int) ( (font->GetPointSize()*((double)ppInch)/72.0) + 0.5);
 #endif
 
     wxString facename = font->GetFaceName();
@@ -396,7 +397,7 @@ wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
 
     // remember that 1pt = 1/72inch
     int height = abs(logFont->lfHeight);
-    int fontPoints = (72*height)/GetDeviceCaps(dc, LOGPIXELSY);
+    int fontPoints = (int) ((72.0*((double)height))/(double) GetDeviceCaps(dc, LOGPIXELSY) + 0.5);
 
     ::ReleaseDC(NULL, dc);
 
