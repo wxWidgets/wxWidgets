@@ -35,7 +35,7 @@ wxRect wxRectFromPRectangle(PRectangle prc) {
 
 PRectangle PRectangleFromwxRect(wxRect rc) {
     return PRectangle(rc.GetLeft(), rc.GetTop(),
-                      rc.GetRight(), rc.GetBottom());
+                      rc.GetRight()+1, rc.GetBottom()+1);
 }
 
 wxColour wxColourFromCA(const ColourAllocated& ca) {
