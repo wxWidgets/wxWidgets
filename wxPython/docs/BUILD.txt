@@ -253,6 +253,7 @@ here.  There is a copy of my build scripts in wxWidgets\wxPython\distrib\msw
 	 wxUSE_GLCANVAS			1
 	 wxUSE_POSTSCRIPT		1
 	 wxUSE_AFM_FOR_POSTSCRIPT	0
+	 wxUSE_DISPLAY			1
 	 
 
 4. Make a %WXWIN%\BIN directory and add it to the PATH.  My build
