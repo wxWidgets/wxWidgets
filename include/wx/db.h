@@ -339,7 +339,7 @@ class WXDLLEXPORT wxDbConnectInf
 struct WXDLLEXPORT wxDbSqlTypeInfo
 {
     wxString    TypeName;
-    int         FsqlType;
+    SWORD       FsqlType;
     long        Precision;
     short       CaseSensitive;
 //    short     MinimumScale;
@@ -404,7 +404,7 @@ public:
     wxChar      tableName[DB_MAX_TABLE_NAME_LEN+1];
     wxChar      tableType[254+1];           // "TABLE" or "SYSTEM TABLE" etc.
     wxChar      tableRemarks[254+1];
-    int         numCols;                    // How many Columns does this Table have: GetColumnCount(..);
+    UWORD       numCols;                    // How many Columns does this Table have: GetColumnCount(..);
     wxDbColInf *pColInf;                    // pColInf = NULL ; User can later call GetColumns(..);
 
     wxDbTableInf();
@@ -609,12 +609,12 @@ public:
     int          TranslateSqlState(const wxString &SQLState);
     wxDbInf     *GetCatalog(const wxChar *userID=NULL);
     bool         Catalog(const wxChar *userID=NULL, const wxString &fileName=SQL_CATALOG_FILENAME);
-    int          GetKeyFields(const wxString &tableName, wxDbColInf* colInf, int nocols);
+    int          GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCols);
 
     wxDbColInf  *GetColumns(wxChar *tableName[], const wxChar *userID=NULL);
-    wxDbColInf  *GetColumns(const wxString &tableName, int *numCols, const wxChar *userID=NULL); 
+    wxDbColInf  *GetColumns(const wxString &tableName, UWORD *numCols, const wxChar *userID=NULL); 
 
-    int             GetColumnCount(const wxString &tableName, const wxChar *userID=NULL);
+    UWORD           GetColumnCount(const wxString &tableName, const wxChar *userID=NULL);
     const wxChar   *GetDatabaseName(void)  {return dbInf.dbmsName;}
     const wxString &GetDataSource(void)    {return dsn;}
     const wxString &GetDatasourceName(void){return dsn;}

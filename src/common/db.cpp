@@ -1936,7 +1936,7 @@ bool wxDb::GetData(UWORD colNo, SWORD cType, PTR pData, SDWORD maxLen, SDWORD FA
 
 
 /********** wxDb::GetKeyFields() **********/
-int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, int noCols)
+int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCols)
 {
     wxChar       szPkTable[DB_MAX_TABLE_NAME_LEN+1];  /* Primary key table name */
     wxChar       szFkTable[DB_MAX_TABLE_NAME_LEN+1];  /* Foreign key table name */
@@ -1946,7 +1946,7 @@ int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, int noCols
     wxChar       szFkCol[DB_MAX_COLUMN_NAME_LEN+1];   /* Foreign key column     */
     SQLRETURN    retcode;
     SDWORD       cb;
-    int          i;
+    SWORD        i;
     wxString     tempStr;
     /*
      * -----------------------------------------------------------------------
@@ -2104,8 +2104,8 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
  *       to avoid undesired unbinding of columns.
  */
 {
-    int      noCols = 0;
-    int      colNo  = 0;
+    UWORD	    noCols = 0;
+    int			 colNo  = 0;
     wxDbColInf *colInf = 0;
 
     RETCODE  retcode;
@@ -2246,7 +2246,7 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
 
 /********** wxDb::GetColumns() **********/
 
-wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxChar *userID)
+wxDbColInf *wxDb::GetColumns(const wxString &tableName, UWORD *numCols, const wxChar *userID)
 //
 // Same as the above GetColumns() function except this one gets columns
 // only for a single table, and if 'numCols' is not NULL, the number of
@@ -2262,8 +2262,8 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
 //       to avoid undesired unbinding of columns.
 
 {
-    int       noCols = 0;
-    int       colNo  = 0;
+    UWORD       noCols = 0;
+    int         colNo  = 0;
     wxDbColInf *colInf = 0;
 
     RETCODE  retcode;
@@ -2447,7 +2447,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
 
 typedef struct
 {
-    int noCols;
+    UWORD noCols;
     wxDbColInf *colInf;
 } _TableColumns;
 
@@ -2458,7 +2458,7 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
     // The last array element of the tableName[] argument must be zero (null).
     // This is how the end of the array is detected.
 
-    int noCols = 0;
+    UWORD noCols = 0;
 
     // How many tables ?
     int tbl;
@@ -2517,7 +2517,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
 //       by this function.  This function should use its own wxDb instance
 //       to avoid undesired unbinding of columns.
 {
-    SWORD       noCols = 0;
+    UWORD       noCols = 0;
     int         colNo  = 0;
     wxDbColInf *colInf = 0;
 
@@ -2762,7 +2762,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
 
 
 /********** wxDb::GetColumnCount() **********/
-int wxDb::GetColumnCount(const wxString &tableName, const wxChar *userID)
+UWORD wxDb::GetColumnCount(const wxString &tableName, const wxChar *userID)
 /*
  * Returns a count of how many columns are in a table.
  * If an error occurs in computing the number of columns
@@ -2778,7 +2778,7 @@ int wxDb::GetColumnCount(const wxString &tableName, const wxChar *userID)
  *       to avoid undesired unbinding of columns.
  */
 {
-    int      noCols = 0;
+    UWORD    noCols = 0;
 
     RETCODE  retcode;
 
@@ -3172,8 +3172,9 @@ bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, cons
 
     wxString TableName;
 
-    wxString UserID;
+    wxString UserID,Schema;
     convertUserID(userID,UserID);
+    convertUserID(schema,Schema);
 
     TableName = tableName;
     // Oracle and Interbase table names are uppercase only, so force
@@ -3184,18 +3185,23 @@ bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, cons
 
     SQLFreeStmt(hstmt, SQL_CLOSE);
 
-    if (!schema)
+    // Some databases cannot accept a user name when looking up table names,
+    // so we use the call below that leaves out the user name
+    if (!Schema.IsEmpty() &&
+        Dbms() != dbmsMY_SQL &&
+        Dbms() != dbmsACCESS &&
+        Dbms() != dbmsMS_SQL_SERVER)
     {
         retcode = SQLTablePrivileges(hstmt,
                                      NULL, 0,                                    // Catalog
-                                     NULL, 0,                                    // Schema
+                                     (UCHAR FAR *)Schema.c_str(), SQL_NTS,               // Schema
                                      (UCHAR FAR *)TableName.c_str(), SQL_NTS);
     }
     else
     {
         retcode = SQLTablePrivileges(hstmt,
                                      NULL, 0,                                    // Catalog
-                                     (UCHAR FAR *)schema, SQL_NTS,               // Schema
+                                     NULL, 0,                                    // Schema
                                      (UCHAR FAR *)TableName.c_str(), SQL_NTS);
     }
 

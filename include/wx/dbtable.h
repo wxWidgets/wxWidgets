@@ -67,7 +67,7 @@ class WXDLLEXPORT wxDbColDef
 public:
     wxChar  ColName[DB_MAX_COLUMN_NAME_LEN+1];  // Column Name
     int     DbDataType;                         // Logical Data Type; e.g. DB_DATA_TYPE_INTEGER
-    int     SqlCtype;                           // C data type; e.g. SQL_C_LONG
+    SWORD   SqlCtype;                           // C data type; e.g. SQL_C_LONG
     void   *PtrDataObj;                         // Address of the data object
     int     SzDataObj;                          // Size, in bytes, of the data object
     bool    KeyField;                           // TRUE if this column is part of the PRIMARY KEY to the table; Date fields should NOT be KeyFields.
@@ -88,7 +88,7 @@ class WXDLLEXPORT wxDbColDataPtr
 public:
     void    *PtrDataObj;
     int      SzDataObj;
-    int      SqlCtype;
+    SWORD    SqlCtype;
 };  // wxDbColDataPtr
 
 
@@ -111,7 +111,7 @@ private:
     bool        insertable;
 
     // Private member functions
-    bool        initialize(wxDb *pwxDb, const wxString &tblName, const int nCols,
+    bool        initialize(wxDb *pwxDb, const wxString &tblName, const UWORD numColumns,
                        const wxString &qryTblName, bool qryOnly, const wxString &tblPath);
     void        cleanup();
 
@@ -153,7 +153,7 @@ private:
     wxString    tablePath;                                 // needed for dBase tables
     wxString    tableName;                                 // Table name
     wxString    queryTableName;                            // Query Table Name
-    int         noCols;                                    // # of columns in the table
+    UWORD       noCols;                                    // # of columns in the table
     bool        queryOnly;                                 // Query Only, no inserts, updates or deletes
 
     // Column Definitions
@@ -187,19 +187,19 @@ public:
     char        tablePath[wxDB_PATH_MAX];                  // needed for dBase tables
     char        tableName[DB_MAX_TABLE_NAME_LEN+1];        // Table name
     char        queryTableName[DB_MAX_TABLE_NAME_LEN+1];   // Query Table Name
-    int         noCols;                                    // # of columns in the table
+    UWORD       noCols;                                    // # of columns in the table
     bool        queryOnly;                                 // Query Only, no inserts, updates or deletes
 
     // Column Definitions
     wxDbColDef *colDefs;         // Array of wxDbColDef structures
 #endif
     // Public member functions
-    wxDbTable(wxDb *pwxDb, const wxString &tblName, const int nCols,
+    wxDbTable(wxDb *pwxDb, const wxString &tblName, const UWORD numColumns,
               const wxString &qryTblName="", bool qryOnly = !wxDB_QUERY_ONLY, 
               const wxString &tblPath="");
 
     // DEPRECATED
-    wxDbTable(wxDb *pwxDb, const wxString &tblName, const int nCols,
+    wxDbTable(wxDb *pwxDb, const wxString &tblName, const UWORD numColumns,
               const wxChar *qryTblName="", bool qryOnly = !wxDB_QUERY_ONLY, 
               const wxString &tblPath="");
 
@@ -222,7 +222,7 @@ public:
     const wxString &GetQueryTableName()  { return queryTableName; }
     const wxString &GetTablePath()       { return tablePath; }
 
-    int             GetNumberOfColumns() { return noCols; }  // number of "defined" columns for this wxDbTable instance
+    UWORD           GetNumberOfColumns() { return noCols; }  // number of "defined" columns for this wxDbTable instance
 
     const wxString &GetFromClause()      { return from; }
     const wxString &GetOrderByClause()   { return orderBy; }
@@ -302,7 +302,7 @@ public:
 
     wxDbColDef     *GetColDefs() { return colDefs; }
     void            SetColDefs(int index, const wxString &fieldName, int dataType, 
-                               void *pData, int cType,
+                               void *pData, SWORD cType,
                                int size, bool keyField = FALSE, bool upd = TRUE,
                                bool insAllow = TRUE, bool derivedCol = FALSE);
     wxDbColDataPtr *SetColDefs(wxDbColInf *colInfs, ULONG numCols);
