@@ -2423,14 +2423,14 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
             {
                 wxLogTrace(_T("i18n"),
                            _T("string '%s'[%d] not found in domain '%s' for locale '%s'."),
-                           szOrigString, n, szDomain, m_strLocale.c_str());
+                           szOrigString, (int)n, szDomain, m_strLocale.c_str());
 
             }
             else
             {
                 wxLogTrace(_T("i18n"),
                            _T("string '%s'[%d] not found in locale '%s'."),
-                           szOrigString, n, m_strLocale.c_str());
+                           szOrigString, (int)n, m_strLocale.c_str());
             }
         }
 #endif // __WXDEBUG__
