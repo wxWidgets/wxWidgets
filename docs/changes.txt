@@ -16,6 +16,7 @@ OTHER CHANGES
 2.2.5
 -----
 
+- fixed memory corruption/crash in wxStreamBuffer
 - wxTree/ListCtrl position fix (Mike Oliver <oliver@math.ucla.edu>)
 - Italian translations updated 
 
