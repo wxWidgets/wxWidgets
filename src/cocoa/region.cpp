@@ -100,6 +100,10 @@ wxRegion::wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
 }
 
+wxRegion::wxRegion(const wxRect& rect)
+{
+}
+
 wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
 }
