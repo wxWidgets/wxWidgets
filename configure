@@ -9299,7 +9299,7 @@ if eval "test \"`echo '$''{'wx_cv_prog_makeisgnu'+set}'`\" = set"; then
 else
   
     if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
-            egrep -qs GNU); then
+            egrep qs GNU > /dev/null); then
         wx_cv_prog_makeisgnu="yes"
     else
         wx_cv_prog_makeisgnu="no"

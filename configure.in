@@ -1223,7 +1223,7 @@ dnl does make support "-include" (only GNU make does AFAIK)?
 AC_CACHE_CHECK([if make is GNU make], wx_cv_prog_makeisgnu,
 [
     if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
-            egrep -qs GNU); then
+            egrep qs GNU > /dev/null); then
         wx_cv_prog_makeisgnu="yes"
     else
         wx_cv_prog_makeisgnu="no"
