@@ -76,6 +76,53 @@ void MywxCanvasImage::OnMouse(wxMouseEvent &event)
     }
 }
 
+class MywxCanvasObjectGroupRef: public wxCanvasObjectGroupRef
+{
+public:
+    MywxCanvasObjectGroupRef(double x, double y, wxCanvasObjectGroup* group);
+
+    void OnMouse(wxMouseEvent &event);
+
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(MywxCanvasObjectGroupRef,wxCanvasObjectGroupRef)
+  EVT_MOUSE_EVENTS( MywxCanvasObjectGroupRef::OnMouse )
+END_EVENT_TABLE()
+
+MywxCanvasObjectGroupRef::MywxCanvasObjectGroupRef(double x, double y,wxCanvasObjectGroup* group)
+    :wxCanvasObjectGroupRef(x,y,group)
+{
+}
+
+void MywxCanvasObjectGroupRef::OnMouse(wxMouseEvent &event)
+{
+    static bool first=false;
+    static dx=0;
+    static dy=0;
+
+    //new position of object
+    int x = m_owner->GetDeviceX( event.GetX());
+    int y = m_owner->GetDeviceY( event.GetY());
+
+    if (event.m_leftDown)
+    {   if (!first)
+        {
+           first=true;
+           dx=x;
+           dy=y;
+        }
+        Move(m_x+x-dx,m_y+y-dy);
+        CaptureMouse();
+    }
+    else if (IsCapturedMouse())
+    {
+        ReleaseMouse();
+        first=false;
+        dx=0;dy=0;
+    }
+}
+
 class MyFrame;
 class MyApp;
 
@@ -97,6 +144,10 @@ public:
     wxCanvasObject   *m_sm2;
     wxCanvasObject   *m_sm3;
     wxCanvasObject   *m_sm4;
+
+    MywxCanvasObjectGroupRef *m_ref;
+    MywxCanvasObjectGroupRef *m_ref2;
+
     wxTimer          *m_timer;
     wxTextCtrl       *m_log;
 
@@ -137,7 +188,7 @@ END_EVENT_TABLE()
 
 MyFrame::MyFrame()
        : wxFrame( (wxFrame *)NULL, -1, "wxCanvas sample",
-                  wxPoint(20,20), wxSize(470,460) )
+                  wxPoint(20,20), wxSize(470,860) )
 {
     wxMenu *file_menu = new wxMenu();
     file_menu->Append( ID_ABOUT, "&About...");
@@ -158,12 +209,13 @@ MyFrame::MyFrame()
     m_canvas->SetArea( 1400, 600 );
     m_canvas->SetColour( 255, 255, 255 );
 
+
     wxBitmap bitmap( smile_xpm );
     wxImage image( bitmap );
 
     m_sm1 = new wxCanvasImage( image, 0,70,16,16 );
     m_canvas->Append( m_sm1 );
-    
+
     int i;
     for (i = 10; i < 300; i+=10)
         m_canvas->Append( new wxCanvasRect( i,50,3,140, 255,0,0 ) );
@@ -189,8 +241,34 @@ MyFrame::MyFrame()
     m_sm4 = new MywxCanvasImage( image, 0,270,64,32 );
     m_canvas->Append( m_sm4 );
 
+
 //    m_canvas->Append( new wxCanvasLine( 10,-1500e6,50,300000e6, 0,255,0 ) );
 //    m_canvas->Append( new wxCanvasLine( 10,-150000,50,300000, 0,255,0 ) );
+
+    //make a group of wxCanvasObjects
+    wxCanvasObjectGroup* group1 = new wxCanvasObjectGroup();
+    group1->Prepend( new wxCanvasLine( 10,-35,50,190,100,255,0 ) );
+    group1->Prepend( new wxCanvasImage( image, 4,38,32,32 ) );
+    group1->Prepend( new wxCanvasRect(20,-20,50,170,0,20,240 ) );
+    group1->Prepend( new wxCanvasRect(10,20,104,52,0,240,240 ) );
+
+
+    //make another group of wxCanvasObjects
+    wxCanvasObjectGroup* group2 = new wxCanvasObjectGroup();
+    group2->Prepend( new wxCanvasImage( image, 60,38,52,32 ) );
+    group2->Prepend( new wxCanvasRect(10,20,104,52,10,40,10 ) );
+
+    //this a reference to group2 put into group1
+    wxCanvasObjectGroupRef* m_subref = new wxCanvasObjectGroupRef(60,50, group2);
+    group1->Prepend( m_subref );
+
+    //now make two refrences to group1 into root group of the canvas
+    m_ref = new MywxCanvasObjectGroupRef(40,200, group1);
+    m_canvas->Prepend( m_ref );
+
+    m_ref2 = new MywxCanvasObjectGroupRef(80,350, group1);
+    m_canvas->Prepend( m_ref2 );
+
 
     m_log = new wxTextCtrl( this, -1, "", wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
@@ -220,11 +298,13 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnTimer( wxTimerEvent &WXUNUSED(event) )
 {
-    m_sm1->Move( m_sm1->GetX()+1, m_sm1->GetY() );
+    m_sm1->Move( m_sm1->GetX()+1, m_sm1 ->GetY() );
     m_sm2->Move( m_sm2->GetX()+1, m_sm2->GetY() );
     m_sm3->Move( m_sm3->GetX()+1, m_sm3->GetY() );
-    m_sm4->Move( m_sm4->GetX()+1, m_sm4->GetY() );
-    
+    m_sm4->Move( m_sm4->GetX()+2, m_sm4->GetY() );
+    m_ref->Move( m_ref->GetPosX()+1, m_ref->GetPosY() );
+    m_ref2->Move( m_ref2->GetPosX()+2, m_ref2->GetPosY() );
+
     wxWakeUpIdle();
 }
 
@@ -242,6 +322,7 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 bool MyApp::OnInit()
 {
   m_fontpath = getenv("TRUETYPE");
+   m_fontpath = "c:\WINNT\Fonts\times.ttf";
   if ( !m_fontpath )
   {
       wxLogError("Please set env var TRUETYPE to the path where times.ttf lives.");

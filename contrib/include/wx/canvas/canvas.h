@@ -41,7 +41,7 @@ public:
     // These are for screen output only therefore use
     // int as coordinates.
     virtual bool IsHit( int x, int y, int margin = 0 );
-    virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
+    virtual void Render(int xabs, int yabs, int clip_x, int clip_y, int clip_width, int clip_height );
 
     // use doubles later
     virtual void Move( int x, int y );
@@ -55,7 +55,7 @@ public:
     virtual void WriteSVG( wxTextOutputStream &stream );
 
     wxCanvas *GetOwner()              { return m_owner; }
-    void SetOwner( wxCanvas *owner )  { m_owner = owner; }
+    virtual void SetOwner( wxCanvas *owner )  { m_owner = owner; }
 
     bool        IsControl()     { return m_isControl; }
     bool        IsVector()      { return m_isVector; }
@@ -74,9 +74,97 @@ protected:
     bool        m_isControl;
     bool        m_isVector;
     bool        m_isImage;
+
+    //relative boundingbox in parent in pixels
     wxRect      m_area;
 
     friend class wxCanvas;
+};
+
+//----------------------------------------------------------------------------
+// wxCanvasObjectGroup
+//----------------------------------------------------------------------------
+
+class wxCanvasObjectGroup
+{
+public:
+    wxCanvasObjectGroup();
+
+    void SetOwner(wxCanvas* canvas);
+    wxCanvas *GetOwner()              { return m_owner; }
+
+    virtual void Prepend( wxCanvasObject* obj );
+    virtual void Append( wxCanvasObject* obj );
+    virtual void Insert( size_t before, wxCanvasObject* obj );
+    virtual void Remove( wxCanvasObject* obj );
+
+    virtual void Recreate();
+            void DeleteContents( bool );
+    virtual void Render(int xabs, int yabs,int x, int y, int width, int height );
+    virtual void WriteSVG( wxTextOutputStream &stream );
+    virtual bool IsHit( int x, int y, int margin );
+    virtual wxCanvasObject* IsHitObject( int x, int y, int margin );
+
+    void ExtendArea(int x, int y);
+
+    inline int  GetXMin()     { return m_minx; }
+    inline int  GetYMin()     { return m_miny; }
+    inline int  GetXMax()     { return m_maxx; }
+    inline int  GetYMax()     { return m_maxy; }
+
+protected:
+    wxCanvas   *m_owner;
+
+    //bounding box
+    double        m_minx;
+    double        m_miny;
+    double        m_maxx;
+    double        m_maxy;
+    bool          m_validbounds;
+
+    wxList        m_objects;
+
+    friend class wxCanvas;
+};
+
+//----------------------------------------------------------------------------
+// wxCanvasObjectGroupRef
+//----------------------------------------------------------------------------
+
+class wxCanvasObjectGroupRef: public wxCanvasObject
+{
+public:
+    wxCanvasObjectGroupRef(double x, double y,wxCanvasObjectGroup* group);
+
+    void SetOwner(wxCanvas* canvas);
+
+    virtual void Recreate();
+    virtual void Render(int xabs, int yabs,int x, int y, int width, int height );
+    virtual void WriteSVG( wxTextOutputStream &stream );
+    virtual bool IsHit( int x, int y, int margin );
+    void Move( int x, int y );
+
+    inline int  GetPosX()          { return m_x; }
+    inline int  GetPosY()          { return m_y; }
+
+    void ExtendArea(int x, int y);
+    virtual wxCanvasObject* IsHitObject( int x, int y, int margin );
+
+protected:
+    //position of the group
+    double        m_x;
+    double        m_y;
+
+    //reference to the group
+    wxCanvasObjectGroup*        m_group;
+
+    //bounding box
+    double        m_minx;
+    double        m_miny;
+    double        m_maxx;
+    double        m_maxy;
+    bool          m_validbounds;
+
 };
 
 //----------------------------------------------------------------------------
@@ -91,7 +179,7 @@ public:
 
     virtual void Recreate();
 
-    virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
+    virtual void Render(int xabs, int yabs, int clip_x, int clip_y, int clip_width, int clip_height );
     virtual void WriteSVG( wxTextOutputStream &stream );
 
 private:
@@ -117,7 +205,7 @@ public:
 
     virtual void Recreate();
 
-    virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
+    virtual void Render(int xabs, int yabs, int clip_x, int clip_y, int clip_width, int clip_height );
     virtual void WriteSVG( wxTextOutputStream &stream );
     
 private:
@@ -142,7 +230,7 @@ public:
     
     virtual void Recreate();
     
-    virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
+    virtual void Render(int xabs, int yabs, int clip_x, int clip_y, int clip_width, int clip_height );
     virtual void WriteSVG( wxTextOutputStream &stream );
     
 private:
@@ -185,7 +273,7 @@ public:
 
     void Recreate();
 
-    virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
+    virtual void Render(int xabs, int yabs, int clip_x, int clip_y, int clip_width, int clip_height );
     virtual void WriteSVG( wxTextOutputStream &stream );
     
     void SetRGB( unsigned char red, unsigned char green, unsigned char blue );
@@ -264,7 +352,8 @@ private:
     int              m_bufferY;
     bool             m_needUpdate;
     wxList           m_updateRects;
-    wxList           m_objects;
+    wxCanvasObjectGroup* m_root;
+
     unsigned char    m_green,m_red,m_blue;
     bool             m_frozen;
     bool             m_requestNewBuffer;
