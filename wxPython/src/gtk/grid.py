@@ -500,6 +500,12 @@ class wxGridCellAttrPtr :
     def SetAlignment(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_SetAlignment,(self,) + _args, _kwargs)
         return val
+    def SetSize(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellAttr_SetSize,(self,) + _args, _kwargs)
+        return val
+    def SetOverflow(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellAttr_SetOverflow,(self,) + _args, _kwargs)
+        return val
     def SetReadOnly(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_SetReadOnly,(self,) + _args, _kwargs)
         return val
@@ -547,6 +553,12 @@ class wxGridCellAttrPtr :
         return val
     def GetAlignment(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_GetAlignment,(self,) + _args, _kwargs)
+        return val
+    def GetSize(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellAttr_GetSize,(self,) + _args, _kwargs)
+        return val
+    def GetOverflow(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellAttr_GetOverflow,(self,) + _args, _kwargs)
         return val
     def GetRenderer(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_GetRenderer,(self,) + _args, _kwargs)
@@ -1000,6 +1012,9 @@ class wxGridPtr(wxScrolledWindowPtr):
     def ForceRefresh(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_ForceRefresh,(self,) + _args, _kwargs)
         return val
+    def Refresh(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_Refresh,(self,) + _args, _kwargs)
+        return val
     def IsEditable(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_IsEditable,(self,) + _args, _kwargs)
         return val
@@ -1214,6 +1229,9 @@ class wxGridPtr(wxScrolledWindowPtr):
     def CanDragGridSize(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_CanDragGridSize,(self,) + _args, _kwargs)
         return val
+    def SetAttr(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_SetAttr,(self,) + _args, _kwargs)
+        return val
     def SetRowAttr(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_SetRowAttr,(self,) + _args, _kwargs)
         return val
@@ -1280,6 +1298,15 @@ class wxGridPtr(wxScrolledWindowPtr):
     def GetCellAlignment(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetCellAlignment,(self,) + _args, _kwargs)
         return val
+    def GetDefaultCellOverflow(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_GetDefaultCellOverflow,(self,) + _args, _kwargs)
+        return val
+    def GetCellOverflow(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_GetCellOverflow,(self,) + _args, _kwargs)
+        return val
+    def GetCellSize(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_GetCellSize,(self,) + _args, _kwargs)
+        return val
     def SetDefaultRowSize(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_SetDefaultRowSize,(self,) + _args, _kwargs)
         return val
@@ -1336,6 +1363,15 @@ class wxGridPtr(wxScrolledWindowPtr):
         return val
     def SetCellAlignment(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_SetCellAlignment,(self,) + _args, _kwargs)
+        return val
+    def SetDefaultCellOverflow(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_SetDefaultCellOverflow,(self,) + _args, _kwargs)
+        return val
+    def SetCellOverflow(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_SetCellOverflow,(self,) + _args, _kwargs)
+        return val
+    def SetCellSize(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_SetCellSize,(self,) + _args, _kwargs)
         return val
     def SetDefaultRenderer(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_SetDefaultRenderer,(self,) + _args, _kwargs)

@@ -869,6 +869,9 @@ class wxTreeEventPtr(wxNotifyEventPtr):
     def GetLabel(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeEvent_GetLabel,(self,) + _args, _kwargs)
         return val
+    def IsEditCancelled(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeEvent_IsEditCancelled,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxTreeEvent instance at %s>" % (self.this,)
     GetCode = GetKeyCode

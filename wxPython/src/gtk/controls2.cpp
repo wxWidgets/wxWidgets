@@ -6315,6 +6315,34 @@ static PyObject *_wrap_wxTreeEvent_GetLabel(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+#define wxTreeEvent_IsEditCancelled(_swigobj)  (_swigobj->IsEditCancelled())
+static PyObject *_wrap_wxTreeEvent_IsEditCancelled(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTreeEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTreeEvent_IsEditCancelled",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_IsEditCancelled. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTreeEvent_IsEditCancelled(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxPyTreeCtrlTowxControl(void *ptr) {
     wxPyTreeCtrl *src;
     wxControl *dest;
@@ -10682,6 +10710,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_Create", (PyCFunction) _wrap_wxTreeCtrl_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreTreeCtrl", (PyCFunction) _wrap_new_wxPreTreeCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTreeCtrl", (PyCFunction) _wrap_new_wxTreeCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_IsEditCancelled", (PyCFunction) _wrap_wxTreeEvent_IsEditCancelled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetLabel", (PyCFunction) _wrap_wxTreeEvent_GetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetKeyCode", (PyCFunction) _wrap_wxTreeEvent_GetKeyCode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetKeyEvent", (PyCFunction) _wrap_wxTreeEvent_GetKeyEvent, METH_VARARGS | METH_KEYWORDS },
