@@ -22,6 +22,8 @@
 #include "wx/bitmap.h"
 #include "wx/image.h"
 
+#include "wx/gizmos/gizmos.h"
+
 enum
 {
     wxSCALE_HORIZONTAL = 0x1,
