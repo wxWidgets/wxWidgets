@@ -21,9 +21,10 @@
 #include "wx/list.h"
 #include "wx/window.h"
 #include "wx/filefn.h"
-#include "wx/process.h"
 
 #include "wx/ioswrap.h"
+
+class wxProcess;
 
 #ifdef __X__
 #ifndef __VMS__
