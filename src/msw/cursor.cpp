@@ -138,8 +138,6 @@ wxCursor::wxCursor(const wxString& cursor_file,
     wxCursorRefData *refData = new wxCursorRefData;
     m_refData = refData;
 
-    refData->m_destroyCursor = FALSE;
-
     if (flags == wxBITMAP_TYPE_CUR_RESOURCE)
     {
 #ifdef __WIN95__
@@ -147,6 +145,7 @@ wxCursor::wxCursor(const wxString& cursor_file,
 #else
         refData->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), cursor_file);
 #endif
+        refData->m_destroyCursor = FALSE;
     }
     else if (flags == wxBITMAP_TYPE_CUR)
     {
@@ -155,7 +154,6 @@ wxCursor::wxCursor(const wxString& cursor_file,
 #else
 #if wxUSE_RESOURCE_LOADING_IN_MSW
         refData->m_hCursor = (WXHCURSOR) ReadCursorFile(WXSTRINGCAST cursor_file, wxGetInstance(), &refData->m_width, &refData->m_height);
-        refData->m_destroyCursor = TRUE;
 #endif
 #endif
     }
@@ -163,7 +161,6 @@ wxCursor::wxCursor(const wxString& cursor_file,
     {
 #if wxUSE_RESOURCE_LOADING_IN_MSW
         refData->m_hCursor = (WXHCURSOR) IconToCursor(WXSTRINGCAST cursor_file, wxGetInstance(), hotSpotX, hotSpotY, &refData->m_width, &refData->m_height);
-        refData->m_destroyCursor = TRUE;
 #endif
     }
     else if (flags == wxBITMAP_TYPE_BMP)
@@ -180,7 +177,6 @@ wxCursor::wxCursor(const wxString& cursor_file,
         pnt.x = hotSpotX;
         pnt.y = hotSpotY;
         refData->m_hCursor = (WXHCURSOR) MakeCursorFromBitmap(wxGetInstance(), hBitmap, &pnt);
-        refData->m_destroyCursor = TRUE;
         DeleteObject(hBitmap);
 #endif
     }
