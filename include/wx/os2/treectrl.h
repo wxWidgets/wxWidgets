@@ -25,6 +25,7 @@
 #include "wx/textctrl.h"
 #include "wx/dynarray.h"
 #include "wx/treebase.h"
+#include "wx/hashmap.h"
 
 // the type for "untyped" data
 typedef long wxDataType;
@@ -51,6 +52,9 @@ enum
 // flags for deprecated InsertItem() variant
 #define wxTREE_INSERT_FIRST 0xFFFF0001
 #define wxTREE_INSERT_LAST  0xFFFF0002
+
+// hash storing attributes for our items
+WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxTreeItemAttr *, wxMapTreeAttr);
 
 // ----------------------------------------------------------------------------
 // wxTreeCtrl
@@ -291,28 +295,19 @@ public:
     wxWindow* GetParent(void) const { return wxControl::GetParent(); }
 #endif  // WXWIN_COMPATIBILITY_2_2
 
-    //
-    // For this enumeration function you must pass in a "cookie" parameter
-    // which is opaque for the application but is necessary for the library
-    // to make these functions reentrant (i.e. allow more than one
-    // enumeration on one and the same object simultaneously). Of course,
-    // the "cookie" passed to GetFirstChild() and GetNextChild() should be
-    // the same!
-    //
+        // for this enumeration function you must pass in a "cookie" parameter
+        // which is opaque for the application but is necessary for the library
+        // to make these functions reentrant (i.e. allow more than one
+        // enumeration on one and the same object simultaneously). Of course,
+        // the "cookie" passed to GetFirstChild() and GetNextChild() should be
+        // the same!
 
-    //
-    // Get the first child of this item
-    //
-    wxTreeItemId GetFirstChild( const wxTreeItemId& rItem
-                               ,long&               rCookie
-                              ) const;
-
-    //
-    // Get the next child
-    //
-    wxTreeItemId GetNextChild( const wxTreeItemId& rItem
-                              ,long&               rCookie
-                             ) const;
+        // get the first child of this item
+    wxTreeItemId GetFirstChild(const wxTreeItemId& item,
+                               wxTreeItemIdValue& cookie) const;
+        // get the next child
+    wxTreeItemId GetNextChild(const wxTreeItemId& item,
+                              wxTreeItemIdValue& cookie) const;
 
     //
     // Get the last child of this item - this method doesn't use cookies
@@ -534,7 +529,8 @@ public:
     //
     // Deprecated
     // ----------
-    //
+
+#if WXWIN_COMPATIBILITY_2_4
     // These methods are deprecated and will be removed in future versions of
     // wxWindows, they're here for compatibility only, don't use them in new
     // code (the comments indicate why these methods are now useless and how to
@@ -544,19 +540,19 @@ public:
     //
     // Use Expand, Collapse, CollapseAndReset or Toggle
     //
-    void ExpandItem( const wxTreeItemId& rItem
-                    ,int                 nAction
-                   );
+    wxDEPRECATED( void ExpandItem( const wxTreeItemId& rItem
+                                  ,int                 nAction
+                                 ) );
 
     //
     // Use AddRoot, PrependItem or AppendItem
     //
-    wxTreeItemId InsertItem( const wxTreeItemId& pParent
-                            ,const wxString&     rsText
-                            ,int                 nImage = -1
-                            ,int                 nSelImage = -1
-                            ,long                lInsertAfter = wxTREE_INSERT_LAST
-                           );
+    wxDEPRECATED( wxTreeItemId InsertItem( const wxTreeItemId& pParent
+                                          ,const wxString&     rsText
+                                          ,int                 nImage = -1
+                                          ,int                 nSelImage = -1
+                                          ,long                lInsertAfter = wxTREE_INSERT_LAST
+                                         ) );
 
     //
     // Use Set/GetImageList and Set/GetStateImageList
@@ -573,6 +569,29 @@ public:
         { return GetItemImage(rItem, wxTreeItemIcon_Selected); }
     void SetItemSelectedImage(const wxTreeItemId& rItem, int nImage)
         { SetItemImage(rItem, nImage, wxTreeItemIcon_Selected); }
+    //
+    // For this enumeration function you must pass in a "cookie" parameter
+    // which is opaque for the application but is necessary for the library
+    // to make these functions reentrant (i.e. allow more than one
+    // enumeration on one and the same object simultaneously). Of course,
+    // the "cookie" passed to GetFirstChild() and GetNextChild() should be
+    // the same!
+    //
+
+    //
+    // Get the first child of this item
+    //
+    wxDEPRECATED( wxTreeItemId GetFirstChild( const wxTreeItemId& rItem
+                                             ,long&               rCookie
+                                            ) const );
+
+    //
+    // Get the next child
+    //
+    wxDEPRECATED( wxTreeItemId GetNextChild( const wxTreeItemId& rItem
+                                            ,long&               rCookie
+                                           ) const );
+#endif // WXWIN_COMPATIBILITY_2_4
 
     //
     // Implementation
@@ -670,7 +689,7 @@ private:
     //
     // The hash storing the items attributes (indexed by items ids)
     //
-    wxHashTable                     m_vAttrs;
+    wxMapTreeAttr                   m_vAttrs;
 
     //
     // TRUE if the hash above is not empty
