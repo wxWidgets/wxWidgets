@@ -404,10 +404,13 @@ long wxExecute(wxChar **argv,
                wxProcess *process)
 {
     // for the sync execution, we return -1 to indicate failure, but for async
-    // cse we return 0 which is never a valid PID
-    long errorRetCode = sync ? -1 : 0;
+    // case we return 0 which is never a valid PID
+    //
+    // we define this as a macro, not a variable, to avoid compiler warnings
+    // about "ERROR_RETURN_CODE value may be clobbered by fork()"
+    #define ERROR_RETURN_CODE ((sync) ? -1 : 0)
 
-    wxCHECK_MSG( *argv, errorRetCode, wxT("can't exec empty command") );
+    wxCHECK_MSG( *argv, ERROR_RETURN_CODE, wxT("can't exec empty command") );
 
 #if wxUSE_UNICODE
     int mb_argc = 0;
@@ -442,7 +445,7 @@ long wxExecute(wxChar **argv,
 
         ARGS_CLEANUP;
 
-        return errorRetCode;
+        return ERROR_RETURN_CODE;
     }
 #endif // wxUSE_GUI
 
@@ -470,7 +473,7 @@ long wxExecute(wxChar **argv,
 
             ARGS_CLEANUP;
 
-            return errorRetCode;
+            return ERROR_RETURN_CODE;
         }
     }
 
@@ -498,7 +501,7 @@ long wxExecute(wxChar **argv,
 
         ARGS_CLEANUP;
 
-        return errorRetCode;
+        return ERROR_RETURN_CODE;
     }
     else if ( pid == 0 )  // we're in child
     {
@@ -631,6 +634,7 @@ long wxExecute(wxChar **argv,
 #endif
 }
 
+#undef ERROR_RETURN_CODE
 #undef ARGS_CLEANUP
 
 // ----------------------------------------------------------------------------
