@@ -168,8 +168,6 @@ utils/hhp2cached/*.xbm
 utils/hhp2cached/*.xpm
 utils/hhp2cached/*.txt
 
-contrib/configure
-contrib/configure.in
 contrib/lib/dummy
 
 samples/samples.bkl

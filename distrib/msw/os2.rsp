@@ -24,6 +24,7 @@ src/os2/*.lst
 
 include/wx/os2/*.h
 include/wx/os2/*.rc
+include/wx/os2/*.res
 include/wx/msw/*.cur
 include/wx/msw/*.ico
 include/wx/msw/*.bmp
