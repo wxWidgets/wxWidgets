@@ -157,7 +157,7 @@ enum wxKeyType
             dummy();                                                          \
         };                                                                    \
     protected:                                                                \
-        iterator find( elT e )                                                \
+        iterator find( const elT e )                                          \
         {                                                                     \
             iterator it, en;                                                  \
             for( it = begin(), en = end(); it != en; ++it )                   \
@@ -188,7 +188,7 @@ enum wxKeyType
         {                                                                     \
             erase( it.m_iter );                                               \
         }                                                                     \
-        citer Find( elT e ) const { return citer( this, ((liT*)this)->find( e ) ); } \
+        citer Find( const elT e ) const { return citer( this, ((liT*)this)->find( e ) ); } \
         citer Member( elT e ) const { return Find( e ); }                     \
         citer Insert( elT e )                                                 \
             { push_front( e ); return citer( this, begin() ); }               \
@@ -497,7 +497,7 @@ protected:
 
     // search (all return NULL if item not found)
         // by data
-    wxNodeBase *Find(void *object) const;
+    wxNodeBase *Find(const void *object) const;
 
         // by key
     wxNodeBase *Find(const wxListKey& key) const;
@@ -647,7 +647,7 @@ private:
         void Erase(compatibility_iterator it)                               \
             { DeleteNode(it); }                                             \
                                                                             \
-        nodetype *Find(Tbase *object) const                                 \
+        nodetype *Find(const Tbase *object) const                           \
             { return (nodetype *)wxListBase::Find(object); }                \
                                                                             \
         virtual nodetype *Find(const wxListKey& key) const                  \

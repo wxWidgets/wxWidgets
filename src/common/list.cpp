@@ -345,7 +345,7 @@ wxNodeBase *wxListBase::Find(const wxListKey& key) const
     return (wxNodeBase *)NULL;
 }
 
-wxNodeBase *wxListBase::Find(void *object) const
+wxNodeBase *wxListBase::Find(const void *object) const
 {
     for ( wxNodeBase *current = GetFirst(); current; current = current->GetNext() )
     {
