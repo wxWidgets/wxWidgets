@@ -99,21 +99,39 @@ void wxMenuItem::UpdateItemStatus()
     if ( !m_parentMenu )
         return ;
         
-    MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
-    MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
-    if( mhandle == NULL || index == 0)
-        return ;
+#if TARGET_CARBON
+    if ( UMAGetSystemVersion() >= 0x1000 && GetId() == wxApp::s_macPreferencesMenuItemId)
+    {
+        if ( !IsEnabled() )
+            DisableMenuCommand( NULL , kHICommandPreferences ) ;
+        else
+            EnableMenuCommand( NULL , kHICommandPreferences ) ;
+    }
+    if ( UMAGetSystemVersion() >= 0x1000 && GetId() == wxApp::s_macExitMenuItemId)
+    {
+        if ( !IsEnabled() )
+            DisableMenuCommand( NULL , kHICommandQuit ) ;
+        else
+            EnableMenuCommand( NULL , kHICommandQuit ) ;
+    }
+#endif
+    { 
+        MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
+        MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
+        if( mhandle == NULL || index == 0)
+            return ;
 
-      UMAEnableMenuItem( mhandle , index , m_isEnabled ) ;
-      if ( IsCheckable() && IsChecked() )
-        ::SetItemMark( mhandle , index , 0x12 ) ; // checkmark
-    else
-        ::SetItemMark( mhandle , index , 0 ) ; // no mark
+          UMAEnableMenuItem( mhandle , index , m_isEnabled ) ;
+          if ( IsCheckable() && IsChecked() )
+            ::SetItemMark( mhandle , index , 0x12 ) ; // checkmark
+        else
+            ::SetItemMark( mhandle , index , 0 ) ; // no mark
 
-       UMASetMenuItemText( mhandle , index , m_text ) ; 
-       wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
-    UMASetMenuItemShortcut( mhandle , index , entry ) ;
-    delete entry ;
+           UMASetMenuItemText( mhandle , index , m_text ) ; 
+           wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
+        UMASetMenuItemShortcut( mhandle , index , entry ) ;
+        delete entry ;
+    }
 }
 
 void wxMenuItem::UpdateItemText() 
