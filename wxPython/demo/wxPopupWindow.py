@@ -34,9 +34,6 @@ class TestPopup(wxPopupWindow):
 
     def OnMouseLeftDown(self, evt):
         self.ldPos = evt.GetEventObject().ClientToScreen(evt.GetPosition())
-##         if wxPlatform == "__WXMSW__":   # this is weird...
-##             self.wPos = self.GetParent().ClientToScreen(self.GetPosition())
-##         else:
         self.wPos = self.GetPosition()
         self.CaptureMouse()
 

@@ -5,9 +5,11 @@ import string
 
 
 class wxScrolledMessageDialog(wxDialog):
-
     def __init__(self, parent, msg, caption, pos = wxDefaultPosition, size = (500,300)):
         wxDialog.__init__(self, parent, -1, caption, pos, size)
+        x, y = pos
+        if x == -1 and y == -1:
+            self.CenterOnScreen(wxBOTH)
         text = wxTextCtrl(self, -1, msg, wxDefaultPosition,
                              wxDefaultSize,
                              wxTE_MULTILINE | wxTE_READONLY)
@@ -19,9 +21,11 @@ class wxScrolledMessageDialog(wxDialog):
 
 
 class wxMultipleChoiceDialog(wxDialog):
-
     def __init__(self, parent, msg, title, lst, pos = wxDefaultPosition, size = (200,200)):
         wxDialog.__init__(self, parent, -1, title, pos, size)
+        x, y = pos
+        if x == -1 and y == -1:
+            self.CenterOnScreen(wxBOTH)
         dc = wxClientDC(self)
         height = 0
         for line in string.split(msg,'\n'):
