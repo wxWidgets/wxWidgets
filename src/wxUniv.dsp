@@ -1040,6 +1040,10 @@ SOURCE=.\univ\checklst.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\univ\choice.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\univ\colschem.cpp
 # End Source File
 # Begin Source File
