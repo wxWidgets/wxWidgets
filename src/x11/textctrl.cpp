@@ -2234,6 +2234,7 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
     if (shift)
     {
         int x,y,w,h;
+        bool erase_background = TRUE;
         
         if (!has_selection)
         {
@@ -2298,11 +2299,17 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
                 {
                     y = m_selEndY*m_lineHeight;
                     h = (new_y-m_selEndY+1) * m_lineHeight;
+                    
+                    erase_background = ((m_selEndY < m_selStartY) ||
+                                        ((m_selEndY == m_selStartY) && (m_selEndX < m_selStartX)));
                 }
                 else
                 {
                     y = new_y*m_lineHeight;
                     h = (-new_y+m_selEndY+1) * m_lineHeight;
+                    
+                    erase_background = ((m_selEndY > m_selStartY) ||
+                                        ((m_selEndY == m_selStartY) && (m_selEndX > m_selStartX)));
                 }
                 no_cursor_refresh = TRUE;
                 m_cursorX = new_x;
@@ -2315,7 +2322,7 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
         
         CalcScrolledPosition( x, y, &x, &y );
         wxRect rect( x+2, y+2, w, h );
-        Refresh( TRUE, &rect );
+        Refresh( erase_background, &rect );
     }
     else
     {
