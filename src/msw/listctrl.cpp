@@ -45,6 +45,12 @@
 
 #include "wx/msw/private.h"
 
+#if defined(__WXWINCE__)
+  #include <ole2.h>
+  #include <shellapi.h>
+  #include <aygshell.h>
+#endif
+
 // include <commctrl.h> "properly"
 #include "wx/msw/wrapcctl.h"
 
@@ -1802,6 +1808,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_col = nmHDR->iItem;
                 break;
 
+#ifdef __WXWINCE__
+            case GN_CONTEXTMENU:
+#endif __WXWINCE__
             case NM_RCLICK:
                 {
                     eventType = wxEVT_COMMAND_LIST_COL_RIGHT_CLICK;
@@ -2128,6 +2137,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_item.m_data = GetItemData(iItem);
                 break;
 
+#ifdef __WXWINCE__
+            case GN_CONTEXTMENU:
+#endif __WXWINCE__
             case NM_RCLICK:
                 // if the user processes it in wxEVT_COMMAND_RIGHT_CLICK(),
                 // don't do anything else

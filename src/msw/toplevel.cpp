@@ -41,6 +41,13 @@
 #include "wx/module.h"
 
 #include "wx/msw/private.h"
+
+#if defined(__WXWINCE__)
+  #include <ole2.h>
+  #include <shellapi.h>
+  #include <aygshell.h>
+#endif
+
 #include "wx/msw/winundef.h"
 
 // This can't be undefed in winundef.h or
@@ -697,10 +704,13 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
         else // fall back to the main desktop
 #else // wxUSE_DISPLAY
         {
-            // FIXME: implement for WinCE
-#ifndef __WXWINCE__
             // resize to the size of the desktop
             wxCopyRECTToRect(wxGetWindowRect(::GetDesktopWindow()), rect);
+#ifdef __WXWINCE__
+            // FIXME: size of the bottom menu (toolbar)
+            // should be taken in account
+            rect.height += rect.y;
+            rect.y       = 0;
 #endif
         }
 #endif // wxUSE_DISPLAY
@@ -727,12 +737,19 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
                      rect.x, rect.y, rect.width, rect.height,
                      flags);
 
+#ifdef __WXWINCE__
+        ::SHFullScreen(GetHwnd(), SHFS_HIDETASKBAR | SHFS_HIDESIPBUTTON);
+#endif
+
         // finally send an event allowing the window to relayout itself &c
         wxSizeEvent event(rect.GetSize(), GetId());
         GetEventHandler()->ProcessEvent(event);
     }
     else // stop showing full screen
     {
+#ifdef __WXWINCE__
+        ::SHFullScreen(GetHwnd(), SHFS_SHOWTASKBAR | SHFS_SHOWSIPBUTTON);
+#endif
         Maximize(m_fsIsMaximized);
         SetWindowLong(GetHwnd(),GWL_STYLE, m_fsOldWindowStyle);
         SetWindowPos(GetHwnd(),HWND_TOP,m_fsOldSize.x, m_fsOldSize.y,
