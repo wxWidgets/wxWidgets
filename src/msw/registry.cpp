@@ -444,6 +444,11 @@ bool wxRegKey::CopyValue(const wxChar *szValue,
                          wxRegKey& keyDst,
                          const wxChar *szValueNew)
 {
+    if ( !szValueNew ) {
+        // by default, use the same name
+        szValueNew = szValue;
+    }
+
     switch ( GetValueType(szValue) ) {
         case Type_String:
             {
