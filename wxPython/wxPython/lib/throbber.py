@@ -149,7 +149,7 @@ class Throbber(wxPanel):
 
     def UpdateThread(self):
         try:
-            while not self.event.isSet():
+            while hasattr(self, 'event') and not self.event.isSet():
                 wxPostEvent(self, UpdateThrobberEvent())
                 self.event.wait(self.frameDelay)
         except wxPyDeadObjectError: # BUG: we were destroyed

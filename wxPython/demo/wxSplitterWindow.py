@@ -35,8 +35,12 @@ def runTest(frame, nb, log):
     wxStaticText(p2, -1, "Panel Two", wxPoint(5,5)).SetBackgroundColour(wxBLUE)
 
     splitter.SetMinimumPaneSize(20)
-    splitter.SplitVertically(p1, p2)
-    splitter.SetSashPosition(100)
+    splitter.SplitVertically(p1, p2, 100)
+
+##     splitter.SetSize((300,300))
+##     print splitter.GetSashPosition()
+##     splitter.SetSashPosition(100)
+##     print splitter.GetSashPosition()
 
     return splitter
 

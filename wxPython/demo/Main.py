@@ -448,6 +448,7 @@ class wxPythonDemo(wxFrame):
         if self.nb.GetPageCount() == 3:
             if self.nb.GetSelection() == 2:
                 self.nb.SetSelection(0)
+            wxSafeYield() # in case the page has pending events
             self.nb.DeletePage(2)
 
         if itemText == self.overviewText:
