@@ -12,8 +12,8 @@
 \section{\class{wxBufferedDC}}\label{wxbuffereddc}
 
 This simple class provides a simple way to avoid flicker: when drawing on it,
-everything is in fact drawn on an in-memory buffer (a 
-\helpref{wxBitmap}{wxbitmap}) and copied to the screen only once, when this
+everything is in fact first drawn on an in-memory buffer (a 
+\helpref{wxBitmap}{wxbitmap}) and then copied to the screen only once, when this
 object is destroyed.
 
 It can be used in the same way as any other device context. wxBufferedDC itself
@@ -42,7 +42,7 @@ your \texttt{OnPaint()} handler, you should look at
 
 \func{}{wxBufferedDC}{\void}
 
-\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{flags}}
+\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}}
 
 \func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}}
 
@@ -55,15 +55,11 @@ must not be called after using them.
 \wxheading{Parameters}
 
 \docparam{dc}{The underlying DC: everything drawn to this object will be
-flushed to this DC when this object is destroyed.}
+flushed to this DC when this object is destroyed.  You may pass NULL
+in order to just initialize the buffer, and not flush it.}
 
 \docparam{area}{The size of the bitmap to be used for buffering (this bitmap is
 created internally when it is not given explicitely).}
-
-\docparam{flags}{Can currently only include the flag 
-\texttt{wxBUFFER\_DC\_PRESERVE\_BG} which means that the existing background
-of \arg{dc} must be copied to this object before doing anything else, otherwise
-the background is overwritten (which is more efficient).}
 
 \docparam{buffer}{Explicitly provided bitmap to be used for buffering: this is
 the most efficient solution as the bitmap doesn't have to be recreated each
@@ -73,7 +69,7 @@ should have appropriate size, anything drawn outside of its bounds is clipped.}
 
 \membersection{wxBufferedDC::Init}\label{wxbuffereddcinit}
 
-\func{void}{Init}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{flags}}
+\func{void}{Init}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}}
 
 \func{void}{Init}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}}
 
@@ -87,7 +83,7 @@ Please see \helpref{constructors documentation}{wxbuffereddcctor} for details.
 \membersection{wxBufferedDC::\destruct{wxBufferedDC}}\label{wxbuffereddcdtor}
 
 Copies everything drawn on the DC so far to the underlying DC associated with
-this object.
+this object, if any.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -95,7 +91,7 @@ this object.
 \section{\class{wxBufferedPaintDC}}\label{wxbufferedpaintdc}
 
 This is a subclass of \helpref{wxBufferedDC}{wxbuffereddc} which can be used
-inside \texttt{OnPaint()} handler. Just create an object of this class instead
+inside of an \texttt{OnPaint()} event handler. Just create an object of this class instead
 of \helpref{wxPaintDC}{wxpaintdc} and that's all you have to do to (mostly)
 avoid flicker. The only thing to watch out for is that if you are using this
 class together with \helpref{wxScrolledWindow}{wxscrolledwindow}, you probably
@@ -117,9 +113,7 @@ already does this internally for the real underlying wxPaintDC.
 
 \membersection{wxBufferedPaintDC::wxBufferedPaintDC}\label{wxbufferedpaintdcctor}
 
-\func{}{wxBufferedPaintDC}{\param{wxWindow *}{window}, \param{int }{flags}}
-
-\func{}{wxBufferedPaintDC}{\param{wxWindow *}{window}, \param{const wxBitmap\& }{buffer}}
+\func{}{wxBufferedPaintDC}{\param{wxWindow *}{window}, \param{const wxBitmap\& }{buffer = wxNullBitmap}}
 
 As with \helpref{wxBufferedDC}{wxbuffereddcctor}, you may either provide the
 bitmap to be used for buffering or let this object create one internally (in
@@ -129,6 +123,6 @@ the latter case, the size of the client part of the window is used).
 \membersection{wxBufferedPaintDC::\destruct{wxBufferedPaintDC}}\label{wxbufferedpaintdcdtor}
 
 Copies everything drawn on the DC so far to the window associated with this
-object.
+object, using a \helpref{wxPaintDC}{wxpaintdc}.
 
 
