@@ -38,9 +38,9 @@ can seek beyond the end of the stream (file) and will thus not return
 
 \membersection{wxFFileInputStream::wxFFileInputStream}\label{wxffileinputstreamctor}
 
-\func{}{wxFFileInputStream}{\param{const wxString\&}{ ifileName}}
+\func{}{wxFFileInputStream}{\param{const wxString\&}{ filename}, \param{const wxChar *}{ mode = "rb"}}
 
-Opens the specified file using its {\it ifilename} name in read-only mode.
+Opens the specified file using its {\it filename} name using the specified mode.
 
 \func{}{wxFFileInputStream}{\param{wxFFile\&}{ file}}
 
@@ -102,10 +102,9 @@ can seek beyond the end of the stream (file) and will thus not return
 
 \membersection{wxFFileOutputStream::wxFFileOutputStream}\label{wxffileoutputstreamctor}
 
-\func{}{wxFFileOutputStream}{\param{const wxString\&}{ ofileName}}
+\func{}{wxFFileOutputStream}{\param{const wxString\&}{ filename}, \param{const wxChar *}{ mode="w+b"}}
 
-Creates a new file with {\it ofilename} name and initializes the stream in
-write-only mode. 
+Opens the file with the given {\it filename} name in the specified mode.
 
 \func{}{wxFFileOutputStream}{\param{wxFFile\&}{ file}}
 

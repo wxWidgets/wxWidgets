@@ -195,18 +195,19 @@ wxFileStream::wxFileStream(const wxString& fileName)
 // wxFFileInputStream
 // ----------------------------------------------------------------------------
 
-wxFFileInputStream::wxFFileInputStream(const wxString& fileName)
-  : wxInputStream()
+wxFFileInputStream::wxFFileInputStream(const wxString& fileName,
+                                       const wxChar *mode)
+                  : wxInputStream()
 {
-    m_file = new wxFFile(fileName, _T("rb"));
+    m_file = new wxFFile(fileName, mode);
     m_file_destroy = true;
 }
 
 wxFFileInputStream::wxFFileInputStream()
-  : wxInputStream()
+                  : wxInputStream()
 {
-    m_file_destroy = false;
     m_file = NULL;
+    m_file_destroy = false;
 }
 
 wxFFileInputStream::wxFFileInputStream(wxFFile& file)
@@ -262,9 +263,10 @@ wxFileOffset wxFFileInputStream::OnSysTell() const
 // wxFFileOutputStream
 // ----------------------------------------------------------------------------
 
-wxFFileOutputStream::wxFFileOutputStream(const wxString& fileName)
+wxFFileOutputStream::wxFFileOutputStream(const wxString& fileName,
+                                         const wxChar *mode)
 {
-    m_file = new wxFFile(fileName, _T("w+b"));
+    m_file = new wxFFile(fileName, mode);
     m_file_destroy = true;
 
     if (!m_file->IsOpened())
@@ -285,10 +287,10 @@ wxFFileOutputStream::wxFFileOutputStream(wxFFile& file)
 }
 
 wxFFileOutputStream::wxFFileOutputStream()
-  : wxOutputStream()
+                   : wxOutputStream()
 {
-    m_file_destroy = false;
     m_file = NULL;
+    m_file_destroy = false;
 }
 
 wxFFileOutputStream::wxFFileOutputStream(FILE *file)
@@ -348,6 +350,5 @@ wxFFileStream::wxFFileStream(const wxString& fileName)
     wxFFileOutputStream::m_file = wxFFileInputStream::m_file;
 }
 
-#endif
-  // wxUSE_STREAMS && wxUSE_FILE
+#endif // wxUSE_STREAMS && wxUSE_FILE
 
