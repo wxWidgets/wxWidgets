@@ -224,7 +224,6 @@ GENERICUNIVOBJS= $(MSWDIR)\accel.obj \
 		$(MSWDIR)\dcbuffer.obj \
 		$(MSWDIR)\dcpsg.obj \
 		$(MSWDIR)\dirctrlg.obj \
-		$(MSWDIR)\dirdlgg.obj \
 		$(MSWDIR)\dragimgg.obj \
 		$(MSWDIR)\fdrepdlg.obj \
 		$(MSWDIR)\filedlgg.obj \
@@ -263,6 +262,7 @@ GENERICUNIVOBJS= $(MSWDIR)\accel.obj \
 		$(MSWDIR)\wizard.obj
 
 MSWUNIVOBJS = $(MSWDIR)\app.obj \
+		$(MSWDIR)\automtn.obj \
 		$(MSWDIR)\bitmap.obj \
 		$(MSWDIR)\brush.obj \
 		$(MSWDIR)\caret.obj \
@@ -270,6 +270,7 @@ MSWUNIVOBJS = $(MSWDIR)\app.obj \
 		$(MSWDIR)\colour.obj \
 		$(MSWDIR)\cursor.obj \
 		$(MSWDIR)\data.obj \
+		$(MSWDIR)\dataobj.obj \
 		$(MSWDIR)\dc.obj \
 		$(MSWDIR)\dcclient.obj \
 		$(MSWDIR)\dcmemory.obj \
@@ -279,6 +280,10 @@ MSWUNIVOBJS = $(MSWDIR)\app.obj \
 		$(MSWDIR)\dialup.obj \
 		$(MSWDIR)\dib.obj \
 		$(MSWDIR)\dir.obj \
+		$(MSWDIR)\dirdlg.obj \
+		$(MSWDIR)\dropsrc.obj \
+		$(MSWDIR)\droptgt.obj \
+		$(MSWDIR)\enhmeta.obj \
 		$(MSWDIR)\evtloop.obj \
 		$(MSWDIR)\font.obj \
 		$(MSWDIR)\fontenum.obj \
@@ -295,6 +300,7 @@ MSWUNIVOBJS = $(MSWDIR)\app.obj \
 		$(MSWDIR)\joystick.obj \
 		$(MSWDIR)\main.obj \
 		$(MSWDIR)\mimetype.obj \
+		$(MSWDIR)\oleutils.obj \
 		$(MSWDIR)\palette.obj \
 		$(MSWDIR)\pen.obj \
 		$(MSWDIR)\popupwin.obj \
@@ -310,6 +316,7 @@ MSWUNIVOBJS = $(MSWDIR)\app.obj \
 		$(MSWDIR)\toplevel.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
+		$(MSWDIR)\uuid.obj \
 		$(MSWDIR)\volume.obj \
 		$(MSWDIR)\wave.obj \
 		$(MSWDIR)\window.obj
@@ -534,12 +541,12 @@ makearchsetuph:
 $(ARCHINCDIR)\wx:
     -mkdir $(ARCHINCDIR)
     -mkdir $(ARCHINCDIR)\wx
-    -erase $(CFG)
+    -$(RM) $(CFG)
 
 !if "$(DLL)" == "0"
 
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
-        -erase $(LIBTARGET)
+        -$(RM) $(LIBTARGET)
     tlib "$(LIBTARGET)" /P1024 $(LINKDEBUGFLAGS) @&&!
 +$(OBJECTS:.obj =.obj +) +$(PERIPH_LIBS:.lib =.lib +)
 !
@@ -547,8 +554,8 @@ $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
 !else
 
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
-    -erase $(LIBTARGET)
-    -erase $(WXDLL)
+    -$(RM) $(LIBTARGET)
+    -$(RM) $(WXDLL)
         $(LINK) $(LINK_FLAGS) $(LINKDEBUGFLAGS) /L$(WXLIBDIR);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk @&&!
 c0d32.obj $(OBJECTS)
 $(WXDLL)
@@ -585,6 +592,8 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
 
 $(MSWDIR)\app.obj: $(MSWDIR)\app.$(SRCSUFF)
 
+$(MSWDIR)\automtn.obj: $(OLEDIR)\automtn.$(SRCSUFF)
+
 $(MSWDIR)\bitmap.obj: $(MSWDIR)\bitmap.$(SRCSUFF)
 
 $(MSWDIR)\brush.obj: $(MSWDIR)\brush.$(SRCSUFF)
@@ -598,6 +607,8 @@ $(MSWDIR)\colour.obj: $(MSWDIR)\colour.$(SRCSUFF)
 $(MSWDIR)\cursor.obj: $(MSWDIR)\cursor.$(SRCSUFF)
 
 $(MSWDIR)\data.obj: $(MSWDIR)\data.$(SRCSUFF)
+
+$(MSWDIR)\dataobj.obj: $(OLEDIR)\dataobj.$(SRCSUFF)
 
 $(MSWDIR)\dc.obj: $(MSWDIR)\dc.$(SRCSUFF)
 
@@ -616,6 +627,14 @@ $(MSWDIR)\dialup.obj: $(MSWDIR)\dialup.$(SRCSUFF)
 $(MSWDIR)\dib.obj: $(MSWDIR)\dib.$(SRCSUFF)
 
 $(MSWDIR)\dir.obj: $(MSWDIR)\dir.$(SRCSUFF)
+
+$(MSWDIR)\dirdlg.obj: $(MSWDIR)\dirdlg.$(SRCSUFF)
+
+$(MSWDIR)\dropsrc.obj: $(OLEDIR)\dropsrc.$(SRCSUFF)
+
+$(MSWDIR)\droptgt.obj: $(OLEDIR)\droptgt.$(SRCSUFF)
+
+$(MSWDIR)\enhmeta.obj: $(MSWDIR)\enhmeta.$(SRCSUFF)
 
 $(MSWDIR)\evtloop.obj: $(MSWDIR)\evtloop.$(SRCSUFF)
 
@@ -649,6 +668,8 @@ $(MSWDIR)\main.obj: $(MSWDIR)\main.$(SRCSUFF)
 
 $(MSWDIR)\mimetype.obj: $(MSWDIR)\mimetype.$(SRCSUFF)
 
+$(MSWDIR)\oleutils.obj: $(OLEDIR)\oleutils.$(SRCSUFF)
+
 $(MSWDIR)\palette.obj: $(MSWDIR)\palette.$(SRCSUFF)
 
 $(MSWDIR)\pen.obj: $(MSWDIR)\pen.$(SRCSUFF)
@@ -678,6 +699,8 @@ $(MSWDIR)\toplevel.obj: $(MSWDIR)\toplevel.$(SRCSUFF)
 $(MSWDIR)\utils.obj: $(MSWDIR)\utils.$(SRCSUFF)
 
 $(MSWDIR)\utilsexc.obj: $(MSWDIR)\utilsexc.$(SRCSUFF)
+
+$(MSWDIR)\uuid.obj: $(OLEDIR)\uuid.$(SRCSUFF)
 
 $(MSWDIR)\volume.obj: $(MSWDIR)\volume.$(SRCSUFF)
 
@@ -1293,8 +1316,6 @@ $(MSWDIR)\dcbuffer.obj: $(GENDIR)\dcbuffer.$(SRCSUFF)
 $(MSWDIR)\dcpsg.obj: $(GENDIR)\dcpsg.$(SRCSUFF)
 
 $(MSWDIR)\dirctrlg.obj: $(GENDIR)\dirctrlg.$(SRCSUFF)
-
-$(MSWDIR)\dirdlgg.obj: $(GENDIR)\dirdlgg.$(SRCSUFF)
 
 $(MSWDIR)\dragimgg.obj: $(GENDIR)\dragimgg.$(SRCSUFF)
 
