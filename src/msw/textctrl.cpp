@@ -251,7 +251,6 @@ void wxTextCtrl::Init()
     m_privateContextMenu = NULL;
     m_updatesCount = -1;
     m_isNativeCaretShown = true;
-    m_isCaretAtEnd = true;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -1090,8 +1089,6 @@ void wxTextCtrl::SetEditable(bool editable)
 void wxTextCtrl::SetInsertionPoint(long pos)
 {
     DoSetSelection(pos, pos);
-
-    m_isCaretAtEnd = pos == GetLastPosition();
 }
 
 void wxTextCtrl::SetInsertionPointEnd()
@@ -1101,9 +1098,8 @@ void wxTextCtrl::SetInsertionPointEnd()
     // if it doesn't actually move the caret anywhere and so the simple fact of
     // doing it results in horrible flicker when appending big amounts of text
     // to the control in a few chunks (see DoAddText() test in the text sample)
-    if ( m_isCaretAtEnd || GetInsertionPoint() == GetLastPosition() )
+    if ( GetInsertionPoint() == GetLastPosition() )
     {
-        m_isCaretAtEnd = true;
         return;
     }
 
@@ -1484,9 +1480,6 @@ void wxTextCtrl::ShowPosition(long pos)
 
     if (linesToScroll != 0)
       (void)::SendMessage(hWnd, EM_LINESCROLL, (WPARAM)0, (LPARAM)linesToScroll);
-
-    // be pessimistic
-    m_isCaretAtEnd = false;
 }
 
 long wxTextCtrl::GetLengthOfLineContainingPos(long pos) const
@@ -1563,9 +1556,6 @@ void wxTextCtrl::Undo()
     if (CanUndo())
     {
         ::SendMessage(GetHwnd(), EM_UNDO, 0, 0);
-
-        // it's not necessarily at the end any more
-        m_isCaretAtEnd = false;
     }
 }
 
@@ -1580,9 +1570,6 @@ void wxTextCtrl::Redo()
 #endif
         // Same as Undo, since Undo undoes the undo, i.e. a redo.
         ::SendMessage(GetHwnd(), EM_UNDO, 0, 0);
-
-        // it's not necessarily at the end any more
-        m_isCaretAtEnd = false;
     }
 }
 
