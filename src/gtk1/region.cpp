@@ -164,7 +164,7 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
         M_REGIONDATA->m_region = reg;
 #endif
     }
-    
+
     M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(x,y,width,height) );
 
     return TRUE;
@@ -212,7 +212,7 @@ bool wxRegion::Intersect( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
         m_refData = new wxRegionRefData();
         M_REGIONDATA->m_region = gdk_region_new();
     }
-    
+
     wxRegion reg( x, y, width, height );
     Intersect( reg );
     return TRUE;
@@ -225,9 +225,26 @@ bool wxRegion::Intersect( const wxRect& rect )
         m_refData = new wxRegionRefData();
         M_REGIONDATA->m_region = gdk_region_new();
     }
-    
+
     wxRegion reg( rect );
     Intersect( reg );
+    return TRUE;
+}
+
+// this helper function just computes the region intersection without updating
+// the list of rectangles each region maintaints: this allows us to call it
+// from Intersect() itself without going into infinite recursion as we would
+// if we called Intersect() itself recursively
+bool wxRegion::IntersectRegionOnly(const wxRegion& region)
+{
+#ifdef __WXGTK20__
+    gdk_region_intersect( M_REGIONDATA->m_region, region.GetRegion() );
+#else
+    GdkRegion *reg = gdk_regions_intersect( M_REGIONDATA->m_region, region.GetRegion() );
+    gdk_region_destroy( M_REGIONDATA->m_region );
+    M_REGIONDATA->m_region = reg;
+#endif
+
     return TRUE;
 }
 
@@ -242,14 +259,37 @@ bool wxRegion::Intersect( const wxRegion& region )
         M_REGIONDATA->m_region = gdk_region_new();
         return TRUE;
     }
-    
-#ifdef __WXGTK20__
-    gdk_region_intersect( M_REGIONDATA->m_region, region.GetRegion() );
-#else
-    GdkRegion *reg = gdk_regions_intersect( M_REGIONDATA->m_region, region.GetRegion() );
-    gdk_region_destroy( M_REGIONDATA->m_region );
-    M_REGIONDATA->m_region = reg;
-#endif
+
+    if ( !IntersectRegionOnly(region) )
+    {
+        GetRectList()->Clear();
+
+        return FALSE;
+    }
+
+    // we need to update the rect list as well
+    wxList& list = *GetRectList();
+    wxNode *node = list.First();
+    while (node)
+    {
+        wxRect *r = (wxRect*)node->Data();
+
+        wxRegion regCopy = region;
+        if ( regCopy.IntersectRegionOnly(*r) )
+        {
+            // replace the node with the intersection
+            *r = regCopy.GetBox();
+        }
+        else
+        {
+            // TODO remove the rect from the list
+            r->width = 0;
+            r->height = 0;
+        }
+
+        node = node->Next();
+    }
+
     return TRUE;
 }
 
@@ -522,4 +562,14 @@ wxCoord wxRegionIterator::GetH() const
     return r->height;
 }
 
+wxRect wxRegionIterator::GetRect() const
+{
+    wxRect r;
+    wxNode *node = m_region.GetRectList()->Nth( m_current );
+
+    if (node)
+        r = *((wxRect*)node->Data());
+
+    return r;
+}
 

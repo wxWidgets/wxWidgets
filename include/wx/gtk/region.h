@@ -56,12 +56,10 @@ public:
     wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight );
     wxRegion( const wxRect& rect );
     wxRegion();
-    ~wxRegion();
+    virtual ~wxRegion();
 
-    inline wxRegion( const wxRegion& r ): wxGDIObject()
-      { Ref(r); }
-    inline wxRegion& operator = ( const wxRegion& r )
-      { Ref(r); return (*this); }
+    wxRegion( const wxRegion& r ) { Ref(r); }
+    wxRegion& operator = ( const wxRegion& r ) { Ref(r); return *this; }
 
     bool operator == ( const wxRegion& region );
     bool operator != ( const wxRegion& region );
@@ -99,8 +97,12 @@ public:
     wxList    *GetRectList() const;
     GdkRegion *GetRegion() const;
     
+protected:
+    // helper of Intersect()
+    bool IntersectRegionOnly(const wxRegion& reg);
+
 private:
-  DECLARE_DYNAMIC_CLASS(wxRegion);
+    DECLARE_DYNAMIC_CLASS(wxRegion);
 };
 
 class wxRegionIterator: public wxObject
@@ -124,7 +126,7 @@ public:
     wxCoord GetWidth() const { return GetW(); }
     wxCoord GetH() const;
     wxCoord GetHeight() const { return GetH(); }
-    wxRect GetRect() const { return wxRect(GetX(), GetY(), GetWidth(), GetHeight()); }
+    wxRect GetRect() const;
 
 private:
     size_t   m_current;
