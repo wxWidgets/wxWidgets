@@ -286,15 +286,15 @@ wxBEGIN_FLAGS( wxWindowStyle )
 wxEND_FLAGS( wxWindowStyle )
 
 wxBEGIN_PROPERTIES_TABLE(wxWindow)
-	wxEVENT_PROPERTY( Close , wxEVT_CLOSE_WINDOW , wxCloseEvent)
-	wxEVENT_PROPERTY( Create , wxEVT_CREATE , wxWindowCreateEvent )
-	wxEVENT_PROPERTY( Destroy , wxEVT_DESTROY , wxWindowDestroyEvent )
+    wxEVENT_PROPERTY( Close , wxEVT_CLOSE_WINDOW , wxCloseEvent)
+    wxEVENT_PROPERTY( Create , wxEVT_CREATE , wxWindowCreateEvent )
+    wxEVENT_PROPERTY( Destroy , wxEVT_DESTROY , wxWindowDestroyEvent )
     // Always constructor Properties first
 
     wxREADONLY_PROPERTY( Parent,wxWindow*, GetParent, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	wxPROPERTY( Id,wxWindowID, SetId, GetId, -1, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-	wxPROPERTY( Position,wxPoint, SetPosition , GetPosition, wxPoint(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // pos
-	wxPROPERTY( Size,wxSize, SetSize, GetSize, wxSize(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // size
+    wxPROPERTY( Id,wxWindowID, SetId, GetId, -1, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxPROPERTY( Position,wxPoint, SetPosition , GetPosition, wxPoint(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // pos
+    wxPROPERTY( Size,wxSize, SetSize, GetSize, wxSize(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // size
     wxPROPERTY( WindowStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 
     // Then all relations of the object graph
@@ -303,23 +303,23 @@ wxBEGIN_PROPERTIES_TABLE(wxWindow)
 
    // and finally all other properties
 
-	wxPROPERTY( ExtraStyle , long , SetExtraStyle , GetExtraStyle , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // extstyle
-	wxPROPERTY( BackgroundColour , wxColour , SetBackgroundColour , GetBackgroundColour , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // bg
-	wxPROPERTY( ForegroundColour , wxColour , SetForegroundColour , GetForegroundColour , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // fg
-	wxPROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	wxPROPERTY( Shown , bool , Show , IsShown , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( ExtraStyle , long , SetExtraStyle , GetExtraStyle , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // extstyle
+    wxPROPERTY( BackgroundColour , wxColour , SetBackgroundColour , GetBackgroundColour , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // bg
+    wxPROPERTY( ForegroundColour , wxColour , SetForegroundColour , GetForegroundColour , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // fg
+    wxPROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( Shown , bool , Show , IsShown , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 #if 0
     // possible property candidates (not in xrc) or not valid in all subclasses
-	wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxT("") )
-	wxPROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
-	wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxT("") )
-	// MaxHeight, Width , MinHeight , Width
-	// TODO switch label to control and title to toplevels
+    wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxT("") )
+    wxPROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
+    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxT("") )
+    // MaxHeight, Width , MinHeight , Width
+    // TODO switch label to control and title to toplevels
 
-	wxPROPERTY( ThemeEnabled , bool , SetThemeEnabled , GetThemeEnabled , )
-	//wxPROPERTY( Cursor , wxCursor , SetCursor , GetCursor , )
-	// wxPROPERTY( ToolTip , wxString , SetToolTip , GetToolTipText , )
-	wxPROPERTY( AutoLayout , bool , SetAutoLayout , GetAutoLayout , )
+    wxPROPERTY( ThemeEnabled , bool , SetThemeEnabled , GetThemeEnabled , )
+    //wxPROPERTY( Cursor , wxCursor , SetCursor , GetCursor , )
+    // wxPROPERTY( ToolTip , wxString , SetToolTip , GetToolTipText , )
+    wxPROPERTY( AutoLayout , bool , SetAutoLayout , GetAutoLayout , )
 
 
 
@@ -976,7 +976,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
 
     // we don't need to subclass the window of our own class (in the Windows
     // sense of the word)
-	if ( !wxCheckWindowWndProc(hWnd, (WXFARPROC)wxWndProc) )
+    if ( !wxCheckWindowWndProc(hWnd, (WXFARPROC)wxWndProc) )
     {
         wxSetWindowProc(hwnd, wxWndProc);
     }
@@ -1023,26 +1023,26 @@ bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
     // Unicows_{Set,Get}WindowLong and Unicows_RegisterClass to our own
     // versions that keep track of fake<->real wnd proc mapping.
 
-	// On WinCE (at least), the wndproc comparison doesn't work,
-	// so have to use something like this.
+    // On WinCE (at least), the wndproc comparison doesn't work,
+    // so have to use something like this.
 #ifdef __WXWINCE__
-	extern       wxChar *wxCanvasClassName;
-	extern       wxChar *wxCanvasClassNameNR;
-	extern const wxChar *wxMDIFrameClassName;
-	extern const wxChar *wxMDIFrameClassNameNoRedraw;
-	extern const wxChar *wxMDIChildFrameClassName;
-	extern const wxChar *wxMDIChildFrameClassNameNoRedraw;
-	wxString str(wxGetWindowClass(hWnd));
-	if (str == wxCanvasClassName ||
-		str == wxCanvasClassNameNR ||
-		str == wxMDIFrameClassName ||
-		str == wxMDIFrameClassNameNoRedraw ||
-		str == wxMDIChildFrameClassName ||
-		str == wxMDIChildFrameClassNameNoRedraw ||
-		str == _T("wxTLWHiddenParent"))
-		return true; // Effectively means don't subclass
-	else
-		return false;
+    extern       wxChar *wxCanvasClassName;
+    extern       wxChar *wxCanvasClassNameNR;
+    extern const wxChar *wxMDIFrameClassName;
+    extern const wxChar *wxMDIFrameClassNameNoRedraw;
+    extern const wxChar *wxMDIChildFrameClassName;
+    extern const wxChar *wxMDIChildFrameClassNameNoRedraw;
+    wxString str(wxGetWindowClass(hWnd));
+    if (str == wxCanvasClassName ||
+        str == wxCanvasClassNameNR ||
+        str == wxMDIFrameClassName ||
+        str == wxMDIFrameClassNameNoRedraw ||
+        str == wxMDIChildFrameClassName ||
+        str == wxMDIChildFrameClassNameNoRedraw ||
+        str == _T("wxTLWHiddenParent"))
+        return true; // Effectively means don't subclass
+    else
+        return false;
 #else
     WNDCLASS cls;
     if ( !::GetClassInfo(wxGetInstance(), wxGetWindowClass(hWnd), &cls) )
@@ -3063,17 +3063,17 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
     //     guess a reasonably good size for a new window just as well
     //     ourselves
 
-	// However, on PocketPC devices, we must use the default
-	// size if possible.
+    // However, on PocketPC devices, we must use the default
+    // size if possible.
 #ifdef _WIN32_WCE
-	if (size.x == -1)
-		w = CW_USEDEFAULT;
-	else
-		w = size.x;
-	if (size.y == -1)
-		h = CW_USEDEFAULT;
-	else
-		h = size.y;
+    if (size.x == -1)
+        w = CW_USEDEFAULT;
+    else
+        w = size.x;
+    if (size.y == -1)
+        h = CW_USEDEFAULT;
+    else
+        h = size.y;
 #else
     if ( size.x == -1 || size.y == -1)
     {
@@ -3869,7 +3869,7 @@ bool wxWindowMSW::HandleQueryNewPalette()
     while (!win->HasCustomPalette() && win->GetParent()) win = win->GetParent();
     if (win->HasCustomPalette()) {
         /* realize the palette to see whether redrawing is needed */
-        HDC hdc = GetDC((HWND) GetHWND());
+        HDC hdc = ::GetDC((HWND) GetHWND());
         win->m_palette.SetHPALETTE( (WXHPALETTE)
              ::SelectPalette(hdc, (HPALETTE) win->m_palette.GetHPALETTE(), FALSE) );
 
@@ -5830,9 +5830,9 @@ bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
 class wxIdleWakeUpModule : public wxModule
 {
 public:
-	virtual bool OnInit()
+    virtual bool OnInit()
     {
-		ms_hMsgHookProc = ::SetWindowsHookEx
+        ms_hMsgHookProc = ::SetWindowsHookEx
                             (
                              WH_GETMESSAGE,
                              &wxIdleWakeUpModule::MsgHookProc,
@@ -5848,26 +5848,26 @@ public:
         }
 
         return true;
-	}
+    }
 
-	virtual void OnExit()
+    virtual void OnExit()
     {
-		::UnhookWindowsHookEx(wxIdleWakeUpModule::ms_hMsgHookProc);
-	}
+        ::UnhookWindowsHookEx(wxIdleWakeUpModule::ms_hMsgHookProc);
+    }
 
-	static LRESULT CALLBACK MsgHookProc(int nCode, WPARAM wParam, LPARAM lParam)
+    static LRESULT CALLBACK MsgHookProc(int nCode, WPARAM wParam, LPARAM lParam)
     {
-		MSG *msg = (MSG*)lParam;
-		if ( msg->message == WM_NULL )
-		{
+        MSG *msg = (MSG*)lParam;
+        if ( msg->message == WM_NULL )
+        {
             wxTheApp->ProcessPendingEvents();
-		}
+        }
 
-		return CallNextHookEx(ms_hMsgHookProc, nCode, wParam, lParam);
-	};
+        return CallNextHookEx(ms_hMsgHookProc, nCode, wParam, lParam);
+    };
 
 private:
-	static HHOOK ms_hMsgHookProc;
+    static HHOOK ms_hMsgHookProc;
 
     DECLARE_DYNAMIC_CLASS(wxIdleWakeUpModule)
 };
@@ -5877,4 +5877,4 @@ HHOOK wxIdleWakeUpModule::ms_hMsgHookProc = 0;
 IMPLEMENT_DYNAMIC_CLASS(wxIdleWakeUpModule, wxModule)
 
 #endif // __WXWINCE__
-    
+
