@@ -218,14 +218,17 @@ bool wxToolBar::Create(wxWindow *parent,
                        long style,
                        const wxString& name)
 {
+    // toolbars never have border, giving one to them results in broken
+    // appearance
+    style &= ~wxBORDER_MASK;
+    style |= wxBORDER_NONE;
+
     // common initialisation
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
     // prepare flags
     DWORD msflags = 0;      // WS_VISIBLE | WS_CHILD always included
-    if (style & wxBORDER)
-        msflags |= WS_BORDER;
 
    if ( style & wxCLIP_SIBLINGS )
         msflags |= WS_CLIPSIBLINGS;
