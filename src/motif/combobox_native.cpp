@@ -26,9 +26,15 @@
 // use the new, shiny combobox for Motif 2.x
 #if (XmVersion >= 2000)
 
+#ifdef __VMS__
+#pragma message disable nosimpint
+#endif
 #include <Xm/ComboBox.h>
 #include <Xm/Text.h>
 #include <Xm/List.h>
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 #include "wx/motif/private.h"
 
@@ -246,17 +252,17 @@ int wxComboBox::FindString(const wxString& s) const
 // Clipboard operations
 void wxComboBox::Copy()
 {
-//    XmComboBoxCopy((Widget) m_mainWidget, CurrentTime);
+    XmTextCopy( GetXmText(this), CurrentTime );
 }
 
 void wxComboBox::Cut()
 {
-//    XmComboBoxCut((Widget) m_mainWidget, CurrentTime);
+    XmTextCut( GetXmText(this), CurrentTime );
 }
 
 void wxComboBox::Paste()
 {
-//    XmComboBoxPaste((Widget) m_mainWidget);
+    XmTextPaste( GetXmText(this) );
 }
 
 void wxComboBox::SetEditable(bool WXUNUSED(editable))
@@ -266,49 +272,44 @@ void wxComboBox::SetEditable(bool WXUNUSED(editable))
 
 void wxComboBox::SetInsertionPoint(long pos)
 {
-//    XmComboBoxSetInsertionPosition ((Widget) m_mainWidget, (XmTextPosition) pos);
+    XmTextSetInsertionPosition( GetXmText(this), (XmTextPosition)pos );
 }
 
 void wxComboBox::SetInsertionPointEnd()
 {
-//    XmTextPosition pos = XmComboBoxGetLastPosition ((Widget) m_mainWidget);
-//    XmComboBoxSetInsertionPosition ((Widget) m_mainWidget, (XmTextPosition) (pos + 1));
+    SetInsertionPoint( GetLastPosition() );
 }
 
 long wxComboBox::GetInsertionPoint() const
 {
-//    return (long) XmComboBoxGetInsertionPosition ((Widget) m_mainWidget);
-	return -1;
+    return (long)XmTextGetInsertionPosition( GetXmText(this) );
 }
 
 long wxComboBox::GetLastPosition() const
 {
-//    return (long) XmComboBoxGetLastPosition ((Widget) m_mainWidget);
-	return -1;
+    XmTextPosition pos = XmTextGetLastPosition( GetXmText(this) );
+    return (long)pos;
 }
 
 void wxComboBox::Replace(long from, long to, const wxString& value)
-{/*
-    XmComboBoxReplace ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
-        (char*) (const char*) value);
-*/
+{
+    XmTextReplace( GetXmText(this), (XmTextPosition)from, (XmTextPosition)to,
+                   (char*)value.c_str() );
 }
 
 void wxComboBox::Remove(long from, long to)
 {
-/*
-    XmComboBoxSetSelection ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
-                      (Time) 0);
-    XmComboBoxRemove ((Widget) m_mainWidget);
-    */
+    SetSelection( from, to );
+    XmTextRemove( GetXmText(this) );
 }
 
 void wxComboBox::SetSelection(long from, long to)
 {
-/*
-    XmComboBoxSetSelection ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
-                      (Time) 0);
-		     */ 
+    if( to == -1 )
+        to = GetLastPosition();
+
+    XmTextSetSelection( GetXmText(this), (XmTextPosition)from,
+                        (XmTextPosition)to, (Time)0 );
 }
 
 void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
