@@ -9,48 +9,48 @@ in Python.  This is not part of the demo framework.
 """
 
 
-from wxPython.wx import *
+import wx
 import time
 
 
 #---------------------------------------------------------------------------
 
-class MyFrame(wxFrame):
+class MyFrame(wx.Frame):
 
     def __init__(self, parent, id, title):
-        wxFrame.__init__(self, parent, id, title,
-                         wxPoint(100, 100), wxSize(160, 150))
+        wx.Frame.__init__(self, parent, id, title,
+                         wx.Point(100, 100), wx.Size(160, 150))
 
-        EVT_SIZE(self, self.OnSize)
-        EVT_MOVE(self, self.OnMove)
-        EVT_CLOSE(self, self.OnCloseWindow)
-        EVT_IDLE(self, self.OnIdle)
+        wx.EVT_SIZE(self, self.OnSize)
+        wx.EVT_MOVE(self, self.OnMove)
+        wx.EVT_CLOSE(self, self.OnCloseWindow)
+        wx.EVT_IDLE(self, self.OnIdle)
 
         self.count = 0
 
-        panel = wxPanel(self, -1)
-        wxStaticText(panel, -1, "Size:",
-                     wxDLG_PNT(panel, wxPoint(4, 4)),  wxDefaultSize)
-        wxStaticText(panel, -1, "Pos:",
-                     wxDLG_PNT(panel, wxPoint(4, 16)), wxDefaultSize)
+        panel = wx.Panel(self, -1)
+        wx.StaticText(panel, -1, "Size:",
+                     wx.DLG_PNT(panel, wx.Point(4, 4)),  wx.DefaultSize)
+        wx.StaticText(panel, -1, "Pos:",
+                     wx.DLG_PNT(panel, wx.Point(4, 16)), wx.DefaultSize)
 
-        wxStaticText(panel, -1, "Idle:",
-                     wxDLG_PNT(panel, wxPoint(4, 28)), wxDefaultSize)
+        wx.StaticText(panel, -1, "Idle:",
+                     wx.DLG_PNT(panel, wx.Point(4, 28)), wx.DefaultSize)
 
-        self.sizeCtrl = wxTextCtrl(panel, -1, "",
-                                   wxDLG_PNT(panel, wxPoint(24, 4)),
-                                   wxDLG_SZE(panel, wxSize(36, -1)),
-                                   wxTE_READONLY)
+        self.sizeCtrl = wx.TextCtrl(panel, -1, "",
+                                   wx.DLG_PNT(panel, wx.Point(24, 4)),
+                                   wx.DLG_SZE(panel, wx.Size(36, -1)),
+                                   wx.TE_READONLY)
 
-        self.posCtrl = wxTextCtrl(panel, -1, "",
-                                  wxDLG_PNT(panel, wxPoint(24, 16)),
-                                  wxDLG_SZE(panel, wxSize(36, -1)),
-                                  wxTE_READONLY)
+        self.posCtrl = wx.TextCtrl(panel, -1, "",
+                                  wx.DLG_PNT(panel, wx.Point(24, 16)),
+                                  wx.DLG_SZE(panel, wx.Size(36, -1)),
+                                  wx.TE_READONLY)
 
-        self.idleCtrl = wxTextCtrl(panel, -1, "",
-                                   wxDLG_PNT(panel, wxPoint(24, 28)),
-                                   wxDLG_SZE(panel, wxSize(36, -1)),
-                                   wxTE_READONLY)
+        self.idleCtrl = wx.TextCtrl(panel, -1, "",
+                                   wx.DLG_PNT(panel, wx.Point(24, 28)),
+                                   wx.DLG_SZE(panel, wx.Size(36, -1)),
+                                   wx.TE_READONLY)
 
 
     def OnCloseWindow(self, event):
@@ -74,7 +74,7 @@ class MyFrame(wxFrame):
 
 #---------------------------------------------------------------------------
 
-class MyApp(wxApp):
+class MyApp(wx.App):
     def MainLoop(self):
         # This outer loop determines when to exit the application,  for
         # this example we let the main frame reset this flag when it

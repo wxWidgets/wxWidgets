@@ -1,7 +1,7 @@
 
-import os
 import wx
 from wx import html
+from Main import opj
 
 #----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ class TestPanel(wx.Panel):
         wx.Panel.__init__(self, parent, -1)
 
         hwin = html.HtmlWindow(self, -1)
-        hwin.LoadFile(os.path.join(os.path.dirname(wx.__file__), 'wx.html'))
+        hwin.LoadFile(opj('data/wxPackage.html'))
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(hwin, 1, wx.EXPAND)
