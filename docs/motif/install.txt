@@ -6,7 +6,7 @@ IMPORTANT NOTE:
   If you experience problems installing, please re-read these
   instructions and other related files (todo.txt, bugs.txt and
   osname.txt for your platform if it exists) carefully before
-  mailing wxwin-users or the author. Preferably, try to fix the
+  mailing wx-users or the author. Preferably, try to fix the
   problem first and then send a patch to the author.
   
   When sending bug reports tell us what version of wxWindows you are 
@@ -34,7 +34,7 @@ First steps
 
 - You can now use configure to build wxWindows and the samples.
 
-  Using configure is the recommended way to build the library. If it doesn't
+  Using configure is the only way to build the library. If it doesn't
   work for you for whatever reason, please report it (together with detailed
   information about your platform and the (relevant part of) contents of
   config.log file) to wx-dev@lists.wxwindows.org.
@@ -79,26 +79,26 @@ such as for GTK and Motif, you can now build two complete libraries and use
 them concurrently. For this end, you have to create a directory for each build 
 of wxWindows - you may also want to create different versions of wxWindows
 and test them concurrently. Most typically, this would be a version configured 
-with --enable-debug_flag and one without. Note, that only one build can
+with --enable-debug and one without. Note, that only one build can
 currently be installed, so you'd have to use local version of the library for
 that purpose.  For building three versions (one GTK, one Motif and a debug
 version of the GTK source) you'd do this:
 
-md buildmotif
+mkdir buildmotif
 cd buildmotif
 ../configure --with-motif
 make
 cd ..
 
-md buildgtk
+mkdir buildgtk
 cd buildgtk
 ../configure --with-gtk
 make
 cd ..
 
-md buildgtkd
+mkdir buildgtkd
 cd buildgtkd
-../configure --with-gtk --enable-debug_flag
+../configure --with-gtk --enable-debug
 make
 cd ..
 
@@ -134,7 +134,7 @@ If you have general problems with installation, see the wxWindows website at
   http://www.wxwindows.org/
   
 for newest information. If you still don't have any success, please send a bug 
-report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF 
+report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF
 YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF MOTIF, WXMOTIF, WHAT
 DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect,
 but I tried...
@@ -148,7 +148,7 @@ most of the Motif API without the licence restrictions of Motif.
 
 You can get the newest version of the Lesstif from the lesstif homepage at:
 
-  http://www.lesstif.org
+  http://www.lesstif.org/
   
 * Additional libraries
 ----------------------
@@ -323,6 +323,9 @@ The following options handle the kind of library you want to build.
 	--enable-dmalloc        Use the dmalloc memory debugger.
 	                        Read more at www.letters.com/dmalloc/
 				
+	--enable-debug		Equivalent to --enable-debug_info plus
+				--enable-debug-flag.
+
 	--enable-debug_info	Add debug info to object files and
 	                        executables for use with debuggers
 				such as gdb (or its many frontends).
@@ -351,11 +354,8 @@ are
 	
 	--without-libjpeg	Disables JPEG image format code.
 	
-{	--without-odbc          Disables ODBC code. Not yet. }
+	--without-odbc          Disables ODBC code.
 	
-        --disable-resources     Disables the use of *.wxr type
-	                        resources.
-		
 	--disable-threads       Disables threads. Will also
 	                        disable sockets.
 
@@ -364,8 +364,6 @@ are
 	--disable-dnd           Disables Drag'n'Drop.
 	
 	--disable-clipboard     Disables Clipboard.
-	
-	--disable-serial        Disables object instance serialisation.
 	
 	--disable-streams       Disables the wxStream classes.
 	
@@ -395,7 +393,7 @@ the library by typing:
 	make
 
 make yourself some coffee, as it will take some time. On an old
-386SX possibly two weeks. During compilation, you'll get a few 
+Pentium 200 around 40 minutes. During compilation, you may get a few 
 warning messages depending in your compiler.
 
 If you want to be more selective, you can change into a specific
@@ -469,7 +467,7 @@ and configure before you can type make.
   # anyhow
   # -- Julian Smart
   chmod a+x configure config.sub config.guess
-  ./configure --with-shared --with-motif --without-gtk --with-debug_flag --with-debug_info --enable-debug --without-threads --without-sockets --without-odbc
+  ./configure --with-shared --with-motif --with-debug_flag --with-debug_info --enable-debug --without-threads --without-sockets --without-odbc
   make
   -------:x-----Cut here-----:x-----
 
@@ -503,14 +501,10 @@ Troubleshooting
 Other Notes
 -----------
 
-- Debugging mode is switched on by default in the makefiles, but using
-  configure will create a release build of the library by default: it's
-  recommended to use --with-debug_info and --with-debug_flag configure
-  switches while developing your application. To compile in non-debug
-  mode, remove the -D__WXDEBUG__ switch in make.env (or if using the
-  configure system, change --with-debug_flag to --without_debug_flag
-  and --with-debug_info to --without-debug_info in the makewxmotif
-  script).
+- Using configure will create a release build of the library by
+  default: it's recommended to use --enable-debug configure switch
+  while developing your application. To compile in non-debug mode, use
+  --disable-debug configure switch.
 
 Bug reports
 -----------

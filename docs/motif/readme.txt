@@ -7,7 +7,7 @@ the wxWindows GUI library.
 More information about the wxWindows project as a whole
 can be found at:
 
-  http://www.wxwindows.org
+  http://www.wxwindows.org/
   
 Information on how to install can be found in the file 
 install.txt, but if you cannot wait, this should work on
@@ -33,7 +33,7 @@ Alternatively, you may also use the bug reporting system
 linked from the wxWindows web page.
 
 The library produced by the install process will be called 
-libwx_motif.a (static) and libwx_motif-2.3.so.0.0.0 (shared) so that
+libwx_motif.a (static) and libwx_motif-2.5.so.0.0.0 (shared) so that
 once a binary incompatible version of wxWindows/Motif comes out 
 we'll augment the library version number to avoid linking problems.
 

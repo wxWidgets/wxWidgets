@@ -21,14 +21,9 @@ High Priority
   anyway, so for example intercepting left-click in a widget doesn't disable
   the default behaviour. See TODOs in window.cpp.
 
-- wxRadioBox doesn't show up in the controls sample, though it's
-  OK on other dialogs (e.g. printing sample).
-
 - wxToolTip
 
 - Miscellaneous events.
-
-- Use wxImage to load other formats into wxBitmaps, such as PNG, BMP.
 
 - Allow wxFrame and other widgets to have mouse event handlers.
 
@@ -43,15 +38,6 @@ Low Priority
 
 - Work out why XFreeFont in font.cpp produces a segv. This is
   currently commented out, which presumably causes a memory leak.
-
-- Better makefile system that can put objects in different dirs.
-
-- Extra wxBitmap formats: PNG, BMP. Could use old wxWin 1.68
-  wxImage code (derived from XV) for BMP/GIF but it's very bloated. However,
-  when implemented as extra bitmap handlers, the code won't be linked
-  unless needed. Update: see if wxImage can handle these formats.
-
-- Get Dialog Editor working (better) under Motif.
 
 - New wxHelp version: try using the XmHTML widget at
   http://www.xs4all.nl/~ripley/XmHTML/.
@@ -82,8 +68,6 @@ Low Priority
 
 - Miscellaneous classes e.g. wxJoystick (identical to GTK's one for
   Linux)
-
-- Get ODBC classes and sample working.
 
 - Work out why wxTextCtrl doesn't work as a stream buffer under
   gcc

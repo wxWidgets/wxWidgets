@@ -5,8 +5,6 @@ Last updated 19/3/2000.
 
 See also: todo.txt.
 
-- Sockets not yet working since idle wake-up not implemented.
-
 - wxTextCtrl doesn't work as a stream buffer in Linux/gcc.
 
 - No wxToolTip (but see wxToolBar for a way of implementing it).
@@ -37,6 +35,3 @@ See also: todo.txt.
   either cure the XPM loading problem, or provide alternative toolbar
   buttons (for HelpView) and icons (for places where icons are used e.g.
   in the log dialog).
-
-- Dialog Editor needs a lot of work.
-

@@ -9,7 +9,7 @@ if [ ! -f ./configure ]; then
   CONFIG=../configure
 fi
 
-CONFIG="$CONFIG --disable-shared --with-motif --without-gtk --enable-debug_flag --enable-debug_info --enable-debug --disable-sockets --disable-odbc --enable-threads --enable-newgrid"
+CONFIG="$CONFIG --disable-shared --with-motif --enable-debug --enable-threads"
 
 echo Invoking $CONFIG
 
