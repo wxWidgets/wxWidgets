@@ -1865,6 +1865,7 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
     }
 
     ICONINFO iconInfo;
+    wxZeroMemory(iconInfo);
     iconInfo.fIcon = iconWanted;  // do we want an icon or a cursor?
     if ( !iconWanted )
     {
