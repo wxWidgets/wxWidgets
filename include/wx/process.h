@@ -168,7 +168,7 @@ public:
 typedef void (wxEvtHandler::*wxProcessEventFunction)(wxProcessEvent&);
 
 #define wxProcessEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxProcessEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxProcessEventFunction, &func)
 
 #define EVT_END_PROCESS(id, func) \
    wx__DECLARE_EVT1(wxEVT_END_PROCESS, id, wxProcessEventHandler(func))

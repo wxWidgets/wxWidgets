@@ -51,7 +51,7 @@ END_DECLARE_EVENT_TYPES()
 typedef void (wxEvtHandler::*wxDateEventFunction)(wxDateEvent&);
 
 #define wxDateEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxDateEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxDateEventFunction, &func)
 
 #define EVT_DATE_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_DATE_CHANGED, id, wxDateEventHandler(fn))

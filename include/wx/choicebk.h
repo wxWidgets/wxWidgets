@@ -126,17 +126,13 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING
 typedef void (wxEvtHandler::*wxChoicebookEventFunction)(wxChoicebookEvent&);
 
 #define wxChoicebookEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxChoicebookEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxChoicebookEventFunction, &func)
 
-#define EVT_CHOICEBOOK_PAGE_CHANGED(id, fn)                                   \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED,                   \
-                     id,                                                      \
-                     wxChoicebookEventHandler(fn))
+#define EVT_CHOICEBOOK_PAGE_CHANGED(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED, winid, wxChoicebookEventHandler(fn))
 
-#define EVT_CHOICEBOOK_PAGE_CHANGING(id, fn)                                  \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING,                  \
-                     id,                                                      \
-                     wxChoicebookEventHandler(fn))
+#define EVT_CHOICEBOOK_PAGE_CHANGING(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, winid, wxChoicebookEventHandler(fn))
 
 #endif // wxUSE_CHOICEBOOK
 

@@ -176,7 +176,7 @@ END_DECLARE_EVENT_TYPES()
 typedef void (wxEvtHandler::*wxFindDialogEventFunction)(wxFindDialogEvent&);
 
 #define wxFindDialogEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxFindDialogEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxFindDialogEventFunction, &func)
 
 #define EVT_FIND(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_FIND, id, wxFindDialogEventHandler(fn))

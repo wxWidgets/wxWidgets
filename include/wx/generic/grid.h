@@ -1327,7 +1327,7 @@ public:
     // DecRef() must be called on the returned pointer, as usual
     wxGridCellAttr *GetOrCreateCellAttr(int row, int col) const;
 
-    
+
     // shortcuts for setting the column parameters
 
     // set the format for the data in the column: default is string
@@ -2133,16 +2133,16 @@ typedef void (wxEvtHandler::*wxGridRangeSelectEventFunction)(wxGridRangeSelectEv
 typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreatedEvent&);
 
 #define wxGridEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxGridEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxGridEventFunction, &func)
 
 #define wxGridSizeEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxGridSizeEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxGridSizeEventFunction, &func)
 
 #define wxGridRangeSelectEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxGridRangeSelectEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxGridRangeSelectEventFunction, &func)
 
 #define wxGridEditorCreatedEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxGridEditorCreatedEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxGridEditorCreatedEventFunction, &func)
 
 #define wx__DECLARE_GRIDEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_GRID_ ## evt, id, wxGridEventHandler(fn))

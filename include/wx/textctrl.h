@@ -477,7 +477,7 @@ typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);
 
 #define wxTextEventHandler(func) wxCommandEventHandler(func)
 #define wxTextUrlEventHandler(func) \
-    (wxObjectEventFunction)wxStaticCastEvent(wxTextUrlEventFunction, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxTextUrlEventFunction, &func)
 
 #define wx__DECLARE_TEXTEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_TEXT_ ## evt, id, wxTextEventHandler(fn))
