@@ -865,8 +865,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     // multi line text controls
 
-    m_horizontal = new MyTextCtrl( this, wxID_ANY, _T("Multiline text control with a horizontal scrollbar."),
-      wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL );
+    m_horizontal = new MyTextCtrl( this, wxID_ANY, _T("Multiline text control with a horizontal scrollbar.\n"),
+      wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL);
 
     // a little hack to use the command line argument for encoding testing
     if ( wxTheApp->argc == 2 )
@@ -877,14 +877,14 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                 m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
                                              false, _T(""),
                                              wxFONTENCODING_ISO8859_2));
-                m_horizontal->SetValue(_T("®lu»ouèký kùò zbìsile èe¹tina «»"));
+                m_horizontal->AppendText(_T("®lu»ouèký kùò zbìsile èe¹tina «»"));
                 break;
 
             case '1':
                 m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
                                              false, _T(""),
                                              wxFONTENCODING_CP1251));
-                m_horizontal->SetValue(_T("Ïðèâåò!"));
+                m_horizontal->AppendText(_T("Ïðèâåò!"));
                 break;
 
             case '8':
@@ -892,15 +892,15 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                              false, _T(""),
                                              wxFONTENCODING_CP1251));
 #if wxUSE_UNICODE
-                m_horizontal->SetValue(L"\x0412\x0430\x0434\x0438\x043c \x0426");
+                m_horizontal->AppendText(L"\x0412\x0430\x0434\x0438\x043c \x0426");
 #else
-                m_horizontal->SetValue("ËÁÖÅÔÓÑ ÕÄÁÞÎÙÍ");
+                m_horizontal->AppendText("ËÁÖÅÔÓÑ ÕÄÁÞÎÙÍ");
 #endif
         }
     }
     else
     {
-        m_horizontal->SetValue(_T("Text in default encoding"));
+        m_horizontal->AppendText(_T("Text in default encoding"));
     }
 
     m_multitext = new MyTextCtrl( this, wxID_ANY, _T("Multi line."),
