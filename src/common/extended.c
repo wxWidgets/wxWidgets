@@ -87,16 +87,16 @@ void ConvertToIeeeExtended(double num, unsigned char *bytes)
         #pragma warning(disable: 4244)
     #endif /* Visual C++ */
 
-	bytes[0] = expon >> 8;
-	bytes[1] = expon;
-	bytes[2] = (unsigned char) hiMant >> 24;
-	bytes[3] = (unsigned char) hiMant >> 16;
-	bytes[4] = (unsigned char) hiMant >> 8;
-	bytes[5] = (unsigned char) hiMant;
-	bytes[6] = (unsigned char) loMant >> 24;
-	bytes[7] = (unsigned char) loMant >> 16;
-	bytes[8] = (unsigned char) loMant >> 8;
-	bytes[9] = (unsigned char) loMant;
+	bytes[0] = (expon >> 8) & 0xff;
+	bytes[1] = expon & 0xff;
+	bytes[2] = (unsigned char) ((hiMant >> 24) & 0xff);
+	bytes[3] = (unsigned char) ((hiMant >> 16) & 0xff);
+	bytes[4] = (unsigned char) ((hiMant >> 8) & 0xff);
+	bytes[5] = (unsigned char) (hiMant & 0xff);
+	bytes[6] = (unsigned char) ((loMant >> 24) & 0xff);
+	bytes[7] = (unsigned char) ((loMant >> 16) & 0xff);
+	bytes[8] = (unsigned char) ((loMant >> 8) & 0xff);
+	bytes[9] = (unsigned char) (loMant & 0xff;
 
     #ifdef _MSC_VER
         #pragma warning(default: 4244)
