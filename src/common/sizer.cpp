@@ -1131,9 +1131,11 @@ void wxFlexGridSizer::RecalcSizes()
 
                 SetItemBounds( node->GetData(), x, y, w, h);
             }
-            y = y + m_rowHeights[r] + m_vgap;
+            if (m_rowHeights[r] != -1)
+                y = y + m_rowHeights[r] + m_vgap;
         }
-        x = x + m_colWidths[c] + m_hgap;
+        if (m_colWidths[c] != -1)
+            x = x + m_colWidths[c] + m_hgap;
     }
 }
 
@@ -1187,12 +1189,16 @@ wxSize wxFlexGridSizer::CalcMin()
     int width = 0;
     for (int col = 0; col < ncols; col++)
         if ( m_colWidths[ col ] != -1 )
-            width += m_colWidths[ col ] + ( col == ncols-1 ? 0 : m_hgap );
+            width += m_colWidths[ col ] + m_hgap;
+    if (width > 0)
+        width -= m_hgap;
 
     int height = 0;
     for (int row = 0; row < nrows; row++)
         if ( m_rowHeights[ row ] != -1 )
-            height += m_rowHeights[ row ] + ( row == nrows-1 ? 0 : m_vgap );
+            height += m_rowHeights[ row ] + m_vgap;
+    if (height > 0)
+        height -= m_vgap;
 
     m_calculatedMinSize = wxSize( width, height );
     return m_calculatedMinSize;
