@@ -246,7 +246,7 @@ bool wxDialog::IsModal() const
 
 bool wxDialog::IsModalShowing() const
 {
-    return wxModalDialogs.Find(wxConstCast(this, wxDialog)) != NULL;
+    return !!wxModalDialogs.Find(wxConstCast(this, wxDialog));
 }
 
 wxWindow *wxDialog::FindSuitableParent() const
