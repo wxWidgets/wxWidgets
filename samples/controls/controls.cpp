@@ -386,6 +386,7 @@ const int  ID_LISTBOX_DELETE    = 135;
 const int  ID_LISTBOX_FONT      = 136;
 const int  ID_LISTBOX_ENABLE    = 137;
 const int  ID_LISTBOX_SORTED    = 138;
+const int  ID_LISTBOX_TOGGLE    = 139;
 
 const int  ID_CHOICE            = 120;
 const int  ID_CHOICE_SEL_NUM    = 121;
@@ -444,6 +445,7 @@ EVT_BUTTON    (ID_LISTBOX_CLEAR,        MyPanel::OnListBoxButtons)
 EVT_BUTTON    (ID_LISTBOX_APPEND,       MyPanel::OnListBoxButtons)
 EVT_BUTTON    (ID_LISTBOX_DELETE,       MyPanel::OnListBoxButtons)
 EVT_BUTTON    (ID_LISTBOX_FONT,         MyPanel::OnListBoxButtons)
+EVT_BUTTON    (ID_LISTBOX_TOGGLE,       MyPanel::OnListBoxButtons)
 EVT_CHECKBOX  (ID_LISTBOX_ENABLE,       MyPanel::OnListBoxButtons)
 EVT_CHOICE    (ID_CHOICE,               MyPanel::OnChoice)
 EVT_CHOICE    (ID_CHOICE_SORTED,        MyPanel::OnChoice)
@@ -611,6 +613,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new MyButton( panel, ID_LISTBOX_APPEND, "&Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_DELETE, "D&elete selected item", wxPoint(180,130), wxSize(140,30) );
     wxButton *button = new MyButton( panel, ID_LISTBOX_FONT, "Set &Italic font", wxPoint(340,130), wxSize(140,30) );
+    (void)new wxButton( panel, ID_LISTBOX_TOGGLE, "Toggle checkbox", wxPoint(340,180), wxSize(140,30) );
 
     button->SetDefault();
 
@@ -1024,6 +1027,11 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
                 m_listbox->SetFont( *wxITALIC_FONT );
                 m_listboxSorted->SetFont( *wxITALIC_FONT );
                 m_checkbox->SetFont( *wxITALIC_FONT );
+                break;
+            }
+        case ID_LISTBOX_TOGGLE:
+            {
+                m_checkbox->SetValue( TRUE );
                 break;
             }
     }
