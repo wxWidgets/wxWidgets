@@ -141,7 +141,7 @@ void wxMenu::Append(wxMenuItem *pItem)
     wxCHECK_RET( pItem != NULL, wxT("can't append NULL item to the menu") );
 
 #if wxUSE_ACCEL
-    wxAcceleratorEntry *accel = wxGetAccelFromMenuLabel(pItem->GetText());
+    wxAcceleratorEntry *accel = wxGetAccelFromString(pItem->GetText());
     if ( accel ) {
         m_accels.Add(accel);
     }
