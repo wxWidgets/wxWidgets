@@ -165,36 +165,39 @@ public:
     int                  m_width, m_height;
     int                  m_oldClientWidth,m_oldClientHeight;
 
-    /* see the docs in src/gtk/window.cpp */
-    GtkWidget           *m_widget;
-    GtkWidget           *m_wxwindow;
+    // see the docs in src/gtk/window.cpp
+    GtkWidget           *m_widget;          // mostly the widget seen by the rest of GTK
+    GtkWidget           *m_wxwindow;        // mostly the client area as per wxWindows
+    
+    // this widget will be queried for GTK's focus events
+    GtkWidget           *m_focusWidget;
 
 #if HAVE_XIM
-    /* XIM support for wxWindows */
+    // XIM support for wxWindows
     GdkIC               *m_ic;
     GdkICAttr           *m_icattr;
 #endif
 
-    /* scrolling stuff */
+    // scrolling stuff
     GtkAdjustment       *m_hAdjust,*m_vAdjust;
     float                m_oldHorizontalPos;
     float                m_oldVerticalPos;
 
     // extra (wxGTK-specific) flags
-    bool                 m_needParent:1;        /* ! wxFrame, wxDialog, wxNotebookPage ?  */
-    bool                 m_noExpose:1;          /* wxGLCanvas has its own redrawing */
-    bool                 m_nativeSizeEvent:1;   /* wxGLCanvas sends wxSizeEvent upon "alloc_size" */
+    bool                 m_needParent:1;        // ! wxFrame, wxDialog, wxNotebookPage ?
+    bool                 m_noExpose:1;          // wxGLCanvas has its own redrawing
+    bool                 m_nativeSizeEvent:1;   // wxGLCanvas sends wxSizeEvent upon "alloc_size"
     bool                 m_hasScrolling:1;
     bool                 m_hasVMT:1;
     bool                 m_sizeSet:1;
     bool                 m_resizing:1;
-    bool                 m_isStaticBox:1;    /* faster than IS_KIND_OF */
-    bool                 m_isRadioButton:1;  /* faster than IS_KIND_OF */
-    bool                 m_isFrame:1;        /* faster than IS_KIND_OF */
-    bool                 m_acceptsFocus:1;   /* not wxStaticBox, not wxStaticBitmap etc.  */
+    bool                 m_isStaticBox:1;       // faster than IS_KIND_OF
+    bool                 m_isRadioButton:1;     // faster than IS_KIND_OF
+    bool                 m_isFrame:1;           // faster than IS_KIND_OF
+    bool                 m_acceptsFocus:1;      // not wxStaticBox, not wxStaticBitmap etc.
     bool                 m_isScrolling;
-    bool                 m_clipPaintRegion;  /* TRUE after ScrollWindow() */
-    bool                 m_queuedFullRedraw; /* TRUE after DoMoveWindow */
+    bool                 m_clipPaintRegion;     // TRUE after ScrollWindow()
+    bool                 m_queuedFullRedraw;    // TRUE after DoMoveWindow
 
     // these are true if the style were set before the widget was realized
     // (typcally in the constructor) but the actual GTK style must not be set

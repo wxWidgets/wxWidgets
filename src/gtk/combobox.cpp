@@ -154,6 +154,8 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     }
 
     m_parent->DoAddChild( this );
+    
+    m_focusWidget = GTK_COMBO(m_widget)->entry;
 
     PostCreation();
 

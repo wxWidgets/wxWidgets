@@ -46,10 +46,12 @@ void wxStaticBitmap::CreatePixmapWidget()
         mask = m_bitmap.GetMask()->GetBitmap();
     m_widget = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );
 
-    /* insert GTK representation */
+    // insert GTK representation
     (*m_parent->m_insertCallback)(m_parent, this);
 
     gtk_widget_show( m_widget );
+
+    m_focusWidget = m_widget;
 
     PostCreation();
 }
@@ -64,7 +66,7 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxXX creation failed") );
-	return FALSE;
+    return FALSE;
     }
 
     m_bitmap = bitmap;
@@ -81,6 +83,8 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     else
     {
         m_widget = gtk_label_new( "Bitmap" );
+        
+        m_focusWidget = m_widget;
 
         PostCreation();
     }

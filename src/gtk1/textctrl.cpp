@@ -52,6 +52,9 @@ gtk_insert_text_callback(GtkEditable *editable,
                          gint *position,
                          wxTextCtrl *win)
 {
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
     // we should only be called if we have a max len limit at all
     GtkEntry *entry = GTK_ENTRY (editable);
 
@@ -115,111 +118,6 @@ gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
         wxapp_install_idle_handler();
 
     win->CalculateScrollbar();
-}
-
-//-----------------------------------------------------------------------------
-// "focus_in_event"
-//-----------------------------------------------------------------------------
-
-extern wxWindow  *g_focusWindow;
-extern bool       g_blockEventsOnDrag;
-// extern bool g_isIdle;
-
-static gint gtk_text_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(event), wxWindow *win )
-{
-    // Necessary?
-#if 0
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-#endif
-    if (!win->m_hasVMT) return FALSE;
-    if (g_blockEventsOnDrag) return FALSE;
-
-    g_focusWindow = win;
-
-    // notify the parent that we got the focus
-    wxChildFocusEvent eventFocus(win);
-    (void)win->GetEventHandler()->ProcessEvent(eventFocus);
-
-#ifdef HAVE_XIM
-    if (win->m_ic)
-        gdk_im_begin(win->m_ic, win->m_wxwindow->window);
-#endif
-
-#if 0
-#ifdef wxUSE_CARET
-    // caret needs to be informed about focus change
-    wxCaret *caret = win->GetCaret();
-    if ( caret )
-    {
-        caret->OnSetFocus();
-    }
-#endif // wxUSE_CARET
-#endif
-
-    wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
-    event.SetEventObject( win );
-
-    if (win->GetEventHandler()->ProcessEvent( event ))
-    {
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
-//-----------------------------------------------------------------------------
-// "focus_out_event"
-//-----------------------------------------------------------------------------
-
-static gint gtk_text_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED(event), wxWindow *win )
-{
-#if 0
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-#endif
-
-    if (!win->m_hasVMT) return FALSE;
-    if (g_blockEventsOnDrag) return FALSE;
-
-#if 0
-    // if the focus goes out of our app alltogether, OnIdle() will send
-    // wxActivateEvent, otherwise gtk_window_focus_in_callback() will reset
-    // g_sendActivateEvent to -1
-    g_sendActivateEvent = 0;
-#endif
-
-    wxWindow *winFocus = wxFindFocusedChild(win);
-    if ( winFocus )
-        win = winFocus;
-
-    g_focusWindow = (wxWindow *)NULL;
-
-#ifdef HAVE_XIM
-    if (win->m_ic)
-        gdk_im_end();
-#endif
-
-#if 0
-#ifdef wxUSE_CARET
-    // caret needs to be informed about focus change
-    wxCaret *caret = win->GetCaret();
-    if ( caret )
-    {
-        caret->OnKillFocus();
-    }
-#endif // wxUSE_CARET
-#endif
-
-    wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
-    event.SetEventObject( win );
-
-    if (win->GetEventHandler()->ProcessEvent( event ))
-    {
-        return TRUE;
-    }
-
-    return FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -347,6 +245,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
 
     m_parent->DoAddChild( this );
+    
+    m_focusWidget = m_text;
 
     PostCreation();
 
@@ -368,20 +268,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
     {
         gtk_signal_connect(GTK_OBJECT(GTK_TEXT(m_text)->vadj), "changed",
           (GtkSignalFunc) gtk_scrollbar_changed_callback, (gpointer) this );
-
-        gtk_signal_connect( GTK_OBJECT(GTK_TEXT(m_text)), "focus_in_event",
-              GTK_SIGNAL_FUNC(gtk_text_focus_in_callback), (gpointer)this );
-
-        gtk_signal_connect( GTK_OBJECT(GTK_TEXT(m_text)), "focus_out_event",
-			    GTK_SIGNAL_FUNC(gtk_text_focus_out_callback), (gpointer)this );
-    }
-    else
-    {
-        gtk_signal_connect( GTK_OBJECT(m_text), "focus_in_event",
-              GTK_SIGNAL_FUNC(gtk_text_focus_in_callback), (gpointer)this );
-
-        gtk_signal_connect( GTK_OBJECT(m_text), "focus_out_event",
-			    GTK_SIGNAL_FUNC(gtk_text_focus_out_callback), (gpointer)this );
     }
 
     if (!value.IsEmpty())

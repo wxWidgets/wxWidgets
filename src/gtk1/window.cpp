@@ -1669,7 +1669,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     switch ( g_sendActivateEvent )
     {
         case -1:
-            // we've got focus from outside, synthtize wxActivateEvent
+            // we've got focus from outside, synthetize wxActivateEvent
             g_sendActivateEvent = 1;
             break;
 
@@ -1683,14 +1683,12 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     g_focusWindowLast =
     g_focusWindow = win;
 
-/*
-    printf( "OnSetFocus from " );
+#if 0
+    wxPrintf( "OnSetFocus from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( "   " );
-    printf( WXSTRINGCAST win->GetLabel() );
-    printf( ".\n" );
-*/
+        wxPrintf( win->GetClassInfo()->GetClassName() );
+    wxPrintf( ".\n" );
+#endif
 
     // notify the parent keeping track of focus for the kbd navigation
     // purposes that we got it
@@ -1710,16 +1708,6 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
         caret->OnSetFocus();
     }
 #endif // wxUSE_CARET
-
-#if wxUSE_TEXTCTRL
-    // If it's a wxTextCtrl don't send the event as it will be done
-    // after the control gets to process it.
-    wxTextCtrl *ctrl = wxDynamicCast(win, wxTextCtrl);
-    if ( ctrl )
-    {
-        return FALSE;
-    }
-#endif
 
     if (win->IsTopLevel())
     {
@@ -1768,12 +1756,12 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
 
     g_focusWindow = (wxWindowGTK *)NULL;
 
-/*
-    printf( "OnKillFocus from " );
+#if 0
+    wxPrintf( "OnKillFocus from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
-*/
+        wxPrintf( win->GetClassInfo()->GetClassName() );
+    wxPrintf( ".\n" );
+#endif
 
 #ifdef HAVE_XIM
     if (win->m_ic)
@@ -1788,16 +1776,6 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
         caret->OnKillFocus();
     }
 #endif // wxUSE_CARET
-
-#if wxUSE_TEXTCTRL
-    // If it's a wxTextCtrl don't send the event as it will be done
-    // after the control gets to process it.
-    wxTextCtrl *ctrl = wxDynamicCast(win, wxTextCtrl);
-    if ( ctrl )
-    {
-        return FALSE;
-    }
-#endif
 
     if (win->IsTopLevel())
     {
@@ -1837,9 +1815,7 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
     wxMouseEvent event( wxEVT_ENTER_WINDOW );
-#if (GTK_MINOR_VERSION > 0)
     event.SetTimestamp( gdk_event->time );
-#endif
     event.SetEventObject( win );
 
     int x = 0;
@@ -1879,9 +1855,7 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
-#if (GTK_MINOR_VERSION > 0)
     event.SetTimestamp( gdk_event->time );
-#endif
     event.SetEventObject( win );
 
     int x = 0;
@@ -2299,6 +2273,7 @@ void wxWindowGTK::Init()
     // GTK specific
     m_widget = (GtkWidget *) NULL;
     m_wxwindow = (GtkWidget *) NULL;
+    m_focusWidget = (GtkWidget *) NULL;
 
     // position/size
     m_x = 0;
@@ -2313,7 +2288,7 @@ void wxWindowGTK::Init()
 
     m_noExpose = FALSE;
     m_nativeSizeEvent = FALSE;
-
+    
     m_hasScrolling = FALSE;
     m_isScrolling = FALSE;
 
@@ -2487,6 +2462,8 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
     if (m_parent)
         m_parent->DoAddChild( this );
+        
+    m_focusWidget = m_wxwindow;
 
     PostCreation();
 
@@ -2576,12 +2553,12 @@ bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const w
 void wxWindowGTK::PostCreation()
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
-
+    
     if (m_wxwindow)
     {
         if (!m_noExpose)
         {
-            /* these get reported to wxWindows -> wxPaintEvent */
+            // these get reported to wxWindows -> wxPaintEvent
 
             gtk_pizza_set_external( GTK_PIZZA(m_wxwindow), TRUE );
 
@@ -2598,35 +2575,32 @@ void wxWindowGTK::PostCreation()
             }
         }
 
-#if (GTK_MINOR_VERSION > 0)
-        /* these are called when the "sunken" or "raised" borders are drawn */
+        // these are called when the "sunken" or "raised" borders are drawn */
         gtk_signal_connect( GTK_OBJECT(m_widget), "expose_event",
           GTK_SIGNAL_FUNC(gtk_window_own_expose_callback), (gpointer)this );
 
         gtk_signal_connect( GTK_OBJECT(m_widget), "draw",
           GTK_SIGNAL_FUNC(gtk_window_own_draw_callback), (gpointer)this );
+    }
+
+    // focus handling
+
+    if (m_focusWidget == NULL)
+        m_focusWidget = m_widget;
+
+#if 0
+    if (GetClassInfo() && GetClassInfo()->GetClassName())
+        wxPrintf( GetClassInfo()->GetClassName() );
+    wxPrintf( ".\n" );
 #endif
-    }
 
-    if (m_wxwindow && m_needParent)
-    {
-        gtk_signal_connect( GTK_OBJECT(m_wxwindow), "focus_in_event",
-            GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
+    gtk_signal_connect( GTK_OBJECT(m_focusWidget), "focus_in_event",
+        GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
 
-        gtk_signal_connect( GTK_OBJECT(m_wxwindow), "focus_out_event",
-            GTK_SIGNAL_FUNC(gtk_window_focus_out_callback), (gpointer)this );
-    }
-    else
-    {
-        // For dialogs and frames, we are interested mainly in
-        // m_widget's focus.
+    gtk_signal_connect( GTK_OBJECT(m_focusWidget), "focus_out_event",
+         GTK_SIGNAL_FUNC(gtk_window_focus_out_callback), (gpointer)this );
 
-        gtk_signal_connect( GTK_OBJECT(m_widget), "focus_in_event",
-            GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
-
-        gtk_signal_connect( GTK_OBJECT(m_widget), "focus_out_event",
-            GTK_SIGNAL_FUNC(gtk_window_focus_out_callback), (gpointer)this );
-    }
+    // connect to the various key and mouse handlers
 
     GtkWidget *connect_widget = GetConnectWidget();
 

@@ -787,6 +787,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                   bmp1,
                                   wxPoint(30, 70)
                                  );
+
     bmpBtn->SetBitmapSelected(bmp2);
     bmpBtn->SetBitmapFocus(bmp3);
 
