@@ -97,20 +97,29 @@ wxWizardPage *wxWizardPageSimple::GetNext() const
 // generic wxWizard implementation
 // ----------------------------------------------------------------------------
 
-wxWizard::wxWizard(wxWindow *parent,
+void wxWizard::Init()
+{
+    m_posWizard = wxDefaultPosition;
+    m_page = (wxWizardPage *)NULL;
+    m_btnPrev = m_btnNext = NULL;
+    m_statbmp = NULL;
+}
+
+bool wxWizard::Create(wxWindow *parent,
                    int id,
                    const wxString& title,
                    const wxBitmap& bitmap,
                    const wxPoint& pos)
-        : m_posWizard(pos), m_bitmap(bitmap)
 {
+    m_posWizard = pos;
+    m_bitmap = bitmap ;
     // just create the dialog itself here, the controls will be created in
     // DoCreateControls() called later when we know our final size
     m_page = (wxWizardPage *)NULL;
     m_btnPrev = m_btnNext = NULL;
     m_statbmp = NULL;
 
-    (void)wxDialog::Create(parent, id, title, pos);
+    return wxDialog::Create(parent, id, title, pos);
 }
 
 void wxWizard::DoCreateControls()
@@ -189,13 +198,24 @@ void wxWizard::DoCreateControls()
 
     x = m_x + m_width - 3*sizeBtn.x - BUTTON_MARGIN;
     y += SEPARATOR_LINE_MARGIN;
+
+    if (GetExtraStyle() & wxWIZARD_EX_HELPBUTTON)
+    {
+        x -= sizeBtn.x;
+        x -= BUTTON_MARGIN ;
+
+        (void*) new wxButton(this, wxID_HELP, _("&Help"), wxPoint(x, y), sizeBtn);
+        x += sizeBtn.x;
+        x += BUTTON_MARGIN ;
+    }
+
     m_btnPrev = new wxButton(this, wxID_BACKWARD, _("< &Back"), wxPoint(x, y), sizeBtn);
 
     x += sizeBtn.x;
     m_btnNext = new wxButton(this, wxID_FORWARD, _("&Next >"), wxPoint(x, y), sizeBtn);
 
     x += sizeBtn.x + BUTTON_MARGIN;
-    (void)new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(x, y), sizeBtn);
+    (void)new wxButton(this, wxID_CANCEL, _("&Cancel"), wxPoint(x, y), sizeBtn);
 
     // position and size the dialog
     // ----------------------------

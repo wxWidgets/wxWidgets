@@ -26,6 +26,9 @@
     #include "wx/event.h"       // wxEVT_XXX constants
 #endif // WX_PRECOMP
 
+// Extended style to specify a help button
+#define wxWIZARD_EX_HELPBUTTON   0x00000010
+
 // forward declarations
 class WXDLLEXPORT wxWizard;
 
