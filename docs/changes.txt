@@ -131,6 +131,11 @@ Unix:
 - added support for GNU/Hurd in configure
 - wxLocale::Init now tries to set .utf8 locale in Unicode mode (Andreas Pflug)
 
+Generic controls:
+
+- implemented wxListCtrl::Refresh() (Norbert Berzen)
+- support adding/removing columns dynamically (Donald C. Taylor)
+
 wxGTK:
 
 - added support for label mnemonics to GTK+2 build (Michael Moss)
@@ -145,7 +150,6 @@ wxGTK:
 - added wxTextCtrl::SetSelection implementation for GTK+ 2
 - fixed wxTextCtrl::IsEditable() for GTK+ 2
 - don't consume 100% CPU when showing a poup menu
-- implemented wxListCtrl::Refresh() (Norbert Berzen)
 
 wxMac:
 

@@ -4113,6 +4113,17 @@ void wxListMainWindow::DeleteColumn( int col )
     m_dirty = TRUE;
     m_columns.DeleteNode( node );
 
+    if ( !IsVirtual() )
+    {
+        // update all the items
+        for ( size_t i = 0; i < m_lines.GetCount(); i++ )
+        {
+            wxListLineData * const line = GetLine(i);
+            wxListItemDataList::Node *n = line->m_items.Item( col );
+            line->m_items.DeleteNode(n);
+        }
+    }
+
     // invalidate it as it has to be recalculated
     m_headerWidth = 0;
 }
@@ -4305,8 +4316,10 @@ void wxListMainWindow::InsertColumn( long col, wxListItem &item )
     {
         if (item.m_width == wxLIST_AUTOSIZE_USEHEADER)
             item.m_width = GetTextLength( item.m_text );
+
         wxListHeaderData *column = new wxListHeaderData( item );
-        if ((col >= 0) && (col < (int)m_columns.GetCount()))
+        bool insert = (col >= 0) && ((size_t)col < m_columns.GetCount());
+        if ( insert )
         {
             wxListHeaderDataList::Node *node = m_columns.Item( col );
             m_columns.Insert( node, column );
@@ -4314,6 +4327,20 @@ void wxListMainWindow::InsertColumn( long col, wxListItem &item )
         else
         {
             m_columns.Append( column );
+        }
+
+        if ( !IsVirtual() )
+        {
+            // update all the items
+            for ( size_t i = 0; i < m_lines.GetCount(); i++ )
+            {
+                wxListLineData * const line = GetLine(i);
+                wxListItemData * const data = new wxListItemData(this);
+                if ( insert )
+                    line->m_items.Insert(col, data);
+                else
+                    line->m_items.Append(data);
+            }
         }
 
         // invalidate it as it has to be recalculated
