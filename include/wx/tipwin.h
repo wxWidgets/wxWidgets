@@ -17,15 +17,15 @@
     #pragma interface "tipwin.h"
 #endif
 
-#include "wx/frame.h"
+#include "wx/popupwin.h"
 
+#if wxUSE_POPUPWIN
 // ----------------------------------------------------------------------------
 // wxTipWindow
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTipWindow : public wxFrame
+class WXDLLEXPORT wxTipWindow : public wxPopupTransientWindow
 {
-    friend class wxTipWindowView;
 public:
     // Supply windowPtr for it to null the given address
     // when the window has closed.
@@ -36,11 +36,15 @@ public:
 
     void SetTipWindowPtr(wxTipWindow** windowPtr) { m_windowPtr = windowPtr; }
 
+    // calculate the client rect we need to display the text
+    void Adjust(const wxString& text, wxCoord maxLength);
+
+    void Close();
+
 protected:
     // event handlers
     void OnMouseClick(wxMouseEvent& event);
-    void OnActivate(wxActivateEvent& event);
-    void OnKillFocus(wxFocusEvent& event);
+    void OnPaint(wxPaintEvent& event);
 
 private:
     wxArrayString m_textLines;
@@ -50,4 +54,5 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+#endif // wxUSE_POPUPWIN
 #endif // _WX_TIPWIN_H_

@@ -51,14 +51,15 @@ static const wxCoord TEXT_MARGIN_Y = 3;
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxTipWindow, wxFrame)
+BEGIN_EVENT_TABLE(wxTipWindow, wxPopupTransientWindow)
     EVT_LEFT_DOWN(wxTipWindow::OnMouseClick)
     EVT_RIGHT_DOWN(wxTipWindow::OnMouseClick)
     EVT_MIDDLE_DOWN(wxTipWindow::OnMouseClick)
-    EVT_KILL_FOCUS(wxTipWindow::OnKillFocus)
-    EVT_ACTIVATE(wxTipWindow::OnActivate)
+    EVT_PAINT(wxTipWindow::OnPaint)
 END_EVENT_TABLE()
 
+
+#if 0
 // Viewer window to put in the frame
 class wxTipWindowView: public wxWindow
 {
@@ -85,7 +86,7 @@ BEGIN_EVENT_TABLE(wxTipWindowView, wxWindow)
     EVT_MIDDLE_DOWN(wxTipWindowView::OnMouseClick)
     EVT_KILL_FOCUS(wxTipWindowView::OnKillFocus)
 END_EVENT_TABLE()
-
+#endif
 
 // ----------------------------------------------------------------------------
 // wxTipWindow
@@ -94,10 +95,10 @@ END_EVENT_TABLE()
 wxTipWindow::wxTipWindow(wxWindow *parent,
                          const wxString& text,
                          wxCoord maxLength, wxTipWindow** windowPtr)
-           : wxFrame(parent, -1, _T(""),
-                     wxDefaultPosition, wxDefaultSize,
-                     wxNO_BORDER | wxFRAME_NO_TASKBAR )
+           : wxPopupTransientWindow(parent)
 {
+    m_windowPtr = windowPtr;
+
     // set colours
     SetForegroundColour(*wxBLACK);
 
@@ -108,18 +109,15 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
 #endif
     SetBackgroundColour(bkCol);
 
-    // set position and size
+    // set size and position
+    Adjust(text, maxLength);
     int x, y;
     wxGetMousePosition(&x, &y);
-    Move(x, y + 20);
+    Position(wxPoint(x, y+10), wxSize(0,0));
 
-    wxTipWindowView* tipWindowView = new wxTipWindowView(this);
-    tipWindowView->Adjust(text, maxLength);
-
-    m_windowPtr = windowPtr;
-
-    Show(TRUE);
-    tipWindowView->SetFocus();
+    //Show(TRUE);
+    Popup();
+    SetFocus();
 }
 
 wxTipWindow::~wxTipWindow()
@@ -135,26 +133,112 @@ void wxTipWindow::OnMouseClick(wxMouseEvent& WXUNUSED(event))
     Close();
 }
 
-void wxTipWindow::OnActivate(wxActivateEvent& event)
+
+void wxTipWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    if (!event.GetActive())
-        Close();
+    wxPaintDC dc(this);
+
+    wxRect rect;
+    wxSize size = GetClientSize();
+    rect.width = size.x;
+    rect.height = size.y;
+
+    // first filll the background
+    dc.SetBrush(wxBrush(GetBackgroundColour(), wxSOLID));
+
+    dc.SetPen( * wxBLACK_PEN );
+    dc.DrawRectangle(rect);
+
+    // and then draw the text line by line
+    dc.SetFont(GetFont());
+
+    wxPoint pt;
+    pt.x = TEXT_MARGIN_X;
+    pt.y = TEXT_MARGIN_Y;
+    size_t count = m_textLines.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        dc.DrawText(m_textLines[n], pt);
+
+        pt.y += m_heightLine;
+    }
 }
 
-void wxTipWindow::OnKillFocus(wxFocusEvent& WXUNUSED(event))
+
+void wxTipWindow::Adjust(const wxString& text, wxCoord maxLength)
 {
-    // Under Windows at least, we will get this immediately
-    // because when the view window is focussed, the
-    // tip window goes out of focus.
-#ifdef __WXGTK__
-    Close();
-#endif
+    wxClientDC dc(this);
+    dc.SetFont(GetFont());
+
+    // calculate the length: we want each line be no longer than maxLength
+    // pixels and we only break lines at words boundary
+    wxString current;
+    wxCoord height, width,
+            widthMax = 0;
+    m_heightLine = 0;
+
+    bool breakLine = FALSE;
+    for ( const wxChar *p = text.c_str(); ; p++ )
+    {
+        if ( *p == _T('\n') || *p == _T('\0') )
+        {
+            dc.GetTextExtent(current, &width, &height);
+            if ( width > widthMax )
+                widthMax = width;
+
+            if ( height > m_heightLine )
+                m_heightLine = height;
+
+            m_textLines.Add(current);
+
+            if ( !*p )
+            {
+                // end of text
+                break;
+            }
+
+            current.clear();
+            breakLine = FALSE;
+        }
+        else if ( breakLine && (*p == _T(' ') || *p == _T('\t')) )
+        {
+            // word boundary - break the line here
+            m_textLines.Add(current);
+            current.clear();
+            breakLine = FALSE;
+        }
+        else // line goes on
+        {
+            current += *p;
+            dc.GetTextExtent(current, &width, &height);
+            if ( width > maxLength )
+                breakLine = TRUE;
+
+            if ( width > widthMax )
+                widthMax = width;
+
+            if ( height > m_heightLine )
+                m_heightLine = height;
+        }
+    }
+
+    // take into account the border size and the margins
+    SetClientSize(2*(TEXT_MARGIN_X + 1) + widthMax,
+                  2*(TEXT_MARGIN_Y + 1) + m_textLines.GetCount() * m_heightLine);
 }
+
+
+void wxTipWindow::Close()
+{
+    Show(FALSE);
+    Destroy();
+}
+
 
 // ----------------------------------------------------------------------------
 // wxTipWindowView
 // ----------------------------------------------------------------------------
-
+#if 0
 wxTipWindowView::wxTipWindowView(wxWindow *parent)
            : wxWindow(parent, -1,
                      wxDefaultPosition, wxDefaultSize,
@@ -280,3 +364,4 @@ void wxTipWindowView::OnKillFocus(wxFocusEvent& WXUNUSED(event))
         GetParent()->Close();
 }
 
+#endif
