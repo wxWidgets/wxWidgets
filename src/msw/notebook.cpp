@@ -252,11 +252,47 @@ bool wxNotebook::Create(wxWindow *parent,
         }
     }
 
+    LPCTSTR className = WC_TABCONTROL;
+
+    // SysTabCtl32 class has natively CS_HREDRAW and CS_VREDRAW enabled and it
+    // causes horrible flicker when resizing notebook, so get rid of it by
+    // using a class without these styles (but otherwise identical to it)
+    if ( !HasFlag(wxFULL_REPAINT_ON_RESIZE) )
+    {
+        static ClassRegistrar s_clsNotebook;
+        if ( !s_clsNotebook.IsInitialized() )
+        {
+            // get a copy of standard class and modify it
+            WNDCLASS wc;
+
+            if ( ::GetClassInfo(::GetModuleHandle(NULL), WC_TABCONTROL, &wc) )
+            {
+                wc.lpszClassName = wxT("_wx_SysTabCtl32");
+                wc.style &= ~(CS_HREDRAW | CS_VREDRAW);
+
+                s_clsNotebook.Register(wc);
+            }
+            else
+            {
+                wxLogLastError(_T("GetClassInfoEx(SysTabCtl32)"));
+            }
+        }
+
+        // use our custom class if available but fall back to the standard
+        // notebook if we failed to register it
+        if ( s_clsNotebook.IsRegistered() )
+        {
+            // it's ok to use c_str() here as the static s_clsNotebook object
+            // has sufficiently long lifetime
+            className = s_clsNotebook.GetName().c_str();
+        }
+    }
+
     if ( !CreateControl(parent, id, pos, size, style | wxTAB_TRAVERSAL,
                         wxDefaultValidator, name) )
         return false;
 
-    if ( !MSWCreateControl(WC_TABCONTROL, wxEmptyString, pos, size) )
+    if ( !MSWCreateControl(className, wxEmptyString, pos, size) )
         return false;
 
     return true;
@@ -679,49 +715,68 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 
 void wxNotebook::OnSize(wxSizeEvent& event)
 {
+    // update the background brush
 #if wxUSE_UXTHEME
-  UpdateBgBrush();
+    UpdateBgBrush();
 #endif // wxUSE_UXTHEME
 
-  // fit the notebook page to the tab control's display area
-  RECT rc;
-  rc.left = rc.top = 0;
-  GetSize((int *)&rc.right, (int *)&rc.bottom);
+    // fit all the notebook pages to the tab control's display area
 
-  // there seems to be a bug in the implementation of TabCtrl_AdjustRect(): it
-  // returns completely false values for multiline tab controls after the tabs
-  // are added but before getting the first WM_SIZE (off by ~50 pixels, see
-  //
-  // http://sf.net/tracker/index.php?func=detail&aid=645323&group_id=9863&atid=109863
-  //
-  // and the only work around I could find was this ugly hack... without it
-  // simply toggling the "multiline" checkbox in the notebook sample resulted
-  // in a noticeable page displacement
-  if ( HasFlag(wxNB_MULTILINE) )
-  {
-      // avoid an infinite recursion: we get another notification too!
-      static bool s_isInOnSize = false;
+    RECT rc;
+    rc.left = rc.top = 0;
+    GetSize((int *)&rc.right, (int *)&rc.bottom);
 
-      if ( !s_isInOnSize )
-      {
-          s_isInOnSize = true;
-          SendMessage(GetHwnd(), WM_SIZE, SIZE_RESTORED,
-                      MAKELPARAM(rc.right, rc.bottom));
-          s_isInOnSize = false;
-      }
-  }
+    // save the total size, we'll use it below
+    int widthNbook = rc.right - rc.left,
+        heightNbook = rc.bottom - rc.top;
 
-  TabCtrl_AdjustRect(m_hwnd, false, &rc);
+    // there seems to be a bug in the implementation of TabCtrl_AdjustRect(): it
+    // returns completely false values for multiline tab controls after the tabs
+    // are added but before getting the first WM_SIZE (off by ~50 pixels, see
+    //
+    // http://sf.net/tracker/index.php?func=detail&aid=645323&group_id=9863&atid=109863
+    //
+    // and the only work around I could find was this ugly hack... without it
+    // simply toggling the "multiline" checkbox in the notebook sample resulted
+    // in a noticeable page displacement
+    if ( HasFlag(wxNB_MULTILINE) )
+    {
+        // avoid an infinite recursion: we get another notification too!
+        static bool s_isInOnSize = false;
 
-  int width = rc.right - rc.left,
-      height = rc.bottom - rc.top;
-  size_t nCount = m_pages.Count();
-  for ( size_t nPage = 0; nPage < nCount; nPage++ ) {
-    wxNotebookPage *pPage = m_pages[nPage];
-    pPage->SetSize(rc.left, rc.top, width, height);
-  }
+        if ( !s_isInOnSize )
+        {
+            s_isInOnSize = true;
+            SendMessage(GetHwnd(), WM_SIZE, SIZE_RESTORED,
+                    MAKELPARAM(rc.right, rc.bottom));
+            s_isInOnSize = false;
+        }
+    }
 
-  event.Skip();
+    TabCtrl_AdjustRect(m_hwnd, false, &rc);
+
+    int width = rc.right - rc.left,
+        height = rc.bottom - rc.top;
+    size_t nCount = m_pages.Count();
+    for ( size_t nPage = 0; nPage < nCount; nPage++ ) {
+        wxNotebookPage *pPage = m_pages[nPage];
+        pPage->SetSize(rc.left, rc.top, width, height);
+    }
+
+
+    // unless we had already repainted everything, we now need to refresh
+    if ( !HasFlag(wxFULL_REPAINT_ON_RESIZE) )
+    {
+        // invalidate areas not covered by pages
+        RefreshRect(wxRect(0, 0, widthNbook, rc.top), false);
+        RefreshRect(wxRect(0, rc.top, rc.left, height), false);
+        RefreshRect(wxRect(0, rc.bottom, widthNbook, heightNbook - rc.bottom),
+                    false);
+        RefreshRect(wxRect(rc.right, rc.top, widthNbook - rc.bottom, height),
+                    false);
+    }
+
+    event.Skip();
 }
 
 void wxNotebook::OnSelChange(wxNotebookEvent& event)
@@ -869,7 +924,7 @@ WXHANDLE wxNotebook::QueryBgBitmap(wxWindow *win)
     SelectInHDC selectBmp(hDCMem, hBmp);
 
     ::SendMessage(GetHwnd(), WM_PRINTCLIENT,
-                  (WPARAM)(HDC)hDCMem, 
+                  (WPARAM)(HDC)hDCMem,
                   PRF_ERASEBKGND | PRF_CLIENT | PRF_NONCLIENT);
 
     if ( win )
@@ -881,8 +936,8 @@ WXHANDLE wxNotebook::QueryBgBitmap(wxWindow *win)
 
         return (WXHANDLE)c;
     }
+    //else: we are asked to create the brush
 
-    // else we are asked to create the brush
     return (WXHANDLE)::CreatePatternBrush(hBmp);
 }
 
