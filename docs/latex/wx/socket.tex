@@ -23,7 +23,9 @@ functions that take a \helpref{wxSocketEvent}{wxsocketevent} argument.
 % ---------------------------------------------------------------------------
 \wxheading{See also}
 
-\helpref{wxSocketEvent}{wxsocketevent}, \helpref{wxSocketClient}{wxsocketclient}, \helpref{wxSocketServer}{wxsocketserver}
+\helpref{wxSocketEvent}{wxsocketevent}\\
+\helpref{wxSocketClient}{wxsocketclient}\\
+\helpref{wxSocketServer}{wxsocketserver}
 
 % ---------------------------------------------------------------------------
 % Members
@@ -121,9 +123,9 @@ Returns a reference to the current object.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Error}{wxsocketbaseerror},
- \helpref{wxSocketBase::LastCount}{wxsocketbaselastcount},
- \helpref{wxSocketBase::LastError}{wxsocketbaselasterror}
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}\\
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}\\
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}
 
 %
 % Read
@@ -143,6 +145,20 @@ This function reads a buffer of {\it nbytes} bytes from the socket.
 \wxheading{Return value}
 
 Returns a reference to the current object.
+
+\wxheading{Remark/Warning}
+
+By default, Read uses an internal asynchronous manager: it will send data when
+the socket requests them. It is particularly interesting when you enter a long
+data transfer (e.g. a big file, an image, ...). But it is also buggy when you
+simply discuss with the peer using user data. In this case, wxSocket prepares
+itself to send data (Write wait for them to be sent) and during a GUI refresh
+the user enters new data, which involves a new Read call though the previous
+isn't finished. Well, in most cases it can work but it might fail too.
+So I advise you to use the SPEED flag, which disables the asynchronous manager,
+when you just want to discuss with the peer.
+
+This remark is also valid for all IO call.
 
 \wxheading{See also}
 
@@ -171,6 +187,18 @@ Returns a reference to the current object.
 
 This function writes a buffer of {\it nbytes} bytes from the socket.
 
+\wxheading{Remark/Warning}
+
+By default, Write uses an internal asynchronous manager: it will send data when
+the socket requests them. It is particularly interesting when you enter a long
+data transfer (e.g. a big file, an image, ...). But it is also buggy when you
+simply discuss with the peer using user data. In this case, wxSocket prepares
+itself to send data (Write wait for them to be sent) and during a GUI refresh
+the user enters new data, which involves a new Write call though the previous
+isn't finished. Well, in most cases it can work but it might fail too.  
+So I advise you to use the SPEED flag, which disables the asynchronous manager,
+when you just want to discuss with the peer.
+
 \wxheading{Parameters}
 
 \docparam{buffer}{Buffer where to get the data to write.}
@@ -183,9 +211,9 @@ Returns a reference to the current object.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Error}{wxsocketbaseerror},
- \helpref{wxSocketBase::LastCount}{wxsocketbaselastcount},
- \helpref{wxSocketBase::LastError}{wxsocketbaselasterror}
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}\\
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}\\
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}
 
 %
 % WriteMsg
@@ -210,10 +238,10 @@ Returns a reference to the current object.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Error}{wxsocketbaseerror},
- \helpref{wxSocketBase::LastCount}{wxsocketbaselastcount},
- \helpref{wxSocketBase::LastError}{wxsocketbaselasterror},
- \helpref{wxSocketBase::ReadMsg}{wxsocketbasereadmsg}
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}\\
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}\\
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}\\
+\helpref{wxSocketBase::ReadMsg}{wxsocketbasereadmsg}
 
 %
 % ReadMsg
@@ -238,10 +266,10 @@ Returns a reference to the current object.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Error}{wxsocketbaseerror},
- \helpref{wxSocketBase::LastCount}{wxsocketbaselastcount},
- \helpref{wxSocketBase::LastError}{wxsocketbaselasterror},
- \helpref{wxSocketBase::WriteMsg}{wxsocketbasewritemsg}
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}\\
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}\\
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}\\
+\helpref{wxSocketBase::WriteMsg}{wxsocketbasewritemsg}
 
 %
 % Unread
@@ -266,9 +294,9 @@ Returns a reference to the current object.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Error}{wxsocketbaseerror},
- \helpref{wxSocketBase::LastCount}{wxsocketbaselastcount},
- \helpref{wxSocketBase::LastError}{wxsocketbaselasterror}
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}\\
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}\\
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}
 
 %
 % Discard
@@ -303,9 +331,9 @@ Returns TRUE if an event occured, FALSE if the timeout was reached.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread},
- \helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite},
- \helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
+\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread}\\
+\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}\\
+\helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
 
 %
 % WaitForRead
@@ -328,9 +356,9 @@ Returns TRUE if a byte arrived, FALSE if the timeout was reached.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Wait}{wxsocketbasewait},
- \helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite},
- \helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
+\helpref{wxSocketBase::Wait}{wxsocketbasewait}\\
+\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}\\
+\helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
 
 %
 % WaitForWrite
@@ -353,9 +381,9 @@ Returns TRUE if a write event occured, FALSE if the timeout was reached.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Wait}{wxsocketbasewait},
- \helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread},
- \helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
+\helpref{wxSocketBase::Wait}{wxsocketbasewait}\\
+\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread}\\
+\helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
 
 %
 % WaitForLost
@@ -379,9 +407,9 @@ Returns TRUE if a "lost" event occured, FALSE if the timeout was reached.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread},
- \helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite},
- \helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
+\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread}\\
+\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}\\
+\helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
 
 %
 % RestoreState
