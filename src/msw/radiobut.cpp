@@ -117,31 +117,35 @@ void wxRadioButton::SetValue(bool value)
         wxWindowList::Node *nodeThis = siblings.Find(this);
         wxCHECK_RET( nodeThis, _T("radio button not a child of its parent?") );
 
-        // turn off all radio buttons before this one
-        for ( wxWindowList::Node *nodeBefore = nodeThis->GetPrevious();
-              nodeBefore;
-              nodeBefore = nodeBefore->GetPrevious() )
+        // if it's not the first item of the group ...
+        if ( !HasFlag(wxRB_GROUP) )
         {
-            wxRadioButton *btn = wxDynamicCast(nodeBefore->GetData(),
-                                               wxRadioButton);
-            if ( !btn )
+            // ... turn off all radio buttons before it
+            for ( wxWindowList::Node *nodeBefore = nodeThis->GetPrevious();
+                  nodeBefore;
+                  nodeBefore = nodeBefore->GetPrevious() )
             {
-                // the radio buttons in a group must be consecutive, so there
-                // are no more of them
-                break;
-            }
+                wxRadioButton *btn = wxDynamicCast(nodeBefore->GetData(),
+                                                   wxRadioButton);
+                if ( !btn )
+                {
+                    // the radio buttons in a group must be consecutive, so
+                    // there are no more of them
+                    break;
+                }
 
-            btn->SetValue(FALSE);
+                btn->SetValue(FALSE);
 
-            if ( btn->HasFlag(wxRB_GROUP) )
-            {
-                // even if there are other radio buttons before this one,
-                // they're not in the same group with us
-                break;
+                if ( btn->HasFlag(wxRB_GROUP) )
+                {
+                    // even if there are other radio buttons before this one,
+                    // they're not in the same group with us
+                    break;
+                }
             }
         }
 
-        // ... and all after this one
+        // ... and also turn off all buttons after this one
         for ( wxWindowList::Node *nodeAfter = nodeThis->GetNext();
               nodeAfter;
               nodeAfter = nodeAfter->GetNext() )

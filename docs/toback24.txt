@@ -474,3 +474,11 @@ Checking in src/msw/textctrl.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/textctrl.cpp,v  <--  textctrl.cpp
 new revision: 1.164; previous revision: 1.163
 
+41. Radio button consecutive groups bug
+
+http://sf.net/tracker/index.php?func=detail&aid=705441&group_id=9863&atid=109863
+
+Checking in src/msw/radiobut.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/radiobut.cpp,v  <--  radiobut.cpp
+new revision: 1.32; previous revision: 1.31
+
