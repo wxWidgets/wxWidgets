@@ -200,6 +200,22 @@
 //                      in your own code (1 if you do, 0 if you don't)
 #define wxUSE_EXCEPTIONS    1
 
+// Set wxUSE_STL to 1 to derive wxList(Foo) and wxArray(Foo) from
+// std::list<Foo*> and std::vector<Foo*>, with a compatibility interface,
+// and for wxHashMap to be implemented with templates.
+//
+// Default is 0
+//
+// Recommended setting: YMMV
+#define wxUSE_STL 0
+
+// Set wxUSE_EXTENDED_RTTI to 1 to use extended RTTI
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_EXTENDED_RTTI 0
+
 // Support for message/error logging. This includes wxLogXXX() functions and
 // wxLog and derived classes. Don't set this to 0 unless you really know what
 // you are doing.
