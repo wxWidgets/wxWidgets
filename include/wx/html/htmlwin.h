@@ -333,9 +333,6 @@ private:
     wxPoint     m_tmpSelFromPos;
     wxHtmlCell *m_tmpSelFromCell;
 
-    // a flag indicated if mouse moved
-    // (if true we will try to change cursor in last call to OnIdle)
-    bool m_tmpMouseMoved;
     // contains last link name
     wxHtmlLinkInfo *m_tmpLastLink;
     // contains the last (terminal) cell which contained the mouse
@@ -349,15 +346,23 @@ private:
     // this filter is used when no filter is able to read some file
     static wxHtmlFilter *m_DefaultFilter;
 
-    wxHtmlHistoryArray *m_History;
+    // html processors array:
+    wxHtmlProcessorList *m_Processors;
+    static wxHtmlProcessorList *m_GlobalProcessors;
+
     // browser history
+    wxHtmlHistoryArray *m_History;
     int m_HistoryPos;
     // if this FLAG is false, items are not added to history
     bool m_HistoryOn;
 
-    // html processors array:
-    wxHtmlProcessorList *m_Processors;
-    static wxHtmlProcessorList *m_GlobalProcessors;
+    // a flag indicated if mouse moved
+    // (if true we will try to change cursor in last call to OnIdle)
+    bool m_tmpMouseMoved;
+
+    // a flag set if we need to erase background in OnPaint() (otherwise this
+    // is supposed to have been done in OnEraseBackground())
+    bool m_eraseBgInOnPaint;
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxHtmlWindow)

@@ -180,6 +180,7 @@ void wxHtmlWindow::Init()
     m_lastDoubleClick = 0;
 #endif // wxUSE_CLIPBOARD
     m_backBuffer = NULL;
+    m_eraseBgInOnPaint = false;
 }
 
 bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
@@ -853,10 +854,11 @@ void wxHtmlWindow::OnEraseBackground(wxEraseEvent& event)
 {
     if ( !m_bmpBg.Ok() )
     {
-        // we used to do nothing at all here but we do have to erase background
-        // now that we reuse it (instead of overwriting it) in OnPaint() below
-        event.Skip();
-
+        // don't even skip the event, if we don't have a bg bitmap we're going
+        // to overwrite background in OnPaint() below anyhow, so letting the
+        // default handling take place would only result in flicker, just set a
+        // flag to erase the background below
+        m_eraseBgInOnPaint = true;
         return;
     }
 
@@ -887,7 +889,8 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 
-    if (m_tmpCanDrawLocks > 0 || m_Cell == NULL) return;
+    if (m_tmpCanDrawLocks > 0 || m_Cell == NULL)
+        return;
 
     int x, y;
     GetViewStart(&x, &y);
@@ -899,13 +902,23 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
         m_backBuffer = new wxBitmap(sz.x, sz.y);
     dcm.SelectObject(*m_backBuffer);
 
-    // preserve the existing background, otherwise we'd erase anything the user
-    // code had drawn in its EVT_ERASE_BACKGROUND handler when we do the Blit
-    // back below
-    dcm.Blit(0, rect.GetTop(),
-             sz.x, rect.GetBottom() - rect.GetTop() + 1,
-             &dc,
-             0, rect.GetTop());
+    if ( m_eraseBgInOnPaint )
+    {
+        dcm.SetBackground(wxBrush(GetBackgroundColour(), wxSOLID));
+        dcm.Clear();
+
+        m_eraseBgInOnPaint = false;
+    }
+    else // someone has already erased the background, keep it
+    {
+        // preserve the existing background, otherwise we'd erase anything the
+        // user code had drawn in its EVT_ERASE_BACKGROUND handler when we do
+        // the Blit back below
+        dcm.Blit(0, rect.GetTop(),
+                 sz.x, rect.GetBottom() - rect.GetTop() + 1,
+                 &dc,
+                 0, rect.GetTop());
+    }
 
     PrepareDC(dcm);
     dcm.SetMapMode(wxMM_TEXT);
