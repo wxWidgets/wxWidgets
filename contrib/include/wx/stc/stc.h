@@ -1676,11 +1676,9 @@ public:
     void SetListType(int val)             { m_listType = val; }
     void SetX(int val)                    { m_x = val; }
     void SetY(int val)                    { m_y = val; }
-#ifndef __WXMAC__ // #if wxUSE_DRAG_AND_DROP
     void SetDragText(const wxString& val) { m_dragText = val; }
     void SetDragAllowMove(bool val)       { m_dragAllowMove = val; }
     void SetDragResult(wxDragResult val)  { m_dragResult = val; }
-#endif
 
     int  GetPosition() const         { return m_position; }
     int  GetKey()  const             { return m_key; }
@@ -1699,11 +1697,9 @@ public:
     int  GetListType() const         { return m_listType; }
     int  GetX() const                { return m_x; }
     int  GetY() const                { return m_y; }
-#ifndef __WXMAC__ // #if wxUSE_DRAG_AND_DROP
     wxString GetDragText()           { return m_dragText; }
     bool GetDragAllowMove()          { return m_dragAllowMove; }
     wxDragResult GetDragResult()     { return m_dragResult; }
-#endif
 
     bool GetShift() const;
     bool GetControl() const;
@@ -1737,12 +1733,10 @@ private:
     int m_x;
     int m_y;
 
-#ifndef __WXMAC__ // #if wxUSE_DRAG_AND_DROP
     wxString m_dragText;        // wxEVT_STC_START_DRAG, wxEVT_STC_DO_DROP
     bool     m_dragAllowMove;   // wxEVT_STC_START_DRAG
 
     wxDragResult m_dragResult; // wxEVT_STC_DRAG_OVER,wxEVT_STC_DO_DROP
-#endif
 #endif
 };
 
@@ -1767,11 +1761,9 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_URIDROPPED,              1666)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DWELLSTART,              1667)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DWELLEND,                1668)
-#if wxUSE_DRAG_AND_DROP
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_START_DRAG,              1669)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DRAG_OVER,               1670)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DO_DROP,                 1671)
-#endif
 END_DECLARE_EVENT_TYPES()
 #else
     enum {
@@ -1794,11 +1786,9 @@ END_DECLARE_EVENT_TYPES()
         wxEVT_STC_URIDROPPED,
         wxEVT_STC_DWELLSTART,
         wxEVT_STC_DWELLEND,
-#ifndef __WXMAC__ // #if wxUSE_DRAG_AND_DROP
         wxEVT_STC_START_DRAG,
         wxEVT_STC_DRAG_OVER,
         wxEVT_STC_DO_DROP,
-#endif
     };
 #endif
 
@@ -1826,11 +1816,9 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_URIDROPPED(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_URIDROPPED,            id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DWELLSTART(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DWELLSTART,            id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DWELLEND(id, fn)                DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DWELLEND,              id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
-#if wxUSE_DRAG_AND_DROP
 #define EVT_STC_START_DRAG(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_START_DRAG,            id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DRAG_OVER(id, fn)               DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DRAG_OVER,             id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DO_DROP(id, fn)                 DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DO_DROP,               id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
-#endif
 #endif
 
 //----------------------------------------------------------------------

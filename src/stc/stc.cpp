@@ -93,11 +93,9 @@ DEFINE_EVENT_TYPE( wxEVT_STC_USERLISTSELECTION )
 DEFINE_EVENT_TYPE( wxEVT_STC_URIDROPPED )
 DEFINE_EVENT_TYPE( wxEVT_STC_DWELLSTART )
 DEFINE_EVENT_TYPE( wxEVT_STC_DWELLEND )
-#if wxUSE_DRAG_AND_DROP
 DEFINE_EVENT_TYPE( wxEVT_STC_START_DRAG )
 DEFINE_EVENT_TYPE( wxEVT_STC_DRAG_OVER )
 DEFINE_EVENT_TYPE( wxEVT_STC_DO_DROP )
-#endif
 
 
 BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
@@ -2077,10 +2075,8 @@ wxStyledTextEvent::wxStyledTextEvent(wxEventType commandType, int id)
     m_listType = 0;
     m_x = 0;
     m_y = 0;
-#if wxUSE_DRAG_AND_DROP
     m_dragAllowMove = FALSE;
     m_dragResult = wxDragNone;
-#endif
 }
 
 bool wxStyledTextEvent::GetShift() const { return (m_modifiers & SCI_SHIFT) != 0; }
@@ -2112,11 +2108,9 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
     m_x =            event.m_x;
     m_y =            event.m_y;
 
-#if wxUSE_DRAG_AND_DROP
     m_dragText =     event.m_dragText;
     m_dragAllowMove =event.m_dragAllowMove;
     m_dragResult =   event.m_dragResult;
-#endif
 }
 
 //----------------------------------------------------------------------
