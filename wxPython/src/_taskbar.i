@@ -58,64 +58,58 @@ enum {
 
 
 #else
-// // Otherwise make a class that can virtualize CreatePopupMenu
-// class wxPyTaskBarIcon : public wxTaskBarIcon
-// {
-//     DECLARE_ABSTRACT_CLASS(wxPyTaskBarIcon);
-// public:
-//     wxPyTaskBarIcon() : wxTaskBarIcon()
-//     {}
+// Otherwise make a class that can virtualize CreatePopupMenu
+class wxPyTaskBarIcon : public wxTaskBarIcon
+{
+    DECLARE_ABSTRACT_CLASS(wxPyTaskBarIcon);
+public:
+    wxPyTaskBarIcon() : wxTaskBarIcon()
+    {}
 
-//     wxMenu* CreatePopupMenu() {
-//         wxMenu *rval = NULL;
-//         bool found;
-//         bool blocked = wxPyBeginBlockThreads();
-//         if ((found = wxPyCBH_findCallback(m_myInst, "CreatePopupMenu"))) {
-//             PyObject* ro;
-//             wxMenu* ptr;
-//             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
-//             if (ro) {
-//                 if (wxPyConvertSwigPtr(ro, (void **)&ptr, wxT("wxMenu")))
-//                     rval = ptr;
-//                 Py_DECREF(ro);
-//             }
-//         }
-//         wxPyEndBlockThreads(blocked);
-//         if (! found)
-//             rval = wxTaskBarIcon::CreatePopupMenu();
-//         return rval;
-//     }
+    wxMenu* CreatePopupMenu() {
+        wxMenu *rval = NULL;
+        bool found;
+        bool blocked = wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "CreatePopupMenu"))) {
+            PyObject* ro;
+            wxMenu* ptr;
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
+            if (ro) {
+                if (wxPyConvertSwigPtr(ro, (void **)&ptr, wxT("wxMenu")))
+                    rval = ptr;
+                Py_DECREF(ro);
+            }
+        }
+        wxPyEndBlockThreads(blocked);
+        if (! found)
+            rval = wxTaskBarIcon::CreatePopupMenu();
+        return rval;
+    }
 
-//     PYPRIVATE;
-// };
+    PYPRIVATE;
+};
 
-// IMPLEMENT_ABSTRACT_CLASS(wxPyTaskBarIcon, wxTaskBarIcon);
+IMPLEMENT_ABSTRACT_CLASS(wxPyTaskBarIcon, wxTaskBarIcon);
 
 #endif
 %}
 
 
-// NOTE: TaskbarIcon has not yet been changed to be able to virtualize the
-// CreatePopupMenu method because it is just before a release and I worry that
-// there will be a problem in this case with it holding a reference to itself
-// (since it depends on the dtor for cleanup.)  Better safe than sorry!
-//
-// Perhaps a better mechanism for wxPython would be to turn CreatePopupMenu
-// into an event...
+MustHaveApp(wxPyTaskBarIcon);
 
-MustHaveApp(wxTaskBarIcon);
-
-class wxTaskBarIcon : public wxEvtHandler
+%name(TaskBarIcon)class wxPyTaskBarIcon : public wxEvtHandler
 {
 public:
-    wxTaskBarIcon();
-    ~wxTaskBarIcon();
+    %pythonAppend wxPyTaskBarIcon   "self._setCallbackInfo(self, TaskBarIcon, 0)"
+
+    wxPyTaskBarIcon();
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref);
 
     %extend {
         void Destroy() {
-        #ifndef __WXMAC__
             self->RemoveIcon();
-        #endif
+            delete self;
         }
     }
 
