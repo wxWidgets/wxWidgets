@@ -264,7 +264,10 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
     symbol = dlsym( m_handle, name.fn_str() );
 
 #elif defined(HAVE_SHL_LOAD)
-    if( shl_findsym( &m_handle, name.fn_str(), TYPE_UNDEFINED, &symbol ) != 0 )
+    // use local variable since shl_findsym modifies the handle argument
+    // to indicate where the symbol was found (GD)
+    wxDllType the_handle = m_handle;
+    if( shl_findsym( &the_handle, name.fn_str(), TYPE_UNDEFINED, &symbol ) != 0 )
         symbol = 0;
 
 #elif defined(__WINDOWS__)
