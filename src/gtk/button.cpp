@@ -209,10 +209,8 @@ void wxButton::SetLabel( const wxString &lbl )
 
     wxString label(lbl);
 
-#ifndef __WXGTK20__
     if (label.empty() && wxIsStockID(m_windowId))
         label = wxGetStockLabel(m_windowId);
-#endif
 
     wxControl::SetLabel(label);
 
@@ -224,8 +222,8 @@ void wxButton::SetLabel( const wxString &lbl )
         {
             gtk_button_set_label(GTK_BUTTON(m_widget), stock);
             gtk_button_set_use_stock(GTK_BUTTON(m_widget), TRUE);
+            return;
         }
-        return;
     }
 
     wxString label2 = PrepareLabelMnemonics(label);
