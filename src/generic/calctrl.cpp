@@ -33,6 +33,7 @@
     #include "wx/settings.h"
     #include "wx/brush.h"
     #include "wx/combobox.h"
+    #include "wx/listbox"
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
 #endif //WX_PRECOMP
@@ -306,29 +307,12 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
 
     ShowCurrentControls();
 
-    wxSize sizeReal;
-    if ( size.x == wxDefaultSize.x || size.y == wxDefaultSize.y )
-    {
-        sizeReal = DoGetBestSize();
-        if ( size.x != wxDefaultSize.x )
-            sizeReal.x = size.x;
-        if ( size.y != wxDefaultSize.y )
-            sizeReal.y = size.y;
-    }
-    else
-    {
-        sizeReal = size;
-    }
-
     // we need to set the position as well because the main control position
     // is not the same as the one specified in pos if we have the controls
     // above it
-    SetSize(pos.x, pos.y, sizeReal.x, sizeReal.y);
-
-    SetForegroundColour(*wxBLACK);
-    SetBackgroundColour(*wxWHITE);
-    SetFont(*wxSWISS_FONT);
-
+    SetBestSize(size);
+    SetPosition(pos);
+        
     SetHolidayAttrs();
 
     return true;
@@ -805,7 +789,9 @@ wxSize wxCalendarCtrl::DoGetBestSize() const
         width += 4;
     }
 
-    return wxSize(width, height);
+    wxSize best(width, height);
+    CacheBestSize(best);
+    return best;   
 }
 
 void wxCalendarCtrl::DoSetSize(int x, int y,
@@ -904,12 +890,9 @@ void wxCalendarCtrl::DoGetSize(int *width, int *height) const
 
 void wxCalendarCtrl::RecalcGeometry()
 {
-    if ( m_widthCol != 0 )
-        return;
-
     wxClientDC dc(this);
 
-    dc.SetFont(m_font);
+    dc.SetFont(GetFont());
 
     // determine the column width (we assume that the weekday names are always
     // wider (in any language) than the numbers)
@@ -940,7 +923,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 
-    dc.SetFont(m_font);
+    dc.SetFont(GetFont());
 
     RecalcGeometry();
 
@@ -1158,7 +1141,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                     }
                     else
                     {
-                        colBorder = m_foregroundColour;
+                        colBorder = GetForegroundColour();
                     }
 
                     wxPen pen(colBorder, 1, wxSOLID);
@@ -1184,13 +1167,13 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
                 if ( changedColours )
                 {
-                    dc.SetTextForeground(m_foregroundColour);
-                    dc.SetTextBackground(m_backgroundColour);
+                    dc.SetTextForeground(GetForegroundColour());
+                    dc.SetTextBackground(GetBackgroundColour());
                 }
 
                 if ( changedFont )
                 {
-                    dc.SetFont(m_font);
+                    dc.SetFont(GetFont());
                 }
             }
             //else: just don't draw it
@@ -1823,6 +1806,16 @@ void wxCalendarCtrl::ResetHolidayAttrs()
         }
     }
 }
+
+
+//static
+wxVisualAttributes
+wxCalendarCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    // Use the same color scheme as wxListBox
+    return wxListBox::GetClassDefaultAttributes(variant);
+}
+
 
 // ----------------------------------------------------------------------------
 // wxCalendarEvent

@@ -162,6 +162,12 @@ public:
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);
 
+    virtual wxVisualAttributes GetDefaultAttributes() const
+        { return GetClassDefaultAttributes(GetWindowVariant()); }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
 private:
     // common part of all ctors
     void Init();
