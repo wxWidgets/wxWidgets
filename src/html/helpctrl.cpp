@@ -30,8 +30,13 @@
 #include "wx/html/helpctrl.h"
 #include "wx/busyinfo.h"
 
+#ifdef __WXGTK__
+    // for the hack in AddGrabIfNeeded()
+    #include "wx/dialog.h"
+#endif // __WXGTK__
+
 #if wxUSE_HELP
-#include "wx/tipwin.h"
+    #include "wx/tipwin.h"
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpController, wxHelpControllerBase)
@@ -274,7 +279,7 @@ void wxHtmlHelpController::AddGrabIfNeeded()
 
     if (needGrab && m_helpFrame)
         m_helpFrame->AddGrab();
-#endif
+#endif // __WXGTK__
 }
 
 bool wxHtmlHelpController::Display(const wxString& x)
