@@ -22,6 +22,11 @@
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
+extern "C"
+void wxgtk_window_size_request_callback(GtkWidget *widget,
+                                        GtkRequisition *requisition,
+                                        wxWindow *win);
+
 //-----------------------------------------------------------------------------
 // wxStaticText
 //-----------------------------------------------------------------------------
@@ -87,6 +92,23 @@ bool wxStaticText::Create(wxWindow *parent,
 
     PostCreation();
     
+    // the bug below only happens with GTK 2
+#ifdef __WXGTK20__
+    if ( justify != GTK_JUSTIFY_LEFT )
+    {
+        // if we let GTK call wxgtk_window_size_request_callback the label
+        // always shrinks to its minimal size for some reason and so no
+        // alignment except the default left doesn't work (in fact it does,
+        // but you don't see it)
+        gtk_signal_disconnect_by_func
+        (
+            GTK_OBJECT(m_widget),
+            GTK_SIGNAL_FUNC(wxgtk_window_size_request_callback),
+            (gpointer) this
+        );
+    }
+#endif // __WXGTK20__
+
     ApplyWidgetStyle();
 
     wxControl::SetFont( parent->GetFont() );

@@ -149,6 +149,7 @@ wxGTK:
   be appended to filenames with no extension
 - added wxTextCtrl::SetSelection implementation for GTK+ 2
 - fixed wxTextCtrl::IsEditable() for GTK+ 2
+- fixed wxStaticText alignment for GTK+ 2 (Kevin Hock)
 - don't consume 100% CPU when showing a poup menu
 
 wxMac:

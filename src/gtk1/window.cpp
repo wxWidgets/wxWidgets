@@ -477,12 +477,18 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 // "size_request" of m_widget
 //-----------------------------------------------------------------------------
 
-static void gtk_window_size_request_callback( GtkWidget *widget, GtkRequisition *requisition, wxWindow *win )
+// make it extern because wxStatitText needs to disconnect this one
+extern "C"
+void wxgtk_window_size_request_callback(GtkWidget *widget,
+                                        GtkRequisition *requisition,
+                                        wxWindow *win)
 {
-    int w,h;
+    int w, h;
     win->GetSize( &w, &h );
-    if (w < 2) w = 2;
-    if (h < 2) h = 2;
+    if (w < 2)
+        w = 2;
+    if (h < 2)
+        h = 2;
 
     requisition->height = h;
     requisition->width = w;
@@ -2797,7 +2803,7 @@ void wxWindowGTK::PostCreation()
                             GTK_SIGNAL_FUNC(gtk_wxwindow_size_callback), (gpointer)this );
     }
 
-    if (!GTK_IS_COMBO(m_widget))
+    if ( !GTK_IS_COMBO(m_widget))
     {
         // This is needed if we want to add our windows into native
         // GTK control, such as the toolbar. With this callback, the
@@ -2805,7 +2811,8 @@ void wxWindowGTK::PostCreation()
         // programmer). Sadly, it misbehaves for wxComboBox. FIXME
         // when moving to GTK 2.0.
         gtk_signal_connect( GTK_OBJECT(m_widget), "size_request",
-                            GTK_SIGNAL_FUNC(gtk_window_size_request_callback), (gpointer) this );
+                            GTK_SIGNAL_FUNC(wxgtk_window_size_request_callback),
+                            (gpointer) this );
     }
 
     m_hasVMT = TRUE;
