@@ -1954,12 +1954,14 @@ wxFileKind wxGetFileKind(int fd)
 
 wxFileKind wxGetFileKind(FILE *fp)
 {
-    // note: the watcom rtl dll doesn't have fileno (the static lib does)
-#if !defined wxFILEKIND_STUB && !(defined __WATCOMC__ && defined __SW_BR)
-    return wxGetFileKind(fileno(fp));
-#else
+    // Note: The watcom rtl dll doesn't have fileno (the static lib does).
+    //       Should be fixed in version 1.4.
+#if defined(wxFILEKIND_STUB) || \
+        (defined(__WATCOMC__) && __WATCOMC__ <= 1230 && defined(__SW_BR))
     (void)fp;
     return wxFILE_KIND_DISK;
+#else
+    return wxGetFileKind(fileno(fp));
 #endif
 }
 
