@@ -182,7 +182,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
         if (style & wxHF_BOOKMARKS) {
             m_Bookmarks = new wxComboBox(toolBar, wxID_HTML_BOOKMARKSLIST, wxEmptyString, 
-                                         wxDefaultPosition, wxSize(300,200), 0, NULL, wxCB_READONLY | wxCB_SORT);
+                                         wxDefaultPosition, wxSize(300,-1), 0, NULL, wxCB_READONLY | wxCB_SORT);
             m_Bookmarks -> Append(_("<bookmarks>"));
             for (unsigned i = 0; i < m_BookmarksNames.GetCount(); i++)
                 m_Bookmarks -> Append(m_BookmarksNames[i]);

@@ -3,6 +3,8 @@
 % -----------------------------------------------------------------------------
 \section{\class{wxInputStream}}\label{wxinputstream}
 
+wxInputStream is an abstract base class which may not be used directly.
+
 \wxheading{Derived from}
 
 \helpref{wxStreamBase}{wxstreambase}
@@ -90,6 +92,11 @@ buffer. This buffer acts like a temporary buffer where datas which has to be
 read during the next read IO call are put. This is useful when you get a big
 block of data which you didn't want to read: you can replace them at the top
 of the input queue by this way.
+
+Be very careful about this call in connection with calling SeekI() on the same
+stream. Any call to SeekI() will invalidate any previous call to this method
+(otherwise you could SeekI() to one position, "unread" a few bytes there, SeekI()
+to another position and data would be either lost or corrupted).
 
 \wxheading{Return value}
 

@@ -101,7 +101,15 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
 
-    if (!PreCreation( parent, pos, size ) ||
+    wxSize newSize( size );
+    if (newSize.x == -1)
+	newSize.x = 80;
+    if (newSize.y == -1)
+	newSize.y = 26;
+    if (newSize.y > 30)
+	newSize.y = 30;
+	
+    if (!PreCreation( parent, pos, newSize ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxComboBox creation failed") );
@@ -112,8 +120,6 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     // make it more useable
     gtk_combo_set_use_arrows_always(GTK_COMBO(m_widget), TRUE);
-
-    SetSizeOrDefault( size );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 

@@ -98,9 +98,9 @@ void wxStreamBuffer::SetBufferIO(size_t bufsize)
     wxDELETEA(m_buffer_start);
 
   if (!bufsize) {
-    m_buffer_start = NULL;
-    m_buffer_end = NULL;
-    m_buffer_pos = NULL;
+    m_buffer_start = (char*)NULL;
+    m_buffer_end = (char*)NULL;
+    m_buffer_pos = (char*)NULL;
     m_buffer_size = 0;
     return;
   }
@@ -379,7 +379,12 @@ off_t wxStreamBuffer::Seek(off_t pos, wxSeekMode mode)
   last_access = GetLastAccess();
 
   if (!m_flushable) {
-    diff = pos + GetIntPosition();
+    switch (mode) {
+      case wxFromStart:   diff = pos;                     break;
+      case wxFromCurrent: diff = pos + GetIntPosition();  break;
+      case wxFromEnd:     diff = pos + last_access;       break;
+      default: return wxInvalidOffset;
+    }
     if (diff < 0 || diff > last_access)
       return wxInvalidOffset;
     SetIntPosition(diff);
@@ -500,7 +505,7 @@ char *wxInputStream::AllocSpaceWBack(size_t needed_size)
     temp_b = (char *)realloc(m_wback, m_wbacksize);
 
   if (!temp_b)
-    return NULL;
+    return (char*)NULL;
   m_wback = temp_b;
 
   memmove(m_wback+needed_size, m_wback, old_size);
@@ -606,9 +611,21 @@ wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
 
 off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
 {
-  //should be check and improve, just to remove a slight bug !
+  // Should be check and improve, just to remove a slight bug !
   // I don't know whether it should be put as well in wxFileInputStream::OnSysSeek ?
-  if (m_lasterror==wxSTREAM_EOF) m_lasterror=wxSTREAM_NOERROR;
+  if (m_lasterror==wxSTREAM_EOF) 
+     m_lasterror=wxSTREAM_NOERROR;
+
+  // A call to SeekI() will automatically invalidate any previous call
+  // to Ungetch(), otherwise it would be possible to SeeI() to one
+  // one position, unread some bytes there, SeekI() to another position
+  // and the data would be corrupted.
+  if (m_wback) {
+    free(m_wback);
+    m_wback = (char*) NULL;
+    m_wbacksize = 0;
+    m_wbackcur = 0;
+  }
 
   return OnSysSeek(pos, mode);
 }

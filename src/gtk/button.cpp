@@ -124,7 +124,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     if (newSize.y == -1)
     {
         newSize.y = 11+y;
-	if (newSize.x < 26) newSize.x = 26;
+	if (newSize.y < 26) newSize.y = 26;
     }
 	
     SetSize( newSize.x, newSize.y );
