@@ -198,7 +198,10 @@ void wxXmlAddContentToNode( wxXmlNode* node , const wxString& data )
 
 wxString wxXmlGetContentFromNode( wxXmlNode *node ) 
 {
-	return node->GetChildren()->GetContent() ;
+	if ( node->GetChildren() )
+		return node->GetChildren()->GetContent() ;
+	else
+		return wxEmptyString ;
 }
 
 // streamer specializations
@@ -261,6 +264,18 @@ void wxStringWriteValue(wxString &s , const wxPoint &data )
 
 WX_CUSTOM_TYPE_INFO(wxPoint)
 
+void wxStringReadValue(const wxString &s , wxSize &data )
+{
+	wxSscanf(s, _T("%d,%d"), &data.x , &data.y ) ;
+}
+
+void wxStringWriteValue(wxString &s , const wxSize &data )
+{
+	s = wxString::Format("%d,%d", data.x , data.y ) ;
+}
+
+WX_CUSTOM_TYPE_INFO(wxSize)
+
 // removing header dependancy on string tokenizer
 
 void wxSetStringToArray( const wxString &s , wxArrayString &array ) 
@@ -298,7 +313,7 @@ void wxClassInfo::Unregister(const char *WXUNUSED(name))
 
 const wxPropertyAccessor *wxClassInfo::FindAccessor(const char *PropertyName)
 {
-    const wxPropertyInfo* info = FindPropInfo( PropertyName ) ;
+    const wxPropertyInfo* info = FindPropertyInfo( PropertyName ) ;
 	
 	if ( info )
 		return info->GetAccessor() ;
@@ -306,7 +321,7 @@ const wxPropertyAccessor *wxClassInfo::FindAccessor(const char *PropertyName)
 	return NULL ;
 }
 
-const wxPropertyInfo *wxClassInfo::FindPropInfo (const char *PropertyName) const
+const wxPropertyInfo *wxClassInfo::FindPropertyInfo (const char *PropertyName) const
 {
 	const wxPropertyInfo* info = GetFirstProperty() ;
 
@@ -320,12 +335,34 @@ const wxPropertyInfo *wxClassInfo::FindPropInfo (const char *PropertyName) const
 	const wxClassInfo** parents = GetParents() ;
 	for ( int i = 0 ; parents[i] ; ++ i )
 	{
-		if ( ( info = parents[i]->FindPropInfo( PropertyName ) ) != NULL )
+		if ( ( info = parents[i]->FindPropertyInfo( PropertyName ) ) != NULL )
 			return info ;
 	}
 
     return 0;
 }
+
+const wxHandlerInfo *wxClassInfo::FindHandlerInfo (const char *PropertyName) const
+{
+	const wxHandlerInfo* info = GetFirstHandler() ;
+
+	while( info )
+	{
+		if ( strcmp( info->GetName() , PropertyName ) == 0 )
+			return info ;
+		info = info->GetNext() ;
+	}
+
+	const wxClassInfo** parents = GetParents() ;
+	for ( int i = 0 ; parents[i] ; ++ i )
+	{
+		if ( ( info = parents[i]->FindHandlerInfo( PropertyName ) ) != NULL )
+			return info ;
+	}
+
+    return 0;
+}
+
 
 void wxClassInfo::SetProperty(wxObject *object, const char *propertyName, const wxxVariant &value)
 {

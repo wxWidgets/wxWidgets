@@ -60,7 +60,7 @@ const wxClassInfo* wxObject::sm_classParentswxObject[] = { NULL } ;
  wxClassInfo wxObject::sm_classwxObject(sm_classParentswxObject , wxT("") , wxT("wxObject"),   
             (int) sizeof(wxObject),                              \
             (wxObjectConstructorFn) 0   ,   
-			(wxPropertyInfo*) NULL,0 , 0 ,     
+			(wxPropertyInfo*) NULL,(wxHandlerInfo*) NULL,0 , 0 ,     
 			0 , wxVariantToObjectConverterwxObject , wxObjectToVariantConverterwxObject);    
  template<> void wxStringReadValue(const wxString & , wxObject * & ){assert(0) ;}
  template<> void wxStringWriteValue(wxString & , wxObject* const & ){assert(0) ;}
