@@ -3200,7 +3200,29 @@ if test "$wxUSE_LIBJPEG" = "yes" -o "$wxUSE_LIBJPEG" = "sys" ; then
     JPEG_INCLUDE="-I\${top_srcdir}/src/jpeg"
   else
     JPEG_LINK=
-    AC_CHECK_HEADER(jpeglib.h, AC_CHECK_LIB(jpeg, jpeg_read_header, JPEG_LINK="-ljpeg"))
+    dnl can't use AC_CHECK_HEADER as jconfig.h defines things like
+    dnl HAVE_STDLIB_H which are already defined and this provokes
+    dnl a compiler warning which configure considers as an error...
+    AC_MSG_CHECKING(for jpeglib.h)
+    AC_CACHE_VAL(ac_cv_header_jpeglib_h,
+        AC_TRY_COMPILE(
+            [
+                #undef HAVE_STDLIB_H
+                #include <stdio.h>
+                #include <jpeglib.h>
+            ],
+            [
+            ],
+            ac_cv_header_jpeglib_h=yes,
+            ac_cv_header_jpeglib_h=no
+        )
+    )
+    AC_MSG_RESULT($ac_cv_header_jpeglib_h)
+
+    if test "$ac_cv_header_jpeglib_h" = "yes"; then
+        AC_CHECK_LIB(jpeg, jpeg_read_header, JPEG_LINK="-ljpeg")
+    fi
+
     if test "x$JPEG_LINK" = "x" ; then
         AC_MSG_ERROR(system jpeg library not found! Use --with-libjpeg=yes to use the built-in one)
     fi
