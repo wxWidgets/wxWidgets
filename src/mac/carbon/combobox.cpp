@@ -60,8 +60,9 @@ protected:
     void OnTextChange( wxCommandEvent& event )
     {
         wxString    s = GetValue();
-            
-        m_cb->DelegateTextChanged( s );
+        
+        if (!s.IsEmpty())
+            m_cb->DelegateTextChanged( s );
 
         event.Skip();
     }
@@ -366,7 +367,11 @@ void wxComboBox::SetSelection(long from, long to)
 
 void wxComboBox::Append(const wxString& item)
 {
-    m_choice->DoAppend( item );
+    // I am not sure what other ports do,
+    // but wxMac chokes on empty entries.
+
+    if (!item.IsEmpty())
+        m_choice->DoAppend( item );
 }
 
 void wxComboBox::Delete(int n)
