@@ -103,19 +103,19 @@ and recreation of internal data structures.
 
 \membersection{wxMenu::Append}\label{wxmenuappend}
 
-\func{void}{Append}{\param{int}{ id}, \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
+\func{wxMenuItem*}{Append}{\param{int}{ id}, \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
 \param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
 Adds a string item to the end of the menu.
 
-\func{void}{Append}{\param{int}{ id}, \param{const wxString\& }{ item}, \param{wxMenu *}{subMenu},\rtfsp
+\func{wxMenuItem*}{Append}{\param{int}{ id}, \param{const wxString\& }{ item}, \param{wxMenu *}{subMenu},\rtfsp
 \param{const wxString\& }{helpString = ""}}
 
 Adds a pull-right submenu to the end of the menu. Append the submenu to the parent
 menu {\it after} you have added your menu items, or accelerators may not be
 registered properly.
 
-\func{void}{Append}{\param{wxMenuItem*}{ menuItem}}
+\func{wxMenuItem*}{Append}{\param{wxMenuItem*}{ menuItem}}
 
 Adds a menu item object. This is the most generic variant of Append() method
 because it may be used for both items (including separators) and submenus and
@@ -191,7 +191,7 @@ implements the following methods:\par
 
 \membersection{wxMenu::AppendCheckItem}\label{wxmenuappendcheckitem}
 
-\func{void}{AppendCheckItem}{\param{int}{ id},\rtfsp
+\func{wxMenuItem*}{AppendCheckItem}{\param{int}{ id},\rtfsp
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
 
 Adds a checkable item to the end of the menu.
@@ -203,7 +203,7 @@ Adds a checkable item to the end of the menu.
 
 \membersection{wxMenu::AppendRadioItem}\label{wxmenuappendradioitem}
 
-\func{void}{AppendRadioItem}{\param{int}{ id},\rtfsp
+\func{wxMenuItem*}{AppendRadioItem}{\param{int}{ id},\rtfsp
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
 
 Adds a radio item to the end of the menu. All consequent radio items form a
@@ -220,7 +220,7 @@ automatically unchecked.
 
 \membersection{wxMenu::AppendSeparator}\label{wxmenuappendseparator}
 
-\func{void}{AppendSeparator}{\void}
+\func{wxMenuItem*}{AppendSeparator}{\void}
 
 Adds a separator to the end of the menu.
 
@@ -423,9 +423,9 @@ menubar.
 
 \membersection{wxMenu::Insert}\label{wxmenuinsert}
 
-\func{bool}{Insert}{\param{size\_t }{pos}, \param{wxMenuItem *}{item}}
+\func{wxMenuItem*}{Insert}{\param{size\_t }{pos}, \param{wxMenuItem *}{item}}
 
-\func{void}{Insert}{\param{size\_t }{pos}, \param{int}{ id},\rtfsp
+\func{wxMenuItem*}{Insert}{\param{size\_t }{pos}, \param{int}{ id},\rtfsp
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
 \param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
@@ -440,7 +440,7 @@ as appending it.
 
 \membersection{wxMenu::InsertCheckItem}\label{wxmenuinsertcheckitem}
 
-\func{void}{InsertCheckItem}{\param{size\_t }{pos}, \param{int}{ id},\rtfsp
+\func{wxMenuItem*}{InsertCheckItem}{\param{size\_t }{pos}, \param{int}{ id},\rtfsp
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
 
 Inserts a checkable item at the given position.
@@ -452,7 +452,7 @@ Inserts a checkable item at the given position.
 
 \membersection{wxMenu::InsertRadioItem}\label{wxmenuinsertradioitem}
 
-\func{void}{InsertRadioItem}{\param{size\_t }{pos}, \param{int}{ id},\rtfsp
+\func{wxMenuItem*}{InsertRadioItem}{\param{size\_t }{pos}, \param{int}{ id},\rtfsp
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
 
 Inserts a radio item at the given position.
@@ -464,7 +464,7 @@ Inserts a radio item at the given position.
 
 \membersection{wxMenu::InsertSeparator}\label{wxmenuinsertseparator}
 
-\func{void}{InsertSeparator}{\param{size\_t }{pos}}
+\func{wxMenuItem*}{InsertSeparator}{\param{size\_t }{pos}}
 
 Inserts a separator at the given position.
 
@@ -511,9 +511,9 @@ true if the menu item is enabled, false otherwise.
 
 \membersection{wxMenu::Prepend}\label{wxmenuprepend}
 
-\func{bool}{Prepend}{\param{wxMenuItem *}{item}}
+\func{wxMenuItem*}{Prepend}{\param{wxMenuItem *}{item}}
 
-\func{void}{Prepend}{\param{int}{ id},\rtfsp
+\func{wxMenuItem*}{Prepend}{\param{int}{ id},\rtfsp
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
 \param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
@@ -527,7 +527,7 @@ existing items.
 
 \membersection{wxMenu::PrependCheckItem}\label{wxmenuprependcheckitem}
 
-\func{void}{PrependCheckItem}{\param{int}{ id},\rtfsp
+\func{wxMenuItem*}{PrependCheckItem}{\param{int}{ id},\rtfsp
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
 
 Inserts a checkable item at the position $0$.
@@ -539,7 +539,7 @@ Inserts a checkable item at the position $0$.
 
 \membersection{wxMenu::PrependRadioItem}\label{wxmenuprependradioitem}
 
-\func{void}{PrependRadioItem}{\param{int}{ id},\rtfsp
+\func{wxMenuItem*}{PrependRadioItem}{\param{int}{ id},\rtfsp
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
 
 Inserts a radio item at the position $0$.
@@ -551,7 +551,7 @@ Inserts a radio item at the position $0$.
 
 \membersection{wxMenu::PrependSeparator}\label{wxmenuprependseparator}
 
-\func{void}{PrependSeparator}{\param{size\_t }{pos}}
+\func{wxMenuItem*}{PrependSeparator}{\param{size\_t }{pos}}
 
 Inserts a separator at the position $0$.
 

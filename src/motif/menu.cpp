@@ -114,7 +114,7 @@ void wxMenu::Break()
 }
 
 // function appends a new item or submenu to the menu
-bool wxMenu::DoAppend(wxMenuItem *pItem)
+wxMenuItem* wxMenu::DoAppend(wxMenuItem *pItem)
 {
     if (m_menuWidget)
     {
@@ -137,14 +137,14 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     return wxMenuBase::DoRemove(item);
 }
 
-bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
+wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 {
     if ( wxMenuBase::DoInsert(pos, item) )
-        return TRUE;
+        return item;
 
     wxFAIL_MSG(wxT("DoInsert not implemented; or error in wxMenuBase::DoInsert"));
 
-    return FALSE;
+    return NULL;
 }
 
 void wxMenu::SetTitle(const wxString& label)

@@ -55,8 +55,8 @@ public:
     //
     // Implement base class virtuals
     //
-    virtual bool        DoAppend(wxMenuItem* pItem);
-    virtual bool        DoInsert( size_t      nPos
+    virtual wxMenuItem* DoAppend(wxMenuItem* pItem);
+    virtual wxMenuItem* DoInsert( size_t      nPos
                                  ,wxMenuItem* pItem
                                 );
     virtual wxMenuItem* DoRemove(wxMenuItem* pItem);

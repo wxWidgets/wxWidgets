@@ -114,6 +114,8 @@ All (GUI):
   when sizing smaller) (Shane Harper)
 - dbbrowse demo fixed for Unicode (Wlodzimierz Skiba)
 - added wxStatusBar support to XRC (Brian Ravnsgaard Riis)
+- wxMenu::Append and etc. return a pointer to the wxMenuItem that was
+  added or inserted, or NULL on failure.
 
 wxMSW:
 

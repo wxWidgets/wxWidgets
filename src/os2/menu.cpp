@@ -415,11 +415,11 @@ void wxMenu::EndRadioGroup()
     m_nStartRadioGroup = -1;
 } // end of wxMenu::EndRadioGroup
 
-bool wxMenu::DoAppend(
+wxMenuItem* wxMenu::DoAppend(
   wxMenuItem*                       pItem
 )
 {
-    wxCHECK_MSG( pItem, FALSE, _T("NULL item in wxMenu::DoAppend") );
+    wxCHECK_MSG( pItem, NULL, _T("NULL item in wxMenu::DoAppend") );
 
     bool                            bCheck = FALSE;
 
@@ -471,7 +471,7 @@ bool wxMenu::DoAppend(
 
     if (!wxMenuBase::DoAppend(pItem) || !DoInsertOrAppend(pItem))
     {
-        return FALSE;
+        return NULL;
     }
     if (bCheck)
     {
@@ -480,20 +480,22 @@ bool wxMenu::DoAppend(
         //
         pItem->Check(TRUE);
     }
-    return TRUE;
+    return pItem;
 } // end of wxMenu::DoAppend
 
-bool wxMenu::DoInsert(
+wxMenuItem* wxMenu::DoInsert(
   size_t                            nPos
 , wxMenuItem*                       pItem
 )
 {
-    return ( wxMenuBase::DoInsert( nPos
-                                  ,pItem) &&
+    if ( wxMenuBase::DoInsert( nPos
+                               ,pItem) &&
              DoInsertOrAppend( pItem
                               ,nPos
-                             )
-           );
+                 ))
+         return pItem;
+    else
+        return NULL;
 } // end of wxMenu::DoInsert
 
 wxMenuItem* wxMenu::DoRemove(

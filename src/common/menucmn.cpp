@@ -310,9 +310,9 @@ void wxMenuBase::AddSubMenu(wxMenu *submenu)
     submenu->SetParent((wxMenu *)this);
 }
 
-bool wxMenuBase::DoAppend(wxMenuItem *item)
+wxMenuItem* wxMenuBase::DoAppend(wxMenuItem *item)
 {
-    wxCHECK_MSG( item, FALSE, wxT("invalid item in wxMenu::Append()") );
+    wxCHECK_MSG( item, NULL, wxT("invalid item in wxMenu::Append()") );
 
     m_items.Append(item);
     item->SetMenu((wxMenu*)this);
@@ -321,12 +321,12 @@ bool wxMenuBase::DoAppend(wxMenuItem *item)
         AddSubMenu(item->GetSubMenu());
     }
 
-    return TRUE;
+    return item;
 }
 
-bool wxMenuBase::Insert(size_t pos, wxMenuItem *item)
+wxMenuItem* wxMenuBase::Insert(size_t pos, wxMenuItem *item)
 {
-    wxCHECK_MSG( item, FALSE, wxT("invalid item in wxMenu::Insert") );
+    wxCHECK_MSG( item, NULL, wxT("invalid item in wxMenu::Insert") );
 
     if ( pos == GetMenuItemCount() )
     {
@@ -341,9 +341,9 @@ bool wxMenuBase::Insert(size_t pos, wxMenuItem *item)
     }
 }
 
-bool wxMenuBase::DoInsert(size_t pos, wxMenuItem *item)
+wxMenuItem* wxMenuBase::DoInsert(size_t pos, wxMenuItem *item)
 {
-    wxCHECK_MSG( item, FALSE, wxT("invalid item in wxMenu::Insert()") );
+    wxCHECK_MSG( item, NULL, wxT("invalid item in wxMenu::Insert()") );
 
     wxMenuItemList::compatibility_iterator node = m_items.Item(pos);
     wxCHECK_MSG( node, FALSE, wxT("invalid index in wxMenu::Insert()") );
@@ -355,7 +355,7 @@ bool wxMenuBase::DoInsert(size_t pos, wxMenuItem *item)
         AddSubMenu(item->GetSubMenu());
     }
 
-    return TRUE;
+    return item;
 }
 
 wxMenuItem *wxMenuBase::Remove(wxMenuItem *item)

@@ -34,9 +34,9 @@ public:
     virtual ~wxMenu();
 
     // implement base class virtuals
-    virtual bool DoAppend(wxMenuItem *item);
-    virtual bool DoInsert(size_t pos, wxMenuItem *item);
-    virtual wxMenuItem *DoRemove(wxMenuItem *item);
+    virtual wxMenuItem* DoAppend(wxMenuItem *item);
+    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
+    virtual wxMenuItem* DoRemove(wxMenuItem *item);
     virtual void Attach(wxMenuBarBase *menubar) ;
 
     virtual void Break();

@@ -1358,21 +1358,23 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
     return TRUE;
 }
 
-bool wxMenu::DoAppend(wxMenuItem *mitem)
+wxMenuItem* wxMenu::DoAppend(wxMenuItem *mitem)
 {
-    return GtkAppend(mitem) && wxMenuBase::DoAppend(mitem);
+    if (!GtkAppend(mitem))
+        return NULL;
+    return wxMenuBase::DoAppend(mitem);
 }
 
-bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
+wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 {
     if ( !wxMenuBase::DoInsert(pos, item) )
-        return FALSE;
+        return NULL;
 
     // GTK+ doesn't have a function to insert a menu using GtkItemFactory (as
     // of version 1.2.6), so we first append the item and then change its
     // index
     if ( !GtkAppend(item) )
-        return FALSE;
+        return NULL;
 
     if ( m_style & wxMENU_TEAROFF )
     {
@@ -1385,7 +1387,7 @@ bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
     menu_shell->children = g_list_remove(menu_shell->children, data);
     menu_shell->children = g_list_insert(menu_shell->children, data, pos);
 
-    return TRUE;
+    return item;
 }
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)

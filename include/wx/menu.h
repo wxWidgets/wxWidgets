@@ -63,142 +63,142 @@ public:
     // -----------------
 
     // append any kind of item (normal/check/radio/separator)
-    void Append(int itemid,
-                const wxString& text,
-                const wxString& help = wxEmptyString,
-                wxItemKind kind = wxITEM_NORMAL)
+    wxMenuItem* Append(int itemid,
+                       const wxString& text,
+                       const wxString& help = wxEmptyString,
+                       wxItemKind kind = wxITEM_NORMAL)
     {
-        DoAppend(wxMenuItem::New((wxMenu *)this, itemid, text, help, kind));
+        return DoAppend(wxMenuItem::New((wxMenu *)this, itemid, text, help, kind));
     }
 
     // append a separator to the menu
-    void AppendSeparator() { Append(wxID_SEPARATOR, wxEmptyString); }
+    wxMenuItem* AppendSeparator() { return Append(wxID_SEPARATOR, wxEmptyString); }
 
     // append a check item
-    void AppendCheckItem(int itemid,
-                         const wxString& text,
-                         const wxString& help = wxEmptyString)
+    wxMenuItem* AppendCheckItem(int itemid,
+                                const wxString& text,
+                                const wxString& help = wxEmptyString)
     {
-        Append(itemid, text, help, wxITEM_CHECK);
+        return Append(itemid, text, help, wxITEM_CHECK);
     }
 
     // append a radio item
-    void AppendRadioItem(int itemid,
-                         const wxString& text,
-                         const wxString& help = wxEmptyString)
+    wxMenuItem* AppendRadioItem(int itemid,
+                                const wxString& text,
+                                const wxString& help = wxEmptyString)
     {
-        Append(itemid, text, help, wxITEM_RADIO);
+        return Append(itemid, text, help, wxITEM_RADIO);
     }
 
     // append a submenu
-    void Append(int itemid,
-                const wxString& text,
-                wxMenu *submenu,
-                const wxString& help = wxEmptyString)
+    wxMenuItem* Append(int itemid,
+                       const wxString& text,
+                       wxMenu *submenu,
+                       const wxString& help = wxEmptyString)
     {
-        DoAppend(wxMenuItem::New((wxMenu *)this, itemid, text, help,
-                                 wxITEM_NORMAL, submenu));
+        return DoAppend(wxMenuItem::New((wxMenu *)this, itemid, text, help,
+                                        wxITEM_NORMAL, submenu));
     }
 
     // the most generic form of Append() - append anything
-    void Append(wxMenuItem *item) { DoAppend(item); }
+    wxMenuItem* Append(wxMenuItem *item) { return DoAppend(item); }
 
     // insert a break in the menu (only works when appending the items, not
     // inserting them)
     virtual void Break() { }
 
     // insert an item before given position
-    bool Insert(size_t pos, wxMenuItem *item);
+    wxMenuItem* Insert(size_t pos, wxMenuItem *item);
 
     // insert an item before given position
-    void Insert(size_t pos,
-                int itemid,
-                const wxString& text,
-                const wxString& help = wxEmptyString,
-                wxItemKind kind = wxITEM_NORMAL)
+    wxMenuItem* Insert(size_t pos,
+                       int itemid,
+                       const wxString& text,
+                       const wxString& help = wxEmptyString,
+                       wxItemKind kind = wxITEM_NORMAL)
     {
-        Insert(pos, wxMenuItem::New((wxMenu *)this, itemid, text, help, kind));
+        return Insert(pos, wxMenuItem::New((wxMenu *)this, itemid, text, help, kind));
     }
 
     // insert a separator
-    void InsertSeparator(size_t pos)
+    wxMenuItem* InsertSeparator(size_t pos)
     {
-        Insert(pos, wxMenuItem::New((wxMenu *)this));
+        return Insert(pos, wxMenuItem::New((wxMenu *)this, wxID_SEPARATOR));
     }
 
     // insert a check item
-    void InsertCheckItem(size_t pos,
-                         int itemid,
-                         const wxString& text,
-                         const wxString& help = wxEmptyString)
+    wxMenuItem* InsertCheckItem(size_t pos,
+                                int itemid,
+                                const wxString& text,
+                                const wxString& help = wxEmptyString)
     {
-        Insert(pos, itemid, text, help, wxITEM_CHECK);
+        return Insert(pos, itemid, text, help, wxITEM_CHECK);
     }
 
     // insert a radio item
-    void InsertRadioItem(size_t pos,
-                         int itemid,
-                         const wxString& text,
-                         const wxString& help = wxEmptyString)
+     wxMenuItem* InsertRadioItem(size_t pos,
+                                 int itemid,
+                                 const wxString& text,
+                                 const wxString& help = wxEmptyString)
     {
-        Insert(pos, itemid, text, help, wxITEM_RADIO);
+        return Insert(pos, itemid, text, help, wxITEM_RADIO);
     }
 
     // insert a submenu
-    void Insert(size_t pos,
-                int itemid,
-                const wxString& text,
-                wxMenu *submenu,
-                const wxString& help = wxEmptyString)
+    wxMenuItem* Insert(size_t pos,
+                       int itemid,
+                       const wxString& text,
+                       wxMenu *submenu,
+                       const wxString& help = wxEmptyString)
     {
-        Insert(pos, wxMenuItem::New((wxMenu *)this, itemid, text, help,
-                                    wxITEM_NORMAL, submenu));
+        return Insert(pos, wxMenuItem::New((wxMenu *)this, itemid, text, help,
+                                           wxITEM_NORMAL, submenu));
     }
 
     // prepend an item to the menu
-    void Prepend(wxMenuItem *item)
+    wxMenuItem* Prepend(wxMenuItem *item)
     {
-        Insert(0u, item);
+        return Insert(0u, item);
     }
 
     // prepend any item to the menu
-    void Prepend(int itemid,
-                 const wxString& text,
-                 const wxString& help = wxEmptyString,
-                 wxItemKind kind = wxITEM_NORMAL)
+    wxMenuItem* Prepend(int itemid,
+                        const wxString& text,
+                        const wxString& help = wxEmptyString,
+                        wxItemKind kind = wxITEM_NORMAL)
     {
-        Insert(0u, itemid, text, help, kind);
+        return Insert(0u, itemid, text, help, kind);
     }
 
     // prepend a separator
-    void PrependSeparator()
+    wxMenuItem* PrependSeparator()
     {
-        InsertSeparator(0u);
+        return InsertSeparator(0u);
     }
 
     // prepend a check item
-    void PrependCheckItem(int itemid,
-                          const wxString& text,
-                          const wxString& help = wxEmptyString)
+    wxMenuItem* PrependCheckItem(int itemid,
+                                 const wxString& text,
+                                 const wxString& help = wxEmptyString)
     {
-        InsertCheckItem(0u, itemid, text, help);
+        return InsertCheckItem(0u, itemid, text, help);
     }
 
     // prepend a radio item
-    void PrependRadioItem(int itemid,
-                          const wxString& text,
-                          const wxString& help = wxEmptyString)
+    wxMenuItem* PrependRadioItem(int itemid,
+                                 const wxString& text,
+                                 const wxString& help = wxEmptyString)
     {
-        InsertRadioItem(0u, itemid, text, help);
+        return InsertRadioItem(0u, itemid, text, help);
     }
 
     // prepend a submenu
-    void Prepend(int itemid,
-                 const wxString& text,
-                 wxMenu *submenu,
-                 const wxString& help = wxEmptyString)
+    wxMenuItem* Prepend(int itemid,
+                        const wxString& text,
+                        wxMenu *submenu,
+                        const wxString& help = wxEmptyString)
     {
-        Insert(0u, itemid, text, submenu, help);
+        return Insert(0u, itemid, text, submenu, help);
     }
 
     // detach an item from the menu, but don't delete it so that it can be
@@ -334,8 +334,8 @@ protected:
     // virtuals to override in derived classes
     // ---------------------------------------
 
-    virtual bool DoAppend(wxMenuItem *item);
-    virtual bool DoInsert(size_t pos, wxMenuItem *item);
+    virtual wxMenuItem* DoAppend(wxMenuItem *item);
+    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
 
     virtual wxMenuItem *DoRemove(wxMenuItem *item);
     virtual bool DoDelete(wxMenuItem *item);
