@@ -26,7 +26,7 @@
 // ----------------------------------------------------------------------------
 
 // the margin between the text control and the spin
-static const wxCoord MARGIN = 2;
+static const wxCoord MARGIN = 8;
 
 // ----------------------------------------------------------------------------
 // wxSpinCtrlText: text control used by spin control
@@ -36,7 +36,7 @@ class wxSpinCtrlText : public wxTextCtrl
 {
 public:
     wxSpinCtrlText(wxSpinCtrl *spin, const wxString& value)
-        : wxTextCtrl(spin , -1, value)
+        : wxTextCtrl(spin , -1, value, wxDefaultPosition, wxSize(40, 22))
     {
         m_spin = spin;
         
@@ -92,7 +92,7 @@ public:
         // differences so change it's default size a bit.  SMALL still gets a
         // bit truncated, but MINI seems to be too small...  Readdress this
         // when the textctrl issues are all sorted out.
-        SetWindowVariant(wxWINDOW_VARIANT_SMALL);
+        //SetWindowVariant(wxWINDOW_VARIANT_SMALL);
 
         // remove the default minsize, the spinctrl will have one instead
         SetSizeHints(-1,-1);
@@ -147,7 +147,8 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                         int initial,
                         const wxString& name)
 {
-    if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, style,
+    m_macIsUserPane = true;
+    if ( !wxControl::Create(parent, id, pos, size, style,
                             wxDefaultValidator, name) )
     {
         return FALSE;
@@ -167,14 +168,22 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     wxSize csize = size ;
     m_text = new wxSpinCtrlText(this, value);
     m_btn = new wxSpinCtrlButton(this, style);
-
+    
     m_btn->SetRange(min, max);
     m_btn->SetValue(initial);
 
-    if ( size.y == -1 ) {
-      csize.y = m_text->GetSize().y ;
+    if ( size.x == -1 ){
+        csize.x = m_text->GetSize().x + MARGIN + m_btn->GetSize().x ;
     }
-    SetBestSize(csize);
+
+    if ( size.y == -1 ) {
+	csize.y = m_text->GetSize().y + 4; //allow for text border highlights
+    }
+    
+    //SetSize(csize);
+    
+    MacPostControlCreate(pos, csize);
+    SetInitialBestSize(csize);
 
     return TRUE;
 }
@@ -202,18 +211,27 @@ wxSize wxSpinCtrl::DoGetBestSize() const
     wxSize sizeBtn = m_btn->GetBestSize(),
            sizeText = m_text->GetBestSize();
 
-    return wxSize(sizeBtn.x + sizeText.x + MARGIN, sizeText.y);
+    int height;
+    if (sizeText.y > sizeBtn.y)
+        height = sizeText.y;
+    else
+        height = sizeBtn.y;
+        
+    return wxSize(sizeBtn.x + sizeText.x + MARGIN, height + MARGIN);
 }
 
 void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
-    wxControl::DoMoveWindow(x, y, width, height);
-
     // position the subcontrols inside the client area
     wxSize sizeBtn = m_btn->GetSize();
+    
+    wxControl::DoMoveWindow(x, y, width, height);
 
-    wxCoord wText = width - sizeBtn.x;
-    m_text->SetSize(0, 0, wText, height);
+    wxCoord wText = width - sizeBtn.x - MARGIN;
+    
+    //growing or shrinking a control like this doesn't really make sense
+    //so just leave the controls the same size and add whitespace
+    m_text->SetSize(2, 2, wText, 22);
     m_btn->SetSize(0 + wText + MARGIN, 0, -1, height);
 }
 
