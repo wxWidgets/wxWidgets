@@ -22,6 +22,7 @@
 
 class WXDLLEXPORT wxGenericValidator: public wxValidator
 {
+DECLARE_CLASS(wxGenericValidator)
 public:
   wxGenericValidator(bool* val);
   wxGenericValidator(int* val);
