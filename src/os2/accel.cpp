@@ -79,6 +79,18 @@ wxAcceleratorTable::wxAcceleratorTable(
                                  ,NULL // resources always in .exe
                                  ,(ULONG)ulId
                                 );
+    if (wxTheApp->GetTopWindow() != NULL)
+    {
+        //
+        // If we have accelerators the top window is the frame
+        //
+        wxFrame*                    pFrame = (wxFrame*)wxTheApp->GetTopWindow();
+
+        ::WinSetAccelTable( vHabmain
+                           ,(HWND)pFrame->GetFrame()
+                           ,hAccel
+                          );
+    }
     M_ACCELDATA->m_hAccel = hAccel;
     M_ACCELDATA->m_ok = (hAccel != 0);
 }
@@ -117,7 +129,7 @@ wxAcceleratorTable::wxAcceleratorTable(
                                                              ,&bIsVirtual
                                                             );
         if (bIsVirtual)
-            uVirt |= AF_VIRTUALKEY;
+            uVirt = AF_CHAR | AF_VIRTUALKEY;
 
         USHORT                      uCmd = vaEntries[i].GetCommand();
 
@@ -130,6 +142,19 @@ wxAcceleratorTable::wxAcceleratorTable(
     M_ACCELDATA->m_hAccel = ::WinCreateAccelTable( vHabmain
                                                   ,pArr
                                                  );
+    if (wxTheApp->GetTopWindow() != NULL)
+    {
+        //
+        // If we have accelerators the top window is the frame
+        //
+        wxFrame*                    pFrame = (wxFrame*)wxTheApp->GetTopWindow();
+
+        ::WinSetAccelTable( vHabmain
+                           ,(HWND)pFrame->GetFrame()
+                           ,M_ACCELDATA->m_hAccel
+                          );
+    }
+
     delete[] pArr;
     M_ACCELDATA->m_ok = (M_ACCELDATA->m_hAccel != 0);
 } // end of wxAcceleratorTable::wxAcceleratorTable
@@ -155,14 +180,14 @@ WXHACCEL wxAcceleratorTable::GetHACCEL() const
 }
 
 bool wxAcceleratorTable::Translate(
-  wxWindow*                         pWindow
+  WXHWND                            hWnd
 , WXMSG*                            pWxmsg
 ) const
 {
     PQMSG                           pMsg = (PQMSG)pWxmsg;
 
     return Ok() && ::WinTranslateAccel( vHabmain
-                                       ,GetHwndOf(pWindow)
+                                       ,(HWND)hWnd
                                        ,GetHaccel()
                                        ,pMsg
                                        );

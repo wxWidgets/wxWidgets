@@ -1147,8 +1147,6 @@ bool wxFrame::OS2TranslateMessage(
   WXMSG*                            pMsg
 )
 {
-    if (wxWindow::OS2TranslateMessage(pMsg))
-        return TRUE;
     //
     // try the menu bar accels
     //
@@ -1158,7 +1156,7 @@ bool wxFrame::OS2TranslateMessage(
         return FALSE;
 
     const wxAcceleratorTable&       rAcceleratorTable = pMenuBar->GetAccelTable();
-    return rAcceleratorTable.Translate(this, pMsg);
+    return rAcceleratorTable.Translate(m_hFrame, pMsg);
 } // end of wxFrame::OS2TranslateMessage
 
 // ---------------------------------------------------------------------------

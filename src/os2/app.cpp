@@ -698,8 +698,8 @@ bool wxApp::ProcessMessage(
   WXMSG*                            pWxmsg
 )
 {
-    QMSG*                           vMsg = (PQMSG)pWxmsg;
-    HWND                            hWnd = vMsg->hwnd;
+    QMSG*                           pMsg = (PQMSG)pWxmsg;
+    HWND                            hWnd = pMsg->hwnd;
     wxWindow*                       pWndThis = wxFindWinFromHandle((WXHWND)hWnd);
     wxWindow*                       pWnd;
 
@@ -708,7 +708,7 @@ bool wxApp::ProcessMessage(
     // We must relay WM_MOUSEMOVE events to the tooltip ctrl if we want it to
     // popup the tooltip bubbles
     //
-    if (pWndThis && (vMsg->msg == WM_MOUSEMOVE))
+    if (pWndThis && (pMsg->msg == WM_MOUSEMOVE))
     {
         wxToolTip*                  pToolTip = pWndThis->GetToolTip();
         if (pToolTip)
@@ -727,6 +727,17 @@ bool wxApp::ProcessMessage(
     {
         hWnd = ::WinQueryWindow(hWnd, QW_PARENT);
         pWndThis = wxFindWinFromHandle((WXHWND)hWnd);
+    }
+
+    //
+    // Try translations first; find the youngest window with
+    // a translation table.
+    //
+    for (pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
+    {
+        if (pMsg->msg == WM_CHAR)
+            if (pWnd->OS2TranslateMessage(pWxmsg))
+                return TRUE;
     }
 
     //

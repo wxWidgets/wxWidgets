@@ -1699,7 +1699,7 @@ bool wxWindow::OS2TranslateMessage(
   WXMSG*                            pMsg
 )
 {
-    return m_acceleratorTable.Translate(this, pMsg);
+    return m_acceleratorTable.Translate(m_hWnd, pMsg);
 } // end of wxWindow::OS2TranslateMessage
 
 // ---------------------------------------------------------------------------
