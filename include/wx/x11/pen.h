@@ -38,7 +38,7 @@ class wxPen: public wxGDIObject
 public:
     wxPen() { }
     
-    wxPen( const wxColour &colour, int width, int style );
+    wxPen( const wxColour &colour, int width = 1, int style = wxSOLID );
     wxPen( const wxBitmap &stipple, int width );
     ~wxPen();
     

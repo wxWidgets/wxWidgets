@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        pen.h
+// Name:        wx/mgl/pen.h
 // Purpose:
 // Author:      Vaclav Slavik
 // Id:          $Id$
@@ -36,7 +36,7 @@ class WXDLLEXPORT wxPen: public wxGDIObject
 {
 public:
     wxPen() {}
-    wxPen(const wxColour &colour, int width, int style);
+    wxPen(const wxColour &colour, int width = 1, int style = wxSOLID);
     wxPen(const wxBitmap& stipple, int width);
     wxPen(const wxPen& pen);
     ~wxPen() {}

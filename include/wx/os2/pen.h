@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        pen.h
+// Name:        wx/os2/pen.h
 // Purpose:     wxPen class
 // Author:      David Webster
 // Modified by:
@@ -46,8 +46,8 @@ class WXDLLEXPORT wxPen : public wxGDIObject
 public:
     wxPen();
     wxPen( const wxColour& rColour
-          ,int             nWidth
-          ,int             nStyle
+          ,int             nWidth = 1
+          ,int             nStyle = wxSOLID
          );
     wxPen( const wxBitmap& rStipple
           ,int             nWidth

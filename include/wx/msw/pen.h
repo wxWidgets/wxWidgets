@@ -61,7 +61,7 @@ class WXDLLEXPORT wxPen: public wxGDIObject
   DECLARE_DYNAMIC_CLASS(wxPen)
 public:
   wxPen();
-  wxPen(const wxColour& col, int width, int style);
+  wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
   wxPen(const wxBitmap& stipple, int width);
   inline wxPen(const wxPen& pen) { Ref(pen); }
   ~wxPen();
