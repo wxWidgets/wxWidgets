@@ -130,6 +130,7 @@ wxDocument::wxDocument(wxDocument *parent)
     m_documentModified = FALSE;
     m_documentParent = parent;
     m_documentTemplate = (wxDocTemplate *) NULL;
+    m_commandProcessor = (wxCommandProcessor*) NULL;
     m_savedYet = FALSE;
 }
 
@@ -145,7 +146,8 @@ wxDocument::~wxDocument()
     if (m_commandProcessor)
         delete m_commandProcessor;
 
-    GetDocumentManager()->RemoveDocument(this);
+    if (GetDocumentManager())
+        GetDocumentManager()->RemoveDocument(this);
 
     // Not safe to do here, since it'll invoke virtual view functions
     // expecting to see valid derived objects: and by the time we get here,
@@ -188,7 +190,7 @@ bool wxDocument::DeleteAllViews()
     }
     // If we haven't yet deleted the document (for example
     // if there were no views) then delete it.
-    if (manager->GetDocuments().Member(this))
+    if (manager && manager->GetDocuments().Member(this))
         delete this;
 
     return TRUE;
@@ -203,7 +205,7 @@ wxView *wxDocument::GetFirstView() const
 
 wxDocManager *wxDocument::GetDocumentManager() const
 {
-    return m_documentTemplate->GetDocumentManager();
+    return (m_documentTemplate ? m_documentTemplate->GetDocumentManager() : (wxDocManager*) NULL);
 }
 
 bool wxDocument::OnNewDocument()
