@@ -334,14 +334,14 @@ void wxFrameLayout::ReparentWindow( wxWindow* pChild, wxWindow* pNewParent )
 
 	if ( pChild->GetParent() )
 	{
-		bool success = pChild->GetParent()->GetChildren()->DeleteObject( pChild );
+		bool success = pChild->GetParent()->GetChildren().DeleteObject( pChild );
 
 		wxASSERT( success ); // DBG::
 	}
 
 	::SetParent( (HWND)pChild->m_hWnd, (HWND)pNewParent->m_hWnd  );
 
-	pNewParent->GetChildren()->Append( pChild );
+	pNewParent->GetChildren().Append( pChild );
 
 	pChild->SetParent( pNewParent );
 
