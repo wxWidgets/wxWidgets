@@ -190,7 +190,7 @@ void wxPrintout::GetPageInfo(int *minPage, int *maxPage, int *fromPage, int *toP
 //     this style it simply doesn't work correctly at all...
 wxPreviewCanvas::wxPreviewCanvas(wxPrintPreviewBase *preview, wxWindow *parent,
                                  const wxPoint& pos, const wxSize& size, long style, const wxString& name):
-wxScrolledWindow(parent, -1, pos, size, style | wxFULL_REPAINT_ON_RESIZE, name)
+wxScrolledWindow(parent, -1, pos, size, style | wxFULL_REPAINT_ON_RESIZE | wxVSCROLL | wxHSCROLL, name)
 {
     m_printPreview = preview;
 #ifdef __WXMAC__
