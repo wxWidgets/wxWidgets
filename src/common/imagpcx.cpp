@@ -490,8 +490,6 @@ bool wxPCXHandler::DoCanRead( wxInputStream& stream )
     if ( !stream )
         return FALSE;
 
-    stream.SeekI(-1, wxFromCurrent);
-
     // not very safe, but this is all we can get from PCX header :-(
     return c == 10;
 }

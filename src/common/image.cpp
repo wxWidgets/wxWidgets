@@ -1286,12 +1286,32 @@ bool wxImageHandler::CanRead( const wxString& name )
         return CanRead(stream);
     }
 
-    else {
-        wxLogError( _("Can't check image format of file '%s': file does not exist."), name.c_str() );
+    wxLogError( _("Can't check image format of file '%s': file does not exist."), name.c_str() );
 
+    return FALSE;
+}
+
+bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
+{
+    off_t posOld = stream.TellI();
+    if ( posOld == wxInvalidOffset )
+    {
+        // can't test unseekable stream
         return FALSE;
     }
-//    return FALSE;
+
+    bool ok = DoCanRead(stream);
+
+    // restore the old position to be able to test other formats and so on
+    if ( stream.SeekI(posOld) == wxInvalidOffset )
+    {
+        wxLogDebug(_T("Failed to rewind the stream in wxImageHandler!"));
+
+        // reading would fail anyhow as we're not at the right position
+        return FALSE;
+    }
+
+    return ok;
 }
 
 #endif // wxUSE_STREAMS

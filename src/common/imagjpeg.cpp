@@ -381,7 +381,6 @@ bool wxJPEGHandler::DoCanRead( wxInputStream& stream )
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
         return FALSE;
 
-    stream.SeekI(-WXSIZEOF(hdr), wxFromCurrent);
     return hdr[0] == 0xFF && hdr[1] == 0xD8;
 }
 

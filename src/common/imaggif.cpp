@@ -116,14 +116,8 @@ bool wxGIFHandler::SaveFile( wxImage * WXUNUSED(image),
 
 bool wxGIFHandler::DoCanRead( wxInputStream& stream )
 {
-    wxGIFDecoder *decod;
-    bool ok;
-
-    decod = new wxGIFDecoder(&stream);
-    ok = decod->CanRead();
-    delete decod;
-
-    return ok;
+    wxGIFDecoder decod(&stream);
+    return decod.CanRead();
 }
 
 #endif  // wxUSE_STREAMS

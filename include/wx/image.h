@@ -53,7 +53,7 @@ public:
 
     virtual int GetImageCount( wxInputStream& stream );
 
-    bool CanRead( wxInputStream& stream ) { return DoCanRead(stream); }
+    bool CanRead( wxInputStream& stream ) { return CallDoCanRead(stream); }
     bool CanRead( const wxString& name );
 #endif // wxUSE_STREAMS
 
@@ -70,6 +70,9 @@ protected:
 #if wxUSE_STREAMS
     virtual bool DoCanRead( wxInputStream& stream ) = 0;
 #endif // wxUSE_STREAMS
+
+    // save the stream position, call DoCanRead() and restore the position
+    bool CallDoCanRead(wxInputStream& stream);
 
     wxString  m_name;
     wxString  m_extension;

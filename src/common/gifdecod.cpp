@@ -620,7 +620,7 @@ bool wxGIFDecoder::CanRead()
     if ( !m_f->Read(buf, WXSIZEOF(buf)) )
         return FALSE;
 
-    m_f->SeekI(-WXSIZEOF(buf), wxFromCurrent);
+    m_f->SeekI(-(off_t)WXSIZEOF(buf), wxFromCurrent);
 
     return memcmp(buf, "GIF", WXSIZEOF(buf)) == 0;
 }

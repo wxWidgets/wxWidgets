@@ -879,8 +879,6 @@ bool wxBMPHandler::DoCanRead(wxInputStream& stream)
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
         return FALSE;
 
-    stream.SeekI(-WXSIZEOF(hdr), wxFromCurrent);
-
     // do we have the BMP file signature?
     return hdr[0] == 'B' && hdr[1] == 'M';
 }
@@ -1201,12 +1199,11 @@ int wxICOHandler::GetImageCount(wxInputStream& stream)
 bool wxICOHandler::DoCanRead(wxInputStream& stream)
 {
     unsigned char hdr[4];
-    off_t iPos = stream.TellI();
-    stream.SeekI (0);
-    stream.Read(hdr, 4);
-    stream.SeekI(iPos);
-    //hdr[2] is one for an icon and two for a cursor
-    return (hdr[0] == '\0' && hdr[1] == '\0' && hdr[2] == '\1' && hdr[3] == '\0');
+    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
+        return FALSE;
+
+    // hdr[2] is one for an icon and two for a cursor
+    return hdr[0] == '\0' && hdr[1] == '\0' && hdr[2] == '\1' && hdr[3] == '\0';
 }
 
 
@@ -1220,12 +1217,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxCURHandler, wxICOHandler)
 bool wxCURHandler::DoCanRead(wxInputStream& stream)
 {
     unsigned char hdr[4];
-    off_t iPos = stream.TellI();
-    stream.SeekI (0);
-    stream.Read(hdr, 4);
-    stream.SeekI(iPos);
-    //hdr[2] is one for an icon and two for a cursor
-    return (hdr[0] == '\0' && hdr[1] == '\0' && hdr[2] == '\2' && hdr[3] == '\0');
+    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
+        return FALSE;
+
+    // hdr[2] is one for an icon and two for a cursor
+    return hdr[0] == '\0' && hdr[1] == '\0' && hdr[2] == '\2' && hdr[3] == '\0';
 }
 
 //-----------------------------------------------------------------------------
@@ -1297,8 +1293,9 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
     wxInt32 *list32 = (wxInt32 *) listtxt;
     wxInt32 *anih32 = (wxInt32 *) anihtxt;
 
-    stream.SeekI(0);
-    stream.Read(&FCC1, 4);
+    if ( !stream.Read(&FCC1, 4) )
+        return FALSE;
+
     if ( FCC1 != *riff32 )
         return FALSE;
 

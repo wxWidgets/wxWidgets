@@ -137,8 +137,6 @@ bool wxPNMHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool WXUNUS
 
 bool wxPNMHandler::DoCanRead( wxInputStream& stream )
 {
-    off_t pos = stream.TellI();
-
     Skip_Comment(stream);
 
     if ( stream.GetC() == 'P' )
@@ -147,12 +145,10 @@ bool wxPNMHandler::DoCanRead( wxInputStream& stream )
         {
             case '3':
             case '6':
-                stream.SeekI(pos);
                 return TRUE;
         }
     }
 
-    stream.SeekI(pos);
     return FALSE;
 }
 

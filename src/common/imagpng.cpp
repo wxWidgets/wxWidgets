@@ -421,8 +421,6 @@ bool wxPNGHandler::DoCanRead( wxInputStream& stream )
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
         return FALSE;
 
-    stream.SeekI(-WXSIZEOF(hdr), wxFromCurrent);
-
     return memcmp(hdr, "\211PNG", WXSIZEOF(hdr)) == 0;
 }
 

@@ -235,7 +235,7 @@ bool wxIFFDecoder::CanRead()
     if ( !m_f->Read(buf, WXSIZEOF(buf)) )
         return FALSE;
 
-    m_f->SeekI(-WXSIZEOF(buf), wxFromCurrent);
+    m_f->SeekI(-(off_t)WXSIZEOF(buf), wxFromCurrent);
 
     return (memcmp(buf, "FORM", 4) == 0) && (memcmp(buf+8, "ILBM", 4) == 0);
 }
@@ -785,14 +785,9 @@ bool wxIFFHandler::SaveFile(wxImage * WXUNUSED(image),
 
 bool wxIFFHandler::DoCanRead(wxInputStream& stream)
 {
-    wxIFFDecoder *decod;
-    bool ok;
+    wxIFFDecoder decod(&stream);
 
-    decod = new wxIFFDecoder(&stream);
-    ok = decod->CanRead();
-    delete decod;
-
-    return ok;
+    return decod.CanRead();
 }
 
 #endif // wxUSE_STREAMS
