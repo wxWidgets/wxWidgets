@@ -3039,42 +3039,22 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     // do create the window
     wxWindowCreationHook hook(this);
 
-    // VZ: anyone care to explain why this is done for CE?
-#ifdef __WXWINCE__
-    if (extendedStyle == 0)
-    {
-        m_hWnd = (WXHWND)::CreateWindow
-            (
-            className,
-            title ? title : wxEmptyString,
-            style,
-            x, y, w, h,
-            (HWND)MSWGetParent(),
-            (HMENU)controlId,
-            wxGetInstance(),
-            NULL                        // no extra data
-            );
-    }
-    else
-#endif // __WXWINCE__
-    {
-        m_hWnd = (WXHWND)::CreateWindowEx
-            (
-            extendedStyle,
-            className,
-            title ? title : wxEmptyString,
-            style,
-            x, y, w, h,
-            (HWND)MSWGetParent(),
-            (HMENU)controlId,
-            wxGetInstance(),
-            NULL                        // no extra data
-            );
-    }
+    m_hWnd = (WXHWND)::CreateWindowEx
+                       (
+                        extendedStyle,
+                        className,
+                        title ? title : m_windowName.c_str(),
+                        style,
+                        x, y, w, h,
+                        (HWND)MSWGetParent(),
+                        (HMENU)controlId,
+                        wxGetInstance(),
+                        NULL                        // no extra data
+                       );
 
     if ( !m_hWnd )
     {
-        wxLogSysError(_("Can't create window of class %s"), wclass);
+        wxLogSysError(_("Can't create window of class %s"), className.c_str());
 
         return false;
     }
