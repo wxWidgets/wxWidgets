@@ -317,7 +317,6 @@ utilsexc.cpp	M	B
 uuid.cpp	M	O
 wave.cpp	M
 window.cpp	M
-xpmhand.cpp	M
 
 dialup.cpp	U
 dir.cpp	U	B
@@ -751,7 +750,6 @@ wxchar.h	W	B
 wxexpr.h	W
 wxhtml.h	W
 wxprec.h	W	B
-xpmhand.h	W
 zipstrm.h	W	B
 zstream.h	W	B
 
@@ -967,7 +965,6 @@ treectrl.h	9
 wave.h	9
 window.h	9
 winundef.h	9
-xpmhand.h	9
 # blank.cur	9
 # bullseye.cur	9
 # child.ico	9
