@@ -57,7 +57,9 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/caret.h>
+#ifdef NOT_READY_YET
 #include <wx/fontenum.h>
+#endif
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
