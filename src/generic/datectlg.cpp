@@ -50,6 +50,7 @@
 
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
+#include "wx/renderer.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -104,26 +105,9 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
         return false;
     }
 
-    SetWindowStyle(style | wxWANTS_CHARS);
     InheritAttributes();
 
-    wxBitmap bmp(8, 4);
-    {
-        wxMemoryDC dc;
-
-        dc.SelectObject(bmp);
-        dc.SetBrush(wxBrush(GetBackgroundColour()));
-        dc.SetPen(wxPen(GetBackgroundColour()));
-        dc.DrawRectangle(0,0, 8,4);
-
-        dc.SetBrush(wxBrush(GetForegroundColour()));
-        dc.SetPen(wxPen(GetForegroundColour()));
-        wxPoint pt[3] = { wxPoint(0,0), wxPoint(6,0), wxPoint(3,3) };
-        dc.DrawPolygon(3, pt);
-        dc.SelectObject(wxNullBitmap);
-    }
-
-    m_txt=new wxTextCtrl(this, CTRLID_TXT);
+    m_txt = new wxTextCtrl(this, CTRLID_TXT);
     m_txt->Connect(wxID_ANY, wxID_ANY, wxEVT_KEY_DOWN,
                    (wxObjectEventFunction)&wxDatePickerCtrlGeneric::OnEditKey,
                    0, this);
@@ -131,7 +115,22 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
                    (wxObjectEventFunction)&wxDatePickerCtrlGeneric::OnKillFocus,
                    0, this);
 
-    m_btn = new wxBitmapButton(this, CTRLID_BTN, bmp);
+    const int height = m_txt->GetBestSize().y - 4; // FIXME: fudge
+    wxBitmap bmp(height, height);
+    {
+        wxMemoryDC dc;
+        dc.SelectObject(bmp);
+        wxRendererNative::Get().DrawComboBoxDropButton
+                                (
+                                    this,
+                                    dc,
+                                    wxRect(0, 0, height, height)
+                                );
+    }
+
+    wxBitmapButton *btn = new wxBitmapButton(this, CTRLID_BTN, bmp);
+    btn->SetMargins(0, 0);
+    m_btn = btn;
 
     m_popup = new wxPopupWindow(this);
     m_popup->SetFont(GetFont());
