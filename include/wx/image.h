@@ -102,7 +102,7 @@ WX_DECLARE_EXPORTED_HASH_MAP(unsigned long, wxImageHistogramEntry,
                              wxIntegerHash, wxIntegerEqual,
                              wxImageHistogramBase);
 
-class wxImageHistogram : public wxImageHistogramBase
+class WXDLLEXPORT wxImageHistogram : public wxImageHistogramBase
 {
 public:
     wxImageHistogram() : wxImageHistogramBase(256) { }
@@ -175,7 +175,7 @@ public:
 
     // return the new image with size width*height
     wxImage Scale( int width, int height ) const;
-    
+
     wxImage ShrinkBy( int xFactor , int yFactor ) const ;
 
     // rescales the image in place
@@ -275,8 +275,8 @@ public:
 
     // Computes the histogram of the image and fills a hash table, indexed
     // with integer keys built as 0xRRGGBB, containing wxImageHistogramEntry
-    // objects. Each of them contains an 'index' (useful to build a palette 
-    // with the image colours) and a 'value', which is the number of pixels 
+    // objects. Each of them contains an 'index' (useful to build a palette
+    // with the image colours) and a 'value', which is the number of pixels
     // in the image with that colour.
     // Returned value: # of entries in the histogram
     unsigned long ComputeHistogram( wxImageHistogram &h ) const;
