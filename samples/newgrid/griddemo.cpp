@@ -72,6 +72,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLECOLSIZING, GridFrame::ToggleColSizing )
     EVT_MENU( ID_TOGGLEGRIDSIZING, GridFrame::ToggleGridSizing )
     EVT_MENU( ID_TOGGLEGRIDLINES, GridFrame::ToggleGridLines )
+    EVT_MENU( ID_AUTOSIZECOLS, GridFrame::AutoSizeCols )
     EVT_MENU( ID_SETLABELCOLOUR, GridFrame::SetLabelColour )
     EVT_MENU( ID_SETLABELTEXTCOLOUR, GridFrame::SetLabelTextColour )
     EVT_MENU( ID_ROWLABELHORIZALIGN, GridFrame::SetRowLabelHorizAlignment )
@@ -131,7 +132,7 @@ GridFrame::GridFrame()
     viewMenu->Append( ID_TOGGLECOLSIZING, "C&ol drag-resize", "", TRUE );
     viewMenu->Append( ID_TOGGLEGRIDSIZING, "&Grid drag-resize", "", TRUE );
     viewMenu->Append( ID_TOGGLEGRIDLINES, "&Grid Lines", "", TRUE );
-
+    viewMenu->Append( ID_AUTOSIZECOLS, "&Auto-size cols" );
 
     wxMenu *rowLabelMenu = new wxMenu;
 
@@ -352,6 +353,13 @@ void GridFrame::ToggleGridLines( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->EnableGridLines(
         GetMenuBar()->IsChecked( ID_TOGGLEGRIDLINES ) );
+}
+
+
+void GridFrame::AutoSizeCols( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->AutoSizeColumns();
+    grid->Refresh();
 }
 
 
