@@ -136,7 +136,7 @@ wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
                         int x, int y, bool WXUNUSED(centre) )
 {
     wxTextEntryDialog dialog(parent, message, caption, defaultValue, wxOK|wxCANCEL, wxPoint(x, y));
-    if (dialog.ShowModal() == wxOK)
+    if (dialog.ShowModal() == wxID_OK)
         return dialog.GetValue();
     else
         return wxString("");

@@ -412,12 +412,6 @@ bool wxDC::GetPixel(long x, long y, wxColour *col) const
   // returns TRUE for pixels in the color of the current pen
   // and FALSE for all other pixels colors
   // if col is non-NULL return the color of the pixel
-/*
-  int xx1 = (int)x;
-  int yy1 = (int)y;
-  if (m_canvas)
-    m_canvas->CalcScrolledPosition((int)x, (int)y, &xx1, &yy1);
-*/
 
   // get the color of the pixel
   COLORREF pixelcolor = ::GetPixel((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y));
@@ -447,21 +441,6 @@ void wxDC::CrossHair(long x, long y)
       long y1 = y-2000;
       long x2 = x+2000;
       long y2 = y+2000;
-/*
-      long xx1 = x1 ;
-      long yy1 = y1 ;
-      long xx2 = x2 ;
-      long yy2 = y2 ;
-      long xx  = x ;
-      long yy  = y ;
-
-      if (m_canvas)
-      {
-        m_canvas->CalcScrolledPosition(x1, y1, &xx1, &yy1);
-        m_canvas->CalcScrolledPosition(x2, y2, &xx2, &yy2);
-        m_canvas->CalcScrolledPosition(x, y, &xx, &yy);
-      }
-*/
 
       BeginDrawing();
 
@@ -482,17 +461,6 @@ void wxDC::DrawLine(long x1, long y1, long x2, long y2)
 // BUGBUG - is this necessary? YES YES YES YEs Yes yes ye....
   if (m_pen.Ok() && m_autoSetting)
     SetPen(m_pen);
-/*
-  int xx1 = (int)x1;
-  int yy1 = (int)y1;
-  int xx2 = (int)x2;
-  int yy2 = (int)y2;
-  if (m_canvas)
-  {
-    m_canvas->CalcScrolledPosition((int)x1, (int)y1, &xx1, &yy1);
-    m_canvas->CalcScrolledPosition((int)x2, (int)y2, &xx2, &yy2);
-  }
-*/
 
   BeginDrawing();
 
@@ -512,15 +480,6 @@ void wxDC::DrawLine(long x1, long y1, long x2, long y2)
 
 void wxDC::DrawArc(long x1,long y1,long x2,long y2,double xc,double yc)
 {
-/*
-  int xx1 = (int)x1;
-  int yy1 = (int)y1;
-  int xx2 = (int)x2;
-  int yy2 = (int)y2;
-  int xxc = (int)xc ;
-  int yyc = (int)yc;
-*/
-
   double dx = xc-x1 ;
   double dy = yc-y1 ;
   double radius = (double)sqrt(dx*dx+dy*dy) ;;
@@ -533,15 +492,6 @@ void wxDC::DrawArc(long x1,long y1,long x2,long y2,double xc,double yc)
 // BUGBUG - is this necessary?
   if (m_pen.Ok() && m_autoSetting)
     SetPen(m_pen) ;
-
-/*
-  if (m_canvas)
-  {
-    m_canvas->CalcScrolledPosition((int)x1, (int)y1, &xx1, &yy1);
-    m_canvas->CalcScrolledPosition((int)x2, (int)y2, &xx2, &yy2);
-    m_canvas->CalcScrolledPosition((int)xc, (int)yc, &xxc, &yyc);
-  }
-*/
 
   BeginDrawing();
 
@@ -582,13 +532,6 @@ void wxDC::DrawPoint(long x, long y)
   if (m_pen.Ok() && m_autoSetting)
     SetPen(m_pen) ;
 
-/*
-  int xx1 = (int)x;
-  int yy1 = (int)y;
-  if (m_canvas)
-    m_canvas->CalcScrolledPosition((int)x, (int)y, &xx1, &yy1);
-*/
-
   BeginDrawing();
 
   COLORREF color = 0x00ffffff;
@@ -597,12 +540,6 @@ void wxDC::DrawPoint(long x, long y)
 //    m_pen.RealizeResource();
     color = m_pen.GetColour().GetPixel() ;
   }
-
-/*
-    color = RGB(m_pen->GetColour().Red(),
-                m_pen->GetColour().Green(),
-                m_pen->GetColour().Blue());
-*/
 
   SetPixel((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), color);
 
@@ -616,15 +553,6 @@ void wxDC::DrawPolygon(int n, wxPoint points[], long xoffset, long yoffset,int f
 // BUGBUG - is this necessary?
   if (m_pen.Ok() && m_autoSetting)
     SetPen(m_pen) ;
-/*
-  int xoffset1 = 0;
-  int yoffset1 = 0;
-
-  if (m_canvas)
-    m_canvas->CalcScrolledPosition(0, 0, &xoffset1, &yoffset1);
-
-  xoffset1 += (int)xoffset; yoffset1 += (int)yoffset;
-*/
 
   BeginDrawing();
 
@@ -632,10 +560,10 @@ void wxDC::DrawPolygon(int n, wxPoint points[], long xoffset, long yoffset,int f
   int i;
   for (i = 0; i < n; i++)
   {
-    cpoints[i].x = (int)(XLOG2DEV(points[i].x));
-    cpoints[i].y = (int)(YLOG2DEV(points[i].y));
+    cpoints[i].x = (int)(XLOG2DEV(points[i].x + xoffset));
+    cpoints[i].y = (int)(YLOG2DEV(points[i].y + yoffset));
 
-    CalcBoundingBox(points[i].x, points[i].y);
+    CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
   }
 
   int prev = SetPolyFillMode((HDC) m_hDC,fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING) ;
@@ -653,27 +581,16 @@ void wxDC::DrawLines(int n, wxPoint points[], long xoffset, long yoffset)
   if (m_pen.Ok() && m_autoSetting)
     SetPen(m_pen) ;
 
-/*
-  int xoffset1 = 0;
-  int yoffset1 = 0;
-
-  if (m_canvas)
-  {
-    m_canvas->CalcScrolledPosition(0, 0, &xoffset1, &yoffset1);
-  }
-  xoffset1 += (int)xoffset; yoffset1 += (int)yoffset;
-*/
-
   BeginDrawing();
 
   POINT *cpoints = new POINT[n];
   int i;
   for (i = 0; i < n; i++)
   {
-    cpoints[i].x = (int)(XLOG2DEV(points[i].x));
-    cpoints[i].y = (int)(YLOG2DEV(points[i].y));
+    cpoints[i].x = (int)(XLOG2DEV(points[i].x + xoffset));
+    cpoints[i].y = (int)(YLOG2DEV(points[i].y + yoffset));
 
-    CalcBoundingBox(points[i].x, points[i].y);
+    CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
   }
 
  (void)Polyline((HDC) m_hDC, cpoints, n);
@@ -689,18 +606,6 @@ void wxDC::DrawRectangle(long x, long y, long width, long height)
   if (m_pen.Ok() && m_autoSetting)
     SetPen(m_pen) ;
 
-/*
-  int x1 = (int)x;
-  int y1 = (int)y;
-  int x2 = (int)(x+width);
-  int y2 = (int)(y+height);
-
-  if (m_canvas)
-  {
-    m_canvas->CalcScrolledPosition((int)x, (int)y, &x1, &y1);
-    m_canvas->CalcScrolledPosition((int)(x+width), (int)(y+height), &x2, &y2);
-  }
-*/
   long x2 = x + width;
   long y2 = y + height;
 
@@ -766,17 +671,6 @@ void wxDC::DrawRoundedRectangle(long x, long y, long width, long height, double 
     radius = (- radius * smallest);
   }
 
-/*
-  int x1 = (int)x;
-  int y1 = (int)y;
-
-  if (m_canvas)
-  {
-    m_canvas->CalcScrolledPosition((int)x, (int)y, &x1, &y1);
-    m_canvas->CalcScrolledPosition((int)(x+width), (int)(y+height), &x2, &y2);
-  }
-*/
-
   long x2 = (x+width);
   long y2 = (y+height);
 
@@ -796,17 +690,6 @@ void wxDC::DrawEllipse(long x, long y, long width, long height)
 // BUGBUG - is this necessary?
   if (m_pen.Ok() && m_autoSetting)
     SetPen(m_pen) ;
-
-/*
-  int x1 = (int)x;
-  int y1 = (int)y;
-
-  if (m_canvas)
-  {
-    m_canvas->CalcScrolledPosition((int)x, (int)y, &x1, &y1);
-    m_canvas->CalcScrolledPosition((int)(x+width), (int)(y+height), &x2, &y2);
-  }
-*/
 
   long x2 = (x+width);
   long y2 = (y+height);
@@ -868,14 +751,6 @@ void wxDC::DrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
 
 void wxDC::DrawIcon(const wxIcon& icon, long x, long y)
 {
-/*
-  int x1 = (int)x;
-  int y1 = (int)y;
-
-  if (m_canvas)
-    m_canvas->CalcScrolledPosition(int)x, (int)y, &x1, &y1);
-*/
-
   BeginDrawing();
 
   ::DrawIcon((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), (HICON) icon.GetHICON());
@@ -979,14 +854,6 @@ void wxDC::SetBrush(const wxBrush& brush)
 
 void wxDC::DrawText(const wxString& text, long x, long y, bool use16bit)
 {
-/*
-  int xx1 = (int)x;
-  int yy1 = (int)y;
-
-  if (m_canvas)
-    m_canvas->CalcScrolledPosition((int)x, (int)y, &xx1, &yy1);
-*/
-
   BeginDrawing();
 
   if (m_font.Ok() && m_font.GetResourceHandle())

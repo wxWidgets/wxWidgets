@@ -50,7 +50,7 @@
 #define wxTREE_HITTEST_TOLEFT           0x0400  // To the right of the client area.
 #define wxTREE_HITTEST_TORIGHT          0x0800  // To the left of the client area.
 
-#define wxTREE_HITTEST_ONITEM (wxTREE_HITTEST_ONITEMICON | wxTREE_HITTEST_ONITEMLABEL wxTREE_HITTEST_ONITEMSTATEICON)
+#define wxTREE_HITTEST_ONITEM (wxTREE_HITTEST_ONITEMICON | wxTREE_HITTEST_ONITEMLABEL | wxTREE_HITTEST_ONITEMSTATEICON)
 
 // Flags for GetNextItem
 enum {
