@@ -377,7 +377,9 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
         wxTheme *theme = wxTheme::Create(themeName);
         if ( !theme )
         {
+#if wxUSE_LOG
             wxLogError(_("Unsupported theme '%s'."), themeName.c_str());
+#endif
 
             return FALSE;
         }
@@ -395,8 +397,9 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
         unsigned w, h, bpp;
         if ( wxSscanf(modeDesc.c_str(), _T("%ux%u-%u"), &w, &h, &bpp) != 3 )
         {
+#if wxUSE_LOG
             wxLogError(_("Invalid display mode specification '%s'."), modeDesc.c_str());
-
+#endif
             return FALSE;
         }
 
@@ -461,7 +464,9 @@ bool wxAppBase::CheckBuildOptions(const wxBuildOptions& opts)
         msg.Printf(_T("Mismatch between the program and library build versions detected.\nThe library used %d.%d (%s), and your program used %d.%d (%s)."),
                    verMaj, verMin, libDebug.c_str(), opts.m_verMaj, opts.m_verMin, progDebug.c_str());
         
+#if wxUSE_LOG
         wxLogFatalError(msg);
+#endif
 
         // normally wxLogFatalError doesn't return
         return FALSE;
@@ -552,8 +557,10 @@ void ShowAssertDialog(const wxChar *szFile,
 
     if ( !s_bNoAsserts )
     {
+#if wxUSE_LOG
         // send it to the normal log destination
         wxLogDebug(szBuf);
+#endif
 
 #if (wxUSE_GUI && wxUSE_MSGDLG) || defined(__WXMSW__)
         // this message is intentionally not translated - it is for
