@@ -81,7 +81,6 @@ private:
 
 class WXDLLEXPORT wxPrivateDataObject : public wxDataObject
 {
-    DECLARE_DYNAMIC_CLASS( wxPrivateDataObject )
 
 public:
     wxPrivateDataObject();
