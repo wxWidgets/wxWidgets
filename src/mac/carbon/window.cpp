@@ -386,40 +386,7 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
     menu->UpdateUI();
     ClientToScreen( &x , &y ) ;
 
-	wxArrayPtrVoid submenus ;
-    wxMenuItemList::Node *node;
-    wxMenuItem *item;
-    int pos ;
-	for (pos = 0, node = menu->GetMenuItems().GetFirst(); node; node = node->GetNext(), pos++) 
-	{
-		item = (wxMenuItem *)node->GetData();
-		wxMenu* subMenu = item->GetSubMenu() ;
-		if (subMenu)             
-		{
-			submenus.Add(subMenu) ;
-		}
-	}
-
-    ::InsertMenu( (MenuHandle) menu->GetHMenu() , -1 ) ;
-
-	for ( size_t i = 0 ; i < submenus.GetCount() ; ++i )
-	{
-		wxMenu* submenu = (wxMenu*) submenus[i] ;
-		wxMenuItemList::Node *subnode;
-		wxMenuItem *subitem;
-		int subpos ;
-		for ( subpos = 0 , subnode = submenu->GetMenuItems().GetFirst(); subnode; subnode = subnode->GetNext(), subpos++) 
-		{
-			subitem = (wxMenuItem *)subnode->GetData();
-			wxMenu* itsSubMenu = subitem->GetSubMenu() ;
-			if (itsSubMenu)             
-			{
-				submenus.Add(itsSubMenu) ;
-			}                  
-		}
-		::InsertMenu( MAC_WXHMENU(submenu->GetHMenu()) , -1 ) ;
-	}
-
+    menu->MacBeforeDisplay( true ) ;
     long menuResult = ::PopUpMenuSelect((MenuHandle) menu->GetHMenu() ,y,x, 0) ;
     if ( HiWord(menuResult) != 0 )
     {
@@ -434,12 +401,7 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
         }        
         menu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
     }
-    ::DeleteMenu( menu->MacGetMenuId() ) ;
-	for ( size_t i = 0 ; i < submenus.GetCount() ; ++i )
-	{
-		wxMenu* submenu = (wxMenu*) submenus[i] ;
-		::DeleteMenu( submenu->MacGetMenuId() ) ;
-	}
+    menu->MacAfterDisplay( true ) ;
 
     menu->SetInvokingWindow(NULL);
 
