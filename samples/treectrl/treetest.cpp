@@ -33,13 +33,14 @@
 
 #include "math.h"
 
+//#define NO_VARIABLE_HEIGHT
+//#define NO_MULTIPLE_SELECTION
+
 #ifdef __WXMSW__
     // comment out this line to test multiple selection even under MSW (where
     // it looks ugly - but works)
     #define NO_MULTIPLE_SELECTION
 #endif
-
-#define NO_VARIABLE_HEIGHT
 
 #include "treetest.h"
 
@@ -200,6 +201,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTR_HAS_BUTTONS |
                                 wxTR_EDIT_LABELS |
+#ifndef NO_MULTIPLE_SELECTION
+                                wxTR_MULTIPLE |
+#endif
 #ifndef NO_VARIABLE_HEIGHT
                                 wxTR_HAS_VARIABLE_ROW_HEIGHT |
 #endif
