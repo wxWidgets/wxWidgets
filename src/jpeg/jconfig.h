@@ -1,3 +1,11 @@
+/* This test added by JACS as a quick fix. What should we do
+ * to make it work with configure?
+ */
+
+#ifdef _MSC_VER
+#include "jconfig.vc"
+#else
+
 /* jconfig.h.  Generated automatically by configure.  */
 /* jconfig.cfg --- source file edited by configure script */
 /* see jconfig.doc for explanations */
@@ -60,3 +68,6 @@
 #undef PROGRESS_REPORT
 
 #endif /* JPEG_CJPEG_DJPEG */
+#endif
+    /* _MSC_VER */
+
