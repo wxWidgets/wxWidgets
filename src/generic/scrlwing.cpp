@@ -44,6 +44,7 @@
 #include "wx/timer.h"
 #endif
 #include "wx/sizer.h"
+#include "wx/recguard.h"
 
 #ifdef __WXMSW__
     #include <windows.h> // for DLGC_WANTARROWS
@@ -621,6 +622,19 @@ int wxScrollHelper::CalcScrollInc(wxScrollWinEvent& event)
 // Adjust the scrollbars - new version.
 void wxScrollHelper::AdjustScrollbars()
 {
+    static wxRecursionGuardFlag s_flagReentrancy;
+    wxRecursionGuard guard(s_flagReentrancy);
+    if ( guard.IsInside() )
+    {
+        // don't reenter AdjustScrollbars() while another call to
+        // AdjustScrollbars() is in progress because this may lead to calling
+        // ScrollWindow() twice and this can really happen under MSW if
+        // SetScrollbar() call below adds or removes the scrollbar which
+        // changes the window size and hence results in another
+        // AdjustScrollbars() call
+        return;
+    }
+
 #ifdef __WXMAC__
     m_targetWindow->Update();
 #endif
