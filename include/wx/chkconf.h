@@ -12,6 +12,16 @@
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
 /*
+   Compiler-specific checking.
+ */
+
+#if defined(__WXMSW__)
+#  include "wx/msw/chkconf.h"
+#elif defined(__WXMAC__)
+#  include "wx/mac/chkconf.h"
+#endif
+
+/*
    this global setting determines what should we do if the setting FOO
    requires BAR and BAR is not set: we can either silently define BAR
    (default, recommended) or give an error and abort (mainly useful for

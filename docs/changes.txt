@@ -42,6 +42,8 @@ All:
 - added Catalan translations (Pau Bosch i Crespo)
 - added Ukrainian translations (Eugene Manko)
 - fixed bug with deleting entries at root level in wxFileConfig
+- chkconf.h now includes platform-specific versions (for MSW
+  and Mac) which contain some tests that were in setup.h
 
 wxBase:
 
@@ -82,6 +84,8 @@ All GUI ports:
 - Wizard now validates when pressing Back or Next
 - Implemented wxNotebook::DoGetBestSize so Fit now works
 - Added FindItemByPosition to wxMenu
+- wxTimer now derives from wxEvtHandler and is its own owner
+  object by default
 
 Unix:
 

@@ -37,7 +37,7 @@
 #define wxTIMER_ONE_SHOT TRUE
 
 // the interface of wxTimer class
-class WXDLLEXPORT wxTimerBase : public wxObject
+class WXDLLEXPORT wxTimerBase : public wxEvtHandler
 {
 public:
     // ctors and initializers
@@ -45,7 +45,7 @@ public:
 
     // default: if you don't call SetOwner(), your only chance to get timer
     // notifications is to override Notify() in the derived class
-    wxTimerBase() { Init(); SetOwner(NULL); }
+    wxTimerBase() { Init(); SetOwner(this); }
 
     // ctor which allows to avoid having to override Notify() in the derived
     // class: the owner will get timer notifications which can be handled with

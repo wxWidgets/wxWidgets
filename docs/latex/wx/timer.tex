@@ -11,9 +11,13 @@ There are two different ways to use this class:
 \helpref{Notify}{wxtimernotify} member to perform the required action.
 \item Or you may redirect the notifications to any 
 \helpref{wxEvtHandler}{wxevthandler} derived object by using the non default
-constructor or \helpref{SetOwner}{wxtimersetowner}. Then use {\tt EVT\_TIMER} 
+constructor or \helpref{SetOwner}{wxtimersetowner}. Then use the {\tt EVT\_TIMER} 
 macro to connect it to the event handler which will receive 
 \helpref{wxTimerEvent}{wxtimerevent} notifications.
+\item Or you may use a derived class and the {\tt EVT\_TIMER} 
+macro to connect it to an event handler defined in the derived class.
+If the default constructor is used, the timer object will be its
+own owner object, since it is derived from wxEvtHandler.
 \end{enumerate}
 
 In any case, you must start the timer with \helpref{Start}{wxtimerstart} 
@@ -24,7 +28,7 @@ be stopped later with \helpref{Stop}{wxtimerstop}.
 
 \wxheading{Derived from}
 
-\helpref{wxObject}{wxobject}
+\helpref{wxEvtHandler}{wxevthandler}
 
 \wxheading{Include files}
 

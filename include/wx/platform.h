@@ -319,5 +319,11 @@
     #endif
 #endif
 
+#if defined (__WXMAC__)
+    #ifndef WORDS_BIGENDIAN
+        #define WORDS_BIGENDIAN 1
+    #endif
+#endif
+
 #endif /* _WX_PLATFORM_H_ */
 

@@ -412,13 +412,13 @@ long wxMDIParentFrame::MSWWindowProc(WXUINT message,
                 (void)HandleCommand(id, cmd, hwnd);
 
                 // even if the frame didn't process it, there is no need to try it
-                // once again (i.e. call wxFrame::HandleCommand()) - we just dud it,
+                // once again (i.e. call wxFrame::HandleCommand()) - we just did it,
                 // so pretend we processed the message anyhow
                 processed = true;
             }
 
             // always pass this message DefFrameProc(), otherwise MDI menu
-            // commands (and sys commands - more surprizingly!) won't work
+            // commands (and sys commands - more surprisingly!) won't work
             MSWDefWindowProc(message, wParam, lParam);
             break;
 
