@@ -367,6 +367,9 @@ can be undone.
 
 Clears the text in the control.
 
+Note that this function will generate a {\tt wxEVT\_COMMAND\_TEXT\_UPDATED}
+event.
+
 \membersection{wxTextCtrl::Copy}\label{wxtextctrlcopy}
 
 \func{virtual void}{Copy}{\void}
@@ -862,6 +865,9 @@ the styles are not supported under this platform.
 Sets the text value and marks the control as not-modified (which means that 
 \helpref{IsModified}{wxtextctrlismodified} would return {\tt FALSE} immediately
 after the call to SetValue).
+
+Note that this function will generate a {\tt wxEVT\_COMMAND\_TEXT\_UPDATED}
+event.
 
 \wxheading{Parameters}
 
