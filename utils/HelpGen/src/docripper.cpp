@@ -224,7 +224,7 @@ void RipperDocGen::AppendHighlightedSource( string& st, string source )
 	char buf[1024*32];
 
 	// DBG:::
-	ASSERT( source.length() + 1 < sizeof(buf) );
+//	ASSERT( source.length() + 1 < sizeof(buf) );
 
 	strcpy( buf, source.c_str() );
 						

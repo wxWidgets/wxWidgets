@@ -630,6 +630,17 @@ void wxPlotWindow::SetCurrent( wxPlotCurve* current )
     GetEventHandler()->ProcessEvent( event );
 }
 
+void wxPlotWindow::Delete( wxPlotCurve* curve )
+{
+    wxNode *node = m_curves.Find( curve );
+    if (!node) return;
+    
+    m_curves.DeleteObject( curve );
+    
+    m_area->DeleteCurve( curve );
+    m_area->Refresh( FALSE );
+}
+
 wxPlotCurve *wxPlotWindow::GetCurrent()
 {
     return m_current;

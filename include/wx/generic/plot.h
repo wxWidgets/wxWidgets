@@ -195,6 +195,8 @@ public:
     void SetCurrent( wxPlotCurve* current );
     wxPlotCurve *GetCurrent();
     
+    void Delete( wxPlotCurve* curve );
+    
     // vertical representation
     // -----------------------
     

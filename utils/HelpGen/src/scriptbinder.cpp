@@ -308,7 +308,7 @@ void ScriptTemplate::PrintScript( void* dataObj, ScriptStream& stm )
 
 		// variable referred by template script is not
 		// registered to this tempalte object
-		ASSERT( found ); 
+		// ASSERT( found ); 
 
 	} while(1);
 }
@@ -398,7 +398,7 @@ ScriptSection* ScriptSection::GetSubsection( const char* name )
 		++cur;
 	}
 
-	ASSERT( cur < sizeof(buf) );
+	// ASSERT( cur < sizeof(buf) );
 
 	buf[cur] = '\0';
 
@@ -432,7 +432,7 @@ void ScriptSection::AddSection( ScriptSection* pSection,
 	pSection->AddRef();
 
 	// can add section to multiple containers
-	ASSERT( pSection->mpParent == 0 );
+	// ASSERT( pSection->mpParent == 0 );
 
 	pSection->mpParent = this;
 
@@ -602,7 +602,7 @@ bool DocGeneratorBase::SaveDocument( const char*    fname,
 	else
 	{
 		ScriptSection* pTopSect = GetTopSection();
-		ASSERT( pTopSect );
+		// ASSERT( pTopSect );
 		pTopSect->Print( stm );
 	}
 

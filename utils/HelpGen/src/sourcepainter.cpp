@@ -405,8 +405,10 @@ void check_keyword_map( int keywordMapNr )
 
 		KeywordT dummy;
 
+/*
 		if ( (char*)& dummy != &dummy.keyWord[0] )
 			throw;
+*/
 
 		int size = sizeof(__gKeyWords) / sizeof( KeywordT );
 
@@ -637,7 +639,7 @@ void SourcePainter::GetResultString(string& result, MarkupTagsT tags)
 {
 	// this method works, only if results of processing 
 	// are collected
-	ASSERT( mCollectResultsOn ); 
+	// ASSERT( mCollectResultsOn ); 
 	result = "";
 
 	int pos = 0;
