@@ -36,7 +36,8 @@ public:
     // ctors and such
     wxFont() { Init(); }
     wxFont(const wxFont& font) { Init(); Ref(font); }
-    wxFont(const wxString& fontname, const wxFontData& fontdata);
+    wxFont(const wxString& fontname, const wxFontData& fontdata) { Create(fontname, fontdata); }
+    wxFont(const wxNativeFontInfo& info);
 
     // assignment
     wxFont& operator=(const wxFont& font);
@@ -60,7 +61,10 @@ public:
                 int weight,
                 bool underlined = FALSE,
                 const wxString& face = wxEmptyString,
-                wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+                wxFontEncoding encoding = wxFONTENCODING_DEFAULT,
+                const wxNativeFontInfo& info = wxNullNativeFontInfo);
+
+    bool Create(const wxString& fontname, const wxFontData& fontdata);
 
     ~wxFont();
 
@@ -72,6 +76,7 @@ public:
     virtual wxString GetFaceName() const;
     virtual bool GetUnderlined() const;
     virtual wxFontEncoding GetEncoding() const;
+    virtual wxNativeFontInfo GetNativeFontInfo() const;
 
     virtual void SetPointSize( int pointSize );
     virtual void SetFamily( int family );
@@ -80,6 +85,7 @@ public:
     virtual void SetFaceName( const wxString& faceName );
     virtual void SetUnderlined( bool underlined );
     virtual void SetEncoding(wxFontEncoding encoding);
+    virtual void SetNativeFontInfo( const wxNativeFontInfo& info );
 
     // implementation from now on
     void Unshare();

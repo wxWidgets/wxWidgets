@@ -174,6 +174,16 @@ wxFontDialog::wxFontDialog( wxWindow *parent, wxFontData *fontdata )
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_fontdialog_delete_callback), (gpointer)this );
+
+    wxFont font = m_fontData.GetInitialFont();
+    if( font.Ok() )
+    {
+        wxNativeFontInfo info = font.GetNativeFontInfo();
+
+        if( info.xFontName.IsEmpty() )
+            font.GetInternalFont();
+        gtk_font_selection_dialog_set_font_name(sel, wxConvCurrent->cWX2MB(info.xFontName.GetData()));
+    }
 }
 
 wxFontDialog::~wxFontDialog()

@@ -95,7 +95,8 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
                                     bool underlined,
                                     const wxString& facename,
                                     const wxString& xregistry,
-                                    const wxString& xencoding);
+                                    const wxString& xencoding,
+                                    wxString* xFontName);
 
 // ============================================================================
 // implementation
@@ -240,7 +241,8 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
                                     int weight,
                                     bool underlined,
                                     const wxString &facename,
-                                    wxFontEncoding encoding)
+                                    wxFontEncoding encoding,
+                                    wxString* xFontName)
 {
     if ( encoding == wxFONTENCODING_DEFAULT )
     {
@@ -274,9 +276,17 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
     }
     
     // OK, we have the correct xregistry/xencoding in info structure
-    wxNativeFont font = wxLoadQueryFont( pointSize, family, style, weight,
+    wxNativeFont font = 0;
+
+    // if we already have the X font name, try to use it
+    if( xFontName && !xFontName->IsEmpty() )
+        font = wxLoadFont(*xFontName);
+
+    if( !font )
+        font = wxLoadQueryFont( pointSize, family, style, weight,
                                          underlined, facename,
-                                         info.xregistry, info.xencoding );
+                                info.xregistry, info.xencoding,
+                                xFontName );
 
     if ( !font )
     {
@@ -290,14 +300,16 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
         for ( i = pointSize - 10; !font && i >= 10 && i >= min_size; i -= 10 )
         {
             font = wxLoadQueryFont(i, family, style, weight, underlined,
-                                   facename, info.xregistry, info.xencoding);
+                                   facename, info.xregistry, info.xencoding,
+                                   xFontName);
         }
 
         // Search for larger size (approx.)
         for ( i = pointSize + 10; !font && i <= max_size; i += 10 )
         {
             font = wxLoadQueryFont(i, family, style, weight, underlined,
-                                   facename, info.xregistry, info.xencoding);
+                                   facename, info.xregistry, info.xencoding,
+                                   xFontName);
         }
 
         // Try default family
@@ -305,7 +317,8 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
         {
             font = wxLoadQueryFont(pointSize, wxDEFAULT, style, weight,
                                    underlined, facename,
-                                   info.xregistry, info.xencoding );
+                                   info.xregistry, info.xencoding,
+                                   xFontName );
         }
 
         // Bogus font I
@@ -313,7 +326,8 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
         {
             font = wxLoadQueryFont(120, wxDEFAULT, wxNORMAL, wxNORMAL,
                                    underlined, facename,
-                                   info.xregistry, info.xencoding);
+                                   info.xregistry, info.xencoding,
+                                   xFontName);
         }
 
         // Bogus font II
@@ -321,7 +335,8 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
         {
             font = wxLoadQueryFont(120, wxDEFAULT, wxNORMAL, wxNORMAL,
                                    underlined, wxEmptyString,
-                                   info.xregistry, info.xencoding);
+                                   info.xregistry, info.xencoding,
+                                   xFontName);
         }
     }
 
@@ -371,7 +386,8 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
                                     bool WXUNUSED(underlined),
                                     const wxString& facename,
                                     const wxString& xregistry,
-                                    const wxString& xencoding)
+                                    const wxString& xencoding,
+                                    wxString* xFontName)
 {
     wxString xfamily;
     switch (family)
@@ -544,6 +560,9 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
     fontSpec.Printf(wxT("-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-%s-%s"),
                     xfamily.c_str(), xweight.c_str(), xstyle.c_str(),
                     pointSize, xregistry.c_str(), xencoding.c_str());
+
+    if( xFontName )
+        *xFontName = fontSpec;
 
     return wxLoadFont(fontSpec);
 }

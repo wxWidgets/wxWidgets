@@ -21,12 +21,14 @@
 #endif
 
 // returns the handle of the nearest available font or 0
-extern wxNativeFont wxLoadQueryNearestFont(int pointSize,
-                                           int family,
-                                           int style,
-                                           int weight,
-                                           bool underlined,
-                                           const wxString &facename,
-                                           wxFontEncoding encoding);
+extern wxNativeFont
+wxLoadQueryNearestFont(int pointSize,
+                       int family,
+                       int style,
+                       int weight,
+                       bool underlined,
+                       const wxString &facename,
+                       wxFontEncoding encoding,
+                       wxString* xFontName = (wxString *)NULL);
 
 #endif // _WX_UNIX_FONTUTIL_H_
