@@ -88,7 +88,9 @@ static bool   g_hasDoubleClicked = FALSE;
    after the GDK_BUTTON_RELEASE event after the GDK_2BUTTON_PRESS event */
 
 static gint
-gtk_listbox_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxListBox *listbox )
+gtk_listbox_button_release_callback( GtkWidget * WXUNUSED(widget),
+                                     GdkEventButton * WXUNUSED(gdk_event),
+                                     wxListBox *listbox )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
@@ -127,7 +129,9 @@ gtk_listbox_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_even
 //-----------------------------------------------------------------------------
 
 static gint
-gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxListBox *listbox )
+gtk_listbox_button_press_callback( GtkWidget *widget,
+                                   GdkEventButton *gdk_event,
+                                   wxListBox *listbox )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
@@ -151,7 +155,7 @@ gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event,
         listbox->GetEventHandler()->ProcessEvent( event );
     }
 #endif // wxUSE_CHECKLISTBOX
-    
+
     /* emit wxEVT_COMMAND_LISTBOX_DOUBLECLICKED later */
     g_hasDoubleClicked = (gdk_event->type == GDK_2BUTTON_PRESS);
 
@@ -388,7 +392,7 @@ void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
 
         return;
     }
-    
+
     wxArrayString deletedLabels;
     wxArrayPtrVoid deletedData;
     wxArrayInt deletedChecks;   // only for check list boxes
@@ -406,7 +410,7 @@ void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
         // save data
         void *clientData = NULL;
         wxNode *node = NULL;
-       
+
         if ( n < (int)m_clientObjectList.GetCount() )
             node = m_clientObjectList.Nth( n );
 
@@ -419,7 +423,7 @@ void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
         if ( !clientData )
         {
             if ( n < (int)m_clientDataList.GetCount() )
-                node = m_clientDataList.Nth( n );        
+                node = m_clientDataList.Nth( n );
 
             if ( node )
             {
@@ -517,7 +521,7 @@ void wxListBox::AppendCommon( const wxString &item )
     {
         gtk_widget_realize( list_item );
         gtk_widget_realize( GTK_BIN(list_item)->child );
-	
+
         //if (m_widgetStyle) ApplyWidgetStyle();
         if (m_widgetStyle) {
             // Apply current widget style to the new list_item
@@ -658,7 +662,7 @@ void wxListBox::Deselect( int n )
     DisableEvents();
 
     gtk_list_unselect_item( m_list, n );
-    
+
     EnableEvents();
 }
 
@@ -746,7 +750,7 @@ wxString wxListBox::GetString( int n ) const
 
         return str;
     }
-    
+
     wxFAIL_MSG(_T("wrong listbox index"));
 
     return _T("");
@@ -824,7 +828,7 @@ void wxListBox::SetSelection( int n, bool select )
         gtk_list_select_item( m_list, n );
     else
         gtk_list_unselect_item( m_list, n );
-	
+
     EnableEvents();
 }
 
@@ -948,7 +952,7 @@ void wxListBox::EnableEvents()
         if (HasFlag(wxLB_MULTIPLE))
             gtk_signal_connect( GTK_OBJECT(child->data), "deselect",
               GTK_SIGNAL_FUNC(gtk_listitem_deselect_callback), (gpointer)this );
-	  
+
         child = child->next;
     }
 }

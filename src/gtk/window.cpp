@@ -146,7 +146,7 @@ static guint32 gs_timeLastClick = 0;
 
 static gint gtk_debug_focus_in_callback( GtkWidget *WXUNUSED(widget),
                                          GdkEvent *WXUNUSED(event),
-                                         const wxChar *name )
+                                         const wxChar *WXUNUSED(name) )
 {
 /*
     static bool s_done = FALSE;
@@ -2268,7 +2268,9 @@ void wxWindow::DoSetClientSize( int width, int height )
             if (HasScrolling())
             {
                 GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
+#if 0 // unused - if this is ok, just remove this line (VZ)
                 GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
+#endif // 0
 
                 GtkWidget *viewport = scroll_window->viewport;
                 GtkStyleClass *viewport_class = viewport->style->klass;
@@ -2334,7 +2336,9 @@ void wxWindow::DoGetClientSize( int *width, int *height ) const
         {
             if (HasScrolling())
             {
+#if 0 // unused - if this is ok, just remove this line (VZ)
                 GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
+#endif // 0
                 GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
 
                 GtkWidget *viewport = scroll_window->viewport;

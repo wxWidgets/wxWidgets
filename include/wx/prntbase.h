@@ -243,8 +243,8 @@ public:
     void OnWindowClose(wxCommandEvent& event);
     void OnNext();
     void OnPrevious();
-    void OnNextButton(wxCommandEvent &event) { OnNext(); }
-    void OnPreviousButton(wxCommandEvent &event) { OnPrevious(); }
+    void OnNextButton(wxCommandEvent & WXUNUSED(event)) { OnNext(); }
+    void OnPreviousButton(wxCommandEvent & WXUNUSED(event)) { OnPrevious(); }
     void OnChar(wxKeyEvent &event);
     void OnZoom(wxCommandEvent& event);
     void OnPaint(wxPaintEvent& event);
