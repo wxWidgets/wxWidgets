@@ -206,7 +206,7 @@ MyFrame::AddSampleText(wxLayoutList *llist)
    llist->Insert("And here the source for the test program:");
    llist->LineBreak();
    llist->Insert("And here the source for the test program:");
-#if 0
+
    char buffer[1024];
    FILE *in = fopen("wxLayout.cpp","r");
    if(in)
@@ -219,7 +219,7 @@ MyFrame::AddSampleText(wxLayoutList *llist)
          wxLayoutImportText(llist, buffer);
       }
    }
-#endif
+
    llist->MoveCursorTo(wxPoint(0,0));
    m_lwin->SetDirty();
    m_lwin->Refresh();
@@ -331,6 +331,8 @@ void MyFrame::OnCommand( wxCommandEvent &event )
                          "This is a text\n"
                          "with embedded line\n"
                          "breaks.\n");
+      m_lwin->SetDirty();
+      m_lwin->Refresh();
       break;
 
    case ID_URL_TEST:

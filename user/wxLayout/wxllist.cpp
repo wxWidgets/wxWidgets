@@ -14,11 +14,11 @@
   Draw()   just draws them with the current settings, without
            re-layout()ing them again
 
-  Each line has its own wxLayoutStyleInfo structure which gets updated 
-  from within Layout(). Thanks to this, we don't need to re-layout all 
+  Each line has its own wxLayoutStyleInfo structure which gets updated
+  from within Layout(). Thanks to this, we don't need to re-layout all
   lines if we want to draw one, but can just use its styleinfo to set
   the right font.
-  
+
  */
 
 #ifdef __GNUG__
@@ -98,9 +98,16 @@
 #define WXLO_CURSORCHAR   "E"
 /** @name Helper functions */
 //@{
+/// allows me to compare to wxPoints
+bool operator <=(wxPoint const &p1, wxPoint const &p2)
+{
+   return p1.y < p2.y || (p1.y == p2.y && p1.x <= p2.x);
+}
+
 /*
   The following STAY HERE until we have a working wxGTK again!!!
 */
+#ifdef __WXGTK__
 /// allows me to compare to wxPoints
 bool operator ==(wxPoint const &p1, wxPoint const &p2)
 {
@@ -119,11 +126,12 @@ wxPoint & operator += (wxPoint &p1, wxPoint const &p2)
    p1.y += p2.y;
    return p1;
 }
+#endif // wxGTK
 
 /// allows me to compare to wxPoints
-bool operator <=(wxPoint const &p1, wxPoint const &p2)
+bool operator>(wxPoint const &p1, wxPoint const &p2)
 {
-   return p1.y < p2.y || (p1.y == p2.y && p1.x <= p2.x);
+   return !(p1 <= p2);
 }
 
 /// grows a wxRect so that it includes the given point
@@ -251,12 +259,14 @@ wxLayoutObjectText::Draw(wxDC &dc, wxPoint const &coords,
                          wxLayoutList *wxllist,
                          CoordType begin, CoordType end)
 {
-   if( end <= 0)
+   if( end <= 0 )
+   {
+      // draw the whole object normally
       dc.DrawText(m_Text, coords.x, coords.y-m_Top);
+   }
    else
    {
       // highlight the bit between begin and len
-      wxString str;
       CoordType
          xpos = coords.x,
          ypos = coords.y-m_Top;
@@ -266,7 +276,7 @@ wxLayoutObjectText::Draw(wxDC &dc, wxPoint const &coords,
       if( end > (signed)m_Text.Length() )
          end = m_Text.Length();
 
-      str = m_Text.Mid(0, begin);
+      wxString str = m_Text.Mid(0, begin);
       dc.DrawText(str, xpos, ypos);
       dc.GetTextExtent(str, &width, &height, &descent);
       xpos += width;
@@ -799,7 +809,7 @@ wxLayoutLine::Insert(CoordType xpos, wxLayoutObject *obj)
    // to update their styleinfo structure.
    if(obj->GetType() == WXLO_TYPE_CMD)
       MarkNextDirty(-1);
-   
+
    CoordType offset;
    wxLOiterator i = FindObject(xpos, &offset);
    if(i == NULLIT)
@@ -1056,7 +1066,7 @@ wxLayoutLine::Draw(wxDC &dc,
 }
 
 /*
-  This function does all the recalculation, that is, it should only be 
+  This function does all the recalculation, that is, it should only be
   called from within wxLayoutList::Layout(), as it uses the current
   list's styleinfo and updates it.
 */
@@ -2079,7 +2089,6 @@ wxLayoutList::UpdateCursorScreenPos(wxDC &dc,
                                     bool resetCursorMovedFlag,
                                     const wxPoint& translate)
 {
-   return;
    wxCHECK_RET( m_CursorLine, "no cursor line" );
 
    if ( m_movedCursor )
@@ -2092,7 +2101,7 @@ wxLayoutList::UpdateCursorScreenPos(wxDC &dc,
                            m_CursorPos.x,
                            /* suppress update */ true);
       ApplyStyle(SiBackup, dc); // restore it
-      
+
       if ( resetCursorMovedFlag )
       {
 #ifdef WXLAYOUT_USE_CARET
@@ -2135,8 +2144,6 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll)
    // This one we always Layout() to get the current cursor
    // coordinates on the screen:
    m_CursorLine->MarkDirty();
-   // FIXME this is completely wrong - we should start by first *visible* line
-   //       (and stop on the last one) instead of looping over all lines!!
    bool wasDirty = false;
    wxLayoutLine *line = m_FirstLine;
    while(line)
@@ -2352,41 +2359,60 @@ wxLayoutList::SetUpdateRect(CoordType x, CoordType y)
 }
 
 void
-wxLayoutList::StartSelection(wxPoint cpos)
+wxLayoutList::StartSelection(const wxPoint& cposOrig, const wxPoint& spos)
 {
-   if(cpos.x == -1)
+   wxPoint cpos(cposOrig);
+   if ( cpos.x == -1 )
       cpos = m_CursorPos;
    WXLO_DEBUG(("Starting selection at %ld/%ld", cpos.x, cpos.y));
    m_Selection.m_CursorA = cpos;
    m_Selection.m_CursorB = cpos;
+   m_Selection.m_ScreenA = spos;
+   m_Selection.m_ScreenB = spos;
    m_Selection.m_selecting = true;
    m_Selection.m_valid = false;
 }
 
 void
-wxLayoutList::ContinueSelection(wxPoint cpos)
+wxLayoutList::ContinueSelection(const wxPoint& cposOrig, const wxPoint& spos)
 {
+   wxPoint cpos(cposOrig);
    if(cpos.x == -1)
       cpos = m_CursorPos;
+
    wxASSERT(m_Selection.m_selecting == true);
    wxASSERT(m_Selection.m_valid == false);
    WXLO_DEBUG(("Continuing selection at %ld/%ld", cpos.x, cpos.y));
-   if(m_Selection.m_CursorB <= cpos)
-      m_Selection.m_CursorB = cpos;
-   else
-      m_Selection.m_CursorA = cpos;
-   // We always want m_CursorA <= m_CursorB!
-   if(! (m_Selection.m_CursorA <= m_Selection.m_CursorB))
+
+   if ( m_Selection.m_CursorB <= cpos )
    {
+      m_Selection.m_ScreenB = spos;
+      m_Selection.m_CursorB = cpos;
+   }
+   else
+   {
+      m_Selection.m_ScreenA = spos;
+      m_Selection.m_CursorA = cpos;
+   }
+
+   // we always want m_CursorA <= m_CursorB!
+   if( m_Selection.m_CursorA > m_Selection.m_CursorB )
+   {
+      // exchange the start/end points
       wxPoint help = m_Selection.m_CursorB;
       m_Selection.m_CursorB = m_Selection.m_CursorA;
       m_Selection.m_CursorA = help;
+
+      help = m_Selection.m_ScreenB;
+      m_Selection.m_ScreenB = m_Selection.m_ScreenA;
+      m_Selection.m_ScreenA = help;
    }
 }
 
 void
-wxLayoutList::EndSelection(wxPoint cpos)
+wxLayoutList::EndSelection(const wxPoint& cposOrig, const wxPoint& spos)
 {
+   wxPoint cpos(cposOrig);
    if(cpos.x == -1)
       cpos = m_CursorPos;
    ContinueSelection(cpos);
@@ -2395,6 +2421,27 @@ wxLayoutList::EndSelection(wxPoint cpos)
    m_Selection.m_valid = true;
 }
 
+void
+wxLayoutList::DiscardSelection()
+{
+   if ( !HasSelection() )
+      return;
+
+   m_Selection.m_valid =
+   m_Selection.m_selecting = false;
+
+   // invalidate the area which was previousle selected - and which is not
+   // selected any more
+   if ( m_Selection.HasValidScreenCoords() )
+   {
+      SetUpdateRect(m_Selection.m_ScreenA);
+      SetUpdateRect(m_Selection.m_ScreenB);
+   }
+   else
+   {
+       // TODO
+   }
+}
 
 bool
 wxLayoutList::IsSelecting(void)
@@ -2405,10 +2452,10 @@ wxLayoutList::IsSelecting(void)
 bool
 wxLayoutList::IsSelected(const wxPoint &cursor)
 {
-   if(! m_Selection.m_valid && ! m_Selection.m_selecting)
+   if ( !HasSelection() )
       return false;
-   return m_Selection.m_CursorA <= cursor
-      && cursor <= m_Selection.m_CursorB;
+
+   return m_Selection.m_CursorA <= cursor && cursor <= m_Selection.m_CursorB;
 }
 
 

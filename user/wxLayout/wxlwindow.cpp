@@ -101,11 +101,17 @@ END_EVENT_TABLE()
 // ===========================================================================
 
 /* LEAVE IT HERE UNTIL WXGTK WORKS AGAIN!!! */
+#ifdef __WXGTK__
 /// allows me to compare to wxPoints
 static bool operator != (wxPoint const &p1, wxPoint const &p2)
 {
    return p1.x != p2.x || p1.y != p2.y;
 }
+#endif // __WXGTK__
+
+#ifndef wxWANTS_CHARS
+   #define wxWANTS_CHARS 0
+#endif
 
 // ----------------------------------------------------------------------------
 // wxLayoutWindow
@@ -115,9 +121,8 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
               : wxScrolledWindow(parent, -1,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxHSCROLL | wxVSCROLL |
-                                 wxBORDER
-                                 //FIXME |wxWANTS_CHARS
-                 )
+                                 wxBORDER |
+                                 wxWANTS_CHARS)
 {
    SetStatusBar(NULL); // don't use statusbar
    m_Editable = false;
@@ -240,30 +245,40 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
       {
          if(! m_Selecting)
          {
-            m_llist->StartSelection();
+            m_llist->StartSelection(wxPoint(-1, -1), m_ClickPosition);
             m_Selecting = true;
-            DoPaint(FALSE);
+            DoPaint();  // TODO: we don't have to redraw everything!
          }
          else
          {
-            m_llist->ContinueSelection(cursorPos);
-            DoPaint(FALSE);
+            m_llist->ContinueSelection(cursorPos, m_ClickPosition);
+            DoPaint();  // TODO: we don't have to redraw everything!
          }
       }
       if(m_Selecting && ! event.LeftIsDown())
       {
-         m_llist->EndSelection(cursorPos);
+         m_llist->EndSelection(cursorPos, m_ClickPosition);
          m_Selecting = false;
-         DoPaint(FALSE);
+         DoPaint();     // TODO: we don't have to redraw everything!
       }
-      if(u) u->DecRef();
-      return;
-   }
 
-   // always move cursor to mouse click:
-   if(eventId == WXLOWIN_MENU_LCLICK)
+      if ( u )
+      {
+         u->DecRef();
+         u = NULL;
+      }
+   }
+   else if(eventId == WXLOWIN_MENU_LCLICK)
    {
+      // always move cursor to mouse click:
       m_llist->MoveCursorTo(cursorPos);
+
+      // clicking a mouse removes the selection
+      if ( m_llist->HasSelection() )
+      {
+         m_llist->DiscardSelection();
+         DoPaint();     // TODO: we don't have to redraw everything!
+      }
 
       // Calculate where the top of the visible area is:
       int x0, y0;
@@ -285,35 +300,35 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 #endif // 0
 
 #ifdef __WXGTK__
-      DoPaint(FALSE); // DoPaint suppresses flicker under GTK
+      DoPaint(); // DoPaint suppresses flicker under GTK
 #endif // wxGTK
    }
 
-   if(!m_doSendEvents) // nothing to do
+   // notify about mouse events?
+   if( m_doSendEvents )
    {
-      if(u) u->DecRef();
-      return;
+      // only do the menu if activated, editable and not on a clickable object
+      if(eventId == WXLOWIN_MENU_RCLICK
+         && IsEditable()
+         && (! obj || u == NULL))
+      {
+         PopupMenu(m_PopupMenu, m_ClickPosition.x, m_ClickPosition.y);
+         if(u) u->DecRef();
+         return;
+      }
+
+      // find the object at this position
+      if(obj)
+      {
+         wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, eventId);
+         commandEvent.SetEventObject( this );
+         commandEvent.SetClientData((char *)obj);
+         GetEventHandler()->ProcessEvent(commandEvent);
+      }
    }
 
-   // only do the menu if activated, editable and not on a clickable object
-   if(eventId == WXLOWIN_MENU_RCLICK
-      && IsEditable()
-      && (! obj || u == NULL))
-   {
-      PopupMenu(m_PopupMenu, m_ClickPosition.x, m_ClickPosition.y);
-      if(u) u->DecRef();
-      return;
-   }
-
-   if(u) u->DecRef();
-   // find the object at this position
-   if(obj)
-   {
-      wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, eventId);
-      commandEvent.SetEventObject( this );
-      commandEvent.SetClientData((char *)obj);
-      GetEventHandler()->ProcessEvent(commandEvent);
-   }
+   if( u )
+      u->DecRef();
 }
 
 /*
@@ -669,9 +684,9 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    m_memDC->SetPen(wxPen(m_llist->GetDefaultStyleInfo().GetBGColour(),
                          0,wxTRANSPARENT));
    m_memDC->SetLogicalFunction(wxCOPY);
+   m_memDC->Clear();
 
-   /* Either fill the background with the background bitmap, or clear
-      it. */
+   // fill the background with the background bitmap
    if(m_BGbitmap)
    {
       CoordType
@@ -683,15 +698,8 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
             m_memDC->DrawBitmap(*m_BGbitmap, x, y);
       m_memDC->SetBackgroundMode(wxTRANSPARENT);
    }
-   else
-   {
-      // clear the background: (must not be done if we use the update rectangle!)
-      m_memDC->SetBackgroundMode(wxSOLID);
-      m_memDC->DrawRectangle(0,0,x1, y1);
-   }
 
-   m_memDC->Clear();
-   /* This is the important bit: we tell the list to draw itself: */
+   // This is the important bit: we tell the list to draw itself
 #if WXLO_DEBUG_URECT
    if(updateRect)
    {

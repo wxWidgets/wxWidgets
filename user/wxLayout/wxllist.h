@@ -1025,15 +1025,24 @@ public:
       }
    //@}
 
-   /// Begin selecting text.
-   void StartSelection(wxPoint cpos = wxPoint(-1,-1));
+   /// Begin selecting text
+   void StartSelection(const wxPoint& cpos = wxPoint(-1,-1),
+                       const wxPoint& spos = wxPoint(-1,-1));
    // Continue selecting text
-   void ContinueSelection(wxPoint cpos = wxPoint(-1,-1));
+   void ContinueSelection(const wxPoint& cpos = wxPoint(-1,-1),
+                          const wxPoint& spos = wxPoint(-1,-1));
    /// End selecting text.
-   void EndSelection(wxPoint cpos = wxPoint(-1,-1));
+   void EndSelection(const wxPoint& cpos = wxPoint(-1,-1),
+                     const wxPoint& spos = wxPoint(-1,-1));
+   /// Discard the current selection
+   void DiscardSelection();
    /// Are we still selecting text?
    bool IsSelecting(void);
+   /// Is the given point (text coords) selected?
    bool IsSelected(const wxPoint &cursor);
+   /// Do we have a non null selection?
+   bool HasSelection() const
+      { return m_Selection.m_valid || m_Selection.m_selecting; }
 
    /** Return the selection as a wxLayoutList.
        @param invalidate if true, the selection will be invalidated after this and can no longer be used.
@@ -1066,6 +1075,7 @@ public:
 #ifdef WXLAYOUT_DEBUG
    void Debug(void);
 #endif
+
 private:
    /// Clear the list.
    void InternalClear(void);
@@ -1094,12 +1104,22 @@ private:
 #endif // WXLAYOUT_USE_CARET
    //@}
 
-   /// A structure for the selection.
+   /// selection.state and begin/end coordinates
    struct Selection
    {
       Selection() { m_valid = false; m_selecting = false; }
       bool m_valid;
       bool m_selecting;
+
+      // returns true if we already have the screen coordinates of the
+      // selection start and end
+      bool HasValidScreenCoords() const
+          { return m_ScreenA.x != -1 && m_ScreenB.x != -1; }
+
+      // the start and end of the selection coordinates in pixels
+      wxPoint m_ScreenA, m_ScreenB;
+
+      // these coordinates are in text positions, not in pixels
       wxPoint m_CursorA, m_CursorB;
    } m_Selection;
    /** @name Font parameters. */

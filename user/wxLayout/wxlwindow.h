@@ -89,7 +89,7 @@ public:
    inline int SetCursorVisibility(int visibility = -1)
       { int v =m_CursorVisibility;
       m_CursorVisibility = visibility; return v;}
-   
+
    /// Pastes text from clipboard.
    void Paste(void);
    /** Copies selection to clipboard.
@@ -102,14 +102,14 @@ public:
 
    bool Find(const wxString &needle,
              wxPoint * fromWhere = NULL);
-   
+
    void EnablePopup(bool enable = true) { m_DoPopupMenu = enable; }
 
    /** Sets the wrap margin.
        @param margin set this to 0 to disable it
    */
    void SetWrapMargin(CoordType margin) { m_WrapMargin = margin; }
-   
+
    /** Redraws the window.
        Internally, this stores the parameter and calls a refresh on
        wxMSW, draws directly on wxGTK.
@@ -172,7 +172,8 @@ public:
          m_StatusBar = bar; m_StatusFieldLabel = labelfield;
          m_StatusFieldCursor = cursorfield;
       }
-protected:   
+
+protected:
    /// generic function for mouse events processing
    void OnMouse(int eventId, wxMouseEvent& event);
    /// as the name says
