@@ -2,8 +2,13 @@
 Installing wxWindows 2.3
 ------------------------
 
-This is wxWindows 2.3 for Microsoft Windows 3.1, 95, 98 and
-Windows NT/Windows 2000. This is an unstable development release.
+This is wxWindows 2.3 for Microsoft Windows 9x/ME, Windows NT,
+Windows 2000 and Windows XP. This is an unstable development release.
+
+Please note that the library naming conventions for VC++
+compilation have changed between 2.3.1 and 2.3.2. This means that
+you will need to change your application project files. See the
+relevant section below for details.
 
 IMPORTANT NOTE: If you experience problems installing, please
 re-read this instructions and other related files (changes.txt,
@@ -53,8 +58,8 @@ For Cygwin or Mingw32 compilation, make sure WXWIN contains only
 forward slashes.
 
 If installing from the CVS server, copy include/wx/msw/setup0.h to
-include/wx/msw/setup.h and edit the resulting file to choose the featrues you
-would like to compile wxWindows with[out].
+include/wx/msw/setup.h and edit the resulting file to choose
+the features you would like to compile wxWindows with[out].
 
 Compilation
 -----------
@@ -62,27 +67,35 @@ Compilation
 The following sections explain how to compile wxWindows with each supported
 compiler.
 
-Visual C++ 4.0/5.0/6.0 compilation
-----------------------------------
+Visual C++ 6.0 compilation
+---------------------------
 
-Using project files (VC++ 5 and 6 only):
+Using project files (VC++ 6 only):
 
-1. Unarchive wxWindows-x.y.z-vc.zip, the VC++ 5/6 project
+1. Unarchive wxWindows-x.y.z-vc.zip, the VC++ 6 project
    makefiles (already included in wxMSW-x.y.z.zip and the setup version).
-2. Open src/wxvc.dsp, set Debug or Release configuration for
-   the wxvc project, and compile. Alternatively, use Batch Build
-   to build both Debug and Release configurations.
-   This will produce lib/wx.lib (release) and lib/wxd.lib (debug),
-   plus various subordinate libraries. It assumes you have
-   the TIFF and JPEG source, which is already in the setup
-   version of the distribution.
-   The project file src/wxvc_dll.dsp will make a DLL version of wxWindow,
-   which will go in lib/wxdll.[lib,dll] and lib/wxdlld.[lib,dll].
+2. Open src/wxWindows.dsp, which has configurations for static
+   compilation or DLL compilation, and each of these available in
+   Unicode/ANSI and Debug/Release variations. Normally you'll use
+   a static linking ANSI configuration. Choose the Win32 Debug or
+   Win32 Release configuration for the wxWindows project, and compile.
+   Alternatively, use Batch Build to build more than one
+   configuration.
+   The following libraries will be produced depending on chosen
+   configuration:
+
+   wxmsw.lib     wxmswd.lib      ; ANSI Release/Debug
+   wxmswu.lib    wxmswud.lib     ; UNICODE Release/Debug
+   wxmsw23x.lib  wxmsw23xd.lib   ; ANSI DLL Release/Debug
+   wxmsw23xu.lib wxmsw23xud.lib  ; UNICODE DLL Release/Debug
+
+   It will also produce similar variations on jpeg.lib, png.lib,
+   tiff.lib, zlib.lib, and regex.lib.
 3. Open a sample project file, choose a configuration such as
-   Debug using Build | Set Active Configuration..., and compile.
+   Win32 Debug using Build | Set Active Configuration..., and compile.
    The project files don't use precompiled headers, to save disk
    space, but you can switch PCH compiling on for greater speed.
-   NOTE: you may also use samples/SamplesVC.dsw to access all
+   NOTE: you may also use samples/samples.dsw to access all
    sample projects without opening each workspace individually.
    You can use the Batch Build facility to make several samples
    at a time.
@@ -104,8 +117,7 @@ Using makefiles:
   'nmake -f makefile.vc cleanall FINAL=1'
   'nmake -f makefile.vc FINAL=1'
 
-   to make the wxWindows core library without debug information
-   (wx\lib\wx.lib).
+   to make the wxWindows core library without debug information.
 4. Change directory to wx\samples and type 'nmake -f makefile.vc'
    to make all the samples. You can also make them individually.
 
@@ -133,11 +145,7 @@ To build the DLL version using makefiles:
 1. Change directory to wx\src\msw. Type 'nmake -f makefile.vc dll pch'
    to make both a suitable DLL and import library, and to build a
    suitable precompiled header file for compiling applications.
-   The resulting libraries are called:
-
-      wx\lib\wx[version].lib(dll) (debug version)
-      wx\lib\wx[version].lib(dll) (release version, using FINAL=1)
-
+   See the previous section for library names.
 2. Invoke a sample makefile with 'nmake -f makefile.vc WXUSINGDLL=1'
    (or edit src\makeprog.vc to set WXUSINGDLL to 1 for all
    applications).
@@ -165,18 +173,6 @@ optimized. For example, in wxWindows project, set to 'Minimum
 Size'. In Dialog Editor project, set to 'Customize: Favor Small
 Code' (and no others). This will then work.
 
-Similarly, in VC++ 4, optimization can cause internal compiler
-errors, so edit src\makevc.env and change /O1 to /Od before
-trying build a release version of the library. Or, type:
-
-nmake -f makefile.vc noopt FINAL=1
-
-and then resume compilation in the normal way. This will build
-troublesome files with no optimization. However, there now seems to be
-an internal linker error using VC++ 4, in addition to internal
-compiler errors for most of the samples, so this version of the compiler
-cannot be recommended!
-
 Note (4): some crash problems can be due to inconsistent compiler
 options. If strange/weird/impossible things start to happen please
 check (dumping IDE project file as makefile and doing text comparison
@@ -184,12 +180,7 @@ if necessary) that the project settings, especially the list of defined
 symbols, struct packing, etc. are exactly the same for all items in
 the project. After this, delete everything (including PCH) and recompile.
 
-Note (5): for some further notes about upgrading your project
-files to be compatible with wxWindows 2.1.14, please see
-"Highlights of wxWindows" from the Download page of the
-web site or CD-ROM.
-
-Note (6): to create your own IDE files, see the technical note on the
+Note (5): to create your own IDE files, see the technical note on the
 wxWindows web site or CD-ROM, entitled "Compiling wxWindows
 applications in the VC++ IDE" (technical note docs/tech/tn0010.htm in the
 wxWindows distribution). You can also copy .dsp and .dsw
@@ -197,6 +188,9 @@ files from an existing wxWindows sample and adapt them.
 
 Visual C++ 1.5 compilation (16-bit)
 -----------------------------------
+
+NOTE: this has not been tested recently and probably doesn't
+work.
 
 1. Make sure your WXWIN variable is set, and uses the FAT (short
    name) form.
@@ -216,6 +210,8 @@ Borland C++ 4.5/5.0 compilation
 
 Compiling using the makefiles:
 
+0. If downloading from CVS, copy include\wx\msw\setup0.h to
+   include\wx\setup.h.
 1. Make sure your WXWIN variable is set, and uses the FAT (short
    name) form if doing a 16-bit compile.
 2. Change directory to wx\src\msw. Type 'make -f makefile.b32' to
