@@ -1183,7 +1183,7 @@ void MyFrame::OnFileSave(wxCommandEvent& event)
         wxLogStatus(this,
                     _T("Successfully saved file (text len = %lu, file size = %ld)"),
                     (unsigned long)m_panel->m_textrich->GetValue().length(),
-                    file.Length());
+                    (long) file.Length());
 #endif
     }
     else

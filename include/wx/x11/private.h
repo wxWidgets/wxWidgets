@@ -58,7 +58,7 @@ extern bool wxAddClientWindowToTable(Window w, wxWindow *win);
 // TranslateXXXEvent() functions - translate X event to wxWindow one
 // ----------------------------------------------------------------------------
 extern bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, XEvent *xevent);
-extern bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window window, XEvent *xevent);
+extern bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window window, XEvent *xevent, bool isAscii = FALSE);
 
 extern Window wxGetWindowParent(Window window);
 

@@ -593,6 +593,9 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 return TRUE;
 
             keyEvent.SetEventType(wxEVT_CHAR);
+            // Do the translation again, retaining the ASCII
+            // code.
+            wxTranslateKeyEvent(keyEvent, win, window, event, TRUE);
             if (win->GetEventHandler()->ProcessEvent( keyEvent ))
                 return TRUE;
 

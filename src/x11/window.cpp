@@ -1514,7 +1514,7 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
     return FALSE;
 }
 
-bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win), XEvent *xevent)
+bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win), XEvent *xevent, bool isAscii)
 {
     switch (XEventGetType(xevent))
     {
@@ -1527,8 +1527,10 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
             (void) XLookupString ((XKeyEvent *) xevent, buf, 20, &keySym, NULL);
             int id = wxCharCodeXToWX (keySym);
             // id may be WXK_xxx code - these are outside ASCII range, so we
-            // can't just use toupper() on id
-            if (id >= 'a' && id <= 'z')
+            // can't just use toupper() on id.
+            // Only change this if we want the raw key that was pressed,
+            // and don't change it if we want an ASCII value.
+            if (!isAscii && (id >= 'a' && id <= 'z'))
             {
                 id = id + 'A' - 'a';
             }
