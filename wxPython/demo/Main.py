@@ -398,8 +398,7 @@ try:
             # The rest remains unchanged.
 
             # Line numbers in margin
-            self.StyleSetSpec(wx.stc.STC_STYLE_LINENUMBER,'fore:#000000,back:#99A9C2')
-    
+            self.StyleSetSpec(wx.stc.STC_STYLE_LINENUMBER,'fore:#000000,back:#99A9C2')    
             # Highlighted brace
             self.StyleSetSpec(wx.stc.STC_STYLE_BRACELIGHT,'fore:#00009D,back:#FFFF00')
             # Unmatched brace
@@ -1050,8 +1049,6 @@ class wxPythonDemo(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(wx.EVT_ICONIZE, self.OnIconfiy)
         self.Bind(wx.EVT_MAXIMIZE, self.OnMaximize)
-        self.Bind(wx.EVT_ACTIVATE, self.OnActivate)
-        wx.GetApp().Bind(wx.EVT_ACTIVATE_APP, self.OnAppActivate)
 
         self.Centre(wx.BOTH)
         self.CreateStatusBar(1, wx.ST_SIZEGRIP)
@@ -1204,6 +1201,9 @@ class wxPythonDemo(wx.Frame):
         #wx.Log_SetActiveTarget(wx.LogStderr())
         #wx.Log_SetTraceMask(wx.TraceMessages)
 
+
+        self.Bind(wx.EVT_ACTIVATE, self.OnActivate)
+        wx.GetApp().Bind(wx.EVT_ACTIVATE_APP, self.OnAppActivate)
 
         # add the windows to the splitter and split it.
         splitter2.SplitHorizontally(self.nb, self.log, -160)
