@@ -391,9 +391,9 @@ void wxWindowMac::DoScreenToClient(int *x, int *y) const
 
     MacRootWindowToWindow( x , y ) ;
     if ( x )
-            x -= MacGetLeftBorderSize() ;
+            *x -= MacGetLeftBorderSize() ;
     if ( y )
-            y -= MacGetTopBorderSize() ;
+            *y -= MacGetTopBorderSize() ;
 }
 
 void wxWindowMac::DoClientToScreen(int *x, int *y) const
@@ -401,9 +401,9 @@ void wxWindowMac::DoClientToScreen(int *x, int *y) const
     WindowRef window = (WindowRef) MacGetRootWindow() ;
 
     if ( x )
-            x += MacGetLeftBorderSize() ;
+            *x += MacGetLeftBorderSize() ;
     if ( y )
-            y += MacGetTopBorderSize() ;
+            *y += MacGetTopBorderSize() ;
 
     MacWindowToRootWindow( x , y ) ;
 
