@@ -16,7 +16,6 @@
 
 %feature("autodoc", "1");  // 0 == no param types, 1 == show param types
 
-
 //---------------------------------------------------------------------------
 // Tell SWIG to wrap all the wrappers with our thread protection by default
 
@@ -63,6 +62,8 @@ typedef unsigned char   byte;
 #define %pythonPrepend  %feature("pythonprepend")
 #define %kwargs         %feature("kwargs")
 #define %nokwargs       %feature("nokwargs")
+#define %noautodoc %feature("noautodoc")
+
 
 //#ifndef %shadow
 //#define %shadow         %insert("shadow")
@@ -309,7 +310,7 @@ typedef unsigned char   byte;
 //---------------------------------------------------------------------------
 // Forward declarations and %renames for some classes, so the autodoc strings
 // will be able to use the right types even when the real class declaration is
-// not in the module being processed.
+// not in the module being processed or seen by %import's.
 
 #ifdef BUILDING_RENAMERS
     #define FORWARD_DECLARE(wxName, Name)
@@ -337,6 +338,7 @@ FORWARD_DECLARE(wxMemoryDC,       MemoryDC);
 FORWARD_DECLARE(wxHtmlTagHandler, HtmlTagHandler);
 FORWARD_DECLARE(wxConfigBase,     ConfigBase);
 FORWARD_DECLARE(wxIcon,           Icon);
+FORWARD_DECLARE(wxStaticBox,      StaticBox);
 
 
 //---------------------------------------------------------------------------

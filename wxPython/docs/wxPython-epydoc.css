@@ -25,7 +25,7 @@ table.rst-table {
 th.rst { 
   border-width: 0px;
   padding: 2px 4px;
-  background: #dddddd;
+  background: #cccccc;
   text-align: left;
   vertical-align: top;
   margin: .25em;
@@ -35,7 +35,7 @@ td.rst {
   border-width: 0px;
   margin: .25em;
   padding: 2px 4px;
-  background: #eeeeee;
+  background: #dddddd;
   vertical-align: top;
 }
 

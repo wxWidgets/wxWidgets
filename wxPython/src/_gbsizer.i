@@ -62,6 +62,12 @@ bool wxGBSpan_helper(PyObject* source, wxGBSpan** obj)
 //---------------------------------------------------------------------------
 %newgroup;
 
+DocStr(wxGBPosition,
+"This class represents the position of an item in a virtual grid of
+rows and columns managed by a `wx.GridBagSizer`.  wxPython has
+typemaps that will automatically convert from a 2-element sequence of
+integers to a wx.GBPosition, so you can use the more pythonic
+representation of the position nearly transparently in Python code.", "");
 
 class wxGBPosition
 {
@@ -120,10 +126,22 @@ public:
 
 
 
+DocStr(wxGBSpan,
+"This class is used to hold the row and column spanning attributes of
+items in a `wx.GridBagSizer`.  wxPython has typemaps that will
+automatically convert from a 2-element sequence of integers to a
+wx.GBSpan, so you can use the more pythonic representation of the span
+nearly transparently in Python code.
+", "");
+
 class wxGBSpan
 {
 public:
-    wxGBSpan(int rowspan=1, int colspan=1);
+    DocCtorStr(
+        wxGBSpan(int rowspan=1, int colspan=1),
+        "Construct a new wxGBSpan, optionally setting the rowspan and
+colspan. The default is (1,1). (Meaning that the item occupies one
+cell in each direction.", "");
 
     int GetRowspan() const;
     int GetColspan() const;
@@ -183,83 +201,182 @@ const wxGBSpan wxDefaultSpan;
 //---------------------------------------------------------------------------
 
 
+DocStr(wxGBSizerItem,
+"The wx.GBSizerItem class is used to track the additional data about
+items in a `wx.GridBagSizer` such as the item's position in the grid
+and how many rows or columns it spans.
+", "");
 class wxGBSizerItem : public wxSizerItem
 {
 public:
-    wxGBSizerItem();
+    DocCtorStr(
+        wxGBSizerItem(),
+        "Constructs an empty wx.GBSizerItem.  Either a window, sizer or spacer
+size will need to be set, as well as a position and span before this
+item can be used in a Sizer.
+
+You will probably never need to create a wx.GBSizerItem directly as they
+are created automatically when the sizer's Add method is called.", "");
+
+    %extend {
+        DocStr(wxGBSizerItem( wxWindow *window, const wxGBPosition& pos,const wxGBSpan& span,int flag,int border,PyObject* userData=NULL ),
+               "Construct a `wx.GBSizerItem` for a window.", "");
+        %name(GBSizerItemWindow) wxGBSizerItem( wxWindow *window,
+                                                const wxGBPosition& pos,
+                                                const wxGBSpan& span,
+                                                int flag,
+                                                int border,
+                                                PyObject* userData=NULL )
+            {
+                wxPyUserData* data = NULL;
+                if ( userData ) {
+                    bool blocked = wxPyBeginBlockThreads();
+                    data = new wxPyUserData(userData);
+                    wxPyEndBlockThreads(blocked);
+                }
+                return new wxGBSizerItem(window, pos, span, flag, border, data);
+            }
+
+
+        DocStr(wxGBSizerItem( wxSizer *sizer,const wxGBPosition& pos,const wxGBSpan& span,int flag,int border,PyObject* userData=NULL ),
+               "Construct a `wx.GBSizerItem` for a sizer", "");
+        %name(GBSizerItemSizer) wxGBSizerItem( wxSizer *sizer,
+                                               const wxGBPosition& pos,
+                                               const wxGBSpan& span,
+                                               int flag,
+                                               int border,
+                                               PyObject* userData=NULL )
+            {
+                wxPyUserData* data = NULL;
+                if ( userData ) {
+                    bool blocked = wxPyBeginBlockThreads();
+                    data = new wxPyUserData(userData);
+                    wxPyEndBlockThreads(blocked);
+                }
+                return new wxGBSizerItem(sizer, pos, span, flag, border, data);
+            }
+
+             
+        DocStr(wxGBSizerItem( int width,int height,const wxGBPosition& pos,const wxGBSpan& span,int flag,int border,PyObject* userData=NULL),
+               "Construct a `wx.GBSizerItem` for a spacer.", "");
+        %name(GBSizerItemSpacer) wxGBSizerItem( int width,
+                                                int height,
+                                                const wxGBPosition& pos,
+                                                const wxGBSpan& span,
+                                                int flag,
+                                                int border,
+                                                PyObject* userData=NULL)
+            {
+                wxPyUserData* data = NULL;
+                if ( userData ) {
+                    bool blocked = wxPyBeginBlockThreads();
+                    data = new wxPyUserData(userData);
+                    wxPyEndBlockThreads(blocked);
+                }
+                return new wxGBSizerItem(width, height, pos, span, flag, border, data);
+            }
+    }
+
     
-    %name(GBSizerItemWindow) wxGBSizerItem( wxWindow *window,
-                   const wxGBPosition& pos,
-                   const wxGBSpan& span,
-                   int flag,
-                   int border,
-                   wxObject* userData );
-
-    %name(GBSizerItemSizer) wxGBSizerItem( wxSizer *sizer,
-                   const wxGBPosition& pos,
-                   const wxGBSpan& span,
-                   int flag,
-                   int border,
-                   wxObject* userData );
-
-    %name(GBSizerItemSpacer) wxGBSizerItem( int width,
-                   int height,
-                   const wxGBPosition& pos,
-                   const wxGBSpan& span,
-                   int flag,
-                   int border,
-                   wxObject* userData);
-
-
-    // Get the grid position of the item
-    wxGBPosition GetPos() const;
+    DocDeclStr(
+        wxGBPosition , GetPos() const,
+        "Get the grid position of the item", "");
+    
     %pythoncode { def GetPosTuple(self): return self.GetPos().Get() }
 
-    // Get the row and column spanning of the item
-    wxGBSpan GetSpan() const;
+    
+   
+    DocDeclStr(
+        wxGBSpan , GetSpan() const,
+        "Get the row and column spanning of the item", "");
+    
     %pythoncode { def GetSpanTuple(self): return self.GetSpan().Get() }
 
-    // If the item is already a member of a sizer then first ensure that there
-    // is no other item that would intersect with this one at the new
-    // position, then set the new position.  Returns True if the change is
-    // successful and after the next Layout the item will be moved.
-    bool SetPos( const wxGBPosition& pos );
-
-    // If the item is already a member of a sizer then first ensure that there
-    // is no other item that would intersect with this one with its new
-    // spanning size, then set the new spanning.  Returns True if the change
-    // is successful and after the next Layout the item will be resized.
-    bool SetSpan( const wxGBSpan& span );
-
-    %nokwargs Intersects;
     
-    // Returns True if this item and the other item instersect
-    bool Intersects(const wxGBSizerItem& other);
+    
+    DocDeclStr(
+        bool , SetPos( const wxGBPosition& pos ),
+        "If the item is already a member of a sizer then first ensure that
+there is no other item that would intersect with this one at the new
+position, then set the new position.  Returns True if the change is
+successful and after the next Layout() the item will be moved.", "");
+    
 
-    // Returns True if the given pos/span would intersect with this item.
-    bool Intersects(const wxGBPosition& pos, const wxGBSpan& span);
-
-    // Get the row and column of the endpoint of this item
-    void GetEndPos(int& row, int& col);
+    DocDeclStr(
+        bool , SetSpan( const wxGBSpan& span ),
+        "If the item is already a member of a sizer then first ensure that
+there is no other item that would intersect with this one with its new
+spanning size, then set the new spanning.  Returns True if the change
+is successful and after the next Layout() the item will be resized.
+", "");
+    
 
     
-    wxGridBagSizer* GetGBSizer() const;
-    void SetGBSizer(wxGridBagSizer* sizer);
+    DocDeclStr(
+        bool , Intersects(const wxGBSizerItem& other),
+        "Returns True if this item and the other item instersect.", "");
+    
+
+    DocDeclStrName(
+        bool , Intersects(const wxGBPosition& pos, const wxGBSpan& span),
+        "Returns True if the given pos/span would intersect with this item.", "",
+        IntersectsPos);
+    
+
+    %extend {
+        DocStr(GetEndPos,
+               "Get the row and column of the endpoint of this item.", "");
+        wxGBPosition GetEndPos() {
+            int row, col;
+            self->GetEndPos(row, col);
+            return wxGBPosition(row, col);
+        }
+    }
+    
+    
+    DocDeclStr(
+        wxGridBagSizer* , GetGBSizer() const,
+        "Get the sizer this item is a member of.", "");
+    
+    DocDeclStr(
+        void , SetGBSizer(wxGridBagSizer* sizer),
+        "Set the sizer this item is a member of.", "");   
     
 };
 
 
 //---------------------------------------------------------------------------
 
+DocStr(wxGridBagSizer,
+"A `wx.Sizer` that can lay out items in a virtual grid like a
+`wx.FlexGridSizer` but in this case explicit positioning of the items
+is allowed using `wx.GBPosition`, and items can optionally span more
+than one row and/or column using `wx.GBSpan`.  The total size of the
+virtual grid is determined by the largest row and column that items are
+positioned at, adjusted for spanning.
+", "");
 
 class wxGridBagSizer : public wxFlexGridSizer
 {
 public:
-    wxGridBagSizer(int vgap = 0, int hgap = 0 );
+    DocCtorStr(
+        wxGridBagSizer(int vgap = 0, int hgap = 0 ),
+        "Constructor, with optional parameters to specify the gap between the
+rows and columns.", "");
 
-    // The Add method returns True if the item was successfully placed at the
-    // given cell position, False if something was already there.
+    
     %extend {
+        DocAStr(Add,
+                "Add(self, item, GBPosition pos, GBSpan span=DefaultSpan, int flag=0,
+int border=0, userData=None)",
+                
+                "Adds an item to the sizer at the grid cell *pos*, optionally spanning
+more than one row or column as specified with *span*.  The remaining
+args behave similarly to `wx.Sizer.Add`.
+
+Returns True if the item was successfully placed at the given cell
+position, False if something was already there.
+", "");
         bool Add( PyObject* item,
                   const wxGBPosition& pos,
                   const wxGBSpan& span = wxDefaultSpan,
@@ -286,78 +403,141 @@ public:
         }
     }
     
-    %name(AddItem) bool Add( wxGBSizerItem *item );
+    DocDeclAStrName(
+        bool , Add( wxGBSizerItem *item ),
+        "Add(self, GBSizerItem item) -> bool",
+        "Add an item to the sizer using a `wx.GBSizerItem`.  Returns True if
+the item was successfully placed at its given cell position, False if
+something was already there.", "",
+        AddItem);
+    
 
+    DocDeclStr(
+        wxSize , GetEmptyCellSize() const,
+        "Get the size used for cells in the grid with no item.", "");
+    
+    DocDeclStr(
+        void , SetEmptyCellSize(const wxSize& sz),
+        "Set the size used for cells in the grid with no item.", "");
+    
 
-    // Get/Set the size used for cells in the grid with no item.
-    wxSize GetEmptyCellSize() const;
-    void SetEmptyCellSize(const wxSize& sz);
-
-    // Get the grid position of the specified item
+    
     %nokwargs GetItemPosition;
+    %noautodoc GetItemPosition;
+    DocStr(GetItemPosition,
+           "GetItemPosition(self, item) -> GBPosition
+
+Get the grid position of the specified *item* where *item* is either a
+window or subsizer that is a member of this sizer, or a zero-based
+index of an item.", "");
     wxGBPosition GetItemPosition(wxWindow *window);
     wxGBPosition GetItemPosition(wxSizer *sizer);
     wxGBPosition GetItemPosition(size_t index);
 
-    // Set the grid position of the specified item.  Returns True on success.
-    // If the move is not allowed (because an item is already there) then
-    // False is returned.
+    
     %nokwargs SetItemPosition;
+    %noautodoc SetItemPosition;
+    DocStr(SetItemPosition,
+           "SetItemPosition(self, item, GBPosition pos) -> bool
+
+Set the grid position of the specified *item* where *item* is either a
+window or subsizer that is a member of this sizer, or a zero-based
+index of an item.  Returns True on success.  If the move is not
+allowed (because an item is already there) then False is returned.
+", "");
     bool SetItemPosition(wxWindow *window, const wxGBPosition& pos);
     bool SetItemPosition(wxSizer *sizer, const wxGBPosition& pos);
     bool SetItemPosition(size_t index, const wxGBPosition& pos);
 
-    // Get the row/col spanning of the specified item
+
+    
     %nokwargs GetItemSpan;
+    %noautodoc GetItemSpan;
+    DocStr(GetItemSpan,
+           "GetItemSpan(self, item) -> GBSpan
+
+Get the row/col spanning of the specified *item* where *item* is
+either a window or subsizer that is a member of this sizer, or a
+zero-based index of an item.", "");
     wxGBSpan GetItemSpan(wxWindow *window);
     wxGBSpan GetItemSpan(wxSizer *sizer);
     wxGBSpan GetItemSpan(size_t index);
 
-    // Set the row/col spanning of the specified item. Returns True on
-    // success.  If the move is not allowed (because an item is already there)
-    // then False is returned.
+
+    
     %nokwargs SetItemSpan;
+    %noautodoc SetItemSpan;
+    DocStr(SetItemSpan,
+            "SetItemSpan(self, item, GBSpan span) -> bool
+
+Set the row/col spanning of the specified *item* where *item* is
+either a window or subsizer that is a member of this sizer, or a
+zero-based index of an item.  Returns True on success.  If the move is
+not allowed (because an item is already there) then False is returned.", "");
     bool SetItemSpan(wxWindow *window, const wxGBSpan& span);
     bool SetItemSpan(wxSizer *sizer, const wxGBSpan& span);
     bool SetItemSpan(size_t index, const wxGBSpan& span);
+
     
 
-    // Find the sizer item for the given window or subsizer, returns NULL if
-    // not found. (non-recursive)
     %nokwargs FindItem;
+    %noautodoc FindItem;
+    DocStr(FindItem,
+            "FindItem(self, item) -> GBSizerItem
+
+Find the sizer item for the given window or subsizer, returns None if
+not found. (non-recursive)", "");
     wxGBSizerItem* FindItem(wxWindow* window);
     wxGBSizerItem* FindItem(wxSizer* sizer);
 
     
-    // Return the sizer item for the given grid cell, or NULL if there is no
-    // item at that position. (non-recursive)
-    wxGBSizerItem* FindItemAtPosition(const wxGBPosition& pos);
+    DocDeclStr(
+        wxGBSizerItem* , FindItemAtPosition(const wxGBPosition& pos),
+        "Return the sizer item for the given grid cell, or None if there is no
+item at that position. (non-recursive)", "");
+    
 
     
-    // Return the sizer item located at the point given in pt, or NULL if
-    // there is no item at that point. The (x,y) coordinates in pt correspond
-    // to the client coordinates of the window using the sizer for
-    // layout. (non-recursive)
-    wxGBSizerItem* FindItemAtPoint(const wxPoint& pt);
+    DocDeclStr(
+        wxGBSizerItem* , FindItemAtPoint(const wxPoint& pt),
+        "Return the sizer item located at the point given in *pt*, or None if
+there is no item at that point. The (x,y) coordinates in pt correspond
+to the client coordinates of the window using the sizer for
+layout. (non-recursive)", "");
+    
 
     
-    // Return the sizer item that has a matching user data (it only compares
-    // pointer values) or NULL if not found. (non-recursive)
-    wxGBSizerItem* FindItemWithData(const wxObject* userData);
-
+//     DocDeclStr(
+//         wxGBSizerItem* , FindItemWithData(const wxObject* userData),
+//         "Return the sizer item that has a matching user data (it only compares
+// pointer values) or None if not found. (non-recursive)", "");
     
-    // These are what make the sizer do size calculations and layout
-    virtual void RecalcSizes();
-    virtual wxSize CalcMin();
-
+    
 
     // Look at all items and see if any intersect (or would overlap) the given
     // item.  Returns True if so, False if there would be no overlap.  If an
     // excludeItem is given then it will not be checked for intersection, for
     // example it may be the item we are checking the position of.
-    %nokwargs CheckForIntersection;
-    bool CheckForIntersection(wxGBSizerItem* item, wxGBSizerItem* excludeItem = NULL);
-    bool CheckForIntersection(const wxGBPosition& pos, const wxGBSpan& span, wxGBSizerItem* excludeItem = NULL);
+
+
+    DocDeclStr(
+        bool , CheckForIntersection(wxGBSizerItem* item, wxGBSizerItem* excludeItem = NULL),
+        "Look at all items and see if any intersect (or would overlap) the
+given *item*.  Returns True if so, False if there would be no overlap.
+If an *excludeItem* is given then it will not be checked for
+intersection, for example it may be the item we are checking the
+position of.
+", "");
+    
+    DocDeclStrName(
+        bool , CheckForIntersection(const wxGBPosition& pos, const wxGBSpan& span, wxGBSizerItem* excludeItem = NULL),
+        "Look at all items and see if any intersect (or would overlap) the
+given position and span.  Returns True if so, False if there would be
+no overlap.  If an *excludeItem* is given then it will not be checked
+for intersection, for example it may be the item we are checking the
+position of.", "",
+        CheckForIntersectionPos);
+    
 
 };
 
