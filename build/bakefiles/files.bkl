@@ -1721,11 +1721,13 @@
     src/cocoa/checkbox.mm
     src/cocoa/checklst.mm
     src/cocoa/choice.mm
+    src/cocoa/clipbrd.mm
     src/cocoa/colour.mm
     src/cocoa/combobox.mm
     src/cocoa/control.mm
     src/cocoa/cursor.mm
     src/cocoa/data.cpp
+    src/cocoa/dataobj.mm
     src/cocoa/dc.mm
     src/cocoa/dcclient.mm
     src/cocoa/dcmemory.mm
@@ -1795,10 +1797,14 @@
     wx/cocoa/checkbox.h
     wx/cocoa/checklst.h
     wx/cocoa/choice.h
+    wx/cocoa/clipbrd.h
     wx/cocoa/colour.h
     wx/cocoa/combobox.h
     wx/cocoa/control.h
     wx/cocoa/cursor.h
+    wx/cocoa/dataform.h
+    wx/cocoa/dataobj.h
+    wx/cocoa/dataobj2.h
     wx/cocoa/dc.h
     wx/cocoa/dcclient.h
     wx/cocoa/dcmemory.h
