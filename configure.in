@@ -593,6 +593,7 @@ case "${host}" in
     AC_DEFINE(__ALPHA__)
     AC_DEFINE(__OSF__)
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    NEEDS_D_REENTRANT_FOR_R_FUNCS=1
   ;;
   *-*-dgux5* )
     USE_ALPHA=1
