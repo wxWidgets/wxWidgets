@@ -122,34 +122,33 @@ enum wxTreeItemIcon
     wxTreeItemIcon_Max
 };
 
-/*
- * wxTreeCtrl flags
- */
-// TODO: maybe renumber these?
+// ----------------------------------------------------------------------------
+// wxTreeCtrl flags
+// ----------------------------------------------------------------------------
+
 #define wxTR_NO_BUTTONS              0x0000     // for convenience
-#define wxTR_HAS_BUTTONS             0x0001     // generates a +/- button
-#define wxTR_TWIST_BUTTONS           0x0002     // generates a twister button
-#define wxTR_NO_LINES                0x0004     // don't generate level connectors
+#define wxTR_HAS_BUTTONS             0x0001     // draw collapsed/expanded btns
+#define wxTR_NO_LINES                0x0004     // don't draw lines at all
 #define wxTR_LINES_AT_ROOT           0x0008     // connect top-level nodes
-#define wxTR_MAC_BUTTONS             wxTR_TWIST_BUTTONS // backward compatibility
-#define wxTR_AQUA_BUTTONS            0x0010     // used internally
 
 #define wxTR_SINGLE                  0x0000     // for convenience
 #define wxTR_MULTIPLE                0x0020     // can select multiple items
 #define wxTR_EXTENDED                0x0040     // TODO: allow extended selection
-#define wxTR_FULL_ROW_HIGHLIGHT      0x2000     // highlight full horizontal space
+#define wxTR_HAS_VARIABLE_ROW_HEIGHT 0x0080     // what it says
 
 #define wxTR_EDIT_LABELS             0x0200     // can edit item labels
 #define wxTR_ROW_LINES               0x0400     // put border around items
 #define wxTR_HIDE_ROOT               0x0800     // don't display root node
-#define wxTR_HAS_VARIABLE_ROW_HEIGHT 0x0080     // what it says
 
-// TODO: different default styles for wxGTK, wxMotif, whatever?
-#ifdef __WXMAC__
-    #define wxTR_DEFAULT_STYLE (wxTR_TWIST_BUTTONS|wxTR_NO_LINES|wxTR_ROW_LINES)
-#else
-    #define wxTR_DEFAULT_STYLE (wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT)
-#endif
+#define wxTR_FULL_ROW_HIGHLIGHT      0x2000     // highlight full horz space
+
+#define wxTR_DEFAULT_STYLE           (wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT)
+
+// deprecated, don't use
+#define wxTR_TWIST_BUTTONS           0
+#define wxTR_MAC_BUTTONS             0
+#define wxTR_AQUA_BUTTONS            0
+
 
 // values for the `flags' parameter of wxTreeCtrl::HitTest() which determine
 // where exactly the specified point is situated:

@@ -68,12 +68,9 @@
     IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxGenericListCtrl)
 #endif // HAVE_NATIVE_LISTCTRL/!HAVE_NATIVE_LISTCTRL
 
-#if defined(__WXGTK__)
-    #include <gtk/gtk.h>
-    #include "wx/gtk/win_gtk.h"
-#endif
-
 #include "wx/selstore.h"
+
+#include "wx/renderer.h"
 
 // ----------------------------------------------------------------------------
 // events
@@ -409,7 +406,6 @@ public:
 
     virtual ~wxListHeaderWindow();
 
-    void DoDrawRect( wxDC *dc, int x, int y, int w, int h );
     void DrawCurrent();
     void AdjustDC(wxDC& dc);
 
@@ -1657,66 +1653,6 @@ wxListHeaderWindow::~wxListHeaderWindow()
 #include "wx/univ/theme.h"
 #endif
 
-void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
-{
-#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
-    GtkStateType state = m_parent->IsEnabled() ? GTK_STATE_NORMAL
-                                               : GTK_STATE_INSENSITIVE;
-
-    x = dc->XLOG2DEV( x );
-
-    gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window,
-                   state, GTK_SHADOW_OUT,
-                   (GdkRectangle*) NULL, m_wxwindow,
-                   (char *)"button", // const_cast
-                   x-1, y-1, w+2, h+2);
-#elif defined(__WXUNIVERSAL__)
-    wxTheme *theme = wxTheme::Get();
-    wxRenderer *renderer = theme->GetRenderer();
-    renderer->DrawBorder( *dc, wxBORDER_RAISED, wxRect(x,y,w,h), 0 );
-#elif defined(__WXMAC__)
-    const int m_corner = 1;
-
-    dc->SetBrush( *wxTRANSPARENT_BRUSH );
-
-    dc->SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNSHADOW ) , 1 , wxSOLID ) );
-    dc->DrawLine( x+w-m_corner+1, y, x+w, y+h );  // right (outer)
-    dc->DrawRectangle( x, y+h, w+1, 1 );          // bottom (outer)
-
-    wxPen pen( wxColour( 0x88 , 0x88 , 0x88 ), 1, wxSOLID );
-
-    dc->SetPen( pen );
-    dc->DrawLine( x+w-m_corner, y, x+w-1, y+h );  // right (inner)
-    dc->DrawRectangle( x+1, y+h-1, w-2, 1 );      // bottom (inner)
-
-    dc->SetPen( *wxWHITE_PEN );
-    dc->DrawRectangle( x, y, w-m_corner+1, 1 );   // top (outer)
-    dc->DrawRectangle( x, y, 1, h );              // left (outer)
-    dc->DrawLine( x, y+h-1, x+1, y+h-1 );
-    dc->DrawLine( x+w-1, y, x+w-1, y+1 );
-#else // !GTK, !Mac
-    const int m_corner = 1;
-
-    dc->SetBrush( *wxTRANSPARENT_BRUSH );
-
-    dc->SetPen( *wxBLACK_PEN );
-    dc->DrawLine( x+w-m_corner+1, y, x+w, y+h );  // right (outer)
-    dc->DrawRectangle( x, y+h, w+1, 1 );          // bottom (outer)
-
-    wxPen pen( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNSHADOW ), 1, wxSOLID );
-
-    dc->SetPen( pen );
-    dc->DrawLine( x+w-m_corner, y, x+w-1, y+h );  // right (inner)
-    dc->DrawRectangle( x+1, y+h-1, w-2, 1 );      // bottom (inner)
-
-    dc->SetPen( *wxWHITE_PEN );
-    dc->DrawRectangle( x, y, w-m_corner+1, 1 );   // top (outer)
-    dc->DrawRectangle( x, y, 1, h );              // left (outer)
-    dc->DrawLine( x, y+h-1, x+1, y+h-1 );
-    dc->DrawLine( x+w-1, y, x+w-1, y+1 );
-#endif
-}
-
 // shift the DC origin to match the position of the main window horz
 // scrollbar: this allows us to always use logical coords
 void wxListHeaderWindow::AdjustDC(wxDC& dc)
@@ -1733,11 +1669,7 @@ void wxListHeaderWindow::AdjustDC(wxDC& dc)
 
 void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
-#if defined(__WXGTK__)
-    wxClientDC dc( this );
-#else
     wxPaintDC dc( this );
-#endif
 
     PrepareDC( dc );
     AdjustDC( dc );
@@ -1772,9 +1704,14 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // inside the column rect
         int cw = wCol - 2;
 
-        dc.SetPen( *wxWHITE_PEN );
-
-        DoDrawRect( &dc, x, HEADER_OFFSET_Y, cw, h-2 );
+        wxRendererNative::Get().DrawHeaderButton
+                                (
+                                    this,
+                                    dc,
+                                    wxRect(x, HEADER_OFFSET_Y, cw, h - 2),
+                                    m_parent->IsEnabled() ? 0
+                                                          : wxCONTROL_DISABLED
+                                );
 
         // see if we have enough space for the column label
 

@@ -18,7 +18,11 @@
    renderers and provide the functionality which is often similar or identical
    in all renderers (using inheritance here would be more restrictive as the
    given concrete renderer may need an arbitrary subset of the base class
-   methods)
+   methods).
+
+   Finally note that wxRenderer supersedes wxRendererNative in wxUniv build and
+   includes the latters functionality (which it may delegate to the generic
+   implementation of the latter or reimplement itself).
  */
 
 #ifdef __GNUG__
@@ -27,6 +31,8 @@
 
 #ifndef _WX_UNIV_RENDERER_H_
 #define _WX_UNIV_RENDERER_H_
+
+#include "wx/renderer.h"
 
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxCheckListBox;
@@ -59,7 +65,7 @@ public:
 // wxRenderer: abstract renderers interface
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRenderer
+class WXDLLEXPORT wxRenderer : public wxDelegateRendererNative
 {
 public:
     // drawing functions
@@ -458,6 +464,7 @@ public:
     // virtual dtor for any base class
     virtual ~wxRenderer();
 
+
 protected:
     // draw a frame around rectFrame rectangle but not touching the rectLabel
     // one: this is used by DrawFrame()
@@ -820,6 +827,17 @@ public:
                              const wxPoint& pt,
                              int flags) const
         { return m_renderer->HitTestFrame(rect, pt, flags); }
+
+    virtual void DrawHeaderButton(wxWindow *win,
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  int flags = 0)
+        { m_renderer->DrawHeaderButton(win, dc, rect, flags); }
+    virtual void DrawTreeItemButton(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0)
+        { m_renderer->DrawTreeItemButton(win, dc, rect, flags); }
 
 protected:
     wxRenderer *m_renderer;

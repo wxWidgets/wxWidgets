@@ -417,9 +417,6 @@ protected:
 
     wxTimer             *m_renameTimer;
 
-    wxBitmap            *m_arrowRight,
-                        *m_arrowDown;
-
     // incremental search data
     wxString             m_findPrefix;
     wxTimer             *m_findTimer;
