@@ -664,6 +664,13 @@ bool wxThread::IsAlive() const
            (p_internal->GetState() == STATE_PAUSED);
 }
 
+bool wxThread::IsPaused() const
+{
+    wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect);
+
+    return (p_internal->GetState() == STATE_PAUSED);
+}
+
 bool wxThread::TestDestroy()
 {
     wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect);

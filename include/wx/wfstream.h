@@ -53,8 +53,8 @@ class wxFileOutputStream: public wxOutputStream {
   virtual ~wxFileOutputStream();
 
   // To solve an ambiguity on GCC
-  inline wxOutputStream& Write(const void *buffer, size_t size)
-     { return wxOutputStream::Write(buffer, size); }
+//  inline wxOutputStream& Write(const void *buffer, size_t size)
+//     { return wxOutputStream::Write(buffer, size); }
 
   void Sync();
   size_t StreamSize() const;

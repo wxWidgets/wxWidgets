@@ -87,6 +87,11 @@ bool wxObject::IsKindOf(wxClassInfo *info) const
         return FALSE;
 }
 
+wxObject *wxObject::Clone() const
+{
+    return GetClassInfo()->CreateObject();
+}
+
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
 void wxObject::Dump(ostream& str)
 {

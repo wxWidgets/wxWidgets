@@ -290,6 +290,8 @@ public:
     // exists only for optimization purposes
     bool IsCommandEvent() const { return m_isCommandEvent; }
 
+    wxObject *Clone() const;
+
 public:
     bool              m_skipped;
     wxObject*         m_eventObject;

@@ -22,15 +22,6 @@
 #if defined(__WINDOWS__) && defined(WXSOCK_INTERNAL)
 #include <winsock.h>
 #include <wx/msw/private.h>
-
-struct wxSockInternal {
-  UINT my_msg;
-};
-
-struct wxSockHandlerInternal {
-  HWND sockWin;
-  UINT firstAvailableMsg;
-};
 #endif // defined(__WINDOWS__) && defined(WXSOCK_INTERNAL)
 
 // ---------------------------------------------------------------------------
@@ -40,29 +31,6 @@ struct wxSockHandlerInternal {
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-
-// ---------------------------------------------------------------------------
-// Athena specific
-// ---------------------------------------------------------------------------
-#if defined(__WXXT__) || defined(__WXMOTIF__)
-#include <X11/Intrinsic.h>
-
-struct wxSockInternal {
-  XtInputId sock_inputid, sock_outputid, sock_exceptid;
-};
-#endif
-
-// ---------------------------------------------------------------------------
-// GTK specific
-// ---------------------------------------------------------------------------
-#if defined(__WXGTK__)
-#include <gdk/gdk.h>
-
-struct wxSockInternal {
-  gint sock_inputid, sock_outputid, sock_exceptid;
-};
-#endif
-
 #endif // defined(__UNIX__) && defined(WXSOCK_INTERNAL)
 
 // ---------------------------------------------------------------------------
@@ -77,70 +45,46 @@ struct wxSockInternal {
 
 class WXDLLEXPORT wxSocketEvent;
 class WXDLLEXPORT wxSocketHandler;
+class wxSocketInternal;
 class WXDLLEXPORT wxSocketBase : public wxEvtHandler
 {
   DECLARE_CLASS(wxSocketBase)
 #ifdef __WXMAC__
   friend void wxMacSocketOnRequestProc(void *refcon , short event) ;
 #endif
-#if defined(__WXGTK__) && defined(WXSOCK_INTERNAL)
-  friend void wxPrereadSocket(wxSocketBase *sock);
-#endif
 public:
 
   enum wxSockFlags { NONE=0, NOWAIT=1, WAITALL=2, SPEED=4 };
   // Type of request
   enum { REQ_READ=0x1, REQ_PEEK=0x2, REQ_WRITE=0x4, REQ_LOST=0x8,
-         REQ_ACCEPT=0x10, REQ_CONNECT=0x20};
+         REQ_ACCEPT=0x10, REQ_CONNECT=0x20, REQ_WAIT=0x40};
   enum { EVT_READ=0, EVT_PEEK=1, EVT_WRITE=2, EVT_LOST=3, EVT_ACCEPT=4,
          EVT_CONNECT=5 };
 
   typedef int wxRequestNotify;
   typedef int wxRequestEvent;
+  enum wxSockType { SOCK_CLIENT, SOCK_SERVER, SOCK_INTERNAL, SOCK_UNINIT }; 
   typedef void (*wxSockCbk)(wxSocketBase& sock,wxRequestEvent evt,char *cdata);
 
 protected:
-  wxList req_list[EVT_WRITE+1];
-
-  // Internal use for SaveState() and RestoreState()
-  class wxSockState : public wxObject {
-  public:
-    bool cbk_on;
-    wxSockCbk cbk;
-    char *cdata;
-    bool notif;
-    wxRequestNotify cbk_set;
-    wxSockFlags flags;
-  };
-  typedef struct {
-    char sig[4];
-    char len[4];
-  } SockMsg;
-  enum wxSockType { SOCK_CLIENT, SOCK_SERVER, SOCK_INTERNAL, SOCK_UNINIT }; 
-
   wxSockFlags m_flags;
   wxSockType m_type;			// wxSocket type
   bool m_connected, m_connecting;	// State of the socket
   int m_fd;				// Socket file descriptors
-  int m_waitflags;			// Wait flags
   wxList m_states;			// States list
-  wxSockCbk m_cbk;			// C callback
-  char *m_cdata;			// C callback data
   int m_id;				// Socket id (for event handler)
   wxSocketHandler *m_handler;		// the current socket handler
   wxRequestNotify m_neededreq;		// Specify which requet signals we need
-  bool m_cbkon;
-  char *m_unread;			// The unread buf
-  size_t m_unrd_size;			// The size of the unread buf
-  bool m_processing;			// To prevent some endless loop
   unsigned long m_timeout;
-  int m_wantbuf;
   size_t m_lcount;			// Last IO request size
   int m_error;				// Last IO error
-  bool m_notifyme;
-
-  struct wxSockInternal *m_internal;	// System specific variables
-
+  wxSocketInternal *m_internal;
+  char *m_unread;			// Pushback buffer
+  size_t m_unrd_size;			// Pushback buffer size
+  wxSockCbk m_cbk;
+  char *m_cdata;
+  bool m_notify_state;
+  
 public:
   wxSocketBase();
   virtual ~wxSocketBase();
@@ -150,8 +94,6 @@ public:
   wxSocketBase& Peek(char* buffer, size_t nbytes);
   wxSocketBase& Read(char* buffer, size_t nbytes);
   wxSocketBase& Write(const char *buffer, size_t nbytes);
-  wxSocketBase& WriteMsg(const char *buffer, size_t nbytes);
-  wxSocketBase& ReadMsg(char* buffer, size_t nbytes);
   wxSocketBase& Unread(const char *buffer, size_t nbytes);
   void Discard();
 
@@ -168,8 +110,10 @@ public:
   bool IsData() const;
   inline size_t LastCount() const { return m_lcount; }
   inline int LastError() const { return m_error; }
+  inline wxSockType GetType() const { return m_type; }
   
   void SetFlags(wxSockFlags _flags);
+  wxSockFlags GetFlags() const;
   inline void SetTimeout(unsigned long sec) { m_timeout = sec; }
 
   // seconds = -1 means infinite wait
@@ -213,6 +157,7 @@ public:
 protected:
   friend class wxSocketServer;
   friend class wxSocketHandler;
+  friend class wxSocketInternal;
 
 #ifdef __SALFORDC__
 public:
@@ -230,10 +175,6 @@ protected:
   inline virtual void SetHandler(wxSocketHandler *handler)
          { m_handler = handler; }
 
-  // Activate or disactivate callback
-  void SetupCallbacks();
-  void DestroyCallbacks();
-
   // Pushback library
   size_t GetPushback(char *buffer, size_t size, bool peek);
 
@@ -241,8 +182,6 @@ protected:
   //   ==> cause strange things :-)
   void WantSpeedBuffer(char *buffer, size_t size, wxRequestEvent req);
   void WantBuffer(char *buffer, size_t size, wxRequestEvent req);
-
-  virtual bool DoRequests(wxRequestEvent req);
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -258,7 +197,6 @@ public:
 
   wxSocketBase* Accept();
   bool AcceptWith(wxSocketBase& sock);
-  virtual void OnRequest(wxRequestEvent flags);
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -284,10 +222,6 @@ class WXDLLEXPORT wxSocketHandler : public wxObject
 {
   DECLARE_CLASS(wxSocketHandler)
 protected:
-#if defined(__WINDOWS__)
-  wxList *smsg_list;
-  struct wxSockHandlerInternal *internal;
-#endif
   wxList *socks;
 
 public:
@@ -337,15 +271,17 @@ public:
   wxSocketEvent(int id = 0);
 
   wxSocketBase::wxRequestEvent SocketEvent() const { return m_skevt; }
+  wxSocketBase *Socket() const { return m_socket; }
+
+  wxObject *Clone() const;
 public:
   wxSocketBase::wxRequestEvent m_skevt;
+  wxSocketBase *m_socket;
 };
 
 typedef void (wxEvtHandler::*wxSocketEventFunction)(wxSocketEvent&);
 
-#define wxEVT_SOCKET wxEVT_FIRST+301
-
-#define EVT_SOCKET(id, func) { wxEVT_SOCKET, id, 0, \
+#define EVT_SOCKET(id, func) { wxEVT_SOCKET, id, -1, \
   (wxObjectEventFunction) (wxEventFunction) (wxSocketEventFunction) & func, \
   (wxObject *) NULL  },
 

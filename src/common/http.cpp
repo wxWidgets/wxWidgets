@@ -116,6 +116,7 @@ void wxHTTP::SendHeaders()
 bool wxHTTP::ParseHeaders()
 {
   wxString line;
+  wxStringTokenizer tokenzr;
 
   m_headers.Clear();
   m_read = TRUE;
@@ -128,17 +129,13 @@ bool wxHTTP::ParseHeaders()
     if (line.Length() == 0)
       break;
 
-    wxPrintf(_T("Header: %s\n"), WXSTRINGCAST line);
-    int pos = line.Find(':');
-    if (pos == -1)
+    printf("Header: %s\n", WXSTRINGCAST line);
+    tokenzr.SetString(line, " :\t\n\r");
+    if (!tokenzr.HasMoreToken())
       return FALSE;
 
-    wxString left_str = line(0, pos);
-    wxString right_str = line(pos+1, line.Length());
-
-    right_str = right_str.Strip(wxString::leading);
-
-    wxString *str = new wxString(right_str);
+    wxString left_str = tokenzr.GetNextToken();
+    wxString *str = new wxString(tokenzr.GetNextToken());
 
     m_headers.Append(left_str, (wxObject *) str);
   }

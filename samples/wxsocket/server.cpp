@@ -42,36 +42,27 @@ class MyFrame: public wxFrame
 { 
   DECLARE_EVENT_TABLE()
 public:
-  MyServer *sock;
+  wxSocketServer *sock;
   int nb_clients;
 
   MyFrame(wxFrame *frame);
   virtual ~MyFrame();
   void Menu_Exit(wxCommandEvent& evt);
+  void OnSockRequest(wxSocketEvent& evt);
+  void OnSockRequestServer(wxSocketEvent& evt);
   void ExecTest1(wxSocketBase *sock_o);
   void UpdateStatus(int incr);
 };
 
 #define SKDEMO_QUIT 101
+#define SKDEMO_SOCKET_SERV 102
+#define SKDEMO_SOCKET 103
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(SKDEMO_QUIT, MyFrame::Menu_Exit)
+  EVT_SOCKET(SKDEMO_SOCKET_SERV, MyFrame::OnSockRequestServer)
+  EVT_SOCKET(SKDEMO_SOCKET, MyFrame::OnSockRequest)
 END_EVENT_TABLE()
-
-class MySock: public wxSocketBase {
-public:
-  MyFrame *frame;
-
-  void OldOnNotify(wxRequestEvent flags);
-};
-
-class MyServer: public wxSocketServer {
-public:
-  MyFrame *frame;
-
-  MyServer(wxSockAddress& addr) : wxSocketServer(addr) { }
-  void OldOnNotify(wxRequestEvent flags);
-};
 
 IMPLEMENT_APP(MyApp)
 
@@ -102,40 +93,50 @@ bool MyApp::OnInit(void)
   return TRUE;
 }
 
-void MySock::OldOnNotify(wxRequestEvent flags)
-{
-  extern wxList WXDLLEXPORT wxPendingDelete;
+extern wxList wxPendingDelete;
 
-  switch (flags) {
-  case EVT_READ:
+void MyFrame::OnSockRequest(wxSocketEvent& evt)
+{
+  wxSocketBase *sock = evt.Socket();
+
+  printf("OnSockRequest OK\n");
+  printf("OnSockRequest (event = %d)\n",evt.SocketEvent());
+  switch (evt.SocketEvent()) {
+  case wxSocketBase::EVT_READ:
     unsigned char c;
 
-    ReadMsg((char *)&c, 1);
+    sock->Read((char *)&c, 1);
     if (c == 0xbe)
-      frame->ExecTest1(this);
+      ExecTest1(sock);
 
     break;
-  case EVT_LOST:
-    frame->UpdateStatus(-1);
-    wxPendingDelete.Append(this);
+  case wxSocketBase::EVT_LOST:
+    UpdateStatus(-1);
+    printf("Destroying socket\n");
+    wxPendingDelete.Append(sock);
+    return;
     break;
   }
+  printf("OnSockRequest Exiting\n");
+  sock->SetNotify(wxSocketBase::REQ_READ | wxSocketBase::REQ_LOST);
 }
 
-void MyServer::OldOnNotify(wxRequestEvent WXUNUSED(flags))
+void MyFrame::OnSockRequestServer(wxSocketEvent& evt)
 {
-  MySock *sock2 = new MySock();
+  wxSocketBase *sock2;
+  wxSocketServer *server = (wxSocketServer *) evt.Socket();
 
-  if (!AcceptWith(*sock2))
+  printf("OnSockRequestServer OK\n");
+
+  sock2 = server->Accept();
+  if (sock2 == NULL)
     return;
 
-  m_handler->Register(sock2);
-
-  sock2->SetFlags(NONE);
-  sock2->frame = frame;
-  sock2->SetNotify(REQ_READ | REQ_LOST);
+  sock2->SetFlags(wxSocketBase::NONE);
   sock2->Notify(TRUE);
-  frame->UpdateStatus(1);
+  sock2->SetEventHandler(*this, SKDEMO_SOCKET);
+  server->SetNotify(wxSocketBase::REQ_ACCEPT);
+  UpdateStatus(1);
 }
 
 // My frame Constructor
@@ -149,10 +150,10 @@ MyFrame::MyFrame(wxFrame *frame):
   // Init all
   wxSocketHandler::Master();
 
-  sock = new MyServer(addr);
+  sock = new wxSocketServer(addr);
   wxSocketHandler::Master().Register(sock);
-  sock->frame = this;
   sock->SetNotify(wxSocketBase::REQ_ACCEPT);
+  sock->SetEventHandler(*this, SKDEMO_SOCKET_SERV);
   sock->Notify(TRUE);
   nb_clients = 0;
 

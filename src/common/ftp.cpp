@@ -60,16 +60,13 @@ IMPLEMENT_PROTOCOL(wxFTP, _T("ftp"), _T("ftp"), TRUE)
 wxFTP::wxFTP()
   : wxProtocol()
 {
-  wxChar tmp[256];
-
   m_lastError = wxPROTO_NOERR;
   m_streaming = FALSE;
 
   m_user = _T("anonymous");
-  wxGetUserName(tmp, 256);
-  m_passwd.sprintf(_T("%s@"),tmp);
-  wxGetHostName(tmp, 256);
-  m_passwd += tmp;
+  m_passwd = wxGetUserId();
+  m_passwd += '@';
+  m_passwd += wxGetHostName();
 
   SetNotify(0);
 }
@@ -404,9 +401,12 @@ wxList *wxFTP::GetList(const wxString& wildcard)
     return NULL;
   }
 
+  // Ininterresting ?!
+  /*
   sock->SetEventHandler(*GetNextHandler(), m_id);
   sock->Notify(m_notifyme);
   sock->SetNotify(m_neededreq);
+  */
 
   return file_list;
 }

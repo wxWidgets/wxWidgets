@@ -167,7 +167,7 @@
 #define wxUSE_TOOLTIPS      1
                                   // Define to use wxToolTip class and
                                   // wxWindow::SetToolTip() method
-#define wxUSE_SOCKETS       1
+#define wxUSE_SOCKETS       0
                                   // Set to 1 to use socket classes
 
 /*

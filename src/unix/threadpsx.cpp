@@ -325,7 +325,8 @@ wxThreadInternal::wxThreadInternal()
 
 wxThreadInternal::~wxThreadInternal()
 {
-    m_mutexSuspend.Unlock();
+    // GL: moved to SignalExit
+    // m_mutexSuspend.Unlock();
 
     // note that m_mutex will be unlocked by the thread which waits for our
     // termination
@@ -375,6 +376,9 @@ void wxThreadInternal::Wait()
 
 void wxThreadInternal::SignalExit()
 {
+    // GL: Unlock mutexSuspend here.
+    m_mutexSuspend.Unlock();
+
     // as mutex is currently locked, this will block until some other thread
     // (normally the same which created this one) unlocks it by entering Wait()
     m_mutex.Lock();
@@ -453,9 +457,7 @@ wxThread::wxThread()
 
 wxThreadError wxThread::Create()
 {
-    // Maybe we could think about recreate the thread once it has exited.
-    if (p_internal->GetState() != STATE_NEW &&
-        p_internal->GetState() != STATE_EXITED)
+    if (p_internal->GetState() != STATE_NEW)
         return wxTHREAD_RUNNING;
 
     // set up the thread attribute: right now, we only set thread priority
@@ -590,7 +592,9 @@ wxThreadError wxThread::Resume()
 
     if ( p_internal->GetState() == STATE_PAUSED )
     {
+        m_critsect.Leave();
         p_internal->Resume();
+        m_critsect.Enter();
 
         return wxTHREAD_NO_ERROR;
     }
@@ -725,6 +729,13 @@ bool wxThread::IsAlive() const
         default:
             return FALSE;
     }
+}
+
+bool wxThread::IsPaused() const
+{
+    wxCriticalSectionLocker lock((wxCriticalSection&)m_critsect);
+
+    return (p_internal->GetState() == STATE_PAUSED);
 }
 
 //--------------------------------------------------------------------

@@ -77,6 +77,7 @@ COMMONOBJS = cmndata.obj \
   paper.obj \
   string.obj \
   socket.obj \
+  sckint.obj \
   sckaddr.obj \
   sckfile.obj \
   sckipc.obj \
@@ -627,6 +628,9 @@ string.obj:     $(COMMDIR)\string.cpp
 
 socket.obj:     $(COMMDIR)\socket.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\socket.cpp /BINARY socket.obj
+
+sckint.obj:     $(COMMDIR)\sckint.cpp
+  $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\sckint.cpp /BINARY sckint.obj
 
 sckaddr.obj:     $(COMMDIR)\sckaddr.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\sckaddr.cpp /BINARY sckaddr.obj

@@ -301,7 +301,7 @@ public:
         // Returns true if the thread is running (not paused, not killed).
     bool IsRunning() const;
         // Returns true if the thread is suspended
-    bool IsPaused() const { return IsAlive() && !IsRunning(); }
+    bool IsPaused() const;
 
     // called when the thread exits - in the context of this thread
     //

@@ -105,6 +105,22 @@ wxEvent::wxEvent(int theId)
     m_isCommandEvent = FALSE;
 }
 
+wxObject *wxEvent::Clone() const
+{
+    wxEvent *event = (wxEvent *)wxObject::Clone();
+
+    event->m_eventType = m_eventType;
+    event->m_eventObject = m_eventObject;
+    event->m_eventHandle = m_eventHandle;
+    event->m_timeStamp = m_timeStamp;
+    event->m_id = m_id;
+    event->m_skipped = m_skipped;
+    event->m_callbackUserData = m_callbackUserData;
+    event->m_isCommandEvent = m_isCommandEvent;
+
+    return event;
+}
+
 /*
  * Command events
  *
@@ -317,10 +333,10 @@ wxEvtHandler::~wxEvtHandler()
         delete m_dynamicEvents;
     };
 
+#if wxUSE_THREADS
     if (m_pendingEvents)
       delete m_pendingEvents;
 
-#if wxUSE_THREADS
     delete m_eventsLocker;
 #endif
 }
@@ -337,8 +353,7 @@ bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
     if (m_pendingEvents == NULL)
       m_pendingEvents = new wxList();
 
-    event_main = (wxEvent *)event.GetClassInfo()->CreateObject();
-    *event_main = event;
+    event_main = (wxEvent *)event.Clone();
 
     m_pendingEvents->Append(event_main);
 

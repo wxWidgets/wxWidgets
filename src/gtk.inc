@@ -63,6 +63,7 @@ LIB_CPP_SRC=\
  common/valtext.cpp \
  common/variant.cpp \
  common/socket.cpp \
+ common/sckint.cpp \
  common/sckaddr.cpp \
  common/sckipc.cpp \
  common/protocol.cpp \

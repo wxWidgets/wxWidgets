@@ -151,6 +151,7 @@ COMMONOBJS = \
   $(MSWDIR)\dynlib.obj \
   $(MSWDIR)\tokenzr.obj \
   $(MSWDIR)\socket.obj \
+  $(MSWDIR)\sckint.obj \
   $(MSWDIR)\sckaddr.obj \
   $(MSWDIR)\protocol.obj \
   $(MSWDIR)\url.obj \

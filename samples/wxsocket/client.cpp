@@ -23,6 +23,7 @@
 #include "wx/wx.h"
 #endif
 
+#include "wx/wfstream.h"
 #include "wx/socket.h"
 #include "wx/url.h"
 #include "wx/protocol/http.h"
@@ -204,12 +205,12 @@ void MyFrame::UpdateStatus()
     SetStatusText("", 1);
   } else {
     wxIPV4address addr;
-    char s[100];
+    wxChar s[100];
 
     sock->GetPeer(addr);
-    sprintf(s, "Connected to %s", (const char *)addr.Hostname());
+    wxSprintf(s, _T("Connected to %s"), WXSTRINGCAST addr.Hostname());
     SetStatusText(s, 0);
-    sprintf(s, "Service: %d", addr.Service());
+    wxSprintf(s, _T("Service: %d"), addr.Service());
     SetStatusText(s, 1);
   } 
 }
@@ -225,7 +226,7 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
 					wxTE_MULTILINE);
   (void)new wxButton(dlgbox, ID_TEST_CLOSE, "Close",
                      wxPoint(100, 210), wxSize(100, -1));
-  char *buf, *buf2;
+  wxChar *buf, *buf2;
 
   dlgbox->Layout();
   dlgbox->Show(TRUE);
@@ -235,21 +236,25 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
   wxYield();
   
   /* Init */
-  buf = copystring("Hi ! Hi ! Hi !\n");
-  buf2 = new char[strlen(buf)+1];
+  buf = copystring(_T("Hi ! Hi ! Hi !\n"));
+  buf2 = new wxChar[wxStrlen(buf)+1];
   char c = 0xbe;
-  sock->WriteMsg(&c, 1);
+  sock->Write(&c, 1);
 
   /* No 1 */
   text_win->WriteText("Sending some byte to the server ...");
-  sock->Write(buf, strlen(buf)+1);
+  wxYield();
+  sock->Write((char *)buf, wxStrlen(buf)+1);
   text_win->WriteText("done\n");
+  wxYield();
   text_win->WriteText("Receiving some byte from the server ...");
-  sock->Read(buf2, strlen(buf)+1);
+  wxYield();
+  sock->Read((char *)buf2, wxStrlen(buf)+1);
   text_win->WriteText("done\n");
+  wxYield();
   
   text_win->WriteText("Comparing the two buffers ...");
-  if (memcmp(buf, buf2, strlen(buf)+1) != 0) {
+  if (memcmp(buf, buf2, wxStrlen(buf)+1) != 0) {
     text_win->WriteText("Fail\n");
     sock->Close();
     UpdateStatus();
@@ -276,7 +281,11 @@ void MyFrame::OnExecUrlTest(wxCommandEvent& WXUNUSED(evt))
   if (!datas)
     wxMessageBox("Error in getting data from the URL.", "Alert !");
   else {
+    wxFileOutputStream *str_out = new wxFileOutputStream("test.url");
+    str_out->Write(*datas);
+
     wxMessageBox("Success !! Click on OK to see the text.", "OK");
     delete datas;
+    delete str_out;
   }
 }
