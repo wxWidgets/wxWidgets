@@ -11,6 +11,8 @@ docs/licence.txt
 docs/msw/*.txt
 docs/wine/*.txt
 docs/wine/COPYING.LIB
+docs/microwin/readme.txt
+docs/microwin/microwindows.patches
 
 distrib/msw/*.rsp
 distrib/msw/*.bat

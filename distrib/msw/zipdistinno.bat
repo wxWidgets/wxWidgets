@@ -218,7 +218,9 @@ copy %src\docs\x11\readme.txt %dest\readme-x11-%version%.txt
 copy %src\docs\x11\readme-nanox.txt %dest\readme-nanox-%version%.txt
 copy %src\docs\msw\readme.txt %dest\readme-msw-%version%.txt
 copy %src\docs\mac\readme.txt %dest\readme-mac-%version%.txt
+copy %src\docs\base\readme.txt %dest\readme-base-%version%.txt
 copy %src\docs\os2\install.txt %dest\install-os2-%version%.txt
+copy %src\docs\univ\readme.txt %dest\readme-univ-%version%.txt
 copy %src\docs\readme_vms.txt %dest\readme-vms-%version%.txt
 copy %src\docs\motif\makewxmotif %dest\makewxmotif-%version%
 copy %src\docs\gtk\makewxgtk %dest\makewxgtk-%version%

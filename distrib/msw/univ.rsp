@@ -8,7 +8,5 @@ src/univ/*.c
 src/univ/*.lst
 src/univ/themes/*.cpp
 
-docs/microwin/readme.txt
-docs/microwin/microwindows.patches
 docs/univ/*.txt
 
