@@ -110,6 +110,7 @@ public:
   virtual bool LoadFile(const wxString& file);
   virtual bool SaveFile(const wxString& file);
   virtual void WriteText(const wxString& text);
+  virtual void AppendText(const wxString& text);
   virtual void DiscardEdits();
   virtual bool IsModified() const;
   

@@ -241,7 +241,11 @@ int wxFileDialog::ShowModal(void)
      */
     //=======================================================================
 
-    wxString theFilter = ( Strlen(m_wildCard) == 0 ) ? wxString("*.*") : m_wildCard;
+    wxString theFilter;
+    if ( Strlen(m_wildCard) == 0 )
+        theFilter = wxString("*.*");
+    else
+        theFilter = m_wildCard ;
     wxString filterBuffer;
 
     if ( !strchr( theFilter, '|' ) ) {    // only one filter ==> default text

@@ -246,8 +246,9 @@ bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * 
 bool wxFileDropTarget::OnDrop(long x, long y, const void *data, size_t size )
 {
   size_t number = 0;
+  size_t i;
   char *text = (char*) data;
-  for (size_t i = 0; i < size; i++)
+  for (i = 0; i < size; i++)
     if (text[i] == 0) number++;
 
   if (number == 0) return TRUE;    
@@ -255,7 +256,7 @@ bool wxFileDropTarget::OnDrop(long x, long y, const void *data, size_t size )
   char **files = new char*[number];
   
   text = (char*) data;
-  for (size_t i = 0; i < number; i++)
+  for (i = 0; i < number; i++)
   {
     files[i] = text;
     int len = strlen( text );
@@ -681,8 +682,9 @@ bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * 
 bool wxFileDropTarget::OnDrop(long x, long y, const void *data, size_t size )
 {
     size_t number = 0;
+    size_t i;
     char *text = (char*) data;
-    for (size_t i = 0; i < size; i++)
+    for ( i = 0; i < size; i++)
         if (text[i] == 0) number++;
 
     if (number == 0) return TRUE;    
@@ -690,7 +692,7 @@ bool wxFileDropTarget::OnDrop(long x, long y, const void *data, size_t size )
     char **files = new char*[number];
   
     text = (char*) data;
-    for (size_t i = 0; i < number; i++)
+    for (i = 0; i < number; i++)
     {
         files[i] = text;
         int len = strlen( text );

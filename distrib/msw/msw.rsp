@@ -9,21 +9,23 @@ tools/gettext/msgfmt.exe
 tools/gettext/msgunfmt.exe
 
 src/makeb32.env
+src/makeprog.b32
 src/makebcc.env
+src/makeprog.bcc
 src/makemsc.env
 src/makeprog.msc
 src/makewat.env
 src/makeprog.wat
 src/makesc.env
 src/makevc.env
+src/makeprog.vc
+src/makelib.vc
 src/makeg95.env
 src/makesl.env
 src/makeprog.sl
 src/salford.lnk
 src/maketwin.env
 src/makeprog.twn
-src/makeprog.vc
-src/makelib.vc
 src/makefile.bcc
 src/makefile.dos
 src/makefile.vc

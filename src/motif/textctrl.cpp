@@ -342,6 +342,16 @@ void wxTextCtrl::WriteText(const wxString& text)
     m_modified = TRUE;
 }
 
+void wxTextCtrl::AppendText(const wxString& text)
+{
+    long textPosition = GetLastPosition() + strlen(text);
+    XmTextInsert ((Widget) m_mainWidget, GetLastPosition(), (char*) (const char*) text);
+    XtVaSetValues ((Widget) m_mainWidget, XmNcursorPosition, textPosition, NULL);
+    SetInsertionPoint(textPosition);
+    XmTextShowPosition ((Widget) m_mainWidget, textPosition);
+    m_modified = TRUE;
+}
+
 void wxTextCtrl::Clear()
 {
     XmTextSetString ((Widget) m_mainWidget, "");
@@ -576,7 +586,7 @@ int wxTextCtrl::underflow()
 
 wxTextCtrl& wxTextCtrl::operator<<(const wxString& s)
 {
-    WriteText(s);
+    AppendText(s);
     return *this;
 }
 
@@ -584,7 +594,7 @@ wxTextCtrl& wxTextCtrl::operator<<(float f)
 {
     wxString str;
     str.Printf("%.2f", f);
-    WriteText(str);
+    AppendText(str);
     return *this;
 }
 
@@ -592,7 +602,7 @@ wxTextCtrl& wxTextCtrl::operator<<(double d)
 {
     wxString str;
     str.Printf("%.2f", d);
-    WriteText(str);
+    AppendText(str);
     return *this;
 }
 
@@ -600,7 +610,7 @@ wxTextCtrl& wxTextCtrl::operator<<(int i)
 {
     wxString str;
     str.Printf("%d", i);
-    WriteText(str);
+    AppendText(str);
     return *this;
 }
 
@@ -608,7 +618,7 @@ wxTextCtrl& wxTextCtrl::operator<<(long i)
 {
     wxString str;
     str.Printf("%ld", i);
-    WriteText(str);
+    AppendText(str);
     return *this;
 }
 
@@ -618,7 +628,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
     
     buf[0] = c;
     buf[1] = 0;
-    WriteText(buf);
+    AppendText(buf);
     return *this;
 }
 

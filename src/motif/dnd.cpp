@@ -76,7 +76,8 @@ bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * 
 {
   wxLogDebug( "Got %d dropped files.", (int)nFiles );
   wxLogDebug( "At x: %d, y: %d.", (int)x, (int)y );
-  for (size_t i = 0; i < nFiles; i++)
+  size_t i;
+  for (i = 0; i < nFiles; i++)
   {
     wxLogDebug( aszFiles[i] );
   }
@@ -87,7 +88,8 @@ bool wxFileDropTarget::OnDrop(long x, long y, const void *data, size_t size )
 {
   size_t number = 0;
   char *text = (char*) data;
-  for (size_t i = 0; i < size; i++)
+  size_t i;
+  for (i = 0; i < size; i++)
     if (text[i] == 0) number++;
 
   if (number == 0) return TRUE;    
@@ -95,7 +97,7 @@ bool wxFileDropTarget::OnDrop(long x, long y, const void *data, size_t size )
   char **files = new char*[number];
   
   text = (char*) data;
-  for (size_t i = 0; i < number; i++)
+  for ( i = 0; i < number; i++)
   {
     files[i] = text;
     int len = strlen( text );
