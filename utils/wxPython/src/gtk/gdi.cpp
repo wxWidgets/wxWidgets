@@ -3075,7 +3075,7 @@ static PyObject *_wrap_wxPen_SetDashes(PyObject *self, PyObject *args, PyObject 
     }
     if (_obj2)
 {
-    _arg2 = byte_LIST_helper(_obj2);
+    _arg2 = (wxDash*)byte_LIST_helper(_obj2);
     if (_arg2 == NULL) {
         return NULL;
     }
@@ -7298,7 +7298,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxRect","_class_wxRect",0},
     { "_wxPoint","_class_wxPoint",0},
     { "_wxBitmap","_class_wxBitmap",0},
-    { "_char","_wxDash",0},
     { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
@@ -7403,7 +7402,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxSize","_wxSize",0},
     { "_class_wxBitmap","_wxBitmap",0},
     { "_class_wxMemoryDC","_wxMemoryDC",0},
-    { "_wxDash","_char",0},
     { "_class_wxPalette","_wxPalette",0},
 {0,0,0}};
 
