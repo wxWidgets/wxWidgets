@@ -381,14 +381,7 @@ void cbPaneDrawPlugin::OnLDblClick( cbLeftDClickEvent& event )
 											 &pBarToFloat ) == CB_BAR_CONTENT_HITTED
 		   )
 			{
-				// TBD: ????
-				return;
-
-				mpLayout->SetBarState( pBarToFloat, wxCBAR_FLOATING, TRUE );
-
-				mpLayout->RepositionFloatedBar( pBarToFloat );
-
-				return; // event is "eaten" by this plugin
+			return;
 			}
 
 		event.Skip();
@@ -439,7 +432,7 @@ void cbPaneDrawPlugin::OnLButtonDown( cbLeftDownEvent& event )
 		{
 			// otehrwise if bar handle dragged
 
-			cbRowInfo& rowInfo     = *mpDraggedBar->mpRow;
+//			cbRowInfo& rowInfo     = *mpDraggedBar->mpRow;
 			wxRect& bounds         = mpDraggedBar->mBounds;
 
 			mHandleIsVertical = ( event.mpPane->IsHorizontal() ) ? TRUE : FALSE;
@@ -735,27 +728,27 @@ void cbPaneDrawPlugin::OnDrawRowBackground ( cbDrawRowBkGroundEvent& event )
 	wxRect     rowBounds    = pRow->mBoundsInParent;
 	bool       isHorizontal	= event.mpPane->IsHorizontal();
 	
-	int prevPos;
+//	int prevPos;
 
 	if ( isHorizontal )
 	{
-		prevPos = rowBounds.x;
-		// include one line obove and below the row
+//		prevPos = rowBounds.x;
+		// include one line above and below the row
 		--rowBounds.y;
-		rowBounds.height +=2;
+		rowBounds.height += 2;
 
 		--rowBounds.x;
-		rowBounds.width += 2;
+		rowBounds.width  += 2;
 	}
 	else
 	{
-		prevPos = rowBounds.y;
-		// include one line obove and below the row
+//		prevPos = rowBounds.y;
+		// include one line above and below the row
 		--rowBounds.x;
-		rowBounds.width += 2;
+		rowBounds.width  += 2;
 
 		--rowBounds.y;
-		rowBounds.height +=2;
+		rowBounds.height += 2;
 	}
 
 //#define TEST_BK_ERASING
@@ -1170,7 +1163,7 @@ void cbPaneDrawPlugin::OnDrawPaneDecorations( cbDrawPaneDecorEvent& event )
 
 void cbPaneDrawPlugin::OnDrawBarDecorations( cbDrawBarDecorEvent& event )
 {
-	cbBarInfo* pBar = event.mpBar;
+//	cbBarInfo* pBar = event.mpBar;
 	wxDC&   dc      = *event.mpDc;
 
 	// draw brick borders

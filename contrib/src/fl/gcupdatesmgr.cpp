@@ -141,7 +141,8 @@ void cbGCUpdatesMgr::UpdateNow()
 
 	wxList mBarsToResize;
 
-	for( int n = 0; n != MAX_PANES; ++n )
+	int n;
+	for ( n = 0; n != MAX_PANES; ++n )
 	{
 		cbDockPane& pane = *(panes[n]);
 
@@ -164,7 +165,7 @@ void cbGCUpdatesMgr::UpdateNow()
 			cbBarInfo* pBar = pRow->GetFirstBar();
 
 			bool rowChanged = FALSE;
-			bool rowBkPainted  = FALSE;
+//			bool rowBkPainted  = FALSE;
 
 			// FIXME:: the below should not be fixed
 			cbBarInfo* barsToRepaint[128];
@@ -207,7 +208,7 @@ void cbGCUpdatesMgr::UpdateNow()
 
 				cbBarInfo* pCurBar = pRow->GetFirstBar();
 
-				while( pCurBar )
+				while ( pCurBar )
 				{
 					if ( WasChanged( pCurBar->mUMgrData, 
 									 pCurBar->mBoundsInParent ) )
@@ -226,7 +227,7 @@ void cbGCUpdatesMgr::UpdateNow()
 			else
 			if ( nBars != 0 )
 			{
-				for( int i = 0; i != nBars; ++i )
+				for ( int i = 0; i != nBars; ++i )
 
 					// postphone the resizement and refreshing the changed
 					// bar windows

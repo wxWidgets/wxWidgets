@@ -371,7 +371,7 @@ void cbBarDragPlugin::UnstickFromPane( cbDockPane* pPane, wxPoint& mousePos )
 
 	if ( pPane->IsHorizontal() && fromLowerEdge )
 	{	
-		bool fromLowerEdge = mousePos.y > bounds.y;
+//		bool fromLowerEdge = mousePos.y > bounds.y;
 
 		mHintRect.y = wxMax( bounds.y + bounds.height + 1, mousePos.y - newHeight );
 
