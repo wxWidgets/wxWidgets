@@ -79,16 +79,6 @@ bool MyApp::OnInit(void)
     g_printData = new wxPrintData;
     g_pageSetupData = new wxPageSetupDialogData;
     
-    // wxGetenv( wxT("HOME") );
-
-    // Compatibility with old system. In fact, we might keep wxThePrintSetupData
-    // just for useful default values which we can optionally assign to our
-    // own print data object.
-
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
-    (*g_printData) = * wxThePrintSetupData;
-#endif
-    
     // Create the main frame window
     frame = new MyFrame((wxFrame *) NULL, (char *) "wxWindows Printing Demo", wxPoint(0, 0), wxSize(400, 400));
     
@@ -491,8 +481,6 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
     dc->SetPen(* wxBLACK_PEN);
     dc->DrawLine(50, 250, (long)(50.0 + logUnits), 250);
     dc->DrawLine(50, 250, 50, (long)(250.0 + logUnits));
-    
-    return;
     
     dc->SetFont(* wxGetApp().m_testFont);
     dc->SetBackgroundMode(wxTRANSPARENT);

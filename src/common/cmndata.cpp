@@ -43,17 +43,8 @@
     #include "wx/fontdlg.h"
 #endif // wxUSE_FONTDLG
 
-// For compatibility
-#if (defined(__WXMOTIF__) || defined(__WXMGL__) || defined(__WXGTK__) || defined(__WXX11__)|| defined(__WXPM__) || defined(__WXMAC__)) && wxUSE_POSTSCRIPT
-    #define wxCOMPATIBILITY_WITH_PRINTSETUPDATA 1
-#endif
-
 #if wxUSE_PRINTING_ARCHITECTURE
     #include "wx/paper.h"
-
-    #if wxCOMPATIBILITY_WITH_PRINTSETUPDATA
-        #include "wx/generic/dcpsg.h"
-    #endif
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
 #ifdef __WXMSW__
@@ -264,11 +255,26 @@ wxPrintData::wxPrintData()
     m_paperSize = wxSize(210, 297);
 
     // PostScript-specific data
-    m_printerCommand = "";
-    m_previewCommand = "";
-    m_printerOptions = "";
-    m_filename = "";
-    m_afmPath = "";
+    m_previewCommand = wxT("");
+    m_filename = wxT("");
+#ifdef __VMS__
+    m_printerCommand = wxT("print");
+    m_printerOptions = wxT("/nonotify/queue=psqueue");
+    m_afmPath = wxT("sys$ps_font_metrics:");
+#endif
+
+#ifdef __WXMSW__
+    m_printerCommand = wxT("print");
+    m_printerOptions = wxT("");
+    m_afmPath = wxT("c:\\windows\\system\\");
+#endif
+
+#if !defined(__VMS__) && !defined(__WXMSW__)
+    m_printerCommand = wxT("lpr");
+    m_printerOptions = wxT("");
+    m_afmPath = wxT("");
+#endif
+
     m_printerScaleX = 1.0;
     m_printerScaleY = 1.0;
     m_printerTranslateX = 0;
@@ -838,32 +844,6 @@ void wxPrintData::operator=(const wxPrintData& data)
     m_printerTranslateY = data.m_printerTranslateY;
     m_printMode = data.m_printMode;
 }
-
-// For compatibility
-#if wxCOMPATIBILITY_WITH_PRINTSETUPDATA
-void wxPrintData::operator=(const wxPrintSetupData& setupData)
-{
-    SetPrinterCommand(setupData.GetPrinterCommand());
-    SetPreviewCommand(setupData.GetPrintPreviewCommand());
-    SetPrinterOptions(setupData.GetPrinterOptions());
-
-    long xt, yt;
-    setupData.GetPrinterTranslation(& xt, & yt);
-    SetPrinterTranslation(xt, yt);
-
-    double xs, ys;
-    setupData.GetPrinterScaling(& xs, & ys);
-    SetPrinterScaling(xs, ys);
-
-    SetOrientation(setupData.GetPrinterOrientation());
-    SetPrintMode((wxPrintMode) setupData.GetPrinterMode());
-    SetFontMetricPath(setupData.GetAFMPath());
-    if (setupData.GetPaperName() != "")
-        SetPaperId(wxThePrintPaperDatabase->ConvertNameToId(setupData.GetPaperName()));
-    SetColour(setupData.GetColour());
-    SetFilename(setupData.GetPrinterFile());
-}
-#endif // wxCOMPATIBILITY_WITH_PRINTSETUPDATA
 
 // Is this data OK for showing the print dialog?
 bool wxPrintData::Ok() const

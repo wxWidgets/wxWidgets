@@ -631,7 +631,7 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
 void MyTextCtrl::OnSetFocus(wxFocusEvent& event)
 {
     if ( ms_logFocus )
-        wxLogMessage("%p got focus.", this);
+        wxLogMessage( wxT("%p got focus."), this);
 
     event.Skip();
 }
@@ -639,7 +639,7 @@ void MyTextCtrl::OnSetFocus(wxFocusEvent& event)
 void MyTextCtrl::OnKillFocus(wxFocusEvent& event)
 {
     if ( ms_logFocus )
-        wxLogMessage("%p lost focus", this);
+        wxLogMessage( wxT("%p lost focus"), this);
 
     event.Skip();
 }
@@ -657,6 +657,7 @@ void MyTextCtrl::OnText(wxCommandEvent& event)
     }
     else
     {
+        // wxLogMessage( event.GetString() );
         wxLogMessage(_T("Text changed in some control"));
     }
 }

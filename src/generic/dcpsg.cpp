@@ -88,8 +88,6 @@ static const char *wxPostScriptHeaderConicTo = "\
     /p2_y p1_y to_y p0_y sub 1 3 div mul add def\n\
     p1_x p1_y p2_x p2_y to_x to_y curveto\n\
 }  bind def\n\
-/start_ol { gsave 1.0 72 div dup scale } bind def\n\
-/end_ol { closepath fill grestore } bind def\n\
 ";
       
 static const char *wxPostScriptHeaderEllipse = "\
@@ -253,6 +251,8 @@ static char wxPostScriptHeaderReencodeISO2[] =
 // wxPostScriptDC
 //-------------------------------------------------------------------------------
 
+IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
+
 float wxPostScriptDC::ms_PSScaleFactor = 10.0;
 
 void wxPostScriptDC::SetResolution(int ppi)
@@ -265,7 +265,7 @@ int wxPostScriptDC::GetResolution()
     return (int)(ms_PSScaleFactor * 72.0);
 }
 
-
+//-------------------------------------------------------------------------------
 
 wxPostScriptDC::wxPostScriptDC ()
 {
@@ -284,57 +284,6 @@ wxPostScriptDC::wxPostScriptDC ()
 
     m_signX =  1;  // default x-axis left to right
     m_signY = -1;  // default y-axis bottom up -> top down
-
-    // Compatibility only
-    // HH: Doesn't seem to work for wxMSW...
-    #if !defined(__WXMSW__)
-    m_printData = * wxThePrintSetupData;
-    #endif
-}
-
-wxPostScriptDC::wxPostScriptDC (const wxString& file, bool interactive, wxWindow *parent)
-{
-    m_pstream = (FILE*) NULL;
-
-    m_currentRed = 0;
-    m_currentGreen = 0;
-    m_currentBlue = 0;
-
-    m_pageNumber = 0;
-
-    m_clipping = FALSE;
-
-    m_underlinePosition = 0.0;
-    m_underlineThickness = 0.0;
-
-    m_signX =  1;  // default x-axis left to right
-    m_signY = -1;  // default y-axis bottom up -> top down
-
-    Create(file, interactive, parent);
-}
-
-bool wxPostScriptDC::Create(const wxString& file, bool interactive, wxWindow *parent)
-{
-    m_isInteractive = interactive;
-
-    m_title = "";
-    m_printData.SetFilename(file);
-
-#ifdef __WXMSW__
-    // Can only send to file in Windows
-    m_printData.SetPrintMode(wxPRINT_MODE_FILE);
-#endif
-
-    if (m_isInteractive)
-    {
-        if ((m_ok = PrinterDialog (parent) ) == FALSE) return FALSE;
-    }
-    else
-    {
-        m_ok = TRUE;
-    }
-
-    return m_ok;
 }
 
 wxPostScriptDC::wxPostScriptDC (const wxPrintData& printData)
@@ -372,54 +321,6 @@ wxPostScriptDC::~wxPostScriptDC ()
 bool wxPostScriptDC::Ok() const
 {
   return m_ok;
-}
-
-// This dialog is deprecated now: use wxGenericPrintDialog or the printing framework
-bool wxPostScriptDC::PrinterDialog(wxWindow *parent)
-{
-    wxPostScriptPrintDialog dialog( parent, _("Printer Settings"), wxPoint(150, 150), wxSize(400, 400),
-                                    wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL );
-    m_ok = (dialog.ShowModal () == wxID_OK);
-
-    if (!m_ok) return FALSE;
-
-    if ((m_printData.GetFilename() == "") &&
-        (m_printData.GetPrintMode() == wxPRINT_MODE_PREVIEW  ||
-         m_printData.GetPrintMode() == wxPRINT_MODE_PRINTER))
-    {
-// steve, 05.09.94
-#ifdef __VMS__
-      m_printData.SetFilename("preview");
-#else
-      // For PS_PRINTER action this depends on a Unix-style print spooler
-      // since the wx_printer_file can be destroyed during a session
-      // @@@ TODO: a Windows-style answer for non-Unix
-      wxChar userId[256];
-      wxGetUserId (userId, sizeof (userId) / sizeof (char));
-      wxChar tmp[256];
-      wxStrcpy (tmp, wxT("/tmp/preview_"));
-      wxStrcat (tmp, userId);
-      m_printData.SetFilename(tmp);
-#endif
-      wxChar tmp2[256];
-      wxStrcpy(tmp2, m_printData.GetFilename());
-      wxStrcat (tmp2, wxT(".ps"));
-      m_printData.SetFilename(tmp2);
-    }
-    else if ((m_printData.GetFilename() == wxT("")) && (m_printData.GetPrintMode() == wxPRINT_MODE_FILE))
-    {
-      wxString file = wxSaveFileSelector (_("PostScript"), wxT("ps"));
-      if ( file.IsEmpty() )
-      {
-        m_ok = FALSE;
-        return FALSE;
-      }
-
-      m_printData.SetFilename(file);
-      m_ok = TRUE;
-    }
-
-    return m_ok;
 }
 
 void wxPostScriptDC::DoSetClippingRegion (wxCoord x, wxCoord y, wxCoord w, wxCoord h)
@@ -1193,9 +1094,13 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
 
 #ifdef __WXGTK20__
 
+#define PANGO_ENABLE_ENGINE
+
 #include "wx/gtk/private.h"
 #include "wx/fontutil.h"
 #include "gtk/gtk.h"
+//#include "gtk/gdk/gdkx.h"
+//#include <pango/pangoxft.h>
 #include <pango/pangoft2.h>
 #include <freetype/ftglyph.h>
 
@@ -1263,7 +1168,7 @@ static int paps_cubic_to( FT_Vector*  control1,
   return 0;
 }
 
-static void draw_bezier_outline(FILE *OUT,
+void draw_bezier_outline(FILE *OUT,
 			 int dpi,
 			 FT_Face face,
 			 FT_UInt glyph_index,
@@ -1289,18 +1194,16 @@ static void draw_bezier_outline(FILE *OUT,
   outline_info.dpi = dpi;
   outline_info.OUT = OUT;
 
-  fprintf(OUT, "gsave %d %d translate 0 0 0 setrgbcolor\n", pos_x, pos_y);
-  fprintf(OUT, "start_ol\n");
+  fprintf(OUT, "gsave %d %d translate 1.0 72.0 div dup scale 0 0 0 setrgbcolor\n", pos_x, pos_y );
 
   FT_Load_Glyph(face, glyph_index, load_flags);
   FT_Get_Glyph (face->glyph, &glyph);
   FT_Outline_Decompose (&(((FT_OutlineGlyph)glyph)->outline),
                         &outlinefunc, &outline_info);
-  fprintf(OUT, "end_ol grestore \n");
+  fprintf(OUT, "closepath fill grestore \n");
   
   FT_Done_Glyph (glyph);
 }
-
 
 #endif
 
@@ -1310,11 +1213,9 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 
 #ifdef __WXGTK20__
 
-    int dpi = GetResolution() * 2;
-    dpi = 300;
+    int dpi = GetResolution();
     
     PangoContext *context = pango_ft2_get_context ( dpi, dpi );
-    
 
     // What are these for?
     pango_context_set_language (context, pango_language_from_string ("en_US"));
@@ -1324,7 +1225,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     pango_context_set_font_description (context, m_font.GetNativeFontInfo()->description );
 
     // Create layout 
-    PangoLayout *layout = layout = pango_layout_new (context);
+    PangoLayout *layout = pango_layout_new (context);
 #if wxUSE_UNICODE
     wxCharBuffer buffer = wxConvUTF8.cWC2MB( text );
 #else
@@ -1332,9 +1233,12 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 #endif
 	pango_layout_set_text( layout, (const char*) buffer, strlen(buffer) );
 
-#if 0
-    double xx = LogicalToDeviceX(x);
-    double yy = LogicalToDeviceY(y /*+ bitmap.GetHeight()*/ );
+#if 1
+    int xx = LogicalToDeviceX(x);
+    int yy = LogicalToDeviceY(y /*+ bitmap.GetHeight()*/ );
+    
+    xx *= PANGO_SCALE;
+    yy *= PANGO_SCALE;
 
     // Loop over lines in layout
     int num_lines = pango_layout_get_line_count( layout );
@@ -1357,13 +1261,13 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
             for (int glyph_idx = 0; glyph_idx < num_glyphs; glyph_idx++)
             {
                 PangoGlyphGeometry geometry = glyphs->glyphs[glyph_idx].geometry;
-                double pos_x = xx + 1.0 * geometry.x_offset / PANGO_SCALE;   
-                double pos_y = yy - 1.0 * geometry.y_offset / PANGO_SCALE;
-                xx += 1.0 * geometry.width / PANGO_SCALE;
-
+                int pos_x = xx + geometry.x_offset;
+                int pos_y = yy - geometry.y_offset;
+                xx += geometry.width;
+                
                 draw_bezier_outline( m_pstream, dpi, ft_face,
 			      (FT_UInt)(glyphs->glyphs[glyph_idx].glyph),
-			      (wxCoord)pos_x, (wxCoord)pos_y );
+			      (wxCoord)(pos_x / PANGO_SCALE), (wxCoord)(pos_y / PANGO_SCALE) );
             }
             runs_list = runs_list->next;
         }
@@ -1863,6 +1767,20 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
 
     m_ok = TRUE;
 
+    fprintf( m_pstream, "%%!PS-Adobe-2.0\n" );
+    fprintf( m_pstream, "%%%%Title: %s\n", (const char *) m_title.ToAscii() );
+    fprintf( m_pstream, "%%%%Creator: wxWindows PostScript renderer\n" );
+    fprintf( m_pstream, "%%%%CreationDate: %s\n", (const char *) wxNow().ToAscii() );
+    if (m_printData.GetOrientation() == wxLANDSCAPE)
+        fprintf( m_pstream, "%%%%Orientation: Landscape\n" );
+    else
+        fprintf( m_pstream, "%%%%Orientation: Portrait\n" );
+    
+    // wxPaperSize ps = m_printData.GetPaperId();
+    // if (ps == ...)
+    fprintf( m_pstream, "%%%%DocumentPaperSizes: %s\n", "A4" );
+    fprintf( m_pstream, "%%%%EndComments\n\n" );
+
     fprintf( m_pstream, "%%%%BeginProlog\n" );
     fprintf( m_pstream, wxPostScriptHeaderConicTo );
     fprintf( m_pstream, wxPostScriptHeaderEllipse );
@@ -1903,15 +1821,7 @@ void wxPostScriptDC::EndDoc ()
     fclose( m_pstream );
     m_pstream = (FILE *) NULL;
 
-    wxChar *header_file = wxGetTempFileName("ps");
-
-    m_pstream = wxFopen( header_file, wxT("w+") );
-
-    fprintf( m_pstream, "%%!PS-Adobe-2.0\n" );                     // PostScript magic strings
-    fprintf( m_pstream, "%%%%Title: %s\n", (const char *)m_title.mb_str() );
-    fprintf( m_pstream, "%%%%Creator: wxWindows PostScript renderer\n" );
-    fprintf( m_pstream, "%%%%CreationDate: %s\n", (const char *)wxNow().mb_str() );
-
+#if 0    
 
     // THE FOLLOWING HAS BEEN CONTRIBUTED BY Andy Fyfe <andy@hyperparallel.com>
 
@@ -1923,11 +1833,6 @@ void wxPostScriptDC::EndDoc ()
 
     wx_printer_scale_x = m_printData.GetPrinterScaleX();
     wx_printer_scale_y = m_printData.GetPrinterScaleY();
-
-    if (m_printData.GetOrientation() == wxLANDSCAPE)
-        fprintf( m_pstream, "%%%%Orientation: Landscape\n" );
-    else
-        fprintf( m_pstream, "%%%%Orientation: Portrait\n" );
 
     // Compute the bounding box.  Note that it is in the default user
     // coordinate system, thus we have to convert the values.
@@ -1972,7 +1877,6 @@ void wxPostScriptDC::EndDoc ()
             (wxCoord)floor((double)llx), (wxCoord)floor((double)lly),
             (wxCoord)ceil((double)urx), (wxCoord)ceil((double)ury) );
     fprintf( m_pstream, "%%%%Pages: %d\n", (wxPageNumber - 1) );
-    fprintf( m_pstream, "%%%%EndComments\n\n" );
 
     // To check the correctness of the bounding box, postscript commands
     // to draw a box corresponding to the bounding box are generated below.
@@ -1985,17 +1889,6 @@ void wxPostScriptDC::EndDoc ()
     fprintf( m_pstream, "%% %d %d lineto\n", urx, lly );
     fprintf( m_pstream, "%% %d %d lineto\n", urx, ury );
     fprintf( m_pstream, "%% %d %d lineto closepath stroke\n", llx, ury );
-
-    fclose( m_pstream );
-    m_pstream = (FILE*) NULL;
-
-    wxChar *tmp_file = wxGetTempFileName("ps");
-
-    // Paste header Before wx_printer_file
-    wxConcatFiles (header_file, m_printData.GetFilename(), tmp_file );
-    wxRemoveFile( header_file );
-    wxRemoveFile( m_printData.GetFilename() );
-    wxRenameFile( tmp_file, m_printData.GetFilename() );
 
 #if defined(__X__) || defined(__WXGTK__)
     if (m_ok)
@@ -2046,6 +1939,8 @@ void wxPostScriptDC::EndDoc ()
             break;
         }
     }
+#endif
+
 #endif
 }
 
@@ -2213,16 +2108,16 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     double UnderlinePosition = 0.0;
     double UnderlineThickness = 0.0;
 
-    /* get actual parameters */
+    // Get actual parameters
     int Family = fontToUse->GetFamily();
     int Size =   fontToUse->GetPointSize();
     int Style =  fontToUse->GetStyle();
     int Weight = fontToUse->GetWeight();
 
-    /* if we have another font, read the font-metrics */
+    // If we have another font, read the font-metrics
     if (Family!=lastFamily || Size!=lastSize || Style!=lastStyle || Weight!=lastWeight)
     {
-        /* store actual values */
+        // Store actual values
         lastFamily = Family;
         lastSize =   Size;
         lastStyle =  Style;
@@ -2266,12 +2161,31 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
             }
         }
 
-        /* get the directory of the AFM files */
-        wxString afmName = wxEmptyString;
+        FILE *afmFile = NULL;
+        
+        // Get the directory of the AFM files
+        wxString afmName;
         if (!m_printData.GetFontMetricPath().IsEmpty())
         {
             afmName = m_printData.GetFontMetricPath();
+            afmName << wxFILE_SEP_PATH << name;
+            afmFile = wxFopen(afmName,wxT("r"));
         }
+
+#if defined(__UNIX__) && !defined(__VMS__)
+        if (afmFile==NULL)
+        {
+           afmName = wxGetDataDir();
+           afmName <<  wxFILE_SEP_PATH
+#if defined(__LINUX__) || defined(__FREEBSD__)
+                   << wxT("gs_afm") << wxFILE_SEP_PATH
+#else
+                   << wxT("afm") << wxFILE_SEP_PATH
+#endif
+                   << name;
+           afmFile = wxFopen(afmName,wxT("r"));
+        }
+#endif
 
         /* 2. open and process the file
            /  a short explanation of the AFM format:
@@ -2286,37 +2200,6 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
            /
            /  when the font has changed, we read in the right AFM file and store the
            /  character widths in an array, which is processed below (see point 3.). */
-
-        /* new elements JC Sun Aug 25 23:21:44 MET DST 1996 */
-
-        afmName << name;
-        FILE *afmFile = wxFopen(afmName,wxT("r"));
-
-        if (afmFile==NULL)
-        {
-           afmName = wxThePrintSetupData->GetAFMPath();
-           afmName << wxFILE_SEP_PATH << name;
-           afmFile = wxFopen(afmName,wxT("r"));
-        }
-
-#if defined(__UNIX__) && !defined(__VMS__)
-       if (afmFile==NULL)
-        /* please do NOT change the line above to "else if (afmFile==NULL)" -
-           - afmFile = fopen() may fail and in that case the next if branch
-           MUST be executed - and it would not if there was "else" */
-        {
-           afmName = wxGetDataDir();
-           afmName <<  wxFILE_SEP_PATH
-#if defined(__LINUX__) || defined(__FREEBSD__)
-                   << wxT("gs_afm") << wxFILE_SEP_PATH
-#else
-                   << wxT("afm") << wxFILE_SEP_PATH
-#endif
-                   << name;
-           afmFile = wxFopen(afmName,wxT("r"));
-        }
-#endif
-
         if (afmFile==NULL)
         {
             wxLogDebug( wxT("GetTextExtent: can't open AFM file '%s'"), afmName.c_str() );
@@ -2482,393 +2365,6 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     if (externalLeading) *externalLeading = 0;
 
 #endif
-}
-
-// Determine the Default Postscript Previewer
-// available on the platform
-#if defined(__SUN__) && defined(__XVIEW__)
-// OpenWindow/NeWS's Postscript Previewer
-# define PS_VIEWER_PROG "pageview"
-#elif defined(__VMS__)
-#define PS_VIEWER_PROG "view/format=ps/select=x_display"
-#elif defined(__SGI__)
-// SGI's Display Postscript Previewer
-//# define PS_VIEWER_PROG "dps"
-# define PS_VIEWER_PROG "xpsview"
-#elif defined(__X__) || defined(__WXGTK__)
-// Front-end to ghostscript
-# define PS_VIEWER_PROG "ghostview"
-#else
-// Windows ghostscript/ghostview
-# define PS_VIEWER_PROG "gsview"
-#endif
-
-wxPrintSetupData *wxThePrintSetupData = (wxPrintSetupData *) NULL;
-
-IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
-IMPLEMENT_DYNAMIC_CLASS(wxPrintSetupData, wxObject)
-
-// Redundant now I think
-#if 1
-IMPLEMENT_CLASS(wxPostScriptPrintDialog, wxDialog)
-
-wxPostScriptPrintDialog::wxPostScriptPrintDialog (wxWindow *parent, const wxString& title,
-            const wxPoint& pos, const wxSize& size, wxCoord style):
-   wxDialog(parent, -1, title, pos, size, style)
-{
-   wxBeginBusyCursor();
-
-   char buf[100];
-   int yPos = 40;
-   wxString
-      *orientation = new wxString[2],
-      *print_modes = new wxString[3];
-   int features;
-   wxCoord wx_printer_translate_x, wx_printer_translate_y;
-   double wx_printer_scale_x, wx_printer_scale_y;
-
-   orientation[0] = _("Portrait");
-   orientation[1] = _("Landscape");
-
-   print_modes[0] = _("Send to Printer");
-   print_modes[1] = _("Print to File");
-   print_modes[2] = _("Preview Only");
-
-
-
-   wxButton *okBut = new wxButton (this, wxID_OK, _("OK"), wxPoint(5, 5));
-   (void) new wxButton (this, wxID_CANCEL, _("Cancel"), wxPoint(40, 5));
-   okBut->SetDefault();
-
-
-#if defined(__WXGTK__) || defined (__WXMOTIF__)
-   (void) new wxStaticText( this, -1, _("Printer Command: "),
-                            wxPoint(5, yPos) );
-   (void) new wxTextCtrl( this, wxID_PRINTER_COMMAND, wxThePrintSetupData->GetPrinterCommand(),
-                          wxPoint(100, yPos), wxSize(100, -1) );
-
-   (void) new wxStaticText( this, -1, _("Printer Options: "),
-                            wxPoint(210, yPos) );
-   (void) new wxTextCtrl( this, wxID_PRINTER_OPTIONS, wxThePrintSetupData->GetPrinterOptions(),
-                          wxPoint(305, yPos), wxSize(150, -1) );
-
-   yPos += 40;
-#endif
-
-
-   wxRadioBox *radio0 = new wxRadioBox(this, wxID_PRINTER_ORIENTATION, "Orientation: ", wxPoint(5, yPos), wxSize(-1,-1),
-                                       2,orientation,2,wxRA_SPECIFY_ROWS);
-   radio0->SetSelection((int)wxThePrintSetupData->GetPrinterOrientation() - 1);
-
-  // @@@ Configuration hook
-   if ( !wxThePrintSetupData->GetPrintPreviewCommand() )
-      wxThePrintSetupData->SetPrintPreviewCommand(PS_VIEWER_PROG);
-
-   //   wxGetResource ("wxWindows", "PSView", &wxThePrintSetupData->m_previewCommand);
-
-   features = (wxThePrintSetupData->GetPrintPreviewCommand() &&
-               *wxThePrintSetupData->GetPrintPreviewCommand()) ? 3 : 2;
-
-   wxRadioBox *radio1 = new wxRadioBox(this, wxID_PRINTER_MODES, _("PostScript:"),
-                                       wxPoint(150, yPos),
-                                       wxSize(-1,-1), features,
-                                       print_modes, features, wxRA_SPECIFY_ROWS);
-
-#ifdef __WXMSW__
-   radio1->Enable(0, FALSE);
-   if (wxThePrintSetupData->GetPrintPreviewCommand() && *wxThePrintSetupData->GetPrintPreviewCommand())
-      radio1->Enable(2, FALSE);
-#endif
-
-   radio1->SetSelection((int)wxThePrintSetupData->GetPrinterMode());
-   wxThePrintSetupData->GetPrinterTranslation(&wx_printer_translate_x, &wx_printer_translate_y);
-   wxThePrintSetupData->GetPrinterScaling(&wx_printer_scale_x, &wx_printer_scale_y);
-
-   sprintf (buf, "%.2f", wx_printer_scale_x);
-
-   yPos += 90;
-   (void) new wxStaticText(this, -1, _("X Scaling"), wxPoint(5, yPos));
-   /* wxTextCtrl *text1 = */ (void) new wxTextCtrl(this, wxID_PRINTER_X_SCALE, buf, wxPoint(100, yPos), wxSize(100, -1));
-
-   sprintf (buf, "%.2f", wx_printer_scale_y);
-   (void) new wxStaticText(this, -1, _("Y Scaling"), wxPoint(220, yPos));
-   /* wxTextCtrl *text2 = */ (void) new wxTextCtrl(this, wxID_PRINTER_Y_SCALE, buf, wxPoint(320, yPos), wxSize(100, -1));
-
-   yPos += 25;
-
-   (void) new wxStaticText(this, -1, _("X Translation"), wxPoint(5, yPos));
-   sprintf (buf, "%.2d", wx_printer_translate_x);
-   /* wxTextCtrl *text3 = */ (void) new wxTextCtrl(this, wxID_PRINTER_X_TRANS, buf, wxPoint(100, yPos), wxSize(100, -1));
-
-   (void) new wxStaticText(this, -1, _("Y Translation"), wxPoint(220, yPos));
-   sprintf (buf, "%.2d", wx_printer_translate_y);
-   /* wxTextCtrl *text4 = */ (void) new wxTextCtrl(this, wxID_PRINTER_Y_TRANS, buf, wxPoint(320, yPos), wxSize(100, -1));
-
-   Fit ();
-
-   delete[] orientation;
-   delete[] print_modes;
-
-   wxEndBusyCursor();
-}
-
-int wxPostScriptPrintDialog::ShowModal ()
-{
-  if ( wxDialog::ShowModal() == wxID_OK )
-  {
-//    wxTextCtrl *text0 = (wxTextCtrl *)FindWindow(wxID_PRINTER_OPTIONS);
-      wxTextCtrl *text1 = (wxTextCtrl *)FindWindow(wxID_PRINTER_X_SCALE);
-      wxTextCtrl *text2 = (wxTextCtrl *)FindWindow(wxID_PRINTER_Y_SCALE);
-      wxTextCtrl *text3 = (wxTextCtrl *)FindWindow(wxID_PRINTER_X_TRANS);
-      wxTextCtrl *text4 = (wxTextCtrl *)FindWindow(wxID_PRINTER_Y_TRANS);
-//    wxTextCtrl *text_prt = (wxTextCtrl *)FindWindow(wxID_PRINTER_COMMAND);
-      wxRadioBox *radio0 = (wxRadioBox *)FindWindow(wxID_PRINTER_ORIENTATION);
-      wxRadioBox *radio1 = (wxRadioBox *)FindWindow(wxID_PRINTER_MODES);
-
-      StringToDouble (WXSTRINGCAST text1->GetValue (), &wxThePrintSetupData->m_printerScaleX);
-      StringToDouble (WXSTRINGCAST text2->GetValue (), &wxThePrintSetupData->m_printerScaleY);
-
-      long dummy;
-      StringToLong (WXSTRINGCAST text3->GetValue (), &dummy);
-      wxThePrintSetupData->m_printerTranslateX = (wxCoord)dummy;
-      StringToLong (WXSTRINGCAST text4->GetValue (), &dummy);
-      wxThePrintSetupData->m_printerTranslateY = (wxCoord)dummy;
-
-#ifdef __X__
-      //      wxThePrintSetupData->SetPrinterOptions(WXSTRINGCAST text0->GetValue ());
-      //      wxThePrintSetupData->SetPrinterCommand(WXSTRINGCAST text_prt->GetValue ());
-#endif
-
-      wxThePrintSetupData->SetPrinterOrientation((radio0->GetSelection() == 1 ? wxLANDSCAPE : wxPORTRAIT));
-
-      // C++ wants this
-      switch ( radio1->GetSelection() ) {
-        case 0: wxThePrintSetupData->SetPrinterMode(PS_PRINTER); break;
-        case 1:  wxThePrintSetupData->SetPrinterMode(PS_FILE); break;
-        case 2: wxThePrintSetupData->SetPrinterMode(PS_PREVIEW); break;
-      }
-      return wxID_OK;
-  }
-  return wxID_CANCEL;
-}
-#endif
- // 0 (redundant)
-
-// PostScript printer settings
-// RETAINED FOR BACKWARD COMPATIBILITY
-void wxSetPrinterCommand(const wxString& cmd)
-{
-  wxThePrintSetupData->SetPrinterCommand(cmd);
-}
-
-void wxSetPrintPreviewCommand(const wxString& cmd)
-{
-  wxThePrintSetupData->SetPrintPreviewCommand(cmd);
-}
-
-void wxSetPrinterOptions(const wxString& flags)
-{
-  wxThePrintSetupData->SetPrinterOptions(flags);
-}
-
-void wxSetPrinterFile(const wxString& f)
-{
-  wxThePrintSetupData->SetPrinterFile(f);
-}
-
-void wxSetPrinterOrientation(int orient)
-{
-  wxThePrintSetupData->SetPrinterOrientation(orient);
-}
-
-void wxSetPrinterScaling(double x, double y)
-{
-  wxThePrintSetupData->SetPrinterScaling(x, y);
-}
-
-void wxSetPrinterTranslation(wxCoord x, wxCoord y)
-{
-  wxThePrintSetupData->SetPrinterTranslation(x, y);
-}
-
-// 1 = Preview, 2 = print to file, 3 = send to printer
-void wxSetPrinterMode(int mode)
-{
-  wxThePrintSetupData->SetPrinterMode(mode);
-}
-
-void wxSetAFMPath(const wxString& f)
-{
-  wxThePrintSetupData->SetAFMPath(f);
-}
-
-// Get current values
-wxString wxGetPrinterCommand()
-{
-  return wxThePrintSetupData->GetPrinterCommand();
-}
-
-wxString wxGetPrintPreviewCommand()
-{
-  return wxThePrintSetupData->GetPrintPreviewCommand();
-}
-
-wxString wxGetPrinterOptions()
-{
-  return wxThePrintSetupData->GetPrinterOptions();
-}
-
-wxString wxGetPrinterFile()
-{
-  return wxThePrintSetupData->GetPrinterFile();
-}
-
-int wxGetPrinterOrientation()
-{
-  return wxThePrintSetupData->GetPrinterOrientation();
-}
-
-void wxGetPrinterScaling(double* x, double* y)
-{
-  wxThePrintSetupData->GetPrinterScaling(x, y);
-}
-
-void wxGetPrinterTranslation(wxCoord *x, wxCoord *y)
-{
-  wxThePrintSetupData->GetPrinterTranslation(x, y);
-}
-
-int wxGetPrinterMode()
-{
-  return wxThePrintSetupData->GetPrinterMode();
-}
-
-wxString wxGetAFMPath()
-{
-  return wxThePrintSetupData->GetAFMPath();
-}
-
-/*
- * Print setup data
- */
-
-wxPrintSetupData::wxPrintSetupData()
-{
-  m_printerOrient = wxPORTRAIT;
-  m_printerScaleX = (double)1.0;
-  m_printerScaleY = (double)1.0;
-  m_printerTranslateX = 0;
-  m_printerTranslateY = 0;
-  m_printerMode = wxPRINT_MODE_FILE;
-  m_printColour = TRUE;
-}
-
-wxPrintSetupData::~wxPrintSetupData()
-{
-}
-
-void wxPrintSetupData::operator=(wxPrintSetupData& data)
-{
-  SetPrinterCommand(data.GetPrinterCommand());
-  SetPrintPreviewCommand(data.GetPrintPreviewCommand());
-  SetPrinterOptions(data.GetPrinterOptions());
-  wxCoord x, y;
-  data.GetPrinterTranslation(&x, &y);
-  SetPrinterTranslation(x, y);
-
-  double x1, y1;
-  data.GetPrinterScaling(&x1, &y1);
-  SetPrinterScaling(x1, y1);
-
-  SetPrinterOrientation(data.GetPrinterOrientation());
-  SetPrinterMode(data.GetPrinterMode());
-  SetAFMPath(data.GetAFMPath());
-  SetPaperName(data.GetPaperName());
-  SetColour(data.GetColour());
-}
-
-// Initialize from a wxPrintData object (wxPrintData should now be used instead of wxPrintSetupData).
-void wxPrintSetupData::operator=(const wxPrintData& data)
-{
-    SetPrinterCommand(data.GetPrinterCommand());
-    SetPrintPreviewCommand(data.GetPreviewCommand());
-    SetPrinterOptions(data.GetPrinterOptions());
-    SetPrinterTranslation((wxCoord)data.GetPrinterTranslateX(),
-                          (wxCoord)data.GetPrinterTranslateY());
-    SetPrinterScaling(data.GetPrinterScaleX(), data.GetPrinterScaleY());
-    SetPrinterOrientation(data.GetOrientation());
-    SetPrinterMode((int) data.GetPrintMode());
-    SetAFMPath(data.GetFontMetricPath());
-    SetPaperName(wxThePrintPaperDatabase->ConvertIdToName(data.GetPaperId()));
-    SetColour(data.GetColour());
-    SetPrinterFile(data.GetFilename());
-}
-
-void wxInitializePrintSetupData(bool init)
-{
-  if (init)
-  {
-    wxThePrintSetupData = new wxPrintSetupData;
-
-    wxThePrintSetupData->SetPrintPreviewCommand(PS_VIEWER_PROG);
-    wxThePrintSetupData->SetPrinterOrientation(wxPORTRAIT);
-    wxThePrintSetupData->SetPrinterMode(wxPRINT_MODE_PREVIEW);
-    wxThePrintSetupData->SetPaperName(_("A4 sheet, 210 x 297 mm"));
-
-    // Could have a .ini file to read in some defaults
-    // - and/or use environment variables, e.g. WXWIN
-#ifdef __VMS__
-    wxThePrintSetupData->SetPrinterCommand("print");
-    wxThePrintSetupData->SetPrinterOptions("/nonotify/queue=psqueue");
-    wxThePrintSetupData->SetAFMPath("sys$ps_font_metrics:");
-#endif
-#ifdef __WXMSW__
-    wxThePrintSetupData->SetPrinterCommand("print");
-    wxThePrintSetupData->SetAFMPath("c:\\windows\\system\\");
-    wxThePrintSetupData->SetPrinterOptions("");
-#endif
-#if !defined(__VMS__) && !defined(__WXMSW__)
-    wxThePrintSetupData->SetPrinterCommand("lpr");
-    wxThePrintSetupData->SetPrinterOptions("");
-    wxThePrintSetupData->SetAFMPath("");
-#endif
-  }
-  else
-  {
-    if (wxThePrintSetupData)
-      delete wxThePrintSetupData;
-     wxThePrintSetupData = (wxPrintSetupData *) NULL;
-  }
-}
-
-// A module to allow initialization/cleanup of PostScript-related
-// things without calling these functions from app.cpp.
-
-class WXDLLEXPORT wxPostScriptModule: public wxModule
-{
-DECLARE_DYNAMIC_CLASS(wxPostScriptModule)
-public:
-    wxPostScriptModule() {}
-    bool OnInit();
-    void OnExit();
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxPostScriptModule, wxModule)
-
-/*
- * Initialization/cleanup module
- */
-
-bool wxPostScriptModule::OnInit()
-{
-    wxInitializePrintSetupData();
-
-    return TRUE;
-}
-
-void wxPostScriptModule::OnExit()
-{
-    wxInitializePrintSetupData(FALSE);
 }
 
 #endif

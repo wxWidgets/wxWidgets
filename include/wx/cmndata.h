@@ -21,13 +21,8 @@
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
 
-#if (defined(__WXMOTIF__) || defined(__WXMGL__) || defined(__WXX11__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMAC__)) && wxUSE_POSTSCRIPT
-class WXDLLEXPORT wxPrintSetupData;
-#endif
-
 class WXDLLEXPORT wxColourData: public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wxColourData)
 public:
     wxColourData();
     wxColourData(const wxColourData& data);
@@ -49,11 +44,13 @@ public:
     wxColour        dataColour;
     wxColour        custColours[16];
     bool            chooseFull;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxColourData)
 };
 
 class WXDLLEXPORT wxFontData: public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wxFontData)
 public:
     wxFontData();
     ~wxFontData();
@@ -130,6 +127,9 @@ public:
 private:
     wxFontEncoding       m_encoding;
     wxNativeEncodingInfo m_encodingInfo;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxFontData)
 };
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -140,8 +140,7 @@ private:
 
 class WXDLLEXPORT wxPrintData: public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wxPrintData)
-
+public:
     wxPrintData();
     wxPrintData(const wxPrintData& printData);
     ~wxPrintData();
@@ -199,11 +198,6 @@ class WXDLLEXPORT wxPrintData: public wxObject
 
     void operator=(const wxPrintData& data);
 
-    // For compatibility
-#if (defined(__WXMOTIF__) || defined(__WXMGL__) || defined(__WXX11__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMAC__)) && wxUSE_POSTSCRIPT
-    void operator=(const wxPrintSetupData& setupData);
-#endif
-
 #if defined(__WXMSW__)
     // Convert to/from the DEVMODE structure
     void ConvertToNative();
@@ -227,7 +221,6 @@ public:
 #endif
 
 private:
-
     int             m_printNoCopies;
     int             m_printOrientation;
     bool            m_printCollate;
@@ -251,6 +244,9 @@ private:
     long            m_printerTranslateX;
     long            m_printerTranslateY;
     wxPrintMode     m_printMode;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxPrintData)
 };
 
 /*
@@ -262,8 +258,7 @@ private:
 
 class WXDLLEXPORT wxPrintDialogData: public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wxPrintDialogData)
-
+public:
     wxPrintDialogData();
     wxPrintDialogData(const wxPrintDialogData& dialogData);
     wxPrintDialogData(const wxPrintData& printData);
@@ -317,8 +312,8 @@ class WXDLLEXPORT wxPrintDialogData: public wxObject
     void SetOwnerWindow(wxWindow* win);
     void* GetNativeData() const { return m_printDlgData; }
 #elif defined(__WXMAC__)
-  void ConvertToNative();
-  void ConvertFromNative();
+    void ConvertToNative();
+    void ConvertFromNative();
 #endif
 
 #ifdef __WXMSW__
@@ -326,7 +321,6 @@ class WXDLLEXPORT wxPrintDialogData: public wxObject
 #endif
 
 private:
-
     int             m_printFromPage;
     int             m_printToPage;
     int             m_printMinPage;
@@ -341,8 +335,10 @@ private:
     bool            m_printEnableHelp;
     bool            m_printEnablePrintToFile;
     bool            m_printSetupDialog;
-
     wxPrintData     m_printData;
+
+private:    
+    DECLARE_DYNAMIC_CLASS(wxPrintDialogData)
 };
 
 /*
@@ -354,8 +350,6 @@ private:
 
 class WXDLLEXPORT wxPageSetupDialogData: public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wxPageSetupDialogData)
-
 public:
     wxPageSetupDialogData();
     wxPageSetupDialogData(const wxPageSetupDialogData& dialogData);
@@ -409,8 +403,8 @@ public:
     void SetOwnerWindow(wxWindow* win);
     void* GetNativeData() const { return m_pageSetupData; }
 #elif defined(__WXMAC__)
-  void ConvertToNative();
-  void ConvertFromNative();
+    void ConvertToNative();
+    void ConvertFromNative();
 #endif
 
     // Use paper size defined in this object to set the wxPrintData
@@ -431,14 +425,11 @@ public:
 #endif
 
 private:
-
     wxSize          m_paperSize; // The dimensions selected by the user (on return, same as in wxPrintData?)
     wxPoint         m_minMarginTopLeft;
     wxPoint         m_minMarginBottomRight;
     wxPoint         m_marginTopLeft;
     wxPoint         m_marginBottomRight;
-
-    // Flags
     bool            m_defaultMinMargins;
     bool            m_enableMargins;
     bool            m_enableOrientation;
@@ -446,8 +437,10 @@ private:
     bool            m_enablePrinter;
     bool            m_getDefaultInfo; // Equiv. to PSD_RETURNDEFAULT
     bool            m_enableHelp;
-
     wxPrintData     m_printData;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxPageSetupDialogData)
 };
 
 #endif // wxUSE_PRINTING_ARCHITECTURE

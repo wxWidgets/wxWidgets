@@ -780,7 +780,7 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
     if ( type == wxEVT_COMMAND_FIND || type == wxEVT_COMMAND_FIND_NEXT )
     {
         wxLogMessage(wxT("Find %s'%s' (flags: %s)"),
-                     type == wxEVT_COMMAND_FIND_NEXT ? _T("next ") : "",
+                     type == wxEVT_COMMAND_FIND_NEXT ? wxT("next ") : wxT(""),
                      event.GetFindString().c_str(),
                      DecodeFindDialogEventFlags(event.GetFlags()).c_str());
     }
@@ -788,7 +788,7 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
                 type == wxEVT_COMMAND_FIND_REPLACE_ALL )
     {
         wxLogMessage(wxT("Replace %s'%s' with '%s' (flags: %s)"),
-                     type == wxEVT_COMMAND_FIND_REPLACE_ALL ? _T("all ") : "",
+                     type == wxEVT_COMMAND_FIND_REPLACE_ALL ? _T("all ") : wxT(""),
                      event.GetFindString().c_str(),
                      event.GetReplaceString().c_str(),
                      DecodeFindDialogEventFlags(event.GetFlags()).c_str());
