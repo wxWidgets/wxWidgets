@@ -176,10 +176,6 @@ protected:
     // Creates resource from info in given node:
     wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance = NULL);
 
-    // Remove nodes with property "platform" that does not
-    // match current platform
-    void ProcessPlatformProperty(wxXmlNode *node);
-
     bool GetUseLocale() { return m_useLocale; }
 
 private:

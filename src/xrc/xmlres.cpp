@@ -210,7 +210,7 @@ bool wxXmlResource::AttachUnknownControl(const wxString& name,
 }
 
 
-void wxXmlResource::ProcessPlatformProperty(wxXmlNode *node)
+static void ProcessPlatformProperty(wxXmlNode *node)
 {
     wxString s;
     bool isok;
