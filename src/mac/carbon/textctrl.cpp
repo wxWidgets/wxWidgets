@@ -159,7 +159,6 @@ typedef struct {
         /* OS records referenced */
     TXNObject fTXNRec; /* the txn record */
     TXNFrameID fTXNFrame; /* the txn frame ID */
-	bool fMultiline ;
     ControlHandle fUserPaneRec;  /* handle to the user pane control */
     WindowPtr fOwner; /* window containing control */
     GrafPtr fDrawingEnvironment; /* grafport where control is drawn */
@@ -176,6 +175,7 @@ typedef struct {
         /* our focus advance override routine */
     EventHandlerUPP handlerUPP;
     EventHandlerRef handlerRef;
+	bool fMultiline ;
 } STPTextPaneVars;
 
 
@@ -194,8 +194,8 @@ ControlUserPaneFocusUPP gTPFocusProc = NULL;
 
     /* events handled by our focus advance override routine */
 #if TARGET_CARBON
-//static const EventTypeSpec gMLTEEvents[] = { { kEventClassTextInput, kEventUnicodeForKeyEvent } };
-//#define kMLTEEventCount (sizeof( gMLTEEvents ) / sizeof( EventTypeSpec ))
+static const EventTypeSpec gMLTEEvents[] = { { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } };
+#define kMLTEEventCount (sizeof( gMLTEEvents ) / sizeof( EventTypeSpec ))
 #endif
 
 
@@ -524,7 +524,7 @@ static pascal OSStatus FocusAdvanceOverride(EventHandlerCallRef myHandler, Event
         /* noErr lets the CEM know we handled the event */
     return noErr;
 bail:
-    return eventNotHandledErr;
+	return eventNotHandledErr;
 }
 #endif
 
@@ -601,21 +601,18 @@ OSStatus mUPOpenControl(ControlHandle theControl, bool multiline)
         kTXNSystemDefaultEncoding, 
         &varsp->fTXNRec, &varsp->fTXNFrame, (TXNObjectRefcon) tpvars);
 
-		/* set the field's font and style */
-		TXNTypeAttributes typeAttr[2];
-    typeAttr[0].tag = kTXNQDFontSizeAttribute;
-    typeAttr[0].size = kTXNFontSizeAttributeSize;
-    typeAttr[0].data.dataValue = 10 << 16;		
+		Str255 fontName ;
+		SInt16 fontSize ;
+		Style fontStyle ;
+		
+		GetThemeFont(kThemeSmallSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
 
-    typeAttr[1].tag = kTXNQDFontStyleAttribute;
-    typeAttr[1].size = kTXNQDFontStyleAttributeSize;
-    typeAttr[1].data.dataValue = normal ;		
-
-		/* this does not seem to get the font id through
-    typeAttr[2].tag = kTXNQDFontFamilyIDAttribute ; // NameAttribute;
-    typeAttr[2].size = kTXNQDFontFamilyIDAttributeSize ; // kTXNQDFontNameAttributeSize;
-    typeAttr[2].data.dataValue = kFontIDTimes ; // (void*) "\pGeneva" ;		
-     */
+		TXNTypeAttributes typeAttr[] =
+		{
+            {   kTXNQDFontNameAttribute , kTXNQDFontNameAttributeSize , { (void*) fontName } } ,
+		    {   kTXNQDFontSizeAttribute , kTXNFontSizeAttributeSize , { (void*) (fontSize << 16) } } ,
+		    {   kTXNQDFontStyleAttribute , kTXNQDFontStyleAttributeSize , {  (void*) normal } } ,
+        } ;
 
     OSStatus status = TXNSetTypeAttributes (varsp->fTXNRec, sizeof( typeAttr ) / sizeof(TXNTypeAttributes) , typeAttr,
       kTXNStartOffset,
@@ -627,9 +624,9 @@ OSStatus mUPOpenControl(ControlHandle theControl, bool multiline)
 
         /* install our focus advance override routine */
 #if TARGET_CARBON
-//	varsp->handlerUPP = NewEventHandlerUPP(FocusAdvanceOverride);
-//	err = InstallWindowEventHandler( varsp->fOwner, varsp->handlerUPP,
-//		kMLTEEventCount, gMLTEEvents, tpvars, &varsp->handlerRef );
+    varsp->handlerUPP = NewEventHandlerUPP(FocusAdvanceOverride);
+    err = InstallWindowEventHandler( varsp->fOwner, varsp->handlerUPP,
+        kMLTEEventCount, gMLTEEvents, tpvars, &varsp->handlerRef );
 #endif
 		
         /* unlock our storage */
@@ -667,8 +664,9 @@ END_EVENT_TABLE()
 // Text item
 wxTextCtrl::wxTextCtrl()
 {
-  ((TEHandle) m_macTE) = NULL ;
-  ((TXNObject) m_macTXN) = NULL ;
+  m_macTE = NULL ;
+  m_macTXN = NULL ;
+  m_macTXNvars = NULL ;
   m_macUsesTXN = false ;
   m_editable = true ;
 }
@@ -677,16 +675,16 @@ wxTextCtrl::~wxTextCtrl()
 {
     if ( m_macUsesTXN )
     {
+        SetControlReference((ControlHandle)m_macControl, 0) ;
         TXNDeleteObject((TXNObject)m_macTXN);
     #if TARGET_CARBON
             /* remove our focus advance override */
-    //    RemoveEventHandler((**tpvars).handlerRef);
-    //    DisposeEventHandlerUPP((**tpvars).handlerUPP);
+        ::RemoveEventHandler((**(STPTextPaneVars **) m_macTXNvars).handlerRef);
+        ::DisposeEventHandlerUPP((**(STPTextPaneVars **) m_macTXNvars).handlerUPP);
     #endif
         /* delete our private storage */
         DisposeHandle((Handle) m_macTXNvars);
         /* zero the control reference */
-        SetControlReference((ControlHandle)m_macControl, 0) ;
     }
 }
 
@@ -700,8 +698,9 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-  ((TEHandle) m_macTE) = NULL ;
-  ((TXNObject) m_macTXN) = NULL ;
+  m_macTE = NULL ;
+  m_macTXN = NULL ;
+  m_macTXNvars = NULL ;
   m_macUsesTXN = false ;
   m_editable = true ;
 
@@ -728,17 +727,16 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     Rect bounds ;
     Str255 title ;
-
+    /*
     if ( mySize.y == -1 )
     {
-		if ( !m_macUsesTXN )
-            mySize.y = 13 ;
-        else
-			mySize.y = 16 ;
+        mySize.y = 13 ;
+        if ( m_windowStyle & wxTE_MULTILINE )
+            mySize.y *= 5 ;
         
         mySize.y += 2 * m_macVerticalBorder ;
     }
-
+    */
     MacPreControlCreate( parent , id ,  "" , pos , mySize ,style, validator , name , &bounds , title ) ;
 
     if ( m_windowStyle & wxTE_MULTILINE )
@@ -762,7 +760,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 	{
         short featurSet;
 
-        featurSet = kControlSupportsEmbedding | kControlSupportsFocus | kControlWantsIdle
+        featurSet = kControlSupportsEmbedding | kControlSupportsFocus // | kControlWantsIdle
                 | kControlWantsActivate | kControlHandlesTracking | kControlHasSpecialBackground
                 | kControlGetsFocusOnClick | kControlSupportsLiveFeedback;
             /* create the control */
@@ -1179,12 +1177,15 @@ wxSize wxTextCtrl::DoGetBestSize() const
 {
     int wText = 100 ;
     
-    int hText ;
-        if ( UMAHasAppearance() )
-            hText = 13 ;
-        else
-            hText = 24 ;
-    hText += 2 * m_macHorizontalBorder ;
+    int hText;
+	if ( m_macUsesTXN )
+	{
+	    hText = 17 ;
+	}
+	else
+	{
+	    hText = 13 ;
+	}
 /*
     int cx, cy;
     wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
@@ -1197,8 +1198,10 @@ wxSize wxTextCtrl::DoGetBestSize() const
 */
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-        hText *= wxMin(GetNumberOfLines(), 5);
+         hText *= 5 ;
     }
+    hText += 2 * m_macVerticalBorder ;
+    wText += 2 * m_macHorizontalBorder ;
     //else: for single line control everything is ok
     return wxSize(wText, hText);
 }
@@ -1319,6 +1322,7 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
 	    }
 	    if (content[i] == '\r') count++;
 	}
+	return "" ;
 }
 
 /*
