@@ -28,7 +28,7 @@ enum thread_state {
 // Static variables
 /////////////////////////////////////////////////////////////////////////////
 
-#include "thread.h"
+#include "wx/thread.h"
 
 static pthread_t p_mainid;
 wxMutex wxMainMutex; // controls access to all GUI functions

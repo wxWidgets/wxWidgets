@@ -422,7 +422,7 @@ dnl   defines HAVE_UNISTD_H
 dnl As it needs Linux 2.1.x for the moment: check whether the file exists (GL).
 AC_CHECK_HEADER(linux/joystick.h)
 GTK_JOYSTICK=""
-if test "$ac_cv_header_linux_joystick_h" != ""; then
+if test "$ac_cv_header_linux_joystick_h" = "yes"; then
   GTK_JOYSTICK="gtk/joystick.cpp"
 fi
 AC_SUBST(GTK_JOYSTICK)

@@ -30,6 +30,8 @@ enum thread_state {
 // Static variables
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/thread.h"
+
 static int p_mainid;
 wxMutex wxMainMutex;
 

@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/wx.h"
+#include "wx/thread.h"
 
 wxMutex::wxMutex()
 {

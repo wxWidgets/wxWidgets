@@ -2712,7 +2712,7 @@ else
 fi
 
 GTK_JOYSTICK=""
-if test "$ac_cv_header_linux_joystick_h" != ""; then
+if test "$ac_cv_header_linux_joystick_h" = "yes"; then
   GTK_JOYSTICK="gtk/joystick.cpp"
 fi
 
