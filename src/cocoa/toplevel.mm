@@ -132,6 +132,22 @@ void wxTopLevelWindowCocoa::Cocoa_wxMenuItemAction(wxMenuItem& item)
 {
 }
 
+void wxTopLevelWindowCocoa::CocoaNotification_DidBecomeKey(void)
+{
+    wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaNotification_DidBecomeKey",this);
+    wxActivateEvent event(wxEVT_ACTIVATE, TRUE, GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
+}
+
+void wxTopLevelWindowCocoa::CocoaNotification_DidResignKey(void)
+{
+    wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaNotification_DidResignKey",this);
+    wxActivateEvent event(wxEVT_ACTIVATE, FALSE, GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
+}
+
 void wxTopLevelWindowCocoa::Cocoa_close(void)
 {
     m_closed = true;
@@ -248,7 +264,7 @@ void wxTopLevelWindowCocoa::CocoaSetWxWindowSize(int width, int height)
 
 void wxTopLevelWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 {
-    wxLogDebug("wxTopLevelWindow=%p::DoMoveWindow(%d,%d,%d,%d)",this,x,y,width,height);
+//    wxLogDebug("wxTopLevelWindow=%p::DoMoveWindow(%d,%d,%d,%d)",this,x,y,width,height);
 
     NSRect cocoaRect = NSMakeRect(x,y,width,height);
     [m_cocoaNSWindow setFrame: cocoaRect display:NO];
@@ -261,7 +277,7 @@ void wxTopLevelWindowCocoa::DoGetSize(int *w, int *h) const
         *w=(int)cocoaRect.size.width;
     if(h)
         *h=(int)cocoaRect.size.height;
-    wxLogDebug("wxTopLevelWindow=%p::DoGetSize = (%d,%d)",this,(int)cocoaRect.size.width,(int)cocoaRect.size.height);
+//    wxLogDebug("wxTopLevelWindow=%p::DoGetSize = (%d,%d)",this,(int)cocoaRect.size.width,(int)cocoaRect.size.height);
 }
 
 void wxTopLevelWindowCocoa::DoGetPosition(int *x, int *y) const
@@ -271,6 +287,6 @@ void wxTopLevelWindowCocoa::DoGetPosition(int *x, int *y) const
         *x=(int)cocoaRect.origin.x;
     if(y)
         *y=(int)cocoaRect.origin.y;
-    wxLogDebug("wxTopLevelWindow=%p::DoGetPosition = (%d,%d)",this,(int)cocoaRect.origin.x,(int)cocoaRect.origin.y);
+//    wxLogDebug("wxTopLevelWindow=%p::DoGetPosition = (%d,%d)",this,(int)cocoaRect.origin.x,(int)cocoaRect.origin.y);
 }
 
