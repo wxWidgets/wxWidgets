@@ -22,10 +22,6 @@
 
 #include "wx/defs.h"
 
-#ifndef __WXGTK__
-#define __GOOD_COMPILER__
-#endif
-
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
 #include "wx/dc.h"
@@ -203,6 +199,7 @@ wxPreviewCanvas::~wxPreviewCanvas()
 void wxPreviewCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
   wxPaintDC dc(this);
+  PrepareDC( dc );
 
   if (m_printPreview)
   {
@@ -313,8 +310,6 @@ void wxPreviewControlBar::OnZoom(wxCommandEvent& WXUNUSED(event))
 
 void wxPreviewControlBar::CreateButtons()
 {
-#ifdef __GOOD_COMPILER__ // Robert Roebling
-
   SetSize(0, 0, 400, 40);
 
 #ifdef __WXMSW__
@@ -327,7 +322,11 @@ void wxPreviewControlBar::CreateButtons()
   SetFont(buttonFont);
 
   int buttonWidth = 65;
-  int buttonHeight = 24;
+#ifdef __WXGTK__
+    int buttonHeight = -1;
+#else
+    int buttonHeight = 24;
+#endif
 
   int x = 5;
   int y = 5;
@@ -359,10 +358,33 @@ void wxPreviewControlBar::CreateButtons()
 	x += gap + buttonWidth;
   }
 
-  // Can't be static because gcc bails out
-  wxString choices[] = { "10%", "20%", "25%", "30%", "35%", "40%", "45%", "50%", "55%", "60%",
-    "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%", "110%", "120%", "150%", "200%" };
-  int n = 22;
+  // Yes, this look stupid, but this is because gcc gives up otherwise.
+  wxString *choices = new wxString[23];
+  choices[0] = "10%";
+  choices[1] = "15%";
+  choices[2] = "20%";
+  choices[3] = "25%";
+  choices[4] = "30%";
+  choices[5] = "35%";
+  choices[6] = "40%";
+  choices[7] = "45%";
+  choices[8] = "50%";
+  choices[9] = "55%";
+  choices[10] = "60%";
+  choices[11] = "65%";
+  choices[12] = "70%";
+  choices[13] = "75%";
+  choices[14] = "80%";
+  choices[15] = "85%";
+  choices[16] = "90%";
+  choices[17] = "95%";
+  choices[18] = "100%";
+  choices[19] = "110%";
+  choices[20] = "120%";
+  choices[21] = "150%";
+  choices[22] = "200%";
+
+  int n = 23;
   if (m_buttonFlags & wxPREVIEW_ZOOM)
   {
     m_zoomControl = new wxChoice(this, wxID_PREVIEW_ZOOM, wxPoint(x, y),
@@ -370,24 +392,21 @@ void wxPreviewControlBar::CreateButtons()
     SetZoomControl(m_printPreview->GetZoom());
   }
 
-  m_closeButton->SetDefault();
+  delete[] choices;
 
-#endif
+  m_closeButton->SetDefault();
 }
 
 void wxPreviewControlBar::SetZoomControl(int zoom)
 {
-#ifdef __GOOD_COMPILER__ // Robert Roebling
   char buf[20];
   sprintf(buf, "%d%%", zoom);
   if (m_zoomControl)
     m_zoomControl->SetStringSelection(buf);
-#endif
 }
 
 int wxPreviewControlBar::GetZoomControl()
 {
-#ifdef __GOOD_COMPILER__ // Robert Roebling
   char buf[20];
   if (m_zoomControl && m_zoomControl->GetStringSelection())
   {
@@ -396,9 +415,6 @@ int wxPreviewControlBar::GetZoomControl()
     return (int)atoi(buf);
   }
   else return 0;
-#else
-  return 0;
-#endif
 }
 
 
@@ -410,11 +426,9 @@ wxPreviewFrame::wxPreviewFrame(wxPrintPreviewBase *preview, wxFrame *parent, con
     const wxPoint& pos, const wxSize& size, long style, const wxString& name):
  wxFrame(parent, -1, title, pos, size, style, name)
 {
-#ifdef __GOOD_COMPILER__ // Robert Roebling
   m_printPreview = preview;
   m_controlBar = NULL;
   m_previewCanvas = NULL;
-#endif
 }
 
 wxPreviewFrame::~wxPreviewFrame()
@@ -423,8 +437,6 @@ wxPreviewFrame::~wxPreviewFrame()
 
 bool wxPreviewFrame::OnClose()
 {
-#ifdef __GOOD_COMPILER__ // Robert Roebling
-
   MakeModal(FALSE);
   
   // Need to delete the printout and the print preview
@@ -438,16 +450,10 @@ bool wxPreviewFrame::OnClose()
   }
   delete m_printPreview;
   return TRUE;
-#else
-  return FALSE;
-#endif
 }
 
 void wxPreviewFrame::Initialize()
 {
-
-#ifdef __GOOD_COMPILER__ // Robert Roebling
-
   CreateStatusBar();
   
   CreateCanvas();
@@ -463,7 +469,7 @@ void wxPreviewFrame::Initialize()
 //  int w, h;
 //  m_controlBar->GetSize(&w, &h);
   int h;
-#ifdef __WXMSW__
+#if (defined(__WXMSW__) || defined(__WXGTK__))
   h = 40;
 #else
   h = 60;
@@ -491,30 +497,21 @@ void wxPreviewFrame::Initialize()
   MakeModal(TRUE);
 
   Layout();
-  
-#endif  
 }
 
 void wxPreviewFrame::CreateCanvas()
 {
-#ifdef __GOOD_COMPILER__ // Robert Roebling
-
   m_previewCanvas = new wxPreviewCanvas(m_printPreview, this);
-  
-#endif
 }
 
 void wxPreviewFrame::CreateControlBar()
 {
-#ifdef __GOOD_COMPILER__ // Robert Roebling
-
   long buttons = wxPREVIEW_DEFAULT;
   if (m_printPreview->GetPrintoutForPrinting())
     buttons |= wxPREVIEW_PRINT;
     
   m_controlBar = new wxPreviewControlBar(m_printPreview, buttons, this, wxPoint(0, 0), wxSize(400, 40));
   m_controlBar->CreateButtons();
-#endif
 }
  
 /*
@@ -523,9 +520,6 @@ void wxPreviewFrame::CreateControlBar()
 
 wxPrintPreviewBase::wxPrintPreviewBase(wxPrintout *printout, wxPrintout *printoutForPrinting, wxPrintData *data)
 {
-
-#ifdef __GOOD_COMPILER__ // Robert Roebling
-
   m_isOk = TRUE;
   m_previewPrintout = printout;
   if (m_previewPrintout)
@@ -550,27 +544,20 @@ wxPrintPreviewBase::wxPrintPreviewBase(wxPrintout *printout, wxPrintout *printou
   // Get some parameters from the printout, if defined
   int selFrom, selTo;
   printout->GetPageInfo(&m_minPage, &m_maxPage, &selFrom, &selTo);
-  
-#endif  
 }
 
 wxPrintPreviewBase::~wxPrintPreviewBase()
 {
-#ifdef __GOOD_COMPILER__ // Robert Roebling
-
   if (m_previewPrintout)
     delete m_previewPrintout;
   if (m_previewBitmap)
     delete m_previewBitmap;
   if (m_printPrintout)
     delete m_printPrintout;
-    
-#endif
 }
 
 bool wxPrintPreviewBase::SetCurrentPage(int pageNum)
 {
-#ifdef __GOOD_COMPILER__ // Robert Roebling
   if (m_currentPage == pageNum)
     return TRUE;
 
@@ -586,16 +573,11 @@ bool wxPrintPreviewBase::SetCurrentPage(int pageNum)
     RenderPage(pageNum);
     m_previewCanvas->Refresh();
   }
-  
-#endif
   return TRUE;
 }
 
 bool wxPrintPreviewBase::PaintPage(wxWindow *canvas, wxDC& dc)
 {
-
-#ifdef __GOOD_COMPILER__  // Robert Roebling
-
   DrawBlankPage(canvas, dc);
 
   if (!m_previewBitmap)
@@ -626,8 +608,6 @@ bool wxPrintPreviewBase::PaintPage(wxWindow *canvas, wxDC& dc)
 
   temp_dc.SelectObject(wxNullBitmap);
 
-#endif  
-  
   return TRUE;
 }
 
@@ -635,8 +615,6 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 {
   int canvasWidth, canvasHeight;
   
-#ifdef __GOOD_COMPILER__  // Robert Roebling
-
   if (!m_previewCanvas)
   {
     wxMessageBox(_("wxPrintPreviewBase::RenderPage: must use wxPrintPreviewBase::SetCanvas to let me know about the canvas!"),
@@ -695,7 +673,6 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
   m_previewPrintout->SetDC(NULL);
   
   memoryDC.SelectObject(wxNullBitmap);
-#endif
 
   char buf[200];
   if (m_maxPage != 0)
@@ -712,9 +689,6 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
 bool wxPrintPreviewBase::DrawBlankPage(wxWindow *canvas, wxDC& dc)
 {
-
-#ifdef __GOOD_COMPILER__ // Robert Roebling
-
   int canvasWidth, canvasHeight;
   canvas->GetSize(&canvasWidth, &canvasHeight);
   
@@ -740,14 +714,11 @@ bool wxPrintPreviewBase::DrawBlankPage(wxWindow *canvas, wxDC& dc)
 
   dc.DrawRectangle((int)(x-1), (int)(y-1), (int)(actualWidth+2), (int)(actualHeight+2));
   
-#endif
-
   return TRUE;
 }
 
 void wxPrintPreviewBase::SetZoom(int percent)
 {
-#ifdef __GOOD_COMPILER__ // Robert Roebling
   if (m_currentZoom == percent)
     return;
     
@@ -764,6 +735,4 @@ void wxPrintPreviewBase::SetZoom(int percent)
     m_previewCanvas->Clear();
     m_previewCanvas->Refresh();
   }
-#endif  
-  
 }

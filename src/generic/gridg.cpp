@@ -1406,9 +1406,10 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
 
   SetGridClippingRegion(dc);
 
-  // Why isn't this needed for Windows??
-  // Probably because of the SetValue??
-  // Arrrrrgh. This isn't needed anywhere, of course. RR.
+  // 1) Why isn't this needed for Windows??
+  // Probably because of the SetValue?? JS.
+  // 2) Arrrrrgh. This isn't needed anywhere, 
+  // of course. One hour of debugging... RR.
 #ifndef __WXMSW__
 //  HighlightCell(dc);
 #endif
@@ -2518,12 +2519,12 @@ void wxGenericGrid::_OnCreateCell(wxGridEvent& ev)
     ev.m_cell = OnCreateCell();
 }
 
-void wxGenericGrid::_OnChangeLabels(wxGridEvent& ev)
+void wxGenericGrid::_OnChangeLabels(wxGridEvent& WXUNUSED(ev))
 {
     OnChangeLabels();
 }
 
-void wxGenericGrid::_OnChangeSelectionLabel(wxGridEvent& ev)
+void wxGenericGrid::_OnChangeSelectionLabel(wxGridEvent& WXUNUSED(ev))
 {
     OnChangeSelectionLabel();
 }

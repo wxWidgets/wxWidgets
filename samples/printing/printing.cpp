@@ -38,6 +38,8 @@
 #include "wx/print.h"
 #include "wx/printdlg.h"
 
+#include "wx/accel.h"
+
 #if wxTEST_POSTSCRIPT_IN_MSW
 #include "wx/generic/printps.h"
 #include "wx/generic/prntdlgg.h"
@@ -91,6 +93,12 @@ bool MyApp::OnInit(void)
   file_menu->Append(WXPRINT_PAGE_SETUP, "Page Set&up...",              "Page setup");
   file_menu->Append(WXPRINT_PREVIEW, "Print Pre&view",              "Preview");
 
+    // Accelerators
+    wxAcceleratorEntry entries[1];
+    entries[0].Set(wxACCEL_CTRL, (int) 'V', WXPRINT_PREVIEW);
+    wxAcceleratorTable accel(1, entries);
+    frame->SetAcceleratorTable(accel);
+    
 #if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
   file_menu->AppendSeparator();
   file_menu->Append(WXPRINT_PRINT_PS, "Print PostScript...",              "Print (PostScript)");

@@ -555,7 +555,7 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
                 gdk_gc_set_clip_mask( m_textGC, mask );
                 gdk_gc_set_clip_origin( m_textGC, xx, yy );
             }
-  
+	    
             gdk_draw_pixmap( m_window, m_textGC, pmap,
                              source->DeviceToLogicalX(xsrc), 
 	                     source->DeviceToLogicalY(ysrc),
@@ -829,6 +829,7 @@ void wxPaintDC::SetBackground( const wxBrush &brush )
   
     m_backgroundBrush.GetColour().CalcPixel( m_cmap );
     gdk_gc_set_background( m_brushGC, m_backgroundBrush.GetColour().GetColor() );
+    gdk_gc_set_background( m_bgGC, m_backgroundBrush.GetColour().GetColor() );
     gdk_gc_set_foreground( m_bgGC, m_backgroundBrush.GetColour().GetColor() );
   
     GdkFill fillStyle = GDK_SOLID;
@@ -950,9 +951,22 @@ void wxPaintDC::SetUpDC(void)
     m_bgGC = gdk_gc_new( m_window );
     SetTextForeground( m_textForegroundColour );
     SetTextBackground( m_textBackgroundColour );
-    SetPen( m_pen );
-    SetFont( m_font );
-    SetBrush( m_brush );
+    
+    wxPen tmp_pen( m_pen );
+    m_pen = wxNullPen;
+    SetPen( tmp_pen );
+    
+    wxFont tmp_font( m_font );
+    m_font = wxNullFont;
+    SetFont( tmp_font );
+    
+    wxBrush tmp_brush( m_brush );
+    m_brush = wxNullBrush;
+    SetBrush( tmp_brush );
+    
+    tmp_brush = m_backgroundBrush;
+    m_backgroundBrush = wxNullBrush;
+    SetBackground( tmp_brush );
   
     gdk_gc_set_background( m_penGC, wxWHITE->GetColor() );
   

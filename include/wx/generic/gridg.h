@@ -150,21 +150,21 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   virtual void OnSelectCellImplementation(wxDC *dc, int row, int col);
 
   virtual void OnSelectCell(int WXUNUSED(row), int WXUNUSED(col)) {};
-  virtual void _OnSelectCell(wxGridEvent& event);
+  void _OnSelectCell(wxGridEvent& event);
 
   // Override to create your own class of grid cell
   virtual wxGridCell *OnCreateCell(void);
-  virtual void _OnCreateCell(wxGridEvent& event);
+  void _OnCreateCell(wxGridEvent& event);
 
   // Override to change labels e.g. creation of grid, inserting/deleting a row/col.
   // By default, auto-labels the grid.
   virtual void OnChangeLabels(void);
-  virtual void _OnChangeLabels(wxGridEvent& event);
+  void _OnChangeLabels(wxGridEvent& event);
 
   // Override to change the label of the edit field when selecting a cell
   // By default, sets it to e.g. A12
   virtual void OnChangeSelectionLabel(void);
-  virtual void _OnChangeSelectionLabel(wxGridEvent& event);
+  void _OnChangeSelectionLabel(wxGridEvent& event);
 
   // Override for event processing
   virtual void OnCellChange(int WXUNUSED(row), int WXUNUSED(col)) {};
@@ -173,12 +173,11 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   virtual void OnLabelLeftClick(int WXUNUSED(row), int WXUNUSED(col), int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(control), bool WXUNUSED(shift)) {};
   virtual void OnLabelRightClick(int WXUNUSED(row), int WXUNUSED(col), int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(control), bool WXUNUSED(shift)) {};
 
-  virtual void _OnCellChange(wxGridEvent& event);
-  virtual void _OnCellLeftClick(wxGridEvent& event);
-  virtual void _OnCellRightClick(wxGridEvent& event);
-  virtual void _OnLabelLeftClick(wxGridEvent& event);
-  virtual void _OnLabelRightClick(wxGridEvent& event);
-
+  void _OnCellChange(wxGridEvent& event);
+  void _OnCellLeftClick(wxGridEvent& event);
+  void _OnCellRightClick(wxGridEvent& event);
+  void _OnLabelLeftClick(wxGridEvent& event);
+  void _OnLabelRightClick(wxGridEvent& event);
 
   // Activation: call from wxFrame::OnActivate
   void OnActivate(bool active);

@@ -20,6 +20,7 @@
 #include "wx/font.h"
 #include "wx/settings.h"
 #include "wx/resource.h"
+#include "wx/module.h"
 
 #include "unistd.h"
 
@@ -424,6 +425,9 @@ int wxEntry( int argc, char *argv[] )
 
   wxApp::CommonInit();
 
+  wxModule::RegisterModules();
+  if (!wxModule::InitializeModules()) return FALSE;
+    
   wxTheApp->OnInitGui();
 
   // Here frames insert themselves automatically
@@ -442,6 +446,8 @@ int wxEntry( int argc, char *argv[] )
 
   wxTheApp->OnExit();
 
+  wxModule::CleanUpModules();
+  
   wxApp::CommonCleanUp();
 
   wxDELETE(wxTheApp);
