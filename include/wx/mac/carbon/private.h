@@ -365,11 +365,14 @@ private:
 
 #endif
 
-
+// utils.cpp
 
 wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding) ;
 wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding) ;
 
+// toplevel.cpp
+
+ControlRef wxMacFindControlUnderMouse( Point location , WindowRef window , ControlPartCode *outPart ) ;
 
 #endif
     // _WX_PRIVATE_H_
