@@ -40,10 +40,7 @@
 // resources
 // --------------------------------------------------------------------------
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXX11__)
-    // logo for the about dialog
-    #include "bitmaps/life.xpm"
-#endif
+#include "bitmaps/life.xpm"
 
 // sample configurations
 #include "samples.inc"
@@ -126,9 +123,14 @@ LifeSamplesDialog::LifeSamplesDialog(wxWindow *parent)
 
     // activate
     SetSizer(sizer3);
+
+#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+    Layout();
+#else
     sizer3->SetSizeHints(this);
     sizer3->Fit(this);
     Centre(wxBOTH | wxCENTRE_ON_SCREEN);
+#endif
 }
 
 LifeSamplesDialog::~LifeSamplesDialog()
@@ -168,10 +170,7 @@ LifeAboutDialog::LifeAboutDialog(wxWindow *parent)
                           wxDefaultPosition, wxDefaultSize)
 {
     // logo
-    wxBitmap bmp = wxBITMAP(life);
-#if !defined(__WXGTK__) && !defined(__WXMOTIF__) && !defined(__WXMAC__)
-    bmp.SetMask(new wxMask(bmp, *wxBLUE));
-#endif
+    wxBitmap bmp(life_xpm);
     wxStaticBitmap *sbmp = new wxStaticBitmap(this, wxID_ANY, bmp);
 
     // layout components
@@ -193,9 +192,14 @@ XLife is (c) 1989 by Jon Bennett et al.")),
 
     // activate
     SetSizer(sizer);
+
+#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+    Layout();
+#else
     sizer->SetSizeHints(this);
     sizer->Fit(this);
     Centre(wxBOTH | wxCENTRE_ON_SCREEN);
+#endif
 }
 
 
