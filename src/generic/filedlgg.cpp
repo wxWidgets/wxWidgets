@@ -32,6 +32,10 @@
 #include "wx/sizer.h"
 #include "wx/bmpbuttn.h"
 #include "wx/tokenzr.h"
+#include "wx/mimetype.h"
+#include "wx/image.h"
+#include "wx/module.h"
+
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -79,6 +83,127 @@ static char * folder_xpm[] = {
 "  ..............",
 "                ",
 "                "};
+
+
+// ----------------------------------------------------------------------------
+// private classes - icons list management
+// ----------------------------------------------------------------------------
+
+class wxFileIconEntry : public wxObject
+{
+    public:
+        wxFileIconEntry(int i) { id = i; }
+    
+        int id;
+};
+
+
+class wxFileIconsTable
+{
+    public:
+
+        wxFileIconsTable();
+        
+        int GetIconID(const wxString& extension);
+        wxImageList *GetImageList() { return &m_ImageList; }
+
+    protected:        
+        wxImageList m_ImageList;
+        wxHashTable m_HashTable;
+        wxMimeTypesManager m_Mime;
+};
+
+static wxFileIconsTable *g_IconsTable = NULL;
+
+
+wxFileIconsTable::wxFileIconsTable() :
+                    m_ImageList(16, 16),
+                    m_HashTable(wxKEY_STRING),
+                    m_Mime()
+{
+    m_HashTable.DeleteContents(TRUE);
+    m_ImageList.Add(wxBitmap(folder_xpm));
+}
+
+
+
+static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
+{
+    wxImage small(16, 16);
+    unsigned char *p1, *p2, *ps;
+    unsigned char mr = img.GetMaskRed(), mg = img.GetMaskGreen(), mb = img.GetMaskBlue();
+    
+    unsigned x, y;
+    unsigned sr, sg, sb, smask;
+    
+    p1 = img.GetData(), p2 = img.GetData() + 3 * 32, ps = small.GetData();
+    small.SetMaskColour(mr, mr, mr);
+    
+    for (y = 0; y < 16; y++)
+    {
+        for (x = 0; x < 16; x++)
+        {
+            sr = sg = sb = smask = 0;
+            if (p1[0] != mr || p1[1] != mg || p1[2] != mb)
+                sr += p1[0], sg += p1[1], sb += p1[2];
+            else smask++;
+            p1 += 3;
+            if (p1[0] != mr || p1[1] != mg || p1[2] != mb)
+                sr += p1[0], sg += p1[1], sb += p1[2];
+            else smask++;
+            p1 += 3;
+            if (p2[0] != mr || p2[1] != mg || p2[2] != mb)
+                sr += p2[0], sg += p2[1], sb += p2[2];
+            else smask++;
+            p2 += 3;
+            if (p2[0] != mr || p2[1] != mg || p2[2] != mb)
+                sr += p2[0], sg += p2[1], sb += p2[2];
+            else smask++;
+            p2 += 3;
+            
+            if (smask > 2) 
+                ps[0] = ps[1] = ps[2] = mr;
+            else
+                ps[0] = sr >> 2, ps[1] = sg >> 2, ps[2] = sb >> 2;
+            ps += 3;
+        }
+        p1 += 32 * 3, p2 += 32 * 3;
+    }
+    
+    return small.ConvertToBitmap();
+}
+
+
+int wxFileIconsTable::GetIconID(const wxString& extension)
+{
+    wxFileIconEntry *entry = (wxFileIconEntry*) m_HashTable.Get(extension);
+    
+    if (entry) return (entry -> id);
+    
+    wxFileType *ft = m_Mime.GetFileTypeFromExtension(extension);
+    wxIcon ic;
+    if (ft == NULL || (!ft -> GetIcon(&ic)))
+    {
+        int newid = GetIconID(wxT("txt"));
+        m_HashTable.Put(extension, new wxFileIconEntry(newid));
+        return newid;
+    }
+    wxImage img(ic);
+    delete ft;
+    
+    int id = m_ImageList.GetImageCount();
+    if (img.GetWidth() == 16 && img.GetHeight() == 16)
+        m_ImageList.Add(img.ConvertToBitmap());
+    else
+        m_ImageList.Add(CreateAntialiasedBitmap(img.Scale(32, 32)));
+    m_HashTable.Put(extension, new wxFileIconEntry(id));
+    return id;
+}
+
+
+
+
+
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -255,7 +380,14 @@ void wxFileData::MakeItem( wxListItem &item )
     item.ClearAttributes();
     if (IsExe()) item.SetTextColour(*wxRED);
     if (IsDir()) item.SetTextColour(*wxBLUE);
-    item.m_image = IsDir() ? 0 : -1;
+    
+    if (IsDir())
+        item.m_image = 0;
+    else if (m_name.Find(wxT('.')) != wxNOT_FOUND)
+        item.m_image = g_IconsTable -> GetIconID(m_name.AfterLast(wxT('.')));
+    else
+        item.m_image = -1;
+
     if (IsLink())
     {
         wxColour *dg = wxTheColourDatabase->FindColour( "MEDIUM GREY" );
@@ -275,6 +407,8 @@ BEGIN_EVENT_TABLE(wxFileCtrl,wxListCtrl)
     EVT_LIST_END_LABEL_EDIT(-1, wxFileCtrl::OnListEndLabelEdit)
 END_EVENT_TABLE()
 
+
+
 wxFileCtrl::wxFileCtrl()
 {
     m_dirName = wxT("/");
@@ -287,8 +421,9 @@ wxFileCtrl::wxFileCtrl( wxWindow *win, wxWindowID id,
     long style, const wxValidator &validator, const wxString &name ) :
   wxListCtrl( win, id, pos, size, style, validator, name )
 {
-    wxImageList *imageList = new wxImageList( 16, 16 );
-    imageList->Add( wxBitmap( folder_xpm ) );
+    if (! g_IconsTable) g_IconsTable = new wxFileIconsTable;
+    wxImageList *imageList = g_IconsTable -> GetImageList();
+
     SetImageList( imageList, wxIMAGE_LIST_SMALL );
 
     m_dirName = dirName;
@@ -573,6 +708,9 @@ BEGIN_EVENT_TABLE(wxFileDialog,wxDialog)
         EVT_CHECKBOX(ID_CHECK,wxFileDialog::OnCheck)
 END_EVENT_TABLE()
 
+long wxFileDialog::m_lastViewStyle = wxLC_LIST;
+bool wxFileDialog::m_lastShowHidden = FALSE;
+
 wxFileDialog::wxFileDialog(wxWindow *parent,
                  const wxString& message,
                  const wxString& defaultDir,
@@ -587,6 +725,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     m_message = message;
     m_dialogStyle = style;
 
+    if (m_dialogStyle == 0) m_dialogStyle = wxOPEN;
     if ((m_dialogStyle & wxMULTIPLE ) && !(m_dialogStyle & wxOPEN))
         m_dialogStyle |= wxOPEN;
 
@@ -602,6 +741,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     m_fileName = defaultFile;
     m_wildCard = wildCard;
     m_filterIndex = 0;
+    m_filterExtension = wxEmptyString;
 
     // interpret wildcards
 
@@ -622,6 +762,9 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
         firstWildText = tokens.GetNextToken();
         firstWild = tokens.GetNextToken();
     }
+    if ( firstWild.Left( 2 ) == wxT("*.") )
+        m_filterExtension = firstWild.Mid( 1 );
+    if ( m_filterExtension == ".*" ) m_filterExtension = wxEmptyString;
 
     // layout
 
@@ -675,10 +818,11 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     if (m_dialogStyle & wxMULTIPLE)
         m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition,
-	                         wxSize(440,180), wxLC_LIST | wxSUNKEN_BORDER );
+	                         wxSize(440,180), m_lastViewStyle | wxSUNKEN_BORDER );
     else
         m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition,
-	                         wxSize(440,180), wxLC_LIST | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
+	                         wxSize(440,180), m_lastViewStyle | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
+    m_list -> ShowHidden(m_lastShowHidden);
     mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
     wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
@@ -691,7 +835,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     m_choice = new wxChoice( this, ID_CHOICE );
     choicesizer->Add( m_choice, 1, wxCENTER|wxALL, 10 );
     m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden files") );
-    m_check->SetValue( FALSE );
+    m_check->SetValue( m_lastShowHidden );
     choicesizer->Add( m_check, 0, wxCENTER|wxALL, 10 );
     choicesizer->Add( new wxButton( this, wxID_CANCEL, _("Cancel") ), 0, wxCENTER | wxALL, 10 );
     mainsizer->Add( choicesizer, 0, wxEXPAND );
@@ -731,11 +875,18 @@ void wxFileDialog::OnChoice( wxCommandEvent &event )
     wxString *str = (wxString*) m_choice->GetClientData( index );
     m_list->SetWild( *str );
     m_filterIndex = index;
+    if ( str -> Left( 2 ) == wxT("*.") )
+    {
+        m_filterExtension = str -> Mid( 1 );
+        if (m_filterExtension == ".*") m_filterExtension = wxEmptyString;
+    }
+    else
+        m_filterExtension = wxEmptyString;
 }
 
 void wxFileDialog::OnCheck( wxCommandEvent &event )
 {
-    m_list->ShowHidden( event.GetInt() != 0 );
+    m_list->ShowHidden( (m_lastShowHidden = event.GetInt() != 0) );
 }
 
 void wxFileDialog::OnActivated( wxListEvent &event )
@@ -828,8 +979,12 @@ void wxFileDialog::HandleAction( const wxString &fn )
         return;
     }
 
+
     if ( (m_dialogStyle & wxSAVE) && (m_dialogStyle & wxOVERWRITE_PROMPT) )
     {
+        if (filename.Find( wxT('.') ) == wxNOT_FOUND ||
+                filename.AfterLast( wxT('.') ).Find( wxT('/') ) != wxNOT_FOUND)
+            filename << m_filterExtension;
         if (wxFileExists( filename ))
         {
             wxString msg;
@@ -840,12 +995,20 @@ void wxFileDialog::HandleAction( const wxString &fn )
                 return;
         }
     }
-    else if ( (m_dialogStyle & wxOPEN) && (m_dialogStyle & wxFILE_MUST_EXIST) )
+    else if ( m_dialogStyle & wxOPEN )
     {
         if ( !wxFileExists( filename ) )
+            if (filename.Find( wxT('.') ) == wxNOT_FOUND ||
+                  filename.AfterLast( wxT('.') ).Find( wxT('/') ) != wxNOT_FOUND)
+                filename << m_filterExtension;
+
+        if ( m_dialogStyle & wxFILE_MUST_EXIST )
         {
-            wxMessageBox(_("Please choose an existing file."), _("Error"), wxOK | wxICON_ERROR );
-            return;
+            if ( !wxFileExists( filename ) )
+            {
+                wxMessageBox(_("Please choose an existing file."), _("Error"), wxOK | wxICON_ERROR );
+                return;
+            }
         }
     }
 
@@ -863,12 +1026,14 @@ void wxFileDialog::OnListOk( wxCommandEvent &WXUNUSED(event) )
 void wxFileDialog::OnList( wxCommandEvent &WXUNUSED(event) )
 {
     m_list->ChangeToListMode();
+    m_lastViewStyle = wxLC_LIST;
     m_list->SetFocus();
 }
 
 void wxFileDialog::OnReport( wxCommandEvent &WXUNUSED(event) )
 {
     m_list->ChangeToReportMode();
+    m_lastViewStyle = wxLC_REPORT;
     m_list->SetFocus();
 }
 
@@ -960,6 +1125,8 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
     }
 }
 
+
+
 // ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
@@ -1041,3 +1208,20 @@ wxString wxSaveFileSelector(const wxChar *what, const wxChar *extension, const w
     return wxFileSelector (prompt, (const wxChar *) NULL, default_name, ext, wild, 0, parent);
 }
 
+
+
+
+
+
+// A module to allow icons table cleanup
+
+class wxFileDialogGenericModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxFileDialogGenericModule)
+public:
+    wxFileDialogGenericModule() {}
+    bool OnInit() { return TRUE; }
+    void OnExit() { if (g_IconsTable) {delete g_IconsTable; g_IconsTable = NULL;} }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxFileDialogGenericModule, wxModule)
