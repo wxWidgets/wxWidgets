@@ -430,10 +430,7 @@ bool wxWindowMSW::Create(wxWindow *parent,
         msflags |= WS_VISIBLE;
     }
 
-    bool retVal = MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exstyle);
-    if (retVal)
-        SetWindowLong( (HWND)m_hWnd, GWL_WNDPROC, (LONG)wxWndProc);
-    return retVal;
+    return MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exstyle);
 }
 
 // ---------------------------------------------------------------------------
@@ -1028,35 +1025,21 @@ void wxWindowMSW::UnsubclassWin()
 
 bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
 {
-#if wxUSE_UNICODE_MSLU
-    // VS: We can't use GetWindowLong(hwnd, GWL_WNDPROC) together with unicows.dll
-    //     because it doesn't return pointer to the real wnd proc but rather a handle
-    //     of a fake proc that does Unicode<->ANSI translation.
-    //
-    //     The hack bellow works, because WNDCLASS contains original window handler
-    //     rather that the unicows fake one. This may not be on purpose, though; if
-    //     it stops working with future versions of unicows.dll, we can override
-    //     unicows hooks by setting Unicows_{Set,Get}WindowLong and
-    //     Unicows_RegisterClass to our own versions that keep track of
-    //     fake<->real wnd proc mapping.
-    //
-    //     FIXME: Doesn't handle wnd procs set by SetWindowLong, only these set
-    //            with RegisterClass!!
-
-    if ( wxUsingUnicowsDll() )
+    // Unicows note: the code below works, but only because WNDCLASS contains
+    // original window handler rather that the unicows fake one. This may not
+    // be on purpose, though; if it stops working with future versions of
+    // unicows.dll, we can override unicows hooks by setting
+    // Unicows_{Set,Get}WindowLong and Unicows_RegisterClass to our own
+    // versions that keep track of fake<->real wnd proc mapping.
+    WNDCLASS cls;
+    if ( !::GetClassInfo(wxGetInstance(), wxGetWindowClass(hWnd), &cls) )
     {
-        static wxChar buffer[512];
-        WNDCLASS cls;
+        wxLogLastError(_T("GetClassInfo"));
 
-        ::GetClassName((HWND)hWnd, buffer, 512);
-        ::GetClassInfo(wxGetInstance(), buffer, &cls);
-        return wndProc == (WXFARPROC)cls.lpfnWndProc;
+        return FALSE;
     }
-    else
-#endif
-    {
-        return wndProc == (WXFARPROC)::GetWindowLong((HWND)hWnd, GWL_WNDPROC);
-    }
+
+    return wndProc == (WXFARPROC)cls.lpfnWndProc;
 }
 
 // ----------------------------------------------------------------------------
