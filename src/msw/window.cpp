@@ -1500,45 +1500,54 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
     case WM_SETCURSOR:
         {
-            // don't set cursor when the mouse is not in the client part
-            short nHitTest = LOWORD(lParam);
-            if ( nHitTest == HTCLIENT || nHitTest == HTERROR )
+            // don't set cursor for other windows, only for this one: this
+            // prevents children of this window from gettign the same cursor
+            // as the parent has (don't forget that this message is propagated
+            // by default up the window parent-child hierarchy)
+            if ( (HWND)wParam == hWnd )
             {
-                HCURSOR hcursor = 0;
-                if ( wxIsBusy() )
+                // don't set cursor when the mouse is not in the client part
+                short nHitTest = LOWORD(lParam);
+                if ( nHitTest == HTCLIENT || nHitTest == HTERROR )
                 {
-                    extern HCURSOR gs_wxBusyCursor; // from msw\utils.cpp
-
-                    hcursor = gs_wxBusyCursor;
-                }
-                else
-                {
-                    wxCursor *cursor = NULL;
-
-                    if ( m_windowCursor.Ok() )
+                    HCURSOR hcursor = 0;
+                    if ( wxIsBusy() )
                     {
-                        cursor = &m_windowCursor;
+                        // from msw\utils.cpp
+                        extern HCURSOR gs_wxBusyCursor;
+
+                        hcursor = gs_wxBusyCursor;
                     }
                     else
                     {
-                        extern wxCursor *g_globalCursor; // from msw\data.cpp
+                        wxCursor *cursor = NULL;
 
-                        if ( g_globalCursor && g_globalCursor->Ok() )
-                            cursor = g_globalCursor;
+                        if ( m_windowCursor.Ok() )
+                        {
+                            cursor = &m_windowCursor;
+                        }
+                        else
+                        {
+                            // from msw\data.cpp
+                            extern wxCursor *g_globalCursor;
+
+                            if ( g_globalCursor && g_globalCursor->Ok() )
+                                cursor = g_globalCursor;
+                        }
+
+                        if ( cursor )
+                            hcursor = (HCURSOR)cursor->GetHCURSOR();
                     }
 
-                    if ( cursor )
-                        hcursor = (HCURSOR)cursor->GetHCURSOR();
-                }
+                    if ( hcursor )
+                    {
+                        ::SetCursor(hcursor);
 
-                if ( hcursor )
-                {
-                    ::SetCursor(hcursor);
-
-                    // returning TRUE stops the DefWindowProc() from further
-                    // processing this message - exactly what we need because we've
-                    // just set the cursor.
-                    return TRUE;
+                        // returning TRUE stops the DefWindowProc() from
+                        // further processing this message - exactly what we
+                        // need because we've just set the cursor.
+                        return TRUE;
+                    }
                 }
             }
         }

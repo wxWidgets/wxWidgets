@@ -1685,10 +1685,9 @@ implements the following methods:\par
 
 \func{virtual void}{SetCursor}{\param{const wxCursor\&}{cursor}}
 
-Sets the window's cursor. Notice that setting the cursor for this window also
-sets it for all the children of the window unless they have their own cursor
-(either explicitly set with the same function, or, in the case of Windows, a
-standard one for some of standard controls).
+Sets the window's cursor. Notice that setting the cursor for this window does
+not set it for its children so you'll need to explicitly call SetCursor() for
+them too if you need it.
 
 \wxheading{Parameters}
 
