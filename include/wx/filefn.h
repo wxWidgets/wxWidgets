@@ -131,6 +131,7 @@ enum wxSeekMode
 // Implemented in filefnwce.cpp
 #if defined( __WXWINCE__)
     typedef __int64 wxFileOffset;
+    typedef unsigned __int64 wxFileSize_t;
     #define wxFileOffsetFmtSpec _("I64")
     int wxOpen(const wxChar *filename, int oflag, int WXUNUSED(pmode));
     int wxAccess(const wxChar *name, int WXUNUSED(how));
@@ -195,9 +196,11 @@ enum wxSeekMode
 
     #if wxHAS_HUGE_FILES
         typedef wxLongLong_t wxFileOffset;
+        typedef unsigned wxLongLong_t wxFileSize_t;
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
     #else
         typedef off_t wxFileOffset;
+        typedef unsigned off_t wxFileSize_t;
         #define wxFileOffsetFmtSpec _("")
     #endif
 
@@ -319,6 +322,7 @@ enum wxSeekMode
     #undef wxHAS_HUGE_FILES
 #else // Unix platforms using configure
     typedef off_t wxFileOffset;
+    typedef unsigned off_t wxFileSize_t;
     #ifdef _LARGE_FILES
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
     #else
@@ -360,9 +364,9 @@ enum wxSeekMode
 // VisualAge C++ V4.0 cannot have any external linkage const decs
 // in headers included by more than one primary source
 //
-extern const wxFileOffset wxInvalidOffset;
+extern const wxFileSize_t wxInvalidOffset;
 #else
-const wxFileOffset wxInvalidOffset = (wxFileOffset)-1;
+const wxFileSize_t wxInvalidOffset = (wxFileSize_t)-1;
 #endif
 
 // ----------------------------------------------------------------------------

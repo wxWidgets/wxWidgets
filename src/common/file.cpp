@@ -298,22 +298,22 @@ bool wxFile::Close()
 // ----------------------------------------------------------------------------
 
 // read
-size_t wxFile::Read(void *pBuf, size_t nCount)
+wxFileSize_t wxFile::Read(void *pBuf, wxFileSize_t nCount)
 {
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
-    int iRc = wxRead(m_fd, pBuf, nCount);
+    wxFileOffset iRc = wxRead(m_fd, pBuf, nCount);
 
     if ( iRc == -1 ) {
         wxLogSysError(_("can't read from file descriptor %d"), m_fd);
-        return (size_t)wxInvalidOffset;
+        return wxInvalidOffset;
     }
     else
-        return (size_t)iRc;
+        return (wxFileSize_t)iRc;
 }
 
 // write
-size_t wxFile::Write(const void *pBuf, size_t nCount)
+wxFileSize_t wxFile::Write(const void *pBuf, wxFileSize_t nCount)
 {
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
@@ -325,7 +325,7 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
         return 0;
     }
     else
-        return iRc;
+        return (wxFileSize_t)iRc;
 }
 
 // flush

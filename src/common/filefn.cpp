@@ -104,7 +104,7 @@ static wxChar wxFileFunctionsBuffer[4*_MAXPATHLEN];
 // VisualAge C++ V4.0 cannot have any external linkage const decs
 // in headers included by more than one primary source
 //
-const off_t wxInvalidOffset = (off_t)-1;
+const wxFileSize_t wxInvalidOffset = (wxFileSize_t)-1;
 #endif
 
 // ----------------------------------------------------------------------------
