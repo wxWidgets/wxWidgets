@@ -46,12 +46,32 @@ public:
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = _T("wxSpinCtrl"));
 
+    // a wxTextCtrl-like method (but we can't have GetValue returning wxString
+    // because the base class already has one returning int!)
+    void SetValue(const wxString& text);
+
+    // implementation only from now on
+    // -------------------------------
+
+    virtual void SetValue(int val) { wxSpinButton::SetValue(val); }
+    virtual int GetValue() const;
+    virtual bool SetFont(const wxFont &font);
+
+    virtual bool Enable(bool enable = TRUE);
+    virtual bool Show(bool show = TRUE);
 protected:
     void DoMoveWindow(int x, int y, int width, int height);
 
+    virtual wxSize DoGetBestSize() const;
+
+    // the handler for wxSpinButton events
+    void OnSpinChange(wxSpinEvent& event);
+
     WXHWND m_hwndBuddy;
 
+private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
+    DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_MSW_SPINCTRL_H_
