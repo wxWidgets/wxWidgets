@@ -25,9 +25,11 @@
 #endif
 
 #ifdef __WXGTK__
+extern "C" {
 #include <../iodbc/postgres/isqlext.h>
 #include <../iodbc/postgres/odbc_funcs.h>
 #include <../iodbc/postgres/odbc_types.h>
+}
 #else
 #include <sqlext.h>
 #endif

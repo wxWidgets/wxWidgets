@@ -1202,6 +1202,14 @@ AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DEF)
 
 dnl ----------------------------------------------------------------
+dnl select  dynamic loader (used by iODBC to load drivers)
+dnl ----------------------------------------------------------------
+
+DL_LIBRARY=-ldl
+
+AC_SUBST(DL_LIBRARY)
+
+dnl ----------------------------------------------------------------
 dnl search for opengl
 dnl ----------------------------------------------------------------
 

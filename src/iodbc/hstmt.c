@@ -184,7 +184,7 @@ RETCODE _iodbcdm_dropstmt( HSTMT hstmt )
 	return SQL_SUCCESS;
 }
 
-RETCODE SQL_API	SQLfreestmt (
+RETCODE SQL_API	SQLFreeStmt (
 			HSTMT	hstmt,
 			UWORD	fOption )
 {

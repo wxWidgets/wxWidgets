@@ -6163,13 +6163,18 @@ fi
 
 
 
+DL_LIBRARY=-ldl
+
+
+
+
 OPENGL_INCLUDE=
 OPENGL_LIBRARY=
 OPENGL_LINK=
 
 if test "$USE_OPENGL" = 1; then
     echo $ac_n "checking for OpenGL includes""... $ac_c" 1>&6
-echo "configure:6173: checking for OpenGL includes" >&5
+echo "configure:6178: checking for OpenGL includes" >&5
   
 ac_find_includes=
 for ac_dir in $SEARCH_INCLUDE;
@@ -6184,7 +6189,7 @@ for ac_dir in $SEARCH_INCLUDE;
     OPENGL_INCLUDE="-I$ac_find_includes"
     echo "$ac_t""found $ac_find_includes" 1>&6
         echo $ac_n "checking for OpenGL library""... $ac_c" 1>&6
-echo "configure:6188: checking for OpenGL library" >&5
+echo "configure:6193: checking for OpenGL library" >&5
     
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB;
@@ -6652,6 +6657,7 @@ s%@GUI_TK_LIBRARY@%$GUI_TK_LIBRARY%g
 s%@GUI_TK_LINK@%$GUI_TK_LINK%g
 s%@TOOLKIT@%$TOOLKIT%g
 s%@TOOLKIT_DEF@%$TOOLKIT_DEF%g
+s%@DL_LIBRARY@%$DL_LIBRARY%g
 s%@OPENGL_INCLUDE@%$OPENGL_INCLUDE%g
 s%@OPENGL_LIBRARY@%$OPENGL_LIBRARY%g
 s%@OPENGL_LINK@%$OPENGL_LINK%g

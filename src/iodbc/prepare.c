@@ -27,7 +27,7 @@
 
 #include	<../iodbc/itrace.h>
 
-RETCODE SQL_API	SQLprepare (
+RETCODE SQL_API	SQLPrepare (
 			HSTMT		hstmt,
 			UCHAR FAR*	szSqlStr,
 			SDWORD		cbSqlStr )

@@ -52,7 +52,7 @@ static void	do_cursoropen(STMT_t FAR* pstmt)
 	}
 }
 
-RETCODE SQL_API	SQLexecute ( HSTMT hstmt )
+RETCODE SQL_API	SQLExecute ( HSTMT hstmt )
 {
 	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
 	HPROC		hproc	= SQL_NULL_HPROC;
