@@ -31,7 +31,6 @@
 #include <wx/toolbar.h>
 #include <wx/log.h>
 #include <wx/image.h>
-#include <wx/spinctrl.h>
 
 // define this to 1 to use wxToolBarSimple instead of the native one
 #define USE_GENERIC_TBAR 0
@@ -102,6 +101,7 @@ public:
 
     void OnSize(wxSizeEvent& event);
 
+    void OnToggleToolbar(wxCommandEvent& event);
     void OnToggleAnotherToolbar(wxCommandEvent& event);
 
     void OnToggleToolbarSize(wxCommandEvent& event);
@@ -165,6 +165,7 @@ enum
     IDM_TOOLBAR_DELETEPRINT,
     IDM_TOOLBAR_INSERTPRINT,
     IDM_TOOLBAR_TOGGLEHELP,
+    IDM_TOOLBAR_TOGGLE_TOOLBAR,
     IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
     IDM_TOOLBAR_CHANGE_TOOLTIP,
     IDM_TOOLBAR_SHOW_TEXT,
@@ -187,6 +188,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(wxID_HELP, MyFrame::OnAbout)
 
+    EVT_MENU(IDM_TOOLBAR_TOGGLE_TOOLBAR, MyFrame::OnToggleToolbar)
     EVT_MENU(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR, MyFrame::OnToggleAnotherToolbar)
 
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARSIZE, MyFrame::OnToggleToolbarSize)
@@ -353,23 +355,25 @@ MyFrame::MyFrame(wxFrame* parent,
 
     // Make a menubar
     wxMenu *tbarMenu = new wxMenu;
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
-                     "Toggle &another toolbar\tCtrl-A",
-                     "Show/hide another test toolbar",
-                     TRUE);
+    tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLE_TOOLBAR,
+                              "Toggle &toolbar\tCtrl-Z",
+                              "Show or hide the toolbar");
 
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBARSIZE,
-                     "&Toggle toolbar size\tCtrl-S",
-                     "Toggle between big/small toolbar",
-                     TRUE);
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBARORIENT,
-                     "Toggle toolbar &orientation\tCtrl-O",
-                     "Toggle toolbar orientation",
-                     TRUE);
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBARROWS,
-                     "Toggle number of &rows\tCtrl-R",
-                     "Toggle number of toolbar rows between 1 and 2",
-                     TRUE);
+    tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
+                              "Toggle &another toolbar\tCtrl-A",
+                              "Show/hide another test toolbar");
+
+    tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLETOOLBARSIZE,
+                              "&Toggle toolbar size\tCtrl-S",
+                              "Toggle between big/small toolbar");
+
+    tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLETOOLBARORIENT,
+                              "Toggle toolbar &orientation\tCtrl-O",
+                              "Toggle toolbar orientation");
+
+    tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLETOOLBARROWS,
+                              "Toggle number of &rows\tCtrl-R",
+                              "Toggle number of toolbar rows between 1 and 2");
 
     tbarMenu->AppendSeparator();
 
@@ -447,6 +451,22 @@ void MyFrame::OnSize(wxSizeEvent& event)
     else
     {
         event.Skip();
+    }
+}
+
+void MyFrame::OnToggleToolbar(wxCommandEvent& WXUNUSED(event))
+{
+    wxToolBar *tbar = GetToolBar();
+
+    if ( !tbar )
+    {
+        RecreateToolbar();
+    }
+    else
+    {
+        delete tbar;
+
+        SetToolBar(NULL);
     }
 }
 
