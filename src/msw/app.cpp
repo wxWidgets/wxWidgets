@@ -52,6 +52,11 @@
 #include <commctrl.h>
 #endif
 
+// use debug CRT functions for memory leak detections in VC++
+#if defined(__WXDEBUG__) && defined(_MSC_VER)
+  #include <crtdbg.h>
+#endif
+
 extern char *wxBuffer;
 extern char *wxOsVersion;
 extern wxList *wxWinHandleList;
@@ -332,6 +337,7 @@ void wxApp::CleanUp()
     delete wxWinHandleList ;
 
   // do it as the very last thing because everything else can log messages
+  wxLog::DontCreateOnDemand();
   delete wxLog::SetActiveTarget(NULL);
 }
 
@@ -424,6 +430,13 @@ int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *m_
 {
   wxhInstance = (HINSTANCE) hInstance;
 
+  #if defined(__WXDEBUG__) && defined(_MSC_VER)
+    // do check for memory leaks on program exit
+    // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
+    //  deallocated memory which may be used to simulate low-memory condition)
+    _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
+  #endif // debug build under MS VC++
+
 #if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
 
 #if !defined(_WINDLL)
@@ -434,7 +447,7 @@ int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *m_
   ostream* oStr = new ostream(sBuf) ;
   wxDebugContext::SetStream(oStr, sBuf);
 
-#endif
+#endif  // USE_MEMORY_TRACING
 
   if (!wxApp::Initialize((WXHINSTANCE) wxhInstance))
     return 0;
