@@ -53,6 +53,9 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     SetValidator(validator);
 #endif // wxUSE_VALIDATORS
 
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+        style |= wxNO_BORDER;
+
     SetBackgroundColour(parent->GetBackgroundColour()) ;
     SetForegroundColour(parent->GetForegroundColour()) ;
     m_windowStyle = style;
@@ -88,7 +91,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     // Now create scrollbar
     DWORD _direction = (style & wxHORIZONTAL) ?
                         SBS_HORZ: SBS_VERT;
-    HWND scroll_bar = CreateWindowEx(wstyle, wxT("SCROLLBAR"), wxT("scrollbar"),
+    HWND scroll_bar = CreateWindowEx(exStyle, wxT("SCROLLBAR"), wxT("scrollbar"),
                          _direction | wstyle,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                          wxGetInstance(), NULL);
