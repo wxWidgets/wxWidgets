@@ -50,10 +50,9 @@ public:
     virtual wxString FindFirst(const wxString& spec, int flags = 0);
     virtual wxString FindNext();
 
-private:
-    static wxHashTable *m_Hash;
-
+protected:
     static bool CheckHash(const wxString& filename);
+    static wxHashTable *m_Hash;
 };
 
 class wxMemoryFSHandler : public wxMemoryFSHandlerBase

@@ -23,7 +23,6 @@
 #include "wx/bitmap.h"
 #include "wx/fs_mem.h"
 
-#ifdef __WXBASE__
 
 #ifndef WXPRECOMP
     #include "wx/intl.h"
@@ -74,6 +73,8 @@ class MemFSHashObj : public wxObject
 #endif // wxUSE_DATETIME            
         }
 };
+
+#ifdef __WXBASE__
 
 
 //--------------------------------------------------------------------------------
@@ -206,10 +207,9 @@ bool wxMemoryFSHandlerBase::CheckHash(const wxString& filename)
 
 #if wxUSE_IMAGE
 /*static*/ void
-wxMemoryFSHandlerBase::AddFile(const wxString& filename, wxImage& image, long type)
+wxMemoryFSHandler::AddFile(const wxString& filename, wxImage& image, long type)
 {
     if (!CheckHash(filename)) return;
-
 
     wxMemoryOutputStream mems;
     if (image.Ok() && image.SaveFile(mems, (int)type))
