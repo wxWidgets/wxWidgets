@@ -25,95 +25,95 @@ public:
 
 
     // append any kind of item (normal/check/radio/separator)
-    void Append(int id,
-                const wxString& text,
-                const wxString& help = wxPyEmptyString,
-                wxItemKind kind = wxITEM_NORMAL);
+    wxMenuItem* Append(int id,
+                       const wxString& text,
+                       const wxString& help = wxPyEmptyString,
+                       wxItemKind kind = wxITEM_NORMAL);
 
     // append a separator to the menu
-    void AppendSeparator();
+    wxMenuItem* AppendSeparator();
 
     // append a check item
-    void AppendCheckItem(int id,
-                         const wxString& text,
-                         const wxString& help = wxPyEmptyString);
+    wxMenuItem* AppendCheckItem(int id,
+                                const wxString& text,
+                                const wxString& help = wxPyEmptyString);
 
     // append a radio item
-    void AppendRadioItem(int id,
-                         const wxString& text,
-                         const wxString& help = wxPyEmptyString);
+    wxMenuItem* AppendRadioItem(int id,
+                                const wxString& text,
+                                const wxString& help = wxPyEmptyString);
     // append a submenu
-    %name(AppendMenu)void Append(int id,
-                                 const wxString& text,
-                                 wxMenu *submenu,
-                                 const wxString& help = wxPyEmptyString);
+    %name(AppendMenu) wxMenuItem* Append(int id,
+                                         const wxString& text,
+                                         wxMenu *submenu,
+                                         const wxString& help = wxPyEmptyString);
 
     // the most generic form of Append() - append anything
-    %name(AppendItem) void Append(wxMenuItem *item);
+    %name(AppendItem) wxMenuItem* Append(wxMenuItem *item);
 
     // insert a break in the menu (only works when appending the items, not
     // inserting them)
     virtual void Break();
 
     // insert an item before given position
-    %name(InsertItem) bool Insert(size_t pos, wxMenuItem *item);
+    %name(InsertItem) wxMenuItem* Insert(size_t pos, wxMenuItem *item);
 
     // insert an item before given position
-    void Insert(size_t pos,
-                int id,
-                const wxString& text,
-                const wxString& help = wxPyEmptyString,
-                wxItemKind kind = wxITEM_NORMAL);
+    wxMenuItem* Insert(size_t pos,
+                       int id,
+                       const wxString& text,
+                       const wxString& help = wxPyEmptyString,
+                       wxItemKind kind = wxITEM_NORMAL);
 
     // insert a separator
-    void InsertSeparator(size_t pos);
+    wxMenuItem* InsertSeparator(size_t pos);
 
     // insert a check item
-    void InsertCheckItem(size_t pos,
-                         int id,
-                         const wxString& text,
-                         const wxString& help = wxPyEmptyString);
+    wxMenuItem* InsertCheckItem(size_t pos,
+                                int id,
+                                const wxString& text,
+                                const wxString& help = wxPyEmptyString);
 
     // insert a radio item
-    void InsertRadioItem(size_t pos,
-                         int id,
-                         const wxString& text,
-                         const wxString& help = wxPyEmptyString);
+    wxMenuItem* InsertRadioItem(size_t pos,
+                                int id,
+                                const wxString& text,
+                                const wxString& help = wxPyEmptyString);
 
     // insert a submenu
-    %name(InsertMenu) void Insert(size_t pos,
-                                  int id,
-                                  const wxString& text,
-                                  wxMenu *submenu,
-                                  const wxString& help = wxPyEmptyString);
+    %name(InsertMenu) wxMenuItem* Insert(size_t pos,
+                                         int id,
+                                         const wxString& text,
+                                         wxMenu *submenu,
+                                         const wxString& help = wxPyEmptyString);
 
     // prepend an item to the menu
-    %name(PrependItem)void Prepend(wxMenuItem *item);
+    %name(PrependItem) wxMenuItem* Prepend(wxMenuItem *item);
 
     // prepend any item to the menu
-    void Prepend(int id,
-                 const wxString& text,
-                 const wxString& help = wxPyEmptyString,
-                 wxItemKind kind = wxITEM_NORMAL);
+    wxMenuItem* Prepend(int id,
+                        const wxString& text,
+                        const wxString& help = wxPyEmptyString,
+                        wxItemKind kind = wxITEM_NORMAL);
 
     // prepend a separator
-    void PrependSeparator();
+    wxMenuItem*  PrependSeparator();
 
     // prepend a check item
-    void PrependCheckItem(int id,
-                          const wxString& text,
-                          const wxString& help = wxPyEmptyString);
+    wxMenuItem* PrependCheckItem(int id,
+                                 const wxString& text,
+                                 const wxString& help = wxPyEmptyString);
 
     // prepend a radio item
-    void PrependRadioItem(int id,
-                          const wxString& text,
-                          const wxString& help = wxPyEmptyString);
+    wxMenuItem*  PrependRadioItem(int id,
+                                  const wxString& text,
+                                  const wxString& help = wxPyEmptyString);
 
     // prepend a submenu
-    %name(PrependMenu)void Prepend(int id,
-                                   const wxString& text,
-                                   wxMenu *submenu,
-                                   const wxString& help = wxPyEmptyString);
+    %name(PrependMenu) wxMenuItem* Prepend(int id,
+                                           const wxString& text,
+                                           wxMenu *submenu,
+                                           const wxString& help = wxPyEmptyString);
 
     // detach an item from the menu, but don't delete it so that it can be
     // added back later (but if it's not, the caller is responsible for
