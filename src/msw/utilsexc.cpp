@@ -185,6 +185,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 {
     wxCHECK_MSG( !!cmd, 0, wxT("empty command in wxExecute") );
 
+    wxString command;
 #if wxUSE_IPC
     // DDE hack: this is really not pretty, but we need to allow this for
     // transparent handling of DDE servers in wxMimeTypesManager. Usually it
@@ -194,7 +195,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     // keep all this well hidden from the application, we allow a special form
     // of command: WX_DDE:<command>:DDE_SERVER:DDE_TOPIC:DDE_COMMAND in which
     // case we execute just <command> and process the rest below
-    wxString command, ddeServer, ddeTopic, ddeCommand;
+    wxString ddeServer, ddeTopic, ddeCommand;
     static const size_t lenDdePrefix = 7;   // strlen("WX_DDE:")
     if ( cmd.Left(lenDdePrefix) == _T("WX_DDE#") )
     {
