@@ -1,7 +1,7 @@
 #include <commctrl.h>
 
 #ifdef WIN32_PLATFORM_WFSP
-    #include "wx\msw\wince\smartphone.rc"
+    #include "wx/msw/wince/smartphone.rc"
 #else
 
 // Dummy menubar/toolbar for WinCE
