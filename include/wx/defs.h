@@ -53,21 +53,23 @@
     #endif
 
     #if defined(__APPLE__)
-	// MacOS X
+        // MacOS X
         #ifndef __WXMAC__
             #define __WXMAC__
         #endif
         #ifndef __WXMAC_X__
             #define __WXMAC_X__
         #endif
-    
+
         #define PM_USE_SESSION_APIS 0
         #include <Carbon/Carbon.h>
     #endif
-#elif defined(applec) || defined(THINK_C) || (defined(__MWERKS__) && !defined(__INTEL__))
-        // MacOS
+#elif defined(applec) || \
+      defined(THINK_C) || \
+      (defined(__MWERKS__) && !defined(__INTEL__))
+      // MacOS
 #elif defined(__WXMAC__) && defined(__APPLE__)
-	// MacOS X
+    // MacOS X
     #define __UNIX_LIKE__
 
     #ifndef __WXMAC__
@@ -76,7 +78,7 @@
     #ifndef __WXMAC_X__
         #define __WXMAC_X__
     #endif
-    
+
     #define PM_USE_SESSION_APIS 0
     #include <Carbon/Carbon.h>
 #elif defined(__OS2__)

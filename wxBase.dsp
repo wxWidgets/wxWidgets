@@ -117,6 +117,11 @@ SOURCE=.\src\common\dbtable.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\msw\dummy.cpp
+# ADD CPP /Yc"wx/wxprec.h"
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\common\dynarray.cpp
 # End Source File
 # Begin Source File

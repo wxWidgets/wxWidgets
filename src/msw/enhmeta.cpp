@@ -234,11 +234,11 @@ wxEnhMetaFileDC::~wxEnhMetaFileDC()
     m_hDC = 0;
 }
 
+#if wxUSE_DRAG_AND_DROP
+
 // ----------------------------------------------------------------------------
 // wxEnhMetaFileDataObject
 // ----------------------------------------------------------------------------
-
-#if wxUSE_DRAG_AND_DROP
 
 wxDataFormat
 wxEnhMetaFileDataObject::GetPreferredFormat(Direction WXUNUSED(dir)) const
@@ -391,6 +391,46 @@ bool wxEnhMetaFileDataObject::SetData(const wxDataFormat& format,
 
     return TRUE;
 }
+
+// ----------------------------------------------------------------------------
+// wxEnhMetaFileSimpleDataObject
+// ----------------------------------------------------------------------------
+
+size_t wxEnhMetaFileSimpleDataObject::GetDataSize() const
+{
+    // we pass data by handle and not HGLOBAL
+    return 0u;
+}
+
+bool wxEnhMetaFileSimpleDataObject::GetDataHere(void *buf) const
+{
+    wxCHECK_MSG( m_metafile.Ok(), FALSE, _T("copying invalid enh metafile") );
+
+    HENHMETAFILE hEMF = (HENHMETAFILE)m_metafile.GetHENHMETAFILE();
+
+    HENHMETAFILE hEMFCopy = ::CopyEnhMetaFile(hEMF, NULL);
+    if ( !hEMFCopy )
+    {
+        wxLogLastError(_T("CopyEnhMetaFile"));
+
+        return FALSE;
+    }
+
+    *(HENHMETAFILE *)buf = hEMFCopy;
+    return TRUE;
+}
+
+bool wxEnhMetaFileSimpleDataObject::SetData(size_t WXUNUSED(len),
+                                            const void *buf)
+{
+    HENHMETAFILE hEMF = *(HENHMETAFILE *)buf;
+
+    wxCHECK_MSG( hEMF, FALSE, _T("pasting invalid enh metafile") );
+    m_metafile.SetHENHMETAFILE((WXHANDLE)hEMF);
+
+    return TRUE;
+}
+
 #endif // wxUSE_DRAG_AND_DROP
 
 #endif // wxUSE_ENH_METAFILE

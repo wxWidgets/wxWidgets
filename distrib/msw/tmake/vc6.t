@@ -37,6 +37,14 @@
         next if $wxHTML{$file} =~ /\b16\b/;
         $project{"WXHTMLSRCS"} .= $file . " "
     }
+
+	if ( Config("wxnodir") ) {
+	    $WXDIR = ".";
+	}
+	else {
+	    if ( $ENV{'wx'} ) { $WXDIR = "\$(wx)"; }
+	    else { $WXDIR = "\$(WXWIN)"; }
+	}
 #$}
 # Microsoft Developer Studio Project File - Name="wxWindows" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
@@ -81,7 +89,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /Zi /O2 /I "$(wx)\include" /I "$(wx)\src\zlib" /I "$(wx)\src\jpeg" /I "$(wx)\src\png" /I "$(wx)\src\tiff" /D "NDEBUG" /D wxUSE_GUI=1 /D WIN95=1 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN32__" /D "_MT" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MD /W4 /Zi /O2 /I #$ $text = "\"$WXDIR\\include\" /I \"$WXDIR\\src\\zlib\" /I \"$WXDIR\\src\\jpeg\" /I \"$WXDIR\\src\\png\" /I \"$WXDIR\\src\\tiff\" /D \"NDEBUG\" /D wxUSE_GUI=1 /D WIN95=1 /D \"__WIN95__\" /D \"WIN32\" /D \"_WIN32\" /D WINVER=0x400 /D \"__WINDOWS__\" /D \"__WXMSW__\" /D \"__WIN32__\" /D \"_MT\" /Yu\"wx/wxprec.h\" /FD /c"
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -104,7 +112,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" -D "_MT" /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "$(wx)\include" /I "$(wx)\src\zlib" /I "$(wx)\src\jpeg" /I "$(wx)\src\png" /I "$(wx)\src\tiff" /D "_DEBUG" /D DEBUG=1 /D WXDEBUG=1 /D "__WXDEBUG__" /D wxUSE_GUI=1 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WIN32__" /D "__WXMSW__" /Fr /D "_MT" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I #$ $text = "\"$WXDIR\\include\" /I \"$WXDIR\\src\\zlib\" /I \"$WXDIR\\src\\jpeg\" /I \"$WXDIR\\src\\png\" /I \"$WXDIR\\src\\tiff\" /D \"_DEBUG\" /D DEBUG=1 /D WXDEBUG=1 /D \"__WXDEBUG__\" /D wxUSE_GUI=1 /D \"__WIN95__\" /D \"WIN32\" /D \"_WIN32\" /D WINVER=0x400 /D \"__WINDOWS__\" /D \"__WIN32__\" /D \"__WXMSW__\" /Fr /D \"_MT\" /Yu\"wx/wxprec.h\" /FD /c"
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -141,11 +149,12 @@ SOURCE=.\src\common\y_tab.c
 
 !IF  "$(CFG)" == "wxWindows - Win32 Release"
 
+# ADD CPP /W1 /D "USE_DEFINE"
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug"
 
-# ADD CPP /W1
+# ADD CPP /W1 /D "USE_DEFINE"
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 

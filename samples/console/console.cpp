@@ -49,11 +49,12 @@
 //#define TEST_HASH
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_LIST
-#define TEST_LOCALE
+//#define TEST_LOCALE
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_PATHLIST
+#define TEST_REGCONF
 //#define TEST_REGISTRY
 //#define TEST_SOCKETS
 //#define TEST_STREAMS
@@ -1599,13 +1600,27 @@ static void TestPathList()
 #endif // TEST_PATHLIST
 
 // ----------------------------------------------------------------------------
-// registry
+// registry and related stuff
 // ----------------------------------------------------------------------------
 
 // this is for MSW only
 #ifndef __WXMSW__
+    #undef TEST_REGCONF
     #undef TEST_REGISTRY
 #endif
+
+#ifdef TEST_REGCONF
+
+#include <wx/confbase.h>
+#include <wx/msw/regconf.h>
+
+static void TestRegConfWrite()
+{
+    wxRegConfig regconf(_T("console"), _T("wxwindows"));
+    regconf.Write(_T("Hello"), wxString(_T("world")));
+}
+
+#endif // TEST_REGCONF
 
 #ifdef TEST_REGISTRY
 
@@ -4679,6 +4694,10 @@ int main(int argc, char **argv)
 #ifdef TEST_PATHLIST
     TestPathList();
 #endif // TEST_PATHLIST
+
+#ifdef TEST_REGCONF
+    TestRegConfWrite();
+#endif // TEST_REGCONF
 
 #ifdef TEST_REGISTRY
     if ( 0 )

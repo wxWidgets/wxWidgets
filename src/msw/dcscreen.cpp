@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcscreen.cpp
+// Name:        src/msw/dcscreen.cpp
 // Purpose:     wxScreenDC class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -33,22 +33,12 @@
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 
 // Create a DC representing the whole screen
-wxScreenDC::wxScreenDC(void)
+wxScreenDC::wxScreenDC()
 {
-  m_hDC = (WXHDC) ::GetDC((HWND) NULL);
-  m_hDCCount ++;
+    m_hDC = (WXHDC) ::GetDC((HWND) NULL);
 
-  // the background mode is only used for text background
-  // and is set in DrawText() to OPAQUE as required, other-
-  // wise always TRANSPARENT, RR
-  ::SetBkMode( GetHdc(), TRANSPARENT );
-}
-
-wxScreenDC::~wxScreenDC(void)
-{
-  SelectOldObjects(m_hDC);
-  ::ReleaseDC((HWND) NULL, (HDC) m_hDC);
-  m_hDC = 0;
-  m_hDCCount --;
+    // the background mode is only used for text background and is set in
+    // DrawText() to OPAQUE as required, otherwise always TRANSPARENT
+    ::SetBkMode( GetHdc(), TRANSPARENT );
 }
 

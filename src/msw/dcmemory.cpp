@@ -53,37 +53,47 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 
 wxMemoryDC::wxMemoryDC()
 {
-    m_hDC = (WXHDC) ::CreateCompatibleDC((HDC) NULL);
-    m_ok = (m_hDC != 0);
+    CreateCompatible(NULL);
+
+    Init();
+}
+
+wxMemoryDC::wxMemoryDC(wxDC *dc)
+{
+    wxCHECK_RET( dc, _T("NULL dc in wxMemoryDC ctor") );
+
+    dc->BeginDrawing();
+
+    CreateCompatible(dc);
+
+    dc->EndDrawing();
+
+    Init();
+}
+
+void wxMemoryDC::Init()
+{
+    if ( m_ok )
+    {
+        SetBrush(*wxWHITE_BRUSH);
+        SetPen(*wxBLACK_PEN);
+
+        // the background mode is only used for text background and is set in
+        // DrawText() to OPAQUE as required, otherwise always TRANSPARENT
+        ::SetBkMode( GetHdc(), TRANSPARENT );
+    }
+}
+
+bool wxMemoryDC::CreateCompatible(wxDC *dc)
+{
+    m_hDC = (WXHDC)::CreateCompatibleDC(dc ? GetHdcOf(*dc) : NULL);
+
+    // as we created the DC, we must delete it in the dtor
     m_bOwnsDC = TRUE;
 
-    SetBrush(*wxWHITE_BRUSH);
-    SetPen(*wxBLACK_PEN);
+    m_ok = m_hDC != 0;
 
-    // the background mode is only used for text background and is set in
-    // DrawText() to OPAQUE as required, otherwise always TRANSPARENT
-    ::SetBkMode( GetHdc(), TRANSPARENT );
-}
-
-wxMemoryDC::wxMemoryDC(wxDC *old_dc)
-{
-    old_dc->BeginDrawing();
-
-    m_hDC = (WXHDC) ::CreateCompatibleDC(GetHdcOf(*old_dc));
-    m_ok = (m_hDC != 0);
-
-    old_dc->EndDrawing();
-
-    SetBrush(*wxWHITE_BRUSH);
-    SetPen(*wxBLACK_PEN);
-
-    // the background mode is only used for text background and is set in
-    // DrawText() to OPAQUE as required, otherwise always TRANSPARENT
-    ::SetBkMode( GetHdc(), TRANSPARENT );
-}
-
-wxMemoryDC::~wxMemoryDC()
-{
+    return m_ok;
 }
 
 void wxMemoryDC::SelectObject(const wxBitmap& bitmap)

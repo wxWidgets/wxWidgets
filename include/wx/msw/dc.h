@@ -216,7 +216,6 @@ protected:
     // our HDC and its usage count: we only free it when the usage count drops
     // to 0
     WXHDC             m_hDC;
-    int               m_hDCCount;
 
     // Store all old GDI objects when do a SelectObject, so we can select them
     // back in (this unselecting user's objects) so we can safely delete the

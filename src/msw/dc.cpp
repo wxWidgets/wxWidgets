@@ -183,23 +183,29 @@ wxDC::wxDC()
 
     m_windowExtX = VIEWPORT_EXTENT;
     m_windowExtY = VIEWPORT_EXTENT;
-
-    m_hDCCount = 0;
 }
 
 
 wxDC::~wxDC()
 {
-    if ( m_hDC != 0 ) {
+    if ( m_hDC != 0 )
+    {
         SelectOldObjects(m_hDC);
-        if ( m_bOwnsDC ) {
-            if ( m_canvas == NULL )
-                ::DeleteDC(GetHdc());
-            else
-                ::ReleaseDC((HWND)m_canvas->GetHWND(), GetHdc());
+
+        // if we own the HDC, we delete it, otherwise we just release it
+
+        if ( m_bOwnsDC )
+        {
+            ::DeleteDC(GetHdc());
+        }
+        else // we don't own our HDC
+        {
+            // this is not supposed to happen as we can't free the HDC then
+            wxCHECK_RET( m_canvas, _T("no canvas in not owning ~wxDC?") );
+
+            ::ReleaseDC(GetHwndOf(m_canvas), GetHdc());
         }
     }
-
 }
 
 // This will select current objects out of the DC,
