@@ -96,6 +96,7 @@ public:
     wxEmulatorContainer*    m_containerWindow;
     wxString                m_appDir;
     wxString                m_displayNumber;
+    long                    m_xnestPID;
 };
 
 // The container for the Xnest window. The decorations
@@ -124,9 +125,10 @@ public:
     // ctor(s)
     wxEmulatorFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 
-    // event handlers (these functions should _not_ be virtual)
+    // event handlers
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnCloseWindow(wxCloseEvent& event);
 
 private:
     // any class wishing to process wxWindows events must use this macro

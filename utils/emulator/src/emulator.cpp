@@ -63,6 +63,7 @@
 BEGIN_EVENT_TABLE(wxEmulatorFrame, wxFrame)
     EVT_MENU(Emulator_Quit,  wxEmulatorFrame::OnQuit)
     EVT_MENU(Emulator_About, wxEmulatorFrame::OnAbout)
+    EVT_CLOSE(wxEmulatorFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -98,11 +99,14 @@ wxEmulatorApp::wxEmulatorApp()
     m_xnestWindow = NULL;
     m_containerWindow = NULL;
     m_displayNumber = wxT("100");
+    m_xnestPID = 0;
+
 }
 
 // 'Main program' equivalent: the program execution "starts" here
 bool wxEmulatorApp::OnInit()
 {
+    wxLog::SetTimestamp(NULL);
     wxInitAllImageHandlers();
 
     wxString currentDir = wxGetCwd();
@@ -194,13 +198,14 @@ bool wxEmulatorApp::OnInit()
     m_xnestWindow = new wxAdoptedWindow;
 
     wxString cmd;
-    cmd.Printf(wxT("Xnest %s -geometry %dx%d"),
+    cmd.Printf(wxT("Xnest :%s -geometry %dx%d"),
         m_displayNumber.c_str(),
         (int) m_emulatorInfo.m_emulatorScreenSize.x,
         (int) m_emulatorInfo.m_emulatorScreenSize.y);
 
-    // Asynchronously executes Xnest    
-    if (0 == wxExecute(cmd))
+    // Asynchronously executes Xnest
+    m_xnestPID = wxExecute(cmd);
+    if (0 == m_xnestPID)
     {
         frame->Destroy();
         wxMessageBox(wxT("Sorry, could not run Xnest. Please check your PATH."));
@@ -301,6 +306,22 @@ void wxEmulatorFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(msg, _T("About wxEmulator"), wxOK | wxICON_INFORMATION, this);
 }
 
+void wxEmulatorFrame::OnCloseWindow(wxCloseEvent& event)
+{
+#ifdef __WXX11__
+    if (wxGetApp().m_xnestWindow)
+    {
+        wxGetApp().m_xnestWindow->SetHandle((WXWindow) NULL);
+    }
+#endif
+    this->Destroy();
+    if (wxGetApp().m_xnestPID > 0)
+    {
+        wxKill(wxGetApp().m_xnestPID);
+        wxGetApp().m_xnestPID = 0;
+    }
+}
+
 IMPLEMENT_CLASS(wxEmulatorContainer, wxWindow)
 
 BEGIN_EVENT_TABLE(wxEmulatorContainer, wxWindow)
@@ -322,7 +343,11 @@ void wxEmulatorContainer::OnSize(wxSizeEvent& event)
 void wxEmulatorContainer::DoResize()
 {
     wxSize sz = GetClientSize();
-    if (wxGetApp().m_xnestWindow)
+    if (wxGetApp().m_xnestWindow
+#ifdef __WXX11__
+        && wxGetApp().m_xnestWindow->GetMainWindow()
+#endif
+        )
     {
         int deviceWidth = wxGetApp().m_emulatorInfo.m_emulatorDeviceSize.x;
         int deviceHeight = wxGetApp().m_emulatorInfo.m_emulatorDeviceSize.y;
