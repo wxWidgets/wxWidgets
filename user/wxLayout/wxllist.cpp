@@ -31,10 +31,6 @@
 
 #define   BASELINESTRETCH   12
 
-#define   VAR(x)   cerr << #x"=" << x << endl;
-#define   DBG_POINT(p)   cerr << #p << ": " << p.x << ',' << p.y << endl
-#define   TRACE(f)   cerr << #f":" << endl;
-
 #ifdef WXLAYOUT_DEBUG
 static const char *_t[] = { "invalid", "text", "cmd", "icon",
                             "linebreak"};
@@ -46,6 +42,14 @@ wxLayoutObjectBase::Debug(void)
    cerr << _t[GetType()] << ": size=" << GetSize(&bl).x << ","
         << GetSize(&bl).y << " bl=" << bl; 
 }
+
+#  define   VAR(x)   cerr << #x"=" << x << endl;
+#  define   DBG_POINT(p)   cerr << #p << ": " << p.x << ',' << p.y << endl
+#  define   TRACE(f)   cerr << #f":" << endl;
+#else 
+#  define   VAR(x)   
+#  define   DBG_POINT(p)   
+#  define   TRACE(f)   
 #endif
 
 //-------------------------- wxLayoutObjectText
@@ -372,6 +376,7 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
             dc.GetTextExtent(Str(str), &width,&height, &descent);
             VAR(height);
             VAR(width); VAR(descent);
+            if(width < 1) width = 1;
             dc.DrawLine(position.x+width,
                         position.y+(baseLineSkip-height),
                         position.x+width, position.y+baseLineSkip);
@@ -523,11 +528,10 @@ wxLayoutList::FindObjectCursor(wxPoint const &cpos, CoordType *offset)
       width = 0;
       if((*i)->GetType() == WXLO_TYPE_LINEBREAK)
       {
-         if(cpos.y == cursor.y)
+         if(cpos.y == cursor.y && i != begin())
          {
             --i;
-            if(offset)
-               *offset = (*i)->CountPositions();
+            if(offset) *offset = i != end() ? (*i)->CountPositions() : 0;
             return i;
          }
          cursor.x = 0; cursor.y ++;
@@ -690,7 +694,7 @@ wxLayoutList::Delete(CoordType count)
          if(offs == len)
          {
             i++;
-            if((*i)->GetType() == WXLO_TYPE_TEXT)
+            if(i != end() && (*i)->GetType() == WXLO_TYPE_TEXT)
             {
                offs = 0;  // delete from begin of next string
                tobj = (wxLayoutObjectText *)*i;
@@ -851,6 +855,9 @@ wxLayoutList::Clear(int family, int size, int style, int weight,
    m_ColourFG = wxTheColourDatabase->FindColour(fg);
    m_ColourBG = wxTheColourDatabase->FindColour(bg);
 
+   if(! m_ColourFG) m_ColourFG = wxBLACK;
+   if(! m_ColourBG) m_ColourBG = wxWHITE;
+   
    m_Position = wxPoint(0,0);
    m_CursorPosition = wxPoint(0,0);
    m_MaxLine = 0;

@@ -16,7 +16,7 @@
 
 #include   "wxllist.h"
 
-#define BROKEN_COMPILER
+#define   BROKEN_COMPILER
 
 #ifdef   BROKEN_COMPILER
 #   define   virtual

@@ -17,10 +17,15 @@
 #include   <wx/wx.h>
 
 // skip the following defines if embedded in M application
-#ifndef   MCONFIG_H
-// for testing only:
+#ifdef   M_BASEDIR
+#   ifdef   DEBUG
+//#      define   WXLAYOUT_DEBUG
+#   endif
+#else
+    // for testing only:
 #   define WXLAYOUT_DEBUG
-//#   define USE_STD_STRING
+    // The wxLayout classes can be compiled with std::string instead of wxString
+    //#   define USE_STD_STRING
 #endif
 
 #ifdef USE_STD_STRING
@@ -60,8 +65,8 @@ public:
        @param baseLine the baseline for alignment, from top of box
        @draw if set to false, do not draw but just calculate sizes
    */
-   virtual void Draw( wxDC &WXUNUSED(dc), wxPoint WXUNUSED(position), 
-                     CoordType WXUNUSED(baseLine), bool draw = true) {};
+   virtual void Draw(wxDC &dc, wxPoint position, CoordType baseLine,
+                     bool draw = true) {};
 
    /** Calculates and returns the size of the object. May need to be
        called twice to work.
@@ -70,9 +75,8 @@ public:
        baseline)
        @return the size of the object's box in pixels
    */
-   virtual wxPoint GetSize( CoordType *WXUNUSED(baseLine) ) const 
-     { return wxPoint(0,0); };
-     
+   virtual wxPoint GetSize(CoordType *baseLine) const { return
+                                                           wxPoint(0,0); };
    /// returns the number of cursor positions occupied by this object
    virtual CoordType CountPositions(void) const { return 1; }
 
@@ -236,10 +240,13 @@ public:
    /**@name Functionality for editing */
    //@{
    /// set list editable or read only
-   void SetEditable(bool editable = true) { m_Editable = true; }
+   void SetEditable(bool editable = true) { m_Editable = editable; }
+   /// return true if list is editable
+   bool IsEditable(void) const { return m_Editable; }
    /// move cursor
    void MoveCursor(int dx = 0, int dy = 0);
    void SetCursor(wxPoint const &p) { m_CursorPosition = p; }
+   wxPoint GetCursor(void) const { return m_CursorPosition; }
    /// delete one or more cursor positions
    void Delete(CoordType count = 1);
    void Insert(String const &text);
@@ -250,7 +257,10 @@ public:
    /// return a pointer to the default settings:
    wxLayoutObjectCmd const *GetDefaults(void) const { return m_DefaultSetting ; }
 
-   //@}
+   wxLayoutObjectList::iterator FindCurrentObject(CoordType *offset = NULL);
+   // get the length of the line with the object pointed to by i
+   CoordType GetLineLength(wxLayoutObjectList::iterator i);
+//@}
 protected:
    /// font parameters:
    int m_FontFamily, m_FontStyle, m_FontWeight;
@@ -285,9 +295,6 @@ protected:
    /// find the object to the cursor position and returns the offset
    /// in there
    wxLayoutObjectList::iterator FindObjectCursor(wxPoint const &cpos, CoordType *offset = NULL);
-   wxLayoutObjectList::iterator FindCurrentObject(CoordType *offset = NULL);
-   // get the length of the line with the object pointed to by i
-   CoordType GetLineLength(wxLayoutObjectList::iterator i);
    
 };
 

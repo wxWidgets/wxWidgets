@@ -76,6 +76,8 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 void
 MyFrame::AddSampleText(wxLayoutList &llist)
 {
+   llist.Insert("--");
+   llist.LineBreak();
 
    llist.Insert("The quick brown fox jumps over the lazy dog.");
    llist.LineBreak();
@@ -146,9 +148,11 @@ MyFrame::AddSampleText(wxLayoutList &llist)
          llist.LineBreak();
       }
    }
-
+   
    m_lwin->Refresh();
    m_lwin->UpdateScrollbars();
+   llist.SetEditable();
+   llist.SetCursor(wxPoint(0,0));
 }
 
 void
@@ -169,7 +173,7 @@ void MyFrame::Edit(void)
    llist.MoveCursor(0,2);
    llist.Delete(2);
    llist.MoveCursor(2);
-   llist.Insert("not all so ");
+   llist.Insert("not");
    llist.LineBreak();
    m_lwin->Refresh();
 }
