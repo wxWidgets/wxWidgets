@@ -376,6 +376,7 @@ typedef int wxWindowID;
     #endif
 
     #define WXMAKINGDLL_CORE
+    #define WXMAKINGDLL_HTML
 #endif // WXMAKINGDLL
 
 #ifdef WXUSINGDLL
