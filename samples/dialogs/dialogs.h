@@ -18,7 +18,7 @@
     #define USE_WXUNIVERSAL 0
 #endif
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXWINCE__)
     #define USE_WXMSW 1
 #else
     #define USE_WXMSW 0
