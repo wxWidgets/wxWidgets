@@ -33,15 +33,16 @@ public:
                     const wxPoint& pos = wxDefaultPosition);
 
     int ShowModal();
-    virtual bool Show( bool show = true ) { return false; };
+    virtual bool Show( bool WXUNUSED(show) = true ) { return false; };
 
 protected:
     // implement some base class methods to do nothing to avoid asserts and
     // GTK warnings, since this is not a real wxDialog.
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) {}
-    virtual void DoMoveWindow(int x, int y, int width, int height) {}
+    virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
+                           int WXUNUSED(width), int WXUNUSED(height),
+                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
+    virtual void DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y),
+                              int WXUNUSED(width), int WXUNUSED(height)) {}
 
 private:
     wxString m_caption;
