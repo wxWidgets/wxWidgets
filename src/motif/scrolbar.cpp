@@ -14,15 +14,12 @@
 #endif
 
 #include "wx/defs.h"
-
 #include "wx/scrolbar.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
-#include <X11/IntrinsicP.h>
 #include <Xm/Xm.h>
-#include <Xm/RowColumn.h>
 #include <Xm/ScrollBar.h>
 #ifdef __VMS__
 #pragma message enable nosimpint
@@ -42,64 +39,26 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-    if (!parent)
-        return FALSE;
-    parent->AddChild(this);
-    SetName(name);
-    m_backgroundColour = parent->GetBackgroundColour();
-    m_foregroundColour = parent->GetForegroundColour();
-    SetValidator(validator);
+    if( !CreateControl( parent, id, pos, size, style, validator, name ) )
+        return false;
 
-    m_windowStyle = style;
-
-    if ( id == -1 )
-        m_windowId = (int)NewControlId();
-    else
-        m_windowId = id;
-
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
-
-    if (width == -1)
-    {
-      if (style & wxHORIZONTAL)
-        width = 140;
-      else
-        width = 12;
-    }
-    if (height == -1)
-    {
-      if (style & wxVERTICAL)
-        height = 140;
-      else
-        height = 12;
-    }
+    wxSize newSize =
+        ( style & wxHORIZONTAL ) ? wxSize( 140, 16 ) : wxSize( 16, 140 );
+    if( size.x != -1 ) newSize.x = size.x;
+    if( size.y != -1 ) newSize.y = size.y;
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
-    int direction = (style & wxHORIZONTAL) ? XmHORIZONTAL: XmVERTICAL;
 
-    Widget scrollBarWidget = XtVaCreateManagedWidget("scrollBarWidget",
-                  xmScrollBarWidgetClass,  parentWidget,
-                  XmNorientation,      direction,
-                  NULL);
+    m_mainWidget =
+        DoCreateScrollBar( (WXWidget)parentWidget,
+                           (wxOrientation)(style & (wxHORIZONTAL|wxVERTICAL)),
+                           (void (*)())wxScrollBarCallback );
 
-    m_mainWidget = (Widget) scrollBarWidget;
-
-    XtAddCallback(scrollBarWidget, XmNvalueChangedCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
-    XtAddCallback(scrollBarWidget, XmNdragCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
-    XtAddCallback(scrollBarWidget, XmNdecrementCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
-    XtAddCallback(scrollBarWidget, XmNincrementCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
-    XtAddCallback(scrollBarWidget, XmNpageDecrementCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
-    XtAddCallback(scrollBarWidget, XmNpageIncrementCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
-    XtAddCallback(scrollBarWidget, XmNtoTopCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
-    XtAddCallback(scrollBarWidget, XmNtoBottomCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
-
-    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, x, y, width, height);
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
+                  pos.x, pos.y, newSize.x, newSize.y);
     ChangeBackgroundColour();
 
-    return TRUE;
+    return true;
 }
 
 wxScrollBar::~wxScrollBar()
@@ -108,25 +67,17 @@ wxScrollBar::~wxScrollBar()
 
 void wxScrollBar::SetThumbPosition(int pos)
 {
-	if (m_mainWidget)
-	{
-		XtVaSetValues ((Widget) m_mainWidget,
-				XmNvalue, pos,
-				NULL);
-	}
+    XtVaSetValues ((Widget) m_mainWidget,
+                   XmNvalue, pos,
+                   NULL);
 }
 
 int wxScrollBar::GetThumbPosition() const
 {
-	if (m_mainWidget)
-	{
-        int pos;
-        XtVaGetValues((Widget) m_mainWidget,
-            XmNvalue, &pos, NULL);
-        return pos;
-    }
-    else
-        return 0;
+    int pos;
+    XtVaGetValues((Widget) m_mainWidget,
+                  XmNvalue, &pos, NULL);
+    return pos;
 }
 
 void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize,
@@ -171,15 +122,11 @@ void wxScrollBar::ChangeBackgroundColour()
         NULL);
 }
 
-void wxScrollBar::ChangeForegroundColour()
+static void wxScrollBarCallback(Widget widget, XtPointer clientData,
+                                XmScaleCallbackStruct *cbs)
 {
-    wxWindow::ChangeForegroundColour();
-}
-
-static void wxScrollBarCallback(Widget WXUNUSED(widget), XtPointer clientData,
-                        XmScaleCallbackStruct *cbs)
-{
-    wxScrollBar *scrollBar = (wxScrollBar *)clientData;
+    wxScrollBar *scrollBar = (wxScrollBar*)wxGetWindowFromTable(widget);
+    wxOrientation orientation = (wxOrientation)(int)clientData;
     wxEventType eventType = wxEVT_NULL;
 
     switch (cbs->reason)
@@ -232,13 +179,8 @@ static void wxScrollBarCallback(Widget WXUNUSED(widget), XtPointer clientData,
         }
     }
 
-    wxScrollEvent event(eventType, scrollBar->GetId());
+    wxScrollEvent event(eventType, scrollBar->GetId(),
+                        cbs->value, orientation);
     event.SetEventObject(scrollBar);
-    event.SetPosition(cbs->value);
     scrollBar->GetEventHandler()->ProcessEvent(event);
-/*
-    if (!scrollBar->inSetValue)
-      scrollBar->ProcessCommand(event);
-*/
 }
-
