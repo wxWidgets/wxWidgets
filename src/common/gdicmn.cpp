@@ -64,12 +64,6 @@
 #include "wx/mac/private.h"
 #include "wx/mac/uma.h"
 #endif
-//IMPLEMENT_CLASS(wxColourDatabase, wxList)
-//IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
-//IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
-//IMPLEMENT_DYNAMIC_CLASS(wxBrushList, wxList)
-//IMPLEMENT_DYNAMIC_CLASS(wxBitmapList, wxList)
-//IMPLEMENT_DYNAMIC_CLASS(wxResourceCache, wxList)
 
 IMPLEMENT_ABSTRACT_CLASS(wxDCBase, wxObject)
 
