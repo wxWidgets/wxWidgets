@@ -192,10 +192,10 @@ wxRendererMac::DrawTreeItemButton(wxWindow *win,
 }
 
 void
-wxRendererMac::DrawSash(wxWindow *win,
-                        wxDC& dc,
-                        const wxSize& size,
-                        wxCoord position)
+wxRendererMac::DrawSplitterSash(wxWindow *win,
+                                wxDC& dc,
+                                const wxSize& size,
+                                wxCoord position)
 {
     // VZ: we have to somehow determine if we're drawing a normal sash or
     //     a brushed metal one as they look quite differently... this is
