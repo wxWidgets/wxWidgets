@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        object.h
+// Name:        wx/object.h
 // Purpose:     wxObject class, plus run-time type information macros
 // Author:      Julian Smart
 // Modified by: Ron Lee
@@ -32,6 +32,8 @@ class WXDLLEXPORT wxObject;
 // conditional compilation
 // ----------------------------------------------------------------------------
 
+// this shouldn't be needed any longer as <wx/msw/private.h> does it but it
+// doesn't hurt neither
 #ifdef GetClassName
 #undef GetClassName
 #endif
@@ -41,9 +43,10 @@ class WXDLLEXPORT wxObject;
 
 class WXDLLEXPORT wxClassInfo;
 class WXDLLEXPORT wxHashTable;
+class WXDLLEXPORT wxObjectRefData;
 
 #if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
-#include "wx/ioswrap.h"
+    #include "wx/ioswrap.h"
 #endif
 
 
@@ -291,18 +294,15 @@ name##PluginSentinel  m_pluginsentinel;
 
 #define wxIS_KIND_OF(obj, className) obj->IsKindOf(&className::sm_class##className)
 
-    // Just seems a bit nicer-looking (pretend it's not a macro)
-
+// Just seems a bit nicer-looking (pretend it's not a macro)
 #define wxIsKindOf(obj, className) obj->IsKindOf(&className::sm_class##className)
 
-    // to be replaced by dynamic_cast<> in the future
-
+// to be replaced by dynamic_cast<> in the future
 #define wxDynamicCast(obj, className) \
  (className *) wxCheckDynamicCast((wxObject*)(obj), &className::sm_class##className)
 
-    // The 'this' pointer is always true, so use this version
-    // to cast the this pointer and avoid compiler warnings.
-
+// The 'this' pointer is always true, so use this version
+// to cast the this pointer and avoid compiler warnings.
 #define wxDynamicCastThis(className) \
  (IsKindOf(&className::sm_class##className) ? (className *)(this) : (className *)0)
 
@@ -323,64 +323,120 @@ inline void wxCheckCast(void *ptr)
 #endif  // __WXDEBUG__
 
 
-    // Unfortunately Borland seems to need this include.
-
+// for some reason Borland seems to need this include.
 #if wxUSE_STD_IOSTREAM                                \
     && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)  \
     && defined(__BORLANDC__)
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#else
-#include <iostream>
+    #if wxUSE_IOSTREAMH
+        #include <iostream.h>
+    #else
+        #include <iostream>
+    #endif
+#endif // wxUSE_IOSTREAMH
+
+// ----------------------------------------------------------------------------
+// set up memory debugging macros
+// ----------------------------------------------------------------------------
+
+/*
+    Which new/delete operator variants do we want?
+
+    _WX_WANT_NEW_SIZET_WXCHAR_INT             = void *operator new (size_t size, wxChar *fileName = 0, int lineNum = 0)
+    _WX_WANT_DELETE_VOID                      = void operator delete (void * buf)
+    _WX_WANT_DELETE_VOID_CONSTCHAR_SIZET      = void operator delete (void *buf, const char *_fname, size_t _line)
+    _WX_WANT_DELETE_VOID_WXCHAR_INT           = void operator delete(void *buf, wxChar*, int)
+    _WX_WANT_ARRAY_NEW_SIZET_WXCHAR_INT       = void *operator new[] (size_t size, wxChar *fileName , int lineNum = 0)
+    _WX_WANT_ARRAY_DELETE_VOID                = void operator delete[] (void *buf)
+    _WX_WANT_ARRAY_DELETE_VOID_WXCHAR_INT     = void operator delete[] (void* buf, wxChar*, int )
+*/
+
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
+
+// All compilers get this one
+#define _WX_WANT_NEW_SIZET_WXCHAR_INT
+
+// Everyone except Visage gets the next one
+#ifndef __VISAGECPP__
+    #define _WX_WANT_DELETE_VOID
 #endif
+
+// Only visage gets this one under the correct circumstances
+#if defined(__VISAGECPP__) && __DEBUG_ALLOC__
+    #define _WX_WANT_DELETE_VOID_CONSTCHAR_SIZET
 #endif
+
+// Only VC++ 6.0 and CodeWarrior compilers get overloaded delete that matches new
+#if ( defined(__VISUALC__) && (__VISUALC__ >= 1200) ) || defined(__MWERKS__)
+    #define _WX_WANT_DELETE_VOID_WXCHAR_INT
+#endif
+
+// Now see who (if anyone) gets the array memory operators
+#if wxUSE_ARRAY_MEMORY_OPERATORS
+
+    // Everyone except Visual C++ (cause problems for VC++ - crashes)
+    #if !defined(__VISUALC__)
+        #define _WX_WANT_ARRAY_NEW_SIZET_WXCHAR_INT
+    #endif
+
+    // Everyone except Visual C++ (cause problems for VC++ - crashes)
+    #if !defined(__VISUALC__)
+        #define _WX_WANT_ARRAY_DELETE_VOID
+    #endif
+
+    // Only CodeWarrior 6 or higher
+    #if defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
+        #define _WX_WANT_ARRAY_DELETE_VOID_WXCHAR_INT
+    #endif
+
+#endif // wxUSE_ARRAY_MEMORY_OPERATORS
+
+#endif // WXDEBUG && wxUSE_MEMORY_TRACING
 
 
 // ----------------------------------------------------------------------------
-// wxObject
+// wxObject: the root class of wxWindows object hierarchy
 // ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxObjectRefData;
 
 class WXDLLEXPORT wxObject
 {
 DECLARE_ABSTRACT_CLASS(wxObject)
 
 public:
-    wxObject() : m_refData(0) {}
+    wxObject() { m_refData = NULL; }
     virtual ~wxObject() { UnRef(); }
 
     bool IsKindOf(wxClassInfo *info) const;
 
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
-    void *operator new (size_t size, wxChar *fileName = 0, int lineNum = 0);
 
-#ifndef __VISAGECPP__
-    void operator delete (void * buf);
-#elif __DEBUG_ALLOC__
-    void operator delete (void *buf, const char *_fname, size_t _line);
+    // Turn on the correct set of new and delete operators
+
+#ifdef _WX_WANT_NEW_SIZET_WXCHAR_INT
+    void *operator new ( size_t size, wxChar *fileName = NULL, int lineNum = 0 );
 #endif
 
-    // VC++ 6.0
-
-#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-    void operator delete(void *buf, wxChar*, int);
+#ifdef _WX_WANT_DELETE_VOID
+    void operator delete ( void * buf );
 #endif
 
-    // Causes problems for VC++
-
-#if wxUSE_ARRAY_MEMORY_OPERATORS && !defined(__VISUALC__) && !defined( __MWERKS__)
-    void *operator new[] (size_t size, wxChar *fileName = 0, int lineNum = 0);
-    void operator delete[] (void *buf);
+#ifdef _WX_WANT_DELETE_VOID_CONSTCHAR_SIZET
+    void operator delete ( void *buf, const char *_fname, size_t _line );
 #endif
 
-#ifdef __MWERKS__
-    void *operator new[] (size_t size, wxChar *fileName , int lineNum = 0);
-    void *operator new[] (size_t size) { return operator new[] ( size, 0, 0 ) ; }
-    void operator delete[] (void *buf);
+#ifdef _WX_WANT_DELETE_VOID_WXCHAR_INT
+    void operator delete ( void *buf, wxChar*, int );
 #endif
 
-#endif // Debug & memory tracing
+#ifdef _WX_WANT_ARRAY_NEW_SIZET_WXCHAR_INT
+    void *operator new[] ( size_t size, wxChar *fileName = NULL, int lineNum = 0 );
+#endif
+
+#ifdef _WX_WANT_ARRAY_DELETE_VOID
+    void operator delete[] ( void *buf );
+#endif
+
+#ifdef _WX_WANT_ARRAY_DELETE_VOID_WXCHAR_INT
+    void operator delete[] (void* buf, wxChar*, int );
+#endif
 
 
 #if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
@@ -417,16 +473,20 @@ protected:
     wxObjectRefData *m_refData;
 };
 
+// ----------------------------------------------------------------------------
+// wxObjectRefData: ref counted data meant to be stored in wxObject
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxObjectRefData
 {
     friend class wxObject;
 
 public:
-    wxObjectRefData() : m_count(1) {}
-    virtual ~wxObjectRefData() {}
+    wxObjectRefData() : m_count(1) { }
+    virtual ~wxObjectRefData() { }
 
-    inline int GetRefCount() const { return m_count; }
+    int GetRefCount() const { return m_count; }
+
 private:
     int m_count;
 };
@@ -434,25 +494,28 @@ private:
 
 inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
 {
-    return obj && obj->GetClassInfo()->IsKindOf(classInfo) ? obj : 0;
+    return obj && obj->GetClassInfo()->IsKindOf(classInfo) ? obj : NULL;
 }
 
+// ----------------------------------------------------------------------------
+// more debugging macros
+// ----------------------------------------------------------------------------
+
 #ifdef __WXDEBUG__
-#ifndef WXDEBUG_NEW
-#define WXDEBUG_NEW new(__TFILE__,__LINE__)
-#endif
-#else
-#define WXDEBUG_NEW new
+    #ifndef WXDEBUG_NEW
+        #define WXDEBUG_NEW new(__TFILE__,__LINE__)
+    #endif
+#else // !__WXDEBUG__
+    #define WXDEBUG_NEW new
 #endif
 
-    // Redefine new to be the debugging version. This doesn't
-    // work with all compilers, in which case you need to
-    // use WXDEBUG_NEW explicitly if you wish to use the debugging version.
+// Redefine new to be the debugging version. This doesn't work with all
+// compilers, in which case you need to use WXDEBUG_NEW explicitly if you wish
+// to use the debugging version.
 
 #if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
-#define new new(__TFILE__,__LINE__)
+    #define new new(__TFILE__,__LINE__)
 #endif
 
 #endif  // _WX_OBJECTH__
 
-// vi:sts=4:sw=4:et

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        object.cpp
+// Name:        src/common/object.cpp
 // Purpose:     wxObject implementation
 // Author:      Julian Smart
 // Modified by: Ron Lee
@@ -14,8 +14,7 @@
 #pragma implementation "object.h"
 #endif
 
-    // For compilers that support precompilation, includes "wx.h".
-
+// For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -27,7 +26,6 @@
 #endif
 
 #include <string.h>
-#include <assert.h>
 
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 #include "wx/memory.h"
@@ -35,35 +33,33 @@
 
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
     // for wxObject::Dump
-#include "wx/ioswrap.h"
+    #include "wx/ioswrap.h"
 
-#if defined(__VISAGECPP__)
-#define DEBUG_PRINTF(NAME) { static int raz=0; \
- printf( #NAME " %i\n",raz); fflush(stdout); raz++; }
-#else
-#define DEBUG_PRINTF(NAME)
-#endif
+    #if defined(__VISAGECPP__)
+        #define DEBUG_PRINTF(NAME) { static int raz=0; \
+            printf( #NAME " %i\n",raz); fflush(stdout); raz++; }
+    #else
+        #define DEBUG_PRINTF(NAME)
+    #endif
+#endif // __WXDEBUG__ || wxUSE_DEBUG_CONTEXT
 
-#endif
 
- 
 wxClassInfo wxObject::sm_classwxObject( wxT("wxObject"), 0, 0,
                                         (int) sizeof(wxObject),
                                         (wxObjectConstructorFn) 0 );
-wxClassInfo* wxClassInfo::sm_first = 0;
-wxHashTable* wxClassInfo::sm_classTable = 0;
 
-    // These are here so we can avoid 'always true/false' warnings
-    // by referring to these instead of TRUE/FALSE
+wxClassInfo* wxClassInfo::sm_first = NULL;
+wxHashTable* wxClassInfo::sm_classTable = NULL;
 
+// These are here so we can avoid 'always true/false' warnings
+// by referring to these instead of TRUE/FALSE
 const bool wxTrue = TRUE;
 const bool wxFalse = FALSE;
 
-    // Is this object a kind of (a subclass of) 'info'?
-    // E.g. is wxWindow a kind of wxObject?
-    // Go from this class to superclass, taking into account
-    // two possible base classes.
-
+// Is this object a kind of (a subclass of) 'info'?
+// E.g. is wxWindow a kind of wxObject?
+// Go from this class to superclass, taking into account
+// two possible base classes.
 bool wxObject::IsKindOf(wxClassInfo *info) const
 {
     wxClassInfo *thisInfo = GetClassInfo();
@@ -76,57 +72,60 @@ void wxObject::Dump(wxSTD ostream& str)
     if (GetClassInfo() && GetClassInfo()->GetClassName())
         str << GetClassInfo()->GetClassName();
     else
-        str << "unknown object class";
+        str << _T("unknown object class");
 }
 #endif
 
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
 
-#ifdef new
-#undef new
-#endif
 
-void *wxObject::operator new (size_t size, wxChar *fileName, int lineNum)
+#ifdef _WX_WANT_NEW_SIZET_WXCHAR_INT
+void *wxObject::operator new ( size_t size, wxChar *fileName, int lineNum )
 {
     return wxDebugAlloc(size, fileName, lineNum, TRUE);
 }
+#endif
 
-#ifndef __VISAGECPP__
-void wxObject::operator delete (void *buf)
-{
-    wxDebugFree(buf);
-}
-#elif __DEBUG_ALLOC__
-void wxObject::operator delete (void *buf, const char *_fname, size_t _line)
+#ifdef _WX_WANT_DELETE_VOID
+void wxObject::operator delete ( void *buf )
 {
     wxDebugFree(buf);
 }
 #endif
 
-    // VC++ 6.0
-
-#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-void wxObject::operator delete(void *pData, wxChar *WXUNUSED(fileName), int WXUNUSED(lineNum))
+#ifdef _WX_WANT_DELETE_VOID_CONSTCHAR_SIZET
+void wxObject::operator delete ( void *buf, const char *_fname, size_t _line )
 {
-    ::operator delete(pData);
+    wxDebugFree(buf);
 }
 #endif
 
-    // Cause problems for VC++ - crashes
+#ifdef _WX_WANT_DELETE_VOID_WXCHAR_INT
+void wxObject::operator delete ( void *buf, wxChar *WXUNUSED(fileName), int WXUNUSED(lineNum) )
+{
+     wxDebugFree(buf);
+}
+#endif
 
-#if (!defined(__VISUALC__) && wxUSE_ARRAY_MEMORY_OPERATORS ) || defined(__MWERKS__)
-void *wxObject::operator new[] (size_t size, wxChar *fileName, int lineNum)
+#ifdef _WX_WANT_ARRAY_NEW_SIZET_WXCHAR_INT
+void *wxObject::operator new[] ( size_t size, wxChar* WXUNUSED(fileName), int WXUNUSED(lineNum) )
 {
     return wxDebugAlloc(size, fileName, lineNum, TRUE, TRUE);
 }
+#endif
 
-void wxObject::operator delete[] (void *buf)
+#ifdef _WX_WANT_ARRAY_DELETE_VOID
+void wxObject::operator delete[] ( void *buf )
 {
     wxDebugFree(buf, TRUE);
 }
 #endif
 
-#endif  // __WXDEBUG__  && wxUSE_MEMORY_TRACING
+#ifdef _WX_WANT_ARRAY_DELETE_VOID_WXCHAR_INT
+void wxObject::operator delete[] (void * buf, wxChar*  WXUNUSED(fileName), int WXUNUSED(lineNum) )
+{
+    wxDebugFree(buf, TRUE);
+}
+#endif
 
 
 // ----------------------------------------------------------------------------
@@ -212,27 +211,32 @@ void wxClassInfo::InitializeClasses()
 void wxClassInfo::CleanUpClasses()
 {
     delete wxClassInfo::sm_classTable;
-    wxClassInfo::sm_classTable = 0;
+    wxClassInfo::sm_classTable = NULL;
 }
 
 
 wxObject *wxCreateDynamicObject(const wxChar *name)
 {
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
- DEBUG_PRINTF(wxObject *wxCreateDynamicObject)
+    DEBUG_PRINTF(wxObject *wxCreateDynamicObject)
 #endif
 
-    if (wxClassInfo::sm_classTable)
+    if ( wxClassInfo::sm_classTable )
     {
         wxClassInfo *info = (wxClassInfo *)wxClassInfo::sm_classTable->Get(name);
-        return info != 0 ? info->CreateObject() : 0;
+        return info ? info->CreateObject() : NULL;
     }
-    else
+    else // no sm_classTable yet
     {
-        for(wxClassInfo *info = wxClassInfo::sm_first; info; info = info->m_next)
+        for ( wxClassInfo *info = wxClassInfo::sm_first;
+              info;
+              info = info->m_next )
+        {
             if (info->m_className && wxStrcmp(info->m_className, name) == 0)
                 return info->CreateObject();
-        return 0;
+        }
+
+        return NULL;
     }
 }
 
