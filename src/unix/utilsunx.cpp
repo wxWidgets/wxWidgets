@@ -928,7 +928,7 @@ bool wxSetEnv(const wxString& variable, const wxChar *value)
         s << _T('=') << value;
 
     // transform to ANSI
-    const char *p = s.mb_str();
+    const wxWX2MBbuf p = s.mb_str();
 
     // the string will be free()d by libc
     char *buf = (char *)malloc(strlen(p) + 1);
@@ -936,7 +936,7 @@ bool wxSetEnv(const wxString& variable, const wxChar *value)
 
     return putenv(buf) == 0;
 #else // no way to set an env var
-    return FALSE;
+    return false;
 #endif
 }
 
