@@ -510,6 +510,8 @@ void wxWindowDC::DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMas
     wxCHECK_RET( Ok(), "invalid window dc" );
   
     if (!bitmap.Ok()) return;
+    
+    /* scale/translate size and position */
   
     int xx = XLOG2DEV(x);
     int yy = YLOG2DEV(y);
@@ -519,6 +521,8 @@ void wxWindowDC::DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMas
     
     int ww = XLOG2DEVREL(w);
     int hh = YLOG2DEVREL(h);
+    
+    /* scale bitmap if required */
     
     wxBitmap use_bitmap;
     
@@ -534,6 +538,8 @@ void wxWindowDC::DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMas
         use_bitmap = bitmap;
     }
     
+    /* apply mask if any */
+    
     GdkBitmap *mask = (GdkBitmap *) NULL;
     if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->GetBitmap();
     
@@ -543,9 +549,24 @@ void wxWindowDC::DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMas
         gdk_gc_set_clip_origin( m_penGC, xx, yy );
     }
   
+    /* draw XPixmap or XBitmap, depending on what the wxBitmap contains */
+    
     GdkPixmap *pm = use_bitmap.GetPixmap();
-    gdk_draw_pixmap( m_window, m_penGC, pm, 0, 0, xx, yy, -1, -1 );
-  
+    if (pm)
+    {
+        gdk_draw_pixmap( m_window, m_penGC, pm, 0, 0, xx, yy, -1, -1 );
+    }
+    else
+    {
+        GdkBitmap *bm = use_bitmap.GetBitmap();
+        if (bm)
+        {
+            gdk_draw_bitmap( m_window, m_penGC, bm, 0, 0, xx, yy, -1, -1 );
+	}
+    }
+    
+    /* remove mask again if any */
+    
     if (useMask && mask) 
     {
         gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
@@ -559,7 +580,41 @@ void wxWindowDC::DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMas
 bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
        wxDC *source, long xsrc, long ysrc, int logical_func, bool useMask )
 {
+   /* this is the nth try to get this utterly useless function to
+      work. it now completely ignores the scaling or translation
+      of the source dc, but scales correctly on the target dc and
+      knows about possible mask information in a memory dc. */
+
     wxCHECK_MSG( Ok(), FALSE, "invalid window dc" );
+    
+    wxCHECK_MSG( source, FALSE, "invalid source dc" );
+    
+    wxClientDC *srcDC = (wxClientDC*)source;
+    wxMemoryDC *memDC = (wxMemoryDC*)source;
+  
+    bool use_bitmap_method = FALSE;
+  
+    if (srcDC->m_isMemDC)
+    {
+	if (!memDC->m_selected.Ok()) return FALSE;
+	
+        /* we use the "XCopyArea" way to copy a memory dc into
+	   y different window if the memory dc BOTH
+	   a) doesn't have any mask or its mask isn't used
+	   b) it is clipped.
+	   we HAVE TO use the direct way for memory dcs
+	   that have mask since the XCopyArea doesn't know
+	   about masks and we SHOULD use the direct way if
+	   all of the bitmap in the memory dc is copied in
+	   which case XCopyArea wouldn't be able able to
+	   boost performace by reducing the area to be scaled */
+    
+	use_bitmap_method = ( (useMask && (memDC->m_selected.GetMask())) ||
+	                       ((xsrc == 0) && (ysrc == 0) &&
+			        (width == memDC->m_selected.GetWidth()) &&
+			        (height == memDC->m_selected.GetHeight()) )
+			    );
+    }
     
     CalcBoundingBox( xdest, ydest );
     CalcBoundingBox( xdest + width, ydest + height );
@@ -567,85 +622,128 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
     int old_logical_func = m_logicalFunction;
     SetLogicalFunction( logical_func );
     
-    wxClientDC *csrc = (wxClientDC*)source;
-  
-    if (csrc->m_isMemDC)
+    if (use_bitmap_method)
     {
-        wxMemoryDC* srcDC = (wxMemoryDC*)source;
-        GdkPixmap* pmap = srcDC->m_selected.GetPixmap();
-        if (pmap)
+        /* scale/translate bitmap size */
+  
+	long bm_width = memDC->m_selected.GetWidth();
+	long bm_height = memDC->m_selected.GetHeight();
+	
+	long bm_ww = XLOG2DEVREL( bm_width );
+	long bm_hh = YLOG2DEVREL( bm_height );
+	
+        /* scale bitmap if required */
+    
+        wxBitmap use_bitmap;
+    
+        if ((bm_width != bm_ww) || (bm_height != bm_hh))
         {
-            long xx = XLOG2DEV(xdest);
-            long yy = YLOG2DEV(ydest);
-    
-            GdkBitmap *mask = (GdkBitmap *) NULL;
-            if (srcDC->m_selected.GetMask()) mask = srcDC->m_selected.GetMask()->GetBitmap();
-    
-            if (useMask && mask) 
-            {
-                gdk_gc_set_clip_mask( m_penGC, mask );
-                gdk_gc_set_clip_origin( m_penGC, xx, yy );
-            }
-	    
-            gdk_draw_pixmap( m_window, m_penGC, pmap,
-                             source->LogicalToDeviceX(xsrc), 
-	                     source->LogicalToDeviceY(ysrc),
-                             xx, 
-	                     yy,
-                             source->LogicalToDeviceXRel(width), 
-	                     source->LogicalToDeviceYRel(height) );
-	  
-            if (useMask && mask) 
-            {
-                gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
-                gdk_gc_set_clip_origin( m_penGC, 0, 0 );
-            }
-      
-            SetLogicalFunction( old_logical_func );
-            return TRUE;
+            wxImage image( memDC->m_selected );
+	    image = image.Scale( bm_ww, bm_hh );
+	
+	    use_bitmap = image.ConvertToBitmap();
+        }
+        else
+        {
+            use_bitmap = memDC->m_selected;
         }
 	
-        GdkBitmap* bmap = srcDC->m_selected.GetBitmap();
-        if (bmap)
-        {
-            long xx = XLOG2DEV(xdest);
-            long yy = YLOG2DEV(ydest);
-    
-            GdkBitmap *mask = (GdkBitmap *) NULL;
-            if (srcDC->m_selected.GetMask()) mask = srcDC->m_selected.GetMask()->GetBitmap();
-    
-            if (useMask && mask) 
-            {
-                gdk_gc_set_clip_mask( m_penGC, mask );
-                gdk_gc_set_clip_origin( m_penGC, xx, yy );
-            }
+        /* scale/translate size and position */
   
-            gdk_draw_bitmap( m_window, m_textGC, bmap,
-                             source->LogicalToDeviceX(xsrc), 
-	                     source->LogicalToDeviceY(ysrc),
-                             xx, 
-	                     yy,
-                             source->LogicalToDeviceXRel(width), 
-	                     source->LogicalToDeviceYRel(height) );
-	  
-            if (useMask && mask) 
+        long xx = XLOG2DEV(xdest);
+        long yy = YLOG2DEV(ydest);
+	
+	long ww = XLOG2DEVREL(width);
+	long hh = YLOG2DEVREL(height);
+	
+        /* apply mask if any */
+    
+        GdkBitmap *mask = (GdkBitmap *) NULL;
+        if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->GetBitmap();
+    
+        if (useMask && mask) 
+        {
+            gdk_gc_set_clip_mask( m_penGC, mask );
+            gdk_gc_set_clip_origin( m_penGC, xx, yy );
+        }
+	
+        /* draw XPixmap or XBitmap, depending on what the wxBitmap contains */
+    
+        GdkPixmap *pm = use_bitmap.GetPixmap();
+        if (pm)
+        {
+            gdk_draw_pixmap( m_window, m_penGC, pm, 0, 0, xx, yy, ww, hh );
+        }
+        else
+        {
+            GdkBitmap *bm = use_bitmap.GetBitmap();
+            if (bm)
             {
-                gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
-                gdk_gc_set_clip_origin( m_penGC, 0, 0 );
-            }
-      
-            SetLogicalFunction( old_logical_func );
-            return TRUE;
+                gdk_draw_bitmap( m_window, m_penGC, bm, 0, 0, xx, yy, ww, hh );
+	    }
+        }
+    
+        /* remove mask again if any */
+    
+        if (useMask && mask) 
+        {
+            gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
+            gdk_gc_set_clip_origin( m_penGC, 0, 0 );
         }
     }
-
-    gdk_window_copy_area ( m_window, m_penGC,
-                           XLOG2DEV(xdest), YLOG2DEV(ydest),
-                           csrc->GetWindow(),
-                           source->LogicalToDeviceX(xsrc), 
-			   source->LogicalToDeviceY(ysrc),
-                           source->LogicalToDeviceXRel(width), 
-			   source->LogicalToDeviceYRel(height) );
+    else /* use_bitmap_method */
+    {
+        /* scale/translate size and position */
+  
+        long xx = XLOG2DEV(xdest);
+        long yy = YLOG2DEV(ydest);
+	
+	long ww = XLOG2DEVREL(width);
+	long hh = YLOG2DEVREL(height);
+	
+        if ((width != ww) || (height != hh))
+	{
+	    /* draw source window into a bitmap as we cannot scale
+	       a window in contrast to a bitmap. this would actually
+	       work with memory dcs as well, but we'd lose the mask
+	       information and waste one step in this process since
+	       a memory already has a bitmap. all this is slightly
+	       inefficient as we could take an XImage directly from
+	       an X window, but we'd then also have to care that
+	       the window is not outside the screen (in which case
+	       we'd get a BadMatch or what not).
+	       Is a double XGetImage and combined XGetPixel and
+	       XPutPixel really faster? I'm not sure. look at wxXt
+	       for a different implementation of the same problem. */
+   
+	    wxBitmap bitmap( width, height );
+	    gdk_window_copy_area( bitmap.GetPixmap(), m_penGC, 0, 0, 
+                                  srcDC->GetWindow(),
+	                          xsrc, ysrc, width, height );
+	    
+	    /* scale image */
+	    
+            wxImage image( bitmap );
+	    image = image.Scale( ww, hh );
+	    
+	    /* convert to bitmap */
+	    
+	    bitmap = image.ConvertToBitmap();
+	    
+	    /* draw scaled bitmap */
+	    
+            gdk_draw_pixmap( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
+	    
+	}
+	else
+	{
+	    /* no scaling and not a memory dc with a mask either */
+	
+            gdk_window_copy_area( m_window, m_penGC, xx, yy,
+                                  srcDC->GetWindow(),
+                                  xsrc, ysrc, width, height );
+	}
+    }
 
     SetLogicalFunction( old_logical_func );
     return TRUE;

@@ -124,7 +124,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
   wxPaintDC dc( this );
   PrepareDC( dc );
-
+  
   dc.DrawText( "Loaded image", 30, 10 );
   if (my_square->Ok()) dc.DrawBitmap( *my_square, 30, 30 );
 
@@ -133,9 +133,9 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   dc.SetPen( *wxWHITE_PEN );
   dc.DrawRectangle( 150, 30, 100, 100 );
 
-  if (my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 140 );
-  
   if (my_anti->Ok()) dc.DrawBitmap( *my_anti, 250, 140 );
+  
+  if (my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 140 );
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()

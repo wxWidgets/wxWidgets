@@ -163,18 +163,22 @@ wxImage wxImage::Scale( int width, int height )
     if (M_IMGDATA->m_hasMask)
         image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
 
-    double xscale = (double)width / (double)M_IMGDATA->m_width;
-    double yscale = (double)height / (double)M_IMGDATA->m_height;
+    long old_height = M_IMGDATA->m_height;
+    long old_width  = M_IMGDATA->m_width;
 
-    for (int j = 0; j < height; j++)
+    char unsigned *source_data = M_IMGDATA->m_data;
+    char unsigned *target_data = data;
+
+    for (long j = 0; j < height; j++)
     {
-        for (int i = 0; i < width; i++)
+        long y_offset = (j * old_height / height) * old_width;
+	
+        for (long i = 0; i < width; i++)
         {
-            int new_pos = 3*(j*width + i);
-            int old_pos = 3*((long)(j/yscale)*M_IMGDATA->m_width + (long)(i/xscale));
-            data[ new_pos   ] = M_IMGDATA->m_data[ old_pos   ];
-            data[ new_pos+1 ] = M_IMGDATA->m_data[ old_pos+1 ];
-            data[ new_pos+2 ] = M_IMGDATA->m_data[ old_pos+2 ];
+	    memcpy( target_data, 
+	            source_data + 3*(y_offset + ((i * old_width )/ width)), 
+		    3 );
+            target_data += 3;
         }
     }
 
