@@ -380,12 +380,7 @@ private:
 
 bool wxConvBrokenFileNames::UseUTF8() const
 {
-#if defined HAVE_LANGINFO_H && defined CODESET
-    char *codeset = nl_langinfo(CODESET);
-    return strcmp(codeset, "UTF-8") == 0;
-#else
-    return false;
-#endif
+    return wxLocale::GetSystemEncoding() == wxFONTENCODING_UTF8;
 }
 
 size_t wxConvBrokenFileNames::MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const
