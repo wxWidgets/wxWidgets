@@ -289,7 +289,7 @@ BEGIN_EVENT_TABLE (AppFrame, wxFrame)
 END_EVENT_TABLE ()
 
 AppFrame::AppFrame (const wxString &title)
-        : wxFrame ((wxFrame *)NULL, -1, title, wxDefaultPosition, wxSize(750,550),
+        : wxFrame ((wxFrame *)NULL, wxID_ANY, title, wxDefaultPosition, wxSize(750,550),
                     wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE) {
 
     // intitialize important variables
@@ -308,7 +308,7 @@ AppFrame::AppFrame (const wxString &title)
     CreateMenu ();
 
     // open first page
-    m_edit = new Edit (this, -1);
+    m_edit = new Edit (this, wxID_ANY);
     m_edit->SetFocus();
 
     FileOpen (_T("stctest.cpp"));
@@ -586,7 +586,7 @@ END_EVENT_TABLE ()
 AppAbout::AppAbout (wxWindow *parent,
                     int milliseconds,
                     long style)
-        : wxDialog (parent, -1, wxEmptyString,
+        : wxDialog (parent, wxID_ANY, wxEmptyString,
                     wxDefaultPosition, wxDefaultSize,
                     style | wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
 
@@ -602,27 +602,27 @@ AppAbout::AppAbout (wxWindow *parent,
 
     // about info
     wxGridSizer *aboutinfo = new wxGridSizer (2, 0, 2);
-    aboutinfo->Add (new wxStaticText(this, -1, _("Written by: ")),
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Written by: ")),
                     0, wxALIGN_LEFT);
-    aboutinfo->Add (new wxStaticText(this, -1, APP_MAINT),
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_MAINT),
                     1, wxEXPAND | wxALIGN_LEFT);
-    aboutinfo->Add (new wxStaticText(this, -1, _("Version: ")),
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Version: ")),
                     0, wxALIGN_LEFT);
-    aboutinfo->Add (new wxStaticText(this, -1, APP_VERSION),
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_VERSION),
                     1, wxEXPAND | wxALIGN_LEFT);
-    aboutinfo->Add (new wxStaticText(this, -1, _("Licence type: ")),
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Licence type: ")),
                     0, wxALIGN_LEFT);
-    aboutinfo->Add (new wxStaticText(this, -1, APP_LICENCE),
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_LICENCE),
                     1, wxEXPAND | wxALIGN_LEFT);
-    aboutinfo->Add (new wxStaticText(this, -1, _("Copyright: ")),
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Copyright: ")),
                     0, wxALIGN_LEFT);
-    aboutinfo->Add (new wxStaticText(this, -1, APP_COPYRIGTH),
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_COPYRIGTH),
                     1, wxEXPAND | wxALIGN_LEFT);
 
     // about icontitle//info
     wxBoxSizer *aboutpane = new wxBoxSizer (wxHORIZONTAL);
     wxBitmap bitmap = wxBitmap(wxICON (mondrian));
-    aboutpane->Add (new wxStaticBitmap (this, -1, bitmap),
+    aboutpane->Add (new wxStaticBitmap (this, wxID_ANY, bitmap),
                     0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 20);
     aboutpane->Add (aboutinfo, 1, wxEXPAND);
     aboutpane->Add (60, 0);
@@ -630,12 +630,12 @@ AppAbout::AppAbout (wxWindow *parent,
     // about complete
     wxBoxSizer *totalpane = new wxBoxSizer (wxVERTICAL);
     totalpane->Add (0, 20);
-    wxStaticText *appname = new wxStaticText(this, -1, *g_appname);
+    wxStaticText *appname = new wxStaticText(this, wxID_ANY, *g_appname);
     appname->SetFont (wxFont (24, wxDEFAULT, wxNORMAL, wxBOLD));
     totalpane->Add (appname, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT, 40);
     totalpane->Add (0, 10);
     totalpane->Add (aboutpane, 0, wxEXPAND | wxALL, 4);
-    totalpane->Add (new wxStaticText(this, -1, APP_DESCR),
+    totalpane->Add (new wxStaticText(this, wxID_ANY, APP_DESCR),
                     0, wxALIGN_CENTER | wxALL, 10);
     wxButton *okButton = new wxButton (this, wxID_OK, _("OK"));
     okButton->SetDefault();

@@ -45,7 +45,7 @@ class Edit: public wxStyledTextCtrl {
 
 public:
     //! constructor
-    Edit (wxWindow *parent, wxWindowID id = -1,
+    Edit (wxWindow *parent, wxWindowID id = wxID_ANY,
           const wxPoint &pos = wxDefaultPosition,
           const wxSize &size = wxDefaultSize,
           long style = wxSUNKEN_BORDER|wxVSCROLL
