@@ -731,6 +731,15 @@ void wxComboBox::EnableEvents()
 
 void wxComboBox::OnSize( wxSizeEvent &event )
 {
+    // NB: In some situations (e.g. on non-first page of a wizard, if the
+    //     size used is default size), GtkCombo widget is resized correctly,
+    //     but it's look is not updated, it's rendered as if it was much wider.
+    //     No other widgets are affected, so it looks like a bug in GTK+.
+    //     Manually requesting resize calculation (as gtk_pizza_set_size does)
+    //     fixes it.
+    if (GTK_WIDGET_VISIBLE(m_widget))
+        gtk_widget_queue_resize(m_widget);
+
     event.Skip();
 }
 
