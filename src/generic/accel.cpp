@@ -181,8 +181,7 @@ wxAcceleratorTable::GetEntry(const wxKeyEvent& event) const
             // now check flags
             if ( (((flags & wxACCEL_CTRL) != 0) == event.ControlDown()) &&
                  (((flags & wxACCEL_SHIFT) != 0) == event.ShiftDown()) &&
-                 (((flags & wxACCEL_ALT) != 0) ==
-                    (event.AltDown() || event.MetaDown())) )
+                 (((flags & wxACCEL_ALT) != 0) == event.AltDown()) )
             {
                 return entry;
             }
