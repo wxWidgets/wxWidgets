@@ -15,12 +15,6 @@ These options are currently recognised by wxWidgets:
 In some circumstances the MaskBlt function can be slower than using the fallback code, especially if using
 DC cacheing. By default, MaskBlt will be used where it is implemented by the operating system and driver.
 }
-\twocolitem{msw.xp-tab-ok}{(wxMSW under Windows XP or later only) Some versions
-of Windows XP don't render \helpref{wxNotebook}{wxnotebook} controls with tabs
-not on the top of it correctly, so wxWidgets by default always uses 
-\texttt{wxTOP} style under XP. If you are sure that this problem will not be
-present on your users machines, set this option to a non zero value to enable
-tabs with non default orientation.}
 \twocolitem{mgl.aa-threshold}{(wxMGL only) Set this integer option to point
 size below which fonts are not antialiased. Default: 10.
 }
