@@ -38,6 +38,7 @@
             strings/unicode.cpp
             strings/crt.cpp
             streams/bstream.cpp
+            streams/datastreamtest.cpp
             streams/ffilestream.cpp
             streams/filestream.cpp
             streams/memstream.cpp
