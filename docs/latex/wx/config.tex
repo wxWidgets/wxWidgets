@@ -386,6 +386,7 @@ add wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS which will turn off character
 escaping for the values of entries stored in the config file: for example 
 a {\it foo} key with some backslash characters will be stored as {\tt foo=C:$\backslash$mydir} instead
 of the usual storage of {\tt foo=C:$\backslash\backslash$mydir}.
+For wxRegConfig, this flag refers to HKLM, and provides read-only access.
 
 The wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS style can be helpful if your config 
 file must be read or written to by a non-wxWidgets program (which might not 
