@@ -17,11 +17,7 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
-#if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
 #include "wx/generic/imaglist.h"
-#else
-#include "wx/imaglist.h"
-#endif
 
 #include "wx/control.h"
 #include "wx/timer.h"
