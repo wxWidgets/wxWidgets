@@ -28,7 +28,7 @@ $(LIBTARGET) : $(OBJECTS)
     @for %i in ( $(OBJECTS) ) do @%append tmp.lbc +%i
     wlib /b /c /n /p=512 $^@ @tmp.lbc
 
-clean:
+clean:   .SYMBOLIC
     -erase *.obj
     -erase $(LIBTARGET)
     -erase *.pch
