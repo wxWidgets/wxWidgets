@@ -60,6 +60,26 @@ void wxNotebookBase::Init()
     m_ownsImageList = FALSE;
 }
 
+bool
+wxNotebookBase::Create(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name)
+{
+    return wxControl::Create
+                     (
+                        parent,
+                        id,
+                        pos,
+                        size,
+                        style,
+                        wxDefaultValidator,
+                        name
+                     );
+}
+
 wxNotebookBase::~wxNotebookBase()
 {
     if ( m_ownsImageList )
