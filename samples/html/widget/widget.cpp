@@ -154,7 +154,7 @@ bool MyApp::OnInit()
 {
     // Create the main application window
     MyFrame *frame = new MyFrame( _("wxHtmlWindow testing application"),
-        wxPoint(50, 50), wxSize(640, 480) );
+        wxDefaultPosition, wxSize(640, 480) );
 
     // Show it and tell the application that it's our main window
     // @@@ what does it do exactly, in fact? is it necessary here?

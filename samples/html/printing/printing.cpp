@@ -140,7 +140,7 @@ bool MyApp::OnInit()
 #endif
 
     MyFrame *frame = new MyFrame(_("Printing test"),
-                                 wxPoint(150, 50), wxSize(640, 480));
+        wxDefaultPosition, wxSize(640, 480));
 
     // Show it and tell the application that it's our main window
     // @@@ what does it do exactly, in fact? is it necessary here?
