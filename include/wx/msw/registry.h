@@ -93,22 +93,28 @@ public:
     // strKey is the full name of the key (i.e. starting with HKEY_xxx...)
   wxRegKey(const wxString& strKey);
     // strKey is the name of key under (standard key) keyParent
-  wxRegKey(StdKey          keyParent, const wxString& strKey);
+  wxRegKey(StdKey keyParent, const wxString& strKey);
     // strKey is the name of key under (previously created) keyParent
   wxRegKey(const wxRegKey& keyParent, const wxString& strKey);
     //
  ~wxRegKey();
 
   // change key (closes the previously opened key if any)
+    // the name is absolute, i.e. should start with HKEY_xxx
   void  SetName(const wxString& strKey);
-  void  SetHkey(HKEY  hKey);
+    // the name is relative to the parent key
+  void  SetName(StdKey keyParent, const wxString& strKey);
+    // the name is relative to the parent key
+  void  SetName(const wxRegKey& keyParent, const wxString& strKey);
+    // hKey should be opened and will be closed in wxRegKey dtor
+  void  SetHkey(HKEY hKey);
 
   // get infomation about the key
     // get the (full) key name. Abbreviate std root keys if bShortPrefix.
-  wxString GetName(bool bShortPrefix = TRUE) const;
-    // return TRUE if the key exists
+  wxString GetName(bool bShortPrefix = true) const;
+    // return true if the key exists
   bool  Exists()   const;
-    // return TRUE if the key is opened
+    // return true if the key is opened
   bool  IsOpened() const { return m_hKey != 0;        }
     // for "if ( !key ) wxLogError(...)" kind of expressions
   operator bool()  const { return m_dwLastError == 0; }
@@ -118,7 +124,7 @@ public:
     // which need the key to be opened if the key is not opened yet)
   bool  Open();
     // create the key: will fail if the key already exists and bOkIfExists
-  bool  Create(bool bOkIfExists = TRUE);
+  bool  Create(bool bOkIfExists = true);
     // close the key (will be automatically done in dtor)
   bool  Close();
 
@@ -155,16 +161,17 @@ public:
   bool  QueryValue(const char *szValue, long *plValue) const;
 #endif  //Win32
 
-    // return TRUE if given subkey exists
+  // query existence of a key/value
+    // return true if value exists
+  bool  HasValue(const char *szKey) const;
+    // return true if given subkey exists
   bool  HasSubKey(const char *szKey) const;
-    // return TRUE if any subkeys exist
+    // return true if any subkeys exist
   bool  HasSubkeys() const;
 
   // enumerate values and subkeys
-#ifdef  __WIN32__
   bool  GetFirstValue(wxString& strValueName, long& lIndex);
   bool  GetNextValue (wxString& strValueName, long& lIndex) const;
-#endif  //Win32
 
   bool  GetFirstKey  (wxString& strKeyName  , long& lIndex);
   bool  GetNextKey   (wxString& strKeyName  , long& lIndex) const;
@@ -182,3 +189,4 @@ private:
 };
 
 #endif  //_REGISTRY_H
+
