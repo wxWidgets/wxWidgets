@@ -50,6 +50,13 @@ wxHTTP::wxHTTP()
 
 wxHTTP::~wxHTTP()
 {
+    ClearHeaders();
+
+    delete m_addr;
+}
+
+void wxHTTP::ClearHeaders()
+{
   // wxString isn't a wxObject
   wxNode *node = m_headers.First();
   wxString *string;
@@ -60,10 +67,7 @@ wxHTTP::~wxHTTP()
     node = node->Next();
   }
 
-  if (m_addr) {
-      delete m_addr;
-      m_addr = NULL;
-  }
+  m_headers.Clear();
 }
 
 wxString wxHTTP::GetContentType()
@@ -79,7 +83,7 @@ void wxHTTP::SetProxyMode(bool on)
 void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
 {
   if (m_read) {
-    m_headers.Clear();
+    ClearHeaders();
     m_read = FALSE;
   }
 
@@ -130,7 +134,7 @@ bool wxHTTP::ParseHeaders()
   wxString line;
   wxStringTokenizer tokenzr;
 
-  m_headers.Clear();
+  ClearHeaders();
   m_read = TRUE;
 
 #if defined(__VISAGECPP__)

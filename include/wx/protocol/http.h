@@ -50,6 +50,9 @@ protected:
   bool BuildRequest(const wxString& path, wxHTTP_Req req);
   void SendHeaders();
   bool ParseHeaders();
+
+  // deletes the header value strings
+  void ClearHeaders();
 };
 
 #endif // wxUSE_PROTOCOL_HTTP
