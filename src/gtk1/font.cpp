@@ -448,13 +448,22 @@ wxFontRefData::wxFontRefData(const wxString& fontname)
 }
 
 #ifndef __WXGTK20__
+
 void wxFontRefData::ReInit(const wxString& fontname)
 {
+    // calling InitFromNative() resets m_underlined flag as X11 fonts are never
+    // underlined, but we don't want to lose its old value here so save it ...
+    bool underlined = m_underlined;
+
     m_nativeFontInfo.SetXFontName(fontname);
 
     InitFromNative();
+
+    // ... and restore it now
+    m_underlined = underlined;
 }
-#endif
+
+#endif // !__WXGTK20__
 
 void wxFontRefData::ClearGdkFonts()
 {
