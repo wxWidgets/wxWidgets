@@ -280,6 +280,14 @@ public:
   bool CollapseItem(long item) { return ExpandItem(item, wxTREE_EXPAND_COLLAPSE); }
   bool ToggleItem(long item)   { return ExpandItem(item, wxTREE_EXPAND_TOGGLE);   }
   bool ExpandItem( long item, int action );
+
+    // is the item expanded now?
+  bool IsItemExpanded(long item)
+  {
+    wxGenericTreeItem *pItem = FindItem(item);
+    return pItem && (pItem->GetState() & wxTREE_STATE_EXPANDED);
+  }
+
   bool GetItem( wxTreeItem &info ) const;
   long GetItemData( long item ) const;
   wxString GetItemText( long item ) const;
@@ -307,7 +315,7 @@ public:
 
   wxImageList *GetImageList(int which = wxIMAGE_LIST_NORMAL) const;
   void SetImageList(wxImageList *imageList, int which = wxIMAGE_LIST_NORMAL);
-  
+
 private:
   wxGenericTreeItem   *m_anchor;
   wxGenericTreeItem   *m_current;
