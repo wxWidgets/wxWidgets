@@ -275,13 +275,16 @@ bool wxDateTime::Tm::IsValid() const
 {
     // we allow for the leap seconds, although we don't use them (yet)
     return (year != wxDateTime::Inv_Year) && (mon != wxDateTime::Inv_Month) &&
-           (mday < GetNumOfDaysInMonth(year, mon)) &&
+           (mday <= GetNumOfDaysInMonth(year, mon)) &&
            (hour < 24) && (min < 60) && (sec < 62) && (msec < 1000);
 }
 
 void wxDateTime::Tm::ComputeWeekDay()
 {
-    wxFAIL_MSG(_T("TODO"));
+    // compute the week day from day/month/year: we use the dumbest algorithm
+    // possible: just compute our JDN and then use the (simple to derive)
+    // formula: weekday = (JDN + 1.5) % 7
+    wday = (wxDateTime::WeekDay)(GetTruncatedJDN(mday, mon, year) + 2) % 7;
 }
 
 void wxDateTime::Tm::AddMonths(int monDiff)
@@ -542,6 +545,10 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday, bool abbr)
     // and offset it by the number of days needed to get the correct wday
     tm.tm_mday += wday;
 
+    // call mktime() to normalize it...
+    (void)mktime(&tm);
+
+    // ... and call strftime()
     return CallStrftime(abbr ? _T("%a") : _T("%A"), &tm);
 }
 
@@ -705,100 +712,112 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
         {
             // we are working with local time
             tm = localtime(&time);
+
+            // should never happen
+            wxCHECK_MSG( tm, Tm(), _T("gmtime() failed") );
         }
         else
         {
             time += tz.GetOffset();
-            tm = gmtime(&time);
+            if ( time >= 0 )
+            {
+                tm = gmtime(&time);
+
+                // should never happen
+                wxCHECK_MSG( tm, Tm(), _T("gmtime() failed") );
+            }
+            else
+            {
+                tm = (struct tm *)NULL;
+            }
         }
 
-        // should never happen
-        wxCHECK_MSG( tm, Tm(), _T("gmtime() failed") );
+        if ( tm )
+        {
+            return Tm(*tm, tz);
+        }
+        //else: use generic code below
+    }
 
-        return Tm(*tm, tz);
+    // remember the time and do the calculations with the date only - this
+    // eliminates rounding errors of the floating point arithmetics
+
+    wxLongLong timeMidnight = m_time + tz.GetOffset() * 1000;
+
+    long timeOnly = (timeMidnight % MILLISECONDS_PER_DAY).ToLong();
+
+    // we want to always have positive time and timeMidnight to be really
+    // the midnight before it
+    if ( timeOnly < 0 )
+    {
+        timeOnly = MILLISECONDS_PER_DAY + timeOnly;
+    }
+
+    timeMidnight -= timeOnly;
+
+    // calculate the Gregorian date from JDN for the midnight of our date:
+    // this will yield day, month (in 1..12 range) and year
+
+    // actually, this is the JDN for the noon of the previous day
+    long jdn = (timeMidnight / MILLISECONDS_PER_DAY).ToLong() + EPOCH_JDN;
+
+    // CREDIT: code below is by Scott E. Lee (but bugs are mine)
+
+    wxASSERT_MSG( jdn > -2, _T("JDN out of range") );
+
+    // calculate the century
+    int temp = (jdn + JDN_OFFSET) * 4 - 1;
+    int century = temp / DAYS_PER_400_YEARS;
+
+    // then the year and day of year (1 <= dayOfYear <= 366)
+    temp = ((temp % DAYS_PER_400_YEARS) / 4) * 4 + 3;
+    int year = (century * 100) + (temp / DAYS_PER_4_YEARS);
+    int dayOfYear = (temp % DAYS_PER_4_YEARS) / 4 + 1;
+
+    // and finally the month and day of the month
+    temp = dayOfYear * 5 - 3;
+    int month = temp / DAYS_PER_5_MONTHS;
+    int day = (temp % DAYS_PER_5_MONTHS) / 5 + 1;
+
+    // month is counted from March - convert to normal
+    if ( month < 10 )
+    {
+        month += 3;
     }
     else
     {
-        // remember the time and do the calculations with the date only - this
-        // eliminates rounding errors of the floating point arithmetics
-
-        wxLongLong timeMidnight = m_time + tz.GetOffset() * 1000;
-
-        long timeOnly = (timeMidnight % MILLISECONDS_PER_DAY).ToLong();
-
-        // we want to always have positive time and timeMidnight to be really
-        // the midnight before it
-        if ( timeOnly < 0 )
-        {
-            timeOnly = MILLISECONDS_PER_DAY + timeOnly;
-        }
-
-        timeMidnight -= timeOnly;
-
-        // calculate the Gregorian date from JDN for the midnight of our date:
-        // this will yield day, month (in 1..12 range) and year
-
-        // actually, this is the JDN for the noon of the previous day
-        long jdn = (timeMidnight / MILLISECONDS_PER_DAY).ToLong() + EPOCH_JDN;
-
-        // CREDIT: code below is by Scott E. Lee (but bugs are mine)
-
-        wxASSERT_MSG( jdn > -2, _T("JDN out of range") );
-
-        // calculate the century
-        int temp = (jdn + JDN_OFFSET) * 4 - 1;
-        int century = temp / DAYS_PER_400_YEARS;
-
-        // then the year and day of year (1 <= dayOfYear <= 366)
-        temp = ((temp % DAYS_PER_400_YEARS) / 4) * 4 + 3;
-        int year = (century * 100) + (temp / DAYS_PER_4_YEARS);
-        int dayOfYear = (temp % DAYS_PER_4_YEARS) / 4 + 1;
-
-        // and finally the month and day of the month
-        temp = dayOfYear * 5 - 3;
-        int month = temp / DAYS_PER_5_MONTHS;
-        int day = (temp % DAYS_PER_5_MONTHS) / 5 + 1;
-
-        // month is counted from March - convert to normal
-        if ( month < 10 )
-        {
-            month += 3;
-        }
-        else
-        {
-            year += 1;
-            month -= 9;
-        }
-
-        // year is offset by 4800
-        year -= 4800;
-
-        // check that the algorithm gave us something reasonable
-        wxASSERT_MSG( (0 < month) && (month <= 12), _T("invalid month") );
-        wxASSERT_MSG( (1 <= day) && (day < 32), _T("invalid day") );
-        wxASSERT_MSG( (INT_MIN <= year) && (year <= INT_MAX),
-                      _T("year range overflow") );
-
-        // construct Tm from these values
-        Tm tm;
-        tm.year = (int)year;
-        tm.mon = (Month)(month - 1); // algorithm yields 1 for January, not 0
-        tm.mday = (wxDateTime_t)day;
-        tm.msec = timeOnly % 1000;
-        timeOnly -= tm.msec;
-        timeOnly /= 1000;               // now we have time in seconds
-
-        tm.sec = timeOnly % 60;
-        timeOnly -= tm.sec;
-        timeOnly /= 60;                 // now we have time in minutes
-
-        tm.min = timeOnly % 60;
-        timeOnly -= tm.min;
-
-        tm.hour = timeOnly / 60;
-
-        return tm;
+        year += 1;
+        month -= 9;
     }
+
+    // year is offset by 4800
+    year -= 4800;
+
+    // check that the algorithm gave us something reasonable
+    wxASSERT_MSG( (0 < month) && (month <= 12), _T("invalid month") );
+    wxASSERT_MSG( (1 <= day) && (day < 32), _T("invalid day") );
+    wxASSERT_MSG( (INT_MIN <= year) && (year <= INT_MAX),
+                  _T("year range overflow") );
+
+    // construct Tm from these values
+    Tm tm;
+    tm.year = (int)year;
+    tm.mon = (Month)(month - 1); // algorithm yields 1 for January, not 0
+    tm.mday = (wxDateTime_t)day;
+    tm.msec = timeOnly % 1000;
+    timeOnly -= tm.msec;
+    timeOnly /= 1000;               // now we have time in seconds
+
+    tm.sec = timeOnly % 60;
+    timeOnly -= tm.sec;
+    timeOnly /= 60;                 // now we have time in minutes
+
+    tm.min = timeOnly % 60;
+    timeOnly -= tm.min;
+
+    tm.hour = timeOnly / 60;
+
+    return tm;
 }
 
 wxDateTime& wxDateTime::SetYear(int year)
@@ -1058,64 +1077,111 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
         {
             // we are working with local time
             tm = localtime(&time);
+
+            // should never happen
+            wxCHECK_MSG( tm, wxEmptyString, _T("localtime() failed") );
         }
         else
         {
             time += tz.GetOffset();
 
-            tm = gmtime(&time);
+            if ( time >= 0 )
+            {
+                tm = gmtime(&time);
+
+                // should never happen
+                wxCHECK_MSG( tm, wxEmptyString, _T("gmtime() failed") );
+            }
+            else
+            {
+                tm = (struct tm *)NULL;
+            }
         }
 
-        // should never happen
-        wxCHECK_MSG( tm, _T(""), _T("gmtime() failed") );
-
-        return CallStrftime(format, tm);
-    }
-    else
-    {
-        // use a hack and still use strftime(): make a copy of the format and
-        // replace all occurences of YEAR in it with some unique string not
-        // appearing anywhere else in it, then use strftime() to format the
-        // date in year YEAR and then replace YEAR back by the real year and
-        // the unique replacement string back with YEAR where YEAR is any year
-        // in the range supported by strftime() (1970 - 2037) which is equal to
-        // the real year modulo 28 (so the week days coincide for them)
-
-        // find the YEAR
-        int yearReal = GetYear(tz);
-        int year = 1970 + yearReal % 28;
-
-        wxString strYear;
-        strYear.Printf(_T("%d"), year);
-
-        // find a string not occuring in format (this is surely not optimal way
-        // of doing it... improvements welcome!)
-        wxString fmt = format;
-        wxString replacement = (wxChar)-1;
-        while ( fmt.Find(replacement) != wxNOT_FOUND )
+        if ( tm )
         {
-            replacement << (wxChar)-1;
+            return CallStrftime(format, tm);
         }
-
-        // replace all occurences of year with it
-        bool wasReplaced = fmt.Replace(strYear, replacement) > 0;
-
-        // use strftime() to format the same date but in supported year
-        wxDateTime dt(*this);
-        dt.SetYear(year);
-        wxString str = dt.Format(format, tz);
-
-        // now replace the occurence of 1999 with the real year
-        wxString strYearReal;
-        strYearReal.Printf(_T("%d"), yearReal);
-        str.Replace(strYear, strYearReal);
-
-        // and replace back all occurences of replacement string
-        if ( wasReplaced )
-            str.Replace(replacement, strYear);
-
-        return str;
+        //else: use generic code below
     }
+
+    // use a hack and still use strftime(): first find the YEAR which is a year
+    // in the strftime() range (1970 - 2038) whose Jan 1 falls on the same week
+    // day as the Jan 1 of the real year. Then make a copy of the format and
+    // replace all occurences of YEAR in it with some unique string not
+    // appearing anywhere else in it, then use strftime() to format the date in
+    // year YEAR and then replace YEAR back by the real year and the unique
+    // replacement string back with YEAR. Notice that "all occurences of YEAR"
+    // means all occurences of 4 digit as well as 2 digit form!
+
+    // NB: may be it would be simpler to "honestly" reimplement strftime()?
+
+    // find the YEAR: normally, for any year X, Jan 1 or the year X + 28 is the
+    // same weekday as Jan 1 of X (because the weekday advances by 1 for each
+    // normal X and by 2 for each leap X, hence by 5 every 4 years or by 35
+    // which is 0 mod 7 every 28 years) but this rule breaks down if there are
+    // years between X and Y which are divisible by 4 but not leap (i.e.
+    // divisible by 100 but not 400), hence the correction.
+
+    int yearReal = GetYear(tz);
+    int year = 1970 + yearReal % 28;
+
+    int nCenturiesInBetween = (year / 100) - (yearReal / 100);
+    int nLostWeekDays = nCenturiesInBetween - (nCenturiesInBetween / 400);
+
+    // we have to gain back the "lost" weekdays...
+    while ( (nLostWeekDays % 7) != 0 )
+    {
+        nLostWeekDays += year++ % 4 ? 1 : 2;
+    }
+
+    // at any rate, we can't go further than 1997 + 28!
+    wxASSERT_MSG( year < 2030, _T("logic error in wxDateTime::Format") );
+
+    wxString strYear, strYear2;
+    strYear.Printf(_T("%d"), year);
+    strYear2.Printf(_T("%d"), year % 100);
+
+    // find two strings not occuring in format (this is surely not optimal way
+    // of doing it... improvements welcome!)
+    wxString fmt = format;
+    wxString replacement = (wxChar)-1;
+    while ( fmt.Find(replacement) != wxNOT_FOUND )
+    {
+        replacement << (wxChar)-1;
+    }
+
+    wxString replacement2 = (wxChar)-2;
+    while ( fmt.Find(replacement) != wxNOT_FOUND )
+    {
+        replacement << (wxChar)-2;
+    }
+
+    // replace all occurences of year with it
+    bool wasReplaced = fmt.Replace(strYear, replacement) > 0;
+    if ( !wasReplaced )
+        wasReplaced = fmt.Replace(strYear2, replacement2) > 0;
+
+    // use strftime() to format the same date but in supported year
+    wxDateTime dt(*this);
+    dt.SetYear(year);
+    wxString str = dt.Format(format, tz);
+
+    // now replace the occurence of 1999 with the real year
+    wxString strYearReal, strYearReal2;
+    strYearReal.Printf(_T("%04d"), yearReal);
+    strYearReal2.Printf(_T("%02d"), yearReal % 100);
+    str.Replace(strYear, strYearReal);
+    str.Replace(strYear2, strYearReal2);
+
+    // and replace back all occurences of replacement string
+    if ( wasReplaced )
+    {
+        str.Replace(replacement2, strYear2);
+        str.Replace(replacement, strYear);
+    }
+
+    return str;
 }
 
 // ============================================================================

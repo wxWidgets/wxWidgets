@@ -149,7 +149,7 @@
     static inline FIND_DATA FindFirst(const wxString& spec,
                                       FIND_STRUCT *finddata)
     {
-        return ::FindFirstFile(filespec, &finddata);
+        return ::FindFirstFile(spec, finddata);
     }
 
     static inline bool FindNext(FIND_DATA fd, FIND_STRUCT *finddata)
