@@ -79,15 +79,15 @@ int wxFontDialog::ShowModal()
         chooseFontStruct.hwndOwner = GetHwndOf(m_parent);
     chooseFontStruct.lpLogFont = &logFont;
 
-    if ( m_fontData.initialFont.Ok() )
+    if ( m_fontData.m_initialFont.Ok() )
     {
         flags |= CF_INITTOLOGFONTSTRUCT;
-        wxFillLogFont(&logFont, &m_fontData.initialFont);
+        wxFillLogFont(&logFont, &m_fontData.m_initialFont);
     }
 
-    if ( m_fontData.fontColour.Ok() )
+    if ( m_fontData.m_fontColour.Ok() )
     {
-        chooseFontStruct.rgbColors = wxColourToRGB(m_fontData.fontColour);
+        chooseFontStruct.rgbColors = wxColourToRGB(m_fontData.m_fontColour);
 
         // need this for the colour to be taken into account
         flags |= CF_EFFECTS;
@@ -109,10 +109,10 @@ int wxFontDialog::ShowModal()
     if ( m_fontData.GetShowHelp() )
       flags |= CF_SHOWHELP;
 
-    if ( m_fontData.minSize != 0 || m_fontData.maxSize != 0 )
+    if ( m_fontData.m_minSize != 0 || m_fontData.m_maxSize != 0 )
     {
-        chooseFontStruct.nSizeMin = m_fontData.minSize;
-        chooseFontStruct.nSizeMax = m_fontData.maxSize;
+        chooseFontStruct.nSizeMin = m_fontData.m_minSize;
+        chooseFontStruct.nSizeMax = m_fontData.m_maxSize;
         flags |= CF_LIMITSIZE;
     }
 
@@ -120,8 +120,8 @@ int wxFontDialog::ShowModal()
 
     if ( ChooseFont(&chooseFontStruct) != 0 )
     {
-        wxRGBToColour(m_fontData.fontColour, chooseFontStruct.rgbColors);
-        m_fontData.chosenFont = wxCreateFontFromLogFont(&logFont);
+        wxRGBToColour(m_fontData.m_fontColour, chooseFontStruct.rgbColors);
+        m_fontData.m_chosenFont = wxCreateFontFromLogFont(&logFont);
         m_fontData.EncodingInfo().facename = logFont.lfFaceName;
         m_fontData.EncodingInfo().charset = logFont.lfCharSet;
 

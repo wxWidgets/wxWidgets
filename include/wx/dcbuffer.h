@@ -102,4 +102,3 @@ public:
 
 #endif  // _WX_DCBUFFER_H_
 
-// vi:sts=4:sw=4:et

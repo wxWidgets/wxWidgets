@@ -64,7 +64,7 @@ public:
     virtual ~wxFSFile() { if (m_Stream) delete m_Stream; }
 
     // returns stream. This doesn't _create_ stream, it only returns
-    // pointer to it!!
+    // pointer to it.
     wxInputStream *GetStream() const {return m_Stream;}
 
     // returns file's mime type

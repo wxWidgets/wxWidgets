@@ -21,7 +21,10 @@
 #if wxUSE_HELP
 
 #include "wx/help.h"
+
+#if wxUSE_BMPBUTTON
 #include "wx/bmpbuttn.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // classes used to implement context help UI
@@ -56,6 +59,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxContextHelp)
 };
 
+#if wxUSE_BMPBUTTON
 /*
  * wxContextHelpButton
  * You can add this to your dialogs (especially on non-Windows platforms)
@@ -77,6 +81,8 @@ private:
     DECLARE_CLASS(wxContextHelpButton)
     DECLARE_EVENT_TABLE()
 };
+
+#endif
 
 // ----------------------------------------------------------------------------
 // classes used to implement context help support

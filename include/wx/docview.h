@@ -569,7 +569,7 @@ public:
     virtual wxString GetHistoryFile(size_t i) const;
     virtual size_t GetCount() const { return m_fileHistoryN; }
 
-    wxList& GetMenus() const { return (wxList&) m_fileMenus; }
+    const wxList& GetMenus() const { return m_fileMenus; }
 
     // deprecated, use GetCount() instead
     wxDEPRECATED( size_t GetNoHistoryFiles() const );

@@ -129,12 +129,12 @@ int wxColourDialog::ShowModal()
 
     int i;
     for (i = 0; i < 16; i++)
-      custColours[i] = wxColourToRGB(m_colourData.custColours[i]);
+      custColours[i] = wxColourToRGB(m_colourData.m_custColours[i]);
 
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
     if ( m_parent )
         chooseColorStruct.hwndOwner = GetHwndOf(m_parent);
-    chooseColorStruct.rgbResult = wxColourToRGB(m_colourData.dataColour);
+    chooseColorStruct.rgbResult = wxColourToRGB(m_colourData.m_dataColour);
     chooseColorStruct.lpCustColors = custColours;
 
     chooseColorStruct.Flags = CC_RGBINIT | CC_ENABLEHOOK;
@@ -160,10 +160,10 @@ int wxColourDialog::ShowModal()
     // Restore values
     for (i = 0; i < 16; i++)
     {
-      wxRGBToColour(m_colourData.custColours[i], custColours[i]);
+      wxRGBToColour(m_colourData.m_custColours[i], custColours[i]);
     }
 
-    wxRGBToColour(m_colourData.dataColour, chooseColorStruct.rgbResult);
+    wxRGBToColour(m_colourData.m_dataColour, chooseColorStruct.rgbResult);
 
     return success ? wxID_OK : wxID_CANCEL;
 }

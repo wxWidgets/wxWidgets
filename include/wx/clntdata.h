@@ -48,16 +48,14 @@ private:
     wxString  m_data;
 };
 
-
-
 // This class is a mixin that provides storage and management of "client
 // data."  The client data stored can either be a pointer to a wxClientData
-// object in which case it is managed by the container (i.e.  it will delete
+// object in which case it is managed by the container (i.e. it will delete
 // the data when it's destroyed) or an untyped pointer which won't be deleted
 // by the container - but not both of them
 //
 // NOTE:  This functionality is currently duplicated in wxEvtHandler in order
-//        to avoid having more than one vtable in that class heirachy.
+//        to avoid having more than one vtable in that class hierarchy.
 
 class WXDLLEXPORT wxClientDataContainer
 {
@@ -73,10 +71,10 @@ public:
 
 protected:
     // The user data: either an object which will be deleted by the container
-    // when it's deleted or some raw pointer which we do nothing with - only
-    // one type of data can be used with the given window (i.e. you cannot set
+    // when it's deleted or some raw pointer which we do nothing with. Only
+    // one type of data can be used with the given window, i.e. you cannot set
     // the void data and then associate the container with wxClientData or vice
-    // versa)
+    // versa.
     union
     {
         wxClientData *m_clientObject;
@@ -112,8 +110,8 @@ WX_DECLARE_VECTOR(wxClientDataDictionaryPair,wxClientDataDictionaryPairVector);
 
 // this class is used internally to maintain the association between items
 // of (some subclasses of) wxControlWithItems and their client data
-// NOTE: this class does not keep track if it contains
-// wxClientData or void*, the client must ensure that
+// NOTE: this class does not keep track of whether it contains
+// wxClientData or void*. The client must ensure that
 // it does not contain a mix of the two, and that
 // DestroyData is called if it contains wxClientData
 class WXDLLEXPORT wxClientDataDictionary

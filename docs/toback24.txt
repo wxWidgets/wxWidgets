@@ -214,3 +214,12 @@ new revision: 1.381; previous revision: 1.380
 done
 
 
+TODO for 2.4 (items that are not backports)
+===========================================
+
+1. Add uxtheme.cpp to CW for Windows project file.
+
+2. Test Mac port with configure and CW.
+
+3. Test popup window and border issues.
+

@@ -342,10 +342,15 @@ public:
         { DoGetClippingBox(x, y, w, h); }
     void GetClippingBox(wxRect& rect) const
         {
+#if 1
+          DoGetClippingBox(&rect.x, &rect.y, &rect.width, &rect.height);
+#else
           // Necessary to use intermediate variables for 16-bit compilation
+          // REMOVE ME if the above is OK for all current platforms
           wxCoord x, y, w, h;
           DoGetClippingBox(&x, &y, &w, &h);
           rect.x = x; rect.y = y; rect.width = w; rect.height = h;
+#endif
         }
 
     // text extent
@@ -492,16 +497,6 @@ public:
     virtual void SetOptimization(bool WXUNUSED(opt)) { }
     virtual bool GetOptimization() { return FALSE; }
 
-    // Some platforms have a DC cache, which should be cleared
-    // at appropriate points such as after a series of DC operations.
-    // Put ClearCache in the wxDC implementation class, since it has to be
-    // static.
-    // static void ClearCache() ;
-#if 0 // wxUSE_DC_CACHEING
-    static void EnableCache(bool cacheing) { sm_cacheing = cacheing; }
-    static bool CacheEnabled() { return sm_cacheing ; }
-#endif
-
     // bounding box
     // ------------
 
@@ -594,10 +589,6 @@ public:
 #endif // !Win16
 
 #if WXWIN_COMPATIBILITY
-
-#if wxUSE_PALETTE
-    virtual void SetColourMap(const wxPalette& palette) { SetPalette(palette); }
-#endif // wxUSE_PALETTE
 
     void GetTextExtent(const wxString& string, float *x, float *y,
             float *descent = NULL, float *externalLeading = NULL,
@@ -709,9 +700,6 @@ protected:
     bool m_clipping:1;
     bool m_isInteractive:1;
     bool m_isBBoxValid:1;
-#if wxUSE_DC_CACHEING
-//    static bool sm_cacheing;
-#endif
 
     // coordinate system variables
 

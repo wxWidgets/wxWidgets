@@ -55,11 +55,11 @@
 // (popping up a message box in your favourite GUI, sending you e-mail or
 // whatever) it will affect all ASSERTs, FAILs and CHECKs in your code.
 //
-// Warning: if you don't like advices on programming style, don't read
+// Warning: if you don't like advice on programming style, don't read
 // further! ;-)
 //
 // Extensive use of these macros is recommended! Remember that ASSERTs are
-// disabled in final (without __WXDEBUG__ defined) build, so they add strictly
+// disabled in final build (without __WXDEBUG__ defined), so they add strictly
 // nothing to your program's code. On the other hand, CHECK macros do stay
 // even in release builds, but in general are not much of a burden, while
 // a judicious use of them might increase your program's stability.
@@ -83,7 +83,7 @@
                                      const wxChar *szCond,
                                      const wxChar *szMsg = NULL);
 
-  // call this function to break into the debugger uncodnitionally (assuming
+  // call this function to break into the debugger unconditionally (assuming
   // the program is running under debugger, of course)
   extern void WXDLLEXPORT wxTrap();
 

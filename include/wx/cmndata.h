@@ -28,11 +28,11 @@ public:
     wxColourData(const wxColourData& data);
     ~wxColourData();
 
-    void SetChooseFull(bool flag) { chooseFull = flag; }
-    bool GetChooseFull() const { return chooseFull; }
-    void SetColour(const wxColour& colour) { dataColour = colour; }
-    const wxColour& GetColour() const { return dataColour; }
-    wxColour& GetColour() { return dataColour; }
+    void SetChooseFull(bool flag) { m_chooseFull = flag; }
+    bool GetChooseFull() const { return m_chooseFull; }
+    void SetColour(const wxColour& colour) { m_dataColour = colour; }
+    const wxColour& GetColour() const { return m_dataColour; }
+    wxColour& GetColour() { return m_dataColour; }
 
     // Array of 16 custom colours
     void SetCustomColour(int i, const wxColour& colour);
@@ -41,9 +41,9 @@ public:
     void operator=(const wxColourData& data);
 
 public:
-    wxColour        dataColour;
-    wxColour        custColours[16];
-    bool            chooseFull;
+    wxColour        m_dataColour;
+    wxColour        m_custColours[16];
+    bool            m_chooseFull;
     
 private:
     DECLARE_DYNAMIC_CLASS(wxColourData)
@@ -57,14 +57,14 @@ public:
 
     wxFontData(const wxFontData& data)
         : wxObject()
-        , fontColour(data.fontColour)
-        , showHelp(data.showHelp)
-        , allowSymbols(data.allowSymbols)
-        , enableEffects(data.enableEffects)
-        , initialFont(data.initialFont)
-        , chosenFont(data.chosenFont)
-        , minSize(data.minSize)
-        , maxSize(data.maxSize)
+        , m_fontColour(data.m_fontColour)
+        , m_showHelp(data.m_showHelp)
+        , m_allowSymbols(data.m_allowSymbols)
+        , m_enableEffects(data.m_enableEffects)
+        , m_initialFont(data.m_initialFont)
+        , m_chosenFont(data.m_chosenFont)
+        , m_minSize(data.m_minSize)
+        , m_maxSize(data.m_maxSize)
         , m_encoding(data.m_encoding)
         , m_encodingInfo(data.m_encodingInfo)
     {
@@ -73,38 +73,38 @@ public:
     wxFontData& operator=(const wxFontData& data)
     {
         wxObject::operator=(data);
-        fontColour     = data.fontColour;
-        showHelp       = data.showHelp;
-        allowSymbols   = data.allowSymbols;
-        enableEffects  = data.enableEffects;
-        initialFont    = data.initialFont;
-        chosenFont     = data.chosenFont;
-        minSize        = data.minSize;
-        maxSize        = data.maxSize;
+        m_fontColour     = data.m_fontColour;
+        m_showHelp       = data.m_showHelp;
+        m_allowSymbols   = data.m_allowSymbols;
+        m_enableEffects  = data.m_enableEffects;
+        m_initialFont    = data.m_initialFont;
+        m_chosenFont     = data.m_chosenFont;
+        m_minSize        = data.m_minSize;
+        m_maxSize        = data.m_maxSize;
         m_encoding     = data.m_encoding;
         m_encodingInfo = data.m_encodingInfo;
         return *this;
     }
                           
-    void SetAllowSymbols(bool flag) { allowSymbols = flag; }
-    bool GetAllowSymbols() const { return allowSymbols; }
+    void SetAllowSymbols(bool flag) { m_allowSymbols = flag; }
+    bool GetAllowSymbols() const { return m_allowSymbols; }
 
-    void SetColour(const wxColour& colour) { fontColour = colour; }
-    wxColour &GetColour() { return fontColour; }
+    void SetColour(const wxColour& colour) { m_fontColour = colour; }
+    wxColour &GetColour() { return m_fontColour; }
 
-    void SetShowHelp(bool flag) { showHelp = flag; }
-    bool GetShowHelp() const { return showHelp; }
+    void SetShowHelp(bool flag) { m_showHelp = flag; }
+    bool GetShowHelp() const { return m_showHelp; }
 
-    void EnableEffects(bool flag) { enableEffects = flag; }
-    bool GetEnableEffects() const { return enableEffects; }
+    void EnableEffects(bool flag) { m_enableEffects = flag; }
+    bool GetEnableEffects() const { return m_enableEffects; }
 
-    void SetInitialFont(const wxFont& font) { initialFont = font; }
-    wxFont GetInitialFont() const { return initialFont; }
+    void SetInitialFont(const wxFont& font) { m_initialFont = font; }
+    wxFont GetInitialFont() const { return m_initialFont; }
 
-    void SetChosenFont(const wxFont& font) { chosenFont = font; }
-    wxFont GetChosenFont() const { return chosenFont; }
+    void SetChosenFont(const wxFont& font) { m_chosenFont = font; }
+    wxFont GetChosenFont() const { return m_chosenFont; }
 
-    void SetRange(int minRange, int maxRange) { minSize = minRange; maxSize = maxRange; }
+    void SetRange(int minRange, int maxRange) { m_minSize = minRange; m_maxSize = maxRange; }
 
     // encoding info is split into 2 parts: the logical wxWin encoding
     // (wxFontEncoding) and a structure containing the native parameters for
@@ -115,14 +115,14 @@ public:
     wxNativeEncodingInfo& EncodingInfo() { return m_encodingInfo; }
 
 public:
-    wxColour        fontColour;
-    bool            showHelp;
-    bool            allowSymbols;
-    bool            enableEffects;
-    wxFont          initialFont;
-    wxFont          chosenFont;
-    int             minSize;
-    int             maxSize;
+    wxColour        m_fontColour;
+    bool            m_showHelp;
+    bool            m_allowSymbols;
+    bool            m_enableEffects;
+    wxFont          m_initialFont;
+    wxFont          m_chosenFont;
+    int             m_minSize;
+    int             m_maxSize;
 
 private:
     wxFontEncoding       m_encoding;

@@ -87,7 +87,10 @@ All GUI ports:
 - Implemented wxNotebook::DoGetBestSize so Fit now works
 - Added FindItemByPosition to wxMenu
 - wxTimer now derives from wxEvtHandler and is its own owner object by default
+- Extended wxTextAttr and added wxTextCtrl::GetStyle stub
+  to allow better rich text support.
 - implemented wxFlexGridSizer::Show() (Wade Brainerd)
+- Added m_ prefix to wxColourData and wxFontData members
 
 Unix:
 

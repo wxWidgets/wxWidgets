@@ -91,10 +91,10 @@ wxColourData::wxColourData()
 {
     int i;
     for (i = 0; i < 16; i++)
-        custColours[i].Set(255, 255, 255);
+        m_custColours[i].Set(255, 255, 255);
 
-    chooseFull = FALSE;
-    dataColour.Set(0,0,0);
+    m_chooseFull = FALSE;
+    m_dataColour.Set(0,0,0);
 }
 
 wxColourData::wxColourData(const wxColourData& data)
@@ -112,7 +112,7 @@ void wxColourData::SetCustomColour(int i, const wxColour& colour)
     if (i > 15 || i < 0)
         return;
 
-    custColours[i] = colour;
+    m_custColours[i] = colour;
 }
 
 wxColour wxColourData::GetCustomColour(int i)
@@ -120,17 +120,17 @@ wxColour wxColourData::GetCustomColour(int i)
     if (i > 15 || i < 0)
         return wxColour(0,0,0);
 
-    return custColours[i];
+    return m_custColours[i];
 }
 
 void wxColourData::operator=(const wxColourData& data)
 {
     int i;
     for (i = 0; i < 16; i++)
-        custColours[i] = data.custColours[i];
+        m_custColours[i] = data.m_custColours[i];
 
-    dataColour = (wxColour&)data.dataColour;
-    chooseFull = data.chooseFull;
+    m_dataColour = (wxColour&)data.m_dataColour;
+    m_chooseFull = data.m_chooseFull;
 }
 
 // ----------------------------------------------------------------------------
@@ -140,13 +140,13 @@ void wxColourData::operator=(const wxColourData& data)
 wxFontData::wxFontData()
 {
     // Intialize colour to black.
-    fontColour = wxNullColour;
+    m_fontColour = wxNullColour;
 
-    showHelp = FALSE;
-    allowSymbols = TRUE;
-    enableEffects = TRUE;
-    minSize = 0;
-    maxSize = 0;
+    m_showHelp = FALSE;
+    m_allowSymbols = TRUE;
+    m_enableEffects = TRUE;
+    m_minSize = 0;
+    m_maxSize = 0;
 
     m_encoding = wxFONTENCODING_SYSTEM;
 }
