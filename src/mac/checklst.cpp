@@ -102,22 +102,30 @@ static pascal void wxMacCheckListDefinition( short message, Boolean isSelected, 
             ClipRect( drawRect );
             EraseRect( drawRect );
             
-            ::TextFont( kFontIDMonaco ) ;
-            ::TextSize( 9  );
-            ::TextFace( 0 ) ;
+			wxFontRefData * font = (wxFontRefData*) (list->GetFont().GetRefData()) ;
+
+			if ( font )
+			{
+				::TextFont( font->m_macFontNum ) ;
+				::TextSize( font->m_macFontSize)  ;
+				::TextFace( font->m_macFontStyle ) ;
+            }
+                       
             ThemeButtonDrawInfo info ;
             info.state = kThemeStateActive ;
             info.value = checked ? kThemeButtonOn : kThemeButtonOff ;
             info.adornment = kThemeAdornmentNone ;
             Rect checkRect = *drawRect ;
+                        
+            
             checkRect.left +=0 ;
-            checkRect.top +=2 ;
-            checkRect.right = checkRect.left + 12 ;
-            checkRect.bottom = checkRect.top + 10 ;
+            checkRect.top +=0 ;
+            checkRect.right = checkRect.left + list->m_checkBoxWidth ;
+            checkRect.bottom = checkRect.top + list->m_checkBoxHeight ;
             DrawThemeButton(&checkRect,kThemeCheckBox,
               &info,NULL,NULL, NULL,0);
 
-        MoveTo(drawRect->left + 4 + kwxMacListCheckboxWidth, drawRect->top + 10 );
+        MoveTo(drawRect->left + 2 + list->m_checkBoxWidth+2, drawRect->top + list->m_TextBaseLineOffset );
  
         DrawText(text, 0 , text.Length());
             //  If the cell is hilited, do the hilite now. Paint the cell contents with the
@@ -178,6 +186,28 @@ bool wxCheckListBox::Create(wxWindow *parent,
     m_noItems = 0 ; // this will be increased by our append command
     m_selected = 0;
     
+    m_checkBoxWidth = 12;
+    m_checkBoxHeight= 10;
+    
+    long h = m_checkBoxHeight ;
+#if TARGET_CARBON
+    GetThemeMetric(kThemeMetricCheckBoxWidth,(long *)&m_checkBoxWidth);    
+    GetThemeMetric(kThemeMetricCheckBoxHeight,&h);
+#endif
+	  wxFontRefData * font = (wxFontRefData*) (GetFont().GetRefData()) ;
+
+    FontInfo finfo;
+    FetchFontInfo(font->m_macFontNum,short(font->m_macFontSize),font->m_macFontStyle,&finfo);
+    
+    m_TextBaseLineOffset= finfo.leading+finfo.ascent;
+    m_checkBoxHeight= finfo.leading+finfo.ascent+finfo.descent;
+    
+	if (m_checkBoxHeight<h)
+	{
+		m_TextBaseLineOffset+= (h-m_checkBoxHeight)/2;
+		m_checkBoxHeight= h;
+	}
+		
     Rect bounds ;
     Str255 title ;
     
@@ -196,7 +226,7 @@ bool wxCheckListBox::Create(wxWindow *parent,
 
 
     CreateListBoxControl( MAC_WXHWND(parent->MacGetRootWindow()), &bounds, false, 0, 1, false, true,
-                          14, 14, false, &listDef, (ControlRef *)&m_macControl );
+                          m_checkBoxHeight+2, 14, false, &listDef, (ControlRef *)&m_macControl );
 
     GetControlData( (ControlHandle) m_macControl, kControlNoPart, kControlListBoxListHandleTag,
                    sizeof(ListHandle), (Ptr) &m_macList, &asize);
@@ -299,10 +329,12 @@ void wxCheckListBox::Delete(int n)
 
 int wxCheckListBox::DoAppend(const wxString& item)
 {
+    LSetDrawingMode( false , (ListHandle) m_macList ) ;
     int pos = wxListBox::DoAppend(item);
 
     // the item is initially unchecked
     m_checks.Insert(FALSE, pos);
+    LSetDrawingMode( true , (ListHandle) m_macList ) ;
 
     return pos;
 }
