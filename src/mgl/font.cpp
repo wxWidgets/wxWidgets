@@ -177,6 +177,7 @@ bool wxFont::Create(int pointSize,
 
 struct font_t *wxFont::GetMGLfont_t(float scale, bool antialiased)
 {
+    // FIXME_MGL -- no antialiasing for fonts smaller than certain treshold!
     if ( !M_FONTDATA->m_valid )
     {
         wxMGLFontLibrary *old = M_FONTDATA->m_library;
