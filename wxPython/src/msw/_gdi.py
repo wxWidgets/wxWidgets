@@ -4049,6 +4049,8 @@ def MemoryDCFromDC(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
+BUFFER_VIRTUAL_AREA = _gdi_.BUFFER_VIRTUAL_AREA
+BUFFER_CLIENT_AREA = _gdi_.BUFFER_CLIENT_AREA
 class BufferedDC(MemoryDC):
     """
     This simple class provides a simple way to avoid flicker: when drawing
@@ -4066,8 +4068,8 @@ class BufferedDC(MemoryDC):
         return "<%s.%s; proxy of C++ wxBufferedDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args):
         """
-        __init__(self, DC dc, Bitmap buffer) -> BufferedDC
-        __init__(self, DC dc, Size area) -> BufferedDC
+        __init__(self, DC dc, Bitmap buffer, int style=BUFFER_CLIENT_AREA) -> BufferedDC
+        __init__(self, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
 
         Constructs a buffered DC.
         """
@@ -4126,12 +4128,14 @@ class BufferedPaintDC(BufferedDC):
 
 
 
+
+
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBufferedPaintDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window window, Bitmap buffer=NullBitmap) -> BufferedPaintDC
+        __init__(self, Window window, Bitmap buffer=NullBitmap, int style=BUFFER_CLIENT_AREA) -> BufferedPaintDC
 
         Create a buffered paint DC.  As with `wx.BufferedDC`, you may either
         provide the bitmap to be used for buffering or let this object create

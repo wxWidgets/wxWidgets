@@ -4527,7 +4527,7 @@ static PyObject *_wrap_new_XmlDocumentFromStream(PyObject *, PyObject *args, PyO
             PyErr_Clear();  // clear the failure of the wxPyConvert above
             arg1 = wxPyCBInputStream_create(obj0, false);
             if (arg1 == NULL) {
-                PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
+                PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
                 SWIG_fail;
             }
             created1 = true;
@@ -4549,8 +4549,7 @@ static PyObject *_wrap_new_XmlDocumentFromStream(PyObject *, PyObject *args, PyO
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxXmlDocument, 1);
     {
-        if (created1)
-        delete arg1;
+        if (created1) delete arg1; 
     }
     {
         if (temp2)
@@ -4559,8 +4558,7 @@ static PyObject *_wrap_new_XmlDocumentFromStream(PyObject *, PyObject *args, PyO
     return resultobj;
     fail:
     {
-        if (created1)
-        delete arg1;
+        if (created1) delete arg1; 
     }
     {
         if (temp2)
@@ -4708,7 +4706,7 @@ static PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *, PyObject *args, Py
             PyErr_Clear();  // clear the failure of the wxPyConvert above
             arg2 = wxPyCBInputStream_create(obj1, false);
             if (arg2 == NULL) {
-                PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
+                PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
                 SWIG_fail;
             }
             created2 = true;
@@ -4732,8 +4730,7 @@ static PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *, PyObject *args, Py
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
     {
-        if (created2)
-        delete arg2;
+        if (created2) delete arg2; 
     }
     {
         if (temp3)
@@ -4742,8 +4739,7 @@ static PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *, PyObject *args, Py
     return resultobj;
     fail:
     {
-        if (created2)
-        delete arg2;
+        if (created2) delete arg2; 
     }
     {
         if (temp3)

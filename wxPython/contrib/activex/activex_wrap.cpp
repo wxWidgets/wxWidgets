@@ -4368,7 +4368,6 @@ static PyObject *_wrap_IEHtmlWindowBase_LoadStream(PyObject *, PyObject *args, P
     wxInputStream *arg2 = (wxInputStream *) 0 ;
     bool result;
     wxPyInputStream *temp2 ;
-    bool created2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4380,16 +4379,14 @@ static PyObject *_wrap_IEHtmlWindowBase_LoadStream(PyObject *, PyObject *args, P
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         if (wxPyConvertSwigPtr(obj1, (void **)&temp2, wxT("wxPyInputStream"))) {
-            arg2 = temp2->m_wxis;
-            created2 = false;
+            arg2 = wxPyCBInputStream_copy((wxPyCBInputStream*)temp2->m_wxis);
         } else {
             PyErr_Clear();  // clear the failure of the wxPyConvert above
             arg2 = wxPyCBInputStream_create(obj1, false);
             if (arg2 == NULL) {
-                PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
+                PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
                 SWIG_fail;
             }
-            created2 = true;
         }
     }
     {
@@ -4402,16 +4399,8 @@ static PyObject *_wrap_IEHtmlWindowBase_LoadStream(PyObject *, PyObject *args, P
     {
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
-    {
-        if (created2)
-        delete arg2;
-    }
     return resultobj;
     fail:
-    {
-        if (created2)
-        delete arg2;
-    }
     return NULL;
 }
 

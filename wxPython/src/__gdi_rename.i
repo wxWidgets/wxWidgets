@@ -403,6 +403,8 @@
 %rename(EncodingConverter)                  wxEncodingConverter;
 %rename(DC)                                 wxDC;
 %rename(MemoryDC)                           wxMemoryDC;
+%rename(BUFFER_VIRTUAL_AREA)                wxBUFFER_VIRTUAL_AREA;
+%rename(BUFFER_CLIENT_AREA)                 wxBUFFER_CLIENT_AREA;
 %rename(BufferedDC)                         wxBufferedDC;
 %rename(BufferedPaintDC)                    wxBufferedPaintDC;
 %rename(ScreenDC)                           wxScreenDC;

@@ -1649,7 +1649,8 @@ static wxPyCoreAPI API = {
     wxPyOORClientData_dtor,
                                              
     wxPyCBInputStream_create,
-
+    wxPyCBInputStream_copy,
+    
     wxPyInstance_Check,
     wxPySwigInstance_Check,
 
@@ -7913,7 +7914,6 @@ static PyObject *_wrap_new_FSFile(PyObject *, PyObject *args, PyObject *kwargs) 
     wxDateTime arg5 ;
     wxFSFile *result;
     wxPyInputStream *temp1 ;
-    bool created1 ;
     bool temp2 = false ;
     bool temp3 = false ;
     bool temp4 = false ;
@@ -7929,16 +7929,14 @@ static PyObject *_wrap_new_FSFile(PyObject *, PyObject *args, PyObject *kwargs) 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:new_FSFile",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     {
         if (wxPyConvertSwigPtr(obj0, (void **)&temp1, wxT("wxPyInputStream"))) {
-            arg1 = temp1->m_wxis;
-            created1 = false;
+            arg1 = wxPyCBInputStream_copy((wxPyCBInputStream*)temp1->m_wxis);
         } else {
             PyErr_Clear();  // clear the failure of the wxPyConvert above
-            arg1 = wxPyCBInputStream_create(obj0, false);
+            arg1 = wxPyCBInputStream_create(obj0, true);
             if (arg1 == NULL) {
-                PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
+                PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
                 SWIG_fail;
             }
-            created1 = true;
         }
     }
     {
@@ -7977,10 +7975,6 @@ static PyObject *_wrap_new_FSFile(PyObject *, PyObject *args, PyObject *kwargs) 
         resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
-        if (created1)
-        delete arg1;
-    }
-    {
         if (temp2)
         delete arg2;
     }
@@ -7994,10 +7988,6 @@ static PyObject *_wrap_new_FSFile(PyObject *, PyObject *args, PyObject *kwargs) 
     }
     return resultobj;
     fail:
-    {
-        if (created1)
-        delete arg1;
-    }
     {
         if (temp2)
         delete arg2;
@@ -10485,7 +10475,7 @@ static PyObject *_wrap_new_ImageFromStream(PyObject *, PyObject *args, PyObject 
             PyErr_Clear();  // clear the failure of the wxPyConvert above
             arg1 = wxPyCBInputStream_create(obj0, false);
             if (arg1 == NULL) {
-                PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
+                PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
                 SWIG_fail;
             }
             created1 = true;
@@ -10512,14 +10502,12 @@ static PyObject *_wrap_new_ImageFromStream(PyObject *, PyObject *args, PyObject 
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxImage, 1);
     {
-        if (created1)
-        delete arg1;
+        if (created1) delete arg1; 
     }
     return resultobj;
     fail:
     {
-        if (created1)
-        delete arg1;
+        if (created1) delete arg1; 
     }
     return NULL;
 }
@@ -10550,7 +10538,7 @@ static PyObject *_wrap_new_ImageFromStreamMime(PyObject *, PyObject *args, PyObj
             PyErr_Clear();  // clear the failure of the wxPyConvert above
             arg1 = wxPyCBInputStream_create(obj0, false);
             if (arg1 == NULL) {
-                PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
+                PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
                 SWIG_fail;
             }
             created1 = true;
@@ -10576,8 +10564,7 @@ static PyObject *_wrap_new_ImageFromStreamMime(PyObject *, PyObject *args, PyObj
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxImage, 1);
     {
-        if (created1)
-        delete arg1;
+        if (created1) delete arg1; 
     }
     {
         if (temp2)
@@ -10586,8 +10573,7 @@ static PyObject *_wrap_new_ImageFromStreamMime(PyObject *, PyObject *args, PyObj
     return resultobj;
     fail:
     {
-        if (created1)
-        delete arg1;
+        if (created1) delete arg1; 
     }
     {
         if (temp2)
@@ -11808,7 +11794,7 @@ static PyObject *_wrap_Image_CanReadStream(PyObject *, PyObject *args, PyObject 
             PyErr_Clear();  // clear the failure of the wxPyConvert above
             arg1 = wxPyCBInputStream_create(obj0, false);
             if (arg1 == NULL) {
-                PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
+                PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
                 SWIG_fail;
             }
             created1 = true;
@@ -11825,14 +11811,12 @@ static PyObject *_wrap_Image_CanReadStream(PyObject *, PyObject *args, PyObject 
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
     {
-        if (created1)
-        delete arg1;
+        if (created1) delete arg1; 
     }
     return resultobj;
     fail:
     {
-        if (created1)
-        delete arg1;
+        if (created1) delete arg1; 
     }
     return NULL;
 }
@@ -11866,7 +11850,7 @@ static PyObject *_wrap_Image_LoadStream(PyObject *, PyObject *args, PyObject *kw
             PyErr_Clear();  // clear the failure of the wxPyConvert above
             arg2 = wxPyCBInputStream_create(obj1, false);
             if (arg2 == NULL) {
-                PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
+                PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
                 SWIG_fail;
             }
             created2 = true;
@@ -11895,14 +11879,12 @@ static PyObject *_wrap_Image_LoadStream(PyObject *, PyObject *args, PyObject *kw
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
     {
-        if (created2)
-        delete arg2;
+        if (created2) delete arg2; 
     }
     return resultobj;
     fail:
     {
-        if (created2)
-        delete arg2;
+        if (created2) delete arg2; 
     }
     return NULL;
 }
@@ -11937,7 +11919,7 @@ static PyObject *_wrap_Image_LoadMimeStream(PyObject *, PyObject *args, PyObject
             PyErr_Clear();  // clear the failure of the wxPyConvert above
             arg2 = wxPyCBInputStream_create(obj1, false);
             if (arg2 == NULL) {
-                PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
+                PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
                 SWIG_fail;
             }
             created2 = true;
@@ -11965,8 +11947,7 @@ static PyObject *_wrap_Image_LoadMimeStream(PyObject *, PyObject *args, PyObject
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
     {
-        if (created2)
-        delete arg2;
+        if (created2) delete arg2; 
     }
     {
         if (temp3)
@@ -11975,8 +11956,7 @@ static PyObject *_wrap_Image_LoadMimeStream(PyObject *, PyObject *args, PyObject
     return resultobj;
     fail:
     {
-        if (created2)
-        delete arg2;
+        if (created2) delete arg2; 
     }
     {
         if (temp3)

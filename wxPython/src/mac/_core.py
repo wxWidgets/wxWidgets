@@ -1691,7 +1691,7 @@ class FSFile(Object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self.thisown = 0   # It will normally be deleted by the user of the wxFileSystem
+        self.thisown = 0   # It will normally be deleted by the user of the wx.FileSystem
 
     def __del__(self, destroy=_core_.delete_FSFile):
         """__del__(self)"""
