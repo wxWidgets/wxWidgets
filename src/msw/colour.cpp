@@ -49,7 +49,7 @@ template<> void wxStringReadValue(const wxString &s , wxColour &data )
 
 template<> void wxStringWriteValue(wxString &s , const wxColour &data )
 {
-	s = wxString::Format("#%02X%02X%02X", data.Red() , data.Green() , data.Blue() ) ;
+	s = wxString::Format(wxT("#%02X%02X%02X"), data.Red() , data.Green() , data.Blue() ) ;
 }
 
 IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( wxColour , wxObject , "wx/colour.h" ,  &wxToStringConverter<wxColour> , &wxFromStringConverter<wxColour>) 
