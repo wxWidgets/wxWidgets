@@ -1356,7 +1356,9 @@ if test "$wxUSE_DEBUG_FLAG" = "yes" ; then
     AC_DEFINE(WXDEBUG)
     WXDEBUG_DEFINE="-D__WXDEBUG__"
 else
-    WXDEBUG_DEFINE="-DGTK_NO_CHECK_CASTS"
+    if test "$wxUSE_GTK" = 1 ; then
+        WXDEBUG_DEFINE="-DGTK_NO_CHECK_CASTS"
+    fi
 fi
 
 if test "$wxUSE_MEM_TRACING" = "yes" ; then
@@ -1380,7 +1382,8 @@ if test "$wxUSE_OPTIMISE" = "no" ; then
     OPTIMISE=
 else
     if test "$GCC" = yes ; then
-        OPTIMISE="-O2 -fno-rtti -fno-exceptions"
+        OPTIMISE="-O2"
+	WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-rtti -fno-exceptions"
         case "${host}" in
             i586-*-*|i686-*-* )
             OPTIMISE="${OPTIMISE} "
