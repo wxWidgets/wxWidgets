@@ -980,7 +980,7 @@ void LifeCanvas::OnScroll(wxScrollWinEvent& event)
         }
     }
 
-#if defined (__WXGTK__) || defined(__WXMOTIF__) // what about Motif?
+#if defined(__WXGTK__) || defined(__WXMOTIF__) // what about Motif?
     // wxGTK updates the thumb automatically (wxMSW doesn't); reset it back
     if (type != wxEVT_SCROLLWIN_THUMBTRACK)
     {
