@@ -436,6 +436,10 @@ public:
     // for implementation code only: is the operation allowed?
     bool IsAllowed() const { return m_bAllow; }
 
+    // probably useless: CopyObject() is used for deferred event
+    // handling but wxNotifyEvent must be processed immediately
+    void CopyObject(wxObject& obj) const;
+
 private:
     bool m_bAllow;
 

@@ -330,7 +330,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     {
         /* this moves the cursor pos to behind the inserted text */
         gint len = GTK_EDITABLE(m_text)->current_pos;
-
+        
 #if wxUSE_UNICODE
         wxWX2MBbuf buf = text.mbc_str();
         gtk_editable_insert_text( GTK_EDITABLE(m_text), buf, strlen(buf), &len );

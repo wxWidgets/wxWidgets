@@ -109,8 +109,18 @@ bool wxYield()
 
 void wxWakeUpIdle()
 {
+#if wxUSE_THREADS
+    if (!wxThread::IsMain())
+        gdk_threads_enter();
+#endif
+
     if (g_isIdle) 
         wxapp_install_idle_handler();
+    
+#if wxUSE_THREADS
+    if (!wxThread::IsMain())
+        gdk_threads_leave();
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -121,12 +131,10 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp) return TRUE;
 
-#if (GTK_MINOR_VERSION > 0)
-    /* when getting called from GDK's idle handler we
-       are no longer within GDK's grab on the GUI
-       thread so we must lock it here ourselves */
-    GDK_THREADS_ENTER ();
-#endif
+    // when getting called from GDK's time-out handler
+    // we are no longer within GDK's grab on the GUI
+    // thread so we must lock it here ourselves
+    gdk_threads_enter();
 
     /* sent idle event to all who request them */
     while (wxTheApp->ProcessIdle()) { }
@@ -143,10 +151,8 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
        emptied */
     g_isIdle = TRUE;
 
-#if (GTK_MINOR_VERSION > 0)
-    /* release lock again */
-    GDK_THREADS_LEAVE ();
-#endif
+    // release lock again
+    gdk_threads_leave();
 
     return TRUE;
 }
@@ -161,19 +167,9 @@ void wxapp_install_idle_handler()
        to the main thread (and processing these in
        idle time). */
 
-#if wxUSE_THREADS
-    if (!wxThread::IsMain())
-        GDK_THREADS_ENTER ();
-#endif
-
     wxTheApp->m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
 
     g_isIdle = FALSE;
-    
-#if wxUSE_THREADS
-    if (!wxThread::IsMain())
-        GDK_THREADS_LEAVE ();
-#endif
 }
 
 #if wxUSE_THREADS
@@ -182,7 +178,7 @@ void wxapp_install_thread_wakeup()
 {
     if (wxTheApp->m_wakeUpTimerTag) return;
 
-    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 100, wxapp_wakeup_timerout_callback, (gpointer) NULL );
+    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 50, wxapp_wakeup_timerout_callback, (gpointer) NULL );
 }
 
 void wxapp_uninstall_thread_wakeup()
@@ -195,14 +191,13 @@ void wxapp_uninstall_thread_wakeup()
 
 gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
 {
-    wxapp_uninstall_thread_wakeup();
-
-#if (GTK_MINOR_VERSION > 0)
     // when getting called from GDK's time-out handler
     // we are no longer within GDK's grab on the GUI
     // thread so we must lock it here ourselves
-    GDK_THREADS_ENTER ();
-#endif
+    
+    gdk_threads_enter();
+
+    wxapp_uninstall_thread_wakeup();
 
     // unblock other threads wishing to do some GUI things
     wxMutexGuiLeave();
@@ -213,13 +208,11 @@ gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
     // block other thread again
     wxMutexGuiEnter();
 
-#if (GTK_MINOR_VERSION > 0)
-    // release lock again
-    GDK_THREADS_LEAVE ();
-#endif
-
     wxapp_install_thread_wakeup();
 
+    // release lock again
+    gdk_threads_leave();
+    
     return TRUE;
 }
 
@@ -560,6 +553,10 @@ void wxApp::CleanUp()
 
 int wxEntry( int argc, char *argv[] )
 {
+#if wxUSE_THREADS
+    g_thread_init(NULL);
+#endif
+    
     gtk_set_locale();
 
 #if wxUSE_WCHAR_T
@@ -568,12 +565,17 @@ int wxEntry( int argc, char *argv[] )
     if (!wxOKlibc()) wxConvCurrent = (wxMBConv*) NULL;
 #endif
 
+    gdk_threads_enter();
+
     gtk_init( &argc, &argv );
 
     wxSetDetectableAutoRepeat( TRUE );
 
     if (!wxApp::Initialize())
+    {
+        gdk_threads_leave();
         return -1;
+    }
 
     if (!wxTheApp)
     {
@@ -593,9 +595,10 @@ int wxEntry( int argc, char *argv[] )
 #if wxUSE_UNICODE
     wxTheApp->argv = new wxChar*[argc+1];
     int mb_argc = 0;
-    while (mb_argc < argc) {
-      wxTheApp->argv[mb_argc] = wxStrdup(wxConvLibc.cMB2WX(argv[mb_argc]));
-      mb_argc++;
+    while (mb_argc < argc) 
+    {
+        wxTheApp->argv[mb_argc] = wxStrdup(wxConvLibc.cMB2WX(argv[mb_argc]));
+        mb_argc++;
     }
     wxTheApp->argv[mb_argc] = (wxChar *)NULL;
 #else
@@ -667,6 +670,8 @@ int wxEntry( int argc, char *argv[] )
 #endif // wxUSE_LOG
 
     wxApp::CleanUp();
+
+    gdk_threads_leave();
 
     return retValue;
 }

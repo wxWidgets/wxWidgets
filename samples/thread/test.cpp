@@ -134,7 +134,7 @@ void MyThread::WriteText(const wxString& text)
     msg << text;
 
     m_frame->WriteText(msg);
-
+    
     wxMutexGuiLeave();
 }
 

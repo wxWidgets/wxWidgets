@@ -173,10 +173,24 @@ void wxCommandEvent::CopyObject(wxObject& obj_d) const
 
     wxEvent::CopyObject(obj_d);
 
-    obj->m_clientData   = m_clientData;
-    obj->m_clientObject = m_clientObject;
-    obj->m_extraLong    = m_extraLong;
-    obj->m_commandInt   = m_commandInt;
+    obj->m_clientData    = m_clientData;
+    obj->m_clientObject  = m_clientObject;
+    obj->m_extraLong     = m_extraLong;
+    obj->m_commandInt    = m_commandInt;
+    obj->m_commandString = m_commandString;
+}
+
+/*
+ * Notify events
+ */
+
+void wxNotifyEvent::CopyObject(wxObject& obj_d) const
+{
+    wxNotifyEvent *obj = (wxNotifyEvent *)&obj_d;
+
+    wxEvent::CopyObject(obj_d);
+
+    if (!m_bAllow) obj->Veto();
 }
 
 /*
@@ -380,6 +394,10 @@ void wxKeyEvent::CopyObject(wxObject& obj_d) const
     wxKeyEvent *obj = (wxKeyEvent *)&obj_d;
     wxEvent::CopyObject(obj_d);
 
+    obj->m_x = m_x;
+    obj->m_y = m_y;
+    obj->m_keyCode = m_keyCode;
+    
     obj->m_shiftDown   = m_shiftDown;
     obj->m_controlDown = m_controlDown;
     obj->m_metaDown    = m_metaDown;
@@ -685,11 +703,18 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // An event handler can be enabled or disabled
     if ( GetEvtHandlerEnabled() )
     {
-#if wxUSE_THREADS
+    
+#if 0
+/*
+        What is this? When using GUI threads, a non main
+        threads can send an event and process it itself.
+        This breaks GTK's GUI threads, so please explain.
+*/
+
         // Check whether we are in a child thread.
         if ( !wxThread::IsMain() )
           return ProcessThreadEvent(event);
-#endif // wxUSE_THREADS
+#endif
 
         // Handle per-instance dynamic event tables first
         if ( m_dynamicEvents && SearchDynamicEventTable(event) )

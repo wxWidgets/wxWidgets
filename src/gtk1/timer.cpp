@@ -15,51 +15,6 @@
 #include "wx/timer.h"
 
 #include "gtk/gtk.h"
-/*
-#include "glib.h"
-*/
-
-//-----------------------------------------------------------------------------
-// global functions
-//-----------------------------------------------------------------------------
-
-/*
-static GTimer *g_timer = (GTimer*) NULL;
-
-void wxStartTimer()
-{
-    if (g_timer)
-    {
-        g_timer_rest( g_timer );
-    }
-    else
-    {
-        g_timer = g_timer_new();
-        g_timer_start( g_timer );
-    }
-}
-
-long wxGetElapsedTime( bool resetTimer )
-{
-    gulong res = 0;
-    if (g_timer)
-    {
-        g_timer_elapsed( g_timer, &res );
-        if (resetTimer) g_timer_reset( g_timer );
-    }
-
-    return res;
-}
-
-bool wxGetLocalTime( long *timeZone, int *dstObserved )
-{
-}
-
-long wxGetCurrentTime()
-{
-}
-*/
-
 
 //-----------------------------------------------------------------------------
 // wxTimer
@@ -71,19 +26,15 @@ static gint timeout_callback( gpointer data )
 {
     wxTimer *timer = (wxTimer*)data;
 
-#if (GTK_MINOR_VERSION > 0)
     /* when getting called from GDK's timer handler we
        are no longer within GDK's grab on the GUI
        thread so we must lock it here ourselves */
-    GDK_THREADS_ENTER ();
-#endif
+    gdk_threads_enter();
 
     timer->Notify();
 
-#if (GTK_MINOR_VERSION > 0)
     /* release lock again */
-    GDK_THREADS_LEAVE ();
-#endif
+    gdk_threads_leave();
 
     if ( timer->IsOneShot() )
         return FALSE;

@@ -1493,7 +1493,7 @@ if test "$wxUSE_GTK" = 1; then
     AM_PATH_GTK(1.2.1, WXGTK12=1, AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.1 or above?))
 
     TOOLKIT_INCLUDE="$GTK_CFLAGS"
-    GUI_TK_LIBRARY="$GTK_LIBS"
+    GUI_TK_LIBRARY="$GTK_LIBS -lgthread"
     TOOLKIT=GTK
 
     GUIOBJS="\$(GTK_GUIOBJS)"
