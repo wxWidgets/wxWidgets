@@ -212,6 +212,49 @@ long wxGetFreeMemory()
     return (long)lSize;
 }
 
+// ----------------------------------------------------------------------------
+// env vars
+// ----------------------------------------------------------------------------
+
+bool wxGetEnv(const wxString& var, wxString *value)
+{
+    // wxGetenv is defined as getenv()
+    wxChar *p = wxGetenv(var);
+    if ( !p )
+        return FALSE;
+
+    if ( value )
+    {
+        *value = p;
+    }
+
+    return TRUE;
+}
+
+bool wxSetEnv(const wxString& variable, const wxChar *value)
+{
+#if defined(HAVE_SETENV)
+    return setenv(variable.mb_str(), value ? wxString(value).mb_str().data()
+                                           : NULL, 1 /* overwrite */) == 0;
+#elif defined(HAVE_PUTENV)
+    wxString s = variable;
+    if ( value )
+        s << _T('=') << value;
+
+    // transform to ANSI
+    const char *p = s.mb_str();
+
+    // the string will be free()d by libc
+    char *buf = (char *)malloc(strlen(p) + 1);
+    strcpy(buf, p);
+
+    return putenv(buf) == 0;
+#else // no way to set an env var
+    return FALSE;
+#endif
+}
+
+
 // Sleep for nSecs seconds. Attempt a Windows implementation using timers.
 static bool inTimer = FALSE;
 
