@@ -2042,10 +2042,12 @@ public:
         Init(CFStringGetSystemEncoding()) ;
     }
 
+#if wxUSE_FONTMAP
     wxMBConv_mac(const wxChar* name)
     {
         Init( wxMacGetSystemEncFromFontEnc(wxFontMapper::Get()->CharsetToEncoding(name, false) ) ) ;
     }
+#endif
 
     wxMBConv_mac(wxFontEncoding encoding)
     {
@@ -2395,8 +2397,12 @@ wxMBConv *wxCSConv::DoCreate() const
         if ( m_name || ( m_encoding < wxFONTENCODING_UTF16BE ) )
         {
 
+#if wxUSE_FONTMAP
             wxMBConv_mac *conv = m_name ? new wxMBConv_mac(m_name)
                                         : new wxMBConv_mac(m_encoding);
+#else
+            wxMBConv_mac *conv = new wxMBConv_mac(m_encoding);
+#endif
             if ( conv->IsOk() )
                  return conv;
 
