@@ -34,6 +34,11 @@ public:
     static wxString GetOption(const wxString& name);
     static int GetOptionInt(const wxString& name);
     static bool HasOption(const wxString& name);
+
+    static bool IsFalse(const wxString& name)
+    {
+        return HasOption(name) && GetOptionInt(name) == 0;
+    }
 };
 
 #if !wxUSE_SYSTEM_OPTIONS

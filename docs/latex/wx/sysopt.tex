@@ -125,6 +125,16 @@ Returns \true if the given option is present. The function is case-insensitive t
 \helpref{wxSystemOptions::GetOptionInt}{wxsystemoptionsgetoptionint}
 
 
+\membersection{wxSystemOptions::IsFalse}\label{wxsystemoptionsisfalse}
+
+\constfunc{bool}{IsFalse}{\param{const wxString\&}{ name}}
+
+Returns \true if the option with the given \arg{name} had been set to $0$
+value. This is mostly useful for boolean options for which you can't use
+\texttt{GetOptionInt(name) == 0} as this would also be true if the option
+hadn't been set at all.
+
+
 \membersection{wxSystemOptions::SetOption}\label{wxsystemoptionssetoption}
 
 \func{void}{SetOption}{\param{const wxString\&}{ name}, \param{const wxString\&}{ value}}
