@@ -66,6 +66,8 @@ public:
     bool operator != ( const wxRegion& region );
 
     void Clear();
+    
+    bool Offset( wxCoord x, wxCoord y );
 
     bool Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
     bool Union( const wxRect& rect );

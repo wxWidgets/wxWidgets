@@ -516,6 +516,16 @@ wxRect wxRegion::GetBox() const
     return wxRect( x, y, w, h );
 }
 
+bool wxRegion::Offset( wxCoord x, wxCoord y )
+{
+    if (!m_refData)
+        return FALSE;
+
+    gdk_region_offset( M_REGIONDATA->m_region, x, y );
+    
+    return TRUE;
+}
+
 bool wxRegion::Empty() const
 {
     if (!m_refData)

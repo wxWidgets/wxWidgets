@@ -320,9 +320,6 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
                int noUnitsX, int noUnitsY,
                int xPos, int yPos, bool noRefresh )
 {
-    // Update any invalidates areas before the get moved/scrolled.
-    Update();
-
     int old_x = m_xScrollPixelsPerLine * m_xScrollPosition;
     int old_y = m_yScrollPixelsPerLine * m_yScrollPosition;
     
@@ -358,9 +355,6 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
 
 void wxScrolledWindow::AdjustScrollbars()
 {
-    // Update any invalidates areas before the get moved/scrolled.
-    Update();
-
     int w, h;
     m_targetWindow->GetClientSize( &w, &h );
 
@@ -435,9 +429,6 @@ void wxScrolledWindow::OnScroll(wxScrollWinEvent& event)
     int nScrollInc = CalcScrollInc(event);
     if (nScrollInc == 0) return;
 
-    // Update any invalidates areas before the get moved/scrolled.
-    Update();
-    
     if (orient == wxHORIZONTAL)
     {
         int newPos = m_xScrollPosition + nScrollInc;
@@ -482,9 +473,6 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
     if (((x_pos == -1) || (x_pos == m_xScrollPosition)) &&
         ((y_pos == -1) || (y_pos == m_yScrollPosition))) return;
 
-    // Update any invalidates areas before the get moved/scrolled.
-    Update();
-    
     if ((x_pos != -1) && (m_xScrollPixelsPerLine))
     {
         int max = (int)(m_hAdjust->upper - m_hAdjust->page_size + 0.5);
@@ -537,9 +525,6 @@ void wxScrolledWindow::GtkVScroll( float value )
     if (y_pos == m_yScrollPosition)
         return;
 
-    // Update any invalidates areas before the get moved/scrolled.
-    Update();
-    
     GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
     GtkRange *range = GTK_RANGE(scrolledWindow->vscrollbar);
 
@@ -567,9 +552,6 @@ void wxScrolledWindow::GtkHScroll( float value )
     if (x_pos == m_xScrollPosition)
         return;
 
-    // Update any invalidates areas before the get moved/scrolled.
-    Update();
-    
     GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
     GtkRange *range = GTK_RANGE(scrolledWindow->hscrollbar);
 
@@ -714,11 +696,6 @@ void wxScrolledWindow::SetScrollPos( int orient, int pos, bool refresh )
 
     wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
 
-    // Update any invalidates areas before the get moved/scrolled.
-    // We ignore the refresh parameter here because it is meant
-    // to control the behaviour AFTER scrolling happens.
-    Update();
-    
     if (orient == wxHORIZONTAL)
     {
         int max = (int)(m_hAdjust->upper - m_hAdjust->page_size + 0.5);

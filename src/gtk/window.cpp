@@ -4091,6 +4091,16 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     // No scrolling requested.
     if ((dx == 0) && (dy == 0)) return;
     
+    if (!m_updateRegion.IsEmpty())
+    {
+        m_updateRegion.Offset( dx, dy );
+        
+        int cw = 0;
+        int ch = 0;
+        GetClientSize( &cw, &ch );
+        m_updateRegion.Intersect( 0, 0, cw, ch );
+    }
+    
 #if 1
 
     m_clipPaintRegion = TRUE;

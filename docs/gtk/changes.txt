@@ -1,6 +1,19 @@
 
 *** wxWindows 2.3.3 ***
 
+New behaviour for wxWindow::Refresh() as it now produces a 
+delayed refresh. Call the new wxWindow::Update() to force
+an immediate update.
+
+Support for more SGI hardware (12-bit mode among others).
+
+Changed wxDC::Blit() to honour source DC's logical coordinates.
+
+Implemented wxIdleEvent::RequestMore() for simple background
+tasks (unlike thread work).
+
+Various updates to wxHTML.
+
 Some wxFont changes for better mixing of native fonts
 and wxFont's accessors.
 
