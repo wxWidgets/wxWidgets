@@ -26,6 +26,7 @@
 %rename(FRAME_NO_WINDOW_MENU)               wxFRAME_NO_WINDOW_MENU;
 %rename(FRAME_NO_TASKBAR)                   wxFRAME_NO_TASKBAR;
 %rename(FRAME_SHAPED)                       wxFRAME_SHAPED;
+%rename(FRAME_DRAWER)                       wxFRAME_DRAWER;
 %rename(DIALOG_MODAL)                       wxDIALOG_MODAL;
 %rename(DIALOG_MODELESS)                    wxDIALOG_MODELESS;
 %rename(USER_COLOURS)                       wxUSER_COLOURS;

@@ -49,7 +49,8 @@ enum
     wxFRAME_NO_WINDOW_MENU,
     wxFRAME_NO_TASKBAR,
     wxFRAME_SHAPED,
-
+    wxFRAME_DRAWER,
+    
     // Obsolete
     wxDIALOG_MODAL,
     wxDIALOG_MODELESS,
