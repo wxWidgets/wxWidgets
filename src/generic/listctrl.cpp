@@ -2834,7 +2834,7 @@ bool wxListMainWindow::OnRenameAccept(size_t itemEdit, const wxString& value)
                 le.IsAllowed();
 }
 
-void wxListMainWindow::OnRenameCancelled(size_t WXUNUSED(itemEdit))
+void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
 {
     // let owner know that the edit was cancelled
     wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
