@@ -276,7 +276,8 @@ wxString wxEncodingConverter::Convert(const wxString& input)
     wxString s;
     const wxChar *i;
 
-    wxCHECK_RET(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+    wxCHECK_MSG(m_Table != NULL, s,
+                wxT("You must call wxEncodingConverter::Init() before actually converting!"));
 
     if (m_UnicodeInput)
     {
