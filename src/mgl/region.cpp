@@ -37,18 +37,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
 class WXDLLEXPORT wxRegionRefData : public wxGDIRefData
 {
 public:
-    wxRegionRefData()
-    {
-    }    
+    wxRegionRefData() {}
 
     wxRegionRefData(const wxRegionRefData& data)
     {
         m_region = data.m_region;
     }
 
-    ~wxRegionRefData()
-    {
-    }
+    ~wxRegionRefData() {}
 
     MGLRegion m_region;
 };
@@ -60,12 +56,22 @@ public:
 // wxRegion
 //-----------------------------------------------------------------------------
 
+wxObjectRefData *wxRegion::CreateRefData() const
+{
+    return new wxRegionRefData;
+}
+
+wxObjectRefData *wxRegion::CloneRefData(const wxObjectRefData *data) const
+{
+    return new wxRegionRefData(*(wxRegionRefData *)data);
+}
+
 /*
  * Create an empty region.
  */
 wxRegion::wxRegion()
 {
-    m_refData = (wxRegionRefData *)NULL;
+    m_refData = NULL;
 }
 
 wxRegion::wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
@@ -156,17 +162,24 @@ bool wxRegion::Empty() const
 // Modifications
 //-----------------------------------------------------------------------------
 
+bool wxRegion::Offset(wxCoord x, wxCoord y)
+{
+    AllocExclusive();
+    M_REGION.offset(x, y);
+    return TRUE;
+}
+
 // Union rectangle or region with this.
 bool wxRegion::Union(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    Unshare();
+    AllocExclusive();
     M_REGION += MGLRect(x, y, x + width, y + height);
     return TRUE;
 }
 
 bool wxRegion::Union(const wxRegion& region)
 {
-    Unshare();
+    AllocExclusive();
     M_REGION += M_REGION_OF(region);
     return TRUE;
 }
@@ -174,14 +187,14 @@ bool wxRegion::Union(const wxRegion& region)
 // Intersect rectangle or region with this.
 bool wxRegion::Intersect(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    Unshare();
+    AllocExclusive();
     M_REGION &= MGLRect(x, y, x + width, y + height);
     return TRUE;
 }
 
 bool wxRegion::Intersect(const wxRegion& region)
 {
-    Unshare();
+    AllocExclusive();
     M_REGION &= M_REGION_OF(region);
     return TRUE;
 }
@@ -190,14 +203,14 @@ bool wxRegion::Intersect(const wxRegion& region)
 // Combines the parts of 'this' that are not part of the second region.
 bool wxRegion::Subtract(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    Unshare();
+    AllocExclusive();
     M_REGION -= MGLRect(x, y, x + width, y + height);
     return TRUE;
 }
 
 bool wxRegion::Subtract(const wxRegion& region)
 {
-    Unshare();
+    AllocExclusive();
     M_REGION -= M_REGION_OF(region);
     return TRUE;
 }
@@ -205,7 +218,7 @@ bool wxRegion::Subtract(const wxRegion& region)
 // XOR: the union of two combined regions except for any overlapping areas.
 bool wxRegion::Xor(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    Unshare();
+    AllocExclusive();
     MGLRect rect(x, y, x + width, y + height);
     MGLRegion rg1 = M_REGION + rect,
               rg2 = M_REGION & rect;
@@ -215,7 +228,7 @@ bool wxRegion::Xor(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 bool wxRegion::Xor(const wxRegion& region)
 {
-    Unshare();
+    AllocExclusive();
     MGLRegion rg1 = M_REGION + M_REGION_OF(region),
               rg2 = M_REGION & M_REGION_OF(region);
     M_REGION = rg1 - rg2;
@@ -271,25 +284,6 @@ wxRegionContain wxRegion::Contains(const wxRect& rect) const
 {
     return Contains(rect.x, rect.y, rect.width, rect.height);
 }
-
-
-
-void wxRegion::Unshare()
-{
-    if (!m_refData)
-    {
-        m_refData = new wxRegionRefData();
-    }
-    else
-    {
-        wxRegionRefData* ref = new wxRegionRefData(*(wxRegionRefData*)m_refData);
-        UnRef();
-        m_refData = ref;
-    }
-}
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -396,4 +390,3 @@ wxCoord wxRegionIterator::GetH() const
     else
         return 0;
 }
-

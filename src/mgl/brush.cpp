@@ -223,25 +223,25 @@ void* wxBrush::GetPixPattern() const
 
 void wxBrush::SetColour(const wxColour& col)
 {
-    Unshare();
+    AllocExclusive();
     M_BRUSHDATA->m_colour = col;
 }
 
 void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
 {
-    Unshare();
+    AllocExclusive();
     M_BRUSHDATA->m_colour.Set(r, g, b);
 }
 
 void wxBrush::SetStyle( int style )
 {
-    Unshare();
+    AllocExclusive();
     M_BRUSHDATA->m_style = style;
 }
 
 void wxBrush::SetStipple(const wxBitmap& stipple)
 {
-    Unshare();
+    AllocExclusive();
 
     wxCHECK_RET( stipple.Ok(), _T("invalid bitmap") );
     wxCHECK_RET( stipple.GetWidth() == 8 && stipple.GetHeight() == 8, 
@@ -257,17 +257,13 @@ void wxBrush::SetStipple(const wxBitmap& stipple)
         M_BRUSHDATA->m_style = wxSTIPPLE;
 }
 
-void wxBrush::Unshare()
+wxObjectRefData *wxBrush::CreateRefData() const
 {
-    if (!m_refData)
-    {
-        m_refData = new wxBrushRefData();
-    }
-    else
-    {
-        wxBrushRefData* ref = new wxBrushRefData(*(wxBrushRefData*)m_refData);
-        UnRef();
-        m_refData = ref;
-    }
+    return new wxBrushRefData;
+}
+
+wxObjectRefData *wxBrush::CloneRefData(const wxObjectRefData *data) const
+{
+    return new wxBrushRefData(*(wxBrushRefData *)data);
 }
 

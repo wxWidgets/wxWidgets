@@ -65,10 +65,13 @@ public:
     
     bool Ok() const;
 
-    void Unshare();
-    
     // implementation:
     void* GetPixPattern() const;
+
+protected:
+    // ref counting code
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
 private:    
     DECLARE_DYNAMIC_CLASS(wxPen)

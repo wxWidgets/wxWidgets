@@ -90,16 +90,15 @@ public:
     virtual void SetUnderlined(bool underlined);
     virtual void SetEncoding(wxFontEncoding encoding);
 
-    // implementation from now on
-    void Unshare();
-
     struct font_t *GetMGLfont_t(float scale, bool antialiased);
-
-    // no data :-)
 
 protected:
     // common part of all ctors
     void Init() {}
+
+    // ref counting code
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFont)

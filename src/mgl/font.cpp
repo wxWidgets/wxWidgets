@@ -192,19 +192,16 @@ struct font_t *wxFont::GetMGLfont_t(float scale, bool antialiased)
     return instance->GetMGLfont_t();
 }
 
-void wxFont::Unshare()
+wxObjectRefData *wxFont::CreateRefData() const
 {
-    if ( !m_refData )
-    {
-        m_refData = new wxFontRefData();
-    }
-    else
-    {
-        wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
-        UnRef();
-        m_refData = ref;
-    }
+    return new wxFontRefData;
 }
+
+wxObjectRefData *wxFont::CloneRefData(const wxObjectRefData *data) const
+{
+    return new wxFontRefData(*(wxFontRefData *)data);
+}
+
 
 // ----------------------------------------------------------------------------
 // accessors
@@ -274,7 +271,7 @@ bool wxFont::IsFixedWidth() const
 
 void wxFont::SetPointSize(int pointSize)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_pointSize = pointSize;
     M_FONTDATA->m_valid = FALSE;
@@ -282,7 +279,7 @@ void wxFont::SetPointSize(int pointSize)
 
 void wxFont::SetFamily(int family)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_family = family;
     M_FONTDATA->m_valid = FALSE;
@@ -290,7 +287,7 @@ void wxFont::SetFamily(int family)
 
 void wxFont::SetStyle(int style)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_style = style;
     M_FONTDATA->m_valid = FALSE;
@@ -298,7 +295,7 @@ void wxFont::SetStyle(int style)
 
 void wxFont::SetWeight(int weight)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_weight = weight;
     M_FONTDATA->m_valid = FALSE;
@@ -306,7 +303,7 @@ void wxFont::SetWeight(int weight)
 
 void wxFont::SetFaceName(const wxString& faceName)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_faceName = faceName;
     M_FONTDATA->m_valid = FALSE;
@@ -314,14 +311,14 @@ void wxFont::SetFaceName(const wxString& faceName)
 
 void wxFont::SetUnderlined(bool underlined)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_underlined = underlined;
 }
 
 void wxFont::SetEncoding(wxFontEncoding encoding)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_encoding = encoding;
     M_FONTDATA->m_valid = FALSE;

@@ -131,38 +131,38 @@ bool wxPen::operator != (const wxPen& pen) const
 
 void wxPen::SetColour(const wxColour &colour)
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_colour = colour;
 }
 
 void wxPen::SetDashes(int number_of_dashes, const wxDash *dash)
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_countDashes = number_of_dashes;
     M_PENDATA->m_dash = (wxDash *)dash; /* TODO */
 }
 
 void wxPen::SetColour(int red, int green, int blue)
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_colour.Set(red, green, blue);
 }
 
 void wxPen::SetCap(int capStyle)
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_capStyle = capStyle;
 }
 
 void wxPen::SetJoin(int joinStyle)
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_joinStyle = joinStyle;
 }
 
 void wxPen::SetStyle(int style)
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_style = style;
 }
 
@@ -172,14 +172,14 @@ void wxPen::SetStipple(const wxBitmap& stipple)
     wxCHECK_RET( stipple.GetWidth() == 8 && stipple.GetHeight() == 8, 
                   _T("stipple bitmap must be 8x8") );
 
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_stipple = stipple;
     wxBitmapToPixPattern(stipple, &(M_PENDATA->m_pixPattern), NULL);
 }
 
 void wxPen::SetWidth(int width)
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_width = width;
 }
 
@@ -254,17 +254,13 @@ bool wxPen::Ok() const
     return (m_refData != NULL);
 }
 
-void wxPen::Unshare()
+wxObjectRefData *wxPen::CreateRefData() const
 {
-    if (!m_refData)
-    {
-        m_refData = new wxPenRefData();
-    }
-    else
-    {
-        wxPenRefData* ref = new wxPenRefData( *(wxPenRefData*)m_refData );
-        UnRef();
-        m_refData = ref;
-    }
+    return new wxPenRefData;
+}
+
+wxObjectRefData *wxPen::CloneRefData(const wxObjectRefData *data) const
+{
+    return new wxPenRefData(*(wxPenRefData *)data);
 }
 

@@ -55,6 +55,8 @@ public:
     // Clear current region
     void Clear(void);
 
+    bool Offset(wxCoord x, wxCoord y);
+
     // Union rectangle or region with this.
     bool Union(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     bool Union(const wxRect& rect) { return Union(rect.x, rect.y, rect.width, rect.height); }
@@ -97,9 +99,11 @@ public:
     
     // implementation from now on:
     const MGLRegion& GetMGLRegion() const;
-    
-private:
-    void Unshare();
+
+protected:
+    // ref counting code
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 };
 
 

@@ -56,10 +56,13 @@ public:
     
     // implementation:
 
-    void Unshare();
-    
     void* GetMaskPattern() const;
     void* GetPixPattern() const;
+
+protected:
+    // ref counting code
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxBrush)
