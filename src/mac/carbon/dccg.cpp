@@ -1686,7 +1686,7 @@ void  wxDC::Clear(void)
                 {
                     wxFAIL_MSG( wxT("There shouldn't be theme backgrounds under Quartz") ) ;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-                    if ( HIThemeDrawBackground != 0 )
+                    if ( UMAGetSystemVersion() >= 0x1030 )
                     {
                         HIThemeBackgroundDrawInfo drawInfo ;
                         drawInfo.version = 0 ;
