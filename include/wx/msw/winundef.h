@@ -265,6 +265,18 @@
     }
 #endif // LoadIcon
 
+// LoadBitmap
+#ifdef LoadBitmap
+    #undef LoadBitmap
+    inline HBITMAP LoadBitmap(HINSTANCE hInstance, LPCTSTR lpBitmapName)
+    {
+        #ifdef _UNICODE
+            return LoadBitmapW(hInstance, lpBitmapName);
+        #else // ANSI
+            return LoadBitmapA(hInstance, lpBitmapName);
+        #endif // Unicode/ANSI
+    }
+#endif // LoadBitmap
 
 // LoadLibrary
 
