@@ -352,9 +352,10 @@ void wxBitmap::SetMask(wxMask *mask)
 void wxBitmap::SetHBITMAP(WXHBITMAP bmp)
 {
   if (!M_BITMAPDATA)
-  m_refData = new wxBitmapRefData;
+    m_refData = new wxBitmapRefData;
 
   M_BITMAPDATA->m_hBitmap = bmp;
+  M_BITMAPDATA->m_ok = bmp != 0;
 }
 
 void wxBitmap::AddHandler(wxBitmapHandler *handler)
