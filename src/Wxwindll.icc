@@ -166,7 +166,6 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "GENERIC\\LOGG.CPP"
       source type(cpp) "GENERIC\\NUMDLGG.CPP"
       source type(cpp) "GENERIC\\PANELG.CPP"
-      source type(cpp) "GENERIC\\PLOT.CPP"
       source type(cpp) "GENERIC\\PRINTPS.CPP"
       source type(cpp) "GENERIC\\PRNTDLGG.CPP"
       source type(cpp) "GENERIC\\PROGDLGG.CPP"
@@ -287,9 +286,19 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "OS2\\WAVE.CPP"
       source type(cpp) "OS2\\WINDOW.CPP"
    }
-   target "..\\samples\\minimal\\dbgos240dll\\Minimal.exe"
+//   target "..\\samples\\minimal\\dbgos240dll\\Minimal.exe"
+//   {
+//      source type(cpp) "..\\SAMPLES\\MINIMAL\\MINIMAL.CPP"
+//      source type(rc) "..\\SAMPLES\\MINIMAL\\MINIMAL.RC4"
+//   }
+   target "..\\samples\\menu\\dbgos240dll\\Menu.exe"
    {
-      source type(cpp) "..\\SAMPLES\\MINIMAL\\MINIMAL.CPP"
-      source type(rc) "..\\SAMPLES\\MINIMAL\\MINIMAL.RC4"
+      source type(cpp) "..\\SAMPLES\\MENU\\MENU.CPP"
+      source type(rc) "..\\SAMPLES\\MENU\\MENU.RC4"
    }
+//   target "..\\samples\\statbar\\dbgos240dll\\Statbar.exe"
+//   {
+//      source type(cpp) "..\\SAMPLES\\STATBAR\\STATBAR.CPP"
+//      source type(rc) "..\\SAMPLES\\STATBAR\\STATBAR.RC4"
+//   }
 }
