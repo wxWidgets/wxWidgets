@@ -29,6 +29,7 @@ public:
 
     virtual bool LoadFile( wxBitmap*       pBitmap
                           ,const wxString& rName
+                          ,HPS             hPs
                           ,long            lFlags
                           ,int             nDesiredWidth
                           ,int             nDesiredHeight
