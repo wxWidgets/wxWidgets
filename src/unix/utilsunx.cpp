@@ -508,7 +508,9 @@ long wxExecute(wxChar **argv,
         // start an xterm executing it.
         if ( !(flags & wxEXEC_SYNC) )
         {
-            for ( int fd = 0; fd < FD_SETSIZE; fd++ )
+            // FD_SETSIZE is unsigned under BSD, signed under other platforms
+            // so we need a cast to avoid warnings on all platforms
+            for ( int fd = 0; fd < (int)FD_SETSIZE; fd++ )
             {
                 if ( fd == pipeIn[wxPipe::Read]
                         || fd == pipeOut[wxPipe::Write]
