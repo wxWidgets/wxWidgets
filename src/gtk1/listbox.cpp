@@ -15,6 +15,7 @@
 
 #include "wx/dynarray.h"
 #include "wx/listbox.h"
+#include "wx/utils.h"
 
 //-----------------------------------------------------------------------------
 // data
@@ -26,22 +27,32 @@ extern bool   g_blockEventsOnDrag;
 // wxListBox
 //-----------------------------------------------------------------------------
 
-static void gtk_listitem_select_callback( GtkWidget *widget, wxListBox *listbox )
+static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox *listbox )
 {
   if (!listbox->HasVMT()) return;
   if (g_blockEventsOnDrag) return;
   
   wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
   
-  event.SetInt( listbox->GetIndex( widget ) );
-  
-  GtkBin *bin = GTK_BIN( widget );
-  GtkLabel *label = GTK_LABEL( bin->child );
-  wxString tmp( label->label );
-  event.SetString( WXSTRINGCAST(tmp) );
+    wxArrayInt aSelections;
+    int count = listbox->GetSelections(aSelections);
+    if ( count > 0 )
+    {
+      event.m_commandInt = aSelections[0] ;
+      event.m_clientData = listbox->GetClientData(event.m_commandInt);
+      wxString str(listbox->GetString(event.m_commandInt));
+      if (str != "")
+        event.m_commandString = copystring((char *)(const char *)str);
+    }
+    else
+    {
+      event.m_commandInt = -1 ;
+      event.m_commandString = copystring("") ;
+    }
+
   event.SetEventObject( listbox );
-  
   listbox->GetEventHandler()->ProcessEvent( event );
+  if (event.m_commandString) delete[] event.m_commandString ;
 };
 
 //-----------------------------------------------------------------------------
@@ -98,6 +109,10 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     gtk_signal_connect( GTK_OBJECT(list_item), "select", 
       GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
   
+    if ( style & wxLB_MULTIPLE )
+      gtk_signal_connect( GTK_OBJECT(list_item), "deselect", 
+        GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
+  
     m_clientData.Append( (wxObject*)NULL );
     
     gtk_widget_show( list_item );
@@ -114,17 +129,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
 void wxListBox::Append( const wxString &item )
 {
-  GtkWidget *list_item;
-  list_item = gtk_list_item_new_with_label( item ); 
-  
- gtk_signal_connect( GTK_OBJECT(list_item), "select", 
-    GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
-  
-  gtk_container_add( GTK_CONTAINER(m_list), list_item );
-    
-  m_clientData.Append( (wxObject*)NULL );
-  
-  gtk_widget_show( list_item );
+  Append( item, (char*)NULL );
 };
 
 void wxListBox::Append( const wxString &item, char *clientData )
@@ -132,8 +137,12 @@ void wxListBox::Append( const wxString &item, char *clientData )
   GtkWidget *list_item;
   list_item = gtk_list_item_new_with_label( item ); 
   
- gtk_signal_connect( GTK_OBJECT(list_item), "select", 
+  gtk_signal_connect( GTK_OBJECT(list_item), "select", 
     GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
+  
+  if ( GetWindowStyleFlag() & wxLB_MULTIPLE )
+    gtk_signal_connect( GTK_OBJECT(list_item), "deselect", 
+      GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
   
   gtk_container_add( GTK_CONTAINER(m_list), list_item );
   
@@ -304,8 +313,15 @@ void wxListBox::SetSelection( int n, bool select )
     gtk_list_unselect_item( m_list, n );
 };
 
-void wxListBox::SetString( int WXUNUSED(n), const wxString &WXUNUSED(string) )
+void wxListBox::SetString( int n, const wxString &string )
 {
+  GList *child = g_list_nth( m_list->children, n );
+  if (child)
+  {
+    GtkBin *bin = GTK_BIN( child->data );
+    GtkLabel *label = GTK_LABEL( bin->child );
+    gtk_label_set( label, string );
+  };
 };
 
 void wxListBox::SetStringSelection( const wxString &string, bool select )

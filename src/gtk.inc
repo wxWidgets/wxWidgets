@@ -16,6 +16,7 @@ LIB_CPP_SRC=\
  common/docmdi.cpp \
  common/docview.cpp \
  common/dynarray.cpp \
+ common/dynlib.cpp \
  common/event.cpp \
  common/file.cpp \
  common/fileconf.cpp \
@@ -35,6 +36,7 @@ LIB_CPP_SRC=\
  common/odbc.cpp \
  common/postscrp.cpp \
  common/prntbase.cpp \
+ common/serbase.cpp \
  common/string.cpp \
  common/textfile.cpp \
  common/time.cpp \
@@ -112,7 +114,6 @@ LIB_CPP_SRC=\
  generic/textdlgg.cpp \
  generic/treectrl.cpp
 
-# common/dynlib.cpp  Disabled until I write support for DLL on all platforms
  
 LIB_C_SRC=\
  common/extended.c \
