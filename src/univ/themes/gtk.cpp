@@ -130,11 +130,13 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// wxGTKColourScheme
+// wxGTKColourScheme: uses the standard GTK colours
 // ----------------------------------------------------------------------------
 
 class wxGTKColourScheme : public wxColourScheme
 {
+public:
+    virtual wxColour Get(StdColour col);
 };
 
 // ----------------------------------------------------------------------------
@@ -179,7 +181,7 @@ WX_IMPLEMENT_THEME(wxGTKTheme, gtk, wxTRANSLATE("GTK+ theme"));
 wxGTKTheme::wxGTKTheme()
 {
     m_renderer = new wxGTKRenderer;
-    m_scheme = NULL;
+    m_scheme = new wxGTKColourScheme;
 }
 
 wxGTKTheme::~wxGTKTheme()
@@ -214,6 +216,30 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
     }
 
     return handler;
+}
+
+// ============================================================================
+// wxGTKColourScheme
+// ============================================================================
+
+wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col)
+{
+    switch ( col )
+    {
+        case DARK_SHADOW:   return wxColour(0x7f7f7f);
+        case FACE:          return wxColour(0xc0c0c0);
+        case HIGHLIGHT:     return wxColour(0xe0e0e0);
+        case LIGHT:         return wxColour(0xffffff);
+        case SHADOW:        return wxColour(0xc0c0c0);
+        case CONTROL_TEXT:  return wxColour(0x000000);
+        case HIGHLIGHT:     return wxColour(0x0000ff);
+        case HIGHLIGHT_TEXT:return wxColour(0x00ffff);
+
+        case MAX:
+        default:
+            wxFAIL_MSG(_T("invalid standard colour"));
+            return wxColour(0x000000);
+    }
 }
 
 // ============================================================================

@@ -24,7 +24,7 @@
 
 class WXDLLEXPORT wxRenderer;
 class WXDLLEXPORT wxInputHandler;
-class WXDLLEXPORT wxColourScheme { };
+class WXDLLEXPORT wxColourScheme;
 
 class WXDLLEXPORT wxTheme
 {
