@@ -361,7 +361,8 @@ void wxMenuItem::SetText(const wxString& text)
     UINT flagsOld = ::GetMenuState(hMenu, id, MF_BYCOMMAND);
     if ( flagsOld == 0xFFFFFFFF )
     {
-        wxLogLastError(wxT("GetMenuState"));
+        // It's not an error, it means that the menu item doesn't exist
+        //wxLogLastError(wxT("GetMenuState"));
     }
     else
     {
