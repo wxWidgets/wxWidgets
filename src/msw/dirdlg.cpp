@@ -52,6 +52,14 @@
     #define MAX_PATH 4096      // be generous
 #endif
 
+#ifndef BIF_NEWDIALOGSTYLE
+    #define BIF_NEWDIALOGSTYLE 0x0040
+#endif
+
+#ifndef BIF_NONEWFOLDERBUTTON
+    #define BIF_NONEWFOLDERBUTTON  0x0200
+#endif
+
 // ----------------------------------------------------------------------------
 // wxWindows macros
 // ----------------------------------------------------------------------------
@@ -115,10 +123,6 @@ void wxDirDialog::SetPath(const wxString& path)
     }
 }
 
-#ifndef BIF_NEWDIALOGSTYLE
-#define BIF_NEWDIALOGSTYLE 0x0040
-#endif
-
 int wxDirDialog::ShowModal()
 {
     wxWindow *parent = GetParent();
@@ -132,12 +136,42 @@ int wxDirDialog::ShowModal()
     bi.lpfn           = BrowseCallbackProc;
     bi.lParam         = (LPARAM)m_path.c_str();    // param for the callback
 
-    if ((GetStyle() & wxDD_NEW_DIR_BUTTON) &&
-        (wxApp::GetComCtl32Version() >= 500))
+    static const int verComCtl32 = wxApp::GetComCtl32Version();
+
+    // we always add the edit box (it doesn't hurt anybody, does it?) if it is
+    // supported by the system
+    if ( verComCtl32 >= 471 )
     {
-        bi.ulFlags |= BIF_NEWDIALOGSTYLE;
+        bi.ulFlags |= BIF_EDITBOX;
     }
 
+    // normally the commented out part should work -- but in practice
+    // BIF_NONEWFOLDERBUTTON doesn't have any effect (Win2k, comctl 5.81) so I
+    // have to disable it [for now]
+#if 0
+    // to have the "New Folder" button we must use the "new" dialog style which
+    // is also the only way to have a resizable dialog
+    //
+    // "new" style is only available in the version 5.0+ of comctl32.dll
+    const bool needNewDir = HasFlag(wxDD_NEW_DIR_BUTTON);
+    if ( (needNewDir || HasFlag(wxRESIZE_BORDER)) && (verComCtl32 >= 500) )
+    {
+        bi.ulFlags |= BIF_NEWDIALOGSTYLE;
+
+        // we'll get the "New Folder" button by default now, don't show it if
+        // not needed
+        if ( !needNewDir )
+            bi.ulFlags |= BIF_NONEWFOLDERBUTTON;
+    }
+#else
+    if ( HasFlag(wxDD_NEW_DIR_BUTTON) && verComCtl32 >= 500 )
+    {
+        // use the new style to make the "New Folder" button appear
+        bi.ulFlags |= BIF_NEWDIALOGSTYLE;
+    }
+#endif
+
+    // do show the dialog
     LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
 
     if ( bi.pidlRoot )
@@ -151,8 +185,7 @@ int wxDirDialog::ShowModal()
         return wxID_CANCEL;
     }
 
-    BOOL ok = SHGetPathFromIDList(pidl, m_path.GetWriteBuf(MAX_PATH));
-    m_path.UngetWriteBuf();
+    BOOL ok = SHGetPathFromIDList(pidl, wxStringBuffer(m_path, MAX_PATH));
 
     ItemListFree(pidl);
 
@@ -184,19 +217,30 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
             break;
 
         case BFFM_SELCHANGED:
+            // note that this doesn't work with the new style UI (MSDN doesn't
+            // say anything about it, but the comments in shlobj.h do!) but we
+            // still execute this code in case it starts working again with the
+            // "new new UI" (or would it be "NewUIEx" according to tradition?)
             {
                 // Set the status window to the currently selected path.
-                TCHAR szDir[MAX_PATH];
-                if ( SHGetPathFromIDList((LPITEMIDLIST)lp, szDir) )
+                wxString strDir;
+                if ( SHGetPathFromIDList((LPITEMIDLIST)lp,
+                                         wxStringBuffer(strDir, MAX_PATH)) )
                 {
-                    wxString strDir(szDir);
-                    int maxChars = 40; // Have to truncate string else it displays incorrectly
-                    if (strDir.Len() > (size_t) (maxChars - 3))
+                    // NB: this shouldn't be necessary with the new style box
+                    //     (which is resizable), but as for now it doesn't work
+                    //     anyhow (see the comment above) no harm in doing it
+
+                    // need to truncate or it displays incorrectly
+                    static const size_t maxChars = 37;
+                    if ( strDir.length() > maxChars )
                     {
-                        strDir = strDir.Right(maxChars - 3);
+                        strDir = strDir.Right(maxChars);
                         strDir = wxString(wxT("...")) + strDir;
                     }
-                    SendMessage(hwnd, BFFM_SETSTATUSTEXT, 0, (LPARAM) (const wxChar*) strDir);
+
+                    SendMessage(hwnd, BFFM_SETSTATUSTEXT,
+                                0, (LPARAM)strDir.c_str());
                 }
             }
             break;
