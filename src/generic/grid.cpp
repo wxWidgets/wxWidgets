@@ -3502,6 +3502,23 @@ void wxGridWindow::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 
 //////////////////////////////////////////////////////////////////////
 
+// Internal Helper function for computing row or column from some
+// (unscrolled) coordinate value, using either
+// m_defaultRowHeight/m_defaultColWidth or binary search on array 
+// of m_rowBottoms/m_ColRights to speed up the search!
+
+// Internal helper macros for simpler use of that function
+
+static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
+                           wxArrayInt BorderArray, bool maxOnOverflow);
+
+#define internalXToCol(x) CoordToRowOrCol(x, m_defaultColWidth, \
+                                          WXGRID_MIN_COL_WIDTH, \
+                                          m_colRights, TRUE)
+#define internalYToRow(y) CoordToRowOrCol(y, m_defaultRowHeight, \
+                                          WXGRID_MIN_ROW_HEIGHT, \
+                                          m_rowBottoms, TRUE)
+/////////////////////////////////////////////////////////////////////
 
 IMPLEMENT_DYNAMIC_CLASS( wxGrid, wxScrolledWindow )
 
@@ -4243,7 +4260,7 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg )
         // find the row labels within these bounds
         //
         int row;
-        for ( row = YToRow(top);  row < m_numRows;  row++ )
+        for ( row = internalYToRow(top);  row < m_numRows;  row++ )
         {
             if ( GetRowBottom(row) < top )
                 continue;
@@ -4294,7 +4311,7 @@ wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg )
         // find the cells within these bounds
         //
         int col;
-        for ( col = XToCol(left);  col < m_numCols;  col++ )
+        for ( col = internalXToCol(left);  col < m_numCols;  col++ )
         {
             if ( GetColRight(col) < left )
                 continue;
@@ -4345,7 +4362,7 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg )
         // find the cells within these bounds
         //
         int row, col;
-        for ( row = YToRow(top);  row < m_numRows;  row++ )
+        for ( row = internalYToRow(top);  row < m_numRows;  row++ )
         {
             if ( GetRowBottom(row) <= top )
                 continue;
@@ -4353,7 +4370,7 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg )
             if ( GetRowTop(row) > bottom )
                 break;
 
-            for ( col = XToCol(left);  col < m_numCols;  col++ )
+            for ( col = internalXToCol(left);  col < m_numCols;  col++ )
             {
                 if ( GetColRight(col) <= left )
                     continue;
@@ -6293,7 +6310,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     // horizontal grid lines
     //
     int i;
-    for ( i = YToRow(top); i < m_numRows; i++ )
+    for ( i = internalYToRow(top); i < m_numRows; i++ )
     {
         int bot = GetRowBottom(i) - 1;
 
@@ -6311,7 +6328,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
 
     // vertical grid lines
     //
-    for ( i = XToCol(left); i < m_numCols; i++ )
+    for ( i = internalXToCol(left); i < m_numCols; i++ )
     {
         int colRight = GetColRight(i) - 1;
         if ( colRight > right )
@@ -6839,12 +6856,12 @@ void wxGrid::XYToCell( int x, int y, wxGridCellCoords& coords )
 // of m_rowBottoms/m_ColRights to speed up the search!
 
 static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
-                           wxArrayInt BorderArray)
+                           wxArrayInt BorderArray, bool maxOnOverflow)
 {
     if (!defaultDist)
         defaultDist = 1;
-    unsigned int i_max = coord / defaultDist,
-                 i_min = 0;
+    int i_max = coord / defaultDist,
+        i_min = 0;
     if (BorderArray.IsEmpty())
     {
         return i_max;
@@ -6862,15 +6879,15 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
         if ( i_max >= BorderArray.GetCount())
             i_max = BorderArray.GetCount() - 1;
     }
-    if ( coord > BorderArray[i_max])
-        return -1;
+    if ( coord >= BorderArray[i_max])
+        return (maxOnOverflow ? i_max : -1);
     if ( coord < BorderArray[0] )
         return 0;
 
     while ( i_max - i_min > 0 )
     {
         wxCHECK_MSG(BorderArray[i_min] <= coord && coord < BorderArray[i_max],
-                    -1, _T("wxGrid: internal error in CoordToRowOrCol"));
+                    0, _T("wxGrid: internal error in CoordToRowOrCol"));
         if (coord >=  BorderArray[ i_max - 1])
             return i_max;
         else
@@ -6887,14 +6904,14 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
 int wxGrid::YToRow( int y )
 {
     return CoordToRowOrCol(y, m_defaultRowHeight,
-                           WXGRID_MIN_ROW_HEIGHT, m_rowBottoms);
+                           WXGRID_MIN_ROW_HEIGHT, m_rowBottoms, FALSE);
 }
 
 
 int wxGrid::XToCol( int x )
 {
     return CoordToRowOrCol(x, m_defaultColWidth,
-                           WXGRID_MIN_COL_WIDTH, m_colRights);
+                           WXGRID_MIN_COL_WIDTH, m_colRights, FALSE);
 }
 
 
@@ -6903,18 +6920,17 @@ int wxGrid::XToCol( int x )
 //
 int wxGrid::YToEdgeOfRow( int y )
 {
-    int i, d;
-    i = YToRow(y);
-    if ( i > 0 )
-        i--;
-    for ( ;  i < m_numRows;  i++ )
+    int i;
+    i = internalYToRow(y);
+
+    if ( GetRowHeight(i) > WXGRID_LABEL_EDGE_ZONE )
     {
-        if ( GetRowHeight(i) > WXGRID_LABEL_EDGE_ZONE )
-        {
-            d = abs( y - GetRowBottom(i) );
-            if ( d < WXGRID_LABEL_EDGE_ZONE )
-                return i;
-        }
+        // We know that we are in row i, test whether we are
+        // close enough to lower or upper border, respectively.
+        if ( abs(GetRowBottom(i) - y) < WXGRID_LABEL_EDGE_ZONE )
+            return i;
+        else if( i > 0 && y - GetRowTop(i) < WXGRID_LABEL_EDGE_ZONE )
+            return i - 1;
     }
 
     return -1;
@@ -6926,18 +6942,17 @@ int wxGrid::YToEdgeOfRow( int y )
 //
 int wxGrid::XToEdgeOfCol( int x )
 {
-    int i, d;
-    i = XToCol(x);
-    if ( i > 0 )
-        i--;
-    for ( ;  i < m_numCols;  i++ )
+    int i;
+    i = internalXToCol(x);
+
+    if ( GetColWidth(i) > WXGRID_LABEL_EDGE_ZONE )
     {
-        if ( GetColWidth(i) > WXGRID_LABEL_EDGE_ZONE )
-        {
-            d = abs( x - GetColRight(i) );
-            if ( d < WXGRID_LABEL_EDGE_ZONE )
-                return i;
-        }
+        // We know that we are in column i,  test whether we are
+        // close enough to right or left border, respectively.
+        if ( abs(GetColRight(i) - x) < WXGRID_LABEL_EDGE_ZONE )
+            return i;
+        else if( i > 0 && x - GetColLeft(i) < WXGRID_LABEL_EDGE_ZONE )
+            return i - 1;
     }
 
     return -1;
