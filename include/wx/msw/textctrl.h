@@ -261,6 +261,12 @@ private:
     wxMenu* m_privateContextMenu;
 
     bool m_isNativeCaretShown;
+
+    // this is an optimization: instead of checking all the time whether we
+    // need to move the caret to the end of text (before appending to the
+    // control), we remember whether it is already at the end of text in this
+    // variable
+    bool m_isCaretAtEnd;
 };
 
 #endif
