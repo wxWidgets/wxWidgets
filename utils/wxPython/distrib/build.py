@@ -65,7 +65,7 @@ Configuration Files
     separate namespace which is then used later as a configuration object.
     This keeps the build script simple in that it doesn't have to parse
     anything, and the config files can be much more than just names and
-    values as any pretty much any python code can be executed.  The global
+    values as pretty much any python code can be executed.  The global
     variables set in the config namespace are what are used later as
     configuation values.
 
@@ -164,6 +164,7 @@ def main(args):
                          runUninstall = runUninstall)
 
     if config.readConfigFiles(args):
+        config.doFixups()
         config.makeMakefile()
         err = 0
 
@@ -206,18 +207,6 @@ def swapslash(st):
 
 def splitlines(st):
     return string.join(string.split(string.strip(st), ' '), ' \\\n\t')
-
-#----------------------------------------------------------------------------
-
-def strippath(st):
-    # remove any leading paths, retrieve only file name. Used while
-    # parsing the SOURCES file list, so that object files are local, 
-    # while source may be anywere)
-    if sys.platform == 'win32':
-	sep = '\\'
-    else:
-	sep = '/'
-    return string.split(st,sep)[-1]
 
 #----------------------------------------------------------------------------
 
@@ -285,7 +274,7 @@ class BuildConfig:
             self.LFLAGS = '-L$(WXPSRCDIR) `wx-config --libs`'
             self.LIBS   = '-l$(HELPERLIB)'
 
-            # **** what to do when I start supporting Motif, etc.???
+            # **** What to do when I start supporting Motif, etc.???
             self.GENCODEDIR = 'gtk'
             self.SWIGTOOLKITFLAG = '-D__WXGTK__'
 
@@ -299,13 +288,7 @@ class BuildConfig:
                 raise SystemExit, "Python development files not found"
 
             self.CCC = self.findMFValue(mfText, 'CCC')
-	    if not self.CCC:
-		print "Warning: C++ compiler not specified (CCC). Assuming c++"
-		self.CCC = 'c++'
             self.CC = self.findMFValue(mfText, 'CC')
-	    if not self.CC:
-		print "Warning: C compiler not specified (CCC). Assuming cc"
-		self.CC = 'cc'
             self.OPT = self.findMFValue(mfText, 'OPT')
             self.SO = self.findMFValue(mfText, 'SO')
             self.LDSHARED = self.findMFValue(mfText, 'LDSHARED')
@@ -323,6 +306,18 @@ class BuildConfig:
                                         string.split(self.LDSHARED, ' ')[1:],
                                         ' ')
 
+
+    #------------------------------------------------------------
+    def doFixups(self):
+        # This is called after the config files have been evaluated
+        # so we can do some sanity checking...
+        if sys.platform != 'win32':
+	    if not self.CCC:
+		print "Warning: C++ compiler not specified (CCC). Assuming c++"
+		self.CCC = 'c++'
+	    if not self.CC:
+		print "Warning: C compiler not specified (CC). Assuming cc"
+		self.CC = 'cc'
 
     #------------------------------------------------------------
     def findMFValue(self, mfText, st):
@@ -343,7 +338,7 @@ class BuildConfig:
         for name in self.SWIGFILES:
             objects = objects + os.path.splitext(name)[0] + self.OBJEXT + ' '
         for name in self.SOURCES:
-	    obj = strippath(name)
+	    obj = os.path.basename(name)
             objects = objects + os.path.splitext(obj)[0] + self.OBJEXT + ' '
         self.OBJECTS = splitlines(objects)
 
