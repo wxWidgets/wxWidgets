@@ -187,8 +187,10 @@ void csFrame::OnIdle(wxIdleEvent& event)
         // window doesn't cause the proper refresh. Just refreshing the
         // client doesn't work (presumably because it's clipping the
         // children).
-        // TODO: how to put this fix in wxWindows, and not the app.
-        // How about at least having a wxWindow::RedrawWindow?
+        // FIXED in wxWindows, by intercepting wxMDIClientWindow::DoSetSize
+        // and checking if the position has changed, before redrawing the
+        // child windows.
+#if 0
         wxMDIChildFrame* childFrame = GetActiveChild();
         if (childFrame)
         {
@@ -196,6 +198,7 @@ void csFrame::OnIdle(wxIdleEvent& event)
             ::RedrawWindow(hWnd, NULL, NULL, RDW_FRAME|RDW_ALLCHILDREN|RDW_INVALIDATE );
 
         }
+#endif
 #endif
     }
 }

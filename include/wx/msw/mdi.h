@@ -197,6 +197,9 @@ public:
     // Explicitly call default scroll behaviour
     void OnScroll(wxScrollEvent& event);
 
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
 protected:
     void Init() { m_scrollX = m_scrollY = 0; }
 

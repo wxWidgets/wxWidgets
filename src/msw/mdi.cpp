@@ -1155,6 +1155,38 @@ void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
     event.Skip();
 }
 
+void wxMDIClientWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    // Try to fix a problem whereby if you show an MDI child frame, then reposition the
+    // client area, you can end up with a non-refreshed portion in the client window
+    // (see OGL studio sample). So check if the position is changed and if so,
+    // redraw the MDI child frames.
+
+    wxPoint oldPos = GetPosition();
+
+    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
+
+    wxPoint newPos = GetPosition();
+
+    if ((newPos.x != oldPos.x) || (newPos.y != oldPos.y))
+    {
+        if (GetParent())
+        {
+            wxNode* node = GetParent()->GetChildren().First();
+            while (node)
+            {
+                wxWindow* child = (wxWindow*) node->Data();
+                if (child->IsKindOf(CLASSINFO(wxMDIChildFrame)))
+                {
+                    HWND hWnd = (HWND) child->GetHWND();
+                   ::RedrawWindow(hWnd, NULL, NULL, RDW_FRAME|RDW_ALLCHILDREN|RDW_INVALIDATE );
+                }
+                node = node->Next();
+            }
+        }
+    }
+}
+
 // ---------------------------------------------------------------------------
 // non member functions
 // ---------------------------------------------------------------------------
