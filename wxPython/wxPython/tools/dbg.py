@@ -61,6 +61,8 @@ useful debugging output in a program.  Consider the following
 code example:
 
 >>> d = {1:'a', 2:'dictionary', 3:'of', 4:'words'}
+>>> logger = dbg.Logger()
+>>> dbg = logger.dbg
 >>> dbg(enable=1)
 >>> def foo(d):
         dbg('foo', indent=1)
@@ -91,75 +93,105 @@ foo
 
 """
 
-_indent = 0     # current number of indentations
-_dbg = 0        # enable/disable flag
-_suspend = 0    # allows code to "suspend/resume" potential dbg output
-_wxLog = 0      # use wxLogMessage for debug output
+
+class Logger:
+    def __init__(self, name=None):
+        import sys
+        self.name = name
+        self._indent = 0     # current number of indentations
+        self._dbg = 0        # enable/disable flag
+        self._suspend = 0    # allows code to "suspend/resume" potential dbg output
+        self._wxLog = 0      # use wxLogMessage for debug output
+        self._outstream = sys.stdout  # default output stream
+        self._outstream_stack = []    # for restoration of streams as necessary
 
 
-import sys
-_outstream = sys.stdout  # default output stream
-_outstream_stack = []    # for restoration of streams as necessary
-del sys
+    def IsEnabled():
+        return self._dbg
+
+    def IsSuspended():
+        return _suspend
 
 
-def dbgEnabled():
-    return _dbg
+    def log(self, *args, **kwargs):
+        """
+        This function provides a useful framework for generating
+        optional debugging output that can be displayed at an
+        arbitrary level of indentation.
+        """
+        if not self._dbg and not 'enable' in kwargs.keys():
+            return
 
-def dbgSuspended():
-    return _suspend
+        if self._dbg and len(args) and not self._suspend:
+            # (emulate print functionality)
+            strs = [str(arg) for arg in args]
+            output = ' '.join(strs)
+            if self.name: output = self.name+': ' + output
+            output = ' ' * 3 * self._indent + output
 
-def dbg(*args, **kwargs):
-    """
-    This function provides a useful framework for generating
-    optional debugging output that can be displayed at an
-    arbitrary level of indentation.
-    """
-    global _indent, _dbg, _suspend, _wxLog, _outstream, _outstream_stack
-    if not _dbg and not 'enable' in kwargs.keys():
-        return
+            if self._wxLog:
+                from wxPython.wx import wxLogMessage    # (if not already imported)
+                wxLogMessage(output)
+            else:
+                self._outstream.write(output + '\n')
+                self._outstream.flush()
+        # else do nothing
 
-    if _dbg and len(args) and not _suspend:
-        # (emulate print functionality)
-        strs = [str(arg) for arg in args]
-        output = ' ' * 3 * _indent + ' '.join(strs)
+        # post process args:
+        for kwarg, value in kwargs.items():
+            if kwarg == 'indent':
+                self.SetIndent(value)
+            elif kwarg == 'enable':
+                self.SetEnabled(value)
+            elif kwarg == 'suspend':
+                self.SetSuspend(value)
+            elif kwarg == 'wxlog':
+                self.SetWxLog(value)
+            elif kwarg == 'stream':
+                self.SetStream(value)
 
-        if _wxLog:
-            from wxPython.wx import wxLogMessage    # (if not already imported)
-            wxLogMessage(output)
-        else:
-            _outstream.write(output + '\n')
-            _outstream.flush()
-    # else do nothing
+    # aliases for the log function
+    dbg = log       # backwards compatible
+    msg = log       #
+    __call__ = log  # this one lets you 'call' the instance directly
 
-    # post process args:
-    for kwarg, value in kwargs.items():
-        if kwarg == 'indent' and value:
-            _indent = _indent + 1
-        elif kwarg == 'indent' and not value and _indent > 0:
-            _indent = _indent - 1
 
-        if kwarg == 'enable' and value:
-            old_dbg = _dbg
-            _dbg = 1
+    def SetEnabled(self, value):
+        if value:
+            old_dbg = self._dbg
+            self._dbg = 1
             if not old_dbg:
-                dbg('dbg enabled')
-        elif kwarg == 'enable' and not value:
-            if _dbg:
-                dbg('dbg disabled')
-                _dbg = 0
+                self.dbg('dbg enabled')
+        else:
+            if self._dbg:
+                self.dbg('dbg disabled')
+                self._dbg = 0
 
-        if kwarg == 'suspend':
-            _suspend = value
 
-        if kwarg == 'wxlog':
-            _wxLog = value
+    def SetSuspend(self, value):
+        if value:
+            self._suspend += 1
+        elif self._suspend > 0:
+            self._suspend -= 1
 
-        if kwarg == 'stream' and value:
-            _outstream_stack.append( _outstream )
-            _outstream = value
-        elif kwarg == 'stream' and value is None and len(_outstream_stack) > 0:
-            _outstream = _outstream_stack.pop(-1)
+
+    def SetIndent(self, value):
+        if value:
+            self._indent += 1
+        elif self._indent > 0:
+            self._indent -= 1
+
+
+    def SetWxLog(self, value):
+        self._wxLog = value
+
+
+    def SetStream(self, value):
+        if value:
+            self._outstream_stack.append( self._outstream )
+            self._outstream = value
+        elif value is None and len(self._outstream_stack) > 0:
+            self._outstream = self._outstream_stack.pop(-1)
 
 
 #------------------------------------------------------------
@@ -167,7 +199,10 @@ def dbg(*args, **kwargs):
 if __name__ == "__main__":
     from wxPython.wx import *
     wxLog_SetActiveTarget( wxLogStderr() )
+    logger = Logger('module')
+    dbg = logger.dbg
     dbg(enable=1)
+    logger('test __call__ interface')
     dbg('testing wxLog output to stderr:', wxlog=1, indent=1)
     dbg('1,2,3...')
     dbg('testing wxLogNull:')
@@ -177,9 +212,25 @@ if __name__ == "__main__":
     dbg('(resuming to wxLogStdErr)', '7,8,9...', indent=0)
     dbg('disabling wxLog output, switching to stderr:')
     dbg(wxlog=0, stream=sys.stderr)
-    dbg(_outstream, 'switching back to stdout:')
+    dbg(logger._outstream, 'switching back to stdout:')
     dbg(stream=None)
-    dbg(_outstream )
+    dbg(logger._outstream )
+    def foo(str):
+        dbg('foo:', indent=1)
+        dbg(str, indent=0)
+    foo('testing dbg inside function')
+    class bar(Logger):
+        def __init__(self, name):
+            Logger.__init__(self, name)
+        def enable(self, value):
+            self.dbg(enable=value)
+        def foo(self, str):
+            self.dbg('foo:', indent=1)
+            self.dbg(str, indent=0)
+    f = bar('class mixin')
+    f.foo("shouldn't print")
+    f.enable(1)
+    f.foo("should print")
     dbg('test completed.', enable=0)
     dbg('(double-checking ;-)')
 
