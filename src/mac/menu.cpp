@@ -234,7 +234,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 			else
 			{
 				UMAInsertMenuItem(MAC_WXHMENU(m_hMenu), label , pos,key,modifiers);
-				SetMenuItemCommandID( MAC_WXHMENU(m_hMenu) , pos , pItem->GetId() ) ;
+				SetMenuItemCommandID( MAC_WXHMENU(m_hMenu) , pos+1 , pItem->GetId() ) ;
 				if ( pItem->GetBitmap().Ok() )
 				{
 					ControlButtonContentInfo info ;
