@@ -50,6 +50,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#include "wx/msw/printdlg.h"
+#elif defined(__WXMAC__)
+#include "wx/mac/printdlg.h"
+#else
+#include "wx/generic/prntdlgg.h"
+#endif
+
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
     #include <commdlg.h>
@@ -58,8 +66,6 @@
         #include <print.h>
     #endif
 #endif // __WXMSW__
-
-IMPLEMENT_CLASS(wxPrintPreviewBase, wxObject)
 
 //----------------------------------------------------------------------------
 // wxPrintFactory
@@ -152,6 +158,18 @@ wxPrintDialogBase *wxNativePrintFactory::CreatePrintDialog( wxWindow *parent,
 #endif
 }
 
+wxPageSetupDialogBase *wxNativePrintFactory::CreatePageSetupDialog( wxWindow *parent, 
+                                                  wxPageSetupDialogData *data )
+{
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    return new wxWindowsPageSetupDialog( parent, data );
+#elif defined(__WXMAC__)
+    return new wxMacPageSetupDialog( parent, data );
+#else
+    return new wxGenericPageSetupDialog( parent, data );
+#endif
+}
+
 bool wxNativePrintFactory::HasPrintSetupDialog()
 {
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
@@ -168,7 +186,8 @@ bool wxNativePrintFactory::HasPrintSetupDialog()
     
 }
 
-wxDialog *wxNativePrintFactory::CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data )
+wxDialog *wxNativePrintFactory::CreatePrintSetupDialog( wxWindow *parent, 
+                                                        wxPrintData *data )
 {
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     wxUnusedVar(parent);
@@ -361,10 +380,10 @@ wxPrintDialogData& wxPrinter::GetPrintDialogData() const
 }
 
 // ---------------------------------------------------------------------------
-// wxPrintDialogBase: the common dialog for printing.
+// wxPrintDialogBase: the dialog for printing.
 // ---------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxPrintDialogBase, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxPrintDialogBase, wxDialog)
 
 wxPrintDialogBase::wxPrintDialogBase(wxWindow *parent,
                                      wxWindowID id, 
@@ -372,20 +391,13 @@ wxPrintDialogBase::wxPrintDialogBase(wxWindow *parent,
                                      const wxPoint &pos,
                                      const wxSize &size,
                                      long style)
-                 : wxDialog
-                   (
-                        parent,
-                        id,
-                        title.empty() ? wxString(_("Print")) : title,
-                        pos,
-                        size,
-                        style
-                   )
+    : wxDialog( parent, id, title.empty() ? wxString(_("Print")) : title,
+                pos, size, style )
 {
 }
 
 // ---------------------------------------------------------------------------
-// wxPrintDialog: the common dialog for printing.
+// wxPrintDialog: the dialog for printing
 // ---------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(wxPrintDialog, wxObject)
@@ -419,9 +431,59 @@ wxPrintData& wxPrintDialog::GetPrintData()
 {
     return m_pimpl->GetPrintData();
 }
+
 wxDC *wxPrintDialog::GetPrintDC()
 {
     return m_pimpl->GetPrintDC();
+}
+
+// ---------------------------------------------------------------------------
+// wxPageSetupDialogBase: the page setup dialog
+// ---------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxPageSetupDialogBase, wxDialog)
+
+wxPageSetupDialogBase::wxPageSetupDialogBase(wxWindow *parent,
+                                     wxWindowID id, 
+                                     const wxString &title,
+                                     const wxPoint &pos,
+                                     const wxSize &size,
+                                     long style)
+    : wxDialog( parent, id, title.empty() ? wxString(_("Page setup")) : title,
+                pos, size, style )
+{
+}
+
+// ---------------------------------------------------------------------------
+// wxPageSetupDialog: the page setup dialog
+// ---------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxPageSetupDialog, wxObject)
+
+wxPageSetupDialog::wxPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data )
+{
+    m_pimpl = wxPrintFactory::GetFactory()->CreatePageSetupDialog( parent, data );
+}
+
+wxPageSetupDialog::~wxPageSetupDialog()
+{
+    delete m_pimpl;
+}
+
+int wxPageSetupDialog::ShowModal()
+{
+    return m_pimpl->ShowModal();
+}
+
+wxPageSetupDialogData& wxPageSetupDialog::GetPageSetupDialogData()
+{
+    return m_pimpl->GetPageSetupDialogData();
+}
+
+// old name
+wxPageSetupDialogData& wxPageSetupDialog::GetPageSetupData()
+{
+    return m_pimpl->GetPageSetupDialogData();
 }
 
 //----------------------------------------------------------------------------
@@ -951,6 +1013,8 @@ void wxPreviewFrame::CreateControlBar()
 /*
 * Print preview
 */
+
+IMPLEMENT_CLASS(wxPrintPreviewBase, wxObject)
 
 wxPrintPreviewBase::wxPrintPreviewBase(wxPrintout *printout,
                                        wxPrintout *printoutForPrinting,
