@@ -976,9 +976,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 _T("(even under broken Win9x)\n")
                                 _T("and a very very very very very ")
                                 _T("very very very long line to test ")
-                                _T("wxHSCROLL style"),
+                                _T("wxHSCROLL style\n")
+                                _T("\nAnd here is a link in quotation marks to ")
+                                _T("test wxTE_AUTO_URL: \"http://www.wxwidgets.org\""),
                                 wxPoint(450, 10), wxSize(230, 230),
-                                wxTE_RICH | wxTE_MULTILINE);
+                                wxTE_RICH | wxTE_MULTILINE | wxTE_AUTO_URL);
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);
     m_textrich->SetStyle(30, 40,
