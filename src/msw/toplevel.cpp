@@ -447,10 +447,6 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
 
     bool result = MSWCreate(wxCanvasClassName, title, pos, sz, flags, exflags);
 
-#ifdef __SMARTPHONE__
-    // Work around title non-display glitch
-    Show(false);
-#endif
     return result;
 }
 
@@ -551,10 +547,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     // Note: if we include PocketPC in this test, dialogs can fail to show up,
     // for example the text entry dialog in the dialogs sample. Problem with Maximise()?
 #if defined(__WXWINCE__) && (defined(__SMARTPHONE__) || defined(__WINCE_STANDARDSDK__))
-    // Smartphone dialogs should always be maximized.
-#if !defined(__SMARTPHONE__)
     if ( style & wxMAXIMIZE )
-#endif
     {
         this->Maximize();
     }
