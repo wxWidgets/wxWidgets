@@ -944,7 +944,7 @@ bool wxTopLevelWindowGTK::IsMaximized() const
 
 void wxTopLevelWindowGTK::Restore()
 {
-#ifdef __GTK20__
+#ifdef __WXGTK20__
     // "Present" seems similar enough to "restore"
     gtk_window_present( GTK_WINDOW( m_widget ) );
 #else
