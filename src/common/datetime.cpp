@@ -3469,8 +3469,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                 mon = (wxDateTime::Month)(day - 1);
 
                 // we're in the current year then
-                if ( (year > 0) &&
-                        (unsigned)year <= GetNumOfDaysInMonth(Inv_Year, mon) )
+                if ( (year > 0) && (year <= (int)GetNumOfDaysInMonth(Inv_Year, mon)) )
                 {
                     day = year;
 

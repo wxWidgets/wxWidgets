@@ -985,8 +985,8 @@ void wxGridSizer::RecalcSizes()
 
 wxSize wxGridSizer::CalcMin()
 {
-    int nitems, nrows, ncols;
-    if ( (nitems = CalcRowsCols(nrows, ncols)) == 0 )
+    int nrows, ncols;
+    if ( CalcRowsCols(nrows, ncols) == 0 )
         return wxSize(10, 10);
 
     // Find the max width and height for any component

@@ -9,7 +9,7 @@ wxWindows 2.5.0
 *** may change in backwards incompatible way. If this doesn't frighten
 *** you, do try this release and please let us know what you think!
 
-Welcome to wxWindows 2, a sophisticated cross-platform C++
+Welcome to wxWindows, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using (where
 possible) the native controls.
 
@@ -211,5 +211,5 @@ web site.
 
 Have fun!
 
-The wxWindows Team, November 2002
+The wxWindows Team, August 2003
 

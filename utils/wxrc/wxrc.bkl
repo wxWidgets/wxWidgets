@@ -6,8 +6,10 @@
 
     <exe id="wxrc" template="wx_util_console" template_append="wx_append">
         <sources>wxrc.cpp</sources>
+        <wx-lib>xrc</wx-lib>
         <wx-lib>xml</wx-lib>
         <wx-lib>base</wx-lib>
+        <wx-lib>expat</wx-lib>
         <install-to>$(BINDIR)</install-to>
     </exe>
 

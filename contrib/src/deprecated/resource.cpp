@@ -3123,7 +3123,7 @@ bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxR
     return TRUE;
 }
 
-bool wxResourceParseString(const wxString& s, wxResourceTable *table)
+bool wxResourceParseString(const wxString& s, wxResourceTable *WXUNUSED(table))
 {
 #if wxUSE_UNICODE
     return wxResourceParseString( (char*)s.mb_str().data() );

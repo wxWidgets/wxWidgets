@@ -121,16 +121,16 @@ void cbBarHintsPlugin::CreateBoxes()
 }
 
 
-void cbBarHintsPlugin::Draw3DBox( wxDC& dc, const wxPoint& pos, bool pressed )
+void cbBarHintsPlugin::Draw3DBox( wxDC& WXUNUSED(dc), const wxPoint& WXUNUSED(pos), bool WXUNUSED(pressed) )
 {
 }
 
-void cbBarHintsPlugin::DrawCloseBox( wxDC& dc, const wxPoint& pos, bool pressed )
+void cbBarHintsPlugin::DrawCloseBox( wxDC& WXUNUSED(dc), const wxPoint& WXUNUSED(pos), bool WXUNUSED(pressed) )
 {
 }
 
-void cbBarHintsPlugin::DrawCollapseBox( wxDC& dc, const wxPoint& pos, 
-                                        bool atLeft, bool disabled, bool pressed )
+void cbBarHintsPlugin::DrawCollapseBox( wxDC& WXUNUSED(dc), const wxPoint& WXUNUSED(pos), 
+                                        bool WXUNUSED(atLeft), bool WXUNUSED(disabled), bool WXUNUSED(pressed) )
 {
 }
 
@@ -200,7 +200,7 @@ void cbBarHintsPlugin::ExcludeHints( wxRect& rect, cbBarInfo& info )
 }
 
 void cbBarHintsPlugin::DoDrawHint( wxDC& dc, wxRect& rect, 
-                                   int pos, int boxOfs, int grooveOfs,
+                                   int pos, int WXUNUSED(boxOfs), int grooveOfs,
                                    bool isFixed )
 {
     if ( !isFixed )
@@ -500,7 +500,7 @@ void cbBarHintsPlugin::OnLeftUp( cbLeftUpEvent&   event )
 
         GetHintsLayout( mpClickedBar->mBoundsInParent, *mpClickedBar, boxOfs, grooveOfs, pos );
 
-        int result = HitTestHints( *mpClickedBar, event.mPos );
+        HitTestHints( *mpClickedBar, event.mPos );
 
         int i;
         for ( i = 0; i != BOXES_IN_HINT; ++i )

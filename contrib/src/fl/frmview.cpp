@@ -153,7 +153,7 @@ void wxFrameViewSerializer::Serialize( wxObject* pObj, wxObjectStorage& store )
 
 /***** Implementation for class wxFrameManager *****/
 
-void wxFrameManager::DoSerialize( wxObjectStorage& store )
+void wxFrameManager::DoSerialize( wxObjectStorage& WXUNUSED(store) )
 {
 #if 0
     store.AddInitialRef( mpFrameWnd );
@@ -293,7 +293,7 @@ void wxFrameManager::Init( wxWindow* pMainFrame, const wxString& settingsFile )
         }
     }
 
-    if ( mActiveViewNo >= mViews.GetCount() )
+    if ( mActiveViewNo >= (int)mViews.GetCount() )
         mActiveViewNo = -1;
 
     ActivateView( GetView( ( mActiveViewNo == -1 ) ? 0 : mActiveViewNo ) );
@@ -308,7 +308,7 @@ void wxFrameManager::AddView( wxFrameView* pFrmView )
     pFrmView->mpFrameMgr = this; // back ref.
 }
 
-void wxFrameManager::RemoveView( wxFrameView* pFrmView )
+void wxFrameManager::RemoveView( wxFrameView* WXUNUSED(pFrmView) )
 {
     // TBD::
     wxFAIL_MSG( _T("wxFrameManager::RemoveView() has not been implemented yet.") );

@@ -74,15 +74,14 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, wxWindowID& id)
     HWND hWndNext;
     hWndNext = ::GetWindow((HWND) m_hWnd, GW_CHILD);
 
-    wxWindow* child = NULL;
     if (hWndNext)
-        child = CreateWindowFromHWND(this, (WXHWND) hWndNext);
+        CreateWindowFromHWND(this, (WXHWND) hWndNext);
 
     while (hWndNext != (HWND) NULL)
     {
         hWndNext = ::GetWindow(hWndNext, GW_HWNDNEXT);
         if (hWndNext)
-            child = CreateWindowFromHWND(this, (WXHWND) hWndNext);
+            CreateWindowFromHWND(this, (WXHWND) hWndNext);
     }
 
     return TRUE;
@@ -112,15 +111,14 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, const wxString& name)
     HWND hWndNext;
     hWndNext = ::GetWindow((HWND) m_hWnd, GW_CHILD);
 
-    wxWindow* child = NULL;
     if (hWndNext)
-        child = CreateWindowFromHWND(this, (WXHWND) hWndNext);
+        CreateWindowFromHWND(this, (WXHWND) hWndNext);
 
     while (hWndNext != (HWND) NULL)
     {
         hWndNext = ::GetWindow(hWndNext, GW_HWNDNEXT);
         if (hWndNext)
-            child = CreateWindowFromHWND(this, (WXHWND) hWndNext);
+            CreateWindowFromHWND(this, (WXHWND) hWndNext);
     }
 
     return TRUE;

@@ -1409,7 +1409,7 @@ void cbRowDragPlugin::DrawRowDragHint( cbRowInfo* pRow , wxDC& dc, bool isHighli
     }
 }
 
-void cbRowDragPlugin::DrawRowsDragHintsBorder( wxDC& dc )
+void cbRowDragPlugin::DrawRowsDragHintsBorder( wxDC& WXUNUSED(dc) )
 {
     // FIXME:: what was that?
 }

@@ -1276,7 +1276,7 @@ void cbPaneDrawPlugin::OnStartDrawInArea( cbStartDrawInAreaEvent& event )
                                  event.mArea.width, event.mArea.height );
 }
 
-void cbPaneDrawPlugin::OnFinishDrawInArea( cbFinishDrawInAreaEvent& event )
+void cbPaneDrawPlugin::OnFinishDrawInArea( cbFinishDrawInAreaEvent& WXUNUSED(event) )
 {
     // DBG::
     wxASSERT( mpClntDc );

@@ -120,8 +120,12 @@ void cbRowLayoutPlugin::ExpandNotFixedBars( cbRowInfo* pRow )
 {
     ApplyLengthRatios( pRow );
 
+    #if 1
+
    // FIXME:: something's wrong?
    return;
+
+    #else
 
     double freeSpc = (double)GetRowFreeSpace( pRow );
 
@@ -156,14 +160,18 @@ void cbRowLayoutPlugin::ExpandNotFixedBars( cbRowInfo* pRow )
         bar.mBounds.x = curX;
         curX = bar.mBounds.x + bar.mBounds.width;
     }
+    #endif
 }
 
-void cbRowLayoutPlugin::AdjustLengthOfInserted( cbRowInfo* pRow, cbBarInfo* pTheBar )
+void cbRowLayoutPlugin::AdjustLengthOfInserted( cbRowInfo* WXUNUSED(pRow), cbBarInfo* WXUNUSED(pTheBar) )
 {
-    return;  // TBD: Makes following code unreachable
+    return;
+
+#if 0
+
+    // TBD: Makes following code unreachable
 
     // pTheBar is not-fixed
-
 
     // FIXME:: what is this for??
 
@@ -203,6 +211,9 @@ void cbRowLayoutPlugin::AdjustLengthOfInserted( cbRowInfo* pRow, cbBarInfo* pThe
 
         pTheBar->mBounds.width = freeSpc * (1.0 - pcntSum);
 #endif
+
+#endif
+
 }
 
 void cbRowLayoutPlugin::FitBarsToRange( int from, int till,
@@ -667,7 +678,7 @@ void cbRowLayoutPlugin::SlideRightSideBars( cbBarInfo* pTheBar )
     }
 }
 
-void cbRowLayoutPlugin::ShiftLeftTrashold( cbBarInfo* pTheBar, cbRowInfo& row )
+void cbRowLayoutPlugin::ShiftLeftTrashold( cbBarInfo* WXUNUSED(pTheBar), cbRowInfo& row )
 {
     wxRect& first = row.mBars[0]->mBounds;
 

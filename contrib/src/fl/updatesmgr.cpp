@@ -102,23 +102,23 @@ void cbSimpleUpdatesMgr::OnFinishChanges()
     // nothing here, could be overriden by more sophisticated updates-managers
 }
 
-void cbSimpleUpdatesMgr::OnRowWillChange( cbRowInfo* pRow, cbDockPane* pInPane )
+void cbSimpleUpdatesMgr::OnRowWillChange( cbRowInfo* WXUNUSED(pRow), cbDockPane* WXUNUSED(pInPane) )
 {
     // -/-
 }
 
-void cbSimpleUpdatesMgr::OnBarWillChange( cbBarInfo* pBar, 
-                                          cbRowInfo* pInRow, cbDockPane* pInPane )
+void cbSimpleUpdatesMgr::OnBarWillChange( cbBarInfo* WXUNUSED(pBar), 
+                                          cbRowInfo* WXUNUSED(pInRow), cbDockPane* WXUNUSED(pInPane) )
 {
     // -/-
 }
 
-void cbSimpleUpdatesMgr::OnPaneMarginsWillChange( cbDockPane* pPane )
+void cbSimpleUpdatesMgr::OnPaneMarginsWillChange( cbDockPane* WXUNUSED(pPane) )
 {
     // -/-
 }
 
-void cbSimpleUpdatesMgr::OnPaneWillChange( cbDockPane* pPane )
+void cbSimpleUpdatesMgr::OnPaneWillChange( cbDockPane* WXUNUSED(pPane) )
 {
     // -/-
 }

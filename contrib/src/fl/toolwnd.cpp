@@ -157,7 +157,7 @@ void wxToolWindow::AddMiniButton( cbMiniButton* pBtn )
 	//LayoutMiniButtons();
 }
 
-void wxToolWindow::OnPaint( wxPaintEvent& event )
+void wxToolWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC pdc( this );
 	wxWindowDC dc( this );
@@ -672,7 +672,7 @@ void wxToolWindow::OnLeftUp( wxMouseEvent& event )
 	}
 }
 
-void wxToolWindow::OnSize( wxSizeEvent& event )
+void wxToolWindow::OnSize( wxSizeEvent& WXUNUSED(event) )
 {
 	if ( mpClientWnd )
 	{
@@ -697,7 +697,7 @@ wxSize wxToolWindow::GetPreferredSize( const wxSize& given )
 	return given;
 }
 
-void wxToolWindow::OnEraseBackground( wxEraseEvent& event )
+void wxToolWindow::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 {
 	// nothing
 }
@@ -755,7 +755,7 @@ void cbMiniButton::OnLeftDown( const wxPoint& pos )
 	}
 }
 
-void cbMiniButton::OnLeftUp( const wxPoint& pos )
+void cbMiniButton::OnLeftUp( const wxPoint& WXUNUSED(pos) )
 {
 	if ( !mVisible || !mDragStarted ) return;
 
@@ -1137,7 +1137,7 @@ bool cbFloatedBarWindow::HandleTitleClick( wxMouseEvent& event )
 	return TRUE;
 }
 
-void cbFloatedBarWindow::OnDblClick( wxMouseEvent& event )
+void cbFloatedBarWindow::OnDblClick( wxMouseEvent& WXUNUSED(event) )
 {
 	mpLayout->SetBarState( mpBar, wxCBAR_DOCKED_HORIZONTALLY, TRUE );
 

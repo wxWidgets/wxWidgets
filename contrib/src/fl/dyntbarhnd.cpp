@@ -29,7 +29,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS( cbDynToolBarDimHandler, cbBarDimHandlerBase )
 
-void cbDynToolBarDimHandler::OnChangeBarState(cbBarInfo* pBar, int newState )
+void cbDynToolBarDimHandler::OnChangeBarState(cbBarInfo* WXUNUSED(pBar), int WXUNUSED(newState) )
 {
     // nothing
 }

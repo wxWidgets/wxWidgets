@@ -140,7 +140,7 @@ void GarbageCollector::ResolveReferences()
     }
 }
 
-void GarbageCollector::AddObject( void* pObj, int refCnt )
+void GarbageCollector::AddObject( void* pObj, int WXUNUSED(refCnt) )
 {
     // FOR NOW:: initial ref-count is not used
 

@@ -154,6 +154,8 @@ Generic controls:
 
 - implemented wxListCtrl::Refresh() (Norbert Berzen)
 - support adding/removing columns dynamically (Donald C. Taylor)
+- wxToolBarSimple, property list classes, wxTreeLayout moved
+  to contrib/src/deprecated
 
 wxGTK:
 

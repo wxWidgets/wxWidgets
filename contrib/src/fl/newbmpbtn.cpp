@@ -271,11 +271,11 @@ wxNewBitmapButton::wxNewBitmapButton( const wxString& bitmapFileName,
                                       const wxString& labelText,
                                       int  alignText,
                                       bool isFlat,
-                                      int  firedEventType, 
-                                      int  marginX,
-                                      int  marginY,
-                                      int  textToLabelGap,
-                                      bool isSticky)
+                                      int  WXUNUSED(firedEventType), 
+                                      int  WXUNUSED(marginX),
+                                      int  WXUNUSED(marginY),
+                                      int  WXUNUSED(textToLabelGap),
+                                      bool WXUNUSED(isSticky))
 
     :   mTextToLabelGap  ( 2 ),
         mMarginX( 2 ),
@@ -652,7 +652,7 @@ void wxNewBitmapButton::SetAlignments( int alignText,
 
 // event handlers
 
-void wxNewBitmapButton::OnLButtonDown( wxMouseEvent& event )
+void wxNewBitmapButton::OnLButtonDown( wxMouseEvent& WXUNUSED(event) )
 {
     mDragStarted      = TRUE;
     mIsPressed        = TRUE;
@@ -687,7 +687,7 @@ bool wxNewBitmapButton::IsInWindow( int x, int y )
              y < height );
 }
 
-void wxNewBitmapButton::OnMouseEnter( wxMouseEvent& event )
+void wxNewBitmapButton::OnMouseEnter( wxMouseEvent& WXUNUSED(event) )
 {
     bool prevIsInFocus = mIsInFocus;
 
@@ -701,7 +701,7 @@ void wxNewBitmapButton::OnMouseEnter( wxMouseEvent& event )
     }
 }
 
-void wxNewBitmapButton::OnMouseLeave( wxMouseEvent& event )
+void wxNewBitmapButton::OnMouseLeave( wxMouseEvent& WXUNUSED(event) )
 {
     bool prevIsInFocus = mIsInFocus;
     bool prevIsPressed = mIsPressed;
@@ -716,7 +716,7 @@ void wxNewBitmapButton::OnMouseLeave( wxMouseEvent& event )
     }
 }
 
-void wxNewBitmapButton::OnSize( wxSizeEvent& event )
+void wxNewBitmapButton::OnSize( wxSizeEvent& WXUNUSED(event) )
 {
         //Reshape();
 }
@@ -775,7 +775,7 @@ void wxNewBitmapButton::DrawLabel( wxDC& dc )
     mdc.SelectObject( wxNullBitmap );
 }
 
-void wxNewBitmapButton::OnPaint( wxPaintEvent& event )
+void wxNewBitmapButton::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
@@ -787,12 +787,12 @@ void wxNewBitmapButton::OnPaint( wxPaintEvent& event )
     DrawDecorations( dc );
 }
 
-void wxNewBitmapButton::OnEraseBackground( wxEraseEvent& event )
+void wxNewBitmapButton::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 {
     // do nothing
 }
 
-void wxNewBitmapButton::OnKillFocus( wxFocusEvent& event )
+void wxNewBitmapButton::OnKillFocus( wxFocusEvent& WXUNUSED(event) )
 {
     // useless
 

@@ -1473,7 +1473,7 @@ void wxFrameLayout::OnPaint( wxPaintEvent& event )
     event.Skip();
 }
 
-void wxFrameLayout::OnEraseBackground( wxEraseEvent& event )
+void wxFrameLayout::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 {
     // do nothing
 }
@@ -1496,18 +1496,18 @@ void wxFrameLayout::OnIdle( wxIdleEvent& event )
 }
 
 
-void wxFrameLayout::OnKillFocus( wxFocusEvent& event )
+void wxFrameLayout::OnKillFocus( wxFocusEvent& WXUNUSED(event) )
 {
     //wxMessageBox( "wxFrameLayoutGot Kill Focus!" );
     //ShowFloatedWindows( FALSE );
 }
 
-void wxFrameLayout::OnSetFocus( wxFocusEvent& event )
+void wxFrameLayout::OnSetFocus( wxFocusEvent& WXUNUSED(event) )
 {
     //ShowFloatedWindows( TRUE );
 }
 
-void wxFrameLayout::OnActivate( wxActivateEvent& event )
+void wxFrameLayout::OnActivate( wxActivateEvent& WXUNUSED(event) )
 {
 #if 0
     if ( event.GetActive() == FALSE )               
@@ -1622,7 +1622,7 @@ void wxFrameLayout::CaptureEventsForPlugin ( cbPluginBase* pPlugin )
 
 }
 
-void wxFrameLayout::ReleaseEventsFromPlugin( cbPluginBase* pPlugin )
+void wxFrameLayout::ReleaseEventsFromPlugin( cbPluginBase* WXUNUSED(pPlugin) )
 {
     // events should be captured first
     wxASSERT( mpCaputesInput != NULL );
@@ -1640,7 +1640,7 @@ void wxFrameLayout::CaptureEventsForPane( cbDockPane* toPane )
     mpPaneInFocus = toPane;
 }
 
-void wxFrameLayout::ReleaseEventsFromPane( cbDockPane* fromPane )
+void wxFrameLayout::ReleaseEventsFromPane( cbDockPane* WXUNUSED(fromPane) )
 {
     // cannot release events without capturing them
     wxASSERT( mpPaneInFocus != NULL );
