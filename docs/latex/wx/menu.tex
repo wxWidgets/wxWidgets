@@ -104,7 +104,9 @@ Adds a string item to the end of the menu.
 \func{void}{Append}{\param{int}{ id}, \param{const wxString\& }{ item}, \param{wxMenu *}{subMenu},\rtfsp
 \param{const wxString\& }{helpString = ""}}
 
-Adds a pull-right submenu to the end of the menu.
+Adds a pull-right submenu to the end of the menu. Append the submenu to the parent
+menu {\it after} you have added your menu items, or accelerators may not be
+registered properly.
 
 \func{void}{Append}{\param{wxMenuItem*}{ menuItem}}
 
