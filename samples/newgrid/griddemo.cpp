@@ -99,6 +99,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
     EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
     EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
+    EVT_MENU( ID_SMALL_GRID, GridFrame::OnSmallGrid)
 
     EVT_MENU( ID_DESELECT_CELL, GridFrame::DeselectCell)
     EVT_MENU( ID_DESELECT_COL, GridFrame::DeselectCol)
@@ -137,6 +138,7 @@ GridFrame::GridFrame()
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append( ID_VTABLE, "&Virtual table test\tCtrl-V");
     fileMenu->Append( ID_BUGS_TABLE, "&Bugs table test\tCtrl-B");
+    fileMenu->Append( ID_SMALL_GRID, "&Small Grid test\tCtrl-S");
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, "E&xit\tAlt-X" );
 
@@ -248,11 +250,11 @@ GridFrame::GridFrame()
     grid->SetCellValue( 0, 1, "A long piece of text to demonstrate wrapping." );
     grid->SetCellRenderer(0 , 1, new wxGridCellAutoWrapStringRenderer);
     grid->SetCellEditor( 0,  1 , new wxGridCellAutoWrapStringEditor);
-    
+
     grid->SetCellValue( 0, 2, "Blah" );
     grid->SetCellValue( 0, 3, "Read only" );
     grid->SetReadOnly( 0, 3 );
-    
+
     grid->SetCellValue( 0, 4, "Can veto edit this cell" );
 
     grid->SetCellValue( 0, 5, "Press\nCtrl+arrow\nto skip over\ncells" );
@@ -838,7 +840,7 @@ void GridFrame::OnEditorShown( wxGridEvent& ev )
 
 void GridFrame::OnEditorHidden( wxGridEvent& ev )
 {
-   
+
     if ( (ev.GetCol() == 4) &&
          (ev.GetRow() == 0) &&
      (wxMessageBox(_T("Are you sure you wish to finish editing this cell"),
@@ -874,6 +876,16 @@ void GridFrame::OnBugsTable(wxCommandEvent& )
     frame->Show(TRUE);
 }
 
+void GridFrame::OnSmallGrid(wxCommandEvent& )
+{
+    wxFrame* frame = new wxFrame(NULL, -1, "A Small Grid",
+                                 wxDefaultPosition, wxSize(640, 480));
+    wxPanel* panel = new wxPanel(frame, -1);
+    wxGrid* grid = new wxGrid(panel, -1, wxPoint(10,10), wxSize(400,400),
+                              wxWANTS_CHARS | wxSIMPLE_BORDER);
+    grid->CreateGrid(3,3);
+    frame->Show(TRUE);
+}
 
 void GridFrame::OnVTable(wxCommandEvent& )
 {

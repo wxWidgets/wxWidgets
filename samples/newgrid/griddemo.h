@@ -95,6 +95,7 @@ public:
     void About( wxCommandEvent& );
     void OnVTable( wxCommandEvent& );
     void OnBugsTable( wxCommandEvent& );
+    void OnSmallGrid( wxCommandEvent& );
 
     enum
     {
@@ -130,6 +131,7 @@ public:
         ID_ABOUT,
         ID_VTABLE,
         ID_BUGS_TABLE,
+        ID_SMALL_GRID,
         ID_SELECT_UNSELECT,
         ID_SELECT_ALL,
         ID_SELECT_ROW,
