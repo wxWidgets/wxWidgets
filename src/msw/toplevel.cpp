@@ -414,6 +414,8 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
                                  long style,
                                  const wxString& name)
 {
+    bool ret = false;
+
     // init our fields
     Init();
 
@@ -458,15 +460,20 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         if ( style & (wxRESIZE_BORDER | wxCAPTION) )
             dlgTemplate->style |= DS_MODALFRAME;
 
-        bool ret = CreateDialog(dlgTemplate, title, pos, size);
+        ret = CreateDialog(dlgTemplate, title, pos, size);
         free(dlgTemplate);
-
-        return ret;
     }
     else // !dialog
     {
-        return CreateFrame(title, pos, size);
+        ret = CreateFrame(title, pos, size);
     }
+
+    if ( ret && !(GetWindowStyleFlag() & wxCLOSE_BOX) )
+    {
+        EnableCloseButton(false);
+    }
+
+    return ret;
 }
 
 wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
