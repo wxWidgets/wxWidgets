@@ -121,6 +121,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
   
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
+    SetFont( parent->GetFont() );
 
     Show( TRUE );
     

@@ -288,6 +288,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
+    SetFont( parent->GetFont() );
 
     Show( TRUE );
 

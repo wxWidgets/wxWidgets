@@ -72,6 +72,7 @@ bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &labe
   
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
+    SetFont( parent->GetFont() );
 
     Show( TRUE );
     

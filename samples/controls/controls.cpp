@@ -489,10 +489,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   (void)new wxStaticBox( panel, -1, "&Move cursor to the end of:", wxPoint(345, 0), wxSize(160, 100) );
   (void)new wxButton( panel, ID_MOVE_END_ENTRY, "Text &entry", wxPoint(370, 20), wxSize(110, 30) );
   (void)new wxButton( panel, ID_MOVE_END_ZONE, "Text &zone", wxPoint(370, 60), wxSize(110, 30) );
-  (void)new wxStaticBox( panel, -1, "wx&Clipboard", wxPoint(345,110), wxSize(160,100) );
-  (void)new wxButton( panel, ID_COPY_TEXT, "C&opy line 1", wxPoint(375,130), wxSize(110,30) );
-  (new wxButton( panel, ID_PASTE_TEXT, "&Paste text", wxPoint(375,170), wxSize(110,30) ))
-      ->SetDefault();
+  (void)new wxStaticBox( panel, -1, "wx&Clipboard", wxPoint(345,100), wxSize(160,100) );
+  (void)new wxButton( panel, ID_COPY_TEXT, "C&opy line 1", wxPoint(370,120), wxSize(110,30) );
+  (void)new wxButton( panel, ID_PASTE_TEXT, "&Paste text", wxPoint(370,160), wxSize(110,30) );
   m_notebook->AddPage( panel, "wxTextCtrl" , FALSE, Image_Text );
 
   wxString choices2[] =

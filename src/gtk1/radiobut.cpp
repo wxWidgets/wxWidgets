@@ -90,6 +90,7 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
 
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
+    SetFont( parent->GetFont() );
   
     Show( TRUE );
 

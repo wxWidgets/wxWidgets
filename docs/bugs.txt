@@ -4,7 +4,10 @@ wxWindows Buglist
 wxGTK:
 ------
 
-- TODO
+- It is impossible to reposition a window before showing it
+  on screen. Suspected GTK bug.
+  
+- DnD does only moderately work.
 
 wxMSW:
 ------

@@ -89,6 +89,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
   
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
+    SetFont( parent->GetFont() );
 
     Show( TRUE );
 

@@ -1,5 +1,5 @@
 
-  Welcome to wxWindows/Gtk 2.01 (beta 4),
+  Welcome to wxWindows/Gtk 2.01 (beta 5),
 
 you have downloaded version 2.01 of the GTK+ 1.0 port of 
 the wxWindows GUI library.
