@@ -51,23 +51,6 @@ public:
     virtual bool OnInit();
 };
 
-// Define a new frame type: this is going to be our main frame
-class MyFrame : public wxFrame
-{
-public:
-    // ctor(s)
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
-
-    // event handlers (these functions should _not_ be virtual)
-    void OnQuit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
-    void OnSetBlinkTime(wxCommandEvent& event);
-
-private:
-    // any class wishing to process wxWindows events must use this macro
-    DECLARE_EVENT_TABLE()
-};
-
 // MyCanvas is a canvas on which you can type
 class MyCanvas: public wxScrolledWindow
 {
@@ -77,6 +60,10 @@ public:
     ~MyCanvas();
 
     wxChar& CharAt(int x, int y) { return *(m_text + x + m_xChars * y); }
+
+    // operations
+    void CreateCaret();
+    void MoveCaret(int x, int y);
 
     // caret movement
     void Home() { m_xCaret = 0; }
@@ -94,6 +81,9 @@ public:
     void OnChar( wxKeyEvent &event );
 
 private:
+    // move the caret to m_xCaret, m_yCaret
+    void DoMoveCaret();
+
     wxFont   m_font;
 
     // the margin around the text (looks nicer)
@@ -115,6 +105,27 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+
+// Define a new frame type: this is going to be our main frame
+class MyFrame : public wxFrame
+{
+public:
+    // ctor(s)
+    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+
+    // event handlers (these functions should _not_ be virtual)
+    void OnQuit(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
+    void OnSetBlinkTime(wxCommandEvent& event);
+    void OnCaretMove(wxCommandEvent& event);
+
+private:
+    MyCanvas *m_canvas;
+
+    // any class wishing to process wxWindows events must use this macro
+    DECLARE_EVENT_TABLE()
+};
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -126,6 +137,7 @@ enum
     Caret_Quit = 1,
     Caret_About,
     Caret_SetBlinkTime,
+    Caret_Move,
 
     // controls start here (the numbers are, of course, arbitrary)
     Caret_Text = 1000
@@ -142,6 +154,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Caret_Quit,  MyFrame::OnQuit)
     EVT_MENU(Caret_About, MyFrame::OnAbout)
     EVT_MENU(Caret_SetBlinkTime, MyFrame::OnSetBlinkTime)
+    EVT_MENU(Caret_Move, MyFrame::OnCaretMove)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -162,14 +175,11 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
-    // Create the main application window
+    // create and show the main application window
     MyFrame *frame = new MyFrame("Caret wxWindows sample",
                                  wxPoint(50, 50), wxSize(450, 340));
 
-    // Show it and tell the application that it's our main window
-    // @@@ what does it do exactly, in fact? is it necessary here?
     frame->Show(TRUE);
-    SetTopWindow(frame);
 
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned FALSE here, the
@@ -192,6 +202,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *menuFile = new wxMenu;
 
     menuFile->Append(Caret_SetBlinkTime, "&Blink time...\tCtrl-B");
+    menuFile->Append(Caret_Move, "&Move caret\tCtrl-C");
     menuFile->AppendSeparator();
     menuFile->Append(Caret_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
@@ -204,7 +215,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
     
-    (void) new MyCanvas( this );
+    m_canvas = new MyCanvas(this);
 
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
@@ -226,6 +237,11 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  _T("About Caret"), wxOK | wxICON_INFORMATION, this);
 }
 
+void MyFrame::OnCaretMove(wxCommandEvent& WXUNUSED(event))
+{
+    m_canvas->MoveCaret(10, 10);
+}
+
 void MyFrame::OnSetBlinkTime(wxCommandEvent& WXUNUSED(event))
 {
     long blinkTime = wxGetNumberFromUser
@@ -239,6 +255,7 @@ void MyFrame::OnSetBlinkTime(wxCommandEvent& WXUNUSED(event))
     if ( blinkTime != -1 )
     {
         wxCaret::SetBlinkTime((int)blinkTime);
+        m_canvas->CreateCaret();
         wxLogStatus(this, _T("Blink time set to %ld milliseconds."), blinkTime);
     }
 }
@@ -262,29 +279,52 @@ MyCanvas::MyCanvas( wxWindow *parent )
 {
     m_text = (wxChar *)NULL;
 
-    SetBackgroundColour(* wxWHITE);
+    SetBackgroundColour(*wxWHITE);
 
-    m_font = *wxNORMAL_FONT;
+    m_font = wxFont(12, wxFONTFAMILY_TELETYPE,
+                    wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 
+    m_xCaret = m_yCaret =
+    m_xChars = m_yChars = 0;
+
+    m_xMargin = m_yMargin = 5;
+
+    CreateCaret();
+}
+
+MyCanvas::~MyCanvas()
+{
+    free(m_text);
+}
+
+void MyCanvas::CreateCaret()
+{
     wxClientDC dc(this);
-    dc.SetFont( m_font );
+    dc.SetFont(m_font);
     m_heightChar = dc.GetCharHeight();
     m_widthChar = dc.GetCharWidth();
 
     wxCaret *caret = new wxCaret(this, m_widthChar, m_heightChar);
     SetCaret(caret);
 
-    m_xCaret = m_yCaret =
-    m_xChars = m_yChars = 0;
-
-    m_xMargin = m_yMargin = 5;
     caret->Move(m_xMargin, m_yMargin);
     caret->Show();
 }
 
-MyCanvas::~MyCanvas()
+void MyCanvas::MoveCaret(int x, int y)
 {
-    free(m_text);
+    m_xCaret = x;
+    m_yCaret = y;
+
+    DoMoveCaret();
+}
+
+void MyCanvas::DoMoveCaret()
+{
+    wxLogStatus(_T("Caret is at (%d, %d)"), m_xCaret, m_yCaret);
+
+    GetCaret()->Move(m_xMargin + m_xCaret * m_widthChar,
+                     m_yMargin + m_yCaret * m_heightChar);
 }
 
 void MyCanvas::OnSize( wxSizeEvent &event )
@@ -342,6 +382,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
 void MyCanvas::OnChar( wxKeyEvent &event )
 {
+    bool refresh = FALSE;
+
     switch ( event.KeyCode() )
     {
         case WXK_LEFT:
@@ -378,21 +420,18 @@ void MyCanvas::OnChar( wxKeyEvent &event )
             {
                 CharAt(m_xCaret, m_yCaret) = (wxChar)event.KeyCode();
                 NextChar();
+
+                refresh = TRUE;
             }
             else
             {
                 event.Skip();
-
-                // don't refresh
-                return;
             }
     }
 
-    wxLogStatus(_T("Caret is at (%d, %d)"), m_xCaret, m_yCaret);
+    DoMoveCaret();
 
-    GetCaret()->Move(m_xMargin + m_xCaret * m_widthChar,
-                     m_yMargin + m_yCaret * m_heightChar);
-
-    Refresh();
+    if ( refresh )
+        Refresh();
 }
 

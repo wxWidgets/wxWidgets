@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_CARET
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/dcclient.h"
@@ -96,7 +98,8 @@ wxCaret::~wxCaret()
     if ( IsVisible() )
     {
         // stop blinking
-        m_timer.Stop();
+        if ( m_timer.IsRunning() )
+            m_timer.Stop();
     }
 }
 
@@ -106,7 +109,9 @@ wxCaret::~wxCaret()
 
 void wxCaret::DoShow()
 {
-    m_timer.Start(GetBlinkTime());
+    int blinkTime = GetBlinkTime();
+    if ( blinkTime )
+        m_timer.Start(blinkTime);
 
     m_blinkedOut = TRUE;
     Blink();
@@ -124,11 +129,20 @@ void wxCaret::DoHide()
 
 void wxCaret::DoMove()
 {
-    if ( IsVisible() && !m_blinkedOut )
+    if ( IsVisible() )
     {
-        Blink();
+        if ( !m_blinkedOut )
+        {
+            // hide it right now and it will be shown the next time it blinks
+            // unless it should be shown all the time in which case just show
+            // it at the new position
+            if ( m_timer.IsRunning() )
+                Blink();
+            else
+                Refresh();
+        }
     }
-    //else: will be shown at the correct location next time it blinks
+    //else: will be shown at the correct location when it is shown
 }
 
 // ----------------------------------------------------------------------------
@@ -205,3 +219,5 @@ void wxCaret::DoDraw(wxDC *dc)
     dc->DrawRectangle( m_x, m_y, m_width, m_height );
 #endif // 0/1
 }
+
+#endif // wxUSE_CARET
