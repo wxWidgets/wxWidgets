@@ -33,7 +33,7 @@ char *wxBuffer = NULL;
 wxList wxTopLevelWindows;
 
 // List of windows pending deletion
-wxList wxPendingDelete;
+wxList WXDLLEXPORT wxPendingDelete;
 
 // Current cursor, in order to hang on to
 // cursor handle when setting the cursor globally

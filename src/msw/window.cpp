@@ -88,7 +88,7 @@ const char *wxGetMessageName(int message);
 #define WINDOW_MARGIN 3 // This defines sensitivity of Leave events
 
 wxMenu *wxCurrentPopupMenu = NULL;
-extern wxList wxPendingDelete;
+extern wxList WXDLLEXPORT wxPendingDelete;
 
 void wxRemoveHandleAssociation(wxWindow *win);
 void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);

@@ -45,7 +45,7 @@
 #endif
 
 extern wxList wxModelessWindows;
-extern wxList wxPendingDelete;
+extern wxList WXDLLEXPORT wxPendingDelete;
 extern char wxFrameClassName[];
 extern wxMenu *wxCurrentPopupMenu;
 

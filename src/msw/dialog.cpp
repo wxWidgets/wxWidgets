@@ -41,7 +41,7 @@
 // for modal dialogs
 wxList wxModalDialogs;
 wxList wxModelessWindows;  // Frames and modeless dialogs
-extern wxList wxPendingDelete;
+extern wxList WXDLLEXPORT wxPendingDelete;
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxPanel)

@@ -93,7 +93,7 @@
 extern char *wxBuffer;
 extern char *wxOsVersion;
 extern wxList *wxWinHandleList;
-extern wxList wxPendingDelete;
+extern wxList WXDLLEXPORT wxPendingDelete;
 extern void wxSetKeyboardHook(bool doIt);
 extern wxCursor *g_globalCursor;
 
