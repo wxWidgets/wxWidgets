@@ -123,7 +123,7 @@ wxInputStream& DrawingDocument::LoadObject(wxInputStream& stream)
 }
 #endif
 
-DoodleSegment::DoodleSegment(DoodleSegment& seg)
+DoodleSegment::DoodleSegment(DoodleSegment& seg):wxObject()
 {
     wxList::compatibility_iterator node = seg.lines.GetFirst();
     while (node)
