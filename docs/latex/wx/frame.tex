@@ -49,7 +49,7 @@ a wxEVT\_HELP event if the user clicked on an application window. {\it Note} tha
 style and must be set by calling \helpref{SetExtraStyle}{wxwindowsetextrastyle} before Create is called (two-step construction).
 You cannot use this style together with wxMAXIMIZE\_BOX or wxMINIMIZE\_BOX, so
 you should use 
-{\tt wxDEFAULT\_FRAME\_STYLE & ~(wxMINIMIZE\_BOX | wxMAXIMIZE\_BOX)} for the
+{\tt wxDEFAULT\_FRAME\_STYLE \& \~ (wxMINIMIZE\_BOX | wxMAXIMIZE\_BOX)} for the
 frames having this style (the dialogs don't have minimize nor maximize box by
 default)}
 \end{twocollist}
