@@ -38,7 +38,8 @@ is reasonably close to the wxWindows help controller API; see {\tt wx/helpwxht.h
 details of use.
 \item \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}, a more sophisticated help controller using \helpref{wxHTML}{wxhtml}, in
 a similar style to the Windows HTML Help viewer and using some of the same files.
-%The API is not the same as the standard API, which is why it is documented separately.
+Although it has an API compatible with other help controllers, it has more advanced features, so it is
+recommended that you use the specific API for this class instead.
 \end{itemize}
 
 \wxheading{Derived from}
@@ -51,9 +52,9 @@ wxHelpControllerBase\\
 <wx/help.h> (wxWindows chooses the appropriate help controller class)\\
 <wx/helpbase.h> (wxHelpControllerBase class)\\
 <wx/helpwin.h> (Windows Help controller)\\
-<wx/generic/helpext.h> (external HTML browser controller)
-<wx/generic/helpwxht.h> (wxHTML based help controller)
-<wx/html/helpctrl.h> (Advanced wxHTML based help controller: wxHtmlHelpController)
+<wx/generic/helpext.h> (external HTML browser controller)\\
+<wx/generic/helpwxht.h> (simple wxHTML-based help controller)\\
+<wx/html/helpctrl.h> (advanced wxHTML based help controller: wxHtmlHelpController)
 
 \wxheading{See also}
 

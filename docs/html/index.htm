@@ -182,14 +182,16 @@ using wxMDIParentFrame, wxMDIChildFrame.
 dynamically.
 <li><a href="../../samples/exec">exec</a>: demonstrates wxExecute.
 <li><a href="../../samples/font">font</a>: tests fonts, font enumerator, font encodings.
-<li><a href="../../samples/grid">grid</a>: demonstrates the wxGrid class.
+<li><a href="../../samples/grid">grid</a>: demonstrates the wxGrid class. This demo should work
+when the old grid implementation is compiled into wxWindows, and also with the new implementation.
+Please see newgrid below for a full demo of the new implementation's capabilities.
 <li><a href="../../samples/help">help</a>: shows how to use wxHelpController.
 <li><a href="../../samples/html">html</a>: a number of demos for the wxHTML class library, used inside
 applications and also as a help facility.
   <ul>
   <li><a href="../../samples/html/about">about</a>: shows use of a wxHTML widget inside an About box.
   <li><a href="../../samples/html/help">help</a>: shows use of wxHtmlHelpController to display wxHTML help.
-  <li><a href="../../samples/html/helpview">helpview</a>: a stand-alone wxHTML help viewer.
+  <li><a href="../../samples/html/helpview">helpview</a>: a stand-alone wxHTML help viewer for any .htb book.
   <li><a href="../../samples/html/printing">printing</a>: shows how easy it is to preview and print HTML files.
   <li><a href="../../samples/html/test">test</a>: general wxHTML test application.
   <li><a href="../../samples/html/virtual">virtual</a>: demonstrates the virtual file system feature.
@@ -215,7 +217,7 @@ platforms that don't support it, a normal-sized title bar is displayed.
 small a wxWindows application as you can get.
 <li><a href="../../samples/nativdlg">nativdlg</a>: shows how wxWindows can load a standard Windows
 dialog resource, translating the controls into wxWindows controls (Windows only).
-<li><a href="../../samples/newgrid">newgrid</a>: demonstrates the new wxGrid implementation, by Michael Bedward.
+<li><a href="../../samples/newgrid">newgrid</a>: demonstrates the new wxGrid implementation, by Michael Bedward and others.
 <li><a href="../../samples/notebook">notebook</a>: shows the wxNotebook (tabbed window) control.
 <li><a href="../../samples/oleauto">oleauto</a>: a little OLE automation controller (Windows only; requires
 Excel to be present).
@@ -238,6 +240,7 @@ the user to resize subwindows.
 an embedded window.
 <li><a href="../../samples/sockets">sockets</a>: demonstrates the TCP/IP family of classes.
 <li><a href="../../samples/splitter">splitter</a>: demonstrates the wxSplitterWindow class.
+<li><a href="../../samples/statbar">statbar</a>: demonstrates the wxStatusBar class.
 <li><a href="../../samples/tab">tab</a>: demonstrates the generic tab window class. You should
 normally use wxNotebook instead, but the generic code is sometimes useful, for example for
 implementing wxNotebook on platforms with no native support.

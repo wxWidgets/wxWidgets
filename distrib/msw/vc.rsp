@@ -178,11 +178,17 @@ samples/sockets/ServerVC.dsw
 samples/splitter/SplitterVC.dsp
 samples/splitter/SplitterVC.dsw
 
+samples/statbar/StatbarVC.dsp
+samples/statbar/StatbarVC.dsw
+
 samples/tab/TabVC.dsp
 samples/tab/TabVC.dsw
 
 samples/taskbar/TaskbarVC.dsp
 samples/taskbar/TaskbarVC.dsw
+
+samples/text/TextVC.dsp
+samples/text/TextVC.dsw
 
 samples/thread/ThreadVC.dsp
 samples/thread/ThreadVC.dsw
@@ -249,4 +255,10 @@ contrib/src/mmedia/MMediaVC.dsw
 
 contrib/samples/mmedia/MmboardVC.dsp
 contrib/samples/mmedia/MmboardVC.dsw
+
+contrib/src/stc/StcVC.dsp
+contrib/src/stc/StcVC.dsw
+
+contrib/samples/stc/StcTestVC.dsp
+contrib/samples/stc/StcTestVC.dsw
 

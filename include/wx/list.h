@@ -501,7 +501,7 @@ public:
 
         // copying the string list: the strings are copied, too (extremely
         // inefficient!)
-    wxStringList(const wxStringList& other) { DoCopy(other); }
+    wxStringList(const wxStringList& other) { DeleteContents(TRUE); DoCopy(other); }
     wxStringList& operator=(const wxStringList& other)
         { Clear(); DoCopy(other); return *this; }
 

@@ -967,6 +967,7 @@ samples/statbar/*.rc
 samples/statbar/*.def
 samples/statbar/*.ico
 samples/statbar/*.xpm
+samples/statbar/*.bmp
 samples/statbar/*.txt
 
 samples/plot/*.cpp

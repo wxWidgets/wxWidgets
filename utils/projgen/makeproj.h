@@ -34,8 +34,8 @@ public:
     void SetLibDirs(const wxStringList& dirs) { m_libDirs = dirs; }
     void SetDebugLibDirs(const wxStringList& dirs) { m_debugLibDirs = dirs; }
     void SetReleaseLibDirs(const wxStringList& dirs) { m_releaseLibDirs = dirs; }
-    void SetExtraLibsDebug(const wxStringList& libs) { m_extraLibsRelease = libs; }
-    void SetExtraLibsRelease(const wxStringList& libs) { m_extraLibsDebug = libs; }
+    void SetExtraLibsDebug(const wxStringList& libs) { m_extraLibsDebug = libs; }
+    void SetExtraLibsRelease(const wxStringList& libs) { m_extraLibsRelease = libs; }
 
     inline wxString GetProjectName() const { return m_projectName; }
     inline wxString GetTargetName() const { return m_targetName; }

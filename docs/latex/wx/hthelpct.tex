@@ -5,8 +5,9 @@
 
 \section{\class{wxHtmlHelpController}}\label{wxhtmlhelpcontroller}
 
-{\bf WARNING! This help controller has an API incompatible with wxWindows
-wxHelpController!}
+{\bf WARNING! Although this class has an API compatible with other wxWindows
+help controllers as documented by \helpref{wxHelpController}{wxhelpcontroller}, it
+is recommended that you use the enhanced capabilities of wxHtmlHelpController's API.}
 
 This help controller provides an easy way of displaying HTML help in your
 application (see {\it test} sample). The help system is based on {\bf books} 
@@ -40,7 +41,7 @@ sample for demonstration of its use.
 
 \wxheading{Derived from}
 
-\helpref{wxEvtHandler}{wxevthandler}
+wxHelpControllerBase
 
 \wxheading{Include files}
 
@@ -193,5 +194,4 @@ default wxConfig object if available (for details see
 \func{void}{WriteCustomization}{\param{wxConfigBase* }{cfg}, \param{wxString }{path = wxEmptyString}}
 
 Stores controllers setting (position of window etc.)
-
 

@@ -41,6 +41,8 @@
 // private classes
 // ----------------------------------------------------------------------------
 
+const wxStringList wxEmptyStringList;
+
 // Define a new application type, each program should derive a class from wxApp
 class MyApp : public wxApp
 {
@@ -54,7 +56,9 @@ public:
     virtual bool OnInit();
 
     bool GenerateSample(const wxString& projectName, const wxString& targetName,
-        const wxString& path, const wxStringList& sourceFiles, const wxString& relativeRootPath = "../..");
+        const wxString& path, const wxStringList& sourceFiles, const wxString& relativeRootPath = "../..",
+        const wxStringList& extraLibsDebug = wxEmptyStringList,
+        const wxStringList& extraLibsRelease = wxEmptyStringList);
     void GenerateSamples(const wxString& dir); // Takes wxWindows directory path
 };
 
@@ -164,32 +168,25 @@ bool MyApp::OnInit()
 }
 
 bool MyApp::GenerateSample(const wxString& projectName, const wxString& targetName,
-    const wxString& path, const wxStringList& sourceFiles, const wxString& relativeRootPath)
+    const wxString& path, const wxStringList& sourceFiles, const wxString& relativeRootPath,
+    const wxStringList& extraLibsDebug, const wxStringList& extraLibsRelease)
 {
     wxString relativeIncludePath(relativeRootPath + wxString("/include"));
     wxString relativeLibPath(relativeRootPath + wxString("/lib"));
-#if 0
-    wxString relativeDebugPath(relativeRootPath + wxString("/src/Debug"));
-    wxString relativeReleasePath(relativeRootPath + wxString("/src/Release"));
-    wxString relativeDebugPathJPEG(relativeRootPath + wxString("/src/jpeg/Debug"));
-    wxString relativeReleasePathJPEG(relativeRootPath + wxString("/src/jpeg/Release"));
-    wxString relativeDebugPathTIFF(relativeRootPath + wxString("/src/tiff/Debug"));
-    wxString relativeReleasePathTIFF(relativeRootPath + wxString("/src/tiff/Release"));
-#endif
+    wxString relativeIncludePathContrib(relativeRootPath + wxString("/contrib/include"));
+    wxString relativeLibPathContrib(relativeRootPath + wxString("/contrib/lib"));
 
     wxProject project;
 
     // For all samples
-    project.SetIncludeDirs(wxStringList((const char*) relativeIncludePath, 0));
-    project.SetResourceIncludeDirs(wxStringList((const char*) relativeIncludePath, 0));
-    project.SetLibDirs(wxStringList((const char*) relativeLibPath, 0));
-#if 0
-    project.SetDebugLibDirs(wxStringList((const char*) relativeDebugPath, (const char*) relativeDebugPathJPEG, (const char*) relativeDebugPathTIFF, 0));
-    project.SetReleaseLibDirs(wxStringList((const char*) relativeReleasePath, (const char*) relativeReleasePathJPEG, (const char*) relativeReleasePathTIFF, 0));
-#endif
+    project.SetIncludeDirs(wxStringList((const char*) relativeIncludePath, (const char*) relativeIncludePathContrib, 0));
+    project.SetResourceIncludeDirs(wxStringList((const char*) relativeIncludePath, (const char*) relativeIncludePathContrib, 0));
+    project.SetLibDirs(wxStringList((const char*) relativeLibPath, (const char*) relativeLibPathContrib, 0));
 
-    project.SetExtraLibsRelease(wxStringList("opengl32.lib", "glu32.lib", 0));
-    project.SetExtraLibsDebug(wxStringList("opengl32.lib", "glu32.lib", 0));
+//    project.SetExtraLibsDebug(wxStringList("opengl32.lib", "glu32.lib", 0));
+//    project.SetExtraLibsRelease(wxStringList("opengl32.lib", "glu32.lib", 0));
+    project.SetExtraLibsDebug(extraLibsDebug);
+    project.SetExtraLibsRelease(extraLibsRelease);
 
     project.SetProjectName(projectName);
     project.SetTargetName(targetName);
@@ -237,11 +234,12 @@ void MyApp::GenerateSamples(const wxString& dir)
 
     // OpenGL samples
     GenerateSample("CubeVC", "cube", dir + wxString("/samples/opengl/cube"), wxStringList("cube.cpp", "cube.h", 0),
-        "../../..");
+        "../../..", wxStringList("opengl32.lib", "glu32.lib", 0), wxStringList("opengl32.lib", "glu32.lib", 0));
     GenerateSample("IsosurfVC", "isosurf", dir + wxString("/samples/opengl/isosurf"), wxStringList("isosurf.cpp", "isousrf.h", 0),
-        "../../..");
+        "../../..", wxStringList("opengl32.lib", "glu32.lib", 0), wxStringList("opengl32.lib", "glu32.lib", 0));
     GenerateSample("PenguinVC", "penguin", dir + wxString("/samples/opengl/penguin"), wxStringList("penguin.cpp", "penguin.h",
-        "lw.cpp", "lw.h", "trackball.c", "trackball.h", 0), "../../..");
+        "lw.cpp", "lw.h", "trackball.c", "trackball.h", 0),
+        "../../..", wxStringList("opengl32.lib", "glu32.lib", 0), wxStringList("opengl32.lib", "glu32.lib", 0));
 
     // wxHTML samples
     GenerateSample("AboutVC", "about", dir + wxString("/samples/html/about"), wxStringList("about.cpp", 0),
@@ -289,6 +287,7 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("ScrollVC", "scroll", dir + wxString("/samples/scroll"), wxStringList("scroll.cpp", 0));
     GenerateSample("ScrollsubVC", "scrollsub", dir + wxString("/samples/scrollsub"), wxStringList("scrollsub.cpp", 0));
     GenerateSample("SplitterVC", "test", dir + wxString("/samples/splitter"), wxStringList("test.cpp", 0));
+    GenerateSample("StatbarVC", "statbar", dir + wxString("/samples/statbar"), wxStringList("statbar.cpp", 0));
     GenerateSample("TabVC", "test", dir + wxString("/samples/tab"), wxStringList("test.cpp", "test.h", 0));
     GenerateSample("TaskbarVC", "tbtest", dir + wxString("/samples/taskbar"), wxStringList("tbtest.cpp", "tbtest.h", 0));
     GenerateSample("TextVC", "text", dir + wxString("/samples/text"), wxStringList("text.cpp", 0));
@@ -336,192 +335,81 @@ void MyApp::GenerateSamples(const wxString& dir)
         "dbbrowse.h", "browsedb.h", "dbgrid.h", "dbtree.h", "dlguser.h", "doc.h", "pgmctrl.h", "std.h", "tabpgwin.h",
         0));
 
-    //// Utilities
+    //// Samples in contrib
 
-    // Dialog Editor
-    wxProject project;
+    // OGLEdit
 
-    project.SetIncludeDirs(wxStringList("../../../include", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
-    project.SetLibDirs(wxStringList("../../../lib", 0));
-#if 0
-    project.SetDebugLibDirs(wxStringList("../../../src/Debug", "../../../src/jpeg/Debug", "../../../src/tiff/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../src/Release", "../../../src/jpeg/Release", "../../../src/tiff/Release", 0));
-#endif
-
-    project.SetProjectName("DialogEdVC");
-    project.SetTargetName("dialoged");
-    project.SetProjectPath(dir + wxString("/utils/dialoged/src"));
-    project.SetSourceFiles(wxStringList("dialoged.cpp", "dlghndlr.cpp", "edlist.cpp", "edtree.cpp",
-        "reseditr.cpp", "reswrite.cpp", "symbtabl.cpp", "winstyle.cpp", "winprop.cpp",
-        "dialoged.h", "dlghndlr.h", "edlist.h", "edtree.h", "reseditr.h", "symbtabl.h", "winprop.h",
-        "winstyle.h",
-        0));
-
-    if (!project.GenerateVCProject())
-    {
-        wxString msg("Could not generate Dialog Editor project");
-        wxMessageBox(msg);
-    }
-
-    // Tex2RTF
-    project.SetIncludeDirs(wxStringList("../../../include", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
-    project.SetLibDirs(wxStringList("../../../lib", 0));
-#if 0
-    project.SetDebugLibDirs(wxStringList("../../../src/Debug", "../../../src/jpeg/Debug", "../../../src/tiff/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../src/Release", "../../../src/jpeg/Release", "../../../src/tiff/Release", 0));
-#endif
-
-    project.SetProjectName("Tex2RTFVC");
-    project.SetTargetName("tex2rtf");
-    project.SetProjectPath(dir + wxString("/utils/tex2rtf/src"));
-    project.SetSourceFiles(wxStringList("tex2rtf.cpp", "htmlutil.cpp", "readshg.cpp", "rtfutils.cpp",
-        "table.cpp", "tex2any.cpp", "texutils.cpp", "xlputils.cpp",
-        "bmputils.h", "readshg.h", "rtfutils.h", "table.h", "tex2any.h", "tex2rtf.h", "wxhlpblk.h",
-        0));
-
-    if (!project.GenerateVCProject())
-    {
-        wxString msg("Could not generate Tex2RTF project");
-        wxMessageBox(msg);
-    }
-
-    // HelpGen
-    project.SetIncludeDirs(wxStringList("../../../include", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
-    project.SetLibDirs(wxStringList("../../../lib", 0));
-#if 0
-    project.SetDebugLibDirs(wxStringList("../../../src/Debug", "../../../src/jpeg/Debug", "../../../src/tiff/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../src/Release", "../../../src/jpeg/Release", "../../../src/tiff/Release", 0));
-#endif
-
-    project.SetProjectName("HelpGenVC");
-    project.SetTargetName("helpgen");
-    project.SetProjectPath(dir + wxString("/utils/helpgen/src"));
-    project.SetSourceFiles(wxStringList("helpgen.cpp", "cjparser.cpp", "docripper.cpp", "ifcontext.cpp",
-        "markup.cpp", "ripper_main.cpp", "scriptbinder.cpp", "sourcepainter.cpp",
-        "srcparser.cpp",
-        "cjparser.h", "docripper.h", "ifcontext.h", "markup.h", "scriptbinder.h", "sourcepainter.h",
-        "srcparser.h", "wxstlac.h", "wxstllst.h", "wxstlvec.h", 0));
-
-    if (!project.GenerateVCProject())
-    {
-        wxString msg("Could not generate HelpGen project");
-        wxMessageBox(msg);
-    }
-
-    // ProjGen
-    project.SetIncludeDirs(wxStringList("../../include", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../include", 0));
-    project.SetLibDirs(wxStringList("../../lib", 0));
-#if 0
-    project.SetDebugLibDirs(wxStringList("../../src/Debug", "../../src/jpeg/Debug", "../../src/tiff/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../src/Release", "../../src/jpeg/Release", "../../src/tiff/Release", 0));
-#endif
-
-    project.SetProjectName("ProjGenVC");
-    project.SetTargetName("makeproj");
-    project.SetProjectPath(dir + wxString("/utils/projgen"));
-    project.SetSourceFiles(wxStringList("makeproj.cpp", "makeproj.h", 0));
-
-    if (!project.GenerateVCProject())
-    {
-        wxString msg("Could not generate ProjGen project");
-        wxMessageBox(msg);
-    }
-
-    // hhp2cached
-    project.SetIncludeDirs(wxStringList("../../include", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../include", 0));
-    project.SetLibDirs(wxStringList("../../lib", 0));
-#if 0
-    project.SetDebugLibDirs(wxStringList("../../src/Debug", "../../src/jpeg/Debug", "../../src/tiff/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../src/Release", "../../src/jpeg/Release", "../../src/tiff/Release", 0));
-#endif
-
-    project.SetProjectName("hhp2cachedVC");
-    project.SetTargetName("hhp2cached");
-    project.SetProjectPath(dir + wxString("/utils/hhp2cached"));
-    project.SetSourceFiles(wxStringList("hhp2cached.cpp", 0));
-
-    if (!project.GenerateVCProject())
-    {
-        wxString msg("Could not generate hhp2cached project");
-        wxMessageBox(msg);
-    }
-
-    // OGLEdit. We have to do it the long way because we need to add the extra ogl.lib.
-
-    project.SetIncludeDirs(wxStringList("../../../../include", "../../../include", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../../../include", "../../../include", 0));
-    project.SetLibDirs(wxStringList("../../../../lib", "../../../lib", 0));
-#if 0
-    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../../src/ogl/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../../src/ogl/Release", "../../../../src/jpeg/Release", "../../../../src/tiff/Release", 0));
-#endif
-
-    project.SetExtraLibsDebug(wxStringList("ogld.lib", 0));
-    project.SetExtraLibsRelease(wxStringList("ogl.lib", 0));
-
-    project.SetProjectName("OGLEditVC");
-    project.SetTargetName("ogledit");
-    project.SetProjectPath(dir + wxString("/contrib/samples/ogl/ogledit"));
-    project.SetSourceFiles(wxStringList("ogledit.cpp", "doc.cpp", "palette.cpp", "view.cpp",
-        "doc.h", "ogledit.h", "palette.h", "view.h",
-        0));
-
-    if (!project.GenerateVCProject())
-    {
-        wxString msg("Could not generate OGLEdit project");
-        wxMessageBox(msg);
-    }
+    GenerateSample("OGLEditVC", "ogledit", dir + wxString("/contrib/samples/ogl/ogledit"),
+        wxStringList("ogledit.cpp", "doc.cpp", "palette.cpp", "view.cpp",
+        "doc.h", "ogledit.h", "palette.h", "view.h", 0),
+        "../../../..",
+        wxStringList("ogld.lib", 0), wxStringList("ogl.lib", 0));
 
     // OGL Studio
 
-    project.SetIncludeDirs(wxStringList("../../../../include", "../../../include", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../../../include", "../../../include", 0));
-    project.SetLibDirs(wxStringList("../../../../lib", "../../../lib", 0));
-#if 0
-    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../../src/ogl/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../../src/ogl/Release", "../../../../src/jpeg/Release", "../../../../src/tiff/Release", 0));
-#endif
-    project.SetExtraLibsDebug(wxStringList("ogld.lib", 0));
-    project.SetExtraLibsRelease(wxStringList("ogl.lib", 0));
-
-    project.SetProjectName("StudioVC");
-    project.SetTargetName("studio");
-    project.SetProjectPath(dir + wxString("/contrib/samples/ogl/studio"));
-    project.SetSourceFiles(wxStringList("studio.cpp", "cspalette.cpp", "dialogs.cpp", "view.cpp",
+    GenerateSample("StudioVC", "studio", dir + wxString("/contrib/samples/ogl/studio"),
+        wxStringList("studio.cpp", "cspalette.cpp", "dialogs.cpp", "view.cpp",
         "doc.cpp", "mainfrm.cpp", "project.cpp", "shapes.cpp", "symbols.cpp", "csprint.cpp",
         "studio.h", "cspalette.h", "dialogs.h", "view.h",
-        "doc.h", "mainfrm.h", "project.h", "shapes.h", "symbols.h",
-        0));
-
-    if (!project.GenerateVCProject())
-    {
-        wxString msg("Could not generate OGL Studio project");
-        wxMessageBox(msg);
-    }
+        "doc.h", "mainfrm.h", "project.h", "shapes.h", "symbols.h", 0),
+        "../../../..",
+        wxStringList("ogld.lib", 0), wxStringList("ogl.lib", 0));
 
     // MMedia mmboard
 
-    project.SetIncludeDirs(wxStringList("../../../include", "../../include", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
-    project.SetLibDirs(wxStringList("../../../lib", "../../lib", 0));
-    project.SetExtraLibsDebug(wxStringList("mmediad.lib", 0));
-    project.SetExtraLibsRelease(wxStringList("mmedia.lib", 0));
+    GenerateSample("MMboardVC", "mmboard", dir + wxString("/contrib/samples/mmedia"),
+        wxStringList("mmboard.cpp", "mmboard.h", "mmbman.cpp", "mmbman.h", 0),
+        "../../..",
+        wxStringList("mmediad.lib", 0), wxStringList("mmedia.lib", 0));
 
-    project.SetProjectName("MMboardVC");
-    project.SetTargetName("mmboard");
-    project.SetProjectPath(dir + wxString("/contrib/samples/mmedia"));
-    project.SetSourceFiles(wxStringList("mmboard.cpp", "mmboard.h", "mmbman.cpp", "mmbman.h", 0));
+    // STC (Scintilla widget)
 
-    if (!project.GenerateVCProject())
-    {
-        wxString msg("Could not generate MMboard project");
-        wxMessageBox(msg);
-    }
+    GenerateSample("StcTestVC", "stctest", dir + wxString("/contrib/samples/stc"),
+        wxStringList("stctest.cpp", 0),
+        "../../..",
+        wxStringList("stcd.lib", 0), wxStringList("stc.lib", 0));
+
+    //// Utilities
+
+    // Dialog Editor
+
+    GenerateSample("DialogEdVC", "dialoged", dir + wxString("/utils/dialoged/src"),
+        wxStringList("dialoged.cpp", "dlghndlr.cpp", "edlist.cpp", "edtree.cpp",
+        "reseditr.cpp", "reswrite.cpp", "symbtabl.cpp", "winstyle.cpp", "winprop.cpp",
+        "dialoged.h", "dlghndlr.h", "edlist.h", "edtree.h", "reseditr.h", "symbtabl.h", "winprop.h",
+        "winstyle.h", 0),
+        "../../..");
+
+    // Tex2RTF
+
+    GenerateSample("Tex2RTFVC", "tex2rtf", dir + wxString("/utils/tex2rtf/src"),
+        wxStringList("tex2rtf.cpp", "htmlutil.cpp", "readshg.cpp", "rtfutils.cpp",
+        "table.cpp", "tex2any.cpp", "texutils.cpp", "xlputils.cpp",
+        "bmputils.h", "readshg.h", "rtfutils.h", "table.h", "tex2any.h", "tex2rtf.h", "wxhlpblk.h",
+        0),
+        "../../..");
+
+    // HelpGen
+
+    GenerateSample("HelpGenVC", "helpgen", dir + wxString("/utils/helpgen/src"),
+        wxStringList("helpgen.cpp", "cjparser.cpp", "docripper.cpp", "ifcontext.cpp",
+        "markup.cpp", "ripper_main.cpp", "scriptbinder.cpp", "sourcepainter.cpp",
+        "srcparser.cpp",
+        "cjparser.h", "docripper.h", "ifcontext.h", "markup.h", "scriptbinder.h", "sourcepainter.h",
+        "srcparser.h", "wxstlac.h", "wxstllst.h", "wxstlvec.h", 0),
+        "../../..");
+
+    // ProjGen
+    GenerateSample("ProjGenVC", "makeproj", dir + wxString("/utils/projgen"),
+        wxStringList("makeproj.cpp", "makeproj.h", 0),
+        "../..");
+
+    // hhp2cached
+
+    GenerateSample("hhp2cachedVC", "hhp2cached", dir + wxString("/utils/hhp2cached"),
+        wxStringList("hhp2cached.cpp", 0),
+        "../..");
+
 }
 
 // ----------------------------------------------------------------------------

@@ -578,6 +578,7 @@ void wxStringList::DoCopy(const wxStringList& other)
 // Makes new storage for the strings
 wxStringList::wxStringList (const wxChar *first, ...)
 {
+  DeleteContents(TRUE);
   if ( !first )
     return;
 
