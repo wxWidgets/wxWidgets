@@ -232,6 +232,11 @@ controls.
 wxMSW:  "Alt" key (VK_MENU) now results in WXK_ALT keyboard event, not
 WXK_MENU
 
+Added modules from Peter Yared and Morgan Hua that implement the wx
+Doc/View framework in pure Python code.  See wx.lib.docview for the
+base implementation and wx.lib.pydocview for Python-specific
+extensions.  There are also a couple sample applications located in
+samples/docview. 
 
 
 
