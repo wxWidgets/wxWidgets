@@ -331,7 +331,7 @@ bool wxGLCanvas::Show(bool show)
     }
     else
     {
-        if ( IsControlVisible( (ControlRef) m_macControl ) && !m_macCanvasIsShown )
+        if ( IsControlVisible( *m_peer ) && !m_macCanvasIsShown )
         {
             m_macCanvasIsShown = true ;
             SetViewport() ;
@@ -343,7 +343,7 @@ bool wxGLCanvas::Show(bool show)
 
 void wxGLCanvas::MacVisibilityChanged() 
 {
-    if ( !IsControlVisible( (ControlRef) m_macControl ) )
+    if ( !IsControlVisible( *m_peer ) )
     {
         if ( m_macCanvasIsShown )
         {
