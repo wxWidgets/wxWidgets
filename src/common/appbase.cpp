@@ -51,6 +51,11 @@
     #include "wx/fontmap.h"
 #endif // wxUSE_FONTMAP
 
+#if defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
+    // For MacTypes.h for Debugger function
+    #include <CoreFoundation/CFBase.h>
+#endif
+
 #if defined(__WXMAC__)
     // VZ: MacTypes.h is enough under Mac OS X (where I could test it) but
     //     I don't know which headers are needed under earlier systems so
@@ -582,6 +587,8 @@ void wxTrap()
     #else
         SysBreak();
     #endif
+#elif defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
+    Debugger();
 #elif defined(__UNIX__)
     raise(SIGTRAP);
 #else
