@@ -196,18 +196,18 @@ wxUint8 MMBoardApp::TestMultimediaCaps()
   caps = 0;
 
 #ifdef __UNIX__
-  // We test the OSS (Open Sound System) support.
-
-  dev = new wxSoundStreamOSS();
-  if (dev->GetError() == wxSOUND_NOERR) 
-    caps |= MM_SOUND_OSS;
-  delete dev;
-
   // We now test the ESD support
 
   dev = new wxSoundStreamESD();
-  if (dev->GetError() == wxSOUND_NOERR)
+  if (dev->GetError() == wxSOUND_NOERR) 
     caps |= MM_SOUND_ESD;
+  delete dev;
+
+  // We test the OSS (Open Sound System) support.
+
+  dev = new wxSoundStreamOSS();
+  if (dev->GetError() == wxSOUND_NOERR)
+    caps |= MM_SOUND_OSS;
   delete dev;
 #endif
 
@@ -355,9 +355,9 @@ void MMBoardFrame::OpenVideoWindow()
   if (m_video_window)
     return;
 
-  m_video_window = new wxWindow(m_panel, -1, wxDefaultPosition, wxSize(400, 400));
+  m_video_window = new wxWindow(m_panel, -1, wxDefaultPosition, wxSize(200, 200));
   m_video_window->SetBackgroundColour(*wxBLACK);
-  m_sizer->Prepend(m_video_window, 0, wxGROW | wxSHRINK | wxCENTRE, 0);
+  m_sizer->Prepend(m_video_window, 2, wxGROW | wxSHRINK | wxCENTRE, 1);
 
   m_sizer->Fit(this);
 }

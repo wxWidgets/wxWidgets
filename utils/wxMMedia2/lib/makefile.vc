@@ -21,7 +21,7 @@ LIBTARGET=$(WXDIR)\lib\mmedia2.lib
 OBJECTS = cdbase.obj cdwin.obj g711.obj g721.obj g723_24.obj sndg72x.obj \
         g723_40.obj g72x.obj sndbase.obj sndcodec.obj sndpcm.obj \
         sndcpcm.obj sndulaw.obj sndfile.obj sndwav.obj sndaiff.obj sndwin.obj \
-        vidbase.obj
+        vidbase.obj vidwin.obj
 
 !include $(WXDIR)\src\makelib.vc
 
@@ -104,3 +104,9 @@ vidbase.obj:      vidbase.h vidbase.$(SRCSUFF)
         $(cc) @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
+
+vidwin.obj:      vidwin.h vidwin.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+

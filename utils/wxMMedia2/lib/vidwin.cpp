@@ -12,120 +12,157 @@
 #pragma implementation "vidwin.h"
 #endif
 
-#if 0
 #include "wx/wxprec.h"
-#else
+
+#ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
+
+#include "wx/stream.h"
+#include "wx/wfstream.h"
 
 #define WXMMEDIA_INTERNAL
 #include <windows.h>
 #include <mmsystem.h>
 #include <digitalv.h>
-#include "mmtype.h"
-#include "mmfile.h"
 #include "vidwin.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
-wxVideoWindows::wxVideoWindows(void)
+IMPLEMENT_DYNAMIC_CLASS(wxVideoWindows, wxVideoBaseDriver)
+
+wxVideoWindows::wxVideoWindows()
 {
 }
 
-wxVideoWindows::wxVideoWindows(wxInputStream& str, bool seekable)
-  : wxVideoBaseDriver(str, seekable)
+wxVideoWindows::wxVideoWindows(wxInputStream& str)
+  : wxVideoBaseDriver(str)
 {
-  OpenFile(GetCurrentFile());
+    m_internal    = new wxVIDWinternal;
+    m_remove_file = TRUE;
+    m_filename    = wxGetTempFileName("wxvid");
+    m_paused      = FALSE;
+    m_stopped     = TRUE;
+    
+    wxFileOutputStream temp_file(m_filename);
+    temp_file << str;
+
+    OpenFile();
 }
 
-wxVideoWindows::wxVideoWindows(const char *fname)
-  : wxVideoBaseDriver(fname)
+wxVideoWindows::wxVideoWindows(const wxString& filename)
+  : wxVideoBaseDriver(filename)
 {
-  OpenFile(fname);
+    m_internal    = new wxVIDWinternal;
+    m_remove_file = FALSE;
+    m_filename    = filename;
+    m_paused      = FALSE;
+    m_stopped     = TRUE;
+    OpenFile();
 }
 
 wxVideoWindows::~wxVideoWindows(void)
 {
-  mciSendCommand(internal->dev_id, MCI_CLOSE, 0, 0);
+    mciSendCommand(m_internal->m_dev_id, MCI_CLOSE, 0, 0);
 
-  if (internal)
-    delete internal;
+    if (m_internal)
+        delete m_internal;
 }
 
-void wxVideoWindows::OpenFile(const char *fname)
+void wxVideoWindows::OpenFile()
 {
-  MCI_DGV_OPEN_PARMS open_struct;
-  DWORD ret;
+    MCI_DGV_OPEN_PARMS open_struct;
+    DWORD ret;
 
-  internal = new VIDW_Internal;
-
-  open_struct.lpstrDeviceType = "avivideo";
-  open_struct.lpstrElementName = (LPSTR)fname;
-  open_struct.hWndParent = 0;
-
-  ret = mciSendCommand(0, MCI_OPEN,
-        MCI_OPEN_ELEMENT|MCI_DGV_OPEN_PARENT|MCI_OPEN_TYPE|MCI_DGV_OPEN_32BIT,
-                       (DWORD)(LPVOID)&open_struct);
-  internal->dev_id = open_struct.wDeviceID;
+    open_struct.lpstrDeviceType = "avivideo";
+    open_struct.lpstrElementName = (LPSTR)(m_filename.mb_str());
+    open_struct.hWndParent = 0;
+    
+    ret = mciSendCommand(0, MCI_OPEN,
+			 MCI_OPEN_ELEMENT|MCI_DGV_OPEN_PARENT|MCI_OPEN_TYPE|MCI_DGV_OPEN_32BIT,
+			 (DWORD)(LPVOID)&open_struct);
+    m_internal->m_dev_id = open_struct.wDeviceID;
 }
 
-bool wxVideoWindows::Pause(void)
+bool wxVideoWindows::Pause()
 {
-  return (mciSendCommand(internal->dev_id, MCI_PAUSE, 0, 0) == 0);
+    if (m_paused || m_stopped)
+        return TRUE;
+    m_paused = TRUE;
+    return (mciSendCommand(m_internal->m_dev_id, MCI_PAUSE, 0, 0) == 0);
 }
 
-bool wxVideoWindows::Resume(void)
+bool wxVideoWindows::Resume()
 {
-  return (mciSendCommand(internal->dev_id, MCI_PAUSE, 0, 0) == 0);
+    if (!m_paused || m_stopped)
+        return TRUE;
+    m_paused = FALSE;
+    return (mciSendCommand(m_internal->m_dev_id, MCI_PAUSE, 0, 0) == 0);
 }
 
-bool wxVideoWindows::SetVolume(wxUint8 vol)
+bool wxVideoWindows::IsPaused()
 {
-  return TRUE;
+    return m_paused;
+}
+
+bool wxVideoWindows::IsStopped()
+{
+    return m_stopped;
+}
+
+bool wxVideoWindows::GetSize(wxSize& size) const
+{
+    return TRUE;
 }
 
 bool wxVideoWindows::Resize(wxUint16 w, wxUint16 h)
 {
-  return TRUE;
+    return TRUE;
 }
 
 bool wxVideoWindows::IsCapable(wxVideoType v_type)
 {
-  return (v_type == wxVIDEO_MSAVI);
+    return (v_type == wxVIDEO_MSAVI);
 }
 
-bool wxVideoWindows::AttachOutput(wxVideoOutput& output)
+bool wxVideoWindows::AttachOutput(wxWindow& output)
 {
-  MCI_DGV_WINDOW_PARMS win_struct;
-
-  if (!wxVideoBaseDriver::AttachOutput(output))
-    return FALSE;
-
-  win_struct.hWnd = (HWND)output.GetHWND();
-  mciSendCommand(internal->dev_id, MCI_WINDOW,
-                 MCI_DGV_WINDOW_HWND, (DWORD)(LPVOID)&win_struct);
-  return TRUE;
+    MCI_DGV_WINDOW_PARMS win_struct;
+    
+    if (!wxVideoBaseDriver::AttachOutput(output))
+        return FALSE;
+    
+    win_struct.hWnd = (HWND)output.GetHWND();
+    mciSendCommand(m_internal->m_dev_id, MCI_WINDOW,
+		   MCI_DGV_WINDOW_HWND, (DWORD)(LPVOID)&win_struct);
+    return TRUE;
 }
 
-void wxVideoWindows::DetachOutput(void)
+void wxVideoWindows::DetachOutput()
 {
-  MCI_DGV_WINDOW_PARMS win_struct;
+    MCI_DGV_WINDOW_PARMS win_struct;
 
-  wxVideoBaseDriver::DetachOutput();
-
-  win_struct.hWnd = 0;
-  mciSendCommand(internal->dev_id, MCI_WINDOW,
-                 MCI_DGV_WINDOW_HWND, (DWORD)(LPVOID)&win_struct);
+    wxVideoBaseDriver::DetachOutput();
+    
+    win_struct.hWnd = 0;
+    mciSendCommand(m_internal->m_dev_id, MCI_WINDOW,
+		   MCI_DGV_WINDOW_HWND, (DWORD)(LPVOID)&win_struct);
 }
 
-bool wxVideoWindows::StartPlay(void)
+bool wxVideoWindows::Play()
 {
-  return (mciSendCommand(internal->dev_id, MCI_PLAY, 0, NULL) == 0);
+    if (!m_stopped)
+        return FALSE;
+    m_stopped = FALSE;
+    return (mciSendCommand(m_internal->m_dev_id, MCI_PLAY, 0, NULL) == 0);
 }
 
-void wxVideoWindows::StopPlay(void)
+bool wxVideoWindows::Stop()
 {
-  mciSendCommand(internal->dev_id, MCI_STOP, 0, NULL);
+    if (m_stopped)
+        return FALSE;
+    m_stopped = TRUE;
+    return (mciSendCommand(m_internal->m_dev_id, MCI_STOP, 0, NULL) == 0);
 }

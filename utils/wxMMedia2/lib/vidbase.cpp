@@ -37,6 +37,11 @@ wxVideoBaseDriver::wxVideoBaseDriver(wxInputStream& str)
   m_video_output = NULL;
 }
 
+wxVideoBaseDriver::wxVideoBaseDriver(const wxString& filename)
+{
+  m_video_output = NULL;
+}
+
 wxVideoBaseDriver::~wxVideoBaseDriver()
 {
 }

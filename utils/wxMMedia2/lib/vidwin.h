@@ -1,4 +1,4 @@
-// /////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------
 // Name:       vidwin.h
 // Purpose:    wxMMedia
 // Author:     Guilhem Lavaux
@@ -6,57 +6,82 @@
 // Updated:
 // Copyright:  (C) 1998, Guilhem Lavaux
 // License:    wxWindows license
-// /////////////////////////////////////////////////////////////////////////////
-/* Real -*- C++ -*- */
+// ----------------------------------------------------------------------------
+
 #ifndef __VID_windows_H__
 #define __VID_windows_H__
 
 #ifdef __GNUG__
-#pragma interface
+    #pragma interface "vidwin.h"
 #endif
 
-#include "mmtype.h"
-#include "mmfile.h"
-#ifdef WX_PRECOMP
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+// For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
-#else
-#include "wx/wx.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
 #endif
+
+// for all others, include the necessary headers (this file is usually all you
+// need because it includes almost all "standard" wxWindows headers
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+    #include "wx/stream.h"
+    #include "wx/window.h"
+#endif
+
+// ----------------------------------------------------------------------------
+// wxMMedia2 headers
+
 #include "vidbase.h"
+
+// ----------------------------------------------------------------------------
+// System headers and private types
 
 #ifdef WXMMEDIA_INTERNAL
 #include <windows.h>
 #include <mmsystem.h>
 
 typedef struct VIDW_Internal {
-  MCIDEVICEID dev_id;
-} VIDW_Internal;
+    MCIDEVICEID m_dev_id;
+} wxVIDWinternal;
 #endif
 
-class wxVideoWindows : public wxVideoBaseDriver {
-  DECLARE_DYNAMIC_CLASS(wxVideoWindows)
+// ----------------------------------------------------------------------------
+// Class definition
+
+class WXDLLEXPORT wxVideoWindows : public wxVideoBaseDriver {
+    DECLARE_DYNAMIC_CLASS(wxVideoWindows)
 protected:
-  struct VIDW_Internal *internal;
+    struct VIDW_Internal *m_internal;
+    bool m_paused, m_stopped, m_remove_file;
+    wxString m_filename;
 
-  void OpenFile(const char *fname);
+    void OpenFile();
 public:
-  wxVideoWindows(void);
-  wxVideoWindows(wxInputStream& str, bool seekable = FALSE);
-  wxVideoWindows(const char *fname);
-  virtual ~wxVideoWindows(void);
+    wxVideoWindows(void);
+    wxVideoWindows(wxInputStream& str);
+    wxVideoWindows(const wxString& fname);
+    ~wxVideoWindows(void);
 
-  virtual bool StartPlay(void);
-  virtual void StopPlay(void);
-  virtual bool Pause(void);
-  virtual bool Resume(void);
-
-  virtual bool SetVolume(wxUint8 vol);
-  virtual bool Resize(wxUint16 w, wxUint16 h);
-
-  virtual bool IsCapable(wxVideoType v_type);
-
-  virtual bool AttachOutput(wxVideoOutput& output);
-  virtual void DetachOutput(void);
+    bool Play();
+    bool Stop();
+    bool Pause();
+    bool Resume();
+    
+    bool Resize(wxUint16 w, wxUint16 h);
+    bool GetSize(wxSize& size) const;
+    
+    bool IsCapable(wxVideoType v_type);
+    
+    bool AttachOutput(wxWindow& output);
+    void DetachOutput(void);
+    
+    bool IsPaused();
+    bool IsStopped();
 };
 
 #endif

@@ -263,50 +263,50 @@ wxString MMBoardSoundFile::GetStringType()
 {
   switch (m_file_type) {
   case MMBoard_WAVE:
-    return wxString("WAVE file");
+    return wxString(wxT("WAVE file"));
     break;
   case MMBoard_AIFF:
-    return wxString("AIFF file");
+    return wxString(wxT("AIFF file"));
     break;
   default:
-    return wxString("Unknown file");
+    return wxString(wxT("Unknown file"));
     break;
   }
 }
 
 wxString MMBoardSoundFile::GetStringInformation()
 {
-  wxString info;
-  wxSoundFormatBase *format;
-
-  format = &(m_file_stream->GetSoundFormat());
-
-  info = _T("Data encoding: ");
-  switch (format->GetType()) {
-  case wxSOUND_PCM: {
-    wxSoundFormatPcm *pcm_format = (wxSoundFormatPcm *)format;
-
-    info += _T("PCM\n");
-    info += wxString::Format(_T("Sampling rate: %d\n")
-			     _T("Bits per sample: %d\n")
-			     _T("Number of channels: %d\n"),
-			     pcm_format->GetSampleRate(),
-			     pcm_format->GetBPS(),
-			     pcm_format->GetChannels());
-
-    break;
-  }
-  case wxSOUND_ULAW: {
-    wxSoundFormatUlaw *ulaw_format = (wxSoundFormatUlaw *)format;
-    info += _T("ULAW\n");
-    info += wxString::Format(_T("Sampling rate: %d\n"), ulaw_format->GetSampleRate());
-    break;
-  }
-  default:
-    info += _T("Unknown");
-    break;
-  }
-  return info;
+    wxString info;
+    wxSoundFormatBase *format;
+    
+    format = &(m_file_stream->GetSoundFormat());
+    
+    info = wxT("Data encoding: ");
+    switch (format->GetType()) {
+    case wxSOUND_PCM: {
+        wxSoundFormatPcm *pcm_format = (wxSoundFormatPcm *)format;
+      
+	info += wxT("PCM\n");
+	info += wxString::Format(wxT("Sampling rate: %d\n")
+				 wxT("Bits per sample: %d\n")
+				 wxT("Number of channels: %d\n"),
+				 pcm_format->GetSampleRate(),
+				 pcm_format->GetBPS(),
+				 pcm_format->GetChannels());
+	
+	break;
+    }
+    case wxSOUND_ULAW: {
+        wxSoundFormatUlaw *ulaw_format = (wxSoundFormatUlaw *)format;
+	info += wxT("ULAW\n");
+	info += wxString::Format(wxT("Sampling rate: %d\n"), ulaw_format->GetSampleRate());
+	break;
+    }
+    default:
+        info += wxT("Unknown");
+	break;
+    }
+    return info;
 }
 
 // ----------------------------------------------------------------------------
@@ -317,93 +317,92 @@ wxString MMBoardSoundFile::GetStringInformation()
 
 MMBoardVideoFile::MMBoardVideoFile(const wxString& filename)
 {
-  m_output_window = NULL;
-  m_input_stream = new wxFileInputStream(filename);
+    m_output_window = NULL;
   
 #if defined(__UNIX__)
-  m_video_driver = new wxVideoXANIM(*m_input_stream);
+    m_video_driver = new wxVideoXANIM(filename);
 #elif defined(__WIN32__)
-  m_video_driver = new wxVideoWindows(m_input_stream);
+    m_video_driver = new wxVideoWindows(filename);
 #else
-  m_video_driver = NULL;
-  SetError(MMBoard_UnknownFile);
+    m_video_driver = NULL;
+    SetError(MMBoard_UnknownFile);
 #endif
 }
 
 MMBoardVideoFile::~MMBoardVideoFile()
 {
-  if (m_video_driver)
-    delete m_video_driver;
+    if (m_video_driver)
+        delete m_video_driver;
 
-  delete m_input_stream;
+    delete m_input_stream;
 }
 
 bool MMBoardVideoFile::NeedWindow()
 {
-  return TRUE;
+    return TRUE;
 }
 
 void MMBoardVideoFile::SetWindow(wxWindow *window)
 {
-  m_output_window = window;
-  m_video_driver->AttachOutput(*window);
+    m_output_window = window;
+    m_video_driver->AttachOutput(*window);
 }
 
 void MMBoardVideoFile::Play()
 {
-  m_video_driver->Play();
+    m_video_driver->Play();
 }
 
 void MMBoardVideoFile::Pause()
 {
-  m_video_driver->Pause();
+    m_video_driver->Pause();
 }
 
 void MMBoardVideoFile::Resume()
 {
-  m_video_driver->Resume();
+    m_video_driver->Resume();
 }
 
 void MMBoardVideoFile::Stop()
 {
-  m_video_driver->Stop();
+    m_video_driver->Stop();
 }
 
 MMBoardTime MMBoardVideoFile::GetPosition()
 {
-  MMBoardTime btime;
+    MMBoardTime btime;
 
-  btime.seconds = btime.minutes = btime.hours = 0;
-  return btime;
+    btime.seconds = btime.minutes = btime.hours = 0;
+    return btime;
 }
 
 MMBoardTime MMBoardVideoFile::GetLength()
 {
-  MMBoardTime btime;
+    MMBoardTime btime;
 
-  btime.seconds = 1;
-  btime.minutes = btime.hours = 0;
-  return btime;
+    btime.seconds = 1;
+    btime.minutes = btime.hours = 0;
+    return btime;
 }
 
 bool MMBoardVideoFile::IsStopped()
 {
-  return m_video_driver->IsStopped();
+    return m_video_driver->IsStopped();
 }
 
 bool MMBoardVideoFile::IsPaused()
 {
-  return m_video_driver->IsPaused();
+    return m_video_driver->IsPaused();
 }
 
 wxString MMBoardVideoFile::GetStringType()
 {
-  return wxString("Video XANIM");
+    return wxString(wxT("Video XANIM"));
 }
 
 wxString MMBoardVideoFile::GetStringInformation()
 {
-  return wxString("No info");
+    return wxString(wxT("No info"));
 }
 
 // ----------------------------------------------------------------------------

@@ -28,7 +28,7 @@ wxSoundStreamOSS::wxSoundStreamOSS(const wxString& dev_name)
 {
   wxSoundFormatPcm pcm_default;
 
-  m_fd = open(dev_name.mb_str(), O_RDWR);
+  m_fd = open(dev_name.mb_str(), O_WRONLY);
 
   if (m_fd == -1) {
     m_snderror = wxSOUND_INVDEV;
