@@ -204,6 +204,102 @@ template<> void wxStringWriteValue(wxString & , char * const & )
         assert(0) ;
 }
 
+// unsigned char *
+
+template<> const wxTypeInfo* wxGetTypeInfo( unsigned char ** )
+{
+        assert(0) ;
+        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
+        return &s_typeInfo ;
+}
+
+template<> void wxStringReadValue(const wxString & , unsigned char* & )
+{
+        assert(0) ;
+}
+
+template<> void wxStringWriteValue(wxString & , unsigned char * const & )
+{
+        assert(0) ;
+}
+
+// int *
+
+template<> const wxTypeInfo* wxGetTypeInfo( int ** )
+{
+        assert(0) ;
+        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
+        return &s_typeInfo ;
+}
+
+template<> void wxStringReadValue(const wxString & , int* & )
+{
+        assert(0) ;
+}
+
+template<> void wxStringWriteValue(wxString & , int * const & )
+{
+        assert(0) ;
+}
+
+// bool *
+
+template<> const wxTypeInfo* wxGetTypeInfo( bool ** )
+{
+        assert(0) ;
+        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
+        return &s_typeInfo ;
+}
+
+template<> void wxStringReadValue(const wxString & , bool* & )
+{
+        assert(0) ;
+}
+
+template<> void wxStringWriteValue(wxString & , bool * const & )
+{
+        assert(0) ;
+}
+
+// long *
+
+template<> const wxTypeInfo* wxGetTypeInfo( long ** )
+{
+        assert(0) ;
+        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
+        return &s_typeInfo ;
+}
+
+template<> void wxStringReadValue(const wxString & , long* & )
+{
+        assert(0) ;
+}
+
+template<> void wxStringWriteValue(wxString & , long * const & )
+{
+        assert(0) ;
+}
+
+// wxString *
+
+template<> const wxTypeInfo* wxGetTypeInfo( wxString ** )
+{
+        assert(0) ;
+        static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
+        return &s_typeInfo ;
+}
+
+template<> void wxStringReadValue(const wxString & , wxString* & )
+{
+        assert(0) ;
+}
+
+template<> void wxStringWriteValue(wxString & , wxString * const & )
+{
+        assert(0) ;
+}
+
+
 // ----------------------------------------------------------------------------
 // value streaming
 // ----------------------------------------------------------------------------
@@ -370,6 +466,16 @@ template<> void wxStringWriteValue(wxString &s , const wxPoint &data )
 	s = wxString::Format("%d,%d", data.x , data.y ) ;
 }
 
+template<> void wxStringReadValue(const wxString & , wxPoint* & )
+{
+    assert(0) ;
+}
+
+template<> void wxStringWriteValue(wxString & , wxPoint* const & )
+{
+    assert(0) ;
+}
+
 WX_CUSTOM_TYPE_INFO(wxPoint)
 
 template<> void wxStringReadValue(const wxString &s , wxSize &data )
@@ -380,6 +486,16 @@ template<> void wxStringReadValue(const wxString &s , wxSize &data )
 template<> void wxStringWriteValue(wxString &s , const wxSize &data )
 {
 	s = wxString::Format("%d,%d", data.x , data.y ) ;
+}
+
+template<> void wxStringReadValue(const wxString & , wxSize* & )
+{
+    assert(0) ;
+}
+
+template<> void wxStringWriteValue(wxString & , wxSize * const & )
+{
+    assert(0) ;
 }
 
 WX_CUSTOM_TYPE_INFO(wxSize)
