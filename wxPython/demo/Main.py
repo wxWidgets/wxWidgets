@@ -31,6 +31,7 @@ _treeList = [
         'NewNamespace',
         'PopupMenu',
         'AnalogClockWindow',
+        'MaskedEditControls',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -111,6 +112,7 @@ _treeList = [
         'FancyText',
         'FileBrowseButton',
         'GenericButtons',
+        'MaskedEditControls',
         'PyShell',
         'PyCrust',
         'SplitTree',

@@ -46,6 +46,10 @@ Toolbars on wxMac can now have controls on them.
 Added wxPython.lib.analogclock module based on samples that were
 passed back and forth on wxPython-users a while back.
 
+Added masked edit controls (wxPython.lib.maskededit) by Jeff Childers
+and Will Sadkin.  Updated wxTimeCtrl to use MaskedEdit.
+
+
 
 
 
