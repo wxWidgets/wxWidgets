@@ -82,7 +82,7 @@ public:
     MyTextCtrl    *m_tab;
     MyTextCtrl    *m_entertab;
     MyTextCtrl    *m_readonly;
-    
+
     MyTextCtrl    *m_multitext;
     MyTextCtrl    *m_horizontal;
     MyTextCtrl    *m_multitab;
@@ -387,37 +387,38 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     // single line text controls
 
-    m_text = new MyTextCtrl( this, -1, "Single line.", 
+    m_text = new MyTextCtrl( this, -1, "Single line.",
       wxPoint(10,10), wxSize(140,-1), 0);
     (*m_text) << " Appended.";
     m_text->SetInsertionPoint(0);
     m_text->WriteText( "Prepended. " );
-    
-    m_password = new MyTextCtrl( this, -1, "", 
+
+    m_password = new MyTextCtrl( this, -1, "",
       wxPoint(10,50), wxSize(140,-1), wxTE_PASSWORD );
-    
-    m_readonly = new MyTextCtrl( this, -1, "Read only", 
+
+    m_readonly = new MyTextCtrl( this, -1, "Read only",
       wxPoint(10,90), wxSize(140,-1), wxTE_READONLY );
-    
+
     // multi line text controls
 
-    m_horizontal = new MyTextCtrl( this, -1, "Multiline text control with a horizontal scrollbar.", 
-      wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL ); 
-    
-    m_multitext = new MyTextCtrl( this, ID_TEXT, "Multi line.", 
+    m_horizontal = new MyTextCtrl( this, -1, "Multiline text control with a horizontal scrollbar.",
+      wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL );
+    m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD));
+
+    m_multitext = new MyTextCtrl( this, ID_TEXT, "Multi line.",
       wxPoint(180,10), wxSize(240,70), wxTE_MULTILINE );
     (*m_multitext) << " Appended.";
     m_multitext->SetInsertionPoint(0);
     m_multitext->WriteText( "Prepended. " );
-    
+
 #if wxUSE_TOOLTIPS
     m_multitext->SetToolTip("Press F1 here.");
 #endif
 
-    m_tab = new MyTextCtrl( this, -1, "Multiline, allow <TAB> processing.", 
+    m_tab = new MyTextCtrl( this, -1, "Multiline, allow <TAB> processing.",
       wxPoint(180,90), wxSize(240,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
 
-    m_enter = new MyTextCtrl( this, -1, "Multiline, allow <ENTER> processing.", 
+    m_enter = new MyTextCtrl( this, -1, "Multiline, allow <ENTER> processing.",
       wxPoint(180,170), wxSize(240,70), wxTE_MULTILINE |  wxTE_PROCESS_ENTER );
 
     wxButton *button;
@@ -431,7 +432,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #if wxUSE_TOOLTIPS
     button->SetToolTip("Move cursor in multi-line text control to end of first line.");
 #endif
-    
+
     (void)new wxStaticBox( this, -1, "wx&Clipboard", wxPoint(445,130), wxSize(160,100) );
     button = new wxButton( this, ID_COPY_TEXT, "C&opy line 1", wxPoint(470,150), wxSize(110,30) );
 #if wxUSE_TOOLTIPS
@@ -581,11 +582,11 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
     wxBeginBusyCursor();
 
     wxMessageDialog dialog(this, "This is a text control sample. It demonstrates the many different text control\n"
-                                 "styles, the use of the clipboard, setting and handling tooltips and intercepting\n" 
-				 "key and char events.\n"
-				 "\n"
-				 "Copyright (c) 1999, Robert Roebling, Julian Smart, Vadim Zeitlin", 
-				 "About Text Controls", wxOK );
+                                 "styles, the use of the clipboard, setting and handling tooltips and intercepting\n"
+                                 "key and char events.\n"
+                                 "\n"
+                                 "Copyright (c) 1999, Robert Roebling, Julian Smart, Vadim Zeitlin",
+                                 "About Text Controls", wxOK );
     dialog.ShowModal();
 
     wxEndBusyCursor();
@@ -600,9 +601,9 @@ void MyFrame::OnSetTooltipDelay(wxCommandEvent& event)
     delay.Printf( _T("%ld"), s_delay);
 
     delay = wxGetTextFromUser("Enter delay (in milliseconds)",
-            "Set tooltip delay",
-            delay,
-            this);
+                              "Set tooltip delay",
+                              delay,
+                              this);
     if ( !delay )
         return; // cancelled
 

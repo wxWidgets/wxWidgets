@@ -96,22 +96,26 @@ void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
   panel2->SetBackgroundColour(wxColour("BLUE"));
 
   wxString animals[] = { "Fox", "Hare", "Rabbit", "Sabre-toothed tiger", "T Rex" };
-  wxListBox *listbox = new wxListBox(panel2, -1, wxPoint(5, 5), wxSize(170, 80), 5, animals);
+  wxRadioBox *radiobox = new wxRadioBox(panel2, -1, "Choose one",
+                                        wxDefaultPosition, wxDefaultSize, 5, animals);
 
   c = new wxLayoutConstraints;
   c->left.SameAs(panel2, wxLeft, 4);
   c->top.SameAs(panel2, wxTop, 4);
   c->height.PercentOf(panel2, wxHeight, 50);
   c->right.SameAs(panel2, wxRight, 4);
-  listbox->SetConstraints(c);
+  radiobox->SetConstraints(c);
 
-  wxTextCtrl *text = new wxTextCtrl(panel2, -1, "Some notes about the animals in this house", wxPoint(5, 100), wxSize(170, 100), wxTE_MULTILINE);
+  wxRadioBox *radiobox2 = new wxRadioBox(panel2, -1, "Choose one",
+                                         wxDefaultPosition, wxDefaultSize,
+                                         5, animals,
+                                         2, wxRA_SPECIFY_ROWS);
   c = new wxLayoutConstraints;
-  c->left.SameAs(panel2, wxLeft, 4);
-  c->bottom.SameAs(panel2, wxBottom, 4);
-  c->top.Below(listbox, 4);
-  c->right.SameAs(panel2, wxRight, 4);
-  text->SetConstraints(c);
+  c->left.SameAs(radiobox, wxLeft);
+  c->height.AsIs();
+  c->top.Below(radiobox, 4);
+  c->right.SameAs(radiobox, wxRight);
+  radiobox2->SetConstraints(c);
 
   notebook->AddPage(panel2, "Dog");
 
@@ -170,7 +174,7 @@ void MyDialog::Init(void)
   SetAutoLayout(TRUE);
   Layout();
 
-  this->Centre(wxBOTH);
+  Centre(wxBOTH);
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)

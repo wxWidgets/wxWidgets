@@ -46,7 +46,7 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
     if (!win->m_hasVMT) return;
 
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     win->SetModified();
@@ -65,8 +65,8 @@ static void
 gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
     if (!win->m_hasVMT) return;
-    
-    if (g_isIdle) 
+
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     win->CalculateScrollbar();
@@ -160,10 +160,10 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
                       (GtkAttachOptions)(GTK_FILL | GTK_EXPAND | GTK_SHRINK),
                       (GtkAttachOptions)(GTK_FILL | GTK_EXPAND | GTK_SHRINK),
                        0, 0);
-		       
+
         /* always wrap words */
         gtk_text_set_word_wrap( GTK_TEXT(m_text), TRUE );
-	
+
         /* put the horizontal scrollbar in the lower left hand corner */
         if (bHasHScrollbar)
         {
@@ -180,7 +180,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
             gtk_text_set_line_wrap( GTK_TEXT(m_text), FALSE );
 #endif
         }
-	
+
         /* finally, put the vertical scrollbar in the upper right corner */
         m_vScrollbar = gtk_vscrollbar_new( GTK_TEXT(m_text)->vadj );
         GTK_WIDGET_UNSET_FLAGS( m_vScrollbar, GTK_CAN_FOCUS );
@@ -317,7 +317,7 @@ void wxTextCtrl::SetValue( const wxString &value )
 
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-      
+
     wxString tmp = _T("");
     if (!value.IsNull()) tmp = value;
     if (m_windowStyle & wxTE_MULTILINE)
@@ -336,7 +336,7 @@ void wxTextCtrl::SetValue( const wxString &value )
     {
         gtk_entry_set_text( GTK_ENTRY(m_text), tmp.mbc_str() );
     }
-    
+
     gtk_signal_connect( GTK_OBJECT(m_text), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
@@ -349,7 +349,7 @@ void wxTextCtrl::WriteText( const wxString &text )
 
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-      
+
     if (m_windowStyle & wxTE_MULTILINE)
     {
         /* this moves the cursor pos to behind the inserted text */
@@ -382,7 +382,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         /* bring entry's cursor uptodate. bug in GTK. */
         gtk_entry_set_position( GTK_ENTRY(m_text), GTK_EDITABLE(m_text)->current_pos );
     }
-    
+
     gtk_signal_connect( GTK_OBJECT(m_text), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
@@ -395,17 +395,32 @@ void wxTextCtrl::AppendText( const wxString &text )
 
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-      
+
     if (m_windowStyle & wxTE_MULTILINE)
     {
-        /* we'll insert at the last position */
-        gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+        bool hasSpecialAttributes = m_font.Ok() ||
+                                    m_foregroundColour.Ok() ||
+                                    m_backgroundColour.Ok();
+        if ( hasSpecialAttributes )
+        {
+             gtk_text_insert( GTK_TEXT(m_text),
+                              m_font.GetInternalFont(),
+                              m_foregroundColour.GetColor(),
+                              m_backgroundColour.GetColor(),
+                              text, text.length());
+
+        }
+        else
+        {
+            /* we'll insert at the last position */
+            gint len = gtk_text_get_length( GTK_TEXT(m_text) );
 #if wxUSE_UNICODE
-        wxWX2MBbuf buf = text.mbc_str();
-        gtk_editable_insert_text( GTK_EDITABLE(m_text), buf, strlen(buf), &len );
+            wxWX2MBbuf buf = text.mbc_str();
+            gtk_editable_insert_text( GTK_EDITABLE(m_text), buf, strlen(buf), &len );
 #else
-        gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
+            gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
 #endif
+        }
 
         /* bring editable's cursor uptodate. bug in GTK. */
         GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
@@ -414,7 +429,7 @@ void wxTextCtrl::AppendText( const wxString &text )
     {
         gtk_entry_append_text( GTK_ENTRY(m_text), text.mbc_str() );
     }
-    
+
     gtk_signal_connect( GTK_OBJECT(m_text), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
@@ -453,7 +468,7 @@ bool wxTextCtrl::LoadFile( const wxString &file )
 
         gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
           GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-      
+
         if (m_windowStyle & wxTE_MULTILINE)
         {
             gint pos = 0;
@@ -463,10 +478,10 @@ bool wxTextCtrl::LoadFile( const wxString &file )
         {
             gtk_entry_set_text( GTK_ENTRY(m_text), text );
         }
-    
+
         gtk_signal_connect( GTK_OBJECT(m_text), "changed",
           GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-      
+
         free (text);
         m_modified = FALSE;
         return TRUE;
@@ -746,9 +761,9 @@ void wxTextCtrl::Remove( long from, long to )
 
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-      
+
     gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
-    
+
     gtk_signal_connect( GTK_OBJECT(m_text), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
@@ -759,9 +774,9 @@ void wxTextCtrl::Replace( long from, long to, const wxString &value )
 
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-      
+
     gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
-    
+
     if (!value.IsEmpty())
     {
         gint pos = (gint)from;
@@ -772,7 +787,7 @@ void wxTextCtrl::Replace( long from, long to, const wxString &value )
         gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &pos );
 #endif
     }
-    
+
     gtk_signal_connect( GTK_OBJECT(m_text), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
@@ -783,13 +798,13 @@ void wxTextCtrl::Cut()
 
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-      
+
 #if (GTK_MINOR_VERSION > 0)
     gtk_editable_cut_clipboard( GTK_EDITABLE(m_text) );
 #else
     gtk_editable_cut_clipboard( GTK_EDITABLE(m_text), 0 );
 #endif
-    
+
     gtk_signal_connect( GTK_OBJECT(m_text), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
@@ -811,13 +826,13 @@ void wxTextCtrl::Paste()
 
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-      
+
 #if (GTK_MINOR_VERSION > 0)
     gtk_editable_paste_clipboard( GTK_EDITABLE(m_text) );
 #else
     gtk_editable_paste_clipboard( GTK_EDITABLE(m_text), 0 );
 #endif
-    
+
     gtk_signal_connect( GTK_OBJECT(m_text), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
@@ -875,14 +890,14 @@ bool wxTextCtrl::CanRedo() const
 void wxTextCtrl::GetSelection(long* from, long* to) const
 {
     wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
-    
+
     if (!(GTK_EDITABLE(m_text)->has_selection))
     {
         if (from) *from = 0;
-	if (to)   *to = 0;
-	return;
+        if (to)   *to = 0;
+        return;
     }
-    
+
     if (from) *from = (long) GTK_EDITABLE(m_text)->selection_start_pos;
     if (to)   *to = (long) GTK_EDITABLE(m_text)->selection_end_pos;
 }
@@ -1005,12 +1020,31 @@ bool wxTextCtrl::IsOwnGtkWindow( GdkWindow *window )
         return (window == GTK_ENTRY(m_text)->text_area);
 }
 
-bool wxTextCtrl::SetFont( const wxFont &WXUNUSED(font) )
+// the font will change for subsequent text insertiongs
+bool wxTextCtrl::SetFont( const wxFont &font )
 {
     wxCHECK_MSG( m_text != NULL, FALSE, _T("invalid text ctrl") );
 
-    // doesn't work
-    return FALSE;
+    if ( !wxWindowBase::SetFont(font) )
+    {
+        // font didn't change, nothing to do
+        return FALSE;
+    }
+
+    if ( m_windowStyle & wxTE_MULTILINE )
+    {
+        // for compatibility with other ports: the font is a global controls
+        // characteristic, so change the font globally
+        wxString value = GetValue();
+        if ( !value.IsEmpty() )
+        {
+            Clear();
+
+            AppendText(value);
+        }
+    }
+
+    return TRUE;
 }
 
 bool wxTextCtrl::SetForegroundColour( const wxColour &WXUNUSED(colour) )
