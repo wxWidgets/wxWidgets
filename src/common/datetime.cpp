@@ -3346,7 +3346,7 @@ wxString wxTimeSpan::Format(const wxChar *format) const
     wxCHECK_MSG( format, _T(""), _T("NULL format in wxTimeSpan::Format") );
 
     wxString str;
-    str.Alloc(strlen(format));
+    str.Alloc(wxStrlen(format));
 
     for ( const wxChar *pch = format; pch; pch++ )
     {

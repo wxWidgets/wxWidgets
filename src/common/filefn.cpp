@@ -943,9 +943,9 @@ wxDos2UnixFilename (char *s)
 
 void
 #if defined(__WXMSW__) || defined(__WXPM__)
-wxUnix2DosFilename (char *s)
+wxUnix2DosFilename (wxChar *s)
 #else
-wxUnix2DosFilename (char *WXUNUSED(s) )
+wxUnix2DosFilename (wxChar *WXUNUSED(s) )
 #endif
 {
 // Yes, I really mean this to happen under DOS only! JACS
