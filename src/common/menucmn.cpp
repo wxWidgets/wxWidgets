@@ -406,6 +406,7 @@ wxMenuItem *wxMenuBase::DoRemove(wxMenuItem *item)
     if ( submenu )
     {
         submenu->SetParent((wxMenu *)NULL);
+        if (submenu->IsAttached()) submenu->Detach();
     }
 
     return item;
