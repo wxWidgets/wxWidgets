@@ -443,7 +443,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     }
 }
 
-#if wxUSE_RICHEDIT
+#if wxUSE_RICHEDIT && !wxUSE_UNICODE
 
 DWORD CALLBACK wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 {
@@ -468,7 +468,6 @@ extern long wxEncodingToCodepage(wxFontEncoding encoding); // from strconv.cpp
 
 bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding encoding)
 {
-#if !wxUSE_UNICODE
     // we have to use EM_STREAMIN to force richedit control 2.0+ to show any
     // text in the non default charset - otherwise it thinks it knows better
     // than we do and always shows it in the default one
@@ -492,9 +491,6 @@ bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding encoding)
 
     // finally, stream it in the control
     const wchar_t *wpc = wchBuf;
-#else
-    const wchar_t *wpc = value.c_str();
-#endif
 
     EDITSTREAM eds;
     wxZeroMemory(eds);
@@ -533,6 +529,7 @@ void wxTextCtrl::WriteText(const wxString& value)
             SetStyle(start, end, m_defaultStyle );
         }
 
+#if !wxUSE_UNICODE
         // next check if the text we're inserting must be shown in a non
         // default charset -- this only works for RichEdit > 1.0
         if ( GetRichVersion() > 1 )
@@ -550,6 +547,7 @@ void wxTextCtrl::WriteText(const wxString& value)
                }
             }
         }
+#endif // !wxUSE_UNICODE
     }
 
     if ( !done )
