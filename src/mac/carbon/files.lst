@@ -9,6 +9,7 @@ ALL_SOURCES = \
 		generic/dcpsg.cpp \
 		generic/dirctrlg.cpp \
 		generic/grid.cpp \
+		generic/gridctrl.cpp \
 		generic/gridsel.cpp \
 		generic/helpext.cpp \
 		generic/helphtml.cpp \
@@ -32,9 +33,11 @@ ALL_SOURCES = \
 		generic/splash.cpp \
 		generic/splitter.cpp \
 		generic/statusbr.cpp \
+		generic/tabg.cpp \
 		generic/tbarsmpl.cpp \
 		generic/textdlgg.cpp \
 		generic/tipdlg.cpp \
+		generic/tipwin.cpp \
 		generic/treectlg.cpp \
 		generic/treelay.cpp \
 		generic/wizard.cpp \
@@ -53,6 +56,7 @@ ALL_SOURCES = \
 		common/db.cpp \
 		common/dbtable.cpp \
 		common/dcbase.cpp \
+		common/dircmn.cpp \
 		common/dlgcmn.cpp \
 		common/dndcmn.cpp \
 		common/dobjcmn.cpp \
@@ -76,6 +80,7 @@ ALL_SOURCES = \
 		common/fs_mem.cpp \
 		common/fs_zip.cpp \
 		common/ftp.cpp \
+		common/gaugecmn.cpp \
 		common/gdicmn.cpp \
 		common/geometry.cpp \
 		common/gifdecod.cpp \
@@ -107,7 +112,9 @@ ALL_SOURCES = \
 		common/nbkbase.cpp \
 		common/object.cpp \
 		common/objstrm.cpp \
+		common/odbc.cpp \
 		common/paper.cpp \
+		common/popupcmn.cpp \
 		common/prntbase.cpp \
 		common/process.cpp \
 		common/protocol.cpp \
@@ -445,6 +452,7 @@ COMMONOBJS = \
 		db.o \
 		dbtable.o \
 		dcbase.o \
+		dircmn.o \
 		dlgcmn.o \
 		dndcmn.o \
 		dobjcmn.o \
@@ -469,6 +477,7 @@ COMMONOBJS = \
 		fs_mem.o \
 		fs_zip.o \
 		ftp.o \
+		gaugecmn.o \
 		gdicmn.o \
 		geometry.o \
 		gifdecod.o \
@@ -501,7 +510,9 @@ COMMONOBJS = \
 		nbkbase.o \
 		object.o \
 		objstrm.o \
+		odbc.o \
 		paper.o \
+		popupcmn.o \
 		prntbase.o \
 		process.o \
 		protocol.o \
@@ -661,6 +672,7 @@ GENERICOBJS = \
 		filedlgg.o \
 		fontdlgg.o \
 		grid.o \
+		gridctrl.o \
 		gridsel.o \
 		helpext.o \
 		helphtml.o \
@@ -680,7 +692,7 @@ GENERICOBJS = \
 		propform.o \
 		proplist.o \
 		sashwin.o \
-		scrolwin.o \
+		scrlwing.o \
 		splash.o \
 		splitter.o \
 		statusbr.o \
