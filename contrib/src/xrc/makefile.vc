@@ -19,6 +19,10 @@ THISDIR = $(WXDIR)\contrib\src\xrc
 DOCDIR=$(WXDIR)\contrib\docs
 LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\xml
 
+!if "$(RM)" == ""
+RM= erase
+!endif
+
 NOPCH=1
 
 EXPAT_DIR=$(THISDIR)\expat
@@ -86,7 +90,7 @@ touchmanual:
 
 $(DOCDIR)\winhelp\xml.hlp:         $(LOCALDOCDIR)\xml.rtf $(LOCALDOCDIR)\xml.hpj
         cd $(LOCALDOCDIR)
-        -erase xml.ph
+        -$(RM) xml.ph
         hc xml
         move xml.hlp $(DOCDIR)\winhelp\xml.hlp
         move xml.cnt $(DOCDIR)\winhelp\xml.cnt
@@ -108,9 +112,9 @@ $(DOCDIR)\html\xml\xml.htm:         $(DOCSOURCES)
         -mkdir $(DOCDIR)\html\xml
         copy *.gif $(DOCDIR)\html\xml
         -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\xml.tex $(DOCDIR)\html\xml\xml.htm -twice -html
-        -erase $(DOCDIR)\html\xml\*.con
-        -erase *.con
-        -erase $(DOCDIR)\html\xml\*.ref
+        -$(RM) $(DOCDIR)\html\xml\*.con
+        -$(RM) *.con
+        -$(RM) $(DOCDIR)\html\xml\*.ref
         cd $(THISDIR)
 
 $(DOCDIR)\htmlhelp\xml.chm: $(DOCDIR)\html\xml\xml.htm $(DOCDIR)\html\xml\xml.hhp
@@ -125,7 +129,7 @@ $(DOCDIR)\htmlhelp\xml.chm: $(DOCDIR)\html\xml\xml.htm $(DOCDIR)\html\xml\xml.hh
 # Optionally, a cached version of the .hhp file can be generated with hhp2cached.
 $(DOCDIR)\htb\xml.htb: $(DOCDIR)\html\xml\xml.htm
 	cd $(DOCDIR)\html\xml
-    -erase xml.zip xml.htb
+    -$(RM) xml.zip xml.htb
     zip xml.zip *.htm *.gif *.hhp *.hhc *.hhk
     -mkdir $(DOCDIR)\htb
     move xml.zip $(DOCDIR)\htb\xml.htb
