@@ -168,7 +168,7 @@ bool wxMetaFile::Play(wxDC *dc)
     {
 #if wxMAC_USE_CORE_GRAPHICS
         QDPictRef cgPictRef = M_METAFILEDATA->m_qdPictRef ;
-        CGContextRef cg = (wxMacCGContext*)(dc->GetGraphicContext())->GetNativeContext() ;
+        CGContextRef cg = ((wxMacCGContext*)(dc->GetGraphicContext()))->GetNativeContext() ;
         CGRect bounds = QDPictGetBounds( cgPictRef ) ;
 
         CGContextSaveGState(cg);    

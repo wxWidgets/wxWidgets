@@ -361,7 +361,7 @@ wxPrinterDC::~wxPrinterDC(void)
 #if wxMAC_USE_CORE_GRAPHICS
 void wxPrinterDC::MacSetCGContext( void * cg ) 
 {
-    (wxMacCGContext*)(m_graphicContext)->SetNativeContext( (CGContextRef) cg ) ;
+    ((wxMacCGContext*)(m_graphicContext))->SetNativeContext( (CGContextRef) cg ) ;
     m_graphicContext->SetPen( m_pen ) ;
     m_graphicContext->SetBrush( m_brush ) ;
 }
