@@ -37,7 +37,8 @@
     #include "wx/button.h"
     #include "wx/sizer.h"
 
-    #include "wx/utils.h"               // for wxMessageBox
+    #include "wx/utils.h"
+    #include "wx/msgdlg.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -216,7 +217,7 @@ void MyApp::OnUnhandledException()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, -1, title, pos, size, style)
+       : wxFrame(NULL, wxID_ANY, title, pos, size, style)
 {
     // set the frame icon
     SetIcon(wxICON(mondrian));
@@ -302,7 +303,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 // ============================================================================
 
 MyDialog::MyDialog(wxFrame *parent)
-        : wxDialog(parent, -1, wxString(_T("Throw exception dialog")))
+        : wxDialog(parent, wxID_ANY, wxString(_T("Throw exception dialog")))
 {
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
 
