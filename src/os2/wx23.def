@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\dev\wx2\wxwindows\lib\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -131,12 +131,10 @@ EXPORTS
       Index__13wxArrayParamsCFRC14wxCmdLineParamUl
       ;wxCmdLineParser::Found(const wxString&,long*) const
       Found__15wxCmdLineParserCFRC8wxStringPl
-      ;wxArrayParams::RemoveAt(unsigned int)
-      RemoveAt__13wxArrayParamsFUi
+      ;wxArrayParams::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__13wxArrayParamsFUiT1
       ;wxCmdLineParser::AddSwitch(const wxString&,const wxString&,const wxString&,int)
       AddSwitch__15wxCmdLineParserFRC8wxStringN21i
-      ;wxArrayOptions::Add(const wxCmdLineOption&)
-      Add__14wxArrayOptionsFRC15wxCmdLineOption
       ;wxCmdLineParser::Reset()
       Reset__15wxCmdLineParserFv
       ;wxCmdLineParser::SetCmdLine(int,char**)
@@ -153,10 +151,8 @@ EXPORTS
       FindOptionByLongName__19wxCmdLineParserDataFRC8wxString
       ;wxArrayOptions::Index(const wxCmdLineOption&,unsigned long) const
       Index__14wxArrayOptionsCFRC15wxCmdLineOptionUl
-      ;wxArrayOptions::RemoveAt(unsigned int)
-      RemoveAt__14wxArrayOptionsFUi
-      ;wxArrayParams::Insert(const wxCmdLineParam&,unsigned int)
-      Insert__13wxArrayParamsFRC14wxCmdLineParamUi
+      ;wxArrayOptions::Insert(const wxCmdLineOption&,unsigned int,unsigned int)
+      Insert__14wxArrayOptionsFRC15wxCmdLineOptionUiT2
       ;wxCmdLineParserData::wxCmdLineParserData()
       __ct__19wxCmdLineParserDataFv
       ;wxCmdLineParser::SetCmdLine(const wxString&)
@@ -169,28 +165,30 @@ EXPORTS
       SetArguments__19wxCmdLineParserDataFRC8wxString
       ;wxCmdLineParser::ConvertStringToArgs(const char*)
       ConvertStringToArgs__15wxCmdLineParserFPCc
-      ;wxArrayOptions::Insert(const wxCmdLineOption&,unsigned int)
-      Insert__14wxArrayOptionsFRC15wxCmdLineOptionUi
-      ;wxArrayParams::Add(const wxCmdLineParam&)
-      Add__13wxArrayParamsFRC14wxCmdLineParam
+      ;wxArrayOptions::Add(const wxCmdLineOption&,unsigned int)
+      Add__14wxArrayOptionsFRC15wxCmdLineOptionUi
       ;wxArrayParams::DoEmpty()
       DoEmpty__13wxArrayParamsFv
       ;wxArrayOptions::~wxArrayOptions()
       __dt__14wxArrayOptionsFv
       ;wxCmdLineParser::Usage()
       Usage__15wxCmdLineParserFv
+      ;wxArrayParams::Insert(const wxCmdLineParam&,unsigned int,unsigned int)
+      Insert__13wxArrayParamsFRC14wxCmdLineParamUiT2
       ;wxCmdLineParserData::SetArguments(int,char**)
       SetArguments__19wxCmdLineParserDataFiPPc
       ;wxCmdLineParser::Found(const wxString&) const
       Found__15wxCmdLineParserCFRC8wxString
       ;wxCmdLineParser::Parse(unsigned long)
       Parse__15wxCmdLineParserFUl
-      ;wxCmdLineParser::AddParam(const wxString&,wxCmdLineParamType,int)
-      AddParam__15wxCmdLineParserFRC8wxString18wxCmdLineParamTypei
+      ;wxArrayParams::Add(const wxCmdLineParam&,unsigned int)
+      Add__13wxArrayParamsFRC14wxCmdLineParamUi
       ;wxCmdLineParser::GetParam(unsigned int) const
       GetParam__15wxCmdLineParserCFUi
       ;wxCmdLineParser::Found(const wxString&,wxDateTime*) const
       Found__15wxCmdLineParserCFRC8wxStringP10wxDateTime
+      ;wxCmdLineParser::AddParam(const wxString&,wxCmdLineParamType,int)
+      AddParam__15wxCmdLineParserFRC8wxString18wxCmdLineParamTypei
       ;wxCmdLineParser::Init()
       Init__15wxCmdLineParserFv
       ;wxCmdLineParser::~wxCmdLineParser()
@@ -199,6 +197,8 @@ EXPORTS
       __dt__13wxArrayParamsFv
       ;wxArrayParams::operator=(const wxArrayParams&)
       __as__13wxArrayParamsFRC13wxArrayParams
+      ;wxArrayOptions::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__14wxArrayOptionsFUiT1
       ;wxCmdLineParser::AddOption(const wxString&,const wxString&,const wxString&,wxCmdLineParamType,int)
       AddOption__15wxCmdLineParserFRC8wxStringN2118wxCmdLineParamTypei
       ;wxArrayOptions::DoEmpty()
@@ -543,8 +543,6 @@ EXPORTS
       Multiply__10wxDateSpanFi
       ;wxDateTime::IsWorkDay(wxDateTime::Country) const
       IsWorkDay__10wxDateTimeCFQ2_10wxDateTime7Country
-      ;wxDateTimeArray::Insert(const wxDateTime&,unsigned int)
-      Insert__15wxDateTimeArrayFRC10wxDateTimeUi
       ;wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags,const wxDateTime::TimeZone&) const
       GetWeekOfYear__10wxDateTimeCFQ2_10wxDateTime9WeekFlagsRCQ2_10wxDateTime8TimeZone
       ;wxDateTime::GetLastMonthDay(wxDateTime::Month,int) const
@@ -647,6 +645,8 @@ EXPORTS
       Set__10wxDateTimeFUsN31
       ;wxDateTime::SetToLastWeekDay(wxDateTime::WeekDay,wxDateTime::Month,int)
       SetToLastWeekDay__10wxDateTimeFQ2_10wxDateTime7WeekDayQ2_10wxDateTime5Monthi
+      ;wxDateTimeArray::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__15wxDateTimeArrayFUiT1
       ;wxDateTime::ParseFormat(const char*,const char*,const wxDateTime&)
       ParseFormat__10wxDateTimeFPCcT1RC10wxDateTime
       ;wxDateSpan::Multiply(int) const
@@ -671,8 +671,8 @@ EXPORTS
       DoGetHolidaysInRange__18wxDateTimeWorkDaysCFRC10wxDateTimeT1R15wxDateTimeArray
       ;wxDateTime::ConvertYearToBC(int)
       ConvertYearToBC__10wxDateTimeFi
-      ;wxDateTimeArray::Add(const wxDateTime&)
-      Add__15wxDateTimeArrayFRC10wxDateTime
+      ;wxDateTimeArray::Add(const wxDateTime&,unsigned int)
+      Add__15wxDateTimeArrayFRC10wxDateTimeUi
       ;wxDateTime::Tm::AddMonths(int)
       AddMonths__Q2_10wxDateTime2TmFi
       ;wxDateTime::TimeZone::TimeZone(wxDateTime::TZ)
@@ -683,6 +683,8 @@ EXPORTS
       IsLeapYear__10wxDateTimeFiQ2_10wxDateTime8Calendar
       ;wxTimeSpan::IsEqualTo(const wxTimeSpan&) const
       IsEqualTo__10wxTimeSpanCFRC10wxTimeSpan
+      ;wxDateTimeArray::Insert(const wxDateTime&,unsigned int,unsigned int)
+      Insert__15wxDateTimeArrayFRC10wxDateTimeUiT2
       ;wxTimeSpan::GetWeeks() const
       GetWeeks__10wxTimeSpanCFv
       ;wxDateTime::GetTicks() const
@@ -710,8 +712,6 @@ EXPORTS
       SetToTheWeek__10wxDateTimeFUsQ2_10wxDateTime7WeekDay
       ;wxDateTime::SetToPrevWeekDay(wxDateTime::WeekDay)
       SetToPrevWeekDay__10wxDateTimeFQ2_10wxDateTime7WeekDay
-      ;wxDateTimeArray::RemoveAt(unsigned int)
-      RemoveAt__15wxDateTimeArrayFUi
       ;wxDateTime::IsSameTime(const wxDateTime&) const
       IsSameTime__10wxDateTimeCFRC10wxDateTime
       ;wxDateTime::IsSameDate(const wxDateTime&) const
@@ -1392,18 +1392,12 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxBaseArrayPtrVoid::Index(const void*,unsigned long) const
       Index__18wxBaseArrayPtrVoidCFPCvUl
-      ;wxBaseArrayInt::Add(int)
-      Add__14wxBaseArrayIntFi
-      ;wxBaseArrayLong::Insert(long,unsigned int)
-      Insert__15wxBaseArrayLongFlUi
-      ;wxBaseArrayInt::Insert(int,unsigned int)
-      Insert__14wxBaseArrayIntFiUi
+      ;wxBaseArrayPtrVoid::Alloc(unsigned int)
+      Alloc__18wxBaseArrayPtrVoidFUi
       ;wxBaseArrayLong::Index(long,int(*)(const void*,const void*)) const
       Index__15wxBaseArrayLongCFlPFPCvT1_i
       ;wxBaseArrayInt::Index(int,int(*)(const void*,const void*)) const
       Index__14wxBaseArrayIntCFiPFPCvT1_i
-      ;wxBaseArrayPtrVoid::Alloc(unsigned int)
-      Alloc__18wxBaseArrayPtrVoidFUi
       ;wxBaseArrayPtrVoid::Add(const void*,int(*)(const void*,const void*))
       Add__18wxBaseArrayPtrVoidFPCvPFPCvT1_i
       ;wxBaseArrayShort::~wxBaseArrayShort()
@@ -1416,24 +1410,28 @@ EXPORTS
       Shrink__16wxBaseArrayShortFv
       ;wxBaseArrayInt::Shrink()
       Shrink__14wxBaseArrayIntFv
-      ;wxBaseArrayPtrVoid::Grow()
-      Grow__18wxBaseArrayPtrVoidFv
+      ;wxBaseArrayLong::Insert(long,unsigned int,unsigned int)
+      Insert__15wxBaseArrayLongFlUiT2
+      ;wxBaseArrayInt::Insert(int,unsigned int,unsigned int)
+      Insert__14wxBaseArrayIntFiUiT2
       ;wxBaseArrayPtrVoid::Clear()
       Clear__18wxBaseArrayPtrVoidFv
       ;wxBaseArrayShort::Remove(short)
       Remove__16wxBaseArrayShortFs
       ;wxBaseArrayPtrVoid::operator=(const wxBaseArrayPtrVoid&)
       __as__18wxBaseArrayPtrVoidFRC18wxBaseArrayPtrVoid
-      ;wxBaseArrayShort::Insert(short,unsigned int)
-      Insert__16wxBaseArrayShortFsUi
-      ;wxBaseArrayPtrVoid::RemoveAt(unsigned int)
-      RemoveAt__18wxBaseArrayPtrVoidFUi
+      ;wxBaseArrayShort::Add(short,unsigned int)
+      Add__16wxBaseArrayShortFsUi
       ;wxBaseArrayShort::Index(short,int(*)(const void*,const void*)) const
       Index__16wxBaseArrayShortCFsPFPCvT1_i
       ;wxBaseArrayShort::IndexForInsert(short,int(*)(const void*,const void*)) const
       IndexForInsert__16wxBaseArrayShortCFsPFPCvT1_i
       ;wxBaseArrayLong::IndexForInsert(long,int(*)(const void*,const void*)) const
       IndexForInsert__15wxBaseArrayLongCFlPFPCvT1_i
+      ;wxBaseArrayShort::Grow(unsigned int)
+      Grow__16wxBaseArrayShortFUi
+      ;wxBaseArrayInt::Grow(unsigned int)
+      Grow__14wxBaseArrayIntFUi
       ;wxBaseArrayLong::Alloc(unsigned int)
       Alloc__15wxBaseArrayLongFUi
       ;wxBaseArrayInt::Add(int,int(*)(const void*,const void*))
@@ -1444,28 +1442,30 @@ EXPORTS
       __ct__18wxBaseArrayPtrVoidFv
       ;wxBaseArrayInt::Clear()
       Clear__14wxBaseArrayIntFv
-      ;wxBaseArrayShort::Add(short)
-      Add__16wxBaseArrayShortFs
       ;wxBaseArrayInt::operator=(const wxBaseArrayInt&)
       __as__14wxBaseArrayIntFRC14wxBaseArrayInt
       ;wxBaseArrayInt::wxBaseArrayInt(const wxBaseArrayInt&)
       __ct__14wxBaseArrayIntFRC14wxBaseArrayInt
       ;wxBaseArrayLong::Remove(long)
       Remove__15wxBaseArrayLongFl
-      ;wxBaseArrayShort::Sort(int(*)(const void*,const void*))
-      Sort__16wxBaseArrayShortFPFPCvT1_i
+      ;wxBaseArrayShort::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__16wxBaseArrayShortFUiT1
       ;wxBaseArrayPtrVoid::Sort(int(*)(const void*,const void*))
       Sort__18wxBaseArrayPtrVoidFPFPCvT1_i
+      ;wxBaseArrayShort::Sort(int(*)(const void*,const void*))
+      Sort__16wxBaseArrayShortFPFPCvT1_i
+      ;wxBaseArrayLong::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__15wxBaseArrayLongFUiT1
       ;wxBaseArrayInt::IndexForInsert(int,int(*)(const void*,const void*)) const
       IndexForInsert__14wxBaseArrayIntCFiPFPCvT1_i
       ;wxBaseArrayShort::Alloc(unsigned int)
       Alloc__16wxBaseArrayShortFUi
+      ;wxBaseArrayPtrVoid::Insert(const void*,unsigned int,unsigned int)
+      Insert__18wxBaseArrayPtrVoidFPCvUiT2
       ;wxBaseArrayPtrVoid::Shrink()
       Shrink__18wxBaseArrayPtrVoidFv
       ;wxBaseArrayPtrVoid::Remove(const void*)
       Remove__18wxBaseArrayPtrVoidFPCv
-      ;wxBaseArrayShort::Grow()
-      Grow__16wxBaseArrayShortFv
       ;wxBaseArrayShort::operator=(const wxBaseArrayShort&)
       __as__16wxBaseArrayShortFRC16wxBaseArrayShort
       ;wxBaseArrayPtrVoid::wxBaseArrayPtrVoid(const wxBaseArrayPtrVoid&)
@@ -1474,50 +1474,50 @@ EXPORTS
       Index__16wxBaseArrayShortCFsUl
       ;wxBaseArrayInt::Index(int,unsigned long) const
       Index__14wxBaseArrayIntCFiUl
-      ;wxBaseArrayLong::Add(long)
-      Add__15wxBaseArrayLongFl
       ;wxBaseArrayInt::Sort(int(*)(const void*,const void*))
       Sort__14wxBaseArrayIntFPFPCvT1_i
       ;wxBaseArrayLong::Sort(int(*)(const void*,const void*))
       Sort__15wxBaseArrayLongFPFPCvT1_i
-      ;wxBaseArrayLong::RemoveAt(unsigned int)
-      RemoveAt__15wxBaseArrayLongFUi
-      ;wxBaseArrayPtrVoid::Insert(const void*,unsigned int)
-      Insert__18wxBaseArrayPtrVoidFPCvUi
+      ;wxBaseArrayPtrVoid::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__18wxBaseArrayPtrVoidFUiT1
       ;wxBaseArrayPtrVoid::Index(const void*,int(*)(const void*,const void*)) const
       Index__18wxBaseArrayPtrVoidCFPCvPFPCvT1_i
       ;wxBaseArrayPtrVoid::IndexForInsert(const void*,int(*)(const void*,const void*)) const
       IndexForInsert__18wxBaseArrayPtrVoidCFPCvPFPCvT1_i
+      ;wxBaseArrayPtrVoid::Grow(unsigned int)
+      Grow__18wxBaseArrayPtrVoidFUi
+      ;wxBaseArrayLong::Grow(unsigned int)
+      Grow__15wxBaseArrayLongFUi
       ;wxBaseArrayInt::Alloc(unsigned int)
       Alloc__14wxBaseArrayIntFUi
+      ;wxBaseArrayLong::Add(long,unsigned int)
+      Add__15wxBaseArrayLongFlUi
       ;wxBaseArrayLong::Add(long,int(*)(const void*,const void*))
       Add__15wxBaseArrayLongFlPFPCvT1_i
       ;wxBaseArrayLong::wxBaseArrayLong()
       __ct__15wxBaseArrayLongFv
-      ;wxBaseArrayLong::Grow()
-      Grow__15wxBaseArrayLongFv
-      ;wxBaseArrayInt::Grow()
-      Grow__14wxBaseArrayIntFv
       ;wxBaseArrayShort::Clear()
       Clear__16wxBaseArrayShortFv
-      ;wxBaseArrayPtrVoid::Add(const void*)
-      Add__18wxBaseArrayPtrVoidFPCv
       ;wxBaseArrayLong::Index(long,unsigned long) const
       Index__15wxBaseArrayLongCFlUl
       ;wxBaseArrayShort::wxBaseArrayShort(const wxBaseArrayShort&)
       __ct__16wxBaseArrayShortFRC16wxBaseArrayShort
-      ;wxBaseArrayShort::RemoveAt(unsigned int)
-      RemoveAt__16wxBaseArrayShortFUi
+      ;wxBaseArrayInt::Add(int,unsigned int)
+      Add__14wxBaseArrayIntFiUi
       ;wxBaseArrayInt::Remove(int)
       Remove__14wxBaseArrayIntFi
-      ;wxBaseArrayInt::RemoveAt(unsigned int)
-      RemoveAt__14wxBaseArrayIntFUi
+      ;wxBaseArrayInt::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__14wxBaseArrayIntFUiT1
+      ;wxBaseArrayPtrVoid::Add(const void*,unsigned int)
+      Add__18wxBaseArrayPtrVoidFPCvUi
       ;wxBaseArrayShort::Add(short,int(*)(const void*,const void*))
       Add__16wxBaseArrayShortFsPFPCvT1_i
-      ;wxBaseArrayInt::wxBaseArrayInt()
-      __ct__14wxBaseArrayIntFv
+      ;wxBaseArrayShort::Insert(short,unsigned int,unsigned int)
+      Insert__16wxBaseArrayShortFsUiT2
       ;wxBaseArrayLong::~wxBaseArrayLong()
       __dt__15wxBaseArrayLongFv
+      ;wxBaseArrayInt::wxBaseArrayInt()
+      __ct__14wxBaseArrayIntFv
       ;wxBaseArrayLong::Shrink()
       Shrink__15wxBaseArrayLongFv
       ;wxBaseArrayLong::Clear()
@@ -1925,7 +1925,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2995,20 +2995,20 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxIconArray::DoCopy(const wxIconArray&)
       DoCopy__11wxIconArrayFRC11wxIconArray
-      ;wxIconArray::Insert(const wxIcon&,unsigned int)
-      Insert__11wxIconArrayFRC6wxIconUi
       ;wxIconArray::~wxIconArray()
       __dt__11wxIconArrayFv
+      ;wxIconArray::Add(const wxIcon&,unsigned int)
+      Add__11wxIconArrayFRC6wxIconUi
+      ;wxIconArray::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__11wxIconArrayFUiT1
       ;wxIconBundle::DeleteIcons()
       DeleteIcons__12wxIconBundleFv
-      ;wxIconArray::Add(const wxIcon&)
-      Add__11wxIconArrayFRC6wxIcon
       ;wxIconArray::Index(const wxIcon&,unsigned long) const
       Index__11wxIconArrayCFRC6wxIconUl
       ;wxIconBundle::operator=(const wxIconBundle&)
       __as__12wxIconBundleFRC12wxIconBundle
-      ;wxIconArray::RemoveAt(unsigned int)
-      RemoveAt__11wxIconArrayFUi
+      ;wxIconArray::Insert(const wxIcon&,unsigned int,unsigned int)
+      Insert__11wxIconArrayFRC6wxIconUiT2
       ;wxIconArray::DoEmpty()
       DoEmpty__11wxIconArrayFv
       ;wxIconBundle::AddIcon(const wxIcon&)
@@ -3428,8 +3428,8 @@ EXPORTS
       Init__8wxLocaleFiT1
       ;wxLocaleModule::sm_classwxLocaleModule
       sm_classwxLocaleModule__14wxLocaleModule
-      ;wxLanguageInfoArray::Insert(const wxLanguageInfo&,unsigned int)
-      Insert__19wxLanguageInfoArrayFRC14wxLanguageInfoUi
+      ;wxLanguageInfoArray::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__19wxLanguageInfoArrayFUiT1
       ;wxLocale::GetSystemEncoding()
       GetSystemEncoding__8wxLocaleFv
       ;wxLocale::~wxLocale()
@@ -3454,16 +3454,18 @@ EXPORTS
       AddCatalog__8wxLocaleFPCc
       ;wxMsgCatalog::Load(const char*,const char*,unsigned long)
       Load__12wxMsgCatalogFPCcT1Ul
+      ;wxLanguageInfoArray::Add(const wxLanguageInfo&,unsigned int)
+      Add__19wxLanguageInfoArrayFRC14wxLanguageInfoUi
       ;wxMsgCatalogFile::wxMsgCatalogFile()
       __ct__16wxMsgCatalogFileFv
       ;wxLocale::wxLocale()
       __ct__8wxLocaleFv
+      ;wxLanguageInfoArray::Insert(const wxLanguageInfo&,unsigned int,unsigned int)
+      Insert__19wxLanguageInfoArrayFRC14wxLanguageInfoUiT2
       ;wxLocale::InitLanguagesDB()
       InitLanguagesDB__8wxLocaleFv
       ;wxLocale::GetSystemEncodingName()
       GetSystemEncodingName__8wxLocaleFv
-      ;wxLanguageInfoArray::Add(const wxLanguageInfo&)
-      Add__19wxLanguageInfoArrayFRC14wxLanguageInfo
       ;wxLocale::AddLanguage(const wxLanguageInfo&)
       AddLanguage__8wxLocaleFRC14wxLanguageInfo
       ;wxLocale::Init(const char*,const char*,const char*,unsigned long,unsigned long)
@@ -3492,8 +3494,6 @@ EXPORTS
       DoCopy__19wxLanguageInfoArrayFRC19wxLanguageInfoArray
       ;wxLanguageInfoArray::operator=(const wxLanguageInfoArray&)
       __as__19wxLanguageInfoArrayFRC19wxLanguageInfoArray
-      ;wxLanguageInfoArray::RemoveAt(unsigned int)
-      RemoveAt__19wxLanguageInfoArrayFUi
       ;wxLocale::AddCatalogLookupPathPrefix(const wxString&)
       AddCatalogLookupPathPrefix__8wxLocaleFRC8wxString
       ;wxLocale::IsLoaded(const char*) const
@@ -3688,6 +3688,8 @@ EXPORTS
       wxLogTrace__FUlPCce
       ;wxLogStatus(const char*,...)
       wxLogStatus__FPCce
+      ;wxLogChain::~wxLogChain()
+      __dt__10wxLogChainFv
       ;wxLog::ClearTraceMasks()
       ClearTraceMasks__5wxLogFv
       ;wxVLogError(const char*,char*)
@@ -4183,8 +4185,6 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxFileType::GetIcon(wxIcon*,wxString*,int*) const
       GetIcon__10wxFileTypeCFP6wxIconP8wxStringPi
-      ;wxArrayFileTypeInfo::Add(const wxFileTypeInfo&)
-      Add__19wxArrayFileTypeInfoFRC14wxFileTypeInfo
       ;wxFileTypeInfo::wxFileTypeInfo(const wxArrayString&)
       __ct__14wxFileTypeInfoFRC13wxArrayString
       ;wxMimeTypesManager::Initialize(int,const wxString&)
@@ -4201,16 +4201,20 @@ EXPORTS
       __ct__14wxFileTypeInfoFPCcN31e
       ;wxFileType::SetDefaultIcon(const wxString&,int)
       SetDefaultIcon__10wxFileTypeFRC8wxStringi
+      ;wxArrayFileTypeInfo::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__19wxArrayFileTypeInfoFUiT1
       ;wxArrayFileTypeInfo::DoCopy(const wxArrayFileTypeInfo&)
       DoCopy__19wxArrayFileTypeInfoFRC19wxArrayFileTypeInfo
       ;wxMimeTypesManager::ReadMimeTypes(const wxString&)
       ReadMimeTypes__18wxMimeTypesManagerFRC8wxString
       ;wxFileType::ExpandCommand(const wxString&,const wxFileType::MessageParameters&)
       ExpandCommand__10wxFileTypeFRC8wxStringRCQ2_10wxFileType17MessageParameters
-      ;wxMimeTypesManager::IsOfType(const wxString&,const wxString&)
-      IsOfType__18wxMimeTypesManagerFRC8wxStringT1
+      ;wxArrayFileTypeInfo::Add(const wxFileTypeInfo&,unsigned int)
+      Add__19wxArrayFileTypeInfoFRC14wxFileTypeInfoUi
       ;wxMimeTypesManager::Unassociate(wxFileType*)
       Unassociate__18wxMimeTypesManagerFP10wxFileType
+      ;wxMimeTypesManager::IsOfType(const wxString&,const wxString&)
+      IsOfType__18wxMimeTypesManagerFRC8wxStringT1
       ;wxArrayFileTypeInfo::DoEmpty()
       DoEmpty__19wxArrayFileTypeInfoFv
       wxTheMimeTypesManager
@@ -4232,8 +4236,6 @@ EXPORTS
       SetCommand__10wxFileTypeFRC8wxStringT1Ul
       ;wxMimeTypesManager::ReadMailcap(const wxString&,unsigned long)
       ReadMailcap__18wxMimeTypesManagerFRC8wxStringUl
-      ;wxArrayFileTypeInfo::Insert(const wxFileTypeInfo&,unsigned int)
-      Insert__19wxArrayFileTypeInfoFRC14wxFileTypeInfoUi
       ;wxFileType::~wxFileType()
       __dt__10wxFileTypeFv
       ;wxFileType::GetExtensions(wxArrayString&)
@@ -4242,18 +4244,18 @@ EXPORTS
       GetMimeTypes__10wxFileTypeCFR13wxArrayString
       ;wxMimeTypesManager::AddFallbacks(const wxFileTypeInfo*)
       AddFallbacks__18wxMimeTypesManagerFPC14wxFileTypeInfo
-      ;wxArrayFileTypeInfo::RemoveAt(unsigned int)
-      RemoveAt__19wxArrayFileTypeInfoFUi
       ;wxMimeTypeCmnModule::sm_classwxMimeTypeCmnModule
       sm_classwxMimeTypeCmnModule__19wxMimeTypeCmnModule
-      ;wxFileType::Unassociate()
-      Unassociate__10wxFileTypeFv
+      ;wxArrayFileTypeInfo::Insert(const wxFileTypeInfo&,unsigned int,unsigned int)
+      Insert__19wxArrayFileTypeInfoFRC14wxFileTypeInfoUiT2
       ;wxConstructorForwxMimeTypeCmnModule()
       wxConstructorForwxMimeTypeCmnModule__Fv
       ;wxMimeTypesManager::~wxMimeTypesManager()
       __dt__18wxMimeTypesManagerFv
       ;wxMimeTypesManager::wxMimeTypesManager()
       __ct__18wxMimeTypesManagerFv
+      ;wxFileType::Unassociate()
+      Unassociate__10wxFileTypeFv
       ;wxMimeTypesManager::ClearData()
       ClearData__18wxMimeTypesManagerFv
       ;wxArrayFileTypeInfo::operator=(const wxArrayFileTypeInfo&)
@@ -4345,6 +4347,8 @@ EXPORTS
       CreateRefData__8wxObjectCFv
       ;wxClassInfo::sm_classTable
       sm_classTable__11wxClassInfo
+      ;wxObject::operator new(unsigned int,const char*,int)
+      __nw__8wxObjectFUiPCci
       ;wxObject::CloneRefData(const wxObjectRefData*) const
       CloneRefData__8wxObjectCFPC15wxObjectRefData
       ;wxClassInfo::sm_first
@@ -4364,8 +4368,6 @@ EXPORTS
       FindClass__11wxClassInfoFPCc
       ;wxObject::sm_classwxObject
       sm_classwxObject__8wxObject
-      ;wxObject::operator new(unsigned int,char*,int)
-      __nw__8wxObjectFUiPci
       ;wxClassInfo::InitializeClasses()
       InitializeClasses__11wxClassInfoFv
   ;From object file:  ..\common\odbc.cpp
@@ -5481,8 +5483,10 @@ EXPORTS
       Sort__13wxArrayStringFPFRC8wxStringT1_i
       ;wxArrayString::SetCount(unsigned int)
       SetCount__13wxArrayStringFUi
-      ;wxArrayString::Remove(unsigned int)
-      Remove__13wxArrayStringFUi
+      ;wxArrayString::Remove(unsigned int,unsigned int)
+      Remove__13wxArrayStringFUiT1
+      ;wxArrayString::Grow(unsigned int)
+      Grow__13wxArrayStringFUi
       ;wxString::Format(const char*,...)
       Format__8wxStringFPCce
       ;wxString::Alloc(unsigned int)
@@ -5491,8 +5495,6 @@ EXPORTS
       IsAscii__8wxStringCFv
       ;wxString::IsWord() const
       IsWord__8wxStringCFv
-      ;wxArrayString::Grow()
-      Grow__13wxArrayStringFv
       ;wxArrayString::DoSort()
       DoSort__13wxArrayStringFv
       ;operator+(char,const wxString&)
@@ -5563,14 +5565,14 @@ EXPORTS
       UngetWriteBuf__8wxStringFUi
       ;wxString::ToLong(long*,int) const
       ToLong__8wxStringCFPli
-      ;wxArrayString::Insert(const wxString&,unsigned int)
-      Insert__13wxArrayStringFRC8wxStringUi
       ;wxString::GetWriteBuf(unsigned int)
       GetWriteBuf__8wxStringFUi
       ;wxString::AllocBuffer(unsigned int)
       AllocBuffer__8wxStringFUi
       ;wxString::AllocBeforeWrite(unsigned int)
       AllocBeforeWrite__8wxStringFUi
+      ;wxArrayString::Add(const wxString&,unsigned int)
+      Add__13wxArrayStringFRC8wxStringUi
       ;wxString::InitWith(const char*,unsigned int,unsigned int)
       InitWith__8wxStringFPCcUiT2
       wxStringCompareFunction
@@ -5596,8 +5598,6 @@ EXPORTS
       Remove__13wxArrayStringFPCc
       ;wxString::ConcatSelf(int,const char*)
       ConcatSelf__8wxStringFiPCc
-      ;wxArrayString::Add(const wxString&)
-      Add__13wxArrayStringFRC8wxString
       ;wxString::erase(unsigned int,unsigned int)
       erase__8wxStringFUiT1
       ;wxString::sprintf(const char*,...)
@@ -5644,6 +5644,8 @@ EXPORTS
       __dt__13wxArrayStringFv
       ;wxString::Lower() const
       Lower__8wxStringCFv
+      ;wxArrayString::Insert(const wxString&,unsigned int,unsigned int)
+      Insert__13wxArrayStringFRC8wxStringUiT2
       ;wxArrayString::Free()
       Free__13wxArrayStringFv
       ;wxArrayString::Clear()
@@ -6037,7 +6039,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -7916,14 +7918,8 @@ EXPORTS
       SetRowAttr__15wxGridTableBaseFP14wxGridCellAttri
       ;wxGrid::SetColMinimalWidth(int,int)
       SetColMinimalWidth__6wxGridFiT1
-      ;wxGridCellWithAttrArray::RemoveAt(unsigned int)
-      RemoveAt__23wxGridCellWithAttrArrayFUi
-      ;wxGridStringArray::RemoveAt(unsigned int)
-      RemoveAt__17wxGridStringArrayFUi
       ;wxGrid::ProcessTableMessage(wxGridTableMessage&)
       ProcessTableMessage__6wxGridFR18wxGridTableMessage
-      ;wxGridCellCoordsArray::Insert(const wxGridCellCoords&,unsigned int)
-      Insert__21wxGridCellCoordsArrayFRC16wxGridCellCoordsUi
       ;wxGridStringTable::InsertRows(unsigned int,unsigned int)
       InsertRows__17wxGridStringTableFUiT1
       ;wxGridTableBase::GetValueAsBool(int,int)
@@ -7944,6 +7940,8 @@ EXPORTS
       DeselectCol__6wxGridFi
       ;wxGridTableBase::AppendCols(unsigned int)
       AppendCols__15wxGridTableBaseFUi
+      ;wxGridCellWithAttrArray::Add(const wxGridCellWithAttr&,unsigned int)
+      Add__23wxGridCellWithAttrArrayFRC18wxGridCellWithAttrUi
       ;wxGridCellAttr::Init(wxGridCellAttr*)
       Init__14wxGridCellAttrFP14wxGridCellAttr
       wxEVT_GRID_EDITOR_SHOWN
@@ -8089,14 +8087,12 @@ EXPORTS
       SetColAttr__15wxGridTableBaseFP14wxGridCellAttri
       ;wxGridRowOrColAttrData::SetAttr(wxGridCellAttr*,int)
       SetAttr__22wxGridRowOrColAttrDataFP14wxGridCellAttri
-      ;wxGridCellCoordsArray::RemoveAt(unsigned int)
-      RemoveAt__21wxGridCellCoordsArrayFUi
+      ;wxGridCellWithAttrArray::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__23wxGridCellWithAttrArrayFUiT1
       ;wxGrid::MakeCellVisible(int,int)
       MakeCellVisible__6wxGridFiT1
       ;wxGrid::IsInSelection(int,int)
       IsInSelection__6wxGridFiT1
-      ;wxGridStringArray::Insert(const wxArrayString&,unsigned int)
-      Insert__17wxGridStringArrayFRC13wxArrayStringUi
       ;wxGridTableBase::InsertRows(unsigned int,unsigned int)
       InsertRows__15wxGridTableBaseFUiT1
       ;wxGridStringTable::GetValue(int,int)
@@ -8131,6 +8127,8 @@ EXPORTS
       AppendRows__15wxGridTableBaseFUi
       ;wxGridStringTable::AppendCols(unsigned int)
       AppendCols__17wxGridStringTableFUi
+      ;wxGridStringArray::Add(const wxArrayString&,unsigned int)
+      Add__17wxGridStringArrayFRC13wxArrayStringUi
       ;wxGrid::SetDefaultCellBackgroundColour(const wxColour&)
       SetDefaultCellBackgroundColour__6wxGridFRC8wxColour
       wxEVT_GRID_EDITOR_HIDDEN
@@ -8174,6 +8172,12 @@ EXPORTS
       MergeWith__14wxGridCellAttrFP14wxGridCellAttr
       ;wxGrid::IsCurrentCellReadOnly() const
       IsCurrentCellReadOnly__6wxGridCFv
+      ;wxGridCellWithAttrArray::Insert(const wxGridCellWithAttr&,unsigned int,unsigned int)
+      Insert__23wxGridCellWithAttrArrayFRC18wxGridCellWithAttrUiT2
+      ;wxGridCellCoordsArray::Insert(const wxGridCellCoords&,unsigned int,unsigned int)
+      Insert__21wxGridCellCoordsArrayFRC16wxGridCellCoordsUiT2
+      ;wxGridStringArray::Insert(const wxArrayString&,unsigned int,unsigned int)
+      Insert__17wxGridStringArrayFRC13wxArrayStringUiT2
       ;wxGridCellAttr::GetTextColour() const
       GetTextColour__14wxGridCellAttrCFv
       ;wxGridCellNumberRenderer::GetString(wxGrid&,int,int)
@@ -8198,8 +8202,6 @@ EXPORTS
       CalcWindowSizes__6wxGridFv
       ;wxGrid::CalcRowLabelsExposed(const wxRegion&)
       CalcRowLabelsExposed__6wxGridFRC8wxRegion
-      ;wxGridCellWithAttrArray::Add(const wxGridCellWithAttr&)
-      Add__23wxGridCellWithAttrArrayFRC18wxGridCellWithAttr
       ;wxGrid::SetCurrentCell(const wxGridCellCoords&)
       SetCurrentCell__6wxGridFRC16wxGridCellCoords
       wxGridNoCellCoords
@@ -8220,10 +8222,6 @@ EXPORTS
       DrawCellBorder__6wxGridFR4wxDCRC16wxGridCellCoords
       ;wxGridCellStringRenderer::DoGetBestSize(wxGridCellAttr&,wxDC&,const wxString&)
       DoGetBestSize__24wxGridCellStringRendererFR14wxGridCellAttrR4wxDCRC8wxString
-      ;wxGridCellCoordsArray::Add(const wxGridCellCoords&)
-      Add__21wxGridCellCoordsArrayFRC16wxGridCellCoords
-      ;wxGridStringArray::Add(const wxArrayString&)
-      Add__17wxGridStringArrayFRC13wxArrayString
       ;wxGrid::EnableCellEditControl(unsigned long)
       EnableCellEditControl__6wxGridFUl
       wxEVT_GRID_EDITOR_CREATED
@@ -8312,6 +8310,8 @@ EXPORTS
       SetRowLabelSize__6wxGridFi
       ;wxGrid::SetCellHighlightROPenWidth(int)
       SetCellHighlightROPenWidth__6wxGridFi
+      ;wxGridStringArray::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__17wxGridStringArrayFUiT1
       ;wxGrid::Redimension(wxGridTableMessage&)
       Redimension__6wxGridFR18wxGridTableMessage
       ;wxGrid::IsReadOnly(int,int) const
@@ -8524,6 +8524,8 @@ EXPORTS
       GetCellFont__6wxGridFiT1
       ;wxGrid::DeselectRow(int)
       DeselectRow__6wxGridFi
+      ;wxGridCellCoordsArray::Add(const wxGridCellCoords&,unsigned int)
+      Add__21wxGridCellCoordsArrayFRC16wxGridCellCoordsUi
       ;wxGridCellEditor::~wxGridCellEditor()
       __dt__16wxGridCellEditorFv
       ;wxConstructorForwxGridStringTable()
@@ -8667,8 +8669,8 @@ EXPORTS
       SetColFormatNumber__6wxGridFi
       ;wxGrid::SetCellHighlightPenWidth(int)
       SetCellHighlightPenWidth__6wxGridFi
-      ;wxGridCellWithAttrArray::Insert(const wxGridCellWithAttr&,unsigned int)
-      Insert__23wxGridCellWithAttrArrayFRC18wxGridCellWithAttrUi
+      ;wxGridCellCoordsArray::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__21wxGridCellCoordsArrayFUiT1
       ;wxGridStringTable::InsertCols(unsigned int,unsigned int)
       InsertCols__17wxGridStringTableFUiT1
       ;wxGridTableBase::GetValueAsDouble(int,int)
@@ -9132,12 +9134,16 @@ EXPORTS
       __dt__16wxListMainWindowFv
       ;wxListHeaderWindow::wxListHeaderWindow()
       __ct__18wxListHeaderWindowFv
+      ;wxListCtrl::SetItemTextColour(long,const wxColour&)
+      SetItemTextColour__10wxListCtrlFlRC8wxColour
       ;wxListLineData::SetAttr(wxListItemAttr*)
       SetAttr__14wxListLineDataFP14wxListItemAttr
       ;wxListMainWindow::RefreshSelected()
       RefreshSelected__16wxListMainWindowFv
       ;wxListMainWindow::OnRenameTimer()
       OnRenameTimer__16wxListMainWindowFv
+      ;wxListLineDataArray::Insert(const wxListLineData&,unsigned int,unsigned int)
+      Insert__19wxListLineDataArrayFRC14wxListLineDataUiT2
       ;wxListItemData::GetX() const
       GetX__14wxListItemDataCFv
       ;wxListCtrl::GetTextColour() const
@@ -9192,6 +9198,10 @@ EXPORTS
       OnChar__14wxListTextCtrlFR10wxKeyEvent
       ;wxListLineDataArray::Index(const wxListLineData&,unsigned long) const
       Index__19wxListLineDataArrayCFRC14wxListLineDataUl
+      ;wxListCtrl::GetItemTextColour(long) const
+      GetItemTextColour__10wxListCtrlCFl
+      ;wxListCtrl::GetItemBackgroundColour(long) const
+      GetItemBackgroundColour__10wxListCtrlCFl
       ;wxListCtrl::FindItem(long,const wxString&,unsigned long)
       FindItem__10wxListCtrlFlRC8wxStringUl
       ;wxListCtrl::SetItemState(long,long,long)
@@ -9212,8 +9222,6 @@ EXPORTS
       SetFormat__16wxListHeaderDataFi
       ;wxListCtrl::SetColumnWidth(int,int)
       SetColumnWidth__10wxListCtrlFiT1
-      ;wxListLineDataArray::RemoveAt(unsigned int)
-      RemoveAt__19wxListLineDataArrayFUi
       ;wxListMainWindow::RefreshLines(unsigned int,unsigned int)
       RefreshLines__16wxListMainWindowFUiT1
       ;wxListCtrl::InsertItem(long,int)
@@ -9248,6 +9256,8 @@ EXPORTS
       Thaw__10wxListCtrlFv
       ;wxListCtrl::SetItem(long,int,const wxString&,int)
       SetItem__10wxListCtrlFliRC8wxStringT2
+      ;wxListCtrl::SetItemBackgroundColour(long,const wxColour&)
+      SetItemBackgroundColour__10wxListCtrlFlRC8wxColour
       ;wxListMainWindow::SetFocus()
       SetFocus__16wxListMainWindowFv
       ;wxListMainWindow::InitScrolling()
@@ -9452,12 +9462,12 @@ EXPORTS
       SetColumn__16wxListMainWindowFiR10wxListItem
       ;wxListCtrl::ScrollList(int,int)
       ScrollList__10wxListCtrlFiT1
+      ;wxListLineDataArray::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__19wxListLineDataArrayFUiT1
       ;wxSelectionStore::IsSelected(unsigned int) const
       IsSelected__16wxSelectionStoreCFUi
       ;wxListMainWindow::IsHighlighted(unsigned int) const
       IsHighlighted__16wxListMainWindowCFUi
-      ;wxListLineDataArray::Insert(const wxListLineData&,unsigned int)
-      Insert__19wxListLineDataArrayFRC14wxListLineDataUi
       ;wxListMainWindow::InsertItem(wxListItem&)
       InsertItem__16wxListMainWindowFR10wxListItem
       ;wxListCtrl::InsertItem(long,const wxString&,int)
@@ -9478,8 +9488,8 @@ EXPORTS
       FindItem__10wxListCtrlFlRC7wxPointi
       ;wxListCtrl::AssignImageList(wxImageList*,int)
       AssignImageList__10wxListCtrlFP11wxImageListi
-      ;wxListLineDataArray::Add(const wxListLineData&)
-      Add__19wxListLineDataArrayFRC14wxListLineData
+      ;wxListLineDataArray::Add(const wxListLineData&,unsigned int)
+      Add__19wxListLineDataArrayFRC14wxListLineDataUi
       ;wxListCtrl::wxListCtrl()
       __ct__10wxListCtrlFv
       ;wxConstructorForwxListView()
@@ -10531,6 +10541,10 @@ EXPORTS
       LoadFile__20wxHtmlHelpControllerFRC8wxString
   ;From object file:  ..\html\helpdata.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxHtmlBookRecArray::Add(const wxHtmlBookRecord&,unsigned int)
+      Add__18wxHtmlBookRecArrayFRC16wxHtmlBookRecordUi
+      ;wxHtmlBookRecArray::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__18wxHtmlBookRecArrayFUiT1
       ;wxHtmlHelpData::wxHtmlHelpData()
       __ct__14wxHtmlHelpDataFv
       ;wxSearchEngine::LookFor(const wxString&,unsigned long,unsigned long)
@@ -10549,12 +10563,10 @@ EXPORTS
       __ct__18wxHtmlBookRecArrayFRC18wxHtmlBookRecArray
       ;HP_TagHandler::WriteOut(wxHtmlContentsItem*&,int&)
       WriteOut__13HP_TagHandlerFRP18wxHtmlContentsItemRi
-      ;wxHtmlBookRecArray::RemoveAt(unsigned int)
-      RemoveAt__18wxHtmlBookRecArrayFUi
       ;wxHtmlBookRecArray::DoEmpty()
       DoEmpty__18wxHtmlBookRecArrayFv
-      ;wxHtmlBookRecArray::Add(const wxHtmlBookRecord&)
-      Add__18wxHtmlBookRecArrayFRC16wxHtmlBookRecord
+      ;wxHtmlBookRecArray::Insert(const wxHtmlBookRecord&,unsigned int,unsigned int)
+      Insert__18wxHtmlBookRecArrayFRC16wxHtmlBookRecordUiT2
       ;wxHtmlHelpData::SaveCachedBook(wxHtmlBookRecord*,wxOutputStream*)
       SaveCachedBook__14wxHtmlHelpDataFP16wxHtmlBookRecordP14wxOutputStream
       ;wxSearchEngine::Scan(wxInputStream*)
@@ -10572,8 +10584,6 @@ EXPORTS
       __vft14wxSearchEngine8wxObject
       ;wxHtmlBookRecArray::DoCopy(const wxHtmlBookRecArray&)
       DoCopy__18wxHtmlBookRecArrayFRC18wxHtmlBookRecArray
-      ;wxHtmlBookRecArray::Insert(const wxHtmlBookRecord&,unsigned int)
-      Insert__18wxHtmlBookRecArrayFRC16wxHtmlBookRecordUi
       ;wxHtmlBookRecArray::~wxHtmlBookRecArray()
       __dt__18wxHtmlBookRecArrayFv
       wxHtmlHelpIndexCompareFunc
@@ -10803,8 +10813,6 @@ EXPORTS
       ;wxHtmlTextPieces::Index(const wxHtmlTextPiece&,unsigned long) const
       Index__16wxHtmlTextPiecesCFRC15wxHtmlTextPieceUl
       __vft20wxHtmlEntitiesParser8wxObject
-      ;wxHtmlTextPieces::Insert(const wxHtmlTextPiece&,unsigned int)
-      Insert__16wxHtmlTextPiecesFRC15wxHtmlTextPieceUi
       ;wxHtmlParser::DoParsing()
       DoParsing__12wxHtmlParserFv
       ;wxHtmlParser::RestoreState()
@@ -10815,6 +10823,8 @@ EXPORTS
       __ct__16wxHtmlTextPiecesFRC16wxHtmlTextPieces
       ;wxHtmlParser::SetSource(const wxString&)
       SetSource__12wxHtmlParserFRC8wxString
+      ;wxHtmlTextPieces::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__16wxHtmlTextPiecesFUiT1
       ;wxHtmlTextPieces::DoEmpty()
       DoEmpty__16wxHtmlTextPiecesFv
       ;wxConstructorForwxHtmlEntitiesParser()
@@ -10835,13 +10845,13 @@ EXPORTS
       PushTagHandler__12wxHtmlParserFP16wxHtmlTagHandler8wxString
       ;wxHtmlParser::OpenURL(wxHtmlURLType,const wxString&) const
       OpenURL__12wxHtmlParserCF13wxHtmlURLTypeRC8wxString
-      ;wxHtmlTextPieces::RemoveAt(unsigned int)
-      RemoveAt__16wxHtmlTextPiecesFUi
+      ;wxHtmlParser::CreateDOMSubTree(wxHtmlTag*,int,int,wxHtmlTagsCache*)
+      CreateDOMSubTree__12wxHtmlParserFP9wxHtmlTagiT2P15wxHtmlTagsCache
       wxHtmlEntityCompare
       ;wxHtmlEntitiesParser::GetCharForCode(unsigned int)
       GetCharForCode__20wxHtmlEntitiesParserFUi
-      ;wxHtmlParser::CreateDOMSubTree(wxHtmlTag*,int,int,wxHtmlTagsCache*)
-      CreateDOMSubTree__12wxHtmlParserFP9wxHtmlTagiT2P15wxHtmlTagsCache
+      ;wxHtmlTextPieces::Insert(const wxHtmlTextPiece&,unsigned int,unsigned int)
+      Insert__16wxHtmlTextPiecesFRC15wxHtmlTextPieceUiT2
       ;wxHtmlParser::~wxHtmlParser()
       __dt__12wxHtmlParserFv
       ;wxHtmlTextPieces::operator=(const wxHtmlTextPieces&)
@@ -10851,8 +10861,8 @@ EXPORTS
       __vft12wxHtmlParser8wxObject
       ;wxHtmlParser::DoParsing(int,int)
       DoParsing__12wxHtmlParserFiT1
-      ;wxHtmlTextPieces::Add(const wxHtmlTextPiece&)
-      Add__16wxHtmlTextPiecesFRC15wxHtmlTextPiece
+      ;wxHtmlTextPieces::Add(const wxHtmlTextPiece&,unsigned int)
+      Add__16wxHtmlTextPiecesFRC15wxHtmlTextPieceUi
       ;wxHtmlEntitiesParser::wxHtmlEntitiesParser()
       __ct__20wxHtmlEntitiesParserFv
       ;wxHtmlParser::sm_classwxHtmlParser
@@ -10906,16 +10916,14 @@ EXPORTS
       sm_classwxHtmlWinModule__15wxHtmlWinModule
       ;wxHtmlWindow::SetFonts(wxString,wxString,const int*)
       SetFonts__12wxHtmlWindowF8wxStringT1PCi
-      ;wxHtmlHistoryArray::RemoveAt(unsigned int)
-      RemoveAt__18wxHtmlHistoryArrayFUi
-      ;wxHtmlHistoryArray::Add(const wxHtmlHistoryItem&)
-      Add__18wxHtmlHistoryArrayFRC17wxHtmlHistoryItem
       ;wxHtmlHistoryArray::~wxHtmlHistoryArray()
       __dt__18wxHtmlHistoryArrayFv
       ;wxHtmlWindow::~wxHtmlWindow()
       __dt__12wxHtmlWindowFv
       ;wxHtmlWindow::OnCellMouseHover(wxHtmlCell*,int,int)
       OnCellMouseHover__12wxHtmlWindowFP10wxHtmlCelliT2
+      ;wxHtmlHistoryArray::Insert(const wxHtmlHistoryItem&,unsigned int,unsigned int)
+      Insert__18wxHtmlHistoryArrayFRC17wxHtmlHistoryItemUiT2
       ;wxHtmlWindow::HistoryCanForward()
       HistoryCanForward__12wxHtmlWindowFv
       ;wxHtmlWindow::HistoryBack()
@@ -10934,8 +10942,6 @@ EXPORTS
       OnDraw__12wxHtmlWindowFR4wxDC
       ;wxHtmlHistoryArray::Index(const wxHtmlHistoryItem&,unsigned long) const
       Index__18wxHtmlHistoryArrayCFRC17wxHtmlHistoryItemUl
-      ;wxHtmlHistoryArray::Insert(const wxHtmlHistoryItem&,unsigned int)
-      Insert__18wxHtmlHistoryArrayFRC17wxHtmlHistoryItemUi
       __vft25wxwxHtmlProcessorListNode10wxNodeBase
       ;wxHtmlHistoryArray::DoEmpty()
       DoEmpty__18wxHtmlHistoryArrayFv
@@ -10965,10 +10971,12 @@ EXPORTS
       OnSize__12wxHtmlWindowFR11wxSizeEvent
       ;wxHtmlWindow::OnMouseEvent(wxMouseEvent&)
       OnMouseEvent__12wxHtmlWindowFR12wxMouseEvent
-      ;wxHtmlHistoryArray::operator=(const wxHtmlHistoryArray&)
-      __as__18wxHtmlHistoryArrayFRC18wxHtmlHistoryArray
+      ;wxHtmlHistoryArray::Add(const wxHtmlHistoryItem&,unsigned int)
+      Add__18wxHtmlHistoryArrayFRC17wxHtmlHistoryItemUi
       ;wxHtmlHistoryArray::wxHtmlHistoryArray(const wxHtmlHistoryArray&)
       __ct__18wxHtmlHistoryArrayFRC18wxHtmlHistoryArray
+      ;wxHtmlHistoryArray::operator=(const wxHtmlHistoryArray&)
+      __as__18wxHtmlHistoryArrayFRC18wxHtmlHistoryArray
       ;wxHtmlWindow::SetRelatedStatusBar(int)
       SetRelatedStatusBar__12wxHtmlWindowFi
       ;wxHtmlWindow::CleanUpStatics()
@@ -10983,6 +10991,8 @@ EXPORTS
       ReadCustomization__12wxHtmlWindowFP12wxConfigBase8wxString
       ;wxHtmlWindow::OnIdle(wxIdleEvent&)
       OnIdle__12wxHtmlWindowFR11wxIdleEvent
+      ;wxHtmlHistoryArray::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__18wxHtmlHistoryArrayFUiT1
       ;wxHtmlWindow::Init()
       Init__12wxHtmlWindowFv
       ;wxConstructorForwxHtmlWindow()
@@ -11113,8 +11123,6 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       __vft22wxHtmlImageMapAreaCell8wxObject
       __vft15wxHtmlImageCell8wxObject
-      ;CoordArray::Add(const int&)
-      Add__10CoordArrayFRCi
       ;CoordArray::operator=(const CoordArray&)
       __as__10CoordArrayFRC10CoordArray
       ;CoordArray::~CoordArray()
@@ -11139,6 +11147,8 @@ EXPORTS
       sm_classHTML_ModuleImage__16HTML_ModuleImage
       ;_link_dummy_func_m_image()
       _link_dummy_func_m_image__Fv
+      ;CoordArray::Insert(const int&,unsigned int,unsigned int)
+      Insert__10CoordArrayFRCiUiT2
       ;CoordArray::DoEmpty()
       DoEmpty__10CoordArrayFv
       __vft18wxHtmlImageMapCell8wxObject
@@ -11146,16 +11156,16 @@ EXPORTS
       DoCopy__10CoordArrayFRC10CoordArray
       ;CoordArray::CoordArray(const CoordArray&)
       __ct__10CoordArrayFRC10CoordArray
+      ;CoordArray::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__10CoordArrayFUiT1
       ;wxHtmlImageCell::Layout(int)
       Layout__15wxHtmlImageCellFi
       ;wxHtmlImageMapCell::GetLink(int,int) const
       GetLink__18wxHtmlImageMapCellCFiT1
+      ;CoordArray::Add(const int&,unsigned int)
+      Add__10CoordArrayFRCiUi
       ;CoordArray::Index(const int&,unsigned long) const
       Index__10CoordArrayCFRCiUl
-      ;CoordArray::RemoveAt(unsigned int)
-      RemoveAt__10CoordArrayFUi
-      ;CoordArray::Insert(const int&,unsigned int)
-      Insert__10CoordArrayFRCiUi
       ;wxHtmlImageCell::GetLink(int,int) const
       GetLink__15wxHtmlImageCellCFiT1
       ;wxHtmlImageCell::~wxHtmlImageCell()
@@ -11375,10 +11385,8 @@ EXPORTS
       OnIdle__5wxAppFR11wxIdleEvent
       ;wxMsgArray::wxMsgArray(const wxMsgArray&)
       __ct__10wxMsgArrayFRC10wxMsgArray
-      ;wxMsgArray::Insert(const _QMSG&,unsigned int)
-      Insert__10wxMsgArrayFRC5_QMSGUi
-      ;wxApp::HandleSockets()
-      HandleSockets__5wxAppFv
+      ;wxMsgArray::Insert(const _QMSG&,unsigned int,unsigned int)
+      Insert__10wxMsgArrayFRC5_QMSGUiT2
       wxDEFAULT_MDIPARENTFRAME_ICON
       ;wxApp::wxApp()
       __ct__5wxAppFv
@@ -11388,8 +11396,8 @@ EXPORTS
       ProcessMessage__5wxAppFPPv
       ;wxApp::OnInitGui()
       OnInitGui__5wxAppFv
-      ;wxMsgArray::Add(const _QMSG&)
-      Add__10wxMsgArrayFRC5_QMSG
+      ;wxApp::HandleSockets()
+      HandleSockets__5wxAppFv
       ;wxApp::OnQueryEndSession(wxCloseEvent&)
       OnQueryEndSession__5wxAppFR12wxCloseEvent
       __vft5wxApp8wxObject
@@ -11413,8 +11421,8 @@ EXPORTS
       GetEventTable__5wxAppCFv
       ;wxSetInstance(unsigned long)
       wxSetInstance__FUl
-      ;wxMsgArray::RemoveAt(unsigned int)
-      RemoveAt__10wxMsgArrayFUi
+      ;wxMsgArray::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__10wxMsgArrayFUiT1
       wxGetInstance
       ;wxMsgArray::~wxMsgArray()
       __dt__10wxMsgArrayFv
@@ -11432,6 +11440,8 @@ EXPORTS
       sm_eventTable__5wxApp
       ;wxApp::Initialize(unsigned long)
       Initialize__5wxAppFUl
+      ;wxMsgArray::Add(const _QMSG&,unsigned int)
+      Add__10wxMsgArrayFRC5_QMSGUi
       ;wxAppBase::m_appInitFn
       m_appInitFn__9wxAppBase
       ;wxApp::DoMessage()
@@ -12233,8 +12243,8 @@ EXPORTS
       InitDC__10wxClientDCFv
       ;wxArrayDCInfo::DoCopy(const wxArrayDCInfo&)
       DoCopy__13wxArrayDCInfoFRC13wxArrayDCInfo
-      ;wxArrayDCInfo::Add(const wxPaintDCInfo&)
-      Add__13wxArrayDCInfoFRC13wxPaintDCInfo
+      ;wxArrayDCInfo::Add(const wxPaintDCInfo&,unsigned int)
+      Add__13wxArrayDCInfoFRC13wxPaintDCInfoUi
       ;wxWindowDC::DoGetSize(int*,int*) const
       DoGetSize__10wxWindowDCCFPiT1
       ;wxPaintDC::wxPaintDC()
@@ -12246,8 +12256,8 @@ EXPORTS
       ;wxPaintDC::FindDCInCache(wxWindow*)
       FindDCInCache__9wxPaintDCFP8wxWindow
       __vft10wxWindowDC8wxObject
-      ;wxArrayDCInfo::Insert(const wxPaintDCInfo&,unsigned int)
-      Insert__13wxArrayDCInfoFRC13wxPaintDCInfoUi
+      ;wxArrayDCInfo::RemoveAt(unsigned int,unsigned int)
+      RemoveAt__13wxArrayDCInfoFUiT1
       ;wxConstructorForwxWindowDC()
       wxConstructorForwxWindowDC__Fv
       ;wxPaintDC::~wxPaintDC()
@@ -12258,14 +12268,14 @@ EXPORTS
       __ct__9wxPaintDCFP8wxWindow
       ;wxArrayDCInfo::Index(const wxPaintDCInfo&,unsigned long) const
       Index__13wxArrayDCInfoCFRC13wxPaintDCInfoUl
-      ;wxArrayDCInfo::RemoveAt(unsigned int)
-      RemoveAt__13wxArrayDCInfoFUi
       ;wxPaintDC::FindInCache(unsigned int*) const
       FindInCache__9wxPaintDCCFPUi
       ;wxArrayDCInfo::DoEmpty()
       DoEmpty__13wxArrayDCInfoFv
       ;wxClientDC::~wxClientDC()
       __dt__10wxClientDCFv
+      ;wxArrayDCInfo::Insert(const wxPaintDCInfo&,unsigned int,unsigned int)
+      Insert__13wxArrayDCInfoFRC13wxPaintDCInfoUiT2
       ;wxClientDC::sm_classwxClientDC
       sm_classwxClientDC__10wxClientDC
       ;wxPaintDC::sm_classwxPaintDC
@@ -12291,6 +12301,8 @@ EXPORTS
       __ct__10wxWindowDCFP8wxWindow
   ;From object file:  ..\os2\dcmemory.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxMemoryDC::DoDrawRoundedRectangle(int,int,int,int,double)
+      DoDrawRoundedRectangle__10wxMemoryDCFiN31d
       ;wxMemoryDC::SelectObject(const wxBitmap&)
       SelectObject__10wxMemoryDCFRC8wxBitmap
       __vft10wxMemoryDC8wxObject
@@ -12438,8 +12450,6 @@ EXPORTS
       Revoke__12wxDropTargetFUl
       ;wxDropTarget::Register(unsigned long)
       Register__12wxDropTargetFUl
-      ;wxDropSource::DoDragDrop(unsigned long)
-      DoDragDrop__12wxDropSourceFUl
       ;wxDropTarget::OnDrop(int,int)
       OnDrop__12wxDropTargetFiT1
       ;wxDropTarget::GetData()
@@ -12452,6 +12462,8 @@ EXPORTS
       OnDragOver__12wxDropTargetFiT112wxDragResult
       ;wxDropTarget::~wxDropTarget()
       __dt__12wxDropTargetFv
+      ;wxDropSource::DoDragDrop(int)
+      DoDragDrop__12wxDropSourceFi
       ;wxDropSource::Init()
       Init__12wxDropSourceFv
       ;wxDropTarget::IsAcceptable(_DRAGINFO*)
@@ -13958,6 +13970,8 @@ EXPORTS
       GetPosition__8wxSliderCFPiT1
       ;wxSlider::OnCtlColor(unsigned long,unsigned long,unsigned int,unsigned int,void*,void*)
       OnCtlColor__8wxSliderFUlT1UiT3PvT5
+      ;wxSlider::DoGetSize(int*,int*) const
+      DoGetSize__8wxSliderCFPiT1
       ;wxConstructorForwxSlider()
       wxConstructorForwxSlider__Fv
       ;wxSlider::wxSlider()
