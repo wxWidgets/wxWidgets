@@ -151,7 +151,7 @@ void wxStaticText::OnDraw( wxDC &dc )
 				if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
 				{
 					if ( ((wxControl*)parent)->GetMacControl() ) {
-						Rect rect = { -32767 , -32767 , 32767 , 32767 } ;
+						Rect rect = { -10000 , -10000 , 10000 , 10000 } ; // MacOS X was having a coord rollover
 						if ( DrawThemeTabPane != (void*)kUnresolvedCFragSymbolAddress )
 						{
 						  DrawThemeTabPane ( &rect, kThemeStateActive);
