@@ -4840,5 +4840,3 @@ const char *wxGetMessageName(int message)
   }
 }
 #endif //WXDEBUG
-
-#include "../common/wincmn.cpp"
