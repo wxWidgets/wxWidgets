@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1772,7 +1772,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2167,10 +2167,12 @@ EXPORTS
       ms_root__16wxLocalFSHandler
       ;wxFileSystemHandler::GetMimeTypeFromExt(const wxString&)
       GetMimeTypeFromExt__19wxFileSystemHandlerFRC8wxString
-      ;wxFileSystem::m_Handlers
-      m_Handlers__12wxFileSystem
+      ;wxFSFile::sm_classwxFSFile
+      sm_classwxFSFile__8wxFSFile
       ;wxFileSystemModule::sm_classwxFileSystemModule
       sm_classwxFileSystemModule__18wxFileSystemModule
+      ;wxFileSystem::m_Handlers
+      m_Handlers__12wxFileSystem
       ;wxFileSystemHandler::FindNext()
       FindNext__19wxFileSystemHandlerFv
       ;wxFileSystem::CleanUpHandlers()
@@ -2766,6 +2768,22 @@ EXPORTS
       Destroy__17wxStringHashTableFv
       ;wxHashTable::Get(long,const char*) const
       Get__11wxHashTableCFlPCc
+  ;From object file:  ..\common\hashmap.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;_wxHashTableBase2::CopyHashTable(_wxHashTable_NodeBase**,unsigned int,_wxHashTableBase2*,_wxHashTable_NodeBase**,unsigned long(*)(_wxHashTableBase2*,_wxHashTable_NodeBase*),_wxHashTable_NodeBase*(*)(_wxHashTable_NodeBase*))
+      CopyHashTable__17_wxHashTableBase2FPP21_wxHashTable_NodeBaseUiP17_wxHashTableBase2T1PFP17_wxHashTableBase2P21_wxHashTable_NodeBase_UlPFP21_wxHashTable_NodeBase_P21_wxHashTable_NodeBase
+      ;wxStringHash::wxCharStringHash(const char*)
+      wxCharStringHash__12wxStringHashFPCc
+      ;_wxHashTableBase2::s_primes
+      s_primes__17_wxHashTableBase2
+      ;_wxHashTableBase2::DummyProcessNode(_wxHashTable_NodeBase*)
+      DummyProcessNode__17_wxHashTableBase2FP21_wxHashTable_NodeBase
+      ;_wxHashTableBase2::DeleteNodes(unsigned int,_wxHashTable_NodeBase**,void(*)(_wxHashTable_NodeBase*))
+      DeleteNodes__17_wxHashTableBase2FUiPP21_wxHashTable_NodeBasePFP21_wxHashTable_NodeBase_v
+      ;_wxHashTableBase2::GetNextPrime(unsigned long)
+      GetNextPrime__17_wxHashTableBase2FUl
+      ;_wxHashTableBase2::GetPreviousPrime(unsigned long)
+      GetPreviousPrime__17_wxHashTableBase2FUl
   ;From object file:  ..\common\helpbase.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxHelpControllerBase::sm_classwxHelpControllerBase
@@ -4115,6 +4133,10 @@ EXPORTS
       wxCreateDynamicObject__FPCc
       ;wxObject::Dump(ostream&)
       Dump__8wxObjectFR7ostream
+      ;wxObject::CloneRefData(wxObjectRefData*) const
+      CloneRefData__8wxObjectCFP15wxObjectRefData
+      ;wxObject::CreateRefData() const
+      CreateRefData__8wxObjectCFv
       ;wxClassInfo::sm_classTable
       sm_classTable__11wxClassInfo
       ;wxClassInfo::sm_first
@@ -4126,6 +4148,8 @@ EXPORTS
       UnRef__8wxObjectFv
       ;wxClassInfo::CleanUpClasses()
       CleanUpClasses__11wxClassInfoFv
+      ;wxObject::AllocExclusive()
+      AllocExclusive__8wxObjectFv
       ;wxObject::IsKindOf(wxClassInfo*) const
       IsKindOf__8wxObjectCFP11wxClassInfo
       ;wxClassInfo::FindClass(const char*)
@@ -5773,7 +5797,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -8648,42 +8672,6 @@ EXPORTS
       sm_eventTableEntries__11wxHelpFrame
       ;wxHelpFrame::~wxHelpFrame()
       __dt__11wxHelpFrameFv
-  ;From object file:  ..\generic\helpxlp.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxXLPHelpController::DisplayContents()
-      DisplayContents__19wxXLPHelpControllerFv
-      ;wxXLPHelpController::Quit()
-      Quit__19wxXLPHelpControllerFv
-      ;wxXLPHelpController::DisplayBlock(long)
-      DisplayBlock__19wxXLPHelpControllerFl
-      __vft19wxXLPHelpController8wxObject
-      __vft19wxXLPHelpConnection8wxObject
-      ;wxXLPHelpController::DisplaySection(int)
-      DisplaySection__19wxXLPHelpControllerFi
-      ;wxXLPHelpConnection::wxXLPHelpConnection(wxXLPHelpController*)
-      __ct__19wxXLPHelpConnectionFP19wxXLPHelpController
-      ;wxXLPHelpController::OnQuit()
-      OnQuit__19wxXLPHelpControllerFv
-      ;wxXLPHelpClient::sm_classwxXLPHelpClient
-      sm_classwxXLPHelpClient__15wxXLPHelpClient
-      ;wxXLPHelpController::Initialize(const wxString&,int)
-      Initialize__19wxXLPHelpControllerFRC8wxStringi
-      ;wxXLPHelpController::~wxXLPHelpController()
-      __dt__19wxXLPHelpControllerFv
-      ;wxXLPHelpController::Run()
-      Run__19wxXLPHelpControllerFv
-      ;wxXLPHelpConnection::OnDisconnect()
-      OnDisconnect__19wxXLPHelpConnectionFv
-      ;wxXLPHelpController::LoadFile(const wxString&)
-      LoadFile__19wxXLPHelpControllerFRC8wxString
-      ;wxXLPHelpController::KeywordSearch(const wxString&)
-      KeywordSearch__19wxXLPHelpControllerFRC8wxString
-      ;wxXLPHelpController::wxXLPHelpController()
-      __ct__19wxXLPHelpControllerFv
-      ;wxXLPHelpController::sm_classwxXLPHelpController
-      sm_classwxXLPHelpController__19wxXLPHelpController
-      ;wxXLPHelpConnection::sm_classwxXLPHelpConnection
-      sm_classwxXLPHelpConnection__19wxXLPHelpConnection
   ;From object file:  ..\generic\imaglist.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft11wxImageList8wxObject
@@ -10241,6 +10229,7 @@ EXPORTS
       ;wxGenericTreeCtrl::FillArray(wxGenericTreeItem*,wxArrayTreeItemIds&) const
       FillArray__17wxGenericTreeCtrlCFP17wxGenericTreeItemR18wxArrayTreeItemIds
   ;From object file:  ..\generic\treelay.cpp
+  ;From object file:  ..\generic\wizard.cpp
   ;From object file:  ..\html\helpctrl.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxHtmlHelpController::DisplayTextPopup(const wxString&,const wxPoint&)
@@ -10586,6 +10575,8 @@ EXPORTS
       SetEncoding__20wxHtmlEntitiesParserF14wxFontEncoding
       ;wxHtmlParser::PushTagHandler(wxHtmlTagHandler*,wxString)
       PushTagHandler__12wxHtmlParserFP16wxHtmlTagHandler8wxString
+      ;wxHtmlParser::OpenURL(wxHtmlURLType,const wxString&) const
+      OpenURL__12wxHtmlParserCF13wxHtmlURLTypeRC8wxString
       ;wxHtmlTextPieces::RemoveAt(unsigned int)
       RemoveAt__16wxHtmlTextPiecesFUi
       wxHtmlEntityCompare
@@ -11013,8 +11004,6 @@ EXPORTS
       SetInputEncoding__15wxHtmlWinParserF14wxFontEncoding
       ;wxHtmlWinParser::SetLink(const wxHtmlLinkInfo&)
       SetLink__15wxHtmlWinParserFRC14wxHtmlLinkInfo
-      ;wxHtmlWinParser::CanOpenURL(const wxString&) const
-      CanOpenURL__15wxHtmlWinParserCFRC8wxString
       __vft15wxHtmlWinParser8wxObject
       ;wxHtmlWinParser::CloseContainer()
       CloseContainer__15wxHtmlWinParserFv
@@ -11041,6 +11030,8 @@ EXPORTS
       OnInit__16wxHtmlTagsModuleFv
       ;wxHtmlWinParser::CreateCurrentFont()
       CreateCurrentFont__15wxHtmlWinParserFv
+      ;wxHtmlWinParser::OpenURL(wxHtmlURLType,const wxString&) const
+      OpenURL__15wxHtmlWinParserCF13wxHtmlURLTypeRC8wxString
       ;wxHtmlWinParser::SetFontFace(const wxString&)
       SetFontFace__15wxHtmlWinParserFRC8wxString
   ;From object file:  ..\generic\msgdlgg.cpp
@@ -13537,6 +13528,10 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxRegion::Combine(const wxRect&,wxRegionOp)
       Combine__8wxRegionFRC6wxRect10wxRegionOp
+      ;wxRegion::CloneData(wxObjectRefData*) const
+      CloneData__8wxRegionCFP15wxObjectRefData
+      ;wxRegion::Offset(int,int)
+      Offset__8wxRegionFiT1
       ;wxRegion::GetBox() const
       GetBox__8wxRegionCFv
       ;wxRegionIterator::operator++()
@@ -13594,6 +13589,8 @@ EXPORTS
       __ct__16wxRegionIteratorFRC8wxRegion
       ;wxRegionIterator::GetH() const
       GetH__16wxRegionIteratorCFv
+      ;wxRegion::CreateData() const
+      CreateData__8wxRegionCFv
       ;wxRegion::SetPS(unsigned long)
       SetPS__8wxRegionFUl
       __vft16wxRegionIterator8wxObject

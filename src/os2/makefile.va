@@ -112,7 +112,6 @@ GENERICOBJS= \
   ..\generic\$D\helpext.obj \
   ..\generic\$D\helphtml.obj \
   ..\generic\$D\helpwxht.obj \
-  ..\generic\$D\helpxlp.obj \
   ..\generic\$D\imaglist.obj \
   ..\generic\$D\laywin.obj \
   ..\generic\$D\listctrl.obj \
@@ -160,7 +159,6 @@ GENLIBOBJS= \
   helpext.obj \
   helphtml.obj \
   helpwxht.obj \
-  helpxlp.obj \
   imaglist.obj \
   laywin.obj \
   listctrl.obj \
@@ -247,6 +245,7 @@ COMMONOBJS = \
   ..\common\$D\geometry.obj \
   ..\common\$D\gifdecod.obj \
   ..\common\$D\hash.obj \
+  ..\common\$D\hashmap.obj \
   ..\common\$D\helpbase.obj \
   ..\common\$D\http.obj \
   ..\common\$D\imagall.obj \
@@ -378,6 +377,7 @@ COMLIBOBJS2 = \
   geometry.obj \
   gifdecod.obj \
   hash.obj \
+  hashmap.obj \
   helpbase.obj \
   http.obj \
   imagall.obj \
@@ -410,10 +410,10 @@ COMLIBOBJS2 = \
   paper.obj \
   popupcmn.obj \
   prntbase.obj \
-  process.obj \
-  protocol.obj
+  process.obj
 
 COMLIBOBJS3 = \
+  protocol.obj \
   quantize.obj \
   radiocmn.obj \
   regex.obj \
@@ -745,6 +745,7 @@ $(COMLIBOBJS2):
   copy ..\common\$D\geometry.obj
   copy ..\common\$D\gifdecod.obj
   copy ..\common\$D\hash.obj
+  copy ..\common\$D\hashmap.obj
   copy ..\common\$D\helpbase.obj
   copy ..\common\$D\http.obj
   copy ..\common\$D\imagall.obj
@@ -778,9 +779,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\popupcmn.obj
   copy ..\common\$D\prntbase.obj
   copy ..\common\$D\process.obj
-  copy ..\common\$D\protocol.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\protocol.obj
   copy ..\common\$D\quantize.obj
   copy ..\common\$D\radiocmn.obj
   copy ..\common\$D\regex.obj
@@ -839,7 +840,6 @@ $(GENLIBOBJS):
   copy ..\generic\$D\helpext.obj
   copy ..\generic\$D\helphtml.obj
   copy ..\generic\$D\helpwxht.obj
-  copy ..\generic\$D\helpxlp.obj
   copy ..\generic\$D\imaglist.obj
   copy ..\generic\$D\laywin.obj
   copy ..\generic\$D\listctrl.obj

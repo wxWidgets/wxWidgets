@@ -190,18 +190,17 @@ void wxChoice::SetString(
 {
     SHORT                           nIndexType = 0;
 
-    ::WinSendMsg(WinUtil_GetHwnd(), LM_DELETEITEM, (MPARAM)n, 0);
+    ::WinSendMsg(GetHwnd(), LM_DELETEITEM, (MPARAM)n, 0);
 
-
-    if (m_lWindowStyle & winLB_SORT)
+    if (m_windowStyle & wxLB_SORT)
         nIndexType = LIT_SORTASCENDING;
     else
         nIndexType = LIT_END;
-    lIndex = (YInt32)::WinSendMsg( WinUtil_GetHwnd()
-                                  ,LM_INSERTITEM
-                                  ,(MPARAM)nIndexType
-                                  ,(MPARAM)rsStr.Data()
-                                 );
+    ::WinSendMsg( GetHwnd()
+                 ,LM_INSERTITEM
+                 ,(MPARAM)nIndexType
+                 ,(MPARAM)rsStr.c_str()
+                );
 } // end of wxChoice::SetString
 
 wxString wxChoice::GetString(
