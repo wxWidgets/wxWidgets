@@ -4,6 +4,12 @@
 The Unix variants of wxWindows use GNU configure. If you have problems 
 with your make use GNU make instead.
 
+Read my homepage at 
+
+  http://www.freiburg.linux.de/~wxxt
+  
+for newest information.
+
 * GUI libraries
 -----------------------
 
@@ -64,8 +70,9 @@ Python scripting language support:
 wxGTK and wxMotif/wxLesstif require the built-in
 ImLib/GdkImlib to be configured. For that purpose
 copy the two files from /misc/imlib to your
-home directory. You may also edit imrc by hand as
-you like. The palette file is required when using
+home directory and rename "imrc" -> ".imrc".
+You may also edit imrc by hand as you like. 
+The palette file is required when using
 wxWindows in 256-colour mode.
 
 If you want to use wxWindows's ODBC support, you'll have
@@ -120,6 +127,8 @@ running configure with either of
 
 The following options handle the kind of library you want to build.
 
+	--without-threads       Compile without thread support.
+
 	--with-shared           Create shared libraries.
 
 	--without-optimise	Do not optimise the code.
@@ -163,7 +172,7 @@ Dependencies are generated automatically using
 
 	make depend
 	
-for some reason, this doesn't seem to work.	
+(For some reason, this doesn't seem to work completely.)
 
 Now the makefiles are created you can compile everything is as simple
 as typing:
