@@ -78,8 +78,37 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
   GdkEventCrossing *WXUNUSED(gdk_event), wxToolBarTool *tool )
 {
     if (g_blockEventsOnDrag) return TRUE;
+    
+    /* we grey-out the tip text of disabled tool */
+    
+    wxToolBar *tb = tool->m_owner;
+    
+    if (tool->m_enabled)
+    {
+        if (tb->m_fg->red != 0)
+	{
+            tb->m_fg->red = 0;
+            tb->m_fg->green = 0;
+            tb->m_fg->blue = 0;
+            gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(tb->m_toolbar) ), tb->m_fg );
+            gtk_tooltips_set_colors( GTK_TOOLBAR(tb->m_toolbar)->tooltips, tb->m_bg, tb->m_fg );
+	}
+    }
+    else
+    {
+        if (tb->m_fg->red == 0)
+	{
+            tb->m_fg->red = 33000;
+            tb->m_fg->green = 33000;
+            tb->m_fg->blue = 33000;
+            gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(tb->m_toolbar) ), tb->m_fg );
+            gtk_tooltips_set_colors( GTK_TOOLBAR(tb->m_toolbar)->tooltips, tb->m_bg, tb->m_fg );
+	}
+    }
+    
+    /* emit the event */
   
-    tool->m_owner->OnMouseEnter( tool->m_index );
+    tb->OnMouseEnter( tool->m_index );
   
     return FALSE;
 }
@@ -301,8 +330,12 @@ void wxToolBar::EnableTool(int toolIndex, bool enable)
         {
             tool->m_enabled = enable;
 	    
+/*   we don't disable the tools for now as the bitmaps don't get
+     greyed anyway and this also disables tooltips
+
 	    if (tool->m_item)
 	        gtk_widget_set_sensitive( tool->m_item, enable );
+*/
 		
             return;
         }

@@ -355,13 +355,25 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
          ((win->m_windowStyle & wxTE_PROCESS_TAB) == 0))
     {
         wxNavigationKeyEvent new_event;
+	/* GDK reports GDK_ISO_Left_Tab for SHIFT-TAB */
         new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
-        new_event.SetWindowChange( FALSE );
+	/* CTRL-TAB changes the (parent) window, i.e. switch notebook page */ 
+        new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
         new_event.SetCurrentFocus( win );
         ret = win->GetEventHandler()->ProcessEvent( new_event );
     }
 
+    if ( (!ret) && 
+         (gdk_event->keyval == GDK_Escape) )
+    {
+        wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+        new_event.SetEventObject( win );
+        ret = win->GetEventHandler()->ProcessEvent( new_event );
+    }
+    
 /*
+    Damn, I forgot why this didn't work, but it didn't work.
+
     // win is a panel: up can be propagated to the panel
     if ((!ret) && (win->m_wxwindow) && (win->m_parent) && (win->m_parent->AcceptsFocus()) &&
         (gdk_event->keyval == GDK_Up))
@@ -501,7 +513,7 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
 
     if (ret)
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_release_event" );
     }
 
     return ret;

@@ -153,6 +153,7 @@ public:
     // get the panel which represents the given page
   wxWindow *GetPage(int nPage) const;
 
+  void OnNavigationKey(wxNavigationKeyEvent& event);
   
   // implementation
   
@@ -171,6 +172,7 @@ public:
   size_t            m_idHandler; // the change page handler id
 
   DECLARE_DYNAMIC_CLASS(wxNotebook)
+  DECLARE_EVENT_TABLE()
 };
 
 // ----------------------------------------------------------------------------

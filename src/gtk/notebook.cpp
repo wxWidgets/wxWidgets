@@ -127,6 +127,10 @@ gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxNo
     if (g_blockEventsOnDrag) return FALSE;
 
     if (!notebook->HasVMT()) return FALSE;
+    
+    /* this code makes jumping down from the handles of the notebooks
+       to the actual items in the visible notebook page possible with
+       the down-arrow key */
 
     if (gdk_event->keyval != GDK_Down) return FALSE;
     
@@ -184,6 +188,10 @@ static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook,wxControl)
 
+BEGIN_EVENT_TABLE(wxNotebook, wxControl)
+    EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
+END_EVENT_TABLE()
+    
 void wxNotebook::Init()
 {
     m_imageList = (wxImageList *) NULL;
@@ -381,7 +389,7 @@ void wxNotebook::AdvanceSelection( bool bForward )
     if (bForward)
         SetSelection( sel == max ? 0 : sel + 1 );
     else
-        SetSelection( sel == 0 ? max : sel - 1 );
+        SetSelection( sel == 0 ? max-1 : sel - 1 );
 }
 
 void wxNotebook::SetImageList( wxImageList* imageList )
@@ -622,6 +630,14 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
     if (select) SetSelection( GetPageCount()-1 );
 
     return TRUE;
+}
+
+void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
+{
+    if (event.IsWindowChange()) 
+        AdvanceSelection( event.GetDirection() );
+    else 
+        event.Skip();
 }
 
 wxWindow *wxNotebook::GetPage( int page ) const
