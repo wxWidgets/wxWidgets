@@ -845,8 +845,8 @@ bool wxPNGBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
             s = ((wxUint32*)bmp->surface) + y * bmp->bytesPerLine/4;
             for (x = 0; x < bmp->width; x++, s ++)
             {
-                if ( ((((*s) >> bmp->pf->rsvdPos) & bmp->pf->rsvdMask) 
-                        << bmp->pf->rsvdAdjust) < 128 )
+                if ( ((((*s) >> bmp->pf->alphaPos) & bmp->pf->alphaMask) 
+                        << bmp->pf->alphaAdjust) < 128 )
                     *s = 0;
                 else
                     *s = 0x00FFFFFF; // white
