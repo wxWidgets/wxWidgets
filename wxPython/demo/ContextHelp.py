@@ -89,17 +89,8 @@ class TestPanel(wx.Panel):
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    if wx.Platform == "__WXMAC__":
-        dlg = wx.MessageDialog(
-                frame, 'The ContextHelp sample does not currently work well on this platform.',
-                'Sorry', wx.OK | wx.ICON_INFORMATION
-                )
-        dlg.ShowModal()
-        dlg.Destroy()
-        
-    else:
-        win = TestPanel(nb, log)
-        return win
+    win = TestPanel(nb, log)
+    return win
 
 
 #----------------------------------------------------------------------
