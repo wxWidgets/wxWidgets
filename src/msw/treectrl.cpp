@@ -195,10 +195,12 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( m_windowStyle & wxTR_LINES_AT_ROOT )
         wstyle |= TVS_LINESATROOT;
 
+#ifndef __GNUWIN32__
     // we emulate the multiple selection tree controls by using checkboxes: set
     // up the image list we need for this if we do have multiple selections
     if ( m_windowStyle & wxTR_MULTIPLE )
-        wstyle |= TVS_CHECKBOXES;
+	wstyle |= TVS_CHECKBOXES;
+#endif
 
     // Create the tree control.
     if ( !MSWCreateControl(WC_TREEVIEW, wstyle) )

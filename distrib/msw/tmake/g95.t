@@ -248,14 +248,19 @@ $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
 
 clean:
 	-erase *.o
+	-erase *.bak
 	-erase core
 	-erase ..\common\y_tab.c
 	-erase ..\common\lex_yy.c
 	-erase ..\common\*.o
+	-erase ..\common\*.bak
 	-erase ..\generic\*.o
+	-erase ..\generic\*.bak
 	-erase ..\html\*.o
 	-erase ..\png\*.o
+	-erase ..\png\*.bak
 	-erase ..\zlib\*.o
+	-erase ..\zlib\*.bak
 	-erase ..\jpeg\*.o
 	-erase ..\..\lib\libwx.a
 

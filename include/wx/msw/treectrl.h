@@ -21,6 +21,7 @@
 #endif
 
 #include "wx/textctrl.h"
+#include "wx/dynarray.h"
 
 #ifdef __GNUWIN32__
     // Cygwin windows.h defines these identifiers

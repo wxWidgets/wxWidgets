@@ -1,5 +1,5 @@
 echo                               --------
-echo    This script will copy the wxMSW release files into ~/wxmsw_dist
+echo    This script will copy the wxMSW release files into \wxmsw_dist
 echo                               --------
 echo                    
 
@@ -148,6 +148,93 @@ cd xpm
 md \wxmsw_dist\wxMSW\src\xpm
 copy *.* \wxmsw_dist\wxMSW\src\xpm
 cd ..
+
+cd ..
+
+echo Utils dir..
+
+cd utils
+md \wxmsw_dist\wxMSW\utils
+
+echo wxGLCanvas..
+
+cd glcanvas
+md \wxmsw_dist\wxMSW\utils\glcanvas
+copy .\docs\notes.txt \wxmsw_dist\wxMSW\utils\glcanvas\NOTES.txt
+
+md \wxmsw_dist\wxMSW\utils\glcanvas\win
+copy .\win\glcanvas.cpp \wxmsw_dist\wxMSW\utils\glcanvas\win
+copy .\win\glcanvas.h \wxmsw_dist\wxMSW\utils\glcanvas\win
+copy .\win\makefile.* \wxmsw_dist\wxMSW\utils\glcanvas\win
+
+md \wxmsw_dist\wxMSW\utils\glcanvas\samples
+md \wxmsw_dist\wxMSW\utils\glcanvas\samples\cube
+md \wxmsw_dist\wxMSW\utils\glcanvas\samples\isosurf
+md \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
+
+cd samples\cube
+copy Makefile.* \wxmsw_dist\wxMSW\utils\glcanvas\samples\cube
+copy cube.rc \wxmsw_dist\wxMSW\utils\glcanvas\samples\cube
+copy cube.h \wxmsw_dist\wxMSW\utils\glcanvas\samples\cube
+copy cube.cpp \wxmsw_dist\wxMSW\utils\glcanvas\samples\cube
+copy mondrian.ico \wxmsw_dist\wxMSW\utils\glcanvas\samples\cube
+cd ..
+
+cd isosurf
+copy Makefile.* \wxmsw_dist\wxMSW\utils\glcanvas\samples\isosurf
+copy isosurf.h \wxmsw_dist\wxMSW\utils\glcanvas\samples\isosurf
+copy isosurf.rc \wxmsw_dist\wxMSW\utils\glcanvas\samples\isosurf
+copy isosurf.cpp \wxmsw_dist\wxMSW\utils\glcanvas\samples\isosurf
+copy isosurf.dat.gz \wxmsw_dist\wxMSW\utils\glcanvas\samples\isosurf
+copy mondrian.ico \wxmsw_dist\wxMSW\utils\glcanvas\samples\isosurf
+cd ..
+
+cd penguin
+copy Makefile.* \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
+copy penguin.rc \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
+copy penguin.h \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
+copy penguin.cpp \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
+copy trackball.h \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
+copy trackball.c \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
+copy lw.h \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
+copy lw.cpp \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
+copy penguin.lwo \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
+copy mondrian.ico \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
+cd ..\..\..
+
+echo DialogEd..
+
+cd dialoged\src
+md \wxmsw_dist\wxMSW\utils\dialoged
+md \wxmsw_dist\wxMSW\utils\dialoged\src
+copy Makefile.* \wxmsw_dist\wxMSW\utils\dialoged\src
+copy dialoged.def \wxmsw_dist\wxMSW\utils\dialoged\src
+copy dialoged.rc \wxmsw_dist\wxMSW\utils\dialoged\src
+copy dialoged.ico \wxmsw_dist\wxMSW\utils\dialoged\src
+copy dialoged.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
+copy dlghndlr.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
+copy edlist.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
+copy edtree.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
+copy reseditr.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
+copy reswrite.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
+copy symbtabl.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
+copy winprop.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
+copy winstyle.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
+copy dialoged.h \wxmsw_dist\wxMSW\utils\dialoged\src
+copy dlghndlr.h \wxmsw_dist\wxMSW\utils\dialoged\src
+copy edlist.h \wxmsw_dist\wxMSW\utils\dialoged\src
+copy edtree.h \wxmsw_dist\wxMSW\utils\dialoged\src
+copy reseditr.h \wxmsw_dist\wxMSW\utils\dialoged\src
+copy symbtabl.h \wxmsw_dist\wxMSW\utils\dialoged\src
+copy winprop.h \wxmsw_dist\wxMSW\utils\dialoged\src
+copy winstyle.h \wxmsw_dist\wxMSW\utils\dialoged\src
+
+cd bitmaps
+md \wxmsw_dist\wxMSW\utils\dialoged\src\bitmaps
+copy *.bmp \wxmsw_dist\wxMSW\utils\dialoged\src\bitmaps
+copy *.ico \wxmsw_dist\wxMSW\utils\dialoged\src\bitmaps
+cd ..\..\..
+
 
 cd ..
 
