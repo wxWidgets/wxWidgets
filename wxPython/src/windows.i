@@ -879,10 +879,16 @@ public:
                     const wxBitmap& bmpUnchecked = wxNullBitmap);
     //void SetBitmap(const wxBitmap& bmpChecked);
     //wxBitmap GetBitmap(bool bChecked = TRUE);
+    
+    void SetDisabledBitmap( const wxBitmap& bmpDisabled );
+    const wxBitmap& GetDisabledBitmap() const;
+   
     void SetMarginWidth(int nWidth);
     int GetMarginWidth();
     static int GetDefaultMarginWidth();
     bool IsOwnerDrawn();
+    // switch on/off owner-drawing the item
+    void SetOwnerDrawn(bool ownerDrawn = TRUE);
     void ResetOwnerDrawn();
 #endif
 

@@ -954,8 +954,11 @@ of your Mac."""
         # KeyboardInterrupt???)  but will later segfault on exit.  By
         # setting the default handler then the app will exit, as
         # expected (depending on platform.)
-        import signal
-        signal.signal(signal.SIGINT, signal.SIG_DFL)
+        try:
+            import signal
+            signal.signal(signal.SIGINT, signal.SIG_DFL)
+        except:
+            pass
 
         # this initializes wxWindows and then calls our OnInit
         _wxStart(self.OnInit)

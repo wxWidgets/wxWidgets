@@ -131,6 +131,12 @@ enum wxFontEncoding
 
     wxFONTENCODING_UTF7,            // UTF-7 Unicode encoding
     wxFONTENCODING_UTF8,            // UTF-8 Unicode encoding
+    wxFONTENCODING_UTF16,           // UTF-16 Unicode encoding
+    wxFONTENCODING_UTF16BE,         // UTF-16 Big Endian Unicode encoding
+    wxFONTENCODING_UTF16LE,         // UTF-16 Little Endian Unicode encoding
+    wxFONTENCODING_UTF32,           // UTF-32 Unicode encoding
+    wxFONTENCODING_UTF32BE,         // UTF-32 Big Endian Unicode encoding
+    wxFONTENCODING_UTF32LE,         // UTF-32 Little Endian Unicode encoding
 
     // Far Eastern encodings
         // Chinese
@@ -160,6 +166,9 @@ struct wxNativeFontInfo
 
     // reset to the default state
     void Init();
+
+    // init with the parameters of the given font
+    void InitFromFont(const wxFont& font);
 
     // accessors and modifiers for the font elements
     int GetPointSize() const;
@@ -199,30 +208,30 @@ struct wxNativeFontInfo
 
 %{
 // Fix some link errors...  Remove this when these methods get real implementations...
-#if defined(__WXGTK__) || defined(__WXX11__)
-#if wxUSE_PANGO
-void wxNativeFontInfo::SetPointSize(int pointsize)
-    { wxFAIL_MSG( _T("not implemented") ); }
+// #if defined(__WXGTK__) || defined(__WXX11__)
+// #if wxUSE_PANGO
+// void wxNativeFontInfo::SetPointSize(int pointsize)
+//     { wxFAIL_MSG( _T("not implemented") ); }
 
-void wxNativeFontInfo::SetStyle(wxFontStyle style)
-    { wxFAIL_MSG( _T("not implemented") ); }
+// void wxNativeFontInfo::SetStyle(wxFontStyle style)
+//     { wxFAIL_MSG( _T("not implemented") ); }
 
-void wxNativeFontInfo::SetWeight(wxFontWeight weight)
-    { wxFAIL_MSG( _T("not implemented") ); }
+// void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+//     { wxFAIL_MSG( _T("not implemented") ); }
 
-void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
-    { wxFAIL_MSG( _T("not implemented") ); }
+// void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
+//     { wxFAIL_MSG( _T("not implemented") ); }
 
-void wxNativeFontInfo::SetFaceName(wxString facename)
-    { wxFAIL_MSG( _T("not implemented") ); }
+// void wxNativeFontInfo::SetFaceName(wxString facename)
+//     { wxFAIL_MSG( _T("not implemented") ); }
 
-void wxNativeFontInfo::SetFamily(wxFontFamily family)
-    { wxFAIL_MSG( _T("not implemented") ); }
+// void wxNativeFontInfo::SetFamily(wxFontFamily family)
+//     { wxFAIL_MSG( _T("not implemented") ); }
 
-void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
-    { wxFAIL_MSG( _T("not implemented") ); }
-#endif
-#endif
+// void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
+//     { wxFAIL_MSG( _T("not implemented") ); }
+// #endif
+// #endif
 %}
 
 //---------------------------------------------------------------------------
@@ -348,7 +357,7 @@ public:
 
     bool IsFixedWidth();
 
-    wxNativeFontInfo* GetNativeFontInfo() const;
+    const wxNativeFontInfo* GetNativeFontInfo() const;
     wxString GetNativeFontInfoDesc() const;
     wxString GetNativeFontInfoUserDesc() const;
 

@@ -557,6 +557,7 @@ public:
     int GetRange();
     int GetShadowWidth();
     int GetValue();
+    bool IsVertical() const;
     void SetBezelFace(int width);
     void SetRange(int range);
     void SetShadowWidth(int width);
@@ -880,6 +881,9 @@ public:
     // load/save the controls contents from/to the file
     bool LoadFile(const wxString& file);
     bool SaveFile(const wxString& file = wxPyEmptyString);
+
+    // sets the dirty flag
+    virtual void MarkDirty() = 0;
 
     // clears the dirty flag
     void DiscardEdits();

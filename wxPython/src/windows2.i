@@ -129,14 +129,14 @@ public:
     // adds a new page to the control
     virtual bool AddPage(wxWindow *page,
                          const wxString& text,
-                         bool bSelect = false,
+                         bool select = false,
                          int imageId = -1);
 
     // the same as AddPage(), but adds the page at the specified position
     virtual bool InsertPage(size_t n,
                             wxWindow *page,
                             const wxString& text,
-                            bool bSelect = false,
+                            bool select = false,
                             int imageId = -1) = 0;
 
     // set the currently selected page, return the index of the previously

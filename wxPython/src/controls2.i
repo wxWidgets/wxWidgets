@@ -476,6 +476,9 @@ public:
     // or small icon view)
     int GetCountPerPage() const;
 
+    // return the total area occupied by all the items (icon/small icon only)
+    wxRect GetViewRect() const;
+    
 #ifdef __WXMSW__
     // Gets the edit control for editing labels.
     wxTextCtrl* GetEditControl() const;
@@ -556,10 +559,8 @@ public:
     // Gets the number of columns in the list control
     int GetColumnCount() const;
 
-    // Retrieves the spacing between icons in pixels.
-    // If small is TRUE, gets the spacing for the small icon
-    // view, otherwise the large icon view.
-    int GetItemSpacing(bool isSmall) const;
+    // get the horizontal and vertical components of the item spacing
+    wxSize GetItemSpacing() const;
 
 #ifndef __WXMSW__
     void SetItemSpacing( int spacing, bool isSmall = FALSE );

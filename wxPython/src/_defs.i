@@ -368,6 +368,7 @@ enum {
     wxID_HELP_PROCEDURES,
     wxID_HELP_CONTEXT,
     wxID_CLOSE_ALL,
+    wxID_PREFERENCES,
 
     wxID_CUT,
     wxID_COPY,
@@ -446,6 +447,7 @@ enum {
     wxMENU_TEAROFF,
     wxMB_DOCKABLE,
     wxNO_FULL_REPAINT_ON_RESIZE,
+    wxFULL_REPAINT_ON_RESIZE,
 
     wxLEFT,
     wxRIGHT,
