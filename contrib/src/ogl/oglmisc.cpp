@@ -452,7 +452,7 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
     wxString oldBuffer(buffer);
 
     wxString s = node->GetData();
-    if (s.IsEmpty())
+    if (s.empty())
     {
       // FORCE NEW LINE
       if (buffer.Length() > 0)
@@ -871,10 +871,12 @@ wxColour oglHexToColour(const wxString& hex)
         hex.Mid(0,2).ToLong(&r, 16);
         hex.Mid(2,2).ToLong(&g, 16);
         hex.Mid(4,2).ToLong(&b, 16);
-        return wxColour(r, g, b);
+        return wxColour((unsigned char)r,
+                        (unsigned char)g,
+                        (unsigned char)b);
     }
     else
-        return wxColour(0,0,0);
+        return *wxBLACK;
 }
 
 // RGB to 3-digit hex

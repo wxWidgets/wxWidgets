@@ -196,7 +196,7 @@ void csEvtHandler::OnBeginDragRight(double x, double y, int WXUNUSED(keys), int 
   wxClientDC dc(GetShape()->GetCanvas());
   GetShape()->GetCanvas()->PrepareDC(dc);
 
-  wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+  wxPen dottedPen(*wxBLACK, 1, wxDOT);
   dc.SetLogicalFunction(OGLRBLF);
   dc.SetPen(dottedPen);
   double xp, yp;
@@ -210,7 +210,7 @@ void csEvtHandler::OnDragRight(bool WXUNUSED(draw), double x, double y, int WXUN
   wxClientDC dc(GetShape()->GetCanvas());
   GetShape()->GetCanvas()->PrepareDC(dc);
 
-  wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+  wxPen dottedPen(*wxBLACK, 1, wxDOT);
   dc.SetLogicalFunction(OGLRBLF);
   dc.SetPen(dottedPen);
   double xp, yp;
@@ -282,7 +282,7 @@ void csEvtHandler::OnDragLeft(bool draw, double x, double y, int keys, int attac
 
   dc.SetLogicalFunction(OGLRBLF);
 
-  wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+  wxPen dottedPen(*wxBLACK, 1, wxDOT);
   dc.SetPen(dottedPen);
   dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
@@ -351,7 +351,7 @@ void csEvtHandler::OnBeginDragLeft(double x, double y, int keys, int attachment)
 
   dc.SetLogicalFunction(OGLRBLF);
 
-  wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+  wxPen dottedPen(*wxBLACK, 1, wxDOT);
   dc.SetPen(dottedPen);
   dc.SetBrush((* wxTRANSPARENT_BRUSH));
 

@@ -1312,7 +1312,7 @@ void wxShape::OnDragLeft(bool draw, double x, double y, int keys, int attachment
 
   dc.SetLogicalFunction(OGLRBLF);
 
-  wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+  wxPen dottedPen(*wxBLACK, 1, wxDOT);
   dc.SetPen(dottedPen);
   dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
@@ -1357,7 +1357,7 @@ void wxShape::OnBeginDragLeft(double x, double y, int keys, int attachment)
 //  m_xpos = xx; m_ypos = yy;
   dc.SetLogicalFunction(OGLRBLF);
 
-  wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+  wxPen dottedPen(*wxBLACK, 1, wxDOT);
   dc.SetPen(dottedPen);
   dc.SetBrush((* wxTRANSPARENT_BRUSH));
 
@@ -2711,7 +2711,9 @@ bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y,
             double left = (double)(m_xpos - w/2.0);
             double right = (double)(m_xpos + w/2.0);
 
+#if 0
             /* bool isEnd = */ (line && line->IsEnd(this));
+#endif
 
             int physicalAttachment = LogicalToPhysicalAttachment(attachment);
 

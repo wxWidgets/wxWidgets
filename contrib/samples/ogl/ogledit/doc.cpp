@@ -56,7 +56,7 @@ bool DiagramDocument::OnCloseDocument(void)
 wxSTD ostream& DiagramDocument::SaveObject(wxSTD ostream& stream)
 {
   wxDocument::SaveObject(stream);
-  
+
   char buf[400];
   (void) wxGetTempFileName("diag", buf);
 
@@ -64,7 +64,7 @@ wxSTD ostream& DiagramDocument::SaveObject(wxSTD ostream& stream)
   wxTransferFileToStream(buf, stream);
 
   wxRemoveFile(buf);
-  
+
   return stream;
 }
 
@@ -199,12 +199,12 @@ bool DiagramCommand::Do(void)
       if (shape)
       {
         deleteShape = true;
-        
+
         shape->Select(false);
-        
+
         // Generate commands to explicitly remove each connected line.
         RemoveLines(shape);
-        
+
         doc->GetDiagram()->RemoveShape(shape);
         if (shape->IsKindOf(CLASSINFO(wxLineShape)))
         {
@@ -213,7 +213,7 @@ bool DiagramCommand::Do(void)
           toShape = lineShape->GetTo();
         }
         shape->Unlink();
-        
+
         doc->Modify(true);
         doc->UpdateAllViews();
       }
@@ -233,7 +233,7 @@ bool DiagramCommand::Do(void)
         theShape->SetCentreResize(false);
         theShape->SetPen(wxBLACK_PEN);
         theShape->SetBrush(wxCYAN_BRUSH);
-      
+
         theShape->SetSize(60, 60);
       }
       doc->GetDiagram()->AddShape(theShape);
@@ -243,7 +243,7 @@ bool DiagramCommand::Do(void)
       theShape->GetCanvas()->PrepareDC(dc);
 
       theShape->Move(dc, x, y);
-      
+
       shape = theShape;
       deleteShape = false;
 
@@ -271,11 +271,11 @@ bool DiagramCommand::Do(void)
         lineShape->MakeLineControlPoints(2);
         lineShape->AddArrow(ARROW_ARROW, ARROW_POSITION_END, 10.0, 0.0, _T("Normal arrowhead"));
       }
-      
+
       doc->GetDiagram()->AddShape(theShape);
-      
+
       fromShape->AddLine((wxLineShape *)theShape, toShape);
-      
+
       theShape->Show(true);
 
       wxClientDC dc(theShape->GetCanvas());
@@ -285,7 +285,7 @@ bool DiagramCommand::Do(void)
       // connected images
       fromShape->Move(dc, fromShape->GetX(), fromShape->GetY());
       toShape->Move(dc, toShape->GetX(), toShape->GetY());
-      
+
       shape = theShape;
       deleteShape = false;
 
@@ -304,7 +304,7 @@ bool DiagramCommand::Do(void)
         shape->SetBrush(shapeBrush);
         shapeBrush = oldBrush;
         shape->Draw(dc);
-        
+
         doc->Modify(true);
         doc->UpdateAllViews();
       }
@@ -325,7 +325,7 @@ bool DiagramCommand::Do(void)
 
         shape->FormatText(dc, /* (char*) (const char*) */ myHandler->label);
         shape->Draw(dc);
-        
+
         doc->Modify(true);
         doc->UpdateAllViews();
       }
@@ -390,7 +390,7 @@ bool DiagramCommand::Undo(void)
         shape->SetBrush(shapeBrush);
         shapeBrush = oldBrush;
         shape->Draw(dc);
-        
+
         doc->Modify(true);
         doc->UpdateAllViews();
       }
@@ -410,7 +410,7 @@ bool DiagramCommand::Undo(void)
 
         shape->FormatText(dc, /* (char*) (const char*) */ myHandler->label);
         shape->Draw(dc);
-        
+
         doc->Modify(true);
         doc->UpdateAllViews();
       }
@@ -429,7 +429,7 @@ void DiagramCommand::RemoveLines(wxShape *shape)
   {
     wxLineShape *line = (wxLineShape *)node->GetData();
     doc->GetCommandProcessor()->Submit(new DiagramCommand(_T("Cut"), OGLEDIT_CUT, doc, NULL, 0.0, 0.0, line->Selected(), line));
-    
+
     node = shape->GetLines().GetFirst();
   }
 }
@@ -437,7 +437,7 @@ void DiagramCommand::RemoveLines(wxShape *shape)
 /*
  * MyEvtHandler: an event handler class for all shapes
  */
- 
+
 void MyEvtHandler::OnLeftClick(double WXUNUSED(x), double WXUNUSED(y), int keys, int WXUNUSED(attachment))
 {
   wxClientDC dc(GetShape()->GetCanvas());
@@ -495,11 +495,11 @@ void MyEvtHandler::OnBeginDragRight(double x, double y, int WXUNUSED(keys), int 
   // Force attachment to be zero for now. Eventually we can deal with
   // the actual attachment point, e.g. a rectangle side if attachment mode is on.
   attachment = 0;
-  
+
   wxClientDC dc(GetShape()->GetCanvas());
   GetShape()->GetCanvas()->PrepareDC(dc);
 
-  wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+  wxPen dottedPen(*wxBLACK, 1, wxDOT);
   dc.SetLogicalFunction(OGLRBLF);
   dc.SetPen(dottedPen);
   double xp, yp;
@@ -516,7 +516,7 @@ void MyEvtHandler::OnDragRight(bool WXUNUSED(draw), double x, double y, int WXUN
   wxClientDC dc(GetShape()->GetCanvas());
   GetShape()->GetCanvas()->PrepareDC(dc);
 
-  wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+  wxPen dottedPen(*wxBLACK, 1, wxDOT);
   dc.SetLogicalFunction(OGLRBLF);
   dc.SetPen(dottedPen);
   double xp, yp;
@@ -532,7 +532,7 @@ void MyEvtHandler::OnEndDragRight(double x, double y, int WXUNUSED(keys), int WX
   // Check if we're on an object
   int new_attachment;
   wxShape *otherShape = canvas->FindFirstSensitiveShape(x, y, &new_attachment, OP_DRAG_RIGHT);
-  
+
   if (otherShape && !otherShape->IsKindOf(CLASSINFO(wxLineShape)))
   {
     canvas->view->GetDocument()->GetCommandProcessor()->Submit(
@@ -554,7 +554,7 @@ void MyEvtHandler::OnEndSize(double WXUNUSED(x), double WXUNUSED(y))
  */
 
 #if wxUSE_PROLOGIO
- 
+
 bool MyDiagram::OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
 {
   wxDiagram::OnShapeSave(db, shape, expr);
@@ -570,7 +570,7 @@ bool MyDiagram::OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
   expr.AssignAttributeValue(_T("label"), &label);
   MyEvtHandler *handler = new MyEvtHandler(&shape, &shape, wxString(label));
   shape.SetEventHandler(handler);
-  
+
   if (label)
     delete[] label;
   return true;
@@ -602,7 +602,7 @@ wxDiamondShape::wxDiamondShape(double w, double h):
     w = 60.0;
   if (h == 0.0)
     h = 60.0;
-    
+
   wxList *thePoints = new wxList;
   wxRealPoint *point = new wxRealPoint(0.0, (-h/2.0));
   thePoints->Append((wxObject*) point);

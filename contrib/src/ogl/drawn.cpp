@@ -1613,9 +1613,9 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
         {
           int penWidth = (int)expr->Nth(1)->IntegerValue();
           int penStyle = (int)expr->Nth(2)->IntegerValue();
-          int penRed = (int)expr->Nth(3)->IntegerValue();
-          int penGreen = (int)expr->Nth(4)->IntegerValue();
-          int penBlue = (int)expr->Nth(5)->IntegerValue();
+          unsigned char penRed = (unsigned char)expr->Nth(3)->IntegerValue();
+          unsigned char penGreen = (unsigned char)expr->Nth(4)->IntegerValue();
+          unsigned char penBlue = (unsigned char)expr->Nth(5)->IntegerValue();
           wxColour col(penRed, penGreen, penBlue);
           wxPen *p = wxThePenList->FindOrCreatePen(col, penWidth, penStyle);
           if (!p)
@@ -1626,9 +1626,9 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
         case gyTYPE_BRUSH:
         {
           int brushStyle = (int)expr->Nth(1)->IntegerValue();
-          int brushRed = (int)expr->Nth(2)->IntegerValue();
-          int brushGreen = (int)expr->Nth(3)->IntegerValue();
-          int brushBlue = (int)expr->Nth(4)->IntegerValue();
+          unsigned char brushRed = (unsigned char)expr->Nth(2)->IntegerValue();
+          unsigned char brushGreen = (unsigned char)expr->Nth(3)->IntegerValue();
+          unsigned char brushBlue = (unsigned char)expr->Nth(4)->IntegerValue();
           wxColour col(brushRed, brushGreen, brushBlue);
           wxBrush *b = wxTheBrushList->FindOrCreateBrush(col, brushStyle);
           if (!b)

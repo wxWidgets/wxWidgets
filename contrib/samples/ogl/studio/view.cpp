@@ -853,7 +853,7 @@ csCanvas::~csCanvas(void)
 
 void csCanvas::DrawOutline(wxDC& dc, double x1, double y1, double x2, double y2)
 {
-    wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+    wxPen dottedPen(*wxBLACK, 1, wxDOT);
     dc.SetPen(dottedPen);
     dc.SetBrush(* wxTRANSPARENT_BRUSH);
 

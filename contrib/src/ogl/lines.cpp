@@ -965,7 +965,7 @@ void wxLineShape::OnDrawOutline(wxDC& dc, double WXUNUSED(x), double WXUNUSED(y)
   wxPen *old_pen = m_pen;
   wxBrush *old_brush = m_brush;
 
-  wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+  wxPen dottedPen(*wxBLACK, 1, wxDOT);
   SetPen(& dottedPen);
   SetBrush( wxTRANSPARENT_BRUSH );
 
@@ -1549,7 +1549,7 @@ void wxLineShape::ReadAttributes(wxExpr *clause)
       wxExpr *spacingExpr = node->Nth(7);
 
       if (type_expr)
-        arrowType = (int)type_expr->IntegerValue();
+          arrowType = (WXTYPE)type_expr->IntegerValue();
       if (end_expr)
         arrowEnd = (int)end_expr->IntegerValue();
       if (dist_expr)
@@ -1733,7 +1733,7 @@ void wxLineShape::OnSizingDragLeft(wxControlPoint* pt, bool WXUNUSED(draw), doub
 
   dc.SetLogicalFunction(OGLRBLF);
 
-  wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+  wxPen dottedPen(*wxBLACK, 1, wxDOT);
   dc.SetPen(dottedPen);
   dc.SetBrush((* wxTRANSPARENT_BRUSH));
 
@@ -1749,7 +1749,7 @@ void wxLineShape::OnSizingDragLeft(wxControlPoint* pt, bool WXUNUSED(draw), doub
     wxPen *old_pen = lineShape->GetPen();
     wxBrush *old_brush = lineShape->GetBrush();
 
-    wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+    wxPen dottedPen(*wxBLACK, 1, wxDOT);
     lineShape->SetPen(& dottedPen);
     lineShape->SetBrush(wxTRANSPARENT_BRUSH);
 
@@ -1797,7 +1797,7 @@ void wxLineShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, 
     wxPen *old_pen = lineShape->GetPen();
     wxBrush *old_brush = lineShape->GetBrush();
 
-    wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
+    wxPen dottedPen(*wxBLACK, 1, wxDOT);
     lineShape->SetPen(& dottedPen);
     lineShape->SetBrush(wxTRANSPARENT_BRUSH);
 
@@ -2407,7 +2407,7 @@ wxLabelShape::wxLabelShape(wxLineShape *parent, wxShapeRegion *region, double w,
 {
   m_lineShape = parent;
   m_shapeRegion = region;
-  SetPen(wxThePenList->FindOrCreatePen(wxColour(0, 0, 0), 1, wxDOT));
+  SetPen(wxThePenList->FindOrCreatePen(*wxBLACK, 1, wxDOT));
 }
 
 wxLabelShape::~wxLabelShape()

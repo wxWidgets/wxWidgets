@@ -560,14 +560,14 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
         /* int lfEsc = */ getshort(handle);       // 2 bytes
         /* int lfOrient = */ getshort(handle);    // 2 bytes
         int lfWeight = getshort(handle);    // 2 bytes
-        char lfItalic = getc(handle);       // 1 byte
-        char lfUnderline = getc(handle);    // 1 byte
+        char lfItalic = (char)getc(handle);       // 1 byte
+        char lfUnderline = (char)getc(handle);    // 1 byte
         /* char lfStrikeout = */ getc(handle);    // 1 byte
         /* char lfCharSet = */ getc(handle);      // 1 byte
         /* char lfOutPrecision = */ getc(handle); // 1 byte
         /* char lfClipPrecision = */ getc(handle); // 1 byte
         /* char lfQuality = */ getc(handle);      // 1 byte
-        char lfPitchAndFamily = getc(handle);   // 1 byte (18th)
+        char lfPitchAndFamily = (char)getc(handle);   // 1 byte (18th)
         char lfFacename[32];
         // Read the rest of the record, which is total record size
         // minus the number of bytes already read (18 record, 6 metarecord
