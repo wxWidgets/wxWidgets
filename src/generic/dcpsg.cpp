@@ -1024,11 +1024,18 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
 
     m_pen = pen;
 
-    #ifdef __WXMSW__
-    fprintf( m_pstream, "%d setlinewidth\n", XLOG2DEVREL(m_pen.GetWidth()) );
-    #else
-    fprintf( m_pstream, "%d setlinewidth\n", XLOG2DEVREL(m_pen.GetWidth()) );
-    #endif
+    {
+        char buffer[100];
+        #ifdef __WXMSW__
+        sprintf( buffer, "%f setlinewidth\n", XLOG2DEVREL(1000 * m_pen.GetWidth()) / 1000.0f );
+        #else
+        sprintf( buffer, "%f setlinewidth\n", XLOG2DEVREL(1000 * m_pen.GetWidth()) / 1000.0f );
+        #endif
+        for (int i = 0; i < 100; i++)
+            if (buffer[i] == ',') buffer[i] = '.'; 
+        fprintf( m_pstream, buffer );
+    }
+
 /*
      Line style - WRONG: 2nd arg is OFFSET
 
@@ -1243,17 +1250,21 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     if (m_font.GetUnderlined())
     {
         wxCoord uy = (wxCoord)(y + size - m_underlinePosition);
+        char buffer[100];
 
-        fprintf( m_pstream,
+        sprintf( buffer,
                 "gsave\n"
                 "%d %d moveto\n"
-                "%d setlinewidth\n"
+                "%f setlinewidth\n"
                 "%d %d lineto\n"
                 "stroke\n"
                 "grestore\n",
                 XLOG2DEV(x), YLOG2DEV(uy),
-                (wxCoord)m_underlineThickness,
+                m_underlineThickness,
                 XLOG2DEV(x + text_w), YLOG2DEV(uy) );
+        for (int i = 0; i < 100; i++)
+            if (buffer[i] == ',') buffer[i] = '.'; 
+        fprintf( m_pstream, buffer );
     }
 
     CalcBoundingBox( x, y );
@@ -1367,18 +1378,22 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
     {
         wxCoord uy = (wxCoord)(y + size - m_underlinePosition);
         wxCoord w, h;
+        char buffer[100];
         GetTextExtent(text, &w, &h);
 
-        fprintf( m_pstream,
+        sprintf( buffer,
                  "gsave\n"
                  "%d %d moveto\n"
-                 "%ld setlinewidth\n"
+                 "%f setlinewidth\n"
                  "%d %d lineto\n"
                  "stroke\n"
                  "grestore\n",
                  XLOG2DEV(x), YLOG2DEV(uy),
-                 (long)m_underlineThickness,
+                 m_underlineThickness,
                  XLOG2DEV(x + w), YLOG2DEV(uy) );
+        for (int i = 0; i < 100; i++)
+            if (buffer[i] == ',') buffer[i] = '.'; 
+        fprintf( m_pstream, buffer );
     }
 
     CalcBoundingBox( x, y );
@@ -2104,17 +2119,18 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         lastWidths[220] = lastWidths['U'];  // Ü
         lastWidths[252] = lastWidths['u'];  // ü
         lastWidths[223] = lastWidths[251];  // ß
-    }
 
-    /* JC: calculate UnderlineThickness/UnderlinePosition */
-    {
+        /* JC: calculate UnderlineThickness/UnderlinePosition */
+
         // VS: dirty, but is there any better solution?
         double *pt;
         pt = (double*) &m_underlinePosition;
-        *pt = UnderlinePosition * fontToUse->GetPointSize() / 1000.0f;
+        *pt = YLOG2DEVREL(UnderlinePosition * fontToUse->GetPointSize()) / 1000.0f;
         pt = (double*) &m_underlineThickness;
-        *pt = UnderlineThickness * fontToUse->GetPointSize() / 1000.0f;
+        *pt = YLOG2DEVREL(UnderlineThickness * fontToUse->GetPointSize()) / 1000.0f;
+
     }
+
 
     /* 3. now the font metrics are read in, calc size this
        /  is done by adding the widths of the characters in the
