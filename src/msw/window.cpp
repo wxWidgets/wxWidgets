@@ -413,7 +413,10 @@ bool wxWindowMSW::Create(wxWindow *parent,
 
 #ifdef __WXUNIVERSAL__
     // no borders, we draw them ourselves
-    exstyle = 0;
+    exstyle &= ~(WS_EX_DLGMODALFRAME |
+                 WS_EX_STATICEDGE |
+                 WS_EX_CLIENTEDGE |
+                 WS_EX_WINDOWEDGE);
     msflags &= ~WS_BORDER;
 #endif // wxUniversal
 
