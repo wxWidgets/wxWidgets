@@ -551,7 +551,7 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream)
         while ( !inStream.Read(buf, WXSIZEOF(buf)).Eof() )
             strTmp.append(wxConvertMB2WX(buf), inStream.LastRead());
 
-        strTmp += wxString(buf, inStream.LastRead());
+        strTmp.append(wxConvertMB2WX(buf), inStream.LastRead());
 
         strTrans = wxTextBuffer::Translate(strTmp);
     }
