@@ -442,6 +442,8 @@ clean:
 	-$(RM) ../xpm/*.bak
 	-$(RM) ../tiff/*.o
 	-$(RM) ../tiff/*.bak
+
+cleanall: clean
 	-$(RM) $(WXLIB)
 	-$(RM) $(ZLIBLIB)
 	-$(RM) $(PNGLIB)
@@ -457,8 +459,4 @@ ifneq "$(strip $(LD_SUPPORTS_SHARED))" "yes"
 	-$(RM) wx.exp
 endif
 endif
-
-
-cleanall: clean
-
 
