@@ -77,6 +77,8 @@ class UnixCCompiler(CCompiler):
     shared_lib_extension = ".so"
     dylib_lib_extension = ".dylib"
     static_lib_format = shared_lib_format = dylib_lib_format = "lib%s%s"
+    if sys.platform == "cygwin":
+        exe_extension = ".exe"
 
     def preprocess(self, source,
                    output_file=None, macros=None, include_dirs=None,
@@ -201,8 +203,10 @@ class UnixCCompiler(CCompiler):
         if sys.platform[:6] == "darwin":
             # MacOSX's linker doesn't understand the -R flag at all
             return "-L" + dir
+        elif sys.platform[:5] == "hp-ux":
+            return "+s -L" + dir
         elif compiler[:3] == "gcc" or compiler[:3] == "g++":
-            return "-Wl,-R" + dir
+          return "-Wl,-R" + dir
         else:
             return "-R" + dir
 

@@ -40,6 +40,10 @@ cygwin in no-cygwin mode).
 #     this is windows standard and there are normally not the necessary symbols
 #     in the dlls.
 #   *** only the version of June 2000 shows these problems
+# * cygwin gcc 3.2/ld 2.13.90 works
+#   (ld supports -shared)
+# * mingw gcc 3.2/ld 2.13 works
+#   (ld supports -shared)
 
 # This module should be kept compatible with Python 1.5.2.
 
@@ -83,7 +87,7 @@ class CygwinCCompiler (UnixCCompiler):
                           self.ld_version,
                           self.dllwrap_version) )
 
-        # ld_version >= "2.10.90" should also be able to use
+        # ld_version >= "2.10.90" and < "2.13" should also be able to use
         # gcc -mdll instead of dllwrap
         # Older dllwraps had own version numbers, newer ones use the
         # same as the rest of binutils ( also ld )
@@ -93,13 +97,20 @@ class CygwinCCompiler (UnixCCompiler):
         else:
             self.linker_dll = "dllwrap"
 
+        # ld_version >= "2.13" support -shared so use it instead of
+        # -mdll -static
+        if self.ld_version >= "2.13":
+            shared_option = "-shared"
+        else:
+            shared_option = "-mdll -static"
+
         # Hard-code GCC because that's what this is all about.
         # XXX optimization, warnings etc. should be customizable.
         self.set_executables(compiler='gcc -mcygwin -O -Wall',
                              compiler_so='gcc -mcygwin -mdll -O -Wall',
                              linker_exe='gcc -mcygwin',
-                             linker_so=('%s -mcygwin -mdll -static' %
-                                        self.linker_dll))
+                             linker_so=('%s -mcygwin %s' %
+                                        (self.linker_dll, shared_option)))
 
         # cygwin and mingw32 need different sets of libraries
         if self.gcc_version == "2.91.57":
@@ -268,6 +279,13 @@ class Mingw32CCompiler (CygwinCCompiler):
 
         CygwinCCompiler.__init__ (self, verbose, dry_run, force)
 
+        # ld_version >= "2.13" support -shared so use it instead of
+        # -mdll -static
+        if self.ld_version >= "2.13":
+            shared_option = "-shared"
+        else:
+            shared_option = "-mdll -static"
+
         # A real mingw32 doesn't need to specify a different entry point,
         # but cygwin 2.91.57 in no-cygwin-mode needs it.
         if self.gcc_version <= "2.91.57":
@@ -278,8 +296,9 @@ class Mingw32CCompiler (CygwinCCompiler):
         self.set_executables(compiler='gcc -mno-cygwin -O -Wall',
                              compiler_so='gcc -mno-cygwin -mdll -O -Wall',
                              linker_exe='gcc -mno-cygwin',
-                             linker_so='%s -mno-cygwin -mdll -static %s'
-                                        % (self.linker_dll, entry_point))
+                             linker_so='%s -mno-cygwin %s %s'
+                                        % (self.linker_dll, shared_option,
+                                           entry_point))
         # Maybe we should also append -mthreads, but then the finished
         # dlls need another dll (mingwm10.dll see Mingw32 docs)
         # (-mthreads: Support thread-safe exception handling on `Mingw32')
@@ -363,7 +382,7 @@ def get_versions():
         out = os.popen(gcc_exe + ' -dumpversion','r')
         out_string = out.read()
         out.close()
-        result = re.search('(\d+\.\d+\.\d+)',out_string)
+        result = re.search('(\d+\.\d+(\.\d+)*)',out_string)
         if result:
             gcc_version = StrictVersion(result.group(1))
         else:
@@ -375,7 +394,7 @@ def get_versions():
         out = os.popen(ld_exe + ' -v','r')
         out_string = out.read()
         out.close()
-        result = re.search('(\d+\.\d+\.\d+)',out_string)
+        result = re.search('(\d+\.\d+(\.\d+)*)',out_string)
         if result:
             ld_version = StrictVersion(result.group(1))
         else:
@@ -387,7 +406,7 @@ def get_versions():
         out = os.popen(dllwrap_exe + ' --version','r')
         out_string = out.read()
         out.close()
-        result = re.search(' (\d+\.\d+\.\d+)',out_string)
+        result = re.search(' (\d+\.\d+(\.\d+)*)',out_string)
         if result:
             dllwrap_version = StrictVersion(result.group(1))
         else:
