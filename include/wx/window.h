@@ -1120,9 +1120,11 @@ protected:
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) = 0;
 #endif // wxUSE_MENUS
 
-    // Makes an adjustment to the window position (for example, a frame that has
-    // a toolbar that it manages itself).
-    virtual void AdjustForParentClientOrigin(int& x, int& y, int sizeFlags) const;
+    // Makes an adjustment to the window position to make it relative to the
+    // parents client area, e.g. if the parent is a frame with a toolbar, its
+    // (0, 0) is just below the toolbar
+    virtual void AdjustForParentClientOrigin(int& x, int& y,
+                                             int sizeFlags = 0) const;
 
 
 private:
