@@ -1369,7 +1369,7 @@ wxWindow *wxWindowBase::FindFocus()
    been realized, so we do this directly after realization */
 
 static gint
-gtk_window_realized_callback( GtkWidget *widget, wxWindow *win )
+gtk_window_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
 {
     if (g_isIdle) 
         wxapp_install_idle_handler();
@@ -2474,7 +2474,9 @@ static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 static gint gs_pop_x = 0;
 static gint gs_pop_y = 0;
 
-static void pop_pos_callback( GtkMenu *menu, gint *x, gint *y, wxWindow *win )
+static void pop_pos_callback( GtkMenu * WXUNUSED(menu),
+                              gint *x, gint *y,
+                              wxWindow *win )
 {
     win->ClientToScreen( &gs_pop_x, &gs_pop_y );
     *x = gs_pop_x;
