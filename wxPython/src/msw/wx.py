@@ -1714,8 +1714,63 @@ def wxCallAfter(callable, *args, **kw):
     evt.kw = kw
     wxPostEvent(app, evt)
 
-# an alias
-wxRunLater = wxCallAfter
+
+#----------------------------------------------------------------------
+
+class wxFutureCall(wxTimer):
+    """
+    A convenience class for wxTimer, that calls the given callable
+    object once after the given amount of milliseconds, passing any
+    positional or keyword args.  The return value of the callable is
+    availbale after it has been run with the GetResult method.
+    """
+    def __init__(self, millis, callable, *args, **kwargs):
+        wxTimer.__init__(self)
+        self.millis = millis
+        self.callable = callable
+        self.SetArgs(*args, **kwargs)
+        self.runCount = 0
+        self.hasRun = False
+        self.result = None
+        self.Start(self.millis, wxTIMER_ONE_SHOT)
+
+    def __del__(self):
+        self.Stop()
+        wxTimer.__del__(self)
+
+    def Restart(self, millis=None):
+        """
+        Restart the timer with the same duration as before.
+        """
+        self.hasRun = False
+        if millis is not None:
+            self.millis = millis
+        self.Start(self.millis, wxTIMER_ONE_SHOT)
+
+    def SetArgs(self, *args, **kwargs):
+        """
+        (Re)set the args passed to the callable object.  This is
+        useful in conjunction with Restart if you want to schedule a
+        new call to the same callable object but with different
+        parameters.
+        """
+        self.args = args
+        self.kwargs = kwargs
+
+    def HasRun(self):
+        return self.hasRun
+
+    def GetResult(self):
+        return self.result
+
+    def Notify(self):
+        """
+        The timer has expired so call the callable.
+        """
+        if self.callable and getattr(self.callable, 'im_self', True):
+            self.runCount += 1
+            self.result = self.callable(*self.args, **self.kwargs)
+        self.hasRun = True
 
 #----------------------------------------------------------------------
 
@@ -1828,6 +1883,18 @@ class wxApp(wxPyApp):
 
     def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=False):
         wxPyApp.__init__(self)
+
+        if wx.wxPlatform == "__WXMAC__":
+            try:
+                import MacOS
+                if not MacOS.WMAvailable():
+                    print """This program needs access to the screen. Please run with
+'pythonw', not 'python', and only when you are logged in on the main display
+of your Mac."""
+                    sys.exit(1)
+            except:
+                pass
+
         self.stdioWin = None
         self.saveStdio = (sys.stdout, sys.stderr)
 

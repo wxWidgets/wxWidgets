@@ -63,6 +63,8 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/imaglist.h>
 #include <wx/dirctrl.h>
 
+#include "pytree.h"
+
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -153,37 +155,6 @@ IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
         return retval;
     }
 
-
-class wxPyTreeItemData : public wxTreeItemData {
-public:
-    wxPyTreeItemData(PyObject* obj = NULL) {
-        if (obj == NULL)
-            obj = Py_None;
-        Py_INCREF(obj);
-        m_obj = obj;
-    }
-
-    ~wxPyTreeItemData() {
-        wxPyBeginBlockThreads();
-        Py_DECREF(m_obj);
-        wxPyEndBlockThreads();
-    }
-
-    PyObject* GetData() {
-        Py_INCREF(m_obj);
-        return m_obj;
-    }
-
-    void SetData(PyObject* obj) {
-        wxPyBeginBlockThreads();
-        Py_DECREF(m_obj);
-        wxPyEndBlockThreads();
-        m_obj = obj;
-        Py_INCREF(obj);
-    }
-
-    PyObject* m_obj;
-};
  // C++ version of Python aware wxTreeCtrl
 class wxPyTreeCtrl : public wxTreeCtrl {
     DECLARE_ABSTRACT_CLASS(wxPyTreeCtrl);
@@ -6416,6 +6387,220 @@ static PyObject *_wrap_wxTreeEvent_IsEditCancelled(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+#define wxTreeEvent_SetItem(_swigobj,_swigarg0)  (_swigobj->SetItem(_swigarg0))
+static PyObject *_wrap_wxTreeEvent_SetItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeEvent * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeEvent_SetItem",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_SetItem. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeEvent_SetItem. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeEvent_SetItem(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeEvent_SetOldItem(_swigobj,_swigarg0)  (_swigobj->SetOldItem(_swigarg0))
+static PyObject *_wrap_wxTreeEvent_SetOldItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeEvent * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeEvent_SetOldItem",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_SetOldItem. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeEvent_SetOldItem. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeEvent_SetOldItem(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeEvent_SetPoint(_swigobj,_swigarg0)  (_swigobj->SetPoint(_swigarg0))
+static PyObject *_wrap_wxTreeEvent_SetPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeEvent * _arg0;
+    wxPoint * _arg1;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeEvent_SetPoint",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_SetPoint. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeEvent_SetPoint(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeEvent_SetKeyEvent(_swigobj,_swigarg0)  (_swigobj->SetKeyEvent(_swigarg0))
+static PyObject *_wrap_wxTreeEvent_SetKeyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeEvent * _arg0;
+    wxKeyEvent * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","evt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeEvent_SetKeyEvent",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_SetKeyEvent. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeEvent_SetKeyEvent. Expected _wxKeyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeEvent_SetKeyEvent(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeEvent_SetLabel(_swigobj,_swigarg0)  (_swigobj->SetLabel(_swigarg0))
+static PyObject *_wrap_wxTreeEvent_SetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeEvent * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","label", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeEvent_SetLabel",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_SetLabel. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeEvent_SetLabel(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxTreeEvent_SetEditCanceled(_swigobj,_swigarg0)  (_swigobj->SetEditCanceled(_swigarg0))
+static PyObject *_wrap_wxTreeEvent_SetEditCanceled(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeEvent * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","editCancelled", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxTreeEvent_SetEditCanceled",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_SetEditCanceled. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeEvent_SetEditCanceled(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxPyTreeCtrlTowxControl(void *ptr) {
     wxPyTreeCtrl *src;
     wxControl *dest;
@@ -6456,7 +6641,7 @@ static PyObject *_wrap_new_wxTreeCtrl(PyObject *self, PyObject *args, PyObject *
     wxWindowID  _arg1 = (wxWindowID ) -1;
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
-    long  _arg4 = (long ) (wxTR_HAS_BUTTONS)|(wxTR_LINES_AT_ROOT);
+    long  _arg4 = (long ) (wxTR_DEFAULT_STYLE);
     wxValidator * _arg5 = (wxValidator *) &wxDefaultValidator;
     wxString * _arg6 = (wxString *) &wxPy_TreeCtrlNameStr;
     PyObject * _argo0 = 0;
@@ -6558,7 +6743,7 @@ static PyObject *_wrap_wxTreeCtrl_Create(PyObject *self, PyObject *args, PyObjec
     wxWindowID  _arg2 = (wxWindowID ) -1;
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
-    long  _arg5 = (long ) (wxTR_HAS_BUTTONS)|(wxTR_LINES_AT_ROOT);
+    long  _arg5 = (long ) (wxTR_DEFAULT_STYLE);
     wxValidator * _arg6 = (wxValidator *) &wxDefaultValidator;
     wxString * _arg7 = (wxString *) &wxPy_TreeCtrlNameStr;
     PyObject * _argo0 = 0;
@@ -9383,7 +9568,7 @@ static PyObject * wxPyTreeCtrl_GetBoundingRect(wxPyTreeCtrl *self,const wxTreeIt
             if (self->GetBoundingRect(item, rect, textOnly)) {
                 wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
-                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"));
+                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), 1);
                 wxPyEndBlockThreads();
                 return val;
             }
@@ -10985,6 +11170,12 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_Create", (PyCFunction) _wrap_wxTreeCtrl_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreTreeCtrl", (PyCFunction) _wrap_new_wxPreTreeCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTreeCtrl", (PyCFunction) _wrap_new_wxTreeCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_SetEditCanceled", (PyCFunction) _wrap_wxTreeEvent_SetEditCanceled, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_SetLabel", (PyCFunction) _wrap_wxTreeEvent_SetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_SetKeyEvent", (PyCFunction) _wrap_wxTreeEvent_SetKeyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_SetPoint", (PyCFunction) _wrap_wxTreeEvent_SetPoint, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_SetOldItem", (PyCFunction) _wrap_wxTreeEvent_SetOldItem, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_SetItem", (PyCFunction) _wrap_wxTreeEvent_SetItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_IsEditCancelled", (PyCFunction) _wrap_wxTreeEvent_IsEditCancelled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetLabel", (PyCFunction) _wrap_wxTreeEvent_GetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetKeyCode", (PyCFunction) _wrap_wxTreeEvent_GetKeyCode, METH_VARARGS | METH_KEYWORDS },
