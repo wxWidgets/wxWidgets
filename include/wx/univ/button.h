@@ -51,6 +51,18 @@ public:
 
         Create(parent, id, bitmap, label, pos, size, style, validator, name);
     }
+    
+    wxButton(wxWindow *parent, wxWindowID id, wxStockItemID stock,
+           const wxString& descriptiveLabel = wxEmptyString,
+           const wxPoint& pos = wxDefaultPosition,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxButtonNameStr)
+    {
+        Init();
+
+        Create(parent, id, stock, descriptiveLabel, pos, style, validator, name);
+    }
 
     wxButton(wxWindow *parent,
              wxWindowID id,
@@ -77,6 +89,17 @@ public:
     {
         return Create(parent, id, wxNullBitmap, label,
                       pos, size, style, validator, name);
+    }
+    
+    bool Create(wxWindow *parent, wxWindowID id, wxStockItemID stock,
+           const wxString& descriptiveLabel = wxEmptyString,
+           const wxPoint& pos = wxDefaultPosition,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxButtonNameStr)
+    {
+        return CreateStock(parent, id, stock, descriptiveLabel,
+                           pos, style, validator, name);
     }
 
     bool Create(wxWindow *parent,

@@ -12,6 +12,10 @@
 #ifndef _WX_BUTTON_H_BASE_
 #define _WX_BUTTON_H_BASE_
 
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
+    #pragma interface "buttonbase.h"
+#endif
+
 #include "wx/defs.h"
 
 // ----------------------------------------------------------------------------
@@ -44,6 +48,7 @@
 #define wxBU_EXACTFIT        0x0001
 
 #include "wx/control.h"
+#include "wx/stockitem.h"
 
 class WXDLLEXPORT wxBitmap;
 
@@ -75,6 +80,17 @@ public:
 
     // returns the default button size for this platform
     static wxSize GetDefaultSize();
+
+protected:
+#ifndef __WXGTK20__
+    // create stock button (generic implementation)
+    bool CreateStock(wxWindow *parent, wxWindowID id, wxStockItemID stock,
+                     const wxString& descriptiveLabel = wxEmptyString,
+                     const wxPoint& pos = wxDefaultPosition,
+                     long style = 0,
+                     const wxValidator& validator = wxDefaultValidator,
+                     const wxString& name = wxButtonNameStr);
+#endif
 
     DECLARE_NO_COPY_CLASS(wxButtonBase)
 };

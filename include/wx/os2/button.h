@@ -39,6 +39,16 @@ class WXDLLEXPORT wxButton: public wxButtonBase
                ,rsName
               );
     }
+    
+    wxButton(wxWindow *parent, wxWindowID id, wxStockItemID stock,
+           const wxString& descriptiveLabel = wxEmptyString,
+           const wxPoint& pos = wxDefaultPosition,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxButtonNameStr)
+    {
+        Create(parent, id, stock, descriptiveLabel, pos, style, validator, name);
+    }
 
     bool Create( wxWindow*          pParent
                 ,wxWindowID         vId
@@ -49,6 +59,17 @@ class WXDLLEXPORT wxButton: public wxButtonBase
                 ,const wxValidator& rValidator = wxDefaultValidator
                 ,const wxString&    rsName = wxButtonNameStr
                );
+    
+    bool Create(wxWindow *parent, wxWindowID id, wxStockItemID stock,
+           const wxString& descriptiveLabel = wxEmptyString,
+           const wxPoint& pos = wxDefaultPosition,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxButtonNameStr)
+    {
+        return CreateStock(parent, id, stock, descriptiveLabel,
+                           pos, style, validator, name);
+    }
 
     virtual ~wxButton();
 

@@ -20,10 +20,10 @@ almost any other window.
 
 \twocolwidtha{5cm}%
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxBU\_LEFT}}{Left-justifies the label. Windows only.}
-\twocolitem{\windowstyle{wxBU\_TOP}}{Aligns the label to the top of the button. Windows only.}
-\twocolitem{\windowstyle{wxBU\_RIGHT}}{Right-justifies the bitmap label. Windows only.}
-\twocolitem{\windowstyle{wxBU\_BOTTOM}}{Aligns the label to the bottom of the button. Windows only.}
+\twocolitem{\windowstyle{wxBU\_LEFT}}{Left-justifies the label. Windows and GTK+ only.}
+\twocolitem{\windowstyle{wxBU\_TOP}}{Aligns the label to the top of the button. Windows and GTK+ only.}
+\twocolitem{\windowstyle{wxBU\_RIGHT}}{Right-justifies the bitmap label. Windows and GTK+ only.}
+\twocolitem{\windowstyle{wxBU\_BOTTOM}}{Aligns the label to the bottom of the button. Windows and GTK+ only.}
 \twocolitem{\windowstyle{wxBU\_EXACTFIT}}{Creates the button as small as possible instead of making it of the standard size (which is the default behaviour ).}
 \twocolitem{\windowstyle{wxNO\_BORDER}}{Creates a flat button. Windows and GTK+ only.}
 \end{twocollist}
@@ -54,7 +54,19 @@ Default constructor.
 \param{const wxPoint\& }{pos}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
 \param{long}{ style = 0}, \param{const wxValidator\& }{validator}, \param{const wxString\& }{name = ``button"}}
 
+\func{}{wxButton}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},
+\param{wxStockItemID}{ stock},\rtfsp
+\param{const wxString\& }{descriptiveLabel = wxEmptyString},\rtfsp
+\param{const wxPoint\& }{pos},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator}, \param{const wxString\& }{name = ``button"}}
+
 Constructor, creating and showing a button.
+
+The second form is used to create {\em stock} button. Stock buttons are
+commonly used buttons such as OK or Cancel. They have standard label and
+dimensions and may have different appearance on some platforms (e.g. GTK+ 2
+decorates them with icons). Using this from is preferred way of creating
+standard buttons.
 
 \wxheading{Parameters}
 
@@ -75,6 +87,14 @@ appropriately for the text.}
 
 \docparam{name}{Window name.}
 
+\docparam{stock}{Stock ID of the stock button to create. See the
+\helpref{list of possible values}{stockitems}.}
+
+\docparam{descriptiveLabel}{Optional label to be used on platforms where
+standard buttons have descriptive rather than generic labels. Mac is one such
+platforms, well-behaved Mac apps should use descriptive labels (e.g. "Save"
+and "Don't Save" instead of "OK" and "Cancel").}
+
 \wxheading{See also}
 
 \helpref{wxButton::Create}{wxbuttoncreate}, \helpref{wxValidator}{wxvalidator}
@@ -91,7 +111,14 @@ Destructor, destroying the button.
 \param{const wxPoint\& }{pos}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
 \param{long}{ style = 0}, \param{const wxValidator\& }{validator}, \param{const wxString\& }{name = ``button"}}
 
-Button creation function for two-step creation. For more details, see \helpref{wxButton::wxButton}{wxbuttonconstr}.
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},
+\param{wxStockItemID}{ stock},\rtfsp
+\param{const wxString\& }{descriptiveLabel = wxEmptyString},\rtfsp
+\param{const wxPoint\& }{pos},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator}, \param{const wxString\& }{name = ``button"}}
+
+Button creation function for two-step creation. For more details, see
+\helpref{wxButton::wxButton}{wxbuttonconstr}.
 
 \membersection{wxButton::GetLabel}\label{wxbuttongetlabel}
 

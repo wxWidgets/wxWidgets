@@ -35,7 +35,7 @@ extern const wxChar *wxButtonNameStr;
 // wxButton
 //-----------------------------------------------------------------------------
 
-class wxButton: public wxControl
+class wxButton: public wxButtonBase
 {
 public:
     wxButton();
@@ -45,8 +45,19 @@ public:
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr)
     {
-      Create(parent, id, label, pos, size, style, validator, name);
+        Create(parent, id, label, pos, size, style, validator, name);
     }
+    
+    wxButton(wxWindow *parent, wxWindowID id, wxStockItemID stock,
+           const wxString& descriptiveLabel = wxEmptyString,
+           const wxPoint& pos = wxDefaultPosition,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxButtonNameStr)
+    {
+        Create(parent, id, stock, descriptiveLabel, pos, style, validator, name);
+    }
+
     virtual ~wxButton();
 
     bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
@@ -54,12 +65,17 @@ public:
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr);
+    
+    bool Create(wxWindow *parent, wxWindowID id, wxStockItemID stock,
+           const wxString& descriptiveLabel = wxEmptyString,
+           const wxPoint& pos = wxDefaultPosition,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxButtonNameStr);
 
     virtual void SetDefault();
     virtual void SetLabel( const wxString &label );
     virtual bool Enable( bool enable = TRUE );
-
-    static wxSize GetDefaultSize();
 
     // implementation
     // --------------
