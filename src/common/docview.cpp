@@ -341,7 +341,8 @@ bool wxDocument::OnOpenDocument(const wxString& file)
         return FALSE;
     }
 #if wxUSE_STD_IOSTREAM
-    if (!LoadObject(store))
+    LoadObject(store);
+    if ( !store && !store.eof() )
 #else
     int res = LoadObject(store).LastError();
     if ((res != wxSTREAM_NOERROR) &&
@@ -960,7 +961,7 @@ void wxDocManager::OnUpdateFileNew(wxUpdateUIEvent& event)
 void wxDocManager::OnUpdateFileSave(wxUpdateUIEvent& event)
 {
     wxDocument *doc = GetCurrentDocument();
-    event.Enable( (doc != (wxDocument*) NULL) );
+    event.Enable( doc && doc->IsModified() );
 }
 
 void wxDocManager::OnUpdateFileSaveAs(wxUpdateUIEvent& event)
@@ -1191,8 +1192,9 @@ bool wxDocManager::FlushDoc(wxDocument *WXUNUSED(doc))
 
 wxDocument *wxDocManager::GetCurrentDocument() const
 {
-    if (m_currentView)
-        return m_currentView->GetDocument();
+    wxView *view = GetCurrentView();
+    if (view)
+        return view->GetDocument();
     else
         return (wxDocument *) NULL;
 }
