@@ -30,22 +30,28 @@
 
 #include "wx/defs.h"
 
-/* checked deleters are used to make sure that the
-   type being deleted is really a complete type.
-   - Jesse Lovelace <jllovela@eos.ncsu.edu>
+/*
+   checked deleters are used to make sure that the type being deleted is really
+   a complete type.: otherwise sizeof() would result in a compile-time error
+
+   do { ... } while ( 0 ) construct is used to have an anonymous scope
+   (otherwise we could have name clashes between different "complete"s) but
+   still force a semicolon after the macro
 */
 
-#define wxCHECKED_DELETE(ptr)                \
-    if (true) {                                 \
-        typedef char complete[sizeof(*ptr)]; \
-        delete ptr;                          \
-    }
+#define wxCHECKED_DELETE(ptr)                                                 \
+    do                                                                        \
+    {                                                                         \
+        typedef char complete[sizeof(*ptr)];                                  \
+        delete ptr;                                                           \
+    } while ( 0 )
 
-#define wxCHECKED_DELETE_ARRAY(ptr)          \
-    if (true) {                                        \
-        typedef char complete[sizeof(*ptr)]; \
-        delete [] ptr;                       \
-    }
+#define wxCHECKED_DELETE_ARRAY(ptr)                                           \
+    do                                                                        \
+    {                                                                         \
+        typedef char complete[sizeof(*ptr)];                                  \
+        delete [] ptr;                                                        \
+    } while ( 0 )
 
 /* These scoped pointers are *not* assignable and cannot be used
    within a container.  Look for wxDECLARE_SHARED_PTR for this
