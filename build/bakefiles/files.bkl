@@ -1113,9 +1113,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="MSW_ONLY_LOWLEVEL_SRC" hints="files">
+    src/msw/helpchm.cpp
+    src/msw/helpwin.cpp
     src/msw/ole/automtn.cpp
     src/msw/ole/uuid.cpp
-    src/msw/dirdlg.cpp
+</set>
+
+<set var="MSW_ONLY_LOWLEVEL_HDR" hints="files">
+    wx/msw/helpchm.h
+    wx/msw/helpwin.h
 </set>
 
 <set var="MSW_SRC" hints="files">
@@ -1131,6 +1137,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/combobox.cpp
     src/msw/control.cpp
     src/msw/dialog.cpp
+    src/msw/dirdlg.cpp
     src/msw/dragimag.cpp
     src/msw/filedlg.cpp
     src/msw/frame.cpp
@@ -1192,6 +1199,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
     wx/msw/enhmeta.h
+    wx/msw/evtloop.h
     wx/msw/filedlg.h
     wx/msw/font.h
     wx/msw/frame.h
@@ -1299,15 +1307,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="MSW_ONLY_SRC" hints="files">
     src/msw/fdrepdlg.cpp
     src/msw/fontdlg.cpp
-    src/msw/helpchm.cpp
-    src/msw/helpwin.cpp
 </set>
 <set var="MSW_ONLY_HDR" hints="files">
     wx/msw/fdrepdlg.h
     wx/msw/fontdlg.h
     wx/msw/helpbest.h
-    wx/msw/helpchm.h
-    wx/msw/helpwin.h
     wx/msw/ole/automtn.h
     wx/msw/ole/uuid.h
 </set>
