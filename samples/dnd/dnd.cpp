@@ -295,11 +295,11 @@ void DnDFrame::OnClipboardHasText(wxCommandEvent& WXUNUSED(event))
 
     if ( !wxTheClipboard->IsSupported( wxDF_TEXT ) )
     {
-        wxLogMessage( _T("No text is on the clipboard") );
+        wxLogMessage( _T("No text on the clipboard") );
     }
     else
     {
-        wxLogMessage( _T("There is text is on the clipboard") );
+        wxLogMessage( _T("There is text on the clipboard") );
     }
 
     wxTheClipboard->Close();
@@ -316,11 +316,11 @@ void DnDFrame::OnClipboardHasBitmap(wxCommandEvent& WXUNUSED(event))
 
     if ( !wxTheClipboard->IsSupported( wxDF_BITMAP ) )
     {
-        wxLogMessage( _T("No bitmap is on the clipboard") );
+        wxLogMessage( _T("No bitmap on the clipboard") );
     }
     else
     {
-        wxLogMessage( _T("A bitmap is on the clipboard") );
+        wxLogMessage( _T("There is a bitmap on the clipboard") );
     }
 
     wxTheClipboard->Close();
@@ -435,7 +435,12 @@ DnDFrame::~DnDFrame()
 
 void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
 {
+    // PNG support is not always compiled in under Windows, so use BMP there
+#ifdef __WXMSW__
+    wxFileDialog dialog(this, "Open a BMP file", "", "", "BMP files (*.bmp)|*.bmp", 0);
+#else
     wxFileDialog dialog(this, "Open a PNG file", "", "", "PNG files (*.png)|*.png", 0);
+#endif
 
     if (dialog.ShowModal() != wxID_OK)
     { 
@@ -456,7 +461,13 @@ void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
     }
     
     wxImage image;
-    image.LoadFile( dialog.GetPath(), wxBITMAP_TYPE_PNG );
+    image.LoadFile( dialog.GetPath(), 
+#ifdef __WXMSW__
+                    wxBITMAP_TYPE_BMP
+#else
+                    wxBITMAP_TYPE_PNG
+#endif
+                  );
     if (!image.Ok())
     {
         wxLogMessage( _T("Invalid image file...") );
