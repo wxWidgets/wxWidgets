@@ -166,6 +166,8 @@ all:
 	$(MAKE) -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
 	cd $(WXDIR)\samples\scrollsub
 	$(MAKE) -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\shaped
+	$(MAKE) -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL) 
 	cd $(WXDIR)\samples\sockets
 	$(MAKE) -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
 	cd $(WXDIR)\samples\splitter
@@ -289,6 +291,8 @@ clean:
         cd $(WXDIR)\samples\scroll
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\scrollsub
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\shaped
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\splitter
         make -f makefile.b32 clean
