@@ -457,8 +457,8 @@ void wxSingleChoiceDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     // TODO!
 #ifndef __WXMOTIF__
     if ( m_listbox->HasClientUntypedData() )
-        SetClientData(m_listbox->GetClientData(m_selection));
 #endif
+        SetClientData(m_listbox->GetClientData(m_selection));
     EndModal(wxID_OK);
 }
 
@@ -470,8 +470,8 @@ void wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent& WXUNUSED(event))
     // TODO!
 #ifndef __WXMOTIF__
     if ( m_listbox->HasClientUntypedData() )
-        SetClientData(m_listbox->GetClientData(m_selection));
 #endif
+        SetClientData(m_listbox->GetClientData(m_selection));
 
     EndModal(wxID_OK);
 }
