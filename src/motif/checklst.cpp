@@ -54,7 +54,7 @@ static void CopyStringsAddingPrefix(const wxArrayString& orig,
     copy.Clear();
 
     for(size_t i = 0; i < orig.GetCount(); ++i )
-        copy[i] = Prefix(FALSE) + orig[i];
+        copy.Add( Prefix(FALSE) + orig[i] );
 }
 
 static wxString* CopyStringsAddingPrefix(size_t n, const wxString choices[])
@@ -62,7 +62,7 @@ static wxString* CopyStringsAddingPrefix(size_t n, const wxString choices[])
     wxString* copy = new wxString[n];
 
     for(size_t i = 0; i < n; ++i )
-        copy[i].Add( Prefix(FALSE) + choices[i] );
+        copy[i] = Prefix(FALSE) + choices[i];
 
     return copy;
 }
