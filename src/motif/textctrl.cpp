@@ -168,8 +168,21 @@ bool wxTextCtrl::Create(wxWindow *parent,
     }
 
     if ( !!value )
+    {
+#if 0
+        // don't do this because it is just linking the text to a source
+        // string which is unsafe. MB
+        //
         XmTextSetString ((Widget) m_mainWidget, (char*)value.c_str());
-
+#else
+        // do this instead... MB
+        //
+        XtVaSetValues( (Widget) m_mainWidget,
+                       XmNvalue, (char *)value.c_str(),
+                       NULL);
+#endif
+    }
+    
     // install callbacks
     XtAddCallback((Widget) m_mainWidget, XmNvalueChangedCallback, (XtCallbackProc)wxTextWindowChangedProc, (XtPointer)this);
 
@@ -234,7 +247,18 @@ void wxTextCtrl::SetValue(const wxString& value)
 {
     m_inSetValue = TRUE;
 
+#if 0
+    // don't do this because it is just linking the text to a source
+    // string which is unsafe. MB
+    //
     XmTextSetString ((Widget) m_mainWidget, (char*)value.c_str());
+#else
+    // do this instead... MB
+    //
+    XtVaSetValues( (Widget) m_mainWidget,
+                   XmNvalue, (char *)value.c_str(),
+                   NULL);
+#endif
 
     m_inSetValue = FALSE;
 }
