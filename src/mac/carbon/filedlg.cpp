@@ -144,12 +144,16 @@ void MakeUserDataRec(OpenUserDataRec	*myData , const wxString& filter )
         current += filter2.GetChar(i) ;
        }
     }
-//    if ( filterIndex > 0 )
-    {
-      wxASSERT_MSG( !isName , "incorrect format of format string" ) ;
-      myData->extensions[filterIndex] = current.MakeUpper() ;
-      ++filterIndex ;
-    }
+    // we allow for compatibility reason to have a single filter expression (like *.*) without
+    // an explanatory text, in that case the first part is name and extension at the same time
+      
+    wxASSERT_MSG( filterIndex == 0 || !isName , "incorrect format of format string" ) ;
+    if ( current.IsEmpty() )
+        myData->extensions[filterIndex] = myData->name[filterIndex] ;
+    else
+        myData->extensions[filterIndex] = current.MakeUpper() ;
+    ++filterIndex ;
+
 
 		myData->numfilters = filterIndex ;
 		for ( int i = 0 ; i < myData->numfilters ; i++ )
