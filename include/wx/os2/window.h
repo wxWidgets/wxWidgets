@@ -40,12 +40,14 @@ class WXDLLEXPORT wxButton;
 // constants
 // ---------------------------------------------------------------------------
 
-// FIXME does anybody use those? they're unused by wxWidgets...
+#if WXWIN_COMPATIBILITY_2_4
+// they're unused by wxWidgets...
 enum
 {
     wxKEY_SHIFT = 1,
     wxKEY_CTRL  = 2
 };
+#endif
 
 // ---------------------------------------------------------------------------
 // wxWindow declaration for OS/2 PM
@@ -92,15 +94,15 @@ public:
     virtual wxString GetTitle(void) const;
     virtual void     Raise(void);
     virtual void     Lower(void);
-    virtual bool     Show(bool bShow = TRUE);
-    virtual bool     Enable(bool bEnable = TRUE);
+    virtual bool     Show(bool bShow = true);
+    virtual bool     Enable(bool bEnable = true);
     virtual void     SetFocus(void);
     virtual void     SetFocusFromKbd(void);
     virtual bool     Reparent(wxWindow* pNewParent);
     virtual void     WarpPointer( int x
                                  ,int y
                                 );
-    virtual void     Refresh( bool          bEraseBackground = TRUE
+    virtual void     Refresh( bool          bEraseBackground = true
                              ,const wxRect* pRect = (const wxRect *)NULL
                             );
     virtual void     Freeze(void);
@@ -129,11 +131,11 @@ public:
                                   ,int  nPos
                                   ,int  nThumbVisible
                                   ,int  nRange
-                                  ,bool bRefresh = TRUE
+                                  ,bool bRefresh = true
                                  );
     virtual void     SetScrollPos( int  nOrient
                                   ,int  nPos
-                                  ,bool bRefresh = TRUE
+                                  ,bool bRefresh = true
                                  );
     virtual int      GetScrollPos(int nOrient) const;
     virtual int      GetScrollThumb(int nOrient) const;
@@ -176,7 +178,7 @@ public:
     virtual WXWidget GetHandle(void) const { return GetHWND(); }
     bool             GetUseCtl3D(void) const { return m_bUseCtl3D; }
     bool             GetTransparentBackground(void) const { return m_bBackgroundTransparent; }
-    void             SetTransparent(bool bT = TRUE) { m_bBackgroundTransparent = bT; }
+    void             SetTransparent(bool bT = true) { m_bBackgroundTransparent = bT; }
 
     // event handlers
     // --------------
@@ -197,22 +199,22 @@ public:
     WXFARPROC OS2GetOldWndProc(void) const { return m_fnOldWndProc; }
     void OS2SetOldWndProc(WXFARPROC fnProc) { m_fnOldWndProc = fnProc; }
     //
-    // Return TRUE if the window is of a standard (i.e. not wxWidgets') class
+    // Return true if the window is of a standard (i.e. not wxWidgets') class
     //
     bool IsOfStandardClass(void) const { return m_fnOldWndProc != NULL; }
 
     wxWindow* FindItem(long lId) const;
     wxWindow* FindItemByHWND( WXHWND hWnd
-                             ,bool   bControlOnly = FALSE
+                             ,bool   bControlOnly = false
                             ) const;
 
     // Make a Windows extended style from the given wxWidgets window style ?? applicable to OS/2??
     static WXDWORD MakeExtendedStyle( long lStyle
-                                     ,bool bEliminateBorders = TRUE
+                                     ,bool bEliminateBorders = true
                                     );
 
-    // PM only: TRUE if this control is part of the main control
-    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
+    // PM only: true if this control is part of the main control
+    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return false; };
 
     // translate wxWidgets style flags for this control into the PM style
     // and optional extended style for the corresponding native control
@@ -234,7 +236,7 @@ public:
     // get the HWND to be used as parent of this window with CreateWindow()
     virtual WXHWND OS2GetParent(void) const;
 
-    // returns TRUE if the window has been created
+    // returns true if the window has been created
     bool         OS2Create( PSZ            zClass
                            ,const char*    zTitle
                            ,WXDWORD        dwStyle
@@ -293,7 +295,7 @@ public:
 
     // ------------------------------------------------------------------------
     // internal handlers for OS2 messages: all handlers return a boolen value:
-    // TRUE means that the handler processed the event and FALSE that it didn't
+    // true means that the handler processed the event and false that it didn't
     // ------------------------------------------------------------------------
 
     // there are several cases where we have virtual functions for PM
@@ -369,7 +371,7 @@ public:
                         );
     bool HandleChar( WXWPARAM wParam
                     ,WXLPARAM lParam
-                    ,bool     bIsASCII = FALSE
+                    ,bool     bIsASCII = false
                    );
     bool HandleKeyDown( WXWPARAM wParam
                        ,WXLPARAM lParam

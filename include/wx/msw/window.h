@@ -32,12 +32,14 @@
 // constants
 // ---------------------------------------------------------------------------
 
-// FIXME does anybody use those? they're unused by wxWidgets...
+#if WXWIN_COMPATIBILITY_2_4
+// they're unused by wxWidgets...
 enum
 {
     wxKEY_SHIFT = 1,
     wxKEY_CTRL  = 2
 };
+#endif
 
 // ---------------------------------------------------------------------------
 // wxWindow declaration for MSW
