@@ -1224,6 +1224,7 @@ static const wxChar *GetTymedName(DWORD tymed)
 #endif // Debug
 
 #else // not using OLE at all
+
 // ----------------------------------------------------------------------------
 // wxDataObject
 // ----------------------------------------------------------------------------
@@ -1243,13 +1244,14 @@ void wxDataObject::SetAutoDelete()
 }
 
 #ifdef __WXDEBUG__
-const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
+const wxChar *wxDataObject::GetFormatName(wxDataFormat WXUNUSED(format))
 {
     return NULL;
 }
-#endif
+#endif // __WXDEBUG__
 
-#endif
+#endif // wxUSE_DATAOBJ
 
-#endif
+#endif // wxUSE_OLE/!wxUSE_OLE
+
 
