@@ -21,7 +21,7 @@
     #pragma implementation "grid.h"
 #endif
 
-// For compilers that support precompilation, includes "wx/wx.h".
+// For compilers that support precompilatixon, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
 #include "wx/defs.h"
@@ -5114,6 +5114,8 @@ bool wxGrid::SendEvent( const wxEventType type,
 
 void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
+    wxPaintDC dc(this);  // needed to prevent zillions of paint events on MSW
+
     m_rowLabelWin->Refresh();
     m_colLabelWin->Refresh();
     m_cornerLabelWin->Refresh();
