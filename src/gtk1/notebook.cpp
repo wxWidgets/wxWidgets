@@ -49,10 +49,9 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-// GTK callbacks
+// "switch_page"
 //-----------------------------------------------------------------------------
 
-// page change callback
 static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
                                               GtkNotebookPage *WXUNUSED(page),
                                               gint nPage,
@@ -60,21 +59,24 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
 {
   wxNotebook *notebook = (wxNotebook *)data;
 
-  int nOld = notebook->GetSelection();
+  int old = notebook->GetSelection();
 
   // TODO: emulate PAGE_CHANGING event
   wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
                         notebook->GetId(),
                         nPage,
-                        nOld);
-  event.SetEventObject(notebook);
-  notebook->ProcessEvent(event);
+                        old);
+  event.SetEventObject( notebook );
+  notebook->ProcessEvent( event );
 }
+
+//-----------------------------------------------------------------------------
+// "size_allocate"
+//-----------------------------------------------------------------------------
 
 static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
 {
-  if ( win->GetAutoLayout() )
-    win->Layout();
+  if (win->GetAutoLayout()) win->Layout();
 
   if ((win->m_x == alloc->x) &&
       (win->m_y == alloc->y) &&
@@ -84,28 +86,7 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
     return;
   }
 
-/*
-  printf( "OnResize from " );
-  if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-    printf( win->GetClassInfo()->GetClassName() );
-  printf( " .\n" );
-
-  printf( "  Old: X: %d  Y: %d ", win->m_x, win->m_y );
-  printf( "  W: %d  H: %d ", win->m_width, win->m_height );
-  printf( " .\n" );
-
-  printf( "  New: X: %d  Y: %d ", alloc->x, alloc->y );
-  printf( "  W: %d  H: %d ", alloc->width, alloc->height );
-  printf( " .\n" );
-*/
-
   win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
-
-/*
-  printf( "  Res: X: %d  Y: %d ", win->m_x, win->m_y );
-  printf( "  W: %d  H: %d ", win->m_width, win->m_height );
-  printf( " .\n" );
-*/
 }
 
 //-----------------------------------------------------------------------------
@@ -137,7 +118,7 @@ wxNotebook::wxNotebook( wxWindow *parent, wxWindowID id,
 wxNotebook::~wxNotebook()
 {
   // don't generate change page events any more
-  if ( m_idHandler != 0 )
+  if (m_idHandler != 0)
     gtk_signal_disconnect(GTK_OBJECT(m_widget), m_idHandler);
 
   DeleteAllPages();
@@ -171,8 +152,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
 int wxNotebook::GetSelection() const
 {
-  if (m_pages.Number() == 0)
-    return -1;
+  if (m_pages.Number() == 0) return -1;
 
   GtkNotebookPage *g_page = GTK_NOTEBOOK(m_widget)->cur_page;
 
@@ -242,15 +222,14 @@ int wxNotebook::SetSelection( int page )
 {
   int selOld = GetSelection();
   wxNotebookPage* nb_page = GetNotebookPage(page);
-  if (!nb_page)
-    return -1;
+  
+  if (!nb_page) return -1;
 
   int page_num = 0;
   GList *child = GTK_NOTEBOOK(m_widget)->children;
   while (child)
   {
-    if (nb_page->m_page == (GtkNotebookPage*)child->data)
-      break;
+    if (nb_page->m_page == (GtkNotebookPage*)child->data)  break;
     page_num++;
     child = child->next;
   }
@@ -262,17 +241,15 @@ int wxNotebook::SetSelection( int page )
   return selOld;
 }
 
-void wxNotebook::AdvanceSelection(bool bForward)
+void wxNotebook::AdvanceSelection( bool bForward )
 {
-  int nSel = GetSelection(),
-      nMax = GetPageCount();
+  int sel = GetSelection();
+  int max = GetPageCount();
 
-  if ( bForward ) {
-    SetSelection(nSel == nMax ? 0 : nSel + 1);
-  }
-  else {
-    SetSelection(nSel == 0 ? nMax : nSel - 1);
-  }
+  if (bForward) 
+    SetSelection( sel == max ? 0 : sel + 1 );
+  else
+    SetSelection( sel == 0 ? max : sel - 1 );
 }
 
 void wxNotebook::SetImageList( wxImageList* imageList )
@@ -283,8 +260,8 @@ void wxNotebook::SetImageList( wxImageList* imageList )
 bool wxNotebook::SetPageText( int page, const wxString &text )
 {
   wxNotebookPage* nb_page = GetNotebookPage(page);
-  if (!nb_page)
-    return FALSE;
+  
+  if (!nb_page) return FALSE;
 
   nb_page->m_text = text;
 
@@ -294,8 +271,8 @@ bool wxNotebook::SetPageText( int page, const wxString &text )
 bool wxNotebook::SetPageImage( int page, int image )
 {
   wxNotebookPage* nb_page = GetNotebookPage(page);
-  if (!nb_page)
-    return FALSE;
+  
+  if (!nb_page) return FALSE;
 
   nb_page->m_image = image;
 
@@ -304,12 +281,12 @@ bool wxNotebook::SetPageImage( int page, int image )
 
 void wxNotebook::SetPageSize( const wxSize &WXUNUSED(size) )
 {
-  wxFAIL_MSG(_("wxNotebook::SetPageSize not implemented"));
+  wxFAIL_MSG( "wxNotebook::SetPageSize not implemented" );
 }
 
 void wxNotebook::SetPadding( const wxSize &WXUNUSED(padding) )
 {
-  wxFAIL_MSG(_("wxNotebook::SetPadding not implemented"));
+  wxFAIL_MSG( "wxNotebook::SetPadding not implemented" );
 }
 
 bool wxNotebook::DeleteAllPages()
@@ -359,28 +336,27 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
   // we've created the notebook page in AddChild(). Now we just have to set
   // the caption for the page and set the others parameters.
 
-  // first, find the page
   wxNotebookPage *page = (wxNotebookPage *) NULL;
 
   wxNode *node = m_pages.First();
   while (node)
   {
     page = (wxNotebookPage*)node->Data();
-    if ( page->m_client == win )
-      break; // found
+    if ( page->m_client == win ) break;
     node = node->Next();
   }
 
-  wxCHECK_MSG(page != NULL, FALSE,
-              "Can't add a page whose parent is not the notebook!");
+  wxCHECK_MSG( page != NULL, FALSE, "Can't add a page whose parent is not the notebook!" );
 
-  // create the image if any
-  if ( imageId != -1 ) {
+  if (imageId != -1) 
+  {
     wxASSERT( m_imageList != NULL );
 
     wxBitmap *bmp = m_imageList->GetBitmap(imageId);
     GdkPixmap *pixmap = bmp->GetPixmap();
-    GtkWidget *pixmapwid = gtk_pixmap_new (pixmap, NULL /* @@@@ */);
+    GdkBitmap *mask = (GdkBitmap*) NULL;
+    if (bmp->GetMask()) mask = bmp->GetMask()->GetBitmap();
+    GtkWidget *pixmapwid = gtk_pixmap_new (pixmap, mask );
 
     gtk_box_pack_start(GTK_BOX(page->m_box), pixmapwid, FALSE, FALSE, 3);
 
@@ -389,21 +365,17 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
 
   // then set the attributes
   page->m_text = text;
-  if ( page->m_text.IsEmpty() )
-    page->m_text = "";
+  if (page->m_text.IsEmpty()) page->m_text = "";
   page->m_image = imageId;
   page->m_label = (GtkLabel *)gtk_label_new(page->m_text);
-  gtk_box_pack_start(GTK_BOX(page->m_box), (GtkWidget *)page->m_label,
-                     FALSE, FALSE, 3);
+  gtk_box_pack_start( GTK_BOX(page->m_box), (GtkWidget *)page->m_label, FALSE, FALSE, 3);
 
   // @@@: what does this do? do we still need it?
   // gtk_misc_set_alignment(GTK_MISC(page->m_label), 0.0, 0.5);
 
   gtk_widget_show((GtkWidget *)page->m_label);
 
-  if ( bSelect ) {
-    SetSelection(GetPageCount());
-  }
+  if (bSelect) SetSelection(GetPageCount());
 
   return TRUE;
 }
@@ -429,8 +401,7 @@ void wxNotebook::AddChild( wxWindow *win )
   gtk_container_border_width(GTK_CONTAINER(page->m_box), 2);
 
   page->m_client = win;
-  gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), win->m_widget,
-                            page->m_box );
+  gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), win->m_widget, page->m_box );
 
   page->m_page =
     (GtkNotebookPage*) (g_list_last(GTK_NOTEBOOK(m_widget)->children)->data);
@@ -442,7 +413,7 @@ void wxNotebook::AddChild( wxWindow *win )
 
   if (!page->m_page)
   {
-     wxLogFatalError( _("Notebook page creation error") );
+     wxLogFatalError( "Notebook page creation error" );
      return;
   }
 
@@ -466,3 +437,4 @@ bool wxNotebook::DoPhase( int WXUNUSED(nPhase) )
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
+

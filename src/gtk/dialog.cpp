@@ -229,7 +229,13 @@ void wxDialog::SetModal(bool flag)
 
 int wxDialog::ShowModal(void)
 {
-  if (m_modalShowing) return GetReturnCode();
+  SetModal(TRUE);
+
+  if (m_modalShowing)
+  {
+    wxFAIL_MSG( "wxDialog:ShowModal called twice" );
+    return GetReturnCode();
+  }
 
   Show( TRUE );
   
@@ -248,13 +254,15 @@ void wxDialog::EndModal( int retCode )
   
   if (!m_modalShowing)
   {
-     wxFAIL_MSG( "wxDialog: called EndModal twice" );
+     wxFAIL_MSG( "wxDialog:EndModal called twice" );
      return;
   }
   
   m_modalShowing = FALSE;
   
   gtk_main_quit();
+  
+  Show( FALSE );
 }
 
 void wxDialog::InitDialog(void)
