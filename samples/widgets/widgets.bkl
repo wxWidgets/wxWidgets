@@ -4,7 +4,9 @@
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="widgets" template="wx_sample" template_append="wx_append">
-        <sources>widgets.cpp</sources>
+        <sources>button.cpp combobox.cpp gauge.cpp listbox.cpp notebook.cpp
+                 radiobox.cpp slider.cpp spinbtn.cpp static.cpp textctrl.cpp
+                 widgets.cpp</sources>
         <wx-lib>core</wx-lib>
         <win32-res>widgets.rc</win32-res>
     </exe>
