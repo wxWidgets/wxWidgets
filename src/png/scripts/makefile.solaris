@@ -1,5 +1,5 @@
 # makefile for libpng on Solaris 2.x with gcc
-# Copyright (C) 2002 Glenn Randers-Pehrson
+# Copyright (C) 2004 Glenn Randers-Pehrson
 # Contributed by William L. Sebok, based on makefile.linux
 # Copyright (C) 1998 Greg Roelofs
 # Copyright (C) 1996, 1997 Andreas Dilger
@@ -22,7 +22,7 @@ ZLIBINC=/usr/local/include
 WARNMORE=-Wwrite-strings -Wpointer-arith -Wshadow \
 	-Wmissing-declarations -Wtraditional -Wcast-align \
 	-Wstrict-prototypes -Wmissing-prototypes #-Wconversion
-CFLAGS=-I$(ZLIBINC) -Wall -O3 \
+CFLAGS=-I$(ZLIBINC) -Wall -O \
 	# $(WARNMORE) -g -DPNG_DEBUG=5
 LDFLAGS=-L. -R. -L$(ZLIBLIB) -R$(ZLIBLIB) -lpng12 -lz -lm
 
@@ -30,7 +30,7 @@ LDFLAGS=-L. -R. -L$(ZLIBLIB) -R$(ZLIBLIB) -lpng12 -lz -lm
 RANLIB=echo
 
 PNGMAJ = 0
-PNGMIN = 1.2.4
+PNGMIN = 1.2.6
 PNGVER = $(PNGMAJ).$(PNGMIN)
 LIBNAME = libpng12
 
@@ -77,10 +77,10 @@ libpng.pc:
 libpng-config:
 	( cat scripts/libpng-config-head.in; \
 	echo prefix=\"$(prefix)\"; \
-	echo cppflags=\"-I$(INCPATH)/$(LIBNAME) -DPNG_USE_PNGGCCRD \
-		-DPNG_NO_ASSEMBLER_CODE\"; \
-	echo cflags=\"$(ABI)\"; \
-	echo ldflags=\"-L$(LIBPATH) -R$(LIBPATH)\"; \
+	echo I_opts=\"-I$(INCPATH)/$(LIBNAME)\"; \
+	echo cppflags=\"-DPNG_USE_PNGGCCRD -DPNG_NO_ASSEMBLER_CODE\"; \
+	echo L_opts=\"-L$(LIBPATH)\"; \
+	echo R_opts=\"-R$(LIBPATH)\"; \
 	echo libs=\"-lpng12 -lz -lm\"; \
 	cat scripts/libpng-config-body.in ) > libpng-config
 	chmod +x libpng-config
@@ -104,8 +104,12 @@ $(LIBNAME).so.$(PNGVER): $(OBJSDLL)
 	echo; \
 	;; \
 	esac
-	$(LD) -G -L$(ZLIBLIB) -R$(ZLIBLIB) -h $(LIBNAME).so.$(PNGMAJ) \
-	 -o $(LIBNAME).so.$(PNGVER) $(OBJSDLL) -lz
+	$(LD) -G -h $(LIBNAME).so.$(PNGMAJ) \
+	 -o $(LIBNAME).so.$(PNGVER) $(OBJSDLL)
+
+libpng.so.3.$(PNGMIN): $(OBJS)
+	$(LD) -G -h libpng.so.3 \
+	 -o libpng.so.3.$(PNGMIN) $(OBJSDLL)
 
 pngtest: pngtest.o $(LIBNAME).so
 	$(CC) -o pngtest $(CFLAGS) pngtest.o $(LDFLAGS)
@@ -129,18 +133,21 @@ install-static: install-headers libpng.a
 	-@/bin/rm -f $(DL)/libpng.a
 	(cd $(DL); ln -f -s $(LIBNAME).a libpng.a)
 
-install-shared: install-headers $(LIBNAME).so.$(PNGVER) libpng.pc
+install-shared: install-headers $(LIBNAME).so.$(PNGVER) libpng.pc \
+	libpng.so.3.$(PNGMIN)
 	-@if [ ! -d $(DL) ]; then mkdir $(DL); fi
-	-@/bin/rm -f $(DL)/$(LIBNAME).so.$(PNGMAJ)* $(DL)/$(LIBNAME).so
+	-@/bin/rm -f $(DL)/$(LIBNAME).so.$(PNGVER)* $(DL)/$(LIBNAME).so
+	-@/bin/rm -f $(DL)/$(LIBNAME).so.$(PNGMAJ)
 	-@/bin/rm -f $(DL)/libpng.so
 	-@/bin/rm -f $(DL)/libpng.so.3
-	-@/bin/rm -f $(DL)/libpng.so.3.*
+	-@/bin/rm -f $(DL)/libpng.so.3.$(PNGMIN)*
 	cp $(LIBNAME).so.$(PNGVER) $(DL)
+	cp libpng.so.3.$(PNGMIN) $(DL)
 	chmod 755 $(DL)/$(LIBNAME).so.$(PNGVER)
+	chmod 755 $(DL)/libpng.so.3.$(PNGMIN)
 	(cd $(DL); \
-	ln -f -s $(LIBNAME).so.$(PNGVER) libpng.so; \
-	ln -f -s $(LIBNAME).so.$(PNGVER) libpng.so.3; \
-	ln -f -s $(LIBNAME).so.$(PNGVER) libpng.so.3.$(PNGMIN); \
+	ln -f -s libpng.so.3.$(PNGMIN) libpng.so.3; \
+	ln -f -s libpng.so.3 libpng.so; \
 	ln -f -s $(LIBNAME).so.$(PNGVER) $(LIBNAME).so; \
 	ln -f -s $(LIBNAME).so.$(PNGVER) $(LIBNAME).so.$(PNGMAJ))
 	-@if [ ! -d $(DL)/pkgconfig ]; then mkdir $(DL)/pkgconfig; fi
@@ -167,7 +174,7 @@ install-config: libpng-config
 	-@/bin/rm -f $(DB)/$(LIBNAME)-config
 	cp libpng-config $(DB)/$(LIBNAME)-config
 	chmod 755 $(DB)/$(LIBNAME)-config
-	(cd $(DB); ln -sf $(LIBNAME)-config libpng-config)
+	(cd $(DB); ln -s -f $(LIBNAME)-config libpng-config)
 
 install: install-static install-shared install-man install-config
 
@@ -178,14 +185,16 @@ test-installed:
 	echo
 	echo Testing installed dynamic shared library.
 	$(CC) -I$(ZLIBINC) \
-	   `$(BINPATH)/libpng12-config --cppflags --cflags` pngtest.c \
-	   -o pngtesti `$(BINPATH)/libpng12-config --ldflags --libs` \
+	   `$(BINPATH)/libpng12-config --cflags` pngtest.c \
+	   -o pngtesti `$(BINPATH)/libpng12-config --ldflags` \
 	   -L$(ZLIBLIB) -R$(ZLIBLIB)
 	./pngtesti pngtest.png
 
 clean:
-	/bin/rm -f *.o libpng.a pngtest pngtesti pngout.png libpng.pc \
-	libpng-config $(LIBNAME).so $(LIBNAME).so.$(PNGMAJ)*
+	/bin/rm -f *.o libpng.a pngtest pngtesti pngout.png \
+	libpng-config $(LIBNAME).so $(LIBNAME).so.$(PNGMAJ)* \
+	libpng.so.3.$(PNGMIN) \
+	libpng.pc
 
 DOCS = ANNOUNCE CHANGES INSTALL KNOWNBUG LICENSE README TODO Y2KINFO
 writelock:

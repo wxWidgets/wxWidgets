@@ -4,28 +4,35 @@
 # Assumes that zlib.lib, zconf.h, and zlib.h have been copied to ..\zlib
 # To use, do "nmake /f scripts\makefile.vcwin32"
 
-# -------- Microsoft Visual C++ 4.0 and later, no assembler code --------
-# If you want to use assembler code, use makefile.vcawin32 instead.
+# -------- Microsoft Visual C++ 2.0 and later, no assembler code --------
+# If you want to use assembler (MMX) code, use makefile.vcawin32 instead.
 
-CFLAGS= -Ox -GA3s -nologo -W3 -I..\zlib
+# Compiler, linker, librarian, and other tools
+CC = cl
+LD = link
+AR = lib
+CFLAGS  = -nologo -MD -O2 -W3 -I..\zlib
+LDFLAGS = -nologo
+ARFLAGS = -nologo
+RM = del
 
-CC=cl
-LD=link
-LDFLAGS= 
+# File extensions
 O=.obj
 
 #uncomment next to put error messages in a file
-#ERRFILE= >> pngerrs
+#ERRFILE= >> pngerrs.log
 
-# variables
-OBJS1 = png$(O) pngset$(O) pngget$(O) pngrutil$(O) pngtrans$(O) pngwutil$(O)
-OBJS2 = pngmem$(O) pngpread$(O) pngread$(O) pngerror$(O) pngwrite$(O)
-OBJS3 = pngrtran$(O) pngwtran$(O) pngrio$(O) pngwio$(O)
+# Variables
+OBJS1 = png$(O) pngerror$(O) pngget$(O) pngmem$(O) pngpread$(O)
+OBJS2 = pngread$(O) pngrio$(O) pngrtran$(O) pngrutil$(O) pngset$(O)
+OBJS3 = pngtrans$(O) pngwio$(O) pngwrite$(O) pngwtran$(O) pngwutil$(O)
+OBJS  = $(OBJS1) $(OBJS2) $(OBJS3)
 
+# Targets
 all: libpng.lib
 
 png$(O): png.h pngconf.h
-		  $(CC) -c $(CFLAGS) $*.c $(ERRFILE)
+	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
 pngset$(O): png.h pngconf.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
@@ -72,16 +79,21 @@ pngwtran$(O): png.h pngconf.h
 pngwutil$(O): png.h pngconf.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-libpng.lib: $(OBJS1) $(OBJS2) $(OBJS3)
-	echo something to del > libpng.lib
-	del libpng.lib
-	lib /OUT:libpng.lib $(OBJS1) $(OBJS2) $(OBJS3)
+libpng.lib: $(OBJS)
+	-$(RM) $@
+	$(AR) $(ARFLAGS) -out:$@ $(OBJS) $(ERRFILE)
 
-pngtest.exe: pngtest.obj libpng.lib
-	$(LD) $(LDFLAGS) pngtest.obj libpng.lib ..\zlib\zlib.lib /OUT:pngtest.exe /SUBSYSTEM:CONSOLE
+pngtest.exe: pngtest$(O) libpng.lib
+	$(LD) $(LDFLAGS) -out:$@ pngtest$(O) libpng.lib ..\zlib\zlib.lib $(ERRFILE)
 
 test: pngtest.exe
 	pngtest
+
+clean:
+	-$(RM) *$(O)
+	-$(RM) libpng.lib
+	-$(RM) pngtest.exe
+	-$(RM) pngout.png
 
 # End of makefile for libpng
 

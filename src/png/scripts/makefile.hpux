@@ -1,4 +1,4 @@
-# makefile for libpng, HPUX (10.20 and 11.00)
+# makefile for libpng, HPUX (10.20 and 11.00) using the ANSI/C product.
 # Copyright (C) 1999-2002 Glenn Randers-Pehrson
 # Copyright (C) 1995 Guy Eric Schalnat, Group 42
 # contributed by Jim Rice and updated by Chris Schleicher, Hewlett Packard
@@ -7,6 +7,13 @@
 # Where the zlib library and include files are located
 ZLIBLIB=/opt/zlib/lib
 ZLIBINC=/opt/zlib/include
+
+# Note that if you plan to build a libpng shared library, zlib must also
+# be a shared library, which zlib's configure does not do.  After running
+# zlib's configure, edit the appropriate lines of makefile to read:
+#   CFLAGS=-O1 -DHAVE_UNISTD -DUSE_MAP -fPIC \
+#   LDSHARED=ld -b
+#   SHAREDLIB=libz.sl
 
 CC=cc
 CFLAGS=-I$(ZLIBINC) -O -Ae +DA1.1 +DS2.0
@@ -17,7 +24,7 @@ LDFLAGS=-L. -L$(ZLIBLIB) -lpng -lz -lm
 RANLIB=ranlib
 
 PNGMAJ = 0
-PNGMIN = 1.2.4
+PNGMIN = 1.2.6
 PNGVER = $(PNGMAJ).$(PNGMIN)
 LIBNAME = libpng12
 
@@ -57,7 +64,7 @@ OBJSDLL = $(OBJS:.o=.pic.o)
 all: libpng.a $(LIBNAME).sl pngtest libpng.pc libpng-config
 
 libpng.a: $(OBJS)
-	ar rc $@  $(OBJS)
+	ar rc $@ $(OBJS)
 	$(RANLIB) $@
 
 libpng.pc:
@@ -66,9 +73,9 @@ libpng.pc:
 libpng-config:
 	( cat scripts/libpng-config-head.in; \
 	echo prefix=\"$(prefix)\"; \
-	echo cppflags=\"-I$(INCPATH)/$(LIBNAME)\"; \
-	echo cflags=\"-Ae +DA1.1 +DS2.0"; \
-	echo ldflags=\"-L$(LIBPATH)\"; \
+	echo I_opts=\"-I$(INCPATH)/$(LIBNAME)\"; \
+	echo ccopts=\"-Ae +DA1.1 +DS2.0\"; \
+	echo L_opts=\"-L$(LIBPATH)\"; \
 	echo libs=\"-lpng12 -lz -lm\"; \
 	cat scripts/libpng-config-body.in ) > libpng-config
 	chmod +x libpng-config
@@ -80,9 +87,12 @@ $(LIBNAME).sl.$(PNGMAJ): $(LIBNAME).sl.$(PNGVER)
 	ln -sf $(LIBNAME).sl.$(PNGVER) $(LIBNAME).sl.$(PNGMAJ)
 
 $(LIBNAME).sl.$(PNGVER): $(OBJSDLL)
-	$(LD) -b -L$(ZLIBLIB) +s +b $(ZLIBLIB) \
-	+h $(LIBNAME).sl.$(PNGMAJ) -o $(LIBNAME).sl.$(PNGVER) \
-	$(OBJSDLL) -lz
+	$(LD) -b +s \
+	+h $(LIBNAME).sl.$(PNGMAJ) -o $(LIBNAME).sl.$(PNGVER) $(OBJSDLL)
+
+libpng.sl.3.$(PNGMIN): $(OBJSDLL)
+	$(LD) -b +s \
+	+h libpng.sl.3 -o libpng.sl.3.$(PNGMIN) $(OBJSDLL)
 
 pngtest: pngtest.o libpng.a
 	$(CC) -o pngtest $(CCFLAGS) pngtest.o $(LDFLAGS)
@@ -106,18 +116,21 @@ install-static: install-headers libpng.a
 	-@/bin/rm -f $(DL)/libpng.a
 	(cd $(DL); ln -sf $(LIBNAME).a libpng.a)
 
-install-shared: install-headers $(LIBNAME).sl.$(PNGVER) libpng.pc
+install-shared: install-headers $(LIBNAME).sl.$(PNGVER) libpng.pc \
+	libpng.sl.3.$(PNGMIN)
 	-@if [ ! -d $(DL) ]; then mkdir $(DL); fi
-	-@/bin/rm -f $(DL)/$(LIBNAME).sl.$(PNGMAJ)* $(DL)/$(LIBNAME).sl
+	-@/bin/rm -f $(DL)/$(LIBNAME).sl.$(PNGVER)* $(DL)/$(LIBNAME).sl
+	-@/bin/rm -f $(DL)/$(LIBNAME).sl.$(PNGMAJ)
 	-@/bin/rm -f $(DL)/libpng.sl
 	-@/bin/rm -f $(DL)/libpng.sl.3
-	-@/bin/rm -f $(DL)/libpng.sl.3.*
+	-@/bin/rm -f $(DL)/libpng.sl.3.$(PNGMIN)*
 	cp $(LIBNAME).sl.$(PNGVER) $(DL)
+	cp libpng.sl.3.$(PNGMIN) $(DL)
 	chmod 755 $(DL)/$(LIBNAME).sl.$(PNGVER)
+	chmod 755 $(DL)/libpng.sl.3.$(PNGMIN)
 	(cd $(DL); \
-	ln -sf $(LIBNAME).sl.$(PNGVER) libpng.sl; \
-	ln -sf $(LIBNAME).sl.$(PNGVER) libpng.sl.3; \
-	ln -sf $(LIBNAME).sl.$(PNGVER) libpng.sl.3.$(PNGMIN); \
+	ln -sf libpng.sl.3.$(PNGMIN) libpng.sl.3; \
+	ln -sf libpng.sl.3 libpng.sl; \
 	ln -sf $(LIBNAME).sl.$(PNGVER) $(LIBNAME).sl.$(PNGMAJ); \
 	ln -sf $(LIBNAME).sl.$(PNGMAJ) $(LIBNAME).sl)
 	-@if [ ! -d $(DL)/pkgconfig ]; then mkdir $(DL)/pkgconfig; fi
@@ -155,14 +168,16 @@ test-installed:
 	echo
 	echo Testing installed dynamic shared library.
 	$(CC) $(CCFLAGS) \
-	   `$(BINPATH)/libpng12-config --cppflags --cflags` pngtest.c \
+	   `$(BINPATH)/libpng12-config --cflags` pngtest.c \
 	   -L$(ZLIBLIB) \
-	   -o pngtesti `$(BINPATH)/libpng12-config --ldflags --libs`
+	   -o pngtesti `$(BINPATH)/libpng12-config --ldflags`
 	./pngtesti pngtest.png
 
 clean:
-	/bin/rm -f *.o libpng.a pngtest pngtesti pngout.png libpng.pc \
-	libpng-config $(LIBNAME).sl $(LIBNAME).sl.$(PNGMAJ)*
+	/bin/rm -f *.o libpng.a pngtest pngtesti pngout.png \
+	libpng-config $(LIBNAME).sl $(LIBNAME).sl.$(PNGMAJ)* \
+	libpng.sl.3.$(PNGMIN) \
+	libpng.pc
 
 DOCS = ANNOUNCE CHANGES INSTALL KNOWNBUG LICENSE README TODO Y2KINFO
 writelock:

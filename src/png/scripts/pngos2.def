@@ -2,7 +2,7 @@
 ; PNG.LIB module definition file for OS/2
 ;----------------------------------------
 
-; Version 1.2.4
+; Version 1.2.6
 
 LIBRARY		PNG
 DESCRIPTION	"PNG image compression library for OS/2"
@@ -184,27 +184,6 @@ EXPORTS
   png_convert_to_rfc1123
   png_set_invalid
 
-; Added at version 1.2.0:
-  png_mmx_support
-  png_permit_empty_plte
-  png_permit_mng_features
-  png_get_mmx_flagmask
-  png_get_asm_flagmask
-  png_get_asm_flags
-  png_get_mmx_bitdepth_threshold
-  png_get_mmx_rowbytes_threshold
-  png_set_asm_flags
-  png_init_mmx_flags
-
-; Added at version 1.2.2:
-  png_handle_as_unknown
-
-; Added at version 1.2.2 and deleted from 1.2.3:
-; png_zalloc
-; png_zfree
-
-; Added at version 1.2.4
-  png_malloc_warn
 
 ; These are not present when libpng is compiled with PNG_NO_GLOBAL_ARRAYS
   png_libpng_ver
