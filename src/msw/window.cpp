@@ -2549,18 +2549,8 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 #endif // VK_APPS
 
                 default:
-                    if ( m_lastKeydownProcessed )
-                    {
-                        // The key was handled in the EVT_KEY_DOWN and handling
-                        // a key in an EVT_KEY_DOWN handler is meant, by
-                        // design, to prevent EVT_CHARs from happening
-                        m_lastKeydownProcessed = FALSE;
-                        processed = TRUE;
-                    }
-                    else // do generate a CHAR event
-                    {
-                        processed = HandleChar((WORD)wParam, lParam);
-                    }
+                    // do generate a CHAR event
+                    processed = HandleChar((WORD)wParam, lParam);
 
             }
             break;
@@ -2586,7 +2576,16 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 
         case WM_SYSCHAR:
         case WM_CHAR: // Always an ASCII character
-            processed = HandleChar((WORD)wParam, lParam, TRUE);
+            if ( m_lastKeydownProcessed )
+            {
+                // The key was handled in the EVT_KEY_DOWN and handling
+                // a key in an EVT_KEY_DOWN handler is meant, by
+                // design, to prevent EVT_CHARs from happening
+                m_lastKeydownProcessed = FALSE;
+                processed = TRUE;
+            }
+            else
+                processed = HandleChar((WORD)wParam, lParam, TRUE);
             break;
 
         case WM_HSCROLL:
