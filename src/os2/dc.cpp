@@ -542,6 +542,18 @@ int wxDC::GetDepth() const
 
 void wxDC::Clear()
 {
+    //
+    // If this is a canvas DC then just fill with the background color
+    // Otherwise purge the whole thing
+    //
+    if (m_pCanvas)
+    {
+        RECTL                       vRect;
+
+        ::GpiQueryClipBox(m_hPS, &vRect);
+        ::WinFillRect(m_hPS, &vRect, ::GpiQueryBackColor(m_hPS));
+    }
+    else
     ::GpiErase(m_hPS);
 } // end of wxDC::Clear
 
