@@ -24,14 +24,19 @@
 #include "wx/wfstream.h"
 #include "wx/quantize.h"
 
+#if wxUSE_CLIPBOARD
+    #include "wx/dataobj.h"
+    #include "wx/clipbrd.h"
+#endif // wxUSE_CLIPBOARD
+
 #include "smile.xbm"
 
 #if !defined(__WINDOWS__) || wxUSE_XPM_IN_MSW
     #include "smile.xpm"
 #endif
 
-#if !defined(__WXMOTIF__)
-#define wxHAVE_RAW_BITMAP
+#if defined(__WXMSW__)
+    #define wxHAVE_RAW_BITMAP
 #endif
 
 // derived classes
@@ -121,6 +126,11 @@ public:
     void OnTestRawBitmap( wxCommandEvent &event );
 #endif // wxHAVE_RAW_BITMAP
     void OnQuit( wxCommandEvent &event );
+
+#if wxUSE_CLIPBOARD
+    void OnCopy(wxCommandEvent& event);
+    void OnPaste(wxCommandEvent& event);
+#endif // wxUSE_CLIPBOARD
 
     MyCanvas         *m_canvas;
 
@@ -531,9 +541,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         else    
             my_horse_ani [i] = wxBitmap( image );
     }
-    
-    
-#endif
+#endif // wxUSE_ICO_CUR
 
     image.Destroy();
 
@@ -805,24 +813,36 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 #ifdef wxHAVE_RAW_BITMAP
   EVT_MENU    (ID_SHOWRAW,  MyFrame::OnTestRawBitmap)
 #endif
+
+#if wxUSE_CLIPBOARD
+    EVT_MENU(wxID_COPY, MyFrame::OnCopy)
+    EVT_MENU(wxID_PASTE, MyFrame::OnPaste)
+#endif // wxUSE_CLIPBOARD
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
        : wxFrame( (wxFrame *)NULL, -1, _T("wxImage sample"),
                   wxPoint(20,20), wxSize(470,360) )
 {
-  wxMenu *file_menu = new wxMenu();
-  file_menu->Append( ID_NEW, _T("&Show image...\tCtrl-O"));
-#ifdef wxHAVE_RAW_BITMAP
-  file_menu->Append( ID_SHOWRAW, _T("Test &raw bitmap...\tCtrl-R"));
-#endif
-  file_menu->AppendSeparator();
-  file_menu->Append( ID_ABOUT, _T("&About..."));
-  file_menu->AppendSeparator();
-  file_menu->Append( ID_QUIT, _T("E&xit\tCtrl-Q"));
-
   wxMenuBar *menu_bar = new wxMenuBar();
-  menu_bar->Append(file_menu, _T("&File"));
+
+  wxMenu *menuImage = new wxMenu;
+  menuImage->Append( ID_NEW, _T("&Show any image...\tCtrl-O"));
+#ifdef wxHAVE_RAW_BITMAP
+  menuImage->Append( ID_SHOWRAW, _T("Test &raw bitmap...\tCtrl-R"));
+#endif
+  menuImage->AppendSeparator();
+  menuImage->Append( ID_ABOUT, _T("&About..."));
+  menuImage->AppendSeparator();
+  menuImage->Append( ID_QUIT, _T("E&xit\tCtrl-Q"));
+  menu_bar->Append(menuImage, _T("&Image"));
+
+#if wxUSE_CLIPBOARD
+  wxMenu *menuClipboard = new wxMenu;
+  menuClipboard->Append(wxID_COPY, _T("&Copy test image\tCtrl-C"));
+  menuClipboard->Append(wxID_PASTE, _T("&Paste image\tCtrl-V"));
+  menu_bar->Append(menuClipboard, _T("&Clipboard"));
+#endif // wxUSE_CLIPBOARD
 
   SetMenuBar( menu_bar );
 
@@ -873,6 +893,34 @@ void MyFrame::OnTestRawBitmap( wxCommandEvent &event )
 }
 
 #endif // wxHAVE_RAW_BITMAP
+
+#if wxUSE_CLIPBOARD
+
+void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
+{
+    wxBitmapDataObject *dobjBmp = new wxBitmapDataObject;
+    dobjBmp->SetBitmap(*m_canvas->my_horse_png);
+
+    if ( !wxTheClipboard->SetData(dobjBmp) )
+    {
+        wxLogError(_T("Failed to copy bitmap to clipboard"));
+    }
+}
+
+void MyFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
+{
+    wxBitmapDataObject dobjBmp;
+    if ( !wxTheClipboard->GetData(dobjBmp) )
+    {
+        wxLogMessage(_T("No bitmap data in the clipboard"));
+    }
+    else
+    {
+        (new MyImageFrame(this, dobjBmp.GetBitmap()))->Show();
+    }
+}
+
+#endif // wxUSE_CLIPBOARD
 
 //-----------------------------------------------------------------------------
 // MyApp
