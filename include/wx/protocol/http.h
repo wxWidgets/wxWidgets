@@ -20,15 +20,8 @@
 
 WX_DECLARE_EXPORTED_STRING_HASH_MAP( wxString, wxStringToStringHashMap );
 
-class WXDLLIMPEXP_BASE wxHTTP : public wxProtocol {
-  DECLARE_DYNAMIC_CLASS(wxHTTP)
-  DECLARE_PROTOCOL(wxHTTP)
-protected:
-  wxProtocolError m_perr;
-  wxStringToStringHashMap m_headers;
-  bool m_read, m_proxy_mode;
-  wxSockAddress *m_addr;
-  wxString m_post_buf;
+class WXDLLIMPEXP_BASE wxHTTP : public wxProtocol
+{
 public:
   wxHTTP();
   ~wxHTTP();
@@ -41,25 +34,41 @@ public:
   wxString GetContentType();
 
   void SetHeader(const wxString& header, const wxString& h_data);
-  wxString GetHeader(const wxString& header);
+  wxString GetHeader(const wxString& header) const;
   void SetPostBuffer(const wxString& post_buf);
 
   void SetProxyMode(bool on);
 
 protected:
-  typedef enum {
+  enum wxHTTP_Req
+  {
     wxHTTP_GET,
     wxHTTP_POST,
     wxHTTP_HEAD
-  } wxHTTP_Req;
+  };
+
+  typedef wxStringToStringHashMap::iterator wxHeaderIterator;
+
   bool BuildRequest(const wxString& path, wxHTTP_Req req);
   void SendHeaders();
   bool ParseHeaders();
 
+  // find the header in m_headers
+  wxHeaderIterator FindHeader(const wxString& header) const;
+
   // deletes the header value strings
   void ClearHeaders();
 
-    DECLARE_NO_COPY_CLASS(wxHTTP)
+  wxProtocolError m_perr;
+  wxStringToStringHashMap m_headers;
+  bool m_read,
+       m_proxy_mode;
+  wxSockAddress *m_addr;
+  wxString m_post_buf;
+
+  DECLARE_DYNAMIC_CLASS(wxHTTP)
+  DECLARE_PROTOCOL(wxHTTP)
+  DECLARE_NO_COPY_CLASS(wxHTTP)
 };
 
 #endif // wxUSE_PROTOCOL_HTTP

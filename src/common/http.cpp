@@ -70,6 +70,21 @@ void wxHTTP::SetProxyMode(bool on)
   m_proxy_mode = on;
 }
 
+wxHTTP::wxHeaderIterator wxHTTP::FindHeader(const wxString& header) const
+{
+    // we can't convert between const_iterator to iterator otherwise...
+    wxStringToStringHashMap& headers = (wxStringToStringHashMap&)m_headers;
+
+    wxHeaderIterator it = headers.begin();
+    for ( wxHeaderIterator en = headers.end(); it != en; ++it )
+    {
+        if ( wxStricmp(it->first, header) == 0 )
+            break;
+    }
+
+    return it;
+}
+
 void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
 {
   if (m_read) {
@@ -77,26 +92,23 @@ void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
     m_read = FALSE;
   }
 
-  wxStringToStringHashMap::iterator it = m_headers.find(header);
+  wxHeaderIterator it = FindHeader(header);
   if (it != m_headers.end())
-    it->second = h_data;  
+    it->second = h_data;
   else
-    m_headers[header.Upper()] = h_data;
+    m_headers[header] = h_data;
 }
 
-wxString wxHTTP::GetHeader(const wxString& header)
+wxString wxHTTP::GetHeader(const wxString& header) const
 {
-  wxStringToStringHashMap::iterator it = m_headers.find(header.Upper());
+    wxHeaderIterator it = FindHeader(header);
 
-  if (it == m_headers.end())
-    return wxEmptyString;
-
-  return it->second;
+    return it == m_headers.end() ? wxEmptyString : it->second;
 }
 
 void wxHTTP::SetPostBuffer(const wxString& post_buf)
 {
-  m_post_buf = post_buf;
+    m_post_buf = post_buf;
 }
 
 void wxHTTP::SendHeaders()
@@ -124,10 +136,11 @@ bool wxHTTP::ParseHeaders()
 #if defined(__VISAGECPP__)
 // VA just can't stand while(1)
     bool bOs2var = TRUE;
-    while(bOs2var) {
+    while(bOs2var)
 #else
-    while (1) {
+  while (1)
 #endif
+  {
     m_perr = GetLine(this, line);
     if (m_perr != wxPROTO_NOERR)
       return FALSE;
@@ -136,8 +149,6 @@ bool wxHTTP::ParseHeaders()
       break;
 
     wxString left_str = line.BeforeFirst(':');
-    left_str.MakeUpper();
-
     m_headers[left_str] = line.AfterFirst(':').Strip(wxString::both);
   }
   return TRUE;
