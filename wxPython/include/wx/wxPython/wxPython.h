@@ -23,101 +23,115 @@
 
 //----------------------------------------------------------------------
 
-// This needs to be called in modules that make calls to any of the functions
-// exported by the wxPython API.  It sets a static pointer to a structure of
-// function pointers located in the wx._core extension module.
-static bool wxPyCoreAPI_IMPORT() {
+// wxPyCoreAPI_IMPORT can be called in extension modules or embedding
+// applications in order to preload the API pointer, and then handle error
+// conditions if it is not able to be loaded for any reason.  If the import
+// fails or there is any other Python related problem then there will be a
+// Python exception set that can be checked with PyErr_Occurred and/or
+// PyErr_Print.
+//
+// Returns true on success, false if there was an error.
+//
+// See also the definition of the wxPyCoreAPI struct in wxPython_int.h
+//
+static bool wxPyCoreAPI_IMPORT()
+{
     wxPyCoreAPIPtr = (wxPyCoreAPI*)PyCObject_Import("wx._core_", "_wxPyCoreAPI");
     return wxPyCoreAPIPtr != NULL;
 }
 
 
+// Used by the macros below to fetch the API pointer, importing it first if
+// needed.  This should never need to be called directly.
+inline wxPyCoreAPI* wxPyGetCoreAPIPtr()
+{
+    if (wxPyCoreAPIPtr == NULL) wxPyCoreAPI_IMPORT();
+    // wxASSERT_MSW(wxPyCoreAPIPtr != NULL, wxT("wxPyCoreAPIPtr is NULL!!!"));  // uncomment when needed for debugging
+    return wxPyCoreAPIPtr;
+}
+
 
 // The following macros call functions located in wx._core_ of the same name
-// via the API pointer retrieved above.
+// via the API pointer retrieved above.  TODO: Should these be made into
+// inline fucntions?
 
+#define SWIG_Python_TypeRegister(a)             (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeRegister(a))
+#define SWIG_Python_TypeCheck(a,b)              (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeCheck(a,b))
+#define SWIG_Python_TypeCast(a,b)               (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeCast(a,b))
+#define SWIG_Python_TypeDynamicCast(a,b)        (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeDynamicCast(a,b))
+#define SWIG_Python_TypeName(a)                 (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeName(a))
+#define SWIG_Python_TypeQuery(a)                (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeQuery(a))
+#define SWIG_Python_TypeClientData(a,b)         (wxPyGetCoreAPIPtr()->p_SWIG_Python_TypeClientData(a,b))
+#define SWIG_Python_newvarlink()                (wxPyGetCoreAPIPtr()->p_SWIG_Python_newvarlink())
+#define SWIG_Python_addvarlink(a,b,c,d)         (wxPyGetCoreAPIPtr()->p_SWIG_Python_addvarlink(a,b,c,d))
+#define SWIG_Python_ConvertPtr(a,b,c,d)         (wxPyGetCoreAPIPtr()->p_SWIG_Python_ConvertPtr(a,b,c,d))
+#define SWIG_Python_ConvertPacked(a,b,c,d,e)    (wxPyGetCoreAPIPtr()->p_SWIG_Python_ConvertPacked(a,b,c,d,e))
+#define SWIG_Python_PackData(a,b,c)             (wxPyGetCoreAPIPtr()->p_SWIG_Python_PackData(a,b,c))
+#define SWIG_Python_UnpackData(a,b,c)           (wxPyGetCoreAPIPtr()->p_SWIG_Python_UnpackData(a,b,c))
+#define SWIG_Python_NewPointerObj(a,b,c)        (wxPyGetCoreAPIPtr()->p_SWIG_Python_NewPointerObj(a,b,c))
+#define SWIG_Python_NewPackedObj(a,b,c)         (wxPyGetCoreAPIPtr()->p_SWIG_Python_NewPackedObj(a,b,c))
+#define SWIG_Python_InstallConstants(a,b)       (wxPyGetCoreAPIPtr()->p_SWIG_Python_InstallConstants(a,b))
+#define SWIG_Python_MustGetPtr(a,b,c,d)         (wxPyGetCoreAPIPtr()->p_SWIG_Python_MustGetPtr(a,b,c,d))
 
-#define SWIG_Python_TypeRegister(a)             (wxPyCoreAPIPtr->p_SWIG_Python_TypeRegister(a))
-#define SWIG_Python_TypeCheck(a,b)              (wxPyCoreAPIPtr->p_SWIG_Python_TypeCheck(a,b))
-#define SWIG_Python_TypeCast(a,b)               (wxPyCoreAPIPtr->p_SWIG_Python_TypeCast(a,b))
-#define SWIG_Python_TypeDynamicCast(a,b)        (wxPyCoreAPIPtr->p_SWIG_Python_TypeDynamicCast(a,b))
-#define SWIG_Python_TypeName(a)                 (wxPyCoreAPIPtr->p_SWIG_Python_TypeName(a))
-#define SWIG_Python_TypeQuery(a)                (wxPyCoreAPIPtr->p_SWIG_Python_TypeQuery(a))
-#define SWIG_Python_TypeClientData(a,b)         (wxPyCoreAPIPtr->p_SWIG_Python_TypeClientData(a,b))
-#define SWIG_Python_addvarlink(a,b,c,d)         (wxPyCoreAPIPtr->p_SWIG_Python_addvarlink(a,b,c,d))
-#define SWIG_Python_ConvertPtr(a,b,c,d)         (wxPyCoreAPIPtr->p_SWIG_Python_ConvertPtr(a,b,c,d))
-#define SWIG_Python_ConvertPacked(a,b,c,d,e)    (wxPyCoreAPIPtr->p_SWIG_Python_ConvertPacked(a,b,c,d,e))
-#define SWIG_Python_PackData(a,b,c)             (wxPyCoreAPIPtr->p_SWIG_Python_PackData(a,b,c))
-#define SWIG_Python_UnpackData(a,b,c)           (wxPyCoreAPIPtr->p_SWIG_Python_UnpackData(a,b,c))
-#define SWIG_Python_NewPointerObj(a,b,c)        (wxPyCoreAPIPtr->p_SWIG_Python_NewPointerObj(a,b,c))
-#define SWIG_Python_NewPackedObj(a,b,c)         (wxPyCoreAPIPtr->p_SWIG_Python_NewPackedObj(a,b,c))
-#define SWIG_Python_InstallConstants(a,b)       (wxPyCoreAPIPtr->p_SWIG_Python_InstallConstants(a,b))
-#define SWIG_Python_MustGetPtr(a,b,c,d)         (wxPyCoreAPIPtr->p_SWIG_Python_MustGetPtr(a,b,c,d))
+#define wxPyCheckSwigType(a)                    (wxPyGetCoreAPIPtr()->p_wxPyCheckSwigType(a))
+#define wxPyConstructObject(a,b,c)              (wxPyGetCoreAPIPtr()->p_wxPyConstructObject(a,b,c))
+#define wxPyConvertSwigPtr(a,b,c)               (wxPyGetCoreAPIPtr()->p_wxPyConvertSwigPtr(a,b,c))
+#define wxPyMakeSwigPtr(a,b)                    (wxPyGetCoreAPIPtr()->p_wxPyMakeSwigPtr(a,b))
 
-#define wxPyCheckSwigType(a)                    (wxPyCoreAPIPtr->p_wxPyCheckSwigType(a))
-#define wxPyConstructObject(a,b,c)              (wxPyCoreAPIPtr->p_wxPyConstructObject(a,b,c))
-#define wxPyConvertSwigPtr(a,b,c)               (wxPyCoreAPIPtr->p_wxPyConvertSwigPtr(a,b,c))
-#define wxPyMakeSwigPtr(a,b)                    (wxPyCoreAPIPtr->p_wxPyMakeSwigPtr(a,b))
+#define wxPyBeginAllowThreads()                 (wxPyGetCoreAPIPtr()->p_wxPyBeginAllowThreads())
+#define wxPyEndAllowThreads(a)                  (wxPyGetCoreAPIPtr()->p_wxPyEndAllowThreads(a))
+#define wxPyBeginBlockThreads()                 (wxPyGetCoreAPIPtr()->p_wxPyBeginBlockThreads())
+#define wxPyEndBlockThreads(a)                  (wxPyGetCoreAPIPtr()->p_wxPyEndBlockThreads(a))
 
-#define wxPyBeginAllowThreads()                 (wxPyCoreAPIPtr->p_wxPyBeginAllowThreads())
-#define wxPyEndAllowThreads(a)                  (wxPyCoreAPIPtr->p_wxPyEndAllowThreads(a))
-#define wxPyBeginBlockThreads()                 (wxPyCoreAPIPtr->p_wxPyBeginBlockThreads())
-#define wxPyEndBlockThreads(a)                  (wxPyCoreAPIPtr->p_wxPyEndBlockThreads(a))
-
-#define wxPyConstructObject(a,b,c)              (wxPyCoreAPIPtr->p_wxPyConstructObject(a,b,c))
-#define wxPy_ConvertList(a)                     (wxPyCoreAPIPtr->p_wxPy_ConvertList(a))
+#define wxPyConstructObject(a,b,c)              (wxPyGetCoreAPIPtr()->p_wxPyConstructObject(a,b,c))
+#define wxPy_ConvertList(a)                     (wxPyGetCoreAPIPtr()->p_wxPy_ConvertList(a))
                                          
-#define wxString_in_helper(a)                   (wxPyCoreAPIPtr->p_wxString_in_helper(a))
-#define Py2wxString(a)                          (wxPyCoreAPIPtr->p_Py2wxString(a))
-#define wx2PyString(a)                          (wxPyCoreAPIPtr->p_wx2PyString(a))
+#define wxString_in_helper(a)                   (wxPyGetCoreAPIPtr()->p_wxString_in_helper(a))
+#define Py2wxString(a)                          (wxPyGetCoreAPIPtr()->p_Py2wxString(a))
+#define wx2PyString(a)                          (wxPyGetCoreAPIPtr()->p_wx2PyString(a))
                                          
-#define byte_LIST_helper(a)                     (wxPyCoreAPIPtr->p_byte_LIST_helper(a))
-#define int_LIST_helper(a)                      (wxPyCoreAPIPtr->p_int_LIST_helper(a))
-#define long_LIST_helper(a)                     (wxPyCoreAPIPtr->p_long_LIST_helper(a))
-#define string_LIST_helper(a)                   (wxPyCoreAPIPtr->p_string_LIST_helper(a))
-#define wxPoint_LIST_helper(a,b)                (wxPyCoreAPIPtr->p_wxPoint_LIST_helper(a, b))
-#define wxBitmap_LIST_helper(a)                 (wxPyCoreAPIPtr->p_wxBitmap_LIST_helper(a))
-#define wxString_LIST_helper(a)                 (wxPyCoreAPIPtr->p_wxString_LIST_helper(a))
-#define wxAcceleratorEntry_LIST_helper(a)       (wxPyCoreAPIPtr->p_wxAcceleratorEntry_LIST_helper(a))
+#define byte_LIST_helper(a)                     (wxPyGetCoreAPIPtr()->p_byte_LIST_helper(a))
+#define int_LIST_helper(a)                      (wxPyGetCoreAPIPtr()->p_int_LIST_helper(a))
+#define long_LIST_helper(a)                     (wxPyGetCoreAPIPtr()->p_long_LIST_helper(a))
+#define string_LIST_helper(a)                   (wxPyGetCoreAPIPtr()->p_string_LIST_helper(a))
+#define wxPoint_LIST_helper(a,b)                (wxPyGetCoreAPIPtr()->p_wxPoint_LIST_helper(a, b))
+#define wxBitmap_LIST_helper(a)                 (wxPyGetCoreAPIPtr()->p_wxBitmap_LIST_helper(a))
+#define wxString_LIST_helper(a)                 (wxPyGetCoreAPIPtr()->p_wxString_LIST_helper(a))
+#define wxAcceleratorEntry_LIST_helper(a)       (wxPyGetCoreAPIPtr()->p_wxAcceleratorEntry_LIST_helper(a))
                                                 
-#define wxSize_helper(a,b)                      (wxPyCoreAPIPtr->p_wxSize_helper(a,b))
-#define wxPoint_helper(a,b)                     (wxPyCoreAPIPtr->p_wxPoint_helper(a,b))
-#define wxRealPoint_helper(a,b)                 (wxPyCoreAPIPtr->p_wxRealPoint_helper(a,b))
-#define wxRect_helper(a,b)                      (wxPyCoreAPIPtr->p_wxRect_helper(a,b))
-#define wxColour_helper(a,b)                    (wxPyCoreAPIPtr->p_wxColour_helper(a,b))
-#define wxPoint2D_helper(a,b)                   (wxPyCoreAPIPtr->p_wxPoint2D_helper(a,b))
+#define wxSize_helper(a,b)                      (wxPyGetCoreAPIPtr()->p_wxSize_helper(a,b))
+#define wxPoint_helper(a,b)                     (wxPyGetCoreAPIPtr()->p_wxPoint_helper(a,b))
+#define wxRealPoint_helper(a,b)                 (wxPyGetCoreAPIPtr()->p_wxRealPoint_helper(a,b))
+#define wxRect_helper(a,b)                      (wxPyGetCoreAPIPtr()->p_wxRect_helper(a,b))
+#define wxColour_helper(a,b)                    (wxPyGetCoreAPIPtr()->p_wxColour_helper(a,b))
+#define wxPoint2D_helper(a,b)                   (wxPyGetCoreAPIPtr()->p_wxPoint2D_helper(a,b))
 
-#define wxPySimple_typecheck(a,b,c)             (wxPyCoreAPIPtr->p_wxPySimple_typecheck(a,b,c))
-#define wxColour_typecheck(a)                   (wxPyCoreAPIPtr->p_wxColour_typecheck(a))
+#define wxPySimple_typecheck(a,b,c)             (wxPyGetCoreAPIPtr()->p_wxPySimple_typecheck(a,b,c))
+#define wxColour_typecheck(a)                   (wxPyGetCoreAPIPtr()->p_wxColour_typecheck(a))
 
-#define wxPyCBH_setCallbackInfo(a, b, c, d)     (wxPyCoreAPIPtr->p_wxPyCBH_setCallbackInfo(a,b,c,d))
-#define wxPyCBH_findCallback(a, b)              (wxPyCoreAPIPtr->p_wxPyCBH_findCallback(a, b))
-#define wxPyCBH_callCallback(a, b)              (wxPyCoreAPIPtr->p_wxPyCBH_callCallback(a, b))
-#define wxPyCBH_callCallbackObj(a, b)           (wxPyCoreAPIPtr->p_wxPyCBH_callCallbackObj(a, b))
-#define wxPyCBH_delete(a)                       (wxPyCoreAPIPtr->p_wxPyCBH_delete(a))
+#define wxPyCBH_setCallbackInfo(a, b, c, d)     (wxPyGetCoreAPIPtr()->p_wxPyCBH_setCallbackInfo(a,b,c,d))
+#define wxPyCBH_findCallback(a, b)              (wxPyGetCoreAPIPtr()->p_wxPyCBH_findCallback(a, b))
+#define wxPyCBH_callCallback(a, b)              (wxPyGetCoreAPIPtr()->p_wxPyCBH_callCallback(a, b))
+#define wxPyCBH_callCallbackObj(a, b)           (wxPyGetCoreAPIPtr()->p_wxPyCBH_callCallbackObj(a, b))
+#define wxPyCBH_delete(a)                       (wxPyGetCoreAPIPtr()->p_wxPyCBH_delete(a))
 
-#define wxPyMake_wxObject(a)                    (wxPyCoreAPIPtr->p_wxPyMake_wxObject(a,True))
-#define wxPyMake_wxObject2(a,b)                 (wxPyCoreAPIPtr->p_wxPyMake_wxObject(a,b))
-#define wxPyMake_wxSizer(a)                     (wxPyCoreAPIPtr->p_wxPyMake_wxSizer(a))
-#define wxPyPtrTypeMap_Add(a, b)                (wxPyCoreAPIPtr->p_wxPyPtrTypeMap_Add(a, b))
-#define wxPy2int_seq_helper(a, b, c)            (wxPyCoreAPIPtr->p_wxPy2int_seq_helper(a, b, c))
-#define wxPy4int_seq_helper(a, b, c, d, e)      (wxPyCoreAPIPtr->p_wxPy4int_seq_helper(a, b, c, d, e))
-#define wxArrayString2PyList_helper(a)          (wxPyCoreAPIPtr->p_wxArrayString2PyList_helper(a))
-#define wxArrayInt2PyList_helper(a)             (wxPyCoreAPIPtr->p_wxArrayInt2PyList_helper(a))
+#define wxPyMake_wxObject(a)                    (wxPyGetCoreAPIPtr()->p_wxPyMake_wxObject(a,True))
+#define wxPyMake_wxObject2(a,b)                 (wxPyGetCoreAPIPtr()->p_wxPyMake_wxObject(a,b))
+#define wxPyMake_wxSizer(a)                     (wxPyGetCoreAPIPtr()->p_wxPyMake_wxSizer(a))
+#define wxPyPtrTypeMap_Add(a, b)                (wxPyGetCoreAPIPtr()->p_wxPyPtrTypeMap_Add(a, b))
+#define wxPy2int_seq_helper(a, b, c)            (wxPyGetCoreAPIPtr()->p_wxPy2int_seq_helper(a, b, c))
+#define wxPy4int_seq_helper(a, b, c, d, e)      (wxPyGetCoreAPIPtr()->p_wxPy4int_seq_helper(a, b, c, d, e))
+#define wxArrayString2PyList_helper(a)          (wxPyGetCoreAPIPtr()->p_wxArrayString2PyList_helper(a))
+#define wxArrayInt2PyList_helper(a)             (wxPyGetCoreAPIPtr()->p_wxArrayInt2PyList_helper(a))
                                                 
-#define wxPyClientData_dtor(a)                  (wxPyCoreAPIPtr->p_wxPyClientData_dtor(a))
-#define wxPyUserData_dtor(a)                    (wxPyCoreAPIPtr->p_wxPyUserData_dtor(a))
-#define wxPyOORClientData_dtor(a)               (wxPyCoreAPIPtr->p_wxPyOORClientData_dtor(a))
+#define wxPyClientData_dtor(a)                  (wxPyGetCoreAPIPtr()->p_wxPyClientData_dtor(a))
+#define wxPyUserData_dtor(a)                    (wxPyGetCoreAPIPtr()->p_wxPyUserData_dtor(a))
+#define wxPyOORClientData_dtor(a)               (wxPyGetCoreAPIPtr()->p_wxPyOORClientData_dtor(a))
                                                 
-#define wxPyCBInputStream_create(a, b)          (wxPyCoreAPIPtr->p_wxPyCBInputStream_create(a, b))
+#define wxPyCBInputStream_create(a, b)          (wxPyGetCoreAPIPtr()->p_wxPyCBInputStream_create(a, b))
 
-#define wxPyInstance_Check(a)                   (wxPyCoreAPIPtr->p_wxPyInstance_Check(a))
-#define wxPySwigInstance_Check(a)               (wxPyCoreAPIPtr->p_wxPySwigInstance_Check(a))
-
-
-// This one is special.  It's the first function called in SWIG generated
-// modules, so we'll use it to also import the API.
-#define SWIG_Python_newvarlink()     (wxPyCoreAPI_IMPORT(), wxPyCoreAPIPtr->p_SWIG_Python_newvarlink())
+#define wxPyInstance_Check(a)                   (wxPyGetCoreAPIPtr()->p_wxPyInstance_Check(a))
+#define wxPySwigInstance_Check(a)               (wxPyGetCoreAPIPtr()->p_wxPySwigInstance_Check(a))
 
 
 //----------------------------------------------------------------------
