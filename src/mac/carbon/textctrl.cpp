@@ -252,7 +252,6 @@ public :
                              const wxSize& size, long style ) ;
     virtual OSStatus SetFocus( ControlFocusPart focusPart ) ;
     virtual bool HasFocus() const ;
-    virtual bool NeedsFocusRect() const ;
 protected :
     HIViewRef m_scrollView ;
     HIViewRef m_textView ;
@@ -2471,21 +2470,6 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     TPActivatePaneText(m_macTXNvars, m_macTXNvars->fIsActive && m_macTXNvars->fInFocus);
     /* all done */
     return err;
-}
-
-//
-// HACKHACK: (RN)
-// Classic controls are not initially focused and
-// smaller ones are focused badly with the focus rect
-// this "fixes" the above issue - but there is probably a 
-// a better way.
-//
-// Still, on smaller text controls the focus rect is off
-//
-
-bool wxMacMLTEClassicControl::NeedsFocusRect() const 
-{
-    return m_windowStyle & wxNO_BORDER ? false : true;
 }
 
 // ----------------------------------------------------------------------------
