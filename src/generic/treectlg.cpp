@@ -55,6 +55,54 @@ static const int NO_IMAGE = -1;
 
 #define PIXELS_PER_UNIT 10
 
+// ----------------------------------------------------------------------------
+// Aqua arrows
+// ----------------------------------------------------------------------------
+
+        /* XPM */
+        static char *aqua_arrow_right[] = {
+        /* columns rows colors chars-per-pixel */
+        "13 11 4 1",
+        "  c None",
+        "b c #C0C0C0",
+        "c c #707070",
+        "d c #A0A0A0",
+        /* pixels */
+        "    b        ",
+        "    ddb      ",
+        "    cccdb    ",
+        "    cccccd   ",
+        "    ccccccdb ",
+        "    ccccccccd",
+        "    ccccccdb ",
+        "    cccccb   ",
+        "    cccdb    ",
+        "    ddb      ",
+        "    b        "
+        };
+
+        /* XPM */
+        static char *aqua_arrow_down[] = {
+        /* columns rows colors chars-per-pixel */
+        "13 11 4 1",
+        "  c None",
+        "b c #C0C0C0",
+        "c c #707070",
+        "d c #A0A0A0",
+        /* pixels */
+        "             ",
+        "             ",
+        " bdcccccccdb ",
+        "  dcccccccd  ",
+        "  bcccccccb  ",
+        "   dcccccd   ",
+        "   bcccccb   ",
+        "    bcccd    ",
+        "     dcd     ",
+        "     bcb     ",
+        "      d      "
+        };
+
 // -----------------------------------------------------------------------------
 // private classes
 // -----------------------------------------------------------------------------
@@ -679,6 +727,16 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
         style |= wxTR_AQUA_BUTTONS;
 #endif
 
+    if (style & wxTR_AQUA_BUTTONS)
+    {
+        m_arrowRight = new wxBitmap( aqua_arrow_right );
+        m_arrowDown = new wxBitmap( aqua_arrow_down );
+    }
+    else
+    {
+        m_arrowRight = NULL;
+        m_arrowDown = NULL;
+    }
 
     wxScrolledWindow::Create( parent, id, pos, size,
                               style|wxHSCROLL|wxVSCROLL, name );
@@ -708,6 +766,9 @@ wxGenericTreeCtrl::~wxGenericTreeCtrl()
 {
     delete m_hilightBrush;
     delete m_hilightUnfocusedBrush;
+    
+    if (m_arrowRight) delete m_arrowRight;
+    if (m_arrowDown) delete m_arrowDown;
 
     DeleteAllItems();
 
@@ -2048,35 +2109,18 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             {
                 // draw the twisty button here
                 
-                wxPoint button[3];
-                dc.SetBrush(*m_hilightBrush);
-                
                 if (HasFlag(wxTR_AQUA_BUTTONS))
                 {
-                    dc.SetPen(*wxTRANSPARENT_PEN);
-                    
                     if (item->IsExpanded())
-                    {
-                        button[0].x = x-6;
-                        button[0].y = y_mid-2;
-                        button[1].x = x+6;
-                        button[1].y = y_mid-2;
-                        button[2].x = x;
-                        button[2].y = y_mid+7;
-                    }
+                        dc.DrawBitmap( *m_arrowDown, x-5, y_mid-6, TRUE );
                     else
-                    {
-                        button[0].y = y_mid-6;
-                        button[0].x = x-2;
-                        button[1].y = y_mid+6;
-                        button[1].x = x-2;
-                        button[2].y = y_mid;
-                        button[2].x = x+7;
-                    }
+                        dc.DrawBitmap( *m_arrowRight, x-5, y_mid-6, TRUE );
                 }
                 else
                 {
+                    dc.SetBrush(*m_hilightBrush);
                     dc.SetPen(*wxBLACK_PEN);
+                    wxPoint button[3];
 
                     if (item->IsExpanded())
                     {
@@ -2096,10 +2140,9 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
                         button[2].y = y_mid;
                         button[2].x = x+3;
                     }
+                    dc.DrawPolygon(3, button);
+                    dc.SetPen(m_dottedPen);
                 }
-                dc.DrawPolygon(3, button);
-
-                dc.SetPen(m_dottedPen);
             }
             else // if (HasFlag(wxTR_HAS_BUTTONS))
             {
