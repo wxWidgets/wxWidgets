@@ -26,10 +26,14 @@
 class wxFSFile : public wxObject
 {
 public:
+    %pythonAppend wxFSFile
+        "self.thisown = 0   # It will normally be deleted by the user of the wxFileSystem";
+    
     wxFSFile(wxInputStream *stream, const wxString& loc,
              const wxString& mimetype, const wxString& anchor,
              wxDateTime modif);
-    ~wxFSFile();
+    
+    ~wxFSFile();  
 
     wxInputStream *GetStream();
     const wxString& GetMimeType();
@@ -102,6 +106,7 @@ public:
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
     bool CanOpen(const wxString& location);
+    %newobject OpenFile;
     wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
     wxString FindFirst(const wxString& spec, int flags = 0);
     wxString FindNext();
@@ -125,6 +130,7 @@ public:
     void ChangePathTo(const wxString& location, bool is_dir = False);
     wxString GetPath();
 
+    %newobject OpenFile;
     wxFSFile* OpenFile(const wxString& location);
 
     wxString FindFirst(const wxString& spec, int flags = 0);
@@ -157,6 +163,7 @@ class wxInternetFSHandler : public wxFileSystemHandler {
 public:
     wxInternetFSHandler();
     bool CanOpen(const wxString& location);
+    %newobject OpenFile;
     wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
 };
 
@@ -168,6 +175,7 @@ public:
     wxZipFSHandler();
 
     bool CanOpen(const wxString& location);
+    %newobject OpenFile;
     wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
     wxString FindFirst(const wxString& spec, int flags = 0);
     wxString FindNext();
@@ -225,6 +233,7 @@ public:
     %pythoncode { AddFile = staticmethod(MemoryFSHandler_AddFile) }
     
     bool CanOpen(const wxString& location);
+    %newobject OpenFile;
     wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
     wxString FindFirst(const wxString& spec, int flags = 0);
     virtual wxString FindNext();
