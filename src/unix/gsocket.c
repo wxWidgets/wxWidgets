@@ -1129,6 +1129,35 @@ void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
   }
 }
 
+GSocketError GSocket_GetSockOpt(GSocket *socket, int level, int optname,
+                                void *optval, int *optlen)
+{
+    if (getsockopt(socket->m_fd, level, optname, optval, optlen) == 0)
+    {
+        return GSOCK_NOERROR;
+    }
+    return GSOCK_OPTERR;
+}
+
+GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname, 
+                                const void *optval, int optlen)
+{
+    if (setsockopt(socket->m_fd, level, optname, optval, optlen) == 0)
+    {
+        return GSOCK_NOERROR;       
+    }
+    return GSOCK_OPTERR;
+}
+
+void GSocket_Streamed(GSocket *socket)
+{
+    socket->m_stream = TRUE;
+}
+
+void GSocket_Unstreamed(GSocket *socket)
+{
+    socket->m_stream = FALSE;
+}
 
 #define CALL_CALLBACK(socket, event) {                                  \
   _GSocket_Disable(socket, event);                                      \

@@ -79,7 +79,8 @@ typedef enum {
   GSOCK_INVPORT,
   GSOCK_WOULDBLOCK,
   GSOCK_TIMEDOUT,
-  GSOCK_MEMERR
+  GSOCK_MEMERR,
+  GSOCK_OPTERR,
 } GSocketError;
 
 /* See below for an explanation on how events work.
@@ -271,6 +272,14 @@ int GSocket_Write(GSocket *socket, const char *buffer,
  */
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags);
 
+GSocketError GSocket_GetSockOpt(GSocket *socket, int level, int optname,
+                                void *optval, int *optlen);
+
+GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname, 
+                                const void *optval, int optlen);
+
+void GSocket_Streamed(GSocket *socket);
+void GSocket_Unstreamed(GSocket *socket);
 
 /* Attributes */
 

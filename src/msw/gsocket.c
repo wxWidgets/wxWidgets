@@ -990,6 +990,36 @@ void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
   }
 }
 
+GSocketError GSocket_GetSockOpt(GSocket *socket, int level, int optname,
+                                void *optval, int *optlen)
+{
+    if (getsockopt(socket->m_fd, level, optname, optval, optlen) == 0)
+    {
+        return GSOCK_NOERROR;
+    }
+    return GSOCK_OPTERR;
+}
+
+GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname, 
+                                const void *optval, int optlen)
+{
+    if (setsockopt(socket->m_fd, level, optname, optval, optlen) == 0)
+    {
+        return GSOCK_NOERROR;       
+    }
+    return GSOCK_OPTERR;
+}
+
+void GSocket_Streamed(GSocket *socket)
+{
+    socket->m_stream = TRUE;
+}
+
+void GSocket_Unstreamed(GSocket *socket)
+{
+    socket->m_stream = FALSE;
+}
+
 /* Internals (IO) */
 
 /* _GSocket_Input_Timeout:
@@ -1312,7 +1342,7 @@ GSocketError _GAddress_Init_INET(GAddress *address)
   }
 
   address->m_family = GSOCK_INET;
-  address->m_realfamily = PF_INET;
+  address->m_realfamily = AF_INET;
   ((struct sockaddr_in *)address->m_addr)->sin_family = AF_INET;
   ((struct sockaddr_in *)address->m_addr)->sin_addr.s_addr = INADDR_ANY;
 

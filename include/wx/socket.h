@@ -151,6 +151,10 @@ public:
   void SetFlags(wxSocketFlags flags);
   void SetTimeout(long seconds);
 
+  bool GetOption(int level, int optname, void *optval, int *optlen);
+  bool SetOption(int level, int optname, const void *optval, int optlen);
+  inline wxUint32 GetLastIOSize() const { return m_lcount; };
+
   // event handling
   void *GetClientData() const { return m_clientData; }
   void SetClientData(void *data) { m_clientData = data; }

@@ -754,6 +754,7 @@ bool wxSocketBase::WaitForRead(long seconds, long milliseconds)
                                       GSOCK_LOST_FLAG);
 }
 
+
 bool wxSocketBase::WaitForWrite(long seconds, long milliseconds)
 {
   return _Wait(seconds, milliseconds, GSOCK_OUTPUT_FLAG);
@@ -1126,6 +1127,27 @@ bool wxSocketServer::WaitForAccept(long seconds, long milliseconds)
   return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG);
 }
 
+bool wxSocketBase::GetOption(int level, int optname, void *optval, int *optlen)
+{
+    if (GSocket_GetSockOpt(m_socket, level, optname, optval, optlen) 
+        != GSOCK_NOERROR)
+    {
+        return FALSE;
+    }
+    return TRUE;
+}
+
+bool wxSocketBase::SetOption(int level, int optname, const void *optval, 
+                              int optlen)
+{
+    if (GSocket_SetSockOpt(m_socket, level, optname, optval, optlen) 
+        != GSOCK_NOERROR)
+    {
+        return FALSE;
+    }
+    return TRUE;
+}
+
 // ==========================================================================
 // wxSocketClient
 // ==========================================================================
@@ -1221,9 +1243,12 @@ wxDatagramSocket::wxDatagramSocket( wxSockAddress& addr,
   m_socket = GSocket_new();
 
   if(!m_socket)
+  {
+    wxASSERT_MSG( 0, _T("datagram socket not new'd") );
     return;
-
+  }
   // Setup the socket as non connection oriented
+  GSocket_Unstreamed(m_socket);
   GSocket_SetLocal(m_socket, addr.GetAddress());
   if( GSocket_SetNonOriented(m_socket) != GSOCK_NOERROR )
   {
