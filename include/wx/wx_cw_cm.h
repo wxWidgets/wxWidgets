@@ -39,7 +39,12 @@
 #elif defined( __WXMAC__)
 	  #define	USE_PRECOMPILED_MAC_HEADERS	0  /*Set to 0 if you don't want to use precompiled MacHeaders*/
 	  #define ACCESSOR_CALLS_ARE_FUNCTIONS 1
+	  #ifdef __WXDEBUG__
+	  // otherwise the debugger looses all symbol information
+    #define OPAQUE_TOOLBOX_STRUCTS 0
+	  #else
     #define OPAQUE_TOOLBOX_STRUCTS 1
+    #endif
       #include <ansi_prefix.mac.h>
       /*
       #include <MacTypes.h>
