@@ -43,6 +43,8 @@
 #include "wx/app.h"
 WX_CHECK_BUILD_OPTIONS("wxHTML")
 
+const wxChar *wxTRACE_HTML_DEBUG = _T("htmldebug");
+
 //-----------------------------------------------------------------------------
 // wxHtmlParser helpers
 //-----------------------------------------------------------------------------
@@ -517,7 +519,9 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input)
             else
             {
                 output.append(ent_s-1, c-ent_s+2);
-                wxLogDebug(wxT("Unrecognized HTML entity: '%s'"), entity.c_str());
+                wxLogTrace(wxTRACE_HTML_DEBUG,
+                           wxT("Unrecognized HTML entity: '%s'"),
+                           entity.c_str());
             }
         }
     }
