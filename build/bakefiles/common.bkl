@@ -395,6 +395,52 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
                           template_append="wx_append_nomono"/>
     <template id="wx_base_dll" template="wx_dll_b,wx_3rdparty_dependencies"
                                template_append="wx_append_base_nomono"/>
+                           
+    <!-- =============================================================== -->
+    <!--             Templates for building wxWindows plugins:           -->
+    <!-- =============================================================== -->
+
+    <set var="">
+    </set>
+
+    <if cond="WX_STABLE_BRANCH=='1'">
+        <set var="PLUGIN_VERSION">
+            <if cond="PLATFORM_UNIX=='1'">
+                -$(WXVER_MAJOR).$(WXVER_MINOR)
+            </if>
+            <if cond="PLATFORM_UNIX=='0'">
+                $(WXVER_MAJOR)$(WXVER_MINOR)
+            </if>
+        </set>
+    </if>
+    <if cond="WX_STABLE_BRANCH=='0'">
+        <set var="PLUGIN_VERSION">
+            <if cond="PLATFORM_UNIX=='1'">
+                -$(WXVER_MAJOR).$(WXVER_MINOR).$(WXVER_RELEASE)
+            </if>
+            <if cond="PLATFORM_UNIX=='0'">
+                $(WXVER_MAJOR)$(WXVER_MINOR)$(WXVER_RELEASE)
+            </if>
+        </set>
+    </if>
+
+    <define-rule name="wx-base-plugin" extends="module">
+        <template>
+            <dllname>
+                $(id)$(addPrefixIfNotEmpty('_',WXNAMESUFFIX))$(PLUGIN_VERSION)
+            </dllname>
+            <define>WXUSINGDLL</define>
+        </template>
+    </define-rule>
+    
+    <define-rule name="wx-gui-plugin" extends="module">
+        <template template="wx">
+            <dllname>
+                $(id)_$(PORTNAME)$(WXUNIVNAME)$(WXNAMESUFFIX)$(PLUGIN_VERSION)
+            </dllname>
+            <define>WXUSINGDLL</define>
+        </template>
+    </define-rule>
     
     <!-- =============================================================== -->
     <!--               Support for wxWindows samples and contrib:        -->
