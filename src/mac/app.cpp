@@ -1384,7 +1384,11 @@ void wxApp::MacHandleModifierEvents( WXEVENTREF evr )
     }
     else
     {
-        ev->modifiers = GetCurrentKeyModifiers() ;
+        EventRecord nev ;
+        WaitNextEvent( 0 , &nev , 0 , NULL ) ;
+        ev->modifiers = nev.modifiers ;
+        // KeyModifiers unfortunately don't include btnState...
+//        ev->modifiers = GetCurrentKeyModifiers() ; 
     }
 #endif
     if ( ev->modifiers != s_lastModifiers && wxWindow::FindFocus() != NULL )
@@ -2143,23 +2147,30 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
 
                 switch (windowPart)
                 {
-                    // fixes for setting the cursor back from dominic mazzoni
-                    case inMenuBar :
-                        UMAShowArrowCursor();
-                        break ;
-                    case inSysWindow :
-                        UMAShowArrowCursor();
-                        break ;
-                    default:
+                    case inContent :
                         {
                             wxTopLevelWindowMac* win = wxFindWinFromMacWindow( window ) ;
                             if ( win )
                                 win->MacMouseMoved( ev , windowPart ) ;
                             else
-                                UMAShowArrowCursor();
-
+                            {
+                                if ( wxIsBusy() )
+                                {
+                                }
+                                else
+                                    UMAShowArrowCursor();
+                             }
                         }
                         break;
+                    default :
+                        {
+                            if ( wxIsBusy() )
+                            {
+                            }
+                            else
+                                UMAShowArrowCursor();
+                        }
+                        break ;
                 }
             }
             break ;
