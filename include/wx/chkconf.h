@@ -205,6 +205,14 @@
 #   endif
 #endif /* !defined(wxUSE_IMAGLIST) */
 
+#ifndef wxUSE_JOYSTICK
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_JOYSTICK must be defined."
+#   else
+#       define wxUSE_JOYSTICK 0
+#   endif
+#endif /* !defined(wxUSE_JOYSTICK) */
+
 #ifndef wxUSE_LISTBOX
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_LISTBOX must be defined."
@@ -245,8 +253,6 @@
 #   endif
 #endif /* !defined(wxUSE_LOGWINDOW) */
 
-/* For now... */
-#ifndef __WXGTK__
 #ifndef wxUSE_LOG_DIALOG
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_LOG_DIALOG must be defined."
@@ -254,7 +260,6 @@
 #       define wxUSE_LOG_DIALOG 0
 #   endif
 #endif /* !defined(wxUSE_LOG_DIALOG) */
-#endif
 
 #ifndef wxUSE_MDI_ARCHITECTURE
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -584,13 +589,26 @@
 #endif /* __WXUNIVERSAL__ */
 
 /* wxGTK-specific dependencies */
-#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
-#   if wxUSE_MDI_ARCHITECTURE && !wxUSE_MENUS
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "MDI requires wxUSE_MENUS in wxGTK"
-#       else
-#           undef wxUSE_MENUS
-#           define wxUSE_MENUS 1
+#ifdef __WXGTK__
+#   ifndef __WXUNIVERSAL__
+#       if wxUSE_MDI_ARCHITECTURE && !wxUSE_MENUS
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "MDI requires wxUSE_MENUS in wxGTK"
+#           else
+#               undef wxUSE_MENUS
+#               define wxUSE_MENUS 1
+#           endif
+#       endif
+#   endif /* !__WXUNIVERSAL__ */
+
+#   if wxUSE_JOYSTICK
+#       if !wxUSE_THREADS
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxJoystick requires threads in wxGTK"
+#           else
+#               undef wxUSE_JOYSTICK
+#               define wxUSE_JOYSTICK 0
+#           endif
 #       endif
 #   endif
 #endif /* wxGTK && !wxUniv */
