@@ -340,6 +340,11 @@ by using wxCLOSE\_BOX to indicate when the OK button should be displayed.
 \item {\bf Dynamic adaptation.} We should probably be using run-time tests more
 than preprocessor tests, so that the same WinCE application can run on different
 versions of the operating system.
+\item {\bf Modeless dialogs.} When a modeless dialog is hidden with the OK button, it doesn't restore the
+frame's menubar. See for example the find dialog in the dialogs sample. However, the menubar is restored
+if pressing Cancel (the window is closed). This reflects the fact that modeless dialogs are
+not very useful on Windows CE; however, we could perhaps destroy/restore a modeless dialog's menubar
+on deactivation and activation.
 \item {\bf Home screen plugins.} Figure out how to make home screen plugins for use with wxWidgets
 applications (see {\tt http://www.codeproject.com/ce/CTodayWindow.asp} for inspiration).
 Although we can't use wxWidgets to create the plugin (too large), we could perhaps write
