@@ -585,4 +585,22 @@ there are compatibility aliases for much of the above items.
 The wxWave class has been renamed to wxSound, and now has a slightly
 different API.
 
+wx.TaskbarIcon works on wxGTK-based platforms now, however you have to
+manage it a little bit more than you did before.  Basically, the app
+will treat it like a top-level frame in that if the wx.TaskBarIcon
+still exists when all the frames are closed then the app will still
+not exit.  You need to ensure that the wx.TaskBarIcon is destroyed
+when your last Frame is closed.  For wxPython apps it is usually
+enough if your main frame object holds the only reference to the
+wx.TaskBarIcon, then when the frame is closed Python reference
+counting takes care of the rest.
+
+If you are embedding wxPython in a C++ app, or are writing wxPython
+compatible extensions modules, then the usage of wxPyBeginAllowThreads
+and wxPyEndAllowThreads has changed slightly.  wxPyBeginAllowThreads
+now returns a boolean value that must be passed to the coresponding
+wxPyEndAllowThreads function call.  This is to help do the RightThing
+when calls to these two functions are nested, or if calls to external
+code that are wrapped in the standard Py_(BEGIN|END)_ALLOW_THERADS may
+result in wx event handlers being called (such as os.startfile.)
 
