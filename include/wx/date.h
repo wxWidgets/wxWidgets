@@ -72,14 +72,14 @@ class WXDLLEXPORT wxDate: public wxObject
   wxDate &operator -- ();     // Prefix decrement
   wxDate &operator -- (int);  // Postfix decrement
 
-  friend bool operator <  (const wxDate &dt1, const wxDate &dt2);
-  friend bool operator <= (const wxDate &dt1, const wxDate &dt2);
-  friend bool operator >  (const wxDate &dt1, const wxDate &dt2);
-  friend bool operator >= (const wxDate &dt1, const wxDate &dt2);
-  friend bool operator == (const wxDate &dt1, const wxDate &dt2);
-  friend bool operator != (const wxDate &dt1, const wxDate &dt2);
+  friend bool WXDLLEXPORT operator <  (const wxDate &dt1, const wxDate &dt2);
+  friend bool WXDLLEXPORT operator <= (const wxDate &dt1, const wxDate &dt2);
+  friend bool WXDLLEXPORT operator >  (const wxDate &dt1, const wxDate &dt2);
+  friend bool WXDLLEXPORT operator >= (const wxDate &dt1, const wxDate &dt2);
+  friend bool WXDLLEXPORT operator == (const wxDate &dt1, const wxDate &dt2);
+  friend bool WXDLLEXPORT operator != (const wxDate &dt1, const wxDate &dt2);
 
-  friend ostream &operator << (ostream &os, const wxDate &dt);
+  friend ostream& WXDLLEXPORT operator << (ostream &os, const wxDate &dt);
 
   wxString FormatDate 	   (int type=-1) const;
   void  SetFormat (int format);
