@@ -829,6 +829,10 @@ public:
 
 
     %addmethods {
+        // NOTE: These methods are VERY SIMILAR in implentation.  It would be
+        // nice to factor out code and or turn them into a set of
+        // template-like macros.
+
         // Draw a point for every set of coordinants in pyPoints, optionally
         // setting a new pen for each
         PyObject* _DrawPointList(PyObject* pyPoints, PyObject* pyPens) {
@@ -860,6 +864,8 @@ public:
                         obj = PySequence_GetItem(pyPens, i);
                     }
                     if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
+                        if (!isFastPens)
+                            Py_DECREF(obj);
                         goto err1;
                     }
 
@@ -876,7 +882,8 @@ public:
                     obj = PySequence_GetItem(pyPoints, i);
                 }
                 if (! _2int_seq_helper(obj, &x1, &y1)) {
-                    Py_DECREF(obj);
+                    if (!isFastPens)
+                        Py_DECREF(obj);
                     goto err0;
                 }
 
@@ -930,6 +937,8 @@ public:
                         obj = PySequence_GetItem(pyPens, i);
                     }
                     if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
+                        if (!isFastPens)
+                            Py_DECREF(obj);
                         goto err1;
                     }
 
@@ -946,7 +955,8 @@ public:
                     obj = PySequence_GetItem(pyLines, i);
                 }
                 if (! _4int_seq_helper(obj, &x1, &y1, &x2, &y2)) {
-                    Py_DECREF(obj);
+                    if (!isFastPens)
+                        Py_DECREF(obj);
                     goto err0;
                 }
 

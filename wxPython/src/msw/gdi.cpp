@@ -9481,6 +9481,8 @@ static PyObject * wxDC__DrawPointList(wxDC *self,PyObject * pyPoints,PyObject * 
                         obj = PySequence_GetItem(pyPens, i);
                     }
                     if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
+                        if (!isFastPens)
+                            Py_DECREF(obj);
                         goto err1;
                     }
 
@@ -9497,7 +9499,8 @@ static PyObject * wxDC__DrawPointList(wxDC *self,PyObject * pyPoints,PyObject * 
                     obj = PySequence_GetItem(pyPoints, i);
                 }
                 if (! _2int_seq_helper(obj, &x1, &y1)) {
-                    Py_DECREF(obj);
+                    if (!isFastPens)
+                        Py_DECREF(obj);
                     goto err0;
                 }
 
@@ -9586,6 +9589,8 @@ static PyObject * wxDC__DrawLineList(wxDC *self,PyObject * pyLines,PyObject * py
                         obj = PySequence_GetItem(pyPens, i);
                     }
                     if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
+                        if (!isFastPens)
+                            Py_DECREF(obj);
                         goto err1;
                     }
 
@@ -9602,7 +9607,8 @@ static PyObject * wxDC__DrawLineList(wxDC *self,PyObject * pyLines,PyObject * py
                     obj = PySequence_GetItem(pyLines, i);
                 }
                 if (! _4int_seq_helper(obj, &x1, &y1, &x2, &y2)) {
-                    Py_DECREF(obj);
+                    if (!isFastPens)
+                        Py_DECREF(obj);
                     goto err0;
                 }
 
