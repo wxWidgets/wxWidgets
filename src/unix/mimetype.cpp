@@ -1110,17 +1110,19 @@ wxString wxFileTypeImpl::GetExpandedCommand(const wxString & verb, const wxFileT
     return wxFileType::ExpandCommand(sTmp, params);
 }
 
-bool wxFileTypeImpl::GetIcon(wxIcon *icon, wxString *iconFile /*= NULL */,
-                 int *iconIndex /*= NULL*/) const
+bool wxFileTypeImpl::GetIcon(wxIcon *icon,
+                             wxString *iconFile /*= NULL */,
+                             int *iconIndex /*= NULL*/) const
 
 {
+#if wxUSE_GUI
     wxString sTmp;
     size_t i = 0;
     while ( (i < m_index.GetCount() ) && sTmp.IsEmpty() )
-        {
-            sTmp = m_manager->m_aIcons[m_index[i]];
-            i ++;
-        }
+    {
+        sTmp = m_manager->m_aIcons[m_index[i]];
+        i ++;
+    }
     if ( sTmp.IsEmpty () ) return FALSE;
 
     wxIcon icn;
@@ -1131,14 +1133,16 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon, wxString *iconFile /*= NULL */,
         icn = wxIcon(sTmp, wxBITMAP_TYPE_ANY);
 
     if ( icn.Ok() )
-      {
-      *icon = icn;
-      if (iconFile) *iconFile = sTmp;
-      if (iconIndex) *iconIndex = 0;
-      return TRUE;
-      }
-        return FALSE;
+    {
+        *icon = icn;
+        if (iconFile) *iconFile = sTmp;
+        if (iconIndex) *iconIndex = 0;
+        return TRUE;
     }
+#endif // wxUSE_GUI
+
+    return FALSE;
+}
 
 
 bool
