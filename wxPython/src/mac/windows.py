@@ -29,7 +29,6 @@ _windows.Panel_swigregister(PanelPtr)
 def PrePanel(*args, **kwargs):
     val = _windows.new_PrePanel(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -74,7 +73,6 @@ _windows.ScrolledWindow_swigregister(ScrolledWindowPtr)
 def PreScrolledWindow(*args, **kwargs):
     val = _windows.new_PreScrolledWindow(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -207,7 +205,6 @@ _windows.Frame_swigregister(FramePtr)
 def PreFrame(*args, **kwargs):
     val = _windows.new_PreFrame(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -242,7 +239,6 @@ _windows.Dialog_swigregister(DialogPtr)
 def PreDialog(*args, **kwargs):
     val = _windows.new_PreDialog(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -268,7 +264,6 @@ _windows.MiniFrame_swigregister(MiniFramePtr)
 def PreMiniFrame(*args, **kwargs):
     val = _windows.new_PreMiniFrame(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -351,7 +346,6 @@ _windows.StatusBar_swigregister(StatusBarPtr)
 def PreStatusBar(*args, **kwargs):
     val = _windows.new_PreStatusBar(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -416,7 +410,6 @@ _windows.SplitterWindow_swigregister(SplitterWindowPtr)
 def PreSplitterWindow(*args, **kwargs):
     val = _windows.new_PreSplitterWindow(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 class SplitterEvent(core.NotifyEvent):
@@ -500,7 +493,6 @@ _windows.SashWindow_swigregister(SashWindowPtr)
 def PreSashWindow(*args, **kwargs):
     val = _windows.new_PreSashWindow(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 SASH_STATUS_OK = _windows.SASH_STATUS_OK
@@ -621,7 +613,6 @@ _windows.SashLayoutWindow_swigregister(SashLayoutWindowPtr)
 def PreSashLayoutWindow(*args, **kwargs):
     val = _windows.new_PreSashLayoutWindow(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 class LayoutAlgorithm(core.Object):
@@ -747,7 +738,6 @@ _windows.VScrolledWindow_swigregister(VScrolledWindowPtr)
 def PreVScrolledWindow(*args, **kwargs):
     val = _windows.new_PreVScrolledWindow(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 class VListBox(VScrolledWindow):
@@ -793,7 +783,6 @@ _windows.VListBox_swigregister(VListBoxPtr)
 def PreVListBox(*args, **kwargs):
     val = _windows.new_PreVListBox(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 class HtmlListBox(VListBox):
@@ -820,7 +809,6 @@ _windows.HtmlListBox_swigregister(HtmlListBoxPtr)
 def PreHtmlListBox(*args, **kwargs):
     val = _windows.new_PreHtmlListBox(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -1226,7 +1214,6 @@ _windows.FindReplaceDialog_swigregister(FindReplaceDialogPtr)
 def PreFindReplaceDialog(*args, **kwargs):
     val = _windows.new_PreFindReplaceDialog(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
@@ -1268,7 +1255,6 @@ _windows.MDIParentFrame_swigregister(MDIParentFramePtr)
 def PreMDIParentFrame(*args, **kwargs):
     val = _windows.new_PreMDIParentFrame(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 class MDIChildFrame(Frame):
@@ -1295,7 +1281,6 @@ _windows.MDIChildFrame_swigregister(MDIChildFramePtr)
 def PreMDIChildFrame(*args, **kwargs):
     val = _windows.new_PreMDIChildFrame(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 class MDIClientWindow(core.Window):
@@ -1319,7 +1304,6 @@ _windows.MDIClientWindow_swigregister(MDIClientWindowPtr)
 def PreMDIClientWindow(*args, **kwargs):
     val = _windows.new_PreMDIClientWindow(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------

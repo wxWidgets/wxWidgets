@@ -92,7 +92,6 @@ _wizard.PyWizardPage_swigregister(PyWizardPagePtr)
 def PrePyWizardPage(*args, **kwargs):
     val = _wizard.new_PrePyWizardPage(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 class WizardPageSimple(WizardPage):
@@ -119,7 +118,6 @@ _wizard.WizardPageSimple_swigregister(WizardPageSimplePtr)
 def PreWizardPageSimple(*args, **kwargs):
     val = _wizard.new_PreWizardPageSimple(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 WizardPageSimple_Chain = _wizard.WizardPageSimple_Chain
@@ -157,7 +155,6 @@ _wizard.Wizard_swigregister(WizardPtr)
 def PreWizard(*args, **kwargs):
     val = _wizard.new_PreWizard(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 
