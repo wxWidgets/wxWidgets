@@ -529,31 +529,31 @@ class wxFileSystemModule : public wxModule
                            _T(""),
                            _T(""),
                            _T("JPEG image (from fallback)"),
-                           _T("jpg"), _T("jpeg"), NULL);
+                           _T("jpg"), _T("jpeg"), _T("JPG"), _T("JPEG"), NULL);
             gs_FSMimeFallbacks[1] =
             wxFileTypeInfo(_T("image/gif"),
                            _T(""),
                            _T(""),
                            _T("GIF image (from fallback)"),
-                           _T("gif"), NULL);
+                           _T("gif"), _T("GIF"), NULL);
             gs_FSMimeFallbacks[2] =
             wxFileTypeInfo(_T("image/png"),
                            _T(""),
                            _T(""),
                            _T("PNG image (from fallback)"),
-                           _T("png"), NULL);
+                           _T("png"), _T("PNG"), NULL);
             gs_FSMimeFallbacks[3] =
             wxFileTypeInfo(_T("image/bmp"),
                            _T(""),
                            _T(""),
                            _T("windows bitmap image (from fallback)"),
-                           _T("bmp"), NULL);
+                           _T("bmp"), _T("BMP"), NULL);
             gs_FSMimeFallbacks[4] =
             wxFileTypeInfo(_T("text/html"),
                            _T(""),
                            _T(""),
                            _T("HTML document (from fallback)"),
-                           _T("htm"), _T("html"), NULL);
+                           _T("htm"), _T("html"), _T("HTM"), _T("HTML"), NULL);
             gs_FSMimeFallbacks[5] =
             // must terminate the table with this!
             wxFileTypeInfo();
