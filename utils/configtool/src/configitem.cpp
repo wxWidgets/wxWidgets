@@ -105,10 +105,10 @@ void ctConfigItem::SetName(const wxString& name )
 /// Clear children
 void ctConfigItem::Clear()
 {
-    wxNode* node = m_children.GetFirst();
+    wxObjectList::compatibility_iterator node = m_children.GetFirst();
     while (node)
     {
-        wxNode* next = node->GetNext();
+        wxObjectList::compatibility_iterator next = node->GetNext();
         ctConfigItem* child = (ctConfigItem*) node->GetData();
 
         // This should delete 'node' too, assuming
@@ -336,7 +336,7 @@ ctConfigItem* ctConfigItem::FindItem(const wxString& name)
     if (GetName() == name)
         return this;
 
-    for ( wxNode* node = GetChildren().GetFirst(); node; node = node->GetNext() )
+    for ( wxObjectList::compatibility_iterator node = GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         ctConfigItem* child = (ctConfigItem*) node->GetData();
         ctConfigItem* found = child->FindItem(name);
@@ -351,7 +351,7 @@ ctConfigItem* ctConfigItem::FindNextSibling()
 {
     if (!GetParent())
         return NULL;
-    wxNode* node = GetParent()->GetChildren().Member(this);
+    wxObjectList::compatibility_iterator node = GetParent()->GetChildren().Member(this);
     if (node && node->GetNext())
     {
         return (ctConfigItem*) node->GetNext()->GetData();
@@ -364,7 +364,7 @@ ctConfigItem* ctConfigItem::FindPreviousSibling()
 {
     if (!GetParent())
         return NULL;
-    wxNode* node = GetParent()->GetChildren().Member(this);
+    wxObjectList::compatibility_iterator node = GetParent()->GetChildren().Member(this);
     if (node && node->GetPrevious())
     {
         return (ctConfigItem*) node->GetPrevious()->GetData();
@@ -390,7 +390,7 @@ ctConfigItem* ctConfigItem::DeepClone()
 {
     ctConfigItem* newItem = Clone();
 
-    for ( wxNode* node = GetChildren().GetFirst(); node; node = node->GetNext() )
+    for ( wxObjectList::compatibility_iterator node = GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         ctConfigItem* child = (ctConfigItem*) node->GetData();
         ctConfigItem* newChild = child->DeepClone();
@@ -426,7 +426,7 @@ void ctConfigItem::DetachFromTree()
     data->SetConfigItem(NULL);
     m_treeItemId = wxTreeItemId();
 
-    for ( wxNode* node = GetChildren().GetFirst(); node; node = node->GetNext() )
+    for ( wxObjectList::compatibility_iterator node = GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         ctConfigItem* child = (ctConfigItem*) node->GetData();
         child->DetachFromTree();
@@ -439,7 +439,7 @@ void ctConfigItem::Attach(ctConfigItem* parent, ctConfigItem* insertBefore)
     if (parent)
     {
         SetParent(parent);
-        wxNode* node = NULL;
+        wxObjectList::compatibility_iterator node = (wxObjectList::compatibility_iterator)NULL;
         if (insertBefore)
             node = parent->GetChildren().Member(insertBefore);
 
@@ -474,7 +474,7 @@ bool ctConfigItem::IsInActiveContext()
     wxList contextItems;
     StringToItems(GetDocument()->GetTopItem(), context, contextItems);
 
-    for ( wxNode* node = contextItems.GetFirst(); node; node = node->GetNext() )
+    for ( wxObjectList::compatibility_iterator node = contextItems.GetFirst(); node; node = node->GetNext() )
     {
         ctConfigItem* otherItem = (ctConfigItem*) node->GetData();
         if (otherItem->IsEnabled())
@@ -516,7 +516,7 @@ void ctConfigItem::EvaluateDependencies()
     wxList tempItems;
     StringToItems(GetDocument()->GetTopItem(), requires, tempItems);
 
-    wxNode* node;
+    wxObjectList::compatibility_iterator node;
     for ( node = tempItems.GetFirst(); node; node = node->GetNext() )
     {
         // Only consider the dependency if both items are in
@@ -556,7 +556,7 @@ void ctConfigItem::EvaluateDependencies()
         int disabledCount = 0;
         int inContextCount = 0;
 
-        for ( wxNode* node = items.GetFirst(); node; node = node->GetNext() )
+        for ( wxObjectList::compatibility_iterator node = items.GetFirst(); node; node = node->GetNext() )
         {
             ctConfigItem* otherItem = (ctConfigItem*) node->GetData();
             
@@ -588,7 +588,7 @@ void ctConfigItem::EvaluateDependencies()
         int enabledCount = 0;
         int inContextCount = 0;
 
-        for ( wxNode* node = items.GetFirst(); node; node = node->GetNext() )
+        for ( wxObjectList::compatibility_iterator node = items.GetFirst(); node; node = node->GetNext() )
         {
             ctConfigItem* otherItem = (ctConfigItem*) node->GetData();
             wxString otherName = otherItem->GetName();
@@ -622,7 +622,7 @@ void ctConfigItem::EvaluateDependencies()
         // int disabledCount = 0;
         int inContextCount = 0;
 
-        for ( wxNode* node = items.GetFirst(); node; node = node->GetNext() )
+        for ( wxObjectList::compatibility_iterator node = items.GetFirst(); node; node = node->GetNext() )
         {
             ctConfigItem* otherItem = (ctConfigItem*) node->GetData();
             
@@ -659,7 +659,7 @@ void ctConfigItem::EvaluateDependencies()
         int enabledCount = 0;
         int inContextCount = 0;
 
-        for ( wxNode* node = items.GetFirst(); node; node = node->GetNext() )
+        for ( wxObjectList::compatibility_iterator node = items.GetFirst(); node; node = node->GetNext() )
         {
             ctConfigItem* otherItem = (ctConfigItem*) node->GetData();
             
@@ -765,7 +765,7 @@ void ctConfigItem::PropagateChange(wxList& considered)
         // TODO: what about string, integer? Can they have
         // dependencies?
         
-        for ( wxNode* node = GetDependents().GetFirst(); node; node = node->GetNext() )
+        for ( wxObjectList::compatibility_iterator node = GetDependents().GetFirst(); node; node = node->GetNext() )
         {
             ctConfigItem* child = (ctConfigItem*) node->GetData();
 
@@ -793,7 +793,7 @@ void ctConfigItem::PropagateRadioButton(wxList& considered)
         wxList list;
         StringToItems(GetDocument()->GetTopItem(), mutuallyExclusive, list);
 
-        for ( wxNode* node = list.GetFirst(); node; node = node->GetNext() )
+        for ( wxObjectList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext() )
         {
             ctConfigItem* child = (ctConfigItem*) node->GetData();
             if (child->IsEnabled() && child != this)

@@ -229,10 +229,10 @@ bool hvApp::OnInit()
 int hvApp::OnExit()
 {
 #if hvUSE_IPC
-    wxNode* node = m_connections.GetFirst();
+    wxObjectList::compatibility_iterator node = m_connections.GetFirst();
     while (node)
     {
-        wxNode* next = node->GetNext();
+        wxObjectList::compatibility_iterator next = node->GetNext();
         hvConnection* connection = (hvConnection*) node->GetData();
         connection->Disconnect();
         delete connection;
