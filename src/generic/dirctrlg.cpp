@@ -121,9 +121,9 @@ static char * icon3_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "16 16 3 1",
 /* colors */
-" 	s None	c None",
-".	c #000000",
-"+	c #ffffff",
+"     s None    c None",
+".    c #000000",
+"+    c #ffffff",
 /* pixels */
 "                ",
 "  ........      ",
@@ -145,13 +145,13 @@ static char * icon3_xpm[] = {
 /* Computer */
 static char * icon4_xpm[] = {
 "16 16 7 1",
-" 	s None	c None",
-".	c #808080",
-"X	c #c0c0c0",
-"o	c Black",
-"O	c Gray100",
-"+	c #008080",
-"@	c Blue",
+"     s None    c None",
+".    c #808080",
+"X    c #c0c0c0",
+"o    c Black",
+"O    c Gray100",
+"+    c #008080",
+"@    c Blue",
 "    ........... ",
 "   .XXXXXXXXXX.o",
 "   .OOOOOOOOO..o",
@@ -172,13 +172,13 @@ static char * icon4_xpm[] = {
 /* Drive */
 static char * icon5_xpm[] = {
 "16 16 7 1",
-" 	s None	c None",
-".	c #808080",
-"X	c #c0c0c0",
-"o	c Black",
-"O	c Gray100",
-"+	c Green",
-"@	c #008000",
+"     s None    c None",
+".    c #808080",
+"X    c #c0c0c0",
+"o    c Black",
+"O    c Gray100",
+"+    c Green",
+"@    c #008000",
 "                ",
 "                ",
 "                ",
@@ -199,16 +199,16 @@ static char * icon5_xpm[] = {
 /* CD-ROM */
 static char *icon6_xpm[] = {
 "16 16 10 1",
-" 	s None	c None",
-".	c #808080",
-"X	c #c0c0c0",
-"o	c Yellow",
-"O	c Blue",
-"+	c Black",
-"@	c Gray100",
-"#	c #008080",
-"$	c Green",
-"%	c #008000",
+"     s None    c None",
+".    c #808080",
+"X    c #c0c0c0",
+"o    c Yellow",
+"O    c Blue",
+"+    c Black",
+"@    c Gray100",
+"#    c #008080",
+"$    c Green",
+"%    c #008000",
 "        ...     ",
 "      ..XoX..   ",
 "     .O.XoXXX+  ",
@@ -229,13 +229,13 @@ static char *icon6_xpm[] = {
 /* Floppy */
 static char * icon7_xpm[] = {
 "16 16 7 1",
-" 	s None	c None",
-".	c #808080",
-"X	c Gray100",
-"o	c #c0c0c0",
-"O	c Black",
-"+	c Cyan",
-"@	c Red",
+"     s None    c None",
+".    c #808080",
+"X    c Gray100",
+"o    c #c0c0c0",
+"O    c Black",
+"+    c Cyan",
+"@    c Red",
 "         ......X",
 "        .ooooooO",
 "        .+++++OO",
@@ -256,13 +256,13 @@ static char * icon7_xpm[] = {
 /* Removeable */
 static char * icon8_xpm[] = {
 "16 16 7 1",
-" 	s None	c None",
-".	c #808080",
-"X	c #c0c0c0",
-"o	c Black",
-"O	c Gray100",
-"+	c Red",
-"@	c #800000",
+"     s None    c None",
+".    c #808080",
+"X    c #c0c0c0",
+"o    c Black",
+"O    c Gray100",
+"+    c Red",
+"@    c #800000",
 "                ",
 "                ",
 "                ",
@@ -292,17 +292,17 @@ static const int ID_NEW = 1004;
 static bool wxIsDriveAvailable(const wxString dirName)
 {
 #ifdef __WIN32__
-	UINT errorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
+    UINT errorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 #endif
-	bool success = TRUE;
+    bool success = TRUE;
 
     // Check if this is a root directory and if so,
     // whether the drive is avaiable.
-    if (dirName.Len() == 3 && dirName[1] == wxT(':'))
+    if (dirName.Len() == 3 && dirName[(size_t)1] == wxT(':'))
     {
-		wxString dirNameLower(dirName.Lower());
+        wxString dirNameLower(dirName.Lower());
         int currentDrive = _getdrive();
-        int thisDrive = (int) (dirNameLower[0] - 'a' + 1) ;
+        int thisDrive = (int) (dirNameLower[(size_t)0] - 'a' + 1) ;
         int err = _chdrive( thisDrive ) ;
         _chdrive( currentDrive );
 
@@ -312,10 +312,10 @@ static bool wxIsDriveAvailable(const wxString dirName)
         }
     }
 #ifdef __WIN32__
-	(void) SetErrorMode(errorMode);
+    (void) SetErrorMode(errorMode);
 #endif
 
-	return success;
+    return success;
 }
 #endif
 
@@ -350,23 +350,23 @@ void wxDirItemDataEx::SetNewDirName( wxString path )
 
 bool wxDirItemDataEx::HasSubDirs()
 {
-	if (m_path.IsEmpty())
-		return TRUE;
+    if (m_path.IsEmpty())
+        return TRUE;
 
-	// On WIN32, must check if this volume is mounted or
-	// we get an error dialog for e.g. drive a:
+    // On WIN32, must check if this volume is mounted or
+    // we get an error dialog for e.g. drive a:
 #ifdef __WIN32__
-	if (!wxIsDriveAvailable(m_path))
-		return FALSE;
+    if (!wxIsDriveAvailable(m_path))
+        return FALSE;
 #endif
 
     wxString search = m_path;
-	
-	if (m_path.Last() != wxFILE_SEP_PATH)
-	{
-		search += wxString(wxFILE_SEP_PATH);
-	}
-	search += wxT("*");
+    
+    if (m_path.Last() != wxFILE_SEP_PATH)
+    {
+        search += wxString(wxFILE_SEP_PATH);
+    }
+    search += wxT("*");
 
     wxLogNull log;
     wxString path = wxFindFirstFile( search, wxDIR );
@@ -568,7 +568,7 @@ void wxGenericDirCtrl::SetupSections()
         path.Printf(wxT("%c:\\"), (char) (drive + 'a' - 1));
         name.Printf(wxT("(%c:)"), (char) (drive + 'a' - 1));
 
-		if (wxIsDriveAvailable(path))
+        if (wxIsDriveAvailable(path))
         {
             
             AddSection(path, name);
@@ -700,12 +700,12 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 #ifdef __WXMSW__
     // Check if this is a root directory and if so,
     // whether the drive is avaiable.
-	if (!wxIsDriveAvailable(dirName))
-	{
+    if (!wxIsDriveAvailable(dirName))
+    {
         data->m_isExpanded = FALSE;
         wxMessageBox(wxT("Sorry, this drive is not available."));
-  		return;
-	}
+          return;
+    }
 #endif
 
     // This may take a longish time. Go to busy cursor
@@ -797,7 +797,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
             {
                 m_treeCtrl->SetItemHasChildren(id);
             }
-	}
+    }
     }
 
     // Add the sorted filenames
