@@ -87,7 +87,8 @@ class TestTransientPopup(wx.PopupTransientWindow):
                           "wxPopupWindow which disappears\n"
                           "automatically when the user\n"
                           "clicks the mouse outside it or if it\n"
-                          "loses focus in any other way."
+                          "(or its first child) loses focus in \n"
+                          "any other way."
                           ,
                           pos=(10,10))
         sz = st.GetBestSize()
