@@ -47,6 +47,9 @@ include samples/wxProject/*.py
 include samples/StyleEditor/*.py
 include samples/StyleEditor/*.txt
 include samples/StyleEditor/*.cfg
+include samples/pySketch/*.py
+include samples/pySketch/images/*.bmp
+
 
 include wxPython/lib/*.py
 include wxPython/lib/*.txt
@@ -77,11 +80,11 @@ include src/gtk/*.h
 include src/gtk/*.py
 
 include tools/*.py
-tools\XRCed\CHANGES
-tools\XRCed\TODO
-tools\XRCed\README
-tools\XRCed\*.py
-tools\XRCed\*.xrc
+tools/XRCed/CHANGES
+tools/XRCed/TODO
+tools/XRCed/README
+tools/XRCed/*.py
+tools/XRCed/*.xrc
 
 
 include contrib/glcanvas/*.i

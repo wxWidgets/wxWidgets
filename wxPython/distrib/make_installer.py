@@ -136,9 +136,12 @@ Source: "samples\stxview\*.stx";                 DestDir: "{app}\wxPython\sample
 Source: "samples\stxview\*.txt";                 DestDir: "{app}\wxPython\samples\stxview"; Components: samples
 Source: "samples\stxview\StructuredText\*.py";   DestDir: "{app}\wxPython\samples\stxview\StructuredText"; Components: samples
 
-Source: "samples\StyleEditor\*.txt";          DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
-Source: "samples\StyleEditor\*.py";           DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
+Source: "samples\StyleEditor\*.txt";           DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
+Source: "samples\StyleEditor\*.py";            DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
 Source: "samples\StyleEditor\*.cfg";           DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
+
+Source: "samples\pySketch\*.py";           DestDir: "{app}\wxPython\samples\pySketch"; Components: samples
+Source: "samples\pySketch\images\*.bmp";   DestDir: "{app}\wxPython\samples\pySketch\images"; Components: samples
 
 
 ;;------------------------------------------------------------
