@@ -76,8 +76,9 @@ bool wxStaticLine::Create( wxWindow *parent,
 
     if ( !m_hWnd )
     {
+#ifdef __WXDEBUG__        
         wxLogDebug(_T("Failed to create static control"));
-
+#endif
         return FALSE;
     }
 

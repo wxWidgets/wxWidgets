@@ -173,6 +173,7 @@ libwx_msw_la_SOURCES = \
  spinbutt.cpp \
  statbmp.cpp \
  statbox.cpp \
+ statline.cpp \
  stattext.cpp \
  tbar95.cpp \
  textctrl.cpp \
