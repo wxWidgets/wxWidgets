@@ -3338,6 +3338,7 @@ bool wxWindow::HandlePaint()
                               ,0L
                               ,&vLineBundle
                              );
+                ::WinQueryWindowRect(GetHwnd(), &vRect);
                 wxDrawBorder( hPS
                              ,vRect
                              ,m_dwExStyle

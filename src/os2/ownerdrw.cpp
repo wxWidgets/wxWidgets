@@ -111,6 +111,8 @@ bool wxOwnerDrawn::OnDrawItem(
     COLORREF                        vRef;
     RECTL                           vRect = {rRect.x + 4, rRect.y + 1, rRect.x + (rRect.width - 2), rRect.y + rRect.height};
 
+    memset(&vCbnd, 0, sizeof(CHARBUNDLE));
+
     //
     // Use default font if no font set
     //
@@ -176,9 +178,21 @@ bool wxOwnerDrawn::OnDrawItem(
                      ,GetBValue(vRef)
                     );
     }
+
     rDC.SetTextBackground(vColBack);
     rDC.SetTextForeground(vColText);
     rDC.SetBackgroundMode(wxTRANSPARENT);
+    vCbnd.lColor     = vColText.GetPixel();
+    vCbnd.lBackColor = vColBack.GetPixel();
+    ::GpiSetAttrs( hPS
+                  ,PRIM_CHAR
+                  ,CBB_BACK_COLOR | CBB_COLOR
+                  ,0
+                  ,&vCbnd
+                 );
+    ::GpiSetBackMix( hPS
+                    ,BM_LEAVEALONE
+                   );
 
     //
     // Paint the background
@@ -248,19 +262,23 @@ bool wxOwnerDrawn::OnDrawItem(
 
     //
     // Draw the main item text sans the accel text
-    rDC.DrawText( sFullString
-                 ,nX
-                 ,rRect.y + 4
-                );
+    //
+    POINTL                      vPntStart = {nX, rRect.y + 4};
+    ::GpiCharStringAt( rDC.GetHPS()
+                      ,&vPntStart
+                      ,sFullString.length()
+                      ,(PCH)sFullString.c_str()
+                     );
     if (bFoundMneumonic)
     {
         //
         // Underline the mneumonic -- still won't work, but at least it "looks" right
         //
         wxPen                       vPen;
-        POINTL                      vPntStart = {nX + nWidth - 1, rRect.y + 2}; // Make it look pretty!
         POINTL                      vPntEnd = {nX + nWidth + nCharWidth - 3, rRect.y + 2}; //CharWidth is bit wide
 
+        vPntStart.x = nX + nWidth - 1;
+        vPntStart.y = rRect.y + 2; // Make it look pretty!
         vPen = wxPen(vColText, 1, wxSOLID); // Assuming we are always black
         rDC.SetPen(vPen);
         ::GpiMove(hPS, &vPntStart);
@@ -282,10 +300,13 @@ bool wxOwnerDrawn::OnDrawItem(
         //
         // Back off the starting position from the right edge
         //
-        rDC.DrawText( sAccel
-                     ,rRect.width - (nWidth + 7) // this seems to mimic the default OS/2 positioning
-                     ,rRect.y + 4
-                    );
+        vPntStart.x = rRect.width - (nWidth + 7);
+        vPntStart.y = rRect.y + 4;
+        ::GpiCharStringAt( rDC.GetHPS()
+                          ,&vPntStart
+                          ,sAccel.length()
+                          ,(PCH)sAccel.c_str()
+                         );
     }
 
     //
@@ -323,8 +344,14 @@ bool wxOwnerDrawn::OnDrawItem(
 
         if (vBmp.Ok())
         {
-            wxMemoryDC              vDCMem(&rDC);
 
+            wxMemoryDC              vDCMem(&rDC);
+            wxMemoryDC*             pOldDC = (wxMemoryDC*)vBmp.GetSelectedInto();
+
+            if(pOldDC != NULL)
+            {
+                vBmp.SetSelectedInto(NULL);
+            }
             vDCMem.SelectObject(vBmp);
 
             //
@@ -378,6 +405,7 @@ bool wxOwnerDrawn::OnDrawItem(
                          ,0L
                         );
             }
+            vBmp.SetSelectedInto(NULL);
         }
     }
     return TRUE;

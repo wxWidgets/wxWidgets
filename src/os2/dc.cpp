@@ -821,8 +821,8 @@ void wxDC::DoDrawRectangle(
                      );
         vPoint[0].x = vX + 1;
         vPoint[0].y = vY + 1;
-        vPoint[1].x = vX + vWidth - 2;
-        vPoint[1].y = vY + vHeight - 2;
+        vPoint[1].x = vX + vWidth - 1;
+        vPoint[1].y = vY + vHeight - 1;
         ::GpiMove(m_hPS, &vPoint[0]);
         ::GpiBox( m_hPS
                  ,lControl

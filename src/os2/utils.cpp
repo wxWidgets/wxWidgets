@@ -964,8 +964,8 @@ void wxDrawBorder(
     if (dwStyle & wxSIMPLE_BORDER ||
         dwStyle & wxSTATIC_BORDER)
     {
-        vPoint[1].x = rRect.xRight;
-        vPoint[1].y = rRect.yTop;
+        vPoint[1].x = rRect.xRight - 1;
+        vPoint[1].y = rRect.yTop - 1;
         ::GpiBox( hPS
                  ,DRO_OUTLINE
                  ,&vPoint[1]
@@ -977,7 +977,7 @@ void wxDrawBorder(
     {
         LINEBUNDLE                      vLineBundle;
 
-        vLineBundle.lColor     = 0x00FFFFFF; // White
+        vLineBundle.lColor     = 0x00FFFFFF; // WHITE
         vLineBundle.usMixMode  = FM_OVERPAINT;
         vLineBundle.fxWidth    = 2;
         vLineBundle.lGeomWidth = 2;
@@ -990,14 +990,26 @@ void wxDrawBorder(
                       ,0L
                       ,&vLineBundle
                      );
-        vPoint[1].x = rRect.xRight;
-        vPoint[1].y = rRect.yTop;
+        vPoint[1].x = rRect.xRight - 1;
+        vPoint[1].y = rRect.yTop - 1;
         ::GpiBox( hPS
                  ,DRO_OUTLINE
                  ,&vPoint[1]
                  ,0L
                  ,0L
                 );
+       vPoint[0].x = rRect.xLeft + 1;
+       vPoint[0].y = rRect.yBottom + 1;
+       ::GpiMove(hPS, &vPoint[0]);
+        vPoint[1].x = rRect.xRight - 2;
+        vPoint[1].y = rRect.yTop - 2;
+        ::GpiBox( hPS
+                 ,DRO_OUTLINE
+                 ,&vPoint[1]
+                 ,0L
+                 ,0L
+                );
+
         vLineBundle.lColor     = 0x00000000; // BLACK
         vLineBundle.usMixMode  = FM_OVERPAINT;
         vLineBundle.fxWidth    = 2;
@@ -1015,17 +1027,165 @@ void wxDrawBorder(
         vPoint[0].y = rRect.yBottom + 2;
         ::GpiMove(hPS, &vPoint[0]);
         vPoint[1].x = rRect.xLeft + 2;
-        vPoint[1].y = rRect.yTop - 2;
+        vPoint[1].y = rRect.yTop - 3;
         ::GpiLine(hPS, &vPoint[1]);
-        vPoint[1].x = rRect.xRight - 2;
-        vPoint[1].y = rRect.yTop - 2;
+        vPoint[1].x = rRect.xRight - 3;
+        vPoint[1].y = rRect.yTop - 3;
+        ::GpiLine(hPS, &vPoint[1]);
+
+        vPoint[0].x = rRect.xLeft + 3;
+        vPoint[0].y = rRect.yBottom + 3;
+        ::GpiMove(hPS, &vPoint[0]);
+        vPoint[1].x = rRect.xLeft + 3;
+        vPoint[1].y = rRect.yTop - 4;
+        ::GpiLine(hPS, &vPoint[1]);
+        vPoint[1].x = rRect.xRight - 4;
+        vPoint[1].y = rRect.yTop - 4;
         ::GpiLine(hPS, &vPoint[1]);
     }
     if (dwStyle & wxDOUBLE_BORDER)
     {
+        LINEBUNDLE                      vLineBundle;
+
+        vLineBundle.lColor     = 0x00FFFFFF; // WHITE
+        vLineBundle.usMixMode  = FM_OVERPAINT;
+        vLineBundle.fxWidth    = 2;
+        vLineBundle.lGeomWidth = 2;
+        vLineBundle.usType     = LINETYPE_SOLID;
+        vLineBundle.usEnd      = 0;
+        vLineBundle.usJoin     = 0;
+        ::GpiSetAttrs( hPS
+                      ,PRIM_LINE
+                      ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
+                      ,0L
+                      ,&vLineBundle
+                     );
+        vPoint[1].x = rRect.xRight - 1;
+        vPoint[1].y = rRect.yTop - 1;
+        ::GpiBox( hPS
+                 ,DRO_OUTLINE
+                 ,&vPoint[1]
+                 ,0L
+                 ,0L
+                );
+        vLineBundle.lColor     = 0x00000000; // WHITE
+        vLineBundle.usMixMode  = FM_OVERPAINT;
+        vLineBundle.fxWidth    = 2;
+        vLineBundle.lGeomWidth = 2;
+        vLineBundle.usType     = LINETYPE_SOLID;
+        vLineBundle.usEnd      = 0;
+        vLineBundle.usJoin     = 0;
+        ::GpiSetAttrs( hPS
+                      ,PRIM_LINE
+                      ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
+                      ,0L
+                      ,&vLineBundle
+                     );
+        vPoint[0].x = rRect.xLeft + 2;
+        vPoint[0].y = rRect.yBottom + 2;
+        ::GpiMove(hPS, &vPoint[0]);
+        vPoint[1].x = rRect.xRight - 2;
+        vPoint[1].y = rRect.yTop - 2;
+        ::GpiBox( hPS
+                 ,DRO_OUTLINE
+                 ,&vPoint[1]
+                 ,0L
+                 ,0L
+                );
+        vLineBundle.lColor     = 0x00FFFFFF; // BLACK
+        vLineBundle.usMixMode  = FM_OVERPAINT;
+        vLineBundle.fxWidth    = 2;
+        vLineBundle.lGeomWidth = 2;
+        vLineBundle.usType     = LINETYPE_SOLID;
+        vLineBundle.usEnd      = 0;
+        vLineBundle.usJoin     = 0;
+        ::GpiSetAttrs( hPS
+                      ,PRIM_LINE
+                      ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
+                      ,0L
+                      ,&vLineBundle
+                     );
+        vPoint[0].x = rRect.xLeft + 3;
+        vPoint[0].y = rRect.yBottom + 3;
+        ::GpiMove(hPS, &vPoint[0]);
+        vPoint[1].x = rRect.xRight - 3;
+        vPoint[1].y = rRect.yTop - 3;
+        ::GpiBox( hPS
+                 ,DRO_OUTLINE
+                 ,&vPoint[1]
+                 ,0L
+                 ,0L
+                );
     }
     if (dwStyle & wxRAISED_BORDER)
     {
+        LINEBUNDLE                      vLineBundle;
+
+        vLineBundle.lColor     = 0x00000000; // BLACK
+        vLineBundle.usMixMode  = FM_OVERPAINT;
+        vLineBundle.fxWidth    = 2;
+        vLineBundle.lGeomWidth = 2;
+        vLineBundle.usType     = LINETYPE_SOLID;
+        vLineBundle.usEnd      = 0;
+        vLineBundle.usJoin     = 0;
+        ::GpiSetAttrs( hPS
+                      ,PRIM_LINE
+                      ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
+                      ,0L
+                      ,&vLineBundle
+                     );
+        vPoint[1].x = rRect.xRight - 1;
+        vPoint[1].y = rRect.yTop - 1;
+        ::GpiBox( hPS
+                 ,DRO_OUTLINE
+                 ,&vPoint[1]
+                 ,0L
+                 ,0L
+                );
+       vPoint[0].x = rRect.xLeft + 1;
+       vPoint[0].y = rRect.yBottom + 1;
+       ::GpiMove(hPS, &vPoint[0]);
+        vPoint[1].x = rRect.xRight - 2;
+        vPoint[1].y = rRect.yTop - 2;
+        ::GpiBox( hPS
+                 ,DRO_OUTLINE
+                 ,&vPoint[1]
+                 ,0L
+                 ,0L
+                );
+
+        vLineBundle.lColor     = 0x00FFFFFF; // WHITE
+        vLineBundle.usMixMode  = FM_OVERPAINT;
+        vLineBundle.fxWidth    = 2;
+        vLineBundle.lGeomWidth = 2;
+        vLineBundle.usType     = LINETYPE_SOLID;
+        vLineBundle.usEnd      = 0;
+        vLineBundle.usJoin     = 0;
+        ::GpiSetAttrs( hPS
+                      ,PRIM_LINE
+                      ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
+                      ,0L
+                      ,&vLineBundle
+                     );
+        vPoint[0].x = rRect.xLeft + 2;
+        vPoint[0].y = rRect.yBottom + 2;
+        ::GpiMove(hPS, &vPoint[0]);
+        vPoint[1].x = rRect.xLeft + 2;
+        vPoint[1].y = rRect.yTop - 3;
+        ::GpiLine(hPS, &vPoint[1]);
+        vPoint[1].x = rRect.xRight - 3;
+        vPoint[1].y = rRect.yTop - 3;
+        ::GpiLine(hPS, &vPoint[1]);
+
+        vPoint[0].x = rRect.xLeft + 3;
+        vPoint[0].y = rRect.yBottom + 3;
+        ::GpiMove(hPS, &vPoint[0]);
+        vPoint[1].x = rRect.xLeft + 3;
+        vPoint[1].y = rRect.yTop - 4;
+        ::GpiLine(hPS, &vPoint[1]);
+        vPoint[1].x = rRect.xRight - 4;
+        vPoint[1].y = rRect.yTop - 4;
+        ::GpiLine(hPS, &vPoint[1]);
     }
 } // end of wxDrawBorder
 
