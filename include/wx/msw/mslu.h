@@ -33,7 +33,7 @@ inline bool wxUsingUnicowsDll()
 
 #if wxUSE_GUI
 
-WXDLLEXPORT int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc, 
+WXDLLIMPEXP_BASE int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc, 
                                   WXLPARAM lData, WXWPARAM wData, 
                                   int x, int y, int cx, int cy, 
                                   unsigned int flags);
@@ -41,10 +41,10 @@ WXDLLEXPORT int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
     wxMSLU_DrawStateW((WXHDC)dc,(WXHBRUSH)br,(WXFARPROC)func, \
                       ld, wd, x, y, cx, cy, flags)
 
-WXDLLEXPORT int wxMSLU_GetOpenFileNameW(void *ofn);
+WXDLLIMPEXP_BASE int wxMSLU_GetOpenFileNameW(void *ofn);
 #define GetOpenFileNameW(ofn) wxMSLU_GetOpenFileNameW((void*)ofn)
 
-WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn);
+WXDLLIMPEXP_BASE int wxMSLU_GetSaveFileNameW(void *ofn);
 #define GetSaveFileNameW(ofn) wxMSLU_GetSaveFileNameW((void*)ofn)
 
 #endif
@@ -53,18 +53,18 @@ WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn);
 // Missing libc file manipulation functions in Win9x
 //------------------------------------------------------------------------
 
-WXDLLEXPORT int wxMSLU__trename(const wxChar *oldname, const wxChar *newname);
-WXDLLEXPORT int wxMSLU__tremove(const wxChar *name);
+WXDLLIMPEXP_BASE int wxMSLU__trename(const wxChar *oldname, const wxChar *newname);
+WXDLLIMPEXP_BASE int wxMSLU__tremove(const wxChar *name);
 
 #if defined( __VISUALC__ ) \
     || ( defined(__MINGW32__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
     || ( defined(__MWERKS__) && defined(__WXMSW__) ) \
     || ( defined(__BORLANDC__) && (__BORLANDC__ > 0x460) )
-WXDLLEXPORT int wxMSLU__wopen(const wxChar *name, int flags, int mode);
-WXDLLEXPORT int wxMSLU__waccess(const wxChar *name, int mode);
-WXDLLEXPORT int wxMSLU__wmkdir(const wxChar *name);
-WXDLLEXPORT int wxMSLU__wrmdir(const wxChar *name);
-WXDLLEXPORT int wxMSLU__wstat(const wxChar *name, struct _stat *buffer);
+WXDLLIMPEXP_BASE int wxMSLU__wopen(const wxChar *name, int flags, int mode);
+WXDLLIMPEXP_BASE int wxMSLU__waccess(const wxChar *name, int mode);
+WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wxChar *name);
+WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wxChar *name);
+WXDLLIMPEXP_BASE int wxMSLU__wstat(const wxChar *name, struct _stat *buffer);
 #endif
 
 #endif // wxUSE_UNICODE_MSLU
