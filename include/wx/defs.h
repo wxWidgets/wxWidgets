@@ -274,7 +274,9 @@
         // Cygwin supports bool
         #define HAVE_BOOL
     #elif defined(__VISAGECPP__)
-        typedef unsigned long bool;
+        #if __IBMCPP__ < 400
+            typedef unsigned long bool;
+        #endif
         #define HAVE_BOOL
     #endif // compilers
 #endif // HAVE_BOOL
