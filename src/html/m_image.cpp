@@ -276,8 +276,8 @@ class wxHtmlImageCell : public wxHtmlCell
 {
 public:
     wxHtmlImageCell(wxWindow *window,
-                    wxFSFile *input, int w = -1, int h = -1, 
-                    double scale = 1.0, int align = wxHTML_ALIGN_BOTTOM, 
+                    wxFSFile *input, int w = -1, int h = -1,
+                    double scale = 1.0, int align = wxHTML_ALIGN_BOTTOM,
                     const wxString& mapname = wxEmptyString);
     ~wxHtmlImageCell();
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
@@ -366,8 +366,8 @@ static const char * broken_image_xpm[] = {
 ".++++++++++++++++++++++++++#.",
 "############################."};
 
-wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input, 
-                                 int w, int h, double scale, int align, 
+wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
+                                 int w, int h, double scale, int align,
                                  const wxString& mapname) : wxHtmlCell()
 {
     m_window = window ? wxStaticCast(window, wxScrolledWindow) : NULL;
@@ -423,7 +423,7 @@ wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
             }
 
             if ( readImg )
-#endif
+#endif // wxUSE_GIF && wxUSE_TIMER
             {
                 SetImage(wxImage(*s, wxBITMAP_TYPE_ANY));
             }
@@ -433,7 +433,8 @@ wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
     {
         if ( m_bmpW == -1 && m_bmpH == -1 )
         {
-            m_bmpW == 29, m_bmpH = 31;            
+            m_bmpW = 29;
+            m_bmpH = 31;
         }
         else
         {
@@ -508,7 +509,7 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
     m_window->CalcScrolledPosition(m_physX, m_physY, &x, &y);
     wxRect rect(x, y, m_Width, m_Height);
 
-    if ( m_window->GetClientRect().Intersects(rect) && 
+    if ( m_window->GetClientRect().Intersects(rect) &&
          m_gifDecoder->ConvertToImage(&img) )
     {
         if ( (int)m_gifDecoder->GetWidth() != m_Width ||
@@ -581,7 +582,7 @@ wxHtmlLinkInfo *wxHtmlImageCell::GetLink( int x, int y ) const
             p = p->GetParent();
         }
         p = op;
-        wxHtmlCell *cell = (wxHtmlCell*)p->Find(wxHTML_COND_ISIMAGEMAP, 
+        wxHtmlCell *cell = (wxHtmlCell*)p->Find(wxHTML_COND_ISIMAGEMAP,
                                                 (const void*)(&m_mapName));
         if (!cell)
         {
@@ -616,9 +617,9 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 wxFSFile *str;
                 wxString tmp = tag.GetParam(wxT("SRC"));
                 wxString mn = wxEmptyString;
-                
+
                 str = m_WParser->OpenURL(wxHTML_URL_IMAGE, tmp);
-                
+
                 if (tag.HasParam(wxT("WIDTH")))
                     tag.GetParamAsInt(wxT("WIDTH"), &w);
                 if (tag.HasParam(wxT("HEIGHT")))
@@ -643,8 +644,8 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 }
                 wxHtmlImageCell *cel = new wxHtmlImageCell(
                                           m_WParser->GetWindow(),
-                                          str, w, h, 
-                                          m_WParser->GetPixelScale(), 
+                                          str, w, h,
+                                          m_WParser->GetPixelScale(),
                                           al, mn);
                 cel->SetLink(m_WParser->GetLink());
                 cel->SetId(tag.GetParam(wxT("id"))); // may be empty
