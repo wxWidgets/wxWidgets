@@ -16,6 +16,9 @@
 #include "wx/utils.h"
 #include "wx/string.h"
 
+#include "wx/intl.h"
+#include "wx/log.h"
+
 #include <stdarg.h>
 #include <dirent.h>
 #include <string.h>
@@ -30,7 +33,7 @@
 
 
 #ifdef __SVR4__
-#include <sys/systeminfo.h>
+  #include <sys/systeminfo.h>
 #endif
 
 //------------------------------------------------------------------------
@@ -203,7 +206,7 @@ void wxFatalError( const wxString &msg, const wxString &title )
   if (!title.IsNull()) fprintf( stderr, "%s ", WXSTRINGCAST(title) );
   if (!msg.IsNull()) fprintf( stderr, ": %s", WXSTRINGCAST(msg) );
   fprintf( stderr, ".\n" );
-  exit(1);
+  exit(3); // the same exit code as for abort()
 };
 
 //------------------------------------------------------------------------
@@ -222,10 +225,11 @@ bool wxDirExists( const wxString& dir )
 // subprocess routines
 //------------------------------------------------------------------------
 
-typedef struct {
+struct wxEndProcessData
+{
   gint pid, tag;
   wxProcess *process;
-} wxEndProcessData;
+};
 
 static void GTK_EndProcessDetector(gpointer data, gint source,
                                    GdkInputCondition WXUNUSED(condition) )
@@ -261,12 +265,11 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
     wxEndProcessData *data = new wxEndProcessData;
     int end_proc_detect[2];
 
-    if (*argv == NULL)
-        return 0;
+    wxCHECK_MSG( *argv, 0, "can't exec empty command" );
 
     /* Create pipes */
     if (pipe(end_proc_detect) == -1) {
-      perror("pipe failed");
+      wxLogSysError(_("Pipe creation failed"));
       return 0;
     }
 
@@ -277,60 +280,67 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
     pid_t pid = fork();
 #endif
     if (pid == -1) {
-        perror ("fork failed");
+        // error
+        wxLogSysError(_("Fork failed"));
         return 0;
-    } else if (pid == 0) {
-        /* Close fd not useful */
+    }
+    else if (pid == 0) {
+        // we're in child
         close(end_proc_detect[0]); // close reading side
 
-        /* child */
 #ifdef _AIX
         execvp ((const char *)*argv, (const char **)argv);
 #else
         execvp (*argv, argv);
 #endif
-        if (errno == ENOENT)
-            wxError("command not found", *argv);
-        else
-            perror (*argv);
-        wxError("could not execute", *argv);
-        _exit (-1);
+        // there is no return after successful exec()
+        wxLogSysError(_("Can't execute '%s'"), *argv);
+
+        _exit(-1);
     }
+    else {
+      // we're in parent
+      close(end_proc_detect[1]); // close writing side
+      data->tag = gdk_input_add(end_proc_detect[0], GDK_INPUT_READ,
+                                GTK_EndProcessDetector, (gpointer)data);
+      data->pid = pid;
+      if (!sync) {
+        data->process = process;
+      }
+      else {
+        data->process = (wxProcess *) NULL;
+        data->pid = -(data->pid);
 
-    close(end_proc_detect[1]); // close writing side
-    data->tag = gdk_input_add(end_proc_detect[0], GDK_INPUT_READ,
-                              GTK_EndProcessDetector, (gpointer)data);
-    data->pid = pid;
-    if (!sync) {
-      data->process = process;
-    } else {
-      data->process = (wxProcess *) NULL;
-      data->pid = -(data->pid);
+        while (data->pid != 0)
+          wxYield();
 
-      while (data->pid != 0)
-        wxYield();
+        delete data;
+      }
 
-      delete data;
+      // @@@ our return value indicates success even if execvp() in the child
+      //     failed!
+      return pid;
     }
-
-    return pid;
 };
 
 long wxExecute( const wxString& command, bool sync, wxProcess *process )
 {
-    if (command.IsNull() || command == "") return FALSE;
+    static const char *IFS = " \t\n";
+
+    wxCHECK_MSG( !command.IsEmpty(), 0, "can't exec empty command" );
 
     int argc = 0;
     char *argv[127];
-    char tmp[1024];
-    const char *IFS = " \t\n";
+    char *tmp = new char[command.Len() + 1];
+    strcpy(tmp, command);
 
-    strncpy (tmp, command, sizeof(tmp) / sizeof(char) - 1);
-    tmp[sizeof (tmp) / sizeof (char) - 1] = '\0';
-    argv[argc++] = strtok (tmp, IFS);
+    argv[argc++] = strtok(tmp, IFS);
     while ((argv[argc++] = strtok((char *) NULL, IFS)) != NULL)
         /* loop */ ;
-    return wxExecute(argv, sync, process);
+
+    long lRc = wxExecute(argv, sync, process);
+    
+    delete [] tmp;
+
+    return lRc;
 };
-
-

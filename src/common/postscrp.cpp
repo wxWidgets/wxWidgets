@@ -172,7 +172,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperDatabase, wxList)
 #endif
 
-wxPostScriptDC::wxPostScriptDC (void)
+wxPostScriptDC::wxPostScriptDC ()
 {
 //  m_yOrigin = 792;		            // For EPS output
   m_yOrigin = 842;		            // For A4 output
@@ -236,7 +236,7 @@ bool wxPostScriptDC::Create(const wxString& file, bool interactive, wxWindow *pa
   return m_ok;
 }
 
-wxPostScriptDC::~wxPostScriptDC (void)
+wxPostScriptDC::~wxPostScriptDC ()
 {
   if (m_pstream)
     delete m_pstream;
@@ -305,7 +305,7 @@ void wxPostScriptDC::SetClippingRegion (long cx, long cy, long cw, long ch)
   *m_pstream << "closepath clip newpath\n";
 }
 
-void wxPostScriptDC::DestroyClippingRegion (void)
+void wxPostScriptDC::DestroyClippingRegion ()
 {
   if (!m_pstream)
     return;
@@ -316,7 +316,7 @@ void wxPostScriptDC::DestroyClippingRegion (void)
     }
 }
 
-void wxPostScriptDC::Clear (void)
+void wxPostScriptDC::Clear ()
 {
 }
 
@@ -1084,7 +1084,7 @@ bool wxPostScriptDC::StartDoc (const wxString& message)
 }
 
 
-void wxPostScriptDC::EndDoc (void)
+void wxPostScriptDC::EndDoc ()
 {
     static char wxPostScriptHeaderReencodeISO1[] =
     "\n/reencodeISO {\n"
@@ -1323,7 +1323,7 @@ void wxPostScriptDC::EndDoc (void)
 #endif
 }
 
-void wxPostScriptDC::StartPage (void)
+void wxPostScriptDC::StartPage ()
 {
   if (!m_pstream)
     return;
@@ -1355,7 +1355,7 @@ void wxPostScriptDC::StartPage (void)
 	*m_pstream << translate_x << " " << translate_y << " translate\n";
 }
 
-void wxPostScriptDC::EndPage (void)
+void wxPostScriptDC::EndPage ()
 {
   if (!m_pstream)
     return;
@@ -1545,7 +1545,7 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
   return TRUE;
 }
 
-long wxPostScriptDC::GetCharHeight (void)
+long wxPostScriptDC::GetCharHeight ()
 {
   if (m_font.Ok())
     return  m_font.GetPointSize ();
@@ -1866,7 +1866,7 @@ void wxPostScriptDC::DrawSpline( wxList *points )
         *(GetStream()) << c << " " << (GetYOrigin() - d) << " lineto stroke\n";
 }
 
-long wxPostScriptDC::GetCharWidth (void)
+long wxPostScriptDC::GetCharWidth ()
 {
 	// Chris Breeze: reasonable approximation using wxMODERN/Courier
 	return (long) (GetCharHeight() * 72.0 / 120.0);
@@ -2136,7 +2136,7 @@ wxDialog(parent, -1, title, pos, size, style)
   wxEndBusyCursor();
 }
 
-int wxPostScriptPrintDialog::ShowModal (void)
+int wxPostScriptPrintDialog::ShowModal ()
 {
   if ( wxDialog::ShowModal() == wxID_OK )
   {
@@ -2221,27 +2221,27 @@ void wxSetAFMPath(const char *f)
 }
 
 // Get current values
-char *wxGetPrinterCommand(void)
+char *wxGetPrinterCommand()
 {
   return wxThePrintSetupData->GetPrinterCommand();
 }
 
-char *wxGetPrintPreviewCommand(void)
+char *wxGetPrintPreviewCommand()
 {
   return wxThePrintSetupData->GetPrintPreviewCommand();
 }
 
-char *wxGetPrinterOptions(void)
+char *wxGetPrinterOptions()
 {
   return wxThePrintSetupData->GetPrinterOptions();
 }
 
-char *wxGetPrinterFile(void)
+char *wxGetPrinterFile()
 {
   return wxThePrintSetupData->GetPrinterFile();
 }
 
-int wxGetPrinterOrientation(void)
+int wxGetPrinterOrientation()
 {
   return wxThePrintSetupData->GetPrinterOrientation();
 }
@@ -2256,12 +2256,12 @@ void wxGetPrinterTranslation(long *x, long *y)
   wxThePrintSetupData->GetPrinterTranslation(x, y);
 }
 
-int wxGetPrinterMode(void)
+int wxGetPrinterMode()
 {
   return wxThePrintSetupData->GetPrinterMode();
 }
 
-char *wxGetAFMPath(void)
+char *wxGetAFMPath()
 {
   return wxThePrintSetupData->GetAFMPath();
 }
@@ -2270,7 +2270,7 @@ char *wxGetAFMPath(void)
  * Print setup data
  */
 
-wxPrintSetupData::wxPrintSetupData(void)
+wxPrintSetupData::wxPrintSetupData()
 {
   printerCommand = (char *) NULL;
   previewCommand = (char *) NULL;
@@ -2288,7 +2288,7 @@ wxPrintSetupData::wxPrintSetupData(void)
   printerFile = (char *) NULL;
 }
 
-wxPrintSetupData::~wxPrintSetupData(void)
+wxPrintSetupData::~wxPrintSetupData()
 {
   if (printerCommand)
     delete[] printerCommand;
@@ -2411,32 +2411,32 @@ void wxPrintSetupData::SetColour(bool col)
 }
 
 // Get current values
-char *wxPrintSetupData::GetPrinterCommand(void)
+char *wxPrintSetupData::GetPrinterCommand()
 {
   return printerCommand;
 }
 
-char *wxPrintSetupData::GetPrintPreviewCommand(void)
+char *wxPrintSetupData::GetPrintPreviewCommand()
 {
   return previewCommand;
 }
 
-char *wxPrintSetupData::GetPrinterOptions(void)
+char *wxPrintSetupData::GetPrinterOptions()
 {
   return printerFlags;
 }
 
-char *wxPrintSetupData::GetPrinterFile(void)
+char *wxPrintSetupData::GetPrinterFile()
 {
   return printerFile;
 }
 
-char *wxPrintSetupData::GetPaperName(void)
+char *wxPrintSetupData::GetPaperName()
 {
   return paperName;
 }
 
-int wxPrintSetupData::GetPrinterOrientation(void)
+int wxPrintSetupData::GetPrinterOrientation()
 {
   return printerOrient;
 }
@@ -2453,17 +2453,17 @@ void wxPrintSetupData::GetPrinterTranslation(long *x, long *y)
   *y = printerTranslateY;
 }
 
-int wxPrintSetupData::GetPrinterMode(void)
+int wxPrintSetupData::GetPrinterMode()
 {
   return printerMode;
 }
 
-char *wxPrintSetupData::GetAFMPath(void)
+char *wxPrintSetupData::GetAFMPath()
 {
   return afmPath;
 }
 
-bool wxPrintSetupData::GetColour(void)
+bool wxPrintSetupData::GetColour()
 {
   return printColour;
 }
@@ -2538,21 +2538,21 @@ wxPrintPaperType::wxPrintPaperType(const char *name, int wmm, int hmm, int wp, i
   pageName = copystring(name);
 }
 
-wxPrintPaperType::~wxPrintPaperType(void)
+wxPrintPaperType::~wxPrintPaperType()
 {
   delete[] pageName;
 }
 
-wxPrintPaperDatabase::wxPrintPaperDatabase(void):wxList(wxKEY_STRING)
+wxPrintPaperDatabase::wxPrintPaperDatabase():wxList(wxKEY_STRING)
 {
   DeleteContents(TRUE);
 }
 
-wxPrintPaperDatabase::~wxPrintPaperDatabase(void)
+wxPrintPaperDatabase::~wxPrintPaperDatabase()
 {
 }
 
-void wxPrintPaperDatabase::CreateDatabase(void)
+void wxPrintPaperDatabase::CreateDatabase()
 {
   // Need correct values for page size in pixels.
   // Each unit is one 'point' = 1/72 of an inch.
@@ -2570,7 +2570,7 @@ void wxPrintPaperDatabase::CreateDatabase(void)
   AddPaperType(_("Legal 8 1/2 x 14 in"), 216, 356,     612, 1009);
 }
 
-void wxPrintPaperDatabase::ClearDatabase(void)
+void wxPrintPaperDatabase::ClearDatabase()
 {
   Clear();
 }
