@@ -14,6 +14,7 @@
 
 #include "wx/cursor.h"
 #include "wx/utils.h"
+#include "wx/app.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
@@ -204,7 +205,8 @@ void wxEndBusyCursor()
     wxSetCursor( gs_savedCursor );
     gs_savedCursor = wxNullCursor;
 
-    wxYield();
+    if (wxTheApp)
+        wxTheApp->SendIdleEvents();
 }
 
 void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
@@ -219,7 +221,8 @@ void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
 
     wxSetCursor( wxCursor(wxCURSOR_WATCH) );
 
-    wxYield();
+    if (wxTheApp)
+        wxTheApp->SendIdleEvents();
 }
 
 bool wxIsBusy()
