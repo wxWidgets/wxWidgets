@@ -634,7 +634,8 @@ bool wxGridCellTextEditor::IsAcceptedKey(wxKeyEvent& event)
                 return TRUE;
 
             default:
-                if ( isprint(keycode) )
+                // accept 8 bit chars too if isprint() agrees
+                if ( (keycode < 255) && (isprint(keycode)) )
                     return TRUE;
         }
     }
@@ -883,7 +884,7 @@ bool wxGridCellNumberEditor::IsAcceptedKey(wxKeyEvent& event)
                 return TRUE;
 
             default:
-                if ( isdigit(keycode) )
+                if ( (keycode < 128) && isdigit(keycode) )
                     return TRUE;
         }
     }
@@ -1093,7 +1094,8 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
 
             default:
                 // additionally accept 'e' as in '1e+6'
-                if ( isdigit(keycode) || tolower(keycode) == 'e' )
+                if ( (keycode < 128) &&
+                     (isdigit(keycode) || tolower(keycode) == 'e') )
                     return TRUE;
         }
     }
