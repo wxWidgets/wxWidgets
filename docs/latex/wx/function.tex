@@ -1022,16 +1022,14 @@ See also \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEClient}{wxddeclient},
 
 \func{void}{wxDebugMsg}{\param{const wxString\& }{fmt}, \param{...}{}}
 
+{\bf This function is deprecated, use \helpref{wxLogDebug}{wxlogoverview} instead!}
+
 Display a debugging message; under Windows, this will appear on the
 debugger command window, and under Unix, it will be written to standard
 error.
 
 The syntax is identical to {\bf printf}: pass a format string and a
 variable list of arguments.
-
-Note that under Windows, you can see the debugging messages without a
-debugger if you have the DBWIN debug log application that comes with
-Microsoft C++.
 
 {\bf Tip:} under Windows, if your application crashes before the
 message appears in the debugging window, put a wxYield call after

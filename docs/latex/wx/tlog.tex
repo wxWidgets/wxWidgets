@@ -44,6 +44,9 @@ first argument.
 \item{\bf wxLogDebug} is {\bf the} right function for debug output. It only
 does anything at all in the debug mode (when the preprocessor symbol
 \_\_WXDEBUG\_\_ is defined) and expands to nothing in release mode (otherwise).
+{\bf Tip:} under Windows, you must either run the program under debugger or
+use a 3rd party program such as DbgView (from 
+{\tt http://www.sysinternals.com}) to actually see the debug output.
 \item{\bf wxLogTrace} as {\bf wxLogDebug} only does something in debug
 build. The reason for making it a separate function from it is that usually
 there are a lot of trace messages, so it might make sense to separate them

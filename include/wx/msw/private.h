@@ -197,22 +197,6 @@ extern LONG APIENTRY _EXPORT
 #endif
 
 // ---------------------------------------------------------------------------
-// debug messages
-// ---------------------------------------------------------------------------
-#if defined(__WIN95__) && defined(__WXDEBUG__) && wxUSE_DBWIN32
-
-    #ifndef __TWIN32__
-        #ifdef OutputDebugString
-            #undef OutputDebugString
-        #endif
-
-        #define OutputDebugString OutputDebugStringW95
-    #endif // __TWIN32__
-
-    extern void OutputDebugStringW95(const wxChar*, ...);
-#endif // USE_DBWIN32
-
-// ---------------------------------------------------------------------------
 // useful macros and functions
 // ---------------------------------------------------------------------------
 
