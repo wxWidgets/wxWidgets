@@ -340,32 +340,9 @@ bool wxDocument::OnSaveDocument(const wxString& file)
     if ( !file )
         return FALSE;
 
-    wxString msgTitle;
-    if (wxTheApp->GetAppName() != wxT(""))
-        msgTitle = wxTheApp->GetAppName();
-    else
-        msgTitle = wxString(_("File error"));
+    if ( !DoSaveDocument(file) )
+       return FALSE;
 
-#if wxUSE_STD_IOSTREAM
-    wxSTD ofstream store(file.mb_str());
-    if (store.fail() || store.bad())
-#else
-    wxFileOutputStream store(file);
-    if (store.GetLastError() != wxSTREAM_NO_ERROR)
-#endif
-    {
-        (void)wxMessageBox(_("Sorry, could not open this file for saving."), msgTitle, wxOK | wxICON_EXCLAMATION,
-                           GetDocumentWindow());
-        // Saving error
-        return FALSE;
-    }
-    if (!SaveObject(store))
-    {
-        (void)wxMessageBox(_("Sorry, could not save this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
-                           GetDocumentWindow());
-        // Saving error
-        return FALSE;
-    }
     Modify(FALSE);
     SetFilename(file);
     SetDocumentSaved(TRUE);
@@ -381,37 +358,9 @@ bool wxDocument::OnOpenDocument(const wxString& file)
     if (!OnSaveModified())
         return FALSE;
 
-    wxString msgTitle;
-    if (wxTheApp->GetAppName() != wxT(""))
-        msgTitle = wxTheApp->GetAppName();
-    else
-        msgTitle = wxString(_("File error"));
+    if ( !DoOpenDocument(file) )
+       return FALSE;
 
-#if wxUSE_STD_IOSTREAM
-    wxSTD ifstream store(file.mb_str());
-    if (store.fail() || store.bad())
-#else
-    wxFileInputStream store(file);
-    if (store.GetLastError() != wxSTREAM_NO_ERROR)
-#endif
-    {
-        (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
-                           GetDocumentWindow());
-        return FALSE;
-    }
-#if wxUSE_STD_IOSTREAM
-    LoadObject(store);
-    if ( !store && !store.eof() )
-#else
-    int res = LoadObject(store).GetLastError();
-    if ((res != wxSTREAM_NO_ERROR) &&
-        (res != wxSTREAM_EOF))
-#endif
-    {
-        (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
-                           GetDocumentWindow());
-        return FALSE;
-    }
     SetFilename(file, TRUE);
     Modify(FALSE);
     m_savedYet = TRUE;
@@ -595,6 +544,76 @@ void wxDocument::SetFilename(const wxString& filename, bool notifyViews)
     }
 }
 
+bool wxDocument::DoSaveDocument(const wxString& file)
+{
+    wxString msgTitle;
+    if (wxTheApp->GetAppName() != wxT(""))
+        msgTitle = wxTheApp->GetAppName();
+    else
+        msgTitle = wxString(_("File error"));
+
+#if wxUSE_STD_IOSTREAM
+    wxSTD ofstream store(file.mb_str());
+    if (store.fail() || store.bad())
+#else
+    wxFileOutputStream store(file);
+    if (store.GetLastError() != wxSTREAM_NO_ERROR)
+#endif
+    {
+        (void)wxMessageBox(_("Sorry, could not open this file for saving."), msgTitle, wxOK | wxICON_EXCLAMATION,
+                           GetDocumentWindow());
+        // Saving error
+        return FALSE;
+    }
+    if (!SaveObject(store))
+    {
+        (void)wxMessageBox(_("Sorry, could not save this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
+                           GetDocumentWindow());
+        // Saving error
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+bool wxDocument::DoOpenDocument(const wxString& file)
+{
+    wxString msgTitle;
+    if (wxTheApp->GetAppName() != wxT(""))
+        msgTitle = wxTheApp->GetAppName();
+    else
+        msgTitle = wxString(_("File error"));
+
+#if wxUSE_STD_IOSTREAM
+    wxSTD ifstream store(file.mb_str());
+    if (store.fail() || store.bad())
+#else
+    wxFileInputStream store(file);
+    if (store.GetLastError() != wxSTREAM_NO_ERROR)
+#endif
+    {
+        (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
+                           GetDocumentWindow());
+        return FALSE;
+    }
+#if wxUSE_STD_IOSTREAM
+    LoadObject(store);
+    if ( !store && !store.eof() )
+#else
+    int res = LoadObject(store).GetLastError();
+    if ((res != wxSTREAM_NO_ERROR) &&
+        (res != wxSTREAM_EOF))
+#endif
+    {
+        (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
+                           GetDocumentWindow());
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+
 // ----------------------------------------------------------------------------
 // Document view
 // ----------------------------------------------------------------------------
@@ -719,9 +738,9 @@ wxDocTemplate::~wxDocTemplate()
 // Tries to dynamically construct an object of the right class.
 wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
 {
-    if (!m_docClassInfo)
+    wxDocument *doc = DoCreateDocument();
+    if ( doc == NULL )
         return (wxDocument *) NULL;
-    wxDocument *doc = (wxDocument *)m_docClassInfo->CreateObject();
     
     if (InitDocument(doc, path, flags))
     {
@@ -752,9 +771,10 @@ bool wxDocTemplate::InitDocument(wxDocument* doc, const wxString& path, long fla
 
 wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
 {
-    if (!m_viewClassInfo)
+    wxView *view = DoCreateView();
+    if ( view == NULL )
         return (wxView *) NULL;
-    wxView *view = (wxView *)m_viewClassInfo->CreateObject();
+
     view->SetDocument(doc);
     if (view->OnCreate(doc, flags))
     {
@@ -772,6 +792,22 @@ wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
 bool wxDocTemplate::FileMatchesTemplate(const wxString& path)
 {
     return GetDefaultExtension().IsSameAs(FindExtension(path));
+}
+
+wxDocument *wxDocTemplate::DoCreateDocument()
+{
+    if (!m_docClassInfo)
+        return (wxDocument *) NULL;
+
+    return (wxDocument *)m_docClassInfo->CreateObject();
+}
+
+wxView *wxDocTemplate::DoCreateView()
+{
+    if (!m_viewClassInfo)
+        return (wxView *) NULL;
+
+    return (wxView *)m_viewClassInfo->CreateObject();
 }
 
 // ----------------------------------------------------------------------------

@@ -162,6 +162,12 @@ protected:
     wxCommandProcessor*   m_commandProcessor;
     bool                  m_savedYet;
 
+    // Called by OnSaveDocument and OnOpenDocument to implement standard
+    // Save/Load behavior. Re-implement in derived class for custom
+    // behavior.
+    virtual bool DoSaveDocument(const wxString& file);
+    virtual bool DoOpenDocument(const wxString& file);
+
 private:
     DECLARE_ABSTRACT_CLASS(wxDocument)
     DECLARE_NO_COPY_CLASS(wxDocument)
@@ -294,6 +300,12 @@ protected:
     // For dynamic creation of appropriate instances.
     wxClassInfo*      m_docClassInfo;
     wxClassInfo*      m_viewClassInfo;
+
+    // Called by CreateDocument and CreateView to create the actual document/view object.
+    // By default uses the ClassInfo provided to the constructor. Override these functions
+    // to provide a different method of creation.
+    virtual wxDocument *DoCreateDocument();
+    virtual wxView *DoCreateView();
 
 private:
     DECLARE_CLASS(wxDocTemplate)
