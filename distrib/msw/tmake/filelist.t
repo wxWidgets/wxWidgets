@@ -48,6 +48,7 @@
         $fileflags =~ s/Socket/S/;
         $fileflags =~ s/NotMSW/U/;
         $fileflags =~ s/NotGTK/R/;
+        $fileflags =~ s/NotX11/X11/;
         $fileflags =~ s/NotX/X/;
         $fileflags =~ s/NotOS2/P/;
         $fileflags =~ s/LowLevel/L/;
@@ -72,6 +73,8 @@
             $wxMICRO{$filename} = $fileflags;
         } elsif ( $filetype eq "OS2" ) {
             $wxOS2PM{$filename} = $fileflags;
+        } elsif ( $filetype eq "X11" ) {
+            $wxX11{$filename} = $fileflags;
         } elsif ( $filetype eq "HTML" ) {
             $wxHTML{$filename} = $fileflags;
         } elsif ( $filetype eq "Unix" ) {
@@ -96,6 +99,8 @@
             $wxGTKINCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "OS2H" ) {
             $wxOS2PMINCLUDE{$filename} = $fileflags;
+        } elsif ( $filetype eq "X11H" ) {
+            $wxX11INCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "UnivH" ) {
             $wxUNIVINCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "UnixH" ) {

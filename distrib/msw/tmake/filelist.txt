@@ -19,6 +19,7 @@
 #  MGL	/src/mgl
 #  Micro	/src/msw for MicroWindows
 #  OS2	/src/os2
+#  X11	/src/x11
 #  HTML	/src/html
 #
 # 'H' suffix means these are headers, not .cpp files
@@ -29,6 +30,7 @@
 #  MotifH	/include/wx/motif
 #  MSWH	/include/wx/msw
 #  OS2H	/include/wx/os2
+#  X11H	/include/wx/x11
 #  GenericH	/include/wx/generic
 #  HtmlH	/include/wx/html
 #  ProtoH	/include/wx/protocol
@@ -56,6 +58,7 @@
 #  NotMicro	Not required for the MicroWindows port
 #  NotGTK	Not required for the GTK port
 #  NotX	Not required for the Motif port
+#  NotX11	Not required for the X11 port
 #  NotOS2	Not required for the os2Pm port
 #  NotUniv	Not required for the wxUniversal
 #  LowLevel	Low level GUI toolkit file, used by wxUniversal as well
@@ -597,6 +600,37 @@ timer.cpp	Motif
 utils.cpp	Motif
 window.cpp	Motif
 
+gsockx11.c	X11	Socket
+accel.cpp	X11
+app.cpp	X11
+bitmap.cpp	X11
+brush.cpp	X11
+clipbrd.cpp	X11
+colour.cpp	X11
+cursor.cpp	X11
+data.cpp	X11
+dataobj.cpp	X11
+dc.cpp	X11
+dcclient.cpp	X11
+dcmemory.cpp	X11
+dcscreen.cpp	X11
+font.cpp	X11
+gdiobj.cpp	X11
+glcanvas.cpp	X11
+icon.cpp	X11
+joystick.cpp	X11
+main.cpp	X11
+minifram.cpp	X11
+palette.cpp	X11
+pen.cpp	X11
+region.cpp	X11
+settings.cpp	X11
+toolbar.cpp	X11
+toplevel.cpp	X11
+timer.cpp	X11
+utils.cpp	X11
+window.cpp	X11
+
 accel.cpp	OS2
 app.cpp	OS2
 bitmap.cpp	OS2
@@ -1119,7 +1153,6 @@ minifram.h	MotifH
 msgdlg.h	MotifH
 palette.h	MotifH
 pen.h	MotifH
-helpbest.h	MSWH
 print.h	MotifH
 printdlg.h	MotifH
 private.h	MotifH
@@ -1137,6 +1170,38 @@ textctrl.h	MotifH
 timer.h	MotifH
 toolbar.h	MotifH
 window.h	MotifH
+
+accel.h	X11H
+app.h	X11H
+bitmap.h	X11H
+brush.h	X11H
+clipbrd.h	X11H
+colour.h	X11H
+cursor.h	X11H
+dataform.h	X11H
+dataobj.h	X11H
+dc.h	X11H
+dcclient.h	X11H
+dcmemory.h	X11H
+dcprint.h	X11H
+dcscreen.h	X11H
+dnd.h	X11H
+font.h	X11H
+gdiobj.h	X11H
+glcanvas.h	X11H
+icon.h	X11H
+joystick.h	X11H
+minifram.h	X11H
+palette.h	X11H
+pen.h	X11H
+print.h	X11H
+private.h	X11H
+region.h	X11H
+settings.h	X11H
+timer.h	X11H
+toolbar.h	X11H
+toplevel.h	X11H
+window.h	X11H
 
 accel.h	MSWH
 app.h	MSWH
@@ -1179,6 +1244,7 @@ gccpriv.h	MSWH
 gdiimage.h	MSWH
 gdiobj.h	MSWH
 glcanvas.h	MSWH
+helpbest.h	MSWH
 helpchm.h	MSWH
 helpwin.h	MSWH
 icon.h	MSWH
@@ -1388,7 +1454,7 @@ laywin.h	GenericH
 listctrl.h	GenericH	NotWin32
 msgdlgg.h	GenericH
 notebook.h	GenericH
-paletteg.h	GenericH	NotMSW,NotX,NotOS2
+paletteg.h	GenericH	NotMSW,NotX,NotX11,NotOS2
 panelg.h	GenericH
 printps.h	GenericH
 prntdlgg.h	GenericH
