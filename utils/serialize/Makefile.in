@@ -1,0 +1,25 @@
+# WXXT base directory
+WXBASEDIR=@WXBASEDIR@
+
+# set the OS type for compilation
+OS=@OS@
+# compile a library only
+RULE=gslib
+
+# define common stuff
+
+# define library name
+LIB_TARGET=wxserial
+LIB_MAJOR=2
+LIB_MINOR=0
+# define library sources
+LIB_SRC=\
+sermain.cpp sercore.cpp sergdi.cpp serwnd.cpp serctrl.cpp serext.cpp
+#define library objects
+LIB_OBJ=\
+sermain.o sercore.o sergdi.o serwnd.o serctrl.o serext.o
+
+#additional things needed for compile
+
+# include the definitions now
+include ../../../template.mak
