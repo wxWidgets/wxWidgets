@@ -43,6 +43,7 @@ LIB_CPP_SRC=\
  common/textfile.cpp \
  common/time.cpp \
  common/timercmn.cpp \
+ common/tbarsmpl.cpp \
  common/utilscmn.cpp \
  common/wincmn.cpp \
  common/framecmn.cpp \
