@@ -17,11 +17,10 @@ include demo/data/*.bmp
 include demo/data/*.txt
 include demo/data/*.i
 include demo/data/*.h
+include demo/data/*.py
 
 include wxPython/lib/*.py
 include wxPython/lib/*.txt
-include wxPython/lib/sizers/*.py
-include wxPython/lib/sizers/*.txt
 include wxPython/lib/editor/*.py
 include wxPython/lib/editor/*.txt
 

@@ -33,6 +33,9 @@ get notified when an asyncronous child process terminates, and also to
 get input/output streams for the child process's stdout, stderr and
 stdin.
 
+Removed the old python sizers.
+
+
 
 
 New in 2.2.1

@@ -43,7 +43,7 @@ _treeList = [
                   'wxCalendarCtrl',
                   ]),
 
-    ('Window Layout', ['wxLayoutConstraints', 'Sizers', 'OldSizers']),
+    ('Window Layout', ['wxLayoutConstraints', 'Sizers', ]),
 
     ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'FontEnumerator',
                         'wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
