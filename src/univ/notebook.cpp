@@ -1253,7 +1253,7 @@ void wxNotebook::ScrollLastTo(int page)
 wxSize wxNotebook::DoGetBestClientSize() const
 {
     // calculate the max page size
-    wxSize size(0, 0);
+    wxSize size;
 
     size_t count = GetPageCount();
     if ( count )

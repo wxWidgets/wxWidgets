@@ -3932,7 +3932,7 @@ wxSize wxWin32Renderer::GetFrameTotalSize(const wxSize& clientSize,
 
 wxSize wxWin32Renderer::GetFrameMinSize(int flags) const
 {
-    wxSize s(0, 0);
+    wxSize s;
 
     if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
     {

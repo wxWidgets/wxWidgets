@@ -1523,7 +1523,7 @@ public:
                     int joystick = wxJOYSTICK1,
                     int change = 0)
         : wxEvent(0, type),
-          m_pos(0, 0),
+          m_pos(),
           m_zPosition(0),
           m_buttonChange(change),
           m_buttonState(state),

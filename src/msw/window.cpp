@@ -306,9 +306,9 @@ wxBEGIN_PROPERTIES_TABLE(wxWindow)
     wxPROPERTY( Shown , bool , Show , IsShown , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 #if 0
     // possible property candidates (not in xrc) or not valid in all subclasses
-    wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxT("") )
+    wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxEmptyString )
     wxPROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
-    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxT("") )
+    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxEmptyString )
     // MaxHeight, Width , MinHeight , Width
     // TODO switch label to control and title to toplevels
 
@@ -2781,7 +2781,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                         wxHelpEvent helpEvent(wxEVT_HELP,
                                               subjectOfHelp->GetId(),
 #ifdef __WXWINCE__
-                                              wxPoint(0, 0)
+                                              wxPoint()
 #else
                                               wxPoint(info->MousePos.x, info->MousePos.y)
 #endif

@@ -1176,7 +1176,7 @@ wxSize wxMCIMediaBackend::GetVideoSize() const
 
         return wxSize(whereParms.rc.right, whereParms.rc.bottom);
     }
-    return wxSize(0,0);
+    return wxSize();
 }
 
 //---------------------------------------------------------------------------
@@ -1619,7 +1619,7 @@ bool wxQTMediaBackend::SetPosition(wxLongLong where)
 // wxQTMediaBackend::GetPosition
 //
 // 1) Calls GetMovieTime to get the position we are in in the movie
-// in milliseconds (we called 
+// in milliseconds (we called
 //---------------------------------------------------------------------------
 wxLongLong wxQTMediaBackend::GetPosition()
 {

@@ -113,11 +113,11 @@ public:
     {                                                                   }
 
     wxMediaCtrl(wxWindow* parent, wxWindowID winid,
-                const wxString& fileName = wxT(""),
+                const wxString& fileName = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& szBackend = wxT(""),
+                const wxString& szBackend = wxEmptyString,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("mediaCtrl"))
                 : m_imp(NULL), m_bLoaded(false), m_bLoop(false)
@@ -129,7 +129,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& szBackend = wxT(""),
+                const wxString& szBackend = wxEmptyString,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("mediaCtrl"))
                 : m_imp(NULL), m_bLoop(false)
@@ -139,11 +139,11 @@ public:
     ~wxMediaCtrl();
 
     bool Create(wxWindow* parent, wxWindowID winid,
-                const wxString& fileName = wxT(""),
+                const wxString& fileName = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& szBackend = wxT(""),
+                const wxString& szBackend = wxEmptyString,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("mediaCtrl"));
 
@@ -152,7 +152,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& szBackend = wxT(""),
+                const wxString& szBackend = wxEmptyString,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("mediaCtrl")); //DirectShow only
 
@@ -252,7 +252,7 @@ public:
                       int WXUNUSED(w), int WXUNUSED(h))
     {                                   }
     virtual wxSize GetVideoSize() const
-    {   return wxSize(0,0);             }
+    {   return wxSize();                }
 
     virtual double GetPlaybackRate()
     {   return 0.0;                     }

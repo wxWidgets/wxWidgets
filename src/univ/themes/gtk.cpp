@@ -449,7 +449,7 @@ protected:
                         const wxString& label,
                         int flags,
                         int indexAccel,
-                        const wxString& accel = _T(""),
+                        const wxString& accel = wxEmptyString,
                         const wxBitmap& bitmap = wxNullBitmap,
                         const wxGTKMenuGeometryInfo *geometryInfo = NULL);
 
@@ -1334,7 +1334,7 @@ void wxGTKRenderer::DrawCheckItem(wxDC& dc,
     rectBitmap.width = GetCheckBitmapSize().x;
 
     // never draw the focus rect around the check indicators here
-    DrawCheckButton(dc, _T(""), bitmap, rectBitmap, flags & ~wxCONTROL_FOCUSED);
+    DrawCheckButton(dc, wxEmptyString, bitmap, rectBitmap, flags & ~wxCONTROL_FOCUSED);
 
     wxRect rectLabel = rect;
     wxCoord shift = rectBitmap.width + 2*GetCheckItemMargin();
@@ -2326,7 +2326,7 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
 wxSize
 wxGTKRenderer::GetStatusBarBorders(wxCoord * WXUNUSED(borderBetweenFields)) const
 {
-    return wxSize(0, 0);
+    return wxSize();
 }
 
 void wxGTKRenderer::DrawStatusField(wxDC& WXUNUSED(dc),
@@ -2913,7 +2913,7 @@ wxGTKRenderer::GetFrameTotalSize(const wxSize& clientSize,
 
 wxSize wxGTKRenderer::GetFrameMinSize(int WXUNUSED(flags)) const
 {
-    return wxSize(0,0);
+    return wxSize();
 }
 
 wxSize wxGTKRenderer::GetFrameIconSize() const

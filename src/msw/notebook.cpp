@@ -480,7 +480,7 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
     wxSize sizeTotal = sizePage;
 
     // We need to make getting tab size part of the wxWidgets API.
-    wxSize tabSize(0, 0);
+    wxSize tabSize;
     if (GetPageCount() > 0)
     {
         RECT rect;
@@ -627,7 +627,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     }
 
     // and the text
-    if ( !strText.IsEmpty() )
+    if ( !strText.empty() )
     {
         tcItem.mask |= TCIF_TEXT;
         tcItem.pszText = (wxChar *)strText.c_str(); // const_cast

@@ -108,8 +108,8 @@ public:
     // constructors
     wxFontRefData()
     {
-        Init(-1, wxSize(0, 0), FALSE, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
-             wxFONTWEIGHT_NORMAL, FALSE, wxEmptyString,
+        Init(-1, wxSize(), false, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+             wxFONTWEIGHT_NORMAL, false, wxEmptyString,
              wxFONTENCODING_DEFAULT);
     }
 
@@ -223,7 +223,7 @@ public:
         else
         {
             m_pointSize = pointSize;
-            m_sizeUsingPixels = FALSE;
+            m_sizeUsingPixels = false;
         }
     }
 
@@ -236,7 +236,7 @@ public:
         else
         {
             m_pixelSize = pixelSize;
-            m_sizeUsingPixels = TRUE;
+            m_sizeUsingPixels = true;
         }
     }
 
