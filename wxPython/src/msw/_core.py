@@ -1322,11 +1322,19 @@ class Point2D(object):
         self.thisown = 1
         del newobj.thisown
     def GetFloor(*args, **kwargs):
-        """GetFloor() -> (x,y)"""
+        """
+        GetFloor() -> (x,y)
+
+        Convert to integer
+        """
         return _core_.Point2D_GetFloor(*args, **kwargs)
 
     def GetRounded(*args, **kwargs):
-        """GetRounded() -> (x,y)"""
+        """
+        GetRounded() -> (x,y)
+
+        Convert to integer
+        """
         return _core_.Point2D_GetRounded(*args, **kwargs)
 
     def GetVectorLength(*args, **kwargs):
@@ -1950,7 +1958,13 @@ class ImageHistogram(object):
 
     MakeKey = staticmethod(MakeKey)
     def FindFirstUnusedColour(*args, **kwargs):
-        """FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)"""
+        """
+        FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)
+
+        Find first colour that is not used in the image and has higher RGB
+        values than startR, startG, startB.  Returns a tuple consisting of a
+        success flag and rgb values.
+        """
         return _core_.ImageHistogram_FindFirstUnusedColour(*args, **kwargs)
 
 
@@ -2037,7 +2051,13 @@ class Image(Object):
         return _core_.Image_HasAlpha(*args, **kwargs)
 
     def FindFirstUnusedColour(*args, **kwargs):
-        """FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)"""
+        """
+        FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)
+
+        Find first colour that is not used in the image and has higher RGB
+        values than startR, startG, startB.  Returns a tuple consisting of a
+        success flag and rgb values.
+        """
         return _core_.Image_FindFirstUnusedColour(*args, **kwargs)
 
     def SetMaskFromImage(*args, **kwargs):
@@ -6220,21 +6240,8 @@ class Window(EvtHandler):
         """
         Navigate(self, int flags=NavigationKeyEvent.IsForward) -> bool
 
-        :param flags: A combination of the ``IsForward`` and ``WinChange``
-                      values in the `wx.NavigationKeyEvent` class, which
-                      determine if the navigation should be in forward or
-                      reverse order, and if it should be able to cross
-                      parent window boundaries, such as between notebook
-                      pages or MDI child frames.  Typically the status of
-                      the Shift key (for forward or reverse) or the
-                      Control key (for WinChange) would be used to
-                      determine how to set the flags.
-
-        situation in which you may wish to call this method is from a text
-        rol custom keypress handler to do the default navigation behaviour
-        the tab key, since the standard default behaviour for a multiline
-         control with the wx.TE_PROCESS_TAB style is to insert a tab and
-        navigate to the next control.
+        Does keyboard navigation from this window to another, by sending a
+        `wx.NavigationKeyEvent`.
         """
         return _core_.Window_Navigate(*args, **kwargs)
 
@@ -6888,7 +6895,11 @@ class Window(EvtHandler):
         return _core_.Window_GetCharWidth(*args, **kwargs)
 
     def GetTextExtent(*args, **kwargs):
-        """GetTextExtent(String string) -> (width, height)"""
+        """
+        GetTextExtent(String string) -> (width, height)
+
+        Get the width and height of the text using the current font.
+        """
         return _core_.Window_GetTextExtent(*args, **kwargs)
 
     def GetFullTextExtent(*args, **kwargs):
@@ -9552,11 +9563,21 @@ class FlexGridSizer(GridSizer):
         return _core_.FlexGridSizer_GetNonFlexibleGrowMode(*args, **kwargs)
 
     def GetRowHeights(*args, **kwargs):
-        """GetRowHeights(self) -> list"""
+        """
+        GetRowHeights(self) -> list
+
+        Returns a list of integers representing the heights of each of the
+        rows in the sizer.
+        """
         return _core_.FlexGridSizer_GetRowHeights(*args, **kwargs)
 
     def GetColWidths(*args, **kwargs):
-        """GetColWidths(self) -> list"""
+        """
+        GetColWidths(self) -> list
+
+        Returns a list of integers representing the widths of each of the
+        columns in the sizer.
+        """
         return _core_.FlexGridSizer_GetColWidths(*args, **kwargs)
 
 
