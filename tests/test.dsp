@@ -398,7 +398,6 @@ LINK32=link.exe
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswd"
 # PROP Intermediate_Dir "vc_mswd\test"
-# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W4 /Gm /GR /GX /Zi /Od /I ".\..\include" /I ".\..\lib\vc_lib\mswd" /I "." /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_CONSOLE" /Fd"vc_mswd\test.pdb" /FD /GZ /c
 # ADD CPP /nologo /MDd /W4 /Gm /GR /GX /Zi /Od /I ".\..\include" /I ".\..\lib\vc_lib\mswd" /I "." /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_CONSOLE" /Fd"vc_mswd\test.pdb" /FD /GZ /c
@@ -409,7 +408,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /subsystem:console /debug /machine:I386 /libpath:".\..\lib\vc_lib"
-# ADD LINK32 wxbase25d.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /subsystem:console /debug /machine:I386 /libpath:".\..\lib\vc_lib"
+# ADD LINK32 wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /subsystem:console /debug /machine:I386 /libpath:".\..\lib\vc_lib"
 
 !ENDIF 
 
@@ -436,11 +435,103 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\arrays\arrays.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\streams\bstream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\streams\bstream.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\strings\crt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\datetime\datetimetest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\streams\ffilestream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\fileconf\fileconftest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\filename\filenametest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\streams\filestream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\filesys\filesystest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\fontmap\fontmaptest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\formatconverter\formatconvertertest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\hashes\hashes.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\longlong\longlongtest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbconv\mbconvtest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\streams\memstream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\regex\regextest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\streams\sstream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\strings\stdstrings.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\strings\strings.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\test.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\strings\unicode.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\uris\uris.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\regex\wxregextest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\streams\zlibstream.cpp
 # End Source File
 # End Group
 # End Target

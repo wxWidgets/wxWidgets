@@ -33,17 +33,17 @@ TEST_CXXFLAGS = $(__RUNTIME_LIBS_6) -I$(BCCDIR)\include $(__DEBUGINFO) \
 TEST_OBJECTS =  \
 	$(OBJS)\test_test.obj \
 	$(OBJS)\test_arrays.obj \
-	$(OBJS)\test_datetime.obj \
-	$(OBJS)\test_fileconf.obj \
-	$(OBJS)\test_filename.obj \
-	$(OBJS)\test_filesys.obj \
-	$(OBJS)\test_fontmap.obj \
-	$(OBJS)\test_formatconverter.obj \
+	$(OBJS)\test_datetimetest.obj \
+	$(OBJS)\test_fileconftest.obj \
+	$(OBJS)\test_filenametest.obj \
+	$(OBJS)\test_filesystest.obj \
+	$(OBJS)\test_fontmaptest.obj \
+	$(OBJS)\test_formatconvertertest.obj \
 	$(OBJS)\test_hashes.obj \
-	$(OBJS)\test_longlong.obj \
-	$(OBJS)\test_main.obj \
-	$(OBJS)\test_regex.obj \
-	$(OBJS)\test_wxregex.obj \
+	$(OBJS)\test_longlongtest.obj \
+	$(OBJS)\test_mbconvtest.obj \
+	$(OBJS)\test_regextest.obj \
+	$(OBJS)\test_wxregextest.obj \
 	$(OBJS)\test_strings.obj \
 	$(OBJS)\test_stdstrings.obj \
 	$(OBJS)\test_unicode.obj \
@@ -119,6 +119,10 @@ __UNICODE_DEFINE_p = -D_UNICODE
 __DLLFLAG_p = -DWXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
+__WXLIB_NET_p = \
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
+!endif
+!if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = \
 	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
@@ -178,7 +182,7 @@ clean:
 
 $(OBJS)\test.exe: $(TEST_OBJECTS)
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(CPPUNIT_LIBS) @&&|
-	c0x32.obj $(TEST_OBJECTS),$@,, $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
+	c0x32.obj $(TEST_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
 
 data: 
@@ -191,37 +195,37 @@ $(OBJS)\test_test.obj: .\test.cpp
 $(OBJS)\test_arrays.obj: .\arrays\arrays.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_datetime.obj: .\datetime\datetime.cpp
+$(OBJS)\test_datetimetest.obj: .\datetime\datetimetest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_fileconf.obj: .\fileconf\fileconf.cpp
+$(OBJS)\test_fileconftest.obj: .\fileconf\fileconftest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_filename.obj: .\filename\filename.cpp
+$(OBJS)\test_filenametest.obj: .\filename\filenametest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_filesys.obj: .\filesys\filesys.cpp
+$(OBJS)\test_filesystest.obj: .\filesys\filesystest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_fontmap.obj: .\fontmap\fontmap.cpp
+$(OBJS)\test_fontmaptest.obj: .\fontmap\fontmaptest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_formatconverter.obj: .\formatconverter\formatconverter.cpp
+$(OBJS)\test_formatconvertertest.obj: .\formatconverter\formatconvertertest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_hashes.obj: .\hashes\hashes.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_longlong.obj: .\longlong\longlong.cpp
+$(OBJS)\test_longlongtest.obj: .\longlong\longlongtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_main.obj: .\mbconv\main.cpp
+$(OBJS)\test_mbconvtest.obj: .\mbconv\mbconvtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_regex.obj: .\regex\regex.cpp
+$(OBJS)\test_regextest.obj: .\regex\regextest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_wxregex.obj: .\regex\wxregex.cpp
+$(OBJS)\test_wxregextest.obj: .\regex\wxregextest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_strings.obj: .\strings\strings.cpp

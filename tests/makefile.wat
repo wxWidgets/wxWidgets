@@ -138,6 +138,11 @@ __DLLFLAG_p =
 !ifeq SHARED 1
 __DLLFLAG_p = -dWXUSINGDLL
 !endif
+__WXLIB_NET_p =
+!ifeq MONOLITHIC 0
+__WXLIB_NET_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
+!endif
 __WXLIB_BASE_p =
 !ifeq MONOLITHIC 0
 __WXLIB_BASE_p = &
@@ -182,17 +187,17 @@ TEST_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
 TEST_OBJECTS =  &
 	$(OBJS)\test_test.obj &
 	$(OBJS)\test_arrays.obj &
-	$(OBJS)\test_datetime.obj &
-	$(OBJS)\test_fileconf.obj &
-	$(OBJS)\test_filename.obj &
-	$(OBJS)\test_filesys.obj &
-	$(OBJS)\test_fontmap.obj &
-	$(OBJS)\test_formatconverter.obj &
+	$(OBJS)\test_datetimetest.obj &
+	$(OBJS)\test_fileconftest.obj &
+	$(OBJS)\test_filenametest.obj &
+	$(OBJS)\test_filesystest.obj &
+	$(OBJS)\test_fontmaptest.obj &
+	$(OBJS)\test_formatconvertertest.obj &
 	$(OBJS)\test_hashes.obj &
-	$(OBJS)\test_longlong.obj &
-	$(OBJS)\test_main.obj &
-	$(OBJS)\test_regex.obj &
-	$(OBJS)\test_wxregex.obj &
+	$(OBJS)\test_longlongtest.obj &
+	$(OBJS)\test_mbconvtest.obj &
+	$(OBJS)\test_regextest.obj &
+	$(OBJS)\test_wxregextest.obj &
 	$(OBJS)\test_strings.obj &
 	$(OBJS)\test_stdstrings.obj &
 	$(OBJS)\test_unicode.obj &
@@ -228,7 +233,7 @@ $(OBJS)\test.exe :  $(TEST_OBJECTS)
 	@%append $(OBJS)\test.lbc option caseexact
 	@%append $(OBJS)\test.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt ref 'main_' $(CPPUNIT_LIBS)
 	@for %i in ($(TEST_OBJECTS)) do @%append $(OBJS)\test.lbc file %i
-	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\test.lbc library %i
+	@for %i in ( $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\test.lbc library %i
 	@%append $(OBJS)\test.lbc
 	wlink @$(OBJS)\test.lbc
 
@@ -242,37 +247,37 @@ $(OBJS)\test_test.obj :  .AUTODEPEND .\test.cpp
 $(OBJS)\test_arrays.obj :  .AUTODEPEND .\arrays\arrays.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_datetime.obj :  .AUTODEPEND .\datetime\datetime.cpp
+$(OBJS)\test_datetimetest.obj :  .AUTODEPEND .\datetime\datetimetest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_fileconf.obj :  .AUTODEPEND .\fileconf\fileconf.cpp
+$(OBJS)\test_fileconftest.obj :  .AUTODEPEND .\fileconf\fileconftest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_filename.obj :  .AUTODEPEND .\filename\filename.cpp
+$(OBJS)\test_filenametest.obj :  .AUTODEPEND .\filename\filenametest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_filesys.obj :  .AUTODEPEND .\filesys\filesys.cpp
+$(OBJS)\test_filesystest.obj :  .AUTODEPEND .\filesys\filesystest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_fontmap.obj :  .AUTODEPEND .\fontmap\fontmap.cpp
+$(OBJS)\test_fontmaptest.obj :  .AUTODEPEND .\fontmap\fontmaptest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_formatconverter.obj :  .AUTODEPEND .\formatconverter\formatconverter.cpp
+$(OBJS)\test_formatconvertertest.obj :  .AUTODEPEND .\formatconverter\formatconvertertest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_hashes.obj :  .AUTODEPEND .\hashes\hashes.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_longlong.obj :  .AUTODEPEND .\longlong\longlong.cpp
+$(OBJS)\test_longlongtest.obj :  .AUTODEPEND .\longlong\longlongtest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_main.obj :  .AUTODEPEND .\mbconv\main.cpp
+$(OBJS)\test_mbconvtest.obj :  .AUTODEPEND .\mbconv\mbconvtest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_regex.obj :  .AUTODEPEND .\regex\regex.cpp
+$(OBJS)\test_regextest.obj :  .AUTODEPEND .\regex\regextest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_wxregex.obj :  .AUTODEPEND .\regex\wxregex.cpp
+$(OBJS)\test_wxregextest.obj :  .AUTODEPEND .\regex\wxregextest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_strings.obj :  .AUTODEPEND .\strings\strings.cpp

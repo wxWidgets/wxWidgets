@@ -24,17 +24,17 @@ TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) -DHAVE_W32API_H \
 TEST_OBJECTS =  \
 	$(OBJS)\test_test.o \
 	$(OBJS)\test_arrays.o \
-	$(OBJS)\test_datetime.o \
-	$(OBJS)\test_fileconf.o \
-	$(OBJS)\test_filename.o \
-	$(OBJS)\test_filesys.o \
-	$(OBJS)\test_fontmap.o \
-	$(OBJS)\test_formatconverter.o \
+	$(OBJS)\test_datetimetest.o \
+	$(OBJS)\test_fileconftest.o \
+	$(OBJS)\test_filenametest.o \
+	$(OBJS)\test_filesystest.o \
+	$(OBJS)\test_fontmaptest.o \
+	$(OBJS)\test_formatconvertertest.o \
 	$(OBJS)\test_hashes.o \
-	$(OBJS)\test_longlong.o \
-	$(OBJS)\test_main.o \
-	$(OBJS)\test_regex.o \
-	$(OBJS)\test_wxregex.o \
+	$(OBJS)\test_longlongtest.o \
+	$(OBJS)\test_mbconvtest.o \
+	$(OBJS)\test_regextest.o \
+	$(OBJS)\test_wxregextest.o \
 	$(OBJS)\test_strings.o \
 	$(OBJS)\test_stdstrings.o \
 	$(OBJS)\test_unicode.o \
@@ -117,6 +117,10 @@ ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
 endif
 ifeq ($(MONOLITHIC),0)
+__WXLIB_NET_p = \
+	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net
+endif
+ifeq ($(MONOLITHIC),0)
 __WXLIB_BASE_p = \
 	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
 endif
@@ -173,7 +177,7 @@ clean:
 	-if exist $(OBJS)\test.exe del $(OBJS)\test.exe
 
 $(OBJS)\test.exe: $(TEST_OBJECTS)
-	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME)  $(CPPUNIT_LIBS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME)  $(CPPUNIT_LIBS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
@@ -185,37 +189,37 @@ $(OBJS)\test_test.o: ./test.cpp
 $(OBJS)\test_arrays.o: ./arrays/arrays.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_datetime.o: ./datetime/datetime.cpp
+$(OBJS)\test_datetimetest.o: ./datetime/datetimetest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_fileconf.o: ./fileconf/fileconf.cpp
+$(OBJS)\test_fileconftest.o: ./fileconf/fileconftest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_filename.o: ./filename/filename.cpp
+$(OBJS)\test_filenametest.o: ./filename/filenametest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_filesys.o: ./filesys/filesys.cpp
+$(OBJS)\test_filesystest.o: ./filesys/filesystest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_fontmap.o: ./fontmap/fontmap.cpp
+$(OBJS)\test_fontmaptest.o: ./fontmap/fontmaptest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_formatconverter.o: ./formatconverter/formatconverter.cpp
+$(OBJS)\test_formatconvertertest.o: ./formatconverter/formatconvertertest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_hashes.o: ./hashes/hashes.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_longlong.o: ./longlong/longlong.cpp
+$(OBJS)\test_longlongtest.o: ./longlong/longlongtest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_main.o: ./mbconv/main.cpp
+$(OBJS)\test_mbconvtest.o: ./mbconv/mbconvtest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_regex.o: ./regex/regex.cpp
+$(OBJS)\test_regextest.o: ./regex/regextest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_wxregex.o: ./regex/wxregex.cpp
+$(OBJS)\test_wxregextest.o: ./regex/wxregextest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_strings.o: ./strings/strings.cpp

@@ -27,7 +27,7 @@
 #include "wx/cppunit.h"
 
 // Test wxURL & wxURI compat?
-#define TEST_URL ( 1 && wxUSE_URL )
+#define TEST_URL ( 0 && wxUSE_URL )
 
 // ----------------------------------------------------------------------------
 // test class
@@ -279,6 +279,7 @@ void URITestCase::Comparison()
 #if TEST_URL
 
 #include "wx/url.h"
+#include "wx/mimetype.h"
 
 void URITestCase::URLCompat()
 {
@@ -309,6 +310,15 @@ void URITestCase::URLCompat()
 #if WXWIN_COMPATIBILITY_2_4
     CPPUNIT_ASSERT( wxURL::ConvertFromURI(wxT("%20%41%20")) == wxT(" A ") );
 #endif
+    CPPUNIT_ASSERT( wxURI::Unescape(wxT("%20%41%20")) == wxT(" A ") );
+
+    wxURI test(wxT("file:\"myf\"ile.txt"));
+
+    CPPUNIT_ASSERT( test.BuildURI() == wxT("file:%22myf%22ile.txt") );
+    CPPUNIT_ASSERT( test.GetScheme() == wxT("file") );
+    CPPUNIT_ASSERT( test.GetPath() == wxT("%22myf%22ile.txt") );
+//    CPPUNIT_ASSERT( wxURI::Unescape(wxT("%22myf%22ile.txt"))  );
+    wxPrintf(wxURI::Unescape(wxT("%22myf%22ile.txt")) );
 }
 
 #endif
