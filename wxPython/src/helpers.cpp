@@ -115,6 +115,10 @@ int  wxPyApp::MainLoop() {
 #endif
 
     if (initialized) {
+        if ( m_exitOnFrameDelete == Later ) {
+            m_exitOnFrameDelete = Yes;
+        }
+
         retval = wxApp::MainLoop();
         OnExit();
     }
