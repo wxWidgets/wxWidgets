@@ -55,7 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "helpc"
 
-#include "export.h"
+#include "wxPython.h"
 #include <wx/cshelp.h>
 
 

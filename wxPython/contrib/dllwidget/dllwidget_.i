@@ -14,7 +14,7 @@
 
 
 %{
-#include "export.h"
+#include "wxPython.h"
 #include "dllwidget.h"
 %}
 

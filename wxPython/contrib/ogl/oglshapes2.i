@@ -14,7 +14,7 @@
 %module oglshapes2
 
 %{
-#include "export.h"
+#include "wxPython.h"
 #include "oglhelpers.h"
 %}
 

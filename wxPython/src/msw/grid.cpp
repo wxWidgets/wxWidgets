@@ -55,7 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "gridc"
 
-#include "export.h"
+#include "wxPython.h"
 #include <wx/grid.h>
 #include <wx/generic/gridctrl.h>
 

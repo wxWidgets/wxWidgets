@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////
-// Name:        export.h
+// Name:        wxPython.h
 // Purpose:     To be used from modules that are not part of the core
-//              wxPython extension in order to get access to some helper
-//              functions that live in wxc.
+//              wxPython extension--or from 3rd party apps and modules--in
+//              order to get access to some helper functions that live in wxc.
 //
 // Author:      Robin Dunn
 //
@@ -17,15 +17,27 @@
 
 //----------------------------------------------------------------------
 
+// TODO:  Make it so this and helpers.h are installed to
+//        the wx include path...
+
 #define wxPyUSE_EXPORT
 #include "helpers.h"
 
+//----------------------------------------------------------------------
 
+// This needs to be called in modules that need to make calls to any
+// of the functions exported by the wxPython API.  It sets a static
+// pointer to a structure of function pointers located in wxc.
 static void wxPyCoreAPI_IMPORT() {
     wxPyCoreAPIPtr = (wxPyCoreAPI*)PyCObject_Import("wxPython.wxc", "wxPyCoreAPI");
     if (! wxPyCoreAPIPtr)
         wxPyCoreAPIPtr = (wxPyCoreAPI*)PyCObject_Import("wxc", "wxPyCoreAPI");
 }
+
+
+
+// The following macros actually call functions of the same name located
+// in the wxc extension module via the API pointer retieved above.
 
 #define SWIG_MakePtr(a, b, c)               (wxPyCoreAPIPtr->p_SWIG_MakePtr(a, b, c))
 #define SWIG_GetPtr(a, b, c)                (wxPyCoreAPIPtr->p_SWIG_GetPtr(a, b, c))

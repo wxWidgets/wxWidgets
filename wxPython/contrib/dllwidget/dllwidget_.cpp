@@ -55,7 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "dllwidget_c"
 
-#include "export.h"
+#include "wxPython.h"
 #include "dllwidget.h"
 
 

@@ -14,7 +14,7 @@
 %module html
 
 %{
-#include "export.h"
+#include "wxPython.h"
 #include <wx/html/htmlwin.h>
 #include <wx/html/htmprint.h>
 #include <wx/image.h>

@@ -13,7 +13,7 @@
 %module help
 
 %{
-#include "export.h"
+#include "wxPython.h"
 #include <wx/cshelp.h>
 %}
 

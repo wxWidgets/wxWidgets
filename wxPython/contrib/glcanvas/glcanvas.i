@@ -14,7 +14,7 @@
 %module glcanvas
 
 %{
-#include "export.h"
+#include "wxPython.h"
 #ifdef __WXMSW__
 #include "myglcanvas.h"
 #else

@@ -14,7 +14,7 @@
 %module htmlhelp
 
 %{
-#include "export.h"
+#include "wxPython.h"
 #include <wx/html/htmlwin.h>
 #include <wx/html/helpctrl.h>
 #include <wx/image.h>

@@ -14,7 +14,7 @@
 
 
 %{
-#include "export.h"
+#include "wxPython.h"
 #include <wx/gizmos/dynamicsash.h>
 #include <wx/gizmos/editlbox.h>
 #include <wx/gizmos/splittree.h>
