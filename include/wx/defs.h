@@ -104,16 +104,20 @@
 // VC++ 4.0 is 1000.
 
 // Add more tests here for compilers that don't already define bool.
-#if ( defined(_MSC_VER) && (_MSC_VER <= 1000) && !defined( __MWERKS__ ) ) || (defined(__BORLANDC__) && (__BORLANDC__ < 0x500)) || ( __MWERKS__ < 0x1000 || !__option(bool) )
-typedef unsigned int bool;
-#endif
-
-#if defined(_MSC_VER) && (_MSC_VER == 1020)
-#define bool unsigned int
+#if defined(_MSC_VER) && (_MSC_VER <= 1000)
+    typedef unsigned int bool;
+#elif defined(_MSC_VER) && (_MSC_VER == 1020)
+    #define bool unsigned int
+#elif defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
+    typedef unsigned int bool;
+#elif defined(__MWERKS__) 
+    #if (__MWERKS__ < 0x1000) || !__option(bool)
+        typedef unsigned int bool;
+    #endif
 #endif
 
 #if ( defined(_MSC_VER) && (_MSC_VER <= 800) ) || defined(__GNUWIN32__)
-#define byte unsigned char
+    #define byte unsigned char
 #endif
 
 typedef short int WXTYPE;
