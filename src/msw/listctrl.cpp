@@ -1280,16 +1280,23 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 
     // ListView_EditLabel requires that the list has focus.
     SetFocus();
-    WXHWND hWnd = (WXHWND) ListView_EditLabel(GetHwnd(), item);
 
-    if (m_textCtrl)
+    WXHWND hWnd = (WXHWND) ListView_EditLabel(GetHwnd(), item);
+    if ( !hWnd )
+    {
+        // failed to start editing
+        return NULL;
+    }
+
+    // [re]create the text control wrapping the HWND we got
+    if ( m_textCtrl )
     {
         m_textCtrl->SetHWND(0);
         m_textCtrl->UnsubclassWin();
         delete m_textCtrl;
     }
 
-    m_textCtrl = (wxTextCtrl*) textControlClass->CreateObject();
+    m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
     m_textCtrl->SetHWND(hWnd);
     m_textCtrl->SubclassWin(hWnd);
     m_textCtrl->SetParent(this);
@@ -2123,6 +2130,17 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         case LVN_ENDLABELEDITW:
             // logic here is inversed compared to all the other messages
             *result = event.IsAllowed();
+
+            // don't keep a stale wxTextCtrl around
+            if ( m_textCtrl )
+            {
+                // EDIT control will be deleted by the list control itself so
+                // prevent us from deleting it as well
+                m_textCtrl->SetHWND(0);
+                m_textCtrl->UnsubclassWin();
+                delete m_textCtrl;
+                m_textCtrl = NULL;
+            }
 
             return TRUE;
     }
