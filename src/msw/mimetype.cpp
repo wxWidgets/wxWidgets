@@ -360,7 +360,7 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon,
 
             wxString strExpPath = wxExpandEnvVars(strFullPath);
             // here we need C based counting!
-            int nIndex = wxAtoi(strIndex) - 1 ;
+            int nIndex = wxAtoi(strIndex);
 
             HICON hIcon = ExtractIcon(GetModuleHandle(NULL), strExpPath, nIndex);
             switch ( (int)hIcon ) {
@@ -453,6 +453,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
     return CreateFileType(wxEmptyString, ext);
 }
 
+/*
 wxFileType *
 wxMimeTypesManagerImpl::GetOrAllocateFileTypeFromExtension(const wxString& ext)
 {
@@ -464,7 +465,7 @@ wxMimeTypesManagerImpl::GetOrAllocateFileTypeFromExtension(const wxString& ext)
 
     return fileType;
 }
-
+*/
 
 // MIME type -> extension -> file type
 wxFileType *
@@ -515,31 +516,36 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
     wxCHECK_MSG( !ftInfo.GetExtensions().IsEmpty(), NULL,
                  _T("Associate() needs extension") );
 
-    const wxString& ext = ftInfo.GetExtensions()[0u];
+    bool ok = FALSE ;
+    int iExtCount = 0 ;
+    wxString filetype;
+    wxString extWithDot;
+
+    wxString ext = ftInfo.GetExtensions()[iExtCount];
 
     wxCHECK_MSG( !ext.empty(), NULL,
                  _T("Associate() needs non empty extension") );
 
-    wxString extWithDot;
     if ( ext[0u] != _T('.') )
         extWithDot = _T('.');
     extWithDot += ext;
 
+    // start by setting the HKCR\\.ext entries
+    // default is filetype; content type is mimetype
+    const wxString& filetypeOrig = ftInfo.GetShortDesc();
+
     wxRegKey key(wxRegKey::HKCR, extWithDot);
-    wxFileType *ft = NULL;
     if ( !key.Exists() )
     {
-        wxString filetype;
-
         // create the mapping from the extension to the filetype
-        bool ok = key.Create();
+        ok = key.Create();
         if ( ok )
         {
-            const wxString& filetypeOrig = ftInfo.GetShortDesc();
+
             if ( filetypeOrig.empty() )
             {
                 // make it up from the extension
-                filetype << extWithDot.c_str() + 1 << _T("_auto_file");
+                filetype << extWithDot.c_str() + 1 << _T("_file");
             }
             else
             {
@@ -549,9 +555,23 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 
             ok = key.SetValue(_T(""), filetype);
         }
-
+        }
+        else
+        {
+            // key already exists, maybe we want to change it ??
+            if (!filetypeOrig.empty())
+                {
+                    filetype = filetypeOrig;
+                    ok = key.SetValue(_T(""), filetype);
+                }
+            else
+                {
+                    ok = key.QueryValue(_T(""), filetype);
+                }
+        }
+        // now set a mimetypeif we have it, but ignore it if none
         const wxString& mimetype = ftInfo.GetMimeType();
-        if ( ok && !mimetype.empty() )
+        if ( !mimetype.empty() )
         {
             // set the MIME type
             ok = key.SetValue(_T("Content Type"), mimetype);
@@ -572,30 +592,63 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
             }
         }
 
-        if ( ok )
+
+    // now make other extensions have the same filetype
+    
+    for (iExtCount=1; iExtCount < ftInfo.GetExtensionsCount(); iExtCount++ )
         {
-            // create the filetype key itself (it will be empty for now, but
-            // SetCommand(), SetDefaultIcon() &c will use it later)
-            wxRegKey keyFT(wxRegKey::HKCR, filetype);
-            ok = keyFT.Create();
-        }
+            ext = ftInfo.GetExtensions()[iExtCount];
+            if ( ext[0u] != _T('.') )
+               extWithDot = _T('.');
+            extWithDot += ext;
+
+            wxRegKey key(wxRegKey::HKCR, extWithDot);
+            if ( !key.Exists() ) ok = key.Create();
+            ok = key.SetValue(_T(""), filetype);
+
+        // now set any mimetypes we may have, but ignore it if none
+        const wxString& mimetype = ftInfo.GetMimeType();
+        if ( !mimetype.empty() )
+        {
+            // set the MIME type
+            ok = key.SetValue(_T("Content Type"), mimetype);
 
         if ( ok )
         {
-            // ok, we've created everything correctly
-            ft = CreateFileType(filetype, extWithDot);
-        }
-        else
+                // create the MIME key
+                wxString strKey = MIME_DATABASE_KEY;
+                strKey << mimetype;
+                wxRegKey keyMIME(wxRegKey::HKCR, strKey);
+                ok = keyMIME.Create();
+
+        if ( ok )
         {
-           // one of the registry operations failed
-            wxLogError(_("Failed to register extension '%s'."), ext.c_str());
+                    // and provide a back link to the extension
+                    ok = keyMIME.SetValue(_T("Extension"), extWithDot);
+        }
         }
     }
-    else // key already exists
+
+
+    } // end of for loop; all extensions now point to HKCR\.ext\Default
+
+    // create the filetype key itself (it will be empty for now, but
+    // SetCommand(), SetDefaultIcon() &c will use it later)
+    wxRegKey keyFT(wxRegKey::HKCR, filetype);
+    ok = keyFT.Create();
+    
+    wxFileType *ft = NULL; 
+    ft = CreateFileType(filetype, extWithDot);
+
+    if (ft)
     {
-        // FIXME we probably should return an existing file type then?
-    }
+            if (! ftInfo.GetOpenCommand ().IsEmpty() ) ft->SetCommand (ftInfo.GetOpenCommand (), wxT("open"  ) );
+            if (! ftInfo.GetPrintCommand().IsEmpty() ) ft->SetCommand (ftInfo.GetPrintCommand(), wxT("print" ) );
+            // chris: I don't like the ->m_impl-> here FIX this ??
+            if (! ftInfo.GetDescription ().IsEmpty() ) ft->m_impl->SetDescription (ftInfo.GetDescription ()) ;
+            if (! ftInfo.GetIconFile().IsEmpty() ) ft->SetDefaultIcon (ftInfo.GetIconFile(), ftInfo.GetIconIndex() );
 
+        }
     return ft;
 }
 
@@ -610,7 +663,7 @@ bool wxFileTypeImpl::SetCommand(const wxString& cmd,
         return FALSE;
 
     wxRegKey rkey(wxRegKey::HKCR, GetVerbPath(verb));
-
+#if 0
     if ( rkey.Exists() && overwriteprompt )
     {
 #if wxUSE_GUI
@@ -620,8 +673,8 @@ bool wxFileTypeImpl::SetCommand(const wxString& cmd,
              (
                 wxString::Format(
                     _("Do you want to overwrite the command used to %s "
-                      "files with extension \"%s\" (current value is '%s', "
-                      "new value is '%s')?"),
+                      "files with extension \"%s\" ?\nCurrent value is \n%s, "
+                      "\nNew value is \n%s %1"), // bug here FIX need %1 ??
                     verb.c_str(),
                     m_ext.c_str(),
                     old.c_str(),
@@ -635,13 +688,14 @@ bool wxFileTypeImpl::SetCommand(const wxString& cmd,
             return FALSE;
         }
     }
-
+#endif
     // TODO:
     // 1. translate '%s' to '%1' instead of always adding it
     // 2. create DDEExec value if needed (undo GetCommand)
     return rkey.Create() && rkey.SetValue(_T(""), cmd + _T(" \"%1\"") );
 }
 
+/* // no longer used
 bool wxFileTypeImpl::SetMimeType(const wxString& mimeTypeOrig)
 {
     wxCHECK_MSG( !m_ext.IsEmpty(), FALSE, _T("SetMimeType() needs extension") );
@@ -666,11 +720,14 @@ bool wxFileTypeImpl::SetMimeType(const wxString& mimeTypeOrig)
     wxRegKey rkey(wxRegKey::HKCR, m_ext);
     return rkey.Create() && rkey.SetValue(_T("Content Type"), mimeType);
 }
+*/
 
 bool wxFileTypeImpl::SetDefaultIcon(const wxString& cmd, int index)
 {
-    wxCHECK_MSG( !m_ext.IsEmpty(), FALSE, _T("SetMimeType() needs extension") );
-    wxCHECK_MSG( wxFileExists(cmd), FALSE, _T("Icon file not found.") );
+    wxCHECK_MSG( !m_ext.IsEmpty(), FALSE, _T("SetDefaultIcon() needs extension") );
+    wxCHECK_MSG( !m_strFileType.IsEmpty(), FALSE, _T("File key not found") );
+//    the next line fails on a SMBshare, I think because it is case mangled
+//    wxCHECK_MSG( !wxFileExists(cmd), FALSE, _T("Icon file not found.") );
 
     if ( !EnsureExtKeyExists() )
         return FALSE;
@@ -680,6 +737,20 @@ bool wxFileTypeImpl::SetDefaultIcon(const wxString& cmd, int index)
     return rkey.Create() &&
            rkey.SetValue(_T(""),
                          wxString::Format(_T("%s,%d"), cmd.c_str(), index));
+}
+
+bool wxFileTypeImpl::SetDescription (const wxString& desc)
+{
+    wxCHECK_MSG( !m_strFileType.IsEmpty(), FALSE, _T("File key not found") );
+    wxCHECK_MSG( !desc.IsEmpty(), FALSE, _T("No file description supplied") );
+
+    if ( !EnsureExtKeyExists() )
+        return FALSE;
+
+    wxRegKey rkey(wxRegKey::HKCR, m_strFileType );
+
+    return rkey.Create() &&
+           rkey.SetValue(_T(""), desc);
 }
 
 // ----------------------------------------------------------------------------
@@ -695,7 +766,11 @@ bool wxFileTypeImpl::Unassociate()
         result = FALSE;
     if ( !RemoveMimeType() )
         result = FALSE;
+   if ( !RemoveDescription() )
+        result = FALSE;
 
+/*
+    //this might hold other keys, eg some have CSLID keys
     if ( result )
     {
         // delete the root key
@@ -703,7 +778,7 @@ bool wxFileTypeImpl::Unassociate()
         if ( key.Exists() )
             result = key.DeleteSelf();
     }
-
+*/
     return result;
 }
 
@@ -738,6 +813,15 @@ bool wxFileTypeImpl::RemoveDefaultIcon()
                  _T("RemoveDefaultIcon() needs extension") );
 
     wxRegKey rkey (wxRegKey::HKCR, m_strFileType  + _T("\\DefaultIcon"));
+    return !rkey.Exists() || rkey.DeleteSelf();
+}
+
+bool wxFileTypeImpl::RemoveDescription()
+{
+    wxCHECK_MSG( !m_ext.IsEmpty(), FALSE,
+                 _T("RemoveDescription() needs extension") );
+
+    wxRegKey rkey (wxRegKey::HKCR, m_strFileType );
     return !rkey.Exists() || rkey.DeleteSelf();
 }
 

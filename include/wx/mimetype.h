@@ -32,6 +32,18 @@ class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxFileTypeImpl;
 class WXDLLEXPORT wxMimeTypesManagerImpl;
 
+// these constants define the MIME informations source under UNIX and are used
+// by wxMimeTypesManager::Initialize()
+enum wxMailcapStyle
+{
+    wxMAILCAP_STANDARD = 1,
+    wxMAILCAP_NETSCAPE = 2,
+    wxMAILCAP_KDE = 4,
+    wxMAILCAP_GNOME = 8,
+
+    wxMAILCAP_ALL = 15
+};
+
 /*
     TODO: would it be more convenient to have this class?
 
@@ -75,6 +87,10 @@ public:
                    // extensions
                    ...);
 
+        // the array elements correspond to the parameters of the ctor above in
+        // the same order
+    wxFileTypeInfo(const wxArrayString& sArray);
+
         // invalid item - use this to terminate the array passed to
         // wxMimeTypesManager::AddFallbacks
     wxFileTypeInfo() { }
@@ -105,6 +121,7 @@ public:
     const wxString& GetDescription() const { return m_desc; }
         // get the array of all extensions
     const wxArrayString& GetExtensions() const { return m_exts; }
+    int GetExtensionsCount() const {return m_exts.GetCount(); }
         // get the icon info
     const wxString& GetIconFile() const { return m_iconFile; }
     int GetIconIndex() const { return m_iconIndex; }
@@ -121,6 +138,7 @@ private:
     int      m_iconIndex;   // icon index in this file
 
     wxArrayString m_exts;   // the extensions which are mapped on this filetype
+
 
 #if 0 // TODO
     // the additional (except "open" and "print") command names and values
@@ -210,6 +228,14 @@ public:
     size_t GetAllCommands(wxArrayString *verbs, wxArrayString *commands,
                           const wxFileType::MessageParameters& params) const;
 
+    // set an arbitrary command, ask confirmation if it already exists and
+    // overwriteprompt is TRUE
+    bool SetCommand(const wxString& cmd, const wxString& verb,
+        bool overwriteprompt = TRUE);
+
+    bool SetDefaultIcon(const wxString& cmd = wxEmptyString, int index = 0);
+
+
     // remove the association for this filetype from the system MIME database:
     // notice that it will only work if the association is defined in the user
     // file/registry part, we will never modify the system-wide settings
@@ -265,6 +291,20 @@ public:
     // ctor
     wxMimeTypesManager();
 
+    // NB: the following 2 functions are for Unix only and don't do anything
+    //     elsewhere
+
+    // loads data from standard files according to the mailcap styles
+    // specified: this is a bitwise OR of wxMailcapStyle values
+    //
+    // use the extraDir parameter if you want to look for files in another
+    // directory
+    void Initialize(int mailcapStyle = wxMAILCAP_STANDARD,
+                    const wxString& extraDir = wxEmptyString);
+
+    // and this function clears all the data from the manager
+    void ClearData();
+
     // Database lookup: all functions return a pointer to wxFileType object
     // whose methods may be used to query it for the information you're
     // interested in. If the return value is !NULL, caller is responsible for
@@ -276,6 +316,9 @@ public:
 
     // other operations: return TRUE if there were no errors or FALSE if there
     // were some unreckognized entries (the good entries are always read anyhow)
+    //
+    // FIXME: These ought to be private ??
+
         // read in additional file (the standard ones are read automatically)
         // in mailcap format (see mimetype.cpp for description)
         //
@@ -283,6 +326,7 @@ public:
         // settings from other, previously parsed, files by this one: normally,
         // the files read most recently would override the older files, but with
         // fallback == TRUE this won't happen
+
     bool ReadMailcap(const wxString& filename, bool fallback = FALSE);
         // read in additional file in mime.types format
     bool ReadMimeTypes(const wxString& filename);
@@ -306,10 +350,11 @@ public:
 
         // create a new association using the fields of wxFileTypeInfo (at least
         // the MIME type and the extension should be set)
+        // if the other fields are empty, the existing values should be left alone
     wxFileType *Associate(const wxFileTypeInfo& ftInfo);
 
         // undo Associate()
-    bool Unassociate(wxFileType *ft) { return ft->Unassociate(); }
+    bool Unassociate(wxFileType *ft) ;
 
     // dtor (not virtual, shouldn't be derived from)
     ~wxMimeTypesManager();
@@ -342,5 +387,3 @@ WXDLLEXPORT_DATA(extern wxMimeTypesManager *) wxTheMimeTypesManager;
 
 #endif
   //_WX_MIMETYPE_H_
-
-/* vi: set cin tw=80 ts=4 sw=4: */

@@ -54,18 +54,16 @@ public:
 
     bool Unassociate();
 
-    // these methods are not publicly accessible (as wxMimeTypesManager
-    // doesn't know about them), and generally not very useful - they could be
-    // removed in the (near) future
-    bool SetCommand(const wxString& cmd, const wxString& verb,
-                    bool overwriteprompt = true);
-    bool SetMimeType(const wxString& mimeType);
+    // set an arbitrary command, ask confirmation if it already exists and
+    // overwriteprompt is TRUE
+    bool SetCommand(const wxString& cmd,
+                    const wxString& verb,
+                    bool overwriteprompt = TRUE);
+
     bool SetDefaultIcon(const wxString& cmd = wxEmptyString, int index = 0);
 
-    bool RemoveOpenCommand();
-    bool RemoveCommand(const wxString& verb);
-    bool RemoveMimeType();
-    bool RemoveDefaultIcon();
+    // this is called  by Associate
+    bool SetDescription (const wxString& desc);
 
 private:
     // helper function: reads the command corresponding to the specified verb
@@ -81,6 +79,15 @@ private:
 
     wxString m_strFileType,         // may be empty
              m_ext;
+
+    // these methods are not publicly accessible (as wxMimeTypesManager
+    // doesn't know about them), and should only be called by Unassociate
+
+    bool RemoveOpenCommand();
+    bool RemoveCommand(const wxString& verb);
+    bool RemoveMimeType();
+    bool RemoveDefaultIcon();
+    bool RemoveDescription();
 };
 
 class WXDLLEXPORT wxMimeTypesManagerImpl
@@ -92,12 +99,12 @@ public:
 
     // implement containing class functions
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
-    wxFileType *GetOrAllocateFileTypeFromExtension(const wxString& ext) ;
+    wxFileType *GetOrAllocateFileTypeFromExtension(const wxString& ext);
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
-    // this are NOPs under Windows
+    // these are NOPs under Windows
     bool ReadMailcap(const wxString& filename, bool fallback = TRUE)
         { return TRUE; }
     bool ReadMimeTypes(const wxString& filename)

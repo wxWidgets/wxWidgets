@@ -99,6 +99,21 @@ wxFileTypeInfo::wxFileTypeInfo(const char *mimeType,
     va_end(argptr);
 }
 
+
+wxFileTypeInfo::wxFileTypeInfo(const wxArrayString& sArray)
+{
+    m_mimeType = sArray [0u];
+    m_openCmd  = sArray [1u];
+    m_printCmd = sArray [2u];
+    m_desc     = sArray [3u];
+
+    size_t count = sArray.GetCount();
+    for ( size_t i = 4; i < count; i++ )
+    {
+        m_exts.Add(sArray[i]);
+    }
+}
+
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxArrayFileTypeInfo);
 
@@ -182,6 +197,8 @@ wxString wxFileType::ExpandCommand(const wxString& command,
     // behave like this, in particular a common test is 'test -n "$DISPLAY"'
     // and appending "< %s" to this command makes the test fail... I don't
     // know of the correct solution, try to guess what we have to do.
+
+    // test now carried out on reading file so test should never get here
     if ( !hasFilename && !str.IsEmpty()
 #ifdef __UNIX__
                       && !str.StartsWith(_T("test "))
@@ -271,7 +288,7 @@ bool wxFileType::GetIcon(wxIcon *icon,
         return TRUE;
     }
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__UNIX__)
     return m_impl->GetIcon(icon, iconFile, iconIndex);
 #else
     return m_impl->GetIcon(icon);
@@ -334,9 +351,9 @@ size_t wxFileType::GetAllCommands(wxArrayString *verbs,
     if ( commands )
         commands->Clear();
 
-#ifdef __WXMSW__
+#if defined (__WXMSW__)  || (__UNIX__)
     return m_impl->GetAllCommands(verbs, commands, params);
-#else // !__WXMSW__
+#else // !__WXMSW__ || Unix
     // we don't know how to retrieve all commands, so just try the 2 we know
     // about
     size_t count = 0;
@@ -361,18 +378,56 @@ size_t wxFileType::GetAllCommands(wxArrayString *verbs,
     }
 
     return count;
-#endif // __WXMSW__/!__WXMSW__
+#endif // __WXMSW__/| __UNIX__
 }
 
 bool wxFileType::Unassociate()
 {
-#if defined(__WXMSW__) || defined(__UNIX__)
+#if defined(__WXMSW__)
     return m_impl->Unassociate();
-#else
+#endif
+
+#if defined(__UNIX__)
+    return m_impl->Unassociate(this);
+#endif
+
     wxFAIL_MSG( _T("not implemented") ); // TODO
+    return FALSE;
+
+}
+
+bool wxFileType::SetCommand(const wxString& cmd, const wxString& verb,
+bool overwriteprompt)
+{
+#if defined (__WXMSW__)  || (__UNIX__)
+    return m_impl->SetCommand(cmd, verb, overwriteprompt);
+#else
+    wxFAIL_MSG(_T("not implemented"));
+
     return FALSE;
 #endif
 }
+
+bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
+{
+    wxString sTmp = cmd;
+#ifdef __WXMSW__
+    // VZ: should we do this?
+    // chris elliott : only makes sense in MS windows
+    if ( sTmp.empty() )
+        GetOpenCommand(&sTmp, wxFileType::MessageParameters("", ""));
+#endif
+    wxCHECK_MSG( !sTmp.empty(), FALSE, _T("need the icon file") );
+
+#if defined (__WXMSW__) || (__UNIX__)
+    return m_impl->SetDefaultIcon (cmd, index);
+#else
+    wxFAIL_MSG(_T("not implemented"));
+
+    return FALSE;
+#endif
+}
+
 
 // ----------------------------------------------------------------------------
 // wxMimeTypesManager
@@ -417,6 +472,16 @@ wxMimeTypesManager::~wxMimeTypesManager()
     if ( m_impl )
         delete m_impl;
 }
+
+bool wxMimeTypesManager::Unassociate(wxFileType *ft)
+{
+#if defined(__UNIX__)
+    return m_impl->Unassociate(ft);
+#else
+    return ft->Unassociate();
+#endif
+}
+
 
 wxFileType *
 wxMimeTypesManager::Associate(const wxFileTypeInfo& ftInfo)
@@ -517,6 +582,26 @@ size_t wxMimeTypesManager::EnumAllFileTypes(wxArrayString& mimetypes)
     return countAll;
 }
 
+void wxMimeTypesManager::Initialize(int mcapStyle,
+                                    const wxString& sExtraDir)
+{
+#ifdef __UNIX__
+    EnsureImpl();
+
+    m_impl->Initialize(mcapStyle, sExtraDir);
+#endif // Unix
+}
+
+// and this function clears all the data from the manager
+void wxMimeTypesManager::ClearData()
+{
+#ifdef __UNIX__
+    EnsureImpl();
+
+    m_impl->ClearData();
+#endif // Unix
+}
+
 // ----------------------------------------------------------------------------
 // global data and wxMimeTypeCmnModule
 // ----------------------------------------------------------------------------
@@ -546,4 +631,3 @@ public:
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxMimeTypeCmnModule, wxModule)
-
