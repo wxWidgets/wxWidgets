@@ -99,8 +99,6 @@ public:
     virtual void     WarpPointer( int x
                                  ,int y
                                 );
-    virtual void     CaptureMouse(void);
-    virtual void     ReleaseMouse(void);
     virtual void     Refresh( bool          bEraseBackground = TRUE
                              ,const wxRect* pRect = (const wxRect *)NULL
                             );
@@ -521,6 +519,9 @@ protected:
     virtual void DoSetClientSize( int nWidth
                                  ,int nHeight
                                 );
+
+    virtual void     DoCaptureMouse(void);
+    virtual void     DoReleaseMouse(void);
 
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just call

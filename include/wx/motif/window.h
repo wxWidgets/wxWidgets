@@ -63,8 +63,6 @@ public:
     virtual void SetFocus();
 
     virtual void WarpPointer(int x, int y);
-    virtual void CaptureMouse();
-    virtual void ReleaseMouse();
 
     virtual void Refresh( bool eraseBackground = TRUE,
                           const wxRect *rect = (const wxRect *) NULL );
@@ -316,6 +314,9 @@ protected:
     virtual void DoSetClientSize(int width, int height);
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
+
+    virtual void DoCaptureMouse();
+    virtual void DoReleaseMouse();
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );

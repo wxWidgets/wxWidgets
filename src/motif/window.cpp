@@ -713,7 +713,7 @@ wxString wxWindow::GetTitle() const
     return wxString(title);
 }
 
-void wxWindow::CaptureMouse()
+void wxWindow::DoCaptureMouse()
 {
     g_captureWindow = this;
     if ( m_winCaptured )
@@ -726,7 +726,7 @@ void wxWindow::CaptureMouse()
     m_winCaptured = TRUE;
 }
 
-void wxWindow::ReleaseMouse()
+void wxWindow::DoReleaseMouse()
 {
     g_captureWindow = NULL;
     if ( !m_winCaptured )

@@ -541,7 +541,7 @@ wxString wxWindowOS2::GetTitle() const
     return wxGetWindowText(GetHWND());
 } // end of wxWindowOS2::GetTitle
 
-void wxWindowOS2::CaptureMouse()
+void wxWindowOS2::DoCaptureMouse()
 {
     HWND                            hWnd = GetHwnd();
 
@@ -552,7 +552,7 @@ void wxWindowOS2::CaptureMouse()
     }
 } // end of wxWindowOS2::GetTitle
 
-void wxWindowOS2::ReleaseMouse()
+void wxWindowOS2::DoReleaseMouse()
 {
     if (m_bWinCaptured)
     {

@@ -62,8 +62,6 @@ public:
     virtual bool Reparent(wxWindowBase *newParent);
 
     virtual void WarpPointer(int x, int y);
-    virtual void CaptureMouse();
-    virtual void ReleaseMouse();
 
     virtual void Refresh(bool eraseBackground = TRUE,
                          const wxRect *rect = (const wxRect *) NULL);
@@ -127,6 +125,9 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
+
+    virtual void DoCaptureMouse();
+    virtual void DoReleaseMouse();
 
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just call

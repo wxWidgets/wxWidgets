@@ -254,7 +254,7 @@ bool wxWindowMac::Enable(bool enable)
     return TRUE;
 }
 
-void wxWindowMac::CaptureMouse()
+void wxWindowMac::DoCaptureMouse()
 {
     wxTheApp->s_captureWindow = this ;
 }
@@ -264,7 +264,7 @@ wxWindow* wxWindowBase::GetCapture()
     return wxTheApp->s_captureWindow ;
 }
 
-void wxWindowMac::ReleaseMouse()
+void wxWindowMac::DoReleaseMouse()
 {
     wxTheApp->s_captureWindow = NULL ;
 }

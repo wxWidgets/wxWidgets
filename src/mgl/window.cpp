@@ -709,7 +709,7 @@ void wxWindowMGL::Lower()
     MGL_wmLowerWindow(m_wnd);
 }
 
-void wxWindowMGL::CaptureMouse()
+void wxWindowMGL::DoCaptureMouse()
 {
     if ( gs_mouseCapture )
         MGL_wmUncaptureEvents(gs_mouseCapture->m_wnd, wxMGL_CAPTURE_MOUSE);
@@ -718,7 +718,7 @@ void wxWindowMGL::CaptureMouse()
     MGL_wmCaptureEvents(m_wnd, EVT_MOUSEEVT, wxMGL_CAPTURE_MOUSE);
 }
 
-void wxWindowMGL::ReleaseMouse()
+void wxWindowMGL::DoReleaseMouse()
 {
     wxASSERT_MSG( gs_mouseCapture == this, wxT("attempt to release mouse, but this window hasn't captured it") )
     
