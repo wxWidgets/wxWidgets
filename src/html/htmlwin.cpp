@@ -33,6 +33,7 @@
 #include "wx/html/htmlproc.h"
 #include "wx/list.h"
 #include "wx/clipbrd.h"
+#include "wx/dataobj.h"
 #include "wx/timer.h"
 #include "wx/dcmemory.h"
 
