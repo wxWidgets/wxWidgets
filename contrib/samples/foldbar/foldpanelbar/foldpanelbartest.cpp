@@ -1,8 +1,11 @@
-
 /////////////////////////////////////////////////////////////////////////////
-// Name:        FoldPanelBarTest.cpp
-// Purpose:     FoldPanelBarTest Test application
-// Created:     06/18/04
+// Name:        foldpanelbartest.cpp
+// Purpose:
+// Author:      Jorgen Bodde
+// Modified by:
+// Created:     18/06/2004
+// RCS-ID:      $Id$
+// Copyright:   (c) Jorgen Bodde
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -18,8 +21,8 @@
 
 enum
 {
-	ID_COLLAPSEME = 10000,
-	ID_EXPANDME
+    ID_COLLAPSEME = 10000,
+    ID_EXPANDME
 };
 
 #include "wx/foldbar/foldpanelbar.h"
@@ -58,14 +61,14 @@ private:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
-	// extra handlers for the bar, to show how it works
+    // extra handlers for the bar, to show how it works
 
-	void OnCollapseMe(wxCommandEvent &event);
-	void OnExpandMe(wxCommandEvent &event);
+    void OnCollapseMe(wxCommandEvent &event);
+    void OnExpandMe(wxCommandEvent &event);
 
 private:
-	wxMenuBar *CreateMenuBar();
-	wxFoldPanelBar *_pnl;
+    wxMenuBar *CreateMenuBar();
+    wxFoldPanelBar *_pnl;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -89,8 +92,8 @@ enum
 BEGIN_EVENT_TABLE(MyAppFrame, wxFrame)
     EVT_MENU(FoldPanelBarTest_Quit,  MyAppFrame::OnQuit)
     EVT_MENU(FoldPanelBarTest_About, MyAppFrame::OnAbout)
-	EVT_BUTTON(ID_COLLAPSEME, MyAppFrame::OnCollapseMe)
-	EVT_BUTTON(ID_EXPANDME, MyAppFrame::OnExpandMe)
+    EVT_BUTTON(ID_COLLAPSEME, MyAppFrame::OnCollapseMe)
+    EVT_BUTTON(ID_EXPANDME, MyAppFrame::OnExpandMe)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -108,10 +111,10 @@ bool MyApp::OnInit()
     MyAppFrame *frame = new MyAppFrame(_T("FoldPanelBarTest wxWindows Test Application"),
                                  wxPoint(50, 50), wxSize(200, 500));
 
-	SetTopWindow(frame);
+    SetTopWindow(frame);
 
-    frame->Show(TRUE);
-    return TRUE;
+    frame->Show(true);
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -119,7 +122,7 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 MyAppFrame::MyAppFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, -1, title, pos, size, style)
+       : wxFrame(NULL, wxID_ANY, title, pos, size, style)
 {
     SetIcon(wxICON(mondrian));
 
@@ -128,53 +131,51 @@ MyAppFrame::MyAppFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     CreateStatusBar(2);
     SetStatusText(_T("Welcome to wxWindows!"));
 
-	_pnl = new wxFoldPanelBar(this, -1, wxDefaultPosition, wxDefaultSize, wxFPB_DEFAULT_STYLE, wxFPB_COLLAPSE_TO_BOTTOM);
-		
-	wxFoldPanel item = _pnl->AddFoldPanel("Test me", false);
-	_pnl->AddFoldPanelWindow(item, new wxButton(item.GetParent(), ID_COLLAPSEME, "Collapse Me"));
+    _pnl = new wxFoldPanelBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFPB_DEFAULT_STYLE, wxFPB_COLLAPSE_TO_BOTTOM);
 
-	item = _pnl->AddFoldPanel("Test me too!", true);
-	_pnl->AddFoldPanelWindow(item, new wxButton(item.GetParent(), ID_EXPANDME, "Expand first one")); 
-	_pnl->AddFoldPanelSeperator(item);
-	_pnl->AddFoldPanelWindow(item, new FoldTestPanel(item.GetParent(), -1)); 
+    wxFoldPanel item = _pnl->AddFoldPanel(_T("Test me"), false);
+    _pnl->AddFoldPanelWindow(item, new wxButton(item.GetParent(), ID_COLLAPSEME, _T("Collapse Me")));
 
-	_pnl->AddFoldPanelSeperator(item);
+    item = _pnl->AddFoldPanel(_T("Test me too!"), true);
+    _pnl->AddFoldPanelWindow(item, new wxButton(item.GetParent(), ID_EXPANDME, _T("Expand first one")));
+    _pnl->AddFoldPanelSeperator(item);
+    _pnl->AddFoldPanelWindow(item, new FoldTestPanel(item.GetParent(), wxID_ANY));
 
-	_pnl->AddFoldPanelWindow(item, new wxTextCtrl(item.GetParent(), -1, "Comment"), wxFPB_ALIGN_WIDTH, wxFPB_DEFAULT_YSPACING, 20); 
+    _pnl->AddFoldPanelSeperator(item);
 
-	item = _pnl->AddFoldPanel("Some opinions ...", false);
-	_pnl->AddFoldPanelWindow(item, new wxCheckBox(item.GetParent(), -1, "I like this")); 
-	_pnl->AddFoldPanelWindow(item, new wxCheckBox(item.GetParent(), -1, "And also this")); 
-	_pnl->AddFoldPanelWindow(item, new wxCheckBox(item.GetParent(), -1, "And gimme this too")); 
+    _pnl->AddFoldPanelWindow(item, new wxTextCtrl(item.GetParent(), wxID_ANY, _T("Comment")), wxFPB_ALIGN_WIDTH, wxFPB_DEFAULT_YSPACING, 20);
 
-	_pnl->AddFoldPanelSeperator(item);
-	
-	_pnl->AddFoldPanelWindow(item, new wxCheckBox(item.GetParent(), -1, "Check this too if you like")); 
-	_pnl->AddFoldPanelWindow(item, new wxCheckBox(item.GetParent(), -1, "What about this")); 
+    item = _pnl->AddFoldPanel(_T("Some opinions ..."), false);
+    _pnl->AddFoldPanelWindow(item, new wxCheckBox(item.GetParent(), wxID_ANY, _T("I like this")));
+    _pnl->AddFoldPanelWindow(item, new wxCheckBox(item.GetParent(), wxID_ANY, _T("And also this")));
+    _pnl->AddFoldPanelWindow(item, new wxCheckBox(item.GetParent(), wxID_ANY, _T("And gimme this too")));
+
+    _pnl->AddFoldPanelSeperator(item);
+
+    _pnl->AddFoldPanelWindow(item, new wxCheckBox(item.GetParent(), wxID_ANY, _T("Check this too if you like")));
+    _pnl->AddFoldPanelWindow(item, new wxCheckBox(item.GetParent(), wxID_ANY, _T("What about this")));
 
 
-	item = _pnl->AddFoldPanel("Choose one ...", false);
-	_pnl->AddFoldPanelWindow(item, new wxStaticText(item.GetParent(), -1, "Enter your comment")); 
-	_pnl->AddFoldPanelWindow(item, new wxTextCtrl(item.GetParent(), -1, "Comment"), wxFPB_ALIGN_WIDTH, wxFPB_DEFAULT_YSPACING, 20); 
+    item = _pnl->AddFoldPanel(_T("Choose one ..."), false);
+    _pnl->AddFoldPanelWindow(item, new wxStaticText(item.GetParent(), wxID_ANY, _T("Enter your comment")));
+    _pnl->AddFoldPanelWindow(item, new wxTextCtrl(item.GetParent(), wxID_ANY, _T("Comment")), wxFPB_ALIGN_WIDTH, wxFPB_DEFAULT_YSPACING, 20);
 
 }
 
 wxMenuBar *MyAppFrame::CreateMenuBar()
 {
-	wxMenuBar *value = 0;
-	
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(FoldPanelBarTest_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(FoldPanelBarTest_About, _T("&About...\tF1"), _T("Show about dialog"));
 
-    value = new wxMenuBar();
+    wxMenuBar *value = new wxMenuBar();
     value->Append(menuFile, _T("&File"));
     value->Append(helpMenu, _T("&Help"));
-    
+
     return value;
-}	
+}
 
 // event handlers
 
@@ -182,8 +183,8 @@ wxMenuBar *MyAppFrame::CreateMenuBar()
 
 void MyAppFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyAppFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -195,14 +196,14 @@ void MyAppFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(msg, _T("About FoldPanelBarTest"), wxOK | wxICON_INFORMATION, this);
 }
 
-void MyAppFrame::OnCollapseMe(wxCommandEvent &event)
+void MyAppFrame::OnCollapseMe(wxCommandEvent &WXUNUSED(event))
 {
-	wxFoldPanel item = _pnl->Item(0);
-	_pnl->Collapse(item);
+    wxFoldPanel item = _pnl->Item(0);
+    _pnl->Collapse(item);
 }
 
-void MyAppFrame::OnExpandMe(wxCommandEvent &event)
+void MyAppFrame::OnExpandMe(wxCommandEvent &WXUNUSED(event))
 {
-	_pnl->Expand(_pnl->Item(0));
-	_pnl->Collapse(_pnl->Item(1));
+    _pnl->Expand(_pnl->Item(0));
+    _pnl->Collapse(_pnl->Item(1));
 }

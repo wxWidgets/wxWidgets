@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        test.h
-// Purpose:     
+// Purpose:
 // Author:      Jorgen Bodde
-// Modified by: 
-// Created:     06/27/04 13:34:20
-// RCS-ID:      
-// Copyright:   
-// Licence:     
+// Modified by:
+// Created:     27/06/2004
+// RCS-ID:      $Id$
+// Copyright:   (c) Jorgen Bodde
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _TEST_H_
@@ -74,7 +74,7 @@ class wxBoxSizer;
  */
 
 class TestTest: public wxDialog
-{    
+{
     DECLARE_CLASS( TestTest )
     DECLARE_EVENT_TABLE()
 

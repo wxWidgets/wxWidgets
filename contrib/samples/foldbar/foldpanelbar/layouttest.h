@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        layouttest.h
-// Purpose:     
+// Purpose:
 // Author:      Jorgen Bodde
-// Modified by: 
-// Created:     06/25/04 19:48:57
-// RCS-ID:      
-// Copyright:   
-// Licence:     
+// Modified by:
+// Created:     25/06/2004
+// RCS-ID:      $Id$
+// Copyright:   (c) Jorgen Bodde
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _LAYOUTTEST_H_
@@ -61,7 +61,7 @@
  */
 
 class LayoutTest: public wxPanel
-{    
+{
     DECLARE_CLASS( LayoutTest )
     DECLARE_EVENT_TABLE()
 

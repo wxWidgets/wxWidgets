@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        foldtestpanel.h
-// Purpose:     
+// Purpose:
 // Author:      Jorgen Bodde
-// Modified by: 
-// Created:     06/18/04 22:37:15
-// RCS-ID:      
-// Copyright:   
-// Licence:     
+// Modified by:
+// Created:     18/06/2004
+// RCS-ID:      $Id$
+// Copyright:   (c) Jorgen Bodde
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _FOLDTESTPANEL_H_
@@ -67,15 +67,15 @@ class wxBoxSizer;
  */
 
 class FoldTestPanel: public wxPanel
-{    
+{
     DECLARE_CLASS( FoldTestPanel )
     DECLARE_EVENT_TABLE()
 
 private:
-	wxImageList *_images;
-	wxRect _oldsize;
+    wxImageList *_images;
+    wxRect _oldsize;
 
-	void OnCaptionPanel(wxCaptionBarEvent &event);
+    void OnCaptionPanel(wxCaptionBarEvent &event);
 
 public:
     /// Constructors
