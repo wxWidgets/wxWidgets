@@ -317,11 +317,11 @@ SWIG_GetPtr(char *c, void **ptr, char *t)
   if (*c != '_') {
     *ptr = (void *) 0;
     if (strcmp(c,"NULL") == 0) return (char *) 0;
-    else c;
+    else return c;
   }
   c++;
   /* Extract hex value from pointer */
-  while (d = *c) {
+  while ((d = *c) != 0) {
     if ((d >= '0') && (d <= '9'))
       p = (p << 4) + (d - '0');
     else if ((d >= 'a') && (d <= 'f'))

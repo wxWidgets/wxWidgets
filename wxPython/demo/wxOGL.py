@@ -193,6 +193,7 @@ class TestWindow(wxShapeCanvas):
             if shape.GetParent() == None:
                 shape.SetCanvas(None)
                 shape.Destroy()
+        self.diagram.Destroy()
 
 
 #----------------------------------------------------------------------

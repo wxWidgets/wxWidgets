@@ -250,6 +250,21 @@ extern "C" SWIGEXPORT(void) initoglcanvasc();
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();
 
+    wxPyPtrTypeMap_Add("wxControlPoint", "wxPyControlPoint");
+    wxPyPtrTypeMap_Add("wxShapeCanvas", "wxPyShapeCanvas");
+    wxPyPtrTypeMap_Add("wxShapeEvtHandler", "wxPyShapeEvtHandler");
+    wxPyPtrTypeMap_Add("wxShape", "wxPyShape");
+    wxPyPtrTypeMap_Add("wxRectangleShape", "wxPyRectangleShape");
+    wxPyPtrTypeMap_Add("wxDrawnShape", "wxPyDrawnShape");
+    wxPyPtrTypeMap_Add("wxCompositeShape", "wxPyCompositeShape");
+    wxPyPtrTypeMap_Add("wxDividedShape", "wxPyDividedShape");
+    wxPyPtrTypeMap_Add("wxDivisionShape", "wxPyDivisionShape");
+    wxPyPtrTypeMap_Add("wxEllipseShape", "wxPyEllipseShape");
+    wxPyPtrTypeMap_Add("wxCircleShape", "wxPyCircleShape");
+    wxPyPtrTypeMap_Add("wxLineShape", "wxPyLineShape");
+    wxPyPtrTypeMap_Add("wxPolygonShape", "wxPyPolygonShape");
+    wxPyPtrTypeMap_Add("wxTextShape", "wxPyTextShape");
+
 %}
 
 //----------------------------------------------------------------------
