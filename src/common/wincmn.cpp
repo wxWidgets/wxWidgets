@@ -504,6 +504,11 @@ void wxWindowBase::AddChild(wxWindowBase *child)
 {
     wxCHECK_RET( child, wxT("can't add a NULL child") );
 
+    // this should never happen and it will lead to a crash later if it does
+    // because RemoveChild() will remove only one node from the children list
+    // and the other(s) one(s) will be left with dangling pointers in them
+    wxASSERT_MSG( !GetChildren().Find(child), _T("AddChild() called twice") );
+
     GetChildren().Append(child);
     child->SetParent(this);
 }

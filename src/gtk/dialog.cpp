@@ -314,9 +314,7 @@ bool wxDialog::Create( wxWindow *parent,
 
 wxDialog::~wxDialog()
 {
-    Destroy();
-
-    m_isBeingDeleted = TRUE;
+    CleanUp();
 
     if ((wxTopLevelWindows.Number() == 0) &&
         (wxTheApp->GetExitOnFrameDelete()))
@@ -328,13 +326,12 @@ wxDialog::~wxDialog()
 void wxDialog::SetTitle( const wxString& title )
 {
     m_title = title;
-    if (m_title.IsNull()) m_title = wxT("");
     gtk_window_set_title( GTK_WINDOW(m_widget), m_title.mbc_str() );
 }
 
 wxString wxDialog::GetTitle() const
 {
-    return (wxString&)m_title;
+    return m_title;
 }
 
 void wxDialog::OnApply( wxCommandEvent &WXUNUSED(event) )
@@ -366,7 +363,7 @@ void wxDialog::OnOK( wxCommandEvent &WXUNUSED(event) )
         else
         {
             SetReturnCode(wxID_OK);
-            this->Show(FALSE);
+            Show(FALSE);
         }
     }
 }
@@ -415,14 +412,21 @@ bool wxDialog::Destroy()
 
     // don't leave a dangling pointer as the app top window, we can be deleted
     // any moment at all now!
+    CleanUp();
+
+    return TRUE;
+}
+
+void wxDialog::CleanUp()
+{
+    m_isBeingDeleted = TRUE;
+
     if ( wxTheApp->GetTopWindow() == this )
     {
         wxTheApp->SetTopWindow( (wxWindow*) NULL );
     }
 
     wxTopLevelWindows.DeleteObject( this );
-
-    return TRUE;
 }
 
 void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
