@@ -8,8 +8,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*
-We don't put pragma implement in this file because it is already present in
-src/common/image.cpp
+  We don't put pragma implement in this file because it is already present in
+  src/common/image.cpp
 */
 
 // For compilers that support precompilation, includes "wx.h".
@@ -24,7 +24,6 @@ src/common/image.cpp
 #endif
 
 #include "wx/image.h"
-// #include "wx/imaggif.h"
 #include "wx/gifdecod.h"
 #include "wx/wfstream.h"
 #include "wx/module.h"
@@ -68,11 +67,14 @@ bool wxGIFHandler::SaveFile( wxImage * WXUNUSED(image),
 
 bool wxGIFHandler::CanRead( wxInputStream& stream )
 {
-    unsigned char hdr[5];
-    
-    stream.Read(&hdr, 5);
-    stream.SeekI(-5, wxFromCurrent);
-    return (hdr[0] == 'G' && hdr[1] == 'I' && hdr[2] == 'F' && hdr[3] == '8' && hdr[4] == '9');
+    wxGIFDecoder *decod;
+    bool ok;
+
+    decod = new wxGIFDecoder(&stream);
+    ok = decod->CanRead();
+
+    delete decod;
+    return ok;
 }
 
 #endif
