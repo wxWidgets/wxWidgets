@@ -68,13 +68,13 @@ enum ScreenToShow
 // global variables
 // ----------------------------------------------------------------------------
 
-static wxBitmap gs_bmpNoMask,
-                gs_bmpWithColMask,
-                gs_bmpMask,
-                gs_bmpWithMask,
-                gs_bmp4,
-                gs_bmp4_mono,
-                gs_bmp36;
+static wxBitmap *gs_bmpNoMask = NULL,
+                *gs_bmpWithColMask = NULL,
+                *gs_bmpMask = NULL,
+                *gs_bmpWithMask = NULL,
+                *gs_bmp4 = NULL,
+                *gs_bmp4_mono = NULL,
+                *gs_bmp36 = NULL;
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -92,7 +92,11 @@ public:
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit();
 
+    virtual int OnExit() { DeleteBitmaps(); return 0; }
+
 protected:
+    void DeleteBitmaps();
+
     bool LoadImages();
 };
 
@@ -237,6 +241,14 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::LoadImages()
 {
+    gs_bmpNoMask = new wxBitmap;
+    gs_bmpWithColMask = new wxBitmap;
+    gs_bmpMask = new wxBitmap;
+    gs_bmpWithMask = new wxBitmap;
+    gs_bmp4 = new wxBitmap;
+    gs_bmp4_mono = new wxBitmap;
+    gs_bmp36 = new wxBitmap;
+
     wxPathList pathList;
     pathList.Add(".");
     pathList.Add("..");
@@ -244,41 +256,38 @@ bool MyApp::LoadImages()
     wxString path = pathList.FindValidPath("pat4.bmp");
     if ( !path )
         return FALSE;
+
     /* 4 colour bitmap */
-    gs_bmp4.LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmp4->LoadFile(path, wxBITMAP_TYPE_BMP);
     /* turn into mono-bitmap */
-    gs_bmp4_mono.LoadFile(path, wxBITMAP_TYPE_BMP);
-    wxMask* mask4 = new wxMask(gs_bmp4_mono, *wxBLACK);
-    gs_bmp4_mono.SetMask(mask4);
+    gs_bmp4_mono->LoadFile(path, wxBITMAP_TYPE_BMP);
+    wxMask* mask4 = new wxMask(*gs_bmp4_mono, *wxBLACK);
+    gs_bmp4_mono->SetMask(mask4);
 
     path = pathList.FindValidPath("pat36.bmp");
     if ( !path )
         return FALSE;
-    gs_bmp36.LoadFile(path, wxBITMAP_TYPE_BMP);
-    wxMask* mask36 = new wxMask(gs_bmp36, *wxBLACK);
-    gs_bmp36.SetMask(mask36);
+    gs_bmp36->LoadFile(path, wxBITMAP_TYPE_BMP);
+    wxMask* mask36 = new wxMask(*gs_bmp36, *wxBLACK);
+    gs_bmp36->SetMask(mask36);
 
     path = pathList.FindValidPath("image.bmp");
     if ( !path )
         return FALSE;
-    gs_bmpNoMask.LoadFile(path, wxBITMAP_TYPE_BMP);
-    gs_bmpWithMask.LoadFile(path, wxBITMAP_TYPE_BMP);
-    gs_bmpWithColMask.LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmpNoMask->LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmpWithMask->LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmpWithColMask->LoadFile(path, wxBITMAP_TYPE_BMP);
 
     path = pathList.FindValidPath("mask.bmp");
     if ( !path )
         return FALSE;
-    gs_bmpMask.LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmpMask->LoadFile(path, wxBITMAP_TYPE_BMP);
 
-//    This is so wrong, it hurts.
-//    gs_bmpMask.SetDepth(1);
-//    wxMask *mask = new wxMask(gs_bmpMask);
+    wxMask *mask = new wxMask(*gs_bmpMask, *wxBLACK);
+    gs_bmpWithMask->SetMask(mask);
 
-    wxMask *mask = new wxMask(gs_bmpMask, *wxBLACK);
-    gs_bmpWithMask.SetMask(mask);
-
-    mask = new wxMask(gs_bmpWithColMask, *wxWHITE);
-    gs_bmpWithColMask.SetMask(mask);
+    mask = new wxMask(*gs_bmpWithColMask, *wxWHITE);
+    gs_bmpWithColMask->SetMask(mask);
 
     return TRUE;
 }
@@ -301,11 +310,24 @@ bool MyApp::OnInit()
                    "there.");
 
         // stop here
+        DeleteBitmaps();
+
         return FALSE;
     }
 
     // ok, continue
     return TRUE;
+}
+
+void MyApp::DeleteBitmaps()
+{
+    delete gs_bmpNoMask;
+    delete gs_bmpWithColMask;
+    delete gs_bmpMask;
+    delete gs_bmpWithMask;
+    delete gs_bmp4;
+    delete gs_bmp4_mono;
+    delete gs_bmp36;
 }
 
 // ----------------------------------------------------------------------------
@@ -342,9 +364,9 @@ MyCanvas::MyCanvas( MyFrame *parent ) : wxScrolledWindow( parent )
 
 void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
 {
-    wxBrush* brush4 = new wxBrush(gs_bmp4);
-    wxBrush* brush4_mono = new wxBrush(gs_bmp4_mono);
-    wxBrush* brush36 = new wxBrush(gs_bmp36);
+    wxBrush* brush4 = new wxBrush(*gs_bmp4);
+    wxBrush* brush4_mono = new wxBrush(*gs_bmp4_mono);
+    wxBrush* brush36 = new wxBrush(*gs_bmp36);
 
     wxPoint todraw[5];
     todraw[0].x=(long)x+100;
@@ -816,6 +838,18 @@ void MyCanvas::DrawText(wxDC& dc)
     dc.DrawText( text, 110, 120 );
 
     dc.DrawRectangle( 100, 40, 4, height );
+
+    // test the logical function effect
+    dc.SetLogicalFunction(wxINVERT);
+    dc.DrawText( "not inverted", 110, 150 );
+    dc.DrawRectangle( 110, 160, 100, height );
+
+    // twice drawn inverted should result in invisible
+    dc.DrawText( "should be invisible", 110, 170 );
+    dc.DrawRectangle( 110, 200, 100, height );
+    dc.DrawText( "should be invisible", 110, 170 );
+    dc.DrawRectangle( 110, 200, 100, height );
+    dc.SetLogicalFunction(wxCOPY);
 }
 
 static const struct
@@ -844,16 +878,16 @@ static const struct
 void MyCanvas::DrawImages(wxDC& dc)
 {
     dc.DrawText("original image", 0, 0);
-    dc.DrawBitmap(gs_bmpNoMask, 0, 20, 0);
+    dc.DrawBitmap(*gs_bmpNoMask, 0, 20, 0);
     dc.DrawText("with colour mask", 0, 100);
-    dc.DrawBitmap(gs_bmpWithColMask, 0, 120, TRUE);
+    dc.DrawBitmap(*gs_bmpWithColMask, 0, 120, TRUE);
     dc.DrawText("the mask image", 0, 200);
-    dc.DrawBitmap(gs_bmpMask, 0, 220, 0);
+    dc.DrawBitmap(*gs_bmpMask, 0, 220, 0);
     dc.DrawText("masked image", 0, 300);
-    dc.DrawBitmap(gs_bmpWithMask, 0, 320, TRUE);
+    dc.DrawBitmap(*gs_bmpWithMask, 0, 320, TRUE);
 
-    int cx = gs_bmpWithColMask.GetWidth(),
-        cy = gs_bmpWithColMask.GetHeight();
+    int cx = gs_bmpWithColMask->GetWidth(),
+        cy = gs_bmpWithColMask->GetHeight();
 
     wxMemoryDC memDC;
     for ( size_t n = 0; n < WXSIZEOF(rasterOperations); n++ )
@@ -862,7 +896,7 @@ void MyCanvas::DrawImages(wxDC& dc)
                 y =  20 + 100*(n/4);
 
         dc.DrawText(rasterOperations[n].name, x, y - 20);
-        memDC.SelectObject(gs_bmpWithColMask);
+        memDC.SelectObject(*gs_bmpWithColMask);
         dc.Blit(x, y, cx, cy, &memDC, 0, 0, rasterOperations[n].rop, TRUE);
     }
 }
