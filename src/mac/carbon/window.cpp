@@ -918,17 +918,18 @@ bool wxWindowMac::SetBackgroundColour(const wxColour& col )
         return false ;
 
     wxBrush brush ;
-    if ( col == wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE) )
+    wxColour newCol(GetBackgroundColour());
+    if ( newCol == wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE) )
     {
         brush.MacSetTheme( kThemeBrushDocumentWindowBackground ) ;
     }
-    else if (  col == wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE ) )
+    else if (  newCol == wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE ) )
     {
         brush.MacSetTheme( kThemeBrushDialogBackgroundActive ) ; 
     } 
     else
     {
-        brush.SetColour( col ) ;
+        brush.SetColour( newCol ) ;
     }
     MacSetBackgroundBrush( brush ) ;
         
