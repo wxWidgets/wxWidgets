@@ -5,7 +5,7 @@ set dest=%src\deliver
 set wise=0
 
 Rem Set this to the required version
-set version=2.2.1
+set version=2.2.4
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -242,6 +242,6 @@ echo DOS wxWindows distribution. Zips up all GTK/Motif/MSW/doc files,
 echo and optionally makes a deliver\wx directory and a setup.exe
 echo if you specify 'wise' (skipping the zipping if you use 'wiseonly').
 echo.
-echo Usage: zipdist [wise | wiseonly]
+echo "Usage: zipdist [wise | wiseonly]"
 
 :end

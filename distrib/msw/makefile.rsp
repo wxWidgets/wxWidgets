@@ -16,7 +16,6 @@ samples/dragimag/Makefile.in
 samples/drawing/Makefile.in
 samples/dynamic/Makefile.in
 samples/exec/Makefile.in
-samples/genvalid/Makefile.in
 samples/grid/Makefile.in
 samples/newgrid/Makefile.in
 samples/help/Makefile.in
@@ -60,7 +59,6 @@ samples/treectrl/Makefile.in
 samples/typetest/Makefile.in
 samples/validate/Makefile.in
 samples/wizard/Makefile.in
-samples/socket/Makefile.in
 samples/dialup/Makefile.in
 samples/font/Makefile.in
 samples/menu/Makefile.in
