@@ -25,8 +25,11 @@
 // constants
 // ----------------------------------------------------------------------------
 
+// the focus rect around a text may have 4 pixels in each direction
+// we handle these problems right now in an extended vis region of a window
+static const wxCoord TEXTBORDER = 0 ;
 // the margin between the text control and the spin
-static const wxCoord MARGIN = 8;
+static const wxCoord MARGIN = 8 - TEXTBORDER;
 
 // ----------------------------------------------------------------------------
 // wxSpinCtrlText: text control used by spin control
@@ -36,7 +39,7 @@ class wxSpinCtrlText : public wxTextCtrl
 {
 public:
     wxSpinCtrlText(wxSpinCtrl *spin, const wxString& value)
-        : wxTextCtrl(spin , -1, value, wxDefaultPosition, wxSize(40, 22))
+        : wxTextCtrl(spin , -1, value, wxDefaultPosition, wxSize(40, -1))
     {
         m_spin = spin;
         
@@ -177,7 +180,9 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     }
 
     if ( size.y == -1 ) {
-	csize.y = m_text->GetSize().y + 4; //allow for text border highlights
+	    csize.y = m_text->GetSize().y + 2 * TEXTBORDER ; //allow for text border highlights
+	    if ( m_btn->GetSize().y > csize.y )
+	        csize.y = m_btn->GetSize().y ;
     }
     
     //SetSize(csize);
@@ -211,28 +216,30 @@ wxSize wxSpinCtrl::DoGetBestSize() const
     wxSize sizeBtn = m_btn->GetBestSize(),
            sizeText = m_text->GetBestSize();
 
+    sizeText.y += 2 * TEXTBORDER ;
+    sizeText.x += 2 * TEXTBORDER ;
+
     int height;
     if (sizeText.y > sizeBtn.y)
         height = sizeText.y;
     else
         height = sizeBtn.y;
         
-    return wxSize(sizeBtn.x + sizeText.x + MARGIN, height + MARGIN);
+    return wxSize(sizeBtn.x + sizeText.x + MARGIN, height );
 }
 
 void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
     // position the subcontrols inside the client area
     wxSize sizeBtn = m_btn->GetSize();
+    wxSize sizeText = m_text->GetSize();
     
     wxControl::DoMoveWindow(x, y, width, height);
 
-    wxCoord wText = width - sizeBtn.x - MARGIN;
+    wxCoord wText = width - sizeBtn.x - MARGIN - 2 * TEXTBORDER;
     
-    //growing or shrinking a control like this doesn't really make sense
-    //so just leave the controls the same size and add whitespace
-    m_text->SetSize(2, 2, wText, 22);
-    m_btn->SetSize(0 + wText + MARGIN, 0, -1, height);
+    m_text->SetSize(TEXTBORDER, (height - sizeText.y) / 2, wText, -1);
+    m_btn->SetSize(0 + wText + MARGIN + 2 * TEXTBORDER , (height - sizeBtn.y) / 2 , -1, -1 );
 }
 
 // ----------------------------------------------------------------------------

@@ -36,6 +36,8 @@
 #include "wx/log.h"
 #include "wx/geometry.h"
 #include "wx/textctrl.h"
+#include "wx/laywin.h"
+#include "wx/splitter.h"
 
 #include "wx/toolbar.h"
 #include "wx/dc.h"
@@ -2591,7 +2593,11 @@ wxTopLevelWindowMac* wxWindowMac::MacGetTopLevelWindow() const
 }
 wxRegion wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
 {
-
+    // includeOuterStructures is true if we try to draw somthing like a focus ring etc.
+    // also a window dc uses this, in this case we only clip in the hierarchy for hard
+    // borders like a scrollwindow, splitter etc otherwise we end up in a paranoia having
+    // to add focus borders everywhere
+    
     Rect r ;
     RgnHandle visRgn = NewRgn() ;
     RgnHandle tempRgn = NewRgn() ;
@@ -2644,12 +2650,19 @@ wxRegion wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
                 parent->MacWindowToRootWindow( &x, &y ) ;
                 MacRootWindowToWindow( &x , &y ) ;
 
-                SetRectRgn( tempRgn ,
-                    x + parent->MacGetLeftBorderSize() , y + parent->MacGetTopBorderSize() ,
-                    x + size.x - parent->MacGetRightBorderSize(),
-                    y + size.y - parent->MacGetBottomBorderSize()) ;
+                if ( !includeOuterStructures || (
+                    parent->IsKindOf( CLASSINFO( wxScrolledWindow ) ) ||
+                    parent->IsKindOf( CLASSINFO( wxSashLayoutWindow ) ) ||
+                    ( parent->GetParent() && parent->GetParent()->IsKindOf( CLASSINFO( wxSplitterWindow ) ) )
+                    ) )
+                {
+                    SetRectRgn( tempRgn ,
+                        x + parent->MacGetLeftBorderSize() , y + parent->MacGetTopBorderSize() ,
+                        x + size.x - parent->MacGetRightBorderSize(),
+                        y + size.y - parent->MacGetBottomBorderSize()) ;
 
-                SectRgn( visRgn , tempRgn , visRgn ) ;
+                    SectRgn( visRgn , tempRgn , visRgn ) ;
+                }
                 if ( parent->IsTopLevel() )
                     break ;
                 child = parent ;
