@@ -721,7 +721,7 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
       wxFprintf( stream, wxT("\"") );
       size_t i;
       const wxWX2MBbuf val = wxConvLibc.cWX2MB(value.string);
-      int len = strlen(val);
+      size_t len = strlen(val);
       for (i = 0; i < len; i++)
       {
         wxChar ch = val[i];
@@ -739,7 +739,7 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
     {
       bool quote_it = FALSE;
       const wxWX2MBbuf val = wxConvLibc.cWX2MB(value.word);
-      int len = strlen(val);
+      size_t len = strlen(val);
       if ((len == 0) || (len > 0 && (val[(size_t) 0] > 64 && val[(size_t) 0] < 91)))
         quote_it = TRUE;
       else
