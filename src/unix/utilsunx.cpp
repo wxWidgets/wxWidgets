@@ -1165,6 +1165,8 @@ bool wxHandleFatalExceptions(bool doit)
 // error and debug output routines (deprecated, use wxLog)
 // ----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_2_2
+
 void wxDebugMsg( const char *format, ... )
 {
   va_list ap;
@@ -1190,4 +1192,6 @@ void wxFatalError( const wxString &msg, const wxString &title )
   wxFprintf( stderr, wxT(".\n") );
   exit(3); // the same exit code as for abort()
 }
+
+#endif // WXWIN_COMPATIBILITY_2_2
 

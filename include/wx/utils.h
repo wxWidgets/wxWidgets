@@ -441,6 +441,8 @@ void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 // Error message functions used by wxWindows (deprecated, use wxLog)
 // ----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_2_2
+
 // Format a message on the standard error (UNIX) or the debugging
 // stream (Windows)
 WXDLLEXPORT void wxDebugMsg(const wxChar *fmt ...);
@@ -453,6 +455,7 @@ WXDLLEXPORT void wxError(const wxString& msg, const wxString& title = wxInternal
 WXDLLEXPORT_DATA(extern const wxChar*) wxFatalErrorStr;
 WXDLLEXPORT void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr);
 
+#endif // WXWIN_COMPATIBILITY_2_2
 
 #endif
     // _WX_UTILSH__

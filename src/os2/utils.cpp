@@ -291,6 +291,8 @@ void wxFlushEvents()
 //  wxYield();
 }
 
+#if WXWIN_COMPATIBILITY_2_2
+
 // Output a debug mess., in a system dependent fashion.
 void wxDebugMsg(
   const wxChar*                     zFmt ...
@@ -342,6 +344,8 @@ void wxFatalError(
                           );
     DosExit(EXIT_PROCESS, ulRc);
 }
+
+#endif // WXWIN_COMPATIBILITY_2_2
 
 // Emit a beeeeeep
 void wxBell()

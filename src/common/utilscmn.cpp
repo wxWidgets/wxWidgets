@@ -91,6 +91,15 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// common data
+// ----------------------------------------------------------------------------
+
+#if WXWIN_COMPATIBILITY_2_2
+    const wxChar *wxInternalErrorStr = wxT("wxWindows Internal Error");
+    const wxChar *wxFatalErrorStr = wxT("wxWindows Fatal Error");
+#endif // WXWIN_COMPATIBILITY_2_2
+
+// ----------------------------------------------------------------------------
 // function protoypes
 // ----------------------------------------------------------------------------
 

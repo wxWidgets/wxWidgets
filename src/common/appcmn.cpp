@@ -80,8 +80,9 @@ wxAppBase::wxAppBase()
 {
     wxTheApp = (wxApp *)this;
 
-    // VZ: what's this? is it obsolete?
+#if WXWIN_COMPATIBILITY_2_2
     m_wantDebugOutput = FALSE;
+#endif // WXWIN_COMPATIBILITY_2_2
 
 #if wxUSE_GUI
     m_topWindow = (wxWindow *)NULL;

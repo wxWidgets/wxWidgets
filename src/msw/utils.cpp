@@ -1059,7 +1059,7 @@ void wxSleep(int nSecs)
 // deprecated (in favour of wxLog) log functions
 // ----------------------------------------------------------------------------
 
-#if wxUSE_GUI
+#if WXWIN_COMPATIBILITY_2_2
 
 // Output a debug mess., in a system dependent fashion.
 #ifndef __WXMICROWIN__
@@ -1095,6 +1095,10 @@ void wxFatalError(const wxString& msg, const wxString& title)
   FatalAppExit(0, (LPCTSTR)wxBuffer);
 }
 #endif // __WXMICROWIN__
+
+#endif // WXWIN_COMPATIBILITY_2_2
+
+#if wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // functions to work with .INI files
@@ -1467,10 +1471,6 @@ WXWORD WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
     return (WXWORD)GetWindowLong((HWND)hWnd, GWL_ID);
 #endif // Win16/32
 }
-
-#endif // wxUSE_GUI
-
-#if wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // Metafile helpers

@@ -164,6 +164,8 @@ void wxFlushEvents()
 {
 }
 
+#if WXWIN_COMPATIBILITY_2_2
+
 // Output a debug message, in a system dependent fashion.
 void wxDebugMsg(const char *fmt ...)
 {
@@ -198,6 +200,9 @@ void wxFatalError(const wxString& msg, const wxString& title)
   wxMessageBox(wxBuffer);
   wxExit();
 }
+
+#endif // WXWIN_COMPATIBILITY_2_2
+
 #endif // !__DARWIN__
 
 // Emit a beeeeeep

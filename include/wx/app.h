@@ -287,10 +287,6 @@ public:
         // (such as wxMGL). This method should be called from wxApp:OnInitGui
     virtual bool SetDisplayMode(const wxDisplayModeInfo& WXUNUSED(info)) { return TRUE; }
 
-        // VZ: what does this do exactly?
-    void SetWantDebugOutput( bool flag ) { m_wantDebugOutput = flag; }
-    bool GetWantDebugOutput() const { return m_wantDebugOutput; }
-
         // set use of best visual flag (see below)
     void SetUseBestVisual( bool flag ) { m_useBestVisual = flag; }
     bool GetUseBestVisual() const { return m_useBestVisual; }
@@ -318,6 +314,18 @@ public:
     virtual void OnAssert(const wxChar *file, int line, const wxChar *msg);
 #endif // __WXDEBUG__
 
+    // deprecated functions, please updae your code to not use them!
+    // -------------------------------------------------------------
+
+#if WXWIN_COMPATIBILITY_2_2
+    // used by obsolete wxDebugMsg only
+    void SetWantDebugOutput( bool flag ) { m_wantDebugOutput = flag; }
+    bool GetWantDebugOutput() const { return m_wantDebugOutput; }
+
+    // TRUE if the application wants to get debug output
+    bool m_wantDebugOutput;
+#endif // WXWIN_COMPATIBILITY_2_2
+
     // implementation only from now on
     // -------------------------------
 
@@ -342,9 +350,6 @@ protected:
     wxString m_vendorName,      // vendor name (ACME Inc)
              m_appName,         // app name
              m_className;       // class name
-
-    // TRUE if the application wants to get debug output
-    bool m_wantDebugOutput;
 
 #if wxUSE_GUI
     // the main top level window - may be NULL

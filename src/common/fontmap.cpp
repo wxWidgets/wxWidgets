@@ -743,9 +743,9 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     // message
     if ( encoding == wxFONTENCODING_SYSTEM )
     {
-        wxFatalError(_("can't load any font, aborting"));
+        wxLogFatalError(_("can't load any font, aborting"));
 
-        // wxFatalError doesn't return
+        // wxLogFatalError doesn't return
     }
 
     wxString configEntry,
