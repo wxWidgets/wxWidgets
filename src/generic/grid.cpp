@@ -3510,7 +3510,7 @@ void wxGridWindow::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 // Internal helper macros for simpler use of that function
 
 static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
-                           wxArrayInt BorderArray, bool maxOnOverflow);
+                           const wxArrayInt& BorderArray, bool maxOnOverflow);
 
 #define internalXToCol(x) CoordToRowOrCol(x, m_defaultColWidth, \
                                           WXGRID_MIN_COL_WIDTH, \
@@ -6856,12 +6856,12 @@ void wxGrid::XYToCell( int x, int y, wxGridCellCoords& coords )
 // of m_rowBottoms/m_ColRights to speed up the search!
 
 static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
-                           wxArrayInt BorderArray, bool maxOnOverflow)
+                           const wxArrayInt& BorderArray, bool maxOnOverflow)
 {
     if (!defaultDist)
         defaultDist = 1;
-    int i_max = coord / defaultDist,
-        i_min = 0;
+    size_t i_max = coord / defaultDist,
+           i_min = 0;
     if (BorderArray.IsEmpty())
     {
         return i_max;
@@ -6880,7 +6880,7 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
             i_max = BorderArray.GetCount() - 1;
     }
     if ( coord >= BorderArray[i_max])
-        return (maxOnOverflow ? i_max : -1);
+        return maxOnOverflow ? (int)i_max : -1;
     if ( coord < BorderArray[0] )
         return 0;
 
