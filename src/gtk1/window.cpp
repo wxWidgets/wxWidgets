@@ -1828,7 +1828,14 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
 
     if ( !g_activeFrameLostFocus && g_activeFrame )
     {
-        wxASSERT_MSG( wxGetTopLevelParent(win) == g_activeFrame, wxT("unfocusing window that haven't gained focus properly") )
+        // VZ: commenting this out because it does happen (although not easy
+        //     to reproduce, I only see it when using wxMiniFrame and not
+        //     always) and makes using Mahogany quite annoying
+#if 0
+        wxASSERT_MSG( wxGetTopLevelParent(win) == g_activeFrame,
+                        wxT("unfocusing window that hasn't gained focus properly") )
+#endif // 0
+
         g_activeFrameLostFocus = TRUE;
     }
 
