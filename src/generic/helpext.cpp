@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_HELP
+
 #ifndef WX_PRECOMP
     #include "wx/setup.h"
     #include "wx/string.h"
@@ -39,7 +41,7 @@
 #endif
 
 IMPLEMENT_CLASS(wxExtHelpController, wxHTMLHelpControllerBase)
-   
+
 /**
    This class implements help via an external browser.
    It requires the name of a directory containing the documentation
@@ -109,7 +111,7 @@ wxExtHelpController::DisplayHelp(wxString const &relativeURL)
          long success;
          command << m_BrowserName << _T(" -remote openURL(")
                  << _T("file://") << m_MapFile
-                 << WXEXTHELP_SEPARATOR << relativeURL << _T(")"); 
+                 << WXEXTHELP_SEPARATOR << relativeURL << _T(")");
          success = wxExecute(command);
          if(success != 0 ) // returns PID on success
             return TRUE;
@@ -117,9 +119,10 @@ wxExtHelpController::DisplayHelp(wxString const &relativeURL)
    }
    command = m_BrowserName;
    command << _T(" file://")
-           << m_MapFile << WXEXTHELP_SEPARATOR << relativeURL; 
-   return wxExecute(command) != 0; 
+           << m_MapFile << WXEXTHELP_SEPARATOR << relativeURL;
+   return wxExecute(command) != 0;
 #endif
 }
 
+#endif // wxUSE_HELP
 

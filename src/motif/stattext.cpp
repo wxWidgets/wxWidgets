@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -40,9 +40,9 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     m_foregroundColour = parent->GetForegroundColour();
 
     if ( id == -1 )
-  	    m_windowId = (int)NewControlId();
+              m_windowId = (int)NewControlId();
     else
-	    m_windowId = id;
+            m_windowId = id;
 
     m_windowStyle = style;
     m_font = parent->GetFont();

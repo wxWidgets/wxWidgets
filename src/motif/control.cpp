@@ -31,7 +31,11 @@ wxControl::wxControl()
 {
     m_backgroundColour = *wxWHITE;
     m_foregroundColour = *wxBLACK;
+
+#if WXWIN_COMPATIBILITY
     m_callback = 0;
+#endif // WXWIN_COMPATIBILITY
+
     m_inSetValue = FALSE;
 }
 
@@ -89,43 +93,17 @@ wxString wxControl::GetLabel() const
     }
 }
 
-void wxControl::ProcessCommand (wxCommandEvent & event)
+bool wxControl::ProcessCommand(wxCommandEvent & event)
 {
-    // Tries:
-    // 1) A callback function (to become obsolete)
-    // 2) OnCommand, starting at this window and working up parent hierarchy
-    // 3) OnCommand then calls ProcessEvent to search the event tables.
-    if (m_callback)
+#if WXWIN_COMPATIBILITY
+    if ( m_callback )
     {
-        (void) (*(m_callback)) (*this, event);
+        (void)(*m_callback)(this, event);
+
+        return TRUE;
     }
     else
-    {
-        GetEventHandler()->OnCommand(*this, event);
-    }
+#endif // WXWIN_COMPATIBILITY
+
+    return GetEventHandler()->ProcessEvent(event);
 }
-
-void wxControl::Centre (int direction)
-{
-    int x, y, width, height, panel_width, panel_height, new_x, new_y;
-
-    wxWindow *parent = (wxWindow *) GetParent ();
-    if (!parent)
-        return;
-
-    parent->GetClientSize (&panel_width, &panel_height);
-    GetSize (&width, &height);
-    GetPosition (&x, &y);
-
-    new_x = x;
-    new_y = y;
-
-    if (direction & wxHORIZONTAL)
-        new_x = (int) ((panel_width - width) / 2);
-
-    if (direction & wxVERTICAL)
-        new_y = (int) ((panel_height - height) / 2);
-
-    SetSize (new_x, new_y, width, height);
-}
-

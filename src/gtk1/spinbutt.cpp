@@ -78,17 +78,18 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton,wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
 
 BEGIN_EVENT_TABLE(wxSpinButton, wxControl)
     EVT_SIZE(wxSpinButton::OnSize)
 END_EVENT_TABLE()
 
-wxSpinButton::wxSpinButton()
-{
-}
-
-bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-            long style, const wxString& name)
+bool wxSpinButton::Create(wxWindow *parent,
+                          wxWindowID id,
+                          const wxPoint& pos,
+                          const wxSize& size,
+                          long style,
+                          const wxString& name)
 {
     m_needParent = TRUE;
 
@@ -199,17 +200,6 @@ void wxSpinButton::ApplyWidgetStyle()
 {
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
-}
-
-//-----------------------------------------------------------------------------
-// wxSpinEvent
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
-
-wxSpinEvent::wxSpinEvent(wxEventType commandType, int id):
-  wxScrollEvent(commandType, id)
-{
 }
 
 #endif

@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_STATBMP_H_
@@ -47,8 +47,10 @@ public:
 
     virtual void SetBitmap(const wxBitmap& bitmap);
 
-    virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
-    virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
+    virtual bool ProcessCommand(wxCommandEvent& WXUNUSED(event))
+    {
+        return FALSE;
+    }
 
     wxBitmap& GetBitmap() const { return (wxBitmap&) m_messageBitmap; }
 

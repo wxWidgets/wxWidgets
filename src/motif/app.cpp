@@ -340,6 +340,12 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 
     if (event->type == KeyPress)
     {
+#ifdef __WXDEBUG__
+        Widget widget = XtWindowToWidget(event->xany.display, event->xany.window);
+        wxLogDebug("Got key press event for 0x%08x (parent = 0x%08x)",
+                   widget, XtParent(widget));
+#endif // DEBUG
+
       if (CheckForAccelerator(_event))
       {
         // Do nothing! We intercepted and processed the event as an
@@ -632,10 +638,6 @@ bool wxApp::CheckForAccelerator(WXEvent* event)
 bool wxApp::CheckForKeyDown(WXEvent* event)
 {
     XEvent* xEvent = (XEvent*) event;
-    // VZ: this code doesn't work for me because it never finds the correct
-    //     window. Also, if we go this way, we should generate KEY_UP and
-    //     CHAR events as well, not only KEY_DOWN.
-#if 0
     if (xEvent->xany.type == KeyPress)
     {
       Widget widget = XtWindowToWidget((Display*) wxGetDisplay(),
@@ -655,7 +657,6 @@ bool wxApp::CheckForKeyDown(WXEvent* event)
       win->ProcessEvent( keyEvent );
       return (keyEvent.GetSkipped() != TRUE);
     }
-#endif // 0
 
     return FALSE;
 }

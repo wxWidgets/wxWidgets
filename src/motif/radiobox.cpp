@@ -88,9 +88,9 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
     wxString label1(wxStripMenuCodes(title));
 
-    XmString text = XmStringCreateSimple ((char*) (const char*) label1);
+    wxXmString text(label1.c_str());
 
-    Widget formWidget = XtVaCreateManagedWidget ((char*) (const char*) name,
+    Widget formWidget = XtVaCreateManagedWidget (name.c_str(),
                                         xmFormWidgetClass, parentWidget,
                                         XmNmarginHeight, 0,
                                         XmNmarginWidth, 0,
@@ -101,11 +101,11 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
     if (label1 != "")
     {
-        text = XmStringCreateSimple ((char*) (const char*) label1);
-        Widget labelWidget = XtVaCreateManagedWidget ((char*) (const char*) label1,
+        wxXmString text(label1);
+        (void)XtVaCreateManagedWidget(label1.c_str(),
 #if wxUSE_GADGETS
-                                             style & wxCOLOURED ?
-                                    xmLabelWidgetClass : xmLabelGadgetClass,
+                                             style & wxCOLOURED ? xmLabelWidgetClass
+                                                                : xmLabelGadgetClass,
                                              formWidget,
 #else
                                              xmLabelWidgetClass, formWidget,
@@ -113,8 +113,6 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
                                              XmNfontList, fontList,
                                              XmNlabelString, text,
                                              NULL);
-
-        XmStringFree (text);
     }
 
     Widget frameWidget = XtVaCreateManagedWidget ("frame",

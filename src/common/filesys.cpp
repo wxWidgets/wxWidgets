@@ -16,6 +16,13 @@
 #pragma hdrstop
 #endif
 
+#if !wxUSE_SOCKETS
+    #undef wxUSE_FS_ZIP
+    #undef wxUSE_FS_INET
+    #define wxUSE_FS_ZIP 0
+    #define wxUSE_FS_INET 0
+#endif
+
 #if (wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
 
 #include "wx/wfstream.h"

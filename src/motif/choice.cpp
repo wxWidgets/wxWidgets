@@ -56,35 +56,35 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     m_menuWidget = (WXWidget) 0;
     m_widgetList = (WXWidget*) 0;
     m_formWidget = (WXWidget) 0;
-    
+
     if (parent) parent->AddChild(this);
-    
+
     if ( id == -1 )
         m_windowId = (int)NewControlId();
     else
         m_windowId = id;
-    
+
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
     m_font = parent->GetFont();
-    
+
     Widget parentWidget = (Widget) parent->GetClientWidget();
-    
-    m_formWidget = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) name,
+
+    m_formWidget = (WXWidget) XtVaCreateManagedWidget(name.c_str(),
         xmRowColumnWidgetClass, parentWidget,
         XmNmarginHeight, 0,
         XmNmarginWidth, 0,
         XmNpacking, XmPACK_TIGHT,
         XmNorientation, XmHORIZONTAL,
         NULL);
-    
+
     XtVaSetValues ((Widget) m_formWidget, XmNspacing, 0, NULL);
-    
+
     /*
     * Create the popup menu
     */
     m_menuWidget = (WXWidget) XmCreatePulldownMenu ((Widget) m_formWidget, "choiceMenu", NULL, 0);
-    
+
     //    int i;
     if (n > 0)
     {
@@ -92,13 +92,13 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
         for (i = 0; i < n; i++)
             Append (choices[i]);
     }
-    
+
     /*
     * Create button
     */
     Arg args[10];
     Cardinal argcnt = 0;
-    
+
     XtSetArg (args[argcnt], XmNsubMenuId, (Widget) m_menuWidget);
     argcnt++;
     XtSetArg (args[argcnt], XmNmarginWidth, 0);
@@ -108,9 +108,9 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     XtSetArg (args[argcnt], XmNpacking, XmPACK_TIGHT);
     argcnt++;
     m_buttonWidget = (WXWidget) XmCreateOptionMenu ((Widget) m_formWidget, "choiceButton", args, argcnt);
-    
+
     m_mainWidget = m_buttonWidget;
-    
+
     XtManageChild ((Widget) m_buttonWidget);
 
     // New code from Roland Haenel (roland_haenel@ac.cybercity.de)
@@ -128,13 +128,13 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 #endif
 
     XtVaSetValues((Widget) m_formWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
-    
+
     ChangeFont(FALSE);
 
     AttachWidget (parent, m_buttonWidget, m_formWidget, pos.x, pos.y, size.x, size.y);
-    
+
     ChangeBackgroundColour();
-    
+
     return TRUE;
 }
 
@@ -147,15 +147,15 @@ wxChoice::~wxChoice()
     //  XtDestroyWidget (menuWidget);
     if (m_widgetList)
         delete[] m_widgetList;
-    
+
     if (GetMainWidget())
     {
         DetachWidget(GetMainWidget()); // Removes event handlers
         DetachWidget(m_formWidget);
-        
+
         XtDestroyWidget((Widget) m_formWidget);
         m_formWidget = (WXWidget) 0;
-        
+
         // Presumably the other widgets have been deleted now, via the form
         m_mainWidget = (WXWidget) 0;
         m_buttonWidget = (WXWidget) 0;
@@ -164,40 +164,39 @@ wxChoice::~wxChoice()
 
 void wxChoice::Append(const wxString& item)
 {
-    wxStripMenuCodes ((char *)(const char *)item, wxBuffer);
-    Widget w = XtVaCreateManagedWidget (wxBuffer,
+    Widget w = XtVaCreateManagedWidget (wxStripMenuCodes(item),
 #if USE_GADGETS
         xmPushButtonGadgetClass, (Widget) m_menuWidget,
 #else
         xmPushButtonWidgetClass, (Widget) m_menuWidget,
 #endif
         NULL);
-    
+
     DoChangeBackgroundColour((WXWidget) w, m_backgroundColour);
-    
+
     if (m_font.Ok())
         XtVaSetValues (w,
         XmNfontList, (XmFontList) m_font.GetFontList(1.0, XtDisplay((Widget) m_formWidget)),
         NULL);
-    
+
     WXWidget *new_widgetList = new WXWidget[m_noStrings + 1];
     int i;
     if (m_widgetList)
         for (i = 0; i < m_noStrings; i++)
             new_widgetList[i] = m_widgetList[i];
-        
+
         new_widgetList[m_noStrings] = (WXWidget) w;
-        
+
         if (m_widgetList)
             delete[] m_widgetList;
         m_widgetList = new_widgetList;
-        
+
         char mnem = wxFindMnemonic ((char*) (const char*) item);
         if (mnem != 0)
             XtVaSetValues (w, XmNmnemonic, mnem, NULL);
-        
+
         XtAddCallback (w, XmNactivateCallback, (XtCallbackProc) wxChoiceCallback, (XtPointer) this);
-        
+
         if (m_noStrings == 0 && m_buttonWidget)
         {
             XtVaSetValues ((Widget) m_buttonWidget, XmNmenuHistory, w, NULL);
@@ -210,18 +209,18 @@ void wxChoice::Append(const wxString& item)
         }
         wxNode *node = m_stringList.Add (item);
         XtVaSetValues (w, XmNuserData, node->Data (), NULL);
-        
+
         m_noStrings ++;
 }
 
 void wxChoice::Delete(int WXUNUSED(n))
 {
     wxFAIL_MSG( "Sorry, wxChoice::Delete isn't implemented yet. Maybe you'd like to volunteer? :-)" );
-    
+
     // What should we do -- remove the callback for this button widget,
     // delete the m_stringList entry, delete the button widget, construct a new widget list
     // (see Append)
-    
+
     // TODO
     m_noStrings --;
 }
@@ -251,7 +250,7 @@ int wxChoice::GetSelection() const
     XtVaGetValues (label,
         XmNlabelString, &text,
         NULL);
-    
+
     if (XmStringGetLtoR (text, XmSTRING_DEFAULT_CHARSET, &s))
     {
         int i = 0;
@@ -267,7 +266,7 @@ int wxChoice::GetSelection() const
             else
                 i++;
         }            // for()
-        
+
         XmStringFree(text) ;
         XtFree (s);
         return -1;
@@ -279,12 +278,12 @@ int wxChoice::GetSelection() const
 void wxChoice::SetSelection(int n)
 {
     m_inSetValue = TRUE;
-    
+
     wxNode *node = m_stringList.Nth (n);
     if (node)
     {
         Dimension selectionWidth, selectionHeight;
-        
+
         char *s = (char *) node->Data ();
         XmString text = XmStringCreateSimple (s);
         XtVaGetValues ((Widget) m_widgetList[n], XmNwidth, &selectionWidth, XmNheight, &selectionHeight, NULL);
@@ -328,10 +327,10 @@ wxString wxChoice::GetString(int n) const
 void wxChoice::SetColumns(int n)
 {
     if (n<1) n = 1 ;
-    
+
     short numColumns = n ;
     Arg args[3];
-    
+
     XtSetArg(args[0], XmNnumColumns, numColumns);
     XtSetArg(args[1], XmNpacking, XmPACK_COLUMN);
     XtSetValues((Widget) m_menuWidget,args,2) ;
@@ -340,7 +339,7 @@ void wxChoice::SetColumns(int n)
 int wxChoice::GetColumns(void) const
 {
     short numColumns ;
-    
+
     XtVaGetValues((Widget) m_menuWidget,XmNnumColumns,&numColumns,NULL) ;
     return numColumns ;
 }
@@ -354,12 +353,12 @@ void wxChoice::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     XtVaSetValues((Widget) m_formWidget, XmNresizePolicy, XmRESIZE_ANY, NULL);
     bool managed = XtIsManaged((Widget) m_formWidget);
-    
+
     if (managed)
         XtUnmanageChild ((Widget) m_formWidget);
-    
+
     int actualWidth = width, actualHeight = height;
-    
+
     if (width > -1)
     {
         int i;
@@ -376,11 +375,11 @@ void wxChoice::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         XtVaSetValues ((Widget) m_buttonWidget, XmNheight, actualHeight,
             NULL);
     }
-    
+
     if (managed)
         XtManageChild ((Widget) m_formWidget);
     XtVaSetValues((Widget) m_formWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
-    
+
     wxControl::DoSetSize (x, y, width, height, sizeFlags);
 }
 
@@ -418,7 +417,7 @@ void wxChoiceCallback (Widget w, XtPointer clientData, XtPointer WXUNUSED(ptr))
     {
         if (item->InSetValue())
             return;
-        
+
         char *s = NULL;
         XtVaGetValues (w, XmNuserData, &s, NULL);
         if (s)
@@ -441,11 +440,11 @@ void wxChoice::ChangeFont(bool keepOriginalSize)
     {
         int width, height, width1, height1;
         GetSize(& width, & height);
-        
+
         XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay((Widget) m_mainWidget));
         XtVaSetValues ((Widget) m_mainWidget, XmNfontList, fontList, NULL);
         XtVaSetValues ((Widget) m_buttonWidget, XmNfontList, fontList, NULL);
-        
+
         /* TODO: why does this cause a crash in XtWidgetToApplicationContext?
         int i;
         for (i = 0; i < m_noStrings; i++)

@@ -61,6 +61,7 @@ libwx_motif_la_SOURCES = \
  docview.cpp \
  dynlib.cpp \
  event.cpp \
+ ffile.cpp \
  file.cpp \
  fileconf.cpp \
  filesys.cpp \
@@ -99,6 +100,7 @@ libwx_motif_la_SOURCES = \
  stream.cpp \
  tbarbase.cpp \
  tbarsmpl.cpp \
+ textcmn.cpp \
  textfile.cpp \
  txtstrm.cpp \
  time.cpp \
@@ -126,6 +128,7 @@ libwx_motif_la_SOURCES = \
  imaglist.cpp \
  laywin.cpp \
  listctrl.cpp \
+ numdlgg.cpp \
  panelg.cpp \
  printps.cpp \
  prntdlgg.cpp \

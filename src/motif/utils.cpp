@@ -725,7 +725,7 @@ char wxFindMnemonic (const char *s)
     return mnem;
 }
 
-char * wxFindAccelerator (char *s)
+char * wxFindAccelerator (const char *s)
 {
     // The accelerator text is after the \t char.
     while (*s && *s != '\t')
@@ -748,7 +748,7 @@ char * wxFindAccelerator (char *s)
     wxBuffer[0] = '\0';
     char *tmp = copystring (s);
     s = tmp;
-    char *p = s;
+    char *p = tmp;
 
     while (1)
     {
@@ -763,8 +763,7 @@ char * wxFindAccelerator (char *s)
                 strcat (wxBuffer, s);
             else
                 strcat (wxBuffer, "Meta");
-            s = p + 1;
-            p = s;
+            s = p++;
         }
         else
         {
@@ -777,7 +776,7 @@ char * wxFindAccelerator (char *s)
     return wxBuffer;
 }
 
-XmString wxFindAcceleratorText (char *s)
+XmString wxFindAcceleratorText (const char *s)
 {
     // The accelerator text is after the \t char.
     while (*s && *s != '\t')
@@ -785,7 +784,7 @@ XmString wxFindAcceleratorText (char *s)
     if (*s == '\0')
         return (NULL);
     s++;
-    XmString text = XmStringCreateSimple (s);
+    XmString text = XmStringCreateSimple ((char *)s);
     return text;
 }
 

@@ -29,6 +29,11 @@ limitation)
 #pragma hdrstop
 #endif
 
+#if !wxUSE_SOCKETS
+    #undef wxUSE_FS_INET
+    #define wxUSE_FS_INET 0
+#endif
+
 #if wxUSE_FS_INET
 
 #ifndef WXPRECOMP

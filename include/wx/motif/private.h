@@ -39,9 +39,15 @@ extern void wxDeleteWindowFromTable(Widget w);
 extern wxWindow *wxGetWindowFromTable(Widget w);
 extern bool wxAddWindowToTable(Widget w, wxWindow *win);
 
+// ----------------------------------------------------------------------------
+// key events related functions
+// ----------------------------------------------------------------------------
+
 extern char wxFindMnemonic(const char* s);
-extern char * wxFindAccelerator (char *s);
-extern XmString wxFindAcceleratorText (char *s);
+
+extern char * wxFindAccelerator (const char *s);
+extern XmString wxFindAcceleratorText (const char *s);
+
 extern int wxCharCodeXToWX(KeySym keySym);
 extern KeySym wxCharCodeWXToX(int id);
 

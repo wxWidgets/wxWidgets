@@ -50,8 +50,6 @@
 
 #include "wx/motif/private.h"
 
-extern wxHashTable *wxWidgetHashTable;
-
 void wxCloseFrameCallback(Widget, XtPointer, XmAnyCallbackStruct *cbs);
 void wxFrameFocusProc(Widget workArea, XtPointer clientData,
                       XmAnyCallbackStruct *cbs);
@@ -150,8 +148,18 @@ bool wxFrame::Create(wxWindow *parent,
     int width = size.x; int height = size.y;
 
     if (wxTopLevelUsed)
+    {
         // Change suggested by Matthew Flatt
-        m_frameShell = (WXWidget) XtAppCreateShell(name, wxTheApp->GetClassName(), topLevelShellWidgetClass, (Display*) wxGetDisplay(), NULL, 0);
+        m_frameShell = (WXWidget)XtAppCreateShell
+                                 (
+                                  name,
+                                  wxTheApp->GetClassName(),
+                                  topLevelShellWidgetClass,
+                                  (Display*) wxGetDisplay(),
+                                  NULL,
+                                  0
+                                 );
+    }
     else
     {
         m_frameShell = wxTheApp->GetTopLevelWidget();
@@ -192,6 +200,9 @@ bool wxFrame::Create(wxWindow *parent,
         //                    XmNresizePolicy, XmRESIZE_ANY,
         NULL);
 
+    wxLogDebug("Created frame (0x%08x) with work area 0x%08x and client "
+               "area 0x%08x", m_frameWidget, m_workArea, m_clientArea);
+
     XtAddEventHandler((Widget) m_clientArea, ExposureMask,FALSE,
         wxUniversalRepaintProc, (XtPointer) this);
 
@@ -201,9 +212,6 @@ bool wxFrame::Create(wxWindow *parent,
 
     XtManageChild((Widget) m_clientArea);
     XtManageChild((Widget) m_workArea);
-
-    wxASSERT_MSG( !wxGetWindowFromTable((Widget)m_workArea),
-                 "Widget table clash in frame.cpp") ;
 
     wxAddWindowToTable((Widget) m_workArea, this);
 

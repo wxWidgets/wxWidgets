@@ -43,7 +43,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
 * indirect or consequential damages or any damages
 * whatsoever resulting from loss of use, data or profits,
 * whether in an action of contract, negligence or other tortious
-* action, arising out of or in connection with the use 
+* action, arising out of or in connection with the use
 * or performance of this software.
 *
 */
@@ -87,16 +87,16 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
     m_windowStyle = style;
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
-    
+
     if (parent) parent->AddChild(this);
-    
+
     if ( id == -1 )
         m_windowId = (int)NewControlId();
     else
         m_windowId = id;
-    
+
     Widget parentWidget = (Widget) parent->GetClientWidget();
-    
+
     Arg args[4];
     int count = 4;
     if (style & wxHORIZONTAL)
@@ -113,24 +113,24 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
     XtSetArg(args[3], XmNmaximum, range);
     Widget gaugeWidget = XtCreateManagedWidget("gauge", xmGaugeWidgetClass, parentWidget, args, count);
     m_mainWidget = (WXWidget) gaugeWidget ;
-    
+
     XtManageChild (gaugeWidget);
-    
+
     int x = pos.x; int y = pos.y;
     int width = size.x; int height = size.y;
     if (width == -1)
         width = 150;
     if (height == -1)
         height = 80;
-    
+
     m_font = parent->GetFont();
     ChangeFont(FALSE);
-    
+
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, x, y, width, height);
-    
+
     ChangeBackgroundColour();
-    
+
     return TRUE;
 }
 
@@ -209,7 +209,7 @@ typedef struct {
     int empty;
 } XmGaugeClassPart;
 
-typedef struct _XmGaugeClassRec {    
+typedef struct _XmGaugeClassRec {
     CoreClassPart	        core_class;
     XmPrimitiveClassPart	primitive_class;
     XmGaugeClassPart	        gauge_class;
@@ -222,10 +222,10 @@ typedef struct _XmGaugePart{
     int maximum;
     unsigned char orientation;
     unsigned char processingDirection;
-    
+
     XtCallbackList dragCallback;
     XtCallbackList valueChangedCallback;
-    
+
     /* private fields */
     Boolean dragging;		/* drag in progress ? */
     int oldx, oldy;
@@ -247,9 +247,9 @@ extern XmGaugeClassRec xmGaugeClassRec;
 
 void
 GaugePick(Widget w, XEvent *e, String *args, Cardinal  *num_args);
-void 
+void
 GaugeDrag(Widget w, XEvent *e, String *args, Cardinal  *num_args);
-void 
+void
 GaugeDrop(Widget w, XEvent *e, String *args, Cardinal  *num_args);
 
 
@@ -280,9 +280,9 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
     unsigned long backgr,foregr;
     XRectangle rects[1];
     ***/
-    
+
     sht = gw->primitive.shadow_thickness;
-    
+
     ratio =  (float)THIS.value/
         (float)(THIS.maximum - THIS.minimum);
         /***chubraev
@@ -290,7 +290,7 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
         len=strlen(string);
         XtVaGetValues(gw,XmNbackground,&backgr,XmNforeground,&foregr,NULL);
     ***/
-    
+
     if(clear) {
         XClearArea(XtDisplay(gw), XtWindow(gw), sht, sht,
             gw->core.width - 2 * sht, gw->core.height - 2 * sht, False);
@@ -299,7 +299,7 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
     case XmHORIZONTAL:
         size = (int) ((gw->core.width - 2 * sht)*ratio);
         /***chubraev
-        XDrawString(XtDisplay(gw), XtWindow(gw), THIS.gc, sht+gw->core.width/2, 
+        XDrawString(XtDisplay(gw), XtWindow(gw), THIS.gc, sht+gw->core.width/2,
         gw->core.height - 2 * sht, string, len);
         ***/
         switch(THIS.processingDirection) {
@@ -307,7 +307,7 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
         case XmMAX_ON_BOTTOM:
             XFillRectangle(XtDisplay(gw), XtWindow(gw), THIS.gc,
                 sht, sht, size, gw->core.height - 2 * sht);
-            
+
                 /***chubraev
                 rects[0].x = sht; rects[0].y = sht;
                 rects[0].width = size; rects[0].height = gw->core.height - 2 * sht;
@@ -318,7 +318,7 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
             XFillRectangle(XtDisplay(gw), XtWindow(gw), THIS.gc,
                 gw->core.width - size - sht, sht,
                 size, gw->core.height - 2 * sht);
-            
+
                 /***chubraev
                 rects[0].x = gw->core.width - size - sht; rects[0].y = sht;
                 rects[0].width = size; rects[0].height = gw->core.height - 2 * sht;
@@ -328,15 +328,15 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
         /***chubraev
         XSetClipRectangles(XtDisplay(gw), THIS.gc, 0, 0, rects, 1, Unsorted);
         XSetForeground(XtDisplay(gw), THIS.gc, backgr);
-        XDrawString(XtDisplay(gw), XtWindow(gw), THIS.gc, sht+gw->core.width/2, 
+        XDrawString(XtDisplay(gw), XtWindow(gw), THIS.gc, sht+gw->core.width/2,
         gw->core.height - 2 * sht, string, len);
         ***/
-        
+
         break;
         case XmVERTICAL:
             size = (int) ((gw->core.height - 2 * sht)*ratio);
             /***chubraev
-            XDrawString(XtDisplay(gw), XtWindow(gw), THIS.gc, sht, 
+            XDrawString(XtDisplay(gw), XtWindow(gw), THIS.gc, sht,
             sht+gw->core.height/2, string,len);
             ***/
             switch(THIS.processingDirection) {
@@ -344,7 +344,7 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
             case XmMAX_ON_BOTTOM:
                 XFillRectangle(XtDisplay(gw), XtWindow(gw), THIS.gc,
                     sht, sht, gw->core.width - 2 * sht, size);
-                
+
                     /***chubraev
                     rects[0].x = sht; rects[0].y = sht;
                     rects[0].width = gw->core.width - 2 * sht; rects[0].height = size;
@@ -355,7 +355,7 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
                 XFillRectangle(XtDisplay(gw), XtWindow(gw), THIS.gc,
                     sht, gw->core.height - size - sht,
                     gw->core.width - 2 * sht, size);
-                
+
                     /***chubraev
                     rects[0].x = sht; rects[0].y = gw->core.height - size - sht;
                     rects[0].width = gw->core.width - 2 * sht; rects[0].height = size;
@@ -364,7 +364,7 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
             /***chubraev
             XSetClipRectangles(XtDisplay(gw), THIS.gc, 0, 0, rects, 1, Unsorted);
             XSetForeground(XtDisplay(gw), THIS.gc, backgr);
-            XDrawString(XtDisplay(gw), XtWindow(gw), THIS.gc, sht, 
+            XDrawString(XtDisplay(gw), XtWindow(gw), THIS.gc, sht,
             sht+gw->core.height/2, string,len);
             ***/
             break;
@@ -373,7 +373,7 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
     XSetClipMask(XtDisplay(gw), THIS.gc, None);
     XSetForeground(XtDisplay(gw), THIS.gc, foregr);
     ***/
-#undef THIS	
+#undef THIS
 }
 
 /* Old code
@@ -385,7 +385,7 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
 #define THIS gw->gauge
     int size, sht;
     /*    float ratio; */
-    
+
     sht = gw->primitive.shadow_thickness;
     /* See fix comment below: can cause divide by zero error.
     ratio = (float)((float)THIS.maximum -
@@ -431,7 +431,7 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
             }
             break;
     }
-#undef THIS	
+#undef THIS
 }
 #endif
 
@@ -441,12 +441,12 @@ Initialize(Widget req, Widget new_w, ArgList args, Cardinal *num_args )
     XmGaugeWidget gw = (XmGaugeWidget)new_w;
 #define THIS gw->gauge
     XGCValues values;
-    
+
     values.foreground = gw->primitive.foreground;
     THIS.gc = XtGetGC(new_w, GCForeground, &values);
-    
-#undef THIS	
-    
+
+#undef THIS
+
 }
 
 
@@ -457,7 +457,7 @@ Destroy(Widget w)
     XmGaugeWidget gw = (XmGaugeWidget)w;
 #define THIS gw->gauge
     XtReleaseGC(w, THIS.gc);
-#undef THIS	
+#undef THIS
 }
 
 
@@ -473,11 +473,11 @@ SetValues(
 {
     XmGaugeWidget cgw = (XmGaugeWidget)cw;
     XmGaugeWidget ngw = (XmGaugeWidget)nw;
-    
+
     Boolean redraw = False;
     if(cgw->primitive.foreground != ngw->primitive.foreground) {
         XGCValues values;
-        
+
         redraw = True;
         XtReleaseGC(nw, ngw->gauge.gc);
         values.foreground = ngw->primitive.foreground;
@@ -498,7 +498,7 @@ ExposeProc(Widget w, XEvent *event, Region r)
     XmGaugeWidget gw = (XmGaugeWidget)w;
 #define THIS gw->gauge
     int sht;
-    
+
     sht = gw->primitive.shadow_thickness;
     _XmDrawShadows(XtDisplay(w), XtWindow(w),
         gw->primitive.top_shadow_GC,
@@ -506,39 +506,39 @@ ExposeProc(Widget w, XEvent *event, Region r)
         0, 0, w->core.width, w->core.height,
         sht, XmSHADOW_IN);
     DrawSlider(gw, False);
-#undef THIS	
+#undef THIS
 }
 
 
 
 
 
-static XtResource 
+static XtResource
 resources[] = {
 #define offset(field) XtOffset(XmGaugeWidget, gauge.field)
     {XmNvalue, XmCValue, XtRInt, sizeof(int),
         offset(value), XtRImmediate, (caddr_t)10},
-        
+
     {XmNminimum, XmCValue, XtRInt, sizeof(int),
     offset(minimum), XtRImmediate, (caddr_t)0},
-    
+
     {XmNmaximum, XmCValue, XtRInt, sizeof(int),
     offset(maximum), XtRImmediate, (caddr_t)100},
-    
+
     {XmNorientation, XmCOrientation, XmROrientation, sizeof(unsigned char),
     offset(orientation), XtRImmediate, (caddr_t)XmVERTICAL},
-    
+
     {XmNprocessingDirection, XmCProcessingDirection,
     XmRProcessingDirection, sizeof(unsigned char),
     offset(processingDirection), XtRImmediate, (caddr_t)XmMAX_ON_RIGHT},
-    
+
     {XmNdragCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
     offset(dragCallback), XtRImmediate, (caddr_t)NULL},
-    
+
     {XmNvalueChangedCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
     offset(valueChangedCallback), XtRImmediate, (caddr_t)NULL},
-    
-    
+
+
 #undef offset
 };
 
@@ -598,7 +598,7 @@ WidgetClass xmGaugeWidgetClass = (WidgetClass)&xmGaugeClassRec;
 
 
 
-void 
+void
 GaugePick(Widget w, XEvent *e, String *args, Cardinal  *num_args)
 {
     /* Commented out for a read-only gauge in wxWindows */
@@ -610,7 +610,7 @@ GaugePick(Widget w, XEvent *e, String *args, Cardinal  *num_args)
     Boolean dragging = False;
     XButtonEvent *event = (XButtonEvent *)e;
     int x, y;
-    
+
     x = event->x;
     y = event->y;
     sht = gw->primitive.shadow_thickness;
@@ -619,10 +619,10 @@ GaugePick(Widget w, XEvent *e, String *args, Cardinal  *num_args)
         gw->primitive.bottom_shadow_GC,
         0, 0, w->core.width, w->core.height,
         sht, XmSHADOW_IN);
-    
-    
+
+
     ratio = (float)((float)THIS.maximum -
-        (float)THIS.minimum) / (float)THIS.value;		   
+        (float)THIS.minimum) / (float)THIS.value;
     switch(THIS.orientation) {
     case XmHORIZONTAL:
         size = (w->core.width - 2 * sht) / ratio;
@@ -658,13 +658,13 @@ GaugePick(Widget w, XEvent *e, String *args, Cardinal  *num_args)
     THIS.dragging = dragging;
     THIS.oldx = x;
     THIS.oldy = y;
-#undef THIS    
+#undef THIS
 #endif
 }
 
 #define round(x) ( (x) > 0 ? ((x) + 0.5) : -(-(x) + 0.5) )
 
-void 
+void
 GaugeDrag(Widget w, XEvent *e, String *args, Cardinal  *num_args)
 {
     /* Commented out for a read-only gauge in wxWindows */
@@ -674,13 +674,13 @@ GaugeDrag(Widget w, XEvent *e, String *args, Cardinal  *num_args)
     int sht, x, y, max, value;
     float ratio, nratio, size, nsize, fvalue, delta;
     XMotionEvent *event = (XMotionEvent *)e;
-    
+
     if( ! THIS.dragging) return;
-    
+
     x = event->x;
     y = event->y;
     sht = gw->primitive.shadow_thickness;
-    
+
     ratio = (float)THIS.value / (float)((float)THIS.maximum -
         (float)THIS.minimum);
     switch(THIS.orientation) {
@@ -706,21 +706,21 @@ GaugeDrag(Widget w, XEvent *e, String *args, Cardinal  *num_args)
     if(nsize > (float)max) nsize = (float)max;
     if(nsize < (float)0 ) nsize = (float)0;
     nratio =  nsize / (float)max;
-    
+
     fvalue = (int)((float)THIS.maximum -
         (float)THIS.minimum) * (float)nsize / (float)max;
     value = round(fvalue);
-    
+
     THIS.value = value;
     THIS.oldx = x;
     THIS.oldy = y;
-    
+
     /* clear old slider only if it was larger */
     DrawSlider(gw, (nsize < size));
-    
+
     {
         XmGaugeCallbackStruct call;
-        
+
         if(NULL  != THIS.dragCallback) {
             call.reason = XmCR_DRAG;
             call.event = e;
@@ -728,12 +728,12 @@ GaugeDrag(Widget w, XEvent *e, String *args, Cardinal  *num_args)
             XtCallCallbacks(w, XmNdragCallback, &call);
         }
     }
-#undef THIS    
+#undef THIS
 #endif
 }
 
 
-void 
+void
 GaugeDrop(Widget w, XEvent *e, String *args, Cardinal  *num_args)
 {
     /* Commented out for a read-only gauge in wxWindows */
@@ -741,7 +741,7 @@ GaugeDrop(Widget w, XEvent *e, String *args, Cardinal  *num_args)
     XmGaugeWidget gw = (XmGaugeWidget)w;
 #define THIS gw->gauge
     if( ! THIS.dragging) return;
-    
+
     if(NULL  != THIS.valueChangedCallback) {
         XmGaugeCallbackStruct call;
         call.reason = XmCR_VALUE_CHANGED;
@@ -750,7 +750,7 @@ GaugeDrop(Widget w, XEvent *e, String *args, Cardinal  *num_args)
         XtCallCallbacks(w, XmNvalueChangedCallback, &call);
     }
     THIS.dragging = False;
-#undef THIS    
+#undef THIS
 #endif
 }
 
@@ -758,7 +758,7 @@ void
 XmGaugeSetValue(Widget w, int value)
 {
     XmGaugeWidget gw = (XmGaugeWidget)w;
-    
+
     gw->gauge.value = value;
     DrawSlider(gw, True);
     XFlush(XtDisplay(w));
@@ -766,8 +766,8 @@ XmGaugeSetValue(Widget w, int value)
 
 int
 XmGaugeGetValue(Widget w)
-{    
+{
     XmGaugeWidget gw = (XmGaugeWidget)w;
-    
+
     return gw->gauge.value;
 }

@@ -113,6 +113,7 @@ libwx_msw_la_SOURCES = \
  dcpsg.cpp \
  gridg.cpp \
  laywin.cpp \
+ numdlgg.cpp \
  panelg.cpp \
  progdlgg.cpp \
  prop.cpp \

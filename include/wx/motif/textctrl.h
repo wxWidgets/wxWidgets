@@ -16,22 +16,11 @@
     #pragma interface "textctrl.h"
 #endif
 
-#include "wx/control.h"
-#include "wx/ioswrap.h"
-
-// TODO Some platforms/compilers don't like inheritance from streambuf.
-#if (defined(__BORLANDC__) && !defined(__WIN32__)) || defined(__MWERKS__)
-    #define NO_TEXT_WINDOW_STREAM
-#endif
-
 WXDLLEXPORT_DATA(extern const char*) wxTextCtrlNameStr;
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
 // Single-line text item
-class WXDLLEXPORT wxTextCtrl: public wxControl
-#ifndef NO_TEXT_WINDOW_STREAM
-                            , public streambuf
-#endif
+class WXDLLEXPORT wxTextCtrl : public wxControl
 {
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
 
@@ -47,9 +36,6 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxTextCtrlNameStr)
-#ifndef NO_TEXT_WINDOW_STREAM
-        : streambuf()
-#endif
         {
             Create(parent, id, value, pos, size, style, validator, name);
         }
@@ -100,20 +86,6 @@ public:
     // selection.
     virtual void GetSelection(long* from, long* to) const;
     virtual bool IsEditable() const ;
-
-    // streambuf implementation
-#ifndef NO_TEXT_WINDOW_STREAM
-    int overflow(int i);
-    int sync();
-    int underflow();
-#endif
-
-    wxTextCtrl& operator<<(const wxString& s);
-    wxTextCtrl& operator<<(int i);
-    wxTextCtrl& operator<<(long i);
-    wxTextCtrl& operator<<(float f);
-    wxTextCtrl& operator<<(double d);
-    wxTextCtrl& operator<<(const char c);
 
     virtual bool LoadFile(const wxString& file);
     virtual bool SaveFile(const wxString& file);

@@ -69,13 +69,13 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
     int             rshift = 0, gshift = 0, bshift = 0;
     wxUint8         aByte;
     wxUint16        aWord;
-    wxInt32         dbuf[4], aDword, 
+    wxInt32         dbuf[4], aDword,
                     rmask = 0, gmask = 0, bmask = 0;
     wxInt8          bbuf[4];
     struct _cmap {
         unsigned char r, g, b;
     } *cmap = NULL;
-    
+
     off_t start_offset = stream.TellI();
 
     image->Destroy();
@@ -87,7 +87,9 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
     stream.Read( &bbuf, 2 );
     stream.Read( dbuf, 4 * 4 );
 
+#if 0 // unused
     wxInt32 size = wxINT32_SWAP_ON_BE( dbuf[0] );
+#endif
     wxInt32 offset = wxINT32_SWAP_ON_BE( dbuf[2] );
 
     stream.Read(dbuf, 4 * 2);
@@ -103,7 +105,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
         wxLogError( _T("Image height > 32767 pixels for file.") );
         return FALSE;
     }
-    
+
     stream.Read( &aWord, 2 );
 /*
     TODO
@@ -116,7 +118,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
         wxLogError( _T("unknown bitdepth in file.") );
         return FALSE;
     }
-    
+
     stream.Read( dbuf, 4 * 4 );
     int comp = (int)wxINT32_SWAP_ON_BE( dbuf[0] );
     if (comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 && comp != BI_BITFIELDS)
@@ -124,15 +126,15 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
         wxLogError( _T("unknown encoding in Windows BMP file.") );
         return FALSE;
     }
-    
+
     stream.Read( dbuf, 4 * 2 );
     int ncolors = (int)wxINT32_SWAP_ON_BE( dbuf[0] );
     if (ncolors == 0)
         ncolors = 1 << bpp;
     /* some more sanity checks */
-    if (((comp == BI_RLE4) && (bpp != 4)) || 
-        ((comp == BI_RLE8) && (bpp != 8)) || 
-	((comp == BI_BITFIELDS) && (bpp != 16 && bpp != 32)))
+    if (((comp == BI_RLE4) && (bpp != 4)) ||
+        ((comp == BI_RLE8) && (bpp != 8)) ||
+        ((comp == BI_BITFIELDS) && (bpp != 16 && bpp != 32)))
     {
         wxLogError( _T("encoding of BMP doesn't match bitdepth.") );
         return FALSE;
@@ -229,13 +231,13 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
         }
         ptr = data;
     }
-    
+
     int line = 0;
     int column = 0;
     int linesize = ((width * bpp + 31) / 32) * 4;
 
     /* BMPs are stored upside down */
-    for (line = (height - 1); line >= 0; line--) 
+    for (line = (height - 1); line >= 0; line--)
     {
         int linepos = 0;
         for (column = 0; column < width;)
@@ -358,7 +360,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
                {
                    unsigned char temp;
                    stream.Read( &aWord, 2 );
-		   aWord = wxUINT16_SWAP_ON_BE( aWord );
+                   aWord = wxUINT16_SWAP_ON_BE( aWord );
                    linepos += 2;
                    temp = (aWord & rmask) >> rshift;
                    ptr[poffset] = temp;
@@ -372,7 +374,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
                {
                    unsigned char temp;
                    stream.Read( &aDword, 4 );
-		   aDword = wxINT32_SWAP_ON_BE( aDword );
+                   aDword = wxINT32_SWAP_ON_BE( aDword );
                    linepos += 4;
                    temp = (aDword & rmask) >> rshift;
                    ptr[poffset] = temp;
@@ -391,7 +393,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
                   break;
           }
      }
-     if (cmap) 
+     if (cmap)
        free(cmap);
 
      image->SetMask( FALSE );

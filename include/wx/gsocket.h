@@ -61,13 +61,13 @@ enum {
   GSOCK_INPUT_FLAG = 1 << GSOCK_INPUT,
   GSOCK_OUTPUT_FLAG = 1 << GSOCK_OUTPUT,
   GSOCK_CONNECTION_FLAG = 1 << GSOCK_CONNECTION,
-  GSOCK_LOST_FLAG = 1 << GSOCK_LOST,
+  GSOCK_LOST_FLAG = 1 << GSOCK_LOST
 };
 
 typedef int GSocketEventFlags;
 
 typedef void (*GSocketFallback)(GSocket *socket, GSocketEvent event,
-			        char *cdata);
+                                char *cdata);
 
 #ifdef __cplusplus
 extern "C" {
@@ -118,13 +118,13 @@ GSocketError GSocket_Connect(GSocket *socket, GSocketStream stream);
 /* Generic IO */
 
 /* Like recv(), send(), ... */
-/* 
+/*
    NOTE: In case we read from a non-oriented connection, the incoming (outgoing)
-   connection address is stored in the "Local" ("Peer") field. 
+   connection address is stored in the "Local" ("Peer") field.
 */
 int GSocket_Read(GSocket *socket, char *buffer, int size);
 int GSocket_Write(GSocket *socket, const char *buffer,
-		  int size);
+                  int size);
 bool GSocket_DataAvailable(GSocket *socket);
 
 /* Flags */
@@ -143,15 +143,15 @@ GSocketError GSocket_GetError(GSocket *socket);
 
 /* Callbacks */
 
-/* 
+/*
    Only one fallback is possible for each event (INPUT, OUTPUT, CONNECTION, LOST)
-   INPUT: The function is called when there is at least a byte in the 
+   INPUT: The function is called when there is at least a byte in the
           input buffer
    OUTPUT: The function is called when the system is sure the next write call
            will not block
    CONNECTION: Two cases is possible:
              Client socket -> the connection is established
-	     Server socket -> a client request a connection
+             Server socket -> a client request a connection
    LOST: the connection is lost
 
    SetFallback accepts a combination of these flags so a same callback can
@@ -163,7 +163,7 @@ GSocketError GSocket_GetError(GSocket *socket);
                 CONNECTION -> GSocket_Accept()
 */
 void GSocket_SetFallback(GSocket *socket, GSocketEventFlags event,
-			 GSocketFallback fallback, char *cdata);
+                         GSocketFallback fallback, char *cdata);
 
 /*
   UnsetFallback will disables all fallbacks specified by "event".
@@ -180,7 +180,7 @@ void GAddress_destroy(GAddress *address);
 void GAddress_SetFamily(GAddress *address, GAddressType type);
 GAddressType GAddress_GetFamily(GAddress *address);
 
-/* 
+/*
    The use of any of the next functions will set the address family to the adapted
    one. For example if you use GAddress_INET_SetHostName, address family will be AF_INET
    implicitely

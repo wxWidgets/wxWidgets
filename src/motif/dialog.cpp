@@ -60,8 +60,6 @@ wxList wxModalDialogs;
 wxList wxModelessWindows;  // Frames and modeless dialogs
 extern wxList wxPendingDelete;
 
-extern wxHashTable *wxWidgetHashTable;
-
 #define wxUSE_INVISIBLE_RESIZE 1
 
 #if !USE_SHARED_LIBRARY

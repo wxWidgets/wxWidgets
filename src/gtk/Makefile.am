@@ -127,6 +127,7 @@ libwx_gtk_la_SOURCES = \
  imaglist.cpp \
  laywin.cpp \
  listctrl.cpp \
+ numdlgg.cpp \
  panelg.cpp \
  printps.cpp \
  prntdlgg.cpp \

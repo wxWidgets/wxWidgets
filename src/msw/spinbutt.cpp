@@ -38,16 +38,15 @@
 
 #if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
+    IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
 #endif
 
-wxSpinButton::wxSpinButton()
-{
-    m_min = 0;
-    m_max = 100;
-}
-
-bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-            long style, const wxString& name)
+bool wxSpinButton::Create(wxWindow *parent,
+                          wxWindowID id,
+                          const wxPoint& pos,
+                          const wxSize& size,
+                          long style,
+                          const wxString& name)
 {
   wxSystemSettings settings;
   m_backgroundColour = parent->GetBackgroundColour() ;
@@ -73,13 +72,12 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
   if (y < 0)
     y = 0;
 
-  m_min = 0;
-  m_max = 100;
+  InitBase();
 
   m_windowId = (id == -1) ? NewControlId() : id;
 
   DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP;
-  
+
   if ( m_windowStyle & wxSP_HORIZONTAL )
     wstyle |= UDS_HORZ;
   if ( m_windowStyle & wxSP_ARROW_KEYS )
@@ -102,7 +100,7 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
   // TODO: have this for all controls.
   if ( !m_hWnd )
     return FALSE;
-  
+
   SubclassWin((WXHWND) m_hWnd);
 
   return TRUE;
@@ -127,8 +125,7 @@ void wxSpinButton::SetValue(int val)
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
-    m_min = minVal;
-    m_max = maxVal;
+    wxSpinButtonBase::SetRange(minVal, maxVal);
     ::SendMessage(GetHwnd(), UDM_SETRANGE, 0,
                    (LPARAM) MAKELONG((short)maxVal, (short)minVal));
 }
@@ -186,14 +183,6 @@ bool wxSpinButton::MSWCommand(WXUINT cmd, WXWORD id)
 {
     // No command messages
     return FALSE;
-}
-
-// Spin event
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
-
-wxSpinEvent::wxSpinEvent(wxEventType commandType, int id)
-           : wxScrollEvent(commandType, id)
-{
 }
 
 #endif // __WIN95__

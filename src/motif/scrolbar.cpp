@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -43,13 +43,13 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
     SetValidator(validator);
-    
+
     m_windowStyle = style;
 
     if ( id == -1 )
-  	    m_windowId = (int)NewControlId();
+        m_windowId = (int)NewControlId();
     else
-	    m_windowId = id;
+        m_windowId = id;
 
     int x = pos.x;
     int y = pos.y;

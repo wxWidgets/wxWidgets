@@ -47,6 +47,7 @@ scrolwin.cpp	G
 splitter.cpp	G
 statusbr.cpp	G
 tabg.cpp	G
+numdlgg.cpp	G
 textdlgg.cpp	G
 tipdlg.cpp	G
 treectrl.cpp	G	16

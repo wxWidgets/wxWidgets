@@ -56,26 +56,26 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     SetValidator(validator);
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
-    
+
     if (parent) parent->AddChild(this);
-    
+
     m_lineSize = 1;
     m_windowStyle = style;
     m_tickFreq = 0;
-    
+
     if ( id == -1 )
         m_windowId = (int)NewControlId();
     else
         m_windowId = id;
-    
+
     m_rangeMax = maxValue;
     m_rangeMin = minValue;
-    
+
     // Not used in Motif, I think
     m_pageSize = (int)((maxValue-minValue)/10);
-    
+
     Widget parentWidget = (Widget) parent->GetClientWidget();
-    
+
     Widget sliderWidget = XtVaCreateManagedWidget ("sliderWidget",
         xmScaleWidgetClass, parentWidget,
         XmNorientation,
@@ -87,26 +87,26 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
         XmNvalue, value,
         XmNshowValue, True,
         NULL);
-    
+
     m_mainWidget = (WXWidget) sliderWidget;
-    
+
     if(style & wxSL_NOTIFY_DRAG)
         XtAddCallback (sliderWidget, XmNdragCallback,
         (XtCallbackProc) wxSliderCallback, (XtPointer) this);
     else
         XtAddCallback (sliderWidget, XmNvalueChangedCallback,
         (XtCallbackProc) wxSliderCallback, (XtPointer) this);
-    
+
     XtAddCallback (sliderWidget, XmNdragCallback, (XtCallbackProc) wxSliderCallback, (XtPointer) this);
-    
+
     m_font = parent->GetFont();
-    
+
     ChangeFont(FALSE);
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
-    
+
     ChangeBackgroundColour();
-    
+
     return TRUE;
 }
 
@@ -134,30 +134,30 @@ void wxSlider::GetSize(int *width, int *height) const
 void wxSlider::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     Widget widget = (Widget) m_mainWidget;
-    
+
     bool managed = XtIsManaged(widget);
-    
+
     if (managed)
         XtUnmanageChild (widget);
-    
+
     if (((m_windowStyle & wxHORIZONTAL) == wxHORIZONTAL) && (width > -1))
     {
         XtVaSetValues (widget, XmNscaleWidth, wxMax (width, 10), NULL);
     }
-    
+
     if (((m_windowStyle & wxVERTICAL) == wxVERTICAL) && (height > -1))
     {
         XtVaSetValues (widget, XmNscaleHeight, wxMax (height, 10), NULL);
     }
-    
+
     int xx = x; int yy = y;
     AdjustForParentClientOrigin(xx, yy, sizeFlags);
-    
+
     if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         XtVaSetValues (widget, XmNx, xx, NULL);
     if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         XtVaSetValues (widget, XmNy, yy, NULL);
-    
+
     if (managed)
         XtManageChild (widget);
 }
@@ -166,7 +166,7 @@ void wxSlider::SetRange(int minValue, int maxValue)
 {
     m_rangeMin = minValue;
     m_rangeMax = maxValue;
-    
+
     XtVaSetValues ((Widget) m_mainWidget, XmNminimum, minValue, XmNmaximum, maxValue, NULL);
 }
 
@@ -276,12 +276,12 @@ void wxSliderCallback (Widget widget, XtPointer clientData, XmScaleCallbackStruc
             // TODO: the XmCR_VALUE_CHANGED case should be handled
             // differently (it's not sent continually as the slider moves).
             // In which case we need a similar behaviour for other platforms.
-            
+
             wxScrollEvent event(wxEVT_SCROLL_THUMBTRACK, slider->GetId());
             XtVaGetValues (widget, XmNvalue, &event.m_commandInt, NULL);
             event.SetEventObject(slider);
             slider->ProcessCommand(event);
-            
+
             // Also send a wxCommandEvent for compatibility.
             wxCommandEvent event2(wxEVT_COMMAND_SLIDER_UPDATED, slider->GetId());
             event2.SetEventObject(slider);

@@ -46,7 +46,7 @@ void wxStaticBitmap::CreatePixmapWidget()
 
     /* insert GTK representation */
     (*m_parent->m_insertCallback)(m_parent, this);
-    
+
     gtk_widget_show( m_widget );
 
     PostCreation();
@@ -81,7 +81,7 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
 
         PostCreation();
     }
-    
+
     m_parent->DoAddChild( this );
 
     Show( TRUE );
@@ -100,17 +100,17 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
         {
             gtk_widget_destroy( m_widget );
 
-            /* recreate m_widget because we've created a label 
-	       and not a bitmap above */
+            /* recreate m_widget because we've created a label
+               and not a bitmap above */
             CreatePixmapWidget();
         }
-	else
-	{
+        else
+        {
             GdkBitmap *mask = (GdkBitmap *) NULL;
             if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
             gtk_pixmap_set( GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask );
-	}
-    
+        }
+
         SetSize( m_bitmap.GetWidth(), m_bitmap.GetHeight() );
     }
 }

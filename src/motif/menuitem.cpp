@@ -65,20 +65,20 @@ m_bCheckable(bCheckable),
 m_strName(strName)
 {
     wxASSERT( pParentMenu != NULL );
-    
+
     m_pParentMenu = pParentMenu;
     m_pSubMenu    = pSubMenu;
     m_idItem      = id;
     m_bEnabled    = TRUE;
     m_bChecked    = FALSE;
-    
+
     //// Motif-specific
     m_menuBar = NULL;
     m_buttonWidget = (WXWidget) NULL;
     m_topMenu = NULL;
 }
 
-wxMenuItem::~wxMenuItem() 
+wxMenuItem::~wxMenuItem()
 {
 }
 
@@ -89,7 +89,7 @@ wxMenuItem::~wxMenuItem()
 void wxMenuItem::DeleteSubMenu()
 {
     wxASSERT( m_pSubMenu != NULL );
-    
+
     delete m_pSubMenu;
     m_pSubMenu = NULL;
 }
@@ -113,7 +113,7 @@ void wxMenuItem::Enable(bool bDoEnable)
             if (m_buttonWidget)
                 XtSetSensitive( (Widget) m_buttonWidget, (Boolean) bDoEnable);
         }
-        
+
         m_bEnabled = bDoEnable;
     }
 }
@@ -121,7 +121,7 @@ void wxMenuItem::Enable(bool bDoEnable)
 void wxMenuItem::Check(bool bDoCheck)
 {
     wxCHECK_RET( IsCheckable(), "only checkable items may be checked" );
-    
+
     if ( m_bChecked != bDoCheck )
     {
         if (m_buttonWidget && XtIsSubclass ((Widget) m_buttonWidget, xmToggleButtonGadgetClass))
@@ -138,48 +138,47 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMen
 {
     m_menuBar = menuBar;
     m_topMenu = topMenu;
-    
+
     if (GetId() == -2)
     {
         // Id=-2 identifies a Title item.
-        wxStripMenuCodes ((char*) (const char*) m_strName, wxBuffer);
-        m_buttonWidget = (WXWidget) XtVaCreateManagedWidget (wxBuffer,
+        m_buttonWidget = (WXWidget) XtVaCreateManagedWidget
+            (wxStripMenuCodes(m_strName),
             xmLabelGadgetClass, (Widget) menu, NULL);
     }
     else if ((!m_strName.IsNull() && m_strName != "") && (!m_pSubMenu))
     {
-        wxStripMenuCodes ((char*) (const char*) m_strName, wxBuffer);
+        wxString strName = wxStripMenuCodes(m_strName);
         if (IsCheckable())
         {
-            m_buttonWidget = (WXWidget) XtVaCreateManagedWidget (wxBuffer,
+            m_buttonWidget = (WXWidget) XtVaCreateManagedWidget (strName,
                 xmToggleButtonGadgetClass, (Widget) menu,
                 NULL);
             XtVaSetValues ((Widget) m_buttonWidget, XmNset, (Boolean) IsChecked(), NULL);
         }
         else
-            m_buttonWidget = (WXWidget) XtVaCreateManagedWidget (wxBuffer,
+            m_buttonWidget = (WXWidget) XtVaCreateManagedWidget (strName,
             xmPushButtonGadgetClass, (Widget) menu,
             NULL);
         char mnem = wxFindMnemonic (m_strName);
         if (mnem != 0)
             XtVaSetValues ((Widget) m_buttonWidget, XmNmnemonic, mnem, NULL);
-        
+
         //// TODO: proper accelerator treatment. What does wxFindAccelerator
         //// look for?
-        strcpy(wxBuffer, (char*) (const char*) m_strName);
-        char *accel = wxFindAccelerator (wxBuffer);
+        strName = m_strName;
+        char *accel = wxFindAccelerator (strName);
         if (accel)
             XtVaSetValues ((Widget) m_buttonWidget, XmNaccelerator, accel, NULL);
-        
+
         // TODO: What does this do?
-        strcpy(wxBuffer, (char*) (const char*) m_strName);
-        XmString accel_str = wxFindAcceleratorText (wxBuffer);
+        XmString accel_str = wxFindAcceleratorText (strName);
         if (accel_str)
         {
             XtVaSetValues ((Widget) m_buttonWidget, XmNacceleratorText, accel_str, NULL);
             XmStringFree (accel_str);
         }
-        
+
         if (IsCheckable())
             XtAddCallback ((Widget) m_buttonWidget,
             XmNvalueChangedCallback,
@@ -222,7 +221,7 @@ void wxMenuItem::DestroyItem(bool full)
     if (GetId() == -2)
     {
         ;			// Nothing
-        
+
     }
     else if ((!m_strName.IsNull() && (m_strName != "")) && !m_pSubMenu)
     {
@@ -243,7 +242,7 @@ void wxMenuItem::DestroyItem(bool full)
     else if (GetId() == -1)
     {
         ;			// Nothing
-        
+
     }
     else if (GetSubMenu())
     {
@@ -256,7 +255,7 @@ void wxMenuItem::DestroyItem(bool full)
         if (full)
             m_buttonWidget = NULL;
     }
-    
+
     if (m_buttonWidget && full)
     {
         XtDestroyWidget ((Widget) m_buttonWidget);
@@ -267,26 +266,23 @@ void wxMenuItem::DestroyItem(bool full)
 void wxMenuItem::SetLabel(const wxString& label)
 {
     char mnem = wxFindMnemonic (label);
-    wxStripMenuCodes ((char*) (const char*) label, wxBuffer);
-    
+    wxString label2 = wxStripMenuCodes(label);
+
     m_strName = label;
-    
+
     if (m_buttonWidget)
     {
-        XmString label_str = XmStringCreateSimple (wxBuffer);
+        wxXmString label_str(label2);
         XtVaSetValues ((Widget) m_buttonWidget,
             XmNlabelString, label_str,
             NULL);
-        XmStringFree (label_str);
         if (mnem != 0)
             XtVaSetValues ((Widget) m_buttonWidget, XmNmnemonic, mnem, NULL);
-        strcpy(wxBuffer, (char*) (const char*) label);
-        char *accel = wxFindAccelerator (wxBuffer);
+        char *accel = wxFindAccelerator (label2);
         if (accel)
             XtVaSetValues ((Widget) m_buttonWidget, XmNaccelerator, accel, NULL);
-        
-        strcpy(wxBuffer, (char*) (const char*) label);
-        XmString accel_str = wxFindAcceleratorText (wxBuffer);
+
+        XmString accel_str = wxFindAcceleratorText (label2);
         if (accel_str)
         {
             XtVaSetValues ((Widget) m_buttonWidget, XmNacceleratorText, accel_str, NULL);
@@ -312,7 +308,7 @@ void wxMenuItemCallback (Widget w, XtPointer clientData,
             wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, item->GetId());
             commandEvent.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
             commandEvent.SetInt( item->GetId() );
-            
+
             item->GetMenuBar()->GetMenuBarFrame()->GetEventHandler()->ProcessEvent(commandEvent);
         }
         else if (item->GetTopMenu())
@@ -320,7 +316,7 @@ void wxMenuItemCallback (Widget w, XtPointer clientData,
             wxCommandEvent event (wxEVT_COMMAND_MENU_SELECTED, item->GetId());
             event.SetEventObject(item->GetTopMenu());
             event.SetInt( item->GetId() );
-            
+
             item->GetTopMenu()->ProcessCommand (event);
         }
     }
@@ -336,13 +332,13 @@ void wxMenuItemArmCallback (Widget w, XtPointer clientData,
         {
             wxMenuEvent menuEvent(wxEVT_MENU_HIGHLIGHT, item->GetId());
             menuEvent.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
-            
+
             item->GetMenuBar()->GetMenuBarFrame()->GetEventHandler()->ProcessEvent(menuEvent);
         }
     }
 }
 
-void 
+void
 wxMenuItemDisarmCallback (Widget w, XtPointer clientData,
                           XtPointer ptr)
 {
@@ -355,7 +351,7 @@ wxMenuItemDisarmCallback (Widget w, XtPointer clientData,
             // special to event system
             wxMenuEvent menuEvent(wxEVT_MENU_HIGHLIGHT, -1);
             menuEvent.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
-            
+
             item->GetMenuBar()->GetMenuBarFrame()->GetEventHandler()->ProcessEvent(menuEvent);
         }
     }

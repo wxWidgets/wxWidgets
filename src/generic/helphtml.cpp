@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_HELP
+
 #ifndef WX_PRECOMP
     #include "wx/setup.h"
     #include "wx/string.h"
@@ -320,3 +322,4 @@ wxHTMLHelpControllerBase::OnQuit()
 {
 }
 
+#endif // wxUSE_HELP

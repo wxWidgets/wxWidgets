@@ -778,9 +778,7 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
         wxString title(m_titles[i]);
         menu->SetButtonWidget(menu->CreateMenu (this, menuBarW, menu, title, TRUE));
 
-        wxStripMenuCodes ((char*) (const char*) title, wxBuffer);
-
-        if (strcmp (wxBuffer, "Help") == 0)
+        if (strcmp (wxStripMenuCodes(title), "Help") == 0)
             XtVaSetValues ((Widget) menuBarW, XmNmenuHelpWidget, (Widget) menu->GetButtonWidget(), NULL);
 
         // tear off menu support
@@ -910,8 +908,9 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
 
         menu = XmCreatePulldownMenu ((Widget) parent, "pulldown", args, 2);
 
-        XmString label_str = XmStringCreateSimple (wxBuffer);
-        buttonWidget = XtVaCreateManagedWidget (wxBuffer,
+        wxString title2(wxStripMenuCodes(title));
+        wxXmString label_str(title2);
+        buttonWidget = XtVaCreateManagedWidget(title2,
 #if wxUSE_GADGETS
             xmCascadeButtonGadgetClass, (Widget) parent,
 #else
@@ -923,8 +922,6 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
 
         if (mnem != 0)
             XtVaSetValues (buttonWidget, XmNmnemonic, mnem, NULL);
-
-        XmStringFree (label_str);
     }
 
     m_menuWidget = (WXWidget) menu;

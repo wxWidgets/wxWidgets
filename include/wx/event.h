@@ -1307,11 +1307,10 @@ public:
     virtual void OnCommand(wxWindow& WXUNUSED(win),
                            wxCommandEvent& WXUNUSED(event))
     {
+        wxFAIL_MSG("shouldn't be called any more");
     }
 
-    // Called if child control has no
-    // callback function
-    // Default behaviour
+    // Called if child control has no callback function
     virtual long Default()
         { return GetNextHandler() ? GetNextHandler()->Default() : 0; };
 #endif // WXWIN_COMPATIBILITY_2

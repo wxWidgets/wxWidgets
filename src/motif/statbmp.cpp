@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -44,9 +44,9 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     if (parent) parent->AddChild(this);
 
     if ( id == -1 )
-  	    m_windowId = (int)NewControlId();
+        m_windowId = (int)NewControlId();
     else
-	    m_windowId = id;
+        m_windowId = id;
 
     m_windowStyle = style;
 
@@ -98,7 +98,7 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
         XtVaSetValues (widget,
             XmNlabelPixmap, ((wxBitmap&)bitmap).GetLabelPixmap (widget),
             XmNlabelType, XmPIXMAP,
-		     NULL);
+            NULL);
         GetSize(&w1, &h1);
 
         if (! (w1 == w2) && (h1 == h2))

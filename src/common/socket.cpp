@@ -54,7 +54,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
 
 class wxSocketState : public wxObject {
 public:
-  bool notify_state; 
+  bool notify_state;
   GSocketEventFlags evt_notify_state;
   wxSocketBase::wxSockFlags socket_flags;
   wxSocketBase::wxSockCbk c_callback;
@@ -112,7 +112,7 @@ wxSocketBase::~wxSocketBase()
 
 bool wxSocketBase::Close()
 {
-  if (m_socket) 
+  if (m_socket)
   {
     if (m_notify_state == TRUE)
       Notify(FALSE);
@@ -140,7 +140,7 @@ int wxSocketBase::DeferRead(char *buffer, size_t nbytes)
 
   old_event_flags = NeededReq();
   old_notify_state = m_notify_state;
-  
+
   SetNotify(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
   Notify(TRUE);
 
@@ -415,7 +415,7 @@ void wxSocketBase::Discard()
   SaveState();
   SetFlags(NOWAIT | SPEED);
 
-  while (recv_size == MAX_BUFSIZE) 
+  while (recv_size == MAX_BUFSIZE)
   {
     recv_size = Read(my_data, MAX_BUFSIZE).LastCount();
   }
@@ -593,7 +593,7 @@ bool wxSocketBase::WaitForLost(long seconds, long milliseconds)
 
 GSocketEventFlags wxSocketBase::EventToNotify(GSocketEvent evt)
 {
-  switch (evt) 
+  switch (evt)
   {
   case GSOCK_INPUT:
     return GSOCK_INPUT_FLAG;
@@ -724,7 +724,7 @@ void wxSocketBase::CreatePushbackBefore(const char *buffer, size_t size)
 
     m_unread = tmp;
   }
-  
+
   m_unrd_size += size;
 
   memcpy(m_unread, buffer, size);
@@ -870,9 +870,9 @@ bool wxSocketClient::WaitOnConnect(long seconds, long microseconds)
 
 void wxSocketClient::OnRequest(GSocketEvent evt)
 {
-  if (evt == GSOCK_CONNECTION) 
+  if (evt == GSOCK_CONNECTION)
   {
-    if (m_connected) 
+    if (m_connected)
     {
       m_neededreq &= ~GSOCK_CONNECTION_FLAG;
       return;

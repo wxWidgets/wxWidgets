@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -17,13 +17,8 @@
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
 #endif
-
-wxSpinButton::wxSpinButton()
-{
-	m_min = 0;
-	m_max = 100;
-}
 
 bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
@@ -33,9 +28,8 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
     m_windowStyle = style;
 
     if (parent) parent->AddChild(this);
-    
-    m_min = 0;
-    m_max = 100;
+
+    InitBase();
 
     m_windowId = (id == -1) ? NewControlId() : id;
 
@@ -52,20 +46,19 @@ wxSpinButton::~wxSpinButton()
 
 int wxSpinButton::GetValue() const
 {
-	// TODO
+    // TODO
     return 0;
 }
 
 void wxSpinButton::SetValue(int val)
 {
-	// TODO
+    // TODO
 }
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
-	m_min = minVal;
-	m_max = maxVal;
-	// TODO
+    // TODO
+    wxSpinButtonBase::SetRange(minVal, maxVal);
 }
 
 void wxSpinButton::ChangeFont(bool keepOriginalSize)
@@ -82,12 +75,3 @@ void wxSpinButton::ChangeForegroundColour()
 {
     // TODO
 }
-
-// Spin event
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
-
-wxSpinEvent::wxSpinEvent(wxEventType commandType, int id):
-  wxScrollEvent(commandType, id)
-{
-}
-

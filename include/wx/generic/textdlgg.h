@@ -53,7 +53,7 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// functions to get a string or a number from user
+// function to get a string from user
 // ----------------------------------------------------------------------------
 
 wxString WXDLLEXPORT
@@ -64,16 +64,6 @@ wxGetTextFromUser(const wxString& message,
                   int x = -1,
                   int y = -1,
                   bool centre = TRUE);
-
-long WXDLLEXPORT
-wxGetNumberFromUser(const wxString& message,
-                    const wxString& prompt,
-                    const wxString& caption,
-                    long value = 0,
-                    long min = 0,
-                    long max = 100,
-                    wxWindow *parent = (wxWindow *)NULL,
-                    const wxPoint& pos = wxDefaultPosition);
 
 #endif
     // __TEXTDLGH_G__

@@ -59,7 +59,7 @@ gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
     event.SetInt( combo->GetSelection() );
     event.SetString( combo->GetStringSelection() );
     event.SetEventObject( combo );
-    
+
     combo->GetEventHandler()->ProcessEvent( event );
 }
 
@@ -71,7 +71,7 @@ static void
 gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
     if (g_isIdle) wxapp_install_idle_handler();
-    
+
     if (!combo->m_hasVMT) return;
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
@@ -126,7 +126,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         /* don't send first event, which GTK sends aways when
 	   inserting the first item */
         m_alreadySent = TRUE;
-    
+
         GtkWidget *list_item = gtk_list_item_new_with_label( choices[i].mbc_str() );
 
         m_clientDataList.Append( (wxObject*)NULL );
@@ -359,8 +359,6 @@ int wxComboBox::GetSelection() const
             child = child->next;
         }
     }
-
-    wxFAIL_MSG( _T("wxComboBox: no selection") );
 
     return -1;
 }
@@ -596,7 +594,7 @@ void wxComboBox::DisableEvents()
     GList *child = list->children;
     while (child)
     {
-        gtk_signal_disconnect_by_func( GTK_OBJECT(child->data), 
+        gtk_signal_disconnect_by_func( GTK_OBJECT(child->data),
           GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
 
         child = child->next;
@@ -619,7 +617,7 @@ void wxComboBox::EnableEvents()
 void wxComboBox::OnSize( wxSizeEvent &event )
 {
     event.Skip();
-    
+
     return;
 
     int w = 21;

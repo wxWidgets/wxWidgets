@@ -17,6 +17,11 @@
 #pragma hdrstop
 #endif
 
+#if !wxUSE_SOCKETS
+    #undef wxUSE_FS_ZIP
+    #define wxUSE_FS_ZIP 0
+#endif
+
 #if wxUSE_FS_ZIP
 
 #ifndef WXPRECOMP

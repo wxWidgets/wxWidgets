@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_STATBOX_H_
@@ -45,8 +45,10 @@ public:
             long style = 0,
             const wxString& name = wxStaticBoxNameStr);
 
-    virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
-    virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
+    virtual bool ProcessCommand(wxCommandEvent& WXUNUSED(event))
+    {
+        return FALSE;
+    }
 
     void SetLabel(const wxString& label);
     wxString GetLabel() const;

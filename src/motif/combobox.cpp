@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -43,17 +43,17 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     //    m_backgroundColour = parent->GetBackgroundColour();
     m_backgroundColour = * wxWHITE;
     m_foregroundColour = parent->GetForegroundColour();
-    
+
     if (parent) parent->AddChild(this);
-    
+
     if ( id == -1 )
         m_windowId = (int)NewControlId();
     else
         m_windowId = id;
-    
+
     Widget parentWidget = (Widget) parent->GetClientWidget();
-    
-    Widget buttonWidget = XtVaCreateManagedWidget((char*) (const char*) name,
+
+    Widget buttonWidget = XtVaCreateManagedWidget(name.c_str(),
         xmComboBoxWidgetClass, parentWidget,
         XmNmarginHeight, 0,
         XmNmarginWidth, 0,
@@ -62,12 +62,12 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
         XmNsorted, ((style & wxCB_SORT) == wxCB_SORT),
         XmNstaticList, ((style & wxCB_SIMPLE) == wxCB_SIMPLE),
         NULL);
-    
+
     XtAddCallback (buttonWidget, XmNselectionCallback, (XtCallbackProc) wxComboBoxCallback,
         (XtPointer) this);
     XtAddCallback (buttonWidget, XmNvalueChangedCallback, (XtCallbackProc) wxComboBoxCallback,
         (XtPointer) this);
-    
+
     int i;
     for (i = 0; i < n; i++)
     {
@@ -77,21 +77,21 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
         m_stringList.Add(choices[i]);
     }
     m_noStrings = n;
-    
+
     m_mainWidget = (Widget) buttonWidget;
-    
+
     XtManageChild (buttonWidget);
-    
+
     SetValue(value);
-    
+
     m_font = parent->GetFont();
     ChangeFont(FALSE);
-    
+
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
-    
+
     ChangeBackgroundColour();
-    
+
     return TRUE;
 }
 
@@ -207,16 +207,16 @@ int wxComboBox::FindString(const wxString& s) const
     XmString text = XmStringCreateSimple ((char*) (const char*) s);
     bool found = (XmComboBoxGetMatchPos((Widget) m_mainWidget,
         text, &pos_list, &count) != 0);
-    
+
     XmStringFree(text);
-    
+
     if (found && count > 0)
     {
         int pos = pos_list[0] - 1;
         free(pos_list);
         return pos;
     }
-    
+
     return -1;
 }
 
@@ -271,21 +271,21 @@ void wxComboBox::Replace(long from, long to, const wxString& value)
 void wxComboBox::Remove(long from, long to)
 {
     XmComboBoxSetSelection ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
-		      (Time) 0);
+                      (Time) 0);
     XmComboBoxRemove ((Widget) m_mainWidget);
 }
 
 void wxComboBox::SetSelection(long from, long to)
 {
     XmComboBoxSetSelection ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
-		      (Time) 0);
+                      (Time) 0);
 }
 
 void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
                           XmComboBoxSelectionCallbackStruct * cbs)
 {
     wxComboBox *item = (wxComboBox *) clientData;
-    
+
     switch (cbs->reason)
     {
     case XmCR_SINGLE_SELECT:
@@ -293,7 +293,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
         {
             wxCommandEvent event (wxEVT_COMMAND_COMBOBOX_SELECTED, item->GetId());
             event.m_commandInt = cbs->index - 1;
-            //	        event.m_commandString = item->GetString (event.m_commandInt);
+            //                event.m_commandString = item->GetString (event.m_commandInt);
             event.m_extraLong = TRUE;
             event.SetEventObject(item);
             item->ProcessCommand (event);
@@ -303,7 +303,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
         {
             wxCommandEvent event (wxEVT_COMMAND_TEXT_UPDATED, item->GetId());
             event.m_commandInt = -1;
-            //	        event.m_commandString = item->GetValue();
+            //                event.m_commandString = item->GetValue();
             event.m_extraLong = TRUE;
             event.SetEventObject(item);
             item->ProcessCommand (event);

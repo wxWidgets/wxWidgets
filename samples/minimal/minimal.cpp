@@ -159,6 +159,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
+    (void)new wxTextCtrl(this, -1, "Hi!", wxPoint(20, 20),
+                         wxSize(100, 30));
+
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
