@@ -39,13 +39,14 @@
 //#define TEST_CMDLINE
 //#define TEST_DATETIME
 //#define TEST_DIR
+#define TEST_DLLLOADER
 //#define TEST_EXECUTE
 //#define TEST_FILECONF
 //#define TEST_HASH
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
-#define TEST_INFO_FUNCTIONS
+//#define TEST_INFO_FUNCTIONS
 //#define TEST_SOCKETS
 //#define TEST_STRINGS
 //#define TEST_THREADS
@@ -190,6 +191,60 @@ static void TestDirEnum()
 }
 
 #endif // TEST_DIR
+
+// ----------------------------------------------------------------------------
+// wxDllLoader
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_DLLLOADER
+
+#include <wx/dynlib.h>
+
+static void TestDllLoad()
+{
+#if defined(__WXMSW__)
+    static const wxChar *LIB_NAME = _T("kernel32.dll");
+    static const wxChar *FUNC_NAME = _T("lstrlenA");
+#elif defined(__UNIX__)
+    static const wxChar *LIB_NAME = _T("libc.so");
+    static const wxChar *FUNC_NAME = _T("strlen");
+#else
+    #error "don't know how to test wxDllLoader on this platform"
+#endif
+
+    puts("*** testing wxDllLoader ***\n");
+
+    wxDllType dllHandle = wxDllLoader::LoadLibrary(LIB_NAME);
+    if ( !dllHandle )
+    {
+        wxPrintf(_T("ERROR: failed to load '%s'.\n"), LIB_NAME);
+    }
+    else
+    {
+        typedef int (*strlenType)(char *);
+        strlenType pfnStrlen = (strlenType)wxDllLoader::GetSymbol(dllHandle, FUNC_NAME);
+        if ( !pfnStrlen )
+        {
+            wxPrintf(_T("ERROR: function '%s' wasn't found in '%s'.\n"),
+                     FUNC_NAME, LIB_NAME);
+        }
+        else
+        {
+            if ( pfnStrlen("foo") != 3 )
+            {
+                wxPrintf(_T("ERROR: loaded function is not strlen()!\n"));
+            }
+            else
+            {
+                puts("... ok");
+            }
+        }
+
+        wxDllLoader::UnloadLibrary(dllHandle);
+    }
+}
+
+#endif // TEST_DLLLOADER
 
 // ----------------------------------------------------------------------------
 // wxExecute
@@ -1830,17 +1885,20 @@ static void TestTimeArithmetics()
 {
     puts("\n*** testing arithmetic operations on wxDateTime ***");
 
-    static const struct
+    static const struct ArithmData
     {
+        ArithmData(const wxDateSpan& sp, const char *nam)
+            : span(sp), name(nam) { }
+
         wxDateSpan span;
         const char *name;
     } testArithmData[] =
     {
-        { wxDateSpan::Day(),           "day"                                },
-        { wxDateSpan::Week(),          "week"                               },
-        { wxDateSpan::Month(),         "month"                              },
-        { wxDateSpan::Year(),          "year"                               },
-        { wxDateSpan(1, 2, 3, 4),      "year, 2 months, 3 weeks, 4 days"    },
+        ArithmData(wxDateSpan::Day(), "day"),
+        ArithmData(wxDateSpan::Week(), "week"),
+        ArithmData(wxDateSpan::Month(), "month"),
+        ArithmData(wxDateSpan::Year(), "year"),
+        ArithmData(wxDateSpan(1, 2, 3, 4), "year, 2 months, 3 weeks, 4 days"),
     };
 
     wxDateTime dt(29, wxDateTime::Dec, 1999), dt1, dt2;
@@ -2589,6 +2647,10 @@ int main(int argc, char **argv)
     TestDirEnum();
 #endif // TEST_DIR
 
+#ifdef TEST_DLLLOADER
+    TestDllLoad();
+#endif // TEST_DLLLOADER
+
 #ifdef TEST_EXECUTE
     TestExecute();
 #endif // TEST_EXECUTE
@@ -2696,8 +2758,8 @@ int main(int argc, char **argv)
         TestTimeParse();
         TestTimeFormat();
         TestTimeArithmetics();
+        TestTimeHolidays();
     }
-    TestTimeHolidays();
     if ( 0 )
         TestInteractive();
 #endif // TEST_DATETIME
@@ -2706,3 +2768,4 @@ int main(int argc, char **argv)
 
     return 0;
 }
+
