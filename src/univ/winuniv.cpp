@@ -1201,7 +1201,7 @@ void wxWindow::OnKeyDown(wxKeyEvent& event)
 {
 #if wxUSE_MENUS
     int key = event.GetKeyCode();
-    if ( !event.ControlDown() && (key == WXK_MENU || key == WXK_F10) )
+    if ( !event.ControlDown() && (key == WXK_ALT || key == WXK_F10) )
     {
         ms_winLastAltPress = this;
 
@@ -1318,7 +1318,7 @@ void wxWindow::OnChar(wxKeyEvent& event)
 void wxWindow::OnKeyUp(wxKeyEvent& event)
 {
     int key = event.GetKeyCode();
-    if ( !event.HasModifiers() && (key == WXK_MENU || key == WXK_F10) )
+    if ( !event.HasModifiers() && (key == WXK_ALT || key == WXK_F10) )
     {
         // only process Alt release specially if there were no other key
         // presses since Alt had been pressed and if both events happened in

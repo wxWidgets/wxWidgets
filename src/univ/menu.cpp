@@ -2185,7 +2185,7 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
     // the menu when up/down one is
     switch ( key )
     {
-        case WXK_MENU:
+        case WXK_ALT:
             // Alt must be processed at wxWindow level too
             event.Skip();
             // fall through

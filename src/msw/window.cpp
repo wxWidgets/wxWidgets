@@ -4940,7 +4940,7 @@ int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam)
         case VK_CLEAR:      id = WXK_CLEAR; break;
         case VK_SHIFT:      id = WXK_SHIFT; break;
         case VK_CONTROL:    id = WXK_CONTROL; break;
-        case VK_MENU :      id = WXK_MENU; break;
+        case VK_MENU :      id = WXK_ALT; break;
         case VK_PAUSE:      id = WXK_PAUSE; break;
         case VK_CAPITAL:    id = WXK_CAPITAL; break;
         case VK_SPACE:      id = WXK_SPACE; break;
@@ -5046,7 +5046,6 @@ WXWORD wxCharCodeWXToMSW(int id, bool *isVirtual)
     case WXK_SHIFT:     keySym = VK_SHIFT; break;
     case WXK_CONTROL:   keySym = VK_CONTROL; break;
     case WXK_ALT:       keySym = VK_MENU; break;
-    case WXK_MENU :     keySym = VK_MENU; break;
     case WXK_PAUSE:     keySym = VK_PAUSE; break;
     case WXK_CAPITAL:   keySym = VK_CAPITAL; break;
     case WXK_PRIOR:     keySym = VK_PRIOR; break;

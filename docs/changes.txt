@@ -47,10 +47,10 @@ All:
 - Changed calculation of scrolling area to not clip away some bits
   due to a rounding error.
 - Changed GetVirtualSize() to return client size by default until
-  SetVirtualSize() gets called. From then on it will only return
-  that.
+  SetVirtualSize() gets called. From then on it will only return that.
 - Various changes to how wxListCtrl and wxTreeCtrl react to right
   mouse clicks and left mouse click for starting a drag operation.
+- "Alt" key (VK_MENU) now results in WXK_ALT keyboard event, not WXK_MENU
 
 
 All (GUI):
