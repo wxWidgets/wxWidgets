@@ -36,7 +36,7 @@
 
 #include "dragimag.h"
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
 #include "mondrian.xpm"
 #include "dragicon.xpm"
 #endif
@@ -190,7 +190,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
                 {
                     // Can anyone explain why this test is necessary,
                     // to prevent a gcc error?
-#ifdef __WXMOTIF__
+#if defined(__WXMOTIF__) || defined(__WXX11__)
                     wxIcon icon(dragicon_xpm);
 #else
                     wxIcon icon(wxICON(dragicon));
@@ -394,6 +394,9 @@ bool MyApp::OnInit()
     {
         wxString filename;
         filename.Printf(wxT("%s%d.png"), (const wxChar*)rootName, i);
+	/* For some reason under wxX11, the 2nd LoadFile in this loop fails, with
+	   a BadMatch inside CreateFromImage (inside ConvertToBitmap). This happens even if you copy
+	   the first file over the second file. */
         if (image.LoadFile(filename, wxBITMAP_TYPE_PNG))
         {
             DragShape* newShape = new DragShape(image.ConvertToBitmap());

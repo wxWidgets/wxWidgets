@@ -614,6 +614,9 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 
         GC gc = XCreateGC( xdisplay, (Pixmap) M_BMPDATA->m_pixmap, 0, NULL );
         XPutImage( xdisplay, (Pixmap) M_BMPDATA->m_pixmap, gc, data_image, 0, 0, 0, 0, width, height );
+#ifdef __WXDEBUG__
+	XSync(wxGlobalDisplay(), False);
+#endif
 
         XDestroyImage( data_image );
         XFreeGC( xdisplay, gc );
