@@ -15,6 +15,12 @@ These options are currently recognised by wxWindows:
 In some circumstances the MaskBlt function can be slower than using the fallback code, especially if using
 DC cacheing. By default, MaskBlt will be used where it is implemented by the operating system and driver.
 }
+\twocolitem{mgl.aa-threshold}{(wxMGL only) Set this integer option to point
+size below which fonts are not antialiased. Default: 10.
+}
+\twocolitem{mgl.aa-threshold}{(wxMGL only) Screen refresh rate in Hz.
+Reasonable default is used if not specified.
+}
 \end{twocollist}
 
 The compile-time option to include or exclude this functionality
