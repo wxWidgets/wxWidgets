@@ -258,8 +258,11 @@ void wxGenericFontDialog::CreateWidgets()
     styleChoice->SetStringSelection(wxFontStyleIntToString(dialogFont.GetStyle()));
     weightChoice->SetStringSelection(wxFontWeightIntToString(dialogFont.GetWeight()));
     wxString name(wxTheColourDatabase->FindName(m_fontData.GetColour()));
-    colourChoice->SetStringSelection(name);
-
+    if (name.length())
+        colourChoice->SetStringSelection(name);
+    else
+        colourChoice->SetStringSelection(wxT("BLACK"));
+    
     underLineCheckBox->SetValue(dialogFont.GetUnderlined());
     pointSizeChoice->SetSelection(dialogFont.GetPointSize()-1);
 
