@@ -93,7 +93,7 @@ class PrintBase:
             return ln_text, ""
 
         try:
-            w, h = self.DC.GetTextExtent(split[0])
+            w, h = self.DC.GetTextExtent(" " + split[0])
             if w >= width:
                 return ln_text, ""
         except:
