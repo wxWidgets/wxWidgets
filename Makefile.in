@@ -100,6 +100,8 @@ TIFFDIR  = $(WXDIR)/src/tiff
 ZLIBDIR  = $(WXDIR)/src/zlib
 REGEXDIR = $(WXDIR)/src/regex
 GTKDIR   = $(WXDIR)/src/gtk
+X11DIR   = $(WXDIR)/src/x11
+MGLDIR   = $(WXDIR)/src/mgl
 MOTIFDIR = $(WXDIR)/src/motif
 MSWDIR   = $(WXDIR)/src/msw
 PMDIR    = $(WXDIR)/src/os2
@@ -190,25 +192,6 @@ PNGOBJS = \
 		pngrio.o \
 		pngget.o \
 		pngset.o
-
-FREETYPEOBJS = \
-		ftsystem.o \
-		autohint.o \
-		ftbase.o \
-		ftdebug.o \
-		ftglyph.o \
-		ftinit.o \
-		ftmm.o \
-		cff.o \
-		type1cid.o \
-		psnames.o \
-		psmodule.o \
-		raster1.o \
-		sfnt.o \
-		smooth.o \
-		truetype.o \
-		type1z.o \
-		winfnt.o
 
 JPEGOBJS = \
 		jcomapi.o \

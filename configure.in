@@ -364,7 +364,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LIBJPEG=no
   DEFAULT_wxUSE_LIBTIFF=no
   DEFAULT_wxUSE_ODBC=no
-  DEFAULT_wxUSE_FREETYPE=no
   DEFAULT_wxUSE_OPENGL=no
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=no
@@ -536,7 +535,6 @@ else
   DEFAULT_wxUSE_LIBJPEG=yes
   DEFAULT_wxUSE_LIBTIFF=yes
   DEFAULT_wxUSE_ODBC=no
-  DEFAULT_wxUSE_FREETYPE=no
   DEFAULT_wxUSE_OPENGL=no
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=yes
@@ -722,7 +720,6 @@ AC_ARG_ENABLE(gtk2,        [  --enable-gtk2           use GTK+ 2.0 if available 
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
-WX_ARG_SYS_WITH(freetype,  [  --with-freetype         use freetype (font rasterizer)], wxUSE_FREETYPE)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
 fi
@@ -1606,41 +1603,6 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
     fi
 fi
 
-dnl ------------------------------------------------------------------------
-dnl Check for freetype library
-dnl ------------------------------------------------------------------------
-
-FREETYPE_INCLUDE=
-FREETYPE_LINK=
-if test "$wxUSE_FREETYPE" != "no" ; then
-    AC_DEFINE(wxUSE_FREETYPE)
-
-    if test "$wxUSE_FREETYPE" = "sys" -o "$wxUSE_FREETYPE" = "yes" ; then
-        AC_CHECK_HEADER(freetype.h,
-                        AC_CHECK_LIB(freetype, FT_Render_Glyph,
-                                     FREETYPE_LINK=" -lfreetype",
-                                     ,
-                                     [-lm])
-                       )
-
-        if test "x$FREETYPE_LINK" = "x" ; then
-            if test "$wxUSE_FREETYPE" = "sys" ; then
-                AC_MSG_ERROR([system freetype library not found! Use --with-freetype=builtin to use built-in version])
-            else
-                AC_MSG_WARN([system freetype library not found, will use built-in instead])
-                wxUSE_FREETYPE=builtin
-            fi
-        else
-            dnl we are using the system library
-            wxUSE_FREETYPE=sys
-        fi
-    fi
-
-    if test "$wxUSE_FREETYPE" = "builtin" ; then
-        FREETYPE_INCLUDE="-I\${top_srcdir}/src/freetype"
-    fi
-fi
-
 dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)
 dnl ----------------------------------------------------------------
@@ -2137,9 +2099,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     fi
     if test "$wxUSE_LIBPNG" = "builtin" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(PNGOBJS)"
-    fi
-    if test "$wxUSE_FREETYPE" = "builtin" ; then
-        ALL_OBJECTS="${ALL_OBJECTS} \$(FREETYPEOBJS)"
     fi
 
     dnl distribute samples/demos/utils with GUI versions
@@ -4642,11 +4601,11 @@ dnl FIXME: should this be covered by the conditional above
 dnl given the -lm comment there?  Or should that comment (and
 dnl this one) be removed..   [ 7 Nov 2001 ]
 
-LIBS="$ZLIB_LINK$POSIX4_LINK$INET_LINK$WCHAR_LINK$THREADS_LINK$DL_LINK -lm$LIBS"
+LIBS="$ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DL_LINK -lm $LIBS"
 
 if test "$wxUSE_GUI" = "yes"; then
 
-    LIBS=" $GUI_TK_LIBRARY$PNG_LINK$JPEG_LINK$TIFF_LINK$FREETYPE_LINK$LIBS"
+    LIBS="$GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $LIBS"
 
     dnl TODO add checks that these samples will really compile (i.e. all the
     dnl      library features they need are present)
@@ -4666,8 +4625,7 @@ fi
 
 dnl all -I options we must pass to the compiler
 INCLUDES="-I\${top_builddir}/lib/wx/include/${TOOLCHAIN_NAME} -I\${top_srcdir}/include \
-$REGEX_INCLUDE $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE \
-$FREETYPE_INCLUDE $TOOLKIT_INCLUDE"
+$REGEX_INCLUDE $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $TOOLKIT_INCLUDE"
 
 dnl wxGTK does not need TOOLKIT includes in wx-config
 if test "$wxUSE_GTK" = 1; then
