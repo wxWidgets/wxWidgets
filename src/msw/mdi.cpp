@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mdi.cpp
-// Purpose:     MDI classes
+// Name:        src/msw/mdi.cpp
+// Purpose:     MDI classes for wxMSW
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
@@ -304,7 +304,7 @@ void wxMDIParentFrame::SetWindowMenu(wxMenu* menu)
     }
 }
 
-void wxMDIParentFrame::OnSize(wxSizeEvent& event)
+void wxMDIParentFrame::OnSize(wxSizeEvent&)
 {
     if ( GetClientWindow() )
     {
@@ -1260,6 +1260,7 @@ static void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
     wxWindow *parent = win->GetParent();
     wxCHECK_RET( parent, wxT("MDI client without parent frame? weird...") );
 
+    ::SendMessage(GetWinHwnd(win), WM_MDIREFRESHMENU, 0, 0L);
     ::DrawMenuBar(GetWinHwnd(parent));
 }
 
@@ -1306,7 +1307,6 @@ static void RemoveWindowMenu(wxWindow *win, WXHMENU menu)
     // Try to insert Window menu in front of Help, otherwise append it.
     HMENU hmenu = (HMENU)menu;
     int N = GetMenuItemCount(hmenu);
-    bool success = FALSE;
     for ( int i = 0; i < N; i++ )
     {
         wxChar buf[256];
@@ -1320,7 +1320,6 @@ static void RemoveWindowMenu(wxWindow *win, WXHMENU menu)
 
         if ( wxStripMenuCodes(wxString(buf)).IsSameAs(_("Window")) )
         {
-            success = TRUE;
             ::RemoveMenu(hmenu, i, MF_BYPOSITION);
             break;
         }
