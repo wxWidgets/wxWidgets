@@ -120,10 +120,9 @@ public:
 #endif
     wxMenu( const wxString& title = wxEmptyString, long style = 0 )
     {
-        Init(title, style, NULL);
+        Init(title, style);
     }
 
-    wxMenu( long style );
     ~wxMenu();
 
     // operations
@@ -203,7 +202,7 @@ private:
     void Init( const wxString& title,
                long style
 #ifdef WXWIN_COMPATIBILITY
-               , const wxFunction func
+               , const wxFunction func = (wxFunction) NULL
 #endif
                );
 

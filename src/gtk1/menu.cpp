@@ -626,19 +626,9 @@ bool wxMenuItem::IsChecked() const
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
-wxMenu::wxMenu( const wxString& title, const wxFunction func, long style )
-{
-   Init(title, func, style);
-}
-
-wxMenu::wxMenu(long style)
-{
-   Init(wxEmptyString, (wxFunction) NULL, style);
-}
-
 void
 wxMenu::Init( const wxString& title,
-              long style,
+              long style
 #ifdef WXWIN_COMPATIBILITY
               , const wxFunction func
 #endif
