@@ -60,7 +60,7 @@ of the parameters is described here:
 
 \docparam{window}{The window to be added to the sizer. Its initial size (either set explicitly by the
 user or calculated internally when using wxDefaultSize) is interpreted as the minimal and in many
-cases also the initial size. This is particularly useful in connection with \helpref{SetSizeHint}{wxsizersetsizehints}.}
+cases also the initial size. This is particularly useful in connection with \helpref{SetSizeHints}{wxsizersetsizehints}.}
 
 \docparam{sizer}{The (child-)sizer to be added to the sizer. This allows placing a child sizer in a
 sizer and thus to create hierarchies of sizers (typically a vertical box as the top sizer and several
@@ -75,21 +75,21 @@ the dialog.}
 
 \docparam{option}{Although the meaning of this parameter is undefined in wxSizer, it is used in wxBoxSizer
 to indicate if a child of a sizer can change its size in the main orientation of the wxBoxSizer - where
-0 stands for not changable and a value of more than zero in interpreted relative to the value of other
-children of the same wxBoxSizer. You might, e.g., have a horizontal wxBoxSizer with three children, two
-of which are supposed to change their size with the sizer, then the two stretchable windows would get a
+0 stands for not changable and a value of more than zero is interpreted relative to the value of other
+children of the same wxBoxSizer. For example, you might have a horizontal wxBoxSizer with three children, two
+of which are supposed to change their size with the sizer. Then the two stretchable windows would get a
 value of 1 each to make them grow and shrink equally with the sizer's horizontal dimension.}
 
 \docparam{flag}{This parameter can be used to set a number of flags which can be combined using
-the binary OR operator |. Two main behaviours are defined using these flags: One is the border
+the binary OR operator |. Two main behaviours are defined using these flags. One is the border
 around a window: the {\it border} parameter determines the border width whereas the flags given here
 determine where the border may be (wxTOP, wxBOTTOM, wxLEFT, wxRIGHT or wxALL). The other flags
-determine the child window's behaviour if the size of the sizer changes, but - in contrast to
-the {\it option} flag - not in the main orientation, but the respectively other orientation. So
+determine the child window's behaviour if the size of the sizer changes. However this is not - in contrast to
+the {\it option} flag - in the main orientation, but in the respectively other orientation. So
 if you created a wxBoxSizer with the wxVERTICAL option, these flags will be relevant if the
 sizer changes its horizontal size. A child may get resized to completely fill out the new size (using
-either wxGROW or wxEXPAND), may get proportionally resized (wxSHAPED), may get centered (wxALIGN\_CENTER
-or wxALIGN\_CENTRE) or may get aligned to either side (wxALIGN\_LEFT and wxALIGN\_TOP are set to 0
+either wxGROW or wxEXPAND), it may get proportionally resized (wxSHAPED), it may get centered (wxALIGN\_CENTER
+or wxALIGN\_CENTRE) or it may get aligned to either side (wxALIGN\_LEFT and wxALIGN\_TOP are set to 0
 and thus represent the default, wxALIGN\_RIGHT and wxALIGN\_BOTTOM have their obvious meaning).
 With proportional resize, a child may also be centered in the main orientation using
 wxALIGN\_CENTER\_VERTICAL (same as wxALIGN\_CENTRE\_VERTICAL) and wxALIGN\_CENTER\_HORIZONTAL
@@ -99,7 +99,7 @@ wxALIGN\_CENTER\_VERTICAL (same as wxALIGN\_CENTRE\_VERTICAL) and wxALIGN\_CENTE
 
 \docparam{userData}{Allows an extra object to be attached to the sizer
 item, for use in derived classes when sizing information is more
-complex than what {\it option} and {\it flag} will allow for.}
+complex than the {\it option} and {\it flag} will allow for.}
 
 \membersection{wxSizer::CalcMin}\label{wxsizercalcmin}
 
@@ -133,14 +133,14 @@ Returns the current position of the sizer.
 \func{wxSize}{GetMinSize}{\void}
 
 Returns the minimal size of the sizer. This is either the combined minimal
-size of all the children and their borders or the minimal size set by
-\helpref{SetMinSize}{wxsizersetminsize}, depending on what is bigger.
+size of all the children and their borders or the minimal size set by 
+\helpref{SetMinSize}{wxsizersetminsize}, depending on which is bigger.
 
 \membersection{wxSizer::Layout}\label{wxsizerlayout}
 
 \func{void}{Layout}{\void}
 
-Call this to force laying out the children anew, e.g. after having added a child
+Call this to force layout of the children anew, e.g. after having added a child
 to or removed a child (window, other sizer or space) from the sizer while keeping
 the current dimension.
 
@@ -171,10 +171,10 @@ and sizes.
 
 \func{bool}{Remove}{\param{int }{nth}}
 
-Removes a child from the sizer. {\it window} is the window to be removed, {\it sizer} the
+Removes a child from the sizer. {\it window} is the window to be removed, {\it sizer} is the
 equivalent sizer and {\it nth} is the position of the child in the sizer, typically 0 for
 the first item. This method does not cause any layout or resizing to take place and does
-not delete the window itself. Call \helpref{wxSizer::Layout}{wxsizerlayout} for updating
+not delete the window itself. Call \helpref{wxSizer::Layout}{wxsizerlayout} to update
 the layout "on screen" after removing a child fom the sizer.
 
 Returns TRUE if the child item was found and removed, FALSE otherwise.
@@ -196,7 +196,7 @@ by the sizer to resize themselves according to the rules defined by the paramate
 Call this to give the sizer a minimal size. Normally, the sizer will calculate its
 minimal size based purely on how much space its children need. After calling this
 method \helpref{GetMinSize}{wxsizergetminsize} will return either the minimal size
-as requested by its children or the minimal size set here, depending on what is
+as requested by its children or the minimal size set here, depending on which is
 bigger.
 
 \membersection{wxSizer::SetItemMinSize}\label{wxsizersetitemminsize}
@@ -217,6 +217,6 @@ after initial creation.
 
 Tell the sizer to set the minimal size of the {\it window} to match the sizer's minimal size.
 This is commonly done in the constructor of the window itself, see sample in the description
-of \helpref{wxBoxSizer}{wxboxsizer} if the window is resizable (as many dialogs under Unix and
+of \helpref{wxBoxSizer}{wxboxsizer} if the window is resizable (as are many dialogs under Unix and
 frames on probably all platforms).
 

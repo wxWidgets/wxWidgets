@@ -2362,8 +2362,6 @@ as wxWriteResource and wxGetResource. It is just an unfortunate clash of termino
 See also \helpref{wxWindow::LoadFromResource}{wxwindowloadfromresource} for
 loading from resource data.
 
-{\bf Warning:} this needs updating for wxWindows 2.
-
 \membersection{::wxResourceAddIdentifier}\label{wxresourceaddidentifier}
 
 \func{bool}{wxResourceAddIdentifier}{\param{const wxString\& }{name}, \param{int }{value}}
@@ -2387,15 +2385,15 @@ wxWindows bitmap resource identifier. For example, if the .WXR file contains
 the following:
 
 \begin{verbatim}
-static const wxString\& aiai_resource = "bitmap(name = 'aiai_resource',\
-  bitmap = ['aiai', wxBITMAP_TYPE_BMP_RESOURCE, 'WINDOWS'],\
-  bitmap = ['aiai.xpm', wxBITMAP_TYPE_XPM, 'X']).";
+static const wxString\& project_resource = "bitmap(name = 'project_resource',\
+  bitmap = ['project', wxBITMAP_TYPE_BMP_RESOURCE, 'WINDOWS'],\
+  bitmap = ['project.xpm', wxBITMAP_TYPE_XPM, 'X']).";
 \end{verbatim}
 
 then this function can be called as follows:
 
 \begin{verbatim}
-  wxBitmap *bitmap  = wxResourceCreateBitmap("aiai_resource");
+  wxBitmap *bitmap  = wxResourceCreateBitmap("project_resource");
 \end{verbatim}
 
 \membersection{::wxResourceCreateIcon}
@@ -2407,15 +2405,15 @@ wxWindows icon resource identifier. For example, if the .WXR file contains
 the following:
 
 \begin{verbatim}
-static const wxString\& aiai_resource = "icon(name = 'aiai_resource',\
-  icon = ['aiai', wxBITMAP_TYPE_ICO_RESOURCE, 'WINDOWS'],\
-  icon = ['aiai', wxBITMAP_TYPE_XBM_DATA, 'X']).";
+static const wxString\& project_resource = "icon(name = 'project_resource',\
+  icon = ['project', wxBITMAP_TYPE_ICO_RESOURCE, 'WINDOWS'],\
+  icon = ['project', wxBITMAP_TYPE_XBM_DATA, 'X']).";
 \end{verbatim}
 
 then this function can be called as follows:
 
 \begin{verbatim}
-  wxIcon *icon = wxResourceCreateIcon("aiai_resource");
+  wxIcon *icon = wxResourceCreateIcon("project_resource");
 \end{verbatim}
 
 \membersection{::wxResourceCreateMenuBar}
@@ -2474,9 +2472,9 @@ dialog(name = 'dialog1',
   title = 'Test dialog box',
   x = 312, y = 234, width = 400, height = 300,
   modal = 0,
-  control = [wxGroupBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,
+  control = [1000, wxStaticBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],
-  control = [wxMultiText, 'Multitext', 'wxVERTICAL_LABEL', 'multitext3',
+  control = [1001, wxTextCtrl, '', 'wxTE_MULTILINE', 'text3',
       156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]]).
@@ -2502,7 +2500,7 @@ wxWindows resource data.
 
 \membersection{::wxResourceParseString}\label{wxresourceparsestring}
 
-\func{bool}{wxResourceParseString}{\param{const wxString\& }{resource}, \param{wxResourceTable *}{table = NULL}}
+\func{bool}{wxResourceParseString}{\param{char*}{ s}, \param{wxResourceTable *}{table = NULL}}
 
 Parses a string containing one or more wxWindows resource objects. If
 the resource objects are global static data that are included into the
@@ -2512,17 +2510,17 @@ containing the resource data, to make it known to wxWindows.
 {\it resource} should contain data with the following form:
 
 \begin{verbatim}
-static const wxString\& dialog1 = "dialog(name = 'dialog1',\
-  style = 'wxCAPTION | wxDEFAULT_DIALOG_STYLE',\
-  title = 'Test dialog box',\
-  x = 312, y = 234, width = 400, height = 300,\
-  modal = 0,\
-  control = [wxGroupBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
-  control = [wxMultiText, 'Multitext', 'wxVERTICAL_LABEL', 'multitext3',\
-      156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]]).";
+dialog(name = 'dialog1',
+  style = 'wxCAPTION | wxDEFAULT_DIALOG_STYLE',
+  title = 'Test dialog box',
+  x = 312, y = 234, width = 400, height = 300,
+  modal = 0,
+  control = [1000, wxStaticBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],
+  control = [1001, wxTextCtrl, '', 'wxTE_MULTILINE', 'text3',
+      156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]]).
 \end{verbatim}
 
 This function will typically be used after calling \helpref{wxLoadUserResource}{wxloaduserresource} to
@@ -2530,10 +2528,10 @@ load an entire {\tt .wxr file} into a string.
 
 \membersection{::wxResourceRegisterBitmapData}\label{registerbitmapdata}
 
-\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{const wxString\& }{xbm\_data}, \param{int }{width},
+\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{char* }{xbm\_data}, \param{int }{width},
 \param{int }{height}, \param{wxResourceTable *}{table = NULL}}
 
-\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{const wxString\& *}{xpm\_data}}
+\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{char** }{xpm\_data}}
 
 Makes \verb$#$included XBM or XPM bitmap data known to the wxWindows resource system. 
 This is required if other resources will use the bitmap data, since otherwise there
