@@ -238,12 +238,12 @@ wxColourChanger::wxColourChanger(wxDC& dc) : m_dc(dc)
                                                           : OPAQUE);
 
         // flag which telsl us to undo changes in the dtor
-        m_changed = TRUE;
+        m_changed = true;
     }
     else
     {
         // nothing done, nothing to undo
-        m_changed = FALSE;
+        m_changed = false;
     }
 }
 
@@ -277,7 +277,7 @@ wxDC::wxDC()
     m_oldPalette = 0;
 #endif // wxUSE_PALETTE
 
-    m_bOwnsDC = FALSE;
+    m_bOwnsDC = false;
     m_hDC = 0;
 }
 
@@ -413,7 +413,7 @@ void wxDC::SetClippingHrgn(WXHRGN hrgn)
     }
 #endif // Win16/32
 
-    m_clipping = TRUE;
+    m_clipping = true;
 
     UpdateClipBox();
 }
@@ -460,7 +460,7 @@ void wxDC::DestroyClippingRegion()
         ::DeleteObject(rgn);
     }
 
-    m_clipping = FALSE;
+    m_clipping = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -469,14 +469,14 @@ void wxDC::DestroyClippingRegion()
 
 bool wxDC::CanDrawBitmap() const
 {
-    return TRUE;
+    return true;
 }
 
 bool wxDC::CanGetTextExtent() const
 {
 #ifdef __WXMICROWIN__
     // TODO Extend MicroWindows' GetDeviceCaps function
-    return TRUE;
+    return true;
 #else
     // What sort of display is it?
     int technology = ::GetDeviceCaps(GetHdc(), TECHNOLOGY);
@@ -543,10 +543,10 @@ void wxDC::Clear()
 bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
 {
 #ifdef __WXWINCE__
-    return FALSE;
+    return false;
 #else
 
-    WXMICROWIN_CHECK_HDC_RET(FALSE)
+    WXMICROWIN_CHECK_HDC_RET(false)
 
     bool success = (0 != ::ExtFloodFill(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
                          col.GetPixel(),
@@ -577,16 +577,16 @@ bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
 
 bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
-    WXMICROWIN_CHECK_HDC_RET(FALSE)
+    WXMICROWIN_CHECK_HDC_RET(false)
 
-    wxCHECK_MSG( col, FALSE, _T("NULL colour parameter in wxDC::GetPixel") );
+    wxCHECK_MSG( col, false, _T("NULL colour parameter in wxDC::GetPixel") );
 
     // get the color of the pixel
     COLORREF pixelcolor = ::GetPixel(GetHdc(), XLOG2DEV(x), YLOG2DEV(y));
 
     wxRGBToColour(*col, pixelcolor);
 
-    return TRUE;
+    return true;
 }
 
 void wxDC::DoCrossHair(wxCoord x, wxCoord y)
@@ -1037,7 +1037,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         {
             // don't give assert here because this would break existing
             // programs - just silently ignore useMask parameter
-            useMask = FALSE;
+            useMask = false;
         }
     }
     if ( useMask )
@@ -1048,7 +1048,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         // On some systems, MaskBlt succeeds yet is much much slower
         // than the wxWindows fall-back implementation. So we need
         // to be able to switch this on and off at runtime.
-        bool ok = FALSE;
+        bool ok = false;
 #if wxUSE_SYSTEM_OPTIONS
         if (wxSystemOptions::GetOptionInt(wxT("no-maskblt")) == 0)
 #endif
@@ -1281,7 +1281,7 @@ void wxDC::DoSelectPalette(bool realize)
     {
         HPALETTE oldPal = ::SelectPalette(GetHdc(),
                                           GetHpaletteOf(m_palette),
-                                          FALSE);
+                                          false);
         if (!m_oldPalette)
             m_oldPalette = (WXHPALETTE) oldPal;
 
@@ -1295,7 +1295,7 @@ void wxDC::SetPalette(const wxPalette& palette)
     if ( palette.Ok() )
     {
         m_palette = palette;
-        DoSelectPalette(TRUE);
+        DoSelectPalette(true);
     }
 }
 
@@ -1354,7 +1354,7 @@ void wxDC::SetFont(const wxFont& font)
                 wxLogLastError(_T("SelectObject(old font)"));
             }
 
-            m_oldFont = NULL;
+            m_oldFont = 0;
         }
 
         m_font = wxNullFont;
@@ -1392,7 +1392,7 @@ void wxDC::SetPen(const wxPen& pen)
                 wxLogLastError(_T("SelectObject(old pen)"));
             }
 
-            m_oldPen = NULL;
+            m_oldPen = 0;
         }
 
         m_pen = wxNullPen;
@@ -1447,7 +1447,7 @@ void wxDC::SetBrush(const wxBrush& brush)
                 wxLogLastError(_T("SelectObject(old brush)"));
             }
 
-            m_oldBrush = NULL;
+            m_oldBrush = 0;
         }
 
         m_brush = wxNullBrush;
@@ -1521,8 +1521,8 @@ void wxDC::SetRop(WXHDC dc)
 
 bool wxDC::StartDoc(const wxString& WXUNUSED(message))
 {
-    // We might be previewing, so return TRUE to let it continue.
-    return TRUE;
+    // We might be previewing, so return true to let it continue.
+    return true;
 }
 
 void wxDC::EndDoc()
@@ -1818,16 +1818,16 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                   int rop, bool useMask,
                   wxCoord xsrcMask, wxCoord ysrcMask)
 {
-    wxCHECK_MSG( source, FALSE, _T("wxDC::Blit(): NULL wxDC pointer") );
+    wxCHECK_MSG( source, false, _T("wxDC::Blit(): NULL wxDC pointer") );
 
-    WXMICROWIN_CHECK_HDC_RET(FALSE)
+    WXMICROWIN_CHECK_HDC_RET(false)
 
     const wxBitmap& bmpSrc = source->m_selectedBitmap;
     if ( bmpSrc.Ok() && bmpSrc.HasAlpha() )
     {
         if ( AlphaBlt(GetHdc(), xdest, ydest, width, height,
                       GetHdcOf(*source), bmpSrc) )
-            return TRUE;
+            return true;
     }
 
     wxMask *mask = NULL;
@@ -1839,7 +1839,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         {
             // don't give assert here because this would break existing
             // programs - just silently ignore useMask parameter
-            useMask = FALSE;
+            useMask = false;
         }
     }
 
@@ -1880,10 +1880,10 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         case wxNOR:          dwRop = NOTSRCCOPY;       break;
         default:
            wxFAIL_MSG( wxT("unsupported logical function") );
-           return FALSE;
+           return false;
     }
 
-    bool success = FALSE;
+    bool success = false;
 
     if (useMask)
     {
@@ -2040,7 +2040,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                 }
                 else
                 {
-                    success = TRUE;
+                    success = true;
                 }
             }
         }
@@ -2066,7 +2066,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             }
             else
             {
-                success = TRUE;
+                success = true;
             }
         }
 
@@ -2086,7 +2086,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             }
             else
             {
-                success = TRUE;
+                success = true;
             }
         }
     }
@@ -2280,7 +2280,7 @@ void wxDC::ClearCache()
 class wxDCModule : public wxModule
 {
 public:
-    virtual bool OnInit() { return TRUE; }
+    virtual bool OnInit() { return true; }
     virtual void OnExit() { wxDC::ClearCache(); }
 
 private:
@@ -2312,11 +2312,11 @@ static bool AlphaBlt(HDC hdcDst,
 
     // bitmaps can be drawn only from GUI thread so there is no need to
     // protect this static variable from multiple threads
-    static bool s_triedToLoad = FALSE;
+    static bool s_triedToLoad = false;
     static AlphaBlend_t pfnAlphaBlend = NULL;
     if ( !s_triedToLoad )
     {
-        s_triedToLoad = TRUE;
+        s_triedToLoad = true;
 
         // don't give errors about the DLL being unavailable, we're
         // prepared to handle this
@@ -2349,7 +2349,7 @@ static bool AlphaBlt(HDC hdcDst,
                            bf) )
         {
             // skip wxAlphaBlend() call below
-            return TRUE;
+            return true;
         }
 
         wxLogLastError(_T("AlphaBlend"));
@@ -2361,11 +2361,11 @@ static bool AlphaBlt(HDC hdcDst,
 #ifdef wxHAVE_RAW_BITMAP
     wxAlphaBlend(hdcDst, x, y, width, height, bmp);
 
-    return TRUE;
+    return true;
 #else // !wxHAVE_RAW_BITMAP
     // no wxAlphaBlend() neither, fall back to using simple BitBlt() (we lose
     // alpha but at least something will be shown like this)
-    return FALSE;
+    return false;
 #endif // wxHAVE_RAW_BITMAP
 }
 
