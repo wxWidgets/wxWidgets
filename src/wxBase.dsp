@@ -525,7 +525,7 @@ SOURCE=.\msw\dummy.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\console.cpp
+SOURCE=.\msw\basemsw.cpp
 # End Source File
 # Begin Source File
 

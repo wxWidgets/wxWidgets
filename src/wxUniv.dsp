@@ -89,6 +89,10 @@ SOURCE=.\common\accesscmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\appbase.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\appcmn.cpp
 # End Source File
 # Begin Source File
@@ -262,6 +266,10 @@ SOURCE=.\common\filesys.cpp
 # Begin Source File
 
 SOURCE=.\common\fldlgcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\fmapbase.cpp
 # End Source File
 # Begin Source File
 
@@ -506,6 +514,10 @@ SOURCE=.\common\socket.cpp
 # Begin Source File
 
 SOURCE=.\common\statbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\stopwatch.cpp
 # End Source File
 # Begin Source File
 
@@ -888,6 +900,10 @@ SOURCE=.\msw\app.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\basemsw.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\bitmap.cpp
 # End Source File
 # Begin Source File
@@ -1024,6 +1040,10 @@ SOURCE=.\msw\minifram.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\mslu.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\palette.cpp
 # End Source File
 # Begin Source File
@@ -1081,6 +1101,10 @@ SOURCE=.\msw\utils.cpp
 # Begin Source File
 
 SOURCE=.\msw\utilsexc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\utilsgui.cpp
 # End Source File
 # Begin Source File
 
@@ -1336,6 +1360,10 @@ SOURCE=..\include\wx\access.h
 # Begin Source File
 
 SOURCE=..\include\wx\app.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\apptrait.h
 # End Source File
 # Begin Source File
 
@@ -1628,6 +1656,10 @@ SOURCE=..\include\wx\filename.h
 # Begin Source File
 
 SOURCE=..\include\wx\filesys.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\fmappriv.h
 # End Source File
 # Begin Source File
 

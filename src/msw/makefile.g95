@@ -107,11 +107,10 @@ GENERICOBJS = \
 		$(GENDIR)/wizard.$(OBJSUFF)
 
 COMMONOBJS_BASE  = \
-                $(COMMDIR)/appcmn.$(OBJSUFF) \
+                $(COMMDIR)/appbase.$(OBJSUFF) \
 		$(COMMDIR)/clntdata.$(OBJSUFF) \
 		$(COMMDIR)/cmdline.$(OBJSUFF) \
 		$(COMMDIR)/config.$(OBJSUFF) \
-		$(COMMDIR)/datacmn.$(OBJSUFF) \
 		$(COMMDIR)/datetime.$(OBJSUFF) \
 		$(COMMDIR)/datstrm.$(OBJSUFF) \
 		$(COMMDIR)/db.$(OBJSUFF) \
@@ -129,7 +128,7 @@ COMMONOBJS_BASE  = \
 		$(COMMDIR)/filefn.$(OBJSUFF) \
 		$(COMMDIR)/filename.$(OBJSUFF) \
 		$(COMMDIR)/filesys.$(OBJSUFF) \
-		$(COMMDIR)/fontmap.$(OBJSUFF) \
+		$(COMMDIR)/fmapbase.$(OBJSUFF) \
 		$(COMMDIR)/fs_inet.$(OBJSUFF) \
 		$(COMMDIR)/fs_mem.$(OBJSUFF) \
 		$(COMMDIR)/fs_zip.$(OBJSUFF) \
@@ -156,13 +155,13 @@ COMMONOBJS_BASE  = \
 		$(COMMDIR)/sckipc.$(OBJSUFF) \
 		$(COMMDIR)/sckstrm.$(OBJSUFF) \
 		$(COMMDIR)/socket.$(OBJSUFF) \
+		$(COMMDIR)/stopwatch.$(OBJSUFF) \
 		$(COMMDIR)/strconv.$(OBJSUFF) \
 		$(COMMDIR)/stream.$(OBJSUFF) \
 		$(COMMDIR)/string.$(OBJSUFF) \
 		$(COMMDIR)/sysopt.$(OBJSUFF) \
 		$(COMMDIR)/textbuf.$(OBJSUFF) \
 		$(COMMDIR)/textfile.$(OBJSUFF) \
-		$(COMMDIR)/timercmn.$(OBJSUFF) \
 		$(COMMDIR)/tokenzr.$(OBJSUFF) \
 		$(COMMDIR)/txtstrm.$(OBJSUFF) \
 		$(COMMDIR)/unzip.$(OBJSUFF) \
@@ -180,6 +179,7 @@ COMMONOBJS_BASEONLY  = \
 COMMONOBJS  = \
                 $(COMMONOBJS_BASE) \
 		$(COMMDIR)/accesscmn.$(OBJSUFF) \
+		$(COMMDIR)/appcmn.$(OBJSUFF) \
 		$(COMMDIR)/artprov.$(OBJSUFF) \
 		$(COMMDIR)/artstd.$(OBJSUFF) \
 		$(COMMDIR)/choiccmn.$(OBJSUFF) \
@@ -190,6 +190,7 @@ COMMONOBJS  = \
 		$(COMMDIR)/cshelp.$(OBJSUFF) \
 		$(COMMDIR)/ctrlcmn.$(OBJSUFF) \
 		$(COMMDIR)/ctrlsub.$(OBJSUFF) \
+		$(COMMDIR)/datacmn.$(OBJSUFF) \
 		$(COMMDIR)/dbgrid.$(OBJSUFF) \
 		$(COMMDIR)/dcbase.$(OBJSUFF) \
 		$(COMMDIR)/dlgcmn.$(OBJSUFF) \
@@ -203,6 +204,7 @@ COMMONOBJS  = \
 		$(COMMDIR)/fddlgcmn.$(OBJSUFF) \
 		$(COMMDIR)/fldlgcmn.$(OBJSUFF) \
 		$(COMMDIR)/fontcmn.$(OBJSUFF) \
+		$(COMMDIR)/fontmap.$(OBJSUFF) \
 		$(COMMDIR)/framecmn.$(OBJSUFF) \
 		$(COMMDIR)/gaugecmn.$(OBJSUFF) \
 		$(COMMDIR)/gdicmn.$(OBJSUFF) \
@@ -239,6 +241,7 @@ COMMONOBJS  = \
 		$(COMMDIR)/taskbarcmn.$(OBJSUFF) \
 		$(COMMDIR)/tbarbase.$(OBJSUFF) \
 		$(COMMDIR)/textcmn.$(OBJSUFF) \
+		$(COMMDIR)/timercmn.$(OBJSUFF) \
 		$(COMMDIR)/toplvcmn.$(OBJSUFF) \
 		$(COMMDIR)/treebase.$(OBJSUFF) \
 		$(COMMDIR)/valgen.$(OBJSUFF) \
@@ -270,12 +273,14 @@ HTMLOBJS = \
 		$(HTMLDIR)/winpars.$(OBJSUFF)
 
 MSWOBJS_BASE = \
-                $(MSWDIR)/dde.$(OBJSUFF) \
+                $(MSWDIR)/basemsw.$(OBJSUFF) \
+		$(MSWDIR)/dde.$(OBJSUFF) \
 		$(MSWDIR)/dir.$(OBJSUFF) \
 		$(MSWDIR)/gsocket.$(OBJSUFF) \
 		$(MSWDIR)/gsockmsw.$(OBJSUFF) \
 		$(MSWDIR)/main.$(OBJSUFF) \
 		$(MSWDIR)/mimetype.$(OBJSUFF) \
+		$(MSWDIR)/mslu.$(OBJSUFF) \
 		$(MSWDIR)/regconf.$(OBJSUFF) \
 		$(MSWDIR)/registry.$(OBJSUFF) \
 		$(MSWDIR)/snglinst.$(OBJSUFF) \
@@ -341,7 +346,6 @@ MSWOBJS     = \
 		$(MSWDIR)/metafile.$(OBJSUFF) \
 		$(MSWDIR)/minifram.$(OBJSUFF) \
 		$(MSWDIR)/msgdlg.$(OBJSUFF) \
-		$(MSWDIR)/mslu.$(OBJSUFF) \
 		$(MSWDIR)/nativdlg.$(OBJSUFF) \
 		$(MSWDIR)/notebook.$(OBJSUFF) \
 		$(MSWDIR)/ownerdrw.$(OBJSUFF) \
@@ -373,6 +377,7 @@ MSWOBJS     = \
 		$(MSWDIR)/tooltip.$(OBJSUFF) \
 		$(MSWDIR)/toplevel.$(OBJSUFF) \
 		$(MSWDIR)/treectrl.$(OBJSUFF) \
+		$(MSWDIR)/utilsgui.$(OBJSUFF) \
 		$(MSWDIR)/uxtheme.$(OBJSUFF) \
 		$(MSWDIR)/wave.$(OBJSUFF) \
 		$(MSWDIR)/window.$(OBJSUFF)

@@ -58,7 +58,7 @@ MSWDIR=.
 DOCDIR = $(WXDIR)\docs
 
 COMMONOBJS = \
-    $(OBJ_PATH)\appcmn.obj \
+    $(OBJ_PATH)\appbase.obj \
 		$(OBJ_PATH)\clntdata.obj \
 		$(OBJ_PATH)\cmdline.obj \
 		$(OBJ_PATH)\config.obj \
@@ -79,7 +79,7 @@ COMMONOBJS = \
 		$(OBJ_PATH)\filefn.obj \
 		$(OBJ_PATH)\filename.obj \
 		$(OBJ_PATH)\filesys.obj \
-		$(OBJ_PATH)\fontmap.obj \
+		$(OBJ_PATH)\fmapbase.obj \
 		$(OBJ_PATH)\fs_inet.obj \
 		$(OBJ_PATH)\fs_mem.obj \
 		$(OBJ_PATH)\fs_zip.obj \
@@ -106,13 +106,13 @@ COMMONOBJS = \
 		$(OBJ_PATH)\sckipc.obj \
 		$(OBJ_PATH)\sckstrm.obj \
 		$(OBJ_PATH)\socket.obj \
+		$(OBJ_PATH)\stopwatch.obj \
 		$(OBJ_PATH)\strconv.obj \
 		$(OBJ_PATH)\stream.obj \
 		$(OBJ_PATH)\string.obj \
 		$(OBJ_PATH)\sysopt.obj \
 		$(OBJ_PATH)\textbuf.obj \
 		$(OBJ_PATH)\textfile.obj \
-		$(OBJ_PATH)\timercmn.obj \
 		$(OBJ_PATH)\tokenzr.obj \
 		$(OBJ_PATH)\txtstrm.obj \
 		$(OBJ_PATH)\unzip.obj \
@@ -125,12 +125,14 @@ COMMONOBJS = \
 		$(OBJ_PATH)\zstream.obj \
 		$(OBJ_PATH)\init.obj
 
-MSWOBJS = $(OBJ_PATH)\dde.obj \
+MSWOBJS = $(OBJ_PATH)\basemsw.obj \
+		$(OBJ_PATH)\dde.obj \
 		$(OBJ_PATH)\dir.obj \
 		$(OBJ_PATH)\gsocket.obj \
 		$(OBJ_PATH)\gsockmsw.obj \
 		$(OBJ_PATH)\main.obj \
 		$(OBJ_PATH)\mimetype.obj \
+		$(OBJ_PATH)\mslu.obj \
 		$(OBJ_PATH)\regconf.obj \
 		$(OBJ_PATH)\registry.obj \
 		$(OBJ_PATH)\snglinst.obj \
@@ -195,6 +197,8 @@ dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\includ
 version.res:
     brc32 -r -i$(WXDIR)\include\ $(MSWDIR)\version.rc
 
+$(OBJ_PATH)\basemsw.obj: $(MSWDIR)\basemsw.$(SRCSUFF)
+
 $(OBJ_PATH)\dde.obj: $(MSWDIR)\dde.$(SRCSUFF)
 
 $(OBJ_PATH)\dir.obj: $(MSWDIR)\dir.$(SRCSUFF)
@@ -206,6 +210,8 @@ $(OBJ_PATH)\gsockmsw.obj: $(MSWDIR)\gsockmsw.c
 $(OBJ_PATH)\main.obj: $(MSWDIR)\main.$(SRCSUFF)
 
 $(OBJ_PATH)\mimetype.obj: $(MSWDIR)\mimetype.$(SRCSUFF)
+
+$(OBJ_PATH)\mslu.obj: $(MSWDIR)\mslu.$(SRCSUFF)
 
 $(OBJ_PATH)\regconf.obj: $(MSWDIR)\regconf.$(SRCSUFF)
 
@@ -226,7 +232,7 @@ $(OBJ_PATH)\volume.obj: $(MSWDIR)\volume.$(SRCSUFF)
 ########################################################
 # Common objects (always compiled)
 
-$(OBJ_PATH)\appcmn.obj: $(COMMDIR)\appcmn.$(SRCSUFF)
+$(OBJ_PATH)\appbase.obj: $(COMMDIR)\appbase.$(SRCSUFF)
 
 $(OBJ_PATH)\clntdata.obj: $(COMMDIR)\clntdata.$(SRCSUFF)
 
@@ -268,7 +274,7 @@ $(OBJ_PATH)\filename.obj: $(COMMDIR)\filename.$(SRCSUFF)
 
 $(OBJ_PATH)\filesys.obj: $(COMMDIR)\filesys.$(SRCSUFF)
 
-$(OBJ_PATH)\fontmap.obj: $(COMMDIR)\fontmap.$(SRCSUFF)
+$(OBJ_PATH)\fmapbase.obj: $(COMMDIR)\fmapbase.$(SRCSUFF)
 
 $(OBJ_PATH)\fs_inet.obj: $(COMMDIR)\fs_inet.$(SRCSUFF)
 
@@ -322,6 +328,8 @@ $(OBJ_PATH)\sckstrm.obj: $(COMMDIR)\sckstrm.$(SRCSUFF)
 
 $(OBJ_PATH)\socket.obj: $(COMMDIR)\socket.$(SRCSUFF)
 
+$(OBJ_PATH)\stopwatch.obj: $(COMMDIR)\stopwatch.$(SRCSUFF)
+
 $(OBJ_PATH)\strconv.obj: $(COMMDIR)\strconv.$(SRCSUFF)
 
 $(OBJ_PATH)\stream.obj: $(COMMDIR)\stream.$(SRCSUFF)
@@ -333,8 +341,6 @@ $(OBJ_PATH)\sysopt.obj: $(COMMDIR)\sysopt.$(SRCSUFF)
 $(OBJ_PATH)\textbuf.obj: $(COMMDIR)\textbuf.$(SRCSUFF)
 
 $(OBJ_PATH)\textfile.obj: $(COMMDIR)\textfile.$(SRCSUFF)
-
-$(OBJ_PATH)\timercmn.obj: $(COMMDIR)\timercmn.$(SRCSUFF)
 
 $(OBJ_PATH)\tokenzr.obj: $(COMMDIR)\tokenzr.$(SRCSUFF)
 

@@ -104,6 +104,7 @@ GENERICOBJS= $(MSWDIR)\busyinfo.obj \
 
 COMMONOBJS = \
 		$(MSWDIR)\accesscmn.obj \
+		$(MSWDIR)\appbase.obj \
 		$(MSWDIR)\appcmn.obj \
 		$(MSWDIR)\artprov.obj \
 		$(MSWDIR)\artstd.obj \
@@ -145,6 +146,7 @@ COMMONOBJS = \
 		$(MSWDIR)\filename.obj \
 		$(MSWDIR)\filesys.obj \
 		$(MSWDIR)\fldlgcmn.obj \
+		$(MSWDIR)\fmapbase.obj \
 		$(MSWDIR)\fontcmn.obj \
 		$(MSWDIR)\fontmap.obj \
 		$(MSWDIR)\framecmn.obj \
@@ -191,6 +193,7 @@ COMMONOBJS = \
 		$(MSWDIR)\settcmn.obj \
 		$(MSWDIR)\sizer.obj \
 		$(MSWDIR)\statbar.obj \
+		$(MSWDIR)\stopwatch.obj \
 		$(MSWDIR)\strconv.obj \
 		$(MSWDIR)\stream.obj \
 		$(MSWDIR)\string.obj \
@@ -221,6 +224,7 @@ COMMONOBJS = \
 
 MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\app.obj \
+		$(MSWDIR)\basemsw.obj \
 		$(MSWDIR)\bitmap.obj \
 		$(MSWDIR)\bmpbuttn.obj \
 		$(MSWDIR)\brush.obj \
@@ -301,6 +305,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\toplevel.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
+		$(MSWDIR)\utilsgui.obj \
 		$(MSWDIR)\uxtheme.obj \
 		$(MSWDIR)\volume.obj \
 		$(MSWDIR)\wave.obj \
@@ -329,6 +334,8 @@ dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\includ
 $(MSWDIR)\accel.obj: $(MSWDIR)\accel.$(SRCSUFF)
 
 $(MSWDIR)\app.obj: $(MSWDIR)\app.$(SRCSUFF)
+
+$(MSWDIR)\basemsw.obj: $(MSWDIR)\basemsw.$(SRCSUFF)
 
 $(MSWDIR)\bitmap.obj: $(MSWDIR)\bitmap.$(SRCSUFF)
 
@@ -490,6 +497,8 @@ $(MSWDIR)\utils.obj: $(MSWDIR)\utils.$(SRCSUFF)
 
 $(MSWDIR)\utilsexc.obj: $(MSWDIR)\utilsexc.$(SRCSUFF)
 
+$(MSWDIR)\utilsgui.obj: $(MSWDIR)\utilsgui.$(SRCSUFF)
+
 $(MSWDIR)\uxtheme.obj: $(MSWDIR)\uxtheme.$(SRCSUFF)
 
 $(MSWDIR)\volume.obj: $(MSWDIR)\volume.$(SRCSUFF)
@@ -504,6 +513,8 @@ $(MSWDIR)\window.obj: $(MSWDIR)\window.$(SRCSUFF)
 # Common objects (always compiled)
 
 $(MSWDIR)\accesscmn.obj: $(COMMDIR)\accesscmn.$(SRCSUFF)
+
+$(MSWDIR)\appbase.obj: $(COMMDIR)\appbase.$(SRCSUFF)
 
 $(MSWDIR)\appcmn.obj: $(COMMDIR)\appcmn.$(SRCSUFF)
 
@@ -586,6 +597,8 @@ $(MSWDIR)\filename.obj: $(COMMDIR)\filename.$(SRCSUFF)
 $(MSWDIR)\filesys.obj: $(COMMDIR)\filesys.$(SRCSUFF)
 
 $(MSWDIR)\fldlgcmn.obj: $(COMMDIR)\fldlgcmn.$(SRCSUFF)
+
+$(MSWDIR)\fmapbase.obj: $(COMMDIR)\fmapbase.$(SRCSUFF)
 
 $(MSWDIR)\fontcmn.obj: $(COMMDIR)\fontcmn.$(SRCSUFF)
 
@@ -678,6 +691,8 @@ $(MSWDIR)\settcmn.obj: $(COMMDIR)\settcmn.$(SRCSUFF)
 $(MSWDIR)\sizer.obj: $(COMMDIR)\sizer.$(SRCSUFF)
 
 $(MSWDIR)\statbar.obj: $(COMMDIR)\statbar.$(SRCSUFF)
+
+$(MSWDIR)\stopwatch.obj: $(COMMDIR)\stopwatch.$(SRCSUFF)
 
 $(MSWDIR)\strconv.obj: $(COMMDIR)\strconv.$(SRCSUFF)
 

@@ -58,6 +58,7 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 		$(GENDIR)\wizard.obj
 
 COMMONOBJS = $(COMMDIR)\accesscmn.obj \
+		$(COMMDIR)\appbase.obj \
 		$(COMMDIR)\appcmn.obj \
 		$(COMMDIR)\artprov.obj \
 		$(COMMDIR)\artstd.obj \
@@ -102,6 +103,7 @@ COMMONOBJS = $(COMMDIR)\accesscmn.obj \
 		$(COMMDIR)\filename.obj \
 		$(COMMDIR)\filesys.obj \
 		$(COMMDIR)\fldlgcmn.obj \
+		$(COMMDIR)\fmapbase.obj \
 		$(COMMDIR)\fontcmn.obj \
 		$(COMMDIR)\fontmap.obj \
 		$(COMMDIR)\framecmn.obj \
@@ -163,6 +165,7 @@ COMMONOBJS = $(COMMDIR)\accesscmn.obj \
 		$(COMMDIR)\sizer.obj \
 		$(COMMDIR)\socket.obj \
 		$(COMMDIR)\statbar.obj \
+		$(COMMDIR)\stopwatch.obj \
 		$(COMMDIR)\strconv.obj \
 		$(COMMDIR)\stream.obj \
 		$(COMMDIR)\string.obj \
@@ -216,6 +219,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\ole\access.obj \
 		$(MSWDIR)\app.obj \
 		$(MSWDIR)\ole\automtn.obj \
+		$(MSWDIR)\basemsw.obj \
 		$(MSWDIR)\bitmap.obj \
 		$(MSWDIR)\bmpbuttn.obj \
 		$(MSWDIR)\brush.obj \
@@ -318,6 +322,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\treectrl.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
+		$(MSWDIR)\utilsgui.obj \
 		$(MSWDIR)\ole\uuid.obj \
 		$(MSWDIR)\uxtheme.obj \
 		$(MSWDIR)\volume.obj \

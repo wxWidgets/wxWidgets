@@ -30,6 +30,7 @@ ALL_SOURCES = \
 		generic/treectlg.cpp \
 		generic/wizard.cpp \
 		common/accesscmn.cpp \
+		common/appbase.cpp \
 		common/appcmn.cpp \
 		common/artprov.cpp \
 		common/artstd.cpp \
@@ -74,6 +75,7 @@ ALL_SOURCES = \
 		common/filename.cpp \
 		common/filesys.cpp \
 		common/fldlgcmn.cpp \
+		common/fmapbase.cpp \
 		common/fontcmn.cpp \
 		common/fontmap.cpp \
 		common/framecmn.cpp \
@@ -135,6 +137,7 @@ ALL_SOURCES = \
 		common/sizer.cpp \
 		common/socket.cpp \
 		common/statbar.cpp \
+		common/stopwatch.cpp \
 		common/strconv.cpp \
 		common/stream.cpp \
 		common/string.cpp \
@@ -166,6 +169,7 @@ ALL_SOURCES = \
 		msw/ole/access.cpp \
 		msw/app.cpp \
 		msw/ole/automtn.cpp \
+		msw/basemsw.cpp \
 		msw/bitmap.cpp \
 		msw/bmpbuttn.cpp \
 		msw/brush.cpp \
@@ -268,6 +272,7 @@ ALL_SOURCES = \
 		msw/treectrl.cpp \
 		msw/utils.cpp \
 		msw/utilsexc.cpp \
+		msw/utilsgui.cpp \
 		msw/ole/uuid.cpp \
 		msw/uxtheme.cpp \
 		msw/volume.cpp \
@@ -298,6 +303,7 @@ ALL_HEADERS = \
 		accel.h \
 		access.h \
 		app.h \
+		apptrait.h \
 		arrimpl.cpp \
 		artprov.h \
 		bitmap.h \
@@ -372,6 +378,7 @@ ALL_HEADERS = \
 		filefn.h \
 		filename.h \
 		filesys.h \
+		fmappriv.h \
 		font.h \
 		fontdlg.h \
 		fontenc.h \
@@ -535,6 +542,8 @@ ALL_HEADERS = \
 		msw/accel.h \
 		msw/access.h \
 		msw/app.h \
+		msw/apptbase.h \
+		msw/apptrait.h \
 		msw/bitmap.h \
 		msw/bmpbuttn.h \
 		msw/brush.h \
@@ -672,10 +681,13 @@ ALL_HEADERS = \
 		generic/timer.h \
 		generic/treectlg.h \
 		generic/wizard.h \
+		unix/apptbase.h \
+		unix/apptrait.h \
 		unix/execute.h \
 		unix/fontutil.h \
 		unix/gsockunx.h \
 		unix/mimetype.h \
+		unix/pipe.h \
 		unix/taskbarx11.h \
 		unix/utilsx11.h \
 		html/forcelnk.h \
@@ -698,6 +710,7 @@ ALL_HEADERS = \
 
 COMMONOBJS = \
 		accesscmn.o \
+		appbase.o \
 		appcmn.o \
 		artprov.o \
 		artstd.o \
@@ -742,6 +755,7 @@ COMMONOBJS = \
 		filename.o \
 		filesys.o \
 		fldlgcmn.o \
+		fmapbase.o \
 		fontcmn.o \
 		fontmap.o \
 		framecmn.o \
@@ -803,6 +817,7 @@ COMMONOBJS = \
 		sizer.o \
 		socket.o \
 		statbar.o \
+		stopwatch.o \
 		strconv.o \
 		stream.o \
 		string.o \
@@ -864,6 +879,7 @@ GENERICOBJS = \
 GUIOBJS = \
 		accel.o \
 		app.o \
+		basemsw.o \
 		bitmap.o \
 		bmpbuttn.o \
 		brush.o \
@@ -962,6 +978,7 @@ GUIOBJS = \
 		treectrl.o \
 		utils.o \
 		utilsexc.o \
+		utilsgui.o \
 		uxtheme.o \
 		volume.o \
 		wave.o \
@@ -1016,6 +1033,7 @@ GUI_LOWLEVEL_OBJS = \
 		toplevel.o \
 		utils.o \
 		utilsexc.o \
+		utilsgui.o \
 		wave.o \
 		window.o
 

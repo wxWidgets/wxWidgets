@@ -2,7 +2,7 @@
 # DO NOT CHANGE THIS FILE, YOUR CHANGES WILL BE LOST! CHANGE BASE.T!
 ALL_SOURCES = \
 		common/init.cpp \
-		common/appcmn.cpp \
+		common/appbase.cpp \
 		common/clntdata.cpp \
 		common/cmdline.cpp \
 		common/config.cpp \
@@ -23,7 +23,7 @@ ALL_SOURCES = \
 		common/filefn.cpp \
 		common/filename.cpp \
 		common/filesys.cpp \
-		common/fontmap.cpp \
+		common/fmapbase.cpp \
 		common/fs_inet.cpp \
 		common/fs_mem.cpp \
 		common/fs_zip.cpp \
@@ -50,13 +50,13 @@ ALL_SOURCES = \
 		common/sckipc.cpp \
 		common/sckstrm.cpp \
 		common/socket.cpp \
+		common/stopwatch.cpp \
 		common/strconv.cpp \
 		common/stream.cpp \
 		common/string.cpp \
 		common/sysopt.cpp \
 		common/textbuf.cpp \
 		common/textfile.cpp \
-		common/timercmn.cpp \
 		common/tokenzr.cpp \
 		common/txtstrm.cpp \
 		common/unzip.c \
@@ -67,18 +67,21 @@ ALL_SOURCES = \
 		common/wxchar.cpp \
 		common/zipstrm.cpp \
 		common/zstream.cpp \
+		unix/baseunix.cpp \
 		unix/dir.cpp \
 		unix/gsocket.c \
 		unix/mimetype.cpp \
 		unix/snglinst.cpp \
 		unix/threadpsx.cpp \
 		unix/utilsunx.cpp \
+		msw/basemsw.cpp \
 		msw/dde.cpp \
 		msw/dir.cpp \
 		msw/gsocket.c \
 		msw/gsockmsw.c \
 		msw/main.cpp \
 		msw/mimetype.cpp \
+		msw/mslu.cpp \
 		msw/regconf.cpp \
 		msw/registry.cpp \
 		msw/snglinst.cpp \
@@ -89,6 +92,7 @@ ALL_SOURCES = \
 
 ALL_HEADERS = \
 		app.h \
+		apptrait.h \
 		arrimpl.cpp \
 		buffer.h \
 		build.h \
@@ -119,6 +123,7 @@ ALL_HEADERS = \
 		filefn.h \
 		filename.h \
 		filesys.h \
+		fmappriv.h \
 		fontenc.h \
 		fontmap.h \
 		fs_inet.h \
@@ -178,8 +183,13 @@ ALL_HEADERS = \
 		wxprec.h \
 		zipstrm.h \
 		zstream.h \
+		unix/apptbase.h \
+		unix/apptrait.h \
 		unix/gsockunx.h \
 		unix/mimetype.h \
+		unix/pipe.h \
+		msw/apptbase.h \
+		msw/apptrait.h \
 		msw/dde.h \
 		msw/gccpriv.h \
 		msw/mimetype.h \
@@ -191,7 +201,7 @@ ALL_HEADERS = \
 
 BASE_OBJS = \
 		init.o \
-		appcmn.o \
+		appbase.o \
 		clntdata.o \
 		cmdline.o \
 		config.o \
@@ -212,7 +222,7 @@ BASE_OBJS = \
 		filefn.o \
 		filename.o \
 		filesys.o \
-		fontmap.o \
+		fmapbase.o \
 		fs_inet.o \
 		fs_mem.o \
 		fs_zip.o \
@@ -239,13 +249,13 @@ BASE_OBJS = \
 		sckipc.o \
 		sckstrm.o \
 		socket.o \
+		stopwatch.o \
 		strconv.o \
 		stream.o \
 		string.o \
 		sysopt.o \
 		textbuf.o \
 		textfile.o \
-		timercmn.o \
 		tokenzr.o \
 		txtstrm.o \
 		unzip.o \
@@ -258,6 +268,7 @@ BASE_OBJS = \
 		zstream.o
 
 BASE_UNIX_OBJS = \
+		baseunix.o \
 		dir.o \
 		gsocket.o \
 		mimetype.o \
@@ -266,12 +277,14 @@ BASE_UNIX_OBJS = \
 		utilsunx.o
 
 BASE_MSW_OBJS = \
+		basemsw.o \
 		dde.o \
 		dir.o \
 		gsocket.o \
 		gsockmsw.o \
 		main.o \
 		mimetype.o \
+		mslu.o \
 		regconf.o \
 		registry.o \
 		snglinst.o \

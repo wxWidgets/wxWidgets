@@ -104,6 +104,7 @@ MSWOBJS = $(OBJ_PATH)\accel.obj \
 		$(OBJ_PATH)\access.obj \
 		$(OBJ_PATH)\app.obj \
 		$(OBJ_PATH)\automtn.obj \
+		$(OBJ_PATH)\basemsw.obj \
 		$(OBJ_PATH)\bitmap.obj \
 		$(OBJ_PATH)\bmpbuttn.obj \
 		$(OBJ_PATH)\brush.obj \
@@ -206,6 +207,7 @@ MSWOBJS = $(OBJ_PATH)\accel.obj \
 		$(OBJ_PATH)\treectrl.obj \
 		$(OBJ_PATH)\utils.obj \
 		$(OBJ_PATH)\utilsexc.obj \
+		$(OBJ_PATH)\utilsgui.obj \
 		$(OBJ_PATH)\uuid.obj \
 		$(OBJ_PATH)\uxtheme.obj \
 		$(OBJ_PATH)\volume.obj \
@@ -255,6 +257,7 @@ GENERICUNIVOBJS= $(OBJ_PATH)\accel.obj \
 
 MSWUNIVOBJS = $(OBJ_PATH)\app.obj \
 		$(OBJ_PATH)\automtn.obj \
+		$(OBJ_PATH)\basemsw.obj \
 		$(OBJ_PATH)\bitmap.obj \
 		$(OBJ_PATH)\brush.obj \
 		$(OBJ_PATH)\caret.obj \
@@ -294,6 +297,7 @@ MSWUNIVOBJS = $(OBJ_PATH)\app.obj \
 		$(OBJ_PATH)\main.obj \
 		$(OBJ_PATH)\mimetype.obj \
 		$(OBJ_PATH)\minifram.obj \
+		$(OBJ_PATH)\mslu.obj \
 		$(OBJ_PATH)\oleutils.obj \
 		$(OBJ_PATH)\palette.obj \
 		$(OBJ_PATH)\pen.obj \
@@ -310,6 +314,7 @@ MSWUNIVOBJS = $(OBJ_PATH)\app.obj \
 		$(OBJ_PATH)\toplevel.obj \
 		$(OBJ_PATH)\utils.obj \
 		$(OBJ_PATH)\utilsexc.obj \
+		$(OBJ_PATH)\utilsgui.obj \
 		$(OBJ_PATH)\uuid.obj \
 		$(OBJ_PATH)\volume.obj \
 		$(OBJ_PATH)\wave.obj \
@@ -377,6 +382,7 @@ HTMLOBJS = $(OBJ_PATH)\helpctrl.obj \
 
 COMMONOBJS = \
         $(OBJ_PATH)\accesscmn.obj \
+		$(OBJ_PATH)\appbase.obj \
 		$(OBJ_PATH)\appcmn.obj \
 		$(OBJ_PATH)\artprov.obj \
 		$(OBJ_PATH)\artstd.obj \
@@ -421,6 +427,7 @@ COMMONOBJS = \
 		$(OBJ_PATH)\filename.obj \
 		$(OBJ_PATH)\filesys.obj \
 		$(OBJ_PATH)\fldlgcmn.obj \
+		$(OBJ_PATH)\fmapbase.obj \
 		$(OBJ_PATH)\fontcmn.obj \
 		$(OBJ_PATH)\fontmap.obj \
 		$(OBJ_PATH)\framecmn.obj \
@@ -482,6 +489,7 @@ COMMONOBJS = \
 		$(OBJ_PATH)\sizer.obj \
 		$(OBJ_PATH)\socket.obj \
 		$(OBJ_PATH)\statbar.obj \
+		$(OBJ_PATH)\stopwatch.obj \
 		$(OBJ_PATH)\strconv.obj \
 		$(OBJ_PATH)\stream.obj \
 		$(OBJ_PATH)\string.obj \
@@ -580,6 +588,8 @@ $(OBJ_PATH)\app.obj: $(MSWDIR)\app.$(SRCSUFF)
 
 $(OBJ_PATH)\automtn.obj: $(OLEDIR)\automtn.$(SRCSUFF)
 
+$(OBJ_PATH)\basemsw.obj: $(MSWDIR)\basemsw.$(SRCSUFF)
+
 $(OBJ_PATH)\bitmap.obj: $(MSWDIR)\bitmap.$(SRCSUFF)
 
 $(OBJ_PATH)\brush.obj: $(MSWDIR)\brush.$(SRCSUFF)
@@ -658,6 +668,8 @@ $(OBJ_PATH)\mimetype.obj: $(MSWDIR)\mimetype.$(SRCSUFF)
 
 $(OBJ_PATH)\minifram.obj: $(MSWDIR)\minifram.$(SRCSUFF)
 
+$(OBJ_PATH)\mslu.obj: $(MSWDIR)\mslu.$(SRCSUFF)
+
 $(OBJ_PATH)\oleutils.obj: $(OLEDIR)\oleutils.$(SRCSUFF)
 
 $(OBJ_PATH)\palette.obj: $(MSWDIR)\palette.$(SRCSUFF)
@@ -690,6 +702,8 @@ $(OBJ_PATH)\utils.obj: $(MSWDIR)\utils.$(SRCSUFF)
 
 $(OBJ_PATH)\utilsexc.obj: $(MSWDIR)\utilsexc.$(SRCSUFF)
 
+$(OBJ_PATH)\utilsgui.obj: $(MSWDIR)\utilsgui.$(SRCSUFF)
+
 $(OBJ_PATH)\uuid.obj: $(OLEDIR)\uuid.$(SRCSUFF)
 
 $(OBJ_PATH)\volume.obj: $(MSWDIR)\volume.$(SRCSUFF)
@@ -712,6 +726,8 @@ $(OBJ_PATH)\access.obj: $(OLEDIR)\access.$(SRCSUFF)
 $(OBJ_PATH)\app.obj: $(MSWDIR)\app.$(SRCSUFF)
 
 $(OBJ_PATH)\automtn.obj: $(OLEDIR)\automtn.$(SRCSUFF)
+
+$(OBJ_PATH)\basemsw.obj: $(MSWDIR)\basemsw.$(SRCSUFF)
 
 $(OBJ_PATH)\bitmap.obj: $(MSWDIR)\bitmap.$(SRCSUFF)
 
@@ -917,6 +933,8 @@ $(OBJ_PATH)\utils.obj: $(MSWDIR)\utils.$(SRCSUFF)
 
 $(OBJ_PATH)\utilsexc.obj: $(MSWDIR)\utilsexc.$(SRCSUFF)
 
+$(OBJ_PATH)\utilsgui.obj: $(MSWDIR)\utilsgui.$(SRCSUFF)
+
 $(OBJ_PATH)\uuid.obj: $(OLEDIR)\uuid.$(SRCSUFF)
 
 $(OBJ_PATH)\uxtheme.obj: $(MSWDIR)\uxtheme.$(SRCSUFF)
@@ -1022,6 +1040,8 @@ $(OBJ_PATH)\win32.obj: $(UNIVTHEMEDIR)\win32.$(SRCSUFF)
 
 $(OBJ_PATH)\accesscmn.obj: $(COMMDIR)\accesscmn.$(SRCSUFF)
 
+$(OBJ_PATH)\appbase.obj: $(COMMDIR)\appbase.$(SRCSUFF)
+
 $(OBJ_PATH)\appcmn.obj: $(COMMDIR)\appcmn.$(SRCSUFF)
 
 $(OBJ_PATH)\artprov.obj: $(COMMDIR)\artprov.$(SRCSUFF)
@@ -1109,6 +1129,8 @@ $(OBJ_PATH)\filename.obj: $(COMMDIR)\filename.$(SRCSUFF)
 $(OBJ_PATH)\filesys.obj: $(COMMDIR)\filesys.$(SRCSUFF)
 
 $(OBJ_PATH)\fldlgcmn.obj: $(COMMDIR)\fldlgcmn.$(SRCSUFF)
+
+$(OBJ_PATH)\fmapbase.obj: $(COMMDIR)\fmapbase.$(SRCSUFF)
 
 $(OBJ_PATH)\fontcmn.obj: $(COMMDIR)\fontcmn.$(SRCSUFF)
 
@@ -1231,6 +1253,8 @@ $(OBJ_PATH)\sizer.obj: $(COMMDIR)\sizer.$(SRCSUFF)
 $(OBJ_PATH)\socket.obj: $(COMMDIR)\socket.$(SRCSUFF)
 
 $(OBJ_PATH)\statbar.obj: $(COMMDIR)\statbar.$(SRCSUFF)
+
+$(OBJ_PATH)\stopwatch.obj: $(COMMDIR)\stopwatch.$(SRCSUFF)
 
 $(OBJ_PATH)\strconv.obj: $(COMMDIR)\strconv.$(SRCSUFF)
 

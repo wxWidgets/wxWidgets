@@ -45,6 +45,7 @@ ALL_SOURCES = \
 		generic/treectlg.cpp \
 		generic/wizard.cpp \
 		common/accesscmn.cpp \
+		common/appbase.cpp \
 		common/appcmn.cpp \
 		common/artprov.cpp \
 		common/artstd.cpp \
@@ -89,6 +90,7 @@ ALL_SOURCES = \
 		common/filename.cpp \
 		common/filesys.cpp \
 		common/fldlgcmn.cpp \
+		common/fmapbase.cpp \
 		common/fontcmn.cpp \
 		common/fontmap.cpp \
 		common/framecmn.cpp \
@@ -150,6 +152,7 @@ ALL_SOURCES = \
 		common/sizer.cpp \
 		common/socket.cpp \
 		common/statbar.cpp \
+		common/stopwatch.cpp \
 		common/strconv.cpp \
 		common/stream.cpp \
 		common/string.cpp \
@@ -240,6 +243,7 @@ ALL_SOURCES = \
 		gtk/wave.cpp \
 		gtk/win_gtk.c \
 		gtk/window.cpp \
+		unix/baseunix.cpp \
 		unix/dialup.cpp \
 		unix/dir.cpp \
 		unix/fontenum.cpp \
@@ -276,6 +280,7 @@ ALL_HEADERS = \
 		accel.h \
 		access.h \
 		app.h \
+		apptrait.h \
 		arrimpl.cpp \
 		artprov.h \
 		bitmap.h \
@@ -350,6 +355,7 @@ ALL_HEADERS = \
 		filefn.h \
 		filename.h \
 		filesys.h \
+		fmappriv.h \
 		font.h \
 		fontdlg.h \
 		fontenc.h \
@@ -610,10 +616,13 @@ ALL_HEADERS = \
 		generic/timer.h \
 		generic/treectlg.h \
 		generic/wizard.h \
+		unix/apptbase.h \
+		unix/apptrait.h \
 		unix/execute.h \
 		unix/fontutil.h \
 		unix/gsockunx.h \
 		unix/mimetype.h \
+		unix/pipe.h \
 		unix/taskbarx11.h \
 		unix/utilsx11.h \
 		html/forcelnk.h \
@@ -636,6 +645,7 @@ ALL_HEADERS = \
 
 COMMONOBJS = \
 		accesscmn.o \
+		appbase.o \
 		appcmn.o \
 		artprov.o \
 		artstd.o \
@@ -680,6 +690,7 @@ COMMONOBJS = \
 		filename.o \
 		filesys.o \
 		fldlgcmn.o \
+		fmapbase.o \
 		fontcmn.o \
 		fontmap.o \
 		framecmn.o \
@@ -741,6 +752,7 @@ COMMONOBJS = \
 		sizer.o \
 		socket.o \
 		statbar.o \
+		stopwatch.o \
 		strconv.o \
 		stream.o \
 		string.o \
@@ -951,6 +963,7 @@ GUI_LOWLEVEL_OBJS = \
 		window.o
 
 UNIXOBJS = \
+		baseunix.o \
 		dialup.o \
 		dir.o \
 		fontenum.o \

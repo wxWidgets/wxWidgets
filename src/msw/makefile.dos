@@ -88,6 +88,7 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 # we can't have all objects in one list because the library becomes too big
 COMMONOBJS1 = \
 		$(COMMDIR)\accesscmn.obj \
+		$(COMMDIR)\appbase.obj \
 		$(COMMDIR)\appcmn.obj \
 		$(COMMDIR)\artprov.obj \
 		$(COMMDIR)\artstd.obj \
@@ -130,6 +131,7 @@ COMMONOBJS1 = \
 		$(COMMDIR)\filename.obj \
 		$(COMMDIR)\filesys.obj \
 		$(COMMDIR)\fldlgcmn.obj \
+		$(COMMDIR)\fmapbase.obj \
 		$(COMMDIR)\fontcmn.obj \
 		$(COMMDIR)\fontmap.obj \
 		$(COMMDIR)\framecmn.obj \
@@ -178,6 +180,7 @@ COMMONOBJS2 = \
 		$(COMMDIR)\settcmn.obj \
 		$(COMMDIR)\sizer.obj \
 		$(COMMDIR)\statbar.obj \
+		$(COMMDIR)\stopwatch.obj \
 		$(COMMDIR)\strconv.obj \
 		$(COMMDIR)\stream.obj \
 		$(COMMDIR)\string.obj \
@@ -208,6 +211,7 @@ COMMONOBJS2 = \
 # we can't have all objects in one list because the library becomes too big
 MSWOBJS1 = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\app.obj \
+		$(MSWDIR)\basemsw.obj \
 		$(MSWDIR)\bitmap.obj \
 		$(MSWDIR)\bmpbuttn.obj \
 		$(MSWDIR)\brush.obj \
@@ -289,6 +293,7 @@ MSWOBJS2 = $(MSWDIR)\palette.obj \
 		$(MSWDIR)\toplevel.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
+		$(MSWDIR)\utilsgui.obj \
 		$(MSWDIR)\uxtheme.obj \
 		$(MSWDIR)\volume.obj \
 		$(MSWDIR)\wave.obj \
@@ -371,6 +376,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(MSWDIR)/app.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(MSWDIR)/basemsw.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
@@ -775,6 +785,11 @@ $(MSWDIR)/utilsexc.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
+$(MSWDIR)/utilsgui.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
 $(MSWDIR)/uxtheme.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
@@ -796,6 +811,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/accesscmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/appbase.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
@@ -1006,6 +1026,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/fldlgcmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/fmapbase.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
@@ -1236,6 +1261,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/statbar.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/stopwatch.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

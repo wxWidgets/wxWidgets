@@ -87,6 +87,7 @@ GENERICOBJS= accel.obj &
 COMMONOBJS = &
 	y_tab.obj &
 	accesscmn.obj &
+	appbase.obj &
 	appcmn.obj &
 	artprov.obj &
 	artstd.obj &
@@ -132,6 +133,7 @@ COMMONOBJS = &
 	filename.obj &
 	filesys.obj &
 	fldlgcmn.obj &
+	fmapbase.obj &
 	fontcmn.obj &
 	fontmap.obj &
 	framecmn.obj &
@@ -193,6 +195,7 @@ COMMONOBJS = &
 	sizer.obj &
 	socket.obj &
 	statbar.obj &
+	stopwatch.obj &
 	strconv.obj &
 	stream.obj &
 	string.obj &
@@ -536,6 +539,9 @@ win32.obj:     $(UNIVTHEMEDIR)\win32.cpp
 accesscmn.obj:     $(COMMDIR)\accesscmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
+appbase.obj:     $(COMMDIR)\appbase.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
 appcmn.obj:     $(COMMDIR)\appcmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
@@ -669,6 +675,9 @@ filesys.obj:     $(COMMDIR)\filesys.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 fldlgcmn.obj:     $(COMMDIR)\fldlgcmn.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+fmapbase.obj:     $(COMMDIR)\fmapbase.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 fontcmn.obj:     $(COMMDIR)\fontcmn.cpp
@@ -852,6 +861,9 @@ socket.obj:     $(COMMDIR)\socket.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 statbar.obj:     $(COMMDIR)\statbar.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+stopwatch.obj:     $(COMMDIR)\stopwatch.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 strconv.obj:     $(COMMDIR)\strconv.cpp

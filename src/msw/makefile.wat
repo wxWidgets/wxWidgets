@@ -78,6 +78,7 @@ NONESSENTIALOBJS= $(OUTPUTDIR)\accel.obj &
 
 COMMONOBJS = &
 	$(OUTPUTDIR)\accesscmn.obj &
+	$(OUTPUTDIR)\appbase.obj &
 	$(OUTPUTDIR)\appcmn.obj &
 	$(OUTPUTDIR)\artprov.obj &
 	$(OUTPUTDIR)\artstd.obj &
@@ -122,6 +123,7 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\filename.obj &
 	$(OUTPUTDIR)\filesys.obj &
 	$(OUTPUTDIR)\fldlgcmn.obj &
+	$(OUTPUTDIR)\fmapbase.obj &
 	$(OUTPUTDIR)\fontcmn.obj &
 	$(OUTPUTDIR)\fontmap.obj &
 	$(OUTPUTDIR)\framecmn.obj &
@@ -183,6 +185,7 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\sizer.obj &
 	$(OUTPUTDIR)\socket.obj &
 	$(OUTPUTDIR)\statbar.obj &
+	$(OUTPUTDIR)\stopwatch.obj &
 	$(OUTPUTDIR)\strconv.obj &
 	$(OUTPUTDIR)\stream.obj &
 	$(OUTPUTDIR)\string.obj &
@@ -215,6 +218,7 @@ MSWOBJS = $(OUTPUTDIR)\accel.obj &
 	$(OUTPUTDIR)\access.obj &
 	$(OUTPUTDIR)\app.obj &
 	$(OUTPUTDIR)\automtn.obj &
+	$(OUTPUTDIR)\basemsw.obj &
 	$(OUTPUTDIR)\bitmap.obj &
 	$(OUTPUTDIR)\bmpbuttn.obj &
 	$(OUTPUTDIR)\brush.obj &
@@ -317,6 +321,7 @@ MSWOBJS = $(OUTPUTDIR)\accel.obj &
 	$(OUTPUTDIR)\treectrl.obj &
 	$(OUTPUTDIR)\utils.obj &
 	$(OUTPUTDIR)\utilsexc.obj &
+	$(OUTPUTDIR)\utilsgui.obj &
 	$(OUTPUTDIR)\uuid.obj &
 	$(OUTPUTDIR)\uxtheme.obj &
 	$(OUTPUTDIR)\volume.obj &
@@ -388,6 +393,9 @@ $(OUTPUTDIR)\app.obj:     $(MSWDIR)\app.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\automtn.obj:     $(OLEDIR)\automtn.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
+$(OUTPUTDIR)\basemsw.obj:     $(MSWDIR)\basemsw.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\bitmap.obj:     $(MSWDIR)\bitmap.cpp
@@ -696,6 +704,9 @@ $(OUTPUTDIR)\utils.obj:     $(MSWDIR)\utils.cpp
 $(OUTPUTDIR)\utilsexc.obj:     $(MSWDIR)\utilsexc.cpp
   *$(CXX) $(CXXFLAGS) $<
 
+$(OUTPUTDIR)\utilsgui.obj:     $(MSWDIR)\utilsgui.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
 $(OUTPUTDIR)\uuid.obj:     $(OLEDIR)\uuid.cpp
   *$(CXX) $(CXXFLAGS) $<
 
@@ -717,6 +728,9 @@ $(OUTPUTDIR)\window.obj:     $(MSWDIR)\window.cpp
 # Common objects (always compiled)
 
 $(OUTPUTDIR)\accesscmn.obj:     $(COMMDIR)\accesscmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
+$(OUTPUTDIR)\appbase.obj:     $(COMMDIR)\appbase.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\appcmn.obj:     $(COMMDIR)\appcmn.cpp
@@ -849,6 +863,9 @@ $(OUTPUTDIR)\filesys.obj:     $(COMMDIR)\filesys.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\fldlgcmn.obj:     $(COMMDIR)\fldlgcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
+$(OUTPUTDIR)\fmapbase.obj:     $(COMMDIR)\fmapbase.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\fontcmn.obj:     $(COMMDIR)\fontcmn.cpp
@@ -1032,6 +1049,9 @@ $(OUTPUTDIR)\socket.obj:     $(COMMDIR)\socket.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\statbar.obj:     $(COMMDIR)\statbar.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
+$(OUTPUTDIR)\stopwatch.obj:     $(COMMDIR)\stopwatch.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\strconv.obj:     $(COMMDIR)\strconv.cpp

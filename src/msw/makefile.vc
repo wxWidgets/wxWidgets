@@ -133,6 +133,7 @@ NONESSENTIALOBJS= $(GENDIR)\$D\colrdlgg.obj \
 
 COMMONOBJS = \
 		$(COMMDIR)\$D\accesscmn.obj \
+		$(COMMDIR)\$D\appbase.obj \
 		$(COMMDIR)\$D\appcmn.obj \
 		$(COMMDIR)\$D\artprov.obj \
 		$(COMMDIR)\$D\artstd.obj \
@@ -177,6 +178,7 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\filename.obj \
 		$(COMMDIR)\$D\filesys.obj \
 		$(COMMDIR)\$D\fldlgcmn.obj \
+		$(COMMDIR)\$D\fmapbase.obj \
 		$(COMMDIR)\$D\fontcmn.obj \
 		$(COMMDIR)\$D\fontmap.obj \
 		$(COMMDIR)\$D\framecmn.obj \
@@ -238,6 +240,7 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\sizer.obj \
 		$(COMMDIR)\$D\socket.obj \
 		$(COMMDIR)\$D\statbar.obj \
+		$(COMMDIR)\$D\stopwatch.obj \
 		$(COMMDIR)\$D\strconv.obj \
 		$(COMMDIR)\$D\stream.obj \
 		$(COMMDIR)\$D\string.obj \
@@ -270,6 +273,7 @@ MSWOBJS = $(MSWDIR)\$D\accel.obj \
 		$(OLEDIR)\$D\access.obj \
 		$(MSWDIR)\$D\app.obj \
 		$(OLEDIR)\$D\automtn.obj \
+		$(MSWDIR)\$D\basemsw.obj \
 		$(MSWDIR)\$D\bitmap.obj \
 		$(MSWDIR)\$D\bmpbuttn.obj \
 		$(MSWDIR)\$D\brush.obj \
@@ -372,6 +376,7 @@ MSWOBJS = $(MSWDIR)\$D\accel.obj \
 		$(MSWDIR)\$D\treectrl.obj \
 		$(MSWDIR)\$D\utils.obj \
 		$(MSWDIR)\$D\utilsexc.obj \
+		$(MSWDIR)\$D\utilsgui.obj \
 		$(OLEDIR)\$D\uuid.obj \
 		$(MSWDIR)\$D\uxtheme.obj \
 		$(MSWDIR)\$D\volume.obj \
