@@ -60,9 +60,10 @@
 
 enum
 {
-    wxCONFIG_USE_LOCAL_FILE = 1,
-    wxCONFIG_USE_GLOBAL_FILE = 2,
-    wxCONFIG_USE_RELATIVE_PATH = 4
+    wxCONFIG_USE_LOCAL_FILE,
+    wxCONFIG_USE_GLOBAL_FILE,
+    wxCONFIG_USE_RELATIVE_PATH,
+    wxCONFIG_USE_NO_ESCAPE_CHARACTERS
 };
 
 //---------------------------------------------------------------------------

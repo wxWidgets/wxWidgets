@@ -709,6 +709,11 @@ public:
 #ifndef __WXMAC__
     int GetItemHeight();
 #endif
+
+    // return the index of the item at this position or wxNOT_FOUND
+    int HitTest(const wxPoint& pt) const;
+    %name(HitTestXY)int HitTest(wxCoord x, wxCoord y) const;
+
 };
 
 //----------------------------------------------------------------------

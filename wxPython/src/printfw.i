@@ -128,9 +128,9 @@ public:
 class wxPostScriptDC : public wxDC {
 public:
     wxPostScriptDC(const wxPrintData& printData);
-    %name(wxPostScriptDC2)wxPostScriptDC(const wxString& output,
-                                         bool interactive = TRUE,
-                                         wxWindow* parent = NULL);
+//     %name(wxPostScriptDC2)wxPostScriptDC(const wxString& output,
+//                                          bool interactive = TRUE,
+//                                          wxWindow* parent = NULL);
 
     wxPrintData& GetPrintData();
     void SetPrintData(const wxPrintData& data);
