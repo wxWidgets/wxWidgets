@@ -382,6 +382,27 @@ bool wxSlider::Create(
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
+    lColor = (LONG)m_backgroundColour.GetPixel();
+    ::WinSetPresParam( m_hStaticMin
+                      ,PP_BACKGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    ::WinSetPresParam( m_hStaticMax
+                      ,PP_BACKGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    ::WinSetPresParam( m_hStaticValue
+                      ,PP_BACKGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    ::WinSetPresParam( m_hWnd
+                      ,PP_BACKGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
     SetValue(nValue);
     return TRUE;
 } // end of wxSlider::Create

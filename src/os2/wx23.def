@@ -1302,6 +1302,11 @@ EXPORTS
       ActivateView__12wxDocManagerFP6wxViewUlT2
       ;wxDocument::OnOpenDocument(const wxString&)
       OnOpenDocument__10wxDocumentFRC8wxString
+  ;From object file:  ..\common\dseldlg.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxDirSelector(const wxString&,const wxString&,long,const wxPoint&,wxWindow*)
+      wxDirSelector__FRC8wxStringT1lRC7wxPointP8wxWindow
+      wxDirSelectorPromptStr
   ;From object file:  ..\common\dynarray.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxBaseArray::Add(long)
@@ -1346,8 +1351,6 @@ EXPORTS
       __dt__9wxLibraryFv
       ;wxLibraries::~wxLibraries()
       __dt__11wxLibrariesFv
-      ;wxDllLoader::GetSymbol(unsigned long,const wxString&)
-      GetSymbol__11wxDllLoaderFUlRC8wxString
       ;wxDllLoader::LoadLibrary(const wxString&,unsigned long*)
       LoadLibrary__11wxDllLoaderFRC8wxStringPUl
       ;wxLibraries::wxLibraries()
@@ -1364,12 +1367,15 @@ EXPORTS
       GetProgramHandle__11wxDllLoaderFv
       ;wxLibrary::PrepareClasses(wxClassInfo*)
       PrepareClasses__9wxLibraryFP11wxClassInfo
+      ;wxDllLoader::GetSymbol(unsigned long,const wxString&,unsigned long*)
+      GetSymbol__11wxDllLoaderFUlRC8wxStringPUl
       __vft9wxLibrary8wxObject
-      ;wxDllLoader::GetDllExt()
-      GetDllExt__11wxDllLoaderFv
+      ;wxDllLoader::ms_dllext
+      ms_dllext__11wxDllLoader
       ;wxLibraries::LoadLibrary(const wxString&)
       LoadLibrary__11wxLibrariesFRC8wxString
       wxTheLibraries
+  ;From object file:  ..\common\dynload.cpp
   ;From object file:  ..\common\effects.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxEffects::sm_classwxEffects
@@ -2086,8 +2092,6 @@ EXPORTS
       wxFileExists__10wxFileNameFRC8wxString
       ;wxFileName::InsertDir(int,const wxString&)
       InsertDir__10wxFileNameFiRC8wxString
-      ;wxFileName::CreateTempFileName(const wxString&)
-      CreateTempFileName__10wxFileNameFRC8wxString
       ;wxFileName::Assign(const wxString&,const wxString&,wxPathFormat)
       Assign__10wxFileNameFRC8wxStringT112wxPathFormat
       ;wxFileName::SplitPath(const wxString&,wxString*,wxString*,wxString*,wxPathFormat)
@@ -2098,14 +2102,16 @@ EXPORTS
       GetFormat__10wxFileNameF12wxPathFormat
       ;wxFileName::Assign(const wxFileName&)
       Assign__10wxFileNameFRC10wxFileName
+      ;wxFileName::CreateTempFileName(const wxString&,wxFile*)
+      CreateTempFileName__10wxFileNameFRC8wxStringP6wxFile
+      ;wxFileName::AssignTempFileName(const wxString&,wxFile*)
+      AssignTempFileName__10wxFileNameFRC8wxStringP6wxFile
       ;wxFileName::DirName(const wxString&)
       DirName__10wxFileNameFRC8wxString
       ;wxFileName::SetCwd(const wxString&)
       SetCwd__10wxFileNameFRC8wxString
       ;wxFileName::Rmdir(const wxString&)
       Rmdir__10wxFileNameFRC8wxString
-      ;wxFileName::AssignTempFileName(const wxString&)
-      AssignTempFileName__10wxFileNameFRC8wxString
   ;From object file:  ..\common\filesys.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft19wxFileSystemHandler8wxObject
@@ -3865,6 +3871,8 @@ EXPORTS
       InitializeModules__8wxModuleFv
       ;wxModule::m_modules
       m_modules__8wxModule
+      ;wxModule::UnregisterModule(wxModule*)
+      UnregisterModule__8wxModuleFP8wxModule
       ;wxModule::CleanUpModules()
       CleanUpModules__8wxModuleFv
       ;wxModule::RegisterModule(wxModule*)
@@ -3921,36 +3929,19 @@ EXPORTS
   ;From object file:  ..\common\object.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft8wxObject
-      ;wxCreateStoredObject(wxInputStream&)
-      wxCreateStoredObject__FR13wxInputStream
-      __vft15wxObjectRefData
       ;wxCreateDynamicObject(const char*)
       wxCreateDynamicObject__FPCc
-      ;wxClassInfo::wxClassInfo(const char*,const char*,const char*,int,wxObject*(*)())
-      __ct__11wxClassInfoFPCcN21iPFv_P8wxObject
       ;wxObject::Dump(ostream&)
       Dump__8wxObjectFR7ostream
-      ;wxObject::LoadObject(wxObjectInputStream&)
-      LoadObject__8wxObjectFR19wxObjectInputStream
-      ;wxClassInfo::IsKindOf(const wxClassInfo*) const
-      IsKindOf__11wxClassInfoCFPC11wxClassInfo
       ;wxClassInfo::sm_classTable
       sm_classTable__11wxClassInfo
-      ;wxObject::StoreObject(wxObjectOutputStream&)
-      StoreObject__8wxObjectFR20wxObjectOutputStream
-      ;wxObjectRefData::~wxObjectRefData()
-      __dt__15wxObjectRefDataFv
       ;wxClassInfo::sm_first
       sm_first__11wxClassInfo
       ;wxObject::Ref(const wxObject&)
       Ref__8wxObjectFRC8wxObject
       wxFalse
-      ;wxObjectRefData::wxObjectRefData()
-      __ct__15wxObjectRefDataFv
       ;wxObject::UnRef()
       UnRef__8wxObjectFv
-      ;wxClassInfo::CreateObject()
-      CreateObject__11wxClassInfoFv
       ;wxClassInfo::CleanUpClasses()
       CleanUpClasses__11wxClassInfoFv
       ;wxObject::IsKindOf(wxClassInfo*) const
@@ -3961,48 +3952,8 @@ EXPORTS
       sm_classwxObject__8wxObject
       ;wxObject::operator new(unsigned int,char*,int)
       __nw__8wxObjectFUiPci
-      ;wxObject::wxObject()
-      __ct__8wxObjectFv
-      ;wxObject::~wxObject()
-      __dt__8wxObjectFv
       ;wxClassInfo::InitializeClasses()
       InitializeClasses__11wxClassInfoFv
-  ;From object file:  ..\common\objstrm.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxObjectOutputStream::AddChild(wxObject*)
-      AddChild__20wxObjectOutputStreamFP8wxObject
-      ;wxObjectOutputStream::SaveObject(wxObject&)
-      SaveObject__20wxObjectOutputStreamFR8wxObject
-      ;wxObjectInputStream::LoadObject()
-      LoadObject__19wxObjectInputStreamFv
-      ;wxObjectOutputStream::WriteObjectDef(wxObjectStreamInfo&)
-      WriteObjectDef__20wxObjectOutputStreamFR18wxObjectStreamInfo
-      ;wxObjectInputStream::ProcessObjectData(wxObjectStreamInfo*)
-      ProcessObjectData__19wxObjectInputStreamFP18wxObjectStreamInfo
-      ;wxObjectOutputStream::wxObjectOutputStream(wxOutputStream&)
-      __ct__20wxObjectOutputStreamFR14wxOutputStream
-      ;wxObjectInputStream::wxObjectInputStream(wxInputStream&)
-      __ct__19wxObjectInputStreamFR13wxInputStream
-      ;wxObjectInputStream::GetChild(int) const
-      GetChild__19wxObjectInputStreamCFi
-      ;wxObjectInputStream::GetParent() const
-      GetParent__19wxObjectInputStreamCFv
-      ;wxObjectOutputStream::ProcessObjectDef(wxObjectStreamInfo*)
-      ProcessObjectDef__20wxObjectOutputStreamFP18wxObjectStreamInfo
-      ;wxObjectInputStream::ProcessObjectDef(wxObjectStreamInfo*)
-      ProcessObjectDef__19wxObjectInputStreamFP18wxObjectStreamInfo
-      ;wxObjectOutputStream::GetObjectName(wxObject*)
-      GetObjectName__20wxObjectOutputStreamFP8wxObject
-      ;wxObjectInputStream::GetChild()
-      GetChild__19wxObjectInputStreamFv
-      ;wxObjectOutputStream::ProcessObjectData(wxObjectStreamInfo*)
-      ProcessObjectData__20wxObjectOutputStreamFP18wxObjectStreamInfo
-      ;wxObjectInputStream::SolveName(const wxString&) const
-      SolveName__19wxObjectInputStreamCFRC8wxString
-      ;wxObjectInputStream::ReadObjectDef(wxObjectStreamInfo*)
-      ReadObjectDef__19wxObjectInputStreamFP18wxObjectStreamInfo
-      ;wxObjectInputStream::RemoveChildren(int)
-      RemoveChildren__19wxObjectInputStreamFi
   ;From object file:  ..\common\odbc.cpp
   ;From object file:  ..\common\paper.cpp
     ;PUBDEFs (Symbols available from object file):
@@ -4591,30 +4542,6 @@ EXPORTS
       __vft14wxSocketStream13wxInputStream12wxStreamBase
       ;wxSocketOutputStream::~wxSocketOutputStream()
       __dt__20wxSocketOutputStreamFv
-  ;From object file:  ..\common\serbase.cpp
-    ;PUBDEFs (Symbols available from object file):
-      __vft21wxHashTable_Serialize8wxObject
-      __vft16wxList_Serialize8wxObject
-      ;wxObject_Serialize::sm_classwxObject_Serialize
-      sm_classwxObject_Serialize__18wxObject_Serialize
-      ;wxList_Serialize::sm_classwxList_Serialize
-      sm_classwxList_Serialize__16wxList_Serialize
-      ;wxConstructorForwxList_Serialize()
-      wxConstructorForwxList_Serialize__Fv
-      ;wxList_Serialize::StoreObject(wxObjectOutputStream&)
-      StoreObject__16wxList_SerializeFR20wxObjectOutputStream
-      ;wxHashTable_Serialize::sm_classwxHashTable_Serialize
-      sm_classwxHashTable_Serialize__21wxHashTable_Serialize
-      ;wxHashTable_Serialize::LoadObject(wxObjectInputStream&)
-      LoadObject__21wxHashTable_SerializeFR19wxObjectInputStream
-      ;wxConstructorForwxObject_Serialize()
-      wxConstructorForwxObject_Serialize__Fv
-      ;wxList_Serialize::LoadObject(wxObjectInputStream&)
-      LoadObject__16wxList_SerializeFR19wxObjectInputStream
-      ;wxConstructorForwxHashTable_Serialize()
-      wxConstructorForwxHashTable_Serialize__Fv
-      ;wxHashTable_Serialize::StoreObject(wxObjectOutputStream&)
-      StoreObject__21wxHashTable_SerializeFR20wxObjectOutputStream
   ;From object file:  ..\common\sizer.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSizerItem::wxSizerItem(int,int,int,int,int,wxObject*)
@@ -4906,8 +4833,6 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxStreamBuffer::SetBufferIO(void*,unsigned int,unsigned long)
       SetBufferIO__14wxStreamBufferFPvUiUl
-      ;wxOutputStream::operator<<(wxObject&)
-      __ls__14wxOutputStreamFR8wxObject
       ;wxStreamBuffer::wxStreamBuffer(wxStreamBase&,wxStreamBuffer::BufMode)
       __ct__14wxStreamBufferFR12wxStreamBaseQ2_14wxStreamBuffer7BufMode
       ;wxEndL(wxOutputStream&)
@@ -4973,11 +4898,13 @@ EXPORTS
       OnSysSeek__21wxBufferedInputStreamFl10wxSeekMode
       ;wxInputStream::GetWBack(void*,unsigned int)
       GetWBack__13wxInputStreamFPvUi
-      ;wxFilterOutputStream::~wxFilterOutputStream()
-      __dt__20wxFilterOutputStreamFv
+      ;wxStreamBuffer::SetError(wxStreamError)
+      SetError__14wxStreamBufferF13wxStreamError
       __vft14wxStreamBuffer
       ;wxBufferedOutputStream::~wxBufferedOutputStream()
       __dt__22wxBufferedOutputStreamFv
+      ;wxFilterOutputStream::~wxFilterOutputStream()
+      __dt__20wxFilterOutputStreamFv
       ;wxBufferedInputStream::wxBufferedInputStream(wxInputStream&,wxStreamBuffer*)
       __ct__21wxBufferedInputStreamFR13wxInputStreamP14wxStreamBuffer
       ;wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer&)
@@ -4988,8 +4915,6 @@ EXPORTS
       TellO__22wxBufferedOutputStreamCFv
       ;wxInputStream::TellI() const
       TellI__13wxInputStreamCFv
-      ;wxStreamBuffer::SetError(wxStreamError)
-      SetError__14wxStreamBufferF13wxStreamError
       ;wxInputStream::Peek()
       Peek__13wxInputStreamFv
       ;wxCountingOutputStream::OnSysTell() const
@@ -5012,10 +4937,10 @@ EXPORTS
       Ungetch__13wxInputStreamFPCvUi
       ;wxBufferedInputStream::Read(void*,unsigned int)
       Read__21wxBufferedInputStreamFPvUi
-      ;wxFilterInputStream::~wxFilterInputStream()
-      __dt__19wxFilterInputStreamFv
       ;wxStreamBuffer::~wxStreamBuffer()
       __dt__14wxStreamBufferFv
+      ;wxFilterInputStream::~wxFilterInputStream()
+      __dt__19wxFilterInputStreamFv
       ;wxOutputStream::Sync()
       Sync__14wxOutputStreamFv
       ;wxBufferedOutputStream::SetOutputStreamBuffer(wxStreamBuffer*)
@@ -5052,8 +4977,6 @@ EXPORTS
       GetInputStream__14wxStreamBufferCFv
       ;wxStreamBuffer::PutChar(char)
       PutChar__14wxStreamBufferFc
-      ;wxInputStream::operator>>(wxObject*&)
-      __rs__13wxInputStreamFRP8wxObject
       ;wxInputStream::Read(wxOutputStream&)
       Read__13wxInputStreamFR14wxOutputStream
       __vft22wxCountingOutputStream12wxStreamBase
@@ -13254,8 +13177,6 @@ EXPORTS
       SetFocus__10wxRadioBoxFv
       ;wxRadioBox::OS2Command(unsigned int,unsigned short)
       OS2Command__10wxRadioBoxFUiUs
-      ;wxRadioBox::AdjustButtons(int,int,int,int,long)
-      AdjustButtons__10wxRadioBoxFiN31l
       ;wxRadioBox::SubclassRadioButton(unsigned long)
       SubclassRadioButton__10wxRadioBoxFUl
       __vft10wxRadioBox14wxRadioBoxBase
@@ -13274,6 +13195,8 @@ EXPORTS
       __vft10wxRadioBox8wxObject
       ;wxRadioBox::sm_classwxRadioBox
       sm_classwxRadioBox__10wxRadioBox
+      ;wxRadioBox::AdjustButtons(int,int,int,int,int)
+      AdjustButtons__10wxRadioBoxFiN41
       ;wxRadioBox::SetSelection(int)
       SetSelection__10wxRadioBoxFi
       ;wxRadioBox::~wxRadioBox()
@@ -13477,6 +13400,8 @@ EXPORTS
       ;wxSlider::Create(wxWindow*,int,int,int,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
       Create__8wxSliderFP8wxWindowiN32RC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
       __vft8wxSlider8wxObject
+      ;wxSlider::AdjustSubControls(int,int,int,int,int)
+      AdjustSubControls__8wxSliderFiN41
       ;wxSlider::SetRange(int,int)
       SetRange__8wxSliderFiT1
       ;wxSlider::~wxSlider()
@@ -13541,6 +13466,8 @@ EXPORTS
       SetValue__10wxSpinCtrlFRC8wxString
       ;wxSpinCtrl::sm_classwxSpinCtrl
       sm_classwxSpinCtrl__10wxSpinCtrl
+      ;wxSpinCtrl::m_svAllSpins
+      m_svAllSpins__10wxSpinCtrl
       ;wxSpinCtrl::DoGetPosition(int*,int*) const
       DoGetPosition__10wxSpinCtrlCFPiT1
       ;wxSpinCtrl::DoMoveWindow(int,int,int,int)
@@ -13576,6 +13503,7 @@ EXPORTS
       GetValue__10wxSpinCtrlCFv
   ;From object file:  ..\os2\statbmp.cpp
     ;PUBDEFs (Symbols available from object file):
+      __vft14wxStaticBitmap8wxObject
       ;wxStaticBitmap::Free()
       Free__14wxStaticBitmapFv
       ;wxStaticBitmap::Create(wxWindow*,int,const wxGDIImage&,const wxPoint&,const wxSize&,long,const wxString&)
@@ -13590,6 +13518,8 @@ EXPORTS
       ImageIsOk__14wxStaticBitmapCFv
       ;wxStaticBitmap::DoGetBestSize() const
       DoGetBestSize__14wxStaticBitmapCFv
+      ;wxStaticBitmap::OS2WindowProc(unsigned int,void*,void*)
+      OS2WindowProc__14wxStaticBitmapFUiPvT2
   ;From object file:  ..\os2\statbox.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxConstructorForwxStaticBox()
@@ -13605,6 +13535,8 @@ EXPORTS
       __vft11wxStaticBox8wxObject
   ;From object file:  ..\os2\stattext.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxStaticText::DoSetSize(int,int,int,int,int)
+      DoSetSize__12wxStaticTextFiN41
       ;wxStaticText::OS2WindowProc(unsigned int,void*,void*)
       OS2WindowProc__12wxStaticTextFUiPvT2
       ;wxStaticText::SetLabel(const wxString&)
@@ -14359,6 +14291,8 @@ EXPORTS
       ;wxAssociateWinWithHandle(unsigned long,wxWindow*)
       wxAssociateWinWithHandle__FUlP8wxWindow
       s_currentMsg
+      ;wxWindow::GetOS2ParentHeight(wxWindow*)
+      GetOS2ParentHeight__8wxWindowFP8wxWindow
       ;wxWindow::Refresh(unsigned long,const wxRect*)
       Refresh__8wxWindowFUlPC6wxRect
       ;wxWindow::SetScrollbar(int,int,int,int,unsigned long)
@@ -14384,6 +14318,8 @@ EXPORTS
       ;wxWindow::WarpPointer(int,int)
       WarpPointer__8wxWindowFiT1
       wxCurrentPopupMenu
+      ;wxWindow::MoveChildren(int)
+      MoveChildren__8wxWindowFi
       ;wxWindow::HandleShow(unsigned long,int)
       HandleShow__8wxWindowFUli
       ;wxWindow::HandleMove(int,int)

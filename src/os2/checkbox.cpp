@@ -82,6 +82,14 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     // Subclass again for purposes of dialog editing mode
     SubclassWin(m_hWnd);
 
+    LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
+
+    ::WinSetPresParam( m_hWnd
+                      ,PP_BACKGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+
     SetFont(parent->GetFont());
 
     SetSize(x, y, width, height);

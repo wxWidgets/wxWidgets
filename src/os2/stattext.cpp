@@ -91,6 +91,13 @@ bool wxStaticText::Create(
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
+    lColor = (LONG)m_backgroundColour.GetPixel();
+
+    ::WinSetPresParam( m_hWnd
+                      ,PP_BACKGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
 
     SubclassWin(m_hWnd);
     wxControl::SetFont(pParent->GetFont());
@@ -158,6 +165,27 @@ wxSize wxStaticText::DoGetBestSize() const
                   ,nHeightTextTotal
                  );
 } // end of wxStaticText::DoGetBestSize
+
+void wxStaticText::DoSetSize(
+  int                               nX
+, int                               nY
+, int                               nWidth
+, int                               nHeight
+, int                               nSizeFlags
+)
+{
+    //
+    // We need to refresh the window after changing its size as the standard
+    // control doesn't always update itself properly.
+    //
+    wxStaticTextBase::DoSetSize( nX
+                                ,nY
+                                ,nWidth
+                                ,nHeight
+                                ,nSizeFlags
+                               );
+    Refresh();
+} // end of wxStaticText::DoSetSize
 
 bool wxStaticText::SetFont(
   const wxFont&                     rFont

@@ -218,8 +218,10 @@ COMMONOBJS = \
   ..\common\$D\dobjcmn.obj \
   ..\common\$D\docmdi.obj \
   ..\common\$D\docview.obj \
+  ..\common\$D\dseldlg.obj \
   ..\common\$D\dynarray.obj \
   ..\common\$D\dynlib.obj \
+  ..\common\$D\dynload.obj \
   ..\common\$D\effects.obj \
   ..\common\$D\encconv.obj \
   ..\common\$D\event.obj \
@@ -270,7 +272,6 @@ COMMONOBJS = \
   ..\common\$D\mstream.obj \
   ..\common\$D\nbkbase.obj \
   ..\common\$D\object.obj \
-  ..\common\$D\objstrm.obj \
 !if "$(WXMAKINGDLL)" != "1"
 # don't have an ODBC database
   ..\common\$D\odbc.obj \
@@ -288,7 +289,6 @@ COMMONOBJS = \
   ..\common\$D\sckfile.obj \
   ..\common\$D\sckipc.obj \
   ..\common\$D\sckstrm.obj \
-  ..\common\$D\serbase.obj \
   ..\common\$D\sizer.obj \
   ..\common\$D\socket.obj \
   ..\common\$D\statbar.obj \
@@ -346,8 +346,10 @@ COMLIBOBJS1 = \
   dobjcmn.obj \
   docmdi.obj \
   docview.obj \
+  dseldlg.obj \
   dynarray.obj \
   dynlib.obj \
+  dynload.obj \
   effects.obj \
   encconv.obj \
   event.obj \
@@ -362,11 +364,11 @@ COMLIBOBJS1 = \
   fontcmn.obj \
   fontmap.obj \
   framecmn.obj \
-  fs_inet.obj \
-  fs_mem.obj \
-  fs_zip.obj
+  fs_inet.obj
 
 COMLIBOBJS2 = \
+  fs_mem.obj \
+  fs_zip.obj \
   ftp.obj \
   gaugecmn.obj \
   gdicmn.obj \
@@ -400,24 +402,22 @@ COMLIBOBJS2 = \
   mstream.obj \
   nbkbase.obj \
   object.obj \
-  objstrm.obj \
   odbc.obj \
   paper.obj \
   popupcmn.obj \
   prntbase.obj \
   process.obj \
   protocol.obj \
-  quantize.obj \
-  radiocmn.obj
+  quantize.obj
 
 COMLIBOBJS3 = \
+  radiocmn.obj \
   regex.obj \
   resource.obj \
   sckaddr.obj \
   sckfile.obj \
   sckipc.obj \
   sckstrm.obj \
-  serbase.obj \
   sizer.obj \
   socket.obj \
   statbar.obj \
@@ -710,8 +710,10 @@ $(COMLIBOBJS1):
   copy ..\common\$D\dobjcmn.obj
   copy ..\common\$D\docmdi.obj
   copy ..\common\$D\docview.obj
+  copy ..\common\$D\dseldlg.obj
   copy ..\common\$D\dynarray.obj
   copy ..\common\$D\dynlib.obj
+  copy ..\common\$D\dynload.obj
   copy ..\common\$D\effects.obj
   copy ..\common\$D\encconv.obj
   copy ..\common\$D\event.obj
@@ -727,10 +729,10 @@ $(COMLIBOBJS1):
   copy ..\common\$D\fontmap.obj
   copy ..\common\$D\framecmn.obj
   copy ..\common\$D\fs_inet.obj
-  copy ..\common\$D\fs_mem.obj
-  copy ..\common\$D\fs_zip.obj
 
 $(COMLIBOBJS2):
+  copy ..\common\$D\fs_mem.obj
+  copy ..\common\$D\fs_zip.obj
   copy ..\common\$D\ftp.obj
   copy ..\common\$D\gaugecmn.obj
   copy ..\common\$D\gdicmn.obj
@@ -764,7 +766,6 @@ $(COMLIBOBJS2):
   copy ..\common\$D\mstream.obj
   copy ..\common\$D\nbkbase.obj
   copy ..\common\$D\object.obj
-  copy ..\common\$D\objstrm.obj
   copy ..\common\$D\odbc.obj
   copy ..\common\$D\paper.obj
   copy ..\common\$D\popupcmn.obj
@@ -772,16 +773,15 @@ $(COMLIBOBJS2):
   copy ..\common\$D\process.obj
   copy ..\common\$D\protocol.obj
   copy ..\common\$D\quantize.obj
-  copy ..\common\$D\radiocmn.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\radiocmn.obj
   copy ..\common\$D\regex.obj
   copy ..\common\$D\resource.obj
   copy ..\common\$D\sckaddr.obj
   copy ..\common\$D\sckfile.obj
   copy ..\common\$D\sckipc.obj
   copy ..\common\$D\sckstrm.obj
-  copy ..\common\$D\serbase.obj
   copy ..\common\$D\sizer.obj
   copy ..\common\$D\socket.obj
   copy ..\common\$D\statbar.obj
