@@ -23,6 +23,7 @@
 
 #include "wx/defs.h"
 #include "wx/dynarray.h"
+#include "wx/regex.h"
 #include "wx/string.h"
 #include "wx/utils.h"
 
@@ -95,12 +96,20 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
                                         char **fonts,
                                         int nFonts)
 {
+#if wxUSE_REGEX
+    wxRegEx re(wxT("^(-[^-]*){14}$"), wxRE_NOSUB);
+#endif // wxUSE_REGEX
+
     // extract the list of (unique) font families
     wxSortedArrayString families;
     for ( int n = 0; n < nFonts; n++ )
     {
         char *font = fonts[n];
+#if wxUSE_REGEX
+        if ( re.Matches(font) )
+#else // !wxUSE_REGEX
         if ( !wxString(font).Matches(wxT("-*-*-*-*-*-*-*-*-*-*-*-*-*-*")) )
+#endif // wxUSE_REGEX/!wxUSE_REGEX
         {
             // it's not a full font name (probably an alias)
             continue;
