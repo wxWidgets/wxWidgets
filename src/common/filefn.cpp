@@ -1386,21 +1386,35 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         buf = new wxChar[sz + 1];
     }
 
-    bool ok;
+    bool ok = FALSE;
 
     // for the compilers which have Unicode version of _getcwd(), call it
     // directly, for the others call the ANSI version and do the translation
-#if wxUSE_UNICODE
-    #ifdef HAVE_WGETCWD
-        ok = _wgetcwd(buf, sz) != NULL;
-    #else // !HAVE_WGETCWD
-        wxCharBuffer cbuf(sz);
-    #endif
-#endif //
+#if !wxUSE_UNICODE
+	#define cbuf buf
+#else // wxUSE_UNICODE
+	bool needsANSI = TRUE;
 
-#if !wxUSE_UNICODE || !defined(HAVE_WGETCWD)
+	#if !defined(HAVE_WGETCWD) || wxUSE_UNICODE_MSLU
+        wxCharBuffer c_buffer(sz);
+		char *cbuf = (char*)(const char*)c_buffer;
+	#endif
+
+    #ifdef HAVE_WGETCWD
+		#if	wxUSE_UNICODE_MSLU
+			if ( wxGetOsVersion() != wxWIN95 )
+		#endif
+			{
+				ok = _wgetcwd(buf, sz) != NULL;
+				needsANSI = FALSE;
+			}
+    #endif
+
+	if ( needsANSI )
+#endif // wxUSE_UNICODE
+	{
     #ifdef _MSC_VER
-        ok = _getcwd(buf, sz) != NULL;
+        ok = _getcwd(cbuf, sz) != NULL;
     #elif defined(__WXMAC__) && !defined(__DARWIN__)
         FSSpec cwdSpec ;
         FCBPBRec pb;
@@ -1418,8 +1432,8 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
             cwdSpec.name[0] = 0 ;
             wxString res = wxMacFSSpec2MacFilename( &cwdSpec ) ;
 
-            strcpy( buf , res ) ;
-            buf[res.length()]=0 ;
+            strcpy( cbuf , res ) ;
+            cbuf[res.length()]=0 ;
 
             ok = TRUE;
         }
@@ -1430,14 +1444,14 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     #elif defined(__VISAGECPP__) || (defined (__OS2__) && defined (__WATCOMC__))
         APIRET rc;
         rc = ::DosQueryCurrentDir( 0 // current drive
-                                  ,buf
+                                  ,cbuf
                                   ,(PULONG)&sz
                                  );
         ok = rc != 0;
     #else // !Win32/VC++ !Mac !OS2
-        ok = getcwd(buf, sz) != NULL;
+        ok = getcwd(cbuf, sz) != NULL;
     #endif // platform
-#endif // !wxUSE_UNICODE || !HAVE_WGETCWD
+	}
 
     if ( !ok )
     {
@@ -1468,12 +1482,16 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 #endif // __CYGWIN__
 
         // finally convert the result to Unicode if needed
-#if wxUSE_UNICODE && !defined(HAVE_WGETCWD)
+#if wxUSE_UNICODE
         wxConvFile.MB2WC(buf, cbuf, sz);
 #endif // wxUSE_UNICODE
     }
 
     return buf;
+
+#if !wxUSE_UNICODE
+	#undef cbuf
+#endif
 }
 
 wxString wxGetCwd()
