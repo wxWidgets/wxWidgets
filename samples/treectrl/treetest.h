@@ -132,12 +132,13 @@ public:
 
     void OnCount(wxCommandEvent& event);
     void OnCountRec(wxCommandEvent& event);
-    
+
     void OnRename(wxCommandEvent& event);
     void OnSort(wxCommandEvent& event) { DoSort(); }
     void OnSortRev(wxCommandEvent& event) { DoSort(TRUE); }
 
     void OnAddItem(wxCommandEvent& event);
+    void OnInsertItem(wxCommandEvent& event);
 
     void OnIncIndent(wxCommandEvent& event);
     void OnDecIndent(wxCommandEvent& event);
@@ -178,6 +179,7 @@ enum
     TreeTest_CollapseAndReset,
     TreeTest_EnsureVisible,
     TreeTest_AddItem,
+    TreeTest_InsertItem,
     TreeTest_IncIndent,
     TreeTest_DecIndent,
     TreeTest_IncSpacing,

@@ -65,6 +65,8 @@
     #include "wx/spinctrl.h"
 #endif // wxUSE_SPINCTRL
 
+#include "wx/generic/calctrl.h"
+
 //----------------------------------------------------------------------
 // class definitions
 //----------------------------------------------------------------------
@@ -258,7 +260,7 @@ bool MyApp::OnInit()
     frame->Show(TRUE);
     frame->SetCursor(wxCursor(wxCURSOR_HAND));
 
-    //frame->GetPanel()->m_notebook->SetSelection(3);
+    frame->GetPanel()->m_notebook->SetSelection(5);
 
     SetTopWindow(frame);
 
@@ -640,6 +642,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                wxALIGN_RIGHT | wxST_NO_AUTORESIZE);
 
     m_notebook->AddPage(panel, "wxBitmapXXX");
+
+    panel = new wxPanel(m_notebook);
+    (void)new wxCalendarCtrl(panel, -1);
+    m_notebook->AddPage(panel, "wxCalendar");
 
 // --------------- TEST CODE ----------------------
 

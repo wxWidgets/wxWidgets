@@ -85,6 +85,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TreeTest_CollapseAndReset, MyFrame::OnCollapseAndReset)
     EVT_MENU(TreeTest_EnsureVisible, MyFrame::OnEnsureVisible)
     EVT_MENU(TreeTest_AddItem, MyFrame::OnAddItem)
+    EVT_MENU(TreeTest_InsertItem, MyFrame::OnInsertItem)
     EVT_MENU(TreeTest_IncIndent, MyFrame::OnIncIndent)
     EVT_MENU(TreeTest_DecIndent, MyFrame::OnDecIndent)
     EVT_MENU(TreeTest_IncSpacing, MyFrame::OnIncSpacing)
@@ -153,6 +154,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     tree_menu->Append(TreeTest_CollapseAndReset, "C&ollapse and reset");
     tree_menu->AppendSeparator();
     tree_menu->Append(TreeTest_AddItem, "Append a &new item");
+    tree_menu->Append(TreeTest_InsertItem, "&Insert a new item");
     tree_menu->Append(TreeTest_Delete, "&Delete this item");
     tree_menu->Append(TreeTest_DeleteChildren, "Delete &children");
     tree_menu->Append(TreeTest_DeleteAll, "Delete &all items");
@@ -284,7 +286,7 @@ void MyFrame::OnCount(wxCommandEvent& WXUNUSED(event))
     CHECK_ITEM( item );
 
     int i = m_treeCtrl->GetChildrenCount( item, FALSE );
-    
+
     wxLogMessage(wxT("%d children"), i);
 }
 
@@ -295,7 +297,7 @@ void MyFrame::OnCountRec(wxCommandEvent& WXUNUSED(event))
     CHECK_ITEM( item );
 
     int i = m_treeCtrl->GetChildrenCount( item );
-    
+
     wxLogMessage(wxT("%d children"), i);
 }
 
@@ -390,6 +392,11 @@ void MyFrame::OnCollapseAndReset(wxCommandEvent& event)
 void MyFrame::OnEnsureVisible(wxCommandEvent& event)
 {
     m_treeCtrl->DoEnsureVisible();
+}
+
+void MyFrame::OnInsertItem(wxCommandEvent& WXUNUSED(event))
+{
+    m_treeCtrl->InsertItem(m_treeCtrl->GetRootItem(), 1, "2nd item");
 }
 
 void MyFrame::OnAddItem(wxCommandEvent& WXUNUSED(event))
