@@ -152,7 +152,10 @@
 #   endif
 #endif /* wxUSE_UNICODE */
 
-
+#if defined( __MWERKS__ ) && !defined(__INTEL__)
+// otherwise MSL headers bring in WIN32 dependant APIs
+#undef UNICODE
+#endif
 /*
    some compilers don't support iostream.h any longer, while some of theme
    are not updated with <iostream> yet, so override the users setting here
