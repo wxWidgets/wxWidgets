@@ -1014,10 +1014,13 @@ bool wxMCIMediaBackend::Play()
     MCI_PLAY_PARMS playParms;
     playParms.dwCallback = (DWORD)m_hNotifyWnd;
 
-    m_ctrl->Show(m_bVideo);
-
-    return ( mciSendCommand(m_hDev, MCI_PLAY, MCI_NOTIFY,
+    bool bOK = ( mciSendCommand(m_hDev, MCI_PLAY, MCI_NOTIFY,
                             (DWORD)(LPVOID)&playParms) == 0 );
+
+    if(bOK)
+        m_ctrl->Show(m_bVideo);
+
+    return bOK;
 }
 
 //---------------------------------------------------------------------------
