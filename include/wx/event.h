@@ -703,6 +703,14 @@ public:
     bool MetaDown() const { return m_metaDown; }
     bool AltDown() const { return m_altDown; }
     bool ShiftDown() const { return m_shiftDown; }
+    bool CmdDown() const
+    {
+#if defined(__WXMAC__) || defined(__WXCOCOA__)
+        return MetaDown();
+#else
+        return ControlDown();
+#endif
+    }
 
     // Find which event was just generated
     bool LeftDown() const { return (m_eventType == wxEVT_LEFT_DOWN); }
@@ -877,6 +885,20 @@ public:
     bool MetaDown() const { return m_metaDown; }
     bool AltDown() const { return m_altDown; }
     bool ShiftDown() const { return m_shiftDown; }
+
+    // "Cmd" is a pseudo key which is Control for PC and Unix platforms but
+    // Apple ("Command") key under Macs: it makes often sense to use it instead
+    // of, say, ControlDown() because Cmd key is used for the same thing under
+    // Mac as Ctrl elsewhere (but Ctrl still exists, just not used for this
+    // purpose under Mac)
+    bool CmdDown() const
+    {
+#if defined(__WXMAC__) || defined(__WXCOCOA__)
+        return MetaDown();
+#else
+        return ControlDown();
+#endif
+    }
 
     // exclude MetaDown() from HasModifiers() because NumLock under X is often
     // configured as mod2 modifier, yet the key events even when it is pressed

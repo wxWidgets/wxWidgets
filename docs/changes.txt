@@ -17,6 +17,9 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
   wxFULL_REPAINT_ON_RESIZE to force this (wxNO_FULL_REPAINT_ON_RESIZE still
   exists but doesn't do anything any more, this behaviour is default now)
 
+! wxWindow::m_font and m_backgroundColour/m_foregroundColour are no longer
+  always set, use GetFont(), GetBack/ForegroundColour() to access them
+
 
 - no initialization/cleanup can be done in wxApp/~wxApp because they are
   now called much earlier/later than before; please move any exiting code
@@ -124,6 +127,7 @@ All (GUI):
 - Added wxWindow::Navigate for programmatic navigation to the next control.
 - wxTextCtrl::OnChar now inserts a tab character if wxTE_PROCESS_TAB is set
 - added wxKeyEvent::GetUnicodeKey()
+- added wxKeyEvent::CmdDown() and wxMouseEvent::CmdDown()
 
 Unix:
 

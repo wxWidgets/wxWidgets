@@ -142,7 +142,20 @@ Constructor. Currently, the only valid event types are wxEVT\_CHAR and wxEVT\_CH
 Returns true if the Alt key was down at the time of the key event.
 
 
-\membersection{wxKeyEvent::ControlDown}
+\membersection{wxKeyEvent::CmdDown}\label{wxkeyeventcmddown}
+
+\constfunc{bool}{CmdDown}{\void}
+
+"Cmd" is a pseudo key which is the same as Control for PC and Unix platforms
+but the special "Apple" (a.k.a as "Command") key under Macs: it makes often
+sense to use it instead of, say, ControlDown() because Cmd key is used for the
+same thing under Mac as Ctrl elsewhere (but Ctrl still exists, just not used
+for this purpose under Mac). So for non-Mac platforms this is the same as 
+\helpref{ControlDown()}{wxkeyeventcontroldown} and under Mac this is the same
+as \helpref{MetaDown()}{wxkeyeventmetadown}.
+
+
+\membersection{wxKeyEvent::ControlDown}\label{wxkeyeventcontroldown}
 
 \constfunc{bool}{ControlDown}{\void}
 
@@ -225,7 +238,7 @@ the latter is that it is common for {\sc NumLock} key to be configured as
 be still processed normally).
 
 
-\membersection{wxKeyEvent::MetaDown}
+\membersection{wxKeyEvent::MetaDown}\label{wxkeyeventmetadown}
 
 \constfunc{bool}{MetaDown}{\void}
 

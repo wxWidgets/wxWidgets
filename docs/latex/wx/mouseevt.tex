@@ -227,7 +227,19 @@ values).
 
 
 
-\membersection{wxMouseEvent::ControlDown}
+\membersection{wxKeyEvent::CmdDown}\label{wxmouseeventcmddown}
+
+\constfunc{bool}{CmdDown}{\void}
+
+Same as \helpref{MetaDown}{wxmouseeventmetadown} under Mac, same as 
+\helpref{ControlDown}{wxmouseeventcontroldown} elsewhere.
+
+\wxheading{See also}
+
+\helpref{wxKeyEvent::CmdDown}\label{wxkeyeventcmddown}
+
+
+\membersection{wxMouseEvent::ControlDown}\label{wxmouseeventcontroldown}
 
 \func{bool}{ControlDown}{\void}
 
@@ -393,7 +405,7 @@ mouse" messages to determine whether the user is (still) dragging the mouse.
 Returns true if the left mouse button changed to up.
 
 
-\membersection{wxMouseEvent::MetaDown}
+\membersection{wxMouseEvent::MetaDown}\label{wxmouseeventmetadown}
 
 \constfunc{bool}{MetaDown}{\void}
 
