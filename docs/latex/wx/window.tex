@@ -481,6 +481,12 @@ control label is not truncated. For windows containing subwindows (typically
 same as the size the window would have had after calling
 \helpref{Fit}{wxwindowfit}.
 
+\membersection{wxWindow::GetCaret}\label{wxwindowgetcaret}
+
+\constfunc{wxCaret *}{GetCaret}{\void}
+
+Returns the \helpref{caret}{wxcaret} associated with the window.
+
 \membersection{wxWindow::GetCharHeight}
 
 \constfunc{virtual int}{GetCharHeight}{\void}
@@ -1807,6 +1813,12 @@ look as the user wishes with run-time loadable modules.
 \helpref{wxWindow::Refresh}{wxwindowrefresh},\rtfsp
 \helpref{wxWindow::OnEraseBackground}{wxwindowonerasebackground}
 
+\membersection{wxWindow::SetCaret}\label{wxwindowsetcaret}
+
+\constfunc{void}{SetCaret}{\param{wxCaret *}{caret}}
+
+Sets the \helpref{caret}{wxcaret} associated with the window.
+
 \membersection{wxWindow::SetClientSize}\label{wxwindowsetclientsize}
 
 \func{virtual void}{SetClientSize}{\param{int}{ width}, \param{int}{ height}}
@@ -1854,36 +1866,6 @@ be reset back to default.
 
 \helpref{::wxSetCursor}{wxsetcursor}, \helpref{wxCursor}{wxcursor}
 
-\membersection{wxWindow::SetEventHandler}\label{wxwindowseteventhandler}
-
-\func{void}{SetEventHandler}{\param{wxEvtHandler* }{handler}}
-
-Sets the event handler for this window.
-
-\wxheading{Parameters}
-
-\docparam{handler}{Specifies the handler to be set.}
-
-\wxheading{Remarks}
-
-An event handler is an object that is capable of processing the events
-sent to a window. By default, the window is its own event handler, but
-an application may wish to substitute another, for example to allow
-central implementation of event-handling for a variety of different
-window classes.
-
-It is usually better to use \helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler} since
-this sets up a chain of event handlers, where an event not handled by one event handler is
-handed to the next one in the chain.
-
-\wxheading{See also}
-
-\helpref{wxWindow::GetEventHandler}{wxwindowgeteventhandler},\rtfsp
-\helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler},\rtfsp
-\helpref{wxWindow::PopEventHandler}{wxwindowpusheventhandler},\rtfsp
-\helpref{wxEvtHandler::ProcessEvent}{wxevthandlerprocessevent},\rtfsp
-\helpref{wxEvtHandler}{wxevthandler}
-
 \membersection{wxWindow::SetConstraints}\label{wxwindowsetconstraints}
 
 \func{void}{SetConstraints}{\param{wxLayoutConstraints* }{constraints}}
@@ -1917,6 +1899,36 @@ If the window already has a drop target, it is deleted.
 
 \helpref{wxWindow::GetDropTarget}{wxwindowgetdroptarget}, 
 \helpref{Drag and drop overview}{wxdndoverview}
+
+\membersection{wxWindow::SetEventHandler}\label{wxwindowseteventhandler}
+
+\func{void}{SetEventHandler}{\param{wxEvtHandler* }{handler}}
+
+Sets the event handler for this window.
+
+\wxheading{Parameters}
+
+\docparam{handler}{Specifies the handler to be set.}
+
+\wxheading{Remarks}
+
+An event handler is an object that is capable of processing the events
+sent to a window. By default, the window is its own event handler, but
+an application may wish to substitute another, for example to allow
+central implementation of event-handling for a variety of different
+window classes.
+
+It is usually better to use \helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler} since
+this sets up a chain of event handlers, where an event not handled by one event handler is
+handed to the next one in the chain.
+
+\wxheading{See also}
+
+\helpref{wxWindow::GetEventHandler}{wxwindowgeteventhandler},\rtfsp
+\helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler},\rtfsp
+\helpref{wxWindow::PopEventHandler}{wxwindowpusheventhandler},\rtfsp
+\helpref{wxEvtHandler::ProcessEvent}{wxevthandlerprocessevent},\rtfsp
+\helpref{wxEvtHandler}{wxevthandler}
 
 \membersection{wxWindow::SetExtraStyle}\label{wxwindowsetextrastyle}
 

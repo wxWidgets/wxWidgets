@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        window.cpp
+// Name:        gtk/window.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -29,6 +29,10 @@
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif
+
+#if wxUSE_CARET
+    #include "wx/caret.h"
+#endif // wxUSE_CARET
 
 #include "wx/menu.h"
 #include "wx/statusbr.h"
@@ -297,6 +301,28 @@ extern bool g_isIdle;
 //-----------------------------------------------------------------------------
 // local code (see below)
 //-----------------------------------------------------------------------------
+
+// returns the child of win which currently has focus or NULL if not found
+static wxWindow *FindFocusedChild(wxWindow *win)
+{
+    wxWindow *winFocus = wxWindow::FindFocus();
+    if ( !winFocus )
+        return (wxWindow *)NULL;
+
+    if ( winFocus == win )
+        return win;
+
+    for ( wxWindowList::Node *node = win->GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow *child = FindFocusedChild(node->GetData());
+        if ( child )
+            return child;
+    }
+
+    return (wxWindow *)NULL;
+}
 
 static void draw_frame( GtkWidget *widget, wxWindow *win )
 {
@@ -1486,6 +1512,15 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
         gdk_im_begin(win->m_ic, win->m_wxwindow->window);
 #endif
 
+#ifdef wxUSE_CARET
+    // caret needs to be informed about focus change
+    wxCaret *caret = win->GetCaret();
+    if ( caret )
+    {
+        caret->OnSetFocus();
+    }
+#endif // wxUSE_CARET
+
     wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
     event.SetEventObject( win );
 
@@ -1517,6 +1552,10 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
     // g_sendActivateEvent to -1
     g_sendActivateEvent = 0;
 
+    wxWindow *winFocus = FindFocusedChild(win);
+    if ( winFocus )
+        win = winFocus;
+
     g_focusWindow = (wxWindow *)NULL;
 
 /*
@@ -1530,6 +1569,15 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
     if (win->m_ic)
         gdk_im_end();
 #endif
+
+#ifdef wxUSE_CARET
+    // caret needs to be informed about focus change
+    wxCaret *caret = win->GetCaret();
+    if ( caret )
+    {
+        caret->OnKillFocus();
+    }
+#endif // wxUSE_CARET
 
     wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
     event.SetEventObject( win );
