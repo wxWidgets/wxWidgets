@@ -94,6 +94,7 @@ wxMSW:
 - wxGauge now supports full 32 bit range (Miroslav Rajcic)
 - make it possible to give focus to the notebook tabs (Hajo Kirchhoff)
 - MDI child frames are not always resizeable any more (Andrei Fortuna)
+- fixed enumerating of entries/groups under '/' in wxRegConfig
 
 wxGTK:
 

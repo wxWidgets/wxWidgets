@@ -386,13 +386,14 @@ void wxRegConfig::SetPath(const wxString& strPath)
 
     // change current key(s)
     m_keyLocal.SetName(m_keyLocalRoot, strRegPath);
-    m_keyGlobal.SetName(m_keyGlobalRoot, strRegPath);
 
-    // don't create it right now, wait until it is accessed
-    //m_keyLocal.Create();
+    if ( GetStyle() & wxCONFIG_USE_GLOBAL_FILE )
+    {
+      m_keyGlobal.SetName(m_keyGlobalRoot, strRegPath);
 
-    wxLogNull nolog;
-    m_keyGlobal.Open();
+      wxLogNull nolog;
+      m_keyGlobal.Open();
+    }
 }
 
 // ----------------------------------------------------------------------------
