@@ -1613,7 +1613,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
 
     if (sort)
     {
-        strings.Sort(wxStringSortAscending);
+        strings.Sort(); // ascending sort
         // Yes, this will be slow, but template lists
         // are typically short.
         int j;
@@ -1692,7 +1692,7 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
 
     if (sort)
     {
-        strings.Sort(wxStringSortAscending);
+        strings.Sort(); // ascending sort
         // Yes, this will be slow, but template lists
         // are typically short.
         int j;

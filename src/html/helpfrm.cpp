@@ -1277,7 +1277,7 @@ void wxHtmlHelpFrame::OptionsDialog()
         enu.EnumerateFacenames();
         m_NormalFonts = new wxArrayString;
         *m_NormalFonts = *enu.GetFacenames();
-        m_NormalFonts->Sort(wxStringSortAscending);
+        m_NormalFonts->Sort(); // ascending sort
     }
     if (m_FixedFonts == NULL)
     {
@@ -1285,7 +1285,7 @@ void wxHtmlHelpFrame::OptionsDialog()
         enu.EnumerateFacenames(wxFONTENCODING_SYSTEM, true /*enum fixed width only*/);
         m_FixedFonts = new wxArrayString;
         *m_FixedFonts = *enu.GetFacenames();
-        m_FixedFonts->Sort(wxStringSortAscending);
+        m_FixedFonts->Sort(); // ascending sort
     }
 
     // VS: We want to show the font that is actually used by wxHtmlWindow.
