@@ -12,6 +12,8 @@
 #ifndef _WX_SETUP_H_
 #define _WX_SETUP_H_
 
+/* --- start common options --- */
+
 // ----------------------------------------------------------------------------
 // global settings
 // ----------------------------------------------------------------------------
@@ -535,6 +537,7 @@
 #define wxUSE_CHECKLISTBOX 1    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
 #define wxUSE_CHOICE       1    // wxChoice
 #define wxUSE_COMBOBOX     1    // wxComboBox
+#define wxUSE_DATEPICKCTRL 1
 #define wxUSE_GAUGE        1    // wxGauge
 #define wxUSE_LISTBOX      1    // wxListBox
 #define wxUSE_LISTCTRL     1    // wxListCtrl
@@ -1022,6 +1025,8 @@
 
 // Set to 1 to compile in wxPalette class
 #define wxUSE_PALETTE       1
+
+/* --- end common options --- */
 
 // ----------------------------------------------------------------------------
 // Windows-only settings
