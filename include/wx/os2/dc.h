@@ -148,6 +148,12 @@ public:
         m_bOwnsDC = bOwnsDC;
     }
 
+    HPS             GetHPS(void) const { return m_hPS; }
+    void            SetHPS(HPS hPS)
+    {
+        HDC                         hDC = ::GpiQueryDevice(hPS);
+        m_hPS = hPS;
+    }
     const wxBitmap& GetSelectedBitmap(void) const { return m_vSelectedBitmap; }
     wxBitmap&       GetSelectedBitmap(void) { return m_vSelectedBitmap; }
 
