@@ -2378,5 +2378,34 @@ SOURCE=.\tiff\tif_zip.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
+# Begin Group "Regex Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\regex\regcomp.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\regex\regerror.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\regex\regexec.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\regex\regfree.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\regex\split.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# End Group
 # End Target
 # End Project
