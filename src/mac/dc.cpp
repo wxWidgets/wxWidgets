@@ -250,14 +250,14 @@ void wxDC::MacCleanupPort(wxMacPortStateHelper* help) const
     {
         Pattern blackColor ;
         ::PenPat(GetQDGlobalsBlack(&blackColor));
-        DisposePixMap( (PixMapHandle) m_macForegroundPixMap ) ;
+        DisposePixPat( (PixPatHandle) m_macForegroundPixMap ) ;
         m_macForegroundPixMap = NULL ;
     }
     if ( m_macBackgroundPixMap )
     {
         Pattern whiteColor ;
         ::BackPat(GetQDGlobalsWhite(&whiteColor));
-        DisposePixMap( (PixMapHandle) m_macBackgroundPixMap ) ;
+        DisposePixPat( (PixPatHandle) m_macBackgroundPixMap ) ;
         m_macBackgroundPixMap = NULL ;
     }
 }
@@ -563,7 +563,11 @@ wxSize wxDC::GetPPI() const
 
 int wxDC::GetDepth() const
 {
-	return wxDisplayDepth() ;
+    if ( IsPortColor( (CGrafPtr) m_macPort ) )
+    {
+        return ( (**GetPortPixMap( (CGrafPtr) m_macPort)).pixelSize ) ;
+    }
+    return 1 ;
 }
 
 void wxDC::ComputeScaleAndOrigin()
