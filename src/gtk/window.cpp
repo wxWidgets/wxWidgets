@@ -1355,12 +1355,19 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
     
     wxKeyEvent event( wxEVT_KEY_DOWN );
     
-    // I wonder how well keyval represents a Unicode char
+#if wxUSE_UNICODE
     event.m_uniChar = g_utf8_get_char( str );
     
     // Backward compatible for ISO-8859
     if (event.m_uniChar < 256)
         event.m_keyCode = event.m_uniChar;
+#else
+    gunichar uniChar = g_utf8_get_char( str );
+    // We cannot handle Unicode in non-Unicode mode
+    if (uniChar > 255) return;
+    
+    event.m_keyCode = uniChar;
+#endif
     
     if (!ret)
     {
