@@ -655,7 +655,8 @@ void wxTextCtrl::ChangeBackgroundColour()
         if (vsb)
             DoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
 
-        DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
+        // MBN: why change parent background?
+        // DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
     }
 }
 
@@ -728,11 +729,14 @@ wxSize wxDoGetSingleTextCtrlBestSize( Widget textWidget,
                    XmNhighlightThickness, &highlight,
                    XmNshadowThickness, &shadow,
                    NULL );
+
     if( !value )
         value = "|";
 
     int x, y;
     window->GetTextExtent( value, &x, &y );
+
+    if( x < 100 ) x = 100;
 
     return wxSize( x + 2 * xmargin + 2 * highlight + 2 * shadow,
                    // MBN: +2 necessary: Lesstif bug or mine?
