@@ -683,7 +683,7 @@ enum wxKillError
 The {\it flags} parameter can be wxKILL\_NOCHILDREN (the default),
 or wxKILL\_CHILDREN, in which case the child processes of this
 process will be killed too. Note that under Unix, for wxKILL\_CHILDREN
-to work you should have created the process by passing wxEXEC\_MAKE_GROUP\_LEADER
+to work you should have created the process by passing wxEXEC\_MAKE\_GROUP\_LEADER
 to wxExecute.
 
 \wxheading{See also}
@@ -2829,10 +2829,10 @@ Gets the currently active window (Windows only).
 
 \func{wxBatteryState}{wxGetBatteryState}{\void}
 
-Returns battery state as one of \texttt{wxBATTERY_NORMAL_STATE},
-\texttt{wxBATTERY_LOW_STATE}, \texttt{wxBATTERY_CRITICAL_STATE},
-\texttt{wxBATTERY_SHUTDOWN_STATE} or \texttt{wxBATTERY_UNKNOWN_STATE}.
-\texttt{wxBATTERY_UNKNOWN_STATE} is also the default on platforms where
+Returns battery state as one of \texttt{wxBATTERY\_NORMAL\_STATE},
+\texttt{wxBATTERY\_LOW\_STATE}, \texttt{wxBATTERY\_CRITICAL\_STATE},
+\texttt{wxBATTERY\_SHUTDOWN\_STATE} or \texttt{wxBATTERY\_UNKNOWN\_STATE}.
+\texttt{wxBATTERY\_UNKNOWN\_STATE} is also the default on platforms where
 this feature is not implemented.
 
 \wxheading{Include files}
@@ -2855,9 +2855,9 @@ Under X only, returns the current display name. See also \helpref{wxSetDisplayNa
 
 \func{wxPowerType}{wxGetPowerType}{\void}
 
-Returns the type of power source as one of \texttt{wxPOWER_SOCKET},
-\texttt{wxPOWER_BATTERY} or \texttt{wxPOWER_UNKNOWN}.
-\texttt{wxPOWER_UNKNOWN} is also the default on platforms where this
+Returns the type of power source as one of \texttt{wxPOWER\_SOCKET},
+\texttt{wxPOWER\_BATTERY} or \texttt{wxPOWER\_UNKNOWN}.
+\texttt{wxPOWER\_UNKNOWN} is also the default on platforms where this
 feature is not implemented.
 
 \wxheading{Include files}
