@@ -183,6 +183,12 @@ Returns a pointer to the client data associated with the given item (if any).
 
 A pointer to the client data, or NULL if the item was not found.
 
+\membersection{wxComboBox::GetCount}\label{wxcomboboxgetcount}
+
+\constfunc{int}{GetCount}{\void}
+
+Returns the number of items in the combobox.
+
 \membersection{wxComboBox::GetInsertionPoint}\label{wxcomboboxgetinsertionpoint}
 
 \constfunc{long}{GetInsertionPoint}{\void}
@@ -231,8 +237,13 @@ Returns the current value in the combobox text field.
 
 \constfunc{int}{Number}{\void}
 
+{\bf Obsolescence note:} This method is obsolete and was replaced with 
+\helpref{GetCount}{wxcomboboxgetcount}, please use the new method in the new
+code. This method is only available if wxWindows was compiled with 
+{\tt WXWIN\_COMPATIBILITY\_2\_2} defined and will disappear completely in
+future versions.
+
 Returns the number of items in the combobox list.
-%TODO: make this GetNumber or GetCount?
 
 \membersection{wxComboBox::Paste}\label{wxcomboboxpaste}
 

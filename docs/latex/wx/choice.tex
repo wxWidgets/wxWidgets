@@ -157,6 +157,12 @@ Returns a pointer to the client data associated with the given item (if any).
 
 A pointer to the client data, or NULL if the item was not found.
 
+\membersection{wxChoice::GetCount}\label{wxchoicegetcount}
+
+\constfunc{int}{GetCount}{\void}
+
+Returns the number of items in the choice.
+
 \membersection{wxChoice::GetSelection}\label{wxchoicegetselection}
 
 \constfunc{int}{GetSelection}{\void}
@@ -186,6 +192,12 @@ Gets the selected string, or the empty string if no string is selected.
 \membersection{wxChoice::Number}\label{wxchoicenumber}
 
 \constfunc{int}{Number}{\void}
+
+{\bf Obsolescence note:} This method is obsolete and was replaced with 
+\helpref{GetCount}{wxchoicegetcount}, please use the new method in the new
+code. This method is only available if wxWindows was compiled with 
+{\tt WXWIN\_COMPATIBILITY\_2\_2} defined and will disappear completely in
+future versions.
 
 Returns the number of strings in the choice control.
 
