@@ -153,6 +153,14 @@ enum wxFontEncoding
     wxFONTENCODING_UTF32BE,         // UTF-32 Big Endian Unicode encoding
     wxFONTENCODING_UTF32LE,         // UTF-32 Little Endian Unicode encoding
 
+    wxFONTENCODING_MACROMAN,        // Mac Roman encoding
+    wxFONTENCODING_MACCENTRALEUR,   // Mac Roman Central Europe encoding
+    wxFONTENCODING_MACHEBREW,       // Mac Hebrew encoding
+    wxFONTENCODING_MACGREEK,        // Mac Greek encoding
+    wxFONTENCODING_MACARABIC,       // Mac Arabic encoding
+    wxFONTENCODING_MACTURKISH,      // Mac Turkish encoding
+    wxFONTENCODING_MACCYRILLIC,     // Mac Cyrillic encoding
+
     wxFONTENCODING_MAX,             // highest enumerated encoding value
 
 
