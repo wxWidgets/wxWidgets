@@ -206,6 +206,9 @@ samples/scroll/scroll.dsw
 samples/scrollsub/scrollsub.dsp
 samples/scrollsub/scrollsub.dsw
 
+samples/shaped/shaped.dsp
+samples/shaped/shaped.dsw
+
 samples/sockets/client.dsp
 samples/sockets/server.dsp
 samples/sockets/client.dsw

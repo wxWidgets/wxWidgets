@@ -1257,6 +1257,13 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/scrollsub/makefile.unx $(DISTDIR)/samples/scrollsub
 	cp $(SAMPDIR)/scrollsub/*.cpp $(DISTDIR)/samples/scrollsub
 
+	mkdir $(DISTDIR)/samples/shaped
+	cp $(SAMPDIR)/shaped/Makefile.in $(DISTDIR)/samples/shaped
+	cp $(SAMPDIR)/shaped/makefile.unx $(DISTDIR)/samples/shaped
+	cp $(SAMPDIR)/shaped/*.cpp $(DISTDIR)/samples/shaped
+	cp $(SAMPDIR)/shaped/*.h $(DISTDIR)/samples/shaped
+	cp $(SAMPDIR)/shaped/*.png $(DISTDIR)/samples/shaped
+
 	mkdir $(DISTDIR)/samples/sockets
 	cp $(SAMPDIR)/sockets/Makefile.in $(DISTDIR)/samples/sockets
 	cp $(SAMPDIR)/sockets/makefile.unx $(DISTDIR)/samples/sockets

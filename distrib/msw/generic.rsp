@@ -980,6 +980,19 @@ samples/scrollsub/*.ico
 samples/scrollsub/*.txt
 samples/scrollsub/*.pro
 
+samples/shaped/*.cpp
+samples/shaped/*.h
+samples/shaped/makefile*
+samples/shaped/*.rc
+samples/shaped/*.def
+samples/shaped/*.bmp
+samples/shaped/*.xpm
+samples/shaped/*.xbm
+samples/shaped/*.png
+samples/shaped/*.ico
+samples/shaped/*.txt
+samples/shaped/*.pro
+
 samples/splitter/*.cpp
 samples/splitter/*.h
 samples/splitter/*.def

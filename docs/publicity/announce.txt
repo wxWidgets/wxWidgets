@@ -1,7 +1,7 @@
 Announcing wxWindows 2.4.1: a cross-platform GUI toolkit
 ----------------------------------------------------------------
 
-April ??th, 2003 -- the wxWindows team is pleased to announce
+June 8th, 2003 -- the wxWindows team is pleased to announce
 an official 2.4.1 release of the mature cross-platform C++
 application framework.
 
@@ -22,23 +22,10 @@ To get wxWindows, go to the Download page at:
 
   http://www.wxwindows.org
 
-This is the first official release to support the many
-enhancements to wxWindows since the 2.2.x series.
-Improvements have been made to many areas, including:
-
-- better support for Windows XP
-- a much fuller Mac port
-- additional platforms (OS/2 and bare X11)
-- further type-safe container classes
-- improved build system
-- Unicode support for GTK+ and WIN32
-- improved wxBase support
-- wxArtProvider class allows tailoring of standard
-  wxWindows images
-- translations for more languages
-- mousewheel support
-- support for more ODBC databases
-- numerous bug fixes
+This is a bug-fix release. Improvements include
+better border and theme handling under Windows XP,
+additional XRC resource types, and removal of
+some memory leaks.
 
 *** About wxWindows
 
@@ -81,6 +68,9 @@ If you're considering wxWindows, do check out some of these links:
     http://www.wxwindows.org/screensh.htm ; Screenshots
     http://www.wxwindows.org/users.htm    ; A list of some of our
                                           ; users
+
+==> Look out for reviews of wxWindows in the July editions of
+    Linux Journal and the UK's PC Plus magazine.
 
 Have fun!
 
