@@ -727,12 +727,16 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         attr |= kWindowCloseBoxAttribute ;
     }
 
-    attr |= kWindowLiveResizeAttribute; //turn on live resizing
-    
+    if (UMAGetSystemVersion() >= 0x1000)
+    {
+        //turn on live resizing (OS X only)
+        attr |= kWindowLiveResizeAttribute;
+    }
+
 #if TARGET_CARBON
 #if 0 //  having problems right now with that
     if (HasFlag(wxSTAY_ON_TOP))
-    	wclass = kUtilityWindowClass;
+        wclass = kUtilityWindowClass;
 #endif
 #endif
 
