@@ -364,5 +364,7 @@
 
 #define wxUSE_PALETTE             1
 
+#define wxUSE_CMDLINE_PARSER      1
+
 #endif
     // _WX_SETUP_H_
