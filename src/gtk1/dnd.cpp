@@ -208,7 +208,7 @@ wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
   if (gdk_dnd.dnd_grabbed) return None;
   if (gdk_dnd.drag_really) return None;
   
-  wxASSERT_MSG( data, "wxDragSource: no data" );
+  wxASSERT_MSG( m_data, "wxDragSource: no data" );
   
   if (!m_data) return None;
   if (m_data->GetDataSize() == 0) return None;
