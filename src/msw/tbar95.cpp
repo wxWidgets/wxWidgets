@@ -61,6 +61,18 @@
 #include "wx/app.h"         // for GetComCtl32Version
 
 // ----------------------------------------------------------------------------
+// conditional compilation
+// ----------------------------------------------------------------------------
+
+// wxWindows previously always considered that toolbar buttons have light grey
+// (0xc0c0c0) background and so ignored any bitmap masks - however, this
+// doesn't work with XPMs which then appear to have black background. To make
+// this work, we must respect the bitmap masks - which we do now. This should
+// be ok in any case, but to restore 100% compatible with the old version
+// behaviour, you can set this to 0.
+#define USE_BITMAP_MASKS 1
+
+// ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
@@ -267,8 +279,32 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
 
 bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 {
-    // normally, we only delete one button, but we use several separators to
-    // cover the space used by one control sometimes (with old comctl32.dll)
+    // the main difficulty we have here is with the controls in the toolbars:
+    // as we (sometimes) use several separators to cover up the space used by
+    // them, the indices are not the same for us and the toolbar
+
+    // first determine the position of the first button to delete: it may be
+    // different from pos if we use several separators to cover the space used
+    // by a control
+    wxToolBarToolsList::Node *node;
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+    {
+        wxToolBarToolBase *tool2 = node->GetData();
+        if ( tool2 == tool )
+        {
+            // let node point to the next node in the list
+            node = node->GetNext();
+
+            break;
+        }
+
+        if ( tool2->IsControl() )
+        {
+            pos += ((wxToolBarTool *)tool2)->GetSeparatorsCount();
+        }
+    }
+
+    // now determine the number of buttons to delete and the area taken by them
     size_t nButtonsToDelete = 1;
 
     // get the size of the button we're going to delete
@@ -287,6 +323,8 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
         width *= nButtonsToDelete;
     }
 
+    // do delete all buttons
+    m_nButtons -= nButtonsToDelete;
     while ( nButtonsToDelete-- > 0 )
     {
         if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, pos, 0) )
@@ -299,11 +337,9 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 
     tool->Detach();
 
-    m_nButtons -= nButtonsToDelete;
-
-    // reposition all the controls after this button
-    wxToolBarToolsList::Node *node = m_tools.Item(pos);
-    for ( node = node->GetNext(); node; node = node->GetNext() )
+    // and finally reposition all the controls after this button (the toolbar
+    // takes care of all normal items)
+    for ( /* node -> first after deleted */ ; node; node = node->GetNext() )
     {
         wxToolBarToolBase *tool2 = node->GetData();
         if ( tool2->IsControl() )
@@ -339,7 +375,17 @@ bool wxToolBar::Realize()
     int totalBitmapWidth = (int)(m_defaultWidth * nTools);
     int totalBitmapHeight = (int)m_defaultHeight;
 
-    // Create a bitmap for all the tool bitmaps
+    // Create a bitmap and copy all the tool bitmaps to it
+#if USE_BITMAP_MASKS
+    wxMemoryDC dcAllButtons;
+    wxBitmap bitmap(totalBitmapWidth, totalBitmapHeight);
+    dcAllButtons.SelectObject(bitmap);
+    dcAllButtons.SetBackground(*wxLIGHT_GREY_BRUSH);
+    dcAllButtons.Clear();
+
+    m_hBitmap = bitmap.GetHBITMAP();
+    HBITMAP hBitmap = (HBITMAP)m_hBitmap;
+#else // !USE_BITMAP_MASKS
     HBITMAP hBitmap = ::CreateCompatibleBitmap(ScreenHDC(),
                                                totalBitmapWidth,
                                                totalBitmapHeight);
@@ -352,11 +398,11 @@ bool wxToolBar::Realize()
 
     m_hBitmap = (WXHBITMAP)hBitmap;
 
-    // Now blit all the tools onto this bitmap
     HDC memoryDC = ::CreateCompatibleDC(NULL);
     HBITMAP oldBitmap = (HBITMAP) ::SelectObject(memoryDC, hBitmap);
 
     HDC memoryDC2 = ::CreateCompatibleDC(NULL);
+#endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
     // the button position
     wxCoord x = 0;
@@ -370,9 +416,14 @@ bool wxToolBar::Realize()
         wxToolBarToolBase *tool = node->GetData();
         if ( tool->IsButton() )
         {
-            HBITMAP hbmp = GetHbitmapOf(tool->GetBitmap1());
-            if ( hbmp )
+            const wxBitmap& bmp = tool->GetBitmap1();
+            if ( bmp.Ok() )
             {
+#if USE_BITMAP_MASKS
+                // notice the last parameter: do use mask
+                dcAllButtons.DrawBitmap(tool->GetBitmap1(), x, 0, TRUE);
+#else // !USE_BITMAP_MASKS
+                HBITMAP hbmp = GetHbitmapOf(bmp);
                 HBITMAP oldBitmap2 = (HBITMAP)::SelectObject(memoryDC2, hbmp);
                 if ( !BitBlt(memoryDC, x, 0,  m_defaultWidth, m_defaultHeight,
                              memoryDC2, 0, 0, SRCCOPY) )
@@ -381,6 +432,7 @@ bool wxToolBar::Realize()
                 }
 
                 ::SelectObject(memoryDC2, oldBitmap2);
+#endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
             }
             else
             {
@@ -397,9 +449,16 @@ bool wxToolBar::Realize()
         node = node->GetNext();
     }
 
+#if USE_BITMAP_MASKS
+    dcAllButtons.SelectObject(wxNullBitmap);
+
+    // don't delete this HBITMAP!
+    bitmap.SetHBITMAP(0);
+#else // !USE_BITMAP_MASKS
     ::SelectObject(memoryDC, oldBitmap);
     ::DeleteDC(memoryDC);
     ::DeleteDC(memoryDC2);
+#endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
     // Map to system colours
     wxMapBitmap(hBitmap, totalBitmapWidth, totalBitmapHeight);
