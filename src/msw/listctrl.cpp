@@ -1419,10 +1419,10 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
         wxHashTable attrsNew(wxKEY_INTEGER, 1000);
         for ( n = 0; n < count; n++ )
         {
-            wxObject *attr = m_attrs.Delete(n);
+            wxObject *attr = m_attrs.Delete(aItems[n]);
             if ( attr )
             {
-                attrsNew.Put(aItems[n], attr);
+                attrsNew.Put(n, attr);
             }
         }
 
