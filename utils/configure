@@ -648,6 +648,8 @@ trap 'rm -fr `echo "
             hhp2cached/Makefile
             dialoged/Makefile
             dialoged/src/Makefile
+            emulator/Makefile
+            emulator/src/Makefile
          " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -731,6 +733,8 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             hhp2cached/Makefile
             dialoged/Makefile
             dialoged/src/Makefile
+            emulator/Makefile
+            emulator/src/Makefile
          "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
