@@ -1922,6 +1922,9 @@ static void wxCanvasInputEvent(Widget drawingArea,
     case ButtonRelease:
     case MotionNotify:
         {
+            // FIXME: most of this mouse event code is more or less
+            // duplicated in wxTranslateMouseEvent
+            //
             wxEventType eventType = wxEVT_NULL;
 
             if (local_event.xany.type == EnterNotify)
@@ -1933,7 +1936,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
             }
             else if (local_event.xany.type == LeaveNotify)
             {
-                //if (local_event.xcrossing.mode!=NotifyNormal)
+                //if (local_event.xcrossingr.mode!=NotifyNormal)
                 //  return ; // Ignore grab events
                 eventType = wxEVT_LEAVE_WINDOW;
                 //            canvas->GetEventHandler()->OnKillFocus();
@@ -2542,14 +2545,16 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, 
 {
     switch (xevent->xany.type)
     {
-    case EnterNotify:
-    case LeaveNotify:
-    case ButtonPress:
-    case ButtonRelease:
-    case MotionNotify:
+        case EnterNotify:  // never received here - yes ? MB
+        case LeaveNotify:  // never received here - yes ? MB
+        case ButtonPress:
+        case ButtonRelease:
+        case MotionNotify:
         {
             wxEventType eventType = wxEVT_NULL;
 
+            // FIXME: this is never true I think - MB
+            //
             if (xevent->xany.type == LeaveNotify)
             {
                 win->SetButton1(FALSE);
@@ -2563,20 +2568,59 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, 
             }
             else if (xevent->xany.type == ButtonPress)
             {
+                wxevent.SetTimestamp(xevent->xbutton.time);
+                int button = 0;
                 if (xevent->xbutton.button == Button1)
                 {
                     eventType = wxEVT_LEFT_DOWN;
                     win->SetButton1(TRUE);
+                    button = 1;
                 }
                 else if (xevent->xbutton.button == Button2)
                 {
                     eventType = wxEVT_MIDDLE_DOWN;
                     win->SetButton2(TRUE);
+                    button = 2;
                 }
                 else if (xevent->xbutton.button == Button3)
                 {
                     eventType = wxEVT_RIGHT_DOWN;
                     win->SetButton3(TRUE);
+                    button = 3;
+                }
+
+                // check for a double click
+                //
+                long dclickTime = XtGetMultiClickTime((Display*) wxGetDisplay());
+                long ts = wxevent.GetTimestamp();
+
+                int buttonLast = win->GetLastClickedButton();
+                long lastTS = win->GetLastClickTime();
+                if ( buttonLast && buttonLast == button && (ts - lastTS) < dclickTime )
+                {
+                    // I have a dclick
+                    win->SetLastClick(0, ts);
+                    switch ( eventType )
+                    {
+                        case wxEVT_LEFT_DOWN:
+                            eventType = wxEVT_LEFT_DCLICK;
+                            break;
+                        case wxEVT_MIDDLE_DOWN:
+                            eventType = wxEVT_MIDDLE_DCLICK;
+                            break;
+                        case wxEVT_RIGHT_DOWN:
+                            eventType = wxEVT_RIGHT_DCLICK;
+                            break;
+
+                        default :
+                            break;
+                    }
+                    
+                }
+                else
+                {
+                    // not fast enough or different button
+                    win->SetLastClick(button, ts);
                 }
             }
             else if (xevent->xany.type == ButtonRelease)
@@ -2637,6 +2681,12 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, 
 
             wxevent.m_shiftDown = xevent->xbutton.state & ShiftMask;
             wxevent.m_controlDown = xevent->xbutton.state & ControlMask;
+            wxevent.m_altDown = xevent->xbutton.state & Mod3Mask;
+            wxevent.m_metaDown = xevent->xbutton.state & Mod1Mask;
+
+            wxevent.SetId(win->GetId());
+            wxevent.SetEventObject(win);
+
             return TRUE;
         }
     }
