@@ -2939,10 +2939,6 @@ EVT_COMMAND_SCROLL_THUMBTRACK = wx.PyEventBinder( wxEVT_SCROLL_THUMBTRACK, 1)
 EVT_COMMAND_SCROLL_THUMBRELEASE = wx.PyEventBinder( wxEVT_SCROLL_THUMBRELEASE, 1)
 EVT_COMMAND_SCROLL_ENDSCROLL = wx.PyEventBinder( wxEVT_SCROLL_ENDSCROLL, 1)
 
-EVT_SPIN_UP   = wx.PyEventBinder( wxEVT_SCROLL_LINEUP, 1)
-EVT_SPIN_DOWN = wx.PyEventBinder( wxEVT_SCROLL_LINEDOWN, 1)
-EVT_SPIN      = wx.PyEventBinder( wxEVT_SCROLL_THUMBTRACK, 1)
-
 EVT_BUTTON = wx.PyEventBinder( wxEVT_COMMAND_BUTTON_CLICKED, 1)
 EVT_CHECKBOX = wx.PyEventBinder( wxEVT_COMMAND_CHECKBOX_CLICKED, 1)
 EVT_CHOICE = wx.PyEventBinder( wxEVT_COMMAND_CHOICE_SELECTED, 1)
@@ -4952,6 +4948,7 @@ class PyOnDemandOutputWindow:
                               style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
         self.text  = wx.TextCtrl(self.frame, -1, "",
                                  style = wx.TE_MULTILINE | wx.TE_READONLY)
+        self.text.AppendText(st)
         self.frame.SetSize((450, 300))
         self.frame.Show(True)
         EVT_CLOSE(self.frame, self.OnCloseWindow)

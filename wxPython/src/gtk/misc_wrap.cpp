@@ -23250,7 +23250,7 @@ static PyObject *_wrap_IsDragResultOk(PyObject *self, PyObject *args, PyObject *
 
 static PyObject *_wrap_new_DropSource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    wxWindow *arg1 = (wxWindow *) NULL ;
+    wxWindow *arg1 = (wxWindow *) 0 ;
     wxIcon const &arg2_defvalue = wxNullIcon ;
     wxIcon *arg2 = (wxIcon *) &arg2_defvalue ;
     wxIcon const &arg3_defvalue = wxNullIcon ;
@@ -23266,10 +23266,8 @@ static PyObject *_wrap_new_DropSource(PyObject *self, PyObject *args, PyObject *
         (char *) "win",(char *) "copy",(char *) "move",(char *) "none", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOO:new_DropSource",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
-    if (obj0) {
-        if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    }
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOO:new_DropSource",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxIcon,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
         if (arg2 == NULL) {
