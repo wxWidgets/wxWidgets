@@ -280,16 +280,14 @@ long wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
         // let the default processign take place too
     }
-    // VZ: I don't remember any more why was this needed but everything seems
-    //     to work just fine without this code and it prevents LDCLICK events
-    //     from being generated, so I will probably remoe it completely soon
-#if 0
     else if ( nMsg == WM_LBUTTONDBLCLK )
     {
-        // trick the base class into thinking that this was just a click
-        nMsg = WM_LBUTTONDOWN;
+        // emulate a click event to force an owner-drawn button to change its
+        // appearance - without this, it won't do it
+        (void)wxControl::MSWWindowProc(WM_LBUTTONDOWN, wParam, lParam);
+
+        // and conitnue with processing the message normally as well
     }
-#endif // 0
 
     // let the base class do all real processing
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
