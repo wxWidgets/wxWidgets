@@ -59,8 +59,8 @@ BEGIN_EVENT_TABLE(DBGrid, wxGrid)
   DBGrid::DBGrid(wxWindow *parent, const wxWindowID id,const wxPoint& pos,const wxSize& size, long style):
     wxGrid(parent, id, pos, size, style)
 {
-  f_Temp = new wxFont(10,wxSWISS,wxNORMAL,wxBOLD,FALSE,"Comic Sans MS");
-  wxPanel::SetFont(* f_Temp);
+  //f_Temp = new wxFont(10,wxSWISS,wxNORMAL,wxBOLD,FALSE,"Comic Sans MS");
+  //wxPanel::SetFont(* f_Temp);
   b_EditModus = TRUE;
   //----------------------------------------------------------------------------------------------------------------------------
   popupMenu1 = new wxMenu("");
@@ -78,7 +78,9 @@ int  DBGrid::OnTableView(wxString Table)
   //---------------------------------------------------------------------------
   int  i=0,x,y,z, ValidTable=0;
   wxString Temp0;
-  SetLabelFont(* f_Temp);
+  //SetLabelFont(* f_Temp);
+
+  wxBeginBusyCursor();
   //---------------------------------------------------------------------------
   ct_BrowserDB = (db_Br+i_Which)->ct_BrowserDB;                       // Get the DSN Pointer
   //----------------------------------------------------------------------------
@@ -135,6 +137,7 @@ int  DBGrid::OnTableView(wxString Table)
   //---------------------------------------------------------------------------
  Weiter:
   SetEditInPlace(b_EditModus);   // Activate in-place Editing (FALSE)
+  wxEndBusyCursor();
   //---------------------------------------------------------------------------
   wxLogMessage(_("-I-> DBGrid::OnTableView() - End"));
   return 0;

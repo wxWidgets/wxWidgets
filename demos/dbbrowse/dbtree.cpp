@@ -60,8 +60,8 @@ BEGIN_EVENT_TABLE(DBTree, wxTreeCtrl)
 DBTree::DBTree(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const wxSize& size, long style)
   : wxTreeCtrl(parent, id, pos, size, style)
 {
-  wxFont* ft_Temp = new wxFont(10,wxSWISS,wxNORMAL,wxBOLD,FALSE,"Comic Sans MS");
-  SetFont(* ft_Temp);
+  //wxFont* ft_Temp = new wxFont(10,wxSWISS,wxNORMAL,wxBOLD,FALSE,"Comic Sans MS");
+  //SetFont(* ft_Temp);
   
   // Make an image list containing small icons
   p_imageListNormal = new wxImageList(16, 16, TRUE);
@@ -111,10 +111,11 @@ int  DBTree::OnPopulate()
   wxTreeItemId Root, Folder, Docu, Funkt;
   int i,x,y;
   wxString SQL_TYPE, DB_TYPE;
-  wxBeginBusyCursor();
+
   //----------------------------------------------------------------------------------------------------------------------------
   if((pDoc->db_Br+i_Which)->Initialize(FALSE))
     {
+      wxBeginBusyCursor();
       ct_BrowserDB = (pDoc->db_Br+i_Which)->OnGetCatalog(FALSE);
       if (ct_BrowserDB)
 	{ // Use the wxDatabase Information
@@ -122,6 +123,7 @@ int  DBTree::OnPopulate()
 	  Root = AddRoot(Temp0,TreeIc_DsnOpen,TreeIc_DsnOpen,new DBTreeData("Root"));
 	  for (x=0;x<ct_BrowserDB->numTables;x++)
 	    {
+              wxYield();
 	      if (!wxStrcmp((ct_BrowserDB->pTableInf+x)->tableType,"TABLE"))    // only TABLES
 		{
 		  Temp0.Printf(_("Tablename(%s) with (%d)Columns ; Remarks(%s)"),  (ct_BrowserDB->pTableInf+x)->tableName,
@@ -187,10 +189,10 @@ int  DBTree::OnPopulate()
 	}      // if (ct_BrowserDB)
       else
 	wxLogMessage(_("\n-E-> DBTree::OnPopulate() : Invalid Catalog Pointer : Failed"));
+      wxEndBusyCursor();
     }       // if((pDoc->db_Br+i_Which)->Initialize(FALSE))
   else
     {
-      wxEndBusyCursor();
       return 0;
       //wxLogMessage(_("\n-E-> DBTree::OnPopulate() : A valid Pointer could not be created : Failed"));
     }
@@ -208,7 +210,7 @@ int  DBTree::OnPopulate()
   popupMenu2->AppendSeparator();
   popupMenu2->Append(DATA_TABLE, _("Make wxTable.cpp/h "));
   //----------------------------------------------------------------------------------------------------------------------------
-  wxEndBusyCursor();  
+
   return 0;
 }
 //---------------------------------------------------------------------------
