@@ -192,11 +192,10 @@ int wxChoice::DoAppend(const wxString& item)
     {
         XtVaSetValues ((Widget) m_buttonWidget, XmNmenuHistory, w, NULL);
         Widget label = XmOptionButtonGadget ((Widget) m_buttonWidget);
-        XmString text = XmStringCreateSimple ((char*) (const char*) item);
+        wxXmString text( item );
         XtVaSetValues (label,
-            XmNlabelString, text,
+            XmNlabelString, text(),
             NULL);
-        XmStringFree (text);
     }
     m_stringList.Add(item);
     m_noStrings ++;
