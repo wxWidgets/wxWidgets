@@ -248,9 +248,9 @@ public:
         return *this;
     }
 
-    bool operator == (const wxImage& image)
+    bool operator == (const wxImage& image) const
         { return m_refData == image.m_refData; }
-    bool operator != (const wxImage& image)
+    bool operator != (const wxImage& image) const
         { return m_refData != image.m_refData; }
 
     static wxList& GetHandlers() { return sm_handlers; }
