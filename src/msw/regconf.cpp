@@ -350,21 +350,24 @@ void wxRegConfig::SetPath(const wxString& strPath)
 
     // registry APIs want backslashes instead of slashes
     wxString strRegPath;
-    size_t len = m_strPath.length();
-
-    const wxChar *src = m_strPath.c_str();
-    wxChar *dst = strRegPath.GetWriteBuf(len);
-
-    const wxChar *end = src + len;
-    for ( ; src < end; src++, dst++ )
+    if ( !m_strPath.empty() )
     {
-        if ( *src == wxCONFIG_PATH_SEPARATOR )
-            *dst = _T('\\');
-        else
-            *dst = *src;
-    }
+        size_t len = m_strPath.length();
 
-    strRegPath.UngetWriteBuf(len);
+        const wxChar *src = m_strPath.c_str();
+        wxChar *dst = strRegPath.GetWriteBuf(len);
+
+        const wxChar *end = src + len;
+        for ( ; src < end; src++, dst++ )
+        {
+            if ( *src == wxCONFIG_PATH_SEPARATOR )
+                *dst = _T('\\');
+            else
+                *dst = *src;
+        }
+
+        strRegPath.UngetWriteBuf(len);
+    }
 
     // this is not needed any longer as we don't create keys unnecessarily any
     // more (now it is done on demand, i.e. only when they're going to contain
