@@ -363,11 +363,6 @@ bool wxListCtrl::Create(wxWindow *parent,
                       0, LVS_EX_FULLROWSELECT);
     }
 
-    // inherit foreground colour but our background should be the same as for
-    // listboxes and other such "container" windows and not inherited
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    SetForegroundColour(GetParent()->GetForegroundColour());
-
     return TRUE;
 }
 
@@ -545,6 +540,17 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
+
+/* static */ wxVisualAttributes
+wxListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    wxVisualAttributes attrs = GetCompositeControlsDefaultAttributes(variant);
+
+    // common controls have their own default font
+    attrs.font = wxGetCCDefaultFont();
+
+    return attrs;
+}
 
 // Sets the foreground, i.e. text, colour
 bool wxListCtrl::SetForegroundColour(const wxColour& col)

@@ -408,10 +408,20 @@ public:
                                             long& cookie) const );
 #endif // WXWIN_COMPATIBILITY_2_4
 
-    virtual bool ShouldInheritColours() const { return false; }
 
     // implementation
     // --------------
+
+    virtual bool ShouldInheritColours() const { return false; }
+
+    virtual wxVisualAttributes GetDefaultAttributes() const
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
 
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWCommand(WXUINT param, WXWORD id);

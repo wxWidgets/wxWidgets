@@ -787,6 +787,18 @@ wxTreeCtrl::~wxTreeCtrl()
 // accessors
 // ----------------------------------------------------------------------------
 
+/* static */ wxVisualAttributes
+wxTreeCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    wxVisualAttributes attrs = GetCompositeControlsDefaultAttributes(variant);
+
+    // common controls have their own default font
+    attrs.font = wxGetCCDefaultFont();
+
+    return attrs;
+}
+
+
 // simple wrappers which add error checking in debug mode
 
 bool wxTreeCtrl::DoGetItem(wxTreeViewItem* tvItem) const
