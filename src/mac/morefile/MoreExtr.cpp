@@ -235,7 +235,7 @@ pascal	OSErr	GetVolumeInfoNoName(ConstStr255Param pathname,
 **	to the local tempPathname).
 */
 
-#if TARGET_CARBON
+// #if TARGET_CARBON
 
 pascal	OSErr	XGetVolumeInfoNoName(ConstStr255Param pathname,
 									short vRefNum,
@@ -291,7 +291,7 @@ pascal	OSErr	XGetVolumeInfoNoName(ConstStr255Param pathname,
 	return ( error );
 }
 
-#endif
+// #endif
 
 /*****************************************************************************/
 
