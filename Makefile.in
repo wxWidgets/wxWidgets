@@ -485,10 +485,15 @@ ALL_DIST: distclean
 	cp $(WXDIR)/mkinstalldirs $(DISTDIR)
 	cp $(WXDIR)/wx-config.in $(DISTDIR)
 	cp $(WXDIR)/setup.h.in $(DISTDIR)
+	cp $(WXDIR)/setup.h_vms $(DISTDIR)
+	cp $(WXDIR)/descrip.mms $(DISTDIR)
 	cp $(WXDIR)/Makefile.in $(DISTDIR)
 	cp $(DOCDIR)/lgpl.txt $(DISTDIR)/COPYING.LIB
 	cp $(DOCDIR)/licence.txt $(DISTDIR)/LICENCE.txt
 	cp $(DOCDIR)/symbols.txt $(DISTDIR)/SYMBOLS.txt
+	mkdir $(DISTDIR)/lib
+	cp $(WXDIR)/lib/vms.opt $(DISTDIR)/lib
+	cp $(WXDIR)/lib/vms_gtk.opt $(DISTDIR)/lib
 
 # this target is the common part of distribution script for all GUI toolkits,
 # but is not used when building wxBase distribution
@@ -529,13 +534,16 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
 	cp $(COMMDIR)/*.cpp $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.c $(DISTDIR)/src/common
-	cp $(UNIXDIR)/*.c $(DISTDIR)/src/unix
-	cp $(UNIXDIR)/*.cpp $(DISTDIR)/src/unix
 	cp $(COMMDIR)/*.inc $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.l $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.h $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.y $(DISTDIR)/src/common
+	cp $(COMMDIR)/*.mms $(DISTDIR)/src/common
+	cp $(UNIXDIR)/*.c $(DISTDIR)/src/unix
+	cp $(UNIXDIR)/*.cpp $(DISTDIR)/src/unix
+	cp $(UNIXDIR)/*.mms $(DISTDIR)/src/unix
 	cp $(GENDIR)/*.cpp $(DISTDIR)/src/generic
+	cp $(GENDIR)/*.mms $(DISTDIR)/src/generic
 	cp $(HTMLDIR)/*.cpp $(DISTDIR)/src/html
 	cp $(HTMLDIR)/bitmaps/*.xpm $(DISTDIR)/src/html/bitmaps
 	cp $(PNGDIR)/*.h $(DISTDIR)/src/png
@@ -544,6 +552,7 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(ZLIBDIR)/*.h $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/README $(DISTDIR)/src/zlib
+	cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
 	cp $(JPEGDIR)/*.h $(DISTDIR)/src/jpeg
 	cp $(JPEGDIR)/*.c $(DISTDIR)/src/jpeg
 	cp $(JPEGDIR)/README $(DISTDIR)/src/jpeg
@@ -589,6 +598,9 @@ GTK_DIST: ALL_GUI_DIST
 	cp $(GTKDIR)/*.cpp $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.c $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.xbm $(DISTDIR)/src/gtk
+	cp $(GTKDIR)/*.mms $(DISTDIR)/src/gtk
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
 
 MOTIF_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxMOTIF.spec $(DISTDIR)
@@ -683,6 +695,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/checklst/makefile.unx $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.cpp $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.xpm $(DISTDIR)/samples/checklst
+	cp $(SAMPDIR)/checklst/*.mms $(DISTDIR)/samples/checklst
 
 	mkdir $(DISTDIR)/samples/config
 	cp $(SAMPDIR)/config/Makefile.in $(DISTDIR)/samples/config
@@ -700,6 +713,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/controls/makefile.unx $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.cpp $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.xpm $(DISTDIR)/samples/controls
+	cp $(SAMPDIR)/controls/*.mms $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/icons/*.??? $(DISTDIR)/samples/controls/icons
 
 	mkdir $(DISTDIR)/samples/db
@@ -715,6 +729,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/dialogs/*.cpp $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/*.h $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/*.txt $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/*.mms $(DISTDIR)/samples/dialogs
 
 	mkdir $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/Makefile.in $(DISTDIR)/samples/dnd
@@ -828,6 +843,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/image/Makefile.in $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/makefile.unx $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/*.cpp $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/*.mms $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/horse.* $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/smile.xbm $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/smile.xpm $(DISTDIR)/samples/image
@@ -901,6 +917,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/minimal/makefile.unx $(DISTDIR)/samples/minimal
 	cp $(SAMPDIR)/minimal/*.cpp $(DISTDIR)/samples/minimal
 	cp $(SAMPDIR)/minimal/*.xpm $(DISTDIR)/samples/minimal
+	cp $(SAMPDIR)/minimal/*.mms $(DISTDIR)/samples/minimal
 
 	mkdir $(DISTDIR)/samples/dialup
 	cp $(SAMPDIR)/dialup/Makefile.in $(DISTDIR)/samples/dialup
@@ -1071,10 +1088,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/wizard/*.xpm $(DISTDIR)/samples/wizard
     
 UTILS_DIST: ALL_GUI_DIST
-	mkdir $(DISTDIR)/utils
-	cp $(UTILSDIR)/Makefile.in $(DISTDIR)/utils
-	cp $(UTILSDIR)/configure $(DISTDIR)/utils
-	cp $(UTILSDIR)/configure.in $(DISTDIR)/utils
 
 MISC_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/misc

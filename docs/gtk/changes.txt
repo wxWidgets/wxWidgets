@@ -1,6 +1,12 @@
-12th March '2000: wxWindows 2.1.14 released
+19th March '2000: wxWindows 2.1.14 released
 
+An extra library for the OpenGl class now gets builts
+and installed. There is also an extra RPM for this 
+small class now.
 
+Added possibility to compile wxGTK with already installed
+image libraries (TIFF, JPEG, PNG, ZLIB) if you really
+know what you are doing.
 
 Added support for pipes and a stream class to get data
 out of them.

@@ -169,6 +169,7 @@ Returns the brush style, one of:
 \twocolitem{{\bf wxHORIZONTAL\_HATCH}}{Horizontal hatch.}
 \twocolitem{{\bf wxVERTICAL\_HATCH}}{Vertical hatch.}
 \twocolitem{{\bf wxSTIPPLE}}{Stippled using a bitmap.}
+\twocolitem{{\bf wxSTIPPLE_MASK_OPAQUE}}{Stippled using a bitmap's mask.}
 \end{twocollist}
 
 \wxheading{See also}
@@ -214,13 +215,17 @@ Sets the stipple bitmap.
 
 \wxheading{Remarks}
 
-The style will be set to wxSTIPPLE.
+The style will be set to wxSTIPPLE, unless the bitmap has a mask associated
+to it, in which case the style will be set to wxSTIPPLE_MASK_OPAQUE.
 
-Note that there is a big difference between stippling in X and Windows.
-On X, the stipple is a mask between the wxBitmap and current colour.
-On Windows, the current colour is ignored, and the bitmap colour is used.
-However, for pre-defined modes like wxCROSS\_HATCH, the behaviour is the
-same for both platforms.
+If the wxSTIPPLE variant is used, the bitmap will be used to fill out the
+area to be drawn. If the wxSTIPPLE_MASK_OPAQUE is used, the current
+text foreground and text background determine what colours are used for
+displaying and the bits in the mask (which is a mono-bitmap actually)
+determine where to draw what.
+
+Note that under Windows 95, only 8x8 pixel large stipple bitmaps are
+supported, Windows 98 and NT as well as GTK support arbitrary bitmaps.
 
 \wxheading{See also}
 
@@ -244,6 +249,7 @@ Sets the brush style.
 \twocolitem{{\bf wxHORIZONTAL\_HATCH}}{Horizontal hatch.}
 \twocolitem{{\bf wxVERTICAL\_HATCH}}{Vertical hatch.}
 \twocolitem{{\bf wxSTIPPLE}}{Stippled using a bitmap.}
+\twocolitem{{\bf wxSTIPPLE_MASK_OPAQUE}}{Stippled using a bitmap's mask.}
 \end{twocollist}}
 
 \wxheading{See also}

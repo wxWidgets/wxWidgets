@@ -12,7 +12,7 @@ freeze and only bugs will be corrected.
 
 wxWindows no longer supports GTK 1.0 (as did some early
 snapshots) so that you will need GTK 1.2 when using it.
-GTK 1.2.6 is recommended although somw programs will work
+GTK 1.2.6 is recommended although some programs will work
 with GTK 1.2.3 onwards.
 
 More information is available from my homepage at:
