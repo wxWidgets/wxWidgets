@@ -95,7 +95,7 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
     x2 = x1 = points[0].x ;
     y2 = y1 = points[0].y ;
     ::MoveTo(x1,y1);
-    for (int i = 1; i < n; i++)
+    for (size_t i = 1; i < n; i++)
     {
         x2 = points[i].x ;
         y2 = points[i].y ;
