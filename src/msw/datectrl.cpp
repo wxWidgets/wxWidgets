@@ -82,6 +82,10 @@ wxDatePickerCtrl::Create(wxWindow *parent,
                          const wxValidator& validator,
                          const wxString& name)
 {
+    // use wxDP_SPIN if wxDP_DEFAULT (0) was given as style
+    if ( !(style & wxDP_DROPDOWN) )
+        style |= wxDP_SPIN;
+
     // initialize the base class
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
