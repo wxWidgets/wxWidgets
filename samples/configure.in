@@ -90,6 +90,7 @@ AC_OUTPUT([
             validate/Makefile
             widgets/Makefile
             wizard/Makefile
+            htlbox/Makefile
             html/Makefile
             html/about/Makefile
             html/help/Makefile

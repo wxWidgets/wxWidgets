@@ -720,6 +720,7 @@ trap 'rm -fr `echo "
             validate/Makefile
             widgets/Makefile
             wizard/Makefile
+            htlbox/Makefile
             html/Makefile
             html/about/Makefile
             html/help/Makefile
@@ -877,6 +878,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             validate/Makefile
             widgets/Makefile
             wizard/Makefile
+            htlbox/Makefile
             html/Makefile
             html/about/Makefile
             html/help/Makefile
