@@ -23,6 +23,7 @@
 #ifndef WX_PRECOMP
     #include "wx/bmpbuttn.h"
     #include "wx/log.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -115,12 +116,15 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 #endif
 
     LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT) item;
+    HDC hDC                = lpDIS->hDC;
+    UINT state             = lpDIS->itemState;
+    bool isSelected        = (state & ODS_SELECTED) != 0;
+    bool autoDraw          = (GetWindowStyleFlag() & wxBU_AUTODRAW) != 0;
 
-    // choose the bitmap to use depending on the buttons state
+
+    // choose the bitmap to use depending on the button state
     wxBitmap* bitmap;
 
-    UINT state = lpDIS->itemState;
-    bool isSelected = (state & ODS_SELECTED) != 0;
     if ( isSelected && m_buttonBitmapSelected.Ok() )
         bitmap = &m_buttonBitmapSelected;
     else if ((state & ODS_FOCUS) && m_buttonBitmapFocus.Ok())
@@ -133,29 +137,23 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     if ( !bitmap->Ok() )
         return FALSE;
 
-    // draw it on the memory DC
-    HDC hDC = lpDIS->hDC;
-    HDC memDC = ::CreateCompatibleDC(hDC);
+    // centre the bitmap in the control area
+    int x      = lpDIS->rcItem.left;
+    int y      = lpDIS->rcItem.top;
+    int width  = lpDIS->rcItem.right - x;
+    int height = lpDIS->rcItem.bottom - y;
+    int wBmp   = bitmap->GetWidth();
+    int hBmp   = bitmap->GetHeight();
+    int x1     = x + (width - wBmp) / 2;
+    int y1     = y + (height - hBmp) / 2;
 
-    HBITMAP old = (HBITMAP) ::SelectObject(memDC, (HBITMAP) bitmap->GetHBITMAP());
-
-    if (!old)
+    if ( isSelected && autoDraw )
     {
-        wxLogLastError(_T("SelectObject"));
-
-        return FALSE;
+        x1++;
+        y1++;
     }
 
-    int x = lpDIS->rcItem.left;
-    int y = lpDIS->rcItem.top;
-    int width = lpDIS->rcItem.right - x;
-    int height = lpDIS->rcItem.bottom - y;
-
-    int wBmp = bitmap->GetWidth(),
-        hBmp = bitmap->GetHeight();
-
-    // Draw the face, if auto-drawing
-    bool autoDraw = (GetWindowStyleFlag() & wxBU_AUTODRAW) != 0;
+    // draw the face, if auto-drawing
     if ( autoDraw )
     {
         DrawFace((WXHDC) hDC,
@@ -164,62 +162,12 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
                  isSelected);
     }
 
-    // Centre the bitmap in the control area
-    int x1 = x + (width - wBmp) / 2;
-    int y1 = y + (height - hBmp) / 2;
-
-    if ( isSelected && autoDraw )
-    {
-        x1++;
-        y1++;
-    }
-
-    BOOL ok;
-
-    // no MaskBlt() under Win16
-#ifdef __WIN32__
-    wxMask *mask = bitmap->GetMask();
-    if ( mask )
-    {
-        // the fg ROP is applied for the pixels of the mask bitmap which are 1
-        // (for a wxMask this means that this is a non transparent pixel), the
-        // bg ROP is applied for all the others
-
-        HBRUSH hbrBackground =
-            ::CreateSolidBrush(wxColourToRGB(GetBackgroundColour()));
-        HBRUSH hbrOld = (HBRUSH)::SelectObject(hDC, hbrBackground);
-
-        ok = ::MaskBlt(
-                       hDC, x1, y1, wBmp, hBmp,                 // dst
-                       memDC, 0, 0,                             // src
-                       (HBITMAP)mask->GetMaskBitmap(), 0, 0,    // mask
-                       MAKEROP4(SRCCOPY,                        // fg ROP
-                                PATCOPY)                        // bg ROP
-                      );
-
-        ::SelectObject(hDC, hbrOld);
-        ::DeleteObject(hbrBackground);
-    }
-    else
-    {
-        // this will make the check below fail and BitBlt() will be used if
-        // MaskBlt() is not supported (for example, under Win95)
-        ok = FALSE;
-    }
-
-    if ( !ok )
-#endif // Win32
-    {
-        ok = ::BitBlt(hDC, x1, y1, wBmp, hBmp,  // dst
-                      memDC, 0, 0,              // src
-                      SRCCOPY);                 // ROP
-    }
-
-    if ( !ok )
-    {
-        wxLogLastError(_T("Mask/BitBlt()"));
-    }
-
+    // draw the bitmap
+    wxDC dst;
+    dst.SetHDC((WXHDC) hDC, FALSE);
+    dst.DrawBitmap(*bitmap, x1, y1, TRUE);
+    
+    // draw focus / disabled state, if auto-drawing
     if ( (state & ODS_DISABLED) && autoDraw )
     {
         DrawButtonDisable((WXHDC) hDC,
@@ -236,10 +184,6 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
                         lpDIS->rcItem.bottom,
                         isSelected);
     }
-
-    ::SelectObject(memDC, old);
-
-    ::DeleteDC(memDC);
 
     return TRUE;
 }
