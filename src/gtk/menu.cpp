@@ -109,8 +109,12 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 	{
 #if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
             str << _T('_');
+        } else 
+	if (*pc == _T('/'))
+	{
+            str << _T('\\');
 #endif
-        }
+	}
         else
            str << *pc;
     }
@@ -483,6 +487,10 @@ void wxMenuItem::SetName( const wxString& str )
 	{
 #if (GTK_MINOR_VERSION > 0)
             m_text << _T('_');
+        } else 
+	if (*pc == _T('/'))
+	{
+            m_text << _T('\\');
 #endif
         }
         else
@@ -664,7 +672,6 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     wxString s = _T("<main>/");
     for ( const wxChar *pc = text; *pc != _T('\0'); pc++ )
     {
-        if (*pc == _T('\t')) break;
         if (*pc == _T('_')) pc++; /* skip it */
         s << *pc;
     }

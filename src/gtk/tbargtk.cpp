@@ -70,7 +70,18 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
             tb->m_fg->green = 0;
             tb->m_fg->blue = 0;
             gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(tb->m_toolbar) ), tb->m_fg );
+	    
+#if (GTK_MINOR_VERSION > 0)
+            GtkStyle *g_style = 
+              gtk_style_copy(
+                gtk_widget_get_style( 
+                   GTK_TOOLBAR(tb->m_toolbar)->tooltips->tip_window ) );
+	    
+            g_style->fg[GTK_STATE_NORMAL] = *tb->m_fg;
+            gtk_widget_set_style( GTK_TOOLBAR(tb->m_toolbar)->tooltips->tip_window, g_style );
+#else
             gtk_tooltips_set_colors( GTK_TOOLBAR(tb->m_toolbar)->tooltips, tb->m_bg, tb->m_fg );
+#endif
 	}
     }
     else
@@ -81,7 +92,17 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
             tb->m_fg->green = 33000;
             tb->m_fg->blue = 33000;
             gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(tb->m_toolbar) ), tb->m_fg );
+#if (GTK_MINOR_VERSION > 0)
+            GtkStyle *g_style = 
+              gtk_style_copy(
+                gtk_widget_get_style( 
+                   GTK_TOOLBAR(tb->m_toolbar)->tooltips->tip_window ) );
+	    
+            g_style->fg[GTK_STATE_NORMAL] = *tb->m_fg;
+            gtk_widget_set_style( GTK_TOOLBAR(tb->m_toolbar)->tooltips->tip_window, g_style );
+#else
             gtk_tooltips_set_colors( GTK_TOOLBAR(tb->m_toolbar)->tooltips, tb->m_bg, tb->m_fg );
+#endif
 	}
     }
     
@@ -161,7 +182,19 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
     m_bg->blue = 50000;
     gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(m_toolbar) ), m_bg );
   
+#if (GTK_MINOR_VERSION > 0)
+    gtk_tooltips_force_window( GTK_TOOLBAR(m_toolbar)->tooltips );
+
+    GtkStyle *g_style = 
+      gtk_style_copy(
+         gtk_widget_get_style( 
+            GTK_TOOLBAR(m_toolbar)->tooltips->tip_window ) );
+	    
+    g_style->bg[GTK_STATE_NORMAL] = *m_bg;
+    gtk_widget_set_style( GTK_TOOLBAR(m_toolbar)->tooltips->tip_window, g_style );
+#else
     gtk_tooltips_set_colors( GTK_TOOLBAR(m_toolbar)->tooltips, m_bg, m_fg );
+#endif
 
     m_xMargin = 0;
     m_yMargin = 0;

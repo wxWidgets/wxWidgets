@@ -631,13 +631,13 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
 	{
 	   /* we HAVE TO use the direct way for memory dcs
 	      that have mask since the XCopyArea doesn't know
-	      about masks and */
+	      about masks */
 	    use_bitmap_method = TRUE;
 	}
 	else if (memDC->m_selected.GetDepth() == 1)
 	{
 	   /* we HAVE TO use the direct way for memory dcs
-	      that are bitmaps because XCopyArea doesn't copy
+	      that are bitmaps because XCopyArea doesn't cope
 	      with different bit depths */
 	    use_bitmap_method = TRUE;
 	}
