@@ -283,6 +283,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
                          int *attribList, 
 			 const wxPalette& palette)
 {
+    int data[512];
     m_sharedContext = (wxGLContext*)shared;  // const_cast
     m_sharedContextOf = (wxGLCanvas*)shared_context_of;  // const_cast
     m_glContext = (wxGLContext*) NULL;
@@ -293,34 +294,56 @@ bool wxGLCanvas::Create( wxWindow *parent,
     
     if (!attribList)
     {
-        int data[] = { GLX_RGBA, 
-	               GLX_DOUBLEBUFFER, 
-		       GLX_DEPTH_SIZE, 1,  // use largest available depth buffer
-		       GLX_RED_SIZE, 1, 
-		       GLX_GREEN_SIZE, 1, 
-		       GLX_BLUE_SIZE, 1, 
-		       GLX_ALPHA_SIZE, 0, 
-		       None };
+        // default settings if attriblist = 0
+        data[0] = GLX_RGBA;
+        data[1] = GLX_DOUBLEBUFFER;
+        data[2] = GLX_DOUBLEBUFFER;
+        data[3] = GLX_DEPTH_SIZE;   data[4] = 1;
+        data[5] = GLX_RED_SIZE;     data[6] = 1;
+        data[7] = GLX_GREEN_SIZE;   data[8] = 1;
+        data[9] = GLX_BLUE_SIZE;    data[10] = 1;
+        data[11] = GLX_ALPHA_SIZE;  data[12] = 0;
+        data[13] = None;
+
 	attribList = (int*) data;
     }
     else
     {
       int data[512], arg=0, p=0;
        
-      while( (attribList[arg]!=0) && (p<512) )
+      while( (attribList[arg]!=0) && (p<510) )
       {
         switch( attribList[arg++] )
         {
           case WX_GL_RGBA: data[p++] = GLX_RGBA; break;
+          case WX_GL_BUFFER_SIZE:
+            data[p++]=GLX_BUFFER_SIZE; data[p++]=attribList[arg++]; break;
+          case WX_GL_LEVEL:
+            data[p++]=GLX_LEVEL; data[p++]=attribList[arg++]; break;
           case WX_GL_DOUBLEBUFFER: data[p++] = GLX_DOUBLEBUFFER; break;
-          case WX_GL_DEPTH_SIZE: 
-            data[p++]=GLX_DEPTH_SIZE; data[p++]=attribList[arg++]; break;
+          case WX_GL_STEREO: data[p++] = GLX_STEREO; break;
+          case WX_GL_AUX_BUFFERS:
+            data[p++]=GLX_AUX_BUFFERS; data[p++]=attribList[arg++]; break;
           case WX_GL_MIN_RED:
             data[p++]=GLX_RED_SIZE; data[p++]=attribList[arg++]; break;
           case WX_GL_MIN_GREEN:
             data[p++]=GLX_GREEN_SIZE; data[p++]=attribList[arg++]; break;
           case WX_GL_MIN_BLUE:
             data[p++]=GLX_BLUE_SIZE; data[p++]=attribList[arg++]; break;
+          case WX_GL_MIN_ALPHA:
+            data[p++]=GLX_ALPHA_SIZE; data[p++]=attribList[arg++]; break;
+          case WX_GL_DEPTH_SIZE: 
+            data[p++]=GLX_DEPTH_SIZE; data[p++]=attribList[arg++]; break;
+          case WX_GL_STENCIL_SIZE: 
+            data[p++]=GLX_STENCIL_SIZE; data[p++]=attribList[arg++]; break;
+          case WX_GL_MIN_ACCUM_RED:
+            data[p++]=GLX_ACCUM_RED_SIZE; data[p++]=attribList[arg++]; break;
+          case WX_GL_MIN_ACCUM_GREEN:
+            data[p++]=GLX_ACCUM_GREEN_SIZE; data[p++]=attribList[arg++]; break;
+          case WX_GL_MIN_ACCUM_BLUE:
+            data[p++]=GLX_ACCUM_BLUE_SIZE; data[p++]=attribList[arg++]; break;
+          case WX_GL_MIN_ACCUM_ALPHA:
+            data[p++]=GLX_ACCUM_ALPHA_SIZE; data[p++]=attribList[arg++]; break;
           default:
             break;
         }
