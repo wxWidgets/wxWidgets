@@ -324,15 +324,16 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                 data[(x << 2) + 0] = *ptr++;
                 data[(x << 2) + 1] = *ptr++;
                 data[(x << 2) + 2] = *ptr++;
-                if ((data[(x << 2) + 0] == image->GetMaskRed()) &&
-                    (data[(x << 2) + 1] == image->GetMaskGreen()) &&
-                    (data[(x << 2) + 2] == image->GetMaskBlue()))
+		 if (( !image->HasMask() ) || \
+                    (data[(x << 2) + 0] != image->GetMaskRed()) || \
+                    (data[(x << 2) + 1] != image->GetMaskGreen()) || \
+                    (data[(x << 2) + 2] != image->GetMaskBlue()))
                 {
-                    data[(x << 2) + 3] = 0;
+                    data[(x << 2) + 3] = 255;
                 }
                 else
                 {
-                    data[(x << 2) + 3] = 255;
+                    data[(x << 2) + 3] = 0;
                 }
             }
             png_bytep row_ptr = data;
