@@ -692,6 +692,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
     src/gtk/region.cpp
+    src/gtk/renderer.cpp
     src/gtk/settings.cpp
     src/gtk/timer.cpp
     src/gtk/tooltip.cpp
@@ -738,7 +739,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/notebook.cpp
     src/gtk/radiobox.cpp
     src/gtk/radiobut.cpp
-    src/gtk/renderer.cpp
     src/gtk/scrolbar.cpp
     src/gtk/scrolwin.cpp
     src/gtk/slider.cpp
@@ -1096,6 +1096,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/pen.cpp
     src/msw/popupwin.cpp
     src/msw/region.cpp
+    src/msw/renderer.cpp
     src/msw/settings.cpp
     src/msw/taskbar.cpp
     src/msw/timer.cpp
@@ -1143,7 +1144,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/printwin.cpp
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp
-    src/msw/renderer.cpp
     src/msw/scrolbar.cpp
     src/msw/slider95.cpp
     src/msw/spinbutt.cpp
@@ -1895,6 +1895,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/colschem.cpp
     src/univ/combobox.cpp
     src/univ/control.cpp
+    src/univ/ctrlrend.cpp
     src/univ/dialog.cpp
     src/univ/framuniv.cpp
     src/univ/gauge.cpp
@@ -1905,7 +1906,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/notebook.cpp
     src/univ/radiobox.cpp
     src/univ/radiobut.cpp
-    src/univ/renderer.cpp
     src/univ/scrarrow.cpp
     src/univ/scrolbar.cpp
     src/univ/scrthumb.cpp
