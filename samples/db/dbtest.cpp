@@ -1646,7 +1646,7 @@ void CparameterDlg::FillDataSourceList()
     for (i = 0; wxStrlen(p[i]); i++)
         pParamODBCSourceList->Append(p[i]);
 
-     delete p;
+    delete [] p;
 }  // CparameterDlg::CparameterDlg::FillDataSourceList()
 
 
