@@ -715,6 +715,7 @@ trap 'rm -fr `echo "
             opengl/cube/Makefile
             opengl/penguin/Makefile
             opengl/isosurf/Makefile
+	    mgl/Makefile
         " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -860,6 +861,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             opengl/cube/Makefile
             opengl/penguin/Makefile
             opengl/isosurf/Makefile
+	    mgl/Makefile
         "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

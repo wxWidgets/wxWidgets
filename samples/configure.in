@@ -83,4 +83,5 @@ AC_OUTPUT([
             opengl/cube/Makefile
             opengl/penguin/Makefile
             opengl/isosurf/Makefile
+	    mgl/Makefile
         ])
