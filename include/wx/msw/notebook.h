@@ -133,10 +133,8 @@ protected:
   // remove one page from the notebook, without deleting
   virtual wxNotebookPage *DoRemovePage(int nPage);
 
-  // helper functions
-  void ChangePage(int nOldSel, int nSel); // change pages
-
-  int m_nSelection;           // the current selection (-1 if none)
+  // the current selection (-1 if none)
+  int m_nSelection;
 
   DECLARE_DYNAMIC_CLASS(wxNotebook)
   DECLARE_EVENT_TABLE()
