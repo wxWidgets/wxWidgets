@@ -2361,8 +2361,6 @@ AC_CHECK_LIB(c, wcslen, [
 dnl check for vprintf/vsprintf() which are GNU extensions
 AC_FUNC_VPRINTF
 
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
 
 dnl check for vsscanf() and vsnprintf() - on some platforms (Linux, glibc
 dnl 2.1.1 for the first one, HP-UX for the second) it's available in the
@@ -2474,6 +2472,28 @@ AC_LANG_RESTORE
 
 dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
+
+dnl check for available version of iconv()
+
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_CACHE_CHECK([if iconv() takes char**], wx_cv_iconv_takes_char,
+[
+    AC_TRY_COMPILE([#include <iconv.h>],
+    [
+        char **inbuf, **outbuf;
+	iconv_t cd;
+	size_t insz, outsz;
+	iconv(cd, inbuf, &insz, outbuf, &outsz);
+    ],
+    wx_cv_iconv_takes_char=yes,
+    wx_cv_iconv_takes_char=no)
+])
+AC_LANG_RESTORE
+if test "$wx_cv_iconv_takes_char" = yes ; then
+    AC_DEFINE(WX_ICONV_TAKES_CHAR)
+fi
+
 
 dnl check for POSIX signals if we need them
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes" -a "$wxUSE_UNIX" = "yes"; then

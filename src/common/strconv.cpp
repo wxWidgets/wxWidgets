@@ -456,7 +456,11 @@ public:
         if (buf)
         {
             // have destination buffer, convert there
+#ifdef WX_ICONV_TAKES_CHAR
             cres = iconv( m2w, (char**)&psz, &inbuf, (char**)&buf, &outbuf );
+#else
+            cres = iconv( m2w, &psz, &inbuf, (char**)&buf, &outbuf );
+#endif
             res = n-(outbuf/SIZEOF_WCHAR_T);
             // convert to native endianness
             WC_BSWAP(buf, res)
@@ -469,7 +473,11 @@ public:
             res = 0;
             do {
                 buf = tbuf; outbuf = 8*SIZEOF_WCHAR_T;
+#ifdef WX_ICONV_TAKES_CHAR
                 cres = iconv( m2w, (char**)&psz, &inbuf, (char**)&buf, &outbuf );
+#else
+                cres = iconv( m2w, &psz, &inbuf, (char**)&buf, &outbuf );
+#endif
                 res += 8-(outbuf/SIZEOF_WCHAR_T);
             } while ((cres==(size_t)-1) && (errno==E2BIG));
         }
@@ -504,7 +512,11 @@ public:
         if (buf)
         {
             // have destination buffer, convert there
+#ifdef WX_ICONV_TAKES_CHAR
             cres = iconv( w2m, (char**)&psz, &inbuf, &buf, &outbuf );
+#else
+            cres = iconv( w2m, (const char**)&psz, &inbuf, &buf, &outbuf );
+#endif
             res = n-outbuf;
         }
         else
@@ -515,7 +527,11 @@ public:
             res = 0;
             do {
                 buf = tbuf; outbuf = 16;
+#ifdef WX_ICONV_TAKES_CHAR
                 cres = iconv( w2m, (char**)&psz, &inbuf, &buf, &outbuf );
+#else
+                cres = iconv( w2m, (const char**)&psz, &inbuf, &buf, &outbuf );
+#endif
                 res += 16 - outbuf;
             } while ((cres==(size_t)-1) && (errno==E2BIG));
         }
@@ -748,7 +764,11 @@ public:
     {
         size_t inbuf = strlen(psz);
         size_t outbuf = n;
+#ifdef WX_ICONV_TAKES_CHAR
         size_t res = iconv( cnv, (char**)&psz, &inbuf, &buf, &outbuf );
+#else
+        size_t res = iconv( cnv, &psz, &inbuf, &buf, &outbuf );
+#endif
         if (res==(size_t)-1) return (size_t)-1;
         return n-outbuf;
     }
