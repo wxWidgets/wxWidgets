@@ -34,13 +34,13 @@
     #include "wx/button.h"
     #include "wx/checkbox.h"
     #include "wx/statbox.h"
-    #include "wx/statbmp.h"
     #include "wx/dialog.h"
     #include "wx/icon.h"
     #include "wx/intl.h"
     #include "wx/layout.h"
     #include "wx/settings.h"
     #include "wx/textctrl.h"
+    #include "wx/statbmp.h"
 #endif // WX_PRECOMP
 
 #include "wx/statline.h"

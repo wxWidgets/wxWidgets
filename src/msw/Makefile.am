@@ -56,6 +56,7 @@ libwx_msw_la_SOURCES = \
  docview.cpp \
  dynlib.cpp \
  event.cpp \
+ ffile.cpp \
  file.cpp \
  fileconf.cpp \
  framecmn.cpp \
@@ -91,6 +92,7 @@ libwx_msw_la_SOURCES = \
  stream.cpp \
  tbarbase.cpp \
  tbarsmpl.cpp \
+ textcmn.cpp \
  textfile.cpp \
  time.cpp \
  url.cpp \

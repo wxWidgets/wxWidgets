@@ -78,7 +78,7 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
     info = (wxInetCacheNode*) m_Cache.Get(right);
 
     // Add item into cache:
-    if (!info == NULL) 
+    if (info != NULL)
     {
         wxURL url(right);
         s = url.GetInputStream();
