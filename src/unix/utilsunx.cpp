@@ -362,10 +362,10 @@ public:
     bool IsOpened() const { return !Eof(); }
 
     // return TRUE if we have anything to read, don't block
-    bool IsAvailable() const;
+    virtual bool CanRead() const;
 };
 
-bool wxPipeInputStream::IsAvailable() const
+bool wxPipeInputStream::CanRead() const
 {
     if ( m_lasterror == wxSTREAM_EOF )
         return FALSE;
