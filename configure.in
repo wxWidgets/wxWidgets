@@ -2249,7 +2249,17 @@ AC_CHECK_LIB(c, wcslen, [
 dnl check for vprintf/vsprintf() which are GNU extensions
 AC_FUNC_VPRINTF
 
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
 dnl check for vsnprintf() - a safe version of vsprintf()
+dnl
+dnl NB: do it using C++ compiler as on some systems it is present in the
+dnl     libraries, but not declared in the header
+dnl
+dnl NB2: we might also check for it with AC_LANG_C if it is not found with
+dnl      AC_LANG_CPLUSPLUS and declare it ourselves if it is found in that
+dnl      case...
 AC_CHECK_FUNCS(vsnprintf,
                AC_DEFINE(HAVE_VSNPRINTF),
                AC_MSG_WARN(unsafe function sprintf will be used instead of snprintf)
@@ -2258,9 +2268,6 @@ AC_CHECK_FUNCS(vsnprintf,
 dnl check for vsscanf() - on some platforms (Linux, glibc 2.1.1) it's
 dnl available in the library but the prototype is missing, so we can't use
 dnl AC_CHECK_FUNCS here, do it manually
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-
 AC_CACHE_CHECK([for vsscanf], wx_cv_func_vsscanf,
 [
   AC_TRY_RUN(
