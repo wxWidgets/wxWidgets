@@ -2329,6 +2329,21 @@ if wx.Platform == "__WXMSW__":
 #---------------------------------------------------------------------------
 
 class DC(_core.Object):
+    """
+    A wx.DC is a device context onto which graphics and text can be
+    drawn. It is intended to represent a number of output devices in a
+    generic way, so a window can have a device context associated with it,
+    and a printer also has a device context. In this way, the same piece
+    of code may write to a number of different devices, if the device
+    context is used as a parameter.
+
+    Derived types of wxDC have documentation for specific features only,
+    so refer to this section for most device context information.
+
+    The wx.DC class is abstract and can not be instantiated, you must use
+    one of the derived classes instead.  Which one will depend on the
+    situation in which it is used.
+    """
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2339,23 +2354,75 @@ class DC(_core.Object):
         except: pass
 
     def BeginDrawing(*args, **kwargs):
-        """BeginDrawing(self)"""
+        """
+        BeginDrawing(self)
+
+        Allows for optimization of drawing code on platforms that need it.  On
+        other platforms this is just an empty function and is harmless.  To
+        take advantage of this postential optimization simply enclose each
+        group of calls to the drawing primitives within calls to
+        `BeginDrawing` and `EndDrawing`.
+        """
         return _gdi_.DC_BeginDrawing(*args, **kwargs)
 
     def EndDrawing(*args, **kwargs):
-        """EndDrawing(self)"""
+        """
+        EndDrawing(self)
+
+        Ends the group of drawing primitives started with `BeginDrawing`, and
+        invokes whatever optimization is available for this DC type on the
+        current platform.
+        """
         return _gdi_.DC_EndDrawing(*args, **kwargs)
 
     def FloodFill(*args, **kwargs):
-        """FloodFill(self, int x, int y, Colour col, int style=FLOOD_SURFACE) -> bool"""
+        """
+        FloodFill(self, int x, int y, Colour col, int style=FLOOD_SURFACE) -> bool
+
+        Flood fills the device context starting from the given point, using
+        the current brush colour, and using a style:
+
+            - **wxFLOOD_SURFACE**: the flooding occurs until a colour other than
+              the given colour is encountered.
+
+            - **wxFLOOD_BORDER**: the area to be flooded is bounded by the given
+              colour.
+
+        Returns False if the operation failed.
+
+        Note: The present implementation for non-Windows platforms may fail to
+        find colour borders if the pixels do not match the colour
+        exactly. However the function will still return true.
+        """
         return _gdi_.DC_FloodFill(*args, **kwargs)
 
     def FloodFillPoint(*args, **kwargs):
-        """FloodFillPoint(self, Point pt, Colour col, int style=FLOOD_SURFACE) -> bool"""
+        """
+        FloodFillPoint(self, Point pt, Colour col, int style=FLOOD_SURFACE) -> bool
+
+        Flood fills the device context starting from the given point, using
+        the current brush colour, and using a style:
+
+            - **wxFLOOD_SURFACE**: the flooding occurs until a colour other than
+              the given colour is encountered.
+
+            - **wxFLOOD_BORDER**: the area to be flooded is bounded by the given
+              colour.
+
+        Returns False if the operation failed.
+
+        Note: The present implementation for non-Windows platforms may fail to
+        find colour borders if the pixels do not match the colour
+        exactly. However the function will still return true.
+        """
         return _gdi_.DC_FloodFillPoint(*args, **kwargs)
 
     def GetPixel(*args, **kwargs):
-        """GetPixel(self, int x, int y) -> Colour"""
+        """
+        GetPixel(self, int x, int y) -> Colour
+
+        Gets the colour at the specified location on the DC.
+        """
         return _gdi_.DC_GetPixel(*args, **kwargs)
 
     def GetPixelPoint(*args, **kwargs):
@@ -2363,127 +2430,368 @@ class DC(_core.Object):
         return _gdi_.DC_GetPixelPoint(*args, **kwargs)
 
     def DrawLine(*args, **kwargs):
-        """DrawLine(self, int x1, int y1, int x2, int y2)"""
+        """
+        DrawLine(self, int x1, int y1, int x2, int y2)
+
+        Draws a line from the first point to the second. The current pen is
+        used for drawing the line. Note that the second point is *not* part of
+        the line and is not drawn by this function (this is consistent with
+        the behaviour of many other toolkits).
+        """
         return _gdi_.DC_DrawLine(*args, **kwargs)
 
     def DrawLinePoint(*args, **kwargs):
-        """DrawLinePoint(self, Point pt1, Point pt2)"""
+        """
+        DrawLinePoint(self, Point pt1, Point pt2)
+
+        Draws a line from the first point to the second. The current pen is
+        used for drawing the line. Note that the second point is *not* part of
+        the line and is not drawn by this function (this is consistent with
+        the behaviour of many other toolkits).
+        """
         return _gdi_.DC_DrawLinePoint(*args, **kwargs)
 
     def CrossHair(*args, **kwargs):
-        """CrossHair(self, int x, int y)"""
+        """
+        CrossHair(self, int x, int y)
+
+        Displays a cross hair using the current pen. This is a vertical and
+        horizontal line the height and width of the window, centred on the
+        given point.
+        """
         return _gdi_.DC_CrossHair(*args, **kwargs)
 
     def CrossHairPoint(*args, **kwargs):
-        """CrossHairPoint(self, Point pt)"""
+        """
+        CrossHairPoint(self, Point pt)
+
+        Displays a cross hair using the current pen. This is a vertical and
+        horizontal line the height and width of the window, centred on the
+        given point.
+        """
         return _gdi_.DC_CrossHairPoint(*args, **kwargs)
 
     def DrawArc(*args, **kwargs):
-        """DrawArc(self, int x1, int y1, int x2, int y2, int xc, int yc)"""
+        """
+        DrawArc(self, int x1, int y1, int x2, int y2, int xc, int yc)
+
+        Draws an arc of a circle, centred on the *center* point (xc, yc), from
+        the first point to the second. The current pen is used for the outline
+        and the current brush for filling the shape.
+
+        The arc is drawn in an anticlockwise direction from the start point to
+        the end point.
+        """
         return _gdi_.DC_DrawArc(*args, **kwargs)
 
     def DrawArcPoint(*args, **kwargs):
-        """DrawArcPoint(self, Point pt1, Point pt2, Point centre)"""
+        """
+        DrawArcPoint(self, Point pt1, Point pt2, Point center)
+
+        Draws an arc of a circle, centred on the *center* point (xc, yc), from
+        the first point to the second. The current pen is used for the outline
+        and the current brush for filling the shape.
+
+        The arc is drawn in an anticlockwise direction from the start point to
+        the end point.
+        """
         return _gdi_.DC_DrawArcPoint(*args, **kwargs)
 
     def DrawCheckMark(*args, **kwargs):
-        """DrawCheckMark(self, int x, int y, int width, int height)"""
+        """
+        DrawCheckMark(self, int x, int y, int width, int height)
+
+        Draws a check mark inside the given rectangle.
+        """
         return _gdi_.DC_DrawCheckMark(*args, **kwargs)
 
     def DrawCheckMarkRect(*args, **kwargs):
-        """DrawCheckMarkRect(self, Rect rect)"""
+        """
+        DrawCheckMarkRect(self, Rect rect)
+
+        Draws a check mark inside the given rectangle.
+        """
         return _gdi_.DC_DrawCheckMarkRect(*args, **kwargs)
 
     def DrawEllipticArc(*args, **kwargs):
-        """DrawEllipticArc(self, int x, int y, int w, int h, double sa, double ea)"""
+        """
+        DrawEllipticArc(self, int x, int y, int w, int h, double start, double end)
+
+        Draws an arc of an ellipse, with the given rectangle defining the
+        bounds of the ellipse. The current pen is used for drawing the arc and
+        the current brush is used for drawing the pie.
+
+        The *start* and *end* parameters specify the start and end of the arc
+        relative to the three-o'clock position from the center of the
+        rectangle. Angles are specified in degrees (360 is a complete
+        circle). Positive values mean counter-clockwise motion. If start is
+        equal to end, a complete ellipse will be drawn.
+        """
         return _gdi_.DC_DrawEllipticArc(*args, **kwargs)
 
     def DrawEllipticArcPointSize(*args, **kwargs):
-        """DrawEllipticArcPointSize(self, Point pt, Size sz, double sa, double ea)"""
+        """
+        DrawEllipticArcPointSize(self, Point pt, Size sz, double start, double end)
+
+        Draws an arc of an ellipse, with the given rectangle defining the
+        bounds of the ellipse. The current pen is used for drawing the arc and
+        the current brush is used for drawing the pie.
+
+        The *start* and *end* parameters specify the start and end of the arc
+        relative to the three-o'clock position from the center of the
+        rectangle. Angles are specified in degrees (360 is a complete
+        circle). Positive values mean counter-clockwise motion. If start is
+        equal to end, a complete ellipse will be drawn.
+        """
         return _gdi_.DC_DrawEllipticArcPointSize(*args, **kwargs)
 
     def DrawPoint(*args, **kwargs):
-        """DrawPoint(self, int x, int y)"""
+        """
+        DrawPoint(self, int x, int y)
+
+        Draws a point using the current pen.
+        """
         return _gdi_.DC_DrawPoint(*args, **kwargs)
 
     def DrawPointPoint(*args, **kwargs):
-        """DrawPointPoint(self, Point pt)"""
+        """
+        DrawPointPoint(self, Point pt)
+
+        Draws a point using the current pen.
+        """
         return _gdi_.DC_DrawPointPoint(*args, **kwargs)
 
     def DrawRectangle(*args, **kwargs):
-        """DrawRectangle(self, int x, int y, int width, int height)"""
+        """
+        DrawRectangle(self, int x, int y, int width, int height)
+
+        Draws a rectangle with the given top left corner, and with the given
+        size. The current pen is used for the outline and the current brush
+        for filling the shape.
+        """
         return _gdi_.DC_DrawRectangle(*args, **kwargs)
 
     def DrawRectangleRect(*args, **kwargs):
-        """DrawRectangleRect(self, Rect rect)"""
+        """
+        DrawRectangleRect(self, Rect rect)
+
+        Draws a rectangle with the given top left corner, and with the given
+        size. The current pen is used for the outline and the current brush
+        for filling the shape.
+        """
         return _gdi_.DC_DrawRectangleRect(*args, **kwargs)
 
     def DrawRectanglePointSize(*args, **kwargs):
-        """DrawRectanglePointSize(self, Point pt, Size sz)"""
+        """
+        DrawRectanglePointSize(self, Point pt, Size sz)
+
+        Draws a rectangle with the given top left corner, and with the given
+        size. The current pen is used for the outline and the current brush
+        for filling the shape.
+        """
         return _gdi_.DC_DrawRectanglePointSize(*args, **kwargs)
 
     def DrawRoundedRectangle(*args, **kwargs):
-        """DrawRoundedRectangle(self, int x, int y, int width, int height, double radius)"""
+        """
+        DrawRoundedRectangle(self, int x, int y, int width, int height, double radius)
+
+        Draws a rectangle with the given top left corner, and with the given
+        size. The corners are quarter-circles using the given radius. The
+        current pen is used for the outline and the current brush for filling
+        the shape.
+
+        If radius is positive, the value is assumed to be the radius of the
+        rounded corner. If radius is negative, the absolute value is assumed
+        to be the proportion of the smallest dimension of the rectangle. This
+        means that the corner can be a sensible size relative to the size of
+        the rectangle, and also avoids the strange effects X produces when the
+        corners are too big for the rectangle.
+        """
         return _gdi_.DC_DrawRoundedRectangle(*args, **kwargs)
 
     def DrawRoundedRectangleRect(*args, **kwargs):
-        """DrawRoundedRectangleRect(self, Rect r, double radius)"""
+        """
+        DrawRoundedRectangleRect(self, Rect r, double radius)
+
+        Draws a rectangle with the given top left corner, and with the given
+        size. The corners are quarter-circles using the given radius. The
+        current pen is used for the outline and the current brush for filling
+        the shape.
+
+        If radius is positive, the value is assumed to be the radius of the
+        rounded corner. If radius is negative, the absolute value is assumed
+        to be the proportion of the smallest dimension of the rectangle. This
+        means that the corner can be a sensible size relative to the size of
+        the rectangle, and also avoids the strange effects X produces when the
+        corners are too big for the rectangle.
+        """
         return _gdi_.DC_DrawRoundedRectangleRect(*args, **kwargs)
 
     def DrawRoundedRectanglePointSize(*args, **kwargs):
-        """DrawRoundedRectanglePointSize(self, Point pt, Size sz, double radius)"""
+        """
+        DrawRoundedRectanglePointSize(self, Point pt, Size sz, double radius)
+
+        Draws a rectangle with the given top left corner, and with the given
+        size. The corners are quarter-circles using the given radius. The
+        current pen is used for the outline and the current brush for filling
+        the shape.
+
+        If radius is positive, the value is assumed to be the radius of the
+        rounded corner. If radius is negative, the absolute value is assumed
+        to be the proportion of the smallest dimension of the rectangle. This
+        means that the corner can be a sensible size relative to the size of
+        the rectangle, and also avoids the strange effects X produces when the
+        corners are too big for the rectangle.
+        """
         return _gdi_.DC_DrawRoundedRectanglePointSize(*args, **kwargs)
 
     def DrawCircle(*args, **kwargs):
-        """DrawCircle(self, int x, int y, int radius)"""
+        """
+        DrawCircle(self, int x, int y, int radius)
+
+        Draws a circle with the given center point and radius.  The current
+        pen is used for the outline and the current brush for filling the
+        shape.
+        """
         return _gdi_.DC_DrawCircle(*args, **kwargs)
 
     def DrawCirclePoint(*args, **kwargs):
-        """DrawCirclePoint(self, Point pt, int radius)"""
+        """
+        DrawCirclePoint(self, Point pt, int radius)
+
+        Draws a circle with the given center point and radius.  The current
+        pen is used for the outline and the current brush for filling the
+        shape.
+        """
         return _gdi_.DC_DrawCirclePoint(*args, **kwargs)
 
     def DrawEllipse(*args, **kwargs):
-        """DrawEllipse(self, int x, int y, int width, int height)"""
+        """
+        DrawEllipse(self, int x, int y, int width, int height)
+
+        Draws an ellipse contained in the specified rectangle. The current pen
+        is used for the outline and the current brush for filling the shape.
+        """
         return _gdi_.DC_DrawEllipse(*args, **kwargs)
 
     def DrawEllipseRect(*args, **kwargs):
-        """DrawEllipseRect(self, Rect rect)"""
+        """
+        DrawEllipseRect(self, Rect rect)
+
+        Draws an ellipse contained in the specified rectangle. The current pen
+        is used for the outline and the current brush for filling the shape.
+        """
         return _gdi_.DC_DrawEllipseRect(*args, **kwargs)
 
     def DrawEllipsePointSize(*args, **kwargs):
-        """DrawEllipsePointSize(self, Point pt, Size sz)"""
+        """
+        DrawEllipsePointSize(self, Point pt, Size sz)
+
+        Draws an ellipse contained in the specified rectangle. The current pen
+        is used for the outline and the current brush for filling the shape.
+        """
         return _gdi_.DC_DrawEllipsePointSize(*args, **kwargs)
 
     def DrawIcon(*args, **kwargs):
-        """DrawIcon(self, Icon icon, int x, int y)"""
+        """
+        DrawIcon(self, Icon icon, int x, int y)
+
+        Draw an icon on the display (does nothing if the device context is
+        PostScript). This can be the simplest way of drawing bitmaps on a
+        window.
+        """
         return _gdi_.DC_DrawIcon(*args, **kwargs)
 
     def DrawIconPoint(*args, **kwargs):
-        """DrawIconPoint(self, Icon icon, Point pt)"""
+        """
+        DrawIconPoint(self, Icon icon, Point pt)
+
+        Draw an icon on the display (does nothing if the device context is
+        PostScript). This can be the simplest way of drawing bitmaps on a
+        window.
+        """
         return _gdi_.DC_DrawIconPoint(*args, **kwargs)
 
     def DrawBitmap(*args, **kwargs):
-        """DrawBitmap(self, Bitmap bmp, int x, int y, bool useMask=False)"""
+        """
+        DrawBitmap(self, Bitmap bmp, int x, int y, bool useMask=False)
+
+        Draw a bitmap on the device context at the specified point. If
+        *transparent* is true and the bitmap has a transparency mask, (or
+        alpha channel on the platforms that support it) then the bitmap will
+        be drawn transparently.
+        """
         return _gdi_.DC_DrawBitmap(*args, **kwargs)
 
     def DrawBitmapPoint(*args, **kwargs):
-        """DrawBitmapPoint(self, Bitmap bmp, Point pt, bool useMask=False)"""
+        """
+        DrawBitmapPoint(self, Bitmap bmp, Point pt, bool useMask=False)
+
+        Draw a bitmap on the device context at the specified point. If
+        *transparent* is true and the bitmap has a transparency mask, (or
+        alpha channel on the platforms that support it) then the bitmap will
+        be drawn transparently.
+        """
         return _gdi_.DC_DrawBitmapPoint(*args, **kwargs)
 
     def DrawText(*args, **kwargs):
-        """DrawText(self, String text, int x, int y)"""
+        """
+        DrawText(self, String text, int x, int y)
+
+        Draws a text string at the specified point, using the current text
+        font, and the current text foreground and background colours.
+
+        The coordinates refer to the top-left corner of the rectangle bounding
+        the string. See `GetTextExtent` for how to get the dimensions of a
+        text string, which can be used to position the text more precisely.
+
+        **NOTE**: under wxGTK the current logical function is used by this
+        function but it is ignored by wxMSW. Thus, you should avoid using
+        logical functions with this function in portable programs.
+        """
         return _gdi_.DC_DrawText(*args, **kwargs)
 
     def DrawTextPoint(*args, **kwargs):
-        """DrawTextPoint(self, String text, Point pt)"""
+        """
+        DrawTextPoint(self, String text, Point pt)
+
+        Draws a text string at the specified point, using the current text
+        font, and the current text foreground and background colours.
+
+        The coordinates refer to the top-left corner of the rectangle bounding
+        the string. See `GetTextExtent` for how to get the dimensions of a
+        text string, which can be used to position the text more precisely.
+
+        **NOTE**: under wxGTK the current logical function is used by this
+        function but it is ignored by wxMSW. Thus, you should avoid using
+        logical functions with this function in portable programs.
+        """
         return _gdi_.DC_DrawTextPoint(*args, **kwargs)
 
     def DrawRotatedText(*args, **kwargs):
-        """DrawRotatedText(self, String text, int x, int y, double angle)"""
+        """
+        DrawRotatedText(self, String text, int x, int y, double angle)
+
+        Draws the text rotated by *angle* degrees, if supported by the platform.
+
+        **NOTE**: Under Win9x only TrueType fonts can be drawn by this
+        function. In particular, a font different from ``wx.NORMAL_FONT``
+        should be used as the it is not normally a TrueType
+        font. ``wx.SWISS_FONT`` is an example of a font which is.
+        """
         return _gdi_.DC_DrawRotatedText(*args, **kwargs)
 
     def DrawRotatedTextPoint(*args, **kwargs):
-        """DrawRotatedTextPoint(self, String text, Point pt, double angle)"""
+        """
+        DrawRotatedTextPoint(self, String text, Point pt, double angle)
+
+        Draws the text rotated by *angle* degrees, if supported by the platform.
+
+        **NOTE**: Under Win9x only TrueType fonts can be drawn by this
+        function. In particular, a font different from ``wx.NORMAL_FONT``
+        should be used as the it is not normally a TrueType
+        font. ``wx.SWISS_FONT`` is an example of a font which is.
+        """
         return _gdi_.DC_DrawRotatedTextPoint(*args, **kwargs)
 
     def Blit(*args, **kwargs):
@@ -2491,6 +2799,11 @@ class DC(_core.Object):
         Blit(self, int xdest, int ydest, int width, int height, DC source, 
             int xsrc, int ysrc, int rop=COPY, bool useMask=False, 
             int xsrcMask=-1, int ysrcMask=-1) -> bool
+
+        Copy from a source DC to this DC.  Parameters specify the destination
+        coordinates, size of area to copy, source DC, source coordinates,
+        logical function, whether to use a bitmap mask, and mask source
+        position.
         """
         return _gdi_.DC_Blit(*args, **kwargs)
 
@@ -2498,33 +2811,105 @@ class DC(_core.Object):
         """
         BlitPointSize(self, Point destPt, Size sz, DC source, Point srcPt, int rop=COPY, 
             bool useMask=False, Point srcPtMask=DefaultPosition) -> bool
+
+        Copy from a source DC to this DC.  Parameters specify the destination
+        coordinates, size of area to copy, source DC, source coordinates,
+        logical function, whether to use a bitmap mask, and mask source
+        position.
         """
         return _gdi_.DC_BlitPointSize(*args, **kwargs)
 
     def SetClippingRegion(*args, **kwargs):
-        """SetClippingRegion(self, int x, int y, int width, int height)"""
+        """
+        SetClippingRegion(self, int x, int y, int width, int height)
+
+        Sets the clipping region for this device context to the intersection
+        of the given region described by the parameters of this method and the
+        previously set clipping region. You should call `DestroyClippingRegion`
+        if you want to set the clipping region exactly to the region
+        specified.
+
+        The clipping region is an area to which drawing is
+        restricted. Possible uses for the clipping region are for clipping
+        text or for speeding up window redraws when only a known area of the
+        screen is damaged.
+        """
         return _gdi_.DC_SetClippingRegion(*args, **kwargs)
 
     def SetClippingRegionPointSize(*args, **kwargs):
-        """SetClippingRegionPointSize(self, Point pt, Size sz)"""
+        """
+        SetClippingRegionPointSize(self, Point pt, Size sz)
+
+        Sets the clipping region for this device context to the intersection
+        of the given region described by the parameters of this method and the
+        previously set clipping region. You should call `DestroyClippingRegion`
+        if you want to set the clipping region exactly to the region
+        specified.
+
+        The clipping region is an area to which drawing is
+        restricted. Possible uses for the clipping region are for clipping
+        text or for speeding up window redraws when only a known area of the
+        screen is damaged.
+        """
         return _gdi_.DC_SetClippingRegionPointSize(*args, **kwargs)
 
     def SetClippingRegionAsRegion(*args, **kwargs):
-        """SetClippingRegionAsRegion(self, Region region)"""
+        """
+        SetClippingRegionAsRegion(self, Region region)
+
+        Sets the clipping region for this device context to the intersection
+        of the given region described by the parameters of this method and the
+        previously set clipping region. You should call `DestroyClippingRegion`
+        if you want to set the clipping region exactly to the region
+        specified.
+
+        The clipping region is an area to which drawing is
+        restricted. Possible uses for the clipping region are for clipping
+        text or for speeding up window redraws when only a known area of the
+        screen is damaged.
+        """
         return _gdi_.DC_SetClippingRegionAsRegion(*args, **kwargs)
 
     def SetClippingRect(*args, **kwargs):
-        """SetClippingRect(self, Rect rect)"""
+        """
+        SetClippingRect(self, Rect rect)
+
+        Sets the clipping region for this device context to the intersection
+        of the given region described by the parameters of this method and the
+        previously set clipping region. You should call `DestroyClippingRegion`
+        if you want to set the clipping region exactly to the region
+        specified.
+
+        The clipping region is an area to which drawing is
+        restricted. Possible uses for the clipping region are for clipping
+        text or for speeding up window redraws when only a known area of the
+        screen is damaged.
+        """
         return _gdi_.DC_SetClippingRect(*args, **kwargs)
 
     def DrawLines(*args, **kwargs):
-        """DrawLines(self, int points, Point points_array, int xoffset=0, int yoffset=0)"""
+        """
+        DrawLines(self, List points, int xoffset=0, int yoffset=0)
+
+        Draws lines using a sequence of `wx.Point` objects, adding the
+        optional offset coordinate. The current pen is used for drawing the
+        lines.
+        """
         return _gdi_.DC_DrawLines(*args, **kwargs)
 
     def DrawPolygon(*args, **kwargs):
         """
-        DrawPolygon(self, int points, Point points_array, int xoffset=0, int yoffset=0, 
+        DrawPolygon(self, List points, int xoffset=0, int yoffset=0,
             int fillStyle=ODDEVEN_RULE)
+
+        Draws a filled polygon using a sequence of `wx.Point` objects, adding
+        the optional offset coordinate.  The last argument specifies the fill
+        rule: ``wx.ODDEVEN_RULE`` (the default) or ``wx.WINDING_RULE``.
+
+        The current pen is used for drawing the outline, and the current brush
+        for filling the shape. Using a transparent brush suppresses
+        filling. Note that wxWidgets automatically closes the first and last
+        points.
         """
         return _gdi_.DC_DrawPolygon(*args, **kwargs)
 
@@ -2532,6 +2917,10 @@ class DC(_core.Object):
         """
         DrawLabel(self, String text, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
             int indexAccel=-1)
+
+        Draw *text* within the specified rectangle, abiding by the alignment
+        flags.  Will additionally emphasize the character at *indexAccel* if
+        it is not -1.
         """
         return _gdi_.DC_DrawLabel(*args, **kwargs)
 
@@ -2539,75 +2928,165 @@ class DC(_core.Object):
         """
         DrawImageLabel(self, String text, Bitmap image, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
             int indexAccel=-1) -> Rect
+
+        Draw *text* and an image (which may be ``wx.NullBitmap`` to skip
+        drawing it) within the specified rectangle, abiding by the alignment
+        flags.  Will additionally emphasize the character at *indexAccel* if
+        it is not -1.  Returns the bounding rectangle.
         """
         return _gdi_.DC_DrawImageLabel(*args, **kwargs)
 
     def DrawSpline(*args, **kwargs):
-        """DrawSpline(self, int points, Point points_array)"""
+        """
+        DrawSpline(self, List points)
+
+        Draws a spline between all given control points, (a list of `wx.Point`
+        objects) using the current pen. The spline is drawn using a series of
+        lines, using an algorithm taken from the X drawing program 'XFIG'.
+        """
         return _gdi_.DC_DrawSpline(*args, **kwargs)
 
     def Clear(*args, **kwargs):
-        """Clear(self)"""
+        """
+        Clear(self)
+
+        Clears the device context using the current background brush.
+        """
         return _gdi_.DC_Clear(*args, **kwargs)
 
     def StartDoc(*args, **kwargs):
-        """StartDoc(self, String message) -> bool"""
+        """
+        StartDoc(self, String message) -> bool
+
+        Starts a document (only relevant when outputting to a
+        printer). *Message* is a message to show whilst printing.
+        """
         return _gdi_.DC_StartDoc(*args, **kwargs)
 
     def EndDoc(*args, **kwargs):
-        """EndDoc(self)"""
+        """
+        EndDoc(self)
+
+        Ends a document (only relevant when outputting to a printer).
+        """
         return _gdi_.DC_EndDoc(*args, **kwargs)
 
     def StartPage(*args, **kwargs):
-        """StartPage(self)"""
+        """
+        StartPage(self)
+
+        Starts a document page (only relevant when outputting to a printer).
+        """
         return _gdi_.DC_StartPage(*args, **kwargs)
 
     def EndPage(*args, **kwargs):
-        """EndPage(self)"""
+        """
+        EndPage(self)
+
+        Ends a document page (only relevant when outputting to a printer).
+        """
         return _gdi_.DC_EndPage(*args, **kwargs)
 
     def SetFont(*args, **kwargs):
-        """SetFont(self, Font font)"""
+        """
+        SetFont(self, Font font)
+
+        Sets the current font for the DC. It must be a valid font, in
+        particular you should not pass ``wx.NullFont`` to this method.
+        """
         return _gdi_.DC_SetFont(*args, **kwargs)
 
     def SetPen(*args, **kwargs):
-        """SetPen(self, Pen pen)"""
+        """
+        SetPen(self, Pen pen)
+
+        Sets the current pen for the DC.
+
+        If the argument is ``wx.NullPen``, the current pen is selected out of the
+        device context, and the original pen restored.
+        """
         return _gdi_.DC_SetPen(*args, **kwargs)
 
     def SetBrush(*args, **kwargs):
-        """SetBrush(self, Brush brush)"""
+        """
+        SetBrush(self, Brush brush)
+
+        Sets the current brush for the DC.
+
+        If the argument is ``wx.NullBrush``, the current brush is selected out
+        of the device context, and the original brush restored, allowing the
+        current brush to be destroyed safely.
+        """
         return _gdi_.DC_SetBrush(*args, **kwargs)
 
     def SetBackground(*args, **kwargs):
-        """SetBackground(self, Brush brush)"""
+        """
+        SetBackground(self, Brush brush)
+
+        Sets the current background brush for the DC.
+        """
         return _gdi_.DC_SetBackground(*args, **kwargs)
 
     def SetBackgroundMode(*args, **kwargs):
-        """SetBackgroundMode(self, int mode)"""
+        """
+        SetBackgroundMode(self, int mode)
+
+        *mode* may be one of ``wx.SOLID`` and ``wx.TRANSPARENT``. This setting
+        determines whether text will be drawn with a background colour or
+        not.
+        """
         return _gdi_.DC_SetBackgroundMode(*args, **kwargs)
 
     def SetPalette(*args, **kwargs):
-        """SetPalette(self, Palette palette)"""
+        """
+        SetPalette(self, Palette palette)
+
+        If this is a window DC or memory DC, assigns the given palette to the
+        window or bitmap associated with the DC. If the argument is
+        ``wx.NullPalette``, the current palette is selected out of the device
+        context, and the original palette restored.
+        """
         return _gdi_.DC_SetPalette(*args, **kwargs)
 
     def DestroyClippingRegion(*args, **kwargs):
-        """DestroyClippingRegion(self)"""
+        """
+        DestroyClippingRegion(self)
+
+        Destroys the current clipping region so that none of the DC is
+        clipped.
+        """
         return _gdi_.DC_DestroyClippingRegion(*args, **kwargs)
 
     def GetClippingBox(*args, **kwargs):
-        """GetClippingBox() -> (x, y, width, height)"""
+        """
+        GetClippingBox() -> (x, y, width, height)
+
+        Gets the rectangle surrounding the current clipping region.
+        """
         return _gdi_.DC_GetClippingBox(*args, **kwargs)
 
     def GetClippingRect(*args, **kwargs):
-        """GetClippingRect(self) -> Rect"""
+        """
+        GetClippingRect(self) -> Rect
+
+        Gets the rectangle surrounding the current clipping region.
+        """
         return _gdi_.DC_GetClippingRect(*args, **kwargs)
 
     def GetCharHeight(*args, **kwargs):
-        """GetCharHeight(self) -> int"""
+        """
+        GetCharHeight(self) -> int
+
+        Gets the character height of the currently set font.
+        """
         return _gdi_.DC_GetCharHeight(*args, **kwargs)
 
     def GetCharWidth(*args, **kwargs):
-        """GetCharWidth(self) -> int"""
+        """
+        GetCharWidth(self) -> int
+
+        Gets the average character width of the currently set font.
+        """
         return _gdi_.DC_GetCharWidth(*args, **kwargs)
 
     def GetTextExtent(*args, **kwargs):
@@ -2641,14 +3120,33 @@ class DC(_core.Object):
         return _gdi_.DC_GetMultiLineTextExtent(*args, **kwargs)
 
     def GetPartialTextExtents(*args, **kwargs):
-        """GetPartialTextExtents(self, String text) -> wxArrayInt"""
+        """
+        GetPartialTextExtents(self, text) -> [widths]
+
+        Returns a list of integers such that each value is the distance in
+        pixels from the begining of text to the coresponding character of
+        *text*. The generic version simply builds a running total of the widths
+        of each character using GetTextExtent, however if the various
+        platforms have a native API function that is faster or more accurate
+        than the generic implementaiton then it will be used instead.
+        """
         return _gdi_.DC_GetPartialTextExtents(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
         """
         GetSize(self) -> Size
 
-        Get the DC size in device units.
+        This gets the horizontal and vertical resolution in device units. It
+        can be used to scale graphics to fit the page. For example, if *maxX*
+        and *maxY* represent the maximum horizontal and vertical 'pixel' values
+        used in your application, the following code will scale the graphic to
+        fit on the printer page::
+
+              w, h = dc.GetSize()
+              scaleX = maxX*1.0 / w
+              scaleY = maxY*1.0 / h
+              dc.SetUserScale(min(scaleX,scaleY),min(scaleX,scaleY))
+
         """
         return _gdi_.DC_GetSize(*args, **kwargs)
 
@@ -2656,7 +3154,17 @@ class DC(_core.Object):
         """
         GetSizeTuple() -> (width, height)
 
-        Get the DC size in device units.
+        This gets the horizontal and vertical resolution in device units. It
+        can be used to scale graphics to fit the page. For example, if *maxX*
+        and *maxY* represent the maximum horizontal and vertical 'pixel' values
+        used in your application, the following code will scale the graphic to
+        fit on the printer page::
+
+              w, h = dc.GetSize()
+              scaleX = maxX*1.0 / w
+              scaleY = maxY*1.0 / h
+              dc.SetUserScale(min(scaleX,scaleY),min(scaleX,scaleY))
+
         """
         return _gdi_.DC_GetSizeTuple(*args, **kwargs)
 
@@ -2677,35 +3185,79 @@ class DC(_core.Object):
         return _gdi_.DC_GetSizeMMTuple(*args, **kwargs)
 
     def DeviceToLogicalX(*args, **kwargs):
-        """DeviceToLogicalX(self, int x) -> int"""
+        """
+        DeviceToLogicalX(self, int x) -> int
+
+        Convert device X coordinate to logical coordinate, using the current
+        mapping mode.
+        """
         return _gdi_.DC_DeviceToLogicalX(*args, **kwargs)
 
     def DeviceToLogicalY(*args, **kwargs):
-        """DeviceToLogicalY(self, int y) -> int"""
+        """
+        DeviceToLogicalY(self, int y) -> int
+
+        Converts device Y coordinate to logical coordinate, using the current
+        mapping mode.
+        """
         return _gdi_.DC_DeviceToLogicalY(*args, **kwargs)
 
     def DeviceToLogicalXRel(*args, **kwargs):
-        """DeviceToLogicalXRel(self, int x) -> int"""
+        """
+        DeviceToLogicalXRel(self, int x) -> int
+
+        Convert device X coordinate to relative logical coordinate, using the
+        current mapping mode but ignoring the x axis orientation. Use this
+        function for converting a width, for example.
+        """
         return _gdi_.DC_DeviceToLogicalXRel(*args, **kwargs)
 
     def DeviceToLogicalYRel(*args, **kwargs):
-        """DeviceToLogicalYRel(self, int y) -> int"""
+        """
+        DeviceToLogicalYRel(self, int y) -> int
+
+        Convert device Y coordinate to relative logical coordinate, using the
+        current mapping mode but ignoring the y axis orientation. Use this
+        function for converting a height, for example.
+        """
         return _gdi_.DC_DeviceToLogicalYRel(*args, **kwargs)
 
     def LogicalToDeviceX(*args, **kwargs):
-        """LogicalToDeviceX(self, int x) -> int"""
+        """
+        LogicalToDeviceX(self, int x) -> int
+
+        Converts logical X coordinate to device coordinate, using the current
+        mapping mode.
+        """
         return _gdi_.DC_LogicalToDeviceX(*args, **kwargs)
 
     def LogicalToDeviceY(*args, **kwargs):
-        """LogicalToDeviceY(self, int y) -> int"""
+        """
+        LogicalToDeviceY(self, int y) -> int
+
+        Converts logical Y coordinate to device coordinate, using the current
+        mapping mode.
+        """
         return _gdi_.DC_LogicalToDeviceY(*args, **kwargs)
 
     def LogicalToDeviceXRel(*args, **kwargs):
-        """LogicalToDeviceXRel(self, int x) -> int"""
+        """
+        LogicalToDeviceXRel(self, int x) -> int
+
+        Converts logical X coordinate to relative device coordinate, using the
+        current mapping mode but ignoring the x axis orientation. Use this for
+        converting a width, for example.
+        """
         return _gdi_.DC_LogicalToDeviceXRel(*args, **kwargs)
 
     def LogicalToDeviceYRel(*args, **kwargs):
-        """LogicalToDeviceYRel(self, int y) -> int"""
+        """
+        LogicalToDeviceYRel(self, int y) -> int
+
+        Converts logical Y coordinate to relative device coordinate, using the
+        current mapping mode but ignoring the y axis orientation. Use this for
+        converting a height, for example.
+        """
         return _gdi_.DC_LogicalToDeviceYRel(*args, **kwargs)
 
     def CanDrawBitmap(*args, **kwargs):
@@ -2717,67 +3269,145 @@ class DC(_core.Object):
         return _gdi_.DC_CanGetTextExtent(*args, **kwargs)
 
     def GetDepth(*args, **kwargs):
-        """GetDepth(self) -> int"""
+        """
+        GetDepth(self) -> int
+
+        Returns the colour depth of the DC.
+        """
         return _gdi_.DC_GetDepth(*args, **kwargs)
 
     def GetPPI(*args, **kwargs):
-        """GetPPI(self) -> Size"""
+        """
+        GetPPI(self) -> Size
+
+        Resolution in Pixels per inch
+        """
         return _gdi_.DC_GetPPI(*args, **kwargs)
 
     def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
+        """
+        Ok(self) -> bool
+
+        Returns true if the DC is ok to use.
+        """
         return _gdi_.DC_Ok(*args, **kwargs)
 
     def GetBackgroundMode(*args, **kwargs):
-        """GetBackgroundMode(self) -> int"""
+        """
+        GetBackgroundMode(self) -> int
+
+        Returns the current background mode, either ``wx.SOLID`` or
+        ``wx.TRANSPARENT``.
+        """
         return _gdi_.DC_GetBackgroundMode(*args, **kwargs)
 
     def GetBackground(*args, **kwargs):
-        """GetBackground(self) -> Brush"""
+        """
+        GetBackground(self) -> Brush
+
+        Gets the brush used for painting the background.
+        """
         return _gdi_.DC_GetBackground(*args, **kwargs)
 
     def GetBrush(*args, **kwargs):
-        """GetBrush(self) -> Brush"""
+        """
+        GetBrush(self) -> Brush
+
+        Gets the current brush
+        """
         return _gdi_.DC_GetBrush(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
-        """GetFont(self) -> Font"""
+        """
+        GetFont(self) -> Font
+
+        Gets the current font
+        """
         return _gdi_.DC_GetFont(*args, **kwargs)
 
     def GetPen(*args, **kwargs):
-        """GetPen(self) -> Pen"""
+        """
+        GetPen(self) -> Pen
+
+        Gets the current pen
+        """
         return _gdi_.DC_GetPen(*args, **kwargs)
 
     def GetTextBackground(*args, **kwargs):
-        """GetTextBackground(self) -> Colour"""
+        """
+        GetTextBackground(self) -> Colour
+
+        Gets the current text background colour
+        """
         return _gdi_.DC_GetTextBackground(*args, **kwargs)
 
     def GetTextForeground(*args, **kwargs):
-        """GetTextForeground(self) -> Colour"""
+        """
+        GetTextForeground(self) -> Colour
+
+        Gets the current text foreground colour
+        """
         return _gdi_.DC_GetTextForeground(*args, **kwargs)
 
     def SetTextForeground(*args, **kwargs):
-        """SetTextForeground(self, Colour colour)"""
+        """
+        SetTextForeground(self, Colour colour)
+
+        Sets the current text foreground colour for the DC.
+        """
         return _gdi_.DC_SetTextForeground(*args, **kwargs)
 
     def SetTextBackground(*args, **kwargs):
-        """SetTextBackground(self, Colour colour)"""
+        """
+        SetTextBackground(self, Colour colour)
+
+        Sets the current text background colour for the DC.
+        """
         return _gdi_.DC_SetTextBackground(*args, **kwargs)
 
     def GetMapMode(*args, **kwargs):
-        """GetMapMode(self) -> int"""
+        """
+        GetMapMode(self) -> int
+
+        Gets the current *mapping mode* for the device context 
+        """
         return _gdi_.DC_GetMapMode(*args, **kwargs)
 
     def SetMapMode(*args, **kwargs):
-        """SetMapMode(self, int mode)"""
+        """
+        SetMapMode(self, int mode)
+
+        The *mapping mode* of the device context defines the unit of
+        measurement used to convert logical units to device units.  The
+        mapping mode can be one of the following:
+
+            ================    =============================================
+            wx.MM_TWIPS         Each logical unit is 1/20 of a point, or 1/1440
+                                of an inch.
+            wx.MM_POINTS        Each logical unit is a point, or 1/72 of an inch.
+            wx.MM_METRIC        Each logical unit is 1 mm.
+            wx.MM_LOMETRIC      Each logical unit is 1/10 of a mm.
+            wx.MM_TEXT          Each logical unit is 1 pixel.
+            ================    =============================================
+
+        """
         return _gdi_.DC_SetMapMode(*args, **kwargs)
 
     def GetUserScale(*args, **kwargs):
-        """GetUserScale() -> (xScale, yScale)"""
+        """
+        GetUserScale(self) -> (xScale, yScale)
+
+        Gets the current user scale factor (set by `SetUserScale`).
+        """
         return _gdi_.DC_GetUserScale(*args, **kwargs)
 
     def SetUserScale(*args, **kwargs):
-        """SetUserScale(self, double x, double y)"""
+        """
+        SetUserScale(self, double x, double y)
+
+        Sets the user scaling factor, useful for applications which require
+        'zooming'.
+        """
         return _gdi_.DC_SetUserScale(*args, **kwargs)
 
     def GetLogicalScale(*args, **kwargs):
@@ -2821,55 +3451,154 @@ class DC(_core.Object):
         return _gdi_.DC_SetDeviceOriginPoint(*args, **kwargs)
 
     def SetAxisOrientation(*args, **kwargs):
-        """SetAxisOrientation(self, bool xLeftRight, bool yBottomUp)"""
+        """
+        SetAxisOrientation(self, bool xLeftRight, bool yBottomUp)
+
+        Sets the x and y axis orientation (i.e., the direction from lowest to
+        highest values on the axis). The default orientation is the natural
+        orientation, e.g. x axis from left to right and y axis from bottom up.
+        """
         return _gdi_.DC_SetAxisOrientation(*args, **kwargs)
 
     def GetLogicalFunction(*args, **kwargs):
-        """GetLogicalFunction(self) -> int"""
+        """
+        GetLogicalFunction(self) -> int
+
+        Gets the current logical function (set by `SetLogicalFunction`).
+        """
         return _gdi_.DC_GetLogicalFunction(*args, **kwargs)
 
     def SetLogicalFunction(*args, **kwargs):
-        """SetLogicalFunction(self, int function)"""
+        """
+        SetLogicalFunction(self, int function)
+
+        Sets the current logical function for the device context. This
+        determines how a source pixel (from a pen or brush colour, or source
+        device context if using `Blit`) combines with a destination pixel in
+        the current device context.
+
+        The possible values and their meaning in terms of source and
+        destination pixel values are as follows:
+
+            ================       ==========================
+            wx.AND                 src AND dst
+            wx.AND_INVERT          (NOT src) AND dst
+            wx.AND_REVERSE         src AND (NOT dst)
+            wx.CLEAR               0
+            wx.COPY                src
+            wx.EQUIV               (NOT src) XOR dst
+            wx.INVERT              NOT dst
+            wx.NAND                (NOT src) OR (NOT dst)
+            wx.NOR                 (NOT src) AND (NOT dst)
+            wx.NO_OP               dst
+            wx.OR                  src OR dst
+            wx.OR_INVERT           (NOT src) OR dst
+            wx.OR_REVERSE          src OR (NOT dst)
+            wx.SET                 1
+            wx.SRC_INVERT          NOT src
+            wx.XOR                 src XOR dst
+            ================       ==========================
+
+        The default is wx.COPY, which simply draws with the current
+        colour. The others combine the current colour and the background using
+        a logical operation. wx.INVERT is commonly used for drawing rubber
+        bands or moving outlines, since drawing twice reverts to the original
+        colour.
+
+        """
         return _gdi_.DC_SetLogicalFunction(*args, **kwargs)
 
     def SetOptimization(*args, **kwargs):
-        """SetOptimization(self, bool opt)"""
+        """
+        SetOptimization(self, bool optimize)
+
+        If *optimize* is true this function sets optimization mode on. This
+        currently means that under X, the device context will not try to set a
+        pen or brush property if it is known to be set already. This approach
+        can fall down if non-wxWidgets code is using the same device context
+        or window, for example when the window is a panel on which the
+        windowing system draws panel items. The wxWidgets device context
+        'memory' will now be out of step with reality.
+
+        Setting optimization off, drawing, then setting it back on again, is a
+        trick that must occasionally be employed.
+        """
         return _gdi_.DC_SetOptimization(*args, **kwargs)
 
     def GetOptimization(*args, **kwargs):
-        """GetOptimization(self) -> bool"""
+        """
+        GetOptimization(self) -> bool
+
+        Returns true if device context optimization is on. See
+        `SetOptimization` for .
+        """
         return _gdi_.DC_GetOptimization(*args, **kwargs)
 
     def CalcBoundingBox(*args, **kwargs):
-        """CalcBoundingBox(self, int x, int y)"""
+        """
+        CalcBoundingBox(self, int x, int y)
+
+        Adds the specified point to the bounding box which can be retrieved
+        with `MinX`, `MaxX` and `MinY`, `MaxY` or `GetBoundingBox` functions.
+        """
         return _gdi_.DC_CalcBoundingBox(*args, **kwargs)
 
     def CalcBoundingBoxPoint(*args, **kwargs):
-        """CalcBoundingBoxPoint(self, Point point)"""
+        """
+        CalcBoundingBoxPoint(self, Point point)
+
+        Adds the specified point to the bounding box which can be retrieved
+        with `MinX`, `MaxX` and `MinY`, `MaxY` or `GetBoundingBox` functions.
+        """
         return _gdi_.DC_CalcBoundingBoxPoint(*args, **kwargs)
 
     def ResetBoundingBox(*args, **kwargs):
-        """ResetBoundingBox(self)"""
+        """
+        ResetBoundingBox(self)
+
+        Resets the bounding box: after a call to this function, the bounding
+        box doesn't contain anything.
+        """
         return _gdi_.DC_ResetBoundingBox(*args, **kwargs)
 
     def MinX(*args, **kwargs):
-        """MinX(self) -> int"""
+        """
+        MinX(self) -> int
+
+        Gets the minimum horizontal extent used in drawing commands so far.
+        """
         return _gdi_.DC_MinX(*args, **kwargs)
 
     def MaxX(*args, **kwargs):
-        """MaxX(self) -> int"""
+        """
+        MaxX(self) -> int
+
+        Gets the maximum horizontal extent used in drawing commands so far.
+        """
         return _gdi_.DC_MaxX(*args, **kwargs)
 
     def MinY(*args, **kwargs):
-        """MinY(self) -> int"""
+        """
+        MinY(self) -> int
+
+        Gets the minimum vertical extent used in drawing commands so far.
+        """
         return _gdi_.DC_MinY(*args, **kwargs)
 
     def MaxY(*args, **kwargs):
-        """MaxY(self) -> int"""
+        """
+        MaxY(self) -> int
+
+        Gets the maximum vertical extent used in drawing commands so far.
+        """
         return _gdi_.DC_MaxY(*args, **kwargs)
 
     def GetBoundingBox(*args, **kwargs):
-        """GetBoundingBox() -> (x1,y1, x2,y2)"""
+        """
+        GetBoundingBox() -> (x1,y1, x2,y2)
+
+        Returns the min and max points used in drawing commands so far.
+        """
         return _gdi_.DC_GetBoundingBox(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -2901,6 +3630,16 @@ class DC(_core.Object):
         return _gdi_.DC__DrawTextList(*args, **kwargs)
 
     def DrawPointList(self, points, pens=None):
+        """
+        Draw a list of points as quickly as possible.
+
+            :param points:  A sequence of 2-element sequences representing
+                            each point to draw, (x,y).
+            :param pens:    If None, then the current pen is used.  If a
+                            single pen then it will be used for all points.  If
+                            a list of pens then there should be one for each point
+                            in points.
+        """
         if pens is None:
            pens = []
         elif isinstance(pens, wx.Pen):
@@ -2911,6 +3650,16 @@ class DC(_core.Object):
 
 
     def DrawLineList(self, lines, pens=None):
+        """
+        Draw a list of lines as quickly as possible.
+
+            :param lines:  A sequence of 4-element sequences representing
+                            each line to draw, (x1,y1, x2,y2).
+            :param pens:    If None, then the current pen is used.  If a
+                            single pen then it will be used for all lines.  If
+                            a list of pens then there should be one for each line
+                            in lines.
+        """
         if pens is None:
            pens = []
         elif isinstance(pens, wx.Pen):
@@ -2921,6 +3670,18 @@ class DC(_core.Object):
 
 
     def DrawRectangleList(self, rectangles, pens=None, brushes=None):
+        """
+        Draw a list of rectangles as quickly as possible.
+
+            :param rectangles:  A sequence of 4-element sequences representing
+                            each rectangle to draw, (x,y, w,h).
+            :param pens:    If None, then the current pen is used.  If a
+                            single pen then it will be used for all rectangles.
+                            If a list of pens then there should be one for each 
+                            rectangle in rectangles.
+            :param brushes: A brush or brushes to be used to fill the rectagles,
+                            with similar semantics as the pens parameter.
+        """
         if pens is None:
            pens = []
         elif isinstance(pens, wx.Pen):
@@ -2937,6 +3698,18 @@ class DC(_core.Object):
 
 
     def DrawEllipseList(self, ellipses, pens=None, brushes=None):
+        """
+        Draw a list of ellipses as quickly as possible.
+
+            :param ellipses: A sequence of 4-element sequences representing
+                            each ellipse to draw, (x,y, w,h).
+            :param pens:    If None, then the current pen is used.  If a
+                            single pen then it will be used for all ellipses.
+                            If a list of pens then there should be one for each 
+                            ellipse in ellipses.
+            :param brushes: A brush or brushes to be used to fill the ellipses,
+                            with similar semantics as the pens parameter.
+        """
         if pens is None:
            pens = []
         elif isinstance(pens, wx.Pen):
@@ -2953,8 +3726,20 @@ class DC(_core.Object):
 
 
     def DrawPolygonList(self, polygons, pens=None, brushes=None):
-        ## Note: This does not currently support fill style or offset
-        ## you can always use the non-List version if need be.
+        """
+        Draw a list of polygons, each of which is a list of points.
+
+            :param polygons: A sequence of sequences of sequences.
+                             [[(x1,y1),(x2,y2),(x3,y3)...],
+                             [(x1,y1),(x2,y2),(x3,y3)...]]
+                              
+            :param pens:    If None, then the current pen is used.  If a
+                            single pen then it will be used for all polygons.
+                            If a list of pens then there should be one for each 
+                            polygon.
+            :param brushes: A brush or brushes to be used to fill the polygons,
+                            with similar semantics as the pens parameter.
+        """
         if pens is None:
            pens = []
         elif isinstance(pens, wx.Pen):
@@ -2970,10 +3755,20 @@ class DC(_core.Object):
         return self._DrawPolygonList(polygons, pens, brushes)
 
 
-    def DrawTextList(self, textList, coords, foregrounds = None, backgrounds = None, fonts = None):
-        ## NOTE: this does not currently support changing the font
-        ##       Make sure you set Background mode to wxSolid (DC.SetBackgroundMode)
-        ##       If you want backgounds to do anything.
+    def DrawTextList(self, textList, coords, foregrounds = None, backgrounds = None):
+        """
+        Draw a list of strings using a list of coordinants for positioning each string.
+
+            :param textList:    A list of strings
+            :param coords:      A list of (x,y) positions
+            :param foregrounds: A list of `wx.Colour` objects to use for the
+                                foregrounds of the strings.
+            :param backgrounds: A list of `wx.Colour` objects to use for the
+                                backgrounds of the strings.
+
+        NOTE: Make sure you set Background mode to wx.Solid (DC.SetBackgroundMode)
+              If you want backgrounds to do anything.
+        """
         if type(textList) == type(''):
            textList = [textList]
         elif len(textList) != len(coords):
@@ -3003,16 +3798,51 @@ _gdi_.DC_swigregister(DCPtr)
 #---------------------------------------------------------------------------
 
 class MemoryDC(DC):
+    """
+    A memory device context provides a means to draw graphics onto a
+    bitmap. A bitmap must be selected into the new memory DC before it may
+    be used for anything. Typical usage is as follows::
+
+        dc = wx.MemoryDC()
+        dc.SelectObject(bitmap)
+        # draw on the dc usign any of the Draw methods
+        dc.SelectObject(wx.NullBitmap)
+        # the bitmap now contains wahtever was drawn upon it
+
+    Note that the memory DC *must* be deleted (or the bitmap selected out
+    of it) before a bitmap can be reselected into another memory DC.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMemoryDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self) -> MemoryDC"""
+        """
+        __init__(self) -> MemoryDC
+
+        Constructs a new memory device context.
+
+        Use the Ok member to test whether the constructor was successful in
+        creating a usable device context. Don't forget to select a bitmap into
+        the DC before drawing on it.
+        """
         newobj = _gdi_.new_MemoryDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def SelectObject(*args, **kwargs):
-        """SelectObject(self, Bitmap bitmap)"""
+        """
+        SelectObject(self, Bitmap bitmap)
+
+        Selects the bitmap into the device context, to use as the memory
+        bitmap. Selecting the bitmap into a memory DC allows you to draw into
+        the DC, and therefore the bitmap, and also to use Blit to copy the
+        bitmap to a window.
+
+        If the argument is wx.NullBitmap (or some other uninitialised
+        `wx.Bitmap`) the current bitmap is selected out of the device context,
+        and the original bitmap restored, allowing the current bitmap to be
+        destroyed safely.
+        """
         return _gdi_.MemoryDC_SelectObject(*args, **kwargs)
 
 
@@ -3024,7 +3854,11 @@ class MemoryDCPtr(MemoryDC):
 _gdi_.MemoryDC_swigregister(MemoryDCPtr)
 
 def MemoryDCFromDC(*args, **kwargs):
-    """MemoryDCFromDC(DC oldDC) -> MemoryDC"""
+    """
+    MemoryDCFromDC(DC oldDC) -> MemoryDC
+
+    Creates a DC that is compatible with the oldDC.
+    """
     val = _gdi_.new_MemoryDCFromDC(*args, **kwargs)
     val.thisown = 1
     return val
@@ -3032,27 +3866,52 @@ def MemoryDCFromDC(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class BufferedDC(MemoryDC):
+    """
+    This simple class provides a simple way to avoid flicker: when drawing
+    on it, everything is in fact first drawn on an in-memory buffer (a
+    `wx.Bitmap`) and then copied to the screen only once, when this object
+    is destroyed.
+
+    It can be used in the same way as any other device
+    context. wx.BufferedDC itself typically replaces `wx.ClientDC`, if you
+    want to use it in your EVT_PAINT handler, you should look at
+    `wx.BufferedPaintDC`.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBufferedDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args):
         """
         __init__(self, DC dc, Bitmap buffer) -> BufferedDC
         __init__(self, DC dc, Size area) -> BufferedDC
+
+        Constructs a buffered DC.
         """
         newobj = _gdi_.new_BufferedDC(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._dc = args[0] # save a ref so the other dc will not be deleted before self
+        self.__dc = args[0] # save a ref so the other dc will not be deleted before self
 
     def __del__(self, destroy=_gdi_.delete_BufferedDC):
-        """__del__(self)"""
+        """
+        __del__(self)
+
+        Copies everything drawn on the DC so far to the underlying DC
+        associated with this object, if any.
+        """
         try:
             if self.thisown: destroy(self)
         except: pass
 
     def UnMask(*args, **kwargs):
-        """UnMask(self)"""
+        """
+        UnMask(self)
+
+        Blits the buffer to the dc, and detaches the dc from the buffer (so it
+        can be effectively used once only).  This is usually only called in
+        the destructor.
+        """
         return _gdi_.BufferedDC_UnMask(*args, **kwargs)
 
 
@@ -3063,18 +3922,40 @@ class BufferedDCPtr(BufferedDC):
         self.__class__ = BufferedDC
 _gdi_.BufferedDC_swigregister(BufferedDCPtr)
 
-def BufferedDCInternalBuffer(*args):
-    """BufferedDCInternalBuffer(DC dc, Size area) -> BufferedDC"""
-    val = _gdi_.new_BufferedDCInternalBuffer(*args)
-    val.thisown = 1
-    val._dc = args[0] # save a ref so the other dc will not be deleted before self
-    return val
-
 class BufferedPaintDC(BufferedDC):
+    """
+    This is a subclass of `wx.BufferedDC` which can be used inside of an
+    EVT_PAINT event handler. Just create an object of this class instead
+    of `wx.PaintDC` and that's all you have to do to (mostly) avoid
+    flicker. The only thing to watch out for is that if you are using this
+    class together with `wx.ScrolledWindow`, you probably do **not** want
+    to call `wx.Window.PrepareDC` on it as it already does this internally
+    for the real underlying `wx.PaintDC`.
+
+    If your window is already fully buffered in a `wx.Bitmap` then your
+    EVT_PAINT handler can be as simple as just creating a
+    ``wx.BufferedPaintDC`` as it will `Blit` the buffer to the window
+    automatically when it is destroyed.  For example::
+
+        def OnPaint(self, event):
+            dc = wx.BufferedPaintDC(self, self.buffer)
+
+
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBufferedPaintDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, Window window, Bitmap buffer=NullBitmap) -> BufferedPaintDC"""
+        """
+        __init__(self, Window window, Bitmap buffer=NullBitmap) -> BufferedPaintDC
+
+        Create a buffered paint DC.  As with `wx.BufferedDC`, you may either
+        provide the bitmap to be used for buffering or let this object create
+        one internally (in the latter case, the size of the client part of the
+        window is automatically used).
+
+
+        """
         newobj = _gdi_.new_BufferedPaintDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3090,24 +3971,66 @@ _gdi_.BufferedPaintDC_swigregister(BufferedPaintDCPtr)
 #---------------------------------------------------------------------------
 
 class ScreenDC(DC):
+    """
+    A wxScreenDC can be used to paint anywhere on the screen. This should
+    normally be constructed as a temporary stack object; don't store a
+    wxScreenDC object.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxScreenDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self) -> ScreenDC"""
+        """
+        __init__(self) -> ScreenDC
+
+        A wxScreenDC can be used to paint anywhere on the screen. This should
+        normally be constructed as a temporary stack object; don't store a
+        wxScreenDC object.
+
+        """
         newobj = _gdi_.new_ScreenDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def StartDrawingOnTopWin(*args, **kwargs):
-        """StartDrawingOnTopWin(self, Window window) -> bool"""
+        """
+        StartDrawingOnTopWin(self, Window window) -> bool
+
+        Specify that the area of the screen to be drawn upon coincides with
+        the given window.
+
+        :see: `EndDrawingOnTop`
+        """
         return _gdi_.ScreenDC_StartDrawingOnTopWin(*args, **kwargs)
 
     def StartDrawingOnTop(*args, **kwargs):
-        """StartDrawingOnTop(self, Rect rect=None) -> bool"""
+        """
+        StartDrawingOnTop(self, Rect rect=None) -> bool
+
+        Specify that the area is the given rectangle, or the whole screen if
+        ``None`` is passed.
+
+        :see: `EndDrawingOnTop`
+        """
         return _gdi_.ScreenDC_StartDrawingOnTop(*args, **kwargs)
 
     def EndDrawingOnTop(*args, **kwargs):
-        """EndDrawingOnTop(self) -> bool"""
+        """
+        EndDrawingOnTop(self) -> bool
+
+        Use this in conjunction with `StartDrawingOnTop` or
+        `StartDrawingOnTopWin` to ensure that drawing to the screen occurs on
+        top of existing windows. Without this, some window systems (such as X)
+        only allow drawing to take place underneath other windows.
+
+        You might use this pair of functions when implementing a drag feature,
+        for example as in the `wx.SplitterWindow` implementation.
+
+        These functions are probably obsolete since the X implementations
+        allow drawing directly on the screen now. However, the fact that this
+        function allows the screen to be refreshed afterwards may be useful
+        to some applications.
+        """
         return _gdi_.ScreenDC_EndDrawingOnTop(*args, **kwargs)
 
 
@@ -3121,10 +4044,27 @@ _gdi_.ScreenDC_swigregister(ScreenDCPtr)
 #---------------------------------------------------------------------------
 
 class ClientDC(DC):
+    """
+    A wx.ClientDC must be constructed if an application wishes to paint on
+    the client area of a window from outside an EVT_PAINT event. This should
+    normally be constructed as a temporary stack object; don't store a
+    wx.ClientDC object long term.
+
+    To draw on a window from within an EVT_PAINT handler, construct a
+    `wx.PaintDC` object.
+
+    To draw on the whole window including decorations, construct a
+    `wx.WindowDC` object (Windows only).
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxClientDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, Window win) -> ClientDC"""
+        """
+        __init__(self, Window win) -> ClientDC
+
+        Constructor. Pass the window on which you wish to paint.
+        """
         newobj = _gdi_.new_ClientDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3140,10 +4080,30 @@ _gdi_.ClientDC_swigregister(ClientDCPtr)
 #---------------------------------------------------------------------------
 
 class PaintDC(DC):
+    """
+    A wx.PaintDC must be constructed if an application wishes to paint on
+    the client area of a window from within an EVT_PAINT event
+    handler. This should normally be constructed as a temporary stack
+    object; don't store a wx.PaintDC object. If you have an EVT_PAINT
+    handler, you **must** create a wx.PaintDC object within it even if you
+    don't actually use it.
+
+    Using wx.PaintDC within EVT_PAINT handlers is important because it
+    automatically sets the clipping area to the damaged area of the
+    window. Attempts to draw outside this area do not appear.
+
+    To draw on a window from outside EVT_PAINT handlers, construct a
+    `wx.ClientDC` object.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPaintDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, Window win) -> PaintDC"""
+        """
+        __init__(self, Window win) -> PaintDC
+
+        Constructor. Pass the window on which you wish to paint.
+        """
         newobj = _gdi_.new_PaintDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3159,10 +4119,20 @@ _gdi_.PaintDC_swigregister(PaintDCPtr)
 #---------------------------------------------------------------------------
 
 class WindowDC(DC):
+    """
+    A wx.WindowDC must be constructed if an application wishes to paint on
+    the whole area of a window (client and decorations). This should
+    normally be constructed as a temporary stack object; don't store a
+    wx.WindowDC object.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindowDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, Window win) -> WindowDC"""
+        """
+        __init__(self, Window win) -> WindowDC
+
+        Constructor. Pass the window on which you wish to paint.
+        """
         newobj = _gdi_.new_WindowDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3178,10 +4148,24 @@ _gdi_.WindowDC_swigregister(WindowDCPtr)
 #---------------------------------------------------------------------------
 
 class MirrorDC(DC):
+    """
+    wx.MirrorDC is a simple wrapper class which is always associated with a
+    real `wx.DC` object and either forwards all of its operations to it
+    without changes (no mirroring takes place) or exchanges x and y
+    coordinates which makes it possible to reuse the same code to draw a
+    figure and its mirror -- i.e. reflection related to the diagonal line
+    x == y.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMirrorDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, DC dc, bool mirror) -> MirrorDC"""
+        """
+        __init__(self, DC dc, bool mirror) -> MirrorDC
+
+        Creates a mirrored DC associated with the real *dc*.  Everything drawn
+        on the wx.MirrorDC will appear on the *dc*, and will be mirrored if
+        *mirror* is True.
+        """
         newobj = _gdi_.new_MirrorDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3197,10 +4181,16 @@ _gdi_.MirrorDC_swigregister(MirrorDCPtr)
 #---------------------------------------------------------------------------
 
 class PostScriptDC(DC):
+    """This is a `wx.DC` that can write to PostScript files on any platform."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPostScriptDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, wxPrintData printData) -> PostScriptDC"""
+        """
+        __init__(self, wxPrintData printData) -> PostScriptDC
+
+        Constructs a PostScript printer device context from a `wx.PrintData`
+        object.
+        """
         newobj = _gdi_.new_PostScriptDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3214,12 +4204,21 @@ class PostScriptDC(DC):
         return _gdi_.PostScriptDC_SetPrintData(*args, **kwargs)
 
     def SetResolution(*args, **kwargs):
-        """SetResolution(int ppi)"""
+        """
+        SetResolution(int ppi)
+
+        Set resolution (in pixels per inch) that will be used in PostScript
+        output. Default is 720ppi.
+        """
         return _gdi_.PostScriptDC_SetResolution(*args, **kwargs)
 
     SetResolution = staticmethod(SetResolution)
     def GetResolution(*args, **kwargs):
-        """GetResolution() -> int"""
+        """
+        GetResolution() -> int
+
+        Return resolution used in PostScript output.
+        """
         return _gdi_.PostScriptDC_GetResolution(*args, **kwargs)
 
     GetResolution = staticmethod(GetResolution)
@@ -3232,11 +4231,20 @@ class PostScriptDCPtr(PostScriptDC):
 _gdi_.PostScriptDC_swigregister(PostScriptDCPtr)
 
 def PostScriptDC_SetResolution(*args, **kwargs):
-    """PostScriptDC_SetResolution(int ppi)"""
+    """
+    PostScriptDC_SetResolution(int ppi)
+
+    Set resolution (in pixels per inch) that will be used in PostScript
+    output. Default is 720ppi.
+    """
     return _gdi_.PostScriptDC_SetResolution(*args, **kwargs)
 
 def PostScriptDC_GetResolution(*args, **kwargs):
-    """PostScriptDC_GetResolution() -> int"""
+    """
+    PostScriptDC_GetResolution() -> int
+
+    Return resolution used in PostScript output.
+    """
     return _gdi_.PostScriptDC_GetResolution(*args, **kwargs)
 
 #---------------------------------------------------------------------------

@@ -488,7 +488,6 @@ wxMemoryDCPtr = wx._gdi.MemoryDCPtr
 wxMemoryDCFromDC = wx._gdi.MemoryDCFromDC
 wxBufferedDC = wx._gdi.BufferedDC
 wxBufferedDCPtr = wx._gdi.BufferedDCPtr
-wxBufferedDCInternalBuffer = wx._gdi.BufferedDCInternalBuffer
 wxBufferedPaintDC = wx._gdi.BufferedPaintDC
 wxBufferedPaintDCPtr = wx._gdi.BufferedPaintDCPtr
 wxScreenDC = wx._gdi.ScreenDC

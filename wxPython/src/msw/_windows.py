@@ -210,6 +210,14 @@ class ScrolledWindow(Panel):
         """GetTargetRect(self) -> Rect"""
         return _windows_.ScrolledWindow_GetTargetRect(*args, **kwargs)
 
+    def DoPrepareDC(*args, **kwargs):
+        """
+        DoPrepareDC(self, DC dc)
+
+        Normally what is called by `PrepareDC`.
+        """
+        return _windows_.ScrolledWindow_DoPrepareDC(*args, **kwargs)
+
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes

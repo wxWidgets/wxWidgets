@@ -5227,7 +5227,8 @@ your Mac."""
     def SetOutputWindowAttributes(self, title=None, pos=None, size=None):
         """
         Set the title, position and/or size of the output window if
-        the stdio has been redirected.
+        the stdio has been redirected.  This should be called before
+        any output would cause the output window to be created.
         """
         if self.stdioWin:
             if title is not None:
@@ -8432,7 +8433,7 @@ class ItemContainer(object):
 
     def AppendItems(*args, **kwargs):
         """
-        AppendItems(self, wxArrayString strings)
+        AppendItems(self, List strings)
 
         Apend several items at once to the control.  Notice that calling this
         method may be much faster than appending the items one by one if you

@@ -11352,7 +11352,7 @@ static PyObject *_wrap_DC_DrawArcPoint(PyObject *self, PyObject *args, PyObject 
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "pt1",(char *) "pt2",(char *) "centre", NULL 
+        (char *) "self",(char *) "pt1",(char *) "pt2",(char *) "center", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DC_DrawArcPoint",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
@@ -11474,7 +11474,7 @@ static PyObject *_wrap_DC_DrawEllipticArc(PyObject *self, PyObject *args, PyObje
     PyObject * obj5 = 0 ;
     PyObject * obj6 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "x",(char *) "y",(char *) "w",(char *) "h",(char *) "sa",(char *) "ea", NULL 
+        (char *) "self",(char *) "x",(char *) "y",(char *) "w",(char *) "h",(char *) "start",(char *) "end", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOO:DC_DrawEllipticArc",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
@@ -11521,7 +11521,7 @@ static PyObject *_wrap_DC_DrawEllipticArcPointSize(PyObject *self, PyObject *arg
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "pt",(char *) "sz",(char *) "sa",(char *) "ea", NULL 
+        (char *) "self",(char *) "pt",(char *) "sz",(char *) "start",(char *) "end", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:DC_DrawEllipticArcPointSize",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
@@ -15105,7 +15105,7 @@ static PyObject *_wrap_DC_SetOptimization(PyObject *self, PyObject *args, PyObje
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "opt", NULL 
+        (char *) "self",(char *) "optimize", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DC_SetOptimization",kwnames,&obj0,&obj1)) goto fail;
@@ -15860,37 +15860,6 @@ static PyObject *_wrap_new_BufferedDC(PyObject *self, PyObject *args) {
     }
     
     PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'new_BufferedDC'");
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_BufferedDCInternalBuffer(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    wxDC *arg1 = (wxDC *) 0 ;
-    wxSize *arg2 = 0 ;
-    wxBufferedDC *result;
-    wxSize temp2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"OO:new_BufferedDCInternalBuffer",&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDC,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        arg2 = &temp2;
-        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        if (!wxPyCheckForApp()) SWIG_fail;
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxBufferedDC *)new wxBufferedDC(arg1,(wxSize const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBufferedDC, 1);
-    return resultobj;
-    fail:
     return NULL;
 }
 
@@ -19534,7 +19503,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MemoryDC_SelectObject", (PyCFunction) _wrap_MemoryDC_SelectObject, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MemoryDC_swigregister", MemoryDC_swigregister, METH_VARARGS },
 	 { (char *)"new_BufferedDC", _wrap_new_BufferedDC, METH_VARARGS },
-	 { (char *)"new_BufferedDCInternalBuffer", _wrap_new_BufferedDCInternalBuffer, METH_VARARGS },
 	 { (char *)"delete_BufferedDC", (PyCFunction) _wrap_delete_BufferedDC, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BufferedDC_UnMask", (PyCFunction) _wrap_BufferedDC_UnMask, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BufferedDC_swigregister", BufferedDC_swigregister, METH_VARARGS },
