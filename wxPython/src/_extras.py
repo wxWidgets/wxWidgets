@@ -580,6 +580,11 @@ NULL = None  # For backwards compatibility only.  You should really be
 wxColor      = wxColour
 wxNamedColor = wxNamedColour
 
+wxPyListCtrlPtr       = wxListCtrlPtr
+wxPyTreeCtrlPtr       = wxTreeCtrlPtr
+wxGenericDragImagePtr = wxDragImagePtr
+wxPyProcessPtr        = wxProcessPtr
+
 
 # backwards compatibility
 wxNoRefBitmap       = wxBitmap

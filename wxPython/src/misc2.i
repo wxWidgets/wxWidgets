@@ -473,6 +473,13 @@ public:
 
     wxGenericDragImage(const wxBitmap& image,
                        const wxCursor& cursor = wxNullCursor);
+    %name(wxDragIcon)wxGenericDragImage(const wxIcon& image,
+                                        const wxCursor& cursor = wxNullCursor);
+    %name(wxDragString)wxGenericDragImage(const wxString& str,
+                                          const wxCursor& cursor = wxNullCursor);
+    %name(wxDragTreeItem)wxGenericDragImage(const wxTreeCtrl& treeCtrl, wxTreeItemId& id);
+    %name(wxDragListItem)wxGenericDragImage(const wxListCtrl& listCtrl, long id);
+
     ~wxGenericDragImage();
 
     void SetBackingBitmap(wxBitmap* bitmap);
@@ -491,42 +498,6 @@ public:
     bool RedrawImage(const wxPoint& oldPos, const wxPoint& newPos,
                      bool eraseOld, bool drawNew);
 };
-
-
-// Alternate Constructors
-%new wxGenericDragImage* wxDragIcon(const wxIcon& image,
-                                   const wxCursor& cursor = wxNullCursor);
-
-%new wxGenericDragImage* wxDragString(const wxString& str,
-                                      const wxCursor& cursor = wxNullCursor);
-
-%new wxGenericDragImage* wxDragTreeItem(const wxTreeCtrl& treeCtrl, wxTreeItemId& id);
-
-%new wxGenericDragImage* wxDragListItem(const wxListCtrl& listCtrl, long id);
-
-
-%{
-
-wxGenericDragImage* wxDragIcon(const wxIcon& image,
-                               const wxCursor& cursor) {
-    return new wxGenericDragImage(image, cursor);
-}
-
-wxGenericDragImage* wxDragString(const wxString& str,
-                                 const wxCursor& cursor) {
-    return new wxGenericDragImage(str, cursor);
-}
-
-wxGenericDragImage* wxDragTreeItem(const wxTreeCtrl& treeCtrl, wxTreeItemId& id) {
-    return new wxGenericDragImage(treeCtrl, id);
-}
-
-wxGenericDragImage* wxDragListItem(const wxListCtrl& listCtrl, long id) {
-    return new wxGenericDragImage(listCtrl, id);
-}
-
-%}
-
 
 
 //----------------------------------------------------------------------

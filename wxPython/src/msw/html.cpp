@@ -193,6 +193,7 @@ private:
     }
 
 class wxPyHtmlWindow : public wxHtmlWindow {
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlWindow);
 public:
     wxPyHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                    const wxPoint& pos = wxDefaultPosition,
@@ -208,7 +209,7 @@ public:
     PYPRIVATE;
 };
 
-
+IMPLEMENT_ABSTRACT_CLASS( wxPyHtmlWindow, wxHtmlWindow );
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
@@ -6271,6 +6272,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxHtmlCell","_wxHtmlContainerCell",SwigwxHtmlContainerCellTowxHtmlCell},
     { "_wxHtmlCell","_wxHtmlWordCell",SwigwxHtmlWordCellTowxHtmlCell},
     { "_char","_wxChar",0},
+    { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_wxPyHtmlTagHandler","_wxPyHtmlWinTagHandler",SwigwxPyHtmlWinTagHandlerTowxPyHtmlTagHandler},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
@@ -6278,6 +6280,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
+    { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},

@@ -411,6 +411,7 @@ public:
 
 %{
 class wxPyHtmlWindow : public wxHtmlWindow {
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlWindow);
 public:
     wxPyHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                    const wxPoint& pos = wxDefaultPosition,
@@ -426,7 +427,7 @@ public:
     PYPRIVATE;
 };
 
-
+IMPLEMENT_ABSTRACT_CLASS( wxPyHtmlWindow, wxHtmlWindow );
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {

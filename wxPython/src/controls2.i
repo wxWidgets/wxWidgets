@@ -392,6 +392,7 @@ IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
 %}
 
 
+
 %name(wxListCtrl)class wxPyListCtrl : public wxControl {
 public:
     wxPyListCtrl(wxWindow* parent, wxWindowID id = -1,
