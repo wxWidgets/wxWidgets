@@ -2,7 +2,7 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-2.3.3.2
+2.3.4
 -------
 Updated XRCed and wxTimeCtrl contribs.
 
@@ -49,6 +49,8 @@ removed.  There is now a CanRead() method that lets you know if there
 is data waiting to be read from the pipe.
 
 Fixed method name clash in wxIEHtmlWin, renamed Refresh to RefreshPage.
+
+Added Throbber from Cliff Wells to the library and the demo.
 
 
 

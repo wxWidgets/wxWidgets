@@ -26,7 +26,7 @@ _treeList = [
     # new stuff
     ('New since last release', [
         'wxRadioButton',
-
+        'Throbber',
         ]),
 
     # managed windows == things with a caption you can close
@@ -80,13 +80,13 @@ _treeList = [
         'wxRadioBox',
         'wxRadioButton',
         'wxSashWindow',
-        'wxSlider',
         'wxScrolledWindow',
-        'wxSplitterWindow',
+        'wxSlider',
         'wxSpinButton',
         'wxSpinCtrl',
-        'wxStaticText',
+        'wxSplitterWindow',
         'wxStaticBitmap',
+        'wxStaticText',
         'wxStatusBar',
         'wxTextCtrl',
         'wxToggleButton',
@@ -97,6 +97,8 @@ _treeList = [
 
     # controls coming from other librairies
     ('More Windows/Controls', [
+        #'wxFloatBar',          deprecated
+        #'wxMVCTree',           deprecated
         'ColourSelect',
         'ContextHelp',
         'FancyText',
@@ -111,12 +113,10 @@ _treeList = [
         'wxDynamicSashWindow',
         'wxEditableListBox',
         'wxEditor',
-        #'wxFloatBar',          deprecated
         'wxHtmlWindow',
         'wxIEHtmlWin',
         'wxLEDNumberCtrl',
         'wxMimeTypesManager',
-        #'wxMVCTree',           deprecated
         'wxRightTextCtrl',
         'wxStyledTextCtrl_1',
         'wxStyledTextCtrl_2',
@@ -155,6 +155,7 @@ _treeList = [
 
     # Images
     ('Images', [
+        'Throbber',
         'wxDragImage',
         'wxImage',
         'wxImageFromStream',
@@ -169,6 +170,7 @@ _treeList = [
         'DrawXXXList',
         'FontEnumerator',
         'PrintFramework',
+        'Throbber',
         'Unicode',
         'wxFileHistory',
         'wxJoystick',
@@ -204,7 +206,8 @@ class MyLog(wxPyLog):
         if self.logTime:
             message = time.strftime("%X", time.localtime(timeStamp)) + \
                       ": " + message
-        self.tc.AppendText(message + '\n')
+        if self.tc:
+            self.tc.AppendText(message + '\n')
 
 
 class MyTP(wxPyTipProvider):
