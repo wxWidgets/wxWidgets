@@ -275,6 +275,11 @@ typedef int wxWindowID;
         #define WXEXPORT _Export
         #define WXIMPORT _Export
     #endif
+#elif defined(__WXMAC__)    
+    #ifdef __MWERKS__
+        #define WXEXPORT __declspec(export)
+        #define WXIMPORT __declspec(import)
+    #endif
 #endif
 
 // for other platforms/compilers we don't anything
