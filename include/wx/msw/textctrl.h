@@ -90,6 +90,7 @@ public:
     // apply text attribute to the range of text (only works with richedit
     // controls)
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
+    virtual bool SetDefaultStyle(const wxTextAttr& style);
 #endif // wxUSE_RICHEDIT
 
     // translate between the position (which is just an index in the text ctrl

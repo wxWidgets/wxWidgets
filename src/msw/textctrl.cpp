@@ -1788,6 +1788,19 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
     return ok;
 }
 
+bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
+{
+    if ( !wxTextCtrlBase::SetDefaultStyle(style) )
+        return FALSE;
+
+    // we have to do this or the style wouldn't apply for the text typed by the
+    // user
+    long posLast = GetLastPosition();
+    SetStyle(posLast, posLast, m_defaultStyle);
+
+    return TRUE;
+}
+
 // ----------------------------------------------------------------------------
 // wxRichEditModule
 // ----------------------------------------------------------------------------
