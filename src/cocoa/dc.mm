@@ -64,16 +64,31 @@ wxDC::~wxDC(void)
 
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    NSGraphicsContext *context = [NSGraphicsContext currentContext];
+    [context saveGraphicsState];
+
     NSBezierPath *bezpath = [NSBezierPath bezierPathWithRect:NSMakeRect(x,y,width,height)];
+    [m_textForegroundColour.GetNSColor() set];
     [bezpath stroke];
+    [m_brush.GetNSColor() set];
+    [bezpath fill];
+
+    [context restoreGraphicsState];
 }
 
 void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
+    NSGraphicsContext *context = [NSGraphicsContext currentContext];
+    [context saveGraphicsState];
+
     NSBezierPath *bezpath = [NSBezierPath bezierPath];
     [bezpath moveToPoint:NSMakePoint(x1,y1)];
     [bezpath lineToPoint:NSMakePoint(x2,y2)];
+
+    [m_textForegroundColour.GetNSColor() set];
     [bezpath stroke];
+
+    [context restoreGraphicsState];
 }
 
 void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord *descent, wxCoord *externalLeading, wxFont *theFont) const
@@ -131,6 +146,7 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     [context saveGraphicsState];
     [transform concat];
     [flipTransform concat];
+    #if 0
     // Draw+fill a rectangle so we can see where the shit is supposed to be.
     wxLogDebug("(%f,%f) (%fx%f)",usedRect.origin.x,usedRect.origin.y,usedRect.size.width,usedRect.size.height);
     NSBezierPath *bezpath = [NSBezierPath bezierPathWithRect:NSMakeRect(0,0,usedRect.size.width,usedRect.size.height)];
@@ -138,12 +154,14 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     [bezpath stroke];
     [[NSColor blueColor] set];
     [bezpath fill];
+    #endif
 
     NSPoint layoutLocation = [sm_cocoaNSLayoutManager locationForGlyphAtIndex:0];
     layoutLocation.x = 0.0;
     layoutLocation.y *= -1.0;
     layoutLocation.y += [[sm_cocoaNSLayoutManager typesetter] baselineOffsetInLayoutManager:sm_cocoaNSLayoutManager glyphIndex:0];
     // NOTE: That's NSMakePoint, not NSMakePint (working on that though)
+    [m_textForegroundColour.GetNSColor() set];
     [sm_cocoaNSLayoutManager drawGlyphsForGlyphRange:glyphRange  atPoint:layoutLocation];
 
     [context restoreGraphicsState];
@@ -250,6 +268,7 @@ void wxDC::SetPen(const wxPen& pen)
 
 void wxDC::SetBrush(const wxBrush& brush)
 {
+    m_brush = brush;
 }
 
 void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
