@@ -79,16 +79,23 @@ const wxIcon& wxIconBundle::GetIcon( const wxSize& size ) const
     size_t i, max = m_icons.GetCount();
     wxCoord sysX = wxSystemSettings::GetMetric( wxSYS_ICON_X ),
             sysY = wxSystemSettings::GetMetric( wxSYS_ICON_Y );
-    wxIcon* sysIcon = 0;
 
-    for( i = 0; i < max; ++i )
+    wxIcon *sysIcon = 0;
+    // temp. variable needed to fix Borland C++ 5.5.1 problem
+    // with passing a return value through two functions
+    wxIcon *tmp;
+
+    for( i = 0; i < max; i++ )
     {
         if( !m_icons[i].Ok() )
             continue;
         wxCoord sx = m_icons[i].GetWidth(), sy = m_icons[i].GetHeight();
         // requested size
         if( sx == size.x && sy == size.y )
-            return m_icons[i];
+        {
+            tmp = &m_icons[i]; // fix for broken BCC
+            return *tmp;
+        }
         // keep track if there is a system-size icon
         if( sx == sysX && sy == sysY )
             sysIcon = &m_icons[i];
@@ -97,7 +104,11 @@ const wxIcon& wxIconBundle::GetIcon( const wxSize& size ) const
     // return the system-sized icon if we've got one
     if( sysIcon ) return *sysIcon;
     // return the first icon, if we have one
-    return max > 0 ? m_icons[0] : wxNullIcon;
+    if( max > 0 ) // fix for broken BCC
+        tmp = &m_icons[0];
+    else
+        tmp = &wxNullIcon;
+    return *tmp;
 }
 
 void wxIconBundle::AddIcon( const wxIcon& icon )
