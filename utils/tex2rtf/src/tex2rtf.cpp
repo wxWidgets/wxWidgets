@@ -457,19 +457,19 @@ bool MyApp::OnInit()
 #ifndef NO_GUI
 int MyApp::OnExit()
 {
-  wxNode *node = CustomMacroList.First();
+  wxNode *node = CustomMacroList.GetFirst();
   while (node)
   {
-    CustomMacro *macro = (CustomMacro *)node->Data();
+    CustomMacro *macro = (CustomMacro *)node->GetData();
     delete macro;
     delete node;
-    node = CustomMacroList.First();
+    node = CustomMacroList.GetFirst();
   }
   MacroDefs.BeginFind();
   node = MacroDefs.Next();
   while (node)
   {
-    TexMacroDef* def = (TexMacroDef*) node->Data();
+    TexMacroDef* def = (TexMacroDef*) node->GetData();
     delete def;
     node = MacroDefs.Next();
   }

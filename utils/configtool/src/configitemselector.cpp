@@ -248,7 +248,7 @@ void ctConfigItemsSelector::InitSourceConfigList(ctConfigItem* item)
         ctConfigItem* child = (ctConfigItem*) node->GetData();
         InitSourceConfigList(child);
 
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 

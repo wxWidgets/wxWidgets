@@ -327,12 +327,12 @@ void Text2HTML(TexChunk *chunk)
       if (def && (def->macroId == ltVERBATIM || def->macroId == ltVERB || def->macroId == ltSPECIAL))
         inVerbatim = TRUE;
 
-      wxNode *node = chunk->children.First();
+      wxNode *node = chunk->children.GetFirst();
       while (node)
       {
-        TexChunk *child_chunk = (TexChunk *)node->Data();
+        TexChunk *child_chunk = (TexChunk *)node->GetData();
         Text2HTML(child_chunk);
-        node = node->Next();
+        node = node->GetNext();
       }
 
       if (def && (def->macroId == ltVERBATIM || def->macroId == ltVERB || def->macroId == ltSPECIAL))
@@ -342,12 +342,12 @@ void Text2HTML(TexChunk *chunk)
     }
     case CHUNK_TYPE_ARG:
     {
-      wxNode *node = chunk->children.First();
+      wxNode *node = chunk->children.GetFirst();
       while (node)
       {
-        TexChunk *child_chunk = (TexChunk *)node->Data();
+        TexChunk *child_chunk = (TexChunk *)node->GetData();
         Text2HTML(child_chunk);
-        node = node->Next();
+        node = node->GetNext();
       }
 
       break;
@@ -1215,9 +1215,9 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
     else
     {
       indentLevel --;
-      if (itemizeStack.First())
+      if (itemizeStack.GetFirst())
       {
-        ItemizeStruc *struc = (ItemizeStruc *)itemizeStack.First()->Data();
+        ItemizeStruc *struc = (ItemizeStruc *)itemizeStack.GetFirst()->GetData();
         switch (struc->listType)
         {
           case LATEX_ITEMIZE:
@@ -1233,7 +1233,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         }
 
         delete struc;
-        delete itemizeStack.First();
+        delete itemizeStack.GetFirst();
       }
     }
     break;
@@ -1484,10 +1484,10 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
   {
     if (!start)
     {
-      wxNode *node = itemizeStack.First();
+      wxNode *node = itemizeStack.GetFirst();
       if (node)
       {
-        ItemizeStruc *struc = (ItemizeStruc *)node->Data();
+        ItemizeStruc *struc = (ItemizeStruc *)node->GetData();
         struc->currentItem += 1;
         if (struc->listType == LATEX_DESCRIPTION)
         {
@@ -3108,16 +3108,16 @@ void GenerateHTMLIndexFile(char *fname)
   wxNode *node = NULL;
   while ((node = TopicTable.Next()))
   {
-    TexTopic *texTopic = (TexTopic *)node->Data();
+    TexTopic *texTopic = (TexTopic *)node->GetData();
     const char *topicName = node->GetKeyString();
     if (texTopic->filename && texTopic->keywords)
     {
-      wxNode *node1 = texTopic->keywords->First();
+      wxStringListNode *node1 = texTopic->keywords->GetFirst();
       while (node1)
       {
-        char *s = (char *)node1->Data();
+        char *s = (char *)node1->GetData();
         fprintf(fd, "%s|%s|%s\n", topicName, texTopic->filename, s);
-        node1 = node1->Next();
+        node1 = node1->GetNext();
       }
     }
   }
@@ -3207,21 +3207,21 @@ void GenerateHTMLWorkshopFiles(char *fname)
   wxNode *node = NULL;
   while ((node = TopicTable.Next()))
   {
-    TexTopic *texTopic = (TexTopic *)node->Data();
+    TexTopic *texTopic = (TexTopic *)node->GetData();
     const char *topicName = node->GetKeyString();
     if (texTopic->filename && texTopic->keywords)
     {
-      wxNode *node1 = texTopic->keywords->First();
+      wxStringListNode *node1 = texTopic->keywords->GetFirst();
       while (node1)
       {
-        char *s = (char *)node1->Data();
+        char *s = (char *)node1->GetData();
         fprintf(f,
             " <LI> <OBJECT type=\"text/sitemap\">\n"
             "  <param name=\"Local\" value=\"%s#%s\">\n"
             "  <param name=\"Name\" value=\"%s\">\n"
             "  </OBJECT>\n",
 	    texTopic->filename, topicName, s);
-        node1 = node1->Next();
+        node1 = node1->GetNext();
       }
     }
   }

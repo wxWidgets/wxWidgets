@@ -1229,10 +1229,10 @@ void ctConfiguration::Detach()
 /// the config items
 void ctConfiguration::DetachFromTree()
 {
+/*
     wxTreeItemId item = GetTreeItemId();
 
     // TODO
-/*
     ctTreeItemData* data = (ctTreeItemData*) wxGetApp().GetMainFrame()->GetConfigTreeCtrl()->GetItemData(item);
     data->SetConfigItem(NULL);
     m_treeItemId = wxTreeItemId();

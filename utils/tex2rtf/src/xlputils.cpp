@@ -348,21 +348,21 @@ void XLPOnMacro(int macroId, int no_args, bool start)
     {
       indentLevel --;
 
-      if (itemizeStack.First())
+      if (itemizeStack.GetFirst())
       {
-        ItemizeStruc *struc = (ItemizeStruc *)itemizeStack.First()->Data();
+        ItemizeStruc *struc = (ItemizeStruc *)itemizeStack.GetFirst()->GetData();
         delete struc;
-        delete itemizeStack.First();
+        delete itemizeStack.GetFirst();
       }
     }
     break;
   }
   case ltITEM:
   {
-    wxNode *node = itemizeStack.First();
+    wxNode *node = itemizeStack.GetFirst();
     if (node)
     {
-      ItemizeStruc *struc = (ItemizeStruc *)node->Data();
+      ItemizeStruc *struc = (ItemizeStruc *)node->GetData();
       if (!start)
       {
         struc->currentItem += 1;
@@ -1176,18 +1176,18 @@ bool XLPGo(void)
              contentsString ? contentsString : "WXHELPCONTENTS");
     TraverseDocument();
 
-    wxNode *node = hyperLinks.First();
+    wxNode *node = hyperLinks.GetFirst();
     while (node)
     {
       long from = node->GetKeyInteger();
-      char *label = (char *)node->Data();
+      char *label = (char *)node->GetData();
       wxNode *otherNode = hyperLabels.Find(label);
       if (otherNode)
       {
-        long to = (long)otherNode->Data();
+        long to = (long)otherNode->GetData();
         fprintf(Index, "%ld %ld\n", from, to);
       }
-      node = node->Next();
+      node = node->GetNext();
     }
 
     fprintf(Index, "}\n");

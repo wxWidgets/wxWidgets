@@ -347,10 +347,10 @@ void GenerateKeywordsForTopic(char *topic)
   wxStringList *list = texTopic->keywords;
   if (list)
   {
-    wxNode *node = list->First();
+    wxStringListNode *node = list->GetFirst();
     while (node)
     {
-      char *s = (char *)node->Data();
+      char *s = (char *)node->GetData();
 
       // Must separate out main entry form subentry (only 1 subentry allowed)
       char buf1[100]; char buf2[100];
@@ -376,7 +376,7 @@ void GenerateKeywordsForTopic(char *topic)
         TexOutput(buf2);
       }
       TexOutput("}\n");
-      node = node->Next();
+      node = node->GetNext();
     }
   }
 }
@@ -412,12 +412,12 @@ void GenerateIndexEntry(char *entry)
 void WriteColourTable(FILE *fd)
 {
   fprintf(fd, "{\\colortbl");
-  wxNode *node = ColourTable.First();
+  wxNode *node = ColourTable.GetFirst();
   while (node)
   {
-    ColourTableEntry *entry = (ColourTableEntry *)node->Data();
+    ColourTableEntry *entry = (ColourTableEntry *)node->GetData();
     fprintf(fd, "\\red%d\\green%d\\blue%d;\n", entry->red, entry->green, entry->blue);
-    node = node->Next();
+    node = node->GetNext();
   }
   fprintf(fd, "}");
 }
@@ -717,12 +717,12 @@ void Text2RTF(TexChunk *chunk)
       if (def && (def->macroId == ltVERBATIM || def->macroId == ltVERB))
         inVerbatim = TRUE;
 
-      wxNode *node = chunk->children.First();
+      wxNode *node = chunk->children.GetFirst();
       while (node)
       {
-        TexChunk *child_chunk = (TexChunk *)node->Data();
+        TexChunk *child_chunk = (TexChunk *)node->GetData();
         Text2RTF(child_chunk);
-        node = node->Next();
+        node = node->GetNext();
       }
 
       if (def && (def->macroId == ltVERBATIM || def->macroId == ltVERB))
@@ -732,12 +732,12 @@ void Text2RTF(TexChunk *chunk)
     }
     case CHUNK_TYPE_ARG:
     {
-      wxNode *node = chunk->children.First();
+      wxNode *node = chunk->children.GetFirst();
       while (node)
       {
-        TexChunk *child_chunk = (TexChunk *)node->Data();
+        TexChunk *child_chunk = (TexChunk *)node->GetData();
         Text2RTF(child_chunk);
-        node = node->Next();
+        node = node->GetNext();
       }
 
       break;
@@ -784,10 +784,10 @@ void PushEnvironmentStyle(char *style)
 
 void PopEnvironmentStyle(void)
 {
-  wxNode *node = environmentStack.Last();
+  wxStringListNode *node = environmentStack.GetLast();
   if (node)
   {
-    char *val = (char *)node->Data();
+    char *val = (char *)node->GetData();
     delete[] val;
     delete node;
   }
@@ -796,12 +796,12 @@ void PopEnvironmentStyle(void)
 // Write out the styles, most recent first.
 void WriteEnvironmentStyles(void)
 {
-  wxNode *node = environmentStack.Last();
+  wxStringListNode *node = environmentStack.GetLast();
   while (node)
   {
-    char *val = (char *)node->Data();
+    char *val = (char *)node->GetData();
     TexOutput(val);
-    node = node->Next();
+    node = node->GetNext();
   }
   if (!inTabular && (ParIndent > 0) && (forbidParindent == 0))
   {
@@ -809,7 +809,7 @@ void WriteEnvironmentStyles(void)
     sprintf(buf, "\\fi%d", ParIndent*20); // Convert points to TWIPS
     TexOutput(buf);
   }
-  if (environmentStack.Number() > 0 || (ParIndent > 0))
+  if (environmentStack.GetCount() > 0 || (ParIndent > 0))
     TexOutput("\n");
 }
 
@@ -2028,9 +2028,9 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         listType = LATEX_DESCRIPTION;
 
       int oldIndent = 0;
-      wxNode *node = itemizeStack.First();
+      wxNode *node = itemizeStack.GetFirst();
       if (node)
-        oldIndent = ((ItemizeStruc *)node->Data())->indentation;
+        oldIndent = ((ItemizeStruc *)node->GetData())->indentation;
 
       int indentSize1 = oldIndent + 20*labelIndentTab;
       int indentSize2 = oldIndent + 20*itemIndentTab;
@@ -2047,11 +2047,11 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       indentLevel --;
       PopEnvironmentStyle();
 
-      if (itemizeStack.First())
+      if (itemizeStack.GetFirst())
       {
-        ItemizeStruc *struc = (ItemizeStruc *)itemizeStack.First()->Data();
+        ItemizeStruc *struc = (ItemizeStruc *)itemizeStack.GetFirst()->GetData();
         delete struc;
-        delete itemizeStack.First();
+        delete itemizeStack.GetFirst();
       }
 /* Change 18/7/97 - don't know why we wish to do this
       if (itemizeStack.Number() == 0)
@@ -2070,9 +2070,9 @@ void RTFOnMacro(int macroId, int no_args, bool start)
     {
       indentLevel ++;
       int oldIndent = 0;
-      wxNode *node = itemizeStack.First();
+      wxNode *node = itemizeStack.GetFirst();
       if (node)
-        oldIndent = ((ItemizeStruc *)node->Data())->indentation;
+        oldIndent = ((ItemizeStruc *)node->GetData())->indentation;
 
       int indentSize = oldIndent + TwoColWidthA;
 
@@ -2087,11 +2087,11 @@ void RTFOnMacro(int macroId, int no_args, bool start)
     {
       indentLevel --;
       PopEnvironmentStyle();
-      if (itemizeStack.First())
+      if (itemizeStack.GetFirst())
       {
-        ItemizeStruc *struc = (ItemizeStruc *)itemizeStack.First()->Data();
+        ItemizeStruc *struc = (ItemizeStruc *)itemizeStack.GetFirst()->GetData();
         delete struc;
-        delete itemizeStack.First();
+        delete itemizeStack.GetFirst();
       }
 /*
       // JACS June 1997
@@ -2099,7 +2099,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       WriteEnvironmentStyles();
 */
 /* why do we need this? */
-      if (itemizeStack.Number() == 0)
+      if (itemizeStack.GetCount() == 0)
       {
         issuedNewParagraph = 0;
         OnMacro(ltPAR, 0, TRUE);
@@ -2110,10 +2110,10 @@ void RTFOnMacro(int macroId, int no_args, bool start)
   }
   case ltITEM:
   {
-    wxNode *node = itemizeStack.First();
+    wxNode *node = itemizeStack.GetFirst();
     if (node)
     {
-      ItemizeStruc *struc = (ItemizeStruc *)node->Data();
+      ItemizeStruc *struc = (ItemizeStruc *)node->GetData();
       if (!start)
       {
         struc->currentItem += 1;
@@ -2200,20 +2200,20 @@ void RTFOnMacro(int macroId, int no_args, bool start)
   case ltTWOCOLITEM:
   case ltTWOCOLITEMRULED:
   {
-    wxNode *node = itemizeStack.First();
+    wxNode *node = itemizeStack.GetFirst();
     if (node)
     {
-      ItemizeStruc *struc = (ItemizeStruc *)node->Data();
+      ItemizeStruc *struc = (ItemizeStruc *)node->GetData();
       if (start)
       {
         struc->currentItem += 1;
 
         int oldIndent = 0;
         wxNode *node2 = NULL;
-        if (itemizeStack.Number() > 1) // TODO: do I actually mean Nth(0) here??
-            node2 = itemizeStack.Nth(1);
+        if (itemizeStack.GetCount() > 1) // TODO: do I actually mean Nth(0) here??
+            node2 = itemizeStack.Item(1);
         if (node2)
-          oldIndent = ((ItemizeStruc *)node2->Data())->indentation;
+          oldIndent = ((ItemizeStruc *)node2->GetData())->indentation;
 
         TexOutput("\n");
         if (struc->currentItem > 1)
@@ -4687,9 +4687,9 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
 //      indentLevel ++;
 //      TexOutput("\\fi0\n");
       int oldIndent = 0;
-      wxNode *node = itemizeStack.First();
+      wxNode *node = itemizeStack.GetFirst();
       if (node)
-        oldIndent = ((ItemizeStruc *)node->Data())->indentation;
+        oldIndent = ((ItemizeStruc *)node->GetData())->indentation;
 
       int indentValue = 20*ParseUnitArgument(GetArgData());
       int indentSize = indentValue + oldIndent;
@@ -4705,13 +4705,13 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
     if (!start && (arg_no == 2))
     {
       PopEnvironmentStyle();
-      if (itemizeStack.First())
+      if (itemizeStack.GetFirst())
       {
-        ItemizeStruc *struc = (ItemizeStruc *)itemizeStack.First()->Data();
+        ItemizeStruc *struc = (ItemizeStruc *)itemizeStack.GetFirst()->GetData();
         delete struc;
-        delete itemizeStack.First();
+        delete itemizeStack.GetFirst();
       }
-      if (itemizeStack.Number() == 0)
+      if (itemizeStack.GetCount() == 0)
       {
         TexOutput("\\par\\pard\n");
         issuedNewParagraph = 1;
@@ -4728,9 +4728,9 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
     if (start && (arg_no == 1))
     {
       int oldIndent = 0;
-      wxNode *node = itemizeStack.First();
+      wxNode *node = itemizeStack.GetFirst();
       if (node)
-        oldIndent = ((ItemizeStruc *)node->Data())->indentation;
+        oldIndent = ((ItemizeStruc *)node->GetData())->indentation;
 
       int boxWidth = 20*ParseUnitArgument(GetArgData());
 
@@ -4750,11 +4750,11 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
     if (!start && (arg_no == 2))
     {
       PopEnvironmentStyle();
-      if (itemizeStack.First())
+      if (itemizeStack.GetFirst())
       {
-        ItemizeStruc *struc = (ItemizeStruc *)itemizeStack.First()->Data();
+        ItemizeStruc *struc = (ItemizeStruc *)itemizeStack.GetFirst()->GetData();
         delete struc;
-        delete itemizeStack.First();
+        delete itemizeStack.GetFirst();
       }
       if (itemizeStack.Number() == 0)
       {

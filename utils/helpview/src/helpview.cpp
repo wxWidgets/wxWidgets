@@ -153,9 +153,7 @@ bool hvApp::OnInit()
 			wxGetCwd(),
 			wxEmptyString,
 			wxEmptyString,
-			wxT(
-			"Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|\
-			HTML Help Project (*.hhp)|*.hhp"),
+			wxT("Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp"),
 			wxOPEN | wxFILE_MUST_EXIST,
 			NULL);
 		
@@ -226,11 +224,11 @@ bool hvApp::OnInit()
 int hvApp::OnExit()
 {
 #if hvUSE_IPC
-    wxNode* node = m_connections.First();
+    wxNode* node = m_connections.GetFirst();
     while (node)
     {
-        wxNode* next = node->Next();
-        hvConnection* connection = (hvConnection*) node->Data();
+        wxNode* next = node->GetNext();
+        hvConnection* connection = (hvConnection*) node->GetData();
         connection->Disconnect();
         delete connection;
         node = next;

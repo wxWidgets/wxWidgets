@@ -1477,10 +1477,10 @@ int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos, char *e
           {
             int n = buffer[pos] - 48;
             pos ++;
-            wxNode *node = customMacroArgs->children.Nth(n-1);
+            wxNode *node = customMacroArgs->children.Item(n-1);
             if (node)
             {
-              TexChunk *argChunk = (TexChunk *)node->Data();
+              TexChunk *argChunk = (TexChunk *)node->GetData();
               children.Append((wxObject *)new TexChunk(*argChunk));
             }
           }
@@ -1654,12 +1654,12 @@ int ParseMacroBody(const char *macro_name, TexChunk *parent,
   parent->no_args = maxArgs;
 
   // Tell each argument how many args there are (useful when processing an arg)
-  wxNode *node = parent->children.First();
+  wxNode *node = parent->children.GetFirst();
   while (node)
   {
-    TexChunk *chunk = (TexChunk *)node->Data();
+    TexChunk *chunk = (TexChunk *)node->GetData();
     chunk->no_args = maxArgs;
-    node = node->Next();
+    node = node->GetNext();
   }
   return pos;
 }
@@ -1739,12 +1739,12 @@ TexChunk::TexChunk(TexChunk& toCopy)
     value = NULL;
   
   optional = toCopy.optional;
-  wxNode *node = toCopy.children.First();
+  wxNode *node = toCopy.children.GetFirst();
   while (node)
   {
-    TexChunk *child = (TexChunk *)node->Data();
+    TexChunk *child = (TexChunk *)node->GetData();
     children.Append((wxObject *)new TexChunk(*child));
-    node = node->Next();
+    node = node->GetNext();
   }
 }
 
@@ -1752,12 +1752,12 @@ TexChunk::~TexChunk(void)
 {
 //  if (name) delete[] name;
   if (value) delete[] value;
-  wxNode *node = children.First();
+  wxNode *node = children.GetFirst();
   while (node)
   {
-    TexChunk *child = (TexChunk *)node->Data();
+    TexChunk *child = (TexChunk *)node->GetData();
     delete child;
-    wxNode *next = node->Next();
+    wxNode *next = node->GetNext();
     delete node;
     node = next;
   }
@@ -1794,25 +1794,25 @@ void GetArgData1(TexChunk *chunk)
         strcat(currentArgData, def->name);
       }
 
-      wxNode *node = chunk->children.First();
+      wxNode *node = chunk->children.GetFirst();
       while (node)
       {
-        TexChunk *child_chunk = (TexChunk *)node->Data();
+        TexChunk *child_chunk = (TexChunk *)node->GetData();
         strcat(currentArgData, "{");
         GetArgData1(child_chunk);
         strcat(currentArgData, "}");
-        node = node->Next();
+        node = node->GetNext();
       }
       break;
     }
     case CHUNK_TYPE_ARG:
     {
-      wxNode *node = chunk->children.First();
+      wxNode *node = chunk->children.GetFirst();
       while (node)
       {
-        TexChunk *child_chunk = (TexChunk *)node->Data();
+        TexChunk *child_chunk = (TexChunk *)node->GetData();
         GetArgData1(child_chunk);
-        node = node->Next();
+        node = node->GetNext();
       }
       break;
     }
@@ -1885,17 +1885,17 @@ void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode, bool childrenOnly)
       if (!childrenOnly)
         OnMacro(chunk->macroId, chunk->no_args, TRUE);
 
-      wxNode *node = chunk->children.First();
+      wxNode *node = chunk->children.GetFirst();
       TexChunk *child_chunk = NULL;
       while (node)
       {
-        child_chunk = (TexChunk *)node->Data();
+        child_chunk = (TexChunk *)node->GetData();
         TraverseFromChunk(child_chunk, node);
-        node = node->Next();
+        node = node->GetNext();
       }
 
-      if (thisNode && thisNode->Next())
-          nextChunk = (TexChunk *)thisNode->Next()->Data();
+      if (thisNode && thisNode->GetNext())
+          nextChunk = (TexChunk *)thisNode->GetNext()->GetData();
 
       if (!childrenOnly)
         OnMacro(chunk->macroId, chunk->no_args, FALSE);
@@ -1912,19 +1912,19 @@ void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode, bool childrenOnly)
 
       if (childrenOnly || OnArgument(chunk->macroId, chunk->argn, TRUE))
       {
-        wxNode *node = chunk->children.First();
+        wxNode *node = chunk->children.GetFirst();
         while (node)
         {
-          TexChunk *child_chunk = (TexChunk *)node->Data();
+          TexChunk *child_chunk = (TexChunk *)node->GetData();
           TraverseFromChunk(child_chunk, node);
-          node = node->Next();
+          node = node->GetNext();
         }
       }
 
       currentArgument = chunk;
 
-      if (thisNode && thisNode->Next())
-          nextChunk = (TexChunk *)thisNode->Next()->Data();
+      if (thisNode && thisNode->GetNext())
+          nextChunk = (TexChunk *)thisNode->GetNext()->GetData();
 
       isArgOptional = chunk->optional;
       noArgs = chunk->no_args;
@@ -2049,13 +2049,13 @@ void TexCleanUp(void)
   {
 /* Don't want to remove custom macros after each pass.*/
       SetFontSizes(10);
-      wxNode *node = CustomMacroList.First();
+      wxNode *node = CustomMacroList.GetFirst();
       while (node)
       {
-        CustomMacro *macro = (CustomMacro *)node->Data();
+        CustomMacro *macro = (CustomMacro *)node->GetData();
         delete macro;
         delete node;
-        node = CustomMacroList.First();
+        node = CustomMacroList.GetFirst();
       }
   }
 /**/
@@ -2063,19 +2063,19 @@ void TexCleanUp(void)
   wxNode *node = TexReferences.Next();
   while (node)
   {
-    TexRef *ref = (TexRef *)node->Data();
+    TexRef *ref = (TexRef *)node->GetData();
     delete ref;
     node = TexReferences.Next();
   }
   TexReferences.Clear();
   
-  node = BibList.First();
+  node = BibList.GetFirst();
   while (node)
   {
-    BibEntry *entry = (BibEntry *)node->Data();
+    BibEntry *entry = (BibEntry *)node->GetData();
     delete entry;
     delete node;
-    node = BibList.First();
+    node = BibList.GetFirst();
   }
   CitationList.Clear();
   ResetTopicCounter();

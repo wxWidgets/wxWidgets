@@ -652,7 +652,7 @@ void SourcePainter::GetResultString(string& result, MarkupTagsT tags)
 
 		for( unsigned n = 0; n != len; ++n )
 		
-			result += mResultStr[pos+n];
+			result += mResultStr[(unsigned int)(pos+n)];
 
 		pos += len;
 

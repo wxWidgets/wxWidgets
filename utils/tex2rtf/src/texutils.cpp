@@ -24,6 +24,7 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/app.h"
 #include "wx/hash.h"
 
 #ifdef new
@@ -182,16 +183,16 @@ char *FindTopicName(TexChunk *chunk)
   if (chunk && (chunk->type == CHUNK_TYPE_MACRO) &&
       (chunk->macroId == ltLABEL))
   {
-    wxNode *node = chunk->children.First();
+    wxNode *node = chunk->children.GetFirst();
     if (node)
     {
-      TexChunk *child = (TexChunk *)node->Data();
+      TexChunk *child = (TexChunk *)node->GetData();
       if (child->type == CHUNK_TYPE_ARG)
       {
-        wxNode *snode = child->children.First();
+        wxNode *snode = child->children.GetFirst();
         if (snode)
         {
-          TexChunk *schunk = (TexChunk *)snode->Data();
+          TexChunk *schunk = (TexChunk *)snode->GetData();
           if (schunk->type == CHUNK_TYPE_STRING)
             topicName = schunk->value;
         }
@@ -402,7 +403,7 @@ void WriteTexReferences(char *filename)
   while (node)
   {
     Tex2RTFYield();
-    TexRef *ref = (TexRef *)node->Data();
+    TexRef *ref = (TexRef *)node->GetData();
     ostr << ref->refLabel << " " << (ref->refFile ? ref->refFile : "??") << " ";
     ostr << (ref->sectionName ? ref->sectionName : "??") << " ";
     ostr << (ref->sectionNumber ? ref->sectionNumber : "??") << "\n";
@@ -988,19 +989,19 @@ void OutputBib(void)
     OnMacro(ltPAR, 0, FALSE);
   }
 
-  wxNode *node = CitationList.First();
+  wxStringListNode *node = CitationList.GetFirst();
   while (node)
   {
-    char *citeKey = (char *)node->Data();
+    char *citeKey = (char *)node->GetData();
 //    wxNode *texNode = TexReferences.Find(citeKey);
     TexRef *ref = (TexRef *)TexReferences.Get(citeKey);
     wxNode *bibNode = BibList.Find(citeKey);
     if (bibNode && ref)
     {
-      BibEntry *entry = (BibEntry *)bibNode->Data();
+      BibEntry *entry = (BibEntry *)bibNode->GetData();
       OutputBibItem(ref, entry);
     }
-    node = node->Next();
+    node = node->GetNext();
   }
 }
 
@@ -1008,23 +1009,23 @@ static int citeCount = 1;
 
 void ResolveBibReferences(void)
 {
-  if (CitationList.Number() > 0)
+  if (CitationList.GetCount() > 0)
     OnInform("Resolving bibliographic references...");
 
   citeCount = 1;
   char buf[200];
-  wxNode *node = CitationList.First();
+  wxStringListNode *node = CitationList.GetFirst();
   while (node)
   {
     Tex2RTFYield();
-    char *citeKey = (char *)node->Data();
+    char *citeKey = (char *)node->GetData();
 //    wxNode *texNode = TexReferences.Find(citeKey);
     TexRef *ref = (TexRef *)TexReferences.Get(citeKey);
     wxNode *bibNode = BibList.Find(citeKey);
     if (bibNode && ref)
     {
       // Unused Variable
-      //BibEntry *entry = (BibEntry *)bibNode->Data();
+      //BibEntry *entry = (BibEntry *)bibNode->GetData();
       if (ref->sectionNumber) delete[] ref->sectionNumber;
       sprintf(buf, "[%d]", citeCount);
       ref->sectionNumber = copystring(buf);
@@ -1035,7 +1036,7 @@ void ResolveBibReferences(void)
       sprintf(buf, "Warning: bib ref %s not resolved.", citeKey);
       OnInform(buf);
     }
-    node = node->Next();
+    node = node->GetNext();
   }
 }
 
@@ -1412,7 +1413,7 @@ CustomMacro *FindCustomMacro(char *name)
   wxNode *node = CustomMacroList.Find(name);
   if (node)
   {
-    CustomMacro *macro = (CustomMacro *)node->Data();
+    CustomMacro *macro = (CustomMacro *)node->GetData();
     return macro;
   }
   return NULL;
@@ -1421,7 +1422,7 @@ CustomMacro *FindCustomMacro(char *name)
 // Display custom macros
 void ShowCustomMacros(void)
 {
-  wxNode *node = CustomMacroList.First();
+  wxNode *node = CustomMacroList.GetFirst();
   if (!node)
   {
     OnInform("No custom macros loaded.\n");
@@ -1431,11 +1432,11 @@ void ShowCustomMacros(void)
   char buf[400];
   while (node)
   {
-    CustomMacro *macro = (CustomMacro *)node->Data();
+    CustomMacro *macro = (CustomMacro *)node->GetData();
     sprintf(buf, "\\%s[%d]\n    {%s}", macro->macroName, macro->noArgs,
      macro->macroBody ? macro->macroBody : "");
     OnInform(buf);
-    node = node->Next();
+    node = node->GetNext();
   }
 }
 
@@ -1505,7 +1506,7 @@ void AddColour(const char *theName, unsigned int r,  unsigned int g,  unsigned i
   wxNode *node = ColourTable.Find(theName);
   if (node)
   {
-    ColourTableEntry *entry = (ColourTableEntry *)node->Data();
+    ColourTableEntry *entry = (ColourTableEntry *)node->GetData();
     if (entry->red == r || entry->green == g || entry->blue == b)
       return;
     else
@@ -1521,14 +1522,14 @@ void AddColour(const char *theName, unsigned int r,  unsigned int g,  unsigned i
 int FindColourPosition(char *theName)
 {
   int i = 0;
-  wxNode *node = ColourTable.First();
+  wxNode *node = ColourTable.GetFirst();
   while (node)
   {
-    ColourTableEntry *entry = (ColourTableEntry *)node->Data();
+    ColourTableEntry *entry = (ColourTableEntry *)node->GetData();
     if (strcmp(theName, entry->name) == 0)
       return i;
     i ++;
-    node = node->Next();
+    node = node->GetNext();
   }
   return -1;
 }
@@ -1538,10 +1539,10 @@ extern void DecToHex(int, char *);
 bool FindColourHTMLString(char *theName, char *buf)
 {
   int i = 0;
-  wxNode *node = ColourTable.First();
+  wxNode *node = ColourTable.GetFirst();
   while (node)
   {
-    ColourTableEntry *entry = (ColourTableEntry *)node->Data();
+    ColourTableEntry *entry = (ColourTableEntry *)node->GetData();
     if (strcmp(theName, entry->name) == 0)
     {
         strcpy(buf, "#");
@@ -1557,7 +1558,7 @@ bool FindColourHTMLString(char *theName, char *buf)
         return TRUE;
     }
     i ++;
-    node = node->Next();
+    node = node->GetNext();
   }
   return FALSE;
 }
@@ -1637,7 +1638,7 @@ void ClearKeyWordTable(void)
   wxNode *node = TopicTable.Next();
   while (node)
   {
-    TexTopic *texTopic = (TexTopic *)node->Data();
+    TexTopic *texTopic = (TexTopic *)node->GetData();
     delete texTopic;
     node = TopicTable.Next();
   }
