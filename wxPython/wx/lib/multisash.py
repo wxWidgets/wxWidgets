@@ -302,6 +302,9 @@ class MultiViewLeaf(wx.Window):
 
         self.Bind(wx.EVT_SIZE,self.OnSize)
 
+        self.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE))
+
+
     def GetSaveData(self):
         saveData = {}
         saveData['detailClass'] = str(self.detail.child.__class__)
@@ -449,6 +452,9 @@ class MultiSizer(wx.Window):
         self.Bind(wx.EVT_MOTION,self.OnMouseMove)
         self.Bind(wx.EVT_LEFT_DOWN,self.OnPress)
         self.Bind(wx.EVT_LEFT_UP,self.OnRelease)
+
+        self.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE))
+
 
     def CalcSizePos(self,parent):
         pw,ph = parent.GetSize()
