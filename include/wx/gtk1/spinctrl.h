@@ -15,6 +15,12 @@
 #pragma interface
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_SPINCTRL
+
+#include "wx/control.h"
+
 //-----------------------------------------------------------------------------
 // wxSpinCtrl
 //-----------------------------------------------------------------------------
@@ -53,6 +59,8 @@ public:
     virtual int GetMax() const;
 
     // implementation
+    // --------------
+    
     void OnChar( wxKeyEvent &event );
     
     bool IsOwnGtkWindow( GdkWindow *window );
@@ -65,6 +73,9 @@ private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
     DECLARE_EVENT_TABLE()
 };
+
+#endif
+    // wxUSE_SPINCTRL
 
 #endif
     // __GTKSPINCTRLH__

@@ -40,10 +40,8 @@ extern const char *wxSliderNameStr;
 
 class wxSlider: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxSlider)
-
-  public:
-    wxSlider(void);
+public:
+    wxSlider() {}
     inline wxSlider( wxWindow *parent, wxWindowID id,
            int value, int minValue, int maxValue,
            const wxPoint& pos = wxDefaultPosition,
@@ -54,7 +52,6 @@ class wxSlider: public wxControl
     {
       Create( parent, id, value, minValue, maxValue, pos, size, style, validator, name );
     }
-    ~wxSlider(void);
     bool Create(wxWindow *parent, wxWindowID id,
            int value, int minValue, int maxValue,
            const wxPoint& pos = wxDefaultPosition,
@@ -62,27 +59,28 @@ class wxSlider: public wxControl
            long style = wxSL_HORIZONTAL,
            const wxValidator& validator = wxDefaultValidator, 
            const wxString& name = wxSliderNameStr );
-    virtual int GetValue(void) const;
+    virtual int GetValue() const;
     virtual void SetValue( int );
     void SetRange( int minValue, int maxValue );
-    int GetMin(void) const;
-    int GetMax(void) const;
+    int GetMin() const;
+    int GetMax() const;
     void SetTickFreq( int n, int pos );
-    int GetTickFreq(void) const;
+    int GetTickFreq() const;
     void SetPageSize( int pageSize );
-    int GetPageSize(void) const;
-    void ClearSel(void);
-    void ClearTicks(void);
+    int GetPageSize() const;
+    void ClearSel();
+    void ClearTicks();
     void SetLineSize( int lineSize );
-    int GetLineSize(void) const;
-    int GetSelEnd(void) const;
-    int GetSelStart(void) const;
+    int GetLineSize() const;
+    int GetSelEnd() const;
+    int GetSelStart() const;
     void SetSelection( int minPos, int maxPos );
     void SetThumbLength( int len );
-    int GetThumbLength(void) const;
+    int GetThumbLength() const;
     void SetTick( int tickPos );
 
-  // implementation    
+    // implementation    
+    // --------------
     
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
@@ -90,6 +88,8 @@ class wxSlider: public wxControl
     GtkAdjustment  *m_adjust;
     float           m_oldPos;
     
+private:
+    DECLARE_DYNAMIC_CLASS(wxSlider)
 };
 
 #endif

@@ -15,6 +15,12 @@
 #pragma interface
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_SPINBTN
+
+#include "wx/control.h"
+
 //-----------------------------------------------------------------------------
 // wxSpinButton
 //-----------------------------------------------------------------------------
@@ -53,6 +59,9 @@ private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxSpinButton)
 };
+
+#endif
+  // wxUSE_SPINBTN
 
 #endif
     // __GTKSPINBUTTH__
