@@ -20,6 +20,7 @@
 #include "wx/event.h"
 #include "wx/app.h"
 #include "wx/dcclient.h"
+#include "wx/scrolwin.h"
 #endif
 #include "wx/os2/private.h"
 #include "wx/control.h"

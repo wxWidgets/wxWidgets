@@ -14,6 +14,7 @@
 #ifndef WX_PRECOMP
 #include "wx/defs.h"
 #include "wx/utils.h"
+#include "wx/scrolwin.h"
 #endif
 
 #include "wx/os2/private.h"

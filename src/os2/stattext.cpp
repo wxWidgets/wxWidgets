@@ -20,6 +20,7 @@
 #include "wx/event.h"
 #include "wx/app.h"
 #include "wx/brush.h"
+#include "wx/scrolwin.h"
 #endif
 
 #include "wx/stattext.h"
@@ -241,5 +242,3 @@ MRESULT wxStaticText::OS2WindowProc(
                                    ,lParam
                                   );
 } // end of wxStaticText::OS2WindowProc
-
-

@@ -35,6 +35,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/frame.h"
+    #include "wx/control.h"
 #endif //WX_PRECOMP
 
 #include "wx/os2/private.h"

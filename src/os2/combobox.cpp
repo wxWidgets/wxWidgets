@@ -15,7 +15,8 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include "wx/setup.h"
+    #include "wx/setup.h"
+    #include "wx/settings.h"
 #endif
 
 #if wxUSE_COMBOBOX

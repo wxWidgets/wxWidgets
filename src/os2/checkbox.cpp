@@ -15,6 +15,9 @@
 #ifndef WX_PRECOMP
     #include "wx/checkbox.h"
     #include "wx/brush.h"
+    #include "wx/scrolwin.h"
+    #include "wx/dcscreen.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/os2/private.h"

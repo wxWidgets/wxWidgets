@@ -9,6 +9,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/defs.h"
+
+#if wxUSE_JOYSTICK
+
 #include "wx/string.h"
 #define INCL_PM
 #define INCL_DOS
@@ -280,4 +284,5 @@ bool wxJoystick::ReleaseCapture()
     // TODO
     return FALSE;
 }
+#endif  // wxUSE_JOYSTICK
 

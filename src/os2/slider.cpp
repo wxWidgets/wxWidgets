@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <wx/utils.h>
 #include <wx/brush.h>
+#include <wx/scrolwin.h>
 #endif
 
 #include "wx/slider.h"

@@ -21,6 +21,8 @@
 #include "wx/setup.h"
 #include "wx/radiobut.h"
 #include "wx/brush.h"
+#include "wx/dcscreen.h"
+#include "wx/settings.h"
 #endif
 
 #include "wx/os2/private.h"

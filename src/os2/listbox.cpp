@@ -22,6 +22,7 @@
 #include "wx/font.h"
 #include "wx/dc.h"
 #include "wx/utils.h"
+#include "wx/scrolwin.h"
 #endif
 
 #define INCL_M

@@ -19,6 +19,7 @@
     #include "wx/bmpbuttn.h"
     #include "wx/settings.h"
     #include "wx/dcscreen.h"
+    #include "wx/scrolwin.h"
 #endif
 
 #include "wx/os2/private.h"

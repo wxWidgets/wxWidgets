@@ -34,7 +34,11 @@
     #include "wx/button.h"
     #include "wx/msgdlg.h"
     #include "wx/scrolwin.h"
-
+    #include "wx/radiobox.h"
+    #include "wx/slider.h"
+    #include "wx/statusbr.h"
+    #include "wx/toolbar.h"
+    #include "wx/settings.h"
     #include <stdio.h>
 #endif
 
@@ -2803,6 +2807,8 @@ MRESULT wxWindowOS2::OS2WindowProc(
     return mResult;
 } // end of wxWindowOS2::OS2WindowProc
 
+#ifndef __EMX__
+// clashes with wxDlgProc in toplevel.cpp?
 //
 // Dialog window proc
 //
@@ -2829,6 +2835,7 @@ MRESULT wxDlgProc(
         return (MRESULT)0;
     }
 } // end of wxDlgProc
+#endif
 
 wxWindow* wxFindWinFromHandle(
   WXHWND                            hWnd
