@@ -5,6 +5,8 @@
 //              source such as opening and closing the data source.
 // Author:      Doug Card
 // Modified by: George Tasker
+//              Bart Jourquin
+//              Mark Johnson
 // Mods:        Dec, 1998:
 //                -Added support for SQL statement logging and database cataloging
 // Mods:        April, 1999
@@ -139,15 +141,17 @@ typedef struct
 /********** wxDbColFor Constructor **********/
 wxDbColFor::wxDbColFor()
 {
-    i_Nation = 0;                // 0=EU, 1=UK, 2=International, 3=US
     s_Field  = "";
     int i;
     for (i=0;i<7;i++)
     {
         s_Format[i] = "";
-        s_Menge[i]  = "";
-        i_Menge[i]  = 0;
+        s_Amount[i]  = "";
+        i_Amount[i]  = 0;
     }
+    i_Nation      = 0;                // 0=EU, 1=UK, 2=International, 3=US
+    i_dbDataType  = 0;
+    i_sqlDataType = 0;
     Format(1,DB_DATA_TYPE_VARCHAR,0,0,0);      // the Function that does the work
 }  // wxDbColFor::wxDbColFor()
 
@@ -174,7 +178,7 @@ int wxDbColFor::Format(int Nation,int dbDataType,SWORD sqlDataType,short columnS
     i_Nation      = Nation;                                 // 0 = timestamp , 1=EU, 2=UK, 3=International, 4=US
     i_dbDataType  = dbDataType;
     i_sqlDataType = sqlDataType;
-    s_Field.Printf(wxT("%s%d"),s_Menge[1].c_str(),i_Menge[1]);   // OK for VARCHAR, INTEGER and FLOAT
+    s_Field.Printf(wxT("%s%d"),s_Amount[1].c_str(),i_Amount[1]);   // OK for VARCHAR, INTEGER and FLOAT
     if (i_dbDataType == 0)                                  // Filter unsupported dbDataTypes
     {
         if ((i_sqlDataType == SQL_VARCHAR) || (i_sqlDataType == SQL_LONGVARCHAR))
@@ -2492,7 +2496,6 @@ wxDbInf *wxDb::GetCatalog(char *userID)
 
         if (retcode != SQL_SUCCESS)
         {
-	  
             DispAllErrors(henv, hdbc, hstmt);
             pDbInf = NULL;
             SQLFreeStmt(hstmt, SQL_CLOSE);
@@ -2961,6 +2964,7 @@ wxDBMS wxDb::Dbms(void)
 {
     wxChar baseName[25+1];
     wxStrncpy(baseName,dbInf.dbmsName,25);
+    baseName[25] = 0;
 
     // BJO 20000428 : add support for Virtuoso
     if (!wxStricmp(dbInf.dbmsName,"OpenLink Virtuoso VDBMS"))
@@ -3021,7 +3025,9 @@ wxDb WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCurso
     {
         // The database connection must be for the same datasource
         // name and must currently not be in use.
-        if (pList->Free && (! wxStrcmp(pDbConfig->Dsn, pList->Dsn)))  // Found a free connection
+        if (pList->Free &&
+            (pList->PtrDb->FwdOnlyCursors() == FwdOnlyCursors) &&
+            (! wxStrcmp(pDbConfig->Dsn, pList->Dsn)))  // Found a free connection
         {
             pList->Free = FALSE;
             return(pList->PtrDb);
