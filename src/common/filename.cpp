@@ -197,8 +197,9 @@ private:
 
 static void ConvertFileTimeToWx(wxDateTime *dt, const FILETIME &ft)
 {
+    FILETIME ftcopy = ft;
     FILETIME ftLocal;
-    if ( !::FileTimeToLocalFileTime(&ft, &ftLocal) )
+    if ( !::FileTimeToLocalFileTime(&ftcopy, &ftLocal) )
     {
         wxLogLastError(_T("FileTimeToLocalFileTime"));
     }
