@@ -668,7 +668,7 @@ class LineShape(Shape):
             d=-arrow.GetYOffset() # Negate so +offset is above line
 
             if x3 == x1:
-                theta = pi / 2
+                theta = math.pi / 2
             else:
                 theta = math.atan((y3-y1) / (x3-x1))
 
@@ -744,15 +744,15 @@ class LineShape(Shape):
                 if x1 == x2 and y1 == y2:
                     theta = 0.0
                 elif x1 == x2 and y1>y2:
-                    theta = 3.0 * pi / 2
+                    theta = 3.0 * math.pi / 2
                 elif x1 == x2 and y2>y1:
-                    theta = pi / 2
+                    theta = math.pi / 2
                 elif x2>x1 and y2 >= y1:
                     theta = math.atan((y2-y1) / (x2-x1))
                 elif x2<x1:
-                    theta = pi + math.atan((y2-y1) / (x2-x1))
+                    theta = math.pi + math.atan((y2-y1) / (x2-x1))
                 elif x2>x1 and y2<y1:
-                    theta = 2 * pi + math.atan((y2-y1) / (x2-x1))
+                    theta = 2 * math.pi + math.atan((y2-y1) / (x2-x1))
                 else:
                     raise "Unknown arrowhead rotation case"
 
