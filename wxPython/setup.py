@@ -106,7 +106,8 @@ HYBRID = 1         # If set and not debug or FINAL, then build a
                    # wxWindows must have been built with /MD, not /MDd
                    # (using FINAL=hybrid will do it.)
 
-WXDLLVER = '25'    # Version part of wxWindows DLL name
+                   # Version part of wxWindows LIB/DLL names
+WXDLLVER = '%d%d' % (VER_MAJOR, VER_MINOR)
 
 
 #----------------------------------------------------------------------
@@ -321,8 +322,7 @@ def makeLibName(name):
     if os.name == 'posix':
         libname = '%s_%s-%s' % (WXBASENAME, name, WXRELEASE)
     else:
-        libname = "FUBAR"
-        #raise NotImplementedError
+        libname = 'wxmsw%s%s_%s' % (WXDLLVER, libFlag(), name)
 
     return [libname]
 
@@ -719,7 +719,6 @@ if BUILD_GLCANVAS:
     msg('Preparing GLCANVAS...')
     location = 'contrib/glcanvas'
     swig_files = ['glcanvas.i']
-    other_sources = []
 
     swig_sources = run_swig(swig_files, location, GENDIR, PKGDIR,
                             USE_SWIG, swig_force, swig_args, swig_deps)
@@ -730,12 +729,11 @@ if BUILD_GLCANVAS:
         gl_lflags = gl_config.split() + lflags
         gl_libs = libs
     else:
-        other_sources = [opj(location, 'msw/myglcanvas.cpp')]
-        gl_libs = libs + ['opengl32', 'glu32']
+        gl_libs = libs + ['opengl32', 'glu32'] + makeLibName('gl')
         gl_lflags = lflags
 
     ext = Extension('glcanvasc',
-                    swig_sources + other_sources,
+                    swig_sources,
 
                     include_dirs = includes,
                     define_macros = defines,
