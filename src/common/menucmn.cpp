@@ -186,6 +186,12 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                     else if ( current == wxT("END") ) {
                         keyCode = WXK_END;
                     }
+                    else if ( current == wxT("SPACE") ) {
+                        keyCode = WXK_SPACE;
+                    }
+                    else if ( current == wxT("TAB") ) {
+                        keyCode = WXK_TAB;
+                    }
                     else
                     {
                         wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
@@ -808,7 +814,7 @@ int wxMenuBarBase::FindMenu(const wxString& title) const
              (wxMenuItem::GetLabelFromText(title2) == label) )
         {
             // found
-            return (int)i; 
+            return (int)i;
         }
     }
 
