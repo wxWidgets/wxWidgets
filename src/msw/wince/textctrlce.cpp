@@ -232,7 +232,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     WXDWORD spiner_style = WS_VISIBLE |
                            UDS_ALIGNRIGHT |
                            UDS_EXPANDABLE |
-						   UDS_NOSCROLL;
+                           UDS_NOSCROLL;
 
     if ( !IsVertical(style) )
         spiner_style |= UDS_HORZ;
@@ -409,7 +409,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     if ( (value.length() > 0x400) || (value != GetValue()) )
     {
         DoWriteText(value, false);
-        
+
         // for compatibility, don't move the cursor when doing SetValue()
         SetInsertionPoint(0);
     }
@@ -546,7 +546,7 @@ bool wxTextCtrl::CanPaste() const
 
 void wxTextCtrl::SetEditable(bool editable)
 {
-    SendMessage(GetBuddyHwnd(), EM_SETREADONLY, (WPARAM)!editable, (LPARAM)0L);
+    ::SendMessage(GetBuddyHwnd(), EM_SETREADONLY, (WPARAM)!editable, (LPARAM)0L);
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)
@@ -740,9 +740,9 @@ wxTextCtrl::HitTest(const wxPoint& pt, long *posOut) const
     // double check that we really are where it pretends
     POINTL ptReal;
 
-    LRESULT lRc = SendMessage(GetBuddyHwnd(), EM_POSFROMCHAR, pos, 0);
+    LRESULT lRc = ::SendMessage(GetBuddyHwnd(), EM_POSFROMCHAR, pos, 0);
 
-	if ( lRc == -1 )
+    if ( lRc == -1 )
     {
         // this is apparently returned when pos corresponds to the last
         // position
@@ -779,7 +779,7 @@ void wxTextCtrl::ShowPosition(long pos)
     int linesToScroll = specifiedLineLineNo - currentLineLineNo;
 
     if (linesToScroll != 0)
-		(void)::SendMessage(GetBuddyHwnd(), EM_LINESCROLL, 0, (LPARAM)linesToScroll);
+        (void)::SendMessage(GetBuddyHwnd(), EM_LINESCROLL, 0, (LPARAM)linesToScroll);
 }
 
 long wxTextCtrl::GetLengthOfLineContainingPos(long pos) const

@@ -6,7 +6,7 @@
 // Created:     2003-07-12
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -87,7 +87,7 @@ bool wxWinceHelpController::KeywordSearch(const wxString& WXUNUSED(k),
 
 bool wxWinceHelpController::Quit()
 {
-    return TRUE;
+    return true;
 }
 
 // Append extension if necessary.
@@ -109,8 +109,8 @@ wxString wxWinceHelpController::GetValidFilename(const wxString& file) const
 // View URL
 bool wxWinceHelpController::ViewURL(const wxString& topic)
 {
-    if (m_helpFile.IsEmpty()) return FALSE;
-    
+    if (m_helpFile.IsEmpty()) return false;
+
     wxString url( wxT("file:") + GetValidFilename(m_helpFile) );
     if (!topic.IsEmpty())
         url = url + wxT("#") + topic;

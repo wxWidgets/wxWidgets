@@ -116,7 +116,7 @@ int wxFileDialog::ShowModal()
     wxWindow* parentWindow = GetParent();
     if (!parentWindow)
         parentWindow = wxTheApp->GetTopWindow();
-    
+
     wxString str = wxGetTextFromUser(m_message, _("File"), m_fileName, parentWindow);
     if (str)
     {

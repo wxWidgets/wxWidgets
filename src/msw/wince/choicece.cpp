@@ -151,8 +151,6 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
     wxSize sizeText(size), sizeBtn(size);
     sizeBtn.x = GetBestSpinerSize(IsVertical(style)).x;
 
-    sizeBtn.x;
-
     if ( sizeText.x == wxDefaultCoord )
     {
         // DEFAULT_ITEM_WIDTH is the default width for the text control
@@ -300,7 +298,7 @@ wxChoice::~wxChoice()
 
 int wxChoice::DoAppend(const wxString& item)
 {
-    int n = (int)SendMessage(GetBuddyHwnd(), LB_ADDSTRING, 0, (LPARAM)item.c_str());
+    int n = (int)::SendMessage(GetBuddyHwnd(), LB_ADDSTRING, 0, (LPARAM)item.c_str());
 
     if ( n == LB_ERR )
     {
@@ -315,7 +313,7 @@ int wxChoice::DoInsert(const wxString& item, int pos)
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into choice"));
     wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
 
-    int n = (int)SendMessage(GetBuddyHwnd(), LB_INSERTSTRING, pos, (LPARAM)item.c_str());
+    int n = (int)::SendMessage(GetBuddyHwnd(), LB_INSERTSTRING, pos, (LPARAM)item.c_str());
     if ( n == LB_ERR )
     {
         wxLogLastError(wxT("SendMessage(LB_INSERTSTRING)"));
@@ -333,14 +331,14 @@ void wxChoice::Delete(int n)
         delete GetClientObject(n);
     }
 
-    SendMessage(GetBuddyHwnd(), LB_DELETESTRING, n, 0);
+    ::SendMessage(GetBuddyHwnd(), LB_DELETESTRING, n, 0);
 }
 
 void wxChoice::Clear()
 {
     Free();
 
-    SendMessage(GetBuddyHwnd(), LB_RESETCONTENT, 0, 0);
+    ::SendMessage(GetBuddyHwnd(), LB_RESETCONTENT, 0, 0);
 }
 
 void wxChoice::Free()
@@ -361,12 +359,12 @@ void wxChoice::Free()
 
 int wxChoice::GetSelection() const
 {
-    return (int)SendMessage(GetBuddyHwnd(), LB_GETCURSEL, 0, 0);
+    return (int)::SendMessage(GetBuddyHwnd(), LB_GETCURSEL, 0, 0);
 }
 
 void wxChoice::SetSelection(int n)
 {
-    SendMessage(GetBuddyHwnd(), LB_SETCURSEL, n, 0);
+    ::SendMessage(GetBuddyHwnd(), LB_SETCURSEL, n, 0);
 }
 
 // ----------------------------------------------------------------------------
@@ -375,12 +373,12 @@ void wxChoice::SetSelection(int n)
 
 int wxChoice::GetCount() const
 {
-    return (int)SendMessage(GetBuddyHwnd(), LB_GETCOUNT, 0, 0);
+    return (int)::SendMessage(GetBuddyHwnd(), LB_GETCOUNT, 0, 0);
 }
 
 int wxChoice::FindString(const wxString& s) const
 {
-    int pos = (int)SendMessage(GetBuddyHwnd(), LB_FINDSTRINGEXACT,
+    int pos = (int)::SendMessage(GetBuddyHwnd(), LB_FINDSTRINGEXACT,
                                (WPARAM)-1, (LPARAM)s.c_str());
 
     return pos == LB_ERR ? wxNOT_FOUND : pos;
@@ -452,7 +450,7 @@ void wxChoice::DoSetItemClientData( int n, void* clientData )
 
 void* wxChoice::DoGetItemClientData( int n ) const
 {
-    LPARAM rc = SendMessage(GetHwnd(), LB_GETITEMDATA, n, 0);
+    LPARAM rc = ::SendMessage(GetHwnd(), LB_GETITEMDATA, n, 0);
     if ( rc == LB_ERR )
     {
         wxLogLastError(wxT("LB_GETITEMDATA"));

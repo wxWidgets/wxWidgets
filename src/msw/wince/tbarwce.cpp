@@ -236,7 +236,7 @@ bool wxToolBar::Create(wxWindow *parent,
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-    return TRUE;
+    return true;
 }
 
 #ifndef TBSTYLE_NO_DROPDOWN_ARROW
@@ -252,7 +252,7 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos), const wxSize& WXU
 #if defined(WINCE_WITHOUT_COMMANDBAR)
     // Create the menubar.
     SHMENUBARINFO mbi;
-    
+
     memset (&mbi, 0, sizeof (SHMENUBARINFO));
     mbi.cbSize     = sizeof (SHMENUBARINFO);
     mbi.hwndParent = (HWND) GetParent()->GetHWND();
@@ -265,13 +265,13 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos), const wxSize& WXU
     mbi.cBmpImages = 0;
     mbi.dwFlags = 0 ; // SHCMBF_EMPTYBAR;
     mbi.hInstRes = wxGetInstance();
-    
+
     if (!SHCreateMenuBar(&mbi))
     {
         wxFAIL_MSG( _T("SHCreateMenuBar failed") );
         return false;
     }
-    
+
     SetHWND((WXHWND) mbi.hwndMB);
 #else
     HWND hWnd = CommandBar_Create(wxGetInstance(), (HWND) GetParent()->GetHWND(), GetId());
@@ -283,8 +283,8 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos), const wxSize& WXU
 
     if (menuBar)
         menuBar->Create();
-    
-    return TRUE;
+
+    return true;
 }
 
 void wxToolBar::Recreate()
@@ -437,7 +437,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
     // Realize() later
     tool->Attach(this);
 
-    return TRUE;
+    return true;
 }
 
 bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
@@ -510,11 +510,11 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
             int x;
             wxControl *control = tool2->GetControl();
             control->GetPosition(&x, NULL);
-            control->Move(x - width, -1);
+            control->Move(x - width, wxDefaultCoord);
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 struct wxToolBarIdMapping
@@ -554,7 +554,7 @@ static wxToolBarIdMapping sm_ToolBarIdMappingArray[] =
 static int wxFindIdForwxWinId(int id)
 {
     int i = 0;
-    while (TRUE)
+    while (true)
     {
         if (sm_ToolBarIdMappingArray[i].m_wxwinId == 0)
             return -1;
@@ -572,7 +572,7 @@ bool wxToolBar::Realize()
     if ( nTools == 0 )
     {
         // nothing to do
-        return TRUE;
+        return true;
     }
 
 #if 0
@@ -605,7 +605,7 @@ bool wxToolBar::Realize()
     {
         wxToolBarToolBase *tool = node->GetData();
 
-        bool processedThis = TRUE;
+        bool processedThis = true;
 
         TBBUTTON& button = buttons[i];
 
@@ -663,10 +663,10 @@ bool wxToolBar::Realize()
                             // radio items
                             button.fsState |= TBSTATE_CHECKED;
 
-                            tool->Toggle(TRUE);
+                            tool->Toggle(true);
                         }
 
-                        isRadio = TRUE;
+                        isRadio = true;
                         break;
 
                     case wxITEM_CHECK:
@@ -723,8 +723,8 @@ bool wxToolBar::Realize()
         // note that we use TB_GETITEMRECT and not TB_GETRECT because the
         // latter only appeared in v4.70 of comctl32.dll
         RECT r;
-        if ( !SendMessage(GetHwnd(), TB_GETITEMRECT,
-                          index, (LPARAM)(LPRECT)&r) )
+        if ( !::SendMessage(GetHwnd(), TB_GETITEMRECT,
+                            index, (LPARAM)(LPRECT)&r) )
         {
             wxLogLastError(wxT("TB_GETITEMRECT"));
         }
@@ -756,8 +756,8 @@ bool wxToolBar::Realize()
             tbbi.cbSize = sizeof(tbbi);
             tbbi.dwMask = TBIF_SIZE;
             tbbi.cx = size.x;
-            if ( !SendMessage(GetHwnd(), TB_SETBUTTONINFO,
-                              tool->GetId(), (LPARAM)&tbbi) )
+            if ( !::SendMessage(GetHwnd(), TB_SETBUTTONINFO,
+                                tool->GetId(), (LPARAM)&tbbi) )
             {
                 // the id is probably invalid?
                 wxLogLastError(wxT("TB_SETBUTTONINFO"));
@@ -780,8 +780,8 @@ bool wxToolBar::Realize()
             size_t nSeparators = size.x / widthSep;
             for ( size_t nSep = 0; nSep < nSeparators; nSep++ )
             {
-                if ( !SendMessage(GetHwnd(), TB_INSERTBUTTON,
-                                  index, (LPARAM)&tbb) )
+                if ( !::SendMessage(GetHwnd(), TB_INSERTBUTTON,
+                                    index, (LPARAM)&tbb) )
                 {
                     wxLogLastError(wxT("TB_INSERTBUTTON"));
                 }
@@ -794,7 +794,7 @@ bool wxToolBar::Realize()
             ((wxToolBarTool *)tool)->SetSeparatorsCount(nSeparators);
 
             // adjust the controls width to exactly cover the separators
-            control->SetSize((nSeparators + 1)*widthSep, -1);
+            control->SetSize((nSeparators + 1)*widthSep, wxDefaultCoord);
         }
 
         // position the control itself correctly vertically
@@ -803,7 +803,7 @@ bool wxToolBar::Realize()
         if ( diff < 0 )
         {
             // the control is too high, resize to fit
-            control->SetSize(-1, height - 2);
+            control->SetSize(wxDefaultCoord, height - 2);
 
             diff = 2;
         }
@@ -893,7 +893,7 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
@@ -908,11 +908,11 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
     // in an ANSI application - this seems to be a bug in comctl32.dll v5
     UINT code = hdr->code;
     if ( (code != (UINT) TTN_NEEDTEXTA) && (code != (UINT) TTN_NEEDTEXTW) )
-        return FALSE;
+        return false;
 
     HWND toolTipWnd = (HWND)::SendMessage((HWND)GetHWND(), TB_GETTOOLTIPS, 0, 0);
     if ( toolTipWnd != hdr->hwndFrom )
-        return FALSE;
+        return false;
 
     LPTOOLTIPTEXT ttText = (LPTOOLTIPTEXT)lParam;
     int id = (int)ttText->hdr.idFrom;
@@ -1032,7 +1032,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 void wxToolBar::UpdateSize()
 {
     // the toolbar size changed
-    SendMessage(GetHwnd(), TB_AUTOSIZE, 0, 0);
+    ::SendMessage(GetHwnd(), TB_AUTOSIZE, 0, 0);
 
     // we must also refresh the frame after the toolbar size (possibly) changed
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);

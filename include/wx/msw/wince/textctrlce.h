@@ -193,10 +193,10 @@ protected:
 
     // replace the contents of the selection or of the entire control with the
     // given text
-    void DoWriteText(const wxString& text, bool selectionOnly = TRUE);
+    void DoWriteText(const wxString& text, bool selectionOnly = true);
 
     // set the selection possibly without scrolling the caret into view
-    void DoSetSelection(long from, long to, bool scrollCaret = TRUE);
+    void DoSetSelection(long from, long to, bool scrollCaret = true);
 
     // return true if there is a non empty selection in the control
     bool HasSelection() const;
@@ -205,7 +205,7 @@ protected:
     // position
     long GetLengthOfLineContainingPos(long pos) const;
 
-    // send TEXT_UPDATED event, return TRUE if it was handled, FALSE otherwise
+    // send TEXT_UPDATED event, return true if it was handled, false otherwise
     bool SendUpdateEvent();
 
     // override some base class virtuals
@@ -214,7 +214,7 @@ protected:
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
-    // if TRUE, SendUpdateEvent() will eat the next event (see comments in the
+    // if true, SendUpdateEvent() will eat the next event (see comments in the
     // code as to why this is needed)
     bool m_suppressNextUpdate;
 

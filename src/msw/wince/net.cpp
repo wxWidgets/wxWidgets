@@ -1,7 +1,7 @@
 // Copyright 1998, Ben Goetter.  All rights reserved.
 
 /*
- patch holes in winsock 
+ patch holes in winsock
 
   WCE 2.0 lacks many of the 'database' winsock routines.
   Stub just enough them for ss.dll.
@@ -47,7 +47,7 @@ static struct protoent RgProtoEnt[] =
 // Ordered by most likely to be requested.
 // Assumes that a service available on different protocols
 // will use the same port number on each protocol.
-// Should that be no longer the case, 
+// Should that be no longer the case,
 // remove the fFoundOnce code from getservbyXxx fcns.
 
 // This table keeps port numbers in host byte order.

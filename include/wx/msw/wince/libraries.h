@@ -12,8 +12,8 @@
 #ifndef _WX_LIBRARIES_H_
 #define _WX_LIBRARIES_H_
 
-// NB: According to Microsoft, it is up to the OEM to decide whether 
-//     some of libraries will be included in the system or not. For example, 
+// NB: According to Microsoft, it is up to the OEM to decide whether
+//     some of libraries will be included in the system or not. For example,
 //     MS' STANDARDSDK does not include cyshell.lib and aygshell.lib, while
 //     Pocket PC 2003 SDK does. We depend on some symbols that are in these
 //     libraries in some SDKs and in different libs in others. Fortunately we

@@ -87,41 +87,41 @@ void wxTopLevelWindowMSW::ButtonMenu::SetButton(int id, const wxString& label, w
 
 wxMenu *wxTopLevelWindowMSW::ButtonMenu::DuplicateMenu(wxMenu *menu)
 {
-	// This is required in case of converting wxMenuBar to wxMenu in wxFrame::SetMenuBar.
-	// All submenus has to be recreated because of new owner.
+    // This is required in case of converting wxMenuBar to wxMenu in wxFrame::SetMenuBar.
+    // All submenus has to be recreated because of new owner.
 
-	wxMenu *duplication = new wxMenu;
+    wxMenu *duplication = new wxMenu;
 
-	if (menu)
-	{
+    if (menu)
+    {
         wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
         while (node)
-		{
-			wxMenuItem *item = node->GetData();
-			if (item)
-			{
-				wxMenu *submenu = NULL;
+        {
+            wxMenuItem *item = node->GetData();
+            if (item)
+            {
+                wxMenu *submenu = NULL;
 
-				if(item->IsSubMenu())
-				    submenu = DuplicateMenu( item->GetSubMenu() );
-				else
-					submenu = NULL;
+                if(item->IsSubMenu())
+                    submenu = DuplicateMenu( item->GetSubMenu() );
+                else
+                    submenu = NULL;
 
-				wxMenuItem *new_item = wxMenuItem::New(duplication, item->GetId(), item->GetLabel(), item->GetHelp(), item->GetKind(), submenu);
+                wxMenuItem *new_item = wxMenuItem::New(duplication, item->GetId(), item->GetLabel(), item->GetHelp(), item->GetKind(), submenu);
 
-				if( item->IsCheckable() )
-				    new_item->Check(item->IsChecked());
+                if( item->IsCheckable() )
+                    new_item->Check(item->IsChecked());
 
-				new_item->Enable( item->IsEnabled() );
+                new_item->Enable( item->IsEnabled() );
 
-				duplication->Append(new_item);
-			}
+                duplication->Append(new_item);
+            }
             node = node->GetNext();
-		}
-		
-	}
+        }
 
-	return duplication;
+    }
+
+    return duplication;
 }
 
 void wxMenuToHMenu(wxMenu* in, HMENU hMenu)
@@ -189,11 +189,11 @@ void wxTopLevelWindowMSW::ReloadButton(ButtonMenu& button, UINT menuID)
     button_info.fsState = TBSTATE_ENABLED;
     wxStrcpy(buf, button.GetLabel().c_str());
     button_info.pszText = buf;
-    SendMessage(m_MenuBarHWND, TB_SETBUTTONINFO, menuID, (LPARAM) &button_info);
+    ::SendMessage(m_MenuBarHWND, TB_SETBUTTONINFO, menuID, (LPARAM) &button_info);
 
     if(button.IsMenu())
     {
-        HMENU hPopupMenu = (HMENU) SendMessage(m_MenuBarHWND, SHCMBM_GETSUBMENU, 0, menuID);
+        HMENU hPopupMenu = (HMENU) ::SendMessage(m_MenuBarHWND, SHCMBM_GETSUBMENU, 0, menuID);
         RemoveMenu(hPopupMenu, 0, MF_BYPOSITION);
         wxMenuToHMenu(button.GetMenu(), hPopupMenu);
     }

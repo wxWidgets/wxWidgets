@@ -1,7 +1,7 @@
 // Copyright 1998, Ben Goetter.  All rights reserved.
 
 /*
- patch holes in winsock 
+ patch holes in winsock
 
   WCE 2.0 lacks many of the 'database' winsock routines.
   Stub just enough them for ss.dll.
