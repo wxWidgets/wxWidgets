@@ -155,7 +155,7 @@ HTMLOBJS = \
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
 # Add $(HTMLOBJS) if wanting wxHTML classes
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) 
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 
 # Normal, static library
 all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg $(LIBTARGET)
@@ -628,4 +628,11 @@ updatedocs: touchmanual alldocs
 # Office StartUp folder, and PDFMaker should be installed.
 updatepdf:  # touchmanual pdfrtf
     start $(WAITFLAG) "winword d:\wx2\wxWindows\docs\latex\pdf\wx.rtf /mGeneratePDF"
+
+
+MFTYPE=vc
+makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
+	cd $(WXWIN)\distrib\msw\tmake
+	tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
+	copy makefile.$(MFTYPE) $(WXWIN)\src\msw
 

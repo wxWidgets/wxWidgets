@@ -253,3 +253,8 @@ clean: $(PERIPH_CLEAN_TARGET)
 cleanall: clean
 
 
+MFTYPE=dos
+makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
+	cd $(WXWIN)\distrib\msw\tmake
+	tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
+	copy makefile.$(MFTYPE) $(WXWIN)\src\msw

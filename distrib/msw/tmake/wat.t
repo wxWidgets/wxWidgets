@@ -104,8 +104,8 @@ $(LIBTARGET) : $(OBJECTS)
 #    %create tmp.lbc
 #    @for %i in ( $(OBJECTS) ) do @%append tmp.lbc +%i
 #    wlib /b /c /n /p=512 $^@ @tmp.lbc
-	
-	
+
+
 clean:   .SYMBOLIC $(EXTRATARGETSCLEAN)
     -erase *.obj
     -erase $(LIBTARGET)
@@ -241,9 +241,9 @@ wrffrp.obj: $(XPMDIR)\wrffrp.c
   *$(CC) $(CPPFLAGS) $(IFLAGS) $<
 
 OBJ1 = adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) \
-  trees$(O) 
+  trees$(O)
 OBJ2 = zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) \
-  infutil$(O) inffast$(O) 
+  infutil$(O) inffast$(O)
 
 adler32.obj: adler32.c zutil.h zlib.h zconf.h
 	$(CC) -c $(CFLAGS) $*.c
@@ -319,3 +319,8 @@ clean_zlib:   .SYMBOLIC
     wmake -f makefile.wat clean
     cd $(WXDIR)\src\msw
 
+MFTYPE=wat
+makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
+	cd $(WXWIN)\distrib\msw\tmake
+	tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
+	copy makefile.$(MFTYPE) $(WXWIN)\src\msw

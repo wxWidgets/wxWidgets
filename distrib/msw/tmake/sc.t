@@ -112,3 +112,8 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
 # $(COMMDIR)\cmndata.obj:     $(COMMDIR)\cmndata.cpp
 #	*$(CC) -c $(CFLAGS) -I$(INCLUDE) $(OPTIONS) $(COMMDIR)\cmndata.cpp -o$(COMMDIR)\cmndata.obj
 
+MFTYPE=sc
+makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
+	cd $(WXWIN)\distrib\msw\tmake
+	tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
+	copy makefile.$(MFTYPE) $(WXWIN)\src\msw

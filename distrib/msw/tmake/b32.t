@@ -253,7 +253,7 @@ clean_wxxpm:	$(CFG)
 
 png:    $(CFG)
         cd $(WXDIR)\src\png
-        make -f makefile.b32 
+        make -f makefile.b32
         cd $(WXDIR)\src\msw
 
 clean_png:
@@ -273,7 +273,7 @@ clean_zlib:
 
 jpeg:    $(CFG)
         cd $(WXDIR)\src\jpeg
-        make -f makefile.b32 
+        make -f makefile.b32
         cd $(WXDIR)\src\msw
 
 clean_jpeg:
@@ -321,4 +321,10 @@ clean: $(PERIPH_CLEAN_TARGET)
 
 cleanall: clean
 
+
+MFTYPE=b32
+makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
+	cd $(WXWIN)\distrib\msw\tmake
+	tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
+	copy makefile.$(MFTYPE) $(WXWIN)\src\msw
 
