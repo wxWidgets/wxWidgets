@@ -211,7 +211,7 @@ SliderWidgetsPage::SliderWidgetsPage(wxBookCtrl *book,
     m_max = 100;
 
     m_chkVert =
-    m_chkInverse = 
+    m_chkInverse =
     m_chkTicks =
     m_chkLabels =
     m_chkBothSides = (wxCheckBox *)NULL;
@@ -539,7 +539,7 @@ void SliderWidgetsPage::OnUpdateUIMinMaxButton(wxUpdateUIEvent& event)
 void SliderWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
     event.Enable( m_chkVert->GetValue() ||
-                  m_chkInverse->GetValue() || 
+                  m_chkInverse->GetValue() ||
                   !m_chkTicks->GetValue() ||
                   !m_chkLabels->GetValue() ||
                   m_chkBothSides->GetValue() );
@@ -606,7 +606,7 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
 
     static int s_numSliderEvents = 0;
 
-    wxLogMessage(wxT("Slider event #%d: %s (pos = %d, int value = %d)"),
+    wxLogMessage(wxT("Slider event #%d: %s (pos = %d, int value = %ld)"),
                  s_numSliderEvents++,
                  eventNames[index],
                  event.GetPosition(),
