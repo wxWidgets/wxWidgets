@@ -1328,7 +1328,7 @@ GSocketError GAddress_INET_SetHostAddress(GAddress *address,
 
   CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
 
-  address->m_host = hostaddr ;
+  address->m_host = htonl(hostaddr) ;
 
   return GSOCK_NOERROR;
 }
@@ -1409,7 +1409,7 @@ unsigned long GAddress_INET_GetHostAddress(GAddress *address)
   assert(address != NULL); 
   CHECK_ADDRESS(address, INET, 0); 
 
-  return address->m_host;
+  return ntohl(address->m_host);
 }
 
 unsigned short GAddress_INET_GetPort(GAddress *address)

@@ -1361,7 +1361,7 @@ GSocketError GAddress_INET_SetHostAddress(GAddress *address,
   CHECK_ADDRESS(address, INET);
 
   addr = &(((struct sockaddr_in *)address->m_addr)->sin_addr);
-  addr->s_addr = hostaddr;
+  addr->s_addr = htonl(hostaddr);;
 
   return GSOCK_NOERROR;
 }
@@ -1450,7 +1450,7 @@ unsigned long GAddress_INET_GetHostAddress(GAddress *address)
 
   addr = (struct sockaddr_in *)address->m_addr;
 
-  return addr->sin_addr.s_addr;
+  return ntohl(addr->sin_addr.s_addr);
 }
 
 unsigned short GAddress_INET_GetPort(GAddress *address)
