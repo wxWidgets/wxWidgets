@@ -133,7 +133,7 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Unicode 8 bit (UTF-8)" ),
 };
 
-// and the internal names
+// and the internal names (these are not translated on purpose!)
 static const wxChar* gs_encodingNames[] =
 {
     wxT( "iso-8859-1" ),
@@ -385,7 +385,7 @@ wxString wxFontMapper::GetEncodingName(wxFontEncoding encoding)
     {
         if ( gs_encodings[i] == encoding )
         {
-            return wxGetTranslation(gs_encodingNames[i]);
+            return gs_encodingNames[i];
         }
     }
 
@@ -712,7 +712,8 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
         // wxFatalError doesn't return
     }
 
-    wxString configEntry, encName = GetEncodingName(encoding);
+    wxString configEntry,
+             encName = GetEncodingName(encoding);
     if ( !!facename )
     {
         configEntry = facename + _T("_");
