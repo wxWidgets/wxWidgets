@@ -1776,7 +1776,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     }
 
 #if defined(_WIN32_IE) && _WIN32_IE >= 0x300 \
-        && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
+        && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 1 ) )
                     if ( lvi.mask & LVIF_IMAGE )
                     {
                         lvi.iImage = OnGetItemImage(item);
@@ -2288,7 +2288,7 @@ static void wxConvertToMSWListCol(int col, const wxListItem& item,
     }
 
 #if defined(_WIN32_IE) && _WIN32_IE >= 0x300 \
-        && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
+        && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 1 ) )
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         if ( wxTheApp->GetComCtl32Version() >= 470 )
