@@ -178,19 +178,34 @@ protected:
     wxCursor          *m_currentCursor;
     wxCursor          *m_resizeCursor;
     bool               m_isDragging;
-    int                m_column;
-    int                m_minX;
-    int                m_currentX;
+
+    // column being resized
+    int m_column;
+
+    // divider line position in logical (unscrolled) coords
+    int m_currentX;
+
+    // minimal position beyond which the divider line can't be dragged in
+    // logical coords
+    int m_minX;
 
 public:
     wxListHeaderWindow();
-    ~wxListHeaderWindow();
-    wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-      long style = 0, const wxString &name = "wxlistctrlcolumntitles" );
+    virtual ~wxListHeaderWindow();
+
+    wxListHeaderWindow( wxWindow *win,
+                        wxWindowID id,
+                        wxListMainWindow *owner,
+                        const wxPoint &pos = wxDefaultPosition,
+                        const wxSize &size = wxDefaultSize,
+                        long style = 0,
+                        const wxString &name = "wxlistctrlcolumntitles" );
+
     void DoDrawRect( wxDC *dc, int x, int y, int w, int h );
-    void OnPaint( wxPaintEvent &event );
     void DrawCurrent();
+    void AdjustDC(wxDC& dc);
+
+    void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
 
@@ -1168,64 +1183,72 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
     dc->DrawLine( x+w-1, y, x+w-1, y+1 );
 }
 
+// shift the DC origin to match the position of the main window horz
+// scrollbar: this allows us to always use logical coords
+void wxListHeaderWindow::AdjustDC(wxDC& dc)
+{
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+    if ( m_owner->GetMode() & wxLC_REPORT )
+    {
+        int xpix;
+        m_owner->GetScrollPixelsPerUnit( &xpix, NULL );
+
+        int x;
+        m_owner->GetViewStart( &x, NULL );
+
+        // account for the horz scrollbar offset
+        dc.SetDeviceOrigin( -x * xpix, 0 );
+    }
+#endif // wxUSE_GENERIC_LIST_EXTENSIONS
+}
+
 void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc( this );
     PrepareDC( dc );
-#if wxUSE_GENERIC_LIST_EXTENSIONS
-        if ( m_owner->GetMode() & wxLC_REPORT )
-        {
-                int x , y ;
-                int xpix , ypix ;
+    AdjustDC( dc );
 
-                m_owner->GetScrollPixelsPerUnit( &xpix , &ypix ) ;
-                m_owner->ViewStart( &x, &y ) ;
-            dc.SetDeviceOrigin( -x * xpix, 0 );
-        }
-#endif
     dc.BeginDrawing();
 
     dc.SetFont( GetFont() );
 
-    int w = 0;
-    int h = 0;
-    int x = 0;
-    int y = 0;
+    // width and height of the entire header window
+    int w, h;
     GetClientSize( &w, &h );
 
     dc.SetBackgroundMode(wxTRANSPARENT);
-    dc.SetTextForeground( *wxBLACK );
 
     // do *not* use the listctrl colour for headers - one day we will have a
     // function to set it separately
+    dc.SetTextForeground( *wxBLACK );
 
-    x = 1;
-    y = 1;
+    int x = 1;          // left of the header rect
+    const int y = 1;    // top
     int numColumns = m_owner->GetColumnCount();
     wxListItem item;
     for (int i = 0; i < numColumns; i++)
     {
         m_owner->GetColumn( i, item );
-        int cw = item.m_width-2;
+        int wCol = item.m_width;
+        int cw = wCol - 2;
+
+        int xEnd = x + wCol;
 #if wxUSE_GENERIC_LIST_EXTENSIONS
-        if ((i+1 == numColumns) || ( dc.LogicalToDeviceX(x+item.m_width) > w-5))
-            cw = dc.DeviceToLogicalX(w)-x-1;
-#else
-        if ((i+1 == numColumns) || (x+item.m_width > w-5))
-            cw = w-x-1;
+        xEnd = dc.LogicalToDeviceX(xEnd);
 #endif
+        if ((i+1 == numColumns) || (xEnd > w-5))
+            cw = w-x-1;
+
         dc.SetPen( *wxWHITE_PEN );
 
         DoDrawRect( &dc, x, y, cw, h-2 );
         dc.SetClippingRegion( x, y, cw-5, h-4 );
         dc.DrawText( item.m_text, x+4, y+3 );
         dc.DestroyClippingRegion();
-        x += item.m_width;
-#if wxUSE_GENERIC_LIST_EXTENSIONS
-        if (dc.LogicalToDeviceX(x) > w+5) break;
-#else
-        if (x > w+5) break;
-#endif
+        x += wCol;
+
+        if (xEnd > w+5)
+            break;
     }
     dc.EndDrawing();
 }
@@ -1234,19 +1257,19 @@ void wxListHeaderWindow::DrawCurrent()
 {
     int x1 = m_currentX;
     int y1 = 0;
+    ClientToScreen( &x1, &y1 );
+
     int x2 = m_currentX-1;
     int y2 = 0;
     m_owner->GetClientSize( NULL, &y2 );
-    ClientToScreen( &x1, &y1 );
     m_owner->ClientToScreen( &x2, &y2 );
-
-    m_owner->CalcScrolledPosition( x1, 0, &x1, NULL );
-    x2 = x1 - 1;
 
     wxScreenDC dc;
     dc.SetLogicalFunction( wxINVERT );
     dc.SetPen( wxPen( *wxBLACK, 2, wxSOLID ) );
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
+
+    AdjustDC(dc);
 
     dc.DrawLine( x1, y1, x2, y2 );
 
@@ -1258,11 +1281,15 @@ void wxListHeaderWindow::DrawCurrent()
 
 void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 {
+    // we want to work with logical coords
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+    int x, y;
+    m_owner->CalcUnscrolledPosition(event.GetX(), event.GetY(), &x, &y);
+#else // !wxUSE_GENERIC_LIST_EXTENSIONS
     int x = event.GetX();
     int y = event.GetY();
+#endif // wxUSE_GENERIC_LIST_EXTENSIONS
 
-    m_owner->CalcUnscrolledPosition( x, 0, &x, NULL );
-    
     if (m_isDragging)
     {
         DrawCurrent();
@@ -1289,20 +1316,30 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 
     m_minX = 0;
     bool hit_border = FALSE;
+
+    // end of the current column
     int xpos = 0;
-    for (int j = 0; j < m_owner->GetColumnCount(); j++)
+
+    // find the column where this event occured
+    int countCol = m_owner->GetColumnCount();
+    for (int j = 0; j < countCol; j++)
     {
         xpos += m_owner->GetColumnWidth( j );
         m_column = j;
-        if ((abs(x-xpos) < 3) && (y < 22) && (m_column < m_owner->GetColumnCount()-1))
+
+        if ((abs(x-xpos) < 3) && (y < 22) && (m_column < countCol - 1))
         {
+            // near the column border
             hit_border = TRUE;
             break;
         }
-        if (x-xpos < 0)
+
+        if ( x < xpos )
         {
+            // inside the column
             break;
         }
+
         m_minX = xpos;
     }
 
