@@ -209,6 +209,9 @@ public:
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
 
+    // needs refresh
+    bool m_dirty;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxListHeaderWindow)
     DECLARE_EVENT_TABLE()
@@ -1152,6 +1155,8 @@ wxListHeaderWindow::wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMain
     m_currentCursor = (wxCursor *) NULL;
     m_resizeCursor = new wxCursor( wxCURSOR_SIZEWE );
     m_isDragging = FALSE;
+    m_dirty = FALSE;
+
     SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE ) );
 }
 
@@ -1188,17 +1193,14 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 void wxListHeaderWindow::AdjustDC(wxDC& dc)
 {
 #if wxUSE_GENERIC_LIST_EXTENSIONS
-    if ( m_owner->GetMode() & wxLC_REPORT )
-    {
-        int xpix;
-        m_owner->GetScrollPixelsPerUnit( &xpix, NULL );
+    int xpix;
+    m_owner->GetScrollPixelsPerUnit( &xpix, NULL );
 
-        int x;
-        m_owner->GetViewStart( &x, NULL );
+    int x;
+    m_owner->GetViewStart( &x, NULL );
 
-        // account for the horz scrollbar offset
-        dc.SetDeviceOrigin( -x * xpix, 0 );
-    }
+    // account for the horz scrollbar offset
+    dc.SetDeviceOrigin( -x * xpix, 0 );
 #endif // wxUSE_GENERIC_LIST_EXTENSIONS
 }
 
@@ -1215,6 +1217,9 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     // width and height of the entire header window
     int w, h;
     GetClientSize( &w, &h );
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+    m_owner->CalcUnscrolledPosition(w, 0, &w, NULL);
+#endif // wxUSE_GENERIC_LIST_EXTENSIONS
 
     dc.SetBackgroundMode(wxTRANSPARENT);
 
@@ -1230,13 +1235,12 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         m_owner->GetColumn( i, item );
         int wCol = item.m_width;
-        int cw = wCol - 2;
+        int cw = wCol - 2; // the width of the rect to draw
 
         int xEnd = x + wCol;
-#if wxUSE_GENERIC_LIST_EXTENSIONS
-        xEnd = dc.LogicalToDeviceX(xEnd);
-#endif
-        if ((i+1 == numColumns) || (xEnd > w-5))
+
+        // let the last column occupy all available space
+        if ( i == numColumns - 1 )
             cw = w-x-1;
 
         dc.SetPen( *wxWHITE_PEN );
@@ -1292,7 +1296,9 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 
     if (m_isDragging)
     {
+        // erase the line
         DrawCurrent();
+
         if (event.ButtonUp())
         {
             ReleaseMouse();
@@ -1301,85 +1307,86 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
         }
         else
         {
-            int size_x = 0;
-            int dummy;
-            GetClientSize( &size_x, & dummy );
-            if (x > m_minX+7)
+            int w = 0;
+            GetClientSize( &w, NULL );
+            if (x > m_minX + 7)
                 m_currentX = x;
             else
-                m_currentX = m_minX+7;
-            if (m_currentX > size_x-7) m_currentX = size_x-7;
+                m_currentX = m_minX + 7;
+
+            if ( m_currentX > w - 7 )
+                m_currentX = w - 7;
+
+            // draw in the new location
             DrawCurrent();
         }
-        return;
     }
-
-    m_minX = 0;
-    bool hit_border = FALSE;
-
-    // end of the current column
-    int xpos = 0;
-
-    // find the column where this event occured
-    int countCol = m_owner->GetColumnCount();
-    for (int j = 0; j < countCol; j++)
+    else // not dragging
     {
-        xpos += m_owner->GetColumnWidth( j );
-        m_column = j;
+        m_minX = 0;
+        bool hit_border = FALSE;
 
-        if ((abs(x-xpos) < 3) && (y < 22) && (m_column < countCol - 1))
+        // end of the current column
+        int xpos = 0;
+
+        // find the column where this event occured
+        int countCol = m_owner->GetColumnCount();
+        for (int j = 0; j < countCol; j++)
         {
-            // near the column border
-            hit_border = TRUE;
-            break;
+            xpos += m_owner->GetColumnWidth( j );
+            m_column = j;
+
+            if ( (abs(x-xpos) < 3) && (y < 22) )
+            {
+                // near the column border
+                hit_border = TRUE;
+                break;
+            }
+
+            if ( x < xpos )
+            {
+                // inside the column
+                break;
+            }
+
+            m_minX = xpos;
         }
 
-        if ( x < xpos )
+        if (event.LeftDown())
         {
-            // inside the column
-            break;
+            if (hit_border)
+            {
+                m_isDragging = TRUE;
+                m_currentX = x;
+                DrawCurrent();
+                CaptureMouse();
+            }
+            else
+            {
+                wxWindow *parent = GetParent();
+                wxListEvent le( wxEVT_COMMAND_LIST_COL_CLICK, parent->GetId() );
+                le.SetEventObject( parent );
+                le.m_col = m_column;
+                parent->GetEventHandler()->ProcessEvent( le );
+            }
         }
-
-        m_minX = xpos;
-    }
-
-    if (event.LeftDown())
-    {
-        if (hit_border)
+        else if (event.Moving())
         {
-            m_isDragging = TRUE;
-            m_currentX = x;
-            DrawCurrent();
-            CaptureMouse();
-            return;
-        }
-        else
-        {
-            wxListEvent le( wxEVT_COMMAND_LIST_COL_CLICK, GetParent()->GetId() );
-            le.SetEventObject( GetParent() );
-            le.m_col = m_column;
-            GetParent()->GetEventHandler()->ProcessEvent( le );
-            return;
-        }
-    }
+            bool setCursor;
+            if (hit_border)
+            {
+                setCursor = m_currentCursor == wxSTANDARD_CURSOR;
+                m_currentCursor = m_resizeCursor;
+            }
+            else
+            {
+                setCursor = m_currentCursor != wxSTANDARD_CURSOR;
+                m_currentCursor = wxSTANDARD_CURSOR;
+            }
 
-
-    if (event.Moving())
-    {
-        bool setCursor;
-        if (hit_border)
-        {
-            setCursor = m_currentCursor == wxSTANDARD_CURSOR;
-            m_currentCursor = m_resizeCursor;
+            if ( setCursor )
+                SetCursor(*m_currentCursor);
         }
-        else
-        {
-            setCursor = m_currentCursor != wxSTANDARD_CURSOR;
-            m_currentCursor = wxSTANDARD_CURSOR;
-        }
-
-        if ( setCursor )
-            SetCursor(*m_currentCursor);
     }
 }
 
@@ -2338,20 +2345,27 @@ void wxListMainWindow::SetColumn( int col, wxListItem &item )
         wxListHeaderData *column = (wxListHeaderData*)node->Data();
         column->SetItem( item );
     }
-    wxListCtrl *lc = (wxListCtrl*) GetParent();
-    if (lc->m_headerWin) lc->m_headerWin->Refresh();
+
+    wxListHeaderWindow *headerWin = ((wxListCtrl*) GetParent())->m_headerWin;
+    if ( headerWin )
+        headerWin->m_dirty = TRUE;
 }
 
 void wxListMainWindow::SetColumnWidth( int col, int width )
 {
-    if (!(m_mode & wxLC_REPORT)) return;
+    wxCHECK_RET( m_mode & wxLC_REPORT,
+                 _T("SetColumnWidth() can only be called in report mode.") );
 
     m_dirty = TRUE;
 
     wxNode *node = (wxNode*) NULL;
 
-    if (width == wxLIST_AUTOSIZE_USEHEADER) width = 80;
-    if (width == wxLIST_AUTOSIZE)
+    if (width == wxLIST_AUTOSIZE_USEHEADER)
+    {
+        // TODO do use the header
+        width = 80;
+    }
+    else if (width == wxLIST_AUTOSIZE)
     {
         wxClientDC dc(this);
         dc.SetFont( GetFont() );
@@ -2405,8 +2419,9 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
         node = node->Next();
     }
 
-    wxListCtrl *lc = (wxListCtrl*) GetParent();
-    if (lc->m_headerWin) lc->m_headerWin->Refresh();
+    wxListHeaderWindow *headerWin = ((wxListCtrl*) GetParent())->m_headerWin;
+    if ( headerWin )
+        headerWin->m_dirty = TRUE;
 }
 
 void wxListMainWindow::GetColumn( int col, wxListItem &item )
@@ -3634,6 +3649,12 @@ void wxListCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
     m_mainWin->RealizeChanges();
     m_mainWin->m_dirty = FALSE;
     m_mainWin->Refresh();
+
+    if ( m_headerWin && m_headerWin->m_dirty )
+    {
+        m_headerWin->m_dirty = FALSE;
+        m_headerWin->Refresh();
+    }
 }
 
 bool wxListCtrl::SetBackgroundColour( const wxColour &colour )
