@@ -424,10 +424,10 @@ void wxTreeCompanionWindow::OnPaint(wxPaintEvent& event)
     if (!m_treeCtrl)
         return;
 
-        wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
+        wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
 	dc.SetPen(pen);
 	dc.SetBrush(* wxTRANSPARENT_BRUSH);
-	wxFont font(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+	wxFont font(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 	dc.SetFont(font);
 
     wxSize clientSize = GetClientSize();

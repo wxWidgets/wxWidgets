@@ -186,7 +186,7 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
     frame = new MainFrame((wxFrame *) NULL,(char *) Temp0.c_str(),wxPoint(x,y),wxSize(w,h));
     //---------------------------------------------------------------------------------------
     // Set the Backgroundcolour (only need if your are NOT using wxSYS_COLOUR_BACKGROUND)
-    frame->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BACKGROUND));
+    frame->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BACKGROUND));
     // frame->SetBackgroundColour(wxColour(255, 255, 255));
     // frame->SetBackgroundColour(* wxWHITE);
     //---------------------------------------------------------------------------------------

@@ -1058,8 +1058,8 @@ void wxDynamicSashWindowLeaf::OnPaint(wxPaintEvent &event) {
     dc.SetBackground(wxBrush(m_impl->m_container->GetBackgroundColour(), wxSOLID));
     dc.Clear();
 
-    wxPen highlight(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNHIGHLIGHT), 1, wxSOLID);
-    wxPen shadow(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNSHADOW), 1, wxSOLID);
+    wxPen highlight(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT), 1, wxSOLID);
+    wxPen shadow(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW), 1, wxSOLID);
     wxPen black(*wxBLACK, 1, wxSOLID);
 
     wxSize size = m_impl->m_container->GetSize();

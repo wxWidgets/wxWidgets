@@ -57,7 +57,7 @@ MainDoc::MainDoc()
     i_TabNr        = 0;
     i_PageNr       = 0;
     s_BColour      = "WHEAT";
-    ft_Doc         = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
+    ft_Doc         = new wxFont(wxSystemSettings::GetFont(wxSYS_SYSTEM_FONT));
 }
 
 //----------------------------------------------------------------------------------------

@@ -75,7 +75,7 @@ bool MyApp::OnInit()
 
   // Make a panel
   frame->panel = new wxPanel(frame, 0, 0, 1000, 500, wxTAB_TRAVERSAL);
-  frame->panel->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+  frame->panel->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 //  frame->panel->SetAutoLayout(TRUE);
 
   // Create some panel items

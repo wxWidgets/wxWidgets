@@ -373,7 +373,7 @@ void csApp::CreateDiagramToolBar(wxFrame* parent)
     win->SetDefaultSize(wxSize(10000, 30));
     win->SetOrientation(wxLAYOUT_HORIZONTAL);
     win->SetAlignment(wxLAYOUT_TOP);
-    win->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    win->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
     m_diagramToolBarSashWindow = win;
     m_diagramToolBarSashWindow->Show(FALSE);

@@ -57,7 +57,7 @@ bool csApp::CreateProjectWindow(wxFrame *parent)
     win->SetDefaultSize(wxSize(150, 10000));
     win->SetOrientation(wxLAYOUT_VERTICAL);
     win->SetAlignment(wxLAYOUT_LEFT);
-    win->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    win->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
     win->SetSashVisible(wxSASH_RIGHT, TRUE);
     win->SetExtraBorderSize(5);
 

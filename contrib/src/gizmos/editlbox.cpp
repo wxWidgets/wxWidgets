@@ -56,7 +56,7 @@ public:
     void SizeColumns()
     {
          int w = GetSize().x;
-         w -= wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X) + 6;
+         w -= wxSystemSettings::GetMetric(wxSYS_VSCROLL_X) + 6;
          SetColumnWidth(0, w);
     }
 

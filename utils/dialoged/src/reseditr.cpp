@@ -2904,7 +2904,7 @@ bool wxResourceManager::InsertLabelResource(wxItemResource* parent, wxItemResour
         font = parent->GetFont();
 
     if (!font.Ok() || (parent->GetResourceStyle() & wxRESOURCE_USE_DEFAULTS))
-        font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+        font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 
     int labelX, labelY;
     wxCoord labelWidth, labelHeight;

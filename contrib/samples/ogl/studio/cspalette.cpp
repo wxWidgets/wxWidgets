@@ -106,7 +106,7 @@ bool csApp::CreatePalette(wxFrame *parent)
     win->SetDefaultSize(wxSize(10000, 40));
     win->SetOrientation(wxLAYOUT_HORIZONTAL);
     win->SetAlignment(wxLAYOUT_TOP);
-    win->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    win->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
     win->SetSashVisible(wxSASH_BOTTOM, TRUE);
 
     m_diagramPaletteSashWindow = win;

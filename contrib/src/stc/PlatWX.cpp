@@ -575,13 +575,13 @@ void Menu::Show(Point pt, Window &w) {
 
 Colour Platform::Chrome() {
     wxColour c;
-    c = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+    c = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     return Colour(c.Red(), c.Green(), c.Blue());
 }
 
 Colour Platform::ChromeHighlight() {
     wxColour c;
-    c = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHIGHLIGHT);
+    c = wxSystemSettings::GetColour(wxSYS_COLOUR_3DHIGHLIGHT);
     return Colour(c.Red(), c.Green(), c.Blue());
 }
 
