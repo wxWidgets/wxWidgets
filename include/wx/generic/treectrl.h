@@ -317,9 +317,8 @@ public:
   void SetImageList(wxImageList *imageList, int which = wxIMAGE_LIST_NORMAL);
 
 private:
-  // set the selection to the specified item generating appropriate event(s) if
-  // not disabled
-  void SelectItem(wxGenericTreeItem *item, bool bDoEvents = TRUE);
+  // set the selection to the specified item generating appropriate event(s)
+  void SelectItem(wxGenericTreeItem *item);
 
   wxGenericTreeItem   *m_anchor;
   wxGenericTreeItem   *m_current;
