@@ -103,7 +103,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_PLATFORM_WIN321@    wx/msw/winundef.h
 @COND_TOOLKITMAC@__macos_res___depname = lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
 @COND_USE_SOVERSION1_PLATFORM_MACOSX0@__monodll___targetnamesuf = .$(SO_SUFFIX).0.0.0
-@COND_USE_SOVERSION1_PLATFORM_MACOSX1@__monodll___targetnamesuf = 0.0.0.$(SO_SUFFIX)
+@COND_USE_SOVERSION1_PLATFORM_MACOSX1@__monodll___targetnamesuf = .0.0.0.$(SO_SUFFIX)
 @COND_WXUSE_LIBTIFFBUILTIN@__LIB_TIFF_LIBR = $(top_builddir)/lib/libwxtiff.a
 @COND_WXUSE_LIBPNGBUILTIN@__LIB_PNG_LIBR = $(top_builddir)/lib/libwxpng.a
 @COND_TOOLKITMAC@__macos_res_install___depname = macos-res-install
