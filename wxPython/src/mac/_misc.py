@@ -2548,16 +2548,16 @@ class ArtProvider(object):
         return _misc_.ArtProvider_GetIcon(*args, **kwargs)
 
     GetIcon = staticmethod(GetIcon)
-    def GetSize(*args, **kwargs):
+    def GetSizeHint(*args, **kwargs):
         """
-        GetSize(String client, bool platform_dependent=False) -> Size
+        GetSizeHint(String client, bool platform_dependent=False) -> Size
 
-        Get the size of an icon from a specific Art Client, queries the
+        Get the size hint of an icon from a specific Art Client, queries the
         topmost provider if platform_dependent = false
         """
-        return _misc_.ArtProvider_GetSize(*args, **kwargs)
+        return _misc_.ArtProvider_GetSizeHint(*args, **kwargs)
 
-    GetSize = staticmethod(GetSize)
+    GetSizeHint = staticmethod(GetSizeHint)
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
         return _misc_.ArtProvider_Destroy(*args, **kwargs)
@@ -2668,14 +2668,14 @@ def ArtProvider_GetIcon(*args, **kwargs):
     """
     return _misc_.ArtProvider_GetIcon(*args, **kwargs)
 
-def ArtProvider_GetSize(*args, **kwargs):
+def ArtProvider_GetSizeHint(*args, **kwargs):
     """
-    ArtProvider_GetSize(String client, bool platform_dependent=False) -> Size
+    ArtProvider_GetSizeHint(String client, bool platform_dependent=False) -> Size
 
-    Get the size of an icon from a specific Art Client, queries the
+    Get the size hint of an icon from a specific Art Client, queries the
     topmost provider if platform_dependent = false
     """
-    return _misc_.ArtProvider_GetSize(*args, **kwargs)
+    return _misc_.ArtProvider_GetSizeHint(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -5289,6 +5289,14 @@ class DropTarget(object):
     def GetData(*args, **kwargs):
         """GetData(self) -> bool"""
         return _misc_.DropTarget_GetData(*args, **kwargs)
+
+    def SetDefaultAction(*args, **kwargs):
+        """SetDefaultAction(self, int action)"""
+        return _misc_.DropTarget_SetDefaultAction(*args, **kwargs)
+
+    def GetDefaultAction(*args, **kwargs):
+        """GetDefaultAction(self) -> int"""
+        return _misc_.DropTarget_GetDefaultAction(*args, **kwargs)
 
 
 class DropTargetPtr(DropTarget):
