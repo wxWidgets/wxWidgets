@@ -1270,7 +1270,6 @@ typedef z_stream FAR *  png_zstreamp;
 #      endif
 #    endif
 #endif
-#endif
 
 #if defined(__VISAGECPP__)
 /* I don't compile with this _System linkage for wxWidgets */
