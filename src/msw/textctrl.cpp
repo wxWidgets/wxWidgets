@@ -1324,11 +1324,13 @@ long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
     if ( nMsg == WM_GETDLGCODE )
     {
+        // we always want the chars and the arrows: the arrows for navigation
+        // and the chars because we want Ctrl-C to work even in a read only
+        // control
+        long lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
+
         if ( IsEditable() )
         {
-            // we always want the chars and the arrows
-            long lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
-
             // we may have several different cases:
             // 1. normal case: both TAB and ENTER are used for dlg navigation
             // 2. ctrl which wants TAB for itself: ENTER is used to pass to the
@@ -1349,15 +1351,11 @@ long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         }
         else // !editable
         {
-            // when the control can't be edited by user, it doesn't need any
-            // extra keys changing its contents at all -- but it still needs
-            // the arrows to allow navigating in it
-            //
             // NB: use "=", not "|=" as the base class version returns the
             //     same flags is this state as usual (i.e. including
             //     DLGC_WANTMESSAGE). This is strange (how does it work in the
             //     native Win32 apps?) but for now live with it.
-            lRc = DLGC_WANTARROWS;
+            lRc = lDlgCode;
         }
     }
 
