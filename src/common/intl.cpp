@@ -308,11 +308,13 @@ static wxString GetFullSearchPath(const wxChar *lang)
     // FIXME it should be the directory of the executable
     searchPath << GetAllMsgCatalogSubdirs(wxT("."), lang);
 
+#ifdef __UNIX_LIKE__
     // and finally add some standard ones
     searchPath
         << GetAllMsgCatalogSubdirs(wxT("/usr/share/locale"), lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/lib/locale"), lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/local/share/locale"), lang);
+#endif // __UNIX_LIKE__
 
     return searchPath;
 }
@@ -329,6 +331,21 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0, bool b
       szName = szName.Left(szName.Find(wxT('.')));
 
   wxString searchPath = GetFullSearchPath(szDirPrefix);
+
+#ifdef __UNIX_LIKE__
+  if ( szName == _("wxstd") )
+  {
+    // WXDIR is the env var holding the installation directory of wxWindows
+    const wxChar *pszWxDir = wxGetenv(wxT("WXDIR"));
+    if ( pszWxDir )
+    {
+        wxString strWxLoc;
+        strWxLoc << pszWxDir << wxFILE_SEP_PATH << wxT("share/locale");
+        searchPath << GetAllMsgCatalogSubdirs(strWxLoc, szDirPrefix);
+    }
+  }
+#endif // __UNIX_LIKE__
+
   const wxChar *sublocale = wxStrchr(szDirPrefix, wxT('_'));
   if ( sublocale )
   {
@@ -546,7 +563,11 @@ bool wxLocale::Init(const wxChar *szName,
   }
   m_pszOldLocale = wxSetlocale(LC_ALL, szLocale);
   if ( m_pszOldLocale == NULL )
-    wxLogError(_("locale '%s' can not be set."), szLocale);
+  {
+    // this is not an error as most systems don't support anything but "C"
+    // anyhow
+    wxLogVerbose(_("locale '%s' can not be set."), szLocale);
+  }
 
   // the short name will be used to look for catalog files as well,
   // so we need something here
