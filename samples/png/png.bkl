@@ -4,10 +4,10 @@
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="png" template="wx_sample" template_append="wx_append">
-        <sources>png.cpp</sources>
+        <sources>pngdemo.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <win32-res>png.rc</win32-res>
+        <win32-res>pngdemo.rc</win32-res>
     </exe>
 
 </makefile>
