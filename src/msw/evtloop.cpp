@@ -44,12 +44,12 @@
 #if wxUSE_THREADS
     #include "wx/thread.h"
 
-    // define the array of MSG strutures
-    WX_DECLARE_OBJARRAY(MSG, wxMsgArray);
+    // define the list of MSG strutures
+    WX_DECLARE_LIST(MSG, wxMsgList);
 
-    #include "wx/arrimpl.cpp"
+    #include "wx/listimpl.cpp"
 
-    WX_DEFINE_OBJARRAY(wxMsgArray);
+    WX_DEFINE_LIST(wxMsgList);
 #endif // wxUSE_THREADS
 
 // ----------------------------------------------------------------------------
@@ -337,7 +337,7 @@ bool wxEventLoop::Dispatch()
                   wxT("only the main thread can process Windows messages") );
 
     static bool s_hadGuiLock = true;
-    static wxMsgArray s_aSavedMessages;
+    static wxMsgList s_aSavedMessages;
 
     // if a secondary thread owning the mutex is doing GUI calls, save all
     // messages for later processing - we can't process them right now because
@@ -350,7 +350,8 @@ bool wxEventLoop::Dispatch()
         // the message will be processed twice
         if ( !wxIsWaitingForThread() || msg.message != WM_COMMAND )
         {
-            s_aSavedMessages.Add(msg);
+            MSG* pMsg = new MSG(msg);
+            s_aSavedMessages.Append(pMsg);
         }
 
         return true;
@@ -366,14 +367,17 @@ bool wxEventLoop::Dispatch()
         {
             s_hadGuiLock = true;
 
-            size_t count = s_aSavedMessages.Count();
-            for ( size_t n = 0; n < count; n++ )
+            wxMsgList::compatibility_iterator node = s_aSavedMessages.GetFirst();
+            while (node)
             {
-                MSG& msg = s_aSavedMessages[n];
-                ProcessMessage(&msg);
-            }
+                MSG* pMsg = node->GetData();
+                s_aSavedMessages.Erase(node);
 
-            s_aSavedMessages.Empty();
+                ProcessMessage(pMsg);
+                delete pMsg;
+
+                node = s_aSavedMessages.GetFirst();
+            }
         }
     }
 #endif // wxUSE_THREADS
