@@ -16,7 +16,7 @@
         next line if ( $_ eq "" or /^#/ );
 
         #! if ( $verbose ) {
-        #!     print STDERR "Processing line: '$_'\n";
+        #!      print STDERR "Processing line: '$_'\n";
         #! }
 
         my @fields = split /\t/;
@@ -117,4 +117,4 @@
 
     close(FILELIST);
 #$}
-#! vim:sw=4:ts=4:list:et
+#! vim:sw=4:ts=4:list:et:ft=perl
