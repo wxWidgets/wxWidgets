@@ -4218,6 +4218,10 @@ if test "$wxUSE_GUI" = "yes"; then
     wx_cv_program_ext=$PROGRAM_EXT
     wx_cv_target_library=$WX_TARGET_LIBRARY
     wx_cv_target_libtype=$WX_TARGET_LIBRARY_TYPE
+    dnl we need to export them because passing them through cache won't
+    dnl work when cache=/dev/null (which is default for autoconf 2.50)
+    export wx_cv_path_samplesubdirs wx_cv_path_ifs wx_cv_program_ext \
+           wx_cv_target_library wx_cv_target_libtype
     AC_CONFIG_SUBDIRS(demos samples utils contrib)
 fi
 dnl from wxUSE_GUI
