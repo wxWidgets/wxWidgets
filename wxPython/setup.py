@@ -11,7 +11,7 @@
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
 
-import sys
+import sys, os
 
 
 # The full contents of the wx.build.config module used to be located
@@ -29,6 +29,14 @@ import sys
 # config .py in the same place as setup.py, and then copy it to
 # wx/build as needed below.
 
+# To fully support external builds, we need to have a build options
+# file that is created whenever a new wxPython build is performed.
+# We happen to be doing that in this script, so make sure to remove
+# the build_options.py file, so that config.py will recreate it.
+
+if os.path.exists("build_options.py"):
+    os.remove("build_options.py")
+
 sys.setup_is_main =  __name__ == "__main__"  # an icky hack!
 from config import *
 
@@ -38,7 +46,9 @@ from config import *
 #----------------------------------------------------------------------
 
 copy_file('config.py', 'wx/build', update=1, verbose=1)
+copy_file('build_options.py', 'wx/build', update=1, verbose=1)
 CLEANUP.append('wx/build/config.py')
+CLEANUP.append('wx/build/build_options.py')
 
 #----------------------------------------------------------------------
 # Update the version file
