@@ -692,11 +692,7 @@ size_t IC_CharSet::MB2WC(wchar_t *buf, const char *psz, size_t n)
 
 size_t IC_CharSet::WC2MB(char *buf, const wchar_t *psz, size_t n)
 {
-#if defined(__BORLANDC__) && (__BORLANDC__ > 0x530)
-    size_t inbuf = std::wcslen(psz) * SIZEOF_WCHAR_T;
-#else
-    size_t inbuf = ::wcslen(psz) * SIZEOF_WCHAR_T;
-#endif
+    size_t inbuf = wxWcslen(psz) * SIZEOF_WCHAR_T;
     size_t outbuf = n;
     size_t res, cres;
 
@@ -842,13 +838,7 @@ public:
 
     size_t WC2MB(char *buf, const wchar_t *psz, size_t WXUNUSED(n))
     {
-#if ( defined(__BORLANDC__) && (__BORLANDC__ > 0x530) ) \
-    || ( defined(__MWERKS__) && defined(__WXMSW__) )
-        size_t inbuf = std::wcslen(psz);
-#else
-	//        size_t inbuf = ::wcslen(psz);
-	size_t inbuf = wxWcslen(psz);
-#endif
+        const size_t inbuf = wxWcslen(psz);
         if (buf)
             w2m.Convert(psz,buf);
 
@@ -1035,13 +1025,7 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         return m_cset->WC2MB(buf, psz, n);
 
     // latin-1 (direct)
-#if ( defined(__BORLANDC__) && (__BORLANDC__ > 0x530) ) \
-    || ( defined(__MWERKS__) && defined(__WXMSW__) )
-    size_t len=std::wcslen(psz);
-#else
-    //    size_t len=::wcslen(psz);
-    size_t len = wxWcslen(psz);
-#endif
+    const size_t len = wxWcslen(psz);
     if (buf)
     {
         for (size_t c = 0; c <= len; c++)
