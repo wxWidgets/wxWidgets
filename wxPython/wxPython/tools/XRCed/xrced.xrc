@@ -82,7 +82,7 @@
         <border>10</border>
       </object>
     </object>
-    <style>wxRESIZE_BORDER</style>
+    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</style>
   </object>
   <object class="wxDialog" name="DIALOG_CONTENT_CHECK_LIST">
     <title>Content</title>
@@ -166,7 +166,7 @@
         <border>10</border>
       </object>
     </object>
-    <style>wxRESIZE_BORDER</style>
+    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</style>
   </object>
   <object class="wxDialog" name="DIALOG_INTLIST">
     <title>Numbers</title>
@@ -234,7 +234,7 @@
         <border>10</border>
       </object>
     </object>
-    <style>wxRESIZE_BORDER</style>
+    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</style>
   </object>
   <object class="wxPanel" name="PANEL_BITMAP">
     <object class="wxStaticBoxSizer">
