@@ -376,6 +376,9 @@ bool wxNativeFontInfo::FromXFontName(const wxString& fontname)
     // TODO: we should be able to handle the font aliases here, but how?
     wxStringTokenizer tokenizer(fontname, _T("-"));
 
+    // we're not initialized yet.
+    m_isDefault = TRUE;
+
     // skip the leading, usually empty field (font name registry)
     if ( !tokenizer.HasMoreTokens() )
         return FALSE;
@@ -389,17 +392,20 @@ bool wxNativeFontInfo::FromXFontName(const wxString& fontname)
             // not enough elements in the XLFD - or maybe an alias
             return FALSE;
         }
+        
+        wxString field = tokenizer.GetNextToken();
+        if (!field.empty() && field != _T('*')) {
+            // we're really initialized now
+            m_isDefault = FALSE;
+        }
 
-        fontElements[n] = tokenizer.GetNextToken();
+        fontElements[n] = field;
     }
 
     // this should be all
     if ( tokenizer.HasMoreTokens() )
         return FALSE;
-
-    // we're initialized now
-    m_isDefault = FALSE;
-
+ 
     return TRUE;
 }
 
