@@ -1,5 +1,5 @@
 /* XPM */
-static char *tipIcon[] = {
+static char *tip_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 7 1",
 "  c Gray0",

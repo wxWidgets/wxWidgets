@@ -25,6 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/timer.h"
     #include "wx/intl.h"
     #include "wx/dc.h"
     #include "wx/window.h"

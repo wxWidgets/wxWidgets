@@ -50,6 +50,7 @@
 // resources
 // ----------------------------------------------------------------------------
 
+#include "bricks.xpm"
 #include "tip.xpm"
 #include "open.xpm"
 
