@@ -222,9 +222,12 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
 // InsertChild callback for wxNotebook
 //-----------------------------------------------------------------------------
 
-static void wxInsertChildInNotebook( wxNotebook* WXUNUSED(parent), wxWindow* WXUNUSED(child) )
+static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
 {
-    /* we don't do anything here but pray */
+    // Hack alert! We manually set the child window
+    // parent field so that GTK can query the 
+    // notebook's style and font. 
+    child->m_widget->parent = parent->m_widget;
 }
 
 //-----------------------------------------------------------------------------
@@ -589,7 +592,11 @@ bool wxNotebook::InsertPage( size_t position,
     wxCHECK_MSG( position <= GetPageCount(), FALSE,
                  _T("invalid page index in wxNotebookPage::InsertPage()") );
 
-    /* don't receive switch page during addition */
+    // Hack alert part II! See above in InsertChildInNotebook
+    // callback why this has to be done.
+    win->m_widget->parent = NULL;
+
+    // don't receive switch page during addition
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
       GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer) this );
 
