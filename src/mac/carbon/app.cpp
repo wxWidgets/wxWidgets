@@ -49,7 +49,7 @@
   #endif
 #endif
 
-#include "apprsrc.h"
+// #include "apprsrc.h"
 
 #include "wx/mac/uma.h"
 #include "wx/mac/macnotfy.h"
