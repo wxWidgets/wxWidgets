@@ -84,7 +84,7 @@ bool wxDIB::Create(int width, int height, int depth)
     static const int infosize = sizeof(BITMAPINFOHEADER);
 
     BITMAPINFO *info = (BITMAPINFO *)malloc(infosize);
-    wxCHECK_MSG( info, NULL, _T("malloc(BITMAPINFO) failed") );
+    wxCHECK_MSG( info, false, _T("malloc(BITMAPINFO) failed") );
 
     memset(info, 0, infosize);
 
