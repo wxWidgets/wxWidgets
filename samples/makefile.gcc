@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-include ../build/config.gcc
+include ../build/msw/config.gcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -15,33 +15,237 @@ include ../build/config.gcc
 
 ### Conditionally set variables: ###
 
-ifeq ($(USE_GUI),0)
-__console___depname = console
-endif
+
+MAKEARGS = GCC_VERSION=$(GCC_VERSION)
 
 
 ### Targets: ###
 
-all: artprov $(__console___depname) dialogs image minimal
+all: access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg newgrid notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wxtest
+
+access: 
+	$(MAKE) -C access -f makefile.gcc $(MAKEARGS) all
 
 artprov: 
-	(cd artprov && $(MAKE) all)
+	$(MAKE) -C artprov -f makefile.gcc $(MAKEARGS) all
+
+calendar: 
+	$(MAKE) -C calendar -f makefile.gcc $(MAKEARGS) all
+
+caret: 
+	$(MAKE) -C caret -f makefile.gcc $(MAKEARGS) all
+
+checklst: 
+	$(MAKE) -C checklst -f makefile.gcc $(MAKEARGS) all
 
 clean: 
 	-if exist .\*.o del .\*.o
 
-ifeq ($(USE_GUI),0)
+config: 
+	$(MAKE) -C config -f makefile.gcc $(MAKEARGS) all
+
 console: 
-	(cd console && $(MAKE) all)
-endif
+	$(MAKE) -C console -f makefile.gcc $(MAKEARGS) all
+
+controls: 
+	$(MAKE) -C controls -f makefile.gcc $(MAKEARGS) all
+
+db: 
+	$(MAKE) -C db -f makefile.gcc $(MAKEARGS) all
 
 dialogs: 
-	(cd dialogs && $(MAKE) all)
+	$(MAKE) -C dialogs -f makefile.gcc $(MAKEARGS) all
+
+dialup: 
+	$(MAKE) -C dialup -f makefile.gcc $(MAKEARGS) all
+
+display: 
+	$(MAKE) -C display -f makefile.gcc $(MAKEARGS) all
+
+dnd: 
+	$(MAKE) -C dnd -f makefile.gcc $(MAKEARGS) all
+
+docview: 
+	$(MAKE) -C docview -f makefile.gcc $(MAKEARGS) all
+
+docvwmdi: 
+	$(MAKE) -C docvwmdi -f makefile.gcc $(MAKEARGS) all
+
+dragimag: 
+	$(MAKE) -C dragimag -f makefile.gcc $(MAKEARGS) all
+
+drawing: 
+	$(MAKE) -C drawing -f makefile.gcc $(MAKEARGS) all
+
+dynamic: 
+	$(MAKE) -C dynamic -f makefile.gcc $(MAKEARGS) all
+
+erase: 
+	$(MAKE) -C erase -f makefile.gcc $(MAKEARGS) all
+
+event: 
+	$(MAKE) -C event -f makefile.gcc $(MAKEARGS) all
+
+exec: 
+	$(MAKE) -C exec -f makefile.gcc $(MAKEARGS) all
+
+font: 
+	$(MAKE) -C font -f makefile.gcc $(MAKEARGS) all
+
+grid: 
+	$(MAKE) -C grid -f makefile.gcc $(MAKEARGS) all
+
+help: 
+	$(MAKE) -C help -f makefile.gcc $(MAKEARGS) all
+
+htlbox: 
+	$(MAKE) -C htlbox -f makefile.gcc $(MAKEARGS) all
+
+html: 
+	$(MAKE) -C html -f makefile.gcc $(MAKEARGS) all
 
 image: 
-	(cd image && $(MAKE) all)
+	$(MAKE) -C image -f makefile.gcc $(MAKEARGS) all
+
+internat: 
+	$(MAKE) -C internat -f makefile.gcc $(MAKEARGS) all
+
+ipc: 
+	$(MAKE) -C ipc -f makefile.gcc $(MAKEARGS) all
+
+joytest: 
+	$(MAKE) -C joytest -f makefile.gcc $(MAKEARGS) all
+
+keyboard: 
+	$(MAKE) -C keyboard -f makefile.gcc $(MAKEARGS) all
+
+layout: 
+	$(MAKE) -C layout -f makefile.gcc $(MAKEARGS) all
+
+listbox: 
+	$(MAKE) -C listbox -f makefile.gcc $(MAKEARGS) all
+
+listctrl: 
+	$(MAKE) -C listctrl -f makefile.gcc $(MAKEARGS) all
+
+mdi: 
+	$(MAKE) -C mdi -f makefile.gcc $(MAKEARGS) all
+
+memcheck: 
+	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) all
+
+menu: 
+	$(MAKE) -C menu -f makefile.gcc $(MAKEARGS) all
+
+mfc: 
+	$(MAKE) -C mfc -f makefile.gcc $(MAKEARGS) all
+
+minifram: 
+	$(MAKE) -C minifram -f makefile.gcc $(MAKEARGS) all
 
 minimal: 
-	(cd minimal && $(MAKE) all)
+	$(MAKE) -C minimal -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all artprov clean console dialogs image minimal
+mobile: 
+	$(MAKE) -C mobile -f makefile.gcc $(MAKEARGS) all
+
+multimon: 
+	$(MAKE) -C multimon -f makefile.gcc $(MAKEARGS) all
+
+nativdlg: 
+	$(MAKE) -C nativdlg -f makefile.gcc $(MAKEARGS) all
+
+newgrid: 
+	$(MAKE) -C newgrid -f makefile.gcc $(MAKEARGS) all
+
+notebook: 
+	$(MAKE) -C notebook -f makefile.gcc $(MAKEARGS) all
+
+oleauto: 
+	$(MAKE) -C oleauto -f makefile.gcc $(MAKEARGS) all
+
+opengl: 
+	$(MAKE) -C opengl -f makefile.gcc $(MAKEARGS) all
+
+ownerdrw: 
+	$(MAKE) -C ownerdrw -f makefile.gcc $(MAKEARGS) all
+
+png: 
+	$(MAKE) -C png -f makefile.gcc $(MAKEARGS) all
+
+printing: 
+	$(MAKE) -C printing -f makefile.gcc $(MAKEARGS) all
+
+propsize: 
+	$(MAKE) -C propsize -f makefile.gcc $(MAKEARGS) all
+
+regtest: 
+	$(MAKE) -C regtest -f makefile.gcc $(MAKEARGS) all
+
+render: 
+	$(MAKE) -C render -f makefile.gcc $(MAKEARGS) all
+
+richedit: 
+	$(MAKE) -C richedit -f makefile.gcc $(MAKEARGS) all
+
+rotate: 
+	$(MAKE) -C rotate -f makefile.gcc $(MAKEARGS) all
+
+sashtest: 
+	$(MAKE) -C sashtest -f makefile.gcc $(MAKEARGS) all
+
+scroll: 
+	$(MAKE) -C scroll -f makefile.gcc $(MAKEARGS) all
+
+scrollsub: 
+	$(MAKE) -C scrollsub -f makefile.gcc $(MAKEARGS) all
+
+shaped: 
+	$(MAKE) -C shaped -f makefile.gcc $(MAKEARGS) all
+
+sockets: 
+	$(MAKE) -C sockets -f makefile.gcc $(MAKEARGS) all
+
+splitter: 
+	$(MAKE) -C splitter -f makefile.gcc $(MAKEARGS) all
+
+statbar: 
+	$(MAKE) -C statbar -f makefile.gcc $(MAKEARGS) all
+
+tab: 
+	$(MAKE) -C tab -f makefile.gcc $(MAKEARGS) all
+
+taskbar: 
+	$(MAKE) -C taskbar -f makefile.gcc $(MAKEARGS) all
+
+text: 
+	$(MAKE) -C text -f makefile.gcc $(MAKEARGS) all
+
+thread: 
+	$(MAKE) -C thread -f makefile.gcc $(MAKEARGS) all
+
+toolbar: 
+	$(MAKE) -C toolbar -f makefile.gcc $(MAKEARGS) all
+
+treectrl: 
+	$(MAKE) -C treectrl -f makefile.gcc $(MAKEARGS) all
+
+typetest: 
+	$(MAKE) -C typetest -f makefile.gcc $(MAKEARGS) all
+
+validate: 
+	$(MAKE) -C validate -f makefile.gcc $(MAKEARGS) all
+
+vscroll: 
+	$(MAKE) -C vscroll -f makefile.gcc $(MAKEARGS) all
+
+widgets: 
+	$(MAKE) -C widgets -f makefile.gcc $(MAKEARGS) all
+
+wizard: 
+	$(MAKE) -C wizard -f makefile.gcc $(MAKEARGS) all
+
+wxtest: 
+	$(MAKE) -C wxtest -f makefile.gcc $(MAKEARGS) all
+
+.PHONY: all access artprov calendar caret checklst clean config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg newgrid notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wxtest

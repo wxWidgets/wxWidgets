@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include <../build/config.vc>
+!include <../build/msw/config.vc>
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -15,42 +15,382 @@
 
 ### Conditionally set variables: ###
 
-!if "$(USE_GUI)" == "0"
-__console___depname = console
-!endif
 
 
 ### Targets: ###
 
-all: artprov $(__console___depname) dialogs image minimal
+all: sub_access sub_artprov sub_calendar sub_caret sub_checklst sub_config sub_console sub_controls sub_db sub_dialogs sub_dialup sub_display sub_dnd sub_docview sub_docvwmdi sub_dragimag sub_drawing sub_dynamic sub_erase sub_event sub_exec sub_font sub_grid sub_help sub_htlbox sub_html sub_image sub_internat sub_ipc sub_joytest sub_keyboard sub_layout sub_listbox sub_listctrl sub_mdi sub_memcheck sub_menu sub_mfc sub_minifram sub_minimal sub_mobile sub_multimon sub_nativdlg sub_newgrid sub_notebook sub_oleauto sub_opengl sub_ownerdrw sub_png sub_printing sub_propsize sub_regtest sub_render sub_richedit sub_rotate sub_sashtest sub_scroll sub_scrollsub sub_shaped sub_sockets sub_splitter sub_statbar sub_tab sub_taskbar sub_text sub_thread sub_toolbar sub_treectrl sub_typetest sub_validate sub_vscroll sub_widgets sub_wizard sub_wxtest
 
-artprov: 
+sub_access: 
+	cd access
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_artprov: 
 	cd artprov
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_calendar: 
+	cd calendar
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_caret: 
+	cd caret
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_checklst: 
+	cd checklst
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
 
-!if "$(USE_GUI)" == "0"
-console: 
+sub_config: 
+	cd config
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_console: 
 	cd console
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
-!endif
 
-dialogs: 
+sub_controls: 
+	cd controls
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_db: 
+	cd db
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_dialogs: 
 	cd dialogs
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
-image: 
+sub_dialup: 
+	cd dialup
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_display: 
+	cd display
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_dnd: 
+	cd dnd
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_docview: 
+	cd docview
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_docvwmdi: 
+	cd docvwmdi
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_dragimag: 
+	cd dragimag
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_drawing: 
+	cd drawing
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_dynamic: 
+	cd dynamic
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_erase: 
+	cd erase
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_event: 
+	cd event
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_exec: 
+	cd exec
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_font: 
+	cd font
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_grid: 
+	cd grid
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_help: 
+	cd help
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_htlbox: 
+	cd htlbox
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_html: 
+	cd html
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_image: 
 	cd image
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
-minimal: 
+sub_internat: 
+	cd internat
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_ipc: 
+	cd ipc
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_joytest: 
+	cd joytest
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_keyboard: 
+	cd keyboard
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_layout: 
+	cd layout
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_listbox: 
+	cd listbox
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_listctrl: 
+	cd listctrl
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_mdi: 
+	cd mdi
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_memcheck: 
+	cd memcheck
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_menu: 
+	cd menu
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_mfc: 
+	cd mfc
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_minifram: 
+	cd minifram
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_minimal: 
 	cd minimal
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_mobile: 
+	cd mobile
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_multimon: 
+	cd multimon
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_nativdlg: 
+	cd nativdlg
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_newgrid: 
+	cd newgrid
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_notebook: 
+	cd notebook
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_oleauto: 
+	cd oleauto
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_opengl: 
+	cd opengl
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_ownerdrw: 
+	cd ownerdrw
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_png: 
+	cd png
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_printing: 
+	cd printing
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_propsize: 
+	cd propsize
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_regtest: 
+	cd regtest
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_render: 
+	cd render
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_richedit: 
+	cd richedit
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_rotate: 
+	cd rotate
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_sashtest: 
+	cd sashtest
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_scroll: 
+	cd scroll
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_scrollsub: 
+	cd scrollsub
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_shaped: 
+	cd shaped
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_sockets: 
+	cd sockets
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_splitter: 
+	cd splitter
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_statbar: 
+	cd statbar
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_tab: 
+	cd tab
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_taskbar: 
+	cd taskbar
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_text: 
+	cd text
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_thread: 
+	cd thread
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_toolbar: 
+	cd toolbar
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_treectrl: 
+	cd treectrl
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_typetest: 
+	cd typetest
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_validate: 
+	cd validate
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_vscroll: 
+	cd vscroll
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_widgets: 
+	cd widgets
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_wizard: 
+	cd wizard
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	cd $(MAKEDIR)
+
+sub_wxtest: 
+	cd wxtest
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)

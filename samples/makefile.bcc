@@ -8,7 +8,7 @@
 BCCDIR = $(MAKEDIR)\..
 !endif
 
-!include ../build/config.bcc
+!include ../build/msw/config.bcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -23,32 +23,384 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Conditionally set variables: ###
 
-!if "$(USE_GUI)" == "0"
-__console___depname = console
-!endif
+
+MAKEARGS = 
 
 
 ### Targets: ###
 
-all: artprov $(__console___depname) dialogs image minimal
+all: access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg newgrid notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wxtest
+
+access: 
+	cd access
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 artprov: 
-	(cd artprov && $(MAKE) all)
+	cd artprov
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+calendar: 
+	cd calendar
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+caret: 
+	cd caret
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+checklst: 
+	cd checklst
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
 
-!if "$(USE_GUI)" == "0"
+config: 
+	cd config
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
 console: 
-	(cd console && $(MAKE) all)
-!endif
+	cd console
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+controls: 
+	cd controls
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+db: 
+	cd db
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 dialogs: 
-	(cd dialogs && $(MAKE) all)
+	cd dialogs
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+dialup: 
+	cd dialup
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+display: 
+	cd display
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+dnd: 
+	cd dnd
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+docview: 
+	cd docview
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+docvwmdi: 
+	cd docvwmdi
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+dragimag: 
+	cd dragimag
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+drawing: 
+	cd drawing
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+dynamic: 
+	cd dynamic
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+erase: 
+	cd erase
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+event: 
+	cd event
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+exec: 
+	cd exec
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+font: 
+	cd font
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+grid: 
+	cd grid
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+help: 
+	cd help
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+htlbox: 
+	cd htlbox
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+html: 
+	cd html
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 image: 
-	(cd image && $(MAKE) all)
+	cd image
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+internat: 
+	cd internat
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+ipc: 
+	cd ipc
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+joytest: 
+	cd joytest
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+keyboard: 
+	cd keyboard
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+layout: 
+	cd layout
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+listbox: 
+	cd listbox
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+listctrl: 
+	cd listctrl
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+mdi: 
+	cd mdi
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+memcheck: 
+	cd memcheck
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+menu: 
+	cd menu
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+mfc: 
+	cd mfc
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+minifram: 
+	cd minifram
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 minimal: 
-	(cd minimal && $(MAKE) all)
+	cd minimal
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+mobile: 
+	cd mobile
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+multimon: 
+	cd multimon
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+nativdlg: 
+	cd nativdlg
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+newgrid: 
+	cd newgrid
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+notebook: 
+	cd notebook
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+oleauto: 
+	cd oleauto
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+opengl: 
+	cd opengl
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+ownerdrw: 
+	cd ownerdrw
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+png: 
+	cd png
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+printing: 
+	cd printing
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+propsize: 
+	cd propsize
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+regtest: 
+	cd regtest
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+render: 
+	cd render
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+richedit: 
+	cd richedit
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+rotate: 
+	cd rotate
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+sashtest: 
+	cd sashtest
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+scroll: 
+	cd scroll
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+scrollsub: 
+	cd scrollsub
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+shaped: 
+	cd shaped
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+sockets: 
+	cd sockets
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+splitter: 
+	cd splitter
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+statbar: 
+	cd statbar
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+tab: 
+	cd tab
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+taskbar: 
+	cd taskbar
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+text: 
+	cd text
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+thread: 
+	cd thread
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+toolbar: 
+	cd toolbar
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+treectrl: 
+	cd treectrl
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+typetest: 
+	cd typetest
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+validate: 
+	cd validate
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+vscroll: 
+	cd vscroll
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+widgets: 
+	cd widgets
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+wizard: 
+	cd wizard
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
+
+wxtest: 
+	cd wxtest
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
