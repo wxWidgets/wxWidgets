@@ -1397,66 +1397,66 @@ SOURCE=.\msw\ole\uuid.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\include\wx\msw\setup0.h
+SOURCE=..\include\wx\msw\setup.h
 !IF  "$(CFG)" == "wxWindows - Win32 Release Unicode DLL"
-# Begin Custom Build - Creating wx/setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup0.h
+# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswdllu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\lib\mswdllu\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode DLL"
-# Begin Custom Build - Creating wx/setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup0.h
+# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswdllud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\lib\mswdllud\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Release Unicode"
-# Begin Custom Build - Creating wx/setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup0.h
+# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\lib\mswu\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode"
-# Begin Custom Build - Creating wx/setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup0.h
+# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\lib\mswud\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Release DLL"
-# Begin Custom Build - Creating wx/setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup0.h
+# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswdll/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\lib\mswdll\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug DLL"
-# Begin Custom Build - Creating wx/setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup0.h
+# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswdlld/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\lib\mswdlld\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Release"
-# Begin Custom Build - Creating wx/setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup0.h
+# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+InputPath=..\include\wx\msw\setup.h
 
 "../lib/msw/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\lib\msw\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug"
-# Begin Custom Build - Creating wx/setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup0.h
+# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswd/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\lib\mswd\wx\setup.h
