@@ -75,7 +75,6 @@ class wxEditor(wxScrolledWindow):
         self.InitDoubleBuffering()
         self.InitScrolling()
         self.SelectOff()
-        self.CopiedData = None
         self.SetFocus()
         self.SetText([""])
         self.SpacesPerTab = 4
@@ -634,17 +633,21 @@ class wxEditor(wxScrolledWindow):
         self.CopySelection(event)
         self.SelectOff()
 
-    def CopyData(self, data):
-        self.CopiedData = data
+    def CopyToClipboard(self, linesOfText):
+        do = wxTextDataObject()
+        do.SetText(string.join(linesOfText, os.linesep))
+        wxTheClipboard.Open()
+        wxTheClipboard.SetData(do)
+        wxTheClipboard.Close()
 
     def SingleLineCopy(self, Row, bCol, eCol):
         Line = self.GetTextLine(Row)
-        self.CopyData([Line[bCol:eCol]])
+        self.CopyToClipboard([Line[bCol:eCol]])
 
     def MultipleLineCopy(self, bRow, bCol, eRow, eCol):
         bLine = self.GetTextLine(bRow)[bCol:]
         eLine = self.GetTextLine(eRow)[:eCol]
-        self.CopyData([bLine] + [l for l in self.lines[bRow + 1:eRow]] + [eLine])
+        self.CopyToClipboard([bLine] + [l for l in self.lines[bRow + 1:eRow]] + [eLine])
 
     def OnDeleteSelection(self, event):
         selection = self.FindSelection()
@@ -677,16 +680,22 @@ class wxEditor(wxScrolledWindow):
         self.lines[bRow:eRow + 1] = [ModLine]
 
     def OnPaste(self, event):
-        if self.CopiedData is None:
-            wxBell()
-            return
-        elif len(self.CopiedData) == 0:
-            wxBell()
-            return
-        elif len(self.CopiedData) == 1:
-            self.SingleLineInsert(self.CopiedData[0])
+        do = wxTextDataObject()
+        wxTheClipboard.Open()
+        success = wxTheClipboard.GetData(do)
+        wxTheClipboard.Close()
+        if success:
+            pastedLines = string.split(do.GetText(), '\n')
         else:
-            self.MultipleLinePaste()
+            wxBell()
+            return
+        if len(pastedLines) == 0:
+            wxBell()
+            return
+        elif len(pastedLines) == 1:
+            self.SingleLineInsert(pastedLines[0])
+        else:
+            self.MultipleLinePaste(pastedLines)
 
     def SingleLineInsert(self, newText):
         ModLine = self.GetTextLine(self.cy)
@@ -696,18 +705,18 @@ class wxEditor(wxScrolledWindow):
         self.TouchBuffer()
         self.UpdateView()
 
-    def MultipleLinePaste(self):
+    def MultipleLinePaste(self, pastedLines):
         FirstLine = LastLine = self.GetTextLine(self.cy)
-        FirstLine = FirstLine[:self.cx] + self.CopiedData[0]
-        LastLine = self.CopiedData[-1] + LastLine[self.cx:]
+        FirstLine = FirstLine[:self.cx] + pastedLines[0]
+        LastLine = pastedLines[-1] + LastLine[self.cx:]
 
         NewSlice = [FirstLine]
-        NewSlice += [l for l in self.CopiedData[1:-1]]
+        NewSlice += [l for l in pastedLines[1:-1]]
         NewSlice += [LastLine]
         self.lines[self.cy:self.cy + 1] = NewSlice
 
-        self.cy = self.cy + len(self.CopiedData)-1
-        self.cx = len(self.CopiedData[-1])
+        self.cy = self.cy + len(pastedLines)-1
+        self.cx = len(pastedLines[-1])
         self.TouchBuffer()
         self.UpdateView()
 
