@@ -18,7 +18,9 @@ Unix:
 All:
 
 - Implemented GetEditControl for wxGenericTreeCtrl (Peter
-  Stieber).
+  Stieber)
+- Improved contrib/utils/convertrc parsing (David J. Cooke)
+- Fixed handling of URLs and filenames in wxFileSystem
 
 OLD CHANGES
 ===========
