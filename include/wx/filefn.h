@@ -80,7 +80,11 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
     #define   wxTell       _tell
 
     #if wxUSE_UNICODE
-        #define   wxOpen       _wopen
+        #if wxUSE_UNICODE_MSLU
+            WXDLLEXPORT int wxOpen(const wxChar *name, int flags, int mode);
+        #else
+            #define   wxOpen       _wopen
+        #endif
         #define   wxAccess     _waccess
 
         #define   wxMkDir      _wmkdir

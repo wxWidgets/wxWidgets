@@ -1764,3 +1764,28 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 #ifdef __VISUALC__
     #pragma warning(default:4706)   // assignment within conditional expression
 #endif // VC++
+
+//------------------------------------------------------------------------
+// Missing functions in Unicode for Win9x
+//------------------------------------------------------------------------
+
+// NB: MSLU only covers Win32 API, it doesn't provide Unicode implementation of
+//     libc functions. Unfortunately, some of MSVCRT wchar_t functions
+//     (e.g. _wopen) don't work on Windows 9x, so we have to workaround it
+//     by calling the char version. We still want to use wchar_t version on
+//     NT/2000/XP, though, because they allow for Unicode file names.
+#if wxUSE_UNICODE_MSLU
+
+    #if defined( __VISUALC__ ) \
+        || ( defined(__MINGW32__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
+        || ( defined(__MWERKS__) && defined(__WXMSW__) )
+    WXDLLEXPORT int wxOpen(const wxChar *name, int flags, int mode)
+    {
+        if ( wxGetOsVersion() == wxWINDOWS_NT )
+            return _wopen(name, flags, mode);
+        else
+            return _open(wxConvFile.cWX2MB(name), flags, mode);
+    }
+    #endif
+
+#endif // wxUSE_UNICODE_MSLU
