@@ -11,6 +11,7 @@ demo/*.xml
 demo/data/*.png
 demo/data/*.htm
 demo/data/*.bmp
+demo/data/*.txt
 demo/data/*.i
 demo/data/*.h
 

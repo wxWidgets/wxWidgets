@@ -85,6 +85,7 @@ fi
 %{pref}/lib/python1.5/site-packages/wxPython/*.py
 %{pref}/lib/python1.5/site-packages/wxPython/*.py?
 %{pref}/lib/python1.5/site-packages/wxPython/lib
+%{pref}/lib/python1.5/site-packages/wxPython/demo
 %{pref}/lib/python1.5/site-packages/wxPython/wxcmodule.so
 %{pref}/lib/python1.5/site-packages/wxPython/oglcmodule.so
 %{pref}/lib/python1.5/site-packages/wxPython/stc_cmodule.so
