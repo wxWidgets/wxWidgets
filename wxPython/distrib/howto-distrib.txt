@@ -164,12 +164,12 @@ created first and in place on the file server.  There are currently
 two builds made of wxPythonOSX, one for Panther and Apple's version of
 Python, and one for Jaguar and a self-installed MacPythonOSX.  
 
-* On BigMac run the following:
+* On BigMac run the following as root:
 
      cd wx/wxPython
      distrib/mac/wxPythonOSX/build panther
 
-* On Whopper run the following  
+* On Whopper run the following as root: 
 
      cd wx/wxPython
      distrib/mac/wxPythonOSX/build jaguar
