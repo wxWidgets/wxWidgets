@@ -594,7 +594,6 @@ wxDocTemplate::wxDocTemplate(wxDocManager *manager,
                              long flags)
 {
     m_documentManager = manager;
-    m_flags = flags;
     m_description = descr;
     m_directory = dir;
     m_defaultExt = ext;
