@@ -182,6 +182,7 @@ protected:
     wxString       m_fileName;
     wxString       m_wildCard;
     int            m_filterIndex;
+    wxString       m_filterExtension;
     wxChoice      *m_choice;
     wxTextCtrl    *m_text;
     wxFileCtrl    *m_list;
@@ -191,6 +192,9 @@ protected:
 private:
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
     DECLARE_EVENT_TABLE()
+
+    static long   m_lastViewStyle;  // list or report?
+    static bool   m_lastShowHidden; 
 };
 
 // File selector - backward compatibility
