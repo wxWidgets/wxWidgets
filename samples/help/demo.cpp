@@ -589,67 +589,66 @@ void MyFrame::ShowHelp(int commandId, wxHelpControllerBase& helpController)
 {
    switch(commandId)
    {
-   case HelpDemo_Help_Classes:
-   case HelpDemo_Html_Help_Classes:
-   case HelpDemo_Advanced_Html_Help_Classes:
-   case HelpDemo_MS_Html_Help_Classes:
-   case HelpDemo_Best_Help_Classes:
-      helpController.DisplaySection(2);
-      //helpController.DisplaySection("Classes"); // An alternative form for most controllers
+       case HelpDemo_Help_Classes:
+       case HelpDemo_Html_Help_Classes:
+       case HelpDemo_Advanced_Html_Help_Classes:
+       case HelpDemo_MS_Html_Help_Classes:
+       case HelpDemo_Best_Help_Classes:
+          helpController.DisplaySection(2);
+          //helpController.DisplaySection("Classes"); // An alternative form for most controllers
+          break;
 
-      break;
-   case HelpDemo_Help_Functions:
-   case HelpDemo_Html_Help_Functions:
-   case HelpDemo_Advanced_Html_Help_Functions:
-   case HelpDemo_MS_Html_Help_Functions:
-      helpController.DisplaySection(1);
-      //helpController.DisplaySection("Functions"); // An alternative form for most controllers
-      break;
-   case HelpDemo_Help_Help:
-   case HelpDemo_Html_Help_Help:
-   case HelpDemo_Advanced_Html_Help_Help:
-   case HelpDemo_MS_Html_Help_Help:
-   case HelpDemo_Best_Help_Help:
-      helpController.DisplaySection(3);
-      //helpController.DisplaySection("About"); // An alternative form for most controllers
-      break;
+       case HelpDemo_Help_Functions:
+       case HelpDemo_Html_Help_Functions:
+       case HelpDemo_Advanced_Html_Help_Functions:
+       case HelpDemo_MS_Html_Help_Functions:
+          helpController.DisplaySection(1);
+          //helpController.DisplaySection("Functions"); // An alternative form for most controllers
+          break;
 
-   case HelpDemo_Help_Search:
-   case HelpDemo_Html_Help_Search:
-   case HelpDemo_Advanced_Html_Help_Search:
-   case HelpDemo_MS_Html_Help_Search:
-   case HelpDemo_Best_Help_Search:
-   {
-      wxString key = wxGetTextFromUser("Search for?",
-                                       "Search help for keyword",
-                                       "",
-                                       this);
-      if(! key.IsEmpty())
-         helpController.KeywordSearch(key);
-   }
-   break;
+       case HelpDemo_Help_Help:
+       case HelpDemo_Html_Help_Help:
+       case HelpDemo_Advanced_Html_Help_Help:
+       case HelpDemo_MS_Html_Help_Help:
+       case HelpDemo_Best_Help_Help:
+          helpController.DisplaySection(3);
+          //helpController.DisplaySection("About"); // An alternative form for most controllers
+          break;
 
-   case HelpDemo_Help_Index:
-   case HelpDemo_Html_Help_Index:
-   case HelpDemo_Advanced_Html_Help_Index:
-   case HelpDemo_MS_Html_Help_Index:
-   case HelpDemo_Best_Help_Index:
-      helpController.DisplayContents();
-      break;
+       case HelpDemo_Help_Search:
+       case HelpDemo_Html_Help_Search:
+       case HelpDemo_Advanced_Html_Help_Search:
+       case HelpDemo_MS_Html_Help_Search:
+       case HelpDemo_Best_Help_Search:
+       {
+          wxString key = wxGetTextFromUser("Search for?",
+                                           "Search help for keyword",
+                                           "",
+                                           this);
+          if(! key.IsEmpty())
+             helpController.KeywordSearch(key);
+       }
+       break;
 
-   // These three calls are only used by wxExtHelpController
+       case HelpDemo_Help_Index:
+       case HelpDemo_Html_Help_Index:
+       case HelpDemo_Advanced_Html_Help_Index:
+       case HelpDemo_MS_Html_Help_Index:
+       case HelpDemo_Best_Help_Index:
+          helpController.DisplayContents();
+          break;
 
-   case HelpDemo_Help_KDE:
-      helpController.SetViewer("kdehelp");
-      break;
-   case HelpDemo_Help_GNOME:
-      helpController.SetViewer("gnome-help-browser");
-      break;
-   case HelpDemo_Help_Netscape:
-      helpController.SetViewer("netscape", wxHELP_NETSCAPE);
-      break;
-   default:
-      break;
+       // These three calls are only used by wxExtHelpController
+
+       case HelpDemo_Help_KDE:
+          helpController.SetViewer("kdehelp");
+          break;
+       case HelpDemo_Help_GNOME:
+          helpController.SetViewer("gnome-help-browser");
+          break;
+       case HelpDemo_Help_Netscape:
+          helpController.SetViewer("netscape", wxHELP_NETSCAPE);
+          break;
    }
 }
 
