@@ -78,6 +78,7 @@ public:
     // implementation only from now on
     // -------------------------------
 
+    long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     WXHWND *GetRadioButtons() const { return m_radioButtons; }
     bool ContainsHWND(WXHWND hWnd) const;
     void SendNotificationEvent();

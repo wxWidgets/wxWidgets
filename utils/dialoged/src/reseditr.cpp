@@ -2152,7 +2152,7 @@ void wxResourceEditorFrame::OnCloseWindow(wxCloseEvent& event)
     }
   }
     
-  if (!Iconized())
+  if (!IsIconized())
   {
     int w, h;
     GetSize(&w, &h);

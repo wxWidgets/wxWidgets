@@ -903,6 +903,9 @@ SOURCE=.\msw\pnghand.cpp
 
 !IF  "$(CFG)" == "wxvc_dll - Win32 Release"
 
+# ADD CPP /I "..\include" /I "png" /I "zlib"
+# SUBTRACT CPP /I "../include"
+
 !ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I "png" /I "zlib"
@@ -1382,7 +1385,6 @@ SOURCE=.\zlib\zutil.c
 SOURCE=..\include\wx\msw\setup.h
 # End Source File
 # End Group
-
 # Begin Group "JPEG Files"
 
 # PROP Default_Filter ""
@@ -1390,13 +1392,14 @@ SOURCE=..\include\wx\msw\setup.h
 
 SOURCE=.\jpeg\jcapimin.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1406,13 +1409,14 @@ SOURCE=.\jpeg\jcapimin.c
 
 SOURCE=.\jpeg\jcapistd.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1422,13 +1426,14 @@ SOURCE=.\jpeg\jcapistd.c
 
 SOURCE=.\jpeg\jccoefct.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1438,13 +1443,14 @@ SOURCE=.\jpeg\jccoefct.c
 
 SOURCE=.\jpeg\jccolor.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1454,13 +1460,14 @@ SOURCE=.\jpeg\jccolor.c
 
 SOURCE=.\jpeg\jcdctmgr.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1470,13 +1477,14 @@ SOURCE=.\jpeg\jcdctmgr.c
 
 SOURCE=.\jpeg\jchuff.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1486,13 +1494,14 @@ SOURCE=.\jpeg\jchuff.c
 
 SOURCE=.\jpeg\jcinit.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1502,13 +1511,14 @@ SOURCE=.\jpeg\jcinit.c
 
 SOURCE=.\jpeg\jcmainct.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1518,13 +1528,14 @@ SOURCE=.\jpeg\jcmainct.c
 
 SOURCE=.\jpeg\jcmarker.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1534,13 +1545,14 @@ SOURCE=.\jpeg\jcmarker.c
 
 SOURCE=.\jpeg\jcmaster.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1550,13 +1562,14 @@ SOURCE=.\jpeg\jcmaster.c
 
 SOURCE=.\jpeg\jcomapi.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1566,13 +1579,14 @@ SOURCE=.\jpeg\jcomapi.c
 
 SOURCE=.\jpeg\jcparam.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1582,13 +1596,14 @@ SOURCE=.\jpeg\jcparam.c
 
 SOURCE=.\jpeg\jcphuff.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1598,13 +1613,14 @@ SOURCE=.\jpeg\jcphuff.c
 
 SOURCE=.\jpeg\jcprepct.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1614,13 +1630,14 @@ SOURCE=.\jpeg\jcprepct.c
 
 SOURCE=.\jpeg\jcsample.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1630,13 +1647,14 @@ SOURCE=.\jpeg\jcsample.c
 
 SOURCE=.\jpeg\jctrans.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1646,13 +1664,14 @@ SOURCE=.\jpeg\jctrans.c
 
 SOURCE=.\jpeg\jdapimin.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1662,13 +1681,14 @@ SOURCE=.\jpeg\jdapimin.c
 
 SOURCE=.\jpeg\jdapistd.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1678,13 +1698,14 @@ SOURCE=.\jpeg\jdapistd.c
 
 SOURCE=.\jpeg\jdatadst.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1694,13 +1715,14 @@ SOURCE=.\jpeg\jdatadst.c
 
 SOURCE=.\jpeg\jdatasrc.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1710,13 +1732,14 @@ SOURCE=.\jpeg\jdatasrc.c
 
 SOURCE=.\jpeg\jdcoefct.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1726,13 +1749,14 @@ SOURCE=.\jpeg\jdcoefct.c
 
 SOURCE=.\jpeg\jdcolor.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1742,13 +1766,14 @@ SOURCE=.\jpeg\jdcolor.c
 
 SOURCE=.\jpeg\jddctmgr.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1758,13 +1783,14 @@ SOURCE=.\jpeg\jddctmgr.c
 
 SOURCE=.\jpeg\jdhuff.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1774,13 +1800,14 @@ SOURCE=.\jpeg\jdhuff.c
 
 SOURCE=.\jpeg\jdinput.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1790,13 +1817,14 @@ SOURCE=.\jpeg\jdinput.c
 
 SOURCE=.\jpeg\jdmainct.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1806,13 +1834,14 @@ SOURCE=.\jpeg\jdmainct.c
 
 SOURCE=.\jpeg\jdmarker.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1822,13 +1851,14 @@ SOURCE=.\jpeg\jdmarker.c
 
 SOURCE=.\jpeg\jdmaster.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1838,13 +1868,14 @@ SOURCE=.\jpeg\jdmaster.c
 
 SOURCE=.\jpeg\jdmerge.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1854,13 +1885,14 @@ SOURCE=.\jpeg\jdmerge.c
 
 SOURCE=.\jpeg\jdphuff.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1870,13 +1902,14 @@ SOURCE=.\jpeg\jdphuff.c
 
 SOURCE=.\jpeg\jdpostct.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1886,13 +1919,14 @@ SOURCE=.\jpeg\jdpostct.c
 
 SOURCE=.\jpeg\jdsample.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1902,13 +1936,14 @@ SOURCE=.\jpeg\jdsample.c
 
 SOURCE=.\jpeg\jdtrans.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1918,13 +1953,14 @@ SOURCE=.\jpeg\jdtrans.c
 
 SOURCE=.\jpeg\jerror.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1934,13 +1970,14 @@ SOURCE=.\jpeg\jerror.c
 
 SOURCE=.\jpeg\jfdctflt.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1950,13 +1987,14 @@ SOURCE=.\jpeg\jfdctflt.c
 
 SOURCE=.\jpeg\jfdctfst.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1966,13 +2004,14 @@ SOURCE=.\jpeg\jfdctfst.c
 
 SOURCE=.\jpeg\jfdctint.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1982,13 +2021,14 @@ SOURCE=.\jpeg\jfdctint.c
 
 SOURCE=.\jpeg\jidctflt.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -1998,13 +2038,14 @@ SOURCE=.\jpeg\jidctflt.c
 
 SOURCE=.\jpeg\jidctfst.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -2014,13 +2055,14 @@ SOURCE=.\jpeg\jidctfst.c
 
 SOURCE=.\jpeg\jidctint.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -2030,13 +2072,14 @@ SOURCE=.\jpeg\jidctint.c
 
 SOURCE=.\jpeg\jidctred.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -2046,13 +2089,14 @@ SOURCE=.\jpeg\jidctred.c
 
 SOURCE=.\jpeg\jmemmgr.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -2062,13 +2106,14 @@ SOURCE=.\jpeg\jmemmgr.c
 
 SOURCE=.\jpeg\jmemnobs.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -2078,13 +2123,14 @@ SOURCE=.\jpeg\jmemnobs.c
 
 SOURCE=.\jpeg\jquant1.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -2094,13 +2140,14 @@ SOURCE=.\jpeg\jquant1.c
 
 SOURCE=.\jpeg\jquant2.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -2110,19 +2157,19 @@ SOURCE=.\jpeg\jquant2.c
 
 SOURCE=.\jpeg\jutils.c
 
-!IF  "$(CFG)" == "jpeg - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
+
+# ADD CPP /I "..\include" /I ".."
+# SUBTRACT CPP /I "../include"
+
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # ADD CPP /I ".."
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "jpeg - Win32 Debug"
-
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
 
 # End Source File
 # End Group
-
 # End Target
 # End Project

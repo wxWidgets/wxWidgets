@@ -687,6 +687,26 @@ void wxRadioBox::SendNotificationEvent()
     ProcessCommand(event);
 }
 
+long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    // This is required for the radiobox to be sensitive to mouse input,
+    // e.g. for Dialog Editor.
+    if (nMsg == WM_NCHITTEST)
+    {
+        int xPos = LOWORD(lParam);  // horizontal position of cursor
+        int yPos = HIWORD(lParam);  // vertical position of cursor
+
+        ScreenToClient(&xPos, &yPos);
+
+        // Make sure you can drag by the top of the groupbox, but let
+        // other (enclosed) controls get mouse events also
+        if (yPos < 10)
+            return (long)HTCLIENT;
+    }
+
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
+
 // ---------------------------------------------------------------------------
 // window proc for radio buttons
 // ---------------------------------------------------------------------------
