@@ -30,7 +30,7 @@ public:
 
     // implicit conversion from the colour name
   wxColour( const wxString &colourName ) { InitFromName(colourName); }
-  wxColour( const char *colourName ) { InitFromName(colourName); }
+  wxColour( const wxChar *colourName ) { InitFromName(colourName); }
 
 
     // copy ctors and assignment operators
