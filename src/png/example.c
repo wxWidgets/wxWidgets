@@ -742,6 +742,9 @@ void write_png(char *file_name /* , ... other image information ... */)
    png_byte image[height][width*bytes_per_pixel];
    png_bytep row_pointers[height];
 
+   if (height > PNG_UINT_32_MAX/png_sizeof(png_bytep))
+     png_error (png_ptr, "Image is too tall to process in memory");
+
    for (k = 0; k < height; k++)
      row_pointers[k] = image + k*width*bytes_per_pixel;
 

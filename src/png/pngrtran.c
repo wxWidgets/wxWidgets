@@ -1,7 +1,7 @@
 
 /* pngrtran.c - transforms the data in a row for PNG readers
  *
- * libpng version 1.2.6 - August 15, 2004
+ * libpng version  1.2.7 - September 12, 2004
  * For conditions of distribution and use, see copyright notice in png.h
  * Copyright (c) 1998-2004 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
@@ -1135,8 +1135,10 @@ png_read_transform_info(png_structp png_ptr, png_infop info_ptr)
        (info_ptr->color_type == PNG_COLOR_TYPE_GRAY)))
    {
       info_ptr->channels++;
-#if 0 /* if adding a true alpha channel not just filler */
-      info_ptr->color_type |= PNG_COLOR_MASK_ALPHA;
+      /* if adding a true alpha channel not just filler */
+#if !defined(PNG_1_0_X)
+      if (png_ptr->transformations & PNG_ADD_ALPHA)
+        info_ptr->color_type |= PNG_COLOR_MASK_ALPHA;
 #endif
    }
 #endif
@@ -1927,7 +1929,6 @@ png_do_read_filler(png_row_infop row_info, png_bytep row,
             row_info->rowbytes = row_width * 4;
          }
       }
-      row_info->color_type |= PNG_COLOR_MASK_ALPHA;
    } /* COLOR_TYPE == GRAY */
    else if (row_info->color_type == PNG_COLOR_TYPE_RGB)
    {
@@ -2012,7 +2013,6 @@ png_do_read_filler(png_row_infop row_info, png_bytep row,
             row_info->rowbytes = row_width * 8;
          }
       }
-      row_info->color_type |= PNG_COLOR_MASK_ALPHA;
    } /* COLOR_TYPE == RGB */
 }
 #endif

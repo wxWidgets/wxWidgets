@@ -1,6 +1,6 @@
 /* png.h - header file for PNG reference library
  *
- * libpng version 1.2.6 - August 15, 2004
+ * libpng version 1.2.7 - September 12, 2004
  * Copyright (c) 1998-2004 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -8,7 +8,7 @@
  * Authors and maintainers:
  *  libpng versions 0.71, May 1995, through 0.88, January 1996: Guy Schalnat
  *  libpng versions 0.89c, June 1996, through 0.96, May 1997: Andreas Dilger
- *  libpng versions 0.97, January 1998, through 1.2.6 - August 15, 2004: Glenn
+ *  libpng versions 0.97, January 1998, through 1.2.7 - September 12, 2004: Glenn
  *  See also "Contributing Authors", below.
  *
  * Note about libpng version numbers:
@@ -101,6 +101,11 @@
  *    1.2.6beta1-4            13    10206  12.so.0.1.2.6beta1-4
  *    1.0.16                  10    10016  10.so.0.1.0.16
  *    1.2.6                   13    10206  12.so.0.1.2.6
+ *    1.2.7beta1-2            13    10207  12.so.0.1.2.7beta1-2
+ *    1.0.17rc1               10    10017  12.so.0.1.0.17rc1
+ *    1.2.7rc1                13    10207  12.so.0.1.2.7rc1
+ *    1.0.17                  10    10017  12.so.0.1.0.17
+ *    1.2.7                   13    10207  12.so.0.1.2.7
  *
  *    Henceforth the source version will match the shared-library major
  *    and minor numbers; the shared-library major version number will be
@@ -120,8 +125,8 @@
  *    in binary compatibility (e.g., when a new feature is added).
  *
  * See libpng.txt or libpng.3 for more information.  The PNG specification
- * is available as RFC 2083 <ftp://ftp.uu.net/graphics/png/documents/>
- * and as a W3C Recommendation <http://www.w3.org/TR/REC.png.html>
+ * is available as a W3C Recommendation and as an ISO Specification,
+ * <http://www.w3.org/TR/2003/REC-PNG-20031110/
  */
 
 /*
@@ -130,17 +135,17 @@
  * If you modify libpng you may insert additional notices immediately following
  * this sentence.
  *
- * libpng version 1.2.6, August 15, 2004, is
- * Copyright (c) 2004 Glenn Randers-Pehrson, and is
+ * libpng versions 1.2.6, August 15, 2004, through 1.2.7, September 12, 2004, are
+ * Copyright (c) 2004 Glenn Randers-Pehrson, and are
  * distributed according to the same disclaimer and license as libpng-1.2.5
- * with the following individual added to the list of Contributing Authors
+ * with the following individual added to the list of Contributing Authors:
  *
  *    Cosmin Truta
  *
- * libpng versions 1.0.7, July 1, 2000, through 1.2.5 - October 3, 2002, are
+ * libpng versions 1.0.7, July 1, 2000, through 1.2.5, October 3, 2002, are
  * Copyright (c) 2000-2002 Glenn Randers-Pehrson, and are
  * distributed according to the same disclaimer and license as libpng-1.0.6
- * with the following individuals added to the list of Contributing Authors
+ * with the following individuals added to the list of Contributing Authors:
  *
  *    Simon-Pierre Cadieux
  *    Eric S. Raymond
@@ -156,8 +161,8 @@
  *    the user.
  *
  * libpng versions 0.97, January 1998, through 1.0.6, March 20, 2000, are
- * Copyright (c) 1998, 1999, 2000 Glenn Randers-Pehrson
- * Distributed according to the same disclaimer and license as libpng-0.96,
+ * Copyright (c) 1998, 1999, 2000 Glenn Randers-Pehrson, and are
+ * distributed according to the same disclaimer and license as libpng-0.96,
  * with the following individuals added to the list of Contributing Authors:
  *
  *    Tom Lane
@@ -242,13 +247,13 @@
  * Y2K compliance in libpng:
  * =========================
  *
- *    August 15, 2004
+ *    September 12, 2004
  *
  *    Since the PNG Development group is an ad-hoc body, we can't make
  *    an official declaration.
  *
  *    This is your unofficial assurance that libpng from version 0.71 and
- *    upward through 1.2.6 are Y2K compliant.  It is my belief that earlier
+ *    upward through 1.2.7 are Y2K compliant.  It is my belief that earlier
  *    versions were also Y2K compliant.
  *
  *    Libpng only has three year fields.  One is a 2-byte unsigned integer
@@ -304,9 +309,9 @@
  */
 
 /* Version information for png.h - this should match the version in png.c */
-#define PNG_LIBPNG_VER_STRING "1.2.6"
+#define PNG_LIBPNG_VER_STRING "1.2.7"
 #define PNG_HEADER_VERSION_STRING \
-   " libpng version 1.2.6 - August 15, 2004 (header)\n"
+   " libpng version 1.2.7 - September 12, 2004 (header)\n"
 
 #define PNG_LIBPNG_VER_SONUM   0
 #define PNG_LIBPNG_VER_DLLNUM  %DLLNUM%
@@ -314,7 +319,7 @@
 /* These should match the first 3 components of PNG_LIBPNG_VER_STRING: */
 #define PNG_LIBPNG_VER_MAJOR   1
 #define PNG_LIBPNG_VER_MINOR   2
-#define PNG_LIBPNG_VER_RELEASE 6
+#define PNG_LIBPNG_VER_RELEASE 7
 /* This should match the numeric part of the final component of
  * PNG_LIBPNG_VER_STRING, omitting any leading zero: */
 
@@ -333,7 +338,7 @@
  * Versions 0.7 through 1.0.0 were in the range 0 to 100 here (only
  * version 1.0.0 was mis-numbered 100 instead of 10000).  From
  * version 1.0.1 it's    xxyyzz, where x=major, y=minor, z=release */
-#define PNG_LIBPNG_VER 10206 /* 1.2.6 */
+#define PNG_LIBPNG_VER 10207 /* 1.2.7 */
 
 #ifndef PNG_VERSION_INFO_ONLY
 
@@ -1310,7 +1315,7 @@ struct png_struct_def
 /* This triggers a compiler error in png.c, if png.c and png.h
  * do not agree upon the version number.
  */
-typedef png_structp version_1_2_6;
+typedef png_structp version_1_2_7;
 
 typedef png_struct FAR * FAR * png_structpp;
 
@@ -1482,12 +1487,17 @@ extern PNG_EXPORT(void,png_set_invert_alpha) PNGARG((png_structp png_ptr));
 #endif
 
 #if defined(PNG_READ_FILLER_SUPPORTED) || defined(PNG_WRITE_FILLER_SUPPORTED)
-/* Add a filler byte to 24-bit RGB images. */
+/* Add a filler byte to 8-bit Gray or 24-bit RGB images. */
 extern PNG_EXPORT(void,png_set_filler) PNGARG((png_structp png_ptr,
    png_uint_32 filler, int flags));
 /* The values of the PNG_FILLER_ defines should NOT be changed */
 #define PNG_FILLER_BEFORE 0
 #define PNG_FILLER_AFTER 1
+/* Add an alpha byte to 8-bit Gray or 24-bit RGB images. */
+#if !defined(PNG_1_0_X)
+extern PNG_EXPORT(void,png_set_add_alpha) PNGARG((png_structp png_ptr,
+   png_uint_32 filler, int flags));
+#endif
 #endif /* PNG_READ_FILLER_SUPPORTED || PNG_WRITE_FILLER_SUPPORTED */
 
 #if defined(PNG_READ_SWAP_SUPPORTED) || defined(PNG_WRITE_SWAP_SUPPORTED)
@@ -2571,6 +2581,7 @@ extern PNG_EXPORT(png_uint_32,png_get_user_height_max) PNGARG((png_structp
 #define PNG_RGB_TO_GRAY_ERR  0x200000L
 #define PNG_RGB_TO_GRAY_WARN 0x400000L
 #define PNG_RGB_TO_GRAY      0x600000L  /* two bits, RGB_TO_GRAY_ERR|WARN */
+#define PNG_ADD_ALPHA       0x1000000L  /* Added to libpng-1.2.7 */
 
 /* flags for png_create_struct */
 #define PNG_STRUCT_PNG   0x0001
