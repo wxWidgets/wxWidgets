@@ -3860,6 +3860,10 @@ else
     fi
 fi
 
+dnl ---------------------------------------------------------------------------
+dnl compatibility level
+dnl ---------------------------------------------------------------------------
+
 if test "$WXWIN_COMPATIBILITY_2" = "yes"; then
     AC_DEFINE(WXWIN_COMPATIBILITY_2)
 
@@ -3868,6 +3872,8 @@ fi
 
 if test "x$WXWIN_COMPATIBILITY_2_2" = "xyes"; then
     AC_DEFINE(WXWIN_COMPATIBILITY_2_2)
+
+    WXWIN_COMPATIBILITY_2_4="yes"
 fi
 
 if test "x$WXWIN_COMPATIBILITY_2_4" != "xno"; then
