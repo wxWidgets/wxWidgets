@@ -29,7 +29,10 @@
 #endif
 
 #ifndef WX_PRECOMP
+#include "wx/wx.h"
 #endif //WX_PRECOMP
+
+#if wxUSE_POPUPWIN
 
 #include "wx/popupwin.h"
 
@@ -84,4 +87,6 @@ WXHWND wxPopupWindow::MSWGetParent() const
     //     ugly
     return (WXHWND)::GetDesktopWindow();
 }
+
+#endif // #if wxUSE_POPUPWIN
 
