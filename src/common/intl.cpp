@@ -163,7 +163,7 @@ static inline wxString ExtractNotLang(const wxString& langFull)
 // Plural forms parser
 // ----------------------------------------------------------------------------
 
-/* 
+/*
                                 Simplified Grammar
 
 Expression:
@@ -189,7 +189,7 @@ RelationalExpression:
     MultiplicativeExpression ">=" MultiplicativeExpression
     MultiplicativeExpression "<=" MultiplicativeExpression
     MultiplicativeExpression
-    
+
 MultiplicativeExpression:
     PmExpression '%' PmExpression
     PmExpression
@@ -401,7 +401,7 @@ private:
     wxPluralFormsToken m_token;
     wxPluralFormsNodePtr m_nodes[3];
 };
-    
+
 wxPluralFormsNodePtr::~wxPluralFormsNodePtr()
 {
     delete m_p;
@@ -486,7 +486,7 @@ class wxPluralFormsCalculator
 {
 public:
     wxPluralFormsCalculator() : m_nplurals(0), m_plural(0) {}
-    
+
     // input: number, returns msgstr index
     int evaluate(int n) const;
 
@@ -499,7 +499,7 @@ public:
 
     void  init(wxPluralFormsToken::Number nplurals, wxPluralFormsNode* plural);
     wxString getString() const;
-    
+
 private:
     wxPluralFormsToken::Number m_nplurals;
     wxPluralFormsNodePtr m_plural;
@@ -541,7 +541,7 @@ private:
     wxPluralFormsScanner& m_scanner;
     const wxPluralFormsToken& token() const;
     bool nextToken();
-    
+
     wxPluralFormsNode* expression();
     wxPluralFormsNode* logicalOrExpression();
     wxPluralFormsNode* logicalAndExpression();
@@ -923,7 +923,7 @@ private:
                      *m_pTransTable;  //            translated
 
     wxString m_charset;
-                     
+
     // swap the 2 halves of 32 bit integer if needed
     size_t32 Swap(size_t32 ui) const
     {
@@ -944,7 +944,7 @@ private:
         }
 
         return (const char *)(m_pData + ofsString);
-    }    
+    }
 
     bool m_bSwapped;   // wrong endianness?
 
@@ -1156,7 +1156,7 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
   m_pTransTable = (wxMsgTableEntry *)(m_pData +
                    Swap(pHeader->ofsTransTable));
   m_nSize = nSize;
-    
+
   // now parse catalog's header and try to extract catalog charset and
   // plural forms formula from it:
 
@@ -1181,7 +1181,7 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
           }
       }
       // else: incorrectly filled Content-Type header
-      
+
       // Extract plural forms:
       begin = header.Find(wxT("Plural-Forms:"));
       if (begin != wxNOT_FOUND)
@@ -1393,7 +1393,7 @@ bool wxLocale::Init(const wxChar *szName,
 {
   wxASSERT_MSG( !m_initialized,
                 _T("you can't call wxLocale::Init more than once") );
-  
+
   m_initialized = true;
   m_strLocale = szName;
   m_strShort = szShort;
@@ -1416,7 +1416,7 @@ bool wxLocale::Init(const wxChar *szName,
       256);
   if (ret != 0)
   {
-    m_pszOldLocale = wxStrdup(localeName);      
+    m_pszOldLocale = wxStrdup(localeName);
   }
   else
     m_pszOldLocale = NULL;
@@ -1574,7 +1574,10 @@ bool wxLocale::Init(int language, int flags)
         //     #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS bellow.
         #define SETLOCALE_FAILS_ON_UNICODE_LANGS
     #endif
-    
+
+#if !wxUSE_UNICODE
+    const
+#endif
     wxMB2WXbuf retloc = wxT("C");
     if (language != wxLANGUAGE_DEFAULT)
     {
@@ -1585,7 +1588,7 @@ bool wxLocale::Init(int language, int flags)
         }
         else
         {
-            int codepage 
+            int codepage
                          #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
                          = -1
                          #endif
@@ -2590,7 +2593,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
         default:
             return wxEmptyString;
     }
-}      
+}
 
 #endif // __WXMSW__/!__WXMSW__
 
