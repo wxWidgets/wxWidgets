@@ -518,7 +518,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
                                   gdk_event->area.height );
 
     // Actual redrawing takes place in idle time.
-    win->GtkUpdate();
+    // win->GtkUpdate();
 
 #ifdef __WXGTK20__
 
@@ -611,20 +611,12 @@ static void gtk_window_draw_callback( GtkWidget *widget,
                             (char *)"base",
                             0, 0, -1, -1);
     }
-
-
-    if (!(GTK_WIDGET_APP_PAINTABLE (widget)) &&
-         (pizza->clear_on_draw))
-    {
-        gdk_window_clear_area( pizza->bin_window,
-                               rect->x, rect->y, rect->width, rect->height);
-    }
 #endif
 
+    win->m_clearRegion.Union( rect->x, rect->y, rect->width, rect->height );
     win->GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
 
-    // Actual redrawing takes place in idle time.
-
+    // Update immediately, not in idle time.
     win->GtkUpdate();
 
 #ifndef __WXUNIVERSAL__
@@ -3455,16 +3447,11 @@ void wxWindowGTK::GtkSendPaintEvents()
     else
     // if (!m_clearRegion.IsEmpty())   // always send an erase event
     {
-        // If the clear region is empty, and the update region isn't,
-        // then we're going to clear more than we repaint,
-        // so let's make sure the two regions are in sync.
-        if (m_clearRegion.IsEmpty() && !m_updateRegion.IsEmpty())
-        {
-            m_clearRegion = m_updateRegion ;
-        }
-        
         wxWindowDC dc( (wxWindow*)this );
-        dc.SetClippingRegion( m_clearRegion );
+        if (m_clearRegion.IsEmpty())
+            dc.SetClippingRegion( m_updateRegion );
+        else
+            dc.SetClippingRegion( m_clearRegion );
 
         wxEraseEvent erase_event( GetId(), &dc );
         erase_event.SetEventObject( this );
