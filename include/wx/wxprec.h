@@ -31,7 +31,7 @@
 // Comment this out if you don't mind slower compilation of the wxWindows
 // library
 #if !defined(__WXMAC__) && !defined(__SALFORDC__)
-#include <windows.h>
+// #include <windows.h>
 #endif
 
 #ifdef GetClassInfo

@@ -29,6 +29,37 @@
 #include <math.h>
 #include <time.h>
 
+#ifdef GetObject
+#undef GetObject
+#endif
+
+// wrapper around BSTR type (by Vadim Zeitlin)
+
+class WXDLLEXPORT BasicString
+{
+public:
+  // ctors & dtor
+  BasicString(const char *sz);
+ ~BasicString();
+
+  // accessors
+    // just get the string
+  operator BSTR() const { return m_wzBuf; }
+    // retrieve a copy of our string - caller must SysFreeString() it later!
+  BSTR Get() const { return SysAllocString(m_wzBuf); }
+
+private:
+  // @@@ not implemented (but should be)
+  BasicString(const BasicString&);
+  BasicString& operator=(const BasicString&);
+
+  OLECHAR *m_wzBuf;     // actual string
+};
+
+// Convert variants
+static bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant) ;
+static bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant) ;
+
 // Convert string to Unicode
 static BSTR ConvertStringToOle(const wxString& str);
 
@@ -484,7 +515,7 @@ bool wxAutomationObject::CreateInstance(const wxString& classId) const
 }
 
 
-bool wxAutomationObject::ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
+bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 {
 	ClearVariant(&oleVariant);
 	if (variant.IsNull())
@@ -601,7 +632,7 @@ bool wxAutomationObject::ConvertVariantToOle(const wxVariant& variant, VARIANTAR
 #define VT_TYPEMASK 0xfff
 #endif
 
-bool wxAutomationObject::ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
+bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 {
 	switch (oleVariant.vt & VT_TYPEMASK)
 	{

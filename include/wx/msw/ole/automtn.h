@@ -81,36 +81,10 @@ public:
 	// without having to deal with nasty IDispatch pointers.
 	bool GetObject(wxAutomationObject& obj, const wxString& property, int noArgs = 0, wxVariant args[] = (wxVariant*) NULL) const;
 
-	// Convert variants
-    static bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant) ;
-    static bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant) ;
-
 public:
     WXIDISPATCH*  m_dispatchPtr;
 };
 
-// wrapper around BSTR type (by Vadim Zeitlin)
-
-class WXDLLEXPORT BasicString
-{
-public:
-  // ctors & dtor
-  BasicString(const char *sz);
- ~BasicString();
-
-  // accessors
-    // just get the string
-  operator BSTR() const { return m_wzBuf; }
-    // retrieve a copy of our string - caller must SysFreeString() it later!
-  BSTR Get() const { return SysAllocString(m_wzBuf); }
-
-private:
-  // @@@ not implemented (but should be)
-  BasicString(const BasicString&);
-  BasicString& operator=(const BasicString&);
-
-  OLECHAR *m_wzBuf;     // actual string
-};
 
 #endif
     // _WX_AUTOMTN_H_

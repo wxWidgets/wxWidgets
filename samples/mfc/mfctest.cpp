@@ -42,9 +42,7 @@
 #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
 #include "wx/wx.h"
-#endif
 
 #ifdef new
 #undef new
@@ -59,8 +57,6 @@
 #include "resource.h"
 
 #include "mfctest.h"
-
-#include "wx/wx.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -95,7 +91,7 @@ class MyChild: public wxFrame
     MyCanvas *canvas;
     MyChild(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size, const long style);
     ~MyChild(void);
-    Bool OnClose(void);
+    bool OnClose(void);
 
     void OnQuit(wxCommandEvent& event);
     void OnNew(wxCommandEvent& event);
@@ -269,7 +265,7 @@ bool MyApp::OnInit(void)
 wxFrame *MyApp::CreateFrame(void)
 {
       MyChild *subframe = new MyChild(NULL, "Canvas Frame", wxPoint(10, 10), wxSize(300, 300),
-                             wxDEFAULT_FRAME);
+                             wxDEFAULT_FRAME_STYLE);
 
       subframe->SetTitle("wxWindows canvas frame");
 
@@ -294,7 +290,7 @@ wxFrame *MyApp::CreateFrame(void)
 
       MyCanvas *canvas = new MyCanvas(subframe, wxPoint(0, 0), wxSize(width, height));
       wxCursor *cursor = new wxCursor(wxCURSOR_PENCIL);
-      canvas->SetCursor(cursor);
+      canvas->SetCursor(*cursor);
       subframe->canvas = canvas;
 
       // Give it scrollbars
@@ -321,13 +317,13 @@ void MyCanvas::OnPaint(wxPaintEvent& event)
 {
     wxPaintDC dc(this);
 
-    dc.SetFont(small_font);
-    dc.SetPen(wxGREEN_PEN);
+    dc.SetFont(* small_font);
+    dc.SetPen(* wxGREEN_PEN);
     dc.DrawLine(0, 0, 200, 200);
     dc.DrawLine(200, 0, 0, 200);
 
-    dc.SetBrush(wxCYAN_BRUSH);
-    dc.SetPen(wxRED_PEN);
+    dc.SetBrush(* wxCYAN_BRUSH);
+    dc.SetPen(* wxRED_PEN);
     dc.DrawRectangle(100, 100, 100, 50);
     dc.DrawRoundedRectangle(150, 150, 100, 50, 20);
 
@@ -342,7 +338,7 @@ void MyCanvas::OnPaint(wxPaintEvent& event)
 void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 {
     wxClientDC dc(this);
-    dc.SetPen(wxBLACK_PEN);
+    dc.SetPen(* wxBLACK_PEN);
     long x, y;
     event.Position(&x, &y);
     if (xpos > -1 && ypos > -1 && event.Dragging())
@@ -387,7 +383,7 @@ void MyChild::OnActivate(wxActivateEvent& event)
     canvas->SetFocus();
 }
 
-Bool MyChild::OnClose(void)
+bool MyChild::OnClose(void)
 {
   return TRUE;
 }

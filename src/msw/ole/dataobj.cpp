@@ -32,14 +32,18 @@
 
 #if defined(__WIN32__) && !defined(__GNUWIN32__)
 
-#include  <wx/log.h>
-#include  <wx/msw/ole/oleutils.h>
-#include  <wx/msw/ole/dataobj.h>
+#include <wx/log.h>
+#include <wx/msw/ole/dataobj.h>
+
+#include <windows.h>
+#include <oleauto.h>
 
 #ifndef __WIN32__
   #include <ole2.h>
   #include <olestd.h>
 #endif
+
+#include  <wx/msw/ole/oleutils.h>
 
 // ----------------------------------------------------------------------------
 // functions

@@ -33,14 +33,19 @@
 #if wxUSE_DRAG_AND_DROP
 
 #include  <wx/log.h>
-#include  <wx/msw/ole/oleutils.h>
 #include  <wx/msw/ole/dataobj.h>
 #include  <wx/msw/ole/dropsrc.h>
+
+#include <windows.h>
 
 #ifndef __WIN32__
   #include <ole2.h>
   #include <olestd.h>
 #endif
+
+#include <oleauto.h>
+
+#include <wx/msw/ole/oleutils.h>
 
 // ----------------------------------------------------------------------------
 // wxIDropSource implementation of IDropSource interface
