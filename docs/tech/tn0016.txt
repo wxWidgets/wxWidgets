@@ -41,6 +41,9 @@ Or monolithic wxBase:
              -DDEBUG_INFO=default -DDEBUG_FLAG=default
              -DOFFICIAL_BUILD=0 -DUSE_HTML=0 -DUSE_OPENGL=0 -DUSE_ODBC=0
              -DMONOLITHIC=1 -DUSE_GUI=0 wx.bkl
+It is, however, recommended to modify Bakefiles.bkgen (or
+Bakefiles.local.bkgen) by means of <add-flags> and <del-flags> directives
+and use bakefile_gen instead of running bakefile directly.
 
 
 2. Bakefile files organization
