@@ -142,6 +142,9 @@ can delete a window only when it is safe to do so, in idle time.
 Adds a child window.  This is called automatically by window creation
 functions so should not be required by the application programmer.
 
+Notice that this function is mostly internal to wxWindows and shouldn't be
+called by the user code.
+
 \wxheading{Parameters}
 
 \docparam{child}{Child window to add.}
@@ -1931,6 +1934,9 @@ Releases mouse input captured with \helpref{wxWindow::CaptureMouse}{wxwindowcapt
 
 Removes a child window.  This is called automatically by window deletion
 functions so should not be required by the application programmer.
+
+Notice that this function is mostly internal to wxWindows and shouldn't be
+called by the user code.
 
 \wxheading{Parameters}
 
