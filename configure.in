@@ -2086,6 +2086,8 @@ fi
 
 dnl do other tests only if we are using threads
 if test "$wxUSE_THREADS" = "yes" ; then
+  AC_CHECK_FUNCS(thr_setconcurrency)
+
   dnl define autoconf macro to check for given function in both pthread and
   dnl posix4 libraries
   dnl usage: AC_FUNC_THREAD(FUNCTION_NAME)

@@ -231,10 +231,10 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
     printout->OnBeginPrinting();
 
-    bool keepGoing = TRUE;
-
     int copyCount;
-    for (copyCount = 1; copyCount <= m_printDialogData.GetNoCopies(); copyCount ++)
+    for ( copyCount = 1;
+          copyCount <= m_printDialogData.GetNoCopies();
+          copyCount++ )
     {
         if (!printout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
         {
@@ -246,21 +246,23 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
             break;
 
         int pn;
-        for (pn = m_printDialogData.GetFromPage(); keepGoing && (pn <= m_printDialogData.GetToPage()) && printout->HasPage(pn);
-        pn++)
+        for ( pn = m_printDialogData.GetFromPage();
+              pn <= m_printDialogData.GetToPage() && printout->HasPage(pn);
+              pn++ )
         {
-            if (sm_abortIt)
+            if ( sm_abortIt )
             {
-                keepGoing = FALSE;
                 break;
             }
-            else
-            {
-                dc->StartPage();
-                printout->OnPrintPage(pn);
-                dc->EndPage();
-            }
+
+            dc->StartPage();
+            bool cont = printout->OnPrintPage(pn);
+            dc->EndPage();
+
+            if ( !cont )
+                break;
         }
+
         printout->OnEndDocument();
     }
 

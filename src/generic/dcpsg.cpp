@@ -1292,8 +1292,8 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
 
     long by = y + (long)floor( double(size) * 2.0 / 3.0 ); // approximate baseline
 
-    // XXX only correct for 90 degrees
-    fprintf( m_pstream, "%ld %ld moveto\n", XLOG2DEV(x + size), YLOG2DEV(by) );
+    // FIXME only correct for 90 degrees
+    fprintf( m_pstream, "%d %d moveto\n", XLOG2DEV(x + size), YLOG2DEV(by) );
     fprintf(m_pstream, "%.8f rotate\n", angle);
 
     /* I don't know how to write char to a stream, so I use a mini string */
@@ -1336,15 +1336,15 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
         GetTextExtent(text, &w, &h);
 
         fprintf( m_pstream, 
-	        "gsave\n"
-		"%ld %ld moveto\n"		
-		"%ld setlinewidth\n"
-		"%ld %ld lineto\n"
-		"stroke\n"
-		"grestore\n", 
-                XLOG2DEV(x), YLOG2DEV(uy),
-		(long)m_underlineThickness,
-		XLOG2DEV(x + w), YLOG2DEV(uy) );
+                 "gsave\n"
+                 "%d %d moveto\n"		
+                 "%ld setlinewidth\n"
+                 "%d %d lineto\n"
+                 "stroke\n"
+                 "grestore\n", 
+                 XLOG2DEV(x), YLOG2DEV(uy),
+                 (long)m_underlineThickness,
+                 XLOG2DEV(x + w), YLOG2DEV(uy) );
     }
 
     CalcBoundingBox( x, y );
