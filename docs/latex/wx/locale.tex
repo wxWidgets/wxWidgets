@@ -131,7 +131,7 @@ added later override those added before.
 
 \membersection{wxLocale::Init}\label{wxlocaleinit}
 
-\func{bool}{Init}{\param{const char }{*szName}, \param{const char }{*szShort = NULL}, \param{const char }{*szLocale = NULL}, \param{bool }{bLoadDefault = TRUE}}
+\func{bool}{Init}{\param{const char }{*szName}, \param{const char }{*szShort = NULL}, \param{const char }{*szLocale = NULL}, \param{bool }{bLoadDefault = TRUE}, \param{bool }{bConvertEncoding = FALSE}}
 
 The parameters have the following meaning:
 
@@ -143,6 +143,12 @@ directory prefix when looking for the message catalog files
 \item bLoadDefault may be set to FALSE to prevent loading of the message catalog
 for the given locale containing the translations of standard wxWindows messages.
 This parameter would be rarely used in normal circumstances.
+\item bConvertEncoding may be set to TRUE to do automatic conversion of message
+catalogs to platform's native encoding. Note that it will do only basic 
+conversion between well-known pair like iso8859-1 and windows-1252 or
+iso8859-2 and windows-1250. 
+See \helpref{Writing non-English applications}{nonenglishoverview} for detailed
+description of this behaviour.
 \end{itemize}
 
 The call of this function has several global side effects which you should
