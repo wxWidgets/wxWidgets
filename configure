@@ -11905,7 +11905,7 @@ echo "$ac_t""$wx_cv_prog_icc" 1>&6
 
         WX_LIBRARY_IMPORTLIB="${WX_LIBRARY_NAME_SHARED}.a"
 
-                                WXCONFIG_LIBS="-l${WX_LIBRARY_NAME_SHARED}"
+                                WXCONFIG_LIBS="${WXCONFIG_LIBS}.${SO_SUFFIX}"
 
         SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_IMPORTLIB} -o"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DWXUSINGDLL=1"
