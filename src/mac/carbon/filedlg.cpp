@@ -31,9 +31,7 @@ IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 
 // begin wxmac
 
-#ifndef __DARWIN__
-  #include <Navigation.h>
-#endif
+#include <Navigation.h>
 
 #include "MoreFiles.h"
 #include "MoreFilesExtras.h"
@@ -301,6 +299,8 @@ void MakeUserDataRec(OpenUserDataRec	*myData , const wxString& filter )
 	}
 
 }
+
+#ifndef __DARWIN__
 void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const char *filter , FileFilterYDUPP fileFilter, StandardFileReply *theSFR )
 {
 	Point 				thePt;
@@ -405,6 +405,7 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 		}
 	}
 }
+#endif
 
 static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecPtr data)
 {
@@ -446,6 +447,7 @@ static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecP
     return true ;
 }
 
+#ifndef __DARWIN__
 static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dataPtr)
 {	
 	OpenUserDataRecPtr data = (OpenUserDataRecPtr) dataPtr ;
@@ -470,6 +472,7 @@ static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dat
 		
 	return false ;
 }
+#endif
 
 // end wxmac
 
