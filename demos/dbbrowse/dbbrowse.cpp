@@ -179,7 +179,8 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
      w = p_ProgramCfg->Read("/MainFrame/w", 750), h = p_ProgramCfg->Read("/MainFrame/h", 600);
  //---------------------------------------------------------------------------------------
  // Create the main frame window
- frame = new MainFrame((wxFrame *) NULL, (char *) _("DBBrowser - mj10777"),wxPoint(x,y),wxSize(w,h));
+ Temp0.Printf("%s - %s",GetAppName().c_str(),GetVendorName().c_str());
+ frame = new MainFrame((wxFrame *) NULL,(char *) Temp0.c_str(),wxPoint(x,y),wxSize(w,h));
  //---------------------------------------------------------------------------------------
  // Set the Backgroundcolour (only need if your are NOT using wxSYS_COLOUR_BACKGROUND)
  frame->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BACKGROUND));
@@ -283,7 +284,8 @@ MainFrame::~MainFrame(void)
  // we want here!)
  // delete wxConfigBase::Set((wxConfigBase *) NULL);
  p_ProgramCfg->Flush(TRUE);        // saves   Objekt
- delete frame->pDoc;               // Cleanup (mjDoc::~mjDoc)
+ if (!frame->pDoc)                 // If we have a Valid Document
+  delete frame->pDoc;              // Cleanup (mjDoc::~mjDoc)
 } // MainFrame::~MainFrame(void)
 //----------------------------------------------------------------------------------------
 void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

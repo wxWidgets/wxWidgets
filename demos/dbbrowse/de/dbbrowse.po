@@ -145,9 +145,9 @@ msgstr  "\n"
 #: ../BrowserDB.cpp:303 ../BrowserDB.cpp:331
 #, c-format
 msgid   "\n"
-        "-I-> BrowserDB::OnSelect(%s) Records(%d): End "
+        "-I-> BrowserDB::OnSelect(%s) Records(%d): End - Time needed : %ld ms"
 msgstr  "\n"
-        "-I-> BrowserDB::OnSelect(%s) Sätze(%d): Ende "
+        "-I-> BrowserDB::OnSelect(%s) Sätze(%d): Ende - Dauer : %ld ms"
 
 #: ../BrowserDB.cpp:104
 #, c-format
@@ -159,9 +159,9 @@ msgstr  "\n"
 #: ../BrowserDB.cpp:140
 #, c-format
 msgid   "\n"
-        "-I-> BrowserDB::OnStartDB(%s) : End "
+        "-I-> BrowserDB::OnStartDB(%s) : End - Time needed : %ld ms"
 msgstr  "\n"
-        "-I-> BrowserDB::OnStartDB(%s) : Ende "
+        "-I-> BrowserDB::OnStartDB(%s) : Ende - Dauer : %ld ms"
 
 #: ../BrowserDB.cpp:108
 msgid   "\n"
@@ -189,6 +189,10 @@ msgstr  "   Zeile: "
 #: ../BrowserDB.cpp:47
 msgid   "Time"
 msgstr  "Zeit"
+
+#: ../BrowserDB.cpp:47
+msgid   "-I-> mjDoc::OnNewDocument() - End - Time needed : %ld ms"
+msgstr  "-I-> mjDoc::OnNewDocument() - Ende - Dauer : %ld ms"
 
 #: ../BrowserDB.cpp:47
 msgid   "OK"
@@ -339,18 +343,29 @@ msgstr  "-I-> BrowserDB::OnGetDataSourceODBC() - DatabaseName(%s) ; DataSource(%
 
 #: ../BrowserDB.cpp:140
 #, c-format
-msgid   "-I-> BrowserDB::OnStartDB(%s) : End "
-msgstr  "-I-> BrowserDB::OnStartDB(%s) : Ende"
+msgid   "-I-> BrowserDB::OnStartDB(%s) : End - Time needed : %ld ms"
+msgstr  "-I-> BrowserDB::OnStartDB(%s) : Ende - Dauer : %ld ms"
 
 #: ../DBGrid.cpp:114
 #, c-format
-msgid   "-I-> DBGrid::OnTableView(%s) - %6d Records have been read."
-msgstr  "-I-> DBGrid::OnTableView(%s) - %6d Sätze wurde insgesamt gelesen."
+msgid   "-I-> DBGrid::OnTableView(%s) - %6d Records have been read. - Time needed : %ld ms"
+msgstr  "-I-> DBGrid::OnTableView(%s) - %6d Sätze wurde insgesamt gelesen. - Dauer : %ld ms"
 
 #: ../DBGrid.cpp:110
 #, c-format
 msgid   "-I-> DBGrid::OnTableView(%s) - Record %6d has been read."
 msgstr  "-I-> DBGrid::OnTableView(%s) - Satz %6d wurde gelesen."
+
+#: ../DBTree.cpp:110
+#, c-format
+msgid   "-I-> DBTree::OnPopulate(%s) - %6d Tables have been read. - Time needed : %ld ms"
+msgstr  "-I-> DBTree::OnPopulate(%s) - %6d Tabellen wurde gelesen. - Dauer : %ld ms"
+
+#: ../DBTree.cpp:110
+#, c-format
+msgid   "-I-> DBTree::OnPopulate(%s) - Table %6d has been read."
+msgstr  "-I-> DBTree::OnPopulate(%s) - Tabelle %6d wurde gelesen."
+
 
 #: ../DBGrid.cpp:129
 msgid   "-I-> DBGrid::OnTableView() - End"
@@ -364,7 +379,7 @@ msgstr  "-I-> PgmCtrl::OnSelChanged - %s"
 #: ../Doc.cpp:126
 #, c-format
 msgid   "-I-> mjDoc::OnInitView() - End - %d DSN's found"
-msgstr  "-I-> mjDoc::OnInitView() - Ende - %d DSN's found"
+msgstr  "-I-> mjDoc::OnInitView() - Ende - %d DSN's gefunden"
 
 #: ../PgmCtrl.cpp:160 ../PgmCtrl.cpp:163
 msgid   "-I-> wxConfigBase.p_ProgramCfg->DeleteAll() was succesfull."
@@ -661,13 +676,9 @@ msgstr  ""
 msgid   "ODBC-%s"
 msgstr  ""
 
-#: ../PgmCtrl.cpp:119
-msgid   "ODBC-DSN"
-msgstr  ""
-
 #: ../PgmCtrl.cpp:115
 msgid   "Path Work"
-msgstr  ""
+msgstr  "Arbeitspfad"
 
 #: ../Doc.cpp:94 ../Doc.cpp:96
 msgid   "PgmCtrl"

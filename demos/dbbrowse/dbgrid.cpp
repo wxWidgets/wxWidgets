@@ -73,14 +73,12 @@ DBGrid::~DBGrid()
 //----------------------------------------------------------------------------------------
 int  DBGrid::OnTableView(wxString Table)
 {
+ wxStopWatch sw;
  //---------------------------------------------------------------------------------------
  int  i=0,x,y,z, ValidTable=0;
  wxString Temp0;
  wxBeginBusyCursor();
  SetFont(* pDoc->ft_Doc);
- // wxFont *ft_Temp;
- // ft_Temp = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
- // SetFont(*ft_Temp);
  //---------------------------------------------------------------------------------------
  ct_BrowserDB = (db_Br+i_Which)->ct_BrowserDB;                       // Get the DSN Pointer
  //---------------------------------------------------------------------------------------
@@ -123,7 +121,8 @@ int  DBGrid::OnTableView(wxString Table)
        pDoc->p_MainFrame->SetStatusText(Temp0, 0);
       }
      }  // for (z=0;z<(db_Br+i_Which)->i_Records;z++)
-     Temp0.Printf(_("-I-> DBGrid::OnTableView(%s) - %6d Records have been read."),Table.c_str(),z);
+     Temp0.Printf(_("-I-> DBGrid::OnTableView(%s) - %6d Records have been read. - Time needed : %ld ms"),Table.c_str(),z,sw.Time());
+     wxLogMessage(Temp0);
      pDoc->p_MainFrame->SetStatusText(Temp0, 0);
      // The Grid has been filled, now leave
      goto Weiter;

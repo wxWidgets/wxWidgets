@@ -103,6 +103,7 @@ bool BrowserDB::Initialize(int Quite)
 //----------------------------------------------------------------------------------------
 bool BrowserDB::OnStartDB(int Quite)
 {
+ wxStopWatch sw;
  if (!Quite)
   wxLogMessage(_("\n-I-> BrowserDB::OnStartDB(%s) : Begin "),ODBCSource.c_str());
  if (db_BrowserDB != NULL)
@@ -155,7 +156,7 @@ bool BrowserDB::OnStartDB(int Quite)
    if (!Quite)
    {
     wxLogMessage(_("\n-E-> BrowserDB::OnConnectDataSource() DB CONNECTION ERROR : Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the table prior to making a connection\n(using tools provided by the database manufacturer)"));
-    wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End "),ODBCSource.c_str());
+    wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End  - Time needed : %ld ms"),ODBCSource.c_str(),sw.Time());
    }
    return FALSE;
   }
@@ -165,7 +166,7 @@ bool BrowserDB::OnStartDB(int Quite)
    Temp1 = db_BrowserDB->GetDatabaseName();
    Temp2 = db_BrowserDB->GetDataSource();
    wxLogMessage(_("-I-> BrowserDB::OnGetDataSourceODBC() - DatabaseName(%s) ; DataSource(%s)"),Temp1.c_str(),Temp2.c_str());
-   wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End "),ODBCSource.c_str());
+   wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End - Time needed : %ld ms"),ODBCSource.c_str(),sw.Time());
   }
   return TRUE;
  } else return FALSE;
@@ -328,6 +329,7 @@ bool BrowserDB::OnGetNext(int Cols,int Quite)
 //----------------------------------------------------------------------------------------
 bool BrowserDB::OnSelect(wxString tb_Name, int Quite)
 {
+ wxStopWatch sw;
  wxString SQLStmt;
  i_Records = 0;
  //---------------------------------------------------------------------------------------
@@ -358,7 +360,7 @@ bool BrowserDB::OnSelect(wxString tb_Name, int Quite)
  //---------------------------------------------------------------------------------------
  if (!Quite)
  {
-  wxLogMessage(_("\n-I-> BrowserDB::OnSelect(%s) Records(%d): End "),tb_Name.c_str(),i_Records);
+  wxLogMessage(_("\n-I-> BrowserDB::OnSelect(%s) Records(%d): End - Time needed : %ld ms"),tb_Name.c_str(),i_Records,sw.Time());
  }
  return TRUE;
 }
@@ -378,7 +380,7 @@ bool BrowserDB::OnExecSql(wxString SQLStmt, int Quite)
  }
  if (!Quite)
  {
-  // wxLogMessage(_("\n-I-> BrowserDB::OnExecSql(%s) - End "),SQLStmt.c_str());
+  // wxLogMessage(_("\n-I-> BrowserDB::OnExecSql(%s) - End - Time needed : %ld ms"),SQLStmt.c_str(),sw.Time());
  }
  return TRUE;
 }

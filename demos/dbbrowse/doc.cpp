@@ -80,13 +80,13 @@ mjDoc::~mjDoc()
 //----------------------------------------------------------------------------------------
 bool mjDoc::OnNewDocument()
 {
+ wxStopWatch sw;
  //---------------------------------------------------------------------------------------
  if (!OnInitView())
- {
   return FALSE;
- }
  p_PgmCtrl->OnPopulate();
  //---------------------------------------------------------------------------------------
+ wxLogMessage(_("-I-> mjDoc::OnNewDocument() - End - Time needed : %ld ms"),sw.Time());
  return TRUE;
 }
 //----------------------------------------------------------------------------------------
@@ -116,9 +116,7 @@ bool mjDoc::OnInitView()
  //---------------------------------------------------------------------------------------
  p_LogWin = new wxTextCtrl(p_PageArea,-1,wxEmptyString,
       wxDefaultPosition, wxDefaultSize,wxTE_MULTILINE );
- //wxFont* ft_Temp = new wxFont(10,wxSWISS,wxNORMAL,wxBOLD,FALSE,"Comic Sans MS");
- wxFont* ft_Temp = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
- p_LogWin->SetFont(* ft_Temp);
+ p_LogWin->SetFont(* ft_Doc);
  // Don't forget ! This is always : i_TabArt = 0 ; i_ViewNr = 1;
  //---------------------------------------------------------------------------------------
  p_LogBook = new wxLogTextCtrl(p_LogWin); // make p_LogWin the LogBook
@@ -136,9 +134,9 @@ bool mjDoc::OnInitView()
  p_Splitter->SplitHorizontally(p_TabArea,p_PageArea,Sash);
  //---------------------------------------------------------------------------------------
  if (!OnInitODBC())
-   return FALSE;
+  return FALSE;
  //---------------------------------------------------------------------------------------
- Temp0.Printf("-I-> mjDoc::OnInitView() - End - %d DSN's found",i_DSN);
+ Temp0.Printf(_("-I-> mjDoc::OnInitView() - End - %d DSN's found"),i_DSN);
  p_MainFrame->SetStatusText(Temp0, 0);
  wxLogMessage(Temp0);
  return TRUE;
