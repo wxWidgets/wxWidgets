@@ -37,7 +37,7 @@
     #include <commctrl.h>
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxSlider95, wxControl)
 
 // Slider
 wxSlider95::wxSlider95()
