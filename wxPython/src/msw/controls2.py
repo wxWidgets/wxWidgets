@@ -349,12 +349,6 @@ class wxListEventPtr(wxNotifyEventPtr):
     def GetIndex(self, *_args, **_kwargs):
         val = apply(controls2c.wxListEvent_GetIndex,(self,) + _args, _kwargs)
         return val
-    def GetOldIndex(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListEvent_GetOldIndex,(self,) + _args, _kwargs)
-        return val
-    def GetOldItem(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListEvent_GetOldItem,(self,) + _args, _kwargs)
-        return val
     def GetColumn(self, *_args, **_kwargs):
         val = apply(controls2c.wxListEvent_GetColumn,(self,) + _args, _kwargs)
         return val
@@ -396,9 +390,6 @@ class wxListEventPtr(wxNotifyEventPtr):
         if name == "m_itemIndex" :
             controls2c.wxListEvent_m_itemIndex_set(self,value)
             return
-        if name == "m_oldItemIndex" :
-            controls2c.wxListEvent_m_oldItemIndex_set(self,value)
-            return
         if name == "m_col" :
             controls2c.wxListEvent_m_col_set(self,value)
             return
@@ -417,8 +408,6 @@ class wxListEventPtr(wxNotifyEventPtr):
             return controls2c.wxListEvent_m_code_get(self)
         if name == "m_itemIndex" : 
             return controls2c.wxListEvent_m_itemIndex_get(self)
-        if name == "m_oldItemIndex" : 
-            return controls2c.wxListEvent_m_oldItemIndex_get(self)
         if name == "m_col" : 
             return controls2c.wxListEvent_m_col_get(self)
         if name == "m_cancelled" : 

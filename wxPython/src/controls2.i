@@ -330,7 +330,6 @@ public:
 
     int           m_code;
     long          m_itemIndex;
-    long          m_oldItemIndex;
     int           m_col;
     bool          m_cancelled;
     wxPoint       m_pointDrag;
@@ -338,8 +337,6 @@ public:
 
     int GetCode();
     long GetIndex();
-    long GetOldIndex();
-    long GetOldItem();
     int GetColumn();
     bool Cancelled();
     wxPoint GetPoint();
