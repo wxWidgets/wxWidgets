@@ -2745,6 +2745,46 @@ static void *SwigwxCursorTowxObject(void *ptr) {
     return (void *) dest;
 }
 
+#define new_wxCursor(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxCursor(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_new_wxCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _result;
+    wxString * _arg0;
+    long  _arg1;
+    int  _arg2 = (int ) 0;
+    int  _arg3 = (int ) 0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "cursorName","flags","hotSpotX","hotSpotY", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol|ii:new_wxCursor",_kwnames,&_obj0,&_arg1,&_arg2,&_arg3)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxCursor *)new_wxCursor(*_arg0,_arg1,_arg2,_arg3);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxCursor_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
 #define delete_wxCursor(_swigobj) (delete _swigobj)
 static PyObject *_wrap_delete_wxCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -10791,6 +10831,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "new_wxColour", (PyCFunction) _wrap_new_wxColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCursor_Ok", (PyCFunction) _wrap_wxCursor_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxCursor", (PyCFunction) _wrap_delete_wxCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxCursor", (PyCFunction) _wrap_new_wxCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIconBundle_GetIcon", (PyCFunction) _wrap_wxIconBundle_GetIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIconBundle_AddIconFromFile", (PyCFunction) _wrap_wxIconBundle_AddIconFromFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIconBundle_AddIcon", (PyCFunction) _wrap_wxIconBundle_AddIcon, METH_VARARGS | METH_KEYWORDS },
