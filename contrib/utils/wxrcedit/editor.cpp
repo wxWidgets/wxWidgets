@@ -354,7 +354,7 @@ void EditorFrame::RefreshTitle()
     wxString s;
     if (m_Modified) s << _T("* ");
     s << _("wxrcedit");
-    if (!m_FileName)
+    if (m_FileName != "")
         s << _T(" - ") << wxFileNameFromPath(m_FileName);
     SetTitle(s);
 }
