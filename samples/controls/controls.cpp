@@ -204,6 +204,12 @@ protected:
     void OnChar(wxKeyEvent& event);
     void OnKeyDown(wxKeyEvent& event);
     void OnKeyUp(wxKeyEvent& event);
+    void OnFocusGot(wxFocusEvent& event)
+    {
+        wxLogMessage(_T("MyComboBox::OnFocusGot"));
+
+        event.Skip();
+    }
 
 private:
     DECLARE_EVENT_TABLE()
@@ -455,6 +461,8 @@ BEGIN_EVENT_TABLE(MyComboBox, wxComboBox)
     EVT_CHAR(MyComboBox::OnChar)
     EVT_KEY_DOWN(MyComboBox::OnKeyDown)
     EVT_KEY_UP(MyComboBox::OnKeyUp)
+
+    EVT_SET_FOCUS(MyComboBox::OnFocusGot)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyRadioBox, wxRadioBox)
