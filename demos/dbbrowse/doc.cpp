@@ -155,8 +155,8 @@ bool MainDoc::OnInitView()
 //----------------------------------------------------------------------------------------
 bool MainDoc::OnInitODBC()
 {
-    wxChar Dsn[SQL_MAX_DSN_LENGTH + 1];
-    wxChar DsDesc[255]; // BJO20002501 instead of 512
+    wxChar Dsn[SQL_MAX_DSN_LENGTH+1];
+    wxChar DsDesc[254+1]; // BJO20002501 instead of 512
     Temp0 = _T("");
     i_DSN = 0;       // Counter
     int i;
@@ -169,14 +169,14 @@ bool MainDoc::OnInitODBC()
     }
 
     //---------------------------------------------------------------------------------------
-    const char sep = 3; // separator character used in string between DSN ans DsDesc
+    const wxChar sep = 3; // separator character used in string between DSN and DsDesc
     wxSortedArrayString s_SortDSNList, s_SortDsDescList;
     // BJO-20000127
     // In order to have same sort result on both Dsn and DsDesc, create a 'keyed' string.
     // The key will be removed after sorting
     wxString KeyString;
     //---------------------------------------------------------------------------------------
-    while(wxDbGetDataSource(DbConnectInf.GetHenv(), Dsn, sizeof(Dsn), DsDesc, sizeof(DsDesc)))
+    while (wxDbGetDataSource(DbConnectInf.GetHenv(), Dsn, SQL_MAX_DSN_LENGTH, DsDesc, 254))
     {
         i_DSN++;   // How many Dsn have we ?
         KeyString.Printf(_T("%s%c%s"),Dsn, sep, DsDesc);

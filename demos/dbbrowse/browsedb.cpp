@@ -470,7 +470,7 @@ void BrowserDB::OnFillSqlTyp()
     i_SqlTyp[1]  = SQL_C_BINARY;    s_SqlTyp[1]  = _T("SQL_C_BINARY");
     i_SqlTyp[2]  = SQL_C_BIT;       s_SqlTyp[2]  = _T("SQL_C_BIT");
     i_SqlTyp[3]  = SQL_C_BOOKMARK;  s_SqlTyp[3]  = _T("SQL_C_BOOKMARK");
-    i_SqlTyp[4]  = SQL_C_CHAR;      s_SqlTyp[4]  = _T("SQL_C_CHAR");
+    i_SqlTyp[4]  = SQL_C_WXCHAR;    s_SqlTyp[4]  = _T("SQL_C_WXCHAR");
     i_SqlTyp[5]  = SQL_C_DATE;      s_SqlTyp[5]  = _T("SQL_C_DATE");
     i_SqlTyp[6]  = SQL_C_DEFAULT;   s_SqlTyp[6]  = _T("SQL_C_DEFAULT");
     i_SqlTyp[7]  = SQL_C_DOUBLE;    s_SqlTyp[7]  = _T("SQL_C_DOUBLE");
