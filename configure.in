@@ -2056,10 +2056,9 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     fi
 
     dnl misc other files depending on the port
-    PORT_FILES="src/\$(TOOLKITDIR)/files.lst"
+    PORT_FILES="\${top_srcdir}/src/\$(TOOLKITDIR)/files.lst"
     if test "$wxUSE_UNIVERSAL" = "yes"; then
-        dnl put univ files first!
-        PORT_FILES="\${top_srcdir}/src/univ/files.lst ${PORT_FILES}"
+        PORT_FILES="${PORT_FILES} \${top_srcdir}/src/univ/files.lst"
     fi
     RPM_FILES="src/\$(TOOLKITDIR)/rpmfiles.lst"
     RPM_SPEC="wx\$(TOOLKIT).spec"

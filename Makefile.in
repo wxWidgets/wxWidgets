@@ -157,7 +157,7 @@ WX_LINGUAS = `cd $(top_srcdir)/locale && ls *.mo 2> /dev/null | sed -n 's/\.mo//
 # this line will include a file which defines ALL_SOURCES, ALL_OBJECTS,
 # ALL_DEPFILES and ALL_HEADERS variables with the complete list of .cpp, .o,
 # .d and .h/.inl files for the current toolkit
-include $(top_srcdir)/@PORT_FILES@
+include @PORT_FILES@
 
 SOURCES = $(ALL_SOURCES)
 HEADERS = $(ALL_HEADERS)

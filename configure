@@ -10508,9 +10508,9 @@ rm -f conftest*
         ALL_DEPFILES="${ALL_DEPFILES} \$(HTMLDEPS)"
     fi
 
-        PORT_FILES="src/\$(TOOLKITDIR)/files.lst"
+        PORT_FILES="\${top_srcdir}/src/\$(TOOLKITDIR)/files.lst"
     if test "$wxUSE_UNIVERSAL" = "yes"; then
-                PORT_FILES="\${top_srcdir}/src/univ/files.lst ${PORT_FILES}"
+        PORT_FILES="${PORT_FILES} \${top_srcdir}/src/univ/files.lst"
     fi
     RPM_FILES="src/\$(TOOLKITDIR)/rpmfiles.lst"
     RPM_SPEC="wx\$(TOOLKIT).spec"
