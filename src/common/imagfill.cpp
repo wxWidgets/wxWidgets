@@ -284,10 +284,8 @@ bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
     dc->GetSize(&width, &height);
 
     //it would be nice to fail if we don't get a sensible size...
-    wxASSERT_MSG(width >= 1 && height >= 1, wxT("In FloodFill, dc.GetSize routine failed, method not supported by this DC"));
-    
-    if (width <= 1 || height <= 1)
-        return FALSE;
+    wxCHECK_MSG(width >= 1 && height >= 1, FALSE,
+                wxT("In FloodFill, dc.GetSize routine failed, method not supported by this DC"));
 
     //this is much faster than doing the individual pixels
     wxMemoryDC memdc;
@@ -303,7 +301,7 @@ bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
     memdc.SelectObject(bitmap);
     dc->Blit(0, 0, width, height, &memdc, 0, 0);
     memdc.SelectObject(wxNullBitmap);
-    
+
     return TRUE;
 }
 
