@@ -756,7 +756,7 @@ wxString wxHtmlWindow::SelectionToText()
 
 #endif // wxUSE_CLIPBOARD
 
-void wxHtmlWindow::CopySelection(ClipboardType t)
+bool wxHtmlWindow::CopySelection(ClipboardType t)
 {
 #if wxUSE_CLIPBOARD
     if ( m_selection )
@@ -769,7 +769,7 @@ void wxHtmlWindow::CopySelection(ClipboardType t)
         //
         // TODO: this should be abstracted at wxClipboard level!
         if ( t == Primary )
-            return;
+            return false;
 #endif // __UNIX__/!__UNIX__
 
         if ( wxTheClipboard->Open() )
@@ -779,9 +779,13 @@ void wxHtmlWindow::CopySelection(ClipboardType t)
             wxTheClipboard->Close();
             wxLogTrace(_T("wxhtmlselection"),
                        _("Copied to clipboard:\"%s\""), txt.c_str());
+
+            return true;
         }
     }
 #endif // wxUSE_CLIPBOARD
+
+    return false;
 }
 
 
@@ -943,10 +947,8 @@ void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
         m_makingSelection = false;
 
         // did the user move the mouse far enough from starting point?
-        if ( m_selection )
+        if ( CopySelection(Primary) )
         {
-            CopySelection(Primary);
-
             // we don't want mouse up event that ended selecting to be
             // handled as mouse click and e.g. follow hyperlink:
             return;
@@ -1215,15 +1217,13 @@ void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
     if ( IsSelectionEnabled() &&
          event.GetKeyCode() == 'C' && event.ControlDown() )
     {
-        if ( m_selection )
-            CopySelection();
+        CopySelection();
     }
 }
 
 void wxHtmlWindow::OnCopy(wxCommandEvent& WXUNUSED(event))
 {
-    if ( m_selection )
-        CopySelection();
+    CopySelection();
 }
 
 void wxHtmlWindow::OnDoubleClick(wxMouseEvent& event)
