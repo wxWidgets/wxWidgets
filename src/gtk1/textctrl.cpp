@@ -21,6 +21,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctype.h>
+#include <math.h>               // for fabs
 
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
@@ -1312,6 +1313,8 @@ void wxTextCtrl::Thaw()
 {
     if ( HasFlag(wxTE_MULTILINE) )
     {
+        GTK_TEXT(m_text)->vadj->value = 0.0;
+
         gtk_text_thaw(GTK_TEXT(m_text));
     }
 }
@@ -1368,6 +1371,6 @@ bool wxTextCtrl::ScrollPages(int pages)
     if ( !adj )
         return FALSE;
 
-    return DoScroll(adj, pages*adj->page_increment);
+    return DoScroll(adj, (int)ceil(pages*adj->page_increment));
 }
 
