@@ -243,7 +243,7 @@ void wxFrame::DoGetClientSize(
 {
     RECTL                           vRect;
     ::WinQueryWindowRect(GetHwnd(), &vRect);
-#if wxUSE_STATUSBAR
+#if 0 // not needed for OS/2 wxUSE_STATUSBAR
     if ( GetStatusBar() && GetStatusBar()->IsShown() )
     {
         int                         nStatusX;
