@@ -53,6 +53,10 @@ AC_CONFIG_HEADER(expat_config.h)
 sinclude(conftools/libtool.m4)
 sinclude(conftools/ac_c_bigendian_cross.m4)
 
+
+dnl Check for many C compilers (have to do this before libtool stuff)
+AC_BAKEFILE_PROG_CC
+
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
@@ -61,7 +65,6 @@ AC_SUBST(LIBREVISION)
 AC_SUBST(LIBAGE)
 
 dnl Checks for programs.
-AC_PROG_CC
 AC_PROG_INSTALL
 
 if test "$GCC" = yes ; then
