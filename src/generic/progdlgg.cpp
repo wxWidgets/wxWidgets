@@ -30,6 +30,7 @@
     #include "wx/gauge.h"
     #include "wx/intl.h"
     #include "wx/settings.h"
+    #include "wx/dcclient.h"
 #endif
 
 #if wxUSE_PROGRESSDLG
