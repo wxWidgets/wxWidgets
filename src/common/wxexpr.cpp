@@ -20,18 +20,11 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_IOSTREAMH
-    #include <fstream.h>
-#else
-    #include <fstream>
-#endif
-
 #include <stdarg.h>
 #include <ctype.h>
 #include <string.h>
 
 #include "wx/utils.h"
-
 #include "wx/expr.h"
 #include "wx/wxexpr.h"
 
@@ -671,7 +664,7 @@ void wxExpr::AssignAttributeValue(wxChar *att, wxChar **var) const
   }
 }
 
-void wxExpr::WriteClause(ostream& stream)  // Write this expression as a top-level clause
+void wxExpr::WriteClause(FILE* stream)  // Write this expression as a top-level clause
 {
   if (type != wxExprList)
     return;
@@ -680,23 +673,24 @@ void wxExpr::WriteClause(ostream& stream)  // Write this expression as a top-lev
   if (node)
   {
     node->WriteExpr(stream);
-    stream << "(";
+    fprintf( stream, "(" );
     node = node->next;
     bool first = TRUE;
     while (node)
     {
       if (!first)
-        stream << "  ";
+        fprintf( stream, "  " );
       node->WriteExpr(stream);
       node = node->next;
-      if (node) stream << ",\n";
+      if (node) 
+        fprintf( stream, ",\n" );
       first = FALSE;
     }
-    stream << ").\n\n";
+    fprintf( stream, ").\n\n" );
   }
 }
 
-void wxExpr::WriteExpr(ostream& stream)    // Write as any other subexpression
+void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
 {
   // This seems to get round an optimizer bug when
   // using Watcom C++ 10a in WIN32 compilation mode.
@@ -713,25 +707,18 @@ void wxExpr::WriteExpr(ostream& stream)    // Write as any other subexpression
   {
     case wxExprInteger:
     {
-      stream << value.integer;
+      fprintf( stream, "%ld", value.integer );
       break;
     }
     case wxExprReal:
     {
       double f = value.real;
-/* Now the parser can cope with this.
-      // Prevent printing in 'e' notation. Any better way?
-      if (fabs(f) < 0.00001)
-        f = 0.0;
-*/
-      char buf[40];
-      sprintf(buf, "%.6g", f);
-      stream << buf;
+      fprintf( stream, "%.6g", f);
       break;
     }
     case wxExprString:
     {
-      stream << "\"";
+      fprintf( stream, "\"" );
       int i;
       const wxWX2MBbuf val = wxConvLibc.cWX2MB(value.string);
       int len = strlen(val);
@@ -739,11 +726,13 @@ void wxExpr::WriteExpr(ostream& stream)    // Write as any other subexpression
       {
         char ch = val[i];
         if (ch == '"' || ch == '\\')
-          stream << "\\";
-        stream << ch;
+	  fprintf( stream, "\\" );
+	char tmp[2];
+	tmp[0] = ch;
+	tmp[1] = 0;
+        fprintf( stream, tmp );
       }
-
-      stream << "\"";
+      fprintf( stream, "\"" );
       break;
     }
     case wxExprWord:
@@ -763,19 +752,19 @@ void wxExpr::WriteExpr(ostream& stream)    // Write as any other subexpression
       }
 
       if (quote_it)
-        stream << "'";
+        fprintf( stream ,"'" );
 
-      stream << val;
+      fprintf( stream, (const char*) val );
 
       if (quote_it)
-        stream << "'";
+        fprintf( stream, "'" );
 
       break;
     }
     case wxExprList:
     {
       if (!value.first)
-        stream << "[]";
+        fprintf( stream, "[]" );
       else
       {
         wxExpr *expr = value.first;
@@ -785,19 +774,20 @@ void wxExpr::WriteExpr(ostream& stream)    // Write as any other subexpression
           wxExpr *arg1 = expr->next;
           wxExpr *arg2 = arg1->next;
           arg1->WriteExpr(stream);
-          stream << " = ";
+          fprintf( stream, " = " );
           arg2->WriteExpr(stream);
         }
         else
         {
-          stream << "[";
+          fprintf( stream, "[" );
           while (expr)
           {
             expr->WriteExpr(stream);
             expr = expr->next;
-            if (expr) stream << ", ";
+            if (expr) 
+	      fprintf( stream, ", " );
           }
-          stream << "]";
+          fprintf( stream, "]" );
         }
       }
       break;
@@ -806,43 +796,48 @@ void wxExpr::WriteExpr(ostream& stream)    // Write as any other subexpression
   }
 }
 
-void wxExpr::WriteLispExpr(ostream& stream)
+void wxExpr::WriteLispExpr(FILE* stream)
 {
   switch (type)
   {
     case wxExprInteger:
     {
-      stream << value.integer;
+      fprintf( stream, "%ld", value.integer );
       break;
     }
     case wxExprReal:
     {
-      stream << value.real;
+      fprintf( stream, "%.6g", value.real );
       break;
     }
     case wxExprString:
     {
-      stream << "\"" << value.string << "\"";
+      fprintf( stream, "\"" );
+      const wxWX2MBbuf val = wxConvLibc.cWX2MB(value.string);
+      fprintf( stream, (const char*) val );
+      fprintf( stream, "\"" );
       break;
     }
     case wxExprWord:
     {
-      stream << value.word;
+      const wxWX2MBbuf val = wxConvLibc.cWX2MB(value.word);
+      fprintf( stream, (const char*) val );
       break;
     }
     case wxExprList:
     {
       wxExpr *expr = value.first;
 
-      stream << "(";
+      fprintf( stream, "(" );
       while (expr)
       {
         expr->WriteLispExpr(stream);
         expr = expr->next;
-        if (expr) stream << " ";
+        if (expr) 
+	  fprintf( stream, " " );
       }
 
-      stream << ")";
+      fprintf( stream, ")" );
       break;
     }
    case wxExprNull: break;
@@ -1079,13 +1074,15 @@ bool wxExprDatabase::ReadFromString(const wxString& buffer)
 
 bool wxExprDatabase::Write(const wxString& fileName)
 {
-  ofstream str(MBSTRINGCAST fileName.mb_str());
-  if (str.bad())
+  FILE *stream = fopen( fileName.fn_str(), "w+" );
+  
+  if (!stream)
     return FALSE;
-  return Write(str);
+    
+  return Write(stream);
 }
 
-bool wxExprDatabase::Write(ostream& stream)
+bool wxExprDatabase::Write(FILE *stream)
 {
   noErrors = 0;
   wxNode *node = First();
@@ -1098,7 +1095,7 @@ bool wxExprDatabase::Write(ostream& stream)
   return (noErrors == 0);
 }
 
-void wxExprDatabase::WriteLisp(ostream& stream)
+void wxExprDatabase::WriteLisp(FILE* stream)
 {
   noErrors = 0;
   wxNode *node = First();
@@ -1106,7 +1103,7 @@ void wxExprDatabase::WriteLisp(ostream& stream)
   {
     wxExpr *expr = (wxExpr *)node->Data();
     expr->WriteLispExpr(stream);
-    stream << "\n\n";
+    fprintf( stream, "\n\n" );
     node = node->Next();
   }
 }

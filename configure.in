@@ -250,6 +250,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LIBJPEG=no
   DEFAULT_wxUSE_ODBC=no
 
+  DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_FILE=no
   DEFAULT_wxUSE_TEXTFILE=no
   DEFAULT_wxUSE_TIMEDATE=no
@@ -347,6 +348,7 @@ else
   DEFAULT_wxUSE_LIBJPEG=yes
   DEFAULT_wxUSE_ODBC=no
 
+  DEFAULT_wxUSE_STD_IOSTREAM=yes
   DEFAULT_wxUSE_FILE=yes
   DEFAULT_wxUSE_TEXTFILE=yes
   DEFAULT_wxUSE_TIMEDATE=yes
@@ -500,24 +502,25 @@ dnl ---------------------------------------------------------------------------
 dnl (small) optional non GUI classes
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(intl,        [  --enable-intl           use internationalization system], wxUSE_INTL)
-WX_ARG_ENABLE(config,      [  --enable-config         use wxConfig (and derived) classes], wxUSE_CONFIG)
-WX_ARG_ENABLE(sockets,     [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
-WX_ARG_ENABLE(ipc,         [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
-WX_ARG_ENABLE(apple_ieee,  [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
-WX_ARG_ENABLE(timedate,    [  --enable-timedate       use date/time classes], wxUSE_TIMEDATE)
-WX_ARG_ENABLE(wave,        [  --enable-wave           use wxWave class], wxUSE_WAVE)
-WX_ARG_ENABLE(fraction,    [  --enable-fraction       use wxFraction class], wxUSE_FRACTION)
-WX_ARG_ENABLE(dynlib,      [  --enable-dynlib         use wxLibrary class for DLL loading], wxUSE_DYNLIB_CLASS)
-WX_ARG_ENABLE(longlong,    [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
-WX_ARG_ENABLE(log,         [  --enable-log            use logging system], wxUSE_LOG)
-WX_ARG_ENABLE(streams,     [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
-WX_ARG_ENABLE(file,        [  --enable-file           use wxFile classes], wxUSE_FILE)
-WX_ARG_ENABLE(textfile,    [  --enable-textfile       use wxTextFile classes], wxUSE_TEXTFILE)
-WX_ARG_ENABLE(unicode,     [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
-WX_ARG_ENABLE(wcsrtombs,   [  --enable-wcsrtombs      use wcsrtombs instead of buggy (GNU libc1/Linux libc5) wcstombs], wxUSE_WCSRTOMBS)
-WX_ARG_ENABLE(wxprintfv,   [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
-WX_ARG_ENABLE(joystick,    [  --enable-joystick       compile in joystick support (Linux only)], wxUSE_JOYSTICK)
+WX_ARG_ENABLE(intl,          [  --enable-intl           use internationalization system], wxUSE_INTL)
+WX_ARG_ENABLE(config,        [  --enable-config         use wxConfig (and derived) classes], wxUSE_CONFIG)
+WX_ARG_ENABLE(sockets,       [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
+WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
+WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
+WX_ARG_ENABLE(timedate,      [  --enable-timedate       use date/time classes], wxUSE_TIMEDATE)
+WX_ARG_ENABLE(wave,          [  --enable-wave           use wxWave class], wxUSE_WAVE)
+WX_ARG_ENABLE(fraction,      [  --enable-fraction       use wxFraction class], wxUSE_FRACTION)
+WX_ARG_ENABLE(dynlib,        [  --enable-dynlib         use wxLibrary class for DLL loading], wxUSE_DYNLIB_CLASS)
+WX_ARG_ENABLE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
+WX_ARG_ENABLE(log,           [  --enable-log            use logging system], wxUSE_LOG)
+WX_ARG_ENABLE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
+WX_ARG_ENABLE(file,          [  --enable-file           use wxFile classes], wxUSE_FILE)
+WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile classes], wxUSE_TEXTFILE)
+WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
+WX_ARG_ENABLE(wcsrtombs,     [  --enable-wcsrtombs      use wcsrtombs instead of buggy (GNU libc1/Linux libc5) wcstombs], wxUSE_WCSRTOMBS)
+WX_ARG_ENABLE(wxprintfv,     [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
+WX_ARG_ENABLE(joystick,      [  --enable-joystick       compile in joystick support (Linux only)], wxUSE_JOYSTICK)
+WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
 
 dnl ---------------------------------------------------------------------------
 dnl "big" options (i.e. those which change a lot of things throughout the library)
@@ -1531,6 +1534,10 @@ fi
 
 if test "$wxUSE_FILE" = "yes"; then
   AC_DEFINE(wxUSE_FILE)
+fi
+
+if test "$wxUSE_STD_IOSTREAM" = "yes"; then
+  AC_DEFINE(wxUSE_STD_IOSTREAM)
 fi
 
 if test "$wxUSE_TEXTFILE" = "yes"; then

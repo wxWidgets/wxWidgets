@@ -21,8 +21,6 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
-#include "wx/ioswrap.h"
-
 #include "wx/list.h"
 #include "wx/hash.h"
 
@@ -141,9 +139,9 @@ class WXDLLEXPORT wxExpr
   wxExpr *AttributeValue(const wxString& word) const;  // Use only for a clause
   wxString Functor(void) const;                     // Only for a clause
   bool IsFunctor(const wxString& s) const;                     // Only for a clause
-  void WriteClause(ostream& stream);  // Write this expression as a top-level clause
-  void WriteExpr(ostream& stream);    // Write as any other subexpression
-  void WriteLispExpr(ostream& stream);
+  void WriteClause(FILE* stream);  // Write this expression as a top-level clause
+  void WriteExpr(FILE* stream);    // Write as any other subexpression
+  void WriteLispExpr(FILE* stream);
 
   // Append an expression to a list
   void Append(wxExpr *expr);
@@ -244,13 +242,13 @@ public:
     bool Read(const wxString& filename);
     bool ReadFromString(const wxString& buffer);
     bool Write(const wxString& fileName);
-    bool Write(ostream& stream);
-    void WriteLisp(ostream& stream);
+    bool Write(FILE* stream);
+    void WriteLisp(FILE* stream);
 
     // Compatibility
     inline bool ReadProlog(wxChar *filename) { return Read(wxString(filename)); }
     inline bool ReadPrologFromString(char *buffer) { return ReadFromString(wxString(buffer)); }
-    inline void WriteProlog(ostream& stream) { Write(stream); }
+    inline void WriteProlog(FILE* stream) { Write(stream); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxExprDatabase)
