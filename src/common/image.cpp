@@ -28,6 +28,7 @@
 #endif
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
+#include "wx/intl.h"
 
 #ifdef __WXMSW__
 #include <windows.h>
@@ -1584,10 +1585,208 @@ wxImage::wxImage( const wxBitmap &bitmap )
 // TODO
 
 #ifdef __WXMOTIF__
+
+#include <Xm/Xm.h>
+#include "wx/utils.h"
+
 wxBitmap wxImage::ConvertToBitmap() const
 {
-  wxFAIL_MSG("Sorry, wxImage::ConvertToBitmap isn't implemented for wxMotif yet.");
-  return wxNullBitmap;
+    wxBitmap bitmap;
+
+    wxCHECK_MSG( Ok(), bitmap, "invalid image" );
+
+    int width = GetWidth();
+    int height = GetHeight();
+
+    bitmap.SetHeight( height );
+    bitmap.SetWidth( width );
+
+    Display *dpy = (Display*) wxGetDisplay();
+    Visual* vis = DefaultVisual( dpy, DefaultScreen( dpy ) );
+    int bpp = DefaultDepth( dpy, DefaultScreen( dpy ) );
+
+    // Create image
+    
+    XImage *data_image = XCreateImage( dpy, vis, bpp, ZPixmap, 0, 0, width, height, 32, 0 );
+    data_image->data = new char[ data_image->bytes_per_line * data_image->height ];
+
+    bitmap.Create( width, height, bpp );
+
+/*
+    // Create mask
+
+    GdkImage *mask_image = (GdkImage*) NULL;
+
+    if (HasMask())
+    {
+        unsigned char *mask_data = (unsigned char*)malloc( ((width >> 3)+8) * height );
+
+        mask_image =  gdk_image_new_bitmap( gdk_visual_get_system(), mask_data, width, height );
+
+	wxMask *mask = new wxMask();
+	mask->m_bitmap = gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, 1 );
+
+	bitmap.SetMask( mask );
+    }
+*/
+
+//    bitmap.SetDepth( bpp );
+    
+    // Retrieve depth info
+    
+    XVisualInfo vinfo_template;
+    XVisualInfo *vi;
+    
+    vinfo_template.visual = vis;
+    vinfo_template.visualid = XVisualIDFromVisual( vis );
+    vinfo_template.depth = bpp;
+    int nitem = 0;
+    
+    vi = XGetVisualInfo( dpy, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
+    
+    if (!vi) 
+    {
+        printf("no visual.\n" );
+        return wxNullBitmap;
+    }
+	
+    if ((bpp == 16) && (vi->red_mask != 0xf800)) bpp = 15;
+    if (bpp < 8) bpp = 8;
+
+    // Render
+
+    enum byte_order { RGB, RBG, BRG, BGR, GRB, GBR };
+    byte_order b_o = RGB;
+
+    if (bpp >= 24)
+    {
+        if ((vi->red_mask > vi->green_mask) && (vi->green_mask > vi->blue_mask))      b_o = RGB;
+        else if ((vi->red_mask > vi->blue_mask) && (vi->blue_mask > vi->green_mask))  b_o = RGB;
+        else if ((vi->blue_mask > vi->red_mask) && (vi->red_mask > vi->green_mask))   b_o = BRG;
+        else if ((vi->blue_mask > vi->green_mask) && (vi->green_mask > vi->red_mask)) b_o = BGR;
+        else if ((vi->green_mask > vi->red_mask) && (vi->red_mask > vi->blue_mask))   b_o = GRB;
+        else if ((vi->green_mask > vi->blue_mask) && (vi->blue_mask > vi->red_mask))  b_o = GBR;
+    }
+
+/*
+    int r_mask = GetMaskRed();
+    int g_mask = GetMaskGreen();
+    int b_mask = GetMaskBlue();
+*/
+
+    unsigned char* data = GetData();
+
+    int index = 0;
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            int r = data[index];
+	    index++;
+            int g = data[index];
+	    index++;
+            int b = data[index];
+	    index++;
+
+/*
+	    if (HasMask())
+	    {
+	        if ((r == r_mask) && (b == b_mask) && (g == g_mask))
+	            gdk_image_put_pixel( mask_image, x, y, 1 );
+	        else
+	            gdk_image_put_pixel( mask_image, x, y, 0 );
+	    }
+*/
+
+	    switch (bpp)
+	    {
+	        case 8:
+	        {
+/*
+                    int pixel = -1;
+		    if (wxTheApp->m_colorCube)
+		    {
+		        pixel = wxTheApp->m_colorCube
+                           [ ((r & 0xf8) << 7) + ((g & 0xf8) << 2) + ((b & 0xf8) >> 3) ];  		      
+                    } 		    
+                    else
+		    {
+	                GdkColormap *cmap = gtk_widget_get_default_colormap();
+                        GdkColor *colors = cmap->colors;
+                        int max = 3 * (65536);
+
+                        for (int i = 0; i < cmap->size; i++)
+                        {
+                            int rdiff = (r << 8) - colors[i].red;
+                            int gdiff = (g << 8) - colors[i].green;
+                            int bdiff = (b << 8) - colors[i].blue;
+                            int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
+                            if (sum < max) { pixel = i; max = sum; }
+			}
+                    }
+
+	            gdk_image_put_pixel( data_image, x, y, pixel );
+*/
+
+	            break;
+	        }
+	        case 15:
+	        {
+	            int pixel = ((r & 0xf8) << 7) | ((g & 0xf8) << 2) | ((b & 0xf8) >> 3);
+		    XPutPixel( data_image, x, y, pixel );
+	            break;
+	        }
+	        case 16:
+	        {
+	            int pixel = ((r & 0xf8) << 8) | ((g & 0xfc) << 3) | ((b & 0xf8) >> 3);
+		    XPutPixel( data_image, x, y, pixel );
+	            break;
+	        }
+	        case 32:
+	        case 24:
+	        {
+	            int pixel = 0;
+	            switch (b_o)
+	            {
+	                case RGB: pixel = (r << 16) | (g << 8) | b; break;
+	                case RBG: pixel = (r << 16) | (b << 8) | g; break;
+	                case BRG: pixel = (b << 16) | (r << 8) | g; break;
+	                case BGR: pixel = (b << 16) | (g << 8) | r; break;
+	                case GRB: pixel = (g << 16) | (r << 8) | b; break;
+	                case GBR: pixel = (g << 16) | (b << 8) | r; break;
+	            }
+		    XPutPixel( data_image, x, y, pixel );
+	        }
+	        default: break;
+	    }
+        } // for
+    }  // for
+
+    // Blit picture
+
+    XGCValues gcvalues;
+    gcvalues.foreground = BlackPixel( dpy, DefaultScreen( dpy ) );
+    GC gc = XCreateGC( dpy, RootWindow ( dpy, DefaultScreen(dpy) ), GCForeground, &gcvalues );
+    XPutImage( dpy, (Drawable)bitmap.GetPixmap(), gc, data_image, 0, 0, 0, 0, width, height );
+
+    XDestroyImage( data_image );
+    XFreeGC( dpy, gc );
+
+/*
+    // Blit mask
+
+    if (HasMask())
+    {
+        GdkGC *mask_gc = gdk_gc_new( bitmap.GetMask()->GetBitmap() );
+
+        gdk_draw_image( bitmap.GetMask()->GetBitmap(), mask_gc, mask_image, 0, 0, 0, 0, width, height );
+
+        gdk_image_destroy( mask_image );
+        gdk_gc_unref( mask_gc );
+    }
+*/
+
+    return bitmap;
 }
 
 wxImage::wxImage( const wxBitmap &bitmap )

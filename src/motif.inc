@@ -24,6 +24,7 @@ LIB_CPP_SRC=\
  common/gdicmn.cpp \
  common/hash.cpp \
  common/helpbase.cpp \
+ common/image.cpp \
  common/intl.cpp \
  common/ipcbase.cpp \
  common/layout.cpp \
@@ -156,35 +157,4 @@ LIB_C_SRC=\
 \
  motif/xmcombo/xmcombo.c \
 \
- common/extended.c \
-\
- png/png.c \
- png/pngset.c \
- png/pngget.c \
- png/pngrutil.c \
- png/pngtrans.c \
- png/pngwutil.c \
- png/pngread.c \
- png/pngrio.c \
- png/pngwio.c \
- png/pngwrite.c \
- png/pngrtran.c \
- png/pngwtran.c \
- png/pngmem.c \
- png/pngerror.c \
- png/pngpread.c \
-\
- zlib/adler32.c \
- zlib/compress.c \
- zlib/crc32.c \
- zlib/gzio.c \
- zlib/uncompr.c \
- zlib/deflate.c \
- zlib/trees.c \
- zlib/zutil.c \
- zlib/inflate.c \
- zlib/infblock.c \
- zlib/inftrees.c \
- zlib/infcodes.c \
- zlib/infutil.c \
- zlib/inffast.c \
+ common/extended.c

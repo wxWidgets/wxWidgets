@@ -6012,7 +6012,7 @@ for ac_dir in $SEARCH_LIB;
   GUI_TK_LINK="$CHECK_LINK $GUI_TK_LINK"
   TOOLKIT=MOTIF
   TOOLKIT_DEF="__WXMOTIF__ -D__LINUX__ -D__UNIX__"
-  WX_LINK=-lwx_motif
+  WX_LINK=-lwx_motif2
   MAKEINCLUDE=../motif.inc
 fi
 

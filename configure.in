@@ -1010,7 +1010,7 @@ if test "$wxUSE_MOTIF" = 1; then
   GUI_TK_LINK="$CHECK_LINK $GUI_TK_LINK"
   TOOLKIT=MOTIF
   TOOLKIT_DEF="__WXMOTIF__ -D__LINUX__ -D__UNIX__"
-  WX_LINK=-lwx_motif
+  WX_LINK=-lwx_motif2
   MAKEINCLUDE=../motif.inc
 fi
 

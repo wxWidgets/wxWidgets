@@ -8,7 +8,6 @@ LIB_MINOR=1
 
 # define library sources
 
-
 LIB_CPP_SRC=\
 \
  common/cmndata.cpp \
