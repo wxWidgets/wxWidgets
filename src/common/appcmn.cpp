@@ -40,6 +40,7 @@
 #include "wx/cmdline.h"
 #include "wx/thread.h"
 #include "wx/confbase.h"
+#include "wx/tokenzr.h"
 
 #if !defined(__WXMSW__) || defined(__WXMICROWIN__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
@@ -61,6 +62,19 @@
 // initialization and termination
 // ----------------------------------------------------------------------------
 
+#ifdef __WXDEBUG__
+static void LINKAGEMODE SetTraceMasks()
+{
+    wxString mask;
+    if ( wxGetEnv(wxT("WXTRACE"), &mask) )
+    {
+        wxStringTokenizer tkn(mask, wxT(","));
+        while ( tkn.HasMoreTokens() )
+            wxLog::AddTraceMask(tkn.GetNextToken());
+    }
+}
+#endif
+
 wxAppBase::wxAppBase()
 {
     wxTheApp = (wxApp *)this;
@@ -74,6 +88,10 @@ wxAppBase::wxAppBase()
     m_exitOnFrameDelete = TRUE;
     m_isActive = TRUE;
 #endif // wxUSE_GUI
+
+#ifdef __WXDEBUG__
+    SetTraceMasks();
+#endif
 }
 
 wxAppBase::~wxAppBase()
