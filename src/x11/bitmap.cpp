@@ -1359,6 +1359,8 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
         wxImage image(decoder.ReadFile(stream));
         return image.Ok() && bitmap->CreateFromImage(image);
     }
+
+    return FALSE;
 #else // !wxHAVE_LIB_XPM && !wxUSE_STREAMS
     return FALSE;
 #endif // wxHAVE_LIB_XPM / wxUSE_STREAMS
