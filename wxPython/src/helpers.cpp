@@ -1492,7 +1492,7 @@ wxFileOffset wxPyCBInputStream::OnSysTell() const {
 
 //----------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxPyCallback, wxEvtHandler);
+IMPLEMENT_ABSTRACT_CLASS(wxPyCallback, wxObject);
 
 wxPyCallback::wxPyCallback(PyObject* func) {
     m_func = func;
