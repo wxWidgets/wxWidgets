@@ -1813,10 +1813,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             switch ( msg->wParam )
             {
                 case VK_TAB:
-                    // assume that nobody wants Shift-TAB for himself - if we
-                    // don't do it there is no easy way for a control to grab
-                    // TABs but still let Shift-TAB work as navugation key
-                    if ( (lDlgCode & DLGC_WANTTAB) && !bShiftDown ) {
+                    if ( lDlgCode & DLGC_WANTTAB ) {
                         bProcess = FALSE;
                     }
                     else {
