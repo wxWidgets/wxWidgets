@@ -513,7 +513,7 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
     Widget buttonWidget = (Widget) 0;
     Arg args[5];
     XtSetArg (args[0], XmNnumColumns, m_numColumns);
-    XtSetArg (args[1], XmNpacking, XmPACK_COLUMN);
+    XtSetArg (args[1], XmNpacking, (m_numColumns > 1) ? XmPACK_COLUMN : XmPACK_TIGHT);
 
     if (!pullDown)
     {
