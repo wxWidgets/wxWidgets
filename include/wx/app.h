@@ -627,20 +627,26 @@ public:
     // we need HINSTANCE declaration to define WinMain()
     #include "wx/msw/wrapwin.h"
 
-    #ifdef SW_SHOWNORMAL
-    #define wxSW_SHOWNORMAL SW_SHOWNORMAL
+    #ifndef SW_SHOWNORMAL
+        #define SW_SHOWNORMAL 1
+    #endif
+
+    // WinMain() is always ANSI, even in Unicode build, under normal Windows
+    // but is always Unicode under CE
+    #ifdef __WXWINCE__
+        typedef wchar_t *wxCmdLineArgType;
     #else
-    #define wxSW_SHOWNORMAL 0
+        typedef char *wxCmdLineArgType;
     #endif
 
     #define IMPLEMENT_WXWIN_MAIN \
         extern int wxEntry(HINSTANCE hInstance,                               \
                            HINSTANCE hPrevInstance = NULL,                    \
-                           char *pCmdLine = NULL,                             \
-                           int nCmdShow = wxSW_SHOWNORMAL);                         \
+                           wxCmdLineArgType pCmdLine = NULL,                  \
+                           int nCmdShow = SW_SHOWNORMAL);                     \
         extern "C" int WINAPI WinMain(HINSTANCE hInstance,                    \
                                       HINSTANCE hPrevInstance,                \
-                                      char *lpCmdLine,                        \
+                                      wxCmdLineArgType lpCmdLine,             \
                                       int nCmdShow)                           \
         {                                                                     \
             return wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);    \

@@ -61,7 +61,7 @@
 
 WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
                         HINSTANCE WXUNUSED(hPrevInstance),
-                        char * WXUNUSED(pCmdLine),
+                        wxCmdLineArgType WXUNUSED(pCmdLine),
                         int nCmdShow)
 {
     // remember the parameters Windows gave us
