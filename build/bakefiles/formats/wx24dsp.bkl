@@ -13,7 +13,7 @@
     
     <output file="$(OUTPUT_FILE)" writer="wx24dsp.empy"/>
     <set var="FORMAT_OUTPUT_VARIABLES">
-        ALL_SOURCES,ALL_HEADERS
-    </set>   
+        ALL_SOURCES ALL_HEADERS
+    </set>
     
 </makefile>
