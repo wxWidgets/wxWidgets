@@ -171,6 +171,10 @@ int WXDLLEXPORT wxStricmp(const wxChar *psz1, const wxChar *psz2)
 #ifndef wxStrtok
 WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_ptr)
 {
+  if (!(save_ptr && *save_ptr)) {
+    return (wxChar *) NULL;
+  }
+
   if (!psz) psz = *save_ptr;
   psz += wxStrspn(psz, delim);
   if (!*psz) {
