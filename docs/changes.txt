@@ -217,6 +217,10 @@ wxMotif:
 
 - don't use stipples in DoDrawText
 
+wxUniv:
+
+- fixed refresh problem when message box is shown
+
 2.4.0
 -----
 
