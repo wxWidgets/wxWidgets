@@ -1764,6 +1764,7 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
                         wxMouseEvent eventleave(event);
                         eventleave.SetEventType( wxEVT_LEAVE_WINDOW );
                         wxWindow::s_lastMouseWindow->ScreenToClient( &eventleave.m_x, &eventleave.m_y );
+                        eventleave.SetEventObject( wxWindow::s_lastMouseWindow ) ;
                         
                         wxWindow::s_lastMouseWindow->GetEventHandler()->ProcessEvent(eventleave);
                     }
@@ -1772,7 +1773,7 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
                         wxMouseEvent evententer(event);
                         evententer.SetEventType( wxEVT_ENTER_WINDOW );
                         currentMouseWindow->ScreenToClient( &evententer.m_x, &evententer.m_y );
-                        
+                        evententer.SetEventObject( currentMouseWindow ) ;
                         currentMouseWindow->GetEventHandler()->ProcessEvent(evententer);
                     }
                     wxWindow::s_lastMouseWindow = currentMouseWindow ;
