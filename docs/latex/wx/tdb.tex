@@ -25,18 +25,20 @@ software with these classes, but at the time of the writing of this document,
 users have successfully used the classes with the following datasources:
 
 \begin{itemize}\itemsep=0pt
-\item Oracle (v7, v8, v8i)
-\item Sybase (ASA and ASE)
-\item MS SQL Server (v7 - minimal testing)
-\item MS Access (97 and 2000)
-\item MySQL
-\item DBase (IV, V)**
-\item PostgreSQL
-\item INFORMIX
-\item VIRTUOSO
 \item DB2
+\item DBase (IV, V)**
+\item Firebird
+\item INFORMIX
 \item Interbase
+\item MS SQL Server (v7 - minimal testing)
+\item MS Access (97, 2000, 2002, and 2003)
+\item MySQL (2.x and 3.5 - use the 2.5x drivers though)
+\item Oracle (v7, v8, v8i)
 \item Pervasive SQL
+\item PostgreSQL
+\item Sybase (ASA and ASE)
+\item XBase Sequiter
+\item VIRTUOSO
 \end{itemize}
 
 An up-to-date list can be obtained by looking in the comments of the function 
@@ -557,9 +559,9 @@ can specify anywhere from one column up to all columns in the table.
 
 \begin{verbatim}
     table->SetColDefs(0, "FIRST_NAME", DB_DATA_TYPE_VARCHAR, FirstName,
-                      SQL_C_CHAR, sizeof(FirstName), true, true);
+                      SQL_C_WXCHAR, sizeof(FirstName), true, true);
     table->SetColDefs(1, "LAST_NAME", DB_DATA_TYPE_VARCHAR, LastName,
-                      SQL_C_CHAR, sizeof(LastName), true, true);
+                      SQL_C_WXCHAR, sizeof(LastName), true, true);
 \end{verbatim}
 
 Notice that column definitions start at index 0 and go up to one less than 
@@ -912,9 +914,9 @@ functionality as the driver can emulate.
 
 {\bf UNICODE with wxODBC classes}
 
-The ODBC classes support for Unicode is yet in early experimental stage and
-hasn't been tested extensively. It might work for you or it might not: please
-report the bugs/problems you have encountered in the latter case.
+As of v2.6 of wxWidgets, the wxODBC classes now fully support the compilation 
+and use of the classes in a Unicode build of wxWidgets, assuming the compiler 
+and OS on which the program will be compiled/run is Unicode capable.
 
 \subsection{wxODBC - Sample Code}\label{wxodbcsamplecode1}
 
@@ -1017,9 +1019,9 @@ table = new wxDbTable(db, tableName, numTableColumns, wxT(""),
 // returned back to the client.
 //
 table->SetColDefs(0, wxT("FIRST_NAME"), DB_DATA_TYPE_VARCHAR, FirstName,
-                SQL_C_CHAR, sizeof(FirstName), true, true);
+                SQL_C_WXCHAR, sizeof(FirstName), true, true);
 table->SetColDefs(1, wxT("LAST_NAME"), DB_DATA_TYPE_VARCHAR, LastName,
-                SQL_C_CHAR, sizeof(LastName), true, true);
+                SQL_C_WXCHAR, sizeof(LastName), true, true);
 
 
 // -----------------------------------------------------------------------

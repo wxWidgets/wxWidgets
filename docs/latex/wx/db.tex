@@ -66,21 +66,22 @@ NOTE: In a future release, all ODBC class constants will be prefaced with 'wx'.
 
 These are the databases currently tested and working with the ODBC classes.  A call to \helpref{wxDb::Dbms}{wxdbdbms} will return one of these enumerated values listed below.
 
-\begin{verbatim}
-      dbmsUNIDENTIFIED
-      dbmsORACLE
-      dbmsSYBASE_ASA     // Adaptive Server Anywhere
-      dbmsSYBASE_ASE     // Adaptive Server Enterprise
-      dbmsMS_SQL_SERVER
-      dbmsMY_SQL
-      dbmsPOSTGRES
-      dbmsACCESS
-      dbmsDBASE
-      dbmsINFORMIX
-      dbmsVIRTUOSO
-      dbmsDB2
-      dbmdINTERBASE
-\end{verbatim}
+\begin{itemize}\itemsep=0pt
+\item DB2
+\item DBase (IV, V)**
+\item Firebird
+\item INFORMIX
+\item Interbase
+\item MS SQL Server (v7 - minimal testing)
+\item MS Access (97, 2000, 2002, and 2003)
+\item MySQL (2.x and 3.5 - use the 2.5x drivers though)
+\item Oracle (v7, v8, v8i)
+\item Pervasive SQL
+\item PostgreSQL
+\item Sybase (ASA and ASE)
+\item XBase Sequiter
+\item VIRTUOSO
+\end{itemize}
 
 See the remarks in \helpref{wxDb::Dbms}{wxdbdbms} for exceptions/issues with each of these database engines.
 
@@ -571,7 +572,7 @@ of a datasource which does support views.
 \begin{verbatim}
    // Incomplete code sample
    db.CreateView("PARTS_SD1", "PN, PD, QTY",
-                 "SELECT PART_NO, PART_DESC, QTY_ON_HAND * 1.1 FROM PARTS \
+                 "SELECT PART_NUM, PART_DESC, QTY_ON_HAND * 1.1 FROM PARTS \
                   WHERE STORAGE_DEVICE = 1");
 
    // PARTS_SD1 can now be queried just as if it were a data table.
@@ -841,7 +842,7 @@ to avoid undesired unbinding of columns.}
 
 \membersection{wxDb::GetData}\label{wxdbgetdata}
 
-\func{bool}{GetData}{\param{UWORD}{ colNo}, \param{SWORD}{ cType},
+\func{bool}{GetData}{\param{UWORD}{ colNumber}, \param{SWORD}{ cType},
 \param{PTR}{ pData}, \param{SDWORD}{ maxLen}, \param{SDWORD FAR *}{ cbReturned} }
 
 Used to retrieve result set data without binding column values to memory
@@ -849,7 +850,7 @@ variables (i.e. not using a wxDbTable instance to access table data).
 
 \wxheading{Parameters}
 
-\docparam{colNo}{Ordinal number of the desired column in the result set to be
+\docparam{colNumber}{Ordinal number of the desired column in the result set to be
 returned.}
 \docparam{cType}{The C data type that is to be returned.  See a partial list
 in \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs}}
@@ -941,7 +942,7 @@ Returns the ODBC statement handle associated with this database connection.
 
 \membersection{wxDb::GetKeyFields}\label{wxdbgetkeyfields}
 
-\func{int }{GetKeyFields}{\param{const wxString \&}{tableName}, \param{wxDbColInf *}{colInf}, \param{UWORD }{nocols}}
+\func{int }{GetKeyFields}{\param{const wxString \&}{tableName}, \param{wxDbColInf *}{colInf}, \param{UWORD }{numColumns}}
 
 Used to determine which columns are members of primary or non-primary indexes on the specified table.  If a column is a member of a foreign key for some other table, that information is detected also.
 
@@ -951,7 +952,7 @@ This function is primarily for use by the \helpref{wxDb::GetColumns}{wxdbgetcolu
 
 \docparam{tableName}{Name of the table for which the columns will be evaluated as to their inclusion in any indexes.}
 \docparam{colInf}{Data structure containing the column definitions (obtained with \helpref{wxDb::GetColumns}{wxdbgetcolumns}).  This function populates the PkCol, PkTableName, and FkTableName members of the colInf structure.}
-\docparam{nocols}{Number of columns defined in the instance of colInf.}
+\docparam{numColumns}{Number of columns defined in the instance of colInf.}
 
 \wxheading{Return value}
 
@@ -2287,26 +2288,26 @@ to an Oracle datasource or not.
     // Incomplete code sample
     wxDbTable parts;
     .....
-    if (parts.CanUpdByROWID())
+    if (parts.CanUpdateByROWID())
     {
         // Note that the ROWID column must always be the last column selected
-        sqlStmt = "SELECT PART_NO, PART_DESC, ROWID" FROM PARTS";
+        sqlStmt = "SELECT PART_NUM, PART_DESC, ROWID" FROM PARTS";
     }
     else
-        sqlStmt = "SELECT PART_NO, PART_DESC FROM PARTS";
+        sqlStmt = "SELECT PART_NUM, PART_DESC FROM PARTS";
 \end{verbatim}
 
 
 \membersection{wxDbTable::ClearMemberVar}\label{wxdbtableclearmembervar}
 
-\func{void}{ClearMemberVar}{\param{UWORD }{colNo}, \param{bool }{setToNull=false}}
+\func{void}{ClearMemberVar}{\param{UWORD }{colNumber}, \param{bool }{setToNull=false}}
 
 Same as \helpref{wxDbTable::ClearMemberVars}{wxdbtableclearmembervars} except
 that this function clears only the specified column of its values, and
 optionally sets the column to be a NULL column.
 
-\docparam{colNo}{Column number that is to be cleared.  This number (between 0
-and (noCols-1)) is the index of the column definition created using the
+\docparam{colNumber}{Column number that is to be cleared.  This number (between 0
+and (numColumns-1)) is the index of the column definition created using the
 \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} function.}
 \docparam{setToNull}{{\it OPTIONAL}.  Indicates whether the column should be
 flagged as being a NULL value stored in the bound memory variable.  If true,
@@ -3063,14 +3064,14 @@ this function to commit or rollback the insertion.
 
 \membersection{wxDbTable::IsColNull}\label{wxdbtableiscolnull}
 
-\func{bool }{IsColNull}{\param{UWORD }{colNo}} const
+\func{bool }{IsColNull}{\param{UWORD }{colNumber}} const
 
 Used primarily in the ODBC class library to determine if a column value is
 set to "NULL".  Works for all data types supported by the ODBC class library.
 
 \wxheading{Parameters}
 
-\docparam{colNo}{The column number of the bound column as defined by the
+\docparam{colNumber}{The column number of the bound column as defined by the
 \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs}
 calls which defined the columns accessible to this wxDbTable instance.}
 
@@ -3313,7 +3314,7 @@ float for column 3 (e.g. PRICE * 1.10 to increase the price by
 10%).
 \item The ROWID can be included in your SELECT statement as the {\bf last}
 column selected, if the datasource supports it.  Use
-wxDbTable::CanUpdByROWID() to determine if the ROWID can be
+wxDbTable::CanUpdateByROWID() to determine if the ROWID can be
 selected from the datasource.  If it can, much better
 performance can be achieved on updates and deletes by including
 the ROWID in the SELECT statement.
@@ -3353,7 +3354,7 @@ either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or
     ----------------------
 
     // Table Join returning 3 columns
-    SELECT part_no, part_desc, sd_name
+    SELECT PART_NUM, part_desc, sd_name
         from parts, storage_devices
         where parts.storage_device_id =
               storage_devices.storage_device_id
@@ -3363,10 +3364,10 @@ either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or
     SELECT count(*) from PARTS where container = 99
 
     // Order by clause; ROWID, scalar function
-    SELECT part_no, substring(part_desc, 1, 10), qty_on_hand + 1, ROWID
+    SELECT PART_NUM, substring(part_desc, 1, 10), qty_on_hand + 1, ROWID
         from parts
         where warehouse = 10
-        order by part_no desc           // descending order
+        order by PART_NUM desc           // descending order
 
     // Subquery
     SELECT * from parts
@@ -3541,7 +3542,8 @@ representation of the data is converted to to be stored in {\it pData}.
 Other valid types are available also, but these are the most common ones:}
 
 \begin{verbatim}
-    SQL_C_CHAR      // strings
+    SQL_C_CHAR      // string - deprecated: use SQL_C_WXCHAR
+    SQL_C_WXCHAR    // string - Used transparently in unicode or non-unicode builds
     SQL_C_LONG
     SQL_C_ULONG
     SQL_C_SHORT
@@ -3591,10 +3593,10 @@ were to be copied over to another datasource or table.
 
 \begin{verbatim}
     // Long way not using this function
-    wxStrcpy(colDefs[0].ColName, "PART_NO");
+    wxStrcpy(colDefs[0].ColName, "PART_NUM");
     colDefs[0].DbDataType   = DB_DATA_TYPE_VARCHAR;
     colDefs[0].PtrDataObj   = PartNumber;
-    colDefs[0].SqlCtype     = SQL_C_CHAR;
+    colDefs[0].SqlCtype     = SQL_C_WXCHAR;
     colDefs[0].SzDataObj    = PART_NUMBER_LEN;
     colDefs[0].KeyField     = true;
     colDefs[0].Updateable   = false;
@@ -3602,8 +3604,8 @@ were to be copied over to another datasource or table.
     colDefs[0].DerivedCol   = false;
 
     // Shortcut using this function
-    SetColDefs(0, "PART_NUMBER", DB_DATA_TYPE_VARCHAR, PartNumber,
-               SQL_C_CHAR, PART_NUMBER_LEN, true, false,true,false);
+    SetColDefs(0, "PART_NUM", DB_DATA_TYPE_VARCHAR, PartNumber,
+               SQL_C_WXCHAR, PART_NUMBER_LEN, true, false, true, false);
 \end{verbatim}
 
 \membersection{wxDbTable::SetCursor}\label{wxdbtablesetcursor}
@@ -3686,7 +3688,7 @@ the datasource knows on which column values the tables should be joined on.
 
 \membersection{wxDbTable::SetColNull}\label{wxdbtablesetcolnull}
 
-\func{bool}{SetColNull}{\param{UWORD }{colNo}, \param{bool }{set=true}}
+\func{bool}{SetColNull}{\param{UWORD }{colNumber}, \param{bool }{set=true}}
 
 \func{bool}{SetColNull}{\param{const wxString \&}{colName},
 \param{bool }{set=true}}
@@ -3700,7 +3702,7 @@ the actual column name to be specified.
 
 \wxheading{Parameters}
 
-\docparam{colNo}{Index into the column definitions used when first defining
+\docparam{colNumber}{Index into the column definitions used when first defining
 this wxDbTable object.}
 \docparam{colName}{Actual data table column name that is to be set to NULL.}
 \docparam{set}{Whether the column is set to NULL or not.  Passing true sets
@@ -3978,7 +3980,7 @@ an introduction to using the wxDbGrid classes.
 
 \membersection{wxDbGridColInfo::wxDbGridColInfo}\label{wxdbgridcolinfoctor}
 
-\func{}{wxDbGridColInfo}{\param{int }{colNo}, \param{wxString }{type},
+\func{}{wxDbGridColInfo}{\param{int }{colNumber}, \param{wxString }{type},
   \param{wxString }{title}, \param{wxDbGridColInfo *}{next}}
 
 Default constructor. See the database grid example in \helpref{wxDbGridTableBase}{wxdbgridtablebase} to
@@ -3987,7 +3989,7 @@ see two different ways for adding columns.
 
 \wxheading{Parameters}
 
-\docparam{colNo}{Column number in the \helpref{wxDbTable}{wxdbtable} instance to be used (first column is 0).}
+\docparam{colNumber}{Column number in the \helpref{wxDbTable}{wxdbtable} instance to be used (first column is 0).}
 \docparam{type}{Column type ,wxString specifying the grid name for the datatype in this column, or
  use wxGRID\_VALUE\_DBAUTO to determine the type automatically from the \helpref{wxDbColDef}{wxdbcoldef} definition}
 \docparam{title}{The column label to be used in the grid display}
@@ -4004,7 +4006,7 @@ Destructor.
 
 \membersection{wxDbGridColInfo::AddColInfo}\label{wxdbgridcolinfoaddcolinfo}
 
-\func{void}{AddColInfo}{\param{int }{colNo},
+\func{void}{AddColInfo}{\param{int }{colNumber},
 \param{wxString }{type}, \param{wxString }{title}}
 
 Use this member function for adding columns. See the database
@@ -4016,7 +4018,7 @@ constructor. Changes made to this datatype after the \helpref{wxDbGridTableBase}
 not have any effect.
 
 \wxheading{Parameters}
-\docparam{colNo}{Column number in the \helpref{wxDbTable}{wxdbtable} instance to be used (first column is 0).}
+\docparam{colNumber}{Column number in the \helpref{wxDbTable}{wxdbtable} instance to be used (first column is 0).}
 \docparam{type}{Column type ,wxString specifying the grid name for the datatype in this column, or
  use wxGRID\_VALUE\_DBAUTO to determine the type automatically from the \helpref{wxDbColDef}{wxdbcoldef} definition}
 \docparam{title}{The column label to be used in the grid display}
