@@ -709,8 +709,11 @@ bool wxRegKey::HasValue(const wxChar *szValue) const
     if ( !CONST_CAST Open() )
         return FALSE;
 
-    return RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
-                           NULL, NULL, NULL) == ERROR_SUCCESS;
+    LONG dwRet = ::RegQueryValueEx((HKEY) m_hKey,
+                                   WXSTRINGCAST szValue,
+                                   RESERVED,
+                                   NULL, NULL, NULL);
+    return dwRet == ERROR_SUCCESS;
   #else   // WIN16
     // only unnamed value exists
     return IsEmpty(szValue);
@@ -1014,8 +1017,13 @@ bool wxRegKey::IsNumericValue(const wxChar *szValue) const
 // ============================================================================
 // implementation of global private functions
 // ============================================================================
+
 bool KeyExists(WXHKEY hRootKey, const wxChar *szKey)
 {
+  // don't close this key itself for the case of empty szKey!
+  if ( wxIsEmpty(szKey) )
+    return TRUE;
+
   HKEY hkeyDummy;
   if ( RegOpenKey( (HKEY) hRootKey, szKey, &hkeyDummy) == ERROR_SUCCESS ) {
     RegCloseKey(hkeyDummy);
