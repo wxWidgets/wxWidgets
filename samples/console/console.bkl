@@ -8,7 +8,6 @@
     </set>
     
     <exe id="console" template="wx_sample_console" template_append="wx_append">
-        <app-type>console</app-type>
         <define>$(MULTILIB_FLAG)</define>
         <sources>console.cpp</sources>
         <wx-lib>base</wx-lib>
