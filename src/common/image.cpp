@@ -235,6 +235,9 @@ wxImage wxImage::Scale( int width, int height ) const
     char unsigned *source_data = M_IMGDATA->m_data;
     char unsigned *target_data = data;
 
+#if 0
+    // This is nonsense, RR.
+
     // We do (x, y) -> (x, y)*oldSize/newSize but the valid values of x and y
     // are from 0 to size-1, hence all decrement the sizes
     long old_old_width = old_width;
@@ -255,6 +258,20 @@ wxImage wxImage::Scale( int width, int height ) const
             target_data += 3;
         }
     }
+#else
+    for (long j = 0; j < height; j++)
+    {
+        long y_offset = (j * old_height / height) * old_width;
+
+        for (long i = 0; i < width; i++)
+        {
+            memcpy( target_data,
+                source_data + 3*(y_offset + ((i * old_width )/ width)),
+                3 );
+            target_data += 3;
+        }
+    }
+#endif
 
     return image;
 }
@@ -1160,7 +1177,7 @@ unsigned long wxImage::CountColours( unsigned long stopafter )
     wxHashTable h;
     wxObject dummy;
     unsigned char r, g, b;
-	unsigned char *p;
+    unsigned char *p;
     unsigned long size, nentries, key;
 
     p = GetData();
@@ -1195,7 +1212,7 @@ unsigned long wxImage::CountColours( unsigned long stopafter )
 unsigned long wxImage::ComputeHistogram( wxHashTable &h )
 {
     unsigned char r, g, b;
-	unsigned char *p;
+    unsigned char *p;
     unsigned long size, nentries, key;
     wxHNode *hnode;
 
