@@ -338,19 +338,17 @@ class DirBrowseButton(FileBrowseButton):
                                   labelText, buttonText, toolTip,
                                   dialogTitle, startDirectory,
                                   changeCallback = changeCallback)
-        #
-        self._dirDialog = dialogClass(self,
-                                      message = dialogTitle,
-                                      defaultPath = startDirectory)
+        self.dialogClass = dialogClass
     #
+
     def OnBrowse(self, ev = None):
-        dialog = self._dirDialog
+        dialog = self.dialogClass(self,
+                                  message = self.dialogTitle,
+                                  defaultPath = self.startDirectory)
         if dialog.ShowModal() == wx.ID_OK:
             self.SetValue(dialog.GetPath())
+        dialog.Destroy()
     #
-    def __del__(self):
-        if self.__dict__.has_key('_dirDialog'):
-            self._dirDialog.Destroy()
 
 
 #----------------------------------------------------------------------
