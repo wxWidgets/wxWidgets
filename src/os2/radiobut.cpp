@@ -193,3 +193,26 @@ void wxRadioButton::SetValue(
     ::WinSendMsg((HWND)GetHWND(), BM_SETCHECK, (MPARAM)bValue, (MPARAM)0);
 } // end of wxRadioButton::SetValue
 
+MRESULT wxRadioButton::OS2WindowProc(
+  WXUINT                            uMsg
+, WXWPARAM                          wParam
+, WXLPARAM                          lParam
+)
+{
+    if (uMsg == WM_SETFOCUS)
+    {
+        m_bFocusJustSet = TRUE;
+
+        MRESULT                     mRc = wxControl::OS2WindowProc( uMsg
+                                                                   ,wParam
+                                                                   ,lParam
+                                                                  );
+
+        m_bFocusJustSet = FALSE;
+        return mRc;
+    }
+    return wxControl::OS2WindowProc( uMsg
+                                    ,wParam
+                                    ,lParam
+                                   );
+} // end of wxRadioButton::OS2WindowProc

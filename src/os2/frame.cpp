@@ -1182,7 +1182,7 @@ MRESULT EXPENTRY wxFrameMainWndProc(
                         }
                         else
                         {
-                            pSWP[i].x    = vRectl.xLeft;
+                            pSWP[i].x    = vRectl.xLeft + nWidth;
                             pSWP[i].y    = vRectl.yBottom + nHeight;
                             pSWP[i].cx   = vRectl.xRight - (vRectl.xLeft + nWidth);
                             pSWP[i].cy   = vRectl.yTop - vRectl.yBottom - nHeight;

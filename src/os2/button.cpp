@@ -162,13 +162,19 @@ wxSize wxButton::DoGetBestSize() const
     //
     nHeightButton += nHeightChar/1.5;
 
-    wxSize                          vSize = GetDefaultSize();
+    if (!HasFlag(wxBU_EXACTFIT))
+    {
+        wxSize                      vSize = GetDefaultSize();
 
-    if (nWidthButton > vSize.x)
-        vSize.x = nWidthButton;
-    if (nHeightButton > vSize.y)
-        vSize.y = nHeightButton;
-    return vSize;
+        if (nWidthButton > vSize.x)
+            vSize.x = nWidthButton;
+        if (nHeightButton > vSize.y)
+            vSize.y = nHeightButton;
+        return vSize;
+    }
+    return wxSize( nWidthButton
+                  ,nHeightButton
+                 );
 } // end of wxButton::DoGetBestSize
 
 /* static */

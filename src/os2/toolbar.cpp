@@ -827,22 +827,39 @@ void wxToolBar::OnPaint (
                                                 );
             int                     nX;
             int                     nY;
-            int                     nHeight;
+            int                     nHeight = 0;
+            int                     nWidth = 0;
 
             vDc.SetPen(vDarkGreyPen);
-            if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().IsEmpty())
+            if (HasFlag(wxTB_TEXT))
             {
-                nX = pTool->m_vX;
-                nY = pTool->m_vY - (m_vTextY - 6);
-                nHeight = (m_vTextY - 2) + pTool->GetHeight();
+                if (HasFlag(wxTB_HORIZONTAL))
+                {
+                    nX = pTool->m_vX;
+                    nY = pTool->m_vY - (m_vTextY - 6);
+                    nHeight = (m_vTextY - 2) + pTool->GetHeight();
+                }
+                else
+                {
+                    nX = pTool->m_vX + m_xMargin + 10;
+                    nY = pTool->m_vY + m_vTextY + m_toolSeparation;
+                    nWidth = pTool->GetWidth() > m_vTextX ? pTool->GetWidth() : m_vTextX;
+                }
             }
             else
             {
                 nX = pTool->m_vX;
                 nY = pTool->m_vY;
-                nHeight = pTool->GetHeight() - 2;
+                if (HasFlag(wxTB_HORIZONTAL))
+                    nHeight = pTool->GetHeight() - 2;
+                else
+                {
+                    nX += m_xMargin + 10;
+                    nY +=  m_yMargin + m_toolSeparation;
+                    nWidth = pTool->GetWidth();
+                }
             }
-            vDc.DrawLine(nX, nY, nX, nY + nHeight);
+            vDc.DrawLine(nX, nY, nX + nWidth, nY + nHeight);
         }
     }
     nCount--;
