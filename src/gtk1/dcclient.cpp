@@ -1341,7 +1341,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
 
-#ifdef __WXGTK20__
+#if defined(__WXGTK20__) && wxUSE_WCHAR_T
     /* FIXME: the layout engine should probably be abstracted at a higher level in wxDC... */
     PangoLayout *layout = pango_layout_new(m_context);
     pango_layout_set_font_description(layout, m_fontdesc);

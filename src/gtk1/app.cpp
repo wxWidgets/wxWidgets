@@ -630,11 +630,14 @@ int wxEntryStart( int argc, char *argv[] )
 
     gtk_set_locale();
 
+    // We should have the wxUSE_WCHAR_T test on the _outside_
+#if wxUSE_WCHAR_T
 #if defined(__WXGTK20__)
     // gtk+ 2.0 supports Unicode through UTF-8 strings
     wxConvCurrent = &wxConvUTF8;
-#elif wxUSE_WCHAR_T
+#else
     if (!wxOKlibc()) wxConvCurrent = &wxConvLocal;
+#endif
 #else
     if (!wxOKlibc()) wxConvCurrent = (wxMBConv*) NULL;
 #endif
@@ -653,7 +656,6 @@ int wxEntryStart( int argc, char *argv[] )
 
     return 0;
 }
-
 
 int wxEntryInitGui()
 {

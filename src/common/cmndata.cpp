@@ -442,6 +442,7 @@ void wxPrintData::ConvertToNative()
         	// DEVMODE is in tenths of a milimeter
             devMode->dmPaperWidth = m_paperSize.x * 10;
             devMode->dmPaperLength = m_paperSize.y * 10;
+            devMode->dmPaperSize = DMPAPER_USER;
             devMode->dmFields |= DM_PAPERWIDTH;
             devMode->dmFields |= DM_PAPERLENGTH;
         }
