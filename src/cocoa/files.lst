@@ -199,8 +199,8 @@ ALL_SOURCES = \
 		cocoa/control.mm \
 		cocoa/cursor.mm \
 		cocoa/data.cpp \
-		cocoa/dc.cpp \
-		cocoa/dcclient.cpp \
+		cocoa/dc.mm \
+		cocoa/dcclient.mm \
 		cocoa/dcmemory.cpp \
 		cocoa/dcscreen.cpp \
 		cocoa/dialog.mm \

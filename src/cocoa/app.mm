@@ -23,6 +23,7 @@
     #include "wx/app.h"
     #include "wx/frame.h"
     #include "wx/dialog.h"
+    #include "wx/dc.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/cocoa/ObjcPose.h"
@@ -311,6 +312,7 @@ END_EVENT_TABLE()
     //  wxDebugContext::SetStream(NULL, NULL);
 #endif
 
+    wxDC::CocoaShutdownTextSystem();
 #if wxUSE_LOG
     // do it as the very last thing because everything else can log messages
     delete wxLog::SetActiveTarget(NULL);
@@ -352,6 +354,7 @@ bool wxApp::OnInitGui()
 
     // Create the app using the sharedApplication method
     m_cocoaApp = [NSApplication sharedApplication];
+    wxDC::CocoaInitializeTextSystem();
 //    [ m_cocoaApp setDelegate:m_cocoaApp ];
     #if 0
     wxLogDebug("Just for kicks");
