@@ -116,7 +116,7 @@ bool MyApp::OnInit(void)
   frame->SetMenuBar(menu_bar);
 
   // Make a panel with a message
-  txtctrl = new wxTextCtrl(this);
+  (void)new wxPanel(frame, 0, 0, 300, 100);
 
   // Show the frame
   frame->Show(TRUE);
