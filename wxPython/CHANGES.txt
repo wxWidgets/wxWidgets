@@ -2,12 +2,37 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+New in 2.2.2
+------------
+
+Significantly changed how the wxStyledtextCtrl code that wrapps
+Scintilla is implemented.  Most of it is now automatically generated
+from an interface definition file provided by Scintilla.  This means
+that it will be much easier to stay in sync with new Scintilla
+releases, but also means that some of the method and identifier names
+have changed.  See wxPython/demo/data/stc.h for a copy of the C++
+interface from which the Python interface is generated.  There is now
+some inline documentation in that file that should really help explain
+how things work.
+
+I am now using the Python Distutils to build wxPython and to make some
+of the distribution files.  (See http://www.python.org/sigs/distutils-sig/)
+This means no more messing with my kludgy build.py/Makefile hack,
+builds will be more consistent with other Python extensions that also
+use Distutils, and will hopefully make wxPython easier to build for
+platforms where there have been troubles before.  If you are building
+wxPython for Python 1.5.2 or for 1.6, then you will need to get and
+install version 1.0 of Distutils from the website above.  If you are
+using Python 2.0 then you already have it.
+
+
+
 New in 2.2.1
 ------------
 
 Various tweaks, fixes, missing methods, etc.
 
-Added use of wxTaskBarIcon to the demo.
+Added example use of wxTaskBarIcon to the demo.
 
 
 

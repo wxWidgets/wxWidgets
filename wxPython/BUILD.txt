@@ -64,6 +64,7 @@ below.)
 	   wxUSE_GLOBAL_MEMORY_OPERATORS    0
 	   wxUSE_LIBTIFF		    1
 	   wxUSE_GLCANVAS		    1
+	   wxDIALOG_UNIT_COMPATIBILITY      0
 
    I also change these:
 

@@ -32,23 +32,26 @@ BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 
 
-USE_SWIG = 1       # Should we actually execute SWIG, or just use the
+USE_SWIG = 0       # Should we actually execute SWIG, or just use the
                    # files already in the distribution?
 
-IN_CVS_TREE = 1    # Set to true if building in a full wxWindows CVS
+IN_CVS_TREE = 0    # Set to true if building in a full wxWindows CVS
                    # tree, otherwise will assume all needed files are
                    # available in the wxPython source distribution
 
+
 # Some MSW build settings
 
-FINAL = 0          # Mirrors use of same flag in wx makefiles,
-                   # should probably autodetect...
+FINAL = 1          # Mirrors use of same flag in wx makefiles,
+                   # (0 or 1 only) should probably find a way to
+                   # autodetect this...
 
-HYBRID = 1         # If set and not debug or FINAL, then build a
+HYBRID = 0         # If set and not debug or FINAL, then build a
                    # hybrid extension that can be used by the
                    # non-debug version of python, but contains
                    # debugging symbols for wxWindows and wxPython.
                    # wxWindows must have been built with /MD, not /MDd
+                   # (using FINAL=hybrid will do it.)
 
 WXDLLVER = '22_2'  # Version part of DLL name
 
@@ -99,6 +102,9 @@ if os.name == 'nt':
         FINAL  = 0
         HYBRID = 0
 
+    if HYBRID:
+        FINAL = 0
+
 
     includes = ['src',
                 os.path.join(WXDIR, 'include'),
@@ -141,8 +147,8 @@ if os.name == 'nt':
     lflags = None
 
     if not FINAL and HYBRID:
-        cflags = ['/Z7', '/Od']
-        lflags = ['/DEBUG', '/PDB:NONE']
+        cflags = ['/Od', '/Z7']
+        lflags = ['/DEBUG', ]   ## '/PDB:NONE']
 
 
 elif os.name == 'posix':
