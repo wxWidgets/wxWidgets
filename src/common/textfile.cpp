@@ -53,6 +53,8 @@ const wxTextFileType wxTextFile::typeDefault =
   wxTextFileType_Unix;
 #elif defined(__WXMAC__)
   wxTextFileType_Mac;
+#elif defined(__WXPM__)
+  wxTextFileType_Os2;
 #else
   wxTextFileType_None;
   #error  "wxTextFile: unsupported platform."

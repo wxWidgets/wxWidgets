@@ -83,7 +83,7 @@ void wxStartTimer(void)
 #endif
   wxStartTime = 1000*tp.tv_sec + tp.tv_usec/1000;
 #elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || \
-       defined(__MINGW32__) || defined(__MWERKS__) || defined(__FreeBSD__) ) 
+       defined(__MINGW32__) || defined(__MWERKS__) || defined(__FreeBSD__) )
   time_t t0;
   struct tm *tp;
   time(&t0);
@@ -136,7 +136,7 @@ long wxGetElapsedTime(bool resetTimer)
 #ifndef __VMS__
 bool wxGetLocalTime(long *timeZone, int *dstObserved)
 {
-#if defined(__MINGW32__) 
+#if defined(__MINGW32__)
   time_t t0;
   struct tm *tp;
   time(&t0);
@@ -157,38 +157,41 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
   *dstObserved = tp->tm_isdst;
 #else
 
-#if (((defined(__SYSV__) && !defined(__HPUX__)) || defined(__MSDOS__) || defined(__WXMSW__)) \
+#if (((defined(__SYSV__) && !defined(__HPUX__)) || defined(__MSDOS__) || defined(__WXMSW__) || defined(__WXPM__)) \
    && !defined(__GNUWIN32__) && !defined(__MWERKS__) )
-#if defined(__BORLANDC__)
+#  if defined(__BORLANDC__)
   /* Borland uses underscores */
   *timeZone = _timezone;
   *dstObserved = _daylight;
-#elif defined(__SALFORDC__)
+#  elif defined(__SALFORDC__)
   *timeZone = _timezone;
   *dstObserved = daylight;
-#else
+#  elif defined(__VISAGECPP__)
+  *timeZone = _timezone;
+  *dstObserved = daylight;
+#  else
   *timeZone = timezone;
   *dstObserved = daylight;
-#endif
+#  endif
 #elif defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || defined(__MWERKS__) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
-#ifndef __MWERKS__ // shouldn't this be one scope below ?
+#  ifndef __MWERKS__ // shouldn't this be one scope below ?
   struct timeval tp;
-#endif 
-#if defined(__SYSV__) || (defined(__GNUWIN32__) && !defined(__MINGW32))
+#  endif
+#  if defined(__SYSV__) || (defined(__GNUWIN32__) && !defined(__MINGW32))
   struct timezone tz;
   gettimeofday(&tp, &tz);
   *timeZone = 60*(tz.tz_minuteswest);
   *dstObserved = tz.tz_dsttime;
-#else
+#  else
   time_t t0;
   struct tm *tp;
   time(&t0);
   tp = localtime(&t0);
-#ifndef __MWERKS__
+#  ifndef __MWERKS__
   *timeZone = tp->tm_gmtoff; // ???
-#else
+#  else
   *timeZone = 0 ;
-#endif
+#  endif
   *dstObserved = tp->tm_isdst;
 #endif
 #elif defined(__WXSTUBS__)

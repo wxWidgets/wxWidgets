@@ -177,6 +177,10 @@ extern "C"
 #endif
 #endif  /* __WXMSW__ */
 
+#ifdef __WXPM__
+#define strcasecmp stricmp
+#define strncasecmp strnicmp
+#endif
 
 wxChar *
 copystring (const wxChar *s)

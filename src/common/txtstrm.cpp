@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     28/06/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Guilhem Lavaux 
+// Copyright:   (c) Guilhem Lavaux
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -55,7 +55,7 @@ wxChar wxTextInputStream::NextNonWhiteSpace()
         c = m_input->GetC();
 	if (!m_input) return (wxChar) 0;
 	
-	if (c != _T('\n') && 
+	if (c != _T('\n') &&
 	    c != _T('\r') &&
 	    c != _T('\t') &&
 	    c != _T(' '))
@@ -63,7 +63,7 @@ wxChar wxTextInputStream::NextNonWhiteSpace()
 	    return c;
 	}
     }
-    
+
     // this shouldn't happen
     return (wxChar) 0;
 }
@@ -71,11 +71,11 @@ wxChar wxTextInputStream::NextNonWhiteSpace()
 void wxTextInputStream::SkipIfEndOfLine( wxChar c )
 {
     if (c == _T('\n'))
-    { 
+    {
         // eat on UNIX
 	return;
     }
-    
+
     if (c == _T('\r'))
     {
         // eat on both Mac and DOS
@@ -84,7 +84,7 @@ void wxTextInputStream::SkipIfEndOfLine( wxChar c )
         if (!m_input) return;
 	
         if (c2 == _T('\n'))
-        {  
+        {
 	    // eat on DOS
 	    return;
 	}
@@ -106,32 +106,32 @@ wxUint32 wxTextInputStream::Read32()
     /* I only implemented a simple integer parser */
     int sign;
     wxInt32 i;
-    
+
     int c = NextNonWhiteSpace();
     if (!m_input) return 0;
 
     i = 0;
-    if (! (c == _T('-') || c == _T('+') || isdigit(c)) ) 
+    if (! (c == _T('-') || c == _T('+') || isdigit(c)) )
     {
         m_input->Ungetch(c);
         return 0;
     }
 
-    if (c == _T('-')) 
+    if (c == _T('-'))
     {
         sign = -1;
         c = m_input->GetC();
-    } else 
-    if (c == _T('+')) 
+    } else
+    if (c == _T('+'))
     {
         sign = 1;
         c = m_input->GetC();
-    } else 
+    } else
     {
         sign = 1;
     }
 
-    while (isdigit(c)) 
+    while (isdigit(c))
     {
         i = i*10 + (c - (int)_T('0'));
         c = m_input->GetC();
@@ -164,54 +164,54 @@ double wxTextInputStream::ReadDouble()
     if (!m_input) return 0.0;
 
     f = 0.0;
-    if (! (c == _T('.') || c == _T('-') || c == _T('+') || isdigit(c)) ) 
+    if (! (c == _T('.') || c == _T('-') || c == _T('+') || isdigit(c)) )
     {
         m_input->Ungetch(c);
         return 0.0;
     }
 
-    if (c == _T('-')) 
+    if (c == _T('-'))
     {
         sign = -1;
         c = m_input->GetC();
-    } else 
-    if (c == _T('+')) 
+    } else
+    if (c == _T('+'))
     {
         sign = 1;
         c = m_input->GetC();
-    } 
-    else 
+    }
+    else
     {
         sign = 1;
     }
 
-    while (isdigit(c)) 
+    while (isdigit(c))
     {
         f = f*10 + (c - _T('0'));
         c = m_input->GetC();
     }
 
-    if (c == _T('.')) 
+    if (c == _T('.'))
     {
         double f_multiplicator = (double) 0.1;
 
         c = m_input->GetC();
 
-        while (isdigit(c)) 
+        while (isdigit(c))
 	{
             f += (c-_T('0'))*f_multiplicator;
             f_multiplicator /= 10;
             c = m_input->GetC();
         }
 
-        if (c == _T('e')) 
+        if (c == _T('e'))
 	{
             double f_multiplicator = 0.0;
             int i, e;
 
             c = m_input->GetC();
 
-            switch (c) 
+            switch (c)
 	    {
                 case _T('-'): f_multiplicator = 0.1;  break;
 		case _T('+'): f_multiplicator = 10.0; break;
@@ -221,7 +221,7 @@ double wxTextInputStream::ReadDouble()
 
             for (i=0;i<e;i++)
                 f *= f_multiplicator;
-        } 
+        }
 	else
 	    SkipIfEndOfLine( c );
     }
@@ -240,7 +240,7 @@ wxString wxTextInputStream::ReadString()
     wxChar c;
     wxString line;
 
-    for (;;) 
+    for (;;)
     {
         c = m_input->GetC();
         if (!m_input) break;
@@ -254,12 +254,12 @@ wxString wxTextInputStream::ReadString()
         if (c == _T('\r'))
         {
             // eat on both Mac and DOS
-	    
+	
             wxChar c2 = m_input->GetC();
 	    if (!m_input) break;
-	    
+	
 	    if (c2 == _T('\n'))
-            {  
+            {
 	        // eat on DOS
 		break;
 	    }
@@ -273,10 +273,10 @@ wxString wxTextInputStream::ReadString()
 	
         line += c;
     }
-    
+
     return line;
 }
-  
+
 wxTextInputStream& wxTextInputStream::operator>>(wxString& line)
 {
   line = ReadString();
@@ -291,13 +291,13 @@ wxTextInputStream& wxTextInputStream::operator>>(wxChar& c)
         c = (wxChar) 0;
         return *this;
     }
-    
+
     if (c1 == _T('\r'))
     {
         c = _T('\n');
         wxChar c2 = m_input->GetC();
 	if (!m_input) return *this;
-	    
+	
 	if (c2 != _T('\n'))
 	{
 	    // we are on a Mac
@@ -308,7 +308,7 @@ wxTextInputStream& wxTextInputStream::operator>>(wxChar& c)
     {
         c = c1;
     }
-    
+
     return *this;
 }
 
@@ -361,7 +361,7 @@ void wxTextOutputStream::Write32(wxUint32 i)
 {
     wxString str;
     str.Printf(_T("%u"), i);
-    
+
     WriteString(str);
 }
 
@@ -369,7 +369,7 @@ void wxTextOutputStream::Write16(wxUint16 i)
 {
     wxString str;
     str.Printf(_T("%u"), i);
-    
+
     WriteString(str);
 }
 
@@ -377,7 +377,7 @@ void wxTextOutputStream::Write8(wxUint8 i)
 {
     wxString str;
     str.Printf(_T("%u"), i);
-    
+
     WriteString(str);
 }
 
@@ -406,6 +406,11 @@ void wxTextOutputStream::WriteString(const wxString& string)
             m_output->Write( (const void*)(&c), sizeof(wxChar) );
 #elif defined(__WXMAC__)
             c = _T('\r');
+            m_output->Write( (const void*)(&c), sizeof(wxChar) );
+#elif   defined(__OS2__)
+            c = _T('\r');
+            m_output->Write( (const void*)(&c), sizeof(wxChar) );
+            c = _T('\n');
             m_output->Write( (const void*)(&c), sizeof(wxChar) );
 #else
             #error  "wxTextOutputStream: unsupported platform."

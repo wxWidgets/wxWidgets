@@ -41,7 +41,8 @@ enum wxTextFileType
     wxTextFileType_None,  // incomplete (the last line of the file only)
     wxTextFileType_Unix,  // line is terminated with 'LF' = 0xA = 10 = '\n'
     wxTextFileType_Dos,   //                         'CR' 'LF'
-    wxTextFileType_Mac    //                         'CR' = 0xD = 13 = '\r'
+    wxTextFileType_Mac,   //                         'CR' = 0xD = 13 = '\r'
+    wxTextFileType_Os2    //                         'CR' 'LF'
 };
 
 WX_DEFINE_ARRAY(wxTextFileType, ArrayFileType);
