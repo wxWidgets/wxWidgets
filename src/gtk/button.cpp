@@ -109,7 +109,8 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 */
 
 #ifdef __WXGTK20__
-    m_widget = gtk_button_new_with_mnemonic("");
+    if (m_widget == NULL) // may be !=NULL if stock form of Create was used
+        m_widget = gtk_button_new_with_mnemonic("");
 #else
     m_widget = gtk_button_new_with_label("");
 #endif
@@ -126,10 +127,15 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     else if (HasFlag(wxBU_BOTTOM))
         y_alignment = 1.0;
 
+#ifdef __WXGTK20__
+    gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, y_alignment);
+#else
     gtk_misc_set_alignment (GTK_MISC (BUTTON_CHILD (m_widget)),
                             x_alignment, y_alignment);
+#endif
 
-    SetLabel( label );
+    if (!label.empty())
+        SetLabel(label);
 
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
@@ -141,7 +147,22 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 
     PostCreation(size);
 
-    return TRUE;
+    return true;
+}
+    
+bool wxButton::Create(wxWindow *parent, wxWindowID id, wxStockItemID stock,
+                      const wxString& descriptiveLabel,
+                      const wxPoint& pos, long style,
+                      const wxValidator& validator, const wxString& name)
+{
+#ifdef __WXGTK20__
+    m_widget = gtk_button_new_from_stock(wxStockItemToGTK(stock));
+    return Create(parent, id, wxEmptyString,
+                  pos, wxDefaultSize, style, validator, name);
+#else
+    return CreateStock(parent, id, stock, descriptiveLabel,
+                       pos, style, validator, name);
+#endif
 }
 
 void wxButton::SetDefault()
@@ -158,9 +179,42 @@ void wxButton::SetDefault()
 }
 
 /* static */
-wxSize wxButton::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize()
 {
+#ifdef __WXGTK20__
+    static wxSize size = wxDefaultSize;
+    if (size == wxDefaultSize)
+    {
+        // NB: Default size of buttons should be same as size of stock
+        //     buttons as used in most GTK+ apps. Unfortunately it's a little
+        //     tricky to obtain this size: stock button's size may be smaller
+        //     than size of button in GtkButtonBox and vice versa,
+        //     GtkButtonBox's minimal button size may be smaller than stock
+        //     button's size. We have to retrieve both values and combine them.
+
+        GtkWidget *wnd = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+        GtkWidget *box = gtk_hbutton_box_new();
+        GtkWidget *btn = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+        gtk_container_add(GTK_CONTAINER(box), btn);
+        gtk_container_add(GTK_CONTAINER(wnd), box);
+        GtkRequisition req;
+        gtk_widget_size_request(btn, &req);
+
+        gint minwidth, minheight;
+        gtk_widget_style_get(box,
+                             "child-min-width", &minwidth,
+                             "child-min-height", &minheight,
+                             NULL);
+
+        size.x = wxMax(minwidth, req.width);
+        size.y = wxMax(minheight, req.height);
+        
+        gtk_widget_destroy(wnd);
+    }
+    return size;
+#else
     return wxSize(80,26);
+#endif
 }
 
 void wxButton::SetLabel( const wxString &label )
@@ -229,7 +283,9 @@ wxSize wxButton::DoGetBestSize() const
     
     if (!HasFlag(wxBU_EXACTFIT))
     {
-        if (ret.x < 80) ret.x = 80;
+        wxSize defaultSize = GetDefaultSize();
+        if (ret.x < defaultSize.x) ret.x = defaultSize.x;
+        if (ret.y < defaultSize.y) ret.y = defaultSize.y;
     }
 
     CacheBestSize(ret);
