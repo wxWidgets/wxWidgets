@@ -436,8 +436,6 @@ WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
 extern HCURSOR wxGetCurrentBusyCursor();    // from msw/utils.cpp
 extern const wxCursor *wxGetGlobalCursor(); // from msw/cursor.cpp
 
-WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
-
 WXDLLEXPORT void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont *the_font);
 WXDLLEXPORT void wxFillLogFont(LOGFONT *logFont, const wxFont *font);
 WXDLLEXPORT wxFont wxCreateFontFromLogFont(const LOGFONT *logFont);
@@ -449,9 +447,6 @@ WXDLLEXPORT void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);
 // Find maximum size of window/rectangle
 WXDLLEXPORT extern void wxFindMaxSize(WXHWND hwnd, RECT *rect);
 
-WXDLLEXPORT wxWindow* wxFindControlFromHandle(WXHWND hWnd);
-WXDLLEXPORT void wxAddControlHandle(WXHWND hWnd, wxWindow *item);
-
 // Safely get the window text (i.e. without using fixed size buffer)
 WXDLLEXPORT extern wxString wxGetWindowText(WXHWND hWnd);
 
@@ -462,8 +457,9 @@ WXDLLEXPORT extern wxString wxGetWindowClass(WXHWND hWnd);
 // is, for mainly historical reasons, signed)
 WXDLLEXPORT extern WXWORD wxGetWindowId(WXHWND hWnd);
 
-// check if hWnd's WNDPROC is wndProc. Return true if yes, false if they are different
-extern bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc);
+// check if hWnd's WNDPROC is wndProc. Return true if yes, false if they are
+// different
+WXDLLEXPORT extern bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc);
 
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)
@@ -472,16 +468,24 @@ inline bool wxStyleHasBorder(long style)
                      wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
 
-// find the window for HWND which is part of some wxWindow, returns just the
-// corresponding wxWindow for HWND which just is one
+// ----------------------------------------------------------------------------
+// functions mapping HWND to wxWindow
+// ----------------------------------------------------------------------------
+
+// this function simply checks whether the given hWnd corresponds to a wxWindow
+// and returns either that window if it does or NULL otherwise
+WXDLLEXPORT extern wxWindow* wxFindWinFromHandle(WXHWND hWnd);
+
+// find the window for HWND which is part of some wxWindow, i.e. unlike
+// wxFindWinFromHandle() above it will also work for "sub controls" of a
+// wxWindow.
 //
-// may return NULL
-extern wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
+// returns the wxWindow corresponding to the given HWND or NULL.
+WXDLLEXPORT extern wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
 
 
 // Get the size of an icon
-wxSize wxGetHiconSize(HICON hicon);
-
+WXDLLEXPORT extern wxSize wxGetHiconSize(HICON hicon);
 
 #endif // wxUSE_GUI
 
