@@ -28,8 +28,6 @@ $Id$
 // the user (who can define wxUSE_ZLIB_H_IN_PATH), we hardcode the path here
 #if defined(__WXMSW__) && !defined(__WX_SETUP_H__) && !defined(wxUSE_ZLIB_H_IN_PATH)
    #include "../zlib/zlib.h"
-#elif defined(__WXMAC__) && defined(__UNIX__)
-   #include <Kernel/net/zlib.h>
 #else
    #include "zlib.h"
 #endif
