@@ -573,10 +573,24 @@ void wxScrolledWindow::EnableScrolling (bool x_scroll, bool y_scroll)
 
 void wxScrolledWindow::GetVirtualSize (int *x, int *y) const
 {
+    wxSize sz(0, 0);
+    if (m_targetWindow)
+        sz = m_targetWindow->GetClientSize();
+
     if ( x )
-        *x = m_xScrollPixelsPerLine * m_xScrollLines;
+    {
+        if (m_xScrollPixelsPerLine == 0)
+            *x = sz.x;
+        else
+            *x = m_xScrollPixelsPerLine * m_xScrollLines;
+    }
     if ( y )
-        *y = m_yScrollPixelsPerLine * m_yScrollLines;
+    {
+        if (m_yScrollPixelsPerLine == 0)
+            *y = sz.y;
+        else
+            *y = m_yScrollPixelsPerLine * m_yScrollLines;
+    }
 }
 
 // Where the current view starts from
