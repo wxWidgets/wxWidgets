@@ -768,7 +768,7 @@ bool wxDebugContext::PrintClasses(void)
   }
 
   int n = 0;
-  wxNode *node;
+  wxHashTable::compatibility_iterator node;
   wxClassInfo *info;
 
   wxClassInfo::sm_classTable->BeginFind();
