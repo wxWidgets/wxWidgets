@@ -1426,22 +1426,37 @@ long wxListCtrl::HitTest(const wxPoint& point, int& flags)
     ListView_HitTest(GetHwnd(), & hitTestInfo);
 
     flags = 0;
+
     if ( hitTestInfo.flags & LVHT_ABOVE )
         flags |= wxLIST_HITTEST_ABOVE;
     if ( hitTestInfo.flags & LVHT_BELOW )
         flags |= wxLIST_HITTEST_BELOW;
-    if ( hitTestInfo.flags & LVHT_NOWHERE )
-        flags |= wxLIST_HITTEST_NOWHERE;
-    if ( hitTestInfo.flags & LVHT_ONITEMICON )
-        flags |= wxLIST_HITTEST_ONITEMICON;
-    if ( hitTestInfo.flags & LVHT_ONITEMLABEL )
-        flags |= wxLIST_HITTEST_ONITEMLABEL;
-    if ( hitTestInfo.flags & LVHT_ONITEMSTATEICON )
-        flags |= wxLIST_HITTEST_ONITEMSTATEICON;
     if ( hitTestInfo.flags & LVHT_TOLEFT )
         flags |= wxLIST_HITTEST_TOLEFT;
     if ( hitTestInfo.flags & LVHT_TORIGHT )
         flags |= wxLIST_HITTEST_TORIGHT;
+
+    if ( hitTestInfo.flags & LVHT_NOWHERE )
+        flags |= wxLIST_HITTEST_NOWHERE;
+
+    // note a bug or at least a very strange feature of comtl32.dll (tested
+    // with version 4.0 under Win95 and 6.0 under Win 2003): if you click to
+    // the right of the item label, ListView_HitTest() returns a combination of
+    // LVHT_ONITEMICON, LVHT_ONITEMLABEL and LVHT_ONITEMSTATEICON -- filter out
+    // the bits which don't make sense
+    if ( hitTestInfo.flags & LVHT_ONITEMLABEL )
+    {
+        flags |= wxLIST_HITTEST_ONITEMLABEL;
+
+        // do not translate LVHT_ONITEMICON here, as per above
+    }
+    else
+    {
+        if ( hitTestInfo.flags & LVHT_ONITEMICON )
+            flags |= wxLIST_HITTEST_ONITEMICON;
+        if ( hitTestInfo.flags & LVHT_ONITEMSTATEICON )
+            flags |= wxLIST_HITTEST_ONITEMSTATEICON;
+    }
 
     return (long) hitTestInfo.iItem;
 }
