@@ -32,6 +32,11 @@ enum wxDragResult
     wxDragCancel    // the operation was cancelled by user (not an error)
 };
 
+inline WXDLLEXPORT bool wxIsDragResultOk(wxDragResult res)
+{
+    return res == wxDragCopy || res == wxDragMove;
+}
+
 // ----------------------------------------------------------------------------
 // wxDropSource is the object you need to create (and call DoDragDrop on it)
 // to initiate a drag-and-drop operation
@@ -127,8 +132,10 @@ public:
 
     // called after OnDrop() returns TRUE: you will usually just call
     // GetData() from here and, probably, also refresh something to update the
-    // new data
-    virtual bool OnData(wxCoord x, wxCoord y) = 0;
+    // new data and, finally, return the code indicating how did the operation
+    // complete (returning default value in case of success and wxDragError on
+    // failure is usually ok)
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) = 0;
 
     // may be called *only* from inside OnData() and will fill m_dataObject
     // with the data from the drop source if it returns TRUE
@@ -137,11 +144,6 @@ public:
 protected:
     wxDataObject *m_dataObject;
 };
-
-// ----------------------------------------------------------------------------
-// the platform-specific headers also define standard wxDropTarget
-// implementations wxTextDropTarget and wxFileDropTarget
-// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // include platform dependent class declarations
@@ -163,6 +165,35 @@ protected:
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/dnd.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// standard wxDropTarget implementations (implemented in common/dobjcmn.cpp)
+// ----------------------------------------------------------------------------
+
+// A simple wxDropTarget derived class for text data: you only need to
+// override OnDropText() to get something working
+class WXDLLEXPORT wxTextDropTarget : public wxDropTarget
+{
+public:
+    wxTextDropTarget();
+
+    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text) = 0;
+
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
+};
+
+// A drop target which accepts files (dragged from File Manager or Explorer)
+class WXDLLEXPORT wxFileDropTarget : public wxDropTarget
+{
+public:
+    wxFileDropTarget();
+
+    // parameters are the number of files and the array of file names
+    virtual bool OnDropFiles(wxCoord x, wxCoord y,
+                             const wxArrayString& filenames) = 0;
+
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
+};
 
 #endif // wxUSE_DRAG_AND_DROP
 

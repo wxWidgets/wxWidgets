@@ -84,7 +84,7 @@ bool wxListBoxBase::SetStringSelection(const wxString& s, bool select)
 
 void wxListBoxBase::Command(wxCommandEvent& event)
 {
-    SetSelection(event.m_commandInt, event.m_extraLong);
+    SetSelection(event.m_commandInt, event.m_extraLong != 0);
     (void)ProcessEvent(event);
 }
 

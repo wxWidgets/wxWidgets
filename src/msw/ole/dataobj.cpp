@@ -463,6 +463,12 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                         size = 0;
                         break;
 
+                    case CF_DIB:
+                        // the handler will calculate size itself (it's too
+                        // complicated to do it here)
+                        size = 0;
+                        break;
+
                     default:
                         {
                             // we suppose that the size precedes the data
@@ -944,54 +950,108 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
 // private functions
 // ----------------------------------------------------------------------------
 
-// otherwise VC++ would give here:
-//  "local variable 'bi' may be used without having been initialized"
-// even though in fact it may not
-#ifdef __VISUALC__
-    #pragma warning(disable:4701)
-#endif // __VISUALC__
+static size_t wxGetNumOfBitmapColors(size_t bitsPerPixel)
+{
+    switch ( bitsPerPixel )
+    {
+        case 1:
+            // monochrome bitmap, 2 entries
+            return 2;
+
+        case 4:
+            return 16;
+
+        case 8:
+            return 256;
+
+        case 24:
+            // may be used with 24bit bitmaps, but we don't use it here - fall
+            // through
+
+        case 16:
+        case 32:
+            // bmiColors not used at all with these bitmaps
+            return 0;
+
+        default:
+            wxFAIL_MSG( wxT("unknown bitmap format") );
+            return 0;
+    }
+}
 
 size_t wxConvertBitmapToDIB(BITMAPINFO *pbi, const wxBitmap& bitmap)
 {
+    wxASSERT_MSG( bitmap.Ok(), wxT("invalid bmp can't be converted to DIB") );
+
     // shouldn't be selected into a DC or GetDIBits() would fail
     wxASSERT_MSG( !bitmap.GetSelectedInto(),
                   wxT("can't copy bitmap selected into wxMemoryDC") );
 
+    // prepare all the info we need
+    BITMAP bm;
     HBITMAP hbmp = (HBITMAP)bitmap.GetHBITMAP();
+    if ( !GetObject(hbmp, sizeof(bm), &bm) )
+    {
+        wxLogLastError("GetObject(bitmap)");
 
-    BITMAPINFO bi;
+        return 0;
+    }
 
-    // first get the info
+    // calculate the number of bits per pixel and the number of items in
+    // bmiColors array (whose meaning depends on the bitmap format)
+    WORD biBits = bm.bmPlanes * bm.bmBitsPixel;
+    WORD biColors = wxGetNumOfBitmapColors(biBits);
+
+    BITMAPINFO bi2;
+
+    bool wantSizeOnly = pbi == NULL;
+    if ( wantSizeOnly )
+        pbi = &bi2;
+
+    // just for convenience
+    BITMAPINFOHEADER& bi = pbi->bmiHeader;
+
+    bi.biSize = sizeof(BITMAPINFOHEADER);
+    bi.biWidth = bm.bmWidth;
+    bi.biHeight = bm.bmHeight;
+    bi.biPlanes = 1;
+    bi.biBitCount = biBits;
+    bi.biCompression = BI_RGB;
+    bi.biSizeImage = 0;
+    bi.biXPelsPerMeter = 0;
+    bi.biYPelsPerMeter = 0;
+    bi.biClrUsed = 0;
+    bi.biClrImportant = 0;
+
+    // memory we need for BITMAPINFO only
+    DWORD dwLen = bi.biSize + biColors * sizeof(RGBQUAD);
+
+    // first get the image size
     ScreenHDC hdc;
-    if ( !GetDIBits(hdc, hbmp, 0, 0, NULL, pbi ? pbi : &bi, DIB_RGB_COLORS) )
+    if ( !GetDIBits(hdc, hbmp, 0, bi.biHeight, NULL, pbi, DIB_RGB_COLORS) )
     {
         wxLogLastError("GetDIBits(NULL)");
 
         return 0;
     }
 
-    if ( !pbi )
+    if ( wantSizeOnly )
     {
-        // we were only asked for size needed for the buffer, not to actually
-        // copy the data
-        return sizeof(BITMAPINFO) + bi.bmiHeader.biSizeImage;
+        // size of the header + size of the image
+        return dwLen + bi.biSizeImage;
     }
 
     // and now copy the bits
-    if ( !GetDIBits(hdc, hbmp, 0, pbi->bmiHeader.biHeight, pbi + 1,
-                    pbi, DIB_RGB_COLORS) )
+    void *image = (char *)pbi + dwLen;
+    if ( !GetDIBits(hdc, hbmp, 0, bi.biHeight, image, pbi, DIB_RGB_COLORS) )
     {
         wxLogLastError("GetDIBits");
 
         return 0;
     }
 
-    return sizeof(BITMAPINFO) + pbi->bmiHeader.biSizeImage;
+    return dwLen + bi.biSizeImage;
 }
-
-#ifdef __VISUALC__
-    #pragma warning(default:4701)
-#endif // __VISUALC__
 
 wxBitmap wxConvertDIBToBitmap(const BITMAPINFO *pbmi)
 {
@@ -999,9 +1059,13 @@ wxBitmap wxConvertDIBToBitmap(const BITMAPINFO *pbmi)
     // BITMAPINFO starts with BITMAPINFOHEADER followed by colour info
     const BITMAPINFOHEADER *pbmih = &pbmi->bmiHeader;
 
+    // offset of image from the beginning of the header
+    DWORD ofs = wxGetNumOfBitmapColors(pbmih->biBitCount) * sizeof(RGBQUAD);
+    void *image = (char *)pbmih + sizeof(BITMAPINFOHEADER) + ofs;
+
     ScreenHDC hdc;
     HBITMAP hbmp = CreateDIBitmap(hdc, pbmih, CBM_INIT,
-                                  pbmi + 1, pbmi, DIB_RGB_COLORS);
+                                  image, pbmi, DIB_RGB_COLORS);
     if ( !hbmp )
     {
         wxLogLastError("CreateDIBitmap");

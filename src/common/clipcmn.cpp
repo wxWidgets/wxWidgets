@@ -31,14 +31,6 @@
 #include "wx/clipbrd.h"
 #include "wx/module.h"
 
-//--------------------------------------------------------------------------
-// wxClipboardBase
-//--------------------------------------------------------------------------
-
-wxClipboardBase::wxClipboardBase()
-{
-}
-
 // ----------------------------------------------------------------------------
 // wxClipboardModule: module responsible for initializing the global clipboard
 // object
@@ -47,12 +39,8 @@ wxClipboardBase::wxClipboardBase()
 class wxClipboardModule : public wxModule
 {
 public:
-    wxClipboardModule() { }
-
-    bool OnInit()
-        { wxTheClipboard = new wxClipboard; return TRUE; }
-    void OnExit()
-        { delete wxTheClipboard; wxTheClipboard = (wxClipboard *)NULL; }
+    bool OnInit();
+    void OnExit();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxClipboardModule)
@@ -63,3 +51,27 @@ private:
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxClipboardModule, wxModule)
+
+wxClipboard* wxTheClipboard = (wxClipboard *)NULL;
+
+// ----------------------------------------------------------------------------
+// implementation
+// ----------------------------------------------------------------------------
+
+wxClipboardBase::wxClipboardBase()
+{
+}
+
+bool wxClipboardModule::OnInit()
+{
+    wxTheClipboard = new wxClipboard;
+
+    return TRUE;
+}
+
+void wxClipboardModule::OnExit()
+{
+    delete wxTheClipboard;
+
+    wxTheClipboard = (wxClipboard *)NULL;
+}

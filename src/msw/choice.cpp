@@ -85,6 +85,11 @@ bool wxChoice::Create(wxWindow *parent,
     return TRUE;
 }
 
+wxChoice::~wxChoice()
+{
+    Free();
+}
+
 // ----------------------------------------------------------------------------
 // adding/deleting items to/from the list
 // ----------------------------------------------------------------------------
@@ -114,6 +119,13 @@ void wxChoice::Delete(int n)
 
 void wxChoice::Clear()
 {
+    Free();
+
+    SendMessage(GetHwnd(), CB_RESETCONTENT, 0, 0);
+}
+
+void wxChoice::Free()
+{
     if ( HasClientObjectData() )
     {
         size_t count = GetCount();
@@ -122,8 +134,6 @@ void wxChoice::Clear()
             delete GetClientObject(n);
         }
     }
-
-    SendMessage(GetHwnd(), CB_RESETCONTENT, 0, 0);
 }
 
 // ----------------------------------------------------------------------------
@@ -216,7 +226,7 @@ void* wxChoice::DoGetItemClientData( int n ) const
         wxLogLastError(wxT("CB_GETITEMDATA"));
 
         // unfortunately, there is no way to return an error code to the user
-	rc = (LPARAM) NULL;
+        rc = (LPARAM) NULL;
     }
 
     return (void *)rc;

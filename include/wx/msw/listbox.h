@@ -6,14 +6,14 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_LISTBOX_H_
 #define _WX_LISTBOX_H_
 
 #ifdef __GNUG__
-#pragma interface "listbox.h"
+    #pragma interface "listbox.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -119,6 +119,9 @@ public:
 protected:
     // do we have multiple selections?
     bool HasMultipleSelection() const;
+
+    // free memory (common part of Clear() and dtor)
+    void Free();
 
     int m_noItems;
     int m_selected;

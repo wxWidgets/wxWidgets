@@ -60,23 +60,28 @@
 class wxIDropTarget : public IDropTarget
 {
 public:
-  wxIDropTarget(wxDropTarget *p);
- ~wxIDropTarget();
+    wxIDropTarget(wxDropTarget *p);
+    ~wxIDropTarget();
 
-  // IDropTarget methods
-  STDMETHODIMP DragEnter(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
-  STDMETHODIMP DragOver(DWORD, POINTL, LPDWORD);
-  STDMETHODIMP DragLeave(void);
-  STDMETHODIMP Drop(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
+    // accessors for wxDropTarget
+    void SetHwnd(HWND hwnd) { m_hwnd = hwnd; }
 
-  DECLARE_IUNKNOWN_METHODS;
+    // IDropTarget methods
+    STDMETHODIMP DragEnter(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
+    STDMETHODIMP DragOver(DWORD, POINTL, LPDWORD);
+    STDMETHODIMP DragLeave();
+    STDMETHODIMP Drop(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
+
+    DECLARE_IUNKNOWN_METHODS;
 
 protected:
-  IDataObject   *m_pIDataObject;  // !NULL between DragEnter and DragLeave/Drop
-  wxDropTarget  *m_pTarget;       // the real target (we're just a proxy)
+    IDataObject  *m_pIDataObject; // !NULL between DragEnter and DragLeave/Drop
+    wxDropTarget *m_pTarget;      // the real target (we're just a proxy)
 
-private:
-  static inline DWORD GetDropEffect(DWORD flags);
+    HWND          m_hwnd;         // window we're associated with
+
+    // get default drop effect for given keyboard flags
+    static inline DWORD GetDropEffect(DWORD flags);
 };
 
 // ----------------------------------------------------------------------------
@@ -90,7 +95,7 @@ static DWORD ConvertDragResultToEffect(wxDragResult result);
 // wxIDropTarget implementation
 // ============================================================================
 
-// Name    : static wxDropTarget::GetDropEffect
+// Name    : static wxIDropTarget::GetDropEffect
 // Purpose : determine the drop operation from keyboard/mouse state.
 // Returns : DWORD combined from DROPEFFECT_xxx constants
 // Params  : [in] DWORD flags       kbd & mouse flags as passed to
@@ -134,31 +139,35 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
                                       POINTL       pt,
                                       DWORD       *pdwEffect)
 {
-  wxLogDebug(wxT("IDropTarget::DragEnter"));
+    wxLogDebug(wxT("IDropTarget::DragEnter"));
 
-  wxASSERT( m_pIDataObject == NULL );
+    wxASSERT( m_pIDataObject == NULL );
 
-  if ( !m_pTarget->IsAcceptedData(pIDataSource) ) {
-    // we don't accept this kind of data
-    *pdwEffect = DROPEFFECT_NONE;
+    if ( !m_pTarget->IsAcceptedData(pIDataSource) ) {
+        // we don't accept this kind of data
+        *pdwEffect = DROPEFFECT_NONE;
+
+        return S_OK;
+    }
+
+    // get hold of the data object
+    m_pIDataObject = pIDataSource;
+    m_pIDataObject->AddRef();
+
+    // we need client coordinates to pass to wxWin functions
+    if ( !ScreenToClient(m_hwnd, (POINT *)&pt) )
+    {
+        wxLogLastError("ScreenToClient");
+    }
+
+    // give some visual feedback
+    *pdwEffect = ConvertDragResultToEffect(
+                    m_pTarget->OnEnter(pt.x, pt.y,
+                        ConvertDragEffectToResult(GetDropEffect(grfKeyState))
+                    )
+                 );
 
     return S_OK;
-  }
-
-  // get hold of the data object
-  m_pIDataObject = pIDataSource;
-  m_pIDataObject->AddRef();
-
-  // give some visual feedback
-  *pdwEffect = ConvertDragResultToEffect(
-                 m_pTarget->OnEnter(pt.x, pt.y,
-                   ConvertDragEffectToResult(
-                     GetDropEffect(grfKeyState)
-                   )
-                 )
-               );
-
-  return S_OK;
 }
 
 // Name    : wxIDropTarget::DragOver
@@ -174,22 +183,28 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
                                      POINTL  pt,
                                      LPDWORD pdwEffect)
 {
-  // there are too many of them... wxLogDebug("IDropTarget::DragOver");
+    // there are too many of them... wxLogDebug("IDropTarget::DragOver");
 
-  wxDragResult result;
-  if ( m_pIDataObject ) {
-      result = ConvertDragEffectToResult(GetDropEffect(grfKeyState));
-  }
-  else {
-      // can't accept data anyhow normally
-      result = wxDragNone;
-  }
+    wxDragResult result;
+    if ( m_pIDataObject ) {
+        result = ConvertDragEffectToResult(GetDropEffect(grfKeyState));
+    }
+    else {
+        // can't accept data anyhow normally
+        result = wxDragNone;
+    }
 
-  *pdwEffect = ConvertDragResultToEffect(
-                 m_pTarget->OnDragOver(pt.x, pt.y, result)
-               );
+    // we need client coordinates to pass to wxWin functions
+    if ( !ScreenToClient(m_hwnd, (POINT *)&pt) )
+    {
+        wxLogLastError("ScreenToClient");
+    }
 
-  return S_OK;
+    *pdwEffect = ConvertDragResultToEffect(
+                    m_pTarget->OnDragOver(pt.x, pt.y, result)
+                 );
+
+    return S_OK;
 }
 
 // Name    : wxIDropTarget::DragLeave
@@ -232,15 +247,23 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
     // by default, nothing happens
     *pdwEffect = DROPEFFECT_NONE;
 
+    // we need client coordinates to pass to wxWin functions
+    if ( !ScreenToClient(m_hwnd, (POINT *)&pt) )
+    {
+        wxLogLastError("ScreenToClient");
+    }
+
     // first ask the drop target if it wants data
     if ( m_pTarget->OnDrop(pt.x, pt.y) ) {
         // it does, so give it the data source
         m_pTarget->SetDataSource(pIDataSource);
 
         // and now it has the data
-        if ( m_pTarget->OnData(pt.x, pt.y) ) {
+        wxDragResult rc = ConvertDragEffectToResult(GetDropEffect(grfKeyState));
+        rc = m_pTarget->OnData(pt.x, pt.y, rc);
+        if ( wxIsDragResultOk(rc) ) {
             // operation succeeded
-            *pdwEffect = GetDropEffect(grfKeyState);
+            *pdwEffect = ConvertDragResultToEffect(rc);
         }
         //else: *pdwEffect is already DROPEFFECT_NONE
     }
@@ -294,6 +317,9 @@ bool wxDropTarget::Register(WXHWND hwnd)
         return FALSE;
     }
 
+    // we will need the window handle for coords transformation later
+    m_pIDropTarget->SetHwnd((HWND)hwnd);
+
     return TRUE;
 }
 
@@ -306,6 +332,8 @@ void wxDropTarget::Revoke(WXHWND hwnd)
     }
 
     ::CoLockObjectExternal(m_pIDropTarget, FALSE, TRUE);
+
+    m_pIDropTarget->SetHwnd(0);
 }
 
 // ----------------------------------------------------------------------------
@@ -418,41 +446,6 @@ wxDataFormat wxDropTarget::GetSupportedFormat(IDataObject *pIDataSource) const
     }
 
     return n < nFormats ? format : wxFormatInvalid;
-}
-
-// ----------------------------------------------------------------------------
-// wxTextDropTarget
-// ----------------------------------------------------------------------------
-
-wxTextDropTarget::wxTextDropTarget()
-                : wxDropTarget(new wxTextDataObject)
-{
-}
-
-bool wxTextDropTarget::OnData(wxCoord x, wxCoord y)
-{
-    if ( !GetData() )
-        return FALSE;
-
-    return OnDropText(x, y, ((wxTextDataObject *)m_dataObject)->GetText());
-}
-
-// ----------------------------------------------------------------------------
-// wxFileDropTarget
-// ----------------------------------------------------------------------------
-
-wxFileDropTarget::wxFileDropTarget()
-                : wxDropTarget(new wxFileDataObject)
-{
-}
-
-bool wxFileDropTarget::OnData(wxCoord x, wxCoord y)
-{
-    if ( !GetData() )
-        return FALSE;
-
-    return OnDropFiles(x, y,
-                       ((wxFileDataObject *)m_dataObject)->GetFilenames());
 }
 
 // ----------------------------------------------------------------------------

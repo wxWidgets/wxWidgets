@@ -289,3 +289,45 @@ bool wxCustomDataObject::SetData(size_t size, const void *buf)
     return TRUE;
 }
 
+// ============================================================================
+// some common dnd related code
+// ============================================================================
+
+#include "wx/dnd.h"
+
+// ----------------------------------------------------------------------------
+// wxTextDropTarget
+// ----------------------------------------------------------------------------
+
+wxTextDropTarget::wxTextDropTarget()
+                : wxDropTarget(new wxTextDataObject)
+{
+}
+
+wxDragResult wxTextDropTarget::OnData(wxCoord x, wxCoord y, wxDragResult def)
+{
+    if ( !GetData() )
+        return wxDragNone;
+
+    wxTextDataObject *dobj = (wxTextDataObject *)m_dataObject;
+    return OnDropText(x, y, dobj->GetText()) ? def : wxDragNone;
+}
+
+// ----------------------------------------------------------------------------
+// wxFileDropTarget
+// ----------------------------------------------------------------------------
+
+wxFileDropTarget::wxFileDropTarget()
+                : wxDropTarget(new wxFileDataObject)
+{
+}
+
+wxDragResult wxFileDropTarget::OnData(wxCoord x, wxCoord y, wxDragResult def)
+{
+    if ( !GetData() )
+        return wxDragNone;
+
+    wxFileDataObject *dobj = (wxFileDataObject *)m_dataObject;
+    return OnDropFiles(x, y, dobj->GetFilenames()) ? def : wxDragNone;
+}
+

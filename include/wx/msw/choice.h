@@ -27,6 +27,7 @@ class WXDLLEXPORT wxChoice : public wxChoiceBase
 public:
     // ctors
     wxChoice() { }
+    virtual ~wxChoice();
 
     wxChoice(wxWindow *parent,
              wxWindowID id,
@@ -77,6 +78,9 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
+
+    // free all memory we have (used by Clear() and dtor)
+    void Free();
 };
 
 #endif // _WX_CHOICE_H_

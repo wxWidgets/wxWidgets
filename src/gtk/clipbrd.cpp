@@ -36,8 +36,6 @@ extern void wxapp_uninstall_thread_wakeup();
 // data
 //-----------------------------------------------------------------------------
 
-wxClipboard *wxTheClipboard = (wxClipboard*) NULL;
-
 GdkAtom  g_clipboardAtom   = 0;
 GdkAtom  g_targetsAtom     = 0;
 

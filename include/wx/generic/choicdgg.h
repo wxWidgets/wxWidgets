@@ -16,9 +16,9 @@
     #pragma interface "choicdgg.h"
 #endif
 
-#include "wx/setup.h"
 #include "wx/dialog.h"
-#include "wx/listbox.h"
+
+class WXDLLEXPORT wxListBox;
 
 #define wxCHOICE_HEIGHT 150
 #define wxCHOICE_WIDTH 200

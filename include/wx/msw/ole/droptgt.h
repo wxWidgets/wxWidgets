@@ -71,35 +71,4 @@ private:
     IDataObject   *m_pIDataSource; // the pointer to the source data object
 };
 
-// ----------------------------------------------------------------------------
-// A simple wxDropTarget derived class for text data: you only need to
-// override OnDropText() to get something working
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxTextDropTarget : public wxDropTarget
-{
-public:
-    wxTextDropTarget();
-
-    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text) = 0;
-
-    virtual bool OnData(wxCoord x, wxCoord y);
-};
-
-// ----------------------------------------------------------------------------
-// A drop target which accepts files (dragged from File Manager or Explorer)
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxFileDropTarget : public wxDropTarget
-{
-public:
-    wxFileDropTarget();
-
-    // parameters are the number of files and the array of file names
-    virtual bool OnDropFiles(wxCoord x, wxCoord y,
-                             const wxArrayString& filenames) = 0;
-
-    virtual bool OnData(wxCoord x, wxCoord y);
-};
-
 #endif  //_WX_OLEDROPTGT_H

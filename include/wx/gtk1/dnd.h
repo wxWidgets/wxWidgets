@@ -44,10 +44,10 @@ class wxDropTarget: public wxDropTargetBase
 {
 public:
     wxDropTarget(wxDataObject *dataObject = (wxDataObject*) NULL );
-    
+
     virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def);
     virtual bool OnDrop(wxCoord x, wxCoord y);
-    virtual bool OnData(wxCoord x, wxCoord y);
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
     virtual bool GetData();
 
   // implementation
@@ -67,37 +67,6 @@ public:
     void SetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
     void SetDragData( GtkSelectionData *sd ) { m_dragData = sd; }
     void SetDragTime( guint time ) { m_dragTime = time; }
-};
-
-// ----------------------------------------------------------------------------
-// A simple wxDropTarget derived class for text data: you only need to
-// override OnDropText() to get something working
-// ----------------------------------------------------------------------------
-
-class wxTextDropTarget : public wxDropTarget
-{
-public:
-    wxTextDropTarget();
-
-    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text) = 0;
-
-    virtual bool OnData(wxCoord x, wxCoord y);
-};
-
-// ----------------------------------------------------------------------------
-// A drop target which accepts files (dragged from File Manager or Explorer)
-// ----------------------------------------------------------------------------
-
-class wxFileDropTarget : public wxDropTarget
-{
-public:
-    wxFileDropTarget();
-
-    // parameters are the number of files and the array of file names
-    virtual bool OnDropFiles(wxCoord x, wxCoord y,
-                             const wxArrayString& filenames) = 0;
-
-    virtual bool OnData(wxCoord x, wxCoord y);
 };
 
 //-------------------------------------------------------------------------
@@ -126,15 +95,15 @@ public:
     void UnregisterWindow();
 
     void PrepareIcon( int hot_x, int hot_y, GdkDragContext *context );
-    
+
     GtkWidget       *m_widget;
     GtkWidget       *m_iconWindow;
     GdkDragContext  *m_dragContext;
     wxWindow        *m_window;
-    
+
     wxDragResult     m_retValue;
     wxIcon           m_icon;
-    
+
     bool             m_waiting;
 };
 

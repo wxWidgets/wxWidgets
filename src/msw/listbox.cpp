@@ -230,12 +230,7 @@ bool wxListBox::Create(wxWindow *parent,
 
 wxListBox::~wxListBox()
 {
-#if wxUSE_OWNER_DRAWN
-    size_t uiCount = m_aItems.Count();
-    while ( uiCount-- != 0 ) {
-        delete m_aItems[uiCount];
-    }
-#endif // wxUSE_OWNER_DRAWN
+    Free();
 }
 
 void wxListBox::SetupColours()
@@ -353,6 +348,15 @@ int wxListBox::FindString(const wxString& s) const
 
 void wxListBox::Clear()
 {
+    Free();
+
+    ListBox_ResetContent(GetHwnd());
+
+    m_noItems = 0;
+    SetHorizontalExtent();
+}
+
+void wxListBox::Free()
 #if wxUSE_OWNER_DRAWN
     size_t uiCount = m_aItems.Count();
     while ( uiCount-- != 0 ) {
@@ -369,11 +373,6 @@ void wxListBox::Clear()
         }
     }
 #endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
-
-    ListBox_ResetContent(GetHwnd());
-
-    m_noItems = 0;
-    SetHorizontalExtent();
 }
 
 void wxListBox::SetSelection(int N, bool select)
@@ -655,44 +654,39 @@ wxSize wxListBox::DoGetBestSize()
 
 bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
-    /*
-       if (param == LBN_SELCANCEL)
-       {
-       event.extraLong = FALSE;
-       }
-     */
-    if (param == LBN_SELCHANGE)
+    if ( param == LBN_SELCHANGE )
     {
         wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
+        event.SetEventObject( this );
+
         wxArrayInt aSelections;
-        int count = GetSelections(aSelections);
+        int n, count = GetSelections(aSelections);
         if ( count > 0 )
         {
-            event.m_commandInt = aSelections[0];
-            event.m_clientData = GetClientData(event.m_commandInt);
-            wxString str(GetString(event.m_commandInt));
-            if (str != wxT(""))
-            {
-		event.m_commandString = str;
-            }
+            n = aSelections[0];
+            if ( HasClientObjectData() )
+                event.SetClientObject( GetClientObject(n) );
+            else if ( HasClientUntypedData() )
+                event.SetClientData( GetClientData(n) );
+            event.SetString( GetString(n) );
         }
         else
         {
-            event.m_commandInt = -1;
-            event.m_commandString.Empty();
+            n = -1;
         }
 
-        event.SetEventObject( this );
-        ProcessCommand(event);
-        return TRUE;
+        event.m_commandInt = n;
+
+        return GetEventHandler()->ProcessEvent(event);
     }
-    else if (param == LBN_DBLCLK)
+    else if ( param == LBN_DBLCLK )
     {
         wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, m_windowId);
         event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent(event);
-        return TRUE;
+
+        return GetEventHandler()->ProcessEvent(event);
     }
+    //else:
 
     return FALSE;
 }

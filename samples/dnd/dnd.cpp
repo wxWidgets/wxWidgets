@@ -420,8 +420,6 @@ public:
         }
         else
         {
-            wxASSERT_MSG( format == wxDF_BITMAP, "unsupported format" );
-
             if ( !m_hasBitmap )
                 CreateBitmap();
 
@@ -544,19 +542,19 @@ public:
         { m_frame->SetStatusText("Mouse entered the frame"); }
     virtual void OnLeave()
         { m_frame->SetStatusText("Mouse left the frame"); }
-    virtual bool OnData(wxCoord x, wxCoord y)
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
     {
         if ( !GetData() )
         {
             wxLogError("Failed to get drag and drop data");
 
-            return FALSE;
+            return wxDragNone;
         }
 
         m_frame->OnDrop(x, y,
                         ((DnDShapeDataObject *)GetDataObject())->GetShape());
 
-        return TRUE;
+        return def;
     }
 
 private:
@@ -1299,9 +1297,6 @@ void DnDShapeFrame::OnDrop(wxCoord x, wxCoord y, DnDShape *shape)
     ms_lastDropTarget = this;
 
     wxPoint pt(x, y);
-#ifdef __WXMSW__    //temporary hack (FIXME)
-    pt = ScreenToClient(pt);
-#endif
 
     wxString s;
     s.Printf("Shape dropped at (%ld, %ld)", pt.x, pt.y);

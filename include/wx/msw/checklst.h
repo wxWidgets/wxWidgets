@@ -16,17 +16,15 @@
 #pragma interface "checklst.h"
 #endif
 
-// No!
-// typedef   unsigned int  size_t;
-#include <stddef.h>
-
 #include "wx/setup.h"
 
 #if !wxUSE_OWNER_DRAWN
   #error  "wxCheckListBox class requires owner-drawn functionality."
 #endif
 
-class wxCheckListBoxItem; // fwd decl, define in checklst.cpp
+#include "wx/listbox.h"
+
+class wxCheckListBoxItem; // fwd decl, defined in checklst.cpp
 
 class WXDLLEXPORT wxCheckListBox : public wxListBox
 {

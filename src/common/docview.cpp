@@ -706,7 +706,6 @@ wxDocManager::wxDocManager(long flags, bool initialize)
     m_currentView = (wxView *) NULL;
     m_maxDocsOpen = 10000;
     m_fileHistory = (wxFileHistory *) NULL;
-    m_lastDirectory = wxT("") ;
     if (initialize)
         Initialize();
 }
@@ -1910,11 +1909,8 @@ void wxFileHistory::RemoveFileFromHistory(int i)
     {
         wxMenu* menu = (wxMenu*) node->Data();
 
-        // wxMenu::Delete() is missing from wxGTK, so this can't be done :-(
-#if 0
         // delete the menu items
         menu->Delete(wxID_FILE1 + i);
-#endif
 
         // delete the element from the array (could use memmove() too...)
         delete [] m_fileHistory[i];
@@ -1933,11 +1929,6 @@ void wxFileHistory::RemoveFileFromHistory(int i)
             menu->SetLabel(wxID_FILE1 + j, buf);
         }
 
-        // to be removed as soon as wxMenu::Delete() is implemented
-#if 1
-        menu->SetLabel(wxID_FILE1 + m_fileHistoryN - 1, wxT(""));
-#endif
-
         node = node->Next();
     }
     m_fileHistoryN--;
@@ -1945,10 +1936,17 @@ void wxFileHistory::RemoveFileFromHistory(int i)
 
 wxString wxFileHistory::GetHistoryFile(int i) const
 {
-    if (i < m_fileHistoryN)
-        return wxString(m_fileHistory[i]);
+    wxString s;
+    if ( i < m_fileHistoryN )
+    {
+        s = m_fileHistory[i];
+    }
     else
-        return wxString("");
+    {
+        wxFAIL_MSG( wxT("bad index in wxFileHistory::GetHistoryFile") );
+    }
+
+    return s;
 }
 
 void wxFileHistory::UseMenu(wxMenu *menu)
