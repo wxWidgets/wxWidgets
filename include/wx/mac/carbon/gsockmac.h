@@ -21,16 +21,62 @@
 #include "gsocket.h"
 #endif
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-typedef GSocket* GSocketPtr ;
+#include <MacHeaders.c>
+#define OTUNIXERRORS 1
+#include <OpenTransport.h>
+#include <OpenTransportProviders.h>
+#include <OpenTptInternet.h>
 
 /* Definition of GSocket */
-struct _GSocket
+class GSocket
 {
+public:
+    GSocket();
+    ~GSocket();
+    bool IsOK() { return m_ok; }
+
+    void Shutdown();
+    GSocketError SetLocal(GAddress *address);
+    GSocketError SetPeer(GAddress *address);
+    GAddress *GetLocal();
+    GAddress *GetPeer();
+    GSocketError SetServer();
+    GSocket *WaitConnection();
+    int SetReusable() { return 0; }
+    GSocketError SetNonOriented();
+    GSocketError Connect(GSocketStream stream);
+    int Read(char *buffer, int size);
+    int Write(const char *buffer, int size);
+    GSocketEventFlags Select(GSocketEventFlags flags);
+    void SetNonBlocking(int non_block);
+    void SetTimeout(unsigned long millisec);
+    GSocketError WXDLLIMPEXP_NET GetError();
+    void SetCallback(GSocketEventFlags flags,
+        GSocketCallback callback, char *cdata);
+    void UnsetCallback(GSocketEventFlags flags);
+    GSocketError GetSockOpt(int level, int optname, void *optval, int *optlen)
+    {   return GSOCK_INVOP; }
+    GSocketError SetSockOpt(int level, int optname,
+        const void *optval, int optlen)
+    {   return GSOCK_INVOP; }
+
+protected:
+    bool m_ok;
+
+    /* Input / Output */
+    GSocketError Input_Timeout();
+    GSocketError Output_Timeout();
+    int Recv_Stream(char *buffer, int size);
+    int Recv_Dgram(char *buffer, int size);
+    int Send_Stream(const char *buffer, int size);
+    int Send_Dgram(const char *buffer, int size);
+    
+    /* Callbacks */
+    void Enable_Events();
+    void Disable_Events();
+
+// TODO: Make these protected
+public:
   wxMacNotifierTableRef m_mac_events ;
   EndpointRef m_endpoint;
   GAddress *m_local;
@@ -50,6 +96,59 @@ struct _GSocket
   int m_takesEvents ;
 };
 
+/* Compatibility methods to support old C API (from gsocket.h) */
+#ifdef wxUSE_GSOCKET_CPLUSPLUS
+inline void GSocket_Shutdown(GSocket *socket)
+{   socket->Shutdown(); }
+inline GSocketError GSocket_SetLocal(GSocket *socket, GAddress *address)
+{   return socket->SetLocal(address); }
+inline GSocketError GSocket_SetPeer(GSocket *socket, GAddress *address)
+{   return socket->SetPeer(address); }
+inline GAddress *GSocket_GetLocal(GSocket *socket)
+{   return socket->GetLocal(); }
+inline GAddress *GSocket_GetPeer(GSocket *socket)
+{   return socket->GetPeer(); }
+inline GSocketError GSocket_SetServer(GSocket *socket)
+{   return socket->SetServer(); }
+inline GSocket *GSocket_WaitConnection(GSocket *socket)
+{   return socket->WaitConnection(); }
+inline int GSocket_SetReusable(GSocket *socket)
+{   return socket->SetReusable(); }
+inline GSocketError GSocket_Connect(GSocket *socket, GSocketStream stream)
+{   return socket->Connect(stream); }
+inline GSocketError GSocket_SetNonOriented(GSocket *socket)
+{   return socket->SetNonOriented(); }
+inline int GSocket_Read(GSocket *socket, char *buffer, int size)
+{   return socket->Read(buffer,size); }
+inline int GSocket_Write(GSocket *socket, const char *buffer, int size)
+{   return socket->Write(buffer,size); }
+inline GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
+{   return socket->Select(flags); }
+inline void GSocket_SetNonBlocking(GSocket *socket, int non_block)
+{   socket->SetNonBlocking(non_block); }
+inline void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
+{   socket->SetTimeout(millisec); }
+inline GSocketError GSocket_GetError(GSocket *socket)
+{   return socket->GetError(); }
+inline void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
+                         GSocketCallback fallback, char *cdata)
+{   socket->SetCallback(flags,fallback,cdata); }
+inline void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
+{   socket->UnsetCallback(flags); }
+inline GSocketError GSocket_GetSockOpt(GSocket *socket, int level, int optname,
+                        void *optval, int *optlen)
+{   return socket->GetSockOpt(level,optname,optval,optlen); }
+inline GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname,
+                        const void *optval, int optlen)
+{   return socket->SetSockOpt(level,optname,optval,optlen); }
+inline void GSocket_destroy(GSocket *socket)
+{   delete socket; }
+
+#endif /* def wxUSE_GSOCKET_CPLUSPLUS */
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 /* Definition of GAddress */
 
 struct _GAddress
@@ -60,19 +159,8 @@ struct _GAddress
   GSocketError m_error;
 };
 
-/* Input / Output */
-
-GSocketError _GSocket_Input_Timeout(GSocket *socket);
-GSocketError _GSocket_Output_Timeout(GSocket *socket);
-int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size);
-int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size);
-int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size);
-int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size);
-
 /* Callbacks */
 
-void _GSocket_Enable_Events(GSocket *socket);
-void _GSocket_Disable_Events(GSocket *socket);
 void _GSocket_Internal_Proc(unsigned long e , void* data ) ;
 
 /* GAddress */
