@@ -206,6 +206,7 @@ it if SHARED=1 unless you know what you are doing.
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRALIBS_OPENGL">
             <if cond="COMPILER=='wat'">opengl32.lib glu32.lib</if>
+            <if cond="COMPILER=='vc'">opengl32.lib glu32.lib</if>
             <if cond="COMPILER=='gcc'">-lopengl32 -lglu32</if>
         </set>
 
