@@ -89,6 +89,10 @@ wxCONSTRUCTOR_5( wxBitmapButton , wxWindow* , Parent , wxWindowID , Id , wxBitma
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 #endif
 
+BEGIN_EVENT_TABLE(wxBitmapButton, wxBitmapButtonBase)
+    EVT_SYS_COLOUR_CHANGED(wxBitmapButton::OnSysColourChanged)
+END_EVENT_TABLE()
+
 /*
 TODO PROPERTIES :
 
@@ -181,6 +185,19 @@ bool wxBitmapButton::SetBackgroundColour(const wxColour& colour)
     m_brushDisabled = wxNullBrush;
 
     return true;
+}
+
+void wxBitmapButton::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    m_brushDisabled = wxNullBrush;
+
+    if ( !IsEnabled() )
+    {
+        // this change affects our current state
+        Refresh();
+    }
+
+    event.Skip();
 }
 
 // VZ: should be at the very least less than wxDEFAULT_BUTTON_MARGIN

@@ -59,8 +59,15 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
 
+    // invalidate m_brushDisabled when system colours change
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+
+    // the brush we use to draw disabled buttons
     wxBrush m_brushDisabled;
 
+
+    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapButton)
 };
 
