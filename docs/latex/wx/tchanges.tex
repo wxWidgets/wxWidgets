@@ -139,9 +139,9 @@ sizer->Add(win);
 
 - \texttt{wxTheApp} can't be assigned to any longer, use \helpref{wxApp::SetInstance()}{wxappsetinstance} instead
 
-- wxFileType::GetIcon() returns wxIconLocation, not wxIcon
+- \helpref{wxFileType::GetIcon()}{wxfiletypegeticon} returns \helpref{wxIconLocation}{wxiconlocation}, not \helpref{wxIcon}{wxicon}
 
-- wxColourDatabase is not a wxList any more, use AddColour to add new colours
+- wxColourDatabase is not a \helpref{wxList}{wxlist} any more, use AddColour to add new colours
 
 - wxWindow::Clear() is now called ClearBackground()
 
@@ -154,7 +154,7 @@ sizer->Add(win);
 
 - \helpref{wxApp::SendIdleEvents()}{wxappsendidleevents} now takes 2 arguments
 
-- wxTabView::GetLayers() changed return type from wxList& to wxTabLayerList&
+- wxTabView::GetLayers() changed return type from \helpref{wxList&}{wxlist} to wxTabLayerList&
   (when WXWIN\_COMPATIBILITY\_2\_4 == 0)
 
 - wxID\_SEPARATOR (id used for the menu separators) value changed from -1 to -2
@@ -165,16 +165,16 @@ sizer->Add(win);
   other ports under MSW, new code is actually correct but different from weird
   stuff they were doing before so the behaviour of your programs might change
 
-- wxTaskBarIcon objects must now be destroyed before the application can exit.
+- \helpref{wxTaskBarIcon}{wxtaskbaricon} objects must now be destroyed before the application can exit.
   Previously, the application terminated if there were no top level windows;
   now it terminates if there are no top level windows or taskbar icons left.
 
-- wxZlibInputStream is not by default compatible with the output of the
-  2.4.x version of wxZlibOutputStream. However, there is a compatibility mode,
+- \helpref{wxZlibInputStream}{wxzlibinputstream} is not by default compatible with the output of the
+  2.4.x version of \helpref{wxZlibOutputStream}{wxzliboutputstream}. However, there is a compatibility mode,
   switched on by passing wxZLIB\_24COMPATIBLE to the constructor.
 
-- when WXWIN\_COMPATIBILITY\_2\_4 == 0 wxHashTable uses a new implementation
-  not using wxList keyed interface (the same used when wxUSE\_STL == 1),
+- when WXWIN\_COMPATIBILITY\_2\_4 == 0 \helpref{wxHashTable}{wxhashtable} uses a new implementation
+  not using \helpref{wxList}{wxlist} keyed interface (the same used when wxUSE\_STL == 1),
   the only incompatibility being that Next() returns a wxHashTable::Node*
   instead of a wxNode*.
 
@@ -184,7 +184,7 @@ sizer->Add(win);
   objects returned by these methods so you should simply switch to using const
   methods.
 
-- wxWindow::GetFont() now returns wxFont object instead of reference
+- \helpref{wxWindow::GetFont()}{wxwindowgetfont} now returns \helpref{wxFont}{wxfont} object instead of reference
 
 - EVT\_XXX macros are now type-safe; code that uses wrong type for event
   handler's argument will no longer compile.
@@ -197,9 +197,9 @@ sizer->Add(win);
   needed, you can treat wxNotebook as any other control and put it directly
   into the sizer that was wxNotebookSizer's parent sizer in old code.
 
-- wxFile methods now return either wxFileOffset or wxFileSize\_t which may be a
+- \helpref{wxFile}{wxfile} methods now return either wxFileOffset or wxFileSize\_t which may be a
   64 bit integer type, even on 32 bit platforms, instead of off\_t and so the
-  return value of wxFile::Length(), for example, shouldn't be assigned to off\_t
+  return value of \helpref{wxFile::Length()}{wxfilelength}, for example, shouldn't be assigned to off\_t
   variable any more (the compiler might warn you about this)
 
 - wxListItem::m\_data is now of type wxUIntPtr, not long, for compatibility
@@ -251,7 +251,7 @@ sizer->Add(win);
 - [MSW only] wxWindow::GetUseCtl3D(), GetTransparentBackground() and
              SetTransparent() as well as wxNO\_3D and wxUSER\_COLOURS styles
 
-- wxList keyed interface: use wxHashMap instead
+- \helpref{wxList}{wxlist} keyed interface: use \helpref{wxHashMap}{wxhashmap} instead
 
 - wxColourDatabase::FindColour(): use Find() instead (NB: different ret type)
 
