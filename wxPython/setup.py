@@ -76,11 +76,11 @@ BUILD_BASE = "build"
 
 # Some MSW build settings
 
-FINAL = 1          # Mirrors use of same flag in wx makefiles,
+FINAL = 0          # Mirrors use of same flag in wx makefiles,
                    # (0 or 1 only) should probably find a way to
                    # autodetect this...
 
-HYBRID = 0         # If set and not debug or FINAL, then build a
+HYBRID = 1         # If set and not debug or FINAL, then build a
                    # hybrid extension that can be used by the
                    # non-debug version of python, but contains
                    # debugging symbols for wxWindows and wxPython.
@@ -251,12 +251,12 @@ if os.name == 'nt':
     if not FINAL or HYBRID:
         defines.append( ('__WXDEBUG__', None) )
 
-    libdirs = [opj(WXDIR, 'lib'), 'build\\ilib']
+    libdirs = [ opj(WXDIR, 'lib') ]
     wxdll = 'wxmsw' + WXDLLVER + libFlag()
-    libs = [wxdll]
+    libs = [ wxdll ]
 
     if bcpp_compiling:
-        libs = ['wx'+WXBCPPLIBVER]
+        libs = [ 'wx'+WXBCPPLIBVER ]
 
     libs = libs + ['kernel32', 'user32', 'gdi32', 'comdlg32',
             'winspool', 'winmm', 'shell32', 'oldnames', 'comctl32',
@@ -264,27 +264,31 @@ if os.name == 'nt':
             'advapi32', 'wsock32']
 
 
-    cflags = [
+    cflags = [ '/Gy',
              # '/GX-'  # workaround for internal compiler error in MSVC on some machines
              ]
     lflags = None
 
 
-    if bcpp_compiling:  # overwrite it
+    if bcpp_compiling:  # BCC flags
         cflags = ['-5', '-VF',  ### To support MSVC spurious semicolons in the class scope
                   ### else, all semicolons at the end of all DECLARE_...CALLBACK... macros must be eliminated
                   '-Hc', '-H=' + opj(WXDIR, '\src\msw\wx32.csm'),
                   '@' + opj(WXDIR, '\src\msw\wxwin32.cfg')
                   ]
+        if not FINAL:
+            cflags = cflags + ['/Od', '/v', '/y']
+            lflags = lflags + ['/v', ]
 
+    else:  # MSVC flags
+        if FINAL:
+            pass #cflags = cflags + ['/O1']
+        elif HYBRID :
+            pass #cflags = cflags + ['/Ox']
+        else:
+            pass # cflags = cflags + ['/Od', '/Z7']
+                 # lflags = ['/DEBUG', ]
 
-    if not FINAL and HYBRID and not bcpp_compiling:
-        cflags = cflags + ['/Od', '/Z7']
-        lflags = ['/DEBUG', ]
-
-    elif bcpp_compiling and not FINAL:
-        cflags = cflags + ['/Od', '/v', '/y']
-        lflags = lflags + ['/v', ]
 
 
 
