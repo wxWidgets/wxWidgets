@@ -82,7 +82,7 @@ protected:
 };
 
 int WXDLLEXPORT wxEntry(WXHINSTANCE hInstance, WXHINSTANCE hPrevInstance,
-                        char *lpszCmdLine, int nCmdShow);
+                        wxCmdLineArgType *lpszCmdLine, int nCmdShow);
 
 #endif // _WX_APP_H_
 
