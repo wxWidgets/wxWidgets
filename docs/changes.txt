@@ -211,7 +211,7 @@ wxMSW:
   called before showing it
 - use ES_DISABLENOSCROLL to work around the vertical scrollbar bug in
   wxTE_RICH2 text control
-
+- fixes for wxLocale::Init and Borland C++
 
 wxMotif:
 
