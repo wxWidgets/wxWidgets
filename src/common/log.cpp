@@ -168,7 +168,7 @@ void wxVLogFatalError(const wxChar *szFormat, va_list argptr)
 #if wxUSE_GUI
     wxMessageBox(s_szBuf, _("Fatal Error"), wxID_OK | wxICON_STOP);
 #else
-    fprintf(stderr, _("Fatal error: %s\n"), s_szBuf);
+    wxFprintf(stderr, _("Fatal error: %s\n"), s_szBuf);
 #endif
 
     abort();
