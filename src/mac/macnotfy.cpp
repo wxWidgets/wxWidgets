@@ -39,7 +39,18 @@ void wxMacWakeUp()
 	SameProcess( &gAppProcess , &psn , &isSame ) ;
 	if ( isSame )
 	{
+#if TARGET_CARBON
+		EventRef dummyEvent ;
+		OSStatus err = MacCreateEvent(nil, 'WXMC', 'WXMC', GetCurrentEventTime(),
+                        kEventAttributeNone, &dummyEvent);
+        if (err == noErr) 
+        {
+        	err = PostEventToQueue(GetMainEventQueue(), dummyEvent,
+                                  kEventPriorityHigh);
+        } 
+#else
 		PostEvent( nullEvent , 0 ) ;
+#endif
 	}
 	else
 	{
