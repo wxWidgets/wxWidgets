@@ -117,11 +117,7 @@ protected:
     // lifetime for each requested wxArtID.
     virtual wxBitmap CreateBitmap(const wxArtID& WXUNUSED(id),
                                   const wxArtClient& WXUNUSED(client),
-                                  const wxSize& WXUNUSED(size))
-    {
-        wxFAIL_MSG(_T("pure virtual method wxArtProvider::CreateBitmap called!"));
-        return wxNullBitmap;
-    }
+                                  const wxSize& WXUNUSED(size)) = 0;
 
 private:
     // list of providers:
