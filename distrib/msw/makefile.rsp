@@ -23,7 +23,6 @@ samples/exec/Makefile.in
 samples/event/Makefile.in
 samples/grid/Makefile.in
 samples/keyboard/Makefile.in
-samples/newgrid/Makefile.in
 samples/help/Makefile.in
 samples/internat/Makefile.in
 samples/ipc/Makefile.in

@@ -69,8 +69,6 @@ all:
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\grid
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\newgrid
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
 
         cd $(WXDIR)\samples\help
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
@@ -212,8 +210,6 @@ clean:
         cd $(WXDIR)\samples\font
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\grid
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\newgrid
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\help
         make -f makefile.b32 clean

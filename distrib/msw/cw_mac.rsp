@@ -101,8 +101,6 @@ samples/multimon/*M?.xml
 samples/multimon/*.mcp
 samples/nativdlg/*M?.xml
 samples/nativdlg/*.mcp
-samples/newgrid/*M?.xml
-samples/newgrid/*.mcp
 samples/notebook/*M?.xml
 samples/notebook/*.mcp
 samples/oleauto/*M?.xml

@@ -32,10 +32,6 @@
 
 #if wxUSE_GRID
 
-#if !defined(wxUSE_NEW_GRID) || !(wxUSE_NEW_GRID)
-    #include "gridg.cpp"
-#else // wxUSE_NEW_GRID
-
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dcclient.h"
@@ -10031,7 +10027,5 @@ wxGridEditorCreatedEvent::wxGridEditorCreatedEvent(int id, wxEventType type,
     m_ctrl = ctrl;
 }
 
-
-#endif // !wxUSE_NEW_GRID/wxUSE_NEW_GRID
-
 #endif // wxUSE_GRID
+

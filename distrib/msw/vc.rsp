@@ -93,8 +93,8 @@ samples/exec/exec.dsw
 samples/font/font.dsp
 samples/font/font.dsw
 
-samples/grid/grid.dsp
-samples/grid/grid.dsw
+samples/grid/griddemo.dsp
+samples/grid/griddemo.dsw
 
 samples/help/help.dsp
 samples/help/help.dsw
@@ -169,9 +169,6 @@ samples/multimon/multimon_test.dsw
 
 samples/nativdlg/nativdlg.dsp
 samples/nativdlg/nativdlg.dsw
-
-samples/newgrid/newgrid.dsp
-samples/newgrid/newgrid.dsw
 
 samples/notebook/notebook.dsp
 samples/notebook/notebook.dsw

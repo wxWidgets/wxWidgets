@@ -1,11 +1,21 @@
-# Purpose: makefile for grid example (UNIX).
-# Created: 2000-03-15
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+# Copyright:	(c) 1998 Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile for wxGrid example (UNIX).
 
 top_srcdir = @top_srcdir@/..
 top_builddir = ../..
 program_dir = samples/grid
 
-PROGRAM=grid
+DATAFILES =
+
+PROGRAM=griddemo
 
 OBJECTS =$(PROGRAM).o
 DEPFILES=$(PROGRAM).d
@@ -13,4 +23,3 @@ DEPFILES=$(PROGRAM).d
 include ../../src/makeprog.env
 
 @IF_GNU_MAKE@-include $(DEPFILES)
-

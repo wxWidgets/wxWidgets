@@ -1,5 +1,10 @@
-# Purpose: makefile for grid example (BC++ 16bit)
-# Created: 2000-03-15
+#
+# File:		makefile.bcc
+# Author:	Michael Bedward
+# Created:	1999
+# Updated:	
+#
+# Builds a BC++ 16-bit sample
 
 !if "$(WXWIN)" == ""
 !error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
@@ -7,7 +12,7 @@
 
 WXDIR = $(WXWIN)
 
-TARGET=grid
+TARGET=griddemo
 OBJECTS=$(TARGET).obj
 
 !include $(WXDIR)\src\makeprog.bcc

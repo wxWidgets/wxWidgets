@@ -16,7 +16,7 @@
     #pragma interface "gridctrl.h"
 #endif
 
-#if wxUSE_GRID || wxUSE_NEW_GRID
+#if wxUSE_GRID
 
 #include "wx/grid.h"
 #include "wx/string.h"
@@ -154,7 +154,7 @@ private:
 
 };
 
-#endif  // #if wxUSE_GRID || wxUSE_NEW_GRID
+#endif  // #if wxUSE_GRID
 
 #endif //_WX_GENERIC_GRIDCTRL_H_
 

@@ -1,9 +1,14 @@
-# Purpose: makefile for grid example (Cygwin/Mingw32)
-# Created: #03.01.00
+#
+# File:         makefile.g95
+# Author:       Michael Bedward
+# Created:      1999
+# Updated:
+#
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-TARGET=grid
+TARGET=griddemo
 OBJECTS = $(TARGET).o
 
 include $(WXDIR)/src/makeprog.g95

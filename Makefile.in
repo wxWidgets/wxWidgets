@@ -51,13 +51,12 @@ VP7 = @top_srcdir@/src/jpeg
 VP8 = @top_srcdir@/src/tiff
 VP9 = @top_srcdir@/src/zlib
 VPA = @top_srcdir@/src/regex
-VP10 = @top_srcdir@/src/iodbc
-VP11 = @top_srcdir@/src/msw/ole
+VP10 = @top_srcdir@/src/msw/ole
 
 # the comment at the end of the next line is needed because otherwise autoconf
 # would remove this line completely - it contains a built-in hack to remove
 # any VPATH assignment not containing ':'
-VPATH = $(VP1)@PATH_IFS@$(VP2)@PATH_IFS@$(VP3)@PATH_IFS@$(VP4)@PATH_IFS@$(VP5)@PATH_IFS@$(VP6)@PATH_IFS@$(VP7)@PATH_IFS@$(VP8)@PATH_IFS@$(VP9)@PATH_IFS@$(VPA)@PATH_IFS@$(VP10)@PATH_IFS@$(VP11) # ':' for autoconf
+VPATH = $(VP1)@PATH_IFS@$(VP2)@PATH_IFS@$(VP3)@PATH_IFS@$(VP4)@PATH_IFS@$(VP5)@PATH_IFS@$(VP6)@PATH_IFS@$(VP7)@PATH_IFS@$(VP8)@PATH_IFS@$(VP9)@PATH_IFS@$(VPA)@PATH_IFS@$(VP10) # ':' for autoconf
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
@@ -113,7 +112,7 @@ MSWDIR   = $(WXDIR)/src/msw
 PMDIR    = $(WXDIR)/src/os2
 MACDIR   = $(WXDIR)/src/mac
 COCOADIR = $(WXDIR)/src/cocoa
-ODBCDIR  = $(WXDIR)/src/iodbc
+# ODBCDIR  = $(WXDIR)/src/iodbc
 FTDIR    = $(WXDIR)/src/freetype
 INCDIR   = $(WXDIR)/include
 SAMPDIR  = $(WXDIR)/samples
@@ -286,22 +285,22 @@ TIFFOBJS = \
 		tif_write.o \
 		tif_zip.o
 
-IODBCOBJS = \
-		catalog.o \
-		connect.o \
-		dlf.o \
-		dlproc.o \
-		execute.o \
-		fetch.o \
-		hdbc.o \
-		henv.o \
-		herr.o \
-		hstmt.o \
-		info.o \
-		itrace.o \
-		misc.o \
-		prepare.o \
-		result.o
+# IODBCOBJS = \
+#		catalog.o \
+#		connect.o \
+#		dlf.o \
+#		dlproc.o \
+#		execute.o \
+#		fetch.o \
+#		hdbc.o \
+#		henv.o \
+#		herr.o \
+#		hstmt.o \
+#		info.o \
+#		itrace.o \
+#		misc.o \
+#		prepare.o \
+#		result.o
 
 
 ############################## Rules ##################################
@@ -631,7 +630,6 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/src/png
 	mkdir $(DISTDIR)/src/jpeg
 	mkdir $(DISTDIR)/src/tiff
-	mkdir $(DISTDIR)/src/iodbc
 	mkdir $(DISTDIR)/src/unix
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
 	cp $(COMMDIR)/*.cpp $(DISTDIR)/src/common
@@ -656,13 +654,14 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(TIFFDIR)/*.h $(DISTDIR)/src/tiff
 	cp $(TIFFDIR)/*.c $(DISTDIR)/src/tiff
 	cp $(TIFFDIR)/README $(DISTDIR)/src/tiff
-	cp $(ODBCDIR)/*.h $(DISTDIR)/src/iodbc
-	cp $(ODBCDIR)/*.c $(DISTDIR)/src/iodbc
-	cp $(ODBCDIR)/*.ci $(DISTDIR)/src/iodbc
-	cp $(ODBCDIR)/*.exp $(DISTDIR)/src/iodbc
-	cp $(ODBCDIR)/README $(DISTDIR)/src/iodbc
-	cp $(ODBCDIR)/NEWS $(DISTDIR)/src/iodbc
-	cp $(ODBCDIR)/Changes.log $(DISTDIR)/src/iodbc
+	#mkdir $(DISTDIR)/src/iodbc
+	#cp $(ODBCDIR)/*.h $(DISTDIR)/src/iodbc
+	#cp $(ODBCDIR)/*.c $(DISTDIR)/src/iodbc
+	#cp $(ODBCDIR)/*.ci $(DISTDIR)/src/iodbc
+	#cp $(ODBCDIR)/*.exp $(DISTDIR)/src/iodbc
+	#cp $(ODBCDIR)/README $(DISTDIR)/src/iodbc
+	#cp $(ODBCDIR)/NEWS $(DISTDIR)/src/iodbc
+	#cp $(ODBCDIR)/Changes.log $(DISTDIR)/src/iodbc
 
 BASE_DIST: ALL_DIST
 	# make --disable-gui the default
@@ -1022,7 +1021,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/grid
 	cp $(SAMPDIR)/grid/Makefile.in $(DISTDIR)/samples/grid
 	cp $(SAMPDIR)/grid/makefile.unx $(DISTDIR)/samples/grid
-	cp $(SAMPDIR)/grid/*.cpp $(DISTDIR)/samples/grid
+	cp $(SAMPDIR)/grid/*.cpp $(SAMPDIR)/grid/*.h $(DISTDIR)/samples/grid
 
 	mkdir $(DISTDIR)/samples/help
 	mkdir $(DISTDIR)/samples/help/doc
@@ -1188,12 +1187,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/dialup/Makefile.in $(DISTDIR)/samples/dialup
 	cp $(SAMPDIR)/dialup/makefile.unx $(DISTDIR)/samples/dialup
 	cp $(SAMPDIR)/dialup/*.cpp $(DISTDIR)/samples/dialup
-
-	mkdir $(DISTDIR)/samples/newgrid
-	cp $(SAMPDIR)/newgrid/Makefile.in $(DISTDIR)/samples/newgrid
-	cp $(SAMPDIR)/newgrid/makefile.unx $(DISTDIR)/samples/newgrid
-	cp $(SAMPDIR)/newgrid/*.cpp $(DISTDIR)/samples/newgrid
-	cp $(SAMPDIR)/newgrid/*.h $(DISTDIR)/samples/newgrid
 
 	mkdir $(DISTDIR)/samples/notebook
 	cp $(SAMPDIR)/notebook/Makefile.in $(DISTDIR)/samples/notebook

@@ -7,29 +7,29 @@ WXDIR = ../..
 # this central makefile.
 include $(WXDIR)/src/maketwin.env
 
-OBJECTS = $(OBJDIR)/grid.$(OBJSUFF) $(OBJDIR)/grid.$(OBJSUFF)
+OBJECTS = $(OBJDIR)/griddemo.$(OBJSUFF) $(OBJDIR)/griddemo.$(OBJSUFF)
 
-all:    $(OBJDIR) grid$(GUISUFFIX)$(EXESUFF)
+all:    $(OBJDIR) griddemo$(GUISUFFIX)$(EXESUFF)
 
 wx:
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
 
-grid$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o grid$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+griddemo$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o griddemo$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
 
-$(OBJDIR)/grid.$(OBJSUFF):	grid.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ grid.$(SRCSUFF)
+$(OBJDIR)/griddemo.$(OBJSUFF):	griddemo.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ griddemo.$(SRCSUFF)
 
-grid.c:  grid.rc
-	$(RESCOMP) $(RCINPUTSWITCH) grid.rc $(RCOUTPUTSWITCH) grid.c $(RESFLAGS)
+griddemo.c:  griddemo.rc
+	$(RESCOMP) $(RCINPUTSWITCH) griddemo.rc $(RCOUTPUTSWITCH) griddemo.c $(RESFLAGS)
 
-$(OBJDIR)/grid.$(OBJSUFF):	grid.c
-	$(CC) -c $(CPPFLAGS) -o $@ grid.c
+$(OBJDIR)/griddemo.$(OBJSUFF):	griddemo.c
+	$(CC) -c $(CPPFLAGS) -o $@ griddemo.c
 
-#$(OBJDIR)/grid.o:  grid.rc
-#	$(RESCOMP) $(RCINPUTSWITCH) grid.rc $(RCOUTPUTSWITCH) $(OBJDIR)/grid.o $(RESFLAGS)
+#$(OBJDIR)/griddemo.o:  griddemo.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) griddemo.rc $(RCOUTPUTSWITCH) $(OBJDIR)/griddemo.o $(RESFLAGS)
 
 clean:
-	rm -f $(OBJECTS) grid$(GUISUFFIX).exe core *.rsc *.res
+	rm -f $(OBJECTS) griddemo$(GUISUFFIX).exe core *.rsc *.res

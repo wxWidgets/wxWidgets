@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_GRID || wxUSE_NEW_GRID
+#if wxUSE_GRID
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"

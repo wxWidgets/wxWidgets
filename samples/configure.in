@@ -65,7 +65,6 @@ AC_OUTPUT([
             mobile/styles/Makefile
             multimon/Makefile
             nativedlg/Makefile
-            newgrid/Makefile
             notebook/Makefile
             oleauto/Makefile
             ownerdrw/Makefile

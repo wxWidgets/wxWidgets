@@ -12,6 +12,6 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = grid.cpp
-RC_FILE = grid.rc
-TARGET  = grid
+SOURCES = griddemo.cpp
+RC_FILE = griddemo.rc
+TARGET  = griddemo

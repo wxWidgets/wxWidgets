@@ -819,18 +819,6 @@ samples/multimon/*.ico
 samples/multimon/*.bmp
 samples/multimon/*.pro
 
-samples/newgrid/*.cpp
-samples/newgrid/*.h
-samples/newgrid/*.def
-samples/newgrid/*.rc
-samples/newgrid/*.txt
-samples/newgrid/makefile*
-samples/newgrid/*.xbm
-samples/newgrid/*.xpm
-samples/newgrid/*.ico
-samples/newgrid/*.bmp
-samples/newgrid/*.pro
-
 samples/notebook/*.cpp
 samples/notebook/*.h
 samples/notebook/makefile*

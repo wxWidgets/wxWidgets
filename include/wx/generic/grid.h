@@ -11,10 +11,6 @@
 
 #include "wx/defs.h"
 
-#if !defined(wxUSE_NEW_GRID) || !(wxUSE_NEW_GRID)
-#include "wx/generic/gridg.h"
-#else
-
 #ifndef __WXGRID_H__
 #define __WXGRID_H__
 
@@ -2079,6 +2075,5 @@ extern const int wxEVT_GRID_CHANGE_SEL_LABEL;
 
 #endif
 
-#endif  // #ifndef __WXGRID_H__
+#endif  // ifndef wxUSE_GRID
 
-#endif  // ifndef wxUSE_NEW_GRID

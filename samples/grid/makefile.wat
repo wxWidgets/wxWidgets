@@ -1,9 +1,11 @@
-# Purpose: makefile for grid example (Watcom)
-# Created: 2000-03-15
+#
+# Makefile for WATCOM
+#
+#
 
 WXDIR = $(%WXWIN)
 
-PROGRAM = grid
+PROGRAM = griddemo
 OBJECTS = $(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.wat

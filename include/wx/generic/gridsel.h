@@ -11,7 +11,7 @@
 
 #include "wx/defs.h"
 
-#if defined(wxUSE_NEW_GRID) && (wxUSE_NEW_GRID)
+#if wxUSE_NEW_GRID
 
 #ifndef __WXGRIDSEL_H__
 #define __WXGRIDSEL_H__
@@ -88,4 +88,5 @@ private:
 };
 
 #endif  // #ifdef __WXGRIDSEL_H__
-#endif  // #ifndef wxUSE_NEW_GRID
+#endif  // #ifndef wxUSE_GRID
+
