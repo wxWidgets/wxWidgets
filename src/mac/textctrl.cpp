@@ -1579,7 +1579,7 @@ bool  wxTextCtrl::Show(bool show)
     
     bool retval = wxControl::Show( show ) ;
     
-    if ( former != m_macControlIsShown && show )
+    if ( former != m_macControlIsShown && m_macUsesTXN )
     {
         if ( m_macControlIsShown )
             TXNSetFrameBounds( (TXNObject) m_macTXN, (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.top, (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.left, 
