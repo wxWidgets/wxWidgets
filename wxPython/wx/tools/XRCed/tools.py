@@ -51,6 +51,7 @@ class Tools(wxPanel):
              (ID_NEW.STATIC_BOX_SIZER, images.getToolStaticBoxSizerBitmap()),
              (ID_NEW.GRID_SIZER, images.getToolGridSizerBitmap()),
              (ID_NEW.FLEX_GRID_SIZER, images.getToolFlexGridSizerBitmap()),
+             (ID_NEW.GRID_BAG_SIZER, images.getToolGridBagSizerBitmap()),
              (ID_NEW.SPACER, images.getToolSpacerBitmap())],
             ["Controls",
              (ID_NEW.STATIC_TEXT, images.getToolStaticTextBitmap()),

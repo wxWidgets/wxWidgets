@@ -87,13 +87,16 @@ class Panel(wxNotebook):
                     sizer.Add(wxStaticText(self.page1, -1, 'Select a tree item.'))
         else:
             g.currentXXX = xxx.treeObject()
+            # Normal or SizerItem page
+            isGBSizerItem = isinstance(xxx.parent, xxxGridBagSizer)
+            cacheID = (xxx.__class__, isGBSizerItem)            
             try:
-                page = self.pageCache[xxx.__class__]
+                page = self.pageCache[cacheID]
                 page.box.SetLabel(xxx.panelName())
                 page.Reparent(self.page1)
             except KeyError:
                 page = PropPage(self.page1, xxx.panelName(), xxx)
-                self.pageCache[xxx.__class__] = page
+                self.pageCache[cacheID] = page
             page.SetValues(xxx)
             self.pages.append(page)
             sizer.Add(page, 1, wxEXPAND)

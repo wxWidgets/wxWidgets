@@ -60,9 +60,9 @@ class ParamBinaryOr(PPanel):
         self.text.SetValue(value)
         self.freeze = False
     def OnButtonChoices(self, evt):
-        dlg = wxDialog(self, -1, 'Choices')
-        topSizer = wxBoxSizer(wxVERTICAL)
-        listBox = wxCheckListBox(dlg, -1, choices=self.values, size=(250,200))
+        dlg = g.frame.res.LoadDialog(self, 'DIALOG_CHOICES')
+        listBox = XRCCTRL(dlg, 'CHECK_LIST')
+        listBox.InsertItems(self.values, 0)
         value = map(string.strip, self.text.GetValue().split('|'))
         if value == ['']: value = []
         ignored = []
@@ -76,18 +76,6 @@ class ParamBinaryOr(PPanel):
                 else:
                     print 'WARNING: unknown flag: %s: ignored.' % i
                     ignored.append(i)
-        topSizer.Add(listBox, 1, wxEXPAND)
-        sizer = wxBoxSizer()
-        buttonOk = wxButton(dlg, wxID_OK, 'OK')
-        buttonOk.SetDefault()
-        sizer.Add(buttonOk, 0, wxRIGHT, 10)
-        sizer.Add((0, 0), 1)
-        sizer.Add(wxButton(dlg, wxID_CANCEL, 'Cancel'))
-        topSizer.Add(sizer, 0, wxALL | wxEXPAND, 10)
-        dlg.SetAutoLayout(True)
-        dlg.SetSizer(topSizer)
-        topSizer.Fit(dlg)
-        dlg.Center()
         if dlg.ShowModal() == wxID_OK:
             value = []
             for i in range(listBox.GetCount()):
@@ -350,20 +338,6 @@ class ParamUnit(PPanel):
     def OnSpinDown(self, evt):
         self.Change(-1)
 
-# Dialog for editing multi-line text
-class TextDialog(wxDialog):
-    def __init__(self, parent, value):
-	pre = wxPreDialog()
-        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_TEXT')
-        self.this = pre.this
-	self._setOORInfo(self)
-        self.text = self.FindWindowByName('TEXT')
-        self.text.SetValue(value)
-        self.SetAutoLayout(True)
-        self.SetSize((300,200))
-    def GetValue(self):
-        return self.text.GetValue()
-
 class ParamMultilineText(PPanel):
     def __init__(self, parent, name, textWidth=-1):
         PPanel.__init__(self, parent, name)
@@ -388,9 +362,11 @@ class ParamMultilineText(PPanel):
         self.text.SetValue(value)
         self.freeze = False             # disable other handlers
     def OnButtonEdit(self, evt):
-        dlg = TextDialog(self, self.text.GetValue())
+        dlg = g.frame.res.LoadDialog(self, 'DIALOG_TEXT')
+        textCtrl = XRCCTRL(dlg, 'TEXT')
+        textCtrl.SetValue(self.text.GetValue())
         if dlg.ShowModal() == wxID_OK:
-            self.text.SetValue(dlg.GetValue())
+            self.text.SetValue(textCtrl.GetValue())
             self.SetModified()
         dlg.Destroy()
 
@@ -439,7 +415,7 @@ class ContentDialog(wxDialog):
         g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT')
         self.this = pre.this
 	self._setOORInfo(self)
-        self.list = self.FindWindowByName('LIST')
+        self.list = XRCCTRL(self, 'LIST')
         # Set list items
         for v in value:
             self.list.Append(v)
@@ -489,7 +465,7 @@ class ContentCheckListDialog(wxDialog):
         g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT_CHECK_LIST')
         self.this = pre.this
 	self._setOORInfo(self)
-        self.list = self.FindWindowByName('CHECK_LIST')
+        self.list = XRCCTRL(self, 'CHECK_LIST')
         # Set list items
         i = 0
         for v,ch in value:
@@ -622,7 +598,7 @@ class IntListDialog(wxDialog):
         g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_INTLIST')
         self.this = pre.this
 	self._setOORInfo(self)
-        self.list = self.FindWindowByName('LIST')
+        self.list = XRCCTRL(self, 'LIST')
         # Set list items
         value.sort()
         for v in value:
@@ -718,7 +694,7 @@ class ParamBool(RadioBox):
     values = {'yes': '1', 'no': '0'}
     seulav = {'1': 'yes', '0': 'no'}
     def __init__(self, parent, name):
-        RadioBox.__init__(self, parent, -1, choices = self.values.keys(), name=name)
+        RadioBox.__init__(self, parent, -1, choices=self.values.keys(), name=name)
     def GetValue(self):
         return self.values[self.GetStringSelection()]
     def SetValue(self, value):
@@ -729,7 +705,7 @@ class ParamOrient(RadioBox):
     values = {'horizontal': 'wxHORIZONTAL', 'vertical': 'wxVERTICAL'}
     seulav = {'wxHORIZONTAL': 'horizontal', 'wxVERTICAL': 'vertical'}
     def __init__(self, parent, name):
-        RadioBox.__init__(self, parent, -1, choices = self.values.keys(), name=name)
+        RadioBox.__init__(self, parent, -1, choices=self.values.keys(), name=name)
     def GetValue(self):
         return self.values[self.GetStringSelection()]
     def SetValue(self, value):
@@ -791,11 +767,11 @@ class ParamBitmap(PPanel):
 	self._setOORInfo(self)
         self.modified = self.freeze = False
         self.SetBackgroundColour(g.panel.GetBackgroundColour())
-        self.radio_std = self.FindWindowByName('RADIO_STD')
-        self.radio_file = self.FindWindowByName('RADIO_FILE')
-        self.combo = self.FindWindowByName('COMBO_STD')
-        self.text = self.FindWindowByName('TEXT_FILE')
-        self.button = self.FindWindowByName('BUTTON_BROWSE')
+        self.radio_std = XRCCTRL(self, 'RADIO_STD')
+        self.radio_file = XRCCTRL(self, 'RADIO_FILE')
+        self.combo = XRCCTRL(self, 'COMBO_STD')
+        self.text = XRCCTRL(self, 'TEXT_FILE')
+        self.button = XRCCTRL(self, 'BUTTON_BROWSE')
         self.textModified = False
         self.SetAutoLayout(True)
         self.GetSizer().SetMinSize((260, -1))
@@ -879,5 +855,3 @@ paramDict = {
     'tooltip': ParamText, 'bitmap': ParamBitmap, 'icon': ParamBitmap,
     'encoding': ParamEncoding
     }
-
-

@@ -643,6 +643,28 @@ class xxxFlexGridSizer(xxxGridSizer):
             self.element.appendChild(node)
             self.special(param, node)
 
+class xxxGridBagSizer(xxxSizer):
+    specials = ['growablecols', 'growablerows']
+    allParams = ['vgap', 'hgap'] + specials
+    paramDict = {'growablecols':ParamIntList, 'growablerows':ParamIntList}
+    # Special processing for growable* parameters
+    # (they are represented by several nodes)
+    def special(self, tag, node):
+        if not self.params.has_key(tag):
+            # Create new multi-group
+            self.params[tag] = xxxParamMulti(node)
+        self.params[tag].append(xxxParamInt(node))
+    def setSpecial(self, param, value):
+        # Straightforward implementation: remove, add again
+        self.params[param].remove()
+        del self.params[param]
+        for i in value:
+            node = g.tree.dom.createElement(param)
+            text = g.tree.dom.createTextNode(str(i))
+            node.appendChild(text)
+            self.element.appendChild(node)
+            self.special(param, node)
+
 # Container with only one child.
 # Not shown in tree.
 class xxxChildContainer(xxxObject):
@@ -668,9 +690,13 @@ class xxxChildContainer(xxxObject):
         assert 0, 'no child found'
 
 class xxxSizerItem(xxxChildContainer):
-    allParams = ['option', 'flag', 'border', 'minsize']
-    paramDict = {'option': ParamInt, 'minsize': ParamPosSize}
+    allParams = ['option', 'flag', 'border', 'minsize', 'ratio']
+    paramDict = {'option': ParamInt, 'minsize': ParamPosSize, 'ratio': ParamPosSize}
+    #default = {'cellspan': '1,1'}
     def __init__(self, parent, element):
+        # For GridBag sizer items, extra parameters added
+        if isinstance(parent, xxxGridBagSizer):
+            self.allParams = self.allParams + ['cellpos', 'cellspan']
         xxxChildContainer.__init__(self, parent, element)
         # Remove pos parameter - not needed for sizeritems
         if 'pos' in self.child.allParams:
@@ -770,6 +796,7 @@ xxxDict = {
     'wxStaticBoxSizer': xxxStaticBoxSizer,
     'wxGridSizer': xxxGridSizer,
     'wxFlexGridSizer': xxxFlexGridSizer,
+    'wxGridBagSizer': xxxGridBagSizer,
     'sizeritem': xxxSizerItem,
     'spacer': xxxSpacer,
 
@@ -784,7 +811,8 @@ xxxDict = {
 # Create IDs for all parameters of all classes
 paramIDs = {'fg': wxNewId(), 'bg': wxNewId(), 'exstyle': wxNewId(), 'font': wxNewId(),
             'enabled': wxNewId(), 'focused': wxNewId(), 'hidden': wxNewId(),
-            'tooltip': wxNewId(), 'encoding': wxNewId()
+            'tooltip': wxNewId(), 'encoding': wxNewId(),
+            'cellpos': wxNewId(), 'cellspan': wxNewId()
             }
 for cl in xxxDict.values():
     if cl.allParams:

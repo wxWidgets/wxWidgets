@@ -348,7 +348,7 @@ class Frame(wxFrame):
         # Expanded container (must have children)
         elif tree.IsExpanded(selected) and tree.GetChildrenCount(selected, False):
             # Insert as first child
-            nextItem = tree.GetFirstChild(selected, 0)[0]
+            nextItem = tree.GetFirstChild(selected)[0]
             parentLeaf = selected
         else:
             # No children or unexpanded item - appendChild stays True
@@ -619,7 +619,7 @@ Homepage: http://xrced.sourceforge.net\
         # Expanded container (must have children)
         elif tree.shift and tree.IsExpanded(selected) \
            and tree.GetChildrenCount(selected, False):
-            nextItem = tree.GetFirstChild(selected, 0)[0]
+            nextItem = tree.GetFirstChild(selected)[0]
             parentLeaf = selected
         else:
             nextItem = wxTreeItemId()
@@ -701,7 +701,7 @@ Homepage: http://xrced.sourceforge.net\
         xxx = MakeXXXFromDOM(parentXXX, elem)
         # Update parent in child objects
         if tree.ItemHasChildren(selected):
-            i, cookie = tree.GetFirstChild(selected, 0)
+            i, cookie = tree.GetFirstChild(selected)
             while i.IsOk():
                 x = tree.GetPyData(i)
                 x.parent = xxx
@@ -1004,6 +1004,7 @@ class App(wxApp):
 
 def main():
     app = App(0, useBestVisual=False)
+    #app.SetAssertMode(wxPYAPP_ASSERT_LOG)
     app.MainLoop()
     app.OnExit()
     global conf

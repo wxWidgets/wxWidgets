@@ -1,3 +1,13 @@
+0.1.2-1
+_______
+
+Added support for wxGridBagSizer (supported in wxPython 2.5).
+
+0.1.1-5
+-------
+
+Added subclass attribute.
+
 0.1.1-4
 -------
 

@@ -6,6 +6,7 @@
 
 from xxx import *                       # xxx imports globals and params
 import types
+import traceback
 
 # Constant to define standart window name
 STD_NAME = '_XRCED_T_W'
@@ -83,6 +84,7 @@ class ID_NEW:
     STATIC_BOX_SIZER = wxNewId()
     GRID_SIZER = wxNewId()
     FLEX_GRID_SIZER = wxNewId()
+    GRID_BAG_SIZER = wxNewId()
     SPACER = wxNewId()
     TOOL_BAR = wxNewId()
     TOOL = wxNewId()
@@ -154,6 +156,7 @@ class PullDownMenu:
             ID_NEW.STATIC_BOX_SIZER: 'wxStaticBoxSizer',
             ID_NEW.GRID_SIZER: 'wxGridSizer',
             ID_NEW.FLEX_GRID_SIZER: 'wxFlexGridSizer',
+            ID_NEW.GRID_BAG_SIZER: 'wxGridBagSizer',
             ID_NEW.SPACER: 'spacer',
             ID_NEW.UNKNOWN: 'unknown',
             }
@@ -178,6 +181,8 @@ class PullDownMenu:
              (ID_NEW.GRID_SIZER, 'GridSizer', 'Create grid sizer'),
              (ID_NEW.FLEX_GRID_SIZER, 'FlexGridSizer',
               'Create flexgrid sizer'),
+             (ID_NEW.GRID_BAG_SIZER, 'GridBagSizer',
+              'Create gridbag sizer'),
              (ID_NEW.SPACER, 'Spacer', 'Create spacer'),
              ]
         self.controls = [
@@ -225,6 +230,8 @@ class PullDownMenu:
              (ID_NEW.GRID_SIZER, 'GridSizer', 'Create grid sizer'),
              (ID_NEW.FLEX_GRID_SIZER, 'FlexGridSizer',
               'Create flexgrid sizer'),
+             (ID_NEW.GRID_BAG_SIZER, 'GridBagSizer',
+              'Create gridbag sizer'),
              (ID_NEW.SPACER, 'Spacer', 'Create spacer'),
              ]
             ]
@@ -721,67 +728,77 @@ class XML_Tree(wxTreeCtrl):
             xmlFlags != wxXRC_USE_LOCALE
         res = wxXmlResource('', xmlFlags)
         res.Load('memory:xxx.xrc')
-        if xxx.__class__ == xxxFrame:
-            # Frame can't have many children,
-            # but it's first child possibly can...
-#            child = self.GetFirstChild(item)[0]
-#            if child.IsOk() and self.GetPyData(child).__class__ == xxxPanel:
-#                # Clean-up before recursive call or error
-#                wxMemoryFSHandler_RemoveFile('xxx.xrc')
-#                wxEndBusyCursor()
-#                self.CreateTestWin(child)
-#                return
-            # This currently works under GTK, but not under MSW
-            testWin = g.testWin = wxPreFrame()
-            res.LoadOnFrame(testWin, g.frame, STD_NAME)
-            # Create status bar
-            testWin.panel = testWin
-            testWin.CreateStatusBar()
-            testWin.SetClientSize(testWin.GetBestSize())
-            testWin.panel = testWin
-            testWin.SetPosition(pos)
-            testWin.Show(True)
-        elif xxx.__class__ == xxxPanel:
-            # Create new frame
-            if not testWin:
-                testWin = g.testWin = wxFrame(g.frame, -1, 'Panel: ' + name,
+        try:
+            if xxx.__class__ == xxxFrame:
+                # Frame can't have many children,
+                # but it's first child possibly can...
+    #            child = self.GetFirstChild(item)[0]
+    #            if child.IsOk() and self.GetPyData(child).__class__ == xxxPanel:
+    #                # Clean-up before recursive call or error
+    #                wxMemoryFSHandler_RemoveFile('xxx.xrc')
+    #                wxEndBusyCursor()
+    #                self.CreateTestWin(child)
+    #                return
+                # This currently works under GTK, but not under MSW
+                testWin = g.testWin = wxPreFrame()
+                res.LoadOnFrame(testWin, g.frame, STD_NAME)
+                # Create status bar
+                testWin.panel = testWin
+                testWin.CreateStatusBar()
+                testWin.SetClientSize(testWin.GetBestSize())
+                testWin.panel = testWin
+                testWin.SetPosition(pos)
+                testWin.Show(True)
+            elif xxx.__class__ == xxxPanel:
+                # Create new frame
+                if not testWin:
+                    testWin = g.testWin = wxFrame(g.frame, -1, 'Panel: ' + name,
+                                                  pos=pos, name=STD_NAME)
+                testWin.panel = res.LoadPanel(testWin, STD_NAME)
+                testWin.SetClientSize(testWin.GetBestSize())
+                testWin.Show(True)
+            elif xxx.__class__ == xxxDialog:
+                testWin = g.testWin = res.LoadDialog(None, STD_NAME)
+                testWin.panel = testWin
+                testWin.Layout()
+                testWin.SetPosition(pos)
+                testWin.Show(True)
+                # Dialog's default code does not produce EVT_CLOSE
+                EVT_BUTTON(testWin, wxID_OK, self.OnCloseTestWin)
+                EVT_BUTTON(testWin, wxID_CANCEL, self.OnCloseTestWin)
+            elif xxx.__class__ == xxxMenuBar:
+                testWin = g.testWin = wxFrame(g.frame, -1, 'MenuBar: ' + name,
                                               pos=pos, name=STD_NAME)
-            testWin.panel = res.LoadPanel(testWin, STD_NAME)
-            testWin.SetClientSize(testWin.GetBestSize())
-            testWin.Show(True)
-        elif xxx.__class__ == xxxDialog:
-            testWin = g.testWin = res.LoadDialog(None, STD_NAME)
-            testWin.panel = testWin
-            testWin.Layout()
-            testWin.SetPosition(pos)
-            testWin.Show(True)
-            # Dialog's default code does not produce EVT_CLOSE
-            EVT_BUTTON(testWin, wxID_OK, self.OnCloseTestWin)
-            EVT_BUTTON(testWin, wxID_CANCEL, self.OnCloseTestWin)
-        elif xxx.__class__ == xxxMenuBar:
-            testWin = g.testWin = wxFrame(g.frame, -1, 'MenuBar: ' + name,
-                                          pos=pos, name=STD_NAME)
-            testWin.panel = None
-            # Set status bar to display help
-            testWin.CreateStatusBar()
-            testWin.menuBar = res.LoadMenuBar(STD_NAME)
-            testWin.SetMenuBar(testWin.menuBar)
-            testWin.Show(True)
-        elif xxx.__class__ == xxxToolBar:
-            testWin = g.testWin = wxFrame(g.frame, -1, 'ToolBar: ' + name,
-                                          pos=pos, name=STD_NAME)
-            testWin.panel = None
-            # Set status bar to display help
-            testWin.CreateStatusBar()
-            testWin.toolBar = res.LoadToolBar(testWin, STD_NAME)
-            testWin.SetToolBar(testWin.toolBar)
-            testWin.Show(True)
+                testWin.panel = None
+                # Set status bar to display help
+                testWin.CreateStatusBar()
+                testWin.menuBar = res.LoadMenuBar(STD_NAME)
+                testWin.SetMenuBar(testWin.menuBar)
+                testWin.Show(True)
+            elif xxx.__class__ == xxxToolBar:
+                testWin = g.testWin = wxFrame(g.frame, -1, 'ToolBar: ' + name,
+                                              pos=pos, name=STD_NAME)
+                testWin.panel = None
+                # Set status bar to display help
+                testWin.CreateStatusBar()
+                testWin.toolBar = res.LoadToolBar(testWin, STD_NAME)
+                testWin.SetToolBar(testWin.toolBar)
+                testWin.Show(True)
+            testWin.item = item
+            EVT_CLOSE(testWin, self.OnCloseTestWin)
+            testWin.highLight = None
+            if highLight and not self.pendingHighLight:
+                self.HighLight(highLight)
+        except:
+            if g.testWin:
+                self.SetItemBold(item, False)
+                g.testWinPos = g.testWin.GetPosition()
+                g.testWin.Destroy()
+                g.testWin = None
+            inf = sys.exc_info()
+            wxLogError(traceback.format_exception(inf[0], inf[1], None)[-1])
+            wxLogError('Error loading resource')
         wxMemoryFSHandler_RemoveFile('xxx.xrc')
-        testWin.item = item
-        EVT_CLOSE(testWin, self.OnCloseTestWin)
-        testWin.highLight = None
-        if highLight and not self.pendingHighLight:
-            self.HighLight(highLight)
         wxEndBusyCursor()
 
     def OnCloseTestWin(self, evt):
