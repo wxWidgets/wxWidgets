@@ -183,6 +183,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "EventVC"=.\event\EventVC.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "ExecVC"=.\exec\ExecVC.dsp - Package Owner=<4>
 
 Package=<5>
