@@ -581,7 +581,7 @@ void  wxNotebook::OnMouse( wxMouseEvent &event )
         int x = event.m_x ;
         int y = event.m_y ;
 
-#if TARGET_API_MAC_ISX
+#if TARGET_API_MAC_OSX
 		// OS Needs it in window not client coordinates
 		wxPoint origin = GetClientAreaOrigin() ;
 		x += origin.x ;
