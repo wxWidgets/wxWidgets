@@ -4420,7 +4420,10 @@ void wxListMainWindow::InsertItem( wxListItem &item )
 
     int mode = 0;
     if ( HasFlag(wxLC_REPORT) )
+    {
         mode = wxLC_REPORT;
+        ResetVisibleLinesRange();
+    }
     else if ( HasFlag(wxLC_LIST) )
         mode = wxLC_LIST;
     else if ( HasFlag(wxLC_ICON) )
