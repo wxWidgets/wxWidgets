@@ -13,8 +13,10 @@ class App(wxApp):
     """PyCrust standalone application."""
 
     def OnInit(self):
+        wxInitAllImageHandlers()
         locals = {'__app__': 'PyCrust Standalone Application'}
         self.crustFrame = CrustFrame(locals=locals)
+        self.crustFrame.SetSize((750, 525))
         self.crustFrame.Show(true)
         self.SetTopWindow(self.crustFrame)
         # Add the application object to the sys module's namespace.

@@ -13,8 +13,10 @@ class App(wxApp):
     """PyShell standalone application."""
 
     def OnInit(self):
+        wxInitAllImageHandlers()
         locals = {'__app__': 'PyShell Standalone Application'}
         self.shellFrame = ShellFrame(locals=locals)
+        self.shellFrame.SetSize((750, 525))
         self.shellFrame.Show(true)
         self.SetTopWindow(self.shellFrame)
         # Add the application object to the sys module's namespace.

@@ -12,10 +12,10 @@ from version import VERSION
 
 class Crust(wxSplitterWindow):
     """PyCrust Crust based on wxSplitterWindow."""
-    
+
     name = 'PyCrust Crust'
     revision = __revision__
-    
+
     def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
                  size=wxDefaultSize, style=wxSP_3D, name='Crust Window', \
                  rootObject=None, rootLabel=None, rootIsNamespace=1, \
@@ -40,10 +40,10 @@ from shell import ShellMenu
 
 class CrustFrame(wxFrame, ShellMenu):
     """Frame containing all the PyCrust components."""
-    
+
     name = 'PyCrust Frame'
     revision = __revision__
-    
+
     def __init__(self, parent=None, id=-1, title='PyCrust', \
                  pos=wxDefaultPosition, size=wxDefaultSize, \
                  style=wxDEFAULT_FRAME_STYLE, \
@@ -55,11 +55,12 @@ class CrustFrame(wxFrame, ShellMenu):
         intro += '\nSponsored by Orbtech - Your source for Python programming expertise.'
         self.CreateStatusBar()
         self.SetStatusText(intro.replace('\n', ', '))
-        if wxPlatform == '__WXMSW__':
-            import os
-            filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')
-            icon = wxIcon(filename, wxBITMAP_TYPE_ICO)
-            self.SetIcon(icon)
+
+        import os
+        filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')
+        icon = wxIcon(filename, wxBITMAP_TYPE_ICO)
+        self.SetIcon(icon)
+
         self.crust = Crust(parent=self, intro=intro, \
                            rootObject=rootObject, \
                            rootLabel=rootLabel, \
@@ -79,4 +80,4 @@ class CrustFrame(wxFrame, ShellMenu):
         self.createMenus()
 
 
-   
+
