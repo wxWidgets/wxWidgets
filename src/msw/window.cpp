@@ -141,13 +141,14 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 // event tables
 // ---------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
+IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 
 BEGIN_EVENT_TABLE(wxWindow, wxWindowBase)
     EVT_ERASE_BACKGROUND(wxWindow::OnEraseBackground)
     EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindow::OnInitDialog)
     EVT_IDLE(wxWindow::OnIdle)
+    EVT_SET_FOCUS(wxWindow::OnSetFocus)
 END_EVENT_TABLE()
 
 // ===========================================================================
@@ -2519,6 +2520,33 @@ bool wxWindow::HandleDestroy()
 // activation/focus
 // ---------------------------------------------------------------------------
 
+void wxWindow::OnSetFocus(wxFocusEvent& event)
+{
+    // panel wants to track the window which was the last to have focus in it,
+    // so we want to set ourselves as the window which last had focus
+    //
+    // notice that it's also important to do it upwards the tree becaus
+    // otherwise when the top level panel gets focus, it won't set it back to
+    // us, but to some other sibling
+    wxWindow *win = this;
+    while ( win )
+    {
+        wxWindow *parent = win->GetParent();
+        wxPanel *panel = wxDynamicCast(parent, wxPanel);
+        if ( panel )
+        {
+            panel->SetLastFocus(win);
+        }
+
+        win = parent;
+    }
+
+    wxLogTrace(_T("focus"), _T("%s (0x%08x) gets focus"),
+               GetClassInfo()->GetClassName(), GetHandle());
+
+    event.Skip();
+}
+
 bool wxWindow::HandleActivate(int state,
                               bool WXUNUSED(minimized),
                               WXHWND WXUNUSED(activate))
@@ -2540,13 +2568,6 @@ bool wxWindow::HandleSetFocus(WXHWND WXUNUSED(hwnd))
         m_caret->OnSetFocus();
     }
 #endif // wxUSE_CARET
-
-    // panel wants to track the window which was the last to have focus in it
-    wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
-    if ( panel )
-    {
-        panel->SetLastFocus(this);
-    }
 
     wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
     event.SetEventObject(this);

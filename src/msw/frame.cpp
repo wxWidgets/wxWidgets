@@ -559,6 +559,15 @@ bool wxFrame::MSWCreate(int id, wxWindow *parent, const wxChar *wclass, wxWindow
 // subwindow found.
 void wxFrame::OnActivate(wxActivateEvent& event)
 {
+    if ( !event.GetActive() )
+    {
+        event.Skip();
+
+        return;
+    }
+
+    wxLogTrace(_T("focus"), _T("wxFrame %08x activated."), m_hWnd);
+
     for ( wxWindowList::Node *node = GetChildren().GetFirst();
           node;
           node = node->GetNext() )
@@ -579,7 +588,7 @@ void wxFrame::OnActivate(wxActivateEvent& event)
            )
         {
             child->SetFocus();
-            return;
+            break;
         }
     }
 }

@@ -179,6 +179,8 @@ public:
 
     // event handlers
     // --------------
+
+    void OnSetFocus(wxFocusEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
     void OnIdle(wxIdleEvent& event);
 

@@ -92,6 +92,9 @@ protected:
     // common part of all ctors
     void Init();
 
+    // set the focus to the child which had it the last time
+    bool SetFocusToChild();
+
     // the child which had the focus last time this panel was activated
     wxWindow *m_winLastFocused;
 

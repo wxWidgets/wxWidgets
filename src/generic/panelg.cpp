@@ -186,59 +186,83 @@ void wxPanel::OnSize(wxSizeEvent& WXUNUSED(event))
 
 void wxPanel::SetFocus()
 {
+    wxLogTrace(_T("focus"), _T("SetFocus on wxPanel 0x%08x."), GetHandle());
+
     // If the panel gets the focus *by way of getting it set directly*
     // we move the focus to the first window that can get it.
 
-    wxNode *node = GetChildren().First();
-    while (node)
+    // VZ: no, we set the focus to the last window too. I don't understand why
+    //     should we make this distinction: if an app wants to set focus to
+    //     some precise control, it may always do it directly, but if we don't
+    //     use m_winLastFocused here, the focus won't be set correctly after a
+    //     notebook page change nor after frame activation under MSW (it calls
+    //     SetFocus too)
+    //
+    //     If you still want to have old behaviour for wxGTK, edit the
+    //     following line
+#if 0 // def __WXGTK__
+    m_winLastFocused = (wxWindow *)NULL;
+#endif // 0
+
+    if ( !SetFocusToChild() )
     {
-        wxWindow *child = (wxWindow*) node->Data();
-        if (child->AcceptsFocus())
-        {
-            m_winLastFocused = child;   // should be redundant, but it is not
-            child->SetFocus();
-            return;
-        }
-        node = node->Next();
+        wxWindow::SetFocus();
     }
-
-    m_winLastFocused = (wxWindow*) NULL;
-
-    wxWindow::SetFocus();
 }
 
 void wxPanel::OnFocus(wxFocusEvent& event)
 {
+    wxLogTrace(_T("focus"), _T("OnFocus on wxPanel 0x%08x."), GetHandle());
+
     // If the panel gets the focus *by way of getting clicked on*
     // we move the focus to either the last window that had the 
     // focus or the first one that can get it.
-
-    if (m_winLastFocused)
-    {
-        // It might happen that the window got reparented or no longer 
-    // accepts the focus.
-        if ((m_winLastFocused->GetParent() == this) &&
-        (m_winLastFocused->AcceptsFocus()))
-        {
-            m_winLastFocused->SetFocus();
-            return;
-        }
-    }
-
-    wxNode *node = GetChildren().First();
-    while (node)
-    {
-        wxWindow *child = (wxWindow*) node->Data();
-        if (child->AcceptsFocus())
-        {
-            m_winLastFocused = child;  // should be redundant, but it is not
-            child->SetFocus();
-            return;
-        }
-        node = node->Next();
-    }
-
-    m_winLastFocused = (wxWindow*) NULL;
+    (void)SetFocusToChild();
 
     event.Skip();
+}
+
+bool wxPanel::SetFocusToChild()
+{
+    if ( m_winLastFocused )
+    {
+        // It might happen that the window got reparented or no longer accepts
+        // the focus.
+        if ( (m_winLastFocused->GetParent() == this) &&
+             m_winLastFocused->AcceptsFocus() )
+        {
+            wxLogTrace(_T("focus"),
+                       _T("SetFocusToChild() => last child (0x%08x)."),
+                       m_winLastFocused->GetHandle());
+
+            m_winLastFocused->SetFocus();
+            return TRUE;
+        }
+        else
+        {
+            // it doesn't count as such any more
+            m_winLastFocused = (wxWindow *)NULL;
+        }
+    }
+
+    // set the focus to the first child who wants it
+    wxWindowList::Node *node = GetChildren().GetFirst();
+    while ( node )
+    {
+        wxWindow *child = node->GetData();
+        if ( child->AcceptsFocus() )
+        {
+            wxLogTrace(_T("focus"),
+                       _T("SetFocusToChild() => first child (0x%08x)."),
+                       child->GetHandle());
+
+            m_winLastFocused = child;  // should be redundant, but it is not
+            child->SetFocus();
+            return TRUE;
+        }
+
+        node = node->GetNext();
+    }
+
+    return FALSE;
 }
