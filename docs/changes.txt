@@ -22,6 +22,7 @@ wxGTK:
 wxMSW:
 
 - wxStaticBitmap doesn't stretch its bitmap any longer (like other ports)
+- support for accelerator keys in the owner drawn menus (Derry Bryson)
 
 All:
 

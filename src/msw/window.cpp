@@ -2887,6 +2887,20 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 processed = GetEventHandler()->ProcessEvent(evtCtx);
             }
             break;
+
+        case WM_MENUCHAR:
+            // we're only interested in our own menus, not MF_SYSMENU
+            if ( HIWORD(wParam) == MF_POPUP )
+            {
+                // handle menu chars for ownerdrawn menu items
+                int i = HandleMenuChar(toupper(LOWORD(wParam)), lParam);
+                if ( i != wxNOT_FOUND )
+                {
+                    rc.result = MAKELRESULT(i, MNC_EXECUTE);
+                    processed = TRUE;
+                }
+            }
+            break;
 #endif // __WIN32__
     }
 
@@ -4477,6 +4491,69 @@ bool wxWindowMSW::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
 
     return FALSE;
 }
+
+#ifdef __WIN32__
+
+int wxWindowMSW::HandleMenuChar(int chAccel, WXLPARAM lParam)
+{
+    const HMENU hmenu = (HMENU)lParam;
+
+    MENUITEMINFO mii;
+    wxZeroMemory(mii);
+    mii.cbSize = sizeof(MENUITEMINFO);
+    mii.fMask = MIIM_TYPE | MIIM_DATA;
+
+    // find if we have this letter in any owner drawn item
+    const int count = ::GetMenuItemCount(hmenu);
+    for ( int i = 0; i < count; i++ )
+    {
+        if ( ::GetMenuItemInfo(hmenu, i, TRUE, &mii) )
+        {
+            if ( mii.fType == MFT_OWNERDRAW )
+            {
+                //  dwItemData member of the MENUITEMINFO is a
+                //  pointer to the associated wxMenuItem -- see the
+                //  menu creation code
+                wxMenuItem *item = (wxMenuItem*)mii.dwItemData;
+
+                const wxChar *p = wxStrchr(item->GetText(), _T('&'));
+                while ( p++ )
+                {
+                    if ( *p == _T('&') )
+                    {
+                        // this is not the accel char, find the real one
+                        p = wxStrchr(p + 1, _T('&'));
+                    }
+                    else // got the accel char
+                    {
+                        // FIXME-UNICODE: this comparison doesn't risk to work
+                        // for non ASCII accelerator characters I'm afraid, but
+                        // what can we do?
+                        if ( wxToupper(*p) == chAccel )
+                        {
+                            return i;
+                        }
+                        else
+                        {
+                            // this one doesn't match
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else // failed ot get the menu text?
+        {
+            // it's not fatal, so don't show error, but still log
+            // it
+            wxLogLastError(_T("GetMenuItemInfo"));
+        }
+    }
+
+    return wxNOT_FOUND;
+}
+
+#endif // __WIN32__
 
 // ---------------------------------------------------------------------------
 // joystick

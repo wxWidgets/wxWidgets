@@ -367,6 +367,9 @@ public:
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII = FALSE);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam);
+#ifdef __WIN32__
+    int HandleMenuChar(int chAccel, WXLPARAM lParam);
+#endif
 
     bool HandleQueryDragIcon(WXHICON *hIcon);
 
