@@ -677,6 +677,10 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
  */
 #ifndef wxVsnprintf_
     #if wxUSE_UNICODE
+        #if defined(__MWERKS__)
+            #define HAVE_WCSRTOMBS 1
+            #define HAVE_VSWPRINTF 1
+        #endif
         #if defined(HAVE__VSNWPRINTF)
             #define wxVsnprintf_    _vsnwprintf
         /* MinGW?MSVCRT has the wrong vswprintf */
