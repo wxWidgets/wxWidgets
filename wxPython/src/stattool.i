@@ -206,8 +206,8 @@ public:
                                         const wxString& label,
                                         const wxBitmap& bitmap,
                                         const wxBitmap& bmpDisabled = wxNullBitmap,
-                                        const wxString& shortHelp = wxEmptyString,
-                                        const wxString& longHelp = wxEmptyString,
+                                        const wxString& shortHelp = wxPyEmptyString,
+                                        const wxString& longHelp = wxPyEmptyString,
                                         PyObject *clientData = NULL)
         {
             wxPyUserData* udata = NULL;
@@ -223,8 +223,8 @@ public:
                                     const wxString& label,
                                     const wxBitmap& bitmap,
                                     const wxBitmap& bmpDisabled = wxNullBitmap,
-                                    const wxString& shortHelp = wxEmptyString,
-                                    const wxString& longHelp = wxEmptyString,
+                                    const wxString& shortHelp = wxPyEmptyString,
+                                    const wxString& longHelp = wxPyEmptyString,
                                     PyObject *clientData = NULL)
         {
             wxPyUserData* udata = NULL;
@@ -242,8 +242,8 @@ public:
                                       const wxBitmap& bitmap,
                                       const wxBitmap& bmpDisabled = wxNullBitmap,
                                       wxItemKind kind = wxITEM_NORMAL,
-                                      const wxString& shortHelp = wxEmptyString,
-                                      const wxString& longHelp = wxEmptyString,
+                                      const wxString& shortHelp = wxPyEmptyString,
+                                      const wxString& longHelp = wxPyEmptyString,
                                       PyObject *clientData = NULL)
         {
             wxPyUserData* udata = NULL;
@@ -259,8 +259,8 @@ public:
                                       const wxString& label,
                                       const wxBitmap& bitmap,
                                       wxItemKind kind = wxITEM_NORMAL,
-                                      const wxString& shortHelp = wxEmptyString,
-                                      const wxString& longHelp = wxEmptyString)
+                                      const wxString& shortHelp = wxPyEmptyString,
+                                      const wxString& longHelp = wxPyEmptyString)
         {
             return self->InsertTool(pos, id, label, bitmap, wxNullBitmap, kind,
                                     shortHelp, longHelp);

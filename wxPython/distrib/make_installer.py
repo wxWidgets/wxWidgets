@@ -69,7 +69,7 @@ Source: "%(SYSDIR)s\MSVCRT.dll";            DestDir: "{sys}"; CopyMode: alwayssk
 Source: "%(SYSDIR)s\MSVCIRT.dll";           DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Components: core
 
 Source: "%(WXDIR)s\lib\%(WXDLL)s";          DestDir: "{app}\wxPython"; Components: core
-;;%(MSLU)s
+%(MSLU)s
 Source: "wxPython\wxc.pyd";                 DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\wxc.pyd.manifest";        DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\gridc.pyd";               DestDir: "{app}\wxPython"; Components: core
@@ -310,8 +310,8 @@ def main():
         PYVER = PYVER + "-hybrid"
 
     MSLU=''
-##     if len(sys.argv) > 1 and sys.argv[1] == "UNICODE=1":
-##         MSLU=r'Source: "%(WXDIR)s\lib\unicows.dll";  DestDir: "{app}\wxPython"; Components: core' % vars()
+    if len(sys.argv) > 1 and sys.argv[1] == "UNICODE=1":
+        MSLU=r'Source: "%(WXDIR)s\lib\unicows.dll";  DestDir: "{code:GetPythonDir}"; Components: core' % vars()
 
     f = open(ISSFILE, "w")
     f.write(ISS_Template % vars())
