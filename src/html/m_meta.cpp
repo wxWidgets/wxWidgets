@@ -47,13 +47,13 @@ TAG_HANDLER_BEGIN(META, "META")
             if (content.Left(19) == _T("text/html; charset="))
             {
                 wxFontEncoding enc = 
-                    wxTheFontMapper -> CharsetToEncoding(content.Mid(19));
+                    wxTheFontMapper->CharsetToEncoding(content.Mid(19));
                 if (enc == wxFONTENCODING_SYSTEM) return FALSE;
-                if (enc == m_WParser -> GetInputEncoding()) return FALSE;
+                if (enc == m_WParser->GetInputEncoding()) return FALSE;
 
-                m_WParser -> SetInputEncoding(enc);
-                m_WParser -> GetContainer() -> InsertCell(
-                    new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+                m_WParser->SetInputEncoding(enc);
+                m_WParser->GetContainer()->InsertCell(
+                    new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
             }
         }
         return FALSE;

@@ -68,7 +68,8 @@ wxHtmlPRECell::wxHtmlPRECell(const wxString& s, wxDC& dc) : wxHtmlCell()
     m_Width = m_Height = 0;
 
     i = 0;
-    while (tokenizer.HasMoreTokens()) {
+    while (tokenizer.HasMoreTokens()) 
+    {
         if (i % 10 == 0) m_Text = (wxString**) realloc(m_Text, sizeof(wxString*) * (i + 10));
         tmp = tokenizer.NextToken();
         tmp.Replace(wxT("&copy;"), wxT("(c)"), TRUE);
@@ -119,46 +120,46 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
     {
         wxHtmlContainerCell *c;
 
-        int fixed = m_WParser -> GetFontFixed(),
-            italic = m_WParser -> GetFontItalic(),
-            underlined = m_WParser -> GetFontUnderlined(),
-            bold = m_WParser -> GetFontBold(),
-            fsize = m_WParser -> GetFontSize();
+        int fixed = m_WParser->GetFontFixed(),
+            italic = m_WParser->GetFontItalic(),
+            underlined = m_WParser->GetFontUnderlined(),
+            bold = m_WParser->GetFontBold(),
+            fsize = m_WParser->GetFontSize();
 
-        m_WParser -> CloseContainer();
-        c = m_WParser -> OpenContainer();
-        c -> SetAlignHor(wxHTML_ALIGN_LEFT);
-        c -> SetIndent(m_WParser -> GetCharHeight(), wxHTML_INDENT_VERTICAL);
+        m_WParser->CloseContainer();
+        c = m_WParser->OpenContainer();
+        c->SetAlignHor(wxHTML_ALIGN_LEFT);
+        c->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_VERTICAL);
 
-        m_WParser -> SetFontUnderlined(FALSE);
-        m_WParser -> SetFontBold(FALSE);
-        m_WParser -> SetFontItalic(FALSE);
-        m_WParser -> SetFontFixed(TRUE);
-        m_WParser -> SetFontSize(3);
-        c -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+        m_WParser->SetFontUnderlined(FALSE);
+        m_WParser->SetFontBold(FALSE);
+        m_WParser->SetFontItalic(FALSE);
+        m_WParser->SetFontFixed(TRUE);
+        m_WParser->SetFontSize(3);
+        c->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
 
         {
             wxString cit;
-            wxEncodingConverter *encconv = m_WParser -> GetEncodingConverter();
-            cit = m_WParser -> GetSource() -> Mid(tag.GetBeginPos(), 
+            wxEncodingConverter *encconv = m_WParser->GetEncodingConverter();
+            cit = m_WParser->GetSource()->Mid(tag.GetBeginPos(), 
                                        tag.GetEndPos1() - tag.GetBeginPos());
             if (encconv)
-                c -> InsertCell(new wxHtmlPRECell(encconv -> Convert(cit), 
-                                                  *(m_WParser -> GetDC())));
+                c->InsertCell(new wxHtmlPRECell(encconv->Convert(cit), 
+                                                  *(m_WParser->GetDC())));
             else
-                c -> InsertCell(new wxHtmlPRECell(cit, 
-                                                  *(m_WParser -> GetDC())));
+                c->InsertCell(new wxHtmlPRECell(cit, 
+                                                  *(m_WParser->GetDC())));
         }
 
-        m_WParser -> SetFontUnderlined(underlined);
-        m_WParser -> SetFontBold(bold);
-        m_WParser -> SetFontItalic(italic);
-        m_WParser -> SetFontFixed(fixed);
-        m_WParser -> SetFontSize(fsize);
-        c -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+        m_WParser->SetFontUnderlined(underlined);
+        m_WParser->SetFontBold(bold);
+        m_WParser->SetFontItalic(italic);
+        m_WParser->SetFontFixed(fixed);
+        m_WParser->SetFontSize(fsize);
+        c->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
 
-        m_WParser -> CloseContainer();
-        m_WParser -> OpenContainer();
+        m_WParser->CloseContainer();
+        m_WParser->OpenContainer();
         return TRUE;
     }
 

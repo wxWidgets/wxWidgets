@@ -58,9 +58,9 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
     wxString doc, doc2;
 
     if (s == NULL) return wxEmptyString;
-    src = new char[s -> GetSize()+1];
-    src[s -> GetSize()] = 0;
-    s -> Read(src, s -> GetSize());
+    src = new char[s->GetSize()+1];
+    src[s->GetSize()] = 0;
+    s->Read(src, s->GetSize());
     doc = src;
     delete [] src;
 
@@ -146,9 +146,9 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
         wxLogError(_("Cannot open HTML document: %s"), file.GetLocation().c_str());
         return wxEmptyString;
     }
-    src = new char[s -> GetSize() + 1];
-    src[s -> GetSize()] = 0;
-    s -> Read(src, s -> GetSize());
+    src = new char[s->GetSize() + 1];
+    src[s->GetSize()] = 0;
+    s->Read(src, s->GetSize());
     doc = src;
     delete[] src;
 

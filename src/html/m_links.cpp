@@ -54,30 +54,32 @@ TAG_HANDLER_BEGIN(A, "A")
 
     TAG_HANDLER_PROC(tag)
     {
-        if (tag.HasParam("NAME")) {
-            m_WParser -> GetContainer() -> InsertCell(new wxHtmlAnchorCell(tag.GetParam("NAME")));
+        if (tag.HasParam("NAME"))
+	    {
+            m_WParser->GetContainer()->InsertCell(new wxHtmlAnchorCell(tag.GetParam("NAME")));
         }
 
-        if (tag.HasParam("HREF")) {
-            wxHtmlLinkInfo oldlnk = m_WParser -> GetLink();
-            wxColour oldclr = m_WParser -> GetActualColor();
-            int oldund = m_WParser -> GetFontUnderlined();
+        if (tag.HasParam("HREF")) 
+	    {
+            wxHtmlLinkInfo oldlnk = m_WParser->GetLink();
+            wxColour oldclr = m_WParser->GetActualColor();
+            int oldund = m_WParser->GetFontUnderlined();
             wxString name(tag.GetParam("HREF")), target;
 
             if (tag.HasParam("TARGET")) target = tag.GetParam("TARGET");
-            m_WParser -> SetActualColor(m_WParser -> GetLinkColor());
-            m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(m_WParser -> GetLinkColor()));
-            m_WParser -> SetFontUnderlined(TRUE);
-            m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
-            m_WParser -> SetLink(wxHtmlLinkInfo(name, target));
+            m_WParser->SetActualColor(m_WParser->GetLinkColor());
+            m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(m_WParser->GetLinkColor()));
+            m_WParser->SetFontUnderlined(TRUE);
+            m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
+            m_WParser->SetLink(wxHtmlLinkInfo(name, target));
 
             ParseInner(tag);
 
-            m_WParser -> SetLink(oldlnk);
-            m_WParser -> SetFontUnderlined(oldund);
-            m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
-            m_WParser -> SetActualColor(oldclr);
-            m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(oldclr));
+            m_WParser->SetLink(oldlnk);
+            m_WParser->SetFontUnderlined(oldund);
+            m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
+            m_WParser->SetActualColor(oldclr);
+            m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(oldclr));
 
             return TRUE;
         }

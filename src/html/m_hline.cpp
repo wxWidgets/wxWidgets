@@ -43,7 +43,7 @@ class wxHtmlLineCell : public wxHtmlCell
     public:
         wxHtmlLineCell(int size) : wxHtmlCell() {m_Height = size;}
         void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
-        void Layout(int w) {m_Width = w; if (m_Next) m_Next -> Layout(w);}
+        void Layout(int w) {m_Width = w; if (m_Next) m_Next->Layout(w);}
 };
 
 
@@ -72,19 +72,19 @@ TAG_HANDLER_BEGIN(HR, "HR")
         wxHtmlContainerCell *c;
         int sz;
 
-        m_WParser -> CloseContainer();
-        c = m_WParser -> OpenContainer();
+        m_WParser->CloseContainer();
+        c = m_WParser->OpenContainer();
 
-        c -> SetIndent(m_WParser -> GetCharHeight(), wxHTML_INDENT_VERTICAL);
-        c -> SetAlignHor(wxHTML_ALIGN_CENTER);
-        c -> SetAlign(tag);
-        c -> SetWidthFloat(tag);
+        c->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_VERTICAL);
+        c->SetAlignHor(wxHTML_ALIGN_CENTER);
+        c->SetAlign(tag);
+        c->SetWidthFloat(tag);
         sz = 1;
         if (tag.HasParam(wxT("SIZE")) && tag.ScanParam(wxT("SIZE"), wxT("%i"), &sz) == 1) {}
-        c -> InsertCell(new wxHtmlLineCell((int)((double)sz * m_WParser -> GetPixelScale())));
+        c->InsertCell(new wxHtmlLineCell((int)((double)sz * m_WParser->GetPixelScale())));
 
-        m_WParser -> CloseContainer();
-        m_WParser -> OpenContainer();
+        m_WParser->CloseContainer();
+        m_WParser->OpenContainer();
 
         return FALSE;
     }

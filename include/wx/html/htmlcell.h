@@ -81,12 +81,12 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
                 // This method returns pointer to the FIRST cell for that
                 // the condition
                 // is true. It first checks if the condition is true for this
-                // cell and then calls m_Next -> Find(). (Note: it checks
+                // cell and then calls m_Next->Find(). (Note: it checks
                 // all subcells if the cell is container)
                 // Condition is unique condition identifier (see htmldefs.h)
                 // (user-defined condition IDs should start from 10000)
                 // and param is optional parameter
-                // Example : m_Cell -> Find(wxHTML_COND_ISANCHOR, "news");
+                // Example : m_Cell->Find(wxHTML_COND_ISANCHOR, "news");
                 //   returns pointer to anchor news
 
         virtual void OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event);
@@ -289,7 +289,7 @@ class WXDLLEXPORT wxHtmlWidgetCell : public wxHtmlCell
                 // if w != 0 then the m_Wnd has 'floating' width - it adjust
                 // it's width according to parent container's width
                 // (w is percent of parent's width)
-        ~wxHtmlWidgetCell() { m_Wnd -> Destroy(); }
+        ~wxHtmlWidgetCell() { m_Wnd->Destroy(); }
         virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
         virtual void DrawInvisible(wxDC& dc, int x, int y);
         virtual void Layout(int w);

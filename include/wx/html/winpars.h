@@ -57,7 +57,7 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         // NOTE : these functions do _not_ return _actual_
         // height/width. They return h/w of default font
         // for this DC. If you want actual values, call
-        // GetDC() -> GetChar...()
+        // GetDC()->GetChar...()
         wxWindow *GetWindow() {return m_Window;}
                 // returns associated wxWindow
 
@@ -71,7 +71,7 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         // parsing-related methods. These methods are called by tag handlers:
         wxHtmlContainerCell *GetContainer() const {return m_Container;}
             // Returns pointer to actual container. Common use in tag handler is :
-            // m_WParser -> GetContainer() -> InsertCell(new ...);
+            // m_WParser->GetContainer()->InsertCell(new ...);
         wxHtmlContainerCell *OpenContainer();
             // opens new container. This container is sub-container of opened
             // container. Sets GetContainer to newly created container

@@ -43,38 +43,44 @@ TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD")
         wxHtmlContainerCell *c;
 
 
-        if (tag.GetName() == wxT("DL")) {
-            if (m_WParser -> GetContainer() -> GetFirstCell() != NULL) {
-                m_WParser -> CloseContainer();
-                m_WParser -> OpenContainer();
+        if (tag.GetName() == wxT("DL")) 
+	    {
+            if (m_WParser->GetContainer()->GetFirstCell() != NULL) 
+	        {
+                m_WParser->CloseContainer();
+                m_WParser->OpenContainer();
             }
-            m_WParser -> GetContainer() -> SetIndent(m_WParser -> GetCharHeight(), wxHTML_INDENT_TOP);
+            m_WParser->GetContainer()->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_TOP);
 
             ParseInner(tag);
 
-            if (m_WParser -> GetContainer() -> GetFirstCell() != NULL) {
-                m_WParser -> CloseContainer();
-                m_WParser -> OpenContainer();
+            if (m_WParser->GetContainer()->GetFirstCell() != NULL) 
+	        {
+                m_WParser->CloseContainer();
+                m_WParser->OpenContainer();
             }
-            m_WParser -> GetContainer() -> SetIndent(m_WParser -> GetCharHeight(), wxHTML_INDENT_TOP);
+            m_WParser->GetContainer()->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_TOP);
 
             return TRUE;
         }
         
-        else if (tag.GetName() == wxT("DT")) {
-            if (!tag.IsEnding()) {
-                m_WParser -> CloseContainer();
-                c = m_WParser -> OpenContainer();
-                c -> SetAlignHor(wxHTML_ALIGN_LEFT);
-                c -> SetMinHeight(m_WParser -> GetCharHeight());
+        else if (tag.GetName() == wxT("DT")) 
+	    {
+            if (!tag.IsEnding()) 
+	        {
+                m_WParser->CloseContainer();
+                c = m_WParser->OpenContainer();
+                c->SetAlignHor(wxHTML_ALIGN_LEFT);
+                c->SetMinHeight(m_WParser->GetCharHeight());
             }
             return FALSE;
         }
         
-        else if (!tag.IsEnding()) { // "DD"
-            m_WParser -> CloseContainer();
-            c = m_WParser -> OpenContainer();
-            c -> SetIndent(5 * m_WParser -> GetCharWidth(), wxHTML_INDENT_LEFT);
+        else if (!tag.IsEnding()) // "DD"
+	    {
+            m_WParser->CloseContainer();
+            c = m_WParser->OpenContainer();
+            c->SetIndent(5 * m_WParser->GetCharWidth(), wxHTML_INDENT_LEFT);
             return FALSE;
         }
             

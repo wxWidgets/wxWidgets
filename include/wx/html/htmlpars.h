@@ -174,7 +174,7 @@ class WXDLLEXPORT wxHtmlTagHandler : public wxObject
                 //                  FALSE etherwise
 
     protected:
-        void ParseInner(const wxHtmlTag& tag) {m_Parser -> DoParsing(tag.GetBeginPos(), tag.GetEndPos1());}
+        void ParseInner(const wxHtmlTag& tag) {m_Parser->DoParsing(tag.GetBeginPos(), tag.GetEndPos1());}
                 // parses input between beginning and ending tag.
                 // m_Parser must be set.
 };

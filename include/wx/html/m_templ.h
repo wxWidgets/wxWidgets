@@ -87,7 +87,7 @@ I STRONGLY recommend reading and understanding these macros!!
 
 
 #define TAGS_MODULE_ADD(handler)                                          \
-                    parser -> AddTagHandler(new HTML_Handler_##handler);
+                    parser->AddTagHandler(new HTML_Handler_##handler);
 
 
 

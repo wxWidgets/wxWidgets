@@ -79,7 +79,8 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
 #if wxUSE_BUSYINFO
     wxBusyInfo* busy = NULL;
     wxString info;
-    if (show_wait_msg) {
+    if (show_wait_msg) 
+    {
         info.Printf(_("Adding book %s"), book.c_str());
         busy = new wxBusyInfo(info);
     }
@@ -102,7 +103,8 @@ wxHtmlHelpFrame *wxHtmlHelpController::CreateHelpFrame(wxHtmlHelpData *data)
 
 void wxHtmlHelpController::CreateHelpWindow()
 {
-    if (m_helpFrame) {
+    if (m_helpFrame)
+    {
         m_helpFrame->Raise();
         return ;
     }
@@ -144,7 +146,7 @@ void wxHtmlHelpController::UseConfig(wxConfigBase *config, const wxString& rootp
 {
     m_Config = config;
     m_ConfigRoot = rootpath;
-    if (m_helpFrame) m_helpFrame -> UseConfig(config, rootpath);
+    if (m_helpFrame) m_helpFrame->UseConfig(config, rootpath);
     ReadCustomization(config, rootpath);
 }
 
