@@ -1,4 +1,4 @@
-"""PyCrust Interpreter executes Python commands."""
+"""Interpreter executes Python commands."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
@@ -18,7 +18,7 @@ except NameError:
 
 
 class Interpreter(InteractiveInterpreter):
-    """PyCrust Interpreter based on code.InteractiveInterpreter."""
+    """Interpreter based on code.InteractiveInterpreter."""
     
     revision = __revision__
     
@@ -112,7 +112,7 @@ class Interpreter(InteractiveInterpreter):
 
 
 class InterpreterAlaCarte(Interpreter):
-    """PyCrustAlaCarte Demo Interpreter."""
+    """Demo Interpreter."""
     
     def __init__(self, locals, rawin, stdin, stdout, stderr, 
                  ps1='main prompt', ps2='continuation prompt'):
