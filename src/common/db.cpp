@@ -63,6 +63,7 @@
                 #include "wx/msgdlg.h"
 	#endif
 	#include "wx/filefn.h"
+	#include "wx/wxchar.h"
 #endif
 
 #if wxMAJOR_VERSION == 1
@@ -1706,7 +1707,12 @@ bool wxDB::WriteSqlLog(char *logMsg)
  */
 DBMS wxDB::Dbms(void)
 {
-	if (!wxStrnicmp(dbInf.dbmsName,"Oracle",6))
+	wxChar baseName[20];
+
+	wxStrncpy(baseName,dbInf.dbmsName,6);
+	baseName[6] = 0;
+//	if (!wxStrnicmp(dbInf.dbmsName,"Oracle",6))
+	if (!wxStricmp(baseName,"Oracle"))
 		return(dbmsORACLE);
 	if (!wxStricmp(dbInf.dbmsName,"Adaptive Server Anywhere"))
 		return(dbmsSYBASE_ASA);
@@ -1720,7 +1726,10 @@ DBMS wxDB::Dbms(void)
 		return(dbmsPOSTGRES);
 	if (!wxStricmp(dbInf.dbmsName,"ACCESS"))
 		return(dbmsACCESS);
-	if (!wxStrnicmp(dbInf.dbmsName,"DBASE",5))
+	wxStrncpy(baseName,dbInf.dbmsName,5);
+	baseName[5] = 0;
+//	if (!wxStrnicmp(dbInf.dbmsName,"DBASE",5))
+	if (!wxStricmp(baseName,"DBASE"))
 		return(dbmsDBASE);
 	return(dbmsUNIDENTIFIED);
 
