@@ -401,18 +401,24 @@ bool wxMWMIsRunning(Window w)
 // smaller
 wxPoint wxTopLevelWindowX11::GetClientAreaOrigin() const
 {
+    // In fact wxFrame::GetClientAreaOrigin
+    // does the required calculation already.
+#if 0
     if (this->IsKindOf(CLASSINFO(wxFrame)))
     {
 	wxFrame* frame = (wxFrame*) this;
 	if (frame->GetMenuBar())
 	    return wxPoint(0, frame->GetMenuBar()->GetSize().y);
     }
+#endif
     return wxPoint(0, 0);
 }
 
 void wxTopLevelWindowX11::DoGetClientSize( int *width, int *height ) const
 {
     wxWindowX11::DoGetClientSize(width, height);
+    // Done by wxTopLevelWindow
+#if 0
     if (this->IsKindOf(CLASSINFO(wxFrame)))
     {
 	wxFrame* frame = (wxFrame*) this;
@@ -421,11 +427,11 @@ void wxTopLevelWindowX11::DoGetClientSize( int *width, int *height ) const
 	if (frame->GetStatusBar())
 	    (*height) -= frame->GetStatusBar()->GetSize().y;
     }
+#endif
 }
 
 void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
 {
-    // TODO - take menubar and status line into account
     wxWindowX11::DoSetClientSize(width, height);
 #if 0
     if (!GetMainWindow())
