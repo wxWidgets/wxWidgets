@@ -91,6 +91,9 @@ wxMSW:
   are changed
 - fixed wxProgressDialog for ranges > 65535
 - wxFontEnumerator now returns all fonts, not only TrueType ones
+- bugs in handling wxFrame styles (border/caption related) fixed
+- showing a dialog from EVT_RADIOBUTTON handler doesn't lead to an infinite
+  recursion any more
 - wxTextCtrl with wxTE_RICH flag scrolls to the end when text is appended to it
 
 wxGTK:
