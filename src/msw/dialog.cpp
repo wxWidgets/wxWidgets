@@ -41,6 +41,7 @@
 #include "wx/msw/private.h"
 #include "wx/log.h"
 #include "wx/evtloop.h"
+#include "wx/ptr_scpd.h"
 
 #if wxUSE_COMMON_DIALOGS && !defined(__WXMICROWIN__)
     #include <commdlg.h>
@@ -135,37 +136,28 @@ END_EVENT_TABLE()
 // wxDialogModalData
 // ----------------------------------------------------------------------------
 
-// this is simply a container for wxEventLoop and wxWindowDisabler which allows
-// to have a single opaque pointer in wxDialog itself
+// this is simply a container for any data we need to implement modality which
+// allows us to avoid changing wxDialog each time the implementation changes
 class wxDialogModalData
 {
 public:
-    wxDialogModalData() { m_windowDisabler = NULL; }
+    wxDialogModalData(wxDialog *dialog) : m_evtLoop(dialog) { }
 
-    void RunLoop(wxDialog *dialog)
+    void RunLoop()
     {
-        m_windowDisabler = new wxWindowDisabler(dialog);
-
         m_evtLoop.Run();
     }
 
     void ExitLoop()
     {
-        delete m_windowDisabler;
-        m_windowDisabler = NULL;
-
         m_evtLoop.Exit();
     }
 
-    ~wxDialogModalData()
-    {
-        wxASSERT_MSG( !m_windowDisabler, _T("forgot to call ExitLoop?") );
-    }
-
 private:
-    wxEventLoop m_evtLoop;
-    wxWindowDisabler *m_windowDisabler;
+    wxModalEventLoop m_evtLoop;
 };
+
+wxDEFINE_TIED_SCOPED_PTR_TYPE(wxDialogModalData);
 
 // ============================================================================
 // implementation
@@ -325,19 +317,12 @@ void wxDialog::DoShowModal()
             hwndOldFocus = GetHwndOf(parent);
     }
 
-    // before entering the modal loop, reset the "is in OnIdle()" flag (see
-    // comment in app.cpp)
-    extern bool wxIsInOnIdleFlag;
-    bool wasInOnIdle = wxIsInOnIdleFlag;
-    wxIsInOnIdleFlag = FALSE;
-
     // enter the modal loop
-    m_modalData = new wxDialogModalData;
-    m_modalData->RunLoop(this);
-    delete m_modalData;
-    m_modalData = NULL;
-
-    wxIsInOnIdleFlag = wasInOnIdle;
+    {
+        wxDialogModalDataTiedPtr modalData(&m_modalData,
+                                           new wxDialogModalData(this));
+        modalData->RunLoop();
+    }
 
     // and restore focus
     // Note that this code MUST NOT access the dialog object's data
