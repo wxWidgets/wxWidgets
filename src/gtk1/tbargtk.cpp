@@ -316,6 +316,9 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool *tool = (wxToolBarTool *)toolBase;
 
+    // we have inserted a space before all the tools
+    if (m_xMargin > 1) pos++;
+    
     if ( tool->IsButton() )
     {
         wxBitmap bitmap = tool->GetBitmap1();
@@ -399,7 +402,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
     GtkRequisition req;
     (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
     m_width = req.width + m_xMargin;
-    m_height = req.height + 2*m_yMargin + 4;
+    m_height = req.height + 2*m_yMargin;
 
     return TRUE;
 }

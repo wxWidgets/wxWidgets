@@ -717,9 +717,7 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
 
                 sizer = new wxBoxSizer(wxHORIZONTAL);
 
-                sizer2 = new wxBoxSizer(wxVERTICAL);
-                sizer2 -> Add(new wxStaticText(this, -1, _("Normal font:")), 
-                              0, wxLEFT | wxTOP, 10);
+                sizer2 = new wxStaticBoxSizer( new wxStaticBox(this, -1, _("Normal font:")), wxVERTICAL);
                 sizer2 -> Add(NormalFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition, 
                               wxSize(200, 200), 
                               0, NULL, wxCB_DROPDOWN | wxCB_READONLY),
@@ -732,11 +730,9 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
                               1, wxEXPAND, 0);
                 sizer2 -> Add(sizer3, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
 
-                sizer -> Add(sizer2, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+                sizer -> Add(sizer2, 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10);
 
-                sizer2 = new wxBoxSizer(wxVERTICAL);
-                sizer2 -> Add(new wxStaticText(this, -1, _("Fixed font:")), 
-                              0, wxLEFT | wxTOP, 10);
+                sizer2 = new wxStaticBoxSizer( new wxStaticBox(this, -1, _("Fixed font:")), wxVERTICAL);
                 sizer2 -> Add(FixedFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition, 
                               wxSize(200, 200), 
                               0, NULL, wxCB_DROPDOWN | wxCB_READONLY), 
@@ -749,18 +745,18 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
                               1, wxEXPAND, 0);
                 sizer2 -> Add(sizer3, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
 
-                sizer -> Add(sizer2, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+                sizer -> Add(sizer2, 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10);
 
                 topsizer -> Add(sizer);
 
                 topsizer -> Add(RadioBox = new wxRadioBox(this, -1, _("Font size:"), 
                                                           wxDefaultPosition, wxDefaultSize, 3, choices, 3), 
-                                0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+                                0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10);
                                 
                 topsizer -> Add(new wxStaticText(this, -1, _("Preview:")), 
                                 0, wxLEFT | wxTOP, 10);
                 topsizer -> Add(TestWin = new wxHtmlWindow(this, -1, wxDefaultPosition, wxSize(-1, 150)), 
-                                1, wxEXPAND | wxLEFT | wxTOP, 10);
+                                1, wxEXPAND | wxLEFT|wxTOP|wxRIGHT, 10);
 
                 sizer = new wxBoxSizer(wxHORIZONTAL);
                 sizer -> Add(new wxButton(this, wxID_OK, _("OK")), 0, wxALL, 10);
