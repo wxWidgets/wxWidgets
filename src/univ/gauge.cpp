@@ -68,6 +68,8 @@ bool wxGauge::Create(wxWindow *parent,
         return FALSE;
     }
 
+    SetBestSize(size);
+
     return TRUE;
 }
 
@@ -90,6 +92,30 @@ void wxGauge::SetValue(int pos)
 }
 
 // ----------------------------------------------------------------------------
+// wxGauge geometry
+// ----------------------------------------------------------------------------
+
+wxSize wxGauge::DoGetBestClientSize() const
+{
+    wxSize size = GetRenderer()->GetProgressBarStep();
+
+    // these adjustments are really ridiculous - they are just done to find the
+    // "correct" result under Windows (FIXME)
+    if ( IsVertical() )
+    {
+        size.x = (3*size.y) / 2 + 2;
+        size.y = -1;
+    }
+    else
+    {
+        size.y = (3*size.x) / 2 + 2;
+        size.x = -1;
+    }
+
+    return size;
+}
+
+// ----------------------------------------------------------------------------
 // wxGauge drawing
 // ----------------------------------------------------------------------------
 
@@ -100,18 +126,6 @@ wxBorder wxGauge::GetDefaultBorder() const
 
 void wxGauge::DoDraw(wxControlRenderer *renderer)
 {
-    int pos = GetValue();
-    if ( IsSmooth() )
-    {
-        // make it a multiple of the step
-        int step = GetStep();
-        if ( step )
-        {
-            pos /= step;
-            pos *= step;
-        }
-    }
-
     renderer->DrawProgressBar(this);
 }
 

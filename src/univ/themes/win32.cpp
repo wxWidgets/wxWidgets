@@ -272,6 +272,7 @@ public:
                                       wxOrientation orient) const;
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
                                       wxOrientation orient) const;
+    virtual wxSize GetProgressBarStep() const { return wxSize(16, 32); }
 
 protected:
     // helper of DrawLabel() and DrawCheckOrRadioButton()

@@ -761,48 +761,62 @@ void wxControlRenderer::DrawProgressBar(const wxGauge *gauge)
     }
 
     // calc the filled rect
-    wxRect rect = m_rect;
-    rect.Deflate(1);
     int pos = gauge->GetValue();
     int left = max - pos;
 
-    if ( gauge->IsVertical() )
-    {
-        // vert bars grow from bottom to top
-        wxCoord dy = ((rect.height - 1) * left) / max;
-        rect.y += dy;
-        rect.height -= dy;
-    }
-    else // horizontal
-    {
-        // grow from left to right
-        rect.width -= ((rect.width - 1) * left) / max;
-    }
+    wxRect rect = m_rect;
+    rect.Deflate(1); // FIXME this depends on the border width
 
     m_dc.SetBrush(wxBrush(m_window->GetForegroundColour(), wxSOLID));
 
     if ( gauge->IsSmooth() )
     {
+        // just draw the rectangle in one go
+        if ( gauge->IsVertical() )
+        {
+            // vert bars grow from bottom to top
+            wxCoord dy = ((rect.height - 1) * left) / max;
+            rect.y += dy;
+            rect.height -= dy;
+        }
+        else // horizontal
+        {
+            // grow from left to right
+            rect.width -= ((rect.width - 1) * left) / max;
+        }
+
         m_dc.DrawRectangle(rect);
     }
     else // discrete
     {
-        int steps = pos / gauge->GetStep();
-        if ( steps == 0 )
-        {
-            // nothing to draw
-            return;
-        }
+        wxSize sizeStep = m_renderer->GetProgressBarStep();
+        int step = gauge->IsVertical() ? sizeStep.y : sizeStep.x;
 
-        wxCoord *p, sizeOneSegment, dx, dy;
+        // we divide by it below!
+        wxCHECK_RET( step, _T("invalid wxGauge step") );
+
+        // round up to make the progress appear to start faster
+        int lenTotal = gauge->IsVertical() ? rect.height : rect.width;
+        int steps = ((lenTotal + step - 1) * pos) / (max * step);
+
+        // calc the coords of one small rect
+        wxCoord *px, dx, dy;
         if ( gauge->IsVertical() )
         {
-            // draw from bottom to top
+            // draw from bottom to top: so first set y to the bottom
             rect.y += rect.height - 1;
-            p = &rect.y;
-            rect.height /= steps;
-            sizeOneSegment = -rect.height;
+
+            // then adjust the height
+            rect.height = step;
+
+            // and then adjust y again to be what it should for the first rect
             rect.y -= rect.height;
+
+            // we are going up
+            step = -step;
+
+            // remember that this will be the coord which will change
+            px = &rect.y;
 
             dy = 1;
             dx = 0;
@@ -812,22 +826,32 @@ void wxControlRenderer::DrawProgressBar(const wxGauge *gauge)
             // don't leave 2 empty pixels in the beginning
             rect.x--;
 
-            p = &rect.x;
-            rect.width /= steps;
-            sizeOneSegment = rect.width;
+            px = &rect.x;
+            rect.width = step;
 
             dy = 0;
             dx = 1;
         }
 
-        for ( int step = 0; step < steps; step++ )
+        for ( int n = 0; n < steps; n++ )
         {
             wxRect rectSegment = rect;
             rectSegment.Deflate(dx, dy);
 
             m_dc.DrawRectangle(rectSegment);
 
-            *p += sizeOneSegment;
+            *px += step;
+            if ( *px < 1 )
+            {
+                // this can only happen for the last step of vertical gauge
+                rect.height = *px - step - 1;
+                *px = 1;
+            }
+            else if ( *px > lenTotal - step )
+            {
+                // this can only happen for the last step of horizontal gauge
+                rect.width = lenTotal - *px - 1;
+            }
         }
     }
 }

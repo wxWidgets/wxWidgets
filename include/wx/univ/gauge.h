@@ -57,15 +57,15 @@ public:
     // is it a vertica; progress bar or a horizontal one?
     bool IsVertical() const { return (GetWindowStyle() & wxGA_VERTICAL) != 0; }
 
-    // get the increment step for a discrete bar (always fixed now)
-    int GetStep() const { return GetRange() / 10; }
-
 protected:
     // common part of all ctors
     void Init();
 
     // return the def border for a progress bar
     virtual wxBorder GetDefaultBorder() const;
+
+    // return the default size
+    virtual wxSize DoGetBestClientSize() const;
 
     // draw the control
     virtual void DoDraw(wxControlRenderer *renderer);

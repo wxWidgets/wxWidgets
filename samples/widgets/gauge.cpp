@@ -341,7 +341,7 @@ void GaugeWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
 void GaugeWidgetsPage::OnUpdateUIValueButton(wxUpdateUIEvent& event)
 {
     unsigned long val;
-    event.Enable( m_textValue->GetValue().ToULong(&val) && (val < m_range) );
+    event.Enable( m_textValue->GetValue().ToULong(&val) && (val <= m_range) );
 }
 
 void GaugeWidgetsPage::OnUpdateUIRangeButton(wxUpdateUIEvent& event)

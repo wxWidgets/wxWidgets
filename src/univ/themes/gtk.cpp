@@ -229,6 +229,7 @@ public:
                                       wxOrientation orient) const;
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
                                       wxOrientation orient) const;
+    virtual wxSize GetProgressBarStep() const { return wxSize(16, 32); }
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);

@@ -302,6 +302,9 @@ public:
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
                                       wxOrientation orient) const = 0;
 
+    // get the size of one progress bar step (in horz and vertical directions)
+    virtual wxSize GetProgressBarStep() const = 0;
+
     // virtual dtor for any base class
     virtual ~wxRenderer();
 
@@ -562,6 +565,8 @@ public:
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
                                       wxOrientation orient) const
         { return m_renderer->GetSliderThumbSize(rect, orient); }
+    virtual wxSize GetProgressBarStep() const
+        { return m_renderer->GetProgressBarStep(); }
 
 protected:
     wxRenderer *m_renderer;
