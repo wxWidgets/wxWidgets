@@ -1,6 +1,14 @@
 wxWindows 2 Change Log
 ----------------------
 
+INCOMPATIBLE CHANGES SINCE 2.2.x
+================================
+
+wxMSW:
+
+- child frames appear in the taskbar by default now, use wxFRAME_NO_TASKBAR
+  style to avoid it
+
 2.3.2
 -----
 
