@@ -1352,7 +1352,12 @@ static void RemoveWindowMenu(wxWindow *win, WXHMENU menu)
         {
             if ( !::GetMenuString(hMenu, i, buf, WXSIZEOF(buf), MF_BYPOSITION) )
             {
-                wxLogLastError(wxT("GetMenuString"));
+                // Ignore successful read of menu string with length 0 which
+                // occurs, for example, for a maximized MDI childs system menu
+                if ( ::GetLastError() != 0 )
+                {
+                    wxLogLastError(wxT("GetMenuString"));
+                }
 
                 continue;
             }
