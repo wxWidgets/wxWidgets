@@ -1649,10 +1649,9 @@ void  wxDC::Clear(void)
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
     wxMacFastPortSetter helper(this) ;
     Rect rect = { -31000 , -31000 , 31000 , 31000 } ;
-    if (m_backgroundBrush.GetStyle() != wxTRANSPARENT)
+    if ( m_backgroundBrush.Ok() && m_backgroundBrush.GetStyle() != wxTRANSPARENT)
     {
         ::PenNormal() ;
-        //MacInstallBrush() ;
         MacSetupBackgroundForCurrentPort( m_backgroundBrush ) ;
         ::EraseRect( &rect ) ;
     }
@@ -1913,37 +1912,40 @@ void wxDC::MacInstallPen() const
 void wxDC::MacSetupBackgroundForCurrentPort(const wxBrush& background )
 {
     Pattern whiteColor ;
-    switch( background.MacGetBrushKind() )
+    if ( background.Ok() )
     {
-        case kwxMacBrushTheme :
+        switch( background.MacGetBrushKind() )
         {
-            ::SetThemeBackground( background.MacGetTheme() , wxDisplayDepth() , true ) ;
-            break ;
-        }
-        case kwxMacBrushThemeBackground :
-        {
-            Rect extent ;
-            ThemeBackgroundKind bg = background.MacGetThemeBackground( &extent ) ;
-            ::ApplyThemeBackground( bg , &extent ,kThemeStateActive , wxDisplayDepth() , true ) ;
-            break ;
-        }
-        case kwxMacBrushColour :
-        {
-            ::RGBBackColor( &MAC_WXCOLORREF( background.GetColour().GetPixel()) );
-            int brushStyle = background.GetStyle();
-            if (brushStyle == wxSOLID)
-                ::BackPat(GetQDGlobalsWhite(&whiteColor));
-            else if (IS_HATCH(brushStyle))
+            case kwxMacBrushTheme :
             {
-                Pattern pat ;
-                wxMacGetPattern(brushStyle, &pat);
-                ::BackPat(&pat);
+                ::SetThemeBackground( background.MacGetTheme() , wxDisplayDepth() , true ) ;
+                break ;
             }
-            else
+            case kwxMacBrushThemeBackground :
             {
-                ::BackPat(GetQDGlobalsWhite(&whiteColor));
+                Rect extent ;
+                ThemeBackgroundKind bg = background.MacGetThemeBackground( &extent ) ;
+                ::ApplyThemeBackground( bg , &extent ,kThemeStateActive , wxDisplayDepth() , true ) ;
+                break ;
             }
-            break ;
+            case kwxMacBrushColour :
+            {
+                ::RGBBackColor( &MAC_WXCOLORREF( background.GetColour().GetPixel()) );
+                int brushStyle = background.GetStyle();
+                if (brushStyle == wxSOLID)
+                    ::BackPat(GetQDGlobalsWhite(&whiteColor));
+                else if (IS_HATCH(brushStyle))
+                {
+                    Pattern pat ;
+                    wxMacGetPattern(brushStyle, &pat);
+                    ::BackPat(&pat);
+                }
+                else
+                {
+                    ::BackPat(GetQDGlobalsWhite(&whiteColor));
+                }
+                break ;
+            }
         }
     }
 }
