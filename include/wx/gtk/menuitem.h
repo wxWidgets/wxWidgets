@@ -52,7 +52,18 @@ public:
 
     wxString GetHotKey() const { return m_hotKey; }
 
+    // compatibility only, don't use in new code
+    wxMenuItem(wxMenu *parentMenu,
+               int id,
+               const wxString& text,
+               const wxString& help,
+               bool isCheckable,
+               wxMenu *subMenu = (wxMenu *)NULL);
+
 private:
+    // common part of all ctors
+    void Init();
+
     // DoSetText() transforms the accel mnemonics in our label from MSW/wxWin
     // style to GTK+ and is called from ctor and SetText()
     void DoSetText(const wxString& text);

@@ -92,8 +92,26 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
             , wxOwnerDrawn(GetLabelFromText(text), kind == wxITEM_CHECK)
 #endif // owner drawn
 {
-    wxASSERT_MSG( pParentMenu != NULL, wxT("a menu item should have a parent") );
+    Init();
+}
 
+wxMenuItem::wxMenuItem(wxMenu *parentMenu,
+                       int id,
+                       const wxString& text,
+                       const wxString& help,
+                       bool isCheckable,
+                       wxMenu *subMenu)
+          : wxMenuItemBase(parentMenu, id, text, help,
+                           isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu)
+#if wxUSE_OWNER_DRAWN
+            , wxOwnerDrawn(GetLabelFromText(text), isCheckable)
+#endif // owner drawn
+{
+    Init();
+}
+
+void wxMenuItem::Init()
+{
     m_startRadioGroup =
     m_endRadioGroup = -1;
 
@@ -110,7 +128,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
     ResetOwnerDrawn();
 
     // tell the owner drawing code to to show the accel string as well
-    SetAccelString(text.AfterFirst(_T('\t')));
+    SetAccelString(m_text.AfterFirst(_T('\t')));
 #endif // wxUSE_OWNER_DRAWN
 }
 

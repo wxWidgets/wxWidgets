@@ -67,7 +67,18 @@ public:
         m_endRadioGroup = end;
     }
 
+    // compatibility only, don't use in new code
+    wxMenuItem(wxMenu *parentMenu,
+               int id,
+               const wxString& text,
+               const wxString& help,
+               bool isCheckable,
+               wxMenu *subMenu = (wxMenu *)NULL);
+
 private:
+    // common part of all ctors
+    void Init();
+
     // the positions of the first and last items of the radio group this item
     // belongs to or -1
     int m_startRadioGroup,

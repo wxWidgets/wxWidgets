@@ -110,7 +110,7 @@ void       gtk_pixmap_menu_item_set_pixmap     (GtkPixmapMenuItem *menu_item,
 static wxString wxReplaceUnderscore( const wxString& title )
 {
     const wxChar *pc;
-    
+
     /* GTK 1.2 wants to have "_" instead of "&" for accelerators */
     wxString str;
     for ( pc = title; *pc != wxT('\0'); pc++ )
@@ -713,10 +713,27 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
                        wxMenu *subMenu)
           : wxMenuItemBase(parentMenu, id, text, help, kind, subMenu)
 {
+    Init();
+}
+
+wxMenuItem::wxMenuItem(wxMenu *parentMenu,
+                       int id,
+                       const wxString& text,
+                       const wxString& help,
+                       bool isCheckable,
+                       wxMenu *subMenu)
+          : wxMenuItemBase(parentMenu, id, text, help,
+                           isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu)
+{
+    Init();
+}
+
+void wxMenuItem::Init()
+{
     m_labelWidget = (GtkWidget *) NULL;
     m_menuItem = (GtkWidget *) NULL;
 
-    DoSetText(text);
+    DoSetText(m_text);
 }
 
 wxMenuItem::~wxMenuItem()
@@ -729,7 +746,7 @@ wxMenuItem::~wxMenuItem()
 wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 {
     wxString label;
-    
+
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
     {
         if ( *pc == wxT('_')  )
@@ -739,7 +756,7 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
             label += *pc;
             continue;
         }
-        
+
         if ( *pc == wxT('&') )
         {
             // wxMSW escapes &
@@ -879,10 +896,10 @@ wxString wxMenuItem::GetFactoryPath() const
             // remove '_' and '&' unconditionally
             continue;
         }
-        
+
         path += *pc;
     }
-    
+
     return path;
 }
 
@@ -1008,7 +1025,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
     {
         wxString text( mitem->GetText() );
         const wxBitmap *bitmap = &mitem->GetBitmap();
-    
+
         menuItem = gtk_pixmap_menu_item_new ();
         GtkWidget *label = gtk_accel_label_new (text.mb_str());
         gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -1255,7 +1272,7 @@ static wxString GetHotKey( const wxMenuItem& item )
             case WXK_F12:
                 hotkey << wxT('F') << code - WXK_F1 + 1;
                 break;
-                
+
                 // TODO: we should use gdk_keyval_name() (a.k.a.
                 //       XKeysymToString) here as well as hardcoding the keysym
                 //       names this might be not portable
@@ -1389,7 +1406,7 @@ gtk_pixmap_menu_item_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      pixmap_menu_item_type = gtk_type_unique (gtk_menu_item_get_type (), 
+      pixmap_menu_item_type = gtk_type_unique (gtk_menu_item_get_type (),
 					       &pixmap_menu_item_info);
     }
 
@@ -1399,7 +1416,7 @@ gtk_pixmap_menu_item_get_type (void)
 /**
  * gtk_pixmap_menu_item_new
  *
- * Creates a new pixmap menu item. Use gtk_pixmap_menu_item_set_pixmap() 
+ * Creates a new pixmap menu item. Use gtk_pixmap_menu_item_set_pixmap()
  * to set the pixmap wich is displayed at the left side.
  *
  * Returns:
@@ -1461,7 +1478,7 @@ gtk_pixmap_menu_item_draw (GtkWidget    *widget,
   if (GTK_WIDGET_CLASS (parent_class)->draw)
     (* GTK_WIDGET_CLASS (parent_class)->draw) (widget, area);
 
-  if (GTK_WIDGET_DRAWABLE (widget) && 
+  if (GTK_WIDGET_DRAWABLE (widget) &&
       GTK_PIXMAP_MENU_ITEM(widget)->pixmap) {
     gtk_widget_draw(GTK_WIDGET(GTK_PIXMAP_MENU_ITEM(widget)->pixmap),NULL);
   }
@@ -1478,7 +1495,7 @@ gtk_pixmap_menu_item_expose (GtkWidget      *widget,
   if (GTK_WIDGET_CLASS (parent_class)->expose_event)
     (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
 
-  if (GTK_WIDGET_DRAWABLE (widget) && 
+  if (GTK_WIDGET_DRAWABLE (widget) &&
       GTK_PIXMAP_MENU_ITEM(widget)->pixmap) {
     gtk_widget_draw(GTK_WIDGET(GTK_PIXMAP_MENU_ITEM(widget)->pixmap),NULL);
   }
@@ -1511,8 +1528,8 @@ gtk_pixmap_menu_item_set_pixmap (GtkPixmapMenuItem *menu_item,
   if (GTK_WIDGET_REALIZED (pixmap->parent) &&
       !GTK_WIDGET_REALIZED (pixmap))
     gtk_widget_realize (pixmap);
-  
-  if (GTK_WIDGET_VISIBLE (pixmap->parent)) {      
+
+  if (GTK_WIDGET_VISIBLE (pixmap->parent)) {
     if (GTK_WIDGET_MAPPED (pixmap->parent) &&
 	GTK_WIDGET_VISIBLE(pixmap) &&
         !GTK_WIDGET_MAPPED (pixmap))
@@ -1520,7 +1537,7 @@ gtk_pixmap_menu_item_set_pixmap (GtkPixmapMenuItem *menu_item,
   }
 
   changed_have_pixmap_status(menu_item);
-  
+
   if (GTK_WIDGET_VISIBLE (pixmap) && GTK_WIDGET_VISIBLE (menu_item))
     gtk_widget_queue_resize (pixmap);
 }
@@ -1606,7 +1623,7 @@ gtk_pixmap_menu_item_size_request (GtkWidget      *widget,
   GTK_WIDGET_CLASS(parent_class)->size_request(widget,requisition);
 
   menu_item = GTK_PIXMAP_MENU_ITEM (widget);
-  
+
   if (menu_item->pixmap)
     gtk_widget_size_request(menu_item->pixmap, &req);
 
@@ -1627,19 +1644,19 @@ gtk_pixmap_menu_item_remove (GtkContainer *container,
   g_return_if_fail (GTK_IS_WIDGET (child));
 
   bin = GTK_BIN (container);
-  g_return_if_fail ((bin->child == child || 
+  g_return_if_fail ((bin->child == child ||
 		     (GTK_PIXMAP_MENU_ITEM(container)->pixmap == child)));
 
   widget_was_visible = GTK_WIDGET_VISIBLE (child);
-  
+
   gtk_widget_unparent (child);
   if (bin->child == child)
-    bin->child = NULL; 
+    bin->child = NULL;
   else {
     GTK_PIXMAP_MENU_ITEM(container)->pixmap = NULL;
     changed_have_pixmap_status(GTK_PIXMAP_MENU_ITEM(container));
   }
-    
+
   if (widget_was_visible)
     gtk_widget_queue_resize (GTK_WIDGET (container));
 }
@@ -1661,7 +1678,7 @@ changed_have_pixmap_status (GtkPixmapMenuItem *menu_item)
 
     if (GTK_PIXMAP_MENU_ITEM_GET_CLASS(menu_item)->have_pixmap_count == 0) {
       /* Install normal toggle size */
-      GTK_MENU_ITEM_GET_CLASS(menu_item)->toggle_size = GTK_PIXMAP_MENU_ITEM_GET_CLASS(menu_item)->orig_toggle_size;    
+      GTK_MENU_ITEM_GET_CLASS(menu_item)->toggle_size = GTK_PIXMAP_MENU_ITEM_GET_CLASS(menu_item)->orig_toggle_size;
     }
   }
 
@@ -1670,7 +1687,7 @@ changed_have_pixmap_status (GtkPixmapMenuItem *menu_item)
      this function is called, we get the same effect, just because of
      how the preferences option to show pixmaps works. Bogus, broken.
   */
-  if (GTK_WIDGET_VISIBLE(GTK_WIDGET(menu_item))) 
+  if (GTK_WIDGET_VISIBLE(GTK_WIDGET(menu_item)))
     gtk_widget_queue_resize(GTK_WIDGET(menu_item));
 }
 
