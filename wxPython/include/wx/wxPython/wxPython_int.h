@@ -579,6 +579,11 @@ public:
 #endif
     // virtual int FilterEvent(wxEvent& event); // This one too????
 
+    // For catching Apple Events
+    virtual void MacOpenFile(const wxString &fileName);
+    virtual void MacPrintFile(const wxString &fileName);
+    virtual void MacNewFile();
+    virtual void MacReopenApp();
 
     static bool GetMacSupportPCMenuShortcuts();
     static long GetMacAboutMenuItemId();
