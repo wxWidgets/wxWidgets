@@ -184,6 +184,7 @@ ALL_SOURCES = \
 		motif/app.cpp \
 		motif/bitmap.cpp \
 		motif/bmpbuttn.cpp \
+		motif/bmpmotif.cpp \
 		motif/button.cpp \
 		motif/checkbox.cpp \
 		motif/checklst.cpp \
@@ -305,7 +306,6 @@ ALL_HEADERS = \
 		ctrlsub.h \
 		cursor.h \
 		dataobj.h \
-		date.h \
 		datetime.h \
 		datetime.inl \
 		datstrm.h \
@@ -479,7 +479,6 @@ ALL_HEADERS = \
 		tglbtn.h \
 		thread.h \
 		thrimpl.cpp \
-		time.h \
 		timer.h \
 		tipdlg.h \
 		tipwin.h \
@@ -519,6 +518,7 @@ ALL_HEADERS = \
 		motif/app.h \
 		motif/bitmap.h \
 		motif/bmpbuttn.h \
+		motif/bmpmotif.h \
 		motif/button.h \
 		motif/checkbox.h \
 		motif/checklst.h \
@@ -828,6 +828,7 @@ GUIOBJS = \
 		app.o \
 		bitmap.o \
 		bmpbuttn.o \
+		bmpmotif.o \
 		button.o \
 		checkbox.o \
 		checklst.o \

@@ -622,6 +622,7 @@ accel.cpp	Motif
 app.cpp	Motif
 bitmap.cpp	Motif
 bmpbuttn.cpp	Motif
+bmpmotif.cpp	Motif
 button.cpp	Motif
 checkbox.cpp	Motif
 checklst.cpp	Motif
@@ -1249,6 +1250,7 @@ accel.h	MotifH
 app.h	MotifH
 bitmap.h	MotifH
 bmpbuttn.h	MotifH
+bmpmotif.h	MotifH
 button.h	MotifH
 checkbox.h	MotifH
 checklst.h	MotifH

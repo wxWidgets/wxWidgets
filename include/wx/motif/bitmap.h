@@ -76,9 +76,9 @@ public:
     int               m_height;
     int               m_depth;
     bool              m_ok;
-    int               m_numColors;
+    // XXX int               m_numColors;
     wxPalette         m_bitmapPalette;
-    int               m_quality;
+    // XXX int               m_quality;
     
     wxMask *          m_bitmapMask; // Optional mask
     
@@ -86,16 +86,22 @@ public:
 public:
     WXPixmap          m_pixmap;
     WXDisplay*        m_display;
-    bool              m_freePixmap;
+    // XXX bool              m_freePixmap;
+#if 0
     unsigned long*    m_freeColors;
     long              m_freeColorsCount;
-    
+#endif
+
+#if 0
     // These 5 variables are for wxControl
     WXPixmap          m_insensPixmap ;
     WXPixmap          m_labelPixmap ;
     WXPixmap          m_armPixmap ;
+#endif
+#if 0
     WXImage*          m_image ;
     WXImage*          m_insensImage ;
+#endif
 };
 
 #define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
@@ -186,11 +192,11 @@ public:
     int GetWidth() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_width : 0); }
     int GetHeight() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_height : 0); }
     int GetDepth() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_depth : 0); }
-    int GetQuality() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_quality : 0); }
+    // XXX int GetQuality() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_quality : 0); }
     void SetWidth(int w);
     void SetHeight(int h);
     void SetDepth(int d);
-    void SetQuality(int q);
+    // XXX void SetQuality(int q);
     void SetOk(bool isOk);
     
     wxPalette* GetPalette() const { return (M_BITMAPDATA ? (& M_BITMAPDATA->m_bitmapPalette) : (wxPalette*) NULL); }
@@ -210,9 +216,11 @@ public:
 public:
     WXDisplay* GetDisplay() const { return M_BITMAPDATA->m_display; }
     WXPixmap GetPixmap() const { return (WXPixmap) M_BITMAPDATA->m_pixmap; }
+#if 0
     virtual WXPixmap GetLabelPixmap(WXWidget w) ;
     virtual WXPixmap GetArmPixmap(WXWidget w) ;
     virtual WXPixmap GetInsensPixmap(WXWidget w = (WXWidget) 0) ;
+#endif
     void SetPixmapNull() { M_BITMAPDATA->m_pixmap = 0; }
     
 protected:

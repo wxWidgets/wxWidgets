@@ -660,7 +660,7 @@ void wxFrame::PositionToolBar()
             tw = cw;
         }
 
-        tb->SetSize(0, 0, tw, th, wxSIZE_NO_ADJUSTMENTS);
+        tb->SetSize(0, 0, -1, -1, wxSIZE_NO_ADJUSTMENTS);
     }
 }
 #endif // wxUSE_TOOLBAR

@@ -36,7 +36,7 @@
 #pragma message enable nosimpint
 #endif
 
-#include "wx/motif/private.h"
+// #include "wx/motif/private.h"
 
 #if wxHAVE_LIB_XPM
     #include <X11/xpm.h>
@@ -53,27 +53,34 @@ wxBitmapRefData::wxBitmapRefData()
     m_width = 0;
     m_height = 0;
     m_depth = 0;
-    m_quality = 0;
-    m_numColors = 0;
+    // XXX m_quality = 0;
+    // m_numColors = 0;
     m_bitmapMask = NULL;
 
     m_pixmap = (WXPixmap) 0;
     m_display = (WXDisplay*) 0;
 
-    m_freePixmap = TRUE; //TODO: necessary?
+    // m_freePixmap = TRUE; //TODO: necessary?
+#if 0
     m_freeColors = (unsigned long*) 0;
     m_freeColorsCount = 0;
+#endif
 
     // These 5 variables are for wxControl
+#if 0
     m_insensPixmap = (WXPixmap) 0;
     m_labelPixmap = (WXPixmap) 0;
     m_armPixmap = (WXPixmap) 0;
+#endif
+#if 0
     m_image = (WXImage*) 0;
     m_insensImage = (WXImage*) 0;
+#endif
 }
 
 wxBitmapRefData::~wxBitmapRefData()
 {
+#if 0
     if (m_labelPixmap)
         XmDestroyPixmap (DefaultScreenOfDisplay ((Display*) m_display), (Pixmap) m_labelPixmap);
 
@@ -82,22 +89,28 @@ wxBitmapRefData::~wxBitmapRefData()
 
     if (m_insensPixmap)
         XmDestroyPixmap (DefaultScreenOfDisplay ((Display*) m_display), (Pixmap) m_insensPixmap);
+#endif
 
+#if 0
     if (m_image)
     {
         XmUninstallImage ((XImage*) m_image);
         XtFree ((char *) (XImage*) m_image);
     }
+#endif
 
+#if 0
     if (m_insensImage)
     {
         XmUninstallImage ((XImage*) m_insensImage);
         delete[] ((XImage*) m_insensImage)->data;
         XtFree ((char *) (XImage*) m_insensImage);
     }
-    if (m_pixmap && m_freePixmap)
+#endif
+    if (m_pixmap /* && m_freePixmap */)
         XFreePixmap ((Display*) m_display, (Pixmap) m_pixmap);
 
+#if 0
     if (m_freeColors)
     {
         int screen = DefaultScreen((Display*) m_display);
@@ -107,6 +120,7 @@ wxBitmapRefData::~wxBitmapRefData()
             XFreeColors((Display*) m_display, cmp, &m_freeColors[llp], 1, 0L);
         delete m_freeColors;
     };
+#endif
 
     if (m_bitmapMask)
         delete m_bitmapMask;
@@ -184,7 +198,7 @@ bool wxBitmap::Create(int w, int h, int d)
     M_BITMAPDATA->m_width = w;
     M_BITMAPDATA->m_height = h;
     M_BITMAPDATA->m_depth = d;
-    M_BITMAPDATA->m_freePixmap = TRUE;
+    // M_BITMAPDATA->m_freePixmap = TRUE;
 
     Display *dpy = (Display*) wxGetDisplay();
 
@@ -276,6 +290,9 @@ void wxBitmap::SetDepth(int d)
     M_BITMAPDATA->m_depth = d;
 }
 
+#if 0
+
+// XXX
 void wxBitmap::SetQuality(int q)
 {
     if (!M_BITMAPDATA)
@@ -283,6 +300,8 @@ void wxBitmap::SetQuality(int q)
 
     M_BITMAPDATA->m_quality = q;
 }
+
+#endif
 
 void wxBitmap::SetOk(bool isOk)
 {
@@ -419,7 +438,7 @@ bool wxXBMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
                                 int WXUNUSED(desiredWidth),
                                 int WXUNUSED(desiredHeight))
 {
-    M_BITMAPHANDLERDATA->m_freePixmap = TRUE;
+    // M_BITMAPHANDLERDATA->m_freePixmap = TRUE;
 
     int hotX, hotY;
     unsigned int w, h;
@@ -471,7 +490,7 @@ bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *data,
     M_BITMAPHANDLERDATA->m_width = width;
     M_BITMAPHANDLERDATA->m_height = height;
     M_BITMAPHANDLERDATA->m_depth = 1;
-    M_BITMAPHANDLERDATA->m_freePixmap = TRUE;
+    // M_BITMAPHANDLERDATA->m_freePixmap = TRUE;
 
     Display *dpy = (Display*) wxGetDisplay();
     M_BITMAPHANDLERDATA->m_display = (WXDisplay*) dpy;
@@ -479,6 +498,7 @@ bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *data,
     M_BITMAPHANDLERDATA->m_pixmap = (WXPixmap) XCreateBitmapFromData (dpy, RootWindow (dpy, DefaultScreen (dpy)), (char*) data, width, height);
     M_BITMAPHANDLERDATA->m_ok = (M_BITMAPHANDLERDATA->m_pixmap != (WXPixmap) 0) ;
 
+#if 0
     // code for wxControl. TODO: can we avoid doing this until we need it?
     // E.g. have CreateButtonPixmaps which is called on demand.
     XImage* image = (XImage *) XtMalloc (sizeof (XImage));
@@ -529,6 +549,9 @@ bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *data,
 
     M_BITMAPHANDLERDATA->m_image = (WXImage*) image;
     M_BITMAPHANDLERDATA->m_insensImage = (WXImage*) insensImage;
+#endif
+
+
 
     return TRUE;
 }
@@ -604,7 +627,7 @@ bool wxXPMFileHandler::LoadFile( wxBitmap *bitmap, const wxString& name,
 
         M_BITMAPHANDLERDATA->m_depth = depthRet;
 
-        M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
+        // M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
 
         XpmFreeAttributes(&xpmAttr);
 
@@ -662,7 +685,7 @@ bool wxXPMDataHandler::Create( wxBitmap *bitmap, void *data,
     M_BITMAPHANDLERDATA->m_width = width;
     M_BITMAPHANDLERDATA->m_height = height;
     M_BITMAPHANDLERDATA->m_depth = 1;
-    M_BITMAPHANDLERDATA->m_freePixmap = TRUE;
+    // M_BITMAPHANDLERDATA->m_freePixmap = TRUE;
 
     Display *dpy = (Display*) wxGetDisplay();
     M_BITMAPHANDLERDATA->m_display = (WXDisplay*) dpy;
@@ -686,7 +709,7 @@ bool wxXPMDataHandler::Create( wxBitmap *bitmap, void *data,
         xpmAttr.valuemask |= XpmColorSymbols;    // add flag
     }
 
-    Pixmap pixmap;
+    Pixmap pixmap = 0;
     Pixmap mask = 0;
     int ErrorStatus = XpmCreatePixmapFromData(dpy, RootWindow(dpy, DefaultScreen(dpy)),
         (char**) data, &pixmap, &mask, &xpmAttr);
@@ -715,7 +738,7 @@ bool wxXPMDataHandler::Create( wxBitmap *bitmap, void *data,
 
         M_BITMAPHANDLERDATA->m_depth = depthRet;
 
-        M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
+        // M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
         XpmFreeAttributes(&xpmAttr);
         M_BITMAPHANDLERDATA->m_ok = TRUE;
         M_BITMAPHANDLERDATA->m_pixmap = (WXPixmap) pixmap;
@@ -749,13 +772,15 @@ void wxBitmap::InitStandardHandlers()
 #endif // wxHAVE_LIB_XPM
 }
 
+#if 0
 WXPixmap wxBitmap::GetLabelPixmap (WXWidget w)
 {
     if (!M_BITMAPDATA)
         return (WXPixmap)NULL;
-    if (M_BITMAPDATA->m_image == (WXPixmap) 0)
+    // if (M_BITMAPDATA->m_image == (WXPixmap) 0)
         return M_BITMAPDATA->m_pixmap;
 
+#if 0
     Display *dpy = (Display*) M_BITMAPDATA->m_display;
 
 #ifdef FOO
@@ -794,13 +819,15 @@ WXPixmap wxBitmap::GetLabelPixmap (WXWidget w)
     M_BITMAPDATA->m_labelPixmap = (WXPixmap) XmGetPixmap (DefaultScreenOfDisplay (dpy), tmp, fg, bg);
 
     return M_BITMAPDATA->m_labelPixmap;
+#endif
 }
 
 WXPixmap wxBitmap::GetArmPixmap (WXWidget w)
 {
-    if (M_BITMAPDATA->m_image == (WXPixmap) 0)
+    // if (M_BITMAPDATA->m_image == (WXPixmap) 0)
         return M_BITMAPDATA->m_pixmap;
 
+#if 0
     Display *dpy = (Display*) M_BITMAPDATA->m_display;
 #ifdef FOO
     // See GetLabelPixmap () comment
@@ -824,6 +851,7 @@ WXPixmap wxBitmap::GetArmPixmap (WXWidget w)
     M_BITMAPDATA->m_armPixmap = (WXPixmap) XmGetPixmap (DefaultScreenOfDisplay (dpy), tmp, fg, bg);
 
     return M_BITMAPDATA->m_armPixmap;
+#endif
 }
 
 WXPixmap wxBitmap::GetInsensPixmap (WXWidget w)
@@ -844,9 +872,10 @@ WXPixmap wxBitmap::GetInsensPixmap (WXWidget w)
             return M_BITMAPDATA->m_pixmap;
     }
 
-    if (M_BITMAPDATA->m_insensImage == (WXPixmap) 0)
+    // if (M_BITMAPDATA->m_insensImage == (WXPixmap) 0)
         return M_BITMAPDATA->m_pixmap;
 
+#if 0
 #ifdef FOO
     See GetLabelPixmap () comment
         // Must be destroyed, because colours can have been changed!
@@ -867,7 +896,9 @@ WXPixmap wxBitmap::GetInsensPixmap (WXWidget w)
     M_BITMAPDATA->m_insensPixmap = (WXPixmap) XmGetPixmap (DefaultScreenOfDisplay (dpy), tmp, fg, bg);
 
     return M_BITMAPDATA->m_insensPixmap;
+#endif
 }
+#endif
 
 // We may need this sometime...
 
@@ -1075,8 +1106,8 @@ wxSearchColor::wxSearchColor( int size_, XColor *colors_ )
 
 wxSearchColor::~wxSearchColor( void )
 {
-  if ( color ) delete color;
-  if ( entry ) delete entry;
+  if ( color ) delete[] color;
+  if ( entry ) delete[] entry;
 }
 
 int wxSearchColor::SearchColor( int r, int g, int b )
@@ -1208,11 +1239,10 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     vinfo_template.depth = bpp;
     int nitem = 0;
 
-    vi = XGetVisualInfo( dpy, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
+    vi = XGetVisualInfo( dpy, VisualIDMask|VisualDepthMask,
+                         &vinfo_template, &nitem );
 
     wxCHECK_MSG( vi, FALSE, wxT("no visual") );
-
-    XFree( vi );
 
     if ((bpp == 16) && (vi->red_mask != 0xf800)) bpp = 15;
     if (bpp < 8) bpp = 8;
@@ -1231,6 +1261,8 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         else if ((vi->green_mask > vi->red_mask) && (vi->red_mask > vi->blue_mask))   b_o = GRB;
         else if ((vi->green_mask > vi->blue_mask) && (vi->blue_mask > vi->red_mask))  b_o = GBR;
     }
+
+    XFree( vi );
 
     int r_mask = image.GetMaskRed();
     int g_mask = image.GetMaskGreen();

@@ -35,7 +35,7 @@
 // Implemented in button.cpp
 void wxButtonCallback (Widget w, XtPointer clientData, XtPointer ptr);
 
-Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
+// Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 
@@ -175,11 +175,15 @@ void wxBitmapButton::DoSetBitmap()
             wxBitmap newBitmap =
                 wxCreateMaskedBitmap(m_bmpNormalOriginal, col);
             m_bmpNormal = newBitmap;
+            m_bitmapCache.SetBitmap( m_bmpNormal );
 
             pixmap = (Pixmap) m_bmpNormal.GetPixmap();
         }
         else
-            pixmap = (Pixmap) m_bmpNormal.GetLabelPixmap(m_mainWidget);
+        {
+            m_bitmapCache.SetBitmap( m_bmpNormal );
+            pixmap = (Pixmap) m_bitmapCache.GetLabelPixmap(m_mainWidget);
+        }
 
         if (m_bmpDisabledOriginal.Ok())
         {
@@ -200,10 +204,10 @@ void wxBitmapButton::DoSetBitmap()
                 insensPixmap = (Pixmap) m_bmpDisabled.GetPixmap();
             }
             else
-                insensPixmap = (Pixmap) m_bmpNormal.GetInsensPixmap(m_mainWidget);
+                insensPixmap = (Pixmap) m_bitmapCache.GetInsensPixmap(m_mainWidget);
         }
         else
-            insensPixmap = (Pixmap) m_bmpNormal.GetInsensPixmap(m_mainWidget);
+            insensPixmap = (Pixmap) m_bitmapCache.GetInsensPixmap(m_mainWidget);
 
         // Now make the bitmap representing the armed state
         if (m_bmpSelectedOriginal.Ok())
@@ -225,11 +229,12 @@ void wxBitmapButton::DoSetBitmap()
                 armPixmap = (Pixmap) m_bmpSelected.GetPixmap();
             }
             else
-                armPixmap = (Pixmap) m_bmpNormal.GetArmPixmap(m_mainWidget);
+                armPixmap = (Pixmap) m_bitmapCache.GetArmPixmap(m_mainWidget);
         }
         else
-            armPixmap = (Pixmap) m_bmpNormal.GetArmPixmap(m_mainWidget);
+            armPixmap = (Pixmap) m_bitmapCache.GetArmPixmap(m_mainWidget);
 
+#if 0
         // <- the Get...Pixmap()-functions return the same pixmap!
         if (insensPixmap == pixmap) 
         {
@@ -237,6 +242,7 @@ void wxBitmapButton::DoSetBitmap()
                 XCreateInsensitivePixmap(DisplayOfScreen(XtScreen((Widget) m_mainWidget)), pixmap);
             m_insensPixmap = (WXPixmap) insensPixmap;
         }
+#endif
 
         XtVaSetValues ((Widget) m_mainWidget,
             XmNlabelPixmap, pixmap,

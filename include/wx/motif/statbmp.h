@@ -16,7 +16,7 @@
 #pragma interface "statbmp.h"
 #endif
 
-#include "wx/control.h"
+#include "wx/motif/bmpmotif.h"
 #include "wx/icon.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxStaticBitmapNameStr;
@@ -82,6 +82,7 @@ protected:
 protected:
     wxBitmap m_messageBitmap;
     wxBitmap m_messageBitmapOriginal;
+    wxBitmapCache m_bitmapCache;
 };
 
 #endif

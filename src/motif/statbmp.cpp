@@ -124,7 +124,10 @@ void wxStaticBitmap::DoSetBitmap()
             pixmap = (Pixmap) m_messageBitmap.GetPixmap();
         }
         else
-            pixmap = (Pixmap) m_messageBitmap.GetLabelPixmap(widget);
+        {
+            m_bitmapCache.SetBitmap( m_messageBitmap );
+            pixmap = (Pixmap)m_bitmapCache.GetLabelPixmap(widget);
+        }
 
         XtVaSetValues (widget,
             XmNlabelPixmap, pixmap,
@@ -164,11 +167,13 @@ void wxStaticBitmap::ChangeBackgroundColour()
     wxWindow::ChangeBackgroundColour();
 
     // must recalculate the background colour
+    m_bitmapCache.SetColoursChanged();
     DoSetBitmap();
 }
 
 void wxStaticBitmap::ChangeForegroundColour()
 {
+    m_bitmapCache.SetColoursChanged();
     wxWindow::ChangeForegroundColour();
 }
 

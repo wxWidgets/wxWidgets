@@ -16,6 +16,8 @@
 #pragma interface "bmpbuttn.h"
 #endif
 
+#include "wx/motif/bmpmotif.h"
+
 WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
 
 #define wxDEFAULT_BUTTON_MARGIN 4
@@ -67,7 +69,9 @@ protected:
     // to reflect button background colour
     wxBitmap m_bmpSelectedOriginal;   
     wxBitmap m_bmpDisabledOriginal;
-    
+
+    wxBitmapCache m_bitmapCache;
+
     WXPixmap m_insensPixmap;
 };
 
