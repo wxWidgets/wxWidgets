@@ -123,9 +123,9 @@ All GUI ports:
   determine whether a window should receive idle events.
 - Added wxWS_EX_PROCESS_IDLE, wxWS_EX_PROCESS_UI_UPDATES window
   styles for use with conservative idle and update event modes.
-- wxMSW and wxGTK now send menu update events only when a menu is
-  about to be used.
+- send menu update events only when a menu is about to be used (MSW/GTK)
 - improved event processing performance (Hans Van Leemputten)
+- added wxMirrorDC class
 
 Unix:
 
