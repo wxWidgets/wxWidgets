@@ -362,7 +362,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
   while (node)
   {
     wxNotebookPage *page = (wxNotebookPage*)node->Data();
-    page->m_clientPanel->ProcessEvent(event);
+    page->m_clientPanel->SetSize(event.GetSize().GetX(), event.GetSize().GetY());
 
     node = node->Next();
   };
