@@ -249,7 +249,7 @@ public:
 
 protected:
         // copy ctor and assignment operator
-    wxListBase(const wxListBase& list)
+    wxListBase(const wxListBase& list) : wxObject()
         { Init(); DoCopy(list); }
     wxListBase& operator=(const wxListBase& list)
         { Clear(); DoCopy(list); return *this; }
@@ -514,7 +514,7 @@ public:
 
         // copying the string list: the strings are copied, too (extremely
         // inefficient!)
-    wxStringList(const wxStringList& other) { DeleteContents(TRUE); DoCopy(other); }
+    wxStringList(const wxStringList& other) : wxStringListBase() { DeleteContents(TRUE); DoCopy(other); }
     wxStringList& operator=(const wxStringList& other)
         { Clear(); DoCopy(other); return *this; }
 

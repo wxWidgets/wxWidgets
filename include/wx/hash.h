@@ -158,7 +158,7 @@ public:
     ~wxHashTable();
 
     // copy ctor and assignment operator
-    wxHashTable(const wxHashTable& table) { DoCopy(table); }
+    wxHashTable(const wxHashTable& table) : wxObject() { DoCopy(table); }
     wxHashTable& operator=(const wxHashTable& table)
         { Clear(); DoCopy(table); return *this; }
 
