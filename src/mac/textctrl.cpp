@@ -183,7 +183,9 @@ void wxTextCtrl::SetValue(const wxString& st)
     else
         value = st ;
     ::SetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
+
     MacRedrawControl() ;
+    Update();
 }
 
 // Clipboard operations
@@ -194,10 +196,10 @@ void wxTextCtrl::Copy()
         TEHandle teH ;
         long size ;
    
-  		  ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-		    TECopy( teH ) ;
+          ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+            TECopy( teH ) ;
         ClearCurrentScrap();
-		    TEToScrap() ;
+            TEToScrap() ;
     }
 }
 
@@ -208,12 +210,12 @@ void wxTextCtrl::Cut()
         TEHandle teH ;
         long size ;
    
-   		  ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-		    TECut( teH ) ;
+          ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+            TECut( teH ) ;
         ClearCurrentScrap();
-		    TEToScrap() ;
-		    //	MacInvalidateControl() ;
-	  }
+            TEToScrap() ;
+            //  MacInvalidateControl() ;
+      }
 }
 
 void wxTextCtrl::Paste()
@@ -1277,40 +1279,40 @@ bail:
 
 
 /* mUPOpenControl initializes a user pane control so it will be drawn
-	and will behave as a scrolling text edit field inside of a window.
-	This routine performs all of the initialization steps necessary,
-	except it does not create the user pane control itself.  theControl
-	should refer to a user pane control that you have either created
-	yourself or extracted from a dialog's control heirarchy using
-	the GetDialogItemAsControl routine.  */
+    and will behave as a scrolling text edit field inside of a window.
+    This routine performs all of the initialization steps necessary,
+    except it does not create the user pane control itself.  theControl
+    should refer to a user pane control that you have either created
+    yourself or extracted from a dialog's control heirarchy using
+    the GetDialogItemAsControl routine.  */
 OSStatus mUPOpenControl(ControlHandle theControl, bool multiline) {
-	Rect bounds;
-	WindowPtr theWindow;
-	STPTextPaneVars **tpvars, *varsp;
-	OSStatus err;
-	RGBColor rgbWhite = {0xFFFF, 0xFFFF, 0xFFFF};
-	TXNBackground tback;
-	
-		/* set up our globals */
-	if (gTPDrawProc == NULL) gTPDrawProc = NewControlUserPaneDrawUPP(TPPaneDrawProc);
-	if (gTPHitProc == NULL) gTPHitProc = NewControlUserPaneHitTestUPP(TPPaneHitTestProc);
-	if (gTPTrackProc == NULL) gTPTrackProc = NewControlUserPaneTrackingUPP(TPPaneTrackingProc);
-	if (gTPIdleProc == NULL) gTPIdleProc = NewControlUserPaneIdleUPP(TPPaneIdleProc);
-	if (gTPKeyProc == NULL) gTPKeyProc = NewControlUserPaneKeyDownUPP(TPPaneKeyDownProc);
-	if (gTPActivateProc == NULL) gTPActivateProc = NewControlUserPaneActivateUPP(TPPaneActivateProc);
-	if (gTPFocusProc == NULL) gTPFocusProc = NewControlUserPaneFocusUPP(TPPaneFocusProc);
-		
-		/* allocate our private storage */
-	tpvars = (STPTextPaneVars **) NewHandleClear(sizeof(STPTextPaneVars));
-	SetControlReference(theControl, (long) tpvars);
-	HLock((Handle) tpvars);
-	varsp = *tpvars;
-		/* set the initial settings for our private data */
-	varsp->fInFocus = false;
-	varsp->fIsActive = true;
-	varsp->fTEActive = false;
-	varsp->fUserPaneRec = theControl;
-	theWindow = varsp->fOwner = GetControlOwner(theControl);
+    Rect bounds;
+    WindowPtr theWindow;
+    STPTextPaneVars **tpvars, *varsp;
+    OSStatus err;
+    RGBColor rgbWhite = {0xFFFF, 0xFFFF, 0xFFFF};
+    TXNBackground tback;
+    
+        /* set up our globals */
+    if (gTPDrawProc == NULL) gTPDrawProc = NewControlUserPaneDrawUPP(TPPaneDrawProc);
+    if (gTPHitProc == NULL) gTPHitProc = NewControlUserPaneHitTestUPP(TPPaneHitTestProc);
+    if (gTPTrackProc == NULL) gTPTrackProc = NewControlUserPaneTrackingUPP(TPPaneTrackingProc);
+    if (gTPIdleProc == NULL) gTPIdleProc = NewControlUserPaneIdleUPP(TPPaneIdleProc);
+    if (gTPKeyProc == NULL) gTPKeyProc = NewControlUserPaneKeyDownUPP(TPPaneKeyDownProc);
+    if (gTPActivateProc == NULL) gTPActivateProc = NewControlUserPaneActivateUPP(TPPaneActivateProc);
+    if (gTPFocusProc == NULL) gTPFocusProc = NewControlUserPaneFocusUPP(TPPaneFocusProc);
+        
+        /* allocate our private storage */
+    tpvars = (STPTextPaneVars **) NewHandleClear(sizeof(STPTextPaneVars));
+    SetControlReference(theControl, (long) tpvars);
+    HLock((Handle) tpvars);
+    varsp = *tpvars;
+        /* set the initial settings for our private data */
+    varsp->fInFocus = false;
+    varsp->fIsActive = true;
+    varsp->fTEActive = false;
+    varsp->fUserPaneRec = theControl;
+    theWindow = varsp->fOwner = GetControlOwner(theControl);
 #if TARGET_CARBON
     varsp->fDrawingEnvironment = GetWindowPort(varsp->fOwner);
 #else
@@ -1838,16 +1840,16 @@ void wxTextCtrl::Copy()
             TEHandle teH ;
             long size ;
        
-      		 ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-    		TECopy( teH ) ;
-    		ClearCurrentScrap();
-    		TEToScrap() ;
-    	}
-    	else
-    	{
-    	  mUPDoEditCommand( (ControlHandle) m_macControl , kmUPCopy ) ;
-    	}
-	}
+             ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+            TECopy( teH ) ;
+            ClearCurrentScrap();
+            TEToScrap() ;
+        }
+        else
+        {
+          mUPDoEditCommand( (ControlHandle) m_macControl , kmUPCopy ) ;
+        }
+    }
 }
 
 void wxTextCtrl::Cut()
@@ -1859,17 +1861,17 @@ void wxTextCtrl::Cut()
             TEHandle teH ;
             long size ;
        
-       		::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-    		TECut( teH ) ;
-    		ClearCurrentScrap();
-    		TEToScrap() ;
-    		//	MacInvalidateControl() ;
+            ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+            TECut( teH ) ;
+            ClearCurrentScrap();
+            TEToScrap() ;
+            //  MacInvalidateControl() ;
     }
-    	else
-    	{
-    	  mUPDoEditCommand( (ControlHandle) m_macControl , kmUPCut ) ;
-    	}
-	}
+        else
+        {
+          mUPDoEditCommand( (ControlHandle) m_macControl , kmUPCut ) ;
+        }
+    }
 }
 
 void wxTextCtrl::Paste()
@@ -1881,16 +1883,16 @@ void wxTextCtrl::Paste()
             TEHandle teH ;
             long size ;
      
-     		::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-  		TEFromScrap() ;
-  		TEPaste( teH ) ;
+            ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+        TEFromScrap() ;
+        TEPaste( teH ) ;
       MacRedrawControl() ;
-  	}
-   	else
-   	{
-   	  mUPDoEditCommand( (ControlHandle) m_macControl , kmUPPaste ) ;
-   	}
-	}
+    }
+    else
+    {
+      mUPDoEditCommand( (ControlHandle) m_macControl , kmUPPaste ) ;
+    }
+    }
 }
 
 bool wxTextCtrl::CanCopy() const
@@ -1986,22 +1988,22 @@ long wxTextCtrl::GetLastPosition() const
   }
   else
   {
-     STPTextPaneVars**	tpvars = (STPTextPaneVars **) GetControlReference( (ControlHandle) m_macControl);
+     STPTextPaneVars**  tpvars = (STPTextPaneVars **) GetControlReference( (ControlHandle) m_macControl);
 
     int actualsize = 0 ;
-  	Handle theText ;
-  	OSErr err = TXNGetDataEncoded( (**tpvars).fTXNRec, kTXNStartOffset, kTXNEndOffset, &theText , kTXNTextData );
-  		/* all done */
-  	if ( err )
-  	{
-  	  actualsize = 0 ;
-  	}
-  	else
-  	{
-  	  actualsize = GetHandleSize( theText ) ;
-  	  DisposeHandle( theText ) ;
-  	}
-  	return actualsize ;
+    Handle theText ;
+    OSErr err = TXNGetDataEncoded( (**tpvars).fTXNRec, kTXNStartOffset, kTXNEndOffset, &theText , kTXNTextData );
+        /* all done */
+    if ( err )
+    {
+      actualsize = 0 ;
+    }
+    else
+    {
+      actualsize = GetHandleSize( theText ) ;
+      DisposeHandle( theText ) ;
+    }
+    return actualsize ;
   }
 }
 
@@ -2014,19 +2016,19 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
    
     ControlEditTextSelectionRec selection ;
    
-   	selection.selStart = from ;
-   	selection.selEnd = to ;
-   	::SetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
-		::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-   	TESetSelect( from , to  , teH ) ;
-   	TEDelete( teH ) ;
-		TEInsert( value , value.Length() , teH ) ;
-	}
-	else
-	{
-	  // TODO
-	}
-	Refresh() ;
+    selection.selStart = from ;
+    selection.selEnd = to ;
+    ::SetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+        ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+    TESetSelect( from , to  , teH ) ;
+    TEDelete( teH ) ;
+        TEInsert( value , value.Length() , teH ) ;
+    }
+    else
+    {
+      // TODO
+    }
+    Refresh() ;
 }
 
 void wxTextCtrl::Remove(long from, long to)
@@ -2038,11 +2040,11 @@ void wxTextCtrl::Remove(long from, long to)
    
     ControlEditTextSelectionRec selection ;
    
-   	selection.selStart = from ;
-   	selection.selEnd = to ;
-   	::SetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
-	::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-   	TEDelete( teH ) ;
+    selection.selStart = from ;
+    selection.selEnd = to ;
+    ::SetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+    ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+    TEDelete( teH ) ;
   }
   else
   {
@@ -2134,7 +2136,7 @@ void wxTextCtrl::Clear()
   {
     mUPDoEditCommand( (ControlHandle) m_macControl , kmUPClear) ;
   }
-	Refresh() ;
+    Refresh() ;
 }
 
 bool wxTextCtrl::IsModified() const
@@ -2219,13 +2221,13 @@ int wxTextCtrl::GetNumberOfLines() const
 {
   // TODO change this if possible to reflect real lines
   wxString content = GetValue() ;
-	
-	int count = 1;
-	for (int i = 0; i < content.Length() ; i++)
-	{
-	    if (content[i] == '\r') count++;
-	}
-	
+    
+    int count = 1;
+    for (int i = 0; i < content.Length() ; i++)
+    {
+        if (content[i] == '\r') count++;
+    }
+    
   return count;
 }
 
@@ -2249,25 +2251,25 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 {
   // TODO change this if possible to reflect real lines
   wxString content = GetValue() ;
-	
-	// Find line first
-	int count = 0;
-	for (int i = 0; i < content.Length() ; i++)
-	{
-	    if (count == lineNo)
-	    {
-	        // Count chars in line then
-	    	count = 0;
-	    	for (int j = i; j < content.Length(); j++)
-	    	{
-	    	    count++;
-	    	    if (content[j] == '\r') return count;
-	    	}
-	    	
-	    	return count;
-	    }
-	    if (content[i] == '\r') count++;
-	}
+    
+    // Find line first
+    int count = 0;
+    for (int i = 0; i < content.Length() ; i++)
+    {
+        if (count == lineNo)
+        {
+            // Count chars in line then
+            count = 0;
+            for (int j = i; j < content.Length(); j++)
+            {
+                count++;
+                if (content[j] == '\r') return count;
+            }
+            
+            return count;
+        }
+        if (content[i] == '\r') count++;
+    }
     return 0;
 }
 
@@ -2276,27 +2278,27 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
   // TODO change this if possible to reflect real lines
   wxString content = GetValue() ;
 
-	// Find line first
-	int count = 0;
-	for (int i = 0; i < content.Length() ; i++)
-	{
-	    if (count == lineNo)
-	    {
-	        // Add chars in line then
-	    	wxString tmp("");
-	    	
-	    	for (int j = i; j < content.Length(); j++)
-	    	{
-	    	    if (content[j] == '\r')
-	    	        return tmp;
-	    	        
-	    	    tmp += content[j];
-	    	}
-	    	
-	    	return tmp;
-	    }
-	    if (content[i] == '\r') count++;
-	}
+    // Find line first
+    int count = 0;
+    for (int i = 0; i < content.Length() ; i++)
+    {
+        if (count == lineNo)
+        {
+            // Add chars in line then
+            wxString tmp("");
+            
+            for (int j = i; j < content.Length(); j++)
+            {
+                if (content[j] == '\r')
+                    return tmp;
+                    
+                tmp += content[j];
+            }
+            
+            return tmp;
+        }
+        if (content[i] == '\r') count++;
+    }
     return wxString("");
 }
 

@@ -52,7 +52,15 @@
 // ----------------------------------------------------------------------------
 
 // list of all frames and modeless dialogs
-wxWindowList wxModelessWindows;
+wxWindowList       wxModelessWindows;
+
+// double click testing
+static   Point     gs_lastWhere;
+static   long      gs_lastWhen = 0;
+
+// cursor stuff
+extern   int       wxBusyCursorCount;
+
 
 // ============================================================================
 // wxTopLevelWindowMac implementation
@@ -347,10 +355,6 @@ void wxTopLevelWindowMac::Lower()
     ::SendBehind( (WindowRef)m_macWindow , NULL ) ;
 }
 
-Point lastWhere ;
-long lastWhen = 0 ;
-extern int wxBusyCursorCount ;
-
 void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
 {
     EventRecord *ev = (EventRecord*) evr ;
@@ -397,22 +401,25 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
 
     if ( ev->what == mouseDown )
     {
-        if ( ev->when - lastWhen <= GetDblTime() )
+        if ( ev->when - gs_lastWhen <= GetDblTime() )
         {
-            if ( abs( localwhere.h - lastWhere.h ) < 3 || abs( localwhere.v - lastWhere.v ) < 3 )
+            if ( abs( localwhere.h - gs_lastWhere.h ) < 3 && abs( localwhere.v - gs_lastWhere.v ) < 3 )
             {
+                // This is not right if the second mouse down
+                // event occured in a differen window. We
+                // correct this in MacDispatchMouseEvent.
                 if ( controlDown )
                     event.SetEventType(wxEVT_RIGHT_DCLICK ) ;
                 else
                     event.SetEventType(wxEVT_LEFT_DCLICK ) ;
             }
-            lastWhen = 0 ;
+            gs_lastWhen = 0 ;
         }
         else
         {
-            lastWhen = ev->when ;
+            gs_lastWhen = ev->when ;
         }
-        lastWhere = localwhere ;
+        gs_lastWhere = localwhere ;
     }
 
     event.m_x = localwhere.h;

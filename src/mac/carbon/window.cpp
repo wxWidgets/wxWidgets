@@ -1386,6 +1386,7 @@ bool wxWindowMac::MacGetWindowFromPoint( const wxPoint &screenpoint , wxWindowMa
 }
 
 extern int wxBusyCursorCount ;
+static wxWindow *gs_lastWhich = NULL;
 
 bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
 {
@@ -1437,6 +1438,23 @@ bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
             || event.GetEventType() == wxEVT_LEAVE_WINDOW )
         wxToolTip::RelayEvent( this , event);
 #endif // wxUSE_TOOLTIPS
+
+    if (gs_lastWhich != this)
+    {
+        gs_lastWhich = this;
+        
+        // Double clicks must always occur on the same window
+        if (event.GetEventType() == wxEVT_LEFT_DCLICK)
+            event.SetEventType( wxEVT_LEFT_DOWN );
+        if (event.GetEventType() == wxEVT_RIGHT_DCLICK)
+            event.SetEventType( wxEVT_RIGHT_DOWN );
+            
+        // Same for mouse up events
+        if (event.GetEventType() == wxEVT_LEFT_UP)
+            return TRUE;
+        if (event.GetEventType() == wxEVT_RIGHT_UP)
+            return TRUE;
+    }
 
     GetEventHandler()->ProcessEvent( event ) ;
 
