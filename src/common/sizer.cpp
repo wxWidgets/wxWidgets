@@ -378,9 +378,12 @@ void wxSizer::SetSizeHints( wxWindow *window )
 
 wxSize wxSizer::GetMaxWindowSize( wxWindow *WXUNUSED(window) )
 {
-    wxSize sizeMax = wxGetDisplaySize();
-    // make the max size a bit smaller than the screen, a window which takes
-    // the entire screen doesn't look very nice neither
+    wxRect rect = wxGetClientDisplayRect();
+    wxSize sizeMax (rect.width,rect.height);
+
+    // Make the max size a bit smaller than the visible portion of 
+    // the screen.  A window which takes the entire screen doesn't 
+    // look very nice either
     sizeMax.x *= 9;
     sizeMax.x /= 10;
 

@@ -395,6 +395,30 @@ void wxWindowBase::Centre(int direction)
     xNew += posParent.x;
     yNew += posParent.y;
 
+    // Base size of the visible dimensions of the display
+    // to take into account the taskbar
+    wxRect rect = wxGetClientDisplayRect();
+    wxSize size (rect.width,rect.height);
+
+    if (posParent.x >= 0)  // if parent is on the main display
+    {
+        if (xNew < 0)
+            xNew = 0;
+        else if (xNew+width > size.x)
+            xNew = size.x-width-1;
+    }
+    if (posParent.y >= 0)  // if parent is on the main display
+    {
+        if (yNew+height > size.y)
+            yNew = size.y-height-1;
+
+        // Make certain that the title bar is initially visible
+        // always, even if this would push the bottom of the
+        // dialog of the visible area of the display
+        if (yNew < 0)
+            yNew = 0;
+    }
+
     // move the window to this position (keeping the old size but using
     // SetSize() and not Move() to allow xNew and/or yNew to be -1)
     SetSize(xNew, yNew, width, height, wxSIZE_ALLOW_MINUS_ONE);
