@@ -630,6 +630,26 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
 
+#if TARGET_API_MAC_OSX
+    // these might be the startup dirs, set them to the 'usual' dir containing the app bundle
+    wxString startupCwd = wxGetCwd() ;
+    if ( startupCwd == "/" || startupCwd.Right(15) == "/Contents/MacOS" )
+    {
+        wxString cwd ;
+        CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle() ) ;
+        CFURLRef urlParent = CFURLCreateCopyDeletingLastPathComponent( kCFAllocatorDefault , url ) ;
+        CFRelease( url ) ;
+        CFStringRef path = CFURLCopyFileSystemPath ( urlParent , kCFURLPOSIXPathStyle ) ;
+        CFRelease( urlParent ) ;
+        CFIndex len = CFStringGetLength( path )  ;
+        CFIndex max = CFStringGetMaximumSizeForEncoding( len, kCFStringEncodingUTF8 ) ;
+        wxChar* buf = cwd.GetWriteBuf( max ) ;
+        CFStringGetCString( path , buf , max + 1 , kCFStringEncodingUTF8 ) ;
+        CFRelease( path ) ;
+        cwd.UngetWriteBuf() ;
+        wxSetWorkingDirectory( cwd ) ;
+    }
+#endif
 
     wxMacCreateNotifierTable() ;
 
