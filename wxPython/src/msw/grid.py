@@ -1227,6 +1227,14 @@ class Grid(_windows.ScrolledWindow):
         del newobj.thisown
         self._setOORInfo(self)
 
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=WANTS_CHARS, 
+            String name=PanelNameStr) -> bool
+        """
+        return _grid.Grid_Create(*args, **kwargs)
+
     wxGridSelectCells = _grid.Grid_wxGridSelectCells
     wxGridSelectRows = _grid.Grid_wxGridSelectRows
     wxGridSelectColumns = _grid.Grid_wxGridSelectColumns
@@ -2013,6 +2021,13 @@ class GridPtr(Grid):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Grid
 _grid.Grid_swigregister(GridPtr)
+
+def PreGrid(*args, **kwargs):
+    """PreGrid() -> Grid"""
+    val = _grid.new_PreGrid(*args, **kwargs)
+    val.thisown = 1
+    self._setOORInfo(self)
+    return val
 
 def Grid_GetClassDefaultAttributes(*args, **kwargs):
     """
