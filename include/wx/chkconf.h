@@ -1609,5 +1609,11 @@
 #   endif
 #endif /* wxUSE_XRC */
 
+/* The generic date picker uses a popup window */
+#if !wxUSE_POPUPWIN
+#    undef wxUSE_DATEPICKCTRL
+#    define wxUSE_DATEPICKCTRL 0
+#endif  /* !wxUSE_POPUPWIN */
+
 #endif /* wxUSE_GUI */
 
