@@ -95,7 +95,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = true;
 #else
-    #define TEST_FILECONF
+    #define TEST_LOG
 
     static const bool TEST_ALL = false;
 #endif
@@ -2984,6 +2984,38 @@ static void TestRegistryAssociation()
 }
 
 #endif // TEST_REGISTRY
+
+// ----------------------------------------------------------------------------
+// scope guard
+// ----------------------------------------------------------------------------
+
+#include "wx/scopeguard.h"
+
+static void function0() { puts("function0()"); }
+static void function1(int n) { printf("function1(%d)\n", n); }
+static void function2(double x, char c) { printf("function2(%g, %c)\n", x, c); }
+
+struct Object
+{
+    void method0() { printf("method0()\n"); }
+    void method1(int n) { printf("method1(%d)\n", n); }
+    void method2(double x, char c) { printf("method2(%g, %c)\n", x, c); }
+};
+
+static void TestScopeGuard()
+{
+    ON_BLOCK_EXIT0(function0);
+    ON_BLOCK_EXIT1(function1, 17);
+    ON_BLOCK_EXIT2(function2, 3.14, 'p');
+
+    Object obj;
+    ON_BLOCK_EXIT_OBJ0(obj, Object::method0);
+    ON_BLOCK_EXIT_OBJ1(obj, Object::method1, 7);
+    ON_BLOCK_EXIT_OBJ2(obj, Object::method2, 2.71, 'e');
+
+    wxScopeGuard dismissed = wxMakeGuard(function0);
+    dismissed.Dismiss();
+}
 
 // ----------------------------------------------------------------------------
 // sockets
