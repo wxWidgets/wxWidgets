@@ -37,6 +37,7 @@
     #include "wx/menu.h"
     #include "wx/dc.h"
     #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/layout.h"
