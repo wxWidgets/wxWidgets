@@ -514,9 +514,9 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     ptDest =
     ptOrigin = GetClientAreaOrigin();
     wxSize size;
-    size.x = sizeTotal.x - abs(dx);
-    size.y = sizeTotal.y - abs(dy);
-    if ( size.x < 0 || size.y < 0 )
+    size.x = sizeTotal.x - abs(dx) - 1;
+    size.y = sizeTotal.y - abs(dy) - 1;
+    if ( size.x <= 0 || size.y <= 0 )
     {
         // just redraw everything as nothing of the displayed image will stay
         wxLogTrace(_T("scroll"), _T("refreshing everything"));

@@ -451,6 +451,7 @@ void wxScrollBarTimer::Notify()
     if ( m_skipNext )
     {
         // scroll normally now - reduce the delay
+        Stop();
         Start(50); // FIXME: hardcoded delay
 
         m_skipNext = FALSE;

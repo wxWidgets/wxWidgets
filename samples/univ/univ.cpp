@@ -421,5 +421,7 @@ void MyUnivCanvas::OnPaint(wxPaintEvent& event)
     dc.DrawText(_T("This is the top of the canvas"), 10, 10);
     dc.DrawLabel(_T("This is the bottom of the canvas"),
                  wxRect(0, 950, 950, 50), wxALIGN_RIGHT | wxBOTTOM);
+
+    event.Skip();
 }
 

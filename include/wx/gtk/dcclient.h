@@ -135,20 +135,6 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// wxPaintDC
-//-----------------------------------------------------------------------------
-
-class wxPaintDC : public wxWindowDC
-{
-public:
-    wxPaintDC();
-    wxPaintDC( wxWindow *win );
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxPaintDC)
-};
-
-//-----------------------------------------------------------------------------
 // wxClientDC
 //-----------------------------------------------------------------------------
 
@@ -160,6 +146,20 @@ public:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxClientDC)
+};
+
+//-----------------------------------------------------------------------------
+// wxPaintDC
+//-----------------------------------------------------------------------------
+
+class wxPaintDC : public wxClientDC
+{
+public:
+    wxPaintDC() { }
+    wxPaintDC( wxWindow *win );
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxPaintDC)
 };
 
 #endif // __GTKDCCLIENTH__
