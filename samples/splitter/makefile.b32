@@ -17,7 +17,7 @@ WXDIR = $(WXWIN)
 WXLIBDIR = $(WXDIR)\lib
 WXINC = $(WXDIR)\include\msw
 WXLIB = $(WXLIBDIR)\wx32.lib
-LIBS=$(WXLIB) cw32 import32
+LIBS=$(WXLIB) cw32 import32 ole2w32
 
 TARGET=test
 

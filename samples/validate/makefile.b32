@@ -19,7 +19,7 @@ WXINC = $(WXDIR)\include\msw
 WXBASESRC = $(WXDIR)\src\base
 WXBASEINC = $(WXDIR)\include\base
 WXLIB = $(WXLIBDIR)\wx32.lib
-LIBS=$(WXLIB) cw32 import32
+LIBS=$(WXLIB) cw32 import32 ole2w32
 
 TARGET=validate
 

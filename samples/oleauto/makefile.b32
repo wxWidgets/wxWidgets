@@ -1,13 +1,13 @@
 #
-# File:		makefile.bcc
-# Author:       Adnre Beltman
-# Created:      1995
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1993
 # Updated:	
-# Copyright:    (c) 1995, AIAI, University of Edinburgh
+# Copyright:
 #
 # "%W% %G%"
 #
-# Makefile : Builds dialogs example (DOS).
+# Makefile : Builds oleauto example
 
 # WXWIN and BCCDIR are set by parent make
 
@@ -15,10 +15,11 @@ WXDIR = $(WXWIN)
 !include $(WXDIR)\src\makeb32.env
 
 WXLIBDIR = $(WXDIR)\lib
-WXLIB=$(WXLIBDIR)\wx32.lib
+WXINC = $(WXDIR)\include\msw
+WXLIB = $(WXLIBDIR)\wx32.lib
 LIBS=$(WXLIB) cw32 import32 ole2w32
 
-TARGET=dialogs
+TARGET=oleauto
 
 !if "$(FINAL)" == "0"
 LINKFLAGS=/v /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
@@ -31,9 +32,9 @@ DEBUG_FLAGS =
 !endif
 CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
 
-OBJECTS = dialogs.obj
+OBJECTS = oleauto.obj
 
-$(TARGET).exe:	$(OBJECTS) $(TARGET).def $(TARGET).res
+$(TARGET).exe:	$(OBJECTS) $(TARGET).res
   tlink32 $(LINKFLAGS) @&&!
 c0w32.obj $(OBJECTS)
 $(TARGET)
@@ -49,7 +50,7 @@ $(TARGET).res
 .c.obj:
 	bcc32 $(CPPFLAGS) -P- -c {$< }
 
-dialogs.obj:      dialogs.$(SRCSUFF)
+oleauto.obj:      oleauto.$(SRCSUFF)
 
 $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
     brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)

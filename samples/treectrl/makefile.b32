@@ -16,7 +16,7 @@ WXDIR = $(WXWIN)
 
 WXLIBDIR = $(WXDIR)\lib
 WXLIB = $(WXLIBDIR)\wx32.lib
-LIBS=$(WXLIB) cw32 import32
+LIBS=$(WXLIB) cw32 import32 ole2w32
 
 TARGET=treetest
 
