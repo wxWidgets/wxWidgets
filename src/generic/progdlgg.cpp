@@ -106,7 +106,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 // VA cannot resolve this so:
     dc.GetTextExtent(message, &widthText, NULL, NULL, NULL, NULL, FALSE);
 #else
-    dc.GetTextExtent(message, &widthText, NULL);
+    dc.GetTextExtent(message, &widthText, (long*)NULL);
 #endif
 
     m_msg = new wxStaticText(this, -1, message);
@@ -143,7 +143,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         m_gauge = (wxGauge *)NULL;
 
     // create the estimated/remaining/total time zones if requested
-    m_elapsed = m_estimated = m_remaining = NULL;
+    m_elapsed = m_estimated = m_remaining = (wxStaticText*)NULL;
 
     int nTimeLabels = 0;
     if ( style & wxPD_ELAPSED_TIME )
@@ -224,6 +224,9 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     Show(TRUE);
     Enable(TRUE); // enable this window
+
+    // Update the display (especially on X, GTK)
+    wxYield();
 }
 
 wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,

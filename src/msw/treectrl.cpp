@@ -345,15 +345,14 @@ void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
     SetAnyImageList(m_imageListState = imageList, TVSIL_STATE);
 }
 
-size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
-                                    bool recursively) const
+// internal class for counting tree items
+
+class TraverseCounter : public wxTreeTraversal
 {
-    class TraverseCounter : public wxTreeTraversal
-    {
-    public:
+public:
         TraverseCounter(const wxTreeCtrl *tree,
                         const wxTreeItemId& root,
-                        bool recursively)
+			bool recursively)
             : wxTreeTraversal(tree)
             {
                 m_count = 0;
@@ -370,9 +369,15 @@ size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
 
         size_t GetCount() const { return m_count; }
 
-    private:
+private:
         size_t m_count;
-    } counter(this, item, recursively);
+};
+
+
+size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
+                                    bool recursively) const
+{
+    TraverseCounter counter(this, item, recursively);
 
     return counter.GetCount();
 }
@@ -645,11 +650,11 @@ void wxTreeCtrl::SetItemCheck(const wxTreeItemId& item, bool check)
     DoSetItem(&tvItem);
 }
 
-size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
+// internal class for getting the selected
+
+class TraverseSelections : public wxTreeTraversal
 {
-    class TraverseSelections : public wxTreeTraversal
-    {
-    public:
+public:
         TraverseSelections(const wxTreeCtrl *tree,
                            wxArrayTreeItemIds& selections)
             : wxTreeTraversal(tree), m_selections(selections)
@@ -669,9 +674,13 @@ size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
             return TRUE;
         }
 
-    private:
+private:
         wxArrayTreeItemIds& m_selections;
-    } selector(this, selections);
+};
+
+size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
+{
+    TraverseSelections selector(this, selections);
 
     return selections.GetCount();
 }

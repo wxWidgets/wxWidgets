@@ -638,11 +638,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
 void
 wxMenu::Init( const wxString& title,
-              long style
-#ifdef WXWIN_COMPATIBILITY
-              , const wxFunction func
-#endif
-              )
+              long style,
+	      const wxFunction func
+	      )
 {
     m_title = title;
     m_items.DeleteContents( TRUE );
@@ -657,9 +655,7 @@ wxMenu::Init( const wxString& title,
     m_menu = gtk_menu_new();  // Do not show!
 #endif
 
-#ifdef WXWIN_COMPATIBILITY
     m_callback = func;
-#endif
 
     m_eventHandler = this;
     m_clientData = (void*) NULL;

@@ -37,13 +37,16 @@ class WXDLLEXPORT wxMenu : public wxEvtHandler
 
 public:
     // ctors & dtor
-#ifdef WXWIN_COMPATIBILITY
     wxMenu(const wxString& title,
            const wxFunction func)
     {
         Init(title, func);
     }
-#endif
+
+    wxMenu( long WXUNUSED(style) )
+    {
+	Init( wxEmptyString );
+    }
 
     wxMenu(const wxString& title = wxEmptyString, long WXUNUSED(style) = 0)
     {
@@ -143,24 +146,20 @@ public:
     size_t CopyAccels(wxAcceleratorEntry *accels) const;
 #endif // wxUSE_ACCEL
 
-#ifdef WXWIN_COMPATIBILITY
+    wxFunction GetCallback() const { return m_callback; }
     void Callback(const wxFunction func) { m_callback = func; }
+    wxFunction        m_callback;
 
+#ifdef WXWIN_COMPATIBILITY
     // compatibility: these functions are deprecated
     bool Enabled(int id) const { return IsEnabled(id); }
     bool Checked(int id) const { return IsChecked(id); }
 
-private:
-    wxFunction        m_callback;
 #endif // WXWIN_COMPATIBILITY
 
 private:
     // common part of all ctors
-    void Init(const wxString& title
-#ifdef WXWIN_COMPATIBILITY
-              , const wxFunction func = NULL
-#endif
-             );
+    void Init(const wxString& title, const wxFunction func = NULL );
 
     bool              m_doBreak;
 

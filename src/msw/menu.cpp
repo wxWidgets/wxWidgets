@@ -78,11 +78,7 @@ static const int idMenuTitle = -2;
 // ---------------------------------------------------------------------------
 
 // Construct a menu with optional title (then use append)
-void wxMenu::Init(const wxString& title
-#ifdef WXWIN_COMPATIBILITY
-               , const wxFunction func
-#endif
-               )
+void wxMenu::Init(const wxString& title, const wxFunction func )
 {
     m_title = title;
     m_parent = NULL;
@@ -102,9 +98,7 @@ void wxMenu::Init(const wxString& title
         AppendSeparator() ;
     }
 
-#if WXWIN_COMPATIBILITY
     Callback(func);
-#endif
 }
 
 // The wxWindow destructor will take care of deleting the submenus.
@@ -537,14 +531,12 @@ bool wxMenu::ProcessCommand(wxCommandEvent & event)
 {
     bool processed = FALSE;
 
-#if WXWIN_COMPATIBILITY
     // Try a callback
     if (m_callback)
     {
         (void)(*(m_callback))(*this, event);
         processed = TRUE;
     }
-#endif // WXWIN_COMPATIBILITY
 
     // Try the menu's event handler
     if ( !processed && GetEventHandler())

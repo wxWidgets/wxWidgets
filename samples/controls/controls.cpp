@@ -433,16 +433,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_notebook->AddPage(panel, "wxRadioBox", FALSE, Image_Radio);
 
     panel = new wxPanel(m_notebook);
-    (void)new wxStaticBox( panel, -1, "wxGauge and wxSlider", wxPoint(10,10), wxSize(180,130) );
+    (void)new wxStaticBox( panel, -1, "wxGauge and wxSlider", wxPoint(10,10), wxSize(200,130) );
     m_gauge = new wxGauge( panel, -1, 200, wxPoint(18,50), wxSize(155, 30) );
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1), wxSL_LABELS );
-    (void)new wxStaticBox( panel, -1, "Explanation", wxPoint(200,10), wxSize(290,130) );
+    (void)new wxStaticBox( panel, -1, "Explanation", wxPoint(220,10), wxSize(270,130) );
 #ifdef __WXMOTIF__
     // No wrapping text in wxStaticText yet :-(
     (void)new wxStaticText( panel, -1,
                             "Drag the slider!",
-                            wxPoint(208,30),
-                            wxSize(210, -1)
+                            wxPoint(228,30),
+                            wxSize(230, -1)
                           );
 #else
     (void)new wxStaticText( panel, -1,
@@ -452,8 +452,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                             "\n"
                             "This is also supposed to demonstrate how\n"
                             "to use static controls.\n",
-                            wxPoint(208,25),
-                            wxSize(250, 110)
+			    wxPoint(228,25),
+			    wxSize(230, 110)
                           );
 #endif
     m_spintext = new wxTextCtrl( panel, -1, "0", wxPoint(20,160), wxSize(80,-1) );

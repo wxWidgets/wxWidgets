@@ -112,12 +112,10 @@ class wxMenu : public wxEvtHandler
     DECLARE_DYNAMIC_CLASS(wxMenu)
 
 public:
-#ifdef WXWIN_COMPATIBILITY
     wxMenu( const wxString& title, const wxFunction func)
     {
         Init(title, 0, func);
     }
-#endif
     wxMenu( long style )
     {
         Init( wxEmptyString, style );
@@ -176,15 +174,16 @@ public:
 
     wxMenuItem *FindItemForId( int id ) const { return FindItem( id ); }
 
-#ifdef WXWIN_COMPATIBILITY
     wxFunction GetCallback() const { return m_callback; }
     void Callback(const wxFunction func) { m_callback = func; }
+    wxFunction m_callback;
+
+#ifdef WXWIN_COMPATIBILITY
 
     // compatibility: these functions are deprecated
     bool Enabled(int id) const { return IsEnabled(id); }
     bool Checked(int id) const { return IsChecked(id); }
 
-    wxFunction m_callback;
 #endif // WXWIN_COMPATIBILITY
 
     // implementation
@@ -204,11 +203,8 @@ public:
 private:
     // common code for both constructors:
     void Init( const wxString& title,
-               long style
-#ifdef WXWIN_COMPATIBILITY
-               , const wxFunction func = (wxFunction) NULL
-#endif
-               );
+               long style, 
+               const wxFunction func = (wxFunction) NULL );
 
     wxString       m_title;
     wxList         m_items;

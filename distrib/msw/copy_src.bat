@@ -116,13 +116,10 @@ copy *.cpp \wxmsw_dist\wxMSW\src\common
 cd ..
 
 cd html
-md \wxgtk_dist\wxGTK\src\html
-copy *.cpp \wxgtk_dist\wxGTK\src\html
-copy *.h \wxgtk_dist\wxGTK\src\html
-cd bitmaps
-md \wxgtk_dist\wxGTK\src\html\bitmaps
-copy *.xpm \wxgtk_dist\wxGTK\src\html\bitmaps
-cd ..\..
+md \wxmsw_dist\wxMSW\src\html
+copy *.cpp \wxmsw_dist\wxMSW\src\html
+copy *.h \wxmsw_dist\wxMSW\src\html
+cd ..
 
 cd generic
 md \wxmsw_dist\wxMSW\src\generic
