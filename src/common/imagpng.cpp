@@ -86,6 +86,20 @@ static void
 FindMaskColour(unsigned char **lines, png_uint_32 width, png_uint_32 height,
                unsigned char& rMask, unsigned char& gMask, unsigned char& bMask);
 
+// is the pixel with this value of alpha a fully opaque one?
+static inline
+bool IsOpaque(unsigned char a)
+{
+    return a == 0xff;
+}
+
+// is the pixel with this value of alpha a fully transparent one?
+static inline
+bool IsTransparent(unsigned char a)
+{
+    return !a;
+}
+
 // ============================================================================
 // wxPNGHandler implementation
 // ============================================================================
@@ -191,9 +205,9 @@ PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 // ----------------------------------------------------------------------------
 
 // determine the kind of transparency we need for this image: if the only alpha
-// values it has are 0 and 0xff then we can simply create a mask for it, we
-// should be ok with a simple mask but otherwise we need a full blown alpha
-// channel in wxImage
+// values it has are 0 (transparent) and 0xff (opaque) then we can simply
+// create a mask for it, we should be ok with a simple mask but otherwise we
+// need a full blown alpha channel in wxImage
 //
 // parameters:
 //      ptr             the start of the data to examine
@@ -206,24 +220,30 @@ CheckTransparency(const unsigned char *ptr,
                   png_uint_32 x, png_uint_32 y, png_uint_32 w, png_uint_32 h,
                   size_t numColBytes)
 {
+    // we start from (x + 1, y)
+    x++;
+
     // suppose that a mask will suffice and check all the remaining alpha
     // values to see if it does
-    unsigned char a2;
     unsigned const char *ptr2 = ptr;
     for ( png_uint_32 y2 = y; y2 < h; y2++ )
     {
-        for ( png_uint_32 x2 = x + 1; x2 < w; x2++ )
+        for ( png_uint_32 x2 = x; x2 < w; x2++ )
         {
-            // skip the grey byte
+            // skip the grey or colour byte(s)
             ptr2 += numColBytes;
-            a2 = *ptr2++;
 
-            if ( a2 && a2 != 0xff )
+            unsigned char a2 = *ptr2++;
+
+            if ( !IsTransparent(a2) && !IsOpaque(a2) )
             {
                 // not fully opaque nor fully transparent, hence need alpha
                 return Transparency_Alpha;
             }
         }
+
+        // during the next loop iteration check all the pixels in the row
+        x = 0;
     }
 
     // mask will be enough
@@ -238,13 +258,11 @@ unsigned char *InitAlpha(wxImage *image, png_uint_32 x, png_uint_32 y)
     unsigned char *alpha = image->GetAlpha();
 
     // set alpha for the pixels we had so far
-    for ( png_uint_32 y2 = 0; y2 <= y; y2++ )
+    png_uint_32 end = y * image->GetWidth() + x;
+    for ( png_uint_32 i = 0; i < end; i++ )
     {
-        for ( png_uint_32 x2 = 0; x2 < x; x2++ )
-        {
-            // all the previous pixels were opaque
-            *alpha++ = 0xff;
-        }
+        // all the previous pixels were opaque
+        *alpha++ = 0xff;
     }
 
     return alpha;
@@ -339,7 +357,7 @@ void CopyDataFromPNG(wxImage *image,
 
                 // the first time we encounter a transparent pixel we must
                 // decide about what to do about them
-                if ( a != 0xff && transparency == Transparency_None )
+                if ( !IsOpaque(a) && transparency == Transparency_None )
                 {
                     // we'll need at least the mask for this image and
                     // maybe even full alpha channel info: the former is
@@ -371,8 +389,25 @@ void CopyDataFromPNG(wxImage *image,
 
                 switch ( transparency )
                 {
+                    case Transparency_Mask:
+                        if ( IsTransparent(a) )
+                        {
+                            *ptrDst++ = rMask;
+                            *ptrDst++ = bMask;
+                            *ptrDst++ = gMask;
+                            break;
+                        }
+                        // else: !transparent
+
+                        // must be opaque then as otherwise we shouldn't be
+                        // using the mask at all
+                        wxASSERT_MSG( IsOpaque(a), _T("logic error") );
+
+                        // fall through
+
                     case Transparency_Alpha:
-                        *alpha++ = a;
+                        if ( alpha )
+                            *alpha++ = a;
                         // fall through
 
                     case Transparency_None:
@@ -380,11 +415,6 @@ void CopyDataFromPNG(wxImage *image,
                         *ptrDst++ = g;
                         *ptrDst++ = g;
                         break;
-
-                    case Transparency_Mask:
-                        *ptrDst++ = rMask;
-                        *ptrDst++ = bMask;
-                        *ptrDst++ = gMask;
                 }
             }
         }
@@ -403,7 +433,7 @@ void CopyDataFromPNG(wxImage *image,
 
                 // the logic here is the same as for the grey case except
                 // where noted
-                if ( a != 0xff && transparency == Transparency_None )
+                if ( !IsOpaque(a) && transparency == Transparency_None )
                 {
                     transparency = CheckTransparency
                                    (
@@ -427,8 +457,34 @@ void CopyDataFromPNG(wxImage *image,
 
                 switch ( transparency )
                 {
+                    case Transparency_Mask:
+                        if ( IsTransparent(a) )
+                        {
+                            // if we couldn't find a unique colour for the mask, we
+                            // can have real pixels with the same value as the mask
+                            // and it's better to slightly change their colour than
+                            // to make them transparent
+                            if ( r == rMask && g == gMask && b == bMask )
+                            {
+                                r++;
+                            }
+
+                            *ptrDst++ = rMask;
+                            *ptrDst++ = bMask;
+                            *ptrDst++ = gMask;
+                            break;
+                        }
+                        // else: !transparent
+
+                        // must be opaque then as otherwise we shouldn't be
+                        // using the mask at all
+                        wxASSERT_MSG( IsOpaque(a), _T("logic error") );
+
+                        // fall through
+
                     case Transparency_Alpha:
-                        *alpha++ = a;
+                        if ( alpha )
+                            *alpha++ = a;
                         // fall through
 
                     case Transparency_None:
@@ -436,20 +492,6 @@ void CopyDataFromPNG(wxImage *image,
                         *ptrDst++ = g;
                         *ptrDst++ = b;
                         break;
-
-                    case Transparency_Mask:
-                        // if we couldn't find a unique colour for the mask, we
-                        // can have real pixels with the same value as the mask
-                        // and it's better to slightly change their colour than
-                        // to make them transparent
-                        if ( r == rMask && g == gMask && b == bMask )
-                        {
-                            r++;
-                        }
-
-                        *ptrDst++ = rMask;
-                        *ptrDst++ = bMask;
-                        *ptrDst++ = gMask;
                 }
             }
         }
