@@ -60,7 +60,9 @@ bool wxChoice::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    long msStyle = WS_CHILD | CBS_DROPDOWNLIST | WS_TABSTOP | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL /* | WS_CLIPSIBLINGS */;
+    long msStyle = WS_CHILD | CBS_DROPDOWNLIST | CBS_NOINTEGRALHEIGHT |
+                   WS_TABSTOP | WS_VISIBLE |
+                   WS_HSCROLL | WS_VSCROLL /* | WS_CLIPSIBLINGS */;
     if ( style & wxCB_SORT )
         msStyle |= CBS_SORT;
 
@@ -104,25 +106,6 @@ int wxChoice::DoAppend(const wxString& item)
     if ( n == CB_ERR )
     {
         wxLogLastError(wxT("SendMessage(CB_ADDSTRING)"));
-    }
-
-    // if we were created empty, the choice is too small to show any items, so
-    // resize it - but as we do it once only, give it some reasonable size
-    if ( GetCount() == 1 )
-    {
-        wxSize size = GetSize();
-        int cx, cy;
-        wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
-
-        size.y = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
-
-        // don't call our SetSize() as it ignores the height parameter and also
-        // short circuit wxComboBox::DoMoveWindow() as it does weird stuff with
-        // the height too
-        int x, y;
-        GetPosition(&x, &y);
-        AdjustForParentClientOrigin(x, y, 0);
-        wxWindow::DoMoveWindow(x, y, size.x, size.y);
     }
 
     return n;
@@ -273,6 +256,14 @@ void wxChoice::DoSetSize(int x, int y,
                          int width, int height,
                          int sizeFlags)
 {
+    // this should be merged with the same fix in wxComboBox::DoMoveWindow()
+    // but it can't be done in 2.2 so we duplicate the check here (but see
+    // comments there)
+    //
+    // NB: we do allow width == -1 though
+    if ( width < -1 )
+        return;
+
     // Ignore height parameter because height doesn't mean 'initially
     // displayed' height, it refers to the drop-down menu as well. The
     // wxWindows interpretation is different; also, getting the size returns
@@ -306,13 +297,8 @@ wxSize wxChoice::DoGetBestSize() const
 
     wChoice += 5*cx;
 
-    if ( nItems > 10 )
-    {
-        // don't make the control too big
-        nItems = 10;
-    }
-
-    int hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*(nItems + 1);
+    // 10 items is arbitrary, of course, but choice will adjust itself
+    int hChoice = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
     return wxSize(wChoice, hChoice);
 }
