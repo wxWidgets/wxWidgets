@@ -2977,12 +2977,26 @@ Win32 and POSIX-like systems (Unix).
 
 <wx/utils.h>
 
-\membersection{wxGetEnv}\label{wxgetenv}
+\membersection{wxGetenv}\label{wxgetenvmacro}
 
 \func{wxChar *}{wxGetEnv}{\param{const wxString\&}{ var}}
 
-Returns the current value of the environment variable {\it var} or {\tt NULL} 
-if it doesn't exist.
+This is a macro defined as {\tt getenv()} or its wide char version in Unicode
+mode.
+
+Note that under Win32 it may not return correct value for the variables set
+with \helpref{wxSetEnv}{wxsetenv}, use \helpref{wxGetEnv}{wxgetenv} function
+instead.
+
+\membersection{wxGetEnv}\label{wxgetenv}
+
+\func{bool}{wxGetEnv}{\param{const wxString\&}{ var}, \param{wxString *}{value}}
+
+Returns the current value of the environment variable {\it var} in {\it value}.
+{\it value} may be {\tt NULL} if you just want to know if the variable exists
+and are not interested in its value.
+
+Returns {\tt TRUE} if the variable exists, {\tt FALSE} otherwise.
 
 \membersection{wxSetEnv}\label{wxsetenv}
 

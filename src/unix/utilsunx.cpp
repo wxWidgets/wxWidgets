@@ -873,6 +873,21 @@ long wxGetFreeMemory()
 // env vars
 // ----------------------------------------------------------------------------
 
+bool wxGetEnv(const wxString& var, wxString *value);
+{
+    // wxGetenv is defined as getenv()
+    wxChar *p = wxGetenv(var);
+    if ( !p )
+        return FALSE;
+
+    if ( value )
+    {
+        *value = p;
+    }
+
+    return TRUE;
+}
+
 bool wxSetEnv(const wxString& variable, const wxChar *value)
 {
 #if defined(HAVE_SETENV)

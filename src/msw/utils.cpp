@@ -457,6 +457,29 @@ bool wxDirExists(const wxString& dir)
 #endif // Win32/16
 }
 
+// ----------------------------------------------------------------------------
+// env vars
+// ----------------------------------------------------------------------------
+
+bool wxGetEnv(const wxString& var, wxString *value)
+{
+    // first get the size of the buffer
+    DWORD dwRet = ::GetEnvironmentVariable(var, NULL, 0);
+    if ( !dwRet )
+    {
+        // this means that there is no such variable
+        return FALSE;
+    }
+
+    if ( value )
+    {
+        (void)::GetEnvironmentVariable(var, value->GetWriteBuf(dwRet), dwRet);
+        value->UngetWriteBuf();
+    }
+
+    return TRUE;
+}
+
 bool wxSetEnv(const wxString& var, const wxChar *value)
 {
     // some compilers have putenv() or _putenv() or _wputenv() but it's better

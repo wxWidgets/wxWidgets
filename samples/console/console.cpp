@@ -292,19 +292,31 @@ static void TestDllLoad()
 
 #include <wx/utils.h>
 
+static wxString MyGetEnv(const wxString& var)
+{
+    wxString val;
+    if ( !wxGetEnv(var, &val) )
+        val = _T("<empty>");
+    else
+        val = wxString(_T('\'')) + val + _T('\'');
+
+    return val;
+}
+
 static void TestEnvironment()
 {
     const wxChar *var = _T("wxTestVar");
 
     puts("*** testing environment access functions ***");
 
-    printf("Initially getenv(%s) = '%s'\n", var, wxGetenv(var));
+    printf("Initially getenv(%s) = %s\n", var, MyGetEnv(var).c_str());
     wxSetEnv(var, _T("value for wxTestVar"));
-    printf("After wxSetEnv: getenv(%s) = '%s'\n",  var, wxGetenv(var));
+    printf("After wxSetEnv: getenv(%s) = %s\n",  var, MyGetEnv(var).c_str());
     wxSetEnv(var, _T("another value"));
-    printf("After 2nd wxSetEnv: getenv(%s) = '%s'\n",  var, wxGetenv(var));
+    printf("After 2nd wxSetEnv: getenv(%s) = %s\n",  var, MyGetEnv(var).c_str());
     wxUnsetEnv(var);
-    printf("After wxUnsetEnv: getenv(%s) = '%s'\n",  var, wxGetenv(var));
+    printf("After wxUnsetEnv: getenv(%s) = %s\n",  var, MyGetEnv(var).c_str());
+    printf("PATH = %s\n",  MyGetEnv(_T("PATH")));
 }
 
 #endif // TEST_ENVIRON

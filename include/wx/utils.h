@@ -207,9 +207,9 @@ WXDLLEXPORT bool wxHandleFatalExceptions(bool doit = TRUE);
 // Environment variables
 // ----------------------------------------------------------------------------
 
-// wxGetenv is declared in wxchar.h, but define a wrapper/synonym for it for
-// consistency with wxSetEnv
-inline const wxChar *wxGetEnv(const wxString& var) { return wxGetenv(var); }
+// returns TRUE if variable exists (value may be NULL if you just want to check
+// for this)
+WXDLLEXPORT bool wxGetEnv(const wxString& var, wxString *value);
 
 // set the env var name to the given value, return TRUE on success
 WXDLLEXPORT bool wxSetEnv(const wxString& var, const wxChar *value);
