@@ -18,7 +18,6 @@ THISDIR=$(WXDIR)/samples
 all:
 	        cd $(WXDIR)/samples/splitter; make -f makefile.g95
 	        cd $(WXDIR)/samples/resource; make -f makefile.g95
-	        cd $(WXDIR)/samples/events; make -f makefile.g95
 	        cd $(WXDIR)/samples/controls; make -f makefile.g95
 	        cd $(WXDIR)/samples/listctrl; make -f makefile.g95
 	        cd $(WXDIR)/samples/treectrl; make -f makefile.g95
@@ -57,7 +56,6 @@ clean:
 	        cd $(WXDIR)/samples/listctrl; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/treectrl; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/validate; make -f makefile.g95 clean
-	        cd $(WXDIR)/samples/events; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/docview; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/controls; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/nativdlg; make -f makefile.g95 clean

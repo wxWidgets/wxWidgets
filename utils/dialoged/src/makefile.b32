@@ -38,7 +38,7 @@ DEBUG_FLAGS =
 !endif
 CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG) @$(INCFILE)
 
-OBJECTS = wx_resed.obj wx_rdlg.obj wx_reswr.obj wx_repal.obj wx_rprop.obj dialoged.obj
+OBJECTS = dialoged.obj editrpal.obj reseditr.obj dlghndlr.obj reswrite.obj winprop.obj edtree.obj edlist.obj
 
 $(TARGET).exe:	wxprop $(INCFILE) $(OBJECTS) $(TARGET).def $(TARGET).res
   tlink32 $(LINKFLAGS) @&&!

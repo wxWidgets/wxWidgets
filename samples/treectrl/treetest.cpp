@@ -70,15 +70,13 @@ bool MyApp::OnInit(void)
   frame->SetIcon(wxIcon("aiai.xbm"));
 #endif
 
-  // Make an image list containing large icons
+  // Make an image list containing small icons
   m_imageListNormal = new wxImageList(16, 16, TRUE);
 
-  wxIcon *icon = new wxIcon("icon1", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(*icon);
-  delete icon;
-  icon = new wxIcon("icon2", wxBITMAP_TYPE_ICO_RESOURCE);
-  m_imageListNormal->Add(*icon);
-  delete icon;
+  wxIcon icon1("icon1", wxBITMAP_TYPE_ICO_RESOURCE);
+  m_imageListNormal->Add(icon1);
+  wxIcon icon2("icon2", wxBITMAP_TYPE_ICO_RESOURCE);
+  m_imageListNormal->Add(icon2);
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;

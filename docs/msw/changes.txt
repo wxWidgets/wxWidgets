@@ -2,7 +2,7 @@
 wxWindows 2.0 for Windows Change Log
 ------------------------------------
 
-Alpha 11, June ??th 1998
+Alpha 11, July 3rd 1998
 -----------------------
 
 - Added thread.h, thread.cpp.
@@ -15,6 +15,16 @@ Alpha 11, June ??th 1998
   wxRegion::IsEmpty for a more consistent naming convention.
 - Added Vadim's wxDataObject and wxDropSource.
 - ENTER/LEAVE events now work.
+- Cured wxMemoryDC bug where the DC wasn't being deleted.
+- Cured wxGauge SetSize major bugginess.
+- Cured problem where if a GDI object was created on the stack,
+  then went out of scope, then another object was selected into
+  the DC, GDI objects would leak. This is because the assignment
+  to e.g. wxDC::m_pen would delete the GDI object without it first
+  being selected out of the DC. Cured by selecting the old DC object
+  first, then doing the assignment.
+- Split up wxGaugeMSW, wxGauge95, wxSliderMSW, wxSlider95
+- Various other bug fixes and additions.
 
 Alpha 10, May 7th 1998
 ----------------------

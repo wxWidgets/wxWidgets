@@ -26,8 +26,6 @@ all:
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\resource
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
-        cd $(WXDIR)\samples\events
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\controls
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\listctrl
@@ -123,8 +121,6 @@ clean:
         cd $(WXDIR)\samples\treectrl
         nmake -f makefile.nt clean
         cd $(WXDIR)\samples\validate
-        nmake -f makefile.nt clean
-        cd $(WXDIR)\samples\events
         nmake -f makefile.nt clean
         cd $(WXDIR)\samples\docview
         nmake -f makefile.nt clean

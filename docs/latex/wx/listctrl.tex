@@ -348,6 +348,16 @@ Inserts an image item.
 
 Insert an image/string item.
 
+\wxheading{Parameters}
+
+\docparam{info}{wxListItem object}
+
+\docparam{index}{Index of the new item, supplied by the application}
+
+\docparam{label}{String label}
+
+\docparam{imageIndex}{index into the image list associated with this control and view style}
+
 \membersection{wxListCtrl::ScrollList}\label{wxlistctrlscrolllist}
 
 \func{bool}{ScrollList}{\param{int }{dx}, \param{int }{dy}}
@@ -377,9 +387,11 @@ information.
 
 \func{bool}{SetColumnWidth}{\param{int }{col}, \param{int }{width}}
 
-Sets the column width (report view only).
+Sets the column width.
 
 {\it width} can be a width in pixels or wxLIST\_AUTOSIZE (-1) or wxLIST\_AUTOSIZE\_USEHEADER (-2).
+
+In small or normal icon view, {\it col} must be -1, and the column width is set for all columns.
 
 \membersection{wxListCtrl::SetImageList}\label{wxlistctrlsetimagelist}
 

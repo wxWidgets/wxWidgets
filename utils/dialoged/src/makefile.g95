@@ -16,6 +16,7 @@ include $(WXDIR)/src/makeg95.env
 
 OBJECTS = $(OBJDIR)/dialoged.$(OBJSUFF) $(OBJDIR)/editrpal.$(OBJSUFF) $(OBJDIR)/reseditr.$(OBJSUFF)\
  $(OBJDIR)/dlghndlr.$(OBJSUFF) $(OBJDIR)/reswrite.$(OBJSUFF) $(OBJDIR)/winprop.$(OBJSUFF)\
+ $(OBJDIR)/edlist.$(OBJSUFF) $(OBJDIR)/edtree.$(OBJSUFF)\
  $(OBJDIR)/dialoged_resources.$(OBJSUFF)
 
 EXTRAINC = -I../../wxprop/src
@@ -53,6 +54,12 @@ $(OBJDIR)/reseditr.$(OBJSUFF):	winprop.h reseditr.h editrpal.h reseditr.$(SRCSUF
 
 $(OBJDIR)/dlghndlr.$(OBJSUFF):	winprop.h reseditr.h editrpal.h dlghndlr.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ dlghndlr.$(SRCSUFF)
+
+$(OBJDIR)/edlist.$(OBJSUFF):	winprop.h edlist.h edlist.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ edlist.$(SRCSUFF)
+
+$(OBJDIR)/edtree.$(OBJSUFF):	winprop.h edtree.h edtree.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ edtree.$(SRCSUFF)
 
 $(OBJDIR)/dialoged_resources.o:  dialoged.rc
 	$(RESCOMP) -i dialoged.rc -o $(OBJDIR)/dialoged_resources.o $(RESFLAGS)

@@ -14,6 +14,7 @@ src/common/dosyacc.c
 src/common/doslex.c
 src/common/vmsyacc.c
 src/common/vmslex.c
+src/common/extended.c
 src/common/*.l
 src/common/*.y
 src/common/*.inc
@@ -181,6 +182,7 @@ utils/dialoged/src/*.ico
 utils/dialoged/src/*.prj
 utils/dialoged/src/*.bmp
 utils/dialoged/src/bitmaps/*.bmp
+utils/dialoged/src/bitmaps/*.ico
 utils/dialoged/test/*.cpp
 utils/dialoged/test/*.def
 utils/dialoged/test/*.rc

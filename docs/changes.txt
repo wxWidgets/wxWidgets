@@ -1,10 +1,14 @@
-
-
 Generic wxWindows 2.0 Change Log
 --------------------------------
 
 Note: for platform-specific changes, see wx/docs/XXX/changes.txt
 where XXX is one of msw, motif, xt, gtk, mac.
+
+Alpha 11, July 3rd 1998
+-----------------------
+
+- Major work on Dialog Editor (still plenty to go).
+- Expanded documentation a bit more.
 
 Alpha 9, April 27th 1998
 ------------------------

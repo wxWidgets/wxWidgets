@@ -65,3 +65,10 @@ Options:
 - take elements from both
 - do the Windows stuff, let someone else write/adapt the
   non-Windows classes
+
+Owner-draw menus
+----------------
+
+If USE_OWNER_DRAWN = 1 and you create a wxMenu, you get 'all bets
+are off' memory checking warnings from wxWindows.
+
