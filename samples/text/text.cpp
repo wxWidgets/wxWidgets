@@ -733,7 +733,9 @@ END_EVENT_TABLE()
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
        : wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) )
 {
-    m_log = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(5,260), wxSize(630,100), wxTE_MULTILINE );
+    m_log = new wxTextCtrl( this, -1, "This is the log window.\n",
+                            wxPoint(5,260), wxSize(630,100),
+                            wxTE_MULTILINE | wxTE_READONLY /* | wxTE_RICH */);
 
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
 
