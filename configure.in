@@ -3067,7 +3067,32 @@ if test "$wxUSE_SHARED" = "yes"; then
             dnl newer versions of gcc need -isystem to compile X headers on
             dnl Solaris (which use old style C syntax)
             CPPFLAGS="$CPPFLAGS -isystem /usr/openwin/include"
-            SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)/lib"
+
+            dnl gcc may use Sun's ld, in which case -rpath gives a confusing
+            dnl error message. We have to try both -Wl,-rpath and -Wl,-R:
+            saveLdflags="$LDFLAGS"
+            LDFLAGS="$saveLdflags -Wl,-rpath,/"
+            AC_MSG_CHECKING([if the linker accepts -rpath])
+            AC_TRY_LINK(
+                [],[],
+                [
+                    AC_MSG_RESULT([yes])
+                    SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)/lib"
+                ],
+                [
+                    AC_MSG_RESULT([no])
+                    AC_MSG_CHECKING([if the linker accepts -R])
+                    LDFLAGS="$saveLdflags -Wl,-R,/"
+                    AC_TRY_LINK(
+                        [],[],
+                        [
+                             AC_MSG_RESULT([yes])
+                             SAMPLES_RPATH_FLAG="-Wl,-R,\$(top_builddir)/lib"],
+                        [
+                            AC_MSG_RESULT([no])
+                        ])                    
+                ])
+            LDFLAGS="$saveLdflags"
         else
             SHARED_LD="${CXX} -G -o"
             PIC_FLAG="-KPIC"
