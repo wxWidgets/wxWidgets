@@ -309,7 +309,7 @@ static bool wxIsNumeric(const wxString& val)
 	for ( i = 0; i < (int)val.Length(); i++)
 	{
 		if ((!isdigit(val[i])) && (val[i] != '.'))
-		  if(!(i == 0) && (val[i] == '-'))
+		  if(!((i == 0) && (val[i] == '-')))
 			return FALSE;
 	}
 	return TRUE;
