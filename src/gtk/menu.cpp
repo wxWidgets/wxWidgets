@@ -797,6 +797,9 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
     {
+        if ( *pc == wxT('\t'))
+            break;
+    
         if ( *pc == wxT('_') )
         {
             // GTK 1.2 escapes "xxx_xxx" to "xxx__xxx"
