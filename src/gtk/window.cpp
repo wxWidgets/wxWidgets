@@ -286,6 +286,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
         wxPrintf( win->GetClassInfo()->GetClassName() );
     wxPrintf( _T(".\n") );
 */
+    
     long key_code = 0;
     switch (gdk_event->keyval)
     {
@@ -1544,10 +1545,10 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     }
 #endif
 
+    /* we always allow a window to get the focus as long as it
+       doesn't have any children. */
     if (m_windowStyle & wxTAB_TRAVERSAL)
     {
-        /* we now allow a window to get the focus as long as it
-           doesn't have any children. */
         GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
         m_acceptsFocus = FALSE;
     }
@@ -1556,6 +1557,9 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
         GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
         m_acceptsFocus = TRUE;
     }
+    
+    /* grab the actual focus */
+    gtk_widget_grab_focus( m_wxwindow );
 
 #if (GTK_MINOR_VERSION == 0)
     // shut the viewport up

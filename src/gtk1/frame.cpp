@@ -193,6 +193,16 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 	win->SetIcon( icon );
     }
     
+    if (!win->m_sizeSet)
+    {
+        /* by calling GtkOnSize here, we don't have to call
+           either after showing the frame, which would entail
+           much ugly flicker or from within the size_allocate
+           handler, because GTK 1.1.X forbids that. */
+
+        win->GtkOnSize( win->m_x, win->m_y, win->m_width, win->m_height );
+    }
+    
     return FALSE;
 }
     
@@ -331,11 +341,11 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     gtk_container_add( GTK_CONTAINER(m_mainWidget), m_wxwindow );
     
     /* we allow the frame to get the focus as otherwise no
-       keye vents will get sent to it. the point with this is
+       key events will get sent to it. the point with this is
        that the menu's key accelerators work by interceting
        key events here */
     GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
-    GTK_WIDGET_SET_FLAGS (m_wxwindow, GTK_HAS_FOCUS);
+    gtk_widget_grab_focus( m_wxwindow );
 
     if (m_parent) m_parent->AddChild( this );
 
@@ -381,6 +391,7 @@ bool wxFrame::Show( bool show )
 {
     wxASSERT_MSG( (m_widget != NULL), _T("invalid frame") );
 
+#if 0
     if (show && !m_sizeSet)
     {
         /* by calling GtkOnSize here, we don't have to call
@@ -390,6 +401,7 @@ bool wxFrame::Show( bool show )
 
         GtkOnSize( m_x, m_y, m_width, m_height );
     }
+#endif
 
     return wxWindow::Show( show );
 }
@@ -764,8 +776,8 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
     {
         /* support for native key accelerators indicated by underscroes */
 #if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
-         gtk_accel_group_attach( m_frameMenuBar->m_accel, GTK_OBJECT(m_wxwindow));
-#endif 
+         gtk_accel_group_attach( m_frameMenuBar->m_accel, GTK_OBJECT(m_widget));
+#endif
 
         wxNode *node = m_frameMenuBar->GetMenus().First();
         while (node)

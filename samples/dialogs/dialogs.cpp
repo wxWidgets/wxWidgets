@@ -231,9 +231,9 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 	if (dialog.ShowModal() == wxID_OK)
 	{
         wxString info;
-        info.Printf("Full file name: %s\n"
-                    "Path: %s\n"
-                    "Name: %s",
+        info.Printf(_T("Full file name: %s\n")
+                    _T("Path: %s\n")
+                    _T("Name: %s"),
                     dialog.GetPath().c_str(),
                     dialog.GetDirectory().c_str(),
                     dialog.GetFilename().c_str());
@@ -250,8 +250,8 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
 
 	if (dialog.ShowModal() == wxID_OK)
 	{
-		char buf[400];
-		sprintf(buf, "%s, filter %d", (const char *)dialog.GetPath(), dialog.GetFilterIndex());
+		wxChar buf[400];
+		wxSprintf(buf, _T("%s, filter %d"), (const wxChar*)dialog.GetPath(), dialog.GetFilterIndex());
 		wxMessageDialog dialog2(this, wxString(buf), "Selected path");
 		dialog2.ShowModal();
 	}
