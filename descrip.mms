@@ -32,7 +32,9 @@ gtk : setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--.demos.bombs]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	set default [--.samples.minimal]
+	set default [--.samples.caret]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.minimal]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 
 motif : setup.h
