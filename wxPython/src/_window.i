@@ -30,7 +30,7 @@ DocStr(wxVisualAttributes,
 struct wxVisualAttributes
 {
     %extend {
-        wxVisualAttributes() {}
+        wxVisualAttributes() { return new wxVisualAttributes; }
         ~wxVisualAttributes() {}
     }
     
@@ -194,7 +194,7 @@ public:
     RefDoc(wxWindow, ""); // turn it off for the ctors
     
     DocCtorStr(
-        wxWindow(wxWindow* parent, const wxWindowID id,
+        wxWindow(wxWindow* parent, const wxWindowID id=-1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
@@ -208,7 +208,7 @@ public:
     
 
     DocDeclStr(
-        bool , Create(wxWindow* parent, const wxWindowID id,
+        bool , Create(wxWindow* parent, const wxWindowID id=-1,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -1010,11 +1010,11 @@ other application.  To bind an event handler function to this hotkey
 use EVT_HOTKEY with an id equal to hotkeyId.  Returns True if the
 hotkey was registered successfully.");
         bool RegisterHotKey(int hotkeyId, int modifiers, int keycode) {
-        #if wxUSE_HOTKEY
+        %#if wxUSE_HOTKEY
             return self->RegisterHotKey(hotkeyId, modifiers, keycode);
-        #else
+        %#else
             return False;
-        #endif
+        %#endif
         }
 
         

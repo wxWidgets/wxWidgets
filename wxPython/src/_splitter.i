@@ -114,7 +114,7 @@ public:
     RefDoc(wxSplitterWindow, ""); // turn it off for the ctors
     
     DocCtorStr(
-        wxSplitterWindow(wxWindow* parent, wxWindowID id,
+        wxSplitterWindow(wxWindow* parent, wxWindowID id=-1,
                          const wxPoint& pos = wxDefaultPosition,
                          const wxSize& size = wxDefaultSize,
                          long style=wxSP_3D,
@@ -128,7 +128,7 @@ public:
 
 
     DocDeclStr(
-        bool , Create(wxWindow* parent, wxWindowID id,
+        bool , Create(wxWindow* parent, wxWindowID id=-1,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
                       long style=wxSP_3D,
