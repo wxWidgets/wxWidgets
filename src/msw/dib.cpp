@@ -288,13 +288,31 @@ HBITMAP wxDIB::ConvertToBitmap(const BITMAPINFO *pbmi, HDC hdc, void *bits)
     if ( !bits )
     {
         // we must skip over the colour table to get to the image data
-
-        // biClrUsed has the number of colors but it may be not initialized at
-        // all
-        int numColors = pbmih->biClrUsed;
-        if ( !numColors )
+        //
+        // colour table either has the real colour data in which case its
+        // number of entries is given by biClrUsed or is used for masks to be
+        // used for extracting colour information from true colour bitmaps in
+        // which case it always have exactly 3 DWORDs
+        int numColors;
+        switch ( pbmih->biCompression )
         {
-            numColors = wxGetNumOfBitmapColors(pbmih->biBitCount);
+            case BI_BITFIELDS:
+                numColors = 3;
+                break;
+
+            case BI_RGB:
+                // biClrUsed has the number of colors but it may be not initialized at
+                // all
+                numColors = pbmih->biClrUsed;
+                if ( !numColors )
+                {
+                    numColors = wxGetNumOfBitmapColors(pbmih->biBitCount);
+                }
+                break;
+
+            default:
+                // no idea how it should be calculated for the other cases
+                numColors = 0;
         }
 
         bits = (char *)pbmih + sizeof(*pbmih) + numColors*sizeof(RGBQUAD);
