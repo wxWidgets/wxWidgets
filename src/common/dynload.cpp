@@ -21,22 +21,23 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_DYNAMIC_LOADER
 
 #ifdef __WINDOWS__
-#include "wx/msw/private.h"
+    #include "wx/msw/private.h"
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/log.h"
-#include "wx/intl.h"
+    #include "wx/log.h"
+    #include "wx/intl.h"
 #endif
 
-#include "wx/dynload.h"
+#include "wx/filename.h"        // for SplitPath()
 
+#include "wx/dynload.h"
 
 // ============================================================================
 // implementation
@@ -75,8 +76,17 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
 {
     wxASSERT_MSG(m_handle == 0, _T("Library already loaded."));
 
-    if( !(flags & wxDL_VERBATIM) )
-        libname += GetDllExt();
+    // add the proper extension for the DLL ourselves unless told not to
+    if ( !(flags & wxDL_VERBATIM) )
+    {
+        // and also check that the libname doesn't already have it
+        wxString ext;
+        wxFileName::SplitPath(libname, NULL, NULL, &ext);
+        if ( ext.empty() )
+        {
+            libname += GetDllExt();
+        }
+    }
 
 #if defined(__WXMAC__) && !defined(__UNIX__)
     FSSpec      myFSSpec;
