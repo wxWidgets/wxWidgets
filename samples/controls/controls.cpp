@@ -491,6 +491,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                  );
     bmpBtn = NULL; // suppress warning
 
+    new wxButton(panel, -1, "Another button", wxPoint(250, 20));
+
     m_notebook->AddPage(panel, "wxBitmapXXX");
 }
 
@@ -776,7 +778,7 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
                             max,    // range
                             this,   // parent
                             wxPD_CAN_ABORT | wxPD_APP_MODAL | wxPD_ELAPSED_TIME | wxPD_ESTIMATED_TIME | wxPD_REMAINING_TIME);
-                            
+
 
     bool cont = TRUE;
     for ( int i = 0; i < max && cont; i++ )
