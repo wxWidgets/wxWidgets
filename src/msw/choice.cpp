@@ -317,10 +317,15 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         return FALSE;
     }
 
+    int n = GetSelection();
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId);
-    event.SetInt(GetSelection());
+    event.SetInt(n);
     event.SetEventObject(this);
     event.SetString(GetStringSelection());
+    if ( HasClientObjectData() )
+        event.SetClientObject( GetClientObject(n) );
+    else if ( HasClientUntypedData() )
+        event.SetClientData( GetClientData(n) );
     ProcessCommand(event);
 
     return TRUE;

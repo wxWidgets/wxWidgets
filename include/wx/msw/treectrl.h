@@ -122,7 +122,7 @@ protected:
     long m_itemId;
 };
 
-WX_DEFINE_EXPORTED_ARRAY(wxTreeItemId, wxArrayTreeItemIds);
+WX_DEFINE_EXPORTED_ARRAY(WXHTREEITEM, wxArrayTreeItemIds);
 
 // ----------------------------------------------------------------------------
 // wxTreeItemData is some (arbitrary) user class associated with some item. The

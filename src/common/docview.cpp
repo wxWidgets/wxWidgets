@@ -1909,9 +1909,6 @@ void wxFileHistory::RemoveFileFromHistory(int i)
     {
         wxMenu* menu = (wxMenu*) node->Data();
 
-        // delete the menu items
-        menu->Delete(wxID_FILE1 + i);
-
         // delete the element from the array (could use memmove() too...)
         delete [] m_fileHistory[i];
 
@@ -1930,7 +1927,17 @@ void wxFileHistory::RemoveFileFromHistory(int i)
         }
 
         node = node->Next();
+
+        // delete the last menu item which is unused now
+        menu->Delete(wxID_FILE1 + m_fileHistoryN - 1);
+
+        // unfortunately, we can't delete separator (there is no function to
+        // delete item by position, only by id - and what if there are several
+        // separators in this menu?) - so we will be always left with at least
+        // one and, even worse, we will add another one if this was the last
+        // file... (FIXME)
     }
+
     m_fileHistoryN--;
 }
 

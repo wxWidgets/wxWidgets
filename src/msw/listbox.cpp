@@ -357,6 +357,7 @@ void wxListBox::Clear()
 }
 
 void wxListBox::Free()
+{
 #if wxUSE_OWNER_DRAWN
     size_t uiCount = m_aItems.Count();
     while ( uiCount-- != 0 ) {
