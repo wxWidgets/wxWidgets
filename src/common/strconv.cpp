@@ -44,9 +44,6 @@
 #ifdef HAVE_ICONV_H
   #include <iconv.h>
 #endif
-#ifdef HAVE_LANGINFO_H
-  #include <langinfo.h>
-#endif
 
 #ifdef __WXMSW__
   #include <windows.h>

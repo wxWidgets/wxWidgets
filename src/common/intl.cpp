@@ -34,6 +34,9 @@
 #include <locale.h>
 #include <ctype.h>
 #include <stdlib.h>
+#ifdef HAVE_LANGINFO_H
+  #include <langinfo.h>
+#endif
 
 // wxWindows
 #ifndef WX_PRECOMP
@@ -955,7 +958,10 @@ wxString wxLocale::GetSystemEncodingName()
 #if defined(HAVE_LANGINFO_H) && defined(CODESET)
     // GNU libc provides current character set this way (this conforms
     // to Unix98)
+    char *oldLocale = strdup(setlocale(LC_CTYPE, NULL));
+    setlocale(LC_CTYPE, "");
     char *alang = nl_langinfo(CODESET);
+    setlocale(LC_CTYPE, oldLocale);
     if (alang)
     {
         encname = wxConvLibc.cMB2WX(alang);
