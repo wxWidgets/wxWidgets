@@ -1174,45 +1174,52 @@ void wxExit()
 
 bool wxApp::Yield(bool onlyIfNeeded)
 {
-    bool s_inYield = FALSE;
-
-    if ( s_inYield )
+    // Sometimes only 2 yields seem
+    // to do the trick, e.g. in the
+    // progress dialog
+    int i;
+    for (i = 0; i < 2; i++)
     {
-        if ( !onlyIfNeeded )
+        bool s_inYield = FALSE;
+
+        if ( s_inYield )
         {
-            wxFAIL_MSG( wxT("wxYield called recursively" ) );
+            if ( !onlyIfNeeded )
+            {
+                wxFAIL_MSG( wxT("wxYield called recursively" ) );
+            }
+
+            return FALSE;
         }
 
-        return FALSE;
-    }
+        s_inYield = TRUE;
 
-    s_inYield = TRUE;
+        // Make sure we have an event loop object,
+        // or Pending/Dispatch will fail
+        wxEventLoop* eventLoop = wxEventLoop::GetActive();
+        wxEventLoop* newEventLoop = NULL;
+        if (!eventLoop)
+        {
+            newEventLoop = new wxEventLoop;
+            wxEventLoop::SetActive(newEventLoop);
+        }
 
-    // Make sure we have an event loop object,
-    // or Pending/Dispatch will fail
-    wxEventLoop* eventLoop = wxEventLoop::GetActive();
-    wxEventLoop* newEventLoop = NULL;
-    if (!eventLoop)
-    {
-        newEventLoop = new wxEventLoop;
-        wxEventLoop::SetActive(newEventLoop);
-    }
-
-    while (wxTheApp && wxTheApp->Pending())
-        wxTheApp->Dispatch();
+        while (wxTheApp && wxTheApp->Pending())
+            wxTheApp->Dispatch();
 
 #if wxUSE_TIMER
-    wxTimer::NotifyTimers();
+        wxTimer::NotifyTimers();
 #endif
-    ProcessIdle();
+        ProcessIdle();
 
-    if (newEventLoop)
-    {
-        wxEventLoop::SetActive(NULL);
-        delete newEventLoop;
+        if (newEventLoop)
+        {
+            wxEventLoop::SetActive(NULL);
+            delete newEventLoop;
+        }
+
+        s_inYield = FALSE;
     }
-
-    s_inYield = FALSE;
 
     return TRUE;
 }

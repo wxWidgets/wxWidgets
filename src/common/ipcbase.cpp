@@ -31,8 +31,10 @@ IMPLEMENT_CLASS(wxClientBase, wxObject)
 IMPLEMENT_CLASS(wxConnectionBase, wxObject)
 
 wxConnectionBase::wxConnectionBase(wxChar *buffer, int size)
-  : m_buffer(buffer), m_buffersize(size),
-    m_deletebufferwhendone(false), m_connected(true)
+    : m_connected(true),
+      m_buffer(buffer), 
+      m_buffersize(size),
+      m_deletebufferwhendone(false)
 {
   if ( buffer == (wxChar *)NULL )
   { // behave like next constructor
@@ -42,14 +44,19 @@ wxConnectionBase::wxConnectionBase(wxChar *buffer, int size)
 }
 
 wxConnectionBase::wxConnectionBase()
-  : m_buffersize(0), m_buffer(NULL), m_deletebufferwhendone(true),
-    m_connected(true)
+    : m_connected(true),
+      m_buffer(NULL),
+      m_buffersize(0),
+      m_deletebufferwhendone(true)
 {
 }
 
 wxConnectionBase::wxConnectionBase(wxConnectionBase& copy)
-  : m_buffer(copy.m_buffer), m_buffersize(copy.m_buffersize),
-    m_deletebufferwhendone(false), m_connected(copy.m_connected)
+    : m_connected(copy.m_connected),
+      m_buffer(copy.m_buffer),
+      m_buffersize(copy.m_buffersize),
+      m_deletebufferwhendone(false)
+
 {
   // copy constructor would require ref-counted pointer to buffer
   wxFAIL_MSG( _T("Copy constructor of wxConnectionBase not implemented") );

@@ -90,8 +90,8 @@ void wxTimerScheduler::QueueTimer(wxTimerDesc *desc, unsigned long when)
     desc->shotTime = when;
     desc->running = TRUE;
 
-    wxLogTrace("timer", "queued timer %p at tick %i", 
-               desc->timer, when);
+    wxLogTrace("timer", "queued timer %p at tick %ld", 
+               desc->timer, (long) when);
 
     if ( m_timers )
     {
@@ -143,8 +143,8 @@ void wxTimerScheduler::NotifyTimers()
             
             if ( !timerDeleted )
             {
-                wxLogTrace("timer", "notified timer %p sheduled for %i", 
-                           desc->timer, desc->shotTime);
+                wxLogTrace("timer", "notified timer %p sheduled for %ld", 
+                           desc->timer, (long) desc->shotTime);
 
                 desc->deleteFlag = NULL;
                 if ( !oneShot )

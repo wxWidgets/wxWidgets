@@ -269,11 +269,6 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     // Update the display (especially on X, GTK)
     wxYield();
 
-    // FIXME: shouldn't be needed
-#ifdef __WXX11__
-    wxYield();
-#endif
-
 #ifdef __WXMAC__
     MacUpdateImmediately();
 #endif
@@ -337,11 +332,6 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
         m_msg->SetLabel(newmsg);
 
         wxYield();
-
-        // FIXME: shouldn't be needed
-#ifdef __WXX11__
-        wxYield();
-#endif
     }
 
     if ( (m_elapsed || m_remaining || m_estimated) && (value != 0) )
@@ -382,11 +372,6 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
 
             wxYield();
 
-            // FIXME: shouldn't be needed
-#ifdef __WXX11__
-            wxYield();
-#endif
-
             (void)ShowModal();
         }
         else // auto hide
@@ -403,11 +388,6 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
     {
         // update the display
         wxYield();
-
-        // FIXME: shouldn't be needed
-#ifdef __WXX11__
-        wxYield();
-#endif
     }
 
 #ifdef __WXMAC__

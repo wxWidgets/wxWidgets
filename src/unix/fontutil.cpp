@@ -1040,4 +1040,3 @@ void wxFontModule::OnExit()
 
 #endif
   // not GTK 2.0
-  
