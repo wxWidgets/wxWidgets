@@ -103,6 +103,13 @@ __RUNTIME_LIBS_5 = -br
 !ifeq RUNTIME_LIBS static
 __RUNTIME_LIBS_5 = 
 !endif
+__EXCEPTIONSFLAG_6 =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG_6 = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG_6 = -xr
+!endif
 __EXCEPTIONSFLAG_7 =
 !ifeq USE_EXCEPTIONS 0
 __EXCEPTIONSFLAG_7 = 
@@ -179,7 +186,7 @@ SETUPHDIR = &
 HELP_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
 	-i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples &
-	$(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG_6) $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
 HELP_OBJECTS =  &
 	$(OBJS)\help_demo.obj
 
@@ -190,7 +197,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\help.exe
+all : .SYMBOLIC $(OBJS)\help.exe data
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -210,8 +217,13 @@ $(OBJS)\help.exe :  $(HELP_OBJECTS) $(OBJS)\help_demo.res
 	@%append $(OBJS)\help.lbc option resource=$(OBJS)\help_demo.res
 	wlink @$(OBJS)\help.lbc
 
+data : .SYMBOLIC 
+	if not exist $(OBJS)\doc mkdir $(OBJS)\doc
+	for %f in (aindex.html ClassGraph.class ClassGraphPanel.class ClassLayout.class down.gif dxxgifs.tex HIER.html HIERjava.html icon1.gif icon2.gif index.html logo.gif NavigatorButton.class USE_HELP.html wx204.htm wx34.htm wxExtHelpController.html wxhelp.map wx.htm) do if not exist $(OBJS)\doc\%f copy .\doc\%f $(OBJS)\doc
+
 $(OBJS)\help_demo.obj :  .AUTODEPEND .\demo.cpp
 	$(CXX) -zq -fo=$^@ $(HELP_CXXFLAGS) $<
 
 $(OBJS)\help_demo.res :  .AUTODEPEND .\demo.rc
 	wrc -q -ad -bt=nt -r -fo=$^@  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
+
