@@ -36,11 +36,11 @@ struct _GSocket
   GAddress *m_peer;
   GSocketError m_error;
 
-  bool m_non_blocking;
-  bool m_server;
-  bool m_stream;
-  bool m_oriented;
-  bool m_establishing;
+  int m_non_blocking;
+  int m_server;
+  int m_stream;
+  int m_oriented;
+  int m_establishing;
   unsigned long m_timeout;
 
   /* Callbacks */
