@@ -1000,8 +1000,10 @@ class Frame(wxFrame):
         frame = self
         wxFrame.__init__(self, None, -1, '', pos, size)
         self.CreateStatusBar()
-        progpath = os.path.split(__file__)[0]
-        icon = wxIcon(os.path.join(progpath, 'xrced.ico'), wxBITMAP_TYPE_ICO)
+        #progpath = os.path.split(__file__)[0]
+        #icon = wxIcon(os.path.join(progpath, 'xrced.ico'), wxBITMAP_TYPE_ICO)
+        icon = wxEmptyIcon()
+        icon.CopyFromBitmap(images.getIconBitmap())
         self.SetIcon(icon)
 
         # Idle flag

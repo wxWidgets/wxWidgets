@@ -56,9 +56,8 @@ class CrustFrame(wxFrame, ShellMenu):
         intro += '\nSponsored by Orbtech - Your source for Python programming expertise.'
         self.CreateStatusBar()
         self.SetStatusText(intro.replace('\n', ', '))
-        filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')
-        icon = wxIcon(filename, wxBITMAP_TYPE_ICO)
-        self.SetIcon(icon)
+        import images
+        self.SetIcon(images.getPyCrustIcon())
         self.crust = Crust(parent=self, intro=intro, \
                            rootObject=rootObject, \
                            rootLabel=rootLabel, \

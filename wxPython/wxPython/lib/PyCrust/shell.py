@@ -50,7 +50,7 @@ else:  # GTK
 class ShellFacade:
     """Simplified interface to all shell-related functionality.
 
-    This is a semi-transparent facade, in that all attributes of other are 
+    This is a semi-transparent facade, in that all attributes of other are
     still accessible, even though only some are visible to the user."""
 
     name = 'PyCrust Shell Interface'
@@ -574,7 +574,7 @@ class Shell(wxStyledTextCtrl):
         # The user hit ENTER and we need to decide what to do. They could be
         # sitting on any line in the shell.
 
-        thepos = self.GetCurrentPos()        
+        thepos = self.GetCurrentPos()
         startpos = self.promptPosEnd
         endpos = self.GetTextLength()
         # If they hit RETURN inside the current command, execute the command.
@@ -661,7 +661,7 @@ class Shell(wxStyledTextCtrl):
         elif text[:ps2size] == ps2:
             text = text[ps2size:]
         return text
-    
+
     def push(self, command):
         """Send command to the interpreter for execution."""
         busy = wxBusyCursor()
@@ -766,11 +766,11 @@ class Shell(wxStyledTextCtrl):
         >>> shell.run('print "this"')
         >>> print "this"
         this
-        >>> 
+        >>>
         """
         # Go to the very bottom of the text.
         endpos = self.GetTextLength()
-        self.SetCurrentPos(endpos)        
+        self.SetCurrentPos(endpos)
         command = command.rstrip()
         if prompt: self.prompt()
         if verbose: self.write(command)
@@ -791,9 +791,9 @@ class Shell(wxStyledTextCtrl):
 
     def autoCompleteShow(self, command):
         """Display auto-completion popup list."""
-        list = self.interp.getAutoCompleteList(command, 
-                    includeMagic=self.autoCompleteIncludeMagic, 
-                    includeSingle=self.autoCompleteIncludeSingle, 
+        list = self.interp.getAutoCompleteList(command,
+                    includeMagic=self.autoCompleteIncludeMagic,
+                    includeSingle=self.autoCompleteIncludeSingle,
                     includeDouble=self.autoCompleteIncludeDouble)
         if list:
             options = ' '.join(list)
@@ -957,7 +957,7 @@ class Shell(wxStyledTextCtrl):
                             command += '\n'
                             command += line
                     commands.append(command)
-                    for command in commands:    
+                    for command in commands:
                         command = command.replace('\n', os.linesep + sys.ps2)
                         self.write(command)
                         self.processLine()
@@ -972,7 +972,7 @@ class Shell(wxStyledTextCtrl):
 
     def zoom(self, points=0):
         """Set the zoom level.
-        
+
         This number of points is added to the size of all fonts.
         It may be positive to magnify or negative to reduce."""
         self.SetZoom(points)
@@ -1169,9 +1169,8 @@ class ShellFrame(wxFrame, ShellMenu):
         intro += '\nSponsored by Orbtech - Your source for Python programming expertise.'
         self.CreateStatusBar()
         self.SetStatusText(intro.replace('\n', ', '))
-        filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')
-        icon = wxIcon(filename, wxBITMAP_TYPE_ICO)
-        self.SetIcon(icon)
+        import images
+        self.SetIcon(images.getPyCrustIcon())
         self.shell = Shell(parent=self, id=-1, introText=intro, \
                            locals=locals, InterpClass=InterpClass, \
                            *args, **kwds)
