@@ -288,6 +288,10 @@ LIB32=link.exe -lib
 # Name "wxWindows - Win32 Release"
 # Name "wxWindows - Win32 Debug"
 # Name "wxWindows - Win32 Release With Debug Info"
+# Begin Source File
+
+SOURCE="This project is deprecated, please see install.txt"
+# End Source File
 # Begin Group "Common Files"
 
 # PROP Default_Filter ""
