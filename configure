@@ -1160,7 +1160,7 @@ EOF
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
 
-  *-*-cygwin32* | *-*-mingw32* )
+  *-*-cygwin* | *-*-mingw32* )
     USE_UNIX=0
     USE_WIN32=1
     cat >> confdefs.h <<\EOF
@@ -9355,7 +9355,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         SHARED_LD="/usr/lpp/xlC/bin/makeC++SharedLib -p 0 -o"
         WX_ALL=${WX_LIBRARY_NAME_SHARED}
       ;;
-      *-*-cygwin32* )
+      *-*-cygwin* )
                 WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
         WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
         if test "$wxUSE_OPENGL" = "yes"; then
