@@ -505,6 +505,14 @@
                                 // Support for backward scrolling cursors is dependent on the
                                 // data source as well as the ODBC driver being used.
 
+#define wxODBC_BACKWARD_COMPATABILITY 0
+                                // Default is 0.  Set to 1 to use the deprecated classes, enum
+                                // types, function, member variables.  With a setting of 1, full
+                                // backward compatability with the 2.0.x release is possible.
+                                // It is STRONGLY recommended that this be set to 0, as 
+                                // future development will be done only on the non-deprecated
+                                // functions/classes/member variables/etc.
+
 // ----------------------------------------------------------------------------
 // other compiler (mis)features
 // ----------------------------------------------------------------------------

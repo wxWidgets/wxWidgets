@@ -138,6 +138,7 @@
  */
 #define wxUSE_ODBC 0
 #define wxODBC_FWD_ONLY_CURSORS 1
+#define wxODBC_BACKWARD_COMPATABILITY 1
 /*
  * Use Threads
  */
