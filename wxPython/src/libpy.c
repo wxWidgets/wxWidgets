@@ -692,7 +692,7 @@ SWIGRUNTIME(long)
 SWIG_PyObj_AsLongInRange(PyObject * obj, const char* type,
 			 long min_value, long max_value)
 {
-  long value = PyInt_Check(obj) ? PyInt_AsLong(obj) : PyLong_AsLongLong(obj);
+  long value = PyInt_Check(obj) ? PyInt_AsLong(obj) : (long)PyLong_AsLongLong(obj);
   if (!PyErr_Occurred()) {
     if (value < min_value) {
       PyObject *err = 
