@@ -35,6 +35,7 @@ all:
 	cd wxpoem && make
 	cd dnd && make
 	cd thread && make
+	cd html && make
 
 clean:
 	cd bombs && make clean
@@ -68,4 +69,5 @@ clean:
 	cd wxpoem && make clean
 	cd dnd && make clean
 	cd thread && make clean
+	cd html && make clean
 

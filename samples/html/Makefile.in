@@ -3,8 +3,20 @@
 #
 
 all:
-	cd about; make
+	cd about && make
+	cd help && make
+	cd printing && make
+	cd test && make
+	cd virtual && make
+	cd widget && make
+	cd zip && make
 
 clean:
-	cd about; make clean
+	cd about && make clean
+	cd help && make clean
+	cd printing && make clean
+	cd test && make clean
+	cd virtual && make clean
+	cd widget && make clean
+	cd zip && make clean
 
