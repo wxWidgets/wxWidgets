@@ -184,6 +184,8 @@ MSWOBJS = \
   $(MSWDIR)\wave.obj \
   $(MSWDIR)\window.obj \
   $(MSWDIR)\droptgt.obj \
+  $(MSWDIR)\dropsrc.obj \
+  $(MSWDIR)\dataobj.obj \
   $(MSWDIR)\oleutils.obj \
   $(MSWDIR)\uuid.obj
 
@@ -365,6 +367,10 @@ $(MSWDIR)\wave.obj:     $(MSWDIR)\wave.$(SRCSUFF)
 $(MSWDIR)\window.obj:     $(MSWDIR)\window.$(SRCSUFF)
 
 $(MSWDIR)\droptgt.obj:     $(OLEDIR)\droptgt.$(SRCSUFF)
+
+$(MSWDIR)\dropsrc.obj:     $(OLEDIR)\dropsrc.$(SRCSUFF)
+
+$(MSWDIR)\dataobj.obj:     $(OLEDIR)\dataobj.$(SRCSUFF)
 
 $(MSWDIR)\oleutils.obj:     $(OLEDIR)\oleutils.$(SRCSUFF)
 

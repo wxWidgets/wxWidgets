@@ -55,7 +55,7 @@ public:
     // function to return symbolic name of clipboard format (debug messages)
     static const char *GetFormatName(wxDataFormat format);
   #else // not used in release mode
-    #define GetFormatName(format) ""
+    inline const char* GetFormatName(wxDataFormat format) { return ""; }
   #endif
 
   // ctor & dtor

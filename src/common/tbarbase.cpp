@@ -795,6 +795,8 @@ void wxToolBarBase::CalcUnscrolledPosition(const int x, const int y, float *xx, 
 
 void wxToolBarBase::OnIdle(wxIdleEvent& event)
 {
+    wxWindow::OnIdle(event);
+
 	DoToolbarUpdates();
 }
 

@@ -190,8 +190,11 @@ MSWOBJS = \
   $(MSWDIR)\wave.obj \
   $(MSWDIR)\window.obj \
   $(OLEDIR)\droptgt.obj \
+  $(OLEDIR)\dropsrc.obj \
+  $(OLEDIR)\dataobj.obj \
   $(OLEDIR)\oleutils.obj \
   $(OLEDIR)\uuid.obj
+
 
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 
@@ -639,6 +642,18 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(OLEDIR)/droptgt.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(OLEDIR)/dropsrc.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(OLEDIR)/dataobj.obj:     $*.$(SRCSUFF)
         echo $(CPPFLAGS)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@

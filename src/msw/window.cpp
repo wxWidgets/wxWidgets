@@ -2235,17 +2235,7 @@ void wxWindow::MSWOnLButtonDown(const int x, const int y, const WXUINT flags)
   }
 #endif
 
-//wxDebugMsg("LButtonDown\n") ;
   wxMouseEvent event(wxEVENT_TYPE_LEFT_DOWN);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2262,17 +2252,7 @@ void wxWindow::MSWOnLButtonDown(const int x, const int y, const WXUINT flags)
 
 void wxWindow::MSWOnLButtonUp(const int x, const int y, const WXUINT flags)
 {
-//wxDebugMsg("LButtonUp\n") ;
   wxMouseEvent event(wxEVENT_TYPE_LEFT_UP);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2290,19 +2270,9 @@ void wxWindow::MSWOnLButtonUp(const int x, const int y, const WXUINT flags)
 
 void wxWindow::MSWOnLButtonDClick(const int x, const int y, const WXUINT flags)
 {
-//wxDebugMsg("LButtonDClick\n") ;
   /* MATTHEW: If dclick not allowed, generate another single-click */
   wxMouseEvent event(m_doubleClickAllowed ?
 		     wxEVENT_TYPE_LEFT_DCLICK : wxEVENT_TYPE_LEFT_DOWN);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2342,17 +2312,7 @@ void wxWindow::MSWOnMButtonDown(const int x, const int y, const WXUINT flags)
   }
 #endif
 
-//wxDebugMsg("MButtonDown\n") ;
   wxMouseEvent event(wxEVENT_TYPE_MIDDLE_DOWN);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2371,15 +2331,6 @@ void wxWindow::MSWOnMButtonUp(const int x, const int y, const WXUINT flags)
 {
 //wxDebugMsg("MButtonUp\n") ;
   wxMouseEvent event(wxEVENT_TYPE_MIDDLE_UP);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2400,15 +2351,6 @@ void wxWindow::MSWOnMButtonDClick(const int x, const int y, const WXUINT flags)
   /* MATTHEW: If dclick not allowed, generate another single-click */
   wxMouseEvent event((m_doubleClickAllowed) ?
 		     wxEVENT_TYPE_MIDDLE_DCLICK : wxEVENT_TYPE_MIDDLE_DOWN);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2447,17 +2389,7 @@ void wxWindow::MSWOnRButtonDown(const int x, const int y, const WXUINT flags)
   }
 #endif
 
-//wxDebugMsg("RButtonDown\n") ;
   wxMouseEvent event(wxEVENT_TYPE_RIGHT_DOWN);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2474,17 +2406,7 @@ void wxWindow::MSWOnRButtonDown(const int x, const int y, const WXUINT flags)
 
 void wxWindow::MSWOnRButtonUp(const int x, const int y, const WXUINT flags)
 {
-//wxDebugMsg("RButtonUp\n") ;
   wxMouseEvent event(wxEVENT_TYPE_RIGHT_UP);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2501,19 +2423,9 @@ void wxWindow::MSWOnRButtonUp(const int x, const int y, const WXUINT flags)
 
 void wxWindow::MSWOnRButtonDClick(const int x, const int y, const WXUINT flags)
 {
-//wxDebugMsg("RButtonDClick\n") ;
   /* MATTHEW: If dclick not allowed, generate another single-click */
   wxMouseEvent event((m_doubleClickAllowed) ?
 		     wxEVENT_TYPE_RIGHT_DCLICK : wxEVENT_TYPE_RIGHT_DOWN);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2538,16 +2450,14 @@ void wxWindow::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
   if (m_windowCursor.Ok() && !wxIsBusy())
     ::SetCursor((HCURSOR) m_windowCursor.GetHCURSOR());
 
+  if (!m_mouseInWindow)
+  {
+    // Generate an ENTER event
+    m_mouseInWindow = TRUE;
+    MSWOnMouseEnter(x, y, flags);
+  }
+
   wxMouseEvent event(wxEVENT_TYPE_MOTION);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2574,136 +2484,10 @@ void wxWindow::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
   m_lastXPos = event.m_x; m_lastYPos = event.m_y;
   GetEventHandler()->OldOnMouseEvent(event);
 }
-
-/* TODO put back leave/enter code if required
- */
-#if 0
-void wxWindow::MSWOnMouseMove(int x, int y, WXUINT flags)
-{
-//wxDebugMsg("Client 0x%08x Move Msg %d,%d\n",this,x,y) ;
-
-// #if MOUSE_EXIT_FIX //Should work now!!
-
-  // Don't do the Leave/Enter fix if we've captured the window,
-  // or SetCapture won't work properly.
-  if (!m_winCaptured)
-  {
-    HWND hunder ;
-    POINT pt ;
-    // See if we Leave/Enter the window.
-    GetCursorPos(&pt) ;
-    hunder = WindowFromPoint(pt) ;
-    if (hunder==m_hWnd)
-    {
-      // I'm in the Window, but perhaps in NC area.
-      RECT wind ;
-      RECT nc ;
-      GetClientRect(m_hWnd,&wind) ;
-      GetWindowRect(m_hWnd,&nc) ;
-      pt.x -= nc.left ;
-      pt.y -= nc.top ;
-      wind.left    += WINDOW_MARGIN ; // to be able to 'see' leave
-      wind.top     += WINDOW_MARGIN ; // to be able to 'see' leave
-      wind.right   -= WINDOW_MARGIN ; // to be able to 'see' leave
-      wind.bottom  -= WINDOW_MARGIN ; // to be able to 'see' leave
-
-      if (!PtInRect(&wind,pt))
-        hunder = NULL ; // So, I can simulate a Leave event...
-    }
-
-    if (hunder!=m_hWnd)
-    {
-      if (m_mouseInWindow)
-      {
-        m_mouseInWindow = FALSE ;
-        // Capture/Release is no more needed...
-        //ReleaseCapture() ;
-        MSWOnMouseLeave(x,y,flags) ;
-        return ;
-      }
-      // We never want to see Enter or Motion in this part of the Window...
-      return ;
-    }
-    else
-    {
-      // Event was triggered while I'm really into my client area.
-      // Do an Enter if not done.
-      if (!m_mouseInWindow)
-      {
-        m_mouseInWindow = TRUE ;
-        // Capture/Release is no more needed...
-        //SetCapture(m_hWnd) ;
-        // Set cursor, but only if we're not in 'busy' mode
-        if (m_windowCursor.Ok() && !wxIsBusy())
-          ::SetCursor(m_windowCursor.ms_cursor);
-        MSWOnMouseEnter(x,y,flags) ;
-        return ;
-      }
-    }
-  }
-// #endif //MOUSE_EXIT_FIX
-    
-  // 'normal' move event...
-  // Set cursor, but only if we're not in 'busy' mode
-  if (m_windowCursor.Ok() && !wxIsBusy())
-    ::SetCursor(m_windowCursor.ms_cursor);
-
-  wxMouseEvent event(wxEVENT_TYPE_MOTION);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
-
-  event.m_x = x; event.m_y = y;
-  event.m_shiftDown = ((flags & MK_SHIFT) != 0);
-  event.m_controlDown = ((flags & MK_CONTROL) != 0);
-  event.m_leftDown = ((flags & MK_LBUTTON) != 0);
-  event.m_middleDown = ((flags & MK_MBUTTON) != 0);
-  event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
-  event.m_eventObject = this;
-
-  // Window gets a click down message followed by a mouse move
-  // message even if position isn't changed!  We want to discard
-  // the trailing move event if x and y are the same.
-  if ((m_lastEvent == wxEVENT_TYPE_RIGHT_DOWN || m_lastEvent == wxEVENT_TYPE_LEFT_DOWN ||
-       m_lastEvent == wxEVENT_TYPE_MIDDLE_DOWN) &&
-      (m_lastXPos == event.m_x && m_lastYPos == event.m_y))
-  {
-    m_lastXPos = event.m_x; m_lastYPos = event.m_y;
-    m_lastEvent = wxEVENT_TYPE_MOTION;
-    return;
-  }
-
-  m_lastEvent = wxEVENT_TYPE_MOTION;
-  m_lastXPos = event.m_x; m_lastYPos = event.m_y;
-  GetEventHandler()->OldOnMouseEvent(event);
-}
-#endif
 
 void wxWindow::MSWOnMouseEnter(const int x, const int y, const WXUINT flags)
 {
-//wxDebugMsg("Client 0x%08x Enter %d,%d\n",this,x,y) ;
-
-  // Set cursor, but only if we're not in 'busy' mode
-  if (m_windowCursor.Ok() && !wxIsBusy())
-    ::SetCursor((HCURSOR) m_windowCursor.GetHCURSOR());
-
-  wxMouseEvent event(wxEVENT_TYPE_ENTER_WINDOW);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
+  wxMouseEvent event(wxEVT_ENTER_WINDOW);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2714,29 +2498,14 @@ void wxWindow::MSWOnMouseEnter(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
   event.m_eventObject = this;
 
-  m_lastEvent = wxEVENT_TYPE_ENTER_WINDOW;
+  m_lastEvent = wxEVT_ENTER_WINDOW;
   m_lastXPos = event.m_x; m_lastYPos = event.m_y;
   GetEventHandler()->OldOnMouseEvent(event);
 }
 
 void wxWindow::MSWOnMouseLeave(const int x, const int y, const WXUINT flags)
 {
-//wxDebugMsg("Client 0x%08x Leave %d,%d\n",this,x,y) ;
-
-  // Set cursor, but only if we're not in 'busy' mode
-  if (m_windowCursor.Ok() && !wxIsBusy())
-    ::SetCursor((HCURSOR) m_windowCursor.GetHCURSOR());
-
-  wxMouseEvent event(wxEVENT_TYPE_LEAVE_WINDOW);
-
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
+  wxMouseEvent event(wxEVT_LEAVE_WINDOW);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2747,7 +2516,7 @@ void wxWindow::MSWOnMouseLeave(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
   event.m_eventObject = this;
 
-  m_lastEvent = wxEVENT_TYPE_LEAVE_WINDOW;
+  m_lastEvent = wxEVT_LEAVE_WINDOW;
   m_lastXPos = event.m_x; m_lastYPos = event.m_y;
   GetEventHandler()->OldOnMouseEvent(event);
 }
@@ -2810,13 +2579,6 @@ void wxWindow::MSWOnChar(const WXWORD wParam, const WXLPARAM lParam, const bool 
     pt.x -= rect.left ;
     pt.y -= rect.top ;
 
-/*
-    float fx,fy ;
-    fx = (float)pt.x ;
-    fy = (float)pt.y ;
-    MSWDeviceToLogical(&fx,&fy) ;
-    CalcUnscrolledPosition((int)fx,(int)fy,&event.m_x,&event.m_y) ;
-*/
     event.m_x = pt.x; event.m_y = pt.y;
 
 #if WXWIN_COMPATIBILITY
@@ -4950,6 +4712,19 @@ void wxWindow::UpdateWindowUI(void)
 
 void wxWindow::OnIdle(wxIdleEvent& event)
 {
+    // Check if we need to send a LEAVE event
+    if (m_mouseInWindow)
+    {
+        POINT pt;
+        ::GetCursorPos(&pt);
+        if (::WindowFromPoint(pt) != (HWND) GetHWND())
+        {
+            // Generate a LEAVE event
+            m_mouseInWindow = FALSE;
+            MSWOnMouseLeave(pt.x, pt.y, 0);
+        }
+    }
+
 	UpdateWindowUI();
 }
 

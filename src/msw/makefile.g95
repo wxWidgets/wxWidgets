@@ -190,6 +190,8 @@ MSWOBJS = \
   wave.$(OBJSUFF) \
   window.$(OBJSUFF) \
   $(OLEDIR)/droptgt.$(OBJSUFF) \
+  $(OLEDIR)/dropsrc.$(OBJSUFF) \
+  $(OLEDIR)/dataobj.$(OBJSUFF) \
   $(OLEDIR)/oleutils.$(OBJSUFF) \
   $(OLEDIR)/uuid.$(OBJSUFF)
 

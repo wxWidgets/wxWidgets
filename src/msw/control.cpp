@@ -175,25 +175,20 @@ wxControl *wxFakeItemEvent(wxWindow *parent, wxControl *item, wxMouseEvent& even
 
 void wxControl::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
 {
-  // 'normal' move event...
-  // Set cursor, but only if we're not in 'busy' mode
-
 /*
   // Trouble with this is that it sets the cursor for controls too :-(
   if (m_windowCursor.Ok() && !wxIsBusy())
     ::SetCursor(m_windowCursor.GetHCURSOR());
 */
 
-  wxMouseEvent event(wxEVENT_TYPE_MOTION);
+  if (!m_mouseInWindow)
+  {
+    // Generate an ENTER event
+    m_mouseInWindow = TRUE;
+    MSWOnMouseEnter(x, y, flags);
+  }
 
-/*
-  float px = (float)x;
-  float py = (float)y;
-
-  MSWDeviceToLogical(&px, &py);
-
-  CalcUnscrolledPosition((int)px, (int)py, &event.m_x, &event.m_y);
-*/
+  wxMouseEvent event(wxEVT_MOTION);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -207,16 +202,16 @@ void wxControl::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
   // Window gets a click down message followed by a mouse move
   // message even if position isn't changed!  We want to discard
   // the trailing move event if x and y are the same.
-  if ((m_lastEvent == wxEVENT_TYPE_RIGHT_DOWN || m_lastEvent == wxEVENT_TYPE_LEFT_DOWN ||
-       m_lastEvent == wxEVENT_TYPE_MIDDLE_DOWN) &&
+  if ((m_lastEvent == wxEVT_RIGHT_DOWN || m_lastEvent == wxEVT_LEFT_DOWN ||
+       m_lastEvent == wxEVT_MIDDLE_DOWN) &&
       (m_lastXPos == event.GetX() && m_lastYPos == event.GetY()))
   {
     m_lastXPos = event.GetX(); m_lastYPos = event.GetY();
-    m_lastEvent = wxEVENT_TYPE_MOTION;
+    m_lastEvent = wxEVT_MOTION;
     return;
   }
 
-  m_lastEvent = wxEVENT_TYPE_MOTION;
+  m_lastEvent = wxEVT_MOTION;
   m_lastXPos = event.GetX(); m_lastYPos = event.GetY();
   GetEventHandler()->OldOnMouseEvent(event);
 }

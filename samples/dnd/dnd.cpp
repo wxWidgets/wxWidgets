@@ -1,19 +1,14 @@
-///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 // Name:        dnd.cpp
 // Purpose:     Drag and drop sample
 // Author:      Vadim Zeitlin
-// Modified by: 
-// Created:     13.11.97
-// RCS-ID:      $Id$
-// Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows license
-///////////////////////////////////////////////////////////////////////////////
+// Modified by:
+// Created:     04/01/98
+// RCS-ID:
+// Copyright:
+// Licence:   	wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// headers & declarations
-// ============================================================================
-
-// For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -79,7 +74,11 @@ public:
   void OnPaint(wxPaintEvent& event);
   void OnQuit (wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
+  void OnDrag (wxCommandEvent& event);
   void OnHelp (wxCommandEvent& event);
+  void OnLogClear(wxCommandEvent& event);
+
+  void OnMouseBtnDown(wxMouseEvent& event);
 
   bool OnClose();
   
@@ -90,7 +89,9 @@ private:
              *m_ctrlText;
   wxTextCtrl *m_ctrlLog;
 
-  wxLogTarget *m_pLog, *m_pLogPrev;
+  wxLog *m_pLog, *m_pLogPrev;
+
+  wxString m_strText;
 };
 
 // ----------------------------------------------------------------------------
@@ -99,16 +100,22 @@ private:
 enum
 {
   Menu_Quit = 1,
+  Menu_Drag,
   Menu_About = 101,
   Menu_Help,
+  Menu_Clear,
 };
 
 BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
-	EVT_MENU(Menu_Quit,  DnDFrame::OnQuit)
-	EVT_MENU(Menu_About, DnDFrame::OnAbout)
-	EVT_MENU(Menu_Help,  DnDFrame::OnHelp)
+  EVT_MENU(Menu_Quit,  DnDFrame::OnQuit)
+  EVT_MENU(Menu_About, DnDFrame::OnAbout)
+  EVT_MENU(Menu_Drag,  DnDFrame::OnDrag)
+  EVT_MENU(Menu_Help,  DnDFrame::OnHelp)
+  EVT_MENU(Menu_Clear, DnDFrame::OnLogClear)
 
-  //EVT_PAINT(DnDFrame::OnPaint)
+  EVT_LEFT_DOWN(OnMouseBtnDown)
+  EVT_RIGHT_DOWN(OnMouseBtnDown)
+  EVT_MIDDLE_DOWN(OnMouseBtnDown)
 END_EVENT_TABLE()
 
 // `Main program' equivalent, creating windows and returning main app frame
@@ -127,18 +134,34 @@ bool DnDApp::OnInit(void)
 }
 
 DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
-        : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
+        : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h)),
+          m_strText("wxWindows drag & drop works :-)")
+
 {
+  // frame icon and status bar
   SetIcon(wxIcon("mondrian"));
+  const int widths[] = { -1 };
+  CreateStatusBar();
 
   // construct menu
   wxMenu *file_menu = new wxMenu;
-  file_menu->Append(Menu_Help, "&Help");
-  file_menu->Append(Menu_About, "&About");
+  file_menu->Append(Menu_Drag, "&Test drag...");
   file_menu->AppendSeparator();
   file_menu->Append(Menu_Quit, "E&xit");
+
+  wxMenu *log_menu = new wxMenu;
+  log_menu->Append(Menu_Clear, "Clear");
+
+  wxMenu *help_menu = new wxMenu;
+  help_menu->Append(Menu_Help, "&Help...");
+  help_menu->AppendSeparator();
+  help_menu->Append(Menu_About, "&About");
+
   wxMenuBar *menu_bar = new wxMenuBar;
   menu_bar->Append(file_menu, "&File");
+  menu_bar->Append(log_menu,  "&Log");
+  menu_bar->Append(help_menu, "&Help");
+
   SetMenuBar(menu_bar);
   
   // make a panel with 3 subwindows
@@ -154,9 +177,8 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
                                wxSUNKEN_BORDER| wxHSCROLL);
 
   // redirect log messages to the text window (don't forget to delete it!)
-//  m_pLog = new wxLogTextCtrl(m_ctrlLog);
-  m_pLog = NULL;
-  m_pLogPrev = wxLogTarget::SetActiveTarget(m_pLog);
+  m_pLog = new wxLogTextCtrl(m_ctrlLog);
+  m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
 
   // associate drop targets with 2 text controls
   m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
@@ -168,21 +190,21 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   c->left.SameAs		(this, wxLeft);
   c->top.SameAs			(this, wxTop);
   c->right.PercentOf(this, wxRight, 50);
-  c->height.PercentOf(this, wxHeight, 50);
+  c->height.PercentOf(this, wxHeight, 40);
   m_ctrlFile->SetConstraints(c);
 
   c = new wxLayoutConstraints;
   c->left.SameAs    (m_ctrlFile, wxRight);
   c->top.SameAs     (this, wxTop);
   c->right.SameAs   (this, wxRight);
-  c->height.PercentOf(this, wxHeight, 50);
+  c->height.PercentOf(this, wxHeight, 40);
   m_ctrlText->SetConstraints(c);
 
   c = new wxLayoutConstraints;
   c->left.SameAs    (this, wxLeft);
   c->right.SameAs   (this, wxRight);
-  c->height.PercentOf(this, wxHeight, 50);
-  c->bottom.SameAs(this, wxBottom);
+  c->height.PercentOf(this, wxHeight, 40);
+  c->top.SameAs(m_ctrlText, wxBottom);
 
   m_ctrlLog->SetConstraints(c);
 
@@ -194,11 +216,26 @@ void DnDFrame::OnQuit(wxCommandEvent& /* event */)
   Close(TRUE);
 }
 
+void DnDFrame::OnDrag(wxCommandEvent& /* event */)
+{
+  wxString strText = wxGetTextFromUser
+  (
+    "After you enter text in this dialog, press any mouse\n"
+    "button in the bottom (empty) part of the frame and \n"
+    "drag it anywhere - you will be in fact dragging the\n"
+    "text object containing this text",
+    "Please enter some text", m_strText, this
+  );
+
+  m_strText = strText;
+}
+
 void DnDFrame::OnAbout(wxCommandEvent& /* event */)
 {
   wxMessageDialog dialog(this, 
                          "Drag-&-Drop Demo\n"
-                         "Please see File|Help for details",
+                         "Please see \"Help|Help...\" for details\n"
+                         "Copyright (c) 1998 Vadim Zeitlin",
                          "About wxDnD");
 
   dialog.ShowModal();
@@ -207,24 +244,36 @@ void DnDFrame::OnAbout(wxCommandEvent& /* event */)
 void DnDFrame::OnHelp(wxCommandEvent& /* event */)
 {
   wxMessageDialog dialog(this, 
-"This small program demonstrates drag & drop support in wxWindows.\n"
-"The program window consists of 3 parts: the bottom pane is for\n"
-"debug messages, so that you can see what's going on inside.\n"
-"The top part is split into 2 listboxes, the left one accepts\n"
-"files and the right one accepts text.\n"
-"\n"
-"To test it: open wordpad (write.exe), select some text in it and\n"
-"drag it to the right listbox (you'll notice the usual visual\n"
-"feedback, i.e. the cursor will change). Also, try dragging some\n"
-"files (you can select several at once) from Windows Explorer (or\n"
-"File Manager) to the left pane. Hold down Ctrl/Shift keys when\n"
-"you drop text (doesn't work with files) and see what changes.\n"
-"\n"
-"Please address any questions/bug reports/suggestions &c to\n"
+"This small program demonstrates drag & drop support in wxWindows. "
+"The program window consists of 3 parts: the bottom pane is for "
+"debug messages, so that you can see what's going on inside. "
+"The top part is split into 2 listboxes, the left one accepts "
+"files and the right one accepts text."
+"\n\n"
+"To test wxDropTarget: open wordpad (write.exe), select some text in "
+"it and drag it to the right listbox (you'll notice the usual visual "
+"feedback, i.e. the cursor will change). Also, try dragging some "
+"files (you can select several at once) from Windows Explorer (or "
+"File Manager) to the left pane. Hold down Ctrl/Shift keys when "
+"you drop text (doesn't work with files) and see what changes. "
+"\n\n"
+"To test wxDropSource: just press any mouse button on the empty zone of "
+"the window and drag it to wordpad or any other droptarget accepting "
+"text (and of course you can just drag it to the right pane). Due to "
+"a lot of trace messages, the cursor might take some time to change, "
+"don't release the mouse button until it does. You can change the "
+"string being dragged in in \"File|Test drag...\" dialog."
+"\n\n"
+"Please send all questions/bug reports/suggestions &c to "
 "Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>",
                         "wxDnD Help");
 
   dialog.ShowModal();
+}
+
+void DnDFrame::OnLogClear(wxCommandEvent& event)
+{
+  m_ctrlLog->Clear();
 }
 
 bool DnDFrame::OnClose() 
@@ -232,10 +281,31 @@ bool DnDFrame::OnClose()
   return TRUE; 
 }
 
+void DnDFrame::OnMouseBtnDown(wxMouseEvent& event)
+{
+  if ( !m_strText.IsEmpty() ) {
+    // start drag operation
+    wxTextDataObject data(m_strText);
+    wxDropSource dragSource(data);
+    const char *pc;
+
+    switch ( dragSource.DoDragDrop(TRUE) ) {
+      case wxDropSource::Error:   pc = "Error!";    break;
+      case wxDropSource::None:    pc = "Nothing";   break;
+      case wxDropSource::Copy:    pc = "Copied";    break;
+      case wxDropSource::Move:    pc = "Moved";     break;
+      case wxDropSource::Cancel:  pc = "Cancelled"; break;
+      default:                    pc = "Huh?";      break;
+    }
+
+    SetStatusText(wxString("Drag result: ") + pc);
+  }
+}
+
 DnDFrame::~DnDFrame()
 {
   if ( m_pLog != NULL ) {
-    if ( wxLogTarget::SetActiveTarget(m_pLogPrev) == m_pLog )
+    if ( wxLog::SetActiveTarget(m_pLogPrev) == m_pLog )
       delete m_pLog;
   }
 }
