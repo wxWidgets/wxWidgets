@@ -2498,19 +2498,23 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     // this should never happen
                     wxCHECK_MSG( win, 0,
                                  _T("FindWindowForMouseEvent() returned NULL") );
+                }
 
+                processed = win->HandleMouseEvent(message, x, y, wParam);
+
+                // if the app didn't eat the event, handle it in the default
+                // way, that is by giving this window the focus
+                if ( !processed )
+                {
                     // for the standard classes their WndProc sets the focus to
                     // them anyhow and doing it from here results in some weird
-                    // problems, but for our windows we want them to acquire
-                    // focus when clicked
+                    // problems, so don't do it for them (unnecessary anyhow)
                     if ( !win->IsOfStandardClass() )
                     {
                         if ( message == WM_LBUTTONDOWN && win->AcceptsFocus() )
                             win->SetFocus();
                     }
                 }
-
-                processed = win->HandleMouseEvent(message, x, y, wParam);
             }
             break;
 
