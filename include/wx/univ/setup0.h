@@ -519,7 +519,7 @@
 #define wxUSE_BMPBUTTON    1    // wxBitmapButton
 #define wxUSE_CALENDARCTRL 1    // wxCalendarCtrl
 #define wxUSE_CHECKBOX     1    // wxCheckBox
-#define wxUSE_CHECKLISTBOX 1    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
+#define wxUSE_CHECKLISTBOX 1    // wxCheckListBox
 #define wxUSE_CHOICE       1    // wxChoice
 #define wxUSE_COMBOBOX     1    // wxComboBox
 #define wxUSE_GAUGE        1    // wxGauge
@@ -1112,13 +1112,12 @@
     #define wxUSE_RICHEDIT2 0
 #endif
 
-// Set this to 1 to enable support for the owner-drawn menu and listboxes. This
-// is required by wxUSE_CHECKLISTBOX.
+// Set this to 1 to enable support for the owner-drawn menu and listboxes.
 //
 // Default is 1.
 //
 // Recommended setting: 1, set to 0 for a small library size reduction
-#define wxUSE_OWNER_DRAWN 0 //? error 'MSWOnDraw' is not a member of 'wxControl'
+#define wxUSE_OWNER_DRAWN 0
 
 #endif
 
@@ -1182,11 +1181,6 @@
 #if !defined(__WIN32__) && wxUSE_NATIVE_STATUSBAR
     #undef  wxUSE_NATIVE_STATUSBAR
     #define wxUSE_NATIVE_STATUSBAR 0
-#endif
-
-#if !wxUSE_OWNER_DRAWN
-    #undef wxUSE_CHECKLISTBOX
-    #define wxUSE_CHECKLISTBOX 0
 #endif
 
 // Salford C++ doesn't like some of the memory operator definitions
