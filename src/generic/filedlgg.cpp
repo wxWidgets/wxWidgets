@@ -156,9 +156,55 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
         }
         p1 += 32 * 3, p2 += 32 * 3;
     }
-    
+
     return small.ConvertToBitmap();
 }
+
+
+// finds empty borders and return non-empty area of image:
+static wxImage CutEmptyBorders(const wxImage& img)
+{
+    unsigned char mr = img.GetMaskRed(), 
+                  mg = img.GetMaskGreen(), 
+                  mb = img.GetMaskBlue();
+    unsigned char *dt = img.GetData(), *dttmp;
+    unsigned w = img.GetWidth(), h = img.GetHeight();
+    
+    unsigned top, bottom, left, right, i;
+    bool empt;
+
+#define MK_DTTMP(x,y)      dttmp = dt + ((x + y * w) * 3)
+#define NOEMPTY_PIX(empt)  if (dttmp[0] != mr || dttmp[1] != mg || dttmp[2] != mb) {empt = FALSE; break;}
+    
+    for (empt = TRUE, top = 0; empt && top < h; top++)
+    {
+        MK_DTTMP(0, top);
+        for (i = 0; i < w; i++, dttmp+=3)
+            NOEMPTY_PIX(empt)
+    }
+    for (empt = TRUE, bottom = h-1; empt && bottom > top; bottom--)
+    {
+        MK_DTTMP(0, bottom);
+        for (i = 0; i < w; i++, dttmp+=3)
+            NOEMPTY_PIX(empt)
+    }
+    for (empt = TRUE, left = 0; empt && left < w; left++)
+    {
+        MK_DTTMP(left, 0);
+        for (i = 0; i < h; i++, dttmp+=3*w)
+            NOEMPTY_PIX(empt)
+    }
+    for (empt = TRUE, right = w-1; empt && right > left; right--)
+    {
+        MK_DTTMP(right, 0);
+        for (i = 0; i < h; i++, dttmp+=3*w)
+            NOEMPTY_PIX(empt)
+    }
+    top--, left--, bottom++, right++;
+
+    return img.GetSubImage(wxRect(left, top, right - left + 1, bottom - top + 1));
+}
+
 
 
 int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
@@ -188,8 +234,9 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     else
     {
         if (img.GetWidth() != 32 || img.GetHeight() != 32)
-            img.Rescale(32, 32);
-        m_ImageList.Add(CreateAntialiasedBitmap(img));
+            m_ImageList.Add(CreateAntialiasedBitmap(CutEmptyBorders(img).Rescale(32, 32)));
+        else
+            m_ImageList.Add(CreateAntialiasedBitmap(img));
     }
     m_HashTable.Put(extension, new wxFileIconEntry(id));
     return id;
