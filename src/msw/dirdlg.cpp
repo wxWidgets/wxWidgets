@@ -60,6 +60,10 @@
     #define BIF_NONEWFOLDERBUTTON  0x0200
 #endif
 
+#ifndef BIF_EDITBOX
+    #define BIF_EDITBOX 16
+#endif
+
 // ----------------------------------------------------------------------------
 // wxWindows macros
 // ----------------------------------------------------------------------------
