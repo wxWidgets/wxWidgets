@@ -2195,7 +2195,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     if ( tvhti.flags & TVHT_ONITEM )
                     {
                         event.m_item = (WXHTREEITEM) tvhti.hItem;
-                        eventType = hdr->code == NM_DBLCLK
+                        eventType = (int)hdr->code == NM_DBLCLK
                                     ? wxEVT_COMMAND_TREE_ITEM_ACTIVATED
                                     : wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
                     }

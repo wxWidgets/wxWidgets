@@ -417,71 +417,50 @@ void wxFrame::PositionStatusBar()
 
 void wxFrame::DetachMenuBar()
 {
-    if (m_frameMenuBar)
+    if ( m_frameMenuBar )
     {
         m_frameMenuBar->Detach();
         m_frameMenuBar = NULL;
     }
 }
 
-void wxFrame::SetMenuBar(wxMenuBar *menu_bar)
+void wxFrame::SetMenuBar(wxMenuBar *menubar)
 {
-    if (!menu_bar)
+    if ( !menubar )
     {
         DetachMenuBar();
-        //actually remove the menu from the frame
-        m_hMenu=NULL;
+
+        // actually remove the menu from the frame
+        m_hMenu = (WXHMENU)0;
         InternalSetMenuBar();
-        return;
     }
-
-    m_frameMenuBar = NULL;
-
-    // Can set a menubar several times.
-    // TODO: how to prevent a memory leak if you have a currently-unattached
-    // menubar? wxWindows assumes that the frame will delete the menu (otherwise
-    // there are problems for MDI).
-    if (menu_bar->GetHMenu())
+    else // set new non NULL menu bar
     {
-        m_hMenu = menu_bar->GetHMenu();
+        m_frameMenuBar = NULL;
+
+        // Can set a menubar several times.
+        // TODO: how to prevent a memory leak if you have a currently-unattached
+        // menubar? wxWindows assumes that the frame will delete the menu (otherwise
+        // there are problems for MDI).
+        if ( menubar->GetHMenu() )
+        {
+            m_hMenu = menubar->GetHMenu();
+        }
+        else
+        {
+            menubar->Detach();
+
+            m_hMenu = menubar->Create();
+
+            if ( !m_hMenu )
+                return;
+        }
+
+        InternalSetMenuBar();
+
+        m_frameMenuBar = menubar;
+        menubar->Attach(this);
     }
-    else
-    {
-        menu_bar->Detach();
-
-        m_hMenu = menu_bar->Create();
-
-        if ( !m_hMenu )
-            return;
-    }
-
-    InternalSetMenuBar();
-
-    m_frameMenuBar = menu_bar;
-    menu_bar->Attach(this);
-
-#if 0 // Old code that assumes only one call of SetMenuBar per frame.
-    if (!menu_bar)
-    {
-        DetachMenuBar();
-        return;
-    }
-
-    wxCHECK_RET( !menu_bar->GetFrame(), wxT("this menubar is already attached") );
-
-    if (m_frameMenuBar)
-        delete m_frameMenuBar;
-
-    m_hMenu = menu_bar->Create();
-
-    if ( !m_hMenu )
-        return;
-
-    InternalSetMenuBar();
-
-    m_frameMenuBar = menu_bar;
-    menu_bar->Attach(this);
-#endif
 }
 
 void wxFrame::InternalSetMenuBar()

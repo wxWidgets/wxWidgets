@@ -225,8 +225,10 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 WXHWND wxComboBox::GetEditHWND() const
 {
-    if ( GetWindowStyle() & wxCB_READONLY )
-        return NULL;
+    // this function should not be called for wxCB_READONLY controls, it is
+    // the callers responsability to check this
+    wxASSERT_MSG( !(GetWindowStyle() & wxCB_READONLY),
+                  _T("read-only combobox doesn't have any edit control") );
 
     POINT pt;
     pt.x = pt.y = 4;
