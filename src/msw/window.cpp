@@ -293,8 +293,6 @@ void wxWindow::Init()
     m_caretEnabled =
     m_caretShown = FALSE;
 
-    m_inOnSize = FALSE;
-
     m_isBeingDeleted = FALSE;
     m_oldWndProc = 0;
     m_useCtl3D = FALSE;
@@ -306,6 +304,9 @@ void wxWindow::Init()
     m_xThumbSize = 0;
     m_yThumbSize = 0;
     m_backgroundTransparent = FALSE;
+
+    // as all windows are created with WS_VISIBLE style...
+    m_isShown = TRUE;
 
 #if wxUSE_MOUSEEVENT_HACK
     m_lastMouseX =

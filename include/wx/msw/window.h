@@ -345,7 +345,6 @@ protected:
 
     // additional (MSW specific) flags
     bool                  m_useCtl3D:1; // Using CTL3D for this control
-    bool                  m_inOnSize:1; // Protection against OnSize reentry
     bool                  m_backgroundTransparent:1;
     bool                  m_mouseInWindow:1;
     bool                  m_doubleClickAllowed:1;
