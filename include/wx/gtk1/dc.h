@@ -147,9 +147,16 @@ public:
     bool         m_needComputeScaleX,
                  m_needComputeScaleY; // not yet used
 
-    
+
 private:
     DECLARE_ABSTRACT_CLASS(wxDC)
 };
+
+// this must be defined when wxDC::Blit() honours the DC origian and needed to
+// allow wxUniv code in univ/winuniv.cpp to work with versions of wxGTK
+// 2.3.[23]
+#ifndef wxHAS_WORKING_GTK_DC_BLIT
+    #define wxHAS_WORKING_GTK_DC_BLIT
+#endif
 
 #endif // __GTKDCH__
