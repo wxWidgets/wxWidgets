@@ -133,7 +133,7 @@ void wxSpinButton::MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXH
 {
   if (control)
   {
-    wxSpinEvent event(0, m_windowId);
+    wxSpinEvent event(wxEVT_NULL, m_windowId);
     event.SetPosition(pos);
     event.SetOrientation(wxVERTICAL);
     event.SetEventObject( this );
@@ -182,7 +182,7 @@ void wxSpinButton::MSWOnHScroll( const WXWORD wParam, const WXWORD pos, const WX
 {
   if (control)
   {
-    wxSpinEvent event(0, m_windowId);
+    wxSpinEvent event(wxEVT_NULL, m_windowId);
     event.SetPosition(pos);
     event.SetOrientation(wxHORIZONTAL);
     event.SetEventObject( this );
@@ -261,7 +261,7 @@ bool wxSpinButton::MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam)
 // Spin event
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
 
-wxSpinEvent::wxSpinEvent(WXTYPE commandType, int id):
+wxSpinEvent::wxSpinEvent(wxEventType commandType, int id):
   wxScrollEvent(commandType, id)
 {
 }

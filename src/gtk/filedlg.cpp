@@ -23,14 +23,14 @@
 void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 {
   wxFileDialog *dialog = (wxFileDialog*)data;
-  wxCommandEvent event(0);
+  wxCommandEvent event(wxEVT_NULL);
   dialog->OnOk( event );
 };
 
 void gtk_filedialog_cancel_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 {
   wxFileDialog *dialog = (wxFileDialog*)data;
-  wxCommandEvent event(0);
+  wxCommandEvent event(wxEVT_NULL);
   dialog->OnCancel( event );
 };
 

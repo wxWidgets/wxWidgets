@@ -152,8 +152,8 @@ bool wxTabCtrl::MSWCommand(const WXUINT cmd, const WXWORD id)
 
 bool wxTabCtrl::MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam)
 {
-	wxTabEvent event(0, m_windowId);
-	int eventType = 0;
+	wxTabEvent event(wxEVT_NULL, m_windowId);
+	wxEventType eventType = wxEVT_NULL;
 	NMHDR* hdr1 = (NMHDR*) lParam;
 	switch ( hdr1->code )
 	{
@@ -471,7 +471,7 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
 // Tab event
 IMPLEMENT_DYNAMIC_CLASS(wxTabEvent, wxCommandEvent)
 
-wxTabEvent::wxTabEvent(WXTYPE commandType, int id):
+wxTabEvent::wxTabEvent(wxEventType commandType, int id):
   wxCommandEvent(commandType, id)
 {
 }

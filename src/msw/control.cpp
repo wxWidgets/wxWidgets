@@ -183,8 +183,8 @@ long wxControl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 bool wxControl::MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam)
 {
 #if defined(__WIN95__)
-	wxCommandEvent event(0, m_windowId);
-	int eventType = 0;
+	wxCommandEvent event(wxEVT_NULL, m_windowId);
+	wxEventType eventType = wxEVT_NULL;
 	NMHDR *hdr1 = (NMHDR*) lParam;
 	switch ( hdr1->code )
 	{

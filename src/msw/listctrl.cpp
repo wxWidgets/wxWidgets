@@ -1050,8 +1050,8 @@ bool wxListCtrl::MSWCommand(const WXUINT cmd, const WXWORD id)
 
 bool wxListCtrl::MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam)
 {
-	wxListEvent event(0, m_windowId);
-	int eventType = 0;
+	wxListEvent event(wxEVT_NULL, m_windowId);
+	wxEventType eventType = wxEVT_NULL;
 	NMHDR *hdr1 = (NMHDR *) lParam;
 	switch ( hdr1->code )
 	{
@@ -1367,7 +1367,7 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_
 // List event
 IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxCommandEvent)
 
-wxListEvent::wxListEvent(WXTYPE commandType, int id):
+wxListEvent::wxListEvent(wxEventType commandType, int id):
   wxCommandEvent(commandType, id)
 {
 	m_code = 0;

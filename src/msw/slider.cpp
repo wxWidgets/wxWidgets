@@ -273,7 +273,7 @@ void wxSlider::MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXHWND 
 #endif
 
     int nScrollInc;
-    int scrollEvent = 0;
+    wxEventType scrollEvent = wxEVT_NULL;
     switch ( wParam )
     {
             case SB_TOP:
@@ -751,7 +751,7 @@ bool wxSlider::ContainsHWND(WXHWND hWnd) const
 // Backward compatibility
 void wxSlider::OnScroll(wxScrollEvent& event)
 {
-    int oldEvent = event.GetEventType();
+    wxEventType oldEvent = event.GetEventType();
     event.SetEventType( wxEVT_COMMAND_SLIDER_UPDATED );
     if ( !GetEventHandler()->ProcessEvent(event) )
     {

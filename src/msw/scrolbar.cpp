@@ -129,7 +129,7 @@ void wxScrollBar::MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXHW
 		maxPos -= (m_pageSize - 1);
 #endif
 
-    int scrollEvent = 0;
+    wxEventType scrollEvent = wxEVT_NULL;
 
     int nScrollInc;
     switch ( wParam )
@@ -339,7 +339,7 @@ void wxScrollBar::Command(wxCommandEvent& event)
 // Backward compatibility
 void wxScrollBar::OnScroll(wxScrollEvent& event)
 {
-    int oldEvent = event.GetEventType();
+    wxEventType oldEvent = event.GetEventType();
     event.SetEventType( wxEVT_COMMAND_SCROLLBAR_UPDATED );
     if ( !GetEventHandler()->ProcessEvent(event) )
     {

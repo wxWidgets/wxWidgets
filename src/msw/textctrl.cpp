@@ -1025,7 +1025,7 @@ bool wxTextCtrl::MSWCommand(const WXUINT param, const WXWORD WXUNUSED(id))
       break;
   }
 */
-  WXTYPE eventTyp = 0;
+  wxEventType eventTyp = wxEVT_NULL;
   switch (param)
   {
     case EN_SETFOCUS:

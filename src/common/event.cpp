@@ -76,7 +76,7 @@ const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] = { { 0, 0, 0, NULL
 
 wxEvent::wxEvent(int theId)
 {
-  m_eventType = 0;
+  m_eventType = wxEVT_NULL;
   m_eventObject = NULL;
   m_eventHandle = NULL;
   m_timeStamp = 0;
@@ -90,7 +90,7 @@ wxEvent::wxEvent(int theId)
  *
  */
 
-wxCommandEvent::wxCommandEvent(WXTYPE commandType, int theId)
+wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
 {
   m_eventType = commandType;
   m_clientData = NULL;
@@ -104,7 +104,7 @@ wxCommandEvent::wxCommandEvent(WXTYPE commandType, int theId)
  * Scroll events
  */
 
-wxScrollEvent::wxScrollEvent(WXTYPE commandType, int id, int pos, int orient):
+wxScrollEvent::wxScrollEvent(wxEventType commandType, int id, int pos, int orient):
   wxCommandEvent(commandType, id)
 {
   m_extraLong = orient;
@@ -117,7 +117,7 @@ wxScrollEvent::wxScrollEvent(WXTYPE commandType, int id, int pos, int orient):
  *
  */
 
-wxMouseEvent::wxMouseEvent(WXTYPE commandType)
+wxMouseEvent::wxMouseEvent(wxEventType commandType)
 {
   m_eventType = commandType;
   m_metaDown = FALSE;
@@ -231,7 +231,7 @@ wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
  *
  */
 
-wxKeyEvent::wxKeyEvent(WXTYPE type)
+wxKeyEvent::wxKeyEvent(wxEventType type)
 {
   m_eventType = type;
   m_shiftDown = FALSE;

@@ -2141,7 +2141,7 @@ void wxWindow::MSWOnLButtonDown(const int x, const int y, const WXUINT flags)
   }
 #endif
 
-  wxMouseEvent event(wxEVENT_TYPE_LEFT_DOWN);
+  wxMouseEvent event(wxEVT_LEFT_DOWN);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2158,7 +2158,7 @@ void wxWindow::MSWOnLButtonDown(const int x, const int y, const WXUINT flags)
 
 void wxWindow::MSWOnLButtonUp(const int x, const int y, const WXUINT flags)
 {
-  wxMouseEvent event(wxEVENT_TYPE_LEFT_UP);
+  wxMouseEvent event(wxEVT_LEFT_UP);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2169,14 +2169,14 @@ void wxWindow::MSWOnLButtonUp(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
   event.m_eventObject = this;
 
-  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_LEFT_UP;
+  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_LEFT_UP;
 
   GetEventHandler()->OldOnMouseEvent(event);
 }
 
 void wxWindow::MSWOnLButtonDClick(const int x, const int y, const WXUINT flags)
 {
-  wxMouseEvent event(wxEVENT_TYPE_LEFT_DCLICK);
+  wxMouseEvent event(wxEVT_LEFT_DCLICK);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2187,7 +2187,7 @@ void wxWindow::MSWOnLButtonDClick(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
   event.m_eventObject = this;
 
-  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_LEFT_DCLICK;
+  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_LEFT_DCLICK;
 
 //  if (m_doubleClickAllowed)
      GetEventHandler()->OldOnMouseEvent(event);
@@ -2216,7 +2216,7 @@ void wxWindow::MSWOnMButtonDown(const int x, const int y, const WXUINT flags)
   }
 #endif
 
-  wxMouseEvent event(wxEVENT_TYPE_MIDDLE_DOWN);
+  wxMouseEvent event(wxEVT_MIDDLE_DOWN);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2227,14 +2227,14 @@ void wxWindow::MSWOnMButtonDown(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
   event.m_eventObject = this;
 
-  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_MIDDLE_DOWN;
+  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_MIDDLE_DOWN;
   GetEventHandler()->OldOnMouseEvent(event);
 }
 
 void wxWindow::MSWOnMButtonUp(const int x, const int y, const WXUINT flags)
 {
 //wxDebugMsg("MButtonUp\n") ;
-  wxMouseEvent event(wxEVENT_TYPE_MIDDLE_UP);
+  wxMouseEvent event(wxEVT_MIDDLE_UP);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2245,13 +2245,13 @@ void wxWindow::MSWOnMButtonUp(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
   event.m_eventObject = this;
 
-  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_MIDDLE_UP;
+  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_MIDDLE_UP;
   GetEventHandler()->OldOnMouseEvent(event);
 }
 
 void wxWindow::MSWOnMButtonDClick(const int x, const int y, const WXUINT flags)
 {
-  wxMouseEvent event(wxEVENT_TYPE_MIDDLE_DCLICK);
+  wxMouseEvent event(wxEVT_MIDDLE_DCLICK);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2262,7 +2262,7 @@ void wxWindow::MSWOnMButtonDClick(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
   event.m_eventObject = this;
 
-  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_MIDDLE_DCLICK;
+  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_MIDDLE_DCLICK;
 //  if (m_doubleClickAllowed)
      GetEventHandler()->OldOnMouseEvent(event);
 }
@@ -2290,7 +2290,7 @@ void wxWindow::MSWOnRButtonDown(const int x, const int y, const WXUINT flags)
   }
 #endif
 
-  wxMouseEvent event(wxEVENT_TYPE_RIGHT_DOWN);
+  wxMouseEvent event(wxEVT_RIGHT_DOWN);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2301,13 +2301,13 @@ void wxWindow::MSWOnRButtonDown(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
   event.m_eventObject = this;
 
-  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_RIGHT_DOWN;
+  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_RIGHT_DOWN;
   GetEventHandler()->OldOnMouseEvent(event);
 }
 
 void wxWindow::MSWOnRButtonUp(const int x, const int y, const WXUINT flags)
 {
-  wxMouseEvent event(wxEVENT_TYPE_RIGHT_UP);
+  wxMouseEvent event(wxEVT_RIGHT_UP);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2318,13 +2318,13 @@ void wxWindow::MSWOnRButtonUp(const int x, const int y, const WXUINT flags)
   event.m_eventObject = this;
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
 
-  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_RIGHT_UP;
+  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_RIGHT_UP;
   GetEventHandler()->OldOnMouseEvent(event);
 }
 
 void wxWindow::MSWOnRButtonDClick(const int x, const int y, const WXUINT flags)
 {
-  wxMouseEvent event(wxEVENT_TYPE_RIGHT_DCLICK);
+  wxMouseEvent event(wxEVT_RIGHT_DCLICK);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2335,7 +2335,7 @@ void wxWindow::MSWOnRButtonDClick(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
   event.m_eventObject = this;
 
-  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_RIGHT_DCLICK;
+  m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_RIGHT_DCLICK;
 //  if (m_doubleClickAllowed)
      GetEventHandler()->OldOnMouseEvent(event);
 }
@@ -2356,7 +2356,7 @@ void wxWindow::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
     MSWOnMouseEnter(x, y, flags);
   }
 
-  wxMouseEvent event(wxEVENT_TYPE_MOTION);
+  wxMouseEvent event(wxEVT_MOTION);
 
   event.m_x = x; event.m_y = y;
   event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2370,16 +2370,16 @@ void wxWindow::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
   // Window gets a click down message followed by a mouse move
   // message even if position isn't changed!  We want to discard
   // the trailing move event if x and y are the same.
-  if ((m_lastEvent == wxEVENT_TYPE_RIGHT_DOWN || m_lastEvent == wxEVENT_TYPE_LEFT_DOWN ||
-       m_lastEvent == wxEVENT_TYPE_MIDDLE_DOWN) &&
+  if ((m_lastEvent == wxEVT_RIGHT_DOWN || m_lastEvent == wxEVT_LEFT_DOWN ||
+       m_lastEvent == wxEVT_MIDDLE_DOWN) &&
       (m_lastXPos == event.m_x && m_lastYPos == event.m_y))
   {
     m_lastXPos = event.m_x; m_lastYPos = event.m_y;
-    m_lastEvent = wxEVENT_TYPE_MOTION;
+    m_lastEvent = wxEVT_MOTION;
     return;
   }
 
-  m_lastEvent = wxEVENT_TYPE_MOTION;
+  m_lastEvent = wxEVT_MOTION;
   m_lastXPos = event.m_x; m_lastYPos = event.m_y;
   GetEventHandler()->OldOnMouseEvent(event);
 }
@@ -2609,32 +2609,32 @@ void wxWindow::MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXHWND 
 	switch ( wParam )
 	{
 		case SB_TOP:
-			event.m_eventType = wxEVENT_TYPE_SCROLL_TOP;
+			event.m_eventType = wxEVT_SCROLL_TOP;
 			break;
 
 		case SB_BOTTOM:
-			event.m_eventType = wxEVENT_TYPE_SCROLL_BOTTOM;
+			event.m_eventType = wxEVT_SCROLL_BOTTOM;
 			break;
 
 		case SB_LINEUP:
-			event.m_eventType = wxEVENT_TYPE_SCROLL_LINEUP;
+			event.m_eventType = wxEVT_SCROLL_LINEUP;
 			break;
 
 		case SB_LINEDOWN:
-		        event.m_eventType = wxEVENT_TYPE_SCROLL_LINEDOWN;
+		        event.m_eventType = wxEVT_SCROLL_LINEDOWN;
 			break;
 
 		case SB_PAGEUP:
-                        event.m_eventType = wxEVENT_TYPE_SCROLL_PAGEUP;
+                        event.m_eventType = wxEVT_SCROLL_PAGEUP;
 			break;
 
 		case SB_PAGEDOWN:
-                        event.m_eventType = wxEVENT_TYPE_SCROLL_PAGEDOWN;
+                        event.m_eventType = wxEVT_SCROLL_PAGEDOWN;
 			break;
 
         case SB_THUMBTRACK:
         case SB_THUMBPOSITION:
-                        event.m_eventType = wxEVENT_TYPE_SCROLL_THUMBTRACK;
+                        event.m_eventType = wxEVT_SCROLL_THUMBTRACK;
 			break;
 
 		default:
@@ -2668,32 +2668,32 @@ void wxWindow::MSWOnHScroll( const WXWORD wParam, const WXWORD pos, const WXHWND
 	switch ( wParam )
 	{
 		case SB_TOP:
-			event.m_eventType = wxEVENT_TYPE_SCROLL_TOP;
+			event.m_eventType = wxEVT_SCROLL_TOP;
 			break;
 
 		case SB_BOTTOM:
-			event.m_eventType = wxEVENT_TYPE_SCROLL_BOTTOM;
+			event.m_eventType = wxEVT_SCROLL_BOTTOM;
 			break;
 
 		case SB_LINEUP:
-			event.m_eventType = wxEVENT_TYPE_SCROLL_LINEUP;
+			event.m_eventType = wxEVT_SCROLL_LINEUP;
 			break;
 
 		case SB_LINEDOWN:
-		        event.m_eventType = wxEVENT_TYPE_SCROLL_LINEDOWN;
+		        event.m_eventType = wxEVT_SCROLL_LINEDOWN;
 			break;
 
 		case SB_PAGEUP:
-                        event.m_eventType = wxEVENT_TYPE_SCROLL_PAGEUP;
+                        event.m_eventType = wxEVT_SCROLL_PAGEUP;
 			break;
 
 		case SB_PAGEDOWN:
-                        event.m_eventType = wxEVENT_TYPE_SCROLL_PAGEDOWN;
+                        event.m_eventType = wxEVT_SCROLL_PAGEDOWN;
 			break;
 
         case SB_THUMBTRACK:
         case SB_THUMBPOSITION:
-                        event.m_eventType = wxEVENT_TYPE_SCROLL_THUMBTRACK;
+                        event.m_eventType = wxEVT_SCROLL_THUMBTRACK;
 			break;
 
 		default:
@@ -4368,7 +4368,7 @@ void wxWindow::OnDefaultAction(wxControl *initiatingItem)
   if (initiatingItem->IsKindOf(CLASSINFO(wxListBox)) && initiatingItem->GetCallback())
   {
     wxListBox *lbox = (wxListBox *)initiatingItem;
-    wxCommandEvent event(wxEVENT_TYPE_LISTBOX_DCLICK_COMMAND);
+    wxCommandEvent event(wxEVT_COMMAND_LEFT_DCLICK);
     event.m_commandInt = -1;
     if ((lbox->GetWindowStyleFlag() & wxLB_MULTIPLE) == 0)
     {
@@ -4388,7 +4388,7 @@ void wxWindow::OnDefaultAction(wxControl *initiatingItem)
   wxButton *but = GetDefaultItem();
   if (but)
   {
-    wxCommandEvent event(wxEVENT_TYPE_BUTTON_COMMAND);
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED);
     but->Command(event);
   }
 }

@@ -285,7 +285,7 @@ gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_ev
   printf( ".\n" );
 */
   
-  WXTYPE event_type = wxEVT_LEFT_DOWN;
+  wxEventType event_type = wxEVT_LEFT_DOWN;
   
   if (gdk_event->button == 1)
   {
@@ -351,7 +351,7 @@ gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_
   printf( ".\n" );
 */
   
-  WXTYPE event_type = 0;
+  wxEventType event_type = wxEVT_NULL;
   
   switch (gdk_event->button)
   {
@@ -499,7 +499,7 @@ void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
   printf( "Sending new value: %d.\n", i );
 */
 
-  int command = 0;
+  wxEventType command = wxEVT_NULL;
   
   float line_step = win->m_vAdjust->step_increment;
   float page_step = win->m_vAdjust->page_increment;
@@ -543,7 +543,7 @@ void gtk_window_hscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
   printf( "Sending new value: %d.\n", i );
 */
       
-  int command = 0;
+  wxEventType command = wxEVT_NULL;
   
   float line_step = win->m_hAdjust->step_increment;
   float page_step = win->m_hAdjust->page_increment;
@@ -577,7 +577,7 @@ void gtk_window_vscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *
   
   if (!win->HasVMT()) return;
   
-  int command = wxEVT_SCROLL_THUMBTRACK;
+  wxEventType command = wxEVT_SCROLL_THUMBTRACK;
   int value = (int)(win->m_vAdjust->value+0.5);
 
   wxScrollEvent event( command, win->GetId(), value, wxVERTICAL );
@@ -601,7 +601,7 @@ void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *
   
   if (!win->HasVMT()) return;
     
-  int command = wxEVT_SCROLL_THUMBTRACK;
+  wxEventType command = wxEVT_SCROLL_THUMBTRACK;
   int value = (int)(win->m_hAdjust->value+0.5);
       
   wxScrollEvent event( command, win->GetId(), value, wxHORIZONTAL );

@@ -90,7 +90,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, const wxWindowID id, const wxPoint& po
 
   m_windowId = (id == -1) ? NewControlId() : id;
 
-  DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP | TVS_HASLINES | TVS_LINESATROOT;
+  DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP | TVS_HASLINES;
   
   bool want3D;
   WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
@@ -102,10 +102,13 @@ bool wxTreeCtrl::Create(wxWindow *parent, const wxWindowID id, const wxPoint& po
     wstyle |= WS_BORDER;
 
   if ( m_windowStyle & wxTR_HAS_BUTTONS )
-  wstyle |= TVS_HASBUTTONS;
+    wstyle |= TVS_HASBUTTONS;
 
   if ( m_windowStyle & wxTR_EDIT_LABELS )
-  wstyle |= TVS_EDITLABELS;
+    wstyle |= TVS_EDITLABELS;
+
+  if ( m_windowStyle & wxTR_LINES_AT_ROOT )
+    wstyle |= TVS_LINESATROOT;
 
   // Create the toolbar control.
   HWND hWndTreeControl = CreateWindowEx(exStyle,
@@ -561,8 +564,8 @@ bool wxTreeCtrl::MSWCommand(const WXUINT cmd, const WXWORD id)
 
 bool wxTreeCtrl::MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam)
 {
-  wxTreeEvent event(0, m_windowId);
-  int eventType = 0;
+  wxTreeEvent event(wxEVT_NULL, m_windowId);
+  wxEventType eventType = wxEVT_NULL;
   NMHDR* hdr1 = (NMHDR*) lParam;
   switch ( hdr1->code )
   {
@@ -916,7 +919,7 @@ static void wxConvertToMSWTreeItem(wxTreeItem& info, TV_ITEM& tvItem)
 // Tree event
 IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxCommandEvent)
 
-wxTreeEvent::wxTreeEvent(WXTYPE commandType, int id):
+wxTreeEvent::wxTreeEvent(wxEventType commandType, int id):
   wxCommandEvent(commandType, id)
 {
   m_code = 0;

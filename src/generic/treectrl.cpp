@@ -39,7 +39,7 @@ wxTreeItem::wxTreeItem(void)
 
 IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent,wxCommandEvent)
 
-wxTreeEvent::wxTreeEvent( WXTYPE commandType, int id ) :
+wxTreeEvent::wxTreeEvent( wxEventType commandType, int id ) :
   wxCommandEvent( commandType, id )
 {
   m_code = 0;

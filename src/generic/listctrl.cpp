@@ -940,7 +940,7 @@ void wxListMainWindow::ActivateLine( wxListLineData *line )
   OnListNotify( le );
 };
 
-void wxListMainWindow::SendNotify( wxListLineData *line, long command )
+void wxListMainWindow::SendNotify( wxListLineData *line, wxEventType command )
 {
   if (!m_parent) return;
   wxListEvent le( command, m_parent->GetId() );
