@@ -1067,7 +1067,6 @@ bool wxFileDataObject::GetDataHere(void *pData) const
 // wxURLDataObject
 // ----------------------------------------------------------------------------
 
-
 class CFSTR_SHELLURLDataObject : public wxCustomDataObject
 {
 public:

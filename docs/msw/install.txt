@@ -601,10 +601,19 @@ Notes:
 1. See also the Cygwin/Mingw32 on the web site or CD-ROM for
    further information about using wxWindows with these compilers.
 
-2. libwx.a is 48 MB or more - but much less if compiled with no
+2. libwx.a is 100 MB or more - but much less if compiled with no
    debug info (-g0) and level 4 optimization (-O4).
 
-3. There's a bug in Mingw32 headers for some early distributions.
+3. If you get a link error under Mingw32 2.95.2 referring to:
+
+   EnumDAdvise__11IDataObjectPP13IEnumSTATDATA@8
+
+   then you need to edit the file objidl.h at line 663 and add
+   a missing PURE keyword:
+
+   STDMETHOD(EnumDAdvise)(THIS_ IEnumSTATDATA**) PURE;
+
+4. There's a bug in Mingw32 headers for some early distributions.
 
    in include/windows32/defines.h, where it says:
 
@@ -616,14 +625,14 @@ Notes:
 
    (a missing bracket).
 
-4. If there's a problem with the copy or remove commands in
+5. If there's a problem with the copy or remove commands in
    src/msw/makefile.g95, you may need to change the COPY and
    RM variables in makeg95.env.
 
-5. If there's a problem executing the windres program, try
+6. If there's a problem executing the windres program, try
    commenting out RCPREPROCESSOR in makeg95.env.
 
-6. OpenGL support should work with Mingw32 as-is. However,
+7. OpenGL support should work with Mingw32 as-is. However,
    if you wish to generate import libraries appropriate either for
    the MS OpenGL libraries or the SGI OpenGL libraries, go to
    include/wx/msw/gl and use:

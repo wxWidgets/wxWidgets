@@ -588,16 +588,20 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 
     wxString type(variant.GetType());
 
-		if (type == wxT("char"))
-		{
-			oleVariant.vt=VT_I1;			// Signed Char
-			oleVariant.cVal=variant.GetChar();
-		}
-    else if (type == wxT("long"))
+
+    if (type == wxT("long"))
     {
         oleVariant.vt = VT_I4;
         oleVariant.lVal = variant.GetLong() ;
     }
+    // cVal not always present
+#ifndef __GNUWIN32__
+    else if (type == wxT("char"))
+    {
+        oleVariant.vt=VT_I1;			// Signed Char
+        oleVariant.cVal=variant.GetChar();
+    }
+#endif
     else if (type == wxT("double"))
     {
         oleVariant.vt = VT_R8;

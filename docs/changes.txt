@@ -193,6 +193,7 @@ wxBase:
 - added wxEXPLICIT macro
 - IPC classes improved and memory leaks fixed (Michael Fielding).
   Global buffer removed, duplication in docs removed
+- debug new/free implementations made thread-safe
 
 Unix (Base/GUI):
 
@@ -301,6 +302,7 @@ wxGTK:
 - implemented wxChoice::Delete()
 - fixed bad memory leak in wxFileDialog (Chris Elliott)
 - made internal GC pool dynamically growable
+- added GTK+ 2 and Unicode support
 
 wxMotif:
 
@@ -311,6 +313,19 @@ wxMotif:
 - implemented wxCheckListBox
 - fixed wxSpinCtrl and wxStaticLine when used with sizers
 - wxStaticBitmap now shows transparent icons correctly
+
+wxX11:
+
+- added generic MDI implementation (Hans Van Leemputten)
+- first cut at wxSocket support (not yet working)
+
+wxMac:
+
+- Many improvements
+
+wxOS2:
+
+- First alpha-quality release
 
 wxHTML:
 
