@@ -126,6 +126,13 @@ All GUI ports:
 - send menu update events only when a menu is about to be used (MSW/GTK)
 - improved event processing performance (Hans Van Leemputten)
 - added wxMirrorDC class
+- printing improvements: GetPageInfo() gets called after the DC has
+  been set and after OnPreparePrinting() has been called so it can
+  report the number of pages accurately; doesn't try to set
+  number of pages in print dialog, in common with other Windows apps;
+  wxHTML easy printing's preview shows number of pages
+  correctly; preview scrollbars are set correctly; keyboard navigation
+  improved
 
 Unix:
 

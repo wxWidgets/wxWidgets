@@ -786,7 +786,7 @@ reference) and to return a tuple of four integers.
 }
 
 \perlnote{When this method is overridden in a derived class,
-it must not take any parameters, an return a 4-element list.
+it must not take any parameters, and returns a 4-element list.
 }
 
 \membersection{wxPrintout::GetPageSizeMM}\label{wxprintoutgetpagesizemm}
@@ -981,7 +981,7 @@ internally.
 
 \membersection{wxPrintPreview::GetCanvas}\label{wxprintpreviewgetcanvas}
 
-\func{wxWindow* }{GetCanvas}{\void}
+\func{wxPreviewCanvas* }{GetCanvas}{\void}
 
 Gets the preview window used for displaying the print preview image.
 
@@ -1067,7 +1067,7 @@ Renders a page into a wxMemoryDC. Used internally by wxPrintPreview.
 
 \membersection{wxPrintPreview::SetCanvas}\label{wxprintpreviewsetcanvas}
 
-\func{void}{SetCanvas}{\param{wxWindow* }{window}}
+\func{void}{SetCanvas}{\param{wxPreviewCanvas** }{window}}
 
 Sets the window to be used for displaying the print preview image.
 

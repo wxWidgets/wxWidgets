@@ -535,38 +535,11 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         return FALSE;
     
     printout->SetIsPreview(FALSE);
-    printout->OnPreparePrinting();
-    
-    // Get some parameters from the printout, if defined
-    int fromPage, toPage;
-    int minPage, maxPage;
-    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
-    
-    if (maxPage == 0)
-        return FALSE;
-    
-    m_printDialogData.SetMinPage(minPage);
-    m_printDialogData.SetMaxPage(maxPage);
-    if (fromPage != 0)
-        m_printDialogData.SetFromPage(fromPage);
-    if (toPage != 0)
-        m_printDialogData.SetToPage(toPage);
-    
-    if (minPage != 0)
-    {
-        m_printDialogData.EnablePageNumbers(TRUE);
-        if (m_printDialogData.GetFromPage() < m_printDialogData.GetMinPage())
-            m_printDialogData.SetFromPage(m_printDialogData.GetMinPage());
-        else if (m_printDialogData.GetFromPage() > m_printDialogData.GetMaxPage())
-            m_printDialogData.SetFromPage(m_printDialogData.GetMaxPage());
-        if (m_printDialogData.GetToPage() > m_printDialogData.GetMaxPage())
-            m_printDialogData.SetToPage(m_printDialogData.GetMaxPage());
-        else if (m_printDialogData.GetToPage() < m_printDialogData.GetMinPage())
-            m_printDialogData.SetToPage(m_printDialogData.GetMinPage());
-    }
-    else
-        m_printDialogData.EnablePageNumbers(FALSE);
-    
+    if (m_printDialogData.GetMinPage() < 1)
+        m_printDialogData.SetMinPage(1);
+    if (m_printDialogData.GetMaxPage() < 1)
+        m_printDialogData.SetMaxPage(9999);
+
     // Create a suitable device context  
     wxDC *dc = NULL;
     if (prompt)
@@ -608,6 +581,24 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     
     // Create an abort window
     wxBeginBusyCursor();
+    
+    printout->OnPreparePrinting();
+    
+    // Get some parameters from the printout, if defined
+    int fromPage, toPage;
+    int minPage, maxPage;
+    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
+    
+    if (maxPage == 0)
+    {
+        wxEndBusyCursor();
+        return FALSE;
+    }
+    
+    // Only set min and max, because from and to have been
+    // set by the user
+    m_printDialogData.SetMinPage(minPage);
+    m_printDialogData.SetMaxPage(maxPage);
     
     wxWindow *win = CreateAbortWindow(parent, printout);
     wxSafeYield(win,true);

@@ -88,6 +88,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
 
     printout->SetIsPreview(FALSE);
 
+#if 0    
     // 4/9/99, JACS: this is a silly place to allow preparation, considering
     // the DC and no parameters have been set in the printout object.
     // Moved further down.
@@ -126,7 +127,12 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     }
     else
         m_printDialogData.EnablePageNumbers(FALSE);
+#endif
 
+    if (m_printDialogData.GetMinPage() < 1)
+        m_printDialogData.SetMinPage(1);
+    if (m_printDialogData.GetMaxPage() < 1)
+        m_printDialogData.SetMaxPage(9999);
 
     // Create a suitable device context
     wxDC *dc = (wxDC *) NULL;
@@ -171,6 +177,23 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
 
     printout->OnPreparePrinting();
 
+    // Get some parameters from the printout, if defined
+    int fromPage, toPage;
+    int minPage, maxPage;
+    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
+
+    if (maxPage == 0)
+    {
+        sm_lastError = wxPRINTER_ERROR;
+        wxEndBusyCursor();
+        return FALSE;
+    }
+
+    // Only set min and max, because from and to have been
+    // set by the user
+    m_printDialogData.SetMinPage(minPage);
+    m_printDialogData.SetMaxPage(maxPage);
+    
     int
        pagesPerCopy = m_printDialogData.GetToPage()-m_printDialogData.GetFromPage()+1,
        totalPages = pagesPerCopy * m_printDialogData.GetNoCopies(),

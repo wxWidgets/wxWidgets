@@ -179,6 +179,8 @@ wxMiscellaneous
   has been destroyed or recreated. On wxMSW, this is done in
   ~wxToolBar. On wxGTK, in SetToolBar. In wxMac, not at all,
   but sending a wxSizeEvent will do it.
+- Need wxRect wxToolBar::GetToolRect(int id) or similar so we can
+  align a popup menu with a toolbar button.
 - wxMac font selector dialog is the generic font selector -
   horrible.
 - No Append(wxArrayString&) for wxChoice and wxComboBox in wxGTK.

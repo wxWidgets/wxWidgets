@@ -171,6 +171,7 @@ public:
     ~wxPreviewCanvas();
 
     void OnPaint(wxPaintEvent& event);
+    void OnChar(wxKeyEvent &event);
 
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
@@ -204,8 +205,11 @@ public:
     virtual void Initialize();
     virtual void CreateCanvas();
     virtual void CreateControlBar();
+
+    inline wxPreviewControlBar* GetControlBar() const { return m_controlBar; }
+
 protected:
-    wxWindow*             m_previewCanvas;
+    wxPreviewCanvas*      m_previewCanvas;
     wxPreviewControlBar*  m_controlBar;
     wxPrintPreviewBase*   m_printPreview;
 
@@ -253,7 +257,7 @@ public:
                         wxWindow *parent,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
-                        long style = 0,
+                        long style = wxTAB_TRAVERSAL,
                         const wxString& name = wxT("panel"));
     ~wxPreviewControlBar();
 
@@ -275,7 +279,6 @@ public:
     void OnFirstButton(wxCommandEvent & WXUNUSED(event)) { OnFirst(); }
     void OnLastButton(wxCommandEvent & WXUNUSED(event)) { OnLast(); }
     void OnGotoButton(wxCommandEvent & WXUNUSED(event)) { OnGoto(); }
-    void OnChar(wxKeyEvent &event);
     void OnZoom(wxCommandEvent& event);
     void OnPaint(wxPaintEvent& event);
 
@@ -322,16 +325,19 @@ public:
     wxPrintout *GetPrintoutForPrinting() const { return m_printPrintout; };
 
     void SetFrame(wxFrame *frame) { m_previewFrame = frame; };
-    void SetCanvas(wxWindow *canvas) { m_previewCanvas = canvas; };
+    void SetCanvas(wxPreviewCanvas *canvas) { m_previewCanvas = canvas; };
 
     virtual wxFrame *GetFrame() const { return m_previewFrame; }
-    virtual wxWindow *GetCanvas() const { return m_previewCanvas; }
+    virtual wxPreviewCanvas *GetCanvas() const { return m_previewCanvas; }
 
     // The preview canvas should call this from OnPaint
-    virtual bool PaintPage(wxWindow *canvas, wxDC& dc);
+    virtual bool PaintPage(wxPreviewCanvas *canvas, wxDC& dc);
 
     // This draws a blank page onto the preview canvas
-    virtual bool DrawBlankPage(wxWindow *canvas, wxDC& dc);
+    virtual bool DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc);
+
+    // Adjusts the scrollbars for the current scale
+    virtual void AdjustScrollbars(wxPreviewCanvas *canvas);
 
     // This is called by wxPrintPreview to render a page into a wxMemoryDC.
     virtual bool RenderPage(int pageNum);
@@ -362,7 +368,7 @@ public:
 
 protected:
     wxPrintDialogData m_printDialogData;
-    wxWindow*         m_previewCanvas;
+    wxPreviewCanvas*  m_previewCanvas;
     wxFrame*          m_previewFrame;
     wxBitmap*         m_previewBitmap;
     wxPrintout*       m_previewPrintout;

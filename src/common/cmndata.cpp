@@ -776,10 +776,10 @@ wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
 #ifdef __WXMSW__
     m_printDlgData = NULL;
 #endif
-    m_printFromPage = 0;
+    m_printFromPage = 1;
     m_printToPage = 0;
-    m_printMinPage = 0;
-    m_printMaxPage = 0;
+    m_printMinPage = 1;
+    m_printMaxPage = 9999;
     m_printNoCopies = 1;
     m_printAllPages = FALSE;
     m_printCollate = FALSE;
@@ -897,7 +897,7 @@ void wxPrintDialogData::ConvertToNative()
         pd->Flags |= PD_NOSELECTION;
     if ( !m_printEnablePageNumbers )
         pd->Flags |= PD_NOPAGENUMS;
-    else if ( (!m_printAllPages) && (!m_printSelection) )
+    else if ( (!m_printAllPages) && (!m_printSelection) && (m_printFromPage != 0) && (m_printToPage != 0))
         pd->Flags |= PD_PAGENUMS;
     if ( m_printEnableHelp )
         pd->Flags |= PD_SHOWHELP;

@@ -152,6 +152,7 @@ public:
     bool HasPage(int page);
     void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
     bool OnBeginDocument(int startPage, int endPage);
+    void OnPreparePrinting();
 
     // Adds input filter
     static void AddFilter(wxHtmlFilter *filter);

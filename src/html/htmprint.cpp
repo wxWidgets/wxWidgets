@@ -178,12 +178,10 @@ void wxHtmlPrintout::AddFilter(wxHtmlFilter *filter)
     m_Filters.Append(filter);
 }
 
-bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
+void wxHtmlPrintout::OnPreparePrinting()
 {
     int pageWidth, pageHeight, mm_w, mm_h, scr_w, scr_h, dc_w, dc_h;
     float ppmm_h, ppmm_v;
-
-    if (!wxPrintout::OnBeginDocument(startPage, endPage)) return FALSE;
 
     GetPageSizePixels(&pageWidth, &pageHeight);
     GetPageSizeMM(&mm_w, &mm_h);
@@ -236,6 +234,12 @@ bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
                           ));
     m_Renderer->SetHtmlText(m_Document, m_BasePath, m_BasePathIsDir);
     CountPages();
+}
+
+bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
+{
+    if (!wxPrintout::OnBeginDocument(startPage, endPage)) return FALSE;
+
     return TRUE;
 }
 
@@ -256,9 +260,9 @@ bool wxHtmlPrintout::OnPrintPage(int page)
 void wxHtmlPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
 {
     *minPage = 1;
-    *maxPage = wxHTML_PRINT_MAX_PAGES;
+    *maxPage = m_NumPages;
     *selPageFrom = 1;
-    *selPageTo = wxHTML_PRINT_MAX_PAGES;
+    *selPageTo = m_NumPages;
 }
 
 

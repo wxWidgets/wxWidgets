@@ -70,6 +70,7 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxPreviewCanvas, wxScrolledWindow)
     EVT_PAINT(wxPreviewCanvas::OnPaint)
+    EVT_CHAR(wxPreviewCanvas::OnChar)
     EVT_SYS_COLOUR_CHANGED(wxPreviewCanvas::OnSysColourChanged)
 END_EVENT_TABLE()
 
@@ -197,7 +198,7 @@ wxScrolledWindow(parent, -1, pos, size, style, name)
 #endif    
     SetBackgroundColour(wxSystemSettings::GetColour(colourIndex));
 
-    SetScrollbars(15, 18, 100, 100);
+    SetScrollbars(10, 10, 100, 100);
 }
 
 wxPreviewCanvas::~wxPreviewCanvas()
@@ -239,6 +240,38 @@ void wxPreviewCanvas::OnSysColourChanged(wxSysColourChangedEvent& event)
     wxWindow::OnSysColourChanged(event);
 }
 
+void wxPreviewCanvas::OnChar(wxKeyEvent &event)
+{
+    if (event.GetKeyCode() == WXK_ESCAPE)
+    {
+        ((wxPreviewFrame*) GetParent())->Close(TRUE);
+        return;
+    }
+    
+    if (!event.ControlDown())
+    {
+        event.Skip();
+        return;
+    }
+
+    wxPreviewControlBar* controlBar = ((wxPreviewFrame*) GetParent())->GetControlBar();
+   switch(event.GetKeyCode())
+   {
+   case WXK_NEXT:
+      controlBar->OnNext(); break;
+   case WXK_PRIOR:
+      controlBar->OnPrevious(); break;
+   case WXK_HOME:
+      controlBar->OnFirst(); break;
+   case WXK_END:
+      controlBar->OnLast(); break;
+   case WXK_TAB:
+      controlBar->OnGoto(); break;
+   default:
+      event.Skip();
+   }
+}
+
 /*
 * Preview control bar
 */
@@ -251,7 +284,6 @@ BEGIN_EVENT_TABLE(wxPreviewControlBar, wxPanel)
     EVT_BUTTON(wxID_PREVIEW_FIRST,    wxPreviewControlBar::OnFirstButton)
     EVT_BUTTON(wxID_PREVIEW_LAST,     wxPreviewControlBar::OnLastButton)
     EVT_BUTTON(wxID_PREVIEW_GOTO,     wxPreviewControlBar::OnGotoButton)
-    EVT_CHAR(wxPreviewControlBar::OnChar)
     EVT_CHOICE(wxID_PREVIEW_ZOOM,     wxPreviewControlBar::OnZoom)
     EVT_PAINT(wxPreviewControlBar::OnPaint)
 END_EVENT_TABLE()
@@ -295,25 +327,6 @@ void wxPreviewControlBar::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
     wxPrintPreviewBase *preview = GetPrintPreview();
     preview->Print(TRUE);
-}
-
-void wxPreviewControlBar::OnChar(wxKeyEvent &event)
-{
-   switch(event.GetKeyCode())
-   {
-   case WXK_NEXT:
-      OnNext(); break;
-   case WXK_PRIOR:
-      OnPrevious(); break;
-   case WXK_HOME:
-      OnFirst(); break;
-   case WXK_END:
-      OnLast(); break;
-   case WXK_TAB:
-      OnGoto(); break;
-   default:
-      event.Skip();
-   }
 }
 
 void wxPreviewControlBar::OnNext(void)
@@ -384,12 +397,12 @@ void wxPreviewControlBar::OnGoto(void)
             wxString strPrompt;
             wxString strPage;
 
-            strPrompt.Printf( wxT("%d...%d"),
+            strPrompt.Printf( _("Enter a page number between %d and %d:"),
                 preview->GetMinPage(), preview->GetMaxPage());
             strPage.Printf( wxT("%d"), preview->GetCurrentPage() );
 
             strPage =
-                wxGetTextFromUser( strPrompt, _("Goto Page"), strPage);
+                wxGetTextFromUser( strPrompt, _("Goto Page"), strPage, GetParent());
 
             if ( strPage.ToLong( &currentPage ) )
                 if (preview->GetPrintout()->HasPage(currentPage))
@@ -571,6 +584,10 @@ void wxPreviewFrame::Initialize()
 #endif
 
     Layout();
+    
+    m_printPreview->AdjustScrollbars(m_previewCanvas);
+    m_previewCanvas->SetFocus();
+    m_controlBar->SetFocus();
 }
 
 void wxPreviewFrame::CreateCanvas()
@@ -632,13 +649,8 @@ void wxPrintPreviewBase::Init(wxPrintout *printout,
     m_pageWidth = 0;
     m_pageHeight = 0;
     m_printingPrepared = FALSE;
-
-    // Too soon! Moved to RenderPage.
-    // printout->OnPreparePrinting();
-
-    // Get some parameters from the printout, if defined
-    int selFrom, selTo;
-    printout->GetPageInfo(&m_minPage, &m_maxPage, &selFrom, &selTo);
+    m_minPage = 1;
+    m_maxPage = 1;
 }
 
 wxPrintPreviewBase::~wxPrintPreviewBase()
@@ -662,17 +674,20 @@ bool wxPrintPreviewBase::SetCurrentPage(int pageNum)
         delete m_previewBitmap;
         m_previewBitmap = NULL;
     }
-
+    
     if (m_previewCanvas)
     {
+        AdjustScrollbars(m_previewCanvas);
+        
         if (!RenderPage(pageNum))
             return FALSE;
         m_previewCanvas->Refresh();
+        m_previewCanvas->SetFocus();
     }
     return TRUE;
 }
 
-bool wxPrintPreviewBase::PaintPage(wxWindow *canvas, wxDC& dc)
+bool wxPrintPreviewBase::PaintPage(wxPreviewCanvas *canvas, wxDC& dc)
 {
     DrawBlankPage(canvas, dc);
 
@@ -706,6 +721,29 @@ bool wxPrintPreviewBase::PaintPage(wxWindow *canvas, wxDC& dc)
     temp_dc.SelectObject(wxNullBitmap);
 
     return TRUE;
+}
+
+// Adjusts the scrollbars for the current scale
+void wxPrintPreviewBase::AdjustScrollbars(wxPreviewCanvas *canvas)
+{
+    if (!canvas)
+        return ;
+
+    int canvasWidth, canvasHeight;
+    canvas->GetSize(&canvasWidth, &canvasHeight);
+
+    double zoomScale = ((float)m_currentZoom/(float)100);
+    double actualWidth = (zoomScale*m_pageWidth*m_previewScale);
+    double actualHeight = (zoomScale*m_pageHeight*m_previewScale);
+
+    // Set the scrollbars appropriately
+    int totalWidth = actualWidth + 2*m_leftMargin;
+    int totalHeight = actualHeight + 2*m_topMargin;
+    int scrollUnitsX = totalWidth/10;
+    int scrollUnitsY = totalHeight/10;
+    wxSize virtualSize = canvas->GetVirtualSize();
+    if (virtualSize.GetWidth() != totalWidth || virtualSize.GetHeight() != totalHeight)
+        canvas->SetScrollbars(10, 10, scrollUnitsX, scrollUnitsY, 0, 0, TRUE);    
 }
 
 bool wxPrintPreviewBase::RenderPage(int pageNum)
@@ -758,6 +796,8 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
     if (!m_printingPrepared)
     {
         m_previewPrintout->OnPreparePrinting();
+        int selFrom, selTo;
+        m_previewPrintout->GetPageInfo(&m_minPage, &m_maxPage, &selFrom, &selTo);
         m_printingPrepared = TRUE;
     }
 
@@ -797,7 +837,7 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 }
 
 
-bool wxPrintPreviewBase::DrawBlankPage(wxWindow *canvas, wxDC& dc)
+bool wxPrintPreviewBase::DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc)
 {
     int canvasWidth, canvasHeight;
     canvas->GetSize(&canvasWidth, &canvasHeight);
@@ -851,10 +891,12 @@ void wxPrintPreviewBase::SetZoom(int percent)
 
     if (m_previewCanvas)
     {
+        AdjustScrollbars(m_previewCanvas);
         RenderPage(m_currentPage);
         ((wxScrolledWindow *) m_previewCanvas)->Scroll(0, 0);
         m_previewCanvas->Clear();
         m_previewCanvas->Refresh();
+        m_previewCanvas->SetFocus();
     }
 }
 
