@@ -407,6 +407,7 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
 
     WidgetsPage *page = wxStaticCast(m_notebook->GetCurrentPage(), WidgetsPage);
     page->GetWidget()->SetForegroundColour(m_colFg);
+    page->GetWidget()->Refresh();
 }
 
 void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
@@ -419,6 +420,7 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 
     WidgetsPage *page = wxStaticCast(m_notebook->GetCurrentPage(), WidgetsPage);
     page->GetWidget()->SetBackgroundColour(m_colBg);
+    page->GetWidget()->Refresh();
 }
 
 #endif // wxUSE_MENUS
