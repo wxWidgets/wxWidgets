@@ -1144,8 +1144,8 @@ class WXDLLIMPEXP_STC wxStyledTextCtrl : public wxControl {
 public:
 
 #ifdef SWIG
-    %addtofunc wxStyledTextCtrl   "self._setOORInfo(self)"
-    %addtofunc wxStyledTextCtrl() ""
+    %pythonAppend wxStyledTextCtrl   "self._setOORInfo(self)"
+    %pythonAppend wxStyledTextCtrl() ""
 
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
