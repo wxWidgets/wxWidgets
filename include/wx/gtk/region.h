@@ -1,14 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        region.h
+// Name:        wx/gtk/region.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __REGIONH__
-#define __REGIONH__
+#ifndef _WX_GTK_REGION_H_
+#define _WX_GTK_REGION_H_
 
 #ifdef __GNUG__
 #pragma interface
@@ -28,7 +28,7 @@ class wxRegion;
 // constants
 //-----------------------------------------------------------------------------
 
-enum wxRegionContain 
+enum wxRegionContain
 {
   wxOutRegion = 0, wxPartRegion = 1, wxInRegion = 2
 };
@@ -46,13 +46,13 @@ wxRGN_XOR           // Creates the union of two combined regions except for any 
 // wxRegion
 //-----------------------------------------------------------------------------
 
-class wxRegion : public wxGDIObject 
+class wxRegion : public wxGDIObject
 {
   DECLARE_DYNAMIC_CLASS(wxRegion);
-  
+
   public:
-  
-    wxRegion( long x, long y, long w, long h );
+
+    wxRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h );
     wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight );
     wxRegion( const wxRect& rect );
     wxRegion();
@@ -65,43 +65,43 @@ class wxRegion : public wxGDIObject
 
     bool operator == ( const wxRegion& region );
     bool operator != ( const wxRegion& region );
-    
+
     void Clear();
 
-    bool Union( long x, long y, long width, long height );
+    bool Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
     bool Union( const wxRect& rect );
     bool Union( const wxRegion& region );
 
-    bool Intersect( long x, long y, long width, long height );
+    bool Intersect( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
     bool Intersect( const wxRect& rect );
     bool Intersect( const wxRegion& region );
 
-    bool Subtract( long x, long y, long width, long height );
+    bool Subtract( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
     bool Subtract( const wxRect& rect );
     bool Subtract( const wxRegion& region );
 
-    bool Xor( long x, long y, long width, long height );
+    bool Xor( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
     bool Xor( const wxRect& rect );
     bool Xor( const wxRegion& region );
 
-    void GetBox( long& x, long& y, long&w, long &h ) const;
+    void GetBox( wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h ) const;
     wxRect GetBox() const ;
 
     bool Empty() const;
     bool IsEmpty() const { return Empty(); }
 
-    wxRegionContain Contains( long x, long y ) const;
-    wxRegionContain Contains( long x, long y, long w, long h ) const;
+    wxRegionContain Contains( wxCoord x, wxCoord y ) const;
+    wxRegionContain Contains( wxCoord x, wxCoord y, wxCoord w, wxCoord h ) const;
     wxRegionContain Contains(const wxPoint& pt) const;
     wxRegionContain Contains(const wxRect& rect) const;
-    
+
   public:
-  
-    wxList    *GetRectList() const;    
+
+    wxList    *GetRectList() const;
     GdkRegion *GetRegion() const;
 };
 
-class wxRegionIterator: public wxObject 
+class wxRegionIterator: public wxObject
 {
 public:
     wxRegionIterator();
@@ -134,4 +134,4 @@ private:
 
 
 #endif
-	// __REGIONH__
+        // _WX_GTK_REGION_H_
