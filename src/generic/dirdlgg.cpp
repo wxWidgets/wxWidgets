@@ -57,6 +57,7 @@ BEGIN_EVENT_TABLE(wxGenericDirDialog, wxDialog)
     EVT_CLOSE                (wxGenericDirDialog::OnCloseWindow)
     EVT_BUTTON               (wxID_OK,        wxGenericDirDialog::OnOK)
     EVT_BUTTON               (ID_NEW,         wxGenericDirDialog::OnNew)
+    EVT_BUTTON               (ID_GO_HOME,     wxGenericDirDialog::OnGoHome)
     EVT_TREE_KEY_DOWN        (-1,             wxGenericDirDialog::OnTreeKeyDown)
     EVT_TREE_SEL_CHANGED     (-1,             wxGenericDirDialog::OnTreeSelected)
     EVT_TEXT_ENTER           (ID_TEXTCTRL,    wxGenericDirDialog::OnOK)
@@ -82,10 +83,13 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     // 0) 'New' and 'Home' Buttons
     wxSizer* buttonsizer = new wxBoxSizer( wxHORIZONTAL );
 
+    // VS: 'Home directory' concept is unknown to MS-DOS
+#ifndef __DOS__
     wxBitmapButton* homeButton = 
         new wxBitmapButton(this, ID_GO_HOME,
                            wxArtProvider::GetBitmap(wxART_GO_HOME, wxART_CMN_DIALOG));
     buttonsizer->Add( homeButton, 0, wxLEFT|wxRIGHT, 10 );
+#endif
     
     // I'm not convinced we need a New button, and we tend to get annoying
     // accidental-editing with label editing enabled.
@@ -287,6 +291,11 @@ void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
     wxTreeItemId new_id = m_dirCtrl->GetTreeCtrl()->AppendItem( parent, new_name, 0, 0, new_data );
     m_dirCtrl->GetTreeCtrl()->EnsureVisible( new_id );
     m_dirCtrl->GetTreeCtrl()->EditLabel( new_id );
+}
+
+void wxGenericDirDialog::OnGoHome(wxCommandEvent& WXUNUSED(event))
+{
+    SetPath(wxGetUserHome());
 }
 
 #endif // wxUSE_DIRDLG
