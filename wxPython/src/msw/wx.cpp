@@ -1923,6 +1923,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxStaticLine","_class_wxStaticLine",0},
     { "_class_wxLayoutAlgorithm","_wxLayoutAlgorithm",0},
     { "_wxBrush","_class_wxBrush",0},
+    { "_wxToggleButton","_class_wxToggleButton",0},
     { "_wxMiniFrame","_class_wxMiniFrame",0},
     { "_class_wxNotebookEvent","_wxNotebookEvent",0},
     { "_class_wxPyPrintout","_wxPyPrintout",0},
@@ -2245,6 +2246,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDataObjectComposite","_class_wxDataObjectComposite",0},
     { "_class_wxJoystickEvent","_wxJoystickEvent",0},
     { "_class_wxTipProvider","_wxTipProvider",0},
+    { "_class_wxToggleButton","_wxToggleButton",0},
     { "_class_wxMiniFrame","_wxMiniFrame",0},
     { "_wxFontDialog","_class_wxFontDialog",0},
     { "_wxMemoryFSHandler","_class_wxMemoryFSHandler",0},
@@ -2615,6 +2617,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxJOY_BUTTON3", PyInt_FromLong((long) wxJOY_BUTTON3));
 	 PyDict_SetItemString(d,"wxJOY_BUTTON4", PyInt_FromLong((long) wxJOY_BUTTON4));
 	 PyDict_SetItemString(d,"wxJOY_BUTTON_ANY", PyInt_FromLong((long) wxJOY_BUTTON_ANY));
+	 PyDict_SetItemString(d,"wxWS_EX_VALIDATE_RECURSIVELY", PyInt_FromLong((long) wxWS_EX_VALIDATE_RECURSIVELY));
 	 PyDict_SetItemString(d,"wxDEFAULT", PyInt_FromLong((long) wxDEFAULT));
 	 PyDict_SetItemString(d,"wxDECORATIVE", PyInt_FromLong((long) wxDECORATIVE));
 	 PyDict_SetItemString(d,"wxROMAN", PyInt_FromLong((long) wxROMAN));
@@ -2898,6 +2901,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TOOL_ENTER", PyInt_FromLong((long) wxEVT_COMMAND_TOOL_ENTER));
 	 PyDict_SetItemString(d,"wxEVT_SET_FOCUS", PyInt_FromLong((long) wxEVT_SET_FOCUS));
 	 PyDict_SetItemString(d,"wxEVT_KILL_FOCUS", PyInt_FromLong((long) wxEVT_KILL_FOCUS));
+	 PyDict_SetItemString(d,"wxEVT_MOUSEWHEEL", PyInt_FromLong((long) wxEVT_MOUSEWHEEL));
 	 PyDict_SetItemString(d,"wxEVT_LEFT_DOWN", PyInt_FromLong((long) wxEVT_LEFT_DOWN));
 	 PyDict_SetItemString(d,"wxEVT_LEFT_UP", PyInt_FromLong((long) wxEVT_LEFT_UP));
 	 PyDict_SetItemString(d,"wxEVT_MIDDLE_DOWN", PyInt_FromLong((long) wxEVT_MIDDLE_DOWN));
@@ -2989,7 +2993,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_ENTER", PyInt_FromLong((long) wxEVT_COMMAND_ENTER));
 	 PyDict_SetItemString(d,"wxEVT_NAVIGATION_KEY", PyInt_FromLong((long) wxEVT_NAVIGATION_KEY));
 	 PyDict_SetItemString(d,"wxEVT_TIMER", PyInt_FromLong((long) wxEVT_TIMER));
-	 PyDict_SetItemString(d,"wxWS_EX_VALIDATE_RECURSIVELY", PyInt_FromLong((long) wxWS_EX_VALIDATE_RECURSIVELY));
 	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.0.0"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxDefaultPosition",_wrap_wxDefaultPosition_get, _wrap_wxDefaultPosition_set);

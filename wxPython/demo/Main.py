@@ -23,7 +23,7 @@ import images
 
 _treeList = [
     ('New since last release', ['ColourSelect', 'ImageBrowser', 'infoframe',
-                                'ColourDB',
+                                'ColourDB', 'wxToggleButton',
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -43,7 +43,7 @@ _treeList = [
                   'wxComboBox', 'wxGauge', 'wxListBox', 'wxListCtrl', 'wxTextCtrl',
                   'wxTreeCtrl', 'wxSpinButton', 'wxSpinCtrl', 'wxStaticText',
                   'wxStaticBitmap', 'wxRadioBox', 'wxSlider', 'wxToolBar',
-                  'wxCalendarCtrl',
+                  'wxCalendarCtrl', 'wxToggleButton',
                   ]),
 
     ('Window Layout', ['wxLayoutConstraints', 'LayoutAnchors', 'Sizers', ]),

@@ -486,6 +486,8 @@ enum {
     wxJOY_BUTTON4,
     wxJOY_BUTTON_ANY,
 
+    wxWS_EX_VALIDATE_RECURSIVELY,
+
 };
 
 
@@ -839,6 +841,7 @@ enum wxEventType {
  wxEVT_COMMAND_TOOL_ENTER,
  wxEVT_SET_FOCUS,
  wxEVT_KILL_FOCUS,
+ wxEVT_MOUSEWHEEL,
 
 /* Mouse event types */
  wxEVT_LEFT_DOWN,
@@ -855,7 +858,7 @@ enum wxEventType {
  wxEVT_RIGHT_DCLICK,
 
  // Non-client mouse events
- wxEVT_NC_LEFT_DOWN = wxEVT_FIRST + 100,
+ wxEVT_NC_LEFT_DOWN,
  wxEVT_NC_LEFT_UP,
  wxEVT_NC_MIDDLE_DOWN,
  wxEVT_NC_MIDDLE_UP,
@@ -952,8 +955,6 @@ enum wxEventType {
  wxEVT_NAVIGATION_KEY,
 
  wxEVT_TIMER,
-
- wxWS_EX_VALIDATE_RECURSIVELY,
 
 };
 

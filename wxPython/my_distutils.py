@@ -54,15 +54,15 @@ class MyMSVCCompiler(MSVCCompiler):
                 self.mkpath (os.path.dirname (obj))
 
                 if ext in self._c_extensions:
-                    input_opt = "/Tc" + os.path.abspath(src)
+                    input_opt = "/Tc" + os.path.abspath(src)    ### RPD
                 elif ext in self._cpp_extensions:
-                    input_opt = "/Tp" + os.path.abspath(src)
+                    input_opt = "/Tp" + os.path.abspath(src)    ### RPD
                 elif ext in self._rc_extensions:
                     # compile .RC to .RES file
                     input_opt = src
                     output_opt = "/fo" + obj
                     try:
-                        self.spawn ([self.rc] + pp_opts +         ### RPD changed this line only
+                        self.spawn ([self.rc] + pp_opts +         ### RPD changed this line
                                     [output_opt] + [input_opt])
                     except DistutilsExecError, msg:
                         raise CompileError, msg

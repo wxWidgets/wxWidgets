@@ -6599,6 +6599,116 @@ static PyObject *_wrap_wxScrolledWindow_CalcUnscrolledPosition(PyObject *self, P
     return _resultobj;
 }
 
+#define wxScrolledWindow_SetScale(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetScale(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxScrolledWindow_SetScale(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxScrolledWindow * _arg0;
+    double  _arg1;
+    double  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","xs","ys", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Odd:wxScrolledWindow_SetScale",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_SetScale. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxScrolledWindow_SetScale(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxScrolledWindow_GetScaleX(_swigobj)  (_swigobj->GetScaleX())
+static PyObject *_wrap_wxScrolledWindow_GetScaleX(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    double  _result;
+    wxScrolledWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxScrolledWindow_GetScaleX",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_GetScaleX. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (double )wxScrolledWindow_GetScaleX(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+#define wxScrolledWindow_GetScaleY(_swigobj)  (_swigobj->GetScaleY())
+static PyObject *_wrap_wxScrolledWindow_GetScaleY(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    double  _result;
+    wxScrolledWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxScrolledWindow_GetScaleY",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_GetScaleY. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (double )wxScrolledWindow_GetScaleY(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+#define wxScrolledWindow_AdjustScrollbars(_swigobj)  (_swigobj->AdjustScrollbars())
+static PyObject *_wrap_wxScrolledWindow_AdjustScrollbars(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxScrolledWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxScrolledWindow_AdjustScrollbars",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_AdjustScrollbars. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxScrolledWindow_AdjustScrollbars(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxMenuTowxEvtHandler(void *ptr) {
     wxMenu *src;
     wxEvtHandler *dest;
@@ -10209,6 +10319,10 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenu_AppendMenu", (PyCFunction) _wrap_wxMenu_AppendMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenu_Append", (PyCFunction) _wrap_wxMenu_Append, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMenu", (PyCFunction) _wrap_new_wxMenu, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_AdjustScrollbars", (PyCFunction) _wrap_wxScrolledWindow_AdjustScrollbars, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_GetScaleY", (PyCFunction) _wrap_wxScrolledWindow_GetScaleY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_GetScaleX", (PyCFunction) _wrap_wxScrolledWindow_GetScaleX, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_SetScale", (PyCFunction) _wrap_wxScrolledWindow_SetScale, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_CalcUnscrolledPosition", (PyCFunction) _wrap_wxScrolledWindow_CalcUnscrolledPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_CalcScrolledPosition", (PyCFunction) _wrap_wxScrolledWindow_CalcScrolledPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_ViewStart", (PyCFunction) _wrap_wxScrolledWindow_ViewStart, METH_VARARGS | METH_KEYWORDS },

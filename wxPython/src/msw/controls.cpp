@@ -61,7 +61,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/spinctrl.h>
 #include <wx/dynarray.h>
 #include <wx/statline.h>
-//#include <wx/toggbutt.h>
+#include <wx/tglbtn.h>
 
 #ifdef __WXMSW__
 #if wxUSE_OWNER_DRAWN
@@ -7794,7 +7794,231 @@ static PyObject *_wrap_wxSpinCtrl_SetValue(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+static void *SwigwxToggleButtonTowxControl(void *ptr) {
+    wxToggleButton *src;
+    wxControl *dest;
+    src = (wxToggleButton *) ptr;
+    dest = (wxControl *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxToggleButtonTowxWindow(void *ptr) {
+    wxToggleButton *src;
+    wxWindow *dest;
+    src = (wxToggleButton *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxToggleButtonTowxEvtHandler(void *ptr) {
+    wxToggleButton *src;
+    wxEvtHandler *dest;
+    src = (wxToggleButton *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+#define new_wxToggleButton(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7) (new wxToggleButton(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7))
+static PyObject *_wrap_new_wxToggleButton(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToggleButton * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1;
+    wxString * _arg2;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxDefaultSize;
+    long  _arg5 = (long ) 0;
+    wxValidator * _arg6 = (wxValidator *) &wxDefaultValidator;
+    char * _arg7 = (char *) "toggle";
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
+    PyObject * _argo6 = 0;
+    char *_kwnames[] = { "parent","id","label","pos","size","style","validator","name", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOlOs:new_wxToggleButton",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_argo6,&_arg7)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxToggleButton. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
+        return NULL;
+}
+    if (_argo6) {
+        if (_argo6 == Py_None) { _arg6 = NULL; }
+        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of new_wxToggleButton. Expected _wxValidator_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxToggleButton *)new_wxToggleButton(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxToggleButton_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxToggleButton_SetValue(_swigobj,_swigarg0)  (_swigobj->SetValue(_swigarg0))
+static PyObject *_wrap_wxToggleButton_SetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToggleButton * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","value", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxToggleButton_SetValue",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToggleButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToggleButton_SetValue. Expected _wxToggleButton_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToggleButton_SetValue(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToggleButton_GetValue(_swigobj)  (_swigobj->GetValue())
+static PyObject *_wrap_wxToggleButton_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxToggleButton * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToggleButton_GetValue",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToggleButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToggleButton_GetValue. Expected _wxToggleButton_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxToggleButton_GetValue(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxToggleButton_SetLabel(_swigobj,_swigarg0)  (_swigobj->SetLabel(_swigarg0))
+static PyObject *_wrap_wxToggleButton_SetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxToggleButton * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","label", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxToggleButton_SetLabel",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToggleButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToggleButton_SetLabel. Expected _wxToggleButton_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxToggleButton_SetLabel(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 static PyMethodDef controlscMethods[] = {
+	 { "wxToggleButton_SetLabel", (PyCFunction) _wrap_wxToggleButton_SetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToggleButton_GetValue", (PyCFunction) _wrap_wxToggleButton_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToggleButton_SetValue", (PyCFunction) _wrap_wxToggleButton_SetValue, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxToggleButton", (PyCFunction) _wrap_new_wxToggleButton, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSpinCtrl_SetValue", (PyCFunction) _wrap_wxSpinCtrl_SetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSpinCtrl_SetRange", (PyCFunction) _wrap_wxSpinCtrl_SetRange, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSpinCtrl_GetValue", (PyCFunction) _wrap_wxSpinCtrl_GetValue, METH_VARARGS | METH_KEYWORDS },
@@ -8020,6 +8244,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxRegionIterator","_wxRegionIterator",0},
     { "_class_wxPyTextDropTarget","_wxPyTextDropTarget",0},
     { "_class_wxMenuBar","_wxMenuBar",0},
+    { "_class_wxEvtHandler","_class_wxToggleButton",SwigwxToggleButtonTowxEvtHandler},
+    { "_class_wxEvtHandler","_wxToggleButton",SwigwxToggleButtonTowxEvtHandler},
     { "_class_wxEvtHandler","_class_wxSpinCtrl",SwigwxSpinCtrlTowxEvtHandler},
     { "_class_wxEvtHandler","_wxSpinCtrl",SwigwxSpinCtrlTowxEvtHandler},
     { "_class_wxEvtHandler","_class_wxSlider",SwigwxSliderTowxEvtHandler},
@@ -8119,6 +8345,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxDataObject","_wxDataObject",0},
     { "_wxStaticLine","_class_wxStaticLine",0},
     { "_wxBrush","_class_wxBrush",0},
+    { "_wxToggleButton","_class_wxToggleButton",0},
     { "_wxDataFormat","_class_wxDataFormat",0},
     { "_class_wxDataObjectSimple","_wxDataObjectSimple",0},
     { "_wxShowEvent","_class_wxShowEvent",0},
@@ -8215,6 +8442,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxBrush","_wxBrush",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_class_wxWindow","_class_wxToggleButton",SwigwxToggleButtonTowxWindow},
+    { "_class_wxWindow","_wxToggleButton",SwigwxToggleButtonTowxWindow},
     { "_class_wxWindow","_class_wxSpinCtrl",SwigwxSpinCtrlTowxWindow},
     { "_class_wxWindow","_wxSpinCtrl",SwigwxSpinCtrlTowxWindow},
     { "_class_wxWindow","_class_wxSlider",SwigwxSliderTowxWindow},
@@ -8286,6 +8515,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_char","_byte",0},
     { "_class_wxMetaFileDC","_wxMetaFileDC",0},
     { "_class_wxMenu","_wxMenu",0},
+    { "_wxControl","_class_wxToggleButton",SwigwxToggleButtonTowxControl},
+    { "_wxControl","_wxToggleButton",SwigwxToggleButtonTowxControl},
     { "_wxControl","_class_wxSpinCtrl",SwigwxSpinCtrlTowxControl},
     { "_wxControl","_wxSpinCtrl",SwigwxSpinCtrlTowxControl},
     { "_wxControl","_class_wxSlider",SwigwxSliderTowxControl},
@@ -8399,6 +8630,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxValidator","_class_wxValidator",0},
     { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
     { "_wxIconizeEvent","_class_wxIconizeEvent",0},
+    { "_class_wxControl","_class_wxToggleButton",SwigwxToggleButtonTowxControl},
+    { "_class_wxControl","_wxToggleButton",SwigwxToggleButtonTowxControl},
     { "_class_wxControl","_class_wxSpinCtrl",SwigwxSpinCtrlTowxControl},
     { "_class_wxControl","_wxSpinCtrl",SwigwxSpinCtrlTowxControl},
     { "_class_wxControl","_class_wxSlider",SwigwxSliderTowxControl},
@@ -8456,6 +8689,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEraseEvent","_class_wxEraseEvent",0},
     { "_wxDataObjectComposite","_class_wxDataObjectComposite",0},
     { "_class_wxJoystickEvent","_wxJoystickEvent",0},
+    { "_class_wxToggleButton","_wxToggleButton",0},
     { "_wxRegion","_class_wxRegion",0},
     { "_class_wxShowEvent","_wxShowEvent",0},
     { "_wxPyDropTarget","_class_wxPyDropTarget",0},
@@ -8474,6 +8708,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxMemoryDC","_wxMemoryDC",0},
     { "_wxPyTextDropTarget","_class_wxPyTextDropTarget",0},
     { "_wxMenuBar","_class_wxMenuBar",0},
+    { "_wxEvtHandler","_class_wxToggleButton",SwigwxToggleButtonTowxEvtHandler},
+    { "_wxEvtHandler","_wxToggleButton",SwigwxToggleButtonTowxEvtHandler},
     { "_wxEvtHandler","_class_wxSpinCtrl",SwigwxSpinCtrlTowxEvtHandler},
     { "_wxEvtHandler","_wxSpinCtrl",SwigwxSpinCtrlTowxEvtHandler},
     { "_wxEvtHandler","_class_wxSlider",SwigwxSliderTowxEvtHandler},
@@ -8524,6 +8760,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFileDataObject","_class_wxFileDataObject",0},
     { "_class_wxEraseEvent","_wxEraseEvent",0},
     { "_class_wxDataObjectComposite","_wxDataObjectComposite",0},
+    { "_wxWindow","_class_wxToggleButton",SwigwxToggleButtonTowxWindow},
+    { "_wxWindow","_wxToggleButton",SwigwxToggleButtonTowxWindow},
     { "_wxWindow","_class_wxSpinCtrl",SwigwxSpinCtrlTowxWindow},
     { "_wxWindow","_wxSpinCtrl",SwigwxSpinCtrlTowxWindow},
     { "_wxWindow","_class_wxSlider",SwigwxSliderTowxWindow},
@@ -8579,6 +8817,7 @@ SWIGEXPORT(void) initcontrolsc() {
 	 d = PyModule_GetDict(m);
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxDefaultValidator",_wrap_wxDefaultValidator_get, _wrap_wxDefaultValidator_set);
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TOGGLEBUTTON_CLICKED", PyInt_FromLong((long) wxEVT_COMMAND_TOGGLEBUTTON_CLICKED));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

@@ -298,6 +298,15 @@ class wxMouseEventPtr(wxEventPtr):
     def GetY(self, *_args, **_kwargs):
         val = apply(eventsc.wxMouseEvent_GetY,(self,) + _args, _kwargs)
         return val
+    def GetWheelRotation(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_GetWheelRotation,(self,) + _args, _kwargs)
+        return val
+    def GetWheelDelta(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_GetWheelDelta,(self,) + _args, _kwargs)
+        return val
+    def GetLinesPerAction(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_GetLinesPerAction,(self,) + _args, _kwargs)
+        return val
     def __setattr__(self,name,value):
         if name == "m_x" :
             eventsc.wxMouseEvent_m_x_set(self,value)
@@ -326,6 +335,15 @@ class wxMouseEventPtr(wxEventPtr):
         if name == "m_metaDown" :
             eventsc.wxMouseEvent_m_metaDown_set(self,value)
             return
+        if name == "m_wheelRotation" :
+            eventsc.wxMouseEvent_m_wheelRotation_set(self,value)
+            return
+        if name == "m_wheelDelta" :
+            eventsc.wxMouseEvent_m_wheelDelta_set(self,value)
+            return
+        if name == "m_linesPerAction" :
+            eventsc.wxMouseEvent_m_linesPerAction_set(self,value)
+            return
         self.__dict__[name] = value
     def __getattr__(self,name):
         if name == "m_x" : 
@@ -346,6 +364,12 @@ class wxMouseEventPtr(wxEventPtr):
             return eventsc.wxMouseEvent_m_altDown_get(self)
         if name == "m_metaDown" : 
             return eventsc.wxMouseEvent_m_metaDown_get(self)
+        if name == "m_wheelRotation" : 
+            return eventsc.wxMouseEvent_m_wheelRotation_get(self)
+        if name == "m_wheelDelta" : 
+            return eventsc.wxMouseEvent_m_wheelDelta_get(self)
+        if name == "m_linesPerAction" : 
+            return eventsc.wxMouseEvent_m_linesPerAction_get(self)
         raise AttributeError,name
     def __repr__(self):
         return "<C wxMouseEvent instance at %s>" % (self.this,)

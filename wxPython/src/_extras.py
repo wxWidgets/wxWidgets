@@ -169,6 +169,8 @@ def EVT_LEAVE_WINDOW(win, func):
 def EVT_ENTER_WINDOW(win, func):
     win.Connect(-1, -1, wxEVT_ENTER_WINDOW, func)
 
+def EVT_MOUSEWHEEL(win, func):
+    win.Connect(-1, -1, wxEVT_MOUSEWHEEL, func)
 
 # all mouse events
 def EVT_MOUSE_EVENTS(win, func):
@@ -443,6 +445,9 @@ def EVT_TREE_BEGIN_DRAG(win, id, func):
 def EVT_TREE_BEGIN_RDRAG(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_RDRAG, func)
 
+def EVT_TREE_END_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_DRAG, func)
+
 def EVT_TREE_BEGIN_LABEL_EDIT(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, func)
 
@@ -632,6 +637,11 @@ def EVT_JOYSTICK_EVENTS(win, func):
     win.Connect(-1, -1, wxEVT_JOY_UP, func)
     win.Connect(-1, -1, wxEVT_JOY_MOVE, func)
     win.Connect(-1, -1, wxEVT_JOY_ZMOVE, func)
+
+
+def EVT_TOGGLEBUTTON(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, func)
+
 
 #----------------------------------------------------------------------
 

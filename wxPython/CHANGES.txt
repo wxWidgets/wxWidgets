@@ -48,12 +48,15 @@ Fixed wxStyledTextCtrl to be much faster on wxGTK.  There was some
 experimental code that got left in place that ended up causing way too
 many refreshes.
 
-A couple hacks in my_distutils.py so wxPython can be built with the
-distutils that comes with Python 2.1.
+A couple more hacks in my_distutils.py so wxPython can be built with
+the distutils that comes with Python 2.1.
 
 Added a ton of missing methods for wxPrintData.
 
 Switched to InnoSetup for MSW distributions.
+
+Added wxToggleButton
+
 
 
 

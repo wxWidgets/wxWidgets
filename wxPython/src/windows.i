@@ -597,6 +597,11 @@ public:
     void CalcScrolledPosition( int x, int y, int *OUTPUT, int *OUTPUT);
     void CalcUnscrolledPosition( int x, int y, int *OUTPUT, int *OUTPUT);
 
+    void SetScale(double xs, double ys);
+    double GetScaleX();
+    double GetScaleY();
+
+    void AdjustScrollbars();
 };
 
 //----------------------------------------------------------------------

@@ -127,6 +127,27 @@ class MyCanvas(wxScrolledWindow):
             self.curLine = []
             self.ReleaseMouse()
 
+
+## This is an example of what to do for the EVT_MOUSEWHEEL event,
+## but since wxScrolledWindow does this already it's not
+## necessary to do it ourselves.
+
+##     wheelScroll = 0
+##     def OnWheel(self, evt):
+##         delta = evt.GetWheelDelta()
+##         rot = evt.GetWheelRotation()
+##         linesPer = evt.GetLinesPerAction()
+##         ws = self.wheelScroll
+##         ws = ws + rot
+##         lines = ws / delta
+##         ws = ws - lines * delta
+##         self.wheelScroll = ws
+##         if lines != 0:
+##             lines = lines * linesPer
+##             vsx, vsy = self.GetViewStart()
+##             scrollTo = vsy - lines
+##             self.Scroll(-1, scrollTo)
+
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):

@@ -454,6 +454,7 @@ wxJOY_BUTTON2 = wxc.wxJOY_BUTTON2
 wxJOY_BUTTON3 = wxc.wxJOY_BUTTON3
 wxJOY_BUTTON4 = wxc.wxJOY_BUTTON4
 wxJOY_BUTTON_ANY = wxc.wxJOY_BUTTON_ANY
+wxWS_EX_VALIDATE_RECURSIVELY = wxc.wxWS_EX_VALIDATE_RECURSIVELY
 wxDEFAULT = wxc.wxDEFAULT
 wxDECORATIVE = wxc.wxDECORATIVE
 wxROMAN = wxc.wxROMAN
@@ -737,6 +738,7 @@ wxEVT_COMMAND_TOOL_RCLICKED = wxc.wxEVT_COMMAND_TOOL_RCLICKED
 wxEVT_COMMAND_TOOL_ENTER = wxc.wxEVT_COMMAND_TOOL_ENTER
 wxEVT_SET_FOCUS = wxc.wxEVT_SET_FOCUS
 wxEVT_KILL_FOCUS = wxc.wxEVT_KILL_FOCUS
+wxEVT_MOUSEWHEEL = wxc.wxEVT_MOUSEWHEEL
 wxEVT_LEFT_DOWN = wxc.wxEVT_LEFT_DOWN
 wxEVT_LEFT_UP = wxc.wxEVT_LEFT_UP
 wxEVT_MIDDLE_DOWN = wxc.wxEVT_MIDDLE_DOWN
@@ -828,7 +830,6 @@ wxEVT_COMMAND_KILL_FOCUS = wxc.wxEVT_COMMAND_KILL_FOCUS
 wxEVT_COMMAND_ENTER = wxc.wxEVT_COMMAND_ENTER
 wxEVT_NAVIGATION_KEY = wxc.wxEVT_NAVIGATION_KEY
 wxEVT_TIMER = wxc.wxEVT_TIMER
-wxWS_EX_VALIDATE_RECURSIVELY = wxc.wxWS_EX_VALIDATE_RECURSIVELY
 __version__ = wxc.__version__
 cvar = wxc.cvar
 wxDefaultPosition = wxPointPtr(wxc.cvar.wxDefaultPosition)
@@ -1008,6 +1009,8 @@ def EVT_LEAVE_WINDOW(win, func):
 def EVT_ENTER_WINDOW(win, func):
     win.Connect(-1, -1, wxEVT_ENTER_WINDOW, func)
 
+def EVT_MOUSEWHEEL(win, func):
+    win.Connect(-1, -1, wxEVT_MOUSEWHEEL, func)
 
 # all mouse events
 def EVT_MOUSE_EVENTS(win, func):
@@ -1282,6 +1285,9 @@ def EVT_TREE_BEGIN_DRAG(win, id, func):
 def EVT_TREE_BEGIN_RDRAG(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_RDRAG, func)
 
+def EVT_TREE_END_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_DRAG, func)
+
 def EVT_TREE_BEGIN_LABEL_EDIT(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, func)
 
@@ -1471,6 +1477,11 @@ def EVT_JOYSTICK_EVENTS(win, func):
     win.Connect(-1, -1, wxEVT_JOY_UP, func)
     win.Connect(-1, -1, wxEVT_JOY_MOVE, func)
     win.Connect(-1, -1, wxEVT_JOY_ZMOVE, func)
+
+
+def EVT_TOGGLEBUTTON(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, func)
+
 
 #----------------------------------------------------------------------
 
