@@ -221,8 +221,10 @@ int DBTree::OnPopulate()
                     z++;
 //                    if (z % 10 == 0)
                     {
+#if wxUSE_STATUSBAR
                         Temp0.Printf(_("-I-> DBTree::OnPopulate(%s) - Table %6d (from %d) has been read."),(ct_BrowserDB->pTableInf+x)->tableName,z,ct_BrowserDB->numTables);
                         pDoc->p_MainFrame->SetStatusText(Temp0, 0);
+#endif // wxUSE_STATUSBAR
                     }
                     wxYield();
                 }    // if ((ct_BrowserDB->pTableInf+x)->tableType == "TABLE" or VIEW)
@@ -235,7 +237,9 @@ int DBTree::OnPopulate()
         wxEndBusyCursor();
         Temp0.Printf(_("-I-> DBTree::OnPopulate() - %6d Tables have been read. - Time needed : %ld ms"),z,sw.Time());
         wxLogMessage(Temp0);
+#if wxUSE_STATUSBAR
         pDoc->p_MainFrame->SetStatusText(Temp0, 0);
+#endif // wxUSE_STATUSBAR
     }       // if((pDoc->db_Br+i_Which)->Initialize(false))
     else
     {
@@ -264,7 +268,9 @@ void DBTree::OnSelChanged(wxTreeEvent& WXUNUSED(event))
 {
     int i;
     Temp0.Empty();
+#if wxUSE_STATUSBAR
     pDoc->p_MainFrame->SetStatusText(Temp0,0);
+#endif // wxUSE_STATUSBAR
     // Get the Information that we need
     wxTreeItemId itemId = GetSelection();
     DBTreeData *item = (DBTreeData *)GetItemData(itemId);

@@ -568,6 +568,8 @@ void wxGenericMDIChildFrame::OnMenuHighlight(wxMenuEvent& event)
         // but may be the MDI frame does?
         m_pMDIParentFrame->OnMenuHighlight(event);
     }
+#else
+    wxUnusedVar(event);
 #endif // wxUSE_STATUSBAR
 }
 

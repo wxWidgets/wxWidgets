@@ -76,9 +76,10 @@ MyFrame::MyFrame() :
    wxFrame( (wxFrame *) NULL, wxID_ANY, _T("wxLayout"),
              wxDefaultPosition, wxDefaultSize )
 {
+#if wxUSE_STATUSBAR
    CreateStatusBar( 2 );
-
    SetStatusText( _T("wxLayout by Karsten Ballüder.") );
+#endif // wxUSE_STATUSBAR
 
    wxMenuBar *menu_bar = new wxMenuBar();
 
@@ -128,7 +129,9 @@ MyFrame::MyFrame() :
    SetMenuBar( menu_bar );
 
    m_lwin = new wxLayoutWindow(this);
+#if wxUSE_STATUSBAR
    m_lwin->SetStatusBar(GetStatusBar(), 0, 1);
+#endif // wxUSE_STATUSBAR
    m_lwin->SetMouseTracking(true);
    m_lwin->SetEditable(true);
    m_lwin->SetWrapMargin(40);

@@ -153,7 +153,9 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
                                  wxWANTS_CHARS),
                 m_llist(NULL)
 {
+#if wxUSE_STATUSBAR
     SetStatusBar(NULL); // don't use statusbar
+#endif // wxUSE_STATUSBAR
     m_Editable = false;
     m_doSendEvents = false;
     m_ViewStartX = 0; m_ViewStartY = 0;
@@ -310,7 +312,9 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
         // this variables is used to only erase the message in the status
         // bar if we had put it there previously - otherwise empting status
         // bar might be undesirable
+#if wxUSE_STATUSBAR
         static bool s_hasPutMessageInStatusBar = false;
+#endif // wxUSE_STATUSBAR
 
         // found is only true if we are really over an object, not just
         // behind it
@@ -319,27 +323,30 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
             if(!m_HandCursor)
                 SetCursor(wxCURSOR_HAND);
             m_HandCursor = true;
+#if wxUSE_STATUSBAR
             if(m_StatusBar && m_StatusFieldLabel != -1)
             {
                 const wxString &label = u->GetLabel();
                 if(label.Length())
                 {
-                    m_StatusBar->SetStatusText(label,
-                        m_StatusFieldLabel);
+                    m_StatusBar->SetStatusText(label,m_StatusFieldLabel);
                     s_hasPutMessageInStatusBar = true;
                 }
             }
+#endif // wxUSE_STATUSBAR
         }
         else
         {
             if(m_HandCursor)
                 SetCursor(wxCURSOR_IBEAM);
             m_HandCursor = false;
+#if wxUSE_STATUSBAR
             if( m_StatusBar && m_StatusFieldLabel != -1 &&
                 s_hasPutMessageInStatusBar )
             {
                 m_StatusBar->SetStatusText(wxEmptyString, m_StatusFieldLabel);
             }
+#endif // wxUSE_STATUSBAR
         }
     }
 
@@ -1062,6 +1069,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 
     ResetDirty();
 
+#if wxUSE_STATUSBAR
     if ( m_StatusBar && m_StatusFieldCursor != -1 )
     {
         static wxPoint s_oldCursorPos(-1, -1);
@@ -1078,6 +1086,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
             m_StatusBar->SetStatusText(label, m_StatusFieldCursor);
         }
     }
+#endif // wxUSE_STATUSBAR
 
     WXLO_TIMER_PRINT(LayoutTimer);
     WXLO_TIMER_PRINT(BlitTimer);

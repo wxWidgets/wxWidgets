@@ -338,7 +338,9 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
     int notebook_page = 0;
 
+#if wxUSE_STATUSBAR
     CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
     // toolbar?
@@ -377,7 +379,9 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     }
 
     m_HtmlWin->SetRelatedFrame(this, m_TitleFormat);
+#if wxUSE_STATUSBAR
     m_HtmlWin->SetRelatedStatusBar(0);
+#endif // wxUSE_STATUSBAR
     if ( m_Config )
         m_HtmlWin->ReadCustomization(m_Config, m_ConfigRoot);
 

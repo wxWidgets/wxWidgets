@@ -261,9 +261,11 @@ LifeFrame::LifeFrame() : wxFrame( (wxFrame *) NULL, wxID_ANY,
     toolBar->Realize();
     toolBar->EnableTool(ID_STOP, false);    // must be after Realize() !
 
+#if wxUSE_STATUSBAR
     // status bar
     CreateStatusBar(2);
     SetStatusText(_("Welcome to Life!"));
+#endif // wxUSE_STATUSBAR
 
     // game and timer
     m_life     = new Life();
@@ -884,10 +886,12 @@ void LifeCanvas::OnMouse(wxMouseEvent& event)
     wxInt32 i = XToCell( event.GetX() );
     wxInt32 j = YToCell( event.GetY() );
 
+#if wxUSE_STATUSBAR
     // set statusbar text
     wxString msg;
     msg.Printf(_("Cell: (%d, %d)"), i, j);
     ((LifeFrame *) wxGetApp().GetTopWindow())->SetStatusText(msg, 1);
+#endif // wxUSE_STATUSBAR
 
     // NOTE that wxMouseEvent::LeftDown() and wxMouseEvent::LeftIsDown()
     // have different semantics. The first one is used to signal that the

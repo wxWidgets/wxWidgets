@@ -137,7 +137,9 @@ void PgmCtrl::OnSelChanged(wxMouseEvent& WXUNUSED(event))
 {
     int i;
     Temp0.Empty();   Temp1.Empty();
+#if wxUSE_STATUSBAR
     pDoc->p_MainFrame->SetStatusText(Temp0,0);
+#endif // wxUSE_STATUSBAR
     // Get the Information that we need
     wxTreeItemId itemId = GetSelection();
     TreeData *item = (TreeData *)GetItemData(itemId);

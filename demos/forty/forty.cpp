@@ -198,7 +198,9 @@ FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos
     SetSizer( topsizer );
     topsizer->SetSizeHints( this );
 
+#if wxUSE_STATUSBAR
     CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 }
 
 FortyFrame::~FortyFrame()

@@ -144,9 +144,11 @@ bool MainDoc::OnInitView()
     //  return false;
     OnInitODBC();
     //---------------------------------------------------------------------------------------
+#if wxUSE_STATUSBAR
     Temp0.Printf(_("-I-> MainDoc::OnInitView() - End - %d DSN's found"),i_DSN);
     p_MainFrame->SetStatusText(Temp0, 0);
     wxLogMessage(Temp0);
+#endif // wxUSE_STATUSBAR
     return true;
 }
 

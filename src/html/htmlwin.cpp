@@ -158,7 +158,9 @@ void wxHtmlWindow::Init()
     m_tmpLastCell = NULL;
     m_tmpCanDrawLocks = 0;
     m_FS = new wxFileSystem();
+#if wxUSE_STATUSBAR
     m_RelatedStatusBar = -1;
+#endif // wxUSE_STATUSBAR
     m_RelatedFrame = NULL;
     m_TitleFormat = wxT("%s");
     m_OpenedPage = m_OpenedAnchor = m_OpenedPageTitle = wxEmptyString;
@@ -228,10 +230,12 @@ void wxHtmlWindow::SetRelatedFrame(wxFrame* frame, const wxString& format)
 
 
 
+#if wxUSE_STATUSBAR
 void wxHtmlWindow::SetRelatedStatusBar(int bar)
 {
     m_RelatedStatusBar = bar;
 }
+#endif // wxUSE_STATUSBAR
 
 
 
@@ -355,13 +359,15 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
     else
     {
-        needs_refresh = TRUE;
+        needs_refresh = true;
+#if wxUSE_STATUSBAR
         // load&display it:
         if (m_RelatedStatusBar != -1)
         {
             m_RelatedFrame->SetStatusText(_("Connecting..."), m_RelatedStatusBar);
-            Refresh(FALSE);
+            Refresh(false);
         }
+#endif // wxUSE_STATUSBAR
 
         f = m_Parser->OpenURL(wxHTML_URL_PAGE, location);
 
@@ -377,7 +383,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         {
             wxLogError(_("Unable to open requested HTML document: %s"), location.c_str());
             m_tmpCanDrawLocks--;
-            return FALSE;
+            return false;
         }
 
         else
@@ -385,12 +391,14 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             wxList::compatibility_iterator node;
             wxString src = wxEmptyString;
 
+#if wxUSE_STATUSBAR
             if (m_RelatedStatusBar != -1)
             {
                 wxString msg = _("Loading : ") + location;
                 m_RelatedFrame->SetStatusText(msg, m_RelatedStatusBar);
-                Refresh(FALSE);
+                Refresh(false);
             }
+#endif // wxUSE_STATUSBAR
 
             node = m_Filters.GetFirst();
             while (node)
@@ -419,7 +427,10 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
             delete f;
 
-            if (m_RelatedStatusBar != -1) m_RelatedFrame->SetStatusText(_("Done"), m_RelatedStatusBar);
+#if wxUSE_STATUSBAR
+            if (m_RelatedStatusBar != -1) 
+                m_RelatedFrame->SetStatusText(_("Done"), m_RelatedStatusBar);
+#endif // wxUSE_STATUSBAR
         }
     }
 
@@ -1118,6 +1129,7 @@ void wxHtmlWindow::OnInternalIdle()
 
             if (lnk != m_tmpLastLink)
             {
+#if wxUSE_STATUSBAR
                 if (lnk == NULL)
                 {
                     if (m_RelatedStatusBar != -1)
@@ -1130,6 +1142,7 @@ void wxHtmlWindow::OnInternalIdle()
                         m_RelatedFrame->SetStatusText(lnk->GetHref(),
                                                       m_RelatedStatusBar);
                 }
+#endif // wxUSE_STATUSBAR
                 m_tmpLastLink = lnk;
             }
 

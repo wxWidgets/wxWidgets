@@ -311,7 +311,9 @@ bool MyApp::OnInit()
 
     // Create the main frame window
     frame = new MyFrame(NULL, wxID_ANY, _T("Tex2RTF"), wxDefaultPosition, wxSize(400, 300));
+#if wxUSE_STATUSBAR
     frame->CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
     // Give it an icon
     // TODO: uncomment this when we have tex2rtf.xpm
@@ -391,16 +393,26 @@ bool MyApp::OnInit()
     if (path != _T(""))
       ReadCustomMacros((wxChar *)path.c_str());
 
+#if wxUSE_STATUSBAR
     wxStrcpy(buf, _T("In "));
-
-    if (winHelp && (convertMode == TEX_RTF))
-      wxStrcat(buf, _T("WinHelp RTF"));
-    else if (!winHelp && (convertMode == TEX_RTF))
-      wxStrcat(buf, _T("linear RTF"));
-    else if (convertMode == TEX_HTML) wxStrcat(buf, _T("HTML"));
-    else if (convertMode == TEX_XLP) wxStrcat(buf, _T("XLP"));
-      wxStrcat(buf, _T(" mode."));
+    switch (convertMode)
+    {
+      case TEX_RTF:
+        wxStrcat(buf, (winHelp) ? _T("WinHelp RTF"), _T("linear RTF"));
+        break;
+      case TEX_HTML:
+        wxStrcat(buf, _T("HTML"));
+        break;
+      case TEX_XLP:
+        wxStrcat(buf, _T("XLP"));
+        break;
+      default:
+        wxStrcat(buf, _T("unknown"));
+        break;
+    }
+    wxStrcat(buf, _T(" mode."));
     frame->SetStatusText(buf, 1);
+#endif // wxUSE_STATUSBAR
 
     frame->Show(true);
     return true;
@@ -649,7 +661,9 @@ void MyFrame::OnGo(wxCommandEvent& WXUNUSED(event))
 
       if (stopRunning)
       {
+#if wxUSE_STATUSBAR
         SetStatusText(_T("Build aborted!"));
+#endif // wxUSE_STATUSBAR
         wxString errBuf;
         errBuf.Printf(_T("\nErrors encountered during this pass: %lu\n"), errorCount);
         OnInform((wxChar *)errBuf.c_str());
@@ -683,9 +697,11 @@ void MyFrame::OnSaveFile(wxCommandEvent& WXUNUSED(event))
       if (s != _T(""))
       {
         textWindow->SaveFile(s);
+#if wxUSE_STATUSBAR
         wxChar buf[350];
         wxSnprintf(buf, sizeof(buf), _T("Saved text to %s"), (const wxChar*) s.c_str());
         frame->SetStatusText(buf, 0);
+#endif // wxUSE_STATUSBAR
       }
 }
 
@@ -740,7 +756,9 @@ void MyFrame::OnModeRTF(wxCommandEvent& WXUNUSED(event))
       winHelp = false;
       InputFile = NULL;
       OutputFile = NULL;
+#if wxUSE_STATUSBAR
       SetStatusText(_T("In linear RTF mode."), 1);
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnModeWinHelp(wxCommandEvent& WXUNUSED(event))
@@ -749,7 +767,9 @@ void MyFrame::OnModeWinHelp(wxCommandEvent& WXUNUSED(event))
       winHelp = true;
       InputFile = NULL;
       OutputFile = NULL;
+#if wxUSE_STATUSBAR
       SetStatusText(_T("In WinHelp RTF mode."), 1);
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnModeHTML(wxCommandEvent& WXUNUSED(event))
@@ -758,7 +778,9 @@ void MyFrame::OnModeHTML(wxCommandEvent& WXUNUSED(event))
       winHelp = false;
       InputFile = NULL;
       OutputFile = NULL;
+#if wxUSE_STATUSBAR
       SetStatusText(_T("In HTML mode."), 1);
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnModeXLP(wxCommandEvent& WXUNUSED(event))
@@ -766,12 +788,15 @@ void MyFrame::OnModeXLP(wxCommandEvent& WXUNUSED(event))
       convertMode = TEX_XLP;
       InputFile = NULL;
       OutputFile = NULL;
+#if wxUSE_STATUSBAR
       SetStatusText(_T("In XLP mode."), 1);
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnOptionsCurleyBrace(wxCommandEvent& WXUNUSED(event))
 {
     checkCurleyBraces = !checkCurleyBraces;
+#if wxUSE_STATUSBAR
     if (checkCurleyBraces)
     {
         SetStatusText(_T("Checking curley braces: YES"), 1);
@@ -780,12 +805,14 @@ void MyFrame::OnOptionsCurleyBrace(wxCommandEvent& WXUNUSED(event))
     {
         SetStatusText(_T("Checking curley braces: NO"), 1);
     }
+#endif // wxUSE_STATUSBAR
 }
 
 
 void MyFrame::OnOptionsSyntaxChecking(wxCommandEvent& WXUNUSED(event))
 {
     checkSyntax = !checkSyntax;
+#if wxUSE_STATUSBAR
     if (checkSyntax)
     {
         SetStatusText(_T("Checking syntax: YES"), 1);
@@ -794,6 +821,7 @@ void MyFrame::OnOptionsSyntaxChecking(wxCommandEvent& WXUNUSED(event))
     {
         SetStatusText(_T("Checking syntax: NO"), 1);
     }
+#endif // wxUSE_STATUSBAR
 }
 
 
@@ -955,7 +983,7 @@ bool Go(void)
       TexCleanUp();
       return false;
     }
-#ifndef NO_GUI
+#if !defined(NO_GUI) && wxUSE_STATUSBAR
     if (isInteractive)
     {
       wxString buf;
@@ -1018,11 +1046,13 @@ bool Go(void)
         OnInform((wxChar *)buf.c_str());
     }
 
+#if wxUSE_STATUSBAR
     if (isInteractive)
     {
       buf.Printf(_T("Done, %d %s."), passNumber, (passNumber > 1) ? _T("passes") : _T("pass"));
       frame->SetStatusText((wxChar *)buf.c_str());
     }
+#endif // wxUSE_STATUSBAR
 #else
     buf.Printf(_T("Done, %d %s."), passNumber, (passNumber > 1) ? _T("passes") : _T("pass"));
     OnInform((wxChar *)buf.c_str());
@@ -1041,7 +1071,7 @@ bool Go(void)
   TexCleanUp();
   startedSections = false;
 
-#ifndef NO_GUI
+#if !defined(NO_GUI) && wxUSE_STATUSBAR
   frame->SetStatusText(_T("Aborted by user."));
 #endif // GUI
 
@@ -1276,7 +1306,7 @@ bool Tex2RTFConnection::OnExecute(const wxString& WXUNUSED(topic), wxChar *data,
     {
       // Try for a setting
       wxStrcpy(Tex2RTFLastStatus, RegisterSetting(firstArg, secondArg, false));
-#ifndef NO_GUI
+#if !defined(NO_GUI) && wxUSE_STATUSBAR
       if (frame && wxStrcmp(firstArg, _T("conversionMode")) == 0)
       {
         wxChar buf[100];

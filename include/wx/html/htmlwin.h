@@ -120,9 +120,11 @@ public:
     void SetRelatedFrame(wxFrame* frame, const wxString& format);
     wxFrame* GetRelatedFrame() const {return m_RelatedFrame;}
 
+#if wxUSE_STATUSBAR
     // After(!) calling SetRelatedFrame, this sets statusbar slot where messages
     // will be displayed. Default is -1 = no messages.
     void SetRelatedStatusBar(int bar);
+#endif // wxUSE_STATUSBAR
 
     // Sets fonts to be used when displaying HTML page.
     void SetFonts(wxString normal_face, wxString fixed_face,
@@ -283,9 +285,11 @@ protected:
 
     wxFrame *m_RelatedFrame;
     wxString m_TitleFormat;
+#if wxUSE_STATUSBAR
     // frame in which page title should be displayed & number of it's statusbar
     // reserved for usage with this html window
     int m_RelatedStatusBar;
+#endif // wxUSE_STATUSBAR
 
     // borders (free space between text and window borders)
     // defaults to 10 pixels.

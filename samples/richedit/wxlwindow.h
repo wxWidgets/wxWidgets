@@ -177,6 +177,7 @@ public:
     /// Redraws the window, used by RequestUpdate() or OnPaint().
     void InternalPaint(const wxRect *updateRect);
 
+#if wxUSE_STATUSBAR
     /** Tell window to update a wxStatusBar with UserData labels and
         cursor positions.
         @param bar wxStatusBar pointer
@@ -190,6 +191,7 @@ public:
         m_StatusBar = bar; m_StatusFieldLabel = labelfield;
         m_StatusFieldCursor = cursorfield;
     }
+#endif // wxUSE_STATUSBAR
 
 #ifndef __WXMSW__
     /// Enable or disable focus follow mode under non-MSW
@@ -307,8 +309,10 @@ private:
     wxBitmap    *m_bitmap;
     wxPoint      m_bitmapSize;
 
+#if wxUSE_STATUSBAR
     /// A frame's statusbar to update
     class wxStatusBar *m_StatusBar;
+#endif // wxUSE_STATUSBAR
 
     /// statusbar field for labels
     int          m_StatusFieldLabel;

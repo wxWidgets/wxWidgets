@@ -125,15 +125,19 @@ int  DBGrid::OnTableView(wxString Table)
                         { // BrowserDB::OnGetNext Formats the field Value into tablename
                             SetCellValue(z, y,((db_Br+i_Which)->cl_BrowserDB+y)->tableName);
                         }
+#if wxUSE_STATUSBAR
                         if (z % 50 == 0)
                         {
                             Temp0.Printf(_("-I-> DBGrid::OnTableView(%s) - Record %6d (from %d) has been read."),Table.c_str(),z,(db_Br+i_Which)->i_Records);
                             pDoc->p_MainFrame->SetStatusText(Temp0, 0);
                         }
+#endif // wxUSE_STATUSBAR
                     }  // for (z=0;z<(db_Br+i_Which)->i_Records;z++)
                     Temp0.Printf(_("-I-> DBGrid::OnTableView(%s) - %6d Records have been read. - Time needed : %ld ms"),Table.c_str(),z,sw.Time());
                     wxLogMessage(Temp0);
+#if wxUSE_STATUSBAR
                     pDoc->p_MainFrame->SetStatusText(Temp0, 0);
+#endif // wxUSE_STATUSBAR
                     // The Grid has been filled, now leave
                     goto Weiter;
                 }   // if ((ct_BrowserDB->pTableInf+x)->pColInf)

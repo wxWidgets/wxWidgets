@@ -234,7 +234,9 @@ wxMDIParentFrame::~wxMDIParentFrame()
 #if wxUSE_TOOLBAR
     m_frameToolBar = NULL;
 #endif
+#if wxUSE_STATUSBAR
     m_frameStatusBar = NULL;
+#endif // wxUSE_STATUSBAR
 
     DestroyChildren();
 
@@ -732,7 +734,9 @@ wxMDIChildFrame::~wxMDIChildFrame()
 #if wxUSE_TOOLBAR
     m_frameToolBar = NULL;
 #endif
+#if wxUSE_STATUSBAR
     m_frameStatusBar = NULL;
+#endif // wxUSE_STATUSBAR
 
     DestroyChildren();
 
@@ -759,12 +763,14 @@ void wxMDIChildFrame::DoSetClientSize(int width, int height)
   int actual_width = rect2.right - rect2.left - rect.right + width;
   int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
 
+#if wxUSE_STATUSBAR
   if (GetStatusBar() && GetStatusBar()->IsShown())
   {
     int sx, sy;
     GetStatusBar()->GetSize(&sx, &sy);
     actual_height += sy;
   }
+#endif // wxUSE_STATUSBAR
 
   POINT point;
   point.x = rect2.left;

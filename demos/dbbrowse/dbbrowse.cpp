@@ -216,9 +216,11 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
     menu_bar->Append(file_menu, _("&File"));
     menu_bar->Append(help_menu, _("&Help"));
     frame->SetMenuBar(menu_bar);
+#if wxUSE_STATUSBAR
     frame->CreateStatusBar(1);
     Temp0.Printf(_("%s has started !"),p_ProgramCfg->GetAppName().c_str());
     frame->SetStatusText(Temp0, 0);
+#endif // wxUSE_STATUSBAR
     //---------------------------------------------------------------------------------------
     int width, height;
     frame->GetClientSize(&width, &height);
