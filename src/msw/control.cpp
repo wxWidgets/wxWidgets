@@ -45,11 +45,11 @@ END_EVENT_TABLE()
 // Item members
 wxControl::wxControl()
 {
-  m_backgroundColour = *wxWHITE;
-  m_foregroundColour = *wxBLACK;
+    m_backgroundColour = *wxWHITE;
+    m_foregroundColour = *wxBLACK;
 
 #if WXWIN_COMPATIBILITY
-  m_callback = 0;
+    m_callback = 0;
 #endif // WXWIN_COMPATIBILITY
 }
 
@@ -60,9 +60,17 @@ wxControl::~wxControl()
 
 bool wxControl::MSWCreateControl(const wxChar *classname, WXDWORD style)
 {
+    // VZ: if someone could put a comment here explaining what exactly this is
+    //     needed for, it would be nice...
+    bool want3D;
+
+    // all controls have these childs (wxWindows creates all controls visible
+    // by default)
+    style |= WS_CHILD | WS_VISIBLE;
+
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
-                        GetExStyle(style),  // extended style
+                        GetExStyle(style, &want3D), // extended style
                         classname,          // the kind of control to create
                         NULL,               // the window name
                         style,              // the window style
@@ -81,6 +89,14 @@ bool wxControl::MSWCreateControl(const wxChar *classname, WXDWORD style)
 
         return FALSE;
     }
+
+#if wxUSE_CTL3D
+    if ( want3D )
+    {
+        Ctl3dSubclassCtl(GetHwnd());
+        m_useCtl3D = TRUE;
+    }
+#endif // wxUSE_CTL3D
 
     // subclass again for purposes of dialog editing mode
     SubclassWin(m_hWnd);
@@ -168,26 +184,25 @@ void wxControl::OnEraseBackground(wxEraseEvent& event)
     // might flicker.
 
     RECT rect;
-    ::GetClientRect((HWND) GetHWND(), &rect);
+    ::GetClientRect(GetHwnd(), &rect);
 
-    HBRUSH hBrush = ::CreateSolidBrush(PALETTERGB(GetBackgroundColour().Red(),
-                                                  GetBackgroundColour().Green(),
-                                                  GetBackgroundColour().Blue()));
-    int mode = ::SetMapMode((HDC) event.GetDC()->GetHDC(), MM_TEXT);
+    HBRUSH hBrush = ::CreateSolidBrush(wxColourToRGB(GetBackgroundColour()));
 
-    ::FillRect ((HDC) event.GetDC()->GetHDC(), &rect, hBrush);
+    HDC hdc = GetHdcOf((*event.GetDC()));
+    int mode = ::SetMapMode(hdc, MM_TEXT);
+
+    ::FillRect(hdc, &rect, hBrush);
     ::DeleteObject(hBrush);
-    ::SetMapMode((HDC) event.GetDC()->GetHDC(), mode);
+    ::SetMapMode(hdc, mode);
 }
 
-WXDWORD wxControl::GetExStyle(WXDWORD& style) const
+WXDWORD wxControl::GetExStyle(WXDWORD& style, bool *want3D) const
 {
-    bool want3D;
-    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
+    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, want3D);
 
-    // Even with extended styles, need to combine with WS_BORDER
-    // for them to look right.
-    if ( want3D || wxStyleHasBorder(m_windowStyle) )
+    // Even with extended styles, need to combine with WS_BORDER for them to
+    // look right.
+    if ( *want3D || wxStyleHasBorder(m_windowStyle) )
         style |= WS_BORDER;
 
     return exStyle;

@@ -76,8 +76,8 @@ protected:
    bool MSWCreateControl(const wxChar *classname, WXDWORD style);
 
    // determine the extended styles combination for this window (may slightly
-   // modify styl parameter)
-   WXDWORD GetExStyle(WXDWORD& style) const;
+   // modify style parameter, this is why it's non const)
+   WXDWORD GetExStyle(WXDWORD& style, bool *want3D) const;
 
 private:
    DECLARE_EVENT_TABLE()

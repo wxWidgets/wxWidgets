@@ -889,6 +889,7 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
         textData.AddFile( "/file2.txt" );
 */
         wxDropSource source(textData, this
+
 #ifdef __WXMSW__
                             ,wxCURSOR_PENCIL,           // for copy
                             wxCURSOR_SPRAYCAN,          // for move
@@ -1043,15 +1044,23 @@ void DnDFrame::OnPasteBitmap(wxCommandEvent& WXUNUSED(event))
 void DnDFrame::OnCopyFiles(wxCommandEvent& WXUNUSED(event))
 {
 #ifdef __WXMSW__
-    wxFileDataObject *dobj = new wxFileDataObject;
-
     wxFileDialog dialog(this, "Select a file to copy", "", "",
                          "All files (*.*)|*.*", 0);
 
-    if ( dialog.ShowModal() == wxID_OK )
+    wxArrayString filenames;
+    while ( dialog.ShowModal() == wxID_OK )
     {
-        wxString filename = dialog.GetPath();
-        dobj->AddFile(filename);
+        filenames.Add(dialog.GetPath());
+    }
+
+    if ( !filenames.IsEmpty() )
+    {
+        wxFileDataObject *dobj = new wxFileDataObject;
+        size_t count = filenames.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            dobj->AddFile(filenames[n]);
+        }
 
         wxClipboardLocker locker;
         if ( !locker )
@@ -1062,12 +1071,12 @@ void DnDFrame::OnCopyFiles(wxCommandEvent& WXUNUSED(event))
         {
             if ( !wxTheClipboard->AddData(dobj) )
             {
-                wxLogError("Can't copy file to the clipboard");
+                wxLogError("Can't copy file(s) to the clipboard");
             }
             else
             {
-                wxLogStatus(this, "File '%s' copied to the clipboard",
-                            filename.c_str());
+                wxLogStatus(this, "%d file%s copied to the clipboard",
+                            count, count == 1 ? "" : "s");
             }
         }
     }

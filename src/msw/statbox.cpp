@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbox.cpp
+// Name:        msw/statbox.cpp
 // Purpose:     wxStaticBox
 // Author:      Julian Smart
 // Modified by:
@@ -9,26 +9,37 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "statbox.h"
+    #pragma implementation "statbox.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
-#include "wx/window.h"
-#include "wx/msw/private.h"
-
 #ifndef WX_PRECOMP
-#include "wx/app.h"
-#include "wx/dcclient.h"
+    #include "wx/app.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/statbox.h"
+
+#include "wx/msw/private.h"
+
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
@@ -39,64 +50,31 @@ END_EVENT_TABLE()
 
 #endif
 
-/*
- * Group box
- */
- 
-bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
-           const wxString& label,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxStaticBox
+// ----------------------------------------------------------------------------
+
+bool wxStaticBox::Create(wxWindow *parent,
+                         wxWindowID id,
+                         const wxString& label,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         const wxString& name)
 {
-  SetName(name);
+    if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
+        return FALSE;
 
-  if (parent) parent->AddChild(this);
+    if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX) )
+        return FALSE;
 
-  SetBackgroundColour(parent->GetBackgroundColour()) ;
-  SetForegroundColour(parent->GetForegroundColour()) ;
+    SetSize(pos.x, pos.y, size.x, size.y);
 
-  if ( id == -1 )
-      m_windowId = (int)NewControlId();
-  else
-    m_windowId = id;
-
-  int x = pos.x;
-  int y = pos.y;
-  int width = size.x;
-  int height = size.y;
-
-  m_windowStyle = style;
-
-  long msStyle = BS_GROUPBOX | WS_CHILD | WS_VISIBLE ; // GROUP_FLAGS;
-
-  bool want3D;
-  WXDWORD exStyle = Determine3DEffects(0, &want3D) ;
-
-  HWND wx_button =
-    CreateWindowEx(exStyle, wxT("BUTTON"), (const wxChar *)label, msStyle,
-                    0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
-                    wxGetInstance(), NULL);
-#if wxUSE_CTL3D
-  if (want3D)
-  {
-    Ctl3dSubclassCtl(wx_button);
-      m_useCtl3D = TRUE;
-  }
-#endif
-
-  m_hWnd = (WXHWND)wx_button;
-
-  // Subclass again for purposes of dialog editing mode
-  SubclassWin(GetHWND());
-
-  SetFont(parent->GetFont());
-
-  SetSize(x, y, width, height);
-  ShowWindow(wx_button, SW_SHOW);
-
-  return TRUE;
+    return TRUE;
 }
 
 wxSize wxStaticBox::DoGetBestSize()
@@ -119,28 +97,32 @@ WXHBRUSH wxStaticBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                                  WXLPARAM lParam)
 {
 #if wxUSE_CTL3D
-  if ( m_useCtl3D )
-  {
-    HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
-    return (WXHBRUSH) hbrush;
-  }
-#endif
+    if ( m_useCtl3D )
+    {
+        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
+        return (WXHBRUSH) hbrush;
+    }
+#endif // wxUSE_CTL3D
 
-  if (GetParent()->GetTransparentBackground())
-    SetBkMode((HDC) pDC, TRANSPARENT);
-  else
-    SetBkMode((HDC) pDC, OPAQUE);
+    HDC hdc = (HDC)pDC;
+    if (GetParent()->GetTransparentBackground())
+        SetBkMode(hdc, TRANSPARENT);
+    else
+        SetBkMode(hdc, OPAQUE);
 
-  ::SetBkColor((HDC) pDC, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
-  ::SetTextColor((HDC) pDC, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
+    const wxColour& colBack = GetBackgroundColour();
+    ::SetBkColor(hdc, wxColourToRGB(colBack));
+    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
 
-  wxBrush *backgroundBrush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
+    wxBrush *brush= wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
 
-  // Note that this will be cleaned up in wxApp::OnIdle, if backgroundBrush
-  // has a zero usage count.
-//  backgroundBrush->RealizeResource();
-  return (WXHBRUSH) backgroundBrush->GetResourceHandle();
+    return (WXHBRUSH)brush->GetResourceHandle();
 }
+
+// VZ: this is probably the most commented function in wxWindows, but I still
+//     don't understand what it does and why. Wouldn't it be better to _never_
+//     erase the background here? What would we lose if we didn't do it?
+//     (FIXME)
 
 // Shouldn't erase the whole window, since the static box must only paint its
 // outline.
@@ -162,25 +144,17 @@ void wxStaticBox::OnEraseBackground(wxEraseEvent& event)
     // few other circumstances where it matters about child clipping. But what about painting onto
     // to panel, inside a groupbox? Doesn't appear, because the box wipes it out.
     wxWindow *parent = GetParent();
-    if ( parent && parent->GetHWND() && (::GetWindowLong((HWND) parent->GetHWND(), GWL_STYLE) & WS_CLIPCHILDREN) )
+    if ( parent && parent->GetHWND() &&
+        (::GetWindowLong(GetHwndOf(parent), GWL_STYLE) & WS_CLIPCHILDREN) )
     {
         // TODO: May in fact need to generate a paint event for inside this
         // control's rectangle, otherwise all controls are going to be clipped -
         // ugh.
-        HBRUSH hBrush = ::CreateSolidBrush(PALETTERGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
-        int mode = ::SetMapMode((HDC) event.GetDC()->GetHDC(), MM_TEXT);
 
-        RECT rect;
-
-        ::GetClientRect(GetHwnd(), &rect);
-        ::FillRect ((HDC) event.GetDC()->GetHDC(), &rect, hBrush);
-        ::DeleteObject(hBrush);
-        ::SetMapMode((HDC) event.GetDC()->GetHDC(), mode);
-    }
-    else
-    {
+        // let wxControl::OnEraseBackground() do the job
         event.Skip();
     }
+    //else: do *not* call event.Skip() or wxControl will erase the background
 }
 
 long wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)

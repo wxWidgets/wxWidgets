@@ -34,8 +34,8 @@ public:
     virtual void Command(wxCommandEvent &event);
 
 protected:
-    // creates the controls (invokes wxWindowBase::CreateBase) and adds it to
-    // the list of parents children
+    // creates the control (calls wxWindowBase::CreateBase inside) and adds it
+    // to the list of parents children
     bool CreateControl(wxWindowBase *parent,
                        wxWindowID id,
                        const wxPoint& pos,
@@ -49,6 +49,18 @@ protected:
 #  endif
 #endif
                        const wxString& name);
+
+    // an overloaded version for the controls without validators
+    bool CreateControl(wxWindowBase *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name)
+    {
+        return CreateControl(parent, id, pos, size, style,
+                             wxDefaultValidator, name);
+    }
 
     // inherit colour and font settings from the parent window
     void InheritAttributes();
