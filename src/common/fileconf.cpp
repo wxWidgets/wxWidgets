@@ -542,15 +542,23 @@ wxFileConfig::LineList *wxFileConfig::LineListAppend(const wxString& str)
   return m_linesTail;
 }
 
-// insert a new line after the given one
+// insert a new line after the given one or in the very beginning if !pLine
 wxFileConfig::LineList *wxFileConfig::LineListInsert(const wxString& str, 
                                                      LineList *pLine)
 {
-  if ( pLine == NULL )
+  if ( pLine == m_linesTail )
     return LineListAppend(str);
 
-  LineList *pNewLine = new LineList(str, pLine->Next());
-  pLine->SetNext(pNewLine);
+  LineList *pNewLine;
+  
+  if ( pLine == NULL ) {
+    pNewLine = new LineList(str, m_linesHead);
+    m_linesHead = pNewLine;
+  }
+  else {
+    pNewLine = new LineList(str, pLine->Next());
+    pLine->SetNext(pNewLine);
+  }
 
   return pNewLine;
 }
@@ -578,9 +586,8 @@ wxFileConfig::ConfigGroup::ConfigGroup(wxFileConfig::ConfigGroup *pParent,
   m_pParent = pParent;
   m_pLine   = NULL;
   m_bDirty  = FALSE;
-
-  m_nLastEntry = 
-  m_nLastGroup = NOT_FOUND;
+  m_pLastEntry = NULL;
+  m_pLastGroup = NULL;
 }
 
 // dtor deletes all children
@@ -618,11 +625,11 @@ wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetGroupLine()
       strFullName << "[" << GetFullName().c_str() + 1 << "]"; // +1: no '/'
       m_pLine = m_pConfig->LineListInsert(strFullName, 
                                           Parent()->GetLastGroupLine());
+      Parent()->SetLastGroup(this);
     }
     else {
-      // we're the root group, yet we were not in the local file => there were
-      // only comments and blank lines in config file or nothing at all
-      // we return NULL, so that LineListInsert() will do Append()
+      // we return NULL, so that LineListInsert() will insert us in the
+      // very beginning
     }
   }
 
@@ -635,14 +642,12 @@ wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetLastGroupLine()
 {
   // if we have any subgroups, our last line is the last line of the last
   // subgroup
-  if ( m_nLastGroup != NOT_FOUND ) {
-    return m_aSubgroups[m_nLastGroup]->GetLastGroupLine();
-  }
+  if ( m_pLastGroup != NULL )
+    return m_pLastGroup->GetLastGroupLine();
 
   // if we have any entries, our last line is the last entry
-  if ( m_nLastEntry != NOT_FOUND ) {
-    return m_aEntries[m_nLastEntry]->GetLine();
-  }
+  if ( m_pLastEntry != NULL )
+    return m_pLastEntry->GetLine();
 
   // nothing at all: last line is the first one
   return GetGroupLine();
@@ -652,10 +657,15 @@ wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetLastGroupLine()
 // (after which we can add a new entry)
 wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetLastEntryLine()
 {
-  if ( m_nLastEntry != NOT_FOUND )
-    return m_aEntries[m_nLastEntry]->GetLine();
-  else
-    return GetGroupLine();
+  if ( m_pLastEntry != NULL ) {
+    wxFileConfig::LineList *pLine = m_pLastEntry->GetLine();
+
+    wxASSERT( pLine != NULL );  // last entry must have !NULL associated line
+    return pLine;
+  }
+
+  // no entrues: insert after the group header
+  return GetGroupLine();
 }
 
 // ----------------------------------------------------------------------------
@@ -807,6 +817,7 @@ void wxFileConfig::ConfigEntry::SetLine(LineList *pLine)
   }
 
   m_pLine = pLine;
+  Group()->SetLastEntry(this);
 }
 
 // second parameter is FALSE if we read the value from file and prevents the
@@ -838,7 +849,9 @@ void wxFileConfig::ConfigEntry::SetValue(const wxString& strValue, bool bUser)
       // add a new line to the file
       wxASSERT( m_nLine == NOT_FOUND );   // consistency check
 
-      Group()->Config()->LineListInsert(strLine, Group()->GetLastEntryLine());
+      m_pLine = Group()->Config()->LineListInsert(strLine, 
+                                                  Group()->GetLastEntryLine());
+      Group()->SetLastEntry(this);
     }
 
     SetDirty();

@@ -229,8 +229,8 @@ protected:
     wxString      m_strName;      // group's name
     bool          m_bDirty;       // if FALSE => all subgroups are not dirty
     LineList     *m_pLine;        // pointer to our line in the linked list
-    int           m_nLastEntry,   // last here means "last added"
-                  m_nLastGroup;   // 
+    ConfigEntry  *m_pLastEntry;   // last entry of this group in the local file
+    ConfigGroup  *m_pLastGroup;   // last subgroup
 
   public:
     // ctor
@@ -264,6 +264,11 @@ protected:
     // will also recursively set parent's dirty flag
     void SetDirty();
     void SetLine(LineList *pLine);
+    
+    // the new entries in this subgroup will be inserted after the last subgroup
+    // or, if there is none, after the last entry
+    void SetLastEntry(ConfigEntry *pLastEntry) { m_pLastEntry = pLastEntry; }
+    void SetLastGroup(ConfigGroup *pLastGroup) { m_pLastGroup = pLastGroup; }
 
     wxString GetFullName() const;
 
