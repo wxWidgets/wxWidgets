@@ -217,14 +217,13 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     wxButton *btnNext = new wxButton(this, wxID_NEXT_TIP, _("&Next Tip"));
 
-    wxStaticText *text = new wxStaticText(this, wxID_ANY, _("Did you know..."), wxDefaultPosition, wxSize(wxDefaultSize.x,30) );
-#if defined(__WXMSW__) || defined(__WXPM__)
-    text->SetFont(wxFont(16, wxSWISS, wxNORMAL, wxBOLD));
-#else
-    text->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD));
-#endif
-//
-//    text->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+    wxStaticText *text = new wxStaticText(this, wxID_ANY, _("Did you know..."));
+
+    wxFont font = text->GetFont();
+    font.SetPointSize(int(1.6 * font.GetPointSize()));
+    font.SetWeight(wxFONTWEIGHT_BOLD);
+    
+    text->SetFont(font);
 
     m_text = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
                             wxDefaultPosition, wxSize(200, 160),
@@ -235,8 +234,6 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
                             wxSUNKEN_BORDER);
 #if defined(__WXMSW__)
     m_text->SetFont(wxFont(12, wxSWISS, wxNORMAL, wxNORMAL));
-#else
-    m_text->SetFont(wxFont(14, wxSWISS, wxNORMAL, wxNORMAL));
 #endif
 
 //#if defined(__WXPM__)
