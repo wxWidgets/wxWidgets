@@ -221,6 +221,16 @@ public:
     // toolbar construction
     // --------------------
 
+    // the most commonly used version of AddTool()
+    wxToolBarToolBase *AddTool(int id,
+                               const wxBitmap& bitmap,
+                               const wxString& shortHelpString = wxEmptyString,
+                               const wxString& longHelpString = wxEmptyString)
+    {
+        return AddTool(id, bitmap, wxNullBitmap, FALSE, NULL,
+                       shortHelpString, longHelpString);
+    }
+
     // If pushedBitmap is NULL, a reversed version of bitmap is created and
     // used as the pushed/toggled image. If toggle is TRUE, the button toggles
     // between the two states.
