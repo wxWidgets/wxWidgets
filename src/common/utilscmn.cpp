@@ -830,20 +830,6 @@ wxFont wxGetFontFromUser(wxWindow *parent, const wxFont& fontInit)
 }
 
 #endif // wxUSE_FONTDLG
-// ----------------------------------------------------------------------------
-// missing C RTL functions (FIXME shouldn't be here at all)
-// ----------------------------------------------------------------------------
-
-#if defined( __MWERKS__ ) && !defined(__MACH__)
-char *strdup(const char *s)
-{
-        return strcpy( (char*) malloc( strlen( s ) + 1 ) , s ) ;
-}
-int isascii( int c )
-{
-        return ( c >= 0 && c < 128 ) ;
-}
-#endif // __MWERKS__
 
 // ----------------------------------------------------------------------------
 // wxSafeYield and supporting functions
