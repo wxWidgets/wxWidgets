@@ -437,6 +437,10 @@ size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *psz, size_t n);
 wxChar * WXDLLEXPORT wxStrdup(const wxChar *psz);
 #endif
 
+#ifndef wxStricmp
+int      WXDLLEXPORT wxStricmp(const wxChar *psz1, const wxChar *psz2);
+#endif
+
 #ifndef wxStrtok
 wxChar * WXDLLEXPORT wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_ptr);
 #endif
