@@ -53,6 +53,14 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
 
         self.SetColLabelAlignment(wxALIGN_LEFT, wxALIGN_BOTTOM)
 
+        # overflow cells
+        self.SetCellValue( 9, 1, "This default cell will overflow into neighboring cells, but not if you turn overflow off.");
+        self.SetCellSize(11, 1, 3, 3);
+        self.SetCellAlignment(11, 1, wxALIGN_CENTRE, wxALIGN_CENTRE);
+        self.SetCellValue(11, 1, "This cell is set span 3 rows and 3 columns");
+
+
+
         # test all the events
         EVT_GRID_CELL_LEFT_CLICK(self, self.OnCellLeftClick)
         EVT_GRID_CELL_RIGHT_CLICK(self, self.OnCellRightClick)
