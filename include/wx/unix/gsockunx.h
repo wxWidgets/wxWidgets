@@ -44,6 +44,7 @@ public:
     GAddress *GetPeer();
     GSocketError SetServer();
     GSocket *WaitConnection();
+    int SetReusable();
     GSocketError Connect(GSocketStream stream);
     GSocketError SetNonOriented();
     int Read(char *buffer, int size);
@@ -55,6 +56,9 @@ public:
     void SetCallback(GSocketEventFlags flags,
         GSocketCallback callback, char *cdata);
     void UnsetCallback(GSocketEventFlags flags);
+    GSocketError GetSockOpt(int level, int optname, void *optval, int *optlen);
+    GSocketError SetSockOpt(int level, int optname,
+        const void *optval, int optlen);
     /* API compatibility functions */
     static void _GSocket_Detected_Read(GSocket *socket);
     static void _GSocket_Detected_Write(GSocket *socket);
@@ -172,6 +176,8 @@ inline GSocketError GSocket_SetServer(GSocket *socket)
 {   return socket->SetServer(); }
 inline GSocket *GSocket_WaitConnection(GSocket *socket)
 {   return socket->WaitConnection(); }
+inline int GSocket_SetReusable(GSocket *socket)
+{   return socket->SetReusable(); }
 inline GSocketError GSocket_Connect(GSocket *socket, GSocketStream stream)
 {   return socket->Connect(stream); }
 inline GSocketError GSocket_SetNonOriented(GSocket *socket)
@@ -191,6 +197,12 @@ inline void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
 {   socket->SetCallback(flags,fallback,cdata); }
 inline void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
 {   socket->UnsetCallback(flags); }
+inline GSocketError GSocket_GetSockOpt(GSocket *socket, int level, int optname,
+                        void *optval, int *optlen)
+{   return socket->GetSockOpt(level,optname,optval,optlen); }
+inline GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname,
+                        const void *optval, int optlen)
+{   return socket->SetSockOpt(level,optname,optval,optlen); }
 
 #endif /* def wxUSE_GSOCKET_CPLUSPLUS */
 
