@@ -293,7 +293,8 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
                     return (size_t)-1;
                 }
 #ifdef WC_UTF16
-                size_t pa = encode_utf16(res, buf);
+                // cast is ok because wchar_t == wxUuint16 if WC_UTF16
+                size_t pa = encode_utf16(res, (wxUint16 *)buf);
                 if (pa == (size_t)-1)
                   return (size_t)-1;
                 if (buf)
@@ -320,7 +321,8 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     {
         wxUint32 cc;
 #ifdef WC_UTF16
-        size_t pa = decode_utf16(psz, cc);
+        // cast is ok for WC_UTF16
+        size_t pa = decode_utf16((const wxUint16 *)psz, cc);
         psz += (pa == (size_t)-1) ? 1 : pa;
 #else
         cc=(*psz++) & 0x7fffffff;
@@ -495,7 +497,7 @@ size_t wxMBConvUTF16straight::WC2MB(char *buf, const wchar_t *psz, size_t n) con
         if (buf)
         {
             *(wxUint16*)buf = cc[0];
-            buf += sizeof(wxUint16); 
+            buf += sizeof(wxUint16);
             if (pa > 1)
             {
                 *(wxUint16*)buf = cc[1];
@@ -631,7 +633,8 @@ size_t wxMBConvUTF32straight::WC2MB(char *buf, const wchar_t *psz, size_t n) con
     {
         wxUint32 cc;
 
-        size_t pa=decode_utf16(psz, cc);
+        // cast is ok for WC_UTF16
+        size_t pa = decode_utf16((const wxUint16 *)psz, cc);
         if (pa == (size_t)-1)
             return pa;
 
@@ -643,7 +646,9 @@ size_t wxMBConvUTF32straight::WC2MB(char *buf, const wchar_t *psz, size_t n) con
         len += sizeof(wxUint32);
         psz += pa;
     }
-    if (buf && len<=n-sizeof(wxUint32))   *(wxUint32*)buf=0;
+
+    if (buf && len<=n-sizeof(wxUint32))
+        *(wxUint32*)buf=0;
 
     return len;
 }
@@ -677,7 +682,9 @@ size_t wxMBConvUTF32swap::MB2WC(wchar_t *buf, const char *psz, size_t n) const
         len += pa;
         psz += sizeof(wxUint32);
     }
-    if (buf && len<n)   *buf=0;
+
+    if (buf && len<n)
+        *buf=0;
 
     return len;
 }
@@ -692,7 +699,8 @@ size_t wxMBConvUTF32swap::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     {
         char cc[4];
 
-        size_t pa=decode_utf16(psz, *(wxUint32*)cc);
+        // cast is ok for WC_UTF16
+        size_t pa=decode_utf16((const wxUint16 *)psz, *(wxUint32*)cc);
         if (pa == (size_t)-1)
             return pa;
 
@@ -706,7 +714,9 @@ size_t wxMBConvUTF32swap::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         len += sizeof(wxUint32);
         psz += pa;
     }
-    if (buf && len<=n-sizeof(wxUint32))   *(wxUint32*)buf=0;
+
+    if (buf && len<=n-sizeof(wxUint32))
+        *(wxUint32*)buf=0;
 
     return len;
 }
@@ -726,7 +736,9 @@ size_t wxMBConvUTF32straight::MB2WC(wchar_t *buf, const char *psz, size_t n) con
         len++;
         psz += sizeof(wxUint32);
     }
-    if (buf && len<n)   *buf=0;
+
+    if (buf && len<n)
+        *buf=0;
 
     return len;
 }
@@ -749,7 +761,8 @@ size_t wxMBConvUTF32straight::WC2MB(char *buf, const wchar_t *psz, size_t n) con
         psz++;
     }
 
-    if (buf && len<=n-sizeof(wxUint32))   *(wxUint32*)buf=0;
+    if (buf && len<=n-sizeof(wxUint32))
+        *(wxUint32*)buf=0;
 
     return len;
 }
@@ -773,7 +786,9 @@ size_t wxMBConvUTF32swap::MB2WC(wchar_t *buf, const char *psz, size_t n) const
         len++;
         psz += sizeof(wxUint32);
     }
-    if (buf && len<n)   *buf=0;
+
+    if (buf && len<n)
+        *buf=0;
 
     return len;
 }
@@ -796,7 +811,9 @@ size_t wxMBConvUTF32swap::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         len += sizeof(wxUint32);
         psz++;
     }
-    if (buf && len<=n-sizeof(wxUint32))   *(wxUint32*)buf=0;
+
+    if (buf && len<=n-sizeof(wxUint32))
+        *(wxUint32*)buf=0;
 
     return len;
 }
