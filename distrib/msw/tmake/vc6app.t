@@ -36,62 +36,12 @@
 	    }
 	}
 
-	AddIncludePath($WXDIR . "\\include");
+	AddIncludePath("$WXDIR\\include");
     }
-
-    if ( Config("unicode") ) {
-	$UNICODE="Unicode";
-	$UNICODE_SUFFIX="u";
-	$UNICODE_FLAGS="/D _UNICODE /D UNICODE ";
-
-	$project{"TARGET"} .= "Unicode";
-	$project{"MAKEFILE"} .= "Unicode";
-    }
-    else {
-	$UNICODE="";
-	$UNICODE_SUFFIX="";
-	$UNICODE_FLAGS=" ";
-    }
-
-    if ( Config("wx") ) {
-	if ( Config("wxbase") ) {
-	    $KIND="Base";
-	    $DLL_OR_LIB="wxbase";
-       	}
-	elsif ( Config("wxuniv") ) {
-	    $KIND="Univ";
-	    $DLL_OR_LIB="wxuniv";
-	}
-	else {
-	    $DLL_OR_LIB="wxmsw"
-	}
-
-	if ( Config("dll") ) {
-	    $DLL="Dll";
-
-	    $DLL_OR_LIB .= "232";
-	    $DLL_FLAGS="/D WXUSINGDLL ";
-	    $EXTRA_LIBS="";
-
-	    $project{"TARGET"} .= "Dll";
-	    $project{"MAKEFILE"} .= "Dll";
-	}
-	else {
-	    $DLL="";
-	    $DLL_FLAGS=" ";
-	    #! actually this should depend on the contents of setup.h!
-	    $EXTRA_LIBS="zlib regex";
-	    if ( !Config("wxbase") ) {
-		$EXTRA_LIBS.=" png jpeg tiff";
-	    }
-	}
-    }
-
-    $DEBUG_SUFFIX="d";
 
     #! let's be smart: if no extension is given, add .lib (this allows for
-    #! LIBS=libname in project files which map either on -l libname.lib under
-    #! Windows or on -llibname under Unix).
+    #! LIBS=libname in project files which map either to -l libname.lib under
+    #! Windows or to -llibname under Unix).
     @libs = split(/\s+/, Project('LIBS'));
     foreach $lib (@libs) {
 	if ( $lib !~ "\.lib\$" ) { $lib .= ".lib"; }
@@ -106,50 +56,92 @@
 			'oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ';
 	if ( Config("wx") ) {
 	    $vc_base_libs .= "comctl32.lib rpcrt4.lib wsock32.lib ";
-
-	    $vc_link_release = "$WXDIR\\lib\\$DLL_OR_LIB$UNICODE_SUFFIX.lib ";
-	    $vc_link_debug = "$WXDIR\\lib\\$DLL_OR_LIB$UNICODE_SUFFIX$DEBUG_SUFFIX.lib ";
-	    foreach ( split(/ /, $EXTRA_LIBS) ) {
-		$vc_link_release .= "$WXDIR\\lib\\$_.lib ";
-		$vc_link_debug .= "$WXDIR\\lib\\$_" . "d.lib ";
-	    }
 	}
 	$vc_link_release .= '/nologo /subsystem:windows /machine:I386';
 	$vc_link_debug   .= '/nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept';
 
-	$vc_cpp_def_common = '/D "WIN32" /D "_WINDOWS" ' . $UNICODE_FLAGS . $DLL_FLAGS;
-	$vc_cpp_def_release = '/D "NDEBUG" ' . $vc_cpp_def_common;
-	$vc_cpp_def_debug   = '/D "_DEBUG" ' . $vc_cpp_def_common;
+	$vc_cpp_def_common = '/D "WIN32" /D "_WINDOWS" /D WINVER=0x400 ';
     } else {
 	$project{"VC_PROJ_TYPE"} = 'Win32 (x86) Console Application';
 	$project{"VC_PROJ_CODE"} = '0x0103';
 	$vc_base_libs = 'kernel32.lib user32.lib advapi32.lib ';
 	if ( Config("wx") ) {
 	    $vc_base_libs .= 'wsock32.lib ';
-	    $vc_link_release = "$WXDIR\\lib\\$DLL_OR_LIB$UNICODE_SUFFIX.lib ";
-	    $vc_link_debug = "$WXDIR\\lib\\$DLL_OR_LIB$UNICODE_SUFFIX$DEBUG_SUFFIX.lib ";
-	    foreach ( split(/ /, $EXTRA_LIBS) ) {
-		$vc_link_release .= "$WXDIR\\lib\\$_.lib ";
-		$vc_link_debug .= "$WXDIR\\lib\\$_" . "d.lib ";
-	    }
 	}
 	$vc_link_release .= '/nologo /subsystem:console /machine:I386';
 	$vc_link_debug   .= '/nologo /subsystem:console /debug /machine:I386 /pdbtype:sept';
 
-	$vc_cpp_def_common = '/D "WIN32" /D "_CONSOLE" ' . $UNICODE_FLAGS . $DLL_FLAGS;
-	$vc_cpp_def_release = '/D "NDEBUG" ' . $vc_cpp_def_common; 
-	$vc_cpp_def_debug   = '/D "_DEBUG" ' . $vc_cpp_def_common;
+	$vc_cpp_def_common = '/D "WIN32" /D "_CONSOLE" ';
     }
+
+    $vc_cpp_def_release = '/D "NDEBUG" ' . $vc_cpp_def_common; 
+    $vc_cpp_def_debug   = '/D "_DEBUG" ' . $vc_cpp_def_common;
 
     foreach ( split(/ /, Project('LIBPATH')) ) {
 	$vc_link_release .= " /libpath:$_\\Release";
 	$vc_link_debug .= " /libpath:$_\\Debug";
     }
 
-    #! define wxWin debug flags in debug build
     if ( Config("wx") ) {
-	$vc_cpp_def_debug .= '/MDd /D "__WXDEBUG__" /D "WXDEBUG=1" ';
-	$vc_cpp_def_release .= '/MD '
+	if ( Config("wxbase") ) {
+	    $KIND="Base";
+	    $TOOLKIT="base";
+	}
+	elsif ( Config("wxuniv") ) {
+	    $KIND="Univ";
+	    $TOOLKIT="univ";
+	}
+	else {
+	    $TOOLKIT="msw"
+	}
+
+	$WX_BASENAME = "$WXDIR\\lib\\wx$TOOLKIT";
+	$UNICODE_SUFFIX = "u";
+	$DEBUG_SUFFIX = "d";
+
+	#! compiler options: for the given configuration they are just obrained
+	#! by concatenating together all relevant values from the list below
+	$project{"WX_CPP_DEBUG"} = '/MDd /D "__WXDEBUG__" /D "WXDEBUG=1" ';
+	$project{"WX_CPP_RELEASE"} = '/MD ';
+	$project{"WX_CPP_UNICODE"} = '/D _UNICODE /D UNICODE ';
+	$project{"WX_CPP_DLL"} = '/D WXUSINGDLL ';
+
+	#! ... plus the config-dependent path to setup.h
+	$project{"WX_SETUPH_DEBUG"} = "/I$WXDIR\\lib\\$TOOLKIT$DEBUG_SUFFIX ";
+	$project{"WX_SETUPH_RELEASE"} = "/I$WXDIR\\lib\\$TOOLKIT ";
+	$project{"WX_SETUPH_DEBUG_DLL"} = "/I$WXDIR\\lib\\$TOOLKIT$DLL$DEBUG_SUFFIX ";
+	$project{"WX_SETUPH_RELEASE_DLL"} = "/I$WXDIR\\lib\\$TOOLKIT$DLL ";
+	$project{"WX_SETUPH_DEBUG_UNICODE"} = "/I$WXDIR\\lib\\$TOOLKIT$UNICODE_SUFFIX$DEBUG_SUFFIX ";
+	$project{"WX_SETUPH_RELEASE_UNICODE"} = "/I$WXDIR\\lib\\$TOOLKIT$UNICODE_SUFFIX ";
+	$project{"WX_SETUPH_DEBUG_UNICODE_DLL"} = "/I$WXDIR\\lib\\$TOOLKIT$DLL$UNICODE_SUFFIX$DEBUG_SUFFIX ";
+	$project{"WX_SETUPH_RELEASE_UNICODE_DLL"} = "/I$WXDIR\\lib\\$TOOLKIT$DLL$UNICODE_SUFFIX ";
+
+	#! the libraries we must link with when linking against static wxWin
+	#! library (DLL already includes all needed libs)
+	#!
+	#! FIXME: actually this should depend on the contents of setup.h!
+	$EXTRA_LIBS="zlib regex";
+	if ( !Config("wxbase") ) {
+	    $EXTRA_LIBS.=" png jpeg tiff";
+	}
+	foreach ( split(/ /, $EXTRA_LIBS) ) {
+	    $DEBUG_EXTRA_LIBS .= "$WXDIR\\lib\\$_.lib ";
+	    $RELEASE_EXTRA_LIBS .= "$WXDIR\\lib\\$_" . "d.lib ";
+	}
+
+	#! the wxWin lib name itself is composed from the basename with various
+	#! suffixes: 'u' for Unicode, 'd' for debug and we also need the version
+	#! for the DLL
+	$DLL_VERSION = "232";
+
+	$project{"WX_LINK_DEBUG"} = $DEBUG_EXTRA_LIBS . "$WX_BASENAME$DEBUG_SUFFIX.lib";
+	$project{"WX_LINK_RELEASE"} = $RELEASE_EXTRA_LIBS . "$WX_BASENAME.lib";
+	$project{"WX_LINK_DEBUG_DLL"} = "$WX_BASENAME$DLL_VERSION$DEBUG_SUFFIX.lib";
+	$project{"WX_LINK_RELEASE_DLL"} = "$WX_BASENAME$DLL_VERSION.lib";
+	$project{"WX_LINK_DEBUG_UNICODE"} = $DEBUG_EXTRA_LIBS . "$WX_BASENAME$UNICODE_SUFFIX$DEBUG_SUFFIX.lib";
+	$project{"WX_LINK_RELEASE_UNICODE"} = $RELEASE_EXTRA_LIBS . "$WX_BASENAME$UNICODE_SUFFIX.lib";
+	$project{"WX_LINK_DEBUG_UNICODE_DLL"} = "$WX_BASENAME$DLL_VERSION$UNICODE_SUFFIX$DEBUG_SUFFIX.lib";
+	$project{"WX_LINK_RELEASE_UNICODE_DLL"} = "$WX_BASENAME$DLL_VERSION$UNICODE_SUFFIX.lib";
     }
 
     $project{"VC_BASE_LINK_RELEASE"} = $vc_base_libs . $vc_link_release;
@@ -175,21 +167,12 @@
 
 	if ( Config("wxbase") ) {
 	    $vc_def .= '/D wxUSE_GUI=0 ';
-	    $vc_inc_debug .= "/I$WXDIR\\lib\\based ";
-	    $vc_inc_release .= "/I$WXDIR\\lib\\base ";
 	}
 	else {
 	    $vc_def .= '/D wxUSE_GUI=1 ';
 
 	    if ( Config("wxuniv") ) {
 		$vc_def .= '/D "__WXUNIVERSAL__" ';
-
-		$vc_inc_debug .= "/I$WXDIR\\lib\\univd ";
-		$vc_inc_release .= "/I$WXDIR\\lib\\univ ";
-	    }
-	    else {
-		$vc_inc_debug .= "/I$WXDIR\\lib\\mswd ";
-		$vc_inc_release .= "/I$WXDIR\\lib\\msw ";
 	    }
 	}
     }
@@ -254,8 +237,14 @@ CFG=#$ Substitute('$$TARGET - Win32 Debug');
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE #$ Substitute('"$$TARGET - Win32 Release" (based on "$$VC_PROJ_TYPE")');
 !MESSAGE #$ Substitute('"$$TARGET - Win32 Debug" (based on "$$VC_PROJ_TYPE")');
+!MESSAGE #$ Substitute('"$$TARGET - Win32 Release" (based on "$$VC_PROJ_TYPE")');
+!MESSAGE #$ Substitute('"$$TARGET - Win32 Debug DLL" (based on "$$VC_PROJ_TYPE")');
+!MESSAGE #$ Substitute('"$$TARGET - Win32 Release DLL" (based on "$$VC_PROJ_TYPE")');
+!MESSAGE #$ Substitute('"$$TARGET - Win32 Debug Unicode" (based on "$$VC_PROJ_TYPE")');
+!MESSAGE #$ Substitute('"$$TARGET - Win32 Release Unicode" (based on "$$VC_PROJ_TYPE")');
+!MESSAGE #$ Substitute('"$$TARGET - Win32 Debug Unicode DLL" (based on "$$VC_PROJ_TYPE")');
+!MESSAGE #$ Substitute('"$$TARGET - Win32 Release Unicode DLL" (based on "$$VC_PROJ_TYPE")');
 !MESSAGE 
 
 # Begin Project
@@ -265,49 +254,21 @@ CPP=cl.exe
 #$ Config("windows") && ($text='MTL=midl.exe');
 RSC=rc.exe
 
-!IF  "$(CFG)" == #$ Substitute('"$$TARGET - Win32 Release"');
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir #$ $text = "\"${KIND}Release$UNICODE$DLL\""
-# PROP BASE Intermediate_Dir #$ $text = "\"${KIND}Release$UNICODE$DLL\""
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir #$ $text = "\"${KIND}Release$UNICODE$DLL\""
-# PROP Intermediate_Dir #$ $text = "${KIND}Release$UNICODE$DLL\""
-#$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
-# PROP Target_Dir ""
-# ADD BASE CPP #$ Expand("VC_BASE_CPP_RELEASE");
-# ADD CPP #$ Expand("VC_CPP_RELEASE");
-#$ Config("windows") || DisableOutput();
-# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
-# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
-#$ Config("windows") || EnableOutput();
-# ADD BASE RSC /l 0x409 /d "NDEBUG" #$ Expand("VC_CPP_INCLUDE");
-# ADD RSC /l 0x409 /d "NDEBUG" #$ Expand("VC_CPP_INCLUDE");
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 #$ Expand("VC_BASE_LINK_RELEASE");
-# ADD LINK32 #$ Expand("VC_LINK_RELEASE");
-
-!ELSEIF  "$(CFG)" == #$ Substitute('"$$TARGET - Win32 Debug"');
+!IF  "$(CFG)" == #$ Substitute('"$$TARGET - Win32 Debug"');
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir #$ $text = "\"${KIND}Debug$UNICODE$DLL\""
-# PROP BASE Intermediate_Dir #$ $text = "\"${KIND}Debug$UNICODE$DLL\""
+# PROP BASE Output_Dir #$ $text = "\"${KIND}Debug\""
+# PROP BASE Intermediate_Dir #$ $text = "\"${KIND}Debug\""
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir #$ $text = "\"${KIND}Debug$UNICODE$DLL\""
-# PROP Intermediate_Dir #$ $text = "\"${KIND}Debug$UNICODE$DLL\""
+# PROP Output_Dir #$ $text = "\"${KIND}Debug\""
+# PROP Intermediate_Dir #$ $text = "\"${KIND}Debug\""
 #$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
 # PROP Target_Dir ""
 # ADD BASE CPP #$ Expand("VC_BASE_CPP_DEBUG");
-# ADD CPP #$ Expand("VC_CPP_DEBUG");
+# ADD CPP #$ $text = "'$project{'VC_CPP_DEBUG'} $project{'WX_CPP_DEBUG'} $project{'WX_SETUPH_DEBUG'}'";
 #$ Config("windows") || DisableOutput();
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
@@ -319,14 +280,216 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 #$ Expand("VC_BASE_LINK_DEBUG");
-# ADD LINK32 #$ Expand("VC_LINK_DEBUG");
+# ADD LINK32 #$ $text = "$project{'VC_LINK_DEBUG'} $project{'WX_LINK_DEBUG'}";
+
+!ELSEIF  "$(CFG)" == #$ Substitute('"$$TARGET - Win32 Release"');
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir #$ $text = "\"${KIND}Release\""
+# PROP BASE Intermediate_Dir #$ $text = "\"${KIND}Release\""
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir #$ $text = "\"${KIND}Release\""
+# PROP Intermediate_Dir #$ $text = "\"${KIND}Release\""
+#$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
+# PROP Target_Dir ""
+# ADD BASE CPP #$ Expand("VC_BASE_CPP_RELEASE");
+# ADD CPP #$ $text = "$project{'VC_CPP_RELEASE'} $project{'WX_CPP_RELEASE'} $project{'WX_SETUPH_RELEASE'}";
+#$ Config("windows") || DisableOutput();
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+#$ Config("windows") || EnableOutput();
+# ADD BASE RSC /l 0x409 /d "NDEBUG" #$ Expand("VC_CPP_INCLUDE");
+# ADD RSC /l 0x409 /d "NDEBUG" #$ Expand("VC_CPP_INCLUDE");
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 #$ Expand("VC_BASE_LINK_RELEASE");
+# ADD LINK32 #$ $text = "$project{'VC_LINK_RELEASE'} $project{'WX_LINK_RELEASE'}";
+
+!ELSEIF  "$(CFG)" == #$ Substitute('"$$TARGET - Win32 Debug DLL"');
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir #$ $text = "\"${KIND}DebugDll\""
+# PROP BASE Intermediate_Dir #$ $text = "\"${KIND}DebugDll\""
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir #$ $text = "\"${KIND}DebugDll\""
+# PROP Intermediate_Dir #$ $text = "\"${KIND}DebugDll\""
+#$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
+# PROP Target_Dir ""
+# ADD BASE CPP #$ Expand("VC_BASE_CPP_DEBUG");
+# ADD CPP #$ $text = "$project{'VC_CPP_DEBUG'} $project{'WX_CPP_DEBUG'} $project{'WX_CPP_DLL'} $project{'WX_SETUPH_DEBUG_DLL'}";
+#$ Config("windows") || DisableOutput();
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+#$ Config("windows") || EnableOutput();
+# ADD BASE RSC /l 0x409 /d "_DEBUG" #$ Expand("VC_CPP_INCLUDE");
+# ADD RSC /l 0x409 /d "_DEBUG" #$ Expand("VC_CPP_INCLUDE");
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 #$ Expand("VC_BASE_LINK_DEBUG");
+# ADD LINK32 #$ $text = "$project{'VC_LINK_DEBUG'} $project{'WX_LINK_DEBUG_DLL'}";
+
+!ELSEIF  "$(CFG)" == #$ Substitute('"$$TARGET - Win32 Release DLL"');
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir #$ $text = "\"${KIND}ReleaseDll\""
+# PROP BASE Intermediate_Dir #$ $text = "\"${KIND}ReleaseDll\""
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir #$ $text = "\"${KIND}ReleaseDll\""
+# PROP Intermediate_Dir #$ $text = "\"${KIND}ReleaseDll\""
+#$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
+# PROP Target_Dir ""
+# ADD BASE CPP #$ Expand("VC_BASE_CPP_RELEASE");
+# ADD CPP #$ $text = "$project{'VC_CPP_RELEASE'} $project{'WX_CPP_RELEASE'} $project{'WX_CPP_DLL'} $project{'WX_SETUPH_RELEASE_DLL'}";
+#$ Config("windows") || DisableOutput();
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+#$ Config("windows") || EnableOutput();
+# ADD BASE RSC /l 0x409 /d "NDEBUG" #$ Expand("VC_CPP_INCLUDE");
+# ADD RSC /l 0x409 /d "NDEBUG" #$ Expand("VC_CPP_INCLUDE");
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 #$ Expand("VC_BASE_LINK_RELEASE");
+# ADD LINK32 #$ $text = "$project{'VC_LINK_RELEASE'} $project{'WX_LINK_RELEASE_DLL'}";
+
+!ELSEIF  "$(CFG)" == #$ Substitute('"$$TARGET - Win32 Debug Unicode"');
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir #$ $text = "\"${KIND}DebugUnicode\""
+# PROP BASE Intermediate_Dir #$ $text = "\"${KIND}DebugUnicode\""
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir #$ $text = "\"${KIND}DebugUnicode\""
+# PROP Intermediate_Dir #$ $text = "\"${KIND}DebugUnicode\""
+#$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
+# PROP Target_Dir ""
+# ADD BASE CPP #$ Expand("VC_BASE_CPP_DEBUG");
+# ADD CPP #$ $text = "$project{'VC_CPP_DEBUG'} $project{'WX_CPP_DEBUG'} $project{'WX_CPP_UNICODE'} $project{'WX_SETUPH_DEBUG_UNICODE'}";
+#$ Config("windows") || DisableOutput();
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+#$ Config("windows") || EnableOutput();
+# ADD BASE RSC /l 0x409 /d "_DEBUG" #$ Expand("VC_CPP_INCLUDE");
+# ADD RSC /l 0x409 /d "_DEBUG" #$ Expand("VC_CPP_INCLUDE");
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 #$ Expand("VC_BASE_LINK_DEBUG");
+# ADD LINK32 #$ $text = "$project{'VC_LINK_DEBUG'} $project{'WX_LINK_DEBUG_UNICODE'}";
+
+!ELSEIF  "$(CFG)" == #$ Substitute('"$$TARGET - Win32 Release Unicode"');
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir #$ $text = "\"${KIND}ReleaseUnicode\""
+# PROP BASE Intermediate_Dir #$ $text = "\"${KIND}ReleaseUnicode\""
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir #$ $text = "\"${KIND}ReleaseUnicode\""
+# PROP Intermediate_Dir #$ $text = "\"${KIND}ReleaseUnicode\""
+#$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
+# PROP Target_Dir ""
+# ADD BASE CPP #$ Expand("VC_BASE_CPP_RELEASE");
+# ADD CPP #$ $text = "$project{'VC_CPP_RELEASE'} $project{'WX_CPP_RELEASE'} $project{'WX_CPP_UNICODE'} $project{'WX_SETUPH_RELEASE_UNICODE'}";
+#$ Config("windows") || DisableOutput();
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+#$ Config("windows") || EnableOutput();
+# ADD BASE RSC /l 0x409 /d "NDEBUG" #$ Expand("VC_CPP_INCLUDE");
+# ADD RSC /l 0x409 /d "NDEBUG" #$ Expand("VC_CPP_INCLUDE");
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 #$ Expand("VC_BASE_LINK_RELEASE");
+# ADD LINK32 #$ $text = "$project{'VC_LINK_RELEASE'} $project{'WX_LINK_RELEASE_UNICODE'}";
+
+!ELSEIF  "$(CFG)" == #$ Substitute('"$$TARGET - Win32 Debug Unicode DLL"');
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir #$ $text = "\"${KIND}DebugUnicodeDll\""
+# PROP BASE Intermediate_Dir #$ $text = "\"${KIND}DebugUnicodeDll\""
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir #$ $text = "\"${KIND}DebugUnicodeDll\""
+# PROP Intermediate_Dir #$ $text = "\"${KIND}DebugUnicodeDll\""
+#$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
+# PROP Target_Dir ""
+# ADD BASE CPP #$ Expand("VC_BASE_CPP_DEBUG");
+# ADD CPP #$ $text = "$project{'VC_CPP_DEBUG'} $project{'WX_CPP_DEBUG'} $project{'WX_CPP_DLL'} $project{'WX_CPP_UNICODE'} $project{'WX_SETUPH_DEBUG_UNICODE_DLL'}";
+#$ Config("windows") || DisableOutput();
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+#$ Config("windows") || EnableOutput();
+# ADD BASE RSC /l 0x409 /d "_DEBUG" #$ Expand("VC_CPP_INCLUDE");
+# ADD RSC /l 0x409 /d "_DEBUG" #$ Expand("VC_CPP_INCLUDE");
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 #$ Expand("VC_BASE_LINK_DEBUG");
+# ADD LINK32 #$ $text = "$project{'VC_LINK_DEBUG'} $project{'WX_LINK_DEBUG_UNICODE_DLL'}";
+
+!ELSEIF  "$(CFG)" == #$ Substitute('"$$TARGET - Win32 Release Unicode DLL"');
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir #$ $text = "\"${KIND}ReleaseUnicodeDll\""
+# PROP BASE Intermediate_Dir #$ $text = "\"${KIND}ReleaseUnicodeDll\""
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir #$ $text = "\"${KIND}ReleaseUnicodeDll\""
+# PROP Intermediate_Dir #$ $text = "\"${KIND}ReleaseUnicodeDll\""
+#$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
+# PROP Target_Dir ""
+# ADD BASE CPP #$ Expand("VC_BASE_CPP_RELEASE");
+# ADD CPP #$ $text = "$project{'VC_CPP_RELEASE'} $project{'WX_CPP_RELEASE'} $project{'WX_CPP_DLL'} $project{'WX_CPP_UNICODE'} $project{'WX_SETUPH_RELEASE_UNICODE_DLL'}";
+#$ Config("windows") || DisableOutput();
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+#$ Config("windows") || EnableOutput();
+# ADD BASE RSC /l 0x409 /d "NDEBUG" #$ Expand("VC_CPP_INCLUDE");
+# ADD RSC /l 0x409 /d "NDEBUG" #$ Expand("VC_CPP_INCLUDE");
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 #$ Expand("VC_BASE_LINK_RELEASE");
+# ADD LINK32 #$ $text = "$project{'VC_LINK_RELEASE'} $project{'WX_LINK_RELEASE_UNICODE_DLL'}";
 
 !ENDIF 
 
 # Begin Target
 
-# Name #$Substitute('"$$TARGET - Win32 Release"');
-# Name #$Substitute('"$$TARGET - Win32 Debug"');
+# Name #$ Substitute('"$$TARGET - Win32 Debug"');
+# Name #$ Substitute('"$$TARGET - Win32 Release"');
+# Name #$ Substitute('"$$TARGET - Win32 Debug DLL"');
+# Name #$ Substitute('"$$TARGET - Win32 Release DLL"');
+# Name #$ Substitute('"$$TARGET - Win32 Debug Unicode"');
+# Name #$ Substitute('"$$TARGET - Win32 Release Unicode"');
+# Name #$ Substitute('"$$TARGET - Win32 Debug Unicode DLL"');
+# Name #$ Substitute('"$$TARGET - Win32 Release Unicode DLL"');
 #${
     foreach $n ( sort keys %file_names ) {
 	$f  = $file_names{$n};
