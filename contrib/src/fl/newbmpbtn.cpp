@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        newbmpbtn.cpp
+// Purpose:     wxNewBitmapButton enhanced bitmap button class.
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     ??/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -142,7 +142,7 @@ static void gray_out_pixmap( int* src, int* dest, int width, int height )
     } while (1);
 }
 
-// alg. for making the image look "grayed" (e.g. disabled button)
+// algorithm for making the image look "grayed" (e.g. disabled button)
 // NOTE:: used GetPixel(), which is Windows-Only!
 
 void gray_out_image_on_dc( wxDC& dc, int width, int height )
@@ -198,7 +198,7 @@ void gray_out_image_on_dc( wxDC& dc, int width, int height )
 
 ///////////////////////////////
 
-/***** Impelementation for class wxNewBitmapButton *****/
+/***** Implementation for class wxNewBitmapButton *****/
 
 IMPLEMENT_DYNAMIC_CLASS(wxNewBitmapButton, wxPanel)
 
@@ -382,7 +382,7 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 {
     if ( destBmp != 0 ) return;
 
-    // render lables on-demand
+    // render labels on-demand
 
     wxMemoryDC srcDc;
     srcDc.SelectObject( *srcBmp );
@@ -756,8 +756,7 @@ void wxNewBitmapButton::OnSize( wxSizeEvent& event )
 }
 
 void wxNewBitmapButton::Reshape( )
-{
-    
+{   
     bool wasCreated = mIsCreated;
     mIsCreated = TRUE;
 

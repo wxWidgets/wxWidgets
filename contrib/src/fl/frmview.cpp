@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        frmview.cpp
+// Purpose:     wxFrameView implementation. NOT USED IN FL.
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     02/01/99
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
  
 #ifdef __GNUG__

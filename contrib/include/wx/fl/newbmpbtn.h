@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        newbmpbtn.h
+// Purpose:     wxNewBitmapButton header.
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     ??/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __NEWBMPBTN_G__
@@ -19,7 +19,7 @@
 #include "wx/button.h"
 #include "wx/string.h"
 
-// button lable-text alignment types
+// button label-text alignment types
 
 #define NB_ALIGN_TEXT_RIGHT  0
 #define NB_ALIGN_TEXT_BOTTOM 1
@@ -31,89 +31,96 @@
 class wxNewBitmapButton;
 class wxBorderLessBitmapButton;
 
-// alternative class for wxBmpButton
+/*
+This is an alternative class to wxBitmapButton. It is used
+in the implementation of dynamic toolbars.
+*/
 
 class wxNewBitmapButton: public wxPanel
 {
-	DECLARE_DYNAMIC_CLASS(wxNewBitmapButton)
+    DECLARE_DYNAMIC_CLASS(wxNewBitmapButton)
 
 protected:
 
-	friend class wxNewBitmapButtonSerializer;
+    friend class wxNewBitmapButtonSerializer;
 
-	int      mTextToLabelGap;
-	int      mMarginX;
-	int      mMarginY;
-	int      mTextAlignment;
-	bool     mIsSticky;
-	bool     mIsFlat;
+    int      mTextToLabelGap;
+    int      mMarginX;
+    int      mMarginY;
+    int      mTextAlignment;
+    bool     mIsSticky;
+    bool     mIsFlat;
 
-	wxString mLabelText;
-	wxString mImageFileName;
-	wxBitmapType mImageFileType;
+    wxString mLabelText;
+    wxString mImageFileName;
+    wxBitmapType mImageFileType;
 
-	wxBitmap mDepressedBmp; // source image for rendering
-	                        // labels for particular state
+    wxBitmap mDepressedBmp; // source image for rendering
+                            // labels for particular state
 
-	wxBitmap mFocusedBmp;   // may not be always present -
-							// only if mHasFocusedBmp is TRUE
+    wxBitmap mFocusedBmp;   // may not be always present -
+                            // only if mHasFocusedBmp is TRUE
 
-	wxBitmap* mpDepressedImg;
-	wxBitmap* mpPressedImg;
-	wxBitmap* mpDisabledImg;
-	wxBitmap* mpFocusedImg;
+    wxBitmap* mpDepressedImg;
+    wxBitmap* mpPressedImg;
+    wxBitmap* mpDisabledImg;
+    wxBitmap* mpFocusedImg;
 
-	// button state variables;
-	bool      mDragStarted;
-	bool      mIsPressed; 
-	bool      mIsInFocus;
-	bool      mPrevPressedState;
-	bool	  mPrevInFocusState;
+    // button state variables;
+    bool      mDragStarted;
+    bool      mIsPressed;
+    bool      mIsInFocus;
+    bool      mPrevPressedState;
+    bool      mPrevInFocusState;
 
-	bool      mHasFocusedBmp;
+    bool      mHasFocusedBmp;
 
-	// type of event which is fired upon depression of this button
-	int       mFiredEventType;
+    // type of event which is fired upon depression of this button
+    int       mFiredEventType;
 
-	// pens for drawing decorations (borders)
-	wxPen     mBlackPen;
-	wxPen     mDarkPen;
-	wxPen     mGrayPen;
-	wxPen     mLightPen;
+    // pens for drawing decorations (borders)
+    wxPen     mBlackPen;
+    wxPen     mDarkPen;
+    wxPen     mGrayPen;
+    wxPen     mLightPen;
 
-	bool      mIsCreated;
-	int       mSizeIsSet;
+    bool      mIsCreated;
+    int       mSizeIsSet;
 
 protected:
-	void DestroyLabels();
 
-	// returns the label which match the current button state
-	virtual wxBitmap* GetStateLabel();
+        // Internal function for destroying labels.
+    void DestroyLabels();
 
-	virtual void DrawShade( int outerLevel,
-							wxDC&  dc,
-		                    wxPen& upperLeftSidePen,
-						    wxPen& lowerRightSidePen );
+        // Returns the label that matches the current button state.
+    virtual wxBitmap* GetStateLabel();
 
-	bool IsInWindow( int x,int y );
+        // Draws shading on the button.
+    virtual void DrawShade( int outerLevel,
+                            wxDC&  dc,
+                            wxPen& upperLeftSidePen,
+                            wxPen& lowerRightSidePen );
+
+        // Returns TRUE if the given point is in the window.
+    bool IsInWindow( int x, int y );
 
 public:
 
-	wxNewBitmapButton( const wxBitmap& labelBitmap = wxNullBitmap, 
-					   const wxString& labelText   = "",
-		               int   alignText             = NB_ALIGN_TEXT_BOTTOM,
-					   bool  isFlat                = TRUE,
-					   // this is the default type of fired events
-					   int firedEventType = wxEVT_COMMAND_MENU_SELECTED,
-					   int marginX        = 2,
-	                   int marginY        = 2,
-					   int textToLabelGap = 2,
-					   bool isSticky      = FALSE
-		             );
+        // Constructor.
+    wxNewBitmapButton( const wxBitmap& labelBitmap = wxNullBitmap,
+                       const wxString& labelText   = "",
+                       int   alignText             = NB_ALIGN_TEXT_BOTTOM,
+                       bool  isFlat                = TRUE,
+                       // this is the default type of fired events
+                       int firedEventType = wxEVT_COMMAND_MENU_SELECTED,
+                       int marginX        = 2,
+                       int marginY        = 2,
+                       int textToLabelGap = 2,
+                       bool isSticky      = FALSE
+                     );
 
-	// use this constructor if buttons have to be persistant 
-	 
-	wxNewBitmapButton( const wxString& bitmapFileName,
+        // Use this constructor if buttons have to be persistant
+    wxNewBitmapButton( const wxString& bitmapFileName,
                            const wxBitmapType     bitmapFileType = wxBITMAP_TYPE_BMP,
                            const wxString& labelText      = "",
                            int alignText                  = NB_ALIGN_TEXT_BOTTOM,
@@ -126,39 +133,61 @@ public:
                            bool isSticky      = FALSE
                              );
 
-	~wxNewBitmapButton();
+        // Destructor.
+    ~wxNewBitmapButton();
 
-	// should be called after Create();
-	virtual void Reshape();
+        // This function should be called after Create. It renders the labels, having
+        // reloaded the button image if necessary.
+    virtual void Reshape();
 
-	// overridables
-	virtual void SetLabel(const wxBitmap& labelBitmap, const wxString& labelText = "" );
-	
-	virtual void SetAlignments( int alignText = NB_ALIGN_TEXT_BOTTOM,
-								int marginX        = 2,
-								int marginY        = 2,
-								int textToLabelGap = 2);
+        // Sets the label and optionally label text.
+    virtual void SetLabel(const wxBitmap& labelBitmap, const wxString& labelText = "" );
 
-	virtual void DrawDecorations( wxDC& dc );
-	virtual void DrawLabel( wxDC& dc );
+        // Sets the text alignment and margins.
+    virtual void SetAlignments( int alignText = NB_ALIGN_TEXT_BOTTOM,
+                                int marginX        = 2,
+                                int marginY        = 2,
+                                int textToLabelGap = 2);
 
-	virtual void RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp, 
-								   bool isEnabled = TRUE,
-								   bool isPressed = FALSE);
+        // Draws the decorations.
+    virtual void DrawDecorations( wxDC& dc );
 
-	virtual void RenderLabelImages();
-	virtual void RenderAllLabelImages();
+        // Draws the label.
+    virtual void DrawLabel( wxDC& dc );
 
-	// event handlers
-	void OnLButtonDown( wxMouseEvent& event );
-	void OnLButtonUp( wxMouseEvent& event );
-	void OnMouseMove( wxMouseEvent& event );
-	void OnSize( wxSizeEvent& event );
-	void OnPaint( wxPaintEvent& event );
-	void OnEraseBackground( wxEraseEvent& event );
-	void OnKillFocus( wxFocusEvent& event );
+        // Renders the label image.
+    virtual void RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp, 
+                                   bool isEnabled = TRUE,
+                                   bool isPressed = FALSE);
 
-	DECLARE_EVENT_TABLE()
+        // Renders label images.
+    virtual void RenderLabelImages();
+
+        // Renders label images.
+    virtual void RenderAllLabelImages();
+
+        // Responds to a left mouse button down event.
+    void OnLButtonDown( wxMouseEvent& event );
+
+        // Responds to a left mouse button up event.
+    void OnLButtonUp( wxMouseEvent& event );
+
+        // Responds to a mouse move event.
+    void OnMouseMove( wxMouseEvent& event );
+
+        // Responds to a size event.
+    void OnSize( wxSizeEvent& event );
+
+        // Responds to a paint event.
+    void OnPaint( wxPaintEvent& event );
+
+        // Responds to an erase background event.
+    void OnEraseBackground( wxEraseEvent& event );
+
+        // Responds to a kill focus event.
+    void OnKillFocus( wxFocusEvent& event );
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif /* __NEWBMPBTN_G__ */

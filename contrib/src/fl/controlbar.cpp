@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        controlbar.cpp
+// Purpose:     Implementation for main controlbar classes.
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     06/09/98
@@ -50,7 +50,6 @@
 // meet the new event paradigm as of wx2.3.0.  Probably we
 // should find a way to make these be non-global, but this
 // works for right now.
-#if wxCHECK_VERSION(2,3,0)
     wxEventType cbEVT_PL_LEFT_DOWN = wxNewEventType();
     wxEventType cbEVT_PL_LEFT_UP = wxNewEventType();
     wxEventType cbEVT_PL_RIGHT_DOWN = wxNewEventType();
@@ -85,7 +84,6 @@
     wxEventType cbEVT_PL_CUSTOMIZE_LAYOUT = wxNewEventType();
 
     wxEventType wxCUSTOM_CB_PLUGIN_EVENTS_START_AT = wxNewEventType();
-#endif // #if wxCHECK_VERSION(2,3,0)
 
 // some ascii-art, still can't get these *nice* cursors working on wx... :-(
 
@@ -347,7 +345,7 @@ wxFrameLayout::wxFrameLayout( wxWindow* pParentFrame, wxWindow* pFrameClient, bo
     mFloatingOn = CanReparent();
 }
 
-// NOTE:: below are the only plaftorm-check "ifdef"s in the docking system!
+// NOTE:: below are the only platform-check "ifdef"s in the docking system!
 
 bool wxFrameLayout::CanReparent()
 {
@@ -627,10 +625,10 @@ bool wxFrameLayout::RedockBar( cbBarInfo*    pBar,
 
     pBarPane->RemoveBar( pBar );
 
-    // FIXME FIXME:: the below recalc. may be a *huge* performance
+    // FIXME FIXME:: the recalculation below may be a *huge* performance
     //               hit, it could be eliminated though...
     //               but first the "pane-postion-changed" problem 
-    //               have to be fixed 
+    //               has to be fixed 
 
     RecalcLayout( FALSE );
 
@@ -710,8 +708,8 @@ void wxFrameLayout::SetBarState( cbBarInfo* pBar, int newState, bool updateNow )
 
     if ( pBar->mState == wxCBAR_FLOATING && newState != wxCBAR_FLOATING )
     {
-        // remove bar's window form the containing mini-frame
-        // and set it's parent to be layout's parent frame
+        // remove bar's window from the containing mini-frame
+        // and set its parent to be layout's parent frame
 
         if ( pBar->mpBarWnd )
         {
@@ -1176,15 +1174,15 @@ void wxFrameLayout::HideBarWindows()
 void wxFrameLayout::UnhookFromFrame()
 {
     // NOTE:: the SetEvtHandlerEnabled() method is not used
-    //        here, since it is assumed, that unhooking layout
+    //        here, since it is assumed that unhooking layout
     //        from window may result destroying of the layout itself
     //       
     //        BUG BUG BUG (wx):: this would not be a problem if 
-    //                           wxEvtHandler's destructor would check if 
+    //                           wxEvtHandler's destructor checked if 
     //                           this handler is currently the top-most 
     //                           handler of some window, and additionally 
-    //                           to the reconnecting itself from the chain
-    //                           it would also re-setup current event handler 
+    //                           to the reconnecting itself from the chain.
+    //                           It would also re-setup current event handler 
     //                           of the window using wxWindow::SetEventHandler()
 
     // FOR NOW::
@@ -2576,7 +2574,7 @@ void cbDockPane::CalcLengthRatios( cbRowInfo* pInRow )
 
     size_t i = 0;
 
-    // clac current-maximal-total-length of all maximized bars
+    // calc current-maximal-total-length of all maximized bars
 
     for ( i = 0; i != pInRow->mBars.GetCount(); ++i )
     {
@@ -2586,7 +2584,7 @@ void cbDockPane::CalcLengthRatios( cbRowInfo* pInRow )
             totalWidth += bar.mBounds.width;
     }
 
-    // set up persentages of occupied space for each maximized bar
+    // set up percentages of occupied space for each maximized bar
 
     for ( i = 0; i != pInRow->mBars.Count(); ++i )
     {

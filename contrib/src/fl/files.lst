@@ -12,7 +12,6 @@ FL_OBJECTS  = \
    newbmpbtn.$(OBJ_EXT) \
    updatesmgr.$(OBJ_EXT) \
    cbcustom.$(OBJ_EXT) \
-   frmview.$(OBJ_EXT) \
    panedrawpl.$(OBJ_EXT) \
    controlbar.$(OBJ_EXT) \
    garbagec.$(OBJ_EXT) \

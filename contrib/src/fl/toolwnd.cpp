@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        toolwnd.cpp
+// Purpose:     wxToolWindow implementation.
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     06/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__

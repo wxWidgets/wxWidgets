@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        updatesmgr.h
+// Purpose:     cbSimpleUpdatesMgr class declaration
 // Author:      Aleksandras Gluchovas (@Lithuania)
 // Modified by:
 // Created:     19/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __UPDATESMGR_G__
@@ -19,37 +19,51 @@
 #include "wx/fl/controlbar.h"
 
 /*
- * class implements slightly optimized logic for refreshing
- * areas of frame layout - which actually need to be updated. 
- */
+This class implements slightly optimized logic for refreshing
+the areas of frame layout that actually need to be updated.
+*/
 
 class cbSimpleUpdatesMgr : public cbUpdatesManagerBase
 {
-	DECLARE_DYNAMIC_CLASS( cbSimpleUpdatesMgr )
+    DECLARE_DYNAMIC_CLASS( cbSimpleUpdatesMgr )
 protected:
 
-	bool WasChanged( cbUpdateMgrData& data, wxRect& currentBounds );
+        // Helper function.
+    bool WasChanged( cbUpdateMgrData& data, wxRect& currentBounds );
 
 public:
+        // Default constructor.
+    cbSimpleUpdatesMgr() {}
 
-	cbSimpleUpdatesMgr(void) {}
+        // Constructor taking frame layout panel.
+    cbSimpleUpdatesMgr( wxFrameLayout* pPanel );
 
-	cbSimpleUpdatesMgr( wxFrameLayout* pPanel );
+        // Notification received from Frame Layout in the order in which
+        // they would usually be invoked.
+    virtual void OnStartChanges();
 
-	// notificiactions received from Frame Layout (in the order, in which
-	// they usually would be invoked)
+        // Notification received from Frame Layout in the order in which
+        // they would usually be invoked.
+    virtual void OnRowWillChange( cbRowInfo* pRow, cbDockPane* pInPane );
 
-	virtual void OnStartChanges();
+        // Notification received from Frame Layout in the order in which
+        // they would usually be invoked.
+    virtual void OnBarWillChange( cbBarInfo* pBar, cbRowInfo* pInRow, cbDockPane* pInPane );
 
-	virtual void OnRowWillChange( cbRowInfo* pRow, cbDockPane* pInPane );
-	virtual void OnBarWillChange( cbBarInfo* pBar, cbRowInfo* pInRow, cbDockPane* pInPane );
-	virtual void OnPaneMarginsWillChange( cbDockPane* pPane );
-	virtual void OnPaneWillChange( cbDockPane* pPane );
+        // Notification received from Frame Layout in the order in which
+        // they would usually be invoked.
+    virtual void OnPaneMarginsWillChange( cbDockPane* pPane );
 
-	virtual void OnFinishChanges();
+        // Notification received from Frame Layout in the order in which
+        // they would usually be invoked.
+    virtual void OnPaneWillChange( cbDockPane* pPane );
 
-	// refreshes parts of the frame layout, which need an update
-	virtual void UpdateNow();
+        // Notification received from Frame Layout in the order in which
+        // they would usually be invoked.
+    virtual void OnFinishChanges();
+
+        // Refreshes the parts of the frame layoutthat need an update.
+    virtual void UpdateNow();
 };
 
 #endif /* __UPDATESMGR_G__ */

@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        garbagec.h
+// Purpose:     GarbageCollector class.
 // Author:      Aleksandras Gluchovas (@Lithuania)
 // Modified by:
 // Created:     ??/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GARBAGEC_G__
@@ -20,54 +20,72 @@
 
 struct GCItem
 {
-	void*	  mpObj;
-	wxList    mRefs;   // references to other nodes
+    void*      mpObj;
+    wxList    mRefs;   // references to other nodes
 };
 
 inline void* gc_node_to_obj( wxNode* pGCNode )
 {
-	return ( (GCItem*) (pGCNode->Data()) )->mpObj;
+    return ( (GCItem*) (pGCNode->Data()) )->mpObj;
 }
 
-// class implements extremely slow, but probably one of the most simple GC algorithms
+/*
+This class implements an extremely slow but simple garbage collection algorithm.
+*/
 
 class GarbageCollector
 {
 protected:
-	wxList mAllNodes;
-	wxList mRegularLst;
-	wxList mCycledLst;
+    wxList mAllNodes;
+    wxList mRegularLst;
+    wxList mCycledLst;
 
-	wxNode* FindItemNode( void* pForObj );
-	void    ResolveReferences();
+        // Internal method for finding a node.
+    wxNode* FindItemNode( void* pForObj );
 
-	wxNode* FindReferenceFreeItemNode();
-	void    RemoveReferencesToNode( wxNode* pItemNode );
-	void    DestroyItemList( wxList& lst );
+        // Internal method for resolving references.
+    void    ResolveReferences();
+
+        // Internal method for findind and freeing a node.
+    wxNode* FindReferenceFreeItemNode();
+
+        // Remove references to this node.
+    void    RemoveReferencesToNode( wxNode* pItemNode );
+
+        // Destroys a list of items.
+    void    DestroyItemList( wxList& lst );
 
 public:
 
-	GarbageCollector() {}
+        // Default constructor.
+    GarbageCollector() {}
 
-	virtual ~GarbageCollector();
+        // Destructor.
+    virtual ~GarbageCollector();
 
-	// prepare data for GC alg.
+        // Prepare data for garbage collection.
 
-	virtual void AddObject( void* pObj, int refCnt = 1 );
-	virtual void AddDependency( void* pObj, void* pDependsOnObj );
+    virtual void AddObject( void* pObj, int refCnt = 1 );
 
-	// executes GC alg.
+        // Prepare data for garbage collection.
 
-	virtual void ArrangeCollection();
+    virtual void AddDependency( void* pObj, void* pDependsOnObj );
 
-	// access results of the alg.
+        // Executes garbage collection algorithm.
 
-	wxList& GetRegularObjects();
-	wxList& GetCycledObjects();
+    virtual void ArrangeCollection();
 
-	// removes all data from GC
+        // Accesses the results of the algorithm.
 
-	void Reset();
+    wxList& GetRegularObjects();
+
+        // Get cycled objects.
+
+    wxList& GetCycledObjects();
+
+        // Removes all data from the garbage collector.
+
+    void Reset();
 };
 
 #endif /* __GARBAGEC_G__ */

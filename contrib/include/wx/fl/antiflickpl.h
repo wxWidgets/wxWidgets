@@ -6,7 +6,7 @@
 // Created:     23/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __ANTIFLICKPL_G__
@@ -20,50 +20,66 @@
 
 /*
 Implements double-buffering to reduce flicker.
-Bitmap and memory DC buffers are shared "resources" among all instances of
+Bitmap and memory DC buffers are shared 'resources' among all instances of
 antiflicker plugins within the application.
 
-Locking for multithreaded applications is  not yet implemented.
+Locking for multithreaded applications is not yet implemented.
 */
 
 class cbAntiflickerPlugin : public cbPluginBase
 {
-	DECLARE_DYNAMIC_CLASS( cbAntiflickerPlugin )
+    DECLARE_DYNAMIC_CLASS( cbAntiflickerPlugin )
 protected:
 
-	static wxBitmap*   mpVertBuf;
-	static wxBitmap*   mpHorizBuf;
-	static wxMemoryDC* mpVertBufDc;
-	static wxMemoryDC* mpHorizBufDc;
+    static wxBitmap*   mpVertBuf;
+    static wxBitmap*   mpHorizBuf;
+    static wxMemoryDC* mpVertBufDc;
+    static wxMemoryDC* mpHorizBufDc;
 
-	static int mRefCount;
+    static int mRefCount;
 
-	wxDC*  mpLRUBufDc; // last-recently-used buffer
-	wxRect mLRUArea;   // last-recently-used area
+    wxDC*  mpLRUBufDc; // last-recently-used buffer
+    wxRect mLRUArea;   // last-recently-used area
 
 protected:
-	// Finds a suitable buffer. Returns NULL if a suitable buffer is not present.
-	wxDC* FindSuitableBuffer( const wxRect& forArea );
-	// Allocates a suitable buffer.
-	wxDC* AllocNewBuffer( const wxRect& forArea );
+        // Finds a suitable buffer. Returns NULL if a suitable buffer is not present.
 
-	wxDC& GetWindowDC();
-	wxDC& GetClientDC();
+    wxDC* FindSuitableBuffer( const wxRect& forArea );
+
+        // Allocates a suitable buffer.
+
+    wxDC* AllocNewBuffer( const wxRect& forArea );
+
+        // Gets the window device context.
+
+    wxDC& GetWindowDC();
+
+        // Gets the client device context.
+
+    wxDC& GetClientDC();
 public:
 
-	cbAntiflickerPlugin(void);
+        // Default constructor.
 
-	cbAntiflickerPlugin( wxFrameLayout* pPanel, int paneMask = wxALL_PANES );
+    cbAntiflickerPlugin(void);
 
-	virtual ~cbAntiflickerPlugin();
+        // Constructor taking frame layout panel, and pane mask.
 
-	// Handler for plugin event.
-	void OnStartDrawInArea ( cbStartDrawInAreaEvent& event );
+    cbAntiflickerPlugin( wxFrameLayout* pPanel, int paneMask = wxALL_PANES );
 
-	// Handler for plugin event.
-	void OnFinishDrawInArea( cbFinishDrawInAreaEvent& event );
+        // Destructor.
 
-	DECLARE_EVENT_TABLE()
+    virtual ~cbAntiflickerPlugin();
+
+        // Handler for plugin event.
+
+    void OnStartDrawInArea ( cbStartDrawInAreaEvent& event );
+
+        // Handler for plugin event.
+
+    void OnFinishDrawInArea( cbFinishDrawInAreaEvent& event );
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif /* __ANTIFLICKPL_G__ */

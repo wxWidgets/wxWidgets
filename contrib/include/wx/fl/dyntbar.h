@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        dyntbar.h
+// Purpose:     wxDynamicToolBar header
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     ??/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __DYNTBAR_G__
@@ -19,13 +19,15 @@
 #include "wx/tbarbase.h"
 #include "wx/dynarray.h"
 
-// layout item
+/*
+Tool layout item.
+*/
 
 class wxToolLayoutItem : public wxObject
 {
 public:
-	wxRect    mRect;
-	bool      mIsSeparator;
+    wxRect    mRect;
+    bool      mIsSeparator;
 };
 
 class wxDynToolInfo;
@@ -33,160 +35,215 @@ class wxDynToolInfo;
 typedef wxToolLayoutItem* wxToolLayoutItemPtrT;
 typedef wxDynToolInfo*    wxDynToolInfoPtrT;
 
-
 WX_DEFINE_ARRAY( wxToolLayoutItemPtrT, wxLayoutItemArrayT  );
 WX_DEFINE_ARRAY( wxDynToolInfoPtrT,    wxDynToolInfoArrayT );
 
-// base class for layouting algorithm implementations
+/*
+This is a base class for layout algorithm implementations.
+*/
 
 class LayoutManagerBase
 {
 public:
-	virtual void Layout( const wxSize&       parentDim, 
-						 wxSize&	         resultingDim,
-						 wxLayoutItemArrayT& items,
-						 int		         horizGap,
- 		                 int		         vertGap   ) = 0;
+        // Constructor.
+    virtual void Layout( const wxSize&       parentDim,
+                         wxSize&             resultingDim,
+                         wxLayoutItemArrayT& items,
+                         int                 horizGap,
+                         int                 vertGap   ) = 0;
 
-	virtual ~LayoutManagerBase() {}
+        // Destructor.
+    virtual ~LayoutManagerBase() {}
 };
 
-// layouts items in left-to-right order from
-// top towards bottom
+/*
+BagLayout lays out items in left-to-right order from
+top to bottom.
+*/
 
 class BagLayout : public LayoutManagerBase
 {
 public:
-	virtual void Layout( const wxSize&       parentDim, 
-						 wxSize&	         resultingDim,
-						 wxLayoutItemArrayT& items,
-						 int		         horizGap,
- 		                 int		         vertGap   );
+        // Constructor.
+    virtual void Layout( const wxSize&       parentDim, 
+                         wxSize&             resultingDim,
+                         wxLayoutItemArrayT& items,
+                         int                 horizGap,
+                         int                 vertGap   );
 };
+
+/*
+This class holds dynamic toolbar item information.
+*/
 
 class wxDynToolInfo : public wxToolLayoutItem
 {
-	DECLARE_DYNAMIC_CLASS(wxDynToolInfo)
+    DECLARE_DYNAMIC_CLASS(wxDynToolInfo)
 
 public:
-	wxWindow* mpToolWnd;
-	int       mIndex;
-	wxSize    mRealSize;
+    wxWindow* mpToolWnd;
+    int       mIndex;
+    wxSize    mRealSize;
 };
 
-// layouting orientations for tools
+// Layout orientations for tools
 
 #define LO_HORIZONTAL    0
 #define LO_VERTICAL      1
 #define LO_FIT_TO_WINDOW 2
 
-// class manages containment and layouting of tool-windows
+/*
+wxDynamicToolBar manages containment and layout of tool windows.
+*/
 
 class wxDynamicToolBar : public wxToolBarBase
 {
-	DECLARE_DYNAMIC_CLASS(wxDynamicToolBar)
+    DECLARE_DYNAMIC_CLASS(wxDynamicToolBar)
 protected:
 
-	friend class wxDynamicToolBarSerializer;
+    friend class wxDynamicToolBarSerializer;
 
-	wxDynToolInfoArrayT mTools;
-	LayoutManagerBase*  mpLayoutMan;
+    wxDynToolInfoArrayT mTools;
+    LayoutManagerBase*  mpLayoutMan;
 
 protected:
-	virtual void SizeToolWindows();
+        // Internal function for sizing tool windows.
+    virtual void SizeToolWindows();
 
 public: /* public properties */
 
-	int                mSepartorSize; // default: 8
-	int                mVertGap;      // default: 0
-	int                mHorizGap;	  // default: 0
-	
+    int                mSepartorSize; // default: 8
+    int                mVertGap;      // default: 0
+    int                mHorizGap;      // default: 0
+
 public:
-	wxDynamicToolBar();
+        // Default constructor.
 
-	wxDynamicToolBar(wxWindow *parent, const wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-	             const long style = wxNO_BORDER, const int orientation = wxVERTICAL,
-		         const int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr);
+    wxDynamicToolBar();
 
-	~wxDynamicToolBar(void);
+        // Constructor: see the documentation for wxToolBar for details.
 
-	bool Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-				const long style = wxNO_BORDER, const int orientation = wxVERTICAL, const int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr);
+    wxDynamicToolBar(wxWindow *parent, const wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                 const long style = wxNO_BORDER, const int orientation = wxVERTICAL,
+                 const int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr);
 
-	// overridables
+        // Destructor.
 
-	virtual void AddTool( int toolIndex, 
-                              wxWindow* pToolWindow, 
+    ~wxDynamicToolBar(void);
+
+        // Creation function: see the documentation for wxToolBar for details.
+
+    bool Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                const long style = wxNO_BORDER, const int orientation = wxVERTICAL, const int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr);
+
+        // Adds a tool. See the documentation for wxToolBar for details.
+
+    virtual void AddTool( int toolIndex, 
+                              wxWindow* pToolWindow,
                               const wxSize& size = wxDefaultSize );
 
-        virtual void AddTool( int toolIndex, 
+        // Adds a tool. See the documentation for wxToolBar for details.
+
+    virtual void AddTool( int toolIndex,
                               const wxString& imageFileName,
                               wxBitmapType imageFileType = wxBITMAP_TYPE_BMP,
                               const wxString& labelText = "", bool alignTextRight = FALSE,
                               bool isFlat = TRUE );
-        virtual void AddTool( int toolIndex, wxBitmap labelBmp,
+        // Adds a tool. See the documentation for wxToolBar for details.
+
+    virtual void AddTool( int toolIndex, wxBitmap labelBmp,
                               const wxString& labelText = "", bool alignTextRight = FALSE,
                               bool isFlat = TRUE );
 
-	// method from wxToolBarBase (for compatibility), only
-	// first two arguments are valid
+    // Method from wxToolBarBase (for compatibility), only
+    // the first two arguments are valid.
+    // See the documentation for wxToolBar for details.
 
-  virtual wxToolBarToolBase *AddTool(const int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
+    virtual wxToolBarToolBase *AddTool(const int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
                const bool toggle = FALSE, const long xPos = -1, const long yPos = -1, wxObject *clientData = NULL,
                const wxString& helpString1 = "", const wxString& helpString2 = "");
 
-	virtual void AddSeparator( wxWindow* pSepartorWnd = NULL );
+        // Adds a separator. See the documentation for wxToolBar for details.
 
-	wxDynToolInfo* GetToolInfo( int toolIndex );
+    virtual void AddSeparator( wxWindow* pSepartorWnd = NULL );
 
-	void RemveTool( int toolIndex );
+        // Returns tool information for the given tool index.
 
-	// the default implementation draws shaded line
-	virtual void DrawSeparator( wxDynToolInfo& info, wxDC& dc );
+    wxDynToolInfo* GetToolInfo( int toolIndex );
 
-	// see definitions of orientation types
-	virtual bool Layout();
+        // Removes the given tool. Misspelt in order not to clash with a similar function
+        // in the base class.
 
-	virtual void GetPreferredDim( const wxSize& givenDim, wxSize& prefDim );
+    void RemveTool( int toolIndex );
 
-	virtual LayoutManagerBase* CreateDefaulLayout() { return new BagLayout(); }
+        // Draws a separator. The default implementation draws a shaded line.
 
-	virtual void SetLayout( LayoutManagerBase* pLayout );
+    virtual void DrawSeparator( wxDynToolInfo& info, wxDC& dc );
 
-	virtual void EnableTool(const int toolIndex, const bool enable = TRUE);
+        // Performs layout. See definitions of orientation types.
 
-	// event handlers
+    virtual bool Layout();
 
-	void OnSize( wxSizeEvent& event );
-	void OnPaint( wxPaintEvent& event );
-	void OnEraseBackground( wxEraseEvent& event );
+        // Returns the preferred dimension, taking the given dimension and a reference to the result.
 
-	// overriden from wxToolBarBase
+    virtual void GetPreferredDim( const wxSize& givenDim, wxSize& prefDim );
 
-	virtual bool Realize(void);
+        // Creates the default layout (BagLayout).
 
-	// stuff from the 2.1.15 
+    virtual LayoutManagerBase* CreateDefaultLayout() { return new BagLayout(); }
+
+        // Sets the layout for this toolbar.
+
+    virtual void SetLayout( LayoutManagerBase* pLayout );
+
+        // Enables or disables the given tool.
+
+    virtual void EnableTool(const int toolIndex, const bool enable = TRUE);
+
+        // Responds to size events, calling Layout.
+
+    void OnSize( wxSizeEvent& event );
+
+        // Responds to paint events, drawing separators.
+
+    void OnPaint( wxPaintEvent& event );
+
+        // Responds to background erase events. Currently does nothing.
+
+    void OnEraseBackground( wxEraseEvent& event );
+
+        // Overriden from wxToolBarBase; does nothing.
+
+    virtual bool Realize(void);
+
+        // Finds a tool for the given position.
 
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x,
                                                    wxCoord y) const;
 
+        // Inserts a tool at the given position.
 
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
 
-    // the tool is still in m_tools list when this function is called, it will
-    // only be deleted from it if it succeeds
+        // Deletes a tool. The tool is still in m_tools list when this function is called, and it will
+        // only be deleted from it if it succeeds.
+
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
 
-    // called when the tools enabled flag changes
+        // Called when the tools enabled flag changes.
+
     virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
 
-    // called when the tool is toggled
+        // Called when the tool is toggled.
+
     virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
 
-    // called when the tools "can be toggled" flag changes
+        // Called when the tools 'can be toggled' flag changes.
+
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
 
-    // the functions to create toolbar tools
+        // Creates a toolbar tool.
+
     virtual wxToolBarToolBase *CreateTool(int id,
                                           const wxBitmap& bitmap1,
                                           const wxBitmap& bitmap2,
@@ -194,10 +251,12 @@ public:
                                           wxObject *clientData,
                                           const wxString& shortHelpString,
                                           const wxString& longHelpString);
+
+        // Creates a toolbar tool.
+
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
-
-	DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 #endif /* __DYNTBAR_G__ */

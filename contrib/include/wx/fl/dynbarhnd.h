@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        dynbarhnd.h
+// Purpose:     This header simply includes controlbar.h.
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     23/01/99
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __DYNBARHND_G__

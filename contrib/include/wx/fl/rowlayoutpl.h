@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        rowlayoutpl.h
+// Purpose:     cbRowLayoutPlugin header.
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     02/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __ROWLAYOUTPL_G__
@@ -19,68 +19,107 @@
 #include "wx/fl/controlbar.h"
 
 /*
- * Simple implementation of plugin, which handles row-layouting
- * requests sent from Frame Layout
- */
+Simple implementation of a plugin which handles row layout
+requests sent from a frame layout.
+*/
 
 class cbRowLayoutPlugin : public cbPluginBase
 {
-	DECLARE_DYNAMIC_CLASS( cbRowLayoutPlugin )
+    DECLARE_DYNAMIC_CLASS( cbRowLayoutPlugin )
 protected:
-	cbDockPane* mpPane; // is set up temorarely, while handling event
+    cbDockPane* mpPane; // is set up temporarily, while handling event
 protected:
 
-	// not-fixed-bars layouting related helpers
+        // Internal helper relating to not-fixed-bars layout.
+    void FitBarsToRange( int from, int till, cbBarInfo* pTheBar, cbRowInfo* pRow ); 
 
-	void FitBarsToRange( int from, int till, cbBarInfo* pTheBar, cbRowInfo* pRow ); 
-	void RelayoutNotFixedBarsAround( cbBarInfo* pTheBar, cbRowInfo* pRow ); 
-	void MinimzeNotFixedBars( cbRowInfo* pRow, cbBarInfo* pBarToPreserve );
-	int  GetRowFreeSpace( cbRowInfo* pRow );
-	
-	void RecalcLengthRatios( cbRowInfo* pRow );
-	void ApplyLengthRatios( cbRowInfo* pRow );
-	void ExpandNotFixedBars( cbRowInfo* pRow );
-	void AdjustLengthOfInserted( cbRowInfo* pRow, cbBarInfo* pTheBar );
+        // Internal helper relating to not-fixed-bars layout.
+    void RelayoutNotFixedBarsAround( cbBarInfo* pTheBar, cbRowInfo* pRow );
 
-	void DetectBarHandles( cbRowInfo* pRow );
-	void CheckIfAtTheBoundary( cbBarInfo* pTheBar, cbRowInfo& rowInfo );
+        // Internal helper relating to not-fixed-bars layout.
+    void MinimzeNotFixedBars( cbRowInfo* pRow, cbBarInfo* pBarToPreserve );
+
+        // Internal helper relating to not-fixed-bars layout.
+    int  GetRowFreeSpace( cbRowInfo* pRow );
 
 
-	// row-layouting helpers (simulate "bar-friction")
+        // Internal helper relating to not-fixed-bars layout.
+    void RecalcLengthRatios( cbRowInfo* pRow );
 
-	int  CalcRowHeight( cbRowInfo& row );
-	void LayoutItemsVertically( cbRowInfo& row );
+        // Internal helper relating to not-fixed-bars layout.
+    void ApplyLengthRatios( cbRowInfo* pRow );
 
-	void StickRightSideBars( cbBarInfo* pToBar );
+        // Internal helper relating to not-fixed-bars layout.
+    void ExpandNotFixedBars( cbRowInfo* pRow );
 
-	void SlideLeftSideBars ( cbBarInfo* pTheBar );
-	void SlideRightSideBars( cbBarInfo* pTheBar );
+        // Internal helper relating to not-fixed-bars layout.
+    void AdjustLengthOfInserted( cbRowInfo* pRow, cbBarInfo* pTheBar );
 
-	void ShiftLeftTrashold ( cbBarInfo* pTheBar, cbRowInfo& row );
-	void ShiftRightTrashold( cbBarInfo* pTheBar, cbRowInfo& row );
 
-	void InsertBefore( cbBarInfo* pBeforeBar, 
-					   cbBarInfo* pTheBar,
-					   cbRowInfo& row
-					 );
+        // Internal helper relating to not-fixed-bars layout.
+    void DetectBarHandles( cbRowInfo* pRow );
 
-	void DoInsertBar( cbBarInfo* pTheBar, cbRowInfo& row );
+        // Internal helper relating to not-fixed-bars layout.
+    void CheckIfAtTheBoundary( cbBarInfo* pTheBar, cbRowInfo& rowInfo );
+
+
+        // Row layout helper simulating bar 'friction'.
+    int  CalcRowHeight( cbRowInfo& row );
+
+        // Row layout helper simulating bar 'friction'.
+    void LayoutItemsVertically( cbRowInfo& row );
+
+
+        // Row layout helper simulating bar 'friction'.
+    void StickRightSideBars( cbBarInfo* pToBar );
+
+
+        // Row layout helper simulating bar 'friction'.
+    void SlideLeftSideBars ( cbBarInfo* pTheBar );
+
+        // Row layout helper simulating bar 'friction'.
+    void SlideRightSideBars( cbBarInfo* pTheBar );
+
+
+        // Row layout helper simulating bar 'friction'.
+    void ShiftLeftTrashold ( cbBarInfo* pTheBar, cbRowInfo& row );
+
+        // Row layout helper simulating bar 'friction'.
+    void ShiftRightTrashold( cbBarInfo* pTheBar, cbRowInfo& row );
+
+
+        // Insert the bar before the given row.
+    void InsertBefore( cbBarInfo* pBeforeBar, 
+                       cbBarInfo* pTheBar,
+                       cbRowInfo& row
+                     );
+
+        // Insert the bar before the given row.
+    void DoInsertBar( cbBarInfo* pTheBar, cbRowInfo& row );
 
 public:
+        // Default constructor.
+    cbRowLayoutPlugin(void);
 
-	cbRowLayoutPlugin(void);
+        // Constructor taking frame layout pane and pane mask.
+    cbRowLayoutPlugin( wxFrameLayout* pPanel, int paneMask = wxALL_PANES );
 
-	cbRowLayoutPlugin( wxFrameLayout* pPanel, int paneMask = wxALL_PANES );
+        // Responds to row resize event.
+    void OnResizeRow ( cbResizeRowEvent&  event );
 
-	// event handlers
+        // Responds to bar insertion event.
+    void OnInsertBar ( cbInsertBarEvent&  event );
 
-	void OnResizeRow ( cbResizeRowEvent&  event );
-	void OnInsertBar ( cbInsertBarEvent&  event );
-	void OnRemoveBar ( cbRemoveBarEvent&  event );
-	void OnLayoutRow ( cbLayoutRowEvent&  event );
-	void OnLayoutRows( cbLayoutRowsEvent& event );
+        // Responds to bar removal event.
+    void OnRemoveBar ( cbRemoveBarEvent&  event );
 
-	DECLARE_EVENT_TABLE()
+        // Responds to row layout event.
+    void OnLayoutRow ( cbLayoutRowEvent&  event );
+
+        // Responds to rows layout event.
+    void OnLayoutRows( cbLayoutRowsEvent& event );
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif /* __ROWLAYOUTPL_G__ */

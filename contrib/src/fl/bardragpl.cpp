@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        bardragpl.cpp
+// Purpose:     cbBarDragPlugin implementation
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     23/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -293,8 +293,8 @@ void cbBarDragPlugin::StickToPane( cbDockPane* pPane, wxPoint& mousePos )
 						 : mousePos.x > bounds.x;
 
 	// NOTE:: about all the below min/max things: they are meant to ensure
-	//        that mouse pointer doesn't overrun (leave) the hint-rectangle
-	//        when dimensions it's are recalculated upon sticking it to the pane
+	//        that the mouse pointer doesn't overrun (leave) the hint-rectangle
+	//        when its dimensions are recalculated upon sticking it to the pane
 
 	if ( pPane->IsHorizontal() && fromLowerEdge )
 	{
@@ -341,9 +341,8 @@ void cbBarDragPlugin::StickToPane( cbDockPane* pPane, wxPoint& mousePos )
 
 void cbBarDragPlugin::UnstickFromPane( cbDockPane* pPane, wxPoint& mousePos )
 {
-	// unsticking causes rectangle to get the shape, in which
+	// unsticking causes rectangle to get the shape in which
 	// dragged control-bar would be when floated
-
 
 	int newWidth  = mpDraggedBar->mDimInfo.mSizes[wxCBAR_FLOATING].x;
 	int newHeight = mpDraggedBar->mDimInfo.mSizes[wxCBAR_FLOATING].y;
@@ -471,7 +470,7 @@ void cbBarDragPlugin::ShowHint( bool prevWasInClient )
 
 	if ( mpSrcPane->mProps.mRealTimeUpdatesOn == FALSE )
 	{
-		// do hevy calculations first
+		// do heavy calculations first
 
 		wxRect actualRect = mHintRect; // will be adjusted depending on drag-settings
 

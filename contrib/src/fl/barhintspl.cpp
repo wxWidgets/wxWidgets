@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        barhintspl.h
+// Purpose:     Implementation for cbBarHintsPlugin
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     30/11/98 (my 22th birthday :-)
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
  
 #ifdef __GNUG__

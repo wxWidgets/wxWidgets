@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        antiflickpl.cpp
+// Purpose:     Double-buffering plugin class for reducing flickering.
 // Author:      Aleksandras Gluchovas (@Lithuania)
 // Modified by:
 // Created:     23/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
  
 #ifdef __GNUG__
@@ -115,7 +115,7 @@ wxDC* cbAntiflickerPlugin::AllocNewBuffer( const wxRect& forArea )
 	//       excessive realocations later
 
 	// check whether the given area is oriented horizontally
-	// or verticallya and choose correspoinding bitmap to create or
+	// or vertically and choose corresponding bitmap to create or
 	// recreate
 
 	if ( forArea.height > forArea.width )

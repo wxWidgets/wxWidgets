@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        rowlayoutpl.cpp
+// Purpose:     cbRowLayoutPlugin implementation.
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     09/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
  
 #ifdef __GNUG__

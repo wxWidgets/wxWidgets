@@ -85,7 +85,7 @@ $(DOCDIR)\htb\fl.htb: $(DOCDIR)\html\fl\fl.htm
 
 # In order to force document reprocessing
 touchmanual:
-    -touch $(WXDIR)\docs\latex\fl\manual.tex
+    -touch $(WXDIR)\contrib\docs\latex\fl\manual.tex
 
 updatedocs: touchmanual alldocs
 

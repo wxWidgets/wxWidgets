@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        garbagec.cpp
+// Purpose:     Garbage collection algorithm for optimizing refresh.
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     18/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -32,193 +32,193 @@
 
 inline static GCItem& node_to_item( wxNode* pNode )
 {
-	return *( (GCItem*)(pNode->Data()) );
+    return *( (GCItem*)(pNode->Data()) );
 }
 
 GarbageCollector::~GarbageCollector()
 {
-	Reset();
+    Reset();
 }
 
 /*** GC alg. helpers ***/
 
 void GarbageCollector::DestroyItemList( wxList& lst )
 {
-	wxNode* pNode = lst.First();
+    wxNode* pNode = lst.First();
 
-	while( pNode )
-	{
-		delete &node_to_item( pNode );
+    while( pNode )
+    {
+        delete &node_to_item( pNode );
 
-		pNode = pNode->Next();
-	}
+        pNode = pNode->Next();
+    }
 
-	lst.Clear();
+    lst.Clear();
 }
 
 wxNode* GarbageCollector::FindItemNode( void* pForObj )
 {
-	wxNode* pNode = mAllNodes.First();
+    wxNode* pNode = mAllNodes.First();
 
-	while( pNode )
-	{
-		if ( node_to_item( pNode ).mpObj == pForObj )
+    while( pNode )
+    {
+        if ( node_to_item( pNode ).mpObj == pForObj )
 
-			return pNode;
+            return pNode;
 
-		pNode = pNode->Next();
-	}
+        pNode = pNode->Next();
+    }
 
-	int avoidCompilerWarning = 0;
-	wxASSERT(avoidCompilerWarning); // DBG:: item should be present
+    int avoidCompilerWarning = 0;
+    wxASSERT(avoidCompilerWarning); // DBG:: item should be present
 
-	return 0;
+    return 0;
 }
 
 wxNode* GarbageCollector::FindReferenceFreeItemNode()
 {
-	wxNode* pNode = mAllNodes.First();
+    wxNode* pNode = mAllNodes.First();
 
-	while( pNode )
-	{
-		if ( node_to_item( pNode ).mRefs.Number() == 0 ) 
+    while( pNode )
+    {
+        if ( node_to_item( pNode ).mRefs.Number() == 0 ) 
 
-			return pNode;
+            return pNode;
 
-		pNode = pNode->Next();
-	}
+        pNode = pNode->Next();
+    }
 
-	return 0;
+    return 0;
 }
 
 void GarbageCollector::RemoveReferencesToNode( wxNode* pItemNode )
 {
-	wxNode* pNode = mAllNodes.First();
+    wxNode* pNode = mAllNodes.First();
 
-	while( pNode )
-	{
-		wxList& refLst   = node_to_item( pNode ).mRefs;
-		wxNode* pRefNode = refLst.First();
+    while( pNode )
+    {
+        wxList& refLst   = node_to_item( pNode ).mRefs;
+        wxNode* pRefNode = refLst.First();
 
-		while( pRefNode )
-		{
-			if ( pRefNode->Data() == (wxObject*)pItemNode )
-			{
-				wxNode* pNext = pRefNode->Next();
+        while( pRefNode )
+        {
+            if ( pRefNode->Data() == (wxObject*)pItemNode )
+            {
+                wxNode* pNext = pRefNode->Next();
 
-				refLst.DeleteNode( pRefNode );
+                refLst.DeleteNode( pRefNode );
 
-				pRefNode = pNext;
+                pRefNode = pNext;
 
-				continue;
-			}
-			else pRefNode = pRefNode->Next();
-		}
+                continue;
+            }
+            else pRefNode = pRefNode->Next();
+        }
 
-		pNode = pNode->Next();
-	}
+        pNode = pNode->Next();
+    }
 }
 
 void GarbageCollector::ResolveReferences()
 {
-	wxNode* pNode = mAllNodes.First();
+    wxNode* pNode = mAllNodes.First();
 
-	while( pNode )
-	{
-		GCItem& item = node_to_item( pNode );
+    while( pNode )
+    {
+        GCItem& item = node_to_item( pNode );
 
-		wxNode* pRefNode = item.mRefs.First();
+        wxNode* pRefNode = item.mRefs.First();
 
-		while( pRefNode )
-		{
-			pRefNode->SetData( (wxObject*) FindItemNode( (void*)pRefNode->Data() ) );
+        while( pRefNode )
+        {
+            pRefNode->SetData( (wxObject*) FindItemNode( (void*)pRefNode->Data() ) );
 
-			pRefNode = pRefNode->Next();
-		}
+            pRefNode = pRefNode->Next();
+        }
 
-		pNode = pNode->Next();
-	}
+        pNode = pNode->Next();
+    }
 }
 
 void GarbageCollector::AddObject( void* pObj, int refCnt )
 {
-	// FOR NOW:: initial ref-count is not used
+    // FOR NOW:: initial ref-count is not used
 
-	GCItem* pItem = new GCItem();
+    GCItem* pItem = new GCItem();
 
-	pItem->mpObj  = pObj;
+    pItem->mpObj  = pObj;
 
-	mAllNodes.Append( (wxObject*) pItem );
+    mAllNodes.Append( (wxObject*) pItem );
 }
 
 void GarbageCollector::AddDependency( void* pObj, void* pDependsOnObj )
 {
-	node_to_item( FindItemNode( pObj ) ).mRefs.Append( (wxObject*)pDependsOnObj );
+    node_to_item( FindItemNode( pObj ) ).mRefs.Append( (wxObject*)pDependsOnObj );
 }
 
 /*** GC alg. implementation ***/
 
 void GarbageCollector::ArrangeCollection()
 {
-	ResolveReferences();
+    ResolveReferences();
 
-	do
-	{
-		// find node, which does not depend on anything
+    do
+    {
+        // find node, which does not depend on anything
 
-		wxNode* pItemNode = FindReferenceFreeItemNode();
+        wxNode* pItemNode = FindReferenceFreeItemNode();
 
-		if ( pItemNode )
-		{
-			// append it to the list, where items are contained
-			// in the increasing order of dependencies
+        if ( pItemNode )
+        {
+            // append it to the list, where items are contained
+            // in the increasing order of dependencies
 
-			mRegularLst.Append( pItemNode->Data() );
+            mRegularLst.Append( pItemNode->Data() );
 
-			mAllNodes.DeleteNode( pItemNode );
+            mAllNodes.DeleteNode( pItemNode );
 
-			// remove references to this current "least-dependent" node
-			// from reference lists of all the other nodes
+            // remove references to this current "least-dependent" node
+            // from reference lists of all the other nodes
 
-			RemoveReferencesToNode( pItemNode );
-		}
-		else
-		{
-			// otherwise, what is left - all nodes, which
-			// are involved into cycled chains (rings)
+            RemoveReferencesToNode( pItemNode );
+        }
+        else
+        {
+            // otherwise, what is left - all nodes, which
+            // are involved into cycled chains (rings)
 
-			wxNode* pNode = mAllNodes.First();
+            wxNode* pNode = mAllNodes.First();
 
-			while( pNode )
-			{
-				mCycledLst.Append( pNode->Data() );
+            while( pNode )
+            {
+                mCycledLst.Append( pNode->Data() );
 
-				pNode = pNode->Next();
-			}
+                pNode = pNode->Next();
+            }
 
-			break;
-		}
+            break;
+        }
 
-		// continue search for "least-dependent" nodes
+        // continue search for "least-dependent" nodes
 
-	} while(1);
+    } while(1);
 }
 
 wxList& GarbageCollector::GetRegularObjects()
 {
-	return mRegularLst;
+    return mRegularLst;
 }
 
 wxList& GarbageCollector::GetCycledObjects()
 {
-	return mCycledLst;
+    return mCycledLst;
 }
 
 void GarbageCollector::Reset()
 {
-	DestroyItemList( mAllNodes   );
+    DestroyItemList( mAllNodes   );
 
-	mRegularLst.Clear();
-	mCycledLst.Clear();
+    mRegularLst.Clear();
+    mCycledLst.Clear();
 }
 

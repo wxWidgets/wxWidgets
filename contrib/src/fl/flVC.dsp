@@ -188,10 +188,6 @@ SOURCE=.\dyntbarhnd.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\frmview.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\garbagec.cpp
 # End Source File
 # Begin Source File
