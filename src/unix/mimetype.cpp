@@ -1069,7 +1069,8 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
                 size_t nDir, nDirs = icondirs.GetCount();
                 for ( nDir = 0; nDir < nDirs; nDir++ )
                 {
-                    wxFileName fname( icondirs[nDir], strIcon );
+                    wxFileName fnameIcon( strIcon );
+                    wxFileName fname( icondirs[nDir], fnameIcon.GetName() );
                     fname.SetExt( wxT("png") );
                     if (fname.FileExists())
                     {
