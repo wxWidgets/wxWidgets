@@ -44,6 +44,7 @@
 #  OLE	OLE file (needs Win32 and a decent compiler)
 #  Socket	Socket file (currently doesn't compile under Win16)
 #  NotMSW	Not required for the MSW port
+#  NotMGL	Not required for the MGL port
 #  NotGTK	Not required for the GTK port
 #  NotX	Not required for the Motif port
 #  NotOS2	Not required for the os2Pm port
@@ -76,8 +77,8 @@ laywin.cpp	Generic
 listctrl.cpp	Generic	NotWin32
 logg.cpp	Generic
 msgdlgg.cpp	Generic	Generic
-notebook.cpp	Generic	NotWin32,NotGTK,NotOS2
-paletteg.cpp	Generic	NotMSW,NotX,NotOS2
+notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL
+paletteg.cpp	Generic	NotMSW,NotX,NotOS2,NotMGL
 panelg.cpp	Generic
 printps.cpp	Generic	NotMSW
 prntdlgg.cpp	Generic	NotMSW
@@ -90,7 +91,7 @@ scrlwing.cpp	Generic
 spinctlg.cpp	Generic
 splash.cpp	Generic
 splitter.cpp	Generic
-statline.cpp	Generic	NotMSW,NotGTK,NotOS2
+statline.cpp	Generic	NotMSW,NotGTK,NotOS2,NotMGL
 statusbr.cpp	Generic
 tabg.cpp	Generic	NotWin32,NotOS2
 numdlgg.cpp	Generic
