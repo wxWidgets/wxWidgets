@@ -189,7 +189,7 @@ long wxControl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 }
 
 bool wxControl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam,
-                          WXLPARAM* WXUNUSED(result))
+                          WXLPARAM* result)
 {
 #if defined(__WIN95__)
 	wxCommandEvent event(wxEVT_NULL, m_windowId);
@@ -240,7 +240,7 @@ bool wxControl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam,
 		}
 */
 		default:
-			return FALSE;
+            return wxWindow::MSWNotify(wParam, lParam, result);
 	}
 
     event.SetEventType(eventType);
