@@ -575,13 +575,36 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_horizontal = new MyTextCtrl( this, -1, "Multiline text control with a horizontal scrollbar.",
       wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL );
-    m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
-                                 FALSE, "", wxFONTENCODING_ISO8859_2)); //wxFONTENCODING_KOI8));
-    //m_horizontal->SetValue("ËÁÖÅÔÓÑ ÕÄÁÞÎÙÍ");
-    m_horizontal->SetValue("®lu»ouèký kùò zbìsile èe¹tina «»");
+
+    // a little hack to use the command line argument for encoding testing
+    if ( wxTheApp->argc == 2 )
+    {
+        switch ( wxTheApp->argv[1][0] )
+        {
+            case '2':
+                m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
+                                             FALSE, "",
+                                             wxFONTENCODING_ISO8859_2));
+                //wxFONTENCODING_KOI8));
+                //m_horizontal->SetValue("ËÁÖÅÔÓÑ ÕÄÁÞÎÙÍ");
+                m_horizontal->SetValue("®lu»ouèký kùò zbìsile èe¹tina «»");
+                break;
+
+            default:
+                m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
+                                             FALSE, "",
+                                             wxFONTENCODING_KOI8));
+                m_horizontal->SetValue("ËÁÖÅÔÓÑ ÕÄÁÞÎÙÍ");
+        }
+    }
+    else
+    {
+        m_horizontal->SetValue("Text in default encoding");
+    }
 
     m_multitext = new MyTextCtrl( this, -1, "Multi line.",
       wxPoint(180,10), wxSize(240,70), wxTE_MULTILINE );
+    m_multitext->SetFont(*wxITALIC_FONT);
     (*m_multitext) << " Appended.";
     m_multitext->SetInsertionPoint(0);
     m_multitext->WriteText( "Prepended. " );
