@@ -408,11 +408,11 @@ void MyFrame::OnAppendMenuItem(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAppendSubMenu(wxCommandEvent& WXUNUSED(event))
 {
     wxMenuBar *menubar = GetMenuBar();
-    
+
     wxMenu *menu = menubar->GetMenu(menubar->GetMenuCount() - 1);
-    
-    menu->Append(Menu_Dummy_Last, "Dummy sub menu\tCtrl-F2",
-                 CreateDummyMenu(NULL));
+
+    menu->Append(Menu_Dummy_Last, "Dummy sub menu",
+                 CreateDummyMenu(NULL), "Dummy sub menu help");
 }
 
 void MyFrame::OnDeleteMenuItem(wxCommandEvent& WXUNUSED(event))
@@ -498,7 +498,7 @@ void MyFrame::OnGetMenuItemInfo(wxCommandEvent& WXUNUSED(event))
         msg << "The item is " << (item->IsEnabled() ? "enabled"
                                                     : "disabled")
             << '\n';
-                                            
+
         if ( item->IsCheckable() )
         {
             msg << "It is checkable and " << (item->IsChecked() ? "" : "un")

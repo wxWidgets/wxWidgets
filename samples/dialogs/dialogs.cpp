@@ -166,24 +166,25 @@ MyFrame::MyFrame(wxWindow *parent,
 
 void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
 {
-      wxColourData data;
-      data.SetChooseFull(TRUE);
-      for (int i = 0; i < 16; i++)
-      {
+    wxColourData data;
+    data.SetChooseFull(TRUE);
+    for (int i = 0; i < 16; i++)
+    {
         wxColour colour(i*16, i*16, i*16);
         data.SetCustomColour(i, colour);
-      }
+    }
 
-      wxColourDialog *dialog = new wxColourDialog(this, &data);
-      if (dialog->ShowModal() == wxID_OK)
-      {
+    wxColourDialog *dialog = new wxColourDialog(this, &data);
+    dialog->SetTitle("Choose the background colour");
+    if (dialog->ShowModal() == wxID_OK)
+    {
         wxColourData retData = dialog->GetColourData();
         wxColour col = retData.GetColour();
         myCanvas->SetBackgroundColour(col);
         myCanvas->Clear();
         myCanvas->Refresh();
-      }
-      dialog->Destroy();
+    }
+    dialog->Destroy();
 }
 
 void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
@@ -608,6 +609,11 @@ void MyModalDialog::OnButton(wxCommandEvent& event)
         m_btnFocused = NULL;
 
         m_btnDelete->Disable();
+    }
+    else if ( event.GetEventObject() == m_btnFocused )
+    {
+        wxGetTextFromUser("Dummy prompt", "Modal dialog called from dialog",
+                          "", this);
     }
     else
     {

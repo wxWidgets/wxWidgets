@@ -431,7 +431,18 @@ void MyFrame::OnSetImageSize(wxCommandEvent& event)
 
 void MyFrame::OnToggleImages(wxCommandEvent& event)
 {
-    wxGetApp().SetShowImages(!wxGetApp().ShowImages());
+    if ( wxGetApp().ShowImages() )
+    {
+        m_treeCtrl->CreateImageList(-1);
+
+        wxGetApp().SetShowImages(FALSE);
+    }
+    else
+    {
+        m_treeCtrl->CreateImageList();
+
+        wxGetApp().SetShowImages(TRUE);
+    }
 
     OnRecreate(event);
 }
@@ -525,42 +536,42 @@ void MyTreeCtrl::CreateImageList(int size)
     if ( size == -1 )
     {
         m_imageListNormal = NULL;
-
-        return;
     }
-
-    // Make an image list containing small icons
-    m_imageListNormal = new wxImageList(size, size, TRUE);
-
-    // should correspond to TreeCtrlIcon_xxx enum
-#if defined(__WXMSW__) && defined(__WIN16__)
-    m_imageListNormal->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
-    m_imageListNormal->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
-    m_imageListNormal->Add(wxBitmap("bitmap3", wxBITMAP_TYPE_BMP_RESOURCE));
-    m_imageListNormal->Add(wxBitmap("bitmap4", wxBITMAP_TYPE_BMP_RESOURCE));
-    m_imageListNormal->Add(wxBitmap("bitmap5", wxBITMAP_TYPE_BMP_RESOURCE));
-#else
-    wxIcon icons[5];
-    icons[0] = wxICON(icon1);
-    icons[1] = wxICON(icon2);
-    icons[2] = wxICON(icon3);
-    icons[3] = wxICON(icon4);
-    icons[4] = wxICON(icon5);
-
-    int sizeOrig = icons[0].GetWidth();
-    for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
+    else
     {
-        if ( size == sizeOrig )
+        // Make an image list containing small icons
+        m_imageListNormal = new wxImageList(size, size, TRUE);
+
+        // should correspond to TreeCtrlIcon_xxx enum
+#if defined(__WXMSW__) && defined(__WIN16__)
+        m_imageListNormal->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
+        m_imageListNormal->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
+        m_imageListNormal->Add(wxBitmap("bitmap3", wxBITMAP_TYPE_BMP_RESOURCE));
+        m_imageListNormal->Add(wxBitmap("bitmap4", wxBITMAP_TYPE_BMP_RESOURCE));
+        m_imageListNormal->Add(wxBitmap("bitmap5", wxBITMAP_TYPE_BMP_RESOURCE));
+#else // !MSW
+        wxIcon icons[5];
+        icons[0] = wxICON(icon1);
+        icons[1] = wxICON(icon2);
+        icons[2] = wxICON(icon3);
+        icons[3] = wxICON(icon4);
+        icons[4] = wxICON(icon5);
+
+        int sizeOrig = icons[0].GetWidth();
+        for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
         {
-            m_imageListNormal->Add(icons[i]);
+            if ( size == sizeOrig )
+            {
+                m_imageListNormal->Add(icons[i]);
+            }
+            else
+            {
+                m_imageListNormal->Add(wxImage(icons[i]).Rescale(size, size).
+                                        ConvertToBitmap());
+            }
         }
-        else
-        {
-            m_imageListNormal->Add(wxImage(icons[i]).Rescale(size, size).
-                                    ConvertToBitmap());
-        }
+#endif // MSW/!MSW
     }
-#endif
 
     SetImageList(m_imageListNormal);
 }

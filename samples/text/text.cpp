@@ -544,6 +544,10 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
         case WXK_F6:
             SetValue("F6 was just pressed.");
             break;
+
+        case WXK_F7:
+            ShowPosition(10);
+            break;
     }
 
     LogEvent( wxT("Key down"), event);
@@ -634,9 +638,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_enter->SetClientData((void *)_T("enter"));
 
     m_textrich = new MyTextCtrl(this, -1, "Allows more than 30Kb of text\n"
-                                "(even under broken Win9x)",
+                                "(even under broken Win9x)\n"
+                                "and a very very very very very "
+                                "very very very long line to test"
+                                "wxHSCROLL style",
                                 wxPoint(450, 10), wxSize(200, 230),
-                                wxTE_RICH | wxTE_MULTILINE);
+                                wxTE_RICH | wxTE_MULTILINE | wxHSCROLL);
 }
 
 void MyPanel::OnSize( wxSizeEvent &event )
