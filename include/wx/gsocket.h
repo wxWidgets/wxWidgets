@@ -27,6 +27,11 @@ typedef int bool;
 #define FALSE 0
 #endif
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _GSocket GSocket;
 typedef struct _GAddress GAddress;
 
@@ -75,11 +80,8 @@ typedef int GSocketEventFlags;
 typedef void (*GSocketCallback)(GSocket *socket, GSocketEvent event,
                                 char *cdata);
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
-/* Global initialisers */
+/* Global initializers */
 
 /* GSocket_Init() must be called at the beginning */
 bool GSocket_Init();
@@ -91,7 +93,7 @@ void GSocket_Cleanup();
 GSocket *GSocket_new();
 void GSocket_destroy(GSocket *socket);
 
-/* This will disable all IO calls to this socket but errors are still available */
+/* This will disable all further IO calls to this socket */
 void GSocket_Shutdown(GSocket *socket);
 
 /* Address handling */
@@ -107,88 +109,107 @@ GSocketError GSocket_SetNonOriented(GSocket *socket);
 
 /* Server specific parts */
 
-/*
-  GSocket_SetServer() setups the socket as a server. It uses the "Local" field
-  of GSocket. "Local" must be set by GSocket_SetLocal() before
-  GSocket_SetServer() is called. In the other case, it returns GSOCK_INVADDR.
-*/
+/* GSocket_SetServer:
+ *  Sets up the socket as a server. It uses the "Local" field of GSocket.
+ *  "Local" must be set by GSocket_SetLocal() before GSocket_SetServer()
+ *  is called. Possible error codes are: GSOCK_INVSOCK if socket has not
+ *  been initialized, GSOCK_INVADDR if the local address has not been
+ *  defined and GSOCK_IOERR for other internal errors.
+ */
 GSocketError GSocket_SetServer(GSocket *socket);
 
-/*
-  GSocket_WaitConnection() waits for an incoming client connection.
-*/
+/* GSocket_WaitConnection:
+ *  Waits for an incoming client connection.
+ */
 GSocket *GSocket_WaitConnection(GSocket *socket);
 
 /* Client specific parts */
 
-/*
-  GSocket_Connect() establishes a client connection to a server using the "Peer"
-  field of GSocket. "Peer" must be set by GSocket_SetPeer() before
-  GSocket_Connect() is called. In the other case, it returns GSOCK_INVADDR.
-*/
+/* GSocket_Connect:
+ *  Establishes a client connection to a server using the "Peer"
+ *  field of GSocket. "Peer" must be set by GSocket_SetPeer() before
+ *  GSocket_Connect() is called. Possible error codes are GSOCK_INVSOCK,
+ *  GSOCK_INVADDR, GSOCK_TIMEDOUT, GSOCK_WOULDBLOCK and GSOCK_IOERR.
+ *  If a socket is nonblocking and Connect() returns GSOCK_WOULDBLOCK,
+ *  the connection request can be completed later. Use GSocket_Select()
+ *  to check it, or wait for a GSOCK_CONNECTION event.
+ */
 GSocketError GSocket_Connect(GSocket *socket, GSocketStream stream);
 
 /* Generic IO */
 
 /* Like recv(), send(), ... */
-/*
-   NOTE: In case we read from a non-oriented connection, the incoming (outgoing)
-   connection address is stored in the "Local" ("Peer") field.
-*/
+
+/* NOTE: In case we read from a non-oriented connection, the incoming
+ * (outgoing) connection address is stored in the "Local" ("Peer")
+ * field.
+ */
 int GSocket_Read(GSocket *socket, char *buffer, int size);
 int GSocket_Write(GSocket *socket, const char *buffer,
                   int size);
-bool GSocket_DataAvailable(GSocket *socket);
+
+/* GSocket_Select:
+ *  Polls the socket to determine its status. This function will
+ *  check for the events specified in the 'flags' parameter, and
+ *  it will return a mask indicating which operations can be
+ *  performed. This function won't block, regardless of the
+ *  mode (blocking|nonblocking) of the socket.
+ */
+GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags);
 
 /* Flags/Parameters */
 
-/*
-  GSocket_SetTimeout() sets the timeout for reading and writing IO call. Time
-  is expressed in milliseconds.
+/* GSocket_SetTimeout:
+ *  Sets the timeout for blocking calls. Time is
+ *  expressed in milliseconds.
  */
 void GSocket_SetTimeout(GSocket *socket, unsigned long millisec);
 
-/*
-  GSocket_SetBlocking() puts the socket in non-blocking mode. This is useful
-  if we don't want to wait.
-*/
+/* GSocket_SetNonBlocking:
+ *  Sets the socket to non-blocking mode. This is useful if
+ *  we don't want to wait.
+ */
 void GSocket_SetNonBlocking(GSocket *socket, bool non_block);
 
-/*
-  GSocket_GetError() returns the last error occured on the socket stream.
-*/
-
+/* GSocket_GetError:
+ *  Returns the last error occured for this socket.
+ */
 GSocketError GSocket_GetError(GSocket *socket);
 
 /* Callbacks */
 
-/*
-   Only one fallback is possible for each event (INPUT, OUTPUT, CONNECTION, LOST)
-   INPUT: The function is called when there is at least a byte in the
-          input buffer
-   OUTPUT: The function is called when the system is sure the next write call
-           will not block
-   CONNECTION: Two cases is possible:
-             Client socket -> the connection is established
-             Server socket -> a client request a connection
-   LOST: the connection is lost
+/* Only one callback is possible for each event (INPUT, OUTPUT, CONNECTION
+ * and LOST). The callbacks are called in the following situations:
+ *
+ * INPUT: There is at least one byte in the input buffer
+ * OUTPUT: The system is sure that the next write call will not block
+ * CONNECTION: Two cases are possible:
+ *           Client socket -> the connection is established
+ *           Server socket -> a client requests a connection
+ * LOST: The connection is lost
+ *
+ * An event is generated only once and its state is reseted when the
+ * relative IO call is requested.
+ * For example: INPUT -> GSocket_Read()
+ *              CONNECTION -> GSocket_Accept()
+ */
 
-   SetCallback accepts a combination of these flags so a same callback can
-   receive different events.
-
-   An event is generated only once and its state is reseted when the relative
-   IO call is requested.
-   For example: INPUT -> GSocket_Read()
-                CONNECTION -> GSocket_Accept()
-*/
-void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
+/* GSocket_SetCallback:
+ *  Enables the callbacks specified by 'flags'. Note that 'flags'
+ *  may be a combination of flags OR'ed toghether, so the same
+ *  callback function can be made to accept different events.
+ *  The callback function must have the following prototype:
+ *
+ *  void function(GSocket *socket, GSocketEvent event, char *cdata)
+ */
+void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
                          GSocketCallback fallback, char *cdata);
 
-/*
-  UnsetCallback will disables all fallbacks specified by "event".
-  NOTE: event may be a combination of flags
-*/
-void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags event);
+/* GSocket_UnsetCallback:
+ *  Disables all callbacks specified by 'flags', which may be a
+ *  combination of flags OR'ed toghether.
+ */
+void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags);
 
 /* GAddress */
 
@@ -199,11 +220,10 @@ void GAddress_destroy(GAddress *address);
 void GAddress_SetFamily(GAddress *address, GAddressType type);
 GAddressType GAddress_GetFamily(GAddress *address);
 
-/*
-   The use of any of the next functions will set the address family to the adapted
-   one. For example if you use GAddress_INET_SetHostName, address family will be AF_INET
-   implicitely
-*/
+/* The use of any of the next functions will set the address family to
+ * the specific one. For example if you use GAddress_INET_SetHostName,
+ * address family will be implicitly set to AF_INET.
+ */
 
 GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname);
 GSocketError GAddress_INET_SetHostAddress(GAddress *address,
@@ -222,23 +242,11 @@ unsigned short GAddress_INET_GetPort(GAddress *address);
 GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path);
 GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 
-/*
- * System specific functions
- */
-
-/* On systems needing an event id */
-void GSocket_SetEventID(GSocket *socket, unsigned long evt_id);
-
-/* On systems which don't have background refresh */
-void GSocket_DoEvent(unsigned long evt_id);
-
 #ifdef __cplusplus
 };
 #endif /* __cplusplus */
 
 
-#endif
-    /* wxUSE_SOCKETS */
+#endif    /* wxUSE_SOCKETS */
 
-#endif
-    /* __GSOCKET_H */
+#endif    /* __GSOCKET_H */
