@@ -32,6 +32,7 @@ int wxForceScintillaLexers(void)
   extern LexerModule lmAVE;
   extern LexerModule lmConf;
   extern LexerModule lmCPP;
+  extern LexerModule lmNncrontab;
   extern LexerModule lmEiffel;
   extern LexerModule lmHTML;
   extern LexerModule lmLISP;
@@ -48,6 +49,7 @@ int wxForceScintillaLexers(void)
      && &lmAVE
      && &lmConf
      && &lmCPP
+     && &lmNncrontab
      && &lmEiffel
      && &lmHTML
      && &lmLISP

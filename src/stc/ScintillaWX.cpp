@@ -122,9 +122,10 @@ void ScintillaWX::Finalise() {
 
 void ScintillaWX::StartDrag() {
     wxDropSource        source(wMain.GetID());
-    wxTextDataObject    data(dragChars);
+    wxTextDataObject    data(wxString(drag.s, drag.len));
     wxDragResult        result;
 
+    dropWentOutside = true;
     source.SetData(data);
     result = source.DoDragDrop(TRUE);
     if (result == wxDragMove && dropWentOutside)
@@ -217,9 +218,10 @@ void ScintillaWX::NotifyParent(SCNotification scn) {
 
 void ScintillaWX::Copy() {
     if (currentPos != anchor) {
-        char* text = CopySelectionRange();
+        SelectionText st;
+        CopySelectionRange(&st);
         wxTheClipboard->Open();
-        wxTheClipboard->SetData(new wxTextDataObject(text));
+        wxTheClipboard->SetData(new wxTextDataObject(wxString(st.s, st.len)));
         wxTheClipboard->Close();
     }
 }
@@ -494,14 +496,15 @@ bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
 
 
 wxDragResult ScintillaWX::DoDragEnter(wxCoord x, wxCoord y, wxDragResult def) {
-    return def;
+    dragResult = def;
+    return dragResult;
 }
 
 
 wxDragResult ScintillaWX::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
     SetDragPosition(PositionFromLocation(Point(x, y)));
     dragResult = def;
-    return def;
+    return dragResult;
 }
 
 

@@ -32,6 +32,7 @@ int wxForceScintillaLexers(void)
   extern LexerModule lmAVE;
   extern LexerModule lmConf;
   extern LexerModule lmCPP;
+  extern LexerModule lmNncrontab;
   extern LexerModule lmEiffel;
   extern LexerModule lmHTML;
   extern LexerModule lmLISP;
@@ -48,6 +49,7 @@ int wxForceScintillaLexers(void)
      && &lmAVE
      && &lmConf
      && &lmCPP
+     && &lmNncrontab
      && &lmEiffel
      && &lmHTML
      && &lmLISP
@@ -1202,6 +1204,7 @@ int wxStyledTextCtrl::GetTargetEnd() {
 }
 
 // Replace the target text with the argument text.
+// Text is counted so it can contain nulls.
 // Returns the length of the replacement text.
 
                        int wxStyledTextCtrl::ReplaceTarget(const wxString& text) {
@@ -1210,6 +1213,7 @@ int wxStyledTextCtrl::GetTargetEnd() {
 }
 
 // Replace the target text with the argument text after \d processing.
+// Text is counted so it can contain nulls.
 // Looks for \d where d is between 1 and 9 and replaces these with the strings
 // matched in the last search operation which were surrounded by \( and \).
 // Returns the length of the replacement text including any change
@@ -1221,7 +1225,7 @@ int wxStyledTextCtrl::GetTargetEnd() {
 }
 
 // Search for a counted string in the target and set the target to the found
-// range.
+// range. Text is counted so it can contain nulls.
 // Returns length of range or -1 for failure in which case target is not moved.
 
                        int wxStyledTextCtrl::SearchInTarget(const wxString& text) {

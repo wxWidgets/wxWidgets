@@ -37,6 +37,7 @@ OBJECTS=PlatWX.o ScintillaWX.o stc.o \
 	LexAda.o		\
 	LexCPP.o		\
 	LexConf.o		\
+	LexCrontab.o		\
 	LexEiffel.o		\
 	LexHTML.o		\
 	LexLisp.o		\
@@ -53,6 +54,7 @@ OBJECTS=PlatWX.o ScintillaWX.o stc.o \
 	RESearch.o		\
         ScintillaBase.o	    	\
         Style.o		        \
+	StyleContext.o		\
 	UniConversion.o		\
         ViewStyle.o		\
 	WindowAccessor.o	\

@@ -108,22 +108,26 @@ LexerModule lmNull(SCLEX_NULL, ColouriseNullDoc, "null");
 int wxForceScintillaLexers(void) {
   extern LexerModule lmAda;
   extern LexerModule lmAVE;
-  extern LexerModule lmConf;
-  extern LexerModule lmDiff;
-  extern LexerModule lmLatex;
-  extern LexerModule lmPascal;
-  extern LexerModule lmCPP;
-  extern LexerModule lmHTML;
-  extern LexerModule lmXML;
-  extern LexerModule lmProps;
-  extern LexerModule lmErrorList;
-  extern LexerModule lmMake;
   extern LexerModule lmBatch;
+  extern LexerModule lmConf;
+  extern LexerModule lmCPP;
+  extern LexerModule lmDiff;
+  extern LexerModule lmEiffel;
+  extern LexerModule lmEiffelkw;
+  extern LexerModule lmErrorList;
+  extern LexerModule lmHTML;
+  extern LexerModule lmLatex;
+  extern LexerModule lmLISP;
+  extern LexerModule lmLua;
+  extern LexerModule lmMake;
+  extern LexerModule lmPascal;
   extern LexerModule lmPerl;
+  extern LexerModule lmProps;  
   extern LexerModule lmPython;
+  extern LexerModule lmRuby;
   extern LexerModule lmSQL;
   extern LexerModule lmVB;
-  extern LexerModule lmRuby;
+  extern LexerModule lmXML;
 
   if (
       &lmAda
@@ -143,7 +147,12 @@ int wxForceScintillaLexers(void) {
       && &lmPython
       && &lmSQL
       && &lmVB
-      && &lmRuby      
+      && &lmRuby
+      && &lmEiffel
+      && &lmEiffelkw
+      && &lmLISP
+      && &lmLua
+      && &lmNull
       )
     {
       return 1;

@@ -531,24 +531,20 @@ ListBox::~ListBox() {
 
 void ListBox::Create(Window &parent, int ctrlID) {
     id = new wxSTCListBox(parent.id, ctrlID);
-//    id = new wxListBox(parent.id, ctrlID,  wxDefaultPosition, wxDefaultSize,
-//                       0, NULL, wxLB_SINGLE | wxLB_SORT | wxSIMPLE_BORDER);
 }
 
 void ListBox::SetVisibleRows(int rows) {
 	desiredVisibleRows = rows;
-        printf("SetVisibleRows: %d\n", rows);
 }
 
 PRectangle ListBox::GetDesiredRect() {
     wxSize sz = ((wxListBox*)id)->GetBestSize();
-    printf("GetDesiredRect: %d, %d\n", sz.x, sz.y);
     PRectangle rc;
     rc.top = 0;
     rc.left = 0;
     if (sz.x > 400)
         sz.x = 400;
-    if (sz.y > 150)
+    if (sz.y > 150)  // TODO:  Use desiredVisibleRows??
         sz.y = 150;
     rc.right = sz.x;
     rc.bottom = sz.y;
@@ -592,13 +588,7 @@ int ListBox::GetSelection() {
 }
 
 int ListBox::Find(const char *prefix) {
-    if (prefix) {
-        for (int x=0; x < ((wxListBox*)id)->GetCount(); x++) {
-            wxString text = ((wxListBox*)id)->GetString(x);
-            if (text.StartsWith(prefix))
-                return x;
-        }
-    }
+    // No longer used
     return -1;
 }
 

@@ -72,6 +72,7 @@
 #define wxSTC_MARK_CIRCLEPLUSCONNECTED 19
 #define wxSTC_MARK_CIRCLEMINUS 20
 #define wxSTC_MARK_CIRCLEMINUSCONNECTED 21
+#define wxSTC_MARK_CHARACTER 10000
 
 // Markers used for outlining column
 #define wxSTC_MARKNUM_FOLDEREND 25
@@ -83,12 +84,16 @@
 #define wxSTC_MARKNUM_FOLDEROPEN 31
 #define wxSTC_MARGIN_SYMBOL 0
 #define wxSTC_MARGIN_NUMBER 1
+
+// Styles in range 32..37 are predefined for parts of the UI and are not used as normal styles.
+// Styles 38 and 39 are for future use.
 #define wxSTC_STYLE_DEFAULT 32
 #define wxSTC_STYLE_LINENUMBER 33
 #define wxSTC_STYLE_BRACELIGHT 34
 #define wxSTC_STYLE_BRACEBAD 35
 #define wxSTC_STYLE_CONTROLCHAR 36
 #define wxSTC_STYLE_INDENTGUIDE 37
+#define wxSTC_STYLE_LASTPREDEFINED 39
 #define wxSTC_STYLE_MAX 127
 
 // Character set identifiers are used in StyleSetCharacterSet.
@@ -295,6 +300,7 @@
 #define wxSTC_LEX_EIFFEL 23
 #define wxSTC_LEX_EIFFELKW 24
 #define wxSTC_LEX_TCL 25
+#define wxSTC_LEX_NNCRONTAB 26
 
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -334,6 +340,8 @@
 #define wxSTC_C_REGEX 14
 #define wxSTC_C_COMMENTLINEDOC 15
 #define wxSTC_C_WORD2 16
+#define wxSTC_C_COMMENTDOCKEYWORD 17
+#define wxSTC_C_COMMENTDOCKEYWORDERROR 18
 
 // Lexical states for SCLEX_HTML, SCLEX_XML
 #define wxSTC_H_DEFAULT 0
@@ -365,7 +373,17 @@
 #define wxSTC_H_XCCOMMENT 20
 
 // SGML
-#define wxSTC_H_SGML 21
+#define wxSTC_H_SGML_DEFAULT 21
+#define wxSTC_H_SGML_COMMAND 22
+#define wxSTC_H_SGML_1ST_PARAM 23
+#define wxSTC_H_SGML_DOUBLESTRING 24
+#define wxSTC_H_SGML_SIMPLESTRING 25
+#define wxSTC_H_SGML_ERROR 26
+#define wxSTC_H_SGML_SPECIAL 27
+#define wxSTC_H_SGML_ENTITY 28
+#define wxSTC_H_SGML_COMMENT 29
+#define wxSTC_H_SGML_1ST_PARAM_COMMENT 30
+#define wxSTC_H_SGML_BLOCK_DEFAULT 31
 
 // Embedded Javascript
 #define wxSTC_HJ_START 40
@@ -603,6 +621,19 @@
 #define wxSTC_EIFFEL_OPERATOR 6
 #define wxSTC_EIFFEL_IDENTIFIER 7
 #define wxSTC_EIFFEL_STRINGEOL 8
+
+// Lexical states for the SCLEX_NNCRONTAB (nnCron crontab Lexer)
+#define wxSTC_NNCRONTAB_DEFAULT 0
+#define wxSTC_NNCRONTAB_COMMENT 1
+#define wxSTC_NNCRONTAB_TASK 2
+#define wxSTC_NNCRONTAB_SECTION 3
+#define wxSTC_NNCRONTAB_KEYWORD 4
+#define wxSTC_NNCRONTAB_MODIFIER 5
+#define wxSTC_NNCRONTAB_ASTERISK 6
+#define wxSTC_NNCRONTAB_NUMBER 7
+#define wxSTC_NNCRONTAB_STRING 8
+#define wxSTC_NNCRONTAB_ENVIRONMENT 9
+#define wxSTC_NNCRONTAB_IDENTIFIER 10
 
 // END of generated section
 //----------------------------------------------------------------------
@@ -1223,10 +1254,12 @@ public:
     int GetTargetEnd();
 
     // Replace the target text with the argument text.
+    // Text is counted so it can contain nulls.
     // Returns the length of the replacement text.
     int ReplaceTarget(const wxString& text);
 
     // Replace the target text with the argument text after \d processing.
+    // Text is counted so it can contain nulls.
     // Looks for \d where d is between 1 and 9 and replaces these with the strings
     // matched in the last search operation which were surrounded by \( and \).
     // Returns the length of the replacement text including any change
@@ -1234,7 +1267,7 @@ public:
     int ReplaceTargetRE(const wxString& text);
 
     // Search for a counted string in the target and set the target to the found
-    // range.
+    // range. Text is counted so it can contain nulls.
     // Returns length of range or -1 for failure in which case target is not moved.
     int SearchInTarget(const wxString& text);
 

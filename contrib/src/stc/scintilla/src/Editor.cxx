@@ -14,10 +14,6 @@
 
 #include "Scintilla.h"
 
-#if PLAT_WX || PLAT_GTK
-#include "WinDefs.h"
-#endif 
-
 #include "ContractionState.h"
 #include "SVector.h"
 #include "CellBuffer.h"
@@ -58,7 +54,6 @@ Editor::Editor() {
 	dwelling = false;
 	ptMouseLast.x = 0;
 	ptMouseLast.y = 0;
-	firstExpose = true;
 	inDragDrop = false;
 	dropWentOutside = false;
 	posDrag = invalidPosition;
@@ -69,9 +64,6 @@ Editor::Editor() {
 	lineAnchor = 0;
 	originalAnchorPos = 0;
 
-	dragChars = 0;
-	lenDrag = 0;
-	dragIsRectangle = false;
 	selType = selStream;
 	xStartSelect = 0;
 	xEndSelect = 0;
@@ -84,9 +76,6 @@ Editor::Editor() {
 	visibleSlop = 0;
 
 	searchAnchor = 0;
-
-	ucWheelScrollLines = 0;
-	cWheelDelta = 0;   //wheel delta from roll
 
 	xOffset = 0;
 	xCaretMargin = 50;
@@ -114,15 +103,11 @@ Editor::Editor() {
 
 	modEventMask = SC_MODEVENTMASKALL;
 
-	displayPopupMenu = true;
-
 	pdoc = new Document();
 	pdoc ->AddRef();
 	pdoc->AddWatcher(this, 0);
 
-#ifdef MACRO_SUPPORT
-	recordingMacro = 0;
-#endif 
+	recordingMacro = false;
 	foldFlags = 0;
 }
 
@@ -131,10 +116,6 @@ Editor::~Editor() {
 	pdoc->Release();
 	pdoc = 0;
 	DropGraphics();
-
-	delete []dragChars;
-	dragChars = 0;
-	lenDrag = 0;
 }
 
 void Editor::Finalise() {
@@ -874,7 +855,7 @@ void Editor::PaintSelMargin(Surface *surfWindow, PRectangle &rc) {
 				if (marks) {
 					for (int markBit = 0; (markBit < 32) && marks; markBit++) {
 						if (marks & 1) {
-							vs.markers[markBit].Draw(surface, rcMarker);
+							vs.markers[markBit].Draw(surface, rcMarker, vs.styles[STYLE_LINENUMBER].font);
 						}
 						marks >>= 1;
 					}
@@ -1917,14 +1898,12 @@ void Editor::NotifyChar(int ch) {
 	scn.nmhdr.code = SCN_CHARADDED;
 	scn.ch = ch;
 	NotifyParent(scn);
-#ifdef MACRO_SUPPORT
 	if (recordingMacro) {
 		char txt[2];
 		txt[0] = static_cast<char>(ch);
 		txt[1] = '\0';
 		NotifyMacroRecord(SCI_REPLACESEL, 0, reinterpret_cast<long>(txt));
 	}
-#endif 
 }
 
 void Editor::NotifySavePoint(bool isSavePoint) {
@@ -2150,7 +2129,6 @@ void Editor::NotifyDeleted(Document *, void *) {
 	/* Do nothing */
 }
 
-#ifdef MACRO_SUPPORT
 void Editor::NotifyMacroRecord(unsigned int iMessage, unsigned long wParam, long lParam) {
 
 	// Enumerates all macroable messages
@@ -2159,10 +2137,6 @@ void Editor::NotifyMacroRecord(unsigned int iMessage, unsigned long wParam, long
 	case SCI_COPY:
 	case SCI_PASTE:
 	case SCI_CLEAR:
-	case WM_CUT:
-	case WM_COPY:
-	case WM_PASTE:
-	case WM_CLEAR:
 	case SCI_REPLACESEL:
 	case SCI_ADDTEXT:
 	case SCI_INSERTTEXT:
@@ -2236,7 +2210,6 @@ void Editor::NotifyMacroRecord(unsigned int iMessage, unsigned long wParam, long
 	scn.lParam = lParam;
 	NotifyParent(scn);
 }
-#endif 
 
 // Force scroll and keep position relative to top of window
 void Editor::PageMove(int direction, bool extend) {
@@ -2674,7 +2647,6 @@ void Editor::Indent(bool forwards) {
  * @return The position of the found text, -1 if not found.
  */
 long Editor::FindText(
-    unsigned int iMessage,    	///< Can be @c EM_FINDTEXT or @c EM_FINDTEXTEX or @c SCI_FINDTEXT.
     unsigned long wParam,    	///< Search modes : @c SCFIND_MATCHCASE, @c SCFIND_WHOLEWORD,
     ///< @c SCFIND_WORDSTART or @c SCFIND_REGEXP.
     long lParam) {			///< @c TextToFind structure: The text to search for in the given range.
@@ -2688,10 +2660,8 @@ long Editor::FindText(
 	                         wParam & SCFIND_REGEXP,
 	                         &lengthFound);
 	if (pos != -1) {
-		if (iMessage != EM_FINDTEXT) {
-			ft->chrgText.cpMin = pos;
-			ft->chrgText.cpMax = pos + lengthFound;
-		}
+		ft->chrgText.cpMin = pos;
+		ft->chrgText.cpMax = pos + lengthFound;
 	}
 	return pos;
 }
@@ -2800,33 +2770,23 @@ char *Editor::CopyRange(int start, int end) {
 	return text;
 }
 
-int Editor::SelectionRangeLength() {
+void Editor::CopySelectionRange(SelectionText *ss) {
+	char *text = 0;
+	int size = 0;
 	if (selType == selRectangle) {
 		int lineStart = pdoc->LineFromPosition(SelectionStart());
 		int lineEnd = pdoc->LineFromPosition(SelectionEnd());
-		int totalSize = 0;
-		for (int line = lineStart; line <= lineEnd; line++) {
-			totalSize += SelectionEnd(line) - SelectionStart(line) + 1;
+		int line;
+		for (line = lineStart; line <= lineEnd; line++) {
+			size += SelectionEnd(line) - SelectionStart(line) + 1;
 			if (pdoc->eolMode == SC_EOL_CRLF)
-				totalSize++;
+				size++;
 		}
-		return totalSize;
-	} else {
-		return SelectionEnd() - SelectionStart();
-	}
-}
-
-char *Editor::CopySelectionRange() {
-	if (selType == selRectangle) {
-		char *text = 0;
-		int lineStart = pdoc->LineFromPosition(SelectionStart());
-		int lineEnd = pdoc->LineFromPosition(SelectionEnd());
-		int totalSize = SelectionRangeLength();
-		if (totalSize > 0) {
-			text = new char[totalSize + 1];
+		if (size > 0) {
+			text = new char[size + 1];
 			if (text) {
 				int j = 0;
-				for (int line = lineStart; line <= lineEnd; line++) {
+				for (line = lineStart; line <= lineEnd; line++) {
 					for (int i = SelectionStart(line);i < SelectionEnd(line);i++) {
 						text[j++] = pdoc->CharAt(i);
 					}
@@ -2835,24 +2795,14 @@ char *Editor::CopySelectionRange() {
 					if (pdoc->eolMode != SC_EOL_CR)
 						text[j++] = '\n';
 				}
-				text[totalSize] = '\0';
+				text[size] = '\0';
 			}
 		}
-		return text;
 	} else {
-		return CopyRange(SelectionStart(), SelectionEnd());
+		size = SelectionEnd() - SelectionStart();
+		text = CopyRange(SelectionStart(), SelectionEnd());
 	}
-}
-
-void Editor::CopySelectionIntoDrag() {
-	delete []dragChars;
-	dragChars = 0;
-	lenDrag = SelectionRangeLength();
-	dragChars = CopySelectionRange();
-	dragIsRectangle = selType == selRectangle;
-	if (!dragChars) {
-		lenDrag = 0;
-	}
+	ss->Set(text, size, selType == selRectangle);
 }
 
 void Editor::SetDragPosition(int newPos) {
@@ -2881,8 +2831,6 @@ void Editor::StartDrag() {
 	//SetMouseCapture(true);
 	//DisplayCursor(Window::cursorArrow);
 }
-
-
 
 void Editor::DropAt(int position, const char *value, bool moving, bool rectangular) {
 	//Platform::DebugPrintf("DropAt %d\n", inDragDrop);
@@ -3115,7 +3063,7 @@ void Editor::ButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, b
 			if (inDragDrop) {
 				SetMouseCapture(false);
 				SetDragPosition(newPos);
-				CopySelectionIntoDrag();
+				CopySelectionRange(&drag);
 				StartDrag();
 			} else {
 				xStartSelect = pt.x - vs.fixedColumnWidth + xOffset;
@@ -3220,25 +3168,23 @@ void Editor::ButtonUp(Point pt, unsigned int curTime, bool ctrl) {
 			int selStart = SelectionStart();
 			int selEnd = SelectionEnd();
 			if (selStart < selEnd) {
-				if (dragChars && lenDrag) {
+				if (drag.len) {
 					if (ctrl) {
-						pdoc->InsertString(newPos, dragChars, lenDrag);
-						SetSelection(newPos, newPos + lenDrag);
+						pdoc->InsertString(newPos, drag.s, drag.len);
+						SetSelection(newPos, newPos + drag.len);
 					} else if (newPos < selStart) {
-						pdoc->DeleteChars(selStart, lenDrag);
-						pdoc->InsertString(newPos, dragChars, lenDrag);
-						SetSelection(newPos, newPos + lenDrag);
+						pdoc->DeleteChars(selStart, drag.len);
+						pdoc->InsertString(newPos, drag.s, drag.len);
+						SetSelection(newPos, newPos + drag.len);
 					} else if (newPos > selEnd) {
-						pdoc->DeleteChars(selStart, lenDrag);
-						newPos -= lenDrag;
-						pdoc->InsertString(newPos, dragChars, lenDrag);
-						SetSelection(newPos, newPos + lenDrag);
+						pdoc->DeleteChars(selStart, drag.len);
+						newPos -= drag.len;
+						pdoc->InsertString(newPos, drag.s, drag.len);
+						SetSelection(newPos, newPos + drag.len);
 					} else {
 						SetEmptySelection(newPos);
 					}
-					delete []dragChars;
-					dragChars = 0;
-					lenDrag = 0;
+					drag.Set(0, 0);
 				}
 				selectionType = selChar;
 			}
@@ -3545,14 +3491,11 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	//Platform::DebugPrintf("S start wnd proc %d %d %d\n",iMessage, wParam, lParam);
 
 	// Optional macro recording hook
-#ifdef MACRO_SUPPORT
 	if (recordingMacro)
 		NotifyMacroRecord(iMessage, wParam, lParam);
-#endif 
 
 	switch (iMessage) {
 
-	case WM_GETTEXT:
 	case SCI_GETTEXT:
 		{
 			if (lParam == 0)
@@ -3565,7 +3508,6 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 			return iChar;
 		}
 
-	case WM_SETTEXT:
 	case SCI_SETTEXT:
 		{
 			if (lParam == 0)
@@ -3576,130 +3518,45 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 			return TRUE;
 		}
 
-	case WM_GETTEXTLENGTH:
 	case SCI_GETTEXTLENGTH:
 		return pdoc->Length();
 
-	case WM_CUT:
 	case SCI_CUT:
 		Cut();
 		SetLastXChosen();
 		break;
 
-	case WM_COPY:
 	case SCI_COPY:
 		Copy();
 		break;
 
-	case WM_PASTE:
 	case SCI_PASTE:
 		Paste();
 		SetLastXChosen();
 		EnsureCaretVisible();
 		break;
 
-	case WM_CLEAR:
 	case SCI_CLEAR:
 		Clear();
 		SetLastXChosen();
 		break;
 
-	case WM_UNDO:
 	case SCI_UNDO:
 		Undo();
 		SetLastXChosen();
 		break;
 
-		// Edit control messages
-
-		// Not supported (no-ops):
-		//		EM_GETWORDBREAKPROC
-		//		EM_GETWORDBREAKPROCEX
-		//		EM_SETWORDBREAKPROC
-		//		EM_SETWORDBREAKPROCEX
-		//		EM_GETWORDWRAPMODE
-		//		EM_SETWORDWRAPMODE
-		//		EM_LIMITTEXT
-		//		EM_EXLIMITTEXT
-		//		EM_SETRECT
-		//		EM_SETRECTNP
-		//		EM_FMTLINES
-		//		EM_GETHANDLE
-		//		EM_SETHANDLE
-		//		EM_GETPASSWORDCHAR
-		//		EM_SETPASSWORDCHAR
-		//		EM_SETTABSTOPS
-		//		EM_FINDWORDBREAK
-		//		EM_GETCHARFORMAT
-		//		EM_SETCHARFORMAT
-		//		EM_GETOLEINTERFACE
-		//		EM_SETOLEINTERFACE
-		//		EM_SETOLECALLBACK
-		//		EM_GETPARAFORMAT
-		//		EM_SETPARAFORMAT
-		//		EM_PASTESPECIAL
-		//		EM_REQUESTRESIZE
-		//		EM_GETBKGNDCOLOR
-		//		EM_SETBKGNDCOLOR
-		//		EM_STREAMIN
-		//		EM_STREAMOUT
-		//		EM_GETIMECOLOR
-		//		EM_SETIMECOLOR
-		//		EM_GETIMEOPTIONS
-		//		EM_SETIMEOPTIONS
-		//		EM_GETOPTIONS
-		//		EM_SETOPTIONS
-		//		EM_GETPUNCTUATION
-		//		EM_SETPUNCTUATION
-		//		EM_GETTHUMB
-		//		EM_SETTARGETDEVICE
-
-		// Not supported but should be:
-		//		EM_GETEVENTMASK
-		//		EM_SETEVENTMASK
-		//		For printing:
-		//			EM_DISPLAYBAND
-
-	case EM_CANUNDO:
 	case SCI_CANUNDO:
 		return pdoc->CanUndo() ? TRUE : FALSE;
 
-	case EM_UNDO:
-		Undo();
-		SetLastXChosen();
-		break;
-
-	case EM_EMPTYUNDOBUFFER:
 	case SCI_EMPTYUNDOBUFFER:
 		pdoc->DeleteUndoHistory();
 		return 0;
 
-	case EM_GETFIRSTVISIBLELINE:
 	case SCI_GETFIRSTVISIBLELINE:
 		return topLine;
 
-	case EM_GETLINE: {
-			if (lParam == 0) {
-				return 0;
-			}
-			char *ptr = reinterpret_cast<char *>(lParam);
-			short *pBufSize = reinterpret_cast<short *>(lParam);
-			short bufSize = *pBufSize;
-			ptr[0] = '\0'; 	// If no characters copied, have to put a NUL into buffer
-			if (static_cast<int>(wParam) > pdoc->LinesTotal()) {
-				return 0;
-			}
-			int lineStart = pdoc->LineStart(wParam);
-			int lineEnd = pdoc->LineStart(wParam + 1);
-			// The first word of the buffer is the size, in TCHARs, of the buffer
-			int iPlace = 0;
-			for (int iChar = lineStart; iChar < lineEnd && iPlace < bufSize; iChar++) {
-				ptr[iPlace++] = pdoc->CharAt(iChar);
-			}
-			return iPlace;
-		}
-
-	case SCI_GETLINE: {	// Simpler than EM_GETLINE, but with risk of overwriting the end of the buffer
+	case SCI_GETLINE: {	// Risk of overwriting the end of the buffer
 			if (lParam == 0) {
 				return 0;
 			}
@@ -3713,42 +3570,15 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 			return iPlace;
 		}
 
-	case EM_GETLINECOUNT:
 	case SCI_GETLINECOUNT:
 		if (pdoc->LinesTotal() == 0)
 			return 1;
 		else
 			return pdoc->LinesTotal();
 
-	case EM_GETMODIFY:
 	case SCI_GETMODIFY:
 		return !pdoc->IsSavePoint();
 
-	case EM_GETRECT:
-		if (lParam == 0)
-			return 0;
-		*(reinterpret_cast<PRectangle *>(lParam)) = GetClientRectangle();
-		break;
-
-	case EM_GETSEL:
-		if (wParam)
-			*reinterpret_cast<int *>(wParam) = SelectionStart();
-		if (lParam)
-			*reinterpret_cast<int *>(lParam) = SelectionEnd();
-		return Platform::LongFromTwoShorts(
-		           static_cast<short>(SelectionStart()),
-		           static_cast<short>(SelectionEnd()));
-
-	case EM_EXGETSEL: {
-			if (lParam == 0)
-				return 0;
-			CharacterRange *pCR = reinterpret_cast<CharacterRange *>(lParam);
-			pCR->cpMin = SelectionStart();
-			pCR->cpMax = SelectionEnd();
-		}
-		break;
-
-	case EM_SETSEL:
 	case SCI_SETSEL: {
 			int nStart = static_cast<int>(wParam);
 			int nEnd = static_cast<int>(lParam);
@@ -3762,55 +3592,28 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		}
 		break;
 
-	case EM_EXSETSEL: {
-			if (lParam == 0)
-				return 0;
-			CharacterRange *pCR = reinterpret_cast<CharacterRange *>(lParam);
-			selType = selStream;
-			if (pCR->cpMax == -1) {
-				SetSelection(pCR->cpMin, pdoc->Length());
-			} else {
-				SetSelection(pCR->cpMin, pCR->cpMax);
-			}
-			EnsureCaretVisible();
-			return pdoc->LineFromPosition(SelectionStart());
-		}
-
-	case EM_GETSELTEXT:
 	case SCI_GETSELTEXT: {
 			if (lParam == 0)
 				return 0;
+			SelectionText selectedText;
+			CopySelectionRange(&selectedText);
 			char *ptr = reinterpret_cast<char *>(lParam);
-			int selSize = SelectionRangeLength();
-			char *text = CopySelectionRange();
 			int iChar = 0;
-			if (text) {
-				for (; iChar < selSize; iChar++)
-					ptr[iChar] = text[iChar];
+			if (selectedText.len) {
+				for (; iChar < selectedText.len; iChar++)
+					ptr[iChar] = selectedText.s[iChar];
 				ptr[iChar] = '\0';
-				delete []text;
 			} else {
 				ptr[0] = '\0';
 			}
 			return iChar;
 		}
 
-	case EM_LINEFROMCHAR:
-		if (static_cast<int>(wParam) < 0)
-			wParam = SelectionStart();
-		return pdoc->LineFromPosition(wParam);
-
-	case EM_EXLINEFROMCHAR:
-		if (static_cast<int>(lParam) < 0)
-			lParam = SelectionStart(); 	// Not specified, but probably OK
-		return pdoc->LineFromPosition(lParam);
-
 	case SCI_LINEFROMPOSITION:
 		if (static_cast<int>(wParam) < 0)
 			return 0;
 		return pdoc->LineFromPosition(wParam);
 
-	case EM_LINEINDEX:
 	case SCI_POSITIONFROMLINE:
 		if (static_cast<int>(wParam) < 0)
 			wParam = pdoc->LineFromPosition(SelectionStart());
@@ -3822,28 +3625,13 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		//	return -1;
 		return pdoc->LineStart(wParam);
 
-	case EM_LINELENGTH: {
-			if (static_cast<int>(wParam) < 0)	// Who use this anyway?
-				return 0; 	// Should be... Too complex to describe here, see MS specs!
-			if (static_cast<int>(wParam) > pdoc->Length())	// Useful test, anyway...
-				return 0;
-			int line = pdoc->LineFromPosition(wParam);
-			int charsOnLine = 0;
-			for (int pos = pdoc->LineStart(line); pos < pdoc->LineStart(line + 1); pos++) {
-				if ((pdoc->CharAt(pos) != '\r') && (pdoc->CharAt(pos) != '\n'))
-					charsOnLine++;
-			}
-			return charsOnLine;
-		}
-
-		// Replacement of the old Scintilla interpretation of EM_LINELENGTH
+	// Replacement of the old Scintilla interpretation of EM_LINELENGTH
 	case SCI_LINELENGTH:
 		if ((static_cast<int>(wParam) < 0) ||
 		        (static_cast<int>(wParam) > pdoc->LineFromPosition(pdoc->Length())))
 			return 0;
 		return pdoc->LineStart(wParam + 1) - pdoc->LineStart(wParam);
 
-	case EM_REPLACESEL:
 	case SCI_REPLACESEL: {
 			if (lParam == 0)
 				return 0;
@@ -3890,18 +3678,15 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	case SCI_GETSEARCHFLAGS:
 		return searchFlags;
 
-	case EM_LINESCROLL:
 	case SCI_LINESCROLL:
 		ScrollTo(topLine + lParam);
 		HorizontalScrollTo(xOffset + wParam * vs.spaceWidth);
 		return TRUE;
 
-	case EM_SCROLLCARET:
 	case SCI_SCROLLCARET:
 		EnsureCaretVisible();
 		break;
 
-	case EM_SETREADONLY:
 	case SCI_SETREADONLY:
 		pdoc->SetReadOnly(wParam);
 		return TRUE;
@@ -3909,32 +3694,8 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	case SCI_GETREADONLY:
 		return pdoc->IsReadOnly();
 
-	case EM_CANPASTE:
 	case SCI_CANPASTE:
 		return CanPaste();
-
-	case EM_CHARFROMPOS: {
-			if (lParam == 0)
-				return 0;
-			Point *ppt = reinterpret_cast<Point *>(lParam);
-			int pos = PositionFromLocation(*ppt);
-			int line = pdoc->LineFromPosition(pos);
-			return Platform::LongFromTwoShorts(
-			           static_cast<short>(pos), static_cast < short > (line));
-		}
-
-	case EM_POSFROMCHAR: {
-			// The MS specs for this have changed 3 times: using the RichEdit 3 version
-			if (wParam == 0)
-				return 0;
-			Point *ppt = reinterpret_cast<Point *>(wParam);
-			if (lParam < 0) {
-				*ppt = Point(0, 0);
-			} else {
-				*ppt = LocationFromPosition(lParam);
-			}
-			return 0;
-		}
 
 	case SCI_POINTXFROMPOSITION:
 		if (lParam < 0) {
@@ -3952,14 +3713,9 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 			return pt.y;
 		}
 
-	case EM_FINDTEXT:
-		return FindText(iMessage, wParam, lParam);
-
-	case EM_FINDTEXTEX:
 	case SCI_FINDTEXT:
-		return FindText(iMessage, wParam, lParam);
+		return FindText(wParam, lParam);
 
-	case EM_GETTEXTRANGE:
 	case SCI_GETTEXTRANGE: {
 			if (lParam == 0)
 				return 0;
@@ -3974,52 +3730,19 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 			return len; 	// Not including NUL
 		}
 
-
-
-	case EM_SELECTIONTYPE:
-#ifdef SEL_EMPTY
-		if (currentPos == anchor)
-			return SEL_EMPTY;
-		else
-			return SEL_TEXT;
-#else 
-		return 0;
-#endif 
-
-	case EM_HIDESELECTION:
+	case SCI_HIDESELECTION:
 		hideSelection = wParam;
 		Redraw();
 		break;
 
-	case EM_FORMATRANGE:
 	case SCI_FORMATRANGE:
 		return FormatRange(wParam, reinterpret_cast<RangeToFormat *>(lParam));
-
-	case EM_GETMARGINS:
-		return Platform::LongFromTwoShorts(static_cast<short>(vs.leftMarginWidth),
-		                                   static_cast<short>(vs.rightMarginWidth));
 
 	case SCI_GETMARGINLEFT:
 		return vs.leftMarginWidth;
 
 	case SCI_GETMARGINRIGHT:
 		return vs.rightMarginWidth;
-
-	case EM_SETMARGINS:
-#ifdef EC_LEFTMARGIN
-		if (wParam & EC_LEFTMARGIN) {
-			vs.leftMarginWidth = Platform::LowShortFromLong(lParam);
-		}
-		if (wParam & EC_RIGHTMARGIN) {
-			vs.rightMarginWidth = Platform::HighShortFromLong(lParam);
-		}
-		if (wParam == EC_USEFONTINFO) {
-			vs.leftMarginWidth = vs.aveCharWidth / 2;
-			vs.rightMarginWidth = vs.aveCharWidth / 2;
-		}
-		InvalidateStyleRedraw();
-#endif 
-		break;
 
 	case SCI_SETMARGINLEFT:
 		vs.leftMarginWidth = lParam;
@@ -4667,10 +4390,6 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	case SCI_LINESONSCREEN:
 		return LinesOnScreen();
 
-	case SCI_USEPOPUP:
-		displayPopupMenu = wParam;
-		break;
-
 	case SCI_SETSELFORE:
 		vs.selforeset = wParam;
 		vs.selforeground.desired = Colour(lParam);
@@ -4711,7 +4430,7 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 
 	case SCI_CLEARCMDKEY:
 		kmap.AssignCmdKey(Platform::LowShortFromLong(wParam),
-		                  Platform::HighShortFromLong(wParam), WM_NULL);
+		                  Platform::HighShortFromLong(wParam), SCI_NULL);
 		break;
 
 	case SCI_CLEARALLCMDKEYS:
@@ -4915,15 +4634,13 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	case SCI_GETCURSOR:
 		return cursorMode;
 
-#ifdef MACRO_SUPPORT
 	case SCI_STARTRECORD:
-		recordingMacro = 1;
+		recordingMacro = true;
 		return 0;
 
 	case SCI_STOPRECORD:
-		recordingMacro = 0;
+		recordingMacro = false;
 		return 0;
-#endif 
 
 	case SCI_MOVECARETINSIDEVIEW:
 		MoveCaretInsideView();

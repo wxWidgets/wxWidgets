@@ -15,317 +15,255 @@
 
 #include "PropSet.h"
 #include "Accessor.h"
+#include "StyleContext.h"
 #include "KeyWords.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-static bool IsOKBeforeRE(int ch) {
+static bool IsOKBeforeRE(const int ch) {
 	return (ch == '(') || (ch == '=') || (ch == ',');
 }
 
-static void getRange(unsigned int start,
-		unsigned int end,
-		Accessor &styler,
-		char *s,
-		unsigned int len) {
-	unsigned int i = 0;
-	while ((i < end - start + 1) && (i < len-1)) {
-		s[i] = styler[start + i];
-		i++;
-	}
-	s[i] = '\0';
-}
-
-inline bool IsASpace(int ch) {
-    return (ch == ' ') || ((ch >= 0x09) && (ch <= 0x0d));
-}
-
-inline bool IsAWordChar(int  ch) {
+inline bool IsAWordChar(const int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
 }
 
-inline bool IsAWordStart(int ch) {
+inline bool IsAWordStart(const int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '_');
 }
 
-inline bool IsADigit(int ch) {
-	return (ch >= '0') && (ch <= '9');
+inline bool IsADoxygenChar(const int ch) {
+	return (islower(ch) || ch == '$' || ch == '@' ||
+		    ch == '\\' || ch == '&' || ch == '<' ||
+			ch == '>' || ch == '#' || ch == '{' ||
+			ch == '}' || ch == '[' || ch == ']');
 }
 
-// All languages handled so far can treat all characters >= 0x80 as one class
-// which just continues the current token or starts an identifier if in default.
-// DBCS treated specially as the second character can be < 0x80 and hence 
-// syntactically significant. UTF-8 avoids this as all trail bytes are >= 0x80
-class ColouriseContext {
-	Accessor &styler;
-	int lengthDoc;
-	int currentPos;
-	ColouriseContext& operator=(const ColouriseContext&) {
-		return *this;
-	}
-public:
-	bool atEOL;
-	int state;
-	int chPrev;
-	int ch;
-	int chNext;
+inline bool IsStateComment(const int state) {
+	return ((state == SCE_C_COMMENT) ||
+		      (state == SCE_C_COMMENTLINE) ||
+		      (state == SCE_C_COMMENTDOC) ||
+		      (state == SCE_C_COMMENTDOCKEYWORD) ||
+		      (state == SCE_C_COMMENTDOCKEYWORDERROR));
+}
 
-	ColouriseContext(unsigned int startPos, int length,
-                        int initStyle, Accessor &styler_) : 
-		styler(styler_),
-		lengthDoc(startPos + length),
-		currentPos(startPos), 
-		atEOL(false),
-		state(initStyle), 
-		chPrev(0),
-		ch(0), 
-		chNext(0) {
-		styler.StartAt(startPos);
-		styler.StartSegment(startPos);
-		int pos = currentPos;
-		ch = static_cast<unsigned char>(styler.SafeGetCharAt(pos));
-		if (styler.IsLeadByte(static_cast<char>(ch))) {
-			pos++;
-			ch = ch << 8;
-			ch |= static_cast<unsigned char>(styler.SafeGetCharAt(pos));
-		}
-		chNext = static_cast<unsigned char>(styler.SafeGetCharAt(pos+1));
-		if (styler.IsLeadByte(static_cast<char>(chNext))) {
-			chNext = chNext << 8;
-			chNext |= static_cast<unsigned char>(styler.SafeGetCharAt(pos+2));
-		}
-		atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
-	}
-	void Complete() {
-		styler.ColourTo(currentPos - 1, state);
-	}
-	bool More() {
-		return currentPos <= lengthDoc;
-	}
-	void Forward() {
-		// A lot of this is repeated from the constructor - TODO: merge code
-		chPrev = ch;
-		currentPos++;
-		if (ch >= 0x100)
-			currentPos++;
-		ch = chNext;
-		chNext = static_cast<unsigned char>(styler.SafeGetCharAt(currentPos+1));
-		if (styler.IsLeadByte(static_cast<char>(chNext))) {
-			chNext = chNext << 8;
-			chNext |= static_cast<unsigned char>(styler.SafeGetCharAt(currentPos + 2));
-		}
-		// Trigger on CR only (Mac style) or either on LF from CR+LF (Dos/Win) or on LF alone (Unix)
-		// Avoid triggering two times on Dos/Win
-		// End of line
-		atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
-	}
-	void ChangeState(int state_) {
-		state = state_;
-	}
-	void SetState(int state_) {
-		styler.ColourTo(currentPos - 1, state);
-		state = state_;
-	}
-	void ForwardSetState(int state_) {
-		Forward();
-		styler.ColourTo(currentPos - 1, state);
-		state = state_;
-	}
-	void GetCurrent(char *s, int len) {
-		getRange(styler.GetStartSegment(), currentPos - 1, styler, s, len);
-	}
-	int LengthCurrent() {
-		return currentPos - styler.GetStartSegment();
-	}
-	bool Match(char ch0) {
-		return ch == ch0;
-	}
-	bool Match(char ch0, char ch1) {
-		return (ch == ch0) && (chNext == ch1);
-	}
-	bool Match(const char *s) {
-		if (ch != *s)
-			return false;
-		s++;
-		if (chNext != *s)
-			return false;
-		s++;
-		for (int n=2; *s; n++) {
-			if (*s != styler.SafeGetCharAt(currentPos+n))
-				return false;
-			s++;
-		}
-		return true;
-	}
-};
+inline bool IsStateString(const int state) {
+	return ((state == SCE_C_STRING) || (state == SCE_C_VERBATIM));
+}
 
 static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
                             Accessor &styler) {
 
 	WordList &keywords = *keywordlists[0];
 	WordList &keywords2 = *keywordlists[1];
+	WordList &keywords3 = *keywordlists[2];
 
 	bool stylingWithinPreprocessor = styler.GetPropertyInt("styling.within.preprocessor");
 
-	if (initStyle == SCE_C_STRINGEOL)	// Does not leak onto next line
+	// Do not leak onto next line
+	if (initStyle == SCE_C_STRINGEOL)
 		initStyle = SCE_C_DEFAULT;
 
 	int chPrevNonWhite = ' ';
 	int visibleChars = 0;
+	int noDocChars = 0;
 	bool lastWordWasUUID = false;
 
-	ColouriseContext cc(startPos, length, initStyle, styler);
+	StyleContext sc(startPos, length, initStyle, styler);
 
-	for (; cc.More(); cc.Forward()) {
+	for (; sc.More(); sc.Forward()) {
+	
+		// Handle line continuation generically.
+		if (sc.ch == '\\') {
+			if (sc.Match("\\\n")) {
+				sc.Forward();
+				sc.Forward();
+				continue;
+			}
+			if (sc.Match("\\\r\n")) {
+				sc.Forward();
+				sc.Forward();
+				sc.Forward();
+				continue;
+			}
+		}
 
-		if (cc.state == SCE_C_STRINGEOL) {
-			if (cc.atEOL) {
-				cc.SetState(SCE_C_DEFAULT);
+		// Determine if the current state should terminate.
+		if (sc.state == SCE_C_OPERATOR) {
+			sc.SetState(SCE_C_DEFAULT);
+		} else if (sc.state == SCE_C_NUMBER) {
+			if (!IsAWordChar(sc.ch)) {
+				sc.SetState(SCE_C_DEFAULT);
 			}
-		} else if (cc.state == SCE_C_OPERATOR) {
-			cc.SetState(SCE_C_DEFAULT);
-		} else if (cc.state == SCE_C_NUMBER) {
-			if (!IsAWordChar(cc.ch)) {
-				cc.SetState(SCE_C_DEFAULT);
-			}
-		} else if (cc.state == SCE_C_IDENTIFIER) {
-			if (!IsAWordChar(cc.ch) || (cc.ch == '.')) {
+		} else if (sc.state == SCE_C_IDENTIFIER) {
+			if (!IsAWordChar(sc.ch) || (sc.ch == '.')) {
 				char s[100];
-				cc.GetCurrent(s, sizeof(s));
+				sc.GetCurrent(s, sizeof(s));
 				if (keywords.InList(s)) {
 					lastWordWasUUID = strcmp(s, "uuid") == 0;
-					cc.ChangeState(SCE_C_WORD);
+					sc.ChangeState(SCE_C_WORD);
 				} else if (keywords2.InList(s)) {
-					cc.ChangeState(SCE_C_WORD2);
+					sc.ChangeState(SCE_C_WORD2);
 				}
-				cc.SetState(SCE_C_DEFAULT);
+				sc.SetState(SCE_C_DEFAULT);
 			}
-		} if (cc.state == SCE_C_PREPROCESSOR) {
+		} else if (sc.state == SCE_C_PREPROCESSOR) {
 			if (stylingWithinPreprocessor) {
-				if (IsASpace(cc.ch)) {
-					cc.SetState(SCE_C_DEFAULT);
+				if (IsASpace(sc.ch)) {
+					sc.SetState(SCE_C_DEFAULT);
 				}
 			} else {
-				if (cc.atEOL && (cc.chPrev != '\\')) {
-					cc.SetState(SCE_C_DEFAULT);
+				if (sc.atLineEnd) {
+					sc.SetState(SCE_C_DEFAULT);
 				}
 			}
-		} else if (cc.state == SCE_C_COMMENT) {
-			if (cc.Match('*', '/')) {
-				cc.Forward();
-				cc.ForwardSetState(SCE_C_DEFAULT);
+		} else if (sc.state == SCE_C_COMMENT) {
+			if (sc.Match('*', '/')) {
+				sc.Forward();
+				sc.ForwardSetState(SCE_C_DEFAULT);
 			}
-		} else if (cc.state == SCE_C_COMMENTDOC) {
-			if (cc.Match('*', '/')) {
-				cc.Forward();
-				cc.ForwardSetState(SCE_C_DEFAULT);
+		} else if (sc.state == SCE_C_COMMENTDOC) {
+			if (sc.Match('*', '/')) {
+				sc.Forward();
+				sc.ForwardSetState(SCE_C_DEFAULT);
+			} else if ((sc.ch == '@' || sc.ch == '\\') && (noDocChars == 0)) {
+				sc.SetState(SCE_C_COMMENTDOCKEYWORD);
+			} else if (sc.atLineEnd) {
+				noDocChars = 0;
+			} else if (!isspace(sc.ch) && (sc.ch != '*')) {
+				noDocChars++;
 			}
-		} else if (cc.state == SCE_C_COMMENTLINE || cc.state == SCE_C_COMMENTLINEDOC) {
-			if (cc.ch == '\r' || cc.ch == '\n') {
-				cc.SetState(SCE_C_DEFAULT);
+		} else if (sc.state == SCE_C_COMMENTLINE || sc.state == SCE_C_COMMENTLINEDOC) {
+			if (sc.atLineEnd) {
+				sc.SetState(SCE_C_DEFAULT);
+				visibleChars = 0;
 			}
-		} else if (cc.state == SCE_C_STRING) {
-			if (cc.ch == '\\') {
-				if (cc.chNext == '\"' || cc.chNext == '\'' || cc.chNext == '\\') {
-					cc.Forward();
+		} else if (sc.state == SCE_C_COMMENTDOCKEYWORD) {
+			if (sc.Match('*', '/')) {
+				sc.ChangeState(SCE_C_COMMENTDOCKEYWORDERROR);
+				sc.Forward();
+				sc.ForwardSetState(SCE_C_DEFAULT);
+			} else if (!IsADoxygenChar(sc.ch)) {
+				char s[100];
+				sc.GetCurrent(s, sizeof(s));
+				if (!isspace(sc.ch) || !keywords3.InList(s+1)) {
+					sc.ChangeState(SCE_C_COMMENTDOCKEYWORDERROR);
 				}
-			} else if (cc.ch == '\"') {
-				cc.ForwardSetState(SCE_C_DEFAULT);
-			} else if ((cc.atEOL) && (cc.chPrev != '\\')) {
-				cc.ChangeState(SCE_C_STRINGEOL);
+				sc.SetState(SCE_C_COMMENTDOC);
 			}
-		} else if (cc.state == SCE_C_CHARACTER) {
-			if ((cc.ch == '\r' || cc.ch == '\n') && (cc.chPrev != '\\')) {
-				cc.ChangeState(SCE_C_STRINGEOL);
-			} else if (cc.ch == '\\') {
-				if (cc.chNext == '\"' || cc.chNext == '\'' || cc.chNext == '\\') {
-					cc.Forward();
+		} else if (sc.state == SCE_C_STRING) {
+			if (sc.ch == '\\') {
+				if (sc.chNext == '\"' || sc.chNext == '\'' || sc.chNext == '\\') {
+					sc.Forward();
 				}
-			} else if (cc.ch == '\'') {
-				cc.ForwardSetState(SCE_C_DEFAULT);
+			} else if (sc.ch == '\"') {
+				sc.ForwardSetState(SCE_C_DEFAULT);
+			} else if (sc.atLineEnd) {
+				sc.ChangeState(SCE_C_STRINGEOL);
+				sc.ForwardSetState(SCE_C_DEFAULT);
+				visibleChars = 0;
 			}
-		} else if (cc.state == SCE_C_REGEX) {
-			if (cc.ch == '\r' || cc.ch == '\n' || cc.ch == '/') {
-				cc.ForwardSetState(SCE_C_DEFAULT);
-			} else if (cc.ch == '\\') {
+		} else if (sc.state == SCE_C_CHARACTER) {
+			if (sc.atLineEnd) {
+				sc.ChangeState(SCE_C_STRINGEOL);
+				sc.ForwardSetState(SCE_C_DEFAULT);
+				visibleChars = 0;
+			} else if (sc.ch == '\\') {
+				if (sc.chNext == '\"' || sc.chNext == '\'' || sc.chNext == '\\') {
+					sc.Forward();
+				}
+			} else if (sc.ch == '\'') {
+				sc.ForwardSetState(SCE_C_DEFAULT);
+			}
+		} else if (sc.state == SCE_C_REGEX) {
+			if (sc.ch == '\r' || sc.ch == '\n' || sc.ch == '/') {
+				sc.ForwardSetState(SCE_C_DEFAULT);
+			} else if (sc.ch == '\\') {
 				// Gobble up the quoted character
-				if (cc.chNext == '\\' || cc.chNext == '/') {
-					cc.Forward();
+				if (sc.chNext == '\\' || sc.chNext == '/') {
+					sc.Forward();
 				}
 			}
-		} else if (cc.state == SCE_C_VERBATIM) {
-			if (cc.ch == '\"') {
-				if (cc.chNext == '\"') {
-					cc.Forward();
+		} else if (sc.state == SCE_C_VERBATIM) {
+			if (sc.ch == '\"') {
+				if (sc.chNext == '\"') {
+					sc.Forward();
 				} else {
-					cc.ForwardSetState(SCE_C_DEFAULT);
+					sc.ForwardSetState(SCE_C_DEFAULT);
 				}
 			}
-		} else if (cc.state == SCE_C_UUID) {
-			if (cc.ch == '\r' || cc.ch == '\n' || cc.ch == ')') {
-				cc.SetState(SCE_C_DEFAULT);
+		} else if (sc.state == SCE_C_UUID) {
+			if (sc.ch == '\r' || sc.ch == '\n' || sc.ch == ')') {
+				sc.SetState(SCE_C_DEFAULT);
 			}
 		}
 
-		if (cc.state == SCE_C_DEFAULT) {
-			if (cc.Match('@', '\"')) {
-				cc.SetState(SCE_C_VERBATIM);
-				cc.Forward();
-			} else if (IsADigit(cc.ch) || (cc.ch == '.' && IsADigit(cc.chNext))) {
+		// Determine if a new state should be entered.
+		if (sc.state == SCE_C_DEFAULT) {
+			if (sc.Match('@', '\"')) {
+				sc.SetState(SCE_C_VERBATIM);
+				sc.Forward();
+			} else if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
 				if (lastWordWasUUID) {
-					cc.SetState(SCE_C_UUID);
+					sc.SetState(SCE_C_UUID);
 					lastWordWasUUID = false;
 				} else {
-					cc.SetState(SCE_C_NUMBER);
+					sc.SetState(SCE_C_NUMBER);
 				}
-			} else if (IsAWordStart(cc.ch) || (cc.ch == '@')) {
+			} else if (IsAWordStart(sc.ch) || (sc.ch == '@')) {
 				if (lastWordWasUUID) {
-					cc.SetState(SCE_C_UUID);
+					sc.SetState(SCE_C_UUID);
 					lastWordWasUUID = false;
 				} else {
-					cc.SetState(SCE_C_IDENTIFIER);
+					sc.SetState(SCE_C_IDENTIFIER);
 				}
-			} else if (cc.Match('/', '*')) {
-				if (cc.Match("/**") || cc.Match("/*!"))	// Support of Qt/Doxygen doc. style
-					cc.SetState(SCE_C_COMMENTDOC);
+			} else if (sc.Match('/', '*')) {
+				if (sc.Match("/**") || sc.Match("/*!")) {	// Support of Qt/Doxygen doc. style
+					noDocChars = 0;
+					sc.SetState(SCE_C_COMMENTDOC);
+				} else {
+					sc.SetState(SCE_C_COMMENT);
+				}
+				sc.Forward();	// Eat the * so it isn't used for the end of the comment
+			} else if (sc.Match('/', '/')) {
+				if (sc.Match("///") || sc.Match("//!"))	// Support of Qt/Doxygen doc. style
+					sc.SetState(SCE_C_COMMENTLINEDOC);
 				else
-					cc.SetState(SCE_C_COMMENT);
-				cc.Forward();	// Eat the * so it isn't used for the end of the comment
-			} else if (cc.Match('/', '/')) {
-				if (cc.Match("///") || cc.Match("//!"))	// Support of Qt/Doxygen doc. style
-					cc.SetState(SCE_C_COMMENTLINEDOC);
-				else
-					cc.SetState(SCE_C_COMMENTLINE);
-			} else if (cc.ch == '/' && IsOKBeforeRE(chPrevNonWhite)) {
-				cc.SetState(SCE_C_REGEX);
-			} else if (cc.ch == '\"') {
-				cc.SetState(SCE_C_STRING);
-			} else if (cc.ch == '\'') {
-				cc.SetState(SCE_C_CHARACTER);
-			} else if (cc.ch == '#' && visibleChars == 0) {
+					sc.SetState(SCE_C_COMMENTLINE);
+			} else if (sc.ch == '/' && IsOKBeforeRE(chPrevNonWhite)) {
+				sc.SetState(SCE_C_REGEX);
+			} else if (sc.ch == '\"') {
+				sc.SetState(SCE_C_STRING);
+			} else if (sc.ch == '\'') {
+				sc.SetState(SCE_C_CHARACTER);
+			} else if (sc.ch == '#' && visibleChars == 0) {
 				// Preprocessor commands are alone on their line
-				cc.SetState(SCE_C_PREPROCESSOR);
+				sc.SetState(SCE_C_PREPROCESSOR);
 				// Skip whitespace between # and preprocessor word
 				do {
-					cc.Forward();
-				} while (IsASpace(cc.ch) && cc.More());
-			} else if (isoperator(static_cast<char>(cc.ch))) {
-				cc.SetState(SCE_C_OPERATOR);
+					sc.Forward();
+				} while ((sc.ch == ' ') && (sc.ch == '\t') && sc.More());
+				if (sc.atLineEnd) {
+					sc.SetState(SCE_C_DEFAULT);
+				}
+			} else if (isoperator(static_cast<char>(sc.ch))) {
+				sc.SetState(SCE_C_OPERATOR);
 			}
 		}
-		if (cc.atEOL) {
+		
+		if (sc.atLineEnd) {
 			// Reset states to begining of colourise so no surprises 
 			// if different sets of lines lexed.
 			chPrevNonWhite = ' ';
 			visibleChars = 0;
 			lastWordWasUUID = false;
 		}
-		if (!IsASpace(cc.ch)) {
-			chPrevNonWhite = cc.ch;
+		if (!IsASpace(sc.ch)) {
+			chPrevNonWhite = sc.ch;
 			visibleChars++;
 		}
 	}
-	cc.Complete();
+	sc.Complete();
 }
 
 static void FoldCppDoc(unsigned int startPos, int length, int initStyle, WordList *[],

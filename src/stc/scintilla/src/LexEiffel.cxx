@@ -16,6 +16,7 @@
 
 #include "PropSet.h"
 #include "Accessor.h"
+#include "StyleContext.h"
 #include "KeyWords.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
@@ -31,23 +32,6 @@ inline bool isEiffelOperator(unsigned int ch) {
 		ch == '!' || ch == '@' || ch == '?';
 }
 
-static void getRangeLowered(unsigned int start,
-		unsigned int end,
-		Accessor &styler,
-		char *s,
-		unsigned int len) {
-	unsigned int i = 0;
-	while ((i < end - start + 1) && (i < len-1)) {
-		s[i] = static_cast<char>(tolower(styler[start + i]));
-		i++;
-	}
-	s[i] = '\0';
-}
-
-inline bool IsASpace(unsigned int ch) {
-    return (ch == ' ') || ((ch >= 0x09) && (ch <= 0x0d));
-}
-
 inline bool IsAWordChar(unsigned int  ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
 }
@@ -55,81 +39,6 @@ inline bool IsAWordChar(unsigned int  ch) {
 inline bool IsAWordStart(unsigned int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '_');
 }
-
-inline bool IsADigit(unsigned int ch) {
-	return (ch >= '0') && (ch <= '9');
-}
-
-// All languages handled so far can treat all characters >= 0x80 as one class
-// which just continues the current token or starts an identifier if in default.
-// DBCS treated specially as the second character can be < 0x80 and hence 
-// syntactically significant. UTF-8 avoids this as all trail bytes are >= 0x80
-class xColouriseContext {
-	Accessor &styler;
-	int lengthDoc;
-	int currentPos;
-	xColouriseContext& operator=(const xColouriseContext&) {
-		return *this;
-	}
-public:
-	int state;
-	unsigned int chPrev;
-	unsigned int ch;
-	unsigned int chNext;
-
-	xColouriseContext(unsigned int startPos, int length,
-                        int initStyle, Accessor &styler_) : 
-		styler(styler_),
-		lengthDoc(startPos + length),
-		currentPos(startPos), 
-		state(initStyle), 
-		chPrev(0),
-		ch(0), 
-		chNext(0) {
-		styler.StartAt(startPos);
-		styler.StartSegment(startPos);
-		int pos = currentPos;
-		ch = static_cast<unsigned char>(styler.SafeGetCharAt(pos));
-		if (styler.IsLeadByte(static_cast<char>(ch))) {
-			pos++;
-			ch = ch << 8;
-			ch |= static_cast<unsigned char>(styler.SafeGetCharAt(pos));
-		}
-		chNext = static_cast<unsigned char>(styler.SafeGetCharAt(pos+1));
-		if (styler.IsLeadByte(static_cast<char>(chNext))) {
-			chNext = chNext << 8;
-			chNext |= static_cast<unsigned char>(styler.SafeGetCharAt(pos+2));
-		}
-	}
-	void Complete() {
-		styler.ColourTo(currentPos - 1, state);
-	}
-	bool More() {
-		return currentPos <= lengthDoc;
-	}
-	void Forward() {
-		chPrev = ch;
-		currentPos++;
-		if (ch >= 0x100)
-			currentPos++;
-		ch = chNext;
-		chNext = static_cast<unsigned char>(styler.SafeGetCharAt(currentPos+1));
-		if (styler.IsLeadByte(static_cast<char>(chNext))) {
-			chNext = chNext << 8;
-			chNext |= static_cast<unsigned char>(styler.SafeGetCharAt(currentPos + 2));
-		}
-	}
-	void ChangeState(int state_) {
-		state = state_;
-	}
-	void SetState(int state_) {
-		styler.ColourTo(currentPos - 1, state);
-		state = state_;
-	}
-	void GetCurrentLowered(char *s, int len) {
-		getRangeLowered(styler.GetStartSegment(), currentPos - 1, styler, s, len);
-	}
-};
 
 static void ColouriseEiffelDoc(unsigned int startPos,
                             int length,
@@ -139,68 +48,68 @@ static void ColouriseEiffelDoc(unsigned int startPos,
 
 	WordList &keywords = *keywordlists[0];
 
-	xColouriseContext lc(startPos, length, initStyle, styler);
+	StyleContext sc(startPos, length, initStyle, styler);
 
-	for (; lc.More(); lc.Forward()) {
+	for (; sc.More(); sc.Forward()) {
 
-		if (lc.state == SCE_EIFFEL_STRINGEOL) {
-			if (lc.ch != '\r' && lc.ch != '\n') {
-				lc.SetState(SCE_EIFFEL_DEFAULT);
+		if (sc.state == SCE_EIFFEL_STRINGEOL) {
+			if (sc.ch != '\r' && sc.ch != '\n') {
+				sc.SetState(SCE_EIFFEL_DEFAULT);
 			}
-		} else if (lc.state == SCE_EIFFEL_OPERATOR) {
-			lc.SetState(SCE_EIFFEL_DEFAULT);
-		} else if (lc.state == SCE_EIFFEL_WORD) {
-			if (!IsAWordChar(lc.ch)) {
+		} else if (sc.state == SCE_EIFFEL_OPERATOR) {
+			sc.SetState(SCE_EIFFEL_DEFAULT);
+		} else if (sc.state == SCE_EIFFEL_WORD) {
+			if (!IsAWordChar(sc.ch)) {
 				char s[100];
-				lc.GetCurrentLowered(s, sizeof(s));
+				sc.GetCurrentLowered(s, sizeof(s));
 				if (!keywords.InList(s)) {
-					lc.ChangeState(SCE_EIFFEL_IDENTIFIER);
+					sc.ChangeState(SCE_EIFFEL_IDENTIFIER);
 				}
-				lc.SetState(SCE_EIFFEL_DEFAULT);
+				sc.SetState(SCE_EIFFEL_DEFAULT);
 			}
-		} else if (lc.state == SCE_EIFFEL_NUMBER) {
-			if (!IsAWordChar(lc.ch)) {
-				lc.SetState(SCE_EIFFEL_DEFAULT);
+		} else if (sc.state == SCE_EIFFEL_NUMBER) {
+			if (!IsAWordChar(sc.ch)) {
+				sc.SetState(SCE_EIFFEL_DEFAULT);
 			}
-		} else if (lc.state == SCE_EIFFEL_COMMENTLINE) {
-			if (lc.ch == '\r' || lc.ch == '\n') {
-				lc.SetState(SCE_EIFFEL_DEFAULT);
+		} else if (sc.state == SCE_EIFFEL_COMMENTLINE) {
+			if (sc.ch == '\r' || sc.ch == '\n') {
+				sc.SetState(SCE_EIFFEL_DEFAULT);
 			}
-		} else if (lc.state == SCE_EIFFEL_STRING) {
-			if (lc.ch == '%') {
-				lc.Forward();
-			} else if (lc.ch == '\"') {
-				lc.Forward();
-				lc.SetState(SCE_EIFFEL_DEFAULT);
+		} else if (sc.state == SCE_EIFFEL_STRING) {
+			if (sc.ch == '%') {
+				sc.Forward();
+			} else if (sc.ch == '\"') {
+				sc.Forward();
+				sc.SetState(SCE_EIFFEL_DEFAULT);
 			}
-		} else if (lc.state == SCE_EIFFEL_CHARACTER) {
-			if (lc.ch == '\r' || lc.ch == '\n') {
-				lc.SetState(SCE_EIFFEL_STRINGEOL);
-			} else if (lc.ch == '%') {
-				lc.Forward();
-			} else if (lc.ch == '\'') {
-				lc.Forward();
-				lc.SetState(SCE_EIFFEL_DEFAULT);
+		} else if (sc.state == SCE_EIFFEL_CHARACTER) {
+			if (sc.ch == '\r' || sc.ch == '\n') {
+				sc.SetState(SCE_EIFFEL_STRINGEOL);
+			} else if (sc.ch == '%') {
+				sc.Forward();
+			} else if (sc.ch == '\'') {
+				sc.Forward();
+				sc.SetState(SCE_EIFFEL_DEFAULT);
 			}
 		}
 
-		if (lc.state == SCE_EIFFEL_DEFAULT) {
-			if (lc.ch == '-' && lc.chNext == '-') {
-				lc.SetState(SCE_EIFFEL_COMMENTLINE);
-			} else if (lc.ch == '\"') {
-				lc.SetState(SCE_EIFFEL_STRING);
-			} else if (lc.ch == '\'') {
-				lc.SetState(SCE_EIFFEL_CHARACTER);
-			} else if (IsADigit(lc.ch) || (lc.ch == '.')) {
-				lc.SetState(SCE_EIFFEL_NUMBER);
-			} else if (IsAWordStart(lc.ch)) {
-				lc.SetState(SCE_EIFFEL_WORD);
-			} else if (isEiffelOperator(lc.ch)) {
-				lc.SetState(SCE_EIFFEL_OPERATOR);
+		if (sc.state == SCE_EIFFEL_DEFAULT) {
+			if (sc.ch == '-' && sc.chNext == '-') {
+				sc.SetState(SCE_EIFFEL_COMMENTLINE);
+			} else if (sc.ch == '\"') {
+				sc.SetState(SCE_EIFFEL_STRING);
+			} else if (sc.ch == '\'') {
+				sc.SetState(SCE_EIFFEL_CHARACTER);
+			} else if (IsADigit(sc.ch) || (sc.ch == '.')) {
+				sc.SetState(SCE_EIFFEL_NUMBER);
+			} else if (IsAWordStart(sc.ch)) {
+				sc.SetState(SCE_EIFFEL_WORD);
+			} else if (isEiffelOperator(sc.ch)) {
+				sc.SetState(SCE_EIFFEL_OPERATOR);
 			}
 		}
 	}
-	lc.Complete();
+	sc.Complete();
 }
 
 static bool IsEiffelComment(Accessor &styler, int pos, int len) {

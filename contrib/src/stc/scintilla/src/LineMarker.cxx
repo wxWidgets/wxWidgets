@@ -40,7 +40,7 @@ static void DrawMinus(Surface *surface, int centreX, int centreY, int armSize, C
 	surface->FillRectangle(rcH, fore);
 }
 
-void LineMarker::Draw(Surface *surface, PRectangle &rcWhole) {
+void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharacter) {
 	// Restrict most shapes a bit
 	PRectangle rc = rcWhole;
 	rc.top++;
@@ -230,6 +230,15 @@ void LineMarker::Draw(Surface *surface, PRectangle &rcWhole) {
 		surface->MoveTo(centreX, rcWhole.top);
 		surface->LineTo(centreX, centreY - blobSize);
 		
+	} else if (markType >= SC_MARK_CHARACTER) {
+		char character[1];
+		character[0] = static_cast<char>(markType - SC_MARK_CHARACTER);
+		int width = surface->WidthText(fontForCharacter, character, 1);
+		rc.left += (rc.Width() - width) / 2;
+		rc.right = rc.left + width;
+		surface->DrawTextClipped(rc, fontForCharacter, rc.bottom - 2, 
+			character, 1, fore.allocated, back.allocated);
+
 	} else { // SC_MARK_SHORTARROW
 		Point pts[] = {
 			Point(centreX, centreY + dimOn2),

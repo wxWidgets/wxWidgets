@@ -11,17 +11,6 @@
 
 #if PLAT_GTK
 
-#ifndef SCINTILLA_H
-#ifdef _MSC_VER
-#pragma message(__FILE__ "(1) : warning : Scintilla.h should be included before ScintillaWidget.h")
-#pragma message("This will be required in the next version of Scintilla")
-#else
-#warning Scintilla.h should be included before ScintillaWidget.h
-#warning This will be required in the next version of Scintilla
-#endif
-#include "Scintilla.h"
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif

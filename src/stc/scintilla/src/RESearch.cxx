@@ -30,9 +30,8 @@
  * Modification history:
  *
  * $Log$
- * Revision 1.1  2001/09/01 03:05:24  RD
- * Upgraded to version 1.39 of Scintilla, and upated wxStyledTextCtrl
- * accordingly.
+ * Revision 1.2  2001/10/18 01:24:58  RD
+ * Updated to version 1.40 of Scintilla
  *
  * Revision 1.6  2001/04/29 13:32:10  nyamatongwe
  * Addition of new target methods - versions of ReplaceTarget that take counted

@@ -15,70 +15,18 @@
 
 #include "PropSet.h"
 #include "Accessor.h"
+#include "StyleContext.h"
 #include "KeyWords.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-/* Returns true if the "as" word that begins at start follows an import statement */
-static bool IsImportAs(unsigned int start, Accessor &styler) {
-	unsigned int i;
-	unsigned int j;
-	char s[10];
-
-	/* Find any import before start but after any statement terminator or quote */
-	i = start;
-	while (i > 0) {
-		char ch = styler[i - 1];
-
-		if (ch == '\n' || ch == '\r' || ch == ';' || ch == '\'' || ch == '"' || ch == '`')
-			break;
-		if (ch == 't' && i > 5) {
-			for (j = 0; j < 6; j++)
-				s[j] = styler[(i - 6) + j];
-			s[j] = '\0';
-			if (strcmp(s, "import") == 0)
-				return true;
-		}
-		i--;
-	}
-
-        return false;
-}
-
-static void ClassifyWordPy(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler, char *prevWord) {
-	char s[100];
-	bool wordIsNumber = isdigit(styler[start]);
-	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
-		s[i] = styler[start + i];
-		s[i + 1] = '\0';
-	}
-	char chAttr = SCE_P_IDENTIFIER;
-	if (0 == strcmp(prevWord, "class"))
-		chAttr = SCE_P_CLASSNAME;
-	else if (0 == strcmp(prevWord, "def"))
-		chAttr = SCE_P_DEFNAME;
-	else if (wordIsNumber)
-		chAttr = SCE_P_NUMBER;
-	else if (keywords.InList(s))
-		chAttr = SCE_P_WORD;
-	else if (strcmp(s, "as") == 0 && IsImportAs(start, styler))
-		chAttr = SCE_P_WORD;
-	// make sure that dot-qualifiers inside the word are lexed correct
-	else for (unsigned int i = 0; i < end - start + 1; i++) {
-		if (styler[start + i] == '.') {
-			styler.ColourTo(start + i - 1, chAttr);
-			styler.ColourTo(start + i, SCE_P_OPERATOR);
-		}
-	}
-	styler.ColourTo(end, chAttr);
-	strcpy(prevWord, s);
-}
+enum kwType { kwOther, kwClass, kwDef, kwImport };
 
 static bool IsPyComment(Accessor &styler, int pos, int len) {
 	return len>0 && styler[pos]=='#';
 }
 
-static bool IsPyStringStart(char ch, char chNext, char chNext2) {
+static bool IsPyStringStart(int ch, int chNext, int chNext2) {
 	if (ch == '\'' || ch == '"')
 		return true;
 	if (ch == 'u' || ch == 'U') {
@@ -91,10 +39,6 @@ static bool IsPyStringStart(char ch, char chNext, char chNext2) {
 		return true;
 
 	return false;
-}
-
-static bool IsPyWordStart(char ch, char chNext, char chNext2) {
-	return (iswordchar(ch) && !IsPyStringStart(ch, chNext, chNext2));
 }
 
 /* Return the state to use for the string starting at i; *nextIndex will be set to the first index following the quote(s) */
@@ -139,10 +83,18 @@ static int GetPyStringState(Accessor &styler, int i, int *nextIndex) {
 	}
 }
 
+inline bool IsAWordChar(int  ch) {
+	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
+}
+
+inline bool IsAWordStart(int ch) {
+	return (ch < 0x80) && (isalnum(ch) || ch == '_');
+}
+
 static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 						   WordList *keywordlists[], Accessor &styler) {
 
-	int lengthDoc = startPos + length;
+	int endPos = startPos + length;
 
 	// Backtrack to previous line in case need to fix its tab whinging
 	int lineCurrent = styler.GetLine(startPos);
@@ -156,32 +108,27 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 		}
 	}
 
-	// Python uses a different mask because bad indentation is marked by oring with 32
-	styler.StartAt(startPos, 127);
-
 	WordList &keywords = *keywordlists[0];
 
-	int whingeLevel = styler.GetPropertyInt("tab.timmy.whinge.level");
-	char prevWord[200];
-	prevWord[0] = '\0';
-	if (length == 0)
-		return ;
+	const int whingeLevel = styler.GetPropertyInt("tab.timmy.whinge.level");
 
-	int state = initStyle & 31;
+	initStyle = initStyle & 31;
+	if (initStyle == SCE_P_STRINGEOL) {
+		initStyle = SCE_P_DEFAULT;
+	}
 
-	int nextIndex = 0;
-	char chPrev = ' ';
-	char chPrev2 = ' ';
-	char chNext = styler[startPos];
-	styler.StartSegment(startPos);
-	bool atStartLine = true;
+	kwType kwLast = kwOther;
 	int spaceFlags = 0;
 	styler.IndentAmount(lineCurrent, &spaceFlags, IsPyComment);
-	for (int i = startPos; i < lengthDoc; i++) {
+	
+	// Python uses a different mask because bad indentation is marked by oring with 32
+	StyleContext sc(startPos, endPos-startPos, initStyle, styler, 0x7f);
+	
+	for (; sc.More(); sc.Forward()) {
 
-		if (atStartLine) {
-			char chBad = static_cast<char>(64);
-			char chGood = static_cast<char>(0);
+		if (sc.atLineStart) {
+			const char chBad = static_cast<char>(64);
+			const char chGood = static_cast<char>(0);
 			char chFlags = chGood;
 			if (whingeLevel == 1) {
 				chFlags = (spaceFlags & wsInconsistent) ? chBad : chGood;
@@ -192,132 +139,117 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 			} else if (whingeLevel == 4) {
 				chFlags = (spaceFlags & wsTab) ? chBad : chGood;
 			}
-			styler.SetFlags(chFlags, static_cast<char>(state));
-			atStartLine = false;
+			styler.SetFlags(chFlags, static_cast<char>(sc.state));
 		}
 
-		char ch = chNext;
-		chNext = styler.SafeGetCharAt(i + 1);
-		char chNext2 = styler.SafeGetCharAt(i + 2);
-
-		if ((ch == '\r' && chNext != '\n') || (ch == '\n') || (i == lengthDoc)) {
-			if ((state == SCE_P_DEFAULT) || (state == SCE_P_TRIPLE) || (state == SCE_P_TRIPLEDOUBLE)) {
+		if (sc.atLineEnd) {
+			if ((sc.state == SCE_P_DEFAULT) || 
+				(sc.state == SCE_P_TRIPLE) || 
+				(sc.state == SCE_P_TRIPLEDOUBLE)) {
 				// Perform colourisation of white space and triple quoted strings at end of each line to allow
 				// tab marking to work inside white space and triple quoted strings
-				styler.ColourTo(i, state);
+				sc.ForwardSetState(sc.state);
 			}
 			lineCurrent++;
 			styler.IndentAmount(lineCurrent, &spaceFlags, IsPyComment);
-			atStartLine = true;
+			if ((sc.state == SCE_P_STRING) || (sc.state == SCE_P_CHARACTER)) {
+				sc.ChangeState(SCE_P_STRINGEOL);
+				sc.ForwardSetState(SCE_P_DEFAULT);
+			}
 		}
 
-		if (styler.IsLeadByte(ch)) {
-			chNext = styler.SafeGetCharAt(i + 2);
-			chPrev = ' ';
-			chPrev2 = ' ';
-			i += 1;
-			continue;
+		// Check for a state end
+		if (sc.state == SCE_P_OPERATOR) {
+			kwLast = kwOther;
+			sc.SetState(SCE_C_DEFAULT);
+		} else if (sc.state == SCE_P_NUMBER) {
+			if (!IsAWordChar(sc.ch)) {
+				sc.SetState(SCE_P_DEFAULT);
+			}
+		} else if (sc.state == SCE_P_WORD) {
+			if ((sc.ch == '.') || (!IsAWordChar(sc.ch))) {
+				char s[100];
+				sc.GetCurrent(s, sizeof(s));
+				int style = SCE_P_IDENTIFIER;
+				if ((kwLast == kwImport) && (strcmp(s, "as") == 0)) {
+					style = SCE_P_WORD;
+				} else if (keywords.InList(s)) {
+					style = SCE_P_WORD;
+				} else if (kwLast == kwClass) {
+					style = SCE_P_CLASSNAME;
+				} else if (kwLast == kwDef) {
+					style = SCE_P_DEFNAME;
+				}
+				sc.ChangeState(style);
+				sc.SetState(SCE_P_DEFAULT);
+				if (style == SCE_P_WORD) {
+					if (0 == strcmp(s, "class"))
+						kwLast = kwClass;
+					else if (0 == strcmp(s, "def"))
+						kwLast = kwDef;
+					else if (0 == strcmp(s, "import"))
+						kwLast = kwImport;
+					else
+						kwLast = kwOther;
+				} else if (style == SCE_P_CLASSNAME) {
+						kwLast = kwOther;
+				} else if (style == SCE_P_DEFNAME) {
+						kwLast = kwOther;
+				}
+			}
+		} else if ((sc.state == SCE_P_COMMENTLINE) || (sc.state == SCE_P_COMMENTBLOCK)) {
+			if (sc.ch == '\r' || sc.ch == '\n') {
+				sc.SetState(SCE_P_DEFAULT);
+			}
+		} else if ((sc.state == SCE_P_STRING) || (sc.state == SCE_P_CHARACTER)) {
+			if (sc.ch == '\\') {
+				if ((sc.chNext == '\r') && (sc.GetRelative(2) == '\n')) {
+					sc.Forward();
+				}
+				sc.Forward();
+			} else if ((sc.state == SCE_P_STRING) && (sc.ch == '\"')) {
+				sc.ForwardSetState(SCE_P_DEFAULT);
+			} else if ((sc.state == SCE_P_CHARACTER) && (sc.ch == '\'')) {
+				sc.ForwardSetState(SCE_P_DEFAULT);
+			}
+		} else if (sc.state == SCE_P_TRIPLE) {
+			if (sc.ch == '\\') {
+				sc.Forward();
+			} else if (sc.Match("\'\'\'")) {
+				sc.Forward();
+				sc.Forward();
+				sc.ForwardSetState(SCE_P_DEFAULT);
+			}
+		} else if (sc.state == SCE_P_TRIPLEDOUBLE) {
+			if (sc.ch == '\\') {
+				sc.Forward();
+			} else if (sc.Match("\"\"\"")) {
+				sc.Forward();
+				sc.Forward();
+				sc.ForwardSetState(SCE_P_DEFAULT);
+			}
 		}
 
-		if (state == SCE_P_STRINGEOL) {
-			if (ch != '\r' && ch != '\n') {
-				styler.ColourTo(i - 1, state);
-				state = SCE_P_DEFAULT;
+		// Check for a new state starting character
+		if (sc.state == SCE_P_DEFAULT) {
+			if (isascii(sc.ch) && isoperator(static_cast<char>(sc.ch)) || sc.ch == '`') {
+				sc.SetState(SCE_P_OPERATOR);
+			} else if (sc.ch == '#') {
+				sc.SetState(sc.chNext == '#' ? SCE_P_COMMENTBLOCK : SCE_P_COMMENTLINE);
+			} else if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
+				sc.SetState(SCE_P_NUMBER);
+			} else if (IsPyStringStart(sc.ch, sc.chNext, sc.GetRelative(2))) {
+				int nextIndex = 0;
+				sc.SetState(GetPyStringState(styler, sc.currentPos, &nextIndex));
+				while (nextIndex > (sc.currentPos+1)) {
+					sc.Forward();
+				}
+			} else if (IsAWordStart(sc.ch)) {
+				sc.SetState(SCE_P_WORD);
 			}
 		}
-		if (state == SCE_P_DEFAULT) {
-			if (IsPyWordStart(ch, chNext, chNext2)) {
-				styler.ColourTo(i - 1, state);
-				state = SCE_P_WORD;
-			} else if (ch == '#') {
-				styler.ColourTo(i - 1, state);
-				state = chNext == '#' ? SCE_P_COMMENTBLOCK : SCE_P_COMMENTLINE;
-			} else if (IsPyStringStart(ch, chNext, chNext2)) {
-				styler.ColourTo(i - 1, state);
-				state = GetPyStringState(styler, i, &nextIndex);
-				if (nextIndex != i + 1) {
-					i = nextIndex - 1;
-					ch = ' ';
-					chPrev = ' ';
-					chNext = styler.SafeGetCharAt(i + 1);
-				}
-			} else if (isoperator(ch)) {
-				styler.ColourTo(i - 1, state);
-				styler.ColourTo(i, SCE_P_OPERATOR);
-			}
-		} else if (state == SCE_P_WORD) {
-			if (!iswordchar(ch)) {
-				ClassifyWordPy(styler.GetStartSegment(), i - 1, keywords, styler, prevWord);
-				state = SCE_P_DEFAULT;
-				if (ch == '#') {
-					state = chNext == '#' ? SCE_P_COMMENTBLOCK : SCE_P_COMMENTLINE;
-				} else if (IsPyStringStart(ch, chNext, chNext2)) {
-					styler.ColourTo(i - 1, state);
-					state = GetPyStringState(styler, i, &nextIndex);
-					if (nextIndex != i + 1) {
-						i = nextIndex - 1;
-						ch = ' ';
-						chPrev = ' ';
-						chNext = styler.SafeGetCharAt(i + 1);
-					}
-				} else if (isoperator(ch)) {
-					styler.ColourTo(i, SCE_P_OPERATOR);
-				}
-			}
-		} else {
-			if (state == SCE_P_COMMENTLINE || state == SCE_P_COMMENTBLOCK) {
-				if (ch == '\r' || ch == '\n') {
-					styler.ColourTo(i - 1, state);
-					state = SCE_P_DEFAULT;
-				}
-			} else if (state == SCE_P_STRING) {
-				if ((ch == '\r' || ch == '\n') && (chPrev != '\\')) {
-					styler.ColourTo(i - 1, state);
-					state = SCE_P_STRINGEOL;
-				} else if (ch == '\\') {
-					if (chNext == '\"' || chNext == '\'' || chNext == '\\') {
-						i++;
-						ch = chNext;
-						chNext = styler.SafeGetCharAt(i + 1);
-					}
-				} else if (ch == '\"') {
-					styler.ColourTo(i, state);
-					state = SCE_P_DEFAULT;
-				}
-			} else if (state == SCE_P_CHARACTER) {
-				if ((ch == '\r' || ch == '\n') && (chPrev != '\\')) {
-					styler.ColourTo(i - 1, state);
-					state = SCE_P_STRINGEOL;
-				} else if (ch == '\\') {
-					if (chNext == '\"' || chNext == '\'' || chNext == '\\') {
-						i++;
-						ch = chNext;
-						chNext = styler.SafeGetCharAt(i + 1);
-					}
-				} else if (ch == '\'') {
-					styler.ColourTo(i, state);
-					state = SCE_P_DEFAULT;
-				}
-			} else if (state == SCE_P_TRIPLE) {
-				if (ch == '\'' && chPrev == '\'' && chPrev2 == '\'') {
-					styler.ColourTo(i, state);
-					state = SCE_P_DEFAULT;
-				}
-			} else if (state == SCE_P_TRIPLEDOUBLE) {
-				if (ch == '\"' && chPrev == '\"' && chPrev2 == '\"') {
-					styler.ColourTo(i, state);
-					state = SCE_P_DEFAULT;
-				}
-			}
-		}
-		chPrev2 = chPrev;
-		chPrev = ch;
 	}
-	if (state == SCE_P_WORD) {
-		ClassifyWordPy(styler.GetStartSegment(), lengthDoc, keywords, styler, prevWord);
-	} else {
-		styler.ColourTo(lengthDoc, state);
-	}
+	sc.Complete();
 }
 
 static bool IsCommentLine(int line, Accessor &styler) {
@@ -338,14 +270,15 @@ static bool IsQuoteLine(int line, Accessor &styler) {
 	return ((style == SCE_P_TRIPLE) || (style== SCE_P_TRIPLEDOUBLE));
 }
 
+
 static void FoldPyDoc(unsigned int startPos, int length, int /*initStyle - unused*/,
 					WordList *[], Accessor &styler) {
-	int maxPos = startPos + length;
-	int maxLines = styler.GetLine(maxPos-1);
-						
-	bool foldComment = styler.GetPropertyInt("fold.comment.python");
-	bool foldQuotes = styler.GetPropertyInt("fold.quotes.python");
-
+	const int maxPos = startPos + length;
+	const int maxLines = styler.GetLine(maxPos-1);             // Requested last line
+	const int docLines = styler.GetLine(styler.Length() - 1);  // Available last line
+	const bool foldComment = styler.GetPropertyInt("fold.comment.python");
+	const bool foldQuotes = styler.GetPropertyInt("fold.quotes.python");
+	
 	// Backtrack to previous non-blank line so we can determine indent level
 	// for any white space lines (needed esp. within triple quoted strings)
 	// and so we can fix any preceding fold level (which is why we go back
@@ -363,8 +296,8 @@ static void FoldPyDoc(unsigned int startPos, int length, int /*initStyle - unuse
 	}
 	int indentCurrentLevel = indentCurrent & SC_FOLDLEVELNUMBERMASK;
 	
+	// Set up initial loop state
 	startPos = styler.LineStart(lineCurrent);
-	// Set up initial state
 	int prev_state = SCE_P_DEFAULT & 31;
 	if (lineCurrent >= 1)
 		prev_state = styler.StyleAt(startPos-1) & 31;
@@ -374,21 +307,27 @@ static void FoldPyDoc(unsigned int startPos, int length, int /*initStyle - unuse
 		prevComment = foldComment && IsCommentLine(lineCurrent - 1, styler);
 
 	// Process all characters to end of requested range or end of any triple quote
-	// or comment that hangs over the end of the range
-	while ((lineCurrent <= maxLines) || prevQuote || prevComment) {
+	// or comment that hangs over the end of the range.  Cap processing in all cases
+	// to end of document (in case of unclosed quote or comment at end).
+	while ((lineCurrent <= docLines) && ((lineCurrent <= maxLines) || prevQuote || prevComment)) {
 
 		// Gather info
 		int lev = indentCurrent;
 		int lineNext = lineCurrent + 1;
-		int style = styler.StyleAt(styler.LineStart(lineNext)) & 31;
-		int indentNext = styler.IndentAmount(lineNext, &spaceFlags, NULL);
-		int quote = foldQuotes && ((style == SCE_P_TRIPLE) || (style== SCE_P_TRIPLEDOUBLE));
-		int quote_start = (quote && !prevQuote);
-		int quote_continue = (quote && prevQuote);
-		int comment = foldComment && IsCommentLine(lineCurrent, styler);
-		int comment_start = (comment && !prevComment && 
+		int indentNext = indentCurrent;
+		int quote = false;
+		if (lineNext <= docLines) {
+			// Information about next line is only available if not at end of document
+			indentNext = styler.IndentAmount(lineNext, &spaceFlags, NULL);
+			int style = styler.StyleAt(styler.LineStart(lineNext)) & 31;
+			quote = foldQuotes && ((style == SCE_P_TRIPLE) || (style== SCE_P_TRIPLEDOUBLE));
+		}
+		const int quote_start = (quote && !prevQuote);
+		const int quote_continue = (quote && prevQuote);
+		const int comment = foldComment && IsCommentLine(lineCurrent, styler);
+		const int comment_start = (comment && !prevComment && (lineNext <= docLines) &&
 			IsCommentLine(lineNext, styler) && (lev > SC_FOLDLEVELBASE));
-		int comment_continue = (comment && prevComment);
+		const int comment_continue = (comment && prevComment);
 		if ((!quote || !prevQuote) && !comment)
 			indentCurrentLevel = indentCurrent & SC_FOLDLEVELNUMBERMASK;
 		if (quote)
@@ -411,22 +350,35 @@ static void FoldPyDoc(unsigned int startPos, int length, int /*initStyle - unuse
 		}
 
 		// Skip past any blank lines for next indent level info; we skip also comments
-		// starting in column 0 which effectively folds them into surrounding code
-		// rather than screwing up folding.  Then set indent level on the lines
-		// we skipped to be same as maximum of current and next indent.  This approach
-		// does a reasonable job of collapsing white space into surrounding code
-		// without getting confused by white space at the start of an indented level.
+		// starting in column 0 which effectively folds them into surrounding code rather
+		// than screwing up folding.
+		const int saveIndentNext = indentNext;
 		while (!quote &&
-		       ((indentNext & SC_FOLDLEVELWHITEFLAG) || styler[styler.LineStart(lineNext)] == '#') &&
-		       (lineNext < maxLines)) {
-			int level = Platform::Maximum(indentCurrent, indentNext);
-			if (indentNext & SC_FOLDLEVELWHITEFLAG)
-				level = SC_FOLDLEVELWHITEFLAG | indentCurrentLevel;
-			styler.SetLevel(lineNext, level);
+		       (lineNext < docLines) &&
+		       ((indentNext & SC_FOLDLEVELWHITEFLAG) || 
+		        (lineNext <= docLines && styler[styler.LineStart(lineNext)] == '#'))) {
+
 			lineNext++;
 			indentNext = styler.IndentAmount(lineNext, &spaceFlags, NULL);
 		}
 
+		// Next compute max indent level of current line and next non-blank line.
+		// This is the level to which we set all the intervening blank or comment lines.
+		const int skip_level = Platform::Maximum(indentCurrentLevel,
+		                                   indentNext & SC_FOLDLEVELNUMBERMASK);
+		
+		// Now set all the indent levels on the lines we skipped
+		int skipLine = lineCurrent + 1;
+		int skipIndentNext = saveIndentNext;
+		while (skipLine < lineNext) {
+			int skipLineLevel = skip_level;
+			if (skipIndentNext & SC_FOLDLEVELWHITEFLAG)
+				skipLineLevel = SC_FOLDLEVELWHITEFLAG | skipLineLevel;
+			styler.SetLevel(skipLine, skipLineLevel);
+			skipLine++;
+			skipIndentNext = styler.IndentAmount(skipLine, &spaceFlags, NULL);
+		}
+		
 		// Set fold header on non-quote/non-comment line
 		if (!quote && !comment && !(indentCurrent & SC_FOLDLEVELWHITEFLAG) ) {
 			if ((indentCurrent & SC_FOLDLEVELNUMBERMASK) < (indentNext & SC_FOLDLEVELNUMBERMASK))
@@ -443,8 +395,9 @@ static void FoldPyDoc(unsigned int startPos, int length, int /*initStyle - unuse
 		lineCurrent = lineNext;
 	}
 
-	// Make sure last line indent level is set too
-	styler.SetLevel(lineCurrent, indentCurrent);
+	// NOTE: Cannot set level of last line here because indentCurrent doesn't have
+	// header flag set; the loop above is crafted to take care of this case!
+	//styler.SetLevel(lineCurrent, indentCurrent);
 }
 
 LexerModule lmPython(SCLEX_PYTHON, ColourisePyDoc, "python", FoldPyDoc);

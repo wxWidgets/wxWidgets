@@ -20,7 +20,7 @@ public:
 		fore = Colour(0,0,0);
 		back = Colour(0xff,0xff,0xff);
 	}
-	void Draw(Surface *surface, PRectangle &rc);
+	void Draw(Surface *surface, PRectangle &rc, Font &fontForCharacter);
 };
 
 #endif

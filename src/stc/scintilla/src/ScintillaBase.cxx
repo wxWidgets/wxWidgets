@@ -35,6 +35,7 @@
 #include "ScintillaBase.h"
 
 ScintillaBase::ScintillaBase() {
+	displayPopupMenu = true;
 	listType = 0;
 #ifdef SCI_LEXER
 	lexLanguage = SCLEX_CONTAINER;
@@ -512,6 +513,10 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 	case SCI_CALLTIPSETBACK:
 		ct.colourBG = Colour(wParam);
 		InvalidateStyleRedraw();
+		break;
+
+	case SCI_USEPOPUP:
+		displayPopupMenu = wParam;
 		break;
 
 #ifdef SCI_LEXER
