@@ -73,6 +73,20 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
     return FALSE;
 }
 
+bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
+{
+    wxString s;
+    
+    if (GetMimeType(&s))
+    {
+        mimeTypes.Clear();
+        mimeTypes.Add(s);
+        return TRUE;
+    }
+    else 
+        return FALSE;
+}
+
 bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
 {
     // no such file type or no value or incorrect icon entry

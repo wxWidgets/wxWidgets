@@ -76,20 +76,23 @@ private:
     static ArrayIconHandlers ms_iconHandlers;
 };
 
+
+
 class WXDLLEXPORT wxFileTypeImpl
 {
 public:
     // initialization functions
     void Init(wxMimeTypesManagerImpl *manager, size_t index)
-        { m_manager = manager; m_index = index; }
+        { m_manager = manager; m_index.Add(index); }
 
     // accessors
     bool GetExtensions(wxArrayString& extensions);
     bool GetMimeType(wxString *mimeType) const
-        { *mimeType = m_manager->m_aTypes[m_index]; return TRUE; }
+        { *mimeType = m_manager->m_aTypes[m_index[0]]; return TRUE; }
+    bool GetMimeTypes(wxArrayString& mimeTypes) const;
     bool GetIcon(wxIcon *icon) const;
     bool GetDescription(wxString *desc) const
-        { *desc = m_manager->m_aDescriptions[m_index]; return TRUE; }
+        { *desc = m_manager->m_aDescriptions[m_index[0]]; return TRUE; }
 
     bool GetOpenCommand(wxString *openCmd,
                         const wxFileType::MessageParameters& params) const
@@ -113,7 +116,7 @@ private:
                             bool open) const;
 
     wxMimeTypesManagerImpl *m_manager;
-    size_t                  m_index; // in the wxMimeTypesManagerImpl arrays
+    wxArrayInt              m_index; // in the wxMimeTypesManagerImpl arrays
 };
 
 

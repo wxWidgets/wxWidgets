@@ -75,6 +75,7 @@ public:
     // parameters are unchanged)
         // return the MIME type for this file type
     bool GetMimeType(wxString *mimeType) const;
+    bool GetMimeTypes(wxArrayString& mimeTypes) const;
         // fill passed in array with all extensions associated with this file
         // type
     bool GetExtensions(wxArrayString& extensions);

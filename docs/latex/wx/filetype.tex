@@ -125,6 +125,16 @@ The destructor of this class is not virtual, so it should not be derived from.
 If the function returns TRUE, the string pointed to by {\it mimeType} is filled
 with full MIME type specification for this file type: for example, "text/plain".
 
+\membersection{wxFileType::GetMimeTypes}\label{wxfiletypegetmimetypes}
+
+\func{bool}{GetMimeType}{\param{wxArrayString&}{ mimeTypes}}
+
+Same as \helpref{GetMimeType}{wxfiletypegetmimetype} but returns array of MIME
+types. This array will contain only one item in most cases but sometimes,
+notably under Unix with KDE, may contain more MIME types. This happens when
+one file extension is mapped to different MIME types by KDE, mailcap and
+mime.types.
+
 \membersection{wxFileType::GetExtensions}\label{wxfiletypegetextensions}
 
 \func{bool}{GetExtensions}{\param{wxArrayString\&}{ extensions}}

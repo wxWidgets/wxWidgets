@@ -208,12 +208,15 @@ class wxGNOMEIconHandler : public wxMimeTypeIconHandler
 {
 public:
     virtual bool GetIcon(const wxString& mimetype, wxIcon *icon);
-    virtual void GetMimeInfoRecords(wxMimeTypesManagerImpl *manager) {}
+    virtual void GetMimeInfoRecords(wxMimeTypesManagerImpl *manager);
 
 private:
     void Init();
     void LoadIconsFromKeyFile(const wxString& filename);
     void LoadKeyFilesFromDir(const wxString& dirbase);
+
+    void LoadMimeTypesFromMimeFile(const wxString& filename, wxMimeTypesManagerImpl *manager);
+    void LoadMimeFilesFromDir(const wxString& dirbase, wxMimeTypesManagerImpl *manager);
 
     static bool m_inited;
 
@@ -375,16 +378,6 @@ void wxGNOMEIconHandler::LoadIconsFromKeyFile(const wxString& filename)
             {
                 curMimeType += *pc++;
             }
-
-            if ( !*pc )
-            {
-                // we reached the end of line without finding the colon,
-                // something is wrong - ignore this line completely
-                wxLogDebug(_T("Unreckognized line %d in file '%s' ignored"),
-                           nLine + 1, filename.c_str());
-
-                break;
-            }
         }
     }
 }
@@ -417,6 +410,112 @@ void wxGNOMEIconHandler::LoadKeyFilesFromDir(const wxString& dirbase)
     }
 }
 
+
+void wxGNOMEIconHandler::LoadMimeTypesFromMimeFile(const wxString& filename, wxMimeTypesManagerImpl *manager)
+{
+    wxTextFile textfile(filename);
+    if ( !textfile.Open() )
+        return;
+
+    // values for the entry being parsed
+    wxString curMimeType, curExtList;
+
+    const wxChar *pc;
+    size_t nLineCount = textfile.GetLineCount();
+    for ( size_t nLine = 0; ; nLine++ )
+    {
+        if ( nLine < nLineCount )
+        {
+            pc = textfile[nLine].c_str();
+            if ( *pc == _T('#') )
+            {
+                // skip comments
+                continue;
+            }
+        }
+        else
+        {
+            // so that we will fall into the "if" below
+            pc = NULL;
+        }
+
+        if ( !pc || !*pc )
+        {
+            // end of the entry
+            if ( !!curMimeType && !!curExtList )
+            {
+                 manager -> AddMimeTypeInfo(curMimeType, curExtList, wxEmptyString);
+            }
+
+            if ( !pc )
+            {
+                // the end - this can only happen if nLine == nLineCount
+                break;
+            }
+
+            curExtList.Empty();
+
+            continue;
+        }
+
+        // what do we have here?
+        if ( *pc == _T('\t') )
+        {
+            // this is a field=value ling
+            pc++; // skip leading TAB
+
+            static const int lenField = 4; // strlen("ext:")
+            if ( wxStrncmp(pc, _T("ext:"), lenField) == 0 )
+            {
+                // skip ' ' which follows and take everything left until the end
+                // of line
+                curExtList = pc + lenField + 1;
+            }
+            //else: some other field, we don't care
+        }
+        else
+        {
+            // this is the start of the new section
+            curMimeType.Empty();
+
+            while ( *pc != _T(':') && *pc != _T('\0') )
+            {
+                curMimeType += *pc++;
+            }
+        }
+    }
+}
+
+
+void wxGNOMEIconHandler::LoadMimeFilesFromDir(const wxString& dirbase, wxMimeTypesManagerImpl *manager)
+{
+    wxASSERT_MSG( !!dirbase && !wxEndsWithPathSeparator(dirbase),
+                  _T("base directory shouldn't end with a slash") );
+
+    wxString dirname = dirbase;
+    dirname << _T("/mime-info");
+
+    if ( !wxDir::Exists(dirname) )
+        return;
+
+    wxDir dir(dirname);
+    if ( !dir.IsOpened() )
+        return;
+
+    // we will concatenate it with filename to get the full path below
+    dirname += _T('/');
+
+    wxString filename;
+    bool cont = dir.GetFirst(&filename, _T("*.mime"), wxDIR_FILES);
+    while ( cont )
+    {
+        LoadMimeTypesFromMimeFile(dirname + filename, manager);
+
+        cont = dir.GetNext(&filename);
+    }
+}
+
+
 void wxGNOMEIconHandler::Init()
 {
     wxArrayString dirs;
@@ -436,6 +535,31 @@ void wxGNOMEIconHandler::Init()
 
     m_inited = TRUE;
 }
+
+
+void wxGNOMEIconHandler::GetMimeInfoRecords(wxMimeTypesManagerImpl *manager)
+{
+    if ( !m_inited )
+    {
+        Init();
+    }
+    
+    wxArrayString dirs;
+    dirs.Add(_T("/usr/share"));
+    dirs.Add(_T("/usr/local/share"));
+
+    wxString gnomedir;
+    wxGetHomeDir( &gnomedir );
+    gnomedir += _T("/.gnome");
+    dirs.Add( gnomedir );
+
+    size_t nDirs = dirs.GetCount();
+    for ( size_t nDir = 0; nDir < nDirs; nDir++ )
+    {
+        LoadMimeFilesFromDir(dirs[nDir], manager);
+    }
+}
+
 
 bool wxGNOMEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
 {
@@ -727,7 +851,7 @@ MailCapEntry *
 wxFileTypeImpl::GetEntry(const wxFileType::MessageParameters& params) const
 {
     wxString command;
-    MailCapEntry *entry = m_manager->m_aEntries[m_index];
+    MailCapEntry *entry = m_manager->m_aEntries[m_index[0]];
     while ( entry != NULL ) {
         // notice that an empty command would always succeed (it's ok)
         command = wxFileType::ExpandCommand(entry->GetTestCmd(), params);
@@ -751,19 +875,34 @@ wxFileTypeImpl::GetEntry(const wxFileType::MessageParameters& params) const
 
 bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
 {
-    wxString mimetype;
-    (void)GetMimeType(&mimetype);
+    wxArrayString mimetypes;
+    GetMimeTypes(mimetypes);
 
     ArrayIconHandlers& handlers = m_manager->GetIconHandlers();
     size_t count = handlers.GetCount();
+    size_t counttypes = mimetypes.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        if ( handlers[n]->GetIcon(mimetype, icon) )
-            return TRUE;
+        for ( size_t n2 = 0; n2 < counttypes; n2++ )
+        {
+            if ( handlers[n]->GetIcon(mimetypes[n2], icon) )
+                return TRUE;
+        }
     }
 
     return FALSE;
 }
+
+
+bool 
+wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
+{
+    mimeTypes.Clear();
+    for (size_t i = 0; i < m_index.GetCount(); i++)
+        mimeTypes.Add(m_manager->m_aTypes[m_index[i]]);
+    return TRUE;
+}
+
 
 bool
 wxFileTypeImpl::GetExpandedCommand(wxString *expandedCmd,
@@ -788,7 +927,7 @@ wxFileTypeImpl::GetExpandedCommand(wxString *expandedCmd,
 
 bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 {
-    wxString strExtensions = m_manager->GetExtension(m_index);
+    wxString strExtensions = m_manager->GetExtension(m_index[0]);
     extensions.Empty();
 
     // one extension in the space or comma delimitid list
@@ -829,8 +968,8 @@ ArrayIconHandlers& wxMimeTypesManagerImpl::GetIconHandlers()
 {
     if ( ms_iconHandlers.GetCount() == 0 )
     {
-        ms_iconHandlers.Add(&gs_iconHandlerKDE);
         ms_iconHandlers.Add(&gs_iconHandlerGNOME);
+        ms_iconHandlers.Add(&gs_iconHandlerKDE);
     }
 
     return ms_iconHandlers;
@@ -839,12 +978,6 @@ ArrayIconHandlers& wxMimeTypesManagerImpl::GetIconHandlers()
 // read system and user mailcaps (TODO implement mime.types support)
 wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
 {
-    // read KDE/GNOME tables
-    ArrayIconHandlers& handlers = GetIconHandlers();
-    size_t count = handlers.GetCount();
-    for ( size_t hn = 0; hn < count; hn++ )
-        handlers[hn]->GetMimeInfoRecords(this);
-
     // directories where we look for mailcap and mime.types by default
     // (taken from metamail(1) sources)
     static const wxChar *aStandardLocations[] =
@@ -885,11 +1018,18 @@ wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
     if ( wxFile::Exists(strUserMimeTypes) ) {
         ReadMimeTypes(strUserMimeTypes);
     }
+
+    // read KDE/GNOME tables
+    ArrayIconHandlers& handlers = GetIconHandlers();
+    size_t count = handlers.GetCount();
+    for ( size_t hn = 0; hn < count; hn++ )
+        handlers[hn]->GetMimeInfoRecords(this);
 }
 
 wxFileType *
 wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
 {
+    wxFileType *fileType = NULL;  
     size_t count = m_aExtensions.GetCount();
     for ( size_t n = 0; n < count; n++ ) {
         wxString extensions = m_aExtensions[n];
@@ -900,16 +1040,14 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
             // consider extensions as not being case-sensitive
             if ( field.IsSameAs(ext, FALSE /* no case */) ) {
                 // found
-                wxFileType *fileType = new wxFileType;
+                if (fileType == NULL) fileType = new wxFileType;
                 fileType->m_impl->Init(this, n);
-
-                return fileType;
+                     // adds this mime type to _list_ of mime types with this extension
             }
         }
     }
 
-    // not found
-    return NULL;
+    return fileType;
 }
 
 wxFileType *

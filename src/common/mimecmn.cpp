@@ -217,6 +217,11 @@ bool wxFileType::GetMimeType(wxString *mimeType) const
     return m_impl->GetMimeType(mimeType);
 }
 
+bool wxFileType::GetMimeTypes(wxArrayString& mimeTypes) const
+{
+    return m_impl->GetMimeTypes(mimeTypes);
+}
+
 bool wxFileType::GetIcon(wxIcon *icon) const
 {
     return m_impl->GetIcon(icon);

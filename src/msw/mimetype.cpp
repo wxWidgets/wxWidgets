@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/mimetype.cpp
+// Name:        msw/mimetype.cpp
 // Purpose:     classes and functions to manage MIME types
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -234,6 +234,22 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
         return FALSE;
     }
 }
+
+
+bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
+{
+    wxString s;
+    
+    if (GetMimeType(&s))
+    {
+        mimeTypes.Clear();
+        mimeTypes.Add(s);
+        return TRUE;
+    }
+    else 
+        return FALSE;
+}
+
 
 bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
 {

@@ -51,6 +51,7 @@ public:
     // implement accessor functions
     bool GetExtensions(wxArrayString& extensions);
     bool GetMimeType(wxString *mimeType) const;
+    bool GetMimeTypes(wxArrayString& mimeTypes) const;
     bool GetIcon(wxIcon *icon) const;
     bool GetDescription(wxString *desc) const;
     bool GetOpenCommand(wxString *openCmd,
