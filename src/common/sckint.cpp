@@ -319,7 +319,7 @@ wxSocketInternal::wxSocketInternal(wxSocketBase *socket)
 
 wxSocketInternal::~wxSocketInternal()
 {
-  wxASSERT(!m_finalized);
+//  wxASSERT(!m_finalized); there is no m_finalized anywhere, RR
   m_request_locker.Unlock();
   delete m_thread_waiter;
   delete m_thread_requester;
