@@ -132,7 +132,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     // It's necessary to call ProcessIdle() to update the frames sizes which
     // might have been changed (it also will update other things set from
-    // OnUpdateUI() which is a nice (and desired) side effect). But we 
+    // OnUpdateUI() which is a nice (and desired) side effect). But we
     // call ProcessIdle() only once since this is not meant for longish
     // background jobs (controlled by wxIdleEvent::RequestMore() and the
     // return value of Processidle().
@@ -326,7 +326,7 @@ wxApp::wxApp()
 #endif
 
     m_colorCube = (unsigned char*) NULL;
-    
+
     // this is NULL for a "regular" wxApp, but is set (and freed) by a wxGLApp
     m_glVisualInfo = (void *) NULL;
 }
@@ -353,7 +353,7 @@ bool wxApp::OnInitGui()
         // seems gtk_widget_set_default_visual no longer exists?
         GdkVisual* vis = gtk_widget_get_default_visual();
 #else
-        GdkVisual* vis = gdkx_visual_get( 
+        GdkVisual* vis = gdkx_visual_get(
             ((XVisualInfo *) m_glVisualInfo) ->visualid );
         gtk_widget_set_default_visual( vis );
 #endif
@@ -363,7 +363,7 @@ bool wxApp::OnInitGui()
 
         visual = vis;
     }
-    
+
     // On some machines, the default visual is just 256 colours, so
     // we make sure we get the best. This can sometimes be wasteful.
 
@@ -441,14 +441,14 @@ bool wxApp::OnInitGui()
 GdkVisual *wxApp::GetGdkVisual()
 {
     GdkVisual *visual = NULL;
-    
+
     if (m_glVisualInfo)
         visual = gdkx_visual_get( ((XVisualInfo *) m_glVisualInfo)->visualid );
     else
         visual = gdk_window_get_visual( wxGetRootWindow()->window );
-        
+
     wxASSERT( visual );
-    
+
     return visual;
 }
 
@@ -497,7 +497,7 @@ bool wxApp::SendIdleEvents()
         wxWindow* win = node->GetData();
         if (SendIdleEvents(win))
             needMore = TRUE;
-            
+
         node = node->GetNext();
     }
 
@@ -506,7 +506,7 @@ bool wxApp::SendIdleEvents()
     {
         wxWindow* win = node->GetData();
         CallInternalIdle( win );
-        
+
         node = node->GetNext();
     }
     return needMore;
@@ -524,7 +524,7 @@ bool wxApp::CallInternalIdle( wxWindow* win )
 
         node = node->Next();
     }
-    
+
     return TRUE;
 }
 
@@ -549,7 +549,7 @@ bool wxApp::SendIdleEvents( wxWindow* win )
 
         node = node->Next();
     }
-    
+
     return needMore;
 }
 
@@ -829,11 +829,11 @@ int wxEntry( int argc, char *argv[] )
             wxTheApp->OnRun();
 
             wxWindow *topWindow = wxTheApp->GetTopWindow();
-            
+
             // Delete all pending windows if any
             wxTheApp->DeletePendingObjects();
-    
-            // Reset top window 
+
+            // Reset top window
             if (topWindow)
                 wxTheApp->SetTopWindow( (wxWindow*) NULL );
 
@@ -848,11 +848,11 @@ int wxEntry( int argc, char *argv[] )
 
 #ifdef __WXDEBUG__
 
-void wxApp::OnAssert(const wxChar *file, int line, const wxChar *msg)
+void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg)
 {
     m_isInAssert = TRUE;
 
-    wxAppBase::OnAssert(file, line, msg);
+    wxAppBase::OnAssert(file, line, cond, msg);
 
     m_isInAssert = FALSE;
 }

@@ -61,7 +61,7 @@ public:
     void DeletePendingObjects();
 
 #ifdef __WXDEBUG__
-    virtual void OnAssert(const wxChar *file, int line, const wxChar *msg);
+    virtual void OnAssert(const wxChar *file, int line, const wxChar *cond, const wxChar *msg);
 
     bool IsInAssert() const { return m_isInAssert; }
 #endif // __WXDEBUG__
@@ -80,7 +80,7 @@ public:
     // This returns the current visual: either that used by wxRootWindow
     // or the XVisualInfo* for SGI.
     GdkVisual      *GetGdkVisual();
-    
+
 private:
     // true if we're inside an assert modal dialog
 #ifdef __WXDEBUG__
@@ -88,7 +88,7 @@ private:
 #endif // __WXDEBUG__
 
     bool CallInternalIdle( wxWindow* win );
-    
+
     DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()
 };
