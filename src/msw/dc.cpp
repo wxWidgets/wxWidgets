@@ -2065,10 +2065,19 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             {
                 StretchBltModeChanger changeMode(GetHdc(), COLORONCOLOR);
 
+                // Figure out what co-ordinate system we're supposed to specify
+                // ysrc in.
+                const LONG hDIB = ds.dsBmih.biHeight;
+                if ( hDIB > 0 )
+                {
+                    // reflect ysrc
+                    ysrc = hDIB - (ysrc + height);
+                }
+
                 if ( ::StretchDIBits(GetHdc(),
                                      xdest, ydest,
                                      width, height,
-                                     0, 0,
+                                     xsrc, ysrc,
                                      width, height,
                                      ds.dsBm.bmBits,
                                      (LPBITMAPINFO)&ds.dsBmih,
