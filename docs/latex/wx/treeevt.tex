@@ -51,15 +51,15 @@ Constructor.
 
 Key code if the event is a keypress event.
 
-\membersection{wxTreeEvent::m\_itemIndex}
+\membersection{wxTreeEvent::m\_item}
 
-\member{wxTreeItem}{m\_item}
+\member{wxTreeItemId}{m\_item}
 
-The item.
+The item of interest.
 
 \membersection{wxTreeEvent::m\_oldItem}
 
-\member{long}{m\_oldItem}
+\member{wxTreeItemId}{m\_oldItem}
 
 The old item index.
 
@@ -68,4 +68,29 @@ The old item index.
 \member{wxPoint}{m\_pointDrag}
 
 The position of the mouse pointer if the event is a drag event.
+
+\membersection{wxTreeEvent::GetCode}\label{wxtreeeventgetcode}
+
+\constfunc{int}{GetCode}{\void}
+
+Returns the keyboard code (for wxEVT\_COMMAND\_TREE\_KEY\_DOWN only).
+
+\membersection{wxTreeEvent::GetItem}\label{wxtreeeventgetitem}
+
+\constfunc{wxTreeItemId}{GetItem}{\void}
+
+Returns the item of interest.
+
+\membersection{wxTreeEvent::GetOldItem}\label{wxtreeeventgetolditem}
+
+\constfunc{wxTreeItemId}{GetOldItem}{\void}
+
+Returns the old item (for example, before a selection took place).
+
+\membersection{wxTreeEvent::GetPoint}\label{wxtreeeventgetpoint}
+
+\constfunc{wxTreeItemId}{GetPoint}{\void}
+
+Returns the point where the mouse was when the drag operation started
+(wxEVT\_COMMAND\_TREE\_BEGIN\_(R)DRAG events only).
 

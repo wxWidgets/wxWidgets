@@ -166,6 +166,36 @@ optimized. For example, in wxWindows project, set to 'Minimum
 Size'. In Dialog Editor project, set to 'Customize: Favor Small
 Code' (and no others). This will then work.<P>
 
+<H3>How do I convert the VC++ 5 project files to VC++ 6?</H3>
+
+<PRE>
+Simon Gornall wrote:
+
+> Could some kind soul please send me the project files they have used to
+> compile Wx with Visual C++ v6.0.  Every time I try to compile the library,
+> I go through the following procedure:
+>
+>  o I click on the project wxvc.dsp
+>  o It starts VC++ v6, and tells me the project files are from an older
+>    version, and do I want to convert them to the new version.
+>  o I click 'yes'
+>  o It chugs away converting all the dependencies, then can't write to the
+>    file 'wxvc.dsw' and crashes!
+</PRE>
+
+Russ Smyth replies:
+
+<PRE>
+Try opening VC++6, then going to file->Open Workspace,
+in dialog pull down file type to .dsp, open wxvc.dsp, when
+it asks to convert say yes, then it should come u p ok.  I have
+found that VC++6 has a bug which will not allow it to open
+a project file by double clicking on the project.. it crashes
+even if it created the .dsp in the first place!  Try it on
+one of the .dsp's you have created yourself..
+
+Opening from a started VC seems to work fine.
+</PRE>
 
 </font>
 

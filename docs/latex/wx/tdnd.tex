@@ -10,7 +10,7 @@ Classes: \helpref{wxDataObject}{wxdataobject},
 It has to be noted that the API for drag and drop in wxWindows is not
 yet finished which is mostly due to the fact that DnD support under
 GTK 1.0 is very rudimentary and entirely different from the XDnD
-protocoll used by GTK 1.2. This also entails that not all of the documentation
+protocol used by GTK 1.2. This also entails that not all of the documentation
 concerning DnD might be correct and some of the code might get broken
 in the future. The next release of wxWindows will be based on GTK 1.2
 and will hopefully include a much improved DnD support. The general
@@ -18,11 +18,11 @@ design on the wxDropSource side will be the same but especially the
 wxDropTarget is almost certain to change.
 
 Note that wxUSE\_DRAG\_AND\_DROP must be defined in setup.h in order
-to use Drag'n'Drop in wxWindows.
+to use drag and drop in wxWindows.
 
 This overview describes wxWindows support for drag and drop and clipboard
-operations. Both of these topics are discussed here because, in fact, they're
-quite related. Drag and drop and clipboard are just two ways of passing the
+operations. Both of these topics are discussed here because they are
+related. Drag and drop transfer and clipboard transfer are just two ways of passing the
 data around and so the code required to implement both types of the operations
 is almost the same.
 

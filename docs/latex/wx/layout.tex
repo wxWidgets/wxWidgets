@@ -26,6 +26,13 @@ width and height will be used, to be compatible with panel items which often
 have take a default size. If the constraint is wxAsIs, the dimension will
 not be changed.
 
+In order for constraints to position a child, four individual constraints are required.
+This can be, for example, a combination of left and width, left and right, or right and width;
+plus top and height, top and bottom, or bottom and height. 
+
+If conflicting restraints are found, the position of the child
+will not be moved.
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
