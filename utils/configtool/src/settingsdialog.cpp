@@ -220,15 +220,19 @@ void ctGeneralSettingsDialog::CreateControls()
     wxCheckBox* item7 = new wxCheckBox(item4, ID_LOAD_LAST_DOCUMENT, _("&Load last document"), wxDefaultPosition, wxDefaultSize, 0);
     item7->SetValue(FALSE);
     item7->SetHelpText(_("Check to load the last document on startup"));
+#if wxUSE_TOOLTIPS
     if (ShowToolTips())
         item7->SetToolTip(_("Check to load the last document on startup"));
+#endif
     item6->Add(item7, 0, wxALIGN_LEFT|wxALL, 5);
 
     wxCheckBox* item8 = new wxCheckBox(item4, ID_SHOW_TOOLTIPS, _("&Show tooltips"), wxDefaultPosition, wxDefaultSize, 0);
     item8->SetValue(FALSE);
     item8->SetHelpText(_("Check to show tooltips"));
+#if wxUSE_TOOLTIPS
     if (ShowToolTips())
         item8->SetToolTip(_("Check to show tooltips"));
+#endif
     item6->Add(item8, 0, wxALIGN_LEFT|wxALL, 5);
 
     wxStaticText* item9 = new wxStaticText(item4, wxID_STATIC, _("&Default file kind to save when using the Go command:"), wxDefaultPosition, wxDefaultSize, 0);
@@ -241,8 +245,10 @@ void ctGeneralSettingsDialog::CreateControls()
     wxChoice* item10 = new wxChoice(item4, ID_DEFAULT_FILE_KIND, wxDefaultPosition, wxSize(200, -1), 2, item10Strings, 0);
     item10->SetStringSelection(_("Setup file"));
     item10->SetHelpText(_("Select the default kind of file to save using Go"));
+#if wxUSE_TOOLTIPS
     if (ShowToolTips())
         item10->SetToolTip(_("Select the default kind of file to save using Go"));
+#endif
     item6->Add(item10, 0, wxGROW|wxALL, 5);
 
     GetSizer()->Fit(this);
@@ -321,14 +327,18 @@ void ctLocationSettingsDialog::CreateControls()
 
     wxTextCtrl* item16 = new wxTextCtrl(item11, ID_WXWIN_HIERARCHY, _(""), wxDefaultPosition, wxSize(200, -1), 0);
     item16->SetHelpText(_("Enter the root path of the wxWindows hierarchy"));
+#if wxUSE_TOOLTIPS
     if (ShowToolTips())
         item16->SetToolTip(_("Enter the root path of the wxWindows hierarchy"));
+#endif
     item15->Add(item16, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxButton* item17 = new wxButton(item11, ID_CHOOSE_WXWIN_HIERARCHY, _("&Choose..."), wxDefaultPosition, wxDefaultSize, 0);
     item17->SetHelpText(_("Click to choose the root path of the wxWindows hierarchy\\n"));
+#if wxUSE_TOOLTIPS
     if (ShowToolTips())
         item17->SetToolTip(_("Click to choose the root path of the wxWindows hierarchy\\n"));
+#endif
     item15->Add(item17, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxBoxSizer* item18 = new wxBoxSizer(wxHORIZONTAL);
@@ -339,8 +349,10 @@ void ctLocationSettingsDialog::CreateControls()
     wxCheckBox* item20 = new wxCheckBox(item11, ID_USE_WXWIN, _("&Use WXWIN environment variable"), wxDefaultPosition, wxDefaultSize, 0);
     item20->SetValue(FALSE);
     item20->SetHelpText(_("Check to use the value of WXWIN instead"));
+#if wxUSE_TOOLTIPS
     if (ShowToolTips())
         item20->SetToolTip(_("Check to use the value of WXWIN instead"));
+#endif
     item18->Add(item20, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     GetSizer()->Fit(this);

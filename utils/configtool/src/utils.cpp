@@ -97,6 +97,14 @@ wxString apFontToString(const wxFont& font)
     return str;
 }
 
+static inline int StringToInt(const wxString& s)
+{
+    long tmp;
+    s.ToLong(&tmp);
+
+    return int(tmp);
+}
+
 // Convert a string to a wxFont
 wxFont apStringToFont(const wxString& str)
 {
@@ -115,7 +123,7 @@ wxFont apStringToFont(const wxString& str)
 
         if (i == 0)
         {
-            StringToInt(token, & pointSize);
+            pointSize = StringToInt(token);
 #if defined(__WXGTK__) || defined(__WXMAC__)
             if (pointSize < 8)
                 pointSize = 8;
@@ -124,13 +132,13 @@ wxFont apStringToFont(const wxString& str)
 #endif            
         }
         else if (i == 1)
-            StringToInt(token, & family);
+            family = StringToInt(token);
         else if (i == 2)
-            StringToInt(token, & style);
+            style = StringToInt(token);
         else if (i == 3)
-            StringToInt(token, & weight);
+            weight = StringToInt(token);
         else if (i == 4)
-            StringToInt(token, & underlined);
+            underlined = StringToInt(token);
         else if (i == 5)
         {
             facename = token;
