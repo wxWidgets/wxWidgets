@@ -327,8 +327,14 @@ void wxCondition::Broadcast()
 
 wxCriticalSection::wxCriticalSection()
 {
-    wxASSERT_MSG( sizeof(CRITICAL_SECTION) <= sizeof(m_buffer),
+#ifdef __WXDEBUG__
+    // Done this way to stop warnings during compilation about statement
+    // always being false
+	 int csSize = sizeof(CRITICAL_SECTION);
+	 int bSize  = sizeof(m_buffer);
+    wxASSERT_MSG( csSize <= bSize,
                   _T("must increase buffer size in wx/thread.h") );
+#endif
 
     ::InitializeCriticalSection((CRITICAL_SECTION *)m_buffer);
 }
