@@ -19,7 +19,7 @@ class FoldOutWindow(wx.PopupWindow):
         self.Bind(wx.EVT_LEAVE_WINDOW, self.evLeave)
         
     def InitColors(self):
-        faceClr = wx.SystemSettings_GetSystemColour(wx.SYS_COLOUR_WINDOW)
+        faceClr = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
         self.SetBackgroundColour(faceClr)
 
     def AddButton(self,bitmap,handler=None):
