@@ -120,7 +120,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     SetMenuBar(menu_bar);
 
     // Make a listbox
-    wxListBox *list = new wxListBox(this, SERVER_LISTBOX, wxPoint(5, 5));
+    wxListBox *list = new wxListBox(this, SERVER_LISTBOX);
     list->Append(_T("Apple"));
     list->Append(_T("Pear"));
     list->Append(_T("Orange"));
@@ -200,7 +200,7 @@ MyConnection::MyConnection()
             : wxConnection()
 {
     dialog = new IPCDialogBox(wxTheApp->GetTopWindow(), _T("Connection"),
-                              wxPoint(100, 100), wxSize(500, 500), this);
+                              wxDefaultPosition, wxDefaultSize, this);
     dialog->Show(true);
     the_connection = this;
 }

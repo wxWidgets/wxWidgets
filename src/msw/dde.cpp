@@ -49,24 +49,6 @@
     #include "wx/msw/gnuwin32/extra.h"
 #endif
 
-// some compilers headers don't define this one (mingw32)
-#ifndef DMLERR_NO_ERROR
-    #define DMLERR_NO_ERROR (0)
-
-    // this one is also missing from some mingw32 headers, but there is no way
-    // to test for it (I know of) - the test for DMLERR_NO_ERROR works for me,
-    // but is surely not the right thing to do
-    extern "C"
-    HDDEDATA STDCALL DdeClientTransaction(LPBYTE pData,
-                                          DWORD cbData,
-                                          HCONV hConv,
-                                          HSZ hszItem,
-                                          UINT wFmt,
-                                          UINT wType,
-                                          DWORD dwTimeout,
-                                          LPDWORD pdwResult);
-#endif // no DMLERR_NO_ERROR
-
 // ----------------------------------------------------------------------------
 // macros and constants
 // ----------------------------------------------------------------------------
@@ -579,7 +561,8 @@ bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
         size = wxStrlen(data) + 1;
     }
 
-    bool ok = DdeClientTransaction((LPBYTE)data, size,
+    bool ok = DdeClientTransaction((LPBYTE)data, 
+                                    size * sizeof(wxChar),
                                     GetHConv(),
                                     NULL,
                                     format,
@@ -616,7 +599,7 @@ wxChar *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat fo
 
     DWORD len = DdeGetData(returned_data, NULL, 0, 0);
 
-    wxChar *data = GetBufferAtLeast( len );
+    wxChar *data = GetBufferAtLeast( len/sizeof(wxChar) );
     wxASSERT_MSG(data != NULL,
                  _T("Buffer too small in wxDDEConnection::Request") );
     (void) DdeGetData(returned_data, (LPBYTE)data, len, 0);
@@ -624,7 +607,7 @@ wxChar *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat fo
     (void) DdeFreeDataHandle(returned_data);
 
     if (size)
-        *size = (int)len;
+        *size = (int)len/sizeof(wxChar);
 
     return data;
 }
@@ -638,7 +621,8 @@ bool wxDDEConnection::Poke(const wxString& item, wxChar *data, int size, wxIPCFo
     }
 
     HSZ item_atom = DDEGetAtom(item);
-    bool ok = DdeClientTransaction((LPBYTE)data, size,
+    bool ok = DdeClientTransaction((LPBYTE)data, 
+                                   size * sizeof(wxChar),
                                    GetHConv(),
                                    item_atom, format,
                                    XTYP_POKE,
@@ -796,7 +780,7 @@ _DDECallback(WORD wType,
                 {
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
 
-                    wxChar *data = connection->GetBufferAtLeast( len );
+                    wxChar *data = connection->GetBufferAtLeast( len/sizeof(wxChar) );
                     wxASSERT_MSG(data != NULL,
                                  _T("Buffer too small in _DDECallback (XTYP_EXECUTE)") );
 
@@ -806,7 +790,7 @@ _DDECallback(WORD wType,
 
                     if ( connection->OnExecute(connection->m_topicName,
                                                data,
-                                               (int)len,
+                                               (int)len/sizeof(wxChar),
                                                (wxIPCFormat) wFmt) )
                     {
                         return (DDERETURN)(DWORD)DDE_FACK;
@@ -836,7 +820,7 @@ _DDECallback(WORD wType,
 
                         HDDEDATA handle = DdeCreateDataHandle(DDEIdInst,
                                                               (LPBYTE)data,
-                                                              user_size,
+                                                              user_size*sizeof(wxChar),
                                                               0,
                                                               hsz2,
                                                               wFmt,
@@ -857,7 +841,7 @@ _DDECallback(WORD wType,
 
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
 
-                    wxChar *data = connection->GetBufferAtLeast( len );
+                    wxChar *data = connection->GetBufferAtLeast( len/sizeof(wxChar) );
                     wxASSERT_MSG(data != NULL,
                                  _T("Buffer too small in _DDECallback (XTYP_EXECUTE)") );
 
@@ -868,7 +852,7 @@ _DDECallback(WORD wType,
                     connection->OnPoke(connection->m_topicName,
                                        item_name,
                                        data,
-                                       (int)len,
+                                       (int)len/sizeof(wxChar),
                                        (wxIPCFormat) wFmt);
 
                     return (DDERETURN)DDE_FACK;
@@ -919,7 +903,7 @@ _DDECallback(WORD wType,
                                     (
                                         DDEIdInst,
                                         (LPBYTE)connection->m_sendingData,
-                                        connection->m_dataSize,
+                                        connection->m_dataSize*sizeof(wxChar),
                                         0,
                                         hsz2,
                                         connection->m_dataType,
@@ -944,7 +928,7 @@ _DDECallback(WORD wType,
 
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
 
-                    wxChar *data = connection->GetBufferAtLeast( len );
+                    wxChar *data = connection->GetBufferAtLeast( len/sizeof(wxChar) );
                     wxASSERT_MSG(data != NULL,
                                  _T("Buffer too small in _DDECallback (XTYP_ADVDATA)") );
 
@@ -954,7 +938,7 @@ _DDECallback(WORD wType,
                     if ( connection->OnAdvise(connection->m_topicName,
                                               item_name,
                                               data,
-                                              (int)len,
+                                              (int)len/sizeof(wxChar),
                                               (wxIPCFormat) wFmt) )
                     {
                         return (DDERETURN)(DWORD)DDE_FACK;

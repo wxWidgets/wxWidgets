@@ -262,6 +262,7 @@ wxMSW:
 - restored (and improved) possibility to use wx with MFC broken in 2.5.2
 - fixed wxTextCtrl::SetMaxLength for rich edit controls
 - fixed flat style for toolbars under XP, Windows Classic style
+- fixed truncation of transferred data in wxConnection under unicode build
 
 wxUniv/X11:
 
