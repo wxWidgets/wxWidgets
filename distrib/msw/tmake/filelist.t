@@ -39,6 +39,8 @@
             $wxGeneric{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "M" ) {
             $wxMSW{$fields[0]} = $fields[2];
+        } elsif ( $fields[1] eq "X" ) {
+            $wxMOTIF{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "R" ) {
             $wxGTK{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "H" ) {

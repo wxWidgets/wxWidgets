@@ -17,19 +17,37 @@
         next if $wxGeneric{$file} =~ /\bR\b/;
 
         $file =~ s/cp?p?$/\o/;
-        $project{"WXGENERICOBJS"} .= $file . " "
+        $project{"WXGTK_GENERICOBJS"} .= $file . " "
+    }
+
+    #! now transform these hashes into $project tags
+    foreach $file (sort keys %wxGeneric) {
+
+        $file =~ s/cp?p?$/\o/;
+        $project{"WXMOTIF_GENERICOBJS"} .= $file . " "
     }
 
     foreach $file (sort keys %wxCommon) {
         next if $wxCommon{$file} =~ /\bR\b/;
 
         $file =~ s/cp?p?$/\o/;
-        $project{"WXCOMMONOBJS"} .= $file . " "
+        $project{"WXGTK_COMMONOBJS"} .= $file . " "
+    }
+
+    foreach $file (sort keys %wxCommon) {
+
+        $file =~ s/cp?p?$/\o/;
+        $project{"WXMOTIF_COMMONOBJS"} .= $file . " "
     }
 
     foreach $file (sort keys %wxGTK) {
         $file =~ s/cp?p?$/\o/;
-        $project{"WXGTKOBJS"} .= $file . " "
+        $project{"WXGTK_GUIOBJS"} .= $file . " "
+    }
+
+    foreach $file (sort keys %wxMOTIF) {
+        $file =~ s/cp?p?$/\o/;
+        $project{"WXMOTIF_GUIOBJS"} .= $file . " "
     }
 
     foreach $file (sort keys %wxHTML) {
@@ -89,7 +107,7 @@ SHELL = @SHELL@
 
 ########################### Paths #################################
 
-srcdir = @srcdir@/src/gtk
+srcdir = @srcdir@/src/@TOOLKIT_DIR@
 
 top_srcdir = @top_srcdir@
 prefix = @prefix@
@@ -135,7 +153,7 @@ host_triplet = @host@
 target_alias = @target_alias@
 target_triplet = @target@
 
-EXTRA_VPATH = @EXTRA_VPATH_MF@
+EXTRA_VPATH = @EXTRA_VPATH@
 
 VPATH = .:${srcdir}:${srcdir}/src/common:${srcdir}/src/generic:${srcdir}/src/html:${EXTRA_VPATH}
 
@@ -195,22 +213,33 @@ PNGDIR  = $(WXDIR)/src/png
 JPEGDIR = $(WXDIR)/src/jpeg
 ZLIBDIR = $(WXDIR)/src/zlib
 GTKDIR  = $(WXDIR)/src/gtk
+MOTIFDIR = $(WXDIR)/src/motif
 INCDIR  = $(WXDIR)/include
 
 DOCDIR = $(WXDIR)\docs
 
-GENERICOBJS = \
-                #$ ExpandList("WXGENERICOBJS");
+GTK_GENERICOBJS = \
+                #$ ExpandList("WXGTK_GENERICOBJS");
 
-COMMONOBJS  = \
+GTK_COMMONOBJS  = \
 		parser.o \
-		#$ ExpandList("WXCOMMONOBJS");
+		#$ ExpandList("WXGTK_COMMONOBJS");
+
+GTK_GUIOBJS     = \
+		#$ ExpandList("WXGTK_GUIOBJS");
+
+MOTIF_GENERICOBJS = \
+                #$ ExpandList("WXMOTIF_GENERICOBJS");
+
+MOTIF_COMMONOBJS  = \
+		parser.o \
+		#$ ExpandList("WXMOTIF_COMMONOBJS");
+
+MOTIF_GUIOBJS     = \
+		#$ ExpandList("WXMOTIF_GUIOBJS");
 
 HTMLOBJS = \
                 #$ ExpandList("WXHTMLOBJS");
-
-GTKOBJS     = \
-		#$ ExpandList("WXGTKOBJS");
 
 UNIXOBJS     = \
 		#$ ExpandList("WXUNIXOBJS");
@@ -297,7 +326,8 @@ JPEGOBJS    = \
 		jquant2.o \
 		jdmerge.o
 
-OBJECTS = $(GTKOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJ) $(UNIXOBJS) \
+
+OBJECTS = $(@GUIOBJS@) $(@COMMONOBJS@) $(@GENERICOBJS@) $(HTMLOBJS) $(UNIXOBJS) \
 	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS)
 
 all:    $(OBJECTS) $(WXLIB)

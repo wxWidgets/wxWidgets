@@ -10,8 +10,9 @@
 #  G	/src/generic 
 #  C	/src/common
 #  M	/src/msw
+#  X	/src/motif   X for Xt
 #  U	/src/unix
-#  R	/src/gtk
+#  R	/src/gtk     R for Robert
 #  H	/src/html
 #  I	/include/wx, /include/wx/gtk, /include/wx/msw, etc.
 #
@@ -313,6 +314,59 @@ utilsgtk.cpp	R
 utilsres.cpp	R
 wave.cpp	R
 window.cpp	R
+
+gsockmot.cpp	X
+accel.cpp	X
+app.cpp	X
+bitmap.cpp	X
+bmpbuttn.cpp	X
+brush.cpp	X
+button.cpp	X
+checkbox.cpp	X
+choice.cpp	X
+clipbrd.cpp	X
+colour.cpp	X
+combobox.cpp	X
+control.cpp	X
+cursor.cpp	X
+data.cpp	X
+dataobj.cpp	X
+dc.cpp	X
+dcclient.cpp	X
+dcmemory.cpp 	X
+dcscreen.cpp	X
+dialog.cpp	X
+filedlg.cpp	X
+font.cpp	X
+frame.cpp	X
+gauge.cpp	X
+gdiobj.cpp	X
+icon.cpp	X
+listbox.cpp	X
+main.cpp	X
+mdi.cpp	X
+menu.cpp	X
+menuitem.cpp	X
+minifram.cpp	X
+msgdlg.cpp	X
+palette.cpp	X
+pen.cpp	X
+radiobox.cpp	X
+radiobut.cpp	X
+region.cpp	X
+scrolbar.cpp	X
+settings.cpp	X
+slider.cpp	X
+spinbutt.cpp	X
+statbmp.cpp	X
+statbox.cpp	X
+stattext.cpp	X
+toolbar.cpp	X
+textctrl.cpp	X
+timer.cpp	X
+tooltip.cpp	X
+utils.cpp	X
+window.cpp	X
 
 htmlcell.cpp	H
 htmlfilter.cpp	H

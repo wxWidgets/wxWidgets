@@ -364,7 +364,7 @@ else
   DEFAULT_wxUSE_LIBJPEG=yes
   DEFAULT_wxUSE_ODBC=no
 
-  DEFAULT_wxUSE_STD_IOSTREAM=yes
+  DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_FILE=yes
   DEFAULT_wxUSE_TEXTFILE=yes
   DEFAULT_wxUSE_TIMEDATE=yes
@@ -1022,6 +1022,10 @@ dnl ----------------------------------------------------------------
 TOOLKIT=
 TOOLKIT_INCLUDE=
 
+GUIOBJS=
+COMMONOBJS=
+GENERICOBJS=
+
 GUI_TK_LIBRARY=
 GUI_TK_LINK=
 
@@ -1052,16 +1056,20 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
 fi
 
 if test "$wxUSE_GTK" = 1; then
-  dnl avoid calling AM_PATH_GTK twice, so check first for the newer version and
-  dnl only then, if it wasn't found, for an older one
-  AM_PATH_GTK(1.2.0, WXGTK12=1)
-  if test "$WXGTK12" != 1; then
-    AM_PATH_GTK(1.0.0, , AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.X or 1.0.X?))
-  fi
+    dnl avoid calling AM_PATH_GTK twice, so check first for the newer version and
+    dnl only then, if it wasn't found, for an older one
+    AM_PATH_GTK(1.2.0, WXGTK12=1)
+    if test "$WXGTK12" != 1; then
+       AM_PATH_GTK(1.0.0, , AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.X or 1.0.X?))
+    fi
 
-  TOOLKIT_INCLUDE="$GTK_CFLAGS"
-  GUI_TK_LIBRARY="$GTK_LIBS"
-  TOOLKIT=GTK
+    TOOLKIT_INCLUDE="$GTK_CFLAGS"
+    GUI_TK_LIBRARY="$GTK_LIBS"
+    TOOLKIT=GTK
+  
+    GUIOBJS=GTK_GUIOBJS
+    COMMONOBJS=GTK_COMMONOBJS
+    GENERICOBJS=GTK_GENERICOBJS
 fi
 
 if test "$wxUSE_WINE" = 1; then
@@ -1169,6 +1177,10 @@ if test "$wxUSE_MOTIF" = 1; then
     GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXt -lX11 -ldl -lm"
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     TOOLKIT=MOTIF
+  
+    GUIOBJS=MOTIF_GUIOBJS
+    COMMONOBJS=MOTIF_COMMONOBJS
+    GENERICOBJS=MOTIF_GENERICOBJS
 fi
 
 dnl the name of the directory where the files for this toolkit live
@@ -2208,6 +2220,11 @@ AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DEF)
 AC_SUBST(TOOLKIT_DIR)
 AC_SUBST(TOOLKIT_INCLUDE)
+
+dnl what to compile
+AC_SUBST(GUIOBJS)
+AC_SUBST(COMMONOBJS)
+AC_SUBST(GENERICOBJS)
 
 dnl additional sources
 AC_SUBST(EXTRA_VPATH)
