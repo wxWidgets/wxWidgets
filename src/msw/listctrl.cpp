@@ -72,8 +72,17 @@
 // private functions
 // ----------------------------------------------------------------------------
 
-static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_ITEM& tvItem);
-static void wxConvertFromMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_ITEM& tvItem, HWND getFullInfo = 0);
+// convert our state and mask flags to LV_ITEM constants
+static void wxConvertToMSWFlags(long state, long mask, LV_ITEM& lvItem);
+
+// convert wxListItem to LV_ITEM
+static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
+                                   const wxListItem& info, LV_ITEM& lvItem);
+
+// convert LV_ITEM to wxListItem
+static void wxConvertFromMSWListItem(HWND hwndListCtrl,
+                                     wxListItem& info,
+                                     /* const */ LV_ITEM& lvItem);
 
 // ----------------------------------------------------------------------------
 // events
@@ -660,7 +669,7 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     }
     else
     {
-        wxConvertFromMSWListItem(this, info, lvItem);
+        wxConvertFromMSWListItem(GetHwnd(), info, lvItem);
     }
 
     if (lvItem.pszText)
@@ -745,14 +754,22 @@ int wxListCtrl::GetItemState(long item, long stateMask) const
 // Sets the item state
 bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 {
-    wxListItem info;
+    // NB: don't use SetItem() here as it doesn't work with the virtual list
+    //     controls
+    LV_ITEM lvItem;
+    wxZeroMemory(lvItem);
 
-    info.m_mask = wxLIST_MASK_STATE;
-    info.m_state = state;
-    info.m_stateMask = stateMask;
-    info.m_itemId = item;
+    wxConvertToMSWFlags(state, stateMask, lvItem);
 
-    return SetItem(info);
+    if ( !::SendMessage(GetHwnd(), LVM_SETITEMSTATE,
+                        (WPARAM)item, (LPARAM)&lvItem) )
+    {
+        wxLogLastError(_T("ListView_SetItemState"));
+
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 // Sets the item image
@@ -1407,7 +1424,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 eventType = wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
                 LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(this, event.m_item, info->item, GetHwnd());
+                wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
                 event.m_itemIndex = event.m_item.m_itemId;
             }
             break;
@@ -1440,7 +1457,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
                 LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(this, event.m_item, info->item);
+                wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
                 if ( info->item.pszText == NULL || info->item.iItem == -1 )
                     return FALSE;
 
@@ -1452,7 +1469,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 eventType = wxEVT_COMMAND_LIST_SET_INFO;
                 LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(this, event.m_item, info->item, GetHwnd());
+                wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
             }
             break;
 
@@ -1918,7 +1935,9 @@ void wxListItem::ClearAttributes()
     m_attr = NULL;
 }
 
-static void wxConvertFromMSWListItem(const wxListCtrl *WXUNUSED(ctrl), wxListItem& info, LV_ITEM& lvItem, HWND getFullInfo)
+static void wxConvertFromMSWListItem(HWND hwndListCtrl,
+                                     wxListItem& info,
+                                     LV_ITEM& lvItem)
 {
     info.m_data = lvItem.lParam;
     info.m_mask = 0;
@@ -1929,7 +1948,7 @@ static void wxConvertFromMSWListItem(const wxListCtrl *WXUNUSED(ctrl), wxListIte
     long oldMask = lvItem.mask;
 
     bool needText = FALSE;
-    if (getFullInfo != 0)
+    if (hwndListCtrl != 0)
     {
         if ( lvItem.mask & LVIF_TEXT )
             needText = FALSE;
@@ -1941,9 +1960,8 @@ static void wxConvertFromMSWListItem(const wxListCtrl *WXUNUSED(ctrl), wxListIte
             lvItem.pszText = new wxChar[513];
             lvItem.cchTextMax = 512;
         }
-        //    lvItem.mask |= TVIF_HANDLE | TVIF_STATE | TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_CHILDREN | TVIF_PARAM;
         lvItem.mask |= LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
-        ::SendMessage(getFullInfo, LVM_GETITEM, 0, (LPARAM)& lvItem);
+        ::SendMessage(hwndListCtrl, LVM_GETITEM, 0, (LPARAM)& lvItem);
     }
 
     if ( lvItem.mask & LVIF_STATE )
@@ -2000,7 +2018,37 @@ static void wxConvertFromMSWListItem(const wxListCtrl *WXUNUSED(ctrl), wxListIte
     lvItem.mask = oldMask;
 }
 
-static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_ITEM& lvItem)
+static void wxConvertToMSWFlags(long state, long stateMask, LV_ITEM& lvItem)
+{
+    if (stateMask & wxLIST_STATE_CUT)
+    {
+        lvItem.stateMask |= LVIS_CUT;
+        if (state & wxLIST_STATE_CUT)
+            lvItem.state |= LVIS_CUT;
+    }
+    if (stateMask & wxLIST_STATE_DROPHILITED)
+    {
+        lvItem.stateMask |= LVIS_DROPHILITED;
+        if (state & wxLIST_STATE_DROPHILITED)
+            lvItem.state |= LVIS_DROPHILITED;
+    }
+    if (stateMask & wxLIST_STATE_FOCUSED)
+    {
+        lvItem.stateMask |= LVIS_FOCUSED;
+        if (state & wxLIST_STATE_FOCUSED)
+            lvItem.state |= LVIS_FOCUSED;
+    }
+    if (stateMask & wxLIST_STATE_SELECTED)
+    {
+        lvItem.stateMask |= LVIS_SELECTED;
+        if (state & wxLIST_STATE_SELECTED)
+            lvItem.state |= LVIS_SELECTED;
+    }
+}
+
+static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
+                                   const wxListItem& info,
+                                   LV_ITEM& lvItem)
 {
     lvItem.iItem = (int) info.m_itemId;
 
@@ -2014,30 +2062,8 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_
     if (info.m_mask & wxLIST_MASK_STATE)
     {
         lvItem.mask |= LVIF_STATE;
-        if (info.m_stateMask & wxLIST_STATE_CUT)
-        {
-            lvItem.stateMask |= LVIS_CUT;
-            if (info.m_state & wxLIST_STATE_CUT)
-                lvItem.state |= LVIS_CUT;
-        }
-        if (info.m_stateMask & wxLIST_STATE_DROPHILITED)
-        {
-            lvItem.stateMask |= LVIS_DROPHILITED;
-            if (info.m_state & wxLIST_STATE_DROPHILITED)
-                lvItem.state |= LVIS_DROPHILITED;
-        }
-        if (info.m_stateMask & wxLIST_STATE_FOCUSED)
-        {
-            lvItem.stateMask |= LVIS_FOCUSED;
-            if (info.m_state & wxLIST_STATE_FOCUSED)
-                lvItem.state |= LVIS_FOCUSED;
-        }
-        if (info.m_stateMask & wxLIST_STATE_SELECTED)
-        {
-            lvItem.stateMask |= LVIS_SELECTED;
-            if (info.m_state & wxLIST_STATE_SELECTED)
-                lvItem.state |= LVIS_SELECTED;
-        }
+
+        wxConvertToMSWFlags(info.m_state, info.m_stateMask, lvItem);
     }
 
     if (info.m_mask & wxLIST_MASK_TEXT)
