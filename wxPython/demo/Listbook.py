@@ -36,7 +36,6 @@ class TestLB(wx.Listbook):
                             )
         self.log = log
 
-
         # make an image list using the BlomXX images
         il = wx.ImageList(32, 32)
         for x in range(1, 15):
@@ -61,11 +60,9 @@ class TestLB(wx.Listbook):
                 #st.SetForegroundColour(wxWHITE)
                 #st.SetBackgroundColour(wxBLUE)
                 first = False
-            
-                
 
-        wx.EVT_LISTBOOK_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
-        wx.EVT_LISTBOOK_PAGE_CHANGING(self, self.GetId(), self.OnPageChanging)
+        self.Bind(wx.EVT_LISTBOOK_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(wx.EVT_LISTBOOK_PAGE_CHANGING, self.OnPageChanging)
 
 
     def makeColorPanel(self, color):
@@ -116,5 +113,6 @@ if __name__ == '__main__':
     import sys,os
     import run
     run.main(['', os.path.basename(sys.argv[0])])
+
 
 
