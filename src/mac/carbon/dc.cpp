@@ -873,12 +873,11 @@ void  wxDC::DoDrawPoint( wxCoord x, wxCoord y )
   
   if (m_pen.GetStyle() != wxTRANSPARENT) 
   {
-		MacInstallPen() ;
         wxCoord xx1 = XLOG2DEVMAC(x); 
         wxCoord yy1 = YLOG2DEVMAC(y);
-	
-		::MoveTo(xx1,yy1);
-		::LineTo(xx1+1, yy1+1);
+        RGBColor pencolor = MAC_WXCOLORREF( m_pen.GetColour().GetPixel());
+        ::SetCPixel( xx1,yy1,&pencolor) ;
+        CalcBoundingBox(x, y);
   }
 }
 
