@@ -2610,7 +2610,7 @@ BadParameter:
 
 /*****************************************************************************/
 
-Ptr
+static Ptr
 GetTempBuffer(
 	ByteCount buffReqSize,
 	ByteCount *buffActSize)

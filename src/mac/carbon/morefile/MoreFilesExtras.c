@@ -494,7 +494,7 @@ pascal	void	TruncPString(StringPtr destination,
 
 /*****************************************************************************/
 
-pascal	Ptr	GetTempBuffer(long buffReqSize,
+static pascal	Ptr	GetTempBuffer(long buffReqSize,
 						  long *buffActSize)
 {
 	enum
