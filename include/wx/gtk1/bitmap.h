@@ -34,6 +34,7 @@ class wxStaticBitmap;
 class wxFrame;
 class wxDialog;
 class wxTreeCtrl;
+class wxNotebook;
 
 class wxMask;
 class wxBitmap;
@@ -65,6 +66,7 @@ class wxMask: public wxObject
     friend wxFrame;
     friend wxDialog;
     friend wxTreeCtrl;
+    friend wxNotebook;
 
     GdkBitmap *GetBitmap() const;
 
