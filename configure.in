@@ -2232,16 +2232,47 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             )
         fi
 
-        dnl MBN: this should really be an AC_TRY_LINK, but it is faster
-        dnl      to special case it
-        xt_needs_sm_ice=
-        case "${host}" in
-          *-*-cygwin* )
-            xt_needs_sm_ice=" -lSM -lICE"
-            ;;
-        esac
+        AC_MSG_CHECKING([if we need -lXp and/or -lSM -lICE])
+        libp_link=""
+        libsm_ice_link=""
+        libs_found=0
+        for libp in "" " -lXp"; do
+            if test "$libs_found" = "0"; then
+                for libsm_ice in " -lSM -lICE"; do
+                    if test "$libs_found" = "0"; then                
+                        save_LIBS="$LIBS"
+                        LIBS="$GUI_TK_LIBRARY -lXm${xpm_link} ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
+                        AC_TRY_LINK(
+                            [
+                                #include <Xm/Xm.h>
+                                #include <Xm/List.h>
+                            ],
+                            [
+                                XmString string = NULL;
+                                Widget w = NULL;
+                                int position = 0;
+                                XmListAddItem(w, string, position);
+                            ],
+                            [
+                                libp_link="$libp"
+                                libsm_ice_link="$libsm_ice"
+                                AC_MSG_RESULT(
+                                    [need${libp_link}${libsm_ice_link}])
+                                libs_found=1
+                            ], []
+                        )
+                        LIBS="$save_LIBS"
+                    fi
+                done
+            fi
+        done
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm$xpm_link -lXmu -lXext -lXt${xt_needs_sm_ice} -lX11"
+        if test "$libs_found" = "0"; then
+            AC_MSG_RESULT([can't find the right libraries])
+            AC_MSG_ERROR([can't link a simple motif program])
+        fi
+
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm$xpm_link${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
         TOOLKIT_VPATH="\${top_srcdir}/src/motif${PATH_IFS}\${top_srcdir}/src/motif/xmcombo"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
