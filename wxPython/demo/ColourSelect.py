@@ -61,7 +61,7 @@ class TestColourSelect(wxPanel):
             name = self.names[i]
             result.append(name + ": " + str(colour))        # create string list for easy viewing of results
         out_result = string.joinfields(result, ',  ')
-        self.log.WriteText("Colour Results :" + out_result)
+        self.log.WriteText("Colour Results :" + out_result + "\n")
 
 #---------------------------------------------------------------------------
 
