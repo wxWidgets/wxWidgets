@@ -684,15 +684,16 @@ static long map_to_wx_keysym( GdkEventKey *event )
         case GDK_F12:           key_code = WXK_F12;         break;
         default:
         {
-        if (event->length == 1)
-        {
             if (event->length == 1)
             {
-                key_code = (unsigned char)*event->string;
-            }
-            else if ((keysym & 0xFF) == keysym)
-            {
-                key_code = (guint)keysym;
+                if (event->length == 1)
+                {
+                    key_code = (unsigned char)*event->string;
+                }
+                else if ((keysym & 0xFF) == keysym)
+                {
+                    key_code = (guint)keysym;
+                }
             }
         }
     }
