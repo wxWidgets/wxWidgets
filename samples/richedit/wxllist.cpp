@@ -2350,7 +2350,8 @@ wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
 #ifdef WXLAYOUT_USE_CARET
    m_caret->Move(coords);
 #else // !WXLAYOUT_USE_CARET
-   dc.SetBrush(*wxBLACK_BRUSH);
+   dc.SetBrush(*wxWHITE_BRUSH);
+   //FIXME: wxGTK XOR is borken at the moment!!!dc.SetLogicalFunction(wxXOR);
    dc.SetLogicalFunction(wxXOR);
    dc.SetPen(wxPen(*wxBLACK,1,wxSOLID));
    if(active)

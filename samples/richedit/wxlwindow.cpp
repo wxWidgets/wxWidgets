@@ -887,6 +887,7 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
       m_maxx = max.x + X_SCROLL_PAGE;
       m_maxy = max.y + Y_SCROLL_PAGE;
    }
+#if 0
    else
    {
       // check if the window hasn't become too big, thus making the scrollbars
@@ -905,6 +906,7 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
          m_hasVScrollbar = false;
       }
    }
+#endif
 }
 
 // ----------------------------------------------------------------------------
