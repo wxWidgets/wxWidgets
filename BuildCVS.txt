@@ -2,6 +2,9 @@
                 How to build the sources from CVS
 ------------------------------------------------------------------------
 
+Please use the install.txt files in docs/gtk, docs/msw, docs/motif, docs/mac
+etc. alongside these instructions.
+
 I) Windows using plain makefiles
 ----------------------------------------
 
