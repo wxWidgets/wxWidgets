@@ -148,9 +148,23 @@ wxString wxStaticText::GetLabel() const
 
 void wxStaticText::SetLabel( const wxString &label )
 {
+    // Build the colorized version of the label
+    wxString colorlabel = label;
+    // If the color has been set, create a markup string to pass to the label setter
+    if (m_foregroundColour.Ok())
+    {
+        colorlabel.Printf(_T("<span foreground=\"#%02x%02x%02x\">%s</span>"), m_foregroundColour.Red(),
+        m_foregroundColour.Green(), m_foregroundColour.Blue(), label.c_str());
+    }
+        
     wxControl::SetLabel(label);
 
+    // markup only allowed under GTK2
+#ifdef __WXGTK20__
+    gtk_label_set_markup( GTK_LABEL(m_widget), wxGTK_CONV( colorlabel ) );
+#else
     gtk_label_set( GTK_LABEL(m_widget), wxGTK_CONV( m_label ) );
+#endif
 
     // adjust the label size to the new label unless disabled
     if (!HasFlag(wxST_NO_AUTORESIZE))
@@ -190,6 +204,15 @@ wxSize wxStaticText::DoGetBestSize() const
         (m_widget, &req );
 
     return wxSize(req.width, req.height);
+}
+
+bool wxStaticText::SetForegroundColour(const wxColour& colour)
+{
+    // First, we call the base class member
+    wxControl::SetForegroundColour(colour);
+    // Then, to force the color change, we set the label with the current label
+    SetLabel(GetLabel());
+    return true;
 }
 
 #endif // wxUSE_STATTEXT
