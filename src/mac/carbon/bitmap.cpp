@@ -36,6 +36,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject )
 
 #include "wx/mac/uma.h"
 
+#include "wx/dcmemory.h"
+
 // Implementation Notes
 // -------------------- 
 //
