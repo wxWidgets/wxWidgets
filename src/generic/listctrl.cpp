@@ -1709,10 +1709,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     if (m_dirty) return;
     if ( !(event.Dragging() || event.ButtonDown() || event.LeftUp() || event.ButtonDClick()) ) return;
 
-    wxClientDC dc(this);
-    PrepareDC(dc);
-    wxCoord x = dc.DeviceToLogicalX( (wxCoord)event.GetX() );
-    wxCoord y = dc.DeviceToLogicalY( (wxCoord)event.GetY() );
+    int x = event.GetX();
+    int y = event.GetY();
+    CalcUnscrolledPosition( x, y, &x, &y );
 
     /* Did we actually hit an item ? */
     long hitResult = 0;
@@ -2832,17 +2831,14 @@ long wxListMainWindow::FindItem(long start, long data)
 
 long wxListMainWindow::HitTest( int x, int y, int &flags )
 {
-    wxClientDC dc(this);
-    PrepareDC(dc);
-    wxCoord cx = dc.DeviceToLogicalX( x );
-    wxCoord cy = dc.DeviceToLogicalY( y );
+    CalcUnscrolledPosition( x, y, &x, &y );
 
     wxNode *node = m_lines.First();
     int count = 0;
     while (node)
     {
         wxListLineData *line = (wxListLineData*)node->Data();
-        long ret = line->IsHit( cx, cy );
+        long ret = line->IsHit( x, y );
         if (ret & flags)
         {
             flags = (int)ret;
