@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        radiobox.tex
+%% Purpose:     wxRadioBox documentation
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:     
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWidgets license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxRadioBox}}\label{wxradiobox}
 
 A radio box item is used to select one of number of mutually exclusive
@@ -276,11 +287,11 @@ a wxEVT\_COMMAND\_RADIOBOX\_SELECTED event to get emitted.
 
 \membersection{wxRadioBox::Show}\label{wxradioboxshow}
 
-\func{void}{Show}{\param{const bool}{ show}}
+\func{virtual bool}{Show}{\param{const bool}{ show = {\tt true}}}
 
 Shows or hides the entire radiobox.
 
-\func{void}{Show}{\param{int }{item}, \param{const bool}{ show}}
+\func{virtual bool}{Show}{\param{int}{ item}, \param{const bool}{ show = {\tt true}}}
 
 Shows or hides individual buttons.
 
@@ -290,6 +301,15 @@ Shows or hides individual buttons.
 
 \docparam{item}{The zero-based position of the button to show or hide.}
 
+\wxheading{Return value}
+
+{\tt true} if the box or item has been shown or hidden or {\tt false} if nothing was
+done because it already was in the requested state.
+
+\wxheading{See also}
+
+\helpref{wxWindow::Show}{wxwindowshow}
+
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
@@ -297,4 +317,3 @@ implements the following methods:\par
 \twocolitem{{\bf ShowItem(n, flag)}}{Shows or hides individual buttons.}
 \end{twocollist}}
 }
-
