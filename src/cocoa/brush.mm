@@ -57,7 +57,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject)
 wxBrushRefData::wxBrushRefData(const wxColour& colour, int style)
 {
     m_cocoaNSColor = NULL;
-    m_style = wxSOLID;
+    m_style = style;
     m_colour = colour;
 }
 
