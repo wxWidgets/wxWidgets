@@ -32,6 +32,9 @@
 #include "wx/splitter.h"
 #include "wx/textfile.h"
 
+#undef wxFontDialog
+#include "wx/mac/fontdlg.h"
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -316,8 +319,8 @@ protected:
                                 const wxString& encoding)
     {
         wxString text;
-        text.Printf(wxT("Encoding %d: %s (available in facename '%s')\n"),
-                    ++m_n, encoding.c_str(), facename.c_str());
+        text.Printf(wxT("Encoding %u: %s (available in facename '%s')\n"),
+                    (unsigned int) ++m_n, encoding.c_str(), facename.c_str());
         m_text += text;
         return true;
     }
