@@ -27,6 +27,8 @@
 #include "wx/xt/colour.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/colour.h"
+#elif defined(__WXQT__)
+#include "wx/qt/colour.h"
 #endif
 
 // Standard cursors

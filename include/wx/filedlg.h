@@ -7,6 +7,8 @@
 #include "wx/xt/filedlg.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/filedlg.h"
+#elif defined(__WXQT__)
+#include "wx/qt/filedlg.h"
 #endif
 
 #endif

@@ -12,14 +12,14 @@
 #ifndef __APPH_BASE__
 #define __APPH_BASE__
 
-#ifndef __WXGTK__
+#ifdef __WXMSW__
 class WXDLLEXPORT wxApp;
 typedef wxApp* (*wxAppInitializerFunction) (void);
 #endif
 
 #include "wx/object.h"
 
-#ifdef __WXGTK__
+#ifndef __WXMSW__
 typedef wxObject* (*wxAppInitializerFunction) (void);  // returning wxApp* won't work with gcc
 #endif
 
