@@ -228,7 +228,7 @@ inline bool wxInitQT ()
     }
     else
     {
-        wxLogSysError("Quicktime is not installed, or Your Version of Quicktime is <= 4.");
+        wxLogSysError(wxT("Quicktime is not installed, or Your Version of Quicktime is <= 4."));
         return false;
     }
 }
@@ -273,7 +273,7 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
 
         wxMacStringToPascal( fileName , lpSnd ) ;
 
-        m_sndname = lpSnd;
+        m_sndname = fileName;
         m_hSnd = (char*) GetNamedResource('snd ', (const unsigned char *) lpSnd);
 #else
         return false;
@@ -322,7 +322,7 @@ bool wxSound::DoPlay(unsigned flags) const
                 miComponent = OpenDefaultComponent(MovieImportType, kQTFileTypeAIFC);
             else
             {
-                wxLogSysError("wxSound - Location in memory does not contain valid data");
+                wxLogSysError(wxT("wxSound - Location in memory does not contain valid data"));
                 return false;
             }
 
@@ -435,7 +435,7 @@ bool wxSound::DoPlay(unsigned flags) const
 
     if (flags & wxSOUND_SYNC)
     {
-        wxASSERT_MSG(!(flags & wxSOUND_LOOP), "Can't loop and play syncronously at the same time");
+        wxASSERT_MSG(!(flags & wxSOUND_LOOP), wxT("Can't loop and play syncronously at the same time"));
 
         //Play movie until it ends, then exit
         while (!IsMovieDone(movie))
