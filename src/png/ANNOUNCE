@@ -1,0 +1,53 @@
+
+Libpng 1.0.3 - January 14, 1999
+
+This is a public release of libpng, intended for use in production codes.
+
+Changes since the previous public release (1.0.2):
+
+libpng-1.0.3:
+
+  Replaced and extended code that was removed from png_set_filler() in 1.0.1a.
+  Fixed a bug in png_do_filler() that made it fail to write filler bytes in
+    the left-most pixel of each row (Kevin Bracey).
+  Changed "static pngcharp tIME_string" to "static char tIME_string[30]"
+    in pngtest.c (Duncan Simpson).
+  Fixed a bug in pngtest.c that caused pngtest to try to write a tIME chunk
+    even when no tIME chunk was present in the source file.
+  Fixed a problem in pngrutil.c: gray_to_rgb didn't always work with 16-bit.
+  Fixed a problem in png_read_push_finish_row(), which would not skip some
+    passes that it should skip, for images that are less than 3 pixels high.
+  Interchanged the order of calls to png_do_swap() and png_do_shift()
+    in pngwtran.c (John Cromer).
+  Added #ifdef PNG_DEBUG/#endif surrounding use of PNG_DEBUG in png.h .
+  Changed "bad adaptive filter type" from error to warning in pngrutil.c .
+  Fixed a documentation error about default filtering with 8-bit indexed-color.
+  Separated the PNG_NO_STDIO macro into PNG_NO_STDIO and PNG_NO_CONSOLE_IO
+    (L. Peter Deutsch).
+  Added png_set_rgb_to_gray() and png_get_rgb_to_gray_status() functions.
+  Added png_get_copyright() and png_get_header_version() functions.
+  Revised comments on png_set_progressive_read_fn() in libpng.txt and example.c
+  Added information about debugging in libpng.txt and libpng.3 .
+  Changed "ln -sf" to "ln -s -f" in makefile.s2x, makefile.lnx, and makefile.sco.
+  Removed lines after Dynamic Dependencies" in makefile.aco .
+  Revised makefile.dec to make a shared library (Jeremie Petit).
+  Removed trailing blanks from all files. 
+  Removed misplaced #endif and #ifdef PNG_NO_EXTERN near the end of png.h
+  Added "if" tests to silence complaints about unused png_ptr in png.h and png.c
+  Changed "check_if_png" function in example.c to return true (nonzero) if PNG.
+  Changed libpng.txt to demonstrate png_sig_cmp() instead of png_check_sig()
+    which is obsolete.
+  Added makefile.hux, for Hewlett Packard HPUX 10.20 and 11.00 (Jim Rice)
+  Added a statement of Y2K compliance in png.h, libpng.1, and Y2KINFO.
+
+Send comments/corrections/commendations to
+png-implement@dworkin.wustl.edu or to randeg@alumni.rpi.edu
+
+Glenn R-P
+
+Send comments/corrections/commendations to
+png-implement@dworkin.wustl.edu or to randeg@alumni.rpi.edu
+
+Glenn Randers-Pehrson
+libpng maintainer
+PNG Development Group
