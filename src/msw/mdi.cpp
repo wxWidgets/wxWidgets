@@ -979,7 +979,10 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
         parent->m_currentChild = NULL;
 
         HMENU parent_menu = (HMENU)parent->GetWinMenu();
-        if ( parent_menu )
+
+        // activate the the parent menu only when there is no other child
+        // that has been activated
+        if ( parent_menu && !hwndAct )
         {
             parent->m_parentFrameActive = TRUE;
 
