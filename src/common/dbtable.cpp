@@ -125,14 +125,14 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
 
 	assert (tblName);
 
-	strcpy(tableName, tblName);				// Table Name
+	wxStrcpy(tableName, tblName);				// Table Name
 	if (tblPath)
-		strcpy(tablePath, tblPath);				// Table Path - used for dBase files
+		wxStrcpy(tablePath, tblPath);				// Table Path - used for dBase files
 
 	if (qryTblName)								// Name of the table/view to query
-		strcpy(queryTableName, qryTblName);
+		wxStrcpy(queryTableName, qryTblName);
 	else
-		strcpy(queryTableName, tblName);
+		wxStrcpy(queryTableName, tblName);
 
 //	assert(pDb);  // Assert is placed after table name is assigned for error reporting reasons
 	if (!pDb)
@@ -354,22 +354,22 @@ bool wxTable::Open(void)
 			if (! colDefs[i].InsertAllowed)
 				continue;
 			if (needComma)
-				strcat(sqlStmt, ",");
-			strcat(sqlStmt, colDefs[i].ColName);
+				wxStrcat(sqlStmt, ",");
+			wxStrcat(sqlStmt, colDefs[i].ColName);
 			needComma = TRUE;
 		}
 		needComma = FALSE;
-		strcat(sqlStmt, ") VALUES (");
+		wxStrcat(sqlStmt, ") VALUES (");
 		for (i = 0; i < noCols; i++)
 		{
 			if (! colDefs[i].InsertAllowed)
 				continue;
 			if (needComma)
-				strcat(sqlStmt, ",");
-			strcat(sqlStmt, "?");
+				wxStrcat(sqlStmt, ",");
+			wxStrcat(sqlStmt, "?");
 			needComma = TRUE;
 		}
-		strcat(sqlStmt, ")");
+		wxStrcat(sqlStmt, ")");
 
 //		pDb->WriteSqlLog(sqlStmt);
 
@@ -459,16 +459,16 @@ void wxTable::GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct)
 	whereClause[0] = 0;
 
 	// Build a select statement to query the database
-	strcpy(pSqlStmt, "SELECT ");
+	wxStrcpy(pSqlStmt, "SELECT ");
 
 	// SELECT DISTINCT values only?
 	if (distinct)
-		strcat(pSqlStmt, "DISTINCT ");
+		wxStrcat(pSqlStmt, "DISTINCT ");
 
 	// Was a FROM clause specified to join tables to the base table?
 	// Available for ::Query() only!!!
 	bool appendFromClause = FALSE;
-	if (typeOfSelect == DB_SELECT_WHERE && from && strlen(from))
+	if (typeOfSelect == DB_SELECT_WHERE && from && wxStrlen(from))
 		appendFromClause = TRUE;
 
 	// Add the column list
@@ -478,12 +478,12 @@ void wxTable::GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct)
 		// If joining tables, the base table column names must be qualified to avoid ambiguity
 		if (appendFromClause)
 		{
-			strcat(pSqlStmt, queryTableName);
-			strcat(pSqlStmt, ".");
+			wxStrcat(pSqlStmt, queryTableName);
+			wxStrcat(pSqlStmt, ".");
 		}
-		strcat(pSqlStmt, colDefs[i].ColName);
+		wxStrcat(pSqlStmt, colDefs[i].ColName);
 		if (i + 1 < noCols)
-			strcat(pSqlStmt, ",");
+			wxStrcat(pSqlStmt, ",");
 	}
 
 	// If the datasource supports ROWID, get this column as well.  Exception: Don't retrieve
@@ -493,17 +493,17 @@ void wxTable::GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct)
 		// If joining tables, the base table column names must be qualified to avoid ambiguity
 		if (appendFromClause)
 		{
-			strcat(pSqlStmt, ",");
-			strcat(pSqlStmt, queryTableName);
-			strcat(pSqlStmt, ".ROWID");
+			wxStrcat(pSqlStmt, ",");
+			wxStrcat(pSqlStmt, queryTableName);
+			wxStrcat(pSqlStmt, ".ROWID");
 		}
 		else
-			strcat(pSqlStmt, ",ROWID");
+			wxStrcat(pSqlStmt, ",ROWID");
 	}
 
 	// Append the FROM tablename portion
-	strcat(pSqlStmt, " FROM ");
-	strcat(pSqlStmt, queryTableName);
+	wxStrcat(pSqlStmt, " FROM ");
+	wxStrcat(pSqlStmt, queryTableName);
 
 	// Sybase uses the HOLDLOCK keyword to lock a record during query.
 	// The HOLDLOCK keyword follows the table name in the from clause.
@@ -511,52 +511,52 @@ void wxTable::GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct)
 	// NOHOLDLOCK (the default).  Note: The "FOR UPDATE" clause
 	// is parsed but ignored in SYBASE Transact-SQL.
 	if (selectForUpdate && (pDb->Dbms() == dbmsSYBASE_ASA || pDb->Dbms() == dbmsSYBASE_ASE))
-		strcat(pSqlStmt, " HOLDLOCK");
+		wxStrcat(pSqlStmt, " HOLDLOCK");
 
 	if (appendFromClause)
-		strcat(pSqlStmt, from);
+		wxStrcat(pSqlStmt, from);
 
 	// Append the WHERE clause.  Either append the where clause for the class
 	// or build a where clause.  The typeOfSelect determines this.
 	switch(typeOfSelect)
 	{
 	case DB_SELECT_WHERE:
-		if (where && strlen(where))	// May not want a where clause!!!
+		if (where && wxStrlen(where))	// May not want a where clause!!!
 		{
-			strcat(pSqlStmt, " WHERE ");
-			strcat(pSqlStmt, where);
+			wxStrcat(pSqlStmt, " WHERE ");
+			wxStrcat(pSqlStmt, where);
 		}
 		break;
 	case DB_SELECT_KEYFIELDS:
 		GetWhereClause(whereClause, DB_WHERE_KEYFIELDS);
-		if (strlen(whereClause))
+		if (wxStrlen(whereClause))
 		{
-			strcat(pSqlStmt, " WHERE ");
-			strcat(pSqlStmt, whereClause);
+			wxStrcat(pSqlStmt, " WHERE ");
+			wxStrcat(pSqlStmt, whereClause);
 		}
 		break;
 	case DB_SELECT_MATCHING:
 		GetWhereClause(whereClause, DB_WHERE_MATCHING);
-		if (strlen(whereClause))
+		if (wxStrlen(whereClause))
 		{
-			strcat(pSqlStmt, " WHERE ");
-			strcat(pSqlStmt, whereClause);
+			wxStrcat(pSqlStmt, " WHERE ");
+			wxStrcat(pSqlStmt, whereClause);
 		}
 		break;
 	}
 
 	// Append the ORDER BY clause
-	if (orderBy && strlen(orderBy))
+	if (orderBy && wxStrlen(orderBy))
 	{
-		strcat(pSqlStmt, " ORDER BY ");
-		strcat(pSqlStmt, orderBy);
+		wxStrcat(pSqlStmt, " ORDER BY ");
+		wxStrcat(pSqlStmt, orderBy);
 	}
 
 	// SELECT FOR UPDATE if told to do so and the datasource is capable.  Sybase
 	// parses the FOR UPDATE clause but ignores it.  See the comment above on the
 	// HOLDLOCK for Sybase.
 	if (selectForUpdate && CanSelectForUpdate())
-		strcat(pSqlStmt, " FOR UPDATE");
+		wxStrcat(pSqlStmt, " FOR UPDATE");
 
 }  // wxTable::GetSelectStmt()
 
@@ -822,38 +822,38 @@ bool wxTable::CreateTable(bool attemptDrop)
 			continue;
 		// Comma Delimiter
 		if (needComma)
-		   strcat(sqlStmt, ",");
+		   wxStrcat(sqlStmt, ",");
 		// Column Name
-		strcat(sqlStmt, colDefs[i].ColName);
-		strcat(sqlStmt, " ");
+		wxStrcat(sqlStmt, colDefs[i].ColName);
+		wxStrcat(sqlStmt, " ");
 		// Column Type
 		switch(colDefs[i].DbDataType)
 		{
 			case DB_DATA_TYPE_VARCHAR:
-				strcat(sqlStmt, pDb->typeInfVarchar.TypeName); break;
+				wxStrcat(sqlStmt, pDb->typeInfVarchar.TypeName); break;
 			case DB_DATA_TYPE_INTEGER:
-				strcat(sqlStmt, pDb->typeInfInteger.TypeName); break;
+				wxStrcat(sqlStmt, pDb->typeInfInteger.TypeName); break;
 			case DB_DATA_TYPE_FLOAT:
-				strcat(sqlStmt, pDb->typeInfFloat.TypeName); break;
+				wxStrcat(sqlStmt, pDb->typeInfFloat.TypeName); break;
 			case DB_DATA_TYPE_DATE:
-				strcat(sqlStmt, pDb->typeInfDate.TypeName); break;
+				wxStrcat(sqlStmt, pDb->typeInfDate.TypeName); break;
 		}
 		// For varchars, append the size of the string
 		if (colDefs[i].DbDataType == DB_DATA_TYPE_VARCHAR)
 		{
 			char s[10];
-			// strcat(sqlStmt, "(");
-			// strcat(sqlStmt, itoa(colDefs[i].SzDataObj, s, 10));
-			// strcat(sqlStmt, ")");
+			// wxStrcat(sqlStmt, "(");
+			// wxStrcat(sqlStmt, itoa(colDefs[i].SzDataObj, s, 10));
+			// wxStrcat(sqlStmt, ")");
 			sprintf(s, "(%d)", colDefs[i].SzDataObj);
-			strcat(sqlStmt, s);
+			wxStrcat(sqlStmt, s);
 		}
- 
+
 		if (pDb->Dbms() == dbmsSYBASE_ASE || pDb->Dbms() == dbmsMY_SQL)
 		{
 			if (colDefs[i].KeyField)
 			{
-					  strcat(sqlStmt, " NOT NULL");
+				wxStrcat(sqlStmt, " NOT NULL");
 			}
 		}
 		
@@ -872,14 +872,14 @@ bool wxTable::CreateTable(bool attemptDrop)
 	{
 		if (pDb->Dbms() != dbmsMY_SQL)
 		{
-			strcat(sqlStmt, ",CONSTRAINT ");
-			strcat(sqlStmt, tableName);
-			strcat(sqlStmt, "_PIDX PRIMARY KEY (");
+			wxStrcat(sqlStmt, ",CONSTRAINT ");
+			wxStrcat(sqlStmt, tableName);
+			wxStrcat(sqlStmt, "_PIDX PRIMARY KEY (");
 		}
 		else
 		{
 			/* MySQL goes out on this one. We also declare the relevant key NON NULL above */
-			strcat(sqlStmt, ", PRIMARY KEY (");
+			wxStrcat(sqlStmt, ", PRIMARY KEY (");
 		}
 
 		// List column name(s) of column(s) comprising the primary key
@@ -888,14 +888,14 @@ bool wxTable::CreateTable(bool attemptDrop)
 			if (colDefs[i].KeyField)
 			{
 				if (j++) // Multi part key, comma separate names
-					strcat(sqlStmt, ",");
-				strcat(sqlStmt, colDefs[i].ColName);
+					wxStrcat(sqlStmt, ",");
+				wxStrcat(sqlStmt, colDefs[i].ColName);
 			}
 		}
-	   strcat(sqlStmt, ")");
+	   wxStrcat(sqlStmt, ")");
 	}
 	// Append the closing parentheses for the create table statement
-   strcat(sqlStmt, ")");
+   wxStrcat(sqlStmt, ")");
 
 	pDb->WriteSqlLog(sqlStmt);
 
@@ -980,36 +980,36 @@ bool wxTable::CreateIndex(char * idxName, bool unique, int noIdxCols, CidxDef *p
 		return (FALSE);
 
 	// Build a CREATE INDEX statement
-	strcpy(sqlStmt, "CREATE ");
+	wxStrcpy(sqlStmt, "CREATE ");
 	if (unique)
-		strcat(sqlStmt, "UNIQUE ");
+		wxStrcat(sqlStmt, "UNIQUE ");
 
-	strcat(sqlStmt, "INDEX ");
-	strcat(sqlStmt, idxName);
-	strcat(sqlStmt, " ON ");
-	strcat(sqlStmt, tableName);
-	strcat(sqlStmt, " (");
+	wxStrcat(sqlStmt, "INDEX ");
+	wxStrcat(sqlStmt, idxName);
+	wxStrcat(sqlStmt, " ON ");
+	wxStrcat(sqlStmt, tableName);
+	wxStrcat(sqlStmt, " (");
 
 	// Append list of columns making up index
 	int i;
 	for (i = 0; i < noIdxCols; i++)
 	{
-		strcat(sqlStmt, pIdxDefs[i].ColName);
+		wxStrcat(sqlStmt, pIdxDefs[i].ColName);
       /* Postgres doesn't cope with ASC */
 		if (pDb->Dbms() != dbmsPOSTGRES)
 		{
 			if (pIdxDefs[i].Ascending)
-				strcat(sqlStmt, " ASC");
+				wxStrcat(sqlStmt, " ASC");
 			else
-				strcat(sqlStmt, " DESC");
+				wxStrcat(sqlStmt, " DESC");
 		}
 
 		if ((i + 1) < noIdxCols)
-			strcat(sqlStmt, ",");
+			wxStrcat(sqlStmt, ",");
 	}
 	
 	// Append closing parentheses
-	strcat(sqlStmt, ")");
+	wxStrcat(sqlStmt, ")");
 
 	pDb->WriteSqlLog(sqlStmt);
 
@@ -1282,16 +1282,16 @@ void wxTable::GetUpdateStmt(char *pSqlStmt, int typeOfUpd, char *pWhereClause)
 		if (colDefs[i].Updateable)
 		{
 			if (! firstColumn)
-				strcat(pSqlStmt, ",");
+				wxStrcat(pSqlStmt, ",");
 			else
 				firstColumn = FALSE;
-			strcat(pSqlStmt, colDefs[i].ColName);
-			strcat(pSqlStmt, " = ?");
+			wxStrcat(pSqlStmt, colDefs[i].ColName);
+			wxStrcat(pSqlStmt, " = ?");
 		}
 	}
 
 	// Append the WHERE clause to the SQL UPDATE statement
-	strcat(pSqlStmt, " WHERE ");
+	wxStrcat(pSqlStmt, " WHERE ");
 	switch(typeOfUpd)
 	{
 	case DB_UPD_KEYFIELDS:
@@ -1308,19 +1308,19 @@ void wxTable::GetUpdateStmt(char *pSqlStmt, int typeOfUpd, char *pWhereClause)
 			// based on the key fields.
 			if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, ROWID_LEN, &cb) == SQL_SUCCESS)
 			{
-				strcat(pSqlStmt, "ROWID = '");
-				strcat(pSqlStmt, rowid);
-				strcat(pSqlStmt, "'");
+				wxStrcat(pSqlStmt, "ROWID = '");
+				wxStrcat(pSqlStmt, rowid);
+				wxStrcat(pSqlStmt, "'");
 				break;
 			}
 		}
 		// Unable to delete by ROWID, so build a WHERE
 		// clause based on the keyfields.
 		GetWhereClause(whereClause, DB_WHERE_KEYFIELDS);
-		strcat(pSqlStmt, whereClause);
+		wxStrcat(pSqlStmt, whereClause);
 		break;
 	case DB_UPD_WHERE:
-		strcat(pSqlStmt, pWhereClause);
+		wxStrcat(pSqlStmt, pWhereClause);
 		break;
 	}
 
@@ -1339,7 +1339,7 @@ void wxTable::GetDeleteStmt(char *pSqlStmt, int typeOfDel, char *pWhereClause)
 
 	// Handle the case of DeleteWhere() and the where clause is blank.  It should
 	// delete all records from the database in this case.
-	if (typeOfDel == DB_DEL_WHERE && (pWhereClause == 0 || strlen(pWhereClause) == 0))
+	if (typeOfDel == DB_DEL_WHERE && (pWhereClause == 0 || wxStrlen(pWhereClause) == 0))
 	{
 		sprintf(pSqlStmt, "DELETE FROM %s", tableName);
 		return;
@@ -1364,23 +1364,23 @@ void wxTable::GetDeleteStmt(char *pSqlStmt, int typeOfDel, char *pWhereClause)
 			// based on the key fields.
 			if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, ROWID_LEN, &cb) == SQL_SUCCESS)
 			{
-				strcat(pSqlStmt, "ROWID = '");
-				strcat(pSqlStmt, rowid);
-				strcat(pSqlStmt, "'");
+				wxStrcat(pSqlStmt, "ROWID = '");
+				wxStrcat(pSqlStmt, rowid);
+				wxStrcat(pSqlStmt, "'");
 				break;
 			}
 		}
 		// Unable to delete by ROWID, so build a WHERE
 		// clause based on the keyfields.
 		GetWhereClause(whereClause, DB_WHERE_KEYFIELDS);
-		strcat(pSqlStmt, whereClause);
+		wxStrcat(pSqlStmt, whereClause);
 		break;
 	case DB_DEL_WHERE:
-		strcat(pSqlStmt, pWhereClause);
+		wxStrcat(pSqlStmt, pWhereClause);
 		break;
 	case DB_DEL_MATCHING:
 		GetWhereClause(whereClause, DB_WHERE_MATCHING);
-		strcat(pSqlStmt, whereClause);
+		wxStrcat(pSqlStmt, whereClause);
 		break;
 	}
 
@@ -1410,17 +1410,17 @@ void wxTable::GetWhereClause(char *pWhereClause, int typeOfWhere, char *qualTabl
 				continue;
 			// If there is more than 1 column, join them with the keyword "AND"
 			if (moreThanOneColumn)
-				strcat(pWhereClause, " AND ");
+				wxStrcat(pWhereClause, " AND ");
 			else
 				moreThanOneColumn = TRUE;
 			// Concatenate where phrase for the column
-			if (qualTableName && strlen(qualTableName))
+			if (qualTableName && wxStrlen(qualTableName))
 			{
-				strcat(pWhereClause, qualTableName);
-				strcat(pWhereClause, ".");
+				wxStrcat(pWhereClause, qualTableName);
+				wxStrcat(pWhereClause, ".");
 			}
-			strcat(pWhereClause, colDefs[i].ColName);
-			strcat(pWhereClause, " = ");
+			wxStrcat(pWhereClause, colDefs[i].ColName);
+			wxStrcat(pWhereClause, " = ");
 			switch(colDefs[i].SqlCtype)
 			{
 			case SQL_C_CHAR:
@@ -1445,7 +1445,7 @@ void wxTable::GetWhereClause(char *pWhereClause, int typeOfWhere, char *qualTabl
 				sprintf(colValue, "%.6f", *((SDOUBLE *) colDefs[i].PtrDataObj));
 				break;
 			}
-			strcat(pWhereClause, colValue);
+			wxStrcat(pWhereClause, colValue);
 		}
 	}
 
@@ -1592,13 +1592,13 @@ void wxTable::SetColDefs (int index, char *fieldName, int dataType, void *pData,
 	if (!colDefs)  // May happen if the database connection fails
 		return;
 
-	if (strlen(fieldName) > (unsigned int) DB_MAX_COLUMN_NAME_LEN)
+	if (wxStrlen(fieldName) > (unsigned int) DB_MAX_COLUMN_NAME_LEN)
 	{
-		strncpy (colDefs[index].ColName, fieldName, DB_MAX_COLUMN_NAME_LEN);
+		wxStrncpy (colDefs[index].ColName, fieldName, DB_MAX_COLUMN_NAME_LEN);
 		colDefs[index].ColName[DB_MAX_COLUMN_NAME_LEN] = 0;
 	}
 	else
-		strcpy(colDefs[index].ColName, fieldName);
+		wxStrcpy(colDefs[index].ColName, fieldName);
 
 	colDefs[index].DbDataType		= dataType;
 	colDefs[index].PtrDataObj		= pData;
@@ -1632,25 +1632,27 @@ void wxTable::SetCursor(HSTMT *hstmtActivate)
 
 }  // wxTable::SetCursor()
 
-/********** wxTable::Count() **********/
-ULONG wxTable::Count(void)
+/********** wxTable::Count(const char *) **********/
+ULONG wxTable::Count(const char *args)
 {
 	ULONG l;
 	char sqlStmt[DB_MAX_STATEMENT_LEN];
 	SDWORD cb;
 
 	// Build a "SELECT COUNT(*) FROM queryTableName [WHERE whereClause]" SQL Statement
-	strcpy(sqlStmt, "SELECT COUNT(*) FROM ");
-	strcat(sqlStmt, queryTableName);
+	wxStrcpy(sqlStmt, "SELECT COUNT(");
+	wxStrcat(sqlStmt, args);
+	wxStrcat(sqlStmt, ") FROM ");
+	wxStrcat(sqlStmt, queryTableName);
 
-	if (from && strlen(from))
-		strcat(sqlStmt, from);
+	if (from && wxStrlen(from))
+		wxStrcat(sqlStmt, from);
 
 	// Add the where clause if one is provided
-	if (where && strlen(where))
+	if (where && wxStrlen(where))
 	{
-		strcat(sqlStmt, " WHERE ");
-		strcat(sqlStmt, where);
+		wxStrcat(sqlStmt, " WHERE ");
+		wxStrcat(sqlStmt, where);
 	}
 
 	pDb->WriteSqlLog(sqlStmt);
@@ -1710,7 +1712,7 @@ bool wxTable::Refresh(void)
 	// Build a where clause to refetch the record with.  Try and use the
 	// ROWID if it's available, ow use the key fields.
 	char whereClause[DB_MAX_WHERE_CLAUSE_LEN+1];
-	strcpy(whereClause, "");
+	wxStrcpy(whereClause, "");
 	if (CanUpdByROWID())
 	{
 		SDWORD cb;
@@ -1721,15 +1723,15 @@ bool wxTable::Refresh(void)
 		// based on the key fields.
 		if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, ROWID_LEN, &cb) == SQL_SUCCESS)
 		{
-			strcat(whereClause, queryTableName);
-			strcat(whereClause, ".ROWID = '");
-			strcat(whereClause, rowid);
-			strcat(whereClause, "'");
+			wxStrcat(whereClause, queryTableName);
+			wxStrcat(whereClause, ".ROWID = '");
+			wxStrcat(whereClause, rowid);
+			wxStrcat(whereClause, "'");
 		}
 	}
 
 	// If unable to use the ROWID, build a where clause from the keyfields
-	if (strlen(whereClause) == 0)
+	if (wxStrlen(whereClause) == 0)
 		GetWhereClause(whereClause, DB_WHERE_KEYFIELDS, queryTableName);
 
 	// Requery the record
