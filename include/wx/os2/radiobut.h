@@ -61,11 +61,16 @@ public:
     virtual void SetValue(bool bVal);
     virtual bool GetValue(void) const ;
 
-    bool         OS2Command( WXUINT wParam
-                            ,WXWORD wId
-                           );
-    void         Command(wxCommandEvent& rEvent);
-    virtual void SetFocus(void);
+    bool            OS2Command( WXUINT wParam
+                               ,WXWORD wId
+                              );
+    void            Command(wxCommandEvent& rEvent);
+    virtual MRESULT OS2WindowProc( WXUINT   uMsg
+                                  ,WXWPARAM wParam
+                                  ,WXLPARAM lParam
+                                 );
+    virtual void    SetFocus(void);
+
 protected:
     virtual wxSize DoGetBestSize() const;
 

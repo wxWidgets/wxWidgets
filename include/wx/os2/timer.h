@@ -29,6 +29,7 @@ public:
         { Init(); }
     ~wxTimer();
 
+    virtual void Notify(void);
     virtual bool Start( int  nMilliseconds = -1
                        ,bool bOneShot = FALSE
                       );

@@ -15,6 +15,9 @@
 #if wxUSE_TOOLBAR
 #include "wx/tbarbase.h"
 
+#define ID_TOOLTIMER                100
+#define ID_TOOLEXPTIMER             101
+
 class WXDLLEXPORT wxToolBar: public wxToolBarBase
 {
 public:
@@ -22,7 +25,10 @@ public:
      * Public interface
      */
 
-    wxToolBar() { Init(); }
+    wxToolBar()
+    : m_vToolTimer(this, ID_TOOLTIMER)
+    , m_vToolExpTimer(this, ID_TOOLEXPTIMER)
+    { Init(); }
 
     inline wxToolBar( wxWindow*       pParent
                      ,wxWindowID      vId
@@ -30,7 +36,8 @@ public:
                      ,const wxSize&   rSize = wxDefaultSize
                      ,long            lStyle = wxNO_BORDER | wxTB_HORIZONTAL
                      ,const wxString& rName = wxToolBarNameStr
-                    )
+                    ) : m_vToolTimer(this, ID_TOOLTIMER)
+                      , m_vToolExpTimer(this, ID_TOOLEXPTIMER)
     {
         Init();
         Create( pParent
@@ -187,8 +194,14 @@ private:
     void RaiseTool( wxToolBarToolBase* pTool
                    ,bool               bRaise = TRUE
                   );
+    void OnTimer(wxTimerEvent& rEvent);
 
     static bool                     m_bInitialized;
+
+    wxTimer                         m_vToolTimer;
+    wxTimer                         m_vToolExpTimer;
+    ULONG                           m_ulToolTimer;
+    ULONG                           m_ulToolExpTimer;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)
