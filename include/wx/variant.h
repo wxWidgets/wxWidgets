@@ -32,7 +32,7 @@
     #include "wx/db.h"  // will #include sqltypes.h
 #endif //ODBC
 
-#include "wx/ioswrap.h"
+#include "wx/iosfwrap.h"
 
 /*
  * wxVariantData stores the actual data in a wxVariant object,

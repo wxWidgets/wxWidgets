@@ -144,7 +144,7 @@
 // ----------------------------------------------------------------------------
 
 // we use iostream for wxLongLong output
-#include "wx/ioswrap.h"
+#include "wx/iosfwrap.h"
 
 #if wxUSE_LONGLONG_NATIVE
 

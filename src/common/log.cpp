@@ -748,6 +748,7 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 // ----------------------------------------------------------------------------
 
 #if wxUSE_STD_IOSTREAM
+#include "wx/ioswrap.h"
 wxLogStream::wxLogStream(wxSTD ostream *ostr)
 {
     if ( ostr == NULL )

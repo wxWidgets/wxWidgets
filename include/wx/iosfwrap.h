@@ -1,20 +1,21 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/ioswrap.h
-// Purpose:     includes the correct iostream headers for current compiler
-// Author:      Vadim Zeitlin
+// Name:        wx/iosfwrap.h
+// Purpose:     includes the correct stream-related forward declarations
+// Author:      Jan van Dijk
 // Modified by:
-// Created:     03.02.99
+// Created:     18.12.2002
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+// Copyright:   (c) 2002 Jan van Dijk <jan@etpmod.phys.tue.nl>
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
 #if wxUSE_STD_IOSTREAM
 
 #if wxUSE_IOSTREAMH
+    // There is no pre-ANSI iosfwd header (?). We include the full decarations.
 #   include <iostream.h>
 #else
-#   include <iostream>
+#   include <iosfwd>
 #endif
 
 #endif

@@ -45,11 +45,6 @@ class WXDLLEXPORT wxClassInfo;
 class WXDLLEXPORT wxHashTable;
 class WXDLLEXPORT wxObjectRefData;
 
-#if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
-    #include "wx/ioswrap.h"
-#endif
-
-
 // ----------------------------------------------------------------------------
 // wxClassInfo
 // ----------------------------------------------------------------------------
@@ -326,18 +321,6 @@ inline void wxCheckCast(void *ptr)
 
 #endif  // __WXDEBUG__
 
-
-// for some reason Borland seems to need this include.
-#if wxUSE_STD_IOSTREAM                                \
-    && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)  \
-    && defined(__BORLANDC__)
-    #if wxUSE_IOSTREAMH
-        #include <iostream.h>
-    #else
-        #include <iostream>
-    #endif
-#endif // wxUSE_IOSTREAMH
-
 // ----------------------------------------------------------------------------
 // set up memory debugging macros
 // ----------------------------------------------------------------------------
@@ -396,6 +379,10 @@ inline void wxCheckCast(void *ptr)
 
 #endif // WXDEBUG && wxUSE_MEMORY_TRACING
 
+#if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
+// needed by wxObject::Dump
+#include "wx/iosfwrap.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // wxObject: the root class of wxWindows object hierarchy

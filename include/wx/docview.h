@@ -40,7 +40,7 @@ class WXDLLEXPORT wxFileHistory;
 class WXDLLEXPORT wxConfigBase;
 
 #if wxUSE_STD_IOSTREAM
-  #include "wx/ioswrap.h"
+  #include "wx/iosfwrap.h"
 #else
   #include "wx/stream.h"
 #endif

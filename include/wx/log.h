@@ -101,7 +101,7 @@ enum
     #define wxTraceOleCalls 0x0100  // OLE interface calls
 #endif
 
-#include "wx/ioswrap.h"
+#include "wx/iosfwrap.h"
 
 // ----------------------------------------------------------------------------
 // derive from this class to redirect (or suppress, or ...) log messages

@@ -37,7 +37,7 @@
 
 #ifndef NO_TEXT_WINDOW_STREAM
     #if wxUSE_STD_IOSTREAM
-        #include "wx/ioswrap.h"    // for iostream classes if we need them
+        #include "wx/ioswrap.h"    // derivation: we need the full decls.
     #else // !wxUSE_STD_IOSTREAM
         // can't compile this feature in if we don't use streams at all
         #define NO_TEXT_WINDOW_STREAM
