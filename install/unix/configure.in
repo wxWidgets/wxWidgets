@@ -265,11 +265,15 @@ SEARCH_INCLUDE="\
                               \
     /usr/include              \
     /usr/local/include        \
-    /usr/local/include/gtk    \
     /usr/unsupported/include  \
     /usr/athena/include       \
     /usr/local/x11r5/include  \
     /usr/lpp/Xamples/include  \
+                              \
+    /usr/local/include/gtk    \
+    /usr/X11R6/include/Xm     \
+    /usr/X11/include/Xm       \
+    /usr/include/qt           \
                               \
     /usr/openwin/include      \
     /usr/openwin/share/include \
@@ -916,11 +920,11 @@ fi
 
 if test "$USE_QT" = 1; then
    AC_MSG_CHECKING(for Qt includes)
-   AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE,qt.h)
+   AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE,qapp.h)
    if test "$ac_find_includes" != "" ; then
      AC_MSG_RESULT(found $ac_find_includes)
      AC_MSG_CHECKING(for Qt library)
-     AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Qt)
+     AC_PATH_FIND_LIBRARIES($SEARCH_LIB,qt)
      if test "$ac_find_libraries" != "" ; then
        AC_INCLUDE_PATH_EXIST($ac_find_includes,$CHECK_INCLUDE)
        AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
@@ -933,7 +937,7 @@ if test "$USE_QT" = 1; then
   else
      AC_MSG_ERROR(no)
   fi
-  GUI_TK_LINK=-lXext -lX11 -lqt -lm
+  GUI_TK_LINK="-lXext -lX11 -lqt -lm"
   AC_DEFINE(__WXQT__)
   TOOLKIT=QT
   TOOLKIT_DEF=__WXQT__
@@ -942,24 +946,24 @@ fi
 
 if test "$USE_MOTIF" = 1; then
    AC_MSG_CHECKING(for Motif/Lesstif includes)
-   AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE,qt.h)
+   AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE,Xm.h)
    if test "$ac_find_includes" != "" ; then
      AC_MSG_RESULT(found $ac_find_includes)
-     AC_MSG_CHECKING(for Motif/Lesstif library)
+     AC_MSG_CHECKING(for Motif or Lesstif library)
      AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xm)
      if test "$ac_find_libraries" != "" ; then
        AC_INCLUDE_PATH_EXIST($ac_find_includes,$CHECK_INCLUDE)
        AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
        CHECK_LINK="$CHECK_INCLUDE $ac_path_to_link"
        CHECK_INCLUDE="$CHECK_INCLUDE $ac_path_to_include"
-       AC_MSG_RESULT(found Motif/Lesstif at $ac_find_libraries)
+       AC_MSG_RESULT(found at $ac_find_libraries)
      else
        AC_MSG_ERROR(no)
      fi
   else
      AC_MSG_ERROR(no)
   fi
-  GUI_TK_LINK=-lXext -lX11 -lXm -lm 
+  GUI_TK_LINK="-lXext -lXt -lX11 -lXm -lm"
   AC_DEFINE(__WXMOTIF__)
   TOOLKIT=MOTIF
   TOOLKIT_DEF=__WXMOTIF__
