@@ -1228,8 +1228,8 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 
     fprintf( m_pstream, "(" );
     const wxWX2MBbuf textbuf = text.mb_str();
-    int len = strlen(textbuf);
-    int i;
+    size_t len = strlen(textbuf);
+    size_t i;
     for (i = 0; i < len; i++)
     {
         int c = (unsigned char) textbuf[i];
@@ -1338,14 +1338,14 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
 
     char buffer[100];
     sprintf(buffer, "%.8f rotate\n", angle);
-    int i;
+    size_t i;
     for (i = 0; i < 100; i++)
         if (buffer[i] == ',') buffer[i] = '.';
     fprintf(m_pstream, buffer);
 
     fprintf( m_pstream, "(" );
     const wxWX2MBbuf textbuf = text.mb_str();
-    int len = strlen(textbuf);
+    size_t len = strlen(textbuf);
     for (i = 0; i < len; i++)
     {
         int c = (unsigned char) textbuf[i];
