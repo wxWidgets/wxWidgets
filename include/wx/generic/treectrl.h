@@ -35,6 +35,8 @@ class wxTreeEvent;
 class wxGenericTreeItem;
 class wxTreeCtrl;
 
+class wxImageList;
+
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
@@ -153,7 +155,7 @@ class WXDLLEXPORT wxTreeItem: public wxObject
     inline void SetStateMask(long stateMask) { m_stateMask = stateMask; }
     inline void GetText(const wxString& text) { m_text = text; }
     inline void SetImage(int image) { m_image = image; }
-    inline void GetSelectedImage(int selImage) { m_selectedImage = selImage; }
+    inline void SetSelectedImage(int selImage) { m_selectedImage = selImage; }
     inline void SetChildren(int children) { m_children = children; }
     inline void SetData(long data) { m_data = data; }
 };
@@ -177,6 +179,7 @@ class WXDLLEXPORT wxTreeEvent: public wxCommandEvent
   inline long GetOldItem() const { return m_oldItem; }
   inline wxTreeItem& GetItem() const { return (wxTreeItem&) m_item; }
   inline wxPoint GetPoint() const { return m_pointDrag; }
+  inline void SetCode(int code) { m_code = code; }
   inline int GetCode() const { return m_code; }
 };
 
@@ -199,20 +202,13 @@ typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
 // wxGenericTreeItem
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericTreeItem: public wxObject
+class WXDLLEXPORT wxGenericTreeItem: public wxTreeItem
 {
   DECLARE_DYNAMIC_CLASS(wxGenericTreeItem)
-  
-  public:
 
-    long                m_itemId;
-    long                m_state;
-    wxString            m_text;
-    int                 m_image;
-    int                 m_selectedImage;
-//    int               m_children;
-    bool                m_hasChildren;
-    long                m_data;
+  public:
+    bool                m_hasChildren,
+                        m_isCollapsed;
 
     int                 m_x,m_y;
     int                 m_height,m_width;
@@ -221,7 +217,7 @@ class WXDLLEXPORT wxGenericTreeItem: public wxObject
     wxList              m_children;
     wxGenericTreeItem  *m_parent;
     bool                m_hasHilight;
-    
+
     wxGenericTreeItem(void) {};
     wxGenericTreeItem( wxGenericTreeItem *parent );
     wxGenericTreeItem( wxGenericTreeItem *parent, const wxTreeItem& item, wxDC *dc );
@@ -244,8 +240,10 @@ class WXDLLEXPORT wxGenericTreeItem: public wxObject
     void SendSelected( wxWindow *target );
     void SendDelete( wxWindow *target );
     void SendExpand( wxWindow *target );
+    void SendCollapse( wxWindow *target );
     void SetHilight( bool set = TRUE );
     bool HasHilight(void);
+    bool IsExpanded() const { return !m_isCollapsed; }
 };
 
 //-----------------------------------------------------------------------------
@@ -255,41 +253,43 @@ class WXDLLEXPORT wxGenericTreeItem: public wxObject
 class wxTreeCtrl: public wxScrolledWindow
 {
   DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
-  
+
    public:
-     
+
     wxTreeCtrl(void);
     wxTreeCtrl(wxWindow *parent, const wxWindowID id = -1,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            const long style = wxTR_HAS_BUTTONS,
+            long style = wxTR_HAS_BUTTONS,
             const wxString& name = "wxTreeCtrl" );
     ~wxTreeCtrl(void);
     bool Create(wxWindow *parent, const wxWindowID id = -1,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            const long style = wxTR_HAS_BUTTONS,
+            long style = wxTR_HAS_BUTTONS,
             const wxString& name = "wxTreeCtrl");
 
     int GetCount(void) const;
-    long InsertItem( const long parent, const wxString& label, const int image = -1,
-      const int selImage = -1, const long insertAfter = wxTREE_INSERT_LAST );
-    long InsertItem( const long parent, wxTreeItem &info, const long insertAfter = wxTREE_INSERT_LAST );
+    long InsertItem( long parent, const wxString& label, const int image = -1,
+      const int selImage = -1, long insertAfter = wxTREE_INSERT_LAST );
+    long InsertItem( long parent, wxTreeItem &info, long insertAfter = wxTREE_INSERT_LAST );
     bool DeleteAllItems(void);
-    bool ExpandItem( const long item, const int action );
+    bool ExpandItem( long item, const int action );
     bool GetItem( wxTreeItem &info ) const;
-    long GetItemData( const long item ) const;
-    wxString GetItemText( const long item ) const;
-    long GetParent( const long item ) const;
+    long GetItemData( long item ) const;
+    wxString GetItemText( long item ) const;
+    int  GetItemImage(long item) const;
+    long GetParent( long item ) const;
     long GetRootItem(void) const;
     long GetSelection(void) const;
-    bool SelectItem( const long item ) const;
-    bool ItemHasChildren( const long item ) const;
+    bool SelectItem( long item ) const;
+    bool ItemHasChildren( long item ) const;
     void SetIndent( const int indent );
     int GetIndent(void) const;
     bool SetItem( wxTreeItem &info );
-    bool SetItemData( const long item, const long data );
-    bool SetItemText( const long item, const wxString &text );
+    bool SetItemData( long item, long data );
+    bool SetItemText( long item, const wxString &text );
+    void SetItemImage(long item, int image, int imageSel) const;
     long HitTest( const wxPoint& point, int &flags );
 
     void AdjustMyScrollbars(void);
@@ -299,9 +299,12 @@ class wxTreeCtrl: public wxScrolledWindow
     void OnKillFocus( const wxFocusEvent &event );
     void OnChar( wxKeyEvent &event );
     void OnMouse( const wxMouseEvent &event );
-        
+
+    void SetImageList(wxImageList *imageList) { m_imageList = imageList; }
+    wxImageList *GetImageList() const { return m_imageList; }
+
   private:
-  
+
     wxGenericTreeItem   *m_anchor;
     wxGenericTreeItem   *m_current;
     bool                 m_hasFocus;
@@ -312,13 +315,14 @@ class wxTreeCtrl: public wxScrolledWindow
     wxPen                m_dottedPen;
     bool                 m_isCreated;
     wxPaintDC           *m_dc;
-    wxBrush            *m_hilightBrush;
+    wxBrush             *m_hilightBrush;
+    wxImageList         *m_imageList;
   
     void CalculateLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, int &y );
     void CalculatePositions(void);
-    wxGenericTreeItem *FindItem( const long itemId ) const;
+    wxGenericTreeItem *FindItem( long itemId ) const;
     void RefreshLine( wxGenericTreeItem *item );
-    
+
   DECLARE_EVENT_TABLE()
 };
 
