@@ -20,8 +20,7 @@
     #pragma interface "framebase.h"
 #endif
 
-#include "wx/window.h"      // the base class
-#include "wx/icon.h"        // for m_icon
+#include "wx/toplevel.h"      // the base class
 
 // the default names for various classs
 WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;
@@ -32,14 +31,6 @@ class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;
 class WXDLLEXPORT wxToolBar;
-
-// Styles for ShowFullScreen
-#define wxFULLSCREEN_NOMENUBAR      0x01
-#define wxFULLSCREEN_NOTOOLBAR      0x02
-#define wxFULLSCREEN_NOSTATUSBAR    0x04
-#define wxFULLSCREEN_NOBORDER       0x08
-#define wxFULLSCREEN_NOCAPTION      0x10
-#define wxFULLSCREEN_ALL            (wxFULLSCREEN_NOMENUBAR | wxFULLSCREEN_NOTOOLBAR | wxFULLSCREEN_NOSTATUSBAR | wxFULLSCREEN_NOBORDER | wxFULLSCREEN_NOCAPTION)
 
 // ----------------------------------------------------------------------------
 // wxFrame is a top-level window with optional menubar, statusbar and toolbar
@@ -53,7 +44,12 @@ class WXDLLEXPORT wxToolBar;
 // CreateXXXBar() is called.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFrameBase : public wxWindow
+// FIXME - temporary hack in absence of wxTLW !!
+#ifndef wxTopLevelWindowNative
+class WXDLLEXPORT wxFrameBase : public wxTopLevelWindowBase
+#else
+class WXDLLEXPORT wxFrameBase : public wxTopLevelWindow
+#endif
 {
 public:
     // construction
@@ -72,30 +68,6 @@ public:
 
     // frame state
     // -----------
-
-    // maximize = TRUE => maximize, otherwise - restore
-    virtual void Maximize(bool maximize = TRUE) = 0;
-
-    // undo Maximize() or Iconize()
-    virtual void Restore() = 0;
-
-    // iconize = TRUE => iconize, otherwise - restore
-    virtual void Iconize(bool iconize = TRUE) = 0;
-
-    // return TRUE if the frame is maximized
-    virtual bool IsMaximized() const = 0;
-
-    // return TRUE if the frame is iconized
-    virtual bool IsIconized() const = 0;
-
-    // get the frame icon
-    const wxIcon& GetIcon() const { return m_icon; }
-
-    // set the frame icon
-    virtual void SetIcon(const wxIcon& icon) { m_icon = icon; }
-
-    // make the window modal (all other windows unresponsive)
-    virtual void MakeModal(bool modal = TRUE);
 
     // get the origin of the client area (which may be different from (0, 0)
     // if the frame has a toolbar) in client coordinates
@@ -157,27 +129,12 @@ public:
     virtual void SetToolBar(wxToolBar *toolbar) { m_frameToolBar = toolbar; }
 #endif // wxUSE_TOOLBAR
 
-    // old functions, use the new ones instead!
-#if WXWIN_COMPATIBILITY_2
-    bool Iconized() const { return IsIconized(); }
-#endif // WXWIN_COMPATIBILITY_2
-
     // implementation only from now on
     // -------------------------------
 
-    // override some base class virtuals
-    virtual bool Destroy();
-    virtual bool IsTopLevel() const { return TRUE; }
-
     // event handlers
     void OnIdle(wxIdleEvent& event);
-    void OnCloseWindow(wxCloseEvent& event);
     void OnMenuHighlight(wxMenuEvent& event);
-    void OnSize(wxSizeEvent& event);
-
-    // this should go away, but for now it's called from docview.cpp,
-    // so should be there for all platforms
-    void OnActivate(wxActivateEvent &WXUNUSED(event)) { }
 
 #if wxUSE_MENUS
     // send wxUpdateUIEvents for all menu items (called from OnIdle())
@@ -230,17 +187,6 @@ protected:
 
     wxToolBar *m_frameToolBar;
 #endif // wxUSE_TOOLBAR
-
-    // the frame client to screen translation should take account of the
-    // toolbar which may shift the origin of the client area
-    virtual void DoClientToScreen(int *x, int *y) const;
-    virtual void DoScreenToClient(int *x, int *y) const;
-
-    // send the iconize event, return TRUE if processed
-    bool SendIconizeEvent(bool iconized = TRUE);
-
-    // the frame icon
-    wxIcon m_icon;
 
     DECLARE_EVENT_TABLE()
 };

@@ -37,11 +37,30 @@
     #include "wx/stattext.h"
     #include "wx/sizer.h"
     #include "wx/button.h"
+    #include "wx/containr.h"
 #endif
+
 
 //--------------------------------------------------------------------------
 // wxDialogBase
 //--------------------------------------------------------------------------
+
+// FIXME - temporary hack in absence of wxtopLevelWindow, should be always used
+#ifdef wxTopLevelWindowNative
+BEGIN_EVENT_TABLE(wxDialogBase, wxTopLevelWindow)
+    WX_EVENT_TABLE_CONTROL_CONTAINER(wxDialogBase)
+END_EVENT_TABLE()
+
+WX_DELEGATE_TO_CONTROL_CONTAINER(wxDialogBase)
+#endif
+
+void wxDialogBase::Init()
+{
+    m_returnCode = 0;
+#ifdef wxTopLevelWindowNative // FIXME - temporary hack, should be always used!
+    m_container.SetContainerWindow(this);
+#endif
+}
 
 #if wxUSE_STATTEXT && wxUSE_TEXTCTRL
 

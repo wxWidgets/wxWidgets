@@ -58,18 +58,6 @@ public:
 
     virtual ~wxFrameGTK();
 
-    // implement base class pure virtuals
-    virtual void Maximize(bool maximize = TRUE);
-    virtual bool IsMaximized() const;
-    virtual void Iconize(bool iconize = TRUE);
-    virtual bool IsIconized() const;
-    virtual void SetIcon(const wxIcon& icon);
-    virtual void MakeModal(bool modal = TRUE);
-    virtual void Restore();
-
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
-    virtual bool IsFullScreen() const { return m_fsIsShowing; };
-
 #if wxUSE_STATUSBAR
     virtual void PositionStatusBar();
 
@@ -86,47 +74,21 @@ public:
     void SetToolBar(wxToolBar *toolbar);
 #endif // wxUSE_TOOLBAR
 
-    virtual bool Show(bool show = TRUE);
-
-    virtual void SetTitle( const wxString &title );
-    virtual wxString GetTitle() const { return m_title; }
-
     // implementation from now on
     // --------------------------
-
-    // move the window to the specified location and resize it: this is called
-    // from both DoSetSize() and DoSetClientSize()
-    virtual void DoMoveWindow(int x, int y, int width, int height);
 
     // GTK callbacks
     virtual void GtkOnSize( int x, int y, int width, int height );
     virtual void OnInternalIdle();
 
-    // do *not* call this to iconize the frame, this is a private function!
-    void SetIconizeState(bool iconic);
-
-    wxString      m_title;
-    int           m_miniEdge,
-                  m_miniTitle;
-    GtkWidget    *m_mainWidget;
     bool          m_menuBarDetached;
     bool          m_toolBarDetached;
-    bool          m_insertInClientArea;  /* not from within OnCreateXXX */
-
-    bool          m_fsIsShowing;         /* full screen */
-    long          m_fsSaveStyle;
-    long          m_fsSaveFlag;
-    wxRect        m_fsSaveFrame;
 
 protected:
     // common part of all ctors
     void Init();
 
     // override wxWindow methods to take into account tool/menu/statusbars
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
-
     virtual void DoSetClientSize(int width, int height);
     virtual void DoGetClientSize( int *width, int *height ) const;
 
@@ -134,9 +96,6 @@ protected:
     virtual void DetachMenuBar();
     virtual void AttachMenuBar(wxMenuBar *menubar);
 #endif // wxUSE_MENUS_NATIVE
-
-    // is the frame currently iconized?
-    bool m_isIconized;
 };
 
 #endif // __GTKFRAMEH__

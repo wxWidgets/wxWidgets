@@ -17,14 +17,23 @@
 #endif
 
 #include "wx/defs.h"
-#include "wx/panel.h"
+#include "wx/containr.h"
+#include "wx/toplevel.h"
 
+// FIXME - temporary hack in absence of wxTLW !!
+#ifndef wxTopLevelWindowNative
+#include "wx/panel.h"
 class WXDLLEXPORT wxDialogBase : public wxPanel
+#else
+class WXDLLEXPORT wxDialogBase : public wxTopLevelWindow
+#endif
 {
 public:
-#ifdef __DARWIN__
-    ~wxDialogBase() { }
-#endif
+    wxDialogBase() { Init(); }
+    ~wxDialogBase() {}
+    
+    void Init();
+    
     // the modal dialogs have a return code - usually the id of the last
     // pressed button
     void SetReturnCode(int returnCode) { m_returnCode = returnCode; }
@@ -44,7 +53,15 @@ public:
 protected:
     // the return code from modal dialog
     int m_returnCode;
+
+    // FIXME - temporary hack in absence of wxTLW !!
+    #ifdef wxTopLevelWindowNative
+    DECLARE_EVENT_TABLE()
+    WX_DECLARE_CONTROL_CONTAINER();
+    #endif
 };
+
+
 
 #if defined(__WXMSW__)
     #include "wx/msw/dialog.h"
@@ -52,9 +69,6 @@ protected:
     #include "wx/motif/dialog.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/dialog.h"
-#elif defined(__WXMGL__)
-    #include "wx/mgl/dialog.h"
-// FIXME_MGL -- belongs to wxUniv
 #elif defined(__WXMAC__)
     #include "wx/mac/dialog.h"
 #elif defined(__WXPM__)
