@@ -173,13 +173,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         return false;
     }
 
-    if ( !wxAppBase::Initialize(argc, argv) )
-    {
-        XCloseDisplay(xdisplay);
-
-        return false;
-    }
-
     if (syncDisplay)
         XSynchronize(xdisplay, True);
 
@@ -189,6 +182,13 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     // Misc.
     wxSetDetectableAutoRepeat( TRUE );
+
+    if ( !wxAppBase::Initialize(argc, argv) )
+    {
+        XCloseDisplay(xdisplay);
+
+        return false;
+    }
 
 #if wxUSE_UNICODE
     // Glib's type system required by Pango
