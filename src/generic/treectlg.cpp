@@ -2637,7 +2637,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
     bool is_multiple, extended_select, unselect_others;
     EventFlagsToSelType(GetWindowStyleFlag(),
                         event.ShiftDown(),
-                        event.ControlDown(),
+                        event.CmdDown(),
                         is_multiple, extended_select, unselect_others);
 
     // + : Expand
@@ -3225,7 +3225,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 size_t count = GetSelections(selections);
 
                 if (count > 1 &&
-                    !event.ControlDown() &&
+                    !event.CmdDown() &&
                     !event.ShiftDown())
                 {
                     DoSelectItem(item, true, false);
@@ -3279,14 +3279,14 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             // user clicked outside of the present selection.
             // otherwise, perform the deselection on mouse-up.
             // this allows multiple drag and drop to work.
-
-            if (!IsSelected(item))
+            // but if Cmd is down, toggle selection of the clicked item
+            if (!IsSelected(item) || event.CmdDown())
             {
                 // how should the selection work for this event?
                 bool is_multiple, extended_select, unselect_others;
                 EventFlagsToSelType(GetWindowStyleFlag(),
                                     event.ShiftDown(),
-                                    event.ControlDown(),
+                                    event.CmdDown(),
                                     is_multiple, extended_select, unselect_others);
 
                 DoSelectItem(item, unselect_others, extended_select);
