@@ -147,6 +147,37 @@ gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
     win->CalculateScrollbar();
 }
 
+// ----------------------------------------------------------------------------
+// redraw callback for multiline text
+// ----------------------------------------------------------------------------
+
+#ifndef __WXGTK20__
+
+// redrawing a GtkText from inside a wxYield() call results in crashes (the
+// text sample shows it in its "Add lines" command which shows wxProgressDialog
+// which implicitly calls wxYield()) so we override GtkText::draw() and simply
+// don't do anything if we're inside wxYield()
+
+extern bool wxIsInsideYield;
+
+typedef void (*GtkDrawCallback)(GtkWidget *widget, GdkRectangle *rect);
+
+static GtkDrawCallback gs_gtk_text_draw = NULL;
+
+extern "C"
+void wxgtk_text_draw( GtkWidget *widget, GdkRectangle *rect)
+{
+    if ( !wxIsInsideYield )
+    {
+        wxCHECK_RET( gs_gtk_text_draw != wxgtk_text_draw,
+                     _T("infinite recursion in wxgtk_text_draw aborted") );
+
+        gs_gtk_text_draw(widget, rect);
+    }
+}
+
+#endif // __WXGTK20__
+
 //-----------------------------------------------------------------------------
 //  wxTextCtrl
 //-----------------------------------------------------------------------------
@@ -268,7 +299,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     {
         /* a single-line text control: no need for scrollbars */
         m_widget =
-          m_text = gtk_entry_new();
+        m_text = gtk_entry_new();
     }
 
     m_parent->DoAddChild( this );
@@ -295,6 +326,20 @@ bool wxTextCtrl::Create( wxWindow *parent,
     {
         gtk_signal_connect(GTK_OBJECT(GTK_TEXT(m_text)->vadj), "changed",
           (GtkSignalFunc) gtk_scrollbar_changed_callback, (gpointer) this );
+
+#ifndef __WXGTK20__
+        // only initialize gs_gtk_text_draw once, starting from the next the
+        // klass::draw will already be wxgtk_text_draw
+        if ( !gs_gtk_text_draw )
+        {
+            GtkDrawCallback&
+                draw = GTK_WIDGET_CLASS(GTK_OBJECT(m_text)->klass)->draw;
+
+            gs_gtk_text_draw = draw;
+
+            draw = wxgtk_text_draw;
+        }
+#endif // GTK+ 1.x
     }
 
     if (!value.IsEmpty())
