@@ -570,136 +570,44 @@ void wxToolBarBase::DoToolbarUpdates()
     }
 }
 
-///////////// button-label rendering helpers //////////////////
-
-#define MIN_COLOR_DIFF 10
-
-#define IS_IN_ARRAY(x,y) ( (x) < width && (y) < height && (x) >= 0 && (y) >= 0 )
-
-#define IS_GREATER(red1,green1,blue1, red2,green2,blue2) ( ( red1 > red2 + MIN_COLOR_DIFF ) && \
-                                ( green1 > green2 + MIN_COLOR_DIFF ) &&  \
-                                ( blue1 > blue2 + MIN_COLOR_DIFF )     \
-                              )
-
 // Helper function, used by wxCreateGreyedImage
 
-static void wxGreyOutImage( const wxImage& src, wxImage& dest,
-    const wxColour& darkCol, const wxColour& lightCol, const wxColour& bgCol)
+static void wxGreyOutImage( const wxImage& src,
+                            wxImage& dest,
+                            const wxColour& darkCol,
+                            const wxColour& lightCol,
+                            const wxColour& bgCol )
 {
     // Second attempt, just making things monochrome
     int width = src.GetWidth();
     int height = src.GetHeight();
 
-    unsigned int redCur, greenCur, blueCur;
-
-    int x, y;
-    for (x = 0; x < width; x++)
+    int redCur, greenCur, blueCur;
+    for ( int x = 0; x < width; x++ )
     {
-	for (y = 1; y < height; y++)
-	{
+        for ( int y = 1; y < height; y++ )
+        {
             redCur = src.GetRed(x, y);
             greenCur = src.GetGreen(x, y);
-            blueCur = src.GetBlue(x, y);     
+            blueCur = src.GetBlue(x, y);
 
-	    // Change light things to the background colour
+            // Change light things to the background colour
             if ( redCur >= (lightCol.Red() - 50) && greenCur >= (lightCol.Green() - 50) && blueCur >= (lightCol.Blue() - 50) )
             {
                 dest.SetRGB(x,y, bgCol.Red(), bgCol.Green(), bgCol.Blue());
             }
             else if ( redCur == bgCol.Red() && greenCur == bgCol.Green() && blueCur == bgCol.Blue() )
             {
-		// Leave the background colour as-is
+                // Leave the background colour as-is
                 // dest.SetRGB(x,y, bgCol.Red(), bgCol.Green(), bgCol.Blue());
             }
             else // if ( redCur <= darkCol.Red() && greenCur <= darkCol.Green() && blueCur <= darkCol.Blue() )
             {
-		// Change dark things to really dark
+                // Change dark things to really dark
                 dest.SetRGB(x,y, darkCol.Red(), darkCol.Green(), darkCol.Blue());
             }
-	}
+        }
     }
-
-
-    // First attempt, causes problems with scissors icon
-#if 0
-    int x = 0;
-    int y = 1;
-
-    int width = src.GetWidth();
-    int height = src.GetHeight();
-
-    unsigned int redCur, greenCur, blueCur;
-
-    do
-    {
-        redCur = src.GetRed(x, y);
-        greenCur = src.GetGreen(x, y);
-        blueCur = src.GetBlue(x, y);     
-
-        if ( IS_IN_ARRAY(x-1,y-1) )
-        {
-            unsigned int redUpper = src.GetRed(x-1, y-1);
-            unsigned int greenUpper = src.GetGreen(x-1, y-1);
-            unsigned int blueUpper = src.GetBlue(x-1, y-1);     
-
-            // if the upper element is lighter than current
-            if ( IS_GREATER(redUpper, greenUpper, blueUpper, redCur, greenCur, blueCur) )
-            {
-                dest.SetRGB(x,y, darkCol.Red(), darkCol.Green(), darkCol.Blue());
-            }
-            // if the current element is ligher than the upper
-            else if ( IS_GREATER(redCur, greenCur, blueCur, redUpper, greenUpper, blueUpper) )
-            {
-                dest.SetRGB(x,y, lightCol.Red(), lightCol.Green(), lightCol.Blue());
-            }
-            else
-            {
-                unsigned int red1 = dest.GetRed(x-1, y-1);
-                unsigned int green1 = dest.GetGreen(x-1, y-1);
-                unsigned int blue1 = dest.GetBlue(x-1, y-1);     
-
-                if ( red1 == lightCol.Red() && green1 == lightCol.Green() && blue1 == lightCol.Blue() )
-                    dest.SetRGB(x, y, bgCol.Red(), bgCol.Green(), bgCol.Blue());
-                else if ( red1 == darkCol.Red() && green1 == darkCol.Green() && blue1 == darkCol.Blue() )
-                    dest.SetRGB(x, y, darkCol.Red(), darkCol.Green(), darkCol.Blue());
-                else
-                    dest.SetRGB(x, y, bgCol.Red(), bgCol.Green(), bgCol.Blue());
-            }
-        }
-
-        // go zig-zag
-
-        if ( IS_IN_ARRAY(x+1,y-1) ) 
-        {
-            ++x;
-            --y;
-        }
-        else
-        {
-            while ( IS_IN_ARRAY(x-1,y+1) ) 
-            {
-                --x;
-                ++y;
-            }
-
-            if ( IS_IN_ARRAY(x,y+1) )
-            {
-                ++y;
-                continue;
-            }
-            else
-            {
-                if ( IS_IN_ARRAY(x+1,y) )
-                {
-                    ++x;
-                    continue;
-                }
-                else break;
-            }
-        }
-
-    } while (1);
-#endif
 }
 
 /*
