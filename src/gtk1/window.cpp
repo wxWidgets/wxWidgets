@@ -2554,11 +2554,12 @@ bool wxWindow::AcceptsFocus() const
     return m_acceptsFocus && wxWindowBase::AcceptsFocus();
 }
 
-bool wxWindow::Reparent( wxWindow *newParent )
+bool wxWindow::Reparent( wxWindowBase *newParentBase )
 {
     wxCHECK_MSG( (m_widget != NULL), FALSE, _T("invalid window") );
 
-    wxWindow *oldParent = m_parent;
+    wxWindow *oldParent = m_parent,
+             *newParent = (wxWindow *)newParentBase;
 
     if ( !wxWindowBase::Reparent(newParent) )
         return FALSE;

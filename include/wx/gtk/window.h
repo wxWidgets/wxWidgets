@@ -62,7 +62,7 @@ public:
     virtual void SetFocus();
     virtual bool AcceptsFocus() const;
 
-    virtual bool Reparent( wxWindow *newParent );
+    virtual bool Reparent( wxWindowBase *newParent );
 
     virtual void WarpPointer(int x, int y);
     virtual void CaptureMouse();
