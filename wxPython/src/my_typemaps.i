@@ -49,6 +49,17 @@
         delete $1;
 }
 
+%typemap(out) wxString& {
+%#if wxUSE_UNICODE
+    $result = PyUnicode_FromWideChar($1->c_str(), $1->Len());
+%#else
+    $result = PyString_FromStringAndSize($1->c_str(), $1->Len());
+%#endif
+}
+
+
+%apply wxString& { wxString* }
+
 
 
 %typemap(out) wxString {
@@ -58,25 +69,6 @@
     $result = PyString_FromStringAndSize($1.c_str(), $1.Len());
 %#endif
 }
-
-
-%typemap(out) wxString* {
-%#if wxUSE_UNICODE
-    $result = PyUnicode_FromWideChar($1->c_str(), $1->Len());
-%#else
-    $result = PyString_FromStringAndSize($1->c_str(), $1->Len());
-%#endif
-}
-
-
-%typemap(out) wxString& {
-%#if wxUSE_UNICODE
-    $result = PyUnicode_FromWideChar($1->c_str(), $1->Len());
-%#else
-    $result = PyString_FromStringAndSize($1->c_str(), $1->Len());
-%#endif
-}
-
 
 %typemap(varout) wxString {
 %#if wxUSE_UNICODE
