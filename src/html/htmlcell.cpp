@@ -62,8 +62,8 @@ void wxHtmlSelection::Set(const wxHtmlCell *fromCell, const wxHtmlCell *toCell)
     wxPoint p2 = toCell ? toCell->GetAbsPos() : wxDefaultPosition;
     if ( toCell )
     {
-        p2.x += toCell->GetWidth()-1;
-        p2.y += toCell->GetHeight()-1;
+        p2.x += toCell->GetWidth();
+        p2.y += toCell->GetHeight();
     }
     Set(p1, fromCell, p2, toCell);
 }
