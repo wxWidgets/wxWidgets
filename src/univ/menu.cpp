@@ -326,9 +326,13 @@ void wxPopupMenuWindow::ChangeCurrent(wxMenuItemList::Node *node)
 {
     if ( node != m_nodeCurrent )
     {
-        if ( m_nodeCurrent )
+        wxMenuItemList::Node *nodeOldCurrent = m_nodeCurrent;
+
+        m_nodeCurrent = node;
+
+        if ( nodeOldCurrent )
         {
-            wxMenuItem *item = m_nodeCurrent->GetData();
+            wxMenuItem *item = nodeOldCurrent->GetData();
             wxCHECK_RET( item, _T("no current item?") );
 
             // if it was the currently opened menu, close it
@@ -340,8 +344,6 @@ void wxPopupMenuWindow::ChangeCurrent(wxMenuItemList::Node *node)
 
             RefreshItem(item);
         }
-
-        m_nodeCurrent = node;
 
         if ( m_nodeCurrent )
             RefreshItem(m_nodeCurrent->GetData());
@@ -1851,7 +1853,11 @@ void wxMenuBar::DoSelectMenu(size_t pos)
 {
     wxCHECK_RET( pos < GetCount(), _T("invalid menu index in DoSelectMenu") );
 
-    if ( m_current != -1 )
+    int posOld = m_current;
+
+    m_current = pos;
+
+    if ( posOld != -1 )
     {
         // close the previous menu
         if ( IsShowingMenu() )
@@ -1865,10 +1871,8 @@ void wxMenuBar::DoSelectMenu(size_t pos)
             m_shouldShowMenu = old;
         }
 
-        RefreshItem((size_t)m_current);
+        RefreshItem((size_t)posOld);
     }
-
-    m_current = pos;
 
     RefreshItem(pos);
 }
@@ -1989,8 +1993,24 @@ bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
 
 void wxMenuBar::OnKeyDown(wxKeyEvent& event)
 {
-    // the current item must have been set before
-    wxCHECK_RET( m_current != -1, _T("where is current item?") );
+    // ensure that we have a current item - we might not have it if we're
+    // given the focus with Alt or F10 press (and under GTK+ the menubar
+    // somehow gets the keyboard events even when it doesn't have focus...)
+    if ( m_current == -1 )
+    {
+        if ( !HasCapture() )
+        {
+            SelectMenu(0);
+        }
+        else // we do have capture
+        {
+            // we always maintain a valid current item while we're in modal
+            // state (i.e. have the capture)
+            wxFAIL_MSG( _T("how did we manage to lose current item?") );
+
+            return;
+        }
+    }
 
     int key = event.GetKeyCode();
 
@@ -2239,10 +2259,6 @@ void wxMenuBar::PopupCurrentMenu(bool selectFirst)
             // item, not to the right of it
             wxRect rectItem = GetItemRect(m_current);
 
-	    // Release mouse, because the menu will get the capture.
-	    if (HasCapture())
-		ReleaseMouse();
-
             m_menuShown->Popup(ClientToScreen(rectItem.GetPosition()),
                                wxSize(0, rectItem.GetHeight()),
                                selectFirst);
@@ -2280,9 +2296,10 @@ void wxMenuBar::OnDismiss()
 
     if ( m_current != -1 )
     {
-        RefreshItem((size_t)m_current);
-
+        size_t current = m_current;
         m_current = -1;
+
+        RefreshItem(current);
     }
 
     GiveAwayFocus();

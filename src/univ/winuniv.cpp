@@ -975,6 +975,8 @@ struct WXDLLEXPORT wxWindowNext
 
 void wxWindow::CaptureMouse()
 {
+    wxLogTrace(_T("mousecapture"), _T("CaptureMouse(0x%08x)"), this);
+
     wxWindow *winOld = GetCapture();
     if ( winOld )
     {
@@ -1002,6 +1004,10 @@ void wxWindow::ReleaseMouse()
         delete item;
     }
     //else: stack is empty, no previous capture
+
+    wxLogTrace(_T("mousecapture"),
+               _T("After ReleaseMouse() mouse is captured by 0x%08x"),
+               GetCapture());
 }
 
 // ----------------------------------------------------------------------------
