@@ -1242,13 +1242,29 @@ The functions in this section are used to retrieve information about the
 current computer and/or user characteristics.
 
 
+\membersection{::wxGetEmailAddress}\label{wxgetemailaddress}
+
+\func{wxString}{wxGetEmailAddress}{\void}
+
+\func{bool}{wxGetEmailAddress}{\param{char * }{buf}, \param{int }{sz}}
+
+Copies the user's email address into the supplied buffer, by
+concatenating the values returned by \helpref{wxGetFullHostName}{wxgetfullhostname}\rtfsp
+and \helpref{wxGetUserId}{wxgetuserid}.
+
+Returns true if successful, false otherwise.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+
 \membersection{::wxGetFreeMemory}\label{wxgetfreememory}
 
 \func{wxMemorySize}{wxGetFreeMemory}{\void}
 
 Returns the amount of free memory in bytes under environments which
-support it, and -1 if not supported. Currently, it is supported only
-under Windows, Linux and Solaris.
+support it, and -1 if not supported or failed to perform measurement.
 
 \wxheading{Include files}
 
@@ -1265,21 +1281,6 @@ error.
 \wxheading{See also}
 
 \helpref{wxGetHostName}{wxgethostname}
-
-\wxheading{Include files}
-
-<wx/utils.h>
-
-
-\membersection{::wxGetEmailAddress}\label{wxgetemailaddress}
-
-\func{bool}{wxGetEmailAddress}{\param{const wxString\& }{buf}, \param{int }{sz}}
-
-Copies the user's email address into the supplied buffer, by
-concatenating the values returned by \helpref{wxGetFullHostName}{wxgetfullhostname}\rtfsp
-and \helpref{wxGetUserId}{wxgetuserid}.
-
-Returns true if successful, false otherwise.
 
 \wxheading{Include files}
 
@@ -1322,32 +1323,6 @@ if successful, false otherwise.
 \wxheading{See also}
 
 \helpref{wxGetFullHostName}{wxgetfullhostname}
-
-\wxheading{Include files}
-
-<wx/utils.h>
-
-
-\membersection{::wxGetUserId}\label{wxgetuserid}
-
-\func{wxString}{wxGetUserId}{\void}
-
-\func{bool}{wxGetUserId}{\param{char * }{buf}, \param{int }{sz}}
-
-This function returns the "user id" also known as "login name" under Unix i.e.
-something like "jsmith". It uniquely identifies the current user (on this system).
-
-Under Windows or NT, this function first looks in the environment
-variables USER and LOGNAME; if neither of these is found, the entry {\bf UserId}\rtfsp
-in the {\bf wxWidgets} section of the WIN.INI file is tried.
-
-The first variant of this function returns the login name if successful or an
-empty string otherwise. The second (deprecated) function returns true
-if successful, false otherwise.
-
-\wxheading{See also}
-
-\helpref{wxGetUserName}{wxgetusername}
 
 \wxheading{Include files}
 
@@ -1409,6 +1384,32 @@ Both {\it major} and {\it minor} have to be looked at as hexadecimal numbers. So
 Returns the home directory for the given user. If the username is empty
 (default value), this function behaves like
 \helpref{wxGetHomeDir}{wxgethomedir}.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+
+\membersection{::wxGetUserId}\label{wxgetuserid}
+
+\func{wxString}{wxGetUserId}{\void}
+
+\func{bool}{wxGetUserId}{\param{char * }{buf}, \param{int }{sz}}
+
+This function returns the "user id" also known as "login name" under Unix i.e.
+something like "jsmith". It uniquely identifies the current user (on this system).
+
+Under Windows or NT, this function first looks in the environment
+variables USER and LOGNAME; if neither of these is found, the entry {\bf UserId}\rtfsp
+in the {\bf wxWidgets} section of the WIN.INI file is tried.
+
+The first variant of this function returns the login name if successful or an
+empty string otherwise. The second (deprecated) function returns true
+if successful, false otherwise.
+
+\wxheading{See also}
+
+\helpref{wxGetUserName}{wxgetusername}
 
 \wxheading{Include files}
 
