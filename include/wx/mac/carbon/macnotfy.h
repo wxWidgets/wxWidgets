@@ -21,7 +21,6 @@ void wxMacCreateNotifierTable() ;
 void wxMacDestroyNotifierTable() ;
 wxMacNotifierTableRef wxMacGetNotifierTable() ;
 void wxMacAddEvent( wxMacNotifierTableRef table , wxMacNotificationProcPtr handler , unsigned long event , void* data , short wakeUp ) ;
-void wxMacWakeUp() ;
 void wxMacProcessNotifierEvents() ;
 void wxMacProcessNotifierAndPendingEvents() ;
 void wxMacRemoveAllNotifiersForData( wxMacNotifierTableRef table , void* data ) ;
