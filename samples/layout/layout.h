@@ -24,7 +24,7 @@ class MyWindow;
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h);
+    MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h);
 
     void OnQuit(wxCommandEvent& event);
 
@@ -42,7 +42,7 @@ class MyTextWindow: public wxTextCtrl
 public:
     MyTextWindow(wxFrame *frame, int x=-1, int y=-1, int width=-1, int height=-1,
                long style=wxTE_MULTILINE):
-    wxTextCtrl(frame, -1, "", wxPoint(x, y), wxSize(width, height), style)
+    wxTextCtrl(frame, -1, _T(""), wxPoint(x, y), wxSize(width, height), style)
     {
     }
 
@@ -64,7 +64,7 @@ class MySizerFrame: public wxFrame
 {
 public:
     wxPanel *panel;
-    MySizerFrame(wxFrame *frame, char *title, int x, int y );
+    MySizerFrame(wxFrame *frame, wxChar *title, int x, int y );
 };
 
 #define LAYOUT_QUIT       100

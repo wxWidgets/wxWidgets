@@ -109,21 +109,21 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
 
-    frame = new MyFrame((wxFrame *)NULL, -1, "MDI Demo",
+    frame = new MyFrame((wxFrame *)NULL, -1, _T("MDI Demo"),
                         wxPoint(-1, -1), wxSize(500, 400),
                         wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
 #ifdef __WXMSW__
 #if 0
     // Experimental: change the window menu
     wxMenu* windowMenu = new wxMenu;
-    windowMenu->Append(5000, "My menu item!");
+    windowMenu->Append(5000, _T("My menu item!"));
     frame->SetWindowMenu(windowMenu);
 #endif
 #endif
 
     // Give it an icon
 #ifdef __WXMSW__
-    frame->SetIcon(wxIcon("mdi_icn"));
+    frame->SetIcon(wxIcon(_T("mdi_icn")));
 #else
     frame->SetIcon(wxIcon( mondrian_xpm ));
 #endif
@@ -131,16 +131,16 @@ bool MyApp::OnInit()
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(MDI_NEW_WINDOW, "&New window\tCtrl-N", "Create a new child window");
-    file_menu->Append(MDI_QUIT, "&Exit\tAlt-X", "Quit the program");
+    file_menu->Append(MDI_NEW_WINDOW, _T("&New window\tCtrl-N"), _T("Create a new child window"));
+    file_menu->Append(MDI_QUIT, _T("&Exit\tAlt-X"), _T("Quit the program"));
 
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(MDI_ABOUT, "&About\tF1");
+    help_menu->Append(MDI_ABOUT, _T("&About\tF1"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
-    menu_bar->Append(file_menu, "&File");
-    menu_bar->Append(help_menu, "&Help");
+    menu_bar->Append(file_menu, _T("&File"));
+    menu_bar->Append(help_menu, _T("&Help"));
 
     // Associate the menu bar with the frame
     frame->SetMenuBar(menu_bar);
@@ -168,7 +168,7 @@ MyFrame::MyFrame(wxWindow *parent,
        : wxMDIParentFrame(parent, id, title, pos, size,
                           style | wxNO_FULL_REPAINT_ON_RESIZE)
 {
-    textWindow = new wxTextCtrl(this, -1, "A help window",
+    textWindow = new wxTextCtrl(this, -1, _T("A help window"),
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
 
@@ -190,7 +190,7 @@ void MyFrame::OnClose(wxCloseEvent& event)
     {
         wxString msg;
         msg.Printf(_T("%d windows still open, close anyhow?"), gs_nFrames);
-        if ( wxMessageBox(msg, "Please confirm",
+        if ( wxMessageBox(msg, _T("Please confirm"),
                           wxICON_QUESTION | wxYES_NO) != wxYES )
         {
             event.Veto();
@@ -209,15 +209,15 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    (void)wxMessageBox("wxWindows 2.0 MDI Demo\n"
-                       "Author: Julian Smart (c) 1997\n"
-                       "Usage: mdi.exe", "About MDI Demo");
+    (void)wxMessageBox(_T("wxWindows 2.0 MDI Demo\n")
+                       _T("Author: Julian Smart (c) 1997\n")
+                       _T("Usage: mdi.exe"), _T("About MDI Demo"));
 }
 
 void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 {
     // Make another frame, containing a canvas
-    MyChild *subframe = new MyChild(frame, "Canvas Frame",
+    MyChild *subframe = new MyChild(frame, _T("Canvas Frame"),
                                     wxPoint(-1, -1), wxSize(-1, -1),
                                     wxDEFAULT_FRAME_STYLE);
 
@@ -228,7 +228,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 
     // Give it an icon
 #ifdef __WXMSW__
-    subframe->SetIcon(wxIcon("chrt_icn"));
+    subframe->SetIcon(wxIcon(_T("chrt_icn")));
 #else
     subframe->SetIcon(wxIcon( mondrian_xpm ));
 #endif
@@ -236,26 +236,26 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(MDI_NEW_WINDOW, "&New window");
-    file_menu->Append(MDI_CHILD_QUIT, "&Close child", "Close this window");
-    file_menu->Append(MDI_QUIT, "&Exit");
+    file_menu->Append(MDI_NEW_WINDOW, _T("&New window"));
+    file_menu->Append(MDI_CHILD_QUIT, _T("&Close child"), _T("Close this window"));
+    file_menu->Append(MDI_QUIT, _T("&Exit"));
 
     wxMenu *option_menu = new wxMenu;
 
-    option_menu->Append(MDI_REFRESH, "&Refresh picture");
-    option_menu->Append(MDI_CHANGE_TITLE, "Change &title...\tCtrl-T");
+    option_menu->Append(MDI_REFRESH, _T("&Refresh picture"));
+    option_menu->Append(MDI_CHANGE_TITLE, _T("Change &title...\tCtrl-T"));
     option_menu->AppendSeparator();
-    option_menu->Append(MDI_CHANGE_POSITION, "Move frame\tCtrl-M");
-    option_menu->Append(MDI_CHANGE_SIZE, "Resize frame\tCtrl-S");
+    option_menu->Append(MDI_CHANGE_POSITION, _T("Move frame\tCtrl-M"));
+    option_menu->Append(MDI_CHANGE_SIZE, _T("Resize frame\tCtrl-S"));
 
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(MDI_ABOUT, "&About");
+    help_menu->Append(MDI_ABOUT, _T("&About"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
-    menu_bar->Append(file_menu, "&File");
-    menu_bar->Append(option_menu, "&Child");
-    menu_bar->Append(help_menu, "&Help");
+    menu_bar->Append(file_menu, _T("&File"));
+    menu_bar->Append(option_menu, _T("&Child"));
+    menu_bar->Append(help_menu, _T("&Help"));
 
     // Associate the menu bar with the frame
     subframe->SetMenuBar(menu_bar);
@@ -307,24 +307,24 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
     int width = 24;
     int currentX = 5;
 
-    toolBar->AddTool( MDI_NEW_WINDOW, *(bitmaps[0]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "New file");
+    toolBar->AddTool( MDI_NEW_WINDOW, *(bitmaps[0]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("New file"));
     currentX += width + 5;
-    toolBar->AddTool(1, *bitmaps[1], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Open file");
+    toolBar->AddTool(1, *bitmaps[1], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Open file"));
     currentX += width + 5;
-    toolBar->AddTool(2, *bitmaps[2], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Save file");
-    currentX += width + 5;
-    toolBar->AddSeparator();
-    toolBar->AddTool(3, *bitmaps[3], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Copy");
-    currentX += width + 5;
-    toolBar->AddTool(4, *bitmaps[4], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Cut");
-    currentX += width + 5;
-    toolBar->AddTool(5, *bitmaps[5], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Paste");
+    toolBar->AddTool(2, *bitmaps[2], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Save file"));
     currentX += width + 5;
     toolBar->AddSeparator();
-    toolBar->AddTool(6, *bitmaps[6], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Print");
+    toolBar->AddTool(3, *bitmaps[3], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Copy"));
+    currentX += width + 5;
+    toolBar->AddTool(4, *bitmaps[4], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Cut"));
+    currentX += width + 5;
+    toolBar->AddTool(5, *bitmaps[5], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Paste"));
     currentX += width + 5;
     toolBar->AddSeparator();
-    toolBar->AddTool(7, *bitmaps[7], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Help");
+    toolBar->AddTool(6, *bitmaps[6], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Print"));
+    currentX += width + 5;
+    toolBar->AddSeparator();
+    toolBar->AddTool(7, *bitmaps[7], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, _T("Help"));
 
     toolBar->Realize();
 
@@ -344,7 +344,7 @@ MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
                            wxNO_FULL_REPAINT_ON_RESIZE |
                            wxVSCROLL | wxHSCROLL)
 {
-    SetBackgroundColour(wxColour("WHITE"));
+    SetBackgroundColour(wxColour(_T("WHITE")));
 
     m_dirty = FALSE;
 }
@@ -367,7 +367,7 @@ void MyCanvas::OnDraw(wxDC& dc)
     dc.DrawSpline(50, 200, 50, 100, 200, 10);
 #endif // wxUSE_SPLINES
     dc.DrawLine(50, 230, 200, 230);
-    dc.DrawText("This is a test string", 50, 230);
+    dc.DrawText(_T("This is a test string"), 50, 230);
 
     wxPoint points[3];
     points[0].x = 200; points[0].y = 300;
@@ -495,7 +495,7 @@ void MyChild::OnClose(wxCloseEvent& event)
 {
     if ( canvas && canvas->IsDirty() )
     {
-        if ( wxMessageBox("Really close?", "Please confirm",
+        if ( wxMessageBox(_T("Really close?"), _T("Please confirm"),
                           wxICON_QUESTION | wxYES_NO) != wxYES )
         {
             event.Veto();
