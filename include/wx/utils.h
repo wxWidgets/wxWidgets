@@ -276,6 +276,9 @@ WXDLLEXPORT int wxFindMenuItemId(wxFrame *frame, const wxString& menuString, con
 // Yield to other apps/messages
 WXDLLEXPORT bool wxYield();
 
+// Like wxYield, but fails silently if the yield is recursive.
+WXDLLEXPORT bool wxYieldIfNeeded();
+
 // Yield to other apps/messages and disable user input
 WXDLLEXPORT bool wxSafeYield(wxWindow *win = NULL);
 

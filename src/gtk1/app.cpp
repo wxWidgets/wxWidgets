@@ -80,16 +80,16 @@ void wxExit()
 // wxYield
 //-----------------------------------------------------------------------------
 
+static bool gs_inYield = FALSE;
+
 bool wxYield()
 {
 #ifdef __WXDEBUG__
-    static bool s_inYield = FALSE;
-    
-    if (s_inYield)
+    if (gs_inYield)
         wxFAIL_MSG( wxT("wxYield called recursively" ) );
-    
-    s_inYield = TRUE;
 #endif
+    
+    gs_inYield = TRUE;
 
     if (!g_isIdle)
     {
@@ -115,11 +115,22 @@ bool wxYield()
     // let the logs be flashed again
     wxLog::Resume();
 
-#ifdef __WXDEBUG__
-    s_inYield = FALSE;
-#endif
+    gs_inYield = FALSE;
 
     return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+// wxYieldIfNeeded
+// Like wxYield, but fails silently if the yield is recursive.
+//-----------------------------------------------------------------------------
+
+bool wxYieldIfNeeded()
+{
+    if (gs_inYield)
+        return FALSE;
+        
+    return wxYield();    
 }
 
 //-----------------------------------------------------------------------------
