@@ -38,7 +38,8 @@
 #endif
 
 #include "wx/msgout.h"
-
+#include "wx/log.h"
+									     
 #include <stdarg.h>
 #include <stdio.h>
 
