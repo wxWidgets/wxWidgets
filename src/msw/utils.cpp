@@ -114,12 +114,12 @@ bool wxGetUserId(char *buf, int maxSize)
   WCHAR  wszUserName[256];           // Unicode user name
   WCHAR  wszDomain[256];
   LPBYTE ComputerName;
- 
+
   struct _SERVER_INFO_100 *si100;   // Server structure
   struct _USER_INFO_2 *ui;          // User structure
- 
+
   // Convert ASCII user name and domain to Unicode.
- 
+
   MultiByteToWideChar( CP_ACP, 0, UserName,
      strlen(UserName)+1, wszUserName, sizeof(wszUserName) );
   MultiByteToWideChar( CP_ACP, 0, Domain,
@@ -127,20 +127,20 @@ bool wxGetUserId(char *buf, int maxSize)
 
   // Get the computer name of a DC for the specified domain.
   // >If you get a link error on this, include netapi32.lib<
- 
+
   NetGetDCName( NULL, wszDomain, &ComputerName );
- 
+
   // Look up the user on the DC.
- 
+
   if(NetUserGetInfo( (LPWSTR) ComputerName,
      (LPWSTR) &wszUserName, 2, (LPBYTE *) &ui))
   {
      printf( "Error getting user information.\n" );
      return( FALSE );
   }
- 
+
   // Convert the Unicode full name to ASCII.
- 
+
   WideCharToMultiByte( CP_ACP, 0, ui->usri2_full_name,
      -1, buf, 256, NULL, NULL );
   }
@@ -168,7 +168,7 @@ bool wxGetUserId(char *buf, int maxSize)
 // Get user name e.g. Julian Smart
 bool wxGetUserName(char *buf, int maxSize)
 {
-  const char *default_name = "Unknown User"; 
+  const char *default_name = "Unknown User";
 #if defined(__WIN32__)
 /*
   DWORD nSize = maxSize;
@@ -178,7 +178,7 @@ bool wxGetUserName(char *buf, int maxSize)
   else
 */
     // Could use NIS, MS-Mail or other site specific programs
-    // Use wxWindows configuration data 
+    // Use wxWindows configuration data
     GetProfileString(WX_SECTION, eUSERNAME, default_name, buf, maxSize - 1);
     return *buf ? TRUE : FALSE;
 //  }
@@ -196,7 +196,7 @@ bool wxGetUserName(char *buf, int maxSize)
 #endif
   {
     // Could use NIS, MS-Mail or other site specific programs
-    // Use wxWindows configuration data 
+    // Use wxWindows configuration data
     GetProfileString(WX_SECTION, eUSERNAME, default_name, buf, maxSize - 1);
   }
   return *buf ? TRUE : FALSE;
@@ -317,11 +317,13 @@ void wxFatalError(const wxString& msg, const wxString& title)
 // Emit a beeeeeep
 void wxBell(void)
 {
-#ifdef __WIN32__
-  Beep(1000,1000) ; // 1kHz during 1 sec.
-#else
+    // Removed by RD because IHMO syncronous sound is a Bad Thing.  MessageBeep
+    // will do a similar thing anyway if there is no sound card...
+//#ifdef __WIN32__
+//  Beep(1000,1000) ; // 1kHz during 1 sec.
+//#else
   MessageBeep(-1) ;
-#endif
+//#endif
 }
 
 // Chris Breeze 27/5/98: revised WIN32 code to
@@ -458,7 +460,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
   if (succ)
   {
     *value = (int)strtol(s, NULL, 10);
-    delete[] s; 
+    delete[] s;
     return TRUE;
   }
   else return FALSE;
@@ -488,7 +490,7 @@ void wxEndBusyCursor(void)
 {
   if (wxBusyCursorCount == 0)
     return;
-    
+
   wxBusyCursorCount --;
   if (wxBusyCursorCount == 0)
   {
@@ -501,7 +503,7 @@ void wxEndBusyCursor(void)
 bool wxIsBusy(void)
 {
   return (wxBusyCursorCount > 0);
-}    
+}
 
 const char* wxGetHomeDir(wxString *pstr)
 {
@@ -635,7 +637,7 @@ char *wxLoadUserResource(const wxString& resourceName, const wxString& resourceT
   char *theText = (char *)LockResource(hData);
   if (!theText)
     return NULL;
-    
+
   s = copystring(theText);
 
   // Obsolete in WIN32
@@ -903,10 +905,10 @@ on MSDN was a step in the right direction, but it is a console application
 and thus has limited features and extensibility.  DBWIN32 is my creation
 to solve this problem.
 
-The code is essentially a merging of a stripped down version of the DBWIN code 
+The code is essentially a merging of a stripped down version of the DBWIN code
 from VC 1.5 and DBMON.C with a few 32 bit changes.
 
-As of version 1.2B, DBWIN32 supports both Win95 and NT.  The NT support is 
+As of version 1.2B, DBWIN32 supports both Win95 and NT.  The NT support is
 built into the operating system and works just by running DBWIN32.  The Win95
 team decided not to support this hook, so I have provided code that will do
 this for you.  See the file WIN95.TXT for instructions on installing this.
@@ -938,11 +940,11 @@ void OutputDebugStringW95(const char* lpOutputString, ...)
     vsprintf(achBuffer, lpOutputString, args);
     va_end(args);
 
-    /* 
-        Do a regular OutputDebugString so that the output is 
+    /*
+        Do a regular OutputDebugString so that the output is
         still seen in the debugger window if it exists.
 
-        This ifdef is necessary to avoid infinite recursion 
+        This ifdef is necessary to avoid infinite recursion
         from the inclusion of W95TRACE.H
     */
 #ifdef _UNICODE
@@ -965,7 +967,7 @@ void OutputDebugStringW95(const char* lpOutputString, ...)
     if ( !heventDBWIN )
     {
         //MessageBox(NULL, "DBWIN_BUFFER_READY nonexistent", NULL, MB_OK);
-        return;            
+        return;
     }
 
     /* get a handle to the data synch object */
@@ -974,11 +976,11 @@ void OutputDebugStringW95(const char* lpOutputString, ...)
     {
         // MessageBox(NULL, "DBWIN_DATA_READY nonexistent", NULL, MB_OK);
         CloseHandle(heventDBWIN);
-        return;            
+        return;
     }
-    
+
     hSharedFile = CreateFileMapping((HANDLE)-1, NULL, PAGE_READWRITE, 0, 4096, "DBWIN_BUFFER");
-    if (!hSharedFile) 
+    if (!hSharedFile)
     {
         //MessageBox(NULL, "DebugTrace: Unable to create file mapping object DBWIN_BUFFER", "Error", MB_OK);
         CloseHandle(heventDBWIN);
@@ -987,7 +989,7 @@ void OutputDebugStringW95(const char* lpOutputString, ...)
     }
 
     lpszSharedMem = (LPSTR)MapViewOfFile(hSharedFile, FILE_MAP_WRITE, 0, 0, 512);
-    if (!lpszSharedMem) 
+    if (!lpszSharedMem)
     {
         //MessageBox(NULL, "DebugTrace: Unable to map shared memory", "Error", MB_OK);
         CloseHandle(heventDBWIN);
