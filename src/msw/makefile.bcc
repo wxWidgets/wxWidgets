@@ -115,6 +115,7 @@ COMMONOBJS = \
   $(MSWDIR)\postscrp.obj \
   $(MSWDIR)\prntbase.obj \
   $(MSWDIR)\resource.obj \
+  $(MSWDIR)\resourc2.obj \
   $(MSWDIR)\tbarbase.obj \
   $(MSWDIR)\tbarsmpl.obj \
   $(MSWDIR)\textfile.obj \
@@ -188,7 +189,6 @@ MSWOBJS = \
   $(MSWDIR)\gdiobj.obj \
   $(MSWDIR)\helpwin.obj \
   $(MSWDIR)\icon.obj \
-  $(MSWDIR)\imaglist.obj \
   $(MSWDIR)\iniconf.obj \
   $(MSWDIR)\joystick.obj \
   $(MSWDIR)\listbox.obj \
@@ -236,6 +236,7 @@ MSWOBJS = \
 #  $(MSWDIR)\uuid.obj
 #  $(MSWDIR)\droptgt.obj \
 #  $(MSWDIR)\dropsrc.obj \
+#  $(MSWDIR)\imaglist.obj \
 #  $(MSWDIR)\notebook.obj \
 #  $(MSWDIR)\listctrl.obj \
 #  $(MSWDIR)\tabctrl.obj \
@@ -344,13 +345,13 @@ $(MSWDIR)\gdiobj.obj:     $(MSWDIR)\gdiobj.$(SRCSUFF)
 
 $(MSWDIR)\icon.obj:     $(MSWDIR)\icon.$(SRCSUFF)
 
-$(MSWDIR)\imaglist.obj:     $(MSWDIR)\imaglist.$(SRCSUFF)
+# $(MSWDIR)\imaglist.obj:     $(MSWDIR)\imaglist.$(SRCSUFF)
 
 $(MSWDIR)\joystick.obj:     $(MSWDIR)\joystick.$(SRCSUFF)
 
 $(MSWDIR)\listbox.obj:     $(MSWDIR)\listbox.$(SRCSUFF)
 
-$(MSWDIR)\listctrl.obj:     $(MSWDIR)\listctrl.$(SRCSUFF)
+# $(MSWDIR)\listctrl.obj:     $(MSWDIR)\listctrl.$(SRCSUFF)
 
 $(MSWDIR)\main.obj:     $(MSWDIR)\main.$(SRCSUFF)
 
@@ -424,7 +425,7 @@ $(MSWDIR)\thread.obj:     $(MSWDIR)\thread.$(SRCSUFF)
 
 $(MSWDIR)\timer.obj:     $(MSWDIR)\timer.$(SRCSUFF)
 
-$(MSWDIR)\treectrl.obj:     $(MSWDIR)\treectrl.$(SRCSUFF)
+# $(MSWDIR)\treectrl.obj:     $(MSWDIR)\treectrl.$(SRCSUFF)
 
 $(MSWDIR)\utils.obj:     $(MSWDIR)\utils.$(SRCSUFF)
 
@@ -498,6 +499,8 @@ $(MSWDIR)\postscrp.obj:     $(COMMDIR)\postscrp.$(SRCSUFF)
 $(MSWDIR)\prntbase.obj:     $(COMMDIR)\prntbase.$(SRCSUFF)
 
 $(MSWDIR)\resource.obj:     $(COMMDIR)\resource.$(SRCSUFF)
+
+$(MSWDIR)\resourc2.obj:     $(COMMDIR)\resourc2.$(SRCSUFF)
 
 $(MSWDIR)\tbarbase.obj:     $(COMMDIR)\tbarbase.$(SRCSUFF)
 

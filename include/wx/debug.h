@@ -55,8 +55,16 @@
 
   /// generic assert macro
   #define   wxASSERT(cond)   if ( !(cond) ) wxOnAssert(__FILE__, __LINE__)
-  /// assert with additional message explaining it's cause 
+
+#if 0 // defined(__BORLANDC__) && defined(__WIN16__)
+  // Too much text, so make wxASSERT_MSG the same as wxASSERT,
+  // thus removing the text from the program.
+  #define   wxASSERT_MSG(x, m)  if ( !(x) ) wxOnAssert(__FILE__, __LINE__)
+#else
+  /// assert with additional message explaining it's cause
   #define   wxASSERT_MSG(x, m)  if ( !(x) ) wxOnAssert(__FILE__, __LINE__, m)
+#endif
+
 #else
   // nothing to do in release modes (hopefully at this moment there are
   // no more bugs ;-)
@@ -66,8 +74,15 @@
 
   /// special form of assert: always triggers it (in debug mode)
 #define   wxFAIL                 wxASSERT(wxFalse)
+
+#if 0 // defined(__BORLANDC__) && defined(__WIN16__)
+  // Too much text, so make wxFAIL_MSG the same as wxFAIL,
+  // thus removing the text from the program.
+#define   wxFAIL_MSG(msg)        wxASSERT(wxFalse)
+#else
   /// FAIL with some message
 #define   wxFAIL_MSG(msg)        wxASSERT_MSG(wxFalse, msg)
+#endif
 //@}
 
 // NB: these macros work also in release mode!

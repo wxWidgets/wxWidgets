@@ -88,6 +88,12 @@
 #define wxUSE_WX_RESOURCES        1
                                   // Use .wxr resource mechanism (requires PrologIO library)
 
+// BC++/Win16 can't cope with the amount of data in resource.cpp
+#if defined(__WIN16__) && defined(__BORLANDC__)
+#undef wxUSE_WX_RESOURCES
+#define wxUSE_WX_RESOURCES        0
+#endif
+
 #define HAVE_SOCKET             1
                                   // Use WinSock if 1
 #define wxUSE_DOC_VIEW_ARCHITECTURE 1

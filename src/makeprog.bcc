@@ -4,22 +4,7 @@
 !include $(WXDIR)\src\makebcc.env
 
 WXLIB = $(WXDIR)\lib\wx.lib
-LIBS=$(WXLIB) mathwl cwl import
-
-!ifndef FINAL
-FINAL=0
-!endif
-
-!if "$(FINAL)" == "0"
-LINKFLAGS=/v/Vt /Twe /L$(WXDIR)\lib;$(BCCDIR)\lib
-OPT = -Od
-DEBUG_FLAGS= -v
-!else
-LINKFLAGS=/Twe /L$(WXDIR)\lib;$(BCCDIR)\lib
-OPT = -O2
-DEBUG_FLAGS =
-!endif
-CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
+LIBS=$(WXLIB) mathwl cwl import ole2w16
 
 all:    $(TARGET).exe
 

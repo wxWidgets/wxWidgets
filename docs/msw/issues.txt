@@ -8,3 +8,22 @@ This conflicts with wxUSE_IOSTREAMSH = 0 using MS VC++ 5.0
 (crashes the template code). It should be switched off if you
 wish to use wxUSE_IOSTREAMSH = 0.
 
+BC++ in 16-bit mode
+-------------------
+
+resource.cpp has to be split into two to compile (hence
+resourc2.cpp). Unfortunately we still get the error:
+
+        Segment TEXT_RESOURCE exceeds 64K.
+
+The solution is probably to load wxResourceBitListTable
+dynamically using LoadString to load the names, and initialize the table
+at wxWindows start-up.
+
+Meanwhile the work-around is to switch wxUSE_WX_RESOURCES to 0
+(done in setup.h if BC++/16-bit mode is detected).
+
+See also:
+ http://www.inprise.com/devsupport/borlandcpp/ti_list/TI703.html
+ http://www.inprise.com/devsupport/borlandcpp/ti/TI1007.html
+

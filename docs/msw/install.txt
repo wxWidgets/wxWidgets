@@ -19,6 +19,7 @@ wx200hlp.zip            WinHelp documentation
 wx200pdf.zip            Acrobat PDF documentation
 wx200htm.zip            HTML documentation
 wx200vc.zip             MS VC++ 5.0 project files
+wx200cw.zip             Metrowerks CodeWarrior project files
 
 Unarchive the required files plus any optional documentation
 files into a suitable directory such as c:\wx. Alter your
@@ -73,12 +74,9 @@ Borland C++ 4.5/5.0 compilation
 3. Change directory to a sample such as minimal, and type
   'make -f makefile.b32'.
 
-Note: the wxWindows library compiles in 16-bit mode (using makefile.bcc),
-but the samples do not link because of the error:
-
-        Segment TEXT_RESOURCE exceeds 64K.
-
-There may or may not be anything we can do about this.
+Note: the wxWindows library and (some) samples compile in 16-bit mode
+using makefile.bcc, but at present the wxWindows resource system is switched
+off in this mode. See issues.txt for details.
 
 Watcom C++ 10.6 compilation
 ---------------------------
@@ -96,8 +94,11 @@ Currently under construction, but so far we have:
 Metrowerks CodeWarrior compilation
 ----------------------------------
 
-Support is currently being added for this compiler by Stefan
-Csomor.
+1. Downloaded and unzip wx200cw.zip.
+2. Load the make_cw.mcp project in wx\src, and compile.
+3. Load the make_cw.mcp project in wx\samples\minimal, and compile.
+   Further project files for samples will be available in due
+   course.
 
 Gnu-Win32 b19/b20/Mingw32 compilation
 -------------------------------------

@@ -2,7 +2,7 @@
 wxWindows 2.0 for Windows Change Log
 ------------------------------------
 
-Alpha 18, December 23nd 1998
+Alpha 18, December 29th 1998
 ----------------------------
 
 - Win16 support working again (VC++ 1.5)
@@ -11,6 +11,9 @@ Alpha 18, December 23nd 1998
   a little work on wxNotebook is still needed.
   Under 16-bit Windows, get assertion when you click
   on a tab.
+- Wrote 16-bit BC++ makefiles: samples don't yet link.
+- Added CodeWarrior support to distribution courtesy
+  of Stefan Csomor.
 
 Alpha 17, November 22nd 1998
 ----------------------------
