@@ -796,8 +796,25 @@ wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
 wxFileType *
 wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
 {
-    wxFAIL_MSG("not implemented (must parse mime.types)");
+    size_t count = m_aExtensions.GetCount();
+    for ( size_t n = 0; n < count; n++ ) {
+        wxString extensions = m_aExtensions[n];
+        while ( !extensions.IsEmpty() ) {
+            wxString field = extensions.BeforeFirst(' ');
+            extensions = extensions.AfterFirst(' ');
 
+            // consider extensions as not being case-sensitive
+            if ( field.IsSameAs(ext, FALSE /* no case */) ) { 
+                // found
+                wxFileType *fileType = new wxFileType;
+                fileType->m_impl->Init(this, n);
+                
+                return fileType;
+            }
+        }
+    }
+
+    // not found
     return NULL;
 }
 
