@@ -550,11 +550,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
         return true;
     }
 
-#ifdef __WXWINCE__
-    name = _strdup(inname);
-#else
-    name = strdup(inname);
-#endif
+    name = wxStrdupA(inname);
 
     // theRGBRecords[] has no names with spaces, and no grey, but a
     // lot of gray...
