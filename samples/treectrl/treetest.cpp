@@ -1016,7 +1016,7 @@ void MyTreeCtrl::OnEndDrag(wxTreeEvent& event)
     if ( itemDst.IsOk() && !ItemHasChildren(itemDst) )
     {
         // copy to the parent then
-        itemDst = GetParent(itemDst);
+        itemDst = GetItemParent(itemDst);
     }
 
     if ( !itemDst.IsOk() )

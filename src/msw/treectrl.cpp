@@ -1349,7 +1349,7 @@ wxTreeItemId wxTreeCtrl::GetSelection() const
     return wxTreeItemId((WXHTREEITEM) TreeView_GetSelection(GetHwnd()));
 }
 
-wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const
+wxTreeItemId wxTreeCtrl::GetItemParent(const wxTreeItemId& item) const
 {
     HTREEITEM hItem;
 

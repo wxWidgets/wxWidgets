@@ -488,14 +488,14 @@ void EditorFrame::OnTreeSel(wxTreeEvent& event)
     if (node)
         PropertiesFrame::Get()->ShowProps(node);
 
-    if (m_TreeCtrl->GetParent(event.GetItem()) == m_TreeCtrl->GetRootItem())
+    if (m_TreeCtrl->GetItemParent(event.GetItem()) == m_TreeCtrl->GetRootItem())
     {
         wxTreeItemId it = event.GetOldItem();
 
         if (it.IsOk() && m_TreeCtrl->GetRootItem() != it)
         {
-            while (m_TreeCtrl->GetParent(it) != m_TreeCtrl->GetRootItem())
-                it = m_TreeCtrl->GetParent(it);
+            while (m_TreeCtrl->GetItemParent(it) != m_TreeCtrl->GetRootItem())
+                it = m_TreeCtrl->GetItemParent(it);
             m_TreeCtrl->Collapse(it);
         }
         RecursivelyExpand(m_TreeCtrl, event.GetItem());
@@ -563,7 +563,7 @@ void EditorFrame::OnToolbar(wxCommandEvent& event)
 void EditorFrame::DeleteSelectedNode()
 {
     XmlTreeData *dt = (XmlTreeData*)
-            (m_TreeCtrl->GetItemData(m_TreeCtrl->GetParent(m_TreeCtrl->GetSelection())));
+            (m_TreeCtrl->GetItemData(m_TreeCtrl->GetItemParent(m_TreeCtrl->GetSelection())));
     wxXmlNode *n = (dt) ? dt->Node : NULL;
 
     m_SelectedNode->GetParent()->RemoveChild(m_SelectedNode);
@@ -579,7 +579,7 @@ void EditorFrame::OnNewNode(wxCommandEvent& event)
     {
         XmlTreeData *pardt = 
             (XmlTreeData*)(m_TreeCtrl->GetItemData(
-                m_TreeCtrl->GetParent(m_TreeCtrl->GetSelection())));
+                m_TreeCtrl->GetItemParent(m_TreeCtrl->GetSelection())));
 
         if (pardt && pardt->Node && pardt->Node != m_Resource->GetRoot())
         {
@@ -683,7 +683,7 @@ void EditorFrame::OnRightClickTree(wxPoint pos)
 
         XmlTreeData *pardt = 
             (XmlTreeData*)(m_TreeCtrl->GetItemData(
-                m_TreeCtrl->GetParent(m_TreeCtrl->GetSelection())));
+                m_TreeCtrl->GetItemParent(m_TreeCtrl->GetSelection())));
         if (pardt && pardt->Node && pardt->Node != m_Resource->GetRoot())
         {
             wxXmlNode *nd = pardt->Node;
@@ -748,7 +748,7 @@ void EditorFrame::OnClipboardAction(wxCommandEvent& event)
             {
             XmlTreeData *pardt = 
                 (XmlTreeData*)(m_TreeCtrl->GetItemData(
-                    m_TreeCtrl->GetParent(m_TreeCtrl->GetSelection())));
+                    m_TreeCtrl->GetItemParent(m_TreeCtrl->GetSelection())));
 
             if (pardt && pardt->Node && pardt->Node != m_Resource->GetRoot())
             {
