@@ -327,8 +327,7 @@ void wxComboBox::DoSetItemClientObject( int n, wxClientData* clientData )
     wxList::compatibility_iterator node = m_clientObjectList.Item( n );
     if (!node) return;
 
-    wxClientData *cd = (wxClientData*) node->GetData();
-    if (cd) delete cd;
+    // wxItemContainer already deletes data for us
 
     node->SetData( (wxObject*) clientData );
 }

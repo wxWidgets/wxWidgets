@@ -162,7 +162,10 @@ END_EVENT_TABLE()
 
 wxComboBox::~wxComboBox()
 {
-   // delete the controls now, don't leave them alive even though they would
+    // delete client objects
+    FreeData();
+
+    // delete the controls now, don't leave them alive even though they would
     // still be eventually deleted by our parent - but it will be too late, the
     // user code expects them to be gone now
     if (m_text != NULL) {
