@@ -244,7 +244,7 @@ bool GSocketGUIFunctionsTableConcrete::OnInit()
   if (!gs_wsock32dll)
       return false;
   gs_WSAAsyncSelect =(WSAAsyncSelectFunc)GetProcAddress(gs_wsock32dll,
-                                                        wxT("WSAAsyncSelect"));
+                                                        "WSAAsyncSelect");
   if (!gs_WSAAsyncSelect)
       return false;
 #else
