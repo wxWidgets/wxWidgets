@@ -52,29 +52,25 @@ MywxCanvasImage::MywxCanvasImage( const wxImage &image, double x, double y, doub
 
 void MywxCanvasImage::OnMouse(wxMouseEvent &event)
 {
-    static bool first=FALSE;
     static int dx=0;
     static int dy=0;
 
     int x = event.GetX();
     int y = event.GetY();
-    if (event.m_leftDown)
+    if (event.LeftDown())
     {   
-        if (!first)
-        {
-           first=TRUE;
-           dx=x;
-           dy=y;
-        }
-        Move(m_area.x+x-dx,m_area.y+y-dy);
+        dx=x;
+        dy=y;
         CaptureMouse();
+    } 
+    else if (event.LeftUp())
+    {
+        ReleaseMouse();
     }
     else if (IsCapturedMouse())
     {
-        ReleaseMouse();
-        first=FALSE;
-        dx=0;
-        dy=0;
+        Move(m_area.x+x-dx,m_area.y+y-dy);
+        m_owner->UpdateNow();
     }
 }
 
@@ -99,7 +95,6 @@ MywxCanvasObjectGroupRef::MywxCanvasObjectGroupRef(double x, double y,wxCanvasOb
 
 void MywxCanvasObjectGroupRef::OnMouse(wxMouseEvent &event)
 {
-    static bool first=FALSE;
     static int dx=0;
     static int dy=0;
 
@@ -107,23 +102,20 @@ void MywxCanvasObjectGroupRef::OnMouse(wxMouseEvent &event)
     int x = m_owner->GetDeviceX( event.GetX());
     int y = m_owner->GetDeviceY( event.GetY());
 
-    if (event.m_leftDown)
+    if (event.LeftDown())
     {   
-        if (!first)
-        {
-           first=FALSE;
-           dx=x;
-           dy=y;
-        }
-        Move(m_x+x-dx,m_y+y-dy);
+        dx=x;
+        dy=y;
         CaptureMouse();
+    } 
+    else if (event.LeftUp())
+    {
+        ReleaseMouse();
     }
     else if (IsCapturedMouse())
     {
-        ReleaseMouse();
-        first=FALSE;
-        dx=0;
-        dy=0;
+        Move(m_x+x-dx,m_y+y-dy);
+        m_owner->UpdateNow();
     }
 }
 
@@ -192,7 +184,7 @@ END_EVENT_TABLE()
 
 MyFrame::MyFrame()
        : wxFrame( (wxFrame *)NULL, -1, "wxCanvas sample",
-                  wxPoint(20,20), wxSize(470,860) )
+                  wxPoint(20,20), wxSize(470,460) )
 {
     wxMenu *file_menu = new wxMenu();
     file_menu->Append( ID_ABOUT, "&About...");
@@ -210,7 +202,7 @@ MyFrame::MyFrame()
 
     m_canvas = new wxCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
 
-    m_canvas->SetArea( 1400, 600 );
+    m_canvas->SetArea( 1000,1000 );
     m_canvas->SetColour( 255, 255, 255 );
 
 
@@ -254,7 +246,6 @@ MyFrame::MyFrame()
     group1->Prepend( new wxCanvasLine( 10,-35,50,190,100,255,0 ) );
     group1->Prepend( new wxCanvasImage( image, 4,38,32,32 ) );
     group1->Prepend( new wxCanvasRect(20,-20,50,170,0,20,240 ) );
-    group1->Prepend( new wxCanvasRect(10,20,104,52,0,240,240 ) );
 
 
     //make another group of wxCanvasObjects
@@ -267,12 +258,13 @@ MyFrame::MyFrame()
     group1->Prepend( m_subref );
 
     //now make two refrences to group1 into root group of the canvas
+/*
     m_ref = new MywxCanvasObjectGroupRef(40,200, group1);
     m_canvas->Prepend( m_ref );
+*/
 
     m_ref2 = new MywxCanvasObjectGroupRef(80,350, group1);
     m_canvas->Prepend( m_ref2 );
-
 
     m_log = new wxTextCtrl( this, -1, "", wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
@@ -306,9 +298,11 @@ void MyFrame::OnTimer( wxTimerEvent &WXUNUSED(event) )
     m_sm2->Move( m_sm2->GetX()+1, m_sm2->GetY() );
     m_sm3->Move( m_sm3->GetX()+1, m_sm3->GetY() );
     m_sm4->Move( m_sm4->GetX()+2, m_sm4->GetY() );
+/*
     m_ref->Move( m_ref->GetPosX()+1, m_ref->GetPosY() );
     m_ref2->Move( m_ref2->GetPosX()+2, m_ref2->GetPosY() );
-
+*/
+    
     wxWakeUpIdle();
 }
 

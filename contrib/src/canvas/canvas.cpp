@@ -1296,7 +1296,9 @@ void wxCanvas::OnMouse(wxMouseEvent &event)
             child_event.m_shiftDown = event.m_shiftDown;
             child_event.m_altDown = event.m_altDown;
             child_event.m_metaDown = event.m_metaDown;
+            
             m_captureMouse->ProcessEvent( child_event );
+            return;
         }
         else
         {
@@ -1334,6 +1336,7 @@ void wxCanvas::OnMouse(wxMouseEvent &event)
                     child_event.SetEventType( wxEVT_MOTION );
                     child_event.SetEventObject( obj );
                 }
+                
                 obj->ProcessEvent( child_event );
                 return;
             }
@@ -1355,6 +1358,46 @@ void wxCanvas::OnMouse(wxMouseEvent &event)
 
             m_lastMouse = (wxCanvasObject*) NULL;
             return;
+        }
+    }
+    else
+    {
+        if (m_captureMouse) //no matter what go to this one
+        {
+            wxMouseEvent child_event( event.GetEventType() );
+            child_event.SetEventObject(m_captureMouse);
+            child_event.m_x = x - m_captureMouse->GetX();
+            child_event.m_y = y - m_captureMouse->GetY();
+            child_event.m_leftDown = event.m_leftDown;
+            child_event.m_rightDown = event.m_rightDown;
+            child_event.m_middleDown = event.m_middleDown;
+            child_event.m_controlDown = event.m_controlDown;
+            child_event.m_shiftDown = event.m_shiftDown;
+            child_event.m_altDown = event.m_altDown;
+            child_event.m_metaDown = event.m_metaDown;
+            m_captureMouse->ProcessEvent( child_event );
+        }
+        else
+        {
+            wxCanvasObject *obj = m_root->IsHitObject(x,y,0);
+
+            if (obj && !obj->IsControl())
+            {
+                wxMouseEvent child_event( event.GetEventType() );
+                child_event.SetEventObject( obj );
+                child_event.m_x = x - obj->GetX();
+                child_event.m_y = y - obj->GetY();
+                child_event.m_leftDown = event.m_leftDown;
+                child_event.m_rightDown = event.m_rightDown;
+                child_event.m_middleDown = event.m_middleDown;
+                child_event.m_controlDown = event.m_controlDown;
+                child_event.m_shiftDown = event.m_shiftDown;
+                child_event.m_altDown = event.m_altDown;
+                child_event.m_metaDown = event.m_metaDown;
+                
+                obj->ProcessEvent( child_event );
+                return;
+            }
         }
     }
 
