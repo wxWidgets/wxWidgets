@@ -114,9 +114,10 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 #endif
                                              XmNfontList, fontList,
                                              XmNlabelString, text(),
-// XmNframeChildType is not in Motif 1.2.
+// XmNframeChildType is not in Motif 1.2, nor in Lesstif,
+// if it was compiled with 1.2 compatibility
 // TODO: check this still looks OK for Motif 1.2.
-#if (XmVersion > 1200) || defined(LESSTIF_VERSION)
+#if (XmVersion > 1200)
                                              XmNframeChildType, XmFRAME_TITLE_CHILD,
 #endif
                                              XmNchildVerticalAlignment, XmALIGNMENT_CENTER,
