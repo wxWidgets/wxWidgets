@@ -987,8 +987,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
         m_current->SetHilight( TRUE );
     }
 
-    Refresh();
-    AdjustMyScrollbars();
+    m_dirty = TRUE;
 
     return m_anchor;
 }
