@@ -60,4 +60,5 @@ AC_OUTPUT([
             utils/Makefile
             utils/wxrc/Makefile
             utils/wxrcedit/Makefile
+            utils/convertrc/Makefile
          ])

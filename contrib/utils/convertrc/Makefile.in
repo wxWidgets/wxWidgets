@@ -1,0 +1,11 @@
+# $Id$
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../../..
+program_dir = contrib/utils/convertrc
+
+PROGRAM=convert
+
+OBJECTS=convert.o rc2xml.o rc2wxr.o wxr2xml.o
+
+include $(top_builddir)/src/makeprog.env

@@ -8,12 +8,12 @@
 #include "wx/file.h"
 #include "stdio.h"
 
-class wxRC2WXR : public wxObject  
+class rc2wxr : public wxObject  
 {
 public:
-wxRC2WXR();
-~wxRC2WXR();
-void Open(wxString wxrfile, wxString rcfile);
+rc2wxr();
+~rc2wxr();
+void Convert(wxString wxrfile, wxString rcfile);
 
 private:
 wxFile m_rc;
@@ -44,28 +44,5 @@ void ParseCtrlButton(wxString label, wxString varname);
 
 };
 
-class wxFileProgressDlg : public wxDialog
-{
-public:
-	void UpdateProgress(wxFile *f);
-
-wxFileProgressDlg();
-virtual ~wxFileProgressDlg();
-
-protected:
-wxGauge *m_pProgress;
-wxStaticText *m_pCompleteLabel;
-
-  DECLARE_EVENT_TABLE()
-
-};
-class GenerateBitmapSrc : public wxObject  
-{
-public:
-	bool Create(wxString imfile, wxString srcfile,wxString varname);
-	GenerateBitmapSrc();
-	virtual ~GenerateBitmapSrc();
-
-};
 
 #endif
