@@ -319,7 +319,9 @@ This can be the simplest way of drawing bitmaps on a window.
 \func{void}{DrawLine}{\param{wxCoord}{ x1}, \param{wxCoord}{ y1}, \param{wxCoord}{ x2}, \param{wxCoord}{ y2}}
 
 Draws a line from the first point to the second. The current pen is used
-for drawing the line.
+for drawing the line. Note that the point $(x2, y2)$ is {\emph not} part of the
+line and is not drawn by this function (this is consistent with the behaviour
+of many other toolkits).
 
 \membersection{wxDC::DrawLines}\label{wxdcdrawlines}
 
