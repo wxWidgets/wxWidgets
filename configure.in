@@ -2324,12 +2324,36 @@ dnl check the sizes of integral types (give some reasonable default values for
 dnl cross-compiling)
 dnl   defines the size of certain types of variables in SIZEOF_<TYPE>
 AC_CHECK_SIZEOF(char, 1)
-AC_CHECK_SIZEOF(wchar_t, 4)
 AC_CHECK_SIZEOF(short, 2)
 AC_CHECK_SIZEOF(int *, 4)
 AC_CHECK_SIZEOF(int, 4)
 AC_CHECK_SIZEOF(long, 4)
 AC_CHECK_SIZEOF(long long, 0)
+
+dnl we have to do it ourselves because SGI/Irix's stdio.h does not include
+dnl wchar_t an AC_CHECK_SIZEOF only includes stdio.h
+AC_CACHE_CHECK([size of wchar_t], wx_cv_sizeof_wchar_t,
+[
+    AC_TRY_RUN(
+        [
+	    #include <wchar.h>
+	    #include <stdio.h>
+	    int main()
+	    {
+            FILE *f=fopen("conftestval", "w");
+            if (!f) exit(1);
+	    fprintf(f, "%i", sizeof(wchar_t));
+	    exit(0);
+	    }
+        ],
+	wx_cv_sizeof_wchar_t=`cat conftestval`,
+	wx_cv_sizeof_wchar_t=0,
+	wx_cv_sizeof_wchar_t=4
+	)
+])
+
+AC_DEFINE_UNQUOTED(wxSIZEOF_WCHAR_T, $wx_cv_sizeof_wchar_t)
+
 
 dnl for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)
 WX_C_BIGENDIAN
