@@ -50,6 +50,12 @@ wxControlContainer::wxControlContainer(wxWindow *winParent)
 
 void wxControlContainer::SetLastFocus(wxWindow *win)
 {
+    // the panel itself should never get the focus at all but if it does happen
+    // temporarily (as it seems to do under wxGTK), at the very least don't
+    // forget our previous m_winLastFocused
+    if ( win == m_winParent )
+        return;
+
     // if we're setting the focus
     if ( win )
     {
@@ -70,6 +76,17 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
     }
 
     m_winLastFocused = win;
+
+    if ( win )
+    {
+        wxLogTrace(_T("focus"), _T("Set last focus to %s(%s)"),
+                   win->GetClassInfo()->GetClassName(),
+                   win->GetLabel().c_str());
+    }
+    else
+    {
+        wxLogTrace(_T("focus"), _T("No more last focus"));
+    }
 }
 
 // ----------------------------------------------------------------------------

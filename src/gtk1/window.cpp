@@ -270,43 +270,6 @@ extern bool g_mainThreadLocked;
 #else
 #   define DEBUG_MAIN_THREAD
 #endif
-
-static gint gtk_debug_focus_in_callback( GtkWidget *WXUNUSED(widget),
-                                         GdkEvent *WXUNUSED(event),
-                                         const wxChar *WXUNUSED(name) )
-{
-/*
-    static bool s_done = FALSE;
-    if ( !s_done )
-    {
-        wxLog::AddTraceMask("focus");
-        s_done = TRUE;
-    }
-    wxLogTrace(wxT("FOCUS NOW AT: %s"), name);
-*/
-
-    return FALSE;
-}
-
-void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window )
-{
-    // suppress warnings about gtk_debug_focus_in_callback being unused with
-    // this "if ( 0 )"
-    if ( 0 )
-    {
-        wxString tmp = name;
-        tmp += wxT(" FROM ");
-        tmp += window;
-
-        wxChar *s = new wxChar[tmp.Length()+1];
-
-        wxStrcpy( s, tmp );
-
-        gtk_signal_connect( GTK_OBJECT(widget), "focus_in_event",
-          GTK_SIGNAL_FUNC(gtk_debug_focus_in_callback), (gpointer)s );
-    }
-}
-
 #else
 #define DEBUG_MAIN_THREAD
 #endif // Debug
@@ -383,15 +346,6 @@ wxWindow *wxFindFocusedChild(wxWindowGTK *win)
     }
 
     return (wxWindow *)NULL;
-}
-
-// Returns toplevel grandparent of given window:
-static wxWindowGTK* wxGetTopLevelParent(wxWindowGTK *win)
-{
-    wxWindowGTK *p = win;
-    while (p && !p->IsTopLevel())
-         p = p->GetParent();
-    return p;
 }
 
 static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
@@ -1749,6 +1703,21 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
 // "focus_in_event"
 //-----------------------------------------------------------------------------
 
+// send the wxChildFocusEvent and wxFocusEvent, common code of
+// gtk_window_focus_in_callback() and SetFocus()
+static bool DoSendFocusEvents(wxWindow *win)
+{
+    // Notify the parent keeping track of focus for the kbd navigation
+    // purposes that we got it.
+    wxChildFocusEvent eventChildFocus(win);
+    (void)win->GetEventHandler()->ProcessEvent(eventChildFocus);
+
+    wxFocusEvent eventFocus(wxEVT_SET_FOCUS, win->GetId());
+    eventFocus.SetEventObject(win);
+
+    return win->GetEventHandler()->ProcessEvent(eventFocus);
+}
+
 static gint gtk_window_focus_in_callback( GtkWidget *widget,
                                           GdkEvent *WXUNUSED(event),
                                           wxWindow *win )
@@ -1781,11 +1750,6 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
 #if 0
     printf( "OnSetFocus 2 from %s\n", win->GetName().c_str() );
 #endif
-
-    // Notify the parent keeping track of focus for the kbd navigation
-    // purposes that we got it.
-    wxChildFocusEvent eventFocus(win);
-    (void)win->GetEventHandler()->ProcessEvent(eventFocus);
 
 #ifdef HAVE_XIM
     if (win->m_ic)
@@ -1825,11 +1789,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
         //    return TRUE;
     }
 
-
-    wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
-    event.SetEventObject( win );
-
-    if (win->GetEventHandler()->ProcessEvent( event ))
+    if ( DoSendFocusEvents(win) )
     {
        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
        return TRUE;
@@ -2906,15 +2866,6 @@ void wxWindowGTK::OnInternalIdle()
         g_activeFrameLostFocus = FALSE;
     }
     
-    if (g_delayedFocus == this)
-    {
-        if (GTK_WIDGET_REALIZED(m_widget))
-        {
-            gtk_widget_grab_focus( m_widget );
-            g_delayedFocus = NULL;
-        }
-    }
-
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
@@ -3281,9 +3232,21 @@ void wxWindowGTK::SetFocus()
         if (GTK_WIDGET_CAN_FOCUS(m_widget) && !GTK_WIDGET_HAS_FOCUS (m_widget) )
         {
             if (!GTK_WIDGET_REALIZED(m_widget))
+            {
+                wxLogTrace(_T("focus"),
+                           _T("Delaying setting focus to %s(%s)\n"),
+                           GetClassInfo()->GetClassName(), GetLabel().c_str());
+
                 g_delayedFocus = this;
+            }
             else
+            {
+                wxLogTrace(_T("focus"),
+                           _T("Setting focus to %s(%s)\n"),
+                           GetClassInfo()->GetClassName(), GetLabel().c_str());
+
                 gtk_widget_grab_focus (m_widget);
+            }
         }
         else if (GTK_IS_CONTAINER(m_widget))
         {
@@ -3294,6 +3257,8 @@ void wxWindowGTK::SetFocus()
            // ?
         }
     }
+
+    (void)DoSendFocusEvents(this);
 }
 
 bool wxWindowGTK::AcceptsFocus() const

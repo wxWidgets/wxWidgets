@@ -92,12 +92,17 @@ public:
     long          m_fsSaveGdkFunc, m_fsSaveGdkDecor;
     long          m_fsSaveFlag;
     wxRect        m_fsSaveFrame;
-    
-    long          m_gdkFunc, m_gdkDecor; // m_windowStyle translated to GDK's terms
+
+    // m_windowStyle translated to GDK's terms
+    long          m_gdkFunc,
+                  m_gdkDecor;
 
 protected:
     // common part of all ctors
     void Init();
+
+    // focus event handler
+    void OnSetFocus(wxFocusEvent& event);
 
     // override wxWindow methods to take into account tool/menu/statusbars
     virtual void DoSetSize(int x, int y,
@@ -109,6 +114,8 @@ protected:
 
     // is the frame currently iconized?
     bool m_isIconized;
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif // __GTKTOPLEVELH__

@@ -56,16 +56,6 @@ extern wxList         wxPendingDelete;
 extern int            g_openDialogs;
 extern wxWindowGTK   *g_delayedFocus;
 
-// ----------------------------------------------------------------------------
-// debug
-// ----------------------------------------------------------------------------
-
-#ifdef __WXDEBUG__
-
-extern void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window );
-
-#endif
-
 //-----------------------------------------------------------------------------
 // "focus" from m_window
 //-----------------------------------------------------------------------------
@@ -155,18 +145,6 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WX
 }
 
 //-----------------------------------------------------------------------------
-// local code
-//-----------------------------------------------------------------------------
-
-static wxWindow* wxGetTopLevelParent(wxWindow *win)
-{
-    wxWindow *p = win;
-    while (p && !p->IsTopLevel())
-         p = p->GetParent();
-    return p;
-}
-
-//-----------------------------------------------------------------------------
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
@@ -174,7 +152,8 @@ static wxWindow* wxGetTopLevelParent(wxWindow *win)
 // so we do this directly after realization
 
 static void
-gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxTopLevelWindowGTK *win )
+gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
+                             wxTopLevelWindowGTK *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -194,49 +173,10 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxTopLevelWindowGTK *
 
     // reset the icon
     wxIconBundle iconsOld = win->GetIcons();
-    wxIcon tmp = iconsOld.GetIcon( -1 ); // operator != is not-const
-    if ( tmp != wxNullIcon )
+    if ( iconsOld.GetIcon(-1).Ok() )
     {
-        // wxIconBundle icon( iconOld );
         win->SetIcon( wxNullIcon );
         win->SetIcons( iconsOld );
-    }
-
-    // We need to set the focus to some child. Either, this
-    // has been done already or will be done in the next
-    // idle cycle, or we will set it ourselves.
-
-    if (g_delayedFocus)
-    {
-        if (wxGetTopLevelParent(g_delayedFocus))
-            return;
-        else
-            g_delayedFocus = NULL;
-    }
-        
-    wxWindow *currentFocus = wxWindow::FindFocus();
-    if (currentFocus)
-    {
-        // I am not sure if this ever can happen,
-        // since the TLW is just about to get
-        // created and its children probably don't
-        // have any focus.
-        if (wxGetTopLevelParent(currentFocus) == win)
-            return;
-    }
-
-    // We set the focus to the child that accepts the focus.
-    wxWindowList::Node *node = win->GetChildren().GetFirst();
-    while (node)
-    {
-        wxWindow *child = node->GetData();
-        if (child->AcceptsFocus())
-        {
-            child->SetFocus();
-            break;
-        }
-        
-        node = node->GetNext();
     }
 }
 
@@ -307,6 +247,10 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowGTK itself
 // ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(wxTopLevelWindowGTK, wxTopLevelWindowBase)
+    EVT_SET_FOCUS(wxTopLevelWindowGTK::OnSetFocus)
+END_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
 // InsertChild for wxTopLevelWindowGTK
@@ -388,7 +332,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     wxTopLevelWindows.Append( this );
 
     m_needParent = FALSE;
-    
+
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
@@ -426,10 +370,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     if (!name.IsEmpty())
         gtk_window_set_wmclass( GTK_WINDOW(m_widget), name.mb_str(), name.mb_str() );
 
-#ifdef __WXDEBUG__
-    debug_focus_in( m_widget, wxT("wxTopLevelWindowGTK::m_widget"), name );
-#endif
-
     gtk_window_set_title( GTK_WINDOW(m_widget), title.mbc_str() );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
@@ -450,18 +390,10 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
                 GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
 #endif
 
-#ifdef __WXDEBUG__
-    debug_focus_in( m_mainWidget, wxT("wxTopLevelWindowGTK::m_mainWidget"), name );
-#endif
-
     // m_wxwindow only represents the client area without toolbar and menubar
     m_wxwindow = gtk_pizza_new();
     gtk_widget_show( m_wxwindow );
     gtk_container_add( GTK_CONTAINER(m_mainWidget), m_wxwindow );
-
-#ifdef __WXDEBUG__
-    debug_focus_in( m_wxwindow, wxT("wxTopLevelWindowGTK::m_wxwindow"), name );
-#endif
 
     // we donm't allow the frame to get the focus as otherwise
     // the frame will grab it at arbitrary focus changes
@@ -477,7 +409,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
     if ((m_x != -1) || (m_y != -1))
         gtk_widget_set_uposition( m_widget, m_x, m_y );
-        
+
     gtk_window_set_default_size( GTK_WINDOW(m_widget), m_width, m_height );
 
     //  we cannot set MWM hints and icons before the widget has
@@ -546,7 +478,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 {
     m_isBeingDeleted = TRUE;
-    
+
     // it may also be GtkScrolledWindow in the case of an MDI child
     if (GTK_IS_WINDOW(m_widget))
     {
@@ -830,9 +762,31 @@ void wxTopLevelWindowGTK::OnInternalIdle()
         return;
     }
 
+    // set the focus if not done yet and if we can already do it
+    if ( GTK_WIDGET_REALIZED(m_wxwindow) )
+    {
+        if ( g_delayedFocus && wxGetTopLevelParent(g_delayedFocus) == this )
+        {
+            g_delayedFocus->SetFocus();
+            g_delayedFocus = NULL;
+        }
+    }
+
     wxWindow::OnInternalIdle();
 }
 
+void wxTopLevelWindowGTK::OnSetFocus(wxFocusEvent& event)
+{
+#if 0
+    if ( !g_delayedFocus || wxGetTopLevelParent(g_delayedFocus) != this )
+    {
+        // let the base class version set the focus to the first child which
+        // accepts it
+        event.Skip();
+    }
+    //else: the focus will be really set from OnInternalIdle() later
+#endif
+}
 
 // ----------------------------------------------------------------------------
 // frame title/icon
