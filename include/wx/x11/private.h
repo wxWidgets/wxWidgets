@@ -13,6 +13,7 @@
 #define _WX_PRIVATE_H_
 
 #include "wx/defs.h"
+#include "wx/hashmap.h"
 #include "wx/utils.h"
 #if defined( __cplusplus ) && defined( __VMS )
 #pragma message disable nosimpint
@@ -51,6 +52,12 @@ class wxWindow;
 // we maintain a hash table which contains the mapping from Widget to wxWindow
 // corresponding to the window for this widget
 // ----------------------------------------------------------------------------
+
+WX_DECLARE_HASH_MAP(Window, wxWindow *, wxIntegerHash, wxIntegerEqual, wxWindowHash);
+
+// these hashes are defined in app.cpp
+extern wxWindowHash *wxWidgetHashTable;
+extern wxWindowHash *wxClientWidgetHashTable;
 
 extern void wxDeleteWindowFromTable(Window w);
 extern wxWindow *wxGetWindowFromTable(Window w);

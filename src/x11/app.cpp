@@ -46,8 +46,8 @@
 
 extern wxList wxPendingDelete;
 
-wxHashTable *wxWidgetHashTable = NULL;
-wxHashTable *wxClientWidgetHashTable = NULL;
+wxWindowHash *wxWidgetHashTable = NULL;
+wxWindowHash *wxClientWidgetHashTable = NULL;
 
 static bool g_showIconic = FALSE;
 static wxSize g_initialSize = wxDefaultSize;
@@ -203,8 +203,8 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
 
-    wxWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
-    wxClientWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
+    wxWidgetHashTable = new wxWindowHash;
+    wxClientWidgetHashTable = new wxWindowHash;
 
     return true;
 }

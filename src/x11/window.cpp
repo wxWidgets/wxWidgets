@@ -62,8 +62,6 @@
 // global variables for this module
 // ----------------------------------------------------------------------------
 
-extern wxHashTable *wxWidgetHashTable;
-extern wxHashTable *wxClientWidgetHashTable;
 static wxWindow* g_captureWindow = NULL;
 static GC g_eraseGC;
 
@@ -1296,69 +1294,67 @@ void wxWindowX11::OnInternalIdle()
 // function which maintain the global hash table mapping Widgets to wxWidgets
 // ----------------------------------------------------------------------------
 
-bool wxAddWindowToTable(Window w, wxWindow *win)
+static bool DoAddWindowToTable(wxWindowHash *hash, Window w, wxWindow *win)
 {
-    wxWindow *oldItem = NULL;
-    if ((oldItem = (wxWindow *)wxWidgetHashTable->Get ((long) w)))
+    if ( !hash->insert(wxWindowHash::value_type(w, win)).second )
     {
-        wxLogDebug( wxT("Widget table clash: new widget is %ld, %s"),
-                    (long)w, win->GetClassInfo()->GetClassName());
+        wxLogDebug( wxT("Widget table clash: new widget is 0x%08x, %s"),
+                    (unsigned int)w, win->GetClassInfo()->GetClassName());
         return FALSE;
     }
-
-    wxWidgetHashTable->Put((long) w, win);
 
     wxLogTrace( wxT("widget"), wxT("XWindow 0x%08x <-> window %p (%s)"),
                 (unsigned int) w, win, win->GetClassInfo()->GetClassName());
 
     return TRUE;
+}
+
+static inline wxWindow *DoGetWindowFromTable(wxWindowHash *hash, Window w)
+{
+    wxWindowHash::iterator i = hash->find(w);
+    return i == hash->end() ? NULL : i->second;
+}
+
+static inline void DoDeleteWindowFromTable(wxWindowHash *hash, Window w)
+{
+    wxLogTrace( wxT("widget"), wxT("XWindow 0x%08x deleted"), (unsigned int) w);
+
+    hash->erase(w);
+}
+
+// ----------------------------------------------------------------------------
+// public wrappers
+// ----------------------------------------------------------------------------
+
+bool wxAddWindowToTable(Window w, wxWindow *win)
+{
+    return DoAddWindowToTable(wxWidgetHashTable, w, win);
 }
 
 wxWindow *wxGetWindowFromTable(Window w)
 {
-    return (wxWindow *)wxWidgetHashTable->Get((long) w);
+    return DoGetWindowFromTable(wxWidgetHashTable, w);
 }
 
 void wxDeleteWindowFromTable(Window w)
 {
-    wxWidgetHashTable->Delete((long)w);
+    DoDeleteWindowFromTable(wxWidgetHashTable, w);
 }
-
-// ----------------------------------------------------------------------------
-// function which maintain the global hash table mapping client widgets
-// ----------------------------------------------------------------------------
 
 bool wxAddClientWindowToTable(Window w, wxWindow *win)
 {
-    wxWindow *oldItem = NULL;
-    if ((oldItem = (wxWindow *)wxClientWidgetHashTable->Get ((long) w)))
-    {
-        wxLogDebug( wxT("Client window table clash: new window is %ld, %s"),
-                    (long)w, win->GetClassInfo()->GetClassName());
-        return FALSE;
-    }
-
-    wxClientWidgetHashTable->Put((long) w, win);
-
-    wxLogTrace( wxT("widget"), wxT("XWindow 0x%08x <-> window %p (%s)"),
-                (unsigned int) w, win, win->GetClassInfo()->GetClassName());
-
-    return TRUE;
+    return DoAddWindowToTable(wxClientWidgetHashTable, w, win);
 }
 
 wxWindow *wxGetClientWindowFromTable(Window w)
 {
-    return (wxWindow *)wxClientWidgetHashTable->Get((long) w);
+    return DoGetWindowFromTable(wxClientWidgetHashTable, w);
 }
 
 void wxDeleteClientWindowFromTable(Window w)
 {
-    wxClientWidgetHashTable->Delete((long)w);
+    DoDeleteWindowFromTable(wxClientWidgetHashTable, w);
 }
-
-// ----------------------------------------------------------------------------
-// add/remove window from the table
-// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // X11-specific accessors
