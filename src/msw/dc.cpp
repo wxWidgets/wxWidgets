@@ -685,6 +685,10 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         // about it, may be use MAKEROP4(SRCCOPY, DSTINVERT) twice? Or create a
         // copy of the bitmap with the transparent part replaced with black
         // pixels?
+
+        // GRG: now this works regardless of what the source bitmap
+        //      contains in the area which is to be transparent.
+        //
         bool ok = ::MaskBlt(GetHdc(), x, y, width, height,
                             hdcMem, 0, 0,
                             hbmpMask, 0, 0,
@@ -696,8 +700,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         {
             // VZ: this is incorrect, Blit() doesn't (and can't) draw
             //     transparently, but it's still better than nothing at all
-
-            // GRG: Blit() *should* draw transparently when there is a mask.
+            // GRG: Blit() *should* draw transparently when there is a mask
 
             // Rather than reproduce wxDC::Blit, let's do it at the wxWin API level
             wxMemoryDC memDC;
@@ -1339,7 +1342,6 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
            return FALSE;
     }
 
-
     bool success;
 
     if (useMask)
@@ -1369,6 +1371,11 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         // we want the part of the image corresponding to the mask to be
         // transparent, i.e. do PATCOPY there and apply dwRop elsewhere
 
+        // GRG: PATCOPY is not transparent, as can be seen when blitting
+        //      over a pattern: the 'transparent' area would be filled
+        //      with the selected colour. We should use NOP instead, or
+        //      do MaskBlt + BitBlt.
+        //
         success = ::MaskBlt(GetHdc(), xdest, ydest, width, height,
                             GetHdcOf(*source), xsrc, ysrc,
                             hbmpMask, 0, 0,
