@@ -1,37 +1,34 @@
 wxMotif TODO
 ------------
 
-Updated: 16/10/98
+Updated: 20/10/98
 
          -------------------------------o-------------------------
 
+General comment: see the following site for useful Motif widgets.
+ftp://ftp.x.org/contrib/widgets/motif
+
+Also, grep for TODO comments in source.
+
 High Priority
 -------------
-
-- wxScreenDC
-
-- Extra wxBitmap formats. What about XPMs, can we assume
-  libxpm exists and use that?
 
 - Work out why XFreeFont in font.cpp produces a segv. This is
   currently commented out, which presumably causes a memory leak.
 
 - Also work out why wxWindow::SetFont causes the widget to be shrunk
-  to fit its text.
+  to fit its text, in dialogs. Uncomment the SetFont implementation and pop
+  up a dialog, e.g. an About box. Widgets are arranged
+  incorrectly. Seems to be OK for non-dialog panels, once the
+  size has been restored after the font setting.
 
-- Bitmap versions of widgets (wxBitmapButton etc.)
+- Colour setting in widgets.
 
-- wxRadioBox
+- Implementation of OnEraseBackground.
 
-- wxRadioButton
-
-- wxComboBox: use combobox.c code as bundled in wxWin 1.68
-
-- wxGauge: use xmgauge as per wxWin 1.68
+- wxBitmapCheckBox, wxBitmapRadioButton
 
 - wxSpinButton
-
-- wxSlider
 
 - wxTextCtrl text file loading and saving.
 
@@ -39,19 +36,17 @@ High Priority
   other toolkits that don't have a native control. Perhaps use wxTab as a
   starting point.
 
-- MDI classes: use existing Motif widgets for this.
+- Complete the MDI implementation. Could eventually alter the MDI
+  widgets to be more Windows-like -- currently it's half-hearted.
 
-- Dialogs e.g. wxFileSelector.
-  Some others need tidying, such as the colour and font selectors.
+- Tidy dialogs such as the colour and font selectors.
 
-- Use generic wxTreeCtrl, wxListCtrl: enhance these.
+- Use generic wxTreeCtrl, wxListCtrl: debug and enhance these.
 
 - Write a better generic wxToolBar class than wxToolBarSimple.
   Alternatively, write a toolbar using Motif as described here:
   http://www.motifzone.com/tmd/articles/Kurt_Huhner/jun96.html.
   This article also explains how to implement tooltips.
-
-- Colour and font setting in widgets.
 
 - wxSystemSettings
 
@@ -59,12 +54,24 @@ High Priority
 
 - wxThread (hopefully, similar to wxGTK)
 
-- Write makefiles for all samples.
+- Miscellaneous events.
+
+- Write makefiles for all samples and utilities.
 
 - Create some samples for testing.
 
 Low Priority
 ------------
+
+- Better makefile system that can put objects in different dirs.
+  Use wxGTK config system? It's really complex to debug and
+  doesn't offer a way of compiling apps outside the wxWin
+  hierarchy.
+
+- Extra wxBitmap formats: PNG, BMP. Could use old wxWin 1.68
+  wxImage code (derived from XV) for BMP/GIF but it's very bloated. However,
+  when implemented as extra bitmap handlers, the code won't be linked
+  unless needed.
 
 - Print/preview framework in print.cpp (see wxGTK).
 
@@ -92,11 +99,11 @@ Low Priority
 
 - wxCheckBoxList
 
-- Write generic wxDirDialog (directory selector).
+- Write generic wxDirDialog (directory selector)
 
-- Use native Motif dialogs for wxMessageBox.
+- Use native Motif dialogs for wxMessageBox
 
 - Miscellaneous classes e.g. wxJoystick (identical to GTK's one for
   Linux)
 
-
+- Blit scaling
