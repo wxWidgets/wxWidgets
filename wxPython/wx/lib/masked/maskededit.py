@@ -50,7 +50,7 @@
 # o wxTimeCtrl -> TimeCtrl
 #
 
-'''\
+"""\
 ====================
 Masked Edit Overview
 ====================
@@ -249,7 +249,7 @@ decimalChar
 
   Eg::
 
-        formatcodes = ',', groupChar="'"                   allows  12'345.34
+        formatcodes = ',', groupChar='\''                  allows  12'345.34
         formatcodes = ',', groupChar='.', decimalChar=','  allows  12.345,34
 
   (These are control-level parameters.)
@@ -546,7 +546,7 @@ use either of the following::
 If not specified as a keyword argument, the default controlType is
 controlTypes.TEXT.
 
-'''
+"""
 
 """
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2892,9 +2892,9 @@ class MaskedEditMixin:
             field = self._FindField(pos)
 
 ##            dbg("key ='%s'" % chr(key))
-##            if chr(key) == ' ':
+            if chr(key) == ' ':
 ##                dbg('okSpaces?', field._okSpaces)
-##                pass
+                pass
 
             char = chr(key) # (must work if we got this far)
 
@@ -4434,9 +4434,16 @@ class MaskedEditMixin:
 
 
             # if entire field is selected or position is at end and field is not full,
-            # or if allowed to right-insert at any point in field and field is not full and cursor is not at a fillChar:
+            # or if allowed to right-insert at any point in field and field is not full and cursor is not at a fillChar
+            # or the field is a singleton integer field and is currently 0 and we're at the end:
             if( (sel_start, sel_to) == field._extent
-                or (pos == end and input_len < field_len)):
+                or (pos == end and ((input_len < field_len)
+                                     or (field_len == 1
+                                         and input_len == field_len
+                                         and field._isInt
+                                         and value[end-1] == '0'
+                                         )
+                                    ) ) ):
                 pos = end - 1
 ##                dbg('pos = end - 1 = ', pos, 'right_insert? 1')
                 right_insert = True
@@ -4476,6 +4483,7 @@ class MaskedEditMixin:
 ##                dbg("checking appropriate regex's")
                 value = self._eraseSelection(self._GetValue())
                 if right_insert:
+                    # move the position to the right side of the insertion:
                     at = pos+1
                 else:
                     at = pos
@@ -4873,15 +4881,15 @@ class MaskedEditMixin:
             fstr = text[start:end]
             erasable_chars = [field._fillChar, ' ']
 
-            if field._padZero:
+            # if zero padding field, or a single digit, and currently a value of 0, allow erasure of 0:
+            if field._padZero or (field._isInt and (end - start == 1) and fstr[0] == '0'):
                 erasable_chars.append('0')
 
             erased = ''
 ####            dbg("fstr[0]:'%s'" % fstr[0])
 ####            dbg('field_index:', field._index)
 ####            dbg("fstr[0] in erasable_chars?", fstr[0] in erasable_chars)
-####            dbg("self._signOk and field._index == 0 and fstr[0] in ('-','(')?",
-##                 self._signOk and field._index == 0 and fstr[0] in ('-','('))
+####            dbg("self._signOk and field._index == 0 and fstr[0] in ('-','(')?", self._signOk and field._index == 0 and fstr[0] in ('-','('))
             if fstr[0] in erasable_chars or (self._signOk and field._index == 0 and fstr[0] in ('-','(')):
                 erased = fstr[0]
 ####                dbg('value:      "%s"' % text)
