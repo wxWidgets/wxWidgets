@@ -33,6 +33,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/tipwin.h"
+#include "wx/timer.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -50,8 +51,6 @@ static const wxCoord TEXT_MARGIN_Y = 3;
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxTipWindow, wxFrame)
-    EVT_PAINT(wxTipWindow::OnPaint)
-
     EVT_LEFT_DOWN(wxTipWindow::OnMouseClick)
     EVT_RIGHT_DOWN(wxTipWindow::OnMouseClick)
     EVT_MIDDLE_DOWN(wxTipWindow::OnMouseClick)
@@ -59,20 +58,48 @@ BEGIN_EVENT_TABLE(wxTipWindow, wxFrame)
     EVT_ACTIVATE(wxTipWindow::OnActivate)
 END_EVENT_TABLE()
 
+// Viewer window to put in the frame
+class wxTipWindowView: public wxWindow
+{
+public:
+    wxTipWindowView(wxWindow *parent);
+
+    // event handlers
+    void OnPaint(wxPaintEvent& event);
+    void OnMouseClick(wxMouseEvent& event);
+    void OnKillFocus(wxFocusEvent& event);
+
+    // calculate the client rect we need to display the text
+    void Adjust(const wxString& text, wxCoord maxLength);
+
+    long m_creationTime;
+
+  DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxTipWindowView, wxWindow)
+    EVT_PAINT(wxTipWindowView::OnPaint)
+    EVT_LEFT_DOWN(wxTipWindowView::OnMouseClick)
+    EVT_RIGHT_DOWN(wxTipWindowView::OnMouseClick)
+    EVT_MIDDLE_DOWN(wxTipWindowView::OnMouseClick)
+    EVT_KILL_FOCUS(wxTipWindowView::OnKillFocus)
+END_EVENT_TABLE()
+
+
 // ----------------------------------------------------------------------------
 // wxTipWindow
 // ----------------------------------------------------------------------------
 
 wxTipWindow::wxTipWindow(wxWindow *parent,
                          const wxString& text,
-                         wxCoord maxLength)
+                         wxCoord maxLength, wxTipWindow** windowPtr)
            : wxFrame(parent, -1, _T(""),
                      wxDefaultPosition, wxDefaultSize,
                      wxNO_BORDER | wxFRAME_FLOAT_ON_PARENT)
 {
     // set colours
     SetForegroundColour(*wxBLACK);
-#if !defined(__WXPM__) && !defined(__WXMAC__)
+#if !defined(__WXPM__)
     SetBackgroundColour(wxColour(0xc3ffff));
 #else
     // What is 0xc3ffff, try some legable documentation for those of us who don't memorize hex codes??
@@ -83,15 +110,62 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     wxGetMousePosition(&x, &y);
     Move(x, y + 20);
 
-    Adjust(text, maxLength);
+    wxTipWindowView* tipWindowView = new wxTipWindowView(this);
+    tipWindowView->Adjust(text, maxLength);
 
-    SetFocus();
+    m_windowPtr = windowPtr;
 
     Show(TRUE);
+    tipWindowView->SetFocus();
 }
 
-void wxTipWindow::Adjust(const wxString& text, wxCoord maxLength)
+wxTipWindow::~wxTipWindow()
 {
+    if (m_windowPtr)
+    {
+        *m_windowPtr = NULL;
+    }
+}
+
+void wxTipWindow::OnMouseClick(wxMouseEvent& event)
+{
+    Close();
+}
+
+void wxTipWindow::OnActivate(wxActivateEvent& event)
+{
+    if (!event.GetActive())
+        Close();
+}
+
+void wxTipWindow::OnKillFocus(wxFocusEvent& event)
+{
+    Close();
+}
+
+// ----------------------------------------------------------------------------
+// wxTipWindowView
+// ----------------------------------------------------------------------------
+
+wxTipWindowView::wxTipWindowView(wxWindow *parent)
+           : wxWindow(parent, -1,
+                     wxDefaultPosition, wxDefaultSize,
+                     wxNO_BORDER)
+{
+    // set colours
+    SetForegroundColour(*wxBLACK);
+#if !defined(__WXPM__)
+    SetBackgroundColour(wxColour(0xc3ffff));
+#else
+    // What is 0xc3ffff, try some legable documentation for those of us who don't memorize hex codes??
+    SetBackgroundColour(wxColour(*wxWHITE));
+#endif
+    m_creationTime = wxGetLocalTime();
+}
+
+void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
+{
+    wxTipWindow* parent = (wxTipWindow*) GetParent();
     wxClientDC dc(this);
     dc.SetFont(GetFont());
 
@@ -100,7 +174,7 @@ void wxTipWindow::Adjust(const wxString& text, wxCoord maxLength)
     wxString current;
     wxCoord height, width,
             widthMax = 0;
-    m_heightLine = 0;
+    parent->m_heightLine = 0;
 
     bool breakLine = FALSE;
     for ( const wxChar *p = text.c_str(); ; p++ )
@@ -111,10 +185,10 @@ void wxTipWindow::Adjust(const wxString& text, wxCoord maxLength)
             if ( width > widthMax )
                 widthMax = width;
 
-            if ( height > m_heightLine )
-                m_heightLine = height;
+            if ( height > parent->m_heightLine )
+                parent->m_heightLine = height;
 
-            m_textLines.Add(current);
+            parent->m_textLines.Add(current);
 
             if ( !*p )
             {
@@ -128,7 +202,7 @@ void wxTipWindow::Adjust(const wxString& text, wxCoord maxLength)
         else if ( breakLine && (*p == _T(' ') || *p == _T('\t')) )
         {
             // word boundary - break the line here
-            m_textLines.Add(current);
+            parent->m_textLines.Add(current);
             current.clear();
             breakLine = FALSE;
         }
@@ -142,18 +216,22 @@ void wxTipWindow::Adjust(const wxString& text, wxCoord maxLength)
             if ( width > widthMax )
                 widthMax = width;
 
-            if ( height > m_heightLine )
-                m_heightLine = height;
+            if ( height > parent->m_heightLine )
+                parent->m_heightLine = height;
         }
     }
 
     // take into account the border size and the margins
-    SetClientSize(2*(TEXT_MARGIN_X + 1) + widthMax,
-                  2*(TEXT_MARGIN_Y + 1) + m_textLines.GetCount()*m_heightLine);
+    GetParent()->SetClientSize(2*(TEXT_MARGIN_X + 1) + widthMax,
+                  2*(TEXT_MARGIN_Y + 1) + parent->m_textLines.GetCount()*parent->m_heightLine);
 }
 
-void wxTipWindow::OnPaint(wxPaintEvent& event)
+void wxTipWindowView::OnPaint(wxPaintEvent& event)
 {
+    wxTipWindow* parent = (wxTipWindow*) GetParent();
+    if (!parent)
+      return;
+
     wxPaintDC dc(this);
 
     wxRect rect;
@@ -178,27 +256,23 @@ void wxTipWindow::OnPaint(wxPaintEvent& event)
     wxPoint pt;
     pt.x = TEXT_MARGIN_X;
     pt.y = TEXT_MARGIN_Y;
-    size_t count = m_textLines.GetCount();
+    size_t count = parent->m_textLines.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        dc.DrawText(m_textLines[n], pt);
+        dc.DrawText(parent->m_textLines[n], pt);
 
-        pt.y += m_heightLine;
+        pt.y += parent->m_heightLine;
     }
 }
 
-void wxTipWindow::OnMouseClick(wxMouseEvent& event)
+void wxTipWindowView::OnMouseClick(wxMouseEvent& event)
 {
-    Close();
+    GetParent()->Close();
 }
 
-void wxTipWindow::OnActivate(wxActivateEvent& event)
+void wxTipWindowView::OnKillFocus(wxFocusEvent& event)
 {
-    if (!event.GetActive())
-        Close();
-}
-
-void wxTipWindow::OnKillFocus(wxFocusEvent& event)
-{
-    Close();
+    // Workaround the kill focus event happening just after creation in wxGTK
+    if (wxGetLocalTime() > m_creationTime + 1)
+        GetParent()->Close();
 }

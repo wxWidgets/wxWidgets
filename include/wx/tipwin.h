@@ -25,24 +25,27 @@
 
 class WXDLLEXPORT wxTipWindow : public wxFrame
 {
+    friend class wxTipWindowView;
 public:
+    // Supply windowPtr for it to null the given address
+    // when the window has closed.
     wxTipWindow(wxWindow *parent,
                 const wxString& text,
-                wxCoord maxLength = 100);
+                wxCoord maxLength = 100, wxTipWindow** windowPtr = NULL);
+    ~wxTipWindow();
+
+    void SetTipWindowPtr(wxTipWindow** windowPtr) { m_windowPtr = windowPtr; }
 
 protected:
     // event handlers
-    void OnPaint(wxPaintEvent& event);
     void OnMouseClick(wxMouseEvent& event);
     void OnActivate(wxActivateEvent& event);
     void OnKillFocus(wxFocusEvent& event);
 
-    // calculate the client rect we need to display the text
-    void Adjust(const wxString& text, wxCoord maxLength);
-
 private:
     wxArrayString m_textLines;
     wxCoord m_heightLine;
+    wxTipWindow** m_windowPtr;
 
     DECLARE_EVENT_TABLE()
 };

@@ -305,10 +305,21 @@ void wxSimpleHelpProvider::AddHelp(wxWindowID id, const wxString& text)
 
 bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
 {
+    static wxTipWindow* s_tipWindow = NULL;
+
+    if (s_tipWindow)
+    {
+        // Prevent s_tipWindow being nulled in OnIdle,
+        // thereby removing the chance for the window to be closed by ShowHelp
+        s_tipWindow->SetTipWindowPtr(NULL);
+        s_tipWindow->Close();
+    }
+    s_tipWindow = NULL;
+
     wxString text = GetHelp(window);
     if ( !text.empty() )
     {
-        new wxTipWindow((wxWindow *)window, text);
+        s_tipWindow = new wxTipWindow((wxWindow *)window, text, 100, & s_tipWindow);
 
         return TRUE;
     }
