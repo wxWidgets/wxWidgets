@@ -149,6 +149,8 @@ protected:
     int percent;
     wxEdge otherEdge;
     bool done;
+
+    DECLARE_DYNAMIC_CLASS(wxIndividualLayoutConstraint)
 };
 
 // ----------------------------------------------------------------------------
