@@ -355,7 +355,8 @@ bool wxSizer::Remove( int pos )
 
 void wxSizer::Fit( wxWindow *window )
 {
-    window->SetSize( GetMinWindowSize( window ) );
+    wxSize size = FitSize( window );
+    window->SetSize( size );
 }
 
 void wxSizer::Layout()
@@ -366,8 +367,22 @@ void wxSizer::Layout()
 
 void wxSizer::SetSizeHints( wxWindow *window )
 {
-    wxSize size( GetMinWindowSize( window ) );
+    wxSize size = FitSize( window );
     window->SetSizeHints( size.x, size.y );
+}
+
+wxSize wxSizer::GetMaxWindowSize( wxWindow *window )
+{
+    wxSize sizeMax = wxGetDisplaySize();
+    // make the max size a bit smaller than the screen, a window which takes
+    // the entire screen doesn't look very nice neither
+    sizeMax.x *= 9;
+    sizeMax.x /= 10;
+
+    sizeMax.y *= 9;
+    sizeMax.y /= 10;
+
+    return sizeMax;
 }
 
 wxSize wxSizer::GetMinWindowSize( wxWindow *window )
@@ -377,6 +392,20 @@ wxSize wxSizer::GetMinWindowSize( wxWindow *window )
     wxSize client_size( window->GetClientSize() );
     return wxSize( minSize.x+size.x-client_size.x,
                    minSize.y+size.y-client_size.y );
+}
+
+// Return a window size that will fit within the screens dimensions
+wxSize wxSizer::FitSize( wxWindow *window )
+{
+    wxSize size     = GetMinWindowSize( window );
+    wxSize sizeMax  = GetMaxWindowSize( window );
+
+    if ( size.x > sizeMax.x )
+        size.x = sizeMax.x;
+    if ( size.y > sizeMax.y )
+        size.y = sizeMax.y;
+
+    return size;
 }
 
 void wxSizer::SetDimension( int x, int y, int width, int height )

@@ -197,8 +197,10 @@ protected:
     wxPoint m_position;
     wxList  m_children;
 
+    wxSize GetMaxWindowSize( wxWindow *window );
     wxSize GetMinWindowSize( wxWindow *window );
-    
+    wxSize FitSize( wxWindow *window );
+
     virtual void DoSetMinSize( int width, int height );
     virtual bool DoSetItemMinSize( wxWindow *window, int width, int height );
     virtual bool DoSetItemMinSize( wxSizer *sizer, int width, int height );
