@@ -123,7 +123,7 @@ public:
     // well)
     virtual bool OnExceptionInMainLoop() {
         throw;
-#ifdef __DMC__
+#if defined(__DMC__) || (defined(_MSC_VER) && _MSC_VER < 1200)
         return false;
 #endif
         }
