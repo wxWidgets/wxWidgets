@@ -1054,7 +1054,7 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     switch ( logical_func )
     {
     case wxAND:        // src AND dst
-        mode = srcOr ; // ok
+        mode = adMin ; // ok
         break ;
     case wxAND_INVERT: // (NOT src) AND dst
         mode = notSrcOr  ; // ok
@@ -1385,7 +1385,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
     long yy = YLOG2DEVMAC(y);
 #if TARGET_CARBON
     bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
-    if ( m_font.GetNoAntiAliasing() )
+    if ( IsKindOf(CLASSINFO( wxPrinterDC ) ) || m_font.GetNoAntiAliasing() )
         useDrawThemeText = false ;
 #endif
     MacInstallFont() ;
@@ -1478,6 +1478,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
         {
             Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
             CFStringRef mString = CFStringCreateWithCString( NULL , text + laststop , kCFStringEncodingMacRoman ) ;
+
             if ( m_backgroundMode != wxTRANSPARENT )
             {
                 Point bounds={0,0} ;
@@ -1534,7 +1535,7 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
     ::GetFontInfo( &fi ) ;
 #if TARGET_CARBON    
     bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
-    if ( ((wxFont*)&m_font)->GetNoAntiAliasing() )
+	if ( IsKindOf(CLASSINFO( wxPrinterDC ) ) || ((wxFont*)&m_font)->GetNoAntiAliasing() )
         useGetThemeText = false ;
 #endif
     if ( height )
@@ -1747,10 +1748,12 @@ void wxDC::MacInstallFont() const
     case wxSRC_INVERT: // (NOT src)
         mode = notPatCopy ;
         break ;
+    case wxAND: // src AND dst
+        mode = adMin ;
+        break ;
         // unsupported TODO
     case wxCLEAR:      // 0
     case wxAND_REVERSE:// src AND (NOT dst)
-    case wxAND:        // src AND dst
     case wxAND_INVERT: // (NOT src) AND dst
     case wxNO_OP:      // dst
     case wxNOR:        // (NOT src) AND (NOT dst)
@@ -1951,10 +1954,12 @@ void wxDC::MacInstallPen() const
     case wxSRC_INVERT: // (NOT src)
         mode = notPatCopy ;
         break ;
+    case wxAND: // src AND dst
+        mode = adMin ;
+        break ;
         // unsupported TODO
     case wxCLEAR:      // 0
     case wxAND_REVERSE:// src AND (NOT dst)
-    case wxAND:        // src AND dst
     case wxAND_INVERT: // (NOT src) AND dst
     case wxNO_OP:      // dst
     case wxNOR:        // (NOT src) AND (NOT dst)
@@ -2131,10 +2136,12 @@ void wxDC::MacInstallBrush() const
     case wxSRC_INVERT: // (NOT src)
         mode = notPatCopy ;
         break ;
+    case wxAND: // src AND dst
+        mode = adMin ;
+        break ;
         // unsupported TODO
     case wxCLEAR:      // 0
     case wxAND_REVERSE:// src AND (NOT dst)
-    case wxAND:        // src AND dst
     case wxAND_INVERT: // (NOT src) AND dst
     case wxNO_OP:      // dst
     case wxNOR:        // (NOT src) AND (NOT dst)
