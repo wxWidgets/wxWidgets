@@ -115,8 +115,10 @@ END_EVENT_TABLE()
 IMPLEMENT_CLASS(wxStyledTextCtrl, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxStyledTextEvent, wxCommandEvent)
 
+#ifdef LINK_LEXERS
 // forces the linking of the lexer modules
-int Scintilla_LinkLexers();
+int wxForceScintillaLexers();
+#endif
 
 //----------------------------------------------------------------------
 // Constructor and Destructor
@@ -131,7 +133,9 @@ wxStyledTextCtrl::wxStyledTextCtrl(wxWindow *parent,
               style | wxVSCROLL | wxHSCROLL | wxWANTS_CHARS | wxCLIP_CHILDREN,
               wxDefaultValidator, name)
 {
-    Scintilla_LinkLexers();
+#ifdef LINK_LEXERS
+    wxForceScintillaLexers();
+#endif
     m_swx = new ScintillaWX(this);
     m_stopWatch.Start();
     m_lastKeyDownConsumed = FALSE;
