@@ -14,6 +14,24 @@ from distutils.ccompiler import \
 
 class MyMSVCCompiler(MSVCCompiler):
 
+##     def __init__ (self,
+##                   verbose=0,
+##                   dry_run=0,
+##                   force=0):
+##         MSVCCompiler.__init__(self, verbose, dry_run, force)
+
+##         self.compile_options = [ '/nologo',
+##                                  '/Ox',
+##                                  '/MD',
+##                                  '/W3',
+##                                  '/GX',
+##                                  ]
+##         self.compile_options_debug = ['/nologo', '/Od', '/MDd', '/W3', '/GX',
+##                                       '/Z7', '/D_DEBUG']
+
+
+
+
     ##------------------------------------------------------------
     ## Override the entire compile method just to add flags to the
     ## RC command.  There should be an easier way to do this from
