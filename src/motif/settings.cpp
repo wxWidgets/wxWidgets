@@ -83,8 +83,19 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_APPWORKSPACE:
     {
         return wxColour("LIGHT GREY");
-	//      return *wxWHITE;
     }
+
+    case wxSYS_COLOUR_HOTLIGHT:
+    case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
+    case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
+    case wxSYS_COLOUR_MENUHILIGHT:
+    case wxSYS_COLOUR_MENUBAR:
+        // TODO
+        return wxColour("LIGHT GREY");
+
+    default:
+    case wxSYS_COLOUR_MAX:
+        wxFAIL_MSG( _T("unknown colour") );
   }
   return *wxWHITE;
 }
