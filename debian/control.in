@@ -25,7 +25,7 @@ Description: wxBase library (runtime) - non-GUI support classes of wxWindows too
 Package: libwxbase=V-dev
 Architecture: any
 Section: devel
-Depends: wxwin=V-headers (= ${Source-Version}), libwxbase=V (= ${Source-Version}), zlib1g-dev, libc6-dev
+Depends: wxwin=V-headers (= ${Source-Version}), libwxbase=V (= ${Source-Version}), libc6-dev
 Suggests: wxwin=V-doc, gettext
 Conflicts: libwxbase-dev
 Replaces: libwxbase-dev
@@ -81,7 +81,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ runtime)
 Package: libwxgtk=V-dev
 Architecture: any
 Section: devel
-Depends: wxwin=V-headers (= ${Source-Version}), libwxgtk=V (= ${Source-Version}), libgtk1.2-dev, zlib1g-dev, libjpeg62-dev, libpng12-0-dev, libtiff3g-dev, libc6-dev
+Depends: wxwin=V-headers (= ${Source-Version}), libwxgtk=V (= ${Source-Version}), libc6-dev
 Suggests: wxwin=V-doc, libstdc++-dev, gettext, libgl-dev
 Conflicts: libwxgtk-dev
 Replaces: libwxgtk-dev, wxgtk2.1-dev
@@ -159,7 +159,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (development contrib libs)
 Package: wxwin=V-headers
 Architecture: any
 Section: devel
-Conflicts: wxwin-headers
+Conflicts: wxwin-headers, libwxgtk2.3
 Replaces: wxwin-headers, wxgtk2.1-dev
 Provides: wxwin-headers
 Description: wxWindows Cross-platform C++ GUI toolkit (header files)
@@ -209,7 +209,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (examples)
 Package: libwxgtk=V-univ
 Architecture: any
 Section: libs
-Depends: wxwin=V-headers (= ${Source-Version}), libwxgtk=V (= ${Source-Version}), libgtk1.2-dev, zlib1g-dev, libjpeg62-dev, libpng12-0-dev, libtiff3g-dev, libc6-dev, ${shlibs:Depends}
+Depends: wxwin=V-headers (= ${Source-Version}), libwxgtk=V (= ${Source-Version}), libc6-dev, ${shlibs:Depends}
 Suggests: wxwin=V-doc, libstdc++-dev, gettext, libgl-dev
 Description: wxWindows Cross-platform C++ GUI toolkit (wxUNIVERSAL widgets)
  wxWindows is a class library for C++ providing GUI (Graphical User

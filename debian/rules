@@ -49,6 +49,8 @@ objdir_wxbase_debug=objs_wxbase_d
 objdir_gtk_shared=objs_gtk_sh
 objdir_gtk_static=objs_gtk_st
 objdir_gtk_debug=objs_gtk_d
+objdir_gtk_install=objs_gtk_install
+objdir_gtk_contrib_install=objs_gtk_contrib_install
 objdir_doc_cruft=objs_doc_con
 objdir_doc=docs/wxWindows-manual.html
 objdir_examples=docs/examples
@@ -65,10 +67,13 @@ objdir_msw_static=objs_msw_st
 objdir_msw_dbg=objs_msw_d
 
 objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
-	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug) $(objdir_gtk_univ) \
-	$(objdir_univ_install) $(objdir_doc_cruft) $(objdir_doc) $(objdir_examples) \
-	$(objdir_wxbase_msw_shared) $(objdir_wxbase_msw_static) $(objdir_wxbase_msw_dbg) \
-	$(objdir_msw_shared) $(objdir_msw_static) $(objdir_msw_dbg)
+	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug)          \
+	$(objdir_gtk_install) $(objdir_gtk_contrib_install) $(objdir_gtk_univ) \
+	$(objdir_univ_install) $(objdir_doc_cruft) $(objdir_doc)               \
+	$(objdir_examples)                                                     \
+	$(objdir_wxbase_msw_shared) $(objdir_wxbase_msw_static)                \
+	$(objdir_wxbase_msw_dbg) $(objdir_msw_shared) $(objdir_msw_static)     \
+	$(objdir_msw_dbg)
 
 #	note that the i18n package is actually arch indep (once built)
 #	but must be built (and installed) during the arch any phase as
@@ -128,7 +133,7 @@ control-files-stamp: debian/control
 		echo "generating control file $(package_wxbase_lib).$$f"; \
 		cp debian/libwxbase.$$f debian/$(package_wxbase_lib).$$f; \
 	done;
-	@for f in dirs files links postinst prerm; do \
+	@for f in dirs links postinst prerm; do \
 		echo "generating control file $(package_wxbase_dev).$$f"; \
 		sed -e 's/=V/$(release)/g' < debian/libwxbase-dev.$$f \
 			> debian/$(package_wxbase_dev).$$f; \
@@ -142,7 +147,7 @@ control-files-stamp: debian/control
 		echo "generating control file $(package_gtk_lib).$$f"; \
 		cp debian/libwxgtk.$$f debian/$(package_gtk_lib).$$f; \
 	done;
-	@for f in dirs files links postinst prerm; do \
+	@for f in dirs links postinst prerm; do \
 		echo "generating control file $(package_gtk_dev).$$f"; \
 		sed -e 's/=V/$(release)/g' < debian/libwxgtk-dev.$$f \
 			> debian/$(package_gtk_dev).$$f; \
@@ -152,7 +157,7 @@ control-files-stamp: debian/control
 		sed -e 's/=V/$(release)/g' < debian/libwxgtk-dbg.$$f \
 			> debian/$(package_gtk_dbg).$$f; \
 	done;
-	@for f in dirs docs files menu postinst prerm; do \
+	@for f in dirs docs menu postinst prerm; do \
 		echo "generating control file $(package_gtk_py).$$f"; \
 		sed -e 's/=PY/$(python_dir)/g;s/=V/$(release)/g' < debian/libwxgtk-python.$$f \
 			> debian/$(package_gtk_py).$$f; \
@@ -161,15 +166,15 @@ control-files-stamp: debian/control
 		echo "generating control file $(package_gtk_contrib).$$f"; \
 		cp debian/libwxgtk-contrib.$$f debian/$(package_gtk_contrib).$$f; \
 	done;
-	@for f in dirs files; do \
+	@for f in dirs; do \
 		echo "generating control file $(package_gtk_contrib_dev).$$f"; \
 		cp debian/libwxgtk-contrib-dev.$$f debian/$(package_gtk_contrib_dev).$$f; \
 	done;
-	@for f in dirs files; do \
+	@for f in dirs; do \
 		echo "generating control file $(package_headers).$$f"; \
 		cp debian/wxwin-headers.$$f debian/$(package_headers).$$f; \
 	done;
-	@for f in dirs files; do \
+	@for f in dirs; do \
 		echo "generating control file $(package_i18n).$$f"; \
 		cp debian/wxwin-i18n.$$f debian/$(package_i18n).$$f; \
 	done;
@@ -226,7 +231,7 @@ build_all: control-files-stamp $(build_stamps_native)
 build: build_arch
 
 
-build-wxbase-shared-stamp:
+configure-wxbase-shared-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_shared)
 	cd $(objdir_wxbase_shared) \
@@ -234,11 +239,15 @@ build-wxbase-shared-stamp:
 				--cache-file=$(config_cache) \
 				--disable-gui \
 				--enable-soname \
-				--with-zlib=sys \
-		&& $(MAKE)
+				--with-zlib=sys
 	touch $@
 
-build-wxbase-static-stamp:
+build-wxbase-shared-stamp: configure-wxbase-shared-stamp
+	dh_testdir
+	cd $(objdir_wxbase_shared) && $(MAKE)
+	touch $@
+
+configure-wxbase-static-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_static)
 	cd $(objdir_wxbase_static) \
@@ -246,11 +255,15 @@ build-wxbase-static-stamp:
 				--cache-file=$(config_cache) \
 				--disable-gui \
 				--disable-shared \
-				--with-zlib=sys \
-		&& $(MAKE)
+				--with-zlib=sys
 	touch $@
 
-build-wxbase-debug-stamp:
+build-wxbase-static-stamp: configure-wxbase-static-stamp
+	dh_testdir
+	cd $(objdir_wxbase_static) && $(MAKE)
+	touch $@
+
+configure-wxbase-debug-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_debug)
 	cd $(objdir_wxbase_debug) \
@@ -259,11 +272,15 @@ build-wxbase-debug-stamp:
 				--disable-gui \
 				--enable-debug \
 				--enable-soname \
-				--with-zlib=sys \
-		&& $(MAKE)
+				--with-zlib=sys
 	touch $@
 
-build-gtk-shared-stamp:
+build-wxbase-debug-stamp: configure-wxbase-debug-stamp
+	dh_testdir
+	cd $(objdir_wxbase_debug) && $(MAKE)
+	touch $@
+
+configure-gtk-shared-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_shared)
 	cd $(objdir_gtk_shared) \
@@ -276,11 +293,15 @@ build-gtk-shared-stamp:
 				--with-libjpeg=sys \
 				--with-libpng=sys \
 				--with-libtiff=sys \
-				--enable-dynamic-loader \
-		&& $(MAKE)
+				--enable-dynamic-loader
 	touch $@
 
-build-gtk-static-stamp:
+build-gtk-shared-stamp: configure-gtk-shared-stamp
+	dh_testdir
+	cd $(objdir_gtk_shared) && $(MAKE)
+	touch $@
+
+configure-gtk-static-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_static)
 	cd $(objdir_gtk_static) \
@@ -293,11 +314,15 @@ build-gtk-static-stamp:
 				--with-libjpeg=sys \
 				--with-libpng=sys \
 				--with-libtiff=sys \
-				--enable-dynamic-loader \
-		&& $(MAKE)
+				--enable-dynamic-loader
 	touch $@
 
-build-gtk-debug-stamp:
+build-gtk-static-stamp: configure-gtk-static-stamp
+	dh_testdir
+	cd $(objdir_gtk_static) && $(MAKE)
+	touch $@
+
+configure-gtk-debug-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_debug)
 	cd $(objdir_gtk_debug) \
@@ -311,11 +336,15 @@ build-gtk-debug-stamp:
 				--with-libjpeg=sys \
 				--with-libpng=sys \
 				--with-libtiff=sys \
-				--enable-dynamic-loader \
-		&& $(MAKE)
+				--enable-dynamic-loader
 	touch $@
 
-build-gtk-univ-stamp:
+build-gtk-debug-stamp: configure-gtk-debug-stamp
+	dh_testdir
+	cd $(objdir_gtk_debug) && $(MAKE)
+	touch $@
+
+configure-gtk-univ-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_univ)
 	cd $(objdir_gtk_univ) \
@@ -329,8 +358,12 @@ build-gtk-univ-stamp:
 				--with-libjpeg=sys \
 				--with-libpng=sys \
 				--with-libtiff=sys \
-				--enable-dynamic-loader \
-		&& $(MAKE)
+				--enable-dynamic-loader
+	touch $@
+
+build-gtk-univ-stamp: configure-gtk-univ-stamp
+	dh_testdir
+	cd $(objdir_gtk_univ) && $(MAKE)
 	touch $@
 
 build-contrib-shared-stamp: build-gtk-shared-stamp
@@ -403,7 +436,7 @@ build-i18n-stamp: build-gtk-shared-stamp
 		&& $(MAKE) allmo
 	touch $@
 
-build-wxbase-msw-shared-stamp:
+configure-wxbase-msw-shared-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_msw_shared)
 	cd $(objdir_wxbase_msw_shared) \
@@ -411,11 +444,15 @@ build-wxbase-msw-shared-stamp:
 				--cache-file=$(config_cache_cross) \
 				--host=$(cross_host) \
 				--build=$(cross_build) \
-				--disable-gui \
-		&& $(MAKE)
+				--disable-gui
 	touch $@
 
-build-wxbase-msw-static-stamp:
+build-wxbase-msw-shared-stamp: configure-wxbase-msw-shared-stamp
+	dh_testdir
+	cd $(objdir_wxbase_msw_shared) && $(MAKE)
+	touch $@
+
+configure-wxbase-msw-static-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_msw_static)
 	cd $(objdir_wxbase_msw_static) \
@@ -424,12 +461,16 @@ build-wxbase-msw-static-stamp:
 				--host=$(cross_host) \
 				--build=$(cross_build) \
 				--disable-gui \
-				--disable-shared \
-		&& $(MAKE)
+				--disable-shared
+	touch $@
+
+build-wxbase-msw-static-stamp: configure-wxbase-msw-static-stamp
+	dh_testdir
+	cd $(objdir_wxbase_msw_static) && $(MAKE)
 	touch $@
 
 # Note this builds dll only, since wxmsw static debug is > 130MB !
-build-wxbase-msw-dbg-stamp:
+configure-wxbase-msw-dbg-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_msw_dbg)
 	cd $(objdir_wxbase_msw_dbg) \
@@ -438,22 +479,30 @@ build-wxbase-msw-dbg-stamp:
 				--host=$(cross_host) \
 				--build=$(cross_build) \
 				--disable-gui \
-				--enable-debug \
-		&& $(MAKE)
+				--enable-debug
 	touch $@
 
-build-msw-shared-stamp:
+build-wxbase-msw-dbg-stamp: configure-wxbase-msw-dbg-stamp
+	dh_testdir
+	cd $(objdir_wxbase_msw_dbg) && $(MAKE)
+	touch $@
+
+configure-msw-shared-stamp:
 	dh_testdir
 	mkdir -p $(objdir_msw_shared)
 	cd $(objdir_msw_shared) \
 		&& ../configure --prefix=/usr/$(cross_host) \
 				--cache-file=$(config_cache_cross) \
 				--host=$(cross_host) \
-				--build=$(cross_build) \
-		&& $(MAKE)
+				--build=$(cross_build)
 	touch $@
 
-build-msw-static-stamp:
+build-msw-shared-stamp: configure-msw-shared-stamp
+	dh_testdir
+	cd $(objdir_msw_shared) && $(MAKE)
+	touch $@
+
+configure-msw-static-stamp:
 	dh_testdir
 	mkdir -p $(objdir_msw_static)
 	cd $(objdir_msw_static) \
@@ -461,11 +510,15 @@ build-msw-static-stamp:
 				--cache-file=$(config_cache_cross) \
 				--host=$(cross_host) \
 				--build=$(cross_build) \
-				--disable-shared \
-		&& $(MAKE)
+				--disable-shared
 	touch $@
 
-build-msw-dbg-stamp:
+build-msw-static-stamp: configure-msw-static-stamp
+	dh_testdir
+	cd $(objdir_msw_static) && $(MAKE)
+	touch $@
+
+configure-msw-dbg-stamp:
 	dh_testdir
 	mkdir -p $(objdir_msw_dbg)
 	cd $(objdir_msw_dbg) \
@@ -473,8 +526,12 @@ build-msw-dbg-stamp:
 				--cache-file=$(config_cache_cross) \
 				--host=$(cross_host) \
 				--build=$(cross_build) \
-				--enable-debug \
-		&& $(MAKE)
+				--enable-debug
+	touch $@
+
+build-msw-dbg-stamp: configure-msw-dbg-stamp
+	dh_testdir
+	cd $(objdir_msw_dbg) && $(MAKE)
 	touch $@
 
 
@@ -482,7 +539,7 @@ clean: debian/control
 	dh_testdir
 	dh_testroot
 
-	rm -rf config_deb.cache config_deb_cross.cache control-files-stamp $(build_stamps) $(objdirs)
+	rm -rf config_deb.cache config_deb_cross.cache *-stamp $(objdirs)
 	rm -f docs/lgpl.txt
 	rm -f docs/latex/wx/manual.bb
 	rm -f $(objdir_i18n)/*.mo
@@ -531,17 +588,17 @@ install-wxbase-lib: build-wxbase-shared-stamp
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	cp -a $(objdir_wxbase_shared)/lib/* debian/$(package_wxbase_lib)/usr/lib
-	cp $(objdir_wxbase_shared)/wxbase-$(release)-config debian/$(package_wxbase_lib)/usr/bin/
+	dh_install $(objdir_wxbase_shared)/lib/*.so.* 	usr/lib
 
 install-wxbase-dev: DH_OPTIONS=-p$(package_wxbase_dev)
-install-wxbase-dev: build-wxbase-static-stamp install-wxbase-lib
+install-wxbase-dev: build-wxbase-static-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	dh_movefiles --sourcedir=debian/$(package_wxbase_lib)
-	cp $(objdir_wxbase_static)/lib/*.a debian/$(package_wxbase_dev)/usr/lib
+	dh_install $(objdir_wxbase_shared)/wxbase-$(release)-config 	usr/bin
+	dh_install $(objdir_wxbase_shared)/lib/{wx,*.so} 		usr/lib
+	dh_install $(objdir_wxbase_static)/lib/*.a 			usr/lib
 
 install-wxbase-dbg: DH_OPTIONS=-p$(package_wxbase_dbg)
 install-wxbase-dbg: build-wxbase-debug-stamp
@@ -549,29 +606,35 @@ install-wxbase-dbg: build-wxbase-debug-stamp
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	cp -a $(objdir_wxbase_debug)/lib/* debian/$(package_wxbase_dbg)/usr/lib
-	cp $(objdir_wxbase_debug)/wxbased-$(release)-config debian/$(package_wxbase_dbg)/usr/bin/
+	dh_install $(objdir_wxbase_debug)/wxbased-$(release)-config 	usr/bin
+	dh_install $(objdir_wxbase_debug)/lib 				usr
 	cp debian/lintian-override debian/$(package_wxbase_dbg)/usr/share/lintian/overrides/$(package_wxbase_dbg)
 
+install-gtk-shared-stamp:
+	dh_testdir
+	mkdir -p $(objdir_gtk_install)
+	cd $(objdir_gtk_shared) \
+		&& $(MAKE) install prefix=`pwd`/../$(objdir_gtk_install)
+	touch $@
+
 install-gtk-lib: DH_OPTIONS=-p$(package_gtk_lib)
-install-gtk-lib: build-gtk-shared-stamp
+install-gtk-lib: build-gtk-shared-stamp install-gtk-shared-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs 
-	cd $(objdir_gtk_shared) \
-		&& $(MAKE) install prefix=`pwd`/../debian/$(package_gtk_lib)/usr
-	rm -f debian/$(package_gtk_lib)/usr/bin/wx-config
+	dh_install $(objdir_gtk_install)/share/wx 	usr/share
+	dh_install $(objdir_gtk_install)/lib/*.so.* 	usr/lib
 
 install-gtk-dev: DH_OPTIONS=-p$(package_gtk_dev)
-install-gtk-dev: build-gtk-static-stamp install-gtk-lib
+install-gtk-dev: build-gtk-static-stamp install-gtk-shared-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	dh_movefiles --sourcedir=debian/$(package_gtk_lib)
-	cp $(objdir_gtk_static)/lib/libwx_gtk-*.a debian/$(package_gtk_dev)/usr/lib
-	cp $(objdir_gtk_static)/lib/libwx_gtk_gl-*.a debian/$(package_gtk_dev)/usr/lib
+	dh_install $(objdir_gtk_install)/bin/wxgtk-$(release)-config 	usr/bin
+	dh_install $(objdir_gtk_install)/lib/{wx,*.so} 			usr/lib
+	dh_install $(objdir_gtk_static)/lib/libwx_gtk{-,_gl}*.a 	usr/lib
 
 install-gtk-dbg: DH_OPTIONS=-p$(package_gtk_dbg)
 install-gtk-dbg: build-gtk-debug-stamp
@@ -579,8 +642,8 @@ install-gtk-dbg: build-gtk-debug-stamp
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	cp -a $(objdir_gtk_debug)/lib/* debian/$(package_gtk_dbg)/usr/lib
-	cp $(objdir_gtk_debug)/wxgtkd-$(release)-config debian/$(package_gtk_dbg)/usr/bin/
+	dh_install $(objdir_gtk_debug)/wxgtkd-$(release)-config 	usr/bin
+	dh_install $(objdir_gtk_debug)/lib 				usr
 	cp debian/lintian-override debian/$(package_gtk_dbg)/usr/share/lintian/overrides/$(package_gtk_dbg)
 
 install-gtk-univ: DH_OPTIONS=-p$(package_gtk_univ)
@@ -589,29 +652,35 @@ install-gtk-univ: build-gtk-univ-stamp
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	cp -a $(objdir_gtk_univ)/lib/* debian/$(package_gtk_univ)/usr/lib
-	cp $(objdir_gtk_univ)/wxgtkuniv-$(release)-config debian/$(package_gtk_univ)/usr/bin/
+	dh_install $(objdir_gtk_univ)/wxgtkuniv-$(release)-config 	usr/bin
+	dh_install $(objdir_gtk_univ)/lib 				usr
 	cp debian/lintian-override debian/$(package_gtk_univ)/usr/share/lintian/overrides/$(package_gtk_univ)
 
+install-gtk-contrib-stamp:
+	dh_testdir
+	mkdir -p $(objdir_gtk_contrib_install)/lib
+	cd $(objdir_gtk_shared)/contrib/src \
+		&& $(MAKE) install prefix=`pwd`/../../../$(objdir_gtk_contrib_install)
+	touch $@
+
 install-gtk-contrib: DH_OPTIONS=-p$(package_gtk_contrib)
-install-gtk-contrib: build-contrib-shared-stamp
+install-gtk-contrib: build-contrib-shared-stamp install-gtk-contrib-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	cd $(objdir_gtk_shared)/contrib/src \
-		&& $(MAKE) install prefix=`pwd`/../../../debian/$(package_gtk_contrib)/usr
+	dh_install $(objdir_gtk_contrib_install)/lib/*.so.* 	usr/lib
 
 install-gtk-contrib-dev: DH_OPTIONS=-p$(package_gtk_contrib_dev)
-install-gtk-contrib-dev: build-contrib-static-stamp install-gtk-dev
+install-gtk-contrib-dev: build-contrib-static-stamp install-gtk-contrib-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	dh_movefiles --sourcedir=debian/$(package_gtk_contrib)
-	cp $(objdir_gtk_static)/lib/*.a debian/$(package_gtk_contrib_dev)/usr/lib
-	rm -f debian/$(package_gtk_contrib_dev)/usr/lib/libwx_gtk-*.a
-	rm -f debian/$(package_gtk_contrib_dev)/usr/lib/libwx_gtk_gl-*.a
+	dh_install $(objdir_gtk_contrib_install)/include 	usr
+	dh_install $(objdir_gtk_contrib_install)/lib/*.so 	usr/lib
+	dh_install -Xlibwx_gtk- -Xlibwx_gtk_gl- \
+		   $(objdir_gtk_static)/lib/*.a 		usr/lib
 
 install-gtk-py: DH_OPTIONS=-p$(package_gtk_py)
 install-gtk-py: build-gtk-py-stamp
@@ -636,7 +705,7 @@ install-gtk-py: build-gtk-py-stamp
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/helpviewer.1
 
 install-headers: DH_OPTIONS=-p$(package_headers)
-install-headers: install-gtk-lib
+install-headers: install-gtk-shared-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
@@ -650,17 +719,18 @@ install-headers: install-gtk-lib
 #		&& $(MAKE) install prefix=`pwd`/../$(objdir_univ_install)/usr
 
 #	dh_movefiles --sourcedir=$(objdir_univ_install)
-	dh_movefiles --sourcedir=debian/$(package_gtk_lib)
+	dh_install $(objdir_gtk_install)/include 	usr
+	dh_install $(objdir_gtk_install)/share/aclocal 	usr/share
 
 	dh_installman debian/wx-config.1
 
 install-i18n: DH_OPTIONS=-p$(package_i18n)
-install-i18n: build-i18n-stamp install-gtk-lib
+install-i18n: build-i18n-stamp install-gtk-shared-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	dh_movefiles --sourcedir=debian/$(package_gtk_lib)
+	dh_install $(objdir_gtk_install)/share/locale 	usr/share
 
 install-doc: DH_OPTIONS=-p$(package_doc)
 install-doc: build-doc-stamp

@@ -4,6 +4,20 @@ wxwindows2.5 (2.5.0) unstable; urgency=low
 
  -- Ron Lee <ron@debian.org>  Thu, 19 Dec 2002 01:08:50 -0800
 
+wxwindows2.4 (2.4.0.2) unstable; urgency=low
+
+  * Added missing quantize.h to install.  Closes: #178135
+  * Removed unnecessary -dev deps.
+  * move wxwin.m4 &c out of the runtime package and conflict with earlier
+    versions that didn't.  Also nuke some empty dir cruft that slipped by.
+    Thanks for noticing the latter Josip.  Closes: #176033
+  * dinstall won't close bugs from earlier unreleased versions :(
+    see below for explanations.  Closes: #162948, #171258, #168148
+    Closes: #170748, #168250, #164557, #172390, #172447, #168887
+    Closes: #155476, #155478
+
+ -- Ron Lee <ron@debian.org>  Thu, 16 Jan 2003 16:46:31 -0800
+
 wxwindows2.4 (2.4.0) unstable; urgency=low
 
   * The fingers crossed release.
