@@ -172,6 +172,8 @@ public:                                                             \
     { return (T&)(wxBaseArray::Item(uiIndex)); }                    \
   T& Item(uint uiIndex) const                                       \
     { return (T&)(wxBaseArray::Item(uiIndex)); }                    \
+  T& Last() const                                                   \
+    { return (T&)(wxBaseArray::Item(Count() - 1)); }                \
                                                                     \
   int Index(T Item, bool bFromEnd = FALSE) const                    \
     { return wxBaseArray::Index((long)Item, bFromEnd); }            \
@@ -209,6 +211,8 @@ public:                                                             \
     { return *(T*)wxBaseArray::Item(uiIndex); }                     \
   T& Item(uint uiIndex) const                                       \
     { return *(T*)wxBaseArray::Item(uiIndex); }                     \
+  T& Last() const                                                   \
+    { return *(T*)(wxBaseArray::Item(Count() - 1)); }               \
                                                                     \
   int Index(const T& Item, bool bFromEnd = FALSE) const;            \
                                                                     \
