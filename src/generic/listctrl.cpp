@@ -2147,7 +2147,7 @@ void wxListTextCtrl::OnKeyUp( wxKeyEvent &event )
 
 void wxListTextCtrl::OnKillFocus( wxFocusEvent &event )
 {
-    if ( !m_finished )
+    if ( !m_finished && !m_aboutToFinish  )
     {
         // We must finish regardless of success, otherwise we'll get
         // focus problems:

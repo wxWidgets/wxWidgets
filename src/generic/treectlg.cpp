@@ -415,7 +415,7 @@ bool wxTreeTextCtrl::AcceptChanges()
 
 void wxTreeTextCtrl::Finish()
 {
-    if ( !m_finished && !m_aboutToFinish )
+    if ( !m_finished  )
     {
         m_owner->ResetTextControl();
 
@@ -470,7 +470,7 @@ void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
 
 void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &event )
 {
-    if ( !m_finished )
+    if ( !m_finished && !m_aboutToFinish )
     {
         // We must finish regardless of success, otherwise we'll get
         // focus problems:
