@@ -771,6 +771,8 @@ wxImage wxBitmap::ConvertToImage() const
 
     GWorldPtr origPort;
     GDHandle  origDevice;
+    RgnHandle maskRgn = NULL ;
+    GWorldPtr tempPort = NULL ;
     int      index;
     RGBColor color;
     // background color set to RGB(16,16,16) in consistent with wxGTK
@@ -779,9 +781,28 @@ wxImage wxBitmap::ConvertToImage() const
     wxMask  *mask = GetMask();
 
     GetGWorld( &origPort, &origDevice );
-    LockPixels(GetGWorldPixMap( (GWorldPtr) GetHBITMAP()));
-    SetGWorld(  (GWorldPtr) GetHBITMAP(), NULL);
-
+    if ( GetBitmapType() != kMacBitmapTypeGrafWorld )
+    {
+    	tempPort = wxMacCreateGWorld( width , height , -1) ;
+    }
+    else
+    {
+    	tempPort =  (GWorldPtr) GetHBITMAP() ;
+	}
+	LockPixels(GetGWorldPixMap(tempPort));
+	SetGWorld( tempPort, NULL);
+	if ( GetBitmapType() == kMacBitmapTypePict || GetBitmapType() == kMacBitmapTypeIcon )
+	{
+        Rect bitmaprect = { 0 , 0 , height, width };
+    	if ( GetBitmapType() == kMacBitmapTypeIcon )
+    	{
+        	::PlotCIconHandle( &bitmaprect , atNone , ttNone , MAC_WXHICON(GetHICON()) ) ;
+        	maskRgn = NewRgn() ;
+        	BitMapToRegion( maskRgn , &(**(MAC_WXHICON(GetHICON()))).iconMask ) ; 
+        }
+     	else
+         	::DrawPicture( (PicHandle) GetPict(), &bitmaprect ) ;
+	}
     // Copy data into image
     index = 0;
     for (int yy = 0; yy < height; yy++)
@@ -795,27 +816,50 @@ wxImage wxBitmap::ConvertToImage() const
             data[index    ] = r;
             data[index + 1] = g;
             data[index + 2] = b;
-            if (mask)
-            {
-                if (mask->PointMasked(xx,yy))
-                {
+            if ( maskRgn )
+            {	
+            	Point pt ;
+            	pt.h = xx ;
+            	pt.v = yy ;
+            	if ( !PtInRgn( pt , maskRgn ) )
+            	{
                     data[index    ] = mask_r;
                     data[index + 1] = mask_g;
                     data[index + 2] = mask_b;
-                }
+            	}
+            }
+            else
+            {
+	            if (mask)
+	            {
+	                if (mask->PointMasked(xx,yy))
+	                {
+	                    data[index    ] = mask_r;
+	                    data[index + 1] = mask_g;
+	                    data[index + 2] = mask_b;
+	                }
+	            }
             }
             index += 3;
         }
     }
-    if (mask)
+    if (mask || maskRgn )
     {
         image.SetMaskColour( mask_r, mask_g, mask_b );
         image.SetMask( true );
     }
 
     // Free resources
-    UnlockPixels(GetGWorldPixMap( (GWorldPtr) GetHBITMAP()));
+    UnlockPixels(GetGWorldPixMap( tempPort ));
     SetGWorld(origPort, origDevice);
+    if ( GetBitmapType() != kMacBitmapTypeGrafWorld )
+    {
+    	wxMacDestroyGWorld( tempPort ) ;
+    }
+    if ( maskRgn )
+    {
+    	DisposeRgn( maskRgn ) ;
+    }
 
     return image;
 }
