@@ -1009,7 +1009,7 @@ void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
 
     // do we need to extend the mapping array?
     wxArrayInt& itm = *imgTypeMap;
-    if ( itm.GetCount() < type+1)
+    if ( itm.GetCount() < (size_t)type+1)
         itm.Add(-1, type - itm.GetCount() + 1);
 
     // Add an item that maps type to the image index
