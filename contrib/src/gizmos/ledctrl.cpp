@@ -230,7 +230,7 @@ void wxLEDNumberCtrl::OnPaint(wxPaintEvent &Event)
                 // just skip it
                 break;
             default :
-                wxFAIL_MSG(_("Unknown digit value"));
+                wxFAIL_MSG(wxT("Unknown digit value"));
                 break;
         }
     }
@@ -344,7 +344,7 @@ void wxLEDNumberCtrl::RecalcInternals(const wxSize &CurrentSize)
             m_LeftStartPos = (ClientWidth - ValueWidth) / 2;
             break;
         default :
-            wxFAIL_MSG(_("Unknown alignent value for wxLEDNumberCtrl."));
+            wxFAIL_MSG(wxT("Unknown alignent value for wxLEDNumberCtrl."));
             break;
     }
 }
