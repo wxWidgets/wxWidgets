@@ -1,10 +1,9 @@
 <?xml version="1.0" ?>
 <makefile>
 
-    <include file="../../../build/bakefiles/common_samples.bkl"/>
-    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+    <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="xrcdemo" template="wx_contrib_sample" template_append="wx_append">
+    <exe id="xrcdemo" template="wx_sample" template_append="wx_append">
         <sources>
             xrcdemo.cpp
             myframe.cpp
