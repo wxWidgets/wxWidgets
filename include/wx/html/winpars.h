@@ -24,6 +24,7 @@
 #include "wx/html/htmlcell.h"
 #include "wx/encconv.h"
 
+class WXDLLEXPORT wxHtmlWindow;
 class WXDLLEXPORT wxHtmlWinParser;
 class WXDLLEXPORT wxHtmlWinTagHandler;
 class WXDLLEXPORT wxHtmlTagsModule;
@@ -40,12 +41,14 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
     friend class wxHtmlWindow;
 
 public:
-    wxHtmlWinParser(wxWindow *wnd = NULL);
+    wxHtmlWinParser(wxHtmlWindow *wnd = NULL);
     ~wxHtmlWinParser();
 
     virtual void InitParser(const wxString& source);
     virtual void DoneParser();
     virtual wxObject* GetProduct();
+
+    virtual bool CanOpenURL(const wxString& url) const;
 
     // Set's the DC used for parsing. If SetDC() is not called,
     // parsing won't proceed
@@ -63,7 +66,7 @@ public:
     // GetDC()->GetChar...()
 
     // returns associated wxWindow
-    wxWindow *GetWindow() {return m_Window;}
+    wxHtmlWindow *GetWindow() {return m_Window;}
 
     // sets fonts to be used when displaying HTML page.
     void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes);
@@ -130,7 +133,7 @@ private:
     wxChar *m_tmpStrBuf;
     size_t  m_tmpStrBufSize;
         // temporary variables used by AddText
-    wxWindow *m_Window;
+    wxHtmlWindow *m_Window;
             // window we're parsing for
     double m_PixelScale;
     wxDC *m_DC;

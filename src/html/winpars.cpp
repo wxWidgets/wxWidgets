@@ -40,7 +40,7 @@
 
 wxList wxHtmlWinParser::m_Modules;
 
-wxHtmlWinParser::wxHtmlWinParser(wxWindow *wnd) : wxHtmlParser()
+wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindow *wnd) : wxHtmlParser()
 {
     m_tmpStrBuf = NULL;
     m_tmpStrBufSize = 0;
@@ -84,7 +84,6 @@ wxHtmlWinParser::wxHtmlWinParser(wxWindow *wnd) : wxHtmlParser()
     }
 }
 
-
 wxHtmlWinParser::~wxHtmlWinParser()
 {
     int i, j, k, l, m;
@@ -102,20 +101,15 @@ wxHtmlWinParser::~wxHtmlWinParser()
     delete[] m_tmpStrBuf;
 }
 
-
 void wxHtmlWinParser::AddModule(wxHtmlTagsModule *module)
 {
     m_Modules.Append(module);
 }
 
-
-
 void wxHtmlWinParser::RemoveModule(wxHtmlTagsModule *module)
 {
     m_Modules.DeleteObject(module);
 }
-
-
 
 void wxHtmlWinParser::SetFonts(wxString normal_face, wxString fixed_face, const int *sizes)
 {
@@ -139,8 +133,6 @@ void wxHtmlWinParser::SetFonts(wxString normal_face, wxString fixed_face, const 
                         }
                     }
 }
-
-
 
 void wxHtmlWinParser::InitParser(const wxString& source)
 {
@@ -169,16 +161,12 @@ void wxHtmlWinParser::InitParser(const wxString& source)
     m_Container->InsertCell(new wxHtmlFontCell(CreateCurrentFont()));
 }
 
-
-
 void wxHtmlWinParser::DoneParser()
 {
     m_Container = NULL;
     SetInputEncoding(wxFONTENCODING_DEFAULT); // for next call
     wxHtmlParser::DoneParser();
 }
-
-
 
 wxObject* wxHtmlWinParser::GetProduct()
 {
@@ -192,6 +180,15 @@ wxObject* wxHtmlWinParser::GetProduct()
     return top;
 }
 
+bool wxHtmlWinParser::CanOpenURL(const wxString& url) const
+{
+    // FIXME - normalize the URL to full path before passing to
+    //         OnOpeningURL!!
+    if ( m_Window )
+        return m_Window->OnOpeningURL(url);
+    else
+        return TRUE;
+}
 
 void wxHtmlWinParser::AddText(const wxChar* txt)
 {

@@ -262,6 +262,12 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             m_RelatedFrame->SetStatusText(_("Connecting..."), m_RelatedStatusBar);
             Refresh(FALSE);
         }
+        
+        if ( !m_Parser->CanOpenURL(location) )
+        {
+            wxLogError(_("Access denied to document '%s'!"), location.c_str());
+            return FALSE;
+        }
 
         f = m_FS->OpenFile(location);
 

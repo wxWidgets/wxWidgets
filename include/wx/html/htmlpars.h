@@ -48,6 +48,10 @@ public:
 
     wxFileSystem* GetFS() const { return m_FS; }
 
+    // Returns TRUE if the parser is allowed to open given URL (may be forbidden
+    // for security reasons)    
+    virtual bool CanOpenURL(const wxString& url) const { return TRUE; }
+
     // You can simply call this method when you need parsed output.
     // This method does these things:
     // 1. call InitParser(source);

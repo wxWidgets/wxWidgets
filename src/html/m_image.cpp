@@ -29,6 +29,7 @@
 
 #include "wx/html/forcelnk.h"
 #include "wx/html/m_templ.h"
+#include "wx/html/htmlwin.h"
 
 #include "wx/image.h"
 #include "wx/gifdecod.h"
@@ -547,6 +548,9 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 wxFSFile *str;
                 wxString tmp = tag.GetParam(wxT("SRC"));
                 wxString mn = wxEmptyString;
+                
+                if ( !m_WParser->CanOpenURL(tmp) )
+                    return FALSE;
 
                 str = m_WParser->GetFS()->OpenFile(tmp);
                 if (tag.HasParam(wxT("WIDTH")))

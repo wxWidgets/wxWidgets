@@ -150,6 +150,11 @@ public:
     // Called when user clicked on hypertext link. Default behavior is to
     // call LoadPage(loc)
     virtual void OnLinkClicked(const wxHtmlLinkInfo& link);
+    
+    // Called when wxHtmlWindow wants to fetch data from an URL (e.g. when loading
+    // a page or loading an image). The data are downloaded if and only if 
+    // OnOpeningURL returns TRUE.
+    virtual bool OnOpeningURL(const wxString& url) const { return TRUE; }
 
     // Returns a pointer to the parser.
     wxHtmlWinParser *GetParser() const { return m_Parser; }
