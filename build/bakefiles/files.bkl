@@ -1024,6 +1024,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/x11/minifram.h
     wx/x11/palette.h
     wx/x11/pen.h
+    wx/x11/popupwin.h
     wx/x11/print.h
     wx/x11/private.h
     wx/x11/privx.h
