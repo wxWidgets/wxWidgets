@@ -316,6 +316,8 @@ public:
     // paper size id member as well.
     void SetPaperSize(const wxSize& sz);
 
+    void SetPaperId(wxPaperSize& id) { m_printData.SetPaperId(id); };
+
     // Sets the wxPrintData id, plus the paper width/height if found in the paper database.
     void SetPaperSize(wxPaperSize id);
 
