@@ -13,7 +13,7 @@ if wx.Platform == "__WXGTK__":
 if wx.Platform == "__WXMSW__":
     import os
     localedir = os.path.join(os.path.split(__file__)[0], "locale")
-    wx.Locale_AddCatalogLookupPathPrefix(localedir)
+    Locale_AddCatalogLookupPathPrefix(localedir)
     del os
 
 #----------------------------------------------------------------------------
