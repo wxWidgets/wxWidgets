@@ -711,7 +711,7 @@ wxSize wxGridSizer::CalcMin()
     else
         ncols = (nitems + nrows-1) / nrows;
 
-    /* Find the max width and height for any component */
+    // Find the max width and height for any component
     int w = 0;
     int h = 0;
 
@@ -811,7 +811,7 @@ void wxFlexGridSizer::CreateArrays()
 
     m_rowHeights = new int[nrows];
     m_colWidths = new int[ncols];
-
+    
     for (int col = 0; col < ncols; col++)
         m_colWidths[ col ] = 0;
     for (int row = 0; row < nrows; row++)
@@ -836,20 +836,35 @@ void wxFlexGridSizer::RecalcSizes()
     wxSize minsz( CalcMin() );
     wxPoint pt( GetPosition() );
     int    delta;
-    size_t idx;
+    size_t idx,num;
+    wxArrayInt temp;
+    
+    // Transfer only those rows into temp which exist in the sizer
+    // ignoring the superflouus ones. This prevents a segfault when
+    // calling AddGrowableRow( 3 ) if the sizer only has 2 rows.
+    for (idx = 0; idx < m_growableRows.GetCount(); idx++)
+        if (m_growableRows[idx] < nrows)
+            temp.Add( m_growableRows[idx] );
+    num = temp.GetCount();
 
-    if ((m_growableRows.GetCount() > 0) && (sz.y > minsz.y))
+    if ((num > 0) && (sz.y > minsz.y))
     {
-        delta = (sz.y - minsz.y) / m_growableRows.GetCount();
-        for (idx = 0; idx < m_growableRows.GetCount(); idx++)
-            m_rowHeights[ m_growableRows[idx] ] += delta;
+        delta = (sz.y - minsz.y) / num;
+        for (idx = 0; idx < num; idx++)
+            m_rowHeights[ temp[idx] ] += delta;
     }
 
-    if ((m_growableCols.GetCount() > 0) && (sz.x > minsz.x))
+    // See above 
+    for (idx = 0; idx < m_growableCols.GetCount(); idx++)
+        if (m_growableCols[idx] < ncols)
+            temp.Add( m_growableCols[idx] );
+    num = temp.GetCount();
+    
+    if ((num > 0) && (sz.x > minsz.x))
     {
-        delta = (sz.x - minsz.x) / m_growableCols.GetCount();
-        for (idx = 0; idx < m_growableCols.GetCount(); idx++)
-            m_colWidths[ m_growableCols[idx] ] += delta;
+        delta = (sz.x - minsz.x) / num;
+        for (idx = 0; idx < num; idx++)
+            m_colWidths[ temp[idx] ] += delta;
     }
 
     sz = wxSize( pt.x + sz.x, pt.y + sz.y );
@@ -1071,8 +1086,8 @@ wxSize wxBoxSizer::CalcMin()
         }
         node = node->Next();
     }
-	// Calculate overall minimum size
-	node = m_children.GetFirst();
+    // Calculate overall minimum size
+    node = m_children.GetFirst();
     while (node)
     {
         wxSizerItem *item = (wxSizerItem*) node->Data();
@@ -1144,7 +1159,7 @@ static void GetStaticBoxBorders(wxStaticBox *box,
     else
 #endif // __WXGTK__
         *borderTop = 15;
-	(void)box;
+    (void)box;
     *borderOther = 5;
 }
 
