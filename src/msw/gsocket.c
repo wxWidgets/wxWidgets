@@ -767,16 +767,19 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
   GSocketEventFlags result = 0;
-  char c;
 
   assert(socket != NULL);
 
   result = flags & socket->m_detected;
 
-  if ((flags & GSOCK_INPUT_FLAG) &&
-      (recv(socket->m_fd, &c, 1, MSG_PEEK) > 0))
+  /* Explicitly check for input events */
+  if ((flags & GSOCK_INPUT_FLAG) && (socket->m_fd != INVALID_SOCKET))
   {
-    result |= GSOCK_INPUT_FLAG;
+    u_long arg = 0;
+    int ret    = ioctlsocket(socket->m_fd, FIONREAD, (u_long FAR *) &arg);
+
+    if ((ret == 0) && (arg > 0))
+      result |= GSOCK_INPUT_FLAG;
   }
 
   return result;
@@ -1041,17 +1044,14 @@ GSocketError _GSocket_Connect_Timeout(GSocket *socket)
   fd_set writefds;
   fd_set exceptfds;
 
-  if (!socket->m_non_blocking)
+  FD_ZERO(&writefds);
+  FD_ZERO(&exceptfds);
+  FD_SET(socket->m_fd, &writefds);
+  FD_SET(socket->m_fd, &exceptfds);
+  if (select(0, NULL, &writefds, &exceptfds, &socket->m_timeout) == 0)
   {
-    FD_ZERO(&writefds);
-    FD_ZERO(&exceptfds);
-    FD_SET(socket->m_fd, &writefds);
-    FD_SET(socket->m_fd, &exceptfds);
-    if (select(0, NULL, &writefds, &exceptfds, &socket->m_timeout) == 0)
-    {
-      socket->m_error = GSOCK_TIMEDOUT;
-      return GSOCK_TIMEDOUT;
-    }
+    socket->m_error = GSOCK_TIMEDOUT;
+    return GSOCK_TIMEDOUT;
   }
   if (!FD_ISSET(socket->m_fd, &writefds))
   {
