@@ -165,33 +165,6 @@ inline int Stricmp(const char *psz1, const char *psz2)
 #endif  // OS/compiler
 }
 
-#ifndef wxSnprintf   
-// wxSnprintf() is like snprintf() if it's available and sprintf() (always
-// available, but dangerous!) if not.
-extern int WXDLLEXPORT wxSnprintf(wxChar *buf, size_t len,
-                                  const wxChar *format,
-                                  ...) ATTRIBUTE_PRINTF_3;
-#else
-// GNU libc 2.2 only has for wxSnprintf for Unicode called swprintf
-// so we imitate wxSprintf using it.
-extern int WXDLLEXPORT wxSprintf(wxChar *buf,
-                                  const wxChar *format,
-                                  ...) ATTRIBUTE_PRINTF_2;
-#endif
-
-#ifndef wxVsnprintf
-// and wxVsnprintf() is like vsnprintf() or vsprintf()
-extern int WXDLLEXPORT wxVsnprintf(wxChar *buf, size_t len,
-                                   const wxChar *format,
-                                   va_list argptr);
-#else
-// GNU libc 2.2 only has for wxVsnprintf for Unicode called vswprintf
-// so we imitate wxVsprintf using it.
-extern int WXDLLEXPORT wxVsprintf(wxChar *buf,
-                                  const wxChar *format,
-                                  va_list argptr);
-#endif
-
 // return an empty wxString
 class WXDLLEXPORT wxString; // not yet defined
 inline const wxString& wxGetEmptyString() { return *(wxString *)&wxEmptyString; }

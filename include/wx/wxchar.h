@@ -52,6 +52,9 @@
 #   define wxUSE_WCHAR_T 1
 #endif // Unicode
 
+// Required for wxPrintf() etc
+#include <stdarg.h>
+
 // ----------------------------------------------------------------------------
 // define wxHAVE_TCHAR_FUNCTIONS for the compilers which support the
 // wide-character functions
@@ -395,23 +398,18 @@ typedef  _TUCHAR     wxUChar;
 #      define  wxFgets     fgetws
 #      define  wxFputc     fputwc
 #      define  wxFputchar  fputwchar
-#      define  wxFprintf   fwprintf
-#      define  wxFscanf    fwscanf
 #      define  wxGetc      getwc
 #      define  wxGetchar   getwchar
 #      define  wxGets      getws
-#      define  wxPrintf    wprintf
 #      define  wxPutc      wputc
 #      define  wxPutchar   wputchar
 #      define  wxPuts      putws
-#      define  wxScanf     wscanf
-#      define  wxSnprintf  swprintf
-#      define  wxSscanf    swscanf
 #      define  wxUngetc    ungetwc
-#      define  wxVfprint   vfwprintf
-#      define  wxVprintf   vwprintf
-#      define  wxVsscanf   vswscanf
-#      define  wxVsnprintf vswprintf
+
+// we need %s to %ls conversion for printf and scanf etc
+#      define wxNEED_PRINTF_CONVERSION
+#      define wxHAS_VSNPRINTF
+#      define wxHAS_SNPRINTF
 
 // glibc doesn't have wc equivalents of the other stuff
 #      define wxNEED_WX_STDIO_H
@@ -608,6 +606,37 @@ WXDLLEXPORT size_t wxWC2MB(char *buf, const wchar_t *psz, size_t n);
 #endif
 
 WXDLLEXPORT bool wxOKlibc(); // for internal use
+
+// We need conversion from %s to %ls in Unicode mode under Unix
+#ifdef wxNEED_PRINTF_CONVERSION
+int wxScanf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
+int wxSscanf( const wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
+int wxFscanf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
+int wxVsscanf( const wxChar *str, const wxChar *format, va_list ap );
+int wxPrintf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
+int wxSnprintf( wxChar *str, size_t size, const wxChar *format, ... ) ATTRIBUTE_PRINTF_4;
+int wxSprintf( wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
+int wxFprintf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
+int wxVfprint( const wxChar *format, va_list ap );
+int wxVprintf( const wxChar *format, va_list ap );
+int wxVsnprintf( wxChar *str, size_t size, const wxChar *format, va_list ap );
+int wxVsprintf( wxChar *str, const wxChar *format, va_list ap );
+#endif
+
+#if !defined(wxSnprintf) && !defined(wxHAS_SNPRINTF)
+// wxSnprintf() is like snprintf() if it's available and sprintf() (always
+// available, but dangerous!) if not.
+WXDLLEXPORT int wxSnprintf(wxChar *buf, size_t len,
+                                  const wxChar *format,
+                                  ...) ATTRIBUTE_PRINTF_3;
+#endif
+
+#if !defined(wxVsnprintf) && !defined(wxHAS_VSNPRINTF)
+// and wxVsnprintf() is like vsnprintf() or vsprintf()
+WXDLLEXPORT int wxVsnprintf(wxChar *buf, size_t len,
+                                   const wxChar *format,
+                                   va_list argptr);
+#endif
 
 // if libc versions are not available, use replacements defined in wxchar.cpp
 #ifndef wxStrdup

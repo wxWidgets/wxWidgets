@@ -389,7 +389,7 @@ protected:
     wxString m_vendorName,      // vendor name (ACME Inc)
              m_appName,         // app name
              m_className;       // class name
-
+             
 #if wxUSE_GUI
     // the main top level window - may be NULL
     wxWindow *m_topWindow;
