@@ -1510,9 +1510,9 @@ wxString wxGetOSDirectory()
 #endif
 }
 
-bool wxEndsWithPathSeparator(const char *pszFileName)
+bool wxEndsWithPathSeparator(const wxChar *pszFileName)
 {
-  size_t len = Strlen(pszFileName);
+  size_t len = wxStrlen(pszFileName);
   if ( len == 0 )
     return FALSE;
   else
