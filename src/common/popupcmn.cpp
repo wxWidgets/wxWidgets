@@ -198,8 +198,9 @@ wxPopupTransientWindow::wxPopupTransientWindow(wxWindow *parent, int style)
 wxPopupTransientWindow::~wxPopupTransientWindow()
 {
     PopHandlers();
-
+#ifndef __WXX11__
     delete m_handlerFocus;
+#endif   
     delete m_handlerPopup;
 }
 
