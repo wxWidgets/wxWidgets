@@ -609,6 +609,7 @@ class wxPrintPreviewPtr(wxObjectPtr):
         return val
     def GetCanvas(self, *_args, **_kwargs):
         val = printfwc.wxPrintPreview_GetCanvas(self, *_args, **_kwargs)
+        if val: val = wxPreviewCanvasPtr(val) 
         return val
     def PaintPage(self, *_args, **_kwargs):
         val = printfwc.wxPrintPreview_PaintPage(self, *_args, **_kwargs)
@@ -618,6 +619,9 @@ class wxPrintPreviewPtr(wxObjectPtr):
         return val
     def RenderPage(self, *_args, **_kwargs):
         val = printfwc.wxPrintPreview_RenderPage(self, *_args, **_kwargs)
+        return val
+    def AdjustScrollbars(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_AdjustScrollbars(self, *_args, **_kwargs)
         return val
     def GetPrintDialogData(self, *_args, **_kwargs):
         val = printfwc.wxPrintPreview_GetPrintDialogData(self, *_args, **_kwargs)
@@ -670,6 +674,10 @@ class wxPreviewFramePtr(wxFramePtr):
         return val
     def CreateCanvas(self, *_args, **_kwargs):
         val = printfwc.wxPreviewFrame_CreateCanvas(self, *_args, **_kwargs)
+        return val
+    def GetControlBar(self, *_args, **_kwargs):
+        val = printfwc.wxPreviewFrame_GetControlBar(self, *_args, **_kwargs)
+        if val: val = wxPreviewControlBarPtr(val) 
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxPreviewFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
