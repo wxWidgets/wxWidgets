@@ -70,7 +70,11 @@
 // is 'c' a valid character in group name?
 // NB: wxCONFIG_IMMUTABLE_PREFIX and wxCONFIG_PATH_SEPARATOR must be valid chars,
 //     but _not_ ']' (group name delimiter)
-inline bool IsValid(char c) { return isalnum(c) || strchr("@_/-!.*%", c); }
+// NB2: we explicitly allow symbols from the 2nd half of the ASCII table
+inline bool IsValid(char c)
+{
+    return isalnum(c) || strchr("@_/-!.*%", c) || ((c & 0x80) != 0);
+}
 
 // compare functions for sorting the arrays
 static int CompareEntries(ConfigEntry *p1, ConfigEntry *p2);
