@@ -147,11 +147,11 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     m_macIsUserPane = false;
     wxControl::Create(parent, m_windowID, pos, size, style , validator , name);
     WebInitForCarbon();
-    HIWebViewCreate( (HIViewRef*) &m_macControl );
+    HIWebViewCreate( (HIViewRef*) *m_peer );
     
-    m_webView = (WebView*) HIWebViewGetWebView( (HIViewRef) m_macControl );
+    m_webView = (WebView*) HIWebViewGetWebView( (HIViewRef) *m_peer );
     MacPostControlCreate(pos, size);
-    HIViewSetVisible( (HIViewRef) m_macControl, true );           
+    HIViewSetVisible( (HIViewRef) *m_peer, true );           
     [m_webView setHidden:false];
 #endif
 
@@ -293,7 +293,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 }
 
 void wxWebKitCtrl::MacVisibilityChanged(){
-    bool isHidden = !IsControlVisible( (HIViewRef)m_macControl);
+    bool isHidden = !IsControlVisible( (HIViewRef)*m_peer);
     [m_webView setHidden:isHidden];
 }
 
