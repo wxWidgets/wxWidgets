@@ -441,8 +441,7 @@ bool wxXmlResourceHandler::GetBool(const wxString& param, bool defaultv)
     wxString v = GetParamValue(param);
     v.MakeLower();
     if (!v) return defaultv;
-    else return v == _T("1") || v == _T("t") || v == _T("yes") ||
-                v == _T("on") || v == _T("true");
+    else return (v == _T("1"));
 }
 
 
