@@ -27,6 +27,9 @@
     #pragma hdrstop
 #endif
 
+#if defined(__WIN95__) && \
+    (!defined(__GNUWIN32__) || defined(wxUSE_NORLANDER_HEADERS))
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dialog.h"
@@ -36,29 +39,21 @@
 
 #include "wx/msw/private.h"
 
-#if defined(__WIN95__) && \
-    (!defined(__GNUWIN32__) || defined(wxUSE_NORLANDER_HEADERS))
-    #define CAN_COMPILE_DIRDLG
-//#else: we provide a stub version which doesn't do anything
-#endif
-
-#ifdef CAN_COMPILE_DIRDLG
-    #include "shlobj.h" // Win95 shell
-#endif
+#include "shlobj.h" // Win95 shell
 
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
 #ifndef MAX_PATH
-    #define MAX_PATH 4096      // be generuous
+    #define MAX_PATH 4096      // be generous
 #endif
 
 // ----------------------------------------------------------------------------
 // wxWindows macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_CLASS(wxDirDialog, wxDialog)
+IMPLEMENT_CLASS(wxDirDialog, wxDialog)
 
 // ----------------------------------------------------------------------------
 // private functions prototypes
@@ -70,6 +65,7 @@ static void ItemListFree(LPITEMIDLIST pidl);
 // the callback proc for the dir dlg
 static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp,
                                        LPARAM pData);
+
 
 // ============================================================================
 // implementation
@@ -93,7 +89,6 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
 
 int wxDirDialog::ShowModal()
 {
-#ifdef CAN_COMPILE_DIRDLG
     BROWSEINFO bi;
     bi.hwndOwner      = m_parent ? GetHwndOf(m_parent) : NULL;
     bi.pidlRoot       = NULL;
@@ -129,9 +124,6 @@ int wxDirDialog::ShowModal()
     }
 
     return wxID_OK;
-#else // !CAN_COMPILE_DIRDLG
-    return wxID_CANCEL;
-#endif // CAN_COMPILE_DIRDLG/!CAN_COMPILE_DIRDLG
 }
 
 // ----------------------------------------------------------------------------
@@ -188,3 +180,6 @@ static void ItemListFree(LPITEMIDLIST pidl)
     }
 }
 
+#else
+    #include "../generic/dirdlgg.cpp"
+#endif // compiler/platform on which the code here compiles
