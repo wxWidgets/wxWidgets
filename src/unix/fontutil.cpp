@@ -235,7 +235,10 @@ static wxHashTable *g_fontHash = (wxHashTable*) NULL;
 #elif defined(__WXGTK__)
     wxNativeFont wxLoadFont(const wxString& fontSpec)
     {
-       return gdk_font_load( wxConvertWX2MB(fontSpec) );
+        // use gdk_fontset_load() instead of gdk_font_load() because otherwise
+        // we have problems with Japanese (not terribly precise, I know, but
+        // this is all the patch said)
+        return gdk_fontset_load( wxConvertWX2MB(fontSpec) );
     }
 
     inline void wxFreeFont(wxNativeFont font)
