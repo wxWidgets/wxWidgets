@@ -73,6 +73,8 @@ extern wxList wxPendingDelete;
 extern wxList *wxWinMacWindowList;
 extern wxList *wxWinMacControlList;
 
+static long sleepTime = 0 ;
+
 wxApp *wxTheApp = NULL;
 
 #if !USE_SHARED_LIBRARY
@@ -1370,16 +1372,19 @@ bool wxApp::Yield(bool onlyIfNeeded)
 #endif
     EventRecord event ;
 
-    long sleepTime = 1 ; //::GetCaretTime();
+	// having a larger value here leads to large performance slowdowns
+	// so we cannot give background apps more processor time here
+	// we do so however having a large sleep value in the main event loop
+    sleepTime = 0 ; 
 
-    while ( !wxTheApp->IsExiting() && WaitNextEvent(everyEvent, &event,sleepTime, (RgnHandle) wxApp::s_macCursorRgn))
+    while ( !IsExiting() && WaitNextEvent(everyEvent, &event,sleepTime, (RgnHandle) wxApp::s_macCursorRgn))
     {
-        wxTheApp->MacHandleModifierEvents( &event ) ;
-        wxTheApp->MacHandleOneEvent( &event );
+        MacHandleModifierEvents( &event ) ;
+        MacHandleOneEvent( &event );
         if ( event.what != kHighLevelEvent )
             SetRectRgn( (RgnHandle) wxApp::s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
     }
-    wxTheApp->MacHandleModifierEvents( &event ) ;
+   MacHandleModifierEvents( &event ) ;
 
     wxMacProcessNotifierAndPendingEvents() ;
 
@@ -1448,12 +1453,11 @@ void wxApp::MacDoOneEvent()
 {
   EventRecord event ;
 
-    long sleepTime = 1; // GetCaretTime() / 4 ;
-
     if (WaitNextEvent(everyEvent, &event, sleepTime, (RgnHandle) s_macCursorRgn))
     {
         MacHandleModifierEvents( &event ) ;
         MacHandleOneEvent( &event );
+        sleepTime = 0 ;
     }
     else
     {
@@ -1463,7 +1467,10 @@ void wxApp::MacDoOneEvent()
         if ( window )
             ::IdleControls( window ) ;
 
-        wxTheApp->ProcessIdle() ;
+        if ( wxTheApp->ProcessIdle() )
+        	sleepTime = 0 ;
+        else
+        	sleepTime = GetCaretTime() / 2 ;
     }
     if ( event.what != kHighLevelEvent )
         SetRectRgn( (RgnHandle) s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
