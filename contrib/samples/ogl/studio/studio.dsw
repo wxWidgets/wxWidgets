@@ -14,6 +14,33 @@ Package=<4>
 
 ###############################################################################
 
+Project: "deprecated"=..\..\..\..\build\msw\wx_deprecated.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "adv"=..\..\..\..\build\msw\wx_adv.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+Begin Project Dependency
+Project_Dep_Name core
+End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "core"=..\..\..\..\build\msw\wx_core.dsp - Package Owner=<4>
 
 Package=<5>
@@ -41,7 +68,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ogledit"=studio.dsp - Package Owner=<4>
+Project: "studio"=studio.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -51,6 +78,12 @@ Package=<4>
 {{{
 Begin Project Dependency
 Project_Dep_Name ogl
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name deprecated
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name adv
 End Project Dependency
 Begin Project Dependency
 Project_Dep_Name core

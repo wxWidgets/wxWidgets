@@ -5,7 +5,7 @@
     <set var="CONTRIB_HDR_DIR">$(SRCDIR)/../../../include</set>
     <include file="../../../../build/bakefiles/common_contrib.bkl"/>
 
-    <exe id="ogledit" template="wx_contrib_sample" template_append="wx_append">
+    <exe id="studio" template="wx_contrib_sample" template_append="wx_append">
         <sources>
             studio.cpp
             doc.cpp
@@ -19,6 +19,8 @@
             csprint.cpp
         </sources>
         <wx-lib>ogl</wx-lib>
+        <wx-lib>deprecated</wx-lib>
+        <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <win32-res>studio.rc</win32-res>

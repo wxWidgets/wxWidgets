@@ -16,6 +16,7 @@
 #pragma interface "basic.h"
 #endif
 
+#include <wx/deprecated/setup.h>
 
 #define OGL_VERSION     2.0
 
