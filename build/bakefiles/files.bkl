@@ -331,6 +331,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/hash.h
     wx/hashmap.h
     wx/hashset.h
+    wx/html/forcelnk.h
     wx/iconloc.h
     wx/init.h
     wx/intl.h
@@ -2478,7 +2479,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/htmllbox.cpp
 </set>
 <set var="HTML_HDR" hints="files">
-    wx/html/forcelnk.h
     wx/html/helpctrl.h
     wx/html/helpdata.h
     wx/html/helpfrm.h

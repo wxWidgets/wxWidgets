@@ -194,6 +194,7 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/include/wx/xml
 	mkdir $(DISTDIR)/include/wx/msw
+	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/src/unix
 	mkdir $(DISTDIR)/src/msw
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
@@ -315,6 +316,7 @@ MSW_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/src/msw/wince
 	cp $(MSWDIR)/*.cpp $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.c $(DISTDIR)/src/msw
+	cp $(MSWDIR)/*.rc $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.def $(DISTDIR)/src/msw
 	cp $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
 
