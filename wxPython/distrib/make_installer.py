@@ -76,6 +76,7 @@ Source: "wxPython\calendarc.pyd";           DestDir: "{app}\wxPython"; Component
 Source: "wxPython\glcanvasc.pyd";           DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\oglc.pyd";                DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\stc_c.pyd";               DestDir: "{app}\wxPython"; Components: core
+Source: "wxPython\xrcc.pyd";                DestDir: "{app}\wxPython"; Components: core
 
 Source: "wxPython\*.py";                    DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\lib\*.py";                DestDir: "{app}\wxPython\lib"; Components: core
@@ -102,6 +103,7 @@ Source: "demo\data\*.i";                    DestDir: "{app}\wxPython\demo\data";
 Source: "demo\data\*.h";                    DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.txt";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.wav";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
+Source: "demo\data\*.wdr";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.xrc";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 
 Source: "README.txt";                       DestDir: "{app}\wxPython\docs";  Flags: isreadme; Components: core
