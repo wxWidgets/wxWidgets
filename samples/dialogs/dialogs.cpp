@@ -923,10 +923,13 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
 {
     wxBoxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
-    m_btnFocused = new wxButton(this, -1, _T("Default button"));
+    m_btnModal = new wxButton(this, -1, _T("&Modal dialog..."));
+    m_btnModeless = new wxButton(this, -1, _T("Mode&less dialog"));
     m_btnDelete = new wxButton(this, -1, _T("&Delete button"));
+
     wxButton *btnOk = new wxButton(this, wxID_CANCEL, _T("&Close"));
-    sizerTop->Add(m_btnFocused, 0, wxALIGN_CENTER | wxALL, 5);
+    sizerTop->Add(m_btnModal, 0, wxALIGN_CENTER | wxALL, 5);
+    sizerTop->Add(m_btnModeless, 0, wxALIGN_CENTER | wxALL, 5);
     sizerTop->Add(m_btnDelete, 0, wxALIGN_CENTER | wxALL, 5);
     sizerTop->Add(btnOk, 0, wxALIGN_CENTER | wxALL, 5);
 
@@ -936,24 +939,28 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
     sizerTop->SetSizeHints(this);
     sizerTop->Fit(this);
 
-    m_btnFocused->SetFocus();
-    m_btnFocused->SetDefault();
+    m_btnModal->SetFocus();
+    m_btnModal->SetDefault();
 }
 
 void MyModalDialog::OnButton(wxCommandEvent& event)
 {
     if ( event.GetEventObject() == m_btnDelete )
     {
-        delete m_btnFocused;
-        m_btnFocused = NULL;
+        delete m_btnModal;
+        m_btnModal = NULL;
 
         m_btnDelete->Disable();
     }
-    else if ( event.GetEventObject() == m_btnFocused )
+    else if ( event.GetEventObject() == m_btnModal )
     {
         wxGetTextFromUser(_T("Dummy prompt"),
                           _T("Modal dialog called from dialog"),
                           _T(""), this);
+    }
+    else if ( event.GetEventObject() == m_btnModeless )
+    {
+        (new MyModelessDialog(this))->Show();
     }
     else
     {

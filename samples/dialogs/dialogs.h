@@ -44,8 +44,9 @@ public:
     void OnButton(wxCommandEvent& event);
 
 private:
-    wxButton *m_btnFocused;
-    wxButton *m_btnDelete;
+    wxButton *m_btnModal,
+             *m_btnModeless,
+             *m_btnDelete;
 
     DECLARE_EVENT_TABLE()
 };
