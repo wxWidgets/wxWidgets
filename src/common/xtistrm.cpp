@@ -78,6 +78,13 @@ void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo 
 
 void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , bool isEmbedded)
 {
+    // hack to avoid writing out embedded windows, these are windows that are constructed as part of other windows, they would
+    // doubly constructed afterwards
+
+    const wxWindow * win = dynamic_cast<const wxWindow*>(object) ;
+    if ( win && win->GetId() < 0 )
+        return ;
+
     if ( persister->BeforeWriteObject( this , object , classInfo ) )
     {
         if ( object == NULL )
@@ -578,24 +585,27 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                     {
                         wxASSERT_MSG(prop->GetName() == wxT("element") , wxT("A non empty collection must consist of 'element' nodes")) ;
                         wxXmlNode* elementContent = prop->GetChildren() ;
-                        wxASSERT_MSG(elementContent, wxT("An element node cannot be empty")) ;
-                        if ( elementType->IsObjectType() )
+                        if ( elementContent )
                         {
-                            int valueId = ReadComponent( elementContent , callbacks ) ;
-                            if ( valueId != wxInvalidObjectID )
+                            // we skip empty elements
+                            if ( elementType->IsObjectType() )
                             {
-                                if ( pi->GetAccessor()->HasAdder() )
-                                    callbacks->AddToPropertyCollectionAsObject( objectID , classInfo , pi , valueId ) ;
-                                // TODO for collections we must have a notation on taking over ownership or not 
-                                if ( elementType->GetKind() == wxT_OBJECT && valueId != wxNullObjectID )
-                                    callbacks->DestroyObject( valueId , GetObjectClassInfo( valueId ) ) ;
+                                int valueId = ReadComponent( elementContent , callbacks ) ;
+                                if ( valueId != wxInvalidObjectID )
+                                {
+                                    if ( pi->GetAccessor()->HasAdder() )
+                                        callbacks->AddToPropertyCollectionAsObject( objectID , classInfo , pi , valueId ) ;
+                                    // TODO for collections we must have a notation on taking over ownership or not 
+                                    if ( elementType->GetKind() == wxT_OBJECT && valueId != wxNullObjectID )
+                                        callbacks->DestroyObject( valueId , GetObjectClassInfo( valueId ) ) ;
+                                }
                             }
-                        }
-                        else
-                        {
-                            wxxVariant elementValue = ReadValue( elementContent , elementType ) ;
-                            if ( pi->GetAccessor()->HasAdder() )
-                                callbacks->AddToPropertyCollection( objectID , classInfo ,pi , elementValue ) ;
+                            else
+                            {
+                                wxxVariant elementValue = ReadValue( elementContent , elementType ) ;
+                                if ( pi->GetAccessor()->HasAdder() )
+                                    callbacks->AddToPropertyCollection( objectID , classInfo ,pi , elementValue ) ;
+                            }
                         }
                         prop = prop->GetNext() ;
                     }
