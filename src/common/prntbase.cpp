@@ -366,41 +366,24 @@ void wxPreviewControlBar::CreateButtons()
         x += gap + buttonWidth;
     }
 
-    // Yes, this look stupid, but this is because gcc gives up otherwise.
-    wxString *choices = new wxString[23];
-    choices[0] = "10%";
-    choices[1] = "15%";
-    choices[2] = "20%";
-    choices[3] = "25%";
-    choices[4] = "30%";
-    choices[5] = "35%";
-    choices[6] = "40%";
-    choices[7] = "45%";
-    choices[8] = "50%";
-    choices[9] = "55%";
-    choices[10] = "60%";
-    choices[11] = "65%";
-    choices[12] = "70%";
-    choices[13] = "75%";
-    choices[14] = "80%";
-    choices[15] = "85%";
-    choices[16] = "90%";
-    choices[17] = "95%";
-    choices[18] = "100%";
-    choices[19] = "110%";
-    choices[20] = "120%";
-    choices[21] = "150%";
-    choices[22] = "200%";
+    static const char *choices[] =
+    {
+        "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45%", "50%", "55%",
+        "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%", "110%",
+        "120%", "150%", "200%"
+    };
 
-    int n = 23;
     if (m_buttonFlags & wxPREVIEW_ZOOM)
     {
-        m_zoomControl = new wxChoice(this, wxID_PREVIEW_ZOOM, wxPoint(x, y),
-            wxSize(100, -1), n, (wxString *)choices);
+        m_zoomControl = new wxChoice(this, wxID_PREVIEW_ZOOM,
+                                     wxPoint(x, y), wxSize(100, -1));
         SetZoomControl(m_printPreview->GetZoom());
     }
 
-    delete[] choices;
+    // Yes, this look stupid, but this is because gcc gives up otherwise.
+    int n = WXSIZEOF(choices);
+    for ( int i = 0; i < n; i++ )
+        m_zoomControl->Append(choices[i]);
 
     //  m_closeButton->SetDefault();
 }
