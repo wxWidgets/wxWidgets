@@ -615,6 +615,8 @@ SWIG_Check_double(PyObject* obj)
  static const wxString wxPyDialogNameStr(wxDialogNameStr); 
  static const wxString wxPyStatusLineNameStr(wxStatusLineNameStr); 
  static const wxString wxPyToolBarNameStr(wxToolBarNameStr); 
+void wxTopLevelWindow_MacSetMetalAppearance(wxTopLevelWindow *self,bool on){ /*wxPyRaiseNotImplemented();*/ }
+bool wxTopLevelWindow_MacGetMetalAppearance(wxTopLevelWindow const *self){ /*wxPyRaiseNotImplemented();*/ return false; }
 
 
 wxRect wxStatusBar_GetFieldRect(wxStatusBar *self,int i){
@@ -3323,6 +3325,63 @@ static PyObject *_wrap_TopLevelWindow_IsActive(PyObject *, PyObject *args, PyObj
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->IsActive();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_TopLevelWindow_MacSetMetalAppearance(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
+    bool arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "on", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TopLevelWindow_MacSetMetalAppearance",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxTopLevelWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (bool)SWIG_As_bool(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxTopLevelWindow_MacSetMetalAppearance(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_TopLevelWindow_MacGetMetalAppearance(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TopLevelWindow_MacGetMetalAppearance",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxTopLevelWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxTopLevelWindow_MacGetMetalAppearance((wxTopLevelWindow const *)arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -25410,6 +25469,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TopLevelWindow_SetShape", (PyCFunction) _wrap_TopLevelWindow_SetShape, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TopLevelWindow_RequestUserAttention", (PyCFunction) _wrap_TopLevelWindow_RequestUserAttention, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TopLevelWindow_IsActive", (PyCFunction) _wrap_TopLevelWindow_IsActive, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"TopLevelWindow_MacSetMetalAppearance", (PyCFunction) _wrap_TopLevelWindow_MacSetMetalAppearance, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"TopLevelWindow_MacGetMetalAppearance", (PyCFunction) _wrap_TopLevelWindow_MacGetMetalAppearance, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TopLevelWindow_swigregister", TopLevelWindow_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_Frame", (PyCFunction) _wrap_new_Frame, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_PreFrame", (PyCFunction) _wrap_new_PreFrame, METH_VARARGS | METH_KEYWORDS, NULL },

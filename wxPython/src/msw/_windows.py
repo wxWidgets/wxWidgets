@@ -380,6 +380,14 @@ class TopLevelWindow(_core.Window):
         """IsActive(self) -> bool"""
         return _windows_.TopLevelWindow_IsActive(*args, **kwargs)
 
+    def MacSetMetalAppearance(*args, **kwargs):
+        """MacSetMetalAppearance(self, bool on)"""
+        return _windows_.TopLevelWindow_MacSetMetalAppearance(*args, **kwargs)
+
+    def MacGetMetalAppearance(*args, **kwargs):
+        """MacGetMetalAppearance(self) -> bool"""
+        return _windows_.TopLevelWindow_MacGetMetalAppearance(*args, **kwargs)
+
 
 class TopLevelWindowPtr(TopLevelWindow):
     def __init__(self, this):

@@ -4298,6 +4298,9 @@ EVT_LIST_COL_DRAGGING      = wx.PyEventBinder(wxEVT_COMMAND_LIST_COL_DRAGGING   
 EVT_LIST_COL_END_DRAG      = wx.PyEventBinder(wxEVT_COMMAND_LIST_COL_END_DRAG     , 1)
 EVT_LIST_ITEM_FOCUSED      = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_FOCUSED     , 1)
 
+EVT_LIST_GET_INFO = wx._deprecated(EVT_LIST_GET_INFO)
+EVT_LIST_SET_INFO = wx._deprecated(EVT_LIST_SET_INFO)
+
 #---------------------------------------------------------------------------
 
 class ListCtrl(_core.Control):
@@ -4386,7 +4389,7 @@ class ListCtrl(_core.Control):
         return _controls_.ListCtrl_SetItemState(*args, **kwargs)
 
     def SetItemImage(*args, **kwargs):
-        """SetItemImage(self, long item, int image, int selImage) -> bool"""
+        """SetItemImage(self, long item, int image, int selImage=-1) -> bool"""
         return _controls_.ListCtrl_SetItemImage(*args, **kwargs)
 
     def GetItemText(*args, **kwargs):

@@ -9450,7 +9450,7 @@ class Sizer(Object):
         """
         ShowItems(self, bool show)
 
-        Recursively call `wx.Window.Show` on all sizer items.
+        Recursively call `wx.SizerItem.Show` on all sizer items.
         """
         return _core_.Sizer_ShowItems(*args, **kwargs)
 
@@ -10261,6 +10261,15 @@ class GridBagSizer(FlexGridSizer):
         something was already there.
         """
         return _core_.GridBagSizer_AddItem(*args, **kwargs)
+
+    def GetCellSize(*args, **kwargs):
+        """
+        GetCellSize(self, int row, int col) -> Size
+
+        Get the size of the specified cell, including hgap and
+        vgap.  Only valid after a Layout.
+        """
+        return _core_.GridBagSizer_GetCellSize(*args, **kwargs)
 
     def GetEmptyCellSize(*args, **kwargs):
         """

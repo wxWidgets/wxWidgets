@@ -4761,6 +4761,16 @@ class PyApp(EvtHandler):
         """
         return _core_.PyApp_WakeUpIdle(*args, **kwargs)
 
+    def IsMainLoopRunning(*args, **kwargs):
+        """
+        IsMainLoopRunning() -> bool
+
+        Returns True if we're running the main loop, i.e. if the events can
+        currently be dispatched.
+        """
+        return _core_.PyApp_IsMainLoopRunning(*args, **kwargs)
+
+    IsMainLoopRunning = staticmethod(IsMainLoopRunning)
     def MainLoop(*args, **kwargs):
         """
         MainLoop(self) -> int
@@ -4986,6 +4996,15 @@ class PyAppPtr(PyApp):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PyApp
 _core_.PyApp_swigregister(PyAppPtr)
+
+def PyApp_IsMainLoopRunning(*args, **kwargs):
+    """
+    PyApp_IsMainLoopRunning() -> bool
+
+    Returns True if we're running the main loop, i.e. if the events can
+    currently be dispatched.
+    """
+    return _core_.PyApp_IsMainLoopRunning(*args, **kwargs)
 
 def PyApp_GetMacSupportPCMenuShortcuts(*args, **kwargs):
     """PyApp_GetMacSupportPCMenuShortcuts() -> bool"""
@@ -9500,7 +9519,7 @@ class Sizer(Object):
         """
         ShowItems(self, bool show)
 
-        Recursively call `wx.Window.Show` on all sizer items.
+        Recursively call `wx.SizerItem.Show` on all sizer items.
         """
         return _core_.Sizer_ShowItems(*args, **kwargs)
 
@@ -10311,6 +10330,15 @@ class GridBagSizer(FlexGridSizer):
         something was already there.
         """
         return _core_.GridBagSizer_AddItem(*args, **kwargs)
+
+    def GetCellSize(*args, **kwargs):
+        """
+        GetCellSize(self, int row, int col) -> Size
+
+        Get the size of the specified cell, including hgap and
+        vgap.  Only valid after a Layout.
+        """
+        return _core_.GridBagSizer_GetCellSize(*args, **kwargs)
 
     def GetEmptyCellSize(*args, **kwargs):
         """

@@ -20215,6 +20215,30 @@ static PyObject *_wrap_PyApp_WakeUpIdle(PyObject *, PyObject *args, PyObject *kw
 }
 
 
+static PyObject *_wrap_PyApp_IsMainLoopRunning(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    bool result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":PyApp_IsMainLoopRunning",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxPyApp::IsMainLoopRunning();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PyApp_MainLoop(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
@@ -38414,6 +38438,44 @@ static PyObject *_wrap_GridBagSizer_AddItem(PyObject *, PyObject *args, PyObject
 }
 
 
+static PyObject *_wrap_GridBagSizer_GetCellSize(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    wxSize result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "row",(char *) "col", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:GridBagSizer_GetCellSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxGridBagSizer,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (int)SWIG_As_int(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    arg3 = (int)SWIG_As_int(obj2); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxGridBagSizer const *)arg1)->GetCellSize(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxSize * resultptr;
+        resultptr = new wxSize((wxSize &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxSize, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_GridBagSizer_GetEmptyCellSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
@@ -41241,6 +41303,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyApp_ProcessPendingEvents", (PyCFunction) _wrap_PyApp_ProcessPendingEvents, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PyApp_Yield", (PyCFunction) _wrap_PyApp_Yield, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PyApp_WakeUpIdle", (PyCFunction) _wrap_PyApp_WakeUpIdle, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PyApp_IsMainLoopRunning", (PyCFunction) _wrap_PyApp_IsMainLoopRunning, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PyApp_MainLoop", (PyCFunction) _wrap_PyApp_MainLoop, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PyApp_Exit", (PyCFunction) _wrap_PyApp_Exit, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PyApp_ExitMainLoop", (PyCFunction) _wrap_PyApp_ExitMainLoop, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -41809,6 +41872,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_GridBagSizer", (PyCFunction) _wrap_new_GridBagSizer, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"GridBagSizer_Add", (PyCFunction) _wrap_GridBagSizer_Add, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"GridBagSizer_AddItem", (PyCFunction) _wrap_GridBagSizer_AddItem, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GridBagSizer_GetCellSize", (PyCFunction) _wrap_GridBagSizer_GetCellSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"GridBagSizer_GetEmptyCellSize", (PyCFunction) _wrap_GridBagSizer_GetEmptyCellSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"GridBagSizer_SetEmptyCellSize", (PyCFunction) _wrap_GridBagSizer_SetEmptyCellSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"GridBagSizer_GetItemPosition", _wrap_GridBagSizer_GetItemPosition, METH_VARARGS, NULL },

@@ -38438,6 +38438,44 @@ static PyObject *_wrap_GridBagSizer_AddItem(PyObject *, PyObject *args, PyObject
 }
 
 
+static PyObject *_wrap_GridBagSizer_GetCellSize(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    wxSize result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "row",(char *) "col", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:GridBagSizer_GetCellSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxGridBagSizer,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (int)SWIG_As_int(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    arg3 = (int)SWIG_As_int(obj2); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxGridBagSizer const *)arg1)->GetCellSize(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxSize * resultptr;
+        resultptr = new wxSize((wxSize &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxSize, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_GridBagSizer_GetEmptyCellSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
@@ -41834,6 +41872,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_GridBagSizer", (PyCFunction) _wrap_new_GridBagSizer, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"GridBagSizer_Add", (PyCFunction) _wrap_GridBagSizer_Add, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"GridBagSizer_AddItem", (PyCFunction) _wrap_GridBagSizer_AddItem, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GridBagSizer_GetCellSize", (PyCFunction) _wrap_GridBagSizer_GetCellSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"GridBagSizer_GetEmptyCellSize", (PyCFunction) _wrap_GridBagSizer_GetEmptyCellSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"GridBagSizer_SetEmptyCellSize", (PyCFunction) _wrap_GridBagSizer_SetEmptyCellSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"GridBagSizer_GetItemPosition", _wrap_GridBagSizer_GetItemPosition, METH_VARARGS, NULL },

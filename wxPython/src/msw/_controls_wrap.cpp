@@ -790,8 +790,10 @@ public:
     }
 
     DEC_PYCALLBACK_STRING_LONGLONG(OnGetItemText);
-    DEC_PYCALLBACK_INT_LONG(OnGetItemImage);
     DEC_PYCALLBACK_LISTATTR_LONG(OnGetItemAttr);
+
+    // use the virtual version to avoid a confusing assert in the base class
+    DEC_PYCALLBACK_INT_LONG_virtual(OnGetItemImage);
 
     PYPRIVATE;
 };
@@ -799,8 +801,9 @@ public:
 IMPLEMENT_ABSTRACT_CLASS(wxPyListCtrl, wxListCtrl);
 
 IMP_PYCALLBACK_STRING_LONGLONG(wxPyListCtrl, wxListCtrl, OnGetItemText);
-IMP_PYCALLBACK_INT_LONG(wxPyListCtrl, wxListCtrl, OnGetItemImage);
 IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
+IMP_PYCALLBACK_INT_LONG_virtual(wxPyListCtrl, wxListCtrl, OnGetItemImage);
+ 
 
 wxListItem *wxPyListCtrl_GetColumn(wxPyListCtrl *self,int col){
             wxListItem item;
@@ -22367,7 +22370,7 @@ static PyObject *_wrap_ListCtrl_SetItemImage(PyObject *, PyObject *args, PyObjec
     wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
     long arg2 ;
     int arg3 ;
-    int arg4 ;
+    int arg4 = (int) -1 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -22377,15 +22380,17 @@ static PyObject *_wrap_ListCtrl_SetItemImage(PyObject *, PyObject *args, PyObjec
         (char *) "self",(char *) "item",(char *) "image",(char *) "selImage", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:ListCtrl_SetItemImage",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:ListCtrl_SetItemImage",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyListCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     arg2 = (long)SWIG_As_long(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg4 = (int)SWIG_As_int(obj3); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj3) {
+        arg4 = (int)SWIG_As_int(obj3); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->SetItemImage(arg2,arg3,arg4);
