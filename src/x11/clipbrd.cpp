@@ -396,9 +396,11 @@ bool wxClipboard::AddData( wxDataObject *data )
     wxDataFormat *array = new wxDataFormat[ m_data->GetFormatCount() ];
     m_data->GetAllFormats( array );
 
+#if 0
     /* primary selection or clipboard */
     Atom clipboard = m_usePrimary ? (Atom) 1  // 1 = primary selection
                                   : g_clipboardAtom;
+#endif // 0
 
 
     for (size_t i = 0; i < m_data->GetFormatCount(); i++)

@@ -606,9 +606,10 @@ void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int siz
     // wxLogDebug( "Setting pos: %d, %d", x, y );
     wxWindowX11::DoSetSize(x, y, width, height, sizeFlags);
 
+#if 0
     wxPoint pt = GetPosition();
     // wxLogDebug( "After, pos: %d, %d", pt.x, pt.y );
-#if 0
+
     XSync(wxGlobalDisplay(), False);
     int w, h;
     GetSize(& w, & h);
