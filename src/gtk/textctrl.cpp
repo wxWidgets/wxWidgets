@@ -22,7 +22,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl,wxControl)
 
 void gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
-{ 
+{
   win->m_modified = TRUE;
 };
 
@@ -36,8 +36,8 @@ wxTextCtrl::wxTextCtrl(void) : streambuf()
   m_modified = FALSE;
 };
 
-wxTextCtrl::wxTextCtrl( wxWindow *parent, const wxWindowID id, const wxString &value, 
-      const wxPoint &pos, const wxSize &size, 
+wxTextCtrl::wxTextCtrl( wxWindow *parent, const wxWindowID id, const wxString &value,
+      const wxPoint &pos, const wxSize &size,
       const int style, const wxString &name ) : streambuf()
 {
   m_modified = FALSE;
@@ -45,36 +45,36 @@ wxTextCtrl::wxTextCtrl( wxWindow *parent, const wxWindowID id, const wxString &v
 };
 
 bool wxTextCtrl::Create( wxWindow *parent, const wxWindowID id, const wxString &value,
-      const wxPoint &pos, const wxSize &size, 
+      const wxPoint &pos, const wxSize &size,
       const int style, const wxString &name )
 {
   m_needParent = TRUE;
-  
+
   PreCreation( parent, id, pos, size, style, name );
-  
+
   if (style & wxTE_MULTILINE)
     m_widget = gtk_text_new( NULL, NULL );
   else
     m_widget = gtk_entry_new();
-    
+
   wxSize newSize = size;
   if (newSize.x == -1) newSize.x = 80;
   if (newSize.y == -1) newSize.y = 26;
   SetSize( newSize.x, newSize.y );
-  
+
   PostCreation();
-  
+
+  // we want to be notified about text changes
+  gtk_signal_connect(GTK_OBJECT(m_widget), "changed",
+                     GTK_SIGNAL_FUNC(gtk_text_changed_callback),
+                     (gpointer)this);
+
   if (!value.IsNull())
   {
     gint tmp = 0;
-    
-    // Don't know why this is so
-    if (style & wxTE_MULTILINE)
-      gtk_editable_insert_text( GTK_EDITABLE(m_widget), value, value.Length()+1, &tmp );
-    else
-      gtk_editable_insert_text( GTK_EDITABLE(m_widget), value, value.Length(), &tmp );
+    gtk_editable_insert_text( GTK_EDITABLE(m_widget), value, value.Length(), &tmp );
   };
-  
+
   if (style & wxREADONLY)
   {
   }
@@ -82,9 +82,9 @@ bool wxTextCtrl::Create( wxWindow *parent, const wxWindowID id, const wxString &
   {
     if (style & wxTE_MULTILINE) gtk_text_set_editable( GTK_TEXT(m_widget), 1 );
   };
-  
+
   Show( TRUE );
-    
+
   return TRUE;
 };
 
@@ -94,7 +94,7 @@ wxString wxTextCtrl::GetValue(void) const
   if (m_windowStyle & wxTE_MULTILINE)
   {
     gint len = gtk_text_get_length( GTK_TEXT(m_widget) );
-    tmp = gtk_editable_get_chars( GTK_EDITABLE(m_widget), 0, len-1 );
+    tmp = gtk_editable_get_chars( GTK_EDITABLE(m_widget), 0, len );
   }
   else
   {
@@ -110,7 +110,7 @@ void wxTextCtrl::SetValue( const wxString &value )
   if (m_windowStyle & wxTE_MULTILINE)
   {
     gint len = gtk_text_get_length( GTK_TEXT(m_widget) );
-    gtk_editable_delete_text( GTK_EDITABLE(m_widget), 0, len-1 );
+    gtk_editable_delete_text( GTK_EDITABLE(m_widget), 0, len );
     len = 0;
     gtk_editable_insert_text( GTK_EDITABLE(m_widget), tmp, tmp.Length(), &len );
   }
@@ -123,7 +123,7 @@ void wxTextCtrl::SetValue( const wxString &value )
 void wxTextCtrl::WriteText( const wxString &text )
 {
   if (text.IsNull()) return;
-  
+
   if (m_windowStyle & wxTE_MULTILINE)
   {
     gint len = gtk_text_get_length( GTK_TEXT(m_widget) );
@@ -156,6 +156,7 @@ bool wxTextCtrl::IsModified(void)
 
 void wxTextCtrl::DiscardEdits(void)
 {
+  m_modified = FALSE;
 };
 
 /*
@@ -278,7 +279,7 @@ int wxTextCtrl::overflow(int c)
     wxError("Streambuf allocation failed","Internal error");
     return EOF;
   }
-  
+
   // Verify that there are no characters in get area
   if ( gptr() && gptr() < egptr() )
   {
