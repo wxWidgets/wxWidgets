@@ -2455,14 +2455,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 event.m_item = info->item.hItem;
                 event.m_label = info->item.pszText;
-                if (info->item.pszText == NULL)
-                {
-                    event.m_editCancelled = true;
-                }
-                 else
-                {
-                    event.m_editCancelled = false;
-                }
+                event.m_editCancelled = info->item.pszText == NULL;
                 break;
             }
 
