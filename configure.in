@@ -1524,6 +1524,10 @@ if test "$wxUSE_GTK" = 1; then
     UNIXOBJS="\$(UNIX_OBJS)"
     UNIXDEPS="\$(UNIX_DEPS)"
     GUIDIST=GTK_DIST
+
+dnl test for XIM support in libgdk
+AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_GDK_XIM))
+
 fi
 
 if test "$wxUSE_WINE" = 1; then

@@ -1,4 +1,4 @@
-
+G
 /* This define (__WX_SETUP_H__) is used both to insure setup.h is included
  * only once and to indicate that we are building using configure. */
 #ifndef __WX_SETUP_H__
@@ -733,5 +733,8 @@
 
 /* Define if you have the <wcstr.h> header file.  */
 #undef HAVE_WCSTR_H
+
+/* Define this if you are using gtk and gdk contains support for X11R6 XIM */
+#undef HAVE_GDK_XIM
 
 #endif /* __WX_SETUP_H__ */
