@@ -174,7 +174,8 @@ public:
     const char* cWX2MB(const char *psz) const { return psz; }
 };
 
-WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc, wxConvFile, wxConvLocal, wxConvISO8859_1;
+WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc, wxConvFile, wxConvLocal,
+                                  wxConvISO8859_1, wxConvUTF8;
 WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
 
 #define wxFNCONV(name) name

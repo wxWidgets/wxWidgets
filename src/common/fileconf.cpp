@@ -384,11 +384,7 @@ void wxFileConfig::Init()
     {
         wxTextFile fileGlobal(m_strGlobalFile);
 
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-        if ( fileGlobal.Open( wxConvUTF8 ) ) 
-#else
-        if ( fileGlobal.Open() ) 
-#endif
+        if ( fileGlobal.Open(wxConvUTF8/*ignored in ANSI build*/) )
         {
             Parse(fileGlobal, FALSE /* global */);
             SetRootPath();
@@ -403,11 +399,7 @@ void wxFileConfig::Init()
     if ( !m_strLocalFile.IsEmpty() && wxFile::Exists(m_strLocalFile) )
     {
         wxTextFile fileLocal(m_strLocalFile);
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-        if ( fileLocal.Open( wxConvUTF8 ) ) 
-#else
-        if ( fileLocal.Open() ) 
-#endif
+        if ( fileLocal.Open(wxConvUTF8/*ignored in ANSI build*/) )
         {
             Parse(fileLocal, TRUE /* local */);
             SetRootPath();
@@ -965,12 +957,7 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   {
     wxString line = p->Text();
     line += wxTextFile::GetEOL();
-#if wxUSE_UNICODE
-    wxCharBuffer buf = wxConvLocal.cWX2MB( line );
-    if ( !file.Write( (const char*)buf, strlen( (const char*) buf ) ) )
-#else
-    if ( !file.Write( line.c_str(), line.Len() ) )
-#endif
+    if ( !file.Write(line, wxConvUTF8) )
     {
       wxLogError(_("can't write user configuration file."));
       return FALSE;

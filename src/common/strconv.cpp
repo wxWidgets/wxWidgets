@@ -58,7 +58,8 @@
     WXDLLEXPORT_DATA(wxMBConv) wxConvLibc,
                                wxConvFile,
                                wxConvISO8859_1,
-                               wxConvLocal;
+                               wxConvLocal,
+                               wxConvUTF8;
 #endif // wxUSE_WCHAR_T
 
 WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
