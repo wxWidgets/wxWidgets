@@ -597,9 +597,12 @@ public:
 // be in your main program (e.g. hello.cpp). Now IMPLEMENT_APP should add this
 // code if required.
 
+#define IMPLEMENT_WXWIN_MAIN_CONSOLE \
+        int main(int argc, char **argv) { return wxEntry(argc, argv); }
+
 #if !wxUSE_GUI || !defined(__WXMSW__)
     #define IMPLEMENT_WXWIN_MAIN                                              \
-        int main(int argc, char **argv) { return wxEntry(argc, argv); }
+        IMPLEMENT_WXWIN_MAIN_CONSOLE
 #elif defined(__WXMSW__)
     // we need HINSTANCE declaration to define WinMain()
     #include "wx/msw/wrapwin.h"
@@ -660,6 +663,11 @@ public:
 #define IMPLEMENT_APP(appname)              \
     IMPLEMENT_APP_NO_THEMES(appname)        \
     IMPLEMENT_WX_THEME_SUPPORT
+
+// Same as IMPLEMENT_APP(), but for console applications.
+#define IMPLEMENT_APP_CONSOLE(appname)      \
+    IMPLEMENT_APP_NO_MAIN(appname)          \
+    IMPLEMENT_WXWIN_MAIN_CONSOLE
 
 // this macro can be used multiple times and just allows you to use wxGetApp()
 // function

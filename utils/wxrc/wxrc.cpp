@@ -64,7 +64,7 @@ private:
     int retCode;
 };
 
-IMPLEMENT_APP_NO_THEMES(XmlResApp)
+IMPLEMENT_APP_CONSOLE(XmlResApp)
 
 int XmlResApp::OnRun()
 {
