@@ -17,7 +17,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include <wx/defs.h>
+#include "wx/defs.h"
 
 #if wxUSE_GUI
     #error "This sample can't be compiled in GUI mode."
@@ -25,9 +25,9 @@
 
 #include <stdio.h>
 
-#include <wx/string.h>
-#include <wx/file.h>
-#include <wx/app.h>
+#include "wx/string.h"
+#include "wx/file.h"
+#include "wx/app.h"
 
 // without this pragma, the stupid compiler precompiles #defines below so that
 // changing them doesn't "take place" later!
@@ -77,7 +77,7 @@
 //#define TEST_ZLIB
 
 #ifdef TEST_SNGLINST
-    #include <wx/snglinst.h>
+    #include "wx/snglinst.h"
 #endif // TEST_SNGLINST
 
 // ----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ static wxString MakePrintable(const wxChar *s)
 
 #ifdef TEST_CHARSET
 
-#include <wx/fontmap.h>
+#include "wx/fontmap.h"
 
 static void TestCharset()
 {
@@ -175,8 +175,8 @@ static void TestCharset()
 
 #ifdef TEST_CMDLINE
 
-#include <wx/cmdline.h>
-#include <wx/datetime.h>
+#include "wx/cmdline.h"
+#include "wx/datetime.h"
 
 static void ShowCmdLine(const wxCmdLineParser& parser)
 {
@@ -217,7 +217,7 @@ static void ShowCmdLine(const wxCmdLineParser& parser)
 
 #ifdef TEST_DIR
 
-#include <wx/dir.h>
+#include "wx/dir.h"
 
 #ifdef __UNIX__
     static const wxChar *ROOTDIR = _T("/");
@@ -349,7 +349,7 @@ static void TestDirTraverse()
 
 #ifdef TEST_DLLLOADER
 
-#include <wx/dynlib.h>
+#include "wx/dynlib.h"
 
 static void TestDllLoad()
 {
@@ -373,7 +373,7 @@ static void TestDllLoad()
     }
     else
     {
-        typedef int (*strlenType)(char *);
+        typedef int (*strlenType)(const char *);
         strlenType pfnStrlen = (strlenType)wxDllLoader::GetSymbol(dllHandle, FUNC_NAME);
         if ( !pfnStrlen )
         {
@@ -404,7 +404,7 @@ static void TestDllLoad()
 
 #ifdef TEST_ENVIRON
 
-#include <wx/utils.h>
+#include "wx/utils.h"
 
 static wxString MyGetEnv(const wxString& var)
 {
@@ -441,7 +441,7 @@ static void TestEnvironment()
 
 #ifdef TEST_EXECUTE
 
-#include <wx/utils.h>
+#include "wx/utils.h"
 
 static void TestExecute()
 {
@@ -508,9 +508,9 @@ static void TestExecute()
 
 #ifdef TEST_FILE
 
-#include <wx/file.h>
-#include <wx/ffile.h>
-#include <wx/textfile.h>
+#include "wx/file.h"
+#include "wx/ffile.h"
+#include "wx/textfile.h"
 
 static void TestFileRead()
 {
@@ -643,8 +643,8 @@ static void TestFileCopy()
 
 #ifdef TEST_FILECONF
 
-#include <wx/confbase.h>
-#include <wx/fileconf.h>
+#include "wx/confbase.h"
+#include "wx/fileconf.h"
 
 static const struct FileConfTestData
 {
@@ -706,7 +706,7 @@ static void TestFileConfRead()
 
 #ifdef TEST_FILENAME
 
-#include <wx/filename.h>
+#include "wx/filename.h"
 
 static struct FileNameInfo
 {
@@ -837,7 +837,7 @@ static void TestFileSetTimes()
 
 #ifdef TEST_HASH
 
-#include <wx/hash.h>
+#include "wx/hash.h"
 
 struct Foo
 {
@@ -854,7 +854,7 @@ size_t Foo::count = 0;
 WX_DECLARE_LIST(Foo, wxListFoos);
 WX_DECLARE_HASH(Foo, wxListFoos, wxHashFoos);
 
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 
 WX_DEFINE_LIST(wxListFoos);
 
@@ -923,10 +923,10 @@ static void TestHash()
 
 #ifdef TEST_LIST
 
-#include <wx/list.h>
+#include "wx/list.h"
 
 WX_DECLARE_LIST(Bar, wxListBars);
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxListBars);
 
 static void TestListCtor()
@@ -1256,7 +1256,7 @@ static void TestDefaultLang()
 
 #ifdef TEST_MIME
 
-#include <wx/mimetype.h>
+#include "wx/mimetype.h"
 
 static void TestMimeEnum()
 {
@@ -1405,7 +1405,7 @@ static void TestMimeAssociate()
 
 #ifdef TEST_INFO_FUNCTIONS
 
-#include <wx/utils.h>
+#include "wx/utils.h"
 
 static void TestDiskInfo()
 {
@@ -1473,8 +1473,8 @@ static void TestUserInfo()
 
 #ifdef TEST_LONGLONG
 
-#include <wx/longlong.h>
-#include <wx/timer.h>
+#include "wx/longlong.h"
+#include "wx/timer.h"
 
 // make a 64 bit number from 4 16 bit ones
 #define MAKE_LL(x1, x2, x3, x4) wxLongLong((x1 << 16) | x2, (x3 << 16) | x3)
@@ -1806,7 +1806,7 @@ static void TestPathList()
 
 #ifdef TEST_REGEX
 
-#include <wx/regex.h>
+#include "wx/regex.h"
 
 static void TestRegExCompile()
 {
@@ -2033,8 +2033,8 @@ static void TestRegExInteractive()
 
 #ifdef TEST_REGCONF
 
-#include <wx/confbase.h>
-#include <wx/msw/regconf.h>
+#include "wx/confbase.h"
+#include "wx/msw/regconf.h"
 
 static void TestRegConfWrite()
 {
@@ -2046,7 +2046,7 @@ static void TestRegConfWrite()
 
 #ifdef TEST_REGISTRY
 
-#include <wx/msw/registry.h>
+#include "wx/msw/registry.h"
 
 // I chose this one because I liked its name, but it probably only exists under
 // NT
@@ -2155,9 +2155,9 @@ static void TestRegistryAssociation()
 
 #ifdef TEST_SOCKETS
 
-#include <wx/socket.h>
-#include <wx/protocol/protocol.h>
-#include <wx/protocol/http.h>
+#include "wx/socket.h"
+#include "wx/protocol/protocol.h"
+#include "wx/protocol/http.h"
 
 static void TestSocketServer()
 {
@@ -2287,7 +2287,7 @@ static void TestSocketClient()
 
 #ifdef TEST_FTP
 
-#include <wx/protocol/ftp.h>
+#include "wx/protocol/ftp.h"
 
 static wxFTP ftp;
 
@@ -2611,8 +2611,8 @@ static void TestFtpUpload()
 
 #ifdef TEST_STREAMS
 
-#include <wx/wfstream.h>
-#include <wx/mstream.h>
+#include "wx/wfstream.h"
+#include "wx/mstream.h"
 
 static void TestFileStream()
 {
@@ -2664,8 +2664,8 @@ static void TestMemoryStream()
 
 #ifdef TEST_TIMER
 
-#include <wx/timer.h>
-#include <wx/utils.h>
+#include "wx/timer.h"
+#include "wx/utils.h"
 
 static void TestStopWatch()
 {
@@ -2714,7 +2714,7 @@ static void TestStopWatch()
 
 #ifdef TEST_VCARD
 
-#include <wx/vcard.h>
+#include "wx/vcard.h"
 
 static void DumpVObject(size_t level, const wxVCardObject& vcard)
 {
@@ -2956,10 +2956,10 @@ static void TestVCardWrite()
 
 #ifdef TEST_WCHAR
 
-#include <wx/strconv.h>
-#include <wx/fontenc.h>
-#include <wx/encconv.h>
-#include <wx/buffer.h>
+#include "wx/strconv.h"
+#include "wx/fontenc.h"
+#include "wx/encconv.h"
+#include "wx/buffer.h"
 
 static void TestUtf8()
 {
@@ -3095,8 +3095,8 @@ static void TestZipFileSystem()
 
 #ifdef TEST_ZLIB
 
-#include <wx/zstream.h>
-#include <wx/wfstream.h>
+#include "wx/zstream.h"
+#include "wx/wfstream.h"
 
 static const wxChar *FILENAME_GZ = _T("test.gz");
 static const char *TEST_DATA = "hello and hello again";
@@ -3149,9 +3149,8 @@ static void TestZlibStreamRead()
 
 #include <math.h>
 
-#include <wx/date.h>
-
-#include <wx/datetime.h>
+#include "wx/date.h"
+#include "wx/datetime.h"
 
 // the test data
 struct Date
@@ -4183,7 +4182,7 @@ static void TestTimeCompatibility()
 
 #ifdef TEST_THREADS
 
-#include <wx/thread.h>
+#include "wx/thread.h"
 
 static size_t gs_counter = (size_t)-1;
 static wxCriticalSection gs_critsect;
