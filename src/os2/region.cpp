@@ -629,6 +629,7 @@ void wxRegionIterator::Reset(
 )
 {
     m_lCurrent = 0;
+    m_lNumRects = 0;
     m_vRegion  = rRegion;
 
     if (m_pRects)
