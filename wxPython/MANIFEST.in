@@ -31,6 +31,8 @@ include demo/data/*.i
 include demo/data/*.h
 include demo/data/*.py
 include demo/data/*.wav
+include demo/data/*.wdr
+include demo/data/*.xrc
 
 include samples/doodle/*.txt
 include samples/doodle/*.py
@@ -113,3 +115,18 @@ include contrib/stc/contrib/src/stc/scintilla/include/*.iface
 include contrib/stc/contrib/src/stc/scintilla/src/*.h
 include contrib/stc/contrib/src/stc/scintilla/src/*.cxx
 
+include contrib/xrc/*.txt
+include contrib/xrc/*.i
+include contrib/xrc/*.py
+include contrib/xrc/*.cpp
+include contrib/xrc/*.c
+include contrib/xrc/*.h
+include contrib/xrc/contrib/include/wx/xrc/*.h
+include contrib/xrc/contrib/src/xrc/*.cpp
+include contrib/xrc/contrib/src/xrc/*.txt
+include contrib/xrc/contrib/src/xrc/README.EXPAT
+include contrib/xrc/contrib/src/xrc/expat/*.txt
+include contrib/xrc/contrib/src/xrc/expat/xmlparse/*.c
+include contrib/xrc/contrib/src/xrc/expat/xmlparse/*.h
+include contrib/xrc/contrib/src/xrc/expat/xmltok/*.c
+include contrib/xrc/contrib/src/xrc/expat/xmltok/*.h

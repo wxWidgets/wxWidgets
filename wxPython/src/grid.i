@@ -1361,6 +1361,7 @@ public:
     void     BeginBatch();
     void     EndBatch();
     int      GetBatchCount();
+    void     ForceRefresh();
 
 
     // ------ edit control functions

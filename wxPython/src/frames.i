@@ -86,6 +86,7 @@ public:
     bool Command(int id);
     bool ProcessCommand(int id);
     bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
+    bool IsFullScreen();
 };
 
 //---------------------------------------------------------------------------

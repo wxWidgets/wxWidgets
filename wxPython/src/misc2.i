@@ -284,18 +284,10 @@ public:
     wxString GetTip();
     // *** Not in the "public" interface void SetWindow(wxWindow *win);
     wxWindow *GetWindow();
+
+    static void Enable(bool flag);
+    static void SetDelay(long milliseconds);
 };
-
-
-%inline %{
-    void wxToolTip_Enable(bool flag) {
-        wxToolTip::Enable(flag);
-    }
-
-    void wxToolTip_SetDelay(long milliseconds) {
-        wxToolTip::SetDelay(milliseconds);
-    }
-%}
 
 //----------------------------------------------------------------------
 

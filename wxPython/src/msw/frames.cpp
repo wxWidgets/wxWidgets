@@ -1078,6 +1078,34 @@ static PyObject *_wrap_wxFrame_ShowFullScreen(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxFrame_IsFullScreen(_swigobj)  (_swigobj->IsFullScreen())
+static PyObject *_wrap_wxFrame_IsFullScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxFrame * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_IsFullScreen",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_IsFullScreen. Expected _wxFrame_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxFrame_IsFullScreen(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxMiniFrameTowxFrame(void *ptr) {
     wxMiniFrame *src;
     wxFrame *dest;
@@ -1192,6 +1220,7 @@ static PyObject *_wrap_new_wxMiniFrame(PyObject *self, PyObject *args, PyObject 
 
 static PyMethodDef framescMethods[] = {
 	 { "new_wxMiniFrame", (PyCFunction) _wrap_new_wxMiniFrame, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_IsFullScreen", (PyCFunction) _wrap_wxFrame_IsFullScreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_ShowFullScreen", (PyCFunction) _wrap_wxFrame_ShowFullScreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_ProcessCommand", (PyCFunction) _wrap_wxFrame_ProcessCommand, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_Command", (PyCFunction) _wrap_wxFrame_Command, METH_VARARGS | METH_KEYWORDS },

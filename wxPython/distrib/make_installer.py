@@ -102,6 +102,7 @@ Source: "demo\data\*.i";                    DestDir: "{app}\wxPython\demo\data";
 Source: "demo\data\*.h";                    DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.txt";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.wav";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
+Source: "demo\data\*.xrc";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 
 Source: "README.txt";                       DestDir: "{app}\wxPython\docs";  Flags: isreadme; Components: core
 Source: "CHANGES.txt";                      DestDir: "{app}\wxPython\docs"; Components: core

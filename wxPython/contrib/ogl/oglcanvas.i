@@ -31,7 +31,7 @@
 
 %include _ogldefs.i
 
-%extern oglbasic.i
+%import oglbasic.i
 
 
 %pragma(python) code = "import wx"
@@ -45,7 +45,7 @@ public:
     wxDiagram();
     //~wxDiagram();
 
-    void AddShape(wxPyShape*shape, wxPyShape *addAfter = NULL);
+    void AddShape(wxPyShape* shape, wxPyShape *addAfter = NULL);
     void Clear(wxDC& dc);
     void DeleteAllShapes();
     void DrawOutline(wxDC& dc, double x1, double y1, double x2, double y2);
