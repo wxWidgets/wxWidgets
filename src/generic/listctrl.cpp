@@ -1969,12 +1969,15 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     wxWindow *parent = GetParent();
 
     /* we send a list_key event up */
-    wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetParent()->GetId() );
-    le.m_itemIndex = GetIndexOfLine( m_current );
-    m_current->GetItem( 0, le.m_item );
-    le.m_code = (int)event.KeyCode();
-    le.SetEventObject( parent );
-    parent->GetEventHandler()->ProcessEvent( le );
+    if ( m_current )
+    {
+        wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetParent()->GetId() );
+        le.m_itemIndex = GetIndexOfLine( m_current );
+        m_current->GetItem( 0, le.m_item );
+        le.m_code = (int)event.KeyCode();
+        le.SetEventObject( parent );
+        parent->GetEventHandler()->ProcessEvent( le );
+    }
 
     /* we propagate the char event up */
     wxKeyEvent ke( wxEVT_CHAR );
