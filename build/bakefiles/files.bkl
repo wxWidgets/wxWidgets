@@ -20,7 +20,8 @@
                                
        $(port)LOWLEVEL               low-level GUI classes
        $(port)                       high-level files for a port
-       XWIN_LOWLEVEL                 low-level classes for X Window System port
+       XWIN_LOWLEVEL                 low-level classes for X Window System 
+                                     ports (wxGTK, wxMotif, wxX11)
 
        HTML                          wxHTML files
   
@@ -205,6 +206,7 @@
     wx/defs.h
     wx/dir.h
     wx/dynarray.h
+    wx/arrstr.h
     wx/dynlib.h
     wx/dynload.h
     wx/encconv.h
@@ -1355,6 +1357,7 @@
     src/unix/snglinst.cpp
 </set>
 <set var="MAC_HDR">
+    wx/mac/chkconf.h
     wx/mac/accel.h
     wx/mac/aga.h
     wx/mac/app.h
