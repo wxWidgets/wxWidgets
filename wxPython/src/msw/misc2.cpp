@@ -1548,11 +1548,13 @@ static PyObject *_wrap_wxSafeYield(PyObject *self, PyObject *args, PyObject *kwa
     PyObject * _resultobj;
     bool  _result;
     wxWindow * _arg0 = (wxWindow *) NULL;
+    bool  _arg1 = (bool ) FALSE;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "win", NULL };
+    int tempbool1 = (int) FALSE;
+    char *_kwnames[] = { "win","onlyIfNeeded", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:wxSafeYield",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|Oi:wxSafeYield",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1561,9 +1563,10 @@ static PyObject *_wrap_wxSafeYield(PyObject *self, PyObject *args, PyObject *kwa
         return NULL;
         }
     }
+    _arg1 = (bool ) tempbool1;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxSafeYield(_arg0);
+    _result = (bool )wxSafeYield(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
