@@ -346,9 +346,11 @@ bool wxRadioBox::Create(wxWindow *parent,
                          (HMENU)NewControlId(), wxGetInstance(), NULL);
 
     SetSelection(0);
-
     SetSize(pos.x, pos.y, size.x, size.y);
 
+    // Now that we have items determine what is the best size and set it.
+    SetBestSize(size);
+    
     return TRUE;
 }
 

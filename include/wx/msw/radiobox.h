@@ -128,6 +128,9 @@ public:
         { SetBackgroundColour(bg); }
 
 protected:
+    // we can't compute our best size before the items are added to the control
+    virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) { }
+
     // subclass one radio button
     void SubclassRadioButton(WXHWND hWndBtn);
 

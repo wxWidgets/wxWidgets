@@ -216,6 +216,7 @@ void wxStaticText::SetLabel(const wxString& label)
     if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
     {
         DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+        SetSizeHints(GetSize());
     }
 }
 
@@ -229,6 +230,7 @@ bool wxStaticText::SetFont(const wxFont& font)
     if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
     {
         DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+        SetSizeHints(GetSize());
     }
 
     return ret;

@@ -143,11 +143,6 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
     m_windowStyle = style;
     m_tickFreq = 0;
 
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
-
     long msStyle = 0;
     long wstyle = 0;
 
@@ -272,8 +267,12 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
         }
     }
 
-    SetSize(x, y, width, height);
+    SetSize(pos.x, pos.y, size.x, size.y);
     SetValue(value);
+
+    // SetInitialBestSize is not called since we don't call MSWCreateControl
+    // for this control, so call SetBestSize here instead.
+    SetBestSize(size);
 
     return TRUE;
 }
