@@ -93,6 +93,7 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
       source "COMMON\\prntbase.cpp"
       source "COMMON\\process.cpp"
       source "COMMON\\protocol.cpp"
+      source "COMMON\\quantize.cpp"
       source "COMMON\\resource.cpp"
       source "COMMON\\sckaddr.cpp"
       source "COMMON\\sckfile.cpp"
@@ -109,6 +110,7 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
       source "COMMON\\textfile.cpp"
       source "COMMON\\timercmn.cpp"
       source "COMMON\\tokenzr.cpp"
+      source "COMMON\\treelist.cpp"
       source "COMMON\\txtstrm.cpp"
       option report(level, "E")
       {

@@ -259,6 +259,7 @@ COMMONOBJS = \
   ..\common\$D\prntbase.obj \
   ..\common\$D\process.obj \
   ..\common\$D\protocol.obj \
+  ..\common\$D\quantize.obj \
   ..\common\$D\resource.obj \
   ..\common\$D\sckaddr.obj \
   ..\common\$D\sckfile.obj \
@@ -275,6 +276,7 @@ COMMONOBJS = \
   ..\common\$D\textfile.obj \
   ..\common\$D\timercmn.obj \
   ..\common\$D\tokenzr.obj \
+  ..\common\$D\treebase.obj \
   ..\common\$D\txtstrm.obj \
   ..\common\$D\unzip.obj \
   ..\common\$D\url.obj \
@@ -364,6 +366,7 @@ COMLIBOBJS2 = \
   prntbase.obj \
   process.obj \
   protocol.obj \
+  quantize.obj \
   resource.obj \
   sckaddr.obj \
   sckfile.obj \
@@ -378,10 +381,11 @@ COMLIBOBJS2 = \
   tbarbase.obj \
   textcmn.obj \
   textfile.obj \
-  timercmn.obj \
-  tokenzr.obj
+  timercmn.obj
 
 COMLIBOBJS3 = \
+  tokenzr.obj \
+  treebase.obj \
   txtstrm.obj \
   unzip.obj \
   url.obj \
@@ -693,6 +697,7 @@ $(COMLIBOBJS2):
   copy ..\common\$D\prntbase.obj
   copy ..\common\$D\process.obj
   copy ..\common\$D\protocol.obj
+  copy ..\common\$D\quantize.obj
   copy ..\common\$D\resource.obj
   copy ..\common\$D\sckaddr.obj
   copy ..\common\$D\sckfile.obj
@@ -708,9 +713,10 @@ $(COMLIBOBJS2):
   copy ..\common\$D\textcmn.obj
   copy ..\common\$D\textfile.obj
   copy ..\common\$D\timercmn.obj
-  copy ..\common\$D\tokenzr.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\tokenzr.obj
+  copy ..\common\$D\treebase.obj
   copy ..\common\$D\txtstrm.obj
   copy ..\common\$D\unzip.obj
   copy ..\common\$D\url.obj

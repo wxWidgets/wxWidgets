@@ -106,6 +106,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "COMMON\\PRNTBASE.CPP"
       source type(cpp) "COMMON\\PROCESS.CPP"
       source type(cpp) "COMMON\\PROTOCOL.CPP"
+      source type(cpp) "COMMON\\QUANTIZE.CPP"
       source type(cpp) "COMMON\\RESOURCE.CPP"
       source type(cpp) "COMMON\\SCKADDR.CPP"
       source type(cpp) "COMMON\\SCKFILE.CPP"
@@ -122,6 +123,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "COMMON\\TEXTFILE.CPP"
       source type(cpp) "COMMON\\TIMERCMN.CPP"
       source type(cpp) "COMMON\\TOKENZR.CPP"
+      source type(cpp) "COMMON\\TREEBASE.CPP"
       source type(cpp) "COMMON\\TXTSTRM.CPP"
       option report(level, "E")
       {
