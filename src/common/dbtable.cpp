@@ -1651,6 +1651,26 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
         sqlStmt += pDb->SQLColumnName(pIdxDefs[i].ColName);
 //        sqlStmt += pIdxDefs[i].ColName;
 
+        // MySQL requires a key length on VARCHAR keys
+        if ( pDb->Dbms() == dbmsMY_SQL )
+        {
+            // Find the details on this column
+            int j;
+            for ( j = 0; j < noCols; ++j )
+            {
+                if ( wxStrcmp( pIdxDefs[i].ColName, colDefs[j].ColName ) == 0 )
+                {
+                    break;
+                }
+            }
+            if ( colDefs[j].DbDataType ==  DB_DATA_TYPE_VARCHAR)
+            {
+                wxString s;
+                s.Printf(wxT("(%d)"), colDefs[i].SzDataObj);
+                sqlStmt += s;
+            }
+        }
+        
         // Postgres and SQL Server 7 do not support the ASC/DESC keywords for index columns
         if (!((pDb->Dbms() == dbmsMS_SQL_SERVER) && (strncmp(pDb->dbInf.dbmsVer,"07",2)==0)) &&
             !(pDb->Dbms() == dbmsPOSTGRES))

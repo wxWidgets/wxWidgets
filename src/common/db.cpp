@@ -3576,8 +3576,16 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
     }
 
     // create the SQL statement
-    sqlStmt.Printf(wxT("ALTER TABLE \"%s\" \"%s\" \"%s\" %s"), tableName.c_str(), alterSlashModify.c_str(),
+    if ( Dbms() == dbmsMY_SQL )
+    {
+        sqlStmt.Printf(wxT("ALTER TABLE %s %s %s %s"), tableName.c_str(), alterSlashModify.c_str(),
               columnName.c_str(), dataTypeName.c_str());
+    }
+    else
+    {
+        sqlStmt.Printf(wxT("ALTER TABLE \"%s\" \"%s\" \"%s\" %s"), tableName.c_str(), alterSlashModify.c_str(),
+              columnName.c_str(), dataTypeName.c_str());
+    }
 
     // For varchars only, append the size of the column
     if (dataType == DB_DATA_TYPE_VARCHAR &&
