@@ -126,6 +126,7 @@ ALL_BASE_HEADERS =  \
 	wx/fontmap.h \
 	wx/fs_mem.h \
 	wx/fs_zip.h \
+	wx/gzstream.h \
 	wx/hash.h \
 	wx/hashmap.h \
 	wx/hashset.h \
@@ -158,6 +159,7 @@ ALL_BASE_HEADERS =  \
 	wx/regex.h \
 	wx/scopeguard.h \
 	wx/snglinst.h \
+	wx/stack.h \
 	wx/stopwatch.h \
 	wx/strconv.h \
 	wx/stream.h \
@@ -223,6 +225,7 @@ ALL_BASE_SOURCES =  \
 	src/common/filesys.cpp \
 	src/common/fmapbase.cpp \
 	src/common/fs_zip.cpp \
+	src/common/gzstream.cpp \
 	src/common/hash.cpp \
 	src/common/hashmap.cpp \
 	src/common/init.cpp \
@@ -350,6 +353,7 @@ BASEDLL_OBJECTS =  \
 	basedll_filesys.o \
 	basedll_fmapbase.o \
 	basedll_fs_zip.o \
+	basedll_gzstream.o \
 	basedll_hash.o \
 	basedll_hashmap.o \
 	basedll_init.o \
@@ -418,6 +422,7 @@ BASELIB_OBJECTS =  \
 	baselib_filesys.o \
 	baselib_fmapbase.o \
 	baselib_fs_zip.o \
+	baselib_gzstream.o \
 	baselib_hash.o \
 	baselib_hashmap.o \
 	baselib_init.o \
@@ -606,6 +611,7 @@ MONODLL_OBJECTS =  \
 	monodll_filesys.o \
 	monodll_fmapbase.o \
 	monodll_fs_zip.o \
+	monodll_gzstream.o \
 	monodll_hash.o \
 	monodll_hashmap.o \
 	monodll_init.o \
@@ -688,6 +694,7 @@ MONOLIB_OBJECTS =  \
 	monolib_filesys.o \
 	monolib_fmapbase.o \
 	monolib_fs_zip.o \
+	monolib_gzstream.o \
 	monolib_hash.o \
 	monolib_hashmap.o \
 	monolib_init.o \
@@ -1124,7 +1131,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/spinbutt.h \
 	wx/spinctrl.h \
 	wx/splitter.h \
-	wx/stack.h \
 	wx/statline.h \
 	wx/tab.h \
 	wx/tabctrl.h \
@@ -1136,6 +1142,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/treebase.h \
 	wx/treectrl.h \
 	wx/valgen.h \
+	wx/vidmode.h \
 	wx/vlbox.h \
 	wx/vms_x_fix.h \
 	wx/vscroll.h \
@@ -3261,7 +3268,6 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS =  \
 	monodll_listbox.o \
 	monodll_mdi.o \
 	monodll_menu.o \
-	monodll_minifram.o \
 	monodll_msgdlg.o \
 	monodll_notebook.o \
 	monodll_radiobox.o \
@@ -3657,7 +3663,6 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_1 =  \
 	monolib_listbox.o \
 	monolib_mdi.o \
 	monolib_menu.o \
-	monolib_minifram.o \
 	monolib_msgdlg.o \
 	monolib_notebook.o \
 	monolib_radiobox.o \
@@ -4053,7 +4058,6 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_2 =  \
 	coredll_listbox.o \
 	coredll_mdi.o \
 	coredll_menu.o \
-	coredll_minifram.o \
 	coredll_msgdlg.o \
 	coredll_notebook.o \
 	coredll_radiobox.o \
@@ -4449,7 +4453,6 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_3 =  \
 	corelib_listbox.o \
 	corelib_mdi.o \
 	corelib_menu.o \
-	corelib_minifram.o \
 	corelib_msgdlg.o \
 	corelib_notebook.o \
 	corelib_radiobox.o \
@@ -4799,6 +4802,7 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gsockgtk.o \
 	monodll_icon.o \
 	monodll_main.o \
+	monodll_minifram.o \
 	monodll_pen.o \
 	monodll_popupwin.o \
 	monodll_region.o \
@@ -4970,6 +4974,7 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_0 =  \
 	monolib_gsockgtk.o \
 	monolib_icon.o \
 	monolib_main.o \
+	monolib_minifram.o \
 	monolib_pen.o \
 	monolib_popupwin.o \
 	monolib_region.o \
@@ -5141,6 +5146,7 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_8 =  \
 	coredll_gsockgtk.o \
 	coredll_icon.o \
 	coredll_main.o \
+	coredll_minifram.o \
 	coredll_pen.o \
 	coredll_popupwin.o \
 	coredll_region.o \
@@ -5312,6 +5318,7 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_9 =  \
 	corelib_gsockgtk.o \
 	corelib_icon.o \
 	corelib_main.o \
+	corelib_minifram.o \
 	corelib_pen.o \
 	corelib_popupwin.o \
 	corelib_region.o \
@@ -6466,6 +6473,9 @@ basedll_fs_mem.o: $(srcdir)/src/common/fs_mem.cpp
 basedll_fs_zip.o: $(srcdir)/src/common/fs_zip.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+basedll_gzstream.o: $(srcdir)/src/common/gzstream.cpp
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 basedll_hash.o: $(srcdir)/src/common/hash.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -6772,6 +6782,9 @@ baselib_fs_mem.o: $(srcdir)/src/common/fs_mem.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_fs_zip.o: $(srcdir)/src/common/fs_zip.cpp
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+baselib_gzstream.o: $(srcdir)/src/common/gzstream.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_hash.o: $(srcdir)/src/common/hash.cpp
@@ -8302,8 +8315,8 @@ coredll_metal.o: $(srcdir)/src/univ/themes/metal.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_minifram.o: $(srcdir)/src/motif/minifram.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@coredll_minifram.o: $(srcdir)/src/gtk/minifram.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+@COND_TOOLKIT_GTK_USE_GUI_1@coredll_minifram.o: $(srcdir)/src/gtk/minifram.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_minifram.o: $(srcdir)/src/msw/minifram.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -10392,8 +10405,8 @@ corelib_metal.o: $(srcdir)/src/univ/themes/metal.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_minifram.o: $(srcdir)/src/motif/minifram.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@corelib_minifram.o: $(srcdir)/src/gtk/minifram.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+@COND_TOOLKIT_GTK_USE_GUI_1@corelib_minifram.o: $(srcdir)/src/gtk/minifram.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_minifram.o: $(srcdir)/src/msw/minifram.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -12777,6 +12790,9 @@ monodll_gsockpm.o: $(srcdir)/src/os2/gsockpm.c
 monodll_gtk.o: $(srcdir)/src/univ/themes/gtk.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+monodll_gzstream.o: $(srcdir)/src/common/gzstream.cpp
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 monodll_hash.o: $(srcdir)/src/common/hash.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -13179,8 +13195,8 @@ monodll_mimetmac.o: $(srcdir)/src/mac/mimetmac.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_minifram.o: $(srcdir)/src/motif/minifram.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@monodll_minifram.o: $(srcdir)/src/gtk/minifram.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_TOOLKIT_GTK_USE_GUI_1@monodll_minifram.o: $(srcdir)/src/gtk/minifram.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_minifram.o: $(srcdir)/src/msw/minifram.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -15359,6 +15375,9 @@ monolib_gsockpm.o: $(srcdir)/src/os2/gsockpm.c
 monolib_gtk.o: $(srcdir)/src/univ/themes/gtk.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+monolib_gzstream.o: $(srcdir)/src/common/gzstream.cpp
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 monolib_hash.o: $(srcdir)/src/common/hash.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -15761,8 +15780,8 @@ monolib_mimetmac.o: $(srcdir)/src/mac/mimetmac.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_minifram.o: $(srcdir)/src/motif/minifram.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@monolib_minifram.o: $(srcdir)/src/gtk/minifram.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_TOOLKIT_GTK_USE_GUI_1@monolib_minifram.o: $(srcdir)/src/gtk/minifram.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_minifram.o: $(srcdir)/src/msw/minifram.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
