@@ -63,7 +63,6 @@ samples/docvwmdi/*.mcp
 samples/dragimag/*M?.xml
 samples/dragimag/*.mcp
 samples/drawing/*M?.xml
-samples/drawer/*M?.xml
 samples/drawing/*.mcp
 samples/dynamic/*M?.xml
 samples/dynamic/*.mcp
