@@ -103,7 +103,7 @@ PyObject* wxPyConstructObject(void* ptr,
                               int setThisOwn=0);
 bool wxPyConvertSwigPtr(PyObject* obj, void **ptr,
                         const wxChar* className);
-PyObject* wxPyMakeSwigPtr(void* ptr, const char* classname);
+PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* classname);
 
 
 PyObject* wx2PyString(const wxString& src);
