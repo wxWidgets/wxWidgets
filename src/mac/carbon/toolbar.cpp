@@ -690,12 +690,30 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
 void wxToolBar::OnPaint(wxPaintEvent& event)
 {
     wxPaintDC dc(this) ;
-#if wxMAC_USE_CORE_GRAPHICS
-    // leave the background as it is (striped or metal)
-#else
-    wxMacPortSetter helper(&dc) ;
+
     int w, h ;
     GetSize( &w , &h ) ;
+#if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+    if ( !MacGetTopLevelWindow()->MacGetMetalAppearance() )
+    {
+        if ( UMAGetSystemVersion() >= 0x1030 )
+        {
+            HIThemePlacardDrawInfo info ;
+            memset( &info, 0 , sizeof( info ) ) ;
+            info.version = 0 ;
+            info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
+            
+            CGContextRef cgContext = (CGContextRef) MacGetCGContextRef() ;
+            HIRect rect = CGRectMake( 0 , 0 , w , h ) ;
+            HIThemeDrawPlacard( &rect , & info , cgContext, kHIThemeOrientationNormal) ;
+        }
+    }
+    else
+    {
+        // leave the background as it is (striped or metal)
+    }
+#else
+    wxMacPortSetter helper(&dc) ;
     
     Rect toolbarrect = { dc.YLOG2DEVMAC(0) , dc.XLOG2DEVMAC(0) , 
         dc.YLOG2DEVMAC(h) , dc.XLOG2DEVMAC(w) } ;
