@@ -287,7 +287,7 @@ FindMaskColour(unsigned char **lines, png_uint_32 width, png_uint_32 height,
         }
     }
 
-    if ( !h.FindFirstUnusedColour(&rMask, &gMask, &bMask) )
+    if ( !h.FindFirstUnusedColour(&rMask, &gMask, &bMask, rMask, gMask, bMask) )
     {
         wxLogWarning(_("Too many colours in PNG, the image may be slightly blurred."));
 
@@ -435,8 +435,14 @@ void CopyDataFromPNG(wxImage *image,
 
                     if ( transparency == Transparency_Mask )
                     {
-                        FindMaskColour(lines, width, height,
-                                       rMask, gMask, bMask);
+                        if ( IsTransparent( a ) && ( ! ( rMask || gMask || bMask ) ) )
+                        {
+                            rMask = r;
+                            gMask = g;
+                            bMask = b;
+
+                            FindMaskColour(lines, width, height, rMask, gMask, bMask );
+                        }  
                     }
                     else // transparency == Transparency_Alpha
                     {
