@@ -231,7 +231,7 @@ typedef int wxWindowID;
 
 // check for explicit keyword support
 #ifndef HAVE_EXPLICIT
-    #if defined(__VISUALC__) && (__VISUALC__ > 1200)
+    #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
         // VC++ 6.0 has explicit (what about the earlier versions?)
         #define HAVE_EXPLICIT
     #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x0520)
