@@ -4066,7 +4066,7 @@ static PyObject *_wrap_new_wxHtmlWindow(PyObject *self, PyObject *args, PyObject
     wxSize  temp0;
     PyObject * _obj3 = 0;
     PyObject * _obj5 = 0;
-    char *_kwnames[] = { "parent","id","pos","size","flags","name", NULL };
+    char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
@@ -4161,7 +4161,7 @@ static PyObject *_wrap_wxHtmlWindow_Create(PyObject *self, PyObject *args, PyObj
     wxSize  temp0;
     PyObject * _obj4 = 0;
     PyObject * _obj6 = 0;
-    char *_kwnames[] = { "self","parent","id","pos","size","flags","name", NULL };
+    char *_kwnames[] = { "self","parent","id","pos","size","style","name", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iOOiO:wxHtmlWindow_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_obj6)) 

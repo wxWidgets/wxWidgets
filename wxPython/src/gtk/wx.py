@@ -813,6 +813,7 @@ wxEVT_LEAVE_WINDOW = wxc.wxEVT_LEAVE_WINDOW
 wxEVT_LEFT_DCLICK = wxc.wxEVT_LEFT_DCLICK
 wxEVT_MIDDLE_DCLICK = wxc.wxEVT_MIDDLE_DCLICK
 wxEVT_RIGHT_DCLICK = wxc.wxEVT_RIGHT_DCLICK
+wxEVT_MOUSE_CAPTURE_CHANGED = wxc.wxEVT_MOUSE_CAPTURE_CHANGED
 wxEVT_NC_LEFT_DOWN = wxc.wxEVT_NC_LEFT_DOWN
 wxEVT_NC_LEFT_UP = wxc.wxEVT_NC_LEFT_UP
 wxEVT_NC_MIDDLE_DOWN = wxc.wxEVT_NC_MIDDLE_DOWN
@@ -858,7 +859,6 @@ wxEVT_DESTROY = wxc.wxEVT_DESTROY
 wxEVT_SHOW = wxc.wxEVT_SHOW
 wxEVT_ICONIZE = wxc.wxEVT_ICONIZE
 wxEVT_MAXIMIZE = wxc.wxEVT_MAXIMIZE
-wxEVT_MOUSE_CAPTURE_CHANGED = wxc.wxEVT_MOUSE_CAPTURE_CHANGED
 wxEVT_PAINT = wxc.wxEVT_PAINT
 wxEVT_ERASE_BACKGROUND = wxc.wxEVT_ERASE_BACKGROUND
 wxEVT_NC_PAINT = wxc.wxEVT_NC_PAINT
@@ -1099,6 +1099,9 @@ def EVT_MOUSE_EVENTS(win, func):
     win.Connect(-1, -1, wxEVT_RIGHT_DCLICK,  func)
     win.Connect(-1, -1, wxEVT_LEAVE_WINDOW,  func)
     win.Connect(-1, -1, wxEVT_ENTER_WINDOW,  func)
+
+def EVT_MOUSE_CAPTURE_CHANGED(win, func):
+    win.Connect(-1, -1, wxEVT_MOUSE_CAPTURE_CHANGED, func)
 
 # EVT_COMMAND
 def EVT_COMMAND(win, id, cmd, func):
@@ -1561,7 +1564,7 @@ class _wxPyDeadObject:
     prevent crashes due to referencing a bogus C++ pointer.
     """
     reprStr = "wxPython wrapper for DELETED %s object! (The C++ object no longer exists.)"
-    attrStr = "The C++ %s object has been deleted, attribute access no longer allowed."
+    attrStr = "The C++ part of the %s object has been deleted, attribute access no longer allowed."
 
     def __repr__( self ):
         if not hasattr(self, "_name"):
