@@ -20,8 +20,8 @@ There are no user commands for the gauge.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxGA\_HORIZONTAL}}{Creates a horizontal gauge.}
 \twocolitem{\windowstyle{wxGA\_VERTICAL}}{Creates a vertical gauge.}
-\twocolitem{\windowstyle{wxGA\_PROGRESSBAR}}{Under Windows 95, creates a horizontal progress bar.}
-\twocolitem{\windowstyle{wxGA\_SMOOTH}}{Under Windows 95, creates smooth progress bar with one pixel wide update step.}
+%\twocolitem{\windowstyle{wxGA\_PROGRESSBAR}}{Obsolete, doesn't do anything any more}
+\twocolitem{\windowstyle{wxGA\_SMOOTH}}{Creates smooth progress bar with one pixel wide update step (not supported by all platforms).}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.
@@ -35,6 +35,7 @@ wxGauge is read-only so generates no events.
 \helpref{wxSlider}{wxslider}, \helpref{wxScrollBar}{wxscrollbar}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
+
 
 \membersection{wxGauge::wxGauge}\label{wxgaugeconstr}
 
@@ -64,20 +65,17 @@ Constructor, creating and showing a gauge.
 
 \docparam{name}{Window name.}
 
-\wxheading{Remarks}
-
-Under Windows 95, there are two different styles of gauge: normal gauge, and progress bar (when
-the {\bf wxGA\_PROGRESSBAR} style is used). A progress bar is always horizontal.
-
 \wxheading{See also}
 
 \helpref{wxGauge::Create}{wxgaugecreate}
+
 
 \membersection{wxGauge::\destruct{wxGauge}}
 
 \func{}{\destruct{wxGauge}}{\void}
 
 Destructor, destroying the gauge.
+
 
 \membersection{wxGauge::Create}\label{wxgaugecreate}
 
@@ -88,6 +86,7 @@ Destructor, destroying the gauge.
 Creates the gauge for two-step construction. See \helpref{wxGauge::wxGauge}{wxgaugeconstr}\rtfsp
 for further details.
 
+
 \membersection{wxGauge::GetBezelFace}\label{wxgaugegetbezelface}
 
 \constfunc{int}{GetBezelFace}{\void}
@@ -96,11 +95,12 @@ Returns the width of the 3D bezel face.
 
 \wxheading{Remarks}
 
-Windows only, not for {\bf wxGA\_PROGRESSBAR}.
+This method is not implemented (returns $0$) for most platforms.
 
 \wxheading{See also}
 
 \helpref{wxGauge::SetBezelFace}{wxgaugesetbezelface}
+
 
 \membersection{wxGauge::GetRange}\label{wxgaugegetrange}
 
@@ -108,9 +108,14 @@ Windows only, not for {\bf wxGA\_PROGRESSBAR}.
 
 Returns the maximum position of the gauge.
 
+\wxheading{Remarks}
+
+This method is not implemented (doesn't do anything) for most platforms.
+
 \wxheading{See also}
 
 \helpref{wxGauge::SetRange}{wxgaugesetrange}
+
 
 \membersection{wxGauge::GetShadowWidth}\label{wxgaugegetshadowwidth}
 
@@ -120,11 +125,12 @@ Returns the 3D shadow margin width.
 
 \wxheading{Remarks}
 
-Windows only, not for {\bf wxGA\_PROGRESSBAR}.
+This method is not implemented (returns $0$) for most platforms.
 
 \wxheading{See also}
 
 \helpref{wxGauge::SetShadowWidth}{wxgaugesetshadowwidth}
+
 
 \membersection{wxGauge::GetValue}\label{wxgaugegetvalue}
 
@@ -132,9 +138,22 @@ Windows only, not for {\bf wxGA\_PROGRESSBAR}.
 
 Returns the current position of the gauge.
 
+\wxheading{Remarks}
+
+This method is not implemented (doesn't do anything) for most platforms.
+
 \wxheading{See also}
 
 \helpref{wxGauge::SetValue}{wxgaugesetvalue}
+
+
+\membersection{wxGauge::IsVertical}\label{wxgaugeisvertical}
+
+\constfunc{bool}{IsVertical}{\void}
+
+Returns \true if the gauge is vertical (has \texttt{wxGA\_VERTICAL} style) and 
+\false otherwise.
+
 
 \membersection{wxGauge::SetBezelFace}\label{wxgaugesetbezelface}
 
@@ -144,11 +163,12 @@ Sets the 3D bezel face width.
 
 \wxheading{Remarks}
 
-Windows only, not for {\bf wxGA\_PROGRESSBAR}.
+This method is not implemented (doesn't do anything) for most platforms.
 
 \wxheading{See also}
 
 \helpref{wxGauge::GetBezelFace}{wxgaugegetbezelface}
+
 
 \membersection{wxGauge::SetRange}\label{wxgaugesetrange}
 
@@ -160,6 +180,7 @@ Sets the range (maximum value) of the gauge.
 
 \helpref{wxGauge::GetRange}{wxgaugegetrange}
 
+
 \membersection{wxGauge::SetShadowWidth}\label{wxgaugesetshadowwidth}
 
 \func{void}{SetShadowWidth}{\param{int }{width}}
@@ -168,7 +189,8 @@ Sets the 3D shadow width.
 
 \wxheading{Remarks}
 
-Windows only, not for {\bf wxGA\_PROGRESSBAR}.
+This method is not implemented (doesn't do anything) for most platforms.
+
 
 \membersection{wxGauge::SetValue}\label{wxgaugesetvalue}
 
