@@ -18,7 +18,10 @@
 
 #include "wx/window.h"
 #include "wx/toolbar.h"
+
+#if wxUSE_ACCEL
 #include "wx/accel.h"
+#endif
 
 WXDLLEXPORT_DATA(extern const char*) wxFrameNameStr;
 WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;

@@ -196,8 +196,6 @@ void wxPlotArea::DrawCurve( wxDC *dc, wxPlotCurve *curve, int from, int to )
     if (to == -1)
         to = view_x + client_width;
         
-    to += 2;  // no idea why this is needed
-
     double zoom = m_owner->GetZoom();
 
     int start_x = wxMax( from, (int)floor(curve->GetStartX()*zoom) );
@@ -206,6 +204,8 @@ void wxPlotArea::DrawCurve( wxDC *dc, wxPlotCurve *curve, int from, int to )
     start_x = wxMax( view_x, start_x );
     end_x = wxMin( view_x + client_width, end_x );
     
+    end_x++;
+
     double double_client_height = (double)client_height;
     double range = curve->GetEndY() - curve->GetStartY();
     double end = curve->GetEndY();

@@ -15,7 +15,11 @@
 #include "wx/object.h"
 #include "wx/window.h"
 #include "wx/dc.h"
+
+#if wxUSE_ACCEL
 #include "wx/accel.h"
+#endif
+
 #include "wx/dcps.h"
 #include "wx/icon.h"
 

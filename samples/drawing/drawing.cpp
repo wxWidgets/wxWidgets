@@ -677,6 +677,21 @@ void MyCanvas::DrawDefault(wxDC& dc)
     dc.DrawLine(400, 170, 400, 210);
     dc.DrawLine(300, 200, 410, 200);
 
+    // a few more tests of this kind
+    dc.SetPen(*wxRED_PEN);
+    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.DrawRectangle(300, 220, 1, 1);
+    dc.DrawRectangle(310, 220, 2, 2);
+    dc.DrawRectangle(320, 220, 3, 3);
+    dc.DrawRectangle(330, 220, 4, 4);
+
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.DrawRectangle(300, 230, 1, 1);
+    dc.DrawRectangle(310, 230, 2, 2);
+    dc.DrawRectangle(320, 230, 3, 3);
+    dc.DrawRectangle(330, 230, 4, 4);
+
     // and now for filled rect with outline
     dc.SetPen(*wxRED_PEN);
     dc.SetBrush( *wxWHITE_BRUSH );

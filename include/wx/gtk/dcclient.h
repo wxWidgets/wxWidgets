@@ -116,6 +116,8 @@ public:
     GdkColormap  *m_cmap;
     bool          m_isMemDC;
     wxWindow     *m_owner;
+    wxRegion      m_currentClippingRegion;
+    wxRegion      m_paintClippingRegion;
 
     void SetUpDC();
     void Destroy();

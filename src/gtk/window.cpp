@@ -615,20 +615,24 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
     if (!win->m_hasVMT)
         return;
 
+/*
+    if (win->GetName() == wxT("columntitles"))
+    {
+        wxPrintf( wxT("OnExpose from ") );
+        if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+            wxPrintf( win->GetClassInfo()->GetClassName() );
+        wxPrintf( wxT(" %d %d %d %d\n"), (int)gdk_event->area.x,
+                                         (int)gdk_event->area.y,
+                                         (int)gdk_event->area.width,
+                                         (int)gdk_event->area.height );
+    }
+*/
+                                
     win->GetUpdateRegion().Union( gdk_event->area.x,
                                   gdk_event->area.y,
                                   gdk_event->area.width,
                                   gdk_event->area.height );
 
-/*
-    wxPrintf( "OnExpose from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        wxPrintf( win->GetClassInfo()->GetClassName() );
-    wxPrintf( " %d %d %d %d\n", (int)gdk_event->area.x,
-                                (int)gdk_event->area.y,
-                                (int)gdk_event->area.width,
-                                (int)gdk_event->area.height );
-*/
 
     if (gdk_event->count > 0)
         return;
@@ -656,21 +660,21 @@ static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget),
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (!win->m_hasVMT)
-        return;
-
+/*
+    if ((win->GetName() == wxT("columntitles")) && (rect->x == 2))
+    {
+        wxPrintf( wxT("OnDraw from ") );
+        if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+            wxPrintf( win->GetClassInfo()->GetClassName() );
+        wxPrintf( wxT(" %d %d %d %d\n"), (int)rect->x,
+                                         (int)rect->y,
+                                         (int)rect->width,
+                                         (int)rect->height );
+    }
+*/
+                                
     win->GetUpdateRegion().Union( rect->x, rect->y,
                                   rect->width, rect->height );
-
-/*
-    wxPrintf( "OnDraw from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    wxPrintf( " %d %d %d %d\n", (int)rect->x,
-                                (int)rect->y,
-                                (int)rect->width,
-                                (int)rect->height );
-*/
 
     wxEraseEvent eevent( win->GetId() );
     eevent.SetEventObject( win );
@@ -1718,7 +1722,7 @@ gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
     wxWindowCreateEvent event( win );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
-
+    
     return FALSE;
 }
 

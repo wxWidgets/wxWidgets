@@ -618,15 +618,14 @@ void wxListLineData::SetAttributes(wxDC *dc,
 
 void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
 {
-    wxCoord dev_x = dc->LogicalToDeviceX( m_bound_all.x-2 );
-    wxCoord dev_y = dc->LogicalToDeviceY( m_bound_all.y-2 );
-    wxCoord dev_w = dc->LogicalToDeviceXRel( m_bound_all.width+4 );
-    wxCoord dev_h = dc->LogicalToDeviceYRel( m_bound_all.height+4 );
+    wxCoord dev_x = 0;
+    wxCoord dev_y = 0;
+    m_owner->CalcScrolledPosition( m_bound_all.x, m_bound_all.y, &dev_x, &dev_y );
+    wxCoord dev_w = m_bound_all.width;
+    wxCoord dev_h = m_bound_all.height;
 
     if (!m_owner->IsExposed( dev_x, dev_y, dev_w, dev_h ))
-    {
         return;
-    }
 
     wxWindow *listctrl = m_owner->GetParent();
 
@@ -884,9 +883,9 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetPen( *wxWHITE_PEN );
 
         DoDrawRect( &dc, x, y, cw, h-2 );
-        dc.SetClippingRegion( x, y, cw-5, h-4 );
+//        dc.SetClippingRegion( x, y, cw-5, h-4 );
         dc.DrawText( item.m_text, x+4, y+3 );
-        dc.DestroyClippingRegion();
+//        dc.DestroyClippingRegion();
         x += item.m_width;
 #if wxUSE_GENERIC_LIST_EXTENSIONS
         if (dc.LogicalToDeviceX(x) > w+5) break;
@@ -1191,22 +1190,16 @@ void wxListMainWindow::RefreshLine( wxListLineData *line )
 {
     if (m_dirty) return;
 
+    if (!line) return;
+    
     int x = 0;
     int y = 0;
     int w = 0;
     int h = 0;
-    if (line)
-    {
-        wxClientDC dc(this);
-        PrepareDC( dc );
-        line->GetExtent( x, y, w, h );
-        wxRect rect(
-          dc.LogicalToDeviceX(x-3),
-          dc.LogicalToDeviceY(y-3),
-          dc.LogicalToDeviceXRel(w+6),
-          dc.LogicalToDeviceXRel(h+6) );
-        Refresh( TRUE, &rect );
-    }
+    line->GetExtent( x, y, w, h );
+    CalcScrolledPosition( x, y, &x, &y );
+    wxRect rect( x, y, w, h );
+    Refresh( TRUE, &rect );
 }
 
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )

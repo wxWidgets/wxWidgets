@@ -43,6 +43,7 @@ wxMemoryDC::~wxMemoryDC()
 
 void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
+    Destroy();
     m_selected = bitmap;
     if (m_selected.Ok())
     {
