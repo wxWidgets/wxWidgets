@@ -40,6 +40,35 @@
     #include <cxxabi.h>
 #endif // HAVE_CXA_DEMANGLE
 
+// ----------------------------------------------------------------------------
+// tiny helper wrapper around popen/pclose()
+// ----------------------------------------------------------------------------
+
+class wxStdioPipe
+{
+public:
+    // ctor parameters are passed to popen()
+    wxStdioPipe(const char *command, const char *type)
+    {
+        m_fp = popen(command, type);
+    }
+
+    // conversion to stdio FILE
+    operator FILE *() const { return m_fp; }
+
+    // dtor closes the pipe
+    ~wxStdioPipe()
+    {
+        if ( m_fp )
+            pclose(m_fp);
+    }
+
+private:
+    FILE *m_fp;
+
+    DECLARE_NO_COPY_CLASS(wxStdioPipe)
+};
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -122,46 +151,57 @@ void wxStackFrame::OnGetLocation()
         exepath = wxTheApp->argv[0];
     }
 
-    wxArrayString output;
-    wxLogNull noLog;
-    if ( wxExecute(wxString::Format(_T("addr2line -C -f -e \"%s\" %p"),
-                                    exepath.c_str(),
-                                    m_address), output) == 0 )
-    {
-        if ( output.GetCount() != 2 )
-        {
-            wxLogDebug(_T("Unexpected addr2line output."));
-        }
-        else // 1st line has function name, 2nd one -- the file/line info
-        {
-            if ( GetName().empty() )
-            {
-                m_name = output[0];
-                if ( m_name == _T("??") )
-                    m_name.clear();
-            }
+    wxStdioPipe fp(wxString::Format(_T("addr2line -C -f -e \"%s\" %p"),
+                                    exepath.c_str(), m_address).mb_str(),
+                   "r");
 
-            const size_t posColon = output[1].find(_T(':'));
-            if ( posColon != wxString::npos )
+    if ( !fp )
+        return;
+
+    // parse addr2line output
+    char buf[1024];
+    if ( !fgets(buf, WXSIZEOF(buf), fp) )
+    {
+        wxLogDebug(_T("Empty addr2line output?"));
+        return;
+    }
+
+    // 1st line has function name
+    if ( GetName().empty() )
+    {
+        m_name = wxString::FromAscii(buf);
+        m_name.RemoveLast(); // trailing newline
+
+        if ( m_name == _T("??") )
+            m_name.clear();
+    }
+
+    // 2nd one -- the file/line info
+    if ( fgets(buf, WXSIZEOF(buf), fp) )
+    {
+        wxString output(wxString::FromAscii(buf));
+        output.RemoveLast();
+
+        const size_t posColon = output.find(_T(':'));
+        if ( posColon != wxString::npos )
+        {
+            m_filename.assign(output, 0, posColon);
+            if ( m_filename == _T("??") )
             {
-                m_filename.assign(output[1], 0, posColon);
-                if ( m_filename == _T("??") )
-                {
-                    m_filename.clear();
-                }
-                else
-                {
-                    unsigned long line;
-                    if ( wxString(output[1], posColon + 1, wxString::npos).
-                            ToULong(&line) )
-                        m_line = line;
-                }
+                m_filename.clear();
             }
             else
             {
-                wxLogDebug(_T("Unexpected addr2line format: \"%s\""),
-                           output[1].c_str());
+                unsigned long line;
+                if ( wxString(output, posColon + 1, wxString::npos).
+                        ToULong(&line) )
+                    m_line = line;
             }
+        }
+        else
+        {
+            wxLogDebug(_T("Unexpected addr2line format: \"%s\""),
+                       output.c_str());
         }
     }
 }
