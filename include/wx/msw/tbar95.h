@@ -20,8 +20,6 @@
 
 #include "wx/dynarray.h"
 
-#include "wx/tbarbase.h"
-
 class WXDLLEXPORT wxToolBar : public wxToolBarBase
 {
 public:
@@ -47,7 +45,7 @@ public:
                 long style = wxNO_BORDER | wxTB_HORIZONTAL,
                 const wxString& name = wxToolBarNameStr);
 
-    ~wxToolBar();
+    virtual ~wxToolBar();
 
     // override/implement base class virtuals
     virtual wxToolBarTool *FindToolForPosition(wxCoord x, wxCoord y) const;
@@ -73,12 +71,12 @@ protected:
     void Init();
 
     // implement base class pure virtuals
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
-    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
+    virtual bool DoInsertTool(size_t pos, wxToolBarTool *tool);
+    virtual bool DoDeleteTool(size_t pos, wxToolBarTool *tool);
 
-    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
-    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
-    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
+    virtual void DoEnableTool(wxToolBarTool *tool, bool enable);
+    virtual void DoToggleTool(wxToolBarTool *tool, bool toggle);
+    virtual void DoSetToggle(wxToolBarTool *tool, bool toggle);
 
     // the big bitmap containing all bitmaps of the toolbar buttons
     WXHBITMAP m_hBitmap;

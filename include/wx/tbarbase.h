@@ -63,7 +63,7 @@ public:
     // ctors & dtor
     // ------------
 
-    wxToolBarToolBase(wxToolBarBase *tbar = (wxToolBarBase *)NULL,
+    wxToolBarToolBase(wxToolBar *tbar = (wxToolBar *)NULL,
                       int id = wxID_SEPARATOR,
                       const wxBitmap& bitmap1 = wxNullBitmap,
                       const wxBitmap& bitmap2 = wxNullBitmap,
@@ -89,7 +89,7 @@ public:
                                            : wxTOOL_STYLE_BUTTON;
     }
 
-    wxToolBarToolBase(wxToolBarBase *tbar, wxControl *control)
+    wxToolBarToolBase(wxToolBar *tbar, wxControl *control)
     {
         m_tbar = tbar;
         m_control = control;
@@ -104,7 +104,7 @@ public:
 
     // this static function should be used to create tools - its implemented in
     // platform-specific sources
-    static wxToolBarTool *New(wxToolBarBase *tbar,
+    static wxToolBarToolBase *New(wxToolBar *tbar,
                               int id = wxID_SEPARATOR,
                               const wxBitmap& bitmap1 = wxNullBitmap,
                               const wxBitmap& bitmap2 = wxNullBitmap,
@@ -113,13 +113,14 @@ public:
                               const wxString& shortHelpString = wxEmptyString,
                               const wxString& longHelpString = wxEmptyString);
 
-    static wxToolBarTool *New(wxToolBarBase *tbar, wxControl *control);
+    static wxToolBarToolBase *New(wxToolBar *tbar, wxControl *control);
 
     ~wxToolBarToolBase();
 
     // accessors
     // ---------
 
+    // general
     int GetId() const { return m_id; }
 
     wxControl *GetControl() const
@@ -128,6 +129,8 @@ public:
 
         return m_control;
     }
+
+    wxToolBar *GetToolBar() const { return m_tbar; }
 
     // style
     int IsButton() const { return m_toolStyle == wxTOOL_STYLE_BUTTON; }
@@ -143,6 +146,9 @@ public:
     // attributes
     const wxBitmap& GetBitmap1() const { return m_bitmap1; }
     const wxBitmap& GetBitmap2() const { return m_bitmap2; }
+
+    const wxBitmap& GetBitmap() const
+        { return IsToggled() ? m_bitmap2 : m_bitmap1; }
 
     wxString GetShortHelp() const { return m_shortHelpString; }
     wxString GetLongHelp() const { return m_longHelpString; }
@@ -162,12 +168,17 @@ public:
     bool SetShortHelp(const wxString& help);
     bool SetLongHelp(const wxString& help);
 
+    void Toggle() { Toggle(!IsToggled()); }
+
+    void SetBitmap1(const wxBitmap& bmp) { m_bitmap1 = bmp; }
+    void SetBitmap2(const wxBitmap& bmp) { m_bitmap2 = bmp; }
+
     // add tool to/remove it from a toolbar
-    virtual void Detach() { m_tbar = (wxToolBarBase *)NULL; }
-    virtual void Attach(wxToolBarBase *tbar) { m_tbar = tbar; }
+    virtual void Detach() { m_tbar = (wxToolBar *)NULL; }
+    virtual void Attach(wxToolBar *tbar) { m_tbar = tbar; }
 
 protected:
-    wxToolBarBase *m_tbar;  // the toolbar to which we belong (may be NULL)
+    wxToolBar *m_tbar;  // the toolbar to which we belong (may be NULL)
 
     int m_toolStyle; // see enum wxToolBarToolStyle
     int m_id;        // the tool id, wxID_SEPARATOR for separator
@@ -191,9 +202,6 @@ protected:
     // short and long help strings
     wxString m_shortHelpString;
     wxString m_longHelpString;
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxToolBarToolBase)
 };
 
 // a list of toolbar tools
@@ -215,11 +223,24 @@ public:
     // If pushedBitmap is NULL, a reversed version of bitmap is created and
     // used as the pushed/toggled image. If toggle is TRUE, the button toggles
     // between the two states.
+    wxToolBarTool *AddTool(int id,
+                           const wxBitmap& bitmap,
+                           const wxBitmap& pushedBitmap = wxNullBitmap,
+                           bool toggle = FALSE,
+                           wxObject *clientData = NULL,
+                           const wxString& shortHelpString = wxEmptyString,
+                           const wxString& longHelpString = wxEmptyString)
+    {
+        return AddTool(id, bitmap, pushedBitmap, toggle,
+                       -1, -1, clientData, shortHelpString, longHelpString);
+    }
+
+    // the old version of AddTool() kept for compatibility
     virtual wxToolBarTool *AddTool(int id,
                                    const wxBitmap& bitmap,
-                                   const wxBitmap& pushedBitmap = wxNullBitmap,
-                                   bool toggle = FALSE,
-                                   wxCoord xPos = -1,
+                                   const wxBitmap& pushedBitmap,
+                                   bool toggle,
+                                   wxCoord xPos,
                                    wxCoord yPos = -1,
                                    wxObject *clientData = NULL,
                                    const wxString& helpString1 = wxEmptyString,
@@ -231,6 +252,7 @@ public:
                                       const wxBitmap& bitmap,
                                       const wxBitmap& pushedBitmap = wxNullBitmap,
                                       bool toggle = FALSE,
+                                      wxObject *clientData = NULL,
                                       const wxString& help1 = wxEmptyString,
                                       const wxString& help2 = wxEmptyString);
 
@@ -370,20 +392,20 @@ protected:
 
     // the tool is not yet inserted into m_tools list when this function is
     // called and will only be added to it if this function succeeds
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) = 0;
+    virtual bool DoInsertTool(size_t pos, wxToolBarTool *tool) = 0;
 
     // the tool is still in m_tools list when this function is called, it will
     // only be deleted from it if it succeeds
-    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) = 0;
+    virtual bool DoDeleteTool(size_t pos, wxToolBarTool *tool) = 0;
 
     // called when the tools enabled flag changes
-    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) = 0;
+    virtual void DoEnableTool(wxToolBarTool *tool, bool enable) = 0;
 
     // called when the tool is toggled
-    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle) = 0;
+    virtual void DoToggleTool(wxToolBarTool *tool, bool toggle) = 0;
 
     // called when the tools "can be toggled" flag changes
-    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) = 0;
+    virtual void DoSetToggle(wxToolBarTool *tool, bool toggle) = 0;
 
     // helper functions
     // ----------------
@@ -408,89 +430,6 @@ protected:
 
     // the size of the toolbar bitmaps
     wxCoord m_defaultWidth, m_defaultHeight;
-
-private:
-    DECLARE_EVENT_TABLE()
-};
-
-// ----------------------------------------------------------------------------
-// A scrollable toolbar used by the generic implementation
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxScrollableToolBar : public wxToolBarBase
-{
-public:
-    // After the toolbar has initialized, this is the size the tools take up
-    virtual wxSize GetMaxSize() const;
-
-    // Lay the tools out
-    virtual void LayoutTools();
-
-#if WXWIN_COMPATIBILITY
-    void GetMaxSize ( long * width, long * height ) const
-    { wxSize maxSize(GetMaxSize()); *width = maxSize.x; *height = maxSize.y; }
-#endif // WXWIN_COMPATIBILITY
-
-    // SCROLLING: this has to be copied from wxScrolledWindow since wxToolBarBase
-    // inherits from wxControl. This could have been put into wxToolBarSimple,
-    // but we might want any derived toolbar class to be scrollable.
-
-    // Number of pixels per user unit (0 or -1 for no scrollbar)
-    // Length of virtual canvas in user units
-    virtual void SetScrollbars(int horizontal, int vertical,
-                               int x_length, int y_length,
-                               int x_pos = 0, int y_pos = 0);
-
-    // Physically scroll the window
-    virtual void Scroll(int x_pos, int y_pos);
-    virtual void GetScrollPixelsPerUnit(int *x_unit, int *y_unit) const;
-    virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
-    virtual void AdjustScrollbars();
-
-    // Prepare the DC by translating it according to the current scroll position
-    virtual void PrepareDC(wxDC& dc);
-
-    int GetScrollPageSize(int orient) const ;
-    void SetScrollPageSize(int orient, int pageSize);
-
-    // Get the view start
-    virtual void ViewStart(int *x, int *y) const;
-
-    // Actual size in pixels when scrolling is taken into account
-    virtual void GetVirtualSize(int *x, int *y) const;
-
-    // event handlers
-    void OnScroll(wxScrollEvent& event);
-    void OnSize(wxSizeEvent& event);
-
-protected:
-    long                  m_maxWidth,
-                          m_maxHeight;
-
-    int                   m_currentTool; // Tool where mouse currently is
-    int                   m_pressedTool; // Tool where mouse pressed
-
-public:
-    ////////////////////////////////////////////////////////////////////////
-    //// IMPLEMENTATION
-
-    // Calculate scroll increment
-    virtual int CalcScrollInc(wxScrollEvent& event);
-
-    ////////////////////////////////////////////////////////////////////////
-    //// PROTECTED DATA
-protected:
-    int                   m_xScrollPixelsPerLine;
-    int                   m_yScrollPixelsPerLine;
-    bool                  m_xScrollingEnabled;
-    bool                  m_yScrollingEnabled;
-    int                   m_xScrollPosition;
-    int                   m_yScrollPosition;
-    bool                  m_calcScrolledOffset; // If TRUE, wxCanvasDC uses scrolled offsets
-    int                   m_xScrollLines;
-    int                   m_yScrollLines;
-    int                   m_xScrollLinesPerPage;
-    int                   m_yScrollLinesPerPage;
 
 private:
     DECLARE_EVENT_TABLE()

@@ -14,13 +14,7 @@
     #pragma interface "tbargtk.h"
 #endif
 
-#include "wx/defs.h"
-
 #if wxUSE_TOOLBAR
-
-#include "wx/control.h"
-#include "wx/bitmap.h"
-#include "wx/tbarbase.h"
 
 // ----------------------------------------------------------------------------
 // wxToolBarTool
@@ -29,9 +23,31 @@
 class wxToolBarTool : public wxToolBarToolBase
 {
 public:
-    wxToolBar            *m_owner;
+    wxToolBarTool(wxToolBar *tbar,
+                  int id,
+                  const wxBitmap& bitmap1,
+                  const wxBitmap& bitmap2,
+                  bool toggle,
+                  wxObject *clientData,
+                  const wxString& shortHelpString,
+                  const wxString& longHelpString)
+        : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle,
+                            clientData, shortHelpString, longHelpString)
+    {
+        Init();
+    }
+
+    wxToolBarTool(wxToolBar *tbar, wxControl *control)
+        : wxToolBarToolBase(tbar, control)
+    {
+        Init();
+    }
+
     GtkWidget            *m_item;
     GtkWidget            *m_pixmap;
+
+protected:
+    void Init();
 };
 
 // ----------------------------------------------------------------------------
@@ -42,14 +58,18 @@ class wxToolBar : public wxToolBarBase
 {
 public:
     // construction/destruction
-    wxToolBar();
+    wxToolBar() { Init(); }
     wxToolBar( wxWindow *parent,
                wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               const wxString& name = wxToolBarNameStr );
-    virtual ~wxToolBar();
+               const wxString& name = wxToolBarNameStr )
+    {
+        Init();
+
+        Create(parent, id, pos, size, style, name);
+    }
 
     bool Create( wxWindow *parent,
                  wxWindowID id,
@@ -58,96 +78,43 @@ public:
                  long style = 0,
                  const wxString& name = wxToolBarNameStr);
 
-    // implement base class virtuals
-    virtual wxToolBarTool *AddTool(int id,
-                                   const wxBitmap& bitmap,
-                                   const wxBitmap& pushedBitmap = wxNullBitmap,
-                                   bool toggle = FALSE,
-                                   wxCoord xPos = -1, wxCoord yPos = -1,
-                                   wxObject *clientData = (wxObject *)NULL,
-                                   const wxString& helpString1 = wxEmptyString,
-                                   const wxString& helpString2 = wxEmptyString);
+    virtual ~wxToolBar();
 
-    virtual wxToolBarTool *InsertTool(size_t pos,
-                                      int id,
-                                      const wxBitmap& bitmap,
-                                      const wxBitmap& pushedBitmap = wxNullBitmap,
-                                      bool toggle = FALSE,
-                                      wxCoord xPos = -1, wxCoord yPos = -1,
-                                      wxObject *clientData = (wxObject *)NULL,
-                                      const wxString& helpString1 = wxEmptyString,
-                                      const wxString& helpString2 = wxEmptyString);
-
-    virtual bool AddControl(wxControl *control);
-    virtual bool InsertControl(size_t pos, wxControl *control);
-
-    virtual void AddSeparator();
-    virtual void InsertSeparator(size_t pos);
-
-    virtual bool DeleteToolByPos(size_t pos);
-    virtual bool DeleteTool(int id);
-
-    virtual void ClearTools();
-
-    // Has to be called after adding tools or changing something
-    virtual bool Realize();
-
-    virtual void EnableTool(int id, bool enable);
-    virtual void ToggleTool(int id, bool toggle);
-    virtual wxObject *GetToolClientData(int index) const;
-
-    virtual bool GetToolState(int id) const;
-    virtual bool GetToolEnabled(int id) const;
-
+    // override base class virtuals
     virtual void SetMargins(int x, int y);
-    void SetMargins(const wxSize& size) { SetMargins(size.x, size.y); };
-    virtual wxSize GetToolMargins(void) { return wxSize(m_xMargin, m_yMargin); }
-
-    virtual void SetToolPacking(int packing);
     virtual void SetToolSeparation(int separation);
-    virtual int GetToolPacking();
-    virtual int GetToolSeparation();
 
-    virtual wxString GetToolLongHelp(int id);
-    virtual wxString GetToolShortHelp(int id);
-
-    virtual void SetToolLongHelp(int id, const wxString& helpString);
-    virtual void SetToolShortHelp(int id, const wxString& helpString);
-
-    void OnIdle( wxIdleEvent &ievent );
-
-    // Only allow toggle if returns TRUE. Call when left button up.
-    virtual bool OnLeftClick(int id, bool toggleDown);
-
-    // Call when right button down.
-    virtual void OnRightClick(int id, float x, float y);
-
-    // Called when the mouse cursor enters a tool bitmap.
-    // Argument is -1 if mouse is exiting the toolbar.
-    virtual void OnMouseEnter(int id);
+    virtual wxToolBarTool *FindToolForPosition(wxCoord x, wxCoord y) const;
 
     // implementation from now on
     // --------------------------
 
     GtkToolbar   *m_toolbar;
-    int           m_separation;
-    wxList        m_tools;
 
-    GdkColor      *m_fg;
-    GdkColor      *m_bg;
-    int           m_xMargin;
-    int           m_yMargin;
-    bool          m_hasToolAlready;
+    GdkColor     *m_fg;
+    GdkColor     *m_bg;
+
     bool          m_blockNextEvent;
 
     void OnInternalIdle();
 
+protected:
+    // common part of all ctors
+    void Init();
+
+    // implement base class pure virtuals
+    virtual bool DoInsertTool(size_t pos, wxToolBarTool *tool);
+    virtual bool DoDeleteTool(size_t pos, wxToolBarTool *tool);
+
+    virtual void DoEnableTool(wxToolBarTool *tool, bool enable);
+    virtual void DoToggleTool(wxToolBarTool *tool, bool toggle);
+    virtual void DoSetToggle(wxToolBarTool *tool, bool toggle);
+
 private:
-    DECLARE_EVENT_TABLE()
-        DECLARE_DYNAMIC_CLASS(wxToolBar)
+    DECLARE_DYNAMIC_CLASS(wxToolBar)
 };
 
-#endif
+#endif // wxUSE_TOOLBAR
 
 #endif
     // _WX_GTK_TBARGTK_H_
