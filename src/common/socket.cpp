@@ -35,10 +35,10 @@
 #include "wx/module.h"
 #include "wx/log.h"
 #include "wx/intl.h"
+#include "wx/event.h"
 
 #if wxUSE_GUI
-    #include "wx/event.h"
-    #include "wx/gdicmn.h"      // for wxPendingDelete
+  #include "wx/gdicmn.h"      // for wxPendingDelete
 #endif // wxUSE_GUI
 
 #include "wx/sckaddr.h"
@@ -49,10 +49,15 @@
 #define MAX_DISCARD_SIZE (10 * 1024)
 
 // what to do within waits
-#define PROCESS_EVENTS() wxYield()
+#if wxUSE_GUI
+  #define PROCESS_EVENTS() wxYield()
+#else
+  #define PROCESS_EVENTS()
+#endif
 
 // use wxPostEvent or not
 #define USE_DELAYED_EVENTS 1
+
 
 // --------------------------------------------------------------------------
 // ClassInfos
@@ -108,15 +113,19 @@ void wxSocketBase::Init()
   m_unrd_cur     = 0;
 
   // events
-  m_handler      = NULL;
   m_id           = -1;
+  m_handler      = NULL;
+  m_clientData   = NULL;
   m_notify_state = FALSE;
   m_neededreq    = 0;
   m_cbk          = NULL;
   m_cdata        = NULL;
 }
 
-wxSocketBase::wxSocketBase() { Init(); }
+wxSocketBase::wxSocketBase()
+{
+  Init();
+}
 
 wxSocketBase::wxSocketBase(wxSocketFlags flags, wxSocketType type)
 {
@@ -197,7 +206,7 @@ bool wxSocketBase::Close()
   return TRUE;
 }
 
-wxSocketBase& wxSocketBase::Read(char* buffer, wxUint32 nbytes)
+wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
 {
   // Mask read events
   m_reading = TRUE;
@@ -216,7 +225,7 @@ wxSocketBase& wxSocketBase::Read(char* buffer, wxUint32 nbytes)
   return *this;
 }
 
-wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
+wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
 {
   int total;
   int ret = 1;
@@ -224,7 +233,7 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
   // Try the pushback buffer first
   total = GetPushback(buffer, nbytes, FALSE);
   nbytes -= total;
-  buffer += total;
+  buffer  = (char *)buffer + total;
 
   // If the socket is invalid or we got all the data, return now
   if (!m_socket || !nbytes)
@@ -240,7 +249,7 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
   if (m_flags & wxSOCKET_NOWAIT)
   {
     GSocket_SetNonBlocking(m_socket, TRUE);
-    ret = GSocket_Read(m_socket, buffer, nbytes);
+    ret = GSocket_Read(m_socket, (char *)buffer, nbytes);
     GSocket_SetNonBlocking(m_socket, FALSE);
 
     if (ret > 0)
@@ -253,13 +262,13 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
       if (!(m_flags & wxSOCKET_BLOCK) && !WaitForRead())
           break;
 
-      ret = GSocket_Read(m_socket, buffer, nbytes);
+      ret = GSocket_Read(m_socket, (char *)buffer, nbytes);
 
       if (ret > 0)
       {
         total  += ret;
-        buffer += ret;
         nbytes -= ret;
+        buffer  = (char *)buffer + ret;
       }
     }
   }
@@ -267,7 +276,7 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
   {
     if ((m_flags & wxSOCKET_BLOCK) || WaitForRead())
     {
-      ret = GSocket_Read(m_socket, buffer, nbytes);
+      ret = GSocket_Read(m_socket, (char *)buffer, nbytes);
 
       if (ret > 0)
         total += ret;
@@ -277,7 +286,7 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
   return total;
 }
 
-wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
+wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
 {
   wxUint32 len, len2, sig, total;
   bool error;
@@ -296,10 +305,10 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
   old_flags = m_flags;
   SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
 
-  if (_Read((char *)&msg, sizeof(msg)) != sizeof(msg))
+  if (_Read(&msg, sizeof(msg)) != sizeof(msg))
     goto exit;
 
-  sig =  (wxUint32)msg.sig[0];
+  sig = (wxUint32)msg.sig[0];
   sig |= (wxUint32)(msg.sig[1] << 8);
   sig |= (wxUint32)(msg.sig[2] << 16);
   sig |= (wxUint32)(msg.sig[3] << 24);
@@ -350,7 +359,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
     if (len2 != 0)
       goto exit;
   }
-  if (_Read((char *)&msg, sizeof(msg)) != sizeof(msg))
+  if (_Read(&msg, sizeof(msg)) != sizeof(msg))
     goto exit;
 
   sig = (wxUint32)msg.sig[0];
@@ -376,7 +385,7 @@ exit:
   return *this;
 }
 
-wxSocketBase& wxSocketBase::Peek(char* buffer, wxUint32 nbytes)
+wxSocketBase& wxSocketBase::Peek(void* buffer, wxUint32 nbytes)
 {
   // Mask read events
   m_reading = TRUE;
@@ -396,7 +405,7 @@ wxSocketBase& wxSocketBase::Peek(char* buffer, wxUint32 nbytes)
   return *this;
 }
 
-wxSocketBase& wxSocketBase::Write(const char *buffer, wxUint32 nbytes)
+wxSocketBase& wxSocketBase::Write(const void *buffer, wxUint32 nbytes)
 {
   // Mask write events
   m_writing = TRUE;
@@ -415,7 +424,7 @@ wxSocketBase& wxSocketBase::Write(const char *buffer, wxUint32 nbytes)
   return *this;
 }
 
-wxUint32 wxSocketBase::_Write(const char *buffer, wxUint32 nbytes)
+wxUint32 wxSocketBase::_Write(const void *buffer, wxUint32 nbytes)
 {
   wxUint32 total = 0;
   int ret = 1;
@@ -434,7 +443,7 @@ wxUint32 wxSocketBase::_Write(const char *buffer, wxUint32 nbytes)
   if (m_flags & wxSOCKET_NOWAIT)
   {
     GSocket_SetNonBlocking(m_socket, TRUE);
-    ret = GSocket_Write(m_socket, buffer, nbytes);
+    ret = GSocket_Write(m_socket, (const char *)buffer, nbytes);
     GSocket_SetNonBlocking(m_socket, FALSE);
 
     if (ret > 0)
@@ -447,13 +456,13 @@ wxUint32 wxSocketBase::_Write(const char *buffer, wxUint32 nbytes)
       if (!(m_flags & wxSOCKET_BLOCK) && !WaitForWrite())
           break;
 
-      ret = GSocket_Write(m_socket, buffer, nbytes);
+      ret = GSocket_Write(m_socket, (const char *)buffer, nbytes);
 
       if (ret > 0)
       {
         total  += ret;
-        buffer += ret;
         nbytes -= ret;
+        buffer  = (const char *)buffer + ret;
       }
     }
   }
@@ -461,7 +470,7 @@ wxUint32 wxSocketBase::_Write(const char *buffer, wxUint32 nbytes)
   {
     if ((m_flags & wxSOCKET_BLOCK) || WaitForWrite())
     {
-      ret = GSocket_Write(m_socket, buffer, nbytes);
+      ret = GSocket_Write(m_socket, (const char *)buffer, nbytes);
 
       if (ret > 0)
         total = ret;
@@ -471,12 +480,13 @@ wxUint32 wxSocketBase::_Write(const char *buffer, wxUint32 nbytes)
   return total;
 }
 
-wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, wxUint32 nbytes)
+wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
 {
   wxUint32 total;
   bool error;
   int old_flags;
-  struct {
+  struct
+  {
     unsigned char sig[4];
     unsigned char len[4];
   } msg;
@@ -499,7 +509,7 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, wxUint32 nbytes)
   msg.len[2] = (unsigned char) ((nbytes >> 16) & 0xff);
   msg.len[3] = (unsigned char) ((nbytes >> 24) & 0xff);
 
-  if (_Write((char *)&msg, sizeof(msg)) < sizeof(msg))
+  if (_Write(&msg, sizeof(msg)) < sizeof(msg))
     goto exit;
 
   total = _Write(buffer, nbytes);
@@ -513,7 +523,7 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, wxUint32 nbytes)
   msg.sig[3] = (unsigned char) 0xde;
   msg.len[0] = msg.len[1] = msg.len[2] = msg.len[3] = (char) 0;
 
-  if ((_Write((char *)&msg, sizeof(msg))) < sizeof(msg))
+  if ((_Write(&msg, sizeof(msg))) < sizeof(msg))
     goto exit;
 
   // everything was OK
@@ -527,7 +537,7 @@ exit:
   return *this;
 }
 
-wxSocketBase& wxSocketBase::Unread(const char *buffer, wxUint32 nbytes)
+wxSocketBase& wxSocketBase::Unread(const void *buffer, wxUint32 nbytes)
 {
   if (nbytes != 0)
     Pushback(buffer, nbytes);
@@ -774,6 +784,7 @@ void wxSocketBase::SetFlags(wxSocketFlags flags)
   m_flags = flags;
 }
 
+
 // --------------------------------------------------------------------------
 // Callbacks (now obsolete - use events instead)
 // --------------------------------------------------------------------------
@@ -795,44 +806,24 @@ char *wxSocketBase::CallbackData(char *data)
 }
 
 // --------------------------------------------------------------------------
-// Event system
+// Event handling
 // --------------------------------------------------------------------------
 
-// All events (INPUT, OUTPUT, CONNECTION, LOST) are now always
-// internally watched; but users will only be notified of those
-// events they are interested in.
+// Callback function from GSocket. All events are internally
+// monitored, but users only get these they are interested in.
 
 static void LINKAGEMODE wx_socket_callback(GSocket * WXUNUSED(socket),
-                                           GSocketEvent event,
+                                           GSocketEvent notify,
                                            char *cdata)
 {
   wxSocketBase *sckobj = (wxSocketBase *)cdata;
 
-  sckobj->OnRequest((wxSocketNotify)event);
+  sckobj->OnRequest((wxSocketNotify) notify);
 }
 
-void wxSocketBase::SetNotify(wxSocketEventFlags flags)
-{
-  m_neededreq = flags;
-}
-
-void wxSocketBase::Notify(bool notify)
-{
-  m_notify_state = notify;
-}
 
 void wxSocketBase::OnRequest(wxSocketNotify req_evt)
 {
-  wxSocketEventFlags flag = -1;
-
-  switch (req_evt)
-  {
-    case GSOCK_INPUT:      flag = GSOCK_INPUT_FLAG; break;
-    case GSOCK_OUTPUT:     flag = GSOCK_OUTPUT_FLAG; break;
-    case GSOCK_CONNECTION: flag = GSOCK_CONNECTION_FLAG; break;
-    case GSOCK_LOST:       flag = GSOCK_LOST_FLAG; break;
-  }
-
   // This duplicates some code in _Wait, but this doesn't
   // hurt. It has to be here because we don't know whether
   // the Wait functions will be used, and it has to be in
@@ -868,24 +859,45 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
       break;
   }
 
+  // Schedule the event
+
+  wxSocketEventFlags flag = -1;
+  switch (req_evt)
+  {
+    case GSOCK_INPUT:      flag = GSOCK_INPUT_FLAG; break;
+    case GSOCK_OUTPUT:     flag = GSOCK_OUTPUT_FLAG; break;
+    case GSOCK_CONNECTION: flag = GSOCK_CONNECTION_FLAG; break;
+    case GSOCK_LOST:       flag = GSOCK_LOST_FLAG; break;
+  }
+
   if (((m_neededreq & flag) == flag) && m_notify_state)
   {
-    if (m_handler)
-    {
-      wxSocketEvent event(m_id);
-      event.m_socket = this;
-      event.m_event  = req_evt;
+    wxSocketEvent event(m_id);
 
+    event.m_event      = req_evt;
+    event.m_clientData = m_clientData;
+    event.SetEventObject(this);
+
+    if (m_handler)
 #if USE_DELAYED_EVENTS
-      wxPostEvent(m_handler, event);
+      m_handler->AddPendingEvent(event);
 #else
       m_handler->ProcessEvent(event);
 #endif
-    }
 
     if (m_cbk)
       m_cbk(*this, req_evt, m_cdata);
   }
+}
+
+void wxSocketBase::Notify(bool notify)
+{
+  m_notify_state = notify;
+}
+
+void wxSocketBase::SetNotify(wxSocketEventFlags flags)
+{
+  m_neededreq = flags;
 }
 
 void wxSocketBase::SetEventHandler(wxEvtHandler& handler, int id)
@@ -894,22 +906,23 @@ void wxSocketBase::SetEventHandler(wxEvtHandler& handler, int id)
   m_id      = id;
 }
 
+
 // --------------------------------------------------------------------------
 // Pushback buffer
 // --------------------------------------------------------------------------
 
-void wxSocketBase::Pushback(const char *buffer, wxUint32 size)
+void wxSocketBase::Pushback(const void *buffer, wxUint32 size)
 {
   if (!size) return;
 
   if (m_unread == NULL)
-    m_unread = (char *)malloc(size);
+    m_unread = malloc(size);
   else
   {
-    char *tmp;
+    void *tmp;
 
-    tmp = (char *)malloc(m_unrd_size + size);
-    memcpy(tmp+size, m_unread, m_unrd_size);
+    tmp = malloc(m_unrd_size + size);
+    memcpy((char *)tmp + size, m_unread, m_unrd_size);
     free(m_unread);
 
     m_unread = tmp;
@@ -920,7 +933,7 @@ void wxSocketBase::Pushback(const char *buffer, wxUint32 size)
   memcpy(m_unread, buffer, size);
 }
 
-wxUint32 wxSocketBase::GetPushback(char *buffer, wxUint32 size, bool peek)
+wxUint32 wxSocketBase::GetPushback(void *buffer, wxUint32 size, bool peek)
 {
   if (!m_unrd_size)
     return 0;
@@ -928,7 +941,7 @@ wxUint32 wxSocketBase::GetPushback(char *buffer, wxUint32 size, bool peek)
   if (size > (m_unrd_size-m_unrd_cur))
     size = m_unrd_size-m_unrd_cur;
 
-  memcpy(buffer, (m_unread+m_unrd_cur), size);
+  memcpy(buffer, (char *)m_unread + m_unrd_cur, size);
 
   if (!peek)
   {
@@ -945,8 +958,9 @@ wxUint32 wxSocketBase::GetPushback(char *buffer, wxUint32 size, bool peek)
   return size;
 }
 
+
 // ==========================================================================
-// wxSocketServer
+// wxSocketServer                             
 // ==========================================================================
 
 // --------------------------------------------------------------------------
@@ -1151,7 +1165,7 @@ wxDatagramSocket::wxDatagramSocket( wxSockAddress& addr,
 }
 
 wxDatagramSocket& wxDatagramSocket::RecvFrom( wxSockAddress& addr,
-                                              char* buf,
+                                              void* buf,
                                               wxUint32 nBytes )
 {
     Read(buf, nBytes);
@@ -1160,7 +1174,7 @@ wxDatagramSocket& wxDatagramSocket::RecvFrom( wxSockAddress& addr,
 }
 
 wxDatagramSocket& wxDatagramSocket::SendTo( wxSockAddress& addr,
-                                            const char* buf,
+                                            const void* buf,
                                             wxUint32 nBytes )
 {
     GSocket_SetPeer(m_socket, addr.GetAddress());
@@ -1183,8 +1197,8 @@ void wxSocketEvent::CopyObject(wxObject& object_dest) const
 
   wxEvent::CopyObject(object_dest);
 
-  event->m_event  = m_event;
-  event->m_socket = m_socket;
+  event->m_event      = m_event;
+  event->m_clientData = m_clientData;
 }
 
 

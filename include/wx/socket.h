@@ -161,12 +161,12 @@ public:
   // base IO
   virtual bool  Close();
   wxSocketBase& Discard();
-  wxSocketBase& Peek(char* buffer, wxUint32 nbytes);
-  wxSocketBase& Read(char* buffer, wxUint32 nbytes);
-  wxSocketBase& ReadMsg(char *buffer, wxUint32 nbytes);
-  wxSocketBase& Unread(const char *buffer, wxUint32 nbytes);
-  wxSocketBase& Write(const char *buffer, wxUint32 nbytes);
-  wxSocketBase& WriteMsg(const char *buffer, wxUint32 nbytes);
+  wxSocketBase& Peek(void* buffer, wxUint32 nbytes);
+  wxSocketBase& Read(void* buffer, wxUint32 nbytes);
+  wxSocketBase& ReadMsg(void *buffer, wxUint32 nbytes);
+  wxSocketBase& Unread(const void *buffer, wxUint32 nbytes);
+  wxSocketBase& Write(const void *buffer, wxUint32 nbytes);
+  wxSocketBase& WriteMsg(const void *buffer, wxUint32 nbytes);
 
   void InterruptAllWaits() { m_interrupt = TRUE; };
   bool Wait(long seconds = -1, long milliseconds = 0);
@@ -174,11 +174,13 @@ public:
   bool WaitForWrite(long seconds = -1, long milliseconds = 0);
   bool WaitForLost(long seconds = -1, long milliseconds = 0);
 
-  inline wxSocketFlags GetFlags() const { return m_flags; };
+  inline wxSocketFlags GetFlags() const { return m_flags; }
   void SetFlags(wxSocketFlags flags);
   void SetTimeout(long seconds);
 
   // event handling
+  void *GetClientData() const { return m_clientData; }
+  void SetClientData(void *data) { m_clientData = data; }
   void SetEventHandler(wxEvtHandler& handler, int id = -1);
   void SetNotify(wxSocketEventFlags flags);
   void Notify(bool notify);
@@ -204,13 +206,13 @@ private:
   friend class wxDatagramSocket;
 
   // low level IO
-  wxUint32 _Read(char* buffer, wxUint32 nbytes);
-  wxUint32 _Write(const char *buffer, wxUint32 nbytes);
+  wxUint32 _Read(void* buffer, wxUint32 nbytes);
+  wxUint32 _Write(const void *buffer, wxUint32 nbytes);
   bool _Wait(long seconds, long milliseconds, wxSocketEventFlags flags);
 
   // pushback buffer
-  void Pushback(const char *buffer, wxUint32 size);
-  wxUint32 GetPushback(char *buffer, wxUint32 size, bool peek);
+  void Pushback(const void *buffer, wxUint32 size);
+  wxUint32 GetPushback(void *buffer, wxUint32 size, bool peek);
 
 private:
   GSocket      *m_socket;           // GSocket
@@ -230,16 +232,18 @@ private:
   bool          m_beingDeleted;     // marked for delayed deletion?
 
   // pushback buffer
-  char         *m_unread;           // pushback buffer
+  void         *m_unread;           // pushback buffer
   wxUint32      m_unrd_size;        // pushback buffer size
   wxUint32      m_unrd_cur;         // pushback pointer (index into buffer)
 
   // events
-  wxEvtHandler *m_handler;          // event handler
   int           m_id;               // socket id
+  wxEvtHandler *m_handler;          // event handler
+  void         *m_clientData;       // client data for events
   bool          m_notify_state;     // notify events to users?
-  wxSocketEventFlags
-                m_neededreq;        // event mask
+  wxSocketEventFlags  m_neededreq;  // event mask
+
+  // callbacks - deprecated, avoid if possible
   wxSockCbk     m_cbk;              // callback
   char         *m_cdata;            // callback data
 };
@@ -295,10 +299,10 @@ public:
   wxDatagramSocket(wxSockAddress& addr, wxSocketFlags flags = wxSOCKET_NONE);
 
   wxDatagramSocket& RecvFrom( wxSockAddress& addr,
-                              char* buf,
+                              void* buf,
                               wxUint32 nBytes );
   wxDatagramSocket& SendTo( wxSockAddress& addr,
-                            const char* buf,
+                            const void* buf,
                             wxUint32 nBytes );
 };
 
@@ -314,14 +318,19 @@ class WXDLLEXPORT wxSocketEvent : public wxEvent
 public:
   wxSocketEvent(int id = 0);
 
-  wxSocketNotify SocketEvent() const { return m_event; }
-  wxSocketBase *Socket() const       { return m_socket; }
+  wxSocketNotify  GetSocketEvent() const { return m_event; }
+  wxSocketBase   *GetSocket() const      { return (wxSocketBase *) GetEventObject(); }
+  void           *GetClientData() const  { return m_clientData; }
+
+  // backwards compatibility
+  wxSocketNotify  SocketEvent() const    { return m_event; }
+  wxSocketBase   *Socket() const         { return (wxSocketBase *) GetEventObject(); }
 
   void CopyObject(wxObject& object_dest) const;
 
 public:
   wxSocketNotify  m_event;
-  wxSocketBase   *m_socket;
+  void           *m_clientData;
 };
 
 
@@ -329,7 +338,7 @@ typedef void (wxEvtHandler::*wxSocketEventFunction)(wxSocketEvent&);
 
 #define EVT_SOCKET(id, func) { wxEVT_SOCKET, id, -1, \
   (wxObjectEventFunction) (wxEventFunction) (wxSocketEventFunction) & func, \
-  (wxObject *) NULL  },
+  (wxObject *) NULL },
 
 
 #endif

@@ -237,7 +237,7 @@ void MyFrame::Test1(wxSocketBase *sock)
 
   sock->SetFlags(wxSOCKET_WAITALL);
 
-  sock->Read((char *)&len, 1);
+  sock->Read(&len, 1);
 
   buf = new char[len];
   sock->Read(buf, len);
@@ -286,7 +286,7 @@ void MyFrame::Test3(wxSocketBase *sock)
 
   sock->SetFlags(wxSOCKET_WAITALL);
 
-  sock->Read((char *)&len, 1);
+  sock->Read(&len, 1);
   buf = new char[len * 1024];
   sock->Read(buf, len * 1024);
   sock->Write(buf, len * 1024);
@@ -359,7 +359,7 @@ void MyFrame::OnSocketEvent(wxSocketEvent& event)
 
       // Which test are we going to run?
       unsigned char c;
-      sock->Read((char *)&c ,1);
+      sock->Read(&c ,1);
 
       switch (c)
       {

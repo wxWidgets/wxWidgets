@@ -367,7 +367,7 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
   buf2 = new char[len];
 
   m_text->AppendText(_("Sending a test buffer to the server ..."));
-  m_sock->Write((char *)&len, 1);
+  m_sock->Write(&len, 1);
   m_sock->Write(buf1, len);
   m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
 
@@ -494,7 +494,7 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
     buf1[i] = (char)(i % 256);
 
   m_text->AppendText(_("Sending a large buffer (32K) to the server ..."));
-  m_sock->Write((char *)&len, 1);
+  m_sock->Write(&len, 1);
   m_sock->Write(buf1, len * 1024);
   m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
 
@@ -528,7 +528,7 @@ void MyFrame::OnCloseConnection(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDatagram(wxCommandEvent& WXUNUSED(event))
 {
-  m_text->AppendText(_("=== Datagram test begins ===\n"));
+  m_text->AppendText(_("\n=== Datagram test begins ===\n"));
   m_text->AppendText(_("Sorry, not implemented\n"));
   m_text->AppendText(_("=== Datagram test ends ===\n"));
 }
