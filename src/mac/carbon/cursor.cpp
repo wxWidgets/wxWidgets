@@ -376,7 +376,6 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
         Str255 theName ;
 		wxMacStringToPascal( cursor_file , theName ) ;
         
-        wxStAppResource resload ;
         Handle resHandle = ::GetNamedResource( 'crsr' , theName ) ;
         if ( resHandle )
         {

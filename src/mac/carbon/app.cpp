@@ -726,153 +726,6 @@ void wxApp::CleanUp()
 // misc initialization stuff
 //----------------------------------------------------------------------
 
-// extern variable for shared library resource id
-// need to be able to find it with NSLookupAndBindSymbol
-short gSharedLibraryResource = kResFileNotOpened ;
-
-#if defined(WXMAKINGDLL_CORE) && defined(__DARWIN__)
-CFBundleRef gSharedLibraryBundle = NULL;
-#endif /* WXMAKINGDLL_CORE && __DARWIN__ */
-
-wxStAppResource::wxStAppResource()
-{
-    m_currentRefNum = CurResFile() ;
-    if ( gSharedLibraryResource != kResFileNotOpened )
-    {
-        UseResFile( gSharedLibraryResource ) ;
-    }
-}
-
-wxStAppResource::~wxStAppResource()
-{
-    if ( m_currentRefNum != kResFileNotOpened )
-    {
-        UseResFile( m_currentRefNum ) ;
-    }
-}
-
-void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
-{
-    gSharedLibraryResource = kResFileNotOpened;
-
-#ifdef WXMAKINGDLL_CORE
-    if ( initBlock != NULL ) {
-        const CFragInitBlock *theInitBlock = (const CFragInitBlock *)initBlock;
-        FSSpec *fileSpec = NULL;
-
-        if (theInitBlock->fragLocator.where == kDataForkCFragLocator) {
-            fileSpec = theInitBlock->fragLocator.u.onDisk.fileSpec;
-        }
-        else if (theInitBlock->fragLocator.where == kResourceCFragLocator) {
-            fileSpec = theInitBlock->fragLocator.u.inSegs.fileSpec;
-        }
-
-        if (fileSpec != NULL) {
-            gSharedLibraryResource =  FSpOpenResFile(fileSpec, fsRdPerm);
-        }
-    }
-    else {
-#ifdef __DARWIN__
-        // Open the shared library resource file if it is not yet open
-        NSSymbol    theSymbol;
-        NSModule    theModule;
-        const char *theLibPath;
-
-        gSharedLibraryBundle = CFBundleGetBundleWithIdentifier(CFSTR("com.wxwindows.wxWidgets"));
-        if (gSharedLibraryBundle != NULL) {
-            // wxWidgets has been bundled into a framework
-            //   load the framework resources
-
-            gSharedLibraryResource = CFBundleOpenBundleResourceMap(gSharedLibraryBundle);
-        }
-        else {
-            // wxWidgets is a simple dynamic shared library
-            //   load the resources from the data fork of a separate resource file
-            wxString theResPath;
-            wxString theName;
-            FSRef  theResRef;
-            OSErr  theErr = noErr;
-
-            // get the library path
-            theSymbol = NSLookupAndBindSymbol("_gSharedLibraryResource");
-            theModule = NSModuleForSymbol(theSymbol);
-            theLibPath = NSLibraryNameForModule(theModule);
-
-            // if we call wxLogDebug from here then, as wxTheApp hasn't been
-            // created yet when we're called from wxApp::Initialize(), wxLog
-            // is going to create a default stderr-based log target instead of
-            // the expected normal GUI one -- don't do it, if we really want
-            // to see this message just use fprintf() here
-#if 0
-            wxLogDebug( wxT("wxMac library installation name is '%s'"),
-                        theLibPath );
-#endif
-
-            // allocate copy to replace .dylib.* extension with .rsrc
-            if (theLibPath != NULL) {
-#if wxUSE_UNICODE
-                theResPath = wxString(theLibPath, wxConvLocal);
-#else
-                theResPath = wxString(theLibPath);
-#endif
-                // replace '_core' with '' in case of multi-lib build
-                theResPath.Replace(wxT("_core"), wxEmptyString);
-                // replace ".dylib" shared library extension with ".rsrc"
-                theResPath.Replace(wxT(".dylib"), wxT(".rsrc"));
-                // Find the begining of the filename
-                theName = theResPath.AfterLast('/');
-
-#if 0
-                wxLogDebug( wxT("wxMac resources file name is '%s'"),
-                            theResPath.mb_str() );
-#endif
-
-                theErr = FSPathMakeRef((UInt8 *) theResPath.mb_str(), &theResRef, false);
-                if (theErr != noErr) {
-                    // try in current directory (using name only)
-                    theErr = FSPathMakeRef((UInt8 *) theName.mb_str(), &theResRef, false);
-                }
-
-                // open the resource file
-                if (theErr == noErr) {
-                    theErr = FSOpenResourceFile( &theResRef, 0, NULL, fsRdPerm,
-                                                 &gSharedLibraryResource);
-                }
-                if (theErr != noErr) {
-#ifdef __WXDEBUG__
-                    wxLogDebug( wxT("unable to open wxMac resource file '%s'\n"),
-                                theResPath.mb_str() );
-#endif // __WXDEBUG__
-                }
-
-            }
-        }
-#endif /* __DARWIN__ */
-    }
-#endif /* WXMAKINGDLL_CORE */
-}
-
-void wxStAppResource::CloseSharedLibraryResource()
-{
-#ifdef WXMAKINGDLL_CORE
-    // Close the shared library resource file
-    if (gSharedLibraryResource != kResFileNotOpened) {
-#ifdef __DARWIN__
-        if (gSharedLibraryBundle != NULL) {
-            CFBundleCloseBundleResourceMap(gSharedLibraryBundle,
-                                           gSharedLibraryResource);
-            gSharedLibraryBundle = NULL;
-        }
-        else
-#endif /* __DARWIN__ */
-        {
-            CloseResFile(gSharedLibraryResource);
-        }
-        gSharedLibraryResource = kResFileNotOpened;
-    }
-#endif /* WXMAKINGDLL_CORE */
-}
-
 #if defined(WXMAKINGDLL_CORE) && !defined(__DARWIN__)
 
 // for shared libraries we have to manually get the correct resource
@@ -887,13 +740,11 @@ extern "C" {
 
 pascal OSErr __wxinitialize(const CFragInitBlock *theInitBlock)
 {
-    wxStAppResource::OpenSharedLibraryResource( theInitBlock ) ;
     return __initialize( theInitBlock ) ;
 }
 
 pascal void __wxterminate(void)
 {
-    wxStAppResource::CloseSharedLibraryResource() ;
     __terminate() ;
 }
 

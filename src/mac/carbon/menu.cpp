@@ -536,8 +536,6 @@ void wxMenuBar::MacInstallMenuBar()
     if ( s_macInstalledMenuBar == this )
         return ;
 
-    wxStAppResource resload ;
-
     MenuBarHandle menubar = NULL ;
 #if TARGET_API_MAC_OSX
     menubar = NewHandleClear( 6 /* sizeof( MenuBarHeader ) */ ) ;
