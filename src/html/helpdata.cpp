@@ -48,15 +48,22 @@ WX_DEFINE_OBJARRAY(wxHtmlBookRecArray)
 //-----------------------------------------------------------------------------
 
 // Reads one line, stores it into buf and returns pointer to new line or NULL.
-static char* ReadLine(char *line, char *buf)
+static char* ReadLine(char *line, char *buf, size_t bufsize)
 {
-    char *writeptr = buf, *readptr = line;
+    char *writeptr = buf;
+    char *endptr = buf + bufsize - 1;
+    char *readptr = line;
 
-    while (*readptr != 0 && *readptr != '\r' && *readptr != '\n') *(writeptr++) = *(readptr++);
+    while (*readptr != 0 && *readptr != '\r' && *readptr != '\n' &&
+           writeptr != endptr) 
+        *(writeptr++) = *(readptr++);
     *writeptr = 0;
-    while (*readptr == '\r' || *readptr == '\n') readptr++;
-    if (*readptr == 0) return NULL;
-    else return readptr;
+    while (*readptr == '\r' || *readptr == '\n')
+        readptr++;
+    if (*readptr == 0)
+        return NULL;
+    else 
+        return readptr;
 }
 
 
@@ -559,10 +566,6 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         wxInputStream *s;
         wxString bookFull;
 
-        int sz;
-        char *buff, *lineptr;
-        char linebuf[300];
-
         wxString title = _("noname"),
                  safetitle,
                  start = wxEmptyString,
@@ -588,25 +591,34 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         }
         fsys.ChangePathTo(bookFull);
         s = fi->GetStream();
+
+        int sz;
+        char *buff, *lineptr;
+        char linebuf[300];
+
         sz = s->GetSize();
         buff = new char[sz + 1];
         buff[sz] = 0;
         s->Read(buff, sz);
         lineptr = buff;
 
-        do {
-            lineptr = ReadLine(lineptr, linebuf);
+        do 
+        {
+            lineptr = ReadLine(lineptr, linebuf, 300);
+            
+            for (char *ch = linebuf; *ch != '\0' && *ch != '='; ch++)
+               *ch = tolower(*ch);
 
-            if (strstr(linebuf, "Title=") == linebuf)
-                title = linebuf + strlen("Title=");
-            if (strstr(linebuf, "Default topic=") == linebuf)
-                start = linebuf + strlen("Default topic=");
-            if (strstr(linebuf, "Index file=") == linebuf)
-                index = linebuf + strlen("Index file=");
-            if (strstr(linebuf, "Contents file=") == linebuf)
-                contents = linebuf + strlen("Contents file=");
-            if (strstr(linebuf, "Charset=") == linebuf)
-                charset = linebuf + strlen("Charset=");
+            if (strstr(linebuf, "title=") == linebuf)
+                title = linebuf + strlen("title=");
+            if (strstr(linebuf, "default topic=") == linebuf)
+                start = linebuf + strlen("default topic=");
+            if (strstr(linebuf, "index file=") == linebuf)
+                index = linebuf + strlen("index file=");
+            if (strstr(linebuf, "contents file=") == linebuf)
+                contents = linebuf + strlen("contents file=");
+            if (strstr(linebuf, "charset=") == linebuf)
+                charset = linebuf + strlen("charset=");
         } while (lineptr != NULL);
         delete[] buff;
 
