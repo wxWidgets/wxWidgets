@@ -42,10 +42,10 @@
 #include "wx/time.h"
 
 // Define a new application type
-class MyApp: public wxApp
+class MyApp : public wxApp
 {
 public:
-    bool OnInit(void);
+    bool OnInit();
 };
 
 WX_DEFINE_ARRAY(wxThread *, wxArrayThread);
@@ -55,7 +55,7 @@ class MyFrame: public wxFrame
 {
 public:
     // ctor
-    MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
+    MyFrame(wxFrame *frame, const wxString& title, int x, int y, int w, int h);
 
     // operations
     void WriteText(const wxString& text) { m_txtctrl->WriteText(text); }
@@ -80,13 +80,15 @@ public:
     wxArrayThread m_threads;
 
 private:
-    void DeleteThread(size_t index);
-
     // crit section protects access to the array below
     wxCriticalSection m_critsect;
-    wxArrayInt        m_aToDelete;
 
-    wxTextCtrl       *m_txtctrl;
+    // the array of threads which finished (either because they did their work
+    // or because they were explicitly stopped)
+    wxArrayInt m_aToDelete;
+
+    // just some place to put our messages in
+    wxTextCtrl *m_txtctrl;
 
     DECLARE_EVENT_TABLE()
 };
@@ -99,7 +101,8 @@ public:
     // thread execution starts here
     virtual void *Entry();
 
-    // called when the thread exits - whether 
+    // called when the thread exits - whether it terminates normally or is
+    // stopped with Delete() (but not when it is Kill()ed!)
     virtual void OnExit();
 
     // write something to the text control
@@ -138,8 +141,6 @@ void *MyThread::Entry()
 {
     wxString text;
 
-    DeferDestroy(TRUE);
-
     text.Printf("Thread 0x%x started.\n", GetID());
     WriteText(text);
 
@@ -152,11 +153,8 @@ void *MyThread::Entry()
         text.Printf("[%u] Thread 0x%x here.\n", m_count, GetID());
         WriteText(text);
 
-#ifdef __WXMSW__
-        ::Sleep(1000);
-#else
-        wxSleep(1);
-#endif
+        // wxSleep() can't be called from non-GUI thread!
+        wxThread::Sleep(1000);
     }
 
     text.Printf("Thread 0x%x finished.\n", GetID());
@@ -229,7 +227,8 @@ bool MyApp::OnInit()
 }
 
 // My frame constructor
-MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
+MyFrame::MyFrame(wxFrame *frame, const wxString& title,
+                 int x, int y, int w, int h)
        : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
     CreateStatusBar();
@@ -243,24 +242,31 @@ void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
 {
     MyThread *thread = new MyThread(this);
 
-    thread->Create();
+    if ( thread->Create() != wxTHREAD_NO_ERROR )
+    {
+        wxLogError("Can't create thread!");
+    }
 
     wxCriticalSectionLocker enter(m_critsect);
     m_threads.Add(thread);
+
+    if ( thread->Run() != wxTHREAD_NO_ERROR )
+    {
+        wxLogError("Can't start thread!");
+    }
 }
 
 void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
 {
-    int no_thrd = m_threads.Count() - 1;
-
-    if ( no_thrd < 0 )
+    // stop the last thread
+    if ( m_threads.IsEmpty() )
     {
         wxLogError("No thread to stop!");
-
-        return;
     }
-
-    DeleteThread(no_thrd);
+    else
+    {
+        m_threads.Last()->Delete();
+    }
 }
 
 void MyFrame::OnResumeThread(wxCommandEvent& WXUNUSED(event) )
@@ -268,11 +274,11 @@ void MyFrame::OnResumeThread(wxCommandEvent& WXUNUSED(event) )
     wxCriticalSectionLocker enter(m_critsect);
 
     // resume first suspended thread
-    size_t n = 0;
-    while ( n < m_threads.Count() && m_threads[n]->IsPaused() )
-        n--;
+    size_t n = 0, count = m_threads.Count();
+    while ( n < count && !m_threads[n]->IsPaused() )
+        n++;
 
-    if ( n < 0 )
+    if ( n == count )
         wxLogError("No thread to resume!");
     else
         m_threads[n]->Resume();
@@ -302,7 +308,11 @@ void MyFrame::OnIdle(wxIdleEvent &event)
 
         size_t nCount = m_aToDelete.Count();
         for ( size_t n = 0; n < nCount; n++ )
-            DeleteThread((size_t)m_aToDelete[n]);
+        {
+            // index should be shifted by n because we've already deleted 
+            // n-1 elements from the array
+            m_threads.Remove((size_t)m_aToDelete[n] - n);
+        }
 
         m_aToDelete.Empty();
     }
@@ -320,16 +330,20 @@ void MyFrame::OnIdle(wxIdleEvent &event)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
-    for ( size_t i = 0; i < m_threads.Count(); i++ )
-        delete m_threads[i];
+    size_t count = m_threads.Count();
+    for ( size_t i = 0; i < count; i++ )
+    {
+        m_threads[i]->Delete();
+    }
 
     Close(TRUE);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    wxMessageDialog dialog(this, "wxThread sample (based on minimal)\n"
-                                 "Julian Smart, Guilhem Lavaux, Vadim Zeitlin",
+    wxMessageDialog dialog(this, "wxWindows multithreaded application sample\n"
+                                 "(c) 1998 Julian Smart, Guilhem Lavaux\n"
+                                 "(c) 1999 Vadim Zeitlin",
                            "About wxThread sample",
                            wxOK | wxICON_INFORMATION);
 
@@ -349,10 +363,4 @@ void MyFrame::OnThreadExit(wxThread *thread)
     wxCriticalSectionLocker enter(m_critsect);
 
     m_aToDelete.Add(index);
-}
-
-void MyFrame::DeleteThread(size_t index)
-{
-    delete m_threads[index];
-    m_threads.Remove(index);
 }
