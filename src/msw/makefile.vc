@@ -752,7 +752,7 @@ rtf:    $(DOCDIR)/winhelp/wx.rtf
 pdfrtf:    $(DOCDIR)/pdf/wx.rtf
 html:	wxhtml
 htb:	$(DOCDIR)\htb\wx.htb
-wxhtml:	$(DOCDIR)\html\wx\wx.htm
+wxhtml:	$(DOCDIR)\html\wx\wx_contents.html
 htmlhelp: $(DOCDIR)\htmlhelp\wx.chm
 ps:     wxps
 wxps:	$(WXDIR)\docs\ps\wx.ps
@@ -834,22 +834,22 @@ $(DOCDIR)/pdf/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/
 
 # This target does two sets of HTML: one using a style sheet, for
 # the purposes of the CHM file, and one without.
-$(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex
+$(DOCDIR)\html\wx\wx_contents.html:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex
         cd $(DOCDIR)\latex\wx
         -mkdir $(DOCDIR)\html\wx
         copy *.gif $(DOCDIR)\html\wx
-        -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx_contents.html -twice -html
         -mkdir $(DOCDIR)\mshtml
         -mkdir $(DOCDIR)\mshtml\wx
         copy *.gif $(DOCDIR)\mshtml\wx
-        -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\mshtml\wx\wx.htm -twice -html -macros $(DOCDIR)\latex\wx\tex2rtf_css.ini
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\mshtml\wx\wx_contents.html -twice -html -macros $(DOCDIR)\latex\wx\tex2rtf_css.ini
         -erase $(DOCDIR)\html\wx\*.con
         -erase $(DOCDIR)\html\wx\*.ref
         -erase $(DOCDIR)\latex\wx\*.con
         -erase $(DOCDIR)\latex\wx\*.ref
          cd $(THISDIR)
 
-$(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\mshtml\wx\wx.htm $(DOCDIR)\mshtml\wx\wx.hhp
+$(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx_contents.html $(DOCDIR)\mshtml\wx\wx_contents.html $(DOCDIR)\mshtml\wx\wx.hhp
 	cd $(DOCDIR)\mshtml\wx
 	copy $(DOCDIR)\latex\wx\wx.css .
 	-hhc wx.hhp
@@ -894,10 +894,10 @@ $(WXDIR)\docs\ps\referenc.ps:	$(WXDIR)\docs\latex\wx\referenc.dvi
 # files, renamed to htb.
 # This can then be used with e.g. helpview.
 # Optionally, a cached version of the .hhp file can be generated with hhp2cached.
-$(DOCDIR)\htb\wx.htb: $(DOCDIR)\html\wx\wx.htm
+$(DOCDIR)\htb\wx.htb: $(DOCDIR)\html\wx\wx_contents.html
 	cd $(WXDIR)\docs\html\wx
     -erase wx.zip wx.htb
-    zip wx.zip *.htm *.gif *.hhp *.hhc *.hhk
+    zip wx.zip *.htm* *.gif *.hhp *.hhc *.hhk
     -mkdir $(DOCDIR)\htb
     move wx.zip $(DOCDIR)\htb\wx.htb
     cd $(THISDIR)
@@ -911,7 +911,7 @@ updatedocs: touchmanual alldocs
 cleandocs:
     -erase $(DOCDIR)\winhelp\wx.hlp
     -erase $(DOCDIR)\winhelp\wx.cnt
-    -erase $(DOCDIR)\html\wx\*.htm
+    -erase $(DOCDIR)\html\wx\*.htm*
     -erase $(DOCDIR)\pdf\wx.rtf
     -erase $(DOCDIR)\latex\wx\wx.rtf
     -erase $(DOCDIR)\latex\wx\WX.PH
