@@ -299,6 +299,8 @@ void wxApp::MacNewFile()
 	    // handling the quit event is not recommended by apple
 	    // rather using the quit apple event - which we do
 	    
+	    { kEventClassAppleEvent , kEventAppleEvent } ,
+	    
     	{ kEventClassMouse , kEventMouseDown } ,
 	} ;
 
@@ -427,6 +429,13 @@ pascal OSStatus wxAppEventHandler( EventHandlerCallRef handler , EventRef event 
     		break ;
     	case kEventClassMouse :
     		result = MouseEventHandler( handler , event , data ) ;
+    		break ;
+    	case kEventClassAppleEvent :
+    		{
+    			EventRecord rec ;
+    			wxMacConvertEventToRecord( event , &rec ) ;
+    			result = AEProcessAppleEvent( &rec ) ;
+    		}
     		break ;
     	default :
     		break ;
