@@ -17,7 +17,7 @@ LIBRARY_FILE=$LIBRARY_BASE.$LIBRARY_MAJOR.$LIBRARY_MINOR
 
 echo "Creating shared library: $LIBRARY_FILE"
 
-case $COMPILER in gcc*|*gcc)
+case $COMPILER in gcc*|*gcc|egcs)
   $COMPILER -shared -Wl,-soname,$LIBRARY_NAME.$LIBRARY_MAJOR -o $LIBRARY_FILE $LIBRARY_OBJS
   ;;
 *)

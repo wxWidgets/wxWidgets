@@ -31,6 +31,7 @@
 
 const int wxMENU_HEIGHT    = 27;
 const int wxSTATUS_HEIGHT  = 25;
+const int wxPLACE_HOLDER   = 0;
 
 //-----------------------------------------------------------------------------
 // data
@@ -167,6 +168,21 @@ static void wxInsertChildInFrame( wxWindow* parent, wxWindow* child )
                          GTK_WIDGET(child->m_widget),
                          child->m_x,
                          child->m_y );
+			 
+	/* we connect to these events for recalculating the client area
+	   space when the toolbar is floating */
+	if (wxIS_KIND_OF(child,wxToolBar))
+	{
+	    wxToolBar *toolBar = (wxToolBar*) child;
+	    if (toolBar->m_windowStyle & wxTB_DOCKABLE)
+	    {
+                gtk_signal_connect( GTK_OBJECT(toolBar->m_widget), "child_attached",
+                    GTK_SIGNAL_FUNC(gtk_toolbar_attached_callback), (gpointer)parent );
+		    
+                gtk_signal_connect( GTK_OBJECT(toolBar->m_widget), "child_detached",
+                    GTK_SIGNAL_FUNC(gtk_toolbar_detached_callback), (gpointer)parent );
+	    }
+	}
     }
     else
     {
@@ -446,14 +462,32 @@ void wxFrame::GetClientSize( int *width, int *height ) const
     wxWindow::GetClientSize( width, height );
     if (height)
     {
-        if (m_frameMenuBar && !m_menuBarDetached) (*height) -= wxMENU_HEIGHT;
+        /* menu bar */
+        if (m_frameMenuBar)
+	{
+	    if (!m_menuBarDetached) 
+	        (*height) -= wxMENU_HEIGHT;
+	    else
+	        (*height) -= wxPLACE_HOLDER;
+	}
+	
+	/* status bar */
         if (m_frameStatusBar) (*height) -= wxSTATUS_HEIGHT;
+	
+	/* tool bar */
         if (m_frameToolBar)
         {
-            int y = 0;
-            m_frameToolBar->GetSize( (int *) NULL, &y );
-            (*height) -= y;
+	    if (!m_toolBarDetached)
+	    {
+                int y = 0;
+                m_frameToolBar->GetSize( (int *) NULL, &y );
+                (*height) -= y;
+	    }
+	    else
+                (*height) -= wxPLACE_HOLDER;
         }
+	
+	/* mini edge */
         (*height) -= m_miniEdge*2 + m_miniTitle;
     }
     if (width)
@@ -466,16 +500,32 @@ void wxFrame::DoSetClientSize( int width, int height )
 {
     wxASSERT_MSG( (m_widget != NULL), _T("invalid frame") );
 
-    int h = height;
-    if (m_frameMenuBar && !m_menuBarDetached) h += wxMENU_HEIGHT;
-    if (m_frameStatusBar) h += wxSTATUS_HEIGHT;
-    if (m_frameToolBar)
-    {
-        int y = 0;
-        m_frameToolBar->GetSize( (int *) NULL, &y );
-        h += y;
-    }
-    wxWindow::DoSetClientSize( width + m_miniEdge*2, h  + m_miniEdge*2 + m_miniTitle );
+        /* menu bar */
+        if (m_frameMenuBar)
+	{
+	    if (!m_menuBarDetached) 
+	        height += wxMENU_HEIGHT;
+	    else
+	        height += wxPLACE_HOLDER;
+	}
+	
+	/* status bar */
+        if (m_frameStatusBar) height += wxSTATUS_HEIGHT;
+	
+	/* tool bar */
+        if (m_frameToolBar)
+        {
+	    if (!m_toolBarDetached)
+	    {
+                int y = 0;
+                m_frameToolBar->GetSize( (int *) NULL, &y );
+                height += y;
+	    }
+	    else
+                height += wxPLACE_HOLDER;
+        }
+	
+    wxWindow::DoSetClientSize( width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle );
 }
 
 void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
@@ -523,8 +573,8 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
             int ww = m_width  - 2*m_miniEdge;
-            int hh = 0;
-	    if (!m_menuBarDetached) hh = wxMENU_HEIGHT;
+            int hh = wxMENU_HEIGHT;
+	    if (m_menuBarDetached) hh = wxPLACE_HOLDER;
             m_frameMenuBar->m_x = xx;
             m_frameMenuBar->m_y = yy;
             m_frameMenuBar->m_width = ww;
@@ -540,13 +590,19 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         {
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
-            if (m_frameMenuBar && !m_menuBarDetached) yy += wxMENU_HEIGHT;
+            if (m_frameMenuBar)
+	    {
+	        if (!m_menuBarDetached) 
+	            yy += wxMENU_HEIGHT; 
+	        else 
+		    yy += wxPLACE_HOLDER;
+	    }
             int ww = m_width - 2*m_miniEdge;
             int hh = m_frameToolBar->m_height;
-
+	    if (m_toolBarDetached) hh = wxPLACE_HOLDER; 
             m_frameToolBar->m_x = xx;
             m_frameToolBar->m_y = yy;
-            m_frameToolBar->m_height = hh;
+            /* m_frameToolBar->m_height = hh;   don't change the toolbar's height */
             m_frameToolBar->m_width = ww;
 
             gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_frameToolBar->m_widget, xx, yy );
