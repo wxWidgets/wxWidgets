@@ -502,6 +502,7 @@ private:
     wxString           *m_res;
     wxListMainWindow   *m_owner;
     wxString            m_startValue;
+    bool                m_finished;
 
 public:
     wxListTextCtrl() {}
@@ -2139,6 +2140,7 @@ wxListTextCtrl::wxListTextCtrl( wxWindow *parent,
     (*m_accept) = FALSE;
     (*m_res) = "";
     m_startValue = value;
+    m_finished = FALSE;
 }
 
 void wxListTextCtrl::OnChar( wxKeyEvent &event )
@@ -2151,8 +2153,11 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
         if (!wxPendingDelete.Member(this))
             wxPendingDelete.Append(this);
 
-        if ((*m_accept) && ((*m_res) != m_startValue))
+        if ((*m_res) != m_startValue)
             m_owner->OnRenameAccept();
+
+        m_finished = TRUE;
+        m_owner->SetFocus(); // This doesn't work. TODO.
 
         return;
     }
@@ -2164,6 +2169,9 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
         if (!wxPendingDelete.Member(this))
             wxPendingDelete.Append(this);
 
+        m_finished = TRUE;
+        m_owner->SetFocus(); // This doesn't work. TODO.
+
         return;
     }
 
@@ -2172,12 +2180,18 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
 
 void wxListTextCtrl::OnKeyUp( wxKeyEvent &event )
 {
+    if (m_finished)
+    {
+        event.Skip();
+        return;
+    }
+
     // auto-grow the textctrl:
     wxSize parentSize = m_owner->GetSize();
     wxPoint myPos = GetPosition();
     wxSize mySize = GetSize();
     int sx, sy;
-    GetTextExtent(GetValue() + _T("MM"), &sx, &sy); // FIXME: MM??
+    GetTextExtent(GetValue() + _T("M"), &sx, &sy); // FIXME: MM??
     if (myPos.x + sx > parentSize.x)
         sx = parentSize.x - myPos.x;
     if (mySize.x > sx)
@@ -2187,12 +2201,21 @@ void wxListTextCtrl::OnKeyUp( wxKeyEvent &event )
     event.Skip();
 }
 
-void wxListTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
+void wxListTextCtrl::OnKillFocus( wxFocusEvent &event )
 {
+    if (m_finished)
+    {
+        event.Skip();
+        return;
+    }
+
     if (!wxPendingDelete.Member(this))
         wxPendingDelete.Append(this);
 
-    if ((*m_accept) && ((*m_res) != m_startValue))
+    (*m_accept) = TRUE;
+    (*m_res) = GetValue();
+    
+    if ((*m_res) != m_startValue)
         m_owner->OnRenameAccept();
 }
 

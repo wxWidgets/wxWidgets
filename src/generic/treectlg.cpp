@@ -96,6 +96,7 @@ private:
     wxString           *m_res;
     wxGenericTreeCtrl  *m_owner;
     wxString            m_startValue;
+    bool                m_finished;
 
     DECLARE_EVENT_TABLE()
 };
@@ -304,21 +305,24 @@ wxTreeTextCtrl::wxTreeTextCtrl( wxWindow *parent,
     (*m_accept) = FALSE;
     (*m_res) = wxEmptyString;
     m_startValue = value;
+    m_finished = FALSE;
 }
 
 void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
 {
-    // TODO focus doesn't return to the wxTextCtrl when this closes...
     if (event.m_keyCode == WXK_RETURN)
     {
         (*m_accept) = TRUE;
         (*m_res) = GetValue();
 
-        if ((*m_accept) && ((*m_res) != m_startValue))
+        if ((*m_res) != m_startValue)
             m_owner->OnRenameAccept();
 
         if (!wxPendingDelete.Member(this))
             wxPendingDelete.Append(this);
+            
+        m_finished = TRUE;
+        m_owner->SetFocus(); // This doesn't work. TODO.
 
         return;
     }
@@ -330,6 +334,9 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
         if (!wxPendingDelete.Member(this))
             wxPendingDelete.Append(this);
 
+        m_finished = TRUE;
+        m_owner->SetFocus(); // This doesn't work. TODO.
+
         return;
     }
     event.Skip();
@@ -337,12 +344,18 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
 
 void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
 {
+    if (m_finished)
+    {
+        event.Skip();
+        return;
+    }
+
     // auto-grow the textctrl:
     wxSize parentSize = m_owner->GetSize();
     wxPoint myPos = GetPosition();
     wxSize mySize = GetSize();
     int sx, sy;
-    GetTextExtent(GetValue() + _T("MM"), &sx, &sy);
+    GetTextExtent(GetValue() + _T("M"), &sx, &sy);
     if (myPos.x + sx > parentSize.x) sx = parentSize.x - myPos.x;
     if (mySize.x > sx) sx = mySize.x;
     SetSize(sx, -1);
@@ -350,12 +363,21 @@ void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
     event.Skip();
 }
 
-void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
+void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &event )
 {
+    if (m_finished)
+    {
+        event.Skip();
+        return;
+    }
+
     if (!wxPendingDelete.Member(this))
         wxPendingDelete.Append(this);
 
-    if ((*m_accept) && ((*m_res) != m_startValue))
+    (*m_accept) = TRUE;
+    (*m_res) = GetValue();
+    
+    if ((*m_res) != m_startValue)
         m_owner->OnRenameAccept();
 }
 
