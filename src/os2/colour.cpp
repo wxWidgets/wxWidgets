@@ -38,7 +38,7 @@ wxColour::wxColour (
     m_cGreen  = cGreen;
     m_cBlue   = cBlue;
     m_bIsInit = TRUE;
-    m_vPixel  = PALETTERGB (m_cRed, m_cGreen, m_cBlue);
+    m_vPixel  = OS2RGB (m_cRed, m_cGreen, m_cBlue);
 } // end of wxColour::wxColour
 
 wxColour::wxColour (
@@ -84,7 +84,7 @@ void wxColour::InitFromName(
         m_cBlue = 0;
         m_bIsInit = FALSE;
     }
-    m_vPixel = PALETTERGB (m_cRed, m_cGreen, m_cBlue);
+    m_vPixel = OS2RGB (m_cRed, m_cGreen, m_cBlue);
 } // end of wxColour::InitFromName
 
 wxColour::~wxColour ()
@@ -101,7 +101,7 @@ void wxColour::Set (
     m_cGreen  = cGreen;
     m_cBlue   = cBlue;
     m_bIsInit = TRUE;
-    m_vPixel  = PALETTERGB (m_cRed, m_cGreen, m_cBlue);
+    m_vPixel  = OS2RGB (m_cRed, m_cGreen, m_cBlue);
 } // end of wxColour::Set
 
 //

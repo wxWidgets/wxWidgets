@@ -364,7 +364,6 @@ void wxDC::DoDrawLine(
     vPoint[0].y = vY1;
     vPoint[1].x = vX2;
     vPoint[1].y = vY2;
-    // ::GpiSetColor(m_hPS,CLR_RED); //DEbug
     ::GpiMove(m_hPS, &vPoint[0]);
     ::GpiLine(m_hPS, &vPoint[1]);
 }
@@ -631,7 +630,7 @@ void wxDC::DoDrawRectangle(
     vPoint[0].x = vX;
     vPoint[0].y = vY;
     vPoint[1].x = vX + vWidth;
-    vPoint[1].y = vY - vHeight;      //mustdie !!! ??
+    vPoint[1].y = vY - vHeight;
     ::GpiMove(m_hPS, &vPoint[0]);
     lColor       = m_brush.GetColour().GetPixel();
     lBorderColor = m_pen.GetColour().GetPixel();
@@ -643,8 +642,7 @@ void wxDC::DoDrawRectangle(
         if(m_brush.GetStyle() == wxTRANSPARENT)
             lControl = DRO_OUTLINE;
 
-//EK    ::GpiSetColor(m_hPS,lBorderColor);
-        ::GpiSetColor(m_hPS,CLR_GREEN);
+        ::GpiSetColor(m_hPS, CLR_GREEN);
         ::GpiBox( m_hPS       // handle to a presentation space
                  ,lControl   // draw the box outline ? or ?
                  ,&vPoint[1]  // address of the corner
@@ -1001,66 +999,29 @@ void wxDC::SetPen(
     if (!m_pen.Ok())
         return;
 
-    int                             nWidth = m_pen.GetWidth();
+    if (m_hOldPen)
+        m_hOldPen = 0L;
+    m_pen = rPen;
 
-    if (nWidth <= 0)
+    if (!m_pen.Ok())
     {
-        nWidth = 1;
+        if (m_hOldPen)
+        {
+            m_pen.SetPS((HPS)m_hOldPen);
+        }
+        m_hOldPen = 0L;
     }
-    else
+
+    if (m_pen.Ok())
     {
-        double                      dW = 0.5 +
-                                       ( fabs((double) XLOG2DEVREL(nWidth)) +
-                                         fabs((double) YLOG2DEVREL(nWidth))
-                                       ) / 2.0;
-        nWidth = (int)dW;
+        if (m_pen.GetResourceHandle())
+        {
+            m_pen.SetPS(m_hPS);
+            if (!m_hOldPen)
+                m_hOldPen = m_pen.GetPS();
+        }
     }
-    wxColour                        vColor = m_pen.GetColour();
 
-    ::GpiSetColor( m_hPS
-                  ,vColor.GetPixel()
-                 ); //DEbug ??
-
-    int                             nLinetype;
-    int                             nStyle = m_pen.GetStyle();
-
-    nLinetype = LINETYPE_DEFAULT;
-    switch(nStyle)
-    {
-        case wxDOT:
-            nLinetype = LINETYPE_DOT;
-            break;
-
-        case wxLONG_DASH:
-            nLinetype = LINETYPE_LONGDASH;
-            break;
-
-        case wxSHORT_DASH:
-            nLinetype = LINETYPE_SHORTDASH;
-            break;
-
-        case wxDOT_DASH:
-            nLinetype = LINETYPE_DASHDOT;
-            break;
-
-        case wxTRANSPARENT:
-            nLinetype = LINETYPE_INVISIBLE;
-            break;
-
-        case wxSOLID:
-            nLinetype = LINETYPE_SOLID;
-            break;
-    }
-    ::GpiSetLineType( m_hPS
-                     ,nLinetype
-                    );
-
-    nWidth =  m_pen.GetWidth();
-    ::GpiSetLineWidth( m_hPS
-                      ,MAKEFIXED( nWidth
-                                 ,0
-                                )
-                     );
 }
 
 void wxDC::SetBrush(
@@ -1254,7 +1215,18 @@ void wxDC::SetLogicalOrigin( wxCoord x, wxCoord y )
 
 void wxDC::SetDeviceOrigin( wxCoord x, wxCoord y )
 {
-    // TODO:
+    RECTL                           vRect;
+
+    ::GpiQueryPageViewport( m_hPS
+                           ,&vRect
+                          );
+    vRect.xLeft += x;
+    vRect.xRight += x;
+    vRect.yBottom -= y;
+    vRect.yTop -= y;
+    ::GpiSetPageViewport( m_hPS
+                         ,&vRect
+                        );
 };
 
 // ---------------------------------------------------------------------------

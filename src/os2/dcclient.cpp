@@ -82,51 +82,66 @@ static RECT        g_paintStruct;
 
 wxWindowDC::wxWindowDC()
 {
-  m_pCanvas = NULL;
+    m_pCanvas = NULL;
 }
 
 wxWindowDC::wxWindowDC(wxWindow *the_canvas)
 {
-  m_pCanvas = the_canvas;
-  m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(the_canvas) );
-  m_nDCCount++;
-  //
-  // default under PM is that Window and Client DC's are the same
-  // so we offer a separate Presentation Space to use for the
-  // entire window.  Otherwise, calling BeginPaint will just create
-  // chached-micro client presentation space
-  //
-   m_hPS = GpiCreatePS( m_hab
-                       ,m_hDC
-                       ,&m_PageSize
-                       ,PU_PELS | GPIF_LONG | GPIA_ASSOC
-                      );
-  ::GpiAssociate(m_hPS, NULLHANDLE);
-  ::GpiAssociate(m_hPS, m_hDC);
-  SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
+    ERRORID                         vError;
+    wxString                        sError;
+
+    m_pCanvas = the_canvas;
+    m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(the_canvas) );
+    m_nDCCount++;
+    //
+    // default under PM is that Window and Client DC's are the same
+    // so we offer a separate Presentation Space to use for the
+    // entire window.  Otherwise, calling BeginPaint will just create
+    // chached-micro client presentation space
+    //
+     m_hPS = GpiCreatePS( m_hab
+                         ,m_hDC
+                         ,&m_PageSize
+                         ,PU_PELS | GPIF_LONG | GPIA_ASSOC
+                        );
+    ::GpiAssociate(m_hPS, NULLHANDLE);
+    ::GpiAssociate(m_hPS, m_hDC);
+    // Set the wxWindows color table
+    if (!::GpiCreateLogColorTable( m_hPS
+                                  ,0L
+                                  ,LCOLF_CONSECRGB
+                                  ,0L
+                                  ,(LONG)wxTheColourDatabase->m_nSize
+                                  ,(PLONG)wxTheColourDatabase->m_palTable
+                                 ))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Unable to set current color table. Error: %s\n", sError);
+    }
+    SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
 }
 
 wxWindowDC::~wxWindowDC()
 {
-  if (m_pCanvas && m_hDC)
-  {
-    SelectOldObjects(m_hDC);
-
-    //
-    // In PM one does not explicitly close or release an open WindowDC
-    // They automatically close with the window, unless explicitly detached
-    // but we need to destroy our PS
-    //
-    if(m_hPS)
+    if (m_pCanvas && m_hDC)
     {
-        ::GpiAssociate(m_hPS, NULLHANDLE);
-        ::GpiDestroyPS(m_hPS);
-    }
-    m_hPS = NULLHANDLE;
-    m_hDC = NULLHANDLE;
-  }
+        SelectOldObjects(m_hDC);
 
-  m_nDCCount--;
+        //
+        // In PM one does not explicitly close or release an open WindowDC
+        // They automatically close with the window, unless explicitly detached
+        // but we need to destroy our PS
+        //
+        if(m_hPS)
+        {
+            ::GpiAssociate(m_hPS, NULLHANDLE);
+            ::GpiDestroyPS(m_hPS);
+        }
+        m_hPS = NULLHANDLE;
+        m_hDC = NULLHANDLE;
+    }
+    m_nDCCount--;
 }
 
 // ----------------------------------------------------------------------------
@@ -135,12 +150,14 @@ wxWindowDC::~wxWindowDC()
 
 wxClientDC::wxClientDC()
 {
-  m_pCanvas = NULL;
+    m_pCanvas = NULL;
 }
 
 wxClientDC::wxClientDC(wxWindow *the_canvas)
 {
     SIZEL                           vSizl = { 0,0};
+    ERRORID                         vError;
+    wxString                        sError;
 
     m_pCanvas = the_canvas;
 
@@ -154,6 +171,19 @@ wxClientDC::wxClientDC(wxWindow *the_canvas)
                           ,PU_PELS | GPIF_LONG | GPIA_ASSOC
                          );
 
+    // Set the wxWindows color table
+    if (!::GpiCreateLogColorTable( m_hPS
+                                  ,0L
+                                  ,LCOLF_CONSECRGB
+                                  ,0L
+                                  ,(LONG)wxTheColourDatabase->m_nSize
+                                  ,(PLONG)wxTheColourDatabase->m_palTable
+                                 ))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Unable to set current color table. Error: %s\n", sError);
+    }
     //
     // Default mode is BM_LEAVEALONE so we make no call Set the mix
     //
@@ -165,15 +195,16 @@ wxClientDC::wxClientDC(wxWindow *the_canvas)
 
 wxClientDC::~wxClientDC()
 {
-  if ( m_pCanvas && GetHdc() )
-  {
-    SelectOldObjects(m_hDC);
+    if ( m_pCanvas && GetHdc() )
+    {
+        SelectOldObjects(m_hDC);
 
-    // We don't explicitly release Device contexts in PM and
-    // the cached micro PS is already gone
-
-    m_hDC = 0;
-  }
+        //
+        // We don't explicitly release Device contexts in PM and
+        // the cached micro PS is already gone
+        //
+        m_hDC = 0;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -209,6 +240,7 @@ wxPaintDC::wxPaintDC(
 )
 {
     wxCHECK_RET(pCanvas, wxT("NULL canvas in wxPaintDC ctor"));
+    RECTL                           vRect;
 
 #ifdef __WXDEBUG__
     if (g_isPainting <= 0)
@@ -242,6 +274,20 @@ wxPaintDC::wxPaintDC(
         {
             m_hOldPS = m_hPS;
             m_hPS = hPS;
+            ::GpiCreateLogColorTable( m_hPS
+                                     ,0L
+                                     ,LCOLF_CONSECRGB
+                                     ,0L
+                                     ,(LONG)wxTheColourDatabase->m_nSize
+                                     ,(PLONG)wxTheColourDatabase->m_palTable
+                                    );
+            ::GpiCreateLogColorTable( m_hPS
+                                     ,0L
+                                     ,LCOLF_RGB
+                                     ,0L
+                                     ,0L
+                                     ,NULL
+                                    );
         }
         m_bIsPaintTime   = TRUE;
         m_hDC = (WXHDC) -1; // to satisfy those anonizmous efforts
