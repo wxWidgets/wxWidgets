@@ -17,6 +17,7 @@
     <lib id="wxjpeg" template="3rdparty_lib"
          cond="wxUSE_LIBJPEG=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
+        <include cond="FORMAT!='autoconf'">$(LIBDIRNAME)</include>
         <sources>
             src/jpeg/jcomapi.c
 		    src/jpeg/jutils.c
