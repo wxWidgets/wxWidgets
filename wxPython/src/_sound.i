@@ -38,22 +38,22 @@ class wxSound : public wxObject
 {
 public:
     wxSound() {
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxSound is not available on this platform.");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
     }
     wxSound(const wxString&, bool) {
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxSound is not available on this platform.");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
     }
     wxSound(int, const wxByte*) {
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxSound is not available on this platform.");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
     }
     
     ~wxSound() {};
@@ -92,10 +92,10 @@ public:
 #else
     %extend {
         bool Create(int size, const wxByte* data) {
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyErr_SetString(PyExc_NotImplementedError,
                             "Create from data  is not available on this platform.");
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return False;
         }
     }

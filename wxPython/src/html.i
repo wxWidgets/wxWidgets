@@ -312,21 +312,21 @@ public:
     }
 
     void OnExit() {
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         Py_DECREF(m_tagHandlerClass);
         m_tagHandlerClass = NULL;
         for (size_t x=0; x < m_objArray.GetCount(); x++) {
             PyObject* obj = (PyObject*)m_objArray.Item(x);
             Py_DECREF(obj);
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
     };
 
     void FillHandlersTable(wxHtmlWinParser *parser) {
         // Wave our magic wand...  (if it works it's a miracle!  ;-)
 
         // First, make a new instance of the tag handler
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         PyObject* arg = PyTuple_New(0);
         PyObject* obj = PyObject_CallObject(m_tagHandlerClass, arg);
         Py_DECREF(arg);
@@ -334,10 +334,10 @@ public:
         // now figure out where it's C++ object is...
         wxPyHtmlWinTagHandler* thPtr;
         if (! wxPyConvertSwigPtr(obj, (void **)&thPtr, wxT("wxPyHtmlWinTagHandler"))) {
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return;
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
 
         // add it,
         parser->AddTagHandler(thPtr);
@@ -625,13 +625,13 @@ public:
     virtual bool CanRead(const wxFSFile& file) const {
         bool rval = False;
         bool found;
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "CanRead"))) {
             PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file);  // cast away const
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
             Py_DECREF(obj);
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return rval;
     }
 
@@ -641,7 +641,7 @@ public:
     virtual wxString ReadFile(const wxFSFile& file) const {
         wxString rval;
         bool found;
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "ReadFile"))) {
             PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file);  // cast away const
             PyObject* ro;
@@ -652,7 +652,7 @@ public:
                 Py_DECREF(ro);
             }
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return rval;
     }
 
@@ -724,13 +724,13 @@ IMP_PYCALLBACK__CELLINTINTME(wxPyHtmlWindow, wxHtmlWindow, OnCellClicked);
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     bool found;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "OnLinkClicked"))) {
         PyObject* obj = wxPyConstructObject((void*)&link, wxT("wxHtmlLinkInfo"), 0);
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
         Py_DECREF(obj);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     if (! found)
         wxHtmlWindow::OnLinkClicked(link);
 }
@@ -744,7 +744,7 @@ wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
                                                  wxString *redirect) const {
     bool found;
     wxHtmlOpeningStatus rval;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "OnOpeningURL"))) {
         PyObject* ro;
         PyObject* s = wx2PyString(url);
@@ -765,7 +765,7 @@ wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
         }
         Py_DECREF(ro);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     if (! found)
         rval = wxHtmlWindow::OnOpeningURL(type, url, redirect);
     return rval;

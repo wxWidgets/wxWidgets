@@ -272,7 +272,7 @@ public:
 
     virtual void DrawItem(wxDC& dc, wxTreeItemId id, const wxRect& rect) {
         bool found;
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawItem"))) {
             PyObject* dcobj = wxPyMake_wxObject(&dc);
             PyObject* idobj = wxPyConstructObject((void*)&id, wxT("wxTreeItemId"), False);
@@ -282,7 +282,7 @@ public:
             Py_DECREF(idobj);
             Py_DECREF(recobj);
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         if (! found)
             wxTreeCompanionWindow::DrawItem(dc, id, rect);
     }
@@ -457,7 +457,7 @@ public:
                        const wxTreeItemId& item2) {
         int rval = 0;
         bool found;
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "OnCompareItems"))) {
             PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"), 0);
             PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"), 0);
@@ -465,7 +465,7 @@ public:
             Py_DECREF(o1);
             Py_DECREF(o2);
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         if (! found)
             rval = wxTreeListCtrl::OnCompareItems(item1, item2);
         return rval;
@@ -715,7 +715,7 @@ public:
     //size_t GetSelections(wxArrayTreeItemIds&) const;
     %extend {
         PyObject* GetSelections() {
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject*           rval = PyList_New(0);
             wxArrayTreeItemIds  array;
             size_t              num, x;
@@ -725,7 +725,7 @@ public:
                 PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), True);
                 PyList_Append(rval, item);
             }
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return rval;
         }
     }
@@ -749,11 +749,11 @@ public:
         PyObject* GetFirstChild(const wxTreeItemId& item) {
             long cookie = 0;
             wxTreeItemId ritem = self->GetFirstChild(item, cookie);
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), true));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(cookie));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
 
@@ -764,11 +764,11 @@ public:
         // passed to GetNextChild in order to continue the search.
         PyObject* GetNextChild(const wxTreeItemId& item, long cookie) {
             wxTreeItemId ritem = self->GetNextChild(item, cookie);
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), true));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(cookie));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }            
     }
@@ -877,10 +877,10 @@ public:
         PyObject* GetBoundingRect(const wxTreeItemId& item, bool textOnly = False) {
             wxRect rect;
             if (self->GetBoundingRect(item, rect, textOnly)) {
-                wxPyBeginBlockThreads();
+                bool blocked = wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
                 PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), 1);
-                wxPyEndBlockThreads();
+                wxPyEndBlockThreads(blocked);
                 return val;
             }
             else {

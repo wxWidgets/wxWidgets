@@ -157,17 +157,17 @@ void wxOGLCleanUp();
 // work for any class for the VERY generic cases, but beyond that the helper
 // needs to know more about the type.
 wxList* wxPy_wxListHelper(PyObject* pyList, const wxChar* className) {
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (!PyList_Check(pyList)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return NULL;
     }
     int count = PyList_Size(pyList);
     wxList* list = new wxList;
     if (! list) {
         PyErr_SetString(PyExc_MemoryError, "Unable to allocate wxList object");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return NULL;
     }
     for (int x=0; x<count; x++) {
@@ -178,29 +178,29 @@ wxList* wxPy_wxListHelper(PyObject* pyList, const wxChar* className) {
             wxString errmsg;
             errmsg.Printf(wxT("Type error, expected list of %s objects"), className);
             PyErr_SetString(PyExc_TypeError, errmsg.mb_str());
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return NULL;
         }
         list->Append(wxo);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return list;
 }
 
 //---------------------------------------------------------------------------
 
 wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList) {
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (!PyList_Check(pyList)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return NULL;
     }
     int count = PyList_Size(pyList);
     wxList* list = new wxList;
     if (! list) {
         PyErr_SetString(PyExc_MemoryError, "Unable to allocate wxList object");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return NULL;
     }
     for (int x=0; x<count; x++) {
@@ -219,13 +219,13 @@ wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList) {
             wxRealPoint* wxo = NULL;
             if (wxPyConvertSwigPtr(pyo, (void **)&wxo, wxT("wxRealPoint"))) {
                 PyErr_SetString(PyExc_TypeError, "Type error, expected list of wxRealPoint objects or 2-tuples");
-                wxPyEndBlockThreads();
+                wxPyEndBlockThreads(blocked);
                 return NULL;
             }
             list->Append((wxObject*) new wxRealPoint(*wxo));
         }
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return list;
 }
 
@@ -262,7 +262,7 @@ PyObject* wxPy_ConvertShapeList(wxListBase* listbase) {
     wxObject*   wxObj;
     wxNode*     node = list->GetFirst();
 
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     pyList = PyList_New(0);
     while (node) {
         wxObj = node->GetData();
@@ -270,7 +270,7 @@ PyObject* wxPy_ConvertShapeList(wxListBase* listbase) {
         PyList_Append(pyList, pyObj);
         node = node->GetNext();
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return pyList;
 }
 

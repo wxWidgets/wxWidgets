@@ -217,13 +217,13 @@ public:
 bool wxPyFileDropTarget::OnDropFiles(wxCoord x, wxCoord y,
                                      const wxArrayString& filenames) {
     bool rval = False;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "OnDropFiles")) {
         PyObject* list = wxArrayString2PyList_helper(filenames);
         rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iiO)",x,y,list));
         Py_DECREF(list);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return rval;
 }
 

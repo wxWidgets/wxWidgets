@@ -190,13 +190,13 @@ public:
                 iconIndex = loc.GetIndex();
 #endif
                 // Make a tuple and put the values in it
-                wxPyBeginBlockThreads();
+                bool blocked = wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(3);
                 PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(loc),
                                                               wxT("wxIcon"), True));
                 PyTuple_SetItem(tuple, 1, wx2PyString(iconFile));
                 PyTuple_SetItem(tuple, 2, PyInt_FromLong(iconIndex));
-                wxPyEndBlockThreads();
+                wxPyEndBlockThreads(blocked);
                 return tuple;
             }
             else
@@ -250,11 +250,11 @@ public:
             wxArrayString commands;
             if (self->GetAllCommands(&verbs, &commands,
                                      wxFileType::MessageParameters(filename, mimetype))) {
-                wxPyBeginBlockThreads();
+                bool blocked = wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(2);
                 PyTuple_SetItem(tuple, 0, wxArrayString2PyList_helper(verbs));
                 PyTuple_SetItem(tuple, 1, wxArrayString2PyList_helper(commands));
-                wxPyEndBlockThreads();
+                wxPyEndBlockThreads(blocked);
                 return tuple;
             }
             else

@@ -176,11 +176,11 @@ public:
                   PyObject* userData=NULL) {
             
             wxPyUserData* data = NULL;
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, True, False);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             
             // Now call the real Add method if a valid item type was found
             if ( info.window )
@@ -197,11 +197,11 @@ public:
                      int border=0, PyObject* userData=NULL) {
 
             wxPyUserData* data = NULL;
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, True, False);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             
             // Now call the real Insert method if a valid item type was found
             if ( info.window )
@@ -219,11 +219,11 @@ public:
                      PyObject* userData=NULL) {
 
             wxPyUserData* data = NULL;
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, True, False);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             
             // Now call the real Prepend method if a valid item type was found
             if ( info.window )
@@ -237,9 +237,9 @@ public:
 
         
         bool Remove(PyObject* item) {
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             if ( info.window )
                 return self->Remove(info.window);
             else if ( info.sizer )
@@ -252,9 +252,9 @@ public:
 
         
         void _SetItemMinSize(PyObject* item, const wxSize& size) {
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             if ( info.window )
                 self->SetItemMinSize(info.window, size);
             else if ( info.sizer )

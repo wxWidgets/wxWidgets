@@ -75,7 +75,7 @@ public:
                                   const wxArtClient& client,
                                   const wxSize& size) {
         wxBitmap rval = wxNullBitmap;
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if ((wxPyCBH_findCallback(m_myInst, "CreateBitmap"))) {
             PyObject* so = wxPyConstructObject((void*)&size, wxT("wxSize"), 0);
             PyObject* ro;
@@ -93,7 +93,7 @@ public:
                 Py_DECREF(ro);
             }
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return rval;
     }
 

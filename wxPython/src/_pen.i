@@ -54,11 +54,11 @@ public:
         PyObject* GetDashes() {
             wxDash* dashes;
             int count = self->GetDashes(&dashes);
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* retval = PyList_New(0);
             for (int x=0; x<count; x++)
                 PyList_Append(retval, PyInt_FromLong(dashes[x]));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return retval;
         }
     }

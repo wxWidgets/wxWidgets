@@ -287,7 +287,7 @@ public:
             wxObject*   wxObj;
             wxNode*     node = list->GetFirst();
 
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             pyList = PyList_New(0);
             while (node) {
                 wxObj = node->GetData();
@@ -295,7 +295,7 @@ public:
                 PyList_Append(pyList, pyObj);
                 node = node->GetNext();
             }
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return pyList;
         }
 
@@ -306,7 +306,7 @@ public:
             wxObject*   wxObj;
             wxNode*     node = list->GetFirst();
 
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             pyList = PyList_New(0);
             while (node) {
                 wxObj = node->GetData();
@@ -314,7 +314,7 @@ public:
                 PyList_Append(pyList, pyObj);
                 node = node->GetNext();
             }
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return pyList;
         }        
     }

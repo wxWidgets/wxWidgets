@@ -204,7 +204,7 @@ public:
             unsigned char* buffer;
             int size;
 
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             if (!PyArg_Parse(data, "t#", &buffer, &size))
                 goto done;
 
@@ -214,7 +214,7 @@ public:
             }
             self->SetData(buffer);
         done:
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
         }
 
 
@@ -258,7 +258,7 @@ public:
             unsigned char* buffer;
             int size;
 
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             if (!PyArg_Parse(data, "t#", &buffer, &size))
                 goto done;
 
@@ -268,7 +268,7 @@ public:
             }
             self->SetAlpha(buffer);
         done:
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
         }
     }
 

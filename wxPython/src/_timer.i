@@ -36,10 +36,10 @@ enum {
 
 void wxPyTimer::Notify() {
     bool found;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "Notify")))
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     if (! found)
         wxTimer::Notify();
 }   

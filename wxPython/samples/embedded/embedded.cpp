@@ -41,8 +41,6 @@ public:
     virtual bool OnInit();
     virtual ~MyApp();
     void Init_wxPython();
-private:
-    PyThreadState* m_mainTState;
 };
 
 
@@ -91,14 +89,14 @@ void MyApp::Init_wxPython()
 
     // Save the current Python thread state and release the
     // Global Interpreter Lock.
-    m_mainTState = wxPyBeginAllowThreads();
+    wxPyBeginAllowThreads();
 }
 
 
 MyApp::~MyApp()
 {
     // Restore the thread state and tell Python to cleanup after itself.
-    wxPyEndAllowThreads(m_mainTState);
+    wxPyEndAllowThreads(true);
     Py_Finalize();
 }
 
@@ -176,13 +174,13 @@ void MyFrame::OnPyFrame(wxCommandEvent& event)
     // First, whenever you do anyting with Python objects or code, you
     // *MUST* aquire the Global Interpreter Lock and block other
     // Python threads from running.
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
 
     // Execute the code in the __main__ module
     PyRun_SimpleString(python_code1);
 
     // Finally, release the GIL and let other Python threads run.
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
 }
 
 
@@ -197,9 +195,9 @@ from wxPython.wx import wxPyOnDemandOutputWindow\n\
 output = wxPyOnDemandOutputWindow()\n\
 sys.stdin = sys.stderr = output\n\
 ";
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     PyRun_SimpleString(python_redirect);
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
 }
 
 
@@ -226,7 +224,7 @@ wxWindow* MyFrame::DoPythonStuff(wxWindow* parent)
     PyObject* result;
 
     // As always, first grab the GIL
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
 
     // Now make a dictionary to serve as the global namespace when the code is
     // executed.  Put a reference to the builtins module in it.  (Yes, the
@@ -277,7 +275,7 @@ wxWindow* MyFrame::DoPythonStuff(wxWindow* parent)
     Py_DECREF(tuple);
 
     // Finally, after all Python stuff is done, release the GIL
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
 
     return window;
 }

@@ -25,9 +25,9 @@ public:
     }
 
     ~wxPyTreeItemData() {
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         Py_DECREF(m_obj);
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
     }
 
     PyObject* GetData() {
@@ -36,9 +36,9 @@ public:
     }
 
     void SetData(PyObject* obj) {
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         Py_DECREF(m_obj);
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         m_obj = obj;
         Py_INCREF(obj);
     }

@@ -30,7 +30,7 @@ void wxPyDrawList_SetAPIPtr()
 PyObject* wxPyDrawXXXList(wxDC& dc, wxPyDrawListOp_t doDraw,
                           PyObject* pyCoords, PyObject* pyPens, PyObject* pyBrushes)
 {
-    wxPyBeginBlockThreads(); 
+    bool blocked = wxPyBeginBlockThreads(); 
 
     bool      isFastSeq  = PyList_Check(pyCoords) || PyTuple_Check(pyCoords);
     bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
@@ -138,7 +138,7 @@ PyObject* wxPyDrawXXXList(wxDC& dc, wxPyDrawListOp_t doDraw,
 
 
  exit:
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return retval;
 }
 
@@ -214,7 +214,7 @@ bool wxPyDrawXXXPolygon(wxDC& dc, PyObject* coords)
 
 PyObject* wxPyDrawTextList(wxDC& dc, PyObject* textList, PyObject* pyPoints, PyObject* foregroundList, PyObject* backgroundList)
 {
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
 
     bool      isFastSeq  = PyList_Check(pyPoints) || PyTuple_Check(pyPoints);
     bool      isFastText = PyList_Check(textList) || PyTuple_Check(textList);
@@ -353,7 +353,7 @@ PyObject* wxPyDrawTextList(wxDC& dc, PyObject* textList, PyObject* pyPoints, PyO
     goto exit;
 
  exit:
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return retval;
 }
 

@@ -270,7 +270,7 @@ void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *p
     bool hadErr = False;
     bool found;
 
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "GetPageInfo"))) {
         PyObject* result = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
         if (result && PyTuple_Check(result) && PyTuple_Size(result) == 4) {
@@ -301,7 +301,7 @@ void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *p
         }
         Py_DECREF(result);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     if (! found)
         wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
 }
@@ -527,7 +527,7 @@ public:
     bool CLASS::CBNAME(wxPreviewCanvas* a, wxDC& b) {                           \
         bool rval=False;                                                        \
         bool found;                                                             \
-        wxPyBeginBlockThreads();                                                \
+        bool blocked = wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* win = wxPyMake_wxObject(a);                               \
             PyObject* dc  = wxPyMake_wxObject(&b);                              \
@@ -535,7 +535,7 @@ public:
             Py_DECREF(win);                                                     \
             Py_DECREF(dc);                                                      \
         }                                                                       \
-        wxPyEndBlockThreads();                                                  \
+        wxPyEndBlockThreads(blocked);                                                  \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a, b);                                        \
         return rval;                                                            \

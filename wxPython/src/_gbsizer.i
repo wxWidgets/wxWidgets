@@ -88,11 +88,11 @@ public:
         }
         
         PyObject* Get() {
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRow()));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->GetCol()));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
     }
@@ -145,11 +145,11 @@ public:
         }
         
         PyObject* Get() {
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRowspan()));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->GetColspan()));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
     }
@@ -268,11 +268,11 @@ public:
                   PyObject* userData = NULL ) {
 
             wxPyUserData* data = NULL;
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, True, False);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             
             // Now call the real Add method if a valid item type was found
             if ( info.window )

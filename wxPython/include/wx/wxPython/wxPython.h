@@ -63,7 +63,7 @@ static void wxPyCoreAPI_IMPORT() {
 #define wxPyBeginAllowThreads()                 (wxPyCoreAPIPtr->p_wxPyBeginAllowThreads())
 #define wxPyEndAllowThreads(a)                  (wxPyCoreAPIPtr->p_wxPyEndAllowThreads(a))
 #define wxPyBeginBlockThreads()                 (wxPyCoreAPIPtr->p_wxPyBeginBlockThreads())
-#define wxPyEndBlockThreads()                   (wxPyCoreAPIPtr->p_wxPyEndBlockThreads())
+#define wxPyEndBlockThreads(a)                  (wxPyCoreAPIPtr->p_wxPyEndBlockThreads(a))
 
 #define wxPyConstructObject(a,b,c)              (wxPyCoreAPIPtr->p_wxPyConstructObject(a,b,c))
 #define wxPy_ConvertList(a)                     (wxPyCoreAPIPtr->p_wxPy_ConvertList(a))

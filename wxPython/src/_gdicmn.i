@@ -178,11 +178,11 @@ public:
                "Get() -> (width,height)",
                "Returns the width and height properties as a tuple.");
         PyObject* Get() {
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
     }
@@ -251,11 +251,11 @@ public:
                "Get() -> (x,y)",
                "Return the x and y properties as a tuple. ");
         PyObject* Get() {
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->x));
             PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->y));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
     }
@@ -364,11 +364,11 @@ public:
                "Get() -> (x,y)",
                "Return the x and y properties as a tuple. ");
         PyObject* Get() {
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
     }
@@ -532,13 +532,13 @@ public:
                "Get() -> (x,y,width,height)",
                "Return the rectangle properties as a tuple.");
         PyObject* Get() {
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(4);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
             PyTuple_SET_ITEM(tup, 2, PyInt_FromLong(self->width));
             PyTuple_SET_ITEM(tup, 3, PyInt_FromLong(self->height));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
     }
@@ -576,10 +576,10 @@ DocAStr(wxIntersectRect,
         dest = reg1.GetBox();
 
         if (dest != wxRect(0,0,0,0)) {
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             wxRect* newRect = new wxRect(dest);
             obj = wxPyConstructObject((void*)newRect, wxT("wxRect"), True);
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return obj;
         }
         Py_INCREF(Py_None);
@@ -663,11 +663,11 @@ public:
                "Get() -> (x,y)",
                "Return x and y properties as a tuple.");               
         PyObject* Get() {
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->m_x));
             PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->m_y));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
     }

@@ -352,12 +352,12 @@ validity of the remaining two values.  The result codes are:
             wxDateTime* date = new wxDateTime;
             wxDateTime::WeekDay wd;
             wxCalendarHitTestResult result = self->HitTest(pos, date, &wd);
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(3);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(result));
             PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(date, wxT("wxDateTime"), 1));
             PyTuple_SET_ITEM(tup, 2, PyInt_FromLong(wd));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
     }

@@ -163,14 +163,14 @@ platform.");
         PyObject* GetModes(const wxVideoMode& mode = wxDefaultVideoMode) {
             PyObject* pyList = NULL;
             wxArrayVideoModes arr = self->GetModes(mode);
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             pyList = PyList_New(0);
             for (int i=0; i < arr.GetCount(); i++) {
                 wxVideoMode* m = new wxVideoMode(arr.Item(i));
                 PyObject* pyObj = wxPyConstructObject(m, wxT("wxVideoMode"), true);
                 PyList_Append(pyList, pyObj);
             }
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return pyList;
         }
     }

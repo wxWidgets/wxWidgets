@@ -238,7 +238,7 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) const {
     // C++ version.
 
     bool rval = False;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "GetDataHere")) {
         PyObject* ro;
         ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
@@ -249,7 +249,7 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) const {
             Py_DECREF(ro);
         }
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return rval;
 }
 
@@ -257,13 +257,13 @@ bool wxPyDataObjectSimple::SetData(size_t len, const void *buf) const{
     // For this one we simply need to make a string from buf and len
     // and send it to the Python method.
     bool rval = False;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "SetData")) {
         PyObject* data = PyString_FromStringAndSize((char*)buf, len);
         rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", data));
         Py_DECREF(data);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return rval;
 }
 %}
@@ -364,7 +364,7 @@ public:
 
 wxBitmap wxPyBitmapDataObject::GetBitmap() const {
     wxBitmap* rval = &wxNullBitmap;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "GetBitmap")) {
         PyObject* ro;
         wxBitmap* ptr;
@@ -375,18 +375,18 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() const {
             Py_DECREF(ro);
         }
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return *rval;
 }
 
 void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "SetBitmap")) {
         PyObject* bo = wxPyConstructObject((void*)&bitmap, wxT("wxBitmap"), False);
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", bo));
         Py_DECREF(bo);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
 }
 %}
 
