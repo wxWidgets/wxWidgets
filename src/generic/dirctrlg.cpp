@@ -818,7 +818,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
                     dirs.Add(eachFilename);
                 }
             }
-            while (d.GetNext(& eachFilename));
+            while (d.GetNext(&eachFilename));
         }
     }
     dirs.Sort(wxDirCtrlStringCompareFunction);
@@ -832,7 +832,9 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 
         if (d.IsOpened())
         {
-            if (d.GetFirst(& eachFilename, m_currentFilterStr, wxDIR_FILES))
+            int style = wxDIR_FILES;
+            if (m_showHidden) style |= wxDIR_HIDDEN;
+            if (d.GetFirst(& eachFilename, m_currentFilterStr, style))
             {
                 do
                 {
