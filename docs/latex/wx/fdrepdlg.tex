@@ -203,20 +203,22 @@ Please see the dialogs sample for example of using it.
 
 \membersection{wxFindReplaceDialog::wxFindReplaceDialog}\label{wxfindreplacedialogctor}
 
-\func{}{wxFindReplaceDialogBase}{\void}
+\func{}{wxFindReplaceDialog}{\void}
 
-\func{}{wxFindReplaceDialogBase}{\param{wxWindow * }{parent}, \param{wxFindReplaceData* }{data}, \param{const wxString\& }{title}, \param{int }{style = 0}}
+\func{}{wxFindReplaceDialog}{\param{wxWindow * }{parent}, \param{wxFindReplaceData* }{data}, \param{const wxString\& }{title}, \param{int }{style = 0}}
 
-After using default constructor \helpref{Created}{wxfindreplacedialogcreate} 
+After using default constructor \helpref{Create()}{wxfindreplacedialogcreate} 
 must be called.
 
 The {\it parent} and {\it data} parameters must be non-{\tt NULL}.
 
-\membersection{wxFindReplaceDialogBase::\destruct{wxFindReplaceDialogBase}}\label{wxfindreplacedialogdtor}
+\membersection{wxFindReplaceDialog::\destruct{wxFindReplaceDialog}}\label{wxfindreplacedialogdtor}
 
-\func{}{\destruct{wxFindReplaceDialogBase}}{\void}
+\func{}{\destruct{wxFindReplaceDialog}}{\void}
 
 Destructor.
+
+\membersection{wxFindReplaceDialog::Create}\label{wxfindreplacedialogcreate}
 
 \func{bool}{Create}{\param{wxWindow * }{parent}, \param{wxFindReplaceData* }{data}, \param{const wxString\& }{title}, \param{int }{style = 0}}
 
@@ -224,7 +226,7 @@ Creates the dialog and shows it on screen.
 
 The {\it parent} and {\it data} parameters must be non-{\tt NULL}.
 
-\membersection{wxFindReplaceDialogBase::GetData}\label{wxfindreplacedialoggetdata}
+\membersection{wxFindReplaceDialog::GetData}\label{wxfindreplacedialoggetdata}
 
 \constfunc{const wxFindReplaceData*}{GetData}{\void}
 
