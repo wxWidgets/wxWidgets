@@ -361,6 +361,8 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 wxListBox::~wxListBox()
 {
     Clear();
+    if (m_strings)
+      delete m_strings;
 }
 
 void wxListBox::DoInsertItems(const wxArrayString& items, int pos)

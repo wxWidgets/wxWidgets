@@ -548,7 +548,7 @@ void wxApp::CleanUp()
 
     // check for memory leaks
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    if (wxDebugContext::CountObjectsLeft() > 0)
+    if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
     {
         wxLogDebug(wxT("There were memory leaks.\n"));
         wxDebugContext::Dump();
