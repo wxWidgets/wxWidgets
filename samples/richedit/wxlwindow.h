@@ -23,8 +23,6 @@
 #endif
 
 
-#define wxUSE_PRIVATE_CLIPBOARD_FORMAT 0
-
 enum
 {
    WXLOWIN_MENU_LARGER = WXLOWIN_MENU_FIRST,
@@ -106,15 +104,12 @@ public:
    bool Cut(void);
    //@}
 
-#ifdef M_BASEDIR
    /// find string in buffer
    bool Find(const wxString &needle,
              wxPoint * fromWhere = NULL,
              const wxString &configPath = "MsgViewFindString");
    /// find the same string again
    bool FindAgain(void);
-#endif
-   
 
    void EnablePopup(bool enable = true) { m_DoPopupMenu = enable; }
 

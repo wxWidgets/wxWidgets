@@ -1230,7 +1230,7 @@ wxLayoutLine::Layout(wxDC &dc,
    {
       // this might be the case if the cursor is at the end of the
       // line or on a command object:
-      if(cursorSize->y < WXLO_MINIMUM_CURSOR_WIDTH)
+      if(cursorSize->x < WXLO_MINIMUM_CURSOR_WIDTH)
       {
          CoordType width, height, descent;
          dc.GetTextExtent(WXLO_CURSORCHAR, &width, &height, &descent);
@@ -2479,6 +2479,8 @@ wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
 #ifdef WXLAYOUT_USE_CARET
    m_caret->Move(coords);
 #else // !WXLAYOUT_USE_CARET
+
+   wxASSERT(m_CursorSize.x >= WXLO_MINIMUM_CURSOR_WIDTH);
    dc.SetBrush(*wxWHITE_BRUSH);
    //FIXME: wxGTK XOR is borken at the moment!!!dc.SetLogicalFunction(wxXOR);
    dc.SetPen(wxPen(*wxBLACK,1,wxSOLID));
@@ -2544,16 +2546,16 @@ wxLayoutList::ContinueSelection(const wxPoint& cposOrig, const wxPoint& spos)
    wxASSERT(m_Selection.m_valid == false);
    WXLO_DEBUG(("Continuing selection at %ld/%ld", cpos.x, cpos.y));
 
-      m_Selection.m_ScreenB = spos;
-      m_Selection.m_CursorB = cpos;}
+   m_Selection.m_ScreenB = spos;
+   m_Selection.m_CursorB = cpos;
+}
 
 void
 wxLayoutList::EndSelection(const wxPoint& cposOrig, const wxPoint& spos)
 {
    wxPoint cpos(cposOrig);
-   if(cpos.x == -1)
-      cpos = m_CursorPos;
-   ContinueSelection(cpos);
+   if(cpos.x == -1) cpos = m_CursorPos;
+   ContinueSelection(cpos, spos);
    WXLO_DEBUG(("Ending selection at %ld/%ld", cpos.x, cpos.y));
    // we always want m_CursorA <= m_CursorB!
    if( m_Selection.m_CursorA > m_Selection.m_CursorB )

@@ -28,7 +28,7 @@
 #   define WXMENU_LAYOUT_LCLICK     1111
 #   define WXMENU_LAYOUT_RCLICK     1112
 #   define WXMENU_LAYOUT_DBLCLICK   1113
-#else // for Mahogany only:
+#else // for Mahogany only
 #   include "MObject.h"
 #endif
 

@@ -86,6 +86,10 @@
 static const int X_SCROLL_PAGE = 10;
 static const int Y_SCROLL_PAGE = 20;
 
+
+
+#define wxUSE_PRIVATE_CLIPBOARD_FORMAT 0
+
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
@@ -394,7 +398,9 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    case WXLOWIN_MENU_LUP:
       if ( m_Selecting )
       {
-         m_llist->EndSelection();
+         // end selection at the cursor position corresponding to the
+         // current mouse position, but don´t move cursor there.
+         m_llist->EndSelection(cursorPos,m_ClickPosition);
          m_Selecting = false;
 
          RequestUpdate();     // TODO: we don't have to redraw everything!
@@ -457,7 +463,6 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    if(keyCode == WXK_F1)
    {
       m_llist->Debug();
-      event.skip();
       return;
    }
 #endif
@@ -571,6 +576,8 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
             FindAgain();
             break;
          default:
+            // we don't handle it, maybe an accelerator?
+            event.Skip();
             ;
          }
       else if( IsEditable() )
@@ -636,7 +643,8 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                break;
 #endif
             default:
-               ;
+            // we don't handle it, maybe an accelerator?
+            event.Skip();
             }
          }
          // ALT only:
@@ -650,7 +658,8 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                SetDirty();
                break;
             default:
-               ;
+               // we don't handle it, maybe an accelerator?
+               event.Skip();
             }
          }
          // no control keys:
@@ -715,10 +724,16 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                   m_llist->Insert((char)keyCode);
                   SetDirty();
                }
+               else
+                  // we don't handle it, maybe an accelerator?
+                  event.Skip();
                break;
             }
          }
       }// if(IsEditable())
+      else
+         // we don't handle it, maybe an accelerator?
+         event.Skip();
    }// first switch()
 
    if ( m_Selecting )
@@ -729,7 +744,6 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    ScrollToCursor();
    // refresh the screen
    RequestUpdate(m_llist->GetUpdateRect());
-   event.Skip();
 }
 
 void
@@ -1068,6 +1082,7 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
 }
 
 // ----------------------------------------------------------------------------
+//
 // clipboard operations
 //
 // ----------------------------------------------------------------------------
@@ -1086,7 +1101,7 @@ wxLayoutWindow::Paste(bool primary)
       wxLayoutDataObject wxldo;
       if (wxTheClipboard->IsSupported( wxldo.GetFormat() ))
       {
-         wxTheClipboard->GetData(&wxldo);
+         wxTheClipboard->GetData(wxldo);
          {
          }
          //FIXME: missing functionality  m_llist->Insert(wxldo.GetList());
@@ -1094,16 +1109,14 @@ wxLayoutWindow::Paste(bool primary)
       else
 #endif
       {
-#if 0 //RE_ENABLE FIXME!!
          wxTextDataObject data;
-         if (wxTheClipboard->IsSupported( data.GetFormat() ))
+         if (wxTheClipboard->IsSupported( data.GetFormat() )
+             && wxTheClipboard->GetData(data) )
          {
-            wxTheClipboard->GetData(&data);
             wxString text = data.GetText();
             wxLayoutImportText( m_llist, text);
             SetDirty();
          }
-#endif
       }
       wxTheClipboard->Close();
    }
@@ -1120,7 +1133,6 @@ wxLayoutWindow::Copy(bool invalidate)
       m_llist->EndSelection();
    }
 
-#if 0 //FIXME CLIPBOARD
    wxLayoutDataObject wldo;
    wxLayoutList *llist = m_llist->GetSelection(&wldo, invalidate);
    if(! llist)
@@ -1147,7 +1159,6 @@ wxLayoutWindow::Copy(bool invalidate)
          text = text.Mid(0,len-1);
    }
 
-
    if (wxTheClipboard->Open())
    {
       wxTextDataObject *data = new wxTextDataObject( text );
@@ -1158,7 +1169,6 @@ wxLayoutWindow::Copy(bool invalidate)
       wxTheClipboard->Close();
       return rc;
    }
-#endif //FIXME CLIPBOARD
    
    return FALSE;
 }
@@ -1180,12 +1190,12 @@ wxLayoutWindow::Cut(void)
 // searching
 // ----------------------------------------------------------------------------
 
-#ifdef M_BASEDIR
 bool
 wxLayoutWindow::Find(const wxString &needle,
                      wxPoint * fromWhere,
                      const wxString &configPath)
 {
+#ifdef M_BASEDIR
    wxPoint found;
    
    if(needle.Length() == 0)
@@ -1217,6 +1227,7 @@ wxLayoutWindow::Find(const wxString &needle,
       RequestUpdate();
       return true;
    }
+#endif
    return false;
 }
 
@@ -1227,7 +1238,6 @@ wxLayoutWindow::FindAgain(void)
    bool rc = Find(m_FindString);
    return rc;
 }
-#endif
 
 // ----------------------------------------------------------------------------
 // popup menu stuff
