@@ -21,6 +21,11 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl,wxControl)
 
+void gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
+{ 
+  win->m_modified = TRUE;
+};
+
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
 //  EVT_CHAR(wxTextCtrl::OnChar)
@@ -28,12 +33,14 @@ END_EVENT_TABLE()
 
 wxTextCtrl::wxTextCtrl(void) : streambuf()
 {
+  m_modified = FALSE;
 };
 
 wxTextCtrl::wxTextCtrl( wxWindow *parent, const wxWindowID id, const wxString &value, 
       const wxPoint &pos, const wxSize &size, 
       const int style, const wxString &name ) : streambuf()
 {
+  m_modified = FALSE;
   Create( parent, id, value, pos, size, style, name );
 };
 
@@ -60,7 +67,20 @@ bool wxTextCtrl::Create( wxWindow *parent, const wxWindowID id, const wxString &
   if (!value.IsNull())
   {
     gint tmp = 0;
-    gtk_editable_insert_text( GTK_EDITABLE(m_widget), value, value.Length(), &tmp );
+    
+    // Don't know why this is so
+    if (style & wxTE_MULTILINE)
+      gtk_editable_insert_text( GTK_EDITABLE(m_widget), value, value.Length()+1, &tmp );
+    else
+      gtk_editable_insert_text( GTK_EDITABLE(m_widget), value, value.Length(), &tmp );
+  };
+  
+  if (style & wxREADONLY)
+  {
+  }
+  else
+  {
+    if (style & wxTE_MULTILINE) gtk_text_set_editable( GTK_TEXT(m_widget), 1 );
   };
   
   Show( TRUE );
@@ -115,26 +135,30 @@ void wxTextCtrl::WriteText( const wxString &text )
   };
 };
 
-/*
-wxString wxTextCtrl::GetLineText( const long lineNo ) const
+bool wxTextCtrl::LoadFile( const wxString &WXUNUSED(file) )
 {
+  return FALSE;
 };
 
-bool wxTextCtrl::LoadFile( const wxString &file )
+bool wxTextCtrl::SaveFile( const wxString &WXUNUSED(file) )
 {
+  return FALSE;
 };
 
-bool wxTextCtrl::SaveFile( const wxString &file )
+bool wxTextCtrl::IsModified(void)
 {
+  return m_modified;
 };
 
 void wxTextCtrl::DiscardEdits(void)
 {
 };
 
-bool wxTextCtrl::IsModified(void)
+/*
+wxString wxTextCtrl::GetLineText( const long lineNo ) const
 {
 };
+
 
 void wxTextCtrl::OnDropFiles( wxDropFilesEvent &event )
 {

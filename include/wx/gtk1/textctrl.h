@@ -59,12 +59,13 @@ class wxTextCtrl: public wxControl, public streambuf
     wxString GetValue(void) const;
     void SetValue( const wxString &value );
     void WriteText( const wxString &text );
-/*
-    wxString GetLineText( const long lineNo ) const;
+    
     bool LoadFile( const wxString &file );
     bool SaveFile( const wxString &file );
-    void DiscardEdits(void);
     bool IsModified(void);
+    void DiscardEdits(void);
+/*
+    wxString GetLineText( const long lineNo ) const;
     void OnDropFiles( wxDropFilesEvent &event );
     long PositionToXY( const long pos, long *x, long *y ) const;
     long XYToPosition( const long x, const long y );
@@ -96,6 +97,10 @@ class wxTextCtrl: public wxControl, public streambuf
     wxTextCtrl& operator<<(const float f);
     wxTextCtrl& operator<<(const double d);
     wxTextCtrl& operator<<(const char c);
+    
+  public:
+  
+    bool  m_modified;
 
   DECLARE_EVENT_TABLE()
     

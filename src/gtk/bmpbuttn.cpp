@@ -26,7 +26,7 @@ class wxBitmapButton;
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton,wxControl)
 
-void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), gpointer data )
+void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 {
   wxBitmapButton *button = (wxBitmapButton*)data;
   wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
@@ -77,7 +77,7 @@ bool wxBitmapButton::Create(  wxWindow *parent, wxWindowID id, const wxBitmap &b
   SetSize( newSize.x, newSize.y );
   
   gtk_signal_connect( GTK_OBJECT(m_widget), "clicked", 
-    GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
+    GTK_SIGNAL_FUNC(gtk_bmpbutton_clicked_callback), (gpointer*)this );
 
   PostCreation();
   

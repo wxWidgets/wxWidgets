@@ -258,7 +258,7 @@ bool TextEditDocument::IsModified(void) const
   TextEditView *view = (TextEditView *)GetFirstView();
   if (view)
   {
-    return (wxDocument::IsModified() || view->textsw->Modified());
+    return (wxDocument::IsModified() || view->textsw->IsModified());
   }
   else
     return wxDocument::IsModified();
