@@ -1605,6 +1605,8 @@ GSocketError _GAddress_Init_UNIX(GAddress *address)
   return GSOCK_NOERROR;
 }
 
+#define UNIX_SOCK_PATHLEN (sizeof(addr->sun_path)/sizeof(addr->sun_path[0]))
+
 GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path)
 {
   struct sockaddr_un *addr;
@@ -1614,7 +1616,8 @@ GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path)
   CHECK_ADDRESS(address, UNIX); 
 
   addr = ((struct sockaddr_un *)address->m_addr);
-  memcpy(addr->sun_path, path, strlen(path));
+  strncpy(addr->sun_path, path, UNIX_SOCK_PATHLEN);
+  addr->sun_path[UNIX_SOCK_PATHLEN - 1] = '\0';
 
   return GSOCK_NOERROR;
 }
