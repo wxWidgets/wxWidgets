@@ -3567,6 +3567,8 @@ void wxListMainWindow::RecalculatePositions()
                        GetScrollPos(wxVERTICAL),
                        TRUE );
 
+        // FIXME: wxGTK::wxScrolledWindow doesn't have SetTargetRect()
+#if !defined(__WXGTK__) || defined(__WXUNIVERSAL__)
         // we must have an integer number of lines on screen and so we fit
         // the real control size to the line height
         wxRect rect;
@@ -3575,6 +3577,7 @@ void wxListMainWindow::RecalculatePositions()
         rect.width = clientWidth;
         rect.height = ((clientHeight - LINE_SPACING) / lineHeight)*lineHeight;
         SetTargetRect(rect);
+#endif
     }
     else // !report
     {

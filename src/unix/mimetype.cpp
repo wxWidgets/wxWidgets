@@ -2531,11 +2531,11 @@ bool wxMimeTypesManagerImpl::Unassociate(wxFileType *ft)
         else
         {
             WriteMimeInfo(nIndex, TRUE );
-            m_aTypes.Remove (nIndex);
-            m_aEntries.Remove (nIndex);
-            m_aExtensions.Remove (nIndex);
-            m_aDescriptions.Remove (nIndex);
-            m_aIcons.Remove (nIndex);
+            m_aTypes.RemoveAt(nIndex);
+            m_aEntries.RemoveAt(nIndex);
+            m_aExtensions.RemoveAt(nIndex);
+            m_aDescriptions.RemoveAt(nIndex);
+            m_aIcons.RemoveAt(nIndex);
         }
     }
     // check data integrity
