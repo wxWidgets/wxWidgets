@@ -161,7 +161,12 @@ gtk_pizza_class_init (GtkPizzaClass *klass)
     widget_class->set_scroll_adjustments_signal =
     gtk_signal_new ("set_scroll_adjustments",
                     GTK_RUN_LAST,
+
+#ifdef __WXGTK20__
                     GTK_CLASS_TYPE(object_class),
+#else
+                    object_class->type,
+#endif
                     GTK_SIGNAL_OFFSET (GtkPizzaClass, set_scroll_adjustments),
                     gtk_marshal_NONE__POINTER_POINTER,
                     GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
