@@ -122,7 +122,7 @@
 // global variables
 // ---------------------------------------------------------------------------
 
-// the last Windows message we got (MT-UNSAFE)
+// the last Windows message we got (FIXME-MT)
 extern MSG s_currentMsg;
 
 #if wxUSE_MENUS_NATIVE
@@ -130,6 +130,10 @@ wxMenu *wxCurrentPopupMenu = NULL;
 #endif // wxUSE_MENUS_NATIVE
 
 extern const wxChar *wxCanvasClassName;
+
+// true if we had already created the std colour map, used by
+// wxGetStdColourMap() and wxWindow::OnSysColourChanged()           (FIXME-MT)
+static bool gs_hasStdCmap = FALSE;
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -2493,8 +2497,8 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             break;
 #endif // !__WXMICROWIN__
 
-            // the return value for this message is ignored
         case WM_SYSCOLORCHANGE:
+            // the return value for this message is ignored
             processed = HandleSysColorChange();
             break;
 
@@ -3350,6 +3354,14 @@ bool wxWindowMSW::HandleQueryNewPalette()
 // Responds to colour changes: passes event on to children.
 void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
+    // the top level window also reset the standard colour map as it might have
+    // changed (there is no need to do it for the non top level windows as we
+    // only have to do it once)
+    if ( IsTopLevel() )
+    {
+        // FIXME-MT
+        gs_hasStdCmap = FALSE;
+    }
     wxWindowList::Node *node = GetChildren().GetFirst();
     while ( node )
     {
@@ -3380,6 +3392,72 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& event)
         m_backgroundColour = wxSystemSettings::
                                 GetSystemColour(wxSYS_COLOUR_BTNFACE);
     }
+}
+
+extern wxCOLORMAP *wxGetStdColourMap()
+{
+    static COLORREF s_stdColours[wxSTD_COL_MAX];
+    static wxCOLORMAP s_cmap[wxSTD_COL_MAX];
+
+    if ( !gs_hasStdCmap )
+    {
+        static bool s_coloursInit = FALSE;
+
+        if ( !s_coloursInit )
+        {
+            // When a bitmap is loaded, the RGB values can change (apparently
+            // because Windows adjusts them to care for the old programs always
+            // using 0xc0c0c0 while the transparent colour for the new Windows
+            // versions is different). But we do this adjustment ourselves so
+            // we want to avoid Windows' "help" and for this we need to have a
+            // reference bitmap which can tell us what the RGB values change
+            // to.
+            wxBitmap stdColourBitmap(_T("wxBITMAP_STD_COLOURS"));
+            if ( stdColourBitmap.Ok() )
+            {
+                // the pixels in the bitmap must correspond to wxSTD_COL_XXX!
+                wxASSERT_MSG( stdColourBitmap.GetWidth() == wxSTD_COL_MAX,
+                              _T("forgot to update wxBITMAP_STD_COLOURS!") );
+
+                wxMemoryDC memDC;
+                memDC.SelectObject(stdColourBitmap);
+
+                wxColour colour;
+                for ( size_t i = 0; i < WXSIZEOF(s_stdColours); i++ )
+                {
+                    memDC.GetPixel(i, 0, &colour);
+                    s_stdColours[i] = wxColourToRGB(colour);
+                }
+            }
+            else // wxBITMAP_STD_COLOURS couldn't be loaded
+            {
+                s_stdColours[0] = RGB(000,000,000);     // black
+                s_stdColours[1] = RGB(128,128,128);     // dark grey
+                s_stdColours[2] = RGB(192,192,192);     // light grey
+                s_stdColours[3] = RGB(255,255,255);     // white
+                //s_stdColours[4] = RGB(000,000,255);     // blue
+                //s_stdColours[5] = RGB(255,000,255);     // magenta
+            }
+
+            s_coloursInit = TRUE;
+        }
+
+        gs_hasStdCmap = TRUE;
+
+        // create the colour map
+#define INIT_CMAP_ENTRY(col) \
+            s_cmap[wxSTD_COL_##col].from = s_stdColours[wxSTD_COL_##col]; \
+            s_cmap[wxSTD_COL_##col].to = ::GetSysColor(COLOR_##col)
+
+        INIT_CMAP_ENTRY(BTNTEXT);
+        INIT_CMAP_ENTRY(BTNSHADOW);
+        INIT_CMAP_ENTRY(BTNFACE);
+        INIT_CMAP_ENTRY(BTNHIGHLIGHT);
+
+#undef INIT_CMAP_ENTRY
+    }
+
+    return s_cmap;
 }
 
 // ---------------------------------------------------------------------------

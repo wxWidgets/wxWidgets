@@ -86,6 +86,8 @@ wxMSW:
 - huge (40*) speed up in wxMask::Create() (=> much faster toolbar creation)
 - fixed flicker in wxTreeCtrl::SetItemXXX()
 - fixed redraw problems in dynamically resized wxStaticText
+- improvements to wxWindows applications behaviour when the system colours
+  are changed
 - fixed wxProgressDialog for ranges > 65535
 - wxFontEnumerator now returns all fonts, not only TrueType ones
 - wxTextCtrl with wxTE_RICH flag scrolls to the end when text is appended to it

@@ -1104,74 +1104,6 @@ long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
 WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
 {
-    // number of the colours we map: if you change this, update
-    // wxBITMAP_STD_COLOURS in the resources as well: it must have the same number
-    // of pixels
-    static const size_t NUM_OF_MAPPED_COLOURS = 4;
-
-    static bool s_coloursInit = FALSE;
-    static long s_stdColours[NUM_OF_MAPPED_COLOURS];
-
-    if (!s_coloursInit)
-    {
-        // When a bitmap is loaded, the RGB values can change (apparently
-        // because Windows adjusts them to care for the old programs always
-        // using 0xc0c0c0 while the transparent colour for the new Windows
-        // versions is different). But we do this adjustment ourselves so we
-        // want to avoid Windows' "help" and for this we need to have a
-        // reference bitmap which can tell us what the RGB values change to.
-        wxBitmap stdColourBitmap(_T("wxBITMAP_STD_COLOURS"));
-        if (stdColourBitmap.Ok())
-        {
-            wxMemoryDC memDC;
-            memDC.SelectObject(stdColourBitmap);
-
-            wxColour colour;
-            for ( size_t i = 0; i < WXSIZEOF(s_stdColours); i++ )
-            {
-                memDC.GetPixel(i, 0, &colour);
-                s_stdColours[i] = wxColourToRGB(colour);
-            }
-        }
-        else
-        {
-            s_stdColours[0] = RGB(000,000,000) ;
-            s_stdColours[1] = RGB(128,128,128) ;
-            s_stdColours[2] = RGB(192,192,192) ;
-            s_stdColours[3] = RGB(255,255,255) ;
-            //s_stdColours[4] = RGB(000,000,255) ;
-            //s_stdColours[5] = RGB(255,000,255) ;
-        }
-
-        s_coloursInit = TRUE;
-    }
-
-    COLORMAP ColorMap[NUM_OF_MAPPED_COLOURS];
-
-    // black        (0, 0 0)
-    ColorMap[0].from = s_stdColours[0];
-    ColorMap[0].to = COLOR_BTNTEXT;
-    // dark grey    (128, 128, 128)
-    ColorMap[1].from = s_stdColours[1];
-    ColorMap[1].to = COLOR_BTNSHADOW;
-    // bright grey  (192, 192, 192)
-    ColorMap[2].from = s_stdColours[2];
-    ColorMap[2].to = COLOR_BTNFACE;
-    // white        (255, 255, 255)
-    ColorMap[3].from = s_stdColours[3];
-    ColorMap[3].to = COLOR_BTNHIGHLIGHT;
-    // blue         (0, 0, 255)
-    //  ColorMap[4].from = s_stdColours[4];
-    //  ColorMap[4].to = COLOR_HIGHLIGHT;
-    // magenta      (255, 0, 255)
-    //  ColorMap[4].from = s_stdColours[5];
-    //  ColorMap[4].to = COLOR_WINDOW;
-
-    for ( size_t n = 0; n < WXSIZEOF(ColorMap); n++ )
-    {
-        ColorMap[n].to = ::GetSysColor(ColorMap[n].to);
-    }
-
     MemoryHDC hdcMem;
 
     if ( !hdcMem )
@@ -1190,20 +1122,22 @@ WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
         return bitmap;
     }
 
+    wxCOLORMAP *cmap = wxGetStdColourMap();
+
     for ( int i = 0; i < width; i++ )
     {
         for ( int j = 0; j < height; j++ )
         {
             COLORREF pixel = ::GetPixel(hdcMem, i, j);
 
-            for ( size_t k = 0; k < WXSIZEOF(ColorMap); k++ )
+            for ( size_t k = 0; k < wxSTD_COL_MAX; k++ )
             {
-                COLORREF col = ColorMap[k].from;
+                COLORREF col = cmap[k].from;
                 if ( abs(GetRValue(pixel) - GetRValue(col)) < 10 &&
                      abs(GetGValue(pixel) - GetGValue(col)) < 10 &&
                      abs(GetBValue(pixel) - GetBValue(col)) < 10 )
                 {
-                    ::SetPixel(hdcMem, i, j, ColorMap[k].to);
+                    ::SetPixel(hdcMem, i, j, cmap[k].to);
                     break;
                 }
             }

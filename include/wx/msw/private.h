@@ -212,6 +212,31 @@ inline void wxRGBToColour(wxColour& c, COLORREF rgb)
     c.Set(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
 }
 
+// get the standard colour map for some standard colours - see comment in this
+// function to understand why is it needed and when should it be used
+//
+// it returns a wxCOLORMAP (can't use COLORMAP itself here as comctl32.dll
+// might be not included/available) array of size wxSTD_COLOUR_MAX
+//
+// NB: if you change these colours, update wxBITMAP_STD_COLOURS in the
+//     resources as well: it must have the same number of pixels!
+enum wxSTD_COLOUR
+{
+    wxSTD_COL_BTNTEXT,
+    wxSTD_COL_BTNSHADOW,
+    wxSTD_COL_BTNFACE,
+    wxSTD_COL_BTNHIGHLIGHT,
+    wxSTD_COL_MAX,
+};
+
+struct WXDLLEXPORT wxCOLORMAP
+{
+    COLORREF from, to;
+};
+
+// this function is implemented in src/msw/window.cpp
+extern wxCOLORMAP *wxGetStdColourMap();
+
 // copy Windows RECT to our wxRect
 inline void wxCopyRECTToRect(const RECT& r, wxRect& rect)
 {
