@@ -181,12 +181,16 @@ enum wxSeekMode
     || ( defined(__DMC__) && defined(__WXMSW__) ) \
     || ( defined(__WATCOMC__) && defined(__WXMSW__) )
 
-    // Not all of the Win32 compilers do have huge file support, for example
-    // the Digitalmars compiler does not have huge file size support
+    // detect compilers which have support for huge files (currently only
+    // Digital Mars doesn't)
     #include "wx/msw/private.h"
 
     #undef __HUGEFILES_SUPPORTED
-    #if _INTEGRAL_MAX_BITS >= 64 && !defined(__DMC__)
+    #if defined(__MINGW32__)
+        #define __HUGEFILES_SUPPORTED 1
+    #elif defined(__DMC__)
+        #define __HUGEFILES_SUPPORTED 0
+    #elif ((_INTEGRAL_MAX_BITS >= 64) || defined(_LARGE_FILES))
         #define __HUGEFILES_SUPPORTED 1
     #else
         #define __HUGEFILES_SUPPORTED 0
