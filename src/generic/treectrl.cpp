@@ -28,7 +28,7 @@
 #pragma hdrstop
 #endif
 
-#include "wx/generic/treectrl.h"
+#include "wx/treectrl.h"
 #include "wx/generic/imaglist.h"
 #include "wx/settings.h"
 #include "wx/log.h"
@@ -161,8 +161,6 @@ private:
 // -----------------------------------------------------------------------------
 // wxTreeEvent
 // -----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxNotifyEvent)
 
 wxTreeEvent::wxTreeEvent( wxEventType commandType, int id )
            : wxNotifyEvent( commandType, id )
@@ -1036,7 +1034,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
     event.SetEventObject( this );
     // TODO : Here we don't send any selection mode yet !
 
-    if ( GetEventHandler()->ProcessEvent( event ) && event.WasVetoed() )
+    if ( GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed() )
       return;
 
     // ctrl press
@@ -1278,7 +1276,7 @@ void wxTreeCtrl::AdjustMyScrollbars()
 
 int wxTreeCtrl::GetLineHeight(wxGenericTreeItem *item) const
 {
-  if (GetWindowStyleFlag() & wxTR_HAS_VARIABLE_ROW_HIGHT)
+  if (GetWindowStyleFlag() & wxTR_HAS_VARIABLE_ROW_HEIGHT)
     return item->GetHeight();
   else
     return m_lineHeight;
