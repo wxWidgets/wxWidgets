@@ -1079,7 +1079,8 @@ RETCODE SQL_API SQLColumns (HSTMT hstmt, UCHAR FAR * szTableQualifier,
     SWORD cbTableQualifier, UCHAR FAR * szTableOwner, SWORD cbTableOwner,
     UCHAR FAR * szTableName, SWORD cbTableName, UCHAR FAR * szColumnName,
     SWORD cbColumnName);
-RETCODE SQL_API SQLDriverConnect (HDBC hdbc, SQLHWND hwnd,  //glt
+/* glt - Cahnged HWND to SQLHWND to match MSW header typing */
+RETCODE SQL_API SQLDriverConnect (HDBC hdbc, SQLHWND hwnd,
     UCHAR FAR * szConnStrIn, SWORD cbConnStrIn, UCHAR FAR * szConnStrOut,
     SWORD cbConnStrOutMax, SWORD FAR * pcbConnStrOut, UWORD fDriverCompletion);
 RETCODE SQL_API SQLGetConnectOption (HDBC hdbc, UWORD fOption, PTR pvParam);
