@@ -98,7 +98,7 @@ void wxHtmlWindow::SetFonts(wxString normal_face, int normal_italic_mode, wxStri
     wxString op = m_OpenedPage;
 
     m_Parser -> SetFonts(normal_face, normal_italic_mode, fixed_face, fixed_italic_mode, sizes);
-    SetPage(wxT("")); // fonts changed => contents invalid
+    SetPage(wxT("<html><body></body></html>")); // fonts changed => contents invalid
     if (!op.IsEmpty()) LoadPage(op);
 }
 
@@ -311,7 +311,7 @@ void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
         tmp.Printf(wxT("wxHtmlWindow/FontsSize%i"), i);
         p_fontsizes[i] = cfg -> Read(tmp, m_Parser -> m_FontsSizes[i]);
     }
-    m_Parser -> SetFonts(p_ffn, p_imn, p_fff, p_imf, p_fontsizes);
+    SetFonts(p_ffn, p_imn, p_fff, p_imf, p_fontsizes);
 
     if (path != wxEmptyString)
         cfg -> SetPath(oldpath);
