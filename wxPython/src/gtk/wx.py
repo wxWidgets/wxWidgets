@@ -239,6 +239,7 @@ wxFRAME_TOOL_WINDOW = wxc.wxFRAME_TOOL_WINDOW
 wxFRAME_FLOAT_ON_PARENT = wxc.wxFRAME_FLOAT_ON_PARENT
 wxFRAME_NO_WINDOW_MENU = wxc.wxFRAME_NO_WINDOW_MENU
 wxFRAME_NO_TASKBAR = wxc.wxFRAME_NO_TASKBAR
+wxFRAME_SHAPED = wxc.wxFRAME_SHAPED
 wxED_CLIENT_MARGIN = wxc.wxED_CLIENT_MARGIN
 wxED_BUTTONS_BOTTOM = wxc.wxED_BUTTONS_BOTTOM
 wxED_BUTTONS_RIGHT = wxc.wxED_BUTTONS_RIGHT
@@ -1737,18 +1738,19 @@ class _wxPyDeadObject:
     def __nonzero__(self):
         return 0
 
+
 #----------------------------------------------------------------------
 
 class wxNotebookPage(wxPanel):
     """
     There is an old (and apparently unsolvable) bug when placing a
-    window with a nonstandard background colour in a wxNotebook, as
-    the notbooks's background colour would always be used when the
-    window is refreshed.  The solution is to place a panel in the
-    notbook and the coloured window o nthe panel, sized to cover the
-    panel.  This simple class does that for you, just put an instance
-    of this in the notebook and make your regular window a child of
-    this one and it will handle the resize for you.
+    window with a nonstandard background colour in a wxNotebook on
+    wxGTK, as the notbooks's background colour would always be used
+    when the window is refreshed.  The solution is to place a panel in
+    the notbook and the coloured window on the panel, sized to cover
+    the panel.  This simple class does that for you, just put an
+    instance of this in the notebook and make your regular window a
+    child of this one and it will handle the resize for you.
     """
     def __init__(self, parent, id=-1,
                  pos=wxDefaultPosition, size=wxDefaultSize,

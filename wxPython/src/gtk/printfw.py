@@ -637,6 +637,10 @@ wxPrinter_GetLastError = printfwc.wxPrinter_GetLastError
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxPRINT_MODE_NONE = printfwc.wxPRINT_MODE_NONE
+wxPRINT_MODE_PREVIEW = printfwc.wxPRINT_MODE_PREVIEW
+wxPRINT_MODE_FILE = printfwc.wxPRINT_MODE_FILE
+wxPRINT_MODE_PRINTER = printfwc.wxPRINT_MODE_PRINTER
 wxPRINTER_NO_ERROR = printfwc.wxPRINTER_NO_ERROR
 wxPRINTER_CANCELLED = printfwc.wxPRINTER_CANCELLED
 wxPRINTER_ERROR = printfwc.wxPRINTER_ERROR
