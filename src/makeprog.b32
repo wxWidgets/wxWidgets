@@ -5,8 +5,9 @@
 # Updated:	
 # Copyright:
 #
-# Include file for samples and utilities. Set TARGET and OBJECTS
-# before including this file.
+# Include file for samples and utilities. Set TARGET, OBJECTS and 
+# TARGETDEF (if you want to include a DEF file in the build) before
+# including this file.
 
 # WXWIN  set by parent make
 # BCCDIR set in makeb32.env
@@ -21,9 +22,13 @@ IMGLIBS= winpng jpeg tiff
 !endif
 
 !if "$(WXUSINGDLL)" == "1"
-LIBS=$(WXLIB) $(EXTRALIBS) cw32mti import32 ole2w32 regex zlib $(IMGLIBS) odbc32
+LIBS=$(WXLIB) $(EXTRALIBS) cw32mti import32 ole2w32 regex zlib $(IMGLIBS) 
 !else
-LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 regex zlib $(IMGLIBS) odbc32
+LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 regex zlib $(IMGLIBS)
+!endif
+
+!if "$(wxUSE_ODBC)" == "1"
+LIBS=$(LIBS) odbc32
 !endif
 
 # Note: you may need to remove some libraries for earlier versions of BC++, as below
@@ -49,12 +54,10 @@ DEBUG_FLAGS =
 
 CPPFLAGS=$(CPPFLAGS) $(DEBUG_FLAGS) $(OPT)
 
-TARGETDEF =
 !if "$(wxUSE_GUI)" == "0"
 TARGETRES = 
 STARTUP = c0x32.obj	
 !else
-if exist $(TARGET).def TARGETDEF = $(TARGET).def
 TARGETRES = $(TARGET).res
 STARTUP = c0w32.obj
 !endif
@@ -67,7 +70,7 @@ $(STARTUP) $(OBJECTS)
 $(TARGET)
 nul
 $(LIBS)
-
+$(TARGETDEF)
 $(TARGETRES)
 !
 
