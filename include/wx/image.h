@@ -162,8 +162,8 @@ public:
 #endif
 #endif
 
-    void Create( int width, int height, bool clear = true );
-    void Create( int width, int height, unsigned char* data, bool static_data = FALSE );
+    bool Create( int width, int height, bool clear = true );
+    bool Create( int width, int height, unsigned char* data, bool static_data = FALSE );
     void Destroy();
 
     // creates an identical copy of the image (the = operator

@@ -156,45 +156,44 @@ wxImage::wxImage( const wxImage* image )
     if (image) Ref(*image);
 }
 
-void wxImage::Create( int width, int height, bool clear )
+bool wxImage::Create( int width, int height, bool clear )
 {
     UnRef();
 
     m_refData = new wxImageRefData();
 
     M_IMGDATA->m_data = (unsigned char *) malloc( width*height*3 );
-    if (M_IMGDATA->m_data)
-    {
-        if (clear) memset(M_IMGDATA->m_data, 0, width*height*3);
-
-        M_IMGDATA->m_width = width;
-        M_IMGDATA->m_height = height;
-        M_IMGDATA->m_ok = TRUE;
-    }
-    else
+    if (!M_IMGDATA->m_data)
     {
         UnRef();
+        return FALSE;
     }
+
+    if (clear)
+        memset(M_IMGDATA->m_data, 0, width*height*3);
+
+    M_IMGDATA->m_width = width;
+    M_IMGDATA->m_height = height;
+    M_IMGDATA->m_ok = TRUE;
+
+    return TRUE;
 }
 
-void wxImage::Create( int width, int height, unsigned char* data, bool static_data )
+bool wxImage::Create( int width, int height, unsigned char* data, bool static_data )
 {
     UnRef();
+
+    wxCHECK_MSG( data, FALSE, _T("NULL data in wxImage::Create") );
 
     m_refData = new wxImageRefData();
 
     M_IMGDATA->m_data = data;
-    if (M_IMGDATA->m_data)
-    {
-        M_IMGDATA->m_width = width;
-        M_IMGDATA->m_height = height;
-        M_IMGDATA->m_ok = TRUE;
-        M_IMGDATA->m_static = static_data;
-    }
-    else
-    {
-        UnRef();
-    }
+    M_IMGDATA->m_width = width;
+    M_IMGDATA->m_height = height;
+    M_IMGDATA->m_ok = TRUE;
+    M_IMGDATA->m_static = static_data;
+
+    return TRUE;
 }
 
 void wxImage::Destroy()
