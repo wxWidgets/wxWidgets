@@ -1902,6 +1902,7 @@ void wxArrayString::Shrink()
     memcpy(pNew, m_pItems, m_nCount*sizeof(wxChar *));
     delete [] m_pItems;
     m_pItems = pNew;
+    m_nSize = m_nCount;
   }
 }
 
