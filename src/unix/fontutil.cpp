@@ -652,6 +652,11 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
             info->xencoding = wxT("*");
             break;
 
+        case wxFONTENCODING_GB2312:
+            info->xregistry = wxT("GB2312");   // or the otherway round? 
+            info->xencoding = wxT("*");
+            break;
+
         case wxFONTENCODING_KOI8:
             info->xregistry = wxT("koi8");
 

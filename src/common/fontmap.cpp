@@ -88,6 +88,10 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_ISO8859_13,
     wxFONTENCODING_ISO8859_14,
     wxFONTENCODING_ISO8859_15,
+    wxFONTENCODING_GB2312,
+    wxFONTENCODING_BIG5,
+    wxFONTENCODING_SHIFT_JIS,
+    wxFONTENCODING_EUC_JP,
     wxFONTENCODING_KOI8,
     wxFONTENCODING_CP932,
     wxFONTENCODING_CP936,
@@ -125,6 +129,10 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Celtic (ISO-8859-14)" ),
     wxTRANSLATE( "Western European with Euro (ISO-8859-15)" ),
     wxTRANSLATE( "KOI8-R" ),
+    wxTRANSLATE( "Chinese Simplified (GB2312)" ),
+    wxTRANSLATE( "Chinese Traditional (BIG5)" ),
+    wxTRANSLATE( "Japanese (Shift-JIS)" ),
+    wxTRANSLATE( "Extended Unix Codepage for Japanese (EUC-JP)" ),
     wxTRANSLATE( "Windows Japanese (CP 932)" ),
     wxTRANSLATE( "Windows Chinese Simplified (CP 936)" ),
     wxTRANSLATE( "Windows Korean (CP 949)" ),
@@ -161,6 +169,10 @@ static const wxChar* gs_encodingNames[] =
     wxT( "iso-8859-14" ),
     wxT( "iso-8859-15" ),
     wxT( "koi8-r" ),
+    wxT( "gb2312" ),
+    wxT( "big5" ),
+    wxT( "shift-jis" ),
+    wxT( "euc-jp" ),
     wxT( "windows-932" ),
     wxT( "windows-936" ),
     wxT( "windows-949" ),
@@ -520,6 +532,25 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         else if ( cs == wxT("UTF-8") )
         {
             encoding = wxFONTENCODING_UTF8;
+        }
+        else if ( cs == wxT("GB2312") )
+        {
+            encoding = wxFONTENCODING_GB2312;
+        }
+        else if ( cs == wxT("BIG5") )
+        {
+            encoding = wxFONTENCODING_BIG5;
+        }
+        else if ( cs == wxT("SJIS") ||
+                  cs == wxT("SHIFT_JIS") ||
+                  cs == wxT("SHIFT-JIS") )
+        {
+            encoding = wxFONTENCODING_SHIFT_JIS;
+        }
+        else if ( cs == wxT("EUC-JP") ||
+                  cs == wxT("EUC_JP") )
+        {
+            encoding = wxFONTENCODING_EUC_JP;
         }
         else if ( cs == wxT("KOI8-R") ||
                   cs == wxT("KOI8-U") ||
