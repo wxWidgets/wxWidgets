@@ -1990,6 +1990,21 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
         switch ( nMsg )
         {
+            case WM_RBUTTONDOWN:
+                // if the item we are about to right click on
+                // is not already select, remove the entire
+                // previous selection
+                if (!::IsItemSelected(GetHwnd(), htItem))
+                {
+                    UnselectAll();
+                }
+
+                // select item and set the focus to the
+                // newly selected item
+                ::SelectItem(GetHwnd(), htItem);
+                ::SetFocus(GetHwnd(), htItem);
+                break;
+
 #if !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
             case WM_LBUTTONDOWN:
                 if ( htItem && isMultiple )
