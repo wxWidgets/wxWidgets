@@ -121,8 +121,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
     #define   wxAccess     access
     #define   wxEof        eof
 
-    #define   wxMkdir      mkdir
-    #define   wxRmdir      rmdir
+    #define   wxMkDir      mkdir
+    #define   wxRmDir      rmdir
 
     #define   wxTell(fd)   lseek(fd, 0, SEEK_CUR)
 
