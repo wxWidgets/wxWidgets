@@ -9259,7 +9259,99 @@ static PyObject *_wrap_wxTreeCtrl_SetItemFont(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+static PyObject * wxPyTreeCtrl_GetBoundingRect(wxPyTreeCtrl *self,const wxTreeItemId & item,int  textOnly) {
+            wxRect rect;
+            if (self->GetBoundingRect(item, rect, textOnly)) {
+                wxPyTState* state = wxPyBeginBlockThreads();
+                wxRect* r = new wxRect(rect);
+                PyObject* val = wxPyConstructObject((void*)r, "wxRect");
+                wxPyEndBlockThreads(state);
+                return val;
+            }
+            else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+static PyObject *_wrap_wxTreeCtrl_GetBoundingRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxPyTreeCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    int  _arg2 = (int ) FALSE;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item","textOnly", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxTreeCtrl_GetBoundingRect",_kwnames,&_argo0,&_argo1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_GetBoundingRect. Expected _wxPyTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetBoundingRect. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxPyTreeCtrl_GetBoundingRect(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+#define wxTreeCtrl_OnPaint(_swigobj,_swigarg0)  (_swigobj->OnPaint(_swigarg0))
+static PyObject *_wrap_wxTreeCtrl_OnPaint(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyTreeCtrl * _arg0;
+    wxPaintEvent * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","event", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_OnPaint",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_OnPaint. Expected _wxPyTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPaintEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_OnPaint. Expected _wxPaintEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTreeCtrl_OnPaint(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef controls2cMethods[] = {
+	 { "wxTreeCtrl_OnPaint", (PyCFunction) _wrap_wxTreeCtrl_OnPaint, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCtrl_GetBoundingRect", (PyCFunction) _wrap_wxTreeCtrl_GetBoundingRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SetItemFont", (PyCFunction) _wrap_wxTreeCtrl_SetItemFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SetItemBackgroundColour", (PyCFunction) _wrap_wxTreeCtrl_SetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SetItemTextColour", (PyCFunction) _wrap_wxTreeCtrl_SetItemTextColour, METH_VARARGS | METH_KEYWORDS },

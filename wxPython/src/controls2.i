@@ -1234,6 +1234,7 @@ public:
 
 #ifdef __WXMSW__
     void SetItemDropHighlight(const wxTreeItemId& item, int highlight = TRUE);
+#endif
 
     //bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect, int textOnly = FALSE)
     %addmethods {
@@ -1252,7 +1253,7 @@ public:
             }
         }
     }
-#endif
+
 
 %pragma(python) addtoclass = "
     # Redefine some methods that SWIG gets a bit confused on...
@@ -1272,6 +1273,9 @@ public:
         val1.thisown = 1
         return (val1,val2)
 "
+
+    // This seems pretty bogus, but is currently needed for SplitTree
+    void OnPaint(wxPaintEvent& event);
 };
 
 

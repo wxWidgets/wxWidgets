@@ -31,7 +31,7 @@ class TestTree(wxRemotelyScrolledTreeCtrl):
     def OnPaint(self, evt):
         dc = wxPaintDC(self)
 
-        self.base_OnPaint(evt)
+        wxTreeCtrl.OnPaint(self, evt)
 
         # Reset the device origin since it may have been set
         dc.SetDeviceOrigin(0, 0)

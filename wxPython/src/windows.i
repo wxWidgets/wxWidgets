@@ -401,8 +401,10 @@ public:
     void SetAcceleratorTable(const wxAcceleratorTable& accel);
     wxAcceleratorTable *GetAcceleratorTable();
 
-
-    %name(base_OnPaint)void OnPaint(wxPaintEvent& event);
+#ifdef __WXMSW__
+    // This seems pretty bogus, but is currently needed for SplitTree
+    void OnPaint(wxPaintEvent& event);
+#endif
 };
 
 

@@ -771,6 +771,7 @@ class wxTreeItemIdPtr :
         return val
     def __repr__(self):
         return "<C wxTreeItemId instance at %s>" % (self.this,)
+    Ok = IsOk
 class wxTreeItemId(wxTreeItemIdPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxTreeItemId,_args,_kwargs)
@@ -1060,6 +1061,12 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def SetItemFont(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_SetItemFont,(self,) + _args, _kwargs)
+        return val
+    def GetBoundingRect(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetBoundingRect,(self,) + _args, _kwargs)
+        return val
+    def OnPaint(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_OnPaint,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxTreeCtrl instance at %s>" % (self.this,)
