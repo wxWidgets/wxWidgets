@@ -1653,8 +1653,10 @@ private:
 
 class wxStyledTextEvent : public wxCommandEvent {
 public:
-    wxStyledTextEvent(const wxStyledTextEvent& event);
     wxStyledTextEvent(wxEventType commandType=0, int id=0);
+#ifndef SWIG
+    wxStyledTextEvent(const wxStyledTextEvent& event);
+#endif
     ~wxStyledTextEvent() {}
 
     void SetPosition(int pos)             { m_position = pos; }
