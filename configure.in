@@ -4892,6 +4892,9 @@ if test "$wxUSE_LOG" = "yes"; then
     if test "$wxUSE_LOGDIALOG" = "yes"; then
       AC_DEFINE(wxUSE_LOG_DIALOG)
     fi
+
+    dnl the keyboard sample requires wxUSE_LOG
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS keyboard"
 fi
 
 if test "$wxUSE_LONGLONG" = "yes"; then
@@ -5423,6 +5426,7 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
             LIBS=" -lrpcrt4 -loleaut32 -lole32 -luuid$LIBS"
             if test "$wxUSE_OLE" = "yes" ; then
                 AC_DEFINE(wxUSE_OLE)
+                SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS oleauto"
             fi
         fi
 
@@ -5448,11 +5452,15 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
 fi
 
 if test "$wxUSE_IPC" = "yes"; then
-    if test "$wxUSE_SOCKETS" != "yes"; then
+    if test "$wxUSE_SOCKETS" != "yes" -a "$USE_WIN32" != 1; then
         AC_MSG_WARN(wxWidgets IPC classes require sockets... disabled)
+        wxUSE_IPC=no
     fi
 
-    AC_DEFINE(wxUSE_IPC)
+    if test "$wxUSE_IPC" = "yes"; then
+        AC_DEFINE(wxUSE_IPC)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ipc"
+    fi
 fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
@@ -5575,7 +5583,7 @@ fi
 
 if test "$wxUSE_DISPLAY" = "yes"; then
     AC_DEFINE(wxUSE_DISPLAY)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS display"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS display multimon"
 fi
 
 if test "$wxUSE_GAUGE" = "yes"; then
@@ -5601,6 +5609,7 @@ fi
 if test "$wxUSE_LISTBOX" = "yes"; then
     AC_DEFINE(wxUSE_LISTBOX)
     USES_CONTROLS=1
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS listbox"
 fi
 
 if test "$wxUSE_LISTCTRL" = "yes"; then
@@ -5779,6 +5788,7 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
             AC_MSG_WARN([wxPopupWindow not yet supported under PM... disabled])
         else
             AC_DEFINE(wxUSE_POPUPWIN)
+            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
 
             USES_CONTROLS=1
         fi
@@ -6260,14 +6270,16 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl TODO add checks that these samples will really compile (i.e. all the
     dnl      library features they need are present)
 
-    dnl TODO some samples are never built so far:
-    dnl      ipc, mfc, nativdlg, oleauto, ownerdrw
+    dnl TODO some samples are never built so far: mfc, ownerdrw
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs \
                      drawing dynamic erase event exec font image \
-                     minimal propsize rotate shaped widgets render"
+                     minimal propsize rotate shaped vscroll widgets render"
 
     if test "$wxUSE_MONOLITHIC" != "yes"; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS console"
+    fi
+    if test "$TOOLKIT" = "MSW"; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS nativdlg regtest richedit"
     fi
 else
     SAMPLES_SUBDIRS="console"
