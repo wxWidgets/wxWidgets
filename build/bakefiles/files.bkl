@@ -1086,8 +1086,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/gdiimage.cpp
     src/msw/gdiobj.cpp
     src/msw/gsockmsw.c
-    src/msw/helpchm.cpp
-    src/msw/helpwin.cpp
     src/msw/icon.cpp
     src/msw/minifram.cpp
     src/msw/ole/automtn.cpp
@@ -1095,7 +1093,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/ole/dropsrc.cpp
     src/msw/ole/droptgt.cpp
     src/msw/ole/oleutils.cpp
-    src/msw/ole/uuid.cpp
     src/msw/palette.cpp
     src/msw/pen.cpp
     src/msw/popupwin.cpp
@@ -1127,9 +1124,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/control.cpp
     src/msw/dialog.cpp
     src/msw/dragimag.cpp
-    src/msw/fdrepdlg.cpp
     src/msw/filedlg.cpp
-    src/msw/fontdlg.cpp
     src/msw/frame.cpp
     src/msw/gauge95.cpp
     src/msw/imaglist.cpp
@@ -1189,17 +1184,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
     wx/msw/enhmeta.h
-    wx/msw/fdrepdlg.h
     wx/msw/filedlg.h
     wx/msw/font.h
-    wx/msw/fontdlg.h
     wx/msw/frame.h
     wx/msw/gauge95.h
     wx/msw/gdiimage.h
     wx/msw/gdiobj.h
-    wx/msw/helpbest.h
-    wx/msw/helpchm.h
-    wx/msw/helpwin.h
     wx/msw/icon.h
     wx/msw/imaglist.h
     wx/msw/iniconf.h
@@ -1223,7 +1213,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/ole/dropsrc.h
     wx/msw/ole/droptgt.h
     wx/msw/ole/oleutils.h
-    wx/msw/ole/uuid.h
     wx/msw/palette.h
     wx/msw/pen.h
     wx/msw/printdlg.h
@@ -1299,12 +1288,34 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/warning.ico
 </set>
 
+<!-- Files used only by desktop MSW port, but *not* WindowsCE one: -->
+<set var="MSW_ONLY_SRC" hints="files">
+    src/msw/fdrepdlg.cpp
+    src/msw/fontdlg.cpp
+    src/msw/helpchm.cpp
+    src/msw/helpwin.cpp
+    src/msw/ole/uuid.cpp
+</set>
+<set var="MSW_ONLY_HDR" hints="files">
+    wx/msw/fdrepdlg.h
+    wx/msw/fontdlg.h
+    wx/msw/helpbest.h
+    wx/msw/helpchm.h
+    wx/msw/helpwin.h
+    wx/msw/ole/uuid.h
+</set>
+
+<!-- Files used by WindowsCE port but not by desktop MSW port: -->
 <set var="WINCE_SRC" hints="files">
+    src/generic/fdrepdlg.cpp
+    src/generic/fontdlgg.cpp
     src/msw/wince/filedlgwce.cpp
     src/msw/wince/helpwce.cpp
     src/msw/wince/tbarwce.cpp
 </set>
 <set var="WINCE_HDR" hints="files">
+    wx/generic/fdrepdlg.h
+    wx/generic/fontdlgg.h
     wx/msw/wince/helpwce.h
     wx/msw/wince/missing.h
     wx/msw/wince/tbarwce.h
@@ -2036,14 +2047,19 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_MSW_SRC" hints="files">
     src/common/taskbarcmn.cpp
-    src/msw/joystick.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
-    wx/msw/joystick.h
     wx/msw/sound.h
     wx/msw/taskbar.h
+</set>
+<!-- not built on WindowsCE: -->
+<set var="ADVANCED_MSW_ONLY_SRC" hints="files">
+    src/msw/joystick.cpp
+</set>
+<set var="ADVANCED_MSW_ONLY_HDR" hints="files">
+    wx/msw/joystick.h
 </set>
 
 <set var="ADVANCED_MAC_SRC" hints="files">
@@ -2299,7 +2315,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="GUI_SRC" hints="files">
         <if cond="TOOLKIT=='GTK'">$(GTK_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_SRC)</if>
-        <if cond="TOOLKIT=='MSW'">$(MSW_SRC)</if>
+        <if cond="TOOLKIT=='MSW'">$(MSW_SRC) $(MSW_ONLY_SRC)</if>
         <if cond="TOOLKIT=='WINCE'">$(MSW_SRC) $(WINCE_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(MAC_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_SRC)</if>
@@ -2308,7 +2324,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="GUI_HDR" hints="files">
         <if cond="TOOLKIT=='GTK'">$(GTK_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_HDR)</if>
-        <if cond="TOOLKIT=='MSW'">$(MSW_HDR)</if>
+        <if cond="TOOLKIT=='MSW'">$(MSW_HDR) $(MSW_ONLY_HDR)</if>
         <if cond="TOOLKIT=='WINCE'">$(MSW_HDR) $(WINCE_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(MAC_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_HDR)</if>
@@ -2326,7 +2342,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     <!-- wxAdvanced files: -->
     <set var="ADVANCED_PLATFORM_SRC" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_SRC)</if>
+        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_SRC) $(ADVANCED_MSW_ONLY_SRC)</if>
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC)</if>
@@ -2335,7 +2351,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_HDR" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR)</if>
+        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR) $(ADVANCED_MSW_ONLY_HDR)</if>
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR)</if>
