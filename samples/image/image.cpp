@@ -25,7 +25,10 @@
 #include "wx/quantize.h"
 
 #include "smile.xbm"
-#include "smile.xpm"
+
+#if !defined(__WINDOWS__) || wxUSE_XPM_IN_MSW
+    #include "smile.xpm"
+#endif
 
 
 // derived classes
