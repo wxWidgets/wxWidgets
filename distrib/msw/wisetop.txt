@@ -1,7 +1,7 @@
 Document Type: WSE
 item: Global
   Version=5.0
-  Title=wxWindows 2.2.1 Installation
+  Title=wxWindows 2.2.3 Installation
   Flags=00000100
   Split=1420
   Languages=65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -47,7 +47,7 @@ item: End Block
 end
 item: Set Variable
   Variable=APPTITLE
-  Value=wxWindows 2.2.1
+  Value=wxWindows 2.2.3
 end
 item: Set Variable
   Variable=GROUP

@@ -143,6 +143,9 @@ samples/newgrid/NewgridVC.dsw
 samples/notebook/NotebookVC.dsp
 samples/notebook/NotebookVC.dsw
 
+samples/oleauto/OleautoVC.dsp
+samples/oleauto/OleautoVC.dsw
+
 samples/ownerdrw/OwnerDrwVC.dsp
 samples/ownerdrw/OwnerDrwVC.dsw
 
@@ -154,6 +157,9 @@ samples/png/PngVC.dsw
 
 samples/printing/PrintingVC.dsp
 samples/printing/PrintingVC.dsw
+
+samples/proplist/ProplistVC.dsp
+samples/proplist/ProplistVC.dsw
 
 samples/propsize/PropsizeVC.dsp
 samples/propsize/PropsizeVC.dsw
@@ -180,6 +186,8 @@ samples/scrollsub/ScrollsubVC.dsp
 samples/scrollsub/ScrollsubVC.dsw
 
 samples/sockets/ClientVC.dsp
+samples/sockets/ServerVC.dsp
+samples/sockets/ClientVC.dsw
 samples/sockets/ServerVC.dsw
 
 samples/splitter/SplitterVC.dsp

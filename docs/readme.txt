@@ -1,4 +1,4 @@
-wxWindows 2.2.1
+wxWindows 2.2.3
 ---------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
@@ -48,7 +48,7 @@ The distribution is available in archive formats appropriate to the
 target system. Documentation is available mainly in zip format.
 Some add-on libraries (such as the Object Graphics Library) are
 available in zip form only. In the following, x.y.z represents
-the current version number (for example, 2.2.1).
+the current version number (for example, 2.2.3).
 
 wxWindows for GTK distribution
 ------------------------------
@@ -228,5 +228,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, 13th August, 2000
+The wxWindows Team, 12th November, 2000
 
