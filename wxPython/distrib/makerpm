@@ -14,13 +14,13 @@ fi
 # Initialization
 
 distdir=`pwd`/dist
-builddir=`pwd`/build_rpm
+builddir=`pwd`/_build_rpm
 rpmtop=${builddir}/rpmtop
 cvsroot=:pserver:anoncvs@cvs.wxwindows.org:/home/wxcvs
 pythonbin=/usr/bin/python
 port=GTK
 lcport=gtk
-tarname=wxPythonFull
+tarname=wxPythonSrc
 debug=0
 
 
@@ -54,6 +54,8 @@ version=$2
 pyver=$3
 shift;shift;shift
 
+tarver=${tarname}-${version}
+
 
 python=${pythonbin}${pyver}
 if [ ! -e ${python} ]; then
@@ -71,6 +73,7 @@ function makespec {
 	| sed s:@PORT@:${port}:g \
 	| sed s:@LCPORT@:${lcport}:g \
 	| sed s:@TARNAME@:${tarname}:g \
+	| sed s:@VERSION@:${version}:g \
 	> ${distdir}/wxPython${port}.spec
 }
 
@@ -92,8 +95,6 @@ for flag in $*; do
     esac
 done
 
-
-tarver=${tarname}-${version}
 
 #----------------------------------------------------------------------
 # Setup build dirs
@@ -152,12 +153,11 @@ fi
 
 
 #----------------------------------------------------------------------
-# Make the spec file and copy to ${builddir}/${tarver}
+# Make the spec file and copy to ${builddir}/${tarver} so it will be
+# in the tar file when it's built
 
-#if [ -z "${skiptar}" ]; then
-    makespec
-    cp ${distdir}/wxPython${port}.spec ${builddir}/${tarver}/wxPython${port}.spec
-#fi
+makespec
+cp ${distdir}/wxPython${port}.spec ${builddir}/${tarver}/wxPython${port}.spec
 
 
 #----------------------------------------------------------------------
@@ -190,6 +190,7 @@ if [ -z "${skiprpm}" ]; then
 	echo "*** RPM failure, exiting."
 	exit 1
     else
+	echo "*** Moving RPMs to ${distdir}"
 	mv -f `find ${rpmtop} -name "wxPython*.rpm"` ${distdir}
     fi
 fi

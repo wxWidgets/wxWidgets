@@ -1,18 +1,20 @@
-%define pref %{_prefix}
-%define python @PYTHON@
-%define pyver @PYVER@
-%define debug @DEBUG@
-%define port  @PORT@
-%define lcport @LCPORT@
+%define pref 	%{_prefix}
+%define python 	@PYTHON@
+%define pyver 	@PYVER@
+%define debug 	@DEBUG@
+%define port  	@PORT@
+%define lcport 	@LCPORT@
 %define tarname @TARNAME@
+%define version @VERSION@
+%define release 1
 
 %if %{debug}
-    %define name wxPython%{port}_py%{pyver}_dbg
+    %define name      wxPython%{port}-py%{pyver}-dbg
+    %define othername wxPython%{port}-py%{pyver}
 %else
-    %define name wxPython%{port}_py%{pyver}
+    %define name      wxPython%{port}-py%{pyver}
+    %define othername wxPython%{port}-py%{pyver}-dbg
 %endif
-%define version 2.3.3pre5
-%define release 1
 
 
 Summary: Cross platform GUI toolkit for Python using wx%{port}
@@ -28,21 +30,17 @@ BuildRoot: %{_tmppath}/%{name}-buildroot
 Prefix: %{pref}
 
 
-# They conflict with each other
-%if %{debug}
-Conflicts: wxPython%{port}_py%{pyver}
-%else
-Conflicts: wxPython%{port}_py%{pyver}_dbg
-%endif
-
 Provides: wxwin
 Provides: wx%{port} = %{version}
 Provides: wxPython  = %{version}
 
 
-# ?? Obsoletes: wx%{port}, wxPython
-# Some funky mandrake names
-Conflicts: wxGTK2.3, wxGTK6
+# They conflict with each other, so let them replace each other
+Obsoletes: %{othername}
+# old wx and wxPython packages
+Obsoletes: wx%{port}, wxPython
+# and some funky mandrake names
+Obsoletes: wxGTK2.3, wxGTK6
 
 
 %description
@@ -56,7 +54,7 @@ includes the wx%{port} shared libs and etc.
 
 
 %prep
-%setup -n %{tarname}-%{version}
+%setup -q -n %{tarname}-%{version}
 
 
 %build
@@ -82,6 +80,8 @@ cd build
 	--with-libpng=builtin \
 	--with-libtiff=builtin \
 	--with-zlib=builtin \
+
+##	--enable-debug_flag \
 
 # Build wxWindows
 $MAKE
@@ -120,7 +120,7 @@ cd wxPython
 
 
 %clean
-##[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+#[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
 
 %post
