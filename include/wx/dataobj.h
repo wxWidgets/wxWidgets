@@ -348,6 +348,18 @@ public:
     size_t GetDataSize(const wxDataFormat& format) const;
     bool GetDataHere(const wxDataFormat& format, void *pBuf) const;
     bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf);
+#elif wxUSE_UNICODE && defined(__WXMAC__)
+    virtual size_t GetFormatCount(Direction WXUNUSED(dir) = Get) const { return 2; }
+    virtual void GetAllFormats(wxDataFormat *formats,
+                               wxDataObjectBase::Direction WXUNUSED(dir) = Get) const;
+
+    virtual size_t GetDataSize() const { return GetDataSize(GetPreferredFormat()); }
+    virtual bool GetDataHere(void *buf) const { return GetDataHere(GetPreferredFormat(), buf); }
+    virtual bool SetData(size_t len, const void *buf) { return SetData(GetPreferredFormat(), len, buf); }
+
+    size_t GetDataSize(const wxDataFormat& format) const;
+    bool GetDataHere(const wxDataFormat& format, void *pBuf) const;
+    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf);
 #else
     virtual size_t GetDataSize() const;
     virtual bool GetDataHere(void *buf) const;

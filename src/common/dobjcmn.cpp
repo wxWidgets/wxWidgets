@@ -282,6 +282,57 @@ bool wxTextDataObject::SetData(const wxDataFormat& format,
     return TRUE;
 }
 
+#elif wxUSE_UNICODE && defined(__WXMAC__)
+
+size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
+{
+    if (format == wxDF_UNICODETEXT)
+    {
+        // host native is UTF16
+	    wxMBConvUTF16BE converter ;
+        wxCharBuffer buffer = converter.cWX2MB( GetText().c_str() );
+        return strlen( (const char*) buffer ) + 1;
+    }
+    else  // == wxDF_TEXT
+    {
+        wxCharBuffer buffer = wxConvLibc.cWX2MB( GetText().c_str() );
+        return strlen( (const char*) buffer ) + 1;
+    }
+}
+
+bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
+{
+    if (format == wxDF_UNICODETEXT)
+    {
+        // host native is UTF16
+	    wxMBConvUTF16BE converter ;
+        wxCharBuffer buffer = converter.cWX2MB( GetText().c_str() );
+        strcpy( (char*) buf, (const char*) buffer );
+    }
+    else
+    {
+        wxCharBuffer buffer = wxConvLibc.cWX2MB( GetText().c_str() );
+        strcpy( (char*) buf, (const char*) buffer );
+    }
+    
+    return TRUE;
+}
+
+bool wxTextDataObject::SetData(const wxDataFormat& format,
+                               size_t WXUNUSED(len), const void *buf)
+{
+    if (format == wxDF_UNICODETEXT)
+    {
+        // host native is UTF16
+	    wxMBConvUTF16BE converter ;
+        SetText( converter.cMB2WX( (const char*) buf ) );
+    }
+    else
+        SetText( wxConvLibc.cMB2WX( (const char*) buf ) );
+ 
+    return TRUE;
+}
+
 #else
 
 size_t wxTextDataObject::GetDataSize() const

@@ -167,6 +167,19 @@ bool wxDataObject::IsSupportedFormat(
 }
 
 // ----------------------------------------------------------------------------
+// wxTextDataObject
+// ----------------------------------------------------------------------------
+
+#if wxUSE_UNICODE
+void wxTextDataObject::GetAllFormats(wxDataFormat *formats, wxDataObjectBase::Direction dir) const
+{
+    *formats++ = wxDataFormat( wxDF_TEXT );
+    *formats = wxDataFormat( wxDF_UNICODETEXT );
+}
+
+#endif
+
+// ----------------------------------------------------------------------------
 // wxFileDataObject
 // ----------------------------------------------------------------------------
 
