@@ -649,8 +649,6 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 
     m_titles.Insert(title, pos);
 
-    menu->Attach(this);
-
     if ( IsAttached() )
     {
         if ( !::InsertMenu(GetHmenu(), pos,
