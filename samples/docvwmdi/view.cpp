@@ -47,7 +47,7 @@ END_EVENT_TABLE()
 bool DrawingView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
 {
     frame = wxGetApp().CreateChildFrame(doc, this, TRUE);
-    frame->SetTitle("DrawingView");
+    frame->SetTitle(_T("DrawingView"));
 
     canvas = GetMainFrame()->CreateCanvas(this, frame);
 #ifdef __X__
@@ -129,7 +129,7 @@ bool DrawingView::OnClose(bool deleteWindow)
 void DrawingView::OnCut(wxCommandEvent& WXUNUSED(event) )
 {
     DrawingDocument *doc = (DrawingDocument *)GetDocument();
-    doc->GetCommandProcessor()->Submit(new DrawingCommand((const wxString) "Cut Last Segment", DOODLE_CUT, doc, (DoodleSegment *) NULL));
+    doc->GetCommandProcessor()->Submit(new DrawingCommand(_T("Cut Last Segment"), DOODLE_CUT, doc, (DoodleSegment *) NULL));
 }
 
 IMPLEMENT_DYNAMIC_CLASS(TextEditView, wxView)
@@ -141,7 +141,7 @@ bool TextEditView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
   int width, height;
   frame->GetClientSize(&width, &height);
   textsw = new MyTextWindow(this, frame, wxPoint(0, 0), wxSize(width, height), wxTE_MULTILINE);
-  frame->SetTitle("TextEditView");
+  frame->SetTitle(_T("TextEditView"));
 
 #ifdef __X__
   // X seems to require a forced resize
@@ -230,7 +230,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
       // We've got a valid segment on mouse left up, so store it.
       DrawingDocument *doc = (DrawingDocument *)view->GetDocument();
 
-      doc->GetCommandProcessor()->Submit(new DrawingCommand("Add Segment", DOODLE_ADD, doc, currentSegment));
+      doc->GetCommandProcessor()->Submit(new DrawingCommand(_T("Add Segment"), DOODLE_ADD, doc, currentSegment));
 
       view->GetDocument()->Modify(TRUE);
       currentSegment = (DoodleSegment *) NULL;
@@ -257,7 +257,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
 // Define a constructor for my text subwindow
 MyTextWindow::MyTextWindow(wxView *v, wxMDIChildFrame *frame, const wxPoint& pos, const wxSize& size, long style):
- wxTextCtrl(frame, -1, "", pos, size, style)
+ wxTextCtrl(frame, -1, _T(""), pos, size, style)
 {
   view = v;
 }
