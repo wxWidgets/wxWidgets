@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -2666,6 +2666,7 @@ EXPORTS
       __vft7wxImage8wxObject
       ;wxImage::wxImage(const wxString&,const wxString&)
       __ct__7wxImageFRC8wxStringT1
+      wxNullImage
       ;wxImage::SaveFile(const wxString&,int)
       SaveFile__7wxImageFRC8wxStringi
       ;wxImage::Replace(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)
@@ -2711,6 +2712,8 @@ EXPORTS
       SetMaskColour__7wxImageFUcN21
       ;wxImageHandler::GetImageCount(wxInputStream&)
       GetImageCount__14wxImageHandlerFR13wxInputStream
+      ;wxImage::ConvertToMono(unsigned char,unsigned char,unsigned char)
+      ConvertToMono__7wxImageFUcN21
       ;wxImage::ConvertToBitmap() const
       ConvertToBitmap__7wxImageCFv
       ;wxImage::SetData(unsigned char*,int,int)
@@ -10343,10 +10346,14 @@ EXPORTS
       __ct__15wxBitmapRefDataFv
       ;wxMask::Create(const wxBitmap&,const wxColour&)
       Create__6wxMaskFRC8wxBitmapRC8wxColour
+      ;wxBitmap::ConvertToImage() const
+      ConvertToImage__8wxBitmapCFv
       ;wxBitmap::wxBitmap(void*,long,int,int,int)
       __ct__8wxBitmapFPvliN23
       ;wxBitmap::LoadFile(const wxString&,long)
       LoadFile__8wxBitmapFRC8wxStringl
+      ;wxBitmap::CreateFromImage(const wxImage&,int)
+      CreateFromImage__8wxBitmapFRC7wxImagei
       ;wxBitmap::SetPalette(const wxPalette&)
       SetPalette__8wxBitmapFRC9wxPalette
       ;wxBitmapHandler::Save(wxGDIImage*,const wxString&,int)
