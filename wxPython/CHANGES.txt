@@ -2,7 +2,7 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-?????
+2.3.1
 -----
 Added EVT_GRID_EDITOR_CREATED and wxGridEditorCreatedEvent so the user
 code can get access to the edit control when it is created, (to push
@@ -17,6 +17,10 @@ subclass wxXmlResourceHandler, etc...
 Added wxGridAutoEditMixin to the mixins library package.
 
 Made ColourSelect be derived from wxButton.
+
+Fixed img2py to work correctly with Python 2.1.
+
+Added enhanced wxVTKRenderWindow by Prabhu Ramachandran
 
 
 

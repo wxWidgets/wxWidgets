@@ -12,120 +12,549 @@
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
 
+# This class has been rewritten and improved by Prabhu Ramachandran
+# <prabhu@aero.iitm.ernet.in>.  It has been tested under Win32 and
+# Linux.  Many thanks to Eric Boix <frog@creatis.insa-lyon.fr> for
+# testing it under Windows(TM) and finding and fixing many errors.
+# Thanks also to Sebastien BARRE <sebastien@barre.nom.fr> for his
+# suggestions.
 
-try:  # For Win32,
+
+try:
     from vtkpython import *
 except ImportError:
-    try:  # for Unix.  Why they do it this way is anybody's guess...
-        from libVTKCommonPython import *
-        from libVTKGraphicsPython import *
-        from libVTKImagingPython import *
-    except ImportError:
-        raise ImportError, "VTK extension module not found"
+    raise ImportError, "VTK extension module not found"
 
 from wxPython.wx import *
 import math
 
 #----------------------------------------------------------------------
 
-class wxVTKRenderWindow(wxScrolledWindow):
+DEBUG = 0
+
+def debug(msg):
+    if DEBUG:
+        print msg
+
+
+class wxVTKRenderWindowBase(wxScrolledWindow):
+    """
+    A base class that enables one to embed a vtkRenderWindow into
+    a wxPython widget.  This class embeds the RenderWindow correctly
+    under different platforms.  Provided are some empty methods that
+    can be overloaded to provide a user defined interaction behaviour.
+    The event handling functions have names that are similar to the
+    ones in the vtkInteractorStyle class included with VTK.
+    """
+
     def __init__(self, parent, id, position=wxDefaultPosition,
                  size=wxDefaultSize, style=0):
         wxScrolledWindow.__init__(self, parent, id, position, size, style)
+        style = style | wxWANTS_CHARS
 
-        self.renderWindow = vtkRenderWindow()
+        # This box is necessary to eliminate flicker and enable proper
+        # event handling under Linux/GTK.
+        self.box = wxPanel(self, -1, position, size, style)
+
+        self._RenderWindow = vtkRenderWindow()
+
+        self.__InExpose = 0
+        self.__Created = 0
 
         if wxPlatform != '__WXMSW__':
             # We can't get the handle in wxGTK until after the widget
             # is created, the window create event happens later so we'll
             # catch it there
-            EVT_WINDOW_CREATE(self, self.OnCreateWindow)
+            EVT_WINDOW_CREATE(self.box, self.OnCreateWindow)
+            EVT_PAINT       (self, self.OnExpose)
         else:
             # but in MSW, the window create event happens durring the above
             # call to __init__ so we have to do it here.
-            hdl = self.GetHandle()
-            self.renderWindow.SetWindowInfo(str(hdl))
+            hdl = self.box.GetHandle()
+            self._RenderWindow.SetWindowInfo(str(hdl))
+            EVT_PAINT       (self.box, self.OnExpose)
+            self.__Created = 1
+
+        # common for all platforms
+        EVT_SIZE        (self, self.OnConfigure)
+
+        # setup the user defined events.
+        self.SetupEvents()
 
 
-        EVT_LEFT_DOWN  (self, self.SaveClick)
-        EVT_MIDDLE_DOWN(self, self.SaveClick)
-        EVT_RIGHT_DOWN (self, self.SaveClick)
-        EVT_LEFT_UP    (self, self.Release)
-        EVT_MIDDLE_UP  (self, self.Release)
-        EVT_RIGHT_UP   (self, self.Release)
-        EVT_MOTION     (self, self.MouseMotion)
-
-        EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
-        EVT_PAINT(self, self.OnPaint)
+    def SetupEvents(self):
+        "Setup the user defined event bindings."
+        # Remember to bind everything to self.box and NOT self
+        EVT_LEFT_DOWN    (self.box, self.OnLeftButtonDown)
+        EVT_MIDDLE_DOWN  (self.box, self.OnMiddleButtonDown)
+        EVT_RIGHT_DOWN   (self.box, self.OnRightButtonDown)
+        EVT_LEFT_UP      (self.box, self.OnLeftButtonUp)
+        EVT_MIDDLE_UP    (self.box, self.OnMiddleButtonUp)
+        EVT_RIGHT_UP     (self.box, self.OnRightButtonUp)
+        EVT_MOTION       (self.box, self.OnMouseMove)
+        EVT_ENTER_WINDOW (self.box, self.OnEnter)
+        EVT_LEAVE_WINDOW (self.box, self.OnLeave)
+        EVT_CHAR         (self.box, self.OnChar)
+        # Add your bindings if you want them in the derived class.
 
 
     def GetRenderer(self):
-        self.renderWindow.GetRenderers().InitTraversal()
-        return self.renderWindow.GetRenderers().GetNextItem()
+        self._RenderWindow.GetRenderers().InitTraversal()
+        return self._RenderWindow.GetRenderers().GetNextItem()
 
 
     def GetRenderWindow(self):
-        return self.renderWindow
+        return self._RenderWindow
 
 
-    def OnPaint(self, event):
-        dc = wxPaintDC(self)
-        self.renderWindow.Render()
+    def Render(self):
+        if self.__Created:
+            # if block needed because calls to render before creation
+            # will prevent the renderwindow from being embedded into a
+            # wxPython widget.
+            self._RenderWindow.Render()
+
+
+    def OnExpose(self, event):
+        # I need this for the MDIDemo.  Somehow OnCreateWindow was
+        # not getting called.
+        if not self.__Created:
+            self.OnCreateWindow(event)
+        if (not self.__InExpose):
+            self.__InExpose = 1
+            dc = wxPaintDC(self.box)
+            self._RenderWindow.Render()
+            self.__InExpose = 0
+
 
     def OnCreateWindow(self, event):
-        hdl = self.GetHandle()
-        self.renderWindow.SetWindowInfo(str(hdl))
+	hdl = self.box.GetHandle()
+        try:
+            self._RenderWindow.SetParentInfo(str(hdl))
+        except:
+            self._RenderWindow.SetWindowInfo(str(hdl))
+            msg = "Warning:\n "\
+                  "Unable to call vtkRenderWindow.SetParentInfo\n\n"\
+                  "Using the SetWindowInfo method instead.  This\n"\
+                  "is likely to cause a lot of flicker when\n"\
+                  "rendering in the vtkRenderWindow.  Please\n"\
+                  "use a recent Nightly VTK release (later than\n"\
+                  "March 10 2001) to eliminate this problem."
+            dlg = wxMessageDialog(NULL, msg, "Warning!",
+                                   wxOK |wxICON_INFORMATION)
+            dlg.ShowModal()
+            dlg.Destroy()
+        self.__Created = 1
 
-    def OnEraseBackground(self, event):
+
+    def OnConfigure(self, event):
+        sz = self.GetSize()
+        self.box.SetSize(sz)
+        # Ugly hack that according to Eric Boix is necessary under
+        # Windows.  If possible Try commenting this out and test under
+        # Windows.
+        #self._RenderWindow.GetSize()
+        #
+	self._RenderWindow.SetSize(sz.width, sz.height)
+
+
+    def OnLeftButtonDown(self, event):
+        "Left mouse button pressed."
+        pass
+
+
+    def OnMiddleButtonDown(self, event):
+        "Middle mouse button pressed."
+        pass
+
+
+    def OnRightButtonDown(self, event):
+        "Right mouse button pressed."
+        pass
+
+
+    def OnLeftButtonUp(self, event):
+        "Left mouse button released."
+        pass
+
+
+    def OnMiddleButtonUp(self, event):
+        "Middle mouse button released."
+        pass
+
+
+    def OnRightButtonUp(self, event):
+        "Right mouse button released."
+        pass
+
+
+    def OnMouseMove(self, event):
+        "Mouse has moved."
+        pass
+
+
+    def OnEnter(self, event):
+        "Entering the vtkRenderWindow."
+        pass
+
+
+    def OnLeave(self, event):
+        "Leaving the vtkRenderWindow."
+        pass
+
+
+    def OnChar(self, event):
+        "Process Key events."
+        pass
+
+
+    def OnKeyDown(self, event):
+        "Key pressed down."
+        pass
+
+
+    def OnKeyUp(self, event):
+        "Key released."
         pass
 
 
 
-    def SaveClick(self, event):
-        self.prev_x, self.prev_y = event.GetPositionTuple()
-        self.CaptureMouse()
 
-    def Release(self, event):
-        self.ReleaseMouse()
+class wxVTKRenderWindow(wxVTKRenderWindowBase):
+    """
+    An example of a fully functional wxVTKRenderWindow that is
+    based on the vtkRenderWidget.py provided with the VTK sources.
+    """
 
-    def MouseMotion(self, event):
+    def __init__(self, parent, id, position=wxDefaultPosition,
+                 size=wxDefaultSize, style=0):
+        wxVTKRenderWindowBase.__init__(self, parent, id, position, size,
+                                       style)
+
+        self._CurrentRenderer = None
+        self._CurrentCamera = None
+        self._CurrentZoom = 1.0
+        self._CurrentLight = None
+
+        self._ViewportCenterX = 0
+        self._ViewportCenterY = 0
+
+        self._Picker = vtkCellPicker()
+        self._PickedAssembly = None
+        self._PickedProperty = vtkProperty()
+        self._PickedProperty.SetColor(1,0,0)
+        self._PrePickedProperty = None
+
+        self._OldFocus = None
+
+        # these record the previous mouse position
+        self._LastX = 0
+        self._LastY = 0
+
+
+    def OnLeftButtonDown(self, event):
+        "Left mouse button pressed."
+        self.StartMotion(event)
+
+
+    def OnMiddleButtonDown(self, event):
+        "Middle mouse button pressed."
+        self.StartMotion(event)
+
+
+    def OnRightButtonDown(self, event):
+        "Right mouse button pressed."
+        self.StartMotion(event)
+
+
+    def OnLeftButtonUp(self, event):
+        "Left mouse button released."
+        self.EndMotion(event)
+
+
+    def OnMiddleButtonUp(self, event):
+        "Middle mouse button released."
+        self.EndMotion(event)
+
+
+    def OnRightButtonUp(self, event):
+        "Right mouse button released."
+        self.EndMotion(event)
+
+
+    def OnMouseMove(self, event):
         event.x, event.y = event.GetPositionTuple()
-        size = self.GetClientSize()
         if event.LeftIsDown():
-            # rotate
-            camera = self.GetRenderer().GetActiveCamera()
-            camera.Azimuth(float(self.prev_x - event.x) / size.width * 360)
-            camera.Elevation(float(event.y - self.prev_y) / size.width * 360)
-            camera.OrthogonalizeViewUp()
-            self.MotionUpdate(event)
+            if event.ShiftDown():
+                self.Pan(event.x, event.y)
+            else:
+                self.Rotate(event.x, event.y)
 
         elif event.MiddleIsDown():
-            # pan
-            camera = self.GetRenderer().GetActiveCamera()
-            camera.Yaw(-float(self.prev_x - event.x) / size.width * 30)
-            camera.Pitch(float(event.y - self.prev_y) / size.width * 30)
-            camera.OrthogonalizeViewUp()
-            self.MotionUpdate(event)
+            self.Pan(event.x, event.y)
 
         elif event.RightIsDown():
-            # dolly
-            camera = self.GetRenderer().GetActiveCamera()
-            camera.Dolly(math.exp(float((event.x - self.prev_x) - \
-                                        (event.y - self.prev_y))/ \
-                                  size.width))
-            self.MotionUpdate(event)
+            self.Zoom(event.x, event.y)
 
 
-    def MotionUpdate(self,event):
-        renderer = self.GetRenderer()
-        renderer.GetLights().InitTraversal()
-        light = renderer.GetLights().GetNextItem()
-        camera = renderer.GetActiveCamera()
-        light.SetPosition(camera.GetPosition())
-        light.SetFocalPoint(camera.GetFocalPoint())
-        self.renderWindow.Render()
-        self.prev_x = event.x
-        self.prev_y = event.y
+    def OnEnter(self, event):
+        self.__OldFocus = wxWindow_FindFocus()
+        self.SetFocus()
+        x, y = event.GetPositionTuple()
+        self.UpdateRenderer(x,y)
 
 
+    def OnLeave(self, event):
+        if (self._OldFocus != None):
+            self.__OldFocus.SetFocus()
 
+
+    def OnChar(self, event):
+        key = event.KeyCode()
+        if (key == ord('r')) or (key == ord('R')):
+            self.Reset()
+        elif (key == ord('w')) or (key == ord('W')):
+            self.Wireframe()
+        elif (key == ord('s')) or (key == ord('S')):
+            self.Surface()
+        elif (key == ord('p')) or (key == ord('P')):
+            x, y = event.GetPositionTuple()
+            self.PickActor(x, y)
+        else:
+            event.Skip()
+
+
+    # Start of internal functions
+    def GetZoomFactor(self):
+        return self._CurrentZoom
+
+
+    def SetZoomFactor(self, zf):
+        self._CurrentZoom = zf
+
+
+    def GetPicker(self):
+        return self._Picker
+
+
+    def Render(self):
+        if (self._CurrentLight):
+            light = self._CurrentLight
+            light.SetPosition(self._CurrentCamera.GetPosition())
+            light.SetFocalPoint(self._CurrentCamera.GetFocalPoint())
+
+        wxVTKRenderWindowBase.Render(self)
+
+
+    def UpdateRenderer(self, x, y):
+        """
+        UpdateRenderer will identify the renderer under the mouse and set
+        up _CurrentRenderer, _CurrentCamera, and _CurrentLight.
+        """
+        sz = self.GetSize()
+        windowX = sz.width
+        windowY = sz.height
+
+        renderers = self._RenderWindow.GetRenderers()
+        numRenderers = renderers.GetNumberOfItems()
+
+        self._CurrentRenderer = None
+        renderers.InitTraversal()
+        for i in range(0,numRenderers):
+            renderer = renderers.GetNextItem()
+            vx,vy = (0,0)
+            if (windowX > 1):
+                vx = float (x)/(windowX-1)
+            if (windowY > 1):
+                vy = (windowY-float(y)-1)/(windowY-1)
+            (vpxmin,vpymin,vpxmax,vpymax) = renderer.GetViewport()
+
+            if (vx >= vpxmin and vx <= vpxmax and
+                vy >= vpymin and vy <= vpymax):
+                self._CurrentRenderer = renderer
+                self._ViewportCenterX = float(windowX)*(vpxmax-vpxmin)/2.0\
+                                        +vpxmin
+                self._ViewportCenterY = float(windowY)*(vpymax-vpymin)/2.0\
+                                        +vpymin
+                self._CurrentCamera = self._CurrentRenderer.GetActiveCamera()
+                lights = self._CurrentRenderer.GetLights()
+                lights.InitTraversal()
+                self._CurrentLight = lights.GetNextItem()
+                break
+
+        self._LastX = x
+        self._LastY = y
+
+
+    def GetCurrentRenderer(self):
+        return self._CurrentRenderer
+
+
+    def StartMotion(self, event):
+        x, y = event.GetPositionTuple()
+        self.UpdateRenderer(x,y)
+        self.box.CaptureMouse()
+
+
+    def EndMotion(self, event=None):
+        if self._CurrentRenderer:
+            self.Render()
+        self.box.ReleaseMouse()
+
+
+    def Rotate(self,x,y):
+        if self._CurrentRenderer:
+
+            self._CurrentCamera.Azimuth(self._LastX - x)
+            self._CurrentCamera.Elevation(y - self._LastY)
+            self._CurrentCamera.OrthogonalizeViewUp()
+
+            self._LastX = x
+            self._LastY = y
+
+            self._CurrentRenderer.ResetCameraClippingRange()
+            self.Render()
+
+
+    def PanAbsolute(self, x_vec, y_vec):
+        if self._CurrentRenderer:
+
+            renderer = self._CurrentRenderer
+            camera = self._CurrentCamera
+            (pPoint0,pPoint1,pPoint2) = camera.GetPosition()
+            (fPoint0,fPoint1,fPoint2) = camera.GetFocalPoint()
+
+            if (camera.GetParallelProjection()):
+                renderer.SetWorldPoint(fPoint0,fPoint1,fPoint2,1.0)
+                renderer.WorldToDisplay()
+                fx,fy,fz = renderer.GetDisplayPoint()
+                renderer.SetDisplayPoint(fx+x_vec,
+                                         fy+y_vec,
+                                         fz)
+                renderer.DisplayToWorld()
+                fx,fy,fz,fw = renderer.GetWorldPoint()
+                camera.SetFocalPoint(fx,fy,fz)
+
+                renderer.SetWorldPoint(pPoint0,pPoint1,pPoint2,1.0)
+                renderer.WorldToDisplay()
+                fx,fy,fz = renderer.GetDisplayPoint()
+                renderer.SetDisplayPoint(fx+x_vec,
+                                         fy+y_vec,
+                                         fz)
+                renderer.DisplayToWorld()
+                fx,fy,fz,fw = renderer.GetWorldPoint()
+                camera.SetPosition(fx,fy,fz)
+
+            else:
+                (fPoint0,fPoint1,fPoint2) = camera.GetFocalPoint()
+                # Specify a point location in world coordinates
+                renderer.SetWorldPoint(fPoint0,fPoint1,fPoint2,1.0)
+                renderer.WorldToDisplay()
+                # Convert world point coordinates to display coordinates
+                dPoint = renderer.GetDisplayPoint()
+                focalDepth = dPoint[2]
+
+                aPoint0 = self._ViewportCenterX + x_vec
+                aPoint1 = self._ViewportCenterY + y_vec
+
+                renderer.SetDisplayPoint(aPoint0,aPoint1,focalDepth)
+                renderer.DisplayToWorld()
+
+                (rPoint0,rPoint1,rPoint2,rPoint3) = renderer.GetWorldPoint()
+                if (rPoint3 != 0.0):
+                    rPoint0 = rPoint0/rPoint3
+                    rPoint1 = rPoint1/rPoint3
+                    rPoint2 = rPoint2/rPoint3
+
+                camera.SetFocalPoint((fPoint0 - rPoint0) + fPoint0,
+                                     (fPoint1 - rPoint1) + fPoint1,
+                                     (fPoint2 - rPoint2) + fPoint2)
+
+                camera.SetPosition((fPoint0 - rPoint0) + pPoint0,
+                                   (fPoint1 - rPoint1) + pPoint1,
+                                   (fPoint2 - rPoint2) + pPoint2)
+
+            self.Render()
+
+
+    def Pan(self, x, y):
+        self.PanAbsolute(x - self._LastX, - y + self._LastY)
+        self._LastX = x
+        self._LastY = y
+
+
+    def Zoom(self,x,y):
+        if self._CurrentRenderer:
+
+            renderer = self._CurrentRenderer
+            camera = self._CurrentCamera
+
+            zoomFactor = math.pow(1.02,(0.5*(self._LastY - y)))
+            self._CurrentZoom = self._CurrentZoom * zoomFactor
+
+            if camera.GetParallelProjection():
+                parallelScale = camera.GetParallelScale()/zoomFactor
+                camera.SetParallelScale(parallelScale)
+            else:
+                camera.Dolly(zoomFactor)
+                renderer.ResetCameraClippingRange()
+
+            self._LastX = x
+            self._LastY = y
+
+            self.Render()
+
+
+    def Reset(self):
+        if self._CurrentRenderer:
+            self._CurrentRenderer.ResetCamera()
+
+        self.Render()
+
+
+    def Wireframe(self):
+        actors = self._CurrentRenderer.GetActors()
+        numActors = actors.GetNumberOfItems()
+        actors.InitTraversal()
+        for i in range(0,numActors):
+            actor = actors.GetNextItem()
+            actor.GetProperty().SetRepresentationToWireframe()
+
+        self.Render()
+
+
+    def Surface(self):
+        actors = self._CurrentRenderer.GetActors()
+        numActors = actors.GetNumberOfItems()
+        actors.InitTraversal()
+        for i in range(0,numActors):
+            actor = actors.GetNextItem()
+            actor.GetProperty().SetRepresentationToSurface()
+
+        self.Render()
+
+
+    def PickActor(self,x,y):
+        if self._CurrentRenderer:
+            renderer = self._CurrentRenderer
+            picker = self._Picker
+
+            windowY = self.GetSize().height
+            picker.Pick(x,(windowY - y - 1),0.0,renderer)
+            assembly = picker.GetAssembly()
+
+            if (self._PickedAssembly != None and
+                self._PrePickedProperty != None):
+                self._PickedAssembly.SetProperty(self._PrePickedProperty)
+                # release hold of the property
+                self._PrePickedProperty.UnRegister(self._PrePickedProperty)
+                self._PrePickedProperty = None
+
+            if (assembly != None):
+                self._PickedAssembly = assembly
+                self._PrePickedProperty = self._PickedAssembly.GetProperty()
+                # hold onto the property
+                self._PrePickedProperty.Register(self._PrePickedProperty)
+                self._PickedAssembly.SetProperty(self._PickedProperty)
+
+            self.Render()
