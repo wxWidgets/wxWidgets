@@ -64,10 +64,10 @@ SHARED_LD_CC = @SHARED_LD_CC@
 
 ### Conditionally set variables: ###
 
-@COND_PLATFORM_WIN321@DLLIMPEXT = .a
-@COND_PLATFORM_WIN320@DLLIMPEXT = .$(SO_SUFFIX)
-@COND_USE_GUI0@__console___depname = console
-@COND_DEPS_TYPEGCC@DEPS_FLAG = -MMD -MT$@ -MF$@.d
+@COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
+@COND_PLATFORM_WIN32_0@DLLIMPEXT = .$(SO_SUFFIX)
+@COND_USE_GUI_0@__console___depname = console
+@COND_DEPS_TYPE_GCC@DEPS_FLAG = -MMD -MT$@ -MF$@.d
 
 ### Targets: ###
 

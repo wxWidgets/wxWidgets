@@ -1,4 +1,6 @@
 <?xml version="1.0" ?>
+<!-- $Id$ -->
+
 <makefile>
 
     <!-- bakefile modules we need: -->
@@ -84,7 +86,7 @@
     <!-- =============================================================== -->
 
     <set var="LIBDIRNAME">
-        <if cond="FORMAT=='autoconf'">$(top_builddir)/lib</if>
+        <if cond="FORMAT=='autoconf'">$(top_builddir)lib</if>
     </set>
 
     <!-- =============================================================== -->

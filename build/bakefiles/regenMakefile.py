@@ -21,7 +21,7 @@ BAKEARGS = -v
 
 lines = []
 all = {}
-all['autoconf'] = ['../../configure', '../../samples/configure']
+all['autoconf'] = ['../../configure']
 
 def addMakefile(bake, makedirs, deps=[], args={}):
     """Adds rules to regenerate native makefile in directory 'makedir' from
@@ -75,7 +75,7 @@ def onSample(arg, dirname, names):
 
     args = {
         'all':'-DWXTOPDIR=/%s..' % prefix,
-        'autoconf':'-DAUTOCONF_MACROS_FILE=../../samples/autoconf_inc.m4',
+        'autoconf':'-DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4',
     }
     
     for bake in bakes:
@@ -105,16 +105,11 @@ for f in all:
 file.write("""
 clean:
 \trm -f ../../autoconf_inc.m4
-\trm -f ../../samples/autoconf_inc.m4
 %s
 
 ../../autoconf_inc.m4: ../../Makefile.in
 ../../configure: ../../autoconf_inc.m4
 \t(cd ../.. ; aclocal && autoconf)
-
-../../samples/autoconf_inc.m4: ../../samples/Makefile.in
-../../samples/configure: ../../samples/autoconf_inc.m4
-\t(cd ../../samples ; aclocal && autoconf)
 
 Makefile: regenMakefile.py
 \t./regenMakefile.py
