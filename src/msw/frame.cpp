@@ -331,7 +331,15 @@ void wxFrame::Iconize(bool iconize)
 
 void wxFrame::Maximize(bool maximize)
 {
-    DoShowWindow(maximize ? SW_MAXIMIZE : SW_RESTORE);
+    // maximizing a hidden frame shows it - which is often much worse than not
+    // maximizing it at all
+    //
+    // the correct workaround this bug breaks binary compatibility and so is
+    // only in 2.3
+    if ( IsShown() )
+    {
+        DoShowWindow(maximize ? SW_MAXIMIZE : SW_RESTORE);
+    }
 }
 
 void wxFrame::Restore()
