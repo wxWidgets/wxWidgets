@@ -14,7 +14,7 @@
 typedef struct _wxSoundInternal wxSoundInternal;
 typedef struct _wxSoundInfoHeader wxSoundInfoHeader;
 
-class wxSoundInternal;
+// class WXDLLEXPORT wxSoundInternal;
 class WXDLLEXPORT wxSoundStreamWin : public wxSoundStream {
  public:
   wxSoundStreamWin();

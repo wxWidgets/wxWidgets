@@ -16,10 +16,11 @@
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/app.h"
-    #include "wx/module.h"
-    #include "wx/msw/private.h"
     #include "wx/string.h"
 #endif
+
+#include "wx/module.h"
+#include "wx/msw/private.h"
 
 // -------------------------------------------------------------------------
 // MMedia headers
@@ -117,7 +118,13 @@ wxSoundStreamWin::~wxSoundStreamWin()
 // -----------------------------------------------------------------------
 // _wxSoundHandlerWndProc: Window callback to handle buffer completion
 // -----------------------------------------------------------------------
-LRESULT APIENTRY _EXPORT _wxSoundHandlerWndProc(HWND hWnd, UINT message,
+/*
+LRESULT APIENTRY _EXPORT
+*/
+
+LRESULT WXDLLEXPORT APIENTRY _EXPORT 
+
+ _wxSoundHandlerWndProc(HWND hWnd, UINT message,
                  WPARAM wParam, LPARAM lParam)
 {
   wxSoundStreamWin *sndwin;
@@ -307,7 +314,7 @@ wxSoundInfoHeader *wxSoundStreamWin::AllocHeader(int mode)
   info->m_h_header = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, sizeof(WAVEHDR));
   if (!info->m_h_data || !info->m_h_header) {
     delete info;
-    m_snderror = wxSOUND_MEMERR;
+    m_snderror = wxSOUND_MEMERROR;
     return NULL;
   }
 

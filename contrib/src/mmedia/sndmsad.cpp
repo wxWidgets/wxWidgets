@@ -10,10 +10,10 @@
 #endif
 
 #include <wx/wxprec.h>
-#include "sndbase.h"
-#include "sndfile.h"
-#include "sndpcm.h"
-#include "sndmsad.h"
+#include "wx/mmedia/sndbase.h"
+#include "wx/mmedia/sndfile.h"
+#include "wx/mmedia/sndpcm.h"
+#include "wx/mmedia/sndmsad.h"
 
 // --------------------------------------------------------------------------
 // wxSoundFormatMSAdpcm
