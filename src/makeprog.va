@@ -37,7 +37,7 @@ $(OPATH)\$(PROGRAM).obj: $(THISDIR)\$(PROGRAM).cpp
 
 $(PROGRAM).res:: $(PROGRES)
 $(PROGRES):
-    $(RC) -I $(WXDIR)\include -D __VISAGECPP__ -r $(PROGRC) $(PROGRES)
+    $(RC) -I $(WXDIR)\include\wx\os2 -D __VISAGECPP__ -r $(PROGRC) $(PROGRES)
 
 $(PROGRAM).exe:: $(PROGTARGET)
 $(PROGTARGET):   $(OBJECTS) $(PROGRES) $(DUMMYOBJ) $(WXLIB)
