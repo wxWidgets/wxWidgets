@@ -333,7 +333,7 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0, bool b
   wxString searchPath = GetFullSearchPath(szDirPrefix);
 
 #ifdef __UNIX_LIKE__
-  if ( szName == _("wxstd") )
+  if ( szName == "wxstd" )
   {
     // WXDIR is the env var holding the installation directory of wxWindows
     const wxChar *pszWxDir = wxGetenv(wxT("WXDIR"));
