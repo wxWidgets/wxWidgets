@@ -263,7 +263,7 @@ while test $# -gt 0; do
       else
           # in multilib mode, link against all sublibraries:
           wxlibs=`output_libs $libs_list`
-          echo $libs @WXCONFIG_RPATH@ $wxlibs @DMALLOC_LIBS@
+          echo $libs @LDFLAGS@ @WXCONFIG_RPATH@ $wxlibs @DMALLOC_LIBS@
       fi
 
       ;;
