@@ -1409,12 +1409,12 @@ const wxCharBuffer wxString::ToAscii() const
     wxCharBuffer buffer(length());
 
 
-    wxInt8 *dest = buffer.data();
+    char *dest = buffer.data();
 
     const wchar_t *pwc = c_str();
     for ( ;; )
     {
-        *dest++ = (wxInt8)(*pwc > SCHAR_MAX ? wxT('_') : *pwc);
+        *dest++ = (char)(*pwc > SCHAR_MAX ? wxT('_') : *pwc);
 
         // the output string can't have embedded NULs anyhow, so we can safely
         // stop at first of them even if we do have any

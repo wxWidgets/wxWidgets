@@ -473,12 +473,8 @@ size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t
             len++;
         }
 #ifndef WC_UTF16
-#ifdef __VMS
-       else if (cc > 0xffff)
-#else
-       else if (cc > ((const wchar_t)0xffff))
-#endif
-	 {
+        else if (((wxUint16)cc) > 0xffff)
+	    {
             // no surrogate pair generation (yet?)
             return (size_t)-1;
         }
