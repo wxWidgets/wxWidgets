@@ -470,14 +470,15 @@ struct _XRegion {
 class wxRIRefData: public wxObjectRefData
 {
 public:
+    wxRIRefData() { Init(); }
+    virtual ~wxRIRefData();
 
-    wxRIRefData() : m_rects(0), m_numRects(0){}
-   ~wxRIRefData();
+    void CreateRects( const wxRegion& r );
+
+    void Init() { m_rects = NULL; m_numRects = 0; }
 
     wxRect *m_rects;
     size_t  m_numRects;
-
-    void CreateRects( const wxRegion& r );
 };
 
 wxRIRefData::~wxRIRefData()
@@ -487,14 +488,13 @@ wxRIRefData::~wxRIRefData()
 
 void wxRIRefData::CreateRects( const wxRegion& region )
 {
-    if (m_rects)
-      delete m_rects;
+    delete m_rects;
 
-    m_rects = 0;
-    m_numRects = 0;
+    Init();
     
     GdkRegion *gdkregion = region.GetRegion();
-    if (!gdkregion) return;
+    if (!gdkregion)
+        return;
     
 #ifdef __WXGTK20__
     GdkRectangle *gdkrects = NULL;
