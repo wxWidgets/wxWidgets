@@ -101,6 +101,9 @@ private:
     // the subcontrols
     wxTextCtrl *m_text;
     wxSpinButton *m_btn;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
 };
 
 #else // !wxUSE_SPINBTN
