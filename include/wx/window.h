@@ -1120,8 +1120,6 @@ protected:
 #if wxUSE_ACCESSIBILITY
     wxAccessible*       m_accessible;
 #endif
-    // Best size for controls which fail to implement DoGetBestSize()
-    wxSize              m_bestSize;
 
     // Virtual size (scrolling)
     wxSize                m_virtualSize;

@@ -84,8 +84,6 @@ bool wxVListBox::Create(wxWindow *parent,
 
     m_colBgSel = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 
-    m_bestSize = GetSize();
-    
     return true;
 }
 
