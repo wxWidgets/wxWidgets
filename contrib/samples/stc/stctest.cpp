@@ -54,7 +54,7 @@
 //============================================================================
 
 #define APP_NAME _T("STC-Test")
-#define APP_DESCR _("See http://wxguide.sourceforge.net/indexedit.html")
+#define APP_DESCR _("See http://wxguide.sourceforge.net/")
 
 #define APP_MAINT _T("Otto Wyss")
 #define APP_VENDOR _T("wxWindows")
@@ -289,7 +289,7 @@ BEGIN_EVENT_TABLE (AppFrame, wxFrame)
 END_EVENT_TABLE ()
 
 AppFrame::AppFrame (const wxString &title)
-        : wxFrame ((wxFrame *)NULL, -1, title, wxDefaultPosition, wxSize(600,400),
+        : wxFrame ((wxFrame *)NULL, -1, title, wxDefaultPosition, wxDefaultSize,
                     wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE) {
 
     // intitialize important variables
@@ -311,6 +311,7 @@ AppFrame::AppFrame (const wxString &title)
     m_edit = new Edit (this, -1);
     m_edit->SetFocus();
 
+    FileOpen (_T("stctest.cpp"));
 }
 
 AppFrame::~AppFrame () {
@@ -377,6 +378,7 @@ void AppFrame::OnFileClose (wxCommandEvent &WXUNUSED(event)) {
                 return;
             }
         }
+        Destroy();
     }
 }
 

@@ -159,7 +159,6 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     SetMarginWidth (m_LineNrID,
                     g_CommonPrefs.lineNumberEnable? m_LineNrMargin: 0);
     CmdKeyClear (wxSTC_KEY_TAB, 0); // this is done by the menu accelerator key
-    UsePopUp (0);
     SetLayoutCache (wxSTC_CACHE_PAGE);
 
 }
@@ -361,7 +360,7 @@ void Edit::OnCharAdded (wxStyledTextEvent &event) {
 // private functions
 wxString Edit::DeterminePrefs (const wxString &filename) {
 
-    LanguageInfo const* curInfo = NULL;
+    LanguageInfo const* curInfo;
 
     // determine language from filepatterns
     int languageNr;
