@@ -525,6 +525,7 @@ utilsexc.cpp	O	B
 wave.cpp	O
 window.cpp	O
 gsocket.c	O
+gsockpm.c	O
 
 helpdata.cpp	H
 helpfrm.cpp	H
