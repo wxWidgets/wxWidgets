@@ -22,7 +22,7 @@ public:
     // other miscellaneous helpers
     // ---------------------------
 
-    virtual wxToolkitInfo *GetToolkitInfo();
+    virtual owxToolkitInfo& GetToolkitInfo();
 };
 
 #if wxUSE_GUI
@@ -33,7 +33,7 @@ public:
     // other miscellaneous helpers
     // ---------------------------
 
-    virtual wxToolkitInfo *GetToolkitInfo();
+    virtual wxToolkitInfo& GetToolkitInfo();
 };
 
 #endif // wxUSE_GUI

@@ -293,12 +293,12 @@ int wxGetOsVersion(int *verMaj, int *verMin)
     if ( ! traits )
         traits = &traitsConsole;
 
-    wxToolkitInfo *info = traits->GetToolkitInfo();
+    wxToolkitInfo& info = traits->GetToolkitInfo();
     if ( verMaj )
-        *verMaj = info->versionMajor;
+        *verMaj = info.versionMajor;
     if ( verMin )
-        *verMin = info->versionMinor;
-    return info->os;
+        *verMin = info.versionMinor;
+    return info.os;
 }
 
 // ----------------------------------------------------------------------------

@@ -24,7 +24,7 @@ public:
     virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
     virtual int WaitForChild(wxExecuteData& execData);
 
-    virtual wxToolkitInfo *GetToolkitInfo();
+    virtual wxToolkitInfo& GetToolkitInfo();
 };
 
 #if wxUSE_GUI
@@ -37,7 +37,7 @@ public:
     virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
     virtual int WaitForChild(wxExecuteData& execData);
 
-    virtual wxToolkitInfo *GetToolkitInfo();
+    virtual wxToolkitInfo& GetToolkitInfo();
 };
 
 #endif // wxUSE_GUI

@@ -229,20 +229,20 @@ bool wxGUIAppTraits::DoMessageFromThreadWait()
     return !wxTheApp || wxTheApp->DoMessage();
 }
 
-wxToolkitInfo *wxGUIAppTraits::GetToolkitInfo()
+wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo info;    
-    wxToolkitInfo *baseInfo = wxAppTraits::GetToolkitInfo();
-    info.versionMajor = baseInfo->versionMajor;
-    info.versionMinor = baseInfo->versionMinor;
-    info.os = baseInfo->os;
+    wxToolkitInfo& baseInfo = wxAppTraits::GetToolkitInfo();
+    info.versionMajor = baseInfo.versionMajor;
+    info.versionMinor = baseInfo.versionMinor;
+    info.os = baseInfo.os;
     info.shortName = _T("msw");
     info.name = _T("wxMSW");
 #ifdef __WXUNIVERSAL__
     info.shortName << _T("univ");
     info.name << _T("/wxUniversal");
 #endif
-    return &info;
+    return info;
 }
 
 // ===========================================================================

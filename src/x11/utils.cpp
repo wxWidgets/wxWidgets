@@ -98,7 +98,7 @@ void wxBell()
     XBell ((Display*) wxGetDisplay(), 0);
 }
 
-wxToolkitInfo *wxGUIAppTraits::GetToolkitInfo()
+wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo info;
     info.shortName = _T("x11univ");
@@ -106,7 +106,7 @@ wxToolkitInfo *wxGUIAppTraits::GetToolkitInfo()
     info.versionMajor = 0;
     info.versionMinor = 0;
     info.os = wxX11;
-    return &info;
+    return info;
 }
 
 // ----------------------------------------------------------------------------

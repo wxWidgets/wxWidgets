@@ -88,7 +88,7 @@ wxConsoleAppTraits::WaitForChild(wxExecuteData& execData)
 // this is in mac/utils.cpp under Mac
 #ifndef __WXMAC__
 
-wxToolkitInfo *wxConsoleAppTraits::GetToolkitInfo()
+wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo info;
     int major, minor;
@@ -106,7 +106,7 @@ wxToolkitInfo *wxConsoleAppTraits::GetToolkitInfo()
     info.name = _T("wxBase");
     info.os = wxUNIX;
 
-    return &info;
+    return info;
 }
 
 #endif // __WXMAC__

@@ -218,19 +218,19 @@ static int DoGetOSVersion(int *majorVsn, int *minorVsn)
 #endif
 }
 
-wxToolkitInfo *wxConsoleAppTraits::GetToolkitInfo()
+wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo info;
     info.os = DoGetOSVersion(&info.majorVersion, &info.minorVersion);
     info.name = _T("wxBase");
-    return &info;
+    return info;
 }
 
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
 
-wxToolkitInfo *wxGUIAppTraits::GetToolkitInfo()
+wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo info;
     info.os = DoGetOSVersion(&info.majorVersion, &info.minorVersion);
@@ -240,7 +240,7 @@ wxToolkitInfo *wxGUIAppTraits::GetToolkitInfo()
     info.shortName << _T("univ");
     info.name << _T("/wxUniversal");
 #endif
-    return &info;
+    return info;
 }
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)

@@ -133,7 +133,7 @@ void wxBell()
     XBell (wxGlobalDisplay(), 0);
 }
 
-wxToolkitInfo *wxGUIAppTraits::GetToolkitInfo()
+wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 {
     wxToolkitInfo info;
     info.shortName = _T("motif");
@@ -150,7 +150,7 @@ wxToolkitInfo *wxGUIAppTraits::GetToolkitInfo()
     info.versionMajor = ProtocolVersion (display);
     info.versionMinor = ProtocolRevision (display);
     info.os = wxMOTIF_X;
-    return &info;
+    return info;
 }
 
 // ----------------------------------------------------------------------------

@@ -23,7 +23,6 @@ class WXDLLIMPEXP_BASE wxLog;
 class WXDLLIMPEXP_BASE wxMessageOutput;
 class WXDLLEXPORT wxRendererNative;
 class WXDLLIMPEXP_BASE wxString;
-struct WXDLLIMPEXP_BASE wxToolkitInfo;
 
 // ----------------------------------------------------------------------------
 // toolkit information
@@ -114,7 +113,7 @@ public:
     //    and in the latter -- about the OS, so we need to virtualize it
     //  - wxDynamicLibrary::CanonicalizePluginName() must embed toolkit
     //    signature in DLL name
-    virtual wxToolkitInfo *GetToolkitInfo() = 0;
+    virtual wxToolkitInfo& GetToolkitInfo() = 0;
 };
 
 // ----------------------------------------------------------------------------
