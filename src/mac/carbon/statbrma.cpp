@@ -21,14 +21,9 @@
 #include "wx/dc.h"
 #include "wx/dcclient.h"
 
-#if     !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxStatusBarMac, wxStatusBarGeneric);
-
 BEGIN_EVENT_TABLE(wxStatusBarMac, wxStatusBarGeneric)
 	EVT_PAINT(wxStatusBarMac::OnPaint)
 END_EVENT_TABLE()
-#endif  //USE_SHARED_LIBRARY
-
 
 // ============================================================================
 // implementation

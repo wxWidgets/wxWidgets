@@ -31,8 +31,12 @@
 
 #include "wx/statusbr.h"
 
-// if !wxUSE_NATIVE_STATUSBAR, this is already done in common/statbar.cpp
-#if defined(wxUSE_NATIVE_STATUSBAR) && wxUSE_NATIVE_STATUSBAR
+// we only have to do it here when we use wxStatusBarGeneric in addition to the
+// standard wxStatusBar class, if wxStatusBarGeneric is the same as
+// wxStatusBar, then the corresponding IMPLEMENT_DYNAMIC_CLASS is already in
+// common/statbar.cpp
+#if defined(__WXMAC__) || \
+    (defined(wxUSE_NATIVE_STATUSBAR) && wxUSE_NATIVE_STATUSBAR)
     #include "wx/generic/statusbr.h"
 
     IMPLEMENT_DYNAMIC_CLASS(wxStatusBarGeneric, wxWindow)
