@@ -109,11 +109,11 @@ void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc)
 {
   gs_gui_functions = guifunc;
 }
-         
+
 int GSocket_Init(void)
 {
   WSADATA wsaData;
-  
+
   if (gs_gui_functions)
   {
       if ( !gs_gui_functions->GUI_Init() )
@@ -130,7 +130,7 @@ void GSocket_Cleanup(void)
   {
       gs_gui_functions->GUI_Cleanup();
   }
-  
+
   /* Cleanup WinSocket */
   WSACleanup();
 }
@@ -388,11 +388,6 @@ GSocketError GSocket_SetServer(GSocket *sck)
 
   ioctlsocket(sck->m_fd, FIONBIO, (u_long FAR *) &arg);
   _GSocket_Enable_Events(sck);
-
-  /* allow a socket to re-bind if the socket is in the TIME_WAIT
-     state after being previously closed.
-   */
-  setsockopt(sck->m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(u_long));
 
   /* Bind to the local address,
    * retrieve the actual address bound,
@@ -777,7 +772,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
     fd_set readfds;
     fd_set writefds;
     fd_set exceptfds;
-    
+
     assert(socket != NULL);
 
     FD_ZERO(&readfds);
@@ -829,7 +824,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
         {
           socket->m_detected = GSOCK_LOST_FLAG;
           socket->m_establishing = FALSE;
-      
+
           /* LOST event: Abort any further processing */
           return (GSOCK_LOST_FLAG & flags);
         }
@@ -1000,14 +995,23 @@ GSocketError GSocket_GetSockOpt(GSocket *socket, int level, int optname,
     return GSOCK_OPTERR;
 }
 
-GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname, 
+GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname,
                                 const void *optval, int optlen)
 {
     if (setsockopt(socket->m_fd, level, optname, optval, optlen) == 0)
     {
-        return GSOCK_NOERROR;       
+        return GSOCK_NOERROR;
     }
     return GSOCK_OPTERR;
+}
+
+GSocketError GSocket_SetReuseAddr(GSocket *socket)
+{
+  /* allow a socket to re-bind if the socket is in the TIME_WAIT
+     state after being previously closed.
+   */
+  u_long arg = 1;
+  setsockopt(socket->m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(u_long));
 }
 
 void GSocket_Streamed(GSocket *socket)
