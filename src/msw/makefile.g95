@@ -383,7 +383,6 @@ ADVANCEDOBJS_BASE = \
 
 ADVANCEDOBJS     = \
                 $(ADVANCEDOBJS_BASE) \
-		$(COMMDIR)/odbc.$(OBJSUFF) \
 		$(MSWDIR)/ole/access.$(OBJSUFF) \
 		$(MSWDIR)/ole/automtn.$(OBJSUFF) \
 		$(MSWDIR)/ole/dataobj.$(OBJSUFF) \

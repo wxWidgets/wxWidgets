@@ -224,7 +224,6 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\mstream.obj \
 		$(COMMDIR)\$D\nbkbase.obj \
 		$(COMMDIR)\$D\object.obj \
-		$(COMMDIR)\$D\odbc.obj \
 		$(COMMDIR)\$D\paper.obj \
 		$(COMMDIR)\$D\popupcmn.obj \
 		$(COMMDIR)\$D\prntbase.obj \

@@ -307,7 +307,6 @@ ALL_HEADERS = \
 		ctrlsub.h \
 		cursor.h \
 		dataobj.h \
-		date.h \
 		datetime.h \
 		datetime.inl \
 		datstrm.h \
@@ -422,7 +421,6 @@ ALL_HEADERS = \
 		mstream.h \
 		notebook.h \
 		object.h \
-		odbc.h \
 		ownerdrw.h \
 		palette.h \
 		panel.h \
@@ -482,7 +480,6 @@ ALL_HEADERS = \
 		tglbtn.h \
 		thread.h \
 		thrimpl.cpp \
-		time.h \
 		timer.h \
 		tipdlg.h \
 		tipwin.h \

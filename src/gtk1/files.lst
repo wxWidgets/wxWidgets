@@ -424,7 +424,6 @@ ALL_HEADERS = \
 		mstream.h \
 		notebook.h \
 		object.h \
-		odbc.h \
 		ownerdrw.h \
 		palette.h \
 		panel.h \

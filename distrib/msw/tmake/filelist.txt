@@ -213,7 +213,6 @@ msgout.cpp	Common	Base
 mstream.cpp	Common	Base
 nbkbase.cpp	Common
 object.cpp	Common	Base
-odbc.cpp	Common	NotGTK,NotX,NotOS2
 paper.cpp	Common
 popupcmn.cpp	Common
 prntbase.cpp	Common
@@ -959,7 +958,6 @@ mslu.cpp	MSW
 mstream.h	WXH	Base
 notebook.h	WXH
 object.h	WXH	Base
-odbc.h	WXH
 ownerdrw.h	WXH
 palette.h	WXH
 panel.h	WXH

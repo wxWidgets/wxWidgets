@@ -471,7 +471,6 @@ COMMONOBJS = \
 		$(MSWDIR)\mstream.obj \
 		$(MSWDIR)\nbkbase.obj \
 		$(MSWDIR)\object.obj \
-		$(MSWDIR)\odbc.obj \
 		$(MSWDIR)\paper.obj \
 		$(MSWDIR)\popupcmn.obj \
 		$(MSWDIR)\prntbase.obj \
@@ -1207,8 +1206,6 @@ $(MSWDIR)\mstream.obj: $(COMMDIR)\mstream.$(SRCSUFF)
 $(MSWDIR)\nbkbase.obj: $(COMMDIR)\nbkbase.$(SRCSUFF)
 
 $(MSWDIR)\object.obj: $(COMMDIR)\object.$(SRCSUFF)
-
-$(MSWDIR)\odbc.obj: $(COMMDIR)\odbc.$(SRCSUFF)
 
 $(MSWDIR)\paper.obj: $(COMMDIR)\paper.$(SRCSUFF)
 

@@ -119,7 +119,6 @@ ALL_SOURCES = \
 		common/mstream.cpp \
 		common/nbkbase.cpp \
 		common/object.cpp \
-		common/odbc.cpp \
 		common/paper.cpp \
 		common/popupcmn.cpp \
 		common/prntbase.cpp \
@@ -446,7 +445,6 @@ ALL_HEADERS = \
 		mstream.h \
 		notebook.h \
 		object.h \
-		odbc.h \
 		ownerdrw.h \
 		palette.h \
 		panel.h \
@@ -794,7 +792,6 @@ COMMONOBJS = \
 		mstream.o \
 		nbkbase.o \
 		object.o \
-		odbc.o \
 		paper.o \
 		popupcmn.o \
 		prntbase.o \

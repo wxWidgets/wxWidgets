@@ -167,8 +167,7 @@ COMMONOBJS1 = \
 		$(COMMDIR)\msgout.obj \
 		$(COMMDIR)\mstream.obj \
 		$(COMMDIR)\nbkbase.obj \
-		$(COMMDIR)\object.obj \
-		$(COMMDIR)\odbc.obj
+		$(COMMDIR)\object.obj
 
 COMMONOBJS2 = \
 		$(COMMDIR)\paper.obj \
@@ -1173,11 +1172,6 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/object.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
-<<
-
-$(COMMDIR)/odbc.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

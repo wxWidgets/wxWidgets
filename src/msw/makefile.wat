@@ -169,7 +169,6 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\mstream.obj &
 	$(OUTPUTDIR)\nbkbase.obj &
 	$(OUTPUTDIR)\object.obj &
-	$(OUTPUTDIR)\odbc.obj &
 	$(OUTPUTDIR)\paper.obj &
 	$(OUTPUTDIR)\popupcmn.obj &
 	$(OUTPUTDIR)\prntbase.obj &
@@ -974,9 +973,6 @@ $(OUTPUTDIR)\nbkbase.obj:     $(COMMDIR)\nbkbase.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\object.obj:     $(COMMDIR)\object.cpp
-  *$(CXX) $(CXXFLAGS) $<
-
-$(OUTPUTDIR)\odbc.obj:     $(COMMDIR)\odbc.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\paper.obj:     $(COMMDIR)\paper.cpp

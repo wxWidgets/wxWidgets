@@ -104,7 +104,6 @@ COMMONOBJS = cmndata.obj \
 
 # Can't compile these yet under Salford C++
 #  mimetype.obj \
-#  odbc.obj \
 #  db.obj \
 #  dbtable.obj \
 
@@ -578,9 +577,6 @@ module.obj:     $(COMMDIR)\module.cpp
 
 object.obj:     $(COMMDIR)\object.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\object.cpp /BINARY object.obj
-
-odbc.obj:     $(COMMDIR)\odbc.cpp
-  $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\odbc.cpp /BINARY odbc.obj
 
 prntbase.obj:     $(COMMDIR)\prntbase.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\prntbase.cpp /BINARY prntbase.obj
