@@ -336,11 +336,13 @@ wxString wxSimpleHelpProvider::GetHelp(const wxWindowBase *window)
 
 void wxSimpleHelpProvider::AddHelp(wxWindowBase *window, const wxString& text)
 {
+    m_hashWindows.Delete((long)window);
     m_hashWindows.Put((long)window, text);
 }
 
 void wxSimpleHelpProvider::AddHelp(wxWindowID id, const wxString& text)
 {
+    m_hashIds.Delete((long)id);
     m_hashIds.Put(id, text);
 }
 
