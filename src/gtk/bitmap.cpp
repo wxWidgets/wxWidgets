@@ -1555,6 +1555,8 @@ void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)
     }
 }
 
+#endif // __WXGTK20__
+
 //-----------------------------------------------------------------------------
 // wxBitmapHandler
 //-----------------------------------------------------------------------------
@@ -1587,4 +1589,3 @@ bool wxBitmapHandler::SaveFile(const wxBitmap *bitmap, const wxString& name, int
 }
 
 
-#endif // __WXGTK20__
