@@ -90,7 +90,7 @@ public:
     wxDate &operator--(int) { return *this -= 1; }
 
 #if wxUSE_STD_IOSTREAM
-    friend ostream WXDLLEXPORT & operator <<(ostream &os, const wxDate &dt)
+    friend wxSTD ostream WXDLLEXPORT & operator <<(wxSTD ostream &os, const wxDate &dt)
         { return os << dt.FormatDate().mb_str(); }
 #endif
 

@@ -251,14 +251,14 @@ class WXDLLEXPORT wxLogStream : public wxLog
 {
 public:
     // redirect log output to an ostream
-    wxLogStream(ostream *ostr = (ostream *) NULL);
+    wxLogStream(wxSTD ostream *ostr = (wxSTD ostream *) NULL);
 
 protected:
     // implement sink function
     virtual void DoLogString(const wxChar *szString, time_t t);
 
     // using ptr here to avoid including <iostream.h> from this file
-    ostream *m_ostr;
+    wxSTD ostream *m_ostr;
 };
 #endif
 

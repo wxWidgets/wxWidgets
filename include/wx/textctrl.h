@@ -31,6 +31,13 @@
     #define NO_TEXT_WINDOW_STREAM
 #endif
 
+// the streambuf which is used in the declaration of wxTextCtrlBase below is not compatible
+// with the standard-conforming implementation found in newer egcs versions
+// (that is, the libstdc++ v3 that is shipped with it)
+#if defined(__GNUC__)&&( (__GNUC__>2) ||( (__GNUC__==2)&&(__GNUC_MINOR__>97) ) )
+    #define NO_TEXT_WINDOW_STREAM
+#endif
+
 #ifndef NO_TEXT_WINDOW_STREAM
     #if wxUSE_STD_IOSTREAM
         #include "wx/ioswrap.h"    // for iostream classes if we need them

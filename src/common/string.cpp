@@ -153,7 +153,7 @@ extern const wxChar WXDLLEXPORT *wxEmptyString = &g_strEmpty.dummy;
 //
 // ATTN: you can _not_ use both of these in the same program!
 
-istream& operator>>(istream& is, wxString& WXUNUSED(str))
+wxSTD istream& operator>>(wxSTD istream& is, wxString& WXUNUSED(str))
 {
 #if 0
   int w = is.width(0);
@@ -184,7 +184,7 @@ istream& operator>>(istream& is, wxString& WXUNUSED(str))
   return is;
 }
 
-ostream& operator<<(ostream& os, const wxString& str)
+wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
 {
   os << str.c_str();
   return os;

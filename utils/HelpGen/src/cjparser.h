@@ -15,7 +15,7 @@
 
 #include "srcparser.h"
 
-#include <iostream.h>
+#include <ioswrap.h>
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -70,9 +70,9 @@ protected:
     void AddEnumNode( char*& cur );
     void AddTypeDefNode( char*& cur );
 
-    void DumpOperationInfo( spOperation& info, const string& tab, ostream& os );
-    void DumpClassHeader( spClass& info, ostream& os );
-    void DumpClassBody( spClass& info, ostream& os );
+    void DumpOperationInfo( spOperation& info, const string& tab, wxSTD ostream& os );
+    void DumpClassHeader( spClass& info, wxSTD ostream& os );
+    void DumpClassBody( spClass& info, wxSTD ostream& os );
 
 public:
 

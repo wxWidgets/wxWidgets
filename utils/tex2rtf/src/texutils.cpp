@@ -378,7 +378,7 @@ void AddTexRef(char *name, char *file, char *sectionName,
 
 void WriteTexReferences(char *filename)
 {
-  ofstream ostr(filename);
+  wxSTD ofstream ostr(filename);
   if (ostr.bad()) return;
   char buf[200];
   
@@ -405,7 +405,7 @@ void ReadTexReferences(char *filename)
   if (!wxFileExists(filename))
       return;
 
-  ifstream istr(filename, ios::in);
+  wxSTD ifstream istr(filename, ios::in);
 
   if (istr.bad()) return;
 
@@ -450,7 +450,7 @@ void ReadTexReferences(char *filename)
  *
  */
 
-void BibEatWhiteSpace(istream& str)
+void BibEatWhiteSpace(wxSTD istream& str)
 {
   char ch = str.peek();
   
@@ -478,7 +478,7 @@ void BibEatWhiteSpace(istream& str)
 }
 
 // Read word up to { or , or space
-void BibReadWord(istream& istr, char *buffer)
+void BibReadWord(wxSTD istream& istr, char *buffer)
 {
   int i = 0;
   buffer[i] = 0;
@@ -495,7 +495,7 @@ void BibReadWord(istream& istr, char *buffer)
 }
 
 // Read string (double-quoted or not) to end quote or EOL
-void BibReadToEOL(istream& istr, char *buffer)
+void BibReadToEOL(wxSTD istream& istr, char *buffer)
 {
   int i = 0;
   buffer[i] = 0;
@@ -524,7 +524,7 @@ void BibReadToEOL(istream& istr, char *buffer)
 }
 
 // Read }-terminated value, taking nested braces into account.
-void BibReadValue(istream& istr, char *buffer, bool ignoreBraces = TRUE,
+void BibReadValue(wxSTD istream& istr, char *buffer, bool ignoreBraces = TRUE,
                   bool quotesMayTerminate = TRUE)
 {
   int braceCount = 1;
@@ -580,7 +580,7 @@ bool ReadBib(char *filename)
       return FALSE;
 
   char buf[300];
-  ifstream istr(filename, ios::in);
+  wxSTD ifstream istr(filename, ios::in);
   if (istr.bad()) return FALSE;
 
   BibLine = 1;
@@ -1302,7 +1302,7 @@ bool ReadCustomMacros(char *filename)
   if (!wxFileExists(filename))
       return FALSE;
 
-  ifstream istr(filename, ios::in);
+  wxSTD ifstream istr(filename, ios::in);
 
   if (istr.bad()) return FALSE;
 

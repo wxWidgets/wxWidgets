@@ -116,7 +116,7 @@ void wxObject::CopyObject(wxObject& WXUNUSED(object_dest)) const
 }
 
 #if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
-void wxObject::Dump(ostream& str)
+void wxObject::Dump(wxSTD ostream& str)
 {
     if (GetClassInfo() && GetClassInfo()->GetClassName())
         str << GetClassInfo()->GetClassName();

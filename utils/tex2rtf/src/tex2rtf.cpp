@@ -1312,7 +1312,7 @@ char *Tex2RTFConnection::OnRequest(const wxString& topic, const wxString& item, 
 
 #ifndef NO_GUI
 #ifndef __WXGTK__
-//void wxObject::Dump(ostream& str)
+//void wxObject::Dump(wxSTD ostream& str)
 //{
 //  if (GetClassInfo() && GetClassInfo()->GetClassName())
 //    str << GetClassInfo()->GetClassName();

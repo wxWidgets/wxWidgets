@@ -461,12 +461,12 @@ int wxMemStruct::ValidateNode ()
 
 wxMemStruct *wxDebugContext::m_head = NULL;
 wxMemStruct *wxDebugContext::m_tail = NULL;
-// ostream *wxDebugContext::m_debugStream = NULL;
-// streambuf *wxDebugContext::m_streamBuf = NULL;
+// wxSTD ostream *wxDebugContext::m_debugStream = NULL;
+// wxSTD streambuf *wxDebugContext::m_streamBuf = NULL;
 
 // Must initialise these in wxEntry, and then delete them just before wxEntry exits
-streambuf *wxDebugContext::m_streamBuf = NULL;
-ostream *wxDebugContext::m_debugStream = NULL;
+wxSTD streambuf *wxDebugContext::m_streamBuf = NULL;
+wxSTD ostream *wxDebugContext::m_debugStream = NULL;
 
 bool wxDebugContext::m_checkPrevious = FALSE;
 int wxDebugContext::debugLevel = 1;
@@ -481,7 +481,7 @@ int wxDebugContext::m_balignmask = (int)((char *)&markerCalc[1] - (char*)&marker
 wxDebugContext::wxDebugContext(void)
 {
 //  m_streamBuf = new wxDebugStreamBuf;
-//  m_debugStream = new ostream(m_streamBuf);
+//  m_debugStream = new wxSTD ostream(m_streamBuf);
 }
 
 wxDebugContext::~wxDebugContext(void)
@@ -494,7 +494,7 @@ wxDebugContext::~wxDebugContext(void)
  * between SetFile and SetStream.
  */
 
-void wxDebugContext::SetStream(ostream *str, streambuf *buf)
+void wxDebugContext::SetStream(wxSTD ostream *str, streambuf *buf)
 {
   if (m_debugStream)
   {
@@ -519,7 +519,7 @@ void wxDebugContext::SetStream(ostream *str, streambuf *buf)
 
 bool wxDebugContext::SetFile(const wxString& file)
 {
-  ofstream *str = new ofstream(file.mb_str());
+  wxSTD ofstream *str = new wxSTD ofstream(file.mb_str());
 
   if (str->bad())
   {
@@ -539,7 +539,7 @@ bool wxDebugContext::SetStandardError(void)
 #if 0
 #if !defined(_WINDLL)
   wxDebugStreamBuf *buf = new wxDebugStreamBuf;
-  ostream *stream = new ostream(m_streamBuf);
+  wxSTD ostream *stream = new wxSTD ostream(m_streamBuf);
   SetStream(stream, buf);
   return TRUE;
 #else

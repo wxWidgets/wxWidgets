@@ -23,8 +23,7 @@
 #include <wx/ogl/ogl.h>
 
 #if wxUSE_STD_IOSTREAM
-class ostream;
-class istream;
+ #include <iosfwd>
 #endif
 
 /*
@@ -98,8 +97,8 @@ class DiagramDocument: public wxDocument
   ~DiagramDocument(void);
 
 #if wxUSE_STD_IOSTREAM
-    virtual ostream& SaveObject(ostream& stream);
-    virtual istream& LoadObject(istream& stream);
+    virtual wxSTD ostream& SaveObject(wxSTD ostream& stream);
+    virtual wxSTD istream& LoadObject(wxSTD istream& stream);
 #else
     virtual wxOutputStream& SaveObject(wxOutputStream& stream);
     virtual wxInputStream& LoadObject(wxInputStream& stream);

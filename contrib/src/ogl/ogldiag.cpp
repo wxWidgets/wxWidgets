@@ -33,7 +33,7 @@
 #include <iostream>
 #include <fstream>
 #ifdef _MSC_VER
-using namespace std;
+//using namespace std;
 #endif
 #endif
 

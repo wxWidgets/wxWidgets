@@ -296,7 +296,7 @@ bool wxDocument::OnSaveDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    ofstream store(wxString(file.fn_str()).mb_str());
+    wxSTD ofstream store(wxString(file.fn_str()).mb_str());
     if (store.fail() || store.bad())
 #else
     wxFileOutputStream store(wxString(file.fn_str()));
@@ -332,7 +332,7 @@ bool wxDocument::OnOpenDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    ifstream store(wxString(file.fn_str()).mb_str());
+    wxSTD ifstream store(wxString(file.fn_str()).mb_str());
     if (store.fail() || store.bad())
 #else
     wxFileInputStream store(wxString(file.fn_str()));
@@ -365,7 +365,7 @@ bool wxDocument::OnOpenDocument(const wxString& file)
 }
 
 #if wxUSE_STD_IOSTREAM
-istream& wxDocument::LoadObject(istream& stream)
+wxSTD istream& wxDocument::LoadObject(wxSTD istream& stream)
 #else
 wxInputStream& wxDocument::LoadObject(wxInputStream& stream)
 #endif
@@ -374,7 +374,7 @@ wxInputStream& wxDocument::LoadObject(wxInputStream& stream)
 }
 
 #if wxUSE_STD_IOSTREAM
-ostream& wxDocument::SaveObject(ostream& stream)
+wxSTD ostream& wxDocument::SaveObject(wxSTD ostream& stream)
 #else
 wxOutputStream& wxDocument::SaveObject(wxOutputStream& stream)
 #endif
@@ -2314,7 +2314,7 @@ void wxFileHistory::AddFilesToMenu(wxMenu* menu)
 // ----------------------------------------------------------------------------
 
 #if wxUSE_STD_IOSTREAM
-bool wxTransferFileToStream(const wxString& filename, ostream& stream)
+bool wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream)
 {
     FILE *fd1;
     int ch;
@@ -2329,7 +2329,7 @@ bool wxTransferFileToStream(const wxString& filename, ostream& stream)
     return TRUE;
 }
 
-bool wxTransferStreamToFile(istream& stream, const wxString& filename)
+bool wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename)
 {
     FILE *fd1;
     int ch;

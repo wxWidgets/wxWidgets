@@ -34,7 +34,7 @@
 #include "view.h"
 
 #if wxUSE_STD_IOSTREAM
-#include <iostream.h>
+#include <ioswrap.h>
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(DiagramDocument, wxDocument)
@@ -54,7 +54,7 @@ bool DiagramDocument::OnCloseDocument(void)
 }
 
 #if wxUSE_STD_IOSTREAM
-ostream& DiagramDocument::SaveObject(ostream& stream)
+wxSTD ostream& DiagramDocument::SaveObject(wxSTD ostream& stream)
 {
   wxDocument::SaveObject(stream);
   
@@ -69,7 +69,7 @@ ostream& DiagramDocument::SaveObject(ostream& stream)
   return stream;
 }
 
-istream& DiagramDocument::LoadObject(istream& stream)
+wxSTD istream& DiagramDocument::LoadObject(wxSTD istream& stream)
 {
   wxDocument::LoadObject(stream);
 

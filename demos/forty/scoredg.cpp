@@ -35,7 +35,7 @@
 #endif
 #else
 #include <strstream>
-using namespace std;
+//using namespace std;
 #endif
 #include "scorefil.h"
 #include "scoredg.h"

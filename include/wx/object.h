@@ -254,7 +254,7 @@ class WXDLLEXPORT wxObject
 #endif // Debug & memory tracing
 
 #if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
-  virtual void Dump(ostream& str);
+  virtual void Dump(wxSTD ostream& str);
 #endif
 
 #if wxUSE_SERIAL

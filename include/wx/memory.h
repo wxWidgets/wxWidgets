@@ -34,7 +34,7 @@
 #else
 #   include <iostream>
 #   if defined(__VISUALC__) || defined(__MWERKS__)
-        using namespace std;
+//        using namespace std;
 #   endif
 #endif
 
@@ -227,8 +227,8 @@ protected:
     // Traverse the list.
     static void TraverseList (PmSFV, wxMemStruct *from = NULL);
 
-    static streambuf *m_streamBuf;
-    static ostream *m_debugStream;
+    static wxSTD streambuf *m_streamBuf;
+    static wxSTD ostream *m_debugStream;
 
     static int debugLevel;
     static bool debugOn;
@@ -244,9 +244,9 @@ public:
     ~wxDebugContext(void);
 
     static bool HasStream(void) { return (m_debugStream != NULL); };
-    static ostream& GetStream(void) { return *m_debugStream; }
-    static streambuf *GetStreamBuf(void) { return m_streamBuf; }
-    static void SetStream(ostream *stream, streambuf *buf = NULL);
+    static wxSTD ostream& GetStream(void) { return *m_debugStream; }
+    static wxSTD streambuf *GetStreamBuf(void) { return m_streamBuf; }
+    static void SetStream(wxSTD ostream *stream, streambuf *buf = NULL);
     static bool SetFile(const wxString& file);
     static bool SetStandardError(void);
 

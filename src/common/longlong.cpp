@@ -60,11 +60,11 @@ void *wxLongLongNative::asArray() const
 #if wxUSE_STD_IOSTREAM
 
 // input/output
-ostream& operator<< (ostream& o, const wxLongLongNative& ll)
+wxSTD ostream& operator<< (wxSTD ostream& o, const wxLongLongNative& ll)
 {
     char result[65];
 
-    memset(result, 'A', 64);
+    wxSTD memset(result, 'A', 64);
 
     result[64] = '\0';
 
@@ -629,7 +629,7 @@ void *wxLongLongWx::asArray(void) const
 #if wxUSE_STD_IOSTREAM
 
 // input/output
-ostream& operator<< (ostream& o, const wxLongLongWx& ll)
+wxSTD ostream& operator<< (wxSTD ostream& o, const wxLongLongWx& ll)
 {
     char result[65];
 

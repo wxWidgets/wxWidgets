@@ -89,8 +89,8 @@ public:
     virtual bool Revert();
 
 #if wxUSE_STD_IOSTREAM
-    virtual ostream& SaveObject(ostream& stream);
-    virtual istream& LoadObject(istream& stream);
+    virtual wxSTD ostream& SaveObject(wxSTD ostream& stream);
+    virtual wxSTD istream& LoadObject(wxSTD istream& stream);
 #else
     virtual wxOutputStream& SaveObject(wxOutputStream& stream);
     virtual wxInputStream& LoadObject(wxInputStream& stream);
@@ -634,8 +634,8 @@ protected:
 #if wxUSE_STD_IOSTREAM
 // For compatibility with existing file formats:
 // converts from/to a stream to/from a temporary file.
-bool WXDLLEXPORT wxTransferFileToStream(const wxString& filename, ostream& stream);
-bool WXDLLEXPORT wxTransferStreamToFile(istream& stream, const wxString& filename);
+bool WXDLLEXPORT wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream);
+bool WXDLLEXPORT wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename);
 #else
 // For compatibility with existing file formats:
 // converts from/to a stream to/from a temporary file.

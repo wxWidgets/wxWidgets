@@ -41,8 +41,8 @@ class DoodleSegment: public wxObject
   void Draw(wxDC *dc);
   
 #if wxUSE_STD_IOSTREAM
-  ostream& SaveObject(ostream& text_stream);
-  istream& LoadObject(istream& text_stream);
+  wxSTD ostream& SaveObject(wxSTD ostream& text_stream);
+  wxSTD istream& LoadObject(wxSTD istream& text_stream);
 #else
   wxOutputStream& SaveObject(wxOutputStream& stream);
   wxInputStream& LoadObject(wxInputStream& stream);
@@ -60,8 +60,8 @@ class DrawingDocument: public wxDocument
   ~DrawingDocument(void);
 
 #if wxUSE_STD_IOSTREAM
-  ostream& SaveObject(ostream& text_stream);
-  istream& LoadObject(istream& text_stream);
+  wxSTD ostream& SaveObject(wxSTD ostream& text_stream);
+  wxSTD istream& LoadObject(wxSTD istream& text_stream);
 #else
   wxOutputStream& SaveObject(wxOutputStream& stream);
   wxInputStream& LoadObject(wxInputStream& stream);
@@ -93,8 +93,8 @@ class TextEditDocument: public wxDocument
  private:
  public:
 /*
-  ostream& SaveObject(ostream& stream);
-  istream& LoadObject(istream& stream);
+  wxSTD ostream& SaveObject(wxSTD ostream& stream);
+  wxSTD istream& LoadObject(wxSTD istream& stream);
 */
   virtual bool OnSaveDocument(const wxString& filename);
   virtual bool OnOpenDocument(const wxString& filename);

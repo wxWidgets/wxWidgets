@@ -16,9 +16,11 @@
 #   include <iostream.h>
 #else
 #   include <iostream>
+#   if 0 // this is not needed any longer now that we have wxSTD
 #   if defined(__VISUALC__) || defined(__MWERKS__)
         using namespace std;
 #   endif
+#endif // 0
 #endif
 
 #endif

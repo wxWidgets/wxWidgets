@@ -308,7 +308,7 @@ public:
 
 #if wxUSE_STD_IOSTREAM
         // input/output
-    friend ostream& operator<<(ostream&, const wxLongLongNative&);
+    friend wxSTD ostream& operator<<(wxSTD ostream&, const wxLongLongNative&);
 #endif
 
 private:
@@ -490,7 +490,7 @@ public:
 
     // input/output
 #if wxUSE_STD_IOSTREAM
-    friend ostream& operator<<(ostream&, const wxLongLongWx&);
+    friend wxSTD ostream& operator<<(wxSTD ostream&, const wxLongLongWx&);
 #endif // wxUSE_STD_IOSTREAM
 
     void *asArray() const;

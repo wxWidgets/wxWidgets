@@ -55,11 +55,11 @@ public:
     virtual void Copy(wxVariantData& data) = 0;
     virtual bool Eq(wxVariantData& data) const = 0;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(ostream& str) const = 0;
+    virtual bool Write(wxSTD ostream& str) const = 0;
 #endif
     virtual bool Write(wxString& str) const = 0;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(istream& str) = 0;
+    virtual bool Read(wxSTD istream& str) = 0;
 #endif
     virtual bool Read(wxString& str) = 0;
     // What type is it? Return a string name.
