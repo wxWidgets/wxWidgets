@@ -44,12 +44,14 @@ Finally, it might be helpful to do a search in the entire sample directory if
 you can't find the sample you showing the control you are interested in by
 name. Most of wxWindows classes, occur in at least one of the samples.
 
+
 \subsection{Minimal sample}\label{sampleminimal}
 
 The minimal sample is what most people will know under the term Hello World,
 i.e. a minimal program that doesn't demonstrate anything apart from what is
 needed to write a program that will display a "hello" dialog. This is usually
 a good starting point for learning how to use wxWindows.
+
 
 \subsection{Art provider sample}\label{sampleartprovider}
 
@@ -58,11 +60,13 @@ wxWindows dialogs by replacing default bitmaps/icons with your own versions.
 It also shows how you can use wxArtProvider to
 get stock bitmaps for use in your application.
 
+
 \subsection{Calendar sample}\label{samplecalendar}
 
 This font shows the \helpref{calendar control}{wxcalendarctrl} in action. It
 shows how to configure the control (see the different options in the calendar
 menu) and also how to process the notifications from it.
+
 
 \subsection{Checklist sample}\label{samplechecklist}
 
@@ -74,6 +78,7 @@ the parent class \helpref{wxListBox}{wxlistbox} so the sample tests that class
 as well). The layout of the dialog is created using a \helpref{wxBoxSizer}{wxboxsizer}
 demonstrating a simple dynamic layout.
 
+
 \subsection{Config sample}\label{sampleconfig}
 
 This sample demonstrates the \helpref{wxConfig}{wxconfigbase} classes in a platform
@@ -82,6 +87,7 @@ Unix and uses the Registry under Windows.
 
 See \helpref{wxConfig overview}{wxconfigoverview} for the descriptions of all
 features of this class.
+
 
 \subsection{Controls sample}\label{samplecontrols}
 
@@ -115,16 +121,19 @@ The various controls tested are listed here:
 \twocolitem{\helpref{wxSlider}{wxslider}}{A slider that can be dragged by the user}
 \end{twocollist}
 
+
 \subsection{Database sample}\label{sampledb}
 
 The database sample is a small test program showing how to use the ODBC
 classes written by Remstar Intl.  Obviously, this sample requires a 
 database with ODBC support to be correctly installed on your system.
 
+
 \subsection{Dialogs sample}\label{sampledialogs}
 
 This sample shows how to use the common dialogs available from wxWindows. These
 dialogs are described in details in the \helpref{Common dialogs overview}{commondialogsoverview}.
+
 
 \subsection{Dialup sample}\label{sampledialup}
 
@@ -138,6 +147,7 @@ connected to the Internet, in which case you will not see this) or not.
 Using the menu entries, you may also dial or hang up the line if you have a
 modem attached and (this only makes sense for Windows) list the available
 connections.
+
 
 \subsection{DnD sample}\label{samplednd}
 
@@ -177,6 +187,7 @@ programs as well - try Write/Wordpad, for example).
 Take a look at DnDShapeDataObject class to see how you may use 
 \helpref{wxDataObject}{wxdataobject} to achieve this.
 
+
 \subsection{Dynamic sample}\label{sampledynamic}
 
 This sample is a very small sample that demonstrates the use of the
@@ -189,6 +200,7 @@ forms or similar datagrams can be created by the uses.
 
 See also the \helpref{event sample}{sampleevent}
 
+
 \subsection{Event sample}\label{sampleevent}
 
 The event sample demonstrates various features of the wxWindows events. It
@@ -198,6 +210,19 @@ during the run time and also using
 \helpref{PopEventHandler()}{wxwindowpopeventhandler}.
 
 It replaces the old dynamic sample.
+
+
+\subsection{Except(ions) sample}\label{sampleexcept}
+
+This very simple sample shows how to use C++ exceptions in wxWindows programs,
+i.e. where to catch the exception which may be thrown by the program code. It
+doesn't do anything very exciting by itself, you need to study its code to
+understand what goes on.
+
+You need to build the library with \texttt{wxUSE\_EXCEPTIONS} being set to $1$
+and compile your code with the C++ exceptions support to be able to build this
+sample.
+
 
 \subsection{Exec sample}\label{sampleexec}
 
@@ -211,6 +236,7 @@ synchronous and asynchronous cases and how to kill the processes with
 \helpref{wxProcess::Kill}{wxprocesskill} and test for their existence with 
 \helpref{wxProcess::Exists}{wxprocessexists}.
 
+
 \subsection{Font sample}\label{samplefont}
 
 The font sample demonstrates \helpref{wxFont}{wxfont}, 
@@ -219,9 +245,11 @@ The font sample demonstrates \helpref{wxFont}{wxfont},
 available (to wxWindows) on the computer and shows all characters of the
 chosen font as well.
 
+
 \subsection{Grid sample}\label{samplegrid}
 
 TODO.
+
 
 \subsection{HTML samples}\label{samplehtml}
 
@@ -254,6 +282,7 @@ documents without much work. In fact, only few function calls are sufficient.
 while {\it Helpview} is simple tool that only pops up help window and
 displays help books given at command line.
 
+
 \subsection{Image sample}\label{sampleimage}
 
 The image sample demonstrates the use of the \helpref{wxImage}{wximage} class
@@ -272,6 +301,7 @@ specifying the foreground and background colours with
 bitmap is then converted to a wxImage and the foreground colour (black) is
 replaced with red using \helpref{wxImage::Replace}{wximagereplace}.
 
+
 \subsection{Internat(ionalization) sample}\label{sampleinternat}
 
 The not very clearly named internat sample demonstrates the wxWindows
@@ -282,6 +312,7 @@ changing the other aspects of the programs behaviour.
 
 More information about this sample can be found in the {\tt readme.txt} file in
 its directory. Please see also \helpref{i18n overview}{internationalization}.
+
 
 \subsection{Layout sample}\label{samplelayout}
 
@@ -300,6 +331,7 @@ showing how to use sizers in connection with a \helpref{wxNotebook}{wxnotebook}
 class. See also \helpref{wxNotebookSizer}{wxnotebooksizer} and 
 \helpref{wxSizer}{wxsizer}.
 
+
 \subsection{Listctrl sample}\label{samplelistctrl}
 
 This sample shows \helpref{wxListCtrl}{wxlistctrl} control. Different modes
@@ -308,6 +340,7 @@ the menu.
 
 The sample also provides some timings for adding/deleting/sorting a lot of
 (several thousands) items into the control.
+
 
 
 \subsection{Notebook sample}\label{samplenotebook}
@@ -319,11 +352,13 @@ controls you need to manually change \texttt{TEST\_LISTBOOK} definition in the
 file \texttt{notebook.h} and rebuild the sample.
 
 
+
 \subsection{Render sample}\label{samplerender}
 
 This sample shows how to replace the default wxWindows 
 \helpref{renderer}{wxrenderernative} and also how to write a shared library
 (DLL) implementing a renderer and load and unload it during the run-time.
+
 
 
 \subsection{Rotate sample}\label{samplerotate}
@@ -333,6 +368,7 @@ the \helpref{wxImage::Rotate}{wximagerotate} method. The rotation can
 be done without interpolation (left mouse button) which will be faster,
 or with interpolation (right mouse button) which is slower but gives
 better results.
+
 
 \subsection{Scroll subwindow sample}\label{samplescrollsub}
 
@@ -345,6 +381,7 @@ Additionally, this samples demonstrates how to optimize drawing operations in wx
 in particular using the \helpref{wxWindow::IsExposed}{wxwindowisexposed} method with 
 the aim to prevent unnecessary drawing in the window and thus reducing or removing 
 flicker on screen.
+
 
 \subsection{Sockets sample}\label{samplesockets}
 
@@ -398,6 +435,7 @@ The sockets sample is work in progress. Some things to do:
 \item New samples which actually do something useful (suggestions accepted).
 \end{itemize}
 
+
 \subsection{Statbar sample}\label{samplestatbar}
 
 This sample shows how to create and use wxStatusBar. Although most of the
@@ -407,6 +445,7 @@ do it once.
 Here you can see how to recreate the statusbar (with possibly different number
 of fields) and how to use it to show icons/bitmaps and/or put arbitrary
 controls into it.
+
 
 \subsection{Text sample}\label{sampletext}
 
@@ -429,6 +468,7 @@ best known from pasting text to the XTerm program.
 Last not least: some of the text controls have tooltips and the sample also shows
 how tooltips can be centrally disabled and their latency controlled.
 
+
 \subsection{Thread sample}\label{samplethread}
 
 This sample demonstrates the use of threads in connection with GUI programs.
@@ -448,6 +488,7 @@ and \helpref{wxMutexGuiLeave}{wxmutexguileave} functions, both of which are
 used and tested in the sample as well.
 
 See also \helpref{Multithreading overview}{wxthreadoverview} and \helpref{wxThread}{wxthread}.
+
 
 \subsection{Toolbar sample}\label{sampletoolbar}
 
@@ -477,6 +518,7 @@ see the radio toolbar buttons in action: the first three buttons form a radio
 group, that is checking any of them automatically unchecks the previously
 checked one.
 
+
 \subsection{Treectrl sample}\label{sampletreectrl}
 
 This sample demonstrates using \helpref{wxTreeCtrl}{wxtreectrl} class. Here
@@ -487,6 +529,7 @@ the bottom part of the frame).
 Adding, inserting and deleting items and branches from the tree as well as
 sorting (in default alphabetical order as well as in custom one) is
 demonstrated here as well - try the corresponding menu entries.
+
 
 \subsection{Wizard sample}\label{samplewizard}
 
