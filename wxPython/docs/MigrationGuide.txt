@@ -314,6 +314,25 @@ For example::
 
 
 
+Sizers
+------
+
+The hack allowing the old "option" keyword parameter has been
+removed.  If you use keyworkd args with wxSizer Add, Insert, or
+Prepend then you will need to use the "proportion" name instead of
+"option".
+
+When adding a spacer to a sizer you now need to use a wxSize or a
+2-integer sequence instead of separate width and height parameters.
+
+The wxGridBagSizer class (very similar to the RowColSizer in the
+library) has been added to C++ and wrapped for wxPython.
+
+You should not use AddWindow, AddSizer, AddSpacer (and similar for
+Insert, Prepend, and etc.) methods any longer.  Just use Add and the
+wrappers will figure out what to do.
+
+
 
 Other Stuff
 -----------

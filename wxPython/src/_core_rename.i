@@ -634,6 +634,11 @@
 %rename(FLEX_GROWMODE_SPECIFIED)            wxFLEX_GROWMODE_SPECIFIED;
 %rename(FLEX_GROWMODE_ALL)                  wxFLEX_GROWMODE_ALL;
 %rename(FlexGridSizer)                      wxFlexGridSizer;
+%rename(GBPosition)                         wxGBPosition;
+%rename(GBSpan)                             wxGBSpan;
+%rename(DefaultSpan)                        wxDefaultSpan;
+%rename(GBSizerItem)                        wxGBSizerItem;
+%rename(GridBagSizer)                       wxGridBagSizer;
 %rename(Left)                               wxLeft;
 %rename(Top)                                wxTop;
 %rename(Right)                              wxRight;

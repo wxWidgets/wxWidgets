@@ -24,11 +24,11 @@
 
 class wxSizerItem : public wxObject {
 public:
-    // No need to ever create one directly in Python...
-
-    //wxSizerItem( int width, int height, int proportion, int flag, int border, wxObject* userData);
-    //wxSizerItem( wxWindow *window, int proportion, int flag, int border, wxObject* userData );
-    //wxSizerItem( wxSizer *sizer, int proportion, int flag, int border, wxObject* userData );
+    wxSizerItem();
+    
+    %name(SizerItemSpacer) wxSizerItem( int width, int height, int proportion, int flag, int border, wxObject* userData);
+    %name(SizerItemWindow) wxSizerItem( wxWindow *window, int proportion, int flag, int border, wxObject* userData );
+    %name(SizerItemSizer) wxSizerItem( wxSizer *sizer, int proportion, int flag, int border, wxObject* userData );
 
     void DeleteWindows();
     void DetachSizer();
@@ -51,18 +51,19 @@ public:
 
     void SetProportion( int proportion );
     int GetProportion();
-    %pythoncode { SetOption = SetProportion }
-    %pythoncode { GetOption = GetProportion }
     
     void SetFlag( int flag );
     int GetFlag();
+    
     void SetBorder( int border );
     int GetBorder();
 
     wxWindow *GetWindow();
     void SetWindow( wxWindow *window );
+    
     wxSizer *GetSizer();
     void SetSizer( wxSizer *sizer );
+    
     const wxSize& GetSpacer();
     void SetSpacer( const wxSize &size );
 
@@ -109,7 +110,7 @@ struct wxPySizerItemInfo {
     int       pos;
 };
  
-static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize, bool checkPos ) {
+static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize, bool checkIdx ) {
 
     wxPySizerItemInfo info;
     wxSize* sizePtr = &info.size;
@@ -130,20 +131,20 @@ static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize,
                 info.gotSize = true;
 
             // or a single int
-            if (checkPos && PyInt_Check(item)) {
+            if (checkIdx && PyInt_Check(item)) {
                 info.pos = PyInt_AsLong(item);
                 info.gotPos = true;
             }
         }
     }
 
-    if ( !(info.window || info.sizer || (checkSize && info.gotSize) || (checkPos && info.gotPos)) ) {
+    if ( !(info.window || info.sizer || (checkSize && info.gotSize) || (checkIdx && info.gotPos)) ) {
         // no expected type, figure out what kind of error message to generate
-        if ( !checkSize && !checkPos )
+        if ( !checkSize && !checkIdx )
             PyErr_SetString(PyExc_TypeError, "wxWindow or wxSizer expected for item");
-        else if ( checkSize && !checkPos )
+        else if ( checkSize && !checkIdx )
             PyErr_SetString(PyExc_TypeError, "wxWindow, wxSizer, wxSize, or (w,h) expected for item");
-        else if ( !checkSize && checkPos)
+        else if ( !checkSize && checkIdx)
             PyErr_SetString(PyExc_TypeError, "wxWindow, wxSizer or int (position) expected for item");
         else
             // can this one happen?
@@ -167,16 +168,11 @@ public:
             self->SetClientObject(new wxPyOORClientData(_self));
         }
 
-        
 
-        void _Add(PyObject* item, int proportion=0, int flag=0, int border=0,
-                  PyObject* userData=NULL, int option=-1) {
-            // The option parameter is only for backwards compatibility
-            // with keyword args, all new code should use "proportion"
-            // instead.  This can be removed eventually.
-            if (option != -1) proportion = option;
+        void Add(PyObject* item, int proportion=0, int flag=0, int border=0,
+                  PyObject* userData=NULL) {
+            
             wxPyUserData* data = NULL;
-
             wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
@@ -194,21 +190,17 @@ public:
         }
 
 
-        void _Insert(int before, PyObject* item, int proportion=0, int flag=0,
-                     int border=0, PyObject* userData=NULL, int option=-1) {
-            // The option parameter is only for backwards compatibility
-            // with keyword args, all new code should use "proportion"
-            // instead.  This can be removed eventually.
-            if (option != -1) proportion = option;
-            wxPyUserData* data = NULL;
+        void Insert(int before, PyObject* item, int proportion=0, int flag=0,
+                     int border=0, PyObject* userData=NULL) {
 
+            wxPyUserData* data = NULL;
             wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads();
             
-            // Now call the real Add method if a valid item type was found
+            // Now call the real Insert method if a valid item type was found
             if ( info.window )
                 self->Insert(before, info.window, proportion, flag, border, data);
             else if ( info.sizer )
@@ -220,21 +212,17 @@ public:
 
 
 
-        void _Prepend(PyObject* item, int proportion=0, int flag=0, int border=0,
-                           PyObject* userData=NULL, int option=-1) {
-            // The option parameter is only for backwards compatibility
-            // with keyword args, all new code should use "proportion"
-            // instead.  This can be removed eventually.
-            if (option != -1) proportion = option;
-            wxPyUserData* data = NULL;
+        void Prepend(PyObject* item, int proportion=0, int flag=0, int border=0,
+                     PyObject* userData=NULL) {
 
+            wxPyUserData* data = NULL;
             wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads();
             
-            // Now call the real Add method if a valid item type was found
+            // Now call the real Prepend method if a valid item type was found
             if ( info.window )
                 self->Prepend(info.window, proportion, flag, border, data);
             else if ( info.sizer )
@@ -246,7 +234,9 @@ public:
 
         
         bool Remove(PyObject* item) {
+            wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
+            wxPyEndBlockThreads();
             if ( info.window )
                 return self->Remove(info.window);
             else if ( info.sizer )
@@ -259,7 +249,9 @@ public:
 
         
         void _SetItemMinSize(PyObject* item, wxSize size) {
+            wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
+            wxPyEndBlockThreads();
             if ( info.window )
                 self->SetItemMinSize(info.window, size);
             else if ( info.sizer )
@@ -269,31 +261,17 @@ public:
         }
     }
 
+    %name(AddItem) void Add( wxSizerItem *item );
+    %name(InsertItem) void Insert( size_t index, wxSizerItem *item );
+    %name(PrependItem) void Prepend( wxSizerItem *item );
+
 
     %pythoncode {
-    def Add(self, item, *args, **kw):
-        if type(item) == type(1):
-            item = (item, args[0])  %# backwards compatibility, args are width, height
-            args = args[1:]
-        self._Add(item, *args, **kw)
-
     def AddMany(self, widgets):
         for childinfo in widgets:
             if type(childinfo) != type(()):
                 childinfo = (childinfo, )
             self.Add(*childinfo)
-
-    def Prepend(self, item, *args, **kw):
-        if type(item) == type(1):
-            item = (item, args[0])  %# backwards compatibility, args are width, height
-            args = args[1:]
-        self._Prepend(item, *args, **kw)
-
-    def Insert(self, before, item, *args, **kw):
-        if type(item) == type(1):
-            item = (item, args[0])  %# backwards compatibility, args are width, height
-            args = args[1:]
-        self._Insert(before, item, *args, **kw)
 
     # for backwards compatibility only, do not use in new code
     AddWindow = AddSizer = AddSpacer = Add
@@ -326,8 +304,8 @@ public:
         return self.GetMinSize().asTuple()
     }
 
-    // void RecalcSizes() = 0;
-    // wxSize CalcMin() = 0;
+    virtual void RecalcSizes();
+    virtual wxSize CalcMin();
 
     void Layout();
 

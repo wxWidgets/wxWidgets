@@ -76,6 +76,7 @@ wx = _sys.modules[__name__]
 
 // Layout
 %include _sizers.i
+%include _gbsizer.i
 %include _constraints.i
 
 
