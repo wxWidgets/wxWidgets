@@ -35,7 +35,6 @@ public:
 
     // copy ctors and assignment operators
   wxColour( const wxColour& col );
-/*  wxColour( const wxColour* col ); */
   wxColour& operator = ( const wxColour& col );
 
     // dtor
@@ -65,12 +64,14 @@ public:
   unsigned char Blue() const { return m_blue; }
 
   // comparison
-  bool operator == (const wxColour& colour) const
+  bool operator==(const wxColour& colour) const
   {
-    return (m_red == colour.m_red &&
-            m_green == colour.m_green &&
-            m_blue == colour.m_blue);
+    return m_isInit == colour.m_isInit &&
+           m_red == colour.m_red &&
+           m_green == colour.m_green &&
+           m_blue == colour.m_blue;
   }
+
   bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
   WXCOLORREF GetPixel() const { return m_pixel; };
