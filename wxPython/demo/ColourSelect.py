@@ -105,7 +105,7 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-
+A coloured button that when clicked allows the user to select a colour from the wxColourDialog.
 """
 
 
