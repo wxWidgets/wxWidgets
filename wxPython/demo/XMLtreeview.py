@@ -61,8 +61,7 @@ class XMLTree(wx.TreeCtrl):
 
     # Define a handler for start element events
     def StartElement(self, name, attrs ):
-        if py2:
-            name = name.encode()
+        name = name.encode()
 
         id = self.AppendItem(self.nodeStack[-1], name)
         self.nodeStack.append(id)
@@ -72,8 +71,7 @@ class XMLTree(wx.TreeCtrl):
 
     def CharacterData(self, data ):
         if data.strip():
-            if py2:
-                data = data.encode()
+            data = data.encode()
 
             self.AppendItem(self.nodeStack[-1], data)
 
