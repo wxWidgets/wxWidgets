@@ -690,7 +690,17 @@ int wxEntry( int argc, char *argv[] )
     wxCHECK_MSG( wxTheApp, -1, _T("wxWindows error: no application object") );
 
     wxTheApp->argc = argc;
+#if wxUSE_UNICODE
+    wxTheApp->argv = new wxChar*[argc+1];
+    int mb_argc = 0;
+    while (mb_argc < argc) {
+      wxTheApp->argv[mb_argc] = wxStrdup(wxConvLibc.cMB2WX(argv[mb_argc]));
+      mb_argc++;
+    }
+    wxTheApp->argv[mb_argc] = (wxChar *)NULL;
+#else
     wxTheApp->argv = argv;
+#endif
 
     wxString name(wxFileNameFromPath(argv[0]));
     wxStripExtension( name );
@@ -781,7 +791,7 @@ wxApp::GetStdIcon(int which) const
             return wxIcon(warning_xpm);
 
         default:
-            wxFAIL_MSG("requested non existent standard icon");
+            wxFAIL_MSG(_T("requested non existent standard icon"));
             // still fall through
 
         case wxICON_HAND:
