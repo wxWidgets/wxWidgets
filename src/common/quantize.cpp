@@ -549,7 +549,7 @@ median_cut (j_decompress_ptr cinfo, boxptr boxlist, int numboxes,
     /* Select box to split.
      * Current algorithm: by population for first half, then by volume.
      */
-    if (numboxes*2 <= desired_colors) {
+    if ((numboxes*2) <= desired_colors) {
       b1 = find_biggest_color_pop(boxlist, numboxes);
     } else {
       b1 = find_biggest_volume(boxlist, numboxes);
