@@ -1896,9 +1896,9 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         fi
 
         if test "$wxUSE_NANOX" = 1; then
-            TOOLKIT_INCLUDE="-I\$(top_srcdir)/include/wx/x11/nanox $TOOLKIT_INCLUDE"
+            TOOLKIT_INCLUDE="-I\$(top_srcdir)/include/wx/x11/nanox -I\$(MICROWIN)/src/include $TOOLKIT_INCLUDE"
             TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__ -D__NANOX__"
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $MICROWIN/src/lib/libnano-X.a $MICROWIN/src/lib/libmwengine.a $MICROWIN/src/lib/libmwfonts.a $MICROWIN/src/lib/libmwdrivers.a $MICROWIN/src/lib/libmwobjects.a"
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY \$MICROWIN/src/lib/libnano-X.a \$MICROWIN/src/lib/libmwengine.a \$MICROWIN/src/lib/libmwfonts.a \$MICROWIN/src/lib/libmwdrivers.a \$MICROWIN/src/lib/libmwobjects.a"
         else
             TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__"
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lX11"
