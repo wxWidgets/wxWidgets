@@ -243,10 +243,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFont->Append(Font_IncSize, wxT("&Increase font size by 2 points\tCtrl-I"));
     menuFont->Append(Font_DecSize, wxT("&Decrease font size by 2 points\tCtrl-D"));
     menuFont->AppendSeparator();
-    menuFont->Append(Font_Bold, wxT("&Bold\tCtrl-B"), wxT("Toggle bold state"), true);
-    menuFont->Append(Font_Italic, wxT("&Oblique\tCtrl-O"), wxT("Toggle italic state"), true);
-    menuFont->Append(Font_Underlined, wxT("&Underlined\tCtrl-U"),
-                     wxT("Toggle underlined state"), true);
+    menuFont->AppendCheckItem(Font_Bold, wxT("&Bold\tCtrl-B"), wxT("Toggle bold state"));
+    menuFont->AppendCheckItem(Font_Italic, wxT("&Oblique\tCtrl-O"), wxT("Toggle italic state"));
+    menuFont->AppendCheckItem(Font_Underlined, wxT("&Underlined\tCtrl-U"),
+                     wxT("Toggle underlined state"));
 
     menuFont->AppendSeparator();
     menuFont->Append(Font_CheckNativeToFromString,

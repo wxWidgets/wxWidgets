@@ -513,7 +513,7 @@ wxMenu *MyFrame::CreateDummyMenu(wxString *title)
     wxMenu *menu = new wxMenu;
     menu->Append(Menu_Dummy_First, _T("&First item\tCtrl-F1"));
     menu->AppendSeparator();
-    menu->Append(Menu_Dummy_Second, _T("&Second item\tCtrl-F2"), _T(""), true);
+    menu->AppendCheckItem(Menu_Dummy_Second, _T("&Second item\tCtrl-F2"));
 
     if ( title )
     {
@@ -929,7 +929,7 @@ void MyFrame::ShowContextMenu(const wxPoint& pos)
     menu.Append(Menu_Help_About, _T("&About"));
     menu.Append(Menu_Popup_Submenu, _T("&Submenu"), CreateDummyMenu(NULL));
     menu.Append(Menu_Popup_ToBeDeleted, _T("To be &deleted"));
-    menu.Append(Menu_Popup_ToBeChecked, _T("To be &checked"), _T(""), true);
+    menu.AppendCheckItem(Menu_Popup_ToBeChecked, _T("To be &checked"));
     menu.Append(Menu_Popup_ToBeGreyed, _T("To be &greyed"),
                 _T("This menu item should be initially greyed out"));
     menu.AppendSeparator();

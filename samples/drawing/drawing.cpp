@@ -1079,8 +1079,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuUserScale->Append( UserScale_Restore, _T("&Restore to normal\tCtrl-0") );
 
     wxMenu *menuAxis = new wxMenu;
-    menuAxis->Append( AxisMirror_Horiz, _T("Mirror horizontally\tCtrl-M"), _T(""), true );
-    menuAxis->Append( AxisMirror_Vertic, _T("Mirror vertically\tCtrl-N"), _T(""), true );
+    menuAxis->AppendCheckItem( AxisMirror_Horiz, _T("Mirror horizontally\tCtrl-M") );
+    menuAxis->AppendCheckItem( AxisMirror_Vertic, _T("Mirror vertically\tCtrl-N") );
 
     wxMenu *menuLogical = new wxMenu;
     menuLogical->Append( LogicalOrigin_MoveDown, _T("Move &down\tCtrl-D") );
@@ -1095,8 +1095,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuColour->Append( Colour_TextForeground, _T("Text &foreground...") );
     menuColour->Append( Colour_TextBackground, _T("Text &background...") );
     menuColour->Append( Colour_Background, _T("Background &colour...") );
-    menuColour->Append( Colour_BackgroundMode, _T("&Opaque/transparent\tCtrl-B"), _T(""), true );
-    menuColour->Append( Colour_TextureBackgound, _T("Draw textured back&ground\tCtrl-T"), _T(""), true);
+    menuColour->AppendCheckItem( Colour_BackgroundMode, _T("&Opaque/transparent\tCtrl-B") );
+    menuColour->AppendCheckItem( Colour_TextureBackgound, _T("Draw textured back&ground\tCtrl-T") );
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
@@ -1110,7 +1110,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
-    // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
     SetStatusText(_T("Welcome to wxWidgets!"));
 

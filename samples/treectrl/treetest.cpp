@@ -186,20 +186,20 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     file_menu->AppendSeparator();
     file_menu->Append(TreeTest_Quit, wxT("E&xit\tAlt-X"));
 
-    style_menu->Append(TreeTest_TogButtons, wxT("Toggle &normal buttons"), wxT(""), true);
-    style_menu->Append(TreeTest_TogTwist, wxT("Toggle &twister buttons"), wxT(""), true);
-    style_menu->Append(TreeTest_ToggleButtons, wxT("Toggle image &buttons"), wxT(""), true);
+    style_menu->AppendCheckItem(TreeTest_TogButtons, wxT("Toggle &normal buttons"));
+    style_menu->AppendCheckItem(TreeTest_TogTwist, wxT("Toggle &twister buttons"));
+    style_menu->AppendCheckItem(TreeTest_ToggleButtons, wxT("Toggle image &buttons"));
     style_menu->AppendSeparator();
-    style_menu->Append(TreeTest_TogLines, wxT("Toggle &connecting lines"), wxT(""), true);
-    style_menu->Append(TreeTest_TogRootLines, wxT("Toggle &lines at root"), wxT(""), true);
-    style_menu->Append(TreeTest_TogHideRoot, wxT("Toggle &hidden root"), wxT(""), true);
-    style_menu->Append(TreeTest_TogBorder, wxT("Toggle &item border"), wxT(""), true);
-    style_menu->Append(TreeTest_TogFullHighlight, wxT("Toggle &full row highlight"), wxT(""), true);
-    style_menu->Append(TreeTest_TogEdit, wxT("Toggle &edit mode"), wxT(""), true);
+    style_menu->AppendCheckItem(TreeTest_TogLines, wxT("Toggle &connecting lines"));
+    style_menu->AppendCheckItem(TreeTest_TogRootLines, wxT("Toggle &lines at root"));
+    style_menu->AppendCheckItem(TreeTest_TogHideRoot, wxT("Toggle &hidden root"));
+    style_menu->AppendCheckItem(TreeTest_TogBorder, wxT("Toggle &item border"));
+    style_menu->AppendCheckItem(TreeTest_TogFullHighlight, wxT("Toggle &full row highlight"));
+    style_menu->AppendCheckItem(TreeTest_TogEdit, wxT("Toggle &edit mode"));
 #ifndef NO_MULTIPLE_SELECTION
-    style_menu->Append(TreeTest_ToggleSel, wxT("Toggle &selection mode"), wxT(""), true);
+    style_menu->AppendCheckItem(TreeTest_ToggleSel, wxT("Toggle &selection mode"));
 #endif // NO_MULTIPLE_SELECTION
-    style_menu->Append(TreeTest_ToggleImages, wxT("Toggle show ima&ges"), wxT(""), true);
+    style_menu->AppendCheckItem(TreeTest_ToggleImages, wxT("Toggle show ima&ges"));
     style_menu->Append(TreeTest_SetImageSize, wxT("Set image si&ze..."));
     style_menu->AppendSeparator();
     style_menu->Append(TreeTest_SetFgColour, wxT("Set &foreground colour..."));

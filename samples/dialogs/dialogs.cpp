@@ -312,15 +312,15 @@ bool MyApp::OnInit()
 
     #if wxUSE_FINDREPLDLG
         wxMenu *find_menu = new wxMenu;
-        find_menu->Append(DIALOGS_FIND, _T("&Find dialog\tCtrl-F"), wxEmptyString, true);
-        find_menu->Append(DIALOGS_REPLACE, _T("Find and &replace dialog\tShift-Ctrl-F"), wxEmptyString, true);
+        find_menu->AppendCheckItem(DIALOGS_FIND, _T("&Find dialog\tCtrl-F"));
+        find_menu->AppendCheckItem(DIALOGS_REPLACE, _T("Find and &replace dialog\tShift-Ctrl-F"));
         file_menu->Append(wxID_ANY,_T("Searching"),find_menu);
     #endif // wxUSE_FINDREPLDLG
 
     #if USE_MODAL_PRESENTATION
         wxMenu *modal_menu = new wxMenu;
         modal_menu->Append(DIALOGS_MODAL, _T("Mo&dal dialog\tCtrl-W"));
-        modal_menu->Append(DIALOGS_MODELESS, _T("Modeless &dialog\tCtrl-Z"), wxEmptyString, true);
+        modal_menu->AppendCheckItem(DIALOGS_MODELESS, _T("Modeless &dialog\tCtrl-Z"));
         file_menu->Append(wxID_ANY,_T("Modal/Modeless"),modal_menu);
     #endif // USE_MODAL_PRESENTATION
 

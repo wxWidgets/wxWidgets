@@ -394,8 +394,8 @@ bool MyApp::OnInit()
     menuText->AppendSeparator();
     menuText->Append(TEXT_MOVE_ENDTEXT, _T("Move cursor to the end of &text"));
     menuText->Append(TEXT_MOVE_ENDENTRY, _T("Move cursor to the end of &entry"));
-    menuText->Append(TEXT_SET_EDITABLE, _T("Toggle &editable state"), _T(""), true);
-    menuText->Append(TEXT_SET_ENABLED, _T("Toggle e&nabled state"), _T(""), true);
+    menuText->AppendCheckItem(TEXT_SET_EDITABLE, _T("Toggle &editable state"));
+    menuText->AppendCheckItem(TEXT_SET_ENABLED, _T("Toggle e&nabled state"));
     menuText->Check(TEXT_SET_EDITABLE, true);
     menuText->Check(TEXT_SET_ENABLED, true);
     menuText->AppendSeparator();
@@ -406,11 +406,11 @@ bool MyApp::OnInit()
     menu_bar->Append(menuText, _T("Te&xt"));
 
     wxMenu *menuLog = new wxMenu;
-    menuLog->Append(TEXT_LOG_KEY, _T("Log &key events"), _T(""), true);
-    menuLog->Append(TEXT_LOG_CHAR, _T("Log &char events"), _T(""), true);
-    menuLog->Append(TEXT_LOG_MOUSE, _T("Log &mouse events"), _T(""), true);
-    menuLog->Append(TEXT_LOG_TEXT, _T("Log &text events"), _T(""), true);
-    menuLog->Append(TEXT_LOG_FOCUS, _T("Log &focus events"), _T(""), true);
+    menuLog->AppendCheckItem(TEXT_LOG_KEY, _T("Log &key events"));
+    menuLog->AppendCheckItem(TEXT_LOG_CHAR, _T("Log &char events"));
+    menuLog->AppendCheckItem(TEXT_LOG_MOUSE, _T("Log &mouse events"));
+    menuLog->AppendCheckItem(TEXT_LOG_TEXT, _T("Log &text events"));
+    menuLog->AppendCheckItem(TEXT_LOG_FOCUS, _T("Log &focus events"));
     menuLog->AppendSeparator();
     menuLog->Append(TEXT_CLEAR, _T("&Clear the log\tCtrl-C"),
                     _T("Clear the log window contents"));

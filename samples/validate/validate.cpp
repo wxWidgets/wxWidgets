@@ -107,7 +107,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
     wxMenu *file_menu = new wxMenu;
 
     file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test"), wxT("Demonstrate validators"));
-    file_menu->Append(VALIDATE_TOGGLE_BELL, wxT("&Bell on error"), wxT("Toggle bell on error"), true);
+    file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, wxT("&Bell on error"), wxT("Toggle bell on error"));
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, wxT("E&xit"));
 
