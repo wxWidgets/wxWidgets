@@ -840,6 +840,8 @@ void wxPlotWindow::Delete( wxPlotCurve* curve )
     
     m_area->DeleteCurve( curve );
     m_area->Refresh( FALSE );
+
+    if (curve == m_current) m_current = (wxPlotCurve *) NULL;
 }
 
 wxPlotCurve *wxPlotWindow::GetCurrent()
