@@ -31,7 +31,6 @@ wx_include_HEADERS = \
  cursor.h \
  dataobj.h \
  date.h \
- datetime.h \
  datstrm.h \
  db.h \
  dbtable.h \
