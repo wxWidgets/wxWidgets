@@ -1185,7 +1185,7 @@ void wxWin32Renderer::DrawTextBorder(wxDC& dc,
                                      wxRect *rectIn)
 {
     // text controls are not special under windows
-    return DrawBorder(dc, border, rect, flags, rectIn);
+    DrawBorder(dc, border, rect, flags, rectIn);
 }
 
 void wxWin32Renderer::DrawButtonBorder(wxDC& dc,

@@ -1884,6 +1884,63 @@ wxRect wxTextCtrl::GetRealTextArea() const
 size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
                                         wxCoord *widthReal) const
 {
+    // this function is slow, it shouldn't be called unless really needed
+    wxASSERT_MSG( WrapLines(), _T("shouldn't be called") );
+
+    wxString s(text);
+    wxTextCoord col;
+    wxCoord wReal = -1;
+    switch ( HitTestLine(s, m_rectText.width, &col) )
+    {
+            /*
+        case wxTE_HT_BEFORE:
+        case wxTE_HT_BELOW:
+            */
+        default:
+            wxFAIL_MSG(_T("unexpected HitTestLine() return value"));
+            // fall through
+
+        case wxTE_HT_ON_TEXT:
+            if ( col > 0 )
+            {
+                // the last entirely seen character is the last one unless the
+                // width of the string is exactly the max width
+                wReal = GetTextWidth(s.Truncate(col));
+                if ( wReal > m_rectText.width )
+                {
+                    // this character is not entirely visible, take the
+                    // previous one
+                    col--;
+                }
+                //else: we can just see it
+            }
+            break;
+
+        case wxTE_HT_BEYOND:
+            break;
+    }
+
+    // we return the number of characters, not the index of the last one
+    if ( (size_t)col < s.length() )
+    {
+        // but don't return more than this (empty) string has
+        col++;
+    }
+
+    if ( widthReal )
+    {
+        if ( wReal == -1 )
+        {
+            // calc it if not done yet
+            wReal = GetTextWidth(s.Truncate(col));
+        }
+
+        *widthReal = wReal;
+    }
+
+    // VZ: old, horribly inefficient code which can still be used for checking
+    //     the result - to be removed later
+#if 0
     wxTextCtrl *self = wxConstCast(this, wxTextCtrl);
     wxClientDC dc(self);
     dc.SetFont(GetFont());
@@ -1921,12 +1978,19 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
         wOld = w;
     }
 
+    wxASSERT( col == str.length() );
+
     if ( widthReal )
     {
+        wxASSERT( *widthReal == wOld );
+
         *widthReal = wOld;
     }
 
-    return str.length();
+    //return str.length();
+#endif
+
+    return col;
 }
 
 wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
@@ -1946,8 +2010,14 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
     if ( x >= width )
     {
         // clicking beyond the end of line is equivalent to clicking at
-        // the end of it
-        col = line.length() - 1;
+        // the end of it, so return the last line column
+        col = line.length();
+        if ( col )
+        {
+            // unless the line is empty and so doesn't have any column at all -
+            // in this case return 0, what else can we do?
+            col--;
+        }
 
         res = wxTE_HT_BEYOND;
     }

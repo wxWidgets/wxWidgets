@@ -446,7 +446,7 @@ TextTestFrame::TextTestFrame(const wxString& title)
 #else
                                wxDefaultSize,
 #endif
-                               wxTE_MULTILINE);
+                               wxTE_MULTILINE | wxHSCROLL);
     sizerDown->Add(m_textLog, 1, wxGROW | wxALL, 5);
     wxBoxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
     btn = new wxButton(m_panel, TextTest_ClearLog, _T("Clear &log"));
