@@ -50,6 +50,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "COMMON\\DATSTRM.CPP"
       source type(cpp) "COMMON\\DCBASE.CPP"
       source type(cpp) "COMMON\\DLGCMN.CPP"
+      source type(cpp) "COMMON\\DIRCMN.CPP"
       source type(cpp) "COMMON\\DNDCMN.CPP"
       source type(cpp) "COMMON\\DOBJCMN.CPP"
       source type(cpp) "COMMON\\DOCMDI.CPP"
@@ -245,6 +246,10 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       option report(level, "E")
       {
          source "OS2\\GSOCKET.C"
+      }
+      option report(level, "E")
+      {
+         source "OS2\\GSOCKPM.C"
       }
       source type(cpp) "OS2\\HELPWIN.CPP"
       source type(cpp) "OS2\\ICON.CPP"

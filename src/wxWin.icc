@@ -34,6 +34,7 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
       source "COMMON\\db.cpp"
       source "COMMON\\dbtable.cpp"
       source "COMMON\\dcbase.cpp"
+      source "COMMON\\dircmn.cpp"
       source "COMMON\\dlgcmn.cpp"
       source "COMMON\\dndcmn.cpp"
       source "COMMON\\dobjcmn.cpp"
@@ -228,6 +229,10 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
       option report(level, "E")
       {
          source type("c") "OS2\\GSOCKET.C"
+      }
+      option report(level, "E")
+      {
+         source type("c") "OS2\\GSOCKPM.C"
       }
       source "OS2\\HELPWIN.CPP"
       source "OS2\\ICON.CPP"

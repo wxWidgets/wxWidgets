@@ -14,7 +14,16 @@
 
 #include <sys/time.h>
 #include <sys/types.h>
+
+#ifdef __EMX__
 #include <unistd.h>
+#else
+#include <utils.h>
+#undef BYTE_ORDER
+#include <types.h>
+#include <nerrno.h>
+#define INCL_ORDERS
+#endif
 
 #include "wx/event.h"
 #include "wx/icon.h"
@@ -95,11 +104,12 @@ protected:
     // PM-specific wxApp definitions */
     //
 private:
-    int m_maxSocketHandles;
-    int m_maxSocketNr;
-    int m_lastUsedHandle;
-    fd_set m_readfds, m_writefds;
-    void *m_sockCallbackInfo;
+    int                             m_maxSocketHandles;
+    int                             m_maxSocketNr;
+    int                             m_lastUsedHandle;
+    fd_set                          m_readfds;
+    fd_set                          m_writefds;
+    void*                           m_sockCallbackInfo;
 
 public:
 
