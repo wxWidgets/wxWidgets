@@ -106,9 +106,14 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         exstyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
     }
 
-    // all controls should have these styles (wxWindows creates all controls
-    // visible by default)
-    style |= WS_CHILD | WS_VISIBLE;
+    // all controls should have this style
+    style |= WS_CHILD;
+
+    // create the control visible if it's currently shown for wxWindows
+    if ( m_isShown )
+    {
+        style |= WS_VISIBLE;
+    }
 
     int x = pos.x == -1 ? 0 : pos.x,
         y = pos.y == -1 ? 0 : pos.y,

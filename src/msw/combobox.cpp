@@ -304,6 +304,11 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                         const wxValidator& validator,
                         const wxString& name)
 {
+    // pretend that wxComboBox is hidden while it is positioned and resized and
+    // show it only right before leaving this method because otherwise there is
+    // some noticeable flicker while the control rearranges itself
+    m_isShown = FALSE;
+
     // first create wxWin object
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
@@ -359,6 +364,9 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                                         (LPARAM)wxComboEditWndProc
                                       );
     }
+
+    // and finally, show the control
+    Show(TRUE);
 
     return TRUE;
 }
