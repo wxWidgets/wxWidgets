@@ -30,12 +30,12 @@
 // what to test?
 
 //#define TEST_ARRAYS
-#define TEST_DIR
+//#define TEST_DIR
 //#define TEST_LOG
 //#define TEST_MIME
 //#define TEST_STRINGS
 //#define TEST_THREADS
-//#define TEST_TIME
+#define TEST_TIME
 //#define TEST_LONGLONG
 
 // ============================================================================
@@ -152,6 +152,8 @@ static void TestMimeEnum()
         filetype->GetDescription(&desc);
         filetype->GetExtensions(exts);
 
+        filetype->GetIcon(NULL);
+
         wxString extsAll;
         for ( size_t e = 0; e < exts.GetCount(); e++ )
         {
@@ -252,6 +254,63 @@ static void TestDivision()
 
 #include <wx/datetime.h>
 
+// the test data
+struct Date
+{
+    wxDateTime::wxDateTime_t day;
+    wxDateTime::Month month;
+    int year;
+    wxDateTime::wxDateTime_t hour, min, sec;
+    double jdn;
+    time_t gmticks, ticks;
+
+    void Init(const wxDateTime::Tm& tm)
+    {
+        day = tm.mday;
+        month = tm.mon;
+        year = tm.year;
+        hour = tm.hour;
+        min = tm.min;
+        sec = tm.sec;
+        jdn = 0.0;
+        gmticks = ticks = -1;
+    }
+
+    wxDateTime DT() const
+        { return wxDateTime(day, month, year, hour, min, sec); }
+
+    wxString Format() const
+    {
+        wxString s;
+        s.Printf("%02d:%02d:%02d %10s %02d, %4d%s",
+                 hour, min, sec,
+                 wxDateTime::GetMonthName(month).c_str(),
+                 day,
+                 abs(wxDateTime::ConvertYearToBC(year)),
+                 year > 0 ? "AD" : "BC");
+        return s;
+    }
+};
+
+static const Date testDates[] =
+{
+    {  1, wxDateTime::Jan,  1970, 00, 00, 00, 2440587.5,         0,     -3600 },
+    { 21, wxDateTime::Jan,  2222, 00, 00, 00, 2532648.5,        -1,        -1 },
+    { 29, wxDateTime::May,  1976, 12, 00, 00, 2442928.0, 202219200, 202212000 },
+    { 29, wxDateTime::Feb,  1976, 00, 00, 00, 2442837.5, 194400000, 194396400 },
+    {  1, wxDateTime::Jan,  1900, 12, 00, 00, 2415021.0,        -1,        -1 },
+    {  1, wxDateTime::Jan,  1900, 00, 00, 00, 2415020.5,        -1,        -1 },
+    { 15, wxDateTime::Oct,  1582, 00, 00, 00, 2299160.5,        -1,        -1 },
+    {  4, wxDateTime::Oct,  1582, 00, 00, 00, 2299149.5,        -1,        -1 },
+    {  1, wxDateTime::Mar,     1, 00, 00, 00, 1721484.5,        -1,        -1 },
+    {  1, wxDateTime::Jan,     1, 00, 00, 00, 1721425.5,        -1,        -1 },
+    { 31, wxDateTime::Dec,     0, 00, 00, 00, 1721424.5,        -1,        -1 },
+    {  1, wxDateTime::Jan,     0, 00, 00, 00, 1721059.5,        -1,        -1 },
+    { 12, wxDateTime::Aug, -1234, 00, 00, 00, 1270573.5,        -1,        -1 },
+    { 12, wxDateTime::Aug, -4000, 00, 00, 00,  260313.5,        -1,        -1 },
+    { 24, wxDateTime::Nov, -4713, 00, 00, 00,      -0.5,        -1,        -1 },
+};
+
 // this test miscellaneous static wxDateTime functions
 static void TestTimeStatic()
 {
@@ -300,10 +359,29 @@ static void TestTimeSet()
 {
     puts("\n*** wxDateTime construction test ***");
 
+#if 0
     printf("Current time:\t%s\n", wxDateTime::Now().Format().c_str());
     printf("Unix epoch:\t%s\n", wxDateTime((time_t)0).Format().c_str());
     printf("Today noon:\t%s\n", wxDateTime(12, 0).Format().c_str());
     printf("May 29, 1976:\t%s\n", wxDateTime(29, wxDateTime::May, 1976).Format().c_str());
+    printf("Jan 1, 1900:\t%s\n", wxDateTime(1, wxDateTime::Jan, 1900).Format().c_str());
+#else
+    for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
+    {
+        const Date& d1 = testDates[n];
+        wxDateTime dt = d1.DT();
+
+        Date d2;
+        d2.Init(dt.GetTm());
+
+        wxString s1 = d1.Format(),
+                 s2 = d2.Format();
+
+        printf("Date: %s == %s (%s)\n",
+               s1.c_str(), s2.c_str(),
+               s1 == s2 ? "ok" : "ERROR");
+    }
+#endif
 }
 
 // test time zones stuff
@@ -313,11 +391,12 @@ static void TestTimeZones()
 
     wxDateTime now = wxDateTime::Now();
 
-    printf("Current GMT time:\t%s\n", now.ToGMT().Format().c_str());
-    printf("Unix epoch (GMT):\t%s\n", wxDateTime((time_t)0).MakeGMT().Format().c_str());
-    printf("Current time in Paris:\t%s\n", now.ToTimezone(wxDateTime::CET).Format().c_str());
-    printf("               Moscow:\t%s\n", now.ToTimezone(wxDateTime::MSK).Format().c_str());
-    printf("             New York:\t%s\n", now.ToTimezone(wxDateTime::EST).Format().c_str());
+    printf("Current GMT time:\t%s\n", now.Format("%c", wxDateTime::GMT0).c_str());
+    printf("Unix epoch (GMT):\t%s\n", wxDateTime((time_t)0).Format("%c", wxDateTime::GMT0).c_str());
+    printf("Unix epoch (EST):\t%s\n", wxDateTime((time_t)0).Format("%c", wxDateTime::EST).c_str());
+    printf("Current time in Paris:\t%s\n", now.Format("%c", wxDateTime::CET).c_str());
+    printf("               Moscow:\t%s\n", now.Format("%c", wxDateTime::MSK).c_str());
+    printf("             New York:\t%s\n", now.Format("%c", wxDateTime::EST).c_str());
 }
 
 // test some minimal support for the dates outside the standard range
@@ -337,48 +416,58 @@ static void TestTimeRange()
             wxDateTime(29, wxDateTime::May, 2099).Format().c_str());
 }
 
+static void TestTimeTicks()
+{
+    puts("\n*** wxDateTime ticks test ***");
+
+    for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
+    {
+        const Date& d = testDates[n];
+        if ( d.ticks == -1 )
+            continue;
+
+        wxDateTime dt = d.DT();
+        long ticks = (dt.GetValue() / 1000).ToLong();
+        printf("Ticks of %s:\t% 10ld", d.Format().c_str(), ticks);
+        if ( ticks == d.ticks )
+        {
+            puts(" (ok)");
+        }
+        else
+        {
+            printf(" (ERROR: should be %ld, delta = %ld)\n",
+                   d.ticks, ticks - d.ticks);
+        }
+
+        dt = d.DT().ToTimezone(wxDateTime::GMT0);
+        ticks = (dt.GetValue() / 1000).ToLong();
+        printf("GMtks of %s:\t% 10ld", d.Format().c_str(), ticks);
+        if ( ticks == d.gmticks )
+        {
+            puts(" (ok)");
+        }
+        else
+        {
+            printf(" (ERROR: should be %ld, delta = %ld)\n",
+                   d.gmticks, ticks - d.gmticks);
+        }
+    }
+
+    puts("");
+}
+
 // test conversions to JDN &c
 static void TestTimeJDN()
 {
     puts("\n*** wxDateTime to JDN test ***");
 
-    struct Date
-    {
-        wxDateTime::wxDateTime_t day;
-        wxDateTime::Month month;
-        int year;
-        double jdn;
-    };
-
-    static const Date testDates[] =
-    {
-        { 21, wxDateTime::Jan,  2222, 2532648.5 },
-        { 29, wxDateTime::May,  1976, 2442927.5 },
-        { 1,  wxDateTime::Jan,  1970, 2440587.5 },
-        { 1,  wxDateTime::Jan,  1900, 2415020.5 },
-        { 15, wxDateTime::Oct,  1582, 2299160.5 },
-        { 4,  wxDateTime::Oct,  1582, 2299149.5 },
-        { 1,  wxDateTime::Mar,     1, 1721484.5 },
-        { 1,  wxDateTime::Jan,     1, 1721425.5 },
-        { 31, wxDateTime::Dec,     0, 1721424.5 },
-        { 1,  wxDateTime::Jan,     0, 1721059.5 },
-        { 12, wxDateTime::Aug, -1234, 1270573.5 },
-        { 12, wxDateTime::Aug, -4000,  260313.5 },
-        { 24, wxDateTime::Nov, -4713,      -0.5 },
-    };
-
     for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
     {
         const Date& d = testDates[n];
-        wxDateTime dt(d.day, d.month, d.year);
+        wxDateTime dt(d.day, d.month, d.year, d.hour, d.min, d.sec);
         double jdn = dt.GetJulianDayNumber();
 
-        printf("JDN of %s %02d, %4d%s is:\t%f",
-               wxDateTime::GetMonthName(d.month).c_str(),
-               d.day,
-               wxDateTime::ConvertYearToBC(d.year),
-               d.year > 0 ? "AD" : "BC",
-               jdn);
+        printf("JDN of %s is:\t% 15.6f", d.Format().c_str(), jdn);
         if ( jdn == d.jdn )
         {
             puts(" (ok)");
@@ -656,7 +745,7 @@ void PrintArray(const char* name, const wxArrayString& array)
 
 #include "wx/timer.h"
 
-void TestString()
+static void TestString()
 {
     wxStopWatch sw;
 
@@ -681,7 +770,7 @@ void TestString()
     printf ("TestString elapsed time: %ld\n", sw.Time());
 }
 
-void TestPChar()
+static void TestPChar()
 {
     wxStopWatch sw;
 
@@ -704,6 +793,23 @@ void TestPChar()
     printf ("TestPChar elapsed time: %ld\n", sw.Time());
 }
 
+static void TestStringSub()
+{
+    wxString s("Hello, world!");
+
+    puts("*** Testing wxString substring extraction ***");
+
+    printf("String = '%s'\n", s.c_str());
+    printf("Left(5) = '%s'\n", s.Left(5).c_str());
+    printf("Right(6) = '%s'\n", s.Right(6).c_str());
+    printf("Mid(3, 5) = '%s'\n", s(3, 5).c_str());
+    printf("Mid(3) = '%s'\n", s.Mid(3).c_str());
+    printf("substr(3, 5) = '%s'\n", s.substr(3, 5).c_str());
+    printf("substr(3) = '%s'\n", s.substr(3).c_str());
+
+    puts("");
+}
+
 #endif // TEST_STRINGS
 
 // ----------------------------------------------------------------------------
@@ -718,8 +824,12 @@ int main(int argc, char **argv)
     }
 
 #ifdef TEST_STRINGS
-    TestPChar();
-    TestString();
+    if ( 0 )
+    {
+        TestPChar();
+        TestString();
+    }
+    TestStringSub();
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS
@@ -809,11 +919,15 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_TIME
-    TestTimeStatic();
     TestTimeSet();
+    if ( 0 )
+    {
+    TestTimeStatic();
     TestTimeZones();
     TestTimeRange();
+    TestTimeTicks();
     TestTimeJDN();
+    }
 #endif // TEST_TIME
 
     wxUninitialize();

@@ -37,13 +37,14 @@ class WXDLLEXPORT wxDateSpan;
 /*
  * TODO Well, everything :-)
  *
- * 1. Time zones with minutes (make wxTimeZone a class)
- * 2. getdate() function like under Solaris
- * 3. text conversion for wxDateSpan
+ * + 1. Time zones with minutes (make TimeZone a class)
+ *   2. getdate() function like under Solaris
+ * + 3. text conversion for wxDateSpan
+ *   4. pluggable modules for the workdays calculations
  */
 
 /*
-  The three classes declared in this header represent:
+  The three (main) classes declared in this header represent:
 
   1. An absolute moment in the time (wxDateTime)
   2. A difference between two moments in the time, positive or negative
@@ -322,6 +323,21 @@ public:
     // helper classes
     // ------------------------------------------------------------------------
 
+        // a class representing a time zone: basicly, this is just an offset
+        // (in seconds) from GMT
+    class TimeZone
+    {
+    public:
+        TimeZone(TZ tz);
+        TimeZone(wxDateTime_t offset = 0) { m_offset = offset; }
+
+        int GetOffset() const { return m_offset; }
+
+    private:
+        // offset for this timezone from GMT in seconds
+        int m_offset;
+    };
+
         // standard struct tm is limited to the years from 1900 (because
         // tm_year field is the offset from 1900), so we use our own struct
         // instead to represent broken down time
@@ -338,8 +354,8 @@ public:
         // default ctor inits the object to an invalid value
         Tm();
 
-        // ctor from struct tm
-        Tm(const struct tm& tm);
+        // ctor from struct tm and the timezone
+        Tm(const struct tm& tm, const TimeZone& tz);
 
         // check that the given date/time is valid (in Gregorian calendar)
         bool IsValid() const;
@@ -363,24 +379,12 @@ public:
         // compute the weekday from other fields
         void ComputeWeekDay();
 
+        // the timezone we correspond to
+        TimeZone m_tz;
+
         // these values can't be accessed directly because they're not always
         // computed and we calculate them on demand
         wxDateTime_t wday, yday;
-    };
-
-        // a class representing a time zone: basicly, this is just an offset
-        // (in minutes) from GMT
-    class TimeZone
-    {
-    public:
-        TimeZone(TZ tz);
-        TimeZone(wxDateTime_t offset) { m_offset = offset; }
-
-        int GetOffset() const { return m_offset; }
-
-    private:
-        // offset for this timezone from GMT in minutes
-        int m_offset;
     };
 
     // static methods
@@ -442,9 +446,6 @@ public:
     // constructors: you should test whether the constructor succeeded with
     // IsValid() function. The values Inv_Month and Inv_Year for the
     // parameters mean take current month and/or year values.
-    //
-    // All new wxDateTime correspond to the local time, use ToUTC() or
-    // MakeUTC() to get the time in UTC/GMT.
     // ------------------------------------------------------------------------
 
         // default ctor does not initialize the object, use Set()!
@@ -607,27 +608,21 @@ public:
         //      religious holidays (Easter...) or moon/solar eclipses? Some
         //      algorithms can be found in the calendar FAQ
 
-    // timezone stuff: by default, we always work with local times, to get
-    // anything else, it should be requested explicitly
+    // timezone stuff: a wxDateTime object constructed using given
+    // day/month/year/hour/min/sec values correspond to this moment in local
+    // time. Using the functions below, it may be converted to another time
+    // zone (for example, the Unix epoch is wxDateTime(1, Jan, 1970).ToGMT())
+    //
+    // Converting to the local time zone doesn't do anything.
     // ------------------------------------------------------------------------
 
-        // transform this object to UTC/GMT
-    wxDateTime& MakeUTC();
-    wxDateTime& MakeGMT() { return MakeUTC(); }
-
-        // get the time corresponding to this one in UTC/GMT
-    inline wxDateTime ToUTC() const;
-    wxDateTime ToGMT() const { return ToUTC(); }
-
-        // generic versions of the above
-
-        // transform from local time to any given timezone
+        // transform to any given timezone
     inline wxDateTime ToTimezone(const TimeZone& tz) const;
     wxDateTime& MakeTimezone(const TimeZone& tz);
 
-        // transform time from any timezone to the local time
-    inline wxDateTime ToLocalTime(const TimeZone& tz) const;
-    wxDateTime& MakeLocalTime(const TimeZone& tz);
+        // transform to GMT/UTC
+    wxDateTime ToGMT() const { return ToTimezone(GMT0); }
+    wxDateTime& MakeGMT() { return MakeTimezone(GMT0); }
 
     // accessors: many of them take the timezone parameter which indicates the
     // timezone for which to make the calculations and the default value means
@@ -640,40 +635,52 @@ public:
         // the functions which failed to convert the date to supported range)
     inline bool IsValid() const { return this != &ms_InvDateTime; }
 
-        // get the broken down date/time representation
-    Tm GetTm() const;
+        // get the broken down date/time representation in the given timezone
+        //
+        // If you wish to get several time components (day, month and year),
+        // consider getting the whole Tm strcuture first and retrieving the
+        // value from it - this is much more efficient
+    Tm GetTm(const TimeZone& tz = Local) const;
 
         // get the number of seconds since the Unix epoch - returns (time_t)-1
         // if the value is out of range
     inline time_t GetTicks() const;
 
         // get the year (returns Inv_Year if date is invalid)
-    int GetYear() const { return GetTm().year; }
+    int GetYear(const TimeZone& tz = Local) const 
+            { return GetTm(tz).year; }
         // get the month (Inv_Month if date is invalid)
-    Month GetMonth() const { return (Month)GetTm().mon; }
+    Month GetMonth(const TimeZone& tz = Local) const 
+            { return (Month)GetTm(tz).mon; }
         // get the month day (in 1..31 range, 0 if date is invalid)
-    wxDateTime_t GetDay() const { return GetTm().mday; }
+    wxDateTime_t GetDay(const TimeZone& tz = Local) const 
+            { return GetTm(tz).mday; }
         // get the day of the week (Inv_WeekDay if date is invalid)
-    WeekDay GetWeekDay() const { return GetTm().GetWeekDay(); }
+    WeekDay GetWeekDay(const TimeZone& tz = Local) const 
+            { return GetTm(tz).GetWeekDay(); }
         // get the hour of the day
-    wxDateTime_t GetHour() const { return GetTm().hour; }
+    wxDateTime_t GetHour(const TimeZone& tz = Local) const 
+            { return GetTm(tz).hour; }
         // get the minute
-    wxDateTime_t GetMinute() const { return GetTm().min; }
+    wxDateTime_t GetMinute(const TimeZone& tz = Local) const 
+            { return GetTm(tz).min; }
         // get the second
-    wxDateTime_t GetSecond() const { return GetTm().sec; }
+    wxDateTime_t GetSecond(const TimeZone& tz = Local) const 
+            { return GetTm(tz).sec; }
         // get milliseconds
-    wxDateTime_t GetMillisecond() const { return m_time.GetLo() % 1000; }
+    wxDateTime_t GetMillisecond(const TimeZone& tz = Local) const 
+            { return GetTm(tz).msec; }
 
         // get the day since the year start (1..366, 0 if date is invalid)
-    wxDateTime_t GetDayOfYear() const;
+    wxDateTime_t GetDayOfYear(const TimeZone& tz = Local) const;
         // get the week number since the year start (1..52, 0 if date is
         // invalid)
-    wxDateTime_t GetWeekOfYear() const;
+    wxDateTime_t GetWeekOfYear(const TimeZone& tz = Local) const;
 
         // is this date a work day? This depends on a country, of course,
         // because the holidays are different in different countries
     bool IsWorkDay(Country country = Country_Default,
-                   TimeZone zone = Local) const;
+                   const TimeZone& tz = Local) const;
 
         // is this date later than Gregorian calendar introduction for the
         // given country (see enum GregorianAdoption)?
@@ -683,11 +690,12 @@ public:
         //     adoption of the Gregorian calendar is simply unknown.
     bool IsGregorianDate(GregorianAdoption country = Gr_Standard) const;
 
-        // is daylight savings time in effect at this moment?
+        // is daylight savings time in effect at this moment according to the
+        // rules of the specified country?
         //
         // Return value is > 0 if DST is in effect, 0 if it is not and -1 if
         // the information is not available (this is compatible with ANSI C)
-    int IsDST(Country country = Country_Default, TimeZone zone = Local) const;
+    int IsDST(Country country = Country_Default) const;
 
     // comparison (see also functions below for operator versions)
     // ------------------------------------------------------------------------
@@ -761,7 +769,8 @@ public:
         // argument corresponds to the preferred date and time representation
         // for the current locale) and returns the string containing the
         // resulting text representation
-    wxString Format(const wxChar *format = _T("%c")) const;
+    wxString Format(const wxChar *format = _T("%c"),
+                    const TimeZone& tz = Local) const;
         // preferred date representation for the current locale
     wxString FormatDate() const { return Format(_T("%x")); }
         // preferred time representation for the current locale
@@ -780,7 +789,7 @@ public:
     static struct tm *GetTmNow()
     {
         time_t t = GetTimeNow();
-        return gmtime(&t);
+        return localtime(&t);
     }
 
 private:

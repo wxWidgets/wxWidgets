@@ -246,19 +246,9 @@ wxDateTime& wxDateTime::operator+=(const wxDateSpan& diff)
 // wxDateTime and timezones
 // ----------------------------------------------------------------------------
 
-wxDateTime wxDateTime::ToUTC() const
-{
-    return wxDateTime(*this).MakeUTC();
-}
-
 wxDateTime wxDateTime::ToTimezone(const wxDateTime::TimeZone& tz) const
 {
     return wxDateTime(*this).MakeTimezone(tz);
-}
-
-wxDateTime wxDateTime::ToLocalTime(const wxDateTime::TimeZone& tz) const
-{
-    return wxDateTime(*this).MakeLocalTime(tz);
 }
 
 // ----------------------------------------------------------------------------

@@ -20,7 +20,8 @@
  * Implementation notes:
  *
  * 1. the time is stored as a 64bit integer containing the signed number of
- *    milliseconds since Jan 1. 1970 (the Unix Epoch)
+ *    milliseconds since Jan 1. 1970 (the Unix Epoch) - so it is always
+ *    expressed in GMT.
  *
  * 2. the range is thus something about 580 million years, but due to current
  *    algorithms limitations, only dates from Nov 24, 4714BC are handled
@@ -33,6 +34,14 @@
  *    algorithm used by Scott E. Lee's code only works for positive JDNs, more
  *    or less)
  *
+ * 5. the object constructed for the given DD-MM-YYYY HH:MM:SS corresponds to
+ *    this moment in local time and may be converted to the object
+ *    corresponding to the same date/time in another time zone by using
+ *    ToTimezone()
+ *
+ * 6. the conversions to the current (or any other) timezone are done when the
+ *    internal time representation is converted to the broken-down one in
+ *    wxDateTime::Tm.
  */
 
 // ============================================================================
@@ -244,7 +253,8 @@ wxDateTime::Tm::Tm()
     wday = wxDateTime::Inv_WeekDay;
 }
 
-wxDateTime::Tm::Tm(const struct tm& tm)
+wxDateTime::Tm::Tm(const struct tm& tm, const TimeZone& tz)
+              : m_tz(tz)
 {
     msec = 0;
     sec = tm.tm_sec;
@@ -321,7 +331,9 @@ wxDateTime::TimeZone::TimeZone(wxDateTime::TZ tz)
     switch ( tz )
     {
         case wxDateTime::Local:
-            // leave offset to be 0
+            // get the offset from C RTL: it returns the difference GMT-local
+            // while we want to have the offset _from_ GMT, hence the '-'
+            m_offset = -GetTimeZone();
             break;
 
         case wxDateTime::GMT_12:
@@ -336,7 +348,7 @@ wxDateTime::TimeZone::TimeZone(wxDateTime::TZ tz)
         case wxDateTime::GMT_3:
         case wxDateTime::GMT_2:
         case wxDateTime::GMT_1:
-            m_offset = -60*(wxDateTime::GMT0 - tz);
+            m_offset = -3600*(wxDateTime::GMT0 - tz);
             break;
 
         case wxDateTime::GMT0:
@@ -352,12 +364,12 @@ wxDateTime::TimeZone::TimeZone(wxDateTime::TZ tz)
         case wxDateTime::GMT10:
         case wxDateTime::GMT11:
         case wxDateTime::GMT12:
-            m_offset = 60*(tz - wxDateTime::GMT0);
+            m_offset = 3600*(tz - wxDateTime::GMT0);
             break;
 
         case wxDateTime::A_CST:
             // Central Standard Time in use in Australia = UTC + 9.5
-            m_offset = 9*60 + 30;
+            m_offset = 60*(9*60 + 30);
             break;
 
         default:
@@ -533,29 +545,13 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday, bool abbr)
 // constructors and assignment operators
 // ----------------------------------------------------------------------------
 
-wxDateTime& wxDateTime::Set(const struct tm& tm1)
+// the values in the tm structure contain the local time
+wxDateTime& wxDateTime::Set(const struct tm& tm)
 {
     wxASSERT_MSG( IsValid(), _T("invalid wxDateTime") );
 
-    tm tm2(tm1);
-
-    // we want the time in GMT, mktime() takes the local time, so use timegm()
-    // if it's available
-#ifdef HAVE_TIMEGM
-    time_t timet = timegm(&tm2);
-#else // !HAVE_TIMEGM
-    // FIXME this almost surely doesn't work
-    tm2.tm_sec -= GetTimeZone();
-
+    struct tm tm2(tm);
     time_t timet = mktime(&tm2);
-
-    if ( tm2.tm_isdst )
-    {
-        tm2.tm_hour += 1;
-
-        timet = mktime(&tm2);
-    }
-#endif // HAVE_TIMEGM/!HAVE_TIMEGM
 
     if ( timet == (time_t)(-1) )
     {
@@ -584,7 +580,9 @@ wxDateTime& wxDateTime::Set(wxDateTime_t hour,
 
     // get the current date from system
     time_t timet = GetTimeNow();
-    struct tm *tm = gmtime(&timet);
+    struct tm *tm = localtime(&timet);
+
+    wxCHECK_MSG( tm, ms_InvDateTime, _T("localtime() failed") );
 
     // adjust the time
     tm->tm_hour = hour;
@@ -634,7 +632,7 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
         tm.tm_hour = hour;
         tm.tm_min = minute;
         tm.tm_sec = second;
-        tm.tm_isdst = -1;       // mktime() will guess it (wrongly, probably)
+        tm.tm_isdst = -1;       // mktime() will guess it
 
         (void)Set(tm);
 
@@ -651,7 +649,8 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
         m_time -= EPOCH_JDN;
         m_time *= SECONDS_PER_DAY * TIME_T_FACTOR;
 
-        Add(wxTimeSpan(hour, minute, second, millisec));
+        // JDN corresponds to GMT, we take localtime
+        Add(wxTimeSpan(hour, minute, second + GetTimeZone(), millisec));
     }
 
     return *this;
@@ -673,7 +672,7 @@ wxDateTime& wxDateTime::Set(double jdn)
 // time_t <-> broken down time conversions
 // ----------------------------------------------------------------------------
 
-wxDateTime::Tm wxDateTime::GetTm() const
+wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
 {
     wxASSERT_MSG( IsValid(), _T("invalid wxDateTime") );
 
@@ -681,24 +680,36 @@ wxDateTime::Tm wxDateTime::GetTm() const
     if ( time != (time_t)-1 )
     {
         // use C RTL functions
-        tm *tm = gmtime(&time);
+        tm *tm;
+        if ( tz.GetOffset() == -GetTimeZone() )
+        {
+            // we are working with local time
+            tm = localtime(&time);
+        }
+        else
+        {
+            tm = gmtime(&time);
+        }
 
         // should never happen
         wxCHECK_MSG( tm, Tm(), _T("gmtime() failed") );
 
-        return Tm(*tm);
+        return Tm(*tm, tz);
     }
     else
     {
         // remember the time and do the calculations with the date only - this
         // eliminates rounding errors of the floating point arithmetics
 
-        wxLongLong timeMidnight = m_time;
+        wxLongLong timeMidnight = m_time - GetTimeZone() * 1000;
 
-        long timeOnly = (m_time % MILLISECONDS_PER_DAY).ToLong();
+        long timeOnly = (timeMidnight % MILLISECONDS_PER_DAY).ToLong();
+
+        // we want to always have positive time and timeMidnight to be really
+        // the midnight before it
         if ( timeOnly < 0 )
         {
-            timeOnly = MILLISECONDS_PER_DAY - timeOnly;
+            timeOnly = MILLISECONDS_PER_DAY + timeOnly;
         }
 
         timeMidnight -= timeOnly;
@@ -950,7 +961,8 @@ bool wxDateTime::SetToWeekDay(WeekDay weekday,
 
 double wxDateTime::GetJulianDayNumber() const
 {
-    Tm tm(GetTm());
+    // JDN are always expressed for the GMT dates
+    Tm tm(ToTimezone(GMT0).GetTm(GMT0));
 
     double result = GetTruncatedJDN(tm.mday, tm.mon, tm.year);
 
@@ -968,31 +980,51 @@ double wxDateTime::GetRataDie() const
 }
 
 // ----------------------------------------------------------------------------
-// timezone stuff
+// timezone and DST stuff
 // ----------------------------------------------------------------------------
 
-wxDateTime& wxDateTime::MakeUTC()
+int wxDateTime::IsDST(wxDateTime::Country country) const
 {
-    return Add(wxTimeSpan::Seconds(GetTimeZone()));
+    wxCHECK_MSG( country == Country_Default, -1,
+                 _T("country support not implemented") );
+
+    // use the C RTL for the dates in the standard range
+    time_t timet = GetTicks();
+    if ( timet != (time_t)-1 )
+    {
+        tm *tm = localtime(&timet);
+
+        wxCHECK_MSG( tm, -1, _T("localtime() failed") );
+
+        return tm->tm_isdst;
+    }
+    else
+    {
+        // wxFAIL_MSG( _T("TODO") );
+
+        return -1;
+    }
 }
 
 wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz)
 {
-    int minDiff = GetTimeZone() / SECONDS_IN_MINUTE + tz.GetOffset();
-    return Add(wxTimeSpan::Minutes(minDiff));
-}
+    int secDiff = GetTimeZone() + tz.GetOffset();
 
-wxDateTime& wxDateTime::MakeLocalTime(const TimeZone& tz)
-{
-    int minDiff = GetTimeZone() / SECONDS_IN_MINUTE + tz.GetOffset();
-    return Substract(wxTimeSpan::Minutes(minDiff));
+    // we need to know whether DST is or not in effect for this date
+    if ( IsDST() == 1 )
+    {
+        // FIXME we assume that the DST is always shifted by 1 hour
+        secDiff -= 3600;
+    }
+
+    return Substract(wxTimeSpan::Seconds(secDiff));
 }
 
 // ----------------------------------------------------------------------------
 // wxDateTime to/from text representations
 // ----------------------------------------------------------------------------
 
-wxString wxDateTime::Format(const wxChar *format) const
+wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 {
     wxCHECK_MSG( format, _T(""), _T("NULL format in wxDateTime::Format") );
 
@@ -1000,7 +1032,18 @@ wxString wxDateTime::Format(const wxChar *format) const
     if ( time != (time_t)-1 )
     {
         // use strftime()
-        tm *tm = gmtime(&time);
+        tm *tm;
+        if ( tz.GetOffset() == -GetTimeZone() )
+        {
+            // we are working with local time
+            tm = localtime(&time);
+        }
+        else
+        {
+            time += tz.GetOffset();
+
+            tm = gmtime(&time);
+        }
 
         // should never happen
         wxCHECK_MSG( tm, _T(""), _T("gmtime() failed") );
@@ -1018,7 +1061,7 @@ wxString wxDateTime::Format(const wxChar *format) const
         // the real year modulo 28 (so the week days coincide for them)
 
         // find the YEAR
-        int yearReal = GetYear();
+        int yearReal = GetYear(tz);
         int year = 1970 + yearReal % 28;
 
         wxString strYear;
@@ -1039,7 +1082,7 @@ wxString wxDateTime::Format(const wxChar *format) const
         // use strftime() to format the same date but in supported year
         wxDateTime dt(*this);
         dt.SetYear(year);
-        wxString str = dt.Format(format);
+        wxString str = dt.Format(format, tz);
 
         // now replace the occurence of 1999 with the real year
         wxString strYearReal;
