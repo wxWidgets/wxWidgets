@@ -12,6 +12,8 @@ include ../../build/msw/config.gcc
 
 ### Variables: ###
 
+WX_RELEASE_NODOT = 25
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)2
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = \
@@ -19,7 +21,7 @@ SETUPHDIR = \
 RENDER_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I.\..\..\include -I$(SETUPHDIR) -Wall -I. $(__DLLFLAG_p) -I.\..\..\samples \
-	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
+	-DNOPCH $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 RENDER_OBJECTS =  \
 	$(OBJS)\render_sample_rc.o \
 	$(OBJS)\render_render.o
@@ -100,7 +102,7 @@ __DLLFLAG_p_1 = --define WXUSINGDLL
 endif
 ifeq ($(SHARED),1)
 __renddll___depname = \
-	$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)252_gcc.dll
+	$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_VERSION_NODOT)_gcc.dll
 endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG = -O0
@@ -142,23 +144,24 @@ LIBDIRNAME = .\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_CORE_p = \
-	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core
+	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core
 endif
 ifeq ($(MONOLITHIC),0)
-__WXLIB_BASE_p = -lwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
+__WXLIB_BASE_p = \
+	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
 endif
 ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
-	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
+	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
 endif
 ifeq ($(USE_GUI),1)
-__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
+__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)
 endif
 ifeq ($(USE_GUI),1)
-__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
+__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)
 endif
 ifeq ($(USE_GUI),1)
-__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
+__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)
 endif
 ifeq ($(MSLU),1)
 __UNICOWS_LIB_p = -lunicows
@@ -192,14 +195,14 @@ all: $(OBJS)\render.exe $(__renddll___depname)
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\render.exe del $(OBJS)\render.exe
-	-if exist $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)252_gcc.dll del $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)252_gcc.dll
+	-if exist $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_VERSION_NODOT)_gcc.dll del $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_VERSION_NODOT)_gcc.dll
 
 $(OBJS)\render.exe: $(RENDER_OBJECTS) $(OBJS)\render_sample_rc.o
-	$(CXX) -o $@ $(RENDER_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+	$(CXX) -o $@ $(RENDER_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT) -lwxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
 
 ifeq ($(SHARED),1)
-$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)252_gcc.dll: $(RENDDLL_OBJECTS)
-	$(CXX) -shared -o $@ $(RENDDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_VERSION_NODOT)_gcc.dll: $(RENDDLL_OBJECTS)
+	$(CXX) -shared -o $@ $(RENDDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT) -lwxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
 endif
 
 $(OBJS)\render_sample_rc.o: ./../../samples/sample.rc

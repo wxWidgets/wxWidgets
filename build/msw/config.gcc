@@ -79,6 +79,12 @@ OFFICIAL_BUILD = 0
 # Use this to name your customized DLLs differently 
 VENDOR = custom
 
+#  
+WX_FLAVOUR = 
+
+#  
+WX_LIB_FLAVOUR = 
+
 # Name of your custom configuration. This affects directory
 # where object files are stored as well as the location of
 # compiled .lib files and setup.h under the lib/ toplevel directory. 

@@ -210,6 +210,7 @@ wx/ptr_scpd.h
 wx/regex.h
 wx/scopeguard.h
 wx/snglinst.h
+wx/sstream.h
 wx/stack.h
 wx/stockitem.h
 wx/stopwatch.h

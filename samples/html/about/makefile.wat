@@ -113,33 +113,34 @@ __EXCEPTIONSFLAG_7 = -xs
 __WXLIB_HTML_p =
 !ifeq MONOLITHIC 0
 __WXLIB_HTML_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.lib
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib
 !endif
 __WXLIB_CORE_p =
 !ifeq MONOLITHIC 0
 __WXLIB_CORE_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
 !endif
 __WXLIB_BASE_p =
 !ifeq MONOLITHIC 0
-__WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+__WXLIB_BASE_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 __WXLIB_MONO_p =
 !ifeq MONOLITHIC 1
 __WXLIB_MONO_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 __LIB_TIFF_p =
 !ifeq USE_GUI 1
-__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
+__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib
 !endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
-__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
+__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib
 !endif
 __LIB_PNG_p =
 !ifeq USE_GUI 1
-__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
+__LIB_PNG_p = wxpng$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib
 !endif
 LIBDIRNAME =
 !ifeq SHARED 0
@@ -172,6 +173,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
+WX_RELEASE_NODOT = 25
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = &
@@ -179,7 +181,7 @@ SETUPHDIR = &
 ABOUT_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
 	-i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	-i=.\..\..\..\samples $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
+	-i=.\..\..\..\samples -dNOPCH $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
 ABOUT_OBJECTS =  &
 	$(OBJS)\about_about.obj
 
@@ -206,7 +208,7 @@ $(OBJS)\about.exe :  $(ABOUT_OBJECTS) $(OBJS)\about_about.res
 	@%append $(OBJS)\about.lbc option caseexact
 	@%append $(OBJS)\about.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(ABOUT_OBJECTS)) do @%append $(OBJS)\about.lbc file %i
-	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\about.lbc library %i
+	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib wxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\about.lbc library %i
 	@%append $(OBJS)\about.lbc option resource=$(OBJS)\about_about.res
 	wlink @$(OBJS)\about.lbc
 
@@ -218,4 +220,4 @@ $(OBJS)\about_about.obj :  .AUTODEPEND .\about.cpp
 	$(CXX) -zq -fo=$^@ $(ABOUT_CXXFLAGS) $<
 
 $(OBJS)\about_about.res :  .AUTODEPEND .\about.rc
-	wrc -q -ad -bt=nt -r -fo=$^@  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $<

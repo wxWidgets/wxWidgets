@@ -123,6 +123,16 @@ OFFICIAL_BUILD = 0
 VENDOR = custom
 !endif
 
+#  
+!ifndef WX_FLAVOUR
+WX_FLAVOUR = 
+!endif
+
+#  
+!ifndef WX_LIB_FLAVOUR
+WX_LIB_FLAVOUR = 
+!endif
+
 # Name of your custom configuration. This affects directory
 # where object files are stored as well as the location of
 # compiled .lib files and setup.h under the lib/ toplevel directory. 

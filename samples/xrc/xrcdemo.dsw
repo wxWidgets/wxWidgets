@@ -32,7 +32,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "xrc"=..\..\..\build\msw\wx_xrc.dsp - Package Owner=<4>
+Project: "xrc"=..\..\build\msw\wx_xrc.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -44,7 +44,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "html"=..\..\..\build\msw\wx_html.dsp - Package Owner=<4>
+Project: "html"=..\..\build\msw\wx_html.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -56,7 +56,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "adv"=..\..\..\build\msw\wx_adv.dsp - Package Owner=<4>
+Project: "adv"=..\..\build\msw\wx_adv.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -68,7 +68,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "core"=..\..\..\build\msw\wx_core.dsp - Package Owner=<4>
+Project: "core"=..\..\build\msw\wx_core.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -80,7 +80,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "xml"=..\..\..\build\msw\wx_xml.dsp - Package Owner=<4>
+Project: "xml"=..\..\build\msw\wx_xml.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -92,7 +92,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "base"=..\..\..\build\msw\wx_base.dsp - Package Owner=<4>
+Project: "base"=..\..\build\msw\wx_base.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

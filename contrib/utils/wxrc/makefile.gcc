@@ -12,6 +12,7 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
+WX_RELEASE_NODOT = 25
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = \
@@ -87,23 +88,25 @@ ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
 endif
 ifeq ($(MONOLITHIC),0)
-__WXLIB_XML_p = -lwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml
+__WXLIB_XML_p = \
+	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml
 endif
 ifeq ($(MONOLITHIC),0)
-__WXLIB_BASE_p = -lwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
+__WXLIB_BASE_p = \
+	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
 endif
 ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
-	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
+	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
 endif
 ifeq ($(USE_GUI),1)
-__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
+__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)
 endif
 ifeq ($(USE_GUI),1)
-__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
+__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)
 endif
 ifeq ($(USE_GUI),1)
-__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
+__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)
 endif
 ifeq ($(MSLU),1)
 __UNICOWS_LIB_p = -lunicows
@@ -145,7 +148,7 @@ clean:
 	-if exist $(OBJS)\wxrc.exe del $(OBJS)\wxrc.exe
 
 $(OBJS)\wxrc.exe: $(WXRC_OBJECTS)
-	$(CXX) -o $@ $(WXRC_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME)   $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+	$(CXX) -o $@ $(WXRC_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME)   $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT) -lwxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
 
 $(OBJS)\wxrc_wxrc.o: ./wxrc.cpp
 	$(CXX) -c -o $@ $(WXRC_CXXFLAGS) $<

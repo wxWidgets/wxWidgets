@@ -113,28 +113,29 @@ __EXCEPTIONSFLAG_7 = -xs
 __WXLIB_CORE_p =
 !ifeq MONOLITHIC 0
 __WXLIB_CORE_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
 !endif
 __WXLIB_BASE_p =
 !ifeq MONOLITHIC 0
-__WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+__WXLIB_BASE_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 __WXLIB_MONO_p =
 !ifeq MONOLITHIC 1
 __WXLIB_MONO_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 __LIB_TIFF_p =
 !ifeq USE_GUI 1
-__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
+__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib
 !endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
-__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
+__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib
 !endif
 __LIB_PNG_p =
 !ifeq USE_GUI 1
-__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
+__LIB_PNG_p = wxpng$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib
 !endif
 LIBDIRNAME =
 !ifeq SHARED 0
@@ -167,6 +168,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
+WX_RELEASE_NODOT = 25
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = &
@@ -174,8 +176,8 @@ SETUPHDIR = &
 PLOT_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
 	-i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	-i=.\..\..\..\samples -i=.\..\..\include $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) &
-	$(CXXFLAGS)
+	-i=.\..\..\..\samples -dNOPCH -i=.\..\..\include $(__EXCEPTIONSFLAG_7) &
+	$(CPPFLAGS) $(CXXFLAGS)
 PLOT_OBJECTS =  &
 	$(OBJS)\plot_plot.obj
 
@@ -202,7 +204,7 @@ $(OBJS)\plot.exe :  $(PLOT_OBJECTS) $(OBJS)\plot_plot.res
 	@%append $(OBJS)\plot.lbc option caseexact
 	@%append $(OBJS)\plot.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(PLOT_OBJECTS)) do @%append $(OBJS)\plot.lbc file %i
-	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\plot.lbc library %i
+	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib wxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\plot.lbc library %i
 	@%append $(OBJS)\plot.lbc option resource=$(OBJS)\plot_plot.res
 	wlink @$(OBJS)\plot.lbc
 
@@ -210,4 +212,4 @@ $(OBJS)\plot_plot.obj :  .AUTODEPEND .\plot.cpp
 	$(CXX) -zq -fo=$^@ $(PLOT_CXXFLAGS) $<
 
 $(OBJS)\plot_plot.res :  .AUTODEPEND .\plot.rc
-	wrc -q -ad -bt=nt -r -fo=$^@  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -i=.\..\..\include $<
+	wrc -q -ad -bt=nt -r -fo=$^@  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH -i=.\..\..\include $<

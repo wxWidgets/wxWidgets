@@ -20,7 +20,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "xml"=..\..\..\build\msw\wx_xml.dsp - Package Owner=<4>
+Project: "xml"=..\..\build\msw\wx_xml.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -32,7 +32,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "base"=..\..\..\build\msw\wx_base.dsp - Package Owner=<4>
+Project: "base"=..\..\build\msw\wx_base.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -21,6 +21,7 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
+WX_RELEASE_NODOT = 25
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = \
@@ -28,13 +29,13 @@ SETUPHDIR = \
 CLIENT_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) \
-	-I.\..\..\samples $(CPPFLAGS) $(CXXFLAGS)
+	-I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
 CLIENT_OBJECTS =  \
 	$(OBJS)\client_client.obj
 SERVER_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) \
-	-I.\..\..\samples $(CPPFLAGS) $(CXXFLAGS)
+	-I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
 SERVER_OBJECTS =  \
 	$(OBJS)\server_server.obj
 
@@ -117,26 +118,28 @@ __DLLFLAG_p_0 = -dWXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
-__WXLIB_NET_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.lib
+__WXLIB_NET_p = \
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
-__WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+__WXLIB_BASE_p = \
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 !if "$(USE_GUI)" == "1"
-__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
+__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib
 !endif
 !if "$(USE_GUI)" == "1"
-__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
+__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib
 !endif
 !if "$(USE_GUI)" == "1"
-__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
+__LIB_PNG_p = wxpng$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
@@ -181,22 +184,22 @@ clean:
 
 $(OBJS)\client.exe: $(CLIENT_OBJECTS)  $(OBJS)\client_client.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(CLIENT_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_0).lib,, $(OBJS)\client_client.res
+	c0w32.obj $(CLIENT_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib wxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_0).lib,, $(OBJS)\client_client.res
 |
 
 $(OBJS)\server.exe: $(SERVER_OBJECTS)  $(OBJS)\server_server.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(SERVER_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_0).lib,, $(OBJS)\server_server.res
+	c0w32.obj $(SERVER_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib wxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_0).lib,, $(OBJS)\server_server.res
 |
 
 $(OBJS)\client_client.obj: .\client.cpp
 	$(CXX) -q -c -P -o$@ $(CLIENT_CXXFLAGS) $**
 
 $(OBJS)\client_client.res: .\client.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include  -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_0) -i.\..\..\samples $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include  -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -dNOPCH $**
 
 $(OBJS)\server_server.obj: .\server.cpp
 	$(CXX) -q -c -P -o$@ $(SERVER_CXXFLAGS) $**
 
 $(OBJS)\server_server.res: .\server.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include  -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_0) -i.\..\..\samples $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include  -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -dNOPCH $**

@@ -2938,6 +2938,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_gauge.o \
 	monodll_gdiobj.o \
 	monodll_gsockosx.o \
+	monodll_hid.o \
 	monodll_icon.o \
 	monodll_listbox.o \
 	monodll_mdi.o \
@@ -3863,6 +3864,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_gauge.o \
 	monolib_gdiobj.o \
 	monolib_gsockosx.o \
+	monolib_hid.o \
 	monolib_icon.o \
 	monolib_listbox.o \
 	monolib_mdi.o \
@@ -4935,6 +4937,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_gauge.o \
 	coredll_gdiobj.o \
 	coredll_gsockosx.o \
+	coredll_hid.o \
 	coredll_icon.o \
 	coredll_listbox.o \
 	coredll_mdi.o \
@@ -5669,6 +5672,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_gauge.o \
 	corelib_gdiobj.o \
 	corelib_gsockosx.o \
+	corelib_hid.o \
 	corelib_icon.o \
 	corelib_listbox.o \
 	corelib_mdi.o \
@@ -8546,6 +8550,9 @@ monodll_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_hid.o: $(srcdir)/src/mac/carbon/hid.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(MONODLL_ODEP)
@@ -11672,6 +11679,9 @@ monolib_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_hid.o: $(srcdir)/src/mac/carbon/hid.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(MONOLIB_ODEP)
@@ -15349,6 +15359,9 @@ coredll_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(COREDLL_ODEP)
 coredll_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+coredll_hid.o: $(srcdir)/src/mac/carbon/hid.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 coredll_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -17798,6 +17811,9 @@ corelib_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+corelib_hid.o: $(srcdir)/src/mac/carbon/hid.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(CORELIB_ODEP)

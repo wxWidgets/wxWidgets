@@ -746,6 +746,10 @@ SOURCE=.\common\socket.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\sstream.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\statbar.cpp
 # End Source File
 # Begin Source File
@@ -1581,6 +1585,162 @@ SOURCE=.\msw\window.cpp
 # Begin Source File
 
 SOURCE=.\xml\xml.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_bmp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_bmpbt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_bttn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_cald.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_chckb.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_chckl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_choic.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_combo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_dlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_frame.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_gauge.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_gdctl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_html.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_listb.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_listc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_menu.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_notbk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_panel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_radbt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_radbx.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_scrol.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_scwin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_sizer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_slidr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_spin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_split.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_statbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_stbmp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_stbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_stlin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_sttxt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_text.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_tglbtn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_toolb.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_tree.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_unkwn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_wizrd.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xmlres.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xmlrsall.cpp
 # End Source File
 # End Group
 # Begin Group "Headers"
@@ -2532,6 +2692,10 @@ SOURCE=..\include\wx\splitter.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\sstream.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\stack.h
 # End Source File
 # Begin Source File
@@ -2757,6 +2921,162 @@ SOURCE=..\include\wx\xpmdecod.h
 # Begin Source File
 
 SOURCE=..\include\wx\xpmhand.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_all.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_bmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_bmpbt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_bttn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_cald.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_chckb.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_chckl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_choic.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_combo.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_dlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_frame.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_gauge.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_gdctl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_html.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_listb.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_listc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_menu.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_notbk.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_panel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_radbt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_radbx.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_scrol.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_scwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_sizer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_slidr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_spin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_split.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_statbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_stbmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_stbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_stlin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_sttxt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_text.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_tglbtn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_toolb.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_tree.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_unkwn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_wizrd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xmlres.h
 # End Source File
 # Begin Source File
 
