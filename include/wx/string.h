@@ -243,6 +243,9 @@ class WXDLLIMPEXP_BASE wxStringBase
 #if !wxUSE_STL
 friend class WXDLLIMPEXP_BASE wxArrayString;
 #endif
+public :
+  // an 'invalid' value for string index, moved to this place due to a CW bug
+  static const size_t npos;
 protected:
   // points to data preceded by wxStringData structure with ref count info
   wxChar *m_pchData;
@@ -290,9 +293,6 @@ public:
   typedef const value_type* const_pointer;
   typedef value_type *iterator;
   typedef const value_type *const_iterator;
-
-  // an 'invalid' value for string index
-  static const size_t npos;
 
   // constructors and destructor
     // ctor for an empty string
