@@ -110,6 +110,9 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
 
     wxSashEdgePosition sashHit = SashHitTest(x, y);
 
+    // reset the cursor
+    SetCursor(wxCursor());
+
 	if (event.LeftDown())
 	{
         if ( sashHit != wxSASH_NONE )
@@ -146,8 +149,6 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
         wxScreenDC::EndDrawingOnTop();
         m_dragMode = wxSASH_DRAG_NONE;
         m_draggingEdge = wxSASH_NONE;
-
-        SetCursor(*wxSTANDARD_CURSOR);
     }
 	else if (event.LeftUp() && m_dragMode == wxSASH_DRAG_DRAGGING)
 	{
@@ -238,10 +239,6 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
                 {
 	                SetCursor(*m_sashCursorNS);
                 }
-        }
-        else
-        {
-    	    SetCursor(*wxSTANDARD_CURSOR);
         }
 	}
 	else if ( event.Dragging() &&
