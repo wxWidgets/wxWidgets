@@ -100,6 +100,9 @@ public:
 
     WXHWND GetEditHWND() const;
 
+protected:
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
 };

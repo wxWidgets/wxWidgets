@@ -101,8 +101,23 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
     // get the real height of the control
     int GetVisibleHeight() const;
+
+    // update the height of the drop down list to fit the number of items we
+    // have (without changing the visible height)
+    void UpdateVisibleHeight();
+
+    // create and initialize the control
+    bool CreateAndInit(wxWindow *parent, wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       int n, const wxString choices[],
+                       long style,
+                       const wxValidator& validator,
+                       const wxString& name);
 
     // free all memory we have (used by Clear() and dtor)
     void Free();

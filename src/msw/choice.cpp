@@ -115,17 +115,6 @@ bool wxChoice::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
-        return FALSE;
-
-    long msStyle = WS_CHILD | CBS_DROPDOWNLIST | WS_TABSTOP | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
-    if ( style & wxCB_SORT )
-        msStyle |= CBS_SORT;
-
-    if ( style & wxCLIP_SIBLINGS )
-        msStyle |= WS_CLIPSIBLINGS;
-
-
     // Experience shows that wxChoice vs. wxComboBox distinction confuses
     // quite a few people - try to help them
     wxASSERT_MSG( !(style & wxCB_DROPDOWN) &&
@@ -134,19 +123,36 @@ bool wxChoice::Create(wxWindow *parent,
                   _T("this style flag is ignored by wxChoice, you ")
                   _T("probably want to use a wxComboBox") );
 
-    if ( !MSWCreateControl(wxT("COMBOBOX"), msStyle) )
+    return CreateAndInit(parent, id, pos, size, n, choices, style,
+                         validator, name);
+}
+
+bool wxChoice::CreateAndInit(wxWindow *parent, wxWindowID id,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             int n, const wxString choices[],
+                             long style,
+                             const wxValidator& validator,
+                             const wxString& name)
+{
+    // initialize wxControl
+    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    // A choice/combobox normally has a white background (or other, depending
-    // on global settings) rather than inheriting the parent's background colour.
+    // now create the real HWND
+    if ( !MSWCreateControl(wxT("COMBOBOX"), _T(""), pos, size) )
+        return FALSE;
+
+
+    // choice/combobox normally has "white" (depends on colour scheme, of
+    // course) background rather than inheriting the parent's background
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
+    // initialize
     for ( int i = 0; i < n; i++ )
     {
         Append(choices[i]);
     }
-
-    SetSize(pos.x, pos.y, size.x, size.y);
 
     return TRUE;
 }
@@ -165,6 +171,26 @@ bool wxChoice::Create(wxWindow *parent,
                   style, validator, name);
 }
 
+WXDWORD wxChoice::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    // we never have an external border
+    WXDWORD msStyle = wxControl::MSWGetStyle
+                      (
+                        (style & ~wxBORDER_MASK) | wxBORDER_NONE, exstyle
+                      );
+
+    // WS_CLIPSIBLINGS is useful with wxChoice and doesn't seem to result in
+    // any problems
+    msStyle |= WS_CLIPSIBLINGS;
+
+    // wxChoice-specific styles
+    msStyle |= CBS_DROPDOWNLIST | WS_HSCROLL | WS_VSCROLL;
+    if ( style & wxCB_SORT )
+        msStyle |= CBS_SORT;
+
+    return msStyle;
+}
+
 wxChoice::~wxChoice()
 {
     Free();
@@ -181,6 +207,12 @@ int wxChoice::DoAppend(const wxString& item)
     {
         wxLogLastError(wxT("SendMessage(CB_ADDSTRING)"));
     }
+    else // ok
+    {
+        // we need to refresh our size in order to have enough space for the
+        // newly added items
+        UpdateVisibleHeight();
+    }
 
     return n;
 }
@@ -194,6 +226,10 @@ int wxChoice::DoInsert(const wxString& item, int pos)
     if ( n == CB_ERR )
     {
         wxLogLastError(wxT("SendMessage(CB_INSERTSTRING)"));
+    }
+    else // ok
+    {
+        UpdateVisibleHeight();
     }
 
     return n;
@@ -209,6 +245,8 @@ void wxChoice::Delete(int n)
     }
 
     SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
+
+    UpdateVisibleHeight();
 }
 
 void wxChoice::Clear()
@@ -216,6 +254,8 @@ void wxChoice::Clear()
     Free();
 
     SendMessage(GetHwnd(), CB_RESETCONTENT, 0, 0);
+
+    UpdateVisibleHeight();
 }
 
 void wxChoice::Free()
@@ -370,6 +410,11 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 int wxChoice::GetVisibleHeight() const
 {
     return ::SendMessage(GetHwnd(), CB_GETITEMHEIGHT, (WPARAM)-1, 0);
+}
+
+void wxChoice::UpdateVisibleHeight()
+{
+    DoSetSize(-1, -1, -1, GetVisibleHeight());
 }
 
 void wxChoice::DoMoveWindow(int x, int y, int width, int height)

@@ -355,6 +355,10 @@ WXHWND wxComboBox::GetEditHWND() const
     return (WXHWND)hwndEdit;
 }
 
+// ----------------------------------------------------------------------------
+// wxComboBox creation
+// ----------------------------------------------------------------------------
+
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                         const wxString& value,
                         const wxPoint& pos,
@@ -369,50 +373,11 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     // some noticeable flicker while the control rearranges itself
     m_isShown = FALSE;
 
-    // first create wxWin object
-    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
+    if ( !CreateAndInit(parent, id, pos, size, n, choices, style,
+                        validator, name) )
         return FALSE;
 
-    // get the right style
-    long msStyle = WS_TABSTOP | WS_VSCROLL | WS_HSCROLL |
-                   CBS_AUTOHSCROLL | CBS_NOINTEGRALHEIGHT /* | WS_CLIPSIBLINGS */;
-    if ( style & wxCB_READONLY )
-        msStyle |= CBS_DROPDOWNLIST;
-#ifndef __WXWINCE__
-    else if ( style & wxCB_SIMPLE )
-        msStyle |= CBS_SIMPLE; // A list (shown always) and edit control
-#endif
-    else
-        msStyle |= CBS_DROPDOWN;
-
-    if ( style & wxCB_SORT )
-        msStyle |= CBS_SORT;
-
-    if ( style & wxCLIP_SIBLINGS )
-        msStyle |= WS_CLIPSIBLINGS;
-
-
-    // and now create the MSW control
-    if ( !MSWCreateControl(_T("COMBOBOX"), msStyle) )
-        return FALSE;
-
-    // A choice/combobox normally has a white background (or other, depending
-    // on global settings) rather than inheriting the parent's background colour.
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-
-    for ( int i = 0; i < n; i++ )
-    {
-        Append(choices[i]);
-    }
-
-    if ( !value.IsEmpty() )
-    {
-        SetValue(value);
-    }
-
-    // do this after appending the values to the combobox so that autosizing
-    // works correctly
-    SetSize(pos.x, pos.y, size.x, size.y);
+    SetValue(value);
 
     // a (not read only) combobox is, in fact, 2 controls: the combobox itself
     // and an edit control inside it and if we want to catch events from this
@@ -446,6 +411,38 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     return Create(parent, id, value, pos, size, chs.GetCount(),
                   chs.GetStrings(), style, validator, name);
 }
+
+WXDWORD wxComboBox::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    // we never have an external border
+    WXDWORD msStyle = wxChoice::MSWGetStyle
+                      (
+                        (style & ~wxBORDER_MASK) | wxBORDER_NONE, exstyle
+                      );
+
+    // remove the style always added by wxChoice
+    msStyle &= ~CBS_DROPDOWNLIST;
+
+    if ( style & wxCB_READONLY )
+        msStyle |= CBS_DROPDOWNLIST;
+#ifndef __WXWINCE__
+    else if ( style & wxCB_SIMPLE )
+        msStyle |= CBS_SIMPLE; // A list (shown always) and edit control
+#endif
+    else
+        msStyle |= CBS_DROPDOWN;
+
+    // there is no reason to not always use CBS_AUTOHSCROLL, so do use it
+    msStyle |= CBS_AUTOHSCROLL;
+
+    // NB: we used to also add CBS_NOINTEGRALHEIGHT here but why?
+
+    return msStyle;
+}
+
+// ----------------------------------------------------------------------------
+// wxComboBox text control-like methods
+// ----------------------------------------------------------------------------
 
 void wxComboBox::SetValue(const wxString& value)
 {
@@ -574,6 +571,5 @@ void wxComboBox::SetSelection(long from, long to)
     }
 }
 
-#endif
- // wxUSE_COMBOBOX
+#endif // wxUSE_COMBOBOX
 
