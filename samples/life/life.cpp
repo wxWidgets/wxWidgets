@@ -236,8 +236,8 @@ enum
     ID_CLEAR,
     ID_START,
     ID_STOP,
-    ID_ABOUT,
     ID_EXIT,
+    ID_ABOUT,
 
     // slider
     ID_SLIDER
@@ -351,7 +351,7 @@ LifeFrame::LifeFrame() : wxFrame((wxFrame *)0, -1, _("Life!"), wxPoint(50, 50))
 
     // slider
     wxSlider *slider = new wxSlider(panel, ID_SLIDER, 5, 1, 10,
-        wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_AUTOTICKS);
+        wxDefaultPosition, wxSize(150,-1), wxSL_HORIZONTAL | wxSL_AUTOTICKS);
 
     // component layout
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
@@ -455,6 +455,7 @@ void LifeFrame::OnNewGame()
             m_canvas->Reset();
             m_tics = 0;
             UpdateInfoText();
+            m_canvas->Refresh();
         }
         else
         {

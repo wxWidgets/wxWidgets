@@ -480,7 +480,7 @@ void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
 static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 {
     if (g_isIdle) wxapp_install_idle_handler();
-
+    
     int id = menu->FindMenuIdByMenuItem(widget);
 
     /* should find it for normal (not popup) menu */
