@@ -255,7 +255,7 @@ bool wxToolBar95::CreateTools()
     replaceBitmap.nIDNew = (UINT) (HBITMAP) m_hBitmap;
     replaceBitmap.nButtons = noButtons;
     if (::SendMessage((HWND) GetHWND(), TB_REPLACEBITMAP, (WPARAM) 0, (LPARAM) &replaceBitmap) == -1)
-      wxMessageBox("Could not add bitmap to toolbar");
+      wxFAIL_MSG("Could not add bitmap to toolbar");
 
     ::DeleteObject((HBITMAP) oldToolBarBitmap);
 
@@ -274,7 +274,7 @@ bool wxToolBar95::CreateTools()
     addBitmap.hInst = 0;
     addBitmap.nID = (UINT)m_hBitmap;
     if (::SendMessage((HWND) GetHWND(), TB_ADDBITMAP, (WPARAM) noButtons, (LPARAM) &addBitmap) == -1)
-      wxMessageBox("Could not add bitmap to toolbar");
+      wxFAIL_MSG("Could not add bitmap to toolbar");
   }
 
   // Now add the buttons.
@@ -370,28 +370,37 @@ bool wxToolBar95::MSWNotify(WXWPARAM WXUNUSED(wParam),
 
     wxToolBarTool *tool = (wxToolBarTool *)node->Data();
 
-    if ( tool->m_shortHelpString != "" )
+    const wxString& help = tool->m_shortHelpString;
+
+    if ( !help.IsEmpty() )
     {
         if ( hdr->code == TTN_NEEDTEXTA )
         {
-            ttText->lpszText = (char *)(const char *)tool->m_shortHelpString;
+            ttText->lpszText = (char *)help.c_str();
         }
 #if (_WIN32_IE >= 0x0300)
         else
         {
             // FIXME this is a temp hack only until I understand better what
             //       must be done in both ANSI and Unicode builds
-            size_t lenAnsi = tool->m_shortHelpString.Len();
+
+            size_t lenAnsi = help.Len();
             #ifdef __MWERKS__
-            wchar_t *pwz = new wchar_t[lenAnsi * 2 + 1];
+                // MetroWerks doesn't like calling mbstowcs with NULL argument
+                size_t lenUnicode = 2*lenAnsi;
             #else
-            size_t lenUnicode = mbstowcs(NULL, tool->m_shortHelpString, lenAnsi);
-            wchar_t *pwz = new wchar_t[lenUnicode + 1];
+                size_t lenUnicode = mbstowcs(NULL, help, lenAnsi);
             #endif
-            mbstowcs(pwz, tool->m_shortHelpString, lenAnsi + 1);
-            memcpy(ttText->szText, pwz,
-                   (sizeof(ttText->szText) - 1)/sizeof(ttText->szText[0]));
-            ttText->szText[WXSIZEOF(ttText->szText)] = 0;
+
+            // using the pointer of right type avoids us doing all sorts of
+            // pointer arithmetics ourselves
+            wchar_t *dst = (wchar_t *)ttText->szText,
+                    *pwz = new wchar_t[lenUnicode + 1];
+            mbstowcs(pwz, help, lenAnsi + 1);
+            memcpy(dst, pwz, lenUnicode*sizeof(wchar_t));
+
+            // put the terminating _wide_ NUL
+            dst[lenUnicode] = 0;
 
             delete [] pwz;
         }
