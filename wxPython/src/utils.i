@@ -14,7 +14,7 @@
 %module utils
 
 %{
-#include "helpers.h"
+#include "export.h"
 #include <wx/config.h>
 #include <wx/fileconf.h>
 #include <wx/datetime.h>
@@ -34,6 +34,8 @@
 //---------------------------------------------------------------------------
 
 %{
+    static wxString wxPyEmptyStr("");
+
     static PyObject* __EnumerationHelper(bool flag, wxString& str, long index) {
         PyObject* ret = PyTuple_New(3);
         if (ret) {

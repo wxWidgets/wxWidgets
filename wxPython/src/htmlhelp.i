@@ -14,7 +14,7 @@
 %module htmlhelp
 
 %{
-#include "helpers.h"
+#include "export.h"
 #include <wx/html/htmlwin.h>
 #include <wx/html/helpctrl.h>
 #include <wx/image.h>

@@ -15,7 +15,7 @@
 #ifndef OLD_GRID
 
 %{
-#include "helpers.h"
+#include "export.h"
 #include <wx/grid.h>
 %}
 
@@ -47,10 +47,10 @@
     wxGridCellAttr* CBNAME(int a, int b) {                              \
         wxGridCellAttr* rval = NULL;                                    \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME)) {                           \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                           \
             PyObject* ro;                                               \
             wxGridCellAttr* ptr;                                        \
-            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)", a, b)); \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)", a, b)); \
             if (ro) {                                                   \
                 if (!SWIG_GetPtrObj(ro, (void **)&ptr, "_wxGridCellAttr_p"))    \
                     rval = ptr;                                         \
@@ -71,9 +71,9 @@
 #define PYCALLBACK__GCAINTINT(PCLASS, CBNAME)                           \
     void CBNAME(wxGridCellAttr *attr, int a, int b) {                   \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME)) {                           \
-            PyObject* obj = wxPyConstructObject((void*)attr, "wxGridCellAttr");\
-            m_myInst.callCallback(Py_BuildValue("(Oii)", obj, a, b));   \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                           \
+            PyObject* obj = wxPyConstructObject((void*)attr, "wxGridCellAttr", 0);\
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oii)", obj, a, b));   \
             Py_DECREF(obj);                                             \
         }                                                               \
         else                                                            \
@@ -89,9 +89,9 @@
 #define PYCALLBACK__GCAINT(PCLASS, CBNAME)                              \
     void CBNAME(wxGridCellAttr *attr, int val) {                        \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME)) {                           \
-            PyObject* obj = wxPyConstructObject((void*)attr, "wxGridCellAttr");\
-            m_myInst.callCallback(Py_BuildValue("(Oi)", obj, val));     \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                           \
+            PyObject* obj = wxPyConstructObject((void*)attr, "wxGridCellAttr", 0);\
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", obj, val));     \
             Py_DECREF(obj);                                             \
         }                                                               \
         else                                                            \
@@ -108,8 +108,8 @@
     int  CBNAME() {                                                     \
         bool doSave = wxPyRestoreThread();                              \
         int rval = 0;                                                   \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            rval = m_myInst.callCallback(Py_BuildValue("()"));          \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));          \
         wxPySaveThread(doSave);                                         \
         return rval;                                                    \
     }
@@ -120,8 +120,8 @@
     bool CBNAME(int a, int b) {                                         \
         bool doSave = wxPyRestoreThread();                              \
         bool rval = 0;                                                  \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            rval = m_myInst.callCallback(Py_BuildValue("(ii)",a,b));    \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(ii)",a,b));    \
         wxPySaveThread(doSave);                                         \
         return rval;                                                    \
     }
@@ -132,9 +132,9 @@
     wxString CBNAME(int a, int b) {                                     \
         bool doSave = wxPyRestoreThread();                              \
         wxString rval;                                                  \
-        if (m_myInst.findCallback(#CBNAME)) {                           \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                           \
             PyObject* ro;                                               \
-            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)",a,b));   \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)",a,b));   \
             if (ro) {                                                   \
                 PyObject* str = PyObject_Str(ro);                       \
                 rval = PyString_AsString(str);                          \
@@ -150,8 +150,8 @@
 #define PYCALLBACK__INTINTSTRING_pure(CBNAME)                           \
     void CBNAME(int a, int b, const wxString& c) {                      \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(Py_BuildValue("(iis)",a,b,c.c_str()));    \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iis)",a,b,c.c_str()));    \
         wxPySaveThread(doSave);                                         \
     }
 
@@ -160,9 +160,9 @@
     wxString CBNAME(int a, int b) {                                     \
         bool doSave = wxPyRestoreThread();                              \
         wxString rval;                                                  \
-        if (m_myInst.findCallback(#CBNAME)) {                           \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                           \
             PyObject* ro;                                               \
-            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)",a,b));   \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)",a,b));   \
             if (ro) {                                                   \
                 PyObject* str = PyObject_Str(ro);                       \
                 rval = PyString_AsString(str);                          \
@@ -183,8 +183,8 @@
     bool CBNAME(int a, int b, const wxString& c)  {                     \
         bool rval;                                                      \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            rval = m_myInst.callCallback(Py_BuildValue("(iis)", a,b,c.c_str()));   \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iis)", a,b,c.c_str()));   \
         else                                                            \
             rval = PCLASS::CBNAME(a,b,c);                               \
         wxPySaveThread(doSave);                                         \
@@ -201,8 +201,8 @@
     long CBNAME(int a, int b)  {                                        \
         long rval;                                                      \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            rval = m_myInst.callCallback(Py_BuildValue("(ii)", a,b));   \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(ii)", a,b));   \
         else                                                            \
             rval = PCLASS::CBNAME(a,b);                                 \
         wxPySaveThread(doSave);                                         \
@@ -218,8 +218,8 @@
     bool CBNAME(int a, int b)  {                                        \
         bool rval;                                                      \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            rval = m_myInst.callCallback(Py_BuildValue("(ii)", a,b));   \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(ii)", a,b));   \
         else                                                            \
             rval = PCLASS::CBNAME(a,b);                                 \
         wxPySaveThread(doSave);                                         \
@@ -235,9 +235,9 @@
     double CBNAME(int a, int b) {                                       \
         bool doSave = wxPyRestoreThread();                              \
         double rval;                                                    \
-        if (m_myInst.findCallback(#CBNAME)) {                           \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                           \
             PyObject* ro;                                               \
-            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)",a,b));   \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)",a,b));   \
             if (ro) {                                                   \
                 PyObject* str = PyObject_Str(ro);                       \
                 rval = PyFloat_AsDouble(str);                           \
@@ -257,8 +257,8 @@
 #define PYCALLBACK__(PCLASS, CBNAME)                                    \
     void CBNAME()  {                                                    \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(Py_BuildValue("()"));                 \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));                 \
         else                                                            \
             PCLASS::CBNAME();                                           \
         wxPySaveThread(doSave);                                         \
@@ -274,8 +274,8 @@
     bool CBNAME(size_t a, size_t b)  {                                  \
         bool rval;                                                      \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            rval = m_myInst.callCallback(Py_BuildValue("(ii)", a,b));   \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(ii)", a,b));   \
         else                                                            \
             rval = PCLASS::CBNAME(a,b);                                 \
         wxPySaveThread(doSave);                                         \
@@ -291,8 +291,8 @@
     bool CBNAME(size_t a)  {                                            \
         bool rval;                                                      \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            rval = m_myInst.callCallback(Py_BuildValue("(i)", a));      \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(i)", a));      \
         else                                                            \
             rval = PCLASS::CBNAME(a);                                   \
         wxPySaveThread(doSave);                                         \
@@ -308,9 +308,9 @@
     wxString CBNAME(int a) {                                            \
         bool doSave = wxPyRestoreThread();                              \
         wxString rval;                                                  \
-        if (m_myInst.findCallback(#CBNAME)) {                           \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                           \
             PyObject* ro;                                               \
-            ro = m_myInst.callCallbackObj(Py_BuildValue("(i)",a));      \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(i)",a));      \
             if (ro) {                                                   \
                 PyObject* str = PyObject_Str(ro);                       \
                 rval = PyString_AsString(str);                          \
@@ -330,8 +330,8 @@
 #define PYCALLBACK__INTSTRING(PCLASS, CBNAME)                           \
     void CBNAME(int a, const wxString& c)  {                            \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(Py_BuildValue("(is)", a,c.c_str()));  \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(is)", a,c.c_str()));  \
         else                                                            \
             PCLASS::CBNAME(a,c);                                        \
         wxPySaveThread(doSave);                                         \
@@ -347,8 +347,8 @@
     bool CBNAME()  {                                                    \
         bool rval;                                                      \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            rval = m_myInst.callCallback(Py_BuildValue("()"));          \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));          \
         else                                                            \
             rval = PCLASS::CBNAME();                                    \
         wxPySaveThread(doSave);                                         \
@@ -363,8 +363,8 @@
 #define PYCALLBACK__SIZETINT(PCLASS, CBNAME)                            \
     void CBNAME(size_t a, int b)  {                                     \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(Py_BuildValue("(ii)", a,b));          \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(ii)", a,b));          \
         else                                                            \
             PCLASS::CBNAME(a,b);                                        \
         wxPySaveThread(doSave);                                         \
@@ -379,8 +379,8 @@
 #define PYCALLBACK__INTINTLONG(PCLASS, CBNAME)                          \
     void CBNAME(int a, int b, long c)  {                                \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(Py_BuildValue("(iii)", a,b,c));       \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iii)", a,b,c));       \
         else                                                            \
             PCLASS::CBNAME(a,b,c);                                      \
         wxPySaveThread(doSave);                                         \
@@ -395,8 +395,8 @@
 #define PYCALLBACK__INTINTDOUBLE(PCLASS, CBNAME)                        \
     void CBNAME(int a, int b, double c)  {                              \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(Py_BuildValue("(iif)", a,b,c));       \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iif)", a,b,c));       \
         else                                                            \
             PCLASS::CBNAME(a,b,c);                                      \
         wxPySaveThread(doSave);                                         \
@@ -410,8 +410,8 @@
 #define PYCALLBACK__INTINTBOOL(PCLASS, CBNAME)                          \
     void CBNAME(int a, int b, bool c)  {                                \
         bool doSave = wxPyRestoreThread();                              \
-        if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(Py_BuildValue("(iii)", a,b,c));       \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                             \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iii)", a,b,c));       \
         else                                                            \
             PCLASS::CBNAME(a,b,c);                                      \
         wxPySaveThread(doSave);                                         \
@@ -484,13 +484,13 @@ public:
               wxDC& dc, const wxRect& rect,
               int row, int col, bool isSelected) {
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("Draw")) {
-            m_myInst.callCallback(
+        if (wxPyCBH_findCallback(m_myInst, "Draw")) {
+            wxPyCBH_callCallback(m_myInst,
                 Py_BuildValue("(OOOOiii)",
-                              wxPyConstructObject((void*)&grid, "wxGrid"),
-                              wxPyConstructObject((void*)&attr, "wxGridCellAttr"),
-                              wxPyConstructObject((void*)&dc,   "wxDC"),
-                              wxPyConstructObject((void*)&rect, "wxRect"),
+                              wxPyConstructObject((void*)&grid, "wxGrid", 0),
+                              wxPyConstructObject((void*)&attr, "wxGridCellAttr", 0),
+                              wxPyConstructObject((void*)&dc,   "wxDC", 0),
+                              wxPyConstructObject((void*)&rect, "wxRect", 0),
                               row, col, isSelected));
         }
         wxPySaveThread(doSave);
@@ -500,14 +500,14 @@ public:
                        int row, int col) {
         wxSize rval;
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("GetBestSize")) {
+        if (wxPyCBH_findCallback(m_myInst, "GetBestSize")) {
             PyObject* ro;
             wxSize*   ptr;
-            ro = m_myInst.callCallbackObj(
+            ro = wxPyCBH_callCallbackObj(m_myInst,
                 Py_BuildValue("(OOOii)",
-                              wxPyConstructObject((void*)&grid, "wxGrid"),
-                              wxPyConstructObject((void*)&attr, "wxGridCellAttr"),
-                              wxPyConstructObject((void*)&dc,   "wxDC"),
+                              wxPyConstructObject((void*)&grid, "wxGrid", 0),
+                              wxPyConstructObject((void*)&attr, "wxGridCellAttr", 0),
+                              wxPyConstructObject((void*)&dc,   "wxDC", 0),
                               row, col));
             if (ro) {
                 if (!SWIG_GetPtrObj(ro, (void **)&ptr, "_wxSize_p"))
@@ -523,10 +523,10 @@ public:
     wxGridCellRenderer *Clone() const {
         wxGridCellRenderer* rval = NULL;
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("Clone")) {
+        if (wxPyCBH_findCallback(m_myInst, "Clone")) {
             PyObject* ro;
             wxGridCellRenderer* ptr;
-            ro = m_myInst.callCallbackObj(Py_BuildValue("()"));
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
             if (ro) {
                 if (!SWIG_GetPtrObj(ro, (void **)&ptr, "_wxGridCellRenderer_p"))
                     rval = ptr;
@@ -638,12 +638,12 @@ public:
 
     void Create(wxWindow* parent, wxWindowID id, wxEvtHandler* evtHandler) {
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("Create")) {
-            m_myInst.callCallback(
+        if (wxPyCBH_findCallback(m_myInst, "Create")) {
+            wxPyCBH_callCallback(m_myInst,
                 Py_BuildValue("(OiO)",
-                              wxPyConstructObject((void*)parent, "wxWindow"),
+                              wxPyConstructObject((void*)parent, "wxWindow", 0),
                               id,
-                              wxPyConstructObject((void*)evtHandler, "wxEvtHandler")));
+                              wxPyConstructObject((void*)evtHandler, "wxEvtHandler", 0)));
         }
         wxPySaveThread(doSave);
     }
@@ -651,10 +651,10 @@ public:
 
     void BeginEdit(int row, int col, wxGrid* grid) {
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("BeginEdit")) {
-            m_myInst.callCallback(
+        if (wxPyCBH_findCallback(m_myInst, "BeginEdit")) {
+            wxPyCBH_callCallback(m_myInst,
                 Py_BuildValue("(iiO)", row, col,
-                              wxPyConstructObject((void*)grid, "wxGrid")));
+                              wxPyConstructObject((void*)grid, "wxGrid", 0)));
         }
         wxPySaveThread(doSave);
     }
@@ -663,10 +663,10 @@ public:
     bool EndEdit(int row, int col, wxGrid* grid) {
         bool rv = FALSE;
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("EndEdit")) {
-            rv = m_myInst.callCallback(
+        if (wxPyCBH_findCallback(m_myInst, "EndEdit")) {
+            rv = wxPyCBH_callCallback(m_myInst,
                 Py_BuildValue("(iiO)", row, col,
-                              wxPyConstructObject((void*)grid, "wxGrid")));
+                              wxPyConstructObject((void*)grid, "wxGrid", 0)));
         }
         wxPySaveThread(doSave);
         return rv;
@@ -676,10 +676,10 @@ public:
     wxGridCellEditor*Clone() const {
         wxGridCellEditor* rval = NULL;
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("Clone")) {
+        if (wxPyCBH_findCallback(m_myInst, "Clone")) {
             PyObject* ro;
             wxGridCellEditor* ptr;
-            ro = m_myInst.callCallbackObj(Py_BuildValue("()"));
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
             if (ro) {
                 if (!SWIG_GetPtrObj(ro, (void **)&ptr, "_wxGridCellEditor_p"))
                     rval = ptr;
@@ -693,10 +693,10 @@ public:
 
     void Show(bool show, wxGridCellAttr *attr) {
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("Show"))
-            m_myInst.callCallback(
+        if (wxPyCBH_findCallback(m_myInst, "Show"))
+            wxPyCBH_callCallback(m_myInst,
                 Py_BuildValue("(iO)", show,
-                              wxPyConstructObject((void*)attr, "wxGridCellAttr")));
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr", 0)));
         else
             wxGridCellEditor::Show(show, attr);
         wxPySaveThread(doSave);
@@ -708,11 +708,11 @@ public:
 
     void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr) {
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("PaintBackground"))
-            m_myInst.callCallback(
+        if (wxPyCBH_findCallback(m_myInst, "PaintBackground"))
+            wxPyCBH_callCallback(m_myInst,
                 Py_BuildValue("(OO)",
-                              wxPyConstructObject((void*)&rectCell, "wxRect"),
-                              wxPyConstructObject((void*)attr, "wxGridCellAttr")));
+                              wxPyConstructObject((void*)&rectCell, "wxRect", 0),
+                              wxPyConstructObject((void*)attr, "wxGridCellAttr", 0)));
         else
             wxGridCellEditor::PaintBackground(rectCell, attr);
         wxPySaveThread(doSave);
@@ -989,9 +989,9 @@ public:
     wxString GetValue(int row, int col) {
         bool doSave = wxPyRestoreThread();
         wxString rval;
-        if (m_myInst.findCallback("GetValue")) {
+        if (wxPyCBH_findCallback(m_myInst, "GetValue")) {
             PyObject* ro;
-            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)",row,col));
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)",row,col));
             if (ro) {
                 PyObject* str = PyObject_Str(ro);
                 rval = PyString_AsString(str);
@@ -1005,8 +1005,8 @@ public:
 
     void SetValue(int row, int col, const wxString& val) {
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("SetValue"))
-            m_myInst.callCallback(Py_BuildValue("(iis)",row,col,val.c_str()));
+        if (wxPyCBH_findCallback(m_myInst, "SetValue"))
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iis)",row,col,val.c_str()));
         wxPySaveThread(doSave);
     }
 
@@ -1016,10 +1016,10 @@ public:
     long GetValueAsLong( int row, int col ) {
         long rval = 0;
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("GetValue")) {
+        if (wxPyCBH_findCallback(m_myInst, "GetValue")) {
             PyObject* ro;
             PyObject* num;
-            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)", row, col));
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)", row, col));
             if (ro && PyNumber_Check(ro)) {
                 num = PyNumber_Int(ro);
                 if (num) {
@@ -1036,10 +1036,10 @@ public:
     double GetValueAsDouble( int row, int col ) {
         double rval = 0.0;
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("GetValue")) {
+        if (wxPyCBH_findCallback(m_myInst, "GetValue")) {
             PyObject* ro;
             PyObject* num;
-            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)", row, col));
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)", row, col));
             if (ro && PyNumber_Check(ro)) {
                 num = PyNumber_Float(ro);
                 if (num) {
@@ -1059,16 +1059,16 @@ public:
 
     void SetValueAsLong( int row, int col, long value ) {
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("SetValue")) {
-            m_myInst.callCallback(Py_BuildValue("(iii)", row, col, value));
+        if (wxPyCBH_findCallback(m_myInst, "SetValue")) {
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iii)", row, col, value));
         }
         wxPySaveThread(doSave);
     }
 
     void SetValueAsDouble( int row, int col, double value ) {
         bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("SetValue")) {
-            m_myInst.callCallback(Py_BuildValue("(iid)", row, col, value));
+        if (wxPyCBH_findCallback(m_myInst, "SetValue")) {
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iid)", row, col, value));
         }
         wxPySaveThread(doSave);
     }

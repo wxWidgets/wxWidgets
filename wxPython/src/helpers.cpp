@@ -257,8 +257,8 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 //---------------------------------------------------------------------------
 
 PyObject* wxPyConstructObject(void* ptr,
-                                 const char* className,
-                                 int setThisOwn) {
+                              const char* className,
+                              int setThisOwn) {
     PyObject* obj;
     PyObject* arg;
 
@@ -301,8 +301,6 @@ PyObject* wxPyConstructObject(void* ptr,
 
 //---------------------------------------------------------------------------
 
-static unsigned int _wxPyNestCount = 0;
-
 static PyThreadState* myPyThreadState_Get() {
     PyThreadState* current;
     current = PyThreadState_Swap(NULL);
@@ -320,7 +318,6 @@ HELPEREXPORT bool wxPyRestoreThread() {
     // already have the lock.  (I hope!)
     //
 #ifdef WXP_WITH_THREAD
-    _wxPyNestCount += 1;
     if (wxPyEventThreadState != myPyThreadState_Get()) {
         PyEval_RestoreThread(wxPyEventThreadState);
         return TRUE;
@@ -336,7 +333,6 @@ HELPEREXPORT void wxPySaveThread(bool doSave) {
     if (doSave) {
         wxPyEventThreadState = PyEval_SaveThread();
     }
-    _wxPyNestCount -= 1;
 #endif
 }
 
@@ -397,23 +393,6 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 
 
 //----------------------------------------------------------------------
-
-wxPyCallbackHelper::wxPyCallbackHelper() {
-    m_class = NULL;
-    m_self = NULL;
-    m_lastFound = NULL;
-    m_incRef = FALSE;
-}
-
-
-wxPyCallbackHelper::~wxPyCallbackHelper() {
-    bool doSave = wxPyRestoreThread();
-    if (m_incRef) {
-        Py_XDECREF(m_self);
-        Py_XDECREF(m_class);
-    }
-    wxPySaveThread(doSave);
-}
 
 wxPyCallbackHelper::wxPyCallbackHelper(const wxPyCallbackHelper& other) {
       m_lastFound = NULL;
@@ -495,6 +474,31 @@ PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) const {
 }
 
 
+void wxPyCBH_setSelf(wxPyCallbackHelper& cbh, PyObject* self, PyObject* klass, int incref) {
+    cbh.setSelf(self, klass, incref);
+}
+
+bool wxPyCBH_findCallback(const wxPyCallbackHelper& cbh, const char* name) {
+    return cbh.findCallback(name);
+}
+
+int  wxPyCBH_callCallback(const wxPyCallbackHelper& cbh, PyObject* argTuple) {
+    return cbh.callCallback(argTuple);
+}
+
+PyObject* wxPyCBH_callCallbackObj(const wxPyCallbackHelper& cbh, PyObject* argTuple) {
+    return cbh.callCallbackObj(argTuple);
+}
+
+
+void wxPyCBH_delete(wxPyCallbackHelper* cbh) {
+    bool doSave = wxPyRestoreThread();
+    if (cbh->m_incRef) {
+        Py_XDECREF(cbh->m_self);
+        Py_XDECREF(cbh->m_class);
+    }
+    wxPySaveThread(doSave);
+}
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

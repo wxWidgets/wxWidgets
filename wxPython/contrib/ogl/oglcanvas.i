@@ -14,7 +14,7 @@
 %module oglcanvas
 
 %{
-#include "helpers.h"
+#include "export.h"
 #include "oglhelpers.h"
 %}
 
@@ -112,8 +112,8 @@ public:
 class wxPyShapeCanvas : public wxScrolledWindow {
 public:
     wxPyShapeCanvas(wxWindow* parent = NULL, wxWindowID id = -1,
-                    const wxPoint& pos = wxPyDefaultPosition,
-                    const wxSize& size = wxPyDefaultSize,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
                     long style = wxBORDER);
 
     void _setSelf(PyObject* self, PyObject* _class);

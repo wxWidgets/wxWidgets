@@ -14,7 +14,7 @@
 
 
 %{
-#include "helpers.h"
+#include "export.h"
 #include "wx/stc/stc.h"
 %}
 
@@ -34,7 +34,6 @@
 // Get all our defs from the REAL header file.
 
 %include stc.h
-//%include SciLexer.h
 
 //----------------------------------------------------------------------
 // Python functions to act like the event macros
@@ -89,8 +88,8 @@ def EVT_STC_POSCHANGED(win, id, fn):
 
 %init %{
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
+//    wxClassInfo::CleanUpClasses();
+//    wxClassInfo::InitializeClasses();
 
 %}
 

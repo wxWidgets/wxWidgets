@@ -14,7 +14,7 @@
 
 
 %{
-#include "helpers.h"
+#include "export.h"
 #include <wx/calctrl.h>
 %}
 

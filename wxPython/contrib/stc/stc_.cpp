@@ -55,7 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "stc_c"
 
-#include "helpers.h"
+#include "export.h"
 #include "wx/stc/stc.h"
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
@@ -8626,6 +8626,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxRealPoint","_wxRealPoint",0},
     { "_wxNavigationKeyEvent","_class_wxNavigationKeyEvent",0},
     { "_wxPNMHandler","_class_wxPNMHandler",0},
+    { "_wxPrinterDC","_class_wxPrinterDC",0},
     { "_wxWindowCreateEvent","_class_wxWindowCreateEvent",0},
     { "_wxLogGui","_class_wxLogGui",0},
     { "_class_wxMenuItem","_wxMenuItem",0},
@@ -8634,7 +8635,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxStatusBar","_wxStatusBar",0},
     { "_class_wxGIFHandler","_wxGIFHandler",0},
     { "_class_wxPySizer","_wxPySizer",0},
-    { "_class_wxPostScriptDC","_wxPostScriptDC",0},
     { "_wxPanel","_class_wxPanel",0},
     { "_wxInitDialogEvent","_class_wxInitDialogEvent",0},
     { "_wxCheckBox","_class_wxCheckBox",0},
@@ -8701,6 +8701,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxZipFSHandler","_wxZipFSHandler",0},
     { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
+    { "_wxTaskBarIcon","_class_wxTaskBarIcon",0},
     { "_wxPrintDialog","_class_wxPrintDialog",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
     { "_wxTimerEvent","_class_wxTimerEvent",0},
@@ -8784,6 +8785,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxTextCtrl","_wxTextCtrl",0},
     { "_class_wxListItemAttr","_wxListItemAttr",0},
     { "_wxLayoutConstraints","_class_wxLayoutConstraints",0},
+    { "_wxMetaFileDC","_class_wxMetaFileDC",0},
     { "_class_wxTextDataObject","_wxTextDataObject",0},
     { "_wxMenu","_class_wxMenu",0},
     { "_class_wxMoveEvent","_wxMoveEvent",0},
@@ -8837,6 +8839,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_short","_short",0},
     { "_wxMemoryDC","_class_wxMemoryDC",0},
     { "_wxPyTextDataObject","_class_wxPyTextDataObject",0},
+    { "_class_wxTaskBarIcon","_wxTaskBarIcon",0},
     { "_class_wxPrintDialog","_wxPrintDialog",0},
     { "_wxPyFileSystemHandler","_class_wxPyFileSystemHandler",0},
     { "_wxPaintDC","_class_wxPaintDC",0},
@@ -8846,7 +8849,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxStatusBar","_class_wxStatusBar",0},
     { "_class_wxAcceleratorEntry","_wxAcceleratorEntry",0},
     { "_class_wxCursor","_wxCursor",0},
-    { "_wxPostScriptDC","_class_wxPostScriptDC",0},
     { "_wxPyFileDropTarget","_class_wxPyFileDropTarget",0},
     { "_class_wxPyProcess","_wxPyProcess",0},
     { "_class_wxImageHandler","_wxImageHandler",0},
@@ -8854,6 +8856,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxLog","_wxLog",0},
     { "_wxTreeItemId","_class_wxTreeItemId",0},
     { "_unsigned_char","_byte",0},
+    { "_class_wxMetaFileDC","_wxMetaFileDC",0},
     { "_class_wxMenu","_wxMenu",0},
     { "_wxControl","_class_wxStyledTextCtrl",SwigwxStyledTextCtrlTowxControl},
     { "_wxControl","_wxStyledTextCtrl",SwigwxStyledTextCtrlTowxControl},
@@ -8941,6 +8944,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyApp","_wxPyApp",0},
     { "_wxSize","_class_wxSize",0},
     { "_wxRegionIterator","_class_wxRegionIterator",0},
+    { "_class_wxPrinterDC","_wxPrinterDC",0},
     { "_class_wxPyTextDataObject","_wxPyTextDataObject",0},
     { "_class_wxLogTextCtrl","_wxLogTextCtrl",0},
     { "_class_wxLogGui","_wxLogGui",0},
@@ -9431,8 +9435,8 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxEVT_STC_POSCHANGED", PyInt_FromLong((long) wxEVT_STC_POSCHANGED));
 
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
+//    wxClassInfo::CleanUpClasses();
+//    wxClassInfo::InitializeClasses();
 
 {
    int i;

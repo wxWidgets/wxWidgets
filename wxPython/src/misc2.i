@@ -99,7 +99,15 @@ long wxGetNumberFromUser(const wxString& message,
 // GDI Functions
 
 bool wxColourDisplay();
+
 int wxDisplayDepth();
+int wxGetDisplayDepth();
+
+void wxDisplaySize(int* OUTPUT, int* OUTPUT);
+wxSize wxGetDisplaySize();
+void wxDisplaySizeMM(int* OUTPUT, int* OUTPUT);
+wxSize wxGetDisplaySizeMM();
+
 void wxSetCursor(wxCursor& cursor);
 
 //----------------------------------------------------------------------

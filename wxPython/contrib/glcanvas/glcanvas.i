@@ -14,7 +14,7 @@
 %module glcanvas
 
 %{
-#include "helpers.h"
+#include "export.h"
 #include <wx/glcanvas.h>
 %}
 
@@ -34,14 +34,6 @@
 %extern controls.i
 %extern events.i
 
-
-%{
-#if defined(__WXMSW__)
-    static wxString wxPyEmptyStr("");
-    static wxPoint  wxPyDefaultPosition(-1, -1);
-    static wxSize   wxPyDefaultSize(-1, -1);
-#endif
-%}
 
 %pragma(python) code = "import wx"
 
@@ -99,8 +91,8 @@ public:
 class wxGLCanvas : public wxScrolledWindow {
 public:
     wxGLCanvas(wxWindow *parent, wxWindowID id = -1,
-               const wxPoint& pos = wxPyDefaultPosition,
-               const wxSize& size = wxPyDefaultSize, long style = 0,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize, long style = 0,
                const char* name = "GLCanvas",
                int *attribList = NULL,
                const wxPalette& palette = wxNullPalette);
@@ -119,8 +111,8 @@ public:
 
 %init %{
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
+//    wxClassInfo::CleanUpClasses();
+//    wxClassInfo::InitializeClasses();
 
 %}
 

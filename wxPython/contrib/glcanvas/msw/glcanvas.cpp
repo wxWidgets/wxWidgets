@@ -55,7 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "glcanvasc"
 
-#include "helpers.h"
+#include "export.h"
 #include <wx/glcanvas.h>
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
@@ -105,12 +105,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 static char* wxStringErrorMsg = "string type is required for parameter";
-
-#if defined(__WXMSW__)
-    static wxString wxPyEmptyStr("");
-    static wxPoint  wxPyDefaultPosition(-1, -1);
-    static wxSize   wxPyDefaultSize(-1, -1);
-#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -341,8 +335,8 @@ static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args, PyObject *
     wxGLCanvas * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1 = (wxWindowID ) -1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) 0;
     char * _arg5 = (char *) "GLCanvas";
     int * _arg6 = (int *) NULL;
@@ -1102,8 +1096,8 @@ SWIGEXPORT(void) initglcanvasc() {
 	 d = PyModule_GetDict(m);
 
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
+//    wxClassInfo::CleanUpClasses();
+//    wxClassInfo::InitializeClasses();
 
 {
    int i;

@@ -632,6 +632,22 @@ wxColourDisplay = misc2c.wxColourDisplay
 
 wxDisplayDepth = misc2c.wxDisplayDepth
 
+wxGetDisplayDepth = misc2c.wxGetDisplayDepth
+
+wxDisplaySize = misc2c.wxDisplaySize
+
+def wxGetDisplaySize(*_args, **_kwargs):
+    val = apply(misc2c.wxGetDisplaySize,_args,_kwargs)
+    if val: val = wxSizePtr(val); val.thisown = 1
+    return val
+
+wxDisplaySizeMM = misc2c.wxDisplaySizeMM
+
+def wxGetDisplaySizeMM(*_args, **_kwargs):
+    val = apply(misc2c.wxGetDisplaySizeMM,_args,_kwargs)
+    if val: val = wxSizePtr(val); val.thisown = 1
+    return val
+
 wxSetCursor = misc2c.wxSetCursor
 
 def wxFindWindowByLabel(*_args, **_kwargs):
