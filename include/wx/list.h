@@ -1170,9 +1170,9 @@ private:
 
 #else // if wxUSE_STL
 
-WX_DECLARE_LIST_XO(wxString, wxStringListBase, class WXDLLEXPORT);
+WX_DECLARE_LIST_XO(wxString, wxStringListBase, class WXDLLIMPEXP_BASE);
 
-class WXDLLEXPORT wxStringList : public wxStringListBase
+class WXDLLIMPEXP_BASE wxStringList : public wxStringListBase
 {
 public:
     compatibility_iterator Append(wxChar* s)
