@@ -207,13 +207,12 @@ wxUint8 MMBoardApp::TestMultimediaCaps()
     delete dev;
     
     // We test the OSS (Open Sound System) support.
+    // WARNING: There is a conflict between ESD and ALSA
     
-#if 0
     dev = new wxSoundStreamOSS();
     if (dev->GetError() == wxSOUND_NOERR)
         caps |= MM_SOUND_OSS;
     delete dev;
-#endif
 #endif
     
 #ifdef __WIN32__

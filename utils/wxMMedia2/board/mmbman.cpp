@@ -361,7 +361,8 @@ void MMBoardVideoFile::SetWindow(wxWindow *window)
     m_video_driver->GetSize(size);
     window->SetSize(size);
     // BAD BAD
-    window->GetParent()->GetSizer()->Fit(window->GetParent());
+    // and we remove
+    // window->GetParent()->GetSizer()->Fit(window->GetParent());
 }
 
 void MMBoardVideoFile::Play()
