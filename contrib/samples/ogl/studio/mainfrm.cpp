@@ -54,7 +54,7 @@ END_EVENT_TABLE()
 // Define my frame constructor
 csFrame::csFrame(wxDocManager* manager, wxFrame *parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size,
 	long style):
-  wxDocMDIParentFrame(manager, parent, id, title, pos, size, style, "frame")
+  wxDocMDIParentFrame(manager, parent, id, title, pos, size, style, _T("frame"))
 {
     CreateToolBar(wxNO_BORDER|wxTB_FLAT|wxTB_HORIZONTAL);
     wxGetApp().InitToolBar(GetToolBar());
@@ -71,26 +71,26 @@ csFrame::csFrame(wxDocManager* manager, wxFrame *parent, wxWindowID id, const wx
     SetAcceleratorTable(accel);
 }
 
-void csFrame::OnHelp(wxCommandEvent& event)
+void csFrame::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().GetHelpController().DisplayContents();
 }
 
-void csFrame::OnSettings(wxCommandEvent& event)
+void csFrame::OnSettings(wxCommandEvent& WXUNUSED(event))
 {
     csSettingsDialog* dialog = new csSettingsDialog(this);
-    int ret = dialog->ShowModal();
+    /* int ret = */ dialog->ShowModal();
     dialog->Destroy();
 }
 
-void csFrame::OnQuit(wxCommandEvent& event)
+void csFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
       Close(TRUE);
 }
 
-void csFrame::OnAbout(wxCommandEvent& event)
+void csFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-      (void)wxMessageBox("OGL Studio\n(c) 1999, Julian Smart", "About OGL Studio", wxICON_INFORMATION);
+      (void)wxMessageBox(_T("OGL Studio\n(c) 1999, Julian Smart"), _T("About OGL Studio"), wxICON_INFORMATION);
 }
 
 void csFrame::OnSashDragPaletteWindow(wxSashEvent& event)
@@ -141,7 +141,7 @@ void csFrame::OnCloseWindow(wxCloseEvent& event)
     wxDocMDIParentFrame::OnCloseWindow(event);
 }
 
-void csFrame::OnSize(wxSizeEvent& event)
+void csFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     wxLayoutAlgorithm layout;
     layout.LayoutMDIFrame(this);

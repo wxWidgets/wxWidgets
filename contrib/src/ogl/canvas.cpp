@@ -82,7 +82,7 @@ wxShapeCanvas::~wxShapeCanvas()
 {
 }
 
-void wxShapeCanvas::OnPaint(wxPaintEvent& event)
+void wxShapeCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 
@@ -469,35 +469,35 @@ wxShape *wxShapeCanvas::FindShape(double x, double y, int *attachment, wxClassIn
  *
  */
 
-void wxShapeCanvas::OnLeftClick(double x, double y, int keys)
+void wxShapeCanvas::OnLeftClick(double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys))
 {
 }
 
-void wxShapeCanvas::OnRightClick(double x, double y, int keys)
+void wxShapeCanvas::OnRightClick(double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys))
 {
 }
 
-void wxShapeCanvas::OnDragLeft(bool draw, double x, double y, int keys)
+void wxShapeCanvas::OnDragLeft(bool WXUNUSED(draw), double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys))
 {
 }
 
-void wxShapeCanvas::OnBeginDragLeft(double x, double y, int keys)
+void wxShapeCanvas::OnBeginDragLeft(double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys))
 {
 }
 
-void wxShapeCanvas::OnEndDragLeft(double x, double y, int keys)
+void wxShapeCanvas::OnEndDragLeft(double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys))
 {
 }
 
-void wxShapeCanvas::OnDragRight(bool draw, double x, double y, int keys)
+void wxShapeCanvas::OnDragRight(bool WXUNUSED(draw), double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys))
 {
 }
 
-void wxShapeCanvas::OnBeginDragRight(double x, double y, int keys)
+void wxShapeCanvas::OnBeginDragRight(double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys))
 {
 }
 
-void wxShapeCanvas::OnEndDragRight(double x, double y, int keys)
+void wxShapeCanvas::OnEndDragRight(double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys))
 {
 }
 

@@ -60,7 +60,7 @@ void wxBitmapShape::OnDraw(wxDC& dc)
   dc.Blit((long) x, (long) y, m_bitmap.GetWidth(), m_bitmap.GetHeight(), &tempDC, 0, 0);
 }
 
-void wxBitmapShape::SetSize(double w, double h, bool recursive)
+void wxBitmapShape::SetSize(double w, double h, bool WXUNUSED(recursive))
 {
   if (m_bitmap.Ok())
   {
@@ -81,13 +81,13 @@ void wxBitmapShape::WriteAttributes(wxExpr *clause)
   // Can't really save the bitmap; so instantiate the bitmap
   // at a higher level in the application, from a symbol library.
   wxRectangleShape::WriteAttributes(clause);
-  clause->AddAttributeValueString("filename", m_filename);
+  clause->AddAttributeValueString(_T("filename"), m_filename);
 }
 
 void wxBitmapShape::ReadAttributes(wxExpr *clause)
 {
   wxRectangleShape::ReadAttributes(clause);
-  clause->GetAttributeValue("filename", m_filename);
+  clause->GetAttributeValue(_T("filename"), m_filename);
 }
 #endif
 

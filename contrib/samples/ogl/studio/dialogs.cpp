@@ -40,7 +40,7 @@ END_EVENT_TABLE()
 
 csLabelEditingDialog::csLabelEditingDialog(wxWindow* parent)
 {
-    wxLoadFromResource(this, parent, "shape_label_dialog");
+    wxLoadFromResource(this, parent, _T("shape_label_dialog"));
 
     // Accelerators
     wxAcceleratorEntry entries[1];
@@ -90,7 +90,7 @@ END_EVENT_TABLE()
 // For 400x400 settings dialog, size your panels to about 375x325 in dialog editor
 
 csSettingsDialog::csSettingsDialog(wxWindow* parent):
-    wxDialog(parent, -1, "Settings", wxPoint(0, 0), wxSize(PROPERTY_DIALOG_WIDTH, PROPERTY_DIALOG_HEIGHT))
+    wxDialog(parent, -1, _T("Settings"), wxPoint(0, 0), wxSize(PROPERTY_DIALOG_WIDTH, PROPERTY_DIALOG_HEIGHT))
 {
     m_generalSettings = NULL;
     m_diagramSettings = NULL;
@@ -100,22 +100,22 @@ csSettingsDialog::csSettingsDialog(wxWindow* parent):
 
     m_generalSettings = new wxPanel;
 
-    bool success = wxLoadFromResource(m_generalSettings, m_notebook, "general_settings_dialog");
-    wxASSERT_MSG( (success), "Could not load general settings panel.");
-    m_notebook->AddPage(m_generalSettings, "General", TRUE);
+    bool success = wxLoadFromResource(m_generalSettings, m_notebook, _T("general_settings_dialog"));
+    wxASSERT_MSG( (success), _T("Could not load general settings panel."));
+    m_notebook->AddPage(m_generalSettings, _T("General"), TRUE);
 
     m_diagramSettings = new wxPanel;
 
-    success = wxLoadFromResource(m_diagramSettings, m_notebook, "diagram_settings_dialog");
-    wxASSERT_MSG( (success), "Could not load diagram settings panel.");
-    m_notebook->AddPage(m_diagramSettings, "Diagram");
+    success = wxLoadFromResource(m_diagramSettings, m_notebook, _T("diagram_settings_dialog"));
+    wxASSERT_MSG( (success), _T("Could not load diagram settings panel."));
+    m_notebook->AddPage(m_diagramSettings, _T("Diagram"));
 
     int largeButtonWidth = 70;
     int largeButtonHeight = 22;
 
-    wxButton* okButton = new wxButton(this, wxID_OK, "OK", wxPoint(0, 0), wxSize(largeButtonWidth, largeButtonHeight));
-    wxButton* cancelButton = new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(0, 0), wxSize(largeButtonWidth, largeButtonHeight));
-    wxButton* helpButton = new wxButton(this, wxID_HELP, "Help", wxPoint(0, 0), wxSize(largeButtonWidth, largeButtonHeight));
+    wxButton* okButton = new wxButton(this, wxID_OK, _T("OK"), wxPoint(0, 0), wxSize(largeButtonWidth, largeButtonHeight));
+    wxButton* cancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"), wxPoint(0, 0), wxSize(largeButtonWidth, largeButtonHeight));
+    wxButton* helpButton = new wxButton(this, wxID_HELP, _T("Help"), wxPoint(0, 0), wxSize(largeButtonWidth, largeButtonHeight));
 
     // Constraints for the notebook
     wxLayoutConstraints *c = new wxLayoutConstraints;
@@ -164,15 +164,15 @@ void csSettingsDialog::OnOK(wxCommandEvent& event)
 bool csSettingsDialog::TransferDataToWindow()
 {
     wxTextCtrl* gridSpacing = (wxTextCtrl*) m_diagramSettings->FindWindow(ID_GRID_SPACING);
-    wxASSERT_MSG( (gridSpacing != (wxTextCtrl*) NULL), "Could not find grid spacing control.");
+    wxASSERT_MSG( (gridSpacing != (wxTextCtrl*) NULL), _T("Could not find grid spacing control."));
 
     wxChoice* gridStyle = (wxChoice*) m_diagramSettings->FindWindow(ID_GRID_STYLE);
-    wxASSERT_MSG( (gridStyle != (wxChoice*) NULL), "Could not find grid style control.");
+    wxASSERT_MSG( (gridStyle != (wxChoice*) NULL), _T("Could not find grid style control."));
 
     gridStyle->SetSelection(wxGetApp().GetGridStyle());
 
     wxString str;
-    str.Printf("%d", wxGetApp().GetGridSpacing());
+    str.Printf(_T("%d"), wxGetApp().GetGridSpacing());
     gridSpacing->SetValue(str);
 
     return TRUE;
@@ -181,17 +181,20 @@ bool csSettingsDialog::TransferDataToWindow()
 bool csSettingsDialog::TransferDataFromWindow()
 {
     wxTextCtrl* gridSpacing = (wxTextCtrl*) m_diagramSettings->FindWindow(ID_GRID_SPACING);
-    wxASSERT_MSG( (gridSpacing != (wxTextCtrl*) NULL), "Could not find grid spacing control.");
+    wxASSERT_MSG( (gridSpacing != (wxTextCtrl*) NULL), _T("Could not find grid spacing control."));
 
     wxChoice* gridStyle = (wxChoice*) m_diagramSettings->FindWindow(ID_GRID_STYLE);
-    wxASSERT_MSG( (gridStyle != (wxChoice*) NULL), "Could not find grid style control.");
+    wxASSERT_MSG( (gridStyle != (wxChoice*) NULL), _T("Could not find grid style control."));
 
     wxGetApp().SetGridStyle(gridStyle->GetSelection());
-    wxGetApp().SetGridSpacing(atoi(gridSpacing->GetValue()));
+    wxString str = gridSpacing->GetValue();
+    long grid_spacing;
+    str.ToLong( &grid_spacing);
+    wxGetApp().SetGridSpacing(grid_spacing);
 
     if (wxGetApp().GetGridStyle() == csGRID_STYLE_DOTTED)
     {
-        wxMessageBox("Dotted grid style not yet implemented.", "Studio", wxICON_EXCLAMATION);
+        wxMessageBox(_T("Dotted grid style not yet implemented."), _T("Studio"), wxICON_EXCLAMATION);
         return FALSE;
     }
 
@@ -259,30 +262,30 @@ csShapePropertiesDialog::csShapePropertiesDialog(wxWindow* parent, const wxStrin
          wxPoint(2, 2), wxSize(SHAPE_PROPERTY_DIALOG_WIDTH - 4, SHAPE_PROPERTY_DIALOG_HEIGHT - 4));
 
     m_generalPropertiesDialog = new csGeneralShapePropertiesDialog;
-    bool success = wxLoadFromResource(m_generalPropertiesDialog, m_notebook, "general_shape_properties_dialog");
-    wxASSERT_MSG( (success), "Could not load general properties panel.");
-    m_notebook->AddPage(m_generalPropertiesDialog, "General");
+    bool success = wxLoadFromResource(m_generalPropertiesDialog, m_notebook, _T("general_shape_properties_dialog"));
+    wxASSERT_MSG( (success), _T("Could not load general properties panel."));
+    m_notebook->AddPage(m_generalPropertiesDialog, _T("General"));
 
     success = wxLoadFromResource(m_attributeDialog, m_notebook, attributeDialogName);
     if (!success)
     {
-        wxMessageBox("Could not load the attribute dialog for this shape.", "Studio", wxICON_EXCLAMATION);
+        wxMessageBox(_T("Could not load the attribute dialog for this shape."), _T("Studio"), wxICON_EXCLAMATION);
         delete m_attributeDialog;
         m_attributeDialog = NULL;
     }
     else
     {
-        m_notebook->AddPage(m_attributeDialog, "Attributes");
+        m_notebook->AddPage(m_attributeDialog, _T("Attributes"));
     }
 
     // Try the alternative dialog (test code)
     wxString str(attributeDialogName);
-    str += "1";
+    str += _T("1");
     m_alternativeAttributeDialog = new wxPanel;
     success = wxLoadFromResource(m_alternativeAttributeDialog, m_notebook, str);
     if (success)
     {
-        m_notebook->AddPage(m_alternativeAttributeDialog, "Attributes (alternative)");
+        m_notebook->AddPage(m_alternativeAttributeDialog, _T("Attributes (alternative)"));
     }
     else
     {
@@ -293,9 +296,9 @@ csShapePropertiesDialog::csShapePropertiesDialog(wxWindow* parent, const wxStrin
     int largeButtonWidth = 70;
     int largeButtonHeight = 22;
 
-    wxButton* okButton = new wxButton(this, wxID_OK, "OK", wxPoint(0, 0), wxSize(largeButtonWidth, largeButtonHeight));
-    wxButton* cancelButton = new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(0, 0), wxSize(largeButtonWidth, largeButtonHeight));
-    wxButton* helpButton = new wxButton(this, wxID_HELP, "Help", wxPoint(0, 0), wxSize(largeButtonWidth, largeButtonHeight));
+    wxButton* okButton = new wxButton(this, wxID_OK, _T("OK"), wxPoint(0, 0), wxSize(largeButtonWidth, largeButtonHeight));
+    wxButton* cancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"), wxPoint(0, 0), wxSize(largeButtonWidth, largeButtonHeight));
+    wxButton* helpButton = new wxButton(this, wxID_HELP, _T("Help"), wxPoint(0, 0), wxSize(largeButtonWidth, largeButtonHeight));
 
     // Constraints for the notebook
     wxLayoutConstraints *c = new wxLayoutConstraints;

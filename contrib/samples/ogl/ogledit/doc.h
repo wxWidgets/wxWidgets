@@ -76,7 +76,7 @@ class MyEvtHandler: public wxShapeEvtHandler
 {
  public:
   wxString label;
-  MyEvtHandler(wxShapeEvtHandler *prev = NULL, wxShape *shape = NULL, const wxString& lab = ""):wxShapeEvtHandler(prev, shape)
+  MyEvtHandler(wxShapeEvtHandler *prev = NULL, wxShape *shape = NULL, const wxString& lab = wxEmptyString):wxShapeEvtHandler(prev, shape)
   {
     label = lab;
   }
@@ -163,12 +163,12 @@ class DiagramCommand: public wxCommand
   wxString shapeLabel;
  public:
   // Multi-purpose constructor for creating, deleting shapes
-  DiagramCommand(char *name, int cmd, DiagramDocument *ddoc, wxClassInfo *shapeInfo = NULL,
+  DiagramCommand(const wxString& name, int cmd, DiagramDocument *ddoc, wxClassInfo *shapeInfo = NULL,
      double x = 0.0, double y = 0.0, bool sel = FALSE, wxShape *theShape = NULL, wxShape *fs = NULL, wxShape *ts = NULL);
 
   // Property-changing command constructors
-  DiagramCommand(char *name, int cmd, DiagramDocument *ddoc, wxBrush *backgroundColour, wxShape *theShape);
-  DiagramCommand(char *name, int cmd, DiagramDocument *ddoc, const wxString& lab, wxShape *theShape);
+  DiagramCommand(const wxString& name, int cmd, DiagramDocument *ddoc, wxBrush *backgroundColour, wxShape *theShape);
+  DiagramCommand(const wxString& name, int cmd, DiagramDocument *ddoc, const wxString& lab, wxShape *theShape);
 
   ~DiagramCommand(void);
 

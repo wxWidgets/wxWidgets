@@ -28,7 +28,10 @@
 // TODO for wxWin: wxToolBar95 cannot be moved to a non-0,0 position!
 // Needs to have a parent window...
 // So use a simple toolbar at present.
-#define TOOLPALETTECLASS    wxToolBarSimple
+// ABX: Simple toolbar is not available in default compilation and is deprecated
+//      so I use wxToolBar anyway
+// #define TOOLPALETTECLASS    wxToolBarSimple
+#define TOOLPALETTECLASS    wxToolBar
 
 class csEditorToolPalette: public TOOLPALETTECLASS
 {

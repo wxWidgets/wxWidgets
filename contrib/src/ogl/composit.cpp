@@ -154,7 +154,7 @@ void wxCompositeShape::OnErase(wxDC& dc)
 static double objectStartX = 0.0;
 static double objectStartY = 0.0;
 
-void wxCompositeShape::OnDragLeft(bool draw, double x, double y, int keys, int attachment)
+void wxCompositeShape::OnDragLeft(bool WXUNUSED(draw), double x, double y, int WXUNUSED(keys), int WXUNUSED(attachment))
 {
   double xx = x;
   double yy = y;
@@ -174,7 +174,7 @@ void wxCompositeShape::OnDragLeft(bool draw, double x, double y, int keys, int a
 //  wxShape::OnDragLeft(draw, x, y, keys, attachment);
 }
 
-void wxCompositeShape::OnBeginDragLeft(double x, double y, int keys, int attachment)
+void wxCompositeShape::OnBeginDragLeft(double x, double y, int WXUNUSED(keys), int WXUNUSED(attachment))
 {
   objectStartX = x;
   objectStartY = y;
@@ -202,7 +202,7 @@ void wxCompositeShape::OnBeginDragLeft(double x, double y, int keys, int attachm
 //  wxShape::OnBeginDragLeft(x, y, keys, attachment);
 }
 
-void wxCompositeShape::OnEndDragLeft(double x, double y, int keys, int attachment)
+void wxCompositeShape::OnEndDragLeft(double x, double y, int keys, int WXUNUSED(attachment))
 {
 //  wxShape::OnEndDragLeft(x, y, keys, attachment);
 
@@ -229,7 +229,7 @@ void wxCompositeShape::OnEndDragLeft(double x, double y, int keys, int attachmen
   if (m_canvas && !m_canvas->GetQuickEditMode()) m_canvas->Redraw(dc);
 }
 
-void wxCompositeShape::OnRightClick(double x, double y, int keys, int attachment)
+void wxCompositeShape::OnRightClick(double x, double y, int keys, int WXUNUSED(attachment))
 {
   // If we get a ctrl-right click, this means send the message to
   // the division, so we can invoke a user interface for dealing with regions.
@@ -606,12 +606,12 @@ void wxCompositeShape::WriteAttributes(wxExpr *clause)
 
   // Output constraints as constraint1 = (...), constraint2 = (...), etc.
   int constraintNo = 1;
-  char m_constraintNameBuf[20];
+  wxChar m_constraintNameBuf[20];
   wxNode *node = m_constraints.GetFirst();
   while (node)
   {
     wxOGLConstraint *constraint = (wxOGLConstraint *)node->GetData();
-    sprintf(m_constraintNameBuf, "constraint%d", constraintNo);
+    wxSprintf(m_constraintNameBuf, _T("constraint%d"), constraintNo);
 
     // Each constraint is stored in the form
     // (type name id xspacing yspacing m_constrainingObjectId constrainedObjectIdList)
@@ -648,7 +648,7 @@ void wxCompositeShape::WriteAttributes(wxExpr *clause)
     childrenExpr->Append(new wxExpr(child->GetId()));
     node = node->GetNext();
   }
-  clause->AddAttributeValue("children", childrenExpr);
+  clause->AddAttributeValue(_T("children"), childrenExpr);
 
   // Write the ids of all the division images
   if (m_divisions.GetCount() > 0)
@@ -661,7 +661,7 @@ void wxCompositeShape::WriteAttributes(wxExpr *clause)
       divisionsExpr->Append(new wxExpr(child->GetId()));
       node = node->GetNext();
     }
-    clause->AddAttributeValue("divisions", divisionsExpr);
+    clause->AddAttributeValue(_T("divisions"), divisionsExpr);
   }
 }
 
@@ -680,12 +680,12 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
 {
   // Constraints are output as constraint1 = (...), constraint2 = (...), etc.
   int constraintNo = 1;
-  char m_constraintNameBuf[20];
+  wxChar m_constraintNameBuf[20];
   bool haveConstraints = TRUE;
 
   while (haveConstraints)
   {
-    sprintf(m_constraintNameBuf, "constraint%d", constraintNo);
+    wxSprintf(m_constraintNameBuf, _T("constraint%d"), constraintNo);
     wxExpr *constraintExpr = NULL;
     clause->GetAttributeValue(m_constraintNameBuf, &constraintExpr);
     if (!constraintExpr)
@@ -696,7 +696,7 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
     int cType = 0;
     double cXSpacing = 0.0;
     double cYSpacing = 0.0;
-    wxString cName("");
+    wxString cName = wxEmptyString;
     long cId = 0;
     wxShape *m_constrainingObject = NULL;
     wxList m_constrainedObjects;
@@ -718,7 +718,7 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
     cName = nameExpr->StringValue();
     cId = idExpr->IntegerValue();
 
-    wxExpr *objExpr1 = database->HashFind("node_image", constrainingExpr->IntegerValue());
+    wxExpr *objExpr1 = database->HashFind(_T("node_image"), constrainingExpr->IntegerValue());
     if (objExpr1 && objExpr1->GetClientData())
       m_constrainingObject = (wxShape *)objExpr1->GetClientData();
     else
@@ -729,7 +729,7 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
     while (currentIdExpr)
     {
       long currentId = currentIdExpr->IntegerValue();
-      wxExpr *objExpr2 = database->HashFind("node_image", currentId);
+      wxExpr *objExpr2 = database->HashFind(_T("node_image"), currentId);
       if (objExpr2 && objExpr2->GetClientData())
       {
         m_constrainedObjects.Append((wxShape *)objExpr2->GetClientData());
@@ -989,30 +989,30 @@ void wxDivisionShape::WriteAttributes(wxExpr *clause)
   wxCompositeShape::WriteAttributes(clause);
 
   if (m_leftSide)
-    clause->AddAttributeValue("left_side", (long)m_leftSide->GetId());
+    clause->AddAttributeValue(_T("left_side"), (long)m_leftSide->GetId());
   if (m_topSide)
-    clause->AddAttributeValue("top_side", (long)m_topSide->GetId());
+    clause->AddAttributeValue(_T("top_side"), (long)m_topSide->GetId());
   if (m_rightSide)
-    clause->AddAttributeValue("right_side", (long)m_rightSide->GetId());
+    clause->AddAttributeValue(_T("right_side"), (long)m_rightSide->GetId());
   if (m_bottomSide)
-    clause->AddAttributeValue("bottom_side", (long)m_bottomSide->GetId());
+    clause->AddAttributeValue(_T("bottom_side"), (long)m_bottomSide->GetId());
 
-  clause->AddAttributeValue("handle_side", (long)m_handleSide);
-  clause->AddAttributeValueString("left_colour", m_leftSideColour);
-  clause->AddAttributeValueString("top_colour", m_topSideColour);
-  clause->AddAttributeValueString("left_style", m_leftSideStyle);
-  clause->AddAttributeValueString("top_style", m_topSideStyle);
+  clause->AddAttributeValue(_T("handle_side"), (long)m_handleSide);
+  clause->AddAttributeValueString(_T("left_colour"), m_leftSideColour);
+  clause->AddAttributeValueString(_T("top_colour"), m_topSideColour);
+  clause->AddAttributeValueString(_T("left_style"), m_leftSideStyle);
+  clause->AddAttributeValueString(_T("top_style"), m_topSideStyle);
 }
 
 void wxDivisionShape::ReadAttributes(wxExpr *clause)
 {
   wxCompositeShape::ReadAttributes(clause);
 
-  clause->GetAttributeValue("handle_side", m_handleSide);
-  clause->GetAttributeValue("left_colour", m_leftSideColour);
-  clause->GetAttributeValue("top_colour", m_topSideColour);
-  clause->GetAttributeValue("left_style", m_leftSideStyle);
-  clause->GetAttributeValue("top_style", m_topSideStyle);
+  clause->GetAttributeValue(_T("handle_side"), m_handleSide);
+  clause->GetAttributeValue(_T("left_colour"), m_leftSideColour);
+  clause->GetAttributeValue(_T("top_colour"), m_topSideColour);
+  clause->GetAttributeValue(_T("left_style"), m_leftSideStyle);
+  clause->GetAttributeValue(_T("top_style"), m_topSideStyle);
 }
 #endif
 
@@ -1622,7 +1622,7 @@ void OGLPopupDivisionMenu::OnMenu(wxCommandEvent& event)
   }
 }
 
-void wxDivisionShape::EditEdge(int side)
+void wxDivisionShape::EditEdge(int WXUNUSED(side))
 {
   wxMessageBox(wxT("EditEdge() not implemented"), wxT("OGL"), wxOK);
 

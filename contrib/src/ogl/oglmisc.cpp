@@ -83,6 +83,7 @@ void wxOGLCleanUp()
         oglBuffer = NULL;
     }
     oglBuffer = NULL;
+
     if (g_oglBullseyeCursor)
     {
         delete g_oglBullseyeCursor;
@@ -340,7 +341,7 @@ void oglCentreTextNoClipping(wxDC& dc, wxList *text_list,
 }
 
 void oglGetCentredTextExtent(wxDC& dc, wxList *text_list,
-                              double m_xpos, double m_ypos, double width, double height,
+                              double WXUNUSED(m_xpos), double WXUNUSED(m_ypos), double WXUNUSED(width), double WXUNUSED(height),
                               double *actual_width, double *actual_height)
 {
   int n = text_list->GetCount();
@@ -377,7 +378,7 @@ void oglGetCentredTextExtent(wxDC& dc, wxList *text_list,
 
 // Format a string to a list of strings that fit in the given box.
 // Interpret %n and 10 or 13 as a new line.
-wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double height, int formatMode)
+wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double WXUNUSED(height), int formatMode)
 {
   // First, parse the string into a list of words
   wxStringList word_list;

@@ -320,7 +320,7 @@ bool wxPolygonShape::HitTest(double x, double y, int *attachment, double *distan
 
 // Really need to be able to reset the shape! Otherwise, if the
 // points ever go to zero, we've lost it, and can't resize.
-void wxPolygonShape::SetSize(double new_width, double new_height, bool recursive)
+void wxPolygonShape::SetSize(double new_width, double new_height, bool WXUNUSED(recursive))
 {
   SetAttachmentSize(new_width, new_height);
 
@@ -906,7 +906,7 @@ void wxRectangleShape::GetBoundingBoxMin(double *the_width, double *the_height)
   *the_height = m_height;
 }
 
-void wxRectangleShape::SetSize(double x, double y, bool recursive)
+void wxRectangleShape::SetSize(double x, double y, bool WXUNUSED(recursive))
 {
   SetAttachmentSize(x, y);
   m_width = (double)wxMax(x, 1.0);
@@ -920,7 +920,7 @@ void wxRectangleShape::SetCornerRadius(double rad)
 }
 
 // Assume (x1, y1) is centre of box (most generally, line end at box)
-bool wxRectangleShape::GetPerimeterPoint(double x1, double y1,
+bool wxRectangleShape::GetPerimeterPoint(double WXUNUSED(x1), double WXUNUSED(y1),
                                      double x2, double y2,
                                      double *x3, double *y3)
 {
@@ -995,7 +995,7 @@ wxTextShape::wxTextShape(double width, double height):
 {
 }
 
-void wxTextShape::OnDraw(wxDC& dc)
+void wxTextShape::OnDraw(wxDC& WXUNUSED(dc))
 {
 }
 
@@ -1063,7 +1063,7 @@ void wxEllipseShape::OnDraw(wxDC& dc)
     dc.DrawEllipse((long) (m_xpos - GetWidth()/2), (long) (m_ypos - GetHeight()/2), (long) GetWidth(), (long) GetHeight());
 }
 
-void wxEllipseShape::SetSize(double x, double y, bool recursive)
+void wxEllipseShape::SetSize(double x, double y, bool WXUNUSED(recursive))
 {
   SetAttachmentSize(x, y);
   m_width = x;
@@ -1175,7 +1175,6 @@ bool wxEllipseShape::GetAttachmentPosition(int attachment, double *x, double *y,
       default:
       {
         return wxShape::GetAttachmentPosition(attachment, x, y, nth, no_arcs, line);
-        break;
       }
     }
     return TRUE;
@@ -1198,7 +1197,7 @@ void wxCircleShape::Copy(wxShape& copy)
   wxEllipseShape::Copy(copy);
 }
 
-bool wxCircleShape::GetPerimeterPoint(double x1, double y1,
+bool wxCircleShape::GetPerimeterPoint(double WXUNUSED(x1), double WXUNUSED(y1),
                                       double x2, double y2,
                                       double *x3, double *y3)
 {
@@ -1242,7 +1241,7 @@ wxControlPoint::~wxControlPoint()
 }
 
 // Don't even attempt to draw any text - waste of time!
-void wxControlPoint::OnDrawContents(wxDC& dc)
+void wxControlPoint::OnDrawContents(wxDC& WXUNUSED(dc))
 {
 }
 
@@ -1279,8 +1278,8 @@ int wxControlPoint::GetNumberOfAttachments() const
   return 1;
 }
 
-bool wxControlPoint::GetAttachmentPosition(int attachment, double *x, double *y,
-                                         int nth, int no_arcs, wxLineShape *line)
+bool wxControlPoint::GetAttachmentPosition(int WXUNUSED(attachment), double *x, double *y,
+                                         int WXUNUSED(nth), int WXUNUSED(no_arcs), wxLineShape *WXUNUSED(line))
 {
   *x = m_xpos; *y = m_ypos;
   return TRUE;
@@ -1288,7 +1287,7 @@ bool wxControlPoint::GetAttachmentPosition(int attachment, double *x, double *y,
 
 // Control points ('handles') redirect control to the actual shape, to make it easier
 // to override sizing behaviour.
-void wxShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys, int attachment)
+void wxShape::OnSizingDragLeft(wxControlPoint* pt, bool WXUNUSED(draw), double x, double y, int keys, int WXUNUSED(attachment))
 {
   double bound_x;
   double bound_y;
@@ -1395,7 +1394,7 @@ void wxShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y
   }
 }
 
-void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys, int attachment)
+void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys, int WXUNUSED(attachment))
 {
   m_canvas->CaptureMouse();
 
@@ -1527,7 +1526,7 @@ void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int 
   }
 }
 
-void wxShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys, int attachment)
+void wxShape::OnSizingEndDragLeft(wxControlPoint* pt, double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys), int WXUNUSED(attachment))
 {
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
@@ -1624,7 +1623,7 @@ void wxPolygonControlPoint::OnEndDragLeft(double x, double y, int keys, int atta
 
 // Control points ('handles') redirect control to the actual shape, to make it easier
 // to override sizing behaviour.
-void wxPolygonShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys, int attachment)
+void wxPolygonShape::OnSizingDragLeft(wxControlPoint* pt, bool WXUNUSED(draw), double x, double y, int WXUNUSED(keys), int WXUNUSED(attachment))
 {
   wxPolygonControlPoint* ppt = (wxPolygonControlPoint*) pt;
 
@@ -1637,7 +1636,7 @@ void wxPolygonShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, d
   dc.SetPen(dottedPen);
   dc.SetBrush((* wxTRANSPARENT_BRUSH));
 
-  if (0) // keys & KEY_CTRL)
+  #if 0 // keys & KEY_CTRL)
   {
     // TODO: mend this code. Currently we rely on altering the
     // actual points, but we should assume we're not, as per
@@ -1652,16 +1651,17 @@ void wxPolygonShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, d
     ((wxPolygonShape *)this)->CalculateBoundingBox();
     ((wxPolygonShape *)this)->CalculatePolygonCentre();
   }
-  else
+  #else
   {
     ppt->CalculateNewSize(x, y);
   }
+  #endif
 
   this->GetEventHandler()->OnDrawOutline(dc, this->GetX(), this->GetY(),
        ppt->GetNewSize().x, ppt->GetNewSize().y);
 }
 
-void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys, int attachment)
+void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int WXUNUSED(keys), int WXUNUSED(attachment))
 {
   wxPolygonControlPoint* ppt = (wxPolygonControlPoint*) pt;
 
@@ -1688,7 +1688,7 @@ void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double 
   dc.SetPen(dottedPen);
   dc.SetBrush((* wxTRANSPARENT_BRUSH));
 
-  if (0) // keys & KEY_CTRL)
+  #if 0 // keys & KEY_CTRL)
   {
     // TODO: mend this code. Currently we rely on altering the
     // actual points, but we should assume we're not, as per
@@ -1703,10 +1703,11 @@ void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double 
     ((wxPolygonShape *)this)->CalculateBoundingBox();
     ((wxPolygonShape *)this)->CalculatePolygonCentre();
   }
-  else
+  #else
   {
     ppt->CalculateNewSize(x, y);
   }
+  #endif
 
   this->GetEventHandler()->OnDrawOutline(dc, this->GetX(), this->GetY(),
        ppt->GetNewSize().x, ppt->GetNewSize().y);
@@ -1714,7 +1715,7 @@ void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double 
   m_canvas->CaptureMouse();
 }
 
-void wxPolygonShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys, int attachment)
+void wxPolygonShape::OnSizingEndDragLeft(wxControlPoint* pt, double WXUNUSED(x), double WXUNUSED(y), int keys, int WXUNUSED(attachment))
 {
   wxPolygonControlPoint* ppt = (wxPolygonControlPoint*) pt;
 

@@ -226,7 +226,7 @@ class csEvtHandler: public wxShapeEvtHandler
 {
  DECLARE_DYNAMIC_CLASS(csEvtHandler)
  public:
-  csEvtHandler(wxShapeEvtHandler *prev = NULL, wxShape *shape = NULL, const wxString& lab = "");
+  csEvtHandler(wxShapeEvtHandler *prev = NULL, wxShape *shape = NULL, const wxString& lab = wxEmptyString);
   ~csEvtHandler();
 
   void OnLeftClick(double x, double y, int keys = 0, int attachment = 0);

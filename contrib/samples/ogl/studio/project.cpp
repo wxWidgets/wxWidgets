@@ -37,8 +37,8 @@ csProjectTreeCtrl::csProjectTreeCtrl(wxWindow *parent, wxWindowID id, const wxPo
   wxTreeCtrl(parent, id, pos, size, style),
   m_imageList(16, 16)
 {
-    m_imageList.Add(wxIcon("folder1"));
-    m_imageList.Add(wxIcon("file1"));
+    m_imageList.Add(wxIcon(_T("folder1")));
+    m_imageList.Add(wxIcon(_T("file1")));
 
     SetImageList(& m_imageList);
 }
@@ -49,7 +49,7 @@ csProjectTreeCtrl::~csProjectTreeCtrl()
 }
 
 // Create the project window
-bool csApp::CreateProjectWindow(wxFrame *parent)
+bool csApp::CreateProjectWindow(wxFrame *WXUNUSED(parent))
 {
 #if 0
     // Create a layout window

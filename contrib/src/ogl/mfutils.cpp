@@ -59,7 +59,10 @@ static int getsignedshort(FILE *fp)
 {
   int c, c1;
   c = getc(fp);  c1 = getc(fp);
+#if 0
+   // this is not used value, no need to execute it
   int testRes = ((unsigned int) c) + (((unsigned int) c1) << 8);
+#endif
   unsigned long res1 = ((unsigned int) c) + (((unsigned int) c1) << 8);
   int res = 0;
   if (res1 > 32767)
@@ -175,7 +178,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
 
   if (key == (long) 0x9AC6CDD7)
   {
-    long hmf = getshort(handle);
+    /* long hmf = */ getshort(handle);
     int iLeft, iTop, iRight, iBottom;
     iLeft = getsignedshort(handle);
     iTop = getsignedshort(handle);
@@ -187,9 +190,9 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
     right = (double)iRight;
     bottom = (double)iBottom;
 
-    int inch = getshort(handle);
-    long reserved = getint(handle);
-    int checksum = getshort(handle);
+    /* int inch = */ getshort(handle);
+    /* long reserved = */ getint(handle);
+    /* int checksum = */ getshort(handle);
 /*
       double widthInUnits = (double)right - left;
       double heightInUnits = (double)bottom - top;
@@ -208,7 +211,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
     return FALSE;
   }
 
-  int mtHeaderSize = getshort(handle);
+  /* int mtHeaderSize = */ getshort(handle);
   int mtVersion = getshort(handle);
 
   if (mtVersion != 0x0300 && mtVersion != 0x0100)
@@ -217,10 +220,10 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
     return FALSE;
   }
 
-  long mtSize = getint(handle);
-  int mtNoObjects = getshort(handle);
-  long mtMaxRecord = getint(handle);
-  int mtNoParameters = getshort(handle);
+  /* long mtSize = */ getint(handle);
+  /* int mtNoObjects = */ getshort(handle);
+  /* long mtMaxRecord = */ getint(handle);
+  /* int mtNoParameters = */ getshort(handle);
 
   while (!feof(handle))
   {
@@ -533,7 +536,7 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
         wxMetaRecord *rec = new wxMetaRecord(META_CREATEPENINDIRECT);
         int msStyle = getshort(handle); // Style: 2 bytes
         int x = getshort(handle); // X:     2 bytes
-        int y = getshort(handle); // Y:     2 bytes
+        /* int y = */ getshort(handle); // Y:     2 bytes
         long colorref = getint(handle); // COLORREF 4 bytes
 
         int style;
@@ -565,17 +568,17 @@ bool wxXMetaFile::ReadFile(const wxChar *file)
       {
         wxMetaRecord *rec = new wxMetaRecord(META_CREATEFONTINDIRECT);
         int lfHeight = getshort(handle);    // 2 bytes
-        int lfWidth = getshort(handle);     // 2 bytes
-        int lfEsc = getshort(handle);       // 2 bytes
-        int lfOrient = getshort(handle);    // 2 bytes
+        /* int lfWidth = */ getshort(handle);     // 2 bytes
+        /* int lfEsc = */ getshort(handle);       // 2 bytes
+        /* int lfOrient = */ getshort(handle);    // 2 bytes
         int lfWeight = getshort(handle);    // 2 bytes
         char lfItalic = getc(handle);       // 1 byte
         char lfUnderline = getc(handle);    // 1 byte
-        char lfStrikeout = getc(handle);    // 1 byte
-        char lfCharSet = getc(handle);      // 1 byte
-        char lfOutPrecision = getc(handle); // 1 byte
-        char lfClipPrecision = getc(handle); // 1 byte
-        char lfQuality = getc(handle);      // 1 byte
+        /* char lfStrikeout = */ getc(handle);    // 1 byte
+        /* char lfCharSet = */ getc(handle);      // 1 byte
+        /* char lfOutPrecision = */ getc(handle); // 1 byte
+        /* char lfClipPrecision = */ getc(handle); // 1 byte
+        /* char lfQuality = */ getc(handle);      // 1 byte
         char lfPitchAndFamily = getc(handle);   // 1 byte (18th)
         char lfFacename[32];
         // Read the rest of the record, which is total record size
@@ -740,7 +743,7 @@ wxXMetaFile::~wxXMetaFile(void)
   }
 }
 
-bool wxXMetaFile::SetClipboard(int width, int height)
+bool wxXMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
 {
   return FALSE;
 }

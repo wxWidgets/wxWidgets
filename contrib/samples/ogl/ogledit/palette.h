@@ -29,11 +29,14 @@
 // TODO for wxWin: wxToolBar95 cannot be moved to a non-0,0 position!
 // Needs to have a parent window...
 // So use a simple toolbar at present.
-#if 0 // def __WXGTK__
+// ABX: Simple toolbar is not available in default compilation
+//      so I use wxToolBar anyway
+// #if 0 // def __WXGTK__
+// #define TOOLPALETTECLASS    wxToolBar
+// #else
+// #define TOOLPALETTECLASS    wxToolBarSimple
+// #endif
 #define TOOLPALETTECLASS    wxToolBar
-#else
-#define TOOLPALETTECLASS    wxToolBarSimple
-#endif
 
 class EditorToolPalette: public TOOLPALETTECLASS
 {

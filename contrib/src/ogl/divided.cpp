@@ -137,7 +137,7 @@ void wxDividedShape::OnDrawContents(wxDC& dc)
   }
 }
 
-void wxDividedShape::SetSize(double w, double h, bool recursive)
+void wxDividedShape::SetSize(double w, double h, bool WXUNUSED(recursive))
 {
   SetAttachmentSize(w, h);
   m_width = w;
@@ -589,7 +589,7 @@ wxDividedShapeControlPoint::~wxDividedShapeControlPoint()
 }
 
 // Implement resizing of divided object division
-void wxDividedShapeControlPoint::OnDragLeft(bool draw, double x, double y, int keys, int attachment)
+void wxDividedShapeControlPoint::OnDragLeft(bool WXUNUSED(draw), double WXUNUSED(x), double y, int WXUNUSED(keys), int WXUNUSED(attachment))
 {
     wxClientDC dc(GetCanvas());
     GetCanvas()->PrepareDC(dc);
@@ -607,7 +607,7 @@ void wxDividedShapeControlPoint::OnDragLeft(bool draw, double x, double y, int k
     dc.DrawLine(WXROUND(x1), WXROUND(y1), WXROUND(x2), WXROUND(y2));
 }
 
-void wxDividedShapeControlPoint::OnBeginDragLeft(double x, double y, int keys, int attachment)
+void wxDividedShapeControlPoint::OnBeginDragLeft(double WXUNUSED(x), double y, int WXUNUSED(keys), int WXUNUSED(attachment))
 {
     wxClientDC dc(GetCanvas());
     GetCanvas()->PrepareDC(dc);
@@ -626,7 +626,7 @@ void wxDividedShapeControlPoint::OnBeginDragLeft(double x, double y, int keys, i
     m_canvas->CaptureMouse();
 }
 
-void wxDividedShapeControlPoint::OnEndDragLeft(double x, double y, int keys, int attachment)
+void wxDividedShapeControlPoint::OnEndDragLeft(double WXUNUSED(x), double y, int WXUNUSED(keys), int WXUNUSED(attachment))
 {
     wxClientDC dc(GetCanvas());
     GetCanvas()->PrepareDC(dc);
@@ -652,7 +652,10 @@ void wxDividedShapeControlPoint::OnEndDragLeft(double x, double y, int keys, int
 
     // Save values
     double thisRegionTop = 0.0;
+    #if 0
+    // this variable is not readed later
     double thisRegionBottom = 0.0;
+    #endif
     double nextRegionBottom = 0.0;
 
     node = dividedObject->GetRegions().GetFirst();
@@ -667,7 +670,10 @@ void wxDividedShapeControlPoint::OnEndDragLeft(double x, double y, int keys, int
       if (region == thisRegion)
       {
         thisRegionTop = currentY;
+        #if 0
+        // no need for assignment if value is not used later
         thisRegionBottom = actualY;
+        #endif
         if (node->GetNext())
           nextRegion = (wxShapeRegion *)node->GetNext()->GetData();
       }

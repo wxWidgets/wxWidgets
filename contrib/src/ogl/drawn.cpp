@@ -34,9 +34,9 @@
 
 #include <math.h>
 
-static void IntToHex(unsigned int dec, char *buf);
-static unsigned long HexToInt(char *buf);
-extern char *oglBuffer;
+static void IntToHex(unsigned int dec, wxChar *buf);
+static unsigned long HexToInt(wxChar *buf);
+extern wxChar *oglBuffer;
 
 #define gyTYPE_PEN   40
 #define gyTYPE_BRUSH 41
@@ -76,7 +76,7 @@ void wxDrawnShape::OnDraw(wxDC& dc)
   m_metafiles[m_currentAngle].Draw(dc, m_xpos, m_ypos);
 }
 
-void wxDrawnShape::SetSize(double w, double h, bool recursive)
+void wxDrawnShape::SetSize(double w, double h, bool WXUNUSED(recursive))
 {
   SetAttachmentSize(w, h);
 
@@ -238,8 +238,8 @@ void wxDrawnShape::WriteAttributes(wxExpr *clause)
 {
   wxRectangleShape::WriteAttributes(clause);
 
-  clause->AddAttributeValue("current_angle", (long)m_currentAngle);
-  clause->AddAttributeValue("save_metafile", (long)m_saveToFile);
+  clause->AddAttributeValue(_T("current_angle"), (long)m_currentAngle);
+  clause->AddAttributeValue(_T("save_metafile"), (long)m_saveToFile);
   if (m_saveToFile)
   {
     int i = 0;
@@ -256,8 +256,8 @@ void wxDrawnShape::ReadAttributes(wxExpr *clause)
   wxRectangleShape::ReadAttributes(clause);
 
   int iVal = (int) m_saveToFile;
-  clause->GetAttributeValue("save_metafile", iVal);
-  clause->GetAttributeValue("current_angle", m_currentAngle);
+  clause->GetAttributeValue(_T("save_metafile"), iVal);
+  clause->GetAttributeValue(_T("current_angle"), m_currentAngle);
   m_saveToFile = (iVal != 0);
 
   if (m_saveToFile)
@@ -419,7 +419,7 @@ wxOpSetGDI::wxOpSetGDI(int theOp, wxPseudoMetaFile *theImage, int theGdiIndex, i
   m_mode = theMode;
 }
 
-void wxOpSetGDI::Do(wxDC& dc, double xoffset, double yoffset)
+void wxOpSetGDI::Do(wxDC& dc, double WXUNUSED(xoffset), double WXUNUSED(yoffset))
 {
   switch (m_op)
   {
@@ -520,7 +520,7 @@ wxDrawOp *wxOpSetGDI::Copy(wxPseudoMetaFile *newImage)
 }
 
 #if wxUSE_PROLOGIO
-wxExpr *wxOpSetGDI::WriteExpr(wxPseudoMetaFile *image)
+wxExpr *wxOpSetGDI::WriteExpr(wxPseudoMetaFile *WXUNUSED(image))
 {
   wxExpr *expr = new wxExpr(wxExprList);
   expr->Append(new wxExpr((long)m_op));
@@ -552,7 +552,7 @@ wxExpr *wxOpSetGDI::WriteExpr(wxPseudoMetaFile *image)
   return expr;
 }
 
-void wxOpSetGDI::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
+void wxOpSetGDI::ReadExpr(wxPseudoMetaFile *WXUNUSED(image), wxExpr *expr)
 {
   switch (m_op)
   {
@@ -596,7 +596,7 @@ wxOpSetClipping::wxOpSetClipping(int theOp, double theX1, double theY1,
   m_y2 = theY2;
 }
 
-wxDrawOp *wxOpSetClipping::Copy(wxPseudoMetaFile *newImage)
+wxDrawOp *wxOpSetClipping::Copy(wxPseudoMetaFile *WXUNUSED(newImage))
 {
   wxOpSetClipping *newOp = new wxOpSetClipping(m_op, m_x1, m_y1, m_x2, m_y2);
   return newOp;
@@ -636,7 +636,7 @@ void wxOpSetClipping::Translate(double x, double y)
 }
 
 #if wxUSE_PROLOGIO
-wxExpr *wxOpSetClipping::WriteExpr(wxPseudoMetaFile *image)
+wxExpr *wxOpSetClipping::WriteExpr(wxPseudoMetaFile *WXUNUSED(image))
 {
   wxExpr *expr = new wxExpr(wxExprList);
   expr->Append(new wxExpr((long)m_op));
@@ -656,7 +656,7 @@ wxExpr *wxOpSetClipping::WriteExpr(wxPseudoMetaFile *image)
   return expr;
 }
 
-void wxOpSetClipping::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
+void wxOpSetClipping::ReadExpr(wxPseudoMetaFile *WXUNUSED(image), wxExpr *expr)
 {
   switch (m_op)
   {
@@ -698,7 +698,7 @@ wxOpDraw::~wxOpDraw()
   if (m_textString) delete[] m_textString;
 }
 
-wxDrawOp *wxOpDraw::Copy(wxPseudoMetaFile *newImage)
+wxDrawOp *wxOpDraw::Copy(wxPseudoMetaFile *WXUNUSED(newImage))
 {
   wxOpDraw *newOp = new wxOpDraw(m_op, m_x1, m_y1, m_x2, m_y2, m_radius, m_textString);
   newOp->m_x3 = m_x3;
@@ -882,7 +882,7 @@ void wxOpDraw::Rotate(double x, double y, double theta, double sinTheta, double 
 }
 
 #if wxUSE_PROLOGIO
-wxExpr *wxOpDraw::WriteExpr(wxPseudoMetaFile *image)
+wxExpr *wxOpDraw::WriteExpr(wxPseudoMetaFile *WXUNUSED(image))
 {
   wxExpr *expr = new wxExpr(wxExprList);
   expr->Append(new wxExpr((long)m_op));
@@ -939,7 +939,7 @@ wxExpr *wxOpDraw::WriteExpr(wxPseudoMetaFile *image)
   return expr;
 }
 
-void wxOpDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
+void wxOpDraw::ReadExpr(wxPseudoMetaFile *WXUNUSED(image), wxExpr *expr)
 {
   switch (m_op)
   {
@@ -1011,7 +1011,7 @@ wxOpPolyDraw::~wxOpPolyDraw()
   delete[] m_points;
 }
 
-wxDrawOp *wxOpPolyDraw::Copy(wxPseudoMetaFile *newImage)
+wxDrawOp *wxOpPolyDraw::Copy(wxPseudoMetaFile *WXUNUSED(newImage))
 {
   wxRealPoint *newPoints = new wxRealPoint[m_noPoints];
   for (int i = 0; i < m_noPoints; i++)
@@ -1071,7 +1071,6 @@ void wxOpPolyDraw::Do(wxDC& dc, double xoffset, double yoffset)
 
         delete[] actualPoints;
         break;
-      break;
     }
     default:
       break;
@@ -1096,7 +1095,7 @@ void wxOpPolyDraw::Translate(double x, double y)
   }
 }
 
-void wxOpPolyDraw::Rotate(double x, double y, double theta, double sinTheta, double cosTheta)
+void wxOpPolyDraw::Rotate(double x, double y, double WXUNUSED(theta), double sinTheta, double cosTheta)
 {
   for (int i = 0; i < m_noPoints; i++)
   {
@@ -1108,15 +1107,15 @@ void wxOpPolyDraw::Rotate(double x, double y, double theta, double sinTheta, dou
 }
 
 #if wxUSE_PROLOGIO
-wxExpr *wxOpPolyDraw::WriteExpr(wxPseudoMetaFile *image)
+wxExpr *wxOpPolyDraw::WriteExpr(wxPseudoMetaFile *WXUNUSED(image))
 {
   wxExpr *expr = new wxExpr(wxExprList);
   expr->Append(new wxExpr((long)m_op));
   expr->Append(new wxExpr((long)m_noPoints));
 
 //  char buf1[9];
-  char buf2[5];
-  char buf3[5];
+  wxChar buf2[5];
+  wxChar buf3[5];
 
   oglBuffer[0] = 0;
 
@@ -1143,20 +1142,20 @@ wxExpr *wxOpPolyDraw::WriteExpr(wxPseudoMetaFile *image)
     // Don't overrun the buffer
     if ((i*8) < 3000)
     {
-      strcat(oglBuffer, buf2);
-      strcat(oglBuffer, buf3);
+      wxStrcat(oglBuffer, buf2);
+      wxStrcat(oglBuffer, buf3);
     }
   }
   expr->Append(new wxExpr(wxExprString, oglBuffer));
   return expr;
 }
 
-void wxOpPolyDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
+void wxOpPolyDraw::ReadExpr(wxPseudoMetaFile *WXUNUSED(image), wxExpr *expr)
 {
   m_noPoints = (int)expr->Nth(1)->IntegerValue();
 
-  char buf1[5];
-  char buf2[5];
+  wxChar buf1[5];
+  wxChar buf2[5];
 
   m_points = new wxRealPoint[m_noPoints];
   int i = 0;
@@ -1185,7 +1184,7 @@ void wxOpPolyDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
     // Scale -32K -> +32K
     long signedX = unSignedX - 32767;
     long signedY = unSignedY - 32767;
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && 0
     int testX = (signed int)unSignedX;
     int testY = (signed int)unSignedY;
 #endif
@@ -1285,11 +1284,12 @@ bool wxOpPolyDraw::GetPerimeterPoint(double x1, double y1,
  *
  */
 
-static char hexArray[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
-  'C', 'D', 'E', 'F' };
+static char hexArray[] = { 
+    _T('0'), _T('1'), _T('2'), _T('3'), _T('4'), _T('5'), _T('6'), _T('7'), 
+    _T('8'), _T('9'), _T('A'), _T('B'), _T('C'), _T('D'), _T('E'), _T('F') };
 
 // Convert unsigned 16-bit integer to 4-character hex string
-static void IntToHex(unsigned int dec, char *buf)
+static void IntToHex(unsigned int dec, wxChar *buf)
 {
   int digit1 = (int)(dec/4096);
   int digit2 = (int)((dec - (digit1*4096))/256);
@@ -1304,50 +1304,54 @@ static void IntToHex(unsigned int dec, char *buf)
 }
 
 // One hex digit to decimal number
-static int HexToInt1(char hex)
+static int HexToInt1(wxChar hex)
 {
   switch (hex)
   {
-    case '0':
+    case _T('0'):
       return 0;
-    case '1':
+    case _T('1'):
       return 1;
-    case '2':
+    case _T('2'):
       return 2;
-    case '3':
+    case _T('3'):
       return 3;
-    case '4':
+    case _T('4'):
       return 4;
-    case '5':
+    case _T('5'):
       return 5;
-    case '6':
+    case _T('6'):
       return 6;
-    case '7':
+    case _T('7'):
       return 7;
-    case '8':
+    case _T('8'):
       return 8;
-    case '9':
+    case _T('9'):
       return 9;
-    case 'A':
+    case _T('A'):
       return 10;
-    case 'B':
+    case _T('B'):
       return 11;
-    case 'C':
+    case _T('C'):
       return 12;
-    case 'D':
+    case _T('D'):
       return 13;
-    case 'E':
+    case _T('E'):
       return 14;
-    case 'F':
+    case _T('F'):
       return 15;
+    #if 0
+    // handling this default outside switch removes warning under Borland 
     default:
       return 0;
+    #endif
   }
+
   return 0;
 }
 
 // 4-digit hex string to unsigned integer
-static unsigned long HexToInt(char *buf)
+static unsigned long HexToInt(wxChar *buf)
 {
   long d1 = (long)(HexToInt1(buf[0])*4096.0) ;
   long d2 = (long)(HexToInt1(buf[1])*256.0) ;
@@ -1475,12 +1479,12 @@ void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
   clause->AddAttributeValue(outlineStr, (long)m_outlineOp);
 
   // Write GDI objects
-  char buf[50];
+  wxChar buf[50];
   int i = 1;
   wxNode *node = m_gdiObjects.GetFirst();
   while (node)
   {
-    sprintf(buf, "gdi%d_%d", whichAngle, i);
+    wxSprintf(buf, _T("gdi%d_%d"), whichAngle, i);
     wxObject *obj = (wxObject *)node->GetData();
     wxExpr *expr = NULL;
     if (obj)
@@ -1538,7 +1542,7 @@ void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
   node = m_ops.GetFirst();
   while (node)
   {
-    sprintf(buf, "op%d_%d", whichAngle, i);
+    wxSprintf(buf, _T("op%d_%d"), whichAngle, i);
     wxDrawOp *op = (wxDrawOp *)node->GetData();
     wxExpr *expr = op->WriteExpr(this);
     if (expr)
@@ -1604,12 +1608,12 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
   m_rotateable = (iVal != 0);
 
   // Read GDI objects
-  char buf[50];
+  wxChar buf[50];
   int i = 1;
   bool keepGoing = TRUE;
   while (keepGoing)
   {
-    sprintf(buf, "gdi%d_%d", whichAngle, i);
+    wxSprintf(buf, _T("gdi%d_%d"), whichAngle, i);
     wxExpr *expr = NULL;
     clause->GetAttributeValue(buf, &expr);
     if (!expr)
@@ -1675,7 +1679,7 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
   i = 1;
   while (keepGoing)
   {
-    sprintf(buf, "op%d_%d", whichAngle, i);
+    wxSprintf(buf, _T("op%d_%d"), whichAngle, i);
     wxExpr *expr = NULL;
     clause->GetAttributeValue(buf, &expr);
     if (!expr)
@@ -2415,7 +2419,7 @@ void wxPseudoMetaFile::DrawSpline(int n, wxPoint pts[])
 
 void wxPseudoMetaFile::SetClippingRect(const wxRect& rect)
 {
-    wxOpSetClipping* theOp = new wxOpSetClipping(DRAWOP_SET_CLIPPING_RECT,
+    /* wxOpSetClipping* theOp = */ new wxOpSetClipping(DRAWOP_SET_CLIPPING_RECT,
         (double) rect.x, (double) rect.y, (double) rect.width, (double) rect.height);
 }
 

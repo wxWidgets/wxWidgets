@@ -75,7 +75,7 @@ bool EditorToolPalette::OnLeftClick(int toolIndex, bool toggled)
   return TRUE;
 }
 
-void EditorToolPalette::OnMouseEnter(int toolIndex)
+void EditorToolPalette::OnMouseEnter(int WXUNUSED(toolIndex))
 {
 }
 
@@ -88,11 +88,11 @@ EditorToolPalette *MyApp::CreatePalette(wxFrame *parent)
 {
   // Load palette bitmaps
 #ifdef __WXMSW__
-  wxBitmap PaletteTool1("TOOL1");
-  wxBitmap PaletteTool2("TOOL2");
-  wxBitmap PaletteTool3("TOOL3");
-  wxBitmap PaletteTool4("TOOL4");
-  wxBitmap PaletteArrow("ARROWTOOL");
+  wxBitmap PaletteTool1(_T("TOOL1"));
+  wxBitmap PaletteTool2(_T("TOOL2"));
+  wxBitmap PaletteTool3(_T("TOOL3"));
+  wxBitmap PaletteTool4(_T("TOOL4"));
+  wxBitmap PaletteArrow(_T("ARROWTOOL"));
 #elif defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
   wxBitmap PaletteTool1(tool1_xpm);
   wxBitmap PaletteTool2(tool2_xpm);
@@ -106,11 +106,11 @@ EditorToolPalette *MyApp::CreatePalette(wxFrame *parent)
   palette->SetMargins(2, 2);
   palette->SetToolBitmapSize(wxSize(22, 22));
 
-  palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, TRUE, 0, -1, NULL, "Pointer");
-  palette->AddTool(PALETTE_TOOL1, PaletteTool1, wxNullBitmap, TRUE, 0, -1, NULL, "Tool 1");
-  palette->AddTool(PALETTE_TOOL2, PaletteTool2, wxNullBitmap, TRUE, 0, -1, NULL, "Tool 2");
-  palette->AddTool(PALETTE_TOOL3, PaletteTool3, wxNullBitmap, TRUE, 0, -1, NULL, "Tool 3");
-  palette->AddTool(PALETTE_TOOL4, PaletteTool4, wxNullBitmap, TRUE, 0, -1, NULL, "Tool 4");
+  palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, TRUE, 0, -1, NULL, _T("Pointer"));
+  palette->AddTool(PALETTE_TOOL1, PaletteTool1, wxNullBitmap, TRUE, 0, -1, NULL, _T("Tool 1"));
+  palette->AddTool(PALETTE_TOOL2, PaletteTool2, wxNullBitmap, TRUE, 0, -1, NULL, _T("Tool 2"));
+  palette->AddTool(PALETTE_TOOL3, PaletteTool3, wxNullBitmap, TRUE, 0, -1, NULL, _T("Tool 3"));
+  palette->AddTool(PALETTE_TOOL4, PaletteTool4, wxNullBitmap, TRUE, 0, -1, NULL, _T("Tool 4"));
 
   palette->Realize();
 

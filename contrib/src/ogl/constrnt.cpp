@@ -386,8 +386,6 @@ bool wxOGLConstraint::Evaluate()
         node = node->GetNext();
       }
       return changed;
-
-      return FALSE;
     }
     case gyCONSTRAINT_ABOVE:
     {
@@ -480,8 +478,10 @@ bool wxOGLConstraint::Evaluate()
         node = node->GetNext();
       }
       return changed;
-
+      #if 0
+      // two returned values ?
       return FALSE;
+      #endif
     }
     case gyCONSTRAINT_ALIGNED_TOP:
     {
@@ -568,8 +568,10 @@ bool wxOGLConstraint::Evaluate()
         node = node->GetNext();
       }
       return changed;
-
+      #if 0
+      // two returned values ?
       return FALSE;
+      #endif
     }
     case gyCONSTRAINT_MIDALIGNED_TOP:
     {
@@ -611,9 +613,11 @@ bool wxOGLConstraint::Evaluate()
       }
       return changed;
     }
-
+    #if 0
+    // default value handled in main function body
     default:
       return FALSE;
+    #endif
   }
   return FALSE;
 }

@@ -962,7 +962,7 @@ void wxLineShape::FindNth(wxShape *image, int *nth, int *no_arcs, bool incoming)
   *no_arcs = num;
 }
 
-void wxLineShape::OnDrawOutline(wxDC& dc, double x, double y, double w, double h)
+void wxLineShape::OnDrawOutline(wxDC& dc, double WXUNUSED(x), double WXUNUSED(y), double WXUNUSED(w), double WXUNUSED(h))
 {
   wxPen *old_pen = m_pen;
   wxBrush *old_brush = m_brush;
@@ -979,7 +979,7 @@ void wxLineShape::OnDrawOutline(wxDC& dc, double x, double y, double w, double h
   else SetBrush(NULL);
 }
 
-bool wxLineShape::OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display)
+bool wxLineShape::OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool WXUNUSED(display))
 {
   double x_offset = x - old_x;
   double y_offset = y - old_y;
@@ -1038,9 +1038,9 @@ void wxLineShape::OnMoveLink(wxDC& dc, bool moveControlPoints)
     FindLineEndPoints(&end_x, &end_y, &other_end_x, &other_end_y);
 
     wxNode *first = m_lineControlPoints->GetFirst();
-    wxRealPoint *first_point = (wxRealPoint *)first->GetData();
+    /* wxRealPoint *first_point = */ (wxRealPoint *)first->GetData();
     wxNode *last = m_lineControlPoints->GetLast();
-    wxRealPoint *last_point = (wxRealPoint *)last->GetData();
+    /* wxRealPoint *last_point = */ (wxRealPoint *)last->GetData();
 
 /* This is redundant, surely? Done by SetEnds.
     first_point->x = end_x; first_point->y = end_y;
@@ -1095,9 +1095,9 @@ void wxLineShape::FindLineEndPoints(double *fromX, double *fromY, double *toX, d
   double other_end_x, other_end_y;
 
   wxNode *first = m_lineControlPoints->GetFirst();
-  wxRealPoint *first_point = (wxRealPoint *)first->GetData();
+  /* wxRealPoint *first_point = */ (wxRealPoint *)first->GetData();
   wxNode *last = m_lineControlPoints->GetLast();
-  wxRealPoint *last_point = (wxRealPoint *)last->GetData();
+  /* wxRealPoint *last_point = */ (wxRealPoint *)last->GetData();
 
   wxNode *second = first->GetNext();
   wxRealPoint *second_point = (wxRealPoint *)second->GetData();
@@ -1240,15 +1240,15 @@ void wxLineShape::OnEraseControlPoints(wxDC& dc)
   wxShape::OnEraseControlPoints(dc);
 }
 
-void wxLineShape::OnDragLeft(bool draw, double x, double y, int keys, int attachment)
+void wxLineShape::OnDragLeft(bool WXUNUSED(draw), double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys), int WXUNUSED(attachment))
 {
 }
 
-void wxLineShape::OnBeginDragLeft(double x, double y, int keys, int attachment)
+void wxLineShape::OnBeginDragLeft(double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys), int WXUNUSED(attachment))
 {
 }
 
-void wxLineShape::OnEndDragLeft(double x, double y, int keys, int attachment)
+void wxLineShape::OnEndDragLeft(double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys), int WXUNUSED(attachment))
 {
 }
 
@@ -1371,23 +1371,23 @@ void wxLineShape::WriteAttributes(wxExpr *clause)
   wxShape::WriteAttributes(clause);
 
   if (m_from)
-    clause->AddAttributeValue("from", m_from->GetId());
+    clause->AddAttributeValue(_T("from"), m_from->GetId());
   if (m_to)
-    clause->AddAttributeValue("to", m_to->GetId());
+    clause->AddAttributeValue(_T("to"), m_to->GetId());
 
   if (m_attachmentTo != 0)
-    clause->AddAttributeValue("attachment_to", (long)m_attachmentTo);
+    clause->AddAttributeValue(_T("attachment_to"), (long)m_attachmentTo);
   if (m_attachmentFrom != 0)
-    clause->AddAttributeValue("attachment_from", (long)m_attachmentFrom);
+    clause->AddAttributeValue(_T("attachment_from"), (long)m_attachmentFrom);
 
   if (m_alignmentStart != 0)
-    clause->AddAttributeValue("align_start", (long)m_alignmentStart);
+    clause->AddAttributeValue(_T("align_start"), (long)m_alignmentStart);
   if (m_alignmentEnd != 0)
-    clause->AddAttributeValue("align_end", (long)m_alignmentEnd);
+    clause->AddAttributeValue(_T("align_end"), (long)m_alignmentEnd);
 
-  clause->AddAttributeValue("is_spline", (long)m_isSpline);
+  clause->AddAttributeValue(_T("is_spline"), (long)m_isSpline);
   if (m_maintainStraightLines)
-    clause->AddAttributeValue("keep_lines_straight", (long)m_maintainStraightLines);
+    clause->AddAttributeValue(_T("keep_lines_straight"), (long)m_maintainStraightLines);
 
   // Make a list of lists for the (sp)line controls
   wxExpr *list = new wxExpr(wxExprList);
@@ -1404,7 +1404,7 @@ void wxLineShape::WriteAttributes(wxExpr *clause)
 
     node = node->GetNext();
   }
-  clause->AddAttributeValue("controls", list);
+  clause->AddAttributeValue(_T("controls"), list);
 
   // Write arc arrows in new OGL format, if there are any.
   // This is a list of lists. Each sublist comprises:
@@ -1432,7 +1432,7 @@ void wxLineShape::WriteAttributes(wxExpr *clause)
 
       node = node->GetNext();
     }
-    clause->AddAttributeValue("arrows", arrow_list);
+    clause->AddAttributeValue(_T("arrows"), arrow_list);
   }
 }
 
@@ -1455,7 +1455,7 @@ void wxLineShape::ReadAttributes(wxExpr *clause)
   if (m_regions.GetCount() == 0)
   {
     wxShapeRegion *newRegion = new wxShapeRegion;
-    newRegion->SetName("Middle");
+    newRegion->SetName(_T("Middle"));
     newRegion->SetSize(150, 50);
     m_regions.Append((wxObject *)newRegion);
     if (m_text.GetCount() > 0)
@@ -1726,7 +1726,7 @@ void wxLineControlPoint::OnEndDragLeft(double x, double y, int keys, int attachm
 
 // Control points ('handles') redirect control to the actual shape, to make it easier
 // to override sizing behaviour.
-void wxLineShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys, int attachment)
+void wxLineShape::OnSizingDragLeft(wxControlPoint* pt, bool WXUNUSED(draw), double x, double y, int WXUNUSED(keys), int WXUNUSED(attachment))
 {
   wxLineControlPoint* lpt = (wxLineControlPoint*) pt;
 
@@ -1768,7 +1768,7 @@ void wxLineShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, doub
 
 }
 
-void wxLineShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys, int attachment)
+void wxLineShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int WXUNUSED(keys), int WXUNUSED(attachment))
 {
   wxLineControlPoint* lpt = (wxLineControlPoint*) pt;
 
@@ -1816,7 +1816,7 @@ void wxLineShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, 
   }
 }
 
-void wxLineShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys, int attachment)
+void wxLineShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int WXUNUSED(keys), int WXUNUSED(attachment))
 {
   wxLineControlPoint* lpt = (wxLineControlPoint*) pt;
 
@@ -2439,7 +2439,7 @@ void wxLabelShape::OnDraw(wxDC& dc)
       dc.DrawRectangle(WXROUND(x1), WXROUND(y1), WXROUND(m_width), WXROUND(m_height));
 }
 
-void wxLabelShape::OnDrawContents(wxDC& dc)
+void wxLabelShape::OnDrawContents(wxDC& WXUNUSED(dc))
 {
 }
 
@@ -2463,7 +2463,7 @@ bool wxLabelShape::OnMovePre(wxDC& dc, double x, double y, double old_x, double 
     return m_lineShape->OnLabelMovePre(dc, this, x, y, old_x, old_y, display);
 }
 
-bool wxLineShape::OnLabelMovePre(wxDC& dc, wxLabelShape* labelShape, double x, double y, double old_x, double old_y, bool display)
+bool wxLineShape::OnLabelMovePre(wxDC& dc, wxLabelShape* labelShape, double x, double y, double WXUNUSED(old_x), double WXUNUSED(old_y), bool WXUNUSED(display))
 {
   labelShape->m_shapeRegion->SetSize(labelShape->GetWidth(), labelShape->GetHeight());
 
