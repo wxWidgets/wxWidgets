@@ -38,7 +38,6 @@
 #include "wx/tooltip.h"
 #include "wx/except.h"
 #include "wx/ptr_scpd.h"
-#include "wx/scopeguard.h"
 
 #include "wx/msw/private.h"
 
@@ -241,7 +240,19 @@ int wxEventLoop::Run()
     wxEventLoopActivator activate(&ms_activeLoop, this);
     wxEventLoopImplTiedPtr impl(&m_impl, new wxEventLoopImpl);
 
-    wxON_BLOCK_EXIT_OBJ0(*this, &wxEventLoop::OnExit);
+    class CallEventLoopMethod
+    {
+    public:
+        typedef void (wxEventLoop::*FuncType)();
+
+        CallEventLoopMethod(wxEventLoop *evtLoop, FuncType fn)
+            : m_evtLoop(evtLoop), m_fn(fn) { }
+        ~CallEventLoopMethod() { (m_evtLoop->*m_fn)(); }
+
+    private:
+        wxEventLoop *m_evtLoop;
+        FuncType m_fn;
+    } callOnExit(this, wxEventLoop::OnExit);
 
     for ( ;; )
     {
