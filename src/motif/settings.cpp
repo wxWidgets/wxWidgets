@@ -224,10 +224,10 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
         case wxSYS_WINDOWMIN_Y:
             break;
         case wxSYS_SCREEN_X:
-            return_value = DisplayWidth( wxGlobalDisplay(), 0 );
+            return_value = DisplayWidth( (Display*)wxGetDisplay(), 0 );
             break;
         case wxSYS_SCREEN_Y:
-            return_value = DisplayHeight( wxGlobalDisplay(), 0 );
+            return_value = DisplayHeight( (Display*)wxGetDisplay(), 0 );
             break;
         case wxSYS_FRAMESIZE_X:
             // TODO
