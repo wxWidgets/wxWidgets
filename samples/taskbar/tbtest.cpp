@@ -110,7 +110,7 @@ BEGIN_EVENT_TABLE(MyTaskBarIcon, wxTaskBarIcon)
     EVT_MENU(PU_RESTORE, MyTaskBarIcon::OnMenuRestore)
     EVT_MENU(PU_EXIT,    MyTaskBarIcon::OnMenuExit)
     EVT_MENU(PU_NEW_ICON,MyTaskBarIcon::OnMenuSetNewIcon)
-    EVT_TASKBAR_LEFT_DCLICK  (MyTaskBarIcon::OnLButtonDClick)
+    EVT_TASKBAR_LEFT_DCLICK  (MyTaskBarIcon::OnLeftButtonDClick)
 END_EVENT_TABLE()
 
 void MyTaskBarIcon::OnMenuRestore(wxCommandEvent& )
@@ -143,11 +143,7 @@ wxMenu *MyTaskBarIcon::CreatePopupMenu()
     return menu;
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-void MyTaskBarIcon::OnLButtonDClick(wxEvent&)
-#else
-void MyTaskBarIcon::OnLButtonDClick(wxTaskBarIconEvent&)
-#endif
+void MyTaskBarIcon::OnLeftButtonDClick(wxTaskBarIconEvent&)
 {
     dialog->Show(true);
 }
