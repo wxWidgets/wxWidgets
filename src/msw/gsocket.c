@@ -1380,4 +1380,3 @@ typedef void (*wxDummy)();
 
 #endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
 
-// vi:sts=4:sw=4:et
