@@ -371,7 +371,8 @@
     /* #define  wxAtof   _tttof -- notice that there is no such thing (why?) */
     /* there are no env vars at all under CE, so no _tgetenv neither */
     #ifdef __WXWINCE__
-        inline wxChar *wxGetenv(const wxChar *) { return NULL; }
+        /* can't define as inline function as this is a C file... */
+        #define wxGetenv(name)  NULL
     #else
         #define  wxGetenv    _tgetenv
     #endif
