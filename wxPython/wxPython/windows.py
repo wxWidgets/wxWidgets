@@ -183,6 +183,7 @@ wxPrintDialog = wx.windows.PrintDialog
 wxPRINTER_NO_ERROR = wx.windows.PRINTER_NO_ERROR
 wxPRINTER_CANCELLED = wx.windows.PRINTER_CANCELLED
 wxPRINTER_ERROR = wx.windows.PRINTER_ERROR
+wxPrinter_GetLastError = wx.windows.Printer_GetLastError
 wxPrinter = wx.windows.Printer
 wxPrintout = wx.windows.Printout
 wxPreviewCanvas = wx.windows.PreviewCanvas

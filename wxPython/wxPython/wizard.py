@@ -30,6 +30,7 @@ wxWizardPage = wx.wizard.WizardPage
 wxPrePyWizardPage = wx.wizard.PrePyWizardPage
 wxPyWizardPage = wx.wizard.PyWizardPage
 wxPreWizardPageSimple = wx.wizard.PreWizardPageSimple
+wxWizardPageSimple_Chain = wx.wizard.WizardPageSimple_Chain
 wxWizardPageSimple = wx.wizard.WizardPageSimple
 wxPreWizard = wx.wizard.PreWizard
 wxWizard = wx.wizard.Wizard

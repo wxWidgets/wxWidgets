@@ -30,7 +30,8 @@ swig_args = ['-c++',
              '-Wall',
              '-nodefault',
 
-              '-xml',
+             '-xml',
+             #'-xmllang', 'python',
 
              '-I./src',
              '-c'
@@ -191,13 +192,14 @@ def checkOtherNames(pyFile, moduleName, filename):
                         
 #---------------------------------------------------------------------------
 
-interestingTypes = ['class', 'cdecl', 'enumitem', 'constructor', 'constant']
-
+interestingTypes = [ 'class', 'cdecl', 'enumitem', 'constructor', 'constant' ]
+interestingAttrs = [ 'name', 'sym_name', 'decl', 'feature_immutable', 'module',
+                     'storage', 'type' ]
 
 
 class Element:
-    def __init__(self, type):
-        self.type      = type
+    def __init__(self, tagtype):
+        self.tagtype   = tagtype
         self.level     = -1
         self.name      = None
         self.sym_name  = None
@@ -206,17 +208,19 @@ class Element:
         self.klass     = None
         self.module    = None
         self.storage   = None
+        self.type      = None
         self.startLine = -1
-        self.nameLine  = -1
+
 
     def write(self, moduleName, swigFile, pyFile):
         doRename = False
         addWX = False
+        revOnly = False
 
-        #if self.name.find('ART_TOOLBAR') != -1:
+        #if self.name.find('DefaultPosition') != -1:
         #    pprint.pprint(self.__dict__)
        
-        if self.type in  ['cdecl', 'constant']:
+        if self.tagtype in  ['cdecl', 'constant']:
             if self.storage == 'typedef':
                 pass
             
@@ -225,8 +229,20 @@ class Element:
                 doRename = True
 
             # top level global vars
-            elif self.level == 0 and self.immutable == 1:
+            elif self.level == 0 and self.immutable == '1':
                 doRename = True
+
+            # static methods
+            elif self.storage == 'static':
+                if not self.klass:
+                    pprint.pprint(self.__dict__)
+                else:
+                    self.name     = self.klass + '_' + self.name
+                    self.sym_name = self.sym_klass + '_' + self.sym_name
+                    # only output the reverse renamer in this case
+                    doRename = revOnly = True
+
+                            
 
             if doRename and self.name != self.sym_name:
                 #print "%-25s %-25s" % (self.name, self.sym_name)
@@ -234,14 +250,14 @@ class Element:
                 addWX = True
                 
 
-        elif self.type == 'class' and self.module == moduleName:
+        elif self.tagtype == 'class' and self.module == moduleName:
             doRename = True
             if self.sym_name != self.klass:
                 #print self.sym_name
                 self.name = self.sym_name
                 addWX = True
 
-        elif self.type == 'constructor':
+        elif self.tagtype == 'constructor':
             #print "%-25s  %-25s" % (self.name, self.sym_name)
             if self.sym_name != self.klass:
                 #print self.sym_name
@@ -249,7 +265,7 @@ class Element:
                 addWX = True
                 doRename = True
 
-        elif self.type == 'enumitem' and self.level == 0:
+        elif self.tagtype == 'enumitem' and self.level == 0:
             doRename = True
 
 
@@ -259,7 +275,8 @@ class Element:
             if old.startswith('wx') and not old.startswith('wxEVT_'):
                 # remove all wx prefixes except wxEVT_ and write a %rename directive for it
                 new = old[2:]
-                swigFile.write("%%rename(%s)  %35s;\n" % (new, old))
+                if not revOnly:
+                    swigFile.write("%%rename(%s)  %35s;\n" % (new, old))
 
             # Write assignments to import into the old wxPython namespace
             if addWX and not old.startswith('wx'):
@@ -269,7 +286,7 @@ class Element:
             
         #else:
         #    text = "%07d  %d  %10s  %-35s %s\n" % (
-        #        self.startLine, self.level, self.type, self.name, self.decl)
+        #        self.startLine, self.level, self.tagtype, self.name, self.decl)
         #    #rejects.write(text)
         #    print text,
 
@@ -285,6 +302,8 @@ class ContentHandler(xml.sax.ContentHandler):
         self.pyFile   = pyFile
         self.elements = []
         self.imports  = 0
+        self.klass = None
+        self.sym_klass = None
 
 
     def setDocumentLocator(self, locator):
@@ -300,43 +319,66 @@ class ContentHandler(xml.sax.ContentHandler):
             ce.level = len(self.elements)
             if name == 'constructor':
                 ce.klass = self.elements[0].name
+            else:
+                ce.klass = self.klass
+                ce.sym_klass = self.sym_klass
             self.elements.insert(0, ce)
 
-        elif len(self.elements) and name == 'attribute' and attrs['name'] == 'name':
-            # save the elements name
-            ce = self.elements[0]
-            if ce.name is None:
-                ce.name = attrs['value']
-                ce.nameLine = self.locator.getLineNumber()
 
-        elif len(self.elements) and name == 'attribute' and attrs['name'] == 'sym_name':
-            # save the elements name
+        elif len(self.elements) and name == 'attribute' and attrs['name'] in interestingAttrs:
+            attrName = attrs['name']
+            attrVal  = attrs['value']
+            if attrName.startswith('feature_'):
+                attrName = attrName.replace('feature_', '')
             ce = self.elements[0]
-            if ce.sym_name is None:
-                ce.sym_name = attrs['value']
+            if getattr(ce, attrName) is None:
+                setattr(ce, attrName, attrVal)
+            if ce.tagtype == 'class' and attrName == 'name' and self.klass is None:
+                self.klass = attrVal
+            if ce.tagtype == 'class' and attrName == 'sym_name' and self.sym_klass is None:
+                self.sym_klass = attrVal
+            
 
-        elif len(self.elements) and name == 'attribute' and attrs['name'] == 'decl':
-            # save the elements decl
-            ce = self.elements[0]
-            ce.decl = attrs['value']
+##         elif len(self.elements) and name == 'attribute' and attrs['name'] == 'name':
+##             # save the elements name
+##             ce = self.elements[0]
+##             if ce.name is None:
+##                 ce.name = attrs['value']
+##                 ce.nameLine = self.locator.getLineNumber()
 
-        elif len(self.elements) and name == 'attribute' and attrs['name'] == 'feature_immutable':
-            # save the elements decl
-            ce = self.elements[0]
-            ce.immutable = int(attrs['value'])
+##         elif len(self.elements) and name == 'attribute' and attrs['name'] == 'sym_name':
+##             # save the elements name
+##             ce = self.elements[0]
+##             if ce.sym_name is None:
+##                 ce.sym_name = attrs['value']
 
-        elif len(self.elements) and name == 'attribute' and attrs['name'] == 'module':
-            # save the elements decl
-            ce = self.elements[0]
-            ce.module = attrs['value']
+##         elif len(self.elements) and name == 'attribute' and attrs['name'] == 'decl':
+##             # save the elements decl
+##             ce = self.elements[0]
+##             ce.decl = attrs['value']
+
+##         elif len(self.elements) and name == 'attribute' and attrs['name'] == 'feature_immutable':
+##             # save the elements decl
+##             ce = self.elements[0]
+##             ce.immutable = int(attrs['value'])
+
+##         elif len(self.elements) and name == 'attribute' and attrs['name'] == 'module':
+##             # save the elements decl
+##             ce = self.elements[0]
+##             ce.module = attrs['value']
 
         elif name == 'import':
             self.imports += 1
 
-        elif len(self.elements) and name == 'attribute' and attrs['name'] == 'storage':
-            # save the elements decl
-            ce = self.elements[0]
-            ce.storage = attrs['value']
+##         elif len(self.elements) and name == 'attribute' and attrs['name'] == 'storage':
+##             # save the elements decl
+##             ce = self.elements[0]
+##             ce.storage = attrs['value']
+
+##         elif len(self.elements) and name == 'attribute' and attrs['name'] == 'type':
+##             # save the elements decl
+##             ce = self.elements[0]
+##             ce.type = attrs['value']
 
 
     def endElement(self, name):
@@ -350,6 +392,11 @@ class ContentHandler(xml.sax.ContentHandler):
             
         if name == 'import':
             self.imports -= 1
+
+        if name == 'class':
+            self.klass = None
+            self.sym_klass = None
+            
 
 #---------------------------------------------------------------------------
 
