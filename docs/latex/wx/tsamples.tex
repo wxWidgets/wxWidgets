@@ -70,8 +70,8 @@ menu) and also how to process the notifications from it.
 
 \subsection{Checklist sample}\label{samplechecklist}
 
-This sample demonstrates the use of the \helpref{wxCheckListBox}{wxchecklistbox}
-class intercepting check, select and double click events. It also tests the
+This sample demonstrates use of the \helpref{wxCheckListBox}{wxchecklistbox}
+class intercepting check, select and double click events. It also tests
 use of various methods modifying the control, such as by deleting items
 from it or inserting new ones (these functions are actually implemented in
 the parent class \helpref{wxListBox}{wxlistbox} so the sample tests that class
@@ -138,7 +138,7 @@ dialogs are described in detail in the \helpref{Common dialogs overview}{commond
 \subsection{Dialup sample}\label{sampledialup}
 
 This sample shows the \helpref{wxDialUpManager}{wxdialupmanager} 
-class. It displays in the status bar the information gathered through its
+class. In the status bar, it displays the information gathered through its
 interface: in particular, the current connection status (online or offline) and
 whether the connection is permanent (in which case a string `LAN' appears in
 the third status bar field - but note that you may be on a LAN not
@@ -190,7 +190,7 @@ Take a look at DnDShapeDataObject class to see how you may use
 
 \subsection{Dynamic sample}\label{sampledynamic}
 
-This sample is a very small sample that demonstrates the use of the
+This sample is a very small sample that demonstrates use of the
 \helpref{wxEvtHandler::Connect}{wxevthandlerconnect} method. This method
 should be used whenever it is not known at compile time which control
 will receive which event or which controls are actually going to be in
@@ -205,7 +205,7 @@ See also the \helpref{event sample}{sampleevent}
 
 The event sample demonstrates various features of the wxWidgets events. It
 shows using dynamic events and connecting/disconnecting the event handlers
-during the run time and also using 
+during run time and also using 
 \helpref{PushEventHandler()}{wxwindowpusheventhandler} and
 \helpref{PopEventHandler()}{wxwindowpopeventhandler}.
 
@@ -285,7 +285,7 @@ displays help books given at command line.
 
 \subsection{Image sample}\label{sampleimage}
 
-The image sample demonstrates the use of the \helpref{wxImage}{wximage} class
+The image sample demonstrates use of the \helpref{wxImage}{wximage} class
 and shows how to download images in a variety of formats, currently PNG, GIF,
 TIFF, JPEG, BMP, PNM and PCX. The top of the sample shows two rectangles, one
 of which is drawn directly in the window, the other one is drawn into a 
@@ -307,7 +307,7 @@ replaced with red using \helpref{wxImage::Replace}{wximagereplace}.
 The not very clearly named internat sample demonstrates the wxWidgets
 internationalization (i18n for short from now on) features. To be more
 precise, it only shows localization support, i.e. support for translating the
-program messages in another language while true i18n would also involve
+program messages into another language while true i18n would also involve
 changing the other aspects of the programs behaviour.
 
 More information about this sample can be found in the {\tt readme.txt} file in
@@ -371,7 +371,7 @@ better results.
 
 \subsection{Scroll subwindow sample}\label{samplescrollsub}
 
-This sample demonstrates the use of the \helpref{wxScrolledWindow}{wxscrolledwindow} 
+This sample demonstrates use of the \helpref{wxScrolledWindow}{wxscrolledwindow} 
 class including placing subwindows into it and drawing simple graphics. It uses the 
 \helpref{SetTargetWindow}{wxscrolledwindowsettargetwindow} method and thus the effect
 of scrolling does not show in the scrolled window itself, but in one of its subwindows.
@@ -393,7 +393,7 @@ is implemented as a \helpref{wxSocketClient}{wxsocketclient}.
 The server binds to the local address, using TCP port number 3000,
 sets up an event handler to be notified of incoming connection requests
 ({\bf wxSOCKET\_CONNECTION} events), and sits there, waiting for clients
-({\it listening} in the socket parlance). For each accepted connection,
+({\it listening}, in socket parlance). For each accepted connection,
 a new \helpref{wxSocketBase}{wxsocketbase} object is created. These
 socket objects are independent from the server that created them, so
 they set up their own event handler, and then request to be notified
@@ -476,7 +476,7 @@ how tooltips can be centrally disabled and their latency controlled.
 
 \subsection{Thread sample}\label{samplethread}
 
-This sample demonstrates the use of threads in connection with GUI programs.
+This sample demonstrates use of threads in connection with GUI programs.
 There are two fundamentally different ways to use threads in GUI programs and
 either way has to take care of the fact that the GUI library itself usually
 is not multi-threading safe, i.e. that it might crash if two threads try to
@@ -526,7 +526,7 @@ checked one.
 
 \subsection{Treectrl sample}\label{sampletreectrl}
 
-This sample demonstrates using \helpref{wxTreeCtrl}{wxtreectrl} class. Here
+This sample demonstrates using the \helpref{wxTreeCtrl}{wxtreectrl} class. Here
 you may see how to process various notification messages sent by this control
 and also when they occur (by looking at the messages in the text control in
 the bottom part of the frame).
@@ -538,7 +538,7 @@ demonstrated here as well - try the corresponding menu entries.
 
 \subsection{Wizard sample}\label{samplewizard}
 
-This sample shows so-called wizard dialog (implemented using 
+This sample shows the so-called wizard dialog (implemented using 
 \helpref{wxWizard}{wxwizard} and related classes). It shows almost all
 features supported:
 

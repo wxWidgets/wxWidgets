@@ -1,12 +1,13 @@
 \section{Writing non-English applications}\label{nonenglishoverview}
 
 This article describes how to write applications that communicate with
-user in language other than English. Unfortunately many languages use
+the user in a language other than English. Unfortunately many languages use
 different charsets under Unix and Windows (and other platforms, to make
-situation even more complicated). These charsets usually differ in so
-many characters it is impossible to use same texts under all platforms.
+the situation even more complicated). These charsets usually differ in so
+many characters that it is impossible to use the same texts under all
+platforms.
 
-wxWidgets library provides mechanism that helps you avoid distributing many
+The wxWidgets library provides a mechanism that helps you avoid distributing many
 identical, only differently encoded, packages with your application 
 (e.g. help files and menu items in iso8859-13 and windows-1257). Thanks
 to this mechanism you can, for example, distribute only iso8859-13 data 
@@ -80,11 +81,11 @@ wxWidgets is able to use this catalog under any supported platform
 Windows).
 
 How is this done? When you tell the wxLocale class to load a message catalog that
-contains correct header, it checks the charset. The catalog is then converted
+contains a correct header, it checks the charset. The catalog is then converted
 to the charset used (see
 \helpref{wxLocale::GetSystemEncoding}{wxlocalegetsystemencoding} and
 \helpref{wxLocale::GetSystemEncodingName}{wxlocalegetsystemencodingname}) by
-user's operating system. This is default behaviour of the
+the user's operating system. This is the default behaviour of the
 \helpref{wxLocale}{wxlocale} class; you can disable it by {\bf not} passing
 {\tt wxLOCALE\_CONV\_ENCODING} to \helpref{wxLocale::Init}{wxlocaleinit}.
 
@@ -137,14 +138,14 @@ if (!wxFontMapper::Get()->IsEncodingAvailable(enc, facename))
 
 You may want to store all program data (created documents etc.) in
 the same encoding, let's say {\tt utf-8}. You can use
-\helpref{wxCSConv}{wxcsconv} class to convert data to encoding used by the
+\helpref{wxCSConv}{wxcsconv} class to convert data to the encoding used by the
 system your application is running on (see
 \helpref{wxLocale::GetSystemEncoding}{wxlocalegetsystemencoding}).
 
 \wxheading{Help files}
 
 If you're using \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} there is
-no problem at all. You must only make sure that all the HTML files contain
+no problem at all. You only need to make sure that all the HTML files contain
 the META tag, e.g.
 
 \begin{verbatim}

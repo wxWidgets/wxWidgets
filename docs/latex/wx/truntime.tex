@@ -10,18 +10,18 @@ storage hard to implement.
 
 Most C++ GUI frameworks overcome these limitations by means of a set of
 macros and functions and wxWidgets is no exception. As it originated before the
-addition of RTTI to the standard C++ and as support for it still missing from
+addition of RTTI to standard C++ and as support for it is still missing from
 some (albeit old) compilers, wxWidgets doesn't (yet) use it, but provides its
 own macro-based RTTI system.
 
 In the future, the standard C++ RTTI will be used though and you're encouraged
-to use whenever possible \helpref{wxDynamicCast()}{wxdynamiccast} macro which,
+to use whenever possible the \helpref{wxDynamicCast()}{wxdynamiccast} macro which,
 for the implementations that support it, is defined just as dynamic\_cast<> and
 uses wxWidgets RTTI for all the others. This macro is limited to wxWidgets
 classes only and only works with pointers (unlike the real dynamic\_cast<> which
 also accepts references).
 
-Each class that you wish to be known the type system should have
+Each class that you wish to be known to the type system should have
 a macro such as DECLARE\_DYNAMIC\_CLASS just inside the class declaration.
 The macro IMPLEMENT\_DYNAMIC\_CLASS should be in the implementation file.
 Note that these are entirely optional; use them if you wish to check object
@@ -50,7 +50,7 @@ to return an appropriate wxClassInfo pointer to use in this function.
 The function \helpref{wxCreateDynamicObject}{wxcreatedynamicobject} can be used
 to construct a new object of a given type, by supplying a string name.
 If you have a pointer to the wxClassInfo object instead, then you
-can simply call wxClassInfo::CreateObject.
+can simply call \helpref{wxClassInfo::CreateObject}{wxclassinfocreateobject}.
 
 \subsection{wxClassInfo}\label{wxclassinfooverview}
 

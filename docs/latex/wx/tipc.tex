@@ -34,8 +34,8 @@ convenient synonyms for the IPC classes: {\tt wxServer} for either
 DDE-based or socket-based implementation is used and the same
 thing for {\tt wxClient} and {\tt wxConnection}.
 
-By default, DDE implementation is used under Windows. DDE works
-only within one computer. If you want to use IPC between
+By default, the DDE implementation is used under Windows. DDE works
+within one computer only. If you want to use IPC between
 different workstations you should define {\tt
 wxUSE\_DDE\_FOR\_IPC} as $0$ before including this header -- this
 will force using TCP/IP implementation even under Windows.
@@ -70,7 +70,7 @@ used for the communications or a valid file name (which shouldn't
 exist and will be deleted afterwards) in which case a Unix domain
 socket is created.
 
-{\bf SECURITY NOTE:} Using Internet domain sockets if extremely insecure for
+{\bf SECURITY NOTE:} Using Internet domain sockets is extremely insecure for
 IPC as there is absolutely no access control for them, use Unix domain sockets
 whenever possible!
 
@@ -220,5 +220,5 @@ where the server calls the client when data has changed).
 \end{verbatim}
 
 Note that it is no longer necessary to call wxDDEInitialize or wxDDECleanUp, since
-wxWidgets will do this itself if necessary.
+wxWidgets will do this by itself if necessary.
 

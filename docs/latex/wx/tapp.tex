@@ -22,7 +22,7 @@ is to explicitly delete child frames in the top-level frame's \helpref{wxCloseEv
 handler.
 
 In emergencies the \helpref{wxExit}{wxexit} function can be called to kill the
-application however normally the applications shuts down automatically, 
+application however normally the application shuts down automatically, 
 \helpref{see below}{wxappshutdownoverview}.
 
 An example of defining an application follows:
@@ -73,9 +73,9 @@ terminates when this dialog -- which is the last top level window for the
 moment -- is closed.
 
 
-Another aspect of the application shutdown is the \helpref{OnExit}{wxapponexit} 
+Another aspect of the application shutdown is \helpref{OnExit}{wxapponexit} 
 which is called when the application exits but {\it before} wxWidgets cleans up
-its internal structures. Your should delete all wxWidgets object that your
+its internal structures. You should delete all wxWidgets object that you
 created by the time OnExit finishes. In particular, do {\bf not} destroy them
 from application class' destructor!
 

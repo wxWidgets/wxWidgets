@@ -9,17 +9,17 @@ wxWidgets programs.
 \begin{twocollist}\itemsep=0pt
 
 \twocolitem{\tt{WXTRACE}}{(Debug build only.)
-This variable can be set to comma-separated list of trace masks used in
+This variable can be set to a comma-separated list of trace masks used in
 \helpref{wxLogTrace}{wxlogtrace} calls;
 \helpref{wxLog::AddTraceMask}{wxlogaddtracemask} is called for every mask
 in the list during wxWidgets initialization.}
 
 \twocolitem{\tt{WXPREFIX}}{(Unix only.)
 Overrides installation prefix. Normally, the prefix
-is hard-coded and is same as the value passed to {\tt configure} via
+is hard-coded and is the same as the value passed to {\tt configure} via
 the {\tt --prefix} switch when compiling the library (typically
 {\tt /usr/local} or {\tt /usr}). You can set WXPREFIX if you are for example
-distributing binary version of an application and you don't know in advance
+distributing a binary version of an application and you don't know in advance
 where it will be installed.}
 
 \twocolitem{\tt{WXMODE}}{(wxMGL only.)

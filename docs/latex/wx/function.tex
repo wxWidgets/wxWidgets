@@ -101,6 +101,8 @@ the corresponding topic.
 \helpref{wxGetCwd}{wxgetcwd}\\
 \helpref{wxGetDiskSpace}{wxgetdiskspace}\\
 \helpref{wxGetDisplayName}{wxgetdisplayname}\\
+\helpref{wxGetDisplaySize}{wxdisplaysize}\\
+\helpref{wxGetDisplaySizeMM}{wxdisplaysizemm}\\ 
 \helpref{wxGetElapsedTime}{wxgetelapsedtime}\\
 \helpref{wxGetEmailAddress}{wxgetemailaddress}\\
 \helpref{wxGetEnv}{wxgetenv}\\
@@ -946,6 +948,10 @@ This function does directory searching; returns the first file
 that matches the path {\it spec}, or the empty string. Use \helpref{wxFindNextFile}{wxfindnextfile} to
 get the next matching file. Neither will report the current directory "." or the
 parent directory "..".
+
+\wxheading{Warning}
+
+As of wx 2.5.2, these functions are not thread-safe! (use static variables)
 
 {\it spec} may contain wildcards.
 
@@ -3649,7 +3655,14 @@ used by wxWidgets are:
 \item wxTRACE\_OleCalls: trace OLE method calls (Win32 only)
 \end{itemize}
 
-The third version of the function only logs the message if all the bit
+{\bf Caveats:} since both the mask and the format string are strings,
+this might lead to function signature confusion in some cases:
+if you intend to call the format string only version of wxLogTrace,
+then add a \%s format string parameter and then supply a second string parameter for that \%s, the string mask version of wxLogTrace will erroneously get called instead, since you are supplying two string parameters to the function.
+In this case you'll unfortunately have to avoid having two leading
+string parameters, e.g. by adding a bogus integer (with its \%d format string). 
+
+The third version of the function only logs the message if all the bits
 corresponding to the {\it mask} are set in the wxLog trace mask which can be
 set by \helpref{SetTraceMask}{wxlogsettracemask}. This version is less
 flexible than the previous one because it doesn't allow defining the user

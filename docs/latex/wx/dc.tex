@@ -908,17 +908,6 @@ left to right orientation, false to invert it.}
 bottom up orientation, false to invert it.}
 
 
-\membersection{wxDC::SetDeviceOrigin}\label{wxdcsetdeviceorigin}
-
-\func{void}{SetDeviceOrigin}{\param{wxCoord}{ x}, \param{wxCoord}{ y}}
-
-Sets the device origin (i.e., the origin in pixels after scaling has been
-applied).
-
-This function may be useful in Windows printing
-operations for placing a graphic on a page.
-
-
 \membersection{wxDC::SetBackground}\label{wxdcsetbackground}
 
 \func{void}{SetBackground}{\param{const wxBrush\& }{brush}}
@@ -934,6 +923,22 @@ Sets the current background brush for the DC.
 whether text will be drawn with a background colour or not.
 
 
+\membersection{wxDC::SetBrush}\label{wxdcsetbrush}
+
+\func{void}{SetBrush}{\param{const wxBrush\& }{brush}}
+
+Sets the current brush for the DC.
+
+If the argument is wxNullBrush, the current brush is selected out of the device
+context, and the original brush restored, allowing the current brush to
+be destroyed safely.
+
+See also \helpref{wxBrush}{wxbrush}.
+
+See also \helpref{wxMemoryDC}{wxmemorydc} for the interpretation of colours
+when drawing into a monochrome bitmap.
+
+ 
 \membersection{wxDC::SetClippingRegion}\label{wxdcsetclippingregion}
 
 \func{void}{SetClippingRegion}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
@@ -959,32 +964,15 @@ when only a known area of the screen is damaged.
 \helpref{wxDC::DestroyClippingRegion}{wxdcdestroyclippingregion}, \helpref{wxRegion}{wxregion}
 
 
-\membersection{wxDC::SetPalette}\label{wxdcsetpalette}
+\membersection{wxDC::SetDeviceOrigin}\label{wxdcsetdeviceorigin}
 
-\func{void}{SetPalette}{\param{const wxPalette\& }{palette}}
+\func{void}{SetDeviceOrigin}{\param{wxCoord}{ x}, \param{wxCoord}{ y}}
 
-If this is a window DC or memory DC, assigns the given palette to the window
-or bitmap associated with the DC. If the argument is wxNullPalette, the current
-palette is selected out of the device context, and the original palette
-restored.
+Sets the device origin (i.e., the origin in pixels after scaling has been
+applied).
 
-See \helpref{wxPalette}{wxpalette} for further details.
-
-
-\membersection{wxDC::SetBrush}\label{wxdcsetbrush}
-
-\func{void}{SetBrush}{\param{const wxBrush\& }{brush}}
-
-Sets the current brush for the DC.
-
-If the argument is wxNullBrush, the current brush is selected out of the device
-context, and the original brush restored, allowing the current brush to
-be destroyed safely.
-
-See also \helpref{wxBrush}{wxbrush}.
-
-See also \helpref{wxMemoryDC}{wxmemorydc} for the interpretation of colours
-when drawing into a monochrome bitmap.
+This function may be useful in Windows printing
+operations for placing a graphic on a page.
 
 
 \membersection{wxDC::SetFont}\label{wxdcsetfont}
@@ -1077,6 +1065,18 @@ The wxWidgets device context 'memory' will now be out of step with reality.
 
 Setting optimization off, drawing, then setting it back on again, is a trick
 that must occasionally be employed.
+
+
+\membersection{wxDC::SetPalette}\label{wxdcsetpalette}
+
+\func{void}{SetPalette}{\param{const wxPalette\& }{palette}}
+
+If this is a window DC or memory DC, assigns the given palette to the window
+or bitmap associated with the DC. If the argument is wxNullPalette, the current
+palette is selected out of the device context, and the original palette
+restored.
+
+See \helpref{wxPalette}{wxpalette} for further details. 
 
 
 \membersection{wxDC::SetPen}\label{wxdcsetpen}
