@@ -112,6 +112,30 @@ struct _GSocket
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
+#else
+///////////////////////////////////////////////////////////////////////////
+// GSocketBSDGUIShim
+class GSocketBSDGUIShim:public GSocketBSD
+{
+    friend void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc);
+public:
+    static inline bool GUI_Init();
+    static inline void GUI_Cleanup();
+    static inline bool UseGUI();
+    GSocketBSDGUIShim();
+    virtual ~GSocketBSDGUIShim();
+protected:
+    virtual void EventLoop_Enable_Events();
+    virtual void EventLoop_Disable_Events();
+    virtual void EventLoop_Install_Callback(GSocketEvent event);
+    virtual void EventLoop_Uninstall_Callback(GSocketEvent event);
+private:
+/* Table of GUI-related functions. We must call them indirectly because
+ * of wxBase and GUI separation: */
+
+    static struct GSocketGUIFunctionsTable *ms_gui_functions;
+};
+
 #endif //ndef wxUSE_GSOCKET_CPLUSPLUS
 
 #ifdef __cplusplus
