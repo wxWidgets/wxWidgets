@@ -193,6 +193,7 @@ wxBU_AUTODRAW = wxpc.wxBU_AUTODRAW
 wxBU_NOAUTODRAW = wxpc.wxBU_NOAUTODRAW
 wxTR_HAS_BUTTONS = wxpc.wxTR_HAS_BUTTONS
 wxTR_EDIT_LABELS = wxpc.wxTR_EDIT_LABELS
+wxTR_LINES_AT_ROOT = wxpc.wxTR_LINES_AT_ROOT
 wxLC_ICON = wxpc.wxLC_ICON
 wxLC_SMALL_ICON = wxpc.wxLC_SMALL_ICON
 wxLC_LIST = wxpc.wxLC_LIST
@@ -955,12 +956,56 @@ def EVT_COMMAND_ENTER(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_ENTER, func)
 
 
-
+# wxNotebook events
 def EVT_NOTEBOOK_PAGE_CHANGED(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, func)
 
 def EVT_NOTEBOOK_PAGE_CHANGING(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, func)
+
+
+#wxTreeCtrl events
+def EVT_TREE_BEGIN_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_DRAG, func)
+
+def EVT_TREE_BEGIN_RDRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_RDRAG, func)
+
+def EVT_TREE_BEGIN_LABEL_EDIT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, func)
+
+def EVT_TREE_END_LABEL_EDIT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_LABEL_EDIT, func)
+
+def EVT_TREE_GET_INFO(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_GET_INFO, func)
+
+def EVT_TREE_SET_INFO(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_SET_INFO, func)
+
+def EVT_TREE_ITEM_EXPANDED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_EXPANDED, func)
+
+def EVT_TREE_ITEM_EXPANDING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_EXPANDING, func)
+
+def EVT_TREE_ITEM_COLLAPSED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_COLLAPSED, func)
+
+def EVT_TREE_ITEM_COLLAPSING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_COLLAPSING, func)
+
+def EVT_TREE_SEL_CHANGED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_SEL_CHANGED, func)
+
+def EVT_TREE_SEL_CHANGING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_SEL_CHANGING, func)
+
+def EVT_TREE_KEY_DOWN(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_KEY_DOWN, func)
+
+def EVT_TREE_DELETE_ITEM(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_DELETE_ITEM, func)
 
 
 
@@ -1059,8 +1104,13 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.5  1998/10/07 07:35:36  RD
-# Version 0.4.1 for wxGTK
+# Revision 1.6  1998/10/20 07:39:22  RD
+# newly generated files from SWIG
+#
+# Revision 1.4  1998/10/20 06:43:54  RD
+# New wxTreeCtrl wrappers (untested)
+# some changes in helpers
+# etc.
 #
 # Revision 1.3  1998/10/02 06:40:33  RD
 #

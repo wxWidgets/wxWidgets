@@ -696,7 +696,6 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_wxPaintEvent","_class_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
-	 SWIG_RegisterMapping("_class_wxToolBarBase","_wxToolBarBase",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
 	 SWIG_RegisterMapping("_wxPen","_class_wxPen",0);
@@ -748,7 +747,6 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxStaticBitmap","_wxStaticBitmap",0);
-	 SWIG_RegisterMapping("_wxToolBarSimple","_class_wxToolBarSimple",0);
 	 SWIG_RegisterMapping("_class_wxToolBar","_wxToolBar",0);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
@@ -778,7 +776,6 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxMoveEvent","_wxMoveEvent",0);
 	 SWIG_RegisterMapping("_wxListBox","_class_wxListBox",0);
 	 SWIG_RegisterMapping("_wxScreenDC","_class_wxScreenDC",0);
-	 SWIG_RegisterMapping("_class_wxToolBarSimple","_wxToolBarSimple",0);
 	 SWIG_RegisterMapping("_WXTYPE","_short",0);
 	 SWIG_RegisterMapping("_WXTYPE","_signed_short",0);
 	 SWIG_RegisterMapping("_WXTYPE","_unsigned_short",0);
@@ -847,7 +844,6 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxInitDialogEvent","_wxInitDialogEvent",0);
 	 SWIG_RegisterMapping("_class_wxComboBox","_wxComboBox",0);
 	 SWIG_RegisterMapping("_class_wxRadioButton","_wxRadioButton",0);
-	 SWIG_RegisterMapping("_wxToolBarBase","_class_wxToolBarBase",0);
 	 SWIG_RegisterMapping("_class_wxLayoutConstraints","_wxLayoutConstraints",0);
 	 SWIG_RegisterMapping("_wxIconizeEvent","_class_wxIconizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxControl","_wxControl",0);

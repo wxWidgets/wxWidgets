@@ -67,9 +67,6 @@ class wxCloseEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetSessionEnding(self):
-        val = eventsc.wxCloseEvent_GetSessionEnding(self.this)
-        return val
     def GetLoggingOff(self):
         val = eventsc.wxCloseEvent_GetLoggingOff(self.this)
         return val
