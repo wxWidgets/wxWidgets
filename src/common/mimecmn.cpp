@@ -68,6 +68,8 @@ class WXDLLEXPORT wxIcon;
 #include "wx/msw/mimetype.h"
 #elif defined (__WXMAC__)
 #include "wx/mac/mimetype.h"
+#elif defined (__WXPM__)
+#include "wx/os2/mimetype.h"
 #else
 #include "wx/unix/mimetype.h"
 #endif
