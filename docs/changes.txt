@@ -10,6 +10,13 @@ wxBase:
   under 64 bit architectures, please replace it with RemoveAt() in your
   code.
 
+- wxObject::CopyObject() and Clone() methods were removed because they
+  simply don't make sense for all objects
+
+- wxEvent now has a pure virtual Clone() method which must be implemented
+  by all derived classes, if you have user-defined event classes please
+  add "wxEvent *Clone() const { return new MyEvent(*this); }" line to them
+
 All (GUI):
 
 - wxGLCanvas now derives directly from wxWindow, not wxScrolledWindow
