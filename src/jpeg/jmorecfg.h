@@ -164,7 +164,7 @@ typedef short INT16;
 #define INT32_DEFINED
 #elif (_MSC_VER >= 1200) || (__BORLANDC__ >= 0x550) || \
       ((defined(__MINGW32__) || defined(__CYGWIN__)) \
-       && ((__GNUC__>2) || ((__GNUC__==2) && (__GNUC_MINOR__>=95))))
+       && ((__GNUC__>2) || ((__GNUC__==2) && (__GNUC_MINOR__>95))))
 /* INT32 is defined in windows.h  for these compilers */
 #define INT32_DEFINED
 #include <windows.h>
