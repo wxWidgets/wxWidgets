@@ -244,36 +244,35 @@ SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxWindow swig_types[20] 
 #define  SWIGTYPE_p_wxFont swig_types[21] 
 #define  SWIGTYPE_p_wxControl swig_types[22] 
-#define  SWIGTYPE_p_size_t swig_types[23] 
-#define  SWIGTYPE_p_wxEvent swig_types[24] 
-#define  SWIGTYPE_p_wxObject swig_types[25] 
-#define  SWIGTYPE_p_wxGridSizeEvent swig_types[26] 
-#define  SWIGTYPE_p_wxRect swig_types[27] 
-#define  SWIGTYPE_p_long swig_types[28] 
-#define  SWIGTYPE_p_wxString swig_types[29] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[30] 
-#define  SWIGTYPE_p_wxPoint swig_types[31] 
-#define  SWIGTYPE_p_wxGridEvent swig_types[32] 
-#define  SWIGTYPE_p_wxGridEditorCreatedEvent swig_types[33] 
-#define  SWIGTYPE_p_wxGridTableBase swig_types[34] 
-#define  SWIGTYPE_p_wxGridCellFloatEditor swig_types[35] 
-#define  SWIGTYPE_p_wxGridCellNumberEditor swig_types[36] 
-#define  SWIGTYPE_p_wxPyGridCellEditor swig_types[37] 
-#define  SWIGTYPE_p_wxGridCellEditor swig_types[38] 
-#define  SWIGTYPE_p_wxGridCellTextEditor swig_types[39] 
-#define  SWIGTYPE_p_wxGridCellBoolEditor swig_types[40] 
-#define  SWIGTYPE_p_wxPyGridTableBase swig_types[41] 
-#define  SWIGTYPE_p_wxGridStringTable swig_types[42] 
-#define  SWIGTYPE_p_wxArrayString swig_types[43] 
-#define  SWIGTYPE_p_wxCommandEvent swig_types[44] 
-#define  SWIGTYPE_p_wxGridCellAttrProvider swig_types[45] 
-#define  SWIGTYPE_p_wxKeyEvent swig_types[46] 
-#define  SWIGTYPE_p_wxGridCellChoiceEditor swig_types[47] 
-#define  SWIGTYPE_p_wxGridCellEnumEditor swig_types[48] 
-#define  SWIGTYPE_p_wxGridCellAutoWrapStringEditor swig_types[49] 
-#define  SWIGTYPE_p_int swig_types[50] 
-#define  SWIGTYPE_p_wxPyGridCellAttrProvider swig_types[51] 
-static swig_type_info *swig_types[53];
+#define  SWIGTYPE_p_wxEvent swig_types[23] 
+#define  SWIGTYPE_p_wxObject swig_types[24] 
+#define  SWIGTYPE_p_wxGridSizeEvent swig_types[25] 
+#define  SWIGTYPE_p_wxRect swig_types[26] 
+#define  SWIGTYPE_p_long swig_types[27] 
+#define  SWIGTYPE_p_wxString swig_types[28] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[29] 
+#define  SWIGTYPE_p_wxPoint swig_types[30] 
+#define  SWIGTYPE_p_wxGridEvent swig_types[31] 
+#define  SWIGTYPE_p_wxGridEditorCreatedEvent swig_types[32] 
+#define  SWIGTYPE_p_wxGridTableBase swig_types[33] 
+#define  SWIGTYPE_p_wxGridCellFloatEditor swig_types[34] 
+#define  SWIGTYPE_p_wxGridCellNumberEditor swig_types[35] 
+#define  SWIGTYPE_p_wxPyGridCellEditor swig_types[36] 
+#define  SWIGTYPE_p_wxGridCellEditor swig_types[37] 
+#define  SWIGTYPE_p_wxGridCellTextEditor swig_types[38] 
+#define  SWIGTYPE_p_wxGridCellBoolEditor swig_types[39] 
+#define  SWIGTYPE_p_wxPyGridTableBase swig_types[40] 
+#define  SWIGTYPE_p_wxGridStringTable swig_types[41] 
+#define  SWIGTYPE_p_wxArrayString swig_types[42] 
+#define  SWIGTYPE_p_wxCommandEvent swig_types[43] 
+#define  SWIGTYPE_p_wxGridCellAttrProvider swig_types[44] 
+#define  SWIGTYPE_p_wxKeyEvent swig_types[45] 
+#define  SWIGTYPE_p_wxGridCellChoiceEditor swig_types[46] 
+#define  SWIGTYPE_p_wxGridCellEnumEditor swig_types[47] 
+#define  SWIGTYPE_p_wxGridCellAutoWrapStringEditor swig_types[48] 
+#define  SWIGTYPE_p_int swig_types[49] 
+#define  SWIGTYPE_p_wxPyGridCellAttrProvider swig_types[50] 
+static swig_type_info *swig_types[52];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -15173,7 +15172,6 @@ static swig_type_info _swigt__p_wxScrolledWindow[] = {{"_p_wxScrolledWindow", 0,
 static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxWindow},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxWindow},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxWindow},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow},{"_p_wxGrid", _p_wxGridTo_p_wxWindow},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxWindow},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxWindow},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxWindow},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxWindow},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxWindow},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxWindow},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxWindow},{"_p_wxPanel", _p_wxPanelTo_p_wxWindow},{"_p_wxStatusBar", _p_wxStatusBarTo_p_wxWindow},{"_p_wxMDIClientWindow", _p_wxMDIClientWindowTo_p_wxWindow},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxWindow},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxWindow},{"_p_wxPopupWindow", _p_wxPopupWindowTo_p_wxWindow},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxWindow},{"_p_wxTopLevelWindow", _p_wxTopLevelWindowTo_p_wxWindow},{"_p_wxSplashScreenWindow", _p_wxSplashScreenWindowTo_p_wxWindow},{"_p_wxSplitterWindow", _p_wxSplitterWindowTo_p_wxWindow},{"_p_wxSashWindow", _p_wxSashWindowTo_p_wxWindow},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxWindow},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxWindow},{"_p_wxWindow"},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxWindow},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxWindow},{"_p_wxControl", _p_wxControlTo_p_wxWindow},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxWindow},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxWindow},{"_p_wxPyWindow", _p_wxPyWindowTo_p_wxWindow},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxWindow},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxWindow},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxWindow},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxWindow},{"_p_wxFrame", _p_wxFrameTo_p_wxWindow},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxWindow},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxWindow},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxWindow},{"_p_wxDialog", _p_wxDialogTo_p_wxWindow},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxWindow},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxWindow},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxWindow},{0}};
 static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0},{"_p_wxFont"},{0}};
 static swig_type_info _swigt__p_wxControl[] = {{"_p_wxControl", 0, "wxControl *", 0},{"_p_wxControl"},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxControl},{0}};
-static swig_type_info _swigt__p_size_t[] = {{"_p_size_t", 0, "size_t *", 0},{"_p_size_t"},{0}};
 static swig_type_info _swigt__p_wxEvent[] = {{"_p_wxEvent", 0, "wxEvent *", 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxEvent},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxEvent},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxEvent},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxEvent},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxEvent},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxEvent},{"_p_wxSplitterEvent", _p_wxSplitterEventTo_p_wxEvent},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxEvent},{"_p_wxFindDialogEvent", _p_wxFindDialogEventTo_p_wxEvent},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxEvent},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxEvent},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxEvent},{"_p_wxCalculateLayoutEvent", _p_wxCalculateLayoutEventTo_p_wxEvent},{"_p_wxGridRangeSelectEvent", _p_wxGridRangeSelectEventTo_p_wxEvent},{"_p_wxEvent"},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxEvent},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxEvent},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxEvent},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxEvent},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxEvent},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxEvent},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxEvent},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxEvent},{"_p_wxGridSizeEvent", _p_wxGridSizeEventTo_p_wxEvent},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxEvent},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxEvent},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxEvent},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxEvent},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxEvent},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxEvent},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxEvent},{"_p_wxGridEditorCreatedEvent", _p_wxGridEditorCreatedEventTo_p_wxEvent},{"_p_wxGridEvent", _p_wxGridEventTo_p_wxEvent},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxEvent},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxEvent},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxEvent},{"_p_wxSashEvent", _p_wxSashEventTo_p_wxEvent},{"_p_wxQueryLayoutInfoEvent", _p_wxQueryLayoutInfoEventTo_p_wxEvent},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxEvent},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxEvent},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxEvent},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxEvent},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxEvent},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxEvent},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxEvent},{"_p_wxTaskBarIconEvent", _p_wxTaskBarIconEventTo_p_wxEvent},{0}};
 static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0},{"_p_wxQueryLayoutInfoEvent", _p_wxQueryLayoutInfoEventTo_p_wxObject},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxObject},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxObject},{"_p_wxGBSizerItem", _p_wxGBSizerItemTo_p_wxObject},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject},{"_p_wxSizer", _p_wxSizerTo_p_wxObject},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxObject},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxObject},{"_p_wxMenu", _p_wxMenuTo_p_wxObject},{"_p_wxFontData", _p_wxFontDataTo_p_wxObject},{"_p_wxPrintData", _p_wxPrintDataTo_p_wxObject},{"_p_wxEvent", _p_wxEventTo_p_wxObject},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject},{"_p_wxTaskBarIcon", _p_wxTaskBarIconTo_p_wxObject},{"_p_wxGridStringTable", _p_wxGridStringTableTo_p_wxObject},{"_p_wxLayoutAlgorithm", _p_wxLayoutAlgorithmTo_p_wxObject},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject},{"_p_wxFindDialogEvent", _p_wxFindDialogEventTo_p_wxObject},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject},{"_p_wxGridEditorCreatedEvent", _p_wxGridEditorCreatedEventTo_p_wxObject},{"_p_wxGridEvent", _p_wxGridEventTo_p_wxObject},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxObject},{"_p_wxControl", _p_wxControlTo_p_wxObject},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject},{"_p_wxSplitterEvent", _p_wxSplitterEventTo_p_wxObject},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject},{"_p_wxFindReplaceData", _p_wxFindReplaceDataTo_p_wxObject},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxObject},{"_p_wxColourData", _p_wxColourDataTo_p_wxObject},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject},{"_p_wxPyWindow", _p_wxPyWindowTo_p_wxObject},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxObject},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxObject},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxObject},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxObject},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxObject},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxObject},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxObject},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxObject},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject},{"_p_wxPrinter", _p_wxPrinterTo_p_wxObject},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject},{"_p_wxGridSizeEvent", _p_wxGridSizeEventTo_p_wxObject},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject},{"_p_wxGridRangeSelectEvent", _p_wxGridRangeSelectEventTo_p_wxObject},{"_p_wxCalculateLayoutEvent", _p_wxCalculateLayoutEventTo_p_wxObject},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxObject},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxObject},{"_p_wxAcceleratorTable", _p_wxAcceleratorTableTo_p_wxObject},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxObject},{"_p_wxImage", _p_wxImageTo_p_wxObject},{"_p_wxFrame", _p_wxFrameTo_p_wxObject},{"_p_wxPyPrintout", _p_wxPyPrintoutTo_p_wxObject},{"_p_wxTaskBarIconEvent", _p_wxTaskBarIconEventTo_p_wxObject},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject},{"_p_wxGrid", _p_wxGridTo_p_wxObject},{"_p_wxStatusBar", _p_wxStatusBarTo_p_wxObject},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxObject},{"_p_wxObject"},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxObject},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxObject},{"_p_wxMDIClientWindow", _p_wxMDIClientWindowTo_p_wxObject},{"_p_wxTopLevelWindow", _p_wxTopLevelWindowTo_p_wxObject},{"_p_wxWindow", _p_wxWindowTo_p_wxObject},{"_p_wxSashWindow", _p_wxSashWindowTo_p_wxObject},{"_p_wxSplitterWindow", _p_wxSplitterWindowTo_p_wxObject},{"_p_wxSplashScreenWindow", _p_wxSplashScreenWindowTo_p_wxObject},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxObject},{"_p_wxPopupWindow", _p_wxPopupWindowTo_p_wxObject},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxObject},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxObject},{"_p_wxSashEvent", _p_wxSashEventTo_p_wxObject},{"_p_wxPrintPreview", _p_wxPrintPreviewTo_p_wxObject},{"_p_wxPyPrintPreview", _p_wxPyPrintPreviewTo_p_wxObject},{"_p_wxPanel", _p_wxPanelTo_p_wxObject},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxObject},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxObject},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxObject},{"_p_wxDialog", _p_wxDialogTo_p_wxObject},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxObject},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxObject},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject},{"_p_wxGridTableBase", _p_wxGridTableBaseTo_p_wxObject},{"_p_wxPyGridTableBase", _p_wxPyGridTableBaseTo_p_wxObject},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxObject},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxObject},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject},{"_p_wxPageSetupDialogData", _p_wxPageSetupDialogDataTo_p_wxObject},{"_p_wxPrintDialogData", _p_wxPrintDialogDataTo_p_wxObject},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject},{0}};
 static swig_type_info _swigt__p_wxGridSizeEvent[] = {{"_p_wxGridSizeEvent", 0, "wxGridSizeEvent *", 0},{"_p_wxGridSizeEvent"},{0}};
@@ -15227,7 +15225,6 @@ _swigt__p_wxScrolledWindow,
 _swigt__p_wxWindow, 
 _swigt__p_wxFont, 
 _swigt__p_wxControl, 
-_swigt__p_size_t, 
 _swigt__p_wxEvent, 
 _swigt__p_wxObject, 
 _swigt__p_wxGridSizeEvent, 
@@ -15334,6 +15331,22 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
     SWIG_addvarlink(SWIG_globals,(char*)"GridNoCellCoords",_wrap_GridNoCellCoords_get, _wrap_GridNoCellCoords_set);
     SWIG_addvarlink(SWIG_globals,(char*)"GridNoCellRect",_wrap_GridNoCellRect_get, _wrap_GridNoCellRect_set);
+    PyDict_SetItemString(d, "wxEVT_GRID_CELL_LEFT_CLICK", PyInt_FromLong(wxEVT_GRID_CELL_LEFT_CLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_CELL_RIGHT_CLICK", PyInt_FromLong(wxEVT_GRID_CELL_RIGHT_CLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_CELL_LEFT_DCLICK", PyInt_FromLong(wxEVT_GRID_CELL_LEFT_DCLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_CELL_RIGHT_DCLICK", PyInt_FromLong(wxEVT_GRID_CELL_RIGHT_DCLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_LABEL_LEFT_CLICK", PyInt_FromLong(wxEVT_GRID_LABEL_LEFT_CLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_LABEL_RIGHT_CLICK", PyInt_FromLong(wxEVT_GRID_LABEL_RIGHT_CLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_LABEL_LEFT_DCLICK", PyInt_FromLong(wxEVT_GRID_LABEL_LEFT_DCLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_LABEL_RIGHT_DCLICK", PyInt_FromLong(wxEVT_GRID_LABEL_RIGHT_DCLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_ROW_SIZE", PyInt_FromLong(wxEVT_GRID_ROW_SIZE));
+    PyDict_SetItemString(d, "wxEVT_GRID_COL_SIZE", PyInt_FromLong(wxEVT_GRID_COL_SIZE));
+    PyDict_SetItemString(d, "wxEVT_GRID_RANGE_SELECT", PyInt_FromLong(wxEVT_GRID_RANGE_SELECT));
+    PyDict_SetItemString(d, "wxEVT_GRID_CELL_CHANGE", PyInt_FromLong(wxEVT_GRID_CELL_CHANGE));
+    PyDict_SetItemString(d, "wxEVT_GRID_SELECT_CELL", PyInt_FromLong(wxEVT_GRID_SELECT_CELL));
+    PyDict_SetItemString(d, "wxEVT_GRID_EDITOR_SHOWN", PyInt_FromLong(wxEVT_GRID_EDITOR_SHOWN));
+    PyDict_SetItemString(d, "wxEVT_GRID_EDITOR_HIDDEN", PyInt_FromLong(wxEVT_GRID_EDITOR_HIDDEN));
+    PyDict_SetItemString(d, "wxEVT_GRID_EDITOR_CREATED", PyInt_FromLong(wxEVT_GRID_EDITOR_CREATED));
     
     
 }

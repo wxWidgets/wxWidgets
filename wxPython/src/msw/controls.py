@@ -885,8 +885,6 @@ _controls.BookCtrlEvent_swigregister(BookCtrlEventPtr)
 
 #---------------------------------------------------------------------------
 
-wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED = _controls.wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
-wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING = _controls.wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
 NB_FIXEDWIDTH = _controls.NB_FIXEDWIDTH
 NB_TOP = _controls.NB_TOP
 NB_LEFT = _controls.NB_LEFT
@@ -942,6 +940,8 @@ class NotebookEventPtr(NotebookEvent):
         self.__class__ = NotebookEvent
 _controls.NotebookEvent_swigregister(NotebookEventPtr)
 
+wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED = _controls.wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
+wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING = _controls.wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
 # wxNotebook events
 EVT_NOTEBOOK_PAGE_CHANGED  = wx.PyEventBinder( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, 1 )
 EVT_NOTEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, 1 )
@@ -984,8 +984,6 @@ LB_BOTTOM = _controls.LB_BOTTOM
 LB_LEFT = _controls.LB_LEFT
 LB_RIGHT = _controls.LB_RIGHT
 LB_ALIGN_MASK = _controls.LB_ALIGN_MASK
-wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED = _controls.wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED
-wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING = _controls.wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING
 class Listbook(BookCtrl):
     def __init__(self, *args, **kwargs):
         newobj = _controls.new_Listbook(*args, **kwargs)
@@ -1026,6 +1024,8 @@ class ListbookEventPtr(ListbookEvent):
         self.__class__ = ListbookEvent
 _controls.ListbookEvent_swigregister(ListbookEventPtr)
 
+wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED = _controls.wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED
+wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING = _controls.wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING
 EVT_LISTBOOK_PAGE_CHANGED  = wx.PyEventBinder( wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED, 1 )
 EVT_LISTBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, 1 )
 

@@ -3012,12 +3012,6 @@ your Mac."""
         # This has to be done before OnInit
         self.SetUseBestVisual(useBestVisual)
 
-        # Save and redirect the stdio to a window?
-        self.stdioWin = None
-        self.saveStdio = (_sys.stdout, _sys.stderr)
-        if redirect:
-            self.RedirectStdio(filename)
-
         # Set the default handler for SIGINT.  This fixes a problem
         # where if Ctrl-C is pressed in the console that started this
         # app then it will not appear to do anything, (not even send
@@ -3029,6 +3023,12 @@ your Mac."""
             signal.signal(signal.SIGINT, signal.SIG_DFL)
         except:
             pass
+
+        # Save and redirect the stdio to a window?
+        self.stdioWin = None
+        self.saveStdio = (_sys.stdout, _sys.stderr)
+        if redirect:
+            self.RedirectStdio(filename)
 
         # This finishes the initialization of wxWindows and then calls
         # the OnInit that should be present in the derived class

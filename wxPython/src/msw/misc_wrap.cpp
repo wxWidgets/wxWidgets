@@ -224,89 +224,87 @@ SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxLogChain swig_types[0] 
 #define  SWIGTYPE_p_wxMutexGuiLocker swig_types[1] 
 #define  SWIGTYPE_p_wxMetafile swig_types[2] 
-#define  SWIGTYPE_p_size_t swig_types[3] 
-#define  SWIGTYPE_p_wxFileHistory swig_types[4] 
-#define  SWIGTYPE_p_wxLog swig_types[5] 
-#define  SWIGTYPE_p_wxDateTime__TimeZone swig_types[6] 
-#define  SWIGTYPE_p_wxMenu swig_types[7] 
-#define  SWIGTYPE_p_wxEvent swig_types[8] 
-#define  SWIGTYPE_p_wxConfigBase swig_types[9] 
-#define  SWIGTYPE_p_wxWave swig_types[10] 
-#define  SWIGTYPE_p_wxFileType swig_types[11] 
-#define  SWIGTYPE_p_wxLogGui swig_types[12] 
-#define  SWIGTYPE_p_wxFont swig_types[13] 
-#define  SWIGTYPE_p_wxDataFormat swig_types[14] 
-#define  SWIGTYPE_p_wxTimerEvent swig_types[15] 
-#define  SWIGTYPE_p_wxCaret swig_types[16] 
-#define  SWIGTYPE_p_int swig_types[17] 
-#define  SWIGTYPE_p_wxSize swig_types[18] 
-#define  SWIGTYPE_p_wxClipboard swig_types[19] 
-#define  SWIGTYPE_p_wxStopWatch swig_types[20] 
-#define  SWIGTYPE_p_wxDC swig_types[21] 
-#define  SWIGTYPE_p_wxClipboardLocker swig_types[22] 
-#define  SWIGTYPE_p_wxIcon swig_types[23] 
-#define  SWIGTYPE_p_wxLogStderr swig_types[24] 
-#define  SWIGTYPE_p_wxLogTextCtrl swig_types[25] 
-#define  SWIGTYPE_p_wxTextCtrl swig_types[26] 
-#define  SWIGTYPE_p_wxBusyCursor swig_types[27] 
-#define  SWIGTYPE_p_wxPyTextDataObject swig_types[28] 
-#define  SWIGTYPE_p_wxBitmapDataObject swig_types[29] 
-#define  SWIGTYPE_p_wxTextDataObject swig_types[30] 
-#define  SWIGTYPE_p_wxDataObject swig_types[31] 
-#define  SWIGTYPE_p_wxPyBitmapDataObject swig_types[32] 
-#define  SWIGTYPE_p_wxFileDataObject swig_types[33] 
-#define  SWIGTYPE_p_wxCustomDataObject swig_types[34] 
-#define  SWIGTYPE_p_wxURLDataObject swig_types[35] 
-#define  SWIGTYPE_p_wxMetafileDataObject swig_types[36] 
-#define  SWIGTYPE_p_wxTimerRunner swig_types[37] 
-#define  SWIGTYPE_p_wxLogWindow swig_types[38] 
-#define  SWIGTYPE_p_wxTimeSpan swig_types[39] 
-#define  SWIGTYPE_p_wxArrayString swig_types[40] 
-#define  SWIGTYPE_p_wxWindowDisabler swig_types[41] 
-#define  SWIGTYPE_p_wxToolTip swig_types[42] 
-#define  SWIGTYPE_p_wxDataObjectComposite swig_types[43] 
-#define  SWIGTYPE_p_wxFileConfig swig_types[44] 
-#define  SWIGTYPE_p_time_t swig_types[45] 
-#define  SWIGTYPE_p_wxSystemSettings swig_types[46] 
-#define  SWIGTYPE_p_wxPyDataObjectSimple swig_types[47] 
-#define  SWIGTYPE_p_wxDataObjectSimple swig_types[48] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[49] 
-#define  SWIGTYPE_p_wxRect swig_types[50] 
-#define  SWIGTYPE_p_wxSingleInstanceChecker swig_types[51] 
-#define  SWIGTYPE_p_wxFileTypeInfo swig_types[52] 
-#define  SWIGTYPE_p_wxFrame swig_types[53] 
-#define  SWIGTYPE_p_wxTimer swig_types[54] 
-#define  SWIGTYPE_p_wxMimeTypesManager swig_types[55] 
-#define  SWIGTYPE_p_wxPyArtProvider swig_types[56] 
-#define  SWIGTYPE_p_wxPyTipProvider swig_types[57] 
-#define  SWIGTYPE_p_wxTipProvider swig_types[58] 
-#define  SWIGTYPE_p_wxJoystick swig_types[59] 
-#define  SWIGTYPE_p_wxSystemOptions swig_types[60] 
-#define  SWIGTYPE_p_wxPoint swig_types[61] 
-#define  SWIGTYPE_p_wxJoystickEvent swig_types[62] 
-#define  SWIGTYPE_p_wxCursor swig_types[63] 
-#define  SWIGTYPE_p_wxObject swig_types[64] 
-#define  SWIGTYPE_p_wxOutputStream swig_types[65] 
-#define  SWIGTYPE_p_wxDateTime swig_types[66] 
-#define  SWIGTYPE_p_wxPyDropSource swig_types[67] 
-#define  SWIGTYPE_p_wxWindow swig_types[68] 
-#define  SWIGTYPE_p_wxString swig_types[69] 
-#define  SWIGTYPE_p_wxPyProcess swig_types[70] 
-#define  SWIGTYPE_p_wxBitmap swig_types[71] 
-#define  SWIGTYPE_p_wxConfig swig_types[72] 
-#define  SWIGTYPE_p_wxChar swig_types[73] 
-#define  SWIGTYPE_p_wxBusyInfo swig_types[74] 
-#define  SWIGTYPE_p_wxPyDropTarget swig_types[75] 
-#define  SWIGTYPE_p_wxPyTextDropTarget swig_types[76] 
-#define  SWIGTYPE_p_wxPyFileDropTarget swig_types[77] 
-#define  SWIGTYPE_p_wxProcessEvent swig_types[78] 
-#define  SWIGTYPE_p_wxPyLog swig_types[79] 
-#define  SWIGTYPE_p_wxLogNull swig_types[80] 
-#define  SWIGTYPE_p_wxColour swig_types[81] 
-#define  SWIGTYPE_p_wxConfigPathChanger swig_types[82] 
-#define  SWIGTYPE_p_wxPyTimer swig_types[83] 
-#define  SWIGTYPE_p_wxDateSpan swig_types[84] 
-static swig_type_info *swig_types[86];
+#define  SWIGTYPE_p_wxFileHistory swig_types[3] 
+#define  SWIGTYPE_p_wxLog swig_types[4] 
+#define  SWIGTYPE_p_wxDateTime__TimeZone swig_types[5] 
+#define  SWIGTYPE_p_wxMenu swig_types[6] 
+#define  SWIGTYPE_p_wxEvent swig_types[7] 
+#define  SWIGTYPE_p_wxConfigBase swig_types[8] 
+#define  SWIGTYPE_p_wxWave swig_types[9] 
+#define  SWIGTYPE_p_wxFileType swig_types[10] 
+#define  SWIGTYPE_p_wxLogGui swig_types[11] 
+#define  SWIGTYPE_p_wxFont swig_types[12] 
+#define  SWIGTYPE_p_wxDataFormat swig_types[13] 
+#define  SWIGTYPE_p_wxTimerEvent swig_types[14] 
+#define  SWIGTYPE_p_wxCaret swig_types[15] 
+#define  SWIGTYPE_p_int swig_types[16] 
+#define  SWIGTYPE_p_wxSize swig_types[17] 
+#define  SWIGTYPE_p_wxClipboard swig_types[18] 
+#define  SWIGTYPE_p_wxStopWatch swig_types[19] 
+#define  SWIGTYPE_p_wxDC swig_types[20] 
+#define  SWIGTYPE_p_wxClipboardLocker swig_types[21] 
+#define  SWIGTYPE_p_wxIcon swig_types[22] 
+#define  SWIGTYPE_p_wxLogStderr swig_types[23] 
+#define  SWIGTYPE_p_wxLogTextCtrl swig_types[24] 
+#define  SWIGTYPE_p_wxTextCtrl swig_types[25] 
+#define  SWIGTYPE_p_wxBusyCursor swig_types[26] 
+#define  SWIGTYPE_p_wxFileDataObject swig_types[27] 
+#define  SWIGTYPE_p_wxPyBitmapDataObject swig_types[28] 
+#define  SWIGTYPE_p_wxPyTextDataObject swig_types[29] 
+#define  SWIGTYPE_p_wxBitmapDataObject swig_types[30] 
+#define  SWIGTYPE_p_wxTextDataObject swig_types[31] 
+#define  SWIGTYPE_p_wxDataObject swig_types[32] 
+#define  SWIGTYPE_p_wxCustomDataObject swig_types[33] 
+#define  SWIGTYPE_p_wxURLDataObject swig_types[34] 
+#define  SWIGTYPE_p_wxMetafileDataObject swig_types[35] 
+#define  SWIGTYPE_p_wxTimerRunner swig_types[36] 
+#define  SWIGTYPE_p_wxLogWindow swig_types[37] 
+#define  SWIGTYPE_p_wxTimeSpan swig_types[38] 
+#define  SWIGTYPE_p_wxArrayString swig_types[39] 
+#define  SWIGTYPE_p_wxWindowDisabler swig_types[40] 
+#define  SWIGTYPE_p_wxToolTip swig_types[41] 
+#define  SWIGTYPE_p_wxDataObjectComposite swig_types[42] 
+#define  SWIGTYPE_p_wxFileConfig swig_types[43] 
+#define  SWIGTYPE_p_wxSystemSettings swig_types[44] 
+#define  SWIGTYPE_p_wxPyDataObjectSimple swig_types[45] 
+#define  SWIGTYPE_p_wxDataObjectSimple swig_types[46] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[47] 
+#define  SWIGTYPE_p_wxRect swig_types[48] 
+#define  SWIGTYPE_p_wxSingleInstanceChecker swig_types[49] 
+#define  SWIGTYPE_p_wxFileTypeInfo swig_types[50] 
+#define  SWIGTYPE_p_wxFrame swig_types[51] 
+#define  SWIGTYPE_p_wxTimer swig_types[52] 
+#define  SWIGTYPE_p_wxMimeTypesManager swig_types[53] 
+#define  SWIGTYPE_p_wxPyArtProvider swig_types[54] 
+#define  SWIGTYPE_p_wxPyTipProvider swig_types[55] 
+#define  SWIGTYPE_p_wxTipProvider swig_types[56] 
+#define  SWIGTYPE_p_wxJoystick swig_types[57] 
+#define  SWIGTYPE_p_wxSystemOptions swig_types[58] 
+#define  SWIGTYPE_p_wxPoint swig_types[59] 
+#define  SWIGTYPE_p_wxJoystickEvent swig_types[60] 
+#define  SWIGTYPE_p_wxCursor swig_types[61] 
+#define  SWIGTYPE_p_wxObject swig_types[62] 
+#define  SWIGTYPE_p_wxOutputStream swig_types[63] 
+#define  SWIGTYPE_p_wxDateTime swig_types[64] 
+#define  SWIGTYPE_p_wxPyDropSource swig_types[65] 
+#define  SWIGTYPE_p_wxWindow swig_types[66] 
+#define  SWIGTYPE_p_wxString swig_types[67] 
+#define  SWIGTYPE_p_wxPyProcess swig_types[68] 
+#define  SWIGTYPE_p_wxBitmap swig_types[69] 
+#define  SWIGTYPE_p_wxConfig swig_types[70] 
+#define  SWIGTYPE_p_wxChar swig_types[71] 
+#define  SWIGTYPE_p_wxBusyInfo swig_types[72] 
+#define  SWIGTYPE_p_wxPyDropTarget swig_types[73] 
+#define  SWIGTYPE_p_wxPyTextDropTarget swig_types[74] 
+#define  SWIGTYPE_p_wxPyFileDropTarget swig_types[75] 
+#define  SWIGTYPE_p_wxProcessEvent swig_types[76] 
+#define  SWIGTYPE_p_wxPyLog swig_types[77] 
+#define  SWIGTYPE_p_wxLogNull swig_types[78] 
+#define  SWIGTYPE_p_wxColour swig_types[79] 
+#define  SWIGTYPE_p_wxConfigPathChanger swig_types[80] 
+#define  SWIGTYPE_p_wxPyTimer swig_types[81] 
+#define  SWIGTYPE_p_wxDateSpan swig_types[82] 
+static swig_type_info *swig_types[84];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -5447,7 +5445,7 @@ static PyObject *_wrap_TipProvider_GetCurrentTip(PyObject *self, PyObject *args,
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTipProvider,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->GetCurrentTip();
+        result = (size_t)(arg1)->GetCurrentTip();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -6204,7 +6202,6 @@ static PyObject *_wrap_Log_OnLog(PyObject *self, PyObject *args, PyObject *kwarg
     wxLogLevel arg1 ;
     wxChar *arg2 = (wxChar *) 0 ;
     time_t arg3 ;
-    time_t *argp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -6216,8 +6213,8 @@ static PyObject *_wrap_Log_OnLog(PyObject *self, PyObject *args, PyObject *kwarg
     arg1 = (wxLogLevel) PyInt_AsLong(obj0);
     if (PyErr_Occurred()) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxChar,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **) &argp3, SWIGTYPE_p_time_t,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg3 = *argp3; 
+    arg3 = (time_t) PyInt_AsLong(obj2);
+    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxLog::OnLog(arg1,(wxChar const *)arg2,arg3);
@@ -13471,7 +13468,7 @@ static PyObject *_wrap_ConfigBase_GetNumberOfEntries(PyObject *self, PyObject *a
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxConfigBase const *)arg1)->GetNumberOfEntries(arg2);
+        result = (size_t)((wxConfigBase const *)arg1)->GetNumberOfEntries(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -13502,7 +13499,7 @@ static PyObject *_wrap_ConfigBase_GetNumberOfGroups(PyObject *self, PyObject *ar
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxConfigBase const *)arg1)->GetNumberOfGroups(arg2);
+        result = (size_t)((wxConfigBase const *)arg1)->GetNumberOfGroups(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -15582,15 +15579,14 @@ static PyObject *_wrap_new_DateTimeFromTimeT(PyObject *self, PyObject *args, PyO
     PyObject *resultobj;
     time_t arg1 ;
     wxDateTime *result;
-    time_t *argp1 ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "timet", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_DateTimeFromTimeT",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &argp1, SWIGTYPE_p_time_t,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg1 = *argp1; 
+    arg1 = (time_t) PyInt_AsLong(obj0);
+    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxDateTime *)new wxDateTime(arg1);
@@ -15781,7 +15777,6 @@ static PyObject *_wrap_DateTime_SetTimeT(PyObject *self, PyObject *args, PyObjec
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     time_t arg2 ;
     wxDateTime *result;
-    time_t *argp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -15790,8 +15785,8 @@ static PyObject *_wrap_DateTime_SetTimeT(PyObject *self, PyObject *args, PyObjec
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetTimeT",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_time_t,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
+    arg2 = (time_t) PyInt_AsLong(obj1);
+    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -17001,16 +16996,12 @@ static PyObject *_wrap_DateTime_GetTicks(PyObject *self, PyObject *args, PyObjec
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxDateTime const *)arg1)->GetTicks();
+        result = (time_t)((wxDateTime const *)arg1)->GetTicks();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        time_t * resultptr;
-        resultptr = new time_t((time_t &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_time_t, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -21962,7 +21953,7 @@ static PyObject *_wrap_DataObject_GetFormatCount(PyObject *self, PyObject *args,
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxDataObject const *)arg1)->GetFormatCount((wxDataObject::Direction )arg2);
+        result = (size_t)((wxDataObject const *)arg1)->GetFormatCount((wxDataObject::Direction )arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -22025,7 +22016,7 @@ static PyObject *_wrap_DataObject_GetDataSize(PyObject *self, PyObject *args, Py
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxDataObject const *)arg1)->GetDataSize((wxDataFormat const &)*arg2);
+        result = (size_t)((wxDataObject const *)arg1)->GetDataSize((wxDataFormat const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -22419,7 +22410,7 @@ static PyObject *_wrap_TextDataObject_GetTextLength(PyObject *self, PyObject *ar
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTextDataObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->GetTextLength();
+        result = (size_t)(arg1)->GetTextLength();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -22950,7 +22941,7 @@ static PyObject *_wrap_CustomDataObject_GetSize(PyObject *self, PyObject *args, 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCustomDataObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->GetSize();
+        result = (size_t)(arg1)->GetSize();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -25802,7 +25793,6 @@ static void *_p_wxPyFileDropTargetTo_p_wxPyDropTarget(void *x) {
 static swig_type_info _swigt__p_wxLogChain[] = {{"_p_wxLogChain", 0, "wxLogChain *", 0},{"_p_wxLogChain"},{0}};
 static swig_type_info _swigt__p_wxMutexGuiLocker[] = {{"_p_wxMutexGuiLocker", 0, "wxMutexGuiLocker *", 0},{"_p_wxMutexGuiLocker"},{0}};
 static swig_type_info _swigt__p_wxMetafile[] = {{"_p_wxMetafile", 0, "wxMetafile *", 0},{"_p_wxMetafile"},{0}};
-static swig_type_info _swigt__p_size_t[] = {{"_p_size_t", 0, "size_t *", 0},{"_p_size_t"},{0}};
 static swig_type_info _swigt__p_wxFileHistory[] = {{"_p_wxFileHistory", 0, "wxFileHistory *", 0},{"_p_wxFileHistory"},{0}};
 static swig_type_info _swigt__p_wxLog[] = {{"_p_wxLog", 0, "wxLog *", 0},{"_p_wxLogStderr", _p_wxLogStderrTo_p_wxLog},{"_p_wxLogTextCtrl", _p_wxLogTextCtrlTo_p_wxLog},{"_p_wxLogWindow", _p_wxLogWindowTo_p_wxLog},{"_p_wxLogChain", _p_wxLogChainTo_p_wxLog},{"_p_wxLogGui", _p_wxLogGuiTo_p_wxLog},{"_p_wxPyLog", _p_wxPyLogTo_p_wxLog},{"_p_wxLog"},{0}};
 static swig_type_info _swigt__p_wxDateTime__TimeZone[] = {{"_p_wxDateTime__TimeZone", 0, "wxDateTime::TimeZone *", 0},{"_p_wxDateTime__TimeZone"},{0}};
@@ -25827,12 +25817,12 @@ static swig_type_info _swigt__p_wxLogStderr[] = {{"_p_wxLogStderr", 0, "wxLogStd
 static swig_type_info _swigt__p_wxLogTextCtrl[] = {{"_p_wxLogTextCtrl", 0, "wxLogTextCtrl *", 0},{"_p_wxLogTextCtrl"},{0}};
 static swig_type_info _swigt__p_wxTextCtrl[] = {{"_p_wxTextCtrl", 0, "wxTextCtrl *", 0},{"_p_wxTextCtrl"},{0}};
 static swig_type_info _swigt__p_wxBusyCursor[] = {{"_p_wxBusyCursor", 0, "wxBusyCursor *", 0},{"_p_wxBusyCursor"},{0}};
+static swig_type_info _swigt__p_wxFileDataObject[] = {{"_p_wxFileDataObject", 0, "wxFileDataObject *", 0},{"_p_wxFileDataObject"},{0}};
+static swig_type_info _swigt__p_wxPyBitmapDataObject[] = {{"_p_wxPyBitmapDataObject", 0, "wxPyBitmapDataObject *", 0},{"_p_wxPyBitmapDataObject"},{0}};
 static swig_type_info _swigt__p_wxPyTextDataObject[] = {{"_p_wxPyTextDataObject", 0, "wxPyTextDataObject *", 0},{"_p_wxPyTextDataObject"},{0}};
 static swig_type_info _swigt__p_wxBitmapDataObject[] = {{"_p_wxBitmapDataObject", 0, "wxBitmapDataObject *", 0},{"_p_wxBitmapDataObject"},{"_p_wxPyBitmapDataObject", _p_wxPyBitmapDataObjectTo_p_wxBitmapDataObject},{0}};
 static swig_type_info _swigt__p_wxTextDataObject[] = {{"_p_wxTextDataObject", 0, "wxTextDataObject *", 0},{"_p_wxTextDataObject"},{"_p_wxPyTextDataObject", _p_wxPyTextDataObjectTo_p_wxTextDataObject},{0}};
 static swig_type_info _swigt__p_wxDataObject[] = {{"_p_wxDataObject", 0, "wxDataObject *", 0},{"_p_wxDataObjectSimple", _p_wxDataObjectSimpleTo_p_wxDataObject},{"_p_wxPyDataObjectSimple", _p_wxPyDataObjectSimpleTo_p_wxDataObject},{"_p_wxDataObjectComposite", _p_wxDataObjectCompositeTo_p_wxDataObject},{"_p_wxDataObject"},{"_p_wxTextDataObject", _p_wxTextDataObjectTo_p_wxDataObject},{"_p_wxPyTextDataObject", _p_wxPyTextDataObjectTo_p_wxDataObject},{"_p_wxBitmapDataObject", _p_wxBitmapDataObjectTo_p_wxDataObject},{"_p_wxPyBitmapDataObject", _p_wxPyBitmapDataObjectTo_p_wxDataObject},{"_p_wxFileDataObject", _p_wxFileDataObjectTo_p_wxDataObject},{"_p_wxCustomDataObject", _p_wxCustomDataObjectTo_p_wxDataObject},{"_p_wxMetafileDataObject", _p_wxMetafileDataObjectTo_p_wxDataObject},{"_p_wxURLDataObject", _p_wxURLDataObjectTo_p_wxDataObject},{0}};
-static swig_type_info _swigt__p_wxPyBitmapDataObject[] = {{"_p_wxPyBitmapDataObject", 0, "wxPyBitmapDataObject *", 0},{"_p_wxPyBitmapDataObject"},{0}};
-static swig_type_info _swigt__p_wxFileDataObject[] = {{"_p_wxFileDataObject", 0, "wxFileDataObject *", 0},{"_p_wxFileDataObject"},{0}};
 static swig_type_info _swigt__p_wxCustomDataObject[] = {{"_p_wxCustomDataObject", 0, "wxCustomDataObject *", 0},{"_p_wxCustomDataObject"},{0}};
 static swig_type_info _swigt__p_wxURLDataObject[] = {{"_p_wxURLDataObject", 0, "wxURLDataObject *", 0},{"_p_wxURLDataObject"},{0}};
 static swig_type_info _swigt__p_wxMetafileDataObject[] = {{"_p_wxMetafileDataObject", 0, "wxMetafileDataObject *", 0},{"_p_wxMetafileDataObject"},{0}};
@@ -25844,7 +25834,6 @@ static swig_type_info _swigt__p_wxWindowDisabler[] = {{"_p_wxWindowDisabler", 0,
 static swig_type_info _swigt__p_wxToolTip[] = {{"_p_wxToolTip", 0, "wxToolTip *", 0},{"_p_wxToolTip"},{0}};
 static swig_type_info _swigt__p_wxDataObjectComposite[] = {{"_p_wxDataObjectComposite", 0, "wxDataObjectComposite *", 0},{"_p_wxDataObjectComposite"},{"_p_wxURLDataObject", _p_wxURLDataObjectTo_p_wxDataObjectComposite},{0}};
 static swig_type_info _swigt__p_wxFileConfig[] = {{"_p_wxFileConfig", 0, "wxFileConfig *", 0},{"_p_wxFileConfig"},{0}};
-static swig_type_info _swigt__p_time_t[] = {{"_p_time_t", 0, "time_t *", 0},{"_p_time_t"},{0}};
 static swig_type_info _swigt__p_wxSystemSettings[] = {{"_p_wxSystemSettings", 0, "wxSystemSettings *", 0},{"_p_wxSystemSettings"},{0}};
 static swig_type_info _swigt__p_wxPyDataObjectSimple[] = {{"_p_wxPyDataObjectSimple", 0, "wxPyDataObjectSimple *", 0},{"_p_wxPyDataObjectSimple"},{0}};
 static swig_type_info _swigt__p_wxDataObjectSimple[] = {{"_p_wxDataObjectSimple", 0, "wxDataObjectSimple *", 0},{"_p_wxDataObjectSimple"},{"_p_wxPyDataObjectSimple", _p_wxPyDataObjectSimpleTo_p_wxDataObjectSimple},{"_p_wxTextDataObject", _p_wxTextDataObjectTo_p_wxDataObjectSimple},{"_p_wxPyTextDataObject", _p_wxPyTextDataObjectTo_p_wxDataObjectSimple},{"_p_wxBitmapDataObject", _p_wxBitmapDataObjectTo_p_wxDataObjectSimple},{"_p_wxPyBitmapDataObject", _p_wxPyBitmapDataObjectTo_p_wxDataObjectSimple},{"_p_wxFileDataObject", _p_wxFileDataObjectTo_p_wxDataObjectSimple},{"_p_wxCustomDataObject", _p_wxCustomDataObjectTo_p_wxDataObjectSimple},{"_p_wxMetafileDataObject", _p_wxMetafileDataObjectTo_p_wxDataObjectSimple},{0}};
@@ -25889,7 +25878,6 @@ static swig_type_info *swig_types_initial[] = {
 _swigt__p_wxLogChain, 
 _swigt__p_wxMutexGuiLocker, 
 _swigt__p_wxMetafile, 
-_swigt__p_size_t, 
 _swigt__p_wxFileHistory, 
 _swigt__p_wxLog, 
 _swigt__p_wxDateTime__TimeZone, 
@@ -25914,12 +25902,12 @@ _swigt__p_wxLogStderr,
 _swigt__p_wxLogTextCtrl, 
 _swigt__p_wxTextCtrl, 
 _swigt__p_wxBusyCursor, 
+_swigt__p_wxFileDataObject, 
+_swigt__p_wxPyBitmapDataObject, 
 _swigt__p_wxPyTextDataObject, 
 _swigt__p_wxBitmapDataObject, 
 _swigt__p_wxTextDataObject, 
 _swigt__p_wxDataObject, 
-_swigt__p_wxPyBitmapDataObject, 
-_swigt__p_wxFileDataObject, 
 _swigt__p_wxCustomDataObject, 
 _swigt__p_wxURLDataObject, 
 _swigt__p_wxMetafileDataObject, 
@@ -25931,7 +25919,6 @@ _swigt__p_wxWindowDisabler,
 _swigt__p_wxToolTip, 
 _swigt__p_wxDataObjectComposite, 
 _swigt__p_wxFileConfig, 
-_swigt__p_time_t, 
 _swigt__p_wxSystemSettings, 
 _swigt__p_wxPyDataObjectSimple, 
 _swigt__p_wxDataObjectSimple, 
@@ -26362,9 +26349,15 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d, "wxEVT_TIMER", PyInt_FromLong(wxEVT_TIMER));
+    PyDict_SetItemString(d, "wxEVT_END_PROCESS", PyInt_FromLong(wxEVT_END_PROCESS));
     
     wxPyPtrTypeMap_Add("wxProcess", "wxPyProcess");
     
+    PyDict_SetItemString(d, "wxEVT_JOY_BUTTON_DOWN", PyInt_FromLong(wxEVT_JOY_BUTTON_DOWN));
+    PyDict_SetItemString(d, "wxEVT_JOY_BUTTON_UP", PyInt_FromLong(wxEVT_JOY_BUTTON_UP));
+    PyDict_SetItemString(d, "wxEVT_JOY_MOVE", PyInt_FromLong(wxEVT_JOY_MOVE));
+    PyDict_SetItemString(d, "wxEVT_JOY_ZMOVE", PyInt_FromLong(wxEVT_JOY_ZMOVE));
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
     SWIG_addvarlink(SWIG_globals,(char*)"TheMimeTypesManager",_wrap_TheMimeTypesManager_get, _wrap_TheMimeTypesManager_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_TOOLBAR",_wrap_ART_TOOLBAR_get, _wrap_ART_TOOLBAR_set);
