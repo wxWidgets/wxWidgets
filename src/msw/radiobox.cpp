@@ -353,6 +353,9 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     int currentX, currentY;
     GetPosition(&currentX, &currentY);
+    int widthOld, heightOld;
+    GetSize(&widthOld, &heightOld);
+
     int xx = x;
     int yy = y;
 
@@ -418,21 +421,36 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
         int extraHeight = cy1;
 
-#if !CTL3D
+#if defined(CTL3D) && !CTL3D
         // Requires a bigger group box in plain Windows
         extraHeight *= 3;
         extraHeight /= 2;
 #endif
 
-        MoveWindow(GetHwnd(), x_offset, y_offset,
-                totWidth+cx1, totHeight+extraHeight,
-                TRUE);
+        // only change our width/height if asked for
+        if ( width == -1 )
+        {
+            if ( sizeFlags & wxSIZE_AUTO_WIDTH )
+                width = totWidth + cx1;
+            else
+                width = widthOld;
+        }
+
+        if ( height == -1 )
+        {
+            if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
+                height = totHeight + extraHeight;
+            else 
+                height = heightOld;
+        }
+
+        MoveWindow(GetHwnd(), x_offset, y_offset, width, height, TRUE);
 
         x_offset += cx1;
         y_offset += cy1;
     }
 
-#if (!CTL3D)
+#if defined(CTL3D) && (!CTL3D)
     y_offset += (int)(cy1/2); // Fudge factor since buttons overlapped label
     // JACS 2/12/93. CTL3D draws group label quite high.
 #endif

@@ -636,18 +636,21 @@ void wxFrame::OnMenuHighlight(wxMenuEvent& event)
 {
   if (GetStatusBar())
   {
+    wxString help;
     int menuId = event.GetMenuId();
     if ( menuId != -1 )
     {
       wxMenuBar *menuBar = GetMenuBar();
       if (menuBar && menuBar->FindItem(menuId))
       {
-        // set status text even if the string is empty - this will at
-        // least remove the string from the item which was previously
-        // selected
-        SetStatusText(menuBar->GetHelpString(menuId));
+        help = menuBar->GetHelpString(menuId);
       }
     }
+
+    // set status text even if the string is empty - this will at
+    // least remove the string from the item which was previously
+    // selected
+    SetStatusText(help);
   }
 }
 
@@ -972,20 +975,22 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     return FALSE;
 }
 
-bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu)
+bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
 {
     int item;
-    if ( nFlags == 0xFFFF && hMenu == 0 )
+    if ( flags == 0xFFFF && hMenu == 0 )
     {
-        // FIXME: what does this do? does it ever happen?
+        // menu was removed from screen
         item = -1;
     }
-    else if ((nFlags != MF_SEPARATOR) && (nItem != 0) && (nItem != 65535))
+    else if ( !(flags & MF_POPUP) && !(flags & MF_SEPARATOR) )
     {
         item = nItem;
     }
     else
     {
+        // don't give hints for separators (doesn't make sense) nor for the
+        // items opening popup menus (they don't have them anyhow)
         return FALSE;
     }
 

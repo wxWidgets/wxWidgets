@@ -179,15 +179,17 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
         wxSashEdgePosition edge = m_draggingEdge;
         m_draggingEdge = wxSASH_NONE;
 
+        y = abs((short)y);
+
         wxRect dragRect;
         wxSashDragStatus status = wxSASH_STATUS_OK;
         switch (edge)
         {
             case wxSASH_TOP:
             {
-                if (y > (yp + h))
+                if ( y > (yp + h))
                     status = wxSASH_STATUS_OUT_OF_RANGE;
-                int newHeight = (h - y);
+                int newHeight = (yp + h - y);
 		newHeight=wxMax(newHeight,m_minimumPaneSizeY);
 		newHeight=wxMin(newHeight,m_maximumPaneSizeY);
                 dragRect = wxRect(xp, (yp + h) - newHeight, w, newHeight);
