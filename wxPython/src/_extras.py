@@ -632,6 +632,12 @@ if wxPlatform == "__WXGTK__":
     except:
         pass
 
+if wxPlatform == "__WXMSW__":
+    import os
+    localedir = os.path.join(os.path.split(__file__)[0], "locale")
+    wxLocale_AddCatalogLookupPathPrefix(localedir)
+    del os
+
 #----------------------------------------------------------------------
 # wxWindows version numbers.  wxPython version is in __version__.
 

@@ -19,6 +19,7 @@ from   wxPython.html import wxHtmlWindow
 
 import images
 
+
 #---------------------------------------------------------------------------
 
 
@@ -702,6 +703,11 @@ class MyApp(wxApp):
         Create and show the splash screen.  It will then create and show
         the main frame when it is time to do so.
         """
+
+        #import locale
+        #self.locale = wxLocale(wxLANGUAGE_FRENCH)
+        #locale.setlocale(locale.LC_ALL, 'fr')
+
         wxInitAllImageHandlers()
         splash = MySplashScreen()
         splash.Show()

@@ -6,6 +6,8 @@ from distutils.core      import setup, Extension
 from distutils.file_util import copy_file
 from distutils.dir_util  import mkpath
 from distutils.dep_util  import newer
+from distutils.spawn     import spawn
+from distutils.command.install_data import install_data
 
 #----------------------------------------------------------------------
 # flags and values that affect this script
@@ -21,7 +23,7 @@ LONG_DESCRIPTION = """\
 wxPython is a GUI toolkit for Python that is a wrapper around the
 wxWindows C++ GUI library.  wxPython provides a large variety of
 window types and controls, all implemented with a native look and
-feel (and native runtime speed) on the platforms it is supported
+feel (by using the native widgets) on the platforms it is supported
 on.
 """
 
@@ -135,6 +137,7 @@ def libFlag():
 
 PKGDIR = 'wxPython'
 wxpExtensions = []
+DATA_FILES = []
 
 force = '--force' in sys.argv or '-f' in sys.argv
 debug = '--debug' in sys.argv or '-g' in sys.argv
@@ -215,12 +218,9 @@ def Verify_WX_CONFIG():
             WX_CONFIG = 'wx-config'
 
 
+
 def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=[]):
     """Run SWIG the way I want it done"""
-    from distutils.file_util import copy_file
-    from distutils.dep_util import newer
-    from distutils.spawn import spawn
-
     if not os.path.exists(os.path.join(dir, gendir)):
         os.mkdir(os.path.join(dir, gendir))
 
@@ -246,7 +246,7 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
                 i_file = '/'.join(i_file.split('\\'))
 
                 cmd = ['./wxSWIG/wxswig'] + swig_args + ['-I'+dir, '-c', '-o', cpp_file, i_file]
-                print ' '.join(cmd)
+                msg(' '.join(cmd))
                 spawn(cmd)
 
         # copy the generated python file to the package directory
@@ -262,6 +262,40 @@ def contrib_copy_tree(src, dest, verbose=0):
 
     mkpath(dest, verbose=verbose)
     copy_tree(src, dest, update=1, verbose=verbose)
+
+
+
+class smart_install_data(install_data):
+    def run(self):
+        #need to change self.install_dir to the actual library dir
+        install_cmd = self.get_finalized_command('install')
+        self.install_dir = getattr(install_cmd, 'install_lib')
+        return install_data.run(self)
+
+
+def build_locale_dir(destdir, verbose=1):
+    """Build a locale dir under the wxPython package for MSW"""
+    moFiles = glob.glob(opj(WXDIR, 'locale', '*.mo'))
+    for src in moFiles:
+        lang = os.path.splitext(os.path.basename(src))[0]
+        dest = opj(destdir, lang, 'LC_MESSAGES')
+        mkpath(dest, verbose=verbose)
+        copy_file(src, opj(dest, 'wxstd.mo'), update=1, verbose=verbose)
+
+
+def build_locale_list(srcdir):
+    # get a list of all files under the srcdir, to be used for install_data
+    def walk_helper(lst, dirname, files):
+        for f in files:
+            filename = opj(dirname, f)
+            if not os.path.isdir(filename):
+                lst.append( (dirname, [filename]) )
+    file_list = []
+    os.path.walk(srcdir, walk_helper, file_list)
+    return file_list
+
+
+
 
 
 #----------------------------------------------------------------------
@@ -508,6 +542,11 @@ if IN_CVS_TREE:   # update the license files
     mkpath('licence')
     for file in ['preamble.txt', 'licence.txt', 'licendoc.txt', 'lgpl.txt']:
         copy_file(opj(WXDIR, 'docs', file), opj('licence',file), update=1, verbose=0)
+
+
+if os.name == 'nt':
+    build_locale_dir(opj(PKGDIR, 'locale'))
+    DATA_FILES += build_locale_list(opj(PKGDIR, 'locale'))
 
 
 if os.name == 'nt':
@@ -1174,8 +1213,11 @@ if __name__ == "__main__":
 
               options = { 'build' : { 'build_base' : BUILD_BASE }},
 
-              ##data_files = TOOLS,
               scripts = SCRIPTS,
+
+              cmdclass = { 'install_data': smart_install_data},
+              data_files = DATA_FILES,
+
               )
 
 

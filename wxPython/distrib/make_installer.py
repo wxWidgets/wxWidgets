@@ -98,6 +98,8 @@ Source: "wxPython\lib\PyCrust\*.txt";       DestDir: "{app}\wxPython\lib\PyCrust
 Source: "wxPython\lib\PyCrust\*.ico";       DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
 Source: "wxPython\lib\colourchooser\*.py";  DestDir: "{app}\wxPython\lib\colourchooser"; Components: core
 
+%(LOCALE)s
+
 Source: "demo\*.py";                        DestDir: "{app}\wxPython\demo"; Components: demo
 Source: "demo\*.xml";                       DestDir: "{app}\wxPython\demo"; Components: demo
 Source: "demo\*.txt";                       DestDir: "{app}\wxPython\demo"; Components: demo
@@ -350,6 +352,22 @@ def find_DLLs():
 
 #----------------------------------------------------------------------
 
+def build_locale_string():
+    template = 'Source: "%s";  DestDir: "{app}\%s"; Components: core'
+    stringlst = []
+
+    def walk_helper(lst, dirname, files):
+        for f in files:
+            filename = os.path.join(dirname, f)
+            if not os.path.isdir(filename):
+                lst.append( template % (filename, dirname) )
+
+    os.path.walk('wxPython\\locale', walk_helper, stringlst)
+    return '\n'.join(stringlst)
+
+
+#----------------------------------------------------------------------
+
 def main():
 
     verglob = {}
@@ -366,6 +384,7 @@ def main():
     SYSDIR     = r"C:\WINNT\SYSTEM32"
     ISSFILE    = "__wxPython.iss"
     IFSFILE    = "__wxPython.ifs"
+    LOCALE     = build_locale_string()
 
     if PYTHONVER >= "2.2":
         IF22 = r"InstallDir := InstallDir + '\Lib\site-packages';"
