@@ -687,7 +687,6 @@ scrolbar.h	W
 scrolwin.h	W
 serbase.h	W	B
 settings.h	W
-setup.h	W	B
 sizer.h	W
 slider.h	W
 socket.h	W	B
