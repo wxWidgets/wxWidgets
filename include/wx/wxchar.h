@@ -593,10 +593,12 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
     #endif
 #endif // wxVsnprintf_ not defined yet
 
-#ifndef wxVsnprintf_
+#ifndef wxSnprintf_
     // no [v]snprintf(), cook our own
     WXDLLEXPORT int wxSnprintf_(wxChar *buf, size_t len, const wxChar *format,
                                 ...) ATTRIBUTE_PRINTF_3;
+#endif
+#ifndef wxVsnprintf_
     WXDLLEXPORT int wxVsnprintf_(wxChar *buf, size_t len, const wxChar *format,
                                  va_list argptr);
 #endif
