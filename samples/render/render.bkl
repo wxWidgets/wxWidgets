@@ -9,17 +9,12 @@
         <sources>render.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <win32-res>../sample.rc</win32-res>
-        <mac-res>../sample.r</mac-res>
     </exe>
 
-    <module id="renddll" cond="SHARED=='1'"
-            template="wx" template_append="wx_append">
-        <dllname>renddll_$(PORTNAME)$(WXUNIVNAME)$(WXWIN32DLLVERSION)</dllname>
-        <define>WXUSINGDLL</define>
+    <wx-gui-plugin id="renddll" cond="SHARED=='1'" template_append="wx_append">
         <sources>renddll.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-    </module>
+    </wx-gui-plugin>
     
 </makefile>

@@ -27,6 +27,13 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/frame.h"
+    #include "wx/dc.h"
+    #include "wx/dcclient.h"
+    #include "wx/panel.h"
+    #include "wx/menu.h"
+    #include "wx/textdlg.h"
+    #include "wx/log.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/apptrait.h"
