@@ -4166,7 +4166,7 @@ void wxWindowGTK::SetWidgetStyle()
 
     GtkStyle *style = GetWidgetStyle();
 
-    if (m_font != wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ))
+    if ( m_hasFont )
     {
 #ifdef __WXGTK20__
         pango_font_description_free( style->font_desc );
@@ -4177,7 +4177,7 @@ void wxWindowGTK::SetWidgetStyle()
 #endif
     }
 
-    if (m_foregroundColour.Ok())
+    if ( m_hasFgCol )
     {
         m_foregroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
         if (m_foregroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT))
@@ -4203,7 +4203,7 @@ void wxWindowGTK::SetWidgetStyle()
         }
     }
 
-    if (m_backgroundColour.Ok())
+    if ( m_hasBgCol )
     {
         m_backgroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
         if (m_backgroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE))
