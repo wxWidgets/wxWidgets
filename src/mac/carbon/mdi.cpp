@@ -368,14 +368,8 @@ wxMDIClientWindow::~wxMDIClientWindow()
 
 bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
 {
-    
-    m_windowId = (int)NewControlId();
-    
-    if ( parent )
-    {
-        parent->AddChild(this);
-    }
-    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
+    if ( !wxWindow::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, style))
+        return FALSE;
     
     wxModelessWindows.Append(this);
     return TRUE;
