@@ -24,7 +24,7 @@ wxOwnerDrawn (Windows only)\\
 
 \membersection{wxMenuItem::wxMenuItem}\label{wxmenuitemconstr}
 
-\func{}{wxMenuItem}{\param{wxMenu*}{ parentMenu = NULL}, \param{int}{ id = ID\_SEPARATOR},
+\func{}{wxMenuItem}{\param{wxMenu*}{ parentMenu = NULL}, \param{int}{ id = wxID\_SEPARATOR},
  \param{const wxString\& }{text = ""},  \param{const wxString\& }{helpString = ""},
  \param{wxItemKind }{kind = wxITEM\_NORMAL}, \param{wxMenu*}{ subMenu = NULL}, }
 
@@ -34,7 +34,7 @@ Constructs a wxMenuItem object.
 
 \docparam{parentMenu}{Menu that the menu item belongs to.}
 
-\docparam{id}{Identifier for this menu item, or ID\_SEPARATOR to indicate a separator.}
+\docparam{id}{Identifier for this menu item, or wxID\_SEPARATOR to indicate a separator.}
 
 \docparam{text}{Text for the menu item, as shown on the menu. An accelerator
 key can be specified using the ampersand '\&' character. In order to embed an
