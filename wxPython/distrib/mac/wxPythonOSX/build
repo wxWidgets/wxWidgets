@@ -17,9 +17,8 @@ function usage {
     echo ""
     echo "Usage: $0  [apple|local]  [command flags...]"
     echo ""
-    echo "   apple          Build for Apple's python in /usr/bin"
-    echo "   local          Build for a locally installed python in /usr/local/bin"
-    echo "                  (for example Jaguar's MacPython)"
+    echo "   panther        Build for Apple's python in /usr/bin, such as on Panther"
+    echo "   jaguar         Build for a python in /usr/local/bin, such as on Jaguar"
     echo ""
     echo "optional command flags:"
     echo "   skiptar        Don't unpack the tarball"
@@ -40,9 +39,9 @@ fi
 
 KIND=$1
 case $KIND in
-    apple)    PYTHON=/usr/bin/python ;;
-    local)    PYTHON=/usr/local/bin/python ;;
-    *)        usage; exit 1 ;;
+    panther)    PYTHON=/usr/bin/python ;;
+    jaguar)     PYTHON=/usr/local/bin/python ;;
+    *)          usage; exit 1 ;;
 esac
 PYTHONW=${PYTHON}w
 shift
@@ -68,7 +67,8 @@ done
 VERSION=`$PYTHON -c "import setup;print setup.VERSION"`
 PYVER=`$PYTHON -c "import sys; print sys.version[:3]"`
 PYPREFIX=`$PYTHON -c "import sys; print sys.exec_prefix"`
-SITEPACKAGES=$PYPREFIX/lib/python$PYVER/site-packages
+PYLIB=$PYPREFIX/lib/python$PYVER
+SITEPACKAGES=$PYLIB/site-packages
 
 SRCDIR=/stuff/Development/wxPython/dist/$VERSION
 TARBALL=$SRCDIR/wxPythonSrc-$VERSION.tar.gz
@@ -201,9 +201,9 @@ if [ -z "$skipbuild" ]; then
 fi
 
 #----------------------------------------------------------------------
-# Install wxWindows
 
 if [ -z "$skipinstall" ]; then
+    # Install wxWindows
     cd $WXDIR/bld
     make prefix=$INSTALLROOT$PREFIX install
     make -C contrib/src/gizmos prefix=$INSTALLROOT$PREFIX install
@@ -221,10 +221,22 @@ if [ -z "$skipinstall" ]; then
 	--root=$INSTALLROOT
 
 
+    # Apple's Python (on Panther) sym-links the site-packages dir to
+    # /Library/Python/$PYVER so we need to move the files so they are
+    # installed in the physical location, not the virtual one.
+    if [ "$KIND" = "panther" ]; then
+	mkdir -p $INSTALLROOT/Library/Python/$PYVER
+	mv $INSTALLROOT/$SITEPACKAGES/* $INSTALLROOT/Library/Python/$PYVER
+	rm -r $INSTALLROOT/System
+	SITEPACKAGES=/Library/Python/$PYVER
+    fi
+
+
     # install wxPython's tool scripts
     mkdir -p $INSTALLROOT$BINPREFIX
     cd $WXDIR/wxPython/scripts
     python$PYVER CreateMacScripts.py $INSTALLROOT $BINPREFIX
+
 
     # Install wxrc
     cp $WXDIR/bld/contrib/utils/wxrc/wxrc $INSTALLROOT$BINPREFIX
@@ -237,7 +249,7 @@ if [ -z "$skipinstall" ]; then
     cp src/*.i    $INSTALLROOT$PREFIX/include/wx/wxPython/i_files
 
 
-    # TODO for $INSTALLROOT and $INSTALLDEVEL ?
+    # Set premissions for files in $INSTALLROOT 
     chown -R root:admin $INSTALLROOT
     chmod -R g+w        $INSTALLROOT
 fi
@@ -256,13 +268,15 @@ if [ -z "$skipdmg" ]; then
 
     # Make the welcome message
     case $KIND in
-	apple)  W_MSG="an Apple installed (Panther) version of" ;;
-	local)  W_MSG="a locally built version (or Jaguar version) of" ;;
+	panther)  W_MSG="the Panther (OS X 10.3.x) version of" ;;
+	jaguar)   W_MSG="the Jaguar (OS X 10.2.x) version of" ;;
     esac
     cat > $RESOURCEDIR/Welcome.txt <<EOF
 Welcome!
 
 This program will install wxPython $VERSION for $W_MSG MacPython-OSX $PYVER.
+
+You must install onto your current boot disk, even though the installer does not enforce this, otherwise things will not work.
 
 Build date:   `date`
 EOF
@@ -281,13 +295,13 @@ EOF
     cat > $RESOURCEDIR/postflight <<EOF
 #!/bin/sh -e
 # Compile the .py files in the wxPython pacakge
-$PYTHON \$2$SITEPACKAGES/../compileall.py \$2$SITEPACKAGES/wxPython
-$PYTHON \$2$SITEPACKAGES/../compileall.py \$2$SITEPACKAGES/wx
-$PYTHON -O \$2$SITEPACKAGES/../compileall.py \$2$SITEPACKAGES/wxPython
-$PYTHON -O \$2$SITEPACKAGES/../compileall.py \$2$SITEPACKAGES/wx
+$PYTHON \$2$PYLIB/compileall.py \$2$SITEPACKAGES/wxPython
+$PYTHON \$2$PYLIB/compileall.py \$2$SITEPACKAGES/wx
+$PYTHON -O \$2$PYLIB/compileall.py \$2$SITEPACKAGES/wxPython
+$PYTHON -O \$2$PYLIB/compileall.py \$2$SITEPACKAGES/wx
 
 
-# and the wxPython pacakge should be group writable
+# and all of the wxPython pacakge should be group writable
 chgrp -R admin \$2$SITEPACKAGES/wxPython
 chmod -R g+w \$2$SITEPACKAGES/wxPython
 chgrp -R admin \$2$SITEPACKAGES/wx
@@ -299,7 +313,7 @@ EOF
 
 
 
-    # Finally, build the main Installer Package...
+    # Build the main Installer Package...
     rm -rf wxPythonOSX-$KIND.pkg
     python $PROGDIR/../buildpkg.py \
 	--Title=wxPythonOSX-$KIND \
@@ -314,25 +328,12 @@ EOF
     mv wxPythonOSX-$KIND.pkg $DMGDIR/root
 
 
-#     # and the devel package
-#     rm -rf wxPythonOSX-devel.pkg
-#     python $PROGDIR/../buildpkg.py \
-# 	--Title=wxPythonOSX-devel \
-# 	--Version=$VERSION \
-# 	--Description="Headers and such that allow you to link with the same wxMac that wxPython does" \
-# 	--NeedsAuthorization="YES" \
-# 	--Relocatable="NO" \
-# 	--InstallOnly="YES" \
-# 	$INSTALLDEVEL
-
-#     mv wxPythonOSX-devel.pkg $DMGDIR/root
-
 
     # Make a README.txt to go on the disk image
-    cat > $DMGDIR/root/README.txt <<EOF
+    cat > "$DMGDIR/root/README 1st.txt" <<EOF
 Welcome to wxPython!
 
-On this disk image you will find the installer for the wxPython $VERSION for $W_MSG MacPython-OSX $PYVER.  You must already have MacPython-OSX installed.  
+On this disk image you will find the installer for wxPython $VERSION for $W_MSG MacPython-OSX $PYVER.  MacPython-OSX is not included.  
 
    wxPython-$KIND.pkg   The installer package.  It contains the wxPython 
                         extension modules, wxMac dynamic libraries and
@@ -340,20 +341,35 @@ On this disk image you will find the installer for the wxPython $VERSION for $W_
                         tools.  
 
 Everything else here is optional and you can drag them out of the disk 
-image and drop them where ever you want.
+image and drop them whereever you want.  You do need to install the above
+package before you can use any of the items below.
 
    docs/                A few readmes, change log, etc.  The full 
                         documentation is downloadable separately. 
 
    licence/             License docs.
 
-   demo/                A copy of the wxPython demo.
+   demo/                A copy of the wxPython demo source code, 
+                        just open the folder and run demo.py.
 
    samples/             Several small sample applications that 
                         demonstrate how to use wxPython.
 
+   wxPython Demo        An application bundle version of the demo.
+                        (This has it's own copy of the sources within
+                        the bundle.)
+
+   XRCed                An application for editing wxPython resource
+                        files  (XRC files.)
+
+   PyCrust              An application that provides an interactive 
+                        Python shell and also namespace inspectors.
+
 Happy Hacking!
 EOF
+
+#   PyAlaMode            An extension of PyCrust that includes source 
+#                        file editing capabilities.
 
 
     # license files, docs, etc.
@@ -375,6 +391,14 @@ EOF
 	--mainprogram=$INSTALLROOT$BINPREFIX/pycrust.py \
 	--iconfile=$PROGDIR/PieShell.icns \
 	build
+
+#     # and PyAlaMode
+#     $PYTHONW $PROGDIR/../buildapp.py \
+# 	--builddir=$DMGDIR/root \
+# 	--name=PyAlaMode \
+# 	--mainprogram=$INSTALLROOT$BINPREFIX/pyalamode.py \
+# 	--iconfile=$PROGDIR/PieShell.icns \
+# 	build
 
     # Make an app to launch XRCed
     $PYTHONW $PROGDIR/../buildapp.py \
