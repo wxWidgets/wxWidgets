@@ -31,6 +31,38 @@
 
 FORCE_LINK_ME(m_pre)
 
+// replaces '\t', ' ' and '\n' with HTML markup:
+static wxString HtmlizeWhitespaces(const wxString& str)
+{
+    wxString out;
+    size_t i = 0, len = str.Len();
+    for (i = 0; i < len; i++)
+    {
+        switch (str[i])
+        {
+            case wxT('<'):
+                while (i < len && str[i] != wxT('>')) 
+                    out << str[i++];
+                out << wxT('>');
+                break;
+            case wxT(' '):
+                out << wxT("&nbsp;");
+                break;
+            case wxT('\n'):
+                out << wxT("<br>");
+                break;
+            case wxT('\t'):
+                for (size_t j = 8 - i%8; j > 0; j--) out << wxT("&nbsp;");
+                break;
+            default:
+                out << str[i];
+                break;
+        }
+    }
+    return out;
+}
+
+
 //-----------------------------------------------------------------------------
 // The list handler:
 //-----------------------------------------------------------------------------
@@ -63,13 +95,9 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
         wxString srcMid = 
             m_WParser->GetSource()->Mid(tag.GetBeginPos(),
                                         tag.GetEndPos1() - tag.GetBeginPos());
-        srcMid.Replace(wxT("\t"), wxT("        "));
-        srcMid.Replace(wxT(" "), wxT("&nbsp;"));
-        srcMid.Replace(wxT("\n"), wxT("<br>"));
-
         // It is safe to temporarily change the source being parsed,
         // provided we restore the state back after parsing
-        m_Parser->SetSourceAndSaveState(srcMid);
+        m_Parser->SetSourceAndSaveState(HtmlizeWhitespaces(srcMid));
         m_Parser->DoParsing();
         m_Parser->RestoreState();
 
