@@ -535,7 +535,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxSB_VERTICAL        wxVERTICAL
 
 /*
- * wxButton flags
+ * wxButton flags (Win32 only)
  */
 #define wxBU_AUTODRAW        0x0004
 #define wxBU_NOAUTODRAW      0x0000
@@ -618,6 +618,14 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
  */
 
 #define wxST_SIZEGRIP       0x0002
+
+/*
+ * wxStaticLine flags
+ */
+#define wxLI_HORIZONTAL      wxHORIZONTAL
+#define wxLI_VERTICAL        wxVERTICAL
+
+
 
 /*
  * GDI descriptions

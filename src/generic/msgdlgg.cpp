@@ -35,6 +35,10 @@
 
 #include "wx/generic/msgdlgg.h"
 
+#ifdef __WXGTK__
+#include "wx/statline.h"
+#endif
+
 ///////////////////////////////////////////////////////////////////
 // New dialog box implementations
 
@@ -145,6 +149,10 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent, const wxString
         node = node->Next();
 	n++;
     }
+    
+#ifdef __WXGTK__
+    (void) new wxStaticLine( this, -1, wxPoint(0,y-20), wxSize(w+30, 5) );
+#endif
     
     SetSize( w+30, y+40 );
 

@@ -122,6 +122,7 @@ LIB_CPP_SRC=\
  gtk/spinbutt.cpp \
  gtk/statbox.cpp \
  gtk/statbmp.cpp \
+ gtk/statline.cpp \
  gtk/stattext.cpp \
  gtk/tbargtk.cpp \
  gtk/textctrl.cpp \

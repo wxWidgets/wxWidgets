@@ -249,6 +249,9 @@ bool wxRadioBox::Show( bool show )
 
     wxWindow::Show( show );
 
+    if ((m_windowStyle & wxNO_BORDER) == 0)
+        gtk_widget_hide( m_widget );
+    
     wxNode *node = m_boxes.First();
     while (node)
     {
