@@ -2395,34 +2395,6 @@ void wxResourceEditorScrolledWindow::DrawTitle(wxDC& dc)
     }
 }
 
-// Popup menu callback
-void ObjectMenuProc(wxMenu *menu, wxCommandEvent& event)
-{
-    wxWindow *data = (wxWindow *)menu->GetClientData();
-    if (!data)
-        return;
-    
-    switch (event.GetInt())
-    {
-    case OBJECT_MENU_EDIT:
-        {
-            wxResourceManager::GetCurrentResourceManager()->EditWindow(data);
-            break;
-        }
-    case OBJECT_MENU_DELETE:
-        {
-            wxResourceManager::GetCurrentResourceManager()->DeselectItemIfNecessary(data);
-            
-            wxResourceManager::GetCurrentResourceManager()->SaveInfoAndDeleteHandler(data);
-            wxResourceManager::GetCurrentResourceManager()->DeleteResource(data);
-            wxResourceManager::GetCurrentResourceManager()->DeleteWindow(data);
-            break;
-        }
-    default:
-        break;
-    }
-}
-
 /*
 * Main toolbar
 *

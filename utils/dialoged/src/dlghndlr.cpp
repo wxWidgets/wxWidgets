@@ -41,6 +41,8 @@ BEGIN_EVENT_TABLE(wxResourceEditorDialogHandler, wxEvtHandler)
 EVT_PAINT(wxResourceEditorDialogHandler::OnPaint)
 EVT_MOUSE_EVENTS(wxResourceEditorDialogHandler::OnMouseEvent)
 EVT_SIZE(wxResourceEditorDialogHandler::OnSize)
+EVT_MENU(OBJECT_MENU_EDIT, wxResourceEditorDialogHandler::OnObjectEdit)
+EVT_MENU(OBJECT_MENU_DELETE, wxResourceEditorDialogHandler::OnObjectDelete)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxResourceEditorControlHandler, wxEvtHandler)
@@ -622,6 +624,32 @@ void wxResourceEditorDialogHandler::PaintSelectionHandles(wxDC& dc)
         node = node->Next();
     }
     dc.EndDrawing();
+}
+
+void wxResourceEditorDialogHandler::OnObjectEdit(wxCommandEvent& event)
+{
+	wxMenu* menu = (wxMenu*) event.GetEventObject();
+
+    wxWindow *data = (wxWindow *)menu->GetClientData();
+    if (!data)
+        return;
+    
+    wxResourceManager::GetCurrentResourceManager()->EditWindow(data);
+}
+
+void wxResourceEditorDialogHandler::OnObjectDelete(wxCommandEvent& event)
+{
+	wxMenu* menu = (wxMenu*) event.GetEventObject();
+
+    wxWindow *data = (wxWindow *)menu->GetClientData();
+    if (!data)
+        return;
+    
+	wxResourceManager::GetCurrentResourceManager()->DeselectItemIfNecessary(data);
+	
+	wxResourceManager::GetCurrentResourceManager()->SaveInfoAndDeleteHandler(data);
+	wxResourceManager::GetCurrentResourceManager()->DeleteResource(data);
+	wxResourceManager::GetCurrentResourceManager()->DeleteWindow(data);
 }
 
 /*

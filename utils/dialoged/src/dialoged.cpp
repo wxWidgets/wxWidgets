@@ -28,8 +28,6 @@
 IMPLEMENT_APP(MyApp)
 
 BEGIN_EVENT_TABLE(MyApp, wxApp)
-EVT_MENU(OBJECT_MENU_EDIT, MyApp::OnObjectPopupMenu)
-EVT_MENU(OBJECT_MENU_DELETE, MyApp::OnObjectPopupMenu)
 END_EVENT_TABLE()
 
 MyApp::MyApp(void)
