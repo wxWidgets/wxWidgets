@@ -941,9 +941,9 @@ class StaticPicture(_core.Control):
         return "<%s.%s; proxy of C++ wxStaticPicture instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Bitmap label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            String name=StaticPictureNameStr) -> StaticPicture
+        __init__(self, Window parent, int id=-1, Bitmap label=wxNullBitmap, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, String name=StaticPictureNameStr) -> StaticPicture
         """
         newobj = _gizmos.new_StaticPicture(*args, **kwargs)
         self.this = newobj.this
@@ -953,9 +953,9 @@ class StaticPicture(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Bitmap label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            String name=StaticPictureNameStr) -> bool
+        Create(self, Window parent, int id=-1, Bitmap label=wxNullBitmap, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, String name=StaticPictureNameStr) -> bool
         """
         return _gizmos.StaticPicture_Create(*args, **kwargs)
 

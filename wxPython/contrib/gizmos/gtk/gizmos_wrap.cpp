@@ -8139,8 +8139,9 @@ static PyObject * TreeListCtrl_swigregister(PyObject *, PyObject *args) {
 static PyObject *_wrap_new_StaticPicture(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
-    wxBitmap *arg3 = 0 ;
+    int arg2 = (int) -1 ;
+    wxBitmap const &arg3_defvalue = wxNullBitmap ;
+    wxBitmap *arg3 = (wxBitmap *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -8163,20 +8164,24 @@ static PyObject *_wrap_new_StaticPicture(PyObject *, PyObject *args, PyObject *k
         (char *) "parent",(char *) "id",(char *) "label",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:new_StaticPicture",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOO:new_StaticPicture",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (int)(SWIG_As_int(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
-        if (SWIG_arg_fail(3)) SWIG_fail;
-        if (arg3 == NULL) {
-            SWIG_null_ref("wxBitmap");
+    if (obj1) {
+        {
+            arg2 = (int)(SWIG_As_int(obj1)); 
+            if (SWIG_arg_fail(2)) SWIG_fail;
         }
-        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
+            if (SWIG_arg_fail(3)) SWIG_fail;
+            if (arg3 == NULL) {
+                SWIG_null_ref("wxBitmap");
+            }
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
     }
     if (obj3) {
         {
@@ -8253,8 +8258,9 @@ static PyObject *_wrap_StaticPicture_Create(PyObject *, PyObject *args, PyObject
     PyObject *resultobj;
     wxStaticPicture *arg1 = (wxStaticPicture *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
-    wxBitmap *arg4 = 0 ;
+    int arg3 = (int) -1 ;
+    wxBitmap const &arg4_defvalue = wxNullBitmap ;
+    wxBitmap *arg4 = (wxBitmap *) &arg4_defvalue ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
     wxSize const &arg6_defvalue = wxDefaultSize ;
@@ -8278,22 +8284,26 @@ static PyObject *_wrap_StaticPicture_Create(PyObject *, PyObject *args, PyObject
         (char *) "self",(char *) "parent",(char *) "id",(char *) "label",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|OOOO:StaticPicture_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOO:StaticPicture_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStaticPicture, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(2)) SWIG_fail;
-    {
-        arg3 = (int)(SWIG_As_int(obj2)); 
-        if (SWIG_arg_fail(3)) SWIG_fail;
-    }
-    {
-        SWIG_Python_ConvertPtr(obj3, (void **)&arg4, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
-        if (SWIG_arg_fail(4)) SWIG_fail;
-        if (arg4 == NULL) {
-            SWIG_null_ref("wxBitmap");
+    if (obj2) {
+        {
+            arg3 = (int)(SWIG_As_int(obj2)); 
+            if (SWIG_arg_fail(3)) SWIG_fail;
         }
-        if (SWIG_arg_fail(4)) SWIG_fail;
+    }
+    if (obj3) {
+        {
+            SWIG_Python_ConvertPtr(obj3, (void **)&arg4, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
+            if (SWIG_arg_fail(4)) SWIG_fail;
+            if (arg4 == NULL) {
+                SWIG_null_ref("wxBitmap");
+            }
+            if (SWIG_arg_fail(4)) SWIG_fail;
+        }
     }
     if (obj4) {
         {
