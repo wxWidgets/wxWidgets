@@ -68,6 +68,7 @@ All:
 - wxFileName::Normalize(wxPATH_NORM_ALL) doesn't lower filename case any more
 - added wxTextInputStream::ReadChar() (M.J.Wetherell)
 - added translation to Afrikaans (Petri Jooste)
+- Spanish translations updated (Javier San Jose)
 
 All (GUI):
 
