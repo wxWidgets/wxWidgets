@@ -774,7 +774,7 @@ else
   DEFAULT_wxUSE_ZLIB=yes
   DEFAULT_wxUSE_LIBPNG=yes
   DEFAULT_wxUSE_LIBJPEG=yes
-  DEFAULT_wxUSE_ODBC=no
+  DEFAULT_wxUSE_ODBC=yes
 
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_FILE=yes
@@ -2334,14 +2334,9 @@ if test "$wxUSE_LONGLONG" = "yes"; then
 fi
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
-    if test "$wxUSE_THREADS" = "yes" ; then
-        AC_DEFINE(wxUSE_SOCKETS)
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wxsocket"
-        INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS protocol"
-    else
-        AC_MSG_WARN(Socket classes require --with-threads and won't be compiled without it)
-        wxUSE_SOCKETS=0
-    fi
+    AC_DEFINE(wxUSE_SOCKETS)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wxsocket"
+    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS protocol"
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes" ; then
@@ -2468,6 +2463,7 @@ dnl ----------------------------------------------------------------
 IODBC_C_SRC=""
 if test "$wxUSE_ODBC" = "yes" ; then
   AC_DEFINE(wxUSE_ODBC)
+  WXODBCFLAG="-D_IODBC_"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
 fi
 
@@ -2823,7 +2819,7 @@ if test "$GXX" = yes ; then
     dnl        doing this... (VZ)
     dnl CXXWARNINGS="-Wall -Werror"
 fi
-EXTRA_CFLAGS="$WXDEBUG $PROFILE $OPTIMISE $INCLUDES"
+EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE $INCLUDES"
 
 CPPFLAGS="-I\${top_srcdir}/include $CPPFLAGS"
 CFLAGS="$CFLAGS $EXTRA_CFLAGS"
@@ -2938,6 +2934,7 @@ AC_OUTPUT([
             samples/checklst/Makefile
             samples/config/Makefile
             samples/controls/Makefile
+            samples/db/Makefile
             samples/dialogs/Makefile
             samples/docview/Makefile
             samples/docvwmdi/Makefile

@@ -366,7 +366,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
                    ptr[poffset] = temp;
                    temp = (aWord & gmask) >> gshift;
                    ptr[poffset + 1] = temp;
-                   temp = (aWord & bmask) >> gshift;
+                   temp = (aWord & bmask) >> bshift;
                    ptr[poffset + 2] = temp;
                    column++;
                }

@@ -217,8 +217,9 @@ VP6 = @top_srcdir@/src/html
 VP7 = @top_srcdir@/src/png
 VP8 = @top_srcdir@/src/jpeg
 VP9 = @top_srcdir@/src/zlib
+VP10 = @top_srcdir@/src/iodbc
 
-VPATH = $(VP1):$(VP2):$(VP3):$(VP4):$(VP5):$(VP6):$(VP7):$(VP8):$(VP9)
+VPATH = $(VP1):$(VP2):$(VP3):$(VP4):$(VP5):$(VP6):$(VP7):$(VP8):$(VP9):$(VP10)
 
 top_srcdir = @top_srcdir@
 prefix = @prefix@
@@ -487,6 +488,23 @@ JPEGOBJS    = \
 		jquant2.o \
 		jdmerge.o
 
+IODBCOBJS = \
+		catalog.o \
+		connect.o \
+		dlf.o \
+		dlproc.o \
+		execute.o \
+		fetch.o \
+		hdbc.o \
+		henv.o \
+		herr.o \
+		hstmt.o \
+		info.o \
+		itrace.o \
+		misc.o \
+		prepare.o \
+		result.o
+
 GUIOBJS = @GUIOBJS@
 GUIDEPS = @GUIDEPS@
 GUIHEADERS = @GUIHEADERS@
@@ -497,7 +515,7 @@ GENERICDEPS = @GENERICDEPS@
 UNIXOBJS = @UNIXOBJS@
 UNIXDEPS = @UNIXDEPS@
 
-OBJECTS = @ALL_OBJECTS@
+OBJECTS = @ALL_OBJECTS@ $(IODBCOBJS)
 
 DEPFILES = @ALL_DEPFILES@
 

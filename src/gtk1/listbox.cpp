@@ -291,6 +291,12 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_list) );
 #endif
 
+    /* make list scroll when moving the focus down using cursor keys */
+    gtk_container_set_focus_vadjustment(
+        GTK_CONTAINER(m_list),
+        gtk_scrolled_window_get_vadjustment(
+	    GTK_SCROLLED_WINDOW(m_widget)));
+
     gtk_widget_show( GTK_WIDGET(m_list) );
 
     wxSize newSize = size;

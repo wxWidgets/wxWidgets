@@ -86,6 +86,12 @@
 DbList* WXDLLEXPORT PtrBegDbList = 0;
 
 #if __WXDEBUG__ > 0
+        #if   wxMAJOR_VERSION == 2
+                #include "wx/object.h"
+                #include "wx/list.h"
+                #include "wx/utils.h"
+                #include "wx/msgdlg.h"
+	#endif
 	extern wxList TablesInUse;
 #endif
 

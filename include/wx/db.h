@@ -429,6 +429,7 @@ struct DbList
 
 
 #if __WXDEBUG__ > 0
+#include "wx/object.h"
 class CstructTablesInUse : public wxObject
 {
 	public:

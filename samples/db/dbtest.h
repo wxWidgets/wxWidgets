@@ -24,6 +24,9 @@ enum		DialogModes {mView,mCreate,mEdit,mSearch};
 #define EDIT_PARAMETERS		200
 #define ABOUT_DEMO			300
 
+// this seems to be missing, Robert Roebling (?)
+#define MAX_PATH   200
+
 
 // Name of the table to be created/opened
 const char	CONTACT_TABLE_NAME[]		=	"contacts";
@@ -40,11 +43,7 @@ enum Language {langENGLISH, langFRENCH, langGERMAN, langSPANISH, langOTHER};
 class CeditorDlg;
 class CparameterDlg;
 
-#ifdef __UNIX__
-const char paramFilename[] = "../dbtest.cfg";
-#else
 const char paramFilename[] = "dbtest.cfg";
-#endif
 
 
 /*

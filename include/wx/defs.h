@@ -47,10 +47,6 @@
         #endif
     #endif // Sun
 
-    #if defined(__hpux) && !defined(__HPUX__)
-        #define __HPUX__
-    #endif // HP-UX
-
 #elif defined(applec) || defined(THINK_C) || ( defined( __MWERKS__ ) && !defined(__INTEL__) )
         // MacOS
 #elif defined(__OS2__)
@@ -205,6 +201,12 @@
 // just in case they were defined in setup.h
 #undef PACKAGE
 #undef VERSION
+
+// this has to be done after including setup.h which might
+// define __HPUX__ 1 itself
+#if defined(__hpux) && !defined(__HPUX__)
+    #define __HPUX__
+#endif // HP-UX
 
 // if we're on a Unixsystem but didn't use configure (so that setup.h didn't
 // define __UNIX__), do define __UNIX__ now
@@ -873,11 +875,11 @@ enum wxStretch
 /*
  * wxGauge flags
  */
-#define wxGA_PROGRESSBAR     0x0004
 #define wxGA_HORIZONTAL      wxHORIZONTAL
 #define wxGA_VERTICAL        wxVERTICAL
+#define wxGA_PROGRESSBAR     0x0010
 // Windows only
-#define wxGA_SMOOTH          0x0010
+#define wxGA_SMOOTH          0x0020
 
 /*
  * wxSlider flags
