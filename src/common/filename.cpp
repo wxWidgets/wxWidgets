@@ -1676,18 +1676,17 @@ void wxFileName::SplitPath(const wxString& fullpathWithVolume,
     size_t posLastDot = fullpath.find_last_of(wxFILE_SEP_EXT);
     size_t posLastSlash = fullpath.find_last_of(sepPath);
 
+    // check whether this dot occurs at the very beginning of a path component
     if ( (posLastDot != wxString::npos) &&
-            ((format == wxPATH_UNIX) || (format == wxPATH_VMS)) )
-    {
-        if ( (posLastDot == 0) ||
-             (fullpath[posLastDot - 1] == sepPath[0u] ) )
+         (posLastDot == 0 ||
+            IsPathSeparator(fullpath[posLastDot - 1]) ||
+            (format == wxPATH_VMS && fullpath[posLastDot - 1] == _T(']'))) )
         {
-            // under Unix and VMS, dot may be (and commonly is) the first
+            // dot may be (and commonly -- at least under Unix -- is) the first
             // character of the filename, don't treat the entire filename as
             // extension in this case
             posLastDot = wxString::npos;
         }
-    }
 
     // if we do have a dot and a slash, check that the dot is in the name part
     if ( (posLastDot != wxString::npos) &&
