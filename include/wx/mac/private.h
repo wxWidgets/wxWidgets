@@ -15,6 +15,7 @@
 #define _WX_PRIVATE_H_
 
 #include "wx/defs.h"
+#include "wx/window.h"
 
 #if defined(__POWERPC__) && defined(__DARWIN__)
         #include <Carbon/Carbon.h>
