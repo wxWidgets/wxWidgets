@@ -184,14 +184,14 @@ Set the replacement string (used as initial value by the dialog).
 \section{\class{wxFindReplaceDialog}}\label{wxfindreplacedialog}
 
 wxFindReplaceDialog is a standard modeless dialog which is used to allow the
-user to search for some text (and possible replace it with something else).
+user to search for some text (and possibly replace it with something else).
 The actual searching is supposed to be done in the owner window which is the
 parent of this dialog. Note that it means that unlike for the other standard
 dialogs this one {\bf must} have a parent window. Also note that there is no
-way to use this dialog in a modal way, it is always, by design and
+way to use this dialog in a modal way; it is always, by design and
 implementation, modeless.
 
-Please see the dialogs sample for example of using it.
+Please see the dialogs sample for an example of using it.
 
 \wxheading{Include files}
 
@@ -229,7 +229,6 @@ Destructor.
 Creates the dialog and shows it on screen.
 
 The {\it parent} and {\it data} parameters must be non-{\tt NULL}.
-
 \membersection{wxFindReplaceDialog::GetData}\label{wxfindreplacedialoggetdata}
 
 \constfunc{const wxFindReplaceData*}{GetData}{\void}

@@ -92,6 +92,12 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
                                 style & ~wxTextEntryDialogStyle);
     topsizer->Add( m_textctrl, 1, wxEXPAND | wxLEFT|wxRIGHT, 15 );
 
+#if wxUSE_VALIDATORS
+    wxTextValidator validator( wxFILTER_NONE, &m_value );
+    m_textctrl->SetValidator( validator );
+#endif
+  // wxUSE_VALIDATORS
+
 #if wxUSE_STATLINE
     // 3) static line
     topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
@@ -115,9 +121,17 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
 
 void wxTextEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event) )
 {
+#if wxUSE_VALIDATORS
+    if( Validate() && TransferDataFromWindow() ) 
+    {
+        EndModal( wxID_OK );
+    }
+#else
     m_value = m_textctrl->GetValue();
 
     EndModal(wxID_OK);
+#endif
+  // wxUSE_VALIDATORS
 }
 
 void wxTextEntryDialog::SetValue(const wxString& val)
@@ -126,5 +140,20 @@ void wxTextEntryDialog::SetValue(const wxString& val)
 
     m_textctrl->SetValue(val);
 }
+
+#if wxUSE_VALIDATORS
+void wxTextEntryDialog::SetTextValidator( long style )
+{
+    wxTextValidator validator( style, &m_value );
+    m_textctrl->SetValidator( validator );
+}
+
+void wxTextEntryDialog::SetTextValidator( wxTextValidator& validator )
+{
+    m_textctrl->SetValidator( validator );
+}
+
+#endif
+  // wxUSE_VALIDATORS
 
 #endif // wxUSE_TEXTDLG

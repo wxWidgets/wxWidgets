@@ -20,12 +20,16 @@
 
 #include "wx/dialog.h"
 
+#if wxUSE_VALIDATORS
+#include "wx/valtext.h"
+#endif
+
 class WXDLLEXPORT wxTextCtrl;
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxGetTextFromUserPromptStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
-#define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE)
+#define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE | wxWS_EX_VALIDATE_RECURSIVELY)
 
 // ----------------------------------------------------------------------------
 // wxTextEntryDialog: a dialog with text control, [ok] and [cancel] buttons
@@ -43,6 +47,13 @@ public:
 
     void SetValue(const wxString& val);
     wxString GetValue() const { return m_value; }
+
+#if wxUSE_VALIDATORS
+    void SetTextValidator( wxTextValidator& validator );
+    void SetTextValidator( long style = wxFILTER_NONE );
+    wxTextValidator* GetTextValidator() { return (wxTextValidator*)m_textctrl->GetValidator(); }
+#endif
+  // wxUSE_VALIDATORS
 
     // implementation only
     void OnOK(wxCommandEvent& event);

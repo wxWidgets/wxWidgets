@@ -208,6 +208,9 @@ All (GUI):
 - Added wxMouseCaptureChangedEvent
 - Added custom character filtering to wxTextValidator
 - wxTreeCtrl now supports incremental keyboard search
+- wxHelpProvider::RemoveHelp added and called from ~wxWindowBase
+  so that erroneous help strings are no longer found as the hash
+  table fills up
 
 wxMSW:
 
