@@ -58,7 +58,7 @@ or the state during the last (fatal) exception:
 \begin{verbatim}
 enum wxDebugReport::Context
 {
-    Context_Curent,
+    Context_Current,
     Context_Exception
 };
 \end{verbatim}
@@ -215,7 +215,7 @@ Get the current number files in this report.
 \constfunc{wxString}{GetReportName}{\void}
 
 Get the name used as base name for various files, by default 
-\helpref{wxApp::GetName()}{wxappgetname} is used.
+\helpref{wxApp::GetAppName()}{wxappgetappname} is used.
 
 
 \membersection{wxDebugReport::IsOk}\label{wxdebugreportisok}
