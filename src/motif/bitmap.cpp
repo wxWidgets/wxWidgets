@@ -443,6 +443,8 @@ bool wxXBMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
                                 int WXUNUSED(desiredHeight))
 {
     // M_BITMAPHANDLERDATA->m_freePixmap = TRUE;
+    if (!bitmap->GetRefData())
+        bitmap->SetRefData( new wxBitmapRefData() );
 
     int hotX, hotY;
     unsigned int w, h;
@@ -491,6 +493,9 @@ bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *data,
                                long WXUNUSED(flags),
                                int width, int height, int WXUNUSED(depth))
 {
+    if (!bitmap->GetRefData())
+        bitmap->SetRefData( new wxBitmapRefData() );
+
     M_BITMAPHANDLERDATA->m_width = width;
     M_BITMAPHANDLERDATA->m_height = height;
     M_BITMAPHANDLERDATA->m_depth = 1;
@@ -585,6 +590,9 @@ bool wxXPMFileHandler::LoadFile( wxBitmap *bitmap, const wxString& name,
                                  int WXUNUSED(desiredWidth),
                                  int WXUNUSED(desiredHeight) )
 {
+    if (!bitmap->GetRefData())
+        bitmap->SetRefData( new wxBitmapRefData() );
+
     Display *dpy = (Display*) wxGetDisplay();
     M_BITMAPHANDLERDATA->m_display = (WXDisplay*) dpy;
 
@@ -686,6 +694,9 @@ bool wxXPMDataHandler::Create( wxBitmap *bitmap, void *data,
                                long WXUNUSED(flags),
                               int width, int height, int WXUNUSED(depth))
 {
+    if (!bitmap->GetRefData())
+        bitmap->SetRefData( new wxBitmapRefData() );
+
     M_BITMAPHANDLERDATA->m_width = width;
     M_BITMAPHANDLERDATA->m_height = height;
     M_BITMAPHANDLERDATA->m_depth = 1;

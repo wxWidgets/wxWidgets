@@ -14,24 +14,12 @@
 #endif
 
 #include "wx/icon.h"
-#include "wx/window.h"
 
-#ifdef __VMS__
-#pragma message disable nosimpint
-#endif
-#include <Xm/Xm.h>
-#include <X11/cursorfont.h>
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
+IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap);
 
-#include "wx/motif/private.h"
-
-IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
-
-/*
-* Icons
-*/
+// ============================================================================
+// Icons
+// ============================================================================
 
 wxIcon::wxIcon()
 {
@@ -75,9 +63,7 @@ bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
                       int desiredWidth, int desiredHeight)
 {
     UnRef();
-    
-    m_refData = new wxBitmapRefData;
-    
+
     wxBitmapHandler *handler = FindHandler(type);
     
     if ( handler )
@@ -86,4 +72,3 @@ bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
     else
         return FALSE;
 }
-

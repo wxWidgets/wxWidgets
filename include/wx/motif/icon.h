@@ -18,13 +18,10 @@
 
 #include "wx/bitmap.h"
 
-#define M_ICONDATA ((wxBitmapRefData *)m_refData)
-#define M_ICONHANDLERDATA ((wxBitmapRefData *)bitmap->GetRefData())
-
 // Icon
 class WXDLLEXPORT wxIcon: public wxBitmap
 {
-    DECLARE_DYNAMIC_CLASS(wxIcon)
+    DECLARE_DYNAMIC_CLASS(wxIcon);
         
 public:
     wxIcon();
@@ -51,12 +48,12 @@ public:
     // ctors, assignment operators...), but it's ok to have such function
     void CopyFromBitmap(const wxBitmap& bmp);
     
-    inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }
-    inline bool operator == (const wxIcon& icon) const { return m_refData == icon.m_refData; }
-    inline bool operator != (const wxIcon& icon) const { return m_refData != icon.m_refData; }
-    
-    virtual bool Ok() const { return ((m_refData != NULL) && (M_ICONDATA->m_ok)); }
+    inline wxIcon& operator = (const wxIcon& icon)
+        { if (*this == icon) return (*this); Ref(icon); return *this; }
+    inline bool operator == (const wxIcon& icon) const
+        { return m_refData == icon.m_refData; }
+    inline bool operator != (const wxIcon& icon) const
+        { return m_refData != icon.m_refData; }
 };
 
-#endif
-// _WX_ICON_H_
+#endif // _WX_ICON_H_
