@@ -37,6 +37,12 @@
 #  endif
 #endif // HAVE_STATFS
 
+#ifdef HAVE_STATVFS
+    #include <sys/statvfs.h>
+
+    #define statfs statvfs
+#endif // HAVE_STATVFS
+
 #if wxUSE_GUI
     #include "wx/unix/execute.h"
 #endif
@@ -1008,8 +1014,7 @@ long wxGetFreeMemory()
 #ifndef __WXMAC__
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
-#ifdef HAVE_STATFS
-
+#if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
     struct statfs fs;
     if ( statfs(path, &fs) != 0 )
     {
@@ -1017,6 +1022,9 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 
         return FALSE;
     }
+
+    // under Solaris we might have to use fs.f_frsize instead as I think it
+    // may be a multiple of the block size in general (TODO)
 
     if ( pTotal )
     {

@@ -874,6 +874,9 @@
 /* define if you have statfs function */
 #undef HAVE_STATFS
 
+/* define if you have statvfs function */
+#undef HAVE_STATVFS
+
 /* Define if you have strptime() */
 #undef HAVE_STRPTIME
 

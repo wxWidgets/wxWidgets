@@ -2723,11 +2723,12 @@ fi
 dnl check for vfork() (even if it's the same as fork() in modern Unices)
 AC_CHECK_FUNCS(vfork)
 
-dnl get the library function to use for wxGetDiskSpace()
+dnl get the library function to use for wxGetDiskSpace(): it is statfs() under
+dnl Linux and *BSD and statvfs() under Solaris
 AC_CACHE_CHECK(for statfs, wx_cv_func_statfs,
     AC_TRY_COMPILE(
         [
-             #ifdef __BSD__
+             #if defined(__BSD__)
                #include <sys/param.h>
                #include <sys/mount.h>
              #else
@@ -2754,7 +2755,33 @@ AC_CACHE_CHECK(for statfs, wx_cv_func_statfs,
 if test "$wx_cv_func_statfs" = "yes"; then
     AC_DEFINE(HAVE_STATFS)
 else
-    AC_MSG_WARN([wxGetDiskSpace() function won't work without statfs()])
+    AC_CACHE_CHECK(for statvfs, wx_cv_func_statvfs,
+        AC_TRY_COMPILE(
+            [
+                 #include <sys/statvfs.h>
+            ],
+            [
+                 long l;
+                 struct statvfs fs;
+                 statvfs("/", &fs);
+                 l = fs.f_bsize;
+                 l += fs.f_blocks;
+                 l += fs.f_bavail;
+            ],
+            [
+                 wx_cv_func_statvfs=yes
+            ],
+            [
+                 wx_cv_func_statvfs=no
+            ]
+        )
+    ]
+
+    if test "$wx_cv_func_statvfs" = "yes"; then
+        AC_DEFINE(HAVE_STATVFS)
+    else
+        AC_MSG_WARN([wxGetDiskSpace() function won't work without statfs()])
+    fi
 fi
 
 dnl check for fcntl() or at least flock() needed by Unix implementation of
