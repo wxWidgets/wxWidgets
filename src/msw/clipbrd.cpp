@@ -146,14 +146,16 @@ bool wxIsClipboardOpened()
 
 bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 {
-    if ( ::IsClipboardFormatAvailable(dataFormat) )
+    CLIPFORMAT cf = dataFormat.GetFormatId();
+
+    if ( ::IsClipboardFormatAvailable(cf) )
     {
         // ok from the first try
         return TRUE;
     }
 
     // for several standard formats, we can convert from some other ones too
-    switch ( dataFormat.GetFormatId() )
+    switch ( cf )
     {
         // for bitmaps, DIBs will also do
         case CF_BITMAP:
@@ -730,9 +732,16 @@ bool wxClipboard::GetData( wxDataObject& data )
 
     data.GetAllFormats(formats, wxDataObject::Set);
 
-    // get the format enumerator
+    // get the data for the given formats
+    FORMATETC formatEtc;
+    CLIPFORMAT cf;
     bool result = FALSE;
-    wxArrayInt supportedFormats;
+
+    // enumerate all explicit formats on the clipboard.
+    // note that this does not include implicit / synthetic (automatically
+    // converted) formats.
+#ifdef __WXDEBUG__
+    // get the format enumerator
     IEnumFORMATETC *pEnumFormatEtc = NULL;
     hr = pDataObject->EnumFormatEtc(DATADIR_GET, &pEnumFormatEtc);
     if ( FAILED(hr) || !pEnumFormatEtc )
@@ -743,7 +752,6 @@ bool wxClipboard::GetData( wxDataObject& data )
     else
     {
         // ask for the supported formats and see if there are any we support
-        FORMATETC formatEtc;
         for ( ;; )
         {
             ULONG nCount;
@@ -756,28 +764,85 @@ bool wxClipboard::GetData( wxDataObject& data )
                 break;
             }
 
-            CLIPFORMAT cf = formatEtc.cfFormat;
+            cf = formatEtc.cfFormat;
 
-#ifdef __WXDEBUG__
             wxLogTrace(wxTRACE_OleCalls,
                        wxT("Object on the clipboard supports format %s."),
                        wxDataObject::GetFormatName(cf));
-#endif // Debug
-
-            // is supported?
-            for ( size_t n = 0; n < nFormats; n++ )
-            {
-                if ( formats[n].GetFormatId() == cf )
-                {
-                    if ( supportedFormats.Index(cf) == wxNOT_FOUND )
-                    {
-                        supportedFormats.Add(cf);
-                    }
-                }
-            }
         }
 
         pEnumFormatEtc->Release();
+    }
+#endif // Debug
+
+    STGMEDIUM medium;
+    // stop at the first valid format found on the clipboard
+    for ( size_t n = 0; !result && (n < nFormats); n++ )
+    {
+        // convert to NativeFormat Id
+        cf = formats[n].GetFormatId();
+        
+        // if the format is not available, try the next one
+        // this test includes implicit / sythetic formats
+        if ( !::IsClipboardFormatAvailable(cf) )
+            continue;
+            
+        formatEtc.cfFormat = cf;
+        formatEtc.ptd      = NULL;
+        formatEtc.dwAspect = DVASPECT_CONTENT;
+        formatEtc.lindex   = -1;
+
+        // use the appropriate tymed
+        switch ( formatEtc.cfFormat )
+        {
+            case CF_BITMAP:
+                formatEtc.tymed = TYMED_GDI;
+                break;
+
+#ifndef __WXWINCE__
+            case CF_METAFILEPICT:
+                formatEtc.tymed = TYMED_MFPICT;
+                break;
+
+            case CF_ENHMETAFILE:
+                formatEtc.tymed = TYMED_ENHMF;
+                break;
+#endif
+
+            default:
+                formatEtc.tymed = TYMED_HGLOBAL;
+        }
+
+        // try to get data
+        hr = pDataObject->GetData(&formatEtc, &medium);
+        if ( FAILED(hr) )
+        {
+            // try other tymed for GDI objects
+            if ( formatEtc.cfFormat == CF_BITMAP )
+            {
+                formatEtc.tymed = TYMED_HGLOBAL;
+                hr = pDataObject->GetData(&formatEtc, &medium);
+            }
+        }
+
+        if ( SUCCEEDED(hr) )
+        {
+            // pass the data to the data object
+            hr = data.GetInterface()->SetData(&formatEtc, &medium, TRUE);
+            if ( FAILED(hr) )
+            {
+                wxLogDebug(wxT("Failed to set data in wxIDataObject"));
+
+                // IDataObject only takes the ownership of data if it
+                // successfully got it - which is not the case here
+                ReleaseStgMedium(&medium);
+            }
+            else
+            {
+                result = TRUE;
+            }
+        }
+        //else: unsupported tymed?
     }
 
     if ( formats != &format )
@@ -785,72 +850,6 @@ bool wxClipboard::GetData( wxDataObject& data )
         delete [] formats;
     }
     //else: we didn't allocate any memory
-
-    if ( !supportedFormats.IsEmpty() )
-    {
-        FORMATETC formatEtc;
-        formatEtc.ptd      = NULL;
-        formatEtc.dwAspect = DVASPECT_CONTENT;
-        formatEtc.lindex   = -1;
-
-        size_t nSupportedFormats = supportedFormats.GetCount();
-        for ( size_t n = 0; !result && (n < nSupportedFormats); n++ )
-        {
-            STGMEDIUM medium;
-            formatEtc.cfFormat = supportedFormats[n];
-
-            // use the appropriate tymed
-            switch ( formatEtc.cfFormat )
-            {
-                case CF_BITMAP:
-                    formatEtc.tymed = TYMED_GDI;
-                    break;
-#ifndef __WXWINCE__
-                case CF_METAFILEPICT:
-                    formatEtc.tymed = TYMED_MFPICT;
-                    break;
-
-                case CF_ENHMETAFILE:
-                    formatEtc.tymed = TYMED_ENHMF;
-                    break;
-#endif
-                default:
-                    formatEtc.tymed = TYMED_HGLOBAL;
-            }
-
-            // try to get data
-            hr = pDataObject->GetData(&formatEtc, &medium);
-            if ( FAILED(hr) )
-            {
-                // try other tymed for GDI objects
-                if ( formatEtc.cfFormat == CF_BITMAP )
-                {
-                    formatEtc.tymed = TYMED_HGLOBAL;
-                    hr = pDataObject->GetData(&formatEtc, &medium);
-                }
-            }
-
-            if ( SUCCEEDED(hr) )
-            {
-                // pass the data to the data object
-                hr = data.GetInterface()->SetData(&formatEtc, &medium, TRUE);
-                if ( FAILED(hr) )
-                {
-                    wxLogDebug(wxT("Failed to set data in wxIDataObject"));
-
-                    // IDataObject only takes the ownership of data if it
-                    // successfully got it - which is not the case here
-                    ReleaseStgMedium(&medium);
-                }
-                else
-                {
-                    result = TRUE;
-                }
-            }
-            //else: unsupported tymed?
-        }
-    }
-    //else: unsupported format
 
     // clean up and return
     pDataObject->Release();
