@@ -592,8 +592,12 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 void wxToolBar::DoEnableTool(wxToolBarToolBase *toolBase, bool enable)
 {
     wxToolBarTool *tool = (wxToolBarTool *)toolBase;
-
-    XtSetSensitive(tool->GetButtonWidget(), (Boolean) enable);
+    if (tool->GetButtonWidget()){
+        XtSetSensitive(tool->GetButtonWidget(), (Boolean) enable);
+    } else if (wxTOOL_STYLE_CONTROL == tool->GetStyle()){
+        // Controls (such as wxChoice) do not have button widgets
+        tool->GetControl()->Enable(enable);
+    }
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *toolBase, bool toggle)
