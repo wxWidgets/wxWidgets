@@ -468,6 +468,9 @@ IMP_PYCALLBACK_STRING__pure( wxPyTipProvider, wxTipProvider, GetTip);
 class wxPyTipProvider : public wxTipProvider {
 public:
     wxPyTipProvider(size_t currentTip);
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyTipProvider)"
 };
 
 

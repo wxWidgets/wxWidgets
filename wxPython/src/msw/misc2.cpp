@@ -3632,6 +3632,44 @@ static PyObject *_wrap_new_wxPyTipProvider(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+#define wxPyTipProvider__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyTipProvider__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyTipProvider * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyTipProvider__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTipProvider_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyTipProvider__setCallbackInfo. Expected _wxPyTipProvider_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyTipProvider__setCallbackInfo(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxGenericDragImageTowxObject(void *ptr) {
     wxGenericDragImage *src;
     wxObject *dest;
@@ -10537,6 +10575,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "new_wxDragString", (PyCFunction) _wrap_new_wxDragString, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxDragIcon", (PyCFunction) _wrap_new_wxDragIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxDragImage", (PyCFunction) _wrap_new_wxDragImage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyTipProvider__setCallbackInfo", (PyCFunction) _wrap_wxPyTipProvider__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyTipProvider", (PyCFunction) _wrap_new_wxPyTipProvider, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTipProvider_GetCurrentTip", (PyCFunction) _wrap_wxTipProvider_GetCurrentTip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTipProvider_GetTip", (PyCFunction) _wrap_wxTipProvider_GetTip, METH_VARARGS | METH_KEYWORDS },

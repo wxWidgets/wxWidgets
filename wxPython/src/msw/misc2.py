@@ -187,12 +187,16 @@ class wxPyTipProviderPtr(wxTipProviderPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(misc2c.wxPyTipProvider__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxPyTipProvider instance at %s>" % (self.this,)
 class wxPyTipProvider(wxPyTipProviderPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(misc2c.new_wxPyTipProvider,_args,_kwargs)
         self.thisown = 1
+        self._setCallbackInfo(self, wxPyTipProvider)
 
 
 
