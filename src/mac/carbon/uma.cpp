@@ -275,8 +275,8 @@ void UMAAppendSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding 
 void UMAInsertSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , MenuItemIndex item , SInt16 id  )
 {
     MacInsertMenuItem(menu, "\pA" , item);
-    UMASetMenuItemText(menu, item , title , encoding);
-    SetMenuItemHierarchicalID( menu , item , id ) ;
+    UMASetMenuItemText(menu, item+1, title , encoding);
+    SetMenuItemHierarchicalID( menu , item+1 , id ) ;
 }
 
 void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEntry *entry )
