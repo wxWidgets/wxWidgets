@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:       wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -42,7 +42,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxWindow)
 
 BEGIN_EVENT_TABLE(wxStatusBar, wxWindow)
-	EVT_PAINT(wxStatusBar::OnPaint)
+    EVT_PAINT(wxStatusBar::OnPaint)
     EVT_SYS_COLOUR_CHANGED(wxStatusBar::OnSysColourChanged)
 END_EVENT_TABLE()
 #endif
@@ -62,14 +62,14 @@ wxStatusBar::wxStatusBar(void)
 
 wxStatusBar::~wxStatusBar(void)
 {
-  // #ifdef __WXMSW__
-    SetFont(wxNullFont);
-    // #endif
+#   ifdef __WXMSW__
+        SetFont(wxNullFont);
+#   endif // MSW
 
-	if ( m_statusWidths )
-		delete[] m_statusWidths;
-	if ( m_statusStrings )
-		delete[] m_statusStrings;
+    if ( m_statusWidths )
+        delete[] m_statusWidths;
+    if ( m_statusStrings )
+        delete[] m_statusStrings;
 }
 
 bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
@@ -101,19 +101,19 @@ void wxStatusBar::SetFieldsCount(int number, const int widths[])
   m_nFields = number;
 
   if ( m_statusWidths )
-	delete[] m_statusWidths;
+    delete[] m_statusWidths;
 
   if ( m_statusStrings )
-		delete[] m_statusStrings;
+        delete[] m_statusStrings;
 
   m_statusStrings = new wxString[number];
 
   int i;
   for (i = 0; i < number; i++)
-	m_statusStrings[i] = "";
+    m_statusStrings[i] = "";
 
-	if ( widths )
-  		SetStatusWidths(number, widths);
+    if ( widths )
+          SetStatusWidths(number, widths);
 }
 
 void wxStatusBar::SetStatusText(const wxString& text, int number)
@@ -177,9 +177,11 @@ void wxStatusBar::OnPaint(wxPaintEvent& WXUNUSED(event) )
   dc.SetBackgroundMode(wxTRANSPARENT);
 
   for ( i = 0; i < m_nFields; i ++ )
-	DrawField(dc, i);
+    DrawField(dc, i);
 
-  dc.SetFont(wxNullFont);
+#   ifdef __WXMSW__
+        dc.SetFont(wxNullFont);
+#   endif // MSW
 }
 
 void wxStatusBar::DrawFieldText(wxDC& dc, int i)
@@ -216,23 +218,23 @@ void wxStatusBar::DrawField(wxDC& dc, int i)
     // Inside this, left and top sides - dark grey. Bottom and right -
     // white.
 
-	dc.SetPen(m_hilightPen);
+    dc.SetPen(m_hilightPen);
 
     // Right and bottom white lines
     dc.DrawLine(rect.x + rect.width, rect.y,
                 rect.x + rect.width, rect.y + rect.height);
     dc.DrawLine(rect.x + rect.width, rect.y + rect.height,
-				rect.x, rect.y + rect.height);
+                rect.x, rect.y + rect.height);
 
-	dc.SetPen(m_mediumShadowPen);
+    dc.SetPen(m_mediumShadowPen);
 
     // Left and top grey lines
     dc.DrawLine(rect.x, rect.y + rect.height,
-	   	rect.x, rect.y);
+           rect.x, rect.y);
     dc.DrawLine(rect.x, rect.y,
-		rect.x + rect.width, rect.y);
+        rect.x + rect.width, rect.y);
 
-	DrawFieldText(dc, i);
+    DrawFieldText(dc, i);
 }
 
   // Get the position and size of the field's internal bounding rectangle
@@ -269,9 +271,9 @@ bool wxStatusBar::GetFieldRect(int n, wxRectangle& rect) const
     for (i = 0; i < m_nFields; i++)
     {
       fieldWidth = (int)(width/m_nFields);
-	  fieldPosition = i*fieldWidth;
-	  if ( i == n )
-		break;
+      fieldPosition = i*fieldWidth;
+      if ( i == n )
+        break;
     }
   }
   else // no_same_width
@@ -285,24 +287,24 @@ bool wxStatusBar::GetFieldRect(int n, wxRectangle& rect) const
     }
     for (i = 0; i < m_nFields; i++)
     {
-		fieldWidth = tempwidth[i];
-		fieldPosition = temppos;
+        fieldWidth = tempwidth[i];
+        fieldPosition = temppos;
 
-      	temppos += tempwidth[i];
+          temppos += tempwidth[i];
 
-		if ( i == n )
-			break;
+        if ( i == n )
+            break;
     }
     delete [] tempwidth;
   }
 
     rect.x = fieldPosition + wxTHICK_LINE_BORDER;
-	rect.y = wxTHICK_LINE_BORDER;
+    rect.y = wxTHICK_LINE_BORDER;
 
-	rect.width = fieldWidth - 2 * wxTHICK_LINE_BORDER ;
-	rect.height = height - 2 * wxTHICK_LINE_BORDER ;
+    rect.width = fieldWidth - 2 * wxTHICK_LINE_BORDER ;
+    rect.height = height - 2 * wxTHICK_LINE_BORDER ;
 
-	return TRUE;
+    return TRUE;
 }
 
 // Initialize colours
