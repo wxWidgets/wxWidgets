@@ -33,8 +33,6 @@
 #include "wx/glcanvas.h"
 #include "wx/mac/uma.h"
 
-#include <agl.h>
-
 /*
  * GLContext implementation
  */
