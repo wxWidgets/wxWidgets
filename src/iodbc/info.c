@@ -193,13 +193,17 @@ SQLDataSources (
    *  Copy DSN information 
    */
   STRNCPY (szDSN, sect[cur_entry], cbDSNMax);
-
+/*
+glt???  pcbDSN = strlen(szDSN);
+*/
   /*
    *  And find the description that goes with this entry
    */
   _iodbcdm_getkeyvalbydsn (sect[cur_entry], strlen (sect[cur_entry]),
       "Description", (char*) szDesc, cbDescMax);
-
+/*
+glt???  pcbDesc = strlen(szDesc);
+*/
   /*
    *  Next record
    */

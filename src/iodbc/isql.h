@@ -26,6 +26,7 @@
 #ifndef _ISQL_H
 #define _ISQL_H
 
+#ifndef WIN16
 #ifdef WIN32
 #define SQL_API				__stdcall
 #else
@@ -35,6 +36,7 @@
 #define SQL_API				EXPORT CALLBACK
 
 typedef void *HWND;
+#endif
 #endif
 
 typedef void *SQLHWND;
