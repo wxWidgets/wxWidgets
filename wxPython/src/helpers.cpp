@@ -400,13 +400,17 @@ void wxPyApp::_BootstrapApp()
         int    argc = 0;
         char** argv = NULL;
         blocked = wxPyBeginBlockThreads();
+        
         PyObject* sysargv = PySys_GetObject("argv");
-        if (sysargv != NULL) {
-            argc = PyList_Size(sysargv);
+        PyObject* executable = PySys_GetObject("executable");
+        
+        if (sysargv != NULL && executable != NULL) {
+            argc = PyList_Size(sysargv) + 1;
             argv = new char*[argc+1];
+            argv[0] = PyString_AsString(executable);
             int x;
-            for(x=0; x<argc; x++) {
-                PyObject *pyArg = PyList_GetItem(sysargv, x);
+            for(x=1; x<argc; x++) {
+                PyObject *pyArg = PyList_GetItem(sysargv, x-1);
                 argv[x] = PyString_AsString(pyArg);
             }
             argv[argc] = NULL;
