@@ -1762,6 +1762,7 @@ int wxKeyCodeToMacModifier(wxKeyCode key)
     switch (key)
     {
     case WXK_START:
+    case WXK_MENU:
         return cmdKey;
 
     case WXK_SHIFT:
@@ -1770,8 +1771,8 @@ int wxKeyCodeToMacModifier(wxKeyCode key)
     case WXK_CAPITAL:
         return alphaLock;
 
-//    case WXK_OPTION:
-//        return optionKey;
+    case WXK_ALT:
+        return optionKey;
 
     case WXK_CONTROL:
         return controlKey;
