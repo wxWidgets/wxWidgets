@@ -1151,7 +1151,7 @@ static void TestHash()
     wxPuts(_T("*** Testing wxHashTable ***\n"));
 
     {
-        wxHashTable hash(wxKEY_INTEGER), hash2(wxKEY_STRING);
+        wxHashTable hash(wxKEY_INTEGER, 10), hash2(wxKEY_STRING);
         wxObject o;
         int i;
 

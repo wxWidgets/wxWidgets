@@ -128,9 +128,20 @@ void _wxHashTableBase2::CopyHashTable( _wxHashTable_NodeBase** srcTable,
                                        size_t srcBuckets,
                                        _wxHashTableBase2* dst,
                                        _wxHashTable_NodeBase** dstTable,
+                                       size_t dstBuckets,
                                        BucketFromNode func, ProcessNode proc )
 {
-    for( size_t i = 0; i < srcBuckets; ++i )
+    // for compatibility with wxHashTable (to avoid reimplementig it
+    // from scratch), we need to preserve the order of nodes in a
+    // source bucket when copying the table, hence, to avoid
+    // allocating an auxiliary table we use a circular list for each
+    // bucket, and we keep the *tail* of each list in dstTable[i], to
+    // be able to append nodes in O(1) time. Wen we're done copying,
+    // we adjust dstTable[i] to point at the head of the list and we
+    // break the circular list into a linear one.
+    size_t i;
+
+    for( i = 0; i < srcBuckets; ++i )
     {
         _wxHashTable_NodeBase* nextnode;
 
@@ -140,8 +151,24 @@ void _wxHashTableBase2::CopyHashTable( _wxHashTable_NodeBase** srcTable,
 
             nextnode = node->m_nxt;
             _wxHashTable_NodeBase* newnode = proc( node );
-            newnode->m_nxt = dstTable[bucket];
-            dstTable[bucket] = newnode;
+            if( dstTable[bucket] )
+            {
+                newnode->m_nxt = dstTable[bucket]->m_nxt; // head of the list
+                dstTable[bucket]->m_nxt = newnode;
+                dstTable[bucket] = newnode;
+            }
+            else
+                dstTable[bucket] = newnode->m_nxt = newnode;
+        }
+    }
+
+    for( i = 0; i < dstBuckets; ++i )
+    {
+        if( dstTable[i] )
+        {
+            _wxHashTable_NodeBase* tmp = dstTable[i];
+            dstTable[i] = dstTable[i]->m_nxt;
+            tmp->m_nxt = NULL;
         }
     }
 }
