@@ -462,7 +462,7 @@ bool wxMapiSession::Send(wxMailMessage& message)
     if (nAttachmentSize)
     {
 #ifdef UNICODE
-        for (int i = 0;i < nAttachmentSize;i++)
+        for (i = 0;i < nAttachmentSize;i++)
         {
             free(mapiMessage.lpFiles[i].lpszPathName);
             free(mapiMessage.lpFiles[i].lpszFileName);
@@ -473,7 +473,7 @@ bool wxMapiSession::Send(wxMailMessage& message)
     
     //Free up the Recipients and Originator memory
 #ifdef UNICODE
-    for (int i = 0;i < nRecipIndex;i++)
+    for (i = 0;i < nRecipIndex;i++)
         free(mapiMessage.lpRecips[i].lpszName);
 #endif
     delete [] mapiMessage.lpRecips;
