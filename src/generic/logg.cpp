@@ -351,7 +351,7 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
                     // debug window anyhow, but do put a timestamp
                     wxString str;
                     TimeStamp(&str);
-                    str << szString << wxT("\n\r");
+                    str << szString << wxT("\r\n");
                     OutputDebugString(str);
                 #else
                     // send them to stderr

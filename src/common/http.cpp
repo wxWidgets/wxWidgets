@@ -116,7 +116,7 @@ void wxHTTP::SendHeaders()
     wxString *str = (wxString *)head->Data();
 
     wxString buf;
-    buf.Printf(wxT("%s: %s\n\r"), head->GetKeyString(), str->GetData());
+    buf.Printf(wxT("%s: %s\r\n"), head->GetKeyString(), str->GetData());
 
     const wxWX2MBbuf cbuf = buf.mb_str();
     Write(cbuf, strlen(cbuf));
@@ -215,11 +215,11 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   SetFlags(wxSOCKET_NONE);
   Notify(FALSE);
 
-  wxSprintf(buf, wxT("%s %s HTTP/1.0\n\r"), tmp_buf, tmp_str.GetData());
+  wxSprintf(buf, wxT("%s %s HTTP/1.0\r\n"), tmp_buf, tmp_str.GetData());
   const wxWX2MBbuf pathbuf = wxConvLibc.cWX2MB(buf);
   Write(pathbuf, strlen(wxMBSTRINGCAST pathbuf));
   SendHeaders();
-  Write("\n\r", 2);
+  Write("\r\n", 2);
 
   m_perr = GetLine(this, tmp_str);
   if (m_perr != wxPROTO_NOERR) {
