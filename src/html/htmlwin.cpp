@@ -40,7 +40,7 @@
 WX_DEFINE_OBJARRAY(HtmlHistoryArray)
 
 
-wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, 
+wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
                 long style, const wxString& name) : wxScrolledWindow(parent, id, pos, size, wxVSCROLL, name)
 {
     m_tmpMouseMoved = FALSE;
@@ -89,9 +89,9 @@ void wxHtmlWindow::SetRelatedStatusBar(int bar)
 {
     m_RelatedStatusBar = bar;
 }
-        
-        
-        
+
+
+
 void wxHtmlWindow::SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, int *sizes)
 {
     m_Parser -> SetFonts(normal_face, normal_italic_mode, fixed_face, fixed_italic_mode, sizes);
@@ -220,7 +220,7 @@ bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
     if (!c) return FALSE;
     else {
         int y;
-    
+
         for (y = 0; c != NULL; c = c -> GetParent()) y += c -> GetPosY();
         Scroll(-1, y / HTML_SCROLL_STEP);
         m_OpenedAnchor = anchor;
@@ -258,7 +258,7 @@ void wxHtmlWindow::CreateLayout()
         GetClientSize(&ClientWidth, &ClientHeight);
 #ifndef __WXMSW__
         // VS : this looks extremely ugly under windoze, better fix needed!
-        SetScrollbars(1, 1, 0, ClientHeight * 2); // always on          
+        SetScrollbars(1, 1, 0, ClientHeight * 2); // always on
 #endif
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell -> Layout(ClientWidth);
@@ -276,7 +276,7 @@ void wxHtmlWindow::CreateLayout()
     }
 }
 
-        
+
 
 void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
 {
@@ -389,13 +389,16 @@ void wxHtmlWindow::CleanUpStatics()
 {
     if (m_DefaultFilter) delete m_DefaultFilter;
     m_DefaultFilter = NULL;
+    wxNode* node = m_Filters.GetFirst();
+    m_Filters.DeleteContents(TRUE);
+    m_Filters.Clear();
+
 }
 
 
 
 void wxHtmlWindow::AddFilter(wxHtmlFilter *filter)
 {
-    m_Filters.DeleteContents(TRUE);
     m_Filters.Append(filter);
 }
 

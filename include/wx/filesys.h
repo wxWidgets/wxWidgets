@@ -162,7 +162,7 @@ class WXDLLEXPORT wxFileSystem : public wxObject
                 // unless is_dir = TRUE 'location' is *not* the directory but
                 // file contained in this directory
                 // (so ChangePathTo("dir/subdir/xh.htm") sets m_Path to "dir/subdir/")
-		
+
 	wxString GetPath() const {return m_Path;}
 
         wxFSFile* OpenFile(const wxString& location);
@@ -175,6 +175,9 @@ class WXDLLEXPORT wxFileSystem : public wxObject
         static void AddHandler(wxFileSystemHandler *handler);
                 // Adds FS handler.
                 // In fact, this class is only front-end to the FS hanlers :-)
+
+        static void CleanUpHandlers();
+                // remove all items from the m_Handlers list
 };
 
 
@@ -204,5 +207,5 @@ special characters :
 #endif
   // (wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
 
-#endif 
+#endif
   // __FILESYS_H__
