@@ -720,6 +720,7 @@ binary-common:
 	dh_installdocs
 	dh_installchangelogs
 	dh_installexamples
+	dh_undocumented -p$(package_gtk_py) img2png img2py img2xpm pycrust pyshell xrced
 	dh_link
 
 	@# Don't strip debug libs at all, and strip cross libs elsewhere
