@@ -358,7 +358,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             m_needUpdating = TRUE;
         }
     }
-    else if ( event.LeftDClick() )
+    else if ( event.LeftDClick() && m_windowTwo )
     {
         OnDoubleClickSash(x, y);
     }
@@ -892,7 +892,7 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
         return FALSE;
     }
 
-    OnUnsplit(win);
+    win->Show(FALSE);
     DoSetSashPosition(0);
     SizeWindows();
 
@@ -1062,6 +1062,8 @@ int wxSplitterWindow::OnSashPositionChanging(int newSashPosition)
 // the sash if the minimum pane size is zero.
 void wxSplitterWindow::OnDoubleClickSash(int x, int y)
 {
+    wxCHECK_RET(m_windowTwo, wxT("splitter: no window to remove"));
+
     // new code should handle events instead of using the virtual functions
     wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, this);
     event.m_data.pt.x = x;
@@ -1070,7 +1072,9 @@ void wxSplitterWindow::OnDoubleClickSash(int x, int y)
     {
         if ( GetMinimumPaneSize() == 0 || m_permitUnsplitAlways )
         {
-            Unsplit();
+            wxWindow* win = m_windowTwo;
+            if (Unsplit(win))
+                OnUnsplit(win);
         }
     }
     //else: blocked by user
