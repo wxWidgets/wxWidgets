@@ -518,42 +518,23 @@ bool wxICOResourceHandler::LoadIcon(
 , const wxString&                   rName
 , HPS                               hPs
 , long                              lFlags
-, int                               nDesiredWidth
-, int                               nDesiredHeight
+, int                               WXUNUSED(nDesiredWidth)
+, int                               WXUNUSED(nDesiredHeight)
 )
 {
-    // TODO: load icon from a file
-    /*
-    HICON hicon;
+    HPOINTER                        hIcon;
 
-#if defined(__WIN32__) && !defined(__SC__)
-    if ( desiredWidth != -1 && desiredHeight != -1 )
-    {
-        hicon = (HICON)::LoadImage(wxGetInstance(), name, IMAGE_ICON,
-                                    desiredWidth, desiredHeight,
-                                    LR_DEFAULTCOLOR);
-    }
-    else
-#endif // Win32
-    {
-        hicon = ::LoadIcon(wxGetInstance(), name);
-    }
+    hIcon = ::WinLoadFileIcon( (PSZ)rName.c_str()
+                              ,TRUE // load for private use
+                             );
 
-    wxSize size = GetHiconSize(hicon);
-    icon->SetSize(size.x, size.y);
+    pIcon->SetSize(32, 32); // all OS/2 icons are 32 x 32
 
-    // Override the found values with desired values
-    if ( desiredWidth > -1 && desiredHeight > -1 )
-    {
-        icon->SetSize(desiredWidth, desiredHeight);
-    }
 
-    icon->SetHICON((WXHICON)hicon);
+    pIcon->SetHICON((WXHICON)hIcon);
 
-    return icon->Ok();
-    */
-    return(FALSE);
-}
+    return pIcon->Ok();
+} // end of wxICOResourceHandler::LoadIcon
 
 // ----------------------------------------------------------------------------
 // private functions

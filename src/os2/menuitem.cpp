@@ -75,26 +75,35 @@
 // ctor & dtor
 // -----------
 
-wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
-                       int id,
-                       const wxString& text,
-                       const wxString& strHelp,
-                       bool bCheckable,
-                       wxMenu *pSubMenu)
+wxMenuItem::wxMenuItem(
+  wxMenu*                           pParentMenu
+, int                               nId
+, const wxString&                   rText
+, const wxString&                   rStrHelp
+, bool                              bCheckable
+, wxMenu*                           pSubMenu
+)
 #if wxUSE_OWNER_DRAWN
-                      :  wxOwnerDrawn(text, bCheckable)
+:  wxOwnerDrawn( rText
+                ,bCheckable
+               )
 #endif // owner drawn
 {
-    wxASSERT_MSG( pParentMenu != NULL, wxT("a menu item should have a parent") );
+    wxASSERT_MSG(pParentMenu != NULL, wxT("a menu item should have a parent"));
 
 #if  wxUSE_OWNER_DRAWN
-    // set default menu colors
+
+    //
+    // Set default menu colors
+    //
     #define SYS_COLOR(c) (wxSystemSettings::GetSystemColour(wxSYS_COLOUR_##c))
 
     SetTextColour(SYS_COLOR(MENUTEXT));
     SetBackgroundColour(SYS_COLOR(MENU));
 
-    // we don't want normal items be owner-drawn
+    //
+    // We don't want normal items be owner-drawn
+    //
     ResetOwnerDrawn();
 
     #undef  SYS_COLOR
@@ -104,42 +113,47 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
     m_subMenu     = pSubMenu;
     m_isEnabled   = TRUE;
     m_isChecked   = FALSE;
-    m_id          = id;
-    m_text        = text;
+    m_id          = nId;
+    m_text        = rText;
     m_isCheckable = bCheckable;
-    m_help        = strHelp;
-}
+    m_help        = rStrHelp;
+} // end of wxMenuItem::wxMenuItem
 
 wxMenuItem::~wxMenuItem()
 {
-}
+} // end of wxMenuItem::~wxMenuItem
 
-// misc
+//
+// Misc
 // ----
 
-// return the id for calling Win32 API functions
+//
+// Return the id for calling Win32 API functions
+//
 int wxMenuItem::GetRealId() const
 {
     return m_subMenu ? (int)m_subMenu->GetHMenu() : GetId();
-}
+} // end of wxMenuItem::GetRealId
 
-// get item state
+//
+// Get item state
 // --------------
-
 bool wxMenuItem::IsChecked() const
 {
-/*
-    int flag = ::GetMenuState(GetHMenuOf(m_parentMenu), GetId(), MF_BYCOMMAND);
+    USHORT                          uFlag = SHORT1FROMMR(::WinSendMsg( GetHMenuOf(m_parentMenu)
+                                                                      ,MM_QUERYITEMATTR
+                                                                      ,MPFROM2SHORT(GetId(), TRUE)
+                                                                      ,MPFROMSHORT(MIA_CHECKED)
+                                                                     ));
 
-    // don't "and" with MF_ENABLED because its value is 0
-    return (flag & MF_DISABLED) == 0;
-*/
-    return FALSE;
-}
+    return (uFlag & MIA_CHECKED);
+} // end of wxMenuItem::IsChecked
 
-wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
+wxString wxMenuItemBase::GetLabelFromText(
+  const wxString&                   rText
+)
 {
-    return wxStripMenuCodes(text);
+    return wxStripMenuCodes(rText);
 }
 
 // accelerators
@@ -157,114 +171,170 @@ wxAcceleratorEntry *wxMenuItem::GetAccel() const
 // change item state
 // -----------------
 
-void wxMenuItem::Enable(bool enable)
+void wxMenuItem::Enable(
+  bool                              bEnable
+)
 {
-    if ( m_isEnabled == enable )
-        return;
-/*
-    long rc = EnableMenuItem(GetHMenuOf(m_parentMenu),
-                             GetRealId(),
-                             MF_BYCOMMAND |
-                             (enable ? MF_ENABLED : MF_GRAYED));
+    bool                            bOk;
 
-    if ( rc == -1 ) {
+    if (m_isEnabled == bEnable)
+        return;
+    if (bEnable)
+        bOk = ::WinSendMsg( GetHMenuOf(m_parentMenu)
+                           ,MM_SETITEMATTR
+                           ,MPFROM2SHORT(GetRealId(), TRUE)
+                           ,MPFROM2SHORT(MIA_DISABLED, MIA_DISABLED)
+                          );
+    else
+        bOk = ::WinSendMsg( GetHMenuOf(m_parentMenu)
+                           ,MM_SETITEMATTR
+                           ,MPFROM2SHORT(GetRealId(), TRUE)
+                           ,MPFROM2SHORT(MIA_DISABLED, FALSE)
+                          );
+    if (!bOk)
+    {
         wxLogLastError("EnableMenuItem");
     }
-*/
-    wxMenuItemBase::Enable(enable);
-}
+    wxMenuItemBase::Enable(bEnable);
+} // end of wxMenuItem::Enable
 
-void wxMenuItem::Check(bool check)
+void wxMenuItem::Check(
+  bool                              bCheck
+)
 {
+    bool                            bOk;
+
     wxCHECK_RET( m_isCheckable, wxT("only checkable items may be checked") );
-
-    if ( m_isChecked == check )
+    if (m_isChecked == bCheck)
         return;
-/*
-    long rc = CheckMenuItem(GetHMenuOf(m_parentMenu),
-                            GetRealId(),
-                            MF_BYCOMMAND |
-                            (check ? MF_CHECKED : MF_UNCHECKED));
-
-    if ( rc == -1 ) {
-        wxLogLastError("CheckMenuItem");
+    if (bCheck)
+        bOk = ::WinSendMsg( GetHMenuOf(m_parentMenu)
+                           ,MM_SETITEMATTR
+                           ,MPFROM2SHORT(GetRealId(), TRUE)
+                           ,MPFROM2SHORT(MIA_CHECKED, MIA_CHECKED)
+                          );
+    else
+        bOk = ::WinSendMsg( GetHMenuOf(m_parentMenu)
+                           ,MM_SETITEMATTR
+                           ,MPFROM2SHORT(GetRealId(), TRUE)
+                           ,MPFROM2SHORT(MIA_CHECKED, FALSE)
+                          );
+    if (!bOk)
+    {
+        wxLogLastError("EnableMenuItem");
     }
-*/
-    wxMenuItemBase::Check(check);
-}
+    wxMenuItemBase::Check(bCheck);
+} // end of wxMenuItem::Check
 
-void wxMenuItem::SetText(const wxString& text)
+void wxMenuItem::SetText(
+  const wxString&                   rText
+)
 {
-    // don't do anything if label didn't change
-    if ( m_text == text )
+    //
+    // Don't do anything if label didn't change
+    //
+    if (m_text == rText)
         return;
 
-    wxMenuItemBase::SetText(text);
-    OWNER_DRAWN_ONLY( wxOwnerDrawn::SetName(text) );
-/*
-    HMENU hMenu = GetHMenuOf(m_parentMenu);
-    wxCHECK_RET( hMenu, wxT("menuitem without menu") );
+    wxMenuItemBase::SetText(rText);
+    OWNER_DRAWN_ONLY(wxOwnerDrawn::SetName(rText));
+
+    HWND                            hMenu = GetHMenuOf(m_parentMenu);
+
+    wxCHECK_RET(hMenu, wxT("menuitem without menu"));
 
 #if wxUSE_ACCEL
     m_parentMenu->UpdateAccel(this);
 #endif // wxUSE_ACCEL
 
-    UINT id = GetRealId();
-    UINT flagsOld = ::GetMenuState(hMenu, id, MF_BYCOMMAND);
-    if ( flagsOld == 0xFFFFFFFF )
+    USHORT                          uId = GetRealId();
+    MENUITEM                        vItem;
+    USHORT                          uFlagsOld;
+    
+    if (!::WinSendMsg( hMenu
+                      ,MM_QUERYITEM
+                      ,MPFROM2SHORT(uId, TRUE)
+                      ,(MPARAM)&vItem
+                     ))
     {
         wxLogLastError("GetMenuState");
     }
     else
     {
-        if ( IsSubMenu() )
+        uFlagsOld = vItem.afStyle;
+        if (IsSubMenu())
         {
-            // high byte contains the number of items in a submenu for submenus
-            flagsOld &= 0xFF;
-            flagsOld |= MF_POPUP;
+            uFlagsOld |= MIS_SUBMENU;
         }
 
-        LPCTSTR data;
+        BYTE*                       pData;
 
 #if wxUSE_OWNER_DRAWN
-        if ( IsOwnerDrawn() )
+        if (IsOwnerDrawn())
         {
-            flagsOld |= MF_OWNERDRAW;
-            data = (LPCTSTR)this;
+            uFlagsOld |= MIS_OWNERDRAW;
+            pData = (BYTE*)this;
         }
         else
 #endif  //owner drawn
         {
-            flagsOld |= MF_STRING;
-            data = (char*) text.c_str();
+            uFlagsOld |= MIS_TEXT;
+            pData = (BYTE*)rText.c_str();
         }
 
-        if ( ::ModifyMenu(hMenu, id,
-                          MF_BYCOMMAND | flagsOld,
-                          id, data) == (int)0xFFFFFFFF )
+        //
+        // Set the style
+        //
+        if (!::WinSendMsg( hMenu
+                          ,MM_SETITEM
+                          ,MPFROM2SHORT(uId, TRUE)
+                          ,(MPARAM)&vItem
+                         ))
+        {
+            wxLogLastError(wxT("ModifyMenu"));
+        }
+
+        //
+        // Set the text
+        //
+        if (::WinSendMsg( hMenu
+                         ,MM_SETITEMTEXT
+                         ,MPFROMSHORT(uId)
+                         ,(MPARAM)pData
+                        ))
         {
             wxLogLastError(wxT("ModifyMenu"));
         }
     }
-*/
-}
+} // end of wxMenuItem::SetText
 
-void wxMenuItem::SetCheckable(bool checkable)
+void wxMenuItem::SetCheckable(
+  bool                              bCheckable
+)
 {
-    wxMenuItemBase::SetCheckable(checkable);
-    OWNER_DRAWN_ONLY( wxOwnerDrawn::SetCheckable(checkable) );
-}
+    wxMenuItemBase::SetCheckable(bCheckable);
+    OWNER_DRAWN_ONLY(wxOwnerDrawn::SetCheckable(bCheckable));
+} // end of wxMenuItem::SetCheckable
 
 // ----------------------------------------------------------------------------
 // wxMenuItemBase
 // ----------------------------------------------------------------------------
 
-wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
-                                int id,
-                                const wxString& name,
-                                const wxString& help,
-                                bool isCheckable,
-                                wxMenu *subMenu)
+wxMenuItem* wxMenuItemBase::New(
+  wxMenu*                           pParentMenu
+, int                               nId
+, const wxString&                   rName
+, const wxString&                   rHelp
+, bool                              bIsCheckable
+, wxMenu*                           pSubMenu
+)
 {
-    return new wxMenuItem(parentMenu, id, name, help, isCheckable, subMenu);
-}
+    return new wxMenuItem( pParentMenu
+                          ,nId
+                          ,rName
+                          ,rHelp
+                          ,bIsCheckable
+                          ,pSubMenu
+                         );
+} // end of wxMenuItemBase::New
+

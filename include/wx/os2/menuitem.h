@@ -43,34 +43,38 @@ class WXDLLEXPORT wxMenuItem: public wxMenuItemBase
 {
 public:
     // ctor & dtor
-    wxMenuItem(wxMenu *pParentMenu = NULL, int id = ID_SEPARATOR,
-             const wxString& strName = "", const wxString& wxHelp = "",
-             bool bCheckable = FALSE, wxMenu *pSubMenu = NULL);
+    wxMenuItem( wxMenu*         pParentMenu = NULL
+               ,int             nId = ID_SEPARATOR
+               ,const wxString& rStrName = ""
+               ,const wxString& rWxHelp = ""
+               ,bool            bCheckable = FALSE
+               ,wxMenu*         pSubMenu = NULL
+              );
     virtual ~wxMenuItem();
 
     // override base class virtuals
-    virtual void SetText(const wxString& strName);
-    virtual void SetCheckable(bool checkable);
+    virtual void SetText(const wxString& rStrName);
+    virtual void SetCheckable(bool bCheckable);
 
     virtual void Enable(bool bDoEnable = TRUE);
     virtual void Check(bool bDoCheck = TRUE);
-    virtual bool IsChecked() const;
+    virtual bool IsChecked(void) const;
 
 #if wxUSE_ACCEL
-    virtual wxAcceleratorEntry *GetAccel() const;
+    virtual wxAcceleratorEntry* GetAccel(void) const;
 #endif // wxUSE_ACCEL
 
     // unfortunately needed to resolve ambiguity between
     // wxMenuItemBase::IsCheckable() and wxOwnerDrawn::IsCheckable()
-    bool IsCheckable() const { return wxMenuItemBase::IsCheckable(); }
+    bool IsCheckable(void) const { return wxMenuItemBase::IsCheckable(); }
 
     // the id for a popup menu is really its menu handle (as required by
     // ::AppendMenu() API), so this function will return either the id or the
     // menu handle depending on what we're
-    int GetRealId() const;
+    int GetRealId(void) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
-};
+}; // end of CLASS wxMenuItem
 
 #endif  //_MENUITEM_H
