@@ -262,6 +262,7 @@ dragimag.cpp	MSW
 dropsrc.cpp	MSW	OLE
 droptgt.cpp	MSW	OLE
 enhmeta.cpp	MSW	Win32Only
+helpbest.cpp	MSW	Win32Only
 evtloop.cpp	MSW	LowLevel
 fdrepdlg.cpp	MSW	Win32Only
 filedlg.cpp	MSW
@@ -922,6 +923,7 @@ minifram.h	MotifH
 msgdlg.h	MotifH
 palette.h	MotifH
 pen.h	MotifH
+helpbest.h	MSWH
 print.h	MotifH
 printdlg.h	MotifH
 private.h	MotifH

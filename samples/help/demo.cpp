@@ -67,6 +67,10 @@
 #include "wx/msw/helpchm.h"
 #endif
 
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
+#include "wx/msw/helpbest.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // ressources
 // ----------------------------------------------------------------------------
@@ -113,6 +117,9 @@ public:
 #if wxUSE_MS_HTML_HELP
     wxCHMHelpController& GetMSHtmlHelpController() { return m_msHtmlHelp; }
 #endif
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
+    wxBestHelpController& GetBestHelpController() { return m_bestHelp; }
+#endif
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
@@ -120,6 +127,7 @@ public:
     void OnHtmlHelp(wxCommandEvent& event);
     void OnAdvancedHtmlHelp(wxCommandEvent& event);
     void OnMSHtmlHelp(wxCommandEvent& event);
+    void OnBestHelp(wxCommandEvent& event);
 
     void OnShowContextHelp(wxCommandEvent& event);
     void OnShowDialogContextHelp(wxCommandEvent& event);
@@ -138,6 +146,10 @@ private:
 
 #if wxUSE_MS_HTML_HELP
     wxCHMHelpController     m_msHtmlHelp;
+#endif
+
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
+    wxBestHelpController    m_bestHelp;
 #endif
 
     // any class wishing to process wxWindows events must use this macro
@@ -190,6 +202,12 @@ enum
     HelpDemo_MS_Html_Help_Help,
     HelpDemo_MS_Html_Help_Search,
 
+    HelpDemo_Best_Help_Index,
+    HelpDemo_Best_Help_Classes,
+    HelpDemo_Best_Help_Functions,
+    HelpDemo_Best_Help_Help,
+    HelpDemo_Best_Help_Search,
+
     HelpDemo_Help_KDE,
     HelpDemo_Help_GNOME,
     HelpDemo_Help_Netscape,
@@ -231,6 +249,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HelpDemo_MS_Html_Help_Functions, MyFrame::OnMSHtmlHelp)
     EVT_MENU(HelpDemo_MS_Html_Help_Help, MyFrame::OnMSHtmlHelp)
     EVT_MENU(HelpDemo_MS_Html_Help_Search, MyFrame::OnMSHtmlHelp)
+
+    EVT_MENU(HelpDemo_Best_Help_Index, MyFrame::OnBestHelp)
 
     EVT_MENU(HelpDemo_Help_KDE, MyFrame::OnHelp)
     EVT_MENU(HelpDemo_Help_GNOME, MyFrame::OnHelp)
@@ -297,6 +317,21 @@ bool MyApp::OnInit()
         return FALSE;
     }
 
+#if wxUSE_MS_HTML_HELP
+    if( !frame->GetMSHtmlHelpController().Initialize("doc") )
+    {
+        wxLogError("Cannot initialize the MS HTML Help system.");
+    }
+#endif
+
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
+    // you need to call Initialize in order to use wxBestHelpController
+    if( !frame->GetBestHelpController().Initialize("doc") )
+    {
+        wxLogError("Cannot initialize the best help system, aborting.");
+    }
+#endif
+
 #if USE_HTML_HELP
     // initialise the standard HTML help system: this means that the HTML docs are in the
     // subdirectory doc for platforms using HTML help
@@ -319,7 +354,8 @@ bool MyApp::OnInit()
     }
 #endif
 
-#if defined(__WXMSW__) && wxUSE_MS_HTML_HELP
+#if 0
+    // defined(__WXMSW__) && wxUSE_MS_HTML_HELP
     wxString path(wxGetCwd());
     if ( !frame->GetMSHtmlHelpController().Initialize(path + "\\doc.chm") )
     {
@@ -385,6 +421,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(HelpDemo_MS_Html_Help_Functions, "MS HTML &Help on Functions...");
     menuFile->Append(HelpDemo_MS_Html_Help_Help, "MS HTML &About Help Demo...");
     menuFile->Append(HelpDemo_MS_Html_Help_Search, "MS HTML &Search help...");
+#endif
+
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
+    menuFile->AppendSeparator();
+    menuFile->Append(HelpDemo_Best_Help_Index, "Best &Help Index...");
 #endif
 
 #ifndef __WXMSW__
@@ -470,6 +511,13 @@ void MyFrame::OnMSHtmlHelp(wxCommandEvent& event)
 #endif
 }
 
+void MyFrame::OnBestHelp(wxCommandEvent& event)
+{
+#if wxUSE_MS_HTML_HELP && wxUSE_HTML
+    ShowHelp(event.GetId(), m_bestHelp);
+#endif
+}
+
 /*
  Notes: ShowHelp uses section ids for displaying particular topics,
  but you might want to use a unique keyword to display a topic, instead.
@@ -545,6 +593,7 @@ void MyFrame::ShowHelp(int commandId, wxHelpControllerBase& helpController)
    case HelpDemo_Html_Help_Classes:
    case HelpDemo_Advanced_Html_Help_Classes:
    case HelpDemo_MS_Html_Help_Classes:
+   case HelpDemo_Best_Help_Classes:
       helpController.DisplaySection(2);
       //helpController.DisplaySection("Classes"); // An alternative form for most controllers
 
@@ -560,6 +609,7 @@ void MyFrame::ShowHelp(int commandId, wxHelpControllerBase& helpController)
    case HelpDemo_Html_Help_Help:
    case HelpDemo_Advanced_Html_Help_Help:
    case HelpDemo_MS_Html_Help_Help:
+   case HelpDemo_Best_Help_Help:
       helpController.DisplaySection(3);
       //helpController.DisplaySection("About"); // An alternative form for most controllers
       break;
@@ -568,6 +618,7 @@ void MyFrame::ShowHelp(int commandId, wxHelpControllerBase& helpController)
    case HelpDemo_Html_Help_Search:
    case HelpDemo_Advanced_Html_Help_Search:
    case HelpDemo_MS_Html_Help_Search:
+   case HelpDemo_Best_Help_Search:
    {
       wxString key = wxGetTextFromUser("Search for?",
                                        "Search help for keyword",
@@ -582,6 +633,7 @@ void MyFrame::ShowHelp(int commandId, wxHelpControllerBase& helpController)
    case HelpDemo_Html_Help_Index:
    case HelpDemo_Advanced_Html_Help_Index:
    case HelpDemo_MS_Html_Help_Index:
+   case HelpDemo_Best_Help_Index:
       helpController.DisplayContents();
       break;
 
