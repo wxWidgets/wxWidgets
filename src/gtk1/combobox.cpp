@@ -63,6 +63,8 @@ gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
         GtkWidget *list = GTK_COMBO(combo->m_widget)->list;
         gtk_list_unselect_item( GTK_LIST(list), combo->m_prevSelection );
     }
+    else if ((curSelection >= 0) && (combo->GetString(curSelection) == combo->GetValue()))
+        return;
 
     combo->m_prevSelection = curSelection;
 
@@ -84,6 +86,13 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
     if (g_isIdle) wxapp_install_idle_handler();
 
     if (!combo->m_hasVMT) return;
+
+    // avoids double events when the GetValue = one of the selections
+    if (combo->m_alreadySent)
+    {
+        combo->m_alreadySent = FALSE;
+        return;
+    }
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
     event.SetString( combo->GetValue() );
@@ -127,7 +136,6 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     
     // and case-sensitive
     gtk_combo_set_case_sensitive( GTK_COMBO(m_widget), TRUE );
-
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
@@ -617,54 +625,28 @@ void wxComboBox::OnChar( wxKeyEvent &event )
     if ( event.GetKeyCode() == WXK_RETURN )
     {
         wxString value = GetValue();
+        int selection = GetSelection();
 
-        if ( Number() == 0 )
+        // note that gtk automatically selects an item if its in the list
+        // so you don't have to call FindString
+        if ((selection >= 0) && (GetString(selection) == value))
         {
-            // make Enter generate "selected" event if there is only one item
-            // in the combobox - without it, it's impossible to select it at
-            // all!
+            // make Enter generate "selected" event if it equals an item
             wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
-            event.SetInt( 0 );
+            event.SetInt( selection );
             event.SetString( value );
             event.SetEventObject( this );
             GetEventHandler()->ProcessEvent( event );
         }
         else
         {
-            // add the item to the list if it's not there yet
-            if ( FindString(value) == wxNOT_FOUND )
-            {
-                Append(value);
-                SetStringSelection(value);
-
-                // and generate the selected event for it
-                wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
-                event.SetInt( Number() - 1 );
-                event.SetString( value );
-                event.SetEventObject( this );
-                GetEventHandler()->ProcessEvent( event );
-            }
-
-            // This will invoke the dialog default action, such
-            // as the clicking the default button.
-
-            wxWindow *top_frame = m_parent;
-            while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
-            top_frame = top_frame->GetParent();
-    
-            if (top_frame && GTK_IS_WINDOW(top_frame->m_widget))
-            {
-                GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
-
-                if (window->default_widget)
-                {
-                    gtk_widget_activate (window->default_widget);
-                    return;
-                }
-            }
-            
-            return;
+            wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, GetId());
+            event.SetString(value);
+            event.SetInt(selection);
+            event.SetEventObject( this );
+            GetEventHandler()->ProcessEvent( event );
         }
+        return;
     }
     
     event.Skip();
