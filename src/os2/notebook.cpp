@@ -329,12 +329,14 @@ bool wxNotebook::SetPageImage (
 } // end of wxNotebook::SetPageImage
 
 void wxNotebook::SetImageList (
-  wxImageList*                      WXUNUSED(pImageList)
+  wxImageList*                      pImageList
 )
 {
-    //
-    // Does nothing under OS/2
-    //
+    // 
+    // Does not really do anything yet, but at least we need to
+    // update the base class.
+    // 
+    wxNotebookBase::SetImageList(pImageList);
 } // end of wxNotebook::SetImageList
 
 // ----------------------------------------------------------------------------
