@@ -1,0 +1,110 @@
+\section{\class{wxURL}}\label{wxurl}
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxSocketBase}{wxsocketbase},\helpref{wxProtocol}{wxprotocol}
+
+% ----------------------------------------------------------------------------
+% Members
+% ----------------------------------------------------------------------------
+
+\latexignore{\rtfignore{\membersection{Members}}}
+
+\membersection{wxURL::wxURL}{wxurlconstr}
+\func{}{wxURL}{\param{const wxString\&}{ url}}
+
+Constructs an URL object from the string.
+
+\wxheading{Parameters}
+
+\docparam{url}{Url string to parse.}
+
+\membersection{wxURL::\destruct{wxURL}}
+\func{}{\destruct{wxURL}}{\void}
+
+Destroys the URL object.
+
+%
+% GetProtocolName
+%
+\membersection{wxURL::GetProtocolName}
+\constfunc{wxString}{GetProtocolName}{\void}
+
+Returns the name of the protocol which will be used to get the URL.
+
+%
+% GetProtocol
+%
+\membersection{wxURL::GetProtocol}
+\func{wxProtocol\&}{GetProtocol}{\void}
+
+Returns a reference to the protocol which will be used to get the URL.
+
+%
+% GetError
+%
+\membersection{wxURL::GetError}
+\constfunc{wxURLError}{GetError}{\void}
+
+Returns the last error. This error refers to the URL parsing or to the protocol.
+It can be one of these errors:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxURL\_NOERR}}{No error.}
+\twocolitem{{\bf wxURL\_SNTXERR}}{Syntax error in the URL string.}
+\twocolitem{{\bf wxURL\_NOPROTO}}{Found no protocol which can get this URL.}
+\twocolitem{{\bf wxURL\_NOHOST}}{An host name is required for this protocol.}
+\twocolitem{{\bf wxURL\_NOPATH}}{A path is required for this protocol.}
+\twocolitem{{\bf wxURL\_CONNERR}}{Connection error.}
+\twocolitem{{\bf wxURL\_PROTOERR}}{An error occured during negotiation.}
+\end{twocollist}%
+
+%
+% GetInputStream
+%
+\membersection{wxURL::GetInputStream}
+\func{wxInputStream *}{GetInputStream}{\void}
+
+Initializes the protocol and opens the input stream.
+
+\wxheading{Return value:}
+
+It returns a read-only wxStream.
+
+\wxheading{See also:}
+
+\helpref{wxInputStream}{wxinputstream}
+
+%
+% SetDefaultProxy
+%
+\membersection{wxURL::SetDefaultProxy}{wxurlsetdefaultproxy}
+\func{static void}{SetDefaultProxy}{\param{const wxString\&}{ url\_proxy}}
+
+Sets the default proxy server to use to get the URL. The string specifies
+the proxy like this: <hostname>:<port number>.
+
+\wxheading{Parameters}
+
+\docparam{url\_proxy}{Specifies the proxy to use}
+
+\wxheading{See also}
+
+\helpref{wxURL::SetProxy}{wxurlsetproxy}
+
+%
+% SetProxy
+%
+\membersection{wxURL::SetProxy}{wxurlsetproxy}
+\func{void}{SetProxy}{\param{const wxString\&}{ url\_proxy}}
+
+Sets the proxy to use for this URL.
+
+\wxheading{See also}
+
+\helpref{wxURL::SetDefaultProxy}{wxurlsetdefaultproxy}
