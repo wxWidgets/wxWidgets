@@ -42,7 +42,7 @@ msgstr " Seitenansicht"
 
 #: ../src/generic/filedlgg.cpp:439
 msgid " bytes "
-msgstr " bytes "
+msgstr " Bytes "
 
 #: ../src/common/paper.cpp:124
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -116,16 +116,15 @@ msgstr "%s: falsch formatierte Resourcendatei-Syntax"
 
 #: ../src/msw/mdi.cpp:181
 msgid "&Arrange Icons"
-msgstr ""
+msgstr "Icons anordnen"
 
 #: ../src/generic/fdrepdlg.cpp:170 ../src/generic/wizard.cpp:239
-#, fuzzy
 msgid "&Cancel"
-msgstr "Abbruch"
+msgstr "Ab&bruch"
 
 #: ../src/msw/mdi.cpp:177
 msgid "&Cascade"
-msgstr ""
+msgstr "Kaskadieren"
 
 #: ../src/generic/logg.cpp:475 ../src/generic/tipdlg.cpp:170
 msgid "&Close"
@@ -136,9 +135,8 @@ msgid "&Details"
 msgstr "&Einzelheiten"
 
 #: ../src/generic/fdrepdlg.cpp:168
-#, fuzzy
 msgid "&Find"
-msgstr "Suchen"
+msgstr "&Suchen"
 
 #: ../src/generic/wizard.cpp:355
 msgid "&Finish"
@@ -154,9 +152,8 @@ msgid "&Log"
 msgstr "&Log"
 
 #: ../src/msw/mdi.cpp:182
-#, fuzzy
 msgid "&Next"
-msgstr "&Weiter >"
+msgstr "&Weiter"
 
 #: ../src/generic/wizard.cpp:236 ../src/generic/wizard.cpp:357
 msgid "&Next >"
@@ -176,7 +173,7 @@ msgstr "&Wiederholen "
 
 #: ../src/generic/fdrepdlg.cpp:174
 msgid "&Replace"
-msgstr ""
+msgstr "&Ersetzen"
 
 #: ../src/generic/logg.cpp:471 ../src/generic/logg.cpp:765
 msgid "&Save..."
@@ -219,9 +216,9 @@ msgid "'%s' is not a valid message catalog."
 msgstr "'%s' ist kein gültiger Nachrichtenkatalog."
 
 #: ../src/common/textbuf.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is probably a binary buffer."
-msgstr "'%s' ist vermutlich eine Binärdatei."
+msgstr "'%s' ist vermutlich ein Binärpuffer."
 
 #: ../src/common/valtext.cpp:178
 #, c-format
@@ -364,7 +361,7 @@ msgstr "ABCDEFGabcdefg12345ÄÖÜßäöü"
 
 #: ../src/common/ftp.cpp:369
 msgid "ASCII"
-msgstr ""
+msgstr "ASCII"
 
 #: ../src/html/helpfrm.cpp:330
 msgid "Add current page to bookmarks"
@@ -388,9 +385,8 @@ msgid "All files (*)|*"
 msgstr "Alle Dateien (*)|*"
 
 #: ../include/wx/defs.h:1623
-#, fuzzy
 msgid "All files (*.*)|*.*"
-msgstr "Alle Dateien (*)|*"
+msgstr "Alle Dateien (*.*)|*.*"
 
 #: ../src/unix/dialup.cpp:362
 msgid "Already dialling ISP."
@@ -430,27 +426,24 @@ msgid "BMP: Couldn't save invalid image."
 msgstr "BMP: Konnte ungültige Format nicht sichern."
 
 #: ../src/common/imagbmp.cpp:481
-#, fuzzy
 msgid "BMP: Couldn't write RGB color map."
-msgstr "BMP: Datei konnte nich gesichert werden."
+msgstr "BMP: Konnte RGB Tabelle nicht speichern."
 
 #: ../src/common/imagbmp.cpp:613
 msgid "BMP: Couldn't write data."
-msgstr "BMP: Datei konnte nich gesichert werden."
+msgstr "BMP: Datei konnte nicht gespeichert werden."
 
 #: ../src/common/imagbmp.cpp:386
-#, fuzzy
 msgid "BMP: Couldn't write the file (Bitmap) header."
-msgstr "BMP: Dateikopf konnte nicht geschrieben werden."
+msgstr "BMP: Dateikopf (Bitmap) konnte nicht geschrieben werden."
 
 #: ../src/common/imagbmp.cpp:407
-#, fuzzy
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
-msgstr "BMP: Dateikopf konnte nicht geschrieben werden."
+msgstr "BMP: Dateikopf (BitmapInfo) konnte nicht geschrieben werden."
 
 #: ../src/common/imagbmp.cpp:311
-msgid "BMP: wImage doesn't have own wxPalette."
-msgstr ""
+msgid "BMP: wxImage doesn't have own wxPalette."
+msgstr "BMP: wxImage hat keine eigene wxPalette."
 
 #: ../src/generic/helpwxht.cpp:157
 msgid "Back"
@@ -520,7 +513,7 @@ msgstr "Kann Mutex nicht anlegen"
 #: ../src/common/filefn.cpp:1324
 #, fuzzy, c-format
 msgid "Can not enumerate files '%s'"
-msgstr "Kann Dateien in Verzeichnis '%s' nicht auflisten"
+msgstr "Kann Dateien '%s' nicht auflisten"
 
 #: ../src/mgl/dir.cpp:202 ../src/msw/dir.cpp:296 ../src/unix/dir.cpp:224
 #, c-format
@@ -566,9 +559,9 @@ msgid "Can't copy values of unsupported type %d."
 msgstr "Kann Inhalte des nicht unterstützten Typs %d nicht kopieren."
 
 #: ../src/msw/toplevel.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Can't create dialog using template '%s'"
-msgstr "Kann Datei '%s' nicht anlegen."
+msgstr "Kann Dialog nicht aus Template '%s' anlegen"
 
 #: ../src/msw/listctrl.cpp:270
 msgid "Can't create list control window, check that comctl32.dll is installed."
@@ -594,9 +587,9 @@ msgid "Can't create thread"
 msgstr "Kann Thread nicht erzeugen"
 
 #: ../src/msw/window.cpp:2855
-#, fuzzy, c-format
+#, c-format
 msgid "Can't create window of class %s"
-msgstr "Kann Datei '%s' nicht anlegen."
+msgstr "Kann kein Fenster der Klasse '%s' anlegen."
 
 #: ../src/msw/registry.cpp:661
 #, c-format
