@@ -112,7 +112,11 @@ enum wxSeekMode
 #endif
         #define   wxAccess     _access
         #define   wxMkDir      _mkdir
+#ifdef __WATCOMC__
+        #define   wxRmDir      rmdir
+#else
         #define   wxRmDir      _rmdir
+#endif
         #define   wxStat       _stat
     #endif
 

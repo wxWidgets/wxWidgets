@@ -1076,30 +1076,30 @@ public:
                           NormalFont->GetStringSelection(),
                           FixedFont->GetStringSelection(),
                           FontSize->GetValue());
-        TestWin->SetPage(_(
-"<html><body>\
-<table><tr><td>\
-Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> \
-<b>Bold face.</b> <b><i>Bold italic face.</i></b><br>\
-<font size=-2>font size -2</font><br>\
-<font size=-1>font size -1</font><br>\
-<font size=+0>font size +0</font><br>\
-<font size=+1>font size +1</font><br>\
-<font size=+2>font size +2</font><br>\
-<font size=+3>font size +3</font><br>\
-<font size=+4>font size +4</font><br>\
-<td>\
-<p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> \
-<b><i>bold italic <u>underlined</u></i></b><br>\
-<font size=-2>font size -2</font><br>\
-<font size=-1>font size -1</font><br>\
-<font size=+0>font size +0</font><br>\
-<font size=+1>font size +1</font><br>\
-<font size=+2>font size +2</font><br>\
-<font size=+3>font size +3</font><br>\
-<font size=+4>font size +4</font></tt>\
-</table></body></html>"
-                          ));
+
+        wxString content(_("font size"));
+
+        content = _T("<font size=-2>") + content + _T(" -2</font><br>")
+                  _T("<font size=-1>") + content + _T(" -1</font><br>")
+                  _T("<font size=+0>") + content + _T(" +0</font><br>")
+                  _T("<font size=+1>") + content + _T(" +1</font><br>")
+                  _T("<font size=+2>") + content + _T(" +2</font><br>")
+                  _T("<font size=+3>") + content + _T(" +3</font><br>")
+                  _T("<font size=+4>") + content + _T(" +4</font><br>") ;
+
+        content = wxString( _T("<html><body><table><tr><td>") ) +
+                  _("Normal face<br>and <u>underlined</u>. ") +
+                  _("<i>Italic face.</i> ") +
+                  _("<b>Bold face.</b> ") +
+                  _("<b><i>Bold italic face.</i></b><br>") +
+                  content +
+                  wxString( _T("</td><td><tt>") ) +
+                  _("Fixed size face.<br> <b>bold</b> <i>italic</i> ") +
+                  _("<b><i>bold italic <u>underlined</u></i></b><br>") +
+                  content +
+                  _T("</tt></td></tr></table></body></html>");
+
+        TestWin->SetPage( content );
     }
 
     void OnUpdate(wxCommandEvent& WXUNUSED(event))
