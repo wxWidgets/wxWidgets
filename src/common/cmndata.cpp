@@ -205,17 +205,23 @@ wxPrintData::~wxPrintData()
 }
 
 
-#ifdef __WXMAC__
 void wxPrintData::ConvertToNative()
 {
+#ifdef __WXMAC__
     m_nativePrintData->TransferFrom( this ) ;
+#else
+    m_nativeData->TransferFrom( *this ) ;
+#endif
 }
 
 void wxPrintData::ConvertFromNative()
 {
+#ifdef __WXMAC__
     m_nativePrintData->TransferTo( this ) ;
-}
+#else
+    m_nativeData->TransferTo( *this ) ;
 #endif
+}
 
 void wxPrintData::operator=(const wxPrintData& data)
 {

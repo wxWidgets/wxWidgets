@@ -216,13 +216,12 @@ public:
     void SetFilename( const wxString &filename ) { m_filename = filename; }
     
     void operator=(const wxPrintData& data);
-    
-    wxPrintNativeDataBase *GetNativeData() const { return m_nativeData; }
 
-#if defined(__WXMAC__)
+    // Convert between wxPrintData and native data
     void ConvertToNative();
     void ConvertFromNative();
-#endif
+    // Holds the native print data
+    wxPrintNativeDataBase *GetNativeData() const { return m_nativeData; }
 
 public:
 #if defined(__WXMAC__)
