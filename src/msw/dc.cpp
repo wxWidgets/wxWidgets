@@ -1711,10 +1711,10 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                 wxDCCacheEntry* dcCacheEntry1 = FindDCInCache(NULL, source->GetHDC());
                 dc_mask = (HDC) dcCacheEntry1->m_dc;
 
-                wxDCCacheEntry* dcCacheEntry2 = FindDCInCache(dcCacheEntry1, dest->GetHDC());
+                wxDCCacheEntry* dcCacheEntry2 = FindDCInCache(dcCacheEntry1, GetHDC());
                 dc_buffer = (HDC) dcCacheEntry2->m_dc;
 
-                wxDCCacheEntry* bitmapCacheEntry = FindBitmapInCache(dest->GetHDC(),
+                wxDCCacheEntry* bitmapCacheEntry = FindBitmapInCache(GetHDC(),
                     width, height);
 
                 buffer_bmap = (HBITMAP) bitmapCacheEntry->m_bitmap;
