@@ -72,16 +72,28 @@ public:
     bool Pause();
     bool Resume();
     
-    bool Resize(wxUint16 w, wxUint16 h);
     bool GetSize(wxSize& size) const;
+    bool SetSize(wxSize size);
+
+    // Return codec name for each stream.
+    wxString GetMovieCodec() const;
+    wxString GetAudioCodec() const;
+    // Return misc. info about audio
+    wxUint32 GetSampleRate() const;
+    wxUint8 GetChannels() const;
+    wxUint8 GetBPS() const;
+    // Return the frame rate of the video (in frames/second)
+    double GetFrameRate() const;
+    // Return the total number of frames in the movie
+    wxUint32 GetNbFrames() const;
     
     bool IsCapable(wxVideoType v_type);
     
     bool AttachOutput(wxWindow& output);
     void DetachOutput(void);
     
-    bool IsPaused();
-    bool IsStopped();
+    bool IsPaused() const;
+    bool IsStopped() const;
 };
 
 #endif

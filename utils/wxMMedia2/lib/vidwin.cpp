@@ -99,25 +99,28 @@ bool wxVideoWindows::Resume()
     if (!m_paused || m_stopped)
         return TRUE;
     m_paused = FALSE;
-    return (mciSendCommand(m_internal->m_dev_id, MCI_PAUSE, 0, 0) == 0);
+    return (mciSendCommand(m_internal->m_dev_id, MCI_RESUME, 0, 0) == 0);
 }
 
-bool wxVideoWindows::IsPaused()
+bool wxVideoWindows::IsPaused() const
 {
     return m_paused;
 }
 
-bool wxVideoWindows::IsStopped()
+bool wxVideoWindows::IsStopped() const
 {
     return m_stopped;
 }
 
 bool wxVideoWindows::GetSize(wxSize& size) const
 {
+    // Two random numbers.
+    size.SetWidth(200);
+    size.SetHeight(200);
     return TRUE;
 }
 
-bool wxVideoWindows::Resize(wxUint16 w, wxUint16 h)
+bool wxVideoWindows::SetSize(wxSize size)
 {
     return TRUE;
 }
@@ -161,8 +164,53 @@ bool wxVideoWindows::Play()
 
 bool wxVideoWindows::Stop()
 {
+    MCI_SEEK_PARMS seekStruct;
+
     if (m_stopped)
         return FALSE;
     m_stopped = TRUE;
-    return (mciSendCommand(m_internal->m_dev_id, MCI_STOP, 0, NULL) == 0);
+    if (::mciSendCommand(m_internal->m_dev_id, MCI_STOP, 0, NULL) != 0)
+      return FALSE;
+
+    seekStruct.dwCallback = 0;
+    seekStruct.dwTo = 0;
+    return (::mciSendCommand(m_internal->m_dev_id, MCI_SEEK, 0, (DWORD)(LPVOID)&seekStruct) == 0);
+}
+
+
+// TODO TODO
+
+wxString wxVideoWindows::GetMovieCodec() const
+{
+    return wxT("No info");
+}
+
+wxString wxVideoWindows::GetAudioCodec() const
+{
+    return wxT("No info");
+}
+
+wxUint32 wxVideoWindows::GetSampleRate() const
+{
+    return 22500;
+}
+
+wxUint8 wxVideoWindows::GetChannels() const
+{
+    return 1;
+}
+
+wxUint8 wxVideoWindows::GetBPS() const
+{
+    return 8;
+}
+
+double wxVideoWindows::GetFrameRate() const
+{
+    return 1.0;
+}
+
+wxUint32 wxVideoWindows::GetNbFrames() const
+{
+    return 0;
 }
