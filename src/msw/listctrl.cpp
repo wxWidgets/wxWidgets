@@ -117,6 +117,24 @@
     #define LVCFMT_BITMAP_ON_RIGHT 0x1000
 #endif
 
+#if defined(__GNUWIN32__) && !defined(LV_ITEM) \
+    && !wxCHECK_W32API_VERSION( 0, 5 )
+typedef struct _LVITEMW {
+    UINT mask;
+    int iItem;
+    int iSubItem;
+    UINT state;
+    UINT stateMask;
+    LPWSTR pszText;
+    int cchTextMax;
+    int iImage;
+    LPARAM lParam;
+#if (_WIN32_IE >= 0x0300)
+    int iIndent;
+#endif
+} LV_ITEMW;
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------

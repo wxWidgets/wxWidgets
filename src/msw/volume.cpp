@@ -44,6 +44,30 @@
 // Win32 headers
 #include <shlobj.h>
 
+#ifndef SHGFI_ATTRIBUTES
+    #define SHGFI_ATTRIBUTES 2048
+#endif
+
+#ifndef SFGAO_READONLY
+    #define SFGAO_READONLY 0x00040000L
+#endif
+
+#ifndef SFGAO_REMOVABLE
+    #define SFGAO_REMOVABLE 0x02000000L
+#endif
+
+#ifndef SHGFI_DISPLAYNAME
+    #define SHGFI_DISPLAYNAME 512
+#endif
+
+#ifndef SHGFI_ICON
+    #define SHGFI_ICON 256
+#endif
+
+#ifndef SHGFI_SMALLICON
+     #define SHGFI_SMALLICON 1
+#endif
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Dynamic library function defs.
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -76,7 +100,9 @@ static FileInfoMap s_fileInfo(25);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Other initialization.
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#if wxUSE_GUI
 WX_DEFINE_OBJARRAY(wxIconArray);
+#endif
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Local helper functions.
@@ -477,7 +503,7 @@ bool wxFSVolume::Create(const wxString& name)
     }
     m_dispName = fi.szDisplayName;
 
-#ifdef wxUSE_GUI
+#if wxUSE_GUI
 
     m_icons.Alloc(wxFS_VOL_ICO_MAX);
     int idx;
@@ -535,7 +561,7 @@ int wxFSVolume::GetFlags() const
     return itr->second.m_flags;
 } // GetFlags
 
-#ifdef wxUSE_GUI
+#if wxUSE_GUI
 
 //=============================================================================
 // Function: GetIcon
