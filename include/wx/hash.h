@@ -18,11 +18,19 @@
 
 #include "wx/defs.h"
 
+#if !wxUSE_STL && WXWIN_COMPATIBILITY_2_4
+    #define wxUSE_OLD_HASH_TABLE 1
+#else
+    #define wxUSE_OLD_HASH_TABLE 0
+#endif
+
 #if !wxUSE_STL
     #include "wx/object.h"
-    #include "wx/list.h"
 #else
     class WXDLLIMPEXP_BASE wxObject;
+#endif
+#if wxUSE_OLD_HASH_TABLE
+    #include "wx/list.h"
 #endif
 #if WXWIN_COMPATIBILITY_2_4
     #include "wx/dynarray.h"
@@ -43,7 +51,7 @@
 // pointers to objects
 // ----------------------------------------------------------------------------
 
-#if !wxUSE_STL
+#if wxUSE_OLD_HASH_TABLE
 
 class WXDLLIMPEXP_BASE wxHashTableBase : public wxObject
 {
@@ -83,7 +91,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxHashTableBase)
 };
 
-#else // if wxUSE_STL
+#else // if !wxUSE_OLD_HASH_TABLE
 
 #if !defined(wxENUM_KEY_TYPE_DEFINED)
 #define wxENUM_KEY_TYPE_DEFINED
@@ -215,7 +223,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxHashTableBase)
 };
 
-#endif // !wxUSE_STL
+#endif // wxUSE_OLD_HASH_TABLE
 
 #if !wxUSE_STL
 
@@ -294,13 +302,13 @@ private:
 
 #endif // WXWIN_COMPATIBILITY_2_4
 
-#endif  // !wxUSE_STL
+#endif // !wxUSE_STL
 
 // ----------------------------------------------------------------------------
 // for compatibility only
 // ----------------------------------------------------------------------------
 
-#if wxUSE_STL
+#if !wxUSE_OLD_HASH_TABLE
 
 class WXDLLIMPEXP_BASE wxHashTable_Node : public wxHashTableBase_Node
 {
@@ -401,7 +409,7 @@ private:
     size_t m_currBucket;
 };
 
-#else // if !wxUSE_STL
+#else // if wxUSE_OLD_HASH_TABLE
 
 class WXDLLIMPEXP_BASE wxHashTable : public wxObject
 {
@@ -492,9 +500,9 @@ private:
     DECLARE_DYNAMIC_CLASS(wxHashTable)
 };
 
-#endif
+#endif // wxUSE_OLD_HASH_TABLE
 
-#if wxUSE_STL
+#if !wxUSE_OLD_HASH_TABLE
 
 // defines a new type safe hash table which stores the elements of type eltype
 // in lists of class listclass
@@ -525,7 +533,7 @@ private:
         DECLARE_NO_COPY_CLASS(hashclass)                                      \
     }
 
-#else // if !wxUSE_STL
+#else // if wxUSE_OLD_HASH_TABLE
 
 #define _WX_DECLARE_HASH(eltype, listclass, hashclass, classexp)               \
     classexp hashclass : public wxHashTableBase                                \
@@ -587,7 +595,7 @@ private:
         DECLARE_NO_COPY_CLASS(hashclass)                                       \
     }
 
-#endif
+#endif // wxUSE_OLD_HASH_TABLE
 
 // this macro is to be used in the user code
 #define WX_DECLARE_HASH(el, list, hash) \

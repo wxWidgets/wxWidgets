@@ -34,7 +34,7 @@
 
 #include "wx/hash.h"
 
-#if !wxUSE_STL
+#if wxUSE_OLD_HASH_TABLE
 
 #include <string.h>
 #include <stdarg.h>
@@ -724,9 +724,7 @@ void wxHashTable::Clear ()
   m_count = 0;
 }
 
-#else // if wxUSE_STL
-
-#include "wx/object.h"
+#else // if !wxUSE_OLD_HASH_TABLE
 
 wxHashTableBase_Node::wxHashTableBase_Node( long key, void* value,
                                             wxHashTableBase* table )
@@ -1083,4 +1081,4 @@ wxHashTable::Node* wxHashTable::Next()
     return m_curr;
 }
 
-#endif // wxUSE_STL
+#endif // !wxUSE_OLD_HASH_TABLE

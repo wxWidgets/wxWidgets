@@ -45,6 +45,10 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - wxZlibInputStream is not by default compatible with the output of the
   2.4.x version of wxZlibOutputStream. However, there is a compatibilty mode,
   switched on by passing wxZLIB_24COMPATIBLE to the constructor.
+- when WXWIN_COMPATIBILITY_2_4 == 0 wxHashTable uses a new implementation
+  not using wxList keyed interface (the same used when wxUSE_STL == 1),
+  the only incompatibility being that Next() returns a wxHashTable::Node*
+  instead of a wxNode*.
 
 wxTaskBarIcon must be explicitly destroyed now, otherwise the application
   won't exit even though there are no top level windows
