@@ -21,7 +21,7 @@ With a popup menu, there is a variety of ways to handle a menu selection event
 
 \begin{enumerate}\itemsep=0pt
 \item Define a callback of type wxFunction, which you pass to the wxMenu constructor.
-The callback takes a reference to a window, and a reference to a \helpref{wxCommandEvent}{wxcommandevent}.
+The callback takes a reference to the menu, and a reference to a \helpref{wxCommandEvent}{wxcommandevent}.
 \item Derive a new class from wxMenu and define event table entries using the EVT\_MENU macro.
 \item Set a new event handler for wxMenu, using an object whose class has EVT\_MENU entries.
 \item Provide EVT\_MENU handlers in the window which pops up the menu, or in an ancestor of

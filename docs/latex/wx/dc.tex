@@ -157,9 +157,11 @@ mapping mode. Use this function for converting a height, for example.
 
 \func{void}{DrawArc}{\param{long}{ x1}, \param{long}{ y1}, \param{long}{ x2}, \param{long}{ y2}, \param{double}{ xc}, \param{double}{ yc}}
 
-Draws an arc, centred on ({\it xc, yc}), with starting point ({\it x1, y1})
+Draws an arc of a circle, centred on ({\it xc, yc}), with starting point ({\it x1, y1})
 and ending at ({\it x2, y2}).   The current pen is used for the outline
 and the current brush for filling the shape.
+
+The arc is drawn in an anticlockwise direction from the start point to the end point.
 
 \membersection{wxDC::DrawEllipse}\label{wxdcdrawellipse}
 
