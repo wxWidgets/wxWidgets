@@ -37,7 +37,8 @@ elseiff "%1" == "d" then
 rem touch all the *.i files so swig will regenerate
 elseiff "%1" == "t" then
 	shift
-	set CMD=touch src\*.i & touch contrib\glcanvas\*.i & touch contrib\ogl\*.i & touch contrib\stc\*.i & touch contrib\gizmos\*.i & touch contrib\dllwidget\*.i
+	set CMD=echo Finished!
+	find . -name "*.i" | xargs -l touch
 
 rem "i" --> install
 elseiff "%1" == "i" then

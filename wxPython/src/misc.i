@@ -315,13 +315,13 @@ public:
         dest = reg1.GetBox();
 
         if (dest != wxRect(0,0,0,0)) {
-            wxPyTState* state = wxPyBeginBlockThreads();
+            wxPyBeginBlockThreads();
             wxRect* newRect = new wxRect(dest);
             obj = wxPyConstructObject((void*)newRect, "wxRect");
             PyObject* one = PyInt_FromLong(1);
             PyObject_SetAttrString(obj, "thisown", one);
             Py_DECREF(one);
-            wxPyEndBlockThreads(state);
+            wxPyEndBlockThreads();
             return obj;
         }
         Py_INCREF(Py_None);

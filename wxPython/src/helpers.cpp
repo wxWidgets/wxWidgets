@@ -19,6 +19,7 @@
 #ifdef __WXMSW__
 #include <wx/msw/private.h>
 #include <wx/msw/winundef.h>
+#include <wx/msw/msvcrt.h>
 #endif
 
 #ifdef __WXGTK__
@@ -28,6 +29,33 @@
 #endif
 
 
+//----------------------------------------------------------------------
+
+
+int  WXDLLEXPORT wxEntryStart( int argc, char** argv );
+int  WXDLLEXPORT wxEntryInitGui();
+void WXDLLEXPORT wxEntryCleanup();
+
+wxPyApp* wxPythonApp = NULL;  // Global instance of application object
+
+
+#ifdef WXP_WITH_THREAD
+struct wxPyThreadState {
+    unsigned long  tid;
+    PyThreadState* tstate;
+
+    wxPyThreadState(unsigned long _tid=0, PyThreadState* _tstate=NULL)
+        : tid(_tid), tstate(_tstate) {}
+};
+
+#include <wx/dynarray.h>
+WX_DECLARE_OBJARRAY(wxPyThreadState, wxPyThreadStateArray);
+#include <wx/arrimpl.cpp>
+WX_DEFINE_OBJARRAY(wxPyThreadStateArray);
+
+wxPyThreadStateArray* wxPyTStates = NULL;
+wxMutex*              wxPyTMutex = NULL;
+#endif
 
 
 #ifdef __WXMSW__             // If building for win32...
@@ -47,10 +75,8 @@ BOOL WINAPI DllMain(
 #endif
 
 //----------------------------------------------------------------------
-// Class for implementing the wxp main application shell.
+// Classes for implementing the wxp main application shell.
 //----------------------------------------------------------------------
-
-wxPyApp *wxPythonApp = NULL;            // Global instance of application object
 
 
 wxPyApp::wxPyApp() {
@@ -63,42 +89,31 @@ wxPyApp::~wxPyApp() {
 
 
 // This one isn't acutally called...  See __wxStart()
-bool wxPyApp::OnInit(void) {
+bool wxPyApp::OnInit() {
     return FALSE;
 }
 
-int  wxPyApp::MainLoop(void) {
+
+int  wxPyApp::MainLoop() {
     int retval = 0;
 
     DeletePendingObjects();
+    bool initialized = wxTopLevelWindows.GetCount() != 0;
 #ifdef __WXGTK__
-    m_initialized = wxTopLevelWindows.GetCount() != 0;
+    m_initialized = initialized;
 #endif
 
-    if (Initialized()) {
+    if (initialized) {
         retval = wxApp::MainLoop();
-        wxPythonApp->OnExit();
+        OnExit();
     }
     return retval;
 }
 
 
+
 //---------------------------------------------------------------------
 //----------------------------------------------------------------------
-
-#ifdef __WXMSW__
-#include "wx/msw/msvcrt.h"
-#endif
-
-
-int  WXDLLEXPORT wxEntryStart( int argc, char** argv );
-int  WXDLLEXPORT wxEntryInitGui();
-void WXDLLEXPORT wxEntryCleanup();
-
-
-#ifdef WXP_WITH_THREAD
-PyInterpreterState* wxPyInterpreter = NULL;
-#endif
 
 
 // This is where we pick up the first part of the wxEntry functionality...
@@ -108,12 +123,13 @@ void __wxPreStart()
 {
 
 #ifdef __WXMSW__
-//    wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+    wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
 #endif
 
 #ifdef WXP_WITH_THREAD
     PyEval_InitThreads();
-    wxPyInterpreter = PyThreadState_Get()->interp;
+    wxPyTStates = new wxPyThreadStateArray;
+    wxPyTMutex = new wxMutex;
 #endif
 
     // Bail out if there is already windows created.  This means that the
@@ -201,8 +217,14 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     return Py_None;
 }
 
+
 void __wxCleanup() {
     wxEntryCleanup();
+    delete wxPyTMutex;
+    wxPyTMutex = NULL;
+    wxPyTStates->Empty();
+    delete wxPyTStates;
+    wxPyTStates = NULL;
 }
 
 
@@ -261,7 +283,6 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 void wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName) {
     if (! wxPyPtrTypeMap)
         wxPyPtrTypeMap = PyDict_New();
-
     PyDict_SetItemString(wxPyPtrTypeMap,
                          (char*)commonName,
                          PyString_FromString((char*)ptrName));
@@ -400,7 +421,7 @@ PyObject* wxPyConstructObject(void* ptr,
     char    buff[64];               // should always be big enough...
     sprintf(buff, "%sPtr", className);
 
-        wxASSERT_MSG(wxPython_dict, "wxPython_dict is not set yet!!");
+    wxASSERT_MSG(wxPython_dict, "wxPython_dict is not set yet!!");
 
     PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
     if (! classobj) {
@@ -417,30 +438,102 @@ PyObject* wxPyConstructObject(void* ptr,
 
 //---------------------------------------------------------------------------
 
-
-wxPyTState* wxPyBeginBlockThreads() {
-    wxPyTState* state = NULL;
+// TODO:  This should really be wxThread::GetCurrentId(), and I will do so
+//        after I make a quick 2.3.2.1 release.
 #ifdef WXP_WITH_THREAD
-    if (1) {   // Can I check if I've already got the lock?
-        state = new wxPyTState;
-        PyEval_AcquireLock();
-        state->newState = PyThreadState_New(wxPyInterpreter);
-        state->prevState = PyThreadState_Swap(state->newState);
-    }
+#ifdef __WXGTK__  // does wxGTK always use pthreads?
+#include <unistd.h>
+#include <pthread.h>
 #endif
-    return state;
+inline
+unsigned long wxPyGetCurrentThreadId() {
+#ifdef __WXMSW__
+    return (unsigned long)::GetCurrentThreadId();
+#endif
+#ifdef __WXGTK__  // does wxGTK always use pthreads?
+    return (unsigned long)pthread_self();
+#endif
+#ifdef __WXMAC__
+#error Fix this!
+#endif
 }
 
 
-void wxPyEndBlockThreads(wxPyTState* state) {
-#ifdef WXP_WITH_THREAD
-    if (state) {
-        PyThreadState_Swap(state->prevState);
-        PyThreadState_Clear(state->newState);
-        PyEval_ReleaseLock();
-        PyThreadState_Delete(state->newState);
-        delete state;
+
+static
+PyThreadState* wxPyGetThreadState() {
+    unsigned long ctid = wxPyGetCurrentThreadId();
+    PyThreadState* tstate = NULL;
+
+    wxPyTMutex->Lock();
+    for(size_t i=0; i < wxPyTStates->GetCount(); i++) {
+        wxPyThreadState& info = wxPyTStates->Item(i);
+        if (info.tid == ctid) {
+            tstate = info.tstate;
+            break;
+        }
     }
+    wxPyTMutex->Unlock();
+    wxASSERT_MSG(tstate, "PyThreadState should not be NULL!");
+    return tstate;
+}
+
+static
+void wxPySaveThreadState(PyThreadState* tstate) {
+    unsigned long ctid = wxPyGetCurrentThreadId();
+    wxPyTMutex->Lock();
+    for(size_t i=0; i < wxPyTStates->GetCount(); i++) {
+        wxPyThreadState& info = wxPyTStates->Item(i);
+        if (info.tid == ctid) {
+            info.tstate = tstate;
+            wxPyTMutex->Unlock();
+            return;
+        }
+    }
+    // not found, so add it...
+    wxPyTStates->Add(new wxPyThreadState(ctid, tstate));
+    wxPyTMutex->Unlock();
+}
+
+#endif
+
+
+// Calls from Python to wxWindows code are wrapped in calls to these
+// functions:
+
+PyThreadState* wxPyBeginAllowThreads() {
+#ifdef WXP_WITH_THREAD
+    PyThreadState* saved = PyEval_SaveThread();  // Py_BEGIN_ALLOW_THREADS;
+    wxPySaveThreadState(saved);
+    return saved;
+#else
+    return NULL;
+#endif
+}
+
+void wxPyEndAllowThreads(PyThreadState* saved) {
+#ifdef WXP_WITH_THREAD
+    PyEval_RestoreThread(saved);   // Py_END_ALLOW_THREADS;
+#endif
+}
+
+
+
+// Calls from wxWindows back to Python code, or even any PyObject
+// manipulations, PyDECREF's and etc. are wrapped in calls to these functions:
+
+void wxPyBeginBlockThreads() {
+#ifdef WXP_WITH_THREAD
+    PyThreadState* tstate = wxPyGetThreadState();
+    PyEval_RestoreThread(tstate);
+#endif
+}
+
+
+void wxPyEndBlockThreads() {
+#ifdef WXP_WITH_THREAD
+    PyThreadState* tstate = PyEval_SaveThread();
+    // Is there any need to save it again?
 #endif
 }
 
@@ -460,9 +553,9 @@ wxPyCallback::wxPyCallback(const wxPyCallback& other) {
 }
 
 wxPyCallback::~wxPyCallback() {
-    wxPyTState* state = wxPyBeginBlockThreads();
+    wxPyBeginBlockThreads();
     Py_DECREF(m_func);
-    wxPyEndBlockThreads(state);
+    wxPyEndBlockThreads();
 }
 
 
@@ -476,7 +569,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     PyObject*       tuple;
 
 
-    wxPyTState* state = wxPyBeginBlockThreads();
+    wxPyBeginBlockThreads();
     wxString className = event.GetClassInfo()->GetClassName();
 
     if (className == "wxPyEvent")
@@ -496,7 +589,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     } else {
         PyErr_Print();
     }
-    wxPyEndBlockThreads(state);
+    wxPyEndBlockThreads();
 }
 
 
@@ -681,10 +774,10 @@ PyObject* wxPyCBH_callCallbackObj(const wxPyCallbackHelper& cbh, PyObject* argTu
 
 void wxPyCBH_delete(wxPyCallbackHelper* cbh) {
     if (cbh->m_incRef) {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         Py_XDECREF(cbh->m_self);
         Py_XDECREF(cbh->m_class);
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
     }
 }
 
@@ -702,14 +795,14 @@ wxPyEvtSelfRef::wxPyEvtSelfRef() {
 }
 
 wxPyEvtSelfRef::~wxPyEvtSelfRef() {
-    wxPyTState* state = wxPyBeginBlockThreads();
+    wxPyBeginBlockThreads();
     if (m_cloned)
         Py_DECREF(m_self);
-    wxPyEndBlockThreads(state);
+    wxPyEndBlockThreads();
 }
 
 void wxPyEvtSelfRef::SetSelf(PyObject* self, bool clone) {
-    wxPyTState* state = wxPyBeginBlockThreads();
+    wxPyBeginBlockThreads();
     if (m_cloned)
         Py_DECREF(m_self);
     m_self = self;
@@ -717,7 +810,7 @@ void wxPyEvtSelfRef::SetSelf(PyObject* self, bool clone) {
         Py_INCREF(m_self);
         m_cloned = TRUE;
     }
-    wxPyEndBlockThreads(state);
+    wxPyEndBlockThreads();
 }
 
 PyObject* wxPyEvtSelfRef::GetSelf() const {
@@ -774,9 +867,9 @@ wxPyTimer::wxPyTimer(PyObject* callback) {
 }
 
 wxPyTimer::~wxPyTimer() {
-    wxPyTState* state = wxPyBeginBlockThreads();
+    wxPyBeginBlockThreads();
     Py_DECREF(func);
-    wxPyEndBlockThreads(state);
+    wxPyEndBlockThreads();
 }
 
 void wxPyTimer::Notify() {
@@ -784,7 +877,7 @@ void wxPyTimer::Notify() {
         wxTimer::Notify();
     }
     else {
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
 
         PyObject*   result;
         PyObject*   args = Py_BuildValue("()");
@@ -798,7 +891,7 @@ void wxPyTimer::Notify() {
             PyErr_Print();
         }
 
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
     }
 }
 
@@ -814,7 +907,7 @@ PyObject* wxPy_ConvertList(wxListBase* list, const char* className) {
     wxObject*   wxObj;
     wxNode*     node = list->First();
 
-    wxPyTState* state = wxPyBeginBlockThreads();
+    wxPyBeginBlockThreads();
     pyList = PyList_New(0);
     while (node) {
         wxObj = node->Data();
@@ -822,7 +915,7 @@ PyObject* wxPy_ConvertList(wxListBase* list, const char* className) {
         PyList_Append(pyList, pyObj);
         node = node->Next();
     }
-    wxPyEndBlockThreads(state);
+    wxPyEndBlockThreads();
     return pyList;
 }
 

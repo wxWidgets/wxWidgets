@@ -96,17 +96,17 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 // the helper needs to know more about the type.
 
 wxList* wxPy_wxListHelper(PyObject* pyList, char* className) {
-    wxPyTState* state = wxPyBeginBlockThreads();
+    wxPyBeginBlockThreads();
     if (!PyList_Check(pyList)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         return NULL;
     }
     int count = PyList_Size(pyList);
     wxList* list = new wxList;
     if (! list) {
         PyErr_SetString(PyExc_MemoryError, "Unable to allocate wxList object");
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         return NULL;
     }
     for (int x=0; x<count; x++) {
@@ -117,29 +117,29 @@ wxList* wxPy_wxListHelper(PyObject* pyList, char* className) {
             char errmsg[1024];
             sprintf(errmsg, "Type error, expected list of %s objects", className);
             PyErr_SetString(PyExc_TypeError, errmsg);
-            wxPyEndBlockThreads(state);
+            wxPyEndBlockThreads();
             return NULL;
         }
         list->Append(wxo);
     }
-    wxPyEndBlockThreads(state);
+    wxPyEndBlockThreads();
     return list;
 }
 
 //---------------------------------------------------------------------------
 
 wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList) {
-    wxPyTState* state = wxPyBeginBlockThreads();
+    wxPyBeginBlockThreads();
     if (!PyList_Check(pyList)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         return NULL;
     }
     int count = PyList_Size(pyList);
     wxList* list = new wxList;
     if (! list) {
         PyErr_SetString(PyExc_MemoryError, "Unable to allocate wxList object");
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
         return NULL;
     }
     for (int x=0; x<count; x++) {
@@ -158,13 +158,13 @@ wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList) {
             wxRealPoint* wxo = NULL;
             if (SWIG_GetPtrObj(pyo, (void **)&wxo, "_wxRealPoint_p")) {
                 PyErr_SetString(PyExc_TypeError, "Type error, expected list of wxRealPoint objects or 2-tuples");
-                wxPyEndBlockThreads(state);
+                wxPyEndBlockThreads();
                 return NULL;
             }
             list->Append((wxObject*) new wxRealPoint(*wxo));
         }
     }
-    wxPyEndBlockThreads(state);
+    wxPyEndBlockThreads();
     return list;
 }
 
@@ -229,10 +229,11 @@ static PyObject *_wrap_wxOGLInitialize(PyObject *self, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxOGLInitialize",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxOGLInitialize();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -246,10 +247,11 @@ static PyObject *_wrap_wxOGLCleanUp(PyObject *self, PyObject *args, PyObject *kw
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxOGLCleanUp",_kwnames)) 
         return NULL;
 {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxOGLCleanUp();
 
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;

@@ -33,8 +33,10 @@ static void wxPyCoreAPI_IMPORT() {
 #define SWIG_RegisterMapping(a, b, c)   (wxPyCoreAPIPtr->p_SWIG_RegisterMapping(a, b, c))
 #define SWIG_addvarlink(a, b, c, d)     (wxPyCoreAPIPtr->p_SWIG_addvarlink(a, b, c, d))
 
+#define wxPyBeginAllowThreads()         (wxPyCoreAPIPtr->p_wxPyBeginAllowThreads())
+#define wxPyEndAllowThreads(a)          (wxPyCoreAPIPtr->p_wxPyEndAllowThreads(a))
 #define wxPyBeginBlockThreads()         (wxPyCoreAPIPtr->p_wxPyBeginBlockThreads())
-#define wxPyEndBlockThreads(a)          (wxPyCoreAPIPtr->p_wxPyEndBlockThreads(a))
+#define wxPyEndBlockThreads()           (wxPyCoreAPIPtr->p_wxPyEndBlockThreads())
 
 #define wxPyConstructObject(a,b,c)      (wxPyCoreAPIPtr->p_wxPyConstructObject(a,b,c))
 #define wxPy_ConvertList(a,b)           (wxPyCoreAPIPtr->p_wxPy_ConvertList(a,b))

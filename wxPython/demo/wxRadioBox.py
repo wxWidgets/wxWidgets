@@ -20,6 +20,8 @@ class TestRadioButtons(wxPanel):
 
         wxRadioButton(self, 32, "wxRadioButton", (235, 35))
         wxRadioButton(self, 33, "wxRadioButton", (235, 55))
+        EVT_RADIOBUTTON(self, 32, self.EvtRadioButton)
+        EVT_RADIOBUTTON(self, 33, self.EvtRadioButton)
 
         rb = wxRadioBox(self, 35, "", wxPoint(35, 120), wxDefaultSize,
                         sampleList, 3, wxRA_SPECIFY_COLS | wxNO_BORDER)
@@ -28,6 +30,9 @@ class TestRadioButtons(wxPanel):
 
     def EvtRadioBox(self, event):
         self.log.WriteText('EvtRadioBox: %d\n' % event.GetInt())
+
+    def EvtRadioButton(self, event):
+        self.log.write('EvtRadioButton:%d\n' % event.GetInt())
 
 #---------------------------------------------------------------------------
 

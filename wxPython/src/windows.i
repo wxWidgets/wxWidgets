@@ -123,7 +123,7 @@ public:
         wxPyValidator* ptr = NULL;
         wxPyValidator* self = (wxPyValidator*)this;
 
-        wxPyTState* state = wxPyBeginBlockThreads();
+        wxPyBeginBlockThreads();
         if (self->m_myInst.findCallback("Clone")) {
             PyObject* ro;
             ro = self->m_myInst.callCallbackObj(Py_BuildValue("()"));
@@ -132,7 +132,7 @@ public:
                 Py_DECREF(ro);
             }
         }
-        wxPyEndBlockThreads(state);
+        wxPyEndBlockThreads();
 
         // This is very dangerous!!! But is the only way I could find
         // to squash a memory leak.  Currently it is okay, but if the

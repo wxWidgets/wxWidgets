@@ -12,12 +12,12 @@
 
 
 //---------------------------------------------------------------------------
-// Tell SWIG to wrap all the wrappers with Python's thread macros
+// Tell SWIG to wrap all the wrappers with our thread protection
 
 %except(python) {
-    wxPy_BEGIN_ALLOW_THREADS;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
     $function
-    wxPy_END_ALLOW_THREADS;
+    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }
 
