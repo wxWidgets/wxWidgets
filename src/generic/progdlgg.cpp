@@ -110,6 +110,13 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     m_state = hasAbortButton ? Continue : Uncancelable;
     m_maximum = maximum;
 
+#ifdef __WXMSW__
+    // we can't have values > 65,536 in the progress control under Windows, so
+    // scale everything down
+    m_factor = m_maximum / 65536 + 1;
+    m_maximum /= m_factor;
+#endif // __WXMSW__
+
     m_parentTop = parent;
     while ( m_parentTop && m_parentTop->GetParent() )
     {
@@ -142,7 +149,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         // note that we can't use wxGA_SMOOTH because it happens to also mean
         // wxDIALOG_MODAL and will cause the dialog to be modal. Have an extra
         // style argument to wxProgressDialog, perhaps.
-        m_gauge = new wxGauge(this, -1, maximum,
+        m_gauge = new wxGauge(this, -1, m_maximum,
                               wxDefaultPosition, wxDefaultSize,
                               wxGA_HORIZONTAL);
 
@@ -305,19 +312,20 @@ bool
 wxProgressDialog::Update(int value, const wxString& newmsg)
 {
     wxASSERT_MSG( value == -1 || m_gauge, wxT("cannot update non existent dialog") );
+
+#ifdef __WXMSW__
+    value /= m_factor;
+#endif // __WXMSW__
+
     wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
 
     if ( m_gauge )
+    {
         m_gauge->SetValue(value + 1);
+    }
 
     if ( !newmsg.IsEmpty() )
     {
-#ifdef __WXMSW__
-        // this seems to be necessary or garbage is left when the new label is
-        // longer than the old one
-        m_msg->SetLabel(wxEmptyString);
-#endif // MSW
-
         m_msg->SetLabel(newmsg);
 
         wxYield();
