@@ -83,8 +83,9 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
   bool success = wxWindow::Create(parent, id, pos, size, style | wxTAB_TRAVERSAL, name);
 
   // Don't wish this to be found as a child
+#ifndef __WXMAC__
   parent->GetChildren().DeleteObject(this);
-
+#endif
   InitColours();
 
   SetFont(m_defaultStatusBarFont);
@@ -196,7 +197,7 @@ void wxStatusBar::DrawFieldText(wxDC& dc, int i)
   int xpos = rect.x + leftMargin;
   int ypos = (int) (((rect.height - y) / 2 ) + rect.y + 0.5) ;
   
-#ifdef __WXGTK__
+#if defined( __WXGTK__ ) || defined(__WXMAC__)
   xpos++;
   ypos++;
 #endif

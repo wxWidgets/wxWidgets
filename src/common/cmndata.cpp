@@ -203,8 +203,9 @@ wxPrintData::wxPrintData(const wxPrintData& printData)
 {
 #ifdef __WXMSW__
     m_devMode = NULL;
+#elif defined( __WXMAC__ )
+	m_macPrintInfo = NULL ;
 #endif
-
     (*this) = printData;
 }
 
@@ -692,6 +693,8 @@ wxPrintDialogData::wxPrintDialogData()
 {
 #ifdef __WXMSW__
     m_printDlgData = NULL;
+#elif defined( __WXMAC__ )
+	m_macPrintInfo = NULL ;
 #endif
     m_printFromPage = 0;
     m_printToPage = 0;
@@ -711,6 +714,11 @@ wxPrintDialogData::wxPrintDialogData()
 
 wxPrintDialogData::wxPrintDialogData(const wxPrintDialogData& dialogData)
 {
+#ifdef __WXMSW__
+    m_printDlgData = NULL;
+#elif defined( __WXMAC__ )
+	m_macPrintInfo = NULL ;
+#endif
     (*this) = dialogData;
 }
 
@@ -994,6 +1002,11 @@ wxPageSetupDialogData::wxPageSetupDialogData()
 
 wxPageSetupDialogData::wxPageSetupDialogData(const wxPageSetupDialogData& dialogData)
 {
+#if defined(__WIN95__)
+    m_pageSetupData = NULL;
+#elif defined( __WXMAC__ )
+	m_macPageSetupInfo = NULL ;
+#endif
     (*this) = dialogData;
 }
 
@@ -1210,7 +1223,7 @@ void wxPageSetupDialogData::SetOwnerWindow(wxWindow* win)
 #endif // Win95
 
 #ifdef __WXMAC__
-void wxPageSetupData::ConvertToNative()
+void wxPageSetupDialogData::ConvertToNative()
 {
 	if ( !m_macPageSetupInfo )
 	{
@@ -1239,7 +1252,7 @@ void wxPageSetupData::ConvertToNative()
 	}
 }
 
-void wxPageSetupData::ConvertFromNative()
+void wxPageSetupDialogData::ConvertFromNative()
 {
 	if ( m_macPageSetupInfo )
 	{

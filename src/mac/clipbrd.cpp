@@ -23,6 +23,7 @@
 
 #include <string.h>
 
+// open/close
 bool wxOpenClipboard()
 {
     return TRUE;
@@ -30,60 +31,60 @@ bool wxOpenClipboard()
 
 bool wxCloseClipboard()
 {
-    return FALSE;
+    return TRUE;
 }
+
+bool wxIsClipboardOpened()
+{
+     return TRUE;
+}
+
+// get/set data
 
 bool wxEmptyClipboard()
 {
-		ZeroScrap() ;
+	ZeroScrap() ;
+    return TRUE;
+}
+
+bool wxSetClipboardData(wxDataFormat dataFormat,const void *data,int width , int height)
+{
     return FALSE;
 }
 
-bool wxClipboardOpen()
+void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 {
-    // TODO
-    return FALSE;
-}
-
-bool wxIsClipboardFormatAvailable(int dataFormat)
-{
-    // TODO
-    return FALSE;
-}
-
-bool wxSetClipboardData(int dataFormat, wxObject *obj, int width, int height)
-{
-    // TODO
-    return FALSE;
-}
-
-wxObject *wxGetClipboardData(int dataFormat, long *len)
-{
-    // TODO
     return NULL;
 }
 
-int  wxEnumClipboardFormats(int dataFormat)
+
+// clipboard formats
+
+bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 {
-    // TODO
+     return FALSE;
+}
+
+wxDataFormat wxEnumClipboardFormats(wxDataFormat dataFormat)
+{
+    return wxDataFormat();
+}
+
+int  wxRegisterClipboardFormat(wxChar *formatName)
+{
     return 0;
 }
 
-int  wxRegisterClipboardFormat(char *formatName)
+bool wxGetClipboardFormatName(wxDataFormat dataFormat, wxChar *formatName, int maxCount)
 {
-    // TODO
-    return 0;
-}
-
-bool wxGetClipboardFormatName(int dataFormat, char *formatName, int maxCount)
-{
-    // TODO
     return FALSE;
 }
 
 /*
  * Generalized clipboard implementation by Matthew Flatt
  */
+
+IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject)
 
 wxClipboard::wxClipboard()
 {

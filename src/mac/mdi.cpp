@@ -75,9 +75,9 @@ wxMDIParentFrame::~wxMDIParentFrame()
 }
 
 // Get size *available for subwindows* i.e. excluding menu bar.
-void wxMDIParentFrame::GetClientSize(int *x, int *y) const
+void wxMDIParentFrame::DoGetClientSize(int *x, int *y) const
 {
-    // TODO
+   wxFrame::DoGetClientSize( x , y ) ;
 }
 
 void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)

@@ -22,8 +22,8 @@ class WXDLLEXPORT wxFontRefData: public wxGDIRefData
 public:
     wxFontRefData()
     {
-        Init(12, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE,
-             "", wxFONTENCODING_DEFAULT);
+        Init(10, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE,
+             "Geneva", wxFONTENCODING_DEFAULT);
     }
 
     wxFontRefData(const wxFontRefData& data)

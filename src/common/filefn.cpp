@@ -1337,6 +1337,84 @@ wxString wxFindNextFile()
     return result;
 }
 
+#elif defined(__WXMAC__)
+
+struct MacDirectoryIterator
+{
+	CInfoPBRec			m_CPB ;
+	wxInt16				m_index ;
+	long				m_dirId ;
+	Str255				m_name ;
+} ;
+
+static int g_iter_flags ;
+
+static MacDirectoryIterator g_iter ;
+
+wxString wxFindFirstFile(const wxChar *spec, int flags)
+{
+    wxString result;
+
+    g_iter_flags = flags; /* MATTHEW: [5] Remember flags */
+
+    // Find path only so we can concatenate found file onto path
+    wxString path(wxPathOnly(spec));
+    if ( !path.IsEmpty() )
+        result << path << wxT('\\');
+
+	FSSpec fsspec ;
+
+	wxUnixFilename2FSSpec( result , &fsspec ) ;
+	g_iter.m_CPB.hFileInfo.ioVRefNum = fsspec.vRefNum ;
+	g_iter.m_CPB.hFileInfo.ioNamePtr = g_iter.m_name ;
+	g_iter.m_index = 0 ;
+	
+	Boolean isDir ;
+	FSpGetDirectoryID( &fsspec , &g_iter.m_dirId , &isDir ) ;
+	if ( !isDir )
+		return wxEmptyString ;
+		
+	return wxFindNextFile( ) ;
+}
+
+wxString wxFindNextFile()
+{
+    wxString result;
+
+	short err = noErr ;
+	
+	while ( err == noErr )
+	{
+		g_iter.m_index++ ;
+		g_iter.m_CPB.dirInfo.ioFDirIndex = g_iter.m_index;
+		g_iter.m_CPB.dirInfo.ioDrDirID = g_iter.m_dirId;	/* we need to do this every time */
+		err = PBGetCatInfoSync((CInfoPBPtr)&g_iter.m_CPB);
+		if ( err != noErr )
+			break ;
+			
+		if ( ( g_iter.m_CPB.dirInfo.ioFlAttrib & ioDirMask) != 0 && (g_iter_flags & wxDIR) ) //  we have a directory
+			break ;
+			
+		if ( ( g_iter.m_CPB.dirInfo.ioFlAttrib & ioDirMask) == 0 && !(g_iter_flags & wxFILE ) )
+			continue ;
+			 
+		// hit !
+		break ;
+	}
+	if ( err != noErr )
+	{
+		return wxEmptyString ;
+	}
+	FSSpec spec ;
+	
+	FSMakeFSSpecCompat(g_iter.m_CPB.hFileInfo.ioVRefNum,
+								   g_iter.m_dirId,
+								   g_iter.m_name,
+								   &spec) ;
+								  
+	return wxMacFSSpec2UnixFilename( &spec ) ;
+}
+
 #elif defined(__WXMSW__)
 
 #ifdef __WIN32__
@@ -1521,14 +1599,25 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 	FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
 	wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
 	strcpy( buf , res ) ;
-	if (0)
+	if (0) {
 #else
   if (getcwd(cbuf, sz) == NULL) {
 #endif
     delete [] cbuf;
-#else
+#else // wxUnicode
 #ifdef _MSC_VER
   if (_getcwd(buf, sz) == NULL) {
+#elif defined( __WXMAC__)
+	enum 
+	{ 
+		SFSaveDisk = 0x214, CurDirStore = 0x398 
+	};
+	FSSpec cwdSpec ;
+	
+	FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
+	wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
+	strcpy( buf , res ) ;
+	if (0) {
 #else
   if (getcwd(buf, sz) == NULL) {
 #endif

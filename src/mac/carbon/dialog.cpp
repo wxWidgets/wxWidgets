@@ -369,6 +369,13 @@ void wxDialog::OnCancel(wxCommandEvent& event)
     }
 }
 
+void wxDialog::OnPaint(wxPaintEvent& event)
+{
+  // No: if you call the default procedure, it makes
+  // the following painting code not work.
+//  wxWindow::OnPaint(event);
+}
+
 void wxDialog::OnCloseWindow(wxCloseEvent& event)
 {
     // We'll send a Cancel message by default,

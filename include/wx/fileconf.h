@@ -194,6 +194,8 @@ public:
     { return wxConfigBase::Write(key, value); }
   bool Write(const wxString& key, bool value)
     { return wxConfigBase::Write(key, value); }
+  bool Write(const wxString& key, const wxChar* value)
+    { return wxConfigBase::Write(key, value); }
 
   virtual bool Flush(bool bCurrentOnly = FALSE);
 

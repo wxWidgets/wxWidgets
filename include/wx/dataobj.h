@@ -446,6 +446,8 @@ private:
     // #include "wx/motif/dataobj2.h" -- not yet
 #elif defined(__WXGTK__)
     #include "wx/gtk/dataobj2.h"
+#elif defined(__WXMAC__)
+    #include "wx/mac/dataobj2.h"
 #elif defined(__WXPM__)
     #include "wx/os2/dataobj2.h"
 #endif

@@ -78,8 +78,8 @@ wxClientDC::wxClientDC(wxWindow *window)
 	m_macPort = UMAGetWindowPort( windowref ) ;
 	MacSetupPort() ;
  	m_ok = TRUE ;
-  SetBackground(wxBrush(window->GetBackgroundColour(), wxSOLID));
-
+  	SetBackground(wxBrush(window->GetBackgroundColour(), wxSOLID));
+	SetFont( window->GetFont() ) ;
 }
 
 wxClientDC::~wxClientDC(void)
@@ -108,6 +108,7 @@ wxPaintDC::wxPaintDC(wxWindow *window)
 	window->GetUpdateRegion().GetBox( x , y , w , h ) ;
 	SetClippingRegion( x , y , w , h ) ;
   	SetBackground(wxBrush(window->GetBackgroundColour(), wxSOLID));
+  	SetFont(window->GetFont() ) ;
 }
 
 wxPaintDC::~wxPaintDC()

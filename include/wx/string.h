@@ -302,7 +302,7 @@ public:
   wxString(const unsigned char* psz, size_t nLength = wxSTRING_MAXLEN)
     { InitWith((const char*)psz, 0, nLength); }
     // from multibyte string
-  wxString(const char *psz, wxMBConv& WXUNUSED(conv), size_t nLength = wxSTRING_MAXLEN)
+  wxString(const char *psz, wxMBConv& WXUNUSED(conv) , size_t nLength = wxSTRING_MAXLEN)
     { InitWith(psz, 0, nLength); }
 
 #if wxUSE_WCHAR_T

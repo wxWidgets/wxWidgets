@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        os2/dataobj2.h
+// Name:        mac/dataobj2.h
 // Purpose:     declaration of standard wxDataObjectSimple-derived classes
-// Author:      David Webster (adapted from Robert Roebling's gtk port
+// Author:      Stefan Csomor (adapted from Robert Roebling's gtk port
 // Modified by:
 // Created:     10/21/99
 // RCS-ID:      $Id$
@@ -9,8 +9,8 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_DATAOBJ2_H_
-#define _WX_GTK_DATAOBJ2_H_
+#ifndef _WX_MAC_DATAOBJ2_H_
+#define _WX_MAC_DATAOBJ2_H_
 
 #ifdef __GNUG__
     #pragma interface "dataobj.h"
@@ -86,5 +86,5 @@ private:
     { return(wxDataObjectSimple::SetData(rFormat, nLen, pBuf)); }
 };
 
-#endif // _WX_GTK_DATAOBJ2_H_
+#endif // _WX_MAC_DATAOBJ2_H_
 

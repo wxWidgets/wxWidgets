@@ -213,7 +213,8 @@ class WXDLLEXPORT wxObject
 #endif
 
 #ifdef __MWERKS__
-  void * operator new[] (size_t size, wxChar * fileName  , int lineNum = 0);
+  void * operator new[] (size_t size, wxChar * fileName , int lineNum = 0);
+  void * operator new[] (size_t size) { return operator new[] ( size , NULL , 0 ) ; }
   void operator delete[] (void * buf);
 #endif
 

@@ -227,6 +227,9 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     // Update the display (especially on X, GTK)
     wxYield();
+    #ifdef __WXMAC__
+    MacUpdateImmediately() ;
+    #endif
 }
 
 wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
@@ -313,6 +316,9 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
        // update the display
        wxYield();
    }
+    #ifdef __WXMAC__
+    MacUpdateImmediately() ;
+    #endif
 
    return m_state != Canceled;
 }

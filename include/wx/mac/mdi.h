@@ -64,7 +64,7 @@ public:
   // Gets the size available for subwindows after menu size, toolbar size
   // and status bar size have been subtracted. If you want to manage your own
   // toolbar(s), don't call SetToolBar.
-  void GetClientSize(int *width, int *height) const;
+  void DoGetClientSize(int *width, int *height) const;
 
   // Get the active MDI child window (Windows only)
   wxMDIChildFrame *GetActiveChild() const ;

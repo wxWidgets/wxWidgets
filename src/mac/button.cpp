@@ -74,6 +74,14 @@ wxSize wxButton::DoGetBestSize()
     return wxSize(wBtn, hBtn);
 }
 
+wxSize wxButton::GetDefaultSize()
+{
+    int wBtn = 15 * 8 + 12 + 2 * 2;
+	int hBtn = 13 + 2 * 2;
+
+    return wxSize(wBtn, hBtn);
+}
+
 void wxButton::Command (wxCommandEvent & event)
 {
     ProcessCommand (event);

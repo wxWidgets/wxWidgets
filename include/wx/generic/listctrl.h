@@ -456,7 +456,8 @@ class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
     void OnSize( wxSizeEvent &event );
-
+	void OnScroll(wxScrollWinEvent& event) ;
+	
     void DrawImage( int index, wxDC *dc, int x, int y );
     void GetImageSize( int index, int &width, int &height );
     int GetIndexOfLine( const wxListLineData *line );

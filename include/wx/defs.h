@@ -586,6 +586,25 @@ enum
 #define  wxByte   wxUint8
 #define  wxWord   wxUint16
 
+// base floating point types 
+// wxFloat32 : 32 bit IEEE float ( 1 sign , 8 exponent bits , 23 fraction bits
+// wxFloat64 : 64 bit IEEE float ( 1 sign , 11 exponent bits , 52 fraction bits
+// wxDouble : native fastest representation that has at least wxFloat64
+//            precision, so use the IEEE types for storage , and this for calculations
+
+typedef float wxFloat32 ; 
+#if defined( __WXMAC__ )  && defined (__MWERKS__) 
+	typedef short double	wxFloat64;
+#else
+	typedef double			wxFloat64;
+#endif
+
+#if defined( __WXMAC__ )  && !defined( __POWERPC__ ) 
+	typedef long double wxDouble;
+#else
+	typedef double wxDouble ;
+#endif
+
 // ----------------------------------------------------------------------------
 // byte ordering related definition and macros
 // ----------------------------------------------------------------------------
@@ -604,6 +623,36 @@ enum
 
 // byte swapping
 
+#if defined (__MWERKS__) && ( (__MWERKS__ < 0x0900) || macintosh )
+// assembler versions for these
+#ifdef __POWERPC__
+	inline wxUint16 wxUINT16_SWAP_ALWAYS( wxUint16 i ) 
+		{return (__lhbrx( &i , 0 ) ) ;}
+	inline wxInt16 wxINT16_SWAP_ALWAYS( wxInt16 i ) 
+		{return (__lhbrx( &i , 0 ) ) ;}
+	inline wxUint32 wxUINT32_SWAP_ALWAYS( wxUint32 i ) 
+		{return (__lwbrx( &i , 0 ) ) ;}
+	inline wxInt32 wxINT32_SWAP_ALWAYS( wxInt32 i ) 
+		{return (__lwbrx( &i , 0 ) ) ;}
+#else
+	#pragma parameter __D0 wxUINT16_SWAP_ALWAYS(__D0)
+	pascal wxUint16 wxUINT16_SWAP_ALWAYS(wxUint16 value)
+		= { 0xE158 };
+	
+	#pragma parameter __D0 wxINT16_SWAP_ALWAYS(__D0)
+	pascal wxInt16 wxUINT16_SWAP_ALWAYS(wxInt16 value)
+		= { 0xE158 };
+
+	#pragma parameter __D0 wxUINT32_SWAP_ALWAYS (__D0)
+	pascal wxUint32 wxUINT32_SWAP_ALWAYS(wxUint32 value)
+		= { 0xE158, 0x4840, 0xE158 };
+
+	#pragma parameter __D0 wxINT32_SWAP_ALWAYS (__D0)
+	pascal wxInt32 wxUINT32_SWAP_ALWAYS(wxInt32 value)
+		= { 0xE158, 0x4840, 0xE158 };
+
+#endif
+#else // !MWERKS
 #define wxUINT16_SWAP_ALWAYS(val) \
    ((wxUint16) ( \
     (((wxUint16) (val) & (wxUint16) 0x00ffU) << 8) | \
@@ -627,7 +676,7 @@ enum
     (((wxUint32) (val) & (wxUint32) 0x0000ff00U) <<  8) | \
     (((wxUint32) (val) & (wxUint32) 0x00ff0000U) >>  8) | \
     (((wxUint32) (val) & (wxUint32) 0xff000000U) >> 24)))
-
+#endif
 // machine specific byte swapping
 
 #ifdef WORDS_BIGENDIAN

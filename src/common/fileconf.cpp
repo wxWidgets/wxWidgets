@@ -194,7 +194,19 @@ wxString wxFileConfig::GetGlobalDir()
   #elif defined(__WXSTUBS__)
     wxASSERT_MSG( FALSE, wxT("TODO") ) ;
   #elif defined(__WXMAC__)
-    wxASSERT_MSG( FALSE, wxT("TODO") ) ;
+  {
+		short 		vRefNum  ;
+		long 		dirID ;
+		
+		if ( FindFolder( (short) kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder, &vRefNum, &dirID) == noErr)
+		{
+			FSSpec file ;
+			if ( FSMakeFSSpec( vRefNum , dirID , "\p" , &file ) == noErr )
+			{
+				strDir = wxMacFSSpec2UnixFilename( &file ) + "/" ;
+ 			}
+		}
+  }
   #else // Windows
     wxChar szWinDir[MAX_PATH];
     ::GetWindowsDirectory(szWinDir, MAX_PATH);
@@ -210,12 +222,17 @@ wxString wxFileConfig::GetLocalDir()
 {
   wxString strDir;
 
+#ifndef __WXMAC__
   wxGetHomeDir(&strDir);
 
 #ifdef  __UNIX__
   if (strDir.Last() != wxT('/')) strDir << wxT('/');
 #else
   if (strDir.Last() != wxT('\\')) strDir << wxT('\\');
+#endif
+#else
+	// no local dir concept on mac
+	return GetGlobalDir() ;
 #endif
 
   return strDir;
@@ -229,6 +246,8 @@ wxString wxFileConfig::GetGlobalFileName(const wxChar *szFile)
   if ( wxStrchr(szFile, wxT('.')) == NULL )
   #ifdef  __UNIX__
     str << wxT(".conf");
+  #elif defined( __WXMAC__ )
+     str << " Preferences";
   #else   // Windows
     str << wxT(".ini");
   #endif  // UNIX/Win
@@ -251,6 +270,10 @@ wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
       str << wxT(".ini");
   #endif
 
+
+  #ifdef __WXMAC__
+     str << " Preferences";
+  #endif
   return str;
 }
 
@@ -749,7 +772,25 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
     }
   }
 
+#ifndef __WXMAC__
   return file.Commit();
+#else
+  bool ret = file.Commit();
+  if ( ret )
+  {
+  	FSSpec spec ;
+  	
+  	wxUnixFilename2FSSpec( m_strLocalFile , &spec ) ;
+  	FInfo finfo ;
+  	if ( FSpGetFInfo( &spec , &finfo ) == noErr )
+  	{
+  		finfo.fdType = 'TEXT' ;
+  		finfo.fdCreator = 'ttxt' ;
+  		FSpSetFInfo( &spec , &finfo ) ;
+  	}
+  }
+  return ret ;
+#endif
 }
 
 // ----------------------------------------------------------------------------

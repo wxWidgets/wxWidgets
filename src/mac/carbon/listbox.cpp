@@ -562,8 +562,8 @@ void wxListBox::MacDoClick()
 	int n, count = GetSelections(aSelections);
 	if ( count > 0 )
 	{
-		  event.m_commandInt = aSelections[0] ;
-          if ( HasClientObjectData() )
+           n = aSelections[0];
+           if ( HasClientObjectData() )
               event.SetClientObject( GetClientObject(n) );
           else if ( HasClientUntypedData() )
               event.SetClientData( GetClientData(n) );

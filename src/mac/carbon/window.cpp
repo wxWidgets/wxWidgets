@@ -58,6 +58,7 @@ BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
   EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
   EVT_INIT_DIALOG(wxWindow::OnInitDialog)
   EVT_IDLE(wxWindow::OnIdle)
+//  EVT_SCROLL(wxWindow::OnScroll)
 END_EVENT_TABLE()
 
 #endif
@@ -651,17 +652,14 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
     const wxFont *fontToUse = theFont;
     if ( !fontToUse )
         fontToUse = &m_font;
-/*
-    if ( x )
-        *x = sizeRect.cx;
-    if ( y )
-        *y = sizeRect.cy;
-    if ( descent )
-        *descent = tm.tmDescent;
-    if ( externalLeading )
-        *externalLeading = tm.tmExternalLeading;
-*/
-
+        
+    wxClientDC dc( this ) ;
+    long lx,ly,ld,le ;
+    dc.GetTextExtent( string , &lx , &ly , &ld, &le, fontToUse ) ;
+    *externalLeading = le ;
+    *descent = ld ;
+    *x = lx ;
+    *y = ly ;
 }
 
 void wxWindow::MacEraseBackground( Rect *rect )
@@ -966,6 +964,51 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     InvalRgn( updateRgn ) ;
     DisposeRgn( updateRgn ) ;
 	}
+}
+
+void wxWindow::MacOnScroll(wxScrollEvent &event )
+{
+	if ( event.m_eventObject == m_vScrollBar || event.m_eventObject == m_hScrollBar )
+	{
+	    wxScrollWinEvent wevent;
+	    wevent.SetPosition(event.GetPosition());
+	    wevent.SetOrientation(event.GetOrientation());
+	    wevent.m_eventObject = this;
+	
+	    switch ( event.m_eventType )
+	    {
+	    case wxEVT_SCROLL_TOP:
+	        wevent.m_eventType = wxEVT_SCROLLWIN_TOP;
+	        break;
+	
+	    case wxEVT_SCROLL_BOTTOM:
+	        wevent.m_eventType = wxEVT_SCROLLWIN_BOTTOM;
+	        break;
+	
+	    case wxEVT_SCROLL_LINEUP:
+	        wevent.m_eventType = wxEVT_SCROLLWIN_LINEUP;
+	        break;
+	
+	    case wxEVT_SCROLL_LINEDOWN:
+	        wevent.m_eventType = wxEVT_SCROLLWIN_LINEDOWN;
+	        break;
+	
+	    case wxEVT_SCROLL_PAGEUP:
+	        wevent.m_eventType = wxEVT_SCROLLWIN_PAGEUP;
+	        break;
+	
+	    case wxEVT_SCROLL_PAGEDOWN:
+	        wevent.m_eventType = wxEVT_SCROLLWIN_PAGEDOWN;
+	        break;
+	
+	    case wxEVT_SCROLL_THUMBTRACK:
+	        wevent.m_eventType = wxEVT_SCROLLWIN_THUMBTRACK;
+	        break;
+	
+	    }
+		
+	    GetEventHandler()->ProcessEvent(wevent);
+    }
 }
 
 bool wxWindow::SetFont(const wxFont& font)
@@ -1478,12 +1521,15 @@ void wxWindow::MacCreateScrollBars( long style )
 	{
 		m_vScrollBar = new wxScrollBar(this, wxWINDOW_VSCROLL, wxPoint(m_width-MAC_SCROLLBAR_SIZE, 0), 
 			wxSize(MAC_SCROLLBAR_SIZE, m_height - adjust), wxVERTICAL);
+//		m_vScrollBar->PushEventHandler( this ) ;
 	}
 	if ( style  & wxHSCROLL )
 	{
 		m_hScrollBar = new wxScrollBar(this, wxWINDOW_HSCROLL, wxPoint(0 , m_height-MAC_SCROLLBAR_SIZE ), 
 			wxSize( m_width - adjust, MAC_SCROLLBAR_SIZE), wxHORIZONTAL);
+//		m_hScrollBar->PushEventHandler( this ) ;
 	}
+	
 	// because the create does not take into account the client area origin
 	MacRepositionScrollBars() ; // we might have a real position shift
 }

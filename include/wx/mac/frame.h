@@ -131,7 +131,7 @@ public:
 
   // Checks if there is a toolbar, and returns the first free client position
   virtual wxPoint GetClientAreaOrigin() const;
-	virtual	void GetClientSize(int *x, int *y) const ;
+	virtual	void DoGetClientSize(int *x, int *y) const ;
 	virtual void DoSetClientSize(int clientwidth, int clientheight) ;
 
   // tooltip management

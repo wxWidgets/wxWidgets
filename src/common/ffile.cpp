@@ -64,11 +64,19 @@ bool wxFFile::Open(const wxChar *filename, const char *mode)
     tmp_fname = new char[fname_len];
     wxWX2MB(tmp_fname, filename, fname_len);
 
+#ifdef __WXMAC__
+  	m_fp = fopen(wxUnix2MacFilename( tmp_fname ), mode);
+#else
     m_fp = fopen(tmp_fname, mode);
+#endif
 
     delete tmp_fname;
 #else
+#ifdef __WXMAC__
+  	m_fp = fopen(wxUnix2MacFilename( filename ), mode);
+#else
     m_fp = fopen(filename, mode);
+#endif
 #endif
 
 

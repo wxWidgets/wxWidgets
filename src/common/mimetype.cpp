@@ -146,6 +146,59 @@ private:
     wxArrayFileTypeInfo m_fallbacks;
 };
 
+#elif defined( __WXMAC__ )
+
+WX_DECLARE_EXPORTED_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo);
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(wxArrayFileTypeInfo);
+
+class wxMimeTypesManagerImpl
+{
+public :
+    wxMimeTypesManagerImpl() { }
+
+    // implement containing class functions
+    wxFileType *GetFileTypeFromExtension(const wxString& ext);
+    wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
+
+    // this are NOPs under MacOS
+    bool ReadMailcap(const wxString& filename, bool fallback = TRUE) { return TRUE; }
+    bool ReadMimeTypes(const wxString& filename) { return TRUE; }
+
+    void AddFallback(const wxFileTypeInfo& ft) { m_fallbacks.Add(ft); }
+
+private:
+    wxArrayFileTypeInfo m_fallbacks;
+};
+
+class wxFileTypeImpl
+{
+public:
+    // initialize us with our file type name
+    void SetFileType(const wxString& strFileType)
+        { m_strFileType = strFileType; }
+    void SetExt(const wxString& ext)
+        { m_ext = ext; }
+
+    // implement accessor functions
+    bool GetExtensions(wxArrayString& extensions);
+    bool GetMimeType(wxString *mimeType) const;
+    bool GetIcon(wxIcon *icon) const;
+    bool GetDescription(wxString *desc) const;
+    bool GetOpenCommand(wxString *openCmd,
+                        const wxFileType::MessageParameters&) const
+        { return GetCommand(openCmd, "open"); }
+    bool GetPrintCommand(wxString *printCmd,
+                         const wxFileType::MessageParameters&) const
+        { return GetCommand(printCmd, "print"); }
+
+private:
+    // helper function
+    bool GetCommand(wxString *command, const char *verb) const;
+
+    wxString m_strFileType, m_ext;
+};
+
 #else  // Unix
 
 // this class uses both mailcap and mime.types to gather information about file
@@ -876,6 +929,121 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
     return NULL;
 }
 
+#elif defined ( __WXMAC__ )
+
+
+bool wxFileTypeImpl::GetCommand(wxString *command, const char *verb) const
+{
+    return FALSE;
+}
+
+// @@ this function is half implemented
+bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
+{
+    return FALSE;
+}
+
+bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
+{
+	if ( m_strFileType.Length() > 0 )
+	{
+		*mimeType = m_strFileType ;
+		return TRUE ;
+	}
+	else
+    return FALSE;
+}
+
+bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
+{
+    // no such file type or no value or incorrect icon entry
+    return FALSE;
+}
+
+bool wxFileTypeImpl::GetDescription(wxString *desc) const
+{
+    return FALSE;
+}
+
+// extension -> file type
+wxFileType *
+wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& e)
+{
+	wxString ext = e ;
+	ext = ext.Lower() ;
+	if ( ext == "txt" )
+	{
+      wxFileType *fileType = new wxFileType;
+      fileType->m_impl->SetFileType("text/text");
+      fileType->m_impl->SetExt(ext);
+      return fileType;
+  }
+	else if ( ext == "htm" || ext == "html" )
+	{
+      wxFileType *fileType = new wxFileType;
+      fileType->m_impl->SetFileType("text/html");
+      fileType->m_impl->SetExt(ext);
+      return fileType;
+	}
+	else if ( ext == "gif" )
+	{
+      wxFileType *fileType = new wxFileType;
+      fileType->m_impl->SetFileType("image/gif");
+      fileType->m_impl->SetExt(ext);
+      return fileType;
+	}
+	else if ( ext == "png" )
+	{
+      wxFileType *fileType = new wxFileType;
+      fileType->m_impl->SetFileType("image/png");
+      fileType->m_impl->SetExt(ext);
+      return fileType;
+	}
+	else if ( ext == "jpg" || ext == "jpeg" )
+	{
+      wxFileType *fileType = new wxFileType;
+      fileType->m_impl->SetFileType("image/jpeg");
+      fileType->m_impl->SetExt(ext);
+      return fileType;
+	}
+	else if ( ext == "bmp" )
+	{
+      wxFileType *fileType = new wxFileType;
+      fileType->m_impl->SetFileType("image/bmp");
+      fileType->m_impl->SetExt(ext);
+      return fileType;
+	}
+	else if ( ext == "tif" || ext == "tiff" )
+	{
+      wxFileType *fileType = new wxFileType;
+      fileType->m_impl->SetFileType("image/tiff");
+      fileType->m_impl->SetExt(ext);
+      return fileType;
+	}
+	else if ( ext == "xpm" )
+	{
+      wxFileType *fileType = new wxFileType;
+      fileType->m_impl->SetFileType("image/xpm");
+      fileType->m_impl->SetExt(ext);
+      return fileType;
+	}
+	else if ( ext == "xbm" )
+	{
+      wxFileType *fileType = new wxFileType;
+      fileType->m_impl->SetFileType("image/xbm");
+      fileType->m_impl->SetExt(ext);
+      return fileType;
+	}
+  // unknown extension
+  return NULL;
+}
+
+// MIME type -> extension -> file type
+wxFileType *
+wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
+{
+    return NULL;
+}
 #else  // Unix
 
 MailCapEntry *

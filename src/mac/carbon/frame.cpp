@@ -490,9 +490,9 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     return pt;
 }
 
-void wxFrame::GetClientSize(int *x, int *y) const
+void wxFrame::DoGetClientSize(int *x, int *y) const
 {
-	wxWindow::GetClientSize( x , y ) ;
+	wxWindow::DoGetClientSize( x , y ) ;
 
   if ( GetStatusBar() )
   {

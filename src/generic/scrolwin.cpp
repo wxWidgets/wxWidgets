@@ -153,7 +153,10 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
    
 #ifdef __WXMSW__
    // Necessary?
-    UpdateWindow ((HWND) GetHWND());
+    UpdateWindow ((HWND) m_targetWindow->GetHWND());
+#endif
+#ifdef __WXMAC__
+		m_targetWindow->MacUpdateImmediately() ;
 #endif
 }
 
@@ -213,6 +216,9 @@ void wxScrolledWindow::OnScroll(wxScrollWinEvent& event)
         else
             m_targetWindow->Refresh();
   }
+#ifdef __WXMAC__
+	m_targetWindow->MacUpdateImmediately() ;
+#endif
 }
 
 int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
@@ -517,6 +523,9 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
 //    ::UpdateWindow ((HWND) GetHWND());
 #else
 //    Refresh();
+#endif
+#ifdef __WXMAC__
+		m_targetWindow->MacUpdateImmediately() ;
 #endif
 }
 

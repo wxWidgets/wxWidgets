@@ -300,7 +300,7 @@ void wxDC::SetClippingRegion( long x, long y, long width, long height )
 	long x1 = XLOG2DEV(m_clipX1);
 	long y1 = YLOG2DEV(m_clipY1);
 	long x2 = XLOG2DEV(m_clipX2);
-	long y2 = XLOG2DEV(m_clipY2);
+	long y2 = YLOG2DEV(m_clipY2);
 	
 	Rect clip = { y1 , x1 , y2 , x2 } ;
 	

@@ -23,6 +23,10 @@
 #include "wx/listctrl.h"
 #include "wx/generic/imaglist.h"
 
+#ifndef wxUSE_GENERIC_LIST_EXTENSIONS
+#define wxUSE_GENERIC_LIST_EXTENSIONS 0
+#endif
+
 //-----------------------------------------------------------------------------
 //  wxListItemData
 //-----------------------------------------------------------------------------
@@ -324,9 +328,10 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
                 wxString s;
                 item->GetText( s );
                 if (s.IsNull()) s = "H";
-                long lh;
-                dc->GetTextExtent( s, (long*) NULL, &lh );
+                long lw,lh;
+                dc->GetTextExtent( s, &lw, &lh );
                 item->SetSize( item->GetWidth(), lh );
+                m_bound_all.width += lw;
                 m_bound_all.height = lh;
                 node = node->Next();
             }
@@ -781,7 +786,17 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc( this );
     PrepareDC( dc );
-
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+	if ( m_owner->GetMode() & wxLC_REPORT )
+	{
+		int x , y ;
+		int xpix , ypix ;
+		
+		m_owner->GetScrollPixelsPerUnit( &xpix , &ypix ) ;
+		m_owner->ViewStart( &x, &y ) ;
+    	dc.SetDeviceOrigin( -x * xpix, 0 );
+	}
+#endif
     dc.BeginDrawing();
 
     dc.SetFont( GetFont() );
@@ -804,7 +819,12 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         m_owner->GetColumn( i, item );
         int cw = item.m_width-2;
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+        if ((i+1 == numColumns) || ( dc.LogicalToDeviceX(x+item.m_width) > w-5)) 
+        	cw = dc.DeviceToLogicalX(w)-x-1;
+#else
         if ((i+1 == numColumns) || (x+item.m_width > w-5)) cw = w-x-1;
+#endif
         dc.SetPen( *wxWHITE_PEN );
 
         DoDrawRect( &dc, x, y, cw, h-2 );
@@ -812,7 +832,11 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawText( item.m_text, x+4, y+3 );
         dc.DestroyClippingRegion();
         x += item.m_width;
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+        if (dc.LogicalToDeviceX(x) > w+5) break;
+#else
         if (x > w+5) break;
+#endif
     }
     dc.EndDrawing();
 }
@@ -1016,6 +1040,7 @@ BEGIN_EVENT_TABLE(wxListMainWindow,wxScrolledWindow)
   EVT_KEY_DOWN       (wxListMainWindow::OnKeyDown)
   EVT_SET_FOCUS      (wxListMainWindow::OnSetFocus)
   EVT_KILL_FOCUS     (wxListMainWindow::OnKillFocus)
+  EVT_SCROLLWIN		 (wxListMainWindow::OnScroll)
 END_EVENT_TABLE()
 
 wxListMainWindow::wxListMainWindow()
@@ -1065,7 +1090,11 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
 
     if (m_mode & wxLC_REPORT)
     {
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+        m_xScroll = 15;
+#else
         m_xScroll = 0;
+#endif
         m_yScroll = 15;
     }
     else
@@ -2082,7 +2111,11 @@ void wxListMainWindow::SetMode( long mode )
 
     if (m_mode & wxLC_REPORT)
     {
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+        m_xScroll = 15;
+#else
         m_xScroll = 0;
+#endif
         m_yScroll = 15;
     }
     else
@@ -2131,10 +2164,15 @@ void wxListMainWindow::CalculatePositions()
         int y = 1;
         int entireHeight = m_lines.Number() * lineSpacing + 2;
         int scroll_pos = GetScrollPos( wxVERTICAL );
+        int x_scroll_pos = GetScrollPos( wxHORIZONTAL );
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+#else
         SetScrollbars( m_xScroll, m_yScroll, 0, (entireHeight+15) / m_yScroll, 0, scroll_pos, TRUE );
+#endif
         GetClientSize( &clientWidth, &clientHeight );
 
         wxNode* node = m_lines.First();
+        int entireWidth = 0 ;
         while (node)
         {
             wxListLineData *line = (wxListLineData*)node->Data();
@@ -2146,10 +2184,17 @@ void wxListMainWindow::CalculatePositions()
                 line->SetColumnPosition( i, col_x );
                 col_x += GetColumnWidth( i );
             }
+            entireWidth = wxMax( entireWidth , col_x ) ;
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+            line->SetPosition( &dc, x, y, col_x );
+#endif
             y += lineSpacing;  // one pixel blank line between items
             node = node->Next();
         }
-	m_visibleLines = clientHeight / lineSpacing;
+		m_visibleLines = clientHeight / lineSpacing;
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+		SetScrollbars( m_xScroll, m_yScroll, entireWidth / m_xScroll , (entireHeight+15) / m_yScroll, x_scroll_pos  , scroll_pos, TRUE );
+#endif
     }
     else
     {
@@ -2437,6 +2482,25 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
     list_ctrl_compare_func_2 = fn;
     list_ctrl_compare_data = data;
     m_lines.Sort( list_ctrl_compare_func_1 );
+}
+
+void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
+{
+	wxScrolledWindow::OnScroll( event ) ;
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+
+    if (event.GetOrientation() == wxHORIZONTAL && ( m_mode & wxLC_REPORT ))
+    {
+    	wxListCtrl* lc = wxDynamicCast( GetParent() , wxListCtrl ) ;
+    	if ( lc )
+    	{
+    		lc->m_headerWin->Refresh() ;
+#ifdef __WXMAC__
+			lc->m_headerWin->MacUpdateImmediately() ;
+#endif
+    	}
+    }
+#endif
 }
 
 // -------------------------------------------------------------------------------------
