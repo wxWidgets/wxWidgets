@@ -23,6 +23,7 @@ OBJECTS = \
     $(S)\Document.obj	        \
 	$(S)\DocumentAccessor.obj	\
     $(S)\Editor.obj			\
+    $(S)\ExternalLexer.obj   \
     $(S)\Indicator.obj       \
     $(S)\KeyMap.obj			\
     $(S)\KeyWords.obj	    \
@@ -37,10 +38,12 @@ OBJECTS = \
 	$(S)\LexCrontab.obj		\
 	$(S)\LexCSS.obj			\
 	$(S)\LexEiffel.obj		\
+	$(S)\LexEScript.obj  \
 	$(S)\LexFortran.obj		\
 	$(S)\LexHTML.obj			\
 	$(S)\LexLisp.obj			\
 	$(S)\LexLua.obj			\
+	$(S)\LexLout.obj        \
 	$(S)\LexOthers.obj		\
 	$(S)\LexPOV.obj			\
 	$(S)\LexPascal.obj		\
