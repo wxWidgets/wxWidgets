@@ -10,10 +10,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-  #pragma implementation "string.h"
-#endif
-
 /*
  * About ref counting:
  *  1) all empty strings use g_strEmpty, nRefs = -1 (set in Init())

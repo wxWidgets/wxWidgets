@@ -18,10 +18,6 @@
 #ifndef _WX_WXSTRINGH__
 #define _WX_WXSTRINGH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "string.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -163,7 +159,12 @@ inline int Stricmp(const char *psz1, const char *psz2)
 #endif  // OS/compiler
 }
 
-#if wxUSE_STL
+// ----------------------------------------------------------------------------
+// deal with STL/non-STL/non-STL-but-wxUSE_STD_STRING
+// ----------------------------------------------------------------------------
+
+// in both cases we need to define wxStdString
+#if wxUSE_STL || defined(wxUSE_STD_STRING)
 
 #include "wx/beforestd.h"
 #include <string>
@@ -171,19 +172,28 @@ inline int Stricmp(const char *psz1, const char *psz2)
 
 #if wxUSE_UNICODE
     #ifdef HAVE_STD_WSTRING
-        typedef std::wstring wxStringBase;
+        typedef std::wstring wxStdString;
     #else
-        typedef std::basic_string<wxChar> wxStringBase;
+        typedef std::basic_string<wxChar> wxStdString;
     #endif
 #else
-    typedef std::string wxStringBase;
+    typedef std::string wxStdString;
 #endif
 
-#if (defined(__GNUG__) && (__GNUG__ < 3)) || \
-    (defined(_MSC_VER) && (_MSC_VER <= 1200))
-    #define wxSTRING_BASE_HASNT_CLEAR
-#endif
+#endif // need <string>
 
+#if wxUSE_STL
+
+    // we don't need an extra ctor from std::string when copy ctor already does
+    // the work
+    #undef wxUSE_STD_STRING
+
+    #if (defined(__GNUG__) && (__GNUG__ < 3)) || \
+        (defined(_MSC_VER) && (_MSC_VER <= 1200))
+        #define wxSTRING_BASE_HASNT_CLEAR
+    #endif
+
+    typedef wxStdString wxStringBase;
 #else // if !wxUSE_STL
 
 #ifndef HAVE_STD_STRING_COMPARE
@@ -644,6 +654,17 @@ public:
       : wxStringBase(psz, nLength) { }
   wxString(const wxChar *psz, wxMBConv& WXUNUSED(conv), size_t nLength = npos)
       : wxStringBase(psz, nLength == npos ? wxStrlen(psz) : nLength) { }
+
+  // even we're not build with wxUSE_STL == 1 it is very convenient to allow
+  // implicit conversions from std::string to wxString as this allows to use
+  // the same strings in non-GUI and GUI code, however we don't want to
+  // unconditionally add this ctor as it would make wx lib dependent on
+  // libstdc++ on some Linux versions which is bad, so instead we ask the
+  // client code to define this wxUSE_STD_STRING symbol if they need it
+#ifdef wxUSE_STD_STRING
+  wxString(const wxStdString& s)
+      : wxStringBase(s.c_str()) { }
+#endif // wxUSE_STD_STRING
 
 #if wxUSE_UNICODE
     // from multibyte string
