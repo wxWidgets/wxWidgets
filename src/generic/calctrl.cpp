@@ -95,6 +95,7 @@ BEGIN_EVENT_TABLE(wxYearSpinCtrl, wxSpinCtrl)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxCalendarEvent, wxCommandEvent)
 
 // ============================================================================
 // implementation
