@@ -176,38 +176,38 @@ bool wxFont::Ok() const
 
 int wxFont::GetPointSize() const
 {
-    wxCHECK_MSG( Ok(), 0, "invalid font" );
+    wxCHECK_MSG( Ok(), 0, _T("invalid font") );
 
     return M_FONTDATA->m_pointSize;
 }
 
 wxString wxFont::GetFaceName() const
 {
-    wxCHECK_MSG( Ok(), "", "invalid font" );
+    wxCHECK_MSG( Ok(), _T(""), _T("invalid font") );
 
     return M_FONTDATA->m_faceName;
 }
 
 int wxFont::GetFamily() const
 {
-    wxCHECK_MSG( Ok(), 0, "invalid font" );
+    wxCHECK_MSG( Ok(), 0, _T("invalid font") );
 
     return M_FONTDATA->m_family;
 }
 
 wxString wxFont::GetFamilyString() const
 {
-    wxCHECK_MSG( Ok(), "wxDEFAULT", "invalid font" );
+    wxCHECK_MSG( Ok(), _T("wxDEFAULT"), _T("invalid font") );
 
     switch (M_FONTDATA->m_family)
     {
-        case wxDECORATIVE:   return wxString("wxDECORATIVE");
-        case wxROMAN:        return wxString("wxROMAN");
-        case wxSCRIPT:       return wxString("wxSCRIPT");
-        case wxSWISS:        return wxString("wxSWISS");
-        case wxMODERN:       return wxString("wxMODERN");
-        case wxTELETYPE:     return wxString("wxTELETYPE");
-        default:             return "wxDEFAULT";
+        case wxDECORATIVE:   return wxString(_T("wxDECORATIVE"));
+        case wxROMAN:        return wxString(_T("wxROMAN"));
+        case wxSCRIPT:       return wxString(_T("wxSCRIPT"));
+        case wxSWISS:        return wxString(_T("wxSWISS"));
+        case wxMODERN:       return wxString(_T("wxMODERN"));
+        case wxTELETYPE:     return wxString(_T("wxTELETYPE"));
+        default:             return _T("wxDEFAULT");
     }
 
     return "wxDEFAULT";
@@ -215,51 +215,51 @@ wxString wxFont::GetFamilyString() const
 
 int wxFont::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), 0, "invalid font" );
+    wxCHECK_MSG( Ok(), 0, _T("invalid font") );
 
     return M_FONTDATA->m_style;
 }
 
 wxString wxFont::GetStyleString() const
 {
-    wxCHECK_MSG( Ok(), "wxDEFAULT", "invalid font" );
+    wxCHECK_MSG( Ok(), _T("wxDEFAULT"), _T("invalid font") );
 
     switch (M_FONTDATA->m_style)
     {
-        case wxNORMAL:   return wxString("wxNORMAL");
-        case wxSLANT:    return wxString("wxSLANT");
-        case wxITALIC:   return wxString("wxITALIC");
-        default:         return wxString("wxDEFAULT");
+        case wxNORMAL:   return wxString(_T("wxNORMAL"));
+        case wxSLANT:    return wxString(_T("wxSLANT"));
+        case wxITALIC:   return wxString(_T("wxITALIC"));
+        default:         return wxString(_T("wxDEFAULT"));
     }
 
-    return wxString("wxDEFAULT");
+    return wxString(_T("wxDEFAULT"));
 }
 
 int wxFont::GetWeight() const
 {
-    wxCHECK_MSG( Ok(), 0, "invalid font" );
+    wxCHECK_MSG( Ok(), 0, _T("invalid font") );
 
     return M_FONTDATA->m_weight;
 }
 
 wxString wxFont::GetWeightString() const
 {
-    wxCHECK_MSG( Ok(), "wxDEFAULT", "invalid font" );
+    wxCHECK_MSG( Ok(), _T("wxDEFAULT"), _T("invalid font") );
 
     switch (M_FONTDATA->m_weight)
     {
-        case wxNORMAL:   return wxString("wxNORMAL");
-        case wxBOLD:     return wxString("wxBOLD");
-        case wxLIGHT:    return wxString("wxLIGHT");
-        default:         return wxString("wxDEFAULT");
+        case wxNORMAL:   return wxString(_T("wxNORMAL"));
+        case wxBOLD:     return wxString(_T("wxBOLD"));
+        case wxLIGHT:    return wxString(_T("wxLIGHT"));
+        default:         return wxString(_T("wxDEFAULT"));
     }
 
-    return wxString("wxDEFAULT");
+    return wxString(_T("wxDEFAULT"));
 }
 
 bool wxFont::GetUnderlined() const
 {
-    wxCHECK_MSG( Ok(), FALSE, "invalid font" );
+    wxCHECK_MSG( Ok(), FALSE, _T("invalid font") );
 
     return M_FONTDATA->m_underlined;
 }
@@ -331,7 +331,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
 {
     if (!Ok())
     {
-        wxFAIL_MSG( "invalid font" );
+        wxFAIL_MSG( _T("invalid font") );
         return (GdkFont*) NULL;
     }
 
@@ -370,7 +370,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
     
     if (!font)
     {
-        wxLogError("could not load any font");
+        wxLogError(_T("could not load any font"));
     }
 	
     return font;
@@ -383,25 +383,25 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
 static GdkFont*wxLoadQueryFont( int pointSize, int family, int style, int weight, 
                                 bool underlined, const wxString &facename )
 {
-    char *xfamily = (char*) NULL;
-    char *xstyle = (char*) NULL;
-    char *xweight = (char*) NULL;
+    wxChar *xfamily = (wxChar*) NULL;
+    wxChar *xstyle = (wxChar*) NULL;
+    wxChar *xweight = (wxChar*) NULL;
     
     switch (family)
     {
-        case wxDECORATIVE: xfamily = "lucida"; break;
-        case wxROMAN:      xfamily = "times";  break;
-        case wxMODERN:     xfamily = "courier"; break;
-        case wxSWISS:      xfamily = "helvetica"; break;
-	case wxTELETYPE:   xfamily = "lucidatypewriter"; break;
-	case wxSCRIPT:     xfamily = "utopia"; break;
-        default:           xfamily = "*";
+        case wxDECORATIVE: xfamily = _T("lucida"); break;
+        case wxROMAN:      xfamily = _T("times");  break;
+        case wxMODERN:     xfamily = _T("courier"); break;
+        case wxSWISS:      xfamily = _T("helvetica"); break;
+	case wxTELETYPE:   xfamily = _T("lucidatypewriter"); break;
+	case wxSCRIPT:     xfamily = _T("utopia"); break;
+        default:           xfamily = _T("*");
     }
     
     if (!facename.IsEmpty())
     {
-        sprintf( wxBuffer, "-*-%s-*-*-normal-*-*-*-*-*-*-*-*-*", facename.c_str() );
-        GdkFont *test = gdk_font_load( wxBuffer );
+        wxSprintf( wxBuffer, _T("-*-%s-*-*-normal-*-*-*-*-*-*-*-*-*"), facename.c_str() );
+        GdkFont *test = gdk_font_load( wxConv_libc.cWX2MB(wxBuffer) );
         if (test)
 	{
 	    gdk_font_unref( test );
@@ -411,23 +411,23 @@ static GdkFont*wxLoadQueryFont( int pointSize, int family, int style, int weight
     
     switch (style)
     {
-        case wxITALIC:     xstyle = "i"; break;
-        case wxSLANT:      xstyle = "o"; break;
-        case wxNORMAL:     xstyle = "r"; break;
-        default:           xstyle = "*"; break;
+        case wxITALIC:     xstyle = _T("i"); break;
+        case wxSLANT:      xstyle = _T("o"); break;
+        case wxNORMAL:     xstyle = _T("r"); break;
+        default:           xstyle = _T("*"); break;
     }
     switch (weight)
     {
-        case wxBOLD:       xweight = "bold"; break;
+        case wxBOLD:       xweight = _T("bold"); break;
         case wxLIGHT:
-        case wxNORMAL:     xweight = "medium"; break;
-        default:           xweight = "*"; break;
+        case wxNORMAL:     xweight = _T("medium"); break;
+        default:           xweight = _T("*"); break;
     }
     
-    sprintf( wxBuffer, "-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-*-*",
+    wxSprintf( wxBuffer, _T("-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-*-*"),
         xfamily, xweight, xstyle, pointSize);
     
-    return gdk_font_load( wxBuffer );
+    return gdk_font_load( wxConv_libc.cWX2MB(wxBuffer) );
 }
 
 static GdkFont *wxLoadQueryNearestFont( int point_size, int family, int style, int weight, 

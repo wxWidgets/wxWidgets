@@ -335,7 +335,7 @@ static void wxInsertChildInMDI( wxMDIClientWindow* parent, wxMDIChildFrame* chil
     wxString s = child->m_title;
     if (s.IsNull()) s = _("MDI child");
 
-    GtkWidget *label_widget = gtk_label_new( s );
+    GtkWidget *label_widget = gtk_label_new( s.mbc_str() );
     gtk_misc_set_alignment( GTK_MISC(label_widget), 0.0, 0.5 );
 
     gtk_signal_connect( GTK_OBJECT(child->m_widget), "size_allocate",

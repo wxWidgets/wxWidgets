@@ -195,8 +195,8 @@ wxDialog::~wxDialog()
 void wxDialog::SetTitle( const wxString& title )
 {
     m_title = title;
-    if (m_title.IsNull()) m_title = "";
-    gtk_window_set_title( GTK_WINDOW(m_widget), m_title );
+    if (m_title.IsNull()) m_title = _T("");
+    gtk_window_set_title( GTK_WINDOW(m_widget), m_title.mbc_str() );
 }
 
 wxString wxDialog::GetTitle() const
@@ -281,7 +281,7 @@ bool wxDialog::Destroy()
 
 void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid dialog" );
+    wxASSERT_MSG( (m_widget != NULL), _T("invalid dialog") );
 
     if (GetAutoLayout())
     {
@@ -314,8 +314,8 @@ void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
 
 void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid dialog" );
-    wxASSERT_MSG( (m_wxwindow != NULL), "invalid dialog" );
+    wxASSERT_MSG( (m_widget != NULL), _T("invalid dialog") );
+    wxASSERT_MSG( (m_wxwindow != NULL), _T("invalid dialog") );
 
     if (m_resizing) return; /* I don't like recursions */
     m_resizing = TRUE;
@@ -401,7 +401,7 @@ void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int heigh
 
 void wxDialog::Centre( int direction )
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid dialog" );
+    wxASSERT_MSG( (m_widget != NULL), _T("invalid dialog") );
 
     int x = 0;
     int y = 0;
@@ -455,14 +455,14 @@ void wxDialog::SetModal( bool WXUNUSED(flag) )
   else
     if (m_windowStyle & wxDIALOG_MODAL) m_windowStyle -= wxDIALOG_MODAL;
 */
-    wxFAIL_MSG( "wxDialog:SetModal obsolete now" );
+    wxFAIL_MSG( _T("wxDialog:SetModal obsolete now") );
 }
 
 int wxDialog::ShowModal()
 {
     if (IsModal())
     {
-       wxFAIL_MSG( "wxDialog:ShowModal called twice" );
+       wxFAIL_MSG( _T("wxDialog:ShowModal called twice") );
        return GetReturnCode();
     }
 
@@ -483,7 +483,7 @@ void wxDialog::EndModal( int retCode )
 
     if (!IsModal())
     {
-        wxFAIL_MSG( "wxDialog:EndModal called twice" );
+        wxFAIL_MSG( _T("wxDialog:EndModal called twice") );
         return;
     }
 

@@ -105,14 +105,14 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
 
     PreCreation( parent, -1, pos, wxDefaultSize, style | wxDIALOG_MODAL, "filedialog" );
     m_message = message;
-    m_path = "";
+    m_path = _T("");
     m_fileName = defaultFileName;
     m_dir = defaultDir;
     m_wildCard = wildCard;
     m_dialogStyle = style;
     m_filterIndex = 1;
 
-    m_widget = gtk_file_selection_new( m_message );
+    m_widget = gtk_file_selection_new( m_message.mbc_str() );
 
     int x = (gdk_screen_width () - 400) / 2;
     int y = (gdk_screen_height () - 400) / 2;
@@ -122,23 +122,23 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
     gtk_file_selection_hide_fileop_buttons( sel ); // they don't work anyway
 
     m_path.Append(m_dir);
-    if( ! m_path.IsEmpty() && m_path.Last()!='/' )
+    if( ! m_path.IsEmpty() && m_path.Last()!=_T('/') )
         m_path.Append('/');
     m_path.Append(m_fileName);
 
-    if(m_path.Length()>1) gtk_file_selection_set_filename(sel,m_path);
+    if(m_path.Length()>1) gtk_file_selection_set_filename(sel,m_path.mbc_str());
 
     gtk_signal_connect( GTK_OBJECT(sel->ok_button), "clicked",
       GTK_SIGNAL_FUNC(gtk_filedialog_ok_callback), (gpointer*)this );
 
     // strange way to internationalize
-    gtk_label_set( GTK_LABEL( GTK_BUTTON(sel->ok_button)->child ), _("OK") );
+    gtk_label_set( GTK_LABEL( GTK_BUTTON(sel->ok_button)->child ), wxConv_current->cWX2MB(_("OK")) );
 
     gtk_signal_connect( GTK_OBJECT(sel->cancel_button), "clicked",
       GTK_SIGNAL_FUNC(gtk_filedialog_cancel_callback), (gpointer*)this );
       
     // strange way to internationalize
-    gtk_label_set( GTK_LABEL( GTK_BUTTON(sel->cancel_button)->child ), _("Cancel") );
+    gtk_label_set( GTK_LABEL( GTK_BUTTON(sel->cancel_button)->child ), wxConv_current->cWX2MB(_("Cancel")) );
     
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_filedialog_delete_callback), (gpointer)this );
@@ -160,14 +160,14 @@ void wxFileDialog::SetPath(const wxString& path)
 // global functions
 // ----------------------------------------------------------------------------
 
-wxString wxFileSelector( const char *title,
-                      const char *defaultDir, const char *defaultFileName,
-                      const char *defaultExtension, const char *filter, int flags,
+wxString wxFileSelector( const wxChar *title,
+                      const wxChar *defaultDir, const wxChar *defaultFileName,
+                      const wxChar *defaultExtension, const wxChar *filter, int flags,
                       wxWindow *parent, int x, int y )
 {
     wxString filter2;
     if ( defaultExtension && !filter )
-        filter2 = wxString("*.") + wxString(defaultExtension) ;
+        filter2 = wxString(_T("*.")) + wxString(defaultExtension) ;
     else if ( filter )
         filter2 = filter;
 
@@ -191,34 +191,34 @@ wxString wxFileSelector( const char *title,
     }
 }
 
-wxString wxLoadFileSelector( const char *what, const char *extension, const char *default_name, wxWindow *parent )
+wxString wxLoadFileSelector( const wxChar *what, const wxChar *extension, const wxChar *default_name, wxWindow *parent )
 {
-    char *ext = (char *)extension;
+    wxChar *ext = (wxChar *)extension;
 
-    char prompt[50];
+    wxChar prompt[50];
     wxString str = _("Load %s file");
-    sprintf(prompt, str, what);
+    wxSprintf(prompt, str, what);
 
-    if (*ext == '.') ext++;
-    char wild[60];
-    sprintf(wild, "*.%s", ext);
+    if (*ext == _T('.')) ext++;
+    wxChar wild[60];
+    wxSprintf(wild, _T("*.%s"), ext);
 
-    return wxFileSelector (prompt, (const char *) NULL, default_name, ext, wild, 0, parent);
+    return wxFileSelector (prompt, (const wxChar *) NULL, default_name, ext, wild, 0, parent);
 }
 
-wxString wxSaveFileSelector(const char *what, const char *extension, const char *default_name,
+wxString wxSaveFileSelector(const wxChar *what, const wxChar *extension, const wxChar *default_name,
          wxWindow *parent )
 {
-    char *ext = (char *)extension;
+    wxChar *ext = (wxChar *)extension;
 
-    char prompt[50];
+    wxChar prompt[50];
     wxString str = _("Save %s file");
-    sprintf(prompt, str, what);
+    wxSprintf(prompt, str, what);
 
-    if (*ext == '.') ext++;
-    char wild[60];
-    sprintf(wild, "*.%s", ext);
+    if (*ext == _T('.')) ext++;
+    wxChar wild[60];
+    wxSprintf(wild, _T("*.%s"), ext);
 
-    return wxFileSelector (prompt, (const char *) NULL, default_name, ext, wild, 0, parent);
+    return wxFileSelector (prompt, (const wxChar *) NULL, default_name, ext, wild, 0, parent);
 }
 
