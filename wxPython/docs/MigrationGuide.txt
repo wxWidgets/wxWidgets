@@ -863,3 +863,21 @@ for changes in capabilities, usage, etc.
 and will raise a DeprecationWarning if used.  The main wx.Mask
 constructor has been modified to be compatible with wx.MaskColour so
 you should use it instead.
+
+**[Changed in 2.5.2.x]** In wx.TextCtrls that have the
+wx.TE_PROCESS_TAB style the TAB key will be treated like an ordinary
+character and will not cause any tab traversal navigation at all.  If
+you use this style but would still like to have the normal tab
+traversal take place then you should send your own
+wx.NavigationKeyEvent from the wx.EVT_KEY_DOWN handler.  There is a
+new Navigate method in the wx.Window class to help send the event and
+it is used something like this::
+
+	flags = wx.NavigationKeyEvent.IsForward
+	if event.ShiftDown:
+	    flags = wx.NavigationKeyEvent.IsBackward
+	if event.ControlDown():
+	    flags |= wx.NavigationKeyEvent.WinChange
+	self.Navigate(flags)
+
+
