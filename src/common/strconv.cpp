@@ -1902,7 +1902,7 @@ public:
         if (szOut == NULL)
         {
             // worst case
-            nRealOutSize = ((nBufSize - 1) << 1)+1 ;
+            nRealOutSize = ((nBufSize - 1) << 2)+1 ;
             szBuffer = new char[ nRealOutSize ] ;
         }
         else
@@ -2079,7 +2079,7 @@ public:
         if (buf == NULL)
         {
             // worst case
-            n = byteInLen * 2 ;
+            n = byteInLen << 1 ;
             tbuf = (char*) malloc( n ) ;
         }
 
