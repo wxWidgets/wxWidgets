@@ -2363,7 +2363,7 @@ bool wxGTKInputHandler::HandleMouse(wxControl *control,
                                     const wxMouseEvent& event)
 {
     // clicking on the control gives it focus
-    if ( event.ButtonDown() )
+    if ( event.ButtonDown() && wxWindow::FindFocus() != control )
     {
         control->SetFocus();
 

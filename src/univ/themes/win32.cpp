@@ -1,4 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
 // Name:        univ/themes/win32.cpp
 // Purpose:     wxUniversal theme implementing Win32-like LNF
 // Author:      Vadim Zeitlin
@@ -3056,6 +3055,14 @@ bool wxWin32InputHandler::HandleKey(wxControl *control,
 bool wxWin32InputHandler::HandleMouse(wxControl *control,
                                       const wxMouseEvent& event)
 {
+    // clicking on the control gives it focus
+    if ( event.ButtonDown() && wxWindow::FindFocus() != control )
+    {
+        control->SetFocus();
+
+        return TRUE;
+    }
+
     return FALSE;
 }
 
