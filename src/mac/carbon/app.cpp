@@ -37,6 +37,7 @@
 #include "wx/textctrl.h"
 #include "wx/menu.h"
 #include "wx/docview.h"
+#include "wx/filename.h"
 
 #include <string.h>
 
@@ -123,6 +124,7 @@ pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long re
 pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
 pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
 pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
+pascal OSErr AEHandleRApp( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
 
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
 {
@@ -142,6 +144,11 @@ pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long WX
 pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
 {
     return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
+}
+
+pascal OSErr AEHandleRApp( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
+{
+    return wxTheApp->MacHandleAERApp( (AppleEvent*) event , reply) ;
 }
 
 // AEODoc Calls MacOpenFile on each of the files passed
@@ -236,6 +243,15 @@ short wxApp::MacHandleAEQuit(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNU
     return noErr ;
 }
 
+// AEROApp calls MacReopenApp
+
+short wxApp::MacHandleAERApp(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
+{
+    MacReopenApp() ;
+    return noErr ;
+}
+
+
 //----------------------------------------------------------------------
 // Support Routines linking the Mac...File Calls to the Document Manager
 //----------------------------------------------------------------------
@@ -277,6 +293,11 @@ void wxApp::MacPrintFile(const wxString & fileName )
 
 void wxApp::MacNewFile()
 {
+}
+
+void wxApp::MacReopenApp()
+{
+    // eventually check for open docs, if none, call MacNewFile
 }
 
 //----------------------------------------------------------------------
@@ -690,6 +711,9 @@ bool wxApp::OnInitGui()
         AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,
                                NewAEEventHandlerUPP(AEHandlePDoc) ,
                                0 , FALSE ) ;
+        AEInstallEventHandler( kCoreEventClass , kAEReopenApplication ,
+                               NewAEEventHandlerUPP(AEHandleRApp) ,
+                               0 , FALSE ) ;
         AEInstallEventHandler( kCoreEventClass , kAEQuitApplication ,
                                NewAEEventHandlerUPP(AEHandleQuit) ,
                                0 , FALSE ) ;
@@ -702,6 +726,9 @@ bool wxApp::OnInitGui()
                                0 , FALSE ) ;
         AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,
                                NewAEEventHandlerProc(AEHandlePDoc) ,
+                               0 , FALSE ) ;
+        AEInstallEventHandler( kCoreEventClass , kAEReopenApplication ,
+                               NewAEEventHandlerProc(AEHandleRApp) ,
                                0 , FALSE ) ;
         AEInstallEventHandler( kCoreEventClass , kAEQuitApplication ,
                                NewAEEventHandlerProc(AEHandleQuit) ,
