@@ -21,6 +21,8 @@ del sys, _wx
 # Now assign all the reverse-renamed names:
 wxShapeRegion = wx.ogl.ShapeRegion
 wxShapeRegionPtr = wx.ogl.ShapeRegionPtr
+wxAttachmentPoint = wx.ogl.AttachmentPoint
+wxAttachmentPointPtr = wx.ogl.AttachmentPointPtr
 wxPyShapeEvtHandler = wx.ogl.PyShapeEvtHandler
 wxPyShapeEvtHandlerPtr = wx.ogl.PyShapeEvtHandlerPtr
 wxPyShape = wx.ogl.PyShape
