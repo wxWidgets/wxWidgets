@@ -467,6 +467,7 @@ private:
     {
     public:
         wxString GetURL() const { return GetText(); }
+        void SetURL(const wxString& url) { SetText(url); }
     };
 #endif // __WXMSW__/!__WXMSW__
 

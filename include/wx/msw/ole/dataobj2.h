@@ -90,6 +90,9 @@ public:
     // return the URL as string
     wxString GetURL() const;
 
+    // Set a string as the URL in the data object
+    void SetURL(const wxString& url);
+
     // override to set m_textFormat
     virtual bool SetData(const wxDataFormat& format,
                          size_t len,

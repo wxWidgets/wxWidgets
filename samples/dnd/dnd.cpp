@@ -109,7 +109,10 @@ public:
     // URLs can't be moved, only copied
     virtual wxDragResult OnDragOver(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                                     wxDragResult def)
-        { return def == wxDragMove ? wxDragCopy : def; }
+        {
+            return wxDragLink;  // At least IE 5.x needs wxDragLink, the
+                                // other browsers on MSW seem okay with it too.
+        }
 
     // translate this to calls to OnDropURL() just for convenience
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
@@ -1462,7 +1465,7 @@ DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
     const wxString choices[] = { wxT("None"), wxT("Triangle"),
                                  wxT("Rectangle"), wxT("Ellipse") };
 
-    m_radio = new wxRadioBox( this, -1, wxT("&Shape"), 
+    m_radio = new wxRadioBox( this, -1, wxT("&Shape"),
                               wxDefaultPosition, wxDefaultSize, 4, choices, 4,
                               wxRA_SPECIFY_COLS );
     shapesSizer->Add( m_radio, 0, wxGROW|wxALL, 5 );
@@ -1472,32 +1475,32 @@ DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
     wxStaticBox* box = new wxStaticBox( this, -1, wxT("&Attributes") );
     wxStaticBoxSizer* attrSizer = new wxStaticBoxSizer( box, wxHORIZONTAL );
     wxFlexGridSizer* xywhSizer = new wxFlexGridSizer( 4, 2 );
-    
+
     wxStaticText* st;
 
     st = new wxStaticText( this, -1, wxT("Position &X:") );
     m_textX = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
-    xywhSizer->Add( st, 1, wxGROW|wxALL, 2 ); 
-    xywhSizer->Add( m_textX, 1, wxGROW|wxALL, 2 ); 
+    xywhSizer->Add( st, 1, wxGROW|wxALL, 2 );
+    xywhSizer->Add( m_textX, 1, wxGROW|wxALL, 2 );
 
     st = new wxStaticText( this, -1, wxT("Size &width:") );
     m_textW = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
-    xywhSizer->Add( st, 1, wxGROW|wxALL, 2 ); 
-    xywhSizer->Add( m_textW, 1, wxGROW|wxALL, 2 ); 
+    xywhSizer->Add( st, 1, wxGROW|wxALL, 2 );
+    xywhSizer->Add( m_textW, 1, wxGROW|wxALL, 2 );
 
     st = new wxStaticText( this, -1, wxT("&Y:") );
     m_textY = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
-    xywhSizer->Add( st, 1, wxALL|wxALIGN_RIGHT, 2 ); 
-    xywhSizer->Add( m_textY, 1, wxGROW|wxALL, 2 ); 
+    xywhSizer->Add( st, 1, wxALL|wxALIGN_RIGHT, 2 );
+    xywhSizer->Add( m_textY, 1, wxGROW|wxALL, 2 );
 
     st = new wxStaticText( this, -1, wxT("&height:") );
     m_textH = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
-    xywhSizer->Add( st, 1, wxALL|wxALIGN_RIGHT, 2 ); 
-    xywhSizer->Add( m_textH, 1, wxGROW|wxALL, 2 ); 
+    xywhSizer->Add( st, 1, wxALL|wxALIGN_RIGHT, 2 );
+    xywhSizer->Add( m_textH, 1, wxGROW|wxALL, 2 );
 
     wxButton* col = new wxButton( this, Button_Colour, wxT("&Colour...") );
     attrSizer->Add( xywhSizer, 1, wxGROW );

@@ -484,6 +484,9 @@ static wxDragResult ConvertDragEffectToResult(DWORD dwEffect)
         case DROPEFFECT_COPY:
             return wxDragCopy;
 
+        case DROPEFFECT_LINK:
+            return wxDragLink;
+
         case DROPEFFECT_MOVE:
             return wxDragMove;
 
@@ -501,6 +504,9 @@ static DWORD ConvertDragResultToEffect(wxDragResult result)
     switch ( result ) {
         case wxDragCopy:
             return DROPEFFECT_COPY;
+
+        case wxDragLink:
+            return DROPEFFECT_LINK;
 
         case wxDragMove:
             return DROPEFFECT_MOVE;

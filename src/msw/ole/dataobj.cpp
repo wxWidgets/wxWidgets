@@ -1109,8 +1109,8 @@ wxURLDataObject::wxURLDataObject()
     // we support CF_TEXT and CFSTR_SHELLURL formats which are basicly the same
     // but it seems that some browsers only provide one of them so we have to
     // support both
-    Add(new CFSTR_SHELLURLDataObject());
     Add(new wxTextDataObject);
+    Add(new CFSTR_SHELLURLDataObject());
 
     // we don't have any data yet
     m_dataObjectLast = NULL;
@@ -1135,10 +1135,16 @@ wxString wxURLDataObject::GetURL() const
 
     size_t len = m_dataObjectLast->GetDataSize();
 
-    m_dataObjectLast->GetDataHere(url.GetWriteBuf(len + 1));
+    m_dataObjectLast->GetDataHere(url.GetWriteBuf(len));
     url.UngetWriteBuf();
 
     return url;
+}
+
+void wxURLDataObject::SetURL(const wxString& url)
+{
+    SetData(wxDataFormat(wxDF_TEXT), url.Length()+1, url.c_str());
+    SetData(wxDataFormat(CFSTR_SHELLURL), url.Length()+1, url.c_str());
 }
 
 // ----------------------------------------------------------------------------
