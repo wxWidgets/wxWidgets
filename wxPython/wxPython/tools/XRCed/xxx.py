@@ -4,11 +4,8 @@
 # Created:      22.08.2001
 # RCS-ID:       $Id$
 
-from wxPython.wx import *
-from wxPython.xrc import *
 from xml.dom import minidom
-import wxPython.lib.wxpTag
-
+from globals import *
 from params import *
 
 currentEncoding = wxLocale_GetSystemEncodingName()
@@ -28,7 +25,7 @@ class xxxParam(xxxNode):
         xxxNode.__init__(self, node)
         if not node.hasChildNodes():
             # If does not have child nodes, create empty text node
-            text = tree.dom.createTextNode('')
+            text = g.tree.dom.createTextNode('')
             node.appendChild(text)
         else:
             text = node.childNodes[0] # first child must be text node
@@ -72,7 +69,7 @@ class xxxParamContent(xxxNode):
                 assert n.tagName == 'item', 'bad content content'
                 if not n.hasChildNodes():
                     # If does not have child nodes, create empty text node
-                    text = tree.dom.createTextNode('')
+                    text = g.tree.dom.createTextNode('')
                     node.appendChild(text)
                 else:
                     # !!! normalize?
@@ -94,8 +91,8 @@ class xxxParamContent(xxxNode):
                 self.node.removeChild(n)
             l = []
             for str in value:
-                itemElem = tree.dom.createElement('item')
-                itemText = tree.dom.createTextNode(str)
+                itemElem = g.tree.dom.createElement('item')
+                itemText = g.tree.dom.createTextNode(str)
                 itemElem.appendChild(itemText)
                 self.node.appendChild(itemElem)
                 l.append(itemText)
@@ -118,7 +115,7 @@ class xxxParamContentCheckList(xxxNode):
                 if not checked: checked = 0
                 if not n.hasChildNodes():
                     # If does not have child nodes, create empty text node
-                    text = tree.dom.createTextNode('')
+                    text = g.tree.dom.createTextNode('')
                     node.appendChild(text)
                 else:
                     # !!! normalize?
@@ -140,10 +137,10 @@ class xxxParamContentCheckList(xxxNode):
                 self.node.removeChild(n)
             l = []
             for s,ch in value:
-                itemElem = tree.dom.createElement('item')
+                itemElem = g.tree.dom.createElement('item')
                 # Add checked only if true
                 if ch: itemElem.setAttribute('checked', '1')
-                itemText = tree.dom.createTextNode(s)
+                itemText = g.tree.dom.createTextNode(s)
                 itemElem.appendChild(itemText)
                 self.node.appendChild(itemElem)
                 l.append((itemText, itemElem))
@@ -255,8 +252,8 @@ class xxxParamFont(xxxObject, xxxNode):
         v = []
         for param in self.allParams:
             if value[i]:
-                fontElem = tree.dom.createElement(param)
-                textNode = tree.dom.createTextNode(value[i])
+                fontElem = g.tree.dom.createElement(param)
+                textNode = g.tree.dom.createTextNode(value[i])
                 self.params[param] = textNode
                 fontElem.appendChild(textNode)
                 elem.appendChild(fontElem)
@@ -559,8 +556,8 @@ class xxxFlexGridSizer(xxxGridSizer):
         self.params[param].remove()
         del self.params[param]
         for i in value:
-            node = tree.dom.createElement(param)
-            text = tree.dom.createTextNode(str(i))
+            node = g.tree.dom.createElement(param)
+            text = g.tree.dom.createTextNode(str(i))
             node.appendChild(text)
             self.element.appendChild(node)
             self.special(param, node)
@@ -732,18 +729,18 @@ def MakeXXXFromDOM(parent, element):
 
 # Make empty DOM element
 def MakeEmptyDOM(className): 
-    elem = tree.dom.createElement('object')
+    elem = g.tree.dom.createElement('object')
     elem.setAttribute('class', className)
     # Set required and default parameters
     xxxClass = xxxDict[className]
     defaultNotRequired = filter(lambda x, l=xxxClass.required: x not in l,
                                 xxxClass.default.keys())
     for param in xxxClass.required + defaultNotRequired:
-        textElem = tree.dom.createElement(param)
+        textElem = g.tree.dom.createElement(param)
         try:
-            textNode = tree.dom.createTextNode(xxxClass.default[param])
+            textNode = g.tree.dom.createTextNode(xxxClass.default[param])
         except KeyError:
-            textNode = tree.dom.createTextNode('')
+            textNode = g.tree.dom.createTextNode('')
         textElem.appendChild(textNode)
         elem.appendChild(textElem)
     return elem
