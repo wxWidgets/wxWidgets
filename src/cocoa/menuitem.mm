@@ -59,16 +59,7 @@
     wxLogTrace(wxTRACE_COCOA,wxT("wxMenuItemAction"));
     wxMenuItem *item = wxMenuItem::GetFromCocoa(sender);
     wxCHECK_RET(item,wxT("wxMenuItemAction received but no wxMenuItem exists!"));
-
-    wxMenu *menu = item->GetMenu();
-    wxCHECK_RET(menu,wxT("wxMenuItemAction received but wxMenuItem is not in a wxMenu"));
-    wxMenuBar *menubar = menu->GetMenuBar();
-    if(menubar)
-    {
-        wxFrame *frame = menubar->GetFrame();
-        wxCHECK_RET(frame, wxT("wxMenuBar MUST be attached to a wxFrame!"));
-        frame->ProcessCommand(item->GetId());
-    }
+    item->CocoaItemSelected();
 }
 
 - (BOOL)validateMenuItem: (id)menuItem
@@ -77,7 +68,7 @@
     wxLogTrace(wxTRACE_COCOA,wxT("wxMenuItemAction"));
     wxMenuItem *item = wxMenuItem::GetFromCocoa(menuItem);
     wxCHECK_MSG(item,NO,wxT("validateMenuItem received but no wxMenuItem exists!"));
-    return item->IsEnabled();
+    return item->Cocoa_validateMenuItem();
 }
 
 @end //implementation wxNSMenuItemTarget
@@ -88,7 +79,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 wxMenuItemCocoaHash wxMenuItemCocoa::sm_cocoaHash;
 
-struct objc_object *wxMenuItemCocoa::sm_cocoaTarget = [[wxNSMenuItemTarget alloc] init];
+wxObjcAutoRefFromAlloc<struct objc_object *> wxMenuItemCocoa::sm_cocoaTarget = [[wxNSMenuItemTarget alloc] init];
 
 // ----------------------------------------------------------------------------
 // wxMenuItemBase
@@ -127,15 +118,21 @@ wxMenuItemCocoa::wxMenuItemCocoa(wxMenu *pParentMenu,
     else
     {
         NSString *menuTitle = wxInitNSStringWithWxString([NSString alloc],wxStripMenuCodes(strName));
-        m_cocoaNSMenuItem = [[NSMenuItem alloc] initWithTitle:menuTitle action:@selector(wxMenuItemAction:) keyEquivalent:@""];
+        SEL action;
+        if(pSubMenu)
+            action = nil;
+        else
+            action = @selector(wxMenuItemAction:);
+        m_cocoaNSMenuItem = [[NSMenuItem alloc] initWithTitle:menuTitle action:action keyEquivalent:@""];
         sm_cocoaHash.insert(wxMenuItemCocoaHash::value_type(m_cocoaNSMenuItem,this));
-        [m_cocoaNSMenuItem setTarget:sm_cocoaTarget];
         if(pSubMenu)
         {
             wxASSERT(pSubMenu->GetNSMenu());
             [pSubMenu->GetNSMenu() setTitle:menuTitle];
             [m_cocoaNSMenuItem setSubmenu:pSubMenu->GetNSMenu()];
         }
+        else
+            [m_cocoaNSMenuItem setTarget: sm_cocoaTarget];
         [menuTitle release];
     }
 }
@@ -144,6 +141,32 @@ wxMenuItem::~wxMenuItem()
 {
     sm_cocoaHash.erase(m_cocoaNSMenuItem);
     [m_cocoaNSMenuItem release];
+}
+
+void wxMenuItem::CocoaItemSelected()
+{
+    wxMenu *menu = GetMenu();
+    wxCHECK_RET(menu,wxT("wxMenuItemAction received but wxMenuItem is not in a wxMenu"));
+    wxMenuBar *menubar = menu->GetMenuBar();
+    if(menubar)
+    {
+        wxFrame *frame = menubar->GetFrame();
+        wxCHECK_RET(frame, wxT("wxMenuBar MUST be attached to a wxFrame!"));
+        frame->ProcessCommand(GetId());
+    }
+    else
+    {
+        if(IsCheckable())
+            Toggle();
+        GetMenu()->SendEvent(GetId(), IsCheckable()?IsChecked():-1);
+    }
+}
+
+bool wxMenuItem::Cocoa_validateMenuItem()
+{
+    // TODO: do more sanity checking
+    // TODO: Do wxWindows validation here and avoid sending during idle time
+    return IsEnabled();
 }
 
 // ----------------------------------------------------------------------------
