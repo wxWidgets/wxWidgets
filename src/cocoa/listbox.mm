@@ -13,12 +13,18 @@
 #include "wx/listbox.h"
 #include "wx/log.h"
 
-#import <AppKit/NSView.h>
+#include "wx/cocoa/string.h"
+#include "wx/cocoa/NSTableDataSource.h"
+
+#import <Foundation/NSArray.h>
+#import <Foundation/NSEnumerator.h>
+#import <AppKit/NSTableView.h>
+#import <AppKit/NSTableColumn.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 BEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
 END_EVENT_TABLE()
-// WX_IMPLEMENT_COCOA_OWNER(wxListBox,NSButton,NSControl,NSView)
+WX_IMPLEMENT_COCOA_OWNER(wxListBox,NSTableView,NSControl,NSView)
 
 bool wxListBox::Create(wxWindow *parent, wxWindowID winid,
             const wxPoint& pos,
@@ -31,41 +37,104 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID winid,
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
 
-    SetNSView([[NSView alloc] initWithFrame: NSMakeRect(10,10,20,20)]);
+    // Provide the data
+    m_cocoaItems = [[NSMutableArray arrayWithCapacity:n] retain];
+    for(int i=0; i < n; i++)
+    {
+        [m_cocoaItems addObject: wxNSStringWithWxString(choices[i])];
+    }
+    // Remove everything
+    m_clientData.Clear();
+    // Initialize n elements to NULL
+    m_clientData.SetCount(n,NULL);
+
+    SetNSTableView([[NSTableView alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
 
+    // Set up the data source
+    m_cocoaDataSource = [[wxCocoaNSTableDataSource alloc] init];
+    [GetNSTableView() setDataSource:m_cocoaDataSource];
+
+    // Add the single column
+    NSTableColumn *tableColumn = [[NSTableColumn alloc] initWithIdentifier:nil];
+    [GetNSTableView() addTableColumn: tableColumn];
+//    [tableColumn release];
+
+    // Finish
     if(m_parent)
         m_parent->CocoaAddChild(this);
+    SetInitialFrameRect(pos,size);
+
     return true;
 }
 
 wxListBox::~wxListBox()
 {
-    CocoaRemoveFromParent();
-    SetNSView(NULL);
+    [GetNSTableView() setDataSource: nil];
+    [m_cocoaDataSource release];
+    [m_cocoaItems release];
+    DisassociateNSTableView(m_cocoaNSView);
+}
+
+int wxListBox::CocoaDataSource_numberOfRows()
+{
+    return [m_cocoaItems count];
+}
+
+struct objc_object* wxListBox::CocoaDataSource_objectForTableColumn(
+        WX_NSTableColumn tableColumn, int rowIndex)
+{
+    return [m_cocoaItems objectAtIndex:rowIndex];
 }
 
 // pure virtuals from wxListBoxBase
 bool wxListBox::IsSelected(int n) const
 {
-    return false;
+    return [GetNSTableView() isRowSelected: n];
 }
 
 void wxListBox::SetSelection(int n, bool select)
 {
+    if(select)
+        [GetNSTableView() selectRow: n byExtendingSelection:NO];
+    else
+        [GetNSTableView() deselectRow: n];
 }
 
 int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
-    return 0;
+    aSelections.Clear();
+    NSEnumerator *enumerator = [GetNSTableView() selectedRowEnumerator];
+    while(NSNumber *num = [enumerator nextObject])
+    {
+        aSelections.Add([num intValue]);
+    }
+    return [GetNSTableView() numberOfSelectedRows];
 }
 
 void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 {
+    for(int i=int(items.GetCount())-1; i >= 0; i--)
+    {
+        [m_cocoaItems insertObject: wxNSStringWithWxString(items[i])
+            atIndex: pos];
+        m_clientData.Insert(NULL,pos);
+    }
+    [GetNSTableView() reloadData];
 }
 
 void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
 {
+    // Remove everything
+    [m_cocoaItems removeAllObjects];
+    m_clientData.Clear();
+    // Provide the data
+    for(size_t i=0; i < items.GetCount(); i++)
+    {
+        [m_cocoaItems addObject: wxNSStringWithWxString(items[i])];
+        m_clientData.Add(clientData[i]);
+    }
+    [GetNSTableView() reloadData];
 }
 
 void wxListBox::DoSetFirstItem(int n)

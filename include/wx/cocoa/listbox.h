@@ -12,12 +12,14 @@
 #ifndef __WX_COCOA_LISTBOX_H__
 #define __WX_COCOA_LISTBOX_H__
 
-//#include "wx/cocoa/NSTableView.h"
+#include "wx/cocoa/NSTableView.h"
+
+#include "wx/dynarray.h"
 
 // ========================================================================
 // wxListBox
 // ========================================================================
-class WXDLLEXPORT wxListBox: public wxListBoxBase //, protected wxCocoaNSTableView
+class WXDLLEXPORT wxListBox: public wxListBoxBase, protected wxCocoaNSTableView
 {
     DECLARE_DYNAMIC_CLASS(wxListBox)
     DECLARE_EVENT_TABLE()
@@ -26,7 +28,7 @@ class WXDLLEXPORT wxListBox: public wxListBoxBase //, protected wxCocoaNSTableVi
 // initialization
 // ------------------------------------------------------------------------
 public:
-    wxListBox() { }
+    wxListBox() { m_cocoaItems = NULL; }
     wxListBox(wxWindow *parent, wxWindowID winid,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
@@ -51,6 +53,12 @@ public:
 // Cocoa callbacks
 // ------------------------------------------------------------------------
 protected:
+    virtual int CocoaDataSource_numberOfRows();
+    virtual struct objc_object* CocoaDataSource_objectForTableColumn(
+        WX_NSTableColumn tableColumn, int rowIndex);
+    WX_NSMutableArray m_cocoaItems;
+    wxArrayPtrVoid m_clientData;
+    struct objc_object *m_cocoaDataSource;
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
