@@ -1,3 +1,9 @@
+wxwindows2.2 (2.2.2) unstable; urgency=low
+
+  * added missing dependancy for contrib-dev package.  Closes: #70880
+
+ -- Ron Lee <ron@microtronics.com.au>  Tue,  5 Sep 2000 18:51:24 +0930
+
 wxwindows2.2 (2.2.1) unstable; urgency=low
 
   * wxWin 2.2.1 stable release.

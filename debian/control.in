@@ -137,7 +137,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (runtime contrib libs)
 Package: libwxgtk=V-contrib-dev
 Architecture: any
 Section: devel
-Depends: wxwin=V-headers (= ${Source-Version}), libwxgtk=V-dev (= ${Source-Version}), libc6-dev
+Depends: wxwin=V-headers (= ${Source-Version}), libwxgtk=V-dev (= ${Source-Version}), libwxgtk=V-contrib (= ${Source-Version}), libc6-dev
 Conflicts: libwxgtk-contrib-dev
 Replaces: libwxgtk-contrib-dev
 Provides: libwxgtk-contrib-dev
