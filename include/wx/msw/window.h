@@ -667,8 +667,8 @@ public:
 
     // These return TRUE if an event handler was found, FALSE otherwise (not processed)
     virtual bool MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
-    virtual bool MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
-    virtual bool MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
+    virtual bool MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam);
+    virtual bool MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam);
 
     virtual bool MSWOnActivate(int flag, bool minimized, WXHWND activate);
     virtual long MSWOnMDIActivate(long flag, WXHWND activate, WXHWND deactivate);

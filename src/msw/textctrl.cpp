@@ -955,6 +955,8 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
     switch( event.KeyCode() )
     {
+        // VZ: commented out until somebody explains to me what it does
+#if 0
         // Fix by Marcel Rasche to allow Alt-Ctrl insertion of special characters
         case '{':
         case '}':
@@ -968,14 +970,10 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 WriteText(c);
             }
             break;
+#endif // 0
 
         case WXK_RETURN:
         {
-/* Oh yes it will, because we also specify DLGC_WANTCHARS
-            wxASSERT_MSG( m_windowStyle & wxTE_PROCESS_ENTER,
-                          "this text ctrl should never receive return" );
-*/
-
             if ( (m_windowStyle & wxTE_MULTILINE) == 0 )
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
@@ -987,6 +985,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
             break;
         }
+
         case WXK_TAB:
             // only produce navigation event if we don't process TAB ourself or
             // if it's a Shift-Tab keypress (we assume nobody will ever need
@@ -1005,6 +1004,9 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                     return;
             }
             break;
+
+        default:
+            event.Skip();
     }
     
     // don't just call event.Skip() because this will cause TABs and ENTERs
