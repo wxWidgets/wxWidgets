@@ -1512,22 +1512,9 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
         lvCol.cx = 80;
     }
 
-    // when we insert a column which can contain an image, we must specify this
-    // flag right now as doing it later in SetColumn() has no effect
-    //
-    // we use LVCFMT_BITMAP_ON_RIGHT by default because without it there is no
-    // way to dynamically set/clear the bitmap as the column without a bitmap
-    // on the left looks ugly (there is a hole)
-    //
-    // unfortunately with my version of comctl32.dll (5.80), the left column
-    // image is always on the left and it seems that it's a "feature" - I
-    // didn't find any way to work around it in any case
-    if ( lvCol.mask & LVCF_IMAGE )
-    {
-        lvCol.mask |= LVCF_FMT;
-        lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT;
-    }
-
+    // NB: this is wrong, according to the docs we should return the index of
+    //     the new column and not a bool, but don't change it in 2.4 branch
+    //     as it's an incompatible change risking to break people's code
     bool success = ListView_InsertColumn(GetHwnd(), col, &lvCol) != -1;
     if ( success )
     {
@@ -2658,7 +2645,17 @@ static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
     {
         if ( wxTheApp->GetComCtl32Version() >= 470 )
         {
-            lvCol.mask |= LVCF_IMAGE;
+            lvCol.mask |= LVCF_IMAGE | LVCF_FMT;
+
+            // we use LVCFMT_BITMAP_ON_RIGHT because thei mages on the right
+            // seem to be generally nicer than on the left and the generic
+            // version only draws them on the right (we don't have a flag to
+            // specify the image location anyhow)
+            //
+            // we don't use LVCFMT_COL_HAS_IMAGES because it doesn't seem to
+            // make any difference in my tests -- but maybe we should?
+            lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT | LVCFMT_IMAGE;
+
             lvCol.iImage = item.m_image;
         }
         //else: it doesn't support item images anyhow
