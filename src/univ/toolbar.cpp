@@ -31,7 +31,7 @@
 #endif
 
 #include "wx/toolbar.h"
-#include "wx/validate.h"
+#include "wx/image.h"
 
 //-----------------------------------------------------------------------------
 // wxToolBar
@@ -90,6 +90,17 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
 {
+    // Created disabled-state bitmap on demand
+    if (!enable && !m_bitmap2.Ok())
+    {
+        wxImage in(m_bitmap1);
+        wxImage out(m_bitmap1);
+
+        wxCreateGreyedImage(in, out);
+
+        m_bitmap2 = out.ConvertToBitmap();
+    }
+    RefreshTool(tool);    
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *tool, bool toggle)
@@ -135,9 +146,10 @@ void wxToolBar::RefreshTool( wxToolBarTool *tool )
 
 void wxToolBar::DrawToolBarTool( wxToolBarTool *tool, wxDC &dc, bool down )
 {
+    wxBitmap& bitmap = (tool->IsEnabled() || !tool->GetBitmap1().Ok()) ? tool->GetBitmap1() : tool->GetBitmap2() ;
     if (down)
     {
-        dc.DrawBitmap( tool->GetBitmap1(), tool->m_x+4, tool->m_y+4, TRUE );
+        dc.DrawBitmap( bitmap, tool->m_x+4, tool->m_y+4, TRUE );
         
         dc.SetPen( *wxGREY_PEN );
         dc.DrawLine( tool->m_x, tool->m_y, tool->m_x+m_defaultWidth+5, tool->m_y );
@@ -153,7 +165,7 @@ void wxToolBar::DrawToolBarTool( wxToolBarTool *tool, wxDC &dc, bool down )
     }
     else
     {
-        dc.DrawBitmap( tool->GetBitmap1(), tool->m_x+3, tool->m_y+3, TRUE );
+        dc.DrawBitmap( bitmap, tool->m_x+3, tool->m_y+3, TRUE );
         
         dc.SetPen( *wxWHITE_PEN );
         dc.DrawLine( tool->m_x, tool->m_y, tool->m_x+m_defaultWidth+5, tool->m_y );
@@ -292,7 +304,7 @@ void wxToolBar::OnMouse(wxMouseEvent &event)
         }
     }
     
-    if (event.LeftDown() && (hit))
+    if (event.LeftDown() && (hit) && hit->Enabled())
     {
         CaptureMouse();
         m_captured = hit;

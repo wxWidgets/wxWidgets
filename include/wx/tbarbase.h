@@ -30,6 +30,7 @@
 
 class WXDLLEXPORT wxToolBarBase;
 class WXDLLEXPORT wxToolBarToolBase;
+class WXDLLEXPORT wxImage;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -474,6 +475,9 @@ private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxToolBarBase)
 };
+
+// Helper function for creating the image for disabled buttons
+bool wxCreateGreyedImage(const wxImage& in, wxImage& out) ;
 
 #endif // wxUSE_TOOLBAR
 
