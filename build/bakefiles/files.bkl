@@ -2406,6 +2406,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="OPENGL_SRC" hints="files">
     <if cond="TOOLKIT=='MAC'">src/mac/carbon/glcanvas.cpp</if>
+    <if cond="TOOLKIT=='COCOA'">src/cocoa/glcanvas.mm</if>
     <if cond="TOOLKIT=='GTK'">src/gtk/glcanvas.cpp</if>
     <if cond="TOOLKIT=='MSW'">src/msw/glcanvas.cpp</if>
     <if cond="TOOLKIT=='WINCE'">src/msw/glcanvas.cpp</if>
@@ -2416,6 +2417,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="OPENGL_HDR" hints="files">
     <if cond="TOOLKIT=='MAC'">wx/mac/carbon/glcanvas.h</if>
+    <if cond="TOOLKIT=='COCOA'">wx/cocoa/glcanvas.h</if>
     <if cond="TOOLKIT=='GTK'">wx/gtk/glcanvas.h</if>
     <if cond="TOOLKIT=='MSW'">wx/msw/glcanvas.h</if>
     <if cond="TOOLKIT=='WINCE'">wx/msw/glcanvas.h</if>

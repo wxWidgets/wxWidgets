@@ -1162,6 +1162,7 @@ COND_WXUSE_EXPAT_BUILTIN___wxexpat___depname = \
 @COND_TOOLKIT_WINCE@BASE_WINCE_HDR = wx/msw/wince/time.h
 @COND_TOOLKIT_WINCE@NET_WINCE_SRC = src/msw/wince/net.cpp
 @COND_TOOLKIT_WINCE@NET_WINCE_HDR = wx/msw/wince/net.h
+@COND_TOOLKIT_COCOA@OPENGL_HDR = wx/cocoa/glcanvas.h
 @COND_TOOLKIT_GTK@OPENGL_HDR = wx/gtk/glcanvas.h
 @COND_TOOLKIT_MAC@OPENGL_HDR = wx/mac/carbon/glcanvas.h
 @COND_TOOLKIT_MOTIF@OPENGL_HDR = wx/x11/glcanvas.h
@@ -6393,6 +6394,7 @@ COND_USE_SOSYMLINKS_1___gldll___so_symlinks_inst_cmd = rm -f \
 	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOSYMLINKS_1@__gldll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___gldll___so_symlinks_inst_cmd)
+@COND_TOOLKIT_COCOA@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
 @COND_TOOLKIT_GTK@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
 @COND_TOOLKIT_MAC@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
 @COND_TOOLKIT_MOTIF@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
@@ -6417,6 +6419,7 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_GCC_PCH_1@__gllib_PCH_INC = -I.pch/wxprec_gllib
 @COND_GCC_PCH_1@___pch_wxprec_gllib_wx_wxprec_h_gch___depname \
 @COND_GCC_PCH_1@	= .pch/wxprec_gllib/wx/wxprec.h.gch
+@COND_TOOLKIT_COCOA@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
 @COND_TOOLKIT_GTK@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
 @COND_TOOLKIT_MAC@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
 @COND_TOOLKIT_MOTIF@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
@@ -20865,6 +20868,9 @@ xrclib_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCLIB_ODEP)
 @COND_TOOLKIT_MAC@gldll_glcanvas.o: $(srcdir)/src/mac/carbon/glcanvas.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_COCOA@gldll_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLDLL_ODEP)
+@COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_GTK@gldll_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
 
@@ -20885,6 +20891,9 @@ xrclib_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCLIB_ODEP)
 
 @COND_TOOLKIT_MAC@gllib_glcanvas.o: $(srcdir)/src/mac/carbon/glcanvas.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA@gllib_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLLIB_ODEP)
+@COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_GTK@gllib_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
