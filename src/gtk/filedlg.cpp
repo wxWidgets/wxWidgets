@@ -237,9 +237,23 @@ void wxFileDialog::SetPath(const wxString& path)
 
     wxFileName fn(path);
     m_path = fn.GetFullPath();
+    m_dir = fn.GetPath();
+    m_fileName = fn.GetFullName();
     
-    SetDirectory(fn.GetPath());
-    SetFilename(fn.GetFullName());
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
+                                            wxGTK_CONV(m_dir));
+                                            
+    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
+                                      wxGTK_CONV(m_path));
+                                      
+    // pre-fill the filename when saving, too (there's no text entry
+    // control when opening a file, so it doesn't make sense to
+    // do this in when opening files):
+    if (GetWindowStyle() & wxSAVE)
+    {
+        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
+                                              wxGTK_CONV(m_fileName));
+    }
 }
 
 void wxFileDialog::SetDirectory(const wxString& dir)
