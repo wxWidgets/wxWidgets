@@ -56,7 +56,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 {
     if ( fixedWidthOnly )
     {
-        OnFacename( wxT("monospaced") );
+        OnFacename( wxT("monospace") );
     }
     else
     {
