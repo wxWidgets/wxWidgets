@@ -2690,10 +2690,12 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     if (m_resizing) return; /* I don't like recursions */
     m_resizing = TRUE;
 
-    if (x == -1) 
-        x = m_x;
+    int currentX, currentY;
+    GetPosition(&currentX, &currentY);
+    if (x == -1)
+        x = currentX;
     if (y == -1)
-        y = m_y;
+        y = currentY;
     AdjustForParentClientOrigin(x, y, sizeFlags);
 
     if (m_parent->m_wxwindow == NULL) /* i.e. wxNotebook */
@@ -2986,9 +2988,21 @@ void wxWindowGTK::DoGetPosition( int *x, int *y ) const
         dx = pizza->xoffset;
         dy = pizza->yoffset;
     }
+    
+    int nx = m_x - dx;
+    int ny = m_y - dy;
+    
+    if ( !IsTopLevel() && m_parent )
+    {
+        // We may be faking the client origin. So a window that's really at (0,
+        // 30) may appear (to wxWin apps) to be at (0, 0).
+        wxPoint pt(m_parent->GetClientAreaOrigin());
+        nx -= pt.x;
+        ny -= pt.y;
+    }
 
-    if (x) (*x) = m_x - dx;
-    if (y) (*y) = m_y - dy;
+    if (x) (*x) = nx;
+    if (y) (*y) = ny;
 }
 
 void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
