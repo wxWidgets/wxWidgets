@@ -137,39 +137,33 @@ int MyApp::OnExit()
 
 // Define my frame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title)
-        : wxFrame(frame, -1, title)
+        : wxFrame(frame, -1, title, wxDefaultPosition, wxSize(300, 200))
 {
-    panel = NULL;
-
     // Give it an icon
     SetIcon(wxICON(mondrian));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(CLIENT_EXECUTE, "Execute");
-    file_menu->Append(CLIENT_REQUEST, "Request");
-    file_menu->Append(CLIENT_POKE, "Poke");
-    file_menu->Append(CLIENT_QUIT, "Quit");
+    file_menu->Append(CLIENT_EXECUTE, "&Execute\tCtrl-E");
+    file_menu->Append(CLIENT_REQUEST, "&Request\tCtrl-R");
+    file_menu->Append(CLIENT_POKE, "&Poke\tCtrl-P");
+    file_menu->Append(CLIENT_QUIT, "&Quit\tCtrl-Q");
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
-    menu_bar->Append(file_menu, "File");
+    menu_bar->Append(file_menu, "&File");
 
     // Associate the menu bar with the frame
     SetMenuBar(menu_bar);
 
-    // Make a panel
-    panel = new wxPanel(this);
-    the_list = new wxListBox(panel, CLIENT_LISTBOX, wxPoint(5, 5));
+    // Make a listbox which shows the choices made in the server
+    the_list = new wxListBox(this, CLIENT_LISTBOX, wxPoint(5, 5));
     the_list->Append("Apple");
     the_list->Append("Pear");
     the_list->Append("Orange");
     the_list->Append("Banana");
     the_list->Append("Fruit");
-
-    panel->Fit();
-    Fit();
 }
 
 void MyFrame::OnExecute(wxCommandEvent& event)

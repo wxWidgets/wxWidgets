@@ -99,10 +99,8 @@ int MyApp::OnExit()
 
 // Define my frame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title)
-       : wxFrame(frame, -1, title)
+       : wxFrame(frame, -1, title, wxDefaultPosition, wxSize(350, 250))
 {
-    panel = NULL;
-
     CreateStatusBar();
 
     // Give it an icon
@@ -111,7 +109,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(SERVER_EXIT, "&Exit");
+    file_menu->Append(SERVER_EXIT, "&Quit\tCtrl-Q");
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
@@ -120,23 +118,19 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     // Associate the menu bar with the frame
     SetMenuBar(menu_bar);
 
-    // Make a panel
-    panel = new wxPanel(this);
-    wxListBox *list = new wxListBox(panel, SERVER_LISTBOX, wxPoint(5, 5));
+    // Make a listbox
+    wxListBox *list = new wxListBox(this, SERVER_LISTBOX, wxPoint(5, 5));
     list->Append("Apple");
     list->Append("Pear");
     list->Append("Orange");
     list->Append("Banana");
     list->Append("Fruit");
-
-    panel->Fit();
-    Fit();
 }
 
 // Set the client process's listbox to this item
 void MyFrame::OnListBoxClick(wxCommandEvent& WXUNUSED(event))
 {
-    wxListBox* listBox = (wxListBox*) panel->FindWindow(SERVER_LISTBOX);
+    wxListBox* listBox = (wxListBox*) FindWindow(SERVER_LISTBOX);
     if (listBox)
     {
         wxString value = listBox->GetStringSelection();
