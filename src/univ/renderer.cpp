@@ -458,7 +458,7 @@ void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap,
         }
         else if ( alignment & wxALIGN_CENTRE )
         {
-            x = (rect.GetLeft() + rect.GetRight() - width) / 2;
+            x = (rect.GetLeft() + rect.GetRight() - width + 1) / 2;
         }
         else // alignment & wxALIGN_LEFT
         {
@@ -471,7 +471,7 @@ void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap,
         }
         else if ( alignment & wxALIGN_CENTRE_VERTICAL )
         {
-            y = (rect.GetTop() + rect.GetBottom() - height) / 2;
+            y = (rect.GetTop() + rect.GetBottom() - height + 1) / 2;
         }
         else // alignment & wxALIGN_TOP
         {
@@ -635,19 +635,26 @@ void wxControlRenderer::DrawItems(const wxListBox *lbox,
     }
 }
 
-void wxControlRenderer::DrawLabelBox(const wxBitmap& bitmap, wxCoord margin)
+void wxControlRenderer::DrawLabelBox(const wxBitmap& bitmap,
+                                     wxCoord marginLeft,
+                                     wxCoord marginRight,
+                                     wxCoord marginTop)
 {
     m_dc.SetFont(m_window->GetFont());
     m_dc.SetTextForeground(m_window->GetForegroundColour());
 
-    if ( margin == -1 )
-        margin = 4;
+    // draw the focus border around everything
+    int flags = m_window->GetStateFlags();
+    if ( flags & wxCONTROL_FOCUSED )
+    {
+        m_renderer->DrawCheckBoxFocusBorder(m_dc, &m_rect);
+    }
 
     // calculate the position of the bitmap and of the label
-    wxRect rectBmp;
-    rectBmp.width = bitmap.GetWidth();
-    rectBmp.height = bitmap.GetHeight();
-    rectBmp.y = m_rect.y + (m_rect.height - rectBmp.height + 1) / 2;
+    wxCoord xBmp,
+            yBmp = m_rect.y
+                    + (m_rect.height - bitmap.GetHeight() + 1) / 2
+                    + marginTop;
 
     wxRect rectLabel;
     wxString label = m_window->GetLabel();
@@ -656,25 +663,25 @@ void wxControlRenderer::DrawLabelBox(const wxBitmap& bitmap, wxCoord margin)
 
     if ( m_window->GetWindowStyle() & wxALIGN_RIGHT )
     {
-        rectBmp.x = m_rect.GetRight() - rectBmp.width;
+        xBmp = m_rect.GetRight() - bitmap.GetWidth() - marginLeft;
         rectLabel.SetLeft(m_rect.GetLeft());
-        rectLabel.SetRight(rectBmp.GetLeft() - margin);
+        rectLabel.SetRight(xBmp - marginRight);
     }
     else // normal (checkbox to the left of the text) case
     {
-        rectBmp.x = m_rect.GetLeft();
-        rectLabel.SetLeft(rectBmp.GetRight() + margin);
+        xBmp = m_rect.GetLeft() + marginLeft;
+        rectLabel.SetLeft(xBmp + bitmap.GetWidth() + marginRight);
         rectLabel.SetRight(m_rect.GetRight());
     }
 
-    DrawBitmap(bitmap, rectBmp);
+    m_dc.DrawBitmap(bitmap, xBmp, yBmp, TRUE /* use mask */);
 
     wxControl *ctrl = wxStaticCast(m_window, wxControl);
 
     m_renderer->DrawLabel(m_dc,
                           label,
                           rectLabel,
-                          m_window->GetStateFlags(),
+                          flags,
                           wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL,
                           ctrl->GetAccelIndex());
 }

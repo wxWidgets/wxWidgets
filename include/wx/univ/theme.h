@@ -23,8 +23,8 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxRenderer;
-class WXDLLEXPORT wxInputHandler;
 class WXDLLEXPORT wxColourScheme;
+class WXDLLEXPORT wxInputHandler;
 struct WXDLLEXPORT wxThemeInfo;
 
 class WXDLLEXPORT wxTheme
@@ -52,8 +52,8 @@ public:
     // this theme
     virtual wxRenderer *GetRenderer() = 0;
 
-    // get the input handler for the control with this name
-    virtual wxInputHandler *GetInputHandler(const wxString& control) = 0;
+    // get the input handler of the given type
+    virtual wxInputHandler *GetInputHandler(const wxString& handlerType) = 0;
 
     // get the colour scheme for the control with this name
     virtual wxColourScheme *GetColourScheme() = 0;

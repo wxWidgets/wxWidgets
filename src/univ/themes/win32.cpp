@@ -104,6 +104,7 @@ public:
                            int flags = 0,
                            int alignment = wxALIGN_LEFT,
                            int indexAccel = -1);
+    virtual void DrawCheckBoxFocusBorder(wxDC& dc, wxRect *rect);
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
@@ -142,6 +143,13 @@ public:
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
         { return fontHeight; }
+
+    virtual wxSize GetCheckBitmapSize(wxCoord *marginLeft,
+                                      wxCoord *marginRight,
+                                      wxCoord *marginTop) const;
+    virtual wxSize GetRadioBitmapSize(wxCoord *marginLeft,
+                                      wxCoord *marginRight,
+                                      wxCoord *marginTop) const;
 
 protected:
     // common part of DrawLabel() and DrawItem()
@@ -258,6 +266,17 @@ protected:
     int m_interval;
 };
 
+class wxWin32CheckboxInputHandler : public wxStdCheckboxInputHandler
+{
+public:
+    wxWin32CheckboxInputHandler(wxInputHandler *handler)
+        : wxStdCheckboxInputHandler(handler) { }
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+};
+
 // ----------------------------------------------------------------------------
 // wxWin32ColourScheme: uses (default) Win32 colours
 // ----------------------------------------------------------------------------
@@ -289,12 +308,17 @@ public:
     virtual wxColourScheme *GetColourScheme();
 
 private:
+    // get the default input handler
+    wxInputHandler *GetDefaultInputHandler();
+
     wxWin32Renderer *m_renderer;
 
     // the names of the already created handlers and the handlers themselves
     // (these arrays are synchronized)
     wxSortedArrayString m_handlerNames;
     wxArrayHandlers m_handlers;
+
+    wxWin32InputHandler *m_handlerDefault;
 
     wxWin32ColourScheme *m_scheme;
 
@@ -315,6 +339,7 @@ wxWin32Theme::wxWin32Theme()
 {
     m_scheme = new wxWin32ColourScheme;
     m_renderer = new wxWin32Renderer(m_scheme);
+    m_handlerDefault = NULL;
 }
 
 wxWin32Theme::~wxWin32Theme()
@@ -325,6 +350,16 @@ wxWin32Theme::~wxWin32Theme()
     delete m_scheme;
 }
 
+wxInputHandler *wxWin32Theme::GetDefaultInputHandler()
+{
+    if ( !m_handlerDefault )
+    {
+        m_handlerDefault = new wxWin32InputHandler(m_renderer);
+    }
+
+    return m_handlerDefault;
+}
+
 wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
 {
     wxInputHandler *handler;
@@ -332,15 +367,17 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
     if ( n == wxNOT_FOUND )
     {
         // create a new handler
-        if ( control.Matches(_T("wx*Button")) )
-            handler = new wxStdButtonInputHandler(GetInputHandler(_T("wxControl")));
-        else if ( control == _T("wxScrollBar") )
+        if ( control == wxINP_HANDLER_BUTTON )
+            handler = new wxStdButtonInputHandler(GetDefaultInputHandler());
+        else if ( control == wxINP_HANDLER_SCROLLBAR )
             handler = new wxWin32ScrollBarInputHandler(m_renderer,
-                                                       GetInputHandler(_T("wxControl")));
-        else if ( control == _T("wxListBox") )
-            handler = new wxStdListboxInputHandler(GetInputHandler(_T("wxControl")));
+                                                       GetDefaultInputHandler());
+        else if ( control == wxINP_HANDLER_CHECKBOX )
+            handler = new wxWin32CheckboxInputHandler(GetDefaultInputHandler());
+        else if ( control == wxINP_HANDLER_LISTBOX )
+            handler = new wxStdListboxInputHandler(GetDefaultInputHandler());
         else
-            handler = new wxWin32InputHandler(m_renderer);
+            handler = GetDefaultInputHandler();
 
         n = m_handlerNames.Add(control);
         m_handlers.Insert(handler, n);
@@ -843,8 +880,13 @@ bool wxWin32Renderer::AreScrollbarsInsideBorder() const
 }
 
 // ----------------------------------------------------------------------------
-// button border
+// borders
 // ----------------------------------------------------------------------------
+
+void wxWin32Renderer::DrawCheckBoxFocusBorder(wxDC& dc, wxRect *rect)
+{
+    // we don't have it
+}
 
 void wxWin32Renderer::DrawButtonBorder(wxDC& dc,
                                        const wxRect& rectTotal,
@@ -1269,6 +1311,34 @@ int wxWin32Renderer::PixelToScrollbar(const wxScrollBar *scrollbar,
 }
 
 // ----------------------------------------------------------------------------
+// check/radio bitmaps geometry
+// ----------------------------------------------------------------------------
+
+wxSize wxWin32Renderer::GetCheckBitmapSize(wxCoord *marginLeft,
+                                           wxCoord *marginRight,
+                                           wxCoord *marginTop) const
+{
+    if ( marginLeft )
+        *marginLeft = 2;
+    if ( marginRight )
+        *marginRight = 5;
+
+    return wxSize(10, 10);
+}
+
+wxSize wxWin32Renderer::GetRadioBitmapSize(wxCoord *marginLeft,
+                                           wxCoord *marginRight,
+                                           wxCoord *marginTop) const
+{
+    if ( marginLeft )
+        *marginLeft = 1;
+    if ( marginRight )
+        *marginRight = 4;
+
+    return wxSize(11, 11);
+}
+
+// ----------------------------------------------------------------------------
 // size adjustments
 // ----------------------------------------------------------------------------
 
@@ -1491,4 +1561,43 @@ bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxControl *control,
     }
 
     return wxStdScrollBarInputHandler::HandleMouseMove(control, event);
+}
+
+// ----------------------------------------------------------------------------
+// wxWin32CheckboxInputHandler
+// ----------------------------------------------------------------------------
+
+bool wxWin32CheckboxInputHandler::HandleKey(wxControl *control,
+                                          const wxKeyEvent& event,
+                                          bool pressed)
+{
+    if ( pressed )
+    {
+        wxControlAction action;
+        int keycode = event.GetKeyCode();
+        switch ( keycode )
+        {
+            case WXK_SPACE:
+                action = wxACTION_CHECKBOX_TOGGLE;
+                break;
+
+            case '-':
+                action = wxACTION_CHECKBOX_CHECK;
+                break;
+
+            case '+':
+            case '=':
+                action = wxACTION_CHECKBOX_CLEAR;
+                break;
+        }
+
+        if ( !!action )
+        {
+            control->PerformAction(wxACTION_CHECKBOX_TOGGLE);
+
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }

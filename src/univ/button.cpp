@@ -130,6 +130,11 @@ void wxButton::DoDraw(wxControlRenderer *renderer)
 // input processing
 // ----------------------------------------------------------------------------
 
+wxString wxButton::GetInputHandlerType() const
+{
+    return wxINP_HANDLER_BUTTON;
+}
+
 void wxButton::Press()
 {
     if ( !m_isPressed )
@@ -296,6 +301,7 @@ bool wxStdButtonInputHandler::HandleMouseMove(wxControl *control,
             m_winHasMouse = FALSE;
 
             // we do have a pressed button, so release it
+            control->SetCurrent(FALSE);
             control->PerformAction(wxACTION_BUTTON_RELEASE);
 
             return TRUE;
@@ -309,6 +315,7 @@ bool wxStdButtonInputHandler::HandleMouseMove(wxControl *control,
 
             // we did have a pressed button which we released when leaving the
             // window, press it again
+            control->SetCurrent(TRUE);
             control->PerformAction(wxACTION_BUTTON_PRESS);
 
             return TRUE;

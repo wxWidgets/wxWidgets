@@ -24,6 +24,8 @@
 #define wxACTION_CHECKBOX_CLEAR   _T("clear")   // SetValue(FALSE)
 #define wxACTION_CHECKBOX_TOGGLE  _T("toggle")  // toggle the check state
 
+// additionally it accepts wxACTION_BUTTON_PRESS and RELEASE
+
 // ----------------------------------------------------------------------------
 // wxCheckBox
 // ----------------------------------------------------------------------------
@@ -79,13 +81,31 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const;
 
-    // set/get the margin between the checkbox bitmap and the label
-    void SetMargin(wxCoord margin) { m_checkMargin = margin; }
-    wxCoord GetMargin() const { return m_checkMargin; }
+    // set/get the margins between the checkbox bitmap and the border and
+    // between the bitmap and the label and above it
+    void SetMargins(wxCoord marginLeft, wxCoord marginRight, wxCoord marginTop)
+    {
+        m_checkMarginLeft = marginLeft;
+        m_checkMarginRight = marginRight;
+        m_checkMarginTop = marginTop;
+    }
+    wxCoord GetLeftMargin() const { return m_checkMarginLeft; }
+    wxCoord GetRightMargin() const { return m_checkMarginRight; }
+    wxCoord GetTopMargin() const { return m_checkMarginTop; }
 
     // set/get the bitmaps to use for the checkbox indicator
     void SetBitmap(const wxBitmap& bmp, State state, Status status);
     wxBitmap GetBitmap(State state, Status status) const;
+
+    // wxCheckBox actions
+    void Toggle();
+    virtual void Press();
+    virtual void Release();
+    virtual void Click();
+    virtual void ChangeValue(bool value);
+
+    // overridden base class virtuals
+    virtual bool IsPressed() const { return m_isPressed; }
 
 protected:
     virtual bool PerformAction(const wxControlAction& action,
@@ -94,8 +114,14 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer);
     virtual wxSize DoGetBestClientSize() const;
 
+    virtual wxString GetInputHandlerType() const;
+    virtual bool CanBeHighlighted() const { return TRUE; }
+
     // common part of all ctors
     void Init();
+
+    // set the margins to the default values if they were not set yet
+    void SetMargins();
 
 private:
     // the current check status
@@ -104,8 +130,13 @@ private:
     // the bitmaps to use for the different states
     wxBitmap m_bitmaps[State_Max][Status_Max];
 
-    // the distance between the checkbox and the label (-1 means default)
-    wxCoord m_checkMargin;
+    // the distance between the checkbox and the label/border (-1 means default)
+    wxCoord m_checkMarginLeft,
+            m_checkMarginRight,
+            m_checkMarginTop;
+
+    // is the checkbox currently pressed?
+    bool m_isPressed;
 
     DECLARE_DYNAMIC_CLASS(wxCheckBox)
 };

@@ -870,6 +870,15 @@ void wxListBox::Activate(int item)
     }
 }
 
+// ----------------------------------------------------------------------------
+// input handling
+// ----------------------------------------------------------------------------
+
+wxString wxListBox::GetInputHandlerType() const
+{
+    return wxINP_HANDLER_LISTBOX;
+}
+
 bool wxListBox::PerformAction(const wxControlAction& action,
                               long numArg,
                               const wxString& strArg)

@@ -309,6 +309,11 @@ void wxScrollBar::SetState(Element which, int flags)
 // input processing
 // ----------------------------------------------------------------------------
 
+wxString wxScrollBar::GetInputHandlerType() const
+{
+    return wxINP_HANDLER_SCROLLBAR;
+}
+
 bool wxScrollBar::PerformAction(const wxControlAction& action,
                                 long numArg,
                                 const wxString& strArg)

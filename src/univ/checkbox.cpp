@@ -33,10 +33,13 @@
     #include "wx/dcclient.h"
     #include "wx/checkbox.h"
     #include "wx/validate.h"
+
+    #include "wx/button.h" // for wxACTION_BUTTON_XXX
 #endif
 
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
+#include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
 
 // ============================================================================
@@ -51,7 +54,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 
 void wxCheckBox::Init()
 {
-    m_checkMargin = -1;
+    m_checkMarginLeft =
+    m_checkMarginRight =
+    m_checkMarginTop = -1;
+    m_isPressed = FALSE;
     m_status = Status_Unchecked;
 }
 
@@ -125,16 +131,36 @@ void wxCheckBox::DoDraw(wxControlRenderer *renderer)
     else
         state = State_Normal;
 
-    renderer->DrawLabelBox(GetBitmap(state, m_status), m_checkMargin);
+    SetMargins();
+
+    renderer->DrawLabelBox(GetBitmap(state, m_status),
+                           m_checkMarginLeft,
+                           m_checkMarginRight,
+                           m_checkMarginTop);
 }
 
 // ----------------------------------------------------------------------------
 // geometry calculations
 // ----------------------------------------------------------------------------
 
+void wxCheckBox::SetMargins()
+{
+    wxCoord *left = m_checkMarginLeft == -1 ? &m_checkMarginLeft : NULL,
+            *right = m_checkMarginRight == -1 ? &m_checkMarginRight : NULL,
+            *top = m_checkMarginTop == -1 ? &m_checkMarginTop : NULL;
+    if ( left || right || top )
+    {
+        GetRenderer()->GetCheckBitmapSize(left, right, top);
+    }
+}
+
 wxSize wxCheckBox::DoGetBestClientSize() const
 {
-    wxClientDC dc(wxConstCast(this, wxCheckBox));
+    wxCheckBox *self = wxConstCast(this, wxCheckBox);
+
+    self->SetMargins();
+
+    wxClientDC dc(self);
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
 
@@ -143,25 +169,82 @@ wxSize wxCheckBox::DoGetBestClientSize() const
         height = bmp.GetHeight();
     height += GetCharHeight();
 
-    width += bmp.GetWidth() + 2*GetCharWidth();
+    width += bmp.GetWidth()
+                + m_checkMarginLeft + m_checkMarginRight
+                + GetCharWidth();
 
     return wxSize(width, height);
+}
+
+// ----------------------------------------------------------------------------
+// checkbox actions
+// ----------------------------------------------------------------------------
+
+void wxCheckBox::Press()
+{
+    if ( !m_isPressed )
+    {
+        m_isPressed = TRUE;
+
+        Refresh();
+    }
+}
+
+void wxCheckBox::Release()
+{
+    if ( m_isPressed )
+    {
+        m_isPressed = FALSE;
+
+        Refresh();
+    }
+}
+
+void wxCheckBox::Toggle()
+{
+    ChangeValue(!GetValue());
+
+    m_isPressed = FALSE;
+}
+
+void wxCheckBox::ChangeValue(bool value)
+{
+    SetValue(value);
+
+    Click();
+}
+
+void wxCheckBox::Click()
+{
+    wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, GetId());
+    InitCommandEvent(event);
+    event.SetInt(IsChecked());
+    Command(event);
 }
 
 // ----------------------------------------------------------------------------
 // input handling
 // ----------------------------------------------------------------------------
 
+wxString wxCheckBox::GetInputHandlerType() const
+{
+    return wxINP_HANDLER_CHECKBOX;
+}
+
 bool wxCheckBox::PerformAction(const wxControlAction& action,
                                long numArg,
                                const wxString& strArg)
 {
+    if ( action == wxACTION_BUTTON_PRESS )
+        Press();
+    else if ( action == wxACTION_BUTTON_RELEASE )
+        Release();
     if ( action == wxACTION_CHECKBOX_CHECK )
-        SetValue(TRUE);
+        ChangeValue(TRUE);
     else if ( action == wxACTION_CHECKBOX_CLEAR )
-        SetValue(FALSE);
+        ChangeValue(FALSE);
     else if ( action == wxACTION_CHECKBOX_TOGGLE )
-        SetValue(!GetValue());
+        Toggle();
     else
         return wxControl::PerformAction(action, numArg, strArg);
 
@@ -170,3 +253,27 @@ bool wxCheckBox::PerformAction(const wxControlAction& action,
 
 #endif // wxUSE_CHECKBOX
 
+#if wxUSE_CHECKBOX || wxUSE_RADIOBTN
+
+// ----------------------------------------------------------------------------
+// wxStdCheckboxInputHandler
+// ----------------------------------------------------------------------------
+
+wxStdCheckboxInputHandler::wxStdCheckboxInputHandler(wxInputHandler *inphand)
+                         : wxStdButtonInputHandler(inphand)
+{
+}
+
+bool wxStdCheckboxInputHandler::HandleMouse(wxControl *control,
+                                            const wxMouseEvent& event)
+{
+    return wxStdButtonInputHandler::HandleMouse(control, event);
+}
+
+bool wxStdCheckboxInputHandler::HandleMouseMove(wxControl *control,
+                                                const wxMouseEvent& event)
+{
+    return wxStdButtonInputHandler::HandleMouseMove(control, event);
+}
+
+#endif // wxUSE_RADIOBTN || wxUSE_CHECKBOX

@@ -90,9 +90,8 @@ public:
                                const wxString& strArg = wxEmptyString);
 
 protected:
-    // create the event translator object for this control: the base class
-    // action creates the default one which doesn't do anything
-    virtual wxInputHandler *CreateInputHandler() const;
+    // get the type of event translator object for this control
+    virtual wxString GetInputHandlerType() const;
 
     // event handlers
     void OnMouse(wxMouseEvent& event);

@@ -108,6 +108,7 @@ public:
 protected:
     // event handlers
     void OnButton(wxCommandEvent& event);
+    void OnCheckBox(wxCommandEvent& event);
     void OnListBox(wxCommandEvent& event);
     void OnLeftUp(wxMouseEvent& event);
 
@@ -148,6 +149,7 @@ WX_USE_THEME(gtk);
 
 BEGIN_EVENT_TABLE(MyUnivFrame, wxFrame)
     EVT_BUTTON(-1, MyUnivFrame::OnButton)
+    EVT_CHECKBOX(-1, MyUnivFrame::OnCheckBox)
     EVT_LISTBOX(-1, MyUnivFrame::OnListBox)
 
     EVT_LEFT_UP(MyUnivFrame::OnLeftUp)
@@ -351,6 +353,12 @@ void MyUnivFrame::OnButton(wxCommandEvent& event)
     {
         wxLogDebug(_T("Another button pressed."));
     }
+}
+
+void MyUnivFrame::OnCheckBox(wxCommandEvent& event)
+{
+    wxLogDebug(_T("Checkbox became %schecked."),
+               event.IsChecked() ? _T("") : _T("un"));
 }
 
 void MyUnivFrame::OnListBox(wxCommandEvent& event)

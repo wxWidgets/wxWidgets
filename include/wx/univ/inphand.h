@@ -26,6 +26,18 @@ class WXDLLEXPORT wxRenderer;
 class WXDLLEXPORT wxScrollBar;
 
 // ----------------------------------------------------------------------------
+// types of the standard input handlers which can be passed to
+// wxTheme::GetInputHandler()
+// ----------------------------------------------------------------------------
+
+#define wxINP_HANDLER_DEFAULT           _T("")
+#define wxINP_HANDLER_BUTTON            _T("button")
+#define wxINP_HANDLER_CHECKBOX          _T("checkbox")
+#define wxINP_HANDLER_RADIOBTN          _T("radiobtn")
+#define wxINP_HANDLER_SCROLLBAR         _T("scrollbar")
+#define wxINP_HANDLER_LISTBOX           _T("listbox")
+
+// ----------------------------------------------------------------------------
 // wxInputHandler: maps the events to the actions
 // ----------------------------------------------------------------------------
 
@@ -230,6 +242,23 @@ protected:
     wxWindow *m_winCapture;
     int m_btnCapture;
     bool m_toggleOnPressAlways;
+};
+
+// ----------------------------------------------------------------------------
+// wxStdCheckboxInputHandler: handles the mouse events for the check and radio
+// boxes (handling the keyboard input is simple, but its handling differs a
+// lot between GTK and MSW, so a new class should be derived for this)
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdCheckboxInputHandler : public wxStdButtonInputHandler
+{
+public:
+    wxStdCheckboxInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control,
+                                 const wxMouseEvent& event);
 };
 
 #endif // _WX_UNIV_INPHAND_H_

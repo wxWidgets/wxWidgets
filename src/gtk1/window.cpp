@@ -348,6 +348,8 @@ static wxWindowGTK *FindFocusedChild(wxWindowGTK *win)
 
 static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
 {
+    // wxUniversal widgets draw the borders and scrollbars themselves
+#ifndef __WXUNIVERSAL__
     if (!win->m_hasVMT)
         return;
 
@@ -385,8 +387,6 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
             }
     }
 
-    // wxUniversal widgets draw the borders themselves
-#ifndef __WXUNIVERSAL__
     int dx = 0;
     int dy = 0;
     if (GTK_WIDGET_NO_WINDOW (widget))
@@ -1452,6 +1452,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
             wxMouseEvent event(g_captureWindowHasMouse ? wxEVT_ENTER_WINDOW
                                                        : wxEVT_LEAVE_WINDOW);
             InitMouseEvent(event, gdk_event);
+            event.SetEventObject(win);
             win->GetEventHandler()->ProcessEvent(event);
         }
     }

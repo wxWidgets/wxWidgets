@@ -31,6 +31,7 @@
     #include "wx/window.h"
 
     #include "wx/button.h"
+    #include "wx/checkbox.h"
     #include "wx/scrolbar.h"
 #endif // WX_PRECOMP
 
@@ -86,6 +87,7 @@ public:
                            int flags = 0,
                            int alignment = wxALIGN_LEFT,
                            int indexAccel = -1);
+    virtual void DrawCheckBoxFocusBorder(wxDC& dc, wxRect *rect);
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
@@ -126,9 +128,16 @@ public:
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
         { return fontHeight + 2; }
 
+    virtual wxSize GetCheckBitmapSize(wxCoord *marginLeft,
+                                      wxCoord *marginRight,
+                                      wxCoord *marginTop) const;
+    virtual wxSize GetRadioBitmapSize(wxCoord *marginLeft,
+                                      wxCoord *marginRight,
+                                      wxCoord *marginTop) const;
+
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
-    void DrawUncheckBitmap(wxDC& dc, const wxRect& rect);
+    void DrawUncheckBitmap(wxDC& dc, const wxRect& rect, bool isPressed);
 
 protected:
     // DrawBackground() helpers
@@ -276,6 +285,17 @@ protected:
     }
 };
 
+class wxGTKCheckboxInputHandler : public wxStdCheckboxInputHandler
+{
+public:
+    wxGTKCheckboxInputHandler(wxInputHandler *handler)
+        : wxStdCheckboxInputHandler(handler) { }
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+};
+
 // ----------------------------------------------------------------------------
 // wxGTKColourScheme: uses the standard GTK colours
 // ----------------------------------------------------------------------------
@@ -290,9 +310,10 @@ public:
 #endif // wxUSE_CHECKBOX
 
 private:
-    // the checkbox bitmaps
-    wxBitmap m_bmpCheck,
-             m_bmpUncheck;
+    // the checkbox bitmaps: first row is for the normal, second for the
+    // pressed state and the columns are for checked and unchecked status
+    // respectively
+    wxBitmap m_bitmapsCheckbox[2][2];
 };
 
 // ----------------------------------------------------------------------------
@@ -312,12 +333,17 @@ public:
     virtual wxColourScheme *GetColourScheme() { return m_scheme; }
 
 private:
+    // get the default input handler
+    wxInputHandler *GetDefaultInputHandler();
+
     wxGTKRenderer *m_renderer;
 
     // the names of the already created handlers and the handlers themselves
     // (these arrays are synchronized)
     wxSortedArrayString m_handlerNames;
     wxArrayHandlers m_handlers;
+
+    wxGTKInputHandler *m_handlerDefault;
 
     wxGTKColourScheme *m_scheme;
 
@@ -338,11 +364,22 @@ wxGTKTheme::wxGTKTheme()
 {
     m_scheme = new wxGTKColourScheme;
     m_renderer = new wxGTKRenderer(m_scheme);
+    m_handlerDefault = NULL;
 }
 
 wxGTKTheme::~wxGTKTheme()
 {
     WX_CLEAR_ARRAY(m_handlers);
+}
+
+wxInputHandler *wxGTKTheme::GetDefaultInputHandler()
+{
+    if ( !m_handlerDefault )
+    {
+        m_handlerDefault = new wxGTKInputHandler(m_renderer);
+    }
+
+    return m_handlerDefault;
 }
 
 wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
@@ -352,15 +389,17 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
     if ( n == wxNOT_FOUND )
     {
         // create a new handler
-        if ( control.Matches(_T("wx*Button")) )
-            handler = new wxStdButtonInputHandler(GetInputHandler(_T("wxControl")));
-        else if ( control == _T("wxScrollBar") )
+        if ( control == wxINP_HANDLER_BUTTON )
+            handler = new wxStdButtonInputHandler(GetDefaultInputHandler());
+        else if ( control == wxINP_HANDLER_SCROLLBAR )
             handler = new wxGTKScrollBarInputHandler(m_renderer,
-                                                     GetInputHandler(_T("wxControl")));
-        else if ( control == _T("wxListBox") )
-            handler = new wxStdListboxInputHandler(GetInputHandler(_T("wxControl")), FALSE);
+                                                     GetDefaultInputHandler());
+        else if ( control == wxINP_HANDLER_CHECKBOX )
+            handler = new wxGTKCheckboxInputHandler(GetDefaultInputHandler());
+        else if ( control == wxINP_HANDLER_LISTBOX )
+            handler = new wxStdListboxInputHandler(GetDefaultInputHandler());
         else
-            handler = new wxGTKInputHandler(m_renderer);
+            handler = GetDefaultInputHandler();
 
         n = m_handlerNames.Add(control);
         m_handlers.Insert(handler, n);
@@ -455,26 +494,42 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col) const
 wxBitmap wxGTKColourScheme::Get(wxCheckBox::State state,
                                 wxCheckBox::Status status)
 {
-    if ( !m_bmpCheck.Ok() )
+    if ( !m_bitmapsCheckbox[0][0].Ok() )
     {
         // init the bitmaps once only
         wxRect rect;
         rect.width =
         rect.height = 10;
-        m_bmpCheck.Create(rect.width, rect.height);
-        m_bmpUncheck.Create(rect.width, rect.height);
+        for ( int i = 0; i < 2; i++ )
+        {
+            for ( int j = 0; j < 2; j++ )
+                m_bitmapsCheckbox[i][j].Create(rect.width, rect.height);
+        }
 
         wxGTKRenderer *renderer = (wxGTKRenderer *)wxTheme::Get()->GetRenderer();
 
         wxMemoryDC dc;
-        dc.SelectObject(m_bmpCheck);
+
+        // normal checked
+        dc.SelectObject(m_bitmapsCheckbox[0][0]);
         renderer->DrawCheckBitmap(dc, rect);
 
-        dc.SelectObject(m_bmpUncheck);
-        renderer->DrawUncheckBitmap(dc, rect);
+        // normal unchecked
+        dc.SelectObject(m_bitmapsCheckbox[0][1]);
+        renderer->DrawUncheckBitmap(dc, rect, FALSE);
+
+        // pressed checked
+        m_bitmapsCheckbox[1][0] = m_bitmapsCheckbox[0][0];
+
+        // pressed unchecked
+        dc.SelectObject(m_bitmapsCheckbox[1][1]);
+        renderer->DrawUncheckBitmap(dc, rect, TRUE);
     }
 
-    return status == wxCheckBox::Status_Checked ? m_bmpCheck : m_bmpUncheck;
+    int row = state == wxCheckBox::State_Pressed ? 1 : 0;
+    int col = status == wxCheckBox::Status_Checked ? 0 : 1;
+
+    return m_bitmapsCheckbox[row][col];
 }
 
 #endif // wxUSE_CHECKBOX
@@ -700,8 +755,13 @@ bool wxGTKRenderer::AreScrollbarsInsideBorder() const
 }
 
 // ----------------------------------------------------------------------------
-// button border
+// borders
 // ----------------------------------------------------------------------------
+
+void wxGTKRenderer::DrawCheckBoxFocusBorder(wxDC& dc, wxRect *rect)
+{
+    DrawRect(dc, rect, m_penBlack);
+}
 
 void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
                                      const wxRect& rectTotal,
@@ -1289,6 +1349,38 @@ int wxGTKRenderer::PixelToScrollbar(const wxScrollBar *scrollbar,
 }
 
 // ----------------------------------------------------------------------------
+// check/radio bitmaps geometry
+// ----------------------------------------------------------------------------
+
+wxSize wxGTKRenderer::GetCheckBitmapSize(wxCoord *marginLeft,
+                                         wxCoord *marginRight,
+                                         wxCoord *marginTop) const
+{
+    if ( marginLeft )
+        *marginLeft = 2;
+    if ( marginRight )
+        *marginRight = 5;
+    if ( marginTop )
+        *marginTop = 1;
+
+    return wxSize(10, 10);
+}
+
+wxSize wxGTKRenderer::GetRadioBitmapSize(wxCoord *marginLeft,
+                                         wxCoord *marginRight,
+                                         wxCoord *marginTop) const
+{
+    if ( marginLeft )
+        *marginLeft = 1;
+    if ( marginRight )
+        *marginRight = 4;
+    if ( marginTop )
+        *marginTop = 1;
+
+    return wxSize(11, 11);
+}
+
+// ----------------------------------------------------------------------------
 // size adjustments
 // ----------------------------------------------------------------------------
 
@@ -1327,7 +1419,9 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
 // checkbox buttons
 // ----------------------------------------------------------------------------
 
-void wxGTKRenderer::DrawUncheckBitmap(wxDC& dc, const wxRect& rectTotal)
+void wxGTKRenderer::DrawUncheckBitmap(wxDC& dc,
+                                      const wxRect& rectTotal,
+                                      bool isPressed)
 {
     wxRect rect = rectTotal;
     DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
@@ -1335,7 +1429,11 @@ void wxGTKRenderer::DrawUncheckBitmap(wxDC& dc, const wxRect& rectTotal)
 
     wxColour col = wxSCHEME_COLOUR(m_scheme, SHADOW_IN);
     dc.SetPen(wxPen(col, 0, wxSOLID));
-    dc.DrawPoint(rect.GetRight(), rect.GetBottom());
+    dc.DrawPoint(rect.GetRight() - 1, rect.GetBottom() - 1);
+
+    if ( isPressed )
+        col = wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED);
+    //else: it is SHADOW_IN, leave as is
 
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush(wxBrush(col, wxSOLID));
@@ -1412,3 +1510,24 @@ bool wxGTKInputHandler::HandleMouseMove(wxControl *control,
     return TRUE;
 }
 
+// ----------------------------------------------------------------------------
+// wxGTKCheckboxInputHandler
+// ----------------------------------------------------------------------------
+
+bool wxGTKCheckboxInputHandler::HandleKey(wxControl *control,
+                                          const wxKeyEvent& event,
+                                          bool pressed)
+{
+    if ( pressed )
+    {
+        int keycode = event.GetKeyCode();
+        if ( keycode == WXK_SPACE || keycode == WXK_RETURN )
+        {
+            control->PerformAction(wxACTION_CHECKBOX_TOGGLE);
+
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
