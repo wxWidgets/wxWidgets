@@ -961,6 +961,7 @@ bool wxFileName::Normalize(int flags,
     {
         // VZ: expand env vars here too?
 
+        m_volume.MakeLower();
         m_name.MakeLower();
         m_ext.MakeLower();
     }
@@ -1141,8 +1142,8 @@ bool wxFileName::SameAs(const wxFileName& filepath, wxPathFormat format) const
 
     // get cwd only once - small time saving
     wxString cwd = wxGetCwd();
-    fn1.Normalize(wxPATH_NORM_ALL & ~wxPATH_NORM_CASE, cwd, format);
-    fn2.Normalize(wxPATH_NORM_ALL & ~wxPATH_NORM_CASE, cwd, format);
+    fn1.Normalize(wxPATH_NORM_ALL | wxPATH_NORM_CASE, cwd, format);
+    fn2.Normalize(wxPATH_NORM_ALL | wxPATH_NORM_CASE, cwd, format);
 
     if ( fn1.GetFullPath() == fn2.GetFullPath() )
         return true;
