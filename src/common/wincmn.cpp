@@ -2460,6 +2460,11 @@ void wxWindowBase::DoMoveInTabOrder(wxWindow *win, MoveKind move)
     wxCHECK_RET( GetParent(),
                     _T("MoveBefore/AfterInTabOrder() don't work for TLWs!") );
 
+    // detect the special case when we have nothing to do anyhow and when the
+    // code below wouldn't work
+    if ( win == this )
+        return;
+
     // find the target window in the siblings list
     wxWindowList& siblings = GetParent()->GetChildren();
     wxWindowList::compatibility_iterator i = siblings.Find(win);
