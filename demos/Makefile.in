@@ -1,0 +1,11 @@
+#
+# Makefile : Builds wxWindows demos for Unix.
+#
+
+DEMOS_SUBDIRS=bombs forty fractal life poem
+
+all:
+	@for d in $(DEMOS_SUBDIRS); do (cd $$d && make); done
+
+clean:
+	@for d in $(DEMOS_SUBDIRS); do (cd $$d && make clean); done

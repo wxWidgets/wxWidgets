@@ -11,7 +11,7 @@
 
 top_srcdir = @top_srcdir@
 top_builddir = ../..
-program_dir = samples/fractal
+program_dir = demos/fractal
 
 PROGRAM=fractal
 

@@ -11,6 +11,9 @@ wxBase:
 
 - wxLongLong class provides support for (signed) 64 bit integers
 
+- wxCmdLineParser class for parsing the command line (supporting short and
+  long options, switches and parameters of different types)
+
 - it is now possible to build wxBase under Win32 (using VC++ only so far)
   and BeOS (without thread support yet)
 

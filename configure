@@ -11516,7 +11516,7 @@ if test "$wxUSE_DIALUP_MANAGER" = "yes" ; then
 #define wxUSE_DIALUP_MANAGER 1
 EOF
 
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS nettest"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dialup"
 fi
 
 if test "$wxUSE_STREAMS" = "yes" ; then
@@ -12056,7 +12056,7 @@ cross_compiling=$ac_cv_prog_cc_cross
 #define wxUSE_SOCKETS 1
 EOF
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wxsocket"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sockets"
     INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS protocol"
 fi
 
@@ -12932,8 +12932,8 @@ LDFLAGS="$LDFLAGS $PROFILE"
 
 if test "$wxUSE_GUI" = "yes"; then
         
-            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS bombs controls dialogs drawing dynamic \
-                     font forty fractal image minimal richedit wxpoem"
+            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS controls dialogs drawing dynamic \
+                     font fractal image minimal richedit"
 
         CPPFLAGS="$CPPFLAGS \$(EXTRADEFS)"
 else
@@ -13143,8 +13143,13 @@ trap 'rm -fr `echo "
             src/makeprog.env
             src/makelib.env
             Makefile
+            demos/Makefile
+            demos/bombs/Makefile
+            demos/forty/Makefile
+            demos/fractal/Makefile
+            demos/life/Makefile
+            demos/poem/Makefile
             samples/Makefile
-            samples/bombs/Makefile
             samples/caret/Makefile
             samples/calendar/Makefile
             samples/checklst/Makefile
@@ -13157,20 +13162,17 @@ trap 'rm -fr `echo "
             samples/docvwmdi/Makefile
             samples/dnd/Makefile
             samples/drawing/Makefile
-            samples/forty/Makefile
             samples/font/Makefile
-            samples/fractal/Makefile
             samples/grid/Makefile
             samples/help/Makefile
             samples/image/Makefile
             samples/internat/Makefile
             samples/layout/Makefile
-            samples/life/Makefile
             samples/listctrl/Makefile
             samples/mdi/Makefile
             samples/minifram/Makefile
             samples/minimal/Makefile
-            samples/nettest/Makefile
+            samples/dialup/Makefile
             samples/newgrid/Makefile
             samples/notebook/Makefile
             samples/png/Makefile
@@ -13189,8 +13191,7 @@ trap 'rm -fr `echo "
             samples/treectrl/Makefile
             samples/typetest/Makefile
             samples/validate/Makefile
-            samples/wxpoem/Makefile
-            samples/wxsocket/Makefile
+            samples/sockets/Makefile
             samples/wizard/Makefile
             samples/html/Makefile
             samples/html/about/Makefile
@@ -13372,8 +13373,13 @@ CONFIG_FILES=\${CONFIG_FILES-"wx-config
             src/makeprog.env
             src/makelib.env
             Makefile
+            demos/Makefile
+            demos/bombs/Makefile
+            demos/forty/Makefile
+            demos/fractal/Makefile
+            demos/life/Makefile
+            demos/poem/Makefile
             samples/Makefile
-            samples/bombs/Makefile
             samples/caret/Makefile
             samples/calendar/Makefile
             samples/checklst/Makefile
@@ -13386,20 +13392,17 @@ CONFIG_FILES=\${CONFIG_FILES-"wx-config
             samples/docvwmdi/Makefile
             samples/dnd/Makefile
             samples/drawing/Makefile
-            samples/forty/Makefile
             samples/font/Makefile
-            samples/fractal/Makefile
             samples/grid/Makefile
             samples/help/Makefile
             samples/image/Makefile
             samples/internat/Makefile
             samples/layout/Makefile
-            samples/life/Makefile
             samples/listctrl/Makefile
             samples/mdi/Makefile
             samples/minifram/Makefile
             samples/minimal/Makefile
-            samples/nettest/Makefile
+            samples/dialup/Makefile
             samples/newgrid/Makefile
             samples/notebook/Makefile
             samples/png/Makefile
@@ -13418,8 +13421,7 @@ CONFIG_FILES=\${CONFIG_FILES-"wx-config
             samples/treectrl/Makefile
             samples/typetest/Makefile
             samples/validate/Makefile
-            samples/wxpoem/Makefile
-            samples/wxsocket/Makefile
+            samples/sockets/Makefile
             samples/wizard/Makefile
             samples/html/Makefile
             samples/html/about/Makefile

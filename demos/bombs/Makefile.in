@@ -11,7 +11,7 @@
 
 top_srcdir = @top_srcdir@
 top_builddir = ../..
-program_dir = samples/bombs
+program_dir = demos/bombs
 
 PROGRAM=bombs
 
