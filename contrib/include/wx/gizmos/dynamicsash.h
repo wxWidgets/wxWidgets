@@ -44,7 +44,7 @@
     for instance, you wish to scroll a subwindow of the view you add to
     your wxDynamicSashWindow object, rather than scrolling the whole view.)
     In this case, you will need to construct your wxDynamicSashWindow without
-    the wxMANAGE_SCROLLBARS style and  you will need to use the
+    the wxDS_MANAGE_SCROLLBARS style and  you will need to use the
     GetHScrollBar() and GetVScrollBar() methods to retrieve the scrollbar
     controls and call SetEventHanler() on them to redirect the scrolling
     events whenever your window is reparented by wxDyanmicSashWindow.
@@ -73,11 +73,19 @@ class wxScrollBar;
 
 
 /*
-    wxMANAGE_SCROLLBARS is a default style of wxDynamicSashWindow which
+    wxDS_MANAGE_SCROLLBARS is a default style of wxDynamicSashWindow which
     will cause it to respond to scrollbar events for your application by
     automatically scrolling the child view.
 */
-#define wxMANAGE_SCROLLBARS     0x00800000
+#define wxDS_MANAGE_SCROLLBARS  0x0010
+
+
+/*
+  wxDS_DRAG_CORNER style indicates that the views can also be resized by
+  dragging the corner piece between the scrollbars, and which is reflected up
+  to the frame if necessary.
+*/
+#define wxDS_DRAG_CORNER        0x0020
 
 
 /*
@@ -129,13 +137,13 @@ public:
     wxDynamicSashWindow();
     wxDynamicSashWindow(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                        long style = wxCLIP_CHILDREN | wxMANAGE_SCROLLBARS,
+                        long style = wxCLIP_CHILDREN | wxDS_MANAGE_SCROLLBARS | wxDS_DRAG_CORNER,
                         const wxString& name = "dynamicSashWindow");
     virtual ~wxDynamicSashWindow();
 
     virtual bool Create(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                        long style = wxCLIP_CHILDREN | wxMANAGE_SCROLLBARS,
+                        long style = wxCLIP_CHILDREN | wxDS_MANAGE_SCROLLBARS | wxDS_DRAG_CORNER,
                         const wxString& name = "dynamicSashWindow");
     virtual wxScrollBar *GetHScrollBar(const wxWindow *child) const;
     virtual wxScrollBar *GetVScrollBar(const wxWindow *child) const;

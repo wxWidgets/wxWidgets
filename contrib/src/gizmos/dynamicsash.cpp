@@ -331,7 +331,8 @@ void wxDynamicSashWindowImpl::DrawSash(int x, int y) const {
     dc.SetBrush(brush);
     dc.SetLogicalFunction(wxXOR);
 
-    if (m_dragging == DSR_CORNER) {
+    if ((m_dragging == DSR_CORNER) &&
+        (m_window->GetWindowStyle() & wxDS_DRAG_CORNER) != 0) {
         int cx = 0;
         int cy = 0;
 
@@ -533,7 +534,6 @@ void wxDynamicSashWindowImpl::Unify(int panel) {
 }
 
 void wxDynamicSashWindowImpl::Split(int px, int py) {
-    m_window->Hide();
 
     m_add_child_target = NULL;
 
@@ -580,9 +580,8 @@ void wxDynamicSashWindowImpl::Split(int px, int py) {
     m_leaf = NULL;
 
     m_container->Layout();
-
-    m_window->Show();
 }
+
 
 /*  This code is called when you finish resizing a view by dragging the
     corner tab, but I think this implementation is lousy and will surprise
@@ -775,7 +774,8 @@ void wxDynamicSashWindowImpl::OnPress(wxMouseEvent &event) {
 }
 
 void wxDynamicSashWindowImpl::OnRelease(wxMouseEvent &event) {
-    if (m_dragging == DSR_CORNER) {
+    if ((m_dragging == DSR_CORNER) &&
+        (m_window->GetWindowStyle() & wxDS_DRAG_CORNER) != 0) {
         DrawSash(m_drag_x, m_drag_y);
         m_container->ReleaseMouse();
 
@@ -877,7 +877,7 @@ bool wxDynamicSashWindowLeaf::Create() {
     m_viewport->SetEventHandler(this);
     Connect(-1, wxEVT_DYNAMIC_SASH_REPARENT, (wxObjectEventFunction)&wxDynamicSashWindowLeaf::OnReparent);
 
-    if (m_impl->m_window->GetWindowStyle() & wxMANAGE_SCROLLBARS) {
+    if (m_impl->m_window->GetWindowStyle() & wxDS_MANAGE_SCROLLBARS) {
         m_hscroll->SetEventHandler(this);
         m_vscroll->SetEventHandler(this);
 
@@ -974,7 +974,7 @@ DynamicSashRegion wxDynamicSashWindowLeaf::GetRegion(int x, int y) {
 
 void wxDynamicSashWindowLeaf::ResizeChild(wxSize size) {
     if (m_child) {
-        if (m_impl->m_window->GetWindowStyle() & wxMANAGE_SCROLLBARS) {
+        if (m_impl->m_window->GetWindowStyle() & wxDS_MANAGE_SCROLLBARS) {
             m_child->SetSize(size);
             wxSize best_size = m_child->GetBestSize();
             if (best_size.GetWidth() < size.GetWidth()) {
@@ -1085,7 +1085,6 @@ void wxDynamicSashWindowLeaf::OnPaint(wxPaintEvent &event) {
     dc.DrawLine(9, h - sh - 3, 9, h - 4);
     dc.DrawLine(9, h - 4, 3, h - 4);
 
-
     int cy = (h - sh + h - 6) / 2 + 1;
     int cx = (w - sw + w - 6) / 2 + 1;
     int sy = cy;
@@ -1138,7 +1137,8 @@ void wxDynamicSashWindowLeaf::OnMouseMove(wxMouseEvent &event) {
         cursor = wxCursor(wxCURSOR_SIZENS);
     } else if (region == DSR_VERTICAL_TAB) {
         cursor = wxCursor(wxCURSOR_SIZEWE);
-    } else if (region == DSR_CORNER) {
+    } else if ((region == DSR_CORNER) &&
+               (m_impl->m_window->GetWindowStyle() & wxDS_DRAG_CORNER) != 0) {
         cursor = wxCursor(wxCURSOR_SIZENWSE);
     } else if (region == DSR_LEFT_EDGE || region == DSR_TOP_EDGE
                 || region == DSR_RIGHT_EDGE || region == DSR_BOTTOM_EDGE) {
@@ -1162,6 +1162,9 @@ void wxDynamicSashWindowLeaf::OnLeave(wxMouseEvent &event) {
 
 void wxDynamicSashWindowLeaf::OnPress(wxMouseEvent &event) {
     DynamicSashRegion region = GetRegion(event.m_x, event.m_y);
+
+    if ((region == DSR_CORNER) && (m_impl->m_window->GetWindowStyle() & wxDS_DRAG_CORNER) == 0)
+        return;
 
     if (region == DSR_HORIZONTAL_TAB || region == DSR_VERTICAL_TAB || region == DSR_CORNER) {
         m_impl->m_dragging = region;
