@@ -1,0 +1,2699 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wxWindows-2.2.1\n"
+"POT-Creation-Date: 2000-07-31 10:41+0200\n"
+"PO-Revision-Date: 2000-08-10 16:09+0200\n"
+"Last-Translator: Roman Rolinsky <rolinsky@mema.ucl.ac.be>\n"
+"Language-Team: wx-translators <wx-translators@wxwindows.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-r\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: ../src/generic/dirdlgg.cpp:550
+msgid ""
+"\n"
+"(Do you have the required permissions?)"
+msgstr ""
+"\n"
+"(У вас есть необходимые разрешения?)"
+
+#: ../src/generic/dirdlgg.cpp:537
+msgid ""
+"\n"
+"does not exist\n"
+"Create it now?"
+msgstr ""
+"\n"
+"не существует\n"
+"Создать его сейчас?"
+
+#: ../src/common/log.cpp:238
+#, c-format
+msgid " (error %ld: %s)"
+msgstr " (ошибка %ld: %s)"
+
+#: ../src/common/docview.cpp:1204
+msgid " - "
+msgstr " - "
+
+#: ../src/html/htmprint.cpp:491
+msgid " Preview"
+msgstr "Пред-осмотр печати"
+
+#: ../src/generic/filedlgg.cpp:328
+msgid " bytes "
+msgstr " байт "
+
+#: ../src/common/paper.cpp:124
+msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+msgstr "#10 Envelope, 4 1/8 x 9 1/2 дюйм"
+
+#: ../src/common/paper.cpp:125
+msgid "#11 Envelope, 4 1/2 x 10 3/8 in"
+msgstr "#11 Envelope, 4 1/2 x 10 3/8 дюйм"
+
+#: ../src/common/paper.cpp:126
+msgid "#12 Envelope, 4 3/4 x 11 in"
+msgstr "#12 Envelope, 4 3/4 x 11 дюйм"
+
+#: ../src/common/paper.cpp:127
+msgid "#14 Envelope, 5 x 11 1/2 in"
+msgstr "#14 Envelope, 5 x 11 1/2 дюйм"
+
+#: ../src/common/paper.cpp:123
+msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
+msgstr "#9 Envelope, 3 7/8 x 8 7/8 дюйм"
+
+#: ../src/common/resourc2.cpp:265 ../src/common/resourc2.cpp:1334
+#: ../src/common/resource.cpp:1778 ../src/common/resource.cpp:1908
+#: ../src/common/resource.cpp:2988
+#, c-format
+msgid "#define %s must be an integer."
+msgstr "#define %s должно быть числом."
+
+#: ../src/html/helpfrm.cpp:718 ../src/html/helpfrm.cpp:719
+#: ../src/html/helpfrm.cpp:1277 ../src/html/helpfrm.cpp:1304
+#, c-format
+msgid "%i of %i"
+msgstr "%i из %i"
+
+#: ../src/common/cmdline.cpp:735
+#, c-format
+msgid "%s (or %s)"
+msgstr "%s (или %s)"
+
+#: ../src/generic/logg.cpp:239
+#, c-format
+msgid "%s Error"
+msgstr "Ошибка %s"
+
+#: ../src/generic/logg.cpp:247
+#, c-format
+msgid "%s Information"
+msgstr "Информация %s"
+
+#: ../src/generic/logg.cpp:243
+#, c-format
+msgid "%s Warning"
+msgstr "Предупреждение %s"
+
+#: ../src/common/resourc2.cpp:709 ../src/common/resource.cpp:2359
+#, c-format
+msgid "%s not a bitmap resource specification."
+msgstr "%s не соответствует спецификации bitmap-ресурса."
+
+#: ../src/common/resourc2.cpp:864 ../src/common/resource.cpp:2514
+#, c-format
+msgid "%s not an icon resource specification."
+msgstr "%s не соответствует спецификации иконки."
+
+#: ../src/common/resourc2.cpp:357 ../src/common/resourc2.cpp:1430
+#: ../src/common/resource.cpp:1871 ../src/common/resource.cpp:2000
+#: ../src/common/resource.cpp:3085
+#, c-format
+msgid "%s: ill-formed resource file syntax."
+msgstr "%s: ошибочный синтаксис файла ресурсов."
+
+#: ../src/generic/logg.cpp:473 ../src/generic/tipdlg.cpp:170
+msgid "&Close"
+msgstr "&Закрыть"
+
+#: ../src/generic/logg.cpp:685
+msgid "&Details"
+msgstr "&Детали"
+
+#: ../src/generic/wizard.cpp:284
+msgid "&Finish"
+msgstr "&Завершить"
+
+#: ../src/generic/logg.cpp:474
+msgid "&Log"
+msgstr "&Журнал"
+
+#: ../src/generic/wizard.cpp:189 ../src/generic/wizard.cpp:286
+msgid "&Next >"
+msgstr "&Следующий >"
+
+#: ../src/generic/tipdlg.cpp:175
+msgid "&Next Tip"
+msgstr "&Следующая подсказка"
+
+#: ../src/common/docview.cpp:1900 ../src/common/docview.cpp:1911
+msgid "&Redo"
+msgstr "&Восстановить"
+
+#: ../src/common/docview.cpp:1894 ../src/common/docview.cpp:1921
+msgid "&Redo "
+msgstr "&Восстановить "
+
+#: ../src/generic/logg.cpp:469 ../src/generic/logg.cpp:770
+msgid "&Save..."
+msgstr "&Сохранить..."
+
+#: ../src/generic/tipdlg.cpp:172
+msgid "&Show tips at startup"
+msgstr "&Показывать подсказки при старте"
+
+#: ../src/common/docview.cpp:1906
+msgid "&Undo"
+msgstr "О&тменить"
+
+#: ../src/common/docview.cpp:1881
+msgid "&Undo "
+msgstr "О&тменить "
+
+#: ../src/common/config.cpp:396
+#, c-format
+msgid "'%s' has extra '..', ignored."
+msgstr "'%s' содержит лишние '..', проигнорировано."
+
+#: ../src/common/valtext.cpp:140
+#, c-format
+msgid "'%s' is invalid"
+msgstr "'%s' недопустимо"
+
+#: ../src/common/cmdline.cpp:657
+#, c-format
+msgid "'%s' is not a correct numeric value for option '%s'."
+msgstr "'%s' - недопустимое числовое значение для опции '%s'."
+
+#: ../src/common/intl.cpp:395
+#, c-format
+msgid "'%s' is not a valid message catalog."
+msgstr "'%s' неверный каталог сообщений."
+
+#: ../src/common/textfile.cpp:250
+#, c-format
+msgid "'%s' is probably a binary file."
+msgstr "'%s' возможно двоичный файл."
+
+#: ../src/common/valtext.cpp:178
+#, c-format
+msgid "'%s' should be numeric."
+msgstr "'%s' должно быть числом."
+
+#: ../src/common/valtext.cpp:160
+#, c-format
+msgid "'%s' should only contain ASCII characters."
+msgstr "'%s' должно содержать только символы ASCII."
+
+#: ../src/common/valtext.cpp:166
+#, c-format
+msgid "'%s' should only contain alphabetic characters."
+msgstr "'%s' должно содержать только символы алфавита."
+
+#: ../src/common/valtext.cpp:172
+#, c-format
+msgid "'%s' should only contain alphabetic or numeric characters."
+msgstr "'%s' должно содержать только символы алфавита или цифры."
+
+#: ../src/html/helpfrm.cpp:679
+msgid "(Help)"
+msgstr "(Помощь)"
+
+#: ../src/html/helpfrm.cpp:276 ../src/html/helpfrm.cpp:783
+#: ../src/html/helpfrm.cpp:1330
+msgid "(bookmarks)"
+msgstr "(закладки)"
+
+#: ../src/common/resourc2.cpp:297 ../src/common/resourc2.cpp:1370
+#: ../src/common/resource.cpp:1810 ../src/common/resource.cpp:1940
+#: ../src/common/resource.cpp:3024
+msgid ""
+", expected static, #include or #define\n"
+"whilst parsing resource."
+msgstr ""
+", ожидался static, #include или #define\n"
+"во время синтаксического анализа."
+
+#: ../src/generic/dirdlgg.cpp:264 ../src/generic/filedlgg.cpp:713
+msgid "."
+msgstr "."
+
+#: ../src/generic/dirdlgg.cpp:265 ../src/generic/filedlgg.cpp:714
+msgid ".."
+msgstr ".."
+
+#: ../src/common/paper.cpp:120
+msgid "10 x 14 in"
+msgstr "10 x 14 дюйм"
+
+#: ../src/common/paper.cpp:121
+msgid "11 x 17 in"
+msgstr "11 x 17 дюйм"
+
+#: ../src/common/paper.cpp:139
+msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
+msgstr "6 3/4 Envelope, 3 5/8 x 6 1/2 дюйм"
+
+#: ../src/html/htmprint.cpp:272
+msgid ": file does not exist!"
+msgstr ": файл не существует!"
+
+#: ../src/common/fontmap.cpp:462
+msgid ": unknown charset"
+msgstr ": неизвестный набор символов"
+
+#: ../src/common/fontmap.cpp:651
+msgid ": unknown encoding"
+msgstr ": неизвестная кодировка"
+
+#: ../src/generic/wizard.cpp:186
+msgid "< &Back"
+msgstr "< &Назад"
+
+#: ../src/generic/filedlgg.cpp:356
+msgid "<DIR>"
+msgstr "<DIR>"
+
+#: ../src/generic/filedlgg.cpp:323
+msgid "<DIR> "
+msgstr "<DIR> "
+
+#: ../src/generic/filedlgg.cpp:357
+msgid "<LINK>"
+msgstr "<LINK>"
+
+#: ../src/generic/filedlgg.cpp:324
+msgid "<LINK> "
+msgstr "<LINK> "
+
+#: ../src/html/helpfrm.cpp:928
+msgid ""
+"<html><body>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> "
+"<b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size "
+"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
+"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
+"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
+"+4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
+"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size "
+"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
+"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
+"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
+"+4</font></tt></body></html>"
+msgstr ""
+"<html><body>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> "
+"<b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size "
+"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
+"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
+"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
+"+4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
+"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size "
+"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
+"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
+"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
+"+4</font></tt></body></html>"
+
+#: ../src/common/paper.cpp:113
+msgid "A3 sheet, 297 x 420 mm"
+msgstr "Лист A3 297 x 420 мм"
+
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2516
+msgid "A4 sheet, 210 x 297 mm"
+msgstr "Лист A4, 210 x 297 мм"
+
+#: ../src/common/paper.cpp:114
+msgid "A4 small sheet, 210 x 297 mm"
+msgstr "Малый лист A4, 210 x 297 мм"
+
+#: ../src/common/paper.cpp:115
+msgid "A5 sheet, 148 x 210 mm"
+msgstr "Лист A5, 148 x 210 мм"
+
+#: ../src/generic/fontdlgg.cpp:325
+msgid "ABCDEFGabcdefg12345"
+msgstr "ABCDEFGabcdefg12345"
+
+#: ../src/html/helpfrm.cpp:270
+msgid "Add current page to bookmarks"
+msgstr "Добавить текущую страницу к закладкам"
+
+#: ../src/generic/colrdlgg.cpp:269
+msgid "Add to custom colours"
+msgstr "Добавить к цветам пользователя"
+
+#: ../src/html/helpctrl.cpp:83
+#, c-format
+msgid "Adding book %s"
+msgstr "Добавление книги %s"
+
+#: ../src/generic/prntdlgg.cpp:163
+msgid "All"
+msgstr "Все"
+
+#: ../src/generic/filedlgg.cpp:825
+msgid "All files (*)|*"
+msgstr "Все файлы (*)|*"
+
+#: ../src/unix/dialup.cpp:359
+msgid "Already dialling ISP."
+msgstr "Уже звоним ISP."
+
+#: ../src/generic/logg.cpp:1017
+#, c-format
+msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
+msgstr "Добавить в файл журнала '%s' (выбор [Нет] перепишет его)?"
+
+#: ../src/common/fontmap.cpp:102
+msgid "Arabic (ISO-8859-6)"
+msgstr "Arabic (ISO-8859-6)"
+
+#: ../src/common/paper.cpp:134
+msgid "B4 Envelope, 250 x 353 mm"
+msgstr "B4 Envelope, 250 x 353 мм"
+
+#: ../src/common/paper.cpp:116
+msgid "B4 sheet, 250 x 354 mm"
+msgstr "Лист B4, 250 x 354 мм"
+
+#: ../src/common/paper.cpp:135
+msgid "B5 Envelope, 176 x 250 mm"
+msgstr "B5 Envelope, 176 x 250 мм"
+
+#: ../src/common/paper.cpp:117
+msgid "B5 sheet, 182 x 257 millimeter"
+msgstr "Лист B5, 182 x 257 мм"
+
+#: ../src/common/paper.cpp:136
+msgid "B6 Envelope, 176 x 125 mm"
+msgstr "B6 Envelope, 176 x 125 мм"
+
+#: ../src/common/imagbmp.cpp:387
+msgid "BMP: Cannot deal with 4bit encoded yet."
+msgstr "BMP: Пока невозможно работать с 4-битной кодировкой."
+
+#: ../src/common/imagbmp.cpp:266 ../src/common/imagbmp.cpp:278
+msgid "BMP: Couldn't allocate memory."
+msgstr "BMP: Не могу распределить память."
+
+#: ../src/common/imagbmp.cpp:62
+msgid "BMP: Couldn't save invalid image."
+msgstr "BMP: Не могу записать недействительное изображение."
+
+#: ../src/common/imagbmp.cpp:154
+msgid "BMP: Couldn't write data."
+msgstr "BMP: Не могу записать данные."
+
+#: ../src/common/imagbmp.cpp:131
+msgid "BMP: Couldn't write the file header."
+msgstr "BMP: Не могу записать заголовок файла."
+
+#: ../src/common/imagbmp.cpp:257
+msgid "BMP: Encoding doesn't match bitdepth."
+msgstr "BMP: Кодировка не соответствует глубине битов."
+
+#: ../src/common/imagbmp.cpp:220
+msgid "BMP: Image height > 32767 pixels for file."
+msgstr "BMP: Высота файла изображения > 32767 пикселов."
+
+#: ../src/common/imagbmp.cpp:214
+msgid "BMP: Image width > 32767 pixels for file."
+msgstr "Ширина файла изображения > 32767 пикселов."
+
+#: ../src/common/imagbmp.cpp:234
+msgid "BMP: Unknown bitdepth in file."
+msgstr "BMP: Неизвестная глубина битов файла."
+
+#: ../src/common/imagbmp.cpp:243
+msgid "BMP: Unknown encoding in file."
+msgstr "BMP: Неизвестная кодировка файла."
+
+#: ../src/generic/helpwxht.cpp:157
+msgid "Back"
+msgstr "Назад"
+
+#: ../src/common/dlgcmn.cpp:135
+msgid "Backward"
+msgstr "Назад"
+
+#: ../src/common/fontmap.cpp:109
+msgid "Baltic (ISO-8859-13)"
+msgstr "Baltic (ISO-8859-13)"
+
+#: ../src/common/fontmap.cpp:100
+msgid "Baltic (old) (ISO-8859-4)"
+msgstr "Baltic (old) (ISO-8859-4)"
+
+#: ../src/common/resourc2.cpp:844 ../src/common/resource.cpp:2494
+#, c-format
+msgid "Bitmap resource specification %s not found."
+msgstr "Спецификация ресурса bitmap %s не найдена."
+
+#: ../src/generic/fontdlgg.cpp:217
+msgid "Bold"
+msgstr "Жирный"
+
+#: ../src/generic/prntdlgg.cpp:662
+msgid "Bottom margin (mm):"
+msgstr "Нижнее поле (мм):"
+
+#: ../src/common/paper.cpp:105
+msgid "C sheet, 17 x 22 in"
+msgstr "Лист C, 17 x 22 дюйм"
+
+#: ../src/generic/logg.cpp:471
+msgid "C&lear"
+msgstr "О&чистить"
+
+#: ../src/common/paper.cpp:130
+msgid "C3 Envelope, 324 x 458 mm"
+msgstr "C3 Envelope, 324 x 458 мм"
+
+#: ../src/common/paper.cpp:131
+msgid "C4 Envelope, 229 x 324 mm"
+msgstr "C4 Envelope, 229 x 324 мм"
+
+#: ../src/common/paper.cpp:129
+msgid "C5 Envelope, 162 x 229 mm"
+msgstr "C5 Envelope, 162 x 229 мм"
+
+#: ../src/common/paper.cpp:132
+msgid "C6 Envelope, 114 x 162 mm"
+msgstr "C6 Envelope, 114 x 162 мм"
+
+#: ../src/common/paper.cpp:133
+msgid "C65 Envelope, 114 x 229 mm"
+msgstr "C65 Envelope, 114 x 229 мм"
+
+#: ../src/common/filefn.cpp:1272 ../src/unix/dir.cpp:214
+#, c-format
+msgid "Can not enumerate files in directory '%s'"
+msgstr "Не могу подсчитать файлы в каталоге '%s'"
+
+#: ../src/common/docview.cpp:1883
+msgid "Can't &Undo "
+msgstr "Не могу О&тменить "
+
+#: ../src/common/image.cpp:926
+#, c-format
+msgid "Can't check image format of file '%s': file does not exist."
+msgstr "Не могу проверить формат изображения файла '%s': файл не существует."
+
+#: ../src/common/ffile.cpp:234
+#, c-format
+msgid "Can't find current position in file '%s'"
+msgstr "Не могу найти текущую позицию в файле '%s'"
+
+#: ../src/common/object.cpp:314 ../src/common/object.cpp:335
+#, c-format
+msgid "Can't find the serialization object '%s' for the object '%s'."
+msgstr "Не могу найти объект сериализации '%s' для объекта '%s'."
+
+#: ../src/common/image.cpp:626 ../src/common/image.cpp:646
+#, c-format
+msgid "Can't load image from file '%s': file does not exist."
+msgstr "Не могу загрузить изображение из файла '%s': файл не существует."
+
+#: ../src/common/object.cpp:307
+msgid "Can't load wxSerial dynamic library."
+msgstr "Не могу загрузить динамическую библиотеку wxSerial."
+
+#: ../src/generic/logg.cpp:531 ../src/generic/logg.cpp:928
+msgid "Can't save log contents to file."
+msgstr "Не могу сохранить содержание журнала в файл."
+
+#: ../src/common/dlgcmn.cpp:148 ../src/common/prntbase.cpp:109
+#: ../src/generic/dcpsg.cpp:2241 ../src/generic/dirdlgg.cpp:424
+#: ../src/generic/filedlgg.cpp:916 ../src/generic/fontdlgg.cpp:257
+#: ../src/generic/prntdlgg.cpp:468 ../src/generic/progdlgg.cpp:179
+#: ../src/generic/proplist.cpp:523 ../src/generic/wizard.cpp:192
+#: ../src/gtk/filedlg.cpp:164 ../src/gtk/fontdlg.cpp:178
+#: ../src/html/helpfrm.cpp:910
+msgid "Cancel"
+msgstr "Отмена"
+
+#: ../src/unix/threadpsx.cpp:954
+#, c-format
+msgid "Cannot get priority range for scheduling policy %d."
+msgstr "Невозможно получить интервал приоритета для распорядка %d."
+
+#: ../src/unix/utilsunx.cpp:709
+msgid "Cannot get the hostname"
+msgstr "Невозможно получить имя хоста"
+
+#: ../src/unix/utilsunx.cpp:745
+msgid "Cannot get the official hostname"
+msgstr "Невозможно получить официальное имя хоста"
+
+#: ../src/html/htmlfilt.cpp:146
+#, c-format
+msgid "Cannot open HTML document: %s"
+msgstr "Невозможно открыть HTML документ: %s"
+
+#: ../src/html/helpdata.cpp:657
+#, c-format
+msgid "Cannot open HTML help book: %s"
+msgstr "Невозможно открыть книгу помощи HTML: %s"
+
+#: ../src/generic/helpext.cpp:96
+#, c-format
+msgid "Cannot open URL '%s'"
+msgstr "Невозможно открыть URL '%s'"
+
+#: ../src/html/helpdata.cpp:353
+#, c-format
+msgid "Cannot open contents file: %s"
+msgstr "Невозможно открыть файл содержания: %s"
+
+#: ../src/generic/dcpsg.cpp:1584
+msgid "Cannot open file for PostScript printing!"
+msgstr "Невозможно открыть файл для печати в PostScript!"
+
+#: ../src/html/helpdata.cpp:368
+#, c-format
+msgid "Cannot open index file: %s"
+msgstr "Невозможно открыть файл индекса: %s"
+
+#: ../src/html/helpfrm.cpp:1174
+msgid "Cannot print empty page."
+msgstr "Невозможно напечатать пустую страницу."
+
+#: ../src/unix/threadpsx.cpp:935
+msgid "Cannot retrieve thread scheduling policy."
+msgstr "Невозможно извлечь распорядок нити."
+
+#: ../src/unix/threadpsx.cpp:588
+msgid "Cannot start thread: error writing TLS"
+msgstr "Невозможно стартовать нить: ошибка записи TLS"
+
+#: ../src/html/helpfrm.cpp:398
+msgid "Case sensitive"
+msgstr "Учет регистра"
+
+#: ../src/common/fontmap.cpp:98
+msgid "Central European (ISO-8859-2/Latin 2)"
+msgstr "Central European (ISO-8859-2/Latin 2)"
+
+#: ../src/gtk/fontdlg.cpp:159
+msgid "Choose font"
+msgstr "Выберите шрифт"
+
+#: ../src/generic/logg.cpp:471
+msgid "Clear the log contents"
+msgstr "Очистить содержимое журнала"
+
+#: ../src/common/prntbase.cpp:359 ../src/generic/progdlgg.cpp:307
+#: ../src/generic/proplist.cpp:518
+msgid "Close"
+msgstr "Закрыть"
+
+#: ../src/generic/logg.cpp:473
+msgid "Close this window"
+msgstr "Закрыть это окно"
+
+#: ../src/common/fileconf.cpp:750
+#, c-format
+msgid "Config entry name cannot start with '%c'."
+msgstr "Имя поля в файле конфигурации не может начинаться с '%c'."
+
+#: ../src/generic/filedlgg.cpp:1077 ../src/gtk/filedlg.cpp:75
+msgid "Confirm"
+msgstr "Подтвердить"
+
+#: ../src/html/htmlwin.cpp:166
+msgid "Connecting..."
+msgstr "Соединение..."
+
+#: ../src/generic/helpxlp.cpp:240
+#, c-format
+msgid "Connection to wxHelp timed out in %d seconds"
+msgstr "Соединение с wxHelp не было установлено за %d секунд"
+
+#: ../src/generic/helpwxht.cpp:159 ../src/html/helpfrm.cpp:303
+#: ../src/html/helpfrm.cpp:312
+msgid "Contents"
+msgstr "Содержание"
+
+#: ../src/generic/prntdlgg.cpp:196
+msgid "Copies:"
+msgstr "Копии:"
+
+#: ../src/common/resourc2.cpp:287 ../src/common/resource.cpp:1800
+#: ../src/common/resource.cpp:1930
+#, c-format
+msgid "Could not find resource include file %s."
+msgstr "Не найден включаемый файл ресурсов %s."
+
+#: ../src/generic/tabg.cpp:1042
+msgid "Could not find tab for id"
+msgstr "невозможно найти tab для id"
+
+#: ../src/common/resource.cpp:796
+#, c-format
+msgid ""
+"Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
+" or provide #define (see manual for caveats)"
+msgstr ""
+"невозможно отыскать контрольный класс для id '%s'. Замените на (ненулевое) целое "
+"число\n"
+"или предоставьте #define (см. руководство для примеров)"
+
+#: ../src/common/resource.cpp:1245
+#, c-format
+msgid ""
+"Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
+"or provide #define (see manual for caveats)"
+msgstr ""
+"невозможно отыскать меню id '%s'. Замените на (ненулевое) целое число\n"
+"или предоставьте #define (см. руководство для примеров)"
+
+#: ../src/common/prntbase.cpp:711
+msgid "Could not start document preview."
+msgstr "невозможно начать пред-осмотр документа."
+
+#: ../src/generic/printps.cpp:209
+msgid "Could not start printing."
+msgstr "невозможно начать печать."
+
+#: ../src/common/wincmn.cpp:782
+msgid "Could not transfer data to window"
+msgstr "невозможно передать данные в окно"
+
+#: ../src/common/dynlib.cpp:268
+#, c-format
+msgid "Couldn't find symbol '%s' in a dynamic library"
+msgstr "Невозможно найти символ '%s' в динамической библиотеке"
+
+#: ../src/common/imagpng.cpp:245
+msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
+msgstr "невозможно загрузить изображение PNG - возможно файл поврежден или недостаточно памяти."
+
+#: ../src/generic/dirdlgg.cpp:571
+msgid "Create directory"
+msgstr "Создать директорий"
+
+#: ../src/generic/filedlgg.cpp:883
+msgid "Create new directory"
+msgstr "Создать новый директорий"
+
+#: ../src/generic/filedlgg.cpp:890
+msgid "Current directory:"
+msgstr "Текущий директорий:"
+
+#: ../src/common/fontmap.cpp:101
+msgid "Cyrillic (Latin 5)"
+msgstr "Cyrillic (Latin 5)"
+
+#: ../src/common/paper.cpp:106
+msgid "D sheet, 22 x 34 in"
+msgstr "Лист D, 22 x 34 дюйм"
+
+#: ../src/common/paper.cpp:128
+msgid "DL Envelope, 110 x 220 mm"
+msgstr "DL Envelope, 110 x 220 мм"
+
+#: ../src/generic/filedlgg.cpp:535
+msgid "Date"
+msgstr "Дата"
+
+#: ../src/generic/fontdlgg.cpp:207
+msgid "Decorative"
+msgstr "Декоративный"
+
+#: ../src/generic/tipdlg.cpp:177
+msgid "Did you know..."
+msgstr "А вы знали что..."
+
+#: ../src/common/filefn.cpp:1086
+#, c-format
+msgid "Directory '%s' couldn't be created"
+msgstr "Директорий '%s' не может быть создан"
+
+#: ../src/generic/dirdlgg.cpp:538
+msgid "Directory does not exist"
+msgstr "Каталог не существует"
+
+#: ../src/html/helpfrm.cpp:366
+msgid ""
+"Display all index items that contain given substring. Search is case "
+"insensitive."
+msgstr ""
+"Вывести все строки индекса содержащие данную подстроку. Поиск без учета \n"
+"регистра."
+
+#: ../src/html/helpfrm.cpp:535
+msgid "Display options dialog"
+msgstr "Открыть диалог опций"
+
+#: ../src/common/docview.cpp:438
+#, c-format
+msgid "Do you want to save changes to document %s?"
+msgstr "Вы хотите сохранить изменения в документе %s?"
+
+#: ../src/html/htmlwin.cpp:216
+msgid "Done"
+msgstr "Сделано"
+
+#: ../src/generic/progdlgg.cpp:313
+msgid "Done."
+msgstr "Сделано."
+
+#: ../src/common/paper.cpp:107
+msgid "E sheet, 34 x 44 in"
+msgstr "E sheet, 34 x 44 дюйм"
+
+#: ../src/generic/progdlgg.cpp:153
+msgid "Elapsed time : "
+msgstr "Затраченное время : "
+
+#: ../src/generic/helphtml.cpp:320
+msgid "Entries found"
+msgstr "Найдены записи"
+
+#: ../src/common/config.cpp:349
+#, c-format
+msgid ""
+"Environment variables expansion failed: missing '%c' at position %d in '%s'."
+msgstr ""
+"Ошибка раскрытия переменной окружения: отсутствует '%c' в позиции %d в '%s'."
+
+#: ../src/generic/dirdlgg.cpp:268 ../src/generic/dirdlgg.cpp:286
+#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:604
+#: ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:717
+#: ../src/generic/filedlgg.cpp:731 ../src/generic/filedlgg.cpp:744
+#: ../src/generic/filedlgg.cpp:1043 ../src/generic/filedlgg.cpp:1092
+#: ../src/generic/helpxlp.cpp:241 ../src/gtk/filedlg.cpp:83
+#: ../src/gtk/fontdlg.cpp:72
+msgid "Error"
+msgstr "Ошибка"
+
+#: ../src/unix/utilsunx.cpp:948 ../src/unix/utilsunx.cpp:956
+msgid "Error "
+msgstr "Ошибка "
+
+#: ../src/generic/dirdlgg.cpp:551
+msgid "Error creating directory"
+msgstr "Ошибка создания каталога"
+
+#: ../src/common/log.cpp:354
+msgid "Error: "
+msgstr "Ошибка: "
+
+#: ../src/common/fontmap.cpp:99
+msgid "Esperanto (ISO-8859-3)"
+msgstr "Esperanto (ISO-8859-3)"
+
+#: ../src/generic/progdlgg.cpp:160
+msgid "Estimated time : "
+msgstr "Оценка времени : "
+
+#: ../src/generic/dirdlgg.cpp:217
+msgid "Etcetera"
+msgstr "И т.д."
+
+#: ../src/common/paper.cpp:112
+msgid "Executive, 7 1/4 x 10 1/2 in"
+msgstr "Executive, 7 1/4 x 10 1/2 дюйм"
+
+#: ../src/common/resourc2.cpp:326 ../src/common/resourc2.cpp:1399
+#: ../src/common/resource.cpp:1839 ../src/common/resource.cpp:1969
+#: ../src/common/resource.cpp:3053
+msgid "Expected '*' whilst parsing resource."
+msgstr "Ожидалось '*' при синтаксическом анализе ресурса."
+
+#: ../src/common/resourc2.cpp:342 ../src/common/resourc2.cpp:1415
+#: ../src/common/resource.cpp:1856 ../src/common/resource.cpp:1985
+#: ../src/common/resource.cpp:3070
+msgid "Expected '=' whilst parsing resource."
+msgstr "Ожидалось '=' при синтаксическом анализе ресурса."
+
+#: ../src/common/resourc2.cpp:312 ../src/common/resourc2.cpp:1385
+#: ../src/common/resource.cpp:1825 ../src/common/resource.cpp:1955
+#: ../src/common/resource.cpp:3039
+msgid "Expected 'char' whilst parsing resource."
+msgstr "Ожидалось 'char' при синтаксическом анализе ресурса."
+
+#: ../src/generic/dirdlgg.cpp:549
+msgid "Failed to create directory "
+msgstr "Не удалось создать каталог "
+
+#: ../src/html/winpars.cpp:364
+#, c-format
+msgid "Failed to display HTML document in %s encoding"
+msgstr "Не удалось вывести документ HTML в кодировке %s"
+
+#: ../src/unix/utilsunx.cpp:441 ../src/unix/utilsunx.cpp:469
+#, c-format
+msgid "Failed to execute '%s'\n"
+msgstr "Не удалось выполнить '%s'\n"
+
+#: ../src/common/resourc2.cpp:808 ../src/common/resource.cpp:2458
+#, c-format
+msgid ""
+"Failed to find XBM resource %s.\n"
+"Forgot to use wxResourceLoadBitmapData?"
+msgstr ""
+"Не удалось найти ресурс XBM %s.\n"
+"Вы забыли применить wxResourceLoadBitmapData?"
+
+#: ../src/common/resourc2.cpp:963 ../src/common/resource.cpp:2613
+#, c-format
+msgid ""
+"Failed to find XBM resource %s.\n"
+"Forgot to use wxResourceLoadIconData?"
+msgstr ""
+"Не удалось найти ресурс XBM %s.\n"
+"Вы забыли применить wxResourceLoadIconData?"
+
+#: ../src/common/resourc2.cpp:824 ../src/common/resource.cpp:2474
+#, c-format
+msgid ""
+"Failed to find XPM resource %s.\n"
+"Forgot to use wxResourceLoadBitmapData?"
+msgstr ""
+"Не удалось найти ресурс XBM %s.\n"
+"Вы забыли применить wxResourceLoadBitmapData?"
+
+#: ../src/common/timercmn.cpp:237
+msgid "Failed to get the UTC system time."
+msgstr "Не удалось получить системное время UTC."
+
+#: ../src/common/timercmn.cpp:189
+msgid "Failed to get the local system time"
+msgstr "Не удалось получить локальное системное время"
+
+#: ../src/unix/threadpsx.cpp:754
+msgid ""
+"Failed to join a thread, potential memory leak detected - please restart the "
+"program"
+msgstr ""
+"Не удалось соединиться с нитью, возможна утечка памяти - пожалуйста перезапустите \n"
+"программу"
+
+#: ../src/common/dynlib.cpp:225
+#, c-format
+msgid "Failed to load shared library '%s'"
+msgstr "Ошибка загрузки разделяемой библиотеки '%s'"
+
+#: ../src/unix/utilsunx.cpp:540
+msgid "Failed to redirect child process input/output"
+msgstr "Не удалось перенаправить ввод/вывод порожденного процесса"
+
+#: ../src/common/fontmap.cpp:507
+#, c-format
+msgid "Failed to remember the encoding for the charset '%s'."
+msgstr "Не удалось запомнить кодировку для набора символов '%s'."
+
+#: ../src/unix/threadpsx.cpp:1071
+#, c-format
+msgid "Failed to set thread priority %d."
+msgstr "Не удалось установить приоритет нити %d."
+
+#: ../src/common/fs_mem.cpp:167
+#, c-format
+msgid "Failed to store image '%s' to memory VFS!"
+msgstr "Не удалось сохранить изображение '%s' в памяти VFS!"
+
+#: ../src/unix/threadpsx.cpp:1251
+msgid "Failed to terminate a thread."
+msgstr "Не удалось завершить нить."
+
+#: ../src/generic/logg.cpp:367
+msgid "Fatal error"
+msgstr "Критическая ошибка"
+
+#: ../src/common/log.cpp:347
+msgid "Fatal error: "
+msgstr "Критическая ошибка: "
+
+#: ../src/generic/filedlgg.cpp:1074 ../src/gtk/filedlg.cpp:72
+#, c-format
+msgid "File '%s' already exists, do you really want to overwrite it?"
+msgstr "Файл '%s' уже существует, вы действительно хотите его переписать?"
+
+#: ../src/common/textcmn.cpp:94
+msgid "File couldn't be loaded."
+msgstr "Файл не может быть загружен."
+
+#: ../src/common/docview.cpp:294 ../src/common/docview.cpp:330
+msgid "File error"
+msgstr "Ошибка файла"
+
+#: ../src/generic/dirdlgg.cpp:286 ../src/generic/filedlgg.cpp:731
+msgid "File name exists already."
+msgstr "Имя файла уже существует."
+
+#: ../src/html/helpfrm.cpp:340
+msgid "Find"
+msgstr "Найти"
+
+#: ../src/html/helpfrm.cpp:889
+msgid "Fixed font:"
+msgstr "Фиксированный шрифт:"
+
+#: ../src/common/paper.cpp:118
+msgid "Folio, 8 1/2 x 13 in"
+msgstr "Folio, 8 1/2 x 13 дюйм"
+
+#: ../src/generic/fontdlgg.cpp:124
+msgid "Font"
+msgstr "Шрифт"
+
+#: ../src/html/helpfrm.cpp:899
+msgid "Font size:"
+msgstr "Размер шрифта:"
+
+#: ../src/unix/utilsunx.cpp:497
+msgid "Fork failed"
+msgstr "Неудачный Fork"
+
+#: ../src/common/dlgcmn.cpp:132 ../src/generic/helpwxht.cpp:158
+msgid "Forward"
+msgstr "Вперед"
+
+#: ../src/common/resourc2.cpp:295 ../src/common/resourc2.cpp:1368
+#: ../src/common/resource.cpp:1808 ../src/common/resource.cpp:1938
+#: ../src/common/resource.cpp:3022
+msgid "Found "
+msgstr "Найден "
+
+#: ../src/html/helpfrm.cpp:637
+#, c-format
+msgid "Found %i matches"
+msgstr "Найдено %i соответствий"
+
+#: ../src/generic/prntdlgg.cpp:187
+msgid "From:"
+msgstr "От:"
+
+#: ../src/common/imaggif.cpp:74
+msgid "GIF: data stream seems to be truncated."
+msgstr "GIF: поток данных кажется укороченным."
+
+#: ../src/common/imaggif.cpp:58
+msgid "GIF: error in GIF image format."
+msgstr "GIF: ошибка в формате изображения GIF."
+
+#: ../src/common/imaggif.cpp:61
+msgid "GIF: not enough memory."
+msgstr "GIF: недостаточно памяти."
+
+#: ../src/common/imaggif.cpp:64
+msgid "GIF: unknown error!!!"
+msgstr "GIF: неизвестная ошибка!!!"
+
+#: ../src/common/paper.cpp:142
+msgid "German Legal Fanfold, 8 1/2 x 13 in"
+msgstr "German Legal Fanfold, 8 1/2 x 13 дюйм"
+
+#: ../src/common/paper.cpp:141
+msgid "German Std Fanfold, 8 1/2 x 12 in"
+msgstr "German Std Fanfold, 8 1/2 x 12 in"
+
+#: ../src/html/helpfrm.cpp:501
+msgid "Go back"
+msgstr "Идти назад"
+
+#: ../src/html/helpfrm.cpp:504
+msgid "Go forward"
+msgstr "Идти вперед"
+
+#: ../src/html/helpfrm.cpp:509
+msgid "Go one level up in document hierarchy"
+msgstr "Идти на один уровень вверх в иерархии документа"
+
+#: ../src/generic/filedlgg.cpp:875
+msgid "Go to home directory"
+msgstr "В домашний директорий"
+
+#: ../src/generic/filedlgg.cpp:869
+msgid "Go to parent directory"
+msgstr "В родительский директорий"
+
+#: ../src/common/fontmap.cpp:103
+msgid "Greek (ISO-8859-7)"
+msgstr "Greek (ISO-8859-7)"
+
+#: ../src/html/htmlwin.cpp:251
+#, c-format
+msgid "HTML anchor %s does not exist."
+msgstr "HTML-якорь %s не существует."
+
+#: ../src/html/helpfrm.cpp:1188
+msgid ""
+"HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books "
+"(*.htb)|*.htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All "
+"files (*.*)|*"
+msgstr "Файлы HTML (*.htm)|*.htm|Файлы HTML (*.html)|*.html|Книги помощи (*.htb)|*.htb|Книги помощи (*.zip)|*.zip|Проект помощи HTML (*.hhp)|*.hhp|Все файлы (*.*)|*"
+
+#: ../src/common/fontmap.cpp:104
+msgid "Hebrew (ISO-8859-8)"
+msgstr "Hebrew (ISO-8859-8)"
+
+#: ../src/common/dlgcmn.cpp:144 ../src/generic/proplist.cpp:528
+#: ../src/html/helpfrm.cpp:208
+msgid "Help"
+msgstr "Помощь"
+
+#: ../src/html/helpfrm.cpp:872
+msgid "Help Browser Options"
+msgstr "Опции просмотра помощи"
+
+#: ../src/generic/helphtml.cpp:319 ../src/generic/helphtml.cpp:320
+msgid "Help Index"
+msgstr "Индекс помощи"
+
+#: ../src/html/helpfrm.cpp:1172
+msgid "Help Printing"
+msgstr "Помощь печати"
+
+#: ../src/generic/helpwxht.cpp:251 ../src/html/helpctrl.cpp:38
+#, c-format
+msgid "Help: %s"
+msgstr "Помощь: %s"
+
+#: ../src/common/fontmap.cpp:108
+msgid "ISO-8859-12"
+msgstr "ISO-8859-12"
+
+#: ../src/common/fontmap.cpp:110
+msgid "ISO-8859-14"
+msgstr "ISO-8859-14"
+
+#: ../src/common/resourc2.cpp:997 ../src/common/resourc2.cpp:1008
+#: ../src/common/resource.cpp:2647 ../src/common/resource.cpp:2658
+#, c-format
+msgid "Icon resource specification %s not found."
+msgstr "Не найдена спецификация ресурса иконки %s."
+
+#: ../src/common/resource.cpp:251
+msgid "Ill-formed resource file syntax."
+msgstr "Неверный синтаксис файла ресурсов."
+
+#: ../src/generic/dirdlgg.cpp:268 ../src/generic/filedlgg.cpp:717
+msgid "Illegal directory name."
+msgstr "Недопустимое имя директория."
+
+#: ../src/generic/filedlgg.cpp:1043
+msgid "Illegal file specification."
+msgstr "Неправильная спецификация файла."
+
+#: ../src/unix/utilsunx.cpp:350
+msgid "Impossible to get child process input"
+msgstr "Невозможно получить ввод порожденного процесса"
+
+#: ../src/html/helpdata.cpp:403
+msgid "Incorrect version of HTML help book"
+msgstr "Неправильная версия книги помощи HTML"
+
+#: ../src/html/helpfrm.cpp:372
+msgid "Index"
+msgstr "Индекс"
+
+#: ../src/common/imagtiff.cpp:171
+msgid "Invalid TIFF image index."
+msgstr "Недопустимый индекс изображения TIFF."
+
+#: ../src/generic/fontdlgg.cpp:213
+msgid "Italic"
+msgstr "Курсив"
+
+#: ../src/common/paper.cpp:137
+msgid "Italy Envelope, 110 x 230 mm"
+msgstr "Italy Envelope, 110 x 230 мм"
+
+#: ../src/common/imagjpeg.cpp:198
+msgid "JPEG: Couldn't load - file is probably corrupted."
+msgstr "JPEG: невозможно[D[D[D[D[D[D[D[D[Н[C[C[C[C[C[C[C[C[C[C[C[C[D[D[D загрузить - возможно файл поврежден."
+
+#: ../src/common/imagjpeg.cpp:315
+msgid "JPEG: Couldn't save image."
+msgstr "JPEG: Невозможно сохранить изображение."
+
+#: ../src/common/fontmap.cpp:112
+msgid "KOI8-R"
+msgstr "KOI8-R"
+
+#: ../src/generic/dcpsg.cpp:2232 ../src/generic/prntdlgg.cpp:441
+#: ../src/generic/prntdlgg.cpp:637
+msgid "Landscape"
+msgstr "Пейзаж"
+
+#: ../src/common/paper.cpp:110
+msgid "Ledger, 17 x 11 in"
+msgstr "Ledger, 17 x 11 дюйм"
+
+#: ../src/generic/prntdlgg.cpp:649
+msgid "Left margin (mm):"
+msgstr "Левое поле (мм):"
+
+#: ../src/common/paper.cpp:103
+msgid "Legal, 8 1/2 x 14 in"
+msgstr "Legal, 8 1/2 x 14 дюйм"
+
+#: ../src/common/paper.cpp:108
+msgid "Letter Small, 8 1/2 x 11 in"
+msgstr "Letter Small 8 1/2 x 11 дюйм"
+
+#: ../src/common/paper.cpp:102
+msgid "Letter, 8 1/2 x 11 in"
+msgstr "Letter, 8 1/2 x 11 дюйм"
+
+#: ../src/generic/fontdlgg.cpp:216
+msgid "Light"
+msgstr "Светлый"
+
+#: ../src/generic/filedlgg.cpp:1270 ../src/gtk/filedlg.cpp:241
+#, c-format
+msgid "Load %s file"
+msgstr "Загрузить файл %s"
+
+#: ../src/html/htmlwin.cpp:187
+msgid "Loading : "
+msgstr "Загрузка : "
+
+#: ../src/common/imagpnm.cpp:72
+msgid "Loading Grey Ascii PNM image is not yet implemented."
+msgstr "Загрузка изображения Grey Ascii PNM еще не реализована."
+
+#: ../src/common/imagpnm.cpp:75
+msgid "Loading Grey Raw PNM image is not yet implemented."
+msgstr "Загрузка изображения Grey Raw PNM еще не реализована."
+
+#: ../src/generic/logg.cpp:534
+#, c-format
+msgid "Log saved to the file '%s'."
+msgstr "Журнал записан в файл '%s'."
+
+#: ../src/gtk/mdi.cpp:435
+msgid "MDI child"
+msgstr "Потомок MDI"
+
+#: ../src/unix/mimetype.cpp:1570
+#, c-format
+msgid "Mailcap file %s, line %d: incomplete entry ignored."
+msgstr "Файл mailcap %s, строка %d: неполная запись проигнорирована."
+
+#: ../src/common/fs_mem.cpp:144
+#, c-format
+msgid "Memory VFS already contains file '%s'!"
+msgstr "Память VFS уже содержит файл '%s'!"
+
+#: ../src/unix/mimetype.cpp:1292
+#, c-format
+msgid "Mime.types file %s, line %d: unterminated quoted string."
+msgstr "Файл mime.types %s, строка %d: незакрытые кавычки."
+
+#: ../src/generic/fontdlgg.cpp:208
+msgid "Modern"
+msgstr "Modern"
+
+#: ../src/common/paper.cpp:138
+msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
+msgstr "Monarch Envelope, 3 7/8 x 7 1/2 дюйм"
+
+#: ../src/common/dlgcmn.cpp:141
+msgid "More..."
+msgstr "Еще..."
+
+#: ../src/generic/dirdlgg.cpp:213
+msgid "Mounted Devices"
+msgstr "Смонтиворанные устройства"
+
+#: ../src/generic/dirdlgg.cpp:208
+msgid "My Harddisk"
+msgstr "Жесткий диск"
+
+#: ../src/generic/dirdlgg.cpp:212
+msgid "My Home"
+msgstr "Домашний директорий"
+
+#: ../src/generic/filedlgg.cpp:533
+msgid "Name"
+msgstr "Имя"
+
+#: ../src/generic/dirdlgg.cpp:426
+msgid "New..."
+msgstr "Новый..."
+
+#: ../src/generic/filedlgg.cpp:610
+msgid "NewName"
+msgstr "NewName"
+
+#: ../src/html/helpfrm.cpp:515
+msgid "Next page"
+msgstr "Следующая станица"
+
+#: ../src/common/dlgcmn.cpp:111 ../src/common/dlgcmn.cpp:121
+msgid "No"
+msgstr "Нет"
+
+#: ../src/common/resourc2.cpp:814 ../src/common/resourc2.cpp:969
+#: ../src/common/resource.cpp:2464 ../src/common/resource.cpp:2619
+msgid "No XBM facility available!"
+msgstr "Средства XBM отсутствуют!"
+
+#: ../src/common/resourc2.cpp:830 ../src/common/resource.cpp:2479
+msgid "No XPM facility available!"
+msgstr "Средства XBM отсутствуют!"
+
+#: ../src/common/resourc2.cpp:991 ../src/common/resource.cpp:2641
+msgid "No XPM icon facility available!"
+msgstr "Средства XBM icon отсутствуют!"
+
+#: ../src/generic/helphtml.cpp:314
+msgid "No entries found."
+msgstr "Запись не найдена."
+
+#: ../src/common/image.cpp:731
+msgid "No handler found for image type."
+msgstr "Не найден ни один обработчик для изображения."
+
+#: ../src/common/image.cpp:739 ../src/common/image.cpp:773
+#, c-format
+msgid "No image handler for type %d defined."
+msgstr "Не определен ни один обработчик для изображения типа %d."
+
+#: ../src/common/image.cpp:757 ../src/common/image.cpp:789
+#, c-format
+msgid "No image handler for type %s defined."
+msgstr "Не определен ни один обработчик для изображения типа %d."
+
+#: ../src/html/helpfrm.cpp:628
+msgid "No matching page found yet"
+msgstr "Ни одна соответствующая страница пока не найдена"
+
+#: ../src/common/fontmap.cpp:106
+msgid "Nordic (ISO-8859-10)"
+msgstr "Nordic (ISO-8859-10)"
+
+#: ../src/generic/fontdlgg.cpp:212 ../src/generic/fontdlgg.cpp:215
+msgid "Normal"
+msgstr "Normal"
+
+#: ../src/html/helpfrm.cpp:881
+msgid "Normal font:"
+msgstr "Нормальный шрифт:"
+
+#: ../src/common/paper.cpp:122
+msgid "Note, 8 1/2 x 11 in"
+msgstr "Note, 8 1/2 x 11 дюйм"
+
+#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2240
+#: ../src/generic/dirdlgg.cpp:422 ../src/generic/filedlgg.cpp:907
+#: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:729
+#: ../src/generic/prntdlgg.cpp:467 ../src/generic/proplist.cpp:511
+#: ../src/gtk/filedlg.cpp:158 ../src/gtk/fontdlg.cpp:172
+#: ../src/html/helpfrm.cpp:909
+msgid "OK"
+msgstr "OK"
+
+#: ../src/html/helpfrm.cpp:523 ../src/html/helpfrm.cpp:1183
+msgid "Open HTML document"
+msgstr "Открыть документ HTML"
+
+#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:604
+#: ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:744
+msgid "Operation not permitted."
+msgstr "Операция не разрешена."
+
+#: ../src/common/cmdline.cpp:590
+#, c-format
+msgid "Option '%s' requires a value, '=' expected."
+msgstr "Опция '%s' требует значения, ожидался '='."
+
+#: ../src/common/cmdline.cpp:610
+#, c-format
+msgid "Option '%s' requires a value."
+msgstr "Опция '%s' требует значение."
+
+#: ../src/common/cmdline.cpp:671
+#, c-format
+msgid "Option '%s': '%s' cannot be converted to a date."
+msgstr "Опция '%s': '%s' не может быть сконвертирована в дату."
+
+#: ../src/generic/prntdlgg.cpp:447
+msgid "Options"
+msgstr "Опции"
+
+#: ../src/generic/prntdlgg.cpp:443 ../src/generic/prntdlgg.cpp:638
+msgid "Orientation"
+msgstr "Ориентация"
+
+#: ../src/common/imagpcx.cpp:448 ../src/common/imagpcx.cpp:471
+msgid "PCX: couldn't allocate memory"
+msgstr "PCX: не могу распределить память"
+
+#: ../src/common/imagpcx.cpp:447
+msgid "PCX: image format unsupported"
+msgstr "PCX: формат не поддерживается"
+
+#: ../src/common/imagpcx.cpp:470
+msgid "PCX: invalid image"
+msgstr "PCX: недопустимое изображение"
+
+#: ../src/common/imagpcx.cpp:434
+msgid "PCX: this is not a PCX file."
+msgstr "PCX: это не файл PCX."
+
+#: ../src/common/imagpcx.cpp:450 ../src/common/imagpcx.cpp:472
+msgid "PCX: unknown error !!!"
+msgstr "PCX: неизвестная ошибка !!!"
+
+#: ../src/common/imagpcx.cpp:449
+msgid "PCX: version number too low"
+msgstr "PCX: номер версии слишком длинный"
+
+#: ../src/common/imagpnm.cpp:96
+msgid "PNM: Couldn't allocate memory."
+msgstr "PCX: Невозможно распределить память."
+
+#: ../src/common/imagpnm.cpp:80
+msgid "PNM: File format is not recognized."
+msgstr "PNM: Формат еще не распознается."
+
+#: ../src/common/imagpnm.cpp:112
+msgid "PNM: File seems truncated."
+msgstr "PNM: Файл кажется укорочен."
+
+#: ../src/common/prntbase.cpp:731
+#, c-format
+msgid "Page %d"
+msgstr "Страница %d"
+
+#: ../src/common/prntbase.cpp:729
+#, c-format
+msgid "Page %d of %d"
+msgstr "Страница %d из %d"
+
+#: ../src/generic/prntdlgg.cpp:604
+msgid "Page Setup"
+msgstr "Настройки страницы"
+
+#: ../src/generic/prntdlgg.cpp:164
+msgid "Pages"
+msgstr "Страницы"
+
+#: ../src/generic/prntdlgg.cpp:555 ../src/generic/prntdlgg.cpp:626
+#: ../src/generic/prntdlgg.cpp:808
+msgid "Paper Size"
+msgstr "Размер бумаги"
+
+#: ../src/generic/prntdlgg.cpp:433 ../src/generic/prntdlgg.cpp:615
+#: ../src/generic/prntdlgg.cpp:804
+msgid "Paper size"
+msgstr "Размер бумаги"
+
+#: ../src/generic/filedlgg.cpp:537
+msgid "Permissions"
+msgstr "Разрешения"
+
+#: ../src/unix/utilsunx.cpp:440 ../src/unix/utilsunx.cpp:468
+msgid "Pipe creation failed"
+msgstr "Ошибка создания потока ввода-вывода"
+
+#: ../src/gtk/fontdlg.cpp:72
+msgid "Please choose a valid font."
+msgstr "Пожалуйста выберите допустимый шрифт."
+
+#: ../src/generic/filedlgg.cpp:1092 ../src/gtk/filedlg.cpp:83
+msgid "Please choose an existing file."
+msgstr "Будьте добры выбрать существующий файл."
+
+#: ../src/common/prntbase.cpp:107
+msgid "Please wait..."
+msgstr "Подождите, пожалуйста..."
+
+#: ../src/generic/dcpsg.cpp:2231 ../src/generic/prntdlgg.cpp:440
+#: ../src/generic/prntdlgg.cpp:636
+msgid "Portrait"
+msgstr "Портрет"
+
+#: ../src/generic/dcpsg.cpp:377
+msgid "PostScript"
+msgstr "PostScript"
+
+#: ../src/generic/prntdlgg.cpp:272
+msgid "PostScript file"
+msgstr "Файл PostScript"
+
+#: ../src/generic/dcpsg.cpp:2273
+msgid "PostScript:"
+msgstr "PostScript:"
+
+#: ../src/generic/dcpsg.cpp:2236
+msgid "Preview Only"
+msgstr "Только пред-осмотр"
+
+#: ../src/html/helpfrm.cpp:903
+msgid "Preview:"
+msgstr "Пред-осмотр:"
+
+#: ../src/html/helpfrm.cpp:512
+msgid "Previous page"
+msgstr "Предыдущая страница"
+
+#: ../src/generic/prntdlgg.cpp:113 ../src/generic/prntdlgg.cpp:127
+msgid "Print"
+msgstr "Печать"
+
+#: ../src/common/docview.cpp:895
+msgid "Print Preview"
+msgstr "Пред-осмотр печати"
+
+#: ../src/common/prntbase.cpp:687 ../src/common/prntbase.cpp:711
+msgid "Print Preview Failure"
+msgstr "Ошибка пред-осмотра печати"
+
+#: ../src/generic/prntdlgg.cpp:172
+msgid "Print Range"
+msgstr "Печать интервала"
+
+#: ../src/generic/prntdlgg.cpp:408 ../src/generic/prntdlgg.cpp:415
+msgid "Print Setup"
+msgstr "Настройки печати"
+
+#: ../src/generic/prntdlgg.cpp:455
+msgid "Print in colour"
+msgstr "Печать в цвете"
+
+#: ../src/generic/prntdlgg.cpp:457
+msgid "Print spooling"
+msgstr "Спулинг печати"
+
+#: ../src/html/helpfrm.cpp:529
+msgid "Print this page"
+msgstr "Напечатать эту страницу"
+
+#: ../src/generic/dcpsg.cpp:2235 ../src/generic/prntdlgg.cpp:150
+msgid "Print to File"
+msgstr "Печать в файл"
+
+#: ../src/common/prntbase.cpp:366
+msgid "Print..."
+msgstr "Печать..."
+
+#: ../src/generic/dcpsg.cpp:2246
+msgid "Printer Command: "
+msgstr "Команда принтера: "
+
+#: ../src/generic/dcpsg.cpp:2251
+msgid "Printer Options: "
+msgstr "Опции принтера: "
+
+#: ../src/generic/dcpsg.cpp:346
+msgid "Printer Settings"
+msgstr "Настройки принтера"
+
+#: ../src/generic/prntdlgg.cpp:459
+msgid "Printer command:"
+msgstr "Команда принтера:"
+
+#: ../src/generic/prntdlgg.cpp:149
+msgid "Printer options"
+msgstr "Опции принтера"
+
+#: ../src/generic/prntdlgg.cpp:463
+msgid "Printer options:"
+msgstr "Опции принтера:"
+
+#: ../src/generic/prntdlgg.cpp:682
+msgid "Printer..."
+msgstr "Принтер..."
+
+#: ../src/common/prntbase.cpp:106 ../src/common/prntbase.cpp:148
+msgid "Printing"
+msgstr "Печать"
+
+#: ../src/common/prntbase.cpp:120
+msgid "Printing Error"
+msgstr "Ошибка печати"
+
+#: ../src/generic/printps.cpp:232
+#, c-format
+msgid "Printing page %d..."
+msgstr "Печать страницы %d..."
+
+#: ../src/generic/printps.cpp:192
+msgid "Printing..."
+msgstr "Печать..."
+
+#: ../src/common/log.cpp:348
+msgid "Program aborted."
+msgstr "Программа остановлена."
+
+#: ../src/common/paper.cpp:119
+msgid "Quarto, 215 x 275 mm"
+msgstr "Quarto, 215 x 275 мм"
+
+#: ../src/generic/logg.cpp:1019
+msgid "Question"
+msgstr "Вопрос"
+
+#: ../src/common/ffile.cpp:133 ../src/common/ffile.cpp:154
+#, c-format
+msgid "Read error on file '%s'"
+msgstr "Ошибка чтения файла '%s'"
+
+#: ../src/generic/helphtml.cpp:319
+msgid "Relevant entries:"
+msgstr "Подходящие записи:"
+
+#: ../src/generic/progdlgg.cpp:167
+msgid "Remaining time : "
+msgstr "Остаточное время : "
+
+#: ../src/html/helpfrm.cpp:269
+msgid "Remove current page from bookmarks"
+msgstr "Удалить текущую станицу из закладок"
+
+#: ../src/generic/prntdlgg.cpp:661
+msgid "Right margin (mm):"
+msgstr "Правая граница (мм):"
+
+#: ../src/generic/fontdlgg.cpp:206
+msgid "Roman"
+msgstr "Roman"
+
+#: ../src/generic/filedlgg.cpp:1286 ../src/gtk/filedlg.cpp:257
+#, c-format
+msgid "Save %s file"
+msgstr "Сохранить файл %s"
+
+#: ../src/common/docview.cpp:247
+msgid "Save as"
+msgstr "Сохранить как"
+
+#: ../src/generic/logg.cpp:469
+msgid "Save log contents to file"
+msgstr "Сохранить содержание журнала в файл"
+
+#: ../src/generic/fontdlgg.cpp:209
+msgid "Script"
+msgstr "Скрипт"
+
+#: ../src/generic/helpwxht.cpp:161 ../src/html/helpfrm.cpp:414
+#: ../src/html/helpfrm.cpp:434
+msgid "Search"
+msgstr "Поиск"
+
+#: ../src/html/helpfrm.cpp:416
+msgid ""
+"Search contents of help book(s) for all occurences of the text you typed "
+"above"
+msgstr ""
+"Поиск в содержании книг помощи всех упоминаний введенного выше \n"
+"текста"
+
+#: ../src/html/helpfrm.cpp:735
+msgid "Search in all books"
+msgstr "Поиск во всех книгах"
+
+#: ../src/html/helpfrm.cpp:628
+msgid "Searching..."
+msgstr "Поиск..."
+
+#: ../src/generic/dirdlgg.cpp:191
+msgid "Sections"
+msgstr "Разделы"
+
+#: ../src/common/ffile.cpp:221
+#, c-format
+msgid "Seek error on file '%s'"
+msgstr "Ошибка поиска в файле '%s'"
+
+#: ../src/common/docview.cpp:1426
+msgid "Select a document template"
+msgstr "Выберите шаблон документа"
+
+#: ../src/common/docview.cpp:1449
+msgid "Select a document view"
+msgstr "Выберите вид документа"
+
+#: ../src/common/docview.cpp:1344 ../src/common/docview.cpp:1381
+msgid "Select a file"
+msgstr "Выберите файл"
+
+#: ../src/generic/dcpsg.cpp:2234
+msgid "Send to Printer"
+msgstr "Отправить на печать"
+
+#: ../src/common/cmdline.cpp:627
+#, c-format
+msgid "Separator expected after the option '%s'."
+msgstr "После опции '%s' ожидался разделитель."
+
+#: ../src/common/dlgcmn.cpp:138
+msgid "Setup"
+msgstr "Настройки"
+
+#: ../src/generic/prntdlgg.cpp:155
+msgid "Setup..."
+msgstr "Настройки..."
+
+#: ../src/html/helpfrm.cpp:331
+msgid "Show all"
+msgstr "Показать все"
+
+#: ../src/html/helpfrm.cpp:365
+msgid "Show all items in index"
+msgstr "Показать все стоки индекса"
+
+#: ../src/generic/filedlgg.cpp:913
+msgid "Show hidden files"
+msgstr "Показать скрытые файлы"
+
+#: ../src/html/helpfrm.cpp:496
+msgid "Show/hide navigation panel"
+msgstr "Показать/спрятать навигационную панель"
+
+#: ../src/generic/filedlgg.cpp:534
+msgid "Size"
+msgstr "Размер"
+
+#: ../src/generic/fontdlgg.cpp:214
+msgid "Slant"
+msgstr "Наклонный"
+
+#: ../src/common/docview.cpp:304
+msgid "Sorry, could not open this file for saving."
+msgstr "Этот файл не может быть открыт для сохранения."
+
+#: ../src/common/docview.cpp:340 ../src/common/docview.cpp:352
+msgid "Sorry, could not open this file."
+msgstr "Этот файл не может быть открыт."
+
+#: ../src/common/docview.cpp:311
+msgid "Sorry, could not save this file."
+msgstr "Невозможно сохранить этот файл."
+
+#: ../src/common/prntbase.cpp:687
+msgid "Sorry, not enough memory to create a preview."
+msgstr "Недостаточно памяти для создания зоны пред-осмотра."
+
+#: ../src/common/paper.cpp:111
+msgid "Statement, 5 1/2 x 8 1/2 in"
+msgstr "Statement, 5 1/2 x 8 1/2 дюйм"
+
+#: ../src/generic/logg.cpp:594
+msgid "Status: "
+msgstr "Статус: "
+
+#: ../src/generic/fontdlgg.cpp:210
+msgid "Swiss"
+msgstr "Swiss"
+
+#: ../src/common/imagtiff.cpp:192 ../src/common/imagtiff.cpp:203
+#: ../src/common/imagtiff.cpp:314
+msgid "TIFF: Couldn't allocate memory."
+msgstr "TIFF: Невозможно распределить память."
+
+#: ../src/common/imagtiff.cpp:163
+msgid "TIFF: Error loading image."
+msgstr "TIFF: Ошибка загрузки изображения."
+
+#: ../src/common/imagtiff.cpp:214
+msgid "TIFF: Error reading image."
+msgstr "TIFF: Ошибка чтения изображения."
+
+#: ../src/common/imagtiff.cpp:291
+msgid "TIFF: Error saving image."
+msgstr "TIFF: Ошибка сохранения изображения."
+
+#: ../src/common/imagtiff.cpp:338
+msgid "TIFF: Error writing image."
+msgstr "TIFF: Ошибка записи изображения."
+
+#: ../src/common/paper.cpp:109
+msgid "Tabloid, 11 x 17 in"
+msgstr "Tabloid, 11 x 17 дюйм"
+
+#: ../src/generic/fontdlgg.cpp:211
+msgid "Teletype"
+msgstr "Телетайп"
+
+#: ../src/common/docview.cpp:1426
+msgid "Templates"
+msgstr "Шаблоны"
+
+#: ../src/generic/dirdlgg.cpp:218
+msgid "Temporary"
+msgstr "Временный"
+
+#: ../src/common/fontmap.cpp:107
+msgid "Thai (ISO-8859-11)"
+msgstr "Thai (ISO-8859-11)"
+
+#: ../src/generic/dirdlgg.cpp:210
+msgid "The Computer"
+msgstr "Компьютер"
+
+#: ../src/common/fontmap.cpp:466
+#, c-format
+msgid ""
+"The charset '%s' is unknown. You may select\n"
+"another charset to replace it with or choose\n"
+"[Cancel] if it cannot be replaced"
+msgstr ""
+"Набор символов '%s' неизвестен. Вы можете выбрать\n"
+"вместо него другой набор или нажать [Отмена] \n"
+"если он не может быть заменен"
+
+#: ../src/generic/dirdlgg.cpp:535
+msgid "The directory "
+msgstr "Директорий"
+
+#: ../src/common/fontmap.cpp:655
+#, c-format
+msgid ""
+"The encoding '%s' is unknown.\n"
+"Would you like to select a font to be used for this encoding\n"
+"(otherwise the text in this encoding will not be shown correctly)?"
+msgstr ""
+"Кодировка '%s' неизвестна. Хотите выбрать шрифт для использования с этой\n"
+"кодировкой (иначе текст в этой кодировке не будет показан правильно)?"
+
+#: ../src/common/docview.cpp:1631
+#, c-format
+msgid ""
+"The file '%s' doesn't exist and couldn't be opened.\n"
+"It has been also removed from the MRU files list."
+msgstr ""
+"Файл '%s' не существует или не может быть открыт.\n"
+"Он был удален из списка файлов MRU."
+
+#: ../src/common/cmdline.cpp:761
+#, c-format
+msgid "The required parameter '%s' was not specified."
+msgstr "Обязательный параметр '%s' не указан."
+
+#: ../src/common/textcmn.cpp:121
+msgid "The text couldn't be saved."
+msgstr "Текст не может быть сохранен."
+
+#: ../src/common/cmdline.cpp:740
+#, c-format
+msgid "The value for the option '%s' must be specified."
+msgstr "Значение опции '%s' должно быть указано."
+
+#: ../src/unix/threadpsx.cpp:1441
+msgid "Thread module initialization failed: failed to create thread key"
+msgstr "Ошибка инициализации модуля нитей: не удалось создать ключ нити"
+
+#: ../src/unix/threadpsx.cpp:962
+msgid "Thread priority setting is ignored."
+msgstr "Приоритет нити проигнорирован."
+
+#: ../src/generic/filedlgg.cpp:536
+msgid "Time"
+msgstr "Время"
+
+#: ../src/generic/tipdlg.cpp:162
+msgid "Tip of the Day"
+msgstr "Подсказка Дня"
+
+#: ../src/generic/tipdlg.cpp:138
+msgid "Tips not available, sorry!"
+msgstr "Извините, подсказки недоступны!"
+
+#: ../src/generic/prntdlgg.cpp:191
+msgid "To:"
+msgstr "До:"
+
+#: ../src/generic/prntdlgg.cpp:650
+msgid "Top margin (mm):"
+msgstr "Верхняя граница (мм):"
+
+#: ../src/common/fs_mem.cpp:202
+#, c-format
+msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
+msgstr "Попытка удаления файла '%s' из списка памяти VFS, но он не загружен!"
+
+#: ../src/common/sckaddr.cpp:107
+msgid "Trying to solve a NULL hostname: giving up"
+msgstr "Попытка определить имя хоста NULL: отменена"
+
+#: ../src/common/fontmap.cpp:105
+msgid "Turkish (ISO-8859-9)"
+msgstr "Turkish (ISO-8859-9)"
+
+#: ../src/common/paper.cpp:140
+msgid "US Std Fanfold, 14 7/8 x 11 in"
+msgstr "US Std Fanfold, 14 7/8 x 11 дюйм"
+
+#: ../src/html/htmlwin.cpp:175
+#, c-format
+msgid "Unable to open requested HTML document: %s"
+msgstr "Невозможно открыть запрошенный документ HTML: %s"
+
+#: ../src/generic/fontdlgg.cpp:242
+msgid "Underline"
+msgstr "Подчеркивание"
+
+#: ../src/common/resourc2.cpp:305 ../src/common/resourc2.cpp:319
+#: ../src/common/resourc2.cpp:335 ../src/common/resourc2.cpp:349
+#: ../src/common/resourc2.cpp:1378 ../src/common/resourc2.cpp:1392
+#: ../src/common/resourc2.cpp:1408 ../src/common/resourc2.cpp:1422
+#: ../src/common/resource.cpp:1818 ../src/common/resource.cpp:1832
+#: ../src/common/resource.cpp:1849 ../src/common/resource.cpp:1863
+#: ../src/common/resource.cpp:1948 ../src/common/resource.cpp:1962
+#: ../src/common/resource.cpp:1978 ../src/common/resource.cpp:1992
+#: ../src/common/resource.cpp:3032 ../src/common/resource.cpp:3046
+#: ../src/common/resource.cpp:3063 ../src/common/resource.cpp:3077
+msgid "Unexpected end of file whilst parsing resource."
+msgstr "Неожиданный конец файла во время лексического разбора ресурса."
+
+#: ../src/common/cmdline.cpp:712
+#, c-format
+msgid "Unexpected parameter '%s'"
+msgstr "Неожиданный параметр '%s'"
+
+#: ../src/common/fontmap.cpp:329
+#, c-format
+msgid "Unknown encoding (%d)"
+msgstr "Неожиданная кодировка (%d)"
+
+#: ../src/unix/mimetype.cpp:1335
+#, c-format
+msgid "Unknown field in file %s, line %d: '%s'."
+msgstr "Неизвестное поле в файле %s, строка %d: '%s'."
+
+#: ../src/common/cmdline.cpp:496
+#, c-format
+msgid "Unknown long option '%s'"
+msgstr "Неизвестная длинная опция '%s'"
+
+#: ../src/common/cmdline.cpp:518
+#, c-format
+msgid "Unknown option '%s'"
+msgstr "Неизвестная опция '%s'"
+
+#: ../src/common/mimecmn.cpp:161
+#, c-format
+msgid "Unmatched '{' in an entry for mime type %s."
+msgstr "Незакрытая скобка '{' в записи для mime type %s."
+
+#: ../src/common/docview.cpp:1878 ../src/common/docview.cpp:1893
+#: ../src/common/docview.cpp:1920
+msgid "Unnamed command"
+msgstr "Неназванная команда"
+
+#: ../src/common/resourc2.cpp:687 ../src/common/resource.cpp:2336
+#, c-format
+msgid "Unrecognized style %s whilst parsing resource."
+msgstr "Неизвестный стиль %s в лексическом разборе ресурса."
+
+#: ../src/common/cmdline.cpp:797
+#, c-format
+msgid "Usage: %s"
+msgstr "Использование: %s"
+
+#: ../src/generic/dirdlgg.cpp:215
+msgid "User"
+msgstr "Пользовательский"
+
+#: ../src/generic/dirdlgg.cpp:214
+msgid "User Local"
+msgstr "Локальный пользовательский"
+
+#: ../src/common/valtext.cpp:188
+msgid "Validation conflict"
+msgstr "Конфликт проверки"
+
+#: ../src/generic/dirdlgg.cpp:216
+msgid "Variables"
+msgstr "Переменные"
+
+#: ../src/generic/filedlgg.cpp:861
+msgid "View files as a detailed view"
+msgstr "Просмотр файлов с деталями"
+
+#: ../src/generic/filedlgg.cpp:855
+msgid "View files as a list view"
+msgstr "Просмотр файлов в виде списка"
+
+#: ../src/common/docview.cpp:1449
+msgid "Views"
+msgstr "Виды"
+
+#: ../src/unix/utilsunx.cpp:270 ../src/unix/utilsunx.cpp:619
+msgid "Waiting for subprocess termination failed"
+msgstr "Ошибка ожидания окончания подпроцесса"
+
+#: ../src/common/docview.cpp:435 ../src/common/resource.cpp:121
+msgid "Warning"
+msgstr "Предупреждение"
+
+#: ../src/common/log.cpp:358
+msgid "Warning: "
+msgstr "Предупреждение: "
+
+#: ../src/html/htmlpars.cpp:179
+msgid "Warning: attempt to remove HTML tag handler from empty stack."
+msgstr "Предупреждение: попытка удалить обработчик тега HTML из пустого стека."
+
+#: ../src/common/fontmap.cpp:97
+msgid "West European (ISO-8859-1/Latin 1)"
+msgstr "West European (ISO-8859-1/Latin 1)"
+
+#: ../src/common/fontmap.cpp:111
+msgid "West European new (ISO-8859-15/Latin 0)"
+msgstr "West European новый (ISO-8859-15/Latin 0)"
+
+#: ../src/html/helpfrm.cpp:406
+msgid "Whole words only"
+msgstr "Только полные слова"
+
+#: ../src/common/fontmap.cpp:119
+msgid "Windows Arabic (CP 1256)"
+msgstr "Windows Arabic (CP 1256)"
+
+#: ../src/common/fontmap.cpp:120
+msgid "Windows Baltic (CP 1257)"
+msgstr "Windows Baltic (CP 1257)"
+
+#: ../src/common/fontmap.cpp:114
+msgid "Windows Cyrillic (CP 1251)"
+msgstr "Windows Cyrillic (CP 1251)"
+
+#: ../src/common/fontmap.cpp:116
+msgid "Windows Greek (CP 1253)"
+msgstr "Windows Greek (CP 1253)"
+
+#: ../src/common/fontmap.cpp:118
+msgid "Windows Hebrew (CP 1255)"
+msgstr "Windows Hebrew (CP 1255)"
+
+#: ../src/common/fontmap.cpp:115
+msgid "Windows Latin 1 (CP 1252)"
+msgstr "Windows Latin 1 (CP 1252)"
+
+#: ../src/common/fontmap.cpp:113
+msgid "Windows Latin 2 (CP 1250)"
+msgstr "Windows Latin 2 (CP 1250)"
+
+#: ../src/common/fontmap.cpp:117
+msgid "Windows Turkish (CP 1254)"
+msgstr "Windows Turkish (CP 1254)"
+
+#: ../src/common/fontmap.cpp:121
+msgid "Windows/DOS OEM (CP 437)"
+msgstr "Windows/DOS OEM (CP 437)"
+
+#: ../src/common/ffile.cpp:168
+#, c-format
+msgid "Write error on file '%s'"
+msgstr "Ошибка записи в файл '%s'"
+
+#: ../src/generic/dcpsg.cpp:2291
+msgid "X Scaling"
+msgstr "Масштабирование по X"
+
+#: ../src/generic/dcpsg.cpp:2300
+msgid "X Translation"
+msgstr "Сдвиг вдоль X"
+
+#: ../src/generic/dcpsg.cpp:2295
+msgid "Y Scaling"
+msgstr "Масштабирование по Y"
+
+#: ../src/generic/dcpsg.cpp:2304
+msgid "Y Translation"
+msgstr "Сдвиг вдоль Y"
+
+#: ../src/common/dlgcmn.cpp:109 ../src/common/dlgcmn.cpp:116
+msgid "Yes"
+msgstr "Да"
+
+#: ../src/generic/dirdlgg.cpp:570
+msgid "You cannot add a new directory to this section."
+msgstr "Вы не можете добавить новый каталог в эту секцию."
+
+#: ../src/common/docview.cpp:1989
+msgid "[EMPTY]"
+msgstr "[ПУСТО]"
+
+#: ../src/common/utilscmn.cpp:466
+msgid "alt"
+msgstr "alt"
+
+#: ../src/common/fileconf.cpp:1440
+#, c-format
+msgid "attempt to change immutable key '%s' ignored."
+msgstr "попытка изменить неизменную клавишу '%s' проигнорирована."
+
+#: ../src/common/ffile.cpp:101
+#, c-format
+msgid "can't close file '%s'"
+msgstr "невозможно открыть файл '%s'"
+
+#: ../src/common/file.cpp:257
+#, c-format
+msgid "can't close file descriptor %d"
+msgstr "невозможно закрыть дескриптор файла %d"
+
+#: ../src/common/file.cpp:555 ../src/common/file.cpp:565
+#, c-format
+msgid "can't commit changes to file '%s'"
+msgstr "невозможно записать изменения в файл '%s'"
+
+#: ../src/common/file.cpp:200
+#, c-format
+msgid "can't create file '%s'"
+msgstr "невозможно создать файл '%s'"
+
+#: ../src/common/fileconf.cpp:910
+#, c-format
+msgid "can't delete user configuration file '%s'"
+msgstr "невозможно удалить файл конфигурации пользователя '%s'"
+
+#: ../src/common/file.cpp:436
+#, c-format
+msgid "can't determine if the end of file is reached on descriptor %d"
+msgstr "невозможно определить достижение конца файла с дескриптором %d"
+
+#: ../src/common/file.cpp:402
+#, c-format
+msgid "can't find length of file on file descriptor %d"
+msgstr "невозможно определить длину файла с дескриптором %d"
+
+#: ../src/common/file.cpp:316
+#, c-format
+msgid "can't flush file descriptor %d"
+msgstr "невозможно слить файл с дескриптором %d"
+
+#: ../src/common/file.cpp:370
+#, c-format
+msgid "can't get seek position on file descriptor %d"
+msgstr "невозможно получить текущую позицию файла с дескриптором %d"
+
+#: ../src/common/fontmap.cpp:597
+msgid "can't load any font, aborting"
+msgstr "невозможно загрузить ни один шрифт, останов"
+
+#: ../src/common/ffile.cpp:85 ../src/common/file.cpp:243
+#, c-format
+msgid "can't open file '%s'"
+msgstr "невозможно открыть файл '%s'"
+
+#: ../src/common/fileconf.cpp:316
+#, c-format
+msgid "can't open global configuration file '%s'."
+msgstr "невозможно открыть глобальный файл конфигурации '%s'."
+
+#: ../src/common/fileconf.cpp:328
+#, c-format
+msgid "can't open user configuration file '%s'."
+msgstr "невозможно открыть пользовательский файл конфигурации '%s'."
+
+#: ../src/common/fileconf.cpp:790
+msgid "can't open user configuration file."
+msgstr "невозможно открыть пользовательский файл конфигурации."
+
+#: ../src/common/file.cpp:283
+#, c-format
+msgid "can't read from file descriptor %d"
+msgstr "ошибка чтения файла с дескриптором %d"
+
+#: ../src/common/file.cpp:550 ../src/common/file.cpp:560
+#, c-format
+msgid "can't remove file '%s'"
+msgstr "ошибка удаления файла '%s'"
+
+#: ../src/common/file.cpp:578 ../src/common/file.cpp:581
+#, c-format
+msgid "can't remove temporary file '%s'"
+msgstr "ошибка удаления временного файла '%s'"
+
+#: ../src/common/file.cpp:356
+#, c-format
+msgid "can't seek on file descriptor %d"
+msgstr "невозможно переместиться по файлу с дескриптором %d"
+
+#: ../src/common/textfile.cpp:354
+#, c-format
+msgid "can't write file '%s' to disk."
+msgstr "ошибка записи файла '%s' на диск."
+
+#: ../src/common/file.cpp:301
+#, c-format
+msgid "can't write to file descriptor %d"
+msgstr "невозможно записать в файл с дескриптором %d"
+
+#: ../src/common/fileconf.cpp:797
+msgid "can't write user configuration file."
+msgstr "невозможно записать пользовательский файл конфигурации."
+
+#: ../src/common/intl.cpp:357
+#, c-format
+msgid "catalog file for domain '%s' not found."
+msgstr "файл каталога для домена '%s' не найден."
+
+#: ../src/common/utilscmn.cpp:464
+msgid "ctrl"
+msgstr "ctrl"
+
+#: ../src/common/cmdline.cpp:910
+msgid "date"
+msgstr "дата"
+
+#: ../src/common/datetime.cpp:3232
+msgid "eighteenth"
+msgstr "восемнадцатый"
+
+#: ../src/common/datetime.cpp:3222
+msgid "eighth"
+msgstr "восьмой"
+
+#: ../src/common/datetime.cpp:3225
+msgid "eleventh"
+msgstr "одиннадцатый"
+
+#: ../src/common/fileconf.cpp:1427
+#, c-format
+msgid "entry '%s' appears more than once in group '%s'"
+msgstr "поле '%s' появляется более одного раза в группе '%s'"
+
+#: ../src/common/ffile.cpp:182
+#, c-format
+msgid "failed to flush the file '%s'"
+msgstr "ошибка сброса буфера файла '%s'."
+
+#: ../src/common/datetime.cpp:3229
+msgid "fifteenth"
+msgstr "пятнадцатый"
+
+#: ../src/common/datetime.cpp:3219
+msgid "fifth"
+msgstr "пятый"
+
+#: ../src/common/fileconf.cpp:471
+#, c-format
+msgid "file '%s', line %d: '%s' ignored after group header."
+msgstr "файл '%s', строка %d: '%s' проигнорировано после заголовка группы."
+
+#: ../src/common/fileconf.cpp:500
+#, c-format
+msgid "file '%s', line %d: '=' expected."
+msgstr "файл '%s', строка %d: ожидался '='."
+
+#: ../src/common/fileconf.cpp:526
+#, c-format
+msgid "file '%s', line %d: key '%s' was first found at line %d."
+msgstr "файл '%s', строка %d: ключ '%s' был уже замечен на строке %d."
+
+#: ../src/common/fileconf.cpp:516
+#, c-format
+msgid "file '%s', line %d: value for immutable key '%s' ignored."
+msgstr ""
+"файл '%s', строка %d: значение неизменного ключа '%s' проигнорировано."
+
+#: ../src/common/fileconf.cpp:439
+#, c-format
+msgid "file '%s': unexpected character %c at line %d."
+msgstr "файл '%s': неожиданный символ %c на строке %d."
+
+#: ../src/common/datetime.cpp:3215
+msgid "first"
+msgstr "первый"
+
+#: ../src/common/datetime.cpp:3228
+msgid "fourteenth"
+msgstr "четырнадцатый"
+
+#: ../src/common/datetime.cpp:3218
+msgid "fourth"
+msgstr "четвертый"
+
+#: ../src/common/timercmn.cpp:233
+msgid "gmtime() failed"
+msgstr "ошибка gmtime()"
+
+#: ../src/common/file.cpp:440
+msgid "invalid eof() return value."
+msgstr "недопустимое значение возврата из eof()."
+
+#: ../src/generic/logg.cpp:1033
+msgid "invalid message box return value"
+msgstr "недопустимое значение возврата из окна сообщения"
+
+#: ../src/html/helpfrm.cpp:874
+msgid "large"
+msgstr "большой"
+
+#: ../src/common/intl.cpp:549
+#, c-format
+msgid "locale '%s' can not be set."
+msgstr "локейл '%s' не может быть установлен."
+
+#: ../src/common/intl.cpp:352
+#, c-format
+msgid "looking for catalog '%s' in path '%s'."
+msgstr "поиск каталога '%s' в пути '%s'."
+
+#: ../src/html/helpfrm.cpp:874
+msgid "medium"
+msgstr "средний"
+
+#: ../src/common/datetime.cpp:3379
+msgid "midnight"
+msgstr "полночь"
+
+#: ../src/common/timercmn.cpp:229
+msgid "mktime() failed"
+msgstr "ошибка mktime()"
+
+#: ../src/common/datetime.cpp:3233
+msgid "nineteenth"
+msgstr "девятнадцатый"
+
+#: ../src/common/datetime.cpp:3223
+msgid "ninth"
+msgstr "девятый"
+
+#: ../src/html/helpdata.cpp:644
+msgid "noname"
+msgstr "без имени"
+
+#: ../src/common/datetime.cpp:3378
+msgid "noon"
+msgstr "полдень"
+
+#: ../src/common/cmdline.cpp:909
+msgid "num"
+msgstr "num"
+
+#: ../src/common/datetime.cpp:3216
+msgid "second"
+msgstr "второй"
+
+#: ../src/common/datetime.cpp:3231
+msgid "seventeenth"
+msgstr "семнадцатый"
+
+#: ../src/common/datetime.cpp:3221
+msgid "seventh"
+msgstr "седьмой"
+
+#: ../src/common/utilscmn.cpp:468
+msgid "shift"
+msgstr "shift"
+
+#: ../src/common/datetime.cpp:3230
+msgid "sixteenth"
+msgstr "шестнадцатый"
+
+#: ../src/common/datetime.cpp:3220
+msgid "sixth"
+msgstr "шестой"
+
+#: ../src/html/helpfrm.cpp:874
+msgid "small"
+msgstr "маленький"
+
+#: ../src/common/cmdline.cpp:908
+msgid "str"
+msgstr "str"
+
+#: ../src/common/datetime.cpp:3224
+msgid "tenth"
+msgstr "десятый"
+
+#: ../src/common/datetime.cpp:3217
+msgid "third"
+msgstr "третий"
+
+#: ../src/common/datetime.cpp:3227
+msgid "thirteenth"
+msgstr "тринадцатый"
+
+#: ../src/common/datetime.cpp:3022
+msgid "today"
+msgstr "сегодня"
+
+#: ../src/common/datetime.cpp:3024
+msgid "tomorrow"
+msgstr "завтра"
+
+#: ../src/common/datetime.cpp:3226
+msgid "twelfth"
+msgstr "двенадцатый"
+
+#: ../src/common/datetime.cpp:3234
+msgid "twentieth"
+msgstr "двадцатый"
+
+#: ../src/common/fileconf.cpp:1547
+#, c-format
+msgid "unexpected \" at position %d in '%s'."
+msgstr "неожиданный \" в позиции %d в '%s'."
+
+#: ../src/generic/progdlgg.cpp:241
+msgid "unknown"
+msgstr "неизвестный"
+
+#: ../src/common/file.cpp:339
+msgid "unknown seek origin"
+msgstr "неизвестный отсчет поиска"
+
+#: ../src/common/fontmap.cpp:351
+#, c-format
+msgid "unknown-%d"
+msgstr "неизвестный-%d"
+
+#: ../src/common/docview.cpp:404
+msgid "unnamed"
+msgstr "безымянный"
+
+#: ../src/common/docview.cpp:1186
+#, c-format
+msgid "unnamed%d"
+msgstr "безымянный%d"
+
+#: ../src/common/intl.cpp:362
+#, c-format
+msgid "using catalog '%s' from '%s'."
+msgstr "используется каталог '%s' из '%s'."
+
+#: ../src/html/helpfrm.cpp:874
+msgid "very large"
+msgstr "очень большой"
+
+#: ../src/html/helpfrm.cpp:874
+msgid "very small"
+msgstr "очень маленький"
+
+#: ../src/common/timercmn.cpp:260
+msgid "wxGetTimeOfDay failed."
+msgstr "ошибка wxGetTimeOfDay."
+
+#: ../src/common/socket.cpp:329 ../src/common/socket.cpp:383
+msgid "wxSocket: invalid signature in ReadMsg."
+msgstr "wxSocket: недействительная подпись в ReadMsg."
+
+#: ../src/common/socket.cpp:903
+msgid "wxSocket: unknown event!."
+msgstr "wxSocket: неизвестное событие!"
+
+#: ../src/common/filefn.cpp:1215
+msgid "wxWindows: error finding temporary file name.\n"
+msgstr "wxWindows: ошибка определения имени временного файла.\n"
+
+#: ../src/common/datetime.cpp:3023
+msgid "yesterday"
+msgstr "вчера"
+
+#~ msgid " B.C."
+#~ msgstr " до р.хр."
+
+#~ msgid "%s is invalid."
+#~ msgstr "%s недопустимое значение."
+
+#~ msgid "%s should be numeric."
+#~ msgstr "%s должно быть числом."
+
+#~ msgid "%s should only contain ASCII characters."
+#~ msgstr "%s должно содержать только символы ASCII."
+
+#~ msgid "%s should only contain alphabetic characters."
+#~ msgstr "%s должно содержать только символы алфавита."
+
+#~ msgid "%s should only contain alphabetic or numeric characters."
+#~ msgstr "%s должно содержать только символы алфавита или цифры."
+
+#~ msgid "Application Error"
+#~ msgstr "Ошибка приложения"
+
+#~ msgid "Can not create event object."
+#~ msgstr "Невозможно создать объект события."
+
+#~ msgid "Can not create tooltip control"
+#~ msgstr "Невозможно создать плавающую подсказку."
+
+#~ msgid "Can not get data in format '%s' from clipboard."
+#~ msgstr "Невозможно получить данные в формате '%s' из clipboard."
+
+#~ msgid "Can not get priority range for scheduling policy %d."
+#~ msgstr "Невозможно получить интервал приоритета для задания распорядка %d."
+
+#~ msgid "Can not put data in format '%s' on clipboard."
+#~ msgstr "Невозможно поместить данные в формате '%s' в clipboard."
+
+#~ msgid "Can not resume thread %x"
+#~ msgstr "Невозможно возобновить нить %x"
+
+#~ msgid "Can not retrieve thread scheduling policy."
+#~ msgstr "Невозможно извлечь распорядок нити."
+
+#~ msgid "Can not start thread: error writing TLS."
+#~ msgstr "Невозможно запустить нить: ошибка записи TLS."
+
+#~ msgid "Can not suspend thread %x"
+#~ msgstr "Невозможно остановить нить %x"
+
+#~ msgid "Can not wait for thread termination"
+#~ msgstr "Невозможно дождаться окончания нити"
+
+#~ msgid "Can't create thread"
+#~ msgstr "Невозможно создать нить"
+
+#~ msgid "Can't delete the INI file '%s'"
+#~ msgstr "Невозможно удалить INI-файл '%s'"
+
+#~ msgid "Can't execute command '%s'"
+#~ msgstr "Невозможно выполнить команду '%s'"
+
+#~ msgid "Can't set thread priority"
+#~ msgstr "Невозможно установить приоритет нити"
+
+#~ msgid "Cannot initialize OLE"
+#~ msgstr "Невозможно проинициализировать OLE"
+
+#~ msgid "Character '%c' is invalid in a config entry name."
+#~ msgstr "Недопустимый символ '%c' в имени записи файла конфигурации."
+
+#~ msgid "Couldn't acquire a mutex lock"
+#~ msgstr "Невозможно получить блок для mutex"
+
+#~ msgid "Couldn't add an image to the image list."
+#~ msgstr "Невозможно добавить изображение к списку изображений."
+
+#~ msgid "Couldn't change the state of event object."
+#~ msgstr "Невозможно изменить состояние объекта сообщения."
+
+#~ msgid "Couldn't get the current thread pointer"
+#~ msgstr "Невозможно получить указатель на текущую нить"
+
+#~ msgid "Couldn't release a mutex"
+#~ msgstr "Невозможно освободить mutex"
+
+#~ msgid "Couldn't retrieve information about list control item %d."
+#~ msgstr "Невозможно извлечь информацию об элементе списка %d."
+
+#~ msgid "Debug"
+#~ msgstr "Отладка"
+
+#~ msgid "DoLogString must be overrided if it's called."
+#~ msgstr "DoLogString должно быть переопределено в случае вызова."
+
+#~ msgid "Enter the name of the directory to create"
+#~ msgstr "Введите имя создаваемого каталога"
+
+#~ msgid "Entry name can't start with '%c'."
+#~ msgstr "Имя записи не может начинаться с '%c'."
+
+#~ msgid "Execution of command '%s' failed"
+#~ msgstr "Ошибка выполнения команды '%s'"
+
+#~ msgid "Failed to close the clipboard."
+#~ msgstr "Не удалось закрыть clipboard."
+
+#~ msgid "Failed to created dialog."
+#~ msgstr "Не удалось создать диалог."
+
+#~ msgid "Failed to empty the clipboard."
+#~ msgstr "Не удалось очистить clipboard."
+
+#~ msgid "Failed to open the clipboard."
+#~ msgstr "Не удалось открыть clipboard."
+
+#~ msgid "Failed to retrieve data from the clipboard."
+#~ msgstr "Не удалось извлечь данные из clipboard."
+
+#~ msgid "Failed to set clipboard data."
+#~ msgstr "Не удалось установить данные clipboard."
+
+#~ msgid "Files (%s)|%s"
+#~ msgstr "Файлы (%s)|%s"
+
+#~ msgid ""
+#~ "Mime.types file %s, line %d: extra characters after the field value ignored."
+#~ msgstr ""
+#~ "Файл mime.types %s, строка %d: лишние символы после значения поля "
+#~ "проигнорированы."
+
+#~ msgid "Print Error"
+#~ msgstr "Ошибка печати"
+
+#~ msgid ""
+#~ "Registry key '%s' is needed for normal system operation,\n"
+#~ "deleting it will leave your system in unusable state:\n"
+#~ "operation aborted."
+#~ msgstr ""
+#~ "Ключ registry '%s' необходим для нормальной работы системы,\n"
+#~ "его удаление приведет вашу систему в нерабочее состояние:\n"
+#~ "операция отменена."
+
+#~ msgid "Sizer error"
+#~ msgstr "Ошибка выравнивателя (sizer)"
+
+#~ msgid ""
+#~ "Thread module initialization failed: can not store value in thread local "
+#~ "storage"
+#~ msgstr ""
+#~ "Ошибка инициализации модуля нитей: невозможно сохранить значение в локальном "
+#~ "пространстве нити"
+
+#~ msgid "Thread module initialization failed: failed to create pthread key."
+#~ msgstr "Ошибка инициализации модуля нитей: невозможно создать ключ pthread."
+
+#~ msgid ""
+#~ "Thread module initialization failed: impossible to allocate index in thread "
+#~ "local storage"
+#~ msgstr ""
+#~ "Ошибка инициализации модуля нитей: невозможно выделить индекс в локальном "
+#~ "пространстве нити "
+
+#~ msgid "Unsupported clipboard format."
+#~ msgstr "Неподдерживаемый формат clipboard."
+
+#~ msgid "bad index in wxArrayString::Remove"
+#~ msgstr "неверный индекс в wxArrayString::Remove"
+
+#~ msgid "can't close registry key '%s'"
+#~ msgstr "невозможно закрыть ключ registry '%s'"
+
+#~ msgid "can't create registry key '%s'"
+#~ msgstr "невозможно создать ключ registry '%s'"
+
+#~ msgid "can't delete key '%s'"
+#~ msgstr "невозможно удалить ключ '%s'"
+
+#~ msgid "can't delete value '%s' from key '%s'"
+#~ msgstr "невозможно удалить значение '%s' ключа '%s'"
+
+#~ msgid "can't delete value of key '%s'"
+#~ msgstr "невозможно удалить значение ключа '%s'"
+
+#~ msgid "can't enumerate subkeys of key '%s'"
+#~ msgstr "невозможно подсчитать подключи ключа '%s'"
+
+#~ msgid "can't enumerate values of key '%s'"
+#~ msgstr "невозможно подсчитать значения ключа '%s'"
+
+#~ msgid "can't find user's HOME, using current directory."
+#~ msgstr ""
+#~ "невозможно определить HOME пользователя, будет использован текущий "
+#~ "директорий."
+
+#~ msgid "can't get info about registry key '%s'"
+#~ msgstr "невозможно получить информацию о ключе registry '%s'"
+
+#~ msgid "can't open registry key '%s'"
+#~ msgstr "невозможно открыть ключ registry '%s'"
+
+#~ msgid "can't read value of '%s'"
+#~ msgstr "невозможно прочитать значение '%s'"
+
+#~ msgid "can't read value of key '%s'"
+#~ msgstr "невозможно прочитать значение ключа '%s'"
+
+#~ msgid "can't set value of '%s'"
+#~ msgstr "невозможно установить значение '%s'"
+
+#~ msgid "can't set value of a group!"
+#~ msgstr "невозможно установить значение группы!"
+
+#~ msgid "empty file name in wxFindFileInPath"
+#~ msgstr "пустое имя файла в wxFindFileInPath"
+
+#~ msgid "invalid day"
+#~ msgstr "недопустимый день"
+
+#~ msgid "invalid month"
+#~ msgstr "недопустимый месяц"
+
+#~ msgid "pm"
+#~ msgstr "пп"
+
+#~ msgid "removing inexistent element in wxArrayString::Remove"
+#~ msgstr "удаление несуществующего элемента в wxArrayString::Remove"
+
+#~ msgid "string '%s' not found in domain '%s' for locale '%s'."
+#~ msgstr "не найдена строка '%s' в домене '%s' локейла '%s'."
+
+#~ msgid "string '%s' not found in locale '%s'."
+#~ msgstr "не найдена строка '%s' в локейле '%s'."
+
+#~ msgid "unknown log level in wxLog::DoLog"
+#~ msgstr "неизвестный уровень журнала в wxLog::DoLog"
+
+#~ msgid "unknown log level in wxLogGui::DoLog"
+#~ msgstr "неизвестный уровень журнала в wxLogGui::DoLog"
+
+#~ msgid "wxExpandSizer has no parent!"
+#~ msgstr "Нет родителя у wxExpandSizer!"
+
+#~ msgid ""
+#~ "wxPrintPreviewBase::RenderPage: must use wxPrintPreviewBase::SetCanvas to "
+#~ "let me know about the canvas!"
+#~ msgstr ""
+#~ "wxPrintPreviewBase::RenderPage: необходимо использовать "
+#~ "wxPrintPreviewBase::SetCanvas чтобы я знал о канве (canvas)!"
+
+#~ msgid ""
+#~ "can't determine if the end of file is reached on                 descriptor "
+#~ "%d"
+#~ msgstr "невозможно определить достигнут ли конец файла с дескриптором %d"
+
+#~ msgid "bad index in wxArrayString::Insert"
+#~ msgstr "неверный индекс в wxArrayString::Insert"
+
+#~ msgid "Couldn't load a JPEG image - probably file is corrupted."
+#~ msgstr "Невозможно загрузить изображение JPEG - возможно файл поврежден."
+
+#~ msgid "Couldn't save a JPEG image - probably file is corrupted."
+#~ msgstr "Невозможно сохранить изображение JPEG - возможно файл поврежден."
+
+#~ msgid "wxWindows could not open display for '%s': exiting."
+#~ msgstr "wxWindows не смог открыть дисплей для '%s': выходим."
+
+#~ msgid "Could not initialise Rich Edit DLL"
+#~ msgstr "Невозможно проинициализировать Rich Edit DLL"
+
+#~ msgid ""
+#~ "Unrecoverable program error detected:  the application will terminate."
+#~ msgstr ""
+#~ "Обнаружена неисправимая ошибка программы: приложение будет завершено."
+
+#~ msgid "Fatal Error"
+#~ msgstr "Фатальная ошибка"
+
+#~ msgid "Fatal error: exiting"
+#~ msgstr "Фатальная ошибка: выходим"
+
+#~ msgid "Failed to create dialog."
+#~ msgstr "Ошибка создания диалога."
+
+#~ msgid "Failed to create MDI parent frame."
+#~ msgstr "Ошибка создания родительского фрейма MDI."
+
+#~ msgid ""
+#~ "Can't find dummy dialog template!\n"
+#~ "Check resource include path for finding wx.rc."
+#~ msgstr ""
+#~ "Невозможно найти шаблон диалога!\n"
+#~ "Проверьте путь поиска wx.rc."
+
+#~ msgid ""
+#~ "Can't create window of class %s!\n"
+#~ "Possible Windows 3.x compatibility problem?"
+#~ msgstr ""
+#~ "Невозможно создать окно класса %s!\n"
+#~ "Возможны проблемы совместимости Windows 3.x?"
+
+#~ msgid "Failed to allocate %dKb of memory for clipboard transfer."
+#~ msgstr "Ошибка распределения %dКб памяти для передачи clipboard."
+
+#~ msgid "Failed to set clipboard data in format %s"
+#~ msgstr "Ошибка установки данных clipboard в формате %s"
