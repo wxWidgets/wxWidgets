@@ -461,7 +461,11 @@ int wxDisplayDepth()
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
-  wxClientDisplayRect( NULL , NULL , width , height ) ;
+  	BitMap screenBits;
+  	GetQDGlobalsScreenBits( &screenBits );
+
+    *width = screenBits.bounds.right - screenBits.bounds.left  ;
+    *height = screenBits.bounds.bottom - screenBits.bounds.top ;
 }
 
 void wxDisplaySizeMM(int *width, int *height)
