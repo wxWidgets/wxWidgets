@@ -4,19 +4,14 @@
 
 ********************************************************************************
 
-Installation on UNIX
---------------------
+System requirements
+-------------------
 
-XRCed requires wxGTK and wxPython greater or equal to 2.3.3, and Python 2.2 
-(it may work with earlier version, but was not tested).
+XRCed requires wxWindows and wxPython greater or equal to 2.3.3, and 
+Python 2.2 or newer (it may work with earlier version, but was not tested).
 
-Of course wxGTK's XRC library (libwxxrc) and it's python module must
-be installed.
+wxPython must be compiled with XRC support.
 
-Installation on Windows
------------------------
-
-Works with wxPython 2.3.2 for Python 2.2.
 
 Short manual
 ------------
@@ -70,4 +65,4 @@ refresh button).
 
 --------------------------------------------------------------------------------
 
-Copyright 2001 Roman Rolinsky <rolinsky@mema.ucl.ac.be>
+Copyright 2001-2003 Roman Rolinsky <rollrom@xrced.sourceforge.net>
