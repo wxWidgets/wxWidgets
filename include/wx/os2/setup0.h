@@ -259,6 +259,9 @@
 // wxStatusBar class
 #define wxUSE_STATUSBAR 1
 
+// wxSpinCtrl class
+#define wxUSE_SPINCTRL 1
+
 // progress dialog class for lengthy operations
 #define wxUSE_PROGRESSDLG 1
 

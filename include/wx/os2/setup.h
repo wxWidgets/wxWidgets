@@ -257,6 +257,9 @@
 #define wxUSE_TOOLBAR 1
 #define wxUSE_TOOLBAR_NATIVE 1
 
+// wxSpinCtrl class
+#define wxUSE_SPINCTRL 1
+
 // wxStatusBar class
 #define wxUSE_STATUSBAR 1
 
