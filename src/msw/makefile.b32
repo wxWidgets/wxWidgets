@@ -140,7 +140,6 @@ MSWOBJS = \
   $(MSWDIR)\font.obj \
   $(MSWDIR)\fontdlg.obj \
   $(MSWDIR)\frame.obj \
-  $(MSWDIR)\gauge.obj \
   $(MSWDIR)\gauge95.obj \
   $(MSWDIR)\gaugemsw.obj \
   $(MSWDIR)\gdiobj.obj \

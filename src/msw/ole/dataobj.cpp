@@ -28,6 +28,10 @@
   #pragma hdrstop
 #endif
 
+#include  <wx/defs.h>
+
+#ifdef __WIN32__
+
 #include  <wx/log.h>
 #include  <wx/msw/ole/oleutils.h>
 #include  <wx/msw/ole/dataobj.h>
@@ -400,3 +404,6 @@ static const char *GetTymedName(DWORD tymed)
       return s_szBuf;
   }
 }
+
+#endif
+

@@ -151,7 +151,7 @@ MSWOBJS = \
   $(MSWDIR)\listctrl.obj \
   $(MSWDIR)\main.obj \
   $(MSWDIR)\mdi.obj \
-  $(MSWDIR)\menu.obj \
+  $(MSWDIR)\menu.obj\
   $(MSWDIR)\menuitem.obj \
   $(MSWDIR)\metafile.obj \
   $(MSWDIR)\minifram.obj \
@@ -178,6 +178,7 @@ MSWOBJS = \
   $(MSWDIR)\timer.obj \
   $(MSWDIR)\treectrl.obj \
   $(MSWDIR)\utils.obj \
+  $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
   $(MSWDIR)\window.obj \
   $(OLEDIR)\droptgt.obj \
@@ -585,6 +586,11 @@ $(MSWDIR)/utils.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
+$(MSWDIR)/utilsexc.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
 $(MSWDIR)/wave.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
@@ -815,7 +821,7 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 
 $(COMMDIR)/extended.obj:     $*.c
         cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.c
+$(CPPFLAGS2) /Fo$@ /c /Tp $*.c
 <<
 
 $(COMMDIR)/y_tab.obj:     $*.c $(COMMDIR)/lex_yy.c

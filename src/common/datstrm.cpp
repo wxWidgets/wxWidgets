@@ -87,10 +87,11 @@ unsigned char wxDataStream::Read8()
   return (unsigned char)buf;
 }
 
+// Must be at global scope for VC++ 5
+extern "C" double ConvertFromIeeeExtended(const unsigned char *bytes);
+
 double wxDataStream::ReadDouble()
 {
-  extern "C" double ConvertFromIeeeExtended(const unsigned char *bytes);
-
 #if USE_APPLE_IEEE
   char buf[10];
 
@@ -159,9 +160,11 @@ void wxDataStream::WriteLine(const wxString& line)
   m_ostream->write((const char *) tmp_string, tmp_string.Length());
 }
 
+// Must be at global scope for VC++ 5
+extern "C" void ConvertToIeeeExtended(double num, unsigned char *bytes);
+
 void wxDataStream::WriteDouble(double d)
 {
-  extern "C" void ConvertToIeeeExtended(double num, unsigned char *bytes)
   char buf[10];
 
   if (!m_ostream)

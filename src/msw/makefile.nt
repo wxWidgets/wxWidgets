@@ -894,7 +894,7 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 
 $(COMMDIR)/extended.obj:     $*.c
         cl @<<
-$(CPPFLAGS) /c /Tp $*.c /Fo$@
+$(CPPFLAGS2) /c /Tp $*.c /Fo$@
 <<
 
 $(COMMDIR)/y_tab.obj:     $*.c $(COMMDIR)/lex_yy.c

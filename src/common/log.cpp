@@ -496,6 +496,7 @@ public:
 
   // menu callbacks
   void OnClose(wxCommandEvent& event);
+  void OnCloseWindow(wxCloseEvent& event);
   void OnSave (wxCommandEvent& event);
   void OnClear(wxCommandEvent& event);
 
@@ -521,7 +522,7 @@ BEGIN_EVENT_TABLE(wxLogFrame, wxFrame)
   EVT_MENU(Menu_Save,  wxLogFrame::OnSave)
   EVT_MENU(Menu_Clear, wxLogFrame::OnClear)
 
-  EVT_CLOSE(wxLogFrame::OnClose)
+  EVT_CLOSE(wxLogFrame::OnCloseWindow)
 END_EVENT_TABLE() 
 
 wxLogFrame::wxLogFrame(const char *szTitle)
@@ -558,6 +559,12 @@ wxLogFrame::wxLogFrame(const char *szTitle)
 }
 
 void wxLogFrame::OnClose(wxCommandEvent& event)
+{
+  // just hide the window
+  Show(FALSE);
+}
+
+void wxLogFrame::OnCloseWindow(wxCloseEvent& event)
 {
   // just hide the window
   Show(FALSE);

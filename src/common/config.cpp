@@ -38,6 +38,7 @@
 #include  <wx/textfile.h>
 #include  <wx/config.h>
 #include  <wx/fileconf.h>
+#include <stdlib.h>
 
 #include  <ctype.h>       // for isalnum()
 

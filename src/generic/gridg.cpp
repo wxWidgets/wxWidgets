@@ -436,7 +436,7 @@ void wxGenericGrid::OnPaint(wxPaintEvent& WXUNUSED(event))
   {
     wxPaintDC paintDC(this);
     wxMemoryDC dc(& paintDC);
-    dc.SelectObject(m_doubleBufferingBitmap);
+    dc.SelectObject(* m_doubleBufferingBitmap);
 
     PaintGrid(dc);
 

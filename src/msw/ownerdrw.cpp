@@ -162,7 +162,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
   if ( IsCheckable() && !m_bmpChecked.Ok() ) {
     if ( st & wxODChecked ) {
       // using native APIs for performance and simplicity
-      #ifdef  O_DRAW_NATIVE_API
+#ifdef  O_DRAW_NATIVE_API
       // what goes on: DrawFrameControl creates a b/w mask, 
       // then we copy it to screen to have right colors
 
@@ -179,10 +179,10 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
       BitBlt(hdc, rc.x, rc.y, GetMarginWidth(), m_nHeight, 
              hdcMem, 0, 0, SRCCOPY);
       DeleteDC(hdcMem);
-      #else
+#else
         // #### to do: perhaps using Marlett font (create equiv. font under X)
-        wxFAIL("not implemented");
-      #endif  //O_DRAW_NATIVE_API
+//        wxFAIL("not implemented");
+#endif  //O_DRAW_NATIVE_API
     }
   }
   else {

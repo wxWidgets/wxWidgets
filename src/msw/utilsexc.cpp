@@ -63,6 +63,10 @@
 #endif
 #include <stdarg.h>
 
+IMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler)
+
+
 #define wxEXECUTE_WIN_MESSAGE 10000
 
 struct wxExecuteData {
@@ -72,6 +76,8 @@ struct wxExecuteData {
   char state;
 };
 
+
+#ifdef __WIN32__
 static DWORD wxExecuteThread(wxExecuteData *data)
 {
   WaitForSingleObject(data->process, INFINITE);
@@ -81,6 +87,8 @@ static DWORD wxExecuteThread(wxExecuteData *data)
 
   return 0;
 }
+#endif
+
 
 LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
                                             WPARAM wParam, LPARAM lParam)
