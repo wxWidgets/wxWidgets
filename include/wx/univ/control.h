@@ -97,9 +97,6 @@ public:
                                const wxString& strArg = wxEmptyString);
 
 protected:
-    // get the type of event translator object for this control
-    virtual wxString GetInputHandlerType() const;
-
     // event handlers
     void OnMouse(wxMouseEvent& event);
     void OnKeyDown(wxKeyEvent& event);
@@ -110,7 +107,10 @@ protected:
     // common part of all ctors
     void Init();
 
-    // input processor
+    // create input handler by name
+    void CreateInputHandler(const wxString& inphandler);
+
+    // input processor (never deleted, the theme deletes it itself)
     wxInputHandler *m_handler;
 
 private:

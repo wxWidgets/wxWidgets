@@ -178,8 +178,6 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer);
     virtual wxBorder GetDefaultBorder() const;
 
-    virtual wxString GetInputHandlerType() const;
-
     // common part of all ctors
     void Init();
 

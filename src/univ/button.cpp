@@ -87,6 +87,8 @@ bool wxButton::Create(wxWindow *parent,
     SetImageLabel(bitmap);
     SetBestSize(size);
 
+    CreateInputHandler(wxINP_HANDLER_BUTTON);
+
     return TRUE;
 }
 
@@ -154,11 +156,6 @@ void wxButton::DoDraw(wxControlRenderer *renderer)
 // ----------------------------------------------------------------------------
 // input processing
 // ----------------------------------------------------------------------------
-
-wxString wxButton::GetInputHandlerType() const
-{
-    return wxINP_HANDLER_BUTTON;
-}
 
 void wxButton::Press()
 {

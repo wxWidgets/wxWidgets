@@ -74,17 +74,9 @@ public:
     virtual ~wxInputHandler();
 };
 
-// ============================================================================
-// The classes below provide the standard input handling for some controls so
-// that the code can be reused in different themes. All of these classes chain
-// to an existing input handler (which must be given to the ctor) and so allow
-// custom processing of the events which they don't handle themselves.
-//
-// NB: these classes were moved to the controls headers
-// ============================================================================
-
 // ----------------------------------------------------------------------------
 // wxStdInputHandler is just a base class for all other "standard" handlers
+// and also provides the way to chain input handlers together
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxStdInputHandler : public wxInputHandler
@@ -95,14 +87,26 @@ public:
     virtual bool HandleKey(wxControl *control,
                            const wxKeyEvent& event,
                            bool pressed)
-        { return m_handler->HandleKey(control, event, pressed); }
+    {
+        return m_handler ? m_handler->HandleKey(control, event, pressed)
+                         : FALSE;
+    }
+
     virtual bool HandleMouse(wxControl *control,
                              const wxMouseEvent& event)
-        { return m_handler->HandleMouse(control, event); }
+    {
+        return m_handler ? m_handler->HandleMouse(control, event) : NULL;
+    }
+
     virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event)
-        { return m_handler->HandleMouseMove(control, event); }
+    {
+        return m_handler ? m_handler->HandleMouseMove(control, event) : NULL;
+    }
+
     virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event)
-        { return m_handler->HandleFocus(control, event); }
+    {
+        return m_handler ? m_handler->HandleFocus(control, event) : NULL;
+    }
 
 private:
     wxInputHandler *m_handler;

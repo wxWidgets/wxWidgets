@@ -55,6 +55,25 @@ void wxCheckListBox::Init()
 {
 }
 
+bool wxCheckListBox::Create(wxWindow *parent,
+                            wxWindowID id,
+                            const wxPoint &pos,
+                            const wxSize &size,
+                            int n,
+                            const wxString choices[],
+                            long style,
+                            const wxValidator& validator,
+                            const wxString &name)
+{
+    if ( !wxListBox::Create(parent, id, pos, size,
+                            n, choices, style, validator, name) )
+        return FALSE;
+
+    CreateInputHandler(wxINP_HANDLER_CHECKLISTBOX);
+
+    return TRUE;
+}
+
 // ----------------------------------------------------------------------------
 // wxCheckListBox functions
 // ----------------------------------------------------------------------------
@@ -154,11 +173,6 @@ void wxCheckListBox::DoDrawRange(wxControlRenderer *renderer,
 // ----------------------------------------------------------------------------
 // actions
 // ----------------------------------------------------------------------------
-
-wxString wxCheckListBox::GetInputHandlerType() const
-{
-    return wxINP_HANDLER_CHECKLISTBOX;
-}
 
 bool wxCheckListBox::PerformAction(const wxControlAction& action,
                                    long numArg,

@@ -47,7 +47,15 @@ public:
         Create(parent, id, pos, size, nStrings, choices, style, validator, name);
     }
 
-    // no Create(): the base class does everything
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                int nStrings = 0,
+                const wxString *choices = NULL,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxListBoxNameStr);
 
     // implement check list box methods
     virtual bool IsChecked(size_t item) const;
@@ -74,9 +82,6 @@ protected:
 
     // take them also into account for size calculation
     virtual wxSize DoGetBestClientSize() const;
-
-    // our input handler
-    virtual wxString GetInputHandlerType() const;
 
     // common part of all ctors
     void Init();

@@ -113,6 +113,8 @@ bool wxListBox::Create(wxWindow *parent,
 
     SetBestSize(size);
 
+    CreateInputHandler(wxINP_HANDLER_LISTBOX);
+
     return TRUE;
 }
 
@@ -1034,11 +1036,6 @@ void wxListBox::Activate(int item)
 // ----------------------------------------------------------------------------
 // input handling
 // ----------------------------------------------------------------------------
-
-wxString wxListBox::GetInputHandlerType() const
-{
-    return wxINP_HANDLER_LISTBOX;
-}
 
 bool wxListBox::PerformAction(const wxControlAction& action,
                               long numArg,

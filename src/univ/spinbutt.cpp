@@ -70,6 +70,8 @@ bool wxSpinButton::Create(wxWindow *parent,
 
     SetBestSize(size);
 
+    // TODO: create input handler
+
     return TRUE;
 }
 
@@ -216,11 +218,6 @@ void wxSpinButton::DoDraw(wxControlRenderer *renderer)
 // ----------------------------------------------------------------------------
 // input processing
 // ----------------------------------------------------------------------------
-
-wxString wxSpinButton::GetInputHandlerType() const
-{
-    return wxINP_HANDLER_SPINBTN;
-}
 
 bool wxSpinButton::PerformAction(const wxControlAction& action,
                                  long numArg,

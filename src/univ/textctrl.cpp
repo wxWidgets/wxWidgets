@@ -715,6 +715,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
     // result in garbage on the screen - we'll do it after first OnPaint()
     m_hasCaret = FALSE;
 
+    CreateInputHandler(wxINP_HANDLER_TEXTCTRL);
+
     return TRUE;
 }
 
@@ -4220,11 +4222,6 @@ void wxTextCtrl::ShowCaret(bool show)
 // ----------------------------------------------------------------------------
 // input
 // ----------------------------------------------------------------------------
-
-wxString wxTextCtrl::GetInputHandlerType() const
-{
-    return wxINP_HANDLER_TEXTCTRL;
-}
 
 bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
                                long numArg,

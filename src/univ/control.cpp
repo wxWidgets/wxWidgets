@@ -79,8 +79,6 @@ bool wxControl::Create(wxWindow *parent,
     if ( !wxControlBase::Create(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    m_handler = wxTheme::Get()->GetInputHandler(GetInputHandlerType());
-
     return TRUE;
 }
 
@@ -155,9 +153,9 @@ void wxControl::OnActivate(wxActivateEvent& event)
 // input processing
 // ----------------------------------------------------------------------------
 
-wxString wxControl::GetInputHandlerType() const
+void wxControl::CreateInputHandler(const wxString& inphandler)
 {
-    return wxINP_HANDLER_DEFAULT;
+    m_handler = wxTheme::Get()->GetInputHandler(inphandler);
 }
 
 void wxControl::OnKeyDown(wxKeyEvent& event)

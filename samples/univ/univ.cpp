@@ -54,7 +54,18 @@
 
 #include "wx/univ/theme.h"
 
-//#define TEST_COMBO
+#define TEST_BMP_BUTTON
+#define TEST_BUTTON
+#define TEST_CHECKBOX
+#define TEST_CHECKLISTBOX
+#define TEST_COMBO
+#define TEST_LISTBOX
+#define TEST_RADIO
+#define TEST_SCROLL
+#define TEST_STATIC_BMP
+#define TEST_STATIC_BOX
+#define TEST_STATIC_LINE
+#define TEST_STATIC_TEXT
 //#define TEST_TEXT
 
 // ----------------------------------------------------------------------------
@@ -231,12 +242,7 @@ bool MyUnivApp::OnInit()
 MyUnivFrame::MyUnivFrame(const wxString& title)
            : wxFrame(NULL, -1, title,
                      wxDefaultPosition,
-#ifndef TEST_TEXT_ONLY
-                     wxSize(140, 100)//wxSize(700, 700)
-#else
-                     wxSize(240, 300)
-#endif
-                    )
+                     wxSize(700, 700))
 {
     static const wxString choices[] =
     {
@@ -325,10 +331,6 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
 #endif // TEST_STATIC_BMP
 
-    wxScrollBar *sb;
-    sb = new wxScrollBar(this, -1, wxPoint(10, 10), wxSize(-1, 35), wxSB_VERTICAL);
-    sb->SetScrollbar(0, 10, 100, 10);
-
 #ifdef TEST_SCROLL
 
 #if 0
@@ -372,7 +374,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 #endif // TEST_BMP_BUTTON
 
 #ifdef TEST_LISTBOX
-    wxListBox *lbox = new wxListBox(this, -1, wxPoint(550, 10), wxDefaultSize,
+    wxListBox *lbox = new wxListBox(this, -1, wxPoint(600, 80), wxDefaultSize,
                                     WXSIZEOF(choices), choices,
                                     wxLB_MULTIPLE | wxLB_ALWAYS_SB);
     lbox = new wxListBox(this, -1, wxPoint(550, 300), wxDefaultSize,
@@ -430,7 +432,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
         _T("of examples"),
     };
     wxComboBox *combo = new wxComboBox(this, -1, _T("Initial value"),
-                                       wxPoint(0, 50), wxSize(-1, 100),
+                                       wxPoint(500, 50), wxSize(-1, 100),
                                        WXSIZEOF(choicesCombo), choicesCombo);
     for ( size_t n = 0; n < 10; n++ )
     {

@@ -73,6 +73,8 @@ bool wxCheckBox::Create(wxWindow *parent,
     SetLabel(label);
     SetBestSize(size);
 
+    CreateInputHandler(wxINP_HANDLER_CHECKBOX);
+
     return TRUE;
 }
 
@@ -240,11 +242,6 @@ void wxCheckBox::SendEvent()
 // ----------------------------------------------------------------------------
 // input handling
 // ----------------------------------------------------------------------------
-
-wxString wxCheckBox::GetInputHandlerType() const
-{
-    return wxINP_HANDLER_CHECKBOX;
-}
 
 bool wxCheckBox::PerformAction(const wxControlAction& action,
                                long numArg,

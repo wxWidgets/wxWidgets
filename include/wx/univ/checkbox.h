@@ -103,7 +103,6 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer);
     virtual wxSize DoGetBestClientSize() const;
 
-    virtual wxString GetInputHandlerType() const;
     virtual bool CanBeHighlighted() const { return TRUE; }
 
     // get the size of the bitmap using either the current one or the default

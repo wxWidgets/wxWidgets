@@ -111,7 +111,6 @@ protected:
     virtual wxSize DoGetBestClientSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
 
-    virtual wxString GetInputHandlerType() const;
     virtual bool CanBeHighlighted() const { return TRUE; }
 
     // common part of all ctors

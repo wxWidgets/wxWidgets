@@ -170,7 +170,6 @@ protected:
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = 0l,
                                const wxString& strArg = wxEmptyString);
-    virtual wxString GetInputHandlerType() const;
 
     // event handlers
     void OnKey(wxCommandEvent& event);

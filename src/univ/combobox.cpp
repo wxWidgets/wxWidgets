@@ -247,6 +247,8 @@ bool wxComboControl::Create(wxWindow *parent,
     wxControl::Enable(FALSE); // don't use non virtual Disable() here!
     m_isEnabled = TRUE;
 
+    CreateInputHandler(wxINP_HANDLER_COMBOBOX);
+
     return TRUE;
 }
 
@@ -711,11 +713,6 @@ wxClientData* wxComboBox::DoGetItemClientObject(int n) const
 // ----------------------------------------------------------------------------
 // input handling
 // ----------------------------------------------------------------------------
-
-wxString wxComboControl::GetInputHandlerType() const
-{
-    return wxINP_HANDLER_COMBOBOX;
-}
 
 void wxComboControl::OnKey(wxCommandEvent& event)
 {

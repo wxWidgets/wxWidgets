@@ -108,8 +108,6 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer);
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
-    virtual wxString GetInputHandlerType() const;
-
     // event handlers
     void OnIdle(wxIdleEvent& event);
 

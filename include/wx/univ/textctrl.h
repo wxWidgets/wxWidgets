@@ -281,9 +281,6 @@ protected:
     // calc the size from the text extent
     virtual wxSize DoGetBestClientSize() const;
 
-    // input support
-    virtual wxString GetInputHandlerType() const;
-
     // common part of all ctors
     void Init();
 
