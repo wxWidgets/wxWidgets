@@ -181,9 +181,16 @@ begin
     if not RegQueryStringValue(HKEY_LOCAL_MACHINE,
                                'Software\Python\PythonCore\%(PYTHONVER)s\InstallPath',
                                '', PythonDir) then begin
-        MsgBox('No installation of Python %(PYTHONVER)s found.  Aborting...',
-               mbConfirmation, MB_OK);
-        Result := false;
+
+        if not RegQueryStringValue(HKEY_CURRENT_USER,
+                                   'Software\Python\PythonCore\%(PYTHONVER)s\InstallPath',
+                                   '', PythonDir) then begin
+
+            MsgBox('No installation of Python %(PYTHONVER)s found.  Aborting...',
+                   mbConfirmation, MB_OK);
+            Result := false;
+        end else
+            Result := true;
     end else
         Result := true;
 end;
