@@ -24,7 +24,7 @@
 Tool layout item.
 */
 
-class WXFL_DECLSPEC wxToolLayoutItem : public wxObject
+class WXDLLIMPEXP_FL wxToolLayoutItem : public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxToolLayoutItem)
 
@@ -33,7 +33,7 @@ public:
     bool      mIsSeparator;
 };
 
-class WXFL_DECLSPEC wxDynToolInfo;
+class WXDLLIMPEXP_FL wxDynToolInfo;
 
 typedef wxToolLayoutItem* wxToolLayoutItemPtrT;
 typedef wxDynToolInfo*    wxDynToolInfoPtrT;
@@ -45,7 +45,7 @@ WXFL_DEFINE_ARRAY( wxDynToolInfoPtrT,    wxDynToolInfoArrayT );
 This is a base class for layout algorithm implementations.
 */
 
-class WXFL_DECLSPEC LayoutManagerBase
+class WXDLLIMPEXP_FL LayoutManagerBase
 {
 public:
         // Constructor.
@@ -64,7 +64,7 @@ BagLayout lays out items in left-to-right order from
 top to bottom.
 */
 
-class WXFL_DECLSPEC BagLayout : public LayoutManagerBase
+class WXDLLIMPEXP_FL BagLayout : public LayoutManagerBase
 {
 public:
         // Constructor.
@@ -79,7 +79,7 @@ public:
 This class holds dynamic toolbar item information.
 */
 
-class WXFL_DECLSPEC wxDynToolInfo : public wxToolLayoutItem
+class WXDLLIMPEXP_FL wxDynToolInfo : public wxToolLayoutItem
 {
     DECLARE_DYNAMIC_CLASS(wxDynToolInfo)
 
@@ -99,7 +99,7 @@ public:
 wxDynamicToolBar manages containment and layout of tool windows.
 */
 
-class WXFL_DECLSPEC wxDynamicToolBar : public wxToolBarBase
+class WXDLLIMPEXP_FL wxDynamicToolBar : public wxToolBarBase
 {
 protected:
     friend class wxDynamicToolBarSerializer;

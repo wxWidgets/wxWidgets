@@ -24,7 +24,7 @@ menu and handling basic customization such as floating
 and horizontal/vertical alignment of the bar.
 */
 
-class WXFL_DECLSPEC cbSimpleCustomizationPlugin : public cbPluginBase
+class WXDLLIMPEXP_FL cbSimpleCustomizationPlugin : public cbPluginBase
 {
 public:
     DECLARE_DYNAMIC_CLASS( cbSimpleCustomizationPlugin )

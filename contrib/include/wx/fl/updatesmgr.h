@@ -23,7 +23,7 @@ This class implements slightly optimized logic for refreshing
 the areas of frame layout that actually need to be updated.
 */
 
-class WXFL_DECLSPEC cbSimpleUpdatesMgr : public cbUpdatesManagerBase
+class WXDLLIMPEXP_FL cbSimpleUpdatesMgr : public cbUpdatesManagerBase
 {
     DECLARE_DYNAMIC_CLASS( cbSimpleUpdatesMgr )
 protected:

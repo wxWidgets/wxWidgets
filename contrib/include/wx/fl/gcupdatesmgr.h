@@ -93,7 +93,7 @@ to avoid dirty non-client areas of moved windows
 in some special cases of 'overlapping anomalies'.
 */
 
-class WXFL_DECLSPEC cbGCUpdatesMgr : public cbSimpleUpdatesMgr
+class WXDLLIMPEXP_FL cbGCUpdatesMgr : public cbSimpleUpdatesMgr
 {
     DECLARE_DYNAMIC_CLASS( cbGCUpdatesMgr )
 protected:

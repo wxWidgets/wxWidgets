@@ -32,8 +32,8 @@
 
 // classes declared in this header file
 
-class WXFL_DECLSPEC wxNewBitmapButton;
-class WXFL_DECLSPEC wxBorderLessBitmapButton;
+class WXDLLIMPEXP_FL wxNewBitmapButton;
+class WXDLLIMPEXP_FL wxBorderLessBitmapButton;
 
 /*
 This is an alternative class to wxBitmapButton. It is used

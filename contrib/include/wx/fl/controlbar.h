@@ -27,19 +27,19 @@
 
 // forward declarations
 
-class  WXFL_DECLSPEC wxFrameLayout;
+class  WXDLLIMPEXP_FL wxFrameLayout;
 
-class  WXFL_DECLSPEC cbDockPane;
-class  WXFL_DECLSPEC cbUpdatesManagerBase;
-class  WXFL_DECLSPEC cbBarDimHandlerBase;
-class  WXFL_DECLSPEC cbPluginBase;
-class  WXFL_DECLSPEC cbPluginEvent;
-class  WXFL_DECLSPEC cbPaneDrawPlugin;
+class  WXDLLIMPEXP_FL cbDockPane;
+class  WXDLLIMPEXP_FL cbUpdatesManagerBase;
+class  WXDLLIMPEXP_FL cbBarDimHandlerBase;
+class  WXDLLIMPEXP_FL cbPluginBase;
+class  WXDLLIMPEXP_FL cbPluginEvent;
+class  WXDLLIMPEXP_FL cbPaneDrawPlugin;
 
-class WXFL_DECLSPEC cbBarInfo;
-class WXFL_DECLSPEC cbRowInfo;
-class WXFL_DECLSPEC cbDimInfo;
-class WXFL_DECLSPEC cbCommonPaneProperties;
+class WXDLLIMPEXP_FL cbBarInfo;
+class WXDLLIMPEXP_FL cbRowInfo;
+class WXDLLIMPEXP_FL cbDimInfo;
+class WXDLLIMPEXP_FL cbCommonPaneProperties;
 
 typedef cbBarInfo* BarInfoPtrT;
 typedef cbRowInfo* RowInfoPtrT;
@@ -98,7 +98,7 @@ Helper class, used for spying for unhandled mouse events on control bars
 and forwarding them to the frame layout.
 */
 
-class WXFL_DECLSPEC cbBarSpy : public wxEvtHandler
+class WXDLLIMPEXP_FL cbBarSpy : public wxEvtHandler
 {
 public:
     DECLARE_DYNAMIC_CLASS( cbBarSpy )
@@ -130,7 +130,7 @@ which can be docked along the top, bottom, right, or left side of the
 parent frame.
 */
 
-class WXFL_DECLSPEC wxFrameLayout : public wxEvtHandler
+class WXDLLIMPEXP_FL wxFrameLayout : public wxEvtHandler
 {
 public:
         // Default constructor, used only for serialization.
@@ -648,7 +648,7 @@ used by any particular updates-manager to store
 auxiliary information to be used by its updating algorithm.
 */
 
-class WXFL_DECLSPEC cbUpdateMgrData : public wxObject
+class WXDLLIMPEXP_FL cbUpdateMgrData : public wxObject
 {
     DECLARE_DYNAMIC_CLASS( cbUpdateMgrData )
 public:
@@ -688,7 +688,7 @@ to adjust the values in cbDimInfo::mSizes accordingly.
 Specific handlers can be hooked up to specific types of bar.
 */
 
-class WXFL_DECLSPEC cbBarDimHandlerBase : public wxObject
+class WXDLLIMPEXP_FL cbBarDimHandlerBase : public wxObject
 {
     DECLARE_ABSTRACT_CLASS( cbBarDimHandlerBase )
 
@@ -726,7 +726,7 @@ Helper class used internally by the wxFrameLayout class.
 Holds and manages information about bar dimensions.
 */
 
-class WXFL_DECLSPEC cbDimInfo : public wxObject
+class WXDLLIMPEXP_FL cbDimInfo : public wxObject
 {
     DECLARE_DYNAMIC_CLASS( cbDimInfo )
 public:

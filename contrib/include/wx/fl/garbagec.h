@@ -34,7 +34,7 @@ inline void* gc_node_to_obj( wxNode* pGCNode )
 This class implements an extremely slow but simple garbage collection algorithm.
 */
 
-class WXFL_DECLSPEC GarbageCollector
+class WXDLLIMPEXP_FL GarbageCollector
 {
 protected:
     wxList mAllNodes;

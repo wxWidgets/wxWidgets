@@ -24,7 +24,7 @@ This class intercepts bar-decoration and sizing events, and draws 3D hints
 around fixed and flexible bars, similar to those in Microsoft DevStudio 6.x
 */
 
-class WXFL_DECLSPEC cbBarHintsPlugin : public cbPluginBase
+class WXDLLIMPEXP_FL cbBarHintsPlugin : public cbPluginBase
 {
     DECLARE_DYNAMIC_CLASS( cbBarHintsPlugin )
 

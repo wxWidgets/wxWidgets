@@ -26,7 +26,7 @@ antiflicker plugins within the application.
 Locking for multithreaded applications is not yet implemented.
 */
 
-class WXFL_DECLSPEC cbAntiflickerPlugin : public cbPluginBase
+class WXDLLIMPEXP_FL cbAntiflickerPlugin : public cbPluginBase
 {
     DECLARE_DYNAMIC_CLASS( cbAntiflickerPlugin )
 protected:
