@@ -33,9 +33,9 @@ class Clookup : public wxDbTable
 {
     public:
 
-        char lookupCol[LOOKUP_COL_LEN+1];
+        wxChar lookupCol[LOOKUP_COL_LEN+1];
 
-        Clookup(char *tblName, char *colName);
+        Clookup(wxChar *tblName, wxChar *colName);
 
 };  // Clookup
 
@@ -44,10 +44,10 @@ class Clookup2 : public wxDbTable
 {
     public:
 
-        char lookupCol1[LOOKUP_COL_LEN+1];
-        char lookupCol2[LOOKUP_COL_LEN+1];
+        wxChar lookupCol1[LOOKUP_COL_LEN+1];
+        wxChar lookupCol2[LOOKUP_COL_LEN+1];
 
-        Clookup2(char *tblName, char *colName1, char *colName2, wxDb *pDb);
+        Clookup2(wxChar *tblName, wxChar *colName1, wxChar *colName2, wxDb *pDb);
 
 };  // Clookup2
 
@@ -69,11 +69,11 @@ class ClookUpDlg : public wxDialog
 
         // This is a generic lookup constructor that will work with any table and any column
         ClookUpDlg(wxWindow *parent,
-                      char  *windowTitle,
-                      char  *tableName,
-                      char  *colName,
-                      char  *where,
-                      char  *orderBy);
+                    wxChar  *windowTitle,
+                    wxChar  *tableName,
+                    wxChar  *colName,
+                    wxChar  *where,
+                    wxChar  *orderBy);
 
         //
         // This is a generic lookup constructor that will work with any table and any column.
@@ -100,17 +100,17 @@ class ClookUpDlg : public wxDialog
         // in the lookup window.
         //
         ClookUpDlg(wxWindow *parent,
-                      char  *windowTitle,
-                      char  *tableName,
-                      char  *dispCol1,                  // Must have at least 1 display column
-                      char  *dispCol2,                  // Optional
-                      char  *where,
-                      char  *orderBy,
-                      bool   distinctValues,            // e.g. SELECT DISTINCT ...
-                      char  *selectStmt = 0,            // If you wish to query by SQLstmt (complicated lookups)
-                      int    maxLenCol1 = 0,            // Mandatory if querying by SQLstmt
-                      wxDb  *pDb        = READONLY_DB,  // Database connection pointer
-                      bool   allowOk    = TRUE);        // is the OK button enabled
+                    wxChar  *windowTitle,
+                    wxChar  *tableName,
+                    wxChar  *dispCol1,                  // Must have at least 1 display column
+                    wxChar  *dispCol2,                  // Optional
+                    wxChar  *where,
+                    wxChar  *orderBy,
+                    bool     distinctValues,            // e.g. SELECT DISTINCT ...
+                    wxChar  *selectStmt = 0,            // If you wish to query by SQLstmt (complicated lookups)
+                    int      maxLenCol1 = 0,            // Mandatory if querying by SQLstmt
+                    wxDb    *pDb        = READONLY_DB,  // Database connection pointer
+                    bool     allowOk    = TRUE);        // is the OK button enabled
 
         void        OnButton( wxCommandEvent &event );
         void        OnCommand(wxWindow& win, wxCommandEvent& event);

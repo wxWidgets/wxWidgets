@@ -33,7 +33,7 @@ enum    DialogModes {mView,mCreate,mEdit,mSearch};
 #endif
 
 // Name of the table to be created/opened
-const char      CONTACT_TABLE_NAME[]        =    "contacts";
+const wxChar      CONTACT_TABLE_NAME[]        =    "contacts";
 
 // Nuber of columns in the above table
 const int       CONTACT_NO_COLS            = 12;        // 0-11
@@ -47,7 +47,7 @@ enum Language {langENGLISH, langFRENCH, langGERMAN, langSPANISH, langOTHER};
 class CeditorDlg;
 class CparameterDlg;
 
-const char paramFilename[] = "dbtest.cfg";
+const wxChar paramFilename[] = "dbtest.cfg";
 
 
 /*
@@ -60,13 +60,13 @@ const char paramFilename[] = "dbtest.cfg";
 class CstructContact : public wxObject
 {
     public:
-        char               Name[50+1];          //    Contact's name
-        char               Addr1[50+1];
-        char               Addr2[50+1];
-        char               City[25+1];
-        char               State[25+1];
-        char               PostalCode[15+1];
-        char               Country[20+1];
+        wxChar               Name[50+1];          //    Contact's name
+        wxChar               Addr1[50+1];
+        wxChar               Addr2[50+1];
+        wxChar               City[25+1];
+        wxChar               State[25+1];
+        wxChar               PostalCode[15+1];
+        wxChar               Country[20+1];
         TIMESTAMP_STRUCT   JoinDate;            // Date on which this person joined the wxWindows project
         Language           NativeLanguage;      // Enumerated type indicating person's native language
         bool               IsDeveloper;         // Is this person a developer for wxWindows, or just a subscriber
@@ -93,7 +93,7 @@ class Ccontact : public wxDbTable, public CstructContact
 
         void                 Initialize();
         bool                 CreateIndexes(void);
-        bool                 FetchByName(char *name);
+        bool                 FetchByName(wxChar *name);
 
 };  // Ccontact class definition
 
@@ -102,10 +102,10 @@ typedef struct Cparameters
 {
     // The length of these strings were arbitrarily picked, and are
     // dependent on the OS and database engine you will be using.
-    char    ODBCSource[100+1];
-    char    UserName[25+1];
-    char    Password[25+1];
-    char    DirPath[MAX_PATH+1];
+    wxChar    ODBCSource[100+1];
+    wxChar    UserName[25+1];
+    wxChar    Password[25+1];
+    wxChar    DirPath[MAX_PATH+1];
 } Cparameters;
 
 
@@ -186,7 +186,7 @@ class CeditorDlg : public wxPanel
         bool    Save();
         bool    GetNextRec();
         bool    GetPrevRec();
-        bool    GetRec(char *whereStr);
+        bool    GetRec(wxChar *whereStr);
         
 DECLARE_EVENT_TABLE()
 };  // CeditorDlg
@@ -299,15 +299,15 @@ enum qryOp
 
 
 // Query strings
-char * const langQRY_EQ           = "column = column | value";
-char * const langQRY_LT           = "column < column | value";
-char * const langQRY_GT           = "column > column | value";
-char * const langQRY_LE           = "column <= column | value";
-char * const langQRY_GE           = "column >= column | value";
-char * const langQRY_BEGINS       = "columns that BEGIN with the string entered";
-char * const langQRY_CONTAINS     = "columns that CONTAIN the string entered";
-char * const langQRY_LIKE         = "% matches 0 or more of any char; _ matches 1 char";
-char * const langQRY_BETWEEN      = "column BETWEEN value AND value";
+wxChar * const langQRY_EQ           = "column = column | value";
+wxChar * const langQRY_LT           = "column < column | value";
+wxChar * const langQRY_GT           = "column > column | value";
+wxChar * const langQRY_LE           = "column <= column | value";
+wxChar * const langQRY_GE           = "column >= column | value";
+wxChar * const langQRY_BEGINS       = "columns that BEGIN with the string entered";
+wxChar * const langQRY_CONTAINS     = "columns that CONTAIN the string entered";
+wxChar * const langQRY_LIKE         = "% matches 0 or more of any char; _ matches 1 char";
+wxChar * const langQRY_BETWEEN      = "column BETWEEN value AND value";
 
 
 class CqueryDlg : public wxDialog
@@ -315,8 +315,8 @@ class CqueryDlg : public wxDialog
     private:
         wxDbColInf  *colInf;        // Column inf. returned by db->GetColumns()
         wxDbTable   *dbTable;
-        char        *masterTableName;
-        char        *pWhere;        // A pointer to the storage for the resulting where clause
+        wxChar        *masterTableName;
+        wxChar        *pWhere;        // A pointer to the storage for the resulting where clause
         wxDb        *pDB;
 
     public:
@@ -351,7 +351,7 @@ class CqueryDlg : public wxDialog
 
         wxTextCtrl              *pFocusTxt;
 
-        CqueryDlg(wxWindow *parent, wxDb *pDb, char *tblName[], char *pWhereArg);
+        CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[], wxChar *pWhereArg);
         ~CqueryDlg();
 
         void        OnButton( wxCommandEvent &event );
@@ -359,7 +359,7 @@ class CqueryDlg : public wxDialog
         void        OnCloseWindow(wxCloseEvent& event);
         void        OnActivate(bool) {};  // necessary for hot keys
 
-        void        AppendToWhere(char *s);
+        void        AppendToWhere(wxChar *s);
         void        ProcessAddBtn();
         void        ProcessCountBtn();
         bool        ValidateWhereClause();

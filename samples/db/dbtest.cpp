@@ -51,8 +51,8 @@ extern wxDbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting ba
 
 IMPLEMENT_APP(DatabaseDemoApp)
 
-extern char ListDB_Selection[];        /* Used to return the first column value for the selected line from the listDB routines */
-extern char ListDB_Selection2[];    /* Used to return the second column value for the selected line from the listDB routines */
+extern wxChar ListDB_Selection[];        /* Used to return the first column value for the selected line from the listDB routines */
+extern wxChar ListDB_Selection2[];    /* Used to return the second column value for the selected line from the listDB routines */
 
 DatabaseDemoFrame *DemoFrame;       /* Pointer to the main frame */
 
@@ -79,38 +79,25 @@ DatabaseDemoFrame *DemoFrame;       /* Pointer to the main frame */
  
 wxDb    *READONLY_DB;
 
-/*
- * This function will return the exact string(s) from the database engine
- * indicating all error conditions which have just occured during the
- * last call to the database engine for the database connection pointed
- * to by pDb.
- *
- * This demo uses the returned string by displaying it in a wxMessageBox.  The
- * formatting therefore is not the greatest, but this is just a demo, not a
- * finished product.  :-) gt
- *
- * NOTE: The value returned by this function is for temporary use only and
- *       should be copied for long term use
- */
 const char *GetExtendedDBErrorMsg(wxDb *pDb, char *ErrFile, int ErrLine)
 {
     static wxString msg;
-    msg = "";
+    msg = wxT("");
 
     wxString tStr;
 
     if (ErrFile || ErrLine)
     {
-        msg += "File: ";
+        msg += wxT("File: ");
         msg += ErrFile;
-        msg += "   Line: ";
-        tStr.Printf("%d",ErrLine);
+        msg += wxT("   Line: ");
+        tStr.Printf(wxT("%d"),ErrLine);
         msg += tStr.c_str();
-        msg += "\n";
+        msg += wxT("\n");
     }
 
-    msg.Append ("\nODBC errors:\n");
-    msg += "\n";
+    msg.Append (wxT("\nODBC errors:\n"));
+    msg += wxT("\n");
     
     // Display errors for this connection
     int i;
@@ -119,14 +106,14 @@ const char *GetExtendedDBErrorMsg(wxDb *pDb, char *ErrFile, int ErrLine)
         if (pDb->errorList[i])
         {
             msg.Append(pDb->errorList[i]);
-            if (wxStrcmp(pDb->errorList[i],"") != 0)
-                msg.Append("\n");
+            if (wxStrcmp(pDb->errorList[i],wxT("")) != 0)
+                msg.Append(wxT("\n"));
             // Clear the errmsg buffer so the next error will not
             // end up showing the previous error that have occurred
-            wxStrcpy(pDb->errorList[i],"");
+            wxStrcpy(pDb->errorList[i],wxT(""));
         }
     }
-    msg += "\n";
+    msg += wxT("\n");
 
     return msg.c_str();
 }  // GetExtendedDBErrorMsg
@@ -135,34 +122,34 @@ const char *GetExtendedDBErrorMsg(wxDb *pDb, char *ErrFile, int ErrLine)
 bool DatabaseDemoApp::OnInit()
 {
     // Create the main frame window
-    DemoFrame = new DatabaseDemoFrame(NULL, "wxWindows Database Demo", wxPoint(50, 50), wxSize(537, 480));
+    DemoFrame = new DatabaseDemoFrame(NULL, wxT("wxWindows Database Demo"), wxPoint(50, 50), wxSize(537, 480));
 
     // Give it an icon
     DemoFrame->SetIcon(wxICON(db));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append(FILE_CREATE, "&Create CONTACT table");
-    file_menu->Append(FILE_RECREATE_TABLE, "&Recreate CONTACT table");
-    file_menu->Append(FILE_RECREATE_INDEXES, "&Recreate CONTACT indexes");
-    file_menu->Append(FILE_EXIT, "E&xit");
+    file_menu->Append(FILE_CREATE, wxT("&Create CONTACT table"));
+    file_menu->Append(FILE_RECREATE_TABLE, wxT("&Recreate CONTACT table"));
+    file_menu->Append(FILE_RECREATE_INDEXES, wxT("&Recreate CONTACT indexes"));
+    file_menu->Append(FILE_EXIT, wxT("E&xit"));
 
     wxMenu *edit_menu = new wxMenu;
-    edit_menu->Append(EDIT_PARAMETERS, "&Parameters...");
+    edit_menu->Append(EDIT_PARAMETERS, wxT("&Parameters..."));
 
     wxMenu *about_menu = new wxMenu;
-    about_menu->Append(ABOUT_DEMO, "&About");
+    about_menu->Append(ABOUT_DEMO, wxT("&About"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, "&File");
-    menu_bar->Append(edit_menu, "&Edit");
-    menu_bar->Append(about_menu, "&About");
+    menu_bar->Append(file_menu, wxT("&File"));
+    menu_bar->Append(edit_menu, wxT("&Edit"));
+    menu_bar->Append(about_menu, wxT("&About"));
     DemoFrame->SetMenuBar(menu_bar);
 
     // Initialize the ODBC Environment for Database Operations
     if (SQLAllocEnv(&DbConnectInf.Henv) != SQL_SUCCESS)
     {
-        wxMessageBox("A problem occured while trying to get a connection to the data source","DB CONNECTION ERROR",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(wxT("A problem occured while trying to get a connection to the data source"),wxT("DB CONNECTION ERROR"),wxOK | wxICON_EXCLAMATION);
         return NULL;
     }
 
@@ -175,51 +162,51 @@ bool DatabaseDemoApp::OnInit()
     DemoFrame->Show(TRUE);
 
     FILE *paramFile;
-    if ((paramFile = fopen(paramFilename, "r")) == NULL)
+    if ((paramFile = fopen(paramFilename, wxT("r"))) == NULL)
     {
         wxString tStr;
-        tStr.Printf("Unable to open the parameter file '%s' for reading.\n\nYou must specify the data source, user name, and\npassword that will be used and save those settings.",paramFilename);
-        wxMessageBox(tStr,"File I/O Error...",wxOK | wxICON_EXCLAMATION);
+        tStr.Printf(wxT("Unable to open the parameter file '%s' for reading.\n\nYou must specify the data source, user name, and\npassword that will be used and save those settings."),paramFilename);
+        wxMessageBox(tStr,wxT("File I/O Error..."),wxOK | wxICON_EXCLAMATION);
 
         DemoFrame->BuildParameterDialog(NULL);
-        if ((paramFile = fopen(paramFilename, "r")) == NULL)
+        if ((paramFile = fopen(paramFilename, wxT("r"))) == NULL)
             return FALSE;
     }
 
-    char buffer[1000+1];
+    wxChar buffer[1000+1];
     fgets(buffer, sizeof(params.ODBCSource), paramFile);
-    buffer[wxStrlen(buffer)-1] = '\0';
+    buffer[wxStrlen(buffer)-1] = wxT('\0');
     wxStrcpy(params.ODBCSource,buffer);
 
     fgets(buffer, sizeof(params.UserName), paramFile);
-    buffer[wxStrlen(buffer)-1] = '\0';
+    buffer[wxStrlen(buffer)-1] = wxT('\0');
     wxStrcpy(params.UserName,buffer);
 
     fgets(buffer, sizeof(params.Password), paramFile);
-    buffer[wxStrlen(buffer)-1] = '\0';
+    buffer[wxStrlen(buffer)-1] = wxT('\0');
     wxStrcpy(params.Password,buffer);
 
     fgets(buffer, sizeof(params.DirPath), paramFile);
-    buffer[wxStrlen(buffer)-1] = '\0';
+    buffer[wxStrlen(buffer)-1] = wxT('\0');
     wxStrcpy(params.DirPath,buffer);
 
     fclose(paramFile);
 
     // Connect to datasource
-    wxStrcpy(DbConnectInf.Dsn,        params.ODBCSource);    // ODBC data source name (created with ODBC Administrator under Win95/NT)
-    wxStrcpy(DbConnectInf.Uid,        params.UserName);      // database username - must already exist in the data source
-    wxStrcpy(DbConnectInf.AuthStr,    params.Password);      // password database username
-    wxStrcpy(DbConnectInf.defaultDir, params.DirPath);       // path where the table exists (needed for dBase)
+    DbConnectInf.Dsn        = params.ODBCSource;    // ODBC data source name (created with ODBC Administrator under Win95/NT)
+    DbConnectInf.Uid        = params.UserName;      // database username - must already exist in the data source
+    DbConnectInf.AuthStr    = params.Password;      // password database username
+    DbConnectInf.defaultDir = params.DirPath;       // path where the table exists (needed for dBase)
 
     READONLY_DB = wxDbGetConnection(&DbConnectInf);
     if (READONLY_DB == 0)
     {
-        wxMessageBox("Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the CONTACT table prior to making a connection\n(using tools provided by the database manufacturer)", "DB CONNECTION ERROR...",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(wxT("Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the CONTACT table prior to making a connection\n(using tools provided by the database manufacturer)"), wxT("DB CONNECTION ERROR..."),wxOK | wxICON_EXCLAMATION);
         DemoFrame->BuildParameterDialog(NULL);
-        wxStrcpy(DbConnectInf.Dsn,        "");
-        wxStrcpy(DbConnectInf.Uid,        "");
-        wxStrcpy(DbConnectInf.AuthStr,    "");
-        wxMessageBox("Now exiting program.\n\nRestart program to try any new settings.","Notice...",wxOK | wxICON_INFORMATION);
+        DbConnectInf.Dsn.Empty();
+        DbConnectInf.Uid.Empty();
+        DbConnectInf.AuthStr.Empty();
+        wxMessageBox(wxT("Now exiting program.\n\nRestart program to try any new settings."),wxT("Notice..."),wxOK | wxICON_INFORMATION);
         return(FALSE);
     }
 
@@ -275,7 +262,7 @@ void DatabaseDemoFrame::OnRecreateIndexes(wxCommandEvent& event)
     if (!Contact)
     {
         wxEndBusyCursor();
-        wxMessageBox("Error allocating memory for 'Ccontact'object.\n\nTable could not be opened.","Error...",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(wxT("Error allocating memory for 'Ccontact'object.\n\nTable could not be opened."),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
         return;
     }
 
@@ -283,9 +270,9 @@ void DatabaseDemoFrame::OnRecreateIndexes(wxCommandEvent& event)
     {
        wxEndBusyCursor();
        wxString tStr;
-       tStr  = "Error creating CONTACTS indexes.\nNew indexes will be unavailable.\n\n";
+       tStr  = wxT("Error creating CONTACTS indexes.\nNew indexes will be unavailable.\n\n");
        tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-       wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+       wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
     }
 
     delete Contact;
@@ -303,13 +290,13 @@ void DatabaseDemoFrame::OnEditParameters(wxCommandEvent& event)
     if ((pEditorDlg->mode != mCreate) && (pEditorDlg->mode != mEdit))
         BuildParameterDialog(this);
     else
-        wxMessageBox("Cannot change database parameters while creating or editing a record","Notice...",wxOK | wxICON_INFORMATION);
+        wxMessageBox(wxT("Cannot change database parameters while creating or editing a record"),wxT("Notice..."),wxOK | wxICON_INFORMATION);
 }  // DatabaseDemoFrame::OnEditParameters()
 
 
 void DatabaseDemoFrame::OnAbout(wxCommandEvent& event)
 {
-    wxMessageBox("wxWindows sample program for database classes\n\nContributed on 27 July 1998","About...",wxOK | wxICON_INFORMATION);
+    wxMessageBox(wxT("wxWindows sample program for database classes\n\nContributed on 27 July 1998"),wxT("About..."),wxOK | wxICON_INFORMATION);
 }  // DatabaseDemoFrame::OnAbout()
 
 
@@ -346,7 +333,7 @@ void DatabaseDemoFrame::CreateDataTable(bool recreate)
 {
     bool Ok = TRUE;
     if (recreate)
-       Ok = (wxMessageBox("Any data currently residing in the table will be erased.\n\nAre you sure?","Confirm",wxYES_NO|wxICON_QUESTION) == wxYES);
+       Ok = (wxMessageBox(wxT("Any data currently residing in the table will be erased.\n\nAre you sure?"),wxT("Confirm"),wxYES_NO|wxICON_QUESTION) == wxYES);
 
     if (!Ok)
         return;
@@ -359,7 +346,7 @@ void DatabaseDemoFrame::CreateDataTable(bool recreate)
     if (!Contact)
     {
         wxEndBusyCursor();
-        wxMessageBox("Error allocating memory for 'Ccontact'object.\n\nTable was not created.","Error...",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(wxT("Error allocating memory for 'Ccontact'object.\n\nTable was not created."),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
         return;
     }
 
@@ -367,9 +354,9 @@ void DatabaseDemoFrame::CreateDataTable(bool recreate)
     {
         wxEndBusyCursor();
         wxString tStr;
-        tStr  = "Error creating CONTACTS table.\nTable was not created.\n\n";
+        tStr  = wxT("Error creating CONTACTS table.\nTable was not created.\n\n");
         tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-        wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         success = FALSE;
     }
     else
@@ -378,9 +365,9 @@ void DatabaseDemoFrame::CreateDataTable(bool recreate)
         {
             wxEndBusyCursor();
             wxString tStr;
-            tStr  = "Error creating CONTACTS indexes.\nIndexes will be unavailable.\n\n";
+            tStr  = wxT("Error creating CONTACTS indexes.\nIndexes will be unavailable.\n\n");
             tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-            wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+            wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
             success = FALSE;
         }
     }
@@ -391,7 +378,7 @@ void DatabaseDemoFrame::CreateDataTable(bool recreate)
     Contact = NULL;
 
     if (success)
-        wxMessageBox("Table and index(es) were successfully created.","Notice...",wxOK | wxICON_INFORMATION);
+        wxMessageBox(wxT("Table and index(es) were successfully created."),wxT("Notice..."),wxOK | wxICON_INFORMATION);
 }  // DatabaseDemoFrame::CreateDataTable()
 
 
@@ -406,13 +393,13 @@ void DatabaseDemoFrame::BuildEditorDialog()
         {
             pEditorDlg->Close();
             pEditorDlg = NULL;
-            wxMessageBox("Unable to initialize the editor dialog for some reason","Error...",wxOK | wxICON_EXCLAMATION);
+            wxMessageBox(wxT("Unable to initialize the editor dialog for some reason"),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
             DemoFrame->Close();
         }
     } 
     else
     {
-        wxMessageBox("Unable to create the editor dialog for some reason","Error...",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(wxT("Unable to create the editor dialog for some reason"),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
         DemoFrame->Close();
     }
 }  // DatabaseDemoFrame::BuildEditorDialog()
@@ -423,7 +410,7 @@ void DatabaseDemoFrame::BuildParameterDialog(wxWindow *parent)
     pParamDlg = new CparameterDlg(parent);
 
     if (!pParamDlg)
-        wxMessageBox("Unable to create the parameter dialog for some reason","Error...",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(wxT("Unable to create the parameter dialog for some reason"),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
 }  // DatabaseDemoFrame::BuildParameterDialog()
 
 
@@ -439,7 +426,7 @@ void DatabaseDemoFrame::BuildParameterDialog(wxWindow *parent)
  *     or creating a table objects which use the same pDb, know that all the objects
  *     will be committed or rolled back when any of the objects has this function call made.
  */
-Ccontact::Ccontact (wxDb *pwxDb) : wxDbTable(pwxDb ? pwxDb : wxDbGetConnection(&DbConnectInf),CONTACT_TABLE_NAME,CONTACT_NO_COLS,NULL,!wxDB_QUERY_ONLY,DbConnectInf.defaultDir)
+Ccontact::Ccontact (wxDb *pwxDb) : wxDbTable(pwxDb ? pwxDb : wxDbGetConnection(&DbConnectInf), CONTACT_TABLE_NAME,CONTACT_NO_COLS, wxT(""), !wxDB_QUERY_ONLY, DbConnectInf.defaultDir)
 {
     // This is used to represent whether the database connection should be released
     // when this instance of the object is deleted.  If using the same connection
@@ -482,9 +469,9 @@ Ccontact::~Ccontact()
         if (!wxDbFreeConnection(GetDb()))
         {
             wxString tStr;
-            tStr  = "Unable to Free the Ccontact data table handle\n\n";
+            tStr  = wxT("Unable to Free the Ccontact data table handle\n\n");
             tStr += GetExtendedDBErrorMsg(GetDb(),__FILE__,__LINE__);
-            wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+            wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
     }
 }  // Ccontract destructor
@@ -499,18 +486,18 @@ void Ccontact::SetupColumns()
 {
     // NOTE: Columns now are 8 character names, as that is all dBase can support.  Longer
     //       names can be used for other database engines
-    SetColDefs ( 0,"NAME",       DB_DATA_TYPE_VARCHAR,     Name,           SQL_C_CHAR,                 sizeof(Name),           TRUE, TRUE);  // Primary index
-    SetColDefs ( 1,"ADDRESS1",   DB_DATA_TYPE_VARCHAR,     Addr1,          SQL_C_CHAR,                 sizeof(Addr1),          FALSE,TRUE);
-    SetColDefs ( 2,"ADDRESS2",   DB_DATA_TYPE_VARCHAR,     Addr2,          SQL_C_CHAR,                 sizeof(Addr2),          FALSE,TRUE);
-    SetColDefs ( 3,"CITY",       DB_DATA_TYPE_VARCHAR,     City,           SQL_C_CHAR,                 sizeof(City),           FALSE,TRUE);
-    SetColDefs ( 4,"STATE",      DB_DATA_TYPE_VARCHAR,     State,          SQL_C_CHAR,                 sizeof(State),          FALSE,TRUE);
-    SetColDefs ( 5,"POSTCODE",   DB_DATA_TYPE_VARCHAR,     PostalCode,     SQL_C_CHAR,                 sizeof(PostalCode),     FALSE,TRUE);
-    SetColDefs ( 6,"COUNTRY",    DB_DATA_TYPE_VARCHAR,     Country,        SQL_C_CHAR,                 sizeof(Country),        FALSE,TRUE);
-    SetColDefs ( 7,"JOINDATE",   DB_DATA_TYPE_DATE,       &JoinDate,       SQL_C_TIMESTAMP,            sizeof(JoinDate),       FALSE,TRUE);
-    SetColDefs ( 8,"IS_DEV",     DB_DATA_TYPE_INTEGER,    &IsDeveloper,    SQL_C_BOOLEAN(IsDeveloper), sizeof(IsDeveloper),    FALSE,TRUE);
-    SetColDefs ( 9,"CONTRIBS",   DB_DATA_TYPE_INTEGER,    &Contributions,  SQL_C_USHORT,               sizeof(Contributions),  FALSE,TRUE);
-    SetColDefs (10,"LINE_CNT",   DB_DATA_TYPE_INTEGER,    &LinesOfCode,    SQL_C_ULONG,                sizeof(LinesOfCode),    FALSE,TRUE);
-    SetColDefs (11,"LANGUAGE",   DB_DATA_TYPE_INTEGER,    &NativeLanguage, SQL_C_ENUM,                 sizeof(NativeLanguage), FALSE,TRUE);
+    SetColDefs ( 0,wxT("NAME"),       DB_DATA_TYPE_VARCHAR,     Name,           SQL_C_CHAR,                 sizeof(Name),           TRUE, TRUE);  // Primary index
+    SetColDefs ( 1,wxT("ADDRESS1"),   DB_DATA_TYPE_VARCHAR,     Addr1,          SQL_C_CHAR,                 sizeof(Addr1),          FALSE,TRUE);
+    SetColDefs ( 2,wxT("ADDRESS2"),   DB_DATA_TYPE_VARCHAR,     Addr2,          SQL_C_CHAR,                 sizeof(Addr2),          FALSE,TRUE);
+    SetColDefs ( 3,wxT("CITY"),       DB_DATA_TYPE_VARCHAR,     City,           SQL_C_CHAR,                 sizeof(City),           FALSE,TRUE);
+    SetColDefs ( 4,wxT("STATE"),      DB_DATA_TYPE_VARCHAR,     State,          SQL_C_CHAR,                 sizeof(State),          FALSE,TRUE);
+    SetColDefs ( 5,wxT("POSTCODE"),   DB_DATA_TYPE_VARCHAR,     PostalCode,     SQL_C_CHAR,                 sizeof(PostalCode),     FALSE,TRUE);
+    SetColDefs ( 6,wxT("COUNTRY"),    DB_DATA_TYPE_VARCHAR,     Country,        SQL_C_CHAR,                 sizeof(Country),        FALSE,TRUE);
+    SetColDefs ( 7,wxT("JOINDATE"),   DB_DATA_TYPE_DATE,       &JoinDate,       SQL_C_TIMESTAMP,            sizeof(JoinDate),       FALSE,TRUE);
+    SetColDefs ( 8,wxT("IS_DEV"),     DB_DATA_TYPE_INTEGER,    &IsDeveloper,    SQL_C_BOOLEAN(IsDeveloper), sizeof(IsDeveloper),    FALSE,TRUE);
+    SetColDefs ( 9,wxT("CONTRIBS"),   DB_DATA_TYPE_INTEGER,    &Contributions,  SQL_C_USHORT,               sizeof(Contributions),  FALSE,TRUE);
+    SetColDefs (10,wxT("LINE_CNT"),   DB_DATA_TYPE_INTEGER,    &LinesOfCode,    SQL_C_ULONG,                sizeof(LinesOfCode),    FALSE,TRUE);
+    SetColDefs (11,wxT("LANGUAGE"),   DB_DATA_TYPE_INTEGER,    &NativeLanguage, SQL_C_ENUM,                 sizeof(NativeLanguage), FALSE,TRUE);
 }  // Ccontact::SetupColumns
 
 
@@ -542,11 +529,11 @@ bool Ccontact::CreateIndexes(void)
  * very efficient and tighter coding so that it is available where ever the object
  * is.  Great for use with multiple tables when not using views or outer joins
  */
-bool Ccontact::FetchByName(char *name)
+bool Ccontact::FetchByName(wxChar *name)
 {
-    whereStr.Printf("NAME = '%s'",name);
+    whereStr.Printf(wxT("NAME = '%s'"),name);
     SetWhereClause(whereStr.c_str());
-    SetOrderByClause("");
+    SetOrderByClause(wxT(""));
 
     if (!Query())
         return(FALSE);
@@ -607,7 +594,7 @@ void CeditorDlg::OnCloseWindow(wxCloseEvent& event)
     }
     else
     {
-        wxMessageBox("Must finish processing the current record being created/modified before exiting","Notice...",wxOK | wxICON_INFORMATION);
+        wxMessageBox(wxT("Must finish processing the current record being created/modified before exiting"),wxT("Notice..."),wxOK | wxICON_INFORMATION);
         event.Veto();
     }
 }  // CeditorDlg::OnCloseWindow()
@@ -634,7 +621,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         Contact->Initialize();
         PutData();
         SetMode( mCreate );
-        pNameTxt->SetValue("");
+        pNameTxt->SetValue(wxT(""));
         pNameTxt->SetFocus();
         return;
     }
@@ -650,7 +637,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
     if (widgetName == pCopyBtn->GetName())
     {
         SetMode(mCreate);
-        pNameTxt->SetValue("");
+        pNameTxt->SetValue(wxT(""));
         pNameTxt->SetFocus();
 
         return;
@@ -658,7 +645,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 
     if (widgetName == pDeleteBtn->GetName())
     {
-        bool Ok = (wxMessageBox("Are you sure?","Confirm",wxYES_NO|wxICON_QUESTION) == wxYES);
+        bool Ok = (wxMessageBox(wxT("Are you sure?"),wxT("Confirm"),wxYES_NO|wxICON_QUESTION) == wxYES);
 
         if (!Ok)
             return;
@@ -703,12 +690,12 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 
     if (widgetName == pCancelBtn->GetName())
     {
-        bool Ok = (wxMessageBox("Are you sure?","Confirm",wxYES_NO|wxICON_QUESTION) == wxYES);
+        bool Ok = (wxMessageBox(wxT("Are you sure?"),wxT("Confirm"),wxYES_NO|wxICON_QUESTION) == wxYES);
 
         if (!Ok)
             return;
 
-        if (!wxStrcmp((const char*) saveName,""))
+        if (saveName.IsEmpty())
         {
             Contact->Initialize();
             PutData();
@@ -718,7 +705,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         else
         {
             // Requery previous record
-            if (Contact->FetchByName((char*) (const char*) saveName))
+            if (Contact->FetchByName((wxChar*) (const wxChar*) saveName))
             {
                 PutData();
                 SetMode(mView);
@@ -729,20 +716,20 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         // Previous record not available, retrieve first record in table
         if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
         {
-            Contact->whereStr  = "NAME = (SELECT MIN(NAME) FROM ";
+            Contact->whereStr  = wxT("NAME = (SELECT MIN(NAME) FROM ");
             Contact->whereStr += Contact->GetTableName();
-            Contact->whereStr += ")";
+            Contact->whereStr += wxT(")");
             Contact->SetWhereClause(Contact->whereStr.c_str());
         }
         else
-            Contact->SetWhereClause("");
+            Contact->SetWhereClause(wxT(""));
 
         if (!Contact->Query())
         {
             wxString tStr;
-            tStr  = "ODBC error during Query()\n\n";
+            tStr  = wxT("ODBC error during Query()\n\n");
             tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-            wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+            wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
             SetMode(mView);
             return;
         }
@@ -776,21 +763,21 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
     if (widgetName == pQueryBtn->GetName())
     {
         // Display the query dialog box
-        char qryWhere[DB_MAX_WHERE_CLAUSE_LEN+1];
-        wxStrcpy(qryWhere, (const char*) Contact->qryWhereStr);
-        char *tblName[] = {(char *)CONTACT_TABLE_NAME, 0};
+        wxChar qryWhere[DB_MAX_WHERE_CLAUSE_LEN+1];
+        wxStrcpy(qryWhere, (const wxChar*) Contact->qryWhereStr);
+        wxChar *tblName[] = {(wxChar *)CONTACT_TABLE_NAME, 0};
         new CqueryDlg(GetParent(), Contact->GetDb(), tblName, qryWhere);
 
         // Query the first record in the new record set and
         // display it, if the query string has changed.
-        if (wxStrcmp(qryWhere, (const char*) Contact->qryWhereStr))
+        if (wxStrcmp(qryWhere, (const wxChar*) Contact->qryWhereStr))
         {
-            Contact->whereStr = "";
+            Contact->whereStr.Empty();
             Contact->SetOrderByClause("NAME");
 
             if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
             {
-                Contact->whereStr  = "NAME = (SELECT MIN(NAME) FROM ";
+                Contact->whereStr  = wxT("NAME = (SELECT MIN(NAME) FROM ");
                 Contact->whereStr += CONTACT_TABLE_NAME;
             }
             
@@ -798,19 +785,19 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
             Contact->qryWhereStr  = qryWhere;
             if (wxStrlen(qryWhere))
             {
-                Contact->whereStr += " WHERE ";
+                Contact->whereStr += wxT(" WHERE ");
                 Contact->whereStr += Contact->qryWhereStr;
             }
             // Close the expression with a right paren
-            Contact->whereStr += ")";
+            Contact->whereStr += wxT(")");
             // Requery the table
             Contact->SetWhereClause(Contact->whereStr.c_str());
             if (!Contact->Query())
             {
                 wxString tStr;
-                tStr  = "ODBC error during Query()\n\n";
+                tStr  = wxT("ODBC error during Query()\n\n");
                 tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-                wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+                wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
                 return;
             }
             // Display the first record from the query set
@@ -829,23 +816,23 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
     if (widgetName == pResetBtn->GetName())
     {
         // Clear the additional where criteria established by the query feature
-        Contact->qryWhereStr = "";
-        Contact->SetOrderByClause("NAME");
+        Contact->qryWhereStr = wxT("");
+        Contact->SetOrderByClause(wxT("NAME"));
 
         if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
         {
-            Contact->whereStr        = "NAME = (SELECT MIN(NAME) FROM ";
+            Contact->whereStr        = wxT("NAME = (SELECT MIN(NAME) FROM ");
             Contact->whereStr        += CONTACT_TABLE_NAME;
-            Contact->whereStr        += ")";
+            Contact->whereStr        += wxT(")");
         }
 
         Contact->SetWhereClause(Contact->whereStr.c_str());
         if (!Contact->Query())
         {
             wxString tStr;
-            tStr  = "ODBC error during Query()\n\n";
+            tStr  = wxT("ODBC error during Query()\n\n");
             tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-            wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+            wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
             return;
         }
         if (!Contact->GetNext())
@@ -860,20 +847,20 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
     if (widgetName == pNameListBtn->GetName())
     {
         new ClookUpDlg(/* wxWindow  *parent        */ this,
-                       /* char      *windowTitle   */ "Select contact name",
-                       /* char      *tableName     */ (char *) CONTACT_TABLE_NAME,
-                       /* char      *dispCol1      */ "NAME",
-                       /* char      *dispCol2      */ "JOINDATE",
-                       /* char      *where         */ "",
-                       /* char      *orderBy       */ "NAME",
+                       /* wxChar      *windowTitle   */ wxT("Select contact name"),
+                       /* wxChar      *tableName     */ (wxChar *) CONTACT_TABLE_NAME,
+                       /* wxChar      *dispCol1      */ wxT("NAME"),
+                       /* wxChar      *dispCol2      */ wxT("JOINDATE"),
+                       /* wxChar      *where         */ wxT(""),
+                       /* wxChar      *orderBy       */ wxT("NAME"),
                        /* bool      distinctValues */ TRUE);
 
         if (ListDB_Selection && wxStrlen(ListDB_Selection))
         {
-            wxString w = "NAME = '";
+            wxString w = wxT("NAME = '");
             w += ListDB_Selection;
-            w += "'";
-            GetRec((char*) (const char*) w);
+            w += wxT("'");
+            GetRec((wxChar*) (const wxChar*) w);
         }
 
         return;
@@ -890,20 +877,20 @@ bool CeditorDlg::Initialize()
 
     if (!Contact)
     {
-        wxMessageBox("Unable to instantiate an instance of Ccontact","Error...",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(wxT("Unable to instantiate an instance of Ccontact"),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
         return FALSE;
     }
 
     // Check if the table exists or not.  If it doesn't, ask the user if they want to 
     // create the table.  Continue trying to create the table until it exists, or user aborts
-    while (!Contact->GetDb()->TableExists((char *)CONTACT_TABLE_NAME,DbConnectInf.Uid,DbConnectInf.defaultDir))
+    while (!Contact->GetDb()->TableExists((wxChar *)CONTACT_TABLE_NAME,DbConnectInf.Uid,DbConnectInf.defaultDir))
     {
         wxString tStr;
-        tStr.Printf("Unable to open the table '%s'.\n\nTable may need to be created...?\n\n",CONTACT_TABLE_NAME);
+        tStr.Printf(wxT("Unable to open the table '%s'.\n\nTable may need to be created...?\n\n"),CONTACT_TABLE_NAME);
         tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-        wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
 
-        bool createTable = (wxMessageBox("Do you wish to try to create/clear the CONTACTS table?","Confirm",wxYES_NO|wxICON_QUESTION) == wxYES);
+        bool createTable = (wxMessageBox(wxT("Do you wish to try to create/clear the CONTACTS table?"),wxT("Confirm"),wxYES_NO|wxICON_QUESTION) == wxYES);
 
         if (!createTable)
         {
@@ -925,21 +912,21 @@ bool CeditorDlg::Initialize()
 // in the 2.4 release.  This check will determine whether the open failing was due
 // to the table not existing, or the users privileges being insufficient to
 // open the table.
-        if (!Contact->GetDb()->TablePrivileges(CONTACT_TABLE_NAME,"SELECT",Contact->GetDb()->GetUsername(),Contact->GetDb()->GetUsername(),DbConnectInf.defaultDir))
+        if (!Contact->GetDb()->TablePrivileges(CONTACT_TABLE_NAME,wxT("SELECT"),Contact->GetDb()->GetUsername(),Contact->GetDb()->GetUsername(),DbConnectInf.defaultDir))
         {
             wxString tStr;
-            tStr.Printf("Unable to open the table '%s'.\n\n",CONTACT_TABLE_NAME);
+            tStr.Printf(wxT("Unable to open the table '%s'.\n\n"),CONTACT_TABLE_NAME);
             tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-            wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+            wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
         else 
 #endif
         if (Contact->GetDb()->TableExists(CONTACT_TABLE_NAME,Contact->GetDb()->GetUsername(),DbConnectInf.defaultDir))
         {
             wxString tStr;
-            tStr.Printf("Unable to open the table '%s'.\n\n",CONTACT_TABLE_NAME);
+            tStr.Printf(wxT("Unable to open the table '%s'.\n\n"),CONTACT_TABLE_NAME);
             tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-            wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+            wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
 
         return FALSE;
@@ -947,55 +934,55 @@ bool CeditorDlg::Initialize()
 
     // Build the dialog
 
-    (void)new wxStaticBox(this, EDITOR_DIALOG_FN_GROUP, "",  wxPoint(15, 1), wxSize(497,  69), 0, "FunctionGrp");
-    (void)new wxStaticBox(this, EDITOR_DIALOG_SEARCH_GROUP, "", wxPoint(417, 1), wxSize(95, 242), 0, "SearchGrp");
+    (void)new wxStaticBox(this, EDITOR_DIALOG_FN_GROUP, wxT(""),  wxPoint(15, 1), wxSize(497,  69), 0, wxT("FunctionGrp"));
+    (void)new wxStaticBox(this, EDITOR_DIALOG_SEARCH_GROUP, wxT(""), wxPoint(417, 1), wxSize(95, 242), 0, wxT("SearchGrp"));
 
-    pCreateBtn      = new wxButton(this, EDITOR_DIALOG_CREATE,           "&Create",     wxPoint( 25,  21), wxSize( 70,  35), 0, wxDefaultValidator, "CreateBtn");
-    pEditBtn        = new wxButton(this, EDITOR_DIALOG_EDIT,             "&Edit",       wxPoint(102,  21), wxSize( 70,  35), 0, wxDefaultValidator, "EditBtn");
-    pDeleteBtn      = new wxButton(this, EDITOR_DIALOG_DELETE,           "&Delete",     wxPoint(179,  21), wxSize( 70,  35), 0, wxDefaultValidator, "DeleteBtn");
-    pCopyBtn        = new wxButton(this, EDITOR_DIALOG_COPY,             "Cop&y",       wxPoint(256,  21), wxSize( 70,  35), 0, wxDefaultValidator, "CopyBtn");
-    pSaveBtn        = new wxButton(this, EDITOR_DIALOG_SAVE,             "&Save",       wxPoint(333,  21), wxSize( 70,  35), 0, wxDefaultValidator, "SaveBtn");
-    pCancelBtn      = new wxButton(this, EDITOR_DIALOG_CANCEL,           "C&ancel",     wxPoint(430,  21), wxSize( 70,  35), 0, wxDefaultValidator, "CancelBtn");
-    pPrevBtn        = new wxButton(this, EDITOR_DIALOG_PREV,             "<< &Prev",    wxPoint(430,  81), wxSize( 70,  35), 0, wxDefaultValidator, "PrevBtn");
-    pNextBtn        = new wxButton(this, EDITOR_DIALOG_NEXT,             "&Next >>",    wxPoint(430, 121), wxSize( 70,  35), 0, wxDefaultValidator, "NextBtn");
-    pQueryBtn       = new wxButton(this, EDITOR_DIALOG_QUERY,            "&Query",      wxPoint(430, 161), wxSize( 70,  35), 0, wxDefaultValidator, "QueryBtn");
-    pResetBtn       = new wxButton(this, EDITOR_DIALOG_RESET,            "&Reset",      wxPoint(430, 200), wxSize( 70,  35), 0, wxDefaultValidator, "ResetBtn");
-    pNameMsg        = new wxStaticText(this, EDITOR_DIALOG_NAME_MSG,     "Name:",       wxPoint( 17,  80), wxSize( -1,  -1), 0, "NameMsg");
-    pNameTxt        = new wxTextCtrl(this, EDITOR_DIALOG_NAME_TEXT,      "",            wxPoint( 17,  97), wxSize(308,  25), 0, wxDefaultValidator, "NameTxt");
-    pNameListBtn    = new wxButton(this, EDITOR_DIALOG_LOOKUP,           "&Lookup",     wxPoint(333,  97), wxSize( 70,  24), 0, wxDefaultValidator, "LookupBtn");
-    pAddress1Msg    = new wxStaticText(this, EDITOR_DIALOG_ADDRESS1_MSG, "Address:",    wxPoint( 17, 130), wxSize( -1,  -1), 0, "Address1Msg");
-    pAddress1Txt    = new wxTextCtrl(this, EDITOR_DIALOG_ADDRESS2_TEXT,  "",            wxPoint( 17, 147), wxSize(308,  25), 0, wxDefaultValidator, "Address1Txt");
-    pAddress2Msg    = new wxStaticText(this, EDITOR_DIALOG_ADDRESS2_MSG, "Address:",    wxPoint( 17, 180), wxSize( -1,  -1), 0, "Address2Msg");
-    pAddress2Txt    = new wxTextCtrl(this, EDITOR_DIALOG_ADDRESS2_TEXT,  "",            wxPoint( 17, 197), wxSize(308,  25), 0, wxDefaultValidator, "Address2Txt");
-    pCityMsg        = new wxStaticText(this, EDITOR_DIALOG_CITY_MSG,     "City:",       wxPoint( 17, 230), wxSize( -1,  -1), 0, "CityMsg");
-    pCityTxt        = new wxTextCtrl(this, EDITOR_DIALOG_CITY_TEXT,      "",            wxPoint( 17, 247), wxSize(225,  25), 0, wxDefaultValidator, "CityTxt");
-    pStateMsg       = new wxStaticText(this, EDITOR_DIALOG_STATE_MSG,    "State:",      wxPoint(250, 230), wxSize( -1,  -1), 0, "StateMsg");
-    pStateTxt       = new wxTextCtrl(this, EDITOR_DIALOG_STATE_TEXT,     "",            wxPoint(250, 247), wxSize(153,  25), 0, wxDefaultValidator, "StateTxt");
-    pCountryMsg     = new wxStaticText(this, EDITOR_DIALOG_COUNTRY_MSG,  "Country:",    wxPoint( 17, 280), wxSize( -1,  -1), 0, "CountryMsg");
-    pCountryTxt     = new wxTextCtrl(this, EDITOR_DIALOG_COUNTRY_TEXT,   "",            wxPoint( 17, 297), wxSize(225,  25), 0, wxDefaultValidator, "CountryTxt");
-    pPostalCodeMsg  = new wxStaticText(this, EDITOR_DIALOG_POSTAL_MSG,   "Postal Code:",wxPoint(250, 280), wxSize( -1,  -1), 0, "PostalCodeMsg");
-    pPostalCodeTxt  = new wxTextCtrl(this, EDITOR_DIALOG_POSTAL_TEXT,    "",            wxPoint(250, 297), wxSize(153,  25), 0, wxDefaultValidator, "PostalCodeTxt");
+    pCreateBtn      = new wxButton(this, EDITOR_DIALOG_CREATE,           wxT("&Create"),     wxPoint( 25,  21), wxSize( 70,  35), 0, wxDefaultValidator, wxT("CreateBtn"));
+    pEditBtn        = new wxButton(this, EDITOR_DIALOG_EDIT,             wxT("&Edit"),       wxPoint(102,  21), wxSize( 70,  35), 0, wxDefaultValidator, wxT("EditBtn"));
+    pDeleteBtn      = new wxButton(this, EDITOR_DIALOG_DELETE,           wxT("&Delete"),     wxPoint(179,  21), wxSize( 70,  35), 0, wxDefaultValidator, wxT("DeleteBtn"));
+    pCopyBtn        = new wxButton(this, EDITOR_DIALOG_COPY,             wxT("Cop&y"),       wxPoint(256,  21), wxSize( 70,  35), 0, wxDefaultValidator, wxT("CopyBtn"));
+    pSaveBtn        = new wxButton(this, EDITOR_DIALOG_SAVE,             wxT("&Save"),       wxPoint(333,  21), wxSize( 70,  35), 0, wxDefaultValidator, wxT("SaveBtn"));
+    pCancelBtn      = new wxButton(this, EDITOR_DIALOG_CANCEL,           wxT("C&ancel"),     wxPoint(430,  21), wxSize( 70,  35), 0, wxDefaultValidator, wxT("CancelBtn"));
+    pPrevBtn        = new wxButton(this, EDITOR_DIALOG_PREV,             wxT("<< &Prev"),    wxPoint(430,  81), wxSize( 70,  35), 0, wxDefaultValidator, wxT("PrevBtn"));
+    pNextBtn        = new wxButton(this, EDITOR_DIALOG_NEXT,             wxT("&Next >>"),    wxPoint(430, 121), wxSize( 70,  35), 0, wxDefaultValidator, wxT("NextBtn"));
+    pQueryBtn       = new wxButton(this, EDITOR_DIALOG_QUERY,            wxT("&Query"),      wxPoint(430, 161), wxSize( 70,  35), 0, wxDefaultValidator, wxT("QueryBtn"));
+    pResetBtn       = new wxButton(this, EDITOR_DIALOG_RESET,            wxT("&Reset"),      wxPoint(430, 200), wxSize( 70,  35), 0, wxDefaultValidator, wxT("ResetBtn"));
+    pNameMsg        = new wxStaticText(this, EDITOR_DIALOG_NAME_MSG,     wxT("Name:"),       wxPoint( 17,  80), wxSize( -1,  -1), 0, wxT("NameMsg"));
+    pNameTxt        = new wxTextCtrl(this, EDITOR_DIALOG_NAME_TEXT,      wxT(""),            wxPoint( 17,  97), wxSize(308,  25), 0, wxDefaultValidator, wxT("NameTxt"));
+    pNameListBtn    = new wxButton(this, EDITOR_DIALOG_LOOKUP,           wxT("&Lookup"),     wxPoint(333,  97), wxSize( 70,  24), 0, wxDefaultValidator, wxT("LookupBtn"));
+    pAddress1Msg    = new wxStaticText(this, EDITOR_DIALOG_ADDRESS1_MSG, wxT("Address:"),    wxPoint( 17, 130), wxSize( -1,  -1), 0, wxT("Address1Msg"));
+    pAddress1Txt    = new wxTextCtrl(this, EDITOR_DIALOG_ADDRESS2_TEXT,  wxT(""),            wxPoint( 17, 147), wxSize(308,  25), 0, wxDefaultValidator, wxT("Address1Txt"));
+    pAddress2Msg    = new wxStaticText(this, EDITOR_DIALOG_ADDRESS2_MSG, wxT("Address:"),    wxPoint( 17, 180), wxSize( -1,  -1), 0, wxT("Address2Msg"));
+    pAddress2Txt    = new wxTextCtrl(this, EDITOR_DIALOG_ADDRESS2_TEXT,  wxT(""),            wxPoint( 17, 197), wxSize(308,  25), 0, wxDefaultValidator, wxT("Address2Txt"));
+    pCityMsg        = new wxStaticText(this, EDITOR_DIALOG_CITY_MSG,     wxT("City:"),       wxPoint( 17, 230), wxSize( -1,  -1), 0, wxT("CityMsg"));
+    pCityTxt        = new wxTextCtrl(this, EDITOR_DIALOG_CITY_TEXT,      wxT(""),            wxPoint( 17, 247), wxSize(225,  25), 0, wxDefaultValidator, wxT("CityTxt"));
+    pStateMsg       = new wxStaticText(this, EDITOR_DIALOG_STATE_MSG,    wxT("State:"),      wxPoint(250, 230), wxSize( -1,  -1), 0, wxT("StateMsg"));
+    pStateTxt       = new wxTextCtrl(this, EDITOR_DIALOG_STATE_TEXT,     wxT(""),            wxPoint(250, 247), wxSize(153,  25), 0, wxDefaultValidator, wxT("StateTxt"));
+    pCountryMsg     = new wxStaticText(this, EDITOR_DIALOG_COUNTRY_MSG,  wxT("Country:"),    wxPoint( 17, 280), wxSize( -1,  -1), 0, wxT("CountryMsg"));
+    pCountryTxt     = new wxTextCtrl(this, EDITOR_DIALOG_COUNTRY_TEXT,   wxT(""),            wxPoint( 17, 297), wxSize(225,  25), 0, wxDefaultValidator, wxT("CountryTxt"));
+    pPostalCodeMsg  = new wxStaticText(this, EDITOR_DIALOG_POSTAL_MSG,   wxT("Postal Code:"),wxPoint(250, 280), wxSize( -1,  -1), 0, wxT("PostalCodeMsg"));
+    pPostalCodeTxt  = new wxTextCtrl(this, EDITOR_DIALOG_POSTAL_TEXT,    wxT(""),            wxPoint(250, 297), wxSize(153,  25), 0, wxDefaultValidator, wxT("PostalCodeTxt"));
 
     wxString choice_strings[5];
-    choice_strings[0] = "English";
-    choice_strings[1] = "French";
-    choice_strings[2] = "German";
-    choice_strings[3] = "Spanish";
-    choice_strings[4] = "Other";
+    choice_strings[0] = wxT("English");
+    choice_strings[1] = wxT("French");
+    choice_strings[2] = wxT("German");
+    choice_strings[3] = wxT("Spanish");
+    choice_strings[4] = wxT("Other");
 
-    pNativeLangChoice = new wxChoice(this, EDITOR_DIALOG_LANG_CHOICE,                        wxPoint( 17, 346), wxSize(277,  -1), 5, choice_strings);
-    pNativeLangMsg    = new wxStaticText(this, EDITOR_DIALOG_LANG_MSG,   "Native language:", wxPoint( 17, 330), wxSize( -1,  -1), 0, "NativeLangMsg");
+    pNativeLangChoice = new wxChoice(this, EDITOR_DIALOG_LANG_CHOICE,                             wxPoint( 17, 346), wxSize(277,  -1), 5, choice_strings);
+    pNativeLangMsg    = new wxStaticText(this, EDITOR_DIALOG_LANG_MSG,   wxT("Native language:"), wxPoint( 17, 330), wxSize( -1,  -1), 0, wxT("NativeLangMsg"));
 
     wxString radio_strings[2];
-    radio_strings[0]  = "No";
-    radio_strings[1]  = "Yes";
-    pDeveloperRadio   = new wxRadioBox(this,EDITOR_DIALOG_DEVELOPER,     "Developer:",       wxPoint(303, 330), wxSize( -1,  -1), 2, radio_strings, 2, wxHORIZONTAL);
-    pJoinDateMsg      = new wxStaticText(this, EDITOR_DIALOG_JOIN_MSG,   "Date joined:",     wxPoint( 17, 380), wxSize( -1,  -1), 0, "JoinDateMsg");
-    pJoinDateTxt      = new wxTextCtrl(this, EDITOR_DIALOG_JOIN_TEXT,    "",                 wxPoint( 17, 397), wxSize(150,  25), 0, wxDefaultValidator, "JoinDateTxt");
-    pContribMsg       = new wxStaticText(this, EDITOR_DIALOG_CONTRIB_MSG,"Contributions:",   wxPoint(175, 380), wxSize( -1,  -1), 0, "ContribMsg");
-    pContribTxt       = new wxTextCtrl(this, EDITOR_DIALOG_CONTRIB_TEXT, "",                 wxPoint(175, 397), wxSize(120,  25), 0, wxDefaultValidator, "ContribTxt");
-    pLinesMsg         = new wxStaticText(this, EDITOR_DIALOG_LINES_MSG,  "Lines of code:",   wxPoint(303, 380), wxSize( -1,  -1), 0, "LinesMsg");
-    pLinesTxt         = new wxTextCtrl(this, EDITOR_DIALOG_LINES_TEXT,   "",                 wxPoint(303, 397), wxSize(100,  25), 0, wxDefaultValidator, "LinesTxt");
+    radio_strings[0]  = wxT("No");
+    radio_strings[1]  = wxT("Yes");
+    pDeveloperRadio   = new wxRadioBox(this,EDITOR_DIALOG_DEVELOPER,     wxT("Developer:"),       wxPoint(303, 330), wxSize( -1,  -1), 2, radio_strings, 2, wxHORIZONTAL);
+    pJoinDateMsg      = new wxStaticText(this, EDITOR_DIALOG_JOIN_MSG,   wxT("Date joined:"),     wxPoint( 17, 380), wxSize( -1,  -1), 0, wxT("JoinDateMsg"));
+    pJoinDateTxt      = new wxTextCtrl(this, EDITOR_DIALOG_JOIN_TEXT,    wxT(""),                 wxPoint( 17, 397), wxSize(150,  25), 0, wxDefaultValidator, wxT("JoinDateTxt"));
+    pContribMsg       = new wxStaticText(this, EDITOR_DIALOG_CONTRIB_MSG,wxT("Contributions:"),   wxPoint(175, 380), wxSize( -1,  -1), 0, wxT("ContribMsg"));
+    pContribTxt       = new wxTextCtrl(this, EDITOR_DIALOG_CONTRIB_TEXT, wxT(""),                 wxPoint(175, 397), wxSize(120,  25), 0, wxDefaultValidator, wxT("ContribTxt"));
+    pLinesMsg         = new wxStaticText(this, EDITOR_DIALOG_LINES_MSG,  wxT("Lines of code:"),   wxPoint(303, 380), wxSize( -1,  -1), 0, wxT("LinesMsg"));
+    pLinesTxt         = new wxTextCtrl(this, EDITOR_DIALOG_LINES_TEXT,   wxT(""),                 wxPoint(303, 397), wxSize(100,  25), 0, wxDefaultValidator, wxT("LinesTxt"));
 
     // Now that all the widgets on the panel are created, its safe to allow ::OnCommand() to 
     // handle all widget processing
@@ -1005,7 +992,7 @@ bool CeditorDlg::Initialize()
     // as there will only be one record being shown on the dialog at a time, this optimizes
     // network traffic by only returning a one row result
     
-    Contact->SetOrderByClause("NAME");  // field name to sort by
+    Contact->SetOrderByClause(wxT("NAME"));  // field name to sort by
 
     // The wxString "whereStr" is not a member of the wxDbTable object, it is a member variable
     // specifically in the Ccontact class.  It is used here for simpler construction of a varying
@@ -1017,12 +1004,12 @@ bool CeditorDlg::Initialize()
     
     if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
     {
-        Contact->whereStr.sprintf("NAME = (SELECT MIN(NAME) FROM %s)",Contact->GetTableName());
-        // NOTE: (const char*) returns a pointer which may not be valid later, so this is short term use only
+        Contact->whereStr.sprintf(wxT("NAME = (SELECT MIN(NAME) FROM %s)"),Contact->GetTableName());
+        // NOTE: (const wxChar*) returns a pointer which may not be valid later, so this is short term use only
         Contact->SetWhereClause(Contact->whereStr.c_str());
     }
     else
-       Contact->SetWhereClause("");
+       Contact->SetWhereClause(wxT(""));
 
     // Perform the Query to get the result set.  
     // NOTE: If there are no rows returned, that is a valid result, so Query() would return TRUE.  
@@ -1030,9 +1017,9 @@ bool CeditorDlg::Initialize()
     if (!Contact->Query())
     {
         wxString tStr;
-        tStr  = "ODBC error during Query()\n\n";
+        tStr  = wxT("ODBC error during Query()\n\n");
         tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-        wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
 //        GetParent()->Close();
         return FALSE;
     }
@@ -1095,9 +1082,9 @@ void CeditorDlg::SetMode(enum DialogModes m)
     if (widgetPtrsSet)
     {
         pCreateBtn->Enable( !edit );
-        pEditBtn->Enable( !edit && (wxStrcmp(Contact->Name,"")!=0) );
-        pDeleteBtn->Enable( !edit && (wxStrcmp(Contact->Name,"")!=0) );
-        pCopyBtn->Enable( !edit && (wxStrcmp(Contact->Name,"")!=0) );
+        pEditBtn->Enable( !edit && (wxStrcmp(Contact->Name,wxT(""))!=0) );
+        pDeleteBtn->Enable( !edit && (wxStrcmp(Contact->Name,wxT(""))!=0) );
+        pCopyBtn->Enable( !edit && (wxStrcmp(Contact->Name,wxT(""))!=0) );
         pSaveBtn->Enable( edit );
         pCancelBtn->Enable( edit );
         pPrevBtn->Enable( !edit );
@@ -1123,13 +1110,13 @@ bool CeditorDlg::PutData()
     pCountryTxt->SetValue(Contact->Country);
     pPostalCodeTxt->SetValue(Contact->PostalCode);
 
-    tStr.Printf("%d/%d/%d",Contact->JoinDate.month,Contact->JoinDate.day,Contact->JoinDate.year);
+    tStr.Printf(wxT("%d/%d/%d"),Contact->JoinDate.month,Contact->JoinDate.day,Contact->JoinDate.year);
     pJoinDateTxt->SetValue(tStr);
 
-    tStr.Printf("%d",Contact->Contributions);
+    tStr.Printf(wxT("%d"),Contact->Contributions);
     pContribTxt->SetValue(tStr);
 
-    tStr.Printf("%lu",Contact->LinesOfCode);
+    tStr.Printf(wxT("%lu"),Contact->LinesOfCode);
     pLinesTxt->SetValue(tStr);
 
     pNativeLangChoice->SetSelection(Contact->NativeLanguage);
@@ -1154,9 +1141,9 @@ bool CeditorDlg::GetData()
 
     wxString tStr;
     tStr = pNameTxt->GetValue();
-    if (!wxStrcmp((const char*) tStr,""))
+    if (!wxStrcmp((const wxChar*) tStr,wxT("")))
     {
-        wxMessageBox("A name is required for entry into the contact table","Notice...",wxOK | wxICON_INFORMATION);
+        wxMessageBox(wxT("A name is required for entry into the contact table"),wxT("Notice..."),wxOK | wxICON_INFORMATION);
         return FALSE;
     }
 
@@ -1165,14 +1152,14 @@ bool CeditorDlg::GetData()
     int    first, second;
 
     tStr = pJoinDateTxt->GetValue();
-    if (tStr.Freq('/') != 2)
+    if (tStr.Freq(wxT('/')) != 2)
         invalid = TRUE;
 
     // Find the month, day, and year tokens
     if (!invalid)
     {
-        first   = tStr.First('/');
-        second  = tStr.Last('/');
+        first   = tStr.First(wxT('/'));
+        second  = tStr.Last(wxT('/'));
 
         mm      = atoi(tStr.SubString(0,first));
         dd      = atoi(tStr.SubString(first+1,second));
@@ -1221,12 +1208,12 @@ bool CeditorDlg::GetData()
     }
     else
     {
-        wxMessageBox("Improper date format.  Please check the date\nspecified and try again.\n\nNOTE: Dates are in american format (MM/DD/YYYY)","Notice...",wxOK | wxICON_INFORMATION);
+        wxMessageBox(wxT("Improper date format.  Please check the date\nspecified and try again.\n\nNOTE: Dates are in american format (MM/DD/YYYY)"),wxT("Notice..."),wxOK | wxICON_INFORMATION);
         return FALSE;
     }
 
     tStr = pNameTxt->GetValue();
-    wxStrcpy(Contact->Name,(const char*) tStr);
+    wxStrcpy(Contact->Name,(const wxChar*) tStr);
     wxStrcpy(Contact->Addr1,pAddress1Txt->GetValue());
     wxStrcpy(Contact->Addr2,pAddress2Txt->GetValue());
     wxStrcpy(Contact->City,pCityTxt->GetValue());
@@ -1278,17 +1265,17 @@ bool CeditorDlg::Save()
                 if (result == DB_ERR_INTEGRITY_CONSTRAINT_VIOL)
                 {
                     wxString tStr;
-                    tStr  = "A duplicate key value already exists in the table.\nUnable to save record\n\n";
+                    tStr  = wxT("A duplicate key value already exists in the table.\nUnable to save record\n\n");
                     tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-                    wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+                    wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
                 }
                 else
                 {
                     // Some other unexpexted error occurred
                     wxString tStr;
-                    tStr  = "Database insert failed\n\n";
+                    tStr  = wxT("Database insert failed\n\n");
                     tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-                    wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+                    wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
                 }
             }
         }
@@ -1297,9 +1284,9 @@ bool CeditorDlg::Save()
             if (!Contact->Update())
             {
                 wxString tStr;
-                tStr  = "Database update failed\n\n";
+                tStr  = wxT("Database update failed\n\n");
                 tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-                wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+                wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
                 failed = TRUE;
             }
         }
@@ -1330,26 +1317,26 @@ bool CeditorDlg::GetNextRec()
 
     if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
     {
-        w  = "NAME = (SELECT MIN(NAME) FROM ";
+        w  = wxT("NAME = (SELECT MIN(NAME) FROM ");
         w += Contact->GetTableName();
-        w += " WHERE NAME > '";
+        w += wxT(" WHERE NAME > '");
     }
     else
-        w = "(NAME > '";
+        w = wxT("(NAME > '");
 
     w += Contact->Name;
-    w += "'";
+    w += wxT("'");
 
     // If a query where string is currently set, append that criteria
     if (!Contact->qryWhereStr.IsEmpty())
     {
-        w += " AND (";
+        w += wxT(" AND (");
         w += Contact->qryWhereStr;
-        w += ")";
+        w += wxT(")");
     }
 
-    w += ")";
-    return(GetRec((char*) (const char*) w));
+    w += wxT(")");
+    return(GetRec((wxChar*) (const wxChar*) w));
 
 }  // CeditorDlg::GetNextRec()
 
@@ -1365,27 +1352,27 @@ bool CeditorDlg::GetPrevRec()
 
     if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
     {
-        w  = "NAME = (SELECT MAX(NAME) FROM ";
+        w  = wxT("NAME = (SELECT MAX(NAME) FROM ");
         w += Contact->GetTableName();
-        w += " WHERE NAME < '";
+        w += wxT(" WHERE NAME < '");
     }
     else
-        w = "(NAME < '";
+        w = wxT("(NAME < '");
 
     w += Contact->Name;
-    w += "'";
+    w += wxT("'");
 
     // If a query where string is currently set, append that criteria
     if (!Contact->qryWhereStr.IsEmpty())
     {
-        w += " AND (";
+        w += wxT(" AND (");
         w += Contact->qryWhereStr;
-        w += ")";
+        w += wxT(")");
     }
 
-    w += ")";
+    w += wxT(")");
 
-    return(GetRec((char*) (const char*)w));
+    return(GetRec((wxChar*) (const wxChar*)w));
 
 }  // CeditorDlg::GetPrevRec()
 
@@ -1394,17 +1381,17 @@ bool CeditorDlg::GetPrevRec()
  * This function is here to avoid duplicating this same code in both the
  * GetPrevRec() and GetNextRec() functions
  */
-bool CeditorDlg::GetRec(char *whereStr)
+bool CeditorDlg::GetRec(wxChar *whereStr)
 {
     Contact->SetWhereClause(whereStr);
-    Contact->SetOrderByClause("NAME");
+    Contact->SetOrderByClause(wxT("NAME"));
 
     if (!Contact->Query())
     {
         wxString tStr;
-        tStr  = "ODBC error during Query()\n\n";
+        tStr  = wxT("ODBC error during Query()\n\n");
         tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-        wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
 
         return(FALSE);
     }
@@ -1430,23 +1417,23 @@ BEGIN_EVENT_TABLE(CparameterDlg, wxDialog)
     EVT_CLOSE(CparameterDlg::OnCloseWindow)
 END_EVENT_TABLE()
 
-CparameterDlg::CparameterDlg(wxWindow *parent) : wxDialog (parent, PARAMETER_DIALOG, "ODBC parameter settings", wxPoint(-1, -1), wxSize(400, 325))
+CparameterDlg::CparameterDlg(wxWindow *parent) : wxDialog (parent, PARAMETER_DIALOG, wxT("ODBC parameter settings"), wxPoint(-1, -1), wxSize(400, 325))
 {
     // Since the ::OnCommand() function is overridden, this prevents the widget
     // detection in ::OnCommand() until all widgets have been initialized to prevent
     // uninitialized pointers from crashing the program
     widgetPtrsSet = FALSE;
 
-    pParamODBCSourceMsg  = new wxStaticText(this, PARAMETER_DIALOG_SOURCE_MSG,   "ODBC data sources:",   wxPoint( 10, 10),    wxSize( -1,  -1), 0, "ParamODBCSourceMsg");
-    pParamODBCSourceList = new wxListBox(this, PARAMETER_DIALOG_SOURCE_LISTBOX,                          wxPoint( 10, 29),    wxSize(285, 150), 0, 0, wxLB_SINGLE|wxLB_ALWAYS_SB, wxDefaultValidator, "ParamODBCSourceList");
-    pParamUserNameMsg    = new wxStaticText(this, PARAMETER_DIALOG_NAME_MSG,     "Database user name:",  wxPoint( 10, 193),   wxSize( -1,  -1), 0, "ParamUserNameMsg");
-    pParamUserNameTxt    = new wxTextCtrl(this, PARAMETER_DIALOG_NAME_TEXT,      "", wxPoint(10, 209),   wxSize( 140, 25),    0, wxDefaultValidator, "ParamUserNameTxt");
-    pParamPasswordMsg    = new wxStaticText(this, PARAMETER_DIALOG_PASSWORD_MSG, "Password:",            wxPoint(156, 193),   wxSize( -1,  -1), 0, "ParamPasswordMsg");
-    pParamPasswordTxt    = new wxTextCtrl(this, PARAMETER_DIALOG_PASSWORD_TEXT,  "", wxPoint(156, 209),  wxSize( 140,  25),   0, wxDefaultValidator, "ParamPasswordTxt");
-    pParamDirPathMsg     = new wxStaticText(this, PARAMETER_DIALOG_DIRPATH_MSG,  "Directory:",           wxPoint( 10, 243),   wxSize( -1,  -1), 0, "ParamDirPathMsg");
-    pParamDirPathTxt     = new wxTextCtrl(this, PARAMETER_DIALOG_DIRPATH_TEXT,   "",                     wxPoint( 10, 259),   wxSize(140,  25), 0, wxDefaultValidator, "ParamDirPathTxt");
-    pParamSaveBtn        = new wxButton(this, PARAMETER_DIALOG_SAVE,             "&Save",                wxPoint(310,  21),   wxSize( 70,  35), 0, wxDefaultValidator, "ParamSaveBtn");
-    pParamCancelBtn      = new wxButton(this, PARAMETER_DIALOG_CANCEL,           "C&ancel",              wxPoint(310,  66),   wxSize( 70,  35), 0, wxDefaultValidator, "ParamCancelBtn");
+    pParamODBCSourceMsg  = new wxStaticText(this, PARAMETER_DIALOG_SOURCE_MSG,   wxT("ODBC data sources:"),   wxPoint( 10, 10),    wxSize( -1,  -1), 0, wxT("ParamODBCSourceMsg"));
+    pParamODBCSourceList = new wxListBox(this, PARAMETER_DIALOG_SOURCE_LISTBOX,                          wxPoint( 10, 29),    wxSize(285, 150), 0, 0, wxLB_SINGLE|wxLB_ALWAYS_SB, wxDefaultValidator, wxT("ParamODBCSourceList"));
+    pParamUserNameMsg    = new wxStaticText(this, PARAMETER_DIALOG_NAME_MSG,     wxT("Database user name:"),  wxPoint( 10, 193),   wxSize( -1,  -1), 0, wxT("ParamUserNameMsg"));
+    pParamUserNameTxt    = new wxTextCtrl(this, PARAMETER_DIALOG_NAME_TEXT,      wxT(""), wxPoint(10, 209),   wxSize( 140, 25),    0, wxDefaultValidator, wxT("ParamUserNameTxt"));
+    pParamPasswordMsg    = new wxStaticText(this, PARAMETER_DIALOG_PASSWORD_MSG, wxT("Password:"),            wxPoint(156, 193),   wxSize( -1,  -1), 0, wxT("ParamPasswordMsg"));
+    pParamPasswordTxt    = new wxTextCtrl(this, PARAMETER_DIALOG_PASSWORD_TEXT,  wxT(""), wxPoint(156, 209),  wxSize( 140,  25),   0, wxDefaultValidator, wxT("ParamPasswordTxt"));
+    pParamDirPathMsg     = new wxStaticText(this, PARAMETER_DIALOG_DIRPATH_MSG,  wxT("Directory:"),           wxPoint( 10, 243),   wxSize( -1,  -1), 0, wxT("ParamDirPathMsg"));
+    pParamDirPathTxt     = new wxTextCtrl(this, PARAMETER_DIALOG_DIRPATH_TEXT,   wxT(""),                     wxPoint( 10, 259),   wxSize(140,  25), 0, wxDefaultValidator, wxT("ParamDirPathTxt"));
+    pParamSaveBtn        = new wxButton(this, PARAMETER_DIALOG_SAVE,             wxT("&Save"),                wxPoint(310,  21),   wxSize( 70,  35), 0, wxDefaultValidator, wxT("ParamSaveBtn"));
+    pParamCancelBtn      = new wxButton(this, PARAMETER_DIALOG_CANCEL,           wxT("C&ancel"),              wxPoint(310,  66),   wxSize( 70,  35), 0, wxDefaultValidator, wxT("ParamCancelBtn"));
 
     // Now that all the widgets on the panel are created, its safe to allow ::OnCommand() to 
     // handle all widget processing
@@ -1467,7 +1454,7 @@ void CparameterDlg::OnCloseWindow(wxCloseEvent& event)
     // to close the program here that is not done elsewhere
     if (!saved)
     {
-        bool Ok = (wxMessageBox("No changes have been saved.\n\nAre you sure you wish exit the parameter screen?","Confirm",wxYES_NO|wxICON_QUESTION) == wxYES);
+        bool Ok = (wxMessageBox(wxT("No changes have been saved.\n\nAre you sure you wish exit the parameter screen?"),wxT("Confirm"),wxYES_NO|wxICON_QUESTION) == wxYES);
         
         if (!Ok)
         {
@@ -1512,10 +1499,10 @@ void CparameterDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         if (Save())
         {
             wxString tStr;
-            tStr = "Database parameters have been saved.";
+            tStr = wxT("Database parameters have been saved.");
             if (GetParent() != NULL)  // The parameter dialog was not called during startup due to a missing cfg file
-                tStr += "\nNew parameters will take effect the next time the program is started.";
-            wxMessageBox(tStr,"Notice...",wxOK | wxICON_INFORMATION);
+                tStr += wxT("\nNew parameters will take effect the next time the program is started.");
+            wxMessageBox(tStr,wxT("Notice..."),wxOK | wxICON_INFORMATION);
             saved = TRUE;
             Close();
         }
@@ -1548,14 +1535,14 @@ bool CparameterDlg::PutData()
 bool CparameterDlg::GetData()
 {
     wxString tStr;
-    if (pParamODBCSourceList->GetStringSelection() != "")
+    if (pParamODBCSourceList->GetStringSelection() != wxT(""))
     {
         tStr = pParamODBCSourceList->GetStringSelection();
         if (tStr.Length() > (sizeof(wxGetApp().params.ODBCSource)-1))
         {
             wxString errmsg;
-            errmsg.Printf("ODBC Data source name is longer than the data structure to hold it.\n'Cparameter.ODBCSource' must have a larger character array\nto handle a data source with this long of a name\n\nThe data source currently selected is %d characters long.",tStr.Length());
-            wxMessageBox(errmsg,"Internal program error...",wxOK | wxICON_EXCLAMATION);
+            errmsg.Printf(wxT("ODBC Data source name is longer than the data structure to hold it.\n'Cparameter.ODBCSource' must have a larger character array\nto handle a data source with this long of a name\n\nThe data source currently selected is %d characters long."),tStr.Length());
+            wxMessageBox(errmsg,wxT("Internal program error..."),wxOK | wxICON_EXCLAMATION);
             return FALSE;
         }
         wxStrcpy(wxGetApp().params.ODBCSource, tStr);
@@ -1567,8 +1554,8 @@ bool CparameterDlg::GetData()
     if (tStr.Length() > (sizeof(wxGetApp().params.UserName)-1))
     {
         wxString errmsg;
-        errmsg.Printf("User name is longer than the data structure to hold it.\n'Cparameter.UserName' must have a larger character array\nto handle a data source with this long of a name\n\nThe user name currently specified is %d characters long.",tStr.Length());
-        wxMessageBox(errmsg,"Internal program error...",wxOK | wxICON_EXCLAMATION);
+        errmsg.Printf(wxT("User name is longer than the data structure to hold it.\n'Cparameter.UserName' must have a larger character array\nto handle a data source with this long of a name\n\nThe user name currently specified is %d characters long."),tStr.Length());
+        wxMessageBox(errmsg,wxT("Internal program error..."),wxOK | wxICON_EXCLAMATION);
         return FALSE;
     }
     wxStrcpy(wxGetApp().params.UserName, tStr);
@@ -1577,19 +1564,19 @@ bool CparameterDlg::GetData()
     if (tStr.Length() > (sizeof(wxGetApp().params.Password)-1))
     {
         wxString errmsg;
-        errmsg.Printf("Password is longer than the data structure to hold it.\n'Cparameter.Password' must have a larger character array\nto handle a data source with this long of a name\n\nThe password currently specified is %d characters long.",tStr.Length());
-        wxMessageBox(errmsg,"Internal program error...",wxOK | wxICON_EXCLAMATION);
+        errmsg.Printf(wxT("Password is longer than the data structure to hold it.\n'Cparameter.Password' must have a larger character array\nto handle a data source with this long of a name\n\nThe password currently specified is %d characters long."),tStr.Length());
+        wxMessageBox(errmsg,wxT("Internal program error..."),wxOK | wxICON_EXCLAMATION);
         return FALSE;
     }
     wxStrcpy(wxGetApp().params.Password,tStr);
 
     tStr = pParamDirPathTxt->GetValue();
-    tStr.Replace("\\","/");
+    tStr.Replace(wxT("\\"),wxT("/"));
     if (tStr.Length() > (sizeof(wxGetApp().params.DirPath)-1))
     {
         wxString errmsg;
-        errmsg.Printf("DirPath is longer than the data structure to hold it.\n'Cparameter.DirPath' must have a larger character array\nto handle a data source with this long of a name\n\nThe password currently specified is %d characters long.",tStr.Length());
-        wxMessageBox(errmsg,"Internal program error...",wxOK | wxICON_EXCLAMATION);
+        errmsg.Printf(wxT("DirPath is longer than the data structure to hold it.\n'Cparameter.DirPath' must have a larger character array\nto handle a data source with this long of a name\n\nThe password currently specified is %d characters long."),tStr.Length());
+        wxMessageBox(errmsg,wxT("Internal program error..."),wxOK | wxICON_EXCLAMATION);
         return FALSE;
     }
     wxStrcpy(wxGetApp().params.DirPath,tStr);
@@ -1607,22 +1594,22 @@ bool CparameterDlg::Save()
     }
 
     FILE *paramFile;
-    if ((paramFile = fopen(paramFilename, "wt")) == NULL)
+    if ((paramFile = fopen(paramFilename, wxT("wt"))) == NULL)
     {
         wxString tStr;
-        tStr.Printf("Unable to write/overwrite '%s'.",paramFilename);
-        wxMessageBox(tStr,"File I/O Error...",wxOK | wxICON_EXCLAMATION);
+        tStr.Printf(wxT("Unable to write/overwrite '%s'."),paramFilename);
+        wxMessageBox(tStr,wxT("File I/O Error..."),wxOK | wxICON_EXCLAMATION);
         return FALSE;
     }
 
     fputs(wxGetApp().params.ODBCSource, paramFile);
-    fputc('\n', paramFile);
+    fputc(wxT('\n'), paramFile);
     fputs(wxGetApp().params.UserName, paramFile);
-    fputc('\n', paramFile);
+    fputc(wxT('\n'), paramFile);
     fputs(wxGetApp().params.Password, paramFile);
-    fputc('\n', paramFile);
+    fputc(wxT('\n'), paramFile);
     fputs(wxGetApp().params.DirPath, paramFile);
-    fputc('\n', paramFile);
+    fputc(wxT('\n'), paramFile);
     fclose(paramFile);
 
     return TRUE;
@@ -1631,16 +1618,16 @@ bool CparameterDlg::Save()
 
 void CparameterDlg::FillDataSourceList()
 {
-    char Dsn[SQL_MAX_DSN_LENGTH + 1];
-    char DsDesc[255];
+    wxChar Dsn[SQL_MAX_DSN_LENGTH + 1];
+    wxChar DsDesc[255];
     wxStringList strList;
 
     while (wxDbGetDataSource(DbConnectInf.Henv, Dsn, SQL_MAX_DSN_LENGTH+1, DsDesc, 255))
         strList.Add(Dsn);
 
     strList.Sort();
-    strList.Add("");
-    char **p = strList.ListToArray();
+    strList.Add(wxT(""));
+    wxChar **p = strList.ListToArray();
 
     int i;
     for (i = 0; wxStrlen(p[i]); i++)
@@ -1657,7 +1644,7 @@ END_EVENT_TABLE()
 
  
 // CqueryDlg() constructor
-CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, char *tblName[], char *pWhereArg) : wxDialog (parent, QUERY_DIALOG, "Query", wxPoint(-1, -1), wxSize(480, 360))
+CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[], wxChar *pWhereArg) : wxDialog (parent, QUERY_DIALOG, wxT("Query"), wxPoint(-1, -1), wxSize(480, 360))
 {
     wxBeginBusyCursor();
 
@@ -1672,62 +1659,62 @@ CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, char *tblName[], char *pWhereA
     if (wxStrlen(pWhere) > (unsigned int)DB_MAX_WHERE_CLAUSE_LEN)  // Check the length of the buffer passed in
     {
         wxString s;
-        s.Printf("Maximum where clause length exceeded.\nLength must be less than %d", DB_MAX_WHERE_CLAUSE_LEN+1);
-        wxMessageBox(s,"Error...",wxOK | wxICON_EXCLAMATION);
+        s.Printf(wxT("Maximum where clause length exceeded.\nLength must be less than %d"), DB_MAX_WHERE_CLAUSE_LEN+1);
+        wxMessageBox(s,wxT("Error..."),wxOK | wxICON_EXCLAMATION);
         Close();
         return;
     }
 
-    pQueryCol1Msg           = new wxStaticText(this, QUERY_DIALOG_COL_MSG,    "Column 1:",   wxPoint( 10,  10), wxSize( 69,  16), 0, "QueryCol1Msg");
-    pQueryCol1Choice        = new wxChoice(this, QUERY_DIALOG_COL_CHOICE,                    wxPoint( 10,  27), wxSize(250,  27), 0, 0, 0, wxDefaultValidator, "QueryCol1Choice");
-    pQueryNotMsg            = new wxStaticText(this, QUERY_DIALOG_NOT_MSG,    "NOT",         wxPoint(268,  10), wxSize( -1,  -1), 0, "QueryNotMsg");
-    pQueryNotCheck          = new wxCheckBox(this, QUERY_DIALOG_NOT_CHECKBOX, "",            wxPoint(275,  37), wxSize( 20,  20), 0, wxDefaultValidator, "QueryNotCheck");
+    pQueryCol1Msg           = new wxStaticText(this, QUERY_DIALOG_COL_MSG,    wxT("Column 1:"),   wxPoint( 10,  10), wxSize( 69,  16), 0, wxT("QueryCol1Msg"));
+    pQueryCol1Choice        = new wxChoice(this, QUERY_DIALOG_COL_CHOICE,                    wxPoint( 10,  27), wxSize(250,  27), 0, 0, 0, wxDefaultValidator, wxT("QueryCol1Choice"));
+    pQueryNotMsg            = new wxStaticText(this, QUERY_DIALOG_NOT_MSG,    wxT("NOT"),         wxPoint(268,  10), wxSize( -1,  -1), 0, wxT("QueryNotMsg"));
+    pQueryNotCheck          = new wxCheckBox(this, QUERY_DIALOG_NOT_CHECKBOX, wxT(""),            wxPoint(275,  37), wxSize( 20,  20), 0, wxDefaultValidator, wxT("QueryNotCheck"));
 
     wxString choice_strings[9];
-    choice_strings[0] = "=";
-    choice_strings[1] = "<";
-    choice_strings[2] = ">";
-    choice_strings[3] = "<=";
-    choice_strings[4] = ">=";
-    choice_strings[5] = "Begins";
-    choice_strings[6] = "Contains";
-    choice_strings[7] = "Like";
-    choice_strings[8] = "Between";
+    choice_strings[0] = wxT("=");
+    choice_strings[1] = wxT("<");
+    choice_strings[2] = wxT(">");
+    choice_strings[3] = wxT("<=");
+    choice_strings[4] = wxT(">=");
+    choice_strings[5] = wxT("Begins");
+    choice_strings[6] = wxT("Contains");
+    choice_strings[7] = wxT("Like");
+    choice_strings[8] = wxT("Between");
 
-    pQueryOperatorMsg       = new wxStaticText(this, QUERY_DIALOG_OP_MSG,       "Operator:",            wxPoint(305,  10), wxSize( -1,  -1), 0, "QueryOperatorMsg");
-    pQueryOperatorChoice    = new wxChoice(this, QUERY_DIALOG_OP_CHOICE,                                wxPoint(305,  27), wxSize( 80,  27), 9, choice_strings, 0, wxDefaultValidator, "QueryOperatorChoice");
-    pQueryCol2Msg           = new wxStaticText(this, QUERY_DIALOG_COL2_MSG,     "Column 2:",            wxPoint( 10,  65), wxSize( 69,  16), 0, "QueryCol2Msg");
-    pQueryCol2Choice        = new wxChoice(this, QUERY_DIALOG_COL2_CHOICE,                              wxPoint( 10,  82), wxSize(250,  27), 0, 0, 0, wxDefaultValidator, "QueryCol2Choice");
-    pQuerySqlWhereMsg       = new wxStaticText(this, QUERY_DIALOG_WHERE_MSG,    "SQL where clause:",    wxPoint( 10, 141), wxSize( -1,  -1), 0, "QuerySqlWhereMsg");
-    pQuerySqlWhereMtxt      = new wxTextCtrl(this, QUERY_DIALOG_WHERE_TEXT,     "",                     wxPoint( 10, 159), wxSize(377, 134), wxTE_MULTILINE, wxDefaultValidator, "QuerySqlWhereMtxt");
-    pQueryAddBtn            = new wxButton(this, QUERY_DIALOG_ADD,              "&Add",                 wxPoint(406,  24), wxSize( 56,  26), 0, wxDefaultValidator, "QueryAddBtn");
-    pQueryAndBtn            = new wxButton(this, QUERY_DIALOG_AND,              "A&nd",                 wxPoint(406,  58), wxSize( 56,  26), 0, wxDefaultValidator, "QueryAndBtn");
-    pQueryOrBtn             = new wxButton(this, QUERY_DIALOG_OR,               "&Or",                  wxPoint(406,  92), wxSize( 56,  26), 0, wxDefaultValidator, "QueryOrBtn");
-    pQueryLParenBtn         = new wxButton(this, QUERY_DIALOG_LPAREN,           "(",                    wxPoint(406, 126), wxSize( 26,  26), 0, wxDefaultValidator, "QueryLParenBtn");
-    pQueryRParenBtn         = new wxButton(this, QUERY_DIALOG_RPAREN,           ")",                    wxPoint(436, 126), wxSize( 26,  26), 0, wxDefaultValidator, "QueryRParenBtn");
-    pQueryDoneBtn           = new wxButton(this, QUERY_DIALOG_DONE,             "&Done",                wxPoint(406, 185), wxSize( 56,  26), 0, wxDefaultValidator, "QueryDoneBtn");
-    pQueryClearBtn          = new wxButton(this, QUERY_DIALOG_CLEAR,            "C&lear",               wxPoint(406, 218), wxSize( 56,  26), 0, wxDefaultValidator, "QueryClearBtn");
-    pQueryCountBtn          = new wxButton(this, QUERY_DIALOG_COUNT,            "&Count",               wxPoint(406, 252), wxSize( 56,  26), 0, wxDefaultValidator, "QueryCountBtn");
-    pQueryValue1Msg         = new wxStaticText(this, QUERY_DIALOG_VALUE1_MSG,   "Value:",               wxPoint(277,  66), wxSize( -1,  -1), 0, "QueryValue1Msg");
-    pQueryValue1Txt         = new wxTextCtrl(this, QUERY_DIALOG_VALUE1_TEXT,    "",                     wxPoint(277,  83), wxSize(108,  25), 0, wxDefaultValidator, "QueryValue1Txt");
-    pQueryValue2Msg         = new wxStaticText(this, QUERY_DIALOG_VALUE2_MSG,   "AND",                  wxPoint(238, 126), wxSize( -1,  -1), 0, "QueryValue2Msg");
-    pQueryValue2Txt         = new wxTextCtrl(this, QUERY_DIALOG_VALUE2_TEXT,    "",                     wxPoint(277, 120), wxSize(108,  25), 0, wxDefaultValidator, "QueryValue2Txt");
-    pQueryHintGrp           = new wxStaticBox(this, QUERY_DIALOG_HINT_GROUP,    "",                     wxPoint( 10, 291), wxSize(377,  40), 0, "QueryHintGrp");
-    pQueryHintMsg           = new wxStaticText(this, QUERY_DIALOG_HINT_MSG,     "",                     wxPoint( 16, 306), wxSize( -1,  -1), 0, "QueryHintMsg");
+    pQueryOperatorMsg       = new wxStaticText(this, QUERY_DIALOG_OP_MSG,       wxT("Operator:"),         wxPoint(305,  10), wxSize( -1,  -1), 0, wxT("QueryOperatorMsg"));
+    pQueryOperatorChoice    = new wxChoice(this, QUERY_DIALOG_OP_CHOICE,                                  wxPoint(305,  27), wxSize( 80,  27), 9, choice_strings, 0, wxDefaultValidator, wxT("QueryOperatorChoice"));
+    pQueryCol2Msg           = new wxStaticText(this, QUERY_DIALOG_COL2_MSG,     wxT("Column 2:"),         wxPoint( 10,  65), wxSize( 69,  16), 0, wxT("QueryCol2Msg"));
+    pQueryCol2Choice        = new wxChoice(this, QUERY_DIALOG_COL2_CHOICE,                                wxPoint( 10,  82), wxSize(250,  27), 0, 0, 0, wxDefaultValidator, wxT("QueryCol2Choice"));
+    pQuerySqlWhereMsg       = new wxStaticText(this, QUERY_DIALOG_WHERE_MSG,    wxT("SQL where clause:"), wxPoint( 10, 141), wxSize( -1,  -1), 0, wxT("QuerySqlWhereMsg"));
+    pQuerySqlWhereMtxt      = new wxTextCtrl(this, QUERY_DIALOG_WHERE_TEXT,     wxT(""),                  wxPoint( 10, 159), wxSize(377, 134), wxTE_MULTILINE, wxDefaultValidator, wxT("QuerySqlWhereMtxt"));
+    pQueryAddBtn            = new wxButton(this, QUERY_DIALOG_ADD,              wxT("&Add"),              wxPoint(406,  24), wxSize( 56,  26), 0, wxDefaultValidator, wxT("QueryAddBtn"));
+    pQueryAndBtn            = new wxButton(this, QUERY_DIALOG_AND,              wxT("A&nd"),              wxPoint(406,  58), wxSize( 56,  26), 0, wxDefaultValidator, wxT("QueryAndBtn"));
+    pQueryOrBtn             = new wxButton(this, QUERY_DIALOG_OR,               wxT("&Or"),               wxPoint(406,  92), wxSize( 56,  26), 0, wxDefaultValidator, wxT("QueryOrBtn"));
+    pQueryLParenBtn         = new wxButton(this, QUERY_DIALOG_LPAREN,           wxT("("),                 wxPoint(406, 126), wxSize( 26,  26), 0, wxDefaultValidator, wxT("QueryLParenBtn"));
+    pQueryRParenBtn         = new wxButton(this, QUERY_DIALOG_RPAREN,           wxT(")"),                 wxPoint(436, 126), wxSize( 26,  26), 0, wxDefaultValidator, wxT("QueryRParenBtn"));
+    pQueryDoneBtn           = new wxButton(this, QUERY_DIALOG_DONE,             wxT("&Done"),             wxPoint(406, 185), wxSize( 56,  26), 0, wxDefaultValidator, wxT("QueryDoneBtn"));
+    pQueryClearBtn          = new wxButton(this, QUERY_DIALOG_CLEAR,            wxT("C&lear"),            wxPoint(406, 218), wxSize( 56,  26), 0, wxDefaultValidator, wxT("QueryClearBtn"));
+    pQueryCountBtn          = new wxButton(this, QUERY_DIALOG_COUNT,            wxT("&Count"),            wxPoint(406, 252), wxSize( 56,  26), 0, wxDefaultValidator, wxT("QueryCountBtn"));
+    pQueryValue1Msg         = new wxStaticText(this, QUERY_DIALOG_VALUE1_MSG,   wxT("Value:"),            wxPoint(277,  66), wxSize( -1,  -1), 0, wxT("QueryValue1Msg"));
+    pQueryValue1Txt         = new wxTextCtrl(this, QUERY_DIALOG_VALUE1_TEXT,    wxT(""),                  wxPoint(277,  83), wxSize(108,  25), 0, wxDefaultValidator, wxT("QueryValue1Txt"));
+    pQueryValue2Msg         = new wxStaticText(this, QUERY_DIALOG_VALUE2_MSG,   wxT("AND"),               wxPoint(238, 126), wxSize( -1,  -1), 0, wxT("QueryValue2Msg"));
+    pQueryValue2Txt         = new wxTextCtrl(this, QUERY_DIALOG_VALUE2_TEXT,    wxT(""),                  wxPoint(277, 120), wxSize(108,  25), 0, wxDefaultValidator, wxT("QueryValue2Txt"));
+    pQueryHintGrp           = new wxStaticBox(this, QUERY_DIALOG_HINT_GROUP,    wxT(""),                  wxPoint( 10, 291), wxSize(377,  40), 0, wxT("QueryHintGrp"));
+    pQueryHintMsg           = new wxStaticText(this, QUERY_DIALOG_HINT_MSG,     wxT(""),                  wxPoint( 16, 306), wxSize( -1,  -1), 0, wxT("QueryHintMsg"));
 
     widgetPtrsSet = TRUE;
     // Initialize the dialog
     wxString qualName;
-    pQueryCol2Choice->Append("VALUE -->");
+    pQueryCol2Choice->Append(wxT("VALUE -->"));
     colInf = pDB->GetColumns(tblName);
 
     if (!colInf)
     {
         wxEndBusyCursor();
         wxString tStr;
-        tStr  = "ODBC error during GetColumns()\n\n";
+        tStr  = wxT("ODBC error during GetColumns()\n\n");
         tStr += GetExtendedDBErrorMsg(pDb,__FILE__,__LINE__);
-        wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         return;
     }
 
@@ -1738,7 +1725,7 @@ CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, char *tblName[], char *pWhereA
         // the column names with the table name prefix.
         if (tblName[1] && wxStrlen(tblName[1]))
         {
-            qualName.Printf("%s.%s", colInf[i].tableName, colInf[i].colName);
+            qualName.Printf(wxT("%s.%s"), colInf[i].tableName, colInf[i].colName);
             pQueryCol1Choice->Append(qualName);
             pQueryCol2Choice->Append(qualName);
         }
@@ -1916,28 +1903,28 @@ void CqueryDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
     // And button
     if (widgetName == pQueryAndBtn->GetName())
     {
-        AppendToWhere(" AND\n");
+        AppendToWhere(wxT(" AND\n"));
         return;
     }  // And button
 
     // Or button
     if (widgetName == pQueryOrBtn->GetName())
     {
-        AppendToWhere(" OR\n");
+        AppendToWhere(wxT(" OR\n"));
         return;
     }  // Or button
 
     // Left Paren button
     if (widgetName == pQueryLParenBtn->GetName())
     {
-        AppendToWhere("(");
+        AppendToWhere(wxT("("));
         return;
     }  // Left Paren button
 
     // Right paren button
     if (widgetName == pQueryRParenBtn->GetName())
     {
-        AppendToWhere(")");
+        AppendToWhere(wxT(")"));
         return;
     }  // Right Paren button
 
@@ -1948,8 +1935,8 @@ void CqueryDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         if (wxStrlen(pQuerySqlWhereMtxt->GetValue()) > (unsigned int)DB_MAX_WHERE_CLAUSE_LEN)
         {
             wxString s;
-            s.Printf("Maximum where clause length exceeded.\nLength must be less than %d", DB_MAX_WHERE_CLAUSE_LEN+1);
-            wxMessageBox(s,"Error...",wxOK | wxICON_EXCLAMATION);
+            s.Printf(wxT("Maximum where clause length exceeded.\nLength must be less than %d"), DB_MAX_WHERE_CLAUSE_LEN+1);
+            wxMessageBox(s,wxT("Error..."),wxOK | wxICON_EXCLAMATION);
             return;
         }
         // Validate the where clause for things such as matching parens
@@ -1964,10 +1951,10 @@ void CqueryDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
     // Clear button
     if (widgetName == pQueryClearBtn->GetName())
     {
-        bool Ok = (wxMessageBox("Are you sure you wish to clear the Query?","Confirm",wxYES_NO|wxICON_QUESTION) == wxYES);
+        bool Ok = (wxMessageBox(wxT("Are you sure you wish to clear the Query?"),wxT("Confirm"),wxYES_NO|wxICON_QUESTION) == wxYES);
 
         if (Ok)
-            pQuerySqlWhereMtxt->SetValue("");
+            pQuerySqlWhereMtxt->SetValue(wxT(""));
         return;
     }  // Clear button
 
@@ -2009,7 +1996,7 @@ void CqueryDlg::OnCloseWindow(wxCloseEvent& event)
 }  // CqueryDlg::OnCloseWindow()
 
 
-void CqueryDlg::AppendToWhere(char *s)
+void CqueryDlg::AppendToWhere(wxChar *s)
 {
     wxString whereStr = pQuerySqlWhereMtxt->GetValue();
     whereStr += s;
@@ -2045,39 +2032,39 @@ void CqueryDlg::ProcessAddBtn()
     wxString s = pQueryCol1Choice->GetStringSelection();
     
     if (pQueryNotCheck->GetValue() && (oper != qryOpEQ))
-        s += " NOT";
+        s += wxT(" NOT");
     
     switch(oper)
     {
     case qryOpEQ:
         if (pQueryNotCheck->GetValue())    // NOT box is checked
-            s += " <>";
+            s += wxT(" <>");
         else
-            s += " =";
+            s += wxT(" =");
         break;
     case qryOpLT:
-        s += " <";
+        s += wxT(" <");
         break;
     case qryOpGT:
-        s += " >";
+        s += wxT(" >");
         break;
     case qryOpLE:
-        s += " <=";
+        s += wxT(" <=");
         break;
     case qryOpGE:
-        s += " >=";
+        s += wxT(" >=");
         break;
     case qryOpBEGINS:
     case qryOpCONTAINS:
     case qryOpLIKE:
-        s += " LIKE";
+        s += wxT(" LIKE");
         break;
     case qryOpBETWEEN:
-        s += " BETWEEN";
+        s += wxT(" BETWEEN");
         break;
     }
 
-    s += " ";
+    s += wxT(" ");
 
     int col1Idx = pQueryCol1Choice->GetSelection();
 
@@ -2093,27 +2080,27 @@ void CqueryDlg::ProcessAddBtn()
     else  // Column 2 is a "value"
     {
         if (quote)
-            s += "'";
+            s += wxT("'");
         if (oper == qryOpCONTAINS)
-            s += "%";
+            s += wxT("%");
         s += pQueryValue1Txt->GetValue();
         if (oper == qryOpCONTAINS || oper == qryOpBEGINS)
-            s += "%";
+            s += wxT("%");
         if (quote)
-            s += "'";
+            s += wxT("'");
     }
 
     if (oper == qryOpBETWEEN)
     {
-        s += " AND ";
+        s += wxT(" AND ");
         if (quote)
-            s += "'";
+            s += wxT("'");
         s += pQueryValue2Txt->GetValue();
         if (quote)
-            s += "'";
+            s += wxT("'");
     }
 
-    AppendToWhere((char*) (const char*) s);
+    AppendToWhere((wxChar*) (const wxChar*) s);
 
 }  // CqueryDlg::ProcessAddBtn()
 
@@ -2125,17 +2112,17 @@ void CqueryDlg::ProcessCountBtn()
 
     if (dbTable == 0)  // wxDbTable object needs to be created and opened
     {
-        if (!(dbTable = new wxDbTable(pDB, masterTableName, 0, NULL, !wxDB_QUERY_ONLY, DbConnectInf.defaultDir)))
+        if (!(dbTable = new wxDbTable(pDB, masterTableName, 0, wxT(""), !wxDB_QUERY_ONLY, DbConnectInf.defaultDir)))
         {
-            wxMessageBox("Memory allocation failed creating a wxDbTable object.","Error...",wxOK | wxICON_EXCLAMATION);
+            wxMessageBox(wxT("Memory allocation failed creating a wxDbTable object."),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
             return;
         }
         if (!dbTable->Open())
         {
             wxString tStr;
-            tStr  = "ODBC error during Open()\n\n";
+            tStr  = wxT("ODBC error during Open()\n\n");
             tStr += GetExtendedDBErrorMsg(dbTable->GetDb(),__FILE__,__LINE__);
-            wxMessageBox(tStr,"ODBC Error...",wxOK | wxICON_EXCLAMATION);
+            wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
             return;
         }
     }
@@ -2145,23 +2132,24 @@ void CqueryDlg::ProcessCountBtn()
 
     whereStr = pQuerySqlWhereMtxt->GetValue();
     dbTable->SetWhereClause(whereStr.c_str());
+
     ULONG whereCnt = dbTable->Count();
 
     // Count() of all records in the table
-    dbTable->SetWhereClause("");
+    dbTable->SetWhereClause(wxT(""));
     ULONG totalCnt = dbTable->Count();
 
     if (whereCnt > 0 || totalCnt == 0)
     {
         wxString tStr;
-        tStr.Printf("%lu of %lu records match the query criteria.",whereCnt,totalCnt);
-        wxMessageBox(tStr,"Notice...",wxOK | wxICON_INFORMATION);
+        tStr.Printf(wxT("%lu of %lu records match the query criteria."),whereCnt,totalCnt);
+        wxMessageBox(tStr,wxT("Notice..."),wxOK | wxICON_INFORMATION);
     }
     else
     {
         wxString tStr;
-        tStr.Printf("%lu of %lu records match the query criteria.\n\nEither the criteria entered produced a result set\nwith no records, or there was a syntactical error\nin the clause you entered.\n\nPress the details button to see if any database errors were reported.",whereCnt,totalCnt);
-        wxMessageBox(tStr,"Notice...",wxOK | wxICON_INFORMATION);
+        tStr.Printf(wxT("%lu of %lu records match the query criteria.\n\nEither the criteria entered produced a result set\nwith no records, or there was a syntactical error\nin the clause you entered.\n\nPress the details button to see if any database errors were reported."),whereCnt,totalCnt);
+        wxMessageBox(tStr,wxT("Notice..."),wxOK | wxICON_INFORMATION);
     }
 
     // After a wxMessageBox, the focus does not necessarily return to the
@@ -2176,9 +2164,9 @@ bool CqueryDlg::ValidateWhereClause()
 {
     wxString where = pQuerySqlWhereMtxt->GetValue();
 
-    if (where.Freq('(') != where.Freq(')'))
+    if (where.Freq(wxT('(')) != where.Freq(wxT(')')))
     {
-        wxMessageBox("There are mismatched parenthesis in the constructed where clause","Error...",wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(wxT("There are mismatched parenthesis in the constructed where clause"),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
         return(FALSE);
     }
     // After a wxMessageBox, the focus does not necessarily return to the
@@ -2197,21 +2185,21 @@ bool CqueryDlg::ValidateWhereClause()
     TEST CODE FOR TESTING THE wxDbCreateDataSource() FUNCTION
 
         int result = 0;
-        result = wxDbCreateDataSource("Microsoft Access Driver (*.mdb)","GLT-TEST2","GLT-Descrip",FALSE,"",this);
+        result = wxDbCreateDataSource(wxT("Microsoft Access Driver (*.mdb)"),wxT("GLT-TEST2"),wxT("GLT-Descrip"),FALSE,wxT(""),this);
         if (!result)
         {
             // check for errors caused by ConfigDSN based functions
             DWORD retcode = 0;
             WORD cb;
             wxChar errMsg[500+1];
-            errMsg[0] = '\0';
+            errMsg[0] = wxT('\0');
 
             SQLInstallerError(1,&retcode,errMsg,500,&cb);
 
-            wxMessageBox("FAILED creating data source","FAILED");
+            wxMessageBox(wxT("FAILED creating data source"),wxT("FAILED"));
         }
         else
-            wxMessageBox("SUCCEEDED creating data source","SUCCESS");
+            wxMessageBox(wxT("SUCCEEDED creating data source"),wxT("SUCCESS"));
 */
 
 
