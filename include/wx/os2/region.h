@@ -213,8 +213,8 @@ public:
 
 protected:
     virtual wxObjectRefData* CreateData(void) const;
-    virtual wxObjectRefData* CloneData(wxObjectRefData* pData) const;
-    
+    virtual wxObjectRefData* CloneData(const wxObjectRefData* pData) const;
+
     friend class WXDLLEXPORT wxRegionIterator;
     DECLARE_DYNAMIC_CLASS(wxRegion);
 
