@@ -19,7 +19,7 @@
 #if WXWIN_COMPATIBILITY_2_4
 #if defined(__DMC__) || defined(__BORLANDC__)
     #pragma message "wx/wave.h header is deprecated, use wx/sound.h and wxSound"
-#elif defined(__WATCOMC__)
+#elif defined(__WATCOMC__) || defined(__VISUALC__)
     #pragma message ("wx/wave.h header is deprecated, use wx/sound.h and wxSound")
 #else
     #warning "wx/wave.h header is deprecated, use wx/sound.h and wxSound"
