@@ -1880,11 +1880,11 @@ class VListBox(VScrolledWindow):
         return _windows_.VListBox_GetSelectedCount(*args, **kwargs)
 
     def GetFirstSelected(*args, **kwargs):
-        """GetFirstSelected(self, unsigned long cookie) -> int"""
+        """GetFirstSelected(self) -> PyObject"""
         return _windows_.VListBox_GetFirstSelected(*args, **kwargs)
 
     def GetNextSelected(*args, **kwargs):
-        """GetNextSelected(self, unsigned long cookie) -> int"""
+        """GetNextSelected(self, unsigned long cookie) -> PyObject"""
         return _windows_.VListBox_GetNextSelected(*args, **kwargs)
 
     def GetMargins(*args, **kwargs):
