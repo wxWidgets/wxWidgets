@@ -1769,14 +1769,25 @@ void wxDC::DrawAnyText(
           m_vRclPaint.yBottom == 0 &&
           m_vRclPaint.xRight == 0 &&
           m_vRclPaint.xLeft == 0))
-        vPtlStart.y = OS2Y(vY,vTextY/1.5); // Full extent is a bit much
+    {
+        //
+        // Position Text a little differently in the Statusbar from other panels
+        //
+        if (m_pCanvas && m_pCanvas->IsKindOf(CLASSINFO(wxStatusBar)))
+            vPtlStart.y = OS2Y(vY,vTextY);
+        else
+            vPtlStart.y = OS2Y(vY,vTextY/1.5); // Full extent is a bit much
+    }
     else
     {
         if (m_vSelectedBitmap != wxNullBitmap)
         {
             m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
             m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
-            vPtlStart.y = OS2Y(vY,vTextY/1.5);
+            if (m_pCanvas && m_pCanvas->IsKindOf(CLASSINFO(wxStatusBar)))
+                vPtlStart.y = OS2Y(vY,vTextY);
+            else
+                vPtlStart.y = OS2Y(vY,vTextY/1.5);
         }
         else
             vPtlStart.y = vY;
