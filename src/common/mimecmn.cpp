@@ -285,6 +285,25 @@ bool wxFileType::GetIcon(wxIconLocation *iconLoc) const
     return m_impl->GetIcon(iconLoc);
 }
 
+bool
+wxFileType::GetIcon(wxIconLocation *iconloc,
+                    const MessageParameters& params) const
+{
+    if ( !GetIcon(iconloc) )
+    {
+        return false;
+    }
+
+    // we may have "%s" in the icon location string, at least under Windows, so
+    // expand this
+    if ( iconloc )
+    {
+        iconloc->SetFileName(ExpandCommand(iconloc->GetFileName(), params));
+    }
+
+    return true;
+}
+
 bool wxFileType::GetDescription(wxString *desc) const
 {
     wxCHECK_MSG( desc, FALSE, _T("invalid parameter in GetDescription") );

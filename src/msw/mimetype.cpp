@@ -77,6 +77,33 @@ class WXDLLEXPORT wxIcon;
 // location, uses it, so it isn't likely to change
 static const wxChar *MIME_DATABASE_KEY = wxT("MIME\\Database\\Content Type\\");
 
+// this function replaces Microsoft %1 with Unix-like %s
+static bool CanonicalizeParams(wxString& command)
+{
+    // transform it from '%1' to '%s' style format string (now also test for %L
+    // as apparently MS started using it as well for the same purpose)
+
+    // NB: we don't make any attempt to verify that the string is valid, i.e.
+    //     doesn't contain %2, or second %1 or .... But we do make sure that we
+    //     return a string with _exactly_ one '%s'!
+    bool foundFilename = false;
+    size_t len = command.length();
+    for ( size_t n = 0; (n < len) && !foundFilename; n++ )
+    {
+        if ( command[n] == wxT('%') &&
+                (n + 1 < len) &&
+                (command[n + 1] == wxT('1') || command[n + 1] == wxT('L')) )
+        {
+            // replace it with '%s'
+            command[n + 1] = wxT('s');
+
+            foundFilename = true;
+        }
+    }
+
+    return foundFilename;
+}
+
 void wxFileTypeImpl::Init(const wxString& strFileType, const wxString& ext)
 {
     // VZ: does it? (FIXME)
@@ -202,26 +229,7 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
     if ( key.Open() ) {
         // it's the default value of the key
         if ( key.QueryValue(wxEmptyString, command) ) {
-            // transform it from '%1' to '%s' style format string (now also
-            // test for %L - apparently MS started using it as well for the
-            // same purpose)
-
-            // NB: we don't make any attempt to verify that the string is valid,
-            //     i.e. doesn't contain %2, or second %1 or .... But we do make
-            //     sure that we return a string with _exactly_ one '%s'!
-            bool foundFilename = FALSE;
-            size_t len = command.Len();
-            for ( size_t n = 0; (n < len) && !foundFilename; n++ ) {
-                if ( command[n] == wxT('%') &&
-                     (n + 1 < len) &&
-                     (command[n + 1] == wxT('1') ||
-                      command[n + 1] == wxT('L')) ) {
-                    // replace it with '%s'
-                    command[n + 1] = wxT('s');
-
-                    foundFilename = TRUE;
-                }
-            }
+            bool foundFilename = CanonicalizeParams(command);
 
 #if wxUSE_IPC
             // look whether we must issue some DDE requests to the application
@@ -251,7 +259,8 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
             }
             else
 #endif // wxUSE_IPC
-                if ( !foundFilename ) {
+            if ( !foundFilename )
+            {
                 // we didn't find any '%1' - the application doesn't know which
                 // file to open (note that we only do it if there is no DDEExec
                 // subkey)

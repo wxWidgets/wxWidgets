@@ -212,6 +212,8 @@ public:
     bool GetExtensions(wxArrayString& extensions);
         // get the icon corresponding to this file type and of the given size
     bool GetIcon(wxIconLocation *iconloc) const;
+    bool GetIcon(wxIconLocation *iconloc,
+                 const MessageParameters& params) const;
         // get a brief file type description ("*.txt" => "text document")
     bool GetDescription(wxString *desc) const;
 
