@@ -40,6 +40,12 @@
     #include "wx/univ/renderer.h"
 #endif // __WXUNIVERSAL__
 
+// there is no src/msw/popupwin.cpp to put this in, so we do it here - BTW we
+// probably could do it for all ports here just as well
+#ifdef __WXMSW__
+    IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
+#endif // __WXMSW__
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -354,3 +360,4 @@ void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
 }
 
 #endif // wxUSE_POPUPWIN
+

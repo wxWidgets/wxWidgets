@@ -42,6 +42,8 @@ protected:
 
         GetParent()->ClientToScreen(x, y);
     }
+
+    DECLARE_DYNAMIC_CLASS(wxPopupWindow)
 };
 
 #endif // _WX_MSW_POPUPWIN_H_
