@@ -33,7 +33,7 @@
 // ----------------------------------------------------------------------------
 
 // Using this typedef removes an ambiguity when calling Remove()
-typedef unsigned long wxTreeItemIdValue;
+typedef long wxTreeItemIdValue;
 
 class WXDLLEXPORT wxTreeItemId
 {
