@@ -199,7 +199,6 @@ public :
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;
     
-    static int ConvertAttribute( const wxTextAttr& style , TXNTypeAttributes attr[] ) ;
     static TXNFrameOptions FrameOptionsFromWXStyle( long wxStyle ) ;
     void    AdjustCreationAttributes( const wxColour& background , bool visible ) ;
 
@@ -234,6 +233,7 @@ public :
     void SetTXNData( const wxString& st , TXNOffset start , TXNOffset end ) ;
 
 protected :
+    void TXNSetAttribute( const wxTextAttr& style , long from , long to ) ;
     TXNObject m_txn ;
 } ;
 
@@ -1493,8 +1493,9 @@ void wxMacMLTEControl::SetBackground( const wxBrush &brush )
     TXNSetBackground( m_txn , &tback);
 }
 
-int wxMacMLTEControl::ConvertAttribute( const wxTextAttr& style , TXNTypeAttributes typeAttr[] )
+void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , long to)
 {
+	TXNTypeAttributes typeAttr[4] ;
     Str255 fontName = "\pMonaco" ;
     SInt16 fontSize = 12 ;
     Style fontStyle = normal ;
@@ -1531,29 +1532,21 @@ int wxMacMLTEControl::ConvertAttribute( const wxTextAttr& style , TXNTypeAttribu
         color = MAC_WXCOLORREF(style.GetTextColour().GetPixel()) ;
         attrCounter += 1 ;
     }
-    return attrCounter ;
+    if ( attrCounter > 0 )
+    {
+        verify_noerr( TXNSetTypeAttributes ( m_txn , attrCounter , typeAttr, from , to) );
+    }
 }
 
 void wxMacMLTEControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle ) 
 {
     EditHelper help(m_txn) ;
-    wxTextAttr style(foreground,wxNullColour,font) ;
-    TXNTypeAttributes typeAttr[4] ;
-    int attrCounter = ConvertAttribute( style , typeAttr ) ;
-    if ( attrCounter > 0 )
-    {
-        verify_noerr( TXNSetTypeAttributes ( m_txn , attrCounter , typeAttr, kTXNStartOffset,kTXNEndOffset) );
-    }
+    TXNSetAttribute( wxTextAttr(foreground,wxNullColour,font) , kTXNStartOffset,kTXNEndOffset ) ;
 }
 void wxMacMLTEControl::SetStyle(long start, long end, const wxTextAttr& style) 
 { 
     EditHelper help(m_txn) ;
-    TXNTypeAttributes typeAttr[4] ;
-    int attrCounter = ConvertAttribute( style , typeAttr ) ;
-    if ( attrCounter > 0 )
-    {
-        verify_noerr( TXNSetTypeAttributes ( m_txn , attrCounter , typeAttr, start,end) );
-    }
+    TXNSetAttribute( style , start,end ) ;
 }   
  
 void wxMacMLTEControl::Copy() 
