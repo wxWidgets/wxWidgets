@@ -6,6 +6,7 @@
 # Created:   29 Aug 1999
 # Copyright: (c) 1999 Michael Bedward
 # Version:   $Id$
+# Licence:   wxWindows licence
 #
 # This creates the makefiles for all compilers from the templates using
 # tmake. The tmake executable should be in the path.
