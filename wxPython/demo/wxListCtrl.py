@@ -56,6 +56,21 @@ musicdata = {
 37: ("Spyro Gyra", "Song for Lorraine", "Jazz"),
 38: ("Yes", "Owner Of A Lonely Heart", "Rock"),
 39: ("Yes", "Rhythm Of Love", "Rock"),
+40: ("Cusco", "Dream Catcher", "New Age"),
+41: ("Cusco", "Geronimos Laughter", "New Age"),
+42: ("Cusco", "Ghost Dance", "New Age"),
+43: ("Blue Man Group", "Drumbone", "New Age"),
+44: ("Blue Man Group", "Endless Column", "New Age"),
+45: ("Blue Man Group", "Klein Mandelbrot", "New Age"),
+46: ("Kenny G", "Silhouette", "Jazz"),
+47: ("Sade", "Smooth Operator", "Jazz"),
+48: ("David Arkenstone", "Papillon (On The Wings Of The Butterfly)", "New Age"),
+49: ("David Arkenstone", "Stepping Stars", "New Age"),
+50: ("David Arkenstone", "Carnation Lily Lily Rose", "New Age"),
+51: ("David Lanz", "Behind The Waterfall", "New Age"),
+52: ("David Lanz", "Cristofori's Dream", "New Age"),
+53: ("David Lanz", "Heartsounds", "New Age"),
+54: ("David Lanz", "Leaves on the Seine", "New Age"),
 }
 
 import images
@@ -170,6 +185,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         self.x = event.GetX()
         self.y = event.GetY()
         self.log.WriteText("x, y = %s\n" % str((self.x, self.y)))
+        print event.GetEventObject()
         event.Skip()
 
 

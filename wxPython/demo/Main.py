@@ -119,7 +119,7 @@ class wxPythonDemo(wxFrame):
         EVT_ERASE_BACKGROUND(splitter, EmptyHandler)
         EVT_ERASE_BACKGROUND(splitter2, EmptyHandler)
 
-        # Prevent TreeCtrl from displaying all items after destruction
+        # Prevent TreeCtrl from displaying all items after destruction when true
         self.dying = false
 
         # Make a File menu

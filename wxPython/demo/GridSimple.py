@@ -71,7 +71,6 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
         EVT_GRID_EDITOR_CREATED(self, self.OnEditorCreated)
 
 
-
     def OnCellLeftClick(self, evt):
         self.log.write("OnCellLeftClick: (%d,%d) %s\n" %
                        (evt.GetRow(), evt.GetCol(), evt.GetPosition()))
