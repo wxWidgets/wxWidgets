@@ -511,8 +511,10 @@ public:
     bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
                    bool fullScreen = FALSE, wxRect* rect = NULL);
 
-    %name(BeginDrag2) bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
-                                     wxWindow* fullScreenRect);
+    %name(BeginDragBounded) bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
+                                           wxWindow* boundingWindow);
+
+    %pragma(python) addtoclass = "BeginDrag2 = BeginDragBounded"
 
     bool EndDrag();
     bool Move(const wxPoint& pt);
