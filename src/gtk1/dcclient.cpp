@@ -1453,7 +1453,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     pango_layout_set_text( layout, (const char*)data, strlen((const char*)data) );
 
-    if (m_scaleY - 1.0 < 0.00001)
+    if (abs(m_scaleY - 1.0) < 0.00001)
     {
          // If there is a user or actually any scale applied to
          // the device context, scale the font.
