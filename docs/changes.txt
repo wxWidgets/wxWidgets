@@ -28,6 +28,7 @@ All:
 wxBase:
 
 - added Watcom makefiles
+- fixed bug with searching in sorted arrays (Jürgen Palm)
 
 All GUI ports:
 
