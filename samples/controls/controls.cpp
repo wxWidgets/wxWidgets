@@ -8,10 +8,6 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-    #pragma implementation "controls.h"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -1567,7 +1563,9 @@ MyFrame::MyFrame(const wxChar *title, int x, int y)
     // The wxICON() macros loads an icon from a resource under Windows
     // and uses an #included XPM image under GTK+ and Motif
 
+#ifdef USE_XPM
     SetIcon( wxICON(mondrian) );
+#endif
 
     wxMenu *file_menu = new wxMenu;
 
