@@ -80,6 +80,7 @@
 #include "wx/tokenzr.h"
 #include "wx/config.h"          // for wxExpandEnvVars
 #include "wx/utils.h"
+#include "wx/file.h"
 
 #if wxUSE_DYNLIB_CLASS
     #include "wx/dynlib.h"
