@@ -140,6 +140,9 @@
         #if (__MWERKS__ >= 0x1000) && __option(bool)
             #define HAVE_BOOL
         #endif
+    #elif defined(__APPLE__) && defined(__APPLE_CC__)
+        // Apple bundled gcc supports bool
+        #define HAVE_BOOL
     #elif defined(__VISUALC__) && (__VISUALC__ == 1020)
         // in VC++ 4.2 the bool keyword is reserved (hence can't be typedefed)
         // but not implemented, so we must #define it

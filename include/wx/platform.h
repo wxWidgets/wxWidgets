@@ -146,14 +146,31 @@
       defined(THINK_C) || \
       (defined(__MWERKS__) && !defined(__INTEL__))
       /* MacOS */
-#elif defined(__WXMAC__) && defined(__DARWIN__)
+#elif defined(__WXMAC__) && defined(__APPLE__)
     /* Mac OS X */
     #define __UNIX_LIKE__
 
     /*
+      These defines are needed when compiling using Project Builder
+      with a non generated setup0.h
+    */
+    #ifndef __UNIX__
+        #define __UNIX__ 1
+    #endif
+    #ifndef __BSD__
+        #define __BSD__ 1
+    #endif
+    #ifndef __DARWIN__
+        #define __DARWIN__ 1
+    #endif
+    #ifndef __POWERPC__
+        #define __POWERPC__ 1
+    #endif
+
+    /*
        Some code has been added to workaround defects(?) in the
-       bundled gcc compiler. These corrections are identified by:
-       __DARWIN__ for corrections necessary for Darwin (wxMac, wxMotif)
+       bundled gcc compiler. These corrections are identified by
+       __DARWIN__ for Darwin related corrections (wxMac, wxMotif)
      */
 #elif defined(__OS2__)
     #if defined(__IBMCPP__)
