@@ -16,24 +16,41 @@ import dispatcher
 from version import VERSION
 
 
-if wx.Platform == '__WXMSW__':
-    FACES = { 'times'  : 'Times New Roman',
-              'mono'   : 'Courier New',
-              'helv'   : 'Lucida Console',
-              'lucida' : 'Lucida Console',
-              'other'  : 'Comic Sans MS',
-              'size'   : 10,
-              'lnsize' : 9,
-              'backcol': '#FFFFFF',
+if 'wxMSW' in wx.PlatformInfo:
+    FACES = { 'times'     : 'Times New Roman',
+              'mono'      : 'Courier New',
+              'helv'      : 'Lucida Console',
+              'lucida'    : 'Lucida Console',
+              'other'     : 'Comic Sans MS',
+              'size'      : 10,
+              'lnsize'    : 9,
+              'backcol'   : '#FFFFFF',
+              'calltipbg' : '#FFFFB8',
+              'calltipfg' : '#404040',
             }
-else:  # GTK
-    FACES = { 'times'  : 'Times',
-              'mono'   : 'Courier',
-              'helv'   : 'Helvetica',
-              'other'  : 'new century schoolbook',
-              'size'   : 12,
-              'lnsize' : 10,
-              'backcol': '#FFFFFF',
+
+elif 'wxGTK' in wx.PlatformInfo and 'gtk2' in wx.PlatformInfo:
+    FACES = { 'times'     : 'Serif',
+              'mono'      : 'Monospace',
+              'helv'      : 'Sans',
+              'other'     : 'new century schoolbook',
+              'size'      : 10,
+              'lnsize'    : 9,
+              'backcol'   : '#FFFFFF',
+              'calltipbg' : '#FFFFB8',
+              'calltipfg' : '#404040',
+            }
+
+else: # GTK1, OSX, etc.
+    FACES = { 'times'     : 'Times',
+              'mono'      : 'Courier',
+              'helv'      : 'Helvetica',
+              'other'     : 'new century schoolbook',
+              'size'      : 12,
+              'lnsize'    : 10,
+              'backcol'   : '#FFFFFF',
+              'calltipbg' : '#FFFFB8',
+              'calltipfg' : '#404040',
             }
 
 
@@ -87,7 +104,8 @@ class EditWindow(stc.StyledTextCtrl):
         self.AutoCompStops(' .,;:([)]}\'"\\<>%^&+-=*/|`')
         # Do we want to automatically pop up command argument help?
         self.autoCallTip = True
-        self.CallTipSetBackground(wx.Colour(255, 255, 232))
+        self.CallTipSetBackground(FACES['calltipbg'])
+        self.CallTipSetForeground(FACES['calltipfg'])
         self.SetWrapMode(False)
         try:
             self.SetEndAtLastLine(False)
