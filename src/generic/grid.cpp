@@ -5358,6 +5358,9 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         return;
     }
 
+    wxClientDC dc(m_gridWin);
+    PrepareDC(dc);
+
     if ( m_currentCellCoords != wxGridNoCellCoords )
     {
         HideCellEditControl();
@@ -5377,28 +5380,16 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         // Otherwise refresh redraws the highlight!
         m_currentCellCoords = coords;
 
-        m_gridWin->Refresh( FALSE, &r );
+        CalcCellsExposed( r );
+        DrawGridCellArea(dc);
+        DrawAllGridLines( dc, r );
     }
 
     m_currentCellCoords = coords;
 
-    wxClientDC dc(m_gridWin);
-    PrepareDC(dc);
-
     wxGridCellAttr* attr = GetCellAttr(coords);
     DrawCellHighlight(dc, attr);
     attr->DecRef();
-
-#if 0
-        // SN: For my extended selection code, automatic
-        //     deselection is definitely not a good idea.
-        if ( IsSelection() )
-        {
-            wxRect r( SelectionToDeviceRect() );
-            ClearSelection();
-            if ( !GetBatchCount() ) m_gridWin->Refresh( FALSE, &r );
-        }
-#endif
 }
 
 

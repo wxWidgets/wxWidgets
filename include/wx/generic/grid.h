@@ -1311,15 +1311,6 @@ public:
     wxRect BlockToDeviceRect( const wxGridCellCoords & topLeft,
                               const wxGridCellCoords & bottomRight );
 
-    // This function returns the rectangle that encloses the selected cells
-    // in device coords and clipped to the client size of the grid window.
-    //
-    wxRect SelectionToDeviceRect()
-        {
-            return BlockToDeviceRect( m_selectingTopLeft,
-                                      m_selectingBottomRight );
-        }
-
     // Access or update the selection fore/back colours
     wxColour GetSelectionBackground() const
         { return m_selectionBackground; }
