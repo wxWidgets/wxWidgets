@@ -351,7 +351,7 @@ wxTextOutputStream::wxTextOutputStream(wxOutputStream& s, wxEOL mode)
     {
 #if defined(__WXMSW__) || defined(__WXPM__)
         m_mode = wxEOL_DOS;
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) && !defined(__DARWIN__)
         m_mode = wxEOL_MAC;
 #else
         m_mode = wxEOL_UNIX;
@@ -370,7 +370,7 @@ void wxTextOutputStream::SetMode(wxEOL mode)
     {
 #if defined(__WXMSW__) || defined(__WXPM__)
         m_mode = wxEOL_DOS;
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) && !defined(__DARWIN__)
         m_mode = wxEOL_MAC;
 #else
         m_mode = wxEOL_UNIX;
