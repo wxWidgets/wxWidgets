@@ -300,7 +300,8 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
     return IsLoaded();
 }
 
-/* static */ void wxDynamicLibrary::Unload(wxDllType handle)
+/* static */
+void wxDynamicLibrary::Unload(wxDllType handle)
 {
 #if defined(__WXPM__) || defined(__EMX__)
     DosFreeModule( handle );
@@ -313,7 +314,7 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
     CloseConnection( (CFragConnectionID*) &handle );
 #else
-#error  "runtime shared lib support not implemented"
+    #error  "runtime shared lib support not implemented"
 #endif
 }
 
