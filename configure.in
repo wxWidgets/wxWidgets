@@ -1557,11 +1557,11 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     dnl --- This will bloat the executable, but it'll work for now...
     LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
 
-	dnl add extra odbc libs if we have compiled in odbc
-	if test "$wxUSE_ODBC" = "yes" ; then
-		LIBS="$LIBS -lodbc32 -lole32 -loleaut32"
-	fi
-	
+    dnl add extra odbc libs if we have compiled in odbc
+    if test "$wxUSE_ODBC" = "yes" ; then
+        LIBS="$LIBS -lodbc32 -lole32 -loleaut32"
+    fi
+
     dnl -mwindows is needed to avoid that spawning of a console window
     if test "$wxUSE_MINGW" = 1; then
         LDFLAGS="$LDFLAGS -mwindows"
@@ -1852,8 +1852,8 @@ if test "$wxUSE_MOTIF" = 1; then
                 version = XpmLibraryVersion();
             ],
             [
-	        XPM_LINK="-lXpm "
-        	AC_DEFINE(wxHAVE_LIB_XPM)
+            XPM_LINK="-lXpm "
+            AC_DEFINE(wxHAVE_LIB_XPM)
                 AC_MSG_RESULT(found in default search path)
                 COMPILED_X_PROGRAM=0
             ],
@@ -2002,6 +2002,9 @@ if test "$wxUSE_SHARED" = "yes"; then
             SHARED_LD="${CC} -shared -fPIC -o"
             PIC_FLAG="-fPIC"
         else
+            dnl no idea why it wants it, but it does
+            LDFLAGS="-L/usr/lib"
+
             SHARED_LD="${CXX} -b -o"
             PIC_FLAG="+Z"
         fi
