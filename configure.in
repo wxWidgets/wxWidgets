@@ -3230,18 +3230,19 @@ if test "$TOOLKIT" != "MSW" ; then
             wxUSE_ODBC=sys
         fi
     fi
-    if test "$wxUSE_ODBC" != "no" ; then
-        AC_DEFINE(wxUSE_ODBC)
-        if test "$wxUSE_ODBC" = "builtin" ; then
-            AC_DEFINE(wxUSE_BUILTIN_IODBC)
-        fi
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
-    
-        dnl is this still necessary in 2.5?
-        WXODBCFLAG="-D_IODBC_"
+
+    if test "$wxUSE_ODBC" = "builtin" ; then
+        AC_DEFINE(wxUSE_BUILTIN_IODBC)
     fi
 fi
 
+if test "$wxUSE_ODBC" != "no" ; then
+    AC_DEFINE(wxUSE_ODBC)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
+
+    dnl is this still necessary?
+    WXODBCFLAG="-D_IODBC_"
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl wxDisplay Sanity checks
