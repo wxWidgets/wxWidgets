@@ -979,6 +979,11 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     }
 
     wxCHECK_RET( err == noErr, wxT("Mac OS error when trying to create new window") );
+
+    // the create commands are only for content rect, so we have to set the size again as
+    // structure bounds 
+    SetWindowBounds(  (WindowRef) m_macWindow , kWindowStructureRgn , &theBoundsRect ) ;
+
     wxAssociateWinWithMacWindow( (WindowRef) m_macWindow , this ) ;
     UMASetWTitle( (WindowRef) m_macWindow , title , m_font.GetEncoding() ) ;
     if ( m_macUsesCompositing )
