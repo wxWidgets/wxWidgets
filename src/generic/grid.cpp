@@ -4003,13 +4003,10 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 CalcDimensions();
                 m_colLabelWin->Refresh();
             }
-            return TRUE;
         }
-#if 0
-// There is no path to this code !!!!!!
-       result = TRUE;
+
+	result = TRUE;
         break;
-#endif
     }
 
     if (result && !GetBatchCount() )
