@@ -242,6 +242,9 @@ public:
     virtual int FindItem(const wxString& item) const;
     wxMenuItem* FindItem(int itemid, wxMenu **menu = NULL) const;
 
+    // find by position
+    wxMenuItem* FindItemByPosition(size_t position) const;
+
     // get/set items attributes
     void Enable(int itemid, bool enable);
     bool IsEnabled(int itemid) const;

@@ -81,6 +81,7 @@ All GUI ports:
 - Added BLOB support to wxDB (John Skiff)
 - Wizard now validates when pressing Back or Next
 - Implemented wxNotebook::DoGetBestSize so Fit now works
+- Added FindItemByPosition to wxMenu
 
 Unix:
 
