@@ -242,7 +242,7 @@ protected :
 class WXDLLIMPEXP_BASE wxBuiltInTypeInfo : public wxTypeInfo
 {
 public :
-	wxBuiltInTypeInfo( wxTypeKind kind ) { assert( kind < wxT_SET ) ; m_kind = kind ;}
+	wxBuiltInTypeInfo( wxTypeKind kind ) { wxASSERT_MSG( kind < wxT_SET , wxT("Illegal Kind for Base Type") ) ; m_kind = kind ;}
 } ;
 
 class WXDLLIMPEXP_BASE wxCustomTypeInfo : public wxTypeInfo
@@ -250,7 +250,7 @@ class WXDLLIMPEXP_BASE wxCustomTypeInfo : public wxTypeInfo
 public :
 	wxCustomTypeInfo( const wxChar *typeName )
 	{ m_kind = wxT_CUSTOM ; m_typeName = typeName ;}
-	const wxChar *GetTypeName() const { assert( m_kind == wxT_CUSTOM ) ; return m_typeName ; }
+	const wxChar *GetTypeName() const { return m_typeName ; }
 private :
 	const wxChar *m_typeName; // Kind == wxT_CUSTOM
 } ;
@@ -259,8 +259,8 @@ class WXDLLIMPEXP_BASE wxEnumTypeInfo : public wxTypeInfo
 {
 public :
 	wxEnumTypeInfo( wxTypeKind kind , wxEnumData* enumInfo )
-	{ assert( kind == wxT_ENUM || kind == wxT_SET ) ; m_kind = kind ; m_enumInfo = enumInfo ;}
-	const wxEnumData* GetEnumData() const { assert( m_kind == wxT_ENUM || m_kind == wxT_SET ) ; return m_enumInfo ; }
+	{ wxASSERT_MSG( kind == wxT_ENUM || kind == wxT_SET , wxT("Illegal Kind for Enum Type")) ; m_kind = kind ; m_enumInfo = enumInfo ;}
+	const wxEnumData* GetEnumData() const { return m_enumInfo ; }
 private :
 	wxEnumData *m_enumInfo; // Kind == wxT_ENUM or Kind == wxT_SET
 } ;
@@ -270,7 +270,7 @@ class WXDLLIMPEXP_BASE wxClassTypeInfo : public wxTypeInfo
 public :
 	wxClassTypeInfo( wxClassInfo* classInfo )
 	{ m_kind = wxT_OBJECT ; m_classInfo = classInfo ;}
-	const wxClassInfo *GetClassInfo() const { assert( m_kind == wxT_OBJECT ) ; return m_classInfo ; }
+	const wxClassInfo *GetClassInfo() const { return m_classInfo ; }
 private :
 	wxClassInfo *m_classInfo; // Kind == wxT_OBJECT - could be NULL
 } ;
@@ -283,7 +283,7 @@ public :
 	wxDelegateTypeInfo( int eventType , wxClassInfo* eventClass )
 	{ m_kind = wxT_DELEGATE ; m_eventClass = eventClass ; m_eventType = eventType ;}
 	const wxClassInfo *GetEventClass() const { assert( m_kind == wxT_DELEGATE ) ; return m_eventClass ; }
-	int GetEventType() const { assert( m_kind == wxT_DELEGATE ) ; return m_eventType ; }
+	int GetEventType() const { return m_eventType ; }
 private :
 	const wxClassInfo *m_eventClass; // (extended will merge into classinfo)
 	int m_eventType ;
@@ -416,7 +416,7 @@ public :
 	template<typename T> T Get() const
 	{
 		wxxVariantDataT<T> *dataptr = dynamic_cast<wxxVariantDataT<T>*> (m_data) ;
-		assert( dataptr ) ;
+		wxASSERT_MSG( dataptr , "Cast not possible" ) ;
 		return dataptr->Get() ;
 	}
 
@@ -978,7 +978,7 @@ public:
     // Call the Create method for a class
     virtual void Create (wxObject *object, int ParamCount, wxxVariant *Params)
 	{
-		wxASSERT( ParamCount == m_constructorPropertiesCount ) ;
+		wxASSERT_MSG( ParamCount == m_constructorPropertiesCount , wxT("Illegal Parameter Count for Create Method")) ;
 		m_constructor->Create( object , Params ) ;
 	}
 
@@ -1091,8 +1091,8 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
             (wxObjectConstructorFn) wxConstructorFor##name   ,   \
 			name::GetPropertiesStatic(),name::GetHandlersStatic(),name::sm_constructor##name , name::sm_constructorProperties##name ,     \
 			name::sm_constructorPropertiesCount##name , wxVariantToObjectConverter##name , wxObjectToVariantConverter##name);    \
- template<> void wxStringReadValue(const wxString & , name * & ){assert(0) ;}\
- template<> void wxStringWriteValue(wxString & , name* const & ){assert(0) ;}\
+ template<> void wxStringReadValue(const wxString & , name * & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") ) ;}\
+ template<> void wxStringWriteValue(wxString & , name* const & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") );}\
  template<> const wxTypeInfo* wxGetTypeInfo( name ** ){ static wxClassTypeInfo s_typeInfo(&name::sm_class##name) ; return &s_typeInfo ; }
 
 #define IMPLEMENT_DYNAMIC_CLASS( name , basename ) \
@@ -1113,8 +1113,8 @@ _IMPLEMENT_DYNAMIC_CLASS( name , basename , unit )
             (wxObjectConstructorFn) 0   ,   \
 			name::GetPropertiesStatic(),name::GetHandlersStatic(),0 , 0 ,     \
 			0 , 0 , 0 );    \
- template<> void wxStringReadValue(const wxString & , name * & ){assert(0) ;}\
- template<> void wxStringWriteValue(wxString & , name* const & ){assert(0) ;}\
+ template<> void wxStringReadValue(const wxString & , name * & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") );}\
+ template<> void wxStringWriteValue(wxString & , name* const & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") );}\
  template<> const wxTypeInfo* wxGetTypeInfo( name ** ){ static wxClassTypeInfo s_typeInfo(&name::sm_class##name) ; return &s_typeInfo ; }
 
 // this is for subclasses that still do not derive from wxobject
@@ -1126,8 +1126,8 @@ _IMPLEMENT_DYNAMIC_CLASS( name , basename , unit )
             (wxObjectConstructorFn) 0   ,   \
 			name::GetPropertiesStatic(),name::GetHandlersStatic(),0 , 0 ,     \
 			0 , 0 , 0 );    \
- template<> void wxStringReadValue(const wxString & , name * & ){assert(0) ;}\
- template<> void wxStringWriteValue(wxString & , name* const & ){assert(0) ;}\
+ template<> void wxStringReadValue(const wxString & , name * & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") );}\
+ template<> void wxStringWriteValue(wxString & , name* const & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") );}\
  template<> const wxTypeInfo* wxGetTypeInfo( name ** ){ static wxClassTypeInfo s_typeInfo(&name::sm_class##name) ; return &s_typeInfo ; }
 
     // Multiple inheritance with two base classes
@@ -1143,8 +1143,8 @@ _IMPLEMENT_DYNAMIC_CLASS( name , basename , unit )
             (wxObjectConstructorFn) wxConstructorFor##name   ,   \
 			name::GetPropertiesStatic(),name::GetHandlersStatic(),name::sm_constructor##name , name::sm_constructorProperties##name ,     \
 			name::sm_constructorPropertiesCount##name , wxVariantToObjectConverter##name , wxObjectToVariantConverter##name);    \
- template<> void wxStringReadValue(const wxString & , name * & ){assert(0) ;}\
- template<> void wxStringWriteValue(wxString & , name* const & ){assert(0) ;}\
+ template<> void wxStringReadValue(const wxString & , name * & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") );}\
+ template<> void wxStringWriteValue(wxString & , name* const & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") );}\
  template<> const wxTypeInfo* wxGetTypeInfo( name ** ){ static wxClassTypeInfo s_typeInfo(&name::sm_class##name) ; return &s_typeInfo ; }
 
 #define IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2) \
@@ -1171,8 +1171,8 @@ WX_CONSTRUCTOR_DUMMY( name )
             (wxObjectConstructorFn) 0   ,   \
 			name::GetPropertiesStatic(),name::GetHandlersStatic(),0 , 0 ,     \
 			0 , wxVariantToObjectConverter##name , wxObjectToVariantConverter##name);    \
- template<> void wxStringReadValue(const wxString & , name * & ){assert(0) ;}\
- template<> void wxStringWriteValue(wxString & , name* const & ){assert(0) ;}\
+ template<> void wxStringReadValue(const wxString & , name * & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") );}\
+ template<> void wxStringWriteValue(wxString & , name* const & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") );}\
  template<> const wxTypeInfo* wxGetTypeInfo( name ** ){ static wxClassTypeInfo s_typeInfo(&name::sm_class##name) ; return &s_typeInfo ; }
 
 #define IMPLEMENT_ABSTRACT_CLASS( name , basename ) \
