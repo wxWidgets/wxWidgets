@@ -219,3 +219,20 @@ Checking in xh_toolb.cpp;
 new revision: 1.7; previous revision: 1.6
 done
 
+
+18. Patch [669508] Define Win32 symbols for CW in platform.h
+
+Checking in platform.h;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/platform.h,v  <--  platform.h
+new revision: 1.13; previous revision: 1.12
+done
+
+
+19. Patch [669503] Patch to CW7 wxMSW project file
+
+Checking in wxWindowsW7.xml;
+/pack/cvsroots/wxwindows/wxWindows/src/wxWindowsW7.xml,v  <--  wxWindowsW7.xml
+new revision: 1.6; previous revision: 1.5
+done
+
+
