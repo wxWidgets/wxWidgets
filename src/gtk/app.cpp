@@ -82,6 +82,14 @@ void wxExit()
 
 bool wxYield()
 {
+#if wxUSE_THREADS
+    if ( !wxThread::IsMain() )
+    {
+        // can't call gtk_main_iteration() from other threads like this
+        return TRUE;
+    }
+#endif // wxUSE_THREADS
+
 #ifdef __WXDEBUG__
     static bool s_inYield = FALSE;
     
