@@ -359,13 +359,6 @@ static void TestTimeSet()
 {
     puts("\n*** wxDateTime construction test ***");
 
-#if 0
-    printf("Current time:\t%s\n", wxDateTime::Now().Format().c_str());
-    printf("Unix epoch:\t%s\n", wxDateTime((time_t)0).Format().c_str());
-    printf("Today noon:\t%s\n", wxDateTime(12, 0).Format().c_str());
-    printf("May 29, 1976:\t%s\n", wxDateTime(29, wxDateTime::May, 1976).Format().c_str());
-    printf("Jan 1, 1900:\t%s\n", wxDateTime(1, wxDateTime::Jan, 1900).Format().c_str());
-#else
     for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
     {
         const Date& d1 = testDates[n];
@@ -381,7 +374,6 @@ static void TestTimeSet()
                s1.c_str(), s2.c_str(),
                s1 == s2 ? "ok" : "ERROR");
     }
-#endif
 }
 
 // test time zones stuff
@@ -926,8 +918,8 @@ int main(int argc, char **argv)
     TestTimeZones();
     TestTimeRange();
     TestTimeTicks();
-    TestTimeJDN();
     }
+    TestTimeJDN();
 #endif // TEST_TIME
 
     wxUninitialize();

@@ -688,6 +688,7 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
         }
         else
         {
+            time += tz.GetOffset();
             tm = gmtime(&time);
         }
 
@@ -701,7 +702,7 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
         // remember the time and do the calculations with the date only - this
         // eliminates rounding errors of the floating point arithmetics
 
-        wxLongLong timeMidnight = m_time - GetTimeZone() * 1000;
+        wxLongLong timeMidnight = m_time + tz.GetOffset() * 1000;
 
         long timeOnly = (timeMidnight % MILLISECONDS_PER_DAY).ToLong();
 
