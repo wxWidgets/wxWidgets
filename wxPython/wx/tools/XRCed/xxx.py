@@ -395,7 +395,7 @@ class xxxFrame(xxxContainer):
     exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY']
 
 class xxxTool(xxxObject):
-    allParams = ['bitmap', 'bitmap2', 'toggle', 'tooltip', 'longhelp']
+    allParams = ['bitmap', 'bitmap2', 'toggle', 'tooltip', 'longhelp', 'label']
     required = ['bitmap']
     paramDict = {'bitmap2': ParamBitmap, 'toggle': ParamBool}
     hasStyle = False
@@ -407,7 +407,7 @@ class xxxToolBar(xxxContainer):
     paramDict = {'bitmapsize': ParamPosSize, 'margins': ParamPosSize,
                  'packing': ParamInt, 'separation': ParamInt,
                  'style': ParamNonGenericStyle}
-    winStyles = ['wxTB_FLAT', 'wxTB_DOCKABLE', 'wxTB_VERTICAL', 'wxTB_HORIZONTAL']
+    winStyles = ['wxTB_FLAT', 'wxTB_DOCKABLE', 'wxTB_VERTICAL', 'wxTB_HORIZONTAL', 'wxTB_TEXT']
 
 ################################################################################
 # Bitmap, Icon
