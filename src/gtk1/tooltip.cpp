@@ -35,6 +35,8 @@ static GdkColor     ss_fg;
 // wxToolTip
 //-----------------------------------------------------------------------------
 
+IMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject)
+
 wxToolTip::wxToolTip( const wxString &tip )
 {
     m_text = tip;
@@ -67,16 +69,16 @@ void wxToolTip::Apply( wxWindow *win )
 
 #if (GTK_MINOR_VERSION > 0)
         gtk_tooltips_force_window( ss_tooltips );
-	
-        GtkStyle *g_style = 
+
+        GtkStyle *g_style =
           gtk_style_copy(
             gtk_widget_get_style( ss_tooltips->tip_window ) );
-	    
+
         g_style->fg[GTK_STATE_NORMAL] = ss_fg;
         g_style->bg[GTK_STATE_NORMAL] = ss_bg;
         gdk_font_unref( g_style->font );
 	    g_style->font = gdk_font_ref( GtkGetDefaultGuiFont() );
-    
+
         gtk_widget_set_style( ss_tooltips->tip_window, g_style );
 #else
         gtk_tooltips_set_colors( ss_tooltips, &ss_bg, &ss_fg );
