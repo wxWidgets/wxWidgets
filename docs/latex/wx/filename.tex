@@ -73,7 +73,7 @@ The rules for determining if the file name is absolute or relative also depends
 on the file name format and the only portable way to answer to this question is
 to use \helpref{IsAbsolute}{wxfilenameisabsolute} method. To ensure that the
 filename is absolute you may use \helpref{MakeAbsolute}{wxfilenamemakeabsolute}.
-There is also an inverse function
+There is also an inverse function 
 \helpref{MakeRelativeTo}{wxfilenamemakerelativeto} which undoes what
 \helpref{Normalize(wxPATH\_NORM\_DOTS)}{wxfilenamenormalize} does.
 
@@ -645,6 +645,7 @@ variables will be expanded in it.
 
 \docparam{flags}{The kind of normalization to do with the file name. It can be
 any or-combination of the following constants:
+
 \begin{twocollist}
 \twocolitem{{\bf wxPATH\_NORM\_ENV\_VARS}}{replace env vars with their values}
 \twocolitem{{\bf wxPATH\_NORM\_DOTS}}{squeeze all .. and . and prepend cwd}
@@ -655,7 +656,7 @@ any or-combination of the following constants:
 \twocolitem{{\bf wxPATH\_NORM\_SHORTCUT}}{resolve if it is a shortcut (Windows only)}
 \twocolitem{{\bf wxPATH\_NORM\_ALL}}{all of previous flags except \texttt{wxPATH\_NORM\_CASE}}
 \end{twocollist}
-}
+}%
 
 \docparam{cwd}{If not empty, this directory will be used instead of current
 working directory in normalization.}

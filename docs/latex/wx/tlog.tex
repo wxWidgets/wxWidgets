@@ -91,7 +91,6 @@ You can also redirect the {\it wxLogXXX} calls to {\it cout} by just writing:
 Finally, there is also a possibility to redirect the output sent to {\it cout} 
 to a \helpref{wxTextCtrl}{wxtextctrl} by using the 
 \helpref{wxStreamToTextRedirector}{wxstreamtotextredirector} class.
-
 \item{\bf Flexibility} The output of wxLog functions can be redirected or
 suppressed entirely based on their importance, which is either impossible or
 difficult to do with traditional methods. For example, only error messages, or
@@ -152,7 +151,7 @@ suppress output of {\it wxLogXXX()} functions. As an example, trying to open a
 non-existing file will usually provoke an error message, but if for some
 reasons it is unwanted, just use this construction:
 
-{\small
+{\small%
 \begin{verbatim}
   wxFile file;
 
@@ -165,7 +164,7 @@ reasons it is unwanted, just use this construction:
   
   wxLogMessage("..."); // ok
 \end{verbatim}
-}
+}%
 \end{itemize}
 
 The log targets can also be combined: for example you may wish to redirect the

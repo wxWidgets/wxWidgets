@@ -91,6 +91,7 @@ derived from them) are ever posted.
 All wxWindows events implement a copy constructor, so the easiest way of
 implementing the Clone function is to implement a copy constructor for
 a new event (call it MyEvent) and then define the Clone function like this:
+
 \begin{verbatim}
     wxEvent *Clone(void) const { return new MyEvent(*this); }
 \end{verbatim}

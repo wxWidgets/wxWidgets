@@ -37,24 +37,25 @@ renderer but it may be changed or extended by the user, see
 
 All drawing functions take some standard parameters:
 \begin{itemize}
-    \item \arg{win} is the window being drawn. It is normally not used and when
-          it is it should only be used as a generic \helpref{wxWindow}{wxwindow} 
-          (in order to get its low level handle, for example), but you should
-          \emph{not} assume that it is of some given type as the same renderer
-          function may be reused for drawing different kinds of control.
-    \item \arg{dc} is the \helpref{wxDC}{wxdc} to draw on. Only this device
-          context should be used for drawing. It is not necessary to restore
-          pens and brushes for it on function exit but, on the other hand, you
-          shouldn't assume that it is in any specific state on function entry:
-          the rendering functions should always prepare it.
-    \item \arg{rect} the bounding rectangle for the element to be drawn.
-    \item \arg{flags} the optional flags (none by default) which can be a
-          combination of the \texttt{wxCONTROL\_XXX} constants below.
+\item \arg{win} is the window being drawn. It is normally not used and when
+it is it should only be used as a generic \helpref{wxWindow}{wxwindow} 
+(in order to get its low level handle, for example), but you should
+\emph{not} assume that it is of some given type as the same renderer
+function may be reused for drawing different kinds of control.
+\item \arg{dc} is the \helpref{wxDC}{wxdc} to draw on. Only this device
+context should be used for drawing. It is not necessary to restore
+pens and brushes for it on function exit but, on the other hand, you
+shouldn't assume that it is in any specific state on function entry:
+the rendering functions should always prepare it.
+\item \arg{rect} the bounding rectangle for the element to be drawn.
+\item \arg{flags} the optional flags (none by default) which can be a
+combination of the \texttt{wxCONTROL\_XXX} constants below.
 \end{itemize}
 
 \wxheading{Constants}
 
 The following rendering flags are defined:
+
 \begin{verbatim}
 enum
 {
@@ -70,7 +71,6 @@ enum
     wxCONTROL_CHECKABLE  = 0x00000080   // (menu) item can be checked
 };
 \end{verbatim}
-
 
 \wxheading{Derived from}
 

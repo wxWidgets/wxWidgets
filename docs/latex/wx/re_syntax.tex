@@ -10,7 +10,6 @@ pattern that matches certain strings and doesn't match others.
 
 \helpref{wxRegEx}{wxregex}
 
- 
 \subsection{Different Flavors of REs}
 
 \helpref{Syntax of the builtin regular expression library}{wxresyn}
@@ -22,11 +21,10 @@ of the traditional {\it egrep}, while BREs are roughly those of the traditional
 EREs with some significant extensions. 
 
 This manual page primarily describes
-AREs.  BREs mostly exist for backward compatibility in some old programs;
-they will be discussed at the \helpref{end}{wxresynbre}.  POSIX EREs are almost an exact subset
-of AREs.  Features of AREs that are not present in EREs will be indicated.
+AREs. BREs mostly exist for backward compatibility in some old programs;
+they will be discussed at the \helpref{end}{wxresynbre}. POSIX EREs are almost an exact subset
+of AREs. Features of AREs that are not present in EREs will be indicated.
 
- 
 \subsection{Regular Expression Syntax}
 
 \helpref{Syntax of the builtin regular expression library}{wxresyn}
@@ -36,16 +34,14 @@ the package written by Henry Spencer, based on the 1003.2 spec and some
 (not quite all) of the Perl5 extensions (thanks, Henry!).  Much of the description
 of regular expressions below is copied verbatim from his manual entry. 
 
-An
-ARE is one or more {\it branches}, separated by `{\bf $|$}', matching anything that matches
+An ARE is one or more {\it branches}, separated by `{\bf $|$}', matching anything that matches
 any of the branches. 
 
 A branch is zero or more {\it constraints} or {\it quantified
 atoms}, concatenated. It matches a match for the first, followed by a match
 for the second, etc; an empty branch matches the empty string. 
 
-A quantified
-atom is an {\it atom} possibly followed by a single {\it quantifier}. Without a quantifier,
+A quantified atom is an {\it atom} possibly followed by a single {\it quantifier}. Without a quantifier,
 it matches a match for the atom. The quantifiers, and what a so-quantified
 atom matches, are:
 
@@ -89,8 +85,7 @@ a digit, it is the beginning of a {\it bound} (see above)}
 character with no other significance, matches that character.}
 \end{twocollist}
 
-A {\it constraint}
-matches an empty string when specific conditions are met. A constraint may
+A {\it constraint} matches an empty string when specific conditions are met. A constraint may
 not be followed by a quantifier. The simple constraints are as follows;
 some more constraints are described later, under \helpref{Escapes}{wxresynescapes}.
 
@@ -107,7 +102,6 @@ The lookahead constraints may not contain back references
 (see later), and all parentheses within them are considered non-capturing.
 
 An RE may not end with `{\bf $\backslash$}'.
-
 
 \subsection{Bracket Expressions}\label{wxresynbracket}
 
@@ -218,7 +212,6 @@ as a sequence of word characters that is neither preceded nor followed
 by word characters. A word character is an {\it alnum} character or an underscore
 ({\bf \_}). These special bracket expressions are deprecated; users of AREs should
 use constraint escapes instead (see \helpref{Escapes}{wxresynescapes} below). 
-
 
 \subsection{Escapes}\label{wxresynescapes}
 
@@ -346,7 +339,6 @@ is taken as a back  reference if it comes after a suitable subexpression
 (i.e. the number is in the legal range for a back reference), and otherwise
 is taken as octal. 
 
-
 \subsection{Metasyntax}
 
 \helpref{Syntax of the builtin regular expression library}{wxresyn}
@@ -419,7 +411,6 @@ metasyntax extensions is available if the application (or an initial {\bf ***=}
 director) has specified that the user's input be treated as a literal string
 rather than as an RE. 
 
-
 \subsection{Matching}\label{wxresynmatching}
 
 \helpref{Syntax of the builtin regular expression library}{wxresyn}
@@ -440,8 +431,7 @@ atom with other non-greedy quantifiers (including {\bf \{m,n\}?} with {\it m} eq
 quantified atom in it which has a preference. An RE consisting of two or
 more branches connected by the {\bf $|$} operator prefers longest match. 
 
-Subject
-to the constraints imposed by the rules for matching the whole RE, subexpressions
+Subject to the constraints imposed by the rules for matching the whole RE, subexpressions
 also match the longest or shortest possible substrings, based on their
 preferences, with subexpressions starting earlier in the RE taking priority
 over ones starting later. Note that outer subexpressions thus take priority
@@ -484,7 +474,6 @@ If inverse partial newline-sensitive matching is specified,
 this affects {\bf $^$} and {\bf \$} as with newline-sensitive matching, but not {\bf .} and bracket
 expressions. This isn't very useful but is provided for symmetry. 
 
-
 \subsection{Limits And Compatibility}
 
 \helpref{Syntax of the builtin regular expression library}{wxresyn}
@@ -519,27 +508,23 @@ Henry Spencer's original 1986 {\it regexp} package, still in widespread use,
 implemented an early version of today's EREs. There are four incompatibilities between {\it regexp}'s
 near-EREs (`RREs' for short) and AREs. In roughly increasing order of significance:
 {\itemize
-\item
-In AREs, {\bf $\backslash$} followed by an alphanumeric character is either an escape or
+\item In AREs, {\bf $\backslash$} followed by an alphanumeric character is either an escape or
 an error, while in RREs, it was just another way of writing the  alphanumeric.
 This should not be a problem because there was no reason to write such
 a sequence in RREs. 
 
-\item%
-{\bf \{} followed by a digit in an ARE is the beginning of
+\item {\bf \{} followed by a digit in an ARE is the beginning of
 a bound, while in RREs, {\bf \{} was always an ordinary character. Such sequences
 should be rare, and will often result in an error because following characters
 will not look like a valid bound. 
 
-\item%
-In AREs, {\bf $\backslash$} remains a special character
+\item In AREs, {\bf $\backslash$} remains a special character
 within `{\bf $[]$}', so a literal {\bf $\backslash$} within {\bf $[]$} must be
 written `{\bf $\backslash\backslash$}'. {\bf $\backslash\backslash$} also gives a literal
  {\bf $\backslash$} within {\bf $[]$} in RREs, but only truly paranoid programmers routinely doubled
 the backslash. 
 
-\item%
-AREs report the longest/shortest match for the RE, rather
+\item AREs report the longest/shortest match for the RE, rather
 than the first found in a specified search order. This may affect some RREs
 which were written in the expectation that the first match would be reported.
 (The careful crafting of RREs to optimize the search order for fast matching
@@ -548,7 +533,6 @@ is largely insensitive to their complexity) but cases where the search
 order was exploited to deliberately  find a match which was {\it not} the longest/shortest
 will need rewriting.)  
 }
-
 
 \subsection{Basic Regular Expressions}\label{wxresynbre}
 
@@ -569,7 +553,6 @@ subexpression (after a possible leading `{\bf $^$}'). Finally, single-digit back
 are available, and {\bf $\backslash<$} and {\bf $\backslash>$} are synonyms
 for {\bf $[[:<:]]$} and {\bf $[[:>:]]$} respectively;
 no other escapes are available.  
-
 
 \subsection{Regular Expression Character Names}\label{wxresynchars}
 
@@ -674,3 +657,4 @@ Note that the character names are case sensitive.
 \twocolitem{tilde}{'$~$'}
 \twocolitem{DEL}{'$\backslash$177'}
 \end{twocollist}
+

@@ -9,6 +9,7 @@ of the strings used to the current language.
 \perlnote{In wxPerl you can't use the '\_' function name, so
 the {\tt Wx::Locale} module can export the {\tt gettext} and 
 {\tt gettext\_noop} under any given name. 
+
 \begin{verbatim}
   # this imports gettext ( equivalent to Wx::GetTranslation
   # and gettext_noop ( a noop )
@@ -22,9 +23,11 @@ the {\tt Wx::Locale} module can export the {\tt gettext} and
 
   button = Wx::Button->new( window, -1, gettext( ``Label'' ) );
 \end{verbatim}
+
 If you need to translate a lot of strings, then adding gettext( ) around
 each one is a long task ( that is why \_( ) was introduced ), so just choose
 a shorter name for gettext:
+
 \begin{verbatim}
   #
   use Wx::Locale 'gettext' => 't',
@@ -37,7 +40,7 @@ a shorter name for gettext:
 
   # ...
 \end{verbatim}
-}
+}%
 
 \wxheading{Derived from}
 

@@ -137,6 +137,7 @@ XRS file is esentially a renamed ZIP archive which means that you can manipulate
 it with standard ZIP tools. Note that if you are using XRS files, you have
 to initialize \helpref{wxFileSystem}{wxfilesystem} ZIP handler first! It is a simple
 thing to do:
+
 \begin{verbatim}
   #include <wx/filesys.h>
   #include <wx/fs_zip.h>
@@ -155,6 +156,7 @@ Use the {\tt -c} switch to
 {\tt wxrc} utility to produce C++ file with embedded resources. This file will
 contain a function called {\it InitXmlResource} (unless you override this with
 a command line switch). Use it to load the resource:
+
 \begin{verbatim}
   extern void InitXMLResource(); // defined in generated file
   ...
@@ -520,6 +522,7 @@ though you must still use {\tt XRCID} to refer to widget ids in the event
 table. 
 
 Example:
+
 \begin{verbatim}
 #include "resource.h"
 

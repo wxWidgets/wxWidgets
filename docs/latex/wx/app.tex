@@ -32,7 +32,6 @@ a reference to your application object) to be visible to other files.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-
 \membersection{wxApp::wxApp}
 
 \func{void}{wxApp}{\void}
@@ -345,7 +344,7 @@ work and, in fact, probably won't.
 
 \wxheading{See also}
 
-\helpref{wxHandleFatalExcetions}{wxhandlefatalexceptions}
+\helpref{wxHandleFatalExceptions}{wxhandlefatalexceptions}
 
 %% VZ: the wxApp event handler are private and should not be documented here!
 %%
@@ -455,10 +454,7 @@ Under Windows, OnQueryEndSession is called in response to the WM\_QUERYENDSESSIO
 \wxheading{See also}
 
 \helpref{wxWindow::Close}{wxwindowclose},\rtfsp
-\helpref{wxCloseEvent}{wxcloseevent}
-%% GD: OnXXX functions are not documented
-%%\helpref{wxApp::OnEndSession}{wxapponendsession}
-
+\helpref{wxCloseEvent}{wxcloseevent}\rtfsp
 
 \membersection{wxApp::OnRun}\label{wxapponrun}
 
@@ -472,7 +468,6 @@ the last frame has been deleted and
 \helpref{GetExitOnFrameDelete}{wxappgetexitonframedelete} flag is \true (this
 is the default).
 
-
 \membersection{wxApp::OnUnhandledException}\label{wxapponunhandledexception}
 
 \func{virtual void}{OnUnhandledException}{\void}
@@ -483,7 +478,6 @@ startup and shutdown might not be caught at all).
 Note that the exception type is lost by now, so if you want to really handle
 the exception you should override \helpref{OnRun()}{wxapponrun} and put a
 try/catch clause around the call to the base class version there.
-
 
 \membersection{wxApp::ProcessMessage}\label{wxappprocessmessage}
 

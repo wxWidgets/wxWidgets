@@ -172,6 +172,7 @@ Add the {\it mask} to the list of allowed masks for
 \helpref{wxLogTrace}{wxlogtrace}.
 
 \wxheading{See also}
+
 \helpref{RemoveTraceMask}{wxlogremovetracemask}
 \helpref{GetTraceMasks}{wxloggettracemasks}
 
@@ -183,6 +184,7 @@ Removes all trace masks previously set with
 \helpref{AddTraceMask}{wxlogaddtracemask}.
 
 \wxheading{See also}
+
 \helpref{RemoveTraceMask}{wxlogremovetracemask}
 
 \membersection{wxLog::GetTraceMasks}\label{wxloggettracemasks}
@@ -192,6 +194,7 @@ Removes all trace masks previously set with
 Returns the currently allowed list of string trace masks.
 
 \wxheading{See also}
+
 \helpref{AddTraceMask}{wxlogaddtracemask}.
 
 \membersection{wxLog::OnLog}\label{wxlogonlog}
@@ -228,7 +231,7 @@ logging immediately without waiting for \helpref{Flush}{wxlogflush} to be
 called (the standard GUI log target only shows the log dialog when it is
 flushed, so Suspend() works as expected with it).
 
-\wxheading{See also:}
+\wxheading{See also}
 
 \helpref{Resume}{wxlogresume},\\
 \helpref{wxLogNull}{wxlogoverview}
@@ -287,7 +290,7 @@ is already empty, nothing happens.
 
 Flushes the current log target if any, does nothing if there is none.
 
-See also:
+\wxheading{See also}
 
 \helpref{Flush}{wxlogflush}
 
@@ -500,7 +503,7 @@ For instance, the example of the overview:
 
   wxLogMessage("..."); // ok
 \end{verbatim}
-}
+}%
 
 would be better written as:
 
@@ -520,7 +523,7 @@ would be better written as:
       ...
   }
 \end{verbatim}
-}
+}%
 
 \wxheading{Derived from}
 

@@ -106,13 +106,13 @@ the previous value is used. Returns {\tt false} if the timer could not be starte
 If {\it oneShot}\/ is {\tt false} (the default), the \helpref{Notify}{wxtimernotify} 
 function will be called repeatedly until the timer is stopped. If {\tt true},
 it will be called only once and the timer will stop automatically. To make your
-code more readable you may also use the following symbolic constants
-\twocolwidtha{5cm}%
+code more readable you may also use the following symbolic constants:
+
+\twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{wxTIMER\_CONTINUOUS}{Start a normal, continuously running, timer}
 \twocolitem{wxTIMER\_ONE\_SHOT}{Start a one shot timer}
 \end{twocollist}
-
 
 If the timer was already running, it will be stopped by this method before
 restarting it.

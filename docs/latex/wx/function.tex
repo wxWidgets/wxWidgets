@@ -6,8 +6,6 @@ The functions and macros defined in wxWindows are described here: you can
 either look up a function using the alphabetical listing of them or find it in
 the corresponding topic.
 
-
-
 \section{Alphabetical functions and macros list}
 
 \helpref{CLASSINFO}{classinfo}\\
@@ -581,7 +579,7 @@ single string.}
 array, any additional ones are the command parameters and the array must be
 terminated with a NULL pointer.}
 
-\docparam{flags}{Combination of bit masks {\tt wxEXEC\_ASYNC},
+\docparam{flags}{Combination of bit masks {\tt wxEXEC\_ASYNC},\rtfsp
 {\tt wxEXEC\_SYNC} and {\tt wxEXEC\_NOHIDE}}
 
 \docparam{callback}{An optional pointer to \helpref{wxProcess}{wxprocess}}
@@ -635,7 +633,7 @@ enum wxSignal
 \end{verbatim}
 
 {\tt wxSIGNONE}, {\tt wxSIGKILL} and {\tt wxSIGTERM} have the same meaning
-under both Unix and Windows but all the other signals are equivalent to
+under both Unix and Windows but all the other signals are equivalent to 
 {\tt wxSIGTERM} under Windows.
 
 Returns 0 on success, -1 on failure. If {\it rc} parameter is not NULL, it will
@@ -797,7 +795,7 @@ other threads start calling it, if this is not the case this approach can
 
 \func{}{wxENTER\_CRIT\_SECT}{\param{wxCriticalSection\& }{cs}}
 
-This macro is equivalent to \helpref{cs.Enter()}{wxcriticalsectionenter} if
+This macro is equivalent to \helpref{cs.Enter()}{wxcriticalsectionenter} if 
 {\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
 
 
@@ -815,7 +813,7 @@ Returns {\tt true} if this thread is the main one. Always returns {\tt true} if
 
 \func{}{wxLEAVE\_CRIT\_SECT}{\param{wxCriticalSection\& }{cs}}
 
-This macro is equivalent to \helpref{cs.Leave()}{wxcriticalsectionleave} if
+This macro is equivalent to \helpref{cs.Leave()}{wxcriticalsectionleave} if 
 {\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
 
 
@@ -1561,18 +1559,22 @@ static array of strings containing the weekday names and which have to be
 translated (note that it is a bad example, really, as
 \helpref{wxDateTime}{wxdatetime} already can be used to get the localized week
 day names already). If you write
+
 \begin{verbatim}
 static const wxChar * const weekdays[] = { _("Mon"), ..., _("Sun") };
 ...
 // use weekdays[n] as usual
 \end{verbatim}
+
 the code wouldn't compile because the function calls are forbidden in the array
 initializer. So instead you should do
+
 \begin{verbatim}
 static const wxChar * const weekdays[] = { wxTRANSLATE("Mon"), ..., wxTRANSLATE("Sun") };
 ...
 // use wxGetTranslation(weekdays[n])
 \end{verbatim}
+
 here.
 
 Note that although the code {\bf would} compile if you simply omit
@@ -2670,7 +2672,7 @@ Initializes the DDE system. May be called multiple times without harm.
 This no longer needs to be called by the application: it will be called
 by wxWindows if necessary.
 
-See also \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEClient}{wxddeclient}, \helpref{wxDDEConnection}{wxddeconnection},
+See also \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEClient}{wxddeclient}, \helpref{wxDDEConnection}{wxddeconnection},\rtfsp
 \helpref{wxDDECleanUp}{wxddecleanup}.
 
 \wxheading{Include files}

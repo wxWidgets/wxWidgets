@@ -9,5 +9,5 @@ functions that take a \helpref{wxNotebookEvent}{wxnotebookevent} argument.
 wxEVT\_COMMAND\_NOTEBOOK\_PAGE\_CHANGED event.}
 \twocolitem{{\bf EVT\_NOTEBOOK\_PAGE\_CHANGING(id, func)}}{The page selection is about to be changed.
 Processes a wxEVT\_COMMAND\_NOTEBOOK\_PAGE\_CHANGING event. This event can be \helpref{vetoed}{wxnotifyeventveto}.}
-\end{twocollist}%
+\end{twocollist}
 

@@ -26,7 +26,8 @@ frames.
 
 Note that the modal dialog is one of the very few examples of
 wxWindow-derived objects which may be created on the stack and not on the heap.
-In other words, although this code snippet
+In other words, although this code snippet:
+
 \begin{verbatim}
     void AskUser()
     {
@@ -38,8 +39,10 @@ In other words, although this code snippet
         dlg->Destroy();
     }
 \end{verbatim}
+
 works, you can also achieve the same result by using a simpler code fragment
 below:
+
 \begin{verbatim}
     void AskUser()
     {

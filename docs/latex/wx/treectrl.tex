@@ -105,7 +105,7 @@ library are known to have bugs with handling the tree control colours: the
 usual symptom is that the expanded items leave black (or otherwise incorrectly
 coloured) background behind them, especially for the controls using non
 default background colour. The recommended solution is to upgrade the {\tt comctl32.dll}
-to a newer version: see
+to a newer version: see 
 \urlref{http://www.microsoft.com/msdownload/ieplatform/ie/comctrlx86.asp}{http://www.microsoft.com/msdownload/ieplatform/ie/comctrlx86.asp}.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -444,17 +444,16 @@ Returns the tree item data associated with the item.
 \twocolitem{{\bf GetPyData(item)}}{Returns the Python Object
 associated with the wxTreeItemData for the given item Id.}
 \end{twocollist}}
-}
+}%
 
 \perlnote{wxPerl provides the following shortcut method:
 \indented{2cm}{
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf GetPlData( item )}}{Returns the Perl data
-associated with the Wx::TreeItemData ( it is just the same as
-tree->GetItemData( item )->GetData(); ).}
+associated with the Wx::TreeItemData. It is just the same as
+tree->GetItemData(item)->GetData().}
 \end{twocollist}}
-}
-
+}%
 
 \membersection{wxTreeCtrl::GetItemFont}\label{wxtreectrlgetitemfont}
 
@@ -835,17 +834,16 @@ Sets the item client data.
 \twocolitem{{\bf SetPyData(item, obj)}}{Associate the given Python
 Object with the wxTreeItemData for the given item Id.}
 \end{twocollist}}
-}
+}%
 
 \perlnote{wxPerl provides the following shortcut method:
 \indented{2cm}{
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf SetPlData( item, data )}}{Sets the Perl data
-associated with the Wx::TreeItemData ( it is just the same as
-tree->GetItemData( item )->SetData( data ); ).}
+associated with the Wx::TreeItemData. It is just the same as
+tree->GetItemData(item)->SetData(data).}
 \end{twocollist}}
-}
-
+}%
 
 \membersection{wxTreeCtrl::SetItemFont}\label{wxtreectrlsetitemfont}
 
@@ -909,6 +907,8 @@ Image list assigned with this method will
 {\bf not} be deleted by wxTreeCtrl's destructor, you must delete it yourself.
 
 See also \helpref{AssignStateImageList}{wxtreectrlassignstateimagelist}.
+
+\membersection{wxTreeCtrl::SetWindowStyle}\label{wxtreectrlsetwindowstyle}
 
 \func{void}{SetWindowStyle}{\param{long}{styles}}
 

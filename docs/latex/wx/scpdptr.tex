@@ -49,12 +49,14 @@ pointer array.
 
 To declare the smart pointer class \texttt{CLASSNAME} containing pointes to a
 (possibly incomplete) type \texttt{TYPE} you should use
+
 \begin{verbatim}
     wxDECLARE_SCOPED_PTR( TYPE,     // type of the values
                                 CLASSNAME ); // name of the class
 \end{verbatim}
 
 And later, when \texttt{TYPE} is fully defined, you must also use
+
 \begin{verbatim}
     wxDEFINE_SCOPED_PTR( TYPE, CLASSNAME );
 \end{verbatim}
@@ -69,9 +71,11 @@ Alternatively, if you don't have to separate the point of declaration and
 definition of this class and if you accept the standard naming convention, that
 is that the scoped pointer for the class \texttt{Foo} is called 
 \texttt{FooPtr}, you can use a single macro which replaces two macros above:
+
 \begin{verbatim}
     wxDEFINE_SCOPED_PTR_TYPE( TYPE );
 \end{verbatim}
+
 Once again, in this cass \texttt{CLASSNAME} will be \texttt{TYPEPtr}.
 
 \wxheading{Include files}
