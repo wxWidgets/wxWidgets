@@ -83,7 +83,7 @@ public:
     wxBitmap(char **data) { CreateFromXpm((const char **)data); }
 
     // Load a file or resource
-    wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
+    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
 
     // New constructor for generalised creation from data
     wxBitmap(void *data, long type, int width, int height, int depth = 1);

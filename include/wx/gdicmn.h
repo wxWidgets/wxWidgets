@@ -48,7 +48,7 @@ class WXDLLEXPORT wxString;
 // ---------------------------------------------------------------------------
 
 // Bitmap flags
-enum
+enum wxBitmapType
 {
     wxBITMAP_TYPE_INVALID,          // should be == 0 for compatibility!
     wxBITMAP_TYPE_BMP,
