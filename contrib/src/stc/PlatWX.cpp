@@ -1200,11 +1200,11 @@ bool Platform::IsDBCSLeadByte(int codePage, char ch) {
 }
 
 int Platform::DBCSCharLength(int codePage, const char *s) {
-    return 0;
+    return 1;
 }
 
 int Platform::DBCSCharMaxLength() {
-    return 0;
+    return 1;
 }
 
 
