@@ -21,10 +21,12 @@
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 
 wxWindowDC::wxWindowDC(void)
+:   m_window(NULL)
 {
 };
 
 wxWindowDC::wxWindowDC( wxWindow *window )
+:   m_window(window)
 {
     wxFAIL_MSG("non-client window DC's are not supported");
 };
@@ -43,6 +45,7 @@ wxClientDC::wxClientDC(void)
 };
 
 wxClientDC::wxClientDC( wxWindow *window )
+:   wxWindowDC(window)
 {
 };
 
@@ -60,6 +63,7 @@ wxPaintDC::wxPaintDC(void)
 };
 
 wxPaintDC::wxPaintDC( wxWindow *window )
+:   wxWindowDC(window)
 {
     wxASSERT_MSG([NSView focusView]==window->GetNSView(), "PaintDC's NSView does not have focus.  Please use wxPaintDC only as the first DC created in a paint handler");
     // This transform flips the graphics since wxDC uses top-left origin
