@@ -644,6 +644,11 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
                     m_owner->GetImageSize( item->GetImage(), w, h );
                     m_bound_icon.width = w + 8;
                     m_bound_icon.height = h + 8;
+
+                    if ( m_bound_icon.width > m_bound_all.width )
+                        m_bound_all.width = m_bound_icon.width;
+                    if ( h + lh > m_bound_all.height - 4 )
+                        m_bound_all.height = h + lh + 4;
                 }
 
                 if (!item->HasText())
@@ -737,7 +742,8 @@ void wxListLineData::SetPosition( wxDC * WXUNUSED(dc),
                 wxListItemData *item = (wxListItemData*)node->Data();
                 if (item->HasImage())
                 {
-                    m_bound_icon.x = m_bound_all.x + 4 + (m_spacing/2) - (m_bound_icon.width/2);
+                    m_bound_icon.x = m_bound_all.x + 4
+                                        + (m_spacing - m_bound_icon.width)/2;
                     m_bound_icon.y = m_bound_all.y + 4;
                 }
                 if (item->HasText())
@@ -2232,8 +2238,26 @@ int wxListMainWindow::GetIndexOfLine( const wxListLineData *line )
 void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
 {
     m_dirty = TRUE;
-    if (which == wxIMAGE_LIST_NORMAL) m_normal_image_list = imageList;
-    if (which == wxIMAGE_LIST_SMALL) m_small_image_list = imageList;
+
+    // calc the spacing from the icon size
+    int width = 0,
+        height = 0;
+    if ( imageList->GetImageCount() )
+    {
+        imageList->GetSize(0, width, height);
+    }
+
+    if (which == wxIMAGE_LIST_NORMAL)
+    {
+        m_normal_image_list = imageList;
+        m_normal_spacing = width + 8;
+    }
+
+    if (which == wxIMAGE_LIST_SMALL)
+    {
+        m_small_image_list = imageList;
+        m_small_spacing = width + 14;
+    }
 }
 
 void wxListMainWindow::SetItemSpacing( int spacing, bool isSmall )
@@ -2251,7 +2275,7 @@ void wxListMainWindow::SetItemSpacing( int spacing, bool isSmall )
 
 int wxListMainWindow::GetItemSpacing( bool isSmall )
 {
-    if (isSmall) return m_small_spacing; else return m_normal_spacing;
+    return isSmall ? m_small_spacing : m_normal_spacing;
 }
 
 void wxListMainWindow::SetColumn( int col, wxListItem &item )
