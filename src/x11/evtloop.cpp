@@ -53,7 +53,7 @@ class wxSocketTableEntry: public wxObject
         m_callbackInput = NULL; m_callbackOutput = NULL;
         m_dataInput = NULL; m_dataOutput = NULL;
     }
-    
+
     int m_fdInput;
     int m_fdOutput;
     wxSocketCallback m_callbackInput;
@@ -175,7 +175,7 @@ void wxSocketTable::FillSets(fd_set* readset, fd_set* writeset, int* highest)
     while (node)
     {
         wxSocketTableEntry* entry = (wxSocketTableEntry*) node->GetData();
-        
+
         if (entry->m_fdInput != -1)
         {
             FD_SET(entry->m_fdInput, readset);
@@ -201,7 +201,7 @@ void wxSocketTable::ProcessEvents(fd_set* readset, fd_set* writeset)
     while (node)
     {
         wxSocketTableEntry* entry = (wxSocketTableEntry*) node->GetData();
-        
+
         if (entry->m_fdInput != -1 && FD_ISSET(entry->m_fdInput, readset))
         {
             (entry->m_callbackInput) (entry->m_fdInput, entry->m_dataInput);
@@ -293,7 +293,7 @@ bool wxEventLoopImpl::ProcessEvent(XEvent *event)
     // give us the chance to preprocess the message first
     if ( PreProcessEvent(event) )
         return TRUE;
-    
+
     // if it wasn't done, dispatch it to the corresponding window
     if (wxTheApp)
         return wxTheApp->ProcessXEvent((WXEvent*) event);
@@ -342,7 +342,7 @@ bool wxEventLoopImpl::SendIdleEvent()
 // wxEventLoop implementation
 // ============================================================================
 
-wxEventLoop *wxEventLoop::ms_activeLoop = NULL;
+wxEventLoop *wxEventLoopBase::ms_activeLoop = NULL;
 
 // ----------------------------------------------------------------------------
 // wxEventLoop running and exiting
@@ -353,18 +353,13 @@ wxEventLoop::~wxEventLoop()
     wxASSERT_MSG( !m_impl, _T("should have been deleted in Run()") );
 }
 
-bool wxEventLoop::IsRunning() const
-{
-    return m_impl != NULL;
-}
-
 int wxEventLoop::Run()
 {
     // event loops are not recursive, you need to create another loop!
     wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
 
     m_impl = new wxEventLoopImpl;
-    
+
     wxEventLoop *oldLoop = ms_activeLoop;
     ms_activeLoop = this;
 
@@ -443,7 +438,7 @@ bool wxEventLoop::Dispatch()
     // does also mean that idle processing will happen more
     // often, so we should probably limit idle processing to
     // not be repeated more than every N milliseconds.
-    
+
     if (XPending( wxGlobalDisplay() ) == 0)
     {
 #if wxUSE_NANOX
@@ -454,26 +449,26 @@ bool wxEventLoop::Dispatch()
         // Fall through to ProcessEvent.
         // we'll assume that ProcessEvent will just ignore
         // the event if there was a timeout and no event.
-            
+
 #else
         struct timeval tv;
         tv.tv_sec=0;
         tv.tv_usec=10000; // TODO make this configurable
         int fd = ConnectionNumber( wxGlobalDisplay() );
-        
+
         fd_set readset;
         fd_set writeset;
         int highest = fd;
         FD_ZERO(&readset);
         FD_ZERO(&writeset);
-        
+
         FD_SET(fd, &readset);
 
 #if wxUSE_SOCKETS
         if (wxTheSocketTable)
             wxTheSocketTable->FillSets( &readset, &writeset, &highest );
 #endif
-        
+
         if (select( highest+1, &readset, &writeset, NULL, &tv ) == 0)
         {
             // Timed out, so no event to process
@@ -493,13 +488,13 @@ bool wxEventLoop::Dispatch()
 #endif
         }
 #endif
-    } 
+    }
     else
     {
         XNextEvent( wxGlobalDisplay(), &event );
     }
-    
-    
+
+
     (void) m_impl->ProcessEvent( &event );
     return TRUE;
 }

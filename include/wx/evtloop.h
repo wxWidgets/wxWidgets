@@ -18,35 +18,35 @@
 
 #include "wx/utils.h"
 
-class WXDLLEXPORT wxEventLoopImpl;
+class WXDLLEXPORT wxEventLoop;
 
 // ----------------------------------------------------------------------------
 // wxEventLoop: a GUI event loop
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxEventLoop
+class WXDLLEXPORT wxEventLoopBase
 {
 public:
-    // ctor
-    wxEventLoop() { m_impl = NULL; }
+    // trivial, but needed (because of wxEventLoopBase) ctor
+    wxEventLoopBase() { }
 
     // dtor
-    virtual ~wxEventLoop();
+    virtual ~wxEventLoopBase() { }
 
     // start the event loop, return the exit code when it is finished
-    virtual int Run();
+    virtual int Run() = 0;
 
     // exit from the loop with the given exit code
-    virtual void Exit(int rc = 0);
+    virtual void Exit(int rc = 0) = 0;
 
     // return TRUE if any events are available
-    virtual bool Pending() const;
+    virtual bool Pending() const = 0;
 
     // dispatch a single event, return FALSE if we should exit from the loop
-    virtual bool Dispatch();
+    virtual bool Dispatch() = 0;
 
     // is the event loop running now?
-    virtual bool IsRunning() const;
+    virtual bool IsRunning() const = 0;
 
     // return currently active (running) event loop, may be NULL
     static wxEventLoop *GetActive() { return ms_activeLoop; }
@@ -64,11 +64,39 @@ protected:
     // the pointer to currently active loop
     static wxEventLoop *ms_activeLoop;
 
+    DECLARE_NO_COPY_CLASS(wxEventLoopBase)
+};
+
+// we're moving away from old m_impl wxEventLoop model as otherwise the user
+// code doesn't have access to platform-specific wxEventLoop methods and this
+// can sometimes be very useful (e.g. under MSW this is necessary for
+// integration with MFC) but currently this is done for MSW only, other ports
+// should follow a.s.a.p.
+#ifdef __WXMSW__
+    #include "wx/msw/evtloop.h"
+#else
+
+class WXDLLEXPORT wxEventLoopImpl;
+
+class WXDLLEXPORT wxEventLoop : public wxEventLoopBase
+{
+public:
+    wxEventLoop() { m_impl = NULL; }
+
+    virtual int Run();
+    virtual void Exit(int rc = 0);
+    virtual bool Pending() const;
+    virtual bool Dispatch();
+    virtual bool IsRunning() const { return m_impl != NULL; }
+
+protected:
     // the pointer to the port specific implementation class
     wxEventLoopImpl *m_impl;
 
     DECLARE_NO_COPY_CLASS(wxEventLoop)
-};
+}
+
+#endif // __WXMSW__/!__WXMSW__
 
 // ----------------------------------------------------------------------------
 // wxModalEventLoop

@@ -108,16 +108,11 @@ bool wxEventLoopImpl::SendIdleEvent()
 // wxEventLoop running and exiting
 // ----------------------------------------------------------------------------
 
-wxEventLoop *wxEventLoop::ms_activeLoop = NULL;
+wxEventLoop *wxEventLoopBase::ms_activeLoop = NULL;
 
 wxEventLoop::~wxEventLoop()
 {
     wxASSERT_MSG( !m_impl, _T("should have been deleted in Run()") );
-}
-
-bool wxEventLoop::IsRunning() const
-{
-    return m_impl != NULL;
 }
 
 int wxEventLoop::Run()
