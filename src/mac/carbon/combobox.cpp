@@ -205,6 +205,8 @@ wxComboBox::~wxComboBox()
 
 wxSize wxComboBox::DoGetBestSize() const
 {
+    if (!m_choice || !m_text)
+        return GetSize();
     wxSize size = m_choice->GetBestSize();
     
     if ( m_text != NULL )
