@@ -264,7 +264,7 @@ wxBEGIN_FLAGS( wxWindowStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -1383,6 +1383,8 @@ void wxWindowMSW::DragAcceptFiles(bool accept)
     HWND hWnd = GetHwnd();
     if ( hWnd )
         ::DragAcceptFiles(hWnd, (BOOL)accept);
+#else
+    wxUnusedVar(accept);
 #endif
 }
 
@@ -2396,18 +2398,18 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
         case WM_MOUSELEAVE:
            {
             wxASSERT_MSG( !m_mouseInWindow, wxT("the mouse should be in a window to generate this event!") );
-           
+
             // only process this message if the mouse is not in the window,
-            // This can also check for children in composite windows. 
+            // This can also check for children in composite windows.
             // however, this may mean the the wxEVT_LEAVE_WINDOW is never sent
-            // if the mouse does not enter the window from it's child before 
+            // if the mouse does not enter the window from it's child before
             // leaving the scope of the window. ( perhaps this can be picked
             // up in the OnIdle code as before, for this special case )
             if ( /*IsComposite() && */ !IsMouseInWindow() )
             {
                 m_mouseInWindow = false;
 
-                // Unfortunately no mouse state is passed with a WM_MOUSE_LEAVE 
+                // Unfortunately no mouse state is passed with a WM_MOUSE_LEAVE
                 int state = 0;
                 if ( wxIsShiftDown() )
                     state |= MK_SHIFT;
@@ -2446,7 +2448,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
            break;
 #endif
  // __WXWINCE__
-           
+
 #if wxUSE_MOUSEWHEEL
         case WM_MOUSEWHEEL:
             processed = HandleMouseWheel(wParam, lParam);
@@ -3047,7 +3049,7 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
           already has - so no WM_SIZE would be sent.
      */
 
-    
+
     // we don't use CW_USEDEFAULT here for several reasons:
     //
     //  1. it results in huge frames on modern screens (1000*800 is not
@@ -3438,7 +3440,7 @@ bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
     {
         return false;
     }
-    
+
     // notify the parent keeping track of focus for the kbd navigation
     // purposes that we got it
     wxChildFocusEvent eventFocus((wxWindow *)this);
@@ -3529,6 +3531,7 @@ bool wxWindowMSW::HandleInitDialog(WXHWND WXUNUSED(hWndFocus))
 bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
 {
 #if defined (__WXMICROWIN__) || defined(__WXWINCE__)
+    wxUnusedVar(wParam);
     return false;
 #else // __WXMICROWIN__
     HDROP hFilesInfo = (HDROP) wParam;
@@ -3703,7 +3706,7 @@ wxWindowMSW::MSWOnDrawItem(int WXUNUSED_UNLESS_ODRAWN(id),
 #else // !wxUSE_OWNER_DRAWN
     // we may still have owner-drawn buttons internally because we have to make
     // them owner-drawn to support colour change
-    wxControl *item = 
+    wxControl *item =
 #                     if wxUSE_BUTTON
                          wxDynamicCast(FindItem(id), wxButton)
 #                     else
@@ -4101,7 +4104,7 @@ void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
 {
     RECT rect;
     ::GetClientRect(GetHwnd(), &rect);
-    
+
     wxColour backgroundColour( GetBackgroundColour());
     COLORREF ref = PALETTERGB(backgroundColour.Red(),
                               backgroundColour.Green(),
@@ -4445,7 +4448,7 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
             trackinfo.hwndTrack = GetHwnd();
             //Use the commctrl.h _TrackMouseEvent, which will call the
             // appropriate TrackMouseEvent or emulate it ( win95 )
-            // else we need _WIN32_WINNT >= 0x0400 
+            // else we need _WIN32_WINNT >= 0x0400
             _TrackMouseEvent(&trackinfo);
 #endif
 #endif
@@ -4821,7 +4824,7 @@ bool wxWindowMSW::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
 
 bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
                               WXWORD pos, WXHWND control)
-{    
+{
     if ( control && control != m_hWnd ) // Prevent infinite recursion
     {
         wxWindow *child = wxFindWinFromHandle(control);
@@ -4904,13 +4907,13 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font)
     TEXTMETRIC tm;
     HDC dc = ::GetDC((HWND) wnd);
     HFONT was = 0;
-        
+
     //    the_font.UseResource();
     //    the_font.RealizeResource();
     HFONT fnt = (HFONT)the_font.GetResourceHandle(); // const_cast
     if ( fnt )
         was = (HFONT) SelectObject(dc,fnt);
-    
+
     GetTextMetrics(dc, &tm);
     if ( fnt && was )
     {
@@ -5125,7 +5128,7 @@ bool wxGetKeyState(wxKeyCode key)
         // get the toggle state of the special key
         state = GetKeyState(vkey);
         break;
-        
+
     default:
         // Get the current state of the physical key
         state = GetAsyncKeyState(vkey);
@@ -5904,7 +5907,7 @@ static void wxAdjustZOrder(wxWindow* parent)
         // Set the z-order correctly
         SetWindowPos((HWND) parent->GetHWND(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
     }
-    
+
     wxWindowList::compatibility_iterator current = parent->GetChildren().GetFirst();
     while (current)
     {
@@ -5922,7 +5925,7 @@ void wxWindowMSW::OnInitDialog( wxInitDialogEvent& event )
 #if wxUSE_STATBOX
     wxAdjustZOrder(this);
 #endif
-    
+
     event.Skip();
 }
 #endif

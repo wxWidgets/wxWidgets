@@ -553,10 +553,10 @@ void wxDC::Clear()
     ::FillRect(GetHdc(), &rect, brush);
     ::DeleteObject(brush);
 
+#ifndef __WXWINCE__
     int width = DeviceToLogicalXRel(VIEWPORT_EXTENT)*m_signX,
         height = DeviceToLogicalYRel(VIEWPORT_EXTENT)*m_signY;
 
-#ifndef __WXWINCE__
     ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
 
     ::SetViewportExtEx(GetHdc(), VIEWPORT_EXTENT, VIEWPORT_EXTENT, NULL);
@@ -819,7 +819,7 @@ wxDC::DoDrawPolyPolygon(int n,
 {
 #ifdef __WXWINCE__
     wxDCBase::DoDrawPolyPolygon(n, count, points, xoffset, yoffset, fillStyle);
-#else    
+#else
     WXMICROWIN_CHECK_HDC
 
     wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
@@ -840,11 +840,11 @@ wxDC::DoDrawPolyPolygon(int n,
         }
 #ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-#endif        
+#endif
         (void)PolyPolygon(GetHdc(), cpoints, count, n);
 #ifndef __WXWINCE__
         SetPolyFillMode(GetHdc(),prev);
-#endif        
+#endif
         delete[] cpoints;
     }
     else
@@ -854,11 +854,11 @@ wxDC::DoDrawPolyPolygon(int n,
 
 #ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-#endif        
+#endif
         (void)PolyPolygon(GetHdc(), (POINT*) points, count, n);
 #ifndef __WXWINCE__
         SetPolyFillMode(GetHdc(),prev);
-#endif        
+#endif
     }
 #endif
   // __WXWINCE__
@@ -2128,7 +2128,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                     // On Win9x this API fails most (all?) of the time, so
                     // logging it becomes quite distracting.  Since it falls
                     // back to the code below this is not really serious, so
-                    // don't log it.                     
+                    // don't log it.
                     //wxLogLastError(wxT("StretchDIBits"));
                 }
                 else
