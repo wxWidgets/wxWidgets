@@ -255,8 +255,8 @@ void wxHtmlContainerCell::Layout(int w)
        m_Width = 0;
        for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
             cell->Layout(0);
-            // this does two things: it recursively calls this code on all child
-            // contrainers and resets children's position to (0,0)
+            // this does two things: it recursively calls this code on all
+            // child contrainers and resets children's position to (0,0)
        return;
     }
 
