@@ -139,7 +139,6 @@ GENERICOBJS= #$ ExpandList("WXGENERICOBJS");
 # Not needed:
 #  $(MSWDIR)\colrdlgg.obj \
 #  $(MSWDIR)\fontdlgg.obj \
-#  $(MSWDIR)\helpxlp.obj \
 #  $(MSWDIR)\msgdlgg.obj \
 #  $(MSWDIR)\printps.obj \
 #  $(MSWDIR)\prntdlgg.obj \

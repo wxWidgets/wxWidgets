@@ -37,7 +37,6 @@ GENERICOBJS= choicdgg.obj \
 NONESSENTIALOBJS= printps.obj \
   prntdlgg.obj \
   msgdlgg.obj \
-  helpxlp.obj \
   colrdlgg.obj \
   fontdlgg.obj
 
@@ -722,9 +721,6 @@ fontdlgg.obj:     $(GENDIR)\fontdlgg.cpp
 
 gridg.obj:     $(GENDIR)\gridg.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(GENDIR)\gridg.cpp /BINARY gridg.obj
-
-helpxlp.obj:     $(GENDIR)\helpxlp.cpp
-  $(CCC) $(CPPFLAGS) $(IFLAGS) $(GENDIR)\helpxlp.cpp /BINARY helpxlp.obj
 
 laywin.obj:     $(GENDIR)\laywin.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(GENDIR)\laywin.cpp /BINARY laywin.obj
