@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        antiflickpl.h
+// Purpose:     Double-buffering plugin class for reducing flicker
 // Author:      Aleksandras Gluchovas (@Lithuania)
 // Modified by:
 // Created:     23/10/98
@@ -18,14 +18,18 @@
 
 #include "wx/fl/controlbar.h"
 
+/*
+Implements double-buffering to reduce flicker.
+Bitmap and memory DC buffers are shared "resources" among all instances of
+antiflicker plugins within the application.
+
+Locking for multithreaded applications is  not yet implemented.
+*/
+
 class cbAntiflickerPlugin : public cbPluginBase
 {
 	DECLARE_DYNAMIC_CLASS( cbAntiflickerPlugin )
 protected:
-	// double-buffers are shared "resource" among all instances of 
-	// antiflicker plugin within the application 
-	//
-	// TODO:: locking should be implemented, for multithreaded GUIs
 
 	static wxBitmap*   mpVertBuf;
 	static wxBitmap*   mpHorizBuf;
@@ -34,15 +38,16 @@ protected:
 
 	static int mRefCount;
 
-	wxDC*  mpLRUBufDc; // last-reacently-used buffer
-	wxRect mLRUArea;   // last-reacently-used area
+	wxDC*  mpLRUBufDc; // last-recently-used buffer
+	wxRect mLRUArea;   // last-recently-used area
 
 protected:
-	// returns NULL, if sutable buffer is not present
+	// Finds a suitable buffer. Returns NULL if a suitable buffer is not present.
 	wxDC* FindSuitableBuffer( const wxRect& forArea );
+	// Allocates a suitable buffer.
 	wxDC* AllocNewBuffer( const wxRect& forArea );
-	wxDC& GetWindowDC();
 
+	wxDC& GetWindowDC();
 	wxDC& GetClientDC();
 public:
 
@@ -52,9 +57,10 @@ public:
 
 	virtual ~cbAntiflickerPlugin();
 
-	// handlers for plugin events
-
+	// Handler for plugin event.
 	void OnStartDrawInArea ( cbStartDrawInAreaEvent& event );
+
+	// Handler for plugin event.
 	void OnFinishDrawInArea( cbFinishDrawInAreaEvent& event );
 
 	DECLARE_EVENT_TABLE()

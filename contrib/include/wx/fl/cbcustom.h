@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        cbcustom.h
+// Purpose:     cbSimpleCustomizationPlugin class declaration
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     28/10/98
@@ -18,6 +18,12 @@
 
 #include "wx/fl/controlbar.h"
 
+/*
+This class enables customization of a bar, popping up a
+menu and handling basic customization such as floating
+and horizontal/vertical alignment of the bar.
+*/
+
 class cbSimpleCustomizationPlugin : public cbPluginBase
 {
 public:
@@ -26,18 +32,19 @@ public:
 	int mCustMenuItemId;
 public:
 
+    // Default constructor.
 	cbSimpleCustomizationPlugin(void);
 
+    // Constructor, taking parent pane and a pane mask flag.
 	cbSimpleCustomizationPlugin( wxFrameLayout* pPanel, int paneMask = wxALL_PANES );
 
-	// plugin-event handlers
-
+	// Plugin event handler for cbCustomizeBarEvent.
 	void OnCustomizeBar( cbCustomizeBarEvent& event );
 
+	// Plugin event handler for cbCustomizeLayoutEvent.
 	void OnCustomizeLayout( cbCustomizeLayoutEvent& event );
 
-	// menu-event handler
-
+	// Menu event handler.
 	void OnMenuItemSelected( wxCommandEvent& event );
 
 	DECLARE_EVENT_TABLE()

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
-// Purpose:     Contrib. demo
+// Name:        bardragpl.h
+// Purpose:     cbBarDragPlugin class
 // Author:      Aleksandras Gluchovas
 // Modified by:
 // Created:     23/09/98
@@ -30,7 +30,7 @@ protected:
 	wxScreenDC*    mpScrDc;            // created while tracking hint-rect
 	wxCursor*      mpCurCursor;
 
-	// rectnagle shows the position/dimensions of the bar, 
+	// rectangle shows the position/dimensions of the bar,
 	// if it would be docked now
 
 	wxRect         mPrevHintRect;
@@ -57,62 +57,108 @@ public: /*** public properties ***/
 
 protected:
 
-
+    // Internal implementation function.
 	void AdjustHintRect( wxPoint& mousePos );
 
+    // Internal implementation function.
 	void ClipRectInFrame( wxRect& rect );
+
+    // Internal implementation function.
 	void ClipPosInFrame( wxPoint& pos );
 
+    // Internal implementation function. Finds the pane
+    // under the specified rectangle.
 	cbDockPane* HitTestPanes( wxRect& rect );
+
+    // Internal implementation function. Finds the pane
+    // under the specified point.
 	cbDockPane* HitTestPanes( wxPoint& pos );
+
+    // Internal implementation function.
 	bool HitsPane( cbDockPane* pPane, wxRect& rect );
 
+    // Internal implementation function.
 	void CalcOnScreenDims( wxRect& rect );
 
+    // Internal implementation function.
 	int  GetDistanceToPane( cbDockPane* pPane, wxPoint& mousePos );
 
+    // Internal implementation function.
 	bool IsInOtherPane ( wxPoint& mousePos );
+
+    // Internal implementation function.
 	bool IsInClientArea( wxPoint& mousePos );
+
+    // Internal implementation function.
 	bool IsInClientArea( wxRect& rect );
 
+    // Internal implementation function.
 	void StickToPane( cbDockPane* pPane, wxPoint& mousePos );
+
+    // Internal implementation function.
 	void UnstickFromPane( cbDockPane* pPane, wxPoint& mousePos );
 
+    // Internal implementation function.
 	int GetBarWidthInPane( cbDockPane* pPane );
+
+    // Internal implementation function.
 	int GetBarHeightInPane( cbDockPane* pPane );
 
 	// on-screen hint-tracking related methods
 
+    // Internal implementation function.
+    // Start showing a visual hint while dragging.
 	void StartTracking();
 
+    // Internal implementation function.
+    // Draw the visual hint while dragging.
 	void DrawHintRect ( wxRect& rect, bool isInClientRect);
+    // Internal implementation function.
+    // Erase the visual hint while dragging.
 	void EraseHintRect( wxRect& rect, bool isInClientRect);
 
+    // Internal implementation function.
+    // Stop showing the visual hint while dragging.
 	void FinishTracking();
 
+    // Internal implementation function.
+    // Draw the hint rectangle.
 	void DoDrawHintRect( wxRect& rect, bool isInClientRect);
 
+    // Internal implementation function.
+    // Converts the given rectangle from window to screen coordinates.
 	void RectToScr( wxRect& frameRect, wxRect& scrRect );
 
+    // Internal implementation function.
+    // Show the hint; called within OnMouseMove.
 	void ShowHint( bool prevWasInClient );
 
 public:
+    // Default constructor.
 	cbBarDragPlugin(void);
 
+    // Constructor taking a parent frame, and flag. See cbPluginBase.
 	cbBarDragPlugin( wxFrameLayout* pPanel, int paneMask = wxALL_PANES );
 
+    // Destructor.
 	virtual ~cbBarDragPlugin();
 
-	// handlers for plugin events
-
+	// Handler for plugin event.
 	void OnMouseMove( cbMotionEvent& event );
+
+	// Handler for plugin event.
 	void OnLButtonUp( cbLeftUpEvent& event );
+
+	// Handler for plugin event.
 	void OnLButtonDown( cbLeftDownEvent& event );
+
+	// Handler for plugin event.
 	void OnLDblClick( cbLeftDClickEvent& event );
 
-	// handles event, which oriniates from itself
+	// Handles event, which originates from itself.
 	void OnDrawHintRect( cbDrawHintRectEvent& event );        
 
+	// Handler for plugin event.
 	void OnStartBarDragging( cbStartBarDraggingEvent& event );
 
 	DECLARE_EVENT_TABLE()
