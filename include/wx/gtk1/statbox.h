@@ -40,6 +40,8 @@ public:
 
     virtual void SetLabel( const wxString &label );
 
+    bool SetFont( const wxFont &font );
+    
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
