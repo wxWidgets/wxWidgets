@@ -24,27 +24,27 @@
             wxToolBar() { }
 
             wxToolBar(wxWindow *parent,
-                      wxWindowID id,
+                      wxWindowID winid,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
                       long style = wxNO_BORDER | wxTB_HORIZONTAL,
                       const wxString& name = wxToolBarNameStr)
-                : wxToolBarSimple(parent, id, pos, size, style, name) { }
+                : wxToolBarSimple(parent, winid, pos, size, style, name) { }
 
             // the most commonly used version of AddTool()
-            wxToolBarToolBase *AddTool(int id,
+            wxToolBarToolBase *AddTool(int toolid,
                                const wxBitmap& bitmap,
                                const wxString& shortHelpString = wxEmptyString,
                                const wxString& longHelpString = wxEmptyString)
             {
-                return wxToolBarSimple::AddTool(id, bitmap, wxNullBitmap, FALSE, -1, -1, NULL,
+                return wxToolBarSimple::AddTool(toolid, bitmap, wxNullBitmap, FALSE, -1, -1, NULL,
                        shortHelpString, longHelpString);
             }
 
             // old form
             wxToolBarToolBase *AddTool
                                (
-                                   int id,
+                                   int toolid,
                                    const wxBitmap& bitmap,
                                    const wxBitmap& pushedBitmap,
                                    bool toggle,
@@ -53,14 +53,14 @@
                                    const wxString& longHelpString = wxEmptyString
                                )
             {
-                return wxToolBarSimple::AddTool(id, bitmap, pushedBitmap, toggle, -1, -1, clientData,
+                return wxToolBarSimple::AddTool(toolid, bitmap, pushedBitmap, toggle, -1, -1, clientData,
                        shortHelpString, longHelpString);
             }
 
             // virtual overridden
             virtual wxToolBarToolBase *AddTool
                                (
-                                   int id,
+                                   int toolid,
                                    const wxBitmap& bitmap,
                                    const wxBitmap& pushedBitmap,
                                    bool toggle,
@@ -71,7 +71,7 @@
                                    const wxString& longHelpString = wxEmptyString
                                )
             {
-                return wxToolBarSimple::AddTool(id, bitmap, pushedBitmap, toggle, xPos, yPos, clientData,
+                return wxToolBarSimple::AddTool(toolid, bitmap, pushedBitmap, toggle, xPos, yPos, clientData,
                        shortHelpString, longHelpString);
             }
 

@@ -38,7 +38,7 @@ class WXDLLEXPORT wxMenuItemBase : public wxObject
 public:
     // creation
     static wxMenuItem *New(wxMenu *parentMenu = (wxMenu *)NULL,
-                           int id = wxID_SEPARATOR,
+                           int itemid = wxID_SEPARATOR,
                            const wxString& text = wxEmptyString,
                            const wxString& help = wxEmptyString,
                            wxItemKind kind = wxITEM_NORMAL,
@@ -51,7 +51,7 @@ public:
     wxMenu *GetMenu() const { return m_parentMenu; }
 
     // get/set id
-    void SetId(int id) { m_id = id; }
+    void SetId(int itemid) { m_id = itemid; }
     int  GetId() const { return m_id; }
     bool IsSeparator() const { return m_id == wxID_SEPARATOR; }
 
@@ -109,13 +109,13 @@ public:
     const wxString& GetName() const { return GetText(); }
 
     static wxMenuItem *New(wxMenu *parentMenu,
-                           int id,
+                           int itemid,
                            const wxString& text,
                            const wxString& help,
                            bool isCheckable,
                            wxMenu *subMenu = (wxMenu *)NULL)
     {
-        return New(parentMenu, id, text, help,
+        return New(parentMenu, itemid, text, help,
                    isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu);
     }
 
@@ -131,7 +131,7 @@ protected:
 
     // this ctor is for the derived classes only, we're never created directly
     wxMenuItemBase(wxMenu *parentMenu = (wxMenu *)NULL,
-                   int id = wxID_SEPARATOR,
+                   int itemid = wxID_SEPARATOR,
                    const wxString& text = wxEmptyString,
                    const wxString& help = wxEmptyString,
                    wxItemKind kind = wxITEM_NORMAL,

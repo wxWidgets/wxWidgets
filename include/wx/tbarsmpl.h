@@ -33,7 +33,7 @@ public:
     wxToolBarSimple() { Init(); }
 
     wxToolBarSimple(wxWindow *parent,
-                    wxWindowID id,
+                    wxWindowID winid,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxNO_BORDER | wxTB_HORIZONTAL,
@@ -41,11 +41,11 @@ public:
     {
         Init();
 
-        Create(parent, id, pos, size, style, name);
+        Create(parent, winid, pos, size, style, name);
     }
 
     bool Create(wxWindow *parent,
-                wxWindowID id,
+                wxWindowID winid,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxNO_BORDER | wxTB_HORIZONTAL,
@@ -108,7 +108,7 @@ protected:
     // implement base class pure virtuals
     virtual wxToolBarToolBase *DoAddTool
                                (
-                                   int id,
+                                   int toolid,
                                    const wxString& label,
                                    const wxBitmap& bitmap,
                                    const wxBitmap& bmpDisabled,
@@ -127,7 +127,7 @@ protected:
     virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
 
-    virtual wxToolBarToolBase *CreateTool(int id,
+    virtual wxToolBarToolBase *CreateTool(int winid,
                                           const wxString& label,
                                           const wxBitmap& bmpNormal,
                                           const wxBitmap& bmpDisabled,

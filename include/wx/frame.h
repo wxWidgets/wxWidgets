@@ -52,7 +52,7 @@ public:
     virtual ~wxFrameBase();
 
     wxFrame *New(wxWindow *parent,
-                 wxWindowID id,
+                 wxWindowID winid,
                  const wxString& title,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
@@ -83,11 +83,11 @@ public:
 
 #ifdef WXWIN_COMPATIBILITY_2_2
     // call this to simulate a menu command
-    bool Command(int id) { return ProcessCommand(id); }
+    bool Command(int winid) { return ProcessCommand(winid); }
 #endif // WXWIN_COMPATIBILITY_2_2
 
     // process menu command: returns TRUE if processed
-    bool ProcessCommand(int id);
+    bool ProcessCommand(int winid);
 
     // status bar functions
     // --------------------
@@ -95,13 +95,13 @@ public:
     // create the main status bar by calling OnCreateStatusBar()
     virtual wxStatusBar* CreateStatusBar(int number = 1,
                                          long style = wxST_SIZEGRIP,
-                                         wxWindowID id = 0,
+                                         wxWindowID winid = 0,
                                          const wxString& name =
                                             wxStatusLineNameStr);
     // return a new status bar
     virtual wxStatusBar *OnCreateStatusBar(int number,
                                            long style,
-                                           wxWindowID id,
+                                           wxWindowID winid,
                                            const wxString& name);
     // get the main status bar
     virtual wxStatusBar *GetStatusBar() const { return m_frameStatusBar; }
@@ -125,11 +125,11 @@ public:
 #if wxUSE_TOOLBAR
     // create main toolbar bycalling OnCreateToolBar()
     virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL,
-                                     wxWindowID id = -1,
+                                     wxWindowID winid = -1,
                                      const wxString& name = wxToolBarNameStr);
     // return a new toolbar
     virtual wxToolBar *OnCreateToolBar(long style,
-                                       wxWindowID id,
+                                       wxWindowID winid,
                                        const wxString& name );
 
     // get/set the main toolbar
@@ -198,7 +198,7 @@ protected:
 
     // show the help string for this menu item in the given status bar: the
     // status bar pointer can be NULL; return TRUE if help was shown
-    bool ShowMenuHelp(wxStatusBar *statbar, int id);
+    bool ShowMenuHelp(wxStatusBar *statbar, int helpid);
 
     wxStatusBar *m_frameStatusBar;
 #endif // wxUSE_STATUSBAR

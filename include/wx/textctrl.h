@@ -327,9 +327,9 @@ END_DECLARE_EVENT_TYPES()
 class WXDLLEXPORT wxTextUrlEvent : public wxCommandEvent
 {
 public:
-    wxTextUrlEvent(int id, const wxMouseEvent& evtMouse,
+    wxTextUrlEvent(int winid, const wxMouseEvent& evtMouse,
                    long start, long end)
-        : wxCommandEvent(wxEVT_COMMAND_TEXT_URL, id)
+        : wxCommandEvent(wxEVT_COMMAND_TEXT_URL, winid)
         , m_evtMouse(evtMouse), m_start(start), m_end(end)
         { }
 

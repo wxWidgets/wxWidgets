@@ -188,7 +188,7 @@ protected:
             // construction
             wxTopLevelWindow() { Init(); }
             wxTopLevelWindow(wxWindow *parent,
-                       wxWindowID id,
+                       wxWindowID winid,
                        const wxString& title,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
@@ -196,7 +196,7 @@ protected:
                        const wxString& name = wxFrameNameStr)
             {
                 Init();
-                Create(parent, id, title, pos, size, style, name);
+                Create(parent, winid, title, pos, size, style, name);
             }
 
             DECLARE_DYNAMIC_CLASS(wxTopLevelWindow)

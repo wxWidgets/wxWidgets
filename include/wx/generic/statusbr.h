@@ -27,7 +27,7 @@ class WXDLLEXPORT wxStatusBarGeneric : public wxStatusBarBase
 public:
   wxStatusBarGeneric() { Init(); }
   wxStatusBarGeneric(wxWindow *parent,
-              wxWindowID id,
+              wxWindowID winid,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
@@ -35,30 +35,30 @@ public:
   {
       Init();
 
-      Create(parent, id, pos, size, style, name);
+      Create(parent, winid, pos, size, style, name);
   }
   wxStatusBarGeneric(wxWindow *parent,
-                     wxWindowID id,
+                     wxWindowID winid,
                      long style,
                      const wxString& name = wxPanelNameStr)
   {
       Init();
 
-      Create(parent, id, style, name);
+      Create(parent, winid, style, name);
   }
 
   virtual ~wxStatusBarGeneric();
 
-  bool Create(wxWindow *parent, wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID winid,
               const wxPoint& WXUNUSED(pos) = wxDefaultPosition,
               const wxSize& WXUNUSED(size) = wxDefaultSize,
               long style = 0,
               const wxString& name = wxPanelNameStr)
   {
-      return Create(parent, id, style, name);
+      return Create(parent, winid, style, name);
   }
 
-  bool Create(wxWindow *parent, wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID winid,
               long style,
               const wxString& name = wxPanelNameStr);
 
