@@ -184,6 +184,24 @@ void wxLogRelease(const char *szInterface, ULONG cRef)
   wxLogTrace("After %s::Release: m_cRef = %d", szInterface, cRef - 1);
 }
 
+#elif defined(__WXDEBUG__) && defined(__VISUALC__) && (__VISUALC__ <= 1000)
+
+// For VC++ 4
+void wxLogQueryInterface(const char *szInterface, REFIID riid)
+{
+  wxLogTrace("%s::QueryInterface", szInterface);
+}
+
+void wxLogAddRef(const char *szInterface, ULONG cRef)
+{
+  wxLogTrace("After %s::AddRef: m_cRef = %d", szInterface, cRef + 1);
+}
+
+void wxLogRelease(const char *szInterface, ULONG cRef)
+{
+  wxLogTrace("After %s::Release: m_cRef = %d", szInterface, cRef - 1);
+}
+
 #endif  //WXDEBUG
 
 #endif

@@ -1,5 +1,5 @@
 #
-# File:		makefile.nt
+# File:		makefile.vc
 # Author:	Julian Smart
 # Created:	1993
 # Updated:	
@@ -23,74 +23,70 @@ LINK_DEBUG_FLAGS="/RELEASE"
 
 all:
         cd $(WXDIR)\utils\dialoged\src
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
-        cd $(WXDIR)\utils\wxprop\src
-        nmake -f makefile.nt test DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\hytext\src
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\mfutils\src
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\tex2rtf\src
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\wxbuild\src
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\wxgraph\src
-#        nmake -f makefile.nt test DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc test DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\wxtree\src
-#        nmake -f makefile.nt test DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc test DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\wxhelp\src
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\wximage\win
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\wxweb\src
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\wxhelp2\src
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\clockwrk\src
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\wxanim\src
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\colours
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\ogl\src
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\utils\wxchart\src
-#        nmake -f makefile.nt test DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.vc test DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 
 clean:
-        cd $(WXDIR)\utils\wxprop\src
-        nmake -f makefile.nt clean
         cd $(WXDIR)\utils\dialoged\src
-        nmake -f makefile.nt clean
+        nmake -f makefile.vc clean
         cd $(WXDIR)\utils\nplugin
-        nmake -f makefile.nt clean
+        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\hytext\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\mfutils\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\tex2rtf\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\wxbuild\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\wxgraph\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\wxtree\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\wxhelp\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\wxhelp2\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\clockwrk\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\wxanim\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\colours
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\ogl\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\wxchart\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\wxweb\src
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean
 #        cd $(WXDIR)\utils\wximage\win
-#        nmake -f makefile.nt clean
+#        nmake -f makefile.vc clean

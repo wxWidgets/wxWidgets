@@ -397,6 +397,8 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxRESIZE_BORDER         0x0040
 #define wxDIALOG_MODAL          0x0020
 #define wxDIALOG_MODELESS       0x0000
+/* Add for normal Windows frame behaviour */
+#define wxFRAME_FLOAT_ON_PARENT 0x0020
 
 #define wxDEFAULT_FRAME_STYLE    (wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxTHICK_FRAME | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
 
@@ -498,6 +500,8 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxGA_PROGRESSBAR     0x0004
 #define wxGA_HORIZONTAL      wxHORIZONTAL
 #define wxGA_VERTICAL        wxVERTICAL
+/* Windows only */
+#define wxGA_SMOOTH          0x0008
 
 /*
  * wxSlider flags

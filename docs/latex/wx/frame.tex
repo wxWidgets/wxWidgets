@@ -33,6 +33,12 @@ the remaining size available to application windows.
 \twocolitem{\windowstyle{wxSYSTEM\_MENU}}{Displays a system menu (Windows and Motif only).}
 \twocolitem{\windowstyle{wxTHICK\_FRAME}}{Displays a thick frame around the window (Windows and Motif only).}
 \twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Displays a resizeable border around the window (Motif only).}
+\twocolitem{\windowstyle{wxFRAME\_FLOAT\_ON\_PARENT}}{Windows only. Causes the frame to be above the parent window in the
+z-order and not shown in the taskbar. Without this style, frames are created as top-level windows that may be obscured by
+the parent window, and frame titles are shown in the taskbar. On Motif and GTK, the behaviour is always as if this
+style is not specified.}
+\twocolitem{\windowstyle{wxFRAME\_TOOL\_WINDOW}}{Windows only. Causes a frame with a small titlebar to be created;
+the frame title does not appear in the taskbar.}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}. Currently the GTK port of wxWindows

@@ -119,7 +119,12 @@ bool wxFrame::Create(wxWindow *parent,
 
   // we pass NULL as parent to MSWCreate because frames with parents behave
   // very strangely under Win95 shell
-  MSWCreate(m_windowId, NULL, wxFrameClassName, this, title,
+  // Alteration by JACS: keep normal Windows behaviour (float on top of parent)
+  // with this style.
+  if ((m_windowStyle & wxFRAME_FLOAT_ON_PARENT) == 0)
+    parent = NULL;
+
+  MSWCreate(m_windowId, parent, wxFrameClassName, this, title,
             x, y, width, height, style);
 
   wxModelessWindows.Append(this);

@@ -721,6 +721,12 @@ only be called within an \helpref{OnPaint}{wxwindowonpaint} event handler.
 
 \helpref{wxRegion}{wxregion}, \helpref{wxRegionIterator}{wxregioniterator}, \helpref{wxWindow::OnPaint}{wxwindowonpaint}
 
+\membersection{wxWindow::GetValidator}\label{wxwindowgetvalidator}
+
+\constfunc{wxValidator*}{GetValidator}{\void}
+
+Returns a pointer to the current validator for the window, or NULL if there is none.
+
 \membersection{wxWindow::GetWindowStyleFlag}
 
 \constfunc{long}{GetWindowStyleFlag}{\void}
@@ -2118,7 +2124,14 @@ Sets the window's title. Applicable only to frames and dialogs.
 
 \helpref{wxWindow::GetTitle}{wxwindowgettitle}
 
-\membersection{wxWindow::Show}
+\membersection{wxWindow::SetValidator}\label{wxwindowsetvalidator}
+
+\func{virtual void}{SetValidator}{\param{const wxValidator\&}{ validator}}
+
+Deletes the current validator (if any) and sets the window validator, having called wxValidator::Clone to
+create a new validator of this type.
+
+\membersection{wxWindow::Show}\label{wxwindowshow}
 
 \func{virtual bool}{Show}{\param{const bool}{ show}}
 

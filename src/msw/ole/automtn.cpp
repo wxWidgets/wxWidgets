@@ -540,7 +540,7 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
     {
         oleVariant.vt = VT_BOOL;
         // 'bool' required for VC++ 4 apparently
-#if defined(__WATCOMC__) || (defined(_MSC_VER) && (_MSC_VER <= 1000))
+#if defined(__WATCOMC__) || (defined(__VISUALC__) && (__VISUALC__ <= 1000))
         oleVariant.bool = variant.GetBool();
 #else
         oleVariant.boolVal = variant.GetBool();
@@ -668,7 +668,7 @@ bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 
 	case VT_BOOL:
 		{
-#ifdef __WATCOMC__
+#if defined(__WATCOMC__) || (defined(_MSC_VER) && (_MSC_VER <= 1000)) //GC
 			variant = (bool) (oleVariant.bool != 0);
 #else
 			variant = (bool) (oleVariant.boolVal != 0);

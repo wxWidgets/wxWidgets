@@ -68,6 +68,11 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   int height = size.y;
 
   long msFlags = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
+  if (m_windowStyle & wxGA_VERTICAL)
+    msFlags |= PBS_VERTICAL;
+
+  if (m_windowStyle & wxGA_SMOOTH)
+    msFlags |= PBS_SMOOTH;
 
   HWND wx_button =
       CreateWindowEx(MakeExtendedStyle(m_windowStyle), PROGRESS_CLASS, NULL, msFlags,
