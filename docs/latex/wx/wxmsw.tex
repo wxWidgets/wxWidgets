@@ -123,17 +123,13 @@ implemented in the future for PocketPC.
 
 Menubars and toolbars can only be implemented using a combined control,
 but you can use the same syntax as before; wxWidgets will combine the menubar
-and toolbar. However, you cannot at present use arbitrary toolbar bitmaps
-(since they have to be loaded from a Windows resource), so only standard
-identifiers will work (wxID\_OPEN, wxID\_SAVE, wxID\_COPY and so on).
-
-The wxWidgets API doesn't currently provide us with a method of passing resource
-identifiers to AddTool, which is something that needs to be addressed.
+and toolbar.
 
 On PocketPC, a frame must always have a menubar, even if it's empty.
 
 On Smartphone, there are only two menu buttons, so a menubar is simulated
-using a nested menu on the right menu button.
+using a nested menu on the right menu button. Toolbars are simply ignored on
+Smartphone.
 
 \subsubsection{Closing windows in wxWinCE}
 
@@ -163,9 +159,6 @@ to be supported.
 
 \itemsep=0pt
 \begin{itemize}
-\item {\bf Custom toolbar buttons.} The bitmaps could be loaded from a resource
-named using the string normally used for a tool caption. Currently only buttons with
-standard identifiers can be used.
 \item {\bf Font dialog.} The generic font dialog is currently used, which
 needs to be simplified (and speeded up).
 \item {\bf Sizer speed.} Particularly for dialogs containing notebooks,
@@ -185,9 +178,10 @@ indicating that drawing works a bit differently between desktop and mobile versi
 Win32.
 \item {\bf wxStaticBitmap.} The About box in the "Life!" demo shows a bitmap that is
 the correct size on the emulator, but too small on a VGA Pocket Loox device.
+\item {\bf wxStaticLine.} Lines don't show up, and the documentation suggests that
+missing styles are implemented with WM\_PAINT.
 \item {\bf OK button.} We should allow the OK button on a dialog to be optional, perhaps
 by using wxCLOSE\_BOX to indicate when the OK button should be displayed.
-\item {\bf Data storage.} Methods for saving data on Smartphone need to be supported and documented.
 \item {\bf Dynamic adaptation.} We should probably be using run-time tests more
 than preprocessor tests, so that the same WinCE application can run on different
 versions of the operating system.

@@ -6,14 +6,11 @@ The name wxToolBar is defined to be a synonym for one of the following classes:
 \item {\bf wxToolBar95} The native Windows 95 toolbar. Used on Windows 95, NT 4 and above.
 \item {\bf wxToolBarMSW} A Windows implementation. Used on 16-bit Windows.
 \item {\bf wxToolBarGTK} The GTK toolbar.
-\item {\bf wxToolBarSimple} A simple implementation, with scrolling.
-Used on platforms with no native toolbar control, or where scrolling is required.
 \end{itemize}
 
 Note that the base class {\bf wxToolBarBase} defines
 automatic scrolling management functionality which is similar
 to \helpref{wxScrolledWindow}{wxscrolledwindow}, so please refer to this class also.
-Not all toolbars support scrolling, but wxToolBarSimple does.
 
 \wxheading{Derived from}
 
@@ -29,7 +26,6 @@ wxToolBarBase\\
 <wx/tbarbase.h> (the base class)\\
 <wx/tbarmsw.h> (the non-Windows 95 Windows toolbar class)\\
 <wx/tbar95.h> (the Windows 95/98 toolbar class)\\
-<wx/tbarsmpl.h> (the generic simple toolbar class)
 
 \wxheading{Remarks}
 
@@ -206,7 +202,7 @@ Adds a separator for spacing groups of tools.
 Adds a tool to the toolbar. The first (short and most commonly used) version
 has fewer parameters than the full version at the price of not being able to
 specify some of the more rarely used button features. The last version allows
-to add an existing tool.
+you to add an existing tool.
 
 \wxheading{Parameters}
 
@@ -332,8 +328,7 @@ Enables or disables the tool.
 
 \wxheading{Remarks}
 
-For wxToolBarSimple, does nothing. Some other implementations
-will change the visible state of the tool to indicate that it is disabled.
+Some implementations will change the visible state of the tool to indicate that it is disabled.
 
 \wxheading{See also}
 
@@ -659,6 +654,13 @@ change to take place, it will happen immediately.
 \wxheading{See also}
 
 \helpref{DeleteTool}{wxtoolbardeletetool}
+
+\membersection{wxToolBar::SetBitmapResource}\label{wxtoolbarsetbitmapresource}
+
+\func{void}{SetBitmapResource}{\param{int }{resourceId}}
+
+Sets the bitmap resource identifier for specifying tool bitmaps as indices
+into a custom bitmap. Windows CE only.
 
 \membersection{wxToolBar::SetMargins}\label{wxtoolbarsetmargins}
 

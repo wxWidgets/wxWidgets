@@ -124,9 +124,6 @@ protected:
     // should be called whenever the toolbar size changes
     void UpdateSize();
 
-    // the big bitmap containing all bitmaps of the toolbar buttons
-    WXHBITMAP m_hBitmap;
-
     // the total number of toolbar elements
     size_t m_nButtons;
 
