@@ -894,9 +894,16 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
 // frame state: maximized/iconized/normal
 // ----------------------------------------------------------------------------
 
-void wxTopLevelWindowGTK::Maximize(bool WXUNUSED(maximize))
+void wxTopLevelWindowGTK::Maximize(bool maximize)
 {
+#ifdef __WXGTK20__
+    if (maximize)
+        gtk_window_maximize( GTK_WINDOW( m_widget ) );
+    else
+        gtk_window_unmaximize( GTK_WINDOW( m_widget ) );
+#else
     wxFAIL_MSG( _T("not implemented") );
+#endif
 }
 
 bool wxTopLevelWindowGTK::IsMaximized() const
@@ -909,11 +916,22 @@ bool wxTopLevelWindowGTK::IsMaximized() const
 
 void wxTopLevelWindowGTK::Restore()
 {
+#ifdef __GTK20__
+    // "Present" seems similar enough to "restore"
+    gtk_window_present( GTK_WINDOW( m_widget ) );
+#else
     wxFAIL_MSG( _T("not implemented") );
+#endif
 }
 
 void wxTopLevelWindowGTK::Iconize( bool iconize )
 {
+#ifdef __WXGTK20__
+    if (iconize)
+        gtk_window_iconify( GTK_WINDOW( m_widget ) );
+    else
+        gtk_window_deiconify( GTK_WINDOW( m_widget ) );
+#else
    if (iconize)
    {
        GdkWindow *window = m_widget->window;
@@ -925,6 +943,7 @@ void wxTopLevelWindowGTK::Iconize( bool iconize )
                        GDK_WINDOW_XWINDOW( window ),
                        DefaultScreen( GDK_DISPLAY() ) );
    }
+#endif
 }
 
 bool wxTopLevelWindowGTK::IsIconized() const
