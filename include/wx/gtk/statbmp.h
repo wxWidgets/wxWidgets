@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -41,23 +41,36 @@ extern const char* wxStaticBitmapNameStr;
 
 class wxStaticBitmap: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
-  
-  public:
-  
-    wxStaticBitmap(void);
-    wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap& label,
-      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      long style = 0, const wxString& name = wxStaticBitmapNameStr );
-    bool Create( wxWindow *parent, wxWindowID id, const wxBitmap& label,
-      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      long style = 0, const wxString& name = wxStaticBitmapNameStr);
+    DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
+
+public:
+    wxStaticBitmap();
+    wxStaticBitmap( wxWindow *parent,
+                    wxWindowID id,
+                    const wxBitmap& label,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = 0,
+                    const wxString& name = wxStaticBitmapNameStr );
+    bool Create( wxWindow *parent,
+                 wxWindowID id,
+                 const wxBitmap& label,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = 0,
+                 const wxString& name = wxStaticBitmapNameStr);
+
     virtual void SetBitmap( const wxBitmap& bitmap );
-    wxBitmap& GetBitmap(void) const { return (wxBitmap&)m_bitmap; }
-    
- private:
- 
-   wxBitmap   m_bitmap;
+
+    wxBitmap& GetBitmap() { return m_bitmap; }
+    const wxBitmap& GetBitmap() const { return m_bitmap; }
+
+    // for compatibility with wxMSW
+    wxIcon& GetIcon()
+        { return *(wxDynamicCast(&m_bitmap, wxIcon)); }
+
+private:
+    wxBitmap   m_bitmap;
 };
 
 #endif
