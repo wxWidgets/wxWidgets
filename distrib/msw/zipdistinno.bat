@@ -114,7 +114,7 @@ rem Misc. utils not in the main distribution
 zip32 -@ %dest\utils-%version%.zip < %src\distrib\msw\utils.rsp
 zip32 -@ -u %dest\utils-%version%.zip < %src\distrib\msw\utilmake.rsp
 
-copy %src\docs\changes.txt %dest\changed-%version%.txt
+copy %src\docs\changes.txt %dest\changes-%version%.txt
 copy %src\docs\msw\install.txt %dest\install_msw-%version%.txt
 copy %src\docs\motif\install.txt %dest\install_motif-%version%.txt
 copy %src\docs\gtk\install.txt %dest\install_gtk-%version%.txt
