@@ -1125,6 +1125,15 @@ wxMask *wxBitmap::GetMask() const
     return GetBitmapData() ? GetBitmapData()->GetMask() : (wxMask *) NULL;
 }
 
+wxBitmap wxBitmap::GetMaskBitmap() const
+{
+    wxBitmap bmp;
+    wxMask *mask = GetMask();
+    if ( mask )
+        bmp.SetHBITMAP(mask->GetMaskBitmap());
+    return bmp;
+}
+
 #ifdef __WXDEBUG__
 
 wxDC *wxBitmap::GetSelectedInto() const

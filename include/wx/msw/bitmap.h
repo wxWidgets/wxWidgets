@@ -145,6 +145,7 @@ public:
 #endif // wxUSE_PALETTE
 
     wxMask *GetMask() const;
+    wxBitmap GetMaskBitmap() const;
     void SetMask(wxMask *mask);
 
     bool operator==(const wxBitmap& bitmap) const { return m_refData == bitmap.m_refData; }
