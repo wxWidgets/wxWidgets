@@ -4,12 +4,13 @@ wxWindows 2 Change Log
 2.4.0
 -----
 
+2.3.0
+-----
+
 wxBase:
 
 - wxMimeTypesManager now can create file associations too
-
-2.3.0
------
+- wxCopyFile() respects the file permissions (Roland Scholz)
 
 wxMSW:
 

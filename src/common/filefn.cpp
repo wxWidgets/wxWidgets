@@ -31,7 +31,7 @@
 
 #include "wx/utils.h"
 #include "wx/intl.h"
-#include "wx/ffile.h"
+#include "wx/file.h"
 #include "wx/filename.h"
 
 // there are just too many of those...
@@ -72,6 +72,7 @@
 #if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
     #include <direct.h>
     #include <dos.h>
+    #include <io.h>
 #endif // __WINDOWS__
 #endif // native Win compiler
 
@@ -996,14 +997,50 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
 bool
 wxCopyFile (const wxString& file1, const wxString& file2)
 {
-    wxFFile fileIn(file1, "rb");
+    wxStructStat fbuf;
+
+    // get permissions of file1
+    if ( wxStat(file1, &fbuf) != 0 )
+    {
+        // the file probably doesn't exist or we haven't the rights to read
+        // from it anyhow
+        wxLogSysError(_("Impossible to get permissions for file '%s'"),
+                      file1.c_str());
+        return FALSE;
+    }
+
+    // open file1 for reading
+    wxFile fileIn(file1, wxFile::read);
     if ( !fileIn.IsOpened() )
         return FALSE;
 
-    wxFFile fileOut(file2, "wb");
-    if ( !fileOut.IsOpened() )
+    // remove file2, if it exists. This is needed for creating
+    // file2 with the correct permissions in the next step
+    if ( wxFileExists(file2) && !wxRemoveFile(file2) )
+    {
+        wxLogSysError(_("Impossible to overwrite the file '%s'"),
+                      file2.c_str());
+        return FALSE;
+    }
+
+#ifdef __UNIX__
+    // reset the umask as we want to create the file with exactly the same
+    // permissions as the original one
+    mode_t oldUmask = umask( 0 );
+#endif // __UNIX__
+
+    // create file2 with the same permissions than file1 and open it for
+    // writing
+    wxFile fileOut;
+    if ( !fileOut.Create(file2, TRUE, fbuf.st_mode & 0777) )
         return FALSE;
 
+#ifdef __UNIX__
+    /// restore the old umask
+    umask(oldUmask);
+#endif // __UNIX__
+
+    // copy contents of file1 to file2
     char buf[4096];
     size_t count;
     for ( ;; )
@@ -1018,6 +1055,13 @@ wxCopyFile (const wxString& file1, const wxString& file2)
 
         if ( fileOut.Write(buf, count) < count )
             return FALSE;
+    }
+
+    if ( chmod(file2, fbuf.st_mode) != 0 )
+    {
+        wxLogSysError(_("Impossible to set permissions for the file '%s'"),
+                      file2.c_str());
+        return FALSE;
     }
 
     return TRUE;
