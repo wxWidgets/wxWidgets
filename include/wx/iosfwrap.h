@@ -12,12 +12,11 @@
 #if wxUSE_STD_IOSTREAM
 
 #if wxUSE_IOSTREAMH
-    // There is no pre-ANSI iosfwd header (?). We include the full decarations.
+    // There is no pre-ANSI iosfwd header so we include the full declarations.
 #   include <iostream.h>
 #else
 #   include <iosfwd>
 #endif
 
-#endif
-  // wxUSE_STD_IOSTREAM
+#endif // wxUSE_STD_IOSTREAM
 
