@@ -3074,10 +3074,14 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
 
     if ( pos >= curNumRows )
     {
-        wxString errmsg;
-        errmsg.Printf(wxT("Called wxGridStringTable::DeleteRows(pos=%d, N=%d)\nPos value is invalid for present table with %d rows"),
-                      pos, numRows, curNumRows );
-        wxFAIL_MSG( errmsg );
+        wxFAIL_MSG( wxString::Format
+                    (
+                        wxT("Called wxGridStringTable::DeleteRows(pos=%lu, N=%lu)\nPos value is invalid for present table with %lu rows"),
+                        (unsigned long)pos,
+                        (unsigned long)numRows,
+                        (unsigned long)curNumRows
+                    ) );
+
         return FALSE;
     }
 
@@ -3182,10 +3186,13 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
 
     if ( pos >= curNumCols )
     {
-        wxString errmsg;
-        errmsg.Printf( wxT("Called wxGridStringTable::DeleteCols(pos=%d, N=%d)...\nPos value is invalid for present table with %d cols"),
-                        pos, numCols, curNumCols );
-        wxFAIL_MSG( errmsg );
+        wxFAIL_MSG( wxString::Format
+                    (
+                        wxT("Called wxGridStringTable::DeleteCols(pos=%lu, N=%lu)\nPos value is invalid for present table with %lu cols"),
+                        (unsigned long)pos,
+                        (unsigned long)numCols,
+                        (unsigned long)curNumCols
+                    ) );
         return FALSE;
     }
 
