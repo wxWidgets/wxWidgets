@@ -110,7 +110,8 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
 
 bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
 {
-    return info.encoding == wxFont::GetDefaultEncoding() ;
+	// basically we should be able to support every encoding via the OS
+    return true ;
 }
 
 

@@ -216,13 +216,13 @@ bool UMAGetProcessModeDoesActivateOnFGSwitch()
 
 // menu manager
 
-MenuRef UMANewMenu( SInt16 id , const wxString& title )
+MenuRef UMANewMenu( SInt16 id , const wxString& title , wxFontEncoding encoding )
 {
     wxString str = wxStripMenuCodes( title ) ;
     MenuRef menu ;
 #if TARGET_CARBON
     CreateNewMenu( id , 0 , &menu ) ;
-    SetMenuTitleWithCFString( menu , wxMacCFStringHolder(str) ) ;
+    SetMenuTitleWithCFString( menu , wxMacCFStringHolder(str , encoding ) ) ;
 #else
     Str255 ptitle ;
     wxMacStringToPascal( str , ptitle ) ;
@@ -231,11 +231,11 @@ MenuRef UMANewMenu( SInt16 id , const wxString& title )
     return menu ;
 }
 
-void UMASetMenuTitle( MenuRef menu , const wxString& title )
+void UMASetMenuTitle( MenuRef menu , const wxString& title , wxFontEncoding encoding)
 {
     wxString str = wxStripMenuCodes( title ) ;
 #if TARGET_CARBON
-    SetMenuTitleWithCFString( menu , wxMacCFStringHolder(str) ) ;
+    SetMenuTitleWithCFString( menu , wxMacCFStringHolder(str , encoding) ) ;
 #else
     Str255 ptitle ;
     wxMacStringToPascal( str , ptitle ) ;
@@ -243,11 +243,11 @@ void UMASetMenuTitle( MenuRef menu , const wxString& title )
 #endif
 }
 
-void UMASetMenuItemText(  MenuRef menu,  MenuItemIndex item, const wxString& title )
+void UMASetMenuItemText(  MenuRef menu,  MenuItemIndex item, const wxString& title , wxFontEncoding encoding)
 {
     wxString str = wxStripMenuCodes( title ) ;
 #if TARGET_CARBON
-    SetMenuItemTextWithCFString( menu , item , wxMacCFStringHolder(str) ) ;
+    SetMenuItemTextWithCFString( menu , item , wxMacCFStringHolder(str , encoding) ) ;
 #else
     Str255 ptitle ;
     wxMacStringToPascal( str , ptitle ) ;
@@ -269,17 +269,17 @@ void UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex inItem , bool enable)
         DisableMenuItem( inMenu , inItem ) ;
 }
 
-void UMAAppendSubMenuItem( MenuRef menu , const wxString& title , SInt16 id )
+void UMAAppendSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , SInt16 id )
 {
     MacAppendMenu(menu, "\pA");
-    UMASetMenuItemText(menu, (SInt16) ::CountMenuItems(menu), title );
+    UMASetMenuItemText(menu, (SInt16) ::CountMenuItems(menu), title , encoding );
     SetMenuItemHierarchicalID( menu , CountMenuItems( menu ) , id ) ;
 }
 
-void UMAInsertSubMenuItem( MenuRef menu , const wxString& title , MenuItemIndex item , SInt16 id  )
+void UMAInsertSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , MenuItemIndex item , SInt16 id  )
 {
     MacInsertMenuItem(menu, "\pA" , item);
-    UMASetMenuItemText(menu, item , title );
+    UMASetMenuItemText(menu, item , title , encoding);
     SetMenuItemHierarchicalID( menu , item , id ) ;
 }
 
@@ -394,17 +394,17 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
     }
 }
 
-void UMAAppendMenuItem( MenuRef menu , const wxString& title , wxAcceleratorEntry *entry )
+void UMAAppendMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , wxAcceleratorEntry *entry )
 {
     MacAppendMenu(menu, "\pA");
-    UMASetMenuItemText(menu, (SInt16) ::CountMenuItems(menu), title );
+    UMASetMenuItemText(menu, (SInt16) ::CountMenuItems(menu), title , encoding );
     UMASetMenuItemShortcut( menu ,  (SInt16) ::CountMenuItems(menu), entry ) ;
 }
 
-void UMAInsertMenuItem( MenuRef menu , const wxString& title , MenuItemIndex item , wxAcceleratorEntry *entry )
+void UMAInsertMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , MenuItemIndex item , wxAcceleratorEntry *entry )
 {
     MacInsertMenuItem( menu , "\pA" , item) ;
-    UMASetMenuItemText(menu, item+1 , title );
+    UMASetMenuItemText(menu, item+1 , title , encoding );
     UMASetMenuItemShortcut( menu , item+1 , entry ) ;
 }
 
@@ -500,10 +500,10 @@ void             UMADisposeWindow( WindowRef inWindowRef )
     DisposeWindow( inWindowRef ) ;
 }
 
-void UMASetWTitle( WindowRef inWindowRef , const wxString& title )
+void UMASetWTitle( WindowRef inWindowRef , const wxString& title , wxFontEncoding encoding)
 {
 #if TARGET_CARBON
-    SetWindowTitleWithCFString( inWindowRef , wxMacCFStringHolder(title) ) ;
+    SetWindowTitleWithCFString( inWindowRef , wxMacCFStringHolder(title , encoding) ) ;
 #else
     Str255 ptitle ;
     wxMacStringToPascal( title , ptitle ) ;
@@ -511,22 +511,12 @@ void UMASetWTitle( WindowRef inWindowRef , const wxString& title )
 #endif
 }
 
-void             UMAGetWTitleC( WindowRef inWindowRef , char *title )
-{
-    GetWTitle( inWindowRef , (unsigned char*)title ) ;
-#if TARGET_CARBON
-    p2cstrcpy( title, (unsigned char *)title ) ;
-#else
-    p2cstr( (unsigned char*)title ) ;
-#endif
-}
-
 // appearance additions
 
-void UMASetControlTitle( ControlHandle inControl , const wxString& title )
+void UMASetControlTitle( ControlHandle inControl , const wxString& title , wxFontEncoding encoding)
 {
 #if TARGET_CARBON
-    SetControlTitleWithCFString( inControl , wxMacCFStringHolder(title) ) ;
+    SetControlTitleWithCFString( inControl , wxMacCFStringHolder(title , encoding) ) ;
 #else
     Str255 ptitle ;
     wxMacStringToPascal( title , ptitle ) ;
