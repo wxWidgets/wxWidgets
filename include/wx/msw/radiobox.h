@@ -100,7 +100,14 @@ public:
 #endif // WXWIN_COMPATIBILITY
 
 protected:
+    // subclass one radio button
     void SubclassRadioButton(WXHWND hWndBtn);
+
+    // get the max size of radio buttons
+    wxSize GetMaxButtonSize() const;
+
+    // get the total size occupied by the radio box buttons
+    wxSize GetTotalButtonSize(const wxSize& sizeBtn) const;
 
     WXHWND *          m_radioButtons;
     int               m_majorDim;
@@ -114,6 +121,7 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
+    virtual wxSize DoGetBestSize() const;
 };
 
 #endif
