@@ -208,6 +208,7 @@ bool wxCheckListBox::Create(wxWindow *parent,
 
     long    result ;
 
+    wxStAppResource resload ;
     m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false ,
                   kwxMacListWithVerticalScrollbar , 0 , 0, 
                   kControlListBoxProc , (long) this ) ;

@@ -76,7 +76,8 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
 wxCursor::wxCursor(int cursor_type)
 {
   m_refData = new wxCursorRefData;
-
+  
+  
   switch (cursor_type)
   {
     case wxCURSOR_WAIT:
@@ -89,47 +90,64 @@ wxCursor::wxCursor(int cursor_type)
       M_CURSORDATA->m_hCursor = ::GetCursor(crossCursor);
       break;
     case wxCURSOR_SIZENWSE:
-      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeWEId);
+      {
+        wxStAppResource resload ;
+        M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeWEId);
+      }
       break;
     case wxCURSOR_SIZENESW:
-      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeWEId);
+      {
+        wxStAppResource resload ;
+        M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeWEId);
+      }
       break;
     case wxCURSOR_SIZEWE:
-      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeWEId);
+      {
+        wxStAppResource resload ;
+        M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeWEId);
+      }
       break;
     case wxCURSOR_SIZENS:
-      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeNSId);
+      {
+        wxStAppResource resload ;
+        M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeNSId);
+      }
       break;
     case wxCURSOR_CHAR:
-    {
-      M_CURSORDATA->m_hCursor = MacArrowCursor;
-      break;
-    }
+        {
+          M_CURSORDATA->m_hCursor = MacArrowCursor;
+          break;
+        }
     case wxCURSOR_HAND:
-    {
-      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
-      break;
-    }
+        {
+          wxStAppResource resload ;
+          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
+        }
+        break;
     case wxCURSOR_BULLSEYE:
-    {
-      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
-      break;
-    }
+        {
+          wxStAppResource resload ;
+          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
+        }
+        break;
     case wxCURSOR_PENCIL:
-    {
-      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
-      break;
-    }
+        {
+          wxStAppResource resload ;
+          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
+        }
+        break;
     case wxCURSOR_MAGNIFIER:
-    {
-      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
-      break;
-    }
+        {
+          wxStAppResource resload ;
+          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
+        }
+        break;
     case wxCURSOR_NO_ENTRY:
-    {
-      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
-      break;
-    }
+        {
+          wxStAppResource resload ;
+          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
+        }
+        break;
     case wxCURSOR_LEFT_BUTTON:
     {
       M_CURSORDATA->m_hCursor = MacArrowCursor;
