@@ -415,8 +415,7 @@ static void DrawButtonText(HDC hdc,
     COLORREF colOld = SetTextColor(hdc, col);
     int modeOld = SetBkMode(hdc, TRANSPARENT);
 
-    DrawText(hdc, text, text.length(), pRect,
-             DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+    ::DrawText(hdc, text, text.length(), pRect, DT_CENTER | DT_VCENTER);
 
     SetBkMode(hdc, modeOld);
     SetTextColor(hdc, colOld);
