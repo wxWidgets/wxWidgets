@@ -69,6 +69,16 @@
 
 extern wxList wxPendingDelete;
 
+// set wxMAC_USE_RAEL to 1 if RunApplicationEventLoop should be used
+// if 0 the lower level CarbonEventLoop will be used
+// on the long run RAEL should replace the low level event loop
+// we will have to clean up event handling to make sure we don't 
+// miss handling of things like pending events etc
+// perhaps we will also have to pipe events through an ueber-event-handler
+// to make sure we have one place to do all these house-keeping functions
+
+#define wxMAC_USE_RAEL 0
+
 #if wxUSE_THREADS
 extern size_t g_numberOfThreads;
 #endif // wxUSE_THREADS
@@ -334,6 +344,9 @@ wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *d
         wxFrame* win = mbar->GetFrame();
         if ( win )
         {
+            EventRef formerEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
+            EventHandlerCallRef formerEventHandlerCallRef = (EventHandlerCallRef) wxTheApp->MacGetCurrentEventHandlerCallRef() ;
+            wxTheApp->MacSetCurrentEvent( event , handler ) ;
             
             // VZ: we could find the menu from its handle here by examining all
             //     the menus in the menu bar recursively but knowing that neither
@@ -374,6 +387,8 @@ wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *d
             wxevent.SetEventObject(win);
 
             (void)win->GetEventHandler()->ProcessEvent(wxevent);
+            
+            wxTheApp->MacSetCurrentEvent( formerEvent, formerEventHandlerCallRef ) ;
         }
     }
 
@@ -934,18 +949,23 @@ wxApp::wxApp()
 int wxApp::MainLoop()
 {
     m_keepGoing = TRUE;
-
+#if wxMAC_USE_RAEL
+    RunApplicationEventLoop() ;
+#else
     while (m_keepGoing)
     {
         MacDoOneEvent() ;
     }
-
+#endif
     return 0;
 }
 
 void wxApp::ExitMainLoop()
 {
-      m_keepGoing = FALSE;
+    m_keepGoing = FALSE;
+#if wxMAC_USE_RAEL
+    QuitApplicationEventLoop() ;
+#endif
 }
 
 // Is a message/event pending?
