@@ -836,9 +836,9 @@ class Shape(ShapeEvtHandler):
         """
         physicalAttachment = self.LogicalToPhysicalAttachment(attachmentPoint)
         if physicalAttachment in [0, 2]:
-            return pt1.x <= pt2.x
+            return pt1[0] <= pt2[0]
         elif physicalAttachment in [1, 3]:
-            return pt1.y <= pt2.y
+            return pt1[1] <= pt2[1]
 
         return False
 
@@ -1479,7 +1479,7 @@ class Shape(ShapeEvtHandler):
             return self._xpos, self._ypos
         elif self._attachmentMode == ATTACHMENT_MODE_BRANCHING:
             pt, stemPt = self.GetBranchingAttachmentPoint(attachment, nth)
-            return pt.x, pt.y
+            return pt[0], pt[1]
         elif self._attachmentMode == ATTACHMENT_MODE_EDGE:
             if len(self._attachmentPoints):
                 for point in self._attachmentPoints:
@@ -1670,41 +1670,41 @@ class Shape(ShapeEvtHandler):
         
         # Assume that we have attachment points 0 to 3: top, right, bottom, left
         if physicalAttachment == 0:
-            neck.x = self.GetX()
-            neck.y = root.y - self._branchNeckLength
+            neck[0] = self.GetX()
+            neck[1] = root[1] - self._branchNeckLength
 
-            shoulder1.x = root.x - totalBranchLength / 2.0
-            shoulder2.x = root.x + totalBranchLength / 2.0
+            shoulder1[0] = root[0] - totalBranchLength / 2.0
+            shoulder2[0] = root[0] + totalBranchLength / 2.0
 
-            shoulder1.y = neck.y
-            shoulder2.y = neck.y
+            shoulder1[1] = neck[1]
+            shoulder2[1] = neck[1]
         elif physicalAttachment == 1:
-            neck.x = root.x + self._branchNeckLength
-            neck.y = root.y
+            neck[0] = root[0] + self._branchNeckLength
+            neck[1] = root[1]
             
-            shoulder1.x = neck.x
-            shoulder2.x = neck.x
+            shoulder1[0] = neck[0]
+            shoulder2[0] = neck[0]
 
-            shoulder1.y = neck.y - totalBranchLength / 2.0
-            shoulder1.y = neck.y + totalBranchLength / 2.0
+            shoulder1[1] = neck[1] - totalBranchLength / 2.0
+            shoulder1[1] = neck[1] + totalBranchLength / 2.0
         elif physicalAttachment == 2:
-            neck.x = self.GetX()
-            neck.y = root.y + self._branchNeckLength
+            neck[0] = self.GetX()
+            neck[1] = root[1] + self._branchNeckLength
 
-            shoulder1.x = root.x - totalBranchLength / 2.0
-            shoulder2.x = root.x + totalBranchLength / 2.0
+            shoulder1[0] = root[0] - totalBranchLength / 2.0
+            shoulder2[0] = root[0] + totalBranchLength / 2.0
 
-            shoulder1.y = neck.y
-            shoulder2.y = neck.y
+            shoulder1[1] = neck[1]
+            shoulder2[1] = neck[1]
         elif physicalAttachment == 3:
-            neck.x = root.x - self._branchNeckLength
-            neck.y = root.y
+            neck[0] = root[0] - self._branchNeckLength
+            neck[1] = root[1]
 
-            shoulder1.x = neck.x
-            shoulder2.x = neck.x
+            shoulder1[0] = neck[0]
+            shoulder2[0] = neck[0]
 
-            shoulder1.y = neck.y - totalBranchLength / 2.0
-            shoulder2.y = neck.y + totalBranchLength / 2.0
+            shoulder1[1] = neck[1] - totalBranchLength / 2.0
+            shoulder2[1] = neck[1] + totalBranchLength / 2.0
         else:
             raise "Unrecognised attachment point in GetBranchingAttachmentInfo"
         return root, neck, shoulder1, shoulder2
@@ -1717,29 +1717,29 @@ class Shape(ShapeEvtHandler):
         stemPt = wx.RealPoint()
 
         if physicalAttachment == 0:
-            pt.y = neck.y - self._branchStemLength
-            pt.x = shoulder1.x + n * self._branchSpacing
+            pt[1] = neck[1] - self._branchStemLength
+            pt[0] = shoulder1[0] + n * self._branchSpacing
 
-            stemPt.x = pt.x
-            stemPt.y = neck.y
+            stemPt[0] = pt[0]
+            stemPt[1] = neck[1]
         elif physicalAttachment == 2:
-            pt.y = neck.y + self._branchStemLength
-            pt.x = shoulder1.x + n * self._branchStemLength
+            pt[1] = neck[1] + self._branchStemLength
+            pt[0] = shoulder1[0] + n * self._branchStemLength
             
-            stemPt.x = pt.x
-            stemPt.y = neck.y
+            stemPt[0] = pt[0]
+            stemPt[1] = neck[1]
         elif physicalAttachment == 1:
-            pt.x = neck.x + self._branchStemLength
-            pt.y = shoulder1.y + n * self._branchSpacing
+            pt[0] = neck[0] + self._branchStemLength
+            pt[1] = shoulder1[1] + n * self._branchSpacing
 
-            stemPt.x = neck.x
-            stemPt.y = pt.y
+            stemPt[0] = neck[0]
+            stemPt[1] = pt[1]
         elif physicalAttachment == 3:
-            pt.x = neck.x - self._branchStemLength
-            pt.y = shoulder1.y + n * self._branchSpacing
+            pt[0] = neck[0] - self._branchStemLength
+            pt[1] = shoulder1[1] + n * self._branchSpacing
 
-            stemPt.x = neck.x
-            stemPt.y = pt.y
+            stemPt[0] = neck[0]
+            stemPt[1] = pt[1]
         else:
             raise "Unrecognised attachment point in GetBranchingAttachmentPoint"
 
@@ -1765,17 +1765,17 @@ class Shape(ShapeEvtHandler):
 
         # Assume that we have attachment points 0 to 3: top, right, bottom, left
         if physicalAttachment == 0:
-            root.x = self.GetX()
-            root.y = self.GetY() - height / 2.0
+            root[0] = self.GetX()
+            root[1] = self.GetY() - height / 2.0
         elif physicalAttachment == 1:
-            root.x = self.GetX() + width / 2.0
-            root.y = self.GetY()
+            root[0] = self.GetX() + width / 2.0
+            root[1] = self.GetY()
         elif physicalAttachment == 2:
-            root.x = self.GetX()
-            root.y = self.GetY() + height / 2.0
+            root[0] = self.GetX()
+            root[1] = self.GetY() + height / 2.0
         elif physicalAttachment == 3:
-            root.x = self.GetX() - width / 2.0
-            root.y = self.GetY()
+            root[0] = self.GetX() - width / 2.0
+            root[1] = self.GetY()
         else:
             raise "Unrecognised attachment point in GetBranchingAttachmentRoot"
 
@@ -1809,7 +1809,7 @@ class Shape(ShapeEvtHandler):
 
             if self.GetBranchStyle() & BRANCHING_ATTACHMENT_BLOB and count > 1:
                 blobSize = 6.0
-                dc.DrawEllipse(stemPt.x - blobSize / 2.0, stemPt.y - blobSize / 2.0, blobSize, blobSize)
+                dc.DrawEllipse(stemPt[0] - blobSize / 2.0, stemPt[1] - blobSize / 2.0, blobSize, blobSize)
 
     def OnDrawBranches(self, dc, erase = False):
         if self._attachmentMode != ATTACHMENT_MODE_BRANCHING:
@@ -2442,15 +2442,15 @@ class PolygonShape(Shape):
         bottom = -10000
 
         for point in self._points:
-            if point.x < left:
-                left = point.x
-            if point.x > right:
-                right = point.x
+            if point[0] < left:
+                left = point[0]
+            if point[0] > right:
+                right = point[0]
 
-            if point.y < top:
-                top = point.y
-            if point.y > bottom:
-                bottom = point.y
+            if point[1] < top:
+                top = point[1]
+            if point[1] > bottom:
+                bottom = point[1]
 
         self._boundWidth = right - left
         self._boundHeight = bottom - top
@@ -2468,15 +2468,15 @@ class PolygonShape(Shape):
         bottom = -10000
 
         for point in self._points:
-            if point.x < left:
-                left = point.x
-            if point.x > right:
-                right = point.x
+            if point[0] < left:
+                left = point[0]
+            if point[0] > right:
+                right = point[0]
 
-            if point.y < top:
-                top = point.y
-            if point.y > bottom:
-                bottom = point.y
+            if point[1] < top:
+                top = point[1]
+            if point[1] > bottom:
+                bottom = point[1]
 
         bwidth = right - left
         bheight = bottom - top
@@ -2484,9 +2484,8 @@ class PolygonShape(Shape):
         newCentreX = left + bwidth / 2.0
         newCentreY = top + bheight / 2.0
 
-        for point in self._points:
-            point.x -= newCentreX
-            point.y -= newCentreY
+        for i in range(len(self._points)):
+            self._points[i] = self._points[i][0] - newCentreX, self._points[i][1] - newCentreY
         self._xpos += newCentreX
         self._ypos += newCentreY
 
@@ -2502,8 +2501,8 @@ class PolygonShape(Shape):
         ypoints = []
 
         for point in self._points:
-            xpoints.append(point.x + self._xpos)
-            ypoints.append(point.y + self._ypos)
+            xpoints.append(point[0] + self._xpos)
+            ypoints.append(point[1] + self._ypos)
 
         # We assume it's inside the polygon UNLESS one or more
         # lines don't hit the outline.
@@ -2542,8 +2541,7 @@ class PolygonShape(Shape):
         y_proportion = abs(float(new_height) / self._originalHeight)
 
         for i in range(max(len(self._points), len(self._originalPoints))):
-            self._points[i].x = self._originalPoints[i][0] * x_proportion
-            self._points[i].y = self._originalPoints[i][1] * y_proportion
+            self._points[i] = wx.Point(self._originalPoints[i][0] * x_proportion, self._originalPoints[i][1] * y_proportion)
 
         self._boundWidth = abs(new_width)
         self._boundHeight = abs(new_height)
@@ -2557,7 +2555,7 @@ class PolygonShape(Shape):
         self._originalPoints = []
 
         for point in self._points:
-            original_point = wx.RealPoint(point.x, point.y)
+            original_point = wx.RealPoint(point[0], point[1])
             self._originalPoints.append(original_point)
 
         self.CalculateBoundingBox()
@@ -2576,8 +2574,8 @@ class PolygonShape(Shape):
         except ValueError:
             secondPoint = self._points[0]
 
-        x = (secondPoint.x - firstPoint.x) / 2.0 + firstPoint.x
-        y = (secondPoint.y - firstPoint.y) / 2.0 + firstPoint.y
+        x = (secondPoint[0] - firstPoint[0]) / 2.0 + firstPoint[0]
+        y = (secondPoint[1] - firstPoint[1]) / 2.0 + firstPoint[1]
         point = wx.RealPoint(x, y)
 
         if pos >= len(self._points) - 1:
@@ -2610,17 +2608,17 @@ class PolygonShape(Shape):
             # Look for the point we'd be connecting to. This is
             # a heuristic...
             for point in self._points:
-                if point.x == 0:
-                    if y2 > y1 and point.y > 0:
-                        return point.x + self._xpos, point.y + self._ypos
-                    elif y2 < y1 and point.y < 0:
-                        return point.x + self._xpos, point.y + self._ypos
+                if point[0] == 0:
+                    if y2 > y1 and point[1] > 0:
+                        return point[0] + self._xpos, point[1] + self._ypos
+                    elif y2 < y1 and point[1] < 0:
+                        return point[0] + self._xpos, point[1] + self._ypos
 
         xpoints = []
         ypoints = []
         for point in self._points:
-            xpoints.append(point.x + self._xpos)
-            ypoints.append(point.y + self._ypos)
+            xpoints.append(point[0] + self._xpos)
+            ypoints.append(point[1] + self._ypos)
 
         return FindEndForPolyline(xpoints, ypoints, x1, y1, x2, y2)
 
@@ -2655,15 +2653,15 @@ class PolygonShape(Shape):
     # Make as many control points as there are vertices
     def MakeControlPoints(self):
         for point in self._points:
-            control = PolygonControlPoint(self._canvas, self, CONTROL_POINT_SIZE, point, point.x, point.y)
+            control = PolygonControlPoint(self._canvas, self, CONTROL_POINT_SIZE, point, point[0], point[1])
             self._canvas.AddShape(control)
             self._controlPoints.append(control)
 
     def ResetControlPoints(self):
         for i in range(min(len(self._points), len(self._controlPoints))):
             point = self._points[i]
-            self._controlPoints[i]._xoffset = point.x
-            self._controlPoints[i]._yoffset = point.y
+            self._controlPoints[i]._xoffset = point[0]
+            self._controlPoints[i]._yoffset = point[1]
             self._controlPoints[i].polygonVertex = point
 
     def GetNumberOfAttachments(self):
@@ -2676,7 +2674,7 @@ class PolygonShape(Shape):
     def GetAttachmentPosition(self, attachment, nth = 0, no_arcs = 1, line = None):
         if self._attachmentMode == ATTACHMENT_MODE_EDGE and self._points and attachment < len(self._points):
             point = self._points[0]
-            return point.x + self._xpos, point.y + self._ypos
+            return point[0] + self._xpos, point[1] + self._ypos
         return Shape.GetAttachmentPosition(self, attachment, nth, no_arcs, line)
 
     def AttachmentIsValid(self, attachment):
@@ -2707,20 +2705,20 @@ class PolygonShape(Shape):
             point._x = x1 * cosTheta - y1 * sinTheta + x * (1 - cosTheta) + y * sinTheta
             point._y = x1 * sinTheta + y1 * cosTheta + y * (1 - cosTheta) + x * sinTheta
 
-        for point in self._points:
-            x1 = point.x
-            y1 = point.y
+        for i in range(len(self._points)):
+            x1, y1 = self._points[i]
 
-            point.x = x1 * cosTheta - y1 * sinTheta + x * (1 - cosTheta) + y * sinTheta
-            point.y = x1 * sinTheta + y1 * cosTheta + y * (1 - cosTheta) + x * sinTheta
+            self._points[i] = x1 * cosTheta - y1 * sinTheta + x * (1 - cosTheta) + y * sinTheta, x1 * sinTheta + y1 * cosTheta + y * (1 - cosTheta) + x * sinTheta
 
-        for point in self._originalPoints:
-            x1 = point.x
-            y1 = point.y
+        for i in range(len(self._originalPoints)):
+            x1, y1 = self._originalPoints[i]
 
-            point.x = x1 * cosTheta - y1 * sinTheta + x * (1 - cosTheta) + y * sinTheta
-            point.y = x1 * sinTheta + y1 * cosTheta + y * (1 - cosTheta) + x * sinTheta
+            self._originalPoints[i] = x1 * cosTheta - y1 * sinTheta + x * (1 - cosTheta) + y * sinTheta, x1 * sinTheta + y1 * cosTheta + y * (1 - cosTheta) + x * sinTheta
 
+        # Added by Pierre Hjälm. If we don't do this the outline will be
+        # the wrong size. Hopefully it won't have any ill effects.
+        self.UpdateOriginalPoints()
+        
         self._rotation = theta
 
         self.CalculatePolygonCentre()
@@ -2743,7 +2741,7 @@ class PolygonShape(Shape):
         
         pt.CalculateNewSize(x, y)
 
-        self.GetEventHandler().OnDrawOutline(dc, self.GetX(), self.GetY(), pt.GetNewSize().x, pt.GetNewSize().y)
+        self.GetEventHandler().OnDrawOutline(dc, self.GetX(), self.GetY(), pt.GetNewSize()[0], pt.GetNewSize()[1])
 
     def OnSizingBeginDragLeft(self, pt, x, y, keys = 0, attachment = 0):
         dc = wx.ClientDC(self.GetCanvas())
@@ -2758,8 +2756,8 @@ class PolygonShape(Shape):
         dist = math.sqrt((x - self.GetX()) * (x - self.GetX()) + (y - self.GetY()) * (y - self.GetY()))
 
         pt._originalDistance = dist
-        pt._originalSize.x = bound_x
-        pt._originalSize.y = bound_y
+        pt._originalSize[0] = bound_x
+        pt._originalSize[1] = bound_y
 
         if pt._originalDistance == 0:
             pt._originalDistance = 0.0001
@@ -2772,7 +2770,7 @@ class PolygonShape(Shape):
 
         pt.CalculateNewSize(x, y)
 
-        self.GetEventHandler().OnDrawOutline(dc, self.GetX(), self.GetY(), pt.GetNewSize().x, pt.GetNewSize().y)
+        self.GetEventHandler().OnDrawOutline(dc, self.GetX(), self.GetY(), pt.GetNewSize()[0], pt.GetNewSize()[1])
 
         self._canvas.CaptureMouse()
 
@@ -2789,7 +2787,7 @@ class PolygonShape(Shape):
             self.CalculateBoundingBox()
             self.CalculatePolygonCentre()
         else:
-            self.SetSize(pt.GetNewSize().x, pt.GetNewSize().y)
+            self.SetSize(pt.GetNewSize()[0], pt.GetNewSize()[1])
 
         self.Recompute()
         self.ResetControlPoints()
@@ -3152,8 +3150,8 @@ class PolygonControlPoint(ControlPoint):
         bound_x, bound_y = self.GetShape().GetBoundingBoxMax()
         dist = math.sqrt((x - self._shape.GetX()) * (x - self._shape.GetX()) + (y - self._shape.GetY()) * (y - self._shape.GetY()))
 
-        self._newSize.x = dist / self._originalDistance * self._originalSize.x
-        self._newSize.y = dist / self._originalDistance * self._originalSize.y
+        self._newSize[0] = dist / self._originalDistance * self._originalSize[0]
+        self._newSize[1] = dist / self._originalDistance * self._originalSize[1]
 
     # Implement resizing polygon or moving the vertex
     def OnDragLeft(self, draw, x, y, keys = 0, attachment = 0):

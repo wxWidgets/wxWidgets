@@ -61,6 +61,9 @@ class DrawOp(object):
 
     def Translate(self, x, y):
         pass
+
+    def Rotate(self, x, y, theta, sinTheta, cosTheta):
+        pass
     
 class OpSetGDI(DrawOp):
     """Set font, brush, text colour."""
@@ -163,7 +166,7 @@ class OpDraw(DrawOp):
         elif self._op == DRAWOP_DRAW_ARC:
             dc.DrawArc(self._x2 + xoffset, self._y2 + yoffset, self._x3 + xoffset, self._y3 + yoffset, self._x1 + xoffset, self._y1 + yoffset)
         elif self._op == DRAWOP_DRAW_ELLIPTIC_ARC:
-            dc.DrawEllipticArc(self._x1 + xoffset, self._y1 + yoffset, self._x2, self._y2, self._x3 * 360 / (2 * math.pi), self.y3 * 360 / (2 * math.pi))
+            dc.DrawEllipticArc(self._x1 + xoffset, self._y1 + yoffset, self._x2, self._y2, self._x3 * 360 / (2 * math.pi), self._y3 * 360 / (2 * math.pi))
         elif self._op == DRAWOP_DRAW_POINT:
             dc.DrawPoint(self._x1 + xoffset, self._y1 + yoffset)
         elif self._op == DRAWOP_DRAW_TEXT:
@@ -263,7 +266,7 @@ class OpPolyDraw(DrawOp):
 
     def Scale(self, scaleX, scaleY):
         for i in range(self._noPoints):
-            self._points[i] = self._points[i][0] * scaleX, self._points[i][1] * scaleY
+            self._points[i] = wx.Point(self._points[i][0] * scaleX, self._points[i][1] * scaleY)
 
     def Translate(self, x, y):
         for i in range(self._noPoints):
@@ -275,8 +278,7 @@ class OpPolyDraw(DrawOp):
             x1 = self._points[i][0]
             y1 = self._points[i][1]
 
-            self._points[i][0] = x1 * cosTheta - y1 * sinTheta + x * (1 - cosTheta) + y * sinTheta
-            self._points[i][1] = x1 * sinTheta + y1 * cosTheta + y * (1 - cosTheta) + x * sinTheta
+            self._points[i] = x1 * cosTheta - y1 * sinTheta + x * (1 - cosTheta) + y * sinTheta, x1 * sinTheta + y1 * cosTheta + y * (1 - cosTheta) + x * sinTheta
 
     def OnDrawOutline(self, dc, x, y, w, h, oldW, oldH):
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
@@ -394,8 +396,8 @@ class PseudoMetaFile(object):
         if theta1 == 0:
             return
 
-        cosTheta = cos(theta1)
-        sinTheta = sin(theta1)
+        cosTheta = math.cos(theta1)
+        sinTheta = math.sin(theta1)
 
         for op in self._ops:
             op.Rotate(x, y, theta, sinTheta, cosTheta)
@@ -710,7 +712,7 @@ class DrawnShape(RectangleShape):
     # of metafiles.
     def DetermineMetaFile(self, rotation):
         tolerance = 0.0001
-        angles = [0.0, math.pi / 2, math.pi, 3 * pi / 2]
+        angles = [0.0, math.pi / 2, math.pi, 3 * math.pi / 2]
 
         whichMetaFile = 0
 

@@ -330,7 +330,8 @@ class LineShape(Shape):
             # initialize them by placing them half way between the first
             # and the last.
 
-            for point in self._lineControlPoints[1:]:
+            for i in range(1,len(self._lineControlPoints)):
+                point = self._lineControlPoints[i]
                 if point[0] == -999:
                     if first_point[0] < last_point[0]:
                         x1 = first_point[0]
@@ -344,8 +345,7 @@ class LineShape(Shape):
                     else:
                         y2 = first_point[1]
                         y1 = last_point[1]
-                    point[0] = (x2 - x1) / 2.0 + x1
-                    point[1] = (y2 - y1) / 2.0 + y1
+                    self._lineControlPoints[i] = (x2 - x1) / 2.0 + x1, (y2 - y1) / 2.0 + y1
                     
     def FormatText(self, dc, s, i):
         """Format a text string according to the region size, adding
@@ -490,15 +490,10 @@ class LineShape(Shape):
 
     def SetEnds(self, x1, y1, x2, y2):
         """Set the end positions of the line."""
+        self._lineControlPoints[0] = x1, y1
+        self._lineControlPoints[-1] = x2, y2
+
         # Find centre point
-        first_point = self._lineControlPoints[0]
-        last_point = self._lineControlPoints[-1]
-
-        first_point[0] = x1
-        first_point[1] = y1
-        last_point[0] = x2
-        last_point[1] = y2
-
         self._xpos = (x1 + x2) / 2.0
         self._ypos = (y1 + y2) / 2.0
 
@@ -935,8 +930,8 @@ class LineShape(Shape):
         # if attachment mode is ON
         if self._from == self._to and self._from.GetAttachmentMode() != ATTACHMENT_MODE_NONE and moveControlPoints and self._lineControlPoints and not (x_offset == 0 and y_offset == 0):
             for point in self._lineControlPoints[1:-1]:
-                point.x += x_offset
-                point.y += y_offset
+                point[0] += x_offset
+                point[1] += y_offset
 
         self.Move(dc, self._xpos, self._ypos)
 
@@ -1005,7 +1000,7 @@ class LineShape(Shape):
 
         points = []
         for point in self._lineControlPoints:
-            points.append(wx.Point(point.x, point.y))
+            points.append(wx.Point(point[0], point[1]))
 
         #print points
         if self._isSpline:
@@ -1016,7 +1011,7 @@ class LineShape(Shape):
         if sys.platform[:3] == "win":
             # For some reason, last point isn't drawn under Windows
             pt = points[-1]
-            dc.DrawPoint(pt.x, pt.y)
+            dc.DrawPoint(pt[0], pt[1])
 
         # Problem with pen - if not a solid pen, does strange things
         # to the arrowhead. So make (get) a new pen that's solid.
@@ -1150,8 +1145,7 @@ class LineShape(Shape):
 
             pt.SetX(x)
             pt.SetY(y)
-            pt._point[0] = x
-            pt._point[1] = y
+            pt._point = x, y
 
             old_pen = self.GetPen()
             old_brush = self.GetBrush()
@@ -1186,8 +1180,7 @@ class LineShape(Shape):
 
             pt._xpos = x
             pt._ypos = y
-            pt._point[0] = x
-            pt._point[1] = y
+            pt._point = x, y
 
             old_pen = self.GetPen()
             old_brush = self.GetBrush()
@@ -1223,8 +1216,7 @@ class LineShape(Shape):
             # as it changed shape.
             pt._xpos = pt._originalPos[0]
             pt._ypos = pt._originalPos[1]
-            pt._point[0] = pt._originalPos[0]
-            pt._point[1] = pt._originalPos[1]
+            pt._point = pt._originalPos[0], pt._originalPos[1]
 
             self.OnMoveMiddleControlPoint(dc, pt, rpt)
 
@@ -1247,8 +1239,7 @@ class LineShape(Shape):
         lpt._xpos = pt[0]
         lpt._ypos = pt[1]
 
-        lpt._point[0] = pt[0]
-        lpt._point[1] = pt[1]
+        lpt._point = pt[0], pt[1]
 
         self.GetEventHandler().OnMoveLink(dc)
 

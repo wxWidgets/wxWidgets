@@ -260,12 +260,12 @@ class DividedShape(RectangleShape):
                 if line and line.GetAlignmentType(isEnd) == LINE_ALIGNMENT_TO_NEXT_HANDLE:
                     # Align line according to the next handle along
                     point = line.GetNextControlPoint(self)
-                    if point.x < left:
+                    if point[0] < left:
                         x = left
-                    elif point.x > right:
+                    elif point[0] > right:
                         x = right
                     else:
-                        x = point.x
+                        x = point[0]
                 else:
                     x = left + (nth + 1) * self._width / (no_arcs + 1.0)
             else:
@@ -276,12 +276,12 @@ class DividedShape(RectangleShape):
                 if line and line.GetAlignmentType(isEnd) == LINE_ALIGNMENT_TO_NEXT_HANDLE:
                     # Align line according to the next handle along
                     point = line.GetNextControlPoint(self)
-                    if point.x < left:
+                    if point[0] < left:
                         x = left
-                    elif point.x > right:
+                    elif point[0] > right:
                         x = right
                     else:
-                        x = point.x
+                        x = point[0]
                 else:
                     x = left + (nth + 1) * self._width / (no_arcs + 1.0)
             else:
@@ -310,12 +310,12 @@ class DividedShape(RectangleShape):
                     if line and line.GetAlignmentType(isEnd) == LINE_ALIGNMENT_TO_NEXT_HANDLE:
                         # Align line according to the next handle along
                         point = line.GetNextControlPoint(self)
-                        if point.y < bottom:
+                        if point[1] < bottom:
                             y = bottom
-                        elif point.y > top:
+                        elif point[1] > top:
                             y = top
                         else:
-                            y = point.y
+                            y = point[1]
                     else:
                         y = top + (nth + 1) * region._height / (no_arcs + 1.0)
                 else:
