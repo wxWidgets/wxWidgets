@@ -1052,18 +1052,19 @@ free ways, you should use \helpref{ParseDateTime}{wxdatetimeparsedatetime} or
 
 This function parses the string {\it date} according to the given
 {\it format}. The system {\tt strptime(3)} function is used whenever available,
-but even if it is not, this function is still implemented (although support
-for locale-dependent format specificators such as {\tt "\%c"}, {\tt "\%x"} or
-{\tt "\%X"} may be not perfect). This function does handle the month and
-weekday names in the current locale on all platforms, however.
+but even if it is not, this function is still implemented, although support
+for locale-dependent format specifiers such as {\tt "\%c"}, {\tt "\%x"} or {\tt "\%X"} may
+not be perfect and GNU extensions such as {\tt "\%z"} and {\tt "\%Z"} are
+not implemented. This function does handle the month and weekday
+names in the current locale on all platforms, however.
 
-Please the description of ANSI C function {\tt strftime(3)} for the syntax of
-the format string.
+Please see the description of the ANSI C function {\tt strftime(3)} for the syntax
+of the format string.
 
 The {\it dateDef} parameter is used to fill in the fields which could not be
-determined from the format string. For example, if the format is {\tt "\%d"}
-(the day of the month), the month and the year are taken from {\it dateDef}.
-If it is not specified, \helpref{Today}{wxdatetimetoday} is used as the
+determined from the format string. For example, if the format is {\tt "\%d"} (the
+ay of the month), the month and the year are taken from {\it dateDef}. If
+it is not specified, \helpref{Today}{wxdatetimetoday} is used as the
 default date.
 
 Returns {\tt NULL} if the conversion failed, otherwise return the pointer to
@@ -1080,7 +1081,8 @@ will accept anything that may be accepted and will only reject strings which
 can not be parsed in any way at all.
 
 Returns {\tt NULL} if the conversion failed, otherwise return the pointer to
-the character which stopped the scan.
+the character which stopped the scan.  This method is currently not
+implemented, so always returns NULL.
 
 \membersection{wxDateTime::ParseDate}\label{wxdatetimeparsedate}
 
