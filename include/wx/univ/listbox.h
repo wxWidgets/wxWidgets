@@ -50,7 +50,7 @@
 // wxListBox: a list of selectable items
 // ----------------------------------------------------------------------------
 
-class wxListBox : public wxListBoxBase, public wxScrollHelper
+class WXDLLEXPORT wxListBox : public wxListBoxBase, public wxScrollHelper
 {
 public:
     // ctors and such
