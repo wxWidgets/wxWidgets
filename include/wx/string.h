@@ -371,11 +371,8 @@ public:
     // return the character at position n
   value_type at(size_type n) const
     { wxASSERT_VALID_INDEX( n ); return m_pchData[n]; }
-  value_type operator[](size_type n) const { return at(n); }
     // returns the writable character at position n
   reference at(size_type n)
-    { wxASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
-  reference operator[](size_type n)
     { wxASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
 
   // lib.string.modifiers
@@ -702,66 +699,44 @@ public:
   // data access (all indexes are 0 based)
     // read access
     wxChar  GetChar(size_t n) const
-      { return operator[](n); }
+      { return at(n); }
     // read/write access
     wxChar& GetWritableChar(size_t n)
-      { return operator[](n); }
+      { return at(n); }
     // write access
     void  SetChar(size_t n, wxChar ch)
-      { operator[](n) = ch; }
+      { at(n) = ch; }
 
     // get last character
     wxChar  Last() const
       {
           wxASSERT_MSG( !IsEmpty(), _T("wxString: index out of bounds") );
 
-          return operator[](length() - 1);
+          return at(length() - 1);
       }
 
     // get writable last character
     wxChar& Last()
       {
           wxASSERT_MSG( !IsEmpty(), _T("wxString: index out of bounds") );
-          return operator[](length() - 1);
+          return at(length() - 1);
       }
 
     /*
-        So why do we have all these overloaded operator[]s? A bit of history:
-        initially there was only one of them, taking size_t. Then people
-        started complaining because they wanted to use ints as indices (I
-        wonder why) and compilers were giving warnings about it, so we had to
-        add the operator[](int). Then it became apparent that you couldn't
-        write str[0] any longer because there was ambiguity between two
-        overloads and so you now had to write str[0u] (or, of course, use the
-        explicit casts to either int or size_t but nobody did this).
-
-        Finally, someone decided to compile wxWin on an Alpha machine and got
-        a surprize: str[0u] didn't compile there because it is of type
-        unsigned int and size_t is unsigned _long_ on Alpha and so there was
-        ambiguity between converting uint to int or ulong. To fix this one we
-        now add operator[](uint) for the machines where size_t is not already
-        the same as unsigned int - hopefully this fixes the problem (for some
-        time)
-
-        The only real fix is, of course, to remove all versions but the one
-        taking size_t...
+       Note that we we must define all of the overloads below to avoid
+       ambiguity when using str[0]. Also note that we don't need const
+       version of operatorp[] at all as indexed access to const string
+       is provided by implicit conversion to "const wxChar *" below.
      */
 
-    // operator version of GetChar
-    wxChar  operator[](int n) const
-      { return wxStringBase::operator[](n); }
+    // operator versions of GetWriteableChar()
+    wxChar& operator[](int n)
+      { return wxStringBase::at(n); }
     wxChar& operator[](size_type n)
-      { return wxStringBase::operator[](n); }
-    wxChar operator[](size_type n) const
-      { return wxStringBase::operator[](n); }
+      { return wxStringBase::at(n); }
 #ifndef wxSIZE_T_IS_UINT
-    // operator version of GetChar
-    wxChar operator[](unsigned int n) const
-      { return wxStringBase::operator[](n); }
-
-    // operator version of GetWriteableChar
     wxChar& operator[](unsigned int n)
-      { return wxStringBase::operator[](n); }
+      { return wxStringBase::at(n); }
 #endif // size_t != unsigned int
 
     // implicit conversion to C string
