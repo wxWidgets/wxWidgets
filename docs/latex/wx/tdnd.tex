@@ -10,63 +10,98 @@ Classes: \helpref{wxDataObject}{wxdataobject}
 
 Samples: see the dnd sample.
 
+Headers: <wx/dataobj.h>, <wx/dropsrc.h and <wx/droptgt.h>>
+(note that wxUSE\_DRAG\_AND\_DROP must be defined in setup.h)
+
 This overview describes wxWindows support for drag and drop and clipboard
 operations. Both of these topics are discussed here because, in fact, they're
 quite related. Drag and drop and clipboard are just too ways of passing the
 data around and so the code required to implement both types of the operations
 is almost the same.
 
-In any case, you work with some data which is represented by
-the \helpref{wxDataObject}{wxdataobject} class. It is capable to contain any kind
-data in one of any of predefined formats (see enum \helpref{StdFormatand}{stdformat}) and is smart enough to describe the format
-of data it contains. There is also a specialization of this class which stores
-only text - the only difference between \helpref{wxTextDataObject}{wxtextdataobject} and wxDataObject is that the
-first one is easily constructed from wxString.
+Both operations involve passing some data from one program to another
+(although the data may be received in the same program as well). In the case
+of clipboard transfer, the data is first places on the clipboard and then
+pasted into the destination program while for a drag-and-drop operation the
+data object is not stored anywhere but is created when the user starts
+dragging and is destroyed as soon as he ends it (whether the operation was
+ended successfully or cancelled).
 
-Also, for both kinds of operations, there is a sender which provides data and
-a receiver who gets it. The sender is responsible for constructing the
-wxDataObject and the receiver can query it and process the data it contains
-in any way he likes.
-
-In the case of a drag and drop operation, the sender is called a {\it drop
-source} while the receiver is a {\it dtop target}. There are several steps in
-the dragging process:
+To be a {\it drag source}, i.e. to provide the data which may be dragged by
+user elsewhere you should implement the following steps:
 
 \begin{itemize}\itemsep=0pt
-\item {\bf preparation} First of all, the data object must be created and
+\item {\bf Preparation:} First of all, the data object must be created and
 initilized with the data you wish to drag. For example:
 
 \begin{verbatim}
 	wxTextDataObject data("This string will be dragged.");
-\end{verbatim}. Of course, the data object may contain arbitrary data of any
-type.
+\end{verbatim}
 
-\item{drag start} This happens when you call \helpref{DoDragDrop}{wxdropsourcedodragdrop} function. For this you must first
-construct a wxDropSource object and associate the data object from the
-previous step with it like this:
+Of course, the data object may contain arbitrary data of any type, but for
+this you should derive your own class from 
+\helpref{wxDataObject}{wxdataobject} overriding all of its pure virtual
+functions.
+
+\item{\bf Drag start:} To start dragging process (typically in response to a
+mouse click) you must call \helpref{DoDragDrop}{wxdropsourcedodragdrop}
+function of wxDropSource object which should be constructed like this:
 
 \begin{verbatim}
 	wxDropSource dragSource(data, this);
 
 	// or also:
+
 	wxDropSource dragSource(this);
 	dragSource.SetData(data);
-\end{verbatim},
+\end{verbatim}
 
-\item {\bf dragging} The call to DoDragDrop() blocks until the user release the
-mouse button (unless you override \helpref{GiveFeedback}{wxdropsourcegivefeedback} function to do something
-special). When the mouse moves in a window of a wxWindows program, the
-corresponding wxDropTarget methods are called (the data can be also dragged to
-any other program under Windows or to any program supporting the same protocol
-under X Windows).
-\item {\bf drop} When the user releases the mouse over a window, wxWindows verifies
-if the wxDropTarget object associated (with \helpref{SetDropTarget}{setdroptarget}) with this window accepts the data. For
-this, \helpref{GetFormatCount}{wxdroptargetgetformatcount} and \helpref{GetFormat}{wxdroptargetgetformat} are used and if the format is
-supported (i.e. is one of returned by GetFormat()), then \helpref{OnDrop}{wxdroptargetondrop} is called. Otherwise, wxDragNone is
-returned by DoDragDrop() and nothing happens.
-\item {\bf the end} Finally, the receiver processes the data (e.g. pastes the text
-in its window). DoDragDrop() returns either wxDragCopy or wxDragMove
-depending on the state of the keys (<Ctrl>, <Shift> and <Alt>) at the moment
-of drop.
+\item {\bf Dragging:} The call to DoDragDrop() blocks until the user release the
+mouse button (unless you override \helpref{GiveFeedback}{wxdropsourcegivefeedback} function
+to do something special). When the mouse moves in a window of a program which understands the
+same drag-and-drop protocol (any program under Windows or any program supporting XDnD protocol
+under X Windows), the corresponding \helpref{wxDropTarget}{wxdroptarget} methods
+are called - see below.
+
+\item {\bf Processing the result:} DoDragDrop() returns an {\it effect code}
+which is one of the values of \helpref{wxDragResult}{wxdragresult} enum. Codes
+of wxDragError, wxDragNone and wxDragCancel have the obvious meaning and mean
+that there is nothing to do on the sending end (except of possibly logging the
+error in the first case). wxDragCopy means that the data has been successfully
+copied and doesn't require any specific actions neither. But wxDragMove is
+special because it means that the data must be deleted from where it was
+copied. If it doesn't make sense (dragging selected text from a read-only
+file) you should pass FALSE as parameter to DoDragDrop() in the previous step.
+
+\end{itemize}
+
+
+To be a {\it drop target}, i.e. to receive the data dropped by user you should
+follow the instructions below:
+
+\begin{itemize}\itemsep=0pt
+\item {\bf Initialization:} For a window to be drop target, it needs to have
+an associated \helpref{wxDropTarget}{wxdroptarget} object. Normally, you will
+call wxWindow::\helpref{SetDropTarget}{wxwindowsetdroptarget} during window
+creation associating you drop target with it. You must derive a class from
+wxDropTarget and override its pure virtual methods. Alternatively, you may
+derive from \helpref{wxTextDropTarget}{wxtextdroptarget} or
+\helpref{wxFileDropTarget}{wxfiledroptarget} and override their OnDropText()
+or OnDropFiles() method.
+
+\item {\bf Drop:} When the user releases the mouse over a window, wxWindows
+queries the associated wxDropTarget object if it accepts the data. For
+this, \helpref{GetFormatCount}{wxdroptargetgetformatcount} and
+\helpref{GetFormat}{wxdroptargetgetformat} are used and if the format is
+supported (i.e. is one of returned by GetFormat()), 
+then \helpref{OnDrop}{wxdroptargetondrop} is called. 
+Otherwise, \helpref{wxDragNone}{stdformat} is returned by DoDragDrop() and
+nothing happens.
+
+\item {\bf The end:} After processing the data, DoDragDrop() returns either
+wxDragCopy or wxDragMove depending on the state of the keys (<Ctrl>, <Shift>
+and <Alt>) at the moment of drop. There is currently no way for the drop
+target to change this return code.
+
 \end{itemize}
 
