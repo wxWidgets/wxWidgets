@@ -483,11 +483,11 @@ void wxMsgCatalog::ConvertEncoding()
        the string would not be included into compiled catalog) */
     wxString header(StringAtOfs(m_pTransTable, 0));
     wxString charset;
-    int pos = header.Find("Content-Type: text/plain; charset=");
+    int pos = header.Find(wxT("Content-Type: text/plain; charset="));
     if (pos == wxNOT_FOUND)
         return; // incorrectly filled Content-Type header
     size_t n = pos + 34; /*strlen("Content-Type: text/plain; charset=")*/
-    while (header[n] != '\n')
+    while (header[n] != wxT('\n'))
         charset << header[n++];
 
     enc = wxTheFontMapper->CharsetToEncoding(charset, FALSE);
