@@ -717,7 +717,7 @@ bool wxTempFile::Commit()
         return FALSE;
     }
 
-    if ( wxRenameFile(m_strTemp, m_strName) != 0 ) {
+    if ( !wxRenameFile(m_strTemp, m_strName)  ) {
         wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
         return FALSE;
     }
