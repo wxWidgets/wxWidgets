@@ -281,7 +281,10 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                     const wxString& name = wxFrameNameStr) ;
+                     const wxString& name = wxFrameNameStr)
+         :wxGenericMDIParentFrame(parent, winid, title, pos, size, style, name)
+     {
+     }
 
     wxMDIChildFrame * GetActiveChild() const ;
     
@@ -305,7 +308,10 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE,
-                     const wxString& name = wxFrameNameStr ) ;
+                     const wxString& name = wxFrameNameStr )
+         :wxGenericMDIChildFrame(parent, winid, title, pos, size, style, name)
+     {
+     }
 private:
     DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
 };
