@@ -12,7 +12,7 @@ resourceText = r'''<?xml version="1.0"?>
 
 <object class="wxPanel" subclass="wxXmlResourceSubclass.MyBluePanel" name="MyPanel">
     <size>200,100</size>
-    <object class="wxStaticText" name="label1" subclass="wxPython.wx.wxPreStaticText">
+    <object class="wxStaticText" name="label1">
         <label>This blue panel is a class derived from wxPanel
 and is loaded by a using a subclass attribute of the object tag.</label>
         <pos>10,10</pos>
@@ -25,11 +25,8 @@ and is loaded by a using a subclass attribute of the object tag.</label>
 
 class MyBluePanel(wxPanel):
     def __init__(self):
-        #print "MyBluePanel.__init__"
         p = wxPrePanel()
-        self.this = p.this
-        self.thisown = p.thisown
-        self._setOORInfo(self)
+        self.PostCreate(p)
 
         EVT_WINDOW_CREATE(self, self.OnCreate)
         

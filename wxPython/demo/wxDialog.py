@@ -80,7 +80,7 @@ class TestDialog(wxDialog):
         btn.SetHelpText("The Cancel button cnacels the dialog. (Duh!)")
         box.Add(btn, 0, wxALIGN_CENTRE|wxALL, 5)
 
-        sizer.AddSizer(box, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5)
+        sizer.Add(box, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5)
 
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
