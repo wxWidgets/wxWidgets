@@ -1534,7 +1534,7 @@ size_t wxString::find(const wxString& str, size_t nStart) const
 #if !defined(__VISUALC__) || defined(__WIN32__)
 size_t wxString::find(const wxChar* sz, size_t nStart, size_t n) const
 {
-  return find(wxString(sz, n == npos ? 0 : n), nStart);
+  return find(wxString(sz, n), nStart);
 }
 #endif // VC++ 1.5
 

@@ -32,11 +32,11 @@
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
 //#define TEST_DIR
-#define TEST_EXECUTE
+//#define TEST_EXECUTE
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
-//#define TEST_STRINGS
+#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIME
 
@@ -1778,6 +1778,54 @@ static void TestStringFormat()
     puts("");
 }
 
+// returns "not found" for npos, value for all others
+static wxString PosToString(size_t res)
+{
+    wxString s = res == wxString::npos ? wxString(_T("not found"))
+                                       : wxString::Format(_T("%u"), res);
+    return s;
+}
+
+static void TestStringFind()
+{
+    puts("*** Testing wxString find() functions ***");
+
+    static const wxChar *strToFind = _T("ell");
+    static const struct StringFindTest
+    {
+        const wxChar *str;
+        size_t        start,
+                      result;   // of searching "ell" in str
+    } findTestData[] =
+    {
+        { _T("Well, hello world"),  0, 1 },
+        { _T("Well, hello world"),  6, 7 },
+        { _T("Well, hello world"),  9, wxString::npos },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(findTestData); n++ )
+    {
+        const StringFindTest& ft = findTestData[n];
+        size_t res = wxString(ft.str).find(strToFind, ft.start);
+
+        printf(_T("Index of '%s' in '%s' starting from %u is %s "),
+               strToFind, ft.str, ft.start, PosToString(res).c_str());
+
+        size_t resTrue = ft.result;
+        if ( res == resTrue )
+        {
+            puts(_T("(ok)"));
+        }
+        else
+        {
+            printf(_T("(ERROR: should be %s)\n"),
+                   PosToString(resTrue).c_str());
+        }
+    }
+
+    puts("");
+}
+
 #endif // TEST_STRINGS
 
 // ----------------------------------------------------------------------------
@@ -1840,8 +1888,9 @@ int main(int argc, char **argv)
     if ( 0 )
     {
         TestStringSub();
+        TestStringFormat();
     }
-    TestStringFormat();
+    TestStringFind();
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS
