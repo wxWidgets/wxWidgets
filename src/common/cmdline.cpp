@@ -986,6 +986,28 @@ static wxString GetTypeName(wxCmdLineParamType type)
 // global functions
 // ----------------------------------------------------------------------------
 
+/*
+   This function is mainly used under Windows (as under Unix we always get the
+   command line arguments as agrc/argv anyhow) and so it tries to handle the
+   Windows path names (separated by backslashes) correctly. For this it only
+   considers that a backslash may be used to escape another backslash (but
+   normally this is _not_ needed) or a quote but nothing else.
+
+   In particular, to pass a single argument containing a space to the program
+   it should be quoted:
+   
+   myprog.exe foo bar       -> argc = 3, argv[1] = "foo", argv[2] = "bar"
+   myprog.exe "foo bar"     -> argc = 2, argv[1] = "foo bar"
+
+   To pass an argument containing spaces and quotes, the latter should be
+   escaped with a backslash:
+
+   myprog.exe "foo \"bar\"" -> argc = 2, argv[1] = "foo "bar""
+
+   This hopefully matches the conventions used by Explorer/command line
+   interpreter under Windows. If not, this function should be fixed.
+ */
+
 /* static */
 wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
 {
@@ -1045,7 +1067,11 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
 
                 case _T(' '):
                 case _T('\t'):
-                    if ( isInsideQuotes || isQuotedByBS )
+                    // we intentionally don't check for preceding backslash
+                    // here as if we allowed it to be used to escape spaces the
+                    // cmd line of the form "foo.exe a:\ c:\bar" wouldn't be
+                    // parsed correctly
+                    if ( isInsideQuotes )
                     {
                         // preserve it, skip endParam below
                         break;
