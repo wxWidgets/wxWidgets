@@ -359,13 +359,17 @@ void wxListBox::Clear()
 void wxListBox::Free()
 {
 #if wxUSE_OWNER_DRAWN
-    size_t uiCount = m_aItems.Count();
-    while ( uiCount-- != 0 ) {
-        delete m_aItems[uiCount];
-    }
+    if ( m_windowStyle & wxLB_OWNERDRAW )
+    {
+        size_t uiCount = m_aItems.Count();
+        while ( uiCount-- != 0 ) {
+            delete m_aItems[uiCount];
+        }
 
-    m_aItems.Clear();
-#else // !wxUSE_OWNER_DRAWN
+        m_aItems.Clear();
+    }
+    else
+#endif // wxUSE_OWNER_DRAWN
     if ( HasClientObjectData() )
     {
         for ( size_t n = 0; n < (size_t)m_noItems; n++ )
@@ -373,7 +377,6 @@ void wxListBox::Free()
             delete GetClientObject(n);
         }
     }
-#endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
 }
 
 void wxListBox::SetSelection(int N, bool select)

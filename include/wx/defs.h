@@ -1025,6 +1025,11 @@ enum wxStretch
 #define wxST_SIZEGRIP         0x0010
 
 /*
+ * wxStaticText flags
+ */
+#define wxST_NO_AUTORESIZE    0x0001
+
+/*
  * wxStaticLine flags
  */
 #define wxLI_HORIZONTAL         wxHORIZONTAL

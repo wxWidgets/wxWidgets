@@ -129,10 +129,12 @@ void wxStaticText::SetLabel(const wxString& label)
 {
     SetWindowText(GetHwnd(), label);
 
-    // adjust the size of the window to fit to the label (this behaviour is
-    // backward compatible and generally makes sense but we might want to still
-    // provide the user a way to disable it) (VZ)
-    DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+    // adjust the size of the window to fit to the label unless autoresizing is
+    // disabled
+    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
+    {
+        DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+    }
 }
 
 WXHBRUSH wxStaticText::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,

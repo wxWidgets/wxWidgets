@@ -96,6 +96,7 @@ public:
     void OnPageChanged( wxNotebookEvent &event );
     void OnPageChanging( wxNotebookEvent &event );
     void OnSliderUpdate( wxCommandEvent &event );
+    void OnUpdateLabel( wxCommandEvent &event );
 #if wxUSE_SPINBUTTON
     void OnSpinUp( wxSpinEvent &event );
     void OnSpinDown( wxSpinEvent &event );
@@ -129,6 +130,8 @@ public:
 
     wxTextCtrl    *m_text;
     wxNotebook    *m_notebook;
+
+    wxStaticText  *m_label;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -200,7 +203,7 @@ bool MyApp::OnInit()
     wxMenu *tooltip_menu = new wxMenu;
     tooltip_menu->Append(MINIMAL_SET_TOOLTIP_DELAY, "Set &delay\tCtrl-D");
     tooltip_menu->AppendSeparator();
-    tooltip_menu->Append(MINIMAL_ENABLE_TOOLTIPS, "&Toggle tooltips\tCrtl-T",
+    tooltip_menu->Append(MINIMAL_ENABLE_TOOLTIPS, "&Toggle tooltips\tCtrl-T",
             "enable/disable tooltips", TRUE);
     tooltip_menu->Check(MINIMAL_ENABLE_TOOLTIPS, TRUE);
     menu_bar->Append(tooltip_menu, "&Tooltips");
@@ -267,6 +270,7 @@ const int  ID_SLIDER            = 181;
 
 const int  ID_SPIN              = 182;
 const int  ID_BTNPROGRESS       = 183;
+const int  ID_BUTTON_LABEL      = 184;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_SIZE      (                         MyPanel::OnSize)
@@ -313,6 +317,7 @@ EVT_SPIN_DOWN (ID_SPIN,                 MyPanel::OnSpinDown)
 EVT_UPDATE_UI (ID_BTNPROGRESS,          MyPanel::OnUpdateShowProgress)
 EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
 #endif
+EVT_BUTTON    (ID_BUTTON_LABEL,         MyPanel::OnUpdateLabel)
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
@@ -539,16 +544,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     dc.DrawText("Bitmap", 20, 20);
     dc.SelectObject( wxNullBitmap );
 
-    wxBitmapButton *bmpBtn = new wxBitmapButton
-                                 (
-                                  panel,
-                                  -1,
-                                  bitmap,
-                                  wxPoint(100, 20)
-                                 );
-    bmpBtn = NULL; // suppress warning
-
-    new wxButton(panel, -1, "Another button", wxPoint(250, 20));
+    (void)new wxBitmapButton(panel, -1, bitmap, wxPoint(100, 20));
+    (void)new wxButton(panel, ID_BUTTON_LABEL, "Toggle label", wxPoint(250, 20));
+    m_label = new wxStaticText(panel, -1, "Label with some long text",
+                               wxPoint(250, 60), wxDefaultSize,
+                               wxALIGN_RIGHT | wxST_NO_AUTORESIZE);
 
     m_notebook->AddPage(panel, "wxBitmapXXX");
 
@@ -586,11 +586,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   panel->SetAutoLayout( true );
 
   wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
-  
+
   sizer->Add( new wxButton(panel, -1, "Test Button" ), 3, wxALL, 10 );
   sizer->Add( 20,20, 1 );
   sizer->Add( new wxButton(panel, -1, "Test Button 2" ), 3, wxGROW|wxALL, 10 );
-  
+
   panel->SetSizer( sizer );
 
   m_notebook->AddPage(panel, "wxSizer");
@@ -890,6 +890,14 @@ void MyPanel::OnSetFont( wxCommandEvent &WXUNUSED(event) )
 {
     m_fontButton->SetFont( *wxITALIC_FONT );
     m_text->SetFont( *wxITALIC_FONT );
+}
+
+void MyPanel::OnUpdateLabel( wxCommandEvent &WXUNUSED(event) )
+{
+    static bool s_long = TRUE;
+
+    s_long = !s_long;
+    m_label->SetLabel(s_long ? "very very very long text" : "shorter text");
 }
 
 void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )

@@ -52,7 +52,7 @@ bool wxStaticText::Create(wxWindow *parent,
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxXX creation failed") );
-	return FALSE;
+        return FALSE;
     }
 
     // notice that we call the base class version which will just remove the
@@ -74,7 +74,7 @@ bool wxStaticText::Create(wxWindow *parent,
     // GTK_JUSTIFY_LEFT is 0, RIGHT 1 and CENTER 2
     static const float labelAlignments[] = { 0.0, 1.0, 0.5 };
     gtk_misc_set_alignment(GTK_MISC(m_widget), labelAlignments[justify], 0.0);
-    
+
     GtkRequisition req;
     (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
 
@@ -110,14 +110,15 @@ void wxStaticText::SetLabel( const wxString &label )
 
     gtk_label_set( GTK_LABEL(m_widget), m_label.mbc_str() );
 
-    // adjust the label size to the new label
+    // adjust the label size to the new label unless disabled
+    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
+    {
+        GtkRequisition req;
+        (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request )
+            (m_widget, &req );
 
-    // TODO there should be a way to prevent SetLabel() from doing it (an
-    //      additional parameter?)
-    GtkRequisition req;
-    (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
-
-    SetSize( req.width, req.height );
+        SetSize( req.width, req.height );
+    }
 }
 
 void wxStaticText::ApplyWidgetStyle()
