@@ -635,9 +635,6 @@ COMMONDEPS = \
 
 # Not included for Mac OS X
 #		gridg.o
-#		imaglist.o
-#		listctrl.o
-#		statusbr.o
 GENERICOBJS = \
 		busyinfo.o \
 		calctrl.o \
@@ -656,7 +653,9 @@ GENERICOBJS = \
 		helphtml.o \
 		helpwxht.o \
 		helpxlp.o \
+		imaglist.o \
 		laywin.o \
+		listctrl.o \
 		logg.o \
 		msgdlgg.o \
 		numdlgg.o \
@@ -671,6 +670,7 @@ GENERICOBJS = \
 		scrolwin.o \
 		splash.o \
 		splitter.o \
+		statusbr.o \
 		tabg.o \
 		tbarsmpl.o \
 		textdlgg.o \
@@ -720,7 +720,7 @@ GENERICDEPS = \
 		wizard.d
 
 # Not included for Mac OS X
-#		dir.o
+#		dirmac.o
 #		filedlg.o
 #		notebook.o
 #		statline.o
@@ -750,7 +750,7 @@ GUIOBJS = \
 		dcprint.o \
 		dcscreen.o \
 		dialog.o \
-		dirmac.o \
+		dir.o \
 		dnd.o \
 		font.o \
 		fontdlg.o \
@@ -761,10 +761,8 @@ GUIOBJS = \
 		gdiobj.o \
 		gsocket.o \
 		icon.o \
-		imaglist.o \
 		joystick.o \
 		listbox.o \
-		listctrl.o \
 		macnotfy.o \
 		main.o \
 		mdi.o \
@@ -788,6 +786,7 @@ GUIOBJS = \
 		settings.o \
 		slider.o \
 		spinbutt.o \
+		spinctrl.o \
 		statbmp.o \
 		statbox.o \
 		statbrma.o \
