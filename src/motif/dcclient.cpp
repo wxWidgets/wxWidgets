@@ -1268,7 +1268,6 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
                 // draw black pixels, ignore white ones (i.e. transparent b/g)
                 if (image.GetRed(sx, sy) == 0)
                 {
-                {
                     DrawPoint(x1 + maxx - rx, cy + y1 - ry);
                 }
                 else

@@ -692,7 +692,7 @@ bool wxImageHandler::CanRead( const wxString& name )
 
         return FALSE;
     }
-    return FALSE;
+//    return FALSE;
 }
 
 #endif // wxUSE_STREAMS

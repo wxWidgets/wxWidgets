@@ -27,6 +27,9 @@
 
 #endif /* __cplusplus */
 
+/* fill in with the string wxGetOsDescription() will return */
+#define WXWIN_OS_DESCRIPTION "OpenVMS"
+
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef gid_t
 
@@ -102,6 +105,9 @@
 #undef STRICT
 #undef WINVER
 
+/* enable rich edit not on VMS (Win32 Only) */
+#define wxUSE_RICHEDIT 0
+
 /*
  * Supports bool type
  */
@@ -119,6 +125,10 @@
  * Use libjpeg
  */
 #define wxUSE_LIBJPEG 1
+/*
+ * Use libtiff
+ */
+#define wxUSE_LIBTIFF 1
 /*
  * Use iODBC
  */
@@ -267,6 +277,10 @@
  * Use this control
  */
 #define wxUSE_SPINBTN 1
+/*
+ * Use this control
+ */
+#define wxUSE_SPINCTRL 1
 /*
  * Use this control
  */
@@ -618,14 +632,17 @@
 /* Define if you have pthread_cancel */
 #undef HAVE_PTHREAD_CANCEL
 
+/* Define if you have shl_load() */
+#undef HAVE_SHL_LOAD
+
 /* Define if you have all functions to set thread priority */
 #undef HAVE_THREAD_PRIORITY_FUNCTIONS
 
 /* Define if you can specify exit functions to a thread */
 #undef HAVE_THREAD_CLEANUP_FUNCTIONS
 
-/* Define if you have shl_load() */
-#undef HAVE_SHL_LOAD
+/* Define if you have timegm() function */
+#undef HAVE_TIMEGM
 
 /* Define if you have vsnprintf() */
 #undef HAVE_VSNPRINTF
@@ -678,6 +695,9 @@
 /* Define if you have strtok_r function. */
 #undef HAVE_STRTOK_R
 
+/* Define if you have thr_setconcurrency function */
+#undef HaVE_THR_SETCONCURRENCY
+
 /* Define if you have the uname function.  */
 #define HAVE_UNAME
 
@@ -713,5 +733,8 @@
 
 /* Define if you have the <wcstr.h> header file.  */
 #undef HAVE_WCSTR_H
+
+/* Define this if you are using gtk and gdk contains support for X11R6 XIM */
+#undef HAVE_XIM
 
 #endif /* __WX_SETUP_H__ */
