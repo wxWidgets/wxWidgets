@@ -141,7 +141,7 @@ XpmFreeExtensions(extensions, nextensions)
     char **sptr;
 
     if (extensions) {
-	for (i = 0, ext = extensions; i < nextensions; i++, ext++) {
+	for (i = 0, ext = extensions; i < (unsigned)nextensions; i++, ext++) {
 	    if (ext->name)
 		XpmFree(ext->name);
 	    nlines = ext->nlines;
