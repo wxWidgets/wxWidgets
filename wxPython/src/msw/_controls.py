@@ -28,7 +28,11 @@ class Button(_core.Control):
             long style=0, Validator validator=DefaultValidator, 
             String name=ButtonNameStr) -> Button
 
-        Create and show a button.
+        Create and show a button.  The preferred way to create standard
+        buttons is to use a standard ID and an empty label.  In this case
+        wxWigets will automatically use a stock label that coresponds to the
+        ID given.  In additon, the button will be decorated with stock icons
+        under GTK+ 2.
         """
         newobj = _controls_.new_Button(*args, **kwargs)
         self.this = newobj.this

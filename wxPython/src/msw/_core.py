@@ -206,6 +206,29 @@ ID_NOTOALL = _core_.ID_NOTOALL
 ID_ABORT = _core_.ID_ABORT
 ID_RETRY = _core_.ID_RETRY
 ID_IGNORE = _core_.ID_IGNORE
+ID_ADD = _core_.ID_ADD
+ID_REMOVE = _core_.ID_REMOVE
+ID_UP = _core_.ID_UP
+ID_DOWN = _core_.ID_DOWN
+ID_HOME = _core_.ID_HOME
+ID_REFRESH = _core_.ID_REFRESH
+ID_STOP = _core_.ID_STOP
+ID_INDEX = _core_.ID_INDEX
+ID_BOLD = _core_.ID_BOLD
+ID_ITALIC = _core_.ID_ITALIC
+ID_JUSTIFY_CENTER = _core_.ID_JUSTIFY_CENTER
+ID_JUSTIFY_FILL = _core_.ID_JUSTIFY_FILL
+ID_JUSTIFY_RIGHT = _core_.ID_JUSTIFY_RIGHT
+ID_JUSTIFY_LEFT = _core_.ID_JUSTIFY_LEFT
+ID_UNDERLINE = _core_.ID_UNDERLINE
+ID_INDENT = _core_.ID_INDENT
+ID_UNINDENT = _core_.ID_UNINDENT
+ID_ZOOM_100 = _core_.ID_ZOOM_100
+ID_ZOOM_FIT = _core_.ID_ZOOM_FIT
+ID_ZOOM_IN = _core_.ID_ZOOM_IN
+ID_ZOOM_OUT = _core_.ID_ZOOM_OUT
+ID_UNDELETE = _core_.ID_UNDELETE
+ID_REVERT_TO_SAVED = _core_.ID_REVERT_TO_SAVED
 ID_HIGHEST = _core_.ID_HIGHEST
 OPEN = _core_.OPEN
 SAVE = _core_.SAVE
@@ -292,6 +315,9 @@ BORDER_RAISED = _core_.BORDER_RAISED
 BORDER_SUNKEN = _core_.BORDER_SUNKEN
 BORDER_DOUBLE = _core_.BORDER_DOUBLE
 BORDER_MASK = _core_.BORDER_MASK
+BG_STYLE_SYSTEM = _core_.BG_STYLE_SYSTEM
+BG_STYLE_COLOUR = _core_.BG_STYLE_COLOUR
+BG_STYLE_CUSTOM = _core_.BG_STYLE_CUSTOM
 DEFAULT = _core_.DEFAULT
 DECORATIVE = _core_.DECORATIVE
 ROMAN = _core_.ROMAN
@@ -7003,6 +7029,39 @@ class Window(EvtHandler):
         """
         return _core_.Window_GetForegroundColour(*args, **kwargs)
 
+    def SetBackgroundStyle(*args, **kwargs):
+        """
+        SetBackgroundStyle(self, int style) -> bool
+
+        Returns the background style of the window. The background style
+        indicates how the background of the window is drawn.
+
+            ======================  ========================================
+            wx.BG_STYLE_SYSTEM      The background colour or pattern should
+                                    be determined by the system
+            wx.BG_STYLE_COLOUR      The background should be a solid colour
+            wx.BG_STYLE_CUSTOM      The background will be implemented by the
+                                    application.
+            ======================  ========================================
+
+        On GTK+, use of wx.BG_STYLE_CUSTOM allows the flicker-free drawing of
+        a custom background, such as a tiled bitmap. Currently the style has
+        no effect on other platforms.
+
+        :see: `GetBackgroundStyle`, `SetBackgroundColour`
+        """
+        return _core_.Window_SetBackgroundStyle(*args, **kwargs)
+
+    def GetBackgroundStyle(*args, **kwargs):
+        """
+        GetBackgroundStyle(self) -> int
+
+        Returns the background style of the window.
+
+        :see: `SetBackgroundStyle`
+        """
+        return _core_.Window_GetBackgroundStyle(*args, **kwargs)
+
     def SetCursor(*args, **kwargs):
         """
         SetCursor(self, Cursor cursor) -> bool
@@ -10581,16 +10640,16 @@ __wxPyPtrTypeMap['wxStatusBar95']   = 'wxStatusBar'
 
 #----------------------------------------------------------------------------
 # Load version numbers from __version__...  Ensure that major and minor
-# versions are the same for both wxPython and wxWindows.
+# versions are the same for both wxPython and wxWidgets.
 
 from __version__ import *
 __version__ = VERSION_STRING
 
-assert MAJOR_VERSION == _core_.MAJOR_VERSION, "wxPython/wxWindows version mismatch"
-assert MINOR_VERSION == _core_.MINOR_VERSION, "wxPython/wxWindows version mismatch"
+assert MAJOR_VERSION == _core_.MAJOR_VERSION, "wxPython/wxWidgets version mismatch"
+assert MINOR_VERSION == _core_.MINOR_VERSION, "wxPython/wxWidgets version mismatch"
 if RELEASE_VERSION != _core_.RELEASE_VERSION:
     import warnings
-    warnings.warn("wxPython/wxWindows release number mismatch")
+    warnings.warn("wxPython/wxWidgets release number mismatch")
 
 #----------------------------------------------------------------------------
 

@@ -422,6 +422,9 @@ SWIG_CheckInt(PyObject* obj)
   }
 }
 
+
+#include <wx/stockitem.h>
+
  static const wxString wxPyFileSelectorPromptStr(wxFileSelectorPromptStr); 
  static const wxString wxPyFileSelectorDefaultWildcardStr(wxFileSelectorDefaultWildcardStr); 
  static const wxString wxPyDirSelectorPromptStr(wxDirSelectorPromptStr); 

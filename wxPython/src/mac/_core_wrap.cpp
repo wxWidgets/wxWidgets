@@ -26332,6 +26332,64 @@ static PyObject *_wrap_Window_GetForegroundColour(PyObject *self, PyObject *args
 }
 
 
+static PyObject *_wrap_Window_SetBackgroundStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    int arg2 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "style", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetBackgroundStyle",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (wxBackgroundStyle) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->SetBackgroundStyle((wxBackgroundStyle )arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_GetBackgroundStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_GetBackgroundStyle",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxWindow const *)arg1)->GetBackgroundStyle();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Window_SetCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -40873,6 +40931,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_SetOwnForegroundColour", (PyCFunction) _wrap_Window_SetOwnForegroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetBackgroundColour", (PyCFunction) _wrap_Window_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetForegroundColour", (PyCFunction) _wrap_Window_GetForegroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetBackgroundStyle", (PyCFunction) _wrap_Window_SetBackgroundStyle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetBackgroundStyle", (PyCFunction) _wrap_Window_GetBackgroundStyle, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetCursor", (PyCFunction) _wrap_Window_SetCursor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetCursor", (PyCFunction) _wrap_Window_GetCursor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetFont", (PyCFunction) _wrap_Window_SetFont, METH_VARARGS | METH_KEYWORDS },
@@ -42211,6 +42271,29 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"ID_ABORT", SWIG_FromInt((int)wxID_ABORT));
     PyDict_SetItemString(d,"ID_RETRY", SWIG_FromInt((int)wxID_RETRY));
     PyDict_SetItemString(d,"ID_IGNORE", SWIG_FromInt((int)wxID_IGNORE));
+    PyDict_SetItemString(d,"ID_ADD", SWIG_FromInt((int)wxID_ADD));
+    PyDict_SetItemString(d,"ID_REMOVE", SWIG_FromInt((int)wxID_REMOVE));
+    PyDict_SetItemString(d,"ID_UP", SWIG_FromInt((int)wxID_UP));
+    PyDict_SetItemString(d,"ID_DOWN", SWIG_FromInt((int)wxID_DOWN));
+    PyDict_SetItemString(d,"ID_HOME", SWIG_FromInt((int)wxID_HOME));
+    PyDict_SetItemString(d,"ID_REFRESH", SWIG_FromInt((int)wxID_REFRESH));
+    PyDict_SetItemString(d,"ID_STOP", SWIG_FromInt((int)wxID_STOP));
+    PyDict_SetItemString(d,"ID_INDEX", SWIG_FromInt((int)wxID_INDEX));
+    PyDict_SetItemString(d,"ID_BOLD", SWIG_FromInt((int)wxID_BOLD));
+    PyDict_SetItemString(d,"ID_ITALIC", SWIG_FromInt((int)wxID_ITALIC));
+    PyDict_SetItemString(d,"ID_JUSTIFY_CENTER", SWIG_FromInt((int)wxID_JUSTIFY_CENTER));
+    PyDict_SetItemString(d,"ID_JUSTIFY_FILL", SWIG_FromInt((int)wxID_JUSTIFY_FILL));
+    PyDict_SetItemString(d,"ID_JUSTIFY_RIGHT", SWIG_FromInt((int)wxID_JUSTIFY_RIGHT));
+    PyDict_SetItemString(d,"ID_JUSTIFY_LEFT", SWIG_FromInt((int)wxID_JUSTIFY_LEFT));
+    PyDict_SetItemString(d,"ID_UNDERLINE", SWIG_FromInt((int)wxID_UNDERLINE));
+    PyDict_SetItemString(d,"ID_INDENT", SWIG_FromInt((int)wxID_INDENT));
+    PyDict_SetItemString(d,"ID_UNINDENT", SWIG_FromInt((int)wxID_UNINDENT));
+    PyDict_SetItemString(d,"ID_ZOOM_100", SWIG_FromInt((int)wxID_ZOOM_100));
+    PyDict_SetItemString(d,"ID_ZOOM_FIT", SWIG_FromInt((int)wxID_ZOOM_FIT));
+    PyDict_SetItemString(d,"ID_ZOOM_IN", SWIG_FromInt((int)wxID_ZOOM_IN));
+    PyDict_SetItemString(d,"ID_ZOOM_OUT", SWIG_FromInt((int)wxID_ZOOM_OUT));
+    PyDict_SetItemString(d,"ID_UNDELETE", SWIG_FromInt((int)wxID_UNDELETE));
+    PyDict_SetItemString(d,"ID_REVERT_TO_SAVED", SWIG_FromInt((int)wxID_REVERT_TO_SAVED));
     PyDict_SetItemString(d,"ID_HIGHEST", SWIG_FromInt((int)wxID_HIGHEST));
     PyDict_SetItemString(d,"OPEN", SWIG_FromInt((int)wxOPEN));
     PyDict_SetItemString(d,"SAVE", SWIG_FromInt((int)wxSAVE));
@@ -42297,6 +42380,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"BORDER_SUNKEN", SWIG_FromInt((int)wxBORDER_SUNKEN));
     PyDict_SetItemString(d,"BORDER_DOUBLE", SWIG_FromInt((int)wxBORDER_DOUBLE));
     PyDict_SetItemString(d,"BORDER_MASK", SWIG_FromInt((int)wxBORDER_MASK));
+    PyDict_SetItemString(d,"BG_STYLE_SYSTEM", SWIG_FromInt((int)wxBG_STYLE_SYSTEM));
+    PyDict_SetItemString(d,"BG_STYLE_COLOUR", SWIG_FromInt((int)wxBG_STYLE_COLOUR));
+    PyDict_SetItemString(d,"BG_STYLE_CUSTOM", SWIG_FromInt((int)wxBG_STYLE_CUSTOM));
     PyDict_SetItemString(d,"DEFAULT", SWIG_FromInt((int)wxDEFAULT));
     PyDict_SetItemString(d,"DECORATIVE", SWIG_FromInt((int)wxDECORATIVE));
     PyDict_SetItemString(d,"ROMAN", SWIG_FromInt((int)wxROMAN));
