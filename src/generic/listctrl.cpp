@@ -2981,12 +2981,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         m_lineLastClicked = current;
 
         size_t oldCurrent = m_current;
-        bool cmdModifierDown;
-#ifdef __WXMAC__
-        cmdModifierDown = event.MetaDown();
-#else
-        cmdModifierDown = event.ControlDown();
-#endif
+        bool cmdModifierDown = event.CmdDown();
         if ( IsSingleSel() || !(cmdModifierDown || event.ShiftDown()) )
         {
             HighlightAll( false );
