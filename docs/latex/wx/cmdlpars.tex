@@ -281,6 +281,14 @@ specifies the \helpref{command line description}{wxcmdlineparsersetdesc}.
 Same as \helpref{wxCmdLineParser}{wxcmdlineparserwxcmdlineparserstr}, but also
 specifies the \helpref{command line description}{wxcmdlineparsersetdesc}.
 
+\membersection{wxCmdLineParser::ConvertStringToArgs}\label{wxcmdlineparserconvertstringtoargs}
+
+\func{static wxArrayString}{ConvertStringToArgs}{\param{const wxChar }{*cmdline}}
+
+Breaks down the string containing the full command line in words. The words are
+separated by whitespace. The quotes can be used in the input string to quote
+the white space and the back slashes can be used to quote the quotes.
+
 \membersection{wxCmdLineParser::SetCmdLine}\label{wxcmdlineparsersetcmdlineargc}
 
 \func{void}{SetCmdLine}{\param{int }{argc}, \param{char** }{argv}}
