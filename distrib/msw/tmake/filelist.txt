@@ -14,6 +14,7 @@
 #  X	/src/motif   X for Xt
 #  U	/src/unix
 #  R	/src/gtk     R for Robert
+#  Z    /src/mgl     Z for v.slavik@volny.cZ
 #  O	/src/os2
 #  H	/src/html
 #  W	/include/wx
@@ -1120,5 +1121,33 @@ tabg.h	N	16
 textdlgg.h	N
 treectlg.h	N	16
 wizard.h	N
+
+# wxMGL:
+colour.cpp	Z	L
+dc.cpp	Z	L
+gdiobj.cpp	Z	L
+palette.cpp	Z	L
+region.cpp	Z	L
+brush.cpp	Z	L
+pen.cpp	Z	L
+font.cpp	Z	L
+data.cpp	Z	L
+#fontenum.cpp	Z	L
+#fontutil.cpp	Z	L
+app.cpp	Z	L
+bitmap.cpp	Z	L
+clipbrd.cpp	Z	L
+cursor.cpp	Z	L
+dcclient.cpp	Z	L
+dcmemory.cpp	Z	L
+dcscreen.cpp	Z	L
+dialog.cpp	Z	L
+frame.cpp	Z	L
+icon.cpp	Z	L
+settings.cpp	Z	L
+timer.cpp	Z	L
+window.cpp	Z	L
+utils.cpp	Z	L
+bmpbase.cpp	Z	L
 
 # vi: set noet ts=16 nolist:

@@ -1,0 +1,14 @@
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../..
+program_dir = samples/mgl
+
+PROGRAM=dctest
+
+DATAFILES=blender.png mask1.png mask2.png garfield.png stipple1.png stipple2.png \
+          folder1.ico
+
+OBJECTS=$(PROGRAM).o tests.o
+
+include ../../src/makeprog.env
+

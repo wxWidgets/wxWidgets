@@ -505,7 +505,7 @@ dnl than checking it during run-time
 NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 
 dnl the list of all available toolkits
-ALL_TOOLKITS="CYGWIN GTK MINGW MOTIF WINE PM"
+ALL_TOOLKITS="CYGWIN GTK MINGW MOTIF WINE PM MGL"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
@@ -514,6 +514,7 @@ DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
 DEFAULT_wxUSE_WINE=0
 DEFAULT_wxUSE_PM=0
+DEFAULT_wxUSE_MGL=0
 
 dnl these are the values which are really default for the given platform -
 dnl they're not cached and are only used if no --with-toolkit was given *and*
@@ -523,6 +524,7 @@ DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
 DEFAULT_DEFAULT_wxUSE_WINE=0
 DEFAULT_DEFAULT_wxUSE_PM=0
+DEFAULT_DEFAULT_wxUSE_MGL=0
 
 PROGRAM_EXT=
 
@@ -1001,6 +1003,7 @@ AC_ARG_WITH(wine,          [  --with-wine             use WINE], [wxUSE_WINE="$w
 AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows], [wxUSE_CYGWIN="$withval" CACHE_CYGWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mingw,         [  --with-mingw            use GCC Minimal MS-Windows], [wxUSE_MINGW="$withval" CACHE_MINGW=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(pm,            [  --with-pm               use OS/2 Presentation Manager], [wxUSE_PM="$withval" CACHE_PM=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(mgl,           [  --with-mgl              use MGL], [wxUSE_MGL="$withval" CACHE_MGL=1 TOOLKIT_GIVEN=1])
 
 AC_ARG_WITH(gtk-prefix,    [  --with-gtk-prefix=PFX   Prefix where GTK is installed],
             gtk_config_prefix="$withval", gtk_config_prefix="")
@@ -1323,7 +1326,7 @@ else
 fi
 
 dnl we suppose that expr exists...
-NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_WINE:-0} + ${wxUSE_MINGW:-0} + ${wxUSE_CYGWIN:-0}`
+NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MAC:-0} + ${wxUSE_WINE:-0} + ${wxUSE_MINGW:-0} + ${wxUSE_CYGWIN:-0} + ${wxUSE_MGL:-0}`
 
 dnl Allow wxUSE_PM only for OS/2 with EMX.
 dnl Path separator; ':' for unix.
@@ -1705,6 +1708,16 @@ if test "$wxUSE_GUI" = "yes"; then
 
         dnl test for XIM support in libgdk
         AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
+    fi
+
+    if test "$wxUSE_MGL" = 1; then
+        dnl FIXME_MGL - test for MGL
+        TOOLKIT_INCLUDE="-I$MGL_ROOT/include"
+        GUI_TK_LIBRARY="-L$MGL_ROOT/lib/debug/linux/gcc/glibc -lmgl -lmglcpp -lpm"
+
+        AFMINSTALL=afminstall
+        TOOLKIT=MGL
+        GUIDIST=MGL_DIST
     fi
 
     if test "$wxUSE_WINE" = 1; then

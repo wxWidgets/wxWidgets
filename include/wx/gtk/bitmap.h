@@ -27,6 +27,7 @@
 
 class wxMask;
 class wxBitmap;
+class wxImage;
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -68,6 +69,7 @@ public:
     wxBitmap( char **bits ) { (void)CreateFromXpm((const char **)bits); }
     wxBitmap( const wxBitmap& bmp );
     wxBitmap( const wxString &filename, int type = wxBITMAP_TYPE_XPM );
+    wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
     ~wxBitmap();
     wxBitmap& operator = ( const wxBitmap& bmp );
     bool operator == ( const wxBitmap& bmp ) const;
@@ -79,6 +81,8 @@ public:
     int GetHeight() const;
     int GetWidth() const;
     int GetDepth() const;
+    
+    wxImage ConvertToImage() const;
 
     wxMask *GetMask() const;
     void SetMask( wxMask *mask );
@@ -106,6 +110,7 @@ public:
     
 protected:
     bool CreateFromXpm(const char **bits);
+    bool CreateFromImage(const wxImage& image, int depth);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmap)
