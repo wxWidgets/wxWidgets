@@ -65,6 +65,8 @@ public:
     
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
+    virtual bool CallOnInit();
+
     
     virtual bool OnInit();
     virtual bool OnInitGui();

@@ -39,6 +39,7 @@
 #import <AppKit/NSApplication.h>
 #import <Foundation/NSRunLoop.h>
 #import <Foundation/NSArray.h>
+#import <Foundation/NSAutoreleasePool.h>
 
 // ----------------------------------------------------------------------------
 // globals
@@ -107,6 +108,21 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 @end // wxPoserNSApplication
 WX_IMPLEMENT_POSER(wxPoserNSApplication);
 
+class wxAutoNSAutoreleasePool
+{
+public:
+    wxAutoNSAutoreleasePool()
+    {
+        m_pool = [[NSAutoreleasePool alloc] init];
+    }
+    ~wxAutoNSAutoreleasePool()
+    {
+        [m_pool release];
+    }
+protected:
+    NSAutoreleasePool *m_pool;
+};
+
 // ============================================================================
 // functions
 // ============================================================================
@@ -141,6 +157,7 @@ END_EVENT_TABLE()
 
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
+    wxAutoNSAutoreleasePool pool;
     // Mac OS X passes a process serial number command line argument when
     // the application is launched from the Finder. This argument must be
     // removed from the command line arguments before being handled by the
@@ -199,6 +216,7 @@ void wxApp::CocoaInstallIdleHandler()
 
 bool wxApp::OnInitGui()
 {
+    wxAutoNSAutoreleasePool pool;
     if(!wxAppBase::OnInitGui())
         return FALSE;
 
@@ -212,6 +230,12 @@ bool wxApp::OnInitGui()
     wxLogDebug("okay.. done now");
     #endif
     return TRUE;
+}
+
+bool wxApp::CallOnInit()
+{
+    wxAutoNSAutoreleasePool pool;
+    return OnInit();
 }
 
 bool wxApp::OnInit()
