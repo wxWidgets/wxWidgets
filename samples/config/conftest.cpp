@@ -2,7 +2,7 @@
 // Name:        conftest.cpp
 // Purpose:     demo of wxConfig and related classes
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     03.08.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -41,7 +41,7 @@ class MyFrame: public wxFrame
 public:
   MyFrame();
   virtual ~MyFrame();
-    
+
   // callbacks
   void OnQuit(wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
@@ -202,6 +202,9 @@ void MyFrame::OnAbout(wxCommandEvent&)
 
 void MyFrame::OnDelete(wxCommandEvent&)
 {
+  // VZ: it seems that DeleteAll() wreaks havoc on NT. Disabled until I
+  // investigate it further, do _not_ compile this code in meanwhile!
+#if 0
   if ( wxConfigBase::Get()->DeleteAll() ) {
     wxLogMessage("Config file/registry key successfully deleted.");
 
@@ -209,6 +212,7 @@ void MyFrame::OnDelete(wxCommandEvent&)
     wxConfigBase::DontCreateOnDemand();
   }
   else
+#endif // 0
     wxLogError("Deleting config file/registry key failed.");
 }
 
