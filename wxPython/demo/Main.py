@@ -28,6 +28,7 @@ _treeList = [
     ('Recent Additions', [
         'wxIntCtrl',
         'wxPyColourChooser',
+        'wxScrolledPanel',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -134,9 +135,9 @@ _treeList = [
         'LayoutAnchors',
         'Layoutf',
         'RowColSizer',
-        'ScrolledPanel',
         'Sizers',
         'wxLayoutConstraints',
+        'wxScrolledPanel',
         'wxXmlResource',
         'wxXmlResourceHandler',
         ]),
