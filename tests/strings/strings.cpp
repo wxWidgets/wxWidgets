@@ -259,8 +259,9 @@ void StringTestCase::ConversionUTF7()
     {
         { "+-", L"+" },
         { "+--", L"+-" },
+#if !defined(__GNUC__) || (__GNUC__ >= 3)
         { "+AKM-", L"\u00a3" },
-
+#endif
         // Windows accepts invalid UTF-7 strings and so does our UTF-7
         // conversion code -- this is wrong IMO but the way it is for now
         //
@@ -284,7 +285,9 @@ void StringTestCase::ConversionUTF8()
 {
     static const StringConversionData utf8data[] =
     {
+#if !defined(__GNUC__) || (__GNUC__ >= 3)
         { "\xc2\xa3", L"\u00a3" },
+#endif
         { "\xc2", NULL },
     };
 
