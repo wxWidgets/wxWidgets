@@ -33,7 +33,6 @@ class MyFrame(wx.Frame):
         sizer.Add(text, 0, wx.ALL, 10)
         sizer.Add(btn, 0, wx.ALL, 10)
         panel.SetSizer(sizer)
-        panel.SetAutoLayout(True)
         panel.Layout()
 
         wx.EVT_BUTTON(self, btn.GetId(), self.OnButton)
@@ -47,6 +46,6 @@ class MyFrame(wx.Frame):
 
 app = wx.PySimpleApp()
 frame = MyFrame(None, "Simple wxPython App")
-frame.Show(True)
+frame.Show()
 app.MainLoop()
 

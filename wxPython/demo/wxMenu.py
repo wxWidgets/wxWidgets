@@ -6,7 +6,7 @@
 #-------------------------------------------------------------------
 
 from wxPython.wx import *
-
+import images
 import time
 
 #-------------------------------------------------------------------
@@ -69,6 +69,11 @@ check the source for this sample to see how to implement them.
         menuBar.Append(menu4, "Chec&k")
 
         menu5 = wxMenu()
+        # Show how to put an icon in the menu
+        item = wxMenuItem(menu5, 500, "&Smile!\tCtrl+S", "This one has an icon")
+        item.SetBitmap(images.getSmilesBitmap())
+        menu5.AppendItem(item)
+
         menu5.Append(501, "Interesting thing\tCtrl+A", "Note the shortcut!")
         menu5.AppendSeparator()
         menu5.Append(502, "Hello\tShift+H")
@@ -107,6 +112,7 @@ check the source for this sample to see how to implement them.
 
         EVT_MENU_RANGE(self, 401, 403, self.Menu401To403)
 
+        EVT_MENU(self, 500, self.Menu500)
         EVT_MENU(self, 501, self.Menu501)
         EVT_MENU(self, 502, self.Menu502)
         EVT_MENU(self, 503, self.TestRemove)
@@ -167,6 +173,9 @@ check the source for this sample to see how to implement them.
 
     def Menu401To403(self, event):
         self.log.write('From a EVT_MENU_RANGE event\n')
+
+    def Menu500(self, event):
+        self.log.write('Have a happy day!\n')
 
     def Menu501(self, event):
         self.log.write('Look in the code how the shortcut has been realized\n')
