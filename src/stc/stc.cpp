@@ -2782,9 +2782,9 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
         // be a function key or etc., the platforms appear to always give us a
         // small value in this case) then fallback to the ascii key code but
         // don't do anything for function keys or etc.
-        if (key <= 255) {
+        if (key <= 127) {
             key = evt.GetKeyCode();
-            keyOk = (key <= 255);
+            keyOk = (key <= 127);
         }
         if (keyOk) {
             m_swx->DoAddChar(key);
