@@ -59,6 +59,9 @@
     #ifdef __GNUWIN32__
         #include <windows.h>
     #endif
+#elif defined(__DOS__) && defined(__WATCOMC__)
+    #include <io.h>
+    char* mktemp(char *path) { return _mktemp(path); }
 #elif (defined(__WXPM__))
     #include <io.h>
     #define   W_OK        2
