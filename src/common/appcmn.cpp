@@ -59,6 +59,11 @@
   #include  "wx/mac/private.h"  // includes mac headers
 #endif
 
+// private functions prototypes
+#ifdef __WXDEBUG__
+    static void LINKAGEMODE SetTraceMasks();
+#endif // __WXDEBUG__
+
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -67,21 +72,17 @@
 // initialization and termination
 // ----------------------------------------------------------------------------
 
-#ifdef __WXDEBUG__
-static void LINKAGEMODE SetTraceMasks()
-{
-    wxString mask;
-    if ( wxGetEnv(wxT("WXTRACE"), &mask) )
-    {
-        wxStringTokenizer tkn(mask, wxT(","));
-        while ( tkn.HasMoreTokens() )
-            wxLog::AddTraceMask(tkn.GetNextToken());
-    }
-}
-#endif
-
 wxAppBase::wxAppBase()
 {
+    // this function is defined by IMPLEMENT_APP() macro in the user code
+    extern const wxBuildOptions& wxGetBuildOptions();
+
+    if ( !CheckBuildOptions(wxGetBuildOptions()) )
+    {
+        wxLogFatalError(_T("Mismatch between the program and library build ")
+                        _T("versions detected."));
+    }
+
     wxTheApp = (wxApp *)this;
 
 #if WXWIN_COMPATIBILITY_2_2
@@ -348,7 +349,38 @@ bool wxAppBase::OnCmdLineError(wxCmdLineParser& parser)
 // debugging support
 // ----------------------------------------------------------------------------
 
+/* static */
+bool wxAppBase::CheckBuildOptions(const wxBuildOptions& opts)
+{
+#define wxCMP(what)   (what == opts.m_ ## what)
+
+    bool
+#ifdef __WXDEBUG__
+    isDebug = TRUE;
+#else
+    isDebug = FALSE;
+#endif
+
+    int verMaj = wxMAJOR_VERSION,
+        verMin = wxMINOR_VERSION;
+
+    return wxCMP(isDebug) && wxCMP(verMaj) && wxCMP(verMin);
+
+#undef wxCMP
+}
+
 #ifdef  __WXDEBUG__
+
+static void LINKAGEMODE SetTraceMasks()
+{
+    wxString mask;
+    if ( wxGetEnv(wxT("WXTRACE"), &mask) )
+    {
+        wxStringTokenizer tkn(mask, wxT(","));
+        while ( tkn.HasMoreTokens() )
+            wxLog::AddTraceMask(tkn.GetNextToken());
+    }
+}
 
 // wxASSERT() helper
 bool wxAssertIsEqual(int x, int y)

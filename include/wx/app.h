@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        app.h
+// Name:        wx/app.h
 // Purpose:     wxAppBase class and macros used for declaration of wxApp
 //              derived class in the user code
 // Author:      Julian Smart
@@ -50,6 +50,8 @@ class WXDLLEXPORT wxCmdLineParser;
 #if WXWIN_COMPATIBILITY_2_2
     #include "wx/icon.h"
 #endif
+
+#include "wx/build.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -321,6 +323,11 @@ public:
     virtual void OnAssert(const wxChar *file, int line, const wxChar *msg);
 #endif // __WXDEBUG__
 
+    // check that the wxBuildOptions object (constructed in the application
+    // itself, usually the one from IMPLEMENT_APP() macro) matches the build
+    // options of the library and abort if it doesn't
+    static bool CheckBuildOptions(const wxBuildOptions& buildOptions);
+
     // deprecated functions, please updae your code to not use them!
     // -------------------------------------------------------------
 
@@ -539,9 +546,19 @@ public:
     #define IMPLEMENT_WX_THEME_SUPPORT
 #endif
 
+// define the build options object for the application which is compared to the
+// one used for building the library on the program startup
+#define WX_DEFINE_BUILDOPTS()                            \
+    const wxBuildOptions& wxGetBuildOptions()            \
+    {                                                    \
+        static wxBuildOptions s_buildOptions;            \
+        return s_buildOptions;                           \
+    }
+
 // Use this macro if you want to define your own main() or WinMain() function
 // and call wxEntry() from there.
 #define IMPLEMENT_APP_NO_MAIN(appname)                   \
+    WX_DEFINE_BUILDOPTS()                                \
     wxApp *wxCreateApp() { return new appname; }         \
     wxAppInitializer wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp); \
     appname& wxGetApp() { return *(appname *)wxTheApp; }
