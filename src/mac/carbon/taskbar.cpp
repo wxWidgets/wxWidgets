@@ -184,8 +184,11 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 #if wxMAC_USE_CORE_GRAPHICS        
     pImage = (CGImageRef) bmp.CGImageCreate() ;
 #else
-    wxMask* mask = bmp.GetMask();
-    if (!mask)
+    WXHBITMAP iconport ;
+    WXHBITMAP maskport ;
+    iconport = bmp.GetHBITMAP( &maskport ) ;
+
+    if (!maskport)
     {
         // Make a mask with no transparent pixels
         wxBitmap   mbmp(icon.GetWidth(), icon.GetHeight());
@@ -195,12 +198,10 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
         dc.Clear();
         dc.SelectObject(wxNullBitmap);
         bmp.SetMask( new wxMask(mbmp, *wxWHITE) ) ;
+        iconport = bmp.GetHBITMAP( &maskport ) ;
     } 
     
     //create the icon from the bitmap and mask bitmap contained within
-    WXHBITMAP iconport ;
-    WXHBITMAP maskport ;
-    iconport = bmp.GetHBITMAP( &maskport ) ;
     err = CreateCGImageFromPixMaps(
                                             GetGWorldPixMap(MAC_WXHBITMAP(iconport)),
                                             GetGWorldPixMap(MAC_WXHBITMAP(maskport)),
