@@ -1374,11 +1374,12 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 #else
     wxCoord width = gdk_string_width( font, text.mbc_str() );
     wxCoord height = font->ascent + font->descent;
-    /* CMB 21/5/98: draw text background if mode is wxSOLID */
-    if (m_backgroundMode == wxSOLID)
+
+    if ( m_backgroundMode == wxSOLID )
     {
         gdk_gc_set_foreground( m_textGC, m_textBackgroundColour.GetColor() );
         gdk_draw_rectangle( m_window, m_textGC, TRUE, x, y, width, height );
+        gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
     }
     gdk_draw_string( m_window, font, m_textGC, x, y + font->ascent, text.mbc_str() );
 #endif
