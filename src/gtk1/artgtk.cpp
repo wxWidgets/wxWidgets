@@ -159,6 +159,45 @@ static GtkIconSize FindClosestIconSize(const wxSize& size)
     return best;
 }
 
+static GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
+{
+    // FIXME: This code is not 100% correct, because stock pixmap are
+    //        context-dependent and may be affected by theme engine, the
+    //        correct value can only be obtained for given GtkWidget object.
+    //        
+    //        Fool-proof implementation of stock bitmaps would extend wxBitmap
+    //        with "stock-id" representation (in addition to pixmap and pixbuf
+    //        ones) and would convert it to pixbuf when rendered.
+    
+    GtkStyle *style = gtk_widget_get_default_style();
+    GtkIconSet *iconset = gtk_style_lookup_icon_set(style, stockid);
+
+    if (!iconset)
+        return NULL;
+
+    return gtk_icon_set_render_icon(iconset, style,
+                                    gtk_widget_get_default_direction(),
+                                    GTK_STATE_NORMAL, size, NULL, NULL);
+}
+
+#if GTK_CHECK_VERSION(2,4,0)
+static GdkPixbuf *CreateThemeIcon(const char *iconname,
+                                  GtkIconSize iconsize, const wxSize& sz)
+{
+    wxSize size(sz);
+    if (size == wxDefaultSize)
+    {
+        gtk_icon_size_lookup(iconsize, &size.x, &size.y);
+    }
+    
+    return gtk_icon_theme_load_icon(
+                    gtk_icon_theme_get_default(),
+                    iconname,
+                    size.x,
+                    (GtkIconLookupFlags)0, NULL);
+}
+#endif // GTK+ >= 2.4.0
+
 wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
                                          const wxArtClient& client,
                                          const wxSize& size)
@@ -172,24 +211,12 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
     if (!stockid)
         stockid = id.ToAscii();
 
-    // FIXME: This code is not 100% correct, because stock pixmap are
-    //        context-dependent and may be affected by theme engine, the
-    //        correct value can only be obtained for given GtkWidget object.
-    //        
-    //        Fool-proof implementation of stock bitmaps would extend wxBitmap
-    //        with "stock-id" representation (in addition to pixmap and pixbuf
-    //        ones) and would convert it to pixbuf when rendered.
-    
-    GtkStyle *style = gtk_widget_get_default_style();
-    GtkIconSet *iconset = gtk_style_lookup_icon_set(style, stockid);
+    GdkPixbuf *pixbuf = CreateStockIcon(stockid, stocksize);
 
-    if (!iconset)
-        return wxNullBitmap;
-
-    GdkPixbuf *pixbuf = 
-        gtk_icon_set_render_icon(iconset, style,
-                                 gtk_widget_get_default_direction(),
-                                 GTK_STATE_NORMAL, stocksize, NULL, NULL);
+#if GTK_CHECK_VERSION(2,4,0)
+    if (!pixbuf)
+        pixbuf = CreateThemeIcon(stockid, stocksize, size);
+#endif
 
     if (pixbuf && size != wxDefaultSize &&
         (size.x != gdk_pixbuf_get_width(pixbuf) ||
