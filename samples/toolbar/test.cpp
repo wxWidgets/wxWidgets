@@ -6,37 +6,146 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 // For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include <wx/wx.h>
 #endif
 
-#include "wx/toolbar.h"
+#include <wx/toolbar.h>
 #include <wx/log.h>
 
-#include "test.h"
+// ----------------------------------------------------------------------------
+// resources
+// ----------------------------------------------------------------------------
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
-#include "mondrian.xpm"
-#include "bitmaps/new.xpm"
-#include "bitmaps/open.xpm"
-#include "bitmaps/save.xpm"
-#include "bitmaps/copy.xpm"
-#include "bitmaps/cut.xpm"
-// #include "bitmaps/paste.xpm"
-#include "bitmaps/print.xpm"
-#include "bitmaps/preview.xpm"
-#include "bitmaps/help.xpm"
-#endif
+    #include "mondrian.xpm"
+    #include "bitmaps/new.xpm"
+    #include "bitmaps/open.xpm"
+    #include "bitmaps/save.xpm"
+    #include "bitmaps/copy.xpm"
+    #include "bitmaps/cut.xpm"
+    // #include "bitmaps/paste.xpm"
+    #include "bitmaps/print.xpm"
+    #include "bitmaps/preview.xpm"
+    #include "bitmaps/help.xpm"
+#endif // GTK or Motif
+
+// ----------------------------------------------------------------------------
+// classes
+// ----------------------------------------------------------------------------
+
+// Define a new application
+class MyApp: public wxApp
+{
+public:
+    bool OnInit();
+    bool InitToolbar(wxToolBar* toolBar, bool smallicons = FALSE);
+};
+
+// Define a new frame
+class MyFrame: public wxFrame
+{
+public:
+    MyFrame(wxFrame *parent,
+            wxWindowID id = -1,
+            const wxString& title = "wxToolBar Sample",
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxDEFAULT_FRAME_STYLE);
+
+    virtual ~MyFrame() { delete m_menu; }
+
+    void OnQuit(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
+
+    void OnToggleToolbar(wxCommandEvent& event);
+    void OnEnablePrint(wxCommandEvent& event) { DoEnablePrint(); }
+    void OnToggleHelp(wxCommandEvent& event) { DoToggleHelp(); }
+
+    void OnAppendMenu(wxCommandEvent& event);
+    void OnDeleteMenu(wxCommandEvent& event);
+    void OnToggleMenu(wxCommandEvent& event);
+
+    void OnToolLeftClick(wxCommandEvent& event);
+    void OnToolEnter(wxCommandEvent& event);
+
+private:
+    void DoEnablePrint();
+    void DoToggleHelp();
+
+    bool                m_smallToolbar;
+    wxTextCtrl*         m_textWindow;
+
+    wxMenu             *m_menu;
+
+    DECLARE_EVENT_TABLE()
+};
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+const int ID_TOOLBAR = 500;
+
+enum
+{
+    IDM_TOOLBAR_TOGGLETOOLBAR = 200,
+    IDM_TOOLBAR_ENABLEPRINT,
+    IDM_TOOLBAR_TOGGLEHELP,
+    IDM_MENU_TOGGLE,
+    IDM_MENU_APPEND,
+    IDM_MENU_DELETE
+};
+
+// ----------------------------------------------------------------------------
+// event tables
+// ----------------------------------------------------------------------------
+
+// Notice that wxID_HELP will be processed for the 'About' menu and the toolbar
+// help button.
+
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
+    EVT_MENU(wxID_HELP, MyFrame::OnAbout)
+
+    EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBAR, MyFrame::OnToggleToolbar)
+    EVT_MENU(IDM_TOOLBAR_ENABLEPRINT, MyFrame::OnEnablePrint)
+    EVT_MENU(IDM_TOOLBAR_TOGGLEHELP, MyFrame::OnToggleHelp)
+
+    EVT_MENU(IDM_MENU_TOGGLE, MyFrame::OnToggleMenu)
+    EVT_MENU(IDM_MENU_APPEND, MyFrame::OnAppendMenu)
+    EVT_MENU(IDM_MENU_DELETE, MyFrame::OnDeleteMenu)
+
+    EVT_MENU(-1, MyFrame::OnToolLeftClick)
+
+    EVT_TOOL_ENTER(ID_TOOLBAR, MyFrame::OnToolEnter)
+END_EVENT_TABLE()
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// MyApp
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_APP(MyApp)
 
@@ -45,47 +154,18 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main frame window
-    MyFrame* frame = new MyFrame((wxFrame *) NULL, -1, (const wxString) "wxToolBar Sample",
-            wxPoint(100, 100), wxSize(450, 300));
+    MyFrame* frame = new MyFrame((wxFrame *) NULL, -1,
+                                 "wxToolBar Sample",
+                                 wxPoint(100, 100), wxSize(450, 300));
 
-    // Give it a status line
-    frame->CreateStatusBar();
-
-    // Give it an icon
-    frame->SetIcon(wxICON(mondrian));
-
-    // Make a menubar
-    wxMenu *tbarMenu = new wxMenu;
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBAR, "&Toggle toolbar", "Change the toolbar kind");
-    tbarMenu->Append(IDM_TOOLBAR_ENABLEPRINT, "&Enable print button", "");
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, "Toggle &help button", "");
-
-    wxMenu *fileMenu = new wxMenu;
-    fileMenu->Append(wxID_EXIT, "E&xit", "Quit toolbar sample" );
-
-    wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_HELP, "&About", "About toolbar sample");
-
-    wxMenuBar* menuBar = new wxMenuBar( wxMB_DOCKABLE );
-
-    menuBar->Append(fileMenu, "&File");
-    menuBar->Append(tbarMenu, "&Toolbar");
-    menuBar->Append(helpMenu, "&Help");
-
-    // Associate the menu bar with the frame
-    frame->SetMenuBar(menuBar);
-
-    // Create the toolbar
-    frame->CreateToolBar(wxNO_BORDER|wxTB_HORIZONTAL|wxTB_FLAT|wxTB_DOCKABLE, ID_TOOLBAR);
-
-    frame->GetToolBar()->SetMargins( 2, 2 );
-
-    InitToolbar(frame->GetToolBar());
-
+    // VZ: what's this for??
+#if 0
     // Force a resize. This should probably be replaced by a call to a wxFrame
     // function that lays out default decorations and the remaining content window.
     wxSizeEvent event(wxSize(-1, -1), frame->GetId());
     frame->OnSize(event);
+#endif // 0
+
     frame->Show(TRUE);
 
     frame->SetStatusText("Hello, wxWindows");
@@ -154,7 +234,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
       currentX += width + 5;
       toolBar->AddSeparator();
       toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), *(toolBarBitmaps[6]), TRUE, currentX, -1, (wxObject *) NULL, "Help");
-      
+
       toolBar->EnableTool( wxID_PRINT, FALSE );
   }
 
@@ -168,19 +248,9 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
   return TRUE;
 }
 
-// wxID_HELP will be processed for the 'About' menu and the toolbar help button.
-
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
-    EVT_MENU(wxID_HELP, MyFrame::OnAbout)
-
-    EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBAR, MyFrame::OnToggleToolbar)
-    EVT_MENU(IDM_TOOLBAR_ENABLEPRINT, MyFrame::OnEnablePrint)
-    EVT_MENU(IDM_TOOLBAR_TOGGLEHELP, MyFrame::OnToggleHelp)
-
-    EVT_MENU(-1, MyFrame::OnToolLeftClick)
-    EVT_TOOL_ENTER(ID_TOOLBAR, MyFrame::OnToolEnter)
-END_EVENT_TABLE()
+// ----------------------------------------------------------------------------
+// MyFrame
+// ----------------------------------------------------------------------------
 
 // Define my frame constructor
 MyFrame::MyFrame(wxFrame* parent,
@@ -191,18 +261,66 @@ MyFrame::MyFrame(wxFrame* parent,
                  long style)
        : wxFrame(parent, id, title, pos, size, style)
 {
+    m_menu = NULL;
     m_textWindow = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
     m_smallToolbar = FALSE;
+
+    // Give it a status line
+    CreateStatusBar();
+
+    // Give it an icon
+    SetIcon(wxICON(mondrian));
+
+    // Make a menubar
+    wxMenu *tbarMenu = new wxMenu;
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBAR, "&Toggle toolbar", "Change the toolbar kind");
+    tbarMenu->Append(IDM_TOOLBAR_ENABLEPRINT, "&Enable print button", "");
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, "Toggle &help button", "");
+
+    wxMenu *fileMenu = new wxMenu;
+    fileMenu->Append(wxID_EXIT, "E&xit", "Quit toolbar sample" );
+
+    wxMenu *menuMenu = new wxMenu;
+    menuMenu->Append(IDM_MENU_APPEND, "&Append menu");
+    menuMenu->Append(IDM_MENU_DELETE, "&Delete menu");
+    menuMenu->Append(IDM_MENU_TOGGLE, "&Toggle menu", "", TRUE);
+
+    wxMenu *helpMenu = new wxMenu;
+    helpMenu->Append(wxID_HELP, "&About", "About toolbar sample");
+
+    wxMenuBar* menuBar = new wxMenuBar( wxMB_DOCKABLE );
+
+    menuBar->Append(fileMenu, "&File");
+    menuBar->Append(tbarMenu, "&Toolbar");
+    menuBar->Append(menuMenu, "&Menubar");
+    menuBar->Append(helpMenu, "&Help");
+
+    // Associate the menu bar with the frame
+    SetMenuBar(menuBar);
+
+    // Create the toolbar
+    wxToolBar *tbar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL |
+                                    wxTB_FLAT | wxTB_DOCKABLE,
+                                    ID_TOOLBAR);
+
+    tbar->SetMargins( 2, 2 );
+
+    wxGetApp().InitToolbar(tbar);
 }
 
-void MyFrame::OnToggleToolbar(wxCommandEvent& event)
+void MyFrame::OnToggleToolbar(wxCommandEvent& WXUNUSED(event))
 {
-    delete GetToolBar();
+    // delete and recreate the toolbar
+    wxToolBar *tbar = GetToolBar();
+    delete tbar;
+
     SetToolBar(NULL);
-    CreateToolBar(wxNO_BORDER|wxTB_HORIZONTAL|wxTB_FLAT|wxTB_DOCKABLE, ID_TOOLBAR);
+    tbar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL |
+                         wxTB_FLAT | wxTB_DOCKABLE,
+                         ID_TOOLBAR);
 
     m_smallToolbar = !m_smallToolbar;
-    wxGetApp().InitToolbar(GetToolBar(), m_smallToolbar);
+    wxGetApp().InitToolbar(tbar, m_smallToolbar);
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -215,25 +333,72 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     (void)wxMessageBox("wxWindows toolbar sample", "About wxToolBar");
 }
 
+void MyFrame::OnDeleteMenu(wxCommandEvent& WXUNUSED(event))
+{
+    wxMenuBar *mbar = GetMenuBar();
+
+    size_t count = mbar->GetMenuCount();
+    if ( count == 3 )
+    {
+        // don't let delete the first 3 menus
+        wxLogError("Can't delete any more menus");
+    }
+    else
+    {
+        delete mbar->Remove(count - 1);
+    }
+}
+
+void MyFrame::OnAppendMenu(wxCommandEvent& WXUNUSED(event))
+{
+    static s_count = 0;
+
+    wxMenu *menu = new wxMenu;
+    menu->Append(0, "First item");
+    menu->AppendSeparator();
+    menu->Append(0, "Second item");
+
+    wxString title;
+    title.Printf("Dummy menu &%d", ++s_count);
+
+    GetMenuBar()->Append(menu, title);
+}
+
+void MyFrame::OnToggleMenu(wxCommandEvent& WXUNUSED(event))
+{
+    wxMenuBar *mbar = GetMenuBar();
+    if ( !m_menu )
+    {
+        // hide the menu
+        m_menu = mbar->Remove(1);
+    }
+    else
+    {
+        // restore it
+        mbar->Insert(1, m_menu, "&Toolbar");
+        m_menu = NULL;
+    }
+}
+
 void MyFrame::OnToolLeftClick(wxCommandEvent& event)
 {
     wxString str;
     str.Printf( _T("Clicked on tool %d\n"), event.GetId());
     m_textWindow->WriteText( str );
-  
+
     if (event.GetId() == wxID_HELP)
     {
-        if ((bool)event.GetExtraLong())
+        if ( event.GetExtraLong() != 0 )
             m_textWindow->WriteText( _T("Help button down now.\n") );
         else
             m_textWindow->WriteText( _T("Help button up now.\n") );
     }
-  
+
     if (event.GetId() == wxID_COPY)
     {
         DoEnablePrint();
     }
-    
+
     if (event.GetId() == wxID_CUT)
     {
         DoToggleHelp();

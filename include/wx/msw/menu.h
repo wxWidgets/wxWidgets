@@ -128,7 +128,6 @@ public:
 
     bool ProcessCommand(wxCommandEvent& event);
 
-    virtual void SetParent(wxEvtHandler *parent) { m_parent = parent; }
     void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
     wxEvtHandler *GetEventHandler() const { return m_eventHandler; }
 
@@ -182,7 +181,6 @@ private:
     wxMenu *          m_topLevelMenu;
     wxMenuBar *       m_menuBar;
     wxList            m_menuItems;
-    wxEvtHandler *    m_parent;
     wxEvtHandler *    m_eventHandler;
     wxWindow         *m_pInvokingWindow;
     void*             m_clientData;
@@ -222,11 +220,6 @@ public:
     virtual void EnableTop( size_t pos, bool flag );
     virtual void SetLabelTop( size_t pos, const wxString& label );
     virtual wxString GetLabelTop( size_t pos ) const;
-
-    // notifications: return FALSE to prevent the menu from being
-    // appended/deleted
-    virtual bool OnAppend(wxMenu *menu, const wxChar *title);
-    virtual bool OnDelete(wxMenu *menu, int index);
 
     // compatibility: these functions are deprecated
 #ifdef WXWIN_COMPATIBILITY

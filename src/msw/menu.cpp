@@ -81,21 +81,20 @@ static const int idMenuTitle = -2;
 void wxMenu::Init(const wxString& title, const wxFunction func )
 {
     m_title = title;
-    m_parent = NULL;
     m_eventHandler = this;
     m_pInvokingWindow = NULL;
-    m_doBreak = FALSE ;
+    m_doBreak = FALSE;
     m_noItems = 0;
     m_menuBar = NULL;
     m_hMenu = (WXHMENU) CreatePopupMenu();
-    m_savehMenu = 0 ;
+    m_savehMenu = 0;
     m_topLevelMenu = this;
     m_clientData = (void*) NULL;
 
     if ( !!m_title )
     {
-        Append(idMenuTitle, m_title) ;
-        AppendSeparator() ;
+        Append(idMenuTitle, m_title);
+        AppendSeparator();
     }
 
     Callback(func);
@@ -107,8 +106,10 @@ wxMenu::~wxMenu()
     // free Windows resources
     if ( m_hMenu )
     {
-        ::DestroyMenu((HMENU)m_hMenu);
-        m_hMenu = 0;
+        if ( !::DestroyMenu(GetHmenu()) )
+        {
+            wxLogLastError("DestroyMenu");
+        }
     }
 
     // delete submenus
@@ -128,6 +129,11 @@ wxMenu::~wxMenu()
         delete node;
         node = next;
     }
+
+#if wxUSE_ACCEL
+    // delete accels
+    WX_CLEAR_ARRAY(m_accels);
+#endif // wxUSE_ACCEL
 }
 
 void wxMenu::Break()
@@ -169,7 +175,6 @@ void wxMenu::Append(wxMenuItem *pItem)
 
         id = (UINT)submenu->GetHMenu();
         submenu->m_topLevelMenu = m_topLevelMenu;
-        submenu->m_parent       = this;
         submenu->m_savehMenu    = (WXHMENU)id;
         submenu->m_hMenu        = 0;
 
@@ -269,7 +274,6 @@ void wxMenu::Delete(int id)
         RemoveMenu(menu, (UINT)pos, MF_BYPOSITION);
         pSubMenu->m_hMenu = pSubMenu->m_savehMenu;
         pSubMenu->m_savehMenu = 0;
-        pSubMenu->m_parent = NULL;
         //     RemoveChild(item->subMenu);
         pSubMenu->m_topLevelMenu = NULL;
         // TODO: Why isn't subMenu deleted here???
@@ -344,7 +348,7 @@ bool wxMenu::IsChecked(int id) const
 
 void wxMenu::SetLabel(int id, const wxString& label)
 {
-    wxMenuItem *item = FindItemForId(id) ;
+    wxMenuItem *item = FindItemForId(id);
     wxCHECK_RET( item, wxT("wxMenu::SetLabel: no such item") );
 
     item->SetText(label);
@@ -353,9 +357,9 @@ void wxMenu::SetLabel(int id, const wxString& label)
 wxString wxMenu::GetLabel(int id) const
 {
     wxString label;
-    wxMenuItem *pItem = FindItemForId(id) ;
+    wxMenuItem *pItem = FindItemForId(id);
     if (pItem)
-        label = pItem->GetText() ;
+        label = pItem->GetText();
     else
         wxFAIL_MSG(wxT("wxMenu::GetLabel: item doesn't exist"));
 
@@ -574,6 +578,7 @@ void wxMenu::Detach()
 {
     wxASSERT_MSG( m_menuBar, wxT("can't detach menu if it's not attached") );
 
+    m_menuBar = NULL;
     m_hMenu = m_savehMenu;
     m_savehMenu = 0;
 }
@@ -585,7 +590,6 @@ void wxMenu::Detach()
 void wxMenuBar::Init()
 {
     m_eventHandler = this;
-    m_titles = NULL;
     m_menuBarFrame = NULL;
     m_hMenu = 0;
 }
@@ -625,9 +629,9 @@ wxMenuBar::~wxMenuBar()
 
 void wxMenuBar::Refresh()
 {
-    wxCHECK_RET( m_menuBarFrame, wxT("can't refresh a menubar withotu a frame") );
+    wxCHECK_RET( IsAttached(), wxT("can't refresh unatteched menubar") );
 
-    DrawMenuBar((HWND)m_menuBarFrame->GetHWND()) ;
+    DrawMenuBar(GetHwndOf(m_menuBarFrame));
 }
 
 WXHMENU wxMenuBar::Create()
@@ -690,8 +694,8 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     if ( flagsOld & MF_POPUP )
     {
         // HIBYTE contains the number of items in the submenu in this case
-        flagsOld &= 0xff ;
-        id = (UINT)::GetSubMenu((HMENU)m_hMenu, pos) ;
+        flagsOld &= 0xff;
+        id = (UINT)::GetSubMenu((HMENU)m_hMenu, pos);
     }
     else
     {
@@ -717,61 +721,6 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
     return label;
 }
 
-// ---------------------------------------------------------------------------
-// wxMenuBar notifications
-// ---------------------------------------------------------------------------
-
-bool wxMenuBar::OnDelete(wxMenu *a_menu, int pos)
-{
-    if ( !m_menuBarFrame )
-        return TRUE;
-
-    if ( ::RemoveMenu((HMENU)m_hMenu, (UINT)pos, MF_BYPOSITION) )
-    {
-        // VZ: I'm not sure about what's going on here, so I leave an assert
-        wxASSERT_MSG( m_menus[pos] == a_menu, wxT("what is this parameter for??") );
-
-        a_menu->Detach();
-
-        if ( m_menuBarFrame )
-            Refresh();
-
-        return TRUE;
-    }
-    else
-    {
-        wxLogLastError("RemoveMenu");
-    }
-
-    return FALSE;
-}
-
-bool wxMenuBar::OnAppend(wxMenu *a_menu, const wxChar *title)
-{
-    WXHMENU submenu = a_menu->GetHMenu();
-    if ( !submenu )
-        return FALSE;
-
-    if ( !m_menuBarFrame )
-        return TRUE;
-
-    a_menu->Attach(this);
-
-    if ( !::AppendMenu(GetHmenu(), MF_POPUP | MF_STRING,
-                       (UINT)submenu, title) )
-    {
-        wxLogLastError(wxT("AppendMenu"));
-    }
-
-    Refresh();
-
-    return TRUE;
-}
-
-// ---------------------------------------------------------------------------
-// wxMenuBar construction
-// ---------------------------------------------------------------------------
-
 int wxMenuBar::FindMenu(const wxString& title)
 {
     wxString menuTitle = wxStripMenuCodes(title);
@@ -788,56 +737,83 @@ int wxMenuBar::FindMenu(const wxString& title)
 
 }
 
+// ---------------------------------------------------------------------------
+// wxMenuBar construction
+// ---------------------------------------------------------------------------
+
 wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 {
-    if ( m_menuBarFrame )
-    {
-        wxFAIL_MSG(wxT("not implemented"));
+    wxMenu *menuOld = wxMenuBarBase::Replace(pos, menu, title);
+    if ( !menuOld )
+        return FALSE;
+    m_titles[pos] = title;
 
-        return NULL;
-    }
-    else
+    if ( IsAttached() )
     {
-        wxMenu *menuOld = wxMenuBarBase::Replace(pos, menu, title);
-        if ( menuOld )
+        // can't use ModifyMenu() because it deletes the submenu it replaces
+        if ( !::RemoveMenu(GetHmenu(), (UINT)pos, MF_BYPOSITION) )
         {
-            m_titles[pos] = title;
+            wxLogLastError("RemoveMenu");
         }
 
-        return menuOld;
+        if ( !::InsertMenu(GetHmenu(), (UINT)pos,
+                           MF_BYPOSITION | MF_POPUP | MF_STRING,
+                           (UINT)GetHmenuOf(menu), title) )
+        {
+            wxLogLastError("InsertMenu");
+        }
+
+        Refresh();
     }
+
+    return menuOld;
 }
 
 bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
-    if ( m_menuBarFrame )
-    {
-        wxFAIL_MSG(wxT("not implemented"));
-
+    if ( !wxMenuBarBase::Insert(pos, menu, title) )
         return FALSE;
-    }
-    else
+
+    m_titles.Insert(title, pos);
+
+    menu->Attach(this);
+
+    if ( IsAttached() )
     {
-        if ( !wxMenuBarBase::Insert(pos, menu, title) )
-            return FALSE;
+        if ( !::InsertMenu(GetHmenu(), pos,
+                           MF_BYPOSITION | MF_POPUP | MF_STRING,
+                           (UINT)GetHmenuOf(menu), title) )
+        {
+            wxLogLastError("InsertMenu");
+        }
 
-        m_titles.Insert(title, pos);
-
-        return TRUE;
+        Refresh();
     }
+
+    return TRUE;
 }
 
-bool wxMenuBar::Append(wxMenu * menu, const wxString& title)
+bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 {
-    if ( !wxMenuBarBase::Append(menu, title) )
-        return FALSE;
+    WXHMENU submenu = menu ? menu->GetHMenu() : 0;
+    wxCHECK_MSG( submenu, FALSE, wxT("can't append invalid menu to menubar") );
 
-    // menu is already appended, ignore errors
-    (void)OnAppend(menu, title);
+    menu->Attach(this);
+
+    if ( IsAttached() )
+    {
+        if ( !::AppendMenu(GetHmenu(), MF_POPUP | MF_STRING,
+                           (UINT)submenu, title) )
+        {
+            wxLogLastError(wxT("AppendMenu"));
+        }
+
+        Refresh();
+    }
+
+    wxMenuBarBase::Append(menu, title);
 
     m_titles.Add(title);
-
-    menu->SetParent(this);
 
     return TRUE;
 }
@@ -848,11 +824,17 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     if ( !menu )
         return NULL;
 
-    menu->SetParent(NULL);
+    if ( IsAttached() )
+    {
+        if ( !::RemoveMenu(GetHmenu(), (UINT)pos, MF_BYPOSITION) )
+        {
+            wxLogLastError("RemoveMenu");
+        }
 
-    // the menu is deleted from the list anyhow, so we have to ignore all
-    // possible errors here
-    (void)OnDelete(menu, pos);
+        menu->Detach();
+
+        Refresh();
+    }
 
     m_titles.Remove(pos);
 
@@ -861,7 +843,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 void wxMenuBar::Attach(wxFrame *frame)
 {
-    wxASSERT_MSG( !m_menuBarFrame, wxT("menubar already attached!") );
+    wxASSERT_MSG( !IsAttached(), wxT("menubar already attached!") );
 
     m_menuBarFrame = frame;
 

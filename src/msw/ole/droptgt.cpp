@@ -260,14 +260,11 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
 
         // and now it has the data
         wxDragResult rc = ConvertDragEffectToResult(GetDropEffect(grfKeyState));
-        m_pTarget->OnData(pt.x, pt.y);//, rc);
-/*
+        m_pTarget->OnData(pt.x, pt.y, rc);
         if ( wxIsDragResultOk(rc) ) {
             // operation succeeded
             *pdwEffect = ConvertDragResultToEffect(rc);
         }
-*/
-
         //else: *pdwEffect is already DROPEFFECT_NONE
     }
     //else: OnDrop() returned FALSE, no need to copy data
