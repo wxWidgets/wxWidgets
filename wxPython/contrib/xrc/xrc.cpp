@@ -874,19 +874,29 @@ static PyObject *_wrap_wxXmlResource_AttachUnknownControl(PyObject *self, PyObje
 static PyObject *_wrap_wxXmlResource_GetXRCID(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
-    char * _arg0;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
     char *_kwnames[] = { "str_id", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxXmlResource_GetXRCID",_kwnames,&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxXmlResource_GetXRCID",_kwnames,&_obj0)) 
         return NULL;
 {
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxXmlResource::GetXRCID(_arg0);
+    _result = (int )wxXmlResource::GetXRCID(*_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj0)
+        delete _arg0;
+}
     return _resultobj;
 }
 

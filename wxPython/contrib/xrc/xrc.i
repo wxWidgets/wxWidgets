@@ -122,7 +122,7 @@ public:
     // Returns numeric ID that is equivalent to string id used in XML
     // resource. To be used in event tables
     // Macro XMLID is provided for convenience
-    static int GetXRCID(const char *str_id);
+    static int GetXRCID(const wxString& str_id);
 
     // Returns version info (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a)
     long GetVersion() const;
