@@ -61,6 +61,7 @@ int wxMessageDialog::ShowModal()
                 
         param.movable = true;
         param.flags = 0 ;
+        param.version = kStdCFStringAlertVersionOne ;
         
         bool skipDialog = false ;
         
@@ -72,7 +73,7 @@ int wxMessageDialog::ShowModal()
                 param.cancelText     = (CFStringRef) kAlertDefaultCancelText;
                 param.otherText     = cfNoString ;
                 param.helpButton     = false ;
-                param.defaultButton = kAlertStdAlertOKButton;
+                param.defaultButton = m_dialogStyle & wxNO_DEFAULT ? kAlertStdAlertOtherButton : kAlertStdAlertOKButton;
                 param.cancelButton     = kAlertStdAlertCancelButton;
             }
             else
@@ -81,7 +82,7 @@ int wxMessageDialog::ShowModal()
                 param.cancelText     = NULL;
                 param.otherText     = cfNoString ;
                 param.helpButton     = false ;
-                param.defaultButton = kAlertStdAlertOKButton;
+                param.defaultButton = m_dialogStyle & wxNO_DEFAULT ? kAlertStdAlertOtherButton : kAlertStdAlertOKButton;
                 param.cancelButton     = 0;
             }
         }
