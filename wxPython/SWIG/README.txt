@@ -12,7 +12,7 @@ source tree soon.
 ------------------------------------------------------------------------
 
 
-
+swig.python-docstring.patch  Adds "autodoc" and "docstring" features.
 
 
 

@@ -1,0 +1,349 @@
+Index: Source/Modules/python.cxx
+===================================================================
+RCS file: /cvsroot/SWIG/Source/Modules/python.cxx,v
+retrieving revision 1.27
+diff -u -r1.27 python.cxx
+--- Source/Modules/python.cxx	12 Nov 2003 17:14:00 -0000	1.27
++++ Source/Modules/python.cxx	19 Nov 2003 06:23:46 -0000
+@@ -315,6 +315,17 @@
+      -noexcept       - No automatic exception handling\n\
+      -noproxy        - Don't generate proxy classes \n\n";
+ 
++
++/* flags for the make_autodoc function */
++enum autodoc_t {
++  AUTODOC_CLASS,
++  AUTODOC_CTOR,
++  AUTODOC_DTOR,
++  AUTODOC_STATICFUNC,
++  AUTODOC_FUNC
++};
++
++
+ class PYTHON : public Language {
+ public:
+ 
+@@ -662,15 +673,21 @@
+    * ------------------------------------------------------------ */
+ 
+   void emitFunctionShadowHelper(Node *n, File *f_dest, String *name, int kw) {
+-    if ( ! have_addtofunc(n) ) {
++    if ( ! have_addtofunc(n) && ! have_docstring(n) ) {
+       /* If there is no addtofunc directive then just assign from the extension module */
+       Printv(f_dest, "\n", name, " = ", module, ".", name, "\n", NIL);
+     } else {
+       /* Otherwise make a wrapper function to insert the code into */
+       Printv(f_dest, "\ndef ", name, "(*args", (kw ? ", **kwargs" : ""), "):\n", NIL);
+-      Printv(f_dest, tab4, "val = ", funcCallHelper(name, kw), "\n", NIL);
+-      Printv(f_dest, tab4, addtofunc(n), "\n", NIL);
+-      Printv(f_dest, tab4, "return val\n", NIL);
++      if ( have_docstring(n) )
++        Printv(f_dest, tab4, docstring(n, AUTODOC_FUNC), "\n", NIL);
++      if ( have_addtofunc(n) ) {
++        Printv(f_dest, tab4, "val = ", funcCallHelper(name, kw), "\n", NIL);
++        Printv(f_dest, tab4, addtofunc(n), "\n", NIL);
++        Printv(f_dest, tab4, "return val\n", NIL);
++      } else {
++        Printv(f_dest, tab4, "return ", funcCallHelper(name, kw), "\n", NIL);
++      }        
+     }
+   }
+ 
+@@ -686,6 +703,193 @@
+ 
+ 
+   /* ------------------------------------------------------------
++   * have_docstring()
++   *    Check if there is a docstring directive and it has text,
++   *    or there is an autodoc flag set
++   * ------------------------------------------------------------ */
++
++  bool have_docstring(Node *n) {
++    String* str = Getattr(n, "feature:docstring");
++    return (str != NULL && Len(str) > 0) ||
++        (Getattr(n,"feature:autodoc") && !Getattr(n, "feature:noautodoc"));
++  }
++  
++  /* ------------------------------------------------------------
++   * docstring()
++   *    Get the docstring text, stripping off {} if neccessary,
++   *    and enclose in triple-double quotes.  If autodoc is also
++   *    set then it will build a combined docstring.
++   * ------------------------------------------------------------ */
++
++  String *docstring(Node *n, autodoc_t ad_type) {
++    String* str = Getattr(n, "feature:docstring");
++    bool have_ds = (str != NULL && Len(str) > 0);
++    bool have_auto = (Getattr(n,"feature:autodoc") && !Getattr(n, "feature:noautodoc"));
++    char* triple_double = "\"\"\"";
++    String* autodoc;
++    String* doc;
++
++    if ( have_ds ) {
++      char* t = Char(str);
++      if (*t == '{') {
++        Delitem(str ,0);
++        Delitem(str,DOH_END);
++      }
++    }
++
++    if ( have_auto ) {
++      autodoc = make_autodoc(n, ad_type);
++      have_auto = (autodoc != NULL && Len(autodoc) > 0);
++    }
++    
++    if ( have_auto && have_ds )
++      doc = NewStringf("%s%s\n\n%s%s", triple_double, autodoc, str, triple_double);
++    else if ( !have_auto && have_ds )
++      doc = NewStringf("%s%s%s", triple_double, str, triple_double);
++    else
++      doc = NewStringf("%s%s%s", triple_double, autodoc, triple_double);
++
++    Setattr(n, "python:docstring", doc);
++    Setattr(n, "python:autodoc", autodoc);
++    return doc;
++  }
++
++
++  /* ------------------------------------------------------------
++   * make_autodoc()
++   *    Build a docstring for the node, using parameter and other
++   *    info in the parse tree.  If the value of the autodoc
++   *    attribute is "0" then do not include parameter types, if
++   *    it is "1" (the default) then do.  If it has some other
++   *    value then assume it is supplied by the extension writer
++   *    and use it directly.
++   * ------------------------------------------------------------ */
++
++  String* make_autodoc(Node *n, autodoc_t ad_type) {
++
++    if (ad_type == AUTODOC_CLASS)
++      return NULL;  // No function call do document in this case
++
++    // check how should the parameters be rendered?
++    String* autodoc = Getattr(n, "feature:autodoc");
++    bool showTypes;
++    if (Strcmp(autodoc, "0") == 0)
++      showTypes = false;
++    else if (Strcmp(autodoc, "1") == 0)
++      showTypes = true;
++    else
++      return autodoc;
++    
++    // If the function is overloaded then this funciton is called
++    // for the last one.  Rewind to the first so the docstrings are
++    // in order.
++    while ( Getattr(n, "sym:previousSibling") )
++      n = Getattr(n, "sym:previousSibling");
++    
++    String* doc  = NewString("");
++    while (n) {
++        String*   symname = Getattr(n, "sym:name");
++        SwigType* type    = Getattr(n, "type");
++      
++        if (type) {
++          if (Strcmp(type, "void") == 0)
++            type = NULL;
++          else {
++            type = SwigType_base(type);
++            Node* lookup = Swig_symbol_clookup(type, 0);
++            if (lookup)
++              type = Getattr(lookup, "sym:name");
++          }
++        }
++        
++        switch ( ad_type ) {
++        case AUTODOC_CTOR:
++          if ( Strcmp(class_name, symname) == 0)
++            Printf(doc, "__init__(%s) -> %s", make_autodocParmList(n, showTypes), class_name);
++          else
++            Printf(doc, "%s(%s) -> %s", symname, make_autodocParmList(n, showTypes), class_name);
++          break;
++          
++        case AUTODOC_DTOR:
++          Printf(doc, "__del__()");
++          break;
++            
++        case AUTODOC_STATICFUNC:
++          Printf(doc, "%s.%s(%s)", class_name, symname, make_autodocParmList(n, showTypes));
++          if (type) Printf(doc, " -> %s", type);
++          break;
++                      
++        case AUTODOC_FUNC:
++          Printf(doc, "%s(%s)", symname, make_autodocParmList(n, showTypes));
++          if (type) Printf(doc, " -> %s", type);
++          break;            
++        }
++
++        // if it's overloaded then get the next decl and loop around again
++        n = Getattr(n, "sym:nextSibling");
++        if (n)
++          Printf(doc, "\n");
++    }
++          
++    return doc;
++  }
++
++
++  String* make_autodocParmList(Node* n, bool showTypes) {
++    String*   doc = NewString(""); 
++    ParmList* plist = Getattr(n,"parms");
++    Parm*     p;
++    Node*     lookup;
++    int       lines = 0;
++    const int maxwidth = 50;
++    
++
++    for (p = plist; p; p = nextSibling(p)) {
++      String*   name =  Getattr(p, "name");
++      String*   value = Getattr(p, "value");
++
++      if ( Len(doc) ) {
++        // add a comma to the previous one if any
++        Printf(doc, ", ");
++
++        // Do we need to wrap a long line?
++        if ((Len(doc) - lines*maxwidth) > maxwidth) {
++          Printf(doc, "\n    ");
++          lines += 1;
++        }
++      }
++        
++      // Do the param type too?
++      if (showTypes) {
++        SwigType* type =  SwigType_base(Getattr(p, "type"));
++        lookup = Swig_symbol_clookup(type, 0);
++        if (lookup)
++          type = Getattr(lookup, "sym:name");
++        Printf(doc, "%s ", type);
++      }
++
++      if (name)
++        Printf(doc, "%s", name);
++      else
++        Printf(doc, "??");
++
++      if (value) {
++        if (Strcmp(value, "NULL") == 0)
++          value = NewString("None");
++        else {
++          lookup = Swig_symbol_clookup(value, 0);
++          if (lookup)
++            value = Getattr(lookup, "sym:name");
++        }
++        Printf(doc, "=%s", value);
++      }
++    }
++    
++    return doc;
++  }
++  
++  
++  /* ------------------------------------------------------------
+    * have_addtofunc()
+    *    Check if there is a %addtofunc directive and it has text
+    * ------------------------------------------------------------ */
+@@ -1908,7 +2112,9 @@
+ 	}
+       }
+       Printf(f_shadow,":\n");
+-
++      if ( have_docstring(n) )
++          Printv(f_shadow, tab4, docstring(n, AUTODOC_CLASS), "\n", NIL);
++      
+       if (!modern) {
+         Printv(f_shadow,tab4,"__swig_setmethods__ = {}\n",NIL);
+         if (Len(base_class)) {
+@@ -2043,14 +2249,20 @@
+ 	  Printv(f_shadow,pycode,"\n",NIL);
+ 	} else {
+ 
+-          Printv(f_shadow, tab4, "def ", symname, "(*args", (allow_kwargs ? ", **kwargs" : ""), "): ", NIL);
+-          if ( have_addtofunc(n) ) {
+-            Printv(f_shadow, "\n", NIL);
+-            Printv(f_shadow, tab8, "val = ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n", NIL);
+-            Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
+-            Printv(f_shadow, tab8, "return val\n", NIL);
++          Printv(f_shadow, tab4, "def ", symname, "(*args", (allow_kwargs ? ", **kwargs" : ""), "):", NIL);
++          if ( ! have_addtofunc(n) && ! have_docstring(n)) {
++            Printv(f_shadow, " return ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n", NIL);
+           } else {
+-            Printv(f_shadow, "return ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n", NIL);
++            Printv(f_shadow, "\n", NIL);
++            if ( have_docstring(n) )
++              Printv(f_shadow, tab8, docstring(n, AUTODOC_FUNC), "\n", NIL);
++            if ( have_addtofunc(n) ) {
++              Printv(f_shadow, tab8, "val = ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n", NIL);
++              Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
++              Printv(f_shadow, tab8, "return val\n\n", NIL);
++            } else {
++              Printv(f_shadow, tab8, "return ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n\n", NIL);
++            }
+           }
+         }
+ 
+@@ -2067,12 +2279,18 @@
+     String *symname = Getattr(n,"sym:name");
+     Language::staticmemberfunctionHandler(n);
+     if (shadow) {
+-      if ( !classic && have_addtofunc(n) ) {
++      if ( !classic && (have_addtofunc(n) || have_docstring(n)) ) {
+         int kw = (check_kwargs(n) && !Getattr(n,"sym:overloaded")) ? 1 : 0;
+         Printv(f_shadow, tab4, "def ", symname, "(*args", (kw ? ", **kwargs" : ""), "):\n", NIL);
+-        Printv(f_shadow, tab8, "val = ", funcCallHelper(Swig_name_member(class_name, symname), kw), "\n", NIL);
+-        Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
+-        Printv(f_shadow, tab8, "return val\n", NIL);
++        if ( have_docstring(n) )
++          Printv(f_shadow, tab8, docstring(n, AUTODOC_STATICFUNC), "\n", NIL);
++        if ( have_addtofunc(n) ) {
++          Printv(f_shadow, tab8, "val = ", funcCallHelper(Swig_name_member(class_name, symname), kw), "\n", NIL);
++          Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
++          Printv(f_shadow, tab8, "return val\n\n", NIL);
++        } else {
++          Printv(f_shadow, tab8, "return ", funcCallHelper(Swig_name_member(class_name, symname), kw), "\n\n", NIL);
++        }
+         Printv(f_shadow, tab4, modern ? "" : "if _newclass:",  symname,
+                " = staticmethod(", symname, ")\n", NIL);
+ 
+@@ -2159,6 +2377,8 @@
+ 
+             Printv(f_shadow, tab4, "def __init__(self, *args",
+                    (allow_kwargs ? ", **kwargs" : ""), "):\n", NIL);
++            if ( have_docstring(n) )
++              Printv(f_shadow, tab8, docstring(n, AUTODOC_CTOR), "\n", NIL);
+             Printv(f_shadow, pass_self, NIL);
+             if (!modern) {
+               Printv(f_shadow, tab8, "_swig_setattr(self, ", rclassname, ", 'this', ", 
+@@ -2174,7 +2394,7 @@
+               Printv(f_shadow, tab8, "del newobj.thisown\n", NIL);
+             }
+             if ( have_addtofunc(n) )
+-              Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
++              Printv(f_shadow, tab8, addtofunc(n), "\n\n", NIL);
+   	    Delete(pass_self);
+   	  }
+ 	  have_constructor = 1;
+@@ -2192,6 +2412,8 @@
+ 
+             Printv(f_shadow_stubs, "\ndef ", symname, "(*args",
+                    (allow_kwargs ? ", **kwargs" : ""), "):\n", NIL);
++            if ( have_docstring(n) )
++              Printv(f_shadow_stubs, tab4, docstring(n, AUTODOC_CTOR), "\n", NIL);
+             Printv(f_shadow_stubs, tab4, "val = ",
+                    funcCallHelper(Swig_name_construct(symname), allow_kwargs), "\n", NIL);
+ 	    Printv(f_shadow_stubs, tab4, "val.thisown = 1\n", NIL);
+@@ -2225,11 +2447,13 @@
+ 	Printv(f_shadow,pycode,"\n", NIL);
+       } else {
+ 	Printv(f_shadow, tab4, "def __del__(self, destroy=", module, ".", Swig_name_destroy(symname), "):\n", NIL);
++        if ( have_docstring(n) )
++              Printv(f_shadow, tab8, docstring(n, AUTODOC_DTOR), "\n", NIL);
+ 	if ( have_addtofunc(n) )
+ 	  Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
+ 	Printv(f_shadow, tab8, "try:\n", NIL);
+ 	Printv(f_shadow, tab4, tab8, "if self.thisown: destroy(self)\n", NIL);
+-	Printv(f_shadow, tab8, "except: pass\n", NIL);
++	Printv(f_shadow, tab8, "except: pass\n\n", NIL);
+       }
+     }
+     return SWIG_OK;
