@@ -74,7 +74,7 @@ public:
     // -------------------------------
 
     // override some base class virtuals
-    virtual bool Show(bool show);
+    virtual bool Show(bool show = TRUE);
 
     // event handlers
     bool OnClose();
