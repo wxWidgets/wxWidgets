@@ -450,6 +450,7 @@ public:
     wxView *GetView() const { return m_childView; }
     void SetDocument(wxDocument *doc) { m_childDocument = doc; }
     void SetView(wxView *view) { m_childView = view; }
+    bool Destroy() { m_childView = (wxView *)NULL; return wxFrame::Destroy(); }
 
 protected:
     wxDocument*       m_childDocument;
