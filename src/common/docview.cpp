@@ -172,7 +172,7 @@ bool wxDocument::Close()
 bool wxDocument::OnCloseDocument()
 {
     // Tell all views that we're about to close
-    NotifyClosing();    
+    NotifyClosing();
     DeleteContents();
     Modify(FALSE);
     return TRUE;
@@ -288,7 +288,7 @@ bool wxDocument::SaveAs()
     if (!OnSaveDocument(m_documentFile))
         return FALSE;
 
-   // A file that doesn't use the default extension of its document template cannot be opened 
+   // A file that doesn't use the default extension of its document template cannot be opened
    // via the FileHistory, so we do not add it.
    if (docTemplate->FileMatchesTemplate(fileName))
    {
@@ -529,7 +529,7 @@ void wxDocument::UpdateAllViews(wxView *sender, wxObject *hint)
     while (node)
     {
         wxView *view = (wxView *)node->GetData();
-		if (view != sender)
+        if (view != sender)
             view->OnUpdate(sender, hint);
         node = node->GetNext();
     }
@@ -800,7 +800,7 @@ bool wxDocManager::CloseDocument(wxDocument* doc, bool force)
         // Check we're really deleted
         if (m_docs.Member(doc))
             delete doc;
-        
+
         return TRUE;
     }
     return FALSE;
@@ -813,7 +813,7 @@ bool wxDocManager::CloseDocuments(bool force)
     {
         wxDocument *doc = (wxDocument *)node->GetData();
         wxNode *next = node->GetNext();
-        
+
         if (!CloseDocument(doc, force))
             return FALSE;
 
@@ -1110,7 +1110,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
         delete[] templates;
         return (wxDocument *) NULL;
     }
-    
+
     wxDocument* docToClose = NULL;
 
     // If we've reached the max number of docs, close the
@@ -1134,11 +1134,11 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
                     return NULL;
                 }
             }
-            
+
             wxDocTemplate *temp = templates[0];
             delete[] templates;
             wxDocument *newDoc = temp->CreateDocument(path, flags);
-            
+
             if (newDoc)
             {
                 newDoc->SetDocumentName(temp->GetDocumentName());
@@ -1159,7 +1159,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
                     return NULL;
                 }
             }
-            
+
             wxDocument *newDoc = temp->CreateDocument(path, flags);
 
             if (newDoc)
@@ -1186,10 +1186,10 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
         temp = FindTemplateForPath(path2);
         if (!temp)
         {
-            // Since we do not add files with non-default extensions to the FileHistory this 
+            // Since we do not add files with non-default extensions to the FileHistory this
             // can only happen if the application changes the allowed templates in runtime.
             (void)wxMessageBox(_("Sorry, the format for this file is unknown."),
-                                _("Open File"), 
+                                _("Open File"),
                                wxOK | wxICON_EXCLAMATION, wxFindSuitableParent());
         }
     }
@@ -1207,7 +1207,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
                 return NULL;
             }
         }
-        
+
         wxDocument *newDoc = temp->CreateDocument(path2, flags);
         if (newDoc)
         {
@@ -1514,10 +1514,10 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
             theTemplate = FindTemplateForPath(path);
         if ( !theTemplate )
         {
-            // Since we do not add files with non-default extensions to the FileHistory this 
+            // Since we do not add files with non-default extensions to the FileHistory this
             // can only happen if the application changes the allowed templates in runtime.
             (void)wxMessageBox(_("Sorry, the format for this file is unknown."),
-                                _("Open File"), 
+                                _("Open File"),
                                 wxOK | wxICON_EXCLAMATION, wxFindSuitableParent());
         }
     }
@@ -1527,28 +1527,6 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     }
 
     return theTemplate;
-
-#if 0
-    // In all other windowing systems, until we have more advanced
-    // file selectors, we must select the document type (template) first, and
-    // _then_ pop up the file selector.
-    wxDocTemplate *temp = SelectDocumentType(templates, noTemplates);
-    if (!temp)
-        return (wxDocTemplate *) NULL;
-
-    wxChar *pathTmp = wxFileSelector(_("Select a file"), wxT(""), wxT(""),
-            temp->GetDefaultExtension(),
-            temp->GetFileFilter(),
-            0, wxTheApp->GetTopWindow());
-
-    if (pathTmp)
-    {
-        path = pathTmp;
-        return temp;
-    }
-    else
-        return (wxDocTemplate *) NULL;
-#endif // 0
 }
 
 wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
@@ -1558,47 +1536,47 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
     wxDocTemplate **data = new wxDocTemplate *[noTemplates];
     int i;
     int n = 0;
-        
-	for (i = 0; i < noTemplates; i++)
-	{
-		if (templates[i]->IsVisible())
-		{
-    		int j;
+
+    for (i = 0; i < noTemplates; i++)
+    {
+        if (templates[i]->IsVisible())
+        {
+            int j;
             bool want = TRUE;
-			for (j = 0; j < n; j++)
-			{
+            for (j = 0; j < n; j++)
+            {
                 //filter out NOT unique documents + view combinations
-				if ( templates[i]->m_docTypeName == data[j]->m_docTypeName &&
+                if ( templates[i]->m_docTypeName == data[j]->m_docTypeName &&
                      templates[i]->m_viewTypeName == data[j]->m_viewTypeName
                    )
                     want = FALSE;
-			}
+            }
 
             if ( want )
-			{
-    			strings.Add(templates[i]->m_description);
+            {
+                strings.Add(templates[i]->m_description);
 
-				data[n] = templates[i];
-				n ++;
-			}
-		}
-	}  // for
+                data[n] = templates[i];
+                n ++;
+            }
+        }
+    }  // for
 
-	if (sort)
-	{
-		// Yes, this will be slow, but template lists
-		// are typically short.
-		int j;
-		n = strings.Count();
-		for (i = 0; i < n; i++)
-		{
-			for (j = 0; j < noTemplates; j++)
-			{
-				if (strings[i] == templates[j]->m_description)
-					data[i] = templates[j];
-			}
-		}
-	}
+    if (sort)
+    {
+        // Yes, this will be slow, but template lists
+        // are typically short.
+        int j;
+        n = strings.Count();
+        for (i = 0; i < n; i++)
+        {
+            for (j = 0; j < noTemplates; j++)
+            {
+                if (strings[i] == templates[j]->m_description)
+                    data[i] = templates[j];
+            }
+        }
+    }
 
     wxDocTemplate *theTemplate;
 
@@ -1638,45 +1616,45 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
     wxDocTemplate **data = new wxDocTemplate *[noTemplates];
     int i;
     int n = 0;
-        
+
     for (i = 0; i < noTemplates; i++)
     {
         wxDocTemplate *templ = templates[i];
         if ( templ->IsVisible() && !templ->GetViewName().empty() )
         {
-    		int j;
+            int j;
             bool want = TRUE;
-			for (j = 0; j < n; j++)
-			{
+            for (j = 0; j < n; j++)
+            {
                 //filter out NOT unique views
-				if ( templates[i]->m_viewTypeName == data[j]->m_viewTypeName )
+                if ( templates[i]->m_viewTypeName == data[j]->m_viewTypeName )
                     want = FALSE;
-			}
+            }
 
             if ( want )
             {
-    			strings.Add(templ->m_viewTypeName);
-				data[n] = templ;
-				n ++;
-			}
+                strings.Add(templ->m_viewTypeName);
+                data[n] = templ;
+                n ++;
+            }
         }
     }
 
-	if (sort)
-	{
-		// Yes, this will be slow, but template lists
-		// are typically short.
-		int j;
-		n = strings.Count();
-		for (i = 0; i < n; i++)
-		{
-			for (j = 0; j < noTemplates; j++)
-			{
-				if (strings[i] == templates[j]->m_viewTypeName)
-					data[i] = templates[j];
-			}
-		}
-	}
+    if (sort)
+    {
+        // Yes, this will be slow, but template lists
+        // are typically short.
+        int j;
+        n = strings.Count();
+        for (i = 0; i < n; i++)
+        {
+            for (j = 0; j < noTemplates; j++)
+            {
+                if (strings[i] == templates[j]->m_viewTypeName)
+                    data[i] = templates[j];
+            }
+        }
+    }
 
     wxDocTemplate *theTemplate;
 
@@ -1878,7 +1856,7 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
             {
                 // remove the file from the MRU list. The user should already be notified.
                 m_docManager->RemoveFileFromHistory(n);
-                
+
                 wxLogError(_("The file '%s' couldn't be opened.\nIt has been removed from the most recently used files list."),
                        filename.c_str());
             }
@@ -2217,7 +2195,7 @@ void wxFileHistory::Save(wxConfigBase& config)
         if (i < m_fileHistoryN)
             config.Write(buf, wxString(m_fileHistory[i]));
         else
-            config.Write(buf, wxEmptyString);            
+            config.Write(buf, wxEmptyString);
     }
 }
 #endif // wxUSE_CONFIG
