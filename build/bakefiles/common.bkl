@@ -368,7 +368,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <lib-path>$(LIBDIRNAME)</lib-path>        
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <warnings>max</warnings>
-        <cppflags-watcom>-wcd=549</cppflags-watcom>
+        <cppflags-watcom>-wcd=549 -wcd=656 -wcd=657</cppflags-watcom>
     </template>
 
     <!-- for both GUI and wxBase libs/samples: -->
