@@ -1675,7 +1675,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     wxEventType eventType = wxEVT_NULL;
 
-    NMHDR *nmhdr = (NMHDR *)lParam;
+   NMHDR *nmhdr = (NMHDR *)lParam;
 
     // if your compiler is as broken as this, you should really change it: this
     // code is needed for normal operation! #ifdef below is only useful for
@@ -1796,52 +1796,28 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         const int iItem = nmLV->iItem;
 
-        // set the data event field for all messages for which the system gives
-        // us a valid NM_LISTVIEW::lParam
-        switch ( nmLV->hdr.code )
+
+        // FreeAllInternalData will cause LVN_ITEMCHANG* messages, which can be
+        // ignored for efficiency.  It is done here because the internal data is in the
+        // process of being deleted so we don't want to try and access it below.
+        if ( gs_ignoreChangeDeleteItem &&
+             ( (nmLV->hdr.code == LVN_ITEMCHANGED) || (nmLV->hdr.code == LVN_ITEMCHANGING)))
         {
-            case LVN_BEGINDRAG:
-            case LVN_BEGINRDRAG:
-            case LVN_COLUMNCLICK:
-            case LVN_ITEMCHANGED:
-            case LVN_ITEMCHANGING:
-                if ( iItem != -1 )
-                {
-                    if ( iItem >= GetItemCount() || gs_ignoreChangeDeleteItem )
-                    {
-                        // there is apparently a bug in comctl32.dll version
-                        // 5.50.4704.1100 (note that the MS DLL database
-                        // doesn't say what this version is, it's not the one
-                        // shipped with W2K although the bug was reported under
-                        // that system) and it sends us LVN_ITEMCHANGING
-                        // notifications with the item out of range -- and as
-                        // we access the items client data, we crash below
-                        //
-                        // see
-                        //
-                        //  http://lists.wxwindows.org/cgi-bin/ezmlm-cgi?8:mss:29852:knlihdmadhaljafjajei
-                        //
-                        // and the thread continuation for more details
-                        // (although note that the bug may be present in other
-                        // versions of comctl32.dll as well as it has been
-                        // reported quite a few times)
-                        //
-                        // to fix this, simply ignore these "bad" events (as
-                        // above with HDN_GETDISPINFOW)
-                        return TRUE;
-                    }
-
-                    wxListItemInternalData *internaldata =
-                        (wxListItemInternalData *) nmLV->lParam;
-
-                    if ( internaldata )
-                        event.m_item.m_data = internaldata->lParam;
-                }
-
-            default:
-                // fall through
-                ;
+            return TRUE;
         }
+
+
+        // If we have a valid item then check if there is a data value
+        // associated with it and put it in the event.
+        if ( iItem >= 0 && iItem < GetItemCount() )
+        {
+            wxListItemInternalData *internaldata =
+                wxGetInternalData(GetHwnd(), iItem);
+
+            if ( internaldata )
+                event.m_item.m_data = internaldata->lParam;
+        }
+
 
         switch ( nmhdr->code )
         {
@@ -2162,8 +2138,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     event.SetEventType(eventType);
 
-    if ( !GetEventHandler()->ProcessEvent(event) )
-        return FALSE;
+    bool processed = GetEventHandler()->ProcessEvent(event);
 
     // post processing
     // ---------------
@@ -2197,9 +2172,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             return TRUE;
     }
 
-    *result = !event.IsAllowed();
+    if ( processed )
+        *result = !event.IsAllowed();
 
-    return TRUE;
+    return processed;
 }
 
 #if defined(_WIN32_IE) && _WIN32_IE >= 0x300
