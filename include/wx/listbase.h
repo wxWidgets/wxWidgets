@@ -242,7 +242,7 @@ public:
     void SetData(long data)
         { m_mask |= wxLIST_MASK_DATA; m_data = data; }
     void SetData(void *data)
-        { m_mask |= wxLIST_MASK_DATA; m_data = (long)data; }
+        { m_mask |= wxLIST_MASK_DATA; m_data = wxPtrToUInt(data); }
 
     void SetWidth(int width)
         { m_mask |= wxLIST_MASK_WIDTH; m_width = width; }
@@ -263,7 +263,7 @@ public:
     long GetState() const { return m_state & m_stateMask; }
     const wxString& GetText() const { return m_text; }
     int GetImage() const { return m_image; }
-    long GetData() const { return m_data; }
+    wxUIntPtr GetData() const { return m_data; }
 
     int GetWidth() const { return m_width; }
     wxListColumnFormat GetAlign() const { return (wxListColumnFormat)m_format; }
@@ -292,7 +292,7 @@ public:
     long            m_stateMask;// Which flags of m_state are valid (uses same flags)
     wxString        m_text;     // The label/header text
     int             m_image;    // The zero-based index into an image list
-    long            m_data;     // App-defined data
+    wxUIntPtr       m_data;     // App-defined data
 
     // For columns only
     int             m_format;   // left, right, centre
