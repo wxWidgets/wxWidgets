@@ -515,18 +515,18 @@ static unsigned char ParseHexadecimal(char digit1, char digit2)
     unsigned char i1, i2;
 
     if (digit1 >= 'a')
-        i1 = digit1 - 'a' + 0x0A;
+        i1 = (unsigned char)(digit1 - 'a' + 0x0A);
     else if (digit1 >= 'A')
-        i1 = digit1 - 'A' + 0x0A;
+        i1 = (unsigned char)(digit1 - 'A' + 0x0A);
     else
-        i1 = digit1 - '0';
+        i1 = (unsigned char)(digit1 - '0');
     if (digit2 >= 'a')
-        i2 = digit2 - 'a' + 0x0A;
+        i2 = (unsigned char)(digit2 - 'a' + 0x0A);
     else if (digit2 >= 'A')
-        i2 = digit2 - 'A' + 0x0A;
+        i2 = (unsigned char)(digit2 - 'A' + 0x0A);
     else
-        i2 = digit2 - '0';
-    return (0x10 * i1 + i2);
+        i2 = (unsigned char)(digit2 - '0');
+    return (unsigned char)(0x10 * i1 + i2);
 }
 
 static bool GetRGBFromName(const char *inname, bool *isNone,
@@ -568,7 +568,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
     p = name;
     while (*p)
     {
-        *p = tolower(*p);
+        *p = (char)tolower(*p);
         p++;
     }
 

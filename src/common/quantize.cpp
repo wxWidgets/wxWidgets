@@ -77,7 +77,9 @@
 
 typedef unsigned short UINT16;
 typedef signed short INT16;
+#ifndef __WATCOMC__
 typedef signed int INT32;
+#endif
 
 typedef unsigned char JSAMPLE;
 typedef JSAMPLE *JSAMPROW;
@@ -1569,7 +1571,7 @@ bool wxQuantize::Quantize(const wxImage& src, wxImage& dest,
             // We need to shift the palette entries up
             // to make room for the Windows system colours.
             for (i = 0; i < w * h; i++)
-                data8bit[i] = data8bit[i] + paletteShift;
+                data8bit[i] = (unsigned char)(data8bit[i] + paletteShift);
         }
 #endif
         *eightBitData = data8bit;

@@ -60,9 +60,9 @@ static bool DoRegionUnion(wxRegion& region,
 {
     unsigned char hiR, hiG, hiB;
 
-    hiR = wxMin(0xFF, loR + tolerance);
-    hiG = wxMin(0xFF, loG + tolerance);
-    hiB = wxMin(0xFF, loB + tolerance);
+    hiR = (unsigned char)wxMin(0xFF, loR + tolerance);
+    hiG = (unsigned char)wxMin(0xFF, loG + tolerance);
+    hiB = (unsigned char)wxMin(0xFF, loB + tolerance);
 
     // Loop through the image row by row, pixel by pixel, building up
     // rectangles to add to the region.

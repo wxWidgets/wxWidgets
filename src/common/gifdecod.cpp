@@ -906,8 +906,8 @@ int wxGIFDecoder::ReadGIF()
             if ((buf[8] & 0x80) == 0x80)
             {
                 ncolors = 2 << (buf[8] & 0x07);
-                off_t pos = m_f->TellI();
-                off_t numBytes = 3 * ncolors;
+                wxFileOffset pos = m_f->TellI();
+                wxFileOffset numBytes = 3 * ncolors;
                 m_f->SeekI(numBytes, wxFromCurrent);
                 if (m_f->TellI() != (pos + numBytes))
                 {

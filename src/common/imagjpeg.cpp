@@ -363,7 +363,7 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     if (image->HasOption(wxIMAGE_OPTION_RESOLUTION))
     {
         cinfo.X_density =
-        cinfo.Y_density = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTION);
+        cinfo.Y_density = (UINT16)image->GetOptionInt(wxIMAGE_OPTION_RESOLUTION);
     }
 
     // sets the resolution unit field in the output file
@@ -371,7 +371,7 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     // wxIMAGE_RESOLUTION_CM for centimeters
     if (image->HasOption(wxIMAGE_OPTION_RESOLUTIONUNIT))
     {
-        cinfo.density_unit = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONUNIT);
+        cinfo.density_unit = (UINT8)image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONUNIT);
     }
 
     jpeg_start_compress(&cinfo, TRUE);

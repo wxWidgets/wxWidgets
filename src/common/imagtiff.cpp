@@ -398,7 +398,7 @@ bool wxTIFFHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char hdr[2];
 
-    if ( !stream.Read(&hdr, WXSIZEOF(hdr)) )
+    if ( !stream.Read(&hdr[0], WXSIZEOF(hdr)) )
         return false;
 
     return (hdr[0] == 'I' && hdr[1] == 'I') ||
