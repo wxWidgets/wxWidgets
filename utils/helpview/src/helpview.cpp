@@ -202,7 +202,8 @@ bool hvApp::OnInit()
 	
     for( i=0; i < bookCount; i++ )
     {
-		m_helpController->AddBook(book[i]);
+        wxFileName fileName(book[i]);
+		m_helpController->AddBook(fileName);
     }
 	
 #ifdef __WXMOTIF__
@@ -260,7 +261,8 @@ bool hvApp::OpenBook(wxHtmlHelpController* controller)
         if (ext == _T(".zip") || ext == _T(".htb") || ext == _T(".hhp"))
         {
             wxBusyCursor bcur;
-            controller->AddBook(s);
+            wxFileName fileName(s);
+            controller->AddBook(fileName);
             return TRUE;
         }
     }
