@@ -71,6 +71,20 @@ void wxDialogBase::Init()
 
 wxSizer *wxDialogBase::CreateTextSizer( const wxString& message )
 {
+    bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
+    
+    wxString text = message;
+    
+    // I admit that this is complete bogus, but it makes
+    // message boxes work for pda screens temporarily..
+    int max_width = -1;
+    if (is_pda)
+    {
+        max_width = wxSystemSettings::GetMetric( wxSYS_SCREEN_X ) - 25;
+        text += wxT('\n');
+    }
+    
+    
     wxBoxSizer *box = new wxBoxSizer( wxVERTICAL );
 
     // get line height for empty lines
@@ -78,18 +92,19 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString& message )
     wxFont font( GetFont() );
     if (!font.Ok())
         font = *wxSWISS_FONT;
-    GetTextExtent(_T("H"), (int*)NULL, &y, (int*)NULL, (int*)NULL, &font);
+    GetTextExtent( wxT("H"), (int*)NULL, &y, (int*)NULL, (int*)NULL, &font);
 
+    size_t last_space = 0;
     wxString line;
-    for ( size_t pos = 0; pos < message.length(); pos++ )
+    for ( size_t pos = 0; pos < text.length(); pos++ )
     {
-        switch ( message[pos] )
+        switch ( text[pos] )
         {
-            case _T('\n'):
+            case wxT('\n'):
                 if (!line.IsEmpty())
                 {
-                    wxStaticText *s1 = new wxStaticText( this, -1, line );
-                    box->Add( s1 );
+                    wxStaticText *s = new wxStaticText( this, -1, line );
+                    box->Add( s );
                     line = wxT("");
                 }
                 else
@@ -98,17 +113,44 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString& message )
                 }
                 break;
 
-            case _T('&'):
+            case wxT('&'):
                 // this is used as accel mnemonic prefix in the wxWindows
                 // controls but in the static messages created by
                 // CreateTextSizer() (used by wxMessageBox, for example), we
                 // don't want this special meaning, so we need to quote it
-                line += _T('&');
+                line += wxT('&');
 
                 // fall through to add it normally too
 
             default:
+                if (text[pos] == wxT(' '))
+                    last_space = pos;
+                    
                 line += message[pos];
+                
+                if (is_pda)
+                {
+                    int width = 0;
+                    GetTextExtent( line, &width, (int*)NULL, (int*)NULL, (int*)NULL, &font );
+   
+                    if (width > max_width)
+                    {
+                        // exception if there was no previous space
+                        if (last_space == 0)
+                            last_space = pos;
+                            
+                        int diff = pos-last_space;
+                        int len = line.Len();
+                        line.Remove( len-diff, diff );
+                        
+                        wxStaticText *s = new wxStaticText( this, -1, line );
+                        box->Add( s );
+                        
+                        pos = last_space;
+                        last_space = 0;
+                        line = wxT("");
+                    }
+                }
         }
     }
 
