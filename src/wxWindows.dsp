@@ -26,6 +26,7 @@ CFG=wxWindows - Win32 Debug
 !MESSAGE "wxWindows - Win32 Debug DLL" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "wxWindows - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxWindows - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxWindows - Win32 Release With Debug Info" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -249,6 +250,31 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\lib\wxmswd.lib"
 
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release With Debug Info"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "wxWindows___Win32_Release_With_Debug_Info"
+# PROP BASE Intermediate_Dir "wxWindows___Win32_Release_With_Debug_Info"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "ReleaseDebug"
+# PROP Intermediate_Dir "ReleaseDebug"
+# PROP Target_Dir ""
+CPP=cl.exe
+# ADD BASE CPP /nologo /MD /W4 /O2 /I "../lib/msw" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "NDEBUG" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D wxUSE_BASE=1 /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MD /W4 /Zi /O2 /I "../lib/msw" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "NDEBUG" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D wxUSE_BASE=1 /Yu"wx/wxprec.h" /FD /c
+RSC=rc.exe
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\lib\wxmsw.lib"
+# ADD LIB32 /nologo /out:"..\lib\wxmsw.lib"
+
 !ENDIF 
 
 # Begin Target
@@ -261,6 +287,7 @@ LIB32=link.exe -lib
 # Name "wxWindows - Win32 Debug DLL"
 # Name "wxWindows - Win32 Release"
 # Name "wxWindows - Win32 Debug"
+# Name "wxWindows - Win32 Release With Debug Info"
 # Begin Group "Common Files"
 
 # PROP Default_Filter ""
@@ -667,6 +694,10 @@ SOURCE=.\common\regex.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\rendcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\rgncmn.cpp
 # End Source File
 # Begin Source File
@@ -877,6 +908,10 @@ SOURCE=.\generic\panelg.cpp
 # Begin Source File
 
 SOURCE=.\generic\progdlgg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\renderg.cpp
 # End Source File
 # Begin Source File
 
@@ -1375,6 +1410,10 @@ SOURCE=.\msw\registry.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\renderer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\scrolbar.cpp
 # End Source File
 # Begin Source File
@@ -1573,6 +1612,16 @@ InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswd/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\lib\mswd\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release With Debug Info"
+
+# Begin Custom Build - Creating ..\lib\msw\wx\setup.h from $(InputPath)
+InputPath=..\include\wx\msw\setup.h
+
+"../lib/msw/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\lib\msw\wx\setup.h
 
 # End Custom Build
 
