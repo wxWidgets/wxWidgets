@@ -106,8 +106,6 @@ bool wxUssSound::DoInput(wxSndBuffer *buf)
   wxSoundCodec *codec = buf->GetCurrentCodec();
 
   m_sndbuf->ResetBuffer();
-  codec->SetInStream(m_sndbuf);
-  codec->InitIO(m_ussformat);
 
   bufsize = codec->Available();
   if (bufsize > m_max_bufsize)
@@ -152,11 +150,18 @@ bool wxUssSound::InitBuffer(wxSndBuffer *buf)
   }
 
   codec = buf->GetCurrentCodec();
-  codec->SetOutStream(m_sndbuf);
-  codec->InitIO(m_ussformat);
-  // TODO: We need more tests here.
-  codec->InitMode((m_mode == wxSND_OUTPUT) ? wxSoundCodec::DECODING : wxSoundCodec::ENCODING);
-
+  switch (m_mode) {
+  case wxSND_INPUT:
+    codec->SetInStream(m_sndbuf);
+    codec->InitIO(m_ussformat);
+    codec->InitMode(wxSoundCodec::ENCODING);
+    break;
+  case wxSND_OUTPUT:
+    codec->SetOutStream(m_sndbuf);
+    codec->InitIO(m_ussformat);
+    codec->InitMode(wxSoundCodec::DECODING);
+    break;
+  }
   return TRUE;
 }
 

@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////////////////////////
+// Name:       sndfrmt.h
+// Purpose:    wxMMedia
+// Author:     Guilhem Lavaux
+// Created:    1998
+// Updated:    December 1998
+// Copyright:  (C) 1997, 1998, Guilhem Lavaux
+// License:    wxWindows license
+////////////////////////////////////////////////////////////////////////////////
 #ifndef __SNDFRMT_H__
 #define __SNDFRMT_H__
 

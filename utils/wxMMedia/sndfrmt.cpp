@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////////////////////////
+// Name:       sndfrmt.cpp
+// Purpose:    wxMMedia
+// Author:     Guilhem Lavaux
+// Created:    1998
+// Updated:    December 1998
+// Copyright:  (C) 1997, 1998, Guilhem Lavaux
+// License:    wxWindows license
+////////////////////////////////////////////////////////////////////////////////
 #ifdef __GNUG__
 #pragma implementation "sndfrmt.h"
 #endif
@@ -81,6 +90,7 @@ wxSoundCodec *wxSoundDataFormat::GetCodec()
 
   m_codchange = FALSE;
   m_codec = wxSoundCodec::Get(m_codno);
+  CodecChange();
 
   return m_codec;
 }

@@ -136,6 +136,7 @@ void wxStreamBuffer::SetBufferIO(size_t bufsize)
 
 void wxStreamBuffer::ResetBuffer()
 {
+  m_stream->m_lasterror = wxStream_NOERROR;
   if (m_mode == read)
     m_buffer_pos = m_buffer_end;
   else
@@ -285,6 +286,7 @@ size_t wxStreamBuffer::Read(void *buffer, size_t size)
   // Buffering disabled
   // ------------------
 
+  m_stream->m_lasterror = wxStream_NOERROR;
   m_stream->m_lastcount = GetWBack((char *)buffer, size);
   size -= m_stream->m_lastcount;
   if (size == 0)
@@ -345,6 +347,7 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
   // Buffering disabled
   // ------------------
 
+  m_stream->m_lasterror = wxStream_NOERROR;
   if (!m_buffer_size)
     return (m_stream->m_lastcount = m_stream->OnSysWrite(buffer, size));
 

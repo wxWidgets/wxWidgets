@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////////////////////////
+// Name:       sndmulaw.cpp
+// Purpose:    wxMMedia
+// Author:     Guilhem Lavaux
+// Created:    1997
+// Updated:    December 1998
+// Copyright:  (C) 1997, 1998, Guilhem Lavaux
+// License:    wxWindows license
+////////////////////////////////////////////////////////////////////////////////
 #ifdef __GNUG__
 #pragma implementation "sndmulaw.h"
 #endif

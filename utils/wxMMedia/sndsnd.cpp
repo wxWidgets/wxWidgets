@@ -101,8 +101,6 @@ void wxSndBuffer::HardUnlock()
 
 void wxSndBuffer::ChangeCodec(int no)
 {
-  wxDELETE(m_sndcodec);
-
   m_sndformat.SetCodecNo(no);
   m_sndcodec = m_sndformat.GetCodec();
   m_sndcodec->SetIOBuffer(this);

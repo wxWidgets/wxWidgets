@@ -620,9 +620,10 @@ void wxStringList::Sort()
 {
     size_t N = GetCount();
     char **array = new char *[N];
+    wxStringListNode *node;
 
     size_t i = 0;
-    for ( wxStringListNode *node = GetFirst(); node; node = node->GetNext() )
+    for ( node = GetFirst(); node; node = node->GetNext() )
     {
         array[i++] = node->GetData();
     }

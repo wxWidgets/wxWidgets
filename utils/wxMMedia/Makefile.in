@@ -17,9 +17,9 @@ ADPCM_SRC=\
 g711.cpp g721.cpp g723_24.cpp g723_40.cpp g72x.cpp
 
 MMEDIA_SRC=\
-mmdata.cpp mmfile.cpp mmsolve.cpp sndsnd.cpp sndfrmt.cpp sndpcm.o \
+mmdata.cpp mmfile.cpp mmsolve.cpp sndsnd.cpp sndfrmt.cpp sndpcm.cpp \
 snduss.cpp sndfile.cpp sndwav.cpp mmriff.cpp vidbase.cpp vidxanm.cpp \
-cdbase.cpp cdunix.cpp
+cdbase.cpp cdunix.cpp sndaiff.cpp sndmulaw.cpp sndau.cpp
 
 LIB_SRC= $(ADPCM_SRC:%.cpp=adpcm/%.cpp) $(MMEDIA_SRC)
 
