@@ -489,8 +489,10 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 
 void __wxCleanup() {
     wxPyDoingCleanup = TRUE;
-    if (wxPyDoCleanup)
+    if (wxPyDoCleanup) {
+        wxPyDoCleanup = FALSE;
         wxEntryCleanup();
+    }
 #ifdef WXP_WITH_THREAD
     delete wxPyTMutex;
     wxPyTMutex = NULL;
