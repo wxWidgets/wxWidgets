@@ -377,7 +377,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         m_ContentsBox->AssignImageList(ContentsImageList);
         
         topsizer->Add(m_ContentsBox, 1,
-                      wxEXPAND | wxLEFT | wxBOTTOM | wxRIGHT | wxADJUST_MINSIZE,
+                      wxEXPAND | wxLEFT | wxBOTTOM | wxRIGHT,
                       2);
 
         m_NavigNotebook->AddPage(dummy, _("Contents"));
@@ -419,7 +419,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         topsizer->Add(btsizer, 0, 
                       wxALIGN_RIGHT | wxLEFT | wxRIGHT | wxBOTTOM, 10);
         topsizer->Add(m_IndexCountInfo, 0, wxEXPAND | wxLEFT | wxRIGHT, 2);
-        topsizer->Add(m_IndexList, 1, wxEXPAND | wxALL | wxADJUST_MINSIZE, 2);
+        topsizer->Add(m_IndexList, 1, wxEXPAND | wxALL, 2);
 
         m_NavigNotebook->AddPage(dummy, _("Index"));
         m_IndexPage = notebook_page++;
@@ -455,7 +455,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         sizer->Add(m_SearchCaseSensitive, 0, wxLEFT | wxRIGHT, 10);
         sizer->Add(m_SearchWholeWords, 0, wxLEFT | wxRIGHT, 10);
         sizer->Add(m_SearchButton, 0, wxALL | wxALIGN_RIGHT, 8);
-        sizer->Add(m_SearchList, 1, wxALL | wxEXPAND | wxADJUST_MINSIZE, 2);
+        sizer->Add(m_SearchList, 1, wxALL | wxEXPAND, 2);
 
         m_NavigNotebook->AddPage(dummy, _("Search"));
         m_SearchPage = notebook_page;

@@ -193,12 +193,10 @@ wxSize wxSizerItem::CalcMin()
     }
     else
     {
-        if ( IsWindow() && (m_flag & wxADJUST_MINSIZE) )
+        if ( IsWindow() )
         {
-            // By user request, keep the minimal size for this item
-            // in sync with the largest of BestSize and any user supplied
-            // minimum size hint.  Useful in cases where the item is
-            // changeable -- static text labels, etc.
+            // the size of the window may change during run-time, we should
+            // use the current minimal size
             m_minSize = m_window->GetAdjustedBestSize();
         }
 
@@ -1140,10 +1138,11 @@ wxSize wxFlexGridSizer::CalcMin()
     m_rowHeights.SetCount(nrows);
     m_colWidths.SetCount(ncols);
 
-    // We have to recalcuate the sizes in case an item has wxADJUST_MINSIZE, has changed
-    // minimum size since the previous layout, or has been hidden using wxSizer::Show().
-    // If all the items in a row/column are hidden, the final dimension of the row/column
-    // will be -1, indicating that the column itself is hidden.
+    // We have to recalcuate the sizes in case the item minimum size has
+    // changed since the previous layout, or the item has been hidden using
+    // wxSizer::Show(). If all the items in a row/column are hidden, the final
+    // dimension of the row/column will be -1, indicating that the column
+    // itself is hidden.
     for( s = m_rowHeights.GetCount(), i = 0; i < s; ++i )
         m_rowHeights[ i ] = -1;
     for( s = m_colWidths.GetCount(), i = 0; i < s; ++i )
