@@ -57,7 +57,7 @@ void wxButton::SetDefault()
         panel->SetDefaultItem(this);
     }
 
-#ifdef __UNIX__
+#ifdef __DARWIN__
 	Boolean inData;
 	if ( btnOldDefault && btnOldDefault->m_macControl )
 	{

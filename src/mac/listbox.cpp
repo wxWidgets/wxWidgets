@@ -20,7 +20,7 @@
 #include "wx/log.h"
 
 #include "wx/utils.h"
-#ifdef __UNIX__
+#ifdef __DARWIN__
   #include "ldef/extldef.h"
 #else
   #include "extldef.h"

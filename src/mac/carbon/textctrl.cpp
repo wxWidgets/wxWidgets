@@ -13,7 +13,7 @@
 #pragma implementation "textctrl.h"
 #endif
 
-#ifdef __UNIX__
+#ifdef __DARWIN__
   #include <sys/types.h>
   #include <sys/stat.h>
 #else
@@ -34,7 +34,7 @@
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
   #include <alloc.h>
-#elif !defined(__MWERKS__) && !defined(__GNUWIN32) && !defined(__WXMAC_X__)
+#elif !defined(__MWERKS__) && !defined(__GNUWIN32) && !defined(__DARWIN__)
   #include <malloc.h>
 #endif
 

@@ -31,7 +31,7 @@
 #   include <fstream>
 #endif
 
-#ifndef __WXMAC_X__
+#ifndef __DARWIN__
 #  include <windows.h>
 #endif
 #include "wx/msgdlg.h"

@@ -20,7 +20,7 @@
 
 #include "wx/cmndata.h"
 
-#if defined(__UNIX__)
+#ifdef __DARWIN__
   #include <Carbon/Carbon.h>
 #else
   #include <Navigation.h>

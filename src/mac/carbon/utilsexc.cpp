@@ -14,7 +14,7 @@
 #endif
 
 #include "wx/utils.h"
-#ifdef __UNIX__
+#ifdef __DARWIN__
 #include "wx/unix/execute.h"
 #endif
 
@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef __UNIX__
+#ifndef __DARWIN__
 #define wxEXECUTE_WIN_MESSAGE 10000
 
 long wxExecute(const wxString& command, bool sync, wxProcess *handler)
@@ -32,7 +32,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
 }
 #endif
 
-#ifdef __UNIX__
+#ifdef __DARWIN__
 int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
    wxFAIL_MSG(wxT("wxAddProcessCallback() function not ready"));

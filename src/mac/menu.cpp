@@ -56,7 +56,7 @@ const short kwxMacAppleMenuId = 1 ;
 
 // Construct a menu with optional title (then use append)
 
-#ifdef __UNIX__
+#ifdef __DARWIN__
 short wxMenu::s_macNextMenuId = 3 ;
 #else
 short wxMenu::s_macNextMenuId = 2 ;
@@ -450,7 +450,7 @@ bool wxMenu::MacMenuSelect( wxEvtHandler* handler, long when , int macMenuId, in
 			return true ;
 		}
 	}
-#ifndef __WXMAC_X__
+#ifndef __DARWIN__
 	else if ( macMenuId == kHMHelpMenuID )
 	{
 		int menuItem = formerHelpMenuItems ;
@@ -499,7 +499,7 @@ bool wxMenu::MacMenuSelect( wxEvtHandler* handler, long when , int macMenuId, in
 			}
 	  }
 	}
-#endif // __WXMAC_X__
+#endif // __DARWIN__
 
   for (pos = 0, node = GetMenuItems().First(); node; node = node->Next(), pos++) 
   {	
@@ -898,7 +898,7 @@ void wxMenuBar::MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, 
 	  for (int i = 0; i < m_menus.GetCount() ; i++)
 	  {
 	  	if ( m_menus[i]->MacGetMenuId() == macMenuId
-#ifndef __WXMAC_X__
+#ifndef __DARWIN__
 		     || 
 	  		( macMenuId == kHMHelpMenuID && ( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName ) )
 #endif

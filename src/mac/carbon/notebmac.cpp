@@ -32,7 +32,7 @@
 // check that the page index is valid
 #define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((nPage) < GetPageCount()))
 
-#ifdef __WXMAC_X__
+#ifdef __DARWIN__
   // I got these values for Mac OS X from the Appearance mgr docs. (Mark Newsam)
 const short kwxMacTabLeftMargin = 20 ;
 const short kwxMacTabTopMargin = 38 ;
@@ -76,7 +76,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 // common part of all ctors
 void wxNotebook::Init()
 {
-#ifdef __WXMAC_X__
+#ifdef __DARWIN__
     m_macHorizontalBorder = 7;
     m_macVerticalBorder = 8;
 #endif

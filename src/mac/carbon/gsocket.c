@@ -19,7 +19,7 @@
 
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
-#ifdef __UNIX__
+#ifdef __DARWIN__
   #include <CoreServices/CoreServices.h>
 
   #ifndef FALSE
@@ -80,7 +80,7 @@ void wxCYield() ;
 #define qDebug2 1
 extern pascal void OTDebugStr(const char* str);
 #endif
-#ifndef __UNIX__
+#ifndef __DARWIN__
   #include <OTDebug.h>
 #endif
 InetSvcRef gInetSvcRef = 0 ;
@@ -121,7 +121,7 @@ OSStatus DoNegotiateIPReuseAddrOption(EndpointRef ep, Boolean enableReuseIPMode)
 	ret.opt.maxlen = kOTFourByteOptionSize;
 
 	opt->level	= INET_IP;					// dealing with an IP Level function
-#ifdef __UNIX__
+#ifdef __DARWIN__
 	opt->name	= kIP_REUSEADDR;
 #else
 	opt->name	= IP_REUSEADDR;

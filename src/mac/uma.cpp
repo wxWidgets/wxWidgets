@@ -3,7 +3,7 @@
 #include "wx/mac/uma.h"
 #include "wx/mac/aga.h"
 
-#ifndef __UNIX__
+#ifndef __DARWIN__
   #include <Navigation.h>
 #endif
 
@@ -84,7 +84,7 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 #endif // UMA_USE_WINDOWMGR
 #endif
 		
-#ifndef __UNIX__
+#ifndef __DARWIN__
 #if TARGET_CARBON
 // Call currently implicitely done :		InitFloatingWindows() ;
 #else

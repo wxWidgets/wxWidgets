@@ -27,7 +27,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-#ifndef __UNIX__
+#ifndef __DARWIN__
 // defined in unix/utilsunx.cpp for Mac OS X
 
 // get full hostname (with domain name if possible)
@@ -178,7 +178,7 @@ void wxFatalError(const wxString& msg, const wxString& title)
   wxMessageBox(wxBuffer);
   wxExit();
 }
-#endif // !__UNIX__
+#endif // !__DARWIN__
 
 // Emit a beeeeeep
 void wxBell()
@@ -315,7 +315,7 @@ bool wxIsBusy()
   return (wxBusyCursorCount > 0);
 }
 
-#ifndef __UNIX__
+#ifndef __DARWIN__
 wxString wxMacFindFolder( short 					vol,
 								 OSType 				folderType,
 								 Boolean 				createFolder)
@@ -336,7 +336,7 @@ wxString wxMacFindFolder( short 					vol,
 }
 #endif
 
-#ifndef __UNIX__
+#ifndef __DARWIN__
 char *wxGetUserHome (const wxString& user)
 {
     // TODO

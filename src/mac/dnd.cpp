@@ -39,7 +39,7 @@ wxDropTarget::~wxDropTarget()
 // ----------------------------------------------------------------------------
 // wxTextDropTarget
 // ----------------------------------------------------------------------------
-#ifndef __WXMAC_X__
+#ifndef __DARWIN__
 bool wxTextDropTarget::OnDrop( wxCoord x, wxCoord y, const void *pData )
 {
   OnDropText( x, y, (const char*)pData );
@@ -54,7 +54,7 @@ bool wxTextDropTarget::OnDropText( wxCoord x, wxCoord y, const wxString &psz )
   return TRUE;
 };
 
-#ifndef __WXMAC_X__
+#ifndef __DARWIN__
 size_t wxTextDropTarget::GetFormatCount() const
 {
   return 1;
@@ -70,7 +70,7 @@ wxDataFormat wxTextDropTarget::GetFormat(size_t WXUNUSED(n)) const
 // wxFileDropTarget
 // ----------------------------------------------------------------------------
 
-#ifndef __WXMAC_X__
+#ifndef __DARWIN__
 bool wxFileDropTarget::OnDropFiles( wxCoord x, wxCoord y, size_t nFiles, const char * const WXUNUSED(aszFiles)[] )
 {
   printf( "Got %d dropped files.\n", (int)nFiles );
@@ -84,7 +84,7 @@ bool wxFileDropTarget::OnDrop(wxCoord x, wxCoord y, const wxArrayString& filenam
   return OnDropFiles(x, y, 1, &filenames); 
 }
 
-#ifndef __WXMAC_X__
+#ifndef __DARWIN__
 size_t wxFileDropTarget::GetFormatCount() const
 {
   return 1;

@@ -40,7 +40,7 @@
 
 // mac
 
-#ifndef __UNIX__
+#ifndef __DARWIN__
   #if __option(profile)
 	#include <profiler.h>
   #endif
@@ -52,7 +52,7 @@
 #include "wx/mac/macnotfy.h"
 
 #if wxUSE_SOCKETS
-    #ifdef __APPLE__
+    #ifdef __DARWIN__
         #include <CoreServices/CoreServices.h>
     #else
         #include <OpenTransport.h>
@@ -374,7 +374,7 @@ bool wxApp::Initialize()
 #endif
 
 
-#ifndef __UNIX__
+#ifndef __DARWIN__
   // test the minimal configuration necessary
 
 	#if !TARGET_CARBON
@@ -427,7 +427,7 @@ bool wxApp::Initialize()
 	  return FALSE ;
   }
 
-#ifndef __UNIX__
+#ifndef __DARWIN__
   #if __option(profile)
 	ProfilerInit( collectDetailed, bestTimeBase , 20000 , 40 ) ;
   #endif
@@ -435,7 +435,7 @@ bool wxApp::Initialize()
 
   // now avoid exceptions thrown for new (bad_alloc)
 
-#ifndef __UNIX__
+#ifndef __DARWIN__
   std::__throws_bad_alloc = FALSE ;
 #endif
 
@@ -544,7 +544,7 @@ void wxApp::CleanUp()
 
   wxClassInfo::CleanUpClasses();
 
-#ifndef __UNIX__
+#ifndef __DARWIN__
   #if __option(profile)
   ProfilerDump( "\papp.prof" ) ;
   ProfilerTerm() ;

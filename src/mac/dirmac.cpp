@@ -36,11 +36,11 @@
 #include "wx/dir.h"
 #include "wx/filefn.h"          // for wxPathExists()
 
-#ifndef __WXMAC_X__
+#ifndef __DARWIN__
   #include <windows.h>
 #endif
 
-#if defined(__WXMAC__) && !defined(__UNIX__)
+#ifndef __DARWIN__
   #include "morefile.h"
   #include "moreextr.h"
   #include "fullpath.h"
@@ -118,7 +118,7 @@ wxDirData::wxDirData(const wxString& dirname)
 	m_CPB.hFileInfo.ioNamePtr = m_name ;
 	m_index = 0 ;
 
-#ifdef __WXMAC_X__
+#ifdef __DARWIN__
 	// TODO: what are we supposed to do for Mac OS X
 #else
 	FSpGetDirectoryID( &fsspec , &m_dirId , &m_isDir ) ;

@@ -29,7 +29,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxBitmapBase , wxGDIObject )
 IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandlerBase, wxObject ) 
 #endif
 
-#ifdef __UNIX__
+#ifdef __DARWIN__
     #include <ApplicationServices/ApplicationServices.h>
 #else
     #include <PictUtils.h>
@@ -841,7 +841,7 @@ PicHandle wxBitmap::GetPict() const
 
    if( mask )
    {
-#ifdef __UNIX__
+#ifdef __DARWIN__
        RGBColor trans = white;
 #else
        RGBBackColor( &gray );

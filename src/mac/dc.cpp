@@ -38,7 +38,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 #define twips2mm		0.0176388888889
 #define mm2pt			2.83464566929
 #define pt2mm			0.352777777778
-#ifndef __UNIX__
+#ifndef __DARWIN__
 const double M_PI = 3.14159265358979 ;
 #endif
 const double RAD2DEG  = 180.0 / M_PI;
