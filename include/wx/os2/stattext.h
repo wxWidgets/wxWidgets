@@ -20,44 +20,56 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxStaticTextNameStr;
 
-class WXDLLEXPORT wxStaticText: public wxControl
+class WXDLLEXPORT wxStaticText : public wxControl
 {
  DECLARE_DYNAMIC_CLASS(wxStaticText)
 
  public:
     inline wxStaticText() { }
 
-    inline wxStaticText(wxWindow *parent, wxWindowID id,
-           const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = 0,
-           const wxString& name = wxStaticTextNameStr)
+    inline wxStaticText( wxWindow*       pParent
+                        ,wxWindowID      vId
+                        ,const wxString& rsLabel
+                        ,const wxPoint&  rPos = wxDefaultPosition
+                        ,const wxSize&   rSize = wxDefaultSize
+                        ,long            lStyle = 0L
+                        ,const wxString& rsName = wxStaticTextNameStr
+                       )
     {
-        Create(parent, id, label, pos, size, style, name);
+        Create(pParent, vId, rsLabel, rPos, rSize, lStyle, rsName);
     }
 
-    bool Create(wxWindow *parent, wxWindowID id,
-           const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = 0,
-           const wxString& name = wxStaticTextNameStr);
+    bool Create( wxWindow*       pParent
+                ,wxWindowID      vId
+                ,const wxString& rsLabel
+                ,const wxPoint&  rPos = wxDefaultPosition
+                ,const wxSize&   rSize = wxDefaultSize
+                ,long            lStyle = 0L
+                ,const wxString& rsName = wxStaticTextNameStr
+               );
 
-    // accessors
+    //
+    // Accessors
+    //
     void SetLabel(const wxString&);
+    bool SetFont(const wxFont &rFont);
 
-    // overriden base class virtuals
+    //
+    // Overriden base class virtuals
+    //
     virtual bool AcceptsFocus() const { return FALSE; }
 
-    // callbacks
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-    virtual MRESULT OS2WindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    //
+    // Callbacks
+    //
+    virtual MRESULT OS2WindowProc( WXUINT   uMsg
+                                  ,WXWPARAM wParam
+                                  ,WXLPARAM lParam
+                                 );
 
 protected:
-    virtual wxSize DoGetBestSize() const;
-};
+    virtual wxSize DoGetBestSize(void) const;
+}; // end of CLASS wxStaticText
 
 #endif
     // _WX_STATTEXT_H_
