@@ -83,11 +83,6 @@ public:
     // Implementation from now on
     // --------------------------
     //
-           virtual void AlterChildPos(void); // OS/2 child control positioning
-           virtual void UpdateInternalSize( wxWindow* pChild
-                                           ,int       nWidth
-                                           ,int       nHeight
-                                          );
            PSWP         GetSwpClient(void) { return &m_vSwpClient; }
 protected:
     //

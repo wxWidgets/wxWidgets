@@ -137,9 +137,6 @@ void wxTopLevelWindowBase::OnSize(wxSizeEvent& WXUNUSED(event))
             {
                 if ( child )
                 {
-#ifdef __WXPM__
-                    AlterChildPos();
-#endif
                     return;     // it's our second subwindow - nothing to do
                 }
 
@@ -162,14 +159,7 @@ void wxTopLevelWindowBase::OnSize(wxSizeEvent& WXUNUSED(event))
             static const int ofs = 0;
 #endif
 
-#ifdef __WXPM__
-            // OS/2 PM has to do a LOT of stuff to get things
-            // positioned right, especially if the child is a
-            // scrolled window.
-            UpdateInternalSize(child, clientW, clientH);
-#else
             child->SetSize(ofs, ofs, clientW - 2*ofs, clientH - 2*ofs);
-#endif
         }
     }
 }

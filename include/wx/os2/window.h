@@ -453,6 +453,7 @@ public:
                        );
 
     void MoveChildren(int nDiff);
+    PSWP GetSwp(void) {return &m_vWinSwp;}
 
 protected:
     // PM can't create some MSW styles natively but can perform these after
@@ -541,7 +542,6 @@ protected:
 #endif // wxUSE_TOOLTIPS
 
     int  GetOS2ParentHeight(wxWindowOS2* pParent);
-    virtual void OS2Layout(int nWidth, int nHeight);
 
 private:
     // common part of all ctors
@@ -572,6 +572,7 @@ private:
 private:
     HWND                            m_hWndScrollBarHorz;
     HWND                            m_hWndScrollBarVert;
+    SWP                             m_vWinSwp;
 
     // Virtual function hiding supression
     inline virtual bool Reparent(wxWindowBase* pNewParent)

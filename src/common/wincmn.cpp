@@ -1194,9 +1194,6 @@ bool wxWindowBase::Layout()
         GetClientSize(&w, &h);
 
         GetSizer()->SetDimension( 0, 0, w, h );
-#if defined __WXPM__
-        OS2Layout(w, h);
-#endif
     }
     else
     {

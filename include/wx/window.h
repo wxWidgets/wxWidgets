@@ -962,10 +962,6 @@ protected:
     // a toolbar that it manages itself).
     virtual void AdjustForParentClientOrigin(int& x, int& y, int sizeFlags);
 
-#ifdef __WXPM__
-    // extra OS/2 layout processing
-    virtual void OS2Layout(int width, int height) { };
-#endif
 
 private:
 

@@ -122,15 +122,6 @@ public:
     // so should be there for all platforms
     void OnActivate(wxActivateEvent &WXUNUSED(event)) { }
 
-    // Override in derived, platfrom specific, class if your OS coordinate
-    // system uses anything other than the top left as 0,0.  The second
-    // method updates any internal sizing parameters such as OS/2's SWP struct
-    inline virtual void AlterChildPos(void) { }
-    inline virtual void UpdateInternalSize( wxWindow* WXUNUSED(pChild)
-                                           ,int WXUNUSED(nWidth)
-                                           ,int WXUNUSED(nHeight)
-                                          ) { }
-
 protected:
     // the frame client to screen translation should take account of the
     // toolbar which may shift the origin of the client area
