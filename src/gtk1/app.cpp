@@ -885,8 +885,7 @@ int wxEntry( int argc, char *argv[] )
     int mb_argc = 0;
     while (mb_argc < argc)
     {
-        wxString tmp = wxString::FromAscii( argv[mb_argc] );
-        wxTheApp->argv[mb_argc] = wxStrdup( tmp.c_str() );
+        wxTheApp->argv[mb_argc] = wxStrdup(wxConvLibc.cMB2WX(argv[mb_argc]));
         mb_argc++;
     }
     wxTheApp->argv[mb_argc] = (wxChar *)NULL;
