@@ -262,6 +262,8 @@ bool wxFontMapper::TestAltEncoding(const wxString& configEntry,
         {
             GetConfig()->Write(configEntry, info->ToString());
         }
+#else
+        wxUnusedVar(configEntry);
 #endif // wxUSE_CONFIG
         return true;
     }
