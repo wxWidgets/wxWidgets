@@ -135,17 +135,22 @@ wxMenuItemCocoa::wxMenuItemCocoa(wxMenu *pParentMenu,
           : wxMenuItemBase(pParentMenu, itemid, strName, strHelp, kind, pSubMenu)
 {
     wxAutoNSAutoreleasePool pool;
-    NSString *menuTitle = wxInitNSStringWithWxString([NSString alloc],wxStripMenuCodes(strName));
-    m_cocoaNSMenuItem = [[NSMenuItem alloc] initWithTitle:menuTitle action:@selector(wxMenuItemAction:) keyEquivalent:@""];
-    sm_cocoaHash.insert(wxMenuItemCocoaHash::value_type(m_cocoaNSMenuItem,this));
-    [m_cocoaNSMenuItem setTarget:sm_cocoaTarget];
-    if(pSubMenu)
+    if(m_kind == wxITEM_SEPARATOR)
+        m_cocoaNSMenuItem = [[NSMenuItem separatorItem] retain];
+    else
     {
-        wxASSERT(pSubMenu->GetNSMenu());
-        [pSubMenu->GetNSMenu() setTitle:menuTitle];
-        [m_cocoaNSMenuItem setSubmenu:pSubMenu->GetNSMenu()];
+        NSString *menuTitle = wxInitNSStringWithWxString([NSString alloc],wxStripMenuCodes(strName));
+        m_cocoaNSMenuItem = [[NSMenuItem alloc] initWithTitle:menuTitle action:@selector(wxMenuItemAction:) keyEquivalent:@""];
+        sm_cocoaHash.insert(wxMenuItemCocoaHash::value_type(m_cocoaNSMenuItem,this));
+        [m_cocoaNSMenuItem setTarget:sm_cocoaTarget];
+        if(pSubMenu)
+        {
+            wxASSERT(pSubMenu->GetNSMenu());
+            [pSubMenu->GetNSMenu() setTitle:menuTitle];
+            [m_cocoaNSMenuItem setSubmenu:pSubMenu->GetNSMenu()];
+        }
+        [menuTitle release];
     }
-    [menuTitle release];
 }
 
 wxMenuItem::~wxMenuItem()
