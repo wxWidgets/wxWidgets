@@ -215,6 +215,9 @@ public:
     // Sets the global resources object and returns a pointer to the previous one (may be NULL).
     static wxXmlResource *Set(wxXmlResource *res);
 
+    // Returns flags, which may be a bitlist of wxXRC_USE_LOCALE and wxXRC_NO_SUBCLASSING.
+    int GetFlags() { return m_flags; }
+
 protected:
     // Scans the resources list for unloaded files and loads them. Also reloads
     // files that have been modified since last loading.
@@ -228,9 +231,6 @@ protected:
 
     // Creates a resource from information in the given node.
     wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance = NULL);
-
-    // Returns flags, which may be a bitlist of wxXRC_USE_LOCALE and wxXRC_NO_SUBCLASSING.
-    int GetFlags() { return m_flags; }
 
 private:
     long m_version;
