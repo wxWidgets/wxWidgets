@@ -1,5 +1,6 @@
 
 from wxPython.wx import *
+import images
 
 #----------------------------------------------------------------------
 
@@ -8,6 +9,11 @@ class TestVirtualList(wxListCtrl):
         wxListCtrl.__init__(self, parent, -1,
                             style=wxLC_REPORT|wxLC_VIRTUAL|wxLC_HRULES|wxLC_VRULES)
         self.log = log
+
+        self.il = wxImageList(16, 16)
+        self.idx1 = self.il.Add(images.getSmilesBitmap())
+        self.SetImageList(self.il, wxIMAGE_LIST_SMALL)
+
 
         self.InsertColumn(0, "First")
         self.InsertColumn(1, "Second")
@@ -51,14 +57,18 @@ class TestVirtualList(wxListCtrl):
 
     #---------------------------------------------------
     # These methods are callbacks for implementing the
-    # "virtualness" of the list...
+    # "virtualness" of the list...  Normally you would
+    # determine the text, attributes and/or image based
+    # on values from some external data source, but for
+    # this demo we'll just calcualte them
     def OnGetItemText(self, item, col):
         return "Item %d, column %d" % (item, col)
 
-
     def OnGetItemImage(self, item):
-        return -1  # if used you should return the index in the ImageList
-
+        if item % 3 == 0:
+            return self.idx1
+        else:
+            return -1
 
     def OnGetItemAttr(self, item):
         if item % 3 == 1:
