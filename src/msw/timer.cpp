@@ -46,7 +46,15 @@
 WX_DECLARE_HASH_MAP(unsigned long, wxTimer *, wxIntegerHash, wxIntegerEqual,
                     wxTimerMap);
 
-static wxTimerMap g_timerMap;
+// instead of using a global here, wrap it in a static function as otherwise it
+// could have been used before being initialized if a timer object were created
+// globally
+static wxTimerMap& TimerMap()
+{
+    static wxTimerMap s_timerMap;
+
+    return s_timerMap;
+}
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -103,7 +111,7 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
     // check that SetTimer() didn't reuse an existing id: according to the MSDN
     // this can happen and this would be catastrophic to us as we rely on ids
     // uniquely identifying the timers because we use them as keys in the hash
-    if ( g_timerMap.find(m_id) != g_timerMap.end() )
+    if ( TimerMap().find(m_id) != TimerMap().end() )
     {
         wxLogError(_("Timer creation failed."));
 
@@ -113,7 +121,7 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
         return false;
     }
 
-    g_timerMap[m_id] = this;
+    TimerMap()[m_id] = this;
 
     return true;
 }
@@ -124,7 +132,7 @@ void wxTimer::Stop()
     {
         ::KillTimer(NULL, m_id);
 
-        g_timerMap.erase(m_id);
+        TimerMap().erase(m_id);
     }
 
     m_id = 0;
@@ -150,9 +158,9 @@ wxTimerProc(HWND WXUNUSED(hwnd),
             UINT idTimer,
             DWORD WXUNUSED(dwTime))
 {
-    wxTimerMap::iterator node = g_timerMap.find((unsigned long)idTimer);
+    wxTimerMap::iterator node = TimerMap().find((unsigned long)idTimer);
 
-    wxCHECK_RET( node != g_timerMap.end(), wxT("bogus timer id in wxTimerProc") );
+    wxCHECK_RET( node != TimerMap().end(), wxT("bogus timer id in wxTimerProc") );
 
     wxProcessTimer(*(node->second));
 }
