@@ -3725,6 +3725,80 @@ static PyObject *_wrap_HtmlCell_GetDescent(PyObject *self, PyObject *args, PyObj
 }
 
 
+static PyObject *_wrap_HtmlCell_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
+    wxString *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:HtmlCell_GetId",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxString const &_result_ref = ((wxHtmlCell const *)arg1)->GetId();
+            result = (wxString *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_HtmlCell_SetId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
+    wxString *arg2 = 0 ;
+    bool temp2 = False ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "id", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlCell_SetId",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetId((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
 static PyObject *_wrap_HtmlCell_GetLink(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
@@ -9508,6 +9582,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlCell_GetWidth", (PyCFunction) _wrap_HtmlCell_GetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetHeight", (PyCFunction) _wrap_HtmlCell_GetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetDescent", (PyCFunction) _wrap_HtmlCell_GetDescent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetId", (PyCFunction) _wrap_HtmlCell_GetId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_SetId", (PyCFunction) _wrap_HtmlCell_SetId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetLink", (PyCFunction) _wrap_HtmlCell_GetLink, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetNext", (PyCFunction) _wrap_HtmlCell_GetNext, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetParent", (PyCFunction) _wrap_HtmlCell_GetParent, METH_VARARGS | METH_KEYWORDS },

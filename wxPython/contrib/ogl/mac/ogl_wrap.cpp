@@ -266,8 +266,7 @@ static swig_type_info *swig_types[41];
 #include "oglhelpers.h"
 
 
-    static const wxString wxPyEmptyString(wxT(""));
-
+ static const wxString wxPyEmptyString(wxEmptyString); 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;

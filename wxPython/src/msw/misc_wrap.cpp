@@ -521,7 +521,8 @@ class wxJoystick : public wxObject {
 public:
     wxJoystick(int joystick = wxJOYSTICK1) {
         wxPyBeginBlockThreads();
-        PyErr_SetString(PyExc_NotImplementedError, "wxJoystick is not available on this platform.");
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxJoystick is not available on this platform.");
         wxPyEndBlockThreads();
     }
     wxPoint GetPosition() { return wxPoint(-1,-1); }
@@ -583,12 +584,14 @@ class wxWave : public wxObject
 public:
     wxWave(const wxString& fileName, bool isResource = False) {
         wxPyBeginBlockThreads();
-        PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxWave is not available on this platform.");
         wxPyEndBlockThreads();
     }
     wxWave(int size, const wxByte* data) {
         wxPyBeginBlockThreads();
-        PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxWave is not available on this platform.");
         wxPyEndBlockThreads();
     }
 

@@ -240,9 +240,7 @@ static swig_type_info *swig_types[15];
 
 #include <wx/calctrl.h>
 
-
-    DECLARE_DEF_STRING(CalendarNameStr);
-
+ static const wxString wxPyCalendarNameStr(wxCalendarNameStr); 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -953,6 +951,26 @@ static PyObject * CalendarEvent_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_CalendarNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable CalendarNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_CalendarNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyCalendarNameStr)->c_str(), (&wxPyCalendarNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyCalendarNameStr)->c_str(), (&wxPyCalendarNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_CalendarCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -2618,6 +2636,8 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d, "wxEVT_CALENDAR_MONTH_CHANGED", PyInt_FromLong(wxEVT_CALENDAR_MONTH_CHANGED));
     PyDict_SetItemString(d, "wxEVT_CALENDAR_YEAR_CHANGED", PyInt_FromLong(wxEVT_CALENDAR_YEAR_CHANGED));
     PyDict_SetItemString(d, "wxEVT_CALENDAR_WEEKDAY_CLICKED", PyInt_FromLong(wxEVT_CALENDAR_WEEKDAY_CLICKED));
+    PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"CalendarNameStr",_wrap_CalendarNameStr_get, _wrap_CalendarNameStr_set);
     
     
 }

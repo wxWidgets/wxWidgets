@@ -285,14 +285,13 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxPrintDialog swig_types[73] 
 #define  SWIGTYPE_p_wxBitmap swig_types[74] 
 #define  SWIGTYPE_p_wxCommandEvent swig_types[75] 
-#define  SWIGTYPE_p_wxPrintQuality swig_types[76] 
-#define  SWIGTYPE_p_wxPreviewControlBar swig_types[77] 
-#define  SWIGTYPE_p_wxPyPreviewControlBar swig_types[78] 
-#define  SWIGTYPE_p_wxColour swig_types[79] 
-#define  SWIGTYPE_p_wxToolBar swig_types[80] 
+#define  SWIGTYPE_p_wxPreviewControlBar swig_types[76] 
+#define  SWIGTYPE_p_wxPyPreviewControlBar swig_types[77] 
+#define  SWIGTYPE_p_wxColour swig_types[78] 
+#define  SWIGTYPE_p_wxToolBar swig_types[79] 
+#define  SWIGTYPE_p_wxPrintDialogData swig_types[80] 
 #define  SWIGTYPE_p_wxPageSetupDialogData swig_types[81] 
-#define  SWIGTYPE_p_wxPrintDialogData swig_types[82] 
-static swig_type_info *swig_types[84];
+static swig_type_info *swig_types[83];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -307,10 +306,9 @@ static swig_type_info *swig_types[84];
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
     
-    DECLARE_DEF_STRING(PanelNameStr);
-    DECLARE_DEF_STRING(EmptyString);
-    
 
+ static const wxString wxPyEmptyString(wxEmptyString); 
+ static const wxString wxPyPanelNameStr(wxPanelNameStr); 
 
 
 
@@ -340,13 +338,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
-
-    // Put some wx default wxChar* values into wxStrings.
-    DECLARE_DEF_STRING(FrameNameStr);
-    DECLARE_DEF_STRING(DialogNameStr);
-    DECLARE_DEF_STRING(StatusLineNameStr);
-    DECLARE_DEF_STRING(ToolBarNameStr);
-
+ static const wxString wxPyFrameNameStr(wxFrameNameStr); 
+ static const wxString wxPyDialogNameStr(wxDialogNameStr); 
+ static const wxString wxPyStatusLineNameStr(wxStatusLineNameStr); 
+ static const wxString wxPyToolBarNameStr(wxToolBarNameStr); 
 bool wxDialog_IsModalShowing(wxDialog *self){
         
 
@@ -361,31 +356,24 @@ wxRect wxStatusBar_GetFieldRect(wxStatusBar *self,int i){
             self->GetFieldRect(i, r);
             return r;
         }
-
-    static const wxChar* wxSplitterNameStr = wxT("splitter");
-    DECLARE_DEF_STRING(SplitterNameStr);
-
-
-    static const wxChar* wxSashNameStr = wxT("sashWindow");
-    DECLARE_DEF_STRING(SashNameStr);
-    static const wxChar* wxSashLayoutNameStr = wxT("layoutWindow");
-    DECLARE_DEF_STRING(SashLayoutNameStr);
-
+ static const wxString wxPySplitterNameStr(wxT(wxT("splitter"))); 
+ static const wxString wxPySashNameStr(wxT(wxT("sashWindow"))); 
+ static const wxString wxPySashLayoutNameStr(wxT(wxT("layoutWindow"))); 
 
 #include <wx/popupwin.h>
 
 
 class wxPopupWindow : public wxWindow {
 public:
-    wxPopupWindow(wxWindow *, int)  { PyErr_SetNone(PyExc_NotImplementedError); }
-    wxPopupWindow()                 { PyErr_SetNone(PyExc_NotImplementedError); }
+    wxPopupWindow(wxWindow *, int)  { wxPyRaiseNotImplemented(); }
+    wxPopupWindow()                 { wxPyRaiseNotImplemented(); }
 };
 
 class wxPyPopupTransientWindow : public wxPopupWindow
 {
 public:
-    wxPyPopupTransientWindow(wxWindow *, int)  { PyErr_SetNone(PyExc_NotImplementedError); }
-    wxPyPopupTransientWindow()                 { PyErr_SetNone(PyExc_NotImplementedError); }
+    wxPyPopupTransientWindow(wxWindow *, int)  { wxPyRaiseNotImplemented(); }
+    wxPyPopupTransientWindow()                 { wxPyRaiseNotImplemented(); }
 };
 
 
@@ -475,8 +463,8 @@ IMP_PYCALLBACK_COORD_const          (wxPyVScrolledWindow, wxVScrolledWindow, Est
 
 
 #include <wx/vlbox.h>
-DECLARE_DEF_STRING(VListBoxNameStr);
 
+ static const wxString wxPyVListBoxNameStr(wxVListBoxNameStr); 
 
 class wxPyVListBox  : public wxVListBox
 {
@@ -600,7 +588,7 @@ IMP_PYCALLBACK_STRING_SIZET     (wxPyHtmlListBox, wxHtmlListBox, OnGetItemMarkup
 class wxTaskBarIcon : public wxEvtHandler
 {
 public:
-    wxTaskBarIcon()  { PyErr_SetNone(PyExc_NotImplementedError); }
+    wxTaskBarIcon()  { wxPyRaiseNotImplemented(); }
 };
  
 
@@ -608,7 +596,7 @@ class wxTaskBarIconEvent : public wxEvent
 {
 public:
     wxTaskBarIconEvent(wxEventType, wxTaskBarIcon *)
-        { PyErr_SetNone(PyExc_NotImplementedError); }
+        { wxPyRaiseNotImplemented(); }
     virtual wxEvent* Clone() const { return NULL; }
 };
 
@@ -623,16 +611,12 @@ enum {
 };
 #endif
 
-
-
-    DECLARE_DEF_STRING(FileSelectorPromptStr);
-    DECLARE_DEF_STRING(DirSelectorPromptStr);
-    DECLARE_DEF_STRING(DirDialogNameStr);
-    DECLARE_DEF_STRING(FileSelectorDefaultWildcardStr);
-    DECLARE_DEF_STRING(GetTextFromUserPromptStr);
-    DECLARE_DEF_STRING(MessageBoxCaptionStr);
-
-
+ static const wxString wxPyFileSelectorPromptStr(wxFileSelectorPromptStr); 
+ static const wxString wxPyDirSelectorPromptStr(wxDirSelectorPromptStr); 
+ static const wxString wxPyDirDialogNameStr(wxDirDialogNameStr); 
+ static const wxString wxPyFileSelectorDefaultWildcardStr(wxFileSelectorDefaultWildcardStr); 
+ static const wxString wxPyGetTextFromUserPromptStr(wxGetTextFromUserPromptStr); 
+ static const wxString wxPyMessageBoxCaptionStr(wxMessageBoxCaptionStr); 
 PyObject *wxFileDialog_GetFilenames(wxFileDialog *self){
             wxArrayString arr;
             self->GetFilenames(arr);
@@ -792,12 +776,9 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, RemoveChild);
 
 #include "wx/wxPython/printfw.h"
 
-    static const wxChar* wxPrintoutTitleStr = wxT("Printout");
-    DECLARE_DEF_STRING(PrintoutTitleStr);
-    static const wxChar* wxPreviewCanvasNameStr = wxT("previewcanvas");
-    DECLARE_DEF_STRING(PreviewCanvasNameStr);
 
-
+ static const wxString wxPyPrintoutTitleStr(wxT(wxT("Printout"))); 
+ static const wxString wxPyPreviewCanvasNameStr(wxT(wxT("previewcanvas"))); 
 
 
 
@@ -2091,6 +2072,86 @@ static PyObject * ScrolledWindow_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_FrameNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable FrameNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_FrameNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyFrameNameStr)->c_str(), (&wxPyFrameNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyFrameNameStr)->c_str(), (&wxPyFrameNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_DialogNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable DialogNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_DialogNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyDialogNameStr)->c_str(), (&wxPyDialogNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyDialogNameStr)->c_str(), (&wxPyDialogNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_StatusLineNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable StatusLineNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_StatusLineNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyStatusLineNameStr)->c_str(), (&wxPyStatusLineNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyStatusLineNameStr)->c_str(), (&wxPyStatusLineNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ToolBarNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable ToolBarNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ToolBarNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyToolBarNameStr)->c_str(), (&wxPyToolBarNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyToolBarNameStr)->c_str(), (&wxPyToolBarNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_TopLevelWindow_Maximize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
@@ -4640,6 +4701,26 @@ static PyObject * StatusBar_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_SplitterNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable SplitterNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_SplitterNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPySplitterNameStr)->c_str(), (&wxPySplitterNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPySplitterNameStr)->c_str(), (&wxPySplitterNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_SplitterWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -5558,6 +5639,46 @@ static PyObject * SplitterEvent_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_SashNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable SashNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_SashNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPySashNameStr)->c_str(), (&wxPySashNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPySashNameStr)->c_str(), (&wxPySashNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_SashLayoutNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable SashLayoutNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_SashLayoutNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPySashLayoutNameStr)->c_str(), (&wxPySashLayoutNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPySashLayoutNameStr)->c_str(), (&wxPySashLayoutNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_SashWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -8047,6 +8168,26 @@ static PyObject * VScrolledWindow_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_VListBoxNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable VListBoxNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_VListBoxNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyVListBoxNameStr)->c_str(), (&wxPyVListBoxNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyVListBoxNameStr)->c_str(), (&wxPyVListBoxNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_VListBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -9161,6 +9302,126 @@ static PyObject * TaskBarIconEvent_swigregister(PyObject *self, PyObject *args) 
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_FileSelectorPromptStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable FileSelectorPromptStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_FileSelectorPromptStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyFileSelectorPromptStr)->c_str(), (&wxPyFileSelectorPromptStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyFileSelectorPromptStr)->c_str(), (&wxPyFileSelectorPromptStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_DirSelectorPromptStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable DirSelectorPromptStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_DirSelectorPromptStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyDirSelectorPromptStr)->c_str(), (&wxPyDirSelectorPromptStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyDirSelectorPromptStr)->c_str(), (&wxPyDirSelectorPromptStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_DirDialogNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable DirDialogNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_DirDialogNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyDirDialogNameStr)->c_str(), (&wxPyDirDialogNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyDirDialogNameStr)->c_str(), (&wxPyDirDialogNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_FileSelectorDefaultWildcardStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable FileSelectorDefaultWildcardStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_FileSelectorDefaultWildcardStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyFileSelectorDefaultWildcardStr)->c_str(), (&wxPyFileSelectorDefaultWildcardStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyFileSelectorDefaultWildcardStr)->c_str(), (&wxPyFileSelectorDefaultWildcardStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_GetTextFromUserPromptStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable GetTextFromUserPromptStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_GetTextFromUserPromptStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyGetTextFromUserPromptStr)->c_str(), (&wxPyGetTextFromUserPromptStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyGetTextFromUserPromptStr)->c_str(), (&wxPyGetTextFromUserPromptStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_MessageBoxCaptionStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable MessageBoxCaptionStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_MessageBoxCaptionStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyMessageBoxCaptionStr)->c_str(), (&wxPyMessageBoxCaptionStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyMessageBoxCaptionStr)->c_str(), (&wxPyMessageBoxCaptionStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_ColourData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxColourData *result;
@@ -14361,6 +14622,46 @@ static PyObject * PyPanel_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_PrintoutTitleStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable PrintoutTitleStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_PrintoutTitleStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyPrintoutTitleStr)->c_str(), (&wxPyPrintoutTitleStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyPrintoutTitleStr)->c_str(), (&wxPyPrintoutTitleStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_PreviewCanvasNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable PreviewCanvasNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_PreviewCanvasNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyPreviewCanvasNameStr)->c_str(), (&wxPyPreviewCanvasNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyPreviewCanvasNameStr)->c_str(), (&wxPyPreviewCanvasNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_PrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPrintData *result;
@@ -14647,7 +14948,7 @@ static PyObject *_wrap_PrintData_GetPaperSize(PyObject *self, PyObject *args, Py
 static PyObject *_wrap_PrintData_GetQuality(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxPrintQuality result;
+    int result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -14657,16 +14958,12 @@ static PyObject *_wrap_PrintData_GetQuality(PyObject *self, PyObject *args, PyOb
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPrintData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->GetQuality();
+        result = (int)(arg1)->GetQuality();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        wxPrintQuality * resultptr;
-        resultptr = new wxPrintQuality((wxPrintQuality &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxPrintQuality, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -14903,18 +15200,14 @@ static PyObject *_wrap_PrintData_SetPaperSize(PyObject *self, PyObject *args, Py
 static PyObject *_wrap_PrintData_SetQuality(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxPrintQuality arg2 ;
-    wxPrintQuality *argp2 ;
+    int arg2 ;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "quality", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetQuality",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:PrintData_SetQuality",kwnames,&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPrintData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_wxPrintQuality,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetQuality(arg2);
@@ -22113,13 +22406,12 @@ static swig_type_info _swigt__p_wxPanel[] = {{"_p_wxPanel", 0, "wxPanel *", 0},{
 static swig_type_info _swigt__p_wxPrintDialog[] = {{"_p_wxPrintDialog", 0, "wxPrintDialog *", 0},{"_p_wxPrintDialog"},{0}};
 static swig_type_info _swigt__p_wxBitmap[] = {{"_p_wxBitmap", 0, "wxBitmap *", 0},{"_p_wxBitmap"},{0}};
 static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wxCommandEvent *", 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxCommandEvent},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxCommandEvent},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxCommandEvent},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxCommandEvent},{"_p_wxFindDialogEvent", _p_wxFindDialogEventTo_p_wxCommandEvent},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxCommandEvent},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxCommandEvent},{"_p_wxSplitterEvent", _p_wxSplitterEventTo_p_wxCommandEvent},{"_p_wxCommandEvent"},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxCommandEvent},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxCommandEvent},{"_p_wxSashEvent", _p_wxSashEventTo_p_wxCommandEvent},{0}};
-static swig_type_info _swigt__p_wxPrintQuality[] = {{"_p_wxPrintQuality", 0, "wxPrintQuality *", 0},{"_p_wxPrintQuality"},{0}};
 static swig_type_info _swigt__p_wxPreviewControlBar[] = {{"_p_wxPreviewControlBar", 0, "wxPreviewControlBar *", 0},{"_p_wxPreviewControlBar"},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxPreviewControlBar},{0}};
 static swig_type_info _swigt__p_wxPyPreviewControlBar[] = {{"_p_wxPyPreviewControlBar", 0, "wxPyPreviewControlBar *", 0},{"_p_wxPyPreviewControlBar"},{0}};
 static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0},{"_p_wxColour"},{0}};
 static swig_type_info _swigt__p_wxToolBar[] = {{"_p_wxToolBar", 0, "wxToolBar *", 0},{"_p_wxToolBar"},{0}};
-static swig_type_info _swigt__p_wxPageSetupDialogData[] = {{"_p_wxPageSetupDialogData", 0, "wxPageSetupDialogData *", 0},{"_p_wxPageSetupDialogData"},{0}};
 static swig_type_info _swigt__p_wxPrintDialogData[] = {{"_p_wxPrintDialogData", 0, "wxPrintDialogData *", 0},{"_p_wxPrintDialogData"},{0}};
+static swig_type_info _swigt__p_wxPageSetupDialogData[] = {{"_p_wxPageSetupDialogData", 0, "wxPageSetupDialogData *", 0},{"_p_wxPageSetupDialogData"},{0}};
 
 static swig_type_info *swig_types_initial[] = {
 _swigt__p_wxQueryLayoutInfoEvent, 
@@ -22198,13 +22490,12 @@ _swigt__p_wxPanel,
 _swigt__p_wxPrintDialog, 
 _swigt__p_wxBitmap, 
 _swigt__p_wxCommandEvent, 
-_swigt__p_wxPrintQuality, 
 _swigt__p_wxPreviewControlBar, 
 _swigt__p_wxPyPreviewControlBar, 
 _swigt__p_wxColour, 
 _swigt__p_wxToolBar, 
-_swigt__p_wxPageSetupDialogData, 
 _swigt__p_wxPrintDialogData, 
+_swigt__p_wxPageSetupDialogData, 
 0
 };
 
@@ -22347,13 +22638,22 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"FrameNameStr",_wrap_FrameNameStr_get, _wrap_FrameNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"DialogNameStr",_wrap_DialogNameStr_get, _wrap_DialogNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"StatusLineNameStr",_wrap_StatusLineNameStr_get, _wrap_StatusLineNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ToolBarNameStr",_wrap_ToolBarNameStr_get, _wrap_ToolBarNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"SplitterNameStr",_wrap_SplitterNameStr_get, _wrap_SplitterNameStr_set);
     PyDict_SetItemString(d, "wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED", PyInt_FromLong(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED));
     PyDict_SetItemString(d, "wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING", PyInt_FromLong(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING));
     PyDict_SetItemString(d, "wxEVT_COMMAND_SPLITTER_DOUBLECLICKED", PyInt_FromLong(wxEVT_COMMAND_SPLITTER_DOUBLECLICKED));
     PyDict_SetItemString(d, "wxEVT_COMMAND_SPLITTER_UNSPLIT", PyInt_FromLong(wxEVT_COMMAND_SPLITTER_UNSPLIT));
+    SWIG_addvarlink(SWIG_globals,(char*)"SashNameStr",_wrap_SashNameStr_get, _wrap_SashNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"SashLayoutNameStr",_wrap_SashLayoutNameStr_get, _wrap_SashLayoutNameStr_set);
     PyDict_SetItemString(d, "wxEVT_SASH_DRAGGED", PyInt_FromLong(wxEVT_SASH_DRAGGED));
     PyDict_SetItemString(d, "wxEVT_QUERY_LAYOUT_INFO", PyInt_FromLong(wxEVT_QUERY_LAYOUT_INFO));
     PyDict_SetItemString(d, "wxEVT_CALCULATE_LAYOUT", PyInt_FromLong(wxEVT_CALCULATE_LAYOUT));
+    SWIG_addvarlink(SWIG_globals,(char*)"VListBoxNameStr",_wrap_VListBoxNameStr_get, _wrap_VListBoxNameStr_set);
     
     // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxHtmlListBox",     "wxPyHtmlListBox");
@@ -22367,11 +22667,19 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d, "wxEVT_TASKBAR_RIGHT_UP", PyInt_FromLong(wxEVT_TASKBAR_RIGHT_UP));
     PyDict_SetItemString(d, "wxEVT_TASKBAR_LEFT_DCLICK", PyInt_FromLong(wxEVT_TASKBAR_LEFT_DCLICK));
     PyDict_SetItemString(d, "wxEVT_TASKBAR_RIGHT_DCLICK", PyInt_FromLong(wxEVT_TASKBAR_RIGHT_DCLICK));
+    SWIG_addvarlink(SWIG_globals,(char*)"FileSelectorPromptStr",_wrap_FileSelectorPromptStr_get, _wrap_FileSelectorPromptStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"DirSelectorPromptStr",_wrap_DirSelectorPromptStr_get, _wrap_DirSelectorPromptStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"DirDialogNameStr",_wrap_DirDialogNameStr_get, _wrap_DirDialogNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"FileSelectorDefaultWildcardStr",_wrap_FileSelectorDefaultWildcardStr_get, _wrap_FileSelectorDefaultWildcardStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"GetTextFromUserPromptStr",_wrap_GetTextFromUserPromptStr_get, _wrap_GetTextFromUserPromptStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"MessageBoxCaptionStr",_wrap_MessageBoxCaptionStr_get, _wrap_MessageBoxCaptionStr_set);
     PyDict_SetItemString(d, "wxEVT_COMMAND_FIND", PyInt_FromLong(wxEVT_COMMAND_FIND));
     PyDict_SetItemString(d, "wxEVT_COMMAND_FIND_NEXT", PyInt_FromLong(wxEVT_COMMAND_FIND_NEXT));
     PyDict_SetItemString(d, "wxEVT_COMMAND_FIND_REPLACE", PyInt_FromLong(wxEVT_COMMAND_FIND_REPLACE));
     PyDict_SetItemString(d, "wxEVT_COMMAND_FIND_REPLACE_ALL", PyInt_FromLong(wxEVT_COMMAND_FIND_REPLACE_ALL));
     PyDict_SetItemString(d, "wxEVT_COMMAND_FIND_CLOSE", PyInt_FromLong(wxEVT_COMMAND_FIND_CLOSE));
+    SWIG_addvarlink(SWIG_globals,(char*)"PrintoutTitleStr",_wrap_PrintoutTitleStr_get, _wrap_PrintoutTitleStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"PreviewCanvasNameStr",_wrap_PreviewCanvasNameStr_get, _wrap_PreviewCanvasNameStr_set);
     
     wxPyPtrTypeMap_Add("wxPrintout", "wxPyPrintout");
     

@@ -246,8 +246,8 @@ static swig_type_info *swig_types[20];
 
 #include <wx/wizard.h>
     
-    static const wxString wxPyEmptyString(wxT(""));
 
+ static const wxString wxPyEmptyString(wxEmptyString); 
 bool wxWizardPage_Create(wxWizardPage *self,wxWizard *parent,wxBitmap const &bitmap,wxString const &resource){
             wxChar* res = NULL;
             if (resource.Length())
@@ -1489,7 +1489,7 @@ static PyObject *_wrap_new_Wizard(PyObject *self, PyObject *args, PyObject *kwar
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) -1 ;
-    wxString const &arg3_defvalue = wxEmptyString ;
+    wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxBitmap const &arg4_defvalue = wxNullBitmap ;
     wxBitmap *arg4 = (wxBitmap *) &arg4_defvalue ;
@@ -1577,7 +1577,7 @@ static PyObject *_wrap_Wizard_Create(PyObject *self, PyObject *args, PyObject *k
     wxWizard *arg1 = (wxWizard *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
     int arg3 = (int) -1 ;
-    wxString const &arg4_defvalue = wxEmptyString ;
+    wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxBitmap const &arg5_defvalue = wxNullBitmap ;
     wxBitmap *arg5 = (wxBitmap *) &arg5_defvalue ;

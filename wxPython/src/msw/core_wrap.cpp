@@ -1010,7 +1010,7 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
         win->SubclassWin(hWnd);
         return win;
 #else
-        PyErr_SetNone(PyExc_NotImplementedError);
+        wxPyRaiseNotImplemented();
         return NULL;
 #endif
     }

@@ -469,10 +469,10 @@ wxString wxNativeFontInfo___str__(wxNativeFontInfo *self){
         }
 
     wxNativeEncodingInfo* wxGetNativeFontEncoding(wxFontEncoding encoding)
-        { PyErr_SetNone(PyExc_NotImplementedError); return NULL; }
+        { wxPyRaiseNotImplemented(); return NULL; }
     
     bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
-        { PyErr_SetNone(PyExc_NotImplementedError); return False; }
+        { wxPyRaiseNotImplemented(); return False; }
 
 PyObject *wxFontMapper_GetAltForEncoding(wxFontMapper *self,wxFontEncoding encoding,wxString const &facename,bool interactive){
             wxFontEncoding alt_enc;
