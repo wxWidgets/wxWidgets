@@ -173,3 +173,8 @@ This gets the tab size and adds a bit for borders.
 We should do the same for other platforms, only rationalise
 it so that wxNotebook returns the tab rect info.
 
+19. Add wxFileConfig bug fix, marked by <JACS>...</JACS> in Parse().
+This prevents mungeing of the config file after reading in
+entries (say, just one entry in one group), then adding entries
+to a different group.
+

@@ -672,6 +672,16 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
           // new entry
           pEntry = m_pCurrentGroup->AddEntry(strKey, n);
 
+          // <JACS>
+          // Take the opportunity to set some pointers now
+          // that we know there are items in this group.
+          // Otherwise, items added to a newly read file
+          // can be put in the wrong place.
+          m_pCurrentGroup->SetLastEntry(pEntry);
+          if (m_pCurrentGroup->Parent())
+              m_pCurrentGroup->Parent()->SetLastGroup(m_pCurrentGroup);
+          // </JACS>
+
           if ( bLocal )
             pEntry->SetLine(m_linesTail);
         }
