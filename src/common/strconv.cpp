@@ -1389,17 +1389,11 @@ wxMBConv *wxCSConv::DoCreate() const
         case wxFONTENCODING_UTF8:
              return new wxMBConvUTF8;
 
-        case wxFONTENCODING_UTF16:
-             return new wxMBConvUTF16;
-
         case wxFONTENCODING_UTF16BE:
              return new wxMBConvUTF16BE;
 
         case wxFONTENCODING_UTF16LE:
              return new wxMBConvUTF16LE;
-
-        case wxFONTENCODING_UTF32:
-             return new wxMBConvUTF32;
 
         case wxFONTENCODING_UTF32BE:
              return new wxMBConvUTF32BE;
