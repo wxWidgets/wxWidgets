@@ -1231,6 +1231,36 @@ static void GetStaticBoxBorders(wxStaticBox *box,
 {
     // this has to be done platform by platform as there is no way to
     // guess the thickness of a wxStaticBox border
+#if defined(__WXMAC__)
+
+    static int extraTop = -1; // Uninitted
+    static int other = 5;
+
+    if ( extraTop == -1 )
+    {
+        int verMaj, verMin;
+        (void) ::wxGetOsVersion(&verMaj, &verMin);
+
+        // The minimal border used for the top. Later on the staticbox'
+        // font height is added to this.
+        extraTop = 0;
+
+        // Is the Mac OS version OS X Panther or higher?
+        if ( ((verMaj << 16) + verMin) >= 0x00100030 )
+        {
+            // As indicated by the HIG, Panther needs an extra border of 11
+            // pixels (otherwise overlapping occurs at the top). The "other"
+            // border has to be 11.
+            extraTop = 11;
+            other = 11; 
+        }
+
+    }
+
+    *borderTop = extraTop + box->GetCharHeight();
+    *borderOther = other;
+
+#else
 #ifdef __WXGTK__
     if ( box->GetLabel().IsEmpty() )
         *borderTop = 5;
@@ -1239,6 +1269,7 @@ static void GetStaticBoxBorders(wxStaticBox *box,
         *borderTop = box->GetCharHeight();
 
     *borderOther = 5;
+#endif
 }
 
 void wxStaticBoxSizer::RecalcSizes()
