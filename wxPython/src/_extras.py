@@ -775,19 +775,20 @@ class wxPyWidgetTester(wxApp):
 # unloaded, the refcount on __cleanMeUp goes to zero and it calls the
 # wxApp_CleanUp function.
 
-## class __wxPyCleanup:
-##     def __init__(self):
-##         self.cleanup = wxc.wxApp_CleanUp
-##     def __del__(self):
-##         self.cleanup()
+class __wxPyCleanup:
+    def __init__(self):
+        self.cleanup = wxc.wxApp_CleanUp
+    def __del__(self):
+        self.cleanup()
 
-## __cleanMeUp = __wxPyCleanup()
+sys.__wxPythonCleanup = __wxPyCleanup()
 
-if sys.version[0] == '2':
-    import atexit
-    atexit.register(wxc.wxApp_CleanUp)
-else:
-    sys.exitfunc = wxc.wxApp_CleanUp
+## # another possible solution, but it gets called too eary...
+## if sys.version[0] == '2':
+##     import atexit
+##     atexit.register(wxc.wxApp_CleanUp)
+## else:
+##     sys.exitfunc = wxc.wxApp_CleanUp
 
 
 #----------------------------------------------------------------------------
