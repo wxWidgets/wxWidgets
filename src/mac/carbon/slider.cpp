@@ -372,6 +372,7 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
     int  xborder, yborder;
     int  minValWidth, maxValWidth, textwidth, textheight;
     int  sliderBreadth;
+    int width = w;
 
     xborder = yborder = 0;
 
@@ -432,10 +433,31 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
                 m_macValueStatic->Move(GetPosition().x + w, GetPosition().y + 0);
         }
     }
-
-    //If the control has labels, we still need to call this again because
+    
+    
+    // yet another hack since this is a composite control
+    // when wxSlider has it's size hardcoded, we're not allowed to 
+    // change the size. But when the control has labels, we DO need 
+    // to resize the internal Mac control to accomodate the text labels.
+    // We need to trick the wxWidgets resize mechanism so that we can
+    // resize the slider part of the control ONLY. 
+    
+    // TODO: Can all of this code go in the conditional wxSL_LABELS block?
+    
+    int minWidth;
+	minWidth = m_minWidth;
+	
+	if (GetWindowStyle() & wxSL_LABELS)
+    {
+		// make sure we don't allow the entire control to be resized accidently
+		if (width == GetSize().x)
+			m_minWidth = -1;
+	}
+	//If the control has labels, we still need to call this again because
     //the labels alter the control's w and h values.
     wxControl::DoSetSize( x, y , w , h ,sizeFlags ) ;
+
+	m_minWidth = minWidth;
 }
 
 void wxSlider::DoMoveWindow(int x, int y, int width, int height)
