@@ -36,11 +36,11 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit(void)
 {
     // Create the main frame window
-    dialog = new MyDialog(NULL, -1, wxT("wxTaskBarIcon Test Dialog"), wxPoint(-1, -1), wxSize(365, 290), wxDIALOG_MODELESS|wxDEFAULT_DIALOG_STYLE);
+    dialog = new MyDialog(NULL, wxID_ANY, wxT("wxTaskBarIcon Test Dialog"), wxDefaultPosition, wxSize(365, 290), wxDIALOG_MODELESS|wxDEFAULT_DIALOG_STYLE);
 
-    dialog->Show(TRUE);
+    dialog->Show(true);
 
-    return TRUE;
+    return true;
 }
 
 
@@ -66,12 +66,12 @@ MyDialog::~MyDialog()
 
 void MyDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
-    Show(FALSE);
+    Show(false);
 }
 
 void MyDialog::OnExit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
@@ -81,10 +81,10 @@ void MyDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 void MyDialog::Init(void)
 {
-  (void)new wxStaticText(this, -1, _T("Press OK to hide me, Exit to quit."),
+  (void)new wxStaticText(this, wxID_ANY, _T("Press OK to hide me, Exit to quit."),
                          wxPoint(10, 20));
 
-  (void)new wxStaticText(this, -1, _T("Double-click on the taskbar icon to show me again."),
+  (void)new wxStaticText(this, wxID_ANY, _T("Double-click on the taskbar icon to show me again."),
                          wxPoint(10, 40));
 
   (void)new wxButton(this, wxID_EXIT, _T("Exit"), wxPoint(185, 230), wxSize(80, 25));
@@ -115,12 +115,12 @@ END_EVENT_TABLE()
 
 void MyTaskBarIcon::OnMenuRestore(wxCommandEvent& )
 {
-    dialog->Show(TRUE);
+    dialog->Show(true);
 }
 
 void MyTaskBarIcon::OnMenuExit(wxCommandEvent& )
 {
-    dialog->Close(TRUE);
+    dialog->Close(true);
 
     // Nudge wxWindows into destroying the dialog, since
     // with a hidden window no messages will get sent to put
@@ -154,7 +154,7 @@ void MyTaskBarIcon::OnRButtonUp(wxEvent&)
 
 void MyTaskBarIcon::OnLButtonDClick(wxEvent&)
 {
-    dialog->Show(TRUE);
+    dialog->Show(true);
 }
 
 
