@@ -2070,6 +2070,19 @@ default)}
 
 This sets the window to receive keyboard input.
 
+\wxheading{See also}
+
+\helpref{wxFocusEvent}{wxfocusevent}
+
+\membersection{wxWindow::SetFocusFromKbd}\label{wxwindowsetfocusfromkbd}
+
+\func{virtual void}{SetFocusFromKbd}{\void}
+
+This function is called by wxWindows keyboard navigation code when the user
+gives the focus to this window from keyboard (e.g. using {\tt TAB} key).
+By default this method simply calls \helpref{SetFocus}{wxwindowsetfocus} but
+can be overridden to do something in addition to this in the derived classes.
+
 \membersection{wxWindow::SetFont}\label{wxwindowsetfont}
 
 \func{void}{SetFont}{\param{const wxFont\& }{font}}

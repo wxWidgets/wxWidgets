@@ -33,8 +33,8 @@
 #include "wx/validate.h"        // for wxDefaultValidator (always include it)
 
 #if wxUSE_PALETTE
-	#include "wx/dcclient.h"
-	#include "wx/palette.h"
+    #include "wx/dcclient.h"
+    #include "wx/palette.h"
 #endif // wxUSE_PALETTE
 
 #if wxUSE_ACCEL
@@ -374,6 +374,9 @@ public:
 
         // set focus to this window
     virtual void SetFocus() = 0;
+
+        // set focus to this window as the result of a keyboard action
+    virtual void SetFocusFromKbd() { SetFocus(); }
 
         // return the window which currently has the focus or NULL
     static wxWindow *FindFocus() /* = 0: implement in derived classes */;
