@@ -203,6 +203,8 @@ public:
 
     void ScrollWindow( int dx, int dy, const wxRect *rect );
 
+    wxGrid* GetOwner() { return m_owner; }
+
 private:
     wxGrid                   *m_owner;
     wxGridRowLabelWindow     *m_rowLabelWin;
@@ -446,6 +448,9 @@ void wxGridCellEditor::PaintBackground(const wxRect& rectCell,
 {
     // erase the background because we might not fill the cell
     wxClientDC dc(m_control->GetParent());
+    wxGridWindow* gridWindow = wxDynamicCast(m_control->GetParent(), wxGridWindow);
+    if (gridWindow)
+        gridWindow->GetOwner()->PrepareDC(dc);
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush(wxBrush(attr->GetBackgroundColour(), wxSOLID));
     dc.DrawRectangle(rectCell);
@@ -1510,13 +1515,21 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
 {
     dc.SetBackgroundMode( wxSOLID );
 
-    if ( isSelected )
+    // grey out fields if the grid is disabled
+    if( grid.IsEnabled() )
     {
-        dc.SetBrush( wxBrush(grid.GetSelectionBackground(), wxSOLID) );
-    }
+      if ( isSelected )
+      {
+          dc.SetBrush( wxBrush(grid.GetSelectionBackground(), wxSOLID) );
+      }
+      else
+      {
+          dc.SetBrush( wxBrush(attr.GetBackgroundColour(), wxSOLID) );
+      }
+    }  
     else
     {
-        dc.SetBrush( wxBrush(attr.GetBackgroundColour(), wxSOLID) );
+      dc.SetBrush(wxBrush(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE), wxSOLID));
     }
 
     dc.SetPen( *wxTRANSPARENT_PEN );
@@ -4035,6 +4048,26 @@ void wxGrid::CalcDimensions()
     int w = m_numCols > 0 ? GetColRight(m_numCols - 1) + m_extraWidth + 1 : 0;
     int h = m_numRows > 0 ? GetRowBottom(m_numRows - 1) + m_extraHeight + 1 : 0;
 
+    // take into account editor if shown
+    if( IsCellEditControlShown() )
+    {
+      int w2, h2;
+      int r = m_currentCellCoords.GetRow();
+      int c = m_currentCellCoords.GetCol();
+      int x = GetColLeft(c);
+      int y = GetRowTop(r);
+
+      // how big is the editor
+      wxGridCellAttr* attr = GetCellAttr(r, c);
+      wxGridCellEditor* editor = attr->GetEditor(this, r, c);
+      editor->GetControl()->GetSize(&w2, &h2);
+      w2 += x;
+      h2 += y;
+      if( w2 > w ) w = w2;
+      if( h2 > h ) h = h2;
+      editor->DecRef();
+      attr->DecRef();
+    }
     // preserve (more or less) the previous position
     int x, y;
     GetViewStart( &x, &y );
@@ -6156,15 +6189,15 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     if ( (event.KeyCode() == WXK_F2 && !event.HasModifiers())
                          || editor->IsAcceptedKey(event) )
                     {
+                        // ensure cell is visble
+                        MakeCellVisible(row, col);
                         EnableCellEditControl();
 
-                        // the editor could be not shown for a variety of
-                        // reasons (i.e. blocked by the app or whatever), so
-                        // check if it really was created
-                        if ( m_cellEditCtrlEnabled )
-                        {
-                            editor->StartingKey(event);
-                        }
+                        // a problem can arise if the cell is not completely
+                        // visible (even after calling MakeCellVisible the
+                        // control is not created and calling StartingKey will
+                        // crash the app
+                        if( editor->IsCreated() && m_cellEditCtrlEnabled ) editor->StartingKey(event);
                     }
                     else
                     {
@@ -7312,8 +7345,6 @@ void wxGrid::ShowCellEditControl()
                 GetEventHandler()->ProcessEvent(evt);
             }
 
-            editor->Show( TRUE, attr );
-
             // resize editor to overflow into righthand cells if allowed
             int maxWidth = rect.width;
             wxString value = GetCellValue(row, col);
@@ -7348,6 +7379,11 @@ void wxGrid::ShowCellEditControl()
             }
             editor->SetCellAttr(attr);
             editor->SetSize( rect );
+            editor->Show( TRUE, attr );
+
+            // recalc dimensions in case we need to
+            // expand the scrolled window to account for editor
+            CalcDimensions();
 
             editor->BeginEdit(row, col, this);
             editor->SetCellAttr(NULL);
