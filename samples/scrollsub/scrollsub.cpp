@@ -115,7 +115,9 @@ public:
     void OnFullScreen( wxCommandEvent &event );
 
     wxScrolledWindow   *m_scrolled;
+#if wxUSE_LOG
     wxTextCtrl         *m_log;
+#endif // wxUSE_LOG
 
 private:
     DECLARE_DYNAMIC_CLASS(MyFrame)
@@ -400,13 +402,17 @@ MyFrame::MyFrame()
     m_scrolled = new MyScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxSize(100,100) );
     m_scrolled->SetScrollbars( 10, 10, 50, 50 );
 
+#if wxUSE_LOG
     m_log = new wxTextCtrl( this, wxID_ANY, _T("This is the log window.\n"), wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
     delete old_log;
+#endif // wxUSE_LOG
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
     topsizer->Add( m_scrolled, 1, wxEXPAND );
+#if wxUSE_LOG
     topsizer->Add( m_log, 0, wxEXPAND );
+#endif // wxUSE_LOG
 
     SetAutoLayout( true );
     SetSizer( topsizer );

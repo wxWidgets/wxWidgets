@@ -165,7 +165,10 @@ bool MyApp::OnInit()
 // My frame constructor
 MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
        : wxFrame((wxFrame *)NULL, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
-         m_treeCtrl(NULL), m_textCtrl(NULL)
+         m_treeCtrl(NULL)
+#if wxUSE_LOG
+         , m_textCtrl(NULL)
+#endif // wxUSE_LOG
 {
     // This reduces flicker effects - even better would be to define
     // OnEraseBackground to do nothing. When the tree control's scrollbars are
@@ -255,10 +258,12 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     SetMenuBar(menu_bar);
 #endif // wxUSE_MENUS
 
+#if wxUSE_LOG
     // create the controls
     m_textCtrl = new wxTextCtrl(this, wxID_ANY, wxT(""),
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
+#endif // wxUSE_LOG
 
     CreateTreeWithDefStyle();
 
@@ -269,6 +274,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     CreateStatusBar(2);
 #endif // wxUSE_STATUSBAR
 
+#if wxUSE_LOG
 #ifdef __WXMOTIF__
     // For some reason, we get a memcpy crash in wxLogStream::DoLogStream
     // on gcc/wxMotif, if we use wxLogTextCtl. Maybe it's just gcc?
@@ -278,11 +284,14 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     wxLogTextCtrl *logWindow = new wxLogTextCtrl(m_textCtrl);
     delete wxLog::SetActiveTarget(logWindow);
 #endif
+#endif // wxUSE_LOG
 }
 
 MyFrame::~MyFrame()
 {
+#if wxUSE_LOG
     delete wxLog::SetActiveTarget(NULL);
+#endif // wxUSE_LOG
 }
 
 void MyFrame::CreateTreeWithDefStyle()
@@ -354,7 +363,11 @@ void MyFrame::OnIdle(wxIdleEvent& event)
 
 void MyFrame::OnSize(wxSizeEvent& event)
 {
-    if ( m_treeCtrl && m_textCtrl )
+    if ( m_treeCtrl 
+#if wxUSE_LOG
+                    && m_textCtrl 
+#endif // wxUSE_LOG
+                                  )
     {
         Resize();
     }
@@ -365,8 +378,13 @@ void MyFrame::OnSize(wxSizeEvent& event)
 void MyFrame::Resize()
 {
     wxSize size = GetClientSize();
-    m_treeCtrl->SetSize(0, 0, size.x, 2*size.y/3);
+    m_treeCtrl->SetSize(0, 0, size.x, size.y
+#if !wxUSE_LOG
+                                            );
+#else
+                                            *2/3);
     m_textCtrl->SetSize(0, 2*size.y/3, size.x, size.y/3);
+#endif
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

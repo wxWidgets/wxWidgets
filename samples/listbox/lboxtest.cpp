@@ -74,7 +74,9 @@ enum
     LboxTest_AddSeveral,
     LboxTest_AddMany,
     LboxTest_Clear,
+#if wxUSE_LOG
     LboxTest_ClearLog,
+#endif // wxUSE_LOG
     LboxTest_Change,
     LboxTest_ChangeText,
     LboxTest_Delete,
@@ -117,7 +119,9 @@ protected:
     void OnButtonDelete(wxCommandEvent& event);
     void OnButtonDeleteSel(wxCommandEvent& event);
     void OnButtonClear(wxCommandEvent& event);
+#if wxUSE_LOG
     void OnButtonClearLog(wxCommandEvent& event);
+#endif // wxUSE_LOG
     void OnButtonAdd(wxCommandEvent& event);
     void OnButtonAddSeveral(wxCommandEvent& event);
     void OnButtonAddMany(wxCommandEvent& event);
@@ -176,8 +180,10 @@ protected:
     wxListBox *m_lbox;
     wxSizer *m_sizerLbox;
 
+#if wxUSE_LOG
     // the listbox for logging messages
     wxListBox *m_lboxLog;
+#endif // wxUSE_LOG
 
     // the text entries for "Add/change string" and "Delete" buttons
     wxTextCtrl *m_textAdd,
@@ -185,13 +191,16 @@ protected:
                *m_textDelete;
 
 private:
+#if wxUSE_LOG
     // the log target we use to redirect messages to the listbox
     wxLog *m_logTarget;
+#endif // wxUSE_LOG
 
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
+#if wxUSE_LOG
 // A log target which just redirects the messages to a listbox
 class LboxLogger : public wxLog
 {
@@ -251,6 +260,7 @@ private:
     // the old log target
     wxLog *m_logOld;
 };
+#endif // wxUSE_LOG
 
 // ----------------------------------------------------------------------------
 // misc macros
@@ -269,7 +279,9 @@ BEGIN_EVENT_TABLE(LboxTestFrame, wxFrame)
     EVT_BUTTON(LboxTest_Delete, LboxTestFrame::OnButtonDelete)
     EVT_BUTTON(LboxTest_DeleteSel, LboxTestFrame::OnButtonDeleteSel)
     EVT_BUTTON(LboxTest_Clear, LboxTestFrame::OnButtonClear)
+#if wxUSE_LOG
     EVT_BUTTON(LboxTest_ClearLog, LboxTestFrame::OnButtonClearLog)
+#endif // wxUSE_LOG
     EVT_BUTTON(LboxTest_Add, LboxTestFrame::OnButtonAdd)
     EVT_BUTTON(LboxTest_AddSeveral, LboxTestFrame::OnButtonAddSeveral)
     EVT_BUTTON(LboxTest_AddMany, LboxTestFrame::OnButtonAddMany)
@@ -308,8 +320,10 @@ bool LboxTestApp::OnInit()
     wxFrame *frame = new LboxTestFrame(_T("wxListBox sample"));
     frame->Show();
 
+#if wxUSE_LOG
     //wxLog::AddTraceMask(_T("listbox"));
     wxLog::AddTraceMask(_T("scrollbar"));
+#endif // wxUSE_LOG
 
     return true;
 }
@@ -329,11 +343,15 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     m_chkHScroll =
     m_chkSort = (wxCheckBox *)NULL;
 
-    m_lbox =
+    m_lbox = (wxListBox *)NULL;
+#if wxUSE_LOG
     m_lboxLog = (wxListBox *)NULL;
+#endif // wxUSE_LOG
     m_sizerLbox = (wxSizer *)NULL;
 
+#if wxUSE_LOG
     m_logTarget = (wxLog *)NULL;
+#endif // wxUSE_LOG
 
     wxPanel *panel = new wxPanel(this, wxID_ANY);
 
@@ -433,6 +451,7 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     sizerUp->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // the lower one only has the log listbox and a button to clear it
+#if wxUSE_LOG
     wxSizer *sizerDown = new wxStaticBoxSizer
                              (
                                new wxStaticBox(panel, wxID_ANY, _T("&Log window")),
@@ -440,10 +459,15 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
                              );
     m_lboxLog = new wxListBox(panel, wxID_ANY);
     sizerDown->Add(m_lboxLog, 1, wxGROW | wxALL, 5);
+#else
+    wxSizer *sizerDown = new wxBoxSizer(wxVERTICAL);
+#endif // wxUSE_LOG
     wxBoxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
+#if wxUSE_LOG
     btn = new wxButton(panel, LboxTest_ClearLog, _T("Clear &log"));
     sizerBtns->Add(btn);
     sizerBtns->Add(10, 0); // spacer
+#endif // wxUSE_LOG
     btn = new wxButton(panel, LboxTest_Quit, _T("E&xit"));
     sizerBtns->Add(btn);
     sizerDown->Add(sizerBtns, 0, wxALL | wxALIGN_RIGHT, 5);
@@ -462,15 +486,19 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     sizerTop->Fit(this);
     sizerTop->SetSizeHints(this);
 
+#if wxUSE_LOG
     // now that everything is created we can redirect the log messages to the
     // listbox
     m_logTarget = new LboxLogger(m_lboxLog, wxLog::GetActiveTarget());
     wxLog::SetActiveTarget(m_logTarget);
+#endif // wxUSE_LOG
 }
 
 LboxTestFrame::~LboxTestFrame()
 {
+#if wxUSE_LOG
     delete m_logTarget;
+#endif // wxUSE_LOG
 }
 
 // ----------------------------------------------------------------------------
@@ -597,10 +625,12 @@ void LboxTestFrame::OnButtonClear(wxCommandEvent& WXUNUSED(event))
     m_lbox->Clear();
 }
 
+#if wxUSE_LOG
 void LboxTestFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 {
     m_lboxLog->Clear();
 }
+#endif // wxUSE_LOG
 
 void LboxTestFrame::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
 {

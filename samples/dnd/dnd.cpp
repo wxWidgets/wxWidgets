@@ -220,7 +220,9 @@ public:
     void OnDragMoveAllow(wxCommandEvent& event);
     void OnNewFrame(wxCommandEvent& event);
     void OnHelp (wxCommandEvent& event);
+#if wxUSE_LOG
     void OnLogClear(wxCommandEvent& event);
+#endif // wxUSE_LOG
 
     void OnCopy(wxCommandEvent& event);
     void OnPaste(wxCommandEvent& event);
@@ -248,10 +250,13 @@ private:
     // GUI controls
     wxListBox  *m_ctrlFile,
                *m_ctrlText;
+
+#if wxUSE_LOG
     wxTextCtrl *m_ctrlLog;
 
     wxLog *m_pLog,
           *m_pLogPrev;
+#endif // wxUSE_LOG
 
     // move the text by default (or copy)?
     bool m_moveByDefault;
@@ -821,7 +826,9 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_MENU(Menu_DragMoveAllow,DnDFrame::OnDragMoveAllow)
     EVT_MENU(Menu_NewFrame,   DnDFrame::OnNewFrame)
     EVT_MENU(Menu_Help,       DnDFrame::OnHelp)
+#if wxUSE_LOG
     EVT_MENU(Menu_Clear,      DnDFrame::OnLogClear)
+#endif // wxUSE_LOG
     EVT_MENU(Menu_Copy,       DnDFrame::OnCopy)
     EVT_MENU(Menu_Paste,      DnDFrame::OnPaste)
     EVT_MENU(Menu_CopyBitmap, DnDFrame::OnCopyBitmap)
@@ -887,11 +894,13 @@ bool DnDApp::OnInit()
 {
 #if wxUSE_DRAG_AND_DROP || wxUSE_CLIPBOARD
     // switch on trace messages
+#if wxUSE_LOG
 #if defined(__WXGTK__)
     wxLog::AddTraceMask(_T("clipboard"));
 #elif defined(__WXMSW__)
     wxLog::AddTraceMask(wxTRACE_OleCalls);
 #endif
+#endif // wxUSE_LOG
 
 #if wxUSE_LIBPNG
     wxImage::AddHandler( new wxPNGHandler );
@@ -942,8 +951,10 @@ DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
     file_menu->AppendSeparator();
     file_menu->Append(Menu_Quit, _T("E&xit\tCtrl-Q"));
 
+#if wxUSE_LOG
     wxMenu *log_menu = new wxMenu;
     log_menu->Append(Menu_Clear, _T("Clear\tCtrl-L"));
+#endif // wxUSE_LOG
 
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(Menu_Help, _T("&Help..."));
@@ -965,7 +976,9 @@ DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, _T("&File"));
+#if wxUSE_LOG
     menu_bar->Append(log_menu,  _T("&Log"));
+#endif // wxUSE_LOG
     menu_bar->Append(clip_menu, _T("&Clipboard"));
     menu_bar->Append(help_menu, _T("&Help"));
 
@@ -979,6 +992,7 @@ DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
     m_ctrlText  = new wxListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 1, &strText,
                                 wxLB_HSCROLL | wxLB_ALWAYS_SB );
 
+#if wxUSE_LOG
     m_ctrlLog   = new wxTextCtrl(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize,
                                  wxTE_MULTILINE | wxTE_READONLY |
                                  wxSUNKEN_BORDER );
@@ -986,12 +1000,15 @@ DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
     // redirect log messages to the text window
     m_pLog = new wxLogTextCtrl(m_ctrlLog);
     m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
+#endif // wxUSE_LOG
 
 #if wxUSE_DRAG_AND_DROP
     // associate drop targets with the controls
     m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
     m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));
+#if wxUSE_LOG
     m_ctrlLog->SetDropTarget(new URLDropTarget);
+#endif // wxUSE_LOG
 #endif // wxUSE_DRAG_AND_DROP
 
     wxBoxSizer *m_sizer_top = new wxBoxSizer( wxHORIZONTAL );
@@ -1000,7 +1017,10 @@ DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
 
     wxBoxSizer *m_sizer = new wxBoxSizer( wxVERTICAL );
     m_sizer->Add(m_sizer_top, 1, wxEXPAND );
-    m_sizer->Add(m_ctrlLog, 1, wxEXPAND | wxBOTTOM, 50);
+#if wxUSE_LOG
+    m_sizer->Add(m_ctrlLog, 1, wxEXPAND);
+#endif // wxUSE_LOG
+    m_sizer->Add(0,50);
 
     SetSizer( m_sizer );
     m_sizer->SetSizeHints( this );
@@ -1136,12 +1156,14 @@ void DnDFrame::OnHelp(wxCommandEvent& /* event */)
     dialog.ShowModal();
 }
 
+#if wxUSE_LOG
 void DnDFrame::OnLogClear(wxCommandEvent& /* event */ )
 {
     m_ctrlLog->Clear();
     m_ctrlText->Clear();
     m_ctrlFile->Clear();
 }
+#endif // wxUSE_LOG
 
 void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
 {
@@ -1201,10 +1223,12 @@ void DnDFrame::OnRightDown(wxMouseEvent &event )
 
 DnDFrame::~DnDFrame()
 {
+#if wxUSE_LOG
     if ( m_pLog != NULL ) {
         if ( wxLog::SetActiveTarget(m_pLogPrev) == m_pLog )
             delete m_pLog;
     }
+#endif // wxUSE_LOG
 }
 
 // ---------------------------------------------------------------------------
@@ -1639,8 +1663,7 @@ void DnDShapeDialog::OnColour(wxCommandEvent& WXUNUSED(event))
 DnDShapeFrame *DnDShapeFrame::ms_lastDropTarget = NULL;
 
 DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
-             : wxFrame(parent, wxID_ANY, _T("Shape Frame"),
-                       wxDefaultPosition, wxSize(250, 150))
+             : wxFrame(parent, wxID_ANY, _T("Shape Frame"))
 {
 #if wxUSE_STATUSBAR
     CreateStatusBar();

@@ -227,7 +227,9 @@ private:
     void CreateTree(long style);
 
     MyTreeCtrl *m_treeCtrl;
+#if wxUSE_LOG
     wxTextCtrl *m_textCtrl;
+#endif // wxUSE_LOG
 
     void DoSetBold(bool bold = true);
 

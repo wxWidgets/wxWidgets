@@ -80,7 +80,9 @@ public:
 
 protected:
     // event handlers
+#if wxUSE_LOG
     void OnButtonClearLog(wxCommandEvent& event);
+#endif // wxUSE_LOG
     void OnButtonQuit(wxCommandEvent& event);
 
     // initialize the notebook: add all pages to it
@@ -90,11 +92,13 @@ private:
     // the panel containing everything
     wxPanel *m_panel;
 
+#if wxUSE_LOG
     // the listbox for logging messages
     wxListBox *m_lboxLog;
 
     // the log target we use to redirect messages to the listbox
     wxLog *m_logTarget;
+#endif // wxUSE_LOG
 
     // the notebook containing the test pages
     wxNotebook *m_notebook;
@@ -106,6 +110,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+#if wxUSE_LOG
 // A log target which just redirects the messages to a listbox
 class LboxLogger : public wxLog
 {
@@ -162,6 +167,7 @@ private:
     // the old log target
     wxLog *m_logOld;
 };
+#endif // wxUSE_LOG
 
 // array of pages
 WX_DEFINE_ARRAY_PTR(WidgetsPage *, ArrayWidgetsPage);
@@ -177,7 +183,9 @@ IMPLEMENT_APP(WidgetsApp)
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
+#if wxUSE_LOG
     EVT_BUTTON(Widgets_ClearLog, WidgetsFrame::OnButtonClearLog)
+#endif // wxUSE_LOG
     EVT_BUTTON(Widgets_Quit, WidgetsFrame::OnButtonQuit)
 END_EVENT_TABLE()
 
@@ -236,8 +244,10 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
                       wxTAB_TRAVERSAL)
 {
     // init everything
+#if wxUSE_LOG
     m_lboxLog = (wxListBox *)NULL;
     m_logTarget = (wxLog *)NULL;
+#endif // wxUSE_LOG
     m_notebook = (wxNotebook *)NULL;
     m_imaglist = (wxImageList *)NULL;
 
@@ -255,6 +265,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     InitNotebook();
 
     // the lower one only has the log listbox and a button to clear it
+#if wxUSE_LOG
     wxSizer *sizerDown = new wxStaticBoxSizer(
         new wxStaticBox( m_panel, wxID_ANY, _T("&Log window") ),
         wxVERTICAL);
@@ -262,11 +273,17 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     m_lboxLog = new wxListBox(m_panel, wxID_ANY);
     sizerDown->Add(m_lboxLog, 1, wxGROW | wxALL, 5);
     sizerDown->SetMinSize(100, 150);
+#else
+    wxSizer *sizerDown = new wxBoxSizer(wxVERTICAL);
+#endif // wxUSE_LOG
 
     wxBoxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
-    wxButton *btn = new wxButton(m_panel, Widgets_ClearLog, _T("Clear &log"));
+    wxButton *btn;
+#if wxUSE_LOG
+    btn = new wxButton(m_panel, Widgets_ClearLog, _T("Clear &log"));
     sizerBtns->Add(btn);
     sizerBtns->Add(10, 0); // spacer
+#endif // wxUSE_LOG
     btn = new wxButton(m_panel, Widgets_Quit, _T("E&xit"));
     sizerBtns->Add(btn);
     sizerDown->Add(sizerBtns, 0, wxALL | wxALIGN_RIGHT, 5);
@@ -281,13 +298,13 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     sizerTop->Fit(this);
     sizerTop->SetSizeHints(this);
 
+#if wxUSE_LOG && !defined(__WXCOCOA__)
     // wxCocoa's listbox is too flakey to use for logging right now
-    #if !defined(__WXCOCOA__)
     // now that everything is created we can redirect the log messages to the
     // listbox
     m_logTarget = new LboxLogger(m_lboxLog, wxLog::GetActiveTarget());
     wxLog::SetActiveTarget(m_logTarget);
-    #endif
+#endif
 }
 
 void WidgetsFrame::InitNotebook()
@@ -327,7 +344,9 @@ void WidgetsFrame::InitNotebook()
 
 WidgetsFrame::~WidgetsFrame()
 {
+#if wxUSE_LOG
     delete m_logTarget;
+#endif // wxUSE_LOG
     delete m_imaglist;
 }
 
@@ -340,10 +359,12 @@ void WidgetsFrame::OnButtonQuit(wxCommandEvent& WXUNUSED(event))
     Close();
 }
 
+#if wxUSE_LOG
 void WidgetsFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 {
     m_lboxLog->Clear();
 }
+#endif // wxUSE_LOG
 
 // ----------------------------------------------------------------------------
 // WidgetsPageInfo

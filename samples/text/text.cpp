@@ -97,7 +97,12 @@ class MyPanel: public wxPanel
 {
 public:
     MyPanel(wxFrame *frame, int x, int y, int w, int h);
-    virtual ~MyPanel() { delete wxLog::SetActiveTarget(m_logOld); }
+    virtual ~MyPanel() 
+    { 
+#if wxUSE_LOG
+        delete wxLog::SetActiveTarget(m_logOld); 
+#endif // wxUSE_LOG
+    }
 
 #if wxUSE_CLIPBOARD
     void DoPasteFromClipboard();
@@ -124,9 +129,10 @@ public:
 
     MyTextCtrl    *m_textrich;
 
+#if wxUSE_LOG
     wxTextCtrl    *m_log;
-
     wxLog         *m_logOld;
+#endif // wxUSE_LOG
 
 private:
     // get the currently focused text control or return the default one is no
@@ -195,7 +201,9 @@ public:
             wxLogMessage(_T("Already at the top"));
     }
 
+#if wxUSE_LOG
     void OnLogClear(wxCommandEvent& event);
+#endif // wxUSE_LOG
     void OnFileSave(wxCommandEvent& event);
     void OnFileLoad(wxCommandEvent& event);
     void OnRichTextTest(wxCommandEvent& event);
@@ -405,6 +413,7 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_PAGE_DOWN, _T("Scroll text one page up"));
     menu_bar->Append(menuText, _T("Te&xt"));
 
+#if wxUSE_LOG
     wxMenu *menuLog = new wxMenu;
     menuLog->AppendCheckItem(TEXT_LOG_KEY, _T("Log &key events"));
     menuLog->AppendCheckItem(TEXT_LOG_CHAR, _T("Log &char events"));
@@ -423,7 +432,9 @@ bool MyApp::OnInit()
     MyTextCtrl::ms_logKey =
     MyTextCtrl::ms_logChar =
     MyTextCtrl::ms_logText = true;
+
     menu_bar->Append(menuLog, _T("&Log"));
+#endif // wxUSE_LOG
 
     frame->SetMenuBar(menu_bar);
 
@@ -840,16 +851,18 @@ END_EVENT_TABLE()
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
        : wxPanel( frame, wxID_ANY, wxPoint(x, y), wxSize(w, h) )
 {
+#if wxUSE_LOG
     m_log = new wxTextCtrl( this, wxID_ANY, _T("This is the log window.\n"),
                             wxPoint(5,260), wxSize(630,100),
                             wxTE_MULTILINE | wxTE_READONLY /* | wxTE_RICH */);
 
     m_logOld = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
+#endif // wxUSE_LOG
 
     // single line text controls
 
     m_text = new MyTextCtrl( this, wxID_ANY, _T("Single line."),
-                             wxPoint(10,10), wxSize(140,wxDefaultCoord),
+                             wxDefaultPosition, wxDefaultSize,
                              wxTE_PROCESS_ENTER);
     m_text->SetForegroundColour(*wxBLUE);
     m_text->SetBackgroundColour(*wxLIGHT_GREY);
@@ -949,13 +962,47 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE, *wxWHITE));
     m_textrich->AppendText(_T("And this should be in blue and the text you ")
                            _T("type should be in blue as well"));
+
+    wxBoxSizer *column1 = new wxBoxSizer(wxVERTICAL);
+    column1->Add( m_text, 0, wxALL, 10 );
+    column1->Add( m_password, 0, wxALL, 10 );
+    column1->Add( m_readonly, 0, wxALL, 10 );
+    column1->Add( m_limited, 0, wxALL, 10 );
+    column1->Add( m_horizontal, 1, wxALL | wxEXPAND, 10 );
+
+    wxBoxSizer *column2 = new wxBoxSizer(wxVERTICAL);
+    column2->Add( m_multitext, 1, wxALL | wxEXPAND, 10 );
+    column2->Add( m_tab, 1, wxALL | wxEXPAND, 10 );
+    column2->Add( m_enter, 1, wxALL | wxEXPAND, 10 );
+
+    wxBoxSizer *column3 = new wxBoxSizer(wxVERTICAL);
+    column3->Add( m_textrich, 1, wxALL | wxEXPAND, 10 );
+
+    wxBoxSizer *row1 = new wxBoxSizer(wxHORIZONTAL);
+    row1->Add( column1, 0, wxALL | wxEXPAND, 10 );
+    row1->Add( column2, 1, wxALL | wxEXPAND, 10 );
+    row1->Add( column3, 1, wxALL | wxEXPAND, 10 );
+
+    wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
+    topSizer->Add( row1, 2, wxALL | wxEXPAND, 10 );
+
+#if wxUSE_LOG
+    wxBoxSizer *row2 = new wxBoxSizer(wxHORIZONTAL);
+    row2->Add( m_log, 1, wxALL | wxEXPAND, 10 );
+    topSizer->Add( row2, 1, wxALL | wxEXPAND, 10 );
+#endif
+
+    SetAutoLayout( true );
+    SetSizer(topSizer);
 }
 
 void MyPanel::OnSize( wxSizeEvent &event )
 {
+#if wxUSE_LOG
     wxSize client_area( GetClientSize() );
     if (m_log)
       m_log->SetSize( 0, 260, client_area.x, client_area.y - 260 );
+#endif // wxUSE_LOG
     event.Skip();
 }
 
@@ -977,38 +1024,52 @@ void MyPanel::DoPasteFromClipboard()
 
     if (!wxTheClipboard->Open())
     {
+#if wxUSE_LOG
         *m_log << _T("Error opening the clipboard.\n");
+#endif // wxUSE_LOG
         return;
     }
     else
     {
+#if wxUSE_LOG
         *m_log << _T("Successfully opened the clipboard.\n");
+#endif // wxUSE_LOG
     }
 
     wxTextDataObject data;
 
     if (wxTheClipboard->IsSupported( data.GetFormat() ))
     {
+#if wxUSE_LOG
         *m_log << _T("Clipboard supports requested format.\n");
+#endif // wxUSE_LOG
 
         if (wxTheClipboard->GetData( data ))
         {
+#if wxUSE_LOG
             *m_log << _T("Successfully retrieved data from the clipboard.\n");
+#endif // wxUSE_LOG
             *m_multitext << data.GetText() << _T("\n");
         }
         else
         {
+#if wxUSE_LOG
             *m_log << _T("Error getting data from the clipboard.\n");
+#endif // wxUSE_LOG
         }
     }
     else
     {
+#if wxUSE_LOG
         *m_log << _T("Clipboard doesn't support requested format.\n");
+#endif // wxUSE_LOG
     }
 
     wxTheClipboard->Close();
 
+#if wxUSE_LOG
     *m_log << _T("Closed the clipboard.\n");
+#endif // wxUSE_LOG
 }
 
 void MyPanel::DoCopyToClipboard()
@@ -1022,36 +1083,48 @@ void MyPanel::DoCopyToClipboard()
 
     if (text.IsEmpty())
     {
+#if wxUSE_LOG
         *m_log << _T("No text to copy.\n");
+#endif // wxUSE_LOG
 
         return;
     }
 
     if (!wxTheClipboard->Open())
     {
+#if wxUSE_LOG
         *m_log << _T("Error opening the clipboard.\n");
+#endif // wxUSE_LOG
 
         return;
     }
     else
     {
+#if wxUSE_LOG
         *m_log << _T("Successfully opened the clipboard.\n");
+#endif // wxUSE_LOG
     }
 
     wxTextDataObject *data = new wxTextDataObject( text );
 
     if (!wxTheClipboard->SetData( data ))
     {
+#if wxUSE_LOG
         *m_log << _T("Error while copying to the clipboard.\n");
+#endif // wxUSE_LOG
     }
     else
     {
+#if wxUSE_LOG
         *m_log << _T("Successfully copied data to the clipboard.\n");
+#endif // wxUSE_LOG
     }
 
     wxTheClipboard->Close();
 
+#if wxUSE_LOG
     *m_log << _T("Closed the clipboard.\n");
+#endif // wxUSE_LOG
 }
 
 #endif // wxUSE_CLIPBOARD
@@ -1099,7 +1172,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_LOG_MOUSE,MyFrame::OnLogMouse)
     EVT_MENU(TEXT_LOG_TEXT, MyFrame::OnLogText)
     EVT_MENU(TEXT_LOG_FOCUS,MyFrame::OnLogFocus)
+#if wxUSE_LOG
     EVT_MENU(TEXT_CLEAR,    MyFrame::OnLogClear)
+#endif // wxUSE_LOG
 
 #if wxUSE_TOOLTIPS
     EVT_MENU(TEXT_TOOLTIPS_SETDELAY,  MyFrame::OnSetTooltipDelay)
@@ -1200,10 +1275,12 @@ void MyFrame::OnToggleTooltips(wxCommandEvent& WXUNUSED(event))
 }
 #endif // tooltips
 
+#if wxUSE_LOG
 void MyFrame::OnLogClear(wxCommandEvent& WXUNUSED(event))
 {
     m_panel->m_log->Clear();
 }
+#endif // wxUSE_LOG
 
 void MyFrame::OnSetEditable(wxCommandEvent& WXUNUSED(event))
 {
