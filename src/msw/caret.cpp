@@ -46,11 +46,9 @@
 #ifdef __WIN16__
     #define CALL_CARET_API(api, args)   api args
 #else // Win32
-#ifdef _UNICODE
-    #define CALL_CARET_API(api, args)   if ( !api args ) wxLogLastError(#api)
-#else
-    #define CALL_CARET_API(api, args)
-#endif
+    #define CALL_CARET_API(api, args)   \
+        if ( !api args )                \
+            wxLogLastError(_T(#api))
 #endif // Win16/32
 
 // ===========================================================================
