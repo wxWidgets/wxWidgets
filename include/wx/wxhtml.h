@@ -21,6 +21,6 @@
 #include <wx/html/htmlwin.h>
 #include <wx/html/htmlwinparser.h>
 #include <wx/filesys.h>
-#include <wx/html/htmlhelp.h>
+#include <wx/html/helpctrl.h>
 
 #endif // __WXHTML_H__
