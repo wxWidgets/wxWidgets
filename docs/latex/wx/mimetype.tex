@@ -25,6 +25,18 @@ gathers MIME information from respective files (e.g. .kdelnk files under KDE).
 NB: Currently, wxMimeTypesManager is limited to reading MIME type information
 but it will support modifying it as well in the future versions.
 
+\wxheading{Global objects}
+
+Global instance of wxMimeTypesManager is always available. It is defined
+as follows:
+
+\begin{verbatim}
+wxMimeTypesManager *wxTheMimeTypesManager;
+\end{verbatim}
+
+It is recommended to use this instance instead of creating your own because
+gathering MIME information may take quite a long on Unix systems.
+
 \wxheading{Derived from}
 
 No base class.
