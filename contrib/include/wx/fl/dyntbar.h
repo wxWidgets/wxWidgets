@@ -172,7 +172,7 @@ public:
         // Adds a separator. See the documentation for wxToolBar for details.
 
     virtual void AddSeparator( wxWindow* pSepartorWnd );
-FIXXXXXME
+
         // Unhide method from parent.
 
     virtual wxToolBarToolBase *AddSeparator()
