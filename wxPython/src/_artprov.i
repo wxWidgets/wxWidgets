@@ -263,7 +263,7 @@ wx.NullBitmap if no provider provides it.", "");
 wx.NullIcon if no provider provides it.", "");
 
     DocDeclStr(
-        static wxSize , GetHintSize(const wxString& client, bool platform_dependent = false),
+        static wxSize , GetSizeHint(const wxString& client, bool platform_dependent = false),
         "Get the size hint of an icon from a specific Art Client, queries the
 topmost provider if platform_dependent = false", "");
     
