@@ -149,7 +149,9 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
   }
   else
   { // Read in Foreign language's text for GetAppName() and Help
-   m_locale.AddCatalog(GetAppName().c_str());
+   Temp0 = GetAppName();
+   Temp0 = Temp0.Lower();
+   m_locale.AddCatalog(Temp0.c_str());
    m_locale.AddCatalog("help");
   }
  } // Support the following languages  (std = english)

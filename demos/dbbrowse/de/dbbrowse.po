@@ -567,7 +567,7 @@ msgstr  "Hier ist wo alle wxTable Klassen für >%s< erstellt wird!"
 #: ../pgmctrl.cpp:186
 #, c-format
 msgid   "Item '%s': %sselected, %sexpanded, %sbold,%u children (%u immediately under this item)."
-msgstr  ""
+msgstr  "Zweig '%s': %sselektiert %serweitert, %sbold,%u Kinder (%u direkt unter diese Zweig)."
 
 #: ../dbtree.cpp:163
 msgid   "KEY"

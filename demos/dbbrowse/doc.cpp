@@ -133,8 +133,9 @@ bool MainDoc::OnInitView()
  p_Splitter->Initialize(p_TabArea);
  p_Splitter->SplitHorizontally(p_TabArea,p_PageArea,Sash);
  //---------------------------------------------------------------------------------------
- if (!OnInitODBC())
-  return FALSE;
+ // if (!OnInitODBC())
+ //  return FALSE;
+ OnInitODBC();
  //---------------------------------------------------------------------------------------
  Temp0.Printf(_("-I-> MainDoc::OnInitView() - End - %d DSN's found"),i_DSN);
  p_MainFrame->SetStatusText(Temp0, 0);
