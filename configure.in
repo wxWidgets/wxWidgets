@@ -2090,7 +2090,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         fi
       ;;
       *-*-darwin* )
-        SHARED_LD="libtool -dynamic -o"
+        SHARED_LD="${CXX} -dynamic -dylib -o"
         PIC_FLAG="-fPIC"
         if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
@@ -2099,6 +2099,16 @@ if test "$wxUSE_SHARED" = "yes"; then
             WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
             WX_ALL="CREATE_LINKS"
         fi
+	dnl the name of the shared library
+	WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}-${WX_RELEASE}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.dylib"
+	WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.dylib"
+	dnl the name of the links to the shared library
+	WX_LIBRARY_LINK1="lib${WX_LIBRARY}-${WX_RELEASE}.${WX_CURRENT}.dylib"
+	WX_LIBRARY_LINK2="lib${WX_LIBRARY}-${WX_RELEASE}.dylib"
+	WX_LIBRARY_LINK3="lib${WX_LIBRARY}.dylib"
+	WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.${WX_CURRENT}.dylib"
+	WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.dylib"
+	WX_LIBRARY_LINK3_GL="lib${WX_LIBRARY}_gl.dylib"
       ;;
       *-*-osf* )
         SHARED_LD="${CXX} -shared -o"
@@ -2583,6 +2593,8 @@ if test "$wxUSE_THREADS" = "yes" ; then
     dnl AIX calls the library libpthreads - thanks IBM!
     if test "$USE_AIX" = 1; then
         THREADS_LIB=pthreads
+    elif test "$USE_MAC" = 1; then
+        THREADS_LIB=cc_dynamic
     else
         THREADS_LIB=pthread
     fi
@@ -3833,7 +3845,7 @@ dnl
 dnl note that we always link with -lm except for Mac OS X
 dnl extended.c uses floor() and is always linked in
 if test "$USE_MAC" = 1 ; then
-    EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -framework System"
+    EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -Llib -lxpm -framework Carbon -framework System"
     CFLAGS="${CFLAGS} -fpascal-strings"
     CPPFLAGS="${CPPFLAGS} -fpascal-strings"
 else
@@ -4042,7 +4054,7 @@ AC_OUTPUT([
             
             dnl the debian build process wants setup.h in the lib subdir so we
             dnl can pretend wxWin is already installed, so we *copy* it there
-            
+         
             if test ! -d lib; then
               mkdir lib
             fi
