@@ -21,8 +21,17 @@
     <set var="WXVER_RELEASE">$(wxwin.getVersionRelease())</set>
     <set var="WX_VERSION">$(WXVER_MAJOR).$(WXVER_MINOR).$(WXVER_RELEASE)</set>
 
-    <set var="WXSOVERSION">0.0.0</set>
+    <set var="WX_STABLE_BRANCH">$(int(int(WXVER_MINOR) % 2 == 0))</set>
+
+    <set var="WXSOVERSION">
+        <if cond="WX_STABLE_BRANCH=='1'">0.0.0</if>
+        <if cond="WX_STABLE_BRANCH=='0'">$(WXVER_RELEASE).0.0</if>
+    </set>
     <set var="WXMACVERSION">$(WX_VERSION)</set>
+    <set var="WXWIN32DLLVERSION">
+        <if cond="WX_STABLE_BRANCH=='1'">$(WXVER_MAJOR)$(WXVER_MINOR)</if>
+        <if cond="WX_STABLE_BRANCH=='0'">$(WXVER_MAJOR)$(WXVER_MINOR)$(WXVER_RELEASE)</if>
+    </set>
     
     
     <!-- ================================================================== -->
@@ -83,13 +92,13 @@
     </if>
     <set var="WXDLLNAMEPREFIX">
         <if cond="PLATFORM_WIN32=='1'">
-            wxbase$(WXBASEPORT)$(WXVER_MAJOR)$(WXVER_MINOR)
+            wxbase$(WXBASEPORT)$(WXWIN32DLLVERSION)
         </if>
         <if cond="PLATFORM_WIN32=='0'">$(WXNAMEPREFIX)</if>
     </set>
     <set var="WXDLLNAMEPREFIXGUI">
         <if cond="PLATFORM_WIN32=='1'">
-            wx$(PORTNAME)$(WXUNIVNAME)$(WXVER_MAJOR)$(WXVER_MINOR)
+            wx$(PORTNAME)$(WXUNIVNAME)$(WXWIN32DLLVERSION)
         </if>
         <if cond="PLATFORM_WIN32=='0'">$(WXNAMEPREFIXGUI)</if>
     </set>

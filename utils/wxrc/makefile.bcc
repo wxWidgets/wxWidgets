@@ -27,8 +27,8 @@ WXRC_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) $(__DEBUGFLAG) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include \
 	-I.\..\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) \
 	-I.\..\..\..\src\tiff -I.\..\..\..\src\jpeg -I.\..\..\..\src\png \
-	-I.\..\..\..\src\zlib -I.\..\..\..\src\regex -I. $(__DLLFLAG_p) \
-	-DwxUSE_GUI=0 $(CXXFLAGS)
+	-I.\..\..\..\src\zlib -I.\..\..\..\src\regex -I.\..\..\..\src\expat\lib -I. \
+	$(__DLLFLAG_p) -DwxUSE_GUI=0 $(CXXFLAGS)
 
 ### Conditionally set variables: ###
 

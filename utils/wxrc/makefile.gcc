@@ -13,7 +13,7 @@ include ../../../build/config.gcc
 ### Variables: ###
 
 OBJS = gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-WXRC_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include -I.\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I.\..\..\..\src\tiff -I.\..\..\..\src\jpeg -I.\..\..\..\src\png -I.\..\..\..\src\zlib  -I.\..\..\..\src\regex -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CXXFLAGS)
+WXRC_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include -I.\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I.\..\..\..\src\tiff -I.\..\..\..\src\jpeg -I.\..\..\..\src\png -I.\..\..\..\src\zlib  -I.\..\..\..\src\regex -I.\..\..\..\src\expat\lib -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CXXFLAGS)
 
 ### Conditionally set variables: ###
 

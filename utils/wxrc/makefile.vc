@@ -13,7 +13,7 @@
 ### Variables: ###
 
 OBJS = vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-WXRC_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_6)$(__DEBUGFLAG_2) $(__DEBUGFLAG_0) /Fd$(OBJS)\wxrc.pdb $(__OPTIMIZEFLAG_3)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include /I.\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png /I.\..\..\..\src\zlib  /I.\..\..\..\src\regex /I. $(__DLLFLAG_p) /DwxUSE_GUI=0 $(CXXFLAGS)
+WXRC_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGFLAG_2) /DWIN32 $(__DEBUGFLAG_0) /Fd$(OBJS)\wxrc.pdb $(____DEBUGFLAG_3_p) $(__OPTIMIZEFLAG_4)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include /I.\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png /I.\..\..\..\src\zlib  /I.\..\..\..\src\regex /I.\..\..\..\src\expat\lib /I. $(__DLLFLAG_p) /D_CONSOLE /DwxUSE_GUI=0 $(CXXFLAGS)
 
 ### Conditionally set variables: ###
 
@@ -60,16 +60,16 @@ __DEBUG_DEFINE_p = /D__WXDEBUG__
 __DLLFLAG_p = /DWXUSINGDLL
 !endif
 !if "$(BUILD)" == "debug"
-__OPTIMIZEFLAG_3 = /Od
+__OPTIMIZEFLAG_4 = /Od
 !endif
 !if "$(BUILD)" == "release"
-__OPTIMIZEFLAG_3 = /O2
+__OPTIMIZEFLAG_4 = /O2
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_6 = D
+__RUNTIME_LIBS_7 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_6 = T
+__RUNTIME_LIBS_7 = T
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
@@ -85,6 +85,12 @@ __WXLIB_XML_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml.lib
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
+!endif
+!if "$(BUILD)" == "debug"
+____DEBUGFLAG_3_p = /D_DEBUG
+!endif
+!if "$(BUILD)" == "release"
+____DEBUGFLAG_3_p = /DNDEBUG
 !endif
 
 

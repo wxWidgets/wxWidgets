@@ -13,7 +13,7 @@
 ### Variables: ###
 
 OBJS = vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-XRCDEMO_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_6)$(__DEBUGFLAG_2) $(__DEBUGFLAG_0) /Fd$(OBJS)\xrcdemo.pdb $(__OPTIMIZEFLAG_3)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include /I.\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png /I.\..\..\..\src\zlib  /I.\..\..\..\src\regex /I. $(__DLLFLAG_p) /I.\..\..\include $(CXXFLAGS)
+XRCDEMO_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGFLAG_2) /DWIN32 $(__DEBUGFLAG_0) /Fd$(OBJS)\xrcdemo.pdb $(____DEBUGFLAG_3_p) $(__OPTIMIZEFLAG_4)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include /I.\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png /I.\..\..\..\src\zlib  /I.\..\..\..\src\regex /I.\..\..\..\src\expat\lib /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\include $(CXXFLAGS)
 
 ### Conditionally set variables: ###
 
@@ -66,16 +66,16 @@ __DLLFLAG_p = /DWXUSINGDLL
 __DLLFLAG_p_1 = /dWXUSINGDLL
 !endif
 !if "$(BUILD)" == "debug"
-__OPTIMIZEFLAG_3 = /Od
+__OPTIMIZEFLAG_4 = /Od
 !endif
 !if "$(BUILD)" == "release"
-__OPTIMIZEFLAG_3 = /O2
+__OPTIMIZEFLAG_4 = /O2
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_6 = D
+__RUNTIME_LIBS_7 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_6 = T
+__RUNTIME_LIBS_7 = T
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
@@ -101,6 +101,18 @@ __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p_1 = /d__WXUNIVERSAL__
 !endif
+!if "$(BUILD)" == "debug"
+____DEBUGFLAG_3_p = /D_DEBUG
+!endif
+!if "$(BUILD)" == "release"
+____DEBUGFLAG_3_p = /DNDEBUG
+!endif
+!if "$(BUILD)" == "debug"
+____DEBUGFLAG_3_p_1 = /d_DEBUG
+!endif
+!if "$(BUILD)" == "release"
+____DEBUGFLAG_3_p_1 = /dNDEBUG
+!endif
 
 
 all: $(OBJS)
@@ -124,7 +136,7 @@ $(OBJS)\xrcdemo_xrcdemo.obj: .\xrcdemo.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDEMO_CXXFLAGS) $**
 
 $(OBJS)\xrcdemo_xrcdemo.res: .\xrcdemo.rc
-	rc /fo$@ /d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i.\..\..\..\include /i.\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /i.\..\..\..\src\tiff /i.\..\..\..\src\jpeg /i.\..\..\..\src\png /i.\..\..\..\src\zlib  /i.\..\..\..\src\regex /i. $(__DLLFLAG_p_1) /i.\..\..\include $**
+	rc /fo$@ /dWIN32 $(____DEBUGFLAG_3_p_1) /d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i.\..\..\..\include /i.\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /i.\..\..\..\src\tiff /i.\..\..\..\src\jpeg /i.\..\..\..\src\png /i.\..\..\..\src\zlib  /i.\..\..\..\src\regex /i.\..\..\..\src\expat\lib /i. $(__DLLFLAG_p_1) /d_WINDOWS /i.\..\..\include $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -136,6 +148,6 @@ data:
 	for %f in (appicon.ico appicon.xpm artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc scanning.gif sppicon.ico toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc) do if not exist $(OBJS)/rc\%f copy ./rc\%f $(OBJS)/rc
 
 $(OBJS)\xrcdemo.exe: $(OBJS)\xrcdemo_xrcdemo.obj $(OBJS)\xrcdemo_myframe.obj $(OBJS)\xrcdemo_derivdlg.obj $(OBJS)\xrcdemo_custclas.obj $(OBJS)\xrcdemo_xrcdemo.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGFLAG_1)  /LIBPATH:.\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)  /SUBSYSTEM:WINDOWS @<<
-	$(OBJS)\xrcdemo_xrcdemo.obj $(OBJS)\xrcdemo_myframe.obj $(OBJS)\xrcdemo_derivdlg.obj $(OBJS)\xrcdemo_custclas.obj $(OBJS)\xrcdemo_xrcdemo.res  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGFLAG_1)  /LIBPATH:.\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /SUBSYSTEM:WINDOWS  @<<
+	$(OBJS)\xrcdemo_xrcdemo.obj $(OBJS)\xrcdemo_myframe.obj $(OBJS)\xrcdemo_derivdlg.obj $(OBJS)\xrcdemo_custclas.obj $(OBJS)\xrcdemo_xrcdemo.res  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<

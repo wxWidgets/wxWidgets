@@ -12,8 +12,8 @@
 
 ### Variables: ###
 
-ANIMATEDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG_3) $(__DEBUGFLAG) /Fd..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate_vc$(VENDORTAG).pdb $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\animate\..\..\..\include /I..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I..\..\src\animate\..\..\..\src\tiff /I..\..\src\animate\..\..\..\src\jpeg /I..\..\src\animate\..\..\..\src\png /I..\..\src\animate\..\..\..\src\zlib  /I..\..\src\animate\..\..\..\src\regex /Fp$(OBJS)\wxprec_animatedll.pch /I..\..\src\animate\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_ANIMATE $(CXXFLAGS)  /Yuwx/wxprec.h
-ANIMATELIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG_3) $(__DEBUGFLAG) /Fd..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.pdb $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\animate\..\..\..\include /I..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I..\..\src\animate\..\..\..\src\tiff /I..\..\src\animate\..\..\..\src\jpeg /I..\..\src\animate\..\..\..\src\png /I..\..\src\animate\..\..\..\src\zlib  /I..\..\src\animate\..\..\..\src\regex /Fp$(OBJS)\wxprec_animatelib.pch /I..\..\src\animate\..\..\include $(CXXFLAGS) /Yuwx/wxprec.h
+ANIMATEDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG_3) /DWIN32 $(__DEBUGFLAG) /Fd..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate_vc$(VENDORTAG).pdb $(____DEBUGFLAG) $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\animate\..\..\..\include /I..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I..\..\src\animate\..\..\..\src\tiff /I..\..\src\animate\..\..\..\src\jpeg /I..\..\src\animate\..\..\..\src\png /I..\..\src\animate\..\..\..\src\zlib  /I..\..\src\animate\..\..\..\src\regex /I..\..\src\animate\..\..\..\src\expat\lib /Fp$(OBJS)\wxprec_animatedll.pch /I..\..\src\animate\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_ANIMATE $(CXXFLAGS)  /Yuwx/wxprec.h
+ANIMATELIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG_3) /DWIN32 $(__DEBUGFLAG) /Fd..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.pdb $(____DEBUGFLAG) $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\animate\..\..\..\include /I..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I..\..\src\animate\..\..\..\src\tiff /I..\..\src\animate\..\..\..\src\jpeg /I..\..\src\animate\..\..\..\src\png /I..\..\src\animate\..\..\..\src\zlib  /I..\..\src\animate\..\..\..\src\regex /I..\..\src\animate\..\..\..\src\expat\lib /Fp$(OBJS)\wxprec_animatelib.pch /I..\..\src\animate\..\..\include $(CXXFLAGS) /Yuwx/wxprec.h
 OBJS = vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 
 ### Conditionally set variables: ###
@@ -90,8 +90,14 @@ __WXLIB_MONO_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
 !endif
+!if "$(BUILD)" == "debug"
+____DEBUGFLAG = /D_DEBUG
+!endif
+!if "$(BUILD)" == "release"
+____DEBUGFLAG = /DNDEBUG
+!endif
 !if "$(SHARED)" == "1"
-__animatedll___depname = ..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate_vc$(VENDORTAG).dll
+__animatedll___depname = ..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate_vc$(VENDORTAG).dll
 !endif
 !if "$(SHARED)" == "0"
 __animatelib___depname = ..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.lib
@@ -119,9 +125,9 @@ $(OBJS)\animatelib_dummy.obj: ../../src/animate\..\..\..\src\msw\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ANIMATELIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 !if "$(SHARED)" == "1"
-..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate_vc$(VENDORTAG).dll: $(OBJS)\animatedll_dummy.obj $(OBJS)\animatedll_dummy.obj $(OBJS)\animatedll_animate.obj
+..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate_vc$(VENDORTAG).dll: $(OBJS)\animatedll_dummy.obj $(OBJS)\animatedll_dummy.obj $(OBJS)\animatedll_animate.obj
 	link /DLL /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGFLAG_1)  /LIBPATH:..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) @<<
-	$(OBJS)\animatedll_dummy.obj $(OBJS)\animatedll_animate.obj  $(__WXLIB_MONO_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) /IMPLIB:..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.lib
+	$(OBJS)\animatedll_dummy.obj $(OBJS)\animatedll_animate.obj  $(__WXLIB_MONO_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) /IMPLIB:..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.lib
 <<
 !endif
 
@@ -136,6 +142,6 @@ $(OBJS)\animatelib_dummy.obj: ../../src/animate\..\..\..\src\msw\dummy.cpp
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
-	-if exist ..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate_vc$(VENDORTAG).dll del ..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate_vc$(VENDORTAG).dll
+	-if exist ..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate_vc$(VENDORTAG).dll del ..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate_vc$(VENDORTAG).dll
 	-if exist ..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.lib del ..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.lib
 	-if exist ..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.lib del ..\..\src\animate\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.lib
