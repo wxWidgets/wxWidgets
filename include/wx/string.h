@@ -216,7 +216,8 @@ struct WXDLLIMPEXP_BASE wxStringData
 
   // VC++ will refuse to inline Unlock but profiling shows that it is wrong
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-  __forceinline
+//	RN - VC6  Refuses to inline this anyway and spits out 2 warnings...
+//  __forceinline
 #endif
   // VC++ free must take place in same DLL as allocation when using non dll
   // run-time library (e.g. Multithreaded instead of Multithreaded DLL)
