@@ -132,8 +132,13 @@ protected:
   // remove one page from the notebook, without deleting
   virtual wxNotebookPage *DoRemovePage(int nPage);
 
+  // set the size of the given page to fit in the notebook
+  void AdjustPageSize(wxNotebookPage *page);
+
+
   // the current selection (-1 if none)
   int m_nSelection;
+
 
   DECLARE_DYNAMIC_CLASS(wxNotebook)
   DECLARE_EVENT_TABLE()

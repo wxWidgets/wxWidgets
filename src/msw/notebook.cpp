@@ -313,6 +313,21 @@ void wxNotebook::SetTabSize(const wxSize& sz)
     ::SendMessage(GetHwnd(), TCM_SETITEMSIZE, 0, MAKELPARAM(sz.x, sz.y));
 }
 
+void wxNotebook::AdjustPageSize(wxNotebookPage *page)
+{
+    wxCHECK_RET( page, _T("NULL page in wxNotebook::AdjustPageSize") );
+
+    RECT rc;
+    rc.left =
+    rc.top = 0;
+
+    // get the page size from the notebook size
+    GetSize((int *)&rc.right, (int *)&rc.bottom);
+    TabCtrl_AdjustRect(m_hwnd, FALSE, &rc);
+
+    page->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+}
+
 // ----------------------------------------------------------------------------
 // wxNotebook operations
 // ----------------------------------------------------------------------------
@@ -423,15 +438,11 @@ bool wxNotebook::InsertPage(int nPage,
     // fit the notebook page to the tab control's display area: this should be
     // done before adding it to the notebook or TabCtrl_InsertItem() will
     // change the notebooks size itself!
-    RECT rc;
-    rc.left = rc.top = 0;
-    GetSize((int *)&rc.right, (int *)&rc.bottom);
-    TabCtrl_AdjustRect(m_hwnd, FALSE, &rc);
-    pPage->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
-
+    AdjustPageSize(pPage);
 
     // finally do insert it
-    if ( TabCtrl_InsertItem(m_hwnd, nPage, &tcItem) == -1 ) {
+    if ( TabCtrl_InsertItem(m_hwnd, nPage, &tcItem) == -1 )
+    {
         wxLogError(wxT("Can't create the notebook page '%s'."), strText.c_str());
 
         return FALSE;
@@ -439,6 +450,14 @@ bool wxNotebook::InsertPage(int nPage,
 
     // succeeded: save the pointer to the page
     m_pages.Insert(pPage, nPage);
+
+    // for the first page (only) we need to adjust the size again because the
+    // notebook size changed: the tabs which hadn't been there before are now
+    // shown
+    if ( m_pages.GetCount() == 1 )
+    {
+        AdjustPageSize(pPage);
+    }
 
     // hide the page: unless it is selected, it shouldn't be shown (and if it
     // is selected it will be shown later)
