@@ -299,17 +299,6 @@ public:
 
     // may be called to terminate the dialog with the given return code
     virtual void EndModal(int retCode);
-
-    // returns True if we're in a modal loop
-    %extend {
-        bool IsModalShowing() {
-        #ifdef __WXGTK__
-            return self->m_modalShowing;
-        #else
-            return self->IsModalShowing();
-        #endif
-        }
-    }
 };
 
 //---------------------------------------------------------------------------

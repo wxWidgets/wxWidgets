@@ -618,7 +618,7 @@ public:
         "windows, or, if wxPD_APP_MODAL flag is not given, for its parent window only.");
 
     DocDeclStr(
-        bool , Update(int value, const wxString& newmsg = wxPyEmptyString),
+        virtual bool , Update(int value, const wxString& newmsg = wxPyEmptyString),
         "Updates the dialog, setting the progress bar to the new value and, if given\n"
         "changes the message above it. Returns true unless the Cancel button has been\n"
         "pressed.\n\n"

@@ -682,9 +682,10 @@ window had already been in the specified state.");
 
     DocDeclStr(
         virtual void , SetWindowStyleFlag( long style ),
-        "Sets the style of the window. Please note that some styles cannot be
-changed after the window creation and that Refresh() might be called
-after changing the others for the change to take place immediately.");
+        "Sets the style of the window. Please note that some styles cannot
+be changed after the window creation and that Refresh() might
+need to be called after changing the others for the change to
+take place immediately.");
     
     DocDeclStr(
         virtual long , GetWindowStyleFlag() const,

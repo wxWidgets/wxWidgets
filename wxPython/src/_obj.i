@@ -25,7 +25,7 @@ public:
 
     %extend {
         DocStr(GetClassName,
-               "Returns the class name of the C++ object using wxRTTI.");
+               "Returns the class name of the C++ class using wxRTTI.");
         wxString GetClassName() {
             return self->GetClassInfo()->GetClassName();
         }
