@@ -91,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_ARRAYS
+    #define TEST_ZLIB
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -3581,16 +3581,16 @@ static void TestZipFileSystem()
 #include "wx/wfstream.h"
 
 static const wxChar *FILENAME_GZ = _T("test.gz");
-static const char *TEST_DATA = "hello and hello again";
+static const char *TEST_DATA = "hello and hello and hello and hello and hello";
 
 static void TestZlibStreamWrite()
 {
     puts("*** Testing Zlib stream reading ***\n");
 
     wxFileOutputStream fileOutStream(FILENAME_GZ);
-    wxZlibOutputStream ostr(fileOutStream, 0);
+    wxZlibOutputStream ostr(fileOutStream);
     printf("Compressing the test string... ");
-    ostr.Write(TEST_DATA, sizeof(TEST_DATA));
+    ostr.Write(TEST_DATA, strlen(TEST_DATA) + 1);
     if ( !ostr )
     {
         puts("(ERROR: failed)");
