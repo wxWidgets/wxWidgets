@@ -7,7 +7,7 @@ set webfiles=c:\wx2dev\wxWebSite
 set inno=0
 
 Rem Set this to the required version
-set version=2.3.2
+set version=2.3.3
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -244,7 +244,7 @@ call %WXWIN\distrib\msw\makeinno.bat
 erase /Y %dest\setup.*
 
 rem Now invoke Inno Setup on the new wxwin2.iss
-set innocmd="C:\Program Files\Inno Setup 1.3\compil32.exe" /cc %WXWIN\distrib\msw\wxwin2.iss
+set innocmd="C:\Program Files\Inno Setup 2\compil32.exe" /cc %WXWIN\distrib\msw\wxwin2.iss
 echo Invoking %innocmd...
 start "Inno Setup" /w %innocmd%
 pause Press any key to continue with the wxWindows distribution...
