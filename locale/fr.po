@@ -46,23 +46,23 @@ msgstr " octets "
 
 #: ../src/common/paper.cpp:124
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
-msgstr ""
+msgstr "Enveloppe #10, 4 1/8 x 9 1/2 in"
 
 #: ../src/common/paper.cpp:125
 msgid "#11 Envelope, 4 1/2 x 10 3/8 in"
-msgstr ""
+msgstr "Enveloppe #11, 4 1/2 x 10 3/8 in"
 
 #: ../src/common/paper.cpp:126
 msgid "#12 Envelope, 4 3/4 x 11 in"
-msgstr ""
+msgstr "Enveloppe #12, 4 3/4 x 11 in"
 
 #: ../src/common/paper.cpp:127
 msgid "#14 Envelope, 5 x 11 1/2 in"
-msgstr ""
+msgstr "Enveloppe #14, 5 x 11 1/2 in"
 
 #: ../src/common/paper.cpp:123
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
-msgstr ""
+msgstr "Enveloppe #9, 3 7/8 x 8 7/8 in"
 
 #: ../src/common/resourc2.cpp:265 ../src/common/resourc2.cpp:1334
 #: ../src/common/resource.cpp:1778 ../src/common/resource.cpp:1908
@@ -83,19 +83,19 @@ msgid "%s (or %s)"
 msgstr "%s (ou %s)"
 
 #: ../src/generic/logg.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "%s Error"
-msgstr "Erreur"
+msgstr "%s Erreur"
 
 #: ../src/generic/logg.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "%s Information"
-msgstr "Information"
+msgstr "%s Information"
 
 #: ../src/generic/logg.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "%s Warning"
-msgstr "Alarme"
+msgstr "%s Alarme"
 
 #: ../src/common/resourc2.cpp:709 ../src/common/resource.cpp:2359
 #, c-format
@@ -120,7 +120,7 @@ msgstr "&Fermer"
 
 #: ../src/generic/logg.cpp:685
 msgid "&Details"
-msgstr ""
+msgstr "&Détails"
 
 #: ../src/generic/wizard.cpp:284
 msgid "&Finish"
@@ -163,9 +163,8 @@ msgid "&Undo "
 msgstr "&Annuler "
 
 #: ../src/msw/mdi.cpp:1280 ../src/msw/mdi.cpp:1287
-#, fuzzy
 msgid "&Window"
-msgstr "&Annuler"
+msgstr "&Fenêtre"
 
 #: ../src/common/config.cpp:396
 #, c-format
@@ -246,16 +245,15 @@ msgstr ""
 
 #: ../src/common/paper.cpp:121
 msgid "11 x 17 in"
-msgstr ""
+msgstr "11 x 17 in"
 
 #: ../src/common/paper.cpp:139
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
-msgstr ""
+msgstr "Enveloppe 6 3/4, 3 5/8 x 6 1/2 in"
 
 #: ../src/html/htmprint.cpp:272
-#, fuzzy
 msgid ": file does not exist!"
-msgstr "Le répertoire n'existe pas"
+msgstr ": le ficheir n'existe pas!"
 
 #: ../src/common/fontmap.cpp:471
 msgid ": unknown charset"
@@ -314,23 +312,20 @@ msgstr ""
 "+4</font></tt></body></html>"
 
 #: ../src/common/paper.cpp:113
-#, fuzzy
 msgid "A3 sheet, 297 x 420 mm"
-msgstr "feuille A4, 210 x 297 mm"
+msgstr "feuille A3, 297 x 420 mm"
 
 #: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2533
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "feuille A4, 210 x 297 mm"
 
 #: ../src/common/paper.cpp:114
-#, fuzzy
 msgid "A4 small sheet, 210 x 297 mm"
-msgstr "feuille A4, 210 x 297 mm"
+msgstr "petite feuille A4, 210 x 297 mm"
 
 #: ../src/common/paper.cpp:115
-#, fuzzy
 msgid "A5 sheet, 148 x 210 mm"
-msgstr "feuille A4, 210 x 297 mm"
+msgstr "feuille A5, 148 x 210 mm"
 
 #: ../src/generic/fontdlgg.cpp:325
 msgid "ABCDEFGabcdefg12345"
@@ -372,49 +367,43 @@ msgstr "Arabe (ISO-8859-6)"
 
 #: ../src/common/paper.cpp:134
 msgid "B4 Envelope, 250 x 353 mm"
-msgstr ""
+msgstr "Enveloppe B4, 250 x 353 mm"
 
 #: ../src/common/paper.cpp:116
-#, fuzzy
 msgid "B4 sheet, 250 x 354 mm"
-msgstr "feuille A4, 210 x 297 mm"
+msgstr "feuille B4, 250 x 354 mm"
 
 #: ../src/common/paper.cpp:135
 msgid "B5 Envelope, 176 x 250 mm"
-msgstr ""
+msgstr "Enveloppe B5, 176 x 250 mm"
 
 #: ../src/common/paper.cpp:117
-#, fuzzy
 msgid "B5 sheet, 182 x 257 millimeter"
-msgstr "feuille A4, 210 x 297 mm"
+msgstr "feuille B5, 182 x 257 mm"
 
 #: ../src/common/paper.cpp:136
 msgid "B6 Envelope, 176 x 125 mm"
-msgstr ""
+msgstr "Enveloppe B6, 176 x 125 mm"
 
 #: ../src/common/imagbmp.cpp:387
 msgid "BMP: Cannot deal with 4bit encoded yet."
-msgstr ""
-"BMP : Impossible d'utiliser actuellement les fichiers codés sur 4 bits."
+msgstr "BMP : Impossible d'utiliser actuellement les fichiers codés sur 4 bits."
 
 #: ../src/common/imagbmp.cpp:266 ../src/common/imagbmp.cpp:278
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP : Impossible d'allouer la mémoire nécessaire."
 
 #: ../src/common/imagbmp.cpp:62
-#, fuzzy
 msgid "BMP: Couldn't save invalid image."
-msgstr "JPEG : Sauvegarde de l'image impossible."
+msgstr "BMP : Sauvegarde de l'image impossible."
 
 #: ../src/common/imagbmp.cpp:154
-#, fuzzy
 msgid "BMP: Couldn't write data."
-msgstr "BMP : Impossible d'allouer la mémoire nécessaire."
+msgstr "BMP : Erreur d'écriture."
 
 #: ../src/common/imagbmp.cpp:131
-#, fuzzy
 msgid "BMP: Couldn't write the file header."
-msgstr "Impossible d'arrêter le thread"
+msgstr "BMP : Erreur d'écriture de l'en-tête du fichier."
 
 #: ../src/common/imagbmp.cpp:257
 msgid "BMP: Encoding doesn't match bitdepth."
@@ -445,14 +434,12 @@ msgid "Backward"
 msgstr "Précédent"
 
 #: ../src/common/fontmap.cpp:109
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "Balte (ISO-8859-4)"
+msgstr "Balte (ISO-8859-13)"
 
 #: ../src/common/fontmap.cpp:100
-#, fuzzy
 msgid "Baltic (old) (ISO-8859-4)"
-msgstr "Balte (ISO-8859-4)"
+msgstr "Balte (l'ancien) (ISO-8859-4)"
 
 #: ../src/common/resourc2.cpp:844 ../src/common/resource.cpp:2494
 #, c-format
@@ -468,9 +455,8 @@ msgid "Bottom margin (mm):"
 msgstr "Marge bas de page (mm) :"
 
 #: ../src/common/paper.cpp:105
-#, fuzzy
 msgid "C sheet, 17 x 22 in"
-msgstr "feuille A4, 210 x 297 mm"
+msgstr "feuille C, 17 x 22 mm"
 
 #: ../src/generic/logg.cpp:471
 msgid "C&lear"
@@ -478,23 +464,23 @@ msgstr "E&ffacer"
 
 #: ../src/common/paper.cpp:130
 msgid "C3 Envelope, 324 x 458 mm"
-msgstr ""
+msgstr "Enveloppe C3, 324 x 458 mm"
 
 #: ../src/common/paper.cpp:131
 msgid "C4 Envelope, 229 x 324 mm"
-msgstr ""
+msgstr "Enveloppe C4, 229 x 324 mm"
 
 #: ../src/common/paper.cpp:129
 msgid "C5 Envelope, 162 x 229 mm"
-msgstr ""
+msgstr "Enveloppe C5, 162 x 229 mm"
 
 #: ../src/common/paper.cpp:132
 msgid "C6 Envelope, 114 x 162 mm"
-msgstr ""
+msgstr "Enveloppe C6, 114 x 162 mm"
 
 #: ../src/common/paper.cpp:133
 msgid "C65 Envelope, 114 x 229 mm"
-msgstr ""
+msgstr "Enveloppe C65, 114 x 229 mm"
 
 #: ../src/msw/thread.cpp:222
 msgid "Can not create event object."
@@ -535,9 +521,7 @@ msgstr "Impossible d'&Annuler"
 #: ../src/common/image.cpp:926
 #, c-format
 msgid "Can't check image format of file '%s': file does not exist."
-msgstr ""
-"Impossible de vérifier le format du fichier image '%s' : le fichier n'existe "
-"pas."
+msgstr "Impossible de vérifier le format du fichier image '%s' : le fichier n'existe pas."
 
 #: ../src/msw/registry.cpp:410
 #, c-format
@@ -551,8 +535,7 @@ msgstr "Impossible de copier les valeurs du type non supporté %d."
 
 #: ../src/msw/listctrl.cpp:212
 msgid "Can't create list control window, check that comctl32.dll is installed."
-msgstr ""
-"Impossible de créer une fenêtre avec un contrôle liste, vérifier que "
+msgstr "Impossible de créer une fenêtre avec un contrôle liste, vérifier que "
 "comctl32.dll est installée."
 
 #: ../src/msw/registry.cpp:393
@@ -637,8 +620,7 @@ msgstr "Impossible d'obtenir l'information sur la clé de registre '%s'"
 #: ../src/common/image.cpp:626 ../src/common/image.cpp:646
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
-msgstr ""
-"Impossible de charger l'image du fichier '%s' : le fichier n'existe pas."
+msgstr "Impossible de charger l'image du fichier '%s' : le fichier n'existe pas."
 
 #: ../src/common/object.cpp:307
 msgid "Can't load wxSerial dynamic library."
@@ -699,8 +681,7 @@ msgstr "Impossible de trouver l'emplacement du fichier du livre des adresses"
 #: ../src/unix/threadpsx.cpp:954
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
-msgstr ""
-"Impossible d'obtenir une gamme de priorité pour le choix de la planification "
+msgstr "Impossible d'obtenir une gamme de priorité pour le choix de la planification "
 "%d."
 
 #: ../src/unix/utilsunx.cpp:709
@@ -750,7 +731,7 @@ msgstr "Impossible d'ouvrir le fichier d'index : %s"
 
 #: ../src/html/helpfrm.cpp:1174
 msgid "Cannot print empty page."
-msgstr ""
+msgstr "Impossible d'imprimer une page vide."
 
 #: ../src/unix/threadpsx.cpp:935
 msgid "Cannot retrieve thread scheduling policy."
@@ -792,8 +773,7 @@ msgstr "Fermer cette fenêtre"
 #: ../src/common/fileconf.cpp:750
 #, c-format
 msgid "Config entry name cannot start with '%c'."
-msgstr ""
-"Le nom pour l'entrée de la configuration ne peut pas commencer par '%c'."
+msgstr "Le nom pour l'entrée de la configuration ne peut pas commencer par '%c'."
 
 #: ../src/generic/filedlgg.cpp:1077 ../src/gtk/filedlg.cpp:75
 msgid "Confirm"
@@ -935,9 +915,8 @@ msgid "Cyrillic (Latin 5)"
 msgstr "Cyrillique (Latin 5)"
 
 #: ../src/common/paper.cpp:106
-#, fuzzy
 msgid "D sheet, 22 x 34 in"
-msgstr "feuille A4, 210 x 297 mm"
+msgstr "feuille D, 22 x 34 mm"
 
 #: ../src/msw/dde.cpp:586
 msgid "DDE poke request failed"
@@ -945,7 +924,7 @@ msgstr "La demande de transfert DDE a échoué"
 
 #: ../src/common/paper.cpp:128
 msgid "DL Envelope, 110 x 220 mm"
-msgstr ""
+msgstr "Enveloppe DL, 110 x 220 mm"
 
 #: ../src/generic/filedlgg.cpp:535
 msgid "Date"
@@ -1004,7 +983,7 @@ msgstr "Fait."
 
 #: ../src/common/paper.cpp:107
 msgid "E sheet, 34 x 44 in"
-msgstr ""
+msgstr "Feuille E, 34 x 44 in"
 
 #: ../src/generic/progdlgg.cpp:153
 msgid "Elapsed time : "
@@ -1063,7 +1042,7 @@ msgstr "L'exécution de la commande '%s' a échoué"
 
 #: ../src/common/paper.cpp:112
 msgid "Executive, 7 1/4 x 10 1/2 in"
-msgstr ""
+msgstr "Executive, 7 1/4 x 10 1/2 in"
 
 #: ../src/common/resourc2.cpp:326 ../src/common/resourc2.cpp:1399
 #: ../src/common/resource.cpp:1839 ../src/common/resource.cpp:1969
@@ -1131,7 +1110,8 @@ msgstr "Impossible de créer une connexion au serveur '%s' sur le sujet '%s'"
 msgid ""
 "Failed to create dialog. You probably forgot to include wx/msw/wx.rc in your "
 "resources."
-msgstr ""
+msgstr "La creation de la boite de dialogue a echoué. Peut-être vouz avez "
+"oublié d'inclure wx/msw/wx.rc dans votre fichier de resources?"
 
 #: ../src/generic/dirdlgg.cpp:549
 msgid "Failed to create directory "
@@ -1286,8 +1266,7 @@ msgstr "Impossible de terminer le thread."
 
 #: ../src/msw/dde.cpp:624
 msgid "Failed to terminate the advise loop with DDE server"
-msgstr ""
-"Impossible de terminer la boucle de conseil (advise loop) avec le server DDE"
+msgstr "Impossible de terminer la boucle de conseil (advise loop) avec le server DDE"
 
 #: ../src/msw/dialup.cpp:928
 #, c-format
@@ -1344,7 +1323,7 @@ msgstr "Police à taille fixe :"
 
 #: ../src/common/paper.cpp:118
 msgid "Folio, 8 1/2 x 13 in"
-msgstr ""
+msgstr "Folio, 8 1/2 x 13 in"
 
 #: ../src/generic/fontdlgg.cpp:124
 msgid "Font"
@@ -1378,24 +1357,20 @@ msgid "From:"
 msgstr "De :"
 
 #: ../src/common/imaggif.cpp:74
-#, fuzzy
 msgid "GIF: data stream seems to be truncated."
-msgstr "wxGIFHandler : le flot de données semble être tronqué."
+msgstr "GIF : le flot de données semble être tronqué."
 
 #: ../src/common/imaggif.cpp:58
-#, fuzzy
 msgid "GIF: error in GIF image format."
-msgstr "wxGIFHandler : erreur dans le format GIF de l'image."
+msgstr "GIF : erreur dans le format GIF de l'image."
 
 #: ../src/common/imaggif.cpp:61
-#, fuzzy
 msgid "GIF: not enough memory."
-msgstr "wxGIFHandler : pas assez de mémoire."
+msgstr "GIF : pas assez de mémoire."
 
 #: ../src/common/imaggif.cpp:64
-#, fuzzy
 msgid "GIF: unknown error!!!"
-msgstr "wxGIFHandler : erreur inconnue !!!"
+msgstr "GIF : erreur inconnue !!!"
 
 #: ../src/common/paper.cpp:142
 msgid "German Legal Fanfold, 8 1/2 x 13 in"
@@ -1440,6 +1415,9 @@ msgid ""
 "(*.htb)|*.htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All "
 "files (*.*)|*"
 msgstr ""
+"Fichiers HTML (*.htm)|*.htm|Fichiers HTML (*.html)|*.html|Fichiers d'aide "
+"(*.htb)|*.htb|Fichiers d'aide (*.zip)|*.zip|Projet d'aide HTML "
+"(*.hhp)|*.hhp|Tous les fichier (*.*)|*"
 
 #: ../src/common/fontmap.cpp:104
 msgid "Hebrew (ISO-8859-8)"
@@ -1693,9 +1671,8 @@ msgid "No matching page found yet"
 msgstr "Pas encore trouvé la page correspondante"
 
 #: ../src/common/fontmap.cpp:106
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "Arabe (ISO-8859-6)"
+msgstr "Nordique (ISO-8859-10)"
 
 #: ../src/generic/fontdlgg.cpp:212 ../src/generic/fontdlgg.cpp:215
 msgid "Normal"
@@ -1751,33 +1728,28 @@ msgid "Orientation"
 msgstr "Orientation"
 
 #: ../src/common/imagpcx.cpp:448 ../src/common/imagpcx.cpp:471
-#, fuzzy
 msgid "PCX: couldn't allocate memory"
-msgstr "BMP : Impossible d'allouer la mémoire nécessaire."
+msgstr "PCX : Impossible d'allouer la mémoire nécessaire."
 
 #: ../src/common/imagpcx.cpp:447
-#, fuzzy
 msgid "PCX: image format unsupported"
-msgstr "wxPCXHandler : format d'image non supporté"
+msgstr "PCX : format d'image non supporté"
 
 #: ../src/common/imagpcx.cpp:470
-#, fuzzy
 msgid "PCX: invalid image"
-msgstr "wxPCXHandler : image non valide"
+msgstr "PCX : image non valide"
 
 #: ../src/common/imagpcx.cpp:434
 msgid "PCX: this is not a PCX file."
 msgstr "PCX: ce n'est pas un fichier PCX."
 
 #: ../src/common/imagpcx.cpp:450 ../src/common/imagpcx.cpp:472
-#, fuzzy
 msgid "PCX: unknown error !!!"
-msgstr "wxPCXHandler : erreur inconnue !!!"
+msgstr "PCX : erreur inconnue !!!"
 
 #: ../src/common/imagpcx.cpp:449
-#, fuzzy
 msgid "PCX: version number too low"
-msgstr "wxPCXHandler : numéro de version trop petit"
+msgstr "PCX : numéro de version trop petit"
 
 #: ../src/common/imagpnm.cpp:96
 msgid "PNM: Couldn't allocate memory."
@@ -1962,9 +1934,8 @@ msgid "Program aborted."
 msgstr "Abandon du programme."
 
 #: ../src/common/paper.cpp:119
-#, fuzzy
 msgid "Quarto, 215 x 275 mm"
-msgstr "feuille A4, 210 x 297 mm"
+msgstr "Quarto, 215 x 275 mm"
 
 #: ../src/generic/logg.cpp:1019
 msgid "Question"
@@ -2094,7 +2065,7 @@ msgstr "Envoyer vers l'imprimante"
 #: ../src/common/cmdline.cpp:627
 #, c-format
 msgid "Separator expected after the option '%s'."
-msgstr ""
+msgstr "Separateur attendu apres l'option '%s'."
 
 #: ../src/common/dlgcmn.cpp:138
 msgid "Setup"
@@ -2177,18 +2148,16 @@ msgid "TIFF: Error reading image."
 msgstr "TIFF: Erreur à la lecture de l'image."
 
 #: ../src/common/imagtiff.cpp:291
-#, fuzzy
 msgid "TIFF: Error saving image."
 msgstr "TIFF: Erreur au chargement de l'image."
 
 #: ../src/common/imagtiff.cpp:338
-#, fuzzy
 msgid "TIFF: Error writing image."
-msgstr "TIFF: Erreur à la lecture de l'image."
+msgstr "TIFF: Erreur à l'écriture de l'image."
 
 #: ../src/common/paper.cpp:109
 msgid "Tabloid, 11 x 17 in"
-msgstr ""
+msgstr "Tabloid, 11 x 17 in"
 
 #: ../src/generic/fontdlgg.cpp:211
 msgid "Teletype"
@@ -2265,7 +2234,7 @@ msgid "The value for the option '%s' must be specified."
 msgstr "La valeur pour l'option '%s' doit être précisée."
 
 #: ../src/msw/dialup.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The version of remote access service (RAS) installed on this machine is "
 "tooold, please upgrade (the following required function is missing: %s)."
@@ -2476,9 +2445,8 @@ msgid "Win32s on Windows 3.1"
 msgstr "Win32s sur Windows 3.1"
 
 #: ../src/msw/mdi.cpp:1311
-#, fuzzy
 msgid "Window"
-msgstr "Windows 3.1"
+msgstr "Fenêtre"
 
 #: ../src/msw/utils.cpp:577
 msgid "Windows 3.1"
@@ -2522,9 +2490,8 @@ msgid "Windows Turkish (CP 1254)"
 msgstr "Windows Turque (CP 1254)"
 
 #: ../src/common/fontmap.cpp:121
-#, fuzzy
 msgid "Windows/DOS OEM (CP 437)"
-msgstr "Windows Grec (CP 1253)"
+msgstr "Windows/DOS OEM (CP 437)"
 
 #: ../src/common/ffile.cpp:168
 #, c-format
@@ -2889,9 +2856,9 @@ msgid "locale '%s' can not be set."
 msgstr "le langage local '%s' ne peut pas être sélectionné."
 
 #: ../src/common/intl.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "looking for catalog '%s' in path '%s'."
-msgstr "utilisation du catalogue '%s' de '%s'."
+msgstr "recherche le catalogue '%s' dans '%s'."
 
 #: ../src/html/helpfrm.cpp:874
 msgid "medium"
@@ -3052,7 +3019,7 @@ msgstr "wxSocket: signature non valide dans ReadMsg."
 
 #: ../src/common/socket.cpp:903
 msgid "wxSocket: unknown event!."
-msgstr ""
+msgstr "wxSocket: événement inconnu!"
 
 #: ../src/motif/app.cpp:591
 #, c-format
@@ -3068,80 +3035,3 @@ msgstr "wxWindows : impossible de trouver le nom du fichier temporaire.\n"
 msgid "yesterday"
 msgstr "hier"
 
-#~ msgid "Baltic II (ISO-8859-10)"
-#~ msgstr "Balte II (ISO-8859-10)"
-
-#, fuzzy
-#~ msgid "Can not create mutex."
-#~ msgstr "Impossible de créer le mutex"
-
-#~ msgid "Can't execute command '%s'"
-#~ msgstr "Impossible d'exécuter la commande '%s'"
-
-#, fuzzy
-#~ msgid "Couldn't change the state of event object."
-#~ msgstr "Impossible de créer l'objet événement."
-
-#~ msgid "Fatal Error"
-#~ msgstr "Erreur Fatale"
-
-#~ msgid "ISO-8859-13"
-#~ msgstr "ISO-8859-13"
-
-#~ msgid "Previewing"
-#~ msgstr "Aperçu en cours"
-
-#~ msgid "Print Error"
-#~ msgstr "Erreur à l'impression"
-
-#~ msgid ""
-#~ "There was a problem previewing.\n"
-#~ "Perhaps your current printer is not set correctly?"
-#~ msgstr ""
-#~ "Problème lors de l'aperçu.\n"
-#~ "Votre paramètrage actuel de l'imprimante n'est peut-être pas correct ?"
-
-#~ msgid ""
-#~ "There was a problem printing.\n"
-#~ "Perhaps your current printer is not set correctly?"
-#~ msgstr ""
-#~ "Problème lors de l'impression.\n"
-#~ "Votre paramètrage actuel de l'imprimante n'est peut-être pas correct ?"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unrecoverable program error detected: the application will terminate."
-#~ msgstr ""
-#~ "Erreur irrécupérable détectée dans le programme: l'application va s'arrêter."
-
-#~ msgid "string '%s' not found in domain '%s' for locale '%s'."
-#~ msgstr ""
-#~ "chaîne ' %s' introuvable dans le domaine '%s' pour le langage local '%s'."
-
-#~ msgid "string '%s' not found in locale '%s'."
-#~ msgstr "chaîne '%s' introuvable pour le langage local '%s'."
-
-#~ msgid "Failed to create dialog."
-#~ msgstr "Impossible de créer le dialogue."
-
-#~ msgid "Message"
-#~ msgstr "Message"
-
-#~ msgid "empty file name in wxFindFileInPath"
-#~ msgstr "nom de fichier vide dans wxFindFilelnPath"
-
-#~ msgid "no DC assigned to wxHtmlWinParser!!"
-#~ msgstr "pas de DC affecté a wxHtmlWinParser !!"
-
-#~ msgid "text/html"
-#~ msgstr "texte/html"
-
-#~ msgid "wxPCXHandler: couldn't allocate memory"
-#~ msgstr "wxPCXHandler : impossible d'allouer la mémoire nécessaire"
-
-#~ msgid ""
-#~ "wxPrintPreviewBase::RenderPage: must use wxPrintPreviewBase::SetCanvas to "
-#~ "let me know about the canvas!"
-#~ msgstr ""
-#~ "wxPrintPreviewBase::RenderPage : doit utiliser wxPrintPreviewBase::SetCanvas "
-#~ "pour savoir quel canvas utiliser !"
