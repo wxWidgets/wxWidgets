@@ -49,6 +49,7 @@ gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
     event.SetInt( combo->GetSelection() );
     event.SetString( combo->GetStringSelection() );
     event.SetEventObject( combo );
+    
     combo->GetEventHandler()->ProcessEvent( event );
 }
 
@@ -164,10 +165,10 @@ void wxComboBox::AppendCommon( const wxString &item )
 
     GtkWidget *list_item = gtk_list_item_new_with_label( item.mbc_str() );
 
+    gtk_container_add( GTK_CONTAINER(list), list_item );
+
     gtk_signal_connect( GTK_OBJECT(list_item), "select",
       GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
-
-    gtk_container_add( GTK_CONTAINER(list), list_item );
 
     if (GTK_WIDGET_REALIZED(m_widget))
     {
