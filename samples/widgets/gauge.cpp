@@ -42,7 +42,7 @@
 #include "wx/sizer.h"
 
 #include "widgets.h"
-#if 1
+#if wxUSE_GAUGE
 #include "icons/gauge.xpm"
 
 // ----------------------------------------------------------------------------
@@ -402,3 +402,4 @@ void GaugeWidgetsPage::StopTimer()
 }
 
 #endif
+    // wxUSE_GAUGE
