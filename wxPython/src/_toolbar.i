@@ -303,9 +303,8 @@ public:
                               shortHelp, longHelp, clientData)
     }
 
-    // TODO?
-    //wxToolBarToolBase *AddTool (wxToolBarToolBase *tool);
-    //wxToolBarToolBase *InsertTool (size_t pos, wxToolBarToolBase *tool);
+    %name(AddToolItem) wxToolBarToolBase *AddTool (wxToolBarToolBase *tool);
+    %name(InsertToolItem) wxToolBarToolBase *InsertTool (size_t pos, wxToolBarToolBase *tool);
 
     wxToolBarToolBase *AddControl(wxControl *control);
     wxToolBarToolBase *InsertControl(size_t pos, wxControl *control);
@@ -375,6 +374,9 @@ public:
     // returns a (non separator) tool containing the point (x, y) or NULL if
     // there is no tool at this point (corrdinates are client)
     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
+
+    // find the tool by id
+    wxToolBarToolBase *FindById(int toolid) const;
 
     // return True if this is a vertical toolbar, otherwise False
     bool IsVertical();
