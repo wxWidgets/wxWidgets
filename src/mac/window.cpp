@@ -2084,7 +2084,7 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
 	if ( event.GetEventType() == wxEVT_RIGHT_DOWN )
 	{
 		// copied from wxGTK : CS
-        // generate a "context menu" event: this is similar to wxEVT_RIGHT_UP
+        // generate a "context menu" event: this is similar to wxEVT_RIGHT_DOWN
         // except that:
         //
         // (a) it's a command event and so is propagated to the parent
@@ -2093,7 +2093,8 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
         wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU,
                                   this->GetId(),
                                   this->ClientToScreen(event.GetPosition()));
-        this->GetEventHandler()->ProcessEvent(evtCtx);
+        if ( ! GetEventHandler()->ProcessEvent(evtCtx) )
+            event.Skip() ;
 	}
 	else
 	{
