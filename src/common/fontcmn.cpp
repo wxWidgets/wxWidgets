@@ -140,6 +140,7 @@ bool wxFontBase::operator==(const wxFont& font) const
             GetPointSize() == font.GetPointSize() &&
             GetFamily() == font.GetFamily() &&
             GetStyle() == font.GetStyle() &&
+            GetWeight() == font.GetWeight() &&
             GetUnderlined() == font.GetUnderlined() &&
             GetFaceName() == font.GetFaceName() &&
             GetEncoding() == font.GetEncoding()
