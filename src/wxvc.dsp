@@ -101,6 +101,10 @@ SOURCE=.\common\cmdline.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\cmdproc.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\cmndata.cpp
 # End Source File
 # Begin Source File

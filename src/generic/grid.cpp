@@ -3503,6 +3503,8 @@ wxGrid::wxGrid( wxWindow *parent,
 
 wxGrid::~wxGrid()
 {
+    // Must do this or ~wxScrollHelper will pop the wrong event handler
+    SetTargetWindow(this);
     ClearAttrCache();
     wxSafeDecRef(m_defaultCellAttr);
 
