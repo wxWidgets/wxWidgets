@@ -991,7 +991,10 @@ bool Go(void)
     TexLoadFile(InputFile);
 
     if (stopRunning)
+    {
+        OkToClose = TRUE;
         return FALSE;
+    }
 
     switch (convertMode)
     {
@@ -1017,6 +1020,7 @@ bool Go(void)
     OnInform("*** Aborted by user.");
     success = FALSE;
     stopRunning = FALSE;
+    OkToClose = TRUE;
   }
 
   if (success)
