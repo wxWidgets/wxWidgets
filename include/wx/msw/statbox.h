@@ -48,12 +48,19 @@ protected:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
-    virtual WXHRGN MSWCalculateClippingRegion();
-    virtual void MSWClipBoxRegion(WXHRGN hrgn, const WXRECTPTR rc);
+    // return the region with all the windows inside this static box excluded
+    virtual WXHRGN MSWGetRegionWithoutChildren();
+
+    // remove the parts which are painted by static box itself from the given
+    // region which is embedded in a rectangle (0, 0)-(w, h)
+    virtual void MSWGetRegionWithoutSelf(WXHRGN hrgn, int w, int h);
+
+    // paint the given rectangle with our background colour
+    void PaintBackground(wxDC& dc, const struct tagRECT& rc);
+
     void OnPaint(wxPaintEvent& event);
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox)
-    DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_MSW_STATBOX_H_

@@ -144,8 +144,11 @@ protected:
                            int sizeFlags = wxSIZE_AUTO);
     virtual wxSize DoGetBestSize() const;
 
-    virtual WXHRGN MSWCalculateClippingRegion();
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXHRGN MSWGetRegionWithoutChildren();
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
+                                    WXWPARAM wParam,
+                                    WXLPARAM lParam);
+
 
     // the buttons we contain
     wxSubwindows *m_radioButtons;

@@ -816,25 +816,21 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
     return ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd, message, wParam, lParam);
 }
 
-WXHRGN wxRadioBox::MSWCalculateClippingRegion()
+WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
 {
     RECT rc;
     ::GetWindowRect(GetHwnd(), &rc);
     HRGN hrgn = ::CreateRectRgn(rc.left, rc.top, rc.right + 1, rc.bottom + 1);
 
-    size_t count = GetCount();
+    const size_t count = GetCount();
     for ( size_t i = 0; i < count; ++i )
     {
         ::GetWindowRect((*m_radioButtons)[i], &rc);
-        HRGN hrgnchild = ::CreateRectRgnIndirect(&rc);
+        AutoHRGN hrgnchild(::CreateRectRgnIndirect(&rc));
         ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
-        ::DeleteObject(hrgnchild);
     }
 
-    ::GetWindowRect(GetHwnd(), &rc);
-    ::OffsetRgn(hrgn, -rc.left, -rc.top);
-
-    return hrgn;
+    return (WXHRGN)hrgn;
 }
 
 WXLRESULT wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
