@@ -402,6 +402,7 @@ private:
     {                                                                       \
     public:                                                                 \
         typedef nodetype Node;                                              \
+        typedef Node* compatibility_iterator;                               \
                                                                             \
         name(wxKeyType keyType = wxKEY_NONE) : wxListBase(keyType)          \
             { }                                                             \
