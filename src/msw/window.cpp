@@ -3522,7 +3522,7 @@ bool wxWindowMSW::HandleGetMinMaxInfo(void *mmInfo)
 bool wxWindowMSW::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 {
 #if wxUSE_MENUS_NATIVE
-    if ( wxCurrentPopupMenu )
+    if ( !cmd && wxCurrentPopupMenu )
     {
         wxMenu *popupMenu = wxCurrentPopupMenu;
         wxCurrentPopupMenu = NULL;
@@ -3531,14 +3531,14 @@ bool wxWindowMSW::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     }
 #endif // wxUSE_MENUS_NATIVE
 
-    wxWindow *win = (wxWindow*) NULL;
+    wxWindow *win = NULL;
     if ( cmd == 0 || cmd == 1 ) // menu or accel - use id
     {
         // must cast to a signed type before comparing with other ids!
         win = FindItem((signed short)id);
     }
 
-    if (!win && control)
+    if ( !win && control )
     {
         // find it from HWND - this works even with the broken programs using
         // the same ids for different controls
