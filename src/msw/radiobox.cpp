@@ -125,6 +125,9 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
 {
     if ( cmd == BN_CLICKED )
     {
+        if (id == GetId())
+            return TRUE;
+
         int selectedButton = -1;
 
         for ( int i = 0; i < m_noItems; i++ )
