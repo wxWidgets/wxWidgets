@@ -1079,7 +1079,7 @@ bool wxBitmap::operator != ( const wxBitmap& bmp ) const
 
 bool wxBitmap::Ok() const
 {
-    return (m_refData != NULL);
+    return (m_refData != NULL) && (M_BMPDATA->m_bitmap || M_BMPDATA->m_pixmap);
 }
 
 int wxBitmap::GetHeight() const
