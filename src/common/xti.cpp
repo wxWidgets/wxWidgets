@@ -28,7 +28,6 @@
 
 #include "wx/xml/xml.h"
 #include "wx/tokenzr.h"
-#include "wx/notebook.h"
 #include "wx/list.h"
 #include "wx/datetime.h"
 #include <string.h>
