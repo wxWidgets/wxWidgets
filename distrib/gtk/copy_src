@@ -772,4 +772,4 @@ cp README.txt ~/wxgtk_dist/wxGTK/utils/wxPython
 cp Setup ~/wxgtk_dist/wxGTK/utils/wxPython/src
 
 cd ~/wxgtk_dist
-# tar ch wxGTK | gzip -f9 > wxGTK-2.1.0-b6.tgz
+tar ch wxGTK | gzip -f9 > wxGTK-2.1.0-b6.tgz

@@ -54,8 +54,6 @@ rm -rf $RPM_BUILD_ROOT
 %{pref}/lib/wx/*
 %dir %{pref}/share/wx
 %{pref}/share/wx/*
-%attr(755, -, -) %{pref}/lib/libwx_gtk2.so
-%attr(755, -, -) %{pref}/lib/libwx_gtk2.so.1
-%attr(755, -, -) %{pref}/lib/libwx_gtk2.so.1.0
+%attr(755, -, -) %{pref}/lib/libwx_gtk*
 %attr(755, -, -) %{pref}/bin/wx-config
 
