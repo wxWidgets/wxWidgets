@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dialog.h"      // the base class
+    #include "wx/panel.h"       // ditto
 
     #include "wx/event.h"       // wxEVT_XXX constants
 #endif // WX_PRECOMP

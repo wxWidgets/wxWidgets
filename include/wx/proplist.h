@@ -49,6 +49,7 @@
 #if wxUSE_PROPSHEET
 
 #include "wx/prop.h"
+#include "wx/panel.h"
 
 #define wxPROP_BUTTON_CLOSE       1
 #define wxPROP_BUTTON_OK          2
