@@ -87,12 +87,12 @@ void wxMenuItem::UpdateItemBitmap()
     if ( m_bitmap.Ok() )
     {
         ControlButtonContentInfo info ;
-        wxMacCreateBitmapButton( &info , m_bitmap , kControlContentCIconHandle ) ;
+        wxMacCreateBitmapButton( &info , m_bitmap ) ;
         if ( info.contentType != kControlNoContent )
         {
-            if ( info.contentType == kControlContentCIconHandle )
+            if ( info.contentType == kControlContentIconRef )
                 SetMenuItemIconHandle( mhandle , index , 
-                    kMenuColorIconType , (Handle) info.u.cIconHandle ) ;
+                    kMenuIconRefType , (Handle) info.u.iconRef ) ;
         }
         wxMacReleaseBitmapButton( &info ) ;
             
