@@ -634,19 +634,15 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
 
     path += name;
 
-    // Needed for Unicode/Ansi conversion
-    char buf[500];
-    
 #if defined(HAVE_MKSTEMP)
     // scratch space for mkstemp()
     path += _T("XXXXXX");
 
-#if wxUSE_UNICODE
-    strcpy( buf, wxConvFile.cWC2MB( path ) );
-#else
-    strcpy( buf, path.c_str() );
-#endif
-    int fdTemp = mkstemp( buf );
+    // we need to copy the path to the buffer in which mkstemp() can modify it
+    wxCharBuffer buf(path.fn_str());
+
+    // cast is safe because the string length doesn't change
+    int fdTemp = mkstemp( (char *)buf.data() );
     if ( fdTemp == -1 )
     {
         // this might be not necessary as mkstemp() on most systems should have
@@ -655,11 +651,8 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     }
     else // mkstemp() succeeded
     {
-#if wxUSE_UNICODE
-        path = wxConvFile.cMB2WC( buf );
-#else
-        path = buf;
-#endif
+        path = wxConvFile.cMB2WX(buf);
+
         // avoid leaking the fd
         if ( fileTemp )
         {
@@ -676,22 +669,14 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     // same as above
     path += _T("XXXXXX");
 
-#if wxUSE_UNICODE
-    strcpy( buf, wxConvFile.cWC2MB( path ) );
-#else
-    strcpy( buf, path.c_str() );
-#endif
-    if ( !mktemp( buf )
+    wxCharBuffer buf(path.fn_str());
+    if ( !mktemp( buf ) )
     {
         path.clear();
     }
     else
     {
-#if wxUSE_UNICODE
-        path = wxConvFile.cMB2WC( buf );
-#else
-        path = buf;
-#endif
+        path = wxConvFile.cMB2WX(buf);
     }
 #else // !HAVE_MKTEMP (includes __DOS__)
     // generate the unique file name ourselves
@@ -1769,7 +1754,7 @@ static void MacEnsureDefaultExtensionsLoaded()
 {
   if ( !gMacDefaultExtensionsInited )
   {
-    
+
     // load the default extensions
     MacDefaultExtensionRecord defaults[1] =
     {
