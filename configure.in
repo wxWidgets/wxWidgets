@@ -1659,39 +1659,99 @@ if test "$wxUSE_MOTIF" = 1; then
     dnl        AC_MSG_ERROR(please set LDFLAGS to contain the location of libX11)
     dnl    fi
 
+    COMPILED_X_PROGRAM=0
+
     AC_MSG_CHECKING(for Motif/Lesstif headers)
     WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
     if test "$ac_find_includes" != "" ; then
         AC_MSG_RESULT(found $ac_find_includes)
     else
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR(please set CFLAGS to contain the location of Xm/Xm.h)
+        AC_TRY_COMPILE(
+            [
+                #include <Xm/Xm.h>
+            ],
+            [
+                int version;
+
+                version = xmUseVersion;
+            ],
+            [
+                AC_MSG_RESULT(found in default search path)
+                COMPILED_X_PROGRAM=1
+            ],
+            [
+                AC_MSG_RESULT(no)
+                AC_MSG_ERROR(please set CFLAGS to contain the location of Xm/Xm.h)
+            ]
+        )
     fi
 
-    AC_MSG_CHECKING(for Motif/Lesstif library)
-    WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
-    if test "$ac_find_libraries" != "" ; then
-        WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
-        WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
+    if test "$COMPILED_X_PROGRAM" = 0; then
+        AC_MSG_CHECKING(for Motif/Lesstif library)
+        WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
+        if test "$ac_find_libraries" != "" ; then
+            WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
+            WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
-        AC_MSG_RESULT(found at $ac_find_libraries)
-    else
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR(please set LDFLAGS to contain the location of libXm)
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
+            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
+            AC_MSG_RESULT(found at $ac_find_libraries)
+        else
+            dnl it might happen that we found headers in one of the standard
+            dnl paths but the libs are elsewhere - we do need to try to
+            dnl compile a sample program then here
+            AC_TRY_COMPILE(
+                [
+                    #include <Xm/Xm.h>
+                ],
+                [
+                    int version;
+
+                    version = xmUseVersion;
+                ],
+                [
+                    AC_MSG_RESULT(found in default search path)
+                    COMPILED_X_PROGRAM=1
+                ],
+                [
+                    AC_MSG_RESULT(no)
+                    AC_MSG_ERROR(please set LDFLAGS to contain the location of libXm)
+                ]
+            )
+        fi
     fi
 
-    AC_MSG_CHECKING(for Xt library)
-    WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
-    if test "$ac_find_libraries" != "" ; then
-        WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-        AC_MSG_RESULT(found at $ac_find_libraries)
-    else
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR(please set LDFLAGS to contain the location of libXt)
-    fi
+    dnl we don't need this as we used AC_PATH_XTRA above which does it for us
+    dnl
+    dnl dnl if we already compiled a sample program, X libs are surely there
+    dnl if test "$COMPILED_X_PROGRAM" = 0; then
+    dnl     AC_MSG_CHECKING(for Xt library)
+    dnl     WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
+    dnl     if test "$ac_find_libraries" != "" ; then
+    dnl         WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
+    dnl         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
+    dnl         AC_MSG_RESULT(found at $ac_find_libraries)
+    dnl     else
+    dnl         AC_TRY_COMPILE
+    dnl         (
+    dnl             [
+    dnl                 #include <X11/Intrinsic.h>
+    dnl             ],
+    dnl             [
+    dnl                 char *p;
+    dnl                 p = XtMalloc(5);
+    dnl             ],
+    dnl             [
+    dnl                 AC_MSG_RESULT(found in default search path)
+    dnl                 COMPILED_X_PROGRAM=1
+    dnl             ],
+    dnl             [
+    dnl                 AC_MSG_RESULT(no)
+    dnl                 AC_MSG_ERROR(please set LDFLAGS to contain the location of libXt)
+    dnl             ]
+    dnl         )
+    dnl     fi
+    dnl fi
 
     XPM_LINK=""
     AC_MSG_CHECKING(for Xpm library)
@@ -1703,8 +1763,24 @@ if test "$wxUSE_MOTIF" = 1; then
         AC_DEFINE(wxHAVE_LIB_XPM)
         AC_MSG_RESULT(found at $ac_find_libraries)
     else
-        AC_MSG_RESULT(no)
-        AC_MSG_WARN(library will be compiled without support for images in XPM format)
+        AC_TRY_COMPILE(
+            [
+                #include <X11/xpm.h>
+            ],
+            [
+                int version;
+
+                version = XpmLibraryVersion();
+            ],
+            [
+                AC_MSG_RESULT(found in default search path),
+                COMPILED_X_PROGRAM=0
+            ],
+            [
+                AC_MSG_RESULT(no)
+                AC_MSG_WARN(library will be compiled without support for images in XPM format)
+            ]
+        )
     fi
 
     GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXext -lXt -lX11 -lm"
