@@ -21,6 +21,8 @@ all : setup.h
 	$(MMS)$(MMSQUALIFIERS)
 	set default [-.checklst]
 	$(MMS)$(MMSQUALIFIERS)
+	set default [-.config]
+	$(MMS)$(MMSQUALIFIERS)
 	set default [-.dialogs]
 	$(MMS)$(MMSQUALIFIERS)
 	set default [-.image]

@@ -98,7 +98,9 @@ wxString wxFileConfig::GetGlobalDir()
 {
   wxString strDir;
 
-  #ifdef __UNIX__
+  #ifdef __VMS__ // Note if __VMS is defined __UNIX is also defined
+    strDir = wxT("sys$manager:");
+  #elif defined( __UNIX__ )
     strDir = wxT("/etc/");
   #elif defined(__WXPM__)
     ULONG                           aulSysInfo[QSV_MAX] = {0};
@@ -225,10 +227,12 @@ wxString wxFileConfig::GetLocalDir()
 #ifndef __WXMAC__
   wxGetHomeDir(&strDir);
 
-#ifdef  __UNIX__
+#ifndef __VMS__
+# ifdef  __UNIX__
   if (strDir.Last() != wxT('/')) strDir << wxT('/');
 #else
   if (strDir.Last() != wxT('\\')) strDir << wxT('\\');
+#endif
 #endif
 #else
 	// no local dir concept on mac
@@ -257,8 +261,14 @@ wxString wxFileConfig::GetGlobalFileName(const wxChar *szFile)
 
 wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
 {
-  wxString str = GetLocalDir();
-
+#ifdef __VMS__ // On VMS I saw the problem that the home directory was appended
+   // twice for the configuration file. Does that also happen for other
+   // platforms?
+   wxString str = wxT( ' ' ); 
+#else
+   wxString str = GetLocalDir();
+#endif
+   
   #ifdef  __UNIX__
     str << wxT('.');
   #endif
