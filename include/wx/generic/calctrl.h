@@ -242,10 +242,12 @@ private:
     // show the correct controls
     void ShowCurrentControls();
 
+public:
     // get the currently shown control for month/year
     wxControl *GetMonthControl() const;
     wxControl *GetYearControl() const;
 
+private:
     // OnPaint helper-methods
 
     // Highlight the [fromdate : todate] range using pen and brush
