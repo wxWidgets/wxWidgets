@@ -121,11 +121,11 @@ handler is disconnected.}
 
 \membersection{wxEvtHandler::Disconnect}\label{wxevthandlerdisconnect}
 
-\func{bool}{Disconnect}{\param{int}{ id},
+\func{bool}{Disconnect}{\param{int}{ id = \texttt{wxID\_ANY}},
  \param{wxEventType }{eventType = wxEVT\_NULL}, \param{wxObjectEventFunction}{ function = NULL},
  \param{wxObject*}{ userData = NULL}, \param{wxEvtHandler*}{ eventSink = NULL}}
 
-\func{bool}{Disconnect}{\param{int}{ id}, \param{int}{ lastId = -1},
+\func{bool}{Disconnect}{\param{int}{ id}, \param{int}{ lastId = \texttt{wxID\_ANY}},
  \param{wxEventType }{eventType = wxEVT\_NULL}, \param{wxObjectEventFunction}{ function = NULL},
  \param{wxObject*}{ userData = NULL}, \param{wxEvtHandler*}{ eventSink = NULL}}
 
