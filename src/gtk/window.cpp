@@ -2721,7 +2721,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         int border = 0;
         int bottom_border = 0;
 
-#ifndef __WXGTK__
+#ifndef __WXGTK20__
         if (GTK_WIDGET_CAN_DEFAULT(m_widget))
         {
             /* the default button has a border around it */
