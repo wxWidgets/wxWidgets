@@ -413,18 +413,24 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <include>$(INC_REGEX)</include>
         <include>$(INC_EXPAT)</include>
     </template>
+
+    <template id="msvc_setup_h">
+        <msvc-copy-setup-h/>
+    </template>
     
-    <template id="wx_lib" template="wx_lib_b,wx_3rdparty_includes"/>
-    <template id="wx_base_lib" template="wx_lib_b,wx_3rdparty_includes">
+    <template id="wx_lib"
+              template="wx_lib_b,wx_3rdparty_includes,msvc_setup_h"/>
+    <template id="wx_base_lib"
+              template="wx_lib_b,wx_3rdparty_includes,msvc_setup_h">
         <define>wxUSE_GUI=0</define> 
     </template>
 
     <template id="wx_dll"
               template="wx_dll_b,wx_3rdparty_dependencies,wx_3rdparty_includes"
-              template_append="wx_append_nomono"/>
+              template_append="msvc_setup_h,wx_append_nomono"/>
     <template id="wx_base_dll"
               template="wx_dll_b,wx_3rdparty_dependencies,wx_3rdparty_includes"
-              template_append="wx_append_base_nomono">
+              template_append="msvc_setup_h,wx_append_base_nomono">
         <define>wxUSE_GUI=0</define> 
     </template>
                            

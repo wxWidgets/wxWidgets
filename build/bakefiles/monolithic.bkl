@@ -19,7 +19,6 @@
         <ldlibs>$(EXTRALIBS_XML)</ldlibs>
         <ldlibs>$(EXTRALIBS_ODBC)</ldlibs>
         <msvc-headers>$(ALL_HEADERS)</msvc-headers>
-        <msvc-copy-setup-h/>
     </dll>
     
     <lib id="monolib" template="wx_lib"
@@ -27,7 +26,6 @@
         <define>wxUSE_BASE=1</define> 
         <sources>$(MONOLIB_SRC)</sources>
         <msvc-headers>$(ALL_HEADERS)</msvc-headers>
-        <msvc-copy-setup-h/>
     </lib>
 
 </makefile>
