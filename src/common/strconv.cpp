@@ -28,6 +28,10 @@
   #pragma hdrstop
 #endif
 
+#ifdef __WXMSW__
+  #include "wx/msw/private.h"
+#endif
+
 #include <errno.h>
 #include <ctype.h>
 #include <string.h>
