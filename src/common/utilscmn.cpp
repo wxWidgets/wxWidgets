@@ -1109,7 +1109,7 @@ const wxChar *wxGetInstallPrefix()
 {
     wxString prefix;
     
-    if ( wxGetEnv(wxT("WX_PREFIX"), &prefix) )
+    if ( wxGetEnv(wxT("WXPREFIX"), &prefix) )
         return prefix.c_str();
     
 #ifdef wxINSTALL_PREFIX
