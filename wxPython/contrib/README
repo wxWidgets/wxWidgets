@@ -1,3 +1,0 @@
-These sub directories contain add-on modules that are not part of the
-core wxPython, either because of licensing issues, optional code in
-wxWindows, contrib code in wxWindows, or whatever.
