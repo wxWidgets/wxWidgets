@@ -17,6 +17,7 @@ OBJECTS = \
         $(S)/Document.$(OBJSUFF)	\
 	$(S)/DocumentAccessor.$(OBJSUFF) \
         $(S)/Editor.$(OBJSUFF)		\
+        $(S)/ExternalLexer.$(OBJSUFF)	\
         $(S)/Indicator.$(OBJSUFF)	\
         $(S)/KeyMap.$(OBJSUFF)		\
         $(S)/KeyWords.$(OBJSUFF)	\
@@ -31,9 +32,11 @@ OBJECTS = \
 	$(S)/LexCrontab.$(OBJSUFF)	\
 	$(S)/LexCSS.$(OBJSUFF)		\
 	$(S)/LexEiffel.$(OBJSUFF)	\
+	$(S)/LexEScript.$(OBJSUFF)	\
 	$(S)/LexFortran.$(OBJSUFF)	\
 	$(S)/LexHTML.$(OBJSUFF)		\
 	$(S)/LexLisp.$(OBJSUFF)		\
+	$(S)/LexLout.$(OBJSUFF)		\
 	$(S)/LexLua.$(OBJSUFF)		\
 	$(S)/LexOthers.$(OBJSUFF)	\
 	$(S)/LexPOV.$(OBJSUFF)		\

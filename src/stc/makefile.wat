@@ -26,6 +26,7 @@ OBJECTS = &
     Document.obj	        &
 	DocumentAccessor.obj	&
     Editor.obj		        &
+    ExternalLexer.obj		&
     Indicator.obj	        &
     KeyMap.obj		        &
     KeyWords.obj	        &
@@ -40,9 +41,11 @@ OBJECTS = &
 	LexCrontab.obj		    &
 	LexCSS.obj		    &
 	LexEiffel.obj		    &
+	LexEScript.obj		    &
 	LexFortran.obj  	    &
 	LexHTML.obj		        &
 	LexLisp.obj		        &
+	LexLout.obj			&
 	LexLua.obj		        &
 	LexOthers.obj		    &
 	LexPOV.obj		    &

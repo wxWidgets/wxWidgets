@@ -329,6 +329,8 @@
 #define wxSTC_LEX_F77 37
 #define wxSTC_LEX_CSS 38
 #define wxSTC_LEX_POV 39
+#define wxSTC_LEX_LOUT 40
+#define wxSTC_LEX_ESCRIPT 41
 
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -370,6 +372,7 @@
 #define wxSTC_C_WORD2 16
 #define wxSTC_C_COMMENTDOCKEYWORD 17
 #define wxSTC_C_COMMENTDOCKEYWORDERROR 18
+#define wxSTC_C_GLOBALCLASS 19
 
 // Lexical states for SCLEX_HTML, SCLEX_XML
 #define wxSTC_H_DEFAULT 0
@@ -810,6 +813,33 @@
 #define wxSTC_POV_IDENTIFIER 8
 #define wxSTC_POV_BRACE 9
 #define wxSTC_POV_WORD2 10
+
+// Lexical states for SCLEX_LOUT
+#define wxSTC_LOUT_DEFAULT 0
+#define wxSTC_LOUT_COMMENT 1
+#define wxSTC_LOUT_NUMBER 2
+#define wxSTC_LOUT_WORD 3
+#define wxSTC_LOUT_WORD2 4
+#define wxSTC_LOUT_WORD3 5
+#define wxSTC_LOUT_WORD4 6
+#define wxSTC_LOUT_STRING 7
+#define wxSTC_LOUT_OPERATOR 8
+#define wxSTC_LOUT_IDENTIFIER 9
+#define wxSTC_LOUT_STRINGEOL 10
+
+// Lexical states for SCLEX_ESCRIPT
+#define wxSTC_ESCRIPT_DEFAULT 0
+#define wxSTC_ESCRIPT_COMMENT 1
+#define wxSTC_ESCRIPT_COMMENTLINE 2
+#define wxSTC_ESCRIPT_COMMENTDOC 3
+#define wxSTC_ESCRIPT_NUMBER 4
+#define wxSTC_ESCRIPT_WORD 5
+#define wxSTC_ESCRIPT_STRING 6
+#define wxSTC_ESCRIPT_OPERATOR 7
+#define wxSTC_ESCRIPT_IDENTIFIER 8
+#define wxSTC_ESCRIPT_BRACE 9
+#define wxSTC_ESCRIPT_WORD2 10
+#define wxSTC_ESCRIPT_WORD3 11
 
 
 //-----------------------------------------
@@ -1880,6 +1910,9 @@ public:
     // caret position.
     void LineEndDisplayExtend();
 
+    // Copy the line containing the caret.
+    void LineCopy();
+
     // Move the caret inside current view if it's not there already.
     void MoveCaretInsideView();
 
@@ -2055,6 +2088,20 @@ public:
 
     // Enable / Disable underlining active hotspots.
     void SetHotspotActiveUnderline(bool underline);
+
+    // Given a valid document position, return the previous position taking code
+    // page into account. Returns 0 if passed 0.
+    int PositionBefore(int pos);
+
+    // Given a valid document position, return the next position taking code
+    // page into account. Maximum value returned is the last position in the document.
+    int PositionAfter(int pos);
+
+    // Copy a range of text to the clipboard. Positions are clipped into the document.
+    void CopyRange(int start, int end);
+
+    // Copy argument text to the clipboard.
+    void CopyText(int length, const wxString& text);
 
     // Start notifying the container of all key presses and commands.
     void StartRecord();

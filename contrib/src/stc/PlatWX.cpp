@@ -1062,6 +1062,13 @@ void Menu::Show(Point pt, Window &w) {
 
 //----------------------------------------------------------------------
 
+DynamicLibrary *DynamicLibrary::Load(const char *modulePath) {
+    wxFAIL_MSG(wxT("Dynamic lexer loading not implemented yet"));
+    return NULL;
+}
+
+//----------------------------------------------------------------------
+
 ColourDesired Platform::Chrome() {
     wxColour c;
     c = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
