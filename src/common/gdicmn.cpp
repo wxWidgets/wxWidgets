@@ -289,10 +289,6 @@ void wxColourDatabase::Initialize ()
         {wxT("WHITE"), 255, 255, 255},
         {wxT("YELLOW"), 255, 255, 0},
         {wxT("YELLOW GREEN"), 153, 204, 50},
-        {wxT("MEDIUM GOLDENROD"), 234, 234, 173},
-        {wxT("MEDIUM FOREST GREEN"), 107, 142, 35},
-        {wxT("LIGHT MAGENTA"), 255, 0, 255},
-        {wxT("MEDIUM GREY"), 100, 100, 100},
     };
 
     size_t      n;
