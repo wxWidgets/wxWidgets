@@ -70,7 +70,7 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
  * GLContext implementation
  */
 
-wxGLContext::wxGLContext(bool isRGB, wxGLCanvas *win, const wxPalette& palette)
+wxGLContext::wxGLContext(bool WXUNUSED(isRGB), wxGLCanvas *win, const wxPalette& WXUNUSED(palette))
 {
   m_window = win;
 
@@ -83,8 +83,8 @@ wxGLContext::wxGLContext(bool isRGB, wxGLCanvas *win, const wxPalette& palette)
 }
 
 wxGLContext::wxGLContext(
-               bool isRGB, wxGLCanvas *win,
-               const wxPalette& palette,
+               bool WXUNUSED(isRGB), wxGLCanvas *win,
+               const wxPalette& WXUNUSED(palette),
                const wxGLContext *other  /* for sharing display lists */
              )
 {
@@ -525,7 +525,7 @@ void wxGLCanvas::SwapBuffers()
     m_glContext->SwapBuffers();
 }
 
-void wxGLCanvas::OnSize(wxSizeEvent& event)
+void wxGLCanvas::OnSize(wxSizeEvent& WXUNUSED(event))
 {
 }
 
@@ -576,11 +576,11 @@ void wxGLCanvas::OnPaletteChanged(wxPaletteChangedEvent& event)
 /* Give extensions proper function names. */
 
 /* EXT_vertex_array */
-void glArrayElementEXT(GLint i)
+void glArrayElementEXT(GLint WXUNUSED(i))
 {
 }
 
-void glColorPointerEXT(GLint size, GLenum type, GLsizei stride, GLsizei count, const GLvoid *pointer)
+void glColorPointerEXT(GLint WXUNUSED(size), GLenum WXUNUSED(type), GLsizei WXUNUSED(stride), GLsizei WXUNUSED(count), const GLvoid *WXUNUSED(pointer))
 {
 }
 
@@ -599,15 +599,15 @@ void glDrawArraysEXT(GLenum mode, GLint first, GLsizei count)
 #endif
 }
 
-void glEdgeFlagPointerEXT(GLsizei stride, GLsizei count, const GLboolean *pointer)
+void glEdgeFlagPointerEXT(GLsizei WXUNUSED(stride), GLsizei WXUNUSED(count), const GLboolean *WXUNUSED(pointer))
 {
 }
 
-void glGetPointervEXT(GLenum pname, GLvoid* *params)
+void glGetPointervEXT(GLenum WXUNUSED(pname), GLvoid* *WXUNUSED(params))
 {
 }
 
-void glIndexPointerEXT(GLenum type, GLsizei stride, GLsizei count, const GLvoid *pointer)
+void glIndexPointerEXT(GLenum WXUNUSED(type), GLsizei WXUNUSED(stride), GLsizei WXUNUSED(count), const GLvoid *WXUNUSED(pointer))
 {
 }
 
@@ -626,7 +626,7 @@ void glNormalPointerEXT(GLenum type, GLsizei stride, GLsizei count, const GLvoid
 #endif
 }
 
-void glTexCoordPointerEXT(GLint size, GLenum type, GLsizei stride, GLsizei count, const GLvoid *pointer)
+void glTexCoordPointerEXT(GLint WXUNUSED(size), GLenum WXUNUSED(type), GLsizei WXUNUSED(stride), GLsizei WXUNUSED(count), const GLvoid *WXUNUSED(pointer))
 {
 }
 
@@ -645,33 +645,33 @@ void glVertexPointerEXT(GLint size, GLenum type, GLsizei stride, GLsizei count, 
 }
 
 /* EXT_color_subtable */
-void glColorSubtableEXT(GLenum target, GLsizei start, GLsizei count, GLenum format, GLenum type, const GLvoid *table)
+void glColorSubtableEXT(GLenum WXUNUSED(target), GLsizei WXUNUSED(start), GLsizei WXUNUSED(count), GLenum WXUNUSED(format), GLenum WXUNUSED(type), const GLvoid *WXUNUSED(table))
 {
 }
 
 /* EXT_color_table */
-void glColorTableEXT(GLenum target, GLenum internalformat, GLsizei width, GLenum format, GLenum type, const GLvoid *table)
+void glColorTableEXT(GLenum WXUNUSED(target), GLenum WXUNUSED(internalformat), GLsizei WXUNUSED(width), GLenum WXUNUSED(format), GLenum WXUNUSED(type), const GLvoid *WXUNUSED(table))
 {
 }
 
-void glCopyColorTableEXT(GLenum target, GLenum internalformat, GLint x, GLint y, GLsizei width)
+void glCopyColorTableEXT(GLenum WXUNUSED(target), GLenum WXUNUSED(internalformat), GLint WXUNUSED(x), GLint WXUNUSED(y), GLsizei WXUNUSED(width))
 {
 }
 
-void glGetColorTableEXT(GLenum target, GLenum format, GLenum type, GLvoid *table)
+void glGetColorTableEXT(GLenum WXUNUSED(target), GLenum WXUNUSED(format), GLenum WXUNUSED(type), GLvoid *WXUNUSED(table))
 {
 }
 
-void glGetColorTableParamaterfvEXT(GLenum target, GLenum pname, GLfloat *params)
+void glGetColorTableParamaterfvEXT(GLenum WXUNUSED(target), GLenum WXUNUSED(pname), GLfloat *WXUNUSED(params))
 {
 }
 
-void glGetColorTavleParameterivEXT(GLenum target, GLenum pname, GLint *params)
+void glGetColorTavleParameterivEXT(GLenum WXUNUSED(target), GLenum WXUNUSED(pname), GLint *WXUNUSED(params))
 {
 }
 
 /* SGI_compiled_vertex_array */
-void glLockArraysSGI(GLint first, GLsizei count)
+void glLockArraysSGI(GLint WXUNUSED(first), GLsizei WXUNUSED(count))
 {
 }
 
@@ -681,26 +681,26 @@ void glUnlockArraysSGI()
 
 
 /* SGI_cull_vertex */
-void glCullParameterdvSGI(GLenum pname, GLdouble* params)
+void glCullParameterdvSGI(GLenum WXUNUSED(pname), GLdouble* WXUNUSED(params))
 {
 }
 
-void glCullParameterfvSGI(GLenum pname, GLfloat* params)
+void glCullParameterfvSGI(GLenum WXUNUSED(pname), GLfloat* WXUNUSED(params))
 {
 }
 
 /* SGI_index_func */
-void glIndexFuncSGI(GLenum func, GLclampf ref)
+void glIndexFuncSGI(GLenum WXUNUSED(func), GLclampf WXUNUSED(ref))
 {
 }
 
 /* SGI_index_material */
-void glIndexMaterialSGI(GLenum face, GLenum mode)
+void glIndexMaterialSGI(GLenum WXUNUSED(face), GLenum WXUNUSED(mode))
 {
 }
 
 /* WIN_swap_hint */
-void glAddSwapHintRectWin(GLint x, GLint y, GLsizei width, GLsizei height)
+void glAddSwapHintRectWin(GLint WXUNUSED(x), GLint WXUNUSED(y), GLsizei WXUNUSED(width), GLsizei WXUNUSED(height))
 {
 }
 

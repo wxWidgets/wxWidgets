@@ -152,7 +152,7 @@ wxBEGIN_FLAGS( wxMenuBarStyle )
 wxEND_FLAGS( wxMenuBarStyle )
 
 // the negative id would lead the window (its superclass !) to vetoe streaming out otherwise
-bool wxMenuBarStreamingCallback( const wxObject *object, wxWriter * , wxPersister * , wxxVariantArray & )
+bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxWriter * , wxPersister * , wxxVariantArray & )
 {
     return true ;
 }
