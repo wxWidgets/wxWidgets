@@ -15,6 +15,7 @@
 
 #include "wx/app.h"
 #include "wx/msgdlg.h"
+#include "wx/intl.h"
 #include "wx/mac/uma.h"
 
 #if !USE_SHARED_LIBRARY
