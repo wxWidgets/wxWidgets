@@ -428,6 +428,13 @@
 // wxSound class
 #define wxUSE_SOUND      1
 
+// Use wxMediaCtrl
+//
+// Default is 1.
+//
+// Recommended setting: 1 
+#define wxUSE_MEDIACTRL     1
+
 // Use wxWidget's XRC XML-based resource system.  Recommended.
 //
 // Default is 1
