@@ -1203,7 +1203,10 @@ wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
 
 void wxImage::InitStandardHandlers()
 {
+#if wxUSE_STREAMS
     AddHandler(new wxBMPHandler);
+#endif // wxUSE_STREAMS
+
 #if wxUSE_XPM && !defined(__WXGTK__) && !defined(__WXMOTIF__)
     AddHandler(new wxXPMHandler);
 #endif
