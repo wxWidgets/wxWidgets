@@ -1164,25 +1164,24 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
         style |= WS_HSCROLL;
 
     wxBorder border = (wxBorder)(flags & wxBORDER_MASK);
-    
+
     // Check if we want to automatically give it a sunken style.
     // Note than because 'sunken' actually maps to WS_EX_CLIENTEDGE, which
     // is a more neutral term, we don't necessarily get a sunken effect in
     // Windows XP. Instead we get the appropriate style for the theme.
 
-    if (border == wxBORDER_DEFAULT && wxTheApp->GetAuto3D() && 
+    if (border == wxBORDER_DEFAULT && wxTheApp->GetAuto3D() &&
         IsKindOf(CLASSINFO(wxControl)) &&
-        GetParent() && (GetParent()->IsKindOf(CLASSINFO(wxPanel)) ||
-                        GetParent()->IsKindOf(CLASSINFO(wxDialog))) &&
+        GetParent() &&
         ((GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS) != wxUSER_COLOURS))
     {
         border = (wxBorder)((flags & wxBORDER_MASK) | wxBORDER_SUNKEN);
-    }   
-    
+    }
+
     // Only give it WS_BORDER for wxBORDER_SIMPLE
     if (border & wxBORDER_SIMPLE)
         style |= WS_BORDER;
-    
+
     // now deal with ext style if the caller wants it
     if ( exstyle )
     {
