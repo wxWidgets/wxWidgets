@@ -27,8 +27,10 @@ functions that take a wxTreeEvent argument.
 \twocolitem{{\bf EVT\_TREE\_DELETE\_ITEM(id, func)}}{Delete an item.}
 \twocolitem{{\bf EVT\_TREE\_GET\_INFO(id, func)}}{Request information from the application.}
 \twocolitem{{\bf EVT\_TREE\_SET\_INFO(id, func)}}{Information is being supplied.}
-\twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDED(id, func)}}{Parent has been expanded.}
-\twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDING(id, func)}}{Parent is being expanded. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_COLLAPSED(id, func)}}{The item has been collapsed.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_COLLAPSING(id, func)}}{The item is being collapsed. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDED(id, func)}}{The item has been expanded.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDING(id, func)}}{The item is being expanded. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
 \twocolitem{{\bf EVT\_TREE\_SEL\_CHANGED(id, func)}}{Selection has changed.}
 \twocolitem{{\bf EVT\_TREE\_SEL\_CHANGING(id, func)}}{Selection is changing. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
 \twocolitem{{\bf EVT\_TREE\_KEY\_DOWN(id, func)}}{A key has been pressed.}
