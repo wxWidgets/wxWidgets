@@ -990,6 +990,11 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     // the content view, so we have to retrieve it explicitely
     HIViewFindByID( HIViewGetRoot( (WindowRef) m_macWindow ) , kHIViewWindowContentID , 
         *m_peer ) ;
+    if ( !m_peer->Ok() )
+    {
+        // compatibility mode fallback
+        GetRootControl( (WindowRef) m_macWindow , *m_peer ) ;
+    }
 #else
     ::CreateRootControl( (WindowRef)m_macWindow , *m_peer ) ;
 #endif
