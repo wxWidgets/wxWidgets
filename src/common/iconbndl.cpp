@@ -83,6 +83,8 @@ const wxIcon& wxIconBundle::GetIcon( const wxSize& size ) const
 
     for( i = 0; i < max; ++i )
     {
+        if( !m_icons[i].Ok() )
+            continue;
         wxCoord sx = m_icons[i].GetWidth(), sy = m_icons[i].GetHeight();
         // requested size
         if( sx == size.x && sy == size.y )
@@ -105,7 +107,7 @@ void wxIconBundle::AddIcon( const wxIcon& icon )
     for( i = 0; i < max; ++i )
     {
         wxIcon& tmp = m_icons[i];
-        if( tmp.GetWidth() == icon.GetWidth() &&
+        if( tmp.Ok() && tmp.GetWidth() == icon.GetWidth() &&
             tmp.GetHeight() == icon.GetHeight() )
         {
             tmp = icon;

@@ -191,12 +191,13 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxTopLevelWindowGTK *
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
 
     // reset the icon
-    wxIcon iconOld = win->GetIcon();
-    if ( iconOld != wxNullIcon )
+    wxIconBundle iconsOld = win->GetIcons();
+    wxIcon tmp = iconsOld.GetIcon( -1 ); // operator != is not-const
+    if ( tmp != wxNullIcon )
     {
-        wxIcon icon( iconOld );
+        // wxIconBundle icon( iconOld );
         win->SetIcon( wxNullIcon );
-        win->SetIcon( icon );
+        win->SetIcons( iconsOld );
     }
 
     // we set the focus to the child that accepts the focus. this
@@ -840,13 +841,13 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
     GdkWindow* window = m_widget->window;
-    wxCHECK_RET( window, _T("window not created yet - can't set icon") );
 
     wxTopLevelWindowBase::SetIcons( icons );
 
     DoSetIcon( icons.GetIcon( -1 ) );
-    wxSetIconsX11( (WXDisplay*)GDK_WINDOW_XDISPLAY( window ),
-                   (WXWindow)GDK_WINDOW_XWINDOW( window ), icons );
+    if( window )
+        wxSetIconsX11( (WXDisplay*)GDK_WINDOW_XDISPLAY( window ),
+                       (WXWindow)GDK_WINDOW_XWINDOW( window ), icons );
 }
 
 // ----------------------------------------------------------------------------

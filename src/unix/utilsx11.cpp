@@ -32,7 +32,8 @@ void wxSetIconsX11( WXDisplay* display, WXWindow window,
     size_t i, max = ib.m_icons.GetCount();
 
     for( i = 0; i < max; ++i )
-        size += 2 + ib.m_icons[i].GetWidth() * ib.m_icons[i].GetHeight();
+        if( ib.m_icons[i].Ok() )
+            size += 2 + ib.m_icons[i].GetWidth() * ib.m_icons[i].GetHeight();
 
     Atom net_wm_icon = XInternAtom( (Display*)display, "_NET_WM_ICON", 0 );
 
