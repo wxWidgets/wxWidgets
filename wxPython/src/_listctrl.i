@@ -266,7 +266,7 @@ public:
     long GetIndex();
     int GetColumn();
     wxPoint GetPoint();
-    %pythoncode { GetPostiion = GetPoint }
+    %pythoncode { GetPosition = GetPoint }
     const wxString& GetLabel();
     const wxString& GetText();
     int GetImage();
