@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // Id:
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -34,8 +34,8 @@ END_EVENT_TABLE()
 wxTextCtrl::wxTextCtrl(void) : streambuf()
 {
     if( allocate() )
-	setp(base(),ebuf());
- 
+  setp(base(),ebuf());
+
   m_modified = FALSE;
 };
 
@@ -43,9 +43,9 @@ wxTextCtrl::wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
       const wxPoint &pos, const wxSize &size,
       int style, const wxString &name ) : streambuf()
 {
-    if( allocate() )
-	setp(base(),ebuf());
- 
+  if( allocate() )
+    setp(base(),ebuf());
+
   m_modified = FALSE;
   Create( parent, id, value, pos, size, style, name );
 };
@@ -58,10 +58,45 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
 
   PreCreation( parent, id, pos, size, style, name );
 
-  if (style & wxTE_MULTILINE)
-    m_widget = gtk_text_new( NULL, NULL );
-  else
-    m_widget = gtk_entry_new();
+  bool bMultiLine = (style & wxTE_MULTILINE) != 0;
+  if ( bMultiLine ) {
+    // a multi-line edit control: create a vertical scrollbar by default and
+    // horizontal if requested
+    bool bHasHScrollbar = (style & wxHSCROLL) != 0;
+
+    // create our control...
+    m_text = gtk_text_new( NULL, NULL );
+
+    // ... and put into the upper left hand corner of the table
+    m_widget = gtk_table_new(bHasHScrollbar ? 2 : 1, 2, FALSE);
+    gtk_table_attach(GTK_TABLE(m_widget), m_text, 0, 1, 0, 1,
+                     GTK_FILL | GTK_EXPAND,
+                     GTK_FILL | GTK_EXPAND | GTK_SHRINK,
+                     0, 0);
+
+    // put the horizontal scrollbar in the lower left hand corner
+    if ( bHasHScrollbar ) {
+      GtkWidget *hscrollbar = gtk_hscrollbar_new(GTK_TEXT(m_text)->hadj);
+      gtk_table_attach(GTK_TABLE(m_widget), hscrollbar, 0, 1, 1, 2,
+                       GTK_EXPAND | GTK_FILL,
+                       GTK_FILL,
+                       0, 0);
+      gtk_widget_show(hscrollbar);
+    }
+
+    // finally, put the vertical scrollbar in the upper right corner
+    GtkWidget *vscrollbar = gtk_vscrollbar_new(GTK_TEXT(m_text)->vadj);
+    gtk_table_attach(GTK_TABLE(m_widget), vscrollbar, 1, 2, 0, 1,
+                     GTK_FILL,
+                     GTK_EXPAND | GTK_FILL | GTK_SHRINK,
+                     0, 0);
+    gtk_widget_show(vscrollbar);
+  }
+  else {
+    // a single-line text control: no need for scrollbars
+    m_widget =
+    m_text = gtk_entry_new();
+  }
 
   wxSize newSize = size;
   if (newSize.x == -1) newSize.x = 80;
@@ -70,15 +105,20 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
 
   PostCreation();
 
+  if ( bMultiLine ) {
+    gtk_widget_realize(m_text);
+    gtk_widget_show(m_text);
+  }
+
   // we want to be notified about text changes
-  gtk_signal_connect(GTK_OBJECT(m_widget), "changed",
+  gtk_signal_connect(GTK_OBJECT(m_text), "changed",
                      GTK_SIGNAL_FUNC(gtk_text_changed_callback),
                      (gpointer)this);
 
   if (!value.IsNull())
   {
     gint tmp = 0;
-    gtk_editable_insert_text( GTK_EDITABLE(m_widget), value, value.Length(), &tmp );
+    gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &tmp );
   };
 
   if (style & wxREADONLY)
@@ -86,7 +126,8 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
   }
   else
   {
-    if (style & wxTE_MULTILINE) gtk_text_set_editable( GTK_TEXT(m_widget), 1 );
+    if ( bMultiLine )
+      gtk_text_set_editable( GTK_TEXT(m_text), 1 );
   };
 
   Show( TRUE );
@@ -99,12 +140,12 @@ wxString wxTextCtrl::GetValue(void) const
   wxString tmp;
   if (m_windowStyle & wxTE_MULTILINE)
   {
-    gint len = gtk_text_get_length( GTK_TEXT(m_widget) );
-    tmp = gtk_editable_get_chars( GTK_EDITABLE(m_widget), 0, len );
+    gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+    tmp = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
   }
   else
   {
-    tmp = gtk_entry_get_text( GTK_ENTRY(m_widget) );
+    tmp = gtk_entry_get_text( GTK_ENTRY(m_text) );
   };
   return tmp;
 };
@@ -115,14 +156,14 @@ void wxTextCtrl::SetValue( const wxString &value )
   if (!value.IsNull()) tmp = value;
   if (m_windowStyle & wxTE_MULTILINE)
   {
-    gint len = gtk_text_get_length( GTK_TEXT(m_widget) );
-    gtk_editable_delete_text( GTK_EDITABLE(m_widget), 0, len );
+    gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+    gtk_editable_delete_text( GTK_EDITABLE(m_text), 0, len );
     len = 0;
-    gtk_editable_insert_text( GTK_EDITABLE(m_widget), tmp, tmp.Length(), &len );
+    gtk_editable_insert_text( GTK_EDITABLE(m_text), tmp, tmp.Length(), &len );
   }
   else
   {
-    gtk_entry_set_text( GTK_ENTRY(m_widget), tmp );
+    gtk_entry_set_text( GTK_ENTRY(m_text), tmp );
   };
 };
 
@@ -132,12 +173,12 @@ void wxTextCtrl::WriteText( const wxString &text )
 
   if (m_windowStyle & wxTE_MULTILINE)
   {
-    gint len = gtk_text_get_length( GTK_TEXT(m_widget) );
-    gtk_editable_insert_text( GTK_EDITABLE(m_widget), text, text.Length(), &len );
+    gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+    gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
   }
   else
   {
-    gtk_entry_append_text( GTK_ENTRY(m_widget), text );
+    gtk_entry_append_text( GTK_ENTRY(m_text), text );
   };
 };
 
@@ -182,32 +223,32 @@ void wxTextCtrl::SetInsertionPoint( long pos )
 {
   int tmp = (int) pos;
   if (m_windowStyle & wxTE_MULTILINE)
-    gtk_text_set_point( GTK_TEXT(m_widget), tmp );
+    gtk_text_set_point( GTK_TEXT(m_text), tmp );
   else
-    gtk_entry_set_position( GTK_ENTRY(m_widget), tmp );
+    gtk_entry_set_position( GTK_ENTRY(m_text), tmp );
 };
 
 void wxTextCtrl::SetInsertionPointEnd(void)
 {
   int pos = 0;
   if (m_windowStyle & wxTE_MULTILINE)
-    pos = gtk_text_get_length( GTK_TEXT(m_widget) );
+    pos = gtk_text_get_length( GTK_TEXT(m_text) );
   else
-    pos = GTK_ENTRY(m_widget)->text_length;
+    pos = GTK_ENTRY(m_text)->text_length;
   SetInsertionPoint( pos-1 );
 };
 
 void wxTextCtrl::SetEditable( bool editable )
 {
   if (m_windowStyle & wxTE_MULTILINE)
-    gtk_text_set_editable( GTK_TEXT(m_widget), editable );
+    gtk_text_set_editable( GTK_TEXT(m_text), editable );
   else
-    gtk_entry_set_editable( GTK_ENTRY(m_widget), editable );
+    gtk_entry_set_editable( GTK_ENTRY(m_text), editable );
 };
 
 void wxTextCtrl::SetSelection( long from, long to )
 {
-  gtk_editable_select_region( GTK_EDITABLE(m_widget), (gint)from, (gint)to );
+  gtk_editable_select_region( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 };
 
 void wxTextCtrl::ShowPosition( long WXUNUSED(pos) )
@@ -217,45 +258,45 @@ void wxTextCtrl::ShowPosition( long WXUNUSED(pos) )
 
 long wxTextCtrl::GetInsertionPoint(void) const
 {
-  return (long) GTK_EDITABLE(m_widget)->current_pos;
+  return (long) GTK_EDITABLE(m_text)->current_pos;
 };
 
 long wxTextCtrl::GetLastPosition(void) const
 {
   int pos = 0;
   if (m_windowStyle & wxTE_MULTILINE)
-    pos = gtk_text_get_length( GTK_TEXT(m_widget) );
+    pos = gtk_text_get_length( GTK_TEXT(m_text) );
   else
-    pos = GTK_ENTRY(m_widget)->text_length;
+    pos = GTK_ENTRY(m_text)->text_length;
   return (long)pos-1;
 };
 
 void wxTextCtrl::Remove( long from, long to )
 {
-  gtk_editable_delete_text( GTK_EDITABLE(m_widget), (gint)from, (gint)to );
+  gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 };
 
 void wxTextCtrl::Replace( long from, long to, const wxString &value )
 {
-  gtk_editable_delete_text( GTK_EDITABLE(m_widget), (gint)from, (gint)to );
+  gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
   if (value.IsNull()) return;
   gint pos = (gint)to;
-  gtk_editable_insert_text( GTK_EDITABLE(m_widget), value, value.Length(), &pos );
+  gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &pos );
 };
 
 void wxTextCtrl::Cut(void)
 {
-  gtk_editable_cut_clipboard( GTK_EDITABLE(m_widget), 0 );
+  gtk_editable_cut_clipboard( GTK_EDITABLE(m_text), 0 );
 };
 
 void wxTextCtrl::Copy(void)
 {
-  gtk_editable_copy_clipboard( GTK_EDITABLE(m_widget), 0 );
+  gtk_editable_copy_clipboard( GTK_EDITABLE(m_text), 0 );
 };
 
 void wxTextCtrl::Paste(void)
 {
-  gtk_editable_paste_clipboard( GTK_EDITABLE(m_widget), 0 );
+  gtk_editable_paste_clipboard( GTK_EDITABLE(m_text), 0 );
 };
 
 void wxTextCtrl::Delete(void)

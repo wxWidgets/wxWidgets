@@ -101,6 +101,8 @@ public:
 
 private:
   bool  m_modified;
+
+  GtkWidget *m_text;
 };
 
 #endif // __GTKTEXTCTRLH__
