@@ -21,13 +21,21 @@
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
-#include "wx/spinbutt.h"
 #endif
 
+#include "wx/spinbutt.h"
 #include "wx/notebook.h"
 #include "wx/imaglist.h"
 
+// XPM doesn't seem to work under Windows at present. Or, wxNotebook images
+// aren't working.
+// Uncomment this line and comment out the next to try it.
+// #if defined(__WXGTK__) || defined(__WXMOTIF__) || (defined(__WXMSW__) && wxUSE_XPM_IN_MSW)
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
+#define USE_XPM
+#endif
+
+#ifdef USE_XPM
 #include "mondrian.xpm"
 #include "icons/choice.xpm"
 #include "icons/combo.xpm"
@@ -143,49 +151,49 @@ bool MyApp::OnInit(void)
 // MyPanel
 //----------------------------------------------------------------------
 
-const  ID_NOTEBOOK          = 1000;
+const int  ID_NOTEBOOK          = 1000;
 
-const  ID_LISTBOX           = 130;
-const  ID_LISTBOX_SEL_NUM   = 131;
-const  ID_LISTBOX_SEL_STR   = 132;
-const  ID_LISTBOX_CLEAR     = 133;
-const  ID_LISTBOX_APPEND    = 134;
-const  ID_LISTBOX_DELETE    = 135;
-const  ID_LISTBOX_FONT      = 136;
-const  ID_LISTBOX_ENABLE    = 137;
+const int  ID_LISTBOX           = 130;
+const int  ID_LISTBOX_SEL_NUM   = 131;
+const int  ID_LISTBOX_SEL_STR   = 132;
+const int  ID_LISTBOX_CLEAR     = 133;
+const int  ID_LISTBOX_APPEND    = 134;
+const int  ID_LISTBOX_DELETE    = 135;
+const int  ID_LISTBOX_FONT      = 136;
+const int  ID_LISTBOX_ENABLE    = 137;
 
-const  ID_CHOICE            = 120;
-const  ID_CHOICE_SEL_NUM    = 121;
-const  ID_CHOICE_SEL_STR    = 122;
-const  ID_CHOICE_CLEAR      = 123;
-const  ID_CHOICE_APPEND     = 124;
-const  ID_CHOICE_DELETE     = 125;
-const  ID_CHOICE_FONT       = 126;
-const  ID_CHOICE_ENABLE     = 127;
+const int  ID_CHOICE            = 120;
+const int  ID_CHOICE_SEL_NUM    = 121;
+const int  ID_CHOICE_SEL_STR    = 122;
+const int  ID_CHOICE_CLEAR      = 123;
+const int  ID_CHOICE_APPEND     = 124;
+const int  ID_CHOICE_DELETE     = 125;
+const int  ID_CHOICE_FONT       = 126;
+const int  ID_CHOICE_ENABLE     = 127;
 
-const  ID_COMBO             = 140;
-const  ID_COMBO_SEL_NUM     = 141;
-const  ID_COMBO_SEL_STR     = 142;
-const  ID_COMBO_CLEAR       = 143;
-const  ID_COMBO_APPEND      = 144;
-const  ID_COMBO_DELETE      = 145;
-const  ID_COMBO_FONT        = 146;
-const  ID_COMBO_ENABLE      = 147;
+const int  ID_COMBO             = 140;
+const int  ID_COMBO_SEL_NUM     = 141;
+const int  ID_COMBO_SEL_STR     = 142;
+const int  ID_COMBO_CLEAR       = 143;
+const int  ID_COMBO_APPEND      = 144;
+const int  ID_COMBO_DELETE      = 145;
+const int  ID_COMBO_FONT        = 146;
+const int  ID_COMBO_ENABLE      = 147;
 
-const  ID_TEXT              = 150;
+const int  ID_TEXT              = 150;
 
-const  ID_RADIOBOX          = 160;
-const  ID_RADIOBOX_SEL_NUM  = 161;
-const  ID_RADIOBOX_SEL_STR  = 162;
-const  ID_RADIOBOX_FONT     = 163;
-const  ID_RADIOBOX_ENABLE   = 164;
+const int  ID_RADIOBOX          = 160;
+const int  ID_RADIOBOX_SEL_NUM  = 161;
+const int  ID_RADIOBOX_SEL_STR  = 162;
+const int  ID_RADIOBOX_FONT     = 163;
+const int  ID_RADIOBOX_ENABLE   = 164;
 
-const  ID_SET_FONT          = 170;
+const int  ID_SET_FONT          = 170;
 
-const  ID_GAUGE             = 180;
-const  ID_SLIDER            = 181;
+const int  ID_GAUGE             = 180;
+const int  ID_SLIDER            = 181;
 
-const  ID_SPIN              = 182;
+const int  ID_SPIN              = 182;
 
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
@@ -244,6 +252,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
     "examples.",
   };
   
+#ifdef USE_XPM
   // image ids and names
   enum
   {
@@ -251,35 +260,30 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   };
   
   // fill the image list
-#ifdef __WXMSW__
-  const char *aIconNames[] =
-  {
-    "list.xpm", "choice.xpm", "combo.xpm", "text.xpm", "radio.xpm", "gauge.txt"
-  };
-  
-  wxASSERT( WXSIZEOF(aIconNames) == Image_Max ); // keep in sync
+  wxImageList *imagelist = new wxImageList(32, 32);
 
-  wxString strIconDir = "icons/";
-  
-  wxImageList *imagelist = new wxImageList(32, 32);
-  for ( size_t n = 0; n < Image_Max; n++ ) 
-  {
-    imagelist->Add(wxBitmap(strIconDir + aIconNames[n]));
-  }
-#else
-  wxImageList *imagelist = new wxImageList(32, 32);
-  
   imagelist-> Add( wxBitmap( list_xpm ));
   imagelist-> Add( wxBitmap( choice_xpm ));
   imagelist-> Add( wxBitmap( combo_xpm ));
   imagelist-> Add( wxBitmap( text_xpm ));
   imagelist-> Add( wxBitmap( radio_xpm ));
   imagelist-> Add( wxBitmap( gauge_xpm ));
+  m_notebook->SetImageList(imagelist);
+#else
+
+// No images for now
+#define    Image_List -1
+#define    Image_Choice -1
+#define    Image_Combo -1
+#define    Image_Text -1
+#define    Image_Radio -1
+#define    Image_Gauge -1
+#define    Image_Max -1
+
 #endif
 
   wxButton *button = (wxButton*)NULL;
 
-  m_notebook->SetImageList(imagelist);
   m_notebook->SetBackgroundColour("cadet blue");
 
   wxPanel *panel = (wxPanel*) NULL;

@@ -256,6 +256,8 @@ wxLog *wxLog::GetActiveTarget()
         // ask the application to create a log target for us
         if ( wxTheApp != NULL )
           ms_pLogger = wxTheApp->CreateLogTarget();
+        else
+          ms_pLogger = new wxLogStderr;
       #endif
 
       s_bInGetActiveTarget = FALSE;

@@ -331,7 +331,7 @@ bool wxGenericGrid::CreateGrid(int nRows, int nCols, wxString **cellValues, shor
   m_hScrollBar->SetObjectLength(objectSizeX);
   m_hScrollBar->SetPageSize(pageSizeX);
 */
-  m_hScrollBar->SetScrollbar(m_hScrollBar->GetPosition(), pageSizeX, objectSizeX, viewLengthX);
+  m_hScrollBar->SetScrollbar(m_hScrollBar->GetThumbPosition(), pageSizeX, objectSizeX, viewLengthX);
 
   int objectSizeY = m_totalRows;
   int pageSizeY = 1;
@@ -343,7 +343,7 @@ bool wxGenericGrid::CreateGrid(int nRows, int nCols, wxString **cellValues, shor
   m_vScrollBar->SetPageSize(pageSizeY);
 */
 
-  m_vScrollBar->SetScrollbar(m_vScrollBar->GetPosition(), pageSizeY, objectSizeY, viewLengthY);
+  m_vScrollBar->SetScrollbar(m_vScrollBar->GetThumbPosition(), pageSizeY, objectSizeY, viewLengthY);
 
   AdjustScrollbars();
 
@@ -1027,7 +1027,7 @@ void wxGenericGrid::AdjustScrollbars(void)
   if (m_hScrollBar)
   {
     int nCols = GetCols();
-    m_hScrollBar->SetScrollbar(m_hScrollBar->GetPosition(), wxMax(noHorizSteps, 1), (noHorizSteps == 0) ? 1 : nCols, wxMax(noHorizSteps, 1));
+    m_hScrollBar->SetScrollbar(m_hScrollBar->GetThumbPosition(), wxMax(noHorizSteps, 1), (noHorizSteps == 0) ? 1 : nCols, wxMax(noHorizSteps, 1));
 
     m_hScrollBar->SetSize(m_leftOfSheet, ch - m_scrollWidth -2,
       cw - vertScrollBarWidth - m_leftOfSheet, m_scrollWidth);
@@ -1037,7 +1037,7 @@ void wxGenericGrid::AdjustScrollbars(void)
   {
     int nRows = GetRows();
 
-    m_vScrollBar->SetScrollbar(m_vScrollBar->GetPosition(), wxMax(noVertSteps, 1), (noVertSteps == 0) ? 1 : nRows, wxMax(noVertSteps, 1));
+    m_vScrollBar->SetScrollbar(m_vScrollBar->GetThumbPosition(), wxMax(noVertSteps, 1), (noVertSteps == 0) ? 1 : nRows, wxMax(noVertSteps, 1));
     m_vScrollBar->SetSize(cw - m_scrollWidth, m_topOfSheet,
        m_scrollWidth, ch - m_topOfSheet - horizScrollBarHeight);
   }

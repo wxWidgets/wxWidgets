@@ -45,19 +45,19 @@ public:
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxScrollBarNameStr);
 
-  int GetPosition(void) const ;
+  int GetThumbPosition(void) const ;
   inline int GetThumbSize() const { return m_pageSize; }
   inline int GetPageSize() const { return m_viewSize; }
   inline int GetRange() const { return m_objectSize; }
 
-  virtual void SetPosition(int viewStart);
+  virtual void SetThumbPosition(int viewStart);
   virtual void SetScrollbar(int position, int thumbSize, int range, int pageSize,
     bool refresh = TRUE);
 
 #if WXWIN_COMPATIBILITY
   // Backward compatibility
-  inline int GetValue(void) const { return GetPosition(); }
-  inline void SetValue(int viewStart) { SetPosition(viewStart); }
+  inline int GetValue(void) const { return GetThumbPosition(); }
+  inline void SetValue(int viewStart) { SetThumbPosition(viewStart); }
   void GetValues(int *viewStart, int *viewLength, int *objectLength,
                  int *pageLength) const ;
   inline int GetViewLength() const { return m_viewSize; }

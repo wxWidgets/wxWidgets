@@ -54,14 +54,29 @@ public:
            const wxString& name = wxFrameNameStr);
 
   virtual bool Destroy();
+
   void SetClientSize(int width, int height);
+  void SetClientSize(const wxSize& size) { wxWindow::SetClientSize(size); }
+
   void GetClientSize(int *width, int *height) const;
+  wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
 
   void GetSize(int *width, int *height) const ;
+  wxSize GetSize() const { return wxWindow::GetSize(); }
+
   void GetPosition(int *x, int *y) const ;
+  wxPoint GetPosition() const { return wxWindow::GetPosition(); }
+
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+  virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+
   void ClientToScreen(int *x, int *y) const;
+  wxPoint ClientToScreen(const wxPoint& pt) const { return wxWindow::ClientToScreen(pt); }
+
   void ScreenToClient(int *x, int *y) const;
+  wxPoint ScreenToClient(const wxPoint& pt) const { return wxWindow::ScreenToClient(pt); }
 
   virtual bool OnClose();
 

@@ -48,12 +48,12 @@ wxScrollBar::~wxScrollBar()
 {
 }
 
-void wxScrollBar::SetPosition(int viewStart)
+void wxScrollBar::SetThumbPosition(int viewStart)
 {
     // TODO
 }
 
-int wxScrollBar::GetPosition() const
+int wxScrollBar::GetThumbPosition() const
 {
     // TODO
     return 0;

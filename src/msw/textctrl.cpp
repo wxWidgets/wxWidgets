@@ -937,6 +937,22 @@ WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
+    // Fix by Marcel Rasche to allow Alt-Ctrl insertion of special characters
+  switch(event.KeyCode())
+  {
+  case '{':
+  case '}':
+  case '[':
+  case ']':
+  case '|':
+  case '~':
+  case '\\':
+   {
+    char c=(char)event.KeyCode();
+    *this << c;
+   }
+   break;
+  }
   if ( (event.KeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
   {
     wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);

@@ -38,7 +38,7 @@
 
 #if wxUSE_XPM_IN_MSW
 #define FOR_MSW 1
-#include "../../contrib/wxxpm/libxpm.34b/lib/xpm34.h"
+#include "../src/xpm/xpm34.h"
 #endif
 
 #include "wx/msw/dib.h"
@@ -170,7 +170,7 @@ wxBitmap::wxBitmap(const wxString& filename, long type)
 
 #if wxUSE_XPM_IN_MSW
 // Create from data
-wxBitmap::wxBitmap(const char **data, wxItem *WXUNUSED(anItem))
+wxBitmap::wxBitmap(char **data, wxItem *WXUNUSED(anItem))
 {
   (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }

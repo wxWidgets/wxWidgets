@@ -902,11 +902,15 @@ int wxDebugContext::Check(bool checkAll)
 
 // Count the number of non-wxDebugContext-related objects
 // that are outstanding
-int wxDebugContext::CountObjectsLeft(void)
+int wxDebugContext::CountObjectsLeft(bool sinceCheckpoint)
 {
   int n = 0;
-    
-  wxMemStruct *from = wxDebugContext::GetHead ();
+
+  wxMemStruct *from = NULL;
+  if (sinceCheckpoint && checkPoint)
+    from = checkPoint->m_next;
+  if (from == (wxMemStruct*) NULL)
+    from = wxDebugContext::GetHead () ;
 
   for (wxMemStruct * st = from; st != 0; st = st->m_next)
   {

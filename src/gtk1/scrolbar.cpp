@@ -152,7 +152,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-int wxScrollBar::GetPosition(void) const
+int wxScrollBar::GetThumbPosition(void) const
 {
   return (int)(m_adjust->value+0.5);
 }
@@ -172,7 +172,7 @@ int wxScrollBar::GetRange() const
   return (int)(m_adjust->upper+0.5);
 }
 
-void wxScrollBar::SetPosition( int viewStart )
+void wxScrollBar::SetThumbPosition( int viewStart )
 {
   if (m_isScrolling) return;
   
@@ -196,7 +196,7 @@ void wxScrollBar::SetScrollbar( int position, int thumbSize, int range, int page
       (fabs(fthumb-m_adjust->page_size) < 0.2) &&
       (fabs(fpage-m_adjust->page_increment) < 0.2))
   {
-    SetPosition( position );
+    SetThumbPosition( position );
     return;
   }
   
@@ -215,12 +215,12 @@ void wxScrollBar::SetScrollbar( int position, int thumbSize, int range, int page
 // Backward compatibility
 int wxScrollBar::GetValue(void) const
 {
-  return GetPosition();
+  return GetThumbPosition();
 }
 
 void wxScrollBar::SetValue( int viewStart )
 {
-  SetPosition( viewStart );
+  SetThumbPosition( viewStart );
 }
 
 void wxScrollBar::GetValues( int *viewStart, int *viewLength, int *objectLength, int *pageLength ) const

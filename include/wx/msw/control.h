@@ -32,6 +32,8 @@ public:
    virtual void ProcessCommand(wxCommandEvent& event); // Calls the callback and
                                                                  // appropriate event handlers
    virtual void SetClientSize(int width, int height);
+   virtual void SetClientSize(const wxSize& sz) { wxWindow::SetClientSize(sz); }
+
    virtual void SetLabel(const wxString& label);
    virtual wxString GetLabel(void) const ;
 

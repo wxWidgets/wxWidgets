@@ -51,9 +51,18 @@ public:
 
   virtual int GetValue(void) const ;
   virtual void SetValue(int);
+
   void GetSize(int *x, int *y) const ;
+  wxSize GetSize() const { return wxWindow::GetSize(); }
+
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+  void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+
   void GetPosition(int *x, int *y) const ;
+  wxPoint GetPosition() const { return wxWindow::GetPosition(); }
+
   bool Show(bool show);
 
   void SetRange(int minValue, int maxValue);

@@ -68,7 +68,9 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
   wxSize GetToolSize(void) const;
 
   wxSize GetMaxSize(void) const;
+
   void GetSize(int *w, int *y) const;
+  wxSize GetSize() const { return wxWindow::GetSize(); }
 
   virtual bool GetToolState(int toolIndex) const;
 

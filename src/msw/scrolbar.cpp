@@ -196,7 +196,7 @@ void wxScrollBar::MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control)
 	MSWOnVScroll(wParam, pos, control);
 }
 
-void wxScrollBar::SetPosition(int viewStart)
+void wxScrollBar::SetThumbPosition(int viewStart)
 {
 #if defined(__WIN95__)
   SCROLLINFO info;
@@ -212,7 +212,7 @@ void wxScrollBar::SetPosition(int viewStart)
 #endif
 }
 
-int wxScrollBar::GetPosition(void) const
+int wxScrollBar::GetThumbPosition(void) const
 {
     return ::GetScrollPos((HWND)m_hWnd, SB_CTL);
 }

@@ -48,6 +48,10 @@ class WXDLLEXPORT wxStaticBox: public wxControl
   virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
 
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+  void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+
   void SetLabel(const wxString& label);
   wxString GetLabel() const;
 

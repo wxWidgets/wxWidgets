@@ -35,6 +35,14 @@ src/msw/ctl3d/borland/*.*
 src/msw/ole/*.cpp
 src/msw/*.prj
 
+src/xpm/*.c
+src/xpm/*.h
+src/xpm/changes
+src/xpm/readme
+src/xpm/readme.msw
+src/xpm/copyrigh.t
+src/xpm/files
+
 include/wx/msw/*.h
 include/wx/msw/*.rc
 include/wx/msw/ctl3d/*.h

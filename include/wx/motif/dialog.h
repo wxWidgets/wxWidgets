@@ -61,7 +61,13 @@ public:
 
   virtual bool Destroy();
   void SetClientSize(int width, int height);
+  void SetClientSize(const wxSize& size) { wxWindow::SetClientSize(size); }
+
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+  virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+
   bool Show(bool show);
   void Iconize(bool iconize);
   void Raise();

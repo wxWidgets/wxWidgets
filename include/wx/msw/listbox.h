@@ -101,6 +101,9 @@ class WXDLLEXPORT wxListBox: public wxControl
   virtual bool Selected(int n) const ;
   virtual wxString GetString(int n) const ;
   virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+  void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
 
   // Set the specified item at the first visible item
   // or scroll to max range.

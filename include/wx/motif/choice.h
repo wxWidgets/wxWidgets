@@ -55,7 +55,12 @@ class WXDLLEXPORT wxChoice: public wxControl
   virtual void SetSelection(int n);
   virtual int FindString(const wxString& s) const;
   virtual wxString GetString(int n) const ;
+
   virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+  virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+
   virtual wxString GetStringSelection() const ;
   virtual bool SetStringSelection(const wxString& sel);
 

@@ -55,7 +55,6 @@ src/zlib/*.mms
 include/wx/*.h
 include/wx/*.cpp
 include/wx/protocol/*.h
-include/wx/*.cpp
 include/wx/wx_setup.vms
 include/wx/common/*.h
 include/wx/generic/*.h

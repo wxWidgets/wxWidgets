@@ -102,7 +102,7 @@ wxScrollBar::~wxScrollBar()
 {
 }
 
-void wxScrollBar::SetPosition(int pos)
+void wxScrollBar::SetThumbPosition(int pos)
 {
 	if (m_mainWidget)
 	{
@@ -112,7 +112,7 @@ void wxScrollBar::SetPosition(int pos)
 	}
 }
 
-int wxScrollBar::GetPosition() const
+int wxScrollBar::GetThumbPosition() const
 {
 	if (m_mainWidget)
 	{

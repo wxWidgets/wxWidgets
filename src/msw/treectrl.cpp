@@ -490,7 +490,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
 
     tvIns.item.mask = mask;
 
-    HTREEITEM id = TreeView_InsertItem(wxhWnd, &tvIns);
+    HTREEITEM id = (HTREEITEM) TreeView_InsertItem(wxhWnd, &tvIns);
     if ( id == 0 )
     {
         wxLogLastError("TreeView_InsertItem");
@@ -738,6 +738,12 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item,
         // TODO: use TreeView_SortChildrenCB
         wxFAIL_MSG("wxTreeCtrl::SortChildren not implemented");
     }
+}
+
+// TODO
+size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recursively)
+{
+    return 0;
 }
 
 // ----------------------------------------------------------------------------

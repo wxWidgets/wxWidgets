@@ -251,7 +251,7 @@ public:
 
     // Count the number of non-wxDebugContext-related objects
     // that are outstanding
-    static int CountObjectsLeft(void);
+    static int CountObjectsLeft(bool sinceCheckpoint = FALSE);
 
 private:
     // Store these here to allow access to the list without

@@ -32,21 +32,9 @@ DUMMYOBJ=dummy.obj
 # This one overrides the others, to be consistent with the settings in wx_setup.h
 MINIMAL_WXWINDOWS_SETUP=0
 
-USE_XPM_IN_MSW=0
-
-!if "$(MINIMAL_WXWINDOWS_SETUP)" == "1"
-USE_XPM_IN_MSW=0
-!endif
-
 PERIPH_LIBS=
 PERIPH_TARGET=
 PERIPH_CLEAN_TARGET=
-
-!if "$(USE_XPM_IN_MSW)" == "1"
-PERIPH_LIBS=$(WXDIR)\contrib\wxxpm\xpm.lib $(PERIPH_LIBS)
-PERIPH_TARGET=xpm $(PERIPH_TARGET)
-PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
-!endif
 
 # These are absolute paths, so that the compiler
 # generates correct __FILE__ symbols for debugging.
@@ -54,6 +42,7 @@ PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 # error to load that file.
 GENDIR=$(WXDIR)\src\generic
 COMMDIR=$(WXDIR)\src\common
+XPMDIR=$(WXDIR)\src\xpm
 OLEDIR=ole
 MSWDIR=$(WXDIR)\src\msw
 
@@ -232,9 +221,20 @@ MSWOBJS = \
   $(OLEDIR)\oleutils.obj \
   $(OLEDIR)\uuid.obj
 
+XPMOBJECTS = 	$(XPMDIR)\crbuffri.obj\
+		$(XPMDIR)\crdatfri.obj\
+		$(XPMDIR)\create.obj $(XPMDIR)\crifrbuf.obj\
+		$(XPMDIR)\crifrdat.obj\
+		$(XPMDIR)\data.obj\
+		$(XPMDIR)\hashtab.obj $(XPMDIR)\misc.obj\
+		$(XPMDIR)\parse.obj $(XPMDIR)\rdftodat.obj\
+		$(XPMDIR)\rdftoi.obj\
+		$(XPMDIR)\rgb.obj $(XPMDIR)\scan.obj\
+		$(XPMDIR)\simx.obj $(XPMDIR)\wrffrdat.obj\
+		$(XPMDIR)\wrffrp.obj $(XPMDIR)\wrffri.obj
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) # $(XPMOBJECTS)
 
 # Normal, static library
 all:    $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib $(LIBTARGET)
@@ -1142,10 +1142,117 @@ $(GENDIR)/textdlgg.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
-#test: $(DUMMYOBJ) $(COMMDIR)/string.obj
-
-
 $(OBJECTS):	$(WXDIR)/include/wx/setup.h
+
+$(XPMDIR)\crbuffri.obj: $(XPMDIR)\crbuffri.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\crbuffrp.obj: $(XPMDIR)\crbuffrp.c
+	 	cl @<<
+$(CPPFLAGS2) /c  $*.c /Fo$@
+<<
+
+$(XPMDIR)\crdatfri.obj: $(XPMDIR)\crdatfri.c
+	 	cl @<<
+$(CPPFLAGS2) /c  $*.c /Fo$@
+<<
+
+$(XPMDIR)\crdatfrp.obj: $(XPMDIR)\crdatfrp.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\create.obj: $(XPMDIR)\create.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\crifrbuf.obj: $(XPMDIR)\crifrbuf.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\crifrdat.obj: $(XPMDIR)\crifrdat.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\crpfrbuf.obj: $(XPMDIR)\crpfrbuf.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\crpfrdat.obj: $(XPMDIR)\crpfrdat.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\data.obj: $(XPMDIR)\data.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\hashtab.obj: $(XPMDIR)\hashtab.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\misc.obj: $(XPMDIR)\misc.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\parse.obj: $(XPMDIR)\parse.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\rdftodat.obj: $(XPMDIR)\rdftodat.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\rdftoi.obj: $(XPMDIR)\rdftoi.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\rdftop.obj: $(XPMDIR)\rdftop.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\rgb.obj: $(XPMDIR)\rgb.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\scan.obj: $(XPMDIR)\scan.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\simx.obj: $(XPMDIR)\simx.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\wrffrdat.obj: $(XPMDIR)\wrffrdat.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\wrffri.obj: $(XPMDIR)\wrffri.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
+
+$(XPMDIR)\wrffrp.obj: $(XPMDIR)\wrffrp.c
+	 	cl @<<
+$(CPPFLAGS2) /c $*.c /Fo$@
+<<
 
 # Peripheral components
 

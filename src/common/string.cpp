@@ -41,6 +41,12 @@
 #include <string.h>
 #include <stdlib.h>
 
+// This probably isn't right, what should it be Vadim?
+// Otherwise we end up with no wxVsprintf defined.
+#ifdef __WXMOTIF__
+#define HAVE_VPRINTF
+#endif
+
 #ifdef wxUSE_WCSRTOMBS
   #include <wchar.h>    // for wcsrtombs(), see comments where it's used
 #endif // GNU

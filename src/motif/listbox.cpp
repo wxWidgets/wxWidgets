@@ -171,8 +171,8 @@ void wxListBox::Delete(int N)
   if (node) m_clientDataList.DeleteNode(node);    // if existed then delete from list
   node = m_clientDataList.First();                // we now have to adjust all keys that
   while (node)                                  // are >=N+1
-   { if (node->key.integer >= (long)(N+1))      // very ugly C++ wise but no other way 
-       node->key.integer--;                     // to look at or change key value
+   { if (node->GetKeyInteger() >= (long)(N+1))
+       node->SetKeyInteger(node->GetKeyInteger() - 1);
      node = node->Next();
    }
 

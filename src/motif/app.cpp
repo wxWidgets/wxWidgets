@@ -67,16 +67,6 @@ bool wxApp::Initialize()
     wxBuffer = new char[BUFSIZ + 512];
 #endif
 
-/* No longer used
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-
-    streambuf* sBuf = new wxDebugStreamBuf;
-    ostream* oStr = new ostream(sBuf) ;
-    wxDebugContext::SetStream(oStr, sBuf);
-
-#endif
-*/
-  
     wxClassInfo::InitializeClasses();
 
     wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
@@ -161,13 +151,12 @@ void wxApp::CleanUp()
     // blocks that aren't part of the wxDebugContext itself,
     // as a special case. Then when dumping we need to ignore
     // wxDebugContext, too.
-    if (wxDebugContext::CountObjectsLeft() > 0)
+    if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
     {
       wxLogDebug("There were memory leaks.\n");
       wxDebugContext::Dump();
       wxDebugContext::PrintStatistics();
     }
-//    wxDebugContext::SetStream(NULL, NULL);
 #endif
   
     // do it as the very last thing because everything else can log messages
@@ -178,8 +167,19 @@ void wxApp::CleanUp()
 
 int wxEntry( int argc, char *argv[] )
 {
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+    // This seems to be necessary since there are 'rogue'
+    // objects present at this point (perhaps global objects?)
+    // Setting a checkpoint will ignore them as far as the
+    // memory checking facility is concerned.
+    // Of course you may argue that memory allocated in globals should be
+    // checked, but this is a reasonable compromise.
+    wxDebugContext::SetCheckpoint();
+#endif
+
     if (!wxApp::Initialize())
       return FALSE;
+
     if (!wxTheApp)
     {
       if (!wxApp::GetInitializerFunction())
@@ -210,11 +210,11 @@ int wxEntry( int argc, char *argv[] )
     // into wxTopLevelWindows by getting created
     // in OnInit().
   
-    if (!wxTheApp->OnInit()) return 0;
-
     int retValue = 0;
-  
-    if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
+    if (wxTheApp->OnInit())
+    {
+      if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
+    }
 
     // flush the logged messages if any
     wxLog *pLog = wxLog::GetActiveTarget();
@@ -233,7 +233,6 @@ int wxEntry( int argc, char *argv[] )
     wxTheApp->DeletePendingObjects();
   
     wxTheApp->OnExit();
-
   
     wxApp::CleanUp();
 

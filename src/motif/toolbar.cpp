@@ -616,7 +616,7 @@ int wxToolBar::FindIndexForWidget(WXWidget w)
     {
         WXWidget widget = (WXWidget) node->Data();
         if (widget == w)
-            return (int) node->key.integer;
+            return (int) node->GetKeyInteger();
         node = node->Next();
     }
     return -1;

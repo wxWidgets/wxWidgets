@@ -58,11 +58,11 @@ class wxScrollBar: public wxControl
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxScrollBarNameStr );
     ~wxScrollBar(void);
-    int GetPosition(void) const;
+    int GetThumbPosition(void) const;
     int GetThumbSize() const;
     int GetPageSize() const;
     int GetRange() const;
-    virtual void SetPosition( int viewStart );
+    virtual void SetThumbPosition( int viewStart );
     virtual void SetScrollbar( int position, int thumbSize, int range, int pageSize,
       bool refresh = TRUE );
 

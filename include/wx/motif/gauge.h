@@ -57,6 +57,9 @@ class WXDLLEXPORT wxGauge: public wxControl
   int GetValue() const ;
 
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+  virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
 
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {} ;
 

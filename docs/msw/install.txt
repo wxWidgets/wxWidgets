@@ -26,11 +26,13 @@ WXWIN environment variable to point to this directory.
 Compilation
 -----------
 
-At present, wxWindows compiles with VC++ 1.5, VC++ 4.0, VC++ 5.0,
-BC++ 4.5/5.0, Gnu-Win32 b19, and Mingw32.
+At present, wxWindows compiles with VC++ 4.0/5.0/6.0,
+BC++ 4.5/5.0, Gnu-Win32 b19/b20, and Mingw32. It may compile
+with 16-bit compilers (BC++ and VC++ 1.5) but this hasn't
+been tested lately.
 
-Visual C++ 4.0/5.0 compilation
-------------------------------
+Visual C++ 4.0/5.0/6.0 compilation
+----------------------------------
 
 1. Change directory to wx\src\msw. Type 'nmake -f makefile.nt' to
    make the wxWindows core library.
@@ -58,7 +60,7 @@ Borland C++ 4.5/5.0 compilation
    minimal, docview, mdi. The utils makefile does not yet work.
 
 Gnu-Win32 b19/b20/Mingw32 compilation
----------------------------------
+-------------------------------------
 
 wxWindows 2.0 supports Gnu-Win32/Cygwin b19, b20, Mingw32, and Mingw32/EGCS.
 
@@ -91,6 +93,9 @@ Here are the steps required:
   to OPTIONS for Mingw32, or removing it for Cygnus Gnu-Win32.
   For Mingw32/EGCS, add both __MINGW32__ and __EGCS__.
 
+- Mingw32 may not support winsock.h, so comment out
+  socket-related files in src/msw/makefile.g95.
+
 - Use the makefile.g95 files for compiling wxWindows and samples,
   e.g.:
   > cd c:\wx\src\msw
@@ -101,7 +106,8 @@ Here are the steps required:
 - Use the 'strip' command to reduce executable size.
 
 - With Cygnus Gnu-Win32, you can invoke gdb --nw myfile.exe to
-  debug an executable.
+  debug an executable. If there are memory leaks, they will be
+  flagged when the program quits.
 
 - If using GnuWin32 b18, you will need to copy windres.exe
   from e.g. the Mingw32 distribution, to a directory in your path.

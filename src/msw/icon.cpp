@@ -34,7 +34,7 @@
 
 #if wxUSE_XPM_IN_MSW
 #define FOR_MSW 1
-#include "..\..\contrib\wxxpm\libxpm.34b\lib\xpm34.h"
+#include "../src/xpm/xpm34.h"
 #endif
 
 #if wxUSE_RESOURCE_LOADING_IN_MSW

@@ -1320,6 +1320,16 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRectangle *rect)
     node = node->Next();
 
   }
+
+  // Delete the update rects
+  node = updateRects.First();
+  while (node)
+  {
+    wxRect* rect = (wxRect*) node->Data();
+    delete rect;
+    node = node->Next();
+  }
+
 }
 
 void wxWindow::OnChar(wxKeyEvent& event)
@@ -1425,6 +1435,13 @@ void wxWindow::RemoveChild(wxWindow *child)
     if (GetChildren())
         GetChildren()->DeleteObject(child);
     child->m_windowParent = NULL;
+}
+
+// Reparents this window to have the new parent.
+bool wxWindow::Reparent(wxWindow* WXUNUSED(parent))
+{
+    // For now, we indicate that this isn't implemented.
+    return FALSE;
 }
 
 void wxWindow::DestroyChildren()

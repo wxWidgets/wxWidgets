@@ -768,6 +768,8 @@ wxVariant::wxVariant(const wxVariant& variant)
         m_data = (wxVariantData*) variant.GetData()->GetClassInfo()->CreateObject();
         variant.m_data->Copy(*m_data);
     }
+    else
+        m_data = (wxVariantData*) NULL;
 }
 
 wxVariant::wxVariant(wxVariantData* data) // User-defined data
@@ -804,7 +806,8 @@ void wxVariant::operator= (const wxVariant& variant)
             delete m_data;
         m_data = (wxVariantData*) variant.GetData()->GetClassInfo()->CreateObject();
     }
-    GetData()->Copy(* variant.GetData());
+//    GetData()->Copy(* variant.GetData());
+    variant.GetData()->Copy(* GetData());
 }
 
 // Assignment using data, e.g.

@@ -49,6 +49,7 @@ EXTRAOBJS=
 
 GENDIR=../generic
 COMMDIR=../common
+XPMDIR=../xpm
 OLEDIR=ole
 MSWDIR=.
 
@@ -123,21 +124,22 @@ COMMONOBJS = \
   $(COMMDIR)/datstrm.$(OBJSUFF) \
   $(COMMDIR)/objstrm.$(OBJSUFF) \
   $(COMMDIR)/extended.$(OBJSUFF) \
-  $(COMMDIR)/socket.$(OBJSUFF) \
-  $(COMMDIR)/sckaddr.$(OBJSUFF) \
-  $(COMMDIR)/sckfile.$(OBJSUFF) \
-  $(COMMDIR)/sckipc.$(OBJSUFF) \
-  $(COMMDIR)/sckstrm.$(OBJSUFF) \
-  $(COMMDIR)/protocol.$(OBJSUFF) \
-  $(COMMDIR)/http.$(OBJSUFF) \
-  $(COMMDIR)/ftp.$(OBJSUFF) \
-  $(COMMDIR)/url.$(OBJSUFF) \
   $(COMMDIR)/wincmn.$(OBJSUFF)
 
 #  $(COMMDIR)/postscrp.$(OBJSUFF) \
 
-# NOTE: if the socket-related files above fail with a syntax error in Sockets.h,
-# remove the files (probably all GnuWin32 releases < b20).
+# NOTE: if the socket-related files fail with a syntax error in Sockets.h,
+# remove the files (probably all GnuWin32 releases < b20). Cygwin b20 is OK,
+# Mingw32 may still have problems.
+#  $(COMMDIR)/socket.$(OBJSUFF) \
+#  $(COMMDIR)/sckaddr.$(OBJSUFF) \
+#  $(COMMDIR)/sckfile.$(OBJSUFF) \
+#  $(COMMDIR)/sckipc.$(OBJSUFF) \
+#  $(COMMDIR)/sckstrm.$(OBJSUFF) \
+#  $(COMMDIR)/protocol.$(OBJSUFF) \
+#  $(COMMDIR)/http.$(OBJSUFF) \
+#  $(COMMDIR)/ftp.$(OBJSUFF) \
+#  $(COMMDIR)/url.$(OBJSUFF) \
 
 MSWOBJS = \
   accel.$(OBJSUFF) \
@@ -228,8 +230,19 @@ MSWOBJS = \
 #  $(OLEDIR)/oleutils.$(OBJSUFF) \
 #  $(OLEDIR)/uuid.$(OBJSUFF)
 
+XPMOBJECTS = 	$(XPMDIR)/crbuffri.o\
+		$(XPMDIR)/crdatfri.o\
+		$(XPMDIR)/create.o $(XPMDIR)/crifrbuf.o\
+		$(XPMDIR)/crifrdat.o\
+		$(XPMDIR)/data.o\
+		$(XPMDIR)/hashtab.o $(XPMDIR)/misc.o\
+		$(XPMDIR)/parse.o $(XPMDIR)/rdftodat.o\
+		$(XPMDIR)/rdftoi.o\
+		$(XPMDIR)/rgb.o $(XPMDIR)/scan.o\
+		$(XPMDIR)/simx.o $(XPMDIR)/wrffrdat.o\
+		$(XPMDIR)/wrffrp.o $(XPMDIR)/wrffri.o
 
-OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS)
+OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) # $(XPMOBJECTS)
 
 all:    $(OBJECTS) $(WXLIB)
 

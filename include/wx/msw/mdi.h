@@ -69,6 +69,7 @@ class WXDLLEXPORT wxMDIParentFrame: public wxFrame
   // and status bar size have been subtracted. If you want to manage your own
   // toolbar(s), don't call SetToolBar.
   void GetClientSize(int *width, int *height) const;
+  wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
 
   // Get the active MDI child window (Windows only)
   wxMDIChildFrame *GetActiveChild(void) const ;
@@ -146,8 +147,12 @@ class WXDLLEXPORT wxMDIChildFrame: public wxFrame
 
   // Set menu bar
   void SetMenuBar(wxMenuBar *menu_bar);
+
   void SetClientSize(int width, int height);
+  void SetClientSize(const wxSize& sz) { wxWindow::SetClientSize(sz); }
+
   void GetPosition(int *x, int *y) const ;
+  wxPoint GetPosition() const { return wxWindow::GetPosition(); }
 
   // MDI operations
   virtual void Maximize(void);

@@ -43,6 +43,10 @@ class WXDLLEXPORT wxButton: public wxControl
            const wxString& name = wxButtonNameStr);
 
   virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+  void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+
   virtual void SetDefault(void);
   virtual void SetLabel(const wxString& label);
   virtual wxString GetLabel(void) const ;

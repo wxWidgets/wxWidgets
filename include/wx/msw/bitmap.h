@@ -133,7 +133,7 @@ public:
 #if wxUSE_XPM_IN_MSW
   class wxItem;
   // Initialize with XPM data
-  wxBitmap(const char **data, wxItem *anItem = NULL);
+  wxBitmap(char **data, wxItem *anItem = NULL);
 #endif
 
   // Load a file or resource

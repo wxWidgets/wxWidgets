@@ -144,6 +144,10 @@ public:
     const char *GetKeyString() const { return m_key.string; }
     long GetKeyInteger() const { return m_key.integer; }
 
+    // Necessary for some existing code
+    void SetKeyString(char* s) { m_key.string = s; }
+    void SetKeyInteger(long i) { m_key.integer = i; }
+
 #ifdef wxLIST_COMPATIBILITY
     // compatibility methods
     wxNode *Next() const { return (wxNode *)GetNext(); }

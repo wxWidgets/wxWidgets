@@ -63,8 +63,16 @@ public:
 
   virtual bool Destroy(void);
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+  void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+
   void SetClientSize(int width, int height);
+  void SetClientSize(const wxSize& sz) { wxWindow::SetClientSize(sz); }
+
   void GetPosition(int *x, int *y) const;
+  wxPoint GetPosition() const { return wxWindow::GetPosition(); }
+
   bool Show(bool show);
   bool IsShown(void) const ;
   void Iconize(bool iconize);

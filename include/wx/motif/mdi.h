@@ -72,6 +72,7 @@ public:
   // and status bar size have been subtracted. If you want to manage your own
   // toolbar(s), don't call SetToolBar.
   void GetClientSize(int *width, int *height) const;
+  wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
 
   // Get the active MDI child window
   wxMDIChildFrame *GetActiveChild() const ;
@@ -143,11 +144,23 @@ public:
   // Set menu bar
   void SetMenuBar(wxMenuBar *menu_bar);
   void SetTitle(const wxString& title);
+
   void SetClientSize(int width, int height);
+  void SetClientSize(const wxSize& size) { wxWindow::SetClientSize(size); }
+
   void GetClientSize(int *width, int *height) const;
+  wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
+
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+  virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+
   void GetSize(int *width, int *height) const;
+  wxSize GetSize() const { return wxWindow::GetSize(); }
+
   void GetPosition(int *x, int *y) const ;
+  wxPoint GetPosition() const { return wxWindow::GetPosition(); }
 
   // Set icon
   virtual void SetIcon(const wxIcon& icon);
@@ -206,11 +219,21 @@ class WXDLLEXPORT wxMDIClientWindow: public wxNotebook
   ~wxMDIClientWindow();
 
    void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+   void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+   void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+
    void SetClientSize(int width, int height);
+   void SetClientSize(const wxSize& size) { wxWindow::SetClientSize(size); }
+
    void GetClientSize(int *width, int *height) const;
+   wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
 
    void GetSize(int *width, int *height) const ;
+   wxSize GetSize() const { return wxWindow::GetSize(); }
+
    void GetPosition(int *x, int *y) const ;
+   wxPoint GetPosition() const { return wxWindow::GetPosition(); }
 
   // Note: this is virtual, to allow overridden behaviour.
   virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);

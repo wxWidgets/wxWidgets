@@ -4342,6 +4342,35 @@ bool wxWindow::IsExposed(const wxRect& rect) const
     return (m_updateRegion.Contains(rect) != wxOutRegion);
 }
 
+// Set this window to be the child of 'parent'.
+bool wxWindow::Reparent(wxWindow *parent)
+{
+    if (parent == GetParent())
+        return TRUE;
+
+    // Unlink this window from the existing parent.
+    if (GetParent())
+    {
+        GetParent()->RemoveChild(this);
+    }
+    else
+        wxTopLevelWindows.DeleteObject(this);
+
+    HWND hWndParent = 0;
+    HWND hWndChild = (HWND) GetHWND();
+    if (parent != (wxWindow*) NULL)
+    {
+        parent->AddChild(this);
+        hWndParent = (HWND) parent->GetHWND();
+    }
+    else
+        wxTopLevelWindows.Append(this);
+
+    ::SetParent(hWndChild, hWndParent);
+
+    return TRUE;
+}
+
 #ifdef __WXDEBUG__
 const char *wxGetMessageName(int message)
 {

@@ -79,9 +79,7 @@
 #define wxUSE_SCROLLBAR   1
                                     // Define 1 to compile contributed wxScrollBar class
 #define wxUSE_XPM_IN_MSW  0
-                                    // Define 1 to support the XPM package in wxBitmap,
-                                    // separated by platform. If 1, you must link in
-                                    // the XPM library to your applications.
+                                    // Define 1 to support the XPM package in wxBitmap.
 #define wxUSE_IMAGE_LOADING_IN_MSW        1
                                   // Use dynamic DIB loading/saving code in utils/dib under MSW.
 #define wxUSE_RESOURCE_LOADING_IN_MSW     1

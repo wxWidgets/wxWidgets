@@ -93,9 +93,18 @@ public:
   void SetSelection(int N);
   int GetSelection(void) const;
   wxString GetString(int N) const;
+
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { wxWindow::SetSize(rect, sizeFlags); }
+  void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+
   void GetSize(int *x, int *y) const;
+  wxSize GetSize() const { return wxWindow::GetSize(); }
+
   void GetPosition(int *x, int *y) const;
+  wxPoint GetPosition() const { return wxWindow::GetPosition(); }
+
   wxString GetLabel(void) const;
   void SetLabel(const wxString& label);
   void SetLabel(int item, const wxString& label) ;
