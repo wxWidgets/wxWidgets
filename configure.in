@@ -1367,6 +1367,7 @@ if test "x$wx_cv_c_exto" '!=' "x"; then
     _AC_PROG_CC_G
 fi
 AC_BAKEFILE_PROG_MWCC
+AC_WX_PROG_XLCC
 
 dnl is -traditional needed for correct compilations
 dnl   adds -traditional for gcc if needed
@@ -1390,6 +1391,7 @@ if test "x$wx_cv_cxx_exto" '!=' "x"; then
     _AC_PROG_CXX_G
 fi
 AC_BAKEFILE_PROG_MWCXX
+AC_WX_PROG_XLCXX
 
 AC_LANG_RESTORE
 
@@ -1503,6 +1505,13 @@ AC_PROG_LN_S
 dnl ------------------------------------------------------------------------
 dnl Platform specific tests
 dnl ------------------------------------------------------------------------
+
+dnl xlC needs -qunique (at least on AIX) so that one source file can be
+dnl compiled to multiple object files and safely linked together.
+if test "x$XLCXX" = "xyes"; then
+    CXXFLAGS="$CXXFLAGS -qunique"
+fi
+
 
 dnl This case is for OS X vs. everything else
 case "${host}" in
