@@ -355,9 +355,7 @@ long wxTaskBarIcon::WindowProc( WXHWND hWnd, unsigned int msg, unsigned int wPar
         }
 
     if (eventType) {
-        wxEvent event;
-        event.SetEventType(eventType);
-        event.SetEventObject(this);
+        wxTaskBarIconEvent event(eventType, this);
 
         ProcessEvent(event);
     }

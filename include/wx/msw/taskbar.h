@@ -1,13 +1,13 @@
 /////////////////////////////////////////////////////////////////////////
-// File:        taskbar.h
-// Purpose:	    Defines wxTaskBarIcon class for manipulating icons on the
+// File:        wx/msw/taskbar.h
+// Purpose:     Defines wxTaskBarIcon class for manipulating icons on the
 //              Windows task bar.
 // Author:      Julian Smart
 // Modified by:
 // Created:     24/3/98
 // RCS-ID:      $Id$
-// Copyright:   (c)
-// Licence:   	wxWindows licence
+// Copyright:   (c) Julian Smart
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////
 
 #ifndef _TASKBAR_H_
@@ -76,6 +76,21 @@ protected:
 };
 
 
+// ----------------------------------------------------------------------------
+// wxTaskBarIcon events
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxTaskBarIconEvent : public wxEvent
+{
+public:
+    wxTaskBarIconEvent(wxEventType evtType, wxTaskBarIcon *tbIcon)
+        : wxEvent(-1, evtType)
+        {
+            SetEventObject(tbIcon);
+        }
+
+    virtual wxEvent *Clone() const { return new wxTaskBarIconEvent(*this); }
+};
 
 const wxEventType wxEVT_TASKBAR_MOVE =                  wxEVT_FIRST + 1550;
 const wxEventType wxEVT_TASKBAR_LEFT_DOWN =             wxEVT_FIRST + 1551;
