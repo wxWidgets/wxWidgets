@@ -858,7 +858,9 @@ void wxThreadModule::OnExit()
 
     for ( size_t n = 0u; n < count; n++ )
     {
-        gs_allThreads[n]->Delete();
+	// Delete calls the destructor which removes the current entry. We
+	// should only delete the first one each time.
+        gs_allThreads[0]->Delete();
     }
 
     // destroy GUI mutex
