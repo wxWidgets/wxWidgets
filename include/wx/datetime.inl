@@ -479,6 +479,18 @@ inline wxDateSpan& wxDateSpan::operator+=(const wxDateSpan& other)
     return *this;
 }
 
+inline wxDateSpan& wxDateSpan::Add(const wxDateSpan& other)
+{
+    return *this += other;
+}
+
+inline wxDateSpan wxDateSpan::Add(const wxDateSpan& other) const
+{
+    wxDateSpan ds(*this);
+    ds.Add(other);
+    return ds;
+}
+
 inline wxDateSpan& wxDateSpan::Multiply(int factor)
 {
     m_years *= factor;
@@ -491,7 +503,9 @@ inline wxDateSpan& wxDateSpan::Multiply(int factor)
 
 inline wxDateSpan wxDateSpan::Multiply(int factor) const
 {
-    return wxDateSpan(*this).Multiply(factor);
+    wxDateSpan ds(*this);
+    ds.Multiply(factor);
+    return ds;
 }
 
 inline wxDateSpan wxDateSpan::Negate() const
@@ -507,6 +521,23 @@ inline wxDateSpan& wxDateSpan::Neg()
     m_days = -m_days;
 
     return *this;
+}
+
+inline wxDateSpan& wxDateSpan::operator-=(const wxDateSpan& other)
+{
+    return *this += other.Negate();
+}
+
+inline wxDateSpan& wxDateSpan::Subtract(const wxDateSpan& other)
+{
+    return *this -= other;
+}
+
+inline wxDateSpan wxDateSpan::Subtract(const wxDateSpan& other) const
+{
+    wxDateSpan ds(*this);
+    ds.Subtract(other);
+    return ds;
 }
 
 #undef MILLISECONDS_PER_DAY
