@@ -119,6 +119,7 @@ wxGTK:
 
 - fixed wrong colour of tooltips under some themes
 - implemented wxColourDialog as native dialog
+- wxTreeCtrl::GetCount() counts root as well now (compatible with MSW)
 
 wxMotif:
 

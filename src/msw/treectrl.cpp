@@ -963,7 +963,7 @@ void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
     HWND hwndEdit = TreeView_GetEditControl(GetHwnd());
     if ( hwndEdit )
     {
-        if ( item == GetSelection() )
+        if ( item == m_idEdited )
         {
             ::SetWindowText(hwndEdit, text);
         }
@@ -2016,6 +2016,8 @@ void wxTreeCtrl::DeleteTextCtrl()
         m_textCtrl->SetHWND(0);
         delete m_textCtrl;
         m_textCtrl = NULL;
+
+        m_idEdited.Unset();
     }
 }
 
@@ -2026,6 +2028,7 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
 
     DeleteTextCtrl();
 
+    m_idEdited = item;
     m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
     HWND hWnd = (HWND) TreeView_EditLabel(GetHwnd(), HITEM(item));
 
