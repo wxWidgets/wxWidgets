@@ -40,7 +40,7 @@ BEGIN_EVENT_TABLE(wxControl, wxWindow)
 END_EVENT_TABLE()
 #endif
 
-#include <wx/mac/uma.h>
+#include "wx/mac/uma.h"
 
 // Item members
 

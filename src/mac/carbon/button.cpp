@@ -22,7 +22,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 #endif
 
-#include <wx/mac/uma.h>
+#include "wx/mac/uma.h"
 // Button
 
 

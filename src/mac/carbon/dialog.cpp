@@ -19,7 +19,7 @@
 #include "wx/app.h"
 #include "wx/settings.h"
 
-#include <wx/mac/uma.h>
+#include "wx/mac/uma.h"
 
 // Lists to keep track of windows, so we can disable/enable them
 // for modal dialogs

@@ -19,7 +19,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
 #endif
 
-#include <wx/mac/uma.h>
+#include "wx/mac/uma.h"
 
 bool wxGauge::Create(wxWindow *parent, wxWindowID id,
            int range,

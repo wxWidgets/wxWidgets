@@ -23,7 +23,7 @@
 #include "wx/settings.h"
 #include "wx/app.h"
 
-#include <wx/mac/uma.h>
+#include "wx/mac/uma.h"
 
 extern wxWindowList wxModelessWindows;
 extern wxList wxPendingDelete;

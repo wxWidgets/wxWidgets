@@ -30,7 +30,7 @@
 #include "wx/statline.h"
 #include "wx/statbox.h"
 
-#include <wx/mac/uma.h>
+#include "wx/mac/uma.h"
 
 // ============================================================================
 // implementation

@@ -26,7 +26,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
 #endif
 
-#include <wx/mac/uma.h>
+#include "wx/mac/uma.h"
 
 BEGIN_EVENT_TABLE(wxStaticText, wxStaticTextBase)
     EVT_PAINT(wxStaticText::OnPaint)

@@ -29,7 +29,7 @@ BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
 END_EVENT_TABLE()
 #endif
 
-#include <wx/mac/uma.h>
+#include "wx/mac/uma.h"
 
 // ----------------------------------------------------------------------------
 // private classes

@@ -14,7 +14,7 @@
 #pragma implementation "taskbar.h"
 #endif
 
-#include <wx/taskbar.h>
+#include "wx/taskbar.h"
 
 wxTaskBarIcon::wxTaskBarIcon()
 {

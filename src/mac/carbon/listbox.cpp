@@ -32,7 +32,7 @@ BEGIN_EVENT_TABLE(wxListBox, wxControl)
 END_EVENT_TABLE()
 #endif
 
-#include <wx/mac/uma.h>
+#include "wx/mac/uma.h"
 
 extern "C" void MacDrawStringCell(Rect *cellRect, Cell lCell, ListHandle theList, long refCon) ;
 const short kwxMacListWithVerticalScrollbar = 128 ;

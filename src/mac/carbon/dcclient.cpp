@@ -39,7 +39,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
  * wxWindowDC
  */
 
-#include <wx/mac/uma.h>
+#include "wx/mac/uma.h"
 
 wxWindowDC::wxWindowDC() 
 {

@@ -20,7 +20,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 #endif
 
-#include <wx/mac/uma.h>
+#include "wx/mac/uma.h"
 
 PicHandle MakePict(GWorldPtr wp, GWorldPtr mask ) ;
 

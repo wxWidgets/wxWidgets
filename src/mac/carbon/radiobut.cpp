@@ -21,7 +21,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 #endif
 
-#include <wx/mac/uma.h>
+#include "wx/mac/uma.h"
 
 bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 		   const wxString& label,

@@ -20,11 +20,11 @@
   #pragma implementation "notebook.h"
 #endif
 
-#include  <wx/string.h>
-#include  <wx/log.h>
-#include  <wx/imaglist.h>
-#include  <wx/notebook.h>
-#include <wx/mac/uma.h>
+#include "wx/string.h"
+#include "wx/log.h"
+#include "wx/imaglist.h"
+#include "wx/notebook.h"
+#include "wx/mac/uma.h"
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
