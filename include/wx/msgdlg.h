@@ -31,7 +31,7 @@ int WXDLLEXPORT wxMessageBox(const wxString& message,
                             const wxString& caption = wxMessageBoxCaptionStr,
                             long style = wxOK | wxCENTRE,
                             wxWindow *parent = NULL,
-                            int x = -1, int y = -1);
+                            int x = wxDefaultCoord, int y = wxDefaultCoord);
 
 #endif // wxUSE_MSGDLG
 

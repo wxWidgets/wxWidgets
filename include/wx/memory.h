@@ -31,8 +31,8 @@
 
 #ifdef __WXDEBUG__
 
-WXDLLIMPEXP_BASE void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool isVect = FALSE);
-WXDLLIMPEXP_BASE void wxDebugFree(void * buf, bool isVect = FALSE);
+WXDLLIMPEXP_BASE void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool isVect = false);
+WXDLLIMPEXP_BASE void wxDebugFree(void * buf, bool isVect = false);
 
 //**********************************************************************************
 /*
@@ -72,33 +72,33 @@ WXDLLIMPEXP_BASE void wxDebugFree(void * buf, bool isVect = FALSE);
 
 inline void * operator new (size_t size, wxChar * fileName, int lineNum)
 {
-    return wxDebugAlloc(size, fileName, lineNum, FALSE, FALSE);
+    return wxDebugAlloc(size, fileName, lineNum, false, false);
 }
 
 inline void * operator new (size_t size)
 {
-    return wxDebugAlloc(size, NULL, 0, FALSE);
+    return wxDebugAlloc(size, NULL, 0, false);
 }
 
 inline void operator delete (void * buf)
 {
-    wxDebugFree(buf, FALSE);
+    wxDebugFree(buf, false);
 }
 
 #if wxUSE_ARRAY_MEMORY_OPERATORS
 inline void * operator new[] (size_t size)
 {
-    return wxDebugAlloc(size, NULL, 0, FALSE, TRUE);
+    return wxDebugAlloc(size, NULL, 0, false, true);
 }
 
 inline void * operator new[] (size_t size, wxChar * fileName, int lineNum)
 {
-    return wxDebugAlloc(size, fileName, lineNum, FALSE, TRUE);
+    return wxDebugAlloc(size, fileName, lineNum, false, true);
 }
 
 inline void operator delete[] (void * buf)
 {
-  wxDebugFree(buf, TRUE);
+  wxDebugFree(buf, true);
 }
 #endif
 
@@ -106,11 +106,11 @@ inline void operator delete[] (void * buf)
 #if ( defined(__VISUALC__) && (__VISUALC__ >= 1200) ) || defined(__MWERKS__)
 inline void operator delete(void* pData, wxChar* /* fileName */, int /* lineNum */)
 {
-    wxDebugFree(pData, FALSE);
+    wxDebugFree(pData, false);
 }
 inline void operator delete[](void* pData, wxChar* /* fileName */, int /* lineNum */)
 {
-    wxDebugFree(pData, TRUE);
+    wxDebugFree(pData, true);
 }
 #endif // __VISUALC__>=1200
 #endif // wxUSE_GLOBAL_MEMORY_OPERATORS
@@ -236,7 +236,7 @@ public:
     static bool GetDebugMode(void) { return debugOn; }
     static void SetDebugMode(bool flag) { debugOn = flag; }
 
-    static void SetCheckpoint(bool all = FALSE);
+    static void SetCheckpoint(bool all = false);
     static wxMemStruct *GetCheckpoint(void) { return checkPoint; }
 
     // Calculated from the request size and any padding needed
@@ -270,8 +270,8 @@ public:
     static bool GetCheckPrevious () { return m_checkPrevious; }
     static void SetCheckPrevious (bool value) { m_checkPrevious = value; }
 
-    // Checks all nodes, or all nodes if checkAll is TRUE
-    static int Check(bool checkAll = FALSE);
+    // Checks all nodes, or all nodes if checkAll is true
+    static int Check(bool checkAll = false);
 
     // Print out the list of wxMemStruct nodes.
     static bool PrintList(void);
@@ -280,14 +280,14 @@ public:
     static bool Dump(void);
 
     // Print statistics
-    static bool PrintStatistics(bool detailed = TRUE);
+    static bool PrintStatistics(bool detailed = true);
 
     // Print out the classes in the application.
     static bool PrintClasses(void);
 
     // Count the number of non-wxDebugContext-related objects
     // that are outstanding
-    static int CountObjectsLeft(bool sinceCheckpoint = FALSE);
+    static int CountObjectsLeft(bool sinceCheckpoint = false);
 
     // This function is used to output the dump
     static void OutputDumpLine(const wxChar *szFormat, ...);
@@ -298,8 +298,8 @@ private:
     static wxMemStruct*         m_head;
     static wxMemStruct*         m_tail;
 
-    // Set to FALSE if we're not checking all previous nodes when
-    // we do a new. Set to TRUE when we are.
+    // Set to false if we're not checking all previous nodes when
+    // we do a new. Set to true when we are.
     static bool                 m_checkPrevious;
 };
 
@@ -349,8 +349,8 @@ void WXDLLIMPEXP_BASE wxTraceLevel(int level, const wxChar *fmt ...) ATTRIBUTE_P
     #define wxTraceLevel(l, fmt)
 #endif
 
-#define WXTRACE TRUE ? (void)0 : wxTrace
-#define WXTRACELEVEL TRUE ? (void)0 : wxTraceLevel
+#define WXTRACE true ? (void)0 : wxTrace
+#define WXTRACELEVEL true ? (void)0 : wxTraceLevel
 
 #endif // (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 

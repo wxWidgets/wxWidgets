@@ -78,11 +78,11 @@ bool wxModule::InitializeModules()
                 n->GetData()->OnExit();
             }
 
-            return FALSE;
+            return false;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxModule::CleanUpModules()

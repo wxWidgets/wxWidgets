@@ -122,7 +122,7 @@ public:
     //!code:           | -1     0      0 |
     //!code: matrix' = |  0    -1      0 | x matrix
     //!code:           |  0     0      1 |
-    wxTransformMatrix&  Mirror(bool x=TRUE, bool y=FALSE);
+    wxTransformMatrix&  Mirror(bool x=true, bool y=false);
     // Translate by dx, dy:
     //!ex:
     //!code:           | 1  0 dx |

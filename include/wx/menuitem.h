@@ -82,10 +82,10 @@ public:
     wxMenu *GetSubMenu() const { return m_subMenu; }
 
     // state
-    virtual void Enable(bool enable = TRUE) { m_isEnabled = enable; }
+    virtual void Enable(bool enable = true) { m_isEnabled = enable; }
     virtual bool IsEnabled() const { return m_isEnabled; }
 
-    virtual void Check(bool check = TRUE) { m_isChecked = check; }
+    virtual void Check(bool check = true) { m_isChecked = check; }
     virtual bool IsChecked() const { return m_isChecked; }
     void Toggle() { Check(!m_isChecked); }
 
@@ -122,7 +122,7 @@ public:
     }
 
 protected:
-    int           m_id;             // numeric id of the item >= 0 or -1
+    int           m_id;             // numeric id of the item >= 0 or wxID_ANY or wxID_SEPARATOR
     wxMenu       *m_parentMenu,     // the menu we belong to
                  *m_subMenu;        // our sub menu or NULL
     wxString      m_text,           // label of the item

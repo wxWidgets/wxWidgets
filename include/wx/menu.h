@@ -294,8 +294,8 @@ public:
     // pos != NULL
     wxMenuItem *FindChildItem(int itemid, size_t *pos = NULL) const;
 
-    // called to generate a wxCommandEvent, return TRUE if it was processed,
-    // FALSE otherwise
+    // called to generate a wxCommandEvent, return true if it was processed,
+    // false otherwise
     //
     // the checked parameter may have boolean value or -1 for uncheckable items
     bool SendEvent(int itemid, int checked = -1);
@@ -334,7 +334,7 @@ public:
     {
         ms_locked = locked;
     }
-    
+
 protected:
     // virtuals to override in derived classes
     // ---------------------------------------
@@ -368,7 +368,7 @@ protected:
     wxEvtHandler  *m_eventHandler;      // a pluggable in event handler
 
     static bool      ms_locked;
-    
+
     DECLARE_NO_COPY_CLASS(wxMenuBase)
 };
 
@@ -388,10 +388,10 @@ public:
     // menu bar construction
     // ---------------------
 
-    // append a menu to the end of menubar, return TRUE if ok
+    // append a menu to the end of menubar, return true if ok
     virtual bool Append(wxMenu *menu, const wxString& title);
 
-    // insert a menu before the given position into the menubar, return TRUE
+    // insert a menu before the given position into the menubar, return true
     // if inserted ok
     virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title);
 
@@ -416,7 +416,7 @@ public:
     virtual void EnableTop(size_t pos, bool enable) = 0;
 
     // is the menu enabled?
-    virtual bool IsEnabledTop(size_t WXUNUSED(pos)) const { return TRUE; }
+    virtual bool IsEnabledTop(size_t WXUNUSED(pos)) const { return true; }
 
     // get or change the label of the menu at given position
     virtual void SetLabelTop(size_t pos, const wxString& label) = 0;
@@ -462,7 +462,7 @@ public:
     // get the frame we are attached to (may return NULL)
     wxFrame *GetFrame() const { return m_menuBarFrame; }
 
-    // returns TRUE if we're attached to a frame
+    // returns true if we're attached to a frame
     bool IsAttached() const { return GetFrame() != NULL; }
 
     // associate the menubar with the frame
@@ -472,12 +472,12 @@ public:
     virtual void Detach();
 
     // need to override these ones to avoid virtual function hiding
-    virtual bool Enable(bool enable = TRUE) { return wxWindow::Enable(enable); }
+    virtual bool Enable(bool enable = true) { return wxWindow::Enable(enable); }
     virtual void SetLabel(const wxString& s) { wxWindow::SetLabel(s); }
     virtual wxString GetLabel() const { return wxWindow::GetLabel(); }
 
     // don't want menu bars to accept the focus by tabbing to them
-    virtual bool AcceptsFocusFromKeyboard() const { return FALSE; }
+    virtual bool AcceptsFocusFromKeyboard() const { return false; }
 
 protected:
     // the list of all our menus

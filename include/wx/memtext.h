@@ -28,21 +28,21 @@ public:
 
 protected:
     virtual bool OnExists() const
-        { return FALSE; }
+        { return false; }
 
     virtual bool OnOpen(const wxString & WXUNUSED(strBufferName),
                         wxTextBufferOpenMode WXUNUSED(OpenMode))
-        { return TRUE; }
+        { return true; }
 
     virtual bool OnClose()
-        { return TRUE; }
+        { return true; }
 
     virtual bool OnRead(wxMBConv& WXUNUSED(conv))
-        { return TRUE; }
+        { return true; }
 
     virtual bool OnWrite(wxTextFileType WXUNUSED(typeNew),
                          wxMBConv& WXUNUSED(conv) = wxConvUTF8)
-        { return TRUE; }
+        { return true; }
 
 private:
     DECLARE_NO_COPY_CLASS(wxMemoryText)
