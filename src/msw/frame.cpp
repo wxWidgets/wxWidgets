@@ -346,6 +346,7 @@ void wxFrame::SetIcon(const wxIcon& icon)
 #endif
 }
 
+#if wxUSE_STATUSBAR
 wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
     const wxString& name)
 {
@@ -430,6 +431,7 @@ void wxFrame::PositionStatusBar()
       m_frameStatusBar->SetSize(0, h, w, sh);
   }
 }
+#endif // wxUSE_STATUSBAR
 
 void wxFrame::SetMenuBar(wxMenuBar *menu_bar)
 {
@@ -571,13 +573,19 @@ void wxFrame::OnSize(wxSizeEvent& event)
 
     // do we have _exactly_ one child?
     wxWindow *child = NULL;
-    for ( wxNode *node = GetChildren().First(); node; node = node->Next() )
+    for ( wxWindowList::Node *node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxWindow *win = (wxWindow *)node->Data();
-        if ( !win->IsKindOf(CLASSINFO(wxFrame))  &&
-                !win->IsKindOf(CLASSINFO(wxDialog)) &&
-                (win != GetStatusBar()) &&
-                (win != GetToolBar()) )
+        wxWindow *win = node->GetData();
+        if ( !win->IsTopLevel()
+#if wxUSE_STATUSBAR
+                && (win != GetStatusBar())
+#endif // wxUSE_STATUSBAR
+#if wxUSE_TOOLBAR
+                && (win != GetToolBar())
+#endif // wxUSE_TOOLBAR
+           )
         {
             if ( child )
                 return;     // it's our second subwindow - nothing to do
@@ -720,6 +728,7 @@ void wxFrame::ClientToScreen(int *x, int *y) const
     wxWindow::ClientToScreen(x, y);
 }
 
+#if wxUSE_TOOLBAR
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
     wxCHECK_MSG( m_frameToolBar == NULL, FALSE,
@@ -772,6 +781,7 @@ void wxFrame::PositionToolBar()
         }
     }
 }
+#endif // wxUSE_TOOLBAR
 
 // propagate our state change to all child frames: this allows us to emulate X
 // Windows behaviour where child frames float independently of the parent one

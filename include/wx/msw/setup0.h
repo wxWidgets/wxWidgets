@@ -179,6 +179,8 @@
 #define wxUSE_ACCEL 1
 #define wxUSE_SASH 1
 #define wxUSE_TEXTDLG 1
+#define wxUSE_TOOLBAR 1
+#define wxUSE_STATUSBAR 1
 
 /*
  * Finer detail

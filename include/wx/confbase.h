@@ -61,22 +61,6 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// various helper global functions
-// ----------------------------------------------------------------------------
-
-/*
-  Replace environment variables ($SOMETHING) with their values. The format is
-  $VARNAME or ${VARNAME} where VARNAME contains alphanumeric characters and
-  '_' only. '$' must be escaped ('\$') in order to be taken literally.
- */
-extern wxString wxExpandEnvVars(const wxString &sz);
-
-/*
-  Split path into parts removing '..' in progress
- */
-extern void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
-
-// ----------------------------------------------------------------------------
 // abstract base class wxConfigBase which defines the interface for derived
 // classes
 //
@@ -311,9 +295,23 @@ private:
   #define sm_classwxConfig sm_classwxFileConfig
 #endif
 
-#endif
+#endif // wxUSE_CONFIG
 
-  // wxUSE_CONFIG
+// ----------------------------------------------------------------------------
+// various helper global functions (defined even if !wxUSE_CONFIG)
+// ----------------------------------------------------------------------------
+
+/*
+  Replace environment variables ($SOMETHING) with their values. The format is
+  $VARNAME or ${VARNAME} where VARNAME contains alphanumeric characters and
+  '_' only. '$' must be escaped ('\$') in order to be taken literally.
+ */
+extern wxString wxExpandEnvVars(const wxString &sz);
+
+/*
+  Split path into parts removing '..' in progress
+ */
+extern void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
 
 #endif
   // _WX_CONFIG_H_

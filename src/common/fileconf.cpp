@@ -21,11 +21,14 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
 #include  "wx/wxprec.h"
 
 #ifdef    __BORLANDC__
   #pragma hdrstop
 #endif  //__BORLANDC__
+
+#if wxUSE_CONFIG
 
 #ifndef   WX_PRECOMP
   #include  "wx/string.h"
@@ -1483,3 +1486,6 @@ static wxString GetAppName(const wxString& appName)
     else
         return appName;
 }
+
+#endif // wxUSE_CONFIG
+

@@ -16,6 +16,8 @@
 #pragma interface "printdlg.h"
 #endif
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
 
@@ -67,6 +69,8 @@ private:
     wxPageSetupData   m_pageSetupData;
     wxWindow*         m_dialogParent;
 };
+
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 #endif
     // _WX_PRINTDLG_H_

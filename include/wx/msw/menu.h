@@ -126,8 +126,10 @@ public:
     void Attach(wxMenuBar *menubar);
     void Detach();
 
+#if wxUSE_ACCEL
     size_t GetAccelCount() const { return m_accelKeyCodes.GetCount(); }
     size_t CopyAccels(wxAcceleratorEntry *accels) const;
+#endif // wxUSE_ACCEL
 
 #ifdef WXWIN_COMPATIBILITY
     void Callback(const wxFunction func) { m_callback = func; }
@@ -160,8 +162,10 @@ private:
     wxWindow         *m_pInvokingWindow;
     void*             m_clientData;
 
+#if wxUSE_ACCEL
     // the accelerators data
     wxArrayInt        m_accelKeyCodes, m_accelFlags, m_accelIds;
+#endif // wxUSE_ACCEL
 };
 
 // ----------------------------------------------------------------------------
@@ -246,8 +250,11 @@ public:
         // attach to a frame
     void Attach(wxFrame *frame);
 
+#if wxUSE_ACCEL
         // get the accel table for the menus
     const wxAcceleratorTable& GetAccelTable() const { return m_accelTable; }
+#endif // wxUSE_ACCEL
+
         // get the menu handle
     WXHMENU GetHMenu() const { return m_hMenu; }
 
@@ -266,8 +273,10 @@ protected:
     wxFrame      *m_menuBarFrame;
     WXHMENU       m_hMenu;
 
+#if wxUSE_ACCEL
     // the accelerator table for all accelerators in all our menus
     wxAcceleratorTable m_accelTable;
+#endif // wxUSE_ACCEL
 };
 
 #endif // _WX_MENU_H_

@@ -146,6 +146,7 @@ void wxMenu::Append(wxMenuItem *pItem)
 {
     wxCHECK_RET( pItem != NULL, "can't append NULL item to the menu" );
 
+#if wxUSE_ACCEL
     // check for accelerators: they are given after '\t'
     wxString label = pItem->GetName();
     int posTab = label.Find('\t');
@@ -206,6 +207,7 @@ void wxMenu::Append(wxMenuItem *pItem)
             m_accelIds.Add(pItem->GetId());
         }
     }
+#endif // wxUSE_ACCEL
 
     UINT flags = 0;
 
@@ -344,6 +346,8 @@ void wxMenu::Delete(int id)
     delete item;
 }
 
+#if wxUSE_ACCEL
+
 // ---------------------------------------------------------------------------
 // accelerator helpers
 // ---------------------------------------------------------------------------
@@ -360,6 +364,8 @@ size_t wxMenu::CopyAccels(wxAcceleratorEntry *accels) const
 
     return count;
 }
+
+#endif // wxUSE_ACCEL
 
 // ---------------------------------------------------------------------------
 // wxMenu functions implemented in wxMenuItem
@@ -1014,6 +1020,7 @@ void wxMenuBar::Attach(wxFrame *frame)
 
     m_menuBarFrame = frame;
 
+#if wxUSE_ACCEL
     // create the accel table - we consider that the menubar construction is
     // finished
     size_t nAccelCount = 0;
@@ -1037,6 +1044,7 @@ void wxMenuBar::Attach(wxFrame *frame)
 
         delete [] accelEntries;
     }
+#endif // wxUSE_ACCEL
 }
 
 // ---------------------------------------------------------------------------

@@ -22,6 +22,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
 #include "wx/dc.h"
@@ -45,20 +47,13 @@
 #include <string.h>
 
 #ifdef __WXMSW__
-#include <windows.h>
-#include <commdlg.h>
+    #include "wx/msw/private.h"
+    #include <commdlg.h>
 
-// Clash with Windows header files
-#ifdef StartDoc
-#undef StartDoc
-#endif
-
-#ifndef __WIN32__
-#include <print.h>
-#endif
-
-#endif
-// End __WXMSW__
+    #ifndef __WIN32__
+        #include <print.h>
+    #endif
+#endif // __WXMSW__
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxPrinterBase, wxObject)
@@ -69,12 +64,12 @@ IMPLEMENT_CLASS(wxPreviewFrame, wxFrame)
 IMPLEMENT_CLASS(wxPrintPreviewBase, wxObject)
 
 BEGIN_EVENT_TABLE(wxPrintAbortDialog, wxDialog)
-EVT_BUTTON(wxID_CANCEL, wxPrintAbortDialog::OnCancel)
+    EVT_BUTTON(wxID_CANCEL, wxPrintAbortDialog::OnCancel)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxPreviewCanvas, wxScrolledWindow)
-EVT_PAINT(wxPreviewCanvas::OnPaint)
-EVT_SYS_COLOUR_CHANGED(wxPreviewCanvas::OnSysColourChanged)
+    EVT_PAINT(wxPreviewCanvas::OnPaint)
+    EVT_SYS_COLOUR_CHANGED(wxPreviewCanvas::OnSysColourChanged)
 END_EVENT_TABLE()
 #endif
 
@@ -763,3 +758,4 @@ void wxPrintPreviewBase::SetZoom(int percent)
     }
 }
 
+#endif // wxUSE_PRINTING_ARCHITECTURE

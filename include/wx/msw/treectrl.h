@@ -15,6 +15,7 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma interface "treectrl.h"
 #endif
@@ -22,6 +23,12 @@
 #include "wx/control.h"
 #include "wx/event.h"
 #include "wx/textctrl.h"
+
+#ifdef __GNUWIN32__
+    // Cygwin windows.h defines these identifiers
+    #undef GetFirstChild
+    #undef GetNextSibling
+#endif // Cygwin
 
 // the type for "untyped" data
 typedef long wxDataType;

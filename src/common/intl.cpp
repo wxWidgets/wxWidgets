@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_INTL
+
 // standard headers
 #include  <locale.h>
 #include  <ctype.h>
@@ -646,3 +648,6 @@ wxLocale *wxSetLocale(wxLocale *pLocale)
   g_pLocale = pLocale;
   return pOld;
 }
+
+#endif // wxUSE_INTL
+

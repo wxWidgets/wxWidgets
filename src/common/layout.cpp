@@ -16,6 +16,7 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "layout.h"
 #endif
@@ -28,6 +29,8 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_CONSTRAINTS
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
@@ -1762,3 +1765,4 @@ wxSpacingSizer::~wxSpacingSizer()
 {
 }
 
+#endif // wxUSE_CONSTRAINTS

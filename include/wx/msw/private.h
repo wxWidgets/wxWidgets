@@ -20,6 +20,7 @@
 #include "wx/msw/winundef.h"
 
 class WXDLLEXPORT wxFont;
+class WXDLLEXPORT wxWindow;
 
 // ---------------------------------------------------------------------------
 // private constants

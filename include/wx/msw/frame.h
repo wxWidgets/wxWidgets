@@ -85,6 +85,7 @@ public:
     virtual void SetIcon(const wxIcon& icon);
 
     // Toolbar
+#if wxUSE_TOOLBAR
     virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER | wxTB_HORIZONTAL | wxTB_FLAT,
                                      wxWindowID id = -1,
                                      const wxString& name = wxToolBarNameStr);
@@ -95,7 +96,9 @@ public:
     virtual wxToolBar *GetToolBar() const { return m_frameToolBar; }
 
     virtual void PositionToolBar();
+#endif // wxUSE_TOOLBAR
 
+#if wxUSE_STATUSBAR
     // Status bar
     virtual wxStatusBar* CreateStatusBar(int number = 1,
                                          long style = wxST_SIZEGRIP,
@@ -121,6 +124,7 @@ public:
     // TODO: should this go into a wxFrameworkSettings class perhaps?
     static void UseNativeStatusBar(bool useNative) { m_useNativeStatusBar = useNative; };
     static bool UsesNativeStatusBar() { return m_useNativeStatusBar; };
+#endif // wxUSE_STATUSBAR
 
     // Iconize
     virtual void Iconize(bool iconize);
@@ -191,13 +195,19 @@ protected:
     long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
     wxMenuBar *           m_frameMenuBar;
-    wxStatusBar *         m_frameStatusBar;
     wxIcon                m_icon;
     bool                  m_iconized;
     WXHICON               m_defaultIcon;
-    wxToolBar *           m_frameToolBar;
+
+#if wxUSE_STATUSBAR
+    wxStatusBar *         m_frameStatusBar;
 
     static bool           m_useNativeStatusBar;
+#endif // wxUSE_STATUSBAR
+
+#if wxUSE_TOOLBAR
+    wxToolBar *           m_frameToolBar;
+#endif // wxUSE_TOOLBAR
 
 private:
 #if wxUSE_TOOLTIPS

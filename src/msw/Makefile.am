@@ -19,7 +19,6 @@ EXTRA_LTLIBRARIES = libwx_gtk.la libwx_motif.la libwx_msw.la
 # these are the common files which always make part of the library
 libwx_msw_la_SOURCES = \
 \
- winestub.c \
  extended.c \
  parser.c \
 \
@@ -178,12 +177,14 @@ libwx_msw_la_SOURCES = \
 #       don't know where to put lexer.l - if I put it in the sources too,
 #       automake tries to build lexer.lo... and fails, of course. (VZ)
 BUILT_SOURCES = parser.c lexer.c
+
+# VZ: can anyone please explain me why are we doing these substitutions?
 parser.c: $(srcdir)/../common/parser.y lexer.c
 	$(YACC) $(srcdir)/../common/parser.y
 	@sed -e "s;$(srcdir)/../common/y.tab.c;parser.y;g" < y.tab.c | \
 	sed -e "s/BUFSIZ/5000/g"            | \
 	sed -e "s/YYLMAX 200/YYLMAX 5000/g" | \
-	sed -e "s/yy/PROIO_yy/g"            | \
+	sed -e "s/yy\([^.]\)/PROIO_yy\1/g"  | \
 	sed -e "s/input/PROIO_input/g"      | \
 	sed -e "s/unput/PROIO_unput/g"      > parser.c
 	@$(RM) y.tab.c
@@ -191,13 +192,13 @@ parser.c: $(srcdir)/../common/parser.y lexer.c
 lexer.c: $(srcdir)/../common/lexer.l
 	$(LEX) $(srcdir)/../common/lexer.l
 	@sed -e "s;$(srcdir)/../common/lex.yy.c;lexer.l;g" < lex.yy.c | \
-	sed -e "s/yy/PROIO_yy/g"            | \
+	sed -e "s/yy\([^.]\)/PROIO_yy\1/g"  | \
 	sed -e "s/input/PROIO_input/g"      | \
 	sed -e "s/unput/PROIO_unput/g"      > lexer.c
 	@$(RM) lex.yy.c
 
 libwx_msw_la_LDFLAGS = -rpath @libdir@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
-	-release $(LT_RELEASE)
+	-release $(LT_RELEASE) -no-undefined
 libwx_msw_la_LIBADD = $(LTLIBOBJS)
 libwx_msw_la_DEPENDENCIES = $(libwx_msw_la_LIBADD) lexer.l parser.y

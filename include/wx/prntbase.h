@@ -17,6 +17,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #include "wx/event.h"
 #include "wx/cmndata.h"
 #include "wx/panel.h"
@@ -366,6 +369,8 @@ public:
 private:
     DECLARE_EVENT_TABLE()
 };
+
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 #endif
     // _WX_PRNTBASEH__

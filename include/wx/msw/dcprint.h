@@ -16,6 +16,8 @@
 #pragma interface "dcprint.h"
 #endif
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #include "wx/dc.h"
 #include "wx/cmndata.h"
 
@@ -48,6 +50,8 @@ protected:
 
 // Gets an HDC for the specified printer configuration
 WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& data);
+
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 #endif
     // _WX_DCPRINT_H_

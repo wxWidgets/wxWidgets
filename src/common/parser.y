@@ -1,4 +1,5 @@
  %{
+#include "wx/setup.h"
 #include <string.h>
 #ifdef _MSC_VER
 #include <io.h>
@@ -156,7 +157,7 @@ void yyerror(char *s)
  * to test
  */
 
-#ifndef __SC__
+#if !defined(__SC__) && !defined(__GNUWIN32__)
 #ifdef USE_DEFINE
 #ifndef yywrap
 #define yywrap() 1

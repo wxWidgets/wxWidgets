@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TBAR95_H_
@@ -16,7 +16,7 @@
 #pragma interface "tbar95.h"
 #endif
 
-#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR
+#if wxUSE_TOOLBAR
 #include "wx/tbarbase.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
@@ -89,6 +89,7 @@ protected:
 DECLARE_EVENT_TABLE()
 };
 
-#endif // wxUSE_TOOL/BUTTONBAR
+#endif // wxUSE_TOOLBAR
+
 #endif
     // _WX_TBAR95_H_
