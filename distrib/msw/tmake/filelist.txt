@@ -91,6 +91,7 @@ tipdlg.cpp	G
 treectrl.cpp	G	16
 wizard.cpp	G
 
+appcmn.cpp	C	B
 choiccmn.cpp	C	R
 cmndata.cpp	C
 config.cpp	C	B
