@@ -48,6 +48,37 @@
 
 static const size_t INVALID_PAGE = (size_t)-1;
 
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
+class wxNotebookSpinBtn : public wxSpinButton
+{
+public:
+    wxNotebookSpinBtn(wxNotebook *nb)
+        : wxSpinButton(nb, -1,
+                       wxDefaultPosition, wxDefaultSize,
+                       nb->IsVertical() ? wxSP_VERTICAL : wxSP_HORIZONTAL)
+    {
+        m_nb = nb;
+    }
+
+protected:
+    void OnSpin(wxSpinEvent& event)
+    {
+        m_nb->PerformAction(wxACTION_NOTEBOOK_GOTO, event.GetPosition());
+    }
+
+private:
+    wxNotebook *m_nb;
+
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxNotebookSpinBtn, wxSpinButton)
+    EVT_SPIN(-1, wxNotebookSpinBtn::OnSpin)
+END_EVENT_TABLE()
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -65,6 +96,10 @@ void wxNotebook::Init()
 
     m_heightTab =
     m_widthMax = 0;
+
+    m_firstVisible =
+    m_lastVisible = 0;
+    m_offset = 0;
 
     m_sizePad = wxSize(6, 5); // FIXME: hardcoded
 
@@ -183,7 +218,18 @@ int wxNotebook::SetSelection(int nPage)
 
     if ( m_sel != -1 ) // yes, this is impossible - but test nevertheless
     {
-        RefreshTab(m_sel);
+        if ( HasSpinBtn() )
+        {
+            // keep it in sync
+            m_spinbtn->SetValue(m_sel);
+        }
+
+        if ( m_sel < m_firstVisible )
+            ScrollTo(m_sel);
+        else if ( m_sel >= m_lastVisible )
+            ScrollLastTo(m_sel);
+        else // no need to scroll
+            RefreshTab(m_sel);
 
         m_pages[m_sel]->SetSize(GetPageRect());
         m_pages[m_sel]->Show();
@@ -252,6 +298,10 @@ bool wxNotebook::InsertPage(int nPage,
 
     m_widths.Insert(sizeTab.x, nPage);
 
+    // spin button may appear if we didn't have it before - but even if we did,
+    // its range should change, so update it unconditionally
+    UpdateSpinBtn();
+
     // if the tab has just appeared, we have to relayout everything, otherwise
     // it's enough to just redraw the tabs
     if ( nPages == 0 )
@@ -299,12 +349,18 @@ wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
     m_widths.RemoveAt(nPage);
     m_images.RemoveAt(nPage);
 
+    // the spin button might not be needed any more
+    if ( HasSpinBtn() )
+    {
+        UpdateSpinBtn();
+    }
+
     if ( GetPageCount() )
     {
         // some tabs are still left, just redraw them
         RefreshAllTabs();
 
-        m_sel = 0;
+        SetSelection(0);
     }
     else // no more tabs left
     {
@@ -384,7 +440,7 @@ void wxNotebook::DoDrawTab(wxDC& dc, const wxRect& rect, size_t n)
 
 void wxNotebook::DoDraw(wxControlRenderer *renderer)
 {
-    wxRect rectUpdate = GetUpdateClientRect();
+    //wxRect rectUpdate = GetUpdateClientRect(); -- unused
 
     wxDC& dc = renderer->GetDC();
     dc.SetFont(GetFont());
@@ -398,19 +454,24 @@ void wxNotebook::DoDraw(wxControlRenderer *renderer)
     bool isVertical = IsVertical();
 
     wxRect rectSel;
-    size_t count = GetPageCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( size_t n = m_firstVisible; n < m_lastVisible; n++ )
     {
         GetTabSize(n, &rect.width, &rect.height);
 
         if ( n == m_sel )
         {
             // don't redraw it now as this tab has to be drawn over the other
-            // ones
+            // ones as it takes more place and spills over to them
             rectSel = rect;
         }
         else // not selected tab
         {
+            // unfortunately we can't do this because the selected tab hangs
+            // over its neighbours and so we might need to refresh more tabs -
+            // of course, we could still avoid rereshing some of them with more
+            // complicated checks, but it doesn't seem too bad to refresh all
+            // of them, I still don't see flicker, so leaving as is for now
+
             //if ( rectUpdate.Intersects(rect) )
             {
                 DoDrawTab(dc, rect, n);
@@ -425,7 +486,10 @@ void wxNotebook::DoDraw(wxControlRenderer *renderer)
             rect.x += rect.width;
     }
 
-    DoDrawTab(dc, rectSel, m_sel);
+    if ( rectSel.width )
+    {
+        DoDrawTab(dc, rectSel, m_sel);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -469,8 +533,7 @@ int wxNotebook::HitTest(const wxPoint& pt) const
             break;
     }
 
-    size_t count = GetPageCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( size_t n = m_firstVisible; n < m_lastVisible; n++ )
     {
         GetTabSize(n, &rectTabs.width, &rectTabs.height);
 
@@ -542,6 +605,8 @@ wxRect wxNotebook::GetTabRect(int page) const
         rect.x = widthBefore;
         rect.width = widthThis;
     }
+
+    rect.x -= m_offset;
 
     return rect;
 }
@@ -620,7 +685,7 @@ void wxNotebook::GetTabSize(int page, wxCoord *w, wxCoord *h) const
     *h = m_heightTab;
 
     // width may also be fixed and be the same for all tabs
-    *w = FixedSizeTabs() ? m_widthMax : m_widths[page];
+    *w = GetTabWidth(page);
 }
 
 void wxNotebook::SetTabSize(const wxSize& sz)
@@ -694,6 +759,9 @@ void wxNotebook::ResizeTab(int page)
     if ( sizeTab.x > m_widthMax )
         m_widthMax = sizeTab.x;
 
+    // the total of the tabs has changed too
+    UpdateSpinBtn();
+
     if ( needsRelayout )
         Relayout();
     else
@@ -714,6 +782,8 @@ void wxNotebook::Relayout()
 {
     if ( m_sel != -1 )
     {
+        RefreshAllTabs();
+
         wxRect rectPage = GetPageRect();
 
         m_pages[m_sel]->SetSize(rectPage);
@@ -778,6 +848,189 @@ void wxNotebook::SetPageSize(const wxSize& size)
 }
 
 // ----------------------------------------------------------------------------
+// wxNotebook spin button
+// ----------------------------------------------------------------------------
+
+bool wxNotebook::HasSpinBtn() const
+{
+    return m_spinbtn && m_spinbtn->IsShown();
+}
+
+size_t wxNotebook::CalcLastVisibleTab() const
+{
+    wxCoord width = GetClientSize().x + m_offset;
+    wxRect rect = GetTabsPart();
+    bool isVertical = IsVertical();
+
+    size_t n,
+           count = GetPageCount();
+    for ( n = m_firstVisible; n < count; n++ )
+    {
+        GetTabSize(n, &rect.width, &rect.height);
+        if ( rect.GetRight() > width )
+        {
+            break;
+        }
+
+        // move the rect to the next tab
+        if ( isVertical )
+            rect.y += rect.height;
+        else
+            rect.x += rect.width;
+    }
+
+    // if even the first tab isn't fully visible, we can't do much but show it
+    // nevertheless, so still return 0 in this case
+    return n;
+}
+
+void wxNotebook::UpdateSpinBtn()
+{
+    // first decide if we need a spin button
+    m_lastVisible = CalcLastVisibleTab();
+    while ( m_lastVisible == (size_t)GetPageCount() )
+    {
+        if ( m_firstVisible > 0 )
+        {
+            m_offset -= GetTabWidth(m_firstVisible--);
+        }
+        else
+        {
+            // we don't need spin button as all tabs are visible after we
+            // rewound to the bginning
+            break;
+        }
+    }
+
+    if ( m_lastVisible < (size_t)GetPageCount() )
+    {
+        if ( !m_spinbtn )
+        {
+            // create it once only
+            m_spinbtn = new wxNotebookSpinBtn(this);
+
+            // set the correct value to keep it in sync
+            m_spinbtn->SetValue(m_sel);
+
+            // and position it correctly
+            PositionSpinBtn();
+        }
+
+        m_spinbtn->Show();
+        m_spinbtn->SetRange(0, GetPageCount() - 1);
+    }
+    else // we don't need spin button
+    {
+        if ( m_spinbtn )
+        {
+            m_spinbtn->Hide();
+        }
+    }
+}
+
+void wxNotebook::PositionSpinBtn()
+{
+    if ( !m_spinbtn )
+        return;
+
+    wxCoord wBtn, hBtn;
+    m_spinbtn->GetSize(&wBtn, &hBtn);
+
+    wxRect rectTabs = GetAllTabsRect();
+
+    wxCoord x, y;
+    switch ( GetTabOrientation() )
+    {
+        default:
+            wxFAIL_MSG(_T("unknown tab orientation"));
+            // fall through
+
+        case wxTOP:
+            x = rectTabs.GetRight() - wBtn;
+            y = rectTabs.GetBottom() - hBtn;
+            break;
+
+        case wxBOTTOM:
+            x = rectTabs.GetRight() - wBtn;
+            y = rectTabs.GetTop();
+            break;
+
+        case wxLEFT:
+            x = rectTabs.GetRight() - wBtn;
+            y = rectTabs.GetBottom() - hBtn;
+            break;
+
+        case wxRIGHT:
+            x = rectTabs.GetLeft();
+            y = rectTabs.GetBottom() - hBtn;
+            break;
+    }
+
+    m_spinbtn->Move(x, y);
+}
+
+// ----------------------------------------------------------------------------
+// wxNotebook scrolling
+// ----------------------------------------------------------------------------
+
+void wxNotebook::ScrollTo(int page)
+{
+    wxCHECK_RET( IS_VALID_PAGE(page), _T("invalid notebook page") );
+
+    // set the first visible tab and offset (easy)
+    m_firstVisible = (size_t)page;
+    m_offset = 0;
+    for ( size_t n = 0; n < m_firstVisible; n++ )
+    {
+        m_offset += GetTabWidth(n);
+    }
+
+    // find the last visible tab
+    wxCoord width = GetClientSize().x,
+            cur = 0;
+
+    size_t count = GetPageCount();
+    for ( m_lastVisible = m_firstVisible;
+          m_lastVisible < count;
+          m_lastVisible++ )
+    {
+        cur += GetTabWidth(m_lastVisible);
+
+        // cur now contains the width of all tabs between m_firstVisible and
+        // m_lastVisible
+        if ( cur > width )
+            break;
+    }
+
+    RefreshAllTabs();
+}
+
+void wxNotebook::ScrollLastTo(int page)
+{
+    wxCHECK_RET( IS_VALID_PAGE(page), _T("invalid notebook page") );
+
+    // go backwards until we find the first tab which can be made visible
+    // withotu hiding the given one
+    wxCoord widthAll = GetClientSize().x,
+            widthTabs = GetTabWidth(page);
+
+    m_firstVisible = page;
+    while ( (m_firstVisible > 0) && (widthTabs <= widthAll) )
+    {
+        widthTabs += GetTabWidth(--m_firstVisible);
+    }
+
+    if ( widthTabs > widthAll )
+    {
+        // take one step back (that it is forward)
+        m_firstVisible++;
+    }
+
+    // go to it
+    ScrollTo(m_firstVisible);
+}
+
+// ----------------------------------------------------------------------------
 // wxNotebook sizing/moving
 // ----------------------------------------------------------------------------
 
@@ -802,8 +1055,10 @@ wxSize wxNotebook::DoGetBestClientSize() const
 
 void wxNotebook::DoMoveWindow(int x, int y, int width, int height)
 {
-    // move the spin ctrl
     wxControl::DoMoveWindow(x, y, width, height);
+
+    // move the spin ctrl too (NOP if it doesn't exist)
+    PositionSpinBtn();
 }
 
 void wxNotebook::DoSetSize(int x, int y,

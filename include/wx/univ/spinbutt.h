@@ -48,6 +48,7 @@ public:
     // implement wxSpinButtonBase methods
     virtual int GetValue() const;
     virtual void SetValue(int val);
+    virtual void SetRange(int minVal, int maxVal);
 
     // implement wxControlWithArrows methods
     virtual wxRenderer *GetRenderer() const { return m_renderer; }

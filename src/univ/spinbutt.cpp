@@ -113,6 +113,16 @@ bool wxSpinButton::Create(wxWindow *parent,
 // value access
 // ----------------------------------------------------------------------------
 
+void wxSpinButton::SetRange(int minVal, int maxVal)
+{
+    wxSpinButtonBase::SetRange(minVal, maxVal);
+
+    // because the arrows disabled state might have changed - we don't check if
+    // it really changed or not because SetRange() is called rarely enough and
+    // son an extre refresh here doesn't really hurt
+    Refresh();
+}
+
 int wxSpinButton::GetValue() const
 {
     return m_value;

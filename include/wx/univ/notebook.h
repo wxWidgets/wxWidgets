@@ -136,6 +136,19 @@ protected:
     // recalculate the geometry of the notebook completely
     void Relayout();
 
+    // is the spin button currently shown?
+    bool HasSpinBtn() const;
+
+    // calculate last (fully) visible tab
+    size_t CalcLastVisibleTab() const;
+
+    // show or hide the spin control for tabs scrolling depending on whether it
+    // is needed or not
+    void UpdateSpinBtn();
+
+    // position the spin button
+    void PositionSpinBtn();
+
     // refresh the given tab only
     void RefreshTab(int page);
 
@@ -158,6 +171,10 @@ protected:
     // get the (cached) size of a tab
     void GetTabSize(int page, wxCoord *w, wxCoord *h) const;
 
+    // get the (cached) width of the tab
+    wxCoord GetTabWidth(int page) const
+        { return FixedSizeTabs() ? m_widthMax : m_widths[page]; }
+
     // return TRUE if the tab has an associated image
     bool HasImage(int page) const
         { return m_imageList && m_images[page] != -1; }
@@ -175,6 +192,12 @@ protected:
     // change thep age and send events about it (can be vetoed by user code)
     void ChangePage(int nPage);
 
+    // scroll the tabs so that the first page shown becomes the given one
+    void ScrollTo(int page);
+
+    // scroll the tabs so that the first page shown becomes the given one
+    void ScrollLastTo(int page);
+
     // the pages titles
     wxArrayString m_titles;
 
@@ -183,6 +206,13 @@ protected:
 
     // the spin button to change the pages
     wxSpinButton *m_spinbtn;
+
+    // the offset of the first page shown (may be changed with m_spinbtn)
+    wxCoord m_offset;
+
+    // the first and last currently visible tabs
+    size_t m_firstVisible,
+           m_lastVisible;
 
     // the height of tabs in a normal notebook or the width of tabs in a
     // notebook with tabs on a side
