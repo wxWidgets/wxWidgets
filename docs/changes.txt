@@ -28,6 +28,11 @@ wxBase:
 
 - small change to wxStopWatch::Pause() semantics, please see the documentation
 
+- unlikely but possible incompatibility: the definition of TRUE has changed
+  from "1" to "(bool)1" (and the same thing for FALSE), so the code which
+  could be erroneously compiled previously such as doing "return FALSE" from
+  a function returning a pointer would stop compiling now (but this change
+  is not supposed to have any effects on valid code)
 
 All (GUI):
 

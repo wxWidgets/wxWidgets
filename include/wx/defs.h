@@ -127,15 +127,6 @@
 // check for native bool type and TRUE/FALSE constants
 // ----------------------------------------------------------------------------
 
-// define boolean constants if not done yet
-#ifndef TRUE
-    #define TRUE  1
-#endif
-
-#ifndef FALSE
-    #define FALSE 0
-#endif
-
 // Add more tests here for Windows compilers that already define bool
 // (under Unix, configure tests for this)
 #ifndef HAVE_BOOL
@@ -180,8 +171,15 @@
     // NB: of course, this doesn't replace the standard type, because, for
     //     example, overloading based on bool/int parameter doesn't work and
     //     so should be avoided in portable programs
-typedef unsigned int bool;
+    typedef unsigned int bool;
 #endif // bool
+
+// define boolean constants: don't use true/false here as not all compilers
+// support them
+#undef TRUE
+#undef FALSE
+#define TRUE  ((bool)1)
+#define FALSE ((bool)0)
 
 typedef short int WXTYPE;
 
@@ -196,17 +194,16 @@ typedef int wxWindowID;
 // other feature tests
 // ----------------------------------------------------------------------------
 
-    // Every ride down a slippery slope begins with a single step..
-    //
-    // Yes, using nested classes is indeed against our coding standards in
-    // general, but there are places where you can use them to advantage
-    // without totally breaking ports that cannot use them.  If you do, then
-    // wrap it in this guard, but such cases should still be relatively rare.
-
+// Every ride down a slippery slope begins with a single step..
+//
+// Yes, using nested classes is indeed against our coding standards in
+// general, but there are places where you can use them to advantage
+// without totally breaking ports that cannot use them.  If you do, then
+// wrap it in this guard, but such cases should still be relatively rare.
 #ifndef __WIN16__
-#define wxUSE_NESTED_CLASSES    1
+    #define wxUSE_NESTED_CLASSES    1
 #else
-#define wxUSE_NESTED_CLASSES    0
+    #define wxUSE_NESTED_CLASSES    0
 #endif
 
 // ----------------------------------------------------------------------------
