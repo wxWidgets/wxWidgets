@@ -1129,6 +1129,10 @@
 #undef wxUSE_COMMON_DIALOGS
 #define wxUSE_COMMON_DIALOGS 0
 
+// Don't use debug report under CE
+#undef wxUSE_DEBUGREPORT
+#define wxUSE_DEBUGREPORT 0
+
 // ----------------------------------------------------------------------------
 // MSW settings not supported by CE
 // ----------------------------------------------------------------------------
