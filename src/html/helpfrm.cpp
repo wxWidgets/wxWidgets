@@ -731,7 +731,7 @@ bool wxHtmlHelpFrame::DisplayIndex()
 
     return true;
 }
-#include <gtk/gtk.h>
+
 void wxHtmlHelpFrame::DisplayIndexItem(const wxHtmlHelpMergedIndexItem *it)
 {
     if (it->items.size() == 1)
