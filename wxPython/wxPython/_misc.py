@@ -453,6 +453,7 @@ wxArtProvider_PopProvider = wx._misc.ArtProvider_PopProvider
 wxArtProvider_RemoveProvider = wx._misc.ArtProvider_RemoveProvider
 wxArtProvider_GetBitmap = wx._misc.ArtProvider_GetBitmap
 wxArtProvider_GetIcon = wx._misc.ArtProvider_GetIcon
+wxArtProvider_GetSize = wx._misc.ArtProvider_GetSize
 wxCONFIG_USE_LOCAL_FILE = wx._misc.CONFIG_USE_LOCAL_FILE
 wxCONFIG_USE_GLOBAL_FILE = wx._misc.CONFIG_USE_GLOBAL_FILE
 wxCONFIG_USE_RELATIVE_PATH = wx._misc.CONFIG_USE_RELATIVE_PATH

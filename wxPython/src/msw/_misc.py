@@ -2548,6 +2548,16 @@ class ArtProvider(object):
         return _misc_.ArtProvider_GetIcon(*args, **kwargs)
 
     GetIcon = staticmethod(GetIcon)
+    def GetSize(*args, **kwargs):
+        """
+        GetSize(String client, bool platform_dependent=False) -> Size
+
+        Get the size of an icon from a specific Art Client, queries the
+        topmost provider if platform_dependent = false
+        """
+        return _misc_.ArtProvider_GetSize(*args, **kwargs)
+
+    GetSize = staticmethod(GetSize)
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
         return _misc_.ArtProvider_Destroy(*args, **kwargs)
@@ -2657,6 +2667,15 @@ def ArtProvider_GetIcon(*args, **kwargs):
     wx.NullIcon if no provider provides it.
     """
     return _misc_.ArtProvider_GetIcon(*args, **kwargs)
+
+def ArtProvider_GetSize(*args, **kwargs):
+    """
+    ArtProvider_GetSize(String client, bool platform_dependent=False) -> Size
+
+    Get the size of an icon from a specific Art Client, queries the
+    topmost provider if platform_dependent = false
+    """
+    return _misc_.ArtProvider_GetSize(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
