@@ -221,20 +221,15 @@ typedef struct {
     long closeness;
 }      CloseColor;
 
-#ifdef __OS2__
-/* Visual Age cannot deal with old, non-ansi, code */
+#ifndef FOR_MSW
 static int closeness_cmp(Const void* a, Const void* b)
-#else
-static int
-closeness_cmp(a, b)
-    Const void *a, *b;
-#endif
 {
     CloseColor *x = (CloseColor *) a, *y = (CloseColor *) b;
 
     /* cast to int as qsort requires */
     return (int) (x->closeness - y->closeness);
 }
+#endif
 
 
 /* default AllocColor function:

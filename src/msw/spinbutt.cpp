@@ -192,7 +192,7 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
                    (LPARAM) MAKELONG((short)maxVal, (short)minVal));
 }
 
-bool wxSpinButton::MSWOnScroll(int orientation, WXWORD wParam,
+bool wxSpinButton::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
                                WXWORD pos, WXHWND control)
 {
     wxCHECK_MSG( control, FALSE, wxT("scrolling what?") )
@@ -210,7 +210,7 @@ bool wxSpinButton::MSWOnScroll(int orientation, WXWORD wParam,
     return GetEventHandler()->ProcessEvent(event);
 }
 
-bool wxSpinButton::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
+bool wxSpinButton::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *result)
 {
 #ifndef __GNUWIN32__
 #if defined(__BORLANDC__) || defined(__WATCOMC__)
@@ -240,7 +240,7 @@ bool wxSpinButton::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 #endif
 }
 
-bool wxSpinButton::MSWCommand(WXUINT cmd, WXWORD id)
+bool wxSpinButton::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD WXUNUSED(id))
 {
     // No command messages
     return FALSE;

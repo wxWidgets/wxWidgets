@@ -175,6 +175,13 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
         ? (className *)(obj) \
         : (className *)0)
 
+// The 'this' pointer is always true, so use this version to cast the this
+// pointer and avoid compiler warnings.
+#define wxDynamicThisCast(obj, className) \
+        (((obj)->IsKindOf(&className::sm_class##className)) \
+        ? (className *)(obj) \
+        : (className *)0)
+
 #define wxConstCast(obj, className) ((className *)(obj))
 
 #ifdef __WXDEBUG__

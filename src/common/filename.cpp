@@ -464,6 +464,7 @@ bool wxFileName::IsWild( wxPathFormat format )
 {
     // FIXME: this is probably false for Mac and this is surely wrong for most
     //        of Unix shells (think about "[...]")
+	(void)format;
     return m_name.find_first_of(_T("*?")) != wxString::npos;
 }
 
@@ -529,6 +530,7 @@ wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
 
 wxString wxFileName::GetFullPath( wxPathFormat format ) const
 {
+	(void)format;
     return GetPathWithSep() + GetFullName();
 }
 
@@ -571,17 +573,16 @@ wxString wxFileName::GetLongPath() const
     typedef DWORD (*GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);
 
     static bool s_triedToLoad = FALSE;
-    static GET_LONG_PATH_NAME s_pfnGetLongPathName = NULL;
 
     if ( !s_triedToLoad )
     {
         s_triedToLoad = TRUE;
-
+#if 0
         wxDllType dllKernel = wxDllLoader::LoadLibrary(_T("kernel32"));
-        short avoidCompilerWarning = 0;
-        if ( avoidCompilerWarning ) // dllKernel )
+        if ( dllKernel )
         {
             // may succeed or fail depending on the Windows version
+			static GET_LONG_PATH_NAME s_pfnGetLongPathName = NULL;
 #ifdef _UNICODE
             s_pfnGetLongPathName = (GET_LONG_PATH_NAME) wxDllLoader::GetSymbol(dllKernel, _T("GetLongPathNameW"));
 #else
@@ -614,6 +615,7 @@ wxString wxFileName::GetLongPath() const
                 }
             }
         }
+#endif		
     }
     if (success)
         return pathOut;

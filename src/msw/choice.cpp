@@ -185,7 +185,7 @@ int wxChoice::FindString(const wxString& s) const
 #endif // Watcom/!Watcom
 }
 
-void wxChoice::SetString(int n, const wxString& s)
+void wxChoice::SetString(int WXUNUSED(n), const wxString& WXUNUSED(s))
 {
     wxFAIL_MSG(wxT("not implemented"));
 
@@ -251,7 +251,7 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 // ----------------------------------------------------------------------------
 
 void wxChoice::DoSetSize(int x, int y,
-                         int width, int height,
+                         int width, int WXUNUSED(height),
                          int sizeFlags)
 {
     // Ignore height parameter because height doesn't mean 'initially
@@ -338,10 +338,10 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     return TRUE;
 }
 
-WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam)
+WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
+                               WXUINT WXUNUSED(message),
+                               WXWPARAM WXUNUSED(wParam),
+                               WXLPARAM WXUNUSED(lParam))
 {
 #if wxUSE_CTL3D
     if ( m_useCtl3D )

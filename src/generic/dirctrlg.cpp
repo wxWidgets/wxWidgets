@@ -308,6 +308,21 @@ static const int ID_NEW = 1004;
 //static const int ID_CHECK = 1005;
 
 #if defined(__WXMSW__) || defined(__WXPM__)
+int setdrive(int drive)
+{
+	char  newdrive[3];
+
+	if (drive < 1 || drive > 31)
+		return -1;
+	newdrive[0] = (char)('A' + (char)drive - (char)1);
+	newdrive[1] = ':';
+	newdrive[2] = '\0';
+	if (SetCurrentDirectory((LPSTR)newdrive))
+		return 0;
+	else
+		return -1;
+}
+
 static bool wxIsDriveAvailable(const wxString dirName)
 {
 #ifdef __WIN32__
@@ -325,8 +340,8 @@ static bool wxIsDriveAvailable(const wxString dirName)
 #else
         int currentDrive = _getdrive();
         int thisDrive = (int) (dirNameLower[(size_t)0] - 'a' + 1) ;
-        int err = _chdrive( thisDrive ) ;
-        _chdrive( currentDrive );
+        int err = setdrive( thisDrive ) ;
+        setdrive( currentDrive );
 
         if (err == -1)
         {
@@ -1107,7 +1122,7 @@ void wxGenericDirCtrl::DoResize()
 }
 
 
-void wxGenericDirCtrl::OnSize(wxSizeEvent &event)
+void wxGenericDirCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     DoResize();
 }
@@ -1136,7 +1151,7 @@ void wxDirFilterListCtrl::Init()
     m_dirCtrl = NULL;
 }
 
-void wxDirFilterListCtrl::OnSelFilter(wxCommandEvent& event)
+void wxDirFilterListCtrl::OnSelFilter(wxCommandEvent& WXUNUSED(event))
 {
     int sel = GetSelection();
 
@@ -1236,12 +1251,12 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     Centre( wxBOTH );
 }
 
-void wxGenericDirDialog::OnCloseWindow(wxCloseEvent& event)
+void wxGenericDirDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     EndModal(wxID_CANCEL);
 }
 
-void wxGenericDirDialog::OnOK(wxCommandEvent& event)
+void wxGenericDirDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
     m_path = m_input->GetValue();
     // Does the path exist? (User may have typed anything in m_input)

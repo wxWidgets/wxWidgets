@@ -104,6 +104,8 @@ void wxFontBase::SetNativeFontInfo(const wxNativeFontInfo& info)
     SetUnderlined(info.underlined);
     SetFaceName(info.faceName);
     SetEncoding(info.encoding);
+#else
+	(void)info;	
 #endif
 }
 
@@ -212,7 +214,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     //
     //  Ignore the version for now
     //
-    
+
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;

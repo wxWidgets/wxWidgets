@@ -33,7 +33,7 @@ int _read( int , void * , size_t ) ;
 #define read _read
 #endif
 #ifdef __WXMSW__
-int fileno( FILE* ) ;
+//int fileno( FILE* ) ; This is defined in watcom
 #else
 #if __MSL__ < 0x6000
 int fileno( void* ) ;

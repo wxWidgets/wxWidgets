@@ -193,7 +193,7 @@ wxString wxFileSelectorEx(const wxChar *title,
 
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
-        long style, const wxPoint& pos)
+        long style, const wxPoint& WXUNUSED(pos))
 {
     m_message = message;
     m_dialogStyle = style;

@@ -391,7 +391,7 @@ bool wxBMPFileHandler::SaveFile(wxBitmap *bitmap,
 
 bool wxICOFileHandler::LoadIcon(wxIcon *icon,
                                 const wxString& name,
-                                long flags,
+                                long WXUNUSED(flags),
                                 int desiredWidth, int desiredHeight)
 {
 #if wxUSE_RESOURCE_LOADING_IN_MSW
@@ -475,7 +475,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
 
 bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
                                     const wxString& name,
-                                    long flags,
+                                    long WXUNUSED(flags),
                                     int desiredWidth, int desiredHeight)
 {
     HICON hicon;

@@ -827,7 +827,7 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
     wxString str;
     wxChar *buf = str.GetWriteBuf(len);
 
-    *(WORD *)buf = len;
+    *(WORD *)buf = (WORD)len;
     len = (size_t)::SendMessage(GetHwnd(), EM_GETLINE, lineNo, (LPARAM)buf);
     buf[len] = 0;
 
@@ -967,10 +967,10 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     return TRUE;
 }
 
-WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam)
+WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
+                               WXUINT WXUNUSED(message),
+                               WXWPARAM WXUNUSED(wParam),
+                               WXLPARAM WXUNUSED(lParam))
 {
 #if wxUSE_CTL3D
     if ( m_useCtl3D )

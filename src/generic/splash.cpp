@@ -77,12 +77,12 @@ wxSplashScreen::~wxSplashScreen()
     m_timer.Stop();
 }
 
-void wxSplashScreen::OnNotify(wxTimerEvent& event)
+void wxSplashScreen::OnNotify(wxTimerEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }
 
-void wxSplashScreen::OnCloseWindow(wxCloseEvent& event)
+void wxSplashScreen::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     m_timer.Stop();
     this->Destroy();
@@ -105,20 +105,20 @@ wxSplashScreenWindow::wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* par
     m_bitmap = bitmap;
 }
 
-void wxSplashScreenWindow::OnPaint(wxPaintEvent& event)
+void wxSplashScreenWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
     if (m_bitmap.Ok())
         dc.DrawBitmap(m_bitmap, 0, 0);
 }
 
-static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int x, int y)
+static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int WXUNUSED(x), int WXUNUSED(y))
 {
     wxMemoryDC dcMem;
 
 #ifndef __WXGTK__
     bool hiColour = (wxDisplayDepth() >= 16) ;
-    
+
     if (bitmap.GetPalette() && !hiColour)
     {
         dc.SetPalette(* bitmap.GetPalette());
@@ -164,7 +164,7 @@ void wxSplashScreenWindow::OnMouseEvent(wxMouseEvent& event)
         GetParent()->Close(TRUE);
 }
 
-void wxSplashScreenWindow::OnChar(wxKeyEvent& event)
+void wxSplashScreenWindow::OnChar(wxKeyEvent& WXUNUSED(event))
 {
     GetParent()->Close(TRUE);
 }

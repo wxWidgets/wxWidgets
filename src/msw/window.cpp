@@ -167,7 +167,7 @@ END_EVENT_TABLE()
 // Find an item given the MS Windows id
 wxWindow *wxWindow::FindItem(long id) const
 {
-    wxControl *item = wxDynamicCast(this, wxControl);
+    wxControl *item = wxDynamicThisCast(this, wxControl);
     if ( item )
     {
         // i it we or one of our "internal" children?
@@ -976,7 +976,7 @@ void wxWindow::SetupColours()
         SetBackgroundColour(GetParent()->GetBackgroundColour());
 }
 
-void wxWindow::OnIdle(wxIdleEvent& event)
+void wxWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
     // Check if we need to send a LEAVE event
     if ( m_mouseInWindow )
@@ -1002,7 +1002,7 @@ void wxWindow::OnIdle(wxIdleEvent& event)
                 state |= MK_MBUTTON;
             if ( GetKeyState( VK_RBUTTON ) )
                 state |= MK_RBUTTON;
-  
+
             wxMouseEvent event(wxEVT_LEAVE_WINDOW);
             InitMouseEvent(event, pt.x, pt.y, state);
 
@@ -1014,7 +1014,7 @@ void wxWindow::OnIdle(wxIdleEvent& event)
 }
 
 // Set this window to be the child of 'parent'.
-bool wxWindow::Reparent(wxWindow *parent)
+bool wxWindow::Reparent(wxWindowBase *parent)
 {
     if ( !wxWindowBase::Reparent(parent) )
         return FALSE;
@@ -1580,7 +1580,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                         }
                         else
                         {
-                            wxPanel *panel = wxDynamicCast(this, wxPanel);
+                            wxPanel *panel = wxDynamicThisCast(this, wxPanel);
                             wxButton *btn = NULL;
                             if ( panel )
                             {
@@ -2228,7 +2228,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
 // Dialog window proc
 LONG APIENTRY _EXPORT
-wxDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+wxDlgProc(HWND WXUNUSED(hWnd), UINT message, WPARAM WXUNUSED(wParam), LPARAM WXUNUSED(lParam))
 {
     if ( message == WM_INITDIALOG )
     {
@@ -2333,7 +2333,7 @@ void wxWindow::MSWDetachWindowMenu()
 bool wxWindow::MSWCreate(int id,
                          wxWindow *parent,
                          const wxChar *wclass,
-                         wxWindow *wx_win,
+                         wxWindow *WXUNUSED(wx_win),
                          const wxChar *title,
                          int x,
                          int y,
@@ -2619,7 +2619,7 @@ bool wxWindow::HandleEndSession(bool endSession, long logOff)
 // window creation/destruction
 // ---------------------------------------------------------------------------
 
-bool wxWindow::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
+bool wxWindow::HandleCreate(WXLPCREATESTRUCT WXUNUSED(cs), bool *mayCreate)
 {
     // TODO: should generate this event from WM_NCCREATE
     wxWindowCreateEvent event(this);
@@ -2729,7 +2729,7 @@ bool wxWindow::HandleKillFocus(WXHWND WXUNUSED(hwnd))
 // miscellaneous
 // ---------------------------------------------------------------------------
 
-bool wxWindow::HandleShow(bool show, int status)
+bool wxWindow::HandleShow(bool show, int WXUNUSED(status))
 {
     wxShowEvent event(GetId(), show);
     event.m_eventObject = this;
@@ -2780,7 +2780,7 @@ bool wxWindow::HandleDropFiles(WXWPARAM wParam)
     return rc;
 }
 
-bool wxWindow::HandleSetCursor(WXHWND hWnd,
+bool wxWindow::HandleSetCursor(WXHWND WXUNUSED(hWnd),
                                short nHitTest,
                                int WXUNUSED(mouseMsg))
 {
@@ -2969,12 +2969,12 @@ bool wxWindow::HandleCtlColor(WXHBRUSH *brush,
 }
 
 // Define for each class of dialog and control
-WXHBRUSH wxWindow::OnCtlColor(WXHDC hDC,
-                              WXHWND hWnd,
-                              WXUINT nCtlColor,
-                              WXUINT message,
-                              WXWPARAM wParam,
-                              WXLPARAM lParam)
+WXHBRUSH wxWindow::OnCtlColor(WXHDC WXUNUSED(hDC),
+                              WXHWND WXUNUSED(hWnd),
+                              WXUINT WXUNUSED(nCtlColor),
+                              WXUINT WXUNUSED(message),
+                              WXWPARAM WXUNUSED(wParam),
+                              WXLPARAM WXUNUSED(lParam))
 {
     return (WXHBRUSH)0;
 }
@@ -3250,7 +3250,7 @@ bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     return FALSE;
 }
 
-bool wxWindow::HandleSysCommand(WXWPARAM wParam, WXLPARAM lParam)
+bool wxWindow::HandleSysCommand(WXWPARAM wParam, WXLPARAM WXUNUSED(lParam))
 {
     // 4 bits are reserved
     switch ( wParam & 0xFFFFFFF0 )
@@ -3383,7 +3383,7 @@ wxKeyEvent wxWindow::CreateKeyEvent(wxEventType evType,
 
 // isASCII is TRUE only when we're called from WM_CHAR handler and not from
 // WM_KEYDOWN one
-bool wxWindow::HandleChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
+bool wxWindow::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
 {
     bool ctrlDown = FALSE;
 
@@ -3436,7 +3436,7 @@ bool wxWindow::HandleChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
     return FALSE;
 }
 
-bool wxWindow::HandleKeyDown(WXWORD wParam, WXLPARAM lParam)
+bool wxWindow::HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam)
 {
     int id = wxCharCodeMSWToWX(wParam);
 
@@ -3458,7 +3458,7 @@ bool wxWindow::HandleKeyDown(WXWORD wParam, WXLPARAM lParam)
     return FALSE;
 }
 
-bool wxWindow::HandleKeyUp(WXWORD wParam, WXLPARAM lParam)
+bool wxWindow::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
 {
     int id = wxCharCodeMSWToWX(wParam);
 
@@ -3916,9 +3916,9 @@ void wxSetKeyboardHook(bool doIt)
     else
     {
         UnhookWindowsHookEx(wxTheKeyboardHook);
-        // avoids mingw warning about statement with no effect (FreeProcInstance
-        // doesn't do anything under Win32)
-#ifndef __GNUC__
+		// avoids warning about statement with no effect (FreeProcInstance
+		// doesn't do anything under Win32)
+#if !defined(WIN32) && !defined(_WIN32) && !defined(__WIN32__) && !defined(__NT__) && !defined(__GNUWIN32__)
         FreeProcInstance(wxTheKeyboardHookProc);
 #endif
     }
@@ -4439,7 +4439,7 @@ static TEXTMETRIC wxGetTextMetrics(const wxWindow *win)
 
 // Find the wxWindow at the current mouse position, returning the mouse
 // position.
-wxWindow* wxFindWindowAtPointer(wxPoint& pt)
+wxWindow* wxFindWindowAtPointer(wxPoint& WXUNUSED(pt))
 {
     return wxFindWindowAtPoint(wxGetMousePosition());
 }

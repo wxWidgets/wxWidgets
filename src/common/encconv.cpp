@@ -138,7 +138,8 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
         else
         {
             CharsetItem *rev = BuildReverseTable(out_tbl);
-            CharsetItem *item, key;
+            CharsetItem *item;
+            CharsetItem key;
 
             for (i = 0; i < 128; i++)
             {
@@ -150,7 +151,11 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
                 if (item)
                     m_Table[128 + i] = (tchar)item -> c;
                 else
-                    m_Table[128 + i] = 128 + i; // don't know => don't touch
+#if wxUSE_WCHAR_T
+                    m_Table[128 + i] = (wchar_t)(128 + i);
+#else
+                    m_Table[128 + i] = (char)(128 + i);
+#endif					
             }
 
             delete[] rev;

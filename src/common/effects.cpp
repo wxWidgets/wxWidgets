@@ -54,7 +54,7 @@ wxEffects::wxEffects(const wxColour& highlightColour, const wxColour& lightShado
 }
 
 // Draw a sunken edge
-void wxEffects::DrawSunkenEdge(wxDC& dc, const wxRect& rect, int borderSize)
+void wxEffects::DrawSunkenEdge(wxDC& dc, const wxRect& rect, int WXUNUSED(borderSize))
 {
     wxPen highlightPen(m_highlightColour, 1, wxSOLID);
     wxPen lightShadowPen(m_lightShadow, 1, wxSOLID);
@@ -93,9 +93,9 @@ bool wxEffects::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
 
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
-    
+
     wxMemoryDC dcMem;
-    
+
     if (bitmap.GetPalette() && !hiColour)
     {
         dc.SetPalette(* bitmap.GetPalette());

@@ -6043,7 +6043,7 @@ void wxGrid::DrawHighlight(wxDC& dc)
 // This is used to redraw all grid lines e.g. when the grid line colour
 // has been changed
 //
-void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED_GTK(reg) )
+void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
 {
     if ( !m_gridLinesEnabled ||
          !m_numRows ||

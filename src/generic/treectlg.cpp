@@ -298,23 +298,23 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
     {
         (*m_accept) = TRUE;
         (*m_res) = GetValue();
-        
+
         if (!wxPendingDelete.Member(this))
             wxPendingDelete.Append(this);
 
         if ((*m_accept) && ((*m_res) != m_startValue))
             m_owner->OnRenameAccept();
-            
+
         return;
     }
     if (event.m_keyCode == WXK_ESCAPE)
     {
         (*m_accept) = FALSE;
         (*m_res) = "";
-        
+
         if (!wxPendingDelete.Member(this))
             wxPendingDelete.Append(this);
-            
+
         return;
     }
     event.Skip();
@@ -331,7 +331,7 @@ void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
     if (myPos.x + sx > parentSize.x) sx = parentSize.x - myPos.x;
     if (mySize.x > sx) sx = mySize.x;
     SetSize(sx, -1);
-    
+
     event.Skip();
 }
 
@@ -632,7 +632,7 @@ void wxGenericTreeCtrl::Init()
 
     m_imageListNormal =
     m_imageListState = (wxImageList *) NULL;
-    m_ownsImageListNormal = 
+    m_ownsImageListNormal =
     m_ownsImageListState = FALSE;
 
     m_dragCount = 0;
@@ -2252,7 +2252,7 @@ wxTreeItemId wxGenericTreeCtrl::HitTest(const wxPoint& point, int& flags)
 // get the bounding rectangle of the item (or of its label only)
 bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
                          wxRect& rect,
-                         bool textOnly) const
+                         bool WXUNUSED(textOnly)) const
 {
     wxCHECK_MSG( item.IsOk(), FALSE, _T("invalid item in wxGenericTreeCtrl::GetBoundingRect") );
 

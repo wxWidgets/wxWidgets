@@ -1575,7 +1575,7 @@ public:
                   wxObject *userData = (wxObject *) NULL )
         { Connect(id, -1, eventType, func, userData); }
 
-    bool Disconnect( int id, int lastId = -1, wxEventType eventType = wxEVT_NULL,
+    bool Disconnect( int id, int lastId, wxEventType eventType,
                   wxObjectEventFunction func = NULL,
                   wxObject *userData = (wxObject *) NULL );
 

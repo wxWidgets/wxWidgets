@@ -223,10 +223,10 @@ void wxControl::OnEraseBackground(wxEraseEvent& event)
     ::SetMapMode(hdc, mode);
 }
 
-WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam)
+WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
+                               WXUINT WXUNUSED(message),
+                               WXWPARAM WXUNUSED(wParam),
+                               WXLPARAM WXUNUSED(lParam))
 {
 #if wxUSE_CTL3D
     if ( m_useCtl3D )

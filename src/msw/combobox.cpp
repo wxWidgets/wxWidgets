@@ -141,10 +141,10 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
     return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
 }
 
-WXHBRUSH wxComboBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam)
+WXHBRUSH wxComboBox::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
+                               WXUINT WXUNUSED(message),
+                               WXWPARAM WXUNUSED(wParam),
+                               WXLPARAM WXUNUSED(lParam))
 {
 #if wxUSE_CTL3D
     if ( m_useCtl3D )
@@ -183,7 +183,7 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
     {
         case WM_CHAR:
             return HandleChar(wParam, lParam, TRUE /* isASCII */);
-
+			
         case WM_KEYDOWN:
             return HandleKeyDown(wParam, lParam);
 
@@ -373,7 +373,7 @@ void wxComboBox::Paste()
   SendMessage(hWnd, WM_PASTE, 0, 0L);
 }
 
-void wxComboBox::SetEditable(bool editable)
+void wxComboBox::SetEditable(bool WXUNUSED(editable))
 {
   // Can't implement in MSW?
 //  HWND hWnd = GetHwnd();
@@ -464,7 +464,7 @@ void wxComboBox::SetSelection(long from, long to)
       toChar = -1;
     }
 
-    if ( 
+    if (
 #ifdef __WIN32__
     SendMessage(hWnd, CB_SETEDITSEL, (WPARAM)0, (LPARAM)MAKELONG(fromChar, toChar))
 #else // Win16

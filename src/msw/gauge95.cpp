@@ -137,11 +137,11 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-void wxGauge95::SetShadowWidth(int w)
+void wxGauge95::SetShadowWidth(int WXUNUSED(w))
 {
 }
 
-void wxGauge95::SetBezelFace(int w)
+void wxGauge95::SetBezelFace(int WXUNUSED(w))
 {
 }
 

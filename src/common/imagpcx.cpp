@@ -102,7 +102,7 @@ void RLEdecode(unsigned char *p, unsigned int size, wxInputStream& s)
 		  //
         if ((data & 0xC0) != 0xC0)
         {
-            *(p++) = data;
+            *(p++) = (unsigned char)data;
             size--;
         }
         else
@@ -110,7 +110,7 @@ void RLEdecode(unsigned char *p, unsigned int size, wxInputStream& s)
             cont = data & 0x3F;
             data = (unsigned char)s.GetC();
             for (i = 1; i <= cont; i++)
-                *(p++) = data;
+                *(p++) = (unsigned char)data;
             size -= cont;
         }
     }
@@ -349,12 +349,12 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     hdr[HDR_ENCODING]         = 1;
     hdr[HDR_NPLANES]          = nplanes;
     hdr[HDR_BITSPERPIXEL]     = 8;
-    hdr[HDR_BYTESPERLINE]     = bytesperline % 256;
-    hdr[HDR_BYTESPERLINE + 1] = bytesperline / 256;
-    hdr[HDR_XMAX]             = (width - 1)  % 256;
-    hdr[HDR_XMAX + 1]         = (width - 1)  / 256;
-    hdr[HDR_YMAX]             = (height - 1) % 256;
-    hdr[HDR_YMAX + 1]         = (height - 1) / 256;
+    hdr[HDR_BYTESPERLINE]     = (unsigned char)(bytesperline % 256);
+    hdr[HDR_BYTESPERLINE + 1] = (unsigned char)(bytesperline / 256);
+    hdr[HDR_XMAX]             = (unsigned char)((width - 1)  % 256);
+    hdr[HDR_XMAX + 1]         = (unsigned char)((width - 1)  / 256);
+    hdr[HDR_YMAX]             = (unsigned char)((height - 1) % 256);
+    hdr[HDR_YMAX + 1]         = (unsigned char)((height - 1) / 256);
     hdr[HDR_PALETTEINFO]      = 1;
 
     stream.Write(hdr, 128);

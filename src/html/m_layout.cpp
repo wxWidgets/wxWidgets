@@ -36,7 +36,7 @@ TAG_HANDLER_BEGIN(P, "P")
 
     TAG_HANDLER_PROC(tag)
     {
-        if (m_WParser->GetContainer()->GetFirstCell() != NULL) 
+        if (m_WParser->GetContainer()->GetFirstCell() != NULL)
 	    {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
@@ -56,7 +56,7 @@ TAG_HANDLER_BEGIN(BR, "BR")
     {
         int al = m_WParser->GetContainer()->GetAlignHor();
         wxHtmlContainerCell *c;
-    
+
         m_WParser->CloseContainer();
         c = m_WParser->OpenContainer();
         c->SetAlignHor(al);
@@ -77,7 +77,7 @@ TAG_HANDLER_BEGIN(CENTER, "CENTER")
         wxHtmlContainerCell *c = m_WParser->GetContainer();
 
         m_WParser->SetAlign(wxHTML_ALIGN_CENTER);
-        if (c->GetFirstCell() != NULL) 
+        if (c->GetFirstCell() != NULL)
 	    {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
@@ -85,12 +85,12 @@ TAG_HANDLER_BEGIN(CENTER, "CENTER")
         else
             c->SetAlignHor(wxHTML_ALIGN_CENTER);
 
-        if (tag.HasEnding()) 
+        if (tag.HasEnding())
 	    {
             ParseInner(tag);
 
             m_WParser->SetAlign(old);
-            if (c->GetFirstCell() != NULL) 
+            if (c->GetFirstCell() != NULL)
 	        {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
@@ -113,7 +113,7 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
     {
         int old = m_WParser->GetAlign();
         wxHtmlContainerCell *c = m_WParser->GetContainer();
-        if (c->GetFirstCell() != NULL) 
+        if (c->GetFirstCell() != NULL)
 	    {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
@@ -121,7 +121,7 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
             c->SetAlign(tag);
             m_WParser->SetAlign(c->GetAlignHor());
         }
-        else 
+        else
 	    {
             c->SetAlign(tag);
             m_WParser->SetAlign(c->GetAlignHor());
@@ -130,7 +130,7 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
         ParseInner(tag);
 
         m_WParser->SetAlign(old);
-        if (c->GetFirstCell() != NULL) 
+        if (c->GetFirstCell() != NULL)
 	    {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
@@ -150,10 +150,10 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
 
     TAG_HANDLER_PROC(tag)
     {
-        if (m_WParser->GetWindow()) 
+        if (m_WParser->GetWindow())
 	    {
             wxHtmlWindow *wfr = (wxHtmlWindow*)(m_WParser->GetWindow());
-            if (wfr) 
+            if (wfr)
 	        {
                 wxString title = "";
                 wxString *src = m_WParser->GetSource();
@@ -177,30 +177,36 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         unsigned long tmp;
         wxColour clr;
 
-        if (tag.HasParam(wxT("TEXT"))) 
+        if (tag.HasParam(wxT("TEXT")))
 	    {
-            if (tag.ScanParam(wxT("TEXT"), wxT("#%lX"), &tmp) == 1) 
+            if (tag.ScanParam(wxT("TEXT"), wxT("#%lX"), &tmp) == 1)
 	        {
-                clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
+                clr = wxColour((unsigned char)((tmp & 0xFF0000) >> 16),
+							   (unsigned char)((tmp & 0x00FF00) >> 8),
+							   (unsigned char)(tmp & 0x0000FF));
                 m_WParser->SetActualColor(clr);
                 m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr));
             }
     	}
 
-        if (tag.HasParam(wxT("LINK"))) 
+        if (tag.HasParam(wxT("LINK")))
 	    {
-            if (tag.ScanParam(wxT("LINK"), wxT("#%lX"), &tmp) == 1) 
+            if (tag.ScanParam(wxT("LINK"), wxT("#%lX"), &tmp) == 1)
 	        {
-                clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
+                clr = wxColour((unsigned char)((tmp & 0xFF0000) >> 16),
+							   (unsigned char)((tmp & 0x00FF00) >> 8),
+							   (unsigned char)(tmp & 0x0000FF));
                 m_WParser->SetLinkColor(clr);
     	    }
         }
 
-        if (tag.HasParam(wxT("BGCOLOR"))) 
+        if (tag.HasParam(wxT("BGCOLOR")))
 	    {
-            if (tag.ScanParam(wxT("BGCOLOR"), wxT("#%lX"), &tmp) == 1) 
+            if (tag.ScanParam(wxT("BGCOLOR"), wxT("#%lX"), &tmp) == 1)
 	        {
-                clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
+                clr = wxColour((unsigned char)((tmp & 0xFF0000) >> 16),
+							   (unsigned char)((tmp & 0x00FF00) >> 8),
+							   (unsigned char)(tmp & 0x0000FF));
                 m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr, wxHTML_CLR_BACKGROUND));
                 if (m_WParser->GetWindow() != NULL)
                     m_WParser->GetWindow()->SetBackgroundColour(clr);
@@ -218,15 +224,15 @@ TAG_HANDLER_BEGIN(BLOCKQUOTE, "BLOCKQUOTE")
     TAG_HANDLER_PROC(tag)
     {
         wxHtmlContainerCell *c;
-    
+
         m_WParser->CloseContainer();
         c = m_WParser->OpenContainer();
-    
+
 	    if (c->GetAlignHor() == wxHTML_ALIGN_RIGHT)
             c->SetIndent(5 * m_WParser->GetCharWidth(), wxHTML_INDENT_RIGHT);
         else
             c->SetIndent(5 * m_WParser->GetCharWidth(), wxHTML_INDENT_LEFT);
-    
+
 	    c->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_TOP);
         m_WParser->OpenContainer();
         ParseInner(tag);

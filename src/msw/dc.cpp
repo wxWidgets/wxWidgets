@@ -1171,7 +1171,7 @@ void wxDC::SetRop(WXHDC dc)
     SetROP2(GetHdc(), rop);
 }
 
-bool wxDC::StartDoc(const wxString& message)
+bool wxDC::StartDoc(const wxString& WXUNUSED(message))
 {
     // We might be previewing, so return TRUE to let it continue.
     return TRUE;

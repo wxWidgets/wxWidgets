@@ -20,6 +20,7 @@
 #endif
 
 #ifndef __GSOCKET_STANDALONE__
+#include "wx/defs.h"
 #include "wx/setup.h"
 #endif
 
@@ -278,7 +279,7 @@ void _GSocket_Disable_Events(GSocket *socket)
 
 #else /* !wxUSE_SOCKETS */
 
-/* 
+/*
  * Translation unit shouldn't be empty, so include this typedef to make the
  * compiler (VC++ 6.0, for example) happy
  */

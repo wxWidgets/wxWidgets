@@ -717,7 +717,7 @@ bool wxToolBar::Realize()
 // message handlers
 // ----------------------------------------------------------------------------
 
-bool wxToolBar::MSWCommand(WXUINT cmd, WXWORD id)
+bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
 {
     wxToolBarToolBase *tool = FindById((int)id);
     if ( !tool )
@@ -747,7 +747,7 @@ bool wxToolBar::MSWCommand(WXUINT cmd, WXWORD id)
 
 bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                             WXLPARAM lParam,
-                            WXLPARAM *result)
+                            WXLPARAM *WXUNUSED(result))
 {
     // First check if this applies to us
     NMHDR *hdr = (NMHDR *)lParam;
@@ -912,7 +912,7 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *tool, bool toggle)
                   (WPARAM)tool->GetId(), (LPARAM)MAKELONG(toggle, 0));
 }
 
-void wxToolBar::DoSetToggle(wxToolBarToolBase *tool, bool toggle)
+void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(toggle))
 {
     // VZ: AFAIK, the button has to be created either with TBSTYLE_CHECK or
     //     without, so we really need to delete the button and recreate it here
@@ -1155,3 +1155,4 @@ m_hBitmap = (WXHBITMAP) newBitmap;
 
 
 #endif // wxUSE_TOOLBAR && Win95
+

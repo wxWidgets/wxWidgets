@@ -159,9 +159,9 @@ WORD wxPaletteSize(VOID FAR * pv)
         NumColors = DibNumColors(lpbi);
 
         if (lpbi->biSize == sizeof(BITMAPCOREHEADER))
-                return NumColors * sizeof(RGBTRIPLE);
+                return (WORD)(NumColors * sizeof(RGBTRIPLE));
         else
-                return NumColors * sizeof(RGBQUAD);
+                return (WORD)(NumColors * sizeof(RGBQUAD));
 }
 
 /****************************************************************************
@@ -528,7 +528,7 @@ BOOL wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
     }
 
     /* offset to the bits from start of DIB header */
-    offBits = (WORD)lpbi->biSize + nNumColors * sizeof(RGBQUAD);
+    offBits = (WORD)(lpbi->biSize + nNumColors * sizeof(RGBQUAD));
 
     if (bf.bfOffBits != 0L)
     {

@@ -302,7 +302,7 @@ wxListCtrl::~wxListCtrl()
         delete m_textCtrl;
         m_textCtrl = NULL;
     }
-    
+
     if (m_ownsImageListNormal) delete m_imageListNormal;
     if (m_ownsImageListSmall) delete m_imageListSmall;
     if (m_ownsImageListState) delete m_imageListState;
@@ -730,7 +730,7 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 }
 
 // Sets the item image
-bool wxListCtrl::SetItemImage(long item, int image, int selImage)
+bool wxListCtrl::SetItemImage(long item, int image, int WXUNUSED(selImage))
 {
     wxListItem info;
 
@@ -1058,7 +1058,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 }
 
 // End label editing, optionally cancelling the edit
-bool wxListCtrl::EndEditLabel(bool cancel)
+bool wxListCtrl::EndEditLabel(bool WXUNUSED(cancel))
 {
     wxFAIL;
 
@@ -1844,7 +1844,7 @@ void wxListItem::ClearAttributes()
     m_attr = NULL;
 }
 
-static void wxConvertFromMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_ITEM& lvItem, HWND getFullInfo)
+static void wxConvertFromMSWListItem(const wxListCtrl *WXUNUSED(ctrl), wxListItem& info, LV_ITEM& lvItem, HWND getFullInfo)
 {
     info.m_data = lvItem.lParam;
     info.m_mask = 0;

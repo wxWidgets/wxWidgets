@@ -561,7 +561,7 @@ public:
                       wxDateTime_t millisec = 0);
         // from separate values for each component with explicit date
     inline wxDateTime(wxDateTime_t day,             // day of the month
-                      Month        month = Inv_Month,
+                      Month        month,
                       int          year = Inv_Year, // 1999, not 99 please!
                       wxDateTime_t hour = 0,
                       wxDateTime_t minute = 0,
@@ -604,7 +604,7 @@ public:
         // from separate values for each component with explicit date
         // (defaults for month and year are the current values)
     wxDateTime& Set(wxDateTime_t day,
-                    Month        month = Inv_Month,
+                    Month        month,
                     int          year = Inv_Year, // 1999, not 99 please!
                     wxDateTime_t hour = 0,
                     wxDateTime_t minute = 0,

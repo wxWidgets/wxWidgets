@@ -711,6 +711,7 @@ bool wxDebugContext::Dump(void)
 #endif
 }
 
+#ifdef __WXDEBUG__
 struct wxDebugStatsStruct
 {
   long instanceCount;
@@ -735,6 +736,7 @@ static wxDebugStatsStruct *InsertStatsStruct(wxDebugStatsStruct *head, wxDebugSt
   st->next = head;
   return st;
 }
+#endif
 
 bool wxDebugContext::PrintStatistics(bool detailed)
 {
@@ -832,6 +834,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
 
   return TRUE;
 #else
+  (void)detailed;
   return FALSE;
 #endif
 }
@@ -1051,7 +1054,7 @@ void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
 }
 
 // Trace: send output to the current debugging stream
-void wxTrace(const wxChar *fmt ...)
+void wxTrace(const wxChar * ...)
 {
 #if 1
     wxFAIL_MSG(wxT("wxTrace is now obsolete. Please use wxDebugXXX instead."));
@@ -1088,7 +1091,7 @@ void wxTrace(const wxChar *fmt ...)
 }
 
 // Trace with level
-void wxTraceLevel(int level, const wxChar *fmt ...)
+void wxTraceLevel(int, const wxChar * ...)
 {
 #if 1
     wxFAIL_MSG(wxT("wxTrace is now obsolete. Please use wxDebugXXX instead."));

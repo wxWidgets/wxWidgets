@@ -19,7 +19,7 @@
 class WXDLLEXPORT wxDataFormat
 {
 public:
-    // the clipboard formats under Win32 are WORDs
+    // the clipboard formats under Win32 are WORD's
     typedef unsigned short NativeFormat;
 
     wxDataFormat(NativeFormat format = wxDF_INVALID) { m_format = format; }

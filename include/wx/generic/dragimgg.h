@@ -190,7 +190,7 @@ public:
 
     // Create a drag image from a bitmap and optional cursor
     bool Create(const wxBitmap& image, const wxCursor& cursor = wxNullCursor);
-    bool Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& cursorHotspot)
+    bool Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
     {
         wxLogDebug(wxT("wxDragImage::Create: use of a cursor hotspot is now deprecated. Please omit this argument."));
         return Create(image, cursor);
@@ -198,7 +198,7 @@ public:
 
     // Create a drag image from an icon and optional cursor
     bool Create(const wxIcon& image, const wxCursor& cursor = wxNullCursor);
-    bool Create(const wxIcon& image, const wxCursor& cursor, const wxPoint& cursorHotspot)
+    bool Create(const wxIcon& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
     {
         wxLogDebug(wxT("wxDragImage::Create: use of a cursor hotspot is now deprecated. Please omit this argument."));
         return Create(image, cursor);
@@ -206,7 +206,7 @@ public:
 
     // Create a drag image from a string and optional cursor
     bool Create(const wxString& str, const wxCursor& cursor = wxNullCursor);
-    bool Create(const wxString& str, const wxCursor& cursor, const wxPoint& cursorHotspot)
+    bool Create(const wxString& str, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
     {
         wxLogDebug(wxT("wxDragImage::Create: use of a cursor hotspot is now deprecated. Please omit this argument."));
         return Create(str, cursor);

@@ -369,7 +369,7 @@ public:
             DoTraverse(root, recursively);
         }
 
-    virtual bool OnVisit(const wxTreeItemId& item)
+    virtual bool OnVisit(const wxTreeItemId& WXUNUSED(item))
     {
         m_count++;
 
@@ -650,7 +650,7 @@ wxTreeCtrl::~wxTreeCtrl()
 
     // delete user data to prevent memory leaks
     DeleteAllItems();
-    
+
     if (m_ownsImageListNormal) delete m_imageListNormal;
     if (m_ownsImageListState) delete m_imageListState;
 }
@@ -1643,7 +1643,7 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
 }
 
 // End label editing, optionally cancelling the edit
-void wxTreeCtrl::EndEditLabel(const wxTreeItemId& item, bool discardChanges)
+void wxTreeCtrl::EndEditLabel(const wxTreeItemId& WXUNUSED(item), bool discardChanges)
 {
     TreeView_EndEditLabelNow(GetHwnd(), discardChanges);
 
@@ -2344,7 +2344,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         case TVN_GETDISPINFO:
             // NB: so far the user can't set the image himself anyhow, so do it
             //     anyway - but this may change later
-            if ( /* !processed && */ 1 )
+//          if ( /* !processed && */ 1 )
             {
                 wxTreeItemId item = event.m_item;
                 TV_DISPINFO *info = (TV_DISPINFO *)lParam;
@@ -2368,7 +2368,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                                           : wxTreeItemIcon_Selected
                         );
                 }
-            }
+			}
             break;
 
         //default:

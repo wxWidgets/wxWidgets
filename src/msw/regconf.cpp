@@ -464,7 +464,7 @@ bool wxRegConfig::GetNextEntry(wxString& str, long& lIndex) const
   return bOk;
 }
 
-size_t wxRegConfig::GetNumberOfEntries(bool bRecursive) const
+size_t wxRegConfig::GetNumberOfEntries(bool WXUNUSED(bRecursive)) const
 {
   size_t nEntries = 0;
 
@@ -481,7 +481,7 @@ size_t wxRegConfig::GetNumberOfEntries(bool bRecursive) const
   return nEntries;
 }
 
-size_t wxRegConfig::GetNumberOfGroups(bool bRecursive) const
+size_t wxRegConfig::GetNumberOfGroups(bool WXUNUSED(bRecursive)) const
 {
   size_t nGroups = 0;
 
@@ -741,7 +741,7 @@ bool wxRegConfig::RenameGroup(const wxString& oldName, const wxString& newName)
 // ----------------------------------------------------------------------------
 // deleting
 // ----------------------------------------------------------------------------
-bool wxRegConfig::DeleteEntry(const wxString& value, bool bGroupIfEmptyAlso)
+bool wxRegConfig::DeleteEntry(const wxString& value, bool WXUNUSED(bGroupIfEmptyAlso))
 {
   wxConfigPathChanger path(this, value);
 

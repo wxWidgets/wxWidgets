@@ -83,7 +83,7 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
 #if wxUSE_BUSYINFO
     wxBusyInfo* busy = NULL;
     wxString info;
-    if (show_wait_msg) 
+    if (show_wait_msg)
     {
         info.Printf(_("Adding book %s"), book.c_str());
         busy = new wxBusyInfo(info);
@@ -93,7 +93,7 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
 #if wxUSE_BUSYINFO
     if (show_wait_msg)
         delete busy;
-#endif 
+#endif
     return retval;
 }
 
@@ -113,7 +113,7 @@ void wxHtmlHelpController::CreateHelpWindow()
         return ;
     }
 
-    if (m_Config == NULL) 
+    if (m_Config == NULL)
     {
         m_Config = wxConfigBase::Get(FALSE);
         if (m_Config != NULL)
@@ -211,11 +211,8 @@ bool wxHtmlHelpController::DisplayTextPopup(const wxString& text, const wxPoint&
 
         return TRUE;
     }
-
-    return FALSE;
-#else
-    return FALSE;    
 #endif
+    return FALSE;
 }
 
 void wxHtmlHelpController::SetFrameParameters(const wxString& title,

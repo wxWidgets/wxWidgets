@@ -87,7 +87,7 @@ public:
 
     virtual void SetFocus();
 
-    virtual bool Reparent( wxWindow *newParent );
+    virtual bool Reparent( wxWindowBase *newParent );
 
     virtual void WarpPointer(int x, int y);
     virtual void CaptureMouse();
@@ -328,9 +328,9 @@ public:
     bool HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags);
     bool HandleMouseMove(int x, int y, WXUINT flags);
 
-    bool HandleChar(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
-    bool HandleKeyDown(WXWORD wParam, WXLPARAM lParam);
-    bool HandleKeyUp(WXWORD wParam, WXLPARAM lParam);
+    bool HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII = FALSE);
+    bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
+    bool HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam);
 
     bool HandleQueryDragIcon(WXHICON *hIcon);
 

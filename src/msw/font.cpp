@@ -290,42 +290,42 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;
-    lf.lfItalic = l;
+    lf.lfItalic = (BYTE)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;
-    lf.lfUnderline = l;
+    lf.lfUnderline = (BYTE)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;
-    lf.lfStrikeOut = l;
+    lf.lfStrikeOut = (BYTE)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;
-    lf.lfCharSet = l;
+    lf.lfCharSet = (BYTE)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;
-    lf.lfOutPrecision = l;
+    lf.lfOutPrecision = (BYTE)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;
-    lf.lfClipPrecision = l;
+    lf.lfClipPrecision = (BYTE)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;
-    lf.lfQuality = l;
+    lf.lfQuality = (BYTE)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;
-    lf.lfPitchAndFamily = l;
+    lf.lfPitchAndFamily = (BYTE)l;
 
     token = tokenizer.GetNextToken();
     if(!token)
@@ -450,7 +450,7 @@ bool wxFont::RealizeResource()
     return TRUE;
 }
 
-bool wxFont::FreeResource(bool force)
+bool wxFont::FreeResource(bool WXUNUSED(force))
 {
     if ( GetResourceHandle() )
     {

@@ -207,7 +207,7 @@ void wxCheckBox::Command (wxCommandEvent & event)
 // wxBitmapCheckBox
 // ----------------------------------------------------------------------------
 
-bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *label,
+bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *WXUNUSED(label),
            const wxPoint& pos,
            const wxSize& size, long style,
            const wxValidator& validator,
@@ -262,7 +262,7 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *l
   return TRUE;
 }
 
-void wxBitmapCheckBox::SetLabel(const wxBitmap& bitmap)
+void wxBitmapCheckBox::SetLabel(const wxBitmap& WXUNUSED(bitmap))
 {
     wxFAIL_MSG(wxT("not implemented"));
 }

@@ -33,7 +33,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 // IMPLEMENT_DYNAMIC_CLASS(wxBitmapRadioButton, wxRadioButton)
 
-bool wxRadioButton::MSWCommand(WXUINT param, WXWORD id)
+bool wxRadioButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
   if (param == BN_CLICKED)
   {
@@ -172,10 +172,10 @@ void wxRadioButton::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-WXHBRUSH wxRadioButton::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam)
+WXHBRUSH wxRadioButton::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
+                               WXUINT WXUNUSED(message),
+                               WXWPARAM WXUNUSED(wParam),
+                               WXLPARAM WXUNUSED(lParam))
 {
 #if wxUSE_CTL3D
     if ( m_useCtl3D )

@@ -1345,7 +1345,7 @@ void wxWindowBase::UpdateWindowUI()
 
         if ( event.GetSetText() )
         {
-            wxControl *control = wxDynamicCast(this, wxControl);
+            wxControl *control = wxDynamicThisCast(this, wxControl);
             if ( control )
             {
                 wxTextCtrl *text = wxDynamicCast(control, wxTextCtrl);
@@ -1357,7 +1357,7 @@ void wxWindowBase::UpdateWindowUI()
         }
 
 #if wxUSE_CHECKBOX
-        wxCheckBox *checkbox = wxDynamicCast(this, wxCheckBox);
+        wxCheckBox *checkbox = wxDynamicThisCast(this, wxCheckBox);
         if ( checkbox )
         {
             if ( event.GetSetChecked() )
@@ -1366,7 +1366,7 @@ void wxWindowBase::UpdateWindowUI()
 #endif // wxUSE_CHECKBOX
 
 #if wxUSE_RADIOBTN
-        wxRadioButton *radiobtn = wxDynamicCast(this, wxRadioButton);
+        wxRadioButton *radiobtn = wxDynamicThisCast(this, wxRadioButton);
         if ( radiobtn )
         {
             if ( event.GetSetChecked() )

@@ -321,8 +321,8 @@ PDIB wxDibReadBitmapInfo(HFILE fh)
             bi.biSize               = sizeof(BITMAPINFOHEADER);
             bi.biWidth              = (DWORD)bc.bcWidth;
             bi.biHeight             = (DWORD)bc.bcHeight;
-            bi.biPlanes             =  (UINT)bc.bcPlanes;
-            bi.biBitCount           =  (UINT)bc.bcBitCount;
+            bi.biPlanes             = (WORD)bc.bcPlanes;
+            bi.biBitCount           = (WORD)bc.bcBitCount;
             bi.biCompression        = BI_RGB;
             bi.biSizeImage          = 0;
             bi.biXPelsPerMeter      = 0;
@@ -549,7 +549,7 @@ static void xlatClut4(BYTE FAR *pb, DWORD dwSize, BYTE FAR *xlat)
 #define RLE_EOF     1
 #define RLE_JMP     2
 
-static void xlatRle8(BYTE FAR *pb, DWORD dwSize, BYTE FAR *xlat)
+static void xlatRle8(BYTE FAR *pb, DWORD WXUNUSED(dwSize), BYTE FAR *xlat)
 {
     BYTE    cnt;
     BYTE    b;
@@ -595,7 +595,7 @@ static void xlatRle8(BYTE FAR *pb, DWORD dwSize, BYTE FAR *xlat)
     }
 }
 
-static void xlatRle4(BYTE FAR *pb, DWORD dwSize, BYTE FAR *xlat)
+static void xlatRle4(BYTE FAR *WXUNUSED(pb), DWORD WXUNUSED(dwSize), BYTE FAR *WXUNUSED(xlat))
 {
 }
 
@@ -708,7 +708,7 @@ HPALETTE wxMakePalette(const BITMAPINFO FAR* Info, UINT flags)
   HPALETTE hPalette;
   const RGBQUAD FAR* rgb = Info->bmiColors;
 
-  WORD nColors = Info->bmiHeader.biClrUsed;
+  WORD nColors = (WORD)Info->bmiHeader.biClrUsed;
   if (nColors) {
    LOGPALETTE* logPal = (LOGPALETTE*)
      new BYTE[sizeof(LOGPALETTE) + (nColors-1)*sizeof(PALETTEENTRY)];

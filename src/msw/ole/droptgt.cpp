@@ -61,11 +61,7 @@ class wxIDropTarget : public IDropTarget
 {
 public:
     wxIDropTarget(wxDropTarget *p);
-    // suppress gcc warning
-#ifdef __GNUG__
-    virtual
-#endif
-    ~wxIDropTarget();
+    virtual ~wxIDropTarget();
 
     // accessors for wxDropTarget
     void SetHwnd(HWND hwnd) { m_hwnd = hwnd; }
@@ -425,7 +421,8 @@ wxDataFormat wxDropTarget::GetSupportedFormat(IDataObject *pIDataSource) const
 
     // get the list of supported formats
     size_t nFormats = m_dataObject->GetFormatCount(wxDataObject::Set);
-    wxDataFormat format, *formats;
+    wxDataFormat format;
+	wxDataFormat *formats;
     formats = nFormats == 1 ? &format :  new wxDataFormat[nFormats];
 
     m_dataObject->GetAllFormats(formats, wxDataObject::Set);

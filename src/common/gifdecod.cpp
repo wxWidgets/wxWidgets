@@ -465,9 +465,9 @@ int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
     while (code != ab_fin);
 
 #ifdef __WXMAC__
-    delete [] ab_prefix ;       
-    delete [] ab_tail ;       
-    delete [] stack ;       
+    delete [] ab_prefix ;
+    delete [] ab_tail ;
+    delete [] stack ;
 #endif
     return 0;
 }
@@ -504,7 +504,8 @@ int wxGIFDecoder::ReadGIF()
     unsigned char type = 0;
     unsigned char pal[768];
     unsigned char buf[16];
-    GIFImage      **ppimg, *pimg, *pprev;
+    GIFImage      **ppimg;
+	GIFImage      *pimg, *pprev;
 
     /* check GIF signature */
     if (!CanRead())

@@ -127,7 +127,7 @@ wxTipWindow::~wxTipWindow()
     }
 }
 
-void wxTipWindow::OnMouseClick(wxMouseEvent& event)
+void wxTipWindow::OnMouseClick(wxMouseEvent& WXUNUSED(event))
 {
     Close();
 }
@@ -138,7 +138,7 @@ void wxTipWindow::OnActivate(wxActivateEvent& event)
         Close();
 }
 
-void wxTipWindow::OnKillFocus(wxFocusEvent& event)
+void wxTipWindow::OnKillFocus(wxFocusEvent& WXUNUSED(event))
 {
     // Under Windows at least, we will get this immediately
     // because when the view window is focussed, the
@@ -231,7 +231,7 @@ void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
                   2*(TEXT_MARGIN_Y + 1) + parent->m_textLines.GetCount()*parent->m_heightLine);
 }
 
-void wxTipWindowView::OnPaint(wxPaintEvent& event)
+void wxTipWindowView::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxTipWindow* parent = (wxTipWindow*) GetParent();
     if (!parent)
@@ -270,14 +270,15 @@ void wxTipWindowView::OnPaint(wxPaintEvent& event)
     }
 }
 
-void wxTipWindowView::OnMouseClick(wxMouseEvent& event)
+void wxTipWindowView::OnMouseClick(wxMouseEvent& WXUNUSED(event))
 {
     GetParent()->Close();
 }
 
-void wxTipWindowView::OnKillFocus(wxFocusEvent& event)
+void wxTipWindowView::OnKillFocus(wxFocusEvent& WXUNUSED(event))
 {
     // Workaround the kill focus event happening just after creation in wxGTK
     if (wxGetLocalTime() > m_creationTime + 1)
         GetParent()->Close();
 }
+

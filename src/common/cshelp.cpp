@@ -167,7 +167,7 @@ bool wxContextHelpEvtHandler::ProcessEvent(wxEvent& event)
         m_contextHelp->EndContextHelp();
         return TRUE;
     }
-    
+
     if ((event.GetEventType() == wxEVT_CHAR) ||
         (event.GetEventType() == wxEVT_KEY_DOWN) ||
         (event.GetEventType() == wxEVT_ACTIVATE) ||
@@ -177,14 +177,14 @@ bool wxContextHelpEvtHandler::ProcessEvent(wxEvent& event)
         m_contextHelp->EndContextHelp();
         return TRUE;
     }
-    
+
     if ((event.GetEventType() == wxEVT_PAINT) ||
         (event.GetEventType() == wxEVT_ERASE_BACKGROUND))
     {
         event.Skip();
         return FALSE;
     }
-    
+
     return TRUE;
 }
 
@@ -198,7 +198,7 @@ bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
         wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(), pt) ;
         helpEvent.SetEventObject(this);
         eventProcessed = win->GetEventHandler()->ProcessEvent(helpEvent);
-        
+
         // Go up the window hierarchy until the event is handled (or not).
         // I.e. keep submitting ancestor windows until one is recognised
         // by the app code that processes the ids and displays help.
@@ -251,7 +251,7 @@ wxContextHelpButton::wxContextHelpButton(wxWindow* parent,
 {
 }
 
-void wxContextHelpButton::OnContextHelp(wxCommandEvent& event)
+void wxContextHelpButton::OnContextHelp(wxCommandEvent& WXUNUSED(event))
 {
     wxContextHelp contextHelp(GetParent());
 }

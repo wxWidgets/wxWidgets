@@ -236,7 +236,7 @@ public:
     // between the two states.
     wxToolBarToolBase *AddTool(int id,
                                const wxBitmap& bitmap,
-                               const wxBitmap& pushedBitmap = wxNullBitmap,
+                               const wxBitmap& pushedBitmap,
                                bool toggle = FALSE,
                                wxObject *clientData = NULL,
                                const wxString& shortHelpString = wxEmptyString,

@@ -472,7 +472,7 @@ bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
                          wxCoord width, wxCoord height,
                          wxDC *source,
                          wxCoord xsrc, wxCoord ysrc,
-                         int rop, bool useMask)
+                         int WXUNUSED(rop), bool useMask)
 {
     bool success = TRUE;
 
@@ -496,7 +496,7 @@ bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
                     HBRUSH brush = ::CreateSolidBrush(::GetPixel(dc_src, x, y));
                     rect.left = xdest + x;
                     rect.right = rect.left + 1;
-                    rect.top = ydest + y; 
+                    rect.top = ydest + y;
                     rect.bottom = rect.top + 1;
                     ::FillRect(GetHdc(), &rect, brush);
                     ::DeleteObject(brush);

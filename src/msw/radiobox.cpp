@@ -329,7 +329,7 @@ void wxRadioBox::SetLabel(int item, const wxString& label)
     SetWindowText((HWND)m_radioButtons[item], label.c_str());
 }
 
-void wxRadioBox::SetLabel(int item, wxBitmap *bitmap)
+void wxRadioBox::SetLabel(int WXUNUSED(item), wxBitmap *WXUNUSED(bitmap))
 {
     /*
        m_radioWidth[item] = bitmap->GetWidth() + FB_MARGIN;
@@ -836,10 +836,10 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
-WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam)
+WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
+                               WXUINT WXUNUSED(message),
+                               WXWPARAM WXUNUSED(wParam),
+                               WXLPARAM WXUNUSED(lParam))
 {
 #if wxUSE_CTL3D
     if ( m_useCtl3D )

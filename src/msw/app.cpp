@@ -1289,11 +1289,11 @@ bool wxYield()
     // normally result in message boxes popping up &c
     wxLog::Suspend();
 
-#ifdef __WXDEBUG__    
+#ifdef __WXDEBUG__
     if (gs_inYield)
         wxFAIL_MSG( wxT("wxYield called recursively" ) );
 #endif
-    
+
     gs_inYield = TRUE;
 
     // we don't want to process WM_QUIT from here - it should be processed in
@@ -1327,7 +1327,7 @@ bool wxYieldIfNeeded()
 {
     if (gs_inYield)
         return FALSE;
-        
+
     return wxYield();
 }
 
@@ -1340,7 +1340,8 @@ bool wxHandleFatalExceptions(bool doit)
     return TRUE;
 #else
     wxFAIL_MSG(_T("set wxUSE_ON_FATAL_EXCEPTION to 1 to sue this function"));
-
+	
+	(void)doit;
     return FALSE;
 #endif
 }

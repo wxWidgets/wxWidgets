@@ -51,7 +51,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 #if wxUSE_VALIDATORS
     SetValidator(validator);
 #endif // wxUSE_VALIDATORS
-    
+
     SetBackgroundColour(parent->GetBackgroundColour()) ;
     SetForegroundColour(parent->GetForegroundColour()) ;
     m_windowStyle = style;
@@ -262,8 +262,8 @@ In version 4.0 or later, the maximum value that a scroll bar can report
 If the scroll bar has a page size greater than one, the maximum scrolling position
 is less than the maximum range value. You can use the following formula to calculate
 the maximum scrolling position:
-  
-MaxScrollPos = MaxRangeValue - (PageSize - 1) 
+
+MaxScrollPos = MaxRangeValue - (PageSize - 1)
 */
 
 #if WXWIN_COMPATIBILITY
@@ -326,8 +326,8 @@ void wxScrollBar::GetValues(int *viewStart, int *viewLength, int *objectLength,
 }
 #endif
 
-WXHBRUSH wxScrollBar::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+WXHBRUSH wxScrollBar::OnCtlColor(WXHDC WXUNUSED(pDC), WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
+            WXUINT WXUNUSED(message), WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))
 {
   return 0;
 }

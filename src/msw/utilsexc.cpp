@@ -421,9 +421,9 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 #if wxUSE_STREAMS
     // the first elements are reading ends, the second are the writing ones
     HANDLE hpipeStdin[2],
-           hpipeStdinWrite = INVALID_HANDLE_VALUE,
            hpipeStdout[2],
            hpipeStderr[2];
+    HANDLE hpipeStdinWrite = INVALID_HANDLE_VALUE;
 
     // open the pipes to which child process IO will be redirected if needed
     if ( handler && handler->IsRedirected() )

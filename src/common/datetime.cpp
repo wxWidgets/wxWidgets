@@ -1249,7 +1249,7 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
         else
         {
             time += (time_t)tz.GetOffset();
-#ifdef __VMS__ // time is unsigned so avoid warning
+#if defined(__VMS__) || defined(__WATCOMC__) // time is unsigned so avoid warning
             int time2 = (int) time;
             if ( time2 >= 0 )
 #else
@@ -1816,7 +1816,7 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
         {
             time += (int)tz.GetOffset();
 
-#ifdef __VMS__ // time is unsigned so avoid the warning
+#if defined(__VMS__) || defined(__WATCOMC__) // time is unsigned so avoid warning
             int time2 = (int) time;
             if ( time2 >= 0 )
 #else
@@ -3251,7 +3251,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
 
                     haveDay = TRUE;
 
-                    day = n + 1;
+                    day = (wxDateTime_t)(n + 1);
                 }
             }
         }

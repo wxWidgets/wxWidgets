@@ -594,7 +594,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 
 
     // now make other extensions have the same filetype
-    
+
     for (iExtCount=1; iExtCount < ftInfo.GetExtensionsCount(); iExtCount++ )
         {
             ext = ftInfo.GetExtensions()[iExtCount];
@@ -636,8 +636,8 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
     // SetCommand(), SetDefaultIcon() &c will use it later)
     wxRegKey keyFT(wxRegKey::HKCR, filetype);
     ok = keyFT.Create();
-    
-    wxFileType *ft = NULL; 
+
+    wxFileType *ft = NULL;
     ft = CreateFileType(filetype, extWithDot);
 
     if (ft)
@@ -654,7 +654,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 
 bool wxFileTypeImpl::SetCommand(const wxString& cmd,
                                 const wxString& verb,
-                                bool overwriteprompt)
+                                bool WXUNUSED(overwriteprompt))
 {
     wxCHECK_MSG( !m_ext.IsEmpty() && !verb.IsEmpty(), FALSE,
                  _T("SetCommand() needs an extension and a verb") );

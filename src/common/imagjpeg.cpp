@@ -29,9 +29,6 @@
 #include "wx/app.h"
 extern "C"
 {
-#ifdef __WATCOMC__
-    #define HAVE_BOOLEAN
-#endif
     #include "jpeglib.h"
 }
 #include "wx/filefn.h"
@@ -102,7 +99,7 @@ METHODDEF(void) my_skip_input_data ( j_decompress_ptr cinfo, long num_bytes )
     {
         my_src_ptr src = (my_src_ptr) cinfo->src;
 
-        while (num_bytes > (long)src->pub.bytes_in_buffer) 
+        while (num_bytes > (long)src->pub.bytes_in_buffer)
         {
             num_bytes -= (long) src->pub.bytes_in_buffer;
             src->pub.fill_input_buffer(cinfo);
@@ -198,7 +195,7 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
       /* If we get here, the JPEG code has signaled an error.
        * We need to clean up the JPEG object, close the input file, and return.
        */
-      if (verbose) 
+      if (verbose)
         wxLogError(_("JPEG: Couldn't load - file is probably corrupted."));
       jpeg_destroy_decompress(&cinfo);
       if (image->Ok()) image->Destroy();
@@ -306,12 +303,12 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     if (!verbose) cinfo.err->output_message=NULL;
 
     /* Establish the setjmp return context for my_error_exit to use. */
-    if (setjmp(jerr.setjmp_buffer)) 
+    if (setjmp(jerr.setjmp_buffer))
     {
         /* If we get here, the JPEG code has signaled an error.
          * We need to clean up the JPEG object, close the input file, and return.
          */
-         if (verbose) 
+         if (verbose)
             wxLogError(_("JPEG: Couldn't save image."));
          jpeg_destroy_compress(&cinfo);
          return FALSE;
@@ -357,7 +354,7 @@ bool wxJPEGHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char hdr[2];
 
-    stream.Read(&hdr, 2);
+    stream.Read(hdr, 2);
     stream.SeekI(-2, wxFromCurrent);
     return (hdr[0] == 0xFF && hdr[1] == 0xD8);
 }

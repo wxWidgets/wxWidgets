@@ -220,7 +220,8 @@ long wxGetLocalTime()
 // Get UTC time as seconds since 00:00:00, Jan 1st 1970
 long wxGetUTCTime()
 {
-    struct tm tm, *ptm;
+    struct tm tm;
+	struct tm *ptm;
     time_t t0, t1;
 
     // This cannot be made static because mktime can overwrite it

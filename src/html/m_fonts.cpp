@@ -43,23 +43,25 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
         int oldsize = m_WParser->GetFontSize();
         wxString oldface = m_WParser->GetFontFace();
 
-        if (tag.HasParam(wxT("COLOR"))) 
+        if (tag.HasParam(wxT("COLOR")))
 	    {
-            unsigned long tmp = 0; 
+            unsigned long tmp = 0;
             wxColour clr;
-            if (tag.ScanParam(wxT("COLOR"), wxT("#%lX"), &tmp) == 1) 
+            if (tag.ScanParam(wxT("COLOR"), wxT("#%lX"), &tmp) == 1)
 	        {
-                clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
+                clr = wxColour((unsigned char)((tmp & 0xFF0000) >> 16),
+							   (unsigned char)((tmp & 0x00FF00) >> 8),
+							   (unsigned char)(tmp & 0x0000FF));
                 m_WParser->SetActualColor(clr);
                 m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr));
             }
         }
 
-        if (tag.HasParam(wxT("SIZE"))) 
+        if (tag.HasParam(wxT("SIZE")))
 	    {
             long tmp = 0;
             wxChar c = tag.GetParam(wxT("SIZE"))[(unsigned int) 0];
-            if (tag.ScanParam(wxT("SIZE"), wxT("%li"), &tmp) == 1) 
+            if (tag.ScanParam(wxT("SIZE"), wxT("%li"), &tmp) == 1)
 	        {
                 if (c == '+' || c == '-')
                     m_WParser->SetFontSize(oldsize+tmp);
@@ -68,10 +70,10 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
                 m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
             }
         }
-        
-        if (tag.HasParam(wxT("FACE"))) 
+
+        if (tag.HasParam(wxT("FACE")))
 	    {
-            if (m_Faces.GetCount() == 0) 
+            if (m_Faces.GetCount() == 0)
 	        {
                 wxFontEnumerator enu;
                 enu.EnumerateFacenames();
@@ -79,10 +81,10 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
             }
             wxStringTokenizer tk(tag.GetParam(wxT("FACE")), ",");
             int index;
-            
-            while (tk.HasMoreTokens()) 
+
+            while (tk.HasMoreTokens())
 	        {
-                if ((index = m_Faces.Index(tk.GetNextToken())) != wxNOT_FOUND) 
+                if ((index = m_Faces.Index(tk.GetNextToken())) != wxNOT_FOUND)
 		        {
                     m_WParser->SetFontFace(m_Faces[index]);
                     m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
@@ -93,17 +95,17 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
 
         ParseInner(tag);
 
-        if (oldface != m_WParser->GetFontFace()) 
+        if (oldface != m_WParser->GetFontFace())
 	    {
             m_WParser->SetFontFace(oldface);
             m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
-        }        
-        if (oldsize != m_WParser->GetFontSize()) 
+        }
+        if (oldsize != m_WParser->GetFontSize())
 	    {
             m_WParser->SetFontSize(oldsize);
             m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
-        }        
-        if (oldclr != m_WParser->GetActualColor()) 
+        }
+        if (oldclr != m_WParser->GetActualColor())
 	    {
             m_WParser->SetActualColor(oldclr);
             m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(oldclr));
@@ -224,7 +226,7 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
                 m_WParser->SetFontSize(6);
         else if (tag.GetName() == wxT("H3"))
                 m_WParser->SetFontSize(5);
-        else if (tag.GetName() == wxT("H4")) 
+        else if (tag.GetName() == wxT("H4"))
 	    {
                 m_WParser->SetFontSize(5);
                 m_WParser->SetFontItalic(TRUE);
@@ -232,7 +234,7 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
         }
         else if (tag.GetName() == wxT("H5"))
                 m_WParser->SetFontSize(4);
-        else if (tag.GetName() == wxT("H6")) 
+        else if (tag.GetName() == wxT("H6"))
 	    {
                 m_WParser->SetFontSize(4);
                 m_WParser->SetFontItalic(TRUE);
@@ -240,7 +242,7 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
         }
 
         c = m_WParser->GetContainer();
-        if (c->GetFirstCell()) 
+        if (c->GetFirstCell())
 	    {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();

@@ -388,7 +388,6 @@ bool wxFileType::Unassociate()
 #elif defined(__UNIX__)
     return m_impl->Unassociate(this);
 #else
-
     wxFAIL_MSG( _T("not implemented") ); // TODO
     return FALSE;
 #endif
@@ -401,7 +400,6 @@ bool overwriteprompt)
     return m_impl->SetCommand(cmd, verb, overwriteprompt);
 #else
     wxFAIL_MSG(_T("not implemented"));
-
     return FALSE;
 #endif
 }
@@ -587,6 +585,9 @@ void wxMimeTypesManager::Initialize(int mcapStyle,
     EnsureImpl();
 
     m_impl->Initialize(mcapStyle, sExtraDir);
+#else
+	(void)mcapStyle;	
+	(void)sExtraDir;	
 #endif // Unix
 }
 

@@ -181,7 +181,7 @@ wxPrintData::wxPrintData()
     m_macPrintSettings = kPMNoPrintSettings;
 #else
 	m_macPrintInfo = (THPrint) NewHandleClear( sizeof( TPrint ) ) ;
-	(**m_macPrintInfo).iPrVersion = 0;					// something invalid 
+	(**m_macPrintInfo).iPrVersion = 0;					// something invalid
 
 	(**m_macPrintInfo).prInfo.iHRes = 72;
 	(**m_macPrintInfo).prInfo.iVRes = 72;
@@ -190,8 +190,8 @@ wxPrintData::wxPrintData()
 
 	Rect r2 = { -18, -36, 8*72 - 18, 11*72 - 36  } ;
 	(**m_macPrintInfo).rPaper = r2;
-	(**m_macPrintInfo).prStl.iPageV = 11 * 120 ;				// 11 inches in 120th of an inch 
-	(**m_macPrintInfo).prStl.iPageH = 8 * 120 ;				// 8 inches in 120th of an inch 
+	(**m_macPrintInfo).prStl.iPageV = 11 * 120 ;				// 11 inches in 120th of an inch
+	(**m_macPrintInfo).prStl.iPageH = 8 * 120 ;				// 8 inches in 120th of an inch
 #endif
 #endif
     m_printOrientation = wxPORTRAIT;
@@ -259,7 +259,7 @@ wxPrintData::~wxPrintData()
     }
 #else
 	wxASSERT( m_macPrintInfo ) ;
-	// we should perhaps delete 
+	// we should perhaps delete
 #endif
 #endif
 }
@@ -915,11 +915,11 @@ void wxPrintDialogData::ConvertToNative()
     m_printData.SetNativeDataDevNames((void*) NULL);
 
     pd->hDC = (HDC) NULL;
-    pd->nFromPage = (UINT)m_printFromPage;
-    pd->nToPage = (UINT)m_printToPage;
-    pd->nMinPage = (UINT)m_printMinPage;
-    pd->nMaxPage = (UINT)m_printMaxPage;
-    pd->nCopies = (UINT)m_printNoCopies;
+    pd->nFromPage = (WORD)m_printFromPage;
+    pd->nToPage = (WORD)m_printToPage;
+    pd->nMinPage = (WORD)m_printMinPage;
+    pd->nMaxPage = (WORD)m_printMaxPage;
+    pd->nCopies = (WORD)m_printNoCopies;
 
     pd->Flags = PD_RETURNDC ;
 

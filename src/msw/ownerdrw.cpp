@@ -2,7 +2,7 @@
 // Name:        msw/ownerdrw.cpp
 // Purpose:     implementation of wxOwnerDrawn class
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     13.11.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -44,8 +44,8 @@
 
 // ctor
 // ----
-wxOwnerDrawn::wxOwnerDrawn(const wxString& str, 
-                           bool bCheckable, bool bMenuItem)
+wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
+                           bool bCheckable, bool WXUNUSED(bMenuItem))
             : m_strName(str)
 {
   m_bCheckable   = bCheckable;
@@ -87,7 +87,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 
   // Ray Gilbert's changes - Corrects the problem of a BMP
   // being placed next to text in a menu item, and the BMP does
-  // not match the size expected by the system.  This will 
+  // not match the size expected by the system.  This will
   // resize the space so the BMP will fit.  Without this, BMPs
   // must be no larger or smaller than 16x16.
   if (m_bmpChecked.Ok())
@@ -97,18 +97,18 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
                               wxSystemSettings::GetSystemMetric(wxSYS_EDGE_Y);
       if (*pheight < adjustedHeight)
           *pheight = adjustedHeight;
-      
+
       // Does BMP encroach on default check menu position?
       size_t adjustedWidth = m_bmpChecked.GetWidth() +
                              (wxSystemSettings::GetSystemMetric(wxSYS_EDGE_X) * 2);
       if (ms_nDefaultMarginWidth < adjustedWidth)
           *pwidth += adjustedWidth - ms_nDefaultMarginWidth;
-      
+
       // Do we need to widen margin to fit BMP?
       if ((size_t)GetMarginWidth() < adjustedWidth)
           SetMarginWidth(adjustedWidth);
   }
-  
+
   m_nHeight = *pheight;                // remember height for use in OnDrawItem
 
   return TRUE;
@@ -149,7 +149,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
     colBack = m_colBack.Ok() ? ToRGB(m_colBack) : GetSysColor(COLOR_WINDOW);
     colText = m_colText.Ok() ? ToRGB(m_colText) : GetSysColor(COLOR_WINDOWTEXT);
   }
-        
+
   #ifdef  O_DRAW_NATIVE_API
     #define  hdc           (HDC)dc.GetHDC()
     COLORREF colOldText = ::SetTextColor(hdc, colText),
@@ -162,10 +162,10 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
   // select the font and draw the text
   // ---------------------------------
 
-  // determine where to draw and leave space for a check-mark. 
+  // determine where to draw and leave space for a check-mark.
   int x = rc.x + GetMarginWidth();
 
-  // using native API because it reckognizes '&' 
+  // using native API because it reckognizes '&'
   #ifdef  O_DRAW_NATIVE_API
     int nPrevMode = SetBkMode(hdc, TRANSPARENT);
     HBRUSH hbr = CreateSolidBrush(colBack),
@@ -187,8 +187,8 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
     }
 
     HFONT hPrevFont = (HFONT) ::SelectObject(hdc, hfont);
-    DrawState(hdc, NULL, NULL, 
-              (LPARAM)(const wxChar *)m_strName, m_strName.Length(), 
+    DrawState(hdc, NULL, NULL,
+              (LPARAM)(const wxChar *)m_strName, m_strName.Length(),
               x, rc.y, rc.GetWidth(), rc.GetHeight(),
               DST_PREFIXTEXT | ( st & wxODDisabled ? DSS_DISABLED : 0) );
 
@@ -206,7 +206,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
     if ( st & wxODChecked ) {
       // using native APIs for performance and simplicity
 #ifdef  O_DRAW_NATIVE_API
-      // what goes on: DrawFrameControl creates a b/w mask, 
+      // what goes on: DrawFrameControl creates a b/w mask,
       // then we copy it to screen to have right colors
 
         // first create a monochrome bitmap in a memory DC
@@ -224,7 +224,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
       }
 
         // finally copy it to screen DC and clean up
-      BitBlt(hdc, rc.x, rc.y, GetMarginWidth(), m_nHeight, 
+      BitBlt(hdc, rc.x, rc.y, GetMarginWidth(), m_nHeight,
              hdcMem, 0, 0, SRCCOPY);
 
       DeleteDC(hdcMem);
@@ -254,15 +254,15 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
 //        heightDiff = -2;
 
       //MT: blit with mask enabled.
-      dc.Blit(rc.x + (GetMarginWidth() - nBmpWidth) / 2, 
-              rc.y + heightDiff / 2, 
-              nBmpWidth, nBmpHeight, 
+      dc.Blit(rc.x + (GetMarginWidth() - nBmpWidth) / 2,
+              rc.y + heightDiff / 2,
+              nBmpWidth, nBmpHeight,
               &dcMem, 0, 0, wxCOPY, TRUE);
 
       if ( st & wxODSelected ) {
         #ifdef  O_DRAW_NATIVE_API
-          RECT rectBmp = { rc.GetLeft(), rc.GetTop(), 
-                           rc.GetLeft() + GetMarginWidth(), 
+          RECT rectBmp = { rc.GetLeft(), rc.GetTop(),
+                           rc.GetLeft() + GetMarginWidth(),
                            rc.GetTop() + m_nHeight };
           SetBkColor(hdc, colBack);
           DrawEdge(hdc, &rectBmp, EDGE_RAISED, BF_SOFT | BF_RECT);

@@ -62,7 +62,7 @@ wxPalette::~wxPalette(void)
 //	FreeResource(TRUE);
 }
 
-bool wxPalette::FreeResource(bool force)
+bool wxPalette::FreeResource(bool WXUNUSED(force))
 {
 	if ( M_PALETTEDATA && M_PALETTEDATA->m_hPalette)
 	{
@@ -78,7 +78,7 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
 #ifdef __WXWINE__
 
   return (FALSE);
-  
+
 #else
 
   m_refData = new wxPaletteRefData;
@@ -102,7 +102,7 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
   M_PALETTEDATA->m_hPalette = (WXHPALETTE) CreatePalette((LPLOGPALETTE)npPal);
   LocalFree((HANDLE)npPal);
   return TRUE;
-  
+
 #endif
 }
 

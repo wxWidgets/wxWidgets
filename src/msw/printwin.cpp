@@ -87,9 +87,9 @@ wxWindowsPrinter::wxWindowsPrinter(wxPrintDialogData *data)
 
 wxWindowsPrinter::~wxWindowsPrinter()
 {
-    // avoids mingw warning about statement with no effect (FreeProcInstance
-    // doesn't do anything under Win32)
-#ifndef __GNUWIN32__
+    // avoids warning about statement with no effect (FreeProcInstance
+	// doesn't do anything under Win32)
+#if !defined(WIN32) && !defined(_WIN32) && !defined(__WIN32__) && !defined(__NT__) && !defined(__GNUWIN32__)
     FreeProcInstance((FARPROC) m_lpAbortProc);
 #endif
 }
@@ -311,7 +311,7 @@ wxDC* wxWindowsPrinter::PrintDialog(wxWindow *parent)
     {
         dc = dialog.GetPrintDC();
         m_printDialogData = dialog.GetPrintDialogData();
-        if (dc == NULL) 
+        if (dc == NULL)
             sm_lastError = wxPRINTER_ERROR;
         else
             sm_lastError = wxPRINTER_NO_ERROR;

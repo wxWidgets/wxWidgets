@@ -423,7 +423,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
   return strDir.c_str();
 }
 
-wxChar *wxGetUserHome(const wxString& user)
+wxChar *wxGetUserHome(const wxString& WXUNUSED(user))
 {
     // VZ: the old code here never worked for user != "" anyhow! Moreover, it
     //     returned sometimes a malloc()'d pointer, sometimes a pointer to a
@@ -502,7 +502,7 @@ bool wxSetEnv(const wxString& var, const wxChar *value)
 // process management
 // ----------------------------------------------------------------------------
 
-int wxKill(long pid, int sig)
+int wxKill(long WXUNUSED(pid), int WXUNUSED(sig))
 {
     // TODO use SendMessage(WM_QUIT) and TerminateProcess() if needed
 
@@ -1105,9 +1105,9 @@ wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
 WXWORD WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
 {
 #ifndef __WIN32__
-    return GetWindowWord((HWND)hWnd, GWW_ID);
+    return (WXWORD)GetWindowWord((HWND)hWnd, GWW_ID);
 #else // Win32
-    return GetWindowLong((HWND)hWnd, GWL_ID);
+    return (WXWORD)GetWindowLong((HWND)hWnd, GWL_ID);
 #endif // Win16/32
 }
 

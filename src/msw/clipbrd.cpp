@@ -219,7 +219,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 wxBitmap *bitmap = (wxBitmap *)data;
                 HBITMAP hBitmap = (HBITMAP)bitmap->GetHBITMAP();
                 // NULL palette means to use the system one
-                HANDLE hDIB = wxBitmapToDIB(hBitmap, (HPALETTE)NULL); 
+                HANDLE hDIB = wxBitmapToDIB(hBitmap, (HPALETTE)NULL);
                 handle = SetClipboardData(CF_DIB, hDIB);
 #endif // wxUSE_IMAGE_LOADING_IN_MSW
                 break;
@@ -433,7 +433,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 
 wxDataFormat wxEnumClipboardFormats(wxDataFormat dataFormat)
 {
-  return ::EnumClipboardFormats(dataFormat);
+  return (wxDataFormat::NativeFormat)::EnumClipboardFormats(dataFormat);
 }
 
 int wxRegisterClipboardFormat(wxChar *formatName)
@@ -583,7 +583,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 #if wxUSE_METAFILE
         case wxDF_METAFILE:
         {
-            wxMetafileDataObject* metaFileDataObject = 
+            wxMetafileDataObject* metaFileDataObject =
                 (wxMetafileDataObject*) data;
             wxMetafile metaFile = metaFileDataObject->GetMetafile();
             return wxSetClipboardData(wxDF_METAFILE, &metaFile,
@@ -627,7 +627,8 @@ bool wxClipboard::GetData( wxDataObject& data )
 
     // build the list of supported formats
     size_t nFormats = data.GetFormatCount(wxDataObject::Set);
-    wxDataFormat format, *formats;
+    wxDataFormat format;
+	wxDataFormat *formats;
     if ( nFormats == 1 )
     {
         // the most common case

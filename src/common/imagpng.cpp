@@ -57,17 +57,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 #if wxUSE_LIBPNG
 
 #if defined(__VISAGECPP__)
-#define LINKAGEMODE _Optlink
+#define PNGLINKAGEMODE _Optlink
+#elif defined(__WATCOMC__)
+#define PNGLINKAGEMODE _cdecl
 #else
-#define LINKAGEMODE
+#define PNGLINKAGEMODE
 #endif
 
-static void LINKAGEMODE _PNG_stream_reader( png_structp png_ptr, png_bytep data, png_size_t length )
+static void PNGLINKAGEMODE _PNG_stream_reader( png_structp png_ptr, png_bytep data, png_size_t length )
 {
     ((wxInputStream*) png_get_io_ptr( png_ptr )) -> Read(data, length);
 }
 
-static void LINKAGEMODE _PNG_stream_writer( png_structp png_ptr, png_bytep data, png_size_t length )
+static void PNGLINKAGEMODE _PNG_stream_writer( png_structp png_ptr, png_bytep data, png_size_t length )
 {
     ((wxOutputStream*) png_get_io_ptr( png_ptr )) -> Write(data, length);
 }
@@ -75,7 +77,7 @@ static void LINKAGEMODE _PNG_stream_writer( png_structp png_ptr, png_bytep data,
 // from pngerror.c
 // so that the libpng doesn't send anything on stderr
 void
-LINKAGEMODE png_silent_error(png_structp png_ptr, png_const_charp WXUNUSED(message))
+PNGLINKAGEMODE png_silent_error(png_structp png_ptr, png_const_charp WXUNUSED(message))
 {
 #ifdef USE_FAR_KEYWORD
    {
@@ -89,7 +91,7 @@ LINKAGEMODE png_silent_error(png_structp png_ptr, png_const_charp WXUNUSED(messa
 }
 
 void
-LINKAGEMODE png_silent_warning(png_structp WXUNUSED(png_ptr), png_const_charp WXUNUSED(message))
+PNGLINKAGEMODE png_silent_warning(png_structp WXUNUSED(png_ptr), png_const_charp WXUNUSED(message))
 {
 }
 
@@ -359,7 +361,7 @@ bool wxPNGHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char hdr[4];
 
-    stream.Read(&hdr, 4);
+    stream.Read(hdr, 4);
     stream.SeekI(-4, wxFromCurrent);
     return (hdr[0] == 0x89 && hdr[1] == 'P' && hdr[2] == 'N' && hdr[3] == 'G');
 }

@@ -109,7 +109,7 @@ bool wxHtmlWindow::SetPage(const wxString& source)
     SetBackgroundColour(wxColour(0xFF, 0xFF, 0xFF));
     m_OpenedPage = m_OpenedAnchor = m_OpenedPageTitle = wxEmptyString;
     m_Parser->SetDC(dc);
-    if (m_Cell) 
+    if (m_Cell)
     {
         delete m_Cell;
         m_Cell = NULL;
@@ -129,7 +129,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
     wxFSFile *f;
     bool rt_val;
     bool needs_refresh = FALSE;
-    
+
     SetCursor(*wxHOURGLASS_CURSOR);
     wxYield(); Refresh(FALSE);
 
@@ -148,15 +148,15 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         rt_val = ScrollToAnchor(anch);
         m_tmpCanDrawLocks++;
     }
-    else if (location.Find(wxT('#')) != wxNOT_FOUND && location.BeforeFirst(wxT('#')) == m_OpenedPage) 
+    else if (location.Find(wxT('#')) != wxNOT_FOUND && location.BeforeFirst(wxT('#')) == m_OpenedPage)
     {
         wxString anch = location.AfterFirst(wxT('#'));
         m_tmpCanDrawLocks--;
         rt_val = ScrollToAnchor(anch);
         m_tmpCanDrawLocks++;
     }
-    else if (location.Find(wxT('#')) != wxNOT_FOUND && 
-             (m_FS->GetPath() + location.BeforeFirst(wxT('#'))) == m_OpenedPage) 
+    else if (location.Find(wxT('#')) != wxNOT_FOUND &&
+             (m_FS->GetPath() + location.BeforeFirst(wxT('#'))) == m_OpenedPage)
 	{
         wxString anch = location.AfterFirst(wxT('#'));
         m_tmpCanDrawLocks--;
@@ -164,19 +164,19 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         m_tmpCanDrawLocks++;
     }
 
-    else 
+    else
     {
         needs_refresh = TRUE;
         // load&display it:
-        if (m_RelatedStatusBar != -1) 
+        if (m_RelatedStatusBar != -1)
 	    {
             m_RelatedFrame->SetStatusText(_("Connecting..."), m_RelatedStatusBar);
             Refresh(FALSE);
         }
 
         f = m_FS->OpenFile(location);
-        
-        if (f == NULL) 
+
+        if (f == NULL)
 	    {
             wxString err;
 
@@ -187,12 +187,12 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             return FALSE;
         }
 
-        else 
+        else
     	{
             wxNode *node;
             wxString src = wxEmptyString;
 
-            if (m_RelatedStatusBar != -1) 
+            if (m_RelatedStatusBar != -1)
 	        {
                 wxString msg = _("Loading : ") + location;
                 m_RelatedFrame->SetStatusText(msg, m_RelatedStatusBar);
@@ -210,7 +210,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
                 }
                 node = node->GetNext();
             }
-            if (src == wxEmptyString) 
+            if (src == wxEmptyString)
 	        {
                 if (m_DefaultFilter == NULL) m_DefaultFilter = GetDefaultFilter();
                 src = m_DefaultFilter->ReadFile(*f);
@@ -219,7 +219,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             m_FS->ChangePathTo(f->GetLocation());
             rt_val = SetPage(src);
             m_OpenedPage = f->GetLocation();
-            if (f->GetAnchor() != wxEmptyString) 
+            if (f->GetAnchor() != wxEmptyString)
 	        {
                 wxYield();
                 ScrollToAnchor(f->GetAnchor());
@@ -245,7 +245,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         OnSetTitle(wxFileNameFromPath(m_OpenedPage));
     SetCursor(*wxSTANDARD_CURSOR);
 
-    if (needs_refresh) 
+    if (needs_refresh)
     {
         wxYield();
         m_tmpCanDrawLocks--;
@@ -267,7 +267,7 @@ bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
         wxLogWarning(_("HTML anchor %s does not exist."), anchor.c_str());
         return FALSE;
     }
-    else 
+    else
     {
         int y;
 
@@ -281,7 +281,7 @@ bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
 
 void wxHtmlWindow::OnSetTitle(const wxString& title)
 {
-    if (m_RelatedFrame) 
+    if (m_RelatedFrame)
     {
         wxString tit;
         tit.Printf(m_TitleFormat, title.c_str());
@@ -300,7 +300,7 @@ void wxHtmlWindow::CreateLayout()
 
     if (!m_Cell) return;
 
-    if (m_Style & wxHW_SCROLLBAR_NEVER) 
+    if (m_Style & wxHW_SCROLLBAR_NEVER)
     {
         SetScrollbars(wxHTML_SCROLL_STEP, 1, m_Cell->GetWidth() / wxHTML_SCROLL_STEP, 0); // always off
         GetClientSize(&ClientWidth, &ClientHeight);
@@ -310,7 +310,7 @@ void wxHtmlWindow::CreateLayout()
     else {
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell->Layout(ClientWidth);
-        if (ClientHeight < m_Cell->GetHeight() + GetCharHeight()) 
+        if (ClientHeight < m_Cell->GetHeight() + GetCharHeight())
 	    {
             SetScrollbars(
                   wxHTML_SCROLL_STEP, wxHTML_SCROLL_STEP,
@@ -336,7 +336,7 @@ void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
     int p_fontsizes[7];
     wxString p_fff, p_ffn;
 
-    if (path != wxEmptyString) 
+    if (path != wxEmptyString)
     {
         oldpath = cfg->GetPath();
         cfg->SetPath(path);
@@ -345,7 +345,7 @@ void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
     m_Borders = cfg->Read("wxHtmlWindow/Borders", m_Borders);
     p_fff = cfg->Read("wxHtmlWindow/FontFaceFixed", m_Parser->m_FontFaceFixed);
     p_ffn = cfg->Read("wxHtmlWindow/FontFaceNormal", m_Parser->m_FontFaceNormal);
-    for (int i = 0; i < 7; i++) 
+    for (int i = 0; i < 7; i++)
     {
         tmp.Printf(wxT("wxHtmlWindow/FontsSize%i"), i);
         p_fontsizes[i] = cfg->Read(tmp, m_Parser->m_FontsSizes[i]);
@@ -363,7 +363,7 @@ void wxHtmlWindow::WriteCustomization(wxConfigBase *cfg, wxString path)
     wxString oldpath;
     wxString tmp;
 
-    if (path != wxEmptyString) 
+    if (path != wxEmptyString)
     {
         oldpath = cfg->GetPath();
         cfg->SetPath(path);
@@ -372,7 +372,7 @@ void wxHtmlWindow::WriteCustomization(wxConfigBase *cfg, wxString path)
     cfg->Write("wxHtmlWindow/Borders", (long) m_Borders);
     cfg->Write("wxHtmlWindow/FontFaceFixed", m_Parser->m_FontFaceFixed);
     cfg->Write("wxHtmlWindow/FontFaceNormal", m_Parser->m_FontFaceNormal);
-    for (int i = 0; i < 7; i++) 
+    for (int i = 0; i < 7; i++)
     {
         tmp.Printf(wxT("wxHtmlWindow/FontsSize%i"), i);
         cfg->Write(tmp, (long) m_Parser->m_FontsSizes[i]);
@@ -498,10 +498,10 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
     int v_y, v_h;
 
     if (m_tmpCanDrawLocks > 0) return;
-    
+
     dc.SetMapMode(wxMM_TEXT);
 #if 0
-/* VS - I don't think this is neccessary any longer 
+/* VS - I don't think this is neccessary any longer
         MSC_VER 1200 means MSVC 6.0 and it works fine */
 #if defined(_MSC_VER) && (_MSC_VER == 1200)
     ::SetMapMode((HDC)dc.GetHDC(), MM_TEXT);
@@ -510,7 +510,7 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
     dc.SetBackgroundMode(wxTRANSPARENT);
     ViewStart(&x, &y);
 
-    while (upd) 
+    while (upd)
     {
         v_y = upd.GetY();
         v_h = upd.GetH();
@@ -534,7 +534,7 @@ void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
 {
     m_tmpMouseMoved = TRUE;
 
-    if (event.ButtonDown()) 
+    if (event.ButtonDown())
     {
         int sx, sy;
         wxPoint pos;
@@ -550,15 +550,15 @@ void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
 
 
 
-void wxHtmlWindow::OnIdle(wxIdleEvent& event)
+void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
-    if (s_cur_hand == NULL) 
+    if (s_cur_hand == NULL)
     {
         s_cur_hand = new wxCursor(wxCURSOR_HAND);
         s_cur_arrow = new wxCursor(wxCURSOR_ARROW);
     }
 
-    if (m_tmpMouseMoved && (m_Cell != NULL)) 
+    if (m_tmpMouseMoved && (m_Cell != NULL))
     {
         int sx, sy;
         int x, y;
@@ -569,17 +569,17 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& event)
         ScreenToClient(&x, &y);
         lnk = m_Cell->GetLink(sx + x, sy + y);
 
-        if (lnk != m_tmpLastLink) 
+        if (lnk != m_tmpLastLink)
 	    {
-            if (lnk == NULL) 
+            if (lnk == NULL)
 	        {
                 SetCursor(*s_cur_arrow);
                 if (m_RelatedStatusBar != -1) m_RelatedFrame->SetStatusText(wxEmptyString, m_RelatedStatusBar);
             }
-            else 
+            else
 	        {
                 SetCursor(*s_cur_hand);
-                if (m_RelatedStatusBar != -1) 
+                if (m_RelatedStatusBar != -1)
                     m_RelatedFrame->SetStatusText(lnk->GetHref(), m_RelatedStatusBar);
             }
             m_tmpLastLink = lnk;

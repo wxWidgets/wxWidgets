@@ -196,7 +196,7 @@ void wxSizerItem::SetDimension( wxPoint pos, wxSize size )
             size.x = rwidth;
         }
     }
-    
+
     // This is what GetPosition() returns. Since we calculate
     // borders afterwards, GetPosition() will be the left/top
     // corner of the surrounding border.
@@ -376,7 +376,7 @@ void wxSizer::SetSizeHints( wxWindow *window )
     window->SetSizeHints( size.x, size.y );
 }
 
-wxSize wxSizer::GetMaxWindowSize( wxWindow *window )
+wxSize wxSizer::GetMaxWindowSize( wxWindow *WXUNUSED(window) )
 {
     wxSize sizeMax = wxGetDisplaySize();
     // make the max size a bit smaller than the screen, a window which takes
@@ -947,7 +947,7 @@ wxSize wxBoxSizer::CalcMin()
         wxSizerItem *item = (wxSizerItem*) node->Data();
 
         m_stretchable += item->GetOption();
-        
+
         wxSize size( item->CalcMin() );
 
         if (m_orient == wxHORIZONTAL)
@@ -969,7 +969,7 @@ wxSize wxBoxSizer::CalcMin()
                 m_fixedWidth = wxMax( m_fixedWidth, size.x );
             }
             else
-            { 
+            {
                 m_fixedWidth += size.x;
                 m_fixedHeight = wxMax( m_fixedHeight, size.y );
             }
@@ -1004,7 +1004,7 @@ static void GetStaticBoxBorders(wxStaticBox *box,
     else
 #endif // __WXGTK__
         *borderTop = 15;
-
+	(void)box;
     *borderOther = 5;
 }
 

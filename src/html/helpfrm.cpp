@@ -198,7 +198,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
 // moreover, if no contents, index or searchpage is needed, m_Splitter and
 // m_NavigPan will be NULL too (with m_HtmlWin directly connected to the frame)
 
-bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& title,
+bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& WXUNUSED(title),
                              int style)
 {
     wxImageList *ContentsImageList = new wxImageList(16, 16);
@@ -1000,7 +1000,7 @@ Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> \
                                   ));
             }
 
-        void OnUpdate(wxCommandEvent& event)
+        void OnUpdate(wxCommandEvent& WXUNUSED(event))
             {
                 UpdateTestWin();
             }
@@ -1321,7 +1321,8 @@ void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
     {
         wxBusyCursor bcur;
         const wxChar *cstr = sr.c_str();
-        wxChar mybuff[512], *ptr;
+        wxChar mybuff[512];
+		wxChar *ptr;
         bool first = TRUE;
 
         m_IndexList->Clear();

@@ -114,8 +114,11 @@ BOOL WINAPI DllMain (HANDLE hModule, DWORD fdwReason, LPVOID lpReserved)
            wxEntryCleanup();
            break;
     }
+#else
+	(void)hModule;
+	(void)fdwReason;
 #endif // !WXMAKINGDLL
-
+	(void)lpReserved;
     return TRUE;
 }
 

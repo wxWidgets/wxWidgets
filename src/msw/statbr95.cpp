@@ -197,7 +197,7 @@ void wxStatusBar95::SetFieldsCount(int nFields, const int *widths)
     SetFieldsWidth();
 }
 
-void wxStatusBar95::SetStatusWidths(int n, const int widths[])
+void wxStatusBar95::SetStatusWidths(int WXUNUSED(n), const int widths[])
 {
     wxASSERT_MSG( n == m_nFields, _T("field number mismatch") );
 

@@ -104,10 +104,10 @@ public:
 
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
-    // these are NOPs under Windows
-    bool ReadMailcap(const wxString& filename, bool fallback = TRUE)
+    // this are NOPs under Windows
+    bool ReadMailcap(const wxString& WXUNUSED(filename), bool WXUNUSED(fallback) = TRUE)
         { return TRUE; }
-    bool ReadMimeTypes(const wxString& filename)
+    bool ReadMimeTypes(const wxString& WXUNUSED(filename))
         { return TRUE; }
 
     // create a new filetype association

@@ -28,6 +28,7 @@
 
 
 #ifndef __GSOCKET_STANDALONE__
+#  include "wx/defs.h"
 #  include "wx/setup.h"
 #endif
 
@@ -82,10 +83,10 @@ GSocket *GSocket_new(void)
     socket->m_cbacks[i]     = NULL;
   }
   socket->m_detected        = 0;
-  socket->m_local           = NULL;     
-  socket->m_peer            = NULL;     
+  socket->m_local           = NULL;
+  socket->m_peer            = NULL;
   socket->m_error           = GSOCK_NOERROR;
-  socket->m_server          = FALSE;            
+  socket->m_server          = FALSE;
   socket->m_stream          = TRUE;
   socket->m_non_blocking    = FALSE;
   socket->m_timeout.tv_sec  = 10 * 60;  /* 10 minutes */
@@ -272,11 +273,11 @@ GAddress *GSocket_GetPeer(GSocket *socket)
  *  Sets up this socket as a server. The local address must have been
  *  set with GSocket_SetLocal() before GSocket_SetServer() is called.
  *  Returns GSOCK_NOERROR on success, one of the following otherwise:
- * 
+ *
  *  Error codes:
  *    GSOCK_INVSOCK - the socket is in use.
  *    GSOCK_INVADDR - the local address has not been set.
- *    GSOCK_IOERR   - low-level error. 
+ *    GSOCK_IOERR   - low-level error.
  */
 GSocketError GSocket_SetServer(GSocket *sck)
 {
@@ -344,7 +345,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
  *    GSOCK_TIMEDOUT   - timeout, no incoming connections.
  *    GSOCK_WOULDBLOCK - the call would block and the socket is nonblocking.
  *    GSOCK_MEMERR     - couldn't allocate memory.
- *    GSOCK_IOERR      - low-level error. 
+ *    GSOCK_IOERR      - low-level error.
  */
 GSocket *GSocket_WaitConnection(GSocket *sck)
 {
@@ -447,7 +448,7 @@ GSocket *GSocket_WaitConnection(GSocket *sck)
  *    GSOCK_TIMEDOUT   - timeout, the connection failed.
  *    GSOCK_WOULDBLOCK - connection in progress (nonblocking sockets only)
  *    GSOCK_MEMERR     - couldn't allocate memory.
- *    GSOCK_IOERR      - low-level error. 
+ *    GSOCK_IOERR      - low-level error.
  */
 GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 {
@@ -552,7 +553,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
  *  Error codes:
  *    GSOCK_INVSOCK - the socket is in use.
  *    GSOCK_INVADDR - the local address has not been set.
- *    GSOCK_IOERR   - low-level error. 
+ *    GSOCK_IOERR   - low-level error.
  */
 GSocketError GSocket_SetNonOriented(GSocket *sck)
 {
@@ -754,7 +755,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 
   return result;
 
-#else 
+#else
 
   assert(socket != NULL);
   return flags & socket->m_detected;
@@ -806,7 +807,7 @@ GSocketError GSocket_GetError(GSocket *socket)
  *   operation, there is still data available, the callback function will
  *   be called again.
  * GSOCK_OUTPUT:
- *   The socket is available for writing. That is, the next write call 
+ *   The socket is available for writing. That is, the next write call
  *   won't block. This event is generated only once, when the connection is
  *   first established, and then only if a call failed with GSOCK_WOULDBLOCK,
  *   when the output buffer empties again. This means that the app should
@@ -1373,7 +1374,7 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
 
 #else /* !wxUSE_SOCKETS */
 
-/* 
+/*
  * Translation unit shouldn't be empty, so include this typedef to make the
  * compiler (VC++ 6.0, for example) happy
  */

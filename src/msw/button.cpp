@@ -255,7 +255,7 @@ void wxButton::Command(wxCommandEvent & event)
 // event/message handlers
 // ----------------------------------------------------------------------------
 
-bool wxButton::MSWCommand(WXUINT param, WXWORD id)
+bool wxButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
     bool processed = FALSE;
     switch ( param )

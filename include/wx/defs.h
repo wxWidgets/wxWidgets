@@ -119,7 +119,6 @@
     #elif defined(__BCPLUSPLUS__) && !defined(__BORLANDC__)
         #define __BORLANDC__
       #elif defined(__WATCOMC__)
-    //#define __WATCOMC__
     #elif defined(__SC__)
         #define __SYMANTECC__
     #endif  // compiler
@@ -146,6 +145,12 @@
 // This one is really annoying, since it occurs for each cast to (HANDLE)...
 #   pragma warning(disable:4305)    // truncation of long to near ptr
 #endif
+#endif // __VISUALC__
+
+// suppress some Watcom C++ warnings
+#ifdef __WATCOMC__
+#   pragma warning 849 9			// Disable 'virtual function hidden'
+#   pragma warning 549 9			// Disable 'operand contains compiler generated information'
 #endif // __VISUALC__
 
 // suppress some Salford C++ warnings
@@ -414,8 +419,8 @@ typedef int wxWindowID;
 
 #if defined(__WXMSW__)
 
-// __declspec works in BC++ 5 and later, as well as VC++ and gcc
-#if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__GNUC__)
+// __declspec works in BC++ 5 and later, Watcom C++ 11.0 and later as well as VC++ and gcc
+#if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__GNUC__) || defined(__WATCOMC__)
 #  ifdef WXMAKINGDLL
 #    define WXDLLEXPORT __declspec( dllexport )
 #    define WXDLLEXPORT_DATA(type) __declspec( dllexport ) type
@@ -477,8 +482,10 @@ typedef int wxWindowID;
 #  define WXDLLIMPORT
 #endif
 
+#ifdef __cplusplus
 class WXDLLEXPORT wxObject;
 class WXDLLEXPORT wxEvent;
+#endif
 
  /** symbolic constant used by all Find()-like functions returning positive
       integer on success as failure indicator */
@@ -489,7 +496,9 @@ class WXDLLEXPORT wxEvent;
 // ----------------------------------------------------------------------------
 
 // everybody gets the assert and other debug macros
+#ifdef __cplusplus
 #include "wx/debug.h"
+#endif
 
 //@{
 /// delete pointer if it is not NULL and NULL it afterwards
@@ -558,7 +567,9 @@ class WXDLLEXPORT wxEvent;
 #endif
 
 // Callback function type definition
+#ifdef __cplusplus
 typedef void (*wxFunction) (wxObject&, wxEvent&);
+#endif
 
 // ----------------------------------------------------------------------------
 // OS mnemonics -- Identify the running OS (useful for Windows)

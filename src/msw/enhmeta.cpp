@@ -183,8 +183,8 @@ wxEnhMetaFileDC::wxEnhMetaFileDC(const wxString& filename,
                                  const wxString& description)
 {
     ScreenHDC hdcRef;
-
-    RECT rect, *pRect;
+    RECT rect;
+	RECT *pRect;
     if ( width && height )
     {
         rect.top =

@@ -94,7 +94,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxXPMHandler,wxImageHandler)
 
 #if wxUSE_STREAMS
 
-bool wxXPMHandler::LoadFile(wxImage *image, 
+bool wxXPMHandler::LoadFile(wxImage *image,
                             wxInputStream& stream,
                             bool verbose, int WXUNUSED(index))
 {
@@ -108,20 +108,20 @@ bool wxXPMHandler::LoadFile(wxImage *image,
 }
 
 bool wxXPMHandler::SaveFile(wxImage * image,
-                            wxOutputStream& stream, bool verbose)
+                            wxOutputStream& stream, bool WXUNUSED(verbose))
 {
     wxString tmp;
     char tmp_c;
-    
+
     // 1. count colours:
     #define MaxCixels  92
-    static const char Cixel[MaxCixels+1] = 
+    static const char Cixel[MaxCixels+1] =
                          " .XoO+@#$%&*=-;:>,<1234567890qwertyuipasdfghjk"
                          "lzxcvbnmMNBVCZASDFGHJKLPIUYTREWQ!~^/()_`'][{}|";
     int chars_per_pixel;
     int cols;
     int i, j, k;
-    
+
     cols = image->CountColours();
     chars_per_pixel = 1;
     for ( k = MaxCixels; cols > k; k *= MaxCixels)
@@ -131,7 +131,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
     tmp.Printf("/* XPM */\n"
                "static char *xpm_data[] = {\n"
                "/* columns rows colors chars-per-pixel */\n"
-               "\"%i %i %i %i\",\n", 
+               "\"%i %i %i %i\",\n",
                image->GetWidth(), image->GetHeight(), cols, chars_per_pixel);
     stream.Write(tmp.mb_str(), tmp.Length());
 
@@ -147,7 +147,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
     if (image->HasMask())
         mask_key = (image->GetMaskRed() << 16) |
                    (image->GetMaskGreen() << 8) | image->GetMaskBlue();
-    
+
     // 2b. generate colour table:
     table.BeginFind();
     wxNode *node = NULL;
@@ -174,7 +174,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
         else if (key == mask_key)
             tmp.Printf(wxT("\"%s c None\",\n"), sym);
         else
-            tmp.Printf(wxT("\"%s c #%s%s%s\",\n"), sym, 
+            tmp.Printf(wxT("\"%s c #%s%s%s\",\n"), sym,
                        wxDecToHex((unsigned char)(key >> 16)).c_str(),
                        wxDecToHex((unsigned char)(key >> 8)).c_str(),
                        wxDecToHex((unsigned char)(key)).c_str());
@@ -203,7 +203,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
     }
     tmp = wxT("};\n");
     stream.Write(tmp.mb_str(), 3);
-    
+
     delete[] symbols;
     delete[] symbols_data;
 

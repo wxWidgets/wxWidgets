@@ -88,8 +88,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxXPMFileHandler, wxBitmapHandler)
 
 bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap,
                                 const wxString& name,
-                                long flags,
-                                int desiredWidth, int desiredHeight)
+                                long WXUNUSED(flags),
+                                int WXUNUSED(desiredWidth),
+								int WXUNUSED(desiredHeight))
 {
 #if wxUSE_XPM_IN_MSW
     XImage *ximage = NULL;
@@ -131,8 +132,8 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap,
 
 bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap,
                                 const wxString& name,
-                                int type,
-                                const wxPalette *palette)
+                                int WXUNUSED(type),
+                                const wxPalette *WXUNUSED(palette))
 {
 #if wxUSE_XPM_IN_MSW
     XImage ximage;
@@ -184,10 +185,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxXPMDataHandler, wxBitmapHandler)
 
 bool wxXPMDataHandler::Create(wxBitmap *bitmap,
                               void *data,
-                              long flags,
-                              int width,
-                              int height,
-                              int depth)
+                              long WXUNUSED(flags),
+                              int WXUNUSED(width),
+                              int WXUNUSED(height),
+                              int WXUNUSED(depth))
 {
 #if wxUSE_XPM_IN_MSW
   XImage *ximage = NULL;
