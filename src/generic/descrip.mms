@@ -62,6 +62,7 @@ OBJECTS = \
 		prntdlgg.obj,\
 		progdlgg.obj,\
 		sashwin.obj,\
+		selstore.obj,\
 		splitter.obj,\
 		tbarsmpl.obj,\
 		tabg.obj,\
@@ -100,6 +101,7 @@ SOURCES = \
 		prntdlgg.cpp,\
 		progdlgg.cpp,\
 		sashwin.cpp,\
+		selstore.cpp,\
 		splitter.cpp,\
 		statline.cpp,\
 		statusbr.cpp,\
@@ -165,6 +167,7 @@ progdlgg.obj : progdlgg.cpp
 scrlwing.obj : scrlwing.cpp
 spinctlg.obj : spinctlg.cpp
 sashwin.obj : sashwin.cpp
+selstore.obj : selstore.cpp
 splitter.obj : splitter.cpp
 statline.obj : statline.cpp
 statusbr.obj : statusbr.cpp

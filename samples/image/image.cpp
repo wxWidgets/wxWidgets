@@ -34,9 +34,11 @@
 #if !defined(__WINDOWS__) || wxUSE_XPM_IN_MSW
     #include "smile.xpm"
 #endif
-#include "wx/rawbmp.h"
+#ifndef __VMS
+# include "wx/rawbmp.h"
 
 #define wxHAVE_RAW_BITMAP
+#endif
 
 // derived classes
 

@@ -155,7 +155,10 @@ int wxComboBox::DoInsert(const wxString& item, int pos)
 
     wxXmString str( item.c_str() );
     XmComboBoxAddItem((Widget) m_mainWidget, str(), pos+1);
-    m_stringList.Insert(pos, item);
+#ifndef __VMS
+   //FIX me for VMS : no intance for insert function to overload
+   m_stringList.Insert(pos, item);
+#endif
     m_noStrings ++;
 
     return pos;

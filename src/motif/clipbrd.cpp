@@ -14,6 +14,15 @@
 #pragma implementation "clipbrd.h"
 #endif
 
+#ifdef __VMS
+#include "wx/vms_x_fix.h"
+#define XtWindow XTWINDOW
+#define XtScreen XTSCREEN
+#define XtParent XTPARENT
+#define XtIsRealized XTISREALIZED
+#define XtDisplay XTDISPLAY
+#endif
+
 #include "wx/defs.h"
 
 #if wxUSE_CLIPBOARD
@@ -27,6 +36,7 @@
 
 #ifdef __VMS__
 #pragma message disable nosimpint
+
 #endif
 #include <Xm/Xm.h>
 #include <Xm/CutPaste.h>
