@@ -97,7 +97,7 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
                 // HINT: if this handling is not enough for you you should use
                 //       wxHtmlBinderCell
 
-        virtual bool AdjustPagebreak(int *pagebreak);
+        virtual bool AdjustPagebreak(int *pagebreak) const;
                 // This method used to adjust pagebreak position. The parameter is
                 // variable that contains y-coordinate of page break (= horizontal line that
                 // should not be crossed by words, images etc.). If this cell cannot be divided
@@ -144,12 +144,12 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
 
 class WXDLLEXPORT wxHtmlWordCell : public wxHtmlCell
 {
-    protected:
-        wxString m_Word;
-
     public:
         wxHtmlWordCell(const wxString& word, wxDC& dc);
         void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
+
+    protected:
+        wxString m_Word;
 };
 
 
@@ -163,6 +163,51 @@ class WXDLLEXPORT wxHtmlWordCell : public wxHtmlCell
 
 class WXDLLEXPORT wxHtmlContainerCell : public wxHtmlCell
 {
+    public:
+        wxHtmlContainerCell(wxHtmlContainerCell *parent);
+        ~wxHtmlContainerCell() {if (m_Cells) delete m_Cells;}
+
+        virtual void Layout(int w);
+        virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
+        virtual void DrawInvisible(wxDC& dc, int x, int y);
+        virtual bool AdjustPagebreak(int *pagebreak) const;
+
+        void InsertCell(wxHtmlCell *cell);
+                // insert cell at the end of m_Cells list
+        void SetAlignHor(int al) {m_AlignHor = al; m_LastLayout = -1;}
+        int GetAlignHor() const {return m_AlignHor;}
+        void SetAlignVer(int al) {m_AlignVer = al; m_LastLayout = -1;}
+                // sets horizontal/vertical alignment
+        int GetAlignVer() const {return m_AlignVer;}
+        void SetIndent(int i, int what, int units = wxHTML_UNITS_PIXELS);
+                // sets left-border indentation. units is one of wxHTML_UNITS_* constants
+                // what is combination of wxHTML_INDENT_*
+        int GetIndent(int ind) const;
+                // returns the indentation. ind is one of wxHTML_INDENT_* constants
+        int GetIndentUnits(int ind) const;
+                // returns type of value returned by GetIndent(ind)
+        void SetAlign(const wxHtmlTag& tag);
+                // sets alignment info based on given tag's params
+        void SetWidthFloat(int w, int units) {m_WidthFloat = w; m_WidthFloatUnits = units; m_LastLayout = -1;}
+        void SetWidthFloat(const wxHtmlTag& tag, double pixel_scale = 1.0);
+                // sets floating width adjustment
+                // (examples : 32 percent of parent container,
+                // -15 pixels percent (this means 100 % - 15 pixels)
+        void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP) {m_MinHeight = h; m_MinHeightAlign = align; m_LastLayout = -1;}
+                // sets minimal height of this container.
+        int GetMaxLineWidth() const {return m_MaxLineWidth;}
+            // returns maximal line width in this container.
+            // Call to this method is valid only after calling
+            // Layout()
+        void SetBackgroundColour(const wxColour& clr) {m_UseBkColour = TRUE; m_BkColour = clr;}
+        void SetBorder(const wxColour& clr1, const wxColour& clr2) {m_UseBorder = TRUE; m_BorderColour1 = clr1, m_BorderColour2 = clr2;}
+        virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const;
+        virtual const wxHtmlCell* Find(int condition, const void* param) const;
+        virtual void OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event);
+
+        wxHtmlCell* GetFirstCell() const {return m_Cells;}
+                // returns pointer to the first cell in container or NULL
+
     protected:
         int m_IndentLeft, m_IndentRight, m_IndentTop, m_IndentBottom;
                 // indentation of subcells. There is always m_Indent pixels
@@ -185,51 +230,9 @@ class WXDLLEXPORT wxHtmlContainerCell : public wxHtmlCell
         bool m_UseBorder;
         wxColour m_BorderColour1, m_BorderColour2;
                 // borders color of this container
-
-    public:
-        wxHtmlContainerCell(wxHtmlContainerCell *parent);
-        ~wxHtmlContainerCell() {if (m_Cells) delete m_Cells;}
-
-        virtual void Layout(int w);
-        virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
-        virtual void DrawInvisible(wxDC& dc, int x, int y);
-        virtual bool AdjustPagebreak(int *pagebreak);
-
-        void InsertCell(wxHtmlCell *cell);
-                // insert cell at the end of m_Cells list
-        void SetAlignHor(int al) {m_AlignHor = al;}
-        int GetAlignHor() const {return m_AlignHor;}
-        void SetAlignVer(int al) {m_AlignVer = al;}
-                // sets horizontal/vertical alignment
-        int GetAlignVer() const {return m_AlignVer;}
-        void SetIndent(int i, int what, int units = wxHTML_UNITS_PIXELS);
-                // sets left-border indentation. units is one of wxHTML_UNITS_* constants
-                // what is combination of wxHTML_INDENT_*
-        int GetIndent(int ind) const;
-                // returns the indentation. ind is one of wxHTML_INDENT_* constants
-        int GetIndentUnits(int ind) const;
-                // returns type of value returned by GetIndent(ind)
-        void SetAlign(const wxHtmlTag& tag);
-                // sets alignment info based on given tag's params
-        void SetWidthFloat(int w, int units) {m_WidthFloat = w; m_WidthFloatUnits = units;}
-        void SetWidthFloat(const wxHtmlTag& tag, double pixel_scale = 1.0);
-                // sets floating width adjustment
-                // (examples : 32 percent of parent container,
-                // -15 pixels percent (this means 100 % - 15 pixels)
-        void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP) {m_MinHeight = h; m_MinHeightAlign = align;}
-                // sets minimal height of this container.
-        int GetMaxLineWidth() const {return m_MaxLineWidth;}
-            // returns maximal line width in this container.
-            // Call to this method is valid only after calling
-            // Layout()
-        void SetBackgroundColour(const wxColour& clr) {m_UseBkColour = TRUE; m_BkColour = clr;}
-        void SetBorder(const wxColour& clr1, const wxColour& clr2) {m_UseBorder = TRUE; m_BorderColour1 = clr1, m_BorderColour2 = clr2;}
-        virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const;
-        virtual const wxHtmlCell* Find(int condition, const void* param) const;
-        virtual void OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event);
-
-        wxHtmlCell* GetFirstCell() {return m_Cells;}
-                // returns pointer to the first cell in container or NULL
+        int m_LastLayout;
+                // if != -1 then call to Layout may be no-op
+                // if previous call to Layout has same argument
 };
 
 
@@ -244,12 +247,13 @@ class WXDLLEXPORT wxHtmlContainerCell : public wxHtmlCell
 class WXDLLEXPORT wxHtmlColourCell : public wxHtmlCell
 {
     public:
-        wxColour m_Colour;
-        unsigned m_Flags;
-
         wxHtmlColourCell(const wxColour& clr, int flags = wxHTML_CLR_FOREGROUND) : wxHtmlCell() {m_Colour = clr; m_Flags = flags;}
         virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
         virtual void DrawInvisible(wxDC& dc, int x, int y);
+
+    protected:
+        wxColour m_Colour;
+        unsigned m_Flags;
 };
 
 
@@ -263,11 +267,12 @@ class WXDLLEXPORT wxHtmlColourCell : public wxHtmlCell
 class WXDLLEXPORT wxHtmlFontCell : public wxHtmlCell
 {
     public:
-        wxFont m_Font;
-
         wxHtmlFontCell(wxFont *font) : wxHtmlCell() { m_Font = (*font); }
         virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
         virtual void DrawInvisible(wxDC& dc, int x, int y);
+
+    protected:
+        wxFont m_Font;
 };
 
 
@@ -284,11 +289,6 @@ class WXDLLEXPORT wxHtmlFontCell : public wxHtmlCell
 
 class WXDLLEXPORT wxHtmlWidgetCell : public wxHtmlCell
 {
-    protected:
-        wxWindow* m_Wnd;
-        int m_WidthFloat;
-                // width float is used in adjustWidth (it is in percents)
-
     public:
         wxHtmlWidgetCell(wxWindow *wnd, int w = 0);
                 // !!! wnd must have correct parent!
@@ -299,6 +299,11 @@ class WXDLLEXPORT wxHtmlWidgetCell : public wxHtmlCell
         virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
         virtual void DrawInvisible(wxDC& dc, int x, int y);
         virtual void Layout(int w);
+
+    protected:
+        wxWindow* m_Wnd;
+        int m_WidthFloat;
+                // width float is used in adjustWidth (it is in percents)
 };
 
 
