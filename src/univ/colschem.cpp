@@ -34,6 +34,7 @@
 #include "wx/settings.h"
 
 #include "wx/univ/colschem.h"
+#include "wx/univ/theme.h"
 
 // ============================================================================
 // implementation
@@ -86,7 +87,7 @@ wxColour wxSystemSettings::GetColour(wxSystemColour index)
         wxColourScheme::CONTROL /* wxSYS_COLOUR_LISTBOX */,
     };
 
-    wxCHECK_MSG( index < WXSIZEOF(s_mapSysToThemeCol), wxNullColour,
+    wxCHECK_MSG( index < (int)WXSIZEOF(s_mapSysToThemeCol), wxNullColour,
                  _T("invalid wxSystemColour") );
 
     wxColourScheme::StdColour col = s_mapSysToThemeCol[index];
