@@ -115,7 +115,9 @@ unzip32 -o ..\tiff.zip
 unzip32 -o ..\tex2rtf2.zip
 
 rem Now delete a few files that are unnecessary
-erase /Y *.in *.spec *.guess *.sub mkinstalldirs modules install-sh *.sh
+attrib -R *
+erase /Y BuildCVS.txt *.in *.spec *.guess *.sub mkinstalldirs modules install-sh *.sh descrip.mms
+erase /Y setup.h.in setup.h_vms
 erase /SY Makefile.in
 rem erase /Y docs\pdf\ogl.pdf
 rem deltree /Y docs\html\ogl
@@ -131,7 +133,7 @@ rem from within distrib\msw, to split off wisetop.txt and wisebott.txt.
 echo Calling 'makewise' to generate wxwin2.wse...
 call %WXWIN\distrib\msw\makewise.bat
 
-erase /Y *setup.*
+erase /Y %dest\setup.*
 
 rem Now invoke WISE install on the new wxwin2.wse
 set wisecmd="c:\Program Files\wise\wise32.exe" /C %WXWIN\distrib\msw\wxwin2.wse
@@ -159,6 +161,9 @@ ren s setup.w05
 
 ren setup.w06 s
 ren s setup.w06
+
+ren setup.w07 s
+ren s setup.w07
 
 rem Put all the setup files into a single zip archive.
 zip32 wx%version%_setup.zip readme.txt setup.*
