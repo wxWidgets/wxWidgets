@@ -6,7 +6,7 @@
 // Created:     08/09/2000
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Julian Smart, Vadim Zeitlin
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -144,14 +144,14 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
     {
         wxPoint pt;
         wxWindow* winAtPtr = wxFindWindowAtPointer(pt);
-	/*
+    /*
         if (winAtPtr)
         {
-	wxString msg;
+    wxString msg;
         msg.Printf("Picked %s (%d)", (const char*) winAtPtr->GetName(), winAtPtr->GetId());
         cout << msg << '\n';
         }
-	*/
+    */
 
         if (winAtPtr)
             DispatchEvent(winAtPtr, pt);
@@ -170,6 +170,7 @@ bool wxContextHelp::EndContextHelp()
 bool wxContextHelp::EventLoop()
 {
     m_inHelp = TRUE;
+    
     while ( m_inHelp )
     {
         if (wxTheApp->Pending())
@@ -181,6 +182,7 @@ bool wxContextHelp::EventLoop()
             wxTheApp->ProcessIdle();
         }
     }
+    
     return TRUE;
 }
 
@@ -223,8 +225,9 @@ bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
     {
         wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(), pt) ;
         helpEvent.SetEventObject(this);
+        
         eventProcessed = win->GetEventHandler()->ProcessEvent(helpEvent);
-
+        
         // Go up the window hierarchy until the event is handled (or not).
         // I.e. keep submitting ancestor windows until one is recognised
         // by the app code that processes the ids and displays help.

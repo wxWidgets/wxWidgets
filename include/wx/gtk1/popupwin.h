@@ -27,9 +27,7 @@ class wxPopupWindow: public wxPopupWindowBase
 {
 public:
     wxPopupWindow() { }
-#ifdef __DARWIN__
-    virtual ~wxPopupWindow() { }
-#endif
+    virtual ~wxPopupWindow();
 
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE)
         { (void)Create(parent, flags); }
