@@ -165,8 +165,8 @@ GridFrame::GridFrame()
     wxMenu *selectionMenu = new wxMenu;
 
     editMenu->Append( ID_CHANGESEL, "Change &selection mode",
-		      selectionMenu,
-		      "Change selection mode" );
+                      selectionMenu,
+                      "Change selection mode" );
 
     selectionMenu->Append( ID_SELCELLS, "Select &Cells" );
     selectionMenu->Append( ID_SELROWS, "Select &Rows" );
@@ -498,8 +498,8 @@ void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
     if ( grid->IsSelection() )
     {
         for ( int n = 0; n < grid->GetNumberRows(); n++ )
-	    if ( grid->IsInSelection( n , 0 ) )
-	        grid->DeleteRows( n, 1 );
+            if ( grid->IsInSelection( n , 0 ) )
+                grid->DeleteRows( n, 1 );
     }
 }
 
@@ -509,8 +509,8 @@ void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
     if ( grid->IsSelection() )
     {
         for ( int n = 0; n < grid->GetNumberCols(); n++ )
-	    if ( grid->IsInSelection( 0 , n ) )
-	        grid->DeleteCols( n, 1 );
+            if ( grid->IsInSelection( 0 , n ) )
+                grid->DeleteCols( n, 1 );
     }
 }
 
@@ -617,7 +617,11 @@ void GridFrame::OnColSize( wxGridSizeEvent& ev )
 void GridFrame::OnSelectCell( wxGridEvent& ev )
 {
     logBuf = "";
-    logBuf << "Selected cell at row " << ev.GetRow()
+    if ( ev.Selecting() )
+        logBuf << "Selected ";
+    else
+        logBuf << "Deselected ";
+    logBuf << "cell at row " << ev.GetRow()
            << " col " << ev.GetCol();
     wxLogMessage( "%s", logBuf.c_str() );
 
@@ -629,10 +633,14 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
 void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
 {
     logBuf = "";
-    logBuf  << "Selected cells from row " << ev.GetTopRow()
-            << " col " << ev.GetLeftCol()
-            << " to row " << ev.GetBottomRow()
-            << " col " << ev.GetRightCol();
+    if ( ev.Selecting() )
+        logBuf << "Selected ";
+    else
+        logBuf << "Deselected ";
+    logBuf << "cells from row " << ev.GetTopRow()
+           << " col " << ev.GetLeftCol()
+           << " to row " << ev.GetBottomRow()
+           << " col " << ev.GetRightCol();
 
     wxLogMessage( "%s", logBuf.c_str() );
 

@@ -998,8 +998,8 @@ public:
 
     wxGridTableBase * GetTable() const { return m_table; }
     bool SetTable( wxGridTableBase *table, bool takeOwnership=FALSE,
-		   wxGrid::wxGridSelectionModes selmode =
-		   wxGrid::wxGridSelectCells );
+                   wxGrid::wxGridSelectionModes selmode =
+                   wxGrid::wxGridSelectCells );
 
     void ClearGrid();
     bool InsertRows( int pos = 0, int numRows = 1, bool updateLabels=TRUE );
@@ -1105,16 +1105,16 @@ public:
     void SetGridCursor( int row, int col )
         { SetCurrentCell( wxGridCellCoords(row, col) ); }
 
-    bool MoveCursorUp();
-    bool MoveCursorDown();
-    bool MoveCursorLeft();
-    bool MoveCursorRight();
+    bool MoveCursorUp( bool expandSelection );
+    bool MoveCursorDown( bool expandSelection );
+    bool MoveCursorLeft( bool expandSelection );
+    bool MoveCursorRight( bool expandSelection );
     bool MovePageDown();
     bool MovePageUp();
-    bool MoveCursorUpBlock();
-    bool MoveCursorDownBlock();
-    bool MoveCursorLeftBlock();
-    bool MoveCursorRightBlock();
+    bool MoveCursorUpBlock( bool expandSelection );
+    bool MoveCursorDownBlock( bool expandSelection );
+    bool MoveCursorLeftBlock( bool expandSelection );
+    bool MoveCursorRightBlock( bool expandSelection );
 
 
     // ------ label and gridline formatting
@@ -1732,17 +1732,18 @@ class WXDLLEXPORT wxGridEvent : public wxNotifyEvent
 public:
     wxGridEvent()
         : wxNotifyEvent(), m_row(-1), m_col(-1), m_x(-1), m_y(-1),
-        m_control(0), m_meta(0), m_shift(0), m_alt(0)
+        m_selecting(0), m_control(0), m_meta(0), m_shift(0), m_alt(0)
         {
         }
 
     wxGridEvent(int id, wxEventType type, wxObject* obj,
-                int row=-1, int col=-1, int x=-1, int y=-1,
+                int row=-1, int col=-1, int x=-1, int y=-1, bool sel = TRUE,
                 bool control=FALSE, bool shift=FALSE, bool alt=FALSE, bool meta=FALSE);
 
     virtual int GetRow() { return m_row; }
     virtual int GetCol() { return m_col; }
     wxPoint     GetPosition() { return wxPoint( m_x, m_y ); }
+    bool        Selecting() { return m_selecting; }
     bool        ControlDown() { return m_control; }
     bool        MetaDown() { return m_meta; }
     bool        ShiftDown() { return m_shift; }
@@ -1753,6 +1754,7 @@ protected:
     int         m_col;
     int         m_x;
     int         m_y;
+    bool        m_selecting;
     bool        m_control;
     bool        m_meta;
     bool        m_shift;
@@ -1802,6 +1804,7 @@ public:
         {
             m_topLeft     = wxGridNoCellCoords;
             m_bottomRight = wxGridNoCellCoords;
+            m_selecting   = FALSE;
             m_control     = FALSE;
             m_meta        = FALSE;
             m_shift       = FALSE;
@@ -1811,6 +1814,7 @@ public:
     wxGridRangeSelectEvent(int id, wxEventType type, wxObject* obj,
                            const wxGridCellCoords& topLeft,
                            const wxGridCellCoords& bottomRight,
+                           bool sel = TRUE,
                            bool control=FALSE, bool shift=FALSE,
                            bool alt=FALSE, bool meta=FALSE);
 
@@ -1820,6 +1824,7 @@ public:
     int         GetBottomRow() { return m_bottomRight.GetRow(); }
     int         GetLeftCol()   { return m_topLeft.GetCol(); }
     int         GetRightCol()  { return m_bottomRight.GetCol(); }
+    bool        Selecting() { return m_selecting; }
     bool        ControlDown()  { return m_control; }
     bool        MetaDown()     { return m_meta; }
     bool        ShiftDown()    { return m_shift; }
@@ -1828,6 +1833,7 @@ public:
 protected:
     wxGridCellCoords  m_topLeft;
     wxGridCellCoords  m_bottomRight;
+    bool              m_selecting;
     bool              m_control;
     bool              m_meta;
     bool              m_shift;

@@ -31,8 +31,10 @@ public:
     void SetSelectionMode(wxGrid::wxGridSelectionModes selmode);
     void SelectRow( int row, bool addToSelected = FALSE );
     void SelectCol( int col, bool addToSelected = FALSE );
-    void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol );
-    void SelectCell( int row, int col);
+    void SelectBlock( int topRow, int leftCol,
+                      int bottomRow, int rightCol,
+                      wxMouseEvent* event = 0, bool sendEvent = TRUE );
+    void SelectCell( int row, int col, bool sendEvent = TRUE );
     void ToggleCellSelection( int row, int col);
     void ClearSelection();
 
