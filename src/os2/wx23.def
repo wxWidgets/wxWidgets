@@ -666,8 +666,6 @@ EXPORTS
       __rs__17wxDataInputStreamFRs
       ;wxDataInputStream::operator>>(unsigned short&)
       __rs__17wxDataInputStreamFRUs
-      ;wxDataOutputStream::operator<<(wxString&)
-      __ls__18wxDataOutputStreamFR8wxString
       ;wxDataInputStream::Read8()
       Read8__17wxDataInputStreamFv
       ;wxDataInputStream::ReadString()
@@ -722,6 +720,8 @@ EXPORTS
       WriteDouble__18wxDataOutputStreamFd
       ;wxDataOutputStream::operator<<(int)
       __ls__18wxDataOutputStreamFi
+      ;wxDataOutputStream::operator<<(const wxString&)
+      __ls__18wxDataOutputStreamFRC8wxString
   ;From object file:  ..\common\dcbase.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxDCBase::DoDrawCheckMark(int,int,int,int)
@@ -2172,6 +2172,8 @@ EXPORTS
       ShowMenuHelp__11wxFrameBaseFP11wxStatusBari
       ;wxFrameBase::GetEventTable() const
       GetEventTable__11wxFrameBaseCFv
+      ;wxFrameBase::SendIconizeEvent(unsigned long)
+      SendIconizeEvent__11wxFrameBaseFUl
       __vft11wxFrameBase8wxObject
       ;wxFrameBase::DoClientToScreen(int*,int*) const
       DoClientToScreen__11wxFrameBaseCFPiT1
@@ -2399,6 +2401,39 @@ EXPORTS
       ;wxFontList::FindOrCreateFont(int,int,int,int,unsigned long,const wxString&,wxFontEncoding)
       FindOrCreateFont__10wxFontListFiN31UlRC8wxString14wxFontEncoding
   ;From object file:  ..\common\geometry.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxRect2DInt::ConstrainTo(const wxRect2DInt&)
+      ConstrainTo__11wxRect2DIntFRC11wxRect2DInt
+      ;wxRect2DInt::ReadFrom(wxDataInputStream&)
+      ReadFrom__11wxRect2DIntFR17wxDataInputStream
+      ;wxRect2DInt::Intersect(const wxRect2DInt&,const wxRect2DInt&,wxRect2DInt*)
+      Intersect__11wxRect2DIntFRC11wxRect2DIntT1P11wxRect2DInt
+      ;wxRect2DInt::operator=(const wxRect2DInt&)
+      __as__11wxRect2DIntFRC11wxRect2DInt
+      ;wxRect2DInt::Union(const wxPoint2DInt&)
+      Union__11wxRect2DIntFRC12wxPoint2DInt
+      ;wxRect2DDouble::Intersect(const wxRect2DDouble&,const wxRect2DDouble&,wxRect2DDouble*)
+      Intersect__14wxRect2DDoubleFRC14wxRect2DDoubleT1P14wxRect2DDouble
+      ;wxRect2DInt::WriteTo(wxDataOutputStream&) const
+      WriteTo__11wxRect2DIntCFR18wxDataOutputStream
+      ;wxRect2DDouble::Union(const wxRect2DDouble&,const wxRect2DDouble&,wxRect2DDouble*)
+      Union__14wxRect2DDoubleFRC14wxRect2DDoubleT1P14wxRect2DDouble
+      ;wxRect2DDouble::Intersects(const wxRect2DDouble&) const
+      Intersects__14wxRect2DDoubleCFRC14wxRect2DDouble
+      ;wxRect2DInt::Union(const wxRect2DInt&,const wxRect2DInt&,wxRect2DInt*)
+      Union__11wxRect2DIntFRC11wxRect2DIntT1P11wxRect2DInt
+      ;wxRect2DDouble::Union(const wxPoint2DDouble&)
+      Union__14wxRect2DDoubleFRC15wxPoint2DDouble
+      ;wxPoint2DInt::ReadFrom(wxDataInputStream&)
+      ReadFrom__12wxPoint2DIntFR17wxDataInputStream
+      ;wxRect2DDouble::ConstrainTo(const wxRect2DDouble&)
+      ConstrainTo__14wxRect2DDoubleFRC14wxRect2DDouble
+      ;wxRect2DInt::Intersects(const wxRect2DInt&) const
+      Intersects__11wxRect2DIntCFRC11wxRect2DInt
+      ;wxPoint2DInt::WriteTo(wxDataOutputStream&) const
+      WriteTo__12wxPoint2DIntCFR18wxDataOutputStream
+      ;wxPoint2DInt::GetVectorAngle()
+      GetVectorAngle__12wxPoint2DIntFv
   ;From object file:  ..\common\gifdecod.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxGIFDecoder::wxGIFDecoder(wxInputStream*,unsigned long)
@@ -2897,6 +2932,8 @@ EXPORTS
       __dt__8wxLocaleFv
       ;wxLocale::GetSystemLanguage()
       GetSystemLanguage__8wxLocaleFv
+      ;wxLocale::GetSystemEncoding()
+      GetSystemEncoding__8wxLocaleFv
       ;wxLocale::CreateLanguagesDB()
       CreateLanguagesDB__8wxLocaleFv
       ;wxLanguageInfoArray::Index(const wxLanguageInfo&,unsigned long) const
@@ -2921,6 +2958,8 @@ EXPORTS
       InitLanguagesDB__8wxLocaleFv
       ;wxLocale::wxLocale()
       __ct__8wxLocaleFv
+      ;wxLocale::GetSystemEncodingName()
+      GetSystemEncodingName__8wxLocaleFv
       ;wxLanguageInfoArray::Add(const wxLanguageInfo&)
       Add__19wxLanguageInfoArrayFRC14wxLanguageInfo
       ;wxLocale::AddLanguage(const wxLanguageInfo&)
@@ -3127,6 +3166,8 @@ EXPORTS
       wxLogStatus__FPCce
       ;wxLog::ClearTraceMasks()
       ClearTraceMasks__5wxLogFv
+      ;wxTrap()
+      wxTrap__Fv
       ;wxLog::RemoveTraceMask(const wxString&)
       RemoveTraceMask__5wxLogFRC8wxString
       ;wxSysErrorMsg(unsigned long)
@@ -3141,14 +3182,14 @@ EXPORTS
       wxLogSysError__FPCce
       ;wxLog::DontCreateOnDemand()
       DontCreateOnDemand__5wxLogFv
-      ;Trap()
-      Trap__Fv
       ;wxLog::TimeStamp(wxString*)
       TimeStamp__5wxLogFP8wxString
       ;wxLogInfo(const char*,...)
       wxLogInfo__FPCce
       ;wxLogSysError(long,const char*,...)
       wxLogSysError__FlPCce
+      ;wxAssertIsEqual(int,int)
+      wxAssertIsEqual__FiT1
       ;wxLogStream::wxLogStream(ostream*)
       __ct__11wxLogStreamFP7ostream
       ;wxLog::ms_suspendCount
@@ -3330,10 +3371,6 @@ EXPORTS
       ErrorMsg__11wxMemStructFv
       ;wxDebugContext::wxDebugContext()
       __ct__14wxDebugContextFv
-      ;wxDebugContext::SetStream(ostream*,streambuf*)
-      SetStream__14wxDebugContextFP7ostreamP9streambuf
-      ;wxDebugContext::SetFile(const wxString&)
-      SetFile__14wxDebugContextFRC8wxString
       ;wxDebugContext::StartPos(const char*)
       StartPos__14wxDebugContextFPCc
       ;wxDebugContext::Check(unsigned long)
@@ -3380,10 +3417,6 @@ EXPORTS
       TraverseList__14wxDebugContextFM11wxMemStructFv_vP11wxMemStruct
       ;wxDebugContext::m_tail
       m_tail__14wxDebugContext
-      ;wxDebugContext::m_streamBuf
-      m_streamBuf__14wxDebugContext
-      ;wxDebugContext::m_debugStream
-      m_debugStream__14wxDebugContext
       ;wxDebugContext::m_checkPrevious
       m_checkPrevious__14wxDebugContext
       ;wxDebugContext::CountObjectsLeft(unsigned long)
@@ -3400,8 +3433,6 @@ EXPORTS
       ValidateNode__11wxMemStructFv
       ;wxMemStruct::Unlink()
       Unlink__11wxMemStructFv
-      ;wxDebugContext::SetStandardError()
-      SetStandardError__14wxDebugContextFv
       ;wxMemStruct::Dump()
       Dump__11wxMemStructFv
       ;wxMemStruct::CheckAllPrevious()
@@ -3893,10 +3924,12 @@ EXPORTS
       __dt__18wxPrintPreviewBaseFv
       ;wxPreviewFrame::Initialize()
       Initialize__14wxPreviewFrameFv
-      ;wxPreviewControlBar::wxPreviewControlBar(wxPrintPreviewBase*,long,wxWindow*,const wxPoint&,const wxSize&,long,const wxString&)
-      __ct__19wxPreviewControlBarFP18wxPrintPreviewBaselP8wxWindowRC7wxPointRC6wxSizeT2RC8wxString
+      ;wxPrinterBase::ReportError(wxWindow*,wxPrintout*,const wxString&)
+      ReportError__13wxPrinterBaseFP8wxWindowP10wxPrintoutRC8wxString
       ;wxPreviewCanvas::sm_eventTable
       sm_eventTable__15wxPreviewCanvas
+      ;wxPreviewControlBar::wxPreviewControlBar(wxPrintPreviewBase*,long,wxWindow*,const wxPoint&,const wxSize&,long,const wxString&)
+      __ct__19wxPreviewControlBarFP18wxPrintPreviewBaselP8wxWindowRC7wxPointRC6wxSizeT2RC8wxString
       ;wxPreviewControlBar::OnWindowClose(wxCommandEvent&)
       OnWindowClose__19wxPreviewControlBarFR14wxCommandEvent
       ;wxPreviewControlBar::OnPrint(wxCommandEvent&)
@@ -5526,6 +5559,8 @@ EXPORTS
       Member__9wxVariantCFRC9wxVariant
       ;wxVariantDataList::Write(ostream&) const
       Write__17wxVariantDataListCFR7ostream
+      ;wxVariantDataDateTime::sm_classwxVariantDataDateTime
+      sm_classwxVariantDataDateTime__21wxVariantDataDateTime
       ;wxTime::sm_classwxTime
       sm_classwxTime__6wxTime
       ;wxVariant::operator=(const wxTime&)
@@ -5552,6 +5587,8 @@ EXPORTS
       Eq__17wxVariantDataRealCFR13wxVariantData
       ;wxVariantDataTime::Copy(wxVariantData&)
       Copy__17wxVariantDataTimeFR13wxVariantData
+      ;wxVariant::Convert(wxDateTime*) const
+      Convert__9wxVariantCFP10wxDateTime
       ;wxVariant::GetBool() const
       GetBool__9wxVariantCFv
       ;wxVariant::GetTime() const
@@ -5560,6 +5597,8 @@ EXPORTS
       GetString__9wxVariantCFv
       ;wxVariant::GetReal() const
       GetReal__9wxVariantCFv
+      ;wxVariant::GetDateTime() const
+      GetDateTime__9wxVariantCFv
       ;wxVariant::ClearList()
       ClearList__9wxVariantFv
       ;wxVariantDataChar::Write(wxString&) const
@@ -5568,8 +5607,12 @@ EXPORTS
       __ct__9wxVariantFRC6wxDateRC8wxString
       ;wxVariant::operator=(char)
       __as__9wxVariantFc
+      ;wxVariantDataDateTime::Write(wxString&) const
+      Write__21wxVariantDataDateTimeCFR8wxString
       ;wxVariantDataString::Write(wxString&) const
       Write__19wxVariantDataStringCFR8wxString
+      ;wxVariantDataDateTime::Read(wxString&)
+      Read__21wxVariantDataDateTimeFR8wxString
       ;wxVariantDataDate::Read(wxString&)
       Read__17wxVariantDataDateFR8wxString
       ;wxVariantDataList::wxVariantDataList(const wxList&)
@@ -5636,6 +5679,8 @@ EXPORTS
       __ct__9wxVariantFUlRC8wxString
       ;wxVariant::wxVariant(const wxList&,const wxString&)
       __ct__9wxVariantFRC6wxListRC8wxString
+      ;wxVariant::wxVariant(const _DATE_STRUCT*,const wxString&)
+      __ct__9wxVariantFPC12_DATE_STRUCTRC8wxString
       ;wxVariant::wxVariant(wxVariantData*,const wxString&)
       __ct__9wxVariantFP13wxVariantDataRC8wxString
       ;wxVariant::operator=(const wxString&)
@@ -5658,6 +5703,8 @@ EXPORTS
       __eq__9wxVariantCFl
       ;wxVariant::operator==(const wxStringList&) const
       __eq__9wxVariantCFRC12wxStringList
+      ;wxVariant::operator=(const _TIMESTAMP_STRUCT*)
+      __as__9wxVariantFPC17_TIMESTAMP_STRUCT
       ;wxVariantDataLong::Read(istream&)
       Read__17wxVariantDataLongFR7istream
       ;wxVariantData::sm_classwxVariantData
@@ -5666,6 +5713,8 @@ EXPORTS
       __vc__9wxVariantFUi
       ;wxVariant::operator!=(const wxTime&) const
       __ne__9wxVariantCFRC6wxTime
+      ;wxVariantDataDateTime::Write(ostream&) const
+      Write__21wxVariantDataDateTimeCFR7ostream
       ;wxVariantDataString::Write(ostream&) const
       Write__19wxVariantDataStringCFR7ostream
       ;wxVariantDataBool::Write(ostream&) const
@@ -5682,6 +5731,8 @@ EXPORTS
       Eq__17wxVariantDataCharCFR13wxVariantData
       ;wxVariant::Delete(int)
       Delete__9wxVariantFi
+      ;wxVariantDataDateTime::Copy(wxVariantData&)
+      Copy__21wxVariantDataDateTimeFR13wxVariantData
       ;wxVariantDataDate::Copy(wxVariantData&)
       Copy__17wxVariantDataDateFR13wxVariantData
       ;wxVariant::Convert(wxTime*) const
@@ -5694,6 +5745,8 @@ EXPORTS
       wxConstructorForwxVariantDataTime__Fv
       ;wxConstructorForwxVariantDataList()
       wxConstructorForwxVariantDataList__Fv
+      ;wxConstructorForwxVariantDataDateTime()
+      wxConstructorForwxVariantDataDateTime__Fv
       ;wxConstructorForwxDate()
       wxConstructorForwxDate__Fv
       ;wxVariantDataChar::sm_classwxVariantDataChar
@@ -5714,6 +5767,8 @@ EXPORTS
       __ct__9wxVariantFRC12wxStringListRC8wxString
       ;wxVariant::wxVariant(const char*,const wxString&)
       __ct__9wxVariantFPCcRC8wxString
+      ;wxVariant::wxVariant(const _TIMESTAMP_STRUCT*,const wxString&)
+      __ct__9wxVariantFPC17_TIMESTAMP_STRUCTRC8wxString
       ;wxVariantDataTime::Write(wxString&) const
       Write__17wxVariantDataTimeCFR8wxString
       ;wxVariantDataDate::Write(wxString&) const
@@ -5741,6 +5796,10 @@ EXPORTS
       __as__9wxVariantFl
       ;wxVariant::operator=(const wxList&)
       __as__9wxVariantFRC6wxList
+      ;wxVariant::operator=(const _TIME_STRUCT*)
+      __as__9wxVariantFPC12_TIME_STRUCT
+      ;wxVariant::operator=(const _DATE_STRUCT*)
+      __as__9wxVariantFPC12_DATE_STRUCT
       ;wxVariant::Append(const wxVariant&)
       Append__9wxVariantFRC9wxVariant
       ;wxVariantDataList::Copy(wxVariantData&)
@@ -5767,6 +5826,8 @@ EXPORTS
       Read__17wxVariantDataCharFR13wxInputStream
       ;wxVariantDataBool::Read(istream&)
       Read__17wxVariantDataBoolFR7istream
+      ;wxVariantDataDateTime::Eq(wxVariantData&) const
+      Eq__21wxVariantDataDateTimeCFR13wxVariantData
       ;wxVariantDataDate::Eq(wxVariantData&) const
       Eq__17wxVariantDataDateCFR13wxVariantData
       ;wxVariantDataString::Copy(wxVariantData&)
@@ -5797,6 +5858,8 @@ EXPORTS
       __ct__9wxVariantFlRC8wxString
       ;wxVariant::wxVariant(double,const wxString&)
       __ct__9wxVariantFdRC8wxString
+      ;wxVariant::wxVariant(const _TIME_STRUCT*,const wxString&)
+      __ct__9wxVariantFPC12_TIME_STRUCTRC8wxString
       ;wxVariantDataReal::Write(wxString&) const
       Write__17wxVariantDataRealCFR8wxString
       ;wxVariantDataVoidPtr::Read(wxString&)
@@ -5809,6 +5872,7 @@ EXPORTS
       __ne__9wxVariantCFRC9wxVariant
       ;wxVariantDataBool::sm_classwxVariantDataBool
       sm_classwxVariantDataBool__17wxVariantDataBool
+      __vft21wxVariantDataDateTime8wxObject
       __vft19wxVariantDataString8wxObject
       __vft17wxVariantDataDate8wxObject
       ;wxVariant::operator!=(long) const
@@ -5839,8 +5903,16 @@ EXPORTS
       __vc__9wxVariantCFUi
       ;wxVariant::operator!=(const wxDate&) const
       __ne__9wxVariantCFRC6wxDate
+      ;wxVariant::operator!=(const wxDateTime&) const
+      __ne__9wxVariantCFRC10wxDateTime
+      ;wxVariant::operator==(const wxDateTime&) const
+      __eq__9wxVariantCFRC10wxDateTime
+      ;wxVariant::operator=(const wxDateTime&)
+      __as__9wxVariantFRC10wxDateTime
       ;wxVariantDataStringList::Read(istream&)
       Read__23wxVariantDataStringListFR7istream
+      ;wxVariantDataDateTime::Read(istream&)
+      Read__21wxVariantDataDateTimeFR7istream
       ;wxVariantDataList::Read(istream&)
       Read__17wxVariantDataListFR7istream
       ;wxVariantDataBool::Read(wxInputStream&)
@@ -5879,6 +5951,8 @@ EXPORTS
       __ne__9wxVariantCFRC8wxString
       ;wxVariant::operator==(char) const
       __eq__9wxVariantCFc
+      ;wxVariant::wxVariant(const wxDateTime&,const wxString&)
+      __ct__9wxVariantFRC10wxDateTimeRC8wxString
       ;wxVariant::wxVariant(void*,const wxString&)
       __ct__9wxVariantFPvRC8wxString
       ;wxVariantDataVoidPtr::Write(wxString&) const
@@ -7056,6 +7130,8 @@ EXPORTS
       ;wxGridStringArray::DoEmpty()
       DoEmpty__17wxGridStringArrayFv
       wxEVT_GRID_EDITOR_SHOWN
+      ;wxConstructorForwxGridEditorCreatedEvent()
+      wxConstructorForwxGridEditorCreatedEvent__Fv
       ;wxConstructorForwxGridCornerLabelWindow()
       wxConstructorForwxGridCornerLabelWindow__Fv
       __vft24wxGridCellStringRenderer16wxGridCellWorker
@@ -7134,6 +7210,8 @@ EXPORTS
       __vft20wxGridRowLabelWindow8wxObject
       __vft15wxGridTableBase8wxObject
       __vft12wxGridWindow8wxObject
+      ;wxGridEditorCreatedEvent::wxGridEditorCreatedEvent(int,int,wxObject*,int,int,wxControl*)
+      __ct__24wxGridEditorCreatedEventFiT1P8wxObjectN21P9wxControl
       ;wxGridCellNumberEditor::StartingKey(wxKeyEvent&)
       StartingKey__22wxGridCellNumberEditorFR10wxKeyEvent
       ;wxGridCellFloatEditor::StartingKey(wxKeyEvent&)
@@ -7325,6 +7403,7 @@ EXPORTS
       Add__17wxGridStringArrayFRC13wxArrayString
       ;wxGrid::EnableCellEditControl(unsigned long)
       EnableCellEditControl__6wxGridFUl
+      wxEVT_GRID_EDITOR_CREATED
       ;wxGrid::sm_classwxGrid
       sm_classwxGrid__6wxGrid
       ;wxGridSizeEvent::sm_classwxGridSizeEvent
@@ -7522,6 +7601,8 @@ EXPORTS
       SetDefaultCellFont__6wxGridFRC6wxFont
       ;wxGridEvent::sm_classwxGridEvent
       sm_classwxGridEvent__11wxGridEvent
+      ;wxGridEditorCreatedEvent::sm_classwxGridEditorCreatedEvent
+      sm_classwxGridEditorCreatedEvent__24wxGridEditorCreatedEvent
       ;wxGridCellChoiceEditor::wxGridCellChoiceEditor(unsigned int,const wxString*,unsigned long)
       __ct__22wxGridCellChoiceEditorFUiPC8wxStringUl
       ;wxGridCellTextEditor::StartingKey(wxKeyEvent&)
@@ -13567,12 +13648,35 @@ EXPORTS
       sm_eventTable__11wxScrollBar
   ;From object file:  ..\os2\settings.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxSystemSettings::SetOption(const wxString&,const wxString&)
+      SetOption__16wxSystemSettingsFRC8wxStringT1
+      ;wxSystemSettingsModule::sm_classwxSystemSettingsModule
+      sm_classwxSystemSettingsModule__22wxSystemSettingsModule
+      ;wxSystemSettingsModule::OnInit()
+      OnInit__22wxSystemSettingsModuleFv
+      ;wxSystemSettings::GetOption(const wxString&)
+      GetOption__16wxSystemSettingsFRC8wxString
+      __vft22wxSystemSettingsModule8wxObject
       ;wxSystemSettings::GetSystemColour(int)
       GetSystemColour__16wxSystemSettingsFi
       ;wxSystemSettings::GetSystemMetric(int)
       GetSystemMetric__16wxSystemSettingsFi
+      ;wxSystemSettings::HasOption(const wxString&)
+      HasOption__16wxSystemSettingsFRC8wxString
+      ;wxSystemSettingsModule::sm_optionNames
+      sm_optionNames__22wxSystemSettingsModule
+      ;wxSystemSettingsModule::OnExit()
+      OnExit__22wxSystemSettingsModuleFv
+      ;wxSystemSettingsModule::sm_optionValues
+      sm_optionValues__22wxSystemSettingsModule
+      ;wxConstructorForwxSystemSettingsModule()
+      wxConstructorForwxSystemSettingsModule__Fv
+      ;wxSystemSettings::GetOptionInt(const wxString&)
+      GetOptionInt__16wxSystemSettingsFRC8wxString
       ;wxSystemSettings::GetSystemFont(int)
       GetSystemFont__16wxSystemSettingsFi
+      ;wxSystemSettings::SetOption(const wxString&,int)
+      SetOption__16wxSystemSettingsFRC8wxStringi
   ;From object file:  ..\os2\slider.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSlider::SetValue(int)

@@ -24,6 +24,53 @@
 #include "wx/window.h"
 #include "wx/os2/private.h"
 
+// the module which is used to clean up wxSystemSettings data (this is a
+// singleton class so it can't be done in the dtor)
+class wxSystemSettingsModule : public wxModule
+{
+    friend class wxSystemSettings;
+public:
+    virtual bool OnInit();
+    virtual void OnExit();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxSystemSettingsModule)
+
+    static wxArrayString   sm_optionNames;
+    static wxArrayString   sm_optionValues;
+};
+
+// ----------------------------------------------------------------------------
+// global data
+// ----------------------------------------------------------------------------
+
+static wxFont *gs_fontDefault = NULL;
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxSystemSettingsModule
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule)
+
+wxArrayString wxSystemSettingsModule::sm_optionNames;
+wxArrayString wxSystemSettingsModule::sm_optionValues;
+
+bool wxSystemSettingsModule::OnInit()
+{
+    return TRUE;
+}
+
+void wxSystemSettingsModule::OnExit()
+{
+    sm_optionNames.Clear();
+    sm_optionValues.Clear();
+    delete gs_fontDefault;
+}
+
 wxColour wxSystemSettings::GetSystemColour(
   int                               nIndex
 )
@@ -308,4 +355,67 @@ int wxSystemSettings::GetSystemMetric(int index)
     }
     return 0;
 }
+
+// Option functions (arbitrary name/value mapping)
+void wxSystemSettings::SetOption(
+  const wxString&                   rsName
+, const wxString&                   rsValue
+)
+{
+    int                             nIdx = wxSystemSettingsModule::sm_optionNames.Index( rsName
+                                                                                        ,FALSE
+                                                                                       );
+
+    if (nIdx == wxNOT_FOUND)
+    {
+        wxSystemSettingsModule::sm_optionNames.Add(rsName);
+        wxSystemSettingsModule::sm_optionValues.Add(rsValue);
+    }
+    else
+    {
+        wxSystemSettingsModule::sm_optionNames[nIdx] = rsName;
+        wxSystemSettingsModule::sm_optionValues[nIdx] = rsValue;
+    }
+}
+
+void wxSystemSettings::SetOption(
+  const wxString&                   rsName
+, int                               nValue
+)
+{
+    wxString                        sValStr;
+
+    sValStr.Printf(wxT("%d"), nValue);
+    SetOption( rsName
+              ,sValStr
+             );
+} // end of
+
+wxString wxSystemSettings::GetOption(
+  const wxString&                   rsName
+)
+{
+    int                             nIdx = wxSystemSettingsModule::sm_optionNames.Index( rsName
+                                                                                        ,FALSE
+                                                                                       );
+
+    if (nIdx == wxNOT_FOUND)
+        return wxEmptyString;
+    else
+        return wxSystemSettingsModule::sm_optionValues[nIdx];
+} // end of
+
+int wxSystemSettings::GetOptionInt(
+  const wxString&                   rsName
+)
+{
+    return wxAtoi(GetOption(rsName));
+} // end of
+
+bool wxSystemSettings::HasOption(
+  const wxString&                   rsName
+)
+{
+    return (wxSystemSettingsModule::sm_optionNames.Index(rsName, FALSE) != wxNOT_FOUND);
+} // end of wxSystemSettings::HasOption
 
