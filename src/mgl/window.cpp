@@ -564,7 +564,7 @@ void wxWindowMGL::Init()
 wxWindowMGL::~wxWindowMGL()
 {
     // Send destroy event
-    wxWindowDestroyEvent destroyEvent(this);
+    wxWindowDestroyEvent destroyEvent((wxWindow*)this);
     destroyEvent.SetId(GetId());
     GetEventHandler()->ProcessEvent(destroyEvent);
 
