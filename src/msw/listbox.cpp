@@ -313,16 +313,7 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
         ListBox_AddString(GetHwnd(), choices[i]);
         if ( clientData )
         {
-#if wxUSE_OWNER_DRAWN
-            if ( m_windowStyle & wxLB_OWNERDRAW )
-            {
-                wxASSERT_MSG(clientData[i] == NULL,
-                             wxT("Can't use client data with owner-drawn listboxes"));
-            }
-            ListBox_SetItemData(GetHwnd(), i, clientData[i]);
-#else // !wxUSE_OWNER_DRAWN
-            ListBox_SetItemData(GetHwnd(), i, clientData[i]);
-#endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
+            SetClientData(i, clientData[i]);
         }
     }
 
