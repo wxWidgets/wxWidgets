@@ -3,11 +3,8 @@
 // Purpose:     Implementation of the wxDbTable class.
 // Author:      Doug Card
 // Modified by: George Tasker
-// Mods:             April 1999
-//                      -Dynamic cursor support - Only one predefined cursor, as many others as
-//                          you need may be created on demand
-//                      -Reduced number of active cursors significantly 
-//                      -Query-Only wxDbTable objects 
+//              Bart Jourquin
+//              Mark Johnson
 // Created:     9.96
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 Remstar International, Inc.
@@ -322,6 +319,7 @@ wxDbTable::~wxDbTable()
                 pDb->DispAllErrors(henv, hdbc);
 
     }
+
     if (hstmtInternal)
         if (SQLFreeStmt(hstmtInternal, SQL_DROP) != SQL_SUCCESS)
             pDb->DispAllErrors(henv, hdbc);
@@ -559,20 +557,6 @@ bool wxDbTable::execUpdate(const char *pSqlStmt)
 /********** wxDbTable::query() **********/
 bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const char *pSqlStmt)
 {
-
-
-
-/*  SQLFreeStmt(hstmt, SQL_CLOSE);
-  if (SQLExecDirect(hstmt, (UCHAR FAR *) pSqlStmt, SQL_NTS) == SQL_SUCCESS)
-    return(TRUE);
-  else
-    {
-      pDb->DispAllErrors(henv, hdbc, hstmt);
-      return(FALSE);
-    }
-*/
-
-
     char sqlStmt[DB_MAX_STATEMENT_LEN];
 
     // Set the selectForUpdate member variable
@@ -622,6 +606,7 @@ bool wxDbTable::Open(void)
 {
     if (!pDb)
         return FALSE;   
+
     int i;
     wxString sqlStmt;
 
@@ -645,14 +630,13 @@ bool wxDbTable::Open(void)
     // the wxDbTable object and the ODBC record.
     if (!queryOnly)
     {
-
         if (!bindInsertParams())                    // Inserts
             return(FALSE);
        
         if (!bindUpdateParams())                    // Updates
             return(FALSE);
-	
     }
+
     if (!bindCols(*hstmtDefault))                   // Selects
         return(FALSE);
 	
@@ -693,8 +677,6 @@ bool wxDbTable::Open(void)
 		      insertableCount++;
         }
         sqlStmt += ")";
-
-//      pDb->WriteSqlLog(sqlStmt);
 
         // Prepare the insert statement for execution
         if (insertableCount)  
@@ -1977,7 +1959,7 @@ void wxDbTable::SetCursor(HSTMT *hstmtActivate)
 /********** wxDbTable::Count(const char *) **********/
 ULONG wxDbTable::Count(const char *args)
 {
-    ULONG l;
+    ULONG count;
     wxString sqlStmt;
     SDWORD cb;
 
@@ -2030,7 +2012,7 @@ ULONG wxDbTable::Count(const char *args)
     }
 
     // Obtain the result
-    if (SQLGetData(*hstmtCount, 1, SQL_C_ULONG, &l, sizeof(l), &cb) != SQL_SUCCESS)
+    if (SQLGetData(*hstmtCount, 1, SQL_C_ULONG, &count, sizeof(count), &cb) != SQL_SUCCESS)
     {
         pDb->DispAllErrors(henv, hdbc, *hstmtCount);
         return(0);
@@ -2041,7 +2023,7 @@ ULONG wxDbTable::Count(const char *args)
         pDb->DispAllErrors(henv, hdbc, *hstmtCount);
 
     // Return the record count
-    return(l);
+    return(count);
 
 }  // wxDbTable::Count()
 
