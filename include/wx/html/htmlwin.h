@@ -121,7 +121,8 @@ public:
     void SetRelatedStatusBar(int bar);
 
     // Sets fonts to be used when displaying HTML page.
-    void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes);
+    void SetFonts(wxString normal_face, wxString fixed_face,
+                  const int *sizes = NULL);
 
     // Sets space between text and window borders.
     void SetBorders(int b) {m_Borders = b;}

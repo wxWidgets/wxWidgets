@@ -68,8 +68,8 @@ public:
     // returns associated wxWindow
     wxHtmlWindow *GetWindow() {return m_Window;}
 
-    // sets fonts to be used when displaying HTML page.
-    void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes);
+    // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
+    void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes = NULL);
 
     // Adds tags module. see wxHtmlTagsModule for details.
     static void AddModule(wxHtmlTagsModule *module);

@@ -79,7 +79,6 @@ void wxHtmlDCRenderer::SetSize(int width, int height)
 }
 
 
-
 void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepath, bool isdir)
 {
     if (m_DC == NULL) return;
@@ -92,6 +91,13 @@ void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepat
     m_Cells->Layout(m_Width);
 }
 
+
+void wxHtmlDCRenderer::SetFonts(wxString normal_face, wxString fixed_face,
+                                const int *sizes)
+{
+    m_Parser->SetFonts(normal_face, fixed_face, sizes);
+    if (m_DC == NULL && m_Cells != NULL) m_Cells->Layout(m_Width);
+}
 
 
 int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render)
@@ -408,11 +414,18 @@ void wxHtmlPrintout::SetMargins(float top, float bottom, float left, float right
 
 
 
+void wxHtmlPrintout::SetFonts(wxString normal_face, wxString fixed_face,
+                              const int *sizes)
+{
+    m_Renderer->SetFonts(normal_face, fixed_face, sizes);
+    m_RendererHdr->SetFonts(normal_face, fixed_face, sizes);
+}
 
 
-//--------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
 // wxHtmlEasyPrinting
-//--------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 
 wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxFrame *parent_frame)
@@ -426,6 +439,8 @@ wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxFrame *parent_fra
     m_PageSetupData->EnableMargins(TRUE);
     m_PageSetupData->SetMarginTopLeft(wxPoint(25, 25));
     m_PageSetupData->SetMarginBottomRight(wxPoint(25, 25));
+
+    SetFonts(wxEmptyString, wxEmptyString, NULL);
 }
 
 
@@ -572,10 +587,27 @@ void wxHtmlEasyPrinting::SetFooter(const wxString& footer, int pg)
 }
 
 
+void wxHtmlEasyPrinting::SetFonts(wxString normal_face, wxString fixed_face,
+                                  const int *sizes)
+{
+    m_FontFaceNormal = normal_face;
+    m_FontFaceFixed = fixed_face;
+
+    if (sizes)
+    {
+        m_FontsSizes = m_FontsSizesArr;
+        for (int i = 0; i < 7; i++) m_FontsSizes[i] = sizes[i];
+    }
+    else
+        m_FontsSizes = NULL;
+}
+
 
 wxHtmlPrintout *wxHtmlEasyPrinting::CreatePrintout()
 {
     wxHtmlPrintout *p = new wxHtmlPrintout(m_Name);
+
+    p->SetFonts(m_FontFaceNormal, m_FontFaceFixed, m_FontsSizes);
 
     p->SetHeader(m_Headers[0], wxPAGE_EVEN);
     p->SetHeader(m_Headers[1], wxPAGE_ODD);

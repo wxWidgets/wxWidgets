@@ -297,7 +297,7 @@ This function sets the space between border of window and HTML contents. See ima
 
 \membersection{wxHtmlWindow::SetFonts}\label{wxhtmlwindowsetfonts}
 
-\func{void}{SetFonts}{\param{wxString }{normal\_face}, \param{wxString }{fixed\_face}, \param{const int }{*sizes}}
+\func{void}{SetFonts}{\param{wxString }{normal\_face}, \param{wxString }{fixed\_face}, \param{const int }{*sizes = NULL}}
 
 This function sets font sizes and faces.
 
@@ -312,24 +312,14 @@ platform-specific face name. Examples are "helvetica" under Unix or
 
 \docparam{sizes}{This is an array of 7 items of {\it int} type.
 The values represent size of font with HTML size from -2 to +4
-( <FONT SIZE=-2> to <FONT SIZE=+4> )}
+( <FONT SIZE=-2> to <FONT SIZE=+4> ). Default sizes are used if {\it sizes}
+is NULL.}
 
 \wxheading{Defaults}
 
-Under wxGTK:
-
-\begin{verbatim}
-    SetFonts("", "", {10, 12, 14, 16, 19, 24, 32});
-\end{verbatim}
-
-Under Windows:
-
-\begin{verbatim}
-    SetFonts("", "", {7, 8, 10, 12, 16, 22, 30});
-\end{verbatim}
-
-Although it seems different the fact is that the fonts are of approximately
-same size under both platforms (due to wxMSW / wxGTK inconsistency)
+Default font sizes are defined by constants wxHTML\_FONT\_SIZE\_1,
+wxHTML\_FONT\_SIZE\_2, ..., wxHTML\_FONT\_SIZE\_7. Note that they differ among
+platforms. Default face names are empty strings.
 
 \membersection{wxHtmlWindow::SetPage}\label{wxhtmlwindowsetpage}
 

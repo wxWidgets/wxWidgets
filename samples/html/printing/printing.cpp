@@ -59,6 +59,10 @@ class MyFrame : public wxFrame
         void OnPreview(wxCommandEvent& event);
         void OnOpen(wxCommandEvent& event);
         
+        void OnPrintSmall(wxCommandEvent& event);
+        void OnPrintNormal(wxCommandEvent& event);
+        void OnPrintHuge(wxCommandEvent& event);
+
 
     private:
         wxHtmlWindow *m_Html;
@@ -81,7 +85,10 @@ enum
     Minimal_Preview,
     Minimal_PageSetup,
     Minimal_PrintSetup,
-    Minimal_Open
+    Minimal_Open,
+    Minimal_PrintSmall,
+    Minimal_PrintNormal,
+    Minimal_PrintHuge
 
 };
 
@@ -100,6 +107,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_PageSetup, MyFrame::OnPageSetup)
     EVT_MENU(Minimal_PrintSetup, MyFrame::OnPrintSetup)
     EVT_MENU(Minimal_Open, MyFrame::OnOpen)
+    EVT_MENU(Minimal_PrintSmall, MyFrame::OnPrintSmall)
+    EVT_MENU(Minimal_PrintNormal, MyFrame::OnPrintNormal)
+    EVT_MENU(Minimal_PrintHuge, MyFrame::OnPrintHuge)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -166,9 +176,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->AppendSeparator();
     menuFile->Append(Minimal_Quit, _("&Exit"));
 
+    wxMenu *testFile = new wxMenu;
+    testFile->Append(Minimal_PrintSmall, _("Small Printer Fonts"));
+    testFile->Append(Minimal_PrintNormal, _("Normal Printer Fonts"));
+    testFile->Append(Minimal_PrintHuge, _("Huge Printer Fonts"));
+    
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(menuFile, _("&File"));
+    menuBar->Append(testFile, _("&Test"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -183,6 +199,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     
     m_Prn = new wxHtmlEasyPrinting(_("Easy Printing Demo"), this);
     m_Prn -> SetHeader(m_Name + wxT("(@PAGENUM@/@PAGESCNT@)<hr>"), wxPAGE_ALL);
+
 }
 
 // frame destructor
@@ -245,3 +262,19 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 }
 
 
+void MyFrame::OnPrintSmall(wxCommandEvent& WXUNUSED(event))
+{
+    int fontsizes[] = { 4, 6, 8, 10, 12, 20, 24 }; 
+    m_Prn->SetFonts(wxEmptyString, wxEmptyString, fontsizes);
+}
+
+void MyFrame::OnPrintNormal(wxCommandEvent& WXUNUSED(event))
+{
+    m_Prn->SetFonts(wxEmptyString, wxEmptyString, 0);
+}
+
+void MyFrame::OnPrintHuge(wxCommandEvent& WXUNUSED(event))
+{
+    int fontsizes[] = { 20, 26, 28, 30, 32, 40, 44 }; 
+    m_Prn->SetFonts(wxEmptyString, wxEmptyString, fontsizes);
+}
