@@ -274,13 +274,7 @@ void WXDLLEXPORT wxLogSysError(long lErrCode, const wxChar *szFormat, ...)
 wxLog::wxLog()
 {
     m_bHasMessages = FALSE;
-
-    // enable verbose messages by default in the debug builds
-#ifdef __WXDEBUG__
-    m_bVerbose = TRUE;
-#else // release
     m_bVerbose = FALSE;
-#endif // debug/release
 }
 
 wxLog *wxLog::GetActiveTarget()
