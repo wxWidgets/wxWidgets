@@ -652,11 +652,24 @@ void GridFrame::OnVTable(wxCommandEvent& )
 {
     static long s_sizeGrid = 10000;
 
+#ifdef __WXMOTIF__
+    // MB: wxGetNumberFromUser doesn't work properly for wxMotif
+    wxString s;
+    s << s_sizeGrid;
+    s = wxGetTextFromUser( "Size of the table to create",
+                           "Size:",
+                           s );
+    
+    s.ToLong( &s_sizeGrid );
+    
+#else
     s_sizeGrid = wxGetNumberFromUser("Size of the table to create",
                                      "Size: ",
                                      "wxGridDemo question",
                                      s_sizeGrid,
                                      0, 32000, this);
+#endif
+    
     if ( s_sizeGrid != -1 )
     {
         BigGridFrame* win = new BigGridFrame(s_sizeGrid);
@@ -697,6 +710,13 @@ BigGridFrame::BigGridFrame(long sizeGrid)
     m_grid = new wxGrid(this, -1, wxDefaultPosition, wxDefaultSize);
     m_table = new BigGridTable(sizeGrid);
     m_grid->SetTable(m_table, TRUE);
+
+#if defined __WXMOTIF__
+    // MB: the grid isn't getting a sensible default size under wxMotif
+    int cw, ch;
+    GetClientSize( &cw, &ch );
+    m_grid->SetSize( cw, ch );
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -983,4 +1003,11 @@ BugsGridFrame::BugsGridFrame()
     grid->SetColAttr(Col_Severity, attrCombo);
 
     grid->AutoSizeColumns();
+
+#if defined __WXMOTIF__
+    // MB: the grid isn't getting a sensible default size under wxMotif
+    int cw, ch;
+    GetClientSize( &cw, &ch );
+    grid->SetSize( cw, ch );
+#endif
 }
