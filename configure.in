@@ -5735,6 +5735,9 @@ if test "$wxUSE_MAC" = 1 ; then
     if test "$wxUSE_SOUND" = "yes"; then
        LDFLAGS="$LDFLAGS -framework QuickTime"
     fi
+    if test "$USE_DARWIN" = 1; then
+       LDFLAGS="$LDFLAGS -framework IOKit"
+    fi
     LDFLAGS="$LDFLAGS -framework Carbon -framework Cocoa -framework System"
 fi
 if test "$wxUSE_COCOA" = 1 ; then
