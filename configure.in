@@ -3204,6 +3204,7 @@ dnl ---------------------------------------------------------------------------
        fi
     fi
     
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mediaplayer"
     AC_DEFINE(wxUSE_MEDIACTRL)
 fi
 

@@ -27616,6 +27616,7 @@ _ACEOF
        fi
     fi
 
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mediaplayer"
     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_MEDIACTRL 1
 _ACEOF
