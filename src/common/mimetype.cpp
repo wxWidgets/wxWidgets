@@ -1105,7 +1105,7 @@ void wxMimeTypesManagerImpl::AddMimeTypeInfo(const wxString& strMimeType,
         if ( !strDesc.IsEmpty() ) {
             m_aDescriptions[index] = strDesc;   // replace old value
         }
-        m_aExtensions[index] += strExtensions;
+        m_aExtensions[index] += ' ' + strExtensions;
     }
 }
 

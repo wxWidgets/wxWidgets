@@ -33,11 +33,11 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
 
     TAG_HANDLER_PROC(tag)
     {
-        unsigned long tmp;
         wxColour oldclr = m_WParser -> GetActualColor();
         int oldsize = m_WParser -> GetFontSize();
 
         if (tag.HasParam("COLOR")) {
+	    unsigned long tmp = 0; 
             wxColour clr;
             tag.ScanParam("COLOR", "#%lX", &tmp);
             clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
@@ -46,8 +46,11 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
         }
 
         if (tag.HasParam("SIZE")) {
+	    // give 'tmp' an initial value. If conversion fails, it will keep this value.
+	    long tmp = 0;
             tag.ScanParam("SIZE", "%li", &tmp);
-            m_WParser -> SetFontSize(tmp);
+	    // We *really* should check the result of (v)sscanf, but ScanParam returns void...
+            m_WParser -> SetFontSize(oldsize+tmp);
             m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
         }
 
