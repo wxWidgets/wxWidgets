@@ -176,6 +176,12 @@ istream& operator>>(istream& is, wxString& WXUNUSED(str))
   return is;
 }
 
+ostream& operator<<(ostream& os, const wxString& str)
+{
+  os << str.c_str();
+  return os;
+}
+
 #endif  //std::string compatibility
 
 // ----------------------------------------------------------------------------

@@ -1037,7 +1037,8 @@ inline wxString WXDLLEXPORT operator+(const wxCharBuffer& buf, const wxString& s
 
 #include "wx/ioswrap.h"
 
-WXDLLEXPORT istream& operator>>(istream& is, wxString& str);
+WXDLLEXPORT istream& operator>>(istream&, wxString&);
+WXDLLEXPORT ostream& operator<<(ostream&, const wxString&);
 
 #endif  // wxSTD_STRING_COMPATIBILITY
 
