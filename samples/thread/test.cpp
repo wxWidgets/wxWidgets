@@ -40,6 +40,9 @@
 
 #include "wx/progdlg.h"
 
+// uncomment this to get some debugging messages from the trace code
+//#define TRACE
+
 class MyThread;
 WX_DEFINE_ARRAY(wxThread *, wxArrayThread);
 
@@ -300,6 +303,10 @@ END_EVENT_TABLE()
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
+#ifdef TRACE
+    wxLog::AddTraceMask("thread");
+#endif
+
     // Create the main frame window
     MyFrame *frame = new MyFrame((wxFrame *)NULL, "wxWindows threads sample",
                                  50, 50, 450, 340);
@@ -427,15 +434,17 @@ void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
 {
+    wxGetApp().m_critsect.Enter();
+
     // stop the last thread
     if ( wxGetApp().m_threads.IsEmpty() )
     {
         wxLogError("No thread to stop!");
+
+        wxGetApp().m_critsect.Leave();
     }
     else
     {
-        wxGetApp().m_critsect.Enter();
-
         wxThread *thread = wxGetApp().m_threads.Last();
 
         // it's important to leave critical section before calling Delete()
@@ -538,6 +547,11 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 {
+#ifdef TRACE
+    // log a separator
+    wxLogTrace("-------- log window cleared --------");
+#endif
+
     m_txtctrl->Clear();
 }
 
