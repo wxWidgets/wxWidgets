@@ -953,7 +953,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
     KeySym keysym = gdk_event->keyval;
 
-    wxLogTrace(TRACE_KEYS, _T("Key %s event: keysym = %d"),
+    wxLogTrace(TRACE_KEYS, _T("Key %s event: keysym = %ld"),
                event.GetEventType() == wxEVT_KEY_UP ? _T("release")
                                                     : _T("press"),
                keysym);
@@ -1023,7 +1023,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         }
     }
 
-    wxLogTrace(TRACE_KEYS, _T("\t-> wxKeyCode %d"), key_code);
+    wxLogTrace(TRACE_KEYS, _T("\t-> wxKeyCode %ld"), key_code);
 
     // sending unknown key events doesn't really make sense
     if ( !key_code )
