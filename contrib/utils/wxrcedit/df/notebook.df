@@ -1,0 +1,6 @@
+node notebook
+type notebook
+var style of flags wxNB_FIXEDWIDTH,wxNB_LEFT,wxNB_RIGHT,wxNB_BOTTOM
+var usenotebooksizer of bool
+childtype panel
+derived from control
