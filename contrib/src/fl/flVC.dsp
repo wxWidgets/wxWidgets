@@ -162,13 +162,13 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "flVC___Win32_Release_Unicode"
-# PROP Intermediate_Dir "flVC___Win32_Release_Unicode"
+# PROP Output_Dir "Release_Unicode"
+# PROP Intermediate_Dir "Release_Unicode"
 # PROP Target_Dir ""
 LINK32=link.exe
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W3 /GX /O1 /Ob2 /I "../../../include" /I "../../include" /I "../../../lib/msw" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__HACK_MY_MSDEV40__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O1 /Ob2 /I "../../../include" /I "../../include" /I "../../../lib/msw" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__HACK_MY_MSDEV40__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "UNICODE" /D "_UNICODE" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O1 /Ob2 /I "../../../include" /I "../../include" /I "../../../lib/mswu" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__HACK_MY_MSDEV40__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "UNICODE" /D "_UNICODE" /YX /FD /c
 RSC=rc.exe
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809
@@ -189,8 +189,8 @@ LIB32=link.exe -lib
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "flVC___Win32_Release_Unicode_DLL"
-# PROP Intermediate_Dir "flVC___Win32_Release_Unicode_DLL"
+# PROP Output_Dir "Release_Unicode_DLL"
+# PROP Intermediate_Dir "Release_Unicode_DLL"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 LIB32=link.exe -lib
@@ -199,7 +199,7 @@ LIB32=link.exe -lib
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W3 /GX /Zi /O2 /Ob2 /I "../../../include" /I "../../include" /I "../../../lib/mswdlld" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "WXUSINGDLL" /D "WXMAKING_FL_DLL" /YX /FD /c
 # SUBTRACT BASE CPP /u
-# ADD CPP /nologo /MD /W3 /GX /Zi /O2 /Ob2 /I "../../../include" /I "../../include" /I "../../../lib/mswdlld" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "WXUSINGDLL" /D "WXMAKING_FL_DLL" /D "_UNICODE" /D "UNICODE" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /Zi /O2 /Ob2 /I "../../../include" /I "../../include" /I "../../../lib/mswdllu" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "WXUSINGDLL" /D "WXMAKING_FL_DLL" /D "_UNICODE" /D "UNICODE" /YX /FD /c
 # SUBTRACT CPP /u
 MTL=midl.exe
 RSC=rc.exe
@@ -209,9 +209,9 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw250.lib /nologo /version:1.0 /dll /machine:IX86 /out:"../../../lib/fldll.dll" /libpath:"../../../lib"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw24.lib /nologo /version:1.0 /dll /machine:IX86 /out:"../../../lib/fldll.dll" /libpath:"../../../lib"
 # SUBTRACT BASE LINK32 /pdb:none /incremental:no /debug
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw250.lib /nologo /version:1.0 /dll /machine:IX86 /out:"../../../lib/fldllu.dll" /libpath:"../../../lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw24u.lib /nologo /version:1.0 /dll /machine:IX86 /out:"../../../lib/fldllu.dll" /libpath:"../../../lib"
 # SUBTRACT LINK32 /pdb:none /incremental:no /debug
 
 !ELSEIF  "$(CFG)" == "flVC - Win32 Debug Unicode"
@@ -223,13 +223,13 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "flVC___Win32_Debug_Unicode"
-# PROP Intermediate_Dir "flVC___Win32_Debug_Unicode"
+# PROP Output_Dir "Debug_Unicode"
+# PROP Intermediate_Dir "Debug_Unicode"
 # PROP Target_Dir ""
 LINK32=link.exe
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W3 /GX /Zi /Od /I "../../../include" /I "../../include" /I "../../../lib/mswd" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /GX /Zi /Od /I "../../../include" /I "../../include" /I "../../../lib/mswd" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "UNICODE" /D "_UNICODE" /YX /FD /c
+# ADD CPP /nologo /MDd /W3 /GX /Zi /Od /I "../../../include" /I "../../include" /I "../../../lib/mswud" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "UNICODE" /D "_UNICODE" /YX /FD /c
 RSC=rc.exe
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809
@@ -250,8 +250,8 @@ LIB32=link.exe -lib
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "flVC___Win32_Debug_Unicode_DLL"
-# PROP Intermediate_Dir "flVC___Win32_Debug_Unicode_DLL"
+# PROP Output_Dir "Debug_Unicode_DLL"
+# PROP Intermediate_Dir "Debug_Unicode_DLL"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 LIB32=link.exe -lib
@@ -260,7 +260,7 @@ LIB32=link.exe -lib
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W3 /GX /Zi /Od /I "../../../include" /I "../../include" /I "../../../lib/mswdlld" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "WXUSINGDLL" /D "WXMAKING_FL_DLL" /YX /FD /c
 # SUBTRACT BASE CPP /u
-# ADD CPP /nologo /MDd /W3 /GX /Zi /Od /I "../../../include" /I "../../include" /I "../../../lib/mswdlld" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "WXUSINGDLL" /D "WXMAKING_FL_DLL" /D "UNICODE" /D "_UNICODE" /YX /FD /c
+# ADD CPP /nologo /MDd /W3 /GX /Zi /Od /I "../../../include" /I "../../include" /I "../../../lib/mswdllud" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "WXUSINGDLL" /D "WXMAKING_FL_DLL" /D "UNICODE" /D "_UNICODE" /YX /FD /c
 # SUBTRACT CPP /u
 MTL=midl.exe
 RSC=rc.exe
@@ -270,9 +270,9 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw250d.lib /nologo /version:1.0 /dll /debug /machine:IX86 /out:"../../../lib/fldlld.dll" /libpath:"../../../lib"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw24d.lib /nologo /version:1.0 /dll /debug /machine:IX86 /out:"../../../lib/fldlld.dll" /libpath:"../../../lib"
 # SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw250d.lib /nologo /version:1.0 /dll /debug /machine:IX86 /out:"../../../lib/fldllud.dll" /libpath:"../../../lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw24ud.lib /nologo /version:1.0 /dll /debug /machine:IX86 /out:"../../../lib/fldllud.dll" /libpath:"../../../lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
