@@ -198,7 +198,7 @@ wxFileStream::wxFileStream(const wxString& fileName)
 wxFFileInputStream::wxFFileInputStream(const wxString& fileName)
   : wxInputStream()
 {
-    m_file = new wxFFile(fileName, "rb");
+    m_file = new wxFFile(fileName, _T("rb"));
     m_file_destroy = TRUE;
 }
 
@@ -265,7 +265,7 @@ off_t wxFFileInputStream::OnSysTell() const
 
 wxFFileOutputStream::wxFFileOutputStream(const wxString& fileName)
 {
-    m_file = new wxFFile(fileName, "w+b");
+    m_file = new wxFFile(fileName, _T("w+b"));
     m_file_destroy = TRUE;
 
     if (!m_file->IsOpened())

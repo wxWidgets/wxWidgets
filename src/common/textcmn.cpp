@@ -173,7 +173,7 @@ bool wxTextCtrlBase::SaveFile(const wxString& filename)
     }
 
 #if wxUSE_FFILE
-    wxFFile file(filename, "w");
+    wxFFile file(filename, _T("w"));
     if ( file.IsOpened() && file.Write(GetValue()) )
     {
         // it's not modified any longer
