@@ -2069,7 +2069,83 @@ static PyObject *_wrap_wxWizard_ShowPage(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+#define wxWizard_HasNextPage(_swigobj,_swigarg0)  (_swigobj->HasNextPage(_swigarg0))
+static PyObject *_wrap_wxWizard_HasNextPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWizard * _arg0;
+    wxWizardPage * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","page", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWizard_HasNextPage",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWizard_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWizard_HasNextPage. Expected _wxWizard_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWizardPage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWizard_HasNextPage. Expected _wxWizardPage_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxWizard_HasNextPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxWizard_HasPrevPage(_swigobj,_swigarg0)  (_swigobj->HasPrevPage(_swigarg0))
+static PyObject *_wrap_wxWizard_HasPrevPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWizard * _arg0;
+    wxWizardPage * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","page", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWizard_HasPrevPage",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWizard_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWizard_HasPrevPage. Expected _wxWizard_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWizardPage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWizard_HasPrevPage. Expected _wxWizardPage_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxWizard_HasPrevPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static PyMethodDef wizardcMethods[] = {
+	 { "wxWizard_HasPrevPage", (PyCFunction) _wrap_wxWizard_HasPrevPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWizard_HasNextPage", (PyCFunction) _wrap_wxWizard_HasNextPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizard_ShowPage", (PyCFunction) _wrap_wxWizard_ShowPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizard_IsRunning", (PyCFunction) _wrap_wxWizard_IsRunning, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWizard_FitToPage", (PyCFunction) _wrap_wxWizard_FitToPage, METH_VARARGS | METH_KEYWORDS },

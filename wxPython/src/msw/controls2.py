@@ -695,10 +695,14 @@ class wxListCtrlPtr(wxControlPtr):
         '''Append an item to the list control.  The entry parameter should be a
            sequence with an item for each column'''
         if len(entry):
+            if wx.wxUSE_UNICODE:
+                cvtfunc = unicode
+            else:
+                cvtfunc = str
             pos = self.GetItemCount()
-            self.InsertStringItem(pos, str(entry[0]))
+            self.InsertStringItem(pos, cvtfunc(entry[0]))
             for i in range(1, len(entry)):
-                self.SetStringItem(pos, i, str(entry[i]))
+                self.SetStringItem(pos, i, cvtfunc(entry[i]))
             return pos
     
 class wxListCtrl(wxListCtrlPtr):

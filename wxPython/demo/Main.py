@@ -25,19 +25,8 @@ import images
 _treeList = [
     # new stuff
     ('New since last release', [
-        'RowColSizer',
-        'Unicode',
-        'wxFileHistory',
-        'wxGenericDirCtrl',
-        'wxImageFromStream',
-        'wxArtProvider',
-        'ScrolledPanel',
-        'wxMenu',
-        'wxIEHtmlWin',
-        'wxKeyEvents',
-        'wxWizard',
-        'wxXmlResourceHandler',
-        'wxTimeCtrl',
+        'wxRadioButton',
+
         ]),
 
     # managed windows == things with a caption you can close
@@ -89,6 +78,7 @@ _treeList = [
         'wxNotebook',
         'wxPopupWindow',
         'wxRadioBox',
+        'wxRadioButton',
         'wxSashWindow',
         'wxSlider',
         'wxScrolledWindow',

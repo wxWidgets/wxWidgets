@@ -101,6 +101,7 @@ class wxGenStaticText(wxPyControl):
         width, height = self.GetClientSize()
         dc = wxBufferedPaintDC(self)
         dc.SetBackground(wxBrush(self.GetBackgroundColour(), wxSOLID))
+        dc.SetTextForeground(self.GetForegroundColour())
         dc.Clear()
         dc.SetFont(self.GetFont())
         label = self.GetLabel()

@@ -176,6 +176,13 @@ if CORE_ONLY:
     BUILD_DLLWIDGET = 0
     BUILD_IEWIN = 0
 
+if debug:
+    FINAL  = 0
+    HYBRID = 0
+
+if FINAL:
+    HYBRID = 0
+
 
 if UNICODE and os.name != 'nt':
     print "UNICODE is currently only supported on Win32"
@@ -202,13 +209,6 @@ if os.name == 'nt':
         WXDIR = '..'  # assumes in CVS tree
     WXPLAT = '__WXMSW__'
     GENDIR = 'msw'
-
-    if debug:
-        FINAL  = 0
-        HYBRID = 0
-
-    if HYBRID:
-        FINAL = 0
 
     includes = ['src',
                 opj(WXDIR, 'lib', 'mswdll' + libFlag()),

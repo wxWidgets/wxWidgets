@@ -1632,6 +1632,9 @@ def wxCallAfter(callable, *args, **kw):
     evt.kw = kw
     wxPostEvent(app, evt)
 
+# an alias
+wxRunLater = wxCallAfter
+
 #----------------------------------------------------------------------
 
 class wxPyDeadObjectError(AttributeError):

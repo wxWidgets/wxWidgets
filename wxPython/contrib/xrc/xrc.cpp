@@ -326,6 +326,41 @@ static PyObject *_wrap_delete_wxXmlResource(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+#define wxXmlResource_GetFirstRoot(_swigobj)  (_swigobj->GetFirstRoot())
+static PyObject *_wrap_wxXmlResource_GetFirstRoot(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxXmlNode * _result;
+    wxXmlResource * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxXmlResource_GetFirstRoot",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxXmlResource_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxXmlResource_GetFirstRoot. Expected _wxXmlResource_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxXmlNode *)wxXmlResource_GetFirstRoot(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxXmlNode_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 #define wxXmlResource_Load(_swigobj,_swigarg0)  (_swigobj->Load(_swigarg0))
 static PyObject *_wrap_wxXmlResource_Load(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5093,6 +5128,7 @@ static PyMethodDef xrccMethods[] = {
 	 { "wxXmlResource_InitAllHandlers", (PyCFunction) _wrap_wxXmlResource_InitAllHandlers, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_LoadFromString", (PyCFunction) _wrap_wxXmlResource_LoadFromString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_Load", (PyCFunction) _wrap_wxXmlResource_Load, METH_VARARGS | METH_KEYWORDS },
+	 { "wxXmlResource_GetFirstRoot", (PyCFunction) _wrap_wxXmlResource_GetFirstRoot, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxXmlResource", (PyCFunction) _wrap_delete_wxXmlResource, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxEmptyXmlResource", (PyCFunction) _wrap_new_wxEmptyXmlResource, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxXmlResource", (PyCFunction) _wrap_new_wxXmlResource, METH_VARARGS | METH_KEYWORDS },

@@ -418,6 +418,7 @@ public:
     %name(SetWidthFloatFromTag)void SetWidthFloat(const wxHtmlTag& tag);
     void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP);
     void SetBackgroundColour(const wxColour& clr);
+    wxColour GetBackgroundColour();
     void SetBorder(const wxColour& clr1, const wxColour& clr2);
     wxHtmlCell* GetFirstCell();
 };
@@ -500,7 +501,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyHtmlFilter, wxHtmlFilter);
 
 // And now the version seen by SWIG
 
-%name(wxHtmlFilter) class wxPyHtmlFilter : wxObject {
+%name(wxHtmlFilter) class wxPyHtmlFilter : public wxObject {
 public:
     wxPyHtmlFilter();
 
