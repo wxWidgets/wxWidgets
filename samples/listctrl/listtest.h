@@ -113,6 +113,7 @@ protected:
     void OnShowSelInfo(wxCommandEvent& event);
     void OnFreeze(wxCommandEvent& event);
     void OnThaw(wxCommandEvent& event);
+    void OnToggleLines(wxCommandEvent& event);
 
     void OnUpdateShowColInfo(wxUpdateUIEvent& event);
     void OnUpdateToggleMultiSel(wxUpdateUIEvent& event);
@@ -176,6 +177,7 @@ enum
     LIST_FOCUS_LAST,
     LIST_FREEZE,
     LIST_THAW,
+    LIST_TOGGLE_LINES,
 
     LIST_CTRL                   = 1000
 };

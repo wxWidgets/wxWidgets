@@ -76,6 +76,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SHOW_SEL_INFO, MyFrame::OnShowSelInfo)
     EVT_MENU(LIST_FREEZE, MyFrame::OnFreeze)
     EVT_MENU(LIST_THAW, MyFrame::OnThaw)
+    EVT_MENU(LIST_TOGGLE_LINES, MyFrame::OnToggleLines)
 
     EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateShowColInfo)
     EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)    
@@ -215,6 +216,7 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menuList->Append(LIST_FREEZE, _T("Free&ze\tCtrl-Z"));
     menuList->Append(LIST_THAW, _T("Tha&w\tCtrl-W"));
     menuList->AppendSeparator();
+    menuList->AppendCheckItem(LIST_TOGGLE_LINES, _T("Toggle &lines\tCtrl-I"));
     menuList->Append(LIST_TOGGLE_MULTI_SEL, _T("&Multiple selection\tCtrl-M"),
             _T("Toggle multiple selection"), true);
 
@@ -305,6 +307,11 @@ void MyFrame::OnThaw(wxCommandEvent& WXUNUSED(event))
     wxLogMessage(_T("Thawing the control"));
 
     m_listCtrl->Thaw();
+}
+
+void MyFrame::OnToggleLines(wxCommandEvent& event)
+{
+    m_listCtrl->SetSingleStyle(wxLC_HRULES | wxLC_VRULES, event.IsChecked());
 }
 
 void MyFrame::OnFocusLast(wxCommandEvent& WXUNUSED(event))
