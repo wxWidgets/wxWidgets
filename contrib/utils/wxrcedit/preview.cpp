@@ -18,8 +18,8 @@
 #endif
 
 #include "wx/wx.h"
-#include "wx/xml/xml.h"
-#include "wx/xml/xmlres.h"
+#include "wx/xrc/xml.h"
+#include "wx/xrc/xmlres.h"
 #include "wx/config.h"
 #include "wx/log.h"
 #include "wx/splitter.h"
@@ -27,7 +27,7 @@
 #include "xmlhelpr.h"
 #include "editor.h"
 
-#include "wx/xml/xh_menu.h"
+#include "wx/xrc/xh_menu.h"
 
 class MyMenubarHandler : public wxMenuBarXmlHandler
 {

@@ -10,7 +10,7 @@
 WXDIR = ../../..
 
 TARGET=wxrc
-EXTRALIBS=-lwxxml
+EXTRALIBS=-lwxxrc
 OBJECTS = $(TARGET).o
 
 include $(WXDIR)/src/makeprog.g95

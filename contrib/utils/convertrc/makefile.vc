@@ -18,9 +18,9 @@ PROGRAM=wxconvert
 FINAL=0
 
 !if "$(FINAL)" == "0"
-EXTRALIBS=$(WXDIR)\lib\wxxmld.lib
+EXTRALIBS=$(WXDIR)\lib\wxxrcd.lib
 !else
-EXTRALIBS=$(WXDIR)\lib\wxxml.lib
+EXTRALIBS=$(WXDIR)\lib\wxxrc.lib
 !endif
 
 OBJECTS=convert.obj rc2xml.obj rc2wxr.obj wxr2xml.obj

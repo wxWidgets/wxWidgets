@@ -27,8 +27,8 @@
 #endif
 
 #include "wx/cmdline.h"
-#include "wx/xml/xml.h"
-#include "wx/xml/xmlio.h"
+#include "wx/xrc/xml.h"
+#include "wx/xrc/xmlio.h"
 #include "wx/ffile.h"
 #include "wx/wfstream.h"
 
@@ -358,8 +358,8 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 \
 #include \"wx/filesys.h\"\n\
 #include \"wx/fs_mem.h\"\n\
-#include \"wx/xml/xmlres.h\"\n\
-#include \"wx/xml/xh_all.h\"\n\
+#include \"wx/xrc/xmlres.h\"\n\
+#include \"wx/xrc/xh_all.h\"\n\
 \n");
 
     for (i = 0; i < flist.Count(); i++)

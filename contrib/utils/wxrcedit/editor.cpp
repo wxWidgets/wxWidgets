@@ -19,8 +19,8 @@
 #endif
 
 #include "wx/wx.h"
-#include "wx/xml/xml.h"
-#include "wx/xml/xmlres.h"
+#include "wx/xrc/xml.h"
+#include "wx/xrc/xmlres.h"
 #include "wx/splitter.h"
 #include "wx/config.h"
 #include "wx/dir.h"

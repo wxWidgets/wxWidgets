@@ -18,15 +18,15 @@ PROGRAM=wxrc
 FINAL=0
 
 !if "$(FINAL)" == "0"
-EXTRALIBS=$(WXDIR)\lib\wxxmld.lib
+EXTRALIBS=$(WXDIR)\lib\wxxrcd.lib
 !endif
 
 !if "$(FINAL)" == "1"
-EXTRALIBS=$(WXDIR)\lib\wxxml.lib
+EXTRALIBS=$(WXDIR)\lib\wxxrc.lib
 !endif
 
 !if "$(FINAL)" == "hybrid"
-EXTRALIBS=$(WXDIR)\lib\wxxmlh.lib
+EXTRALIBS=$(WXDIR)\lib\wxxrch.lib
 !endif
 
 

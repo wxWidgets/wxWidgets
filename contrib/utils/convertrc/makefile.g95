@@ -10,7 +10,7 @@
 WXDIR = ../../..
 
 TARGET=wxconvert
-EXTRALIBS=-lwxxml
+EXTRALIBS=-lwxxrc
 OBJECTS=convert.o rc2xml.o rc2wxr.o wxr2xml.o
 
 include $(WXDIR)/src/makeprog.g95

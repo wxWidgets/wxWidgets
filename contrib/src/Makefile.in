@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SUBDIRS=ogl mmedia stc xml applet
+CONTRIB_SUBDIRS=ogl mmedia stc xrc applet
 
 all:
 	@for d in $(CONTRIB_SUBDIRS); do (cd $$d && $(MAKE)); done
