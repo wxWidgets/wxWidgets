@@ -24,6 +24,8 @@
     #include "wx/log.h"
 #endif //WX_PRECOMP
 
+#include "wx/module.h"
+
 #if wxUSE_UXTHEME
 
 #include <windows.h>
