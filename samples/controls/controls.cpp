@@ -692,7 +692,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_combo = new MyComboBox( panel, ID_COMBO, _T("This"),
                               wxPoint(20,25), wxSize(120, -1),
                               5, choices,
-                              /* wxCB_READONLY | */ wxPROCESS_ENTER);
+                              wxCB_READONLY | wxPROCESS_ENTER);
+    m_combo->SetBackgroundColour(*wxBLUE);
 
     (void)new wxButton( panel, ID_COMBO_SEL_NUM, _T("Select #&2"), wxPoint(180,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_SEL_STR, _T("&Select 'This'"), wxPoint(340,30), wxSize(140,30) );
