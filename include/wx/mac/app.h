@@ -185,7 +185,9 @@ private:
 } ;
 
 // TODO: add platform-specific arguments
+#ifndef __DARWIN__
 int WXDLLEXPORT wxEntry( int argc, char *argv[] , bool enterLoop = TRUE);
+#endif
 
 void wxMacConvertFromPCForControls( char * p ) ;
 
