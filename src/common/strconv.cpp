@@ -782,7 +782,7 @@ size_t IC_CharSet::WC2MB(char *buf, const wchar_t *psz, size_t n)
 // Win32 conversion classes
 // ============================================================================
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXUNIVERSAL__)
 
 #ifdef __WXWINE__
     #define WINE_CAST (WCHAR *)
@@ -842,7 +842,7 @@ public:
 public:
     long m_CodePage;
 };
-#endif // __WIN32__
+#endif // defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXUNIVERSAL__)
 
 // ============================================================================
 // wxEncodingConverter based conversion classes
@@ -942,14 +942,14 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
         cset = NULL;
     }
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXUNIVERSAL__)
     cset = new CP_CharSet(name);
     if ( cset->usable() )
         return cset;
 
     delete cset;
     cset = NULL;
-#endif // __WIN32__
+#endif // defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXUNIVERSAL__)
 
 #if wxUSE_FONTMAP
     cset = new EC_CharSet(name);
