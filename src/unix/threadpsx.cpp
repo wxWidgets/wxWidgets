@@ -453,7 +453,9 @@ wxThread::wxThread()
 
 wxThreadError wxThread::Create()
 {
-    if (p_internal->GetState() != STATE_NEW)
+    // Maybe we could think about recreate the thread once it has exited.
+    if (p_internal->GetState() != STATE_NEW &&
+        p_internal->GetState() != STATE_EXITED)
         return wxTHREAD_RUNNING;
 
     // set up the thread attribute: right now, we only set thread priority
@@ -668,7 +670,8 @@ void wxThread::Exit(void *status)
     p_internal->SetState(STATE_EXITED);
 
     // delete both C++ thread object and terminate the OS thread object
-    delete this;
+    // GL: This is very ugly and buggy ...
+//    delete this;
     pthread_exit(status);
 }
 
