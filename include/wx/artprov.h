@@ -84,6 +84,7 @@ typedef wxString wxArtID;
 #define wxART_QUESTION             wxART_MAKE_ART_ID(wxART_QUESTION)           
 #define wxART_WARNING              wxART_MAKE_ART_ID(wxART_WARNING)            
 #define wxART_INFORMATION          wxART_MAKE_ART_ID(wxART_INFORMATION)        
+#define wxART_MISSING_IMAGE        wxART_MAKE_ART_ID(wxART_MISSING_IMAGE)
 
 // ----------------------------------------------------------------------------
 // wxArtProvider class
