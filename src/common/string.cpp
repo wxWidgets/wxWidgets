@@ -42,6 +42,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #ifdef __SALFORDC__
   #include <clib.h>
@@ -1835,7 +1836,9 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
         // vsnprintf() may return either -1 (traditional Unix behaviour) or the
         // total number of characters which would have been written if the
         // buffer were large enough
-        if ( len >= 0 && len <= size )
+        // also, it may return an errno may be something like EILSEQ,
+        // in which case we need to break out
+        if ( (len >= 0 && len <= size) || errno != EOVERFLOW )
         {
             // ok, there was enough space
             break;
