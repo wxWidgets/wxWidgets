@@ -42,6 +42,7 @@ None.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxThread::wxThread}\label{wxthreadctor}
 
 \func{}{wxThread}{\param{wxThreadKind }{kind = wxTHREAD\_DETACHED}}
@@ -58,6 +59,7 @@ The possible values for {\it kind} parameters are:
 \twocolitem{{\bf wxTHREAD\_JOINABLE}}{Create a joinable thread}
 \end{twocollist}
 
+
 \membersection{wxThread::\destruct{wxThread}}
 
 \func{}{\destruct{wxThread}}{\void}
@@ -71,6 +73,7 @@ only be allocated on the heap.
 Joinable threads should be deleted explicitly. The \helpref{Delete}{wxthreaddelete} and \helpref{Kill}{wxthreadkill} functions
 will not delete the C++ thread object. It is also safe to allocate them on
 stack.
+
 
 \membersection{wxThread::Create}\label{wxthreadcreate}
 
@@ -91,6 +94,7 @@ One of:
 \twocolitem{{\bf wxTHREAD\_NO\_RESOURCE}}{There were insufficient resources to create a new thread.}
 \twocolitem{{\bf wxTHREAD\_RUNNING}}{The thread is already running.}
 \end{twocollist}
+
 
 \membersection{wxThread::Delete}\label{wxthreaddelete}
 
@@ -119,6 +123,7 @@ will not do this for joinable ones.
 
 This function can only be called from another thread context.
 
+
 \membersection{wxThread::Entry}\label{wxthreadentry}
 
 \func{virtual ExitCode}{Entry}{\void}
@@ -132,6 +137,7 @@ joinable threads and is the value returned by \helpref{Wait}{wxthreadwait}.
 This function is called by wxWindows itself and should never be called
 directly.
 
+
 \membersection{wxThread::Exit}\label{wxthreadexit}
 
 \func{void}{Exit}{\param{ExitCode }{exitcode = 0}}
@@ -144,6 +150,7 @@ This function will terminate the OS thread (i.e. stop the associated path of
 execution) and also delete the associated C++ object for detached threads.
 \helpref{wxThread::OnExit}{wxthreadonexit} will be called just before exiting.
 
+
 \membersection{wxThread::GetCPUCount}\label{wxthreadgetcpucount}
 
 \func{static int}{GetCPUCount}{\void}
@@ -154,6 +161,7 @@ Returns the number of system CPUs or -1 if the value is unknown.
 
 \helpref{SetConcurrency}{wxthreadsetconcurrency}
 
+
 \membersection{wxThread::GetCurrentId}\label{wxthreadgetcurrentid}
 
 \func{static unsigned long}{GetCurrentId}{\void}
@@ -162,12 +170,14 @@ Returns the platform specific thread ID of the current thread as a
 long.  This can be used to uniquely identify threads, even if they are
 not wxThreads.
 
+
 \membersection{wxThread::GetId}\label{wxthreadgetid}
 
 \constfunc{unsigned long}{GetId}{\void}
 
 Gets the thread identifier: this is a platform dependent number that uniquely identifies the
 thread throughout the system during its existence (i.e. the thread identifiers may be reused).
+
 
 \membersection{wxThread::GetPriority}\label{wxthreadgetpriority}
 
@@ -184,35 +194,50 @@ The following priorities are defined:
 \twocolitem{{\bf WXTHREAD\_MAX\_PRIORITY}}{100}
 \end{twocollist}
 
+
 \membersection{wxThread::IsAlive}\label{wxthreadisalive}
 
 \constfunc{bool}{IsAlive}{\void}
 
-Returns true if the thread is alive (i.e. started and not terminating).
+Returns \true if the thread is alive (i.e. started and not terminating).
+
+Note that this function can only be saely used with joinable threads, not
+detached ones as the latter delete themselves and so when the real thread is
+not alive any longer it is not possible to call this function neither because
+the wxThread object doesn't exist any more as well.
+
 
 \membersection{wxThread::IsDetached}\label{wxthreadisdetached}
 
 \constfunc{bool}{IsDetached}{\void}
 
-Returns true if the thread is of the detached kind, false if it is a joinable one.
+Returns \true if the thread is of the detached kind, \false if it is a joinable
+one.
+
 
 \membersection{wxThread::IsMain}\label{wxthreadismain}
 
 \func{static bool}{IsMain}{\void}
 
-Returns true if the calling thread is the main application thread.
+Returns \true if the calling thread is the main application thread.
+
 
 \membersection{wxThread::IsPaused}\label{wxthreadispaused}
 
 \constfunc{bool}{IsPaused}{\void}
 
-Returns true if the thread is paused.
+Returns \true if the thread is paused.
+
 
 \membersection{wxThread::IsRunning}\label{wxthreadisrunning}
 
 \constfunc{bool}{IsRunning}{\void}
 
-Returns true if the thread is running.
+Returns \true if the thread is running.
+
+This method may only be safely used for joinable threads, see the remark in 
+\helpref{IsAlive}{wxthreadisalive}.
+
 
 \membersection{wxThread::Kill}\label{wxthreadkill}
 
@@ -236,6 +261,7 @@ It is also an error to call this function for a thread which is not running or
 paused (in the latter case, the thread will be resumed first) -- if you do it,
 a {\tt wxTHREAD\_NOT\_RUNNING} error will be returned.
 
+
 \membersection{wxThread::OnExit}\label{wxthreadonexit}
 
 \func{void}{OnExit}{\void}
@@ -246,6 +272,7 @@ thread. This function will not be called if the thread was
 \helpref{killed}{wxthreadkill}.
 
 This function should never be called directly.
+
 
 \membersection{wxThread::Pause}\label{wxthreadpause}
 
@@ -258,6 +285,7 @@ thread doesn't call it at all, it won't be suspended).
 
 This function can only be called from another thread context.
 
+
 \membersection{wxThread::Run}\label{wxthreadrun}
 
 \func{wxThreadError}{Run}{\void}
@@ -266,6 +294,7 @@ Starts the thread execution. Should be called after
 \helpref{Create}{wxthreadcreate}.
 
 This function can only be called from another thread context.
+
 
 \membersection{wxThread::SetPriority}\label{wxthreadsetpriority}
 
@@ -284,6 +313,7 @@ The following priorities are already defined:
 \twocolitem{{\bf WXTHREAD\_MAX\_PRIORITY}}{100}
 \end{twocollist}
 
+
 \membersection{wxThread::Sleep}\label{wxthreadsleep}
 
 \func{static void}{Sleep}{\param{unsigned long }{milliseconds}}
@@ -293,6 +323,7 @@ Pauses the thread execution for the given amount of time.
 This function should be used instead of \helpref{wxSleep}{wxsleep} by all worker
 threads (i.e. all except the main one).
 
+
 \membersection{wxThread::Resume}\label{wxthreadresume}
 
 \func{wxThreadError}{Resume}{\void}
@@ -300,6 +331,7 @@ threads (i.e. all except the main one).
 Resumes a thread suspended by the call to \helpref{Pause}{wxthreadpause}.
 
 This function can only be called from another thread context.
+
 
 \membersection{wxThread::SetConcurrency}\label{wxthreadsetconcurrency}
 
@@ -312,6 +344,7 @@ The value of $0$ for {\it level} may be used to set the default one.
 Returns true on success or false otherwise (for example, if this function is
 not implemented for this platform -- currently everything except Solaris).
 
+
 \membersection{wxThread::TestDestroy}\label{wxthreadtestdestroy}
 
 \func{bool}{TestDestroy}{\void}
@@ -319,6 +352,7 @@ not implemented for this platform -- currently everything except Solaris).
 This function should be called periodically by the thread to ensure that calls
 to \helpref{Pause}{wxthreadpause} and \helpref{Delete}{wxthreaddelete} will
 work. If it returns true, the thread should exit as soon as possible.
+
 
 \membersection{wxThread::This}\label{wxthreadthis}
 
@@ -330,12 +364,14 @@ whether the thread is really the main one because NULL may also be returned for 
 not created with wxThread class. Generally speaking, the return value for such a thread
 is undefined.
 
+
 \membersection{wxThread::Yield}\label{wxthreadyield}
 
 \func{void}{Yield}{\void}
 
 Give the rest of the thread time slice to the system allowing the other threads to run.
 See also \helpref{Sleep()}{wxthreadsleep}.
+
 
 \membersection{wxThread::Wait}\label{wxthreadwait}
 
