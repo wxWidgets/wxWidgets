@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/os2/apptbase.h
-// Purpose:     declaration of wxAppTraits for OS2
+// Name:        wx/os2/apptrait.h
+// Purpose:     class implementing wxAppTraits for OS/2
 // Author:      Stefan Neis
 // Modified by:
 // Created:     22.09.2003
@@ -9,16 +9,26 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OS2_APPTBASE_H_
-#define _WX_OS2_APPTBASE_H_
+#ifndef _WX_OS2_APPTRAIT_H_
+#define _WX_OS2_APPTRAIT_H_
 
 // ----------------------------------------------------------------------------
-// wxAppTraits: the OS2 version adds extra hooks needed by OS2-only code
+// wxGUI/ConsoleAppTraits: must derive from wxAppTraits, not wxAppTraitsBase
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxAppTraits : public wxAppTraitsBase
+class WXDLLIMPEXP_BASE wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
+    virtual wxToolkitInfo& GetToolkitInfo();
+};
+
+#if wxUSE_GUI
+
+class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
+{
+public:
+    virtual wxToolkitInfo& GetToolkitInfo();
+
     // wxThread helpers
     // ----------------
 
@@ -29,4 +39,6 @@ public:
     virtual void TerminateGui(unsigned long ulHab);
 };
 
-#endif // _WX_OS2_APPTBASE_H_
+#endif // wxUSE_GUI
+
+#endif // _WX_OS2_APPTRAIT_H_
