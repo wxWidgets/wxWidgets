@@ -5746,10 +5746,10 @@ void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
     wxPaintDC dc(this);  // needed to prevent zillions of paint events on MSW
 }
 
-void wxGrid::Refresh(bool eraseb, wxRect* rect= NULL)
+void wxGrid::Refresh(bool eraseb, wxRect* rect)
 {
-    //Don't do anything if between Begin/EndBatch...
-    //   endbatch will do all this on the last nested one anyway.
+    // Don't do anything if between Begin/EndBatch...
+    // EndBatch() will do all this on the last nested one anyway.
     if (! GetBatchCount())
     {
         wxScrolledWindow::Refresh(eraseb,rect);
