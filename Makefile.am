@@ -1,3 +1,3 @@
-SUBDIRS = src samples # utils user docs
+SUBDIRS = include src samples # utils user docs
 
 pkgdata_SCRIPTS = wx-config

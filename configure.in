@@ -148,6 +148,8 @@ esac
 if test "$USE_UNIX" = 1 ; then
   wxUSE_UNIX=yes
   AC_DEFINE(__UNIX__)
+  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/unix"
+  INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS unix"
 fi
 
 dnl Linux: test for libc5/glibc2: glibc2 has gettext() included
@@ -1144,7 +1146,6 @@ if test "$wxUSE_THREADS" = "yes"; then
   CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
 
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
-  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/unix"
   LTLIBOBJS="$LTLIBOBJS $THREADS_OBJ"
 
   dnl define autoconf macro to check for given function in both pthread and
@@ -1421,6 +1422,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
         AC_DEFINE(wxUSE_SOCKETS)
         LTLIBOBJS="$LTLIBOBJS sckint.lo socket.lo sckaddr.lo protocol.lo http.lo ftp.lo url.lo"
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wxsocket"
+        INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS protocol"
     else
         AC_MSG_WARN(socket classes require --with-threads and won't be compiled without it)
         wxUSE_SOCKETS=0
@@ -1804,9 +1806,10 @@ dnl ---------------------------------------------------------------------------
 dnl misc options
 dnl ---------------------------------------------------------------------------
 
-if test "$wxUSE_WXTREE" = "yes"; then
-  AC_DEFINE(wxUSE_WXTREE)
-fi
+dnl TODO this is unused for now...
+dnl if test "$wxUSE_WXTREE" = "yes"; then
+dnl   AC_DEFINE(wxUSE_WXTREE)
+dnl fi
 
 if test "$wxUSE_METAFILE" = "yes"; then
   AC_DEFINE(wxUSE_METAFILE)
@@ -1916,6 +1919,7 @@ AC_SUBST(EXTRA_VPATH)
 AC_SUBST(LTLIBOBJS)
 
 dnl additional subdirectories where we will build
+AC_SUBST(INCLUDE_SUBDIRS)
 AC_SUBST(UTILS_SUBDIRS)
 AC_SUBST(DOCS_SUBDIRS)
 AC_SUBST(SAMPLES_SUBDIRS)
@@ -1939,7 +1943,16 @@ dnl create each of the files in the space separated list from the file.in
 dnl (the original file name may be overriden by appending another name after a
 dnl colon)
 AC_OUTPUT([
-            Makefile src/Makefile wx-config
+            wx-config
+            Makefile src/Makefile
+            include/Makefile
+            include/wx/Makefile
+            include/wx/generic/Makefile
+            include/wx/gtk/Makefile
+            include/wx/motif/Makefile
+            include/wx/msw/Makefile
+            include/wx/protocol/Makefile
+            include/wx/unix/Makefile
             samples/Makefile
             samples/bombs/Makefile
             samples/caret/Makefile

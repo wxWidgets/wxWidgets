@@ -72,6 +72,7 @@ EXTRA_VPATH = @EXTRA_VPATH@
 GTK_CFLAGS = @GTK_CFLAGS@
 GTK_CONFIG = @GTK_CONFIG@
 GTK_LIBS = @GTK_LIBS@
+INCLUDE_SUBDIRS = @INCLUDE_SUBDIRS@
 LD = @LD@
 LEX = @LEX@
 LIBS = @LIBS@
@@ -98,7 +99,7 @@ WX_MINOR_VERSION_NUMBER = @WX_MINOR_VERSION_NUMBER@
 WX_RELEASE_NUMBER = @WX_RELEASE_NUMBER@
 YACC = @YACC@
 
-SUBDIRS = src samples # utils user docs
+SUBDIRS = include src samples # utils user docs
 
 pkgdata_SCRIPTS = wx-config
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -107,10 +108,10 @@ CONFIG_HEADER = ./${SETUPH_DIR}/setup.h
 CONFIG_CLEAN_FILES =  wx-config
 SCRIPTS =  $(pkgdata_SCRIPTS)
 
-DIST_COMMON =  Makefile.am Makefile.in aclocal.m4 config.guess \
-config.sub configure configure.in include/wx/unix/setup.h.in \
-include/wx/unix/stamp-h.in install-sh ltconfig ltmain.sh missing \
-mkinstalldirs wx-config.in
+DIST_COMMON =  Makefile.am Makefile.in acconfig.h aclocal.m4 \
+config.guess config.sub configure configure.in \
+include/wx/unix/setup.h.in include/wx/unix/stamp-h.in install-sh \
+ltconfig ltmain.sh missing mkinstalldirs wx-config.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -147,7 +148,7 @@ $(srcdir)/include/wx/unix/setup.h.in: $(srcdir)//stamp-h.in
 		rm -f $(srcdir)//stamp-h.in; \
 		$(MAKE) $(srcdir)//stamp-h.in; \
 	else :; fi
-$(srcdir)//stamp-h.in: $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+$(srcdir)//stamp-h.in: $(top_srcdir)/configure.in $(ACLOCAL_M4) acconfig.h
 	cd $(top_srcdir) && $(AUTOHEADER)
 	@echo timestamp > $(srcdir)//stamp-h.in 2> /dev/null
 

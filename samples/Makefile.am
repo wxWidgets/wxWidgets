@@ -7,3 +7,9 @@
 
 SUBDIRS = minimal \
  @SAMPLES_SUBDIRS@
+
+# do nothing during "make install" in the samples subdirectory (can't override
+# install because install-recursive is its dependency which is still built)
+install-recursive:
+	@true
+

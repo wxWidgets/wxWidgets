@@ -79,6 +79,7 @@ EXTRA_VPATH = @EXTRA_VPATH@
 GTK_CFLAGS = @GTK_CFLAGS@
 GTK_CONFIG = @GTK_CONFIG@
 GTK_LIBS = @GTK_LIBS@
+INCLUDE_SUBDIRS = @INCLUDE_SUBDIRS@
 LD = @LD@
 LEX = @LEX@
 LIBS = @LIBS@
@@ -315,6 +316,11 @@ uninstall-am uninstall all-redirect all-am all installdirs-am \
 installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
+
+# do nothing during "make install" in the samples subdirectory (can't override
+# install because install-recursive is its dependency which is still built)
+install-recursive:
+	@true
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
