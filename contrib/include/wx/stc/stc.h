@@ -487,6 +487,10 @@ public:
     void     SetKeywords(int keywordSet, const wxString& keywordList);
 
 
+    // Event mask for Modified Event
+    void     SetModEventMask(int mask);
+    //int      GetModEventMask();
+
 #ifndef SWIG
 private:
     // Event handlers

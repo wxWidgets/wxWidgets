@@ -1398,6 +1398,18 @@ void     wxStyledTextCtrl::SetKeywords(int keywordSet, const wxString& keywordLi
 
 
 //----------------------------------------------------------------------
+// Event mask for Modified Event
+
+void wxStyledTextCtrl::SetModEventMask(int mask) {
+    SendMsg(SCI_SETMODEVENTMASK, mask);
+}
+
+
+//int wxStyledTextCtrl::GetModEventMask() {
+//    return SendMsg(SCI_GETMODEVENTMASK);
+//}
+
+//----------------------------------------------------------------------
 // Event handlers
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& evt) {
@@ -1549,7 +1561,8 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetModifiers(scn.modifiers);
         if (eventType == wxEVT_STC_MODIFIED) {
             evt.SetModificationType(scn.modificationType);
-            evt.SetText(scn.text);
+            if (scn.text)
+                evt.SetText(wxString(scn.text, scn.length));
             evt.SetLength(scn.length);
             evt.SetLinesAdded(scn.linesAdded);
             evt.SetLine(scn.line);
