@@ -491,7 +491,7 @@ struct wxHtmlEntityInfo
     unsigned code;
 };
 
-static int LINKAGEMODE compar_entity(const void *key, const void *item)
+extern "C" int LINKAGEMODE wxHtmlEntityCompare(const void *key, const void *item)
 {
     return wxStrcmp((wxChar*)key, ((wxHtmlEntityInfo*)item)->name);
 }
@@ -801,7 +801,7 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity)
         info = (wxHtmlEntityInfo*) bsearch(entity.c_str(), substitutions,
                                            substitutions_cnt,
                                            sizeof(wxHtmlEntityInfo),
-                                           compar_entity);
+                                           wxHtmlEntityCompare);
         if (info)
             code = info->code;
     }

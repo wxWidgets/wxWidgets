@@ -97,16 +97,16 @@ public :
     wxDouble m_y;
 };
 
-wxPoint2DDouble operator+(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
-wxPoint2DDouble operator-(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
-wxPoint2DDouble operator*(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
-wxPoint2DDouble operator*(wxDouble n , const wxPoint2DDouble& pt);
-wxPoint2DDouble operator*(wxInt32 n , const wxPoint2DDouble& pt);
-wxPoint2DDouble operator*(const wxPoint2DDouble& pt , wxDouble n);
-wxPoint2DDouble operator*(const wxPoint2DDouble& pt , wxInt32 n);
-wxPoint2DDouble operator/(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
-wxPoint2DDouble operator/(const wxPoint2DDouble& pt , wxDouble n);
-wxPoint2DDouble operator/(const wxPoint2DDouble& pt , wxInt32 n);
+inline wxPoint2DDouble operator+(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
+inline wxPoint2DDouble operator-(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
+inline wxPoint2DDouble operator*(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
+inline wxPoint2DDouble operator*(wxDouble n , const wxPoint2DDouble& pt);
+inline wxPoint2DDouble operator*(wxInt32 n , const wxPoint2DDouble& pt);
+inline wxPoint2DDouble operator*(const wxPoint2DDouble& pt , wxDouble n);
+inline wxPoint2DDouble operator*(const wxPoint2DDouble& pt , wxInt32 n);
+inline wxPoint2DDouble operator/(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
+inline wxPoint2DDouble operator/(const wxPoint2DDouble& pt , wxDouble n);
+inline wxPoint2DDouble operator/(const wxPoint2DDouble& pt , wxInt32 n);
 
 inline wxPoint2DDouble::wxPoint2DDouble()
 {

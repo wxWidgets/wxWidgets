@@ -54,7 +54,7 @@ typedef struct {
 
 
 
-static int LINKAGEMODE CompareCharsetItems(const void *i1, const void *i2)
+extern "C" int LINKAGEMODE CompareCharsetItems(const void *i1, const void *i2)
 {
     return ( ((CharsetItem*)i1) -> u - ((CharsetItem*)i2) -> u );
 }

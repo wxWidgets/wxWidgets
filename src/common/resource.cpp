@@ -2049,7 +2049,7 @@ wxChar* wxResourceParseWord(wxChar*s, int *i)
 
 struct wxResourceBitListStruct
 {
-    wxChar *word;
+    const wxChar *word;
     long bits;
 };
 

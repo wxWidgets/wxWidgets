@@ -1255,7 +1255,7 @@ void process_command(char * cexpr)
 void syntax_error(char *WXUNUSED(s))
 {
   if (currentwxExprErrorHandler)
-    (void)(*(currentwxExprErrorHandler))(WXEXPR_ERROR_SYNTAX, "syntax error");
+    (void)(*(currentwxExprErrorHandler))(WXEXPR_ERROR_SYNTAX, (char *)"syntax error");
   if (thewxExprDatabase) thewxExprDatabase->noErrors += 1;
 }
 

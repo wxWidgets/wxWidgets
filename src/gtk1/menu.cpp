@@ -322,7 +322,7 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
     entry.accelerator = (gchar*) NULL;
     entry.callback = (GtkItemFactoryCallback) NULL;
     entry.callback_action = 0;
-    entry.item_type = "<Branch>";
+    entry.item_type = (char *)"<Branch>";
 
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
     /* in order to get the pointer to the item we need the item text _without_ underscores */
@@ -886,10 +886,10 @@ void wxMenu::Init()
     if(m_style & wxMENU_TEAROFF)
     {
        GtkItemFactoryEntry entry;
-       entry.path = "/tearoff";
+       entry.path = (char *)"/tearoff";
        entry.callback = (GtkItemFactoryCallback) NULL;
        entry.callback_action = 0;
-       entry.item_type = "<Tearoff>";
+       entry.item_type = (char *)"<Tearoff>";
        entry.accelerator = (gchar*) NULL;
        gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
        //GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, "<main>/tearoff" );
@@ -923,10 +923,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
     {
 #if (GTK_MINOR_VERSION > 0)
         GtkItemFactoryEntry entry;
-        entry.path = "/sep";
+        entry.path = (char *)"/sep";
         entry.callback = (GtkItemFactoryCallback) NULL;
         entry.callback_action = 0;
-        entry.item_type = "<Separator>";
+        entry.item_type = (char *)"<Separator>";
         entry.accelerator = (gchar*) NULL;
 
         gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
@@ -952,7 +952,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         entry.path = buf;
         entry.callback = (GtkItemFactoryCallback) 0;
         entry.callback_action = 0;
-        entry.item_type = "<Branch>";
+        entry.item_type = (char *)"<Branch>";
         entry.accelerator = (gchar*) NULL;
 
         gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
@@ -1022,9 +1022,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         entry.callback = (GtkItemFactoryCallback) gtk_menu_clicked_callback;
         entry.callback_action = 0;
         if ( mitem->IsCheckable() )
-            entry.item_type = "<CheckItem>";
+            entry.item_type = (char *)"<CheckItem>";
         else
-            entry.item_type = "<Item>";
+            entry.item_type = (char *)"<Item>";
         entry.accelerator = (gchar*) NULL;
 
 #if wxUSE_ACCEL
@@ -1251,6 +1251,9 @@ static wxString GetHotKey( const wxMenuItem& item )
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkcontainer.h>
 
+extern "C"
+{
+
 static void gtk_pixmap_menu_item_class_init    (GtkPixmapMenuItemClass *klass);
 static void gtk_pixmap_menu_item_init          (GtkPixmapMenuItem      *menu_item);
 static void gtk_pixmap_menu_item_draw          (GtkWidget              *widget,
@@ -1276,6 +1279,8 @@ static void changed_have_pixmap_status         (GtkPixmapMenuItem *menu_item);
 
 static GtkMenuItemClass *parent_class = NULL;
 
+}
+
 #define BORDER_SPACING  3
 #define PMAP_WIDTH 20
 
@@ -1288,7 +1293,7 @@ gtk_pixmap_menu_item_get_type (void)
     {
       GtkTypeInfo pixmap_menu_item_info =
       {
-        "GtkPixmapMenuItem",
+        (char *)"GtkPixmapMenuItem",
         sizeof (GtkPixmapMenuItem),
         sizeof (GtkPixmapMenuItemClass),
         (GtkClassInitFunc) gtk_pixmap_menu_item_class_init,

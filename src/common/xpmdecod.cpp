@@ -263,7 +263,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
 
 typedef struct
 {
-    char *name;
+    const char *name;
     wxUint32 rgb;
 } rgbRecord;
 

@@ -26,7 +26,7 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
 
-static gint timeout_callback( gpointer data )
+extern "C" gint timeout_callback( gpointer data )
 {
     wxTimer *timer = (wxTimer*)data;
 

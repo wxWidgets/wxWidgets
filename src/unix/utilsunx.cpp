@@ -1093,7 +1093,7 @@ bool wxSetEnv(const wxString& variable, const wxChar *value)
 
 #include <signal.h>
 
-static void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
+extern "C" void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
 {
     if ( wxTheApp )
     {

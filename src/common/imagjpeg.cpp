@@ -58,6 +58,11 @@ extern "C"
 #endif
 #endif
 
+// we can't use METHODDEF here as it includes static yet the functions must be
+// extern "C" and these can't be used together!
+#undef METHODDEF
+#define METHODDEF(type) extern "C" wxC_CALLING_CONV type
+
 //-----------------------------------------------------------------------------
 // wxJPEGHandler
 //-----------------------------------------------------------------------------
@@ -125,6 +130,34 @@ METHODDEF(void) my_term_source ( j_decompress_ptr cinfo )
     delete[] src->buffer;
 }
 
+
+// JPEG error manager:
+
+struct my_error_mgr {
+  struct jpeg_error_mgr pub;    /* "public" fields */
+
+  jmp_buf setjmp_buffer;    /* for return to caller */
+};
+
+typedef struct my_error_mgr * my_error_ptr;
+
+/*
+ * Here's the routine that will replace the standard error_exit method:
+ */
+
+METHODDEF(void) my_error_exit (j_common_ptr cinfo)
+{
+  /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
+  my_error_ptr myerr = (my_error_ptr) cinfo->err;
+
+  /* Always display the message. */
+  /* We could postpone this until after returning, if we chose. */
+  if (cinfo->err->output_message) (*cinfo->err->output_message) (cinfo);
+
+  /* Return control to the setjmp point */
+  longjmp(myerr->setjmp_buffer, 1);
+}
+
 void jpeg_wxio_src( j_decompress_ptr cinfo, wxInputStream& infile )
 {
     my_src_ptr src;
@@ -148,34 +181,6 @@ void jpeg_wxio_src( j_decompress_ptr cinfo, wxInputStream& infile )
     src->pub.term_source = my_term_source;
 }
 
-
-// JPEG error manager:
-
-struct my_error_mgr {
-  struct jpeg_error_mgr pub;    /* "public" fields */
-
-  jmp_buf setjmp_buffer;    /* for return to caller */
-};
-
-typedef struct my_error_mgr * my_error_ptr;
-
-/*
- * Here's the routine that will replace the standard error_exit method:
- */
-
-METHODDEF(void)
-my_error_exit (j_common_ptr cinfo)
-{
-  /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
-  my_error_ptr myerr = (my_error_ptr) cinfo->err;
-
-  /* Always display the message. */
-  /* We could postpone this until after returning, if we chose. */
-  if (cinfo->err->output_message) (*cinfo->err->output_message) (cinfo);
-
-  /* Return control to the setjmp point */
-  longjmp(myerr->setjmp_buffer, 1);
-}
 
 // temporarily disable the warning C4611 (interaction between '_setjmp' and
 // C++ object destruction is non-portable) - I don't see any dtors here

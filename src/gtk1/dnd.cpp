@@ -60,7 +60,7 @@ static const wxChar *TRACE_DND = _T("dnd");
 //----------------------------------------------------------------------------
 
 /* XPM */
-static char * page_xpm[] = {
+static const char * page_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "32 32 5 1",
 /* colors */

@@ -42,7 +42,10 @@
  callback compare function for quick sort
  must return negative value, 0 or positive value if pItem1 <, = or > pItem2
  */
+extern "C"
+{
 typedef int (wxCMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
+}
 
 // ----------------------------------------------------------------------------
 /**

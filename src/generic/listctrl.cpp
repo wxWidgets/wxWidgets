@@ -1804,7 +1804,8 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 
     gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window,
                    state, GTK_SHADOW_OUT,
-                   (GdkRectangle*) NULL, m_wxwindow, "button",
+                   (GdkRectangle*) NULL, m_wxwindow,
+                   (char *)"button", // const_cast
                    x-1, y-1, w+2, h+2);
 #elif defined( __WXMAC__  )
     const int m_corner = 1;

@@ -218,7 +218,7 @@ bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
  */
 
 #if !defined(__WXMSW__)
-static char * csquery_xpm[] = {
+static const char * csquery_xpm[] = {
 "12 11 2 1",
 "  c None",
 ". c #000000",

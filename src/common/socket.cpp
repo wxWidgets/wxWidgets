@@ -862,9 +862,10 @@ char *wxSocketBase::CallbackData(char *data)
 // decoupled from wx_socket_callback and thus they suffer from a variety
 // of problems. Avoid them where possible and use events instead.
 
-static void LINKAGEMODE wx_socket_callback(GSocket * WXUNUSED(socket),
-                                           GSocketEvent notification,
-                                           char *cdata)
+extern "C"
+void LINKAGEMODE wx_socket_callback(GSocket * WXUNUSED(socket),
+                                    GSocketEvent notification,
+                                    char *cdata)
 {
   wxSocketBase *sckobj = (wxSocketBase *)cdata;
 

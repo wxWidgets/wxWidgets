@@ -61,14 +61,15 @@ static GtkWidget *gs_RootWindow = (GtkWidget*) NULL;
 // local functions
 //-----------------------------------------------------------------------------
 
-/* forward declaration */
-gint   wxapp_idle_callback( gpointer WXUNUSED(data) );
-gint   wxapp_pending_callback( gpointer WXUNUSED(data) );
-void   wxapp_install_idle_handler();
+extern "C"
+{
+    gint wxapp_idle_callback( gpointer WXUNUSED(data) );
+    gint wxapp_pending_callback( gpointer WXUNUSED(data) );
+}
 
-#if wxUSE_THREADS
-gint   wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) );
-#endif
+void wxapp_install_thread_wakeup();
+void wxapp_uninstall_thread_wakeup();
+void wxapp_install_idle_handler();
 
 //-----------------------------------------------------------------------------
 // wxExit
@@ -163,6 +164,28 @@ void wxWakeUpIdle()
 // local functions
 //-----------------------------------------------------------------------------
 
+void wxapp_install_idle_handler()
+{
+    wxASSERT_MSG( wxTheApp->m_idleTag == 0, wxT("attempt to install idle handler twice") );
+
+    g_isIdle = FALSE;
+
+    if (g_pendingTag == 0)
+        g_pendingTag = gtk_idle_add_priority( 900, wxapp_pending_callback, (gpointer) NULL );
+
+    /* This routine gets called by all event handlers
+       indicating that the idle is over. It may also
+       get called from other thread for sending events
+       to the main thread (and processing these in
+       idle time). Very low priority. */
+
+    wxTheApp->m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
+}
+
+// the callback functions must be extern "C" to comply with GTK+ declarations
+extern "C"
+{
+
 gint wxapp_pending_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp) return TRUE;
@@ -230,50 +253,7 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     return FALSE;
 }
 
-void wxapp_install_idle_handler()
-{
-    wxASSERT_MSG( wxTheApp->m_idleTag == 0, wxT("attempt to install idle handler twice") );
-
-    g_isIdle = FALSE;
-
-    if (g_pendingTag == 0)
-        g_pendingTag = gtk_idle_add_priority( 900, wxapp_pending_callback, (gpointer) NULL );
-
-    /* This routine gets called by all event handlers
-       indicating that the idle is over. It may also
-       get called from other thread for sending events
-       to the main thread (and processing these in
-       idle time). Very low priority. */
-
-    wxTheApp->m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
-}
-
 #if wxUSE_THREADS
-
-static int g_threadUninstallLevel = 0;
-
-void wxapp_install_thread_wakeup()
-{
-    g_threadUninstallLevel++;
-
-    if (g_threadUninstallLevel != 1) return;
-
-    if (wxTheApp->m_wakeUpTimerTag) return;
-
-    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 50, wxapp_wakeup_timerout_callback, (gpointer) NULL );
-}
-
-void wxapp_uninstall_thread_wakeup()
-{
-    g_threadUninstallLevel--;
-
-    if (g_threadUninstallLevel != 0) return;
-
-    if (!wxTheApp->m_wakeUpTimerTag) return;
-
-    gtk_timeout_remove( wxTheApp->m_wakeUpTimerTag );
-    wxTheApp->m_wakeUpTimerTag = 0;
-}
 
 gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
 {
@@ -303,6 +283,37 @@ gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
     gdk_threads_leave();
 
     return TRUE;
+}
+
+#endif // wxUSE_THREADS
+
+} // extern "C"
+
+#if wxUSE_THREADS
+
+static int g_threadUninstallLevel = 0;
+
+void wxapp_install_thread_wakeup()
+{
+    g_threadUninstallLevel++;
+
+    if (g_threadUninstallLevel != 1) return;
+
+    if (wxTheApp->m_wakeUpTimerTag) return;
+
+    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 50, wxapp_wakeup_timerout_callback, (gpointer) NULL );
+}
+
+void wxapp_uninstall_thread_wakeup()
+{
+    g_threadUninstallLevel--;
+
+    if (g_threadUninstallLevel != 0) return;
+
+    if (!wxTheApp->m_wakeUpTimerTag) return;
+
+    gtk_timeout_remove( wxTheApp->m_wakeUpTimerTag );
+    wxTheApp->m_wakeUpTimerTag = 0;
 }
 
 #endif // wxUSE_THREADS

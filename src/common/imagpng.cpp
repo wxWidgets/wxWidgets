@@ -60,12 +60,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
   #define PNGLINKAGEMODE LINKAGEMODE
 #endif
 
-static void PNGLINKAGEMODE _PNG_stream_reader( png_structp png_ptr, png_bytep data, png_size_t length )
+extern "C"
+{
+
+void PNGLINKAGEMODE _PNG_stream_reader( png_structp png_ptr, png_bytep data, png_size_t length )
 {
     ((wxInputStream*) png_get_io_ptr( png_ptr )) -> Read(data, length);
 }
 
-static void PNGLINKAGEMODE _PNG_stream_writer( png_structp png_ptr, png_bytep data, png_size_t length )
+void PNGLINKAGEMODE _PNG_stream_writer( png_structp png_ptr, png_bytep data, png_size_t length )
 {
     ((wxOutputStream*) png_get_io_ptr( png_ptr )) -> Write(data, length);
 }
@@ -90,6 +93,8 @@ void
 PNGLINKAGEMODE png_silent_warning(png_structp WXUNUSED(png_ptr), png_const_charp WXUNUSED(message))
 {
 }
+
+} // extern "C"
 
 // temporarily disable the warning C4611 (interaction between '_setjmp' and
 // C++ object destruction is non-portable) - I don't see any dtors here

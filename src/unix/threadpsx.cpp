@@ -490,6 +490,13 @@ void wxCondition::Broadcast()
 // wxThread (Posix implementation)
 //--------------------------------------------------------------------
 
+#if HAVE_THREAD_CLEANUP_FUNCTIONS
+
+// thread exit function
+extern "C" void wxPthreadCleanup(void *ptr);
+
+#endif // HAVE_THREAD_CLEANUP_FUNCTIONS
+
 class wxThreadInternal
 {
 public:
@@ -498,11 +505,6 @@ public:
 
     // thread entry function
     static void *PthreadStart(void *ptr);
-
-#if HAVE_THREAD_CLEANUP_FUNCTIONS
-    // thread exit function
-    static void PthreadCleanup(void *ptr);
-#endif
 
     // thread actions
         // start the thread
@@ -548,6 +550,11 @@ public:
         // but even detached threads need to notifyus about their termination
         // sometimes - tell the thread that it should do it
     void Notify() { m_shouldBroadcast = TRUE; }
+
+#if HAVE_THREAD_CLEANUP_FUNCTIONS
+    // this is used by wxPthreadCleanup() only
+    static void Cleanup(wxThread *thread);
+#endif // HAVE_THREAD_CLEANUP_FUNCTIONS
 
 private:
     pthread_t     m_threadId;   // id of the thread
@@ -615,7 +622,7 @@ void *wxThreadInternal::PthreadStart(void *ptr)
 #if HAVE_THREAD_CLEANUP_FUNCTIONS
     // install the cleanup handler which will be called if the thread is
     // cancelled
-    pthread_cleanup_push(wxThreadInternal::PthreadCleanup, ptr);
+    pthread_cleanup_push(wxPthreadCleanup, ptr);
 #endif // HAVE_THREAD_CLEANUP_FUNCTIONS
 
     // wait for the condition to be signaled from Run()
@@ -645,7 +652,7 @@ void *wxThreadInternal::PthreadStart(void *ptr)
                        pthread->GetId());
 
             // change the state of the thread to "exited" so that
-            // PthreadCleanup handler won't do anything from now (if it's
+            // wxPthreadCleanup handler won't do anything from now (if it's
             // called before we do pthread_cleanup_pop below)
             pthread->SetState(STATE_EXITED);
         }
@@ -679,10 +686,13 @@ void *wxThreadInternal::PthreadStart(void *ptr)
 #if HAVE_THREAD_CLEANUP_FUNCTIONS
 
 // this handler is called when the thread is cancelled
-void wxThreadInternal::PthreadCleanup(void *ptr)
+extern "C" void wxPthreadCleanup(void *ptr)
 {
-    wxThread *thread = (wxThread *) ptr;
+    wxThreadInternal::Cleanup((wxThread *)ptr);
+}
 
+void wxThreadInternal::Cleanup(wxThread *thread)
+{
     {
         wxCriticalSectionLocker lock(thread->m_critsect);
         if ( thread->m_internal->GetState() == STATE_EXITED )
@@ -1284,7 +1294,7 @@ wxThreadError wxThread::Kill()
             if ( m_isDetached )
             {
                 // if we use cleanup function, this will be done from
-                // PthreadCleanup()
+                // wxPthreadCleanup()
 #if !HAVE_THREAD_CLEANUP_FUNCTIONS
                 ScheduleThreadForDeletion();
 

@@ -852,7 +852,7 @@ gtk_pizza_forall (GtkContainer *container,
 
     g_return_if_fail (container != NULL);
     g_return_if_fail (GTK_IS_PIZZA (container));
-    g_return_if_fail (callback != NULL);
+    g_return_if_fail (callback != (GtkCallback)NULL);
 
     pizza = GTK_PIZZA (container);
 

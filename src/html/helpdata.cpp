@@ -61,7 +61,8 @@ static char* ReadLine(char *line, char *buf)
 
 
 
-static int LINKAGEMODE IndexCompareFunc(const void *a, const void *b)
+extern "C" int LINKAGEMODE
+wxHtmlHelpIndexCompareFunc(const void *a, const void *b)
 {
     return wxStricmp(((wxHtmlContentsItem*)a)->m_Name, ((wxHtmlContentsItem*)b)->m_Name);
 }
@@ -524,7 +525,7 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
 
     m_BookRecords.Add(bookr);
     if (m_IndexCnt > 0)
-        qsort(m_Index, m_IndexCnt, sizeof(wxHtmlContentsItem), IndexCompareFunc);
+        qsort(m_Index, m_IndexCnt, sizeof(wxHtmlContentsItem), wxHtmlHelpIndexCompareFunc);
 
     return TRUE;
 }

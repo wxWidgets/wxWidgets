@@ -3721,8 +3721,10 @@ int WXDLLEXPORT wxDbConnectionsInUse(void)
 
 /********** wxDbLogExtendedErrorMsg() **********/
 // DEBUG ONLY function
-const wxChar WXDLLEXPORT *wxDbLogExtendedErrorMsg(const wxChar *userText, wxDb *pDb,
-                             wxChar *ErrFile, int ErrLine)
+const wxChar WXDLLEXPORT *wxDbLogExtendedErrorMsg(const wxChar *userText,
+                                                  wxDb *pDb,
+                                                  const wxChar *ErrFile,
+                                                  int ErrLine)
 {
     static wxString msg;
     msg = userText;

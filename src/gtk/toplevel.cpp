@@ -245,8 +245,13 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
 {
     GtkPizza *pizza = GTK_PIZZA(widget);
 
-    gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
-                GTK_SHADOW_NONE, &gdk_event->area, win->m_widget, "base", 0, 0, -1, -1);
+    gtk_paint_flat_box (win->m_widget->style,
+                        pizza->bin_window, GTK_STATE_NORMAL,
+                        GTK_SHADOW_NONE,
+                        &gdk_event->area,
+                        win->m_widget,
+                        (char *)"base",
+                        0, 0, -1, -1);
 
     return TRUE;
 }
@@ -260,8 +265,13 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
 {
     GtkPizza *pizza = GTK_PIZZA(widget);
 
-    gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
-                GTK_SHADOW_NONE, rect, win->m_widget, "base", 0, 0, -1, -1);
+    gtk_paint_flat_box (win->m_widget->style,
+                        pizza->bin_window, GTK_STATE_NORMAL,
+                        GTK_SHADOW_NONE,
+                        rect,
+                        win->m_widget,
+                        (char *)"base",
+                        0, 0, -1, -1);
 }
 
 // ----------------------------------------------------------------------------

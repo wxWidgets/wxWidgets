@@ -235,15 +235,18 @@ typedef int wxWindowID;
     #define wxCALLBACK
 #endif // platform
 
-// callling convention for the qsort(3) callback
+// generic calling convention for the extern "C" functions
 
 #if defined(__VISUALC__)
-  #define   wxCMPFUNC_CONV    _cdecl
+  #define   wxC_CALLING_CONV    _cdecl
 #elif defined(__VISAGECPP__)
-  #define   wxCMPFUNC_CONV    _Optlink
+  #define   wxC_CALLING_CONV    _Optlink
 #else   // !Visual C++
-  #define   wxCMPFUNC_CONV
+  #define   wxC_CALLING_CONV
 #endif  // compiler
+
+// callling convention for the qsort(3) callback
+#define wxCMPFUNC_CONV wxC_CALLING_CONV
 
 // compatibility :-(
 #define CMPFUNC_CONV wxCMPFUNC_CONV

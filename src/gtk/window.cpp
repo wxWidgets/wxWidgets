@@ -785,8 +785,14 @@ static int gtk_window_expose_callback( GtkWidget *widget,
         if (!parent)
             parent = win;
 
-        gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
-            GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
+        gtk_paint_flat_box (parent->m_widget->style,
+                            pizza->bin_window,
+                            GTK_STATE_NORMAL,
+                            GTK_SHADOW_NONE,
+                            &gdk_event->area,
+                            parent->m_widget,
+                            (char *)"base",
+                            0, 0, -1, -1);
     }
 
     win->GetUpdateRegion().Union( gdk_event->area.x,
@@ -928,8 +934,14 @@ static void gtk_window_draw_callback( GtkWidget *widget,
         if (!parent)
             parent = win;
 
-        gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
-            GTK_SHADOW_NONE, rect, parent->m_widget, "base", 0, 0, -1, -1);
+        gtk_paint_flat_box (parent->m_widget->style,
+                            pizza->bin_window,
+                            GTK_STATE_NORMAL,
+                            GTK_SHADOW_NONE,
+                            rect,
+                            parent->m_widget,
+                            (char *)"base",
+                            0, 0, -1, -1);
     }
 
 
@@ -3713,7 +3725,8 @@ void wxWindowGTK::ApplyWidgetStyle()
 
 #if wxUSE_MENUS_NATIVE
 
-static void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
+extern "C"
+void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
 {
     *is_waiting = FALSE;
 }
@@ -3775,8 +3788,10 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     bool is_waiting = TRUE;
 
-    gtk_signal_connect( GTK_OBJECT(menu->m_menu), "hide",
-      GTK_SIGNAL_FUNC(gtk_pop_hide_callback), (gpointer)&is_waiting );
+    gtk_signal_connect( GTK_OBJECT(menu->m_menu),
+                        "hide",
+                        GTK_SIGNAL_FUNC(gtk_pop_hide_callback),
+                        (gpointer)&is_waiting );
 
     gtk_menu_popup(
                   GTK_MENU(menu->m_menu),

@@ -90,7 +90,7 @@
 #endif
 
 /* Closed folder */
-static char * icon1_xpm[] = {
+static const char * icon1_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "16 16 6 1",
 /* colors */
@@ -119,7 +119,7 @@ static char * icon1_xpm[] = {
 "                "};
 
 /* Open folder */
-static char * icon2_xpm[] = {
+static const char * icon2_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "16 16 6 1",
 /* colors */
@@ -148,7 +148,7 @@ static char * icon2_xpm[] = {
 "                "};
 
 /* File */
-static char * icon3_xpm[] = {
+static const char * icon3_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "16 16 3 1",
 /* colors */
@@ -174,7 +174,7 @@ static char * icon3_xpm[] = {
 "                "};
 
 /* Computer */
-static char * icon4_xpm[] = {
+static const char * icon4_xpm[] = {
 "16 16 7 1",
 "     s None    c None",
 ".    c #808080",
@@ -201,7 +201,7 @@ static char * icon4_xpm[] = {
 "............o   "};
 
 /* Drive */
-static char * icon5_xpm[] = {
+static const char * icon5_xpm[] = {
 "16 16 7 1",
 "     s None    c None",
 ".    c #808080",
@@ -228,7 +228,7 @@ static char * icon5_xpm[] = {
 "                "};
 
 /* CD-ROM */
-static char *icon6_xpm[] = {
+static const char *icon6_xpm[] = {
 "16 16 10 1",
 "     s None    c None",
 ".    c #808080",
@@ -258,7 +258,7 @@ static char *icon6_xpm[] = {
 "                "};
 
 /* Floppy */
-static char * icon7_xpm[] = {
+static const char * icon7_xpm[] = {
 "16 16 7 1",
 "     s None    c None",
 ".    c #808080",
@@ -285,7 +285,7 @@ static char * icon7_xpm[] = {
 "                "};
 
 /* Removeable */
-static char * icon8_xpm[] = {
+static const char * icon8_xpm[] = {
 "16 16 7 1",
 "     s None    c None",
 ".    c #808080",
