@@ -22,7 +22,7 @@ call \helpref{SetTargetWindow}{wxscrolledwindowsettargetwindow} which means that
 the scrollbars will scroll a different window.
 
 Note that the underlying system knows nothing about scrolling coordinates, so that all system
-functions (mouse events, expose events, refresh calls etc) as well as the position of subwindows 
+functions (mouse events, expose events, refresh calls etc) as well as the position of subwindows
 are relative to the "physical" origin of the scrolled window. If the user insert a child window at
 position (10,10) and scrolls the window down 100 pixels (moving the child window out of the visible
 area), the child window will report a position of (10,-90).
@@ -118,6 +118,9 @@ CalcScrolledPosition(0, 0, \&xx, \&yy) will return 10 in yy.
 
 \helpref{CalcUnscrolledPosition}{wxscrolledwindowcalcunscrolledposition}
 
+\pythonnote{The wxPython version of this methods accepts only two
+parameters and returns xx and yy as a tuple of values.}
+
 \membersection{wxScrolledWindow::CalcUnscrolledPosition}\label{wxscrolledwindowcalcunscrolledposition}
 
 \constfunc{void}{CalcUnscrolledPosition}{
@@ -134,6 +137,9 @@ CalcUnscrolledPosition(0, 10, \&xx, \&yy) will return 0 in yy.
 \wxheading{See also}
 
 \helpref{CalcScrolledPosition}{wxscrolledwindowcalcscrolledposition}
+
+\pythonnote{The wxPython version of this methods accepts only two
+parameters and returns xx and yy as a tuple of values.}
 
 \membersection{wxScrolledWindow::Create}\label{wxscrolledwindowcreate}
 
@@ -187,6 +193,10 @@ scrolling in that direction.
 \helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars},\rtfsp
 \helpref{wxScrolledWindow::GetVirtualSize}{wxscrolledwindowgetvirtualsize}
 
+\pythonnote{The wxPython version of this methods accepts no
+parameters and returns a tuple of values for xUnit and yUnit.}
+
+
 \membersection{wxScrolledWindow::GetVirtualSize}\label{wxscrolledwindowgetvirtualsize}
 
 \constfunc{void}{GetVirtualSize}{\param{int* }{x}, \param{int* }{y}}
@@ -210,6 +220,9 @@ to translate these units to logical units.
 
 \helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars},\rtfsp
 \helpref{wxScrolledWindow::GetScrollPixelsPerUnit}{wxscrolledwindowgetscrollpixelsperunit}
+
+\pythonnote{The wxPython version of this methods accepts no
+parameters and returns a tuple of values for x and y.}
 
 \membersection{wxScrolledWindow::IsRetained}\label{wxscrolledwindowisretained}
 
@@ -253,7 +266,7 @@ void MyWindow::OnEvent(wxMouseEvent& event)
 \func{virtual void}{OnDraw}{\param{wxDC\& }{dc}}
 
 Called by the default paint event handler to allow the application to define
-painting behaviour without having to worry about calling 
+painting behaviour without having to worry about calling
 \helpref{wxScrolledWindow::PrepareDC}{wxscrolledwindowpreparedc}.
 
 Instead of overriding this function you may also just process the paint event
@@ -362,4 +375,7 @@ by the number of pixels per scroll increment.
 \wxheading{See also}
 
 \helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars}
+
+\pythonnote{The wxPython version of this methods accepts no
+parameters and returns a tuple of values for x and y.}
 

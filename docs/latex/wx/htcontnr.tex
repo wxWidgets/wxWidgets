@@ -184,7 +184,7 @@ of parent container}
 
 \func{void}{SetMinHeight}{\param{int }{h}, \param{int }{align = HTML_ALIGN_TOP}}
 
-Sets minimal height of the container. 
+Sets minimal height of the container.
 
 When container's \helpref{Layout}{wxhtmlcelllayout} is called, m\_Height
 is set depending on layout of subcells to the height of area covered
@@ -207,16 +207,16 @@ empty place!}
 
 \func{void}{SetWidthFloat}{\param{const wxHtmlTag\& }{tag}}
 
-Sets floating width adjustment. 
+Sets floating width adjustment.
 
-The normal behaviour of container is that its width is the same as the width of 
+The normal behaviour of container is that its width is the same as the width of
 parent container (and thus you can have only one sub-container per line).
 You can change this by setting FWA.
 
 \wxheading{Parameters}
 
 \docparam{w}{Width of the container. If the value is negative it means
-complement to full width of parent container (e.g. 
+complement to full width of parent container (e.g.
 {\tt SetWidthFloat(-50, HTML\_UNITS\_PIXELS)} sets the width
 of container to parent's width minus 50 pixels. This is useful when
 creating tables - you can call SetWidthFloat(50) and SetWidthFloat(-50))}
@@ -232,4 +232,14 @@ of parent container}
 
 \docparam{tag}{In the second version of method, {\it w} and {\it units}
 info is extracted from tag's {\tt WIDTH} parameter.}
+
+\pythonnote{The second form of this method is named
+SetWidthFloatFromTag in wxPython.}
+
+
+
+
+
+
+
 

@@ -9,7 +9,7 @@
 wxHelpController!}
 
 This help controller provides an easy way of displaying HTML help in your
-application (see {\it test} sample). The help system is based on {\bf books} 
+application (see {\it test} sample). The help system is based on {\bf books}
 (see \helpref{AddBook}{wxhtmlhelpcontrolleraddbook}). A book is a logical
 section of documentation (for example "User's Guide" or "Programmer's Guide" or
 "C++ Reference" or "wxWindows Reference"). The help controller can handle as
@@ -75,7 +75,7 @@ You can specify the page in many ways:
 \item as direct filename of HTML document
 \item as chapter name (from contents) or as a book name
 \item as some word from index
-\item even as any word (will be searched) 
+\item even as any word (will be searched)
 \end{itemize}
 
 Looking for the page runs in these steps:
@@ -91,6 +91,9 @@ Looking for the page runs in these steps:
 \func{void}{Display}{\param{const int }{id}}
 
 This alternative form is used to search help contents by numeric IDs.
+
+\pythonnote{The second form of this method is named DisplayId in
+wxPython.}
 
 \membersection{wxHtmlHelpController::DisplayContents}\label{wxhtmlhelpcontrollerdisplaycontents}
 
@@ -126,7 +129,7 @@ Reads the controller's setting (position of window, etc.)
 
 Sets the path for storing temporary files - cached binary versions of index and contents files. These binary
 forms are much faster to read. Default value is empty string (empty string means
-that no cached data are stored). Note that these files are {\it not} 
+that no cached data are stored). Note that these files are {\it not}
 deleted when program exits.
 
 \membersection{wxHtmlHelpController::SetTitleFormat}\label{wxhtmlhelpcontrollersettitleformat}
@@ -145,7 +148,7 @@ Associates {\it config} object with the controller.
 If there is associated config object, wxHtmlHelpController automatically
 reads and writes settings (including wxHtmlWindow's settings) when needed.
 
-The only thing you must do is create wxConfig object and call UseConfig. 
+The only thing you must do is create wxConfig object and call UseConfig.
 
 \membersection{wxHtmlHelpController::WriteCustomization}\label{wxhtmlhelpcontrollerwritecustomization}
 
