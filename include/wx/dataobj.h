@@ -86,6 +86,8 @@ public:
     #include "wx/x11/dataform.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/dataform.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/dataform.h"
 #elif defined(__WXPM__)
     #include "wx/os2/dataform.h"
 #endif
@@ -170,6 +172,8 @@ public:
     #include "wx/gtk/dataobj.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/dataobj.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/dataobj.h"
 #elif defined(__WXPM__)
     #include "wx/os2/dataobj.h"
 #endif
@@ -480,6 +484,8 @@ private:
         #include "wx/motif/dataobj2.h"
     #elif defined(__WXMAC__)
         #include "wx/mac/dataobj2.h"
+    #elif defined(__WXCOCOA__)
+        #include "wx/cocoa/dataobj2.h"
     #elif defined(__WXPM__)
         #include "wx/os2/dataobj2.h"
     #endif
