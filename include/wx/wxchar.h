@@ -609,6 +609,9 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
 
 // We need conversion from %s to %ls in Unicode mode under Unix
 #ifdef wxNEED_PRINTF_CONVERSION
+
+#include <stdio.h>  // need FILE
+
 int wxScanf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
 int wxSscanf( const wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
 int wxFscanf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
@@ -621,7 +624,8 @@ int wxVfprint( const wxChar *format, va_list ap );
 int wxVprintf( const wxChar *format, va_list ap );
 int wxVsnprintf( wxChar *str, size_t size, const wxChar *format, va_list ap );
 int wxVsprintf( wxChar *str, const wxChar *format, va_list ap );
-#endif
+
+#endif // wxNEED_PRINTF_CONVERSION
 
 #if !defined(wxSnprintf) && !defined(wxHAS_SNPRINTF)
 // wxSnprintf() is like snprintf() if it's available and sprintf() (always
