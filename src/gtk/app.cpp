@@ -821,47 +821,6 @@ int wxEntry( int argc, char *argv[] )
     return retValue;
 }
 
-#ifndef __WXUNIVERSAL__
-
-// XPM hack: make the arrays const
-#define static static const
-
-#include "wx/gtk/info.xpm"
-#include "wx/gtk/error.xpm"
-#include "wx/gtk/question.xpm"
-#include "wx/gtk/warning.xpm"
-
-#undef static
-
-wxIcon wxApp::GetStdIcon(int which) const
-{
-    switch(which)
-    {
-        case wxICON_INFORMATION:
-            return wxIcon(info_xpm);
-
-        case wxICON_QUESTION:
-            return wxIcon(question_xpm);
-
-        case wxICON_EXCLAMATION:
-            return wxIcon(warning_xpm);
-
-        default:
-            wxFAIL_MSG(wxT("requested non existent standard icon"));
-            // still fall through
-
-        case wxICON_HAND:
-            return wxIcon(error_xpm);
-    }
-}
-#else
-wxIcon wxApp::GetStdIcon(int which) const
-{
-    return wxTheme::Get()->GetRenderer()->GetStdIcon(which);
-}
-#endif // !__WXUNIVERSAL__
-
-
 #ifdef __WXDEBUG__
 
 void wxApp::OnAssert(const wxChar *file, int line, const wxChar *msg)

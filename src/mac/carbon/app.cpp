@@ -953,29 +953,6 @@ void wxApp::DeletePendingObjects()
   }
 }
 
-wxIcon
-wxApp::GetStdIcon(int which) const
-{
-    switch(which)
-    {
-        case wxICON_INFORMATION:
-            return wxIcon("wxICON_INFO");
-
-        case wxICON_QUESTION:
-            return wxIcon("wxICON_QUESTION");
-
-        case wxICON_EXCLAMATION:
-            return wxIcon("wxICON_WARNING");
-
-        default:
-            wxFAIL_MSG(wxT("requested non existent standard icon"));
-            // still fall through
-
-        case wxICON_HAND:
-            return wxIcon("wxICON_ERROR");
-    }
-}
-
 void wxExit()
 {
     wxLogError(_("Fatal error: exiting"));

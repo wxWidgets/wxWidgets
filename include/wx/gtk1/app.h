@@ -48,8 +48,6 @@ public:
     virtual void Dispatch();
     virtual bool Yield(bool onlyIfNeeded = FALSE);
 
-    virtual wxIcon GetStdIcon(int which) const;
-
     // implementation only from now on
     void OnIdle( wxIdleEvent &event );
     bool SendIdleEvents();

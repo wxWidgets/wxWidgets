@@ -1004,11 +1004,6 @@ bool wxApp::Yield(bool onlyIfNeeded)
     return TRUE;
 }
 
-wxIcon wxApp::GetStdIcon(int which) const
-{
-    return wxTheme::Get()->GetRenderer()->GetStdIcon(which);
-}
-
 void wxApp::OnAssert(const wxChar *file, int line, const wxChar *msg)
 {
     // While the GUI isn't working that well, just print out the

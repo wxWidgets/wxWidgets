@@ -58,8 +58,6 @@ public:
     
     virtual bool OnInitGui();
     
-    virtual wxIcon GetStdIcon(int which) const;
-    
     // implementation from now on
     // --------------------------
     

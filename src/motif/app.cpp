@@ -745,41 +745,6 @@ bool wxApp::Yield(bool onlyIfNeeded)
     return TRUE;
 }
 
-// TODO use XmGetPixmap (?) to get the really standard icons!
-
-// XPM hack: make the arrays const
-#define static static const
-
-#include "wx/generic/info.xpm"
-#include "wx/generic/error.xpm"
-#include "wx/generic/question.xpm"
-#include "wx/generic/warning.xpm"
-
-#undef static
-
-wxIcon
-wxApp::GetStdIcon(int which) const
-{
-    switch(which)
-    {
-        case wxICON_INFORMATION:
-            return wxIcon(info_xpm);
-
-        case wxICON_QUESTION:
-            return wxIcon(question_xpm);
-
-        case wxICON_EXCLAMATION:
-            return wxIcon(warning_xpm);
-
-        default:
-            wxFAIL_MSG("requested non existent standard icon");
-            // still fall through
-
-        case wxICON_HAND:
-            return wxIcon(error_xpm);
-    }
-}
-
 // ----------------------------------------------------------------------------
 // accessors for C modules
 // ----------------------------------------------------------------------------

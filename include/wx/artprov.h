@@ -34,14 +34,15 @@ typedef wxString wxArtID;
 // Art clients
 // ----------------------------------------------------------------------------
 
-#define wxART_TOOLBAR                       _T("toolbar_C")
-#define wxART_MENU                          _T("menu_C")
-#define wxART_FRAME_ICON                    _T("frame_icon_C")
+#define wxART_TOOLBAR                  _T("toolbar_C")
+#define wxART_MENU                     _T("menu_C")
+#define wxART_FRAME_ICON               _T("frame_icon_C")
 
-#define wxART_CMN_DIALOG                    _T("cmn_dialog_C")
-#define wxART_HELP_BROWSER                  _T("help_browser_C")
+#define wxART_CMN_DIALOG               _T("cmn_dialog_C")
+#define wxART_HELP_BROWSER             _T("help_browser_C")
+#define wxART_MESSAGE_BOX              _T("message_box_C")
 
-#define wxART_OTHER                         _T("other_C")
+#define wxART_OTHER                    _T("other_C")
 
 // ----------------------------------------------------------------------------
 // Art IDs
@@ -73,6 +74,10 @@ typedef wxString wxArtID;
 #define wxART_NORMAL_FILE              _T("normal_file")
 #define wxART_TICK_MARK                _T("tick")
 #define wxART_CROSS_MARK               _T("cross")
+#define wxART_ERROR                    _T("error")
+#define wxART_QUESTION                 _T("question")
+#define wxART_WARNING                  _T("warning")
+#define wxART_INFORMATION              _T("information")
 
 // ----------------------------------------------------------------------------
 // wxArtProvider class

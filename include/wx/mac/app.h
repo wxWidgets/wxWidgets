@@ -53,7 +53,6 @@ class WXDLLEXPORT wxApp: public wxAppBase
   virtual void Dispatch() ;
   virtual bool Yield(bool onlyIfNeeded = FALSE);
 
-  virtual wxIcon GetStdIcon(int which) const;
   virtual void SetPrintMode(int mode) { m_printMode = mode; }
   virtual int GetPrintMode() const { return m_printMode; }
 

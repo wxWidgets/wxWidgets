@@ -48,8 +48,6 @@ public:
     virtual bool Pending();
     virtual void Dispatch();
 
-    virtual wxIcon GetStdIcon(int which) const;
-
     // implementation only from now on
     void OnIdle(wxIdleEvent &event);
     bool SendIdleEvents();

@@ -1481,29 +1481,6 @@ void wxWakeUpIdle()
 
 //-----------------------------------------------------------------------------
 
-wxIcon
-wxApp::GetStdIcon(int which) const
-{
-    switch(which)
-    {
-        case wxICON_INFORMATION:
-            return wxIcon("wxICON_INFO");
-
-        case wxICON_QUESTION:
-            return wxIcon("wxICON_QUESTION");
-
-        case wxICON_EXCLAMATION:
-            return wxIcon("wxICON_WARNING");
-
-        default:
-            wxFAIL_MSG(wxT("requested non existent standard icon"));
-            // still fall through
-
-        case wxICON_HAND:
-            return wxIcon("wxICON_ERROR");
-    }
-}
-
 // For some reason, with MSVC++ 1.5, WinMain isn't linked in properly
 // if in a separate file. So include it here to ensure it's linked.
 #if (defined(__VISUALC__) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !defined(__TWIN32__) && !defined(WXMAKINGDLL))

@@ -444,11 +444,6 @@ bool wxApp::Initialize()
     return TRUE;
 }
 
-wxIcon wxApp::GetStdIcon(int which) const
-{
-    return wxTheme::Get()->GetRenderer()->GetStdIcon(which);
-}
-
 void wxApp::CleanUp()
 {
 #if wxUSE_LOG

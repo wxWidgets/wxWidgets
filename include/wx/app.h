@@ -47,6 +47,10 @@ class WXDLLEXPORT wxCmdLineParser;
     #include "wx/log.h"
 #endif
 
+#if WXWIN_COMPATIBILITY_2_2
+    #include "wx/icon.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -275,10 +279,13 @@ public:
 #endif // wxUSE_LOG
 
 #if wxUSE_GUI
+
+  #if WXWIN_COMPATIBILITY_2_2
         // get the standard icon used by wxWin dialogs - this allows the user
         // to customize the standard dialogs. The 'which' parameter is one of
         // wxICON_XXX values
-    virtual wxIcon GetStdIcon(int which) const = 0;
+    virtual wxIcon GetStdIcon(int WXUNUSED(which)) const { return wxNullIcon; }
+  #endif
 
         // Get display mode that is used use. This is only used in framebuffer wxWin ports
         // (such as wxMGL).

@@ -1175,31 +1175,6 @@ bool wxApp::Yield(bool onlyIfNeeded)
     return TRUE;
 } // end of wxYield
 
-wxIcon wxApp::GetStdIcon(
-  int                               nWhich
-) const
-{
-    switch(nWhich)
-    {
-        case wxICON_INFORMATION:
-            return wxIcon("wxICON_INFO");
-
-        case wxICON_QUESTION:
-            return wxIcon("wxICON_QUESTION");
-
-        case wxICON_EXCLAMATION:
-            return wxIcon("wxICON_WARNING");
-
-        default:
-            wxFAIL_MSG(wxT("requested non existent standard icon"));
-            // still fall through
-
-        case wxICON_HAND:
-            return wxIcon("wxICON_ERROR");
-    }
-    return wxIcon("wxICON_ERROR");
-} // end of wxApp::GetStdIcon
-
 int wxApp::AddSocketHandler(int handle, int mask,
                             void (*callback)(void*), void * gsock)
 {
