@@ -51,7 +51,21 @@
 
 #endif
 
+#ifdef __SVR4__
+  #include <sys/systeminfo.h>
+#endif
+
+#ifdef __SOLARIS__
+// somehow missing from sys/wait.h but in the system's docs
+extern "C"
+{
+   pid_t wait4(pid_t pid, int *statusp, int options, struct rusage
+               *rusage);
+}
+#endif
+
 #include <sys/time.h>
+#include <errno.h>
 
 #include <Xm/Xm.h>
 
@@ -82,7 +96,7 @@ void xt_notify_end_process(XtPointer client, int *fid,
   /* wait4 is not part of any standard, use at own risk
    * not sure what wait4 does, but wait3 seems to be closest, whats a digit ;-)
    * --- offer@sgi.com */
-#if !defined(__sgi)
+#if !defined(__sgi) && !defined(__ALPHA__)
   wait4(process_data->pid, NULL, 0, NULL);
 #else
   wait3((int *) NULL, 0, (rusage *) NULL);

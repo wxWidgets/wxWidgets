@@ -55,12 +55,6 @@
 
 #ifdef __GNUWIN32__
 #include <sys/unistd.h>
-// #include <sys/stat.h>
-
-#ifndef __MINGW32__
-#include <std.h>
-#endif
-
 #define stricmp strcasecmp
 #endif
 
@@ -214,11 +208,18 @@ wxString wxPathList::FindAbsoluteValidPath (const wxString& file)
 bool 
 wxFileExists (const wxString& filename)
 {
+#ifdef __GNUWIN32__ // (fix a B20 bug)
+  if (GetFileAttributes(filename) == 0xFFFFFFFF)
+    return FALSE;
+  else
+    return TRUE;
+#else
   struct stat stbuf;
 
   if (filename && stat ((char *)(const char *)filename, &stbuf) == 0)
     return TRUE;
   return FALSE;
+#endif
 }
 
 /* Vadim's alternative implementation

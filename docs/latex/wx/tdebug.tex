@@ -1,56 +1,84 @@
 \section{Debugging overview}\label{debuggingoverview}
 
-Classes: \helpref{wxDebugContext}{wxdebugcontext}, \helpref{wxDebugStreamBuf}{wxdebugstreambuf},
-\rtfsp\helpref{wxObject}{wxobject}
+Classes, functions and macros: \helpref{wxDebugContext}{wxdebugcontext}, \helpref{wxObject}{wxobject}, \helpref{wxLog}{wxlog},
+\rtfsp\helpref{Log functions}{logfunctions}, \helpref{Debug macros}{debugmacros}
 
 Various classes, functions and macros are provided in wxWindows to help you debug
 your application. Most of these are only available if you compile both wxWindows,
-your application and {\it all} libraries that use wxWindows with the DEBUG flag
-set to 1 or more.
+your application and {\it all} libraries that use wxWindows with the \_\_WXDEBUG\_\_ symbol
+defined. You can also test the \_\_WXDEBUG\_\_ symbol in your own applications to execute
+code that should be active only in debug mode.
 
-wxDebugContext is a class that never gets instantiated, but ties together
-various functions and variables. It allows you to set the debugging stream, dump
-all objects to that stream, write statistics about object allocation, and
+\wxheading{wxDebugContext}
+
+\helpref{wxDebugContext}{wxdebugcontext} is a class that never gets instantiated, but ties together
+various static functions and variables. It allows you to dump all objects to that stream, write statistics about object allocation, and
 check memory for errors.
 
-You can use the \helpref{WXTRACE}{trace} macro to output debugging information in DEBUG mode;
-it will be defined to nothing for non-debugging code.
-
-It is good practice to define a Dump member function for each class you derive
-from a wxWindows class, so that wxDebugContext::Dump can call it and
+It is good practice to define a \helpref{wxObject::Dump}{wxobjectdump} member function for each class you derive
+from a wxWindows class, so that \helpref{wxDebugContext::Dump}{wxdebugcontextdump} can call it and
 give valuable information about the state of the application.
+
+If you have difficulty tracking down a memory leak, recompile
+in debugging mode and call \helpref{wxDebugContext::Dump}{wxdebugcontextdump} and \helpref{wxDebugContext::PrintStatistics}{wxdebugcontextprintstatistics} at
+appropriate places. They will tell you what objects have not yet been
+deleted, and what kinds of object they are. In fact, in debug mode wxWindows will automatically
+detect memory leaks when your application is about to exit, and if there are any leaks,
+will give you information about the problem. (How much information depends on the operating system
+and compiler -- some systems don't allow all memory logging to be enabled). See the
+memcheck sample for example of usage.
 
 For wxDebugContext to do its work, the {\it new} and {\it delete}\rtfsp
 operators for wxObject have been redefined to store extra information
 about dynamically allocated objects (but not statically declared
 objects). This slows down a debugging version of an application, but can
-in theory find difficult-to-detect memory leaks (objects are not
+find difficult-to-detect memory leaks (objects are not
 deallocated), overwrites (writing past the end of your object) and
 underwrites (writing to memory in front of the object).
 
-If you have difficulty tracking down a memory leak, recompile
-in debugging mode and call wxDebugContext::Dump and wxDebugContext::Statistics
-at appropriate places. They will tell you what objects have not yet been
-deleted, and what kinds of object they are.
+If debugging mode is on and the symbol wxUSE\_GLOBAL\_MEMORY\_OPERATORS is set
+to 1 in setup.h, 'new' is defined to be:
 
-If you use the macro WXDEBUG\_NEW instead of the normal 'new', the debugging
-output (and error messages reporting memory problems) will also tell you what
-file and on what line you allocated the object.
-
-To avoid the need for replacing existing new operators with WXDEBUG\_NEW, you
-can write this at the top of each application file:
-
+{\small
 \begin{verbatim}
-#define new WXDEBUG\_NEW
+#define new new(__FILE__,__LINE__)
 \end{verbatim}
+}%
 
-In non-debugging mode, this will revert to the usual interpretation
-of new. Note that for this not to mess up new-based allocation of non-wxObject derived classes and
-built-in types, there are global definitions of new and delete which match
-the syntax required for storing filename and line numbers. These merely
-call malloc and free, and so do not do anything interesting. The definitions
-may possibly cause multiple symbol problems for some compilers and so might
-need to be omitted by setting the USE\_GLOBAL\_MEMORY\_OPERATORS to 0 in wx\_setup.h
+All occurrences of 'new' in wxWindows and your own application will use
+the overridden form of the operator with two extra arguments. This means that the debugging
+output (and error messages reporting memory problems) will tell you what
+file and on what line you allocated the object. Unfortunately not all
+compilers allow this definition to work properly, but most do.
+
+\wxheading{Debug macros}
+
+You should also use \helpref{debug macros}{debugmacros} as part of a `defensive programming' strategy,
+scattering wxASSERTs liberally to test for problems in your code as early as possible. Forward thinking
+will save a surprising amount of time in the long run.
+
+\helpref{wxASSERT}{wxassert} is used to pop up an error message box when a condition
+is not true. You can also use \helpref{wxASSERT\_MSG}{wxassertmsg} to supply your
+own helpful error message. For example:
+
+{\small
+\begin{verbatim}
+  void MyClass::MyFunction(wxObject* object)
+  {
+      wxASSERT_MSG( (object != NULL), "object should not be NULL in MyFunction!" );
+
+      ...
+  };
+\end{verbatim}
+}
+
+The message box allows you to continue execution or abort the program. If you are running
+the application inside a debugger, you will be able to see exactly where the problem was.
+
+\wxheading{Logging functions}
+
+You can use the \helpref{wxLogDebug}{wxlogdebug} and \helpref{wxLogTrace}{wxlogtrace} functions to output debugging information in debug mode;
+it will do nothing for non-debugging code.
 
 \subsection{wxDebugContext overview}\label{wxdebugcontextoverview}
 
@@ -59,8 +87,7 @@ need to be omitted by setting the USE\_GLOBAL\_MEMORY\_OPERATORS to 0 in wx\_set
 Class: \helpref{wxDebugContext}{wxdebugcontext}
 
 wxDebugContext is a class for performing various debugging and memory tracing
-operations. wxDebugContext, and the related macros and function WXTRACE and
-wxTrace, are only present if USE\_DEBUG\_CONTEXT is used.
+operations.
 
 This class has only static data and function members, and there should be
 no instances. Probably the most useful members are SetFile (for directing output
@@ -70,35 +97,26 @@ Dump (for dumping the dynamically allocated objects) and PrintStatistics
 Check to check memory blocks for integrity.
 
 Here's an example of use. The SetCheckpoint ensures that only the
-allocations done after the checkpoint will be dumped. Unfortunately
-the define of new to WXDEBUG\_NEW does not work for Borland C++ (and
-perhaps other compilers) because it fails to find the correct overloaded
-operator for non-object usage of new. Instead, you need to use WXDEBUG\_NEW
-explicitly if there are any examples of non-object new usage in the file.
+allocations done after the checkpoint will be dumped.
 
 \begin{verbatim}
-#define new WXDEBUG_NEW
-
   wxDebugContext::SetCheckpoint();
 
   wxDebugContext::SetFile("c:\\temp\\debug.log");
 
   wxString *thing = new wxString;
 
-  // Proves that defining 'new' to be 'WXDEBUG_NEW' doesn't mess up
-  // non-object allocation. Doesn't work for Borland C++.
   char *ordinaryNonObject = new char[1000];
 
   wxDebugContext::Dump();
   wxDebugContext::PrintStatistics();
 \end{verbatim}
 
-You can use wxDebugContext if DEBUG is 1 or more, or you can use it
-at any other time (if USE\_DEBUG\_CONTEXT is 1). It is not disabled
-for DEBUG = 1 (as in earlier versions of wxWindows) because you
-may not wish to recompile wxWindows and your entire application
-just to make use of the error logging facility. This is especially
-true in a Windows NT or Windows 95 environment, where you cannot
-easily output to a debug window: wxDebugContext can be used to
-write to log files instead.
+You can use wxDebugContext if \_\_WXDEBUG\_\_ is defined, or you can use it
+at any other time (if wxUSE\_DEBUG\_CONTEXT is set to 1 in setup.h). It is not disabled
+in non-debug mode because you may not wish to recompile wxWindows and your entire application
+just to make use of the error logging facility.
+
+Note: wxDebugContext::SetFile has a problem at present, so use the default stream instead.
+Eventually the logging will be done through the wxLog facilities instead.
 

@@ -13,8 +13,9 @@ when it starts, and immediately call {\bf Initialize}\rtfsp
 to associate a filename with it. The help viewer will only get run, however,
 just before the first call to display something.
 
-Although all classes actually derive from wxHelpControllerBase, the
-appropriate class is aliased to wxHelpController for each platform.
+Although all help controller classes actually derive from wxHelpControllerBase and have
+names of the form wxXXXHelpController, the
+appropriate class is aliased to the name wxHelpController for each platform.
 
 There are currently the following help controller classes defined:
 

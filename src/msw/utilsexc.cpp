@@ -40,10 +40,6 @@
 #ifdef __GNUWIN32__
 #include <sys/unistd.h>
 #include <sys/stat.h>
-#ifndef __MINGW32__
-#include <std.h>
-#endif
-
 #endif
 
 #ifdef __WIN32__

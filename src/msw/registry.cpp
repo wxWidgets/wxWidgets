@@ -194,7 +194,7 @@ wxRegKey::wxRegKey()
 wxRegKey::wxRegKey(const wxString& strKey) : m_strKey(strKey)
 {
   m_hRootKey  = (WXHKEY) aStdKeys[ExtractKeyName(m_strKey)].hkey;
-  m_hKey      = NULL;
+  m_hKey      = (WXHKEY) NULL;
   m_dwLastError = 0;
 }
 
@@ -203,7 +203,7 @@ wxRegKey::wxRegKey(StdKey keyParent, const wxString& strKey) : m_strKey(strKey)
 {
   RemoveTrailingSeparator(m_strKey);
   m_hRootKey  = (WXHKEY) aStdKeys[keyParent].hkey;
-  m_hKey      = NULL;
+  m_hKey      = (WXHKEY) NULL;
   m_dwLastError = 0;
 }
 
@@ -221,7 +221,7 @@ wxRegKey::wxRegKey(const wxRegKey& keyParent, const wxString& strKey)
   RemoveTrailingSeparator(m_strKey);
 
   m_hRootKey  = keyParent.m_hRootKey;
-  m_hKey      = NULL;
+  m_hKey      = (WXHKEY) NULL;
   m_dwLastError = 0;
 }
 
@@ -562,7 +562,7 @@ wxRegKey::ValueType wxRegKey::GetValueType(const char *szValue)
 bool wxRegKey::SetValue(const char *szValue, long lValue)
 {
   if ( CONST_CAST Open() ) {
-    m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, RESERVED, REG_DWORD,
+    m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_DWORD,
                                   (RegString)&lValue, sizeof(lValue));
     if ( m_dwLastError == ERROR_SUCCESS )
       return TRUE;
@@ -640,7 +640,7 @@ bool wxRegKey::SetValue(const char *szValue, const wxString& strValue)
 {
   if ( CONST_CAST Open() ) {
     #ifdef  __WIN32__
-      m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, RESERVED, REG_SZ,
+      m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_SZ,
                                     (RegString)strValue.c_str(), 
                                     strValue.Len() + 1);
       if ( m_dwLastError == ERROR_SUCCESS )

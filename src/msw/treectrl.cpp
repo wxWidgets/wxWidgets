@@ -467,7 +467,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
         mask |= TVIF_IMAGE;
         tvIns.item.iImage = image;
 
-        if ( selectedImage = -1 )
+        if ( selectedImage == -1 )
         {
             // take the same image for selected icon if not specified
             selectedImage = image;

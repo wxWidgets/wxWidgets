@@ -728,7 +728,7 @@ Use .wrc (wxWindows resource files) where possible, because they can be easily c
 independently of source code. Bitmap resources can be set up to load different
 kinds of bitmap depending on platform (see the section on resource files).
 
-\section{Strategies for debugging}
+\section{Strategies for debugging}\label{debugstrategies}
 
 \subsection{Positive thinking}
 
@@ -757,49 +757,35 @@ to go from functioning to non-functioning state. This should give a clue
 to the problem. In some cases though, such as memory leaks or wrong
 deallocation, this can still give totally spurious results!
 
-\subsection{Genetic mutation}
-
-If we had sophisticated genetic algorithm tools that could be applied
-to programming, we could use them. Until then, a common -- if rather irrational --
-technique is to just make arbitrary changes to the code until something
-different happens. You may have an intuition why a change will make a difference;
-otherwise, just try altering the order of code, comment lines out, anything
-to get over an impasse. Obviously, this is usually a last resort.
-
 \subsection{Use a debugger}
 
 This sounds like facetious advice, but it's surprising how often people
 don't use a debugger. Often it's an overhead to install or learn how to
 use a debugger, but it really is essential for anything but the most
-trivial programs. Some platforms don't allow for debugging, such
-as WIN32s under Windows 3.x. In this case, you might be advised to
-debug under 16-bit Windows and when you're confident, compile for
-WIN32s. In fact WIN32s can be very strict about bad memory handling,
-so testing out under WIN32s is a good thing to do even if you're
-not going to distribute this version. (Unless you've got a good memory checking,
-utility, of course!) Tracking bugs under WIN32s can involve a lot of debug message
-insertion and relinking, so make sure your compiler has a fast linker
-(e.g. Watcom, Symantec).
+trivial programs.
 
-\subsection{Use tracing code}
+\subsection{Use logging functions}
 
-You can use wxDebugMsg statements (or the wxDebugStreamBuf class) to
-output to a debugging window such as DBWIN under Windows, or standard
-error under X. If compiling in DEBUG mode, you can use TRACE statements
-that will be compiled out of the final build of your application.
+There is a variety of logging functions that you can use in your program:
+see \helpref{Logging functions}{logfunctions}.
 
 Using tracing statements may be more convenient than using the debugger
 in some circumstances (such as when your debugger doesn't support a lot
 of debugging code, or you wish to print a bunch of variables).
 
-\subsection{Use wxObject::Dump and the wxDebugContext class}
+\subsection{Use the wxWindows debugging facilities}
 
-It's good practice to implement the Dump member function for all
-classes derived from wxObject. You can then make use of wxDebugContext
-to dump out information on all objects in the program, if DEBUG is
-defined to be more than zero. You can use wxDebugContext to check for
-memory leaks and corrupt memory. See the debugging topic in the
-reference manual for more information.
+You can use wxDebugContext to check for
+memory leaks and corrupt memory: in fact in debugging mode, wxWindows will
+automatically check for memory leaks at the end of the program if wxWindows is suitably
+configured. Depending on the operating system and compiler, more or less
+specific information about the problem will be logged.
+
+You should also use \helpref{debug macros}{debugmacros} as part of a `defensive programming' strategy,
+scattering wxASSERTs liberally to test for problems in your code as early as possible. Forward thinking
+will save a surprising amount of time in the long run.
+
+See the \helpref{debugging overview}{debuggingoverview} for further information.
 
 \subsection{Check Windows debug messages}
 
@@ -812,3 +798,14 @@ more problems. However, I doubt it's worth the hassle for most
 applications. wxWindows is designed to minimize the possibility of such
 errors, but they can still happen occasionally, slipping through unnoticed
 because they are not severe enough to cause a crash.
+
+\subsection{Genetic mutation}
+
+If we had sophisticated genetic algorithm tools that could be applied
+to programming, we could use them. Until then, a common -- if rather irrational --
+technique is to just make arbitrary changes to the code until something
+different happens. You may have an intuition why a change will make a difference;
+otherwise, just try altering the order of code, comment lines out, anything
+to get over an impasse. Obviously, this is usually a last resort.
+
+

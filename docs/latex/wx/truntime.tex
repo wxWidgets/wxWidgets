@@ -8,10 +8,13 @@ Another is that instances of a class cannot be created just by knowing the name 
 which makes facilities such as persistent storage hard to implement.
 
 Most C++ GUI frameworks overcome these limitations by means of a set of
-macros and functions and wxWindows (from version 1.62) is no exception.
+macros and functions and wxWindows is no exception.
 Each class that you wish to be known the type system should have
 a macro such as DECLARE\_DYNAMIC\_CLASS just inside the class declaration.
 The macro IMPLEMENT\_DYNAMIC\_CLASS should be in the implementation file.
+Note that these are entirely optional; use them if you wish to check object
+types, or create instances of classes using the class name. However,
+it is good to get into the habit of adding these macros for all classes.
 
 Variations on these \helpref{macros}{macros} are used for multiple inheritance, and abstract
 classes that cannot be instantiated dynamically or otherwise.

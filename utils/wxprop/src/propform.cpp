@@ -187,6 +187,7 @@ void wxPropertyFormView::OnOk(wxCommandEvent& WXUNUSED(event))
     return;
   
   sm_dialogCancelled = FALSE;
+  TransferToPropertySheet();
 
   m_managedWindow->Close(TRUE);
 }
@@ -204,7 +205,8 @@ void wxPropertyFormView::OnHelp(wxCommandEvent& WXUNUSED(event))
 
 void wxPropertyFormView::OnUpdate(wxCommandEvent& WXUNUSED(event))
 {
-  TransferToPropertySheet();
+    if (Check())
+        TransferToPropertySheet();
 }
 
 void wxPropertyFormView::OnRevert(wxCommandEvent& WXUNUSED(event))

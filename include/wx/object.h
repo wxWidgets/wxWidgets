@@ -247,6 +247,7 @@ private:
 };
 
 #if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS
+// JACS: not necessary now that new can be defined globally
 //#ifndef WXDEBUG_NEW
 //#define WXDEBUG_NEW new(__FILE__,__LINE__)
 //#endif

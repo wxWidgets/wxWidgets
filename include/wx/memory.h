@@ -41,19 +41,14 @@
 
 #ifdef __WXDEBUG__
 
-// #ifndef WXDEBUG_NEW
-// #define WXDEBUG_NEW new(__FILE__,__LINE__)
-// #endif
-
 void * wxDebugAlloc(size_t size, char * fileName, int lineNum, bool isObject, bool isVect = FALSE);
 void wxDebugFree(void * buf, bool isVect = FALSE);
 
 // Global versions of the new and delete operators.
-// Currently, these merely call malloc and free; only the wxObject
-// operators do something interesting. But this allows WXDEBUG_NEW to
-// work for all 'new's in a file.
 #if wxUSE_GLOBAL_MEMORY_OPERATORS
 
+// Undefine temporarily (new is #defined in object.h) because we want to
+// declare some new operators.
 #ifdef new
 #undef new
 #endif
@@ -264,14 +259,14 @@ private:
     static bool                 m_checkPrevious;
 };
 
-// Output a debug mess., in a system dependent fashion.
+// Output a debug message, in a system dependent fashion.
 void WXDLLEXPORT wxTrace(const char *fmt ...);
 void WXDLLEXPORT wxTraceLevel(int level, const char *fmt ...);
 
 #define WXTRACE wxTrace
 #define WXTRACELEVEL wxTraceLevel
 
-#else // else part for the #if WXDEBUG
+#else // else part for the #if __WXDEBUG__
 
 inline void wxTrace(const char *WXUNUSED(fmt)) {}
 inline void wxTraceLevel(int WXUNUSED(level), const char *WXUNUSED(fmt)) {}

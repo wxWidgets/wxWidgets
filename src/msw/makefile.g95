@@ -64,7 +64,6 @@ GENERICOBJS= \
   $(GENDIR)/colrdlgg.$(OBJSUFF) \
   $(GENDIR)/fontdlgg.$(OBJSUFF) \
   $(GENDIR)/gridg.$(OBJSUFF) \
-  $(GENDIR)/helpxlp.$(OBJSUFF) \
   $(GENDIR)/laywin.$(OBJSUFF) \
   $(GENDIR)/msgdlgg.$(OBJSUFF) \
   $(GENDIR)/panelg.$(OBJSUFF) \
@@ -124,19 +123,22 @@ COMMONOBJS = \
   $(COMMDIR)/datstrm.$(OBJSUFF) \
   $(COMMDIR)/objstrm.$(OBJSUFF) \
   $(COMMDIR)/extended.$(OBJSUFF) \
+  $(COMMDIR)/socket.$(OBJSUFF) \
+  $(COMMDIR)/sckaddr.$(OBJSUFF) \
+  $(COMMDIR)/sckfile.$(OBJSUFF) \
+  $(COMMDIR)/sckipc.$(OBJSUFF) \
+  $(COMMDIR)/sckstrm.$(OBJSUFF) \
+  $(COMMDIR)/protocol.$(OBJSUFF) \
+  $(COMMDIR)/http.$(OBJSUFF) \
+  $(COMMDIR)/ftp.$(OBJSUFF) \
+  $(COMMDIR)/url.$(OBJSUFF) \
   $(COMMDIR)/wincmn.$(OBJSUFF)
 
-# Unfortunately, GnuWin32 fails with a syntax error in Sockets.h,
-# so remove socket code.
-#  $(COMMDIR)/socket.$(OBJSUFF) \
-#  $(COMMDIR)/sckaddr.$(OBJSUFF) \
-#  $(COMMDIR)/sckfile.$(OBJSUFF) \
-#  $(COMMDIR)/sckipc.$(OBJSUFF) \
-#  $(COMMDIR)/sckstrm.$(OBJSUFF) \
-#  $(COMMDIR)/protocol.$(OBJSUFF) \
-#  $(COMMDIR)/http.$(OBJSUFF) \
-#  $(COMMDIR)/ftp.$(OBJSUFF) \
-#  $(COMMDIR)/url.$(OBJSUFF) \
+# This must be renamed! It conflicts with the g++ fstream.h.
+#  $(COMMDIR)/fstream.$(OBJSUFF) \
+
+# NOTE: if the socket-related files above fail with a syntax error in Sockets.h,
+# remove the files (probably all GnuWin32 releases < b20).
 
 MSWOBJS = \
   accel.$(OBJSUFF) \

@@ -31,8 +31,8 @@
 #include "mondrian.xpm"
 #endif
 
-#if !WXDEBUG
-#error You must set WXDEBUG to 1 on the 'make' command line (MSW) or with configure (GTK)
+#ifndef __WXDEBUG__
+#error This program must be compiled in debug mode.
 #endif
 
 // Define a new application type
@@ -82,7 +82,7 @@ bool MyApp::OnInit(void)
   frame->Show(TRUE);
 
   wxDebugContext::SetCheckpoint();
-  wxDebugContext::SetFile("debug.log");
+//  wxDebugContext::SetFile("debug.log");
 
   wxString *thing = new wxString;
   wxDate* date = new wxDate;
@@ -96,7 +96,7 @@ bool MyApp::OnInit(void)
   wxDebugContext::Dump();
   wxDebugContext::PrintStatistics();
 
-  // Don't delete these two objects, to force wxApp to flag a memory leak.
+  // Don't delete these objects, to force wxApp to flag a memory leak.
 //  delete thing;
 //  delete date;
 //  delete[] ordinaryNonObject;
