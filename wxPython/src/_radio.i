@@ -87,6 +87,8 @@ public:
         int GetNextItem(int item, wxDirection dir, long style) const { return -1; }
     }
 #endif
+
+    bool IsValid(int n) const;
         
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
