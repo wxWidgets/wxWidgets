@@ -196,7 +196,7 @@ class wxLogFrame;
 class WXDLLEXPORT wxLogWindow : public wxLog
 {
 public:
-  wxLogWindow(const wxTString& strTitle, bool bShow = TRUE);
+  wxLogWindow(const char *szTitle, bool bShow = TRUE);
   ~wxLogWindow();
   
   // show/hide the log window
@@ -254,16 +254,13 @@ private:
 // define wxLog<level>
 // -------------------
 
-// NB: all these functions take `wxTString' and not
-//     `const wxTString&' because according to C++ standard
-//     the first argument to a vararg function can not be
-//     an array, function or reference :-(
-
-// the most generic log function
-void WXDLLEXPORT wxLogGeneric(wxLogLevel level, wxTString strFormat, ...);
-
 #define DECLARE_LOG_FUNCTION(level)                                 \
-        extern void WXDLLEXPORT wxLog##level(wxTString strFormat, ...)
+        extern void WXDLLEXPORT wxLog##level(const char *szFormat, ...)
+#define DECLARE_LOG_FUNCTION2(level, arg1)                          \
+        extern void WXDLLEXPORT wxLog##level(arg1, const char *szFormat, ...)
+
+// a generic function for all levels (level is passes as parameter)
+DECLARE_LOG_FUNCTION2(Generic, wxLogLevel level);
 
 // one function per each level
 DECLARE_LOG_FUNCTION(FatalError);
@@ -280,19 +277,17 @@ DECLARE_LOG_FUNCTION(SysError);
 
 // and another one which also takes the error code (for those broken APIs
 // that don't set the errno (like registry APIs in Win32))
-void WXDLLEXPORT wxLogSysError(long lErrCode, wxTString strFormat, ...);
+DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 
 // debug functions do nothing in release mode
 #ifdef  __WXDEBUG__
-  // NB: debug functions don't translate their arguments
-  extern void WXDLLEXPORT wxLogDebug(const char *szFormat, ...);
+  DECLARE_LOG_FUNCTION(Debug);
 
   // first king of LogTrace is uncoditional: it doesn't check the level,
   // while the second one does nothing if all of level bits are not set
   // in wxLog::GetActive()->GetTraceMask().
-  extern void WXDLLEXPORT wxLogTrace(const char *szFormat, ...);
-  extern void WXDLLEXPORT wxLogTrace(wxTraceMask mask,
-                                     const char *szFormat, ...);
+  DECLARE_LOG_FUNCTION(Trace);
+  DECLARE_LOG_FUNCTION2(Trace, wxTraceMask mask);
 #else   //!debug
   // these functions do nothing
   inline void wxLogDebug(const char *, ...) { }

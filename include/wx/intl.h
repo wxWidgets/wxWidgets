@@ -43,12 +43,7 @@ typedef unsigned long uint32;
 // ----------------------------------------------------------------------------
 class WXDLLEXPORT wxLocale;
 class WXDLLEXPORT wxMsgCatalog;
-
-// ----------------------------------------------------------------------------
-// global functions
-// ----------------------------------------------------------------------------
-extern wxLocale* WXDLLEXPORT wxGetLocale();
-inline const char* wxGetTranslation(const char *sz);
+extern WXDLLEXPORT_DATA(wxLocale *) g_pLocale;
 
 // ============================================================================
 // locale support
@@ -63,10 +58,10 @@ class WXDLLEXPORT wxLocale
 public:
   // ctor & dtor
     // the ctor has a side effect of changing current locale
-    wxLocale(const char *szName,              // name (for messages)
-             const char *szShort = NULL,      // dir prefix (for msg files)
-             const char *szLocale = NULL,     // locale (for setlocale)
-             bool bLoadDefault = TRUE);       // preload wxstd.mo?
+  wxLocale(const char *szName,              // name (for messages)
+           const char *szShort = NULL,      // dir prefix (for msg files)
+           const char *szLocale = NULL,     // locale (for setlocale)
+           bool bLoadDefault = TRUE);       // preload wxstd.mo?
     // restores old locale
  ~wxLocale();
 
@@ -110,50 +105,16 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// inline functions
+// global functions
 // ----------------------------------------------------------------------------
+inline WXDLLEXPORT wxLocale* wxGetLocale() { return g_pLocale; }
 
 // get the translation of the string in the current locale  
-inline const char *wxGetTranslation(const char *sz)
+inline WXDLLEXPORT const char *wxGetTranslation(const char *sz)
 {
   wxLocale *pLoc = wxGetLocale();
   return pLoc == NULL ? sz : pLoc->GetString(sz);
 }
 
-// ============================================================================
-// optional features
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// wxTString: automatically translates strings to current language
-// ----------------------------------------------------------------------------
-
-// this feature should be enabled by defining WX_USE_AUTOTRANS, if it's not
-// done no automatic translation is performed
-#if  USE_AUTOTRANS
-  class WXDLLEXPORT wxTString
-  {
-  public:
-    // NB: different ctors do different things!
-      // does translation
-    wxTString(const char *sz) : m_pcsz(wxGetTranslation(sz)) { }
-      // no translation
-    wxTString(const wxString& s) : m_pcsz(s) { }
-
-    // NB: no copy ctor, it must be a POD so that we can pass it
-    //     to vararg functions (and it's not needed anyhow)
-    
-    // implicit conversion
-    operator const char *() const { return m_pcsz; }
-
-  private:
-    const char *m_pcsz;
-  };
-#else   //!USE_AUTOTRANS
-  #define wxTString   wxString
-#endif  //USE_AUTOTRANS
-
-#define TRANSSTRING_DEFINED
-  
 #endif
 	// __INTLH__

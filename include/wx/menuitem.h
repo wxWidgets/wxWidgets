@@ -49,7 +49,7 @@ DECLARE_DYNAMIC_CLASS(wxMenuItem)
 public:
   // ctor & dtor
   wxMenuItem(wxMenu *pParentMenu = NULL, int id = ID_SEPARATOR,
-             const wxTString& strName = "", const wxTString& wxHelp = "",
+             const wxString& strName = "", const wxString& wxHelp = "",
              bool bCheckable = FALSE, wxMenu *pSubMenu = NULL);
   virtual ~wxMenuItem();
 

@@ -31,9 +31,9 @@ class WXDLLEXPORT wxOwnerDrawn
 {
 public:
   // ctor & dtor
-  wxOwnerDrawn(const wxTString& str = "",
-                        bool bCheckable = FALSE,
-                        bool bMenuItem = FALSE); // ## kludge for colors
+  wxOwnerDrawn(const wxString& str = "",
+               bool bCheckable = FALSE,
+               bool bMenuItem = FALSE); // @@ kludge for colors
   virtual ~wxOwnerDrawn() { }
 
   // fix appearance

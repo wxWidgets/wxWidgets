@@ -60,7 +60,7 @@ public:
   // open/close
   bool Create(const char *szFileName, bool bOverwrite = FALSE);
   bool Open(const char *szFileName, OpenMode mode = read);
-  inline bool Close();  // Close is a NOP if not opened
+  bool Close();  // Close is a NOP if not opened
 
   // assign an existing file descriptor and get it back from wxFile object
   void Attach(int fd) { Close(); m_fd = fd; }
