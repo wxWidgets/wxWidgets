@@ -69,6 +69,7 @@ wxPython/wx/build
 wxPython/wx/lib
 wxPython/wx/lib/colourchooser
 wxPython/wx/lib/editor
+wxPython/wx/lib/masked
 wxPython/wx/lib/mixins
 wxPython/wx/py
 wxPython/wx/py/tests
