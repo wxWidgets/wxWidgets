@@ -1228,6 +1228,10 @@ void wxMacConvertNewlines10To13( wxChar * data )
 // Common Event Support
 // ----------------------------------------------------------------------------
 
+#endif // wxUSE_GUI
+
+#if wxUSE_BASE
+
 extern ProcessSerialNumber gAppProcess ;
 
 void wxMacWakeUp()
@@ -1257,6 +1261,11 @@ void wxMacWakeUp()
         WakeUpProcess( &gAppProcess ) ;
     }
 }
+
+#endif // wxUSE_BASE
+
+#if wxUSE_GUI
+
 
 // ----------------------------------------------------------------------------
 // Carbon Event Support
