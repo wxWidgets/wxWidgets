@@ -163,6 +163,8 @@ wxEventType wxNewEventType();
 %constant wxEventType wxEVT_UPDATE_UI;
 %constant wxEventType wxEVT_SIZING;
 %constant wxEventType wxEVT_MOVING;
+%constant wxEventType wxEVT_HIBERNATE;
+
 
 // Generic command events
 // Note: a click is a higher-level event than button down/up
@@ -203,6 +205,7 @@ EVT_KILL_FOCUS = wx.PyEventBinder( wxEVT_KILL_FOCUS )
 EVT_CHILD_FOCUS = wx.PyEventBinder( wxEVT_CHILD_FOCUS )
 EVT_ACTIVATE = wx.PyEventBinder( wxEVT_ACTIVATE )
 EVT_ACTIVATE_APP = wx.PyEventBinder( wxEVT_ACTIVATE_APP )
+EVT_HIBERNATE = wx.PyEventBinder( wxEVT_HIBERNATE )     
 EVT_END_SESSION = wx.PyEventBinder( wxEVT_END_SESSION )
 EVT_QUERY_END_SESSION = wx.PyEventBinder( wxEVT_QUERY_END_SESSION )
 EVT_DROP_FILES = wx.PyEventBinder( wxEVT_DROP_FILES )
