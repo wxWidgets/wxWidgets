@@ -118,6 +118,9 @@ static const wxChar eUSERNAME[]  = wxT("UserName");
 bool wxGetHostName(wxChar *buf, int maxSize)
 {
 #if defined(__WXWINCE__)
+    // TODO-CE
+    wxUnusedVar(buf);
+    wxUnusedVar(maxSize);
     return false;
 #elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     DWORD nSize = maxSize;
@@ -230,6 +233,9 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 bool wxGetUserId(wxChar *buf, int maxSize)
 {
 #if defined(__WXWINCE__)
+    // TODO-CE
+    wxUnusedVar(buf);
+    wxUnusedVar(maxSize);
     return false;
 #elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     DWORD nSize = maxSize;
@@ -270,6 +276,9 @@ bool wxGetUserId(wxChar *buf, int maxSize)
 bool wxGetUserName(wxChar *buf, int maxSize)
 {
 #if defined(__WXWINCE__)
+    // TODO-CE
+    wxUnusedVar(buf);
+    wxUnusedVar(maxSize);
     return false;
 #elif defined(USE_NET_API)
     CHAR szUserName[256];
@@ -350,9 +359,9 @@ error:
     {
         wxStrncpy(buf, wxT("Unknown User"), maxSize);
     }
-#endif // Win32/16
 
     return true;
+#endif // Win32/16
 }
 
 const wxChar* wxGetHomeDir(wxString *pstr)
@@ -464,6 +473,10 @@ bool wxDirExists(const wxString& dir)
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
 #ifdef __WXWINCE__
+    // TODO-CE
+    wxUnusedVar(path);
+    wxUnusedVar(pTotal);
+    wxUnusedVar(pFree);
     return false;
 #else
     if ( path.empty() )
@@ -576,6 +589,9 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 bool wxGetEnv(const wxString& var, wxString *value)
 {
 #ifdef __WXWINCE__
+    // no environment variables under CE
+    wxUnusedVar(var);
+    wxUnusedVar(value);
     return false;
 #else // Win32
     // first get the size of the buffer
@@ -610,6 +626,9 @@ bool wxSetEnv(const wxString& var, const wxChar *value)
 
     return true;
 #else // no way to set env vars
+    // no environment variables under CE
+    wxUnusedVar(var);
+    wxUnusedVar(value);
     return false;
 #endif
 }
@@ -951,6 +970,8 @@ bool wxShell(const wxString& command)
 bool wxShutdown(wxShutdownFlags wFlags)
 {
 #ifdef __WXWINCE__
+    // TODO-CE
+    wxUnusedVar(wFlags);
     return false;
 #elif defined(__WIN32__)
     bool bOK = true;

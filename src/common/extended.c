@@ -8,8 +8,8 @@
 *****************************************************************************/
 
 
-#if defined(_WIN32_WCE) && (_WIN32_WCE < 400)
-    // eVC3 cause warnings in its own headers: stdlib.h and winnt.h
+#if defined(_WIN32_WCE)
+    // eVC cause warnings in its own headers: stdlib.h and winnt.h
     #pragma warning (disable:4115)
     #pragma warning (disable:4214)
 #endif
@@ -21,7 +21,7 @@
 #include <string.h>
 #include "wx/defs.h"
 
-#if defined(_WIN32_WCE) && (_WIN32_WCE < 400)
+#if defined(_WIN32_WCE)
     #pragma warning (default:4115)
     #pragma warning (default:4214)
 #endif

@@ -1052,6 +1052,8 @@ bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
     // On WinCE (at least), the wndproc comparison doesn't work,
     // so have to use something like this.
 #ifdef __WXWINCE__
+    wxUnusedVar(wndProc);
+
     extern       wxChar *wxCanvasClassName;
     extern       wxChar *wxCanvasClassNameNR;
     extern const wxChar *wxMDIFrameClassName;
@@ -3228,7 +3230,7 @@ bool wxWindowMSW::MSWOnNotify(int WXUNUSED(idCtrl),
 
 bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
 {
-#ifndef __WXWINCE__
+#ifdef ENDSESSION_LOGOFF
     wxCloseEvent event(wxEVT_QUERY_END_SESSION, wxID_ANY);
     event.SetEventObject(wxTheApp);
     event.SetCanVeto(true);
@@ -3245,13 +3247,15 @@ bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
 
     return rc;
 #else
+    wxUnusedVar(logOff);
+    wxUnusedVar(mayEnd);
     return false;
 #endif
 }
 
 bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
 {
-#ifndef __WXWINCE__
+#ifdef ENDSESSION_LOGOFF
     // do nothing if the session isn't ending
     if ( !endSession )
         return false;
@@ -3267,6 +3271,8 @@ bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
 
     return wxTheApp->ProcessEvent(event);
 #else
+    wxUnusedVar(endSession);
+    wxUnusedVar(logOff);
     return false;
 #endif
 }
