@@ -335,13 +335,23 @@ them.
 
 \wxheading{See also}
 
-\helpref{Customization}{wxcmdlineparsercustomization}
+\helpref{Customization}{wxcmdlineparsercustomization} and \helpref{AreLongOptionsEnabled}{wxcmdlineparserarelongoptionsenabled}
 
 \membersection{wxCmdLineParser::DisableLongOptions}\label{wxcmdlineparserdisablelongoptions}
 
 \func{void}{DisableLongOptions}{\void}
 
-Ientical to \helpref{EnableLongOptions(FALSE)}{wxcmdlineparserenablelongoptions}.
+Identical to \helpref{EnableLongOptions(FALSE)}{wxcmdlineparserenablelongoptions}.
+
+\membersection{wxCmdLineParser::AreLongOptionsEnabled}\label{wxcmdlineparserarelongoptionsenabled}
+
+\func{bool}{AreLongOptionsEnabled}{\void}
+
+Returns TRUE if long options are enabled, otherwise FALSE.
+
+\wxheading{See also}
+
+\helpref{EnableLongOptions}{wxcmdlineparserenablelongoptions}
 
 \membersection{wxCmdLineParser::SetLogo}\label{wxcmdlineparsersetlogo}
 

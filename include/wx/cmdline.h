@@ -130,6 +130,8 @@ public:
     void EnableLongOptions(bool enable = TRUE);
     void DisableLongOptions() { EnableLongOptions(FALSE); }
 
+    bool AreLongOptionsEnabled();
+
     // extra text may be shown by Usage() method if set by this function
     void SetLogo(const wxString& logo);
 

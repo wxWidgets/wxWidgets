@@ -51,8 +51,14 @@
 
 static wxString GetTypeName(wxCmdLineParamType type);
 
+static wxString GetOptionName(const wxChar *p, const wxChar *allowedChars);
+
+static wxString GetShortOptionName(const wxChar *p);
+
+static wxString GetLongOptionName(const wxChar *p);
+
 // ----------------------------------------------------------------------------
-// private classes
+// private structs
 // ----------------------------------------------------------------------------
 
 // an internal representation of an option
@@ -67,6 +73,18 @@ struct wxCmdLineOption
     {
         wxASSERT_MSG( !shrt.empty() || !lng.empty(),
                       _T("option should have at least one name") );
+
+        wxASSERT_MSG
+            (
+                GetShortOptionName(shrt).Len() == shrt.Len(),
+                wxT("Short option contains invalid characters")
+            );
+
+        wxASSERT_MSG
+            (
+                GetLongOptionName(lng).Len() == lng.Len(),
+                wxT("Long option contains invalid characters")
+            );
 
         kind = k;
 
@@ -278,6 +296,11 @@ void wxCmdLineParser::SetSwitchChars(const wxString& switchChars)
 void wxCmdLineParser::EnableLongOptions(bool enable)
 {
     m_data->m_enableLongOptions = enable;
+}
+
+bool wxCmdLineParser::AreLongOptionsEnabled()
+{
+    return m_data->m_enableLongOptions;
 }
 
 void wxCmdLineParser::SetLogo(const wxString& logo)
@@ -519,23 +542,35 @@ int wxCmdLineParser::Parse(bool showUsage)
             int optInd = wxNOT_FOUND;   // init to suppress warnings
 
             // an option or a switch: find whether it's a long or a short one
-            if ( m_data->m_enableLongOptions &&
-                    arg[0u] == _T('-') && arg[1u] == _T('-') )
+            if ( arg[0u] == _T('-') && arg[1u] == _T('-') )
             {
                 // a long one
                 isLong = TRUE;
 
+                // Skip leading "--"
                 const wxChar *p = arg.c_str() + 2;
-                while ( wxIsalnum(*p) || (*p == _T('_')) || (*p == _T('-')) )
+
+                bool longOptionsEnabled = AreLongOptionsEnabled();
+
+                name = GetLongOptionName(p);
+
+                if (longOptionsEnabled)
                 {
-                    name += *p++;
+                    optInd = m_data->FindOptionByLongName(name);
+                    if ( optInd == wxNOT_FOUND )
+                    {
+                        wxLogError(_("Unknown long option '%s'"), name.c_str());
+                    }
+                }
+                else
+                {
+                    optInd = wxNOT_FOUND; // Sanity check
+
+                    // Print the argument including leading "--"
+                    name.Prepend( wxT("--") );
+                    wxLogError(_("Unknown option '%s'"), name.c_str());
                 }
 
-                optInd = m_data->FindOptionByLongName(name);
-                if ( optInd == wxNOT_FOUND )
-                {
-                    wxLogError(_("Unknown long option '%s'"), name.c_str());
-                }
             }
             else
             {
@@ -544,10 +579,8 @@ int wxCmdLineParser::Parse(bool showUsage)
                 // a short one: as they can be cumulated, we try to find the
                 // longest substring which is a valid option
                 const wxChar *p = arg.c_str() + 1;
-                while ( wxIsalnum(*p) || (*p == _T('_')) )
-                {
-                    name += *p++;
-                }
+
+                name = GetShortOptionName(p);
 
                 size_t len = name.length();
                 do
@@ -842,6 +875,7 @@ void wxCmdLineParser::Usage()
     wxChar chSwitch = !m_data->m_switchChars ? _T('-')
                                              : m_data->m_switchChars[0u];
 
+    bool areLongOptionsEnabled = AreLongOptionsEnabled();
     size_t n, count = m_data->m_options.GetCount();
     for ( n = 0; n < count; n++ )
     {
@@ -857,13 +891,21 @@ void wxCmdLineParser::Usage()
         {
             brief << chSwitch << opt.shortName;
         }
-        else if ( !opt.longName.empty() )
+        else if ( areLongOptionsEnabled && !opt.longName.empty() )
         {
             brief << _T("--") << opt.longName;
         }
         else
         {
-            wxFAIL_MSG( _T("option without neither short nor long name?") );
+            if (!opt.longName.empty())
+            {
+                wxFAIL_MSG( wxT("option with only a long name while long ")
+                    wxT("options are disabled") );
+            }
+            else
+            {
+                wxFAIL_MSG( _T("option without neither short nor long name") );
+            }
         }
 
         wxString option;
@@ -873,7 +915,7 @@ void wxCmdLineParser::Usage()
             option << _T("  ") << chSwitch << opt.shortName;
         }
 
-        if ( !opt.longName.empty() )
+        if ( areLongOptionsEnabled && !opt.longName.empty() )
         {
             option << (option.empty() ? _T("  ") : _T(", "))
                    << _T("--") << opt.longName;
@@ -980,6 +1022,48 @@ static wxString GetTypeName(wxCmdLineParamType type)
     }
 
     return s;
+}
+
+/*
+Returns a string which is equal to the string pointed to by p, but up to the
+point where p contains an character that's not allowed.
+Allowable characters are letters and numbers, and characters pointed to by
+the parameter allowedChars.
+
+For example, if p points to "abcde-@-_", and allowedChars is "-_",
+this function returns "abcde-".
+*/
+static wxString GetOptionName(const wxChar *p,
+    const wxChar *allowedChars)
+{
+    wxString argName;
+
+    while ( *p && (wxIsalnum(*p) || wxStrchr(allowedChars, *p)) )
+    {
+        argName += *p++;
+    }
+
+    return argName;
+}
+
+// Besides alphanumeric characters, short and long options can
+// have other characters.
+
+// A short option additionally can have these
+#define wxCMD_LINE_CHARS_ALLOWED_BY_SHORT_OPTION wxT("_?")
+
+// A long option can have the same characters as a short option and a '-'.
+#define wxCMD_LINE_CHARS_ALLOWED_BY_LONG_OPTION \
+    wxCMD_LINE_CHARS_ALLOWED_BY_SHORT_OPTION wxT("-")
+
+static wxString GetShortOptionName(const wxChar *p)
+{
+    return GetOptionName(p, wxCMD_LINE_CHARS_ALLOWED_BY_SHORT_OPTION);
+}
+
+static wxString GetLongOptionName(const wxChar *p)
+{
+    return GetOptionName(p, wxCMD_LINE_CHARS_ALLOWED_BY_LONG_OPTION);
 }
 
 #endif // wxUSE_CMDLINE_PARSER
