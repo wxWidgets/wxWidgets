@@ -106,7 +106,10 @@ wxSize wxStaticText::DoGetBestSize() const
             }
         }
         else {
-            curLine += *pc;
+            // we shouldn't take into account the '&' which just introduce the
+            // mnemonic characters and so are not shown on the screen
+            if ( pc != _T('&') )
+                curLine += *pc;
         }
     }
 
