@@ -134,7 +134,7 @@ The stream is not seekable, \helpref{SeekO()}{wxoutputstreamseeko} returns
 
 \membersection{wxGzipOutputStream::wxGzipOutputStream}\label{wxgzipoutputstreamwxgzipoutputstream}
 
-\func{}{wxGzipOutputStream}{\param{wxOutputStream\& }{stream}, \param{const wxString\& }{originalName = wxEmptyString}, \param{int }{level = -1}, \param{wxMBConv\& }{conv = wxConvFile}}
+\func{}{wxGzipOutputStream}{\param{wxOutputStream\& }{stream}, \param{const wxString\& }{originalName = wxEmptyString}, \param{const wxDateTime\& }{originalTime = wxDateTime::Now()}, \param{int }{level = -1}, \param{wxMBConv\& }{conv = wxConvFile}}
 
 If the {\it originalName} is given, then it is written to the gzip header
 with any directory components removed. On a Unicode build it is first
@@ -144,9 +144,8 @@ use {\it wxConvFile} which more closely matches the behaviour of the gzip
 program. In a non-Unicode build {\it conv} is ignored. {\it conv} has no
 effect on the stream data.
 
-If {\it originalName} specifies a file that exists then it's current
-modification time is also written to the gzip header as the timestamp.
-Otherwise the current time is used for the timestamp.
+If {\it originalTime} is given then it is also written to the gzip header
+as the timestamp. If omitted the current time is used.
 
 {\it level} is the compression level. It can be an integer between $0$ (no
 compression) and $9$ (most compression). $-1$ specifies that the default

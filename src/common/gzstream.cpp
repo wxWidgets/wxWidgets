@@ -175,12 +175,14 @@ size_t wxGzipInputStream::OnSysRead(void *buffer, size_t size)
         wxDataInputStream ds(*m_parent_i_stream);
         m_lasterror = wxSTREAM_READ_ERROR;
 
-        if (m_parent_i_stream->IsOk() && ds.Read32() != m_crc)
-            wxLogError(_("reading Gzip stream: bad crc"));
-        else if (m_parent_i_stream->IsOk() && ds.Read32() != (wxUint32)TellI())
-            wxLogError(_("reading Gzip stream: incorrect length"));
-        else if (m_parent_i_stream->IsOk())
-            m_lasterror = wxSTREAM_EOF;
+        if (m_parent_i_stream->IsOk()) {
+            if (ds.Read32() != m_crc)
+                wxLogError(_("reading Gzip stream: bad crc"));
+            else if (ds.Read32() != (wxUint32)TellI())
+                wxLogError(_("reading Gzip stream: incorrect length"));
+            else
+                m_lasterror = wxSTREAM_EOF;
+        }
     } 
     else if (!*m_decomp) {
         m_lasterror = wxSTREAM_READ_ERROR;
@@ -194,10 +196,13 @@ size_t wxGzipInputStream::OnSysRead(void *buffer, size_t size)
 // Output stream
 
 wxGzipOutputStream::wxGzipOutputStream(
-                            wxOutputStream& stream,
-                            const wxString& originalName /*=wxEmptyString*/,
-                            int level /*=-1*/,
-                            wxMBConv& conv /*=wxConvFile*/)
+                        wxOutputStream& stream,
+                        const wxString& originalName /*=wxEmptyString*/,
+#if wxUSE_DATETIME
+                        const wxDateTime& originalTime /*=wxDateTime::Now()*/,
+#endif
+                        int level /*=-1*/,
+                        wxMBConv& conv /*=wxConvFile*/)
   : wxFilterOutputStream(stream)
 {
     m_comp = NULL;
@@ -205,17 +210,10 @@ wxGzipOutputStream::wxGzipOutputStream(
 
     wxFileName filename(originalName);
 
-#if wxUSE_DATETIME
-    wxDateTime datetime;
-
-    if (filename.FileExists())
-        datetime = filename.GetModificationTime();
-    else
-        datetime = wxDateTime::Now();
-
-    wxUint32 timestamp = (datetime.GetValue() / 1000L).GetLo();
-#else
     wxUint32 timestamp = 0;
+#if wxUSE_DATETIME
+    if (originalTime.IsValid())
+        timestamp = (originalTime.GetValue() / 1000L).GetLo();
 #endif
 
     // RFC-1952 specifies ISO-8859-1 for the name. Also it should be just the

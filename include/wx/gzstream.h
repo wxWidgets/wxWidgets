@@ -64,6 +64,9 @@ class WXDLLIMPEXP_BASE wxGzipOutputStream : public wxFilterOutputStream
 public:
     wxGzipOutputStream(wxOutputStream& stream,
                        const wxString& originalName = wxEmptyString,
+#if wxUSE_DATETIME
+                       const wxDateTime& originalTime = wxDateTime::Now(),
+#endif
                        int level = -1,
                        wxMBConv& conv = wxConvFile);
     virtual ~wxGzipOutputStream();
