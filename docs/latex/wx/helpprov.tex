@@ -28,12 +28,13 @@ No base class
 
 Virtual destructor for any base class.
 
-\membersection{wxHelpProvider::Set}\label{wxhelpproviderset}
+\membersection{wxHelpProvider::AddHelp}\label{wxhelpprovideraddhelp}
 
-\func{wxHelpProvider*}{Set}{\param{wxHelpProvider* }{helpProvider}}
+\func{void}{AddHelp}{\param{wxWindowBase* }{window}, \param{const wxString\& }{text}}
 
-Get/set the current, application-wide help provider. Returns
-the previous one.
+Associates the text with the given window or id. Although all help
+providers have these functions to allow making \helpref{wxWindow::SetHelpText}{wxwindowsethelptext} 
+work, not all of them implement the functions.
 
 \membersection{wxHelpProvider::Get}\label{wxhelpproviderget}
 
@@ -50,24 +51,6 @@ Gets the help string for this window. Its interpretation is dependent on the hel
 except that empty string always means that no help is associated with
 the window.
 
-\membersection{wxHelpProvider::ShowHelp}\label{wxhelpprovidershowhelp}
-
-\func{bool}{ShowHelp}{\param{wxWindowBase* }{window}}
-
-Shows help for the given window. Uses \helpref{GetHelp}{wxhelpprovidergethelp} internally if
-applicable.
-
-Returns true if it was done, or false if no help was available
-for this window.
-
-\membersection{wxHelpProvider::AddHelp}\label{wxhelpprovideraddhelp}
-
-\func{void}{AddHelp}{\param{wxWindowBase* }{window}, \param{const wxString\& }{text}}
-
-Associates the text with the given window or id. Although all help
-providers have these functions to allow making \helpref{wxWindow::SetHelpText}{wxwindowsethelptext} 
-work, not all of them implement the functions.
-
 \func{void}{AddHelp}{\param{wxWindowID }{id}, \param{const wxString\& }{text}}
 
 This version associates the given text with all windows with this id.
@@ -81,4 +64,21 @@ the application, for example.
 Removes the association between the window pointer and the help text. This is
 called by the wxWindow destructor. Without this, the table of help strings will fill up
 and when window pointers are reused, the wrong help string will be found.
+
+\membersection{wxHelpProvider::Set}\label{wxhelpproviderset}
+
+\func{wxHelpProvider*}{Set}{\param{wxHelpProvider* }{helpProvider}}
+
+Get/set the current, application-wide help provider. Returns
+the previous one.
+
+\membersection{wxHelpProvider::ShowHelp}\label{wxhelpprovidershowhelp}
+
+\func{bool}{ShowHelp}{\param{wxWindowBase* }{window}}
+
+Shows help for the given window. Uses \helpref{GetHelp}{wxhelpprovidergethelp} internally if
+applicable.
+
+Returns true if it was done, or false if no help was available
+for this window.
 

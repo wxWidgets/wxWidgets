@@ -684,13 +684,12 @@ instead.
 
 Gets the current pen (see \helpref{wxDC::SetPen}{wxdcsetpen}).
 
-
 \membersection{wxDC::GetPixel}\label{wxdcgetpixel}
 
 \func{bool}{GetPixel}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxColour *}{colour}}
 
-Sets {\it colour} to the colour at the specified location. Windows only; an X implementation
-is being worked on. Not available for wxPostScriptDC or wxMetafileDC.
+Sets {\it colour} to the colour at the specified location.
+Not available for wxPostScriptDC or wxMetafileDC.
 
 \pythonnote{For wxPython the wxColour value is returned and is not
 required as a parameter.}
@@ -698,17 +697,20 @@ required as a parameter.}
 \perlnote{This method only takes the parameters {\tt x} and {\tt y} and returns
 a Wx::Colour value}
 
+\membersection{wxDC::GetPPI}\label{wxdcgetppi}
+
+\constfunc{wxSize}{GetPPI}{\void}
+
+Returns the resolution of the device in pixels per inch.
 
 \membersection{wxDC::GetSize}\label{wxdcgetsize}
 
-\func{void}{GetSize}{\param{wxCoord *}{width}, \param{wxCoord *}{height}}
+\constfunc{void}{GetSize}{\param{wxCoord *}{width}, \param{wxCoord *}{height}}
 
-For a PostScript device context, this gets the maximum size of graphics
-drawn so far on the device context.
+\constfunc{wxSize}{GetSize}{\void}
 
-For a Windows printer device context, this gets the horizontal and vertical
-resolution. It can be used to scale graphics to fit the page when using
-a Windows printer device context. For example, if {\it maxX} and {\it maxY}\rtfsp
+This gets the horizontal and vertical resolution in device units. It can be used to scale graphics to fit the page.
+For example, if {\it maxX} and {\it maxY}\rtfsp
 represent the maximum horizontal and vertical `pixel' values used in your
 application, the following code will scale the graphic to fit on the
 printer page:
@@ -737,6 +739,13 @@ implements the following methods:\par
 \end{twocollist}
 }}
 
+\membersection{wxDC::GetSizeMM}\label{wxdcgetsizemm}
+
+\constfunc{void}{GetSizeMM}{\param{wxCoord *}{width}, \param{wxCoord *}{height}}
+
+\constfunc{wxSize}{GetSizeMM}{\void}
+
+Returns the horizontal and vertical resolution in millimetres.
 
 \membersection{wxDC::GetTextBackground}\label{wxdcgettextbackground}
 
@@ -1038,12 +1047,10 @@ user scale} (see \helpref{wxDC::SetUserScale}{wxdcsetuserscale}) scales the text
 Windows, scalable TrueType fonts are always used; in X, results depend
 on availability of fonts, but usually a reasonable match is found.
 
-Note that the coordinate origin should ideally be selectable, but for
-now is always at the top left of the screen/printer.
+The coordinate origin is always at the top left of the screen/printer.
 
-Drawing to a Windows printer device context under UNIX
-uses the current mapping mode, but mapping mode is currently ignored for
-PostScript output.
+Drawing to a Windows printer device context uses the current mapping mode,
+but mapping mode is currently ignored for PostScript output.
 
 The mapping mode can be one of the following:
 
