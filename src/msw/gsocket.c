@@ -222,7 +222,7 @@ void GSocket_Shutdown(GSocket *socket)
   for (evt = 0; evt < GSOCK_MAX_EVENT; evt++)
     socket->m_cbacks[evt] = NULL;
 
-  socket->m_detected = 0;
+  socket->m_detected = GSOCK_LOST_FLAG;
   _GSocket_Disable_Events(socket);
 }
 
