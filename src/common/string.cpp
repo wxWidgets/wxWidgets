@@ -930,13 +930,15 @@ wxString& wxString::insert(size_t nPos, const wxString& str)
   wxASSERT( str.GetStringData()->IsValid() );
   wxASSERT( nPos <= Len() );
 
-  wxString strTmp;
-  char *pc = strTmp.GetWriteBuf(Len() + str.Len());
-  strncpy(pc, c_str(), nPos);
-  strcpy(pc + nPos, str);
-  strcpy(pc + nPos + str.Len(), c_str() + nPos);
-  strTmp.UngetWriteBuf();
-  *this = strTmp;
+  if ( !str.IsEmpty() ) {
+    wxString strTmp;
+    char *pc = strTmp.GetWriteBuf(Len() + str.Len());
+    strncpy(pc, c_str(), nPos);
+    strcpy(pc + nPos, str);
+    strcpy(pc + nPos + str.Len(), c_str() + nPos);
+    strTmp.UngetWriteBuf();
+    *this = strTmp;
+  }
 
   return *this;
 }
