@@ -5452,6 +5452,12 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     rect.width = GetColWidth(col) - 1;
     rect.height = GetRowHeight(row) - 1;
 
+    // if grid lines are disabled, then the area of the cell is a bit larger
+    if (! m_gridLinesEnabled) {
+        rect.width += 1;
+        rect.height += 1;
+    }
+
     // if the editor is shown, we should use it and not the renderer
     // Note: However, only if it is really _shown_, i.e. not hidden!
     if ( isCurrent && IsCellEditControlShown() )
