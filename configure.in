@@ -2775,21 +2775,37 @@ if test "$wxUSE_OPENGL" = "yes"; then
     else
         AC_CHECK_HEADER(GL/gl.h,
             [
+                found_gl=0
+
                 AC_MSG_CHECKING([for -lGL])
-                WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],[GL])
+                WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],GL)
                 if test "$ac_find_libraries" != "" ; then
                     WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
-                    if test "$ac_path_to_link" = " -L/usr/lib" ; then
-                        LDFLAGS_GL="$LDFLAGS"
-                    else
-                        LDFLAGS_GL="$LDFLAGS$ac_path_to_link"
+                    if test "$ac_path_to_link" != " -L/usr/lib" ; then
+                        LDFLAGS_GL="$ac_path_to_link"
                     fi
-                    OPENGL_LIBS="-lGL -lGLU"
-                    AC_MSG_RESULT([yes])
-                else
+
+                    dnl don't suppose that libGL and libGLU are always in the
+                    dnl same directory -- this is not true for some common
+                    dnl distributions
+                    WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],GLU)
+                    if test "$ac_find_libraries" != "" ; then
+                        WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
+                        if test "$ac_path_to_link" != " -L/usr/lib" -a \
+                                    "$ac_path_to_link" != "$LDFLAGS_GL"; then
+                            LDFLAGS_GL="$LDFLAGS_GL$ac_path_to_link"
+                        fi
+
+                        found_gl=1
+                        OPENGL_LIBS="-lGL -lGLU"
+                        AC_MSG_RESULT([yes])
+                    fi
+                fi
+
+                if "$found_gl" != 1; then
                     AC_MSG_RESULT([no])
                     AC_MSG_CHECKING([for -lMesaGL])
-                    WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],[MesaGL])
+                    WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],MesaGL)
                     if test "$ac_find_libraries" != "" ; then
                         WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
                         LDFLAGS_GL="$LDFLAGS$ac_path_to_link"
