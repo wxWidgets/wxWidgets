@@ -124,8 +124,10 @@ public:
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
     // this are NOPs under Windows
-    bool ReadMailcap(const wxString& filename, bool fallback = TRUE) { }
-    bool ReadMimeTypes(const wxString& filename) { }
+    bool ReadMailcap(const wxString& filename, bool fallback = TRUE)
+        { return TRUE; }
+    bool ReadMimeTypes(const wxString& filename)
+        { return TRUE; }
 };
 
 #else  // Unix
