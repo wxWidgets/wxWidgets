@@ -70,7 +70,7 @@
     There are no instances of this class, it simply serves as a
     namespace for its static member functions.
 */
-class wxDllLoader
+class WXDLLEXPORT wxDllLoader
 {
 public:
     /** This function loads a shared library into memory, with libname
@@ -94,6 +94,9 @@ public:
      */
     static void * GetSymbol(wxDllType dllHandle, const wxString &name);
 
+    // return the standard DLL extension (with leading dot) for this platform
+    static wxString GetDllExt();
+
 private:
     /// forbid construction of objects
     wxDllLoader();
@@ -103,7 +106,7 @@ private:
 // wxLibrary
 // ----------------------------------------------------------------------------
 
-class wxLibrary : public wxObject
+class WXDLLEXPORT wxLibrary : public wxObject
 {
 public:
     wxHashTable classTable;
@@ -130,7 +133,7 @@ protected:
 // wxLibraries
 // ----------------------------------------------------------------------------
 
-class wxLibraries
+class WXDLLEXPORT wxLibraries
 {
 public:
     wxLibraries();
