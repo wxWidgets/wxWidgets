@@ -160,7 +160,7 @@ static void TranslateKbdEventToMouse(wxWindowMSW *win,
 static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win);
 
 // check if the mouse is in the window or its child
-static bool IsMouseInWindow(HWND hwnd);
+//static bool IsMouseInWindow(HWND hwnd);
 
 // ---------------------------------------------------------------------------
 // event tables
@@ -421,12 +421,19 @@ void wxWindowMSW::SetFocus()
     HWND hWnd = GetHwnd();
     wxCHECK_RET( hWnd, _T("can't set focus to invalid window") );
 
+#ifndef __WXMICROWIN__
     ::SetLastError(0);
-
+#endif
+    
     if ( !::SetFocus(hWnd) )
     {
         // was there really an error?
+#ifndef __WXMICROWIN__
         DWORD dwRes = ::GetLastError();
+#else
+
+        DWORD dwRes = 0;
+#endif
         if ( dwRes )
         {
             wxLogApiError(_T("SetFocus"), dwRes);
@@ -1178,7 +1185,7 @@ void wxWindowMSW::Update()
         wxLogLastError(_T("UpdateWindow"));
     }
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // just calling UpdateWindow() is not enough, what we did in our WM_PAINT
     // handler needs to be really drawn right now
     (void)::GdiFlush();
@@ -2069,7 +2076,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             }
             break;
 
-#ifdef __WXUNIVERSAL__
+#if defined(__WXUNIVERSAL__) && !defined(__WXMICROWIN__)
         case WM_ACTIVATEAPP:
             wxTheApp->SetActive(wParam != 0, FindFocus());
             break;
@@ -2546,6 +2553,7 @@ void wxWindowMSW::MSWDestroyWindow()
 
 void wxWindowMSW::MSWDetachWindowMenu()
 {
+#ifndef __WXUNIVERSAL__
     if ( m_hMenu )
     {
         wxChar buf[1024];
@@ -2572,6 +2580,7 @@ void wxWindowMSW::MSWDetachWindowMenu()
             }
         }
     }
+#endif
 }
 
 bool wxWindowMSW::MSWCreate(int id,
@@ -3830,6 +3839,7 @@ bool wxWindowMSW::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
 
 bool wxWindowMSW::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
 {
+#ifdef JOY_BUTTON1
     int change = 0;
     if ( flags & JOY_BUTTON1CHG )
         change = wxJOY_BUTTON1;
@@ -3906,6 +3916,9 @@ bool wxWindowMSW::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
     event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
+#else
+    return FALSE;
+#endif
 }
 
 // ---------------------------------------------------------------------------

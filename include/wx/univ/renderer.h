@@ -35,6 +35,9 @@ class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxScrollBar;
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxWindow;
+#if wxUSE_GAUGE
+class WXDLLEXPORT wxGauge;
+#endif // wxUSE_GAUGE
 
 #include "wx/string.h"
 #include "wx/gdicmn.h"

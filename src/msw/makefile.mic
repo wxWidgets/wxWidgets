@@ -3,7 +3,7 @@
 # Copyright (c) 2000 Martin Jolicoeur, Greg Haerr
 ##############################################################################
 
-TOP=/home/julians/microwindows/microwin/src
+TOP=/home/julians/local/microwindows/microwin/src
 CONFIG = $(TOP)/config
 WXDIR = ../..
 OBJSUFF = o
@@ -206,10 +206,7 @@ MSWOBJS     = \
 		$(MICROWINDIR)/gdiobj.$(OBJSUFF) \
 		$(MICROWINDIR)/icon.$(OBJSUFF) \
 		$(MICROWINDIR)/main.$(OBJSUFF) \
-		$(MICROWINDIR)/menu.$(OBJSUFF) \
-		$(MICROWINDIR)/menuitem.$(OBJSUFF) \
 		$(MICROWINDIR)/microwin.$(OBJSUFF) \
-		$(MICROWINDIR)/msgdlg.$(OBJSUFF) \
 		$(MICROWINDIR)/palette.$(OBJSUFF) \
 		$(MICROWINDIR)/pen.$(OBJSUFF) \
 		$(MICROWINDIR)/regconf.$(OBJSUFF) \
@@ -219,7 +216,7 @@ MSWOBJS     = \
 		$(MICROWINDIR)/thread.$(OBJSUFF) \
 		$(MICROWINDIR)/timer.$(OBJSUFF) \
 		$(MICROWINDIR)/utils.$(OBJSUFF) \
-		$(MICROWINDIR)/window.$(OBJSUFF)
+		$(MICROWINDIR)/window.$(OBJSUFF) \
 		$(OLEDIR)/dataobj.$(OBJSUFF)
 
 UNIVOBJS_TODO = $(UNIVDIR)/choice.$(OBJSUFF) \
@@ -234,7 +231,7 @@ UNIVOBJS     = \
 		$(UNIVDIR)/colschem.$(OBJSUFF) \
 		$(UNIVDIR)/combobox.$(OBJSUFF) \
 		$(UNIVDIR)/control.$(OBJSUFF) \
-		$(UNIVDIR)/frameuniv.$(OBJSUFF) \
+		$(UNIVDIR)/framuniv.$(OBJSUFF) \
 		$(UNIVDIR)/gauge.$(OBJSUFF) \
 		$(UNIVDIR)/inphand.$(OBJSUFF) \
 		$(UNIVDIR)/listbox.$(OBJSUFF) \
@@ -248,7 +245,6 @@ UNIVOBJS     = \
 		$(UNIVDIR)/scrthumb.$(OBJSUFF) \
 		$(UNIVDIR)/slider.$(OBJSUFF) \
 		$(UNIVDIR)/spinbutt.$(OBJSUFF) \
-		$(UNIVDIR)/spinctrl.$(OBJSUFF) \
 		$(UNIVDIR)/statbmp.$(OBJSUFF) \
 		$(UNIVDIR)/statbox.$(OBJSUFF) \
 		$(UNIVDIR)/statline.$(OBJSUFF) \
@@ -266,7 +262,7 @@ include $(CONFIG)
 # Directories list for header files
 INCLUDEDIRS += -I$(WXDIR)/include
 # Defines for preprocessor
-DEFINES += -DMWIN -D__WXMSW__ -D__WXMICROWIN__ -D__WXUNIVERSAL__ -D__WIN32__ -D__WIN95__ -DHAVE_BOOL -DMICROWIN_TODO=1 -D__UNIX__ -DHAVE_NANOSLEEP -DMICROWIN_NOCONTROLS -D__WXDEBUG__
+DEFINES += -DMWIN -D__WXMSW__ -D__WXMICROWIN__ -D__WXUNIVERSAL__ -D__WIN32__ -D__WIN95__ -DHAVE_BOOL -DMICROWIN_TODO=1 -D__UNIX__ -DHAVE_NANOSLEEP -DMICROWIN_NOCONTROLS -D__WXDEBUG__ -DwxSIZE_T_IS_UINT -DWXWIN_OS_DESCRIPTION="\"MicroWindows\""
 
 # Compilation flags for C files OTHER than include directories
 CFLAGS +=

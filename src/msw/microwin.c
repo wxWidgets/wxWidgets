@@ -19,7 +19,7 @@
 #include "windows.h"
 #include "wintern.h"
 #include "device.h"
-#include "wx/microwin/microwin.h"
+#include "wx/msw/microwin.h"
 
 void GdMoveCursor(MWCOORD x, MWCOORD y);
 void MwSetCursor(HWND wp, PMWCURSOR pcursor);

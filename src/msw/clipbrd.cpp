@@ -55,7 +55,10 @@
 #include <windows.h>
 
 #include "wx/msw/private.h"
+
+#ifndef __WXMICROWIN__
 #include "wx/msw/dib.h"
+#endif
 
 // wxDataObject is tied to OLE/drag and drop implementation, therefore so are
 // the functions using wxDataObject in wxClipboard
@@ -64,8 +67,11 @@
 #if wxUSE_DATAOBJ
     #include "wx/dataobj.h"
 
-    // use OLE clipboard
-    #define wxUSE_OLE_CLIPBOARD 1
+// No: don't necessarily use OLE clipboard with data object
+#if 0
+   // use OLE clipboard
+   #define wxUSE_OLE_CLIPBOARD 1
+#endif
 #else // !wxUSE_DATAOBJ
     // use Win clipboard API
     #define wxUSE_OLE_CLIPBOARD 0

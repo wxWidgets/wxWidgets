@@ -3,7 +3,7 @@
 # Copyright (c) 2000 Martin Jolicoeur, Greg Haerr
 ##############################################################################
 
-TOP=/home/julians/microwindows/microwin/src
+TOP=/home/julians/local/microwindows/microwin/src
 CONFIG = $(TOP)/config
 WXDIR = ../..
 OBJSUFF = o
@@ -25,7 +25,7 @@ include $(CONFIG)
 # Directories list for header files
 INCLUDEDIRS += -I$(WXDIR)/include
 # Defines for preprocessor
-DEFINES += -DMWIN -D__WXMICROWIN__ -D__WIN32__ -D__WIN95__ -DHAVE_BOOL -DMICROWIN_TODO=1 -D__UNIX__ -DHAVE_NANOSLEEP -DMICROWIN_NOCONTROLS -D__WXDEBUG__
+DEFINES += -DMWIN -D__WXMSW__ -D__WXMICROWIN__ -D__WXUNIVERSAL__ -D__WIN32__ -D__WIN95__ -DHAVE_BOOL -DMICROWIN_TODO=1 -D__UNIX__ -DHAVE_NANOSLEEP -DMICROWIN_NOCONTROLS -D__WXDEBUG__ -DwxSIZE_T_IS_UINT -DWXWIN_OS_DESCRIPTION="\"MicroWindows\""
 
 # Compilation flags for C files OTHER than include directories
 CFLAGS +=

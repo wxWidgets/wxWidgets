@@ -242,7 +242,7 @@ bool wxApp::Initialize()
     InitCommonControls();
 #endif // __WIN95__
 
-#if wxUSE_OLE || wxUSE_DRAG_AND_DROP || wxUSE_DATAOBJ
+#if wxUSE_OLE || wxUSE_DRAG_AND_DROP
 
 #ifdef __WIN16__
     // for OLE, enlarge message queue to be as large as possible
@@ -250,6 +250,7 @@ bool wxApp::Initialize()
     while (!SetMessageQueue(iMsg) && (iMsg -= 8))
         ;
 #endif // Win16
+
     // we need to initialize OLE library
     if ( FAILED(::OleInitialize(NULL)) )
         wxLogError(_("Cannot initialize OLE"));
@@ -717,7 +718,7 @@ int wxEntry(WXHINSTANCE hInstance,
             wxCHECK_MSG( wxApp::GetInitializerFunction(), 0,
                          wxT("No initializer - use IMPLEMENT_APP macro.") );
 
-            wxTheApp = (*wxApp::GetInitializerFunction()) ();
+            wxTheApp = (wxApp*) (*wxApp::GetInitializerFunction()) ();
         }
 
         wxCHECK_MSG( wxTheApp, 0, wxT("You have to define an instance of wxApp!") );

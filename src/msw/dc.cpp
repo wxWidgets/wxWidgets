@@ -537,9 +537,9 @@ void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     HPEN hBrushOld = (HPEN)::SelectObject(GetHdc(), whiteBrush);
     ::SetROP2(GetHdc(), R2_COPYPEN);
     Rectangle(GetHdc(), x1, y1, x2, y2);
-    MoveTo(GetHdc(), x1, y1);
+    MoveToEx(GetHdc(), x1, y1, NULL);
     LineTo(GetHdc(), x2, y2);
-    MoveTo(GetHdc(), x2, y1);
+    MoveToEx(GetHdc(), x2, y1, NULL);
     LineTo(GetHdc(), x1, y2);
     ::SelectObject(GetHdc(), hPenOld);
     ::SelectObject(GetHdc(), hBrushOld);

@@ -35,6 +35,7 @@
     #include "wx/button.h"
     #include "wx/listbox.h"
     #include "wx/checklst.h"
+    #include "wx/combobox.h"
     #include "wx/scrolbar.h"
     #include "wx/slider.h"
     #include "wx/textctrl.h"
@@ -42,6 +43,7 @@
 
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
+#include "wx/settings.h"
 
 #include "wx/univ/scrtimer.h"
 

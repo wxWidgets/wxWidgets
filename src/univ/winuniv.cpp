@@ -36,6 +36,7 @@
     #include "wx/event.h"
     #include "wx/scrolbar.h"
     #include "wx/menu.h"
+    #include "wx/frame.h"
 #endif // WX_PRECOMP
 
 #include "wx/univ/colschem.h"
@@ -345,7 +346,7 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
         dc.DrawRectangle(rectWin);
 
         // under Unix we use "--sync" X option for this
-        #ifdef __WXMSW__
+        #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
             ::GdiFlush();
             ::Sleep(200);
         #endif // __WXMSW__

@@ -57,9 +57,11 @@
 #include  <stdlib.h>
 #include  <time.h>
 
-#ifdef  __WXMSW__
+#if defined(__WXMSW__)
   #include  "wx/msw/private.h"      // includes windows.h for OutputDebugString
-#else   //Unix
+#endif
+
+#if !defined(__WXMSW__) || defined(__WXMICROWIN__)
   #include  <signal.h>
 #endif  //Win/Unix
 
@@ -513,7 +515,7 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 
     // under Windows, programs usually don't have stderr at all, so show the
     // messages also under debugger - unless it's a console program
-#if defined(__WXMSW__) && wxUSE_GUI
+#if defined(__WXMSW__) && wxUSE_GUI && !defined(__WXMICROWIN__)
     str += wxT("\r\n") ;
     OutputDebugString(str.c_str());
 #endif // MSW
@@ -639,7 +641,7 @@ static void wxLogWrap(FILE *f, const char *pszPrefix, const char *psz)
 // get error code from syste
 unsigned long wxSysErrorCode()
 {
-#ifdef  __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
 #ifdef  __WIN32__
     return ::GetLastError();
 #else   //WIN16
@@ -657,7 +659,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
     if ( nErrCode == 0 )
         nErrCode = wxSysErrorCode();
 
-#ifdef  __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
 #ifdef  __WIN32__
     static wxChar s_szBuf[LOG_BUFFER_SIZE / 2];
 
@@ -714,7 +716,7 @@ bool wxAssertIsEqual(int x, int y)
 // break into the debugger
 void wxTrap()
 {
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
     DebugBreak();
 #elif defined(__WXMAC__)
 #if __powerc
@@ -779,7 +781,7 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
 
         // use the native message box if available: this is more robust than
         // using our own
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
         switch ( ::MessageBox(NULL, szBuf, _T("Debug"),
                               MB_YESNOCANCEL | MB_ICONSTOP ) ) {
             case IDYES:

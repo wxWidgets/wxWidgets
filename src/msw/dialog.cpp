@@ -194,6 +194,7 @@ bool wxDialog::Create(wxWindow *parent,
 
 bool wxDialog::EnableCloseButton(bool enable)
 {
+#ifndef __WXMICROWIN__
     // get system (a.k.a. window) menu
     HMENU hmenu = ::GetSystemMenu(GetHwnd(), FALSE /* get it */);
     if ( !hmenu )
@@ -218,7 +219,8 @@ bool wxDialog::EnableCloseButton(bool enable)
     {
         wxLogLastError(_T("DrawMenuBar"));
     }
-
+#endif
+    
     return TRUE;
 }
 

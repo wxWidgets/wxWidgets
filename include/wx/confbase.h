@@ -19,6 +19,7 @@
 #endif
 
 #include "wx/defs.h"
+#include "wx/string.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -306,7 +307,8 @@ private:
   Replace environment variables ($SOMETHING) with their values. The format is
   $VARNAME or ${VARNAME} where VARNAME contains alphanumeric characters and
   '_' only. '$' must be escaped ('\$') in order to be taken literally.
- */
+*/
+
 WXDLLEXPORT wxString wxExpandEnvVars(const wxString &sz);
 
 /*

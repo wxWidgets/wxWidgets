@@ -55,7 +55,7 @@
 #define wxUSE_ZIPSTREAM     0
 #define wxUSE_ZLIB          0
 #define wxUSE_APPLE_IEEE          0
-#define wxUSE_FILE                0
+#define wxUSE_FILE                1
 #define wxUSE_FFILE               1
 #define wxUSE_TEXTFILE            0
 #define wxUSE_INTL                0
@@ -135,7 +135,7 @@
 #define wxUSE_MS_HTML_HELP 0
 #define wxUSE_RESOURCES   0
 #define wxUSE_CONSTRAINTS 1
-#define wxUSE_CLIPBOARD   1
+#define wxUSE_CLIPBOARD   0
 #define wxUSE_DATAOBJ     1
 #define wxUSE_SPLINES     0
 #define wxUSE_DRAG_AND_DROP 0

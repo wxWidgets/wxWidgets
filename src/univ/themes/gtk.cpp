@@ -34,6 +34,7 @@
     #include "wx/checkbox.h"
     #include "wx/listbox.h"
     #include "wx/checklst.h"
+    #include "wx/combobox.h"
     #include "wx/scrolbar.h"
     #include "wx/slider.h"
     #include "wx/textctrl.h"

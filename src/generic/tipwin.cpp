@@ -34,6 +34,7 @@
 
 #include "wx/tipwin.h"
 #include "wx/timer.h"
+#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // constants

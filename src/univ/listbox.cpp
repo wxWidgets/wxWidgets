@@ -242,7 +242,7 @@ void wxListBox::DoClear()
         size_t count = m_itemsClientData.GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
-            delete m_itemsClientData[n];
+            delete (wxClientData *) m_itemsClientData[n];
         }
     }
 
@@ -275,7 +275,7 @@ void wxListBox::Delete(int n)
 
     if ( HasClientObjectData() )
     {
-        delete m_itemsClientData[n];
+        delete (wxClientData *)m_itemsClientData[n];
     }
 
     m_itemsClientData.RemoveAt(n);

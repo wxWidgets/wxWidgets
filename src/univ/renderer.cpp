@@ -43,6 +43,10 @@
 #include "wx/univ/renderer.h"
 #include "wx/univ/colschem.h"
 
+#if wxUSE_GAUGE
+#include "wx/gauge.h"
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================

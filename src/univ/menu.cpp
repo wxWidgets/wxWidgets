@@ -41,6 +41,8 @@
 
 #include "wx/popupwin.h"
 #include "wx/evtloop.h"
+#include "wx/dcclient.h"
+#include "wx/frame.h"
 
 #include "wx/univ/renderer.h"
 

@@ -353,7 +353,7 @@ void wxScrollBar::OnIdle(wxIdleEvent& event)
             dc.DrawRectangle(rect);
 
             // under Unix we use "--sync" X option for this
-            #ifdef __WXMSW__
+            #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
                 ::GdiFlush();
                 ::Sleep(200);
             #endif // __WXMSW__

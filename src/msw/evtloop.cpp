@@ -32,6 +32,8 @@
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
+#include "wx/window.h"
+#include "wx/app.h"
 
 #include "wx/msw/private.h"
 

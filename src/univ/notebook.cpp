@@ -31,8 +31,8 @@
 
 #include "wx/imaglist.h"
 #include "wx/notebook.h"
-
 #include "wx/spinbutt.h"
+#include "wx/dcmemory.h"
 
 #include "wx/univ/renderer.h"
 

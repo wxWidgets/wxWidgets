@@ -43,6 +43,8 @@
 class WXDLLEXPORT wxComboControl;
 class WXDLLEXPORT wxListBox;
 class WXDLLEXPORT wxPopupComboWindow;
+class WXDLLEXPORT wxTextCtrl;
+class WXDLLEXPORT wxButton;
 
 // ----------------------------------------------------------------------------
 // the actions supported by this control

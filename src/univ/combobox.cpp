@@ -46,6 +46,7 @@
     #include "wx/combobox.h"
     #include "wx/listbox.h"
     #include "wx/textctrl.h"
+    #include "wx/bmpbuttn.h"
 
     #include "wx/validate.h"
 #endif

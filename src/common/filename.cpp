@@ -537,7 +537,7 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
 // Return the short form of the path (returns identity on non-Windows platforms)
 wxString wxFileName::GetShortPath() const
 {
-#if defined(__WXMSW__) && defined(__WIN32__)
+#if defined(__WXMSW__) && defined(__WIN32__) && !defined(__WXMICROWIN__)
     wxString path(GetFullPath());
     wxString pathOut;
     DWORD sz = ::GetShortPathName(path, NULL, 0);
@@ -564,7 +564,7 @@ wxString wxFileName::GetShortPath() const
 // Return the long form of the path (returns identity on non-Windows platforms)
 wxString wxFileName::GetLongPath() const
 {
-#if defined(__WXMSW__) && defined(__WIN32__)
+#if defined(__WXMSW__) && defined(__WIN32__) && !defined(__WXMICROWIN__)
     wxString path(GetFullPath());
     wxString pathOut;
     bool success = FALSE;

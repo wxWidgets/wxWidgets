@@ -382,6 +382,10 @@ bool wxBitmap::Create(int w, int h, int d)
 
 bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 {
+#ifdef __WXMICROWIN__
+    // TODO
+    return FALSE;
+#else
     wxCHECK_MSG( image.Ok(), FALSE, wxT("invalid image") )
 
     m_refData = new wxBitmapRefData();
@@ -604,10 +608,15 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 
     return TRUE;
+#endif
 }
 
 wxImage wxBitmap::ConvertToImage() const
 {
+#ifdef __WXMICROWIN__
+    // TODO
+    return wxImage();
+#else
     wxImage image;
 
     wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
@@ -732,6 +741,7 @@ wxImage wxBitmap::ConvertToImage() const
     free(lpBits);
 
     return image;
+#endif
 }
 
 #endif // wxUSE_IMAGE
