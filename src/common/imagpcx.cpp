@@ -36,7 +36,7 @@
 // PCX decoding
 //-----------------------------------------------------------------------------
 
-void RLEencode(unsigned char *p, unsigned int size, wxOutputStream& s)
+void RLEencode(unsigned char *WXUNUSED(p), unsigned int WXUNUSED(size), wxOutputStream& WXUNUSED(s))
 {
 }
 
@@ -255,7 +255,7 @@ bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     return TRUE;
 }
 
-bool wxPCXHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
+bool wxPCXHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), bool verbose )
 {
     if (verbose)
         wxLogError(_T("wxPCXHandler::SaveFile still not implemented"));

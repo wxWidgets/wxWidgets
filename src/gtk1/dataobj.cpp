@@ -433,7 +433,7 @@ size_t wxBitmapDataObject::GetSize() const
     return m_pngSize;
 }
 
-void wxBitmapDataObject::WriteBitmap( const wxBitmap &bitmap, void *dest ) const
+void wxBitmapDataObject::WriteBitmap( const wxBitmap &WXUNUSED(bitmap), void *dest ) const
 {
 //    if (m_bitmap == bitmap)
         memcpy( dest, m_pngData, m_pngSize );

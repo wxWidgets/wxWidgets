@@ -150,7 +150,7 @@ void wxFont::Init()
         wxTheFontList->Append( this );
 }
 
-wxFont::wxFont( GdkFont *font, char *xFontName )
+wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
 {
     if (!xFontName)
         return;

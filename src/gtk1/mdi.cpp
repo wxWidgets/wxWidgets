@@ -49,7 +49,7 @@ extern wxList wxPendingDelete;
 
 static void gtk_mdi_page_change_callback(GtkNotebook *WXUNUSED(widget),
                                               GtkNotebookPage *WXUNUSED(page),
-                                              gint page,
+                                              gint WXUNUSED(page),
                                               wxMDIParentFrame *parent )
 {
     if (g_isIdle) 

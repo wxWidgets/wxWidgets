@@ -12,6 +12,10 @@
 #ifndef _WX_NET_H
 #define _WX_NET_H
 
+#ifdef __GNUG__
+    #pragma interface "dialup.h"
+#endif
+
 #if wxUSE_DIALUP_MANAGER
 
 // ----------------------------------------------------------------------------

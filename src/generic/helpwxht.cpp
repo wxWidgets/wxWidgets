@@ -220,7 +220,7 @@ wxHelpFrame::~wxHelpFrame()
 }
 
 void
-wxHelpFrame::OnClose(wxCloseEvent &ev)
+wxHelpFrame::OnClose(wxCloseEvent &WXUNUSED(ev))
 {
    wxASSERT(m_controller);
    m_controller->m_Frame = NULL;

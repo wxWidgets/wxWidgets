@@ -90,7 +90,7 @@ wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
     m_pTextCtrl = pTextCtrl;
 }
 
-void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t t)
+void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
     wxString msg;
     TimeStamp(&msg);

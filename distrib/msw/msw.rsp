@@ -5,7 +5,6 @@ docs/wine/COPYING.LIB
 
 distrib/msw/*.rsp
 distrib/msw/*.bat
-distrib/msw/tmake/*.t
 
 tools/gettext/xgettext.exe
 tools/gettext/msgfmt.exe

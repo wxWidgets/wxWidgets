@@ -60,12 +60,12 @@ wxFont& wxFont::operator=(const wxFont& font)
 // VZ: is it correct to compare pointers and not the contents? (FIXME)
 bool wxFontBase::operator==(const wxFont& font) const
 {
-    return m_refData == font.m_refData;
+    return GetFontData() == font.GetFontData();
 }
 
 bool wxFontBase::operator!=(const wxFont& font) const
 {
-    return m_refData != font.m_refData;
+    return GetFontData() != font.GetFontData();
 }
 
 wxString wxFontBase::GetFamilyString() const

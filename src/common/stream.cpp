@@ -677,7 +677,7 @@ size_t wxCountingOutputStream::GetSize() const
   return m_lastcount;
 }
 
-size_t wxCountingOutputStream::OnSysWrite(const void *buffer, size_t size)
+size_t wxCountingOutputStream::OnSysWrite(const void *WXUNUSED(buffer), size_t size)
 {
   m_currentPos += size;
   if (m_currentPos > m_lastcount) m_lastcount = m_currentPos;

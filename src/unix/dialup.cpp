@@ -13,6 +13,10 @@
 
 #if wxUSE_DIALUP_MANAGER
 
+#ifdef __GNUG__
+    #pragma implementation "dialup.h"
+#endif
+
 #ifndef  WX_PRECOMP
 #   include "wx/defs.h"
 #endif // !PCH
@@ -214,7 +218,7 @@ public:
       {
          m_DupMan = dupman;
       }
-   void OnTerminate(int pid, int status) const
+   void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status)) const
       {
          m_DupMan->m_DialProcess = NULL;
          m_DupMan->CheckStatus(TRUE);
@@ -485,7 +489,7 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
 
 /* static */
 wxDialUpManager *
-wxDialUpManager::wxDialUpManager::Create(void)
+wxDialUpManager::Create(void)
 {
    return new wxDialUpManagerImpl;
 }

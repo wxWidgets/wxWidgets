@@ -120,18 +120,18 @@ DECLARE_ABSTRACT_CLASS(wxHTMLHelpControllerBase)
    virtual bool DisplayHelp(wxString const &) = 0;
 
    /// Allows one to override the default settings for the help frame.
-   virtual void SetFrameParameters(const wxString &title,
-                                   const wxSize &size,
-                                   const wxPoint &pos = wxDefaultPosition,
-                                   bool newFrameEachTime = FALSE)
+   virtual void SetFrameParameters(const wxString& WXUNUSED(title),
+                                   const wxSize& WXUNUSED(size),
+                                   const wxPoint& WXUNUSED(pos) = wxDefaultPosition,
+                                   bool WXUNUSED(newFrameEachTime) = FALSE)
       {
          // does nothing by default
       }
    /// Obtains the latest settings used by the help frame and the help 
    /// frame.
-   virtual wxFrame *GetFrameParameters(wxSize *size = NULL,
-                                   wxPoint *pos = NULL,
-                                   bool *newFrameEachTime = NULL)
+   virtual wxFrame *GetFrameParameters(wxSize *WXUNUSED(size) = NULL,
+                                   wxPoint *WXUNUSED(pos) = NULL,
+                                   bool *WXUNUSED(newFrameEachTime) = NULL)
       {
          return (wxFrame*) NULL;// does nothing by default
       }

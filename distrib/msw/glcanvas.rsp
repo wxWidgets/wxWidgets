@@ -1,3 +1,4 @@
+utils/glcanvas/Makefile.in
 utils/glcanvas/docs/*.*
 utils/glcanvas/win/*.cpp
 utils/glcanvas/win/*.h

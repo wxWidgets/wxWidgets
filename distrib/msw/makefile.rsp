@@ -1,3 +1,4 @@
+Makefile.in
 src/Makefile
 locale/Makefile
 samples/Makefile.in

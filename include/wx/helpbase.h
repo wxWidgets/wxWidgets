@@ -40,7 +40,7 @@ class WXDLLEXPORT wxHelpControllerBase: public wxObject
   // server is only required when implementing TCP/IP-based
   // help controllers.
   virtual bool Initialize(const wxString& WXUNUSED(file), int WXUNUSED(server) ) { return FALSE; }
-  virtual bool Initialize(const wxString& file) { return FALSE; }
+  virtual bool Initialize(const wxString& WXUNUSED(file)) { return FALSE; }
 
   // Set viewer: only relevant to some kinds of controller
   virtual void SetViewer(const wxString& WXUNUSED(viewer), long WXUNUSED(flags) = 0) {}
@@ -52,18 +52,18 @@ class WXDLLEXPORT wxHelpControllerBase: public wxObject
   virtual bool DisplayBlock(long blockNo) = 0;
   virtual bool KeywordSearch(const wxString& k) = 0;
   /// Allows one to override the default settings for the help frame.
-  virtual void SetFrameParameters(const wxString &title,
-                                   const wxSize &size,
-                                   const wxPoint &pos = wxDefaultPosition,
-                                   bool newFrameEachTime = FALSE)
+  virtual void SetFrameParameters(const wxString& WXUNUSED(title),
+                                   const wxSize& WXUNUSED(size),
+                                   const wxPoint& WXUNUSED(pos) = wxDefaultPosition,
+                                   bool WXUNUSED(newFrameEachTime) = FALSE)
       {
          // does nothing by default
       }
    /// Obtains the latest settings used by the help frame and the help 
    /// frame.
-   virtual wxFrame *GetFrameParameters(wxSize *size = NULL,
-                                   wxPoint *pos = NULL,
-                                   bool *newFrameEachTime = NULL)
+   virtual wxFrame *GetFrameParameters(wxSize *WXUNUSED(size) = NULL,
+                                   wxPoint *WXUNUSED(pos) = NULL,
+                                   bool *WXUNUSED(newFrameEachTime) = NULL)
       {
          return (wxFrame*) NULL;// does nothing by default
       }

@@ -1,3 +1,5 @@
+configure
+
 distrib/gtk/copy_src
 distrib/gtk/README.txt
 distrib/gtk/Setup
@@ -8,6 +10,7 @@ docs/gtk/COPYING.LIB
 docs/gtk/makewxgtk
 
 include/wx/gtk/*.h
+include/wx/gtk/*.xpm
 include/install-sh
 include/wx/install-sh
 

@@ -642,7 +642,7 @@ bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSE
     return FALSE;
 }
 
-bool wxImageHandler::CanRead( wxInputStream& stream )
+bool wxImageHandler::CanRead( wxInputStream& WXUNUSED(stream) )
 {
     return FALSE;
 }

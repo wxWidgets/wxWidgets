@@ -817,7 +817,7 @@ void wxFileDialog::HandleAction( const wxString &fn )
     wxDialog::OnOK(event);
 }
 
-void wxFileDialog::OnListOk( wxCommandEvent &event )
+void wxFileDialog::OnListOk( wxCommandEvent &WXUNUSED(event) )
 {
     HandleAction( m_text->GetValue() );
 }
@@ -881,7 +881,7 @@ wxString
 wxFileSelectorEx(const wxChar *message,
                  const wxChar *default_path,
                  const wxChar *default_filename,
-                 int *indexDefaultExtension,
+                 int *WXUNUSED(indexDefaultExtension),
                  const wxChar *wildcard,
                  int flags,
                  wxWindow *parent,

@@ -20,6 +20,12 @@ makefile.unx.in
 distrib/msw/*.rsp
 distrib/msw/*.bat
 distrib/msw/tardist
+distrib/msw/tmake/*.t
+distrib/msw/tmake/Makefile
+distrib/msw/tmake/filelist.txt
+distrib/msw/tmake/makeall.bat
+distrib/msw/tmake/makeall.sh
+distrib/msw/tmake/wxwin.pro
 distrib/gtk/*
 
 locale/*.po
@@ -37,6 +43,7 @@ docs/bugs.txt
 docs/*.htm
 docs/html/*.htm
 docs/html/*.gif
+docs/html/*.png
 
 src/*.inc
 src/mkdir
@@ -66,6 +73,7 @@ src/html/*.h
 src/html/bitmaps/*.xpm
 
 src/unix/*.cpp
+src/unix/*.c
 
 src/png/*.c
 src/png/*.h
@@ -97,6 +105,7 @@ include/wx/protocol/*.h
 include/wx/wx_setup.vms
 include/wx/common/*.h
 include/wx/generic/*.h
+include/wx/generic/*.xpm
 include/wx/unix/*.h
 include/wx/html/*.h
 include/wx/html/msw/*.bmp

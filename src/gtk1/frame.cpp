@@ -137,7 +137,7 @@ static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 // "child_detached" of tool bar
 //-----------------------------------------------------------------------------
 
-static void gtk_toolbar_detached_callback( GtkWidget *widget, GtkWidget *WXUNUSED(child), wxFrame *win )
+static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -191,7 +191,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *ev
    so we do this directly after realization */
 
 static gint
-gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
+gtk_frame_realized_callback( GtkWidget *WXUNUSED(widget), wxFrame *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
