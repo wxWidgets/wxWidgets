@@ -1134,7 +1134,9 @@ public:
     int GetValue();
     void SetRange(int min, int max);
     void SetValue(int value);
-
+#ifndef __WXGTK__
+    void SetSelection(long from, long to);
+#endif
 };
 
 
