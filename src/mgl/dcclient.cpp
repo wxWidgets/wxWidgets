@@ -69,5 +69,6 @@ wxClientDC::wxClientDC(wxWindow *win) : wxWindowDC(win)
 {
     wxRect r = m_wnd->GetClientRect();
     m_globalClippingRegion.Intersect(r);
+    SetClippingRegion(m_globalClippingRegion);
     SetDeviceOrigin(r.x, r.y);
 }
