@@ -403,6 +403,14 @@ wxSize wxWindowBase::DoGetBestSize() const
 
             int wx, wy, ww, wh;
             win->GetPosition(&wx, &wy);
+
+            // if the window hadn't been positioned yet, assume that it is in
+            // the origin
+            if ( wx == -1 )
+                wx = 0;
+            if ( wy == -1 )
+                wy = 0;
+
             win->GetSize(&ww, &wh);
             if ( wx + ww > maxX )
                 maxX = wx + ww;
