@@ -247,6 +247,7 @@ public:
     wxRealPoint operator-(const wxRealPoint& pt) const { return wxRealPoint(x - pt.x, y - pt.y); }
 
     bool operator==(const wxRealPoint& pt) const { return x == pt.x && y == pt.y; }
+    bool operator!=(const wxRealPoint& pt) const { return x != pt.x || y != pt.y; }
 };
 
 class WXDLLEXPORT wxPoint
