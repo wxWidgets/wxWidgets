@@ -40,7 +40,6 @@ public:
     wxObject* GetParent()               { return m_parent; }
     wxObject* GetInstance()             { return m_instance; }
     wxWindow* GetParentAsWindow()       { return m_parentAsWindow; }
-//    wxWindow* GetInstanceAsWindow()     { return m_instanceAsWindow; }
 
 
     // turn some protected methods into public via delegation
