@@ -153,7 +153,6 @@ _treeList = [
         'wxStaticBitmap',
         'wxStatusBar',
         'wxTextCtrl',
-        'wxTimer',
         'wxToggleButton',
         'wxToolBar',
         'wxTreeCtrl',
