@@ -5,7 +5,7 @@ CHANGES.txt for wxPython
 2.4.1.1
 -------
 
-Added wxScrolledPanel from Wil Sadkin
+Added wxScrolledPanel from Will Sadkin
 
 Added SetShape method to top level windows (e.g. wxFrame.)
 
