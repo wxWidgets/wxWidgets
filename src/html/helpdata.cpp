@@ -95,7 +95,10 @@ static T* ReallocArray(T *arr, size_t oldsize, size_t newsize)
 class HP_Parser : public wxHtmlParser
 {
 public:
-    HP_Parser() { }
+    HP_Parser()
+    {
+        GetEntitiesParser()->SetEncoding(wxFONTENCODING_ISO8859_1);
+    }
 
     wxObject* GetProduct() { return NULL; }
 
@@ -247,7 +250,9 @@ wxHtmlHelpData::~wxHtmlHelpData()
     delete[] m_Index;
 }
 
-bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, const wxString& indexfile, const wxString& contentsfile)
+bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys,
+                                   const wxString& indexfile,
+                                   const wxString& contentsfile)
 {
     wxFSFile *f;
     wxHtmlFilterHTML filter;
@@ -444,25 +449,8 @@ static wxString SafeFileName(const wxString& s)
     return res;
 }
 
-#ifdef WXWIN_COMPATIBILITY_2_4
 bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
                                   wxFontEncoding encoding,
-                                  const wxString& title, const wxString& contfile,
-                                  const wxString& indexfile, const wxString& deftopic,
-                                  const wxString& path)
-{
-    wxString charset;
-#if wxUSE_FONTMAP
-    if (encoding != wxFONTENCODING_SYSTEM)
-        charset = wxFontMapper::Get()->GetEncodingName(encoding);
-#endif
-    return AddBookParam(bookfile, charset, title, contfile, indexfile,
-                        deftopic, path);
-}
-#endif // WXWIN_COMPATIBILITY_2_4
-
-bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
-                                  const wxString& charset,
                                   const wxString& title, const wxString& contfile,
                                   const wxString& indexfile, const wxString& deftopic,
                                   const wxString& path)
@@ -540,7 +528,7 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
     // in that the data are iso-8859-1 (including HTML entities), but must
     // be interpreted as being in language's windows charset. Correct the
     // differences here and also convert to wxConvLocal in ANSI build
-    if (!charset.empty())
+    if (encoding != wxFONTENCODING_SYSTEM)
     {
         #if wxUSE_UNICODE
             #define CORRECT_STR(str, conv) \
@@ -549,7 +537,7 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
             #define CORRECT_STR(str, conv) \
                 str = wxString((str).wc_str(conv), wxConvLocal)
         #endif
-        wxCSConv conv(charset);
+        wxCSConv conv(encoding);
         int i;
         for (i = IndexOld; i < m_IndexCnt; i++)
         {
@@ -564,7 +552,7 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
 #else
     wxUnusedVar(IndexOld);
     wxUnusedVar(ContentsOld);
-    wxASSERT_MSG(charset.empty(), wxT("Help files need charset conversion, but wxUSE_WCHAR_T is 0"));
+    wxASSERT_MSG(encoding == wxFONTENCODING_SYSTEM, wxT("Help files need charset conversion, but wxUSE_WCHAR_T is 0"));
 #endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
 
     m_BookRecords.Add(bookr);
@@ -647,8 +635,12 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         if (wxStrstr(linebuf, _T("charset=")) == linebuf)
             charset = linebuf + wxStrlen(_T("charset="));
     } while (lineptr != NULL);
+        
+    wxFontEncoding enc;
+    if (charset == wxEmptyString) enc = wxFONTENCODING_SYSTEM;
+    else enc = wxFontMapper::Get()->CharsetToEncoding(charset);
 
-    bool rtval = AddBookParam(*fi, charset,
+    bool rtval = AddBookParam(*fi, enc,
                               title, contents, index, start, fsys.GetPath());
     delete fi;
     return rtval;

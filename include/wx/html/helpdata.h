@@ -172,15 +172,12 @@ public:
     // See documentation for details on its format.
     // Returns success.
     bool AddBook(const wxString& book);
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED(
     bool AddBookParam(const wxFSFile& bookfile,
                       wxFontEncoding encoding,
                       const wxString& title, const wxString& contfile,
                       const wxString& indexfile = wxEmptyString,
                       const wxString& deftopic = wxEmptyString,
-                      const wxString& path = wxEmptyString) );
-#endif
+                      const wxString& path = wxEmptyString);
 
     // Some accessing stuff:
 
@@ -206,13 +203,6 @@ protected:
     int m_IndexCnt;  // list of index items
 
 protected:
-    bool AddBookParam(const wxFSFile& bookfile,
-                      const wxString& charset,
-                      const wxString& title, const wxString& contfile,
-                      const wxString& indexfile = wxEmptyString,
-                      const wxString& deftopic = wxEmptyString,
-                      const wxString& path = wxEmptyString);
-    
     // Imports .hhp files (MS HTML Help Workshop)
     bool LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys,
                        const wxString& indexfile, const wxString& contentsfile);
