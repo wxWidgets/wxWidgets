@@ -197,6 +197,12 @@ class wxPopupControl(wxPyControl):
 
         EVT_SIZE(self,self.OnSize)
         EVT_BUTTON(self.bCtrl,self.bCtrl.GetId(),self.OnButton)
+        # embedded control should get focus on TAB keypress
+        EVT_SET_FOCUS(self,self.OnFocus)
+
+    def OnFocus(self,evt):
+        self.textCtrl.SetFocus()
+        evt.Skip()
 
     def OnSize(self,evt):
         w,h = self.GetClientSizeTuple()
