@@ -86,7 +86,7 @@ class wxBoxSizer(wxSizer):
 
 
     def RecalcSizes(self):
-        # get current dimensions, for performance
+        # get current dimensions, save for performance
         myWidth  = self.size.width
         myHeight = self.size.height
 
