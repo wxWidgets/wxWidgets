@@ -314,6 +314,10 @@
 // i18n support: _() macro, wxLocale class. Requires wxTextFile.
 #define wxUSE_INTL                1
 
+// Joystick support class
+#define wxUSE_JOYSTICK            1
+
+
 // ----------------------------------------------------------------------------
 // Optional controls
 // ----------------------------------------------------------------------------
