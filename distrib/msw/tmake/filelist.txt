@@ -230,6 +230,7 @@ strconv.cpp	Common	Base
 stream.cpp	Common	Base
 string.cpp	Common	Base
 sysopt.cpp	Common	Base
+taskbarcmn.cpp	Common
 tbarbase.cpp	Common
 textbuf.cpp	Common	Base
 textcmn.cpp	Common
@@ -375,6 +376,7 @@ fontutil.cpp	Unix	NotCocoa,NotMac,NotMGL,NotMicro
 gsocket.c	Unix	Base,NotMac
 mimetype.cpp	Unix	Base,NotMac,NotMicro
 snglinst.cpp	Unix	Base
+taskbarx11.cpp	Unix	NotMac,NotMGL,NotMicro
 threadpsx.cpp	Unix	Base,NotMac
 utilsunx.cpp	Unix	Base
 utilsx11.cpp	Unix	NotMac,NotMGL,NotMicro
@@ -1544,6 +1546,7 @@ execute.h	UnixH
 fontutil.h	UnixH
 gsockunx.h	UnixH	Base
 mimetype.h	UnixH	Base
+taskbarx11.h	UnixH
 utilsx11.h	UnixH
 
 file.h	ProtoH	Base
