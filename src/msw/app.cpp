@@ -1152,7 +1152,11 @@ int wxApp::GetComCtl32Version()
                     FARPROC theProc = ::GetProcAddress
                                         (
                                          hModuleComCtl32,
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x520)
+                                         "InitCommonControlsEx"
+#else
                                          _T("InitCommonControlsEx")
+#endif
                                         );
 
                     if ( !theProc )
@@ -1167,7 +1171,11 @@ int wxApp::GetComCtl32Version()
                         theProc = ::GetProcAddress
                                     (
                                      hModuleComCtl32,
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x520)
+                                     "InitializeFlatSB"
+#else
                                      _T("InitializeFlatSB")
+#endif
                                     );
                         if ( !theProc )
                         {
