@@ -421,6 +421,8 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacWindowEventHandler )
 wxList *wxWinMacWindowList = NULL;
 wxTopLevelWindowMac *wxFindWinFromMacWindow(WXWindow inWindowRef)
 {
+    if ( wxWinMacWindowList == NULL )
+        return NULL ;
     wxNode *node = wxWinMacWindowList->Find((long)inWindowRef);
     if (!node)
         return NULL;
