@@ -36,6 +36,7 @@
     #include "wx/combobox.h"        // wxComboControl
     #include "wx/app.h"             // wxPostEvent
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif //WX_PRECOMP
 
 #ifdef __WXUNIVERSAL__
