@@ -45,7 +45,10 @@
 #if defined(__WXWINCE__)
   #include <ole2.h>
   #include <shellapi.h>
-  #if _WIN32_WCE < 400
+  // FIXME: aygshell.h is in the PocketPC 2003 SDK,
+  // so for which SDK _is_ it missing, and how do we test
+  // for it?
+  #if 1 // _WIN32_WCE < 400
     #include <aygshell.h>
   #endif
 #include "wx/msw/wince/missing.h"

@@ -39,9 +39,11 @@ inline BOOL IsIconic( HWND WXUNUSED(hWnd) )
 #define TBSTYLE_NO_DROPDOWN_ARROW 0x0080
 #endif
 
-#if _WIN32_WCE >= 400
+#if _WIN32_WCE >= 400 && !defined(SHCMBM_GETMENU)
 
 // aygshell.h missing from eVC 4 for some reason
+// NB not missing from Pocket PC 2003, hence the test for SHCMBM_GETMENU
+
 #define SHCMBM_GETMENU      (WM_USER + 402)
 #define SHCMBM_SETSUBMENU   (WM_USER + 400) // wparam == id of button, lParam == hmenu, return is old hmenu
 #define SHCMBM_GETSUBMENU   (WM_USER + 401) // lParam == ID
