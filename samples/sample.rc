@@ -21,6 +21,11 @@ aaaaaaaa ICON "sample.ico"
 // this icon is used with wxFrame::SetIcon()
 sample ICON "sample.ico"
 
+// set this to 1 if you don't want to use manifest resource (manifest resource
+// is needed to enable visual styles on Windows XP - see docs/msw/winxp.txt
+// for more information)
+#define wxUSE_NO_MANIFEST 0
+
 // this is not always needed but doesn't hurt (except making the executable
 // very slightly larger): this file contains the standard icons, cursors, ...
 #include "wx/msw/wx.rc"
