@@ -401,14 +401,18 @@ void wxWindowBase::Centre(int direction)
     wxRect rect = wxGetClientDisplayRect();
     wxSize size (rect.width,rect.height);
 
+#ifndef __WXMGL__ // FIXME - temporary dirty hack!!
     if (posParent.x >= 0)  // if parent is on the main display
+#endif
     {
         if (xNew < 0)
             xNew = 0;
         else if (xNew+width > size.x)
             xNew = size.x-width-1;
     }
+#ifndef __WXMGL__ // FIXME - temporary dirty hack!!
     if (posParent.y >= 0)  // if parent is on the main display
+#endif
     {
         if (yNew+height > size.y)
             yNew = size.y-height-1;
