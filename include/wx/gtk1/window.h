@@ -76,10 +76,10 @@ public:
            long style = 0,
            const wxString& name = wxPanelNameStr);
   virtual ~wxWindow();
-  
+
   virtual bool LoadFromResource(wxWindow *parent, const wxString& resourceName, const wxResourceTable *table = NULL);
   virtual wxControl *CreateItem(const wxItemResource *childResource, const wxResourceTable *table = NULL);
-  
+
   bool Close( bool force = FALSE );
   virtual bool Destroy();
   virtual bool DestroyChildren();
@@ -95,10 +95,11 @@ public:
   virtual void GetClientSize( int *width, int *height ) const;
   virtual void GetPosition( int *x, int *y ) const;
   virtual void Centre( int direction = wxHORIZONTAL );
+  inline void Center(int direction = wxHORIZONTAL) { Centre(direction); }
   virtual void Fit();
     // set minimal/maxmimal size for the frame
-  virtual void SetSizeHints( int WXUNUSED(minW), int WXUNUSED(minH), int WXUNUSED(maxW), 
-    int WXUNUSED(maxH), int WXUNUSED(incW) ) { }
+  virtual void SetSizeHints( int WXUNUSED(minW), int WXUNUSED(minH), int WXUNUSED(maxW),
+    int WXUNUSED(maxH), int WXUNUSED(incW),  int WXUNUSED(incH) ) { }
 
   void OnSize( wxSizeEvent &event );
   void OnIdle( wxIdleEvent& event );
@@ -116,11 +117,11 @@ public:
   virtual void RemoveChild( wxWindow *child );
   void SetReturnCode( int retCode );
   int GetReturnCode();
-  wxWindow *GetParent() const 
+  wxWindow *GetParent() const
     { return m_parent; }
   wxWindow *GetGrandParent(void) const
     { return (m_parent ? m_parent->m_parent : (wxWindow*)NULL); }
-  void SetParent( wxWindow *p ) 
+  void SetParent( wxWindow *p )
     { m_parent = p; }
 
   wxEvtHandler *GetEventHandler();
@@ -147,7 +148,7 @@ public:
   virtual void SetBackgroundColour( const wxColour &colour );
   virtual wxColour GetForegroundColour() const;
   virtual void SetForegroundColour( const wxColour &colour );
-  
+
   virtual int GetCharHeight(void) const;
   virtual int GetCharWidth(void) const;
   virtual void GetTextExtent( const wxString& string, int *x, int *y,
@@ -201,16 +202,16 @@ public:
   virtual bool TransferDataFromWindow();
   void OnInitDialog( wxInitDialogEvent &event );
   virtual void InitDialog();
-  
+
   virtual bool PopupMenu( wxMenu *menu, int x, int y );
 
   virtual void SetDropTarget( wxDropTarget *dropTarget );
   virtual wxDropTarget *GetDropTarget() const;
-  
+
 //private:
   virtual GtkWidget* GetConnectWidget(void);
   virtual bool IsOwnGtkWindow( GdkWindow *window );
-  
+
 public:
   virtual void SetScrollbar( int orient, int pos, int thumbVisible,
     int range, bool refresh = TRUE );
@@ -226,7 +227,7 @@ public:
   // update the UI state (called from OnIdle)
   void UpdateWindowUI();
 
-  
+
 public:         // cannot get private going yet
 
   void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
