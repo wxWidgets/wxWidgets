@@ -44,7 +44,7 @@ const wxVideoMode wxDefaultVideoMode;
 wxDisplayBase::wxDisplayBase(size_t index)
              : m_index (index)
 {
-    wxASSERT_MSG( m_index < wxDisplayBase::GetCount(),
+    wxASSERT_MSG( m_index < GetCount(),
                     wxT("An invalid index was passed to wxDisplay") );
 }
 

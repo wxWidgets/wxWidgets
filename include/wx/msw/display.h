@@ -19,9 +19,17 @@
 class WXDLLEXPORT wxDisplay : public wxDisplayBase
 {
 public:
+    // this function may be called *before* using any other wxDisplay methods
+    // to tell it to use DirectX functions instead of the standard Windows ones
+    static void UseDirectX(bool useDX);
+
+    // create the display object for the given physical display
     wxDisplay(size_t index = 0);
 
+    virtual ~wxDisplay();
+
     // implement base class pure virtuals
+    virtual bool IsOk() const;
     virtual wxRect GetGeometry() const;
     virtual wxString GetName() const;
 
@@ -34,6 +42,14 @@ private:
     // get the display name to use with EnumDisplaySettings()
     wxString GetNameForEnumSettings() const;
 
+    // we have different implementations using DirectDraw and without it
+    wxArrayVideoModes DoGetModesDirectX(const wxVideoMode& modeMatch) const;
+    bool DoChangeModeDirectX(const wxVideoMode& mode);
+
+    wxArrayVideoModes DoGetModesWindows(const wxVideoMode& modeMatch) const;
+    bool DoChangeModeWindows(const wxVideoMode& mode);
+
+    
     DECLARE_NO_COPY_CLASS(wxDisplay);
 };
 

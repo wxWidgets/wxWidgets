@@ -100,6 +100,9 @@ public:
     static int GetFromWindow(wxWindow *window);
 
 
+    // return true if the object was initialized successfully
+    virtual bool IsOk() const { return true; }
+
     // get the display size
     virtual wxRect GetGeometry() const = 0;
 

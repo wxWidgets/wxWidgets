@@ -2,7 +2,7 @@
 // Name:        display.cpp
 // Purpose:     MSW Implementation of wxDisplay class
 // Author:      Royce Mitchell III
-// Modified by:
+// Modified by: VZ (resolutions enumeration/change support, DirectDraw, ...)
 // Created:     06/21/02
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWindows team
@@ -48,7 +48,7 @@
 //
 
 #ifdef _MSC_VER
-    // as (m)any standard header, this one doesn't compile without warnings
+    // as (m)any standard header(s), this one doesn't compile without warnings
     // with VC++ 6 <sigh>
     #pragma warning(disable:4706)
 #endif
@@ -59,15 +59,25 @@
     #pragma warning(default:4706)
 #endif
 
+#include <ddraw.h>
+
+// we don't want to link with ddraw.lib which contains the real
+// IID_IDirectDraw2 definition
+const GUID wxIID_IDirectDraw2 =
+    { 0xB3A6F3E0, 0x2B43, 0x11CF, { 0xA2,0xDE,0x00,0xAA,0x00,0xB9,0x33,0x56 } };
+
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
 #ifdef _UNICODE
-    #define MAKE_WFUNC(x) #x "W"
-    #define WINFUNC(x)  L ## MAKE_WFUNC(x)
+    #define WINFUNC(x)  _T(#x) L"W"
 #else
     #define WINFUNC(x) #x "A"
 #endif
 
 // ----------------------------------------------------------------------------
-// typedefs
+// typedefs for dynamically loaded Windows functions
 // ----------------------------------------------------------------------------
 
 typedef LONG (WINAPI *ChangeDisplaySettingsEx_t)(LPCTSTR lpszDeviceName,
@@ -75,6 +85,20 @@ typedef LONG (WINAPI *ChangeDisplaySettingsEx_t)(LPCTSTR lpszDeviceName,
                                                  HWND hwnd,
                                                  DWORD dwFlags,
                                                  LPVOID lParam);
+
+typedef BOOL (PASCAL *DDEnumExCallback_t)(GUID *pGuid,
+                                          LPTSTR driverDescription,
+                                          LPTSTR driverName,
+                                          LPVOID lpContext,
+                                          HMONITOR hmon);
+
+typedef HRESULT (WINAPI *DirectDrawEnumerateEx_t)(DDEnumExCallback_t lpCallback,
+                                                  LPVOID lpContext,
+                                                  DWORD dwFlags);
+
+typedef HRESULT (WINAPI *DirectDrawCreate_t)(GUID *lpGUID,
+                                             LPDIRECTDRAW *lplpDD,
+                                             IUnknown *pUnkOuter);
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -86,6 +110,12 @@ public:
     // handle of this monitor used by MonitorXXX() functions, never NULL
     HMONITOR m_hmon;
 
+    // IDirectDraw object used to control this display, may be NULL
+    IDirectDraw2 *m_pDD2;
+
+    // DirectDraw GUID for this display, only valid when using DirectDraw
+    GUID m_guid;
+
     // the entire area of this monitor in virtual screen coordinates
     wxRect m_rect;
 
@@ -93,23 +123,19 @@ public:
     // on demand by DoGetName()
     wxString m_devName;
 
-    wxDisplayInfo() { m_hmon = NULL; }
+    wxDisplayInfo() { m_hmon = NULL; m_pDD2 = NULL; }
+    ~wxDisplayInfo() { if ( m_pDD2 ) m_pDD2->Release(); }
 };
 
 WX_DECLARE_OBJARRAY(wxDisplayInfo, wxDisplayInfoArray);
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxDisplayInfoArray);
 
-// this is not really MT-unsafe as wxDisplay is only going to be used from the
-// main thread, i.e. we consider that it's a GUI class and so don't protect it
-static wxDisplayInfoArray *g_displays = NULL;
-
-
-// this module is used to cleanup g_displays array
+// this module is used to cleanup gs_displays array
 class wxDisplayModule : public wxModule
 {
 public:
-    virtual bool OnInit() { return TRUE; }
+    virtual bool OnInit() { return true; }
     virtual void OnExit();
 
     DECLARE_DYNAMIC_CLASS(wxDisplayModule)
@@ -117,12 +143,26 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxDisplayModule, wxModule)
 
+// ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
+
+// do we use DirectX?
+static bool gs_useDirectX = false;
+
+// dynamically resolved DirectDrawCreate()
+static DirectDrawCreate_t gs_DirectDrawCreate = NULL;
+
+// this is not really MT-unsafe as wxDisplay is only going to be used from the
+// main thread, i.e. we consider that it's a GUI class and so don't protect it
+static wxDisplayInfoArray *gs_displays = NULL;
+
 // ===========================================================================
 // implementation
 // ===========================================================================
 
 // ----------------------------------------------------------------------------
-// local functions
+// callbacks for monitor/modes enumeration stuff
 // ----------------------------------------------------------------------------
 
 static BOOL CALLBACK wxmswMonitorEnumProc (
@@ -132,7 +172,7 @@ static BOOL CALLBACK wxmswMonitorEnumProc (
   LPARAM dwData       // data passed from EnumDisplayMonitors (unused)
 )
 {
-    wxDisplayInfo* info = new wxDisplayInfo();
+    wxDisplayInfo *info = new wxDisplayInfo();
 
     // we need hMonitor to be able to map display id to it which is needed for
     // MonitorXXX() functions, in particular MonitorFromPoint()
@@ -145,28 +185,125 @@ static BOOL CALLBACK wxmswMonitorEnumProc (
     info->m_rect.SetHeight ( lprcMonitor->bottom - lprcMonitor->top );
 
     // now add this monitor to the array
-    g_displays->Add(info);
+    gs_displays->Add(info);
 
     // continue the enumeration
-    return TRUE;
+    return true;
 }
 
-// this function must be called before accessing g_displays array as it
-// creates and initializes it
-static void InitDisplays()
+BOOL PASCAL
+wxDDEnumExCallback(GUID *pGuid,
+                   LPTSTR driverDescription,
+                   LPTSTR driverName,
+                   LPVOID lpContext,
+                   HMONITOR hmon)
 {
-    if ( g_displays )
-        return;
+    if ( pGuid )
+    {
+        wxDisplayInfo *info = new wxDisplayInfo();
 
-    g_displays = new wxDisplayInfoArray();
+        info->m_hmon = hmon;
+        info->m_guid = *pGuid;
+        info->m_devName = driverName;
 
+        gs_displays->Add(info);
+    }
+    //else: we're called for the primary monitor, skip it
+
+    // continue the enumeration
+    return true;
+}
+
+HRESULT WINAPI wxDDEnumModesCallback(LPDDSURFACEDESC lpDDSurfaceDesc,  
+                                     LPVOID lpContext)
+{
+    // we need at least the mode size
+    static const int FLAGS_REQUIRED = DDSD_HEIGHT | DDSD_WIDTH;
+    if ( (lpDDSurfaceDesc->dwFlags & FLAGS_REQUIRED) == FLAGS_REQUIRED )
+    {
+        wxArrayVideoModes * const modes = (wxArrayVideoModes *)lpContext;
+
+        modes->Add(wxVideoMode(lpDDSurfaceDesc->dwWidth,
+                               lpDDSurfaceDesc->dwHeight,
+                               lpDDSurfaceDesc->ddpfPixelFormat.dwRGBBitCount,
+                               lpDDSurfaceDesc->dwRefreshRate));
+    }
+
+    // continue the enumeration
+    return DDENUMRET_OK;
+}
+
+// ----------------------------------------------------------------------------
+// local functions
+// ----------------------------------------------------------------------------
+
+// initialize gs_displays using DirectX functions
+static bool DoInitDirectX()
+{
+    // suppress the errors if ddraw.dll is not found
+    wxLog::EnableLogging(false);
+
+    wxDynamicLibrary dllDX(_T("ddraw.dll"));
+
+    wxLog::EnableLogging(true);
+
+    if ( !dllDX.IsLoaded() )
+        return false;
+
+    DirectDrawEnumerateEx_t pDDEnumEx = (DirectDrawEnumerateEx_t)
+        dllDX.GetSymbol(WINFUNC(DirectDrawEnumerateEx));
+    if ( !pDDEnumEx )
+        return false;
+
+    // we'll also need DirectDrawCreate() later, resolve it right now
+    gs_DirectDrawCreate = (DirectDrawCreate_t)
+        dllDX.GetSymbol(_T("DirectDrawCreate"));
+    if ( !gs_DirectDrawCreate )
+        return false;
+
+    if ( (*pDDEnumEx)(wxDDEnumExCallback,
+                      NULL,
+                      DDENUM_ATTACHEDSECONDARYDEVICES) != DD_OK )
+    {
+        return false;
+    }
+
+    // ok, it seems like we're going to use DirectDraw and so we're going to
+    // need ddraw.dll all the time, don't unload it
+    dllDX.Detach();
+
+    return true;
+}
+
+// initialize gs_displays using the standard Windows functions
+static void DoInitStdWindows()
+{
     // enumerate all displays
     if ( !::EnumDisplayMonitors(NULL, NULL, wxmswMonitorEnumProc, 0) )
     {
         wxLogLastError(wxT("EnumDisplayMonitors"));
 
-        // TODO: still create at least one (valid) entry in g_displays for the
+        // TODO: still create at least one (valid) entry in gs_displays for the
         //       primary display!
+    }
+}
+
+// this function must be called before accessing gs_displays array as it
+// creates and initializes it
+static void InitDisplays()
+{
+    if ( gs_displays )
+        return;
+
+    gs_displays = new wxDisplayInfoArray();
+
+    if ( gs_useDirectX && !DoInitDirectX() )
+    {
+        // either we were told not to try to use DirectX or fall back to std
+        // functions if DirectX method failed
+        gs_useDirectX = false;
+
+        DoInitStdWindows();
     }
 }
 
@@ -197,12 +334,20 @@ LONG WINAPI ChangeDisplaySettingsExForWin95(LPCTSTR WXUNUSED(lpszDeviceName),
 
 void wxDisplayModule::OnExit()
 {
-    delete g_displays;
+    delete gs_displays;
 }
 
 // ---------------------------------------------------------------------------
 // wxDisplay
 // ---------------------------------------------------------------------------
+
+/* static */
+void wxDisplay::UseDirectX(bool useDX)
+{
+    wxCHECK_RET( !gs_displays, _T("it is too late to call UseDirectX") );
+
+    gs_useDirectX = useDX;
+}
 
 // helper of GetFromPoint() and GetFromWindow()
 static int DisplayFromHMONITOR(HMONITOR hmon)
@@ -213,7 +358,7 @@ static int DisplayFromHMONITOR(HMONITOR hmon)
 
         for ( size_t n = 0; n < count; n++ )
         {
-            if ( hmon == (*g_displays)[n].m_hmon )
+            if ( hmon == (*gs_displays)[n].m_hmon )
                 return n;
         }
     }
@@ -228,10 +373,10 @@ size_t wxDisplayBase::GetCount()
 
     // I'm not sure if they really always return the same thing and if this is
     // not true I'd like to know in which situation does it happen
-    wxASSERT_MSG( g_displays->GetCount() == (size_t)::GetSystemMetrics(SM_CMONITORS),
+    wxASSERT_MSG( gs_displays->GetCount() == (size_t)::GetSystemMetrics(SM_CMONITORS),
                     _T("So how many displays does this system have?") );
 
-    return g_displays->GetCount();
+    return gs_displays->GetCount();
 }
 
 /* static */
@@ -253,22 +398,107 @@ int wxDisplayBase::GetFromWindow(wxWindow *window)
            );
 }
 
+// ----------------------------------------------------------------------------
+// wxDisplay ctor/dtor
+// ----------------------------------------------------------------------------
+
 wxDisplay::wxDisplay ( size_t n )
          : wxDisplayBase ( n )
 {
     // if we do this in ctor we won't have to call it from all the member
     // functions
     InitDisplays();
+
+    if ( gs_useDirectX )
+    {
+        wxDisplayInfo& dpyInfo = (*gs_displays)[n];
+
+        LPDIRECTDRAW2& pDD2 = dpyInfo.m_pDD2;
+        if ( !pDD2 )
+        {
+            if ( !gs_DirectDrawCreate )
+            {
+                // what to do??
+                return;
+            }
+
+            IDirectDraw *pDD;
+            HRESULT hr = (*gs_DirectDrawCreate)(&dpyInfo.m_guid, &pDD, NULL);
+
+            if ( FAILED(hr) || !pDD )
+            {
+                // what to do??
+                wxLogApiError(_T("DirectDrawCreate"), hr);
+            }
+            else // got IDirectDraw, we want IDirectDraw2
+            {
+                hr = pDD->QueryInterface(wxIID_IDirectDraw2, (void **)&pDD2);
+                if ( FAILED(hr) || !pDD2 )
+                {
+                    wxLogApiError(_T("IDirectDraw::QueryInterface(IDD2)"), hr);
+                }
+
+                pDD->Release();
+            }
+        }
+        //else: DirectDraw object corresponding to our display already exists
+
+        // increment its ref count to account for Release() in dtor
+        //
+        // NB: pDD2 will be only really Release()d when gs_displays is
+        //     destroyed which is ok as we don't want to recreate DD objects
+        //     all the time
+        pDD2->AddRef();
+    }
+}
+
+wxDisplay::~wxDisplay()
+{
+    wxDisplayInfo& dpyInfo = (*gs_displays)[m_index];
+
+    LPDIRECTDRAW2& pDD2 = dpyInfo.m_pDD2;
+    if ( pDD2 )
+    {
+        pDD2->Release();
+    }
+}
+
+// ----------------------------------------------------------------------------
+// wxDisplay simple accessors
+// ----------------------------------------------------------------------------
+
+bool wxDisplay::IsOk() const
+{
+    return m_index < GetCount() &&
+                (!gs_useDirectX || (*gs_displays)[m_index].m_pDD2);
 }
 
 wxRect wxDisplay::GetGeometry() const
 {
-    return (*g_displays)[m_index].m_rect;
+    wxDisplayInfo& dpyInfo = (*gs_displays)[m_index];
+    wxRect& rect = dpyInfo.m_rect;
+    if ( !rect.width )
+    {
+        MONITORINFO monInfo;
+        wxZeroMemory(monInfo);
+        monInfo.cbSize = sizeof(monInfo);
+
+        if ( !::GetMonitorInfo(dpyInfo.m_hmon, &monInfo) )
+        {
+            wxLogLastError(_T("GetMonitorInfo"));
+        }
+        else
+        {
+            wxCopyRECTToRect(monInfo.rcMonitor, rect);
+        }
+    }
+
+    return rect;
 }
 
 wxString wxDisplay::GetName() const
 {
-    wxDisplayInfo& dpyInfo = (*g_displays)[m_index];
+    wxDisplayInfo& dpyInfo = (*gs_displays)[m_index];
     if ( dpyInfo.m_devName.empty() )
     {
         MONITORINFOEX monInfo;
@@ -304,7 +534,38 @@ wxString wxDisplay::GetNameForEnumSettings() const
     return name;
 }
 
-wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& modeMatch) const
+// ----------------------------------------------------------------------------
+// video modes enumeration
+// ----------------------------------------------------------------------------
+
+wxArrayVideoModes
+wxDisplay::DoGetModesDirectX(const wxVideoMode& modeMatch) const
+{
+    wxArrayVideoModes modes;
+
+    IDirectDraw2 *pDD = (*gs_displays)[m_index].m_pDD2;
+
+    if ( pDD )
+    {
+        HRESULT hr = pDD->EnumDisplayModes
+                          (
+                            DDEDM_REFRESHRATES,
+                            NULL,   // all modes (TODO: use modeMatch!)
+                            &modes,   // callback parameter
+                            wxDDEnumModesCallback
+                          );
+
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(_T("IDirectDraw::EnumDisplayModes"), hr);
+        }
+    }
+
+    return modes;
+}
+
+wxArrayVideoModes
+wxDisplay::DoGetModesWindows(const wxVideoMode& modeMatch) const
 {
     wxArrayVideoModes modes;
 
@@ -325,6 +586,12 @@ wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& modeMatch) const
     }
 
     return modes;
+}
+
+wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& modeMatch) const
+{
+    return gs_useDirectX ? DoGetModesDirectX(modeMatch)
+                         : DoGetModesWindows(modeMatch);
 }
 
 wxVideoMode wxDisplay::GetCurrentMode() const
@@ -348,7 +615,44 @@ wxVideoMode wxDisplay::GetCurrentMode() const
     return mode;
 }
 
-bool wxDisplay::ChangeMode(const wxVideoMode& mode)
+// ----------------------------------------------------------------------------
+// video mode switching
+// ----------------------------------------------------------------------------
+
+bool wxDisplay::DoChangeModeDirectX(const wxVideoMode& mode)
+{
+    IDirectDraw2 *pDD = (*gs_displays)[m_index].m_pDD2;
+    if ( !pDD )
+        return false;
+
+    wxWindow *winTop = wxTheApp->GetTopWindow();
+    wxCHECK_MSG( winTop, false, _T("top level window required for DirectX") );
+
+    HRESULT hr = pDD->SetCooperativeLevel
+                      (
+                        GetHwndOf(winTop),
+                        DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN
+                      );
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(_T("IDirectDraw::SetCooperativeLevel"), hr);
+
+        return false;
+    }
+
+    hr = pDD->SetDisplayMode(mode.w, mode.h, mode.bpp, mode.refresh, 0);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(_T("IDirectDraw::SetDisplayMode"), hr);
+
+        return false;
+    }
+
+         
+    return true;
+}
+
+bool wxDisplay::DoChangeModeWindows(const wxVideoMode& mode)
 {
     // prepare ChangeDisplaySettingsEx() parameters
     DEVMODE dm,
@@ -363,7 +667,7 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
     }
     else // change to the given mode
     {
-        wxCHECK_MSG( mode.w && mode.h, FALSE,
+        wxCHECK_MSG( mode.w && mode.h, false,
                         _T("at least the width and height must be specified") );
 
         wxZeroMemory(dm);
@@ -425,7 +729,7 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
     {
         case DISP_CHANGE_SUCCESSFUL:
             // ok
-            return TRUE;
+            return true;
 
         case DISP_CHANGE_BADMODE:
             // don't complain about this, this is the only "expected" error
@@ -435,7 +739,13 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
             wxFAIL_MSG( _T("unexpected ChangeDisplaySettingsEx() return value") );
     }
 
-    return FALSE;
+    return false;
+}
+
+bool wxDisplay::ChangeMode(const wxVideoMode& mode)
+{
+    return gs_useDirectX ? DoChangeModeDirectX(mode)
+                         : DoChangeModeWindows(mode);
 }
 
 #endif // wxUSE_DISPLAY
