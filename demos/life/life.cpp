@@ -1057,7 +1057,7 @@ void LifeCanvas::OnScroll(wxScrollWinEvent& event)
     else
     if (type == wxEVT_SCROLLWIN_PAGEDOWN)
     {
-        scrollinc = -10;
+        scrollinc = +10;
     }
     else
     if (type == wxEVT_SCROLLWIN_THUMBTRACK)
