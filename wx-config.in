@@ -233,7 +233,7 @@ cppflags()
     includes="-I${libdir}/wx/include/${TOOLCHAIN_NAME}$includes"
 
     # in inplace case we need to also add path to contrib headers -- do it
-    # unconditionnally as they might be used and we have no way of knowing if
+    # unconditionally as they might be used and we have no way of knowing if
     # they really are
     if test $inplace_flag = yes ; then
         includes="$includes -I${prefix}/contrib/include"
