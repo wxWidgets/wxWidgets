@@ -37,6 +37,7 @@
 
 #include "wx/datectrl.h"
 #include "wx/calctrl.h"
+#include "wx/popupwin.h"
 
 // ----------------------------------------------------------------------------
 // constants

@@ -15,8 +15,7 @@
 class WXDLLIMPEXP_ADV wxCalendarDateAttr;
 class WXDLLIMPEXP_ADV wxCalendarCtrl;
 class WXDLLIMPEXP_ADV wxCalendarEvent;
-
-#include <wx/popupwin.h>
+class WXDLLIMPEXP_ADV wxPopupWindow;
 
 class WXDLLIMPEXP_ADV wxDatePickerCtrl : public wxDatePickerCtrlBase
 {
