@@ -361,6 +361,8 @@ wxMenuItem *MyFrame::GetLastMenuItem() const
 void MyFrame::LogMenuEvent(const wxCommandEvent& event)
 {
     int id = event.GetId();
+    if (!GetMenuBar()->FindItem(id))
+        return;
     wxString msg = wxString::Format("Menu command %d", id);
     if ( GetMenuBar()->FindItem(id)->IsCheckable() )
     {
