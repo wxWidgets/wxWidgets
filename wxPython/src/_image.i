@@ -479,7 +479,7 @@ public:
         DocStr(
             Quantize,
             "Reduce the colours in the source image and put the result into the
-destination image, setting the palette in the detination if
+destination image, setting the palette in the destination if
 needed. Both images may be the same, to overwrite the source image.", "
 :todo: Create a version that returns the wx.Palette used.");
     
