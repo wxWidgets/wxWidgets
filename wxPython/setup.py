@@ -409,11 +409,6 @@ if os.name == 'nt':
 
     defines = [ ('WIN32', None),
                 ('_WINDOWS', None),
-##                 ('__WIN32__', None),
-##                 ('__WINDOWS__', None),
-##                 ('WINVER', '0x0400'),
-##                 ('__WIN95__', None),
-##                 ('STRICT', None),
 
                 (WXPLAT, None),
                 ('WXUSINGDLL', '1'),
@@ -431,8 +426,13 @@ if os.name == 'nt':
         defines.append( ('__WXDEBUG__', None) )
 
     libdirs = [ opj(WXDIR, 'lib', 'vc_msw' + libFlag() + 'dll') ]
-    wxdll = 'wxmsw' + WXDLLVER + libFlag()
-    libs = [ wxdll ]
+    libs = [ 'wxbase' + WXDLLVER + libFlag(),  # TODO: trim this down to what is really needed for the core
+             'wxbase' + WXDLLVER + libFlag() + '_net',
+             'wxbase' + WXDLLVER + libFlag() + '_xml',
+             makeLibName('core')[0],
+             makeLibName('adv')[0],
+             makeLibName('html')[0],
+             ]
 
     libs = libs + ['kernel32', 'user32', 'gdi32', 'comdlg32',
             'winspool', 'winmm', 'shell32', 'oldnames', 'comctl32',
