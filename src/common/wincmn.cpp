@@ -126,7 +126,7 @@ void wxWindowBase::InitBase()
 #if !defined(__WXMAC__) && !defined(__WXGTK__)
     m_font = *wxSWISS_FONT;         //      and this?
 #else
-	m_font = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_font = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 #endif
 
     // no style bits
@@ -176,6 +176,15 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     m_windowId = id == -1 ? NewControlId() : id;
 
     SetName(name);
+
+    // if the parent window has wxWS_EX_VALIDATE_RECURSIVELY set, we want to
+    // have it too - like this it's possible to set it only in the top level
+    // dialog/frame and all children will inherit it by defult
+    if ( parent && (parent->GetWindowStyle() & wxWS_EX_VALIDATE_RECURSIVELY) )
+    {
+        style |= wxWS_EX_VALIDATE_RECURSIVELY;
+    }
+
     SetWindowStyleFlag(style);
     SetParent(parent);
 
