@@ -155,10 +155,6 @@ bool wxDropdownButton::Create(wxWindow *parent,
                                  pos, wxDefaultSize, BTN_FLAGS, validator) )
         return false;
 
-#if (BTNFLAGS & wxBU_AUTODRAW ) == 0
-    m_windowStyle |= wxBU_AUTODRAW;
-#endif
-
     const wxSize sz = GetSize();
     int w = chkBmp.GetWidth(),
         h = chkBmp.GetHeight();
@@ -196,8 +192,15 @@ void wxDropdownButton::DoMoveWindow(int x, int y, int w, int h)
         wxBitmap bmp(bw, bh);
         dc.SelectObject(bmp);
 
-        wxRendererNative::Get().DrawComboBoxDropButton(this, dc, wxRect(0,0,bw, bh));
+        wxRect r(0,0,bw, bh);
+        wxRendererNative& renderer = wxRendererNative::Get();
+        renderer.DrawComboBoxDropButton(this, dc, r);
         SetBitmapLabel(bmp);
+
+        wxBitmap bmpSel(bw, bh);
+        dc.SelectObject(bmpSel);
+        renderer.DrawComboBoxDropButton(this, dc, r, wxCONTROL_PRESSED);
+        SetBitmapSelected(bmpSel);
     }
 
     wxBitmapButton::DoMoveWindow(x, y, w, h);
