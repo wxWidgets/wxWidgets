@@ -2170,7 +2170,7 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
 
 // this is a bit strange as under Windows we get the encoding name using its
 // numeric value and under Unix we do it the other way round, but this just
-// reflects the way different systems provide he encoding info
+// reflects the way different systems provide the encoding info
 
 /* static */
 wxString wxLocale::GetSystemEncodingName()
@@ -2202,8 +2202,18 @@ wxString wxLocale::GetSystemEncodingName()
         // ISO-646, i.e. 7 bit ASCII
         //
         // and recent glibc call it ANSI_X3.4-1968...
-        if ( strcmp(alang, "646") == 0 ||
-               strcmp(alang, "ANSI_X3.4-1968") == 0 )
+        //
+        // HP-UX uses HP-Roman8 cset which is not the same as ASCII (see RFC
+        // 1345 for its definition) but must be recognized as otherwise HP
+        // users get a warning about it on each program startup, so handle it
+        // here -- but it would be obviously better to add real supprot to it,
+        // of course!
+        if ( strcmp(alang, "646") == 0
+                || strcmp(alang, "ANSI_X3.4-1968") == 0
+#ifdef __HPUX__
+                    || strcmp(alang, "roman8") == 0
+#endif // __HPUX__
+            )
         {
             encname = _T("US-ASCII");
         }
