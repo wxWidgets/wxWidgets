@@ -600,14 +600,16 @@ bool wxGetEnv(const wxString& var, wxString *value)
 {
 #ifdef __WIN16__
     const wxChar* ret = wxGetenv(var);
-    if (ret)
+    if ( !ret )
+        return FALSE;
+
+    if ( value )
     {
         *value = ret;
-        return TRUE;
     }
-    else
-        return FALSE;
-#else
+
+    return TRUE;
+#else // Win32
     // first get the size of the buffer
     DWORD dwRet = ::GetEnvironmentVariable(var, NULL, 0);
     if ( !dwRet )
@@ -623,7 +625,7 @@ bool wxGetEnv(const wxString& var, wxString *value)
     }
 
     return TRUE;
-#endif
+#endif // Win16/32
 }
 
 bool wxSetEnv(const wxString& var, const wxChar *value)
