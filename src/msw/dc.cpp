@@ -377,8 +377,8 @@ void wxDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2, wxCoord xc, wx
 
     if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
     {
-       oldFgOld = ::GetTextColor(GetHdc());
-       oldBgOld = ::GetBkColor(GetHdc());
+       colFgOld = ::GetTextColor(GetHdc());
+       colBgOld = ::GetBkColor(GetHdc());
 
        if (m_textForegroundColour.Ok())
        {   //just the oposite from what is expected see help on pattern brush
@@ -500,8 +500,8 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffs
 
     if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
     {
-       oldFgOld = ::GetTextColor(GetHdc());
-       oldBgOld = ::GetBkColor(GetHdc());
+       colFgOld = ::GetTextColor(GetHdc());
+       colBgOld = ::GetBkColor(GetHdc());
 
        if (m_textForegroundColour.Ok())
        {   //just the oposite from what is expected see help on pattern brush
