@@ -175,12 +175,6 @@ public:
     bool SetMaskFromImage(const wxImage & mask,
                           unsigned char mr, unsigned char mg, unsigned char mb);
 
-    void DoFloodFill (wxCoord x, wxCoord y,
-        const wxBrush & fillBrush,
-        const wxColour& testColour,
-        int style = wxFLOOD_SURFACE,
-        int LogicalFunction = wxCOPY /* currently unused */ ) ;
-
     static bool CanRead( const wxString& name );
     static int GetImageCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );
     virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
@@ -270,10 +264,6 @@ protected:
     static wxList   sm_handlers;
 
 private:
-    //these two are called by FloodFill
-    bool MatchPixel(int x, int y, int w, int h, const wxColour & c) ;
-    bool MatchBoundaryPixel(int x, int y, int w, int h, const wxColour & fill, const wxColour & bound) ;
-
     friend class WXDLLEXPORT wxImageHandler;
 
     DECLARE_DYNAMIC_CLASS(wxImage)
