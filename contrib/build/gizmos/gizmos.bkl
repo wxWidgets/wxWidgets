@@ -12,6 +12,7 @@
         multicell.cpp
         splittree.cpp
         statpict.cpp
+<!--        treelistctrl.cpp -->
     </set>
 
     <headers template="wx_contrib_headers">
@@ -23,6 +24,7 @@
             wx/gizmos/splittree.h
             wx/gizmos/statpict.h
             wx/gizmos/gizmos.h
+<!--            wx/gizmos/treelistctrl.h -->
         </files>
     </headers>
 
