@@ -157,6 +157,10 @@ bool wxListBox::Create(wxWindow *parent,
 
     DWORD wstyle = WS_VISIBLE | WS_VSCROLL | WS_TABSTOP |
                    LBS_NOTIFY | LBS_HASSTRINGS /* | WS_CLIPSIBLINGS */;
+
+    wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
+                  _T("only one of listbox selection modes can be specified") );
+
     if (m_windowStyle & wxLB_MULTIPLE)
         wstyle |= LBS_MULTIPLESEL;
     else if (m_windowStyle & wxLB_EXTENDED)
