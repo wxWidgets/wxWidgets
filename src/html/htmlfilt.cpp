@@ -14,6 +14,7 @@
 
 #include "wx/wxprec.h"
 
+#include "wx/defs.h"
 #if wxUSE_HTML
 
 #ifdef __BORDLANDC__

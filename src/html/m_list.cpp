@@ -10,7 +10,7 @@
 #pragma implementation
 #endif
 
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
 
 #include "wx/defs.h"
