@@ -270,6 +270,7 @@ WXDLLEXPORT void   wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font);
 WXDLLEXPORT void   wxFillLogFont( LOGFONT*      pLogFont
                                  ,PFACENAMEDESC pFaceName
                                  ,HPS*          phPS
+                                 ,bool*         pbInternalPS
                                  ,long*         pflId
                                  ,wxString&     sFaceName
                                  ,wxFont*       pFont
