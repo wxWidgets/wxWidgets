@@ -68,19 +68,17 @@ static void gtk_pizza_forall        (GtkContainer     *container,
                                      gboolean          include_internals,
                                      GtkCallback       callback,
                                      gpointer          callback_data);
+                                     
 static void     gtk_pizza_allocate_child     (GtkPizza      *pizza,
                                               GtkPizzaChild *child);
-
-static void     gtk_pizza_position_child     (GtkPizza      *pizza,
-                                              GtkPizzaChild *child);
-#ifndef __WXGTK20__
-static void     gtk_pizza_position_children  (GtkPizza      *pizza);
-
 static void     gtk_pizza_adjust_allocations_recurse (GtkWidget *widget,
                                                       gpointer   cb_data);
-static void     gtk_pizza_adjust_allocations         (GtkPizza  *pizza,
-                                                      gint       dx,
-                                                      gint       dy);
+
+#ifndef __WXGTK20__
+static void     gtk_pizza_position_child     (GtkPizza      *pizza,
+                                              GtkPizzaChild *child);
+static void     gtk_pizza_position_children  (GtkPizza      *pizza);
+
 static GdkFilterReturn gtk_pizza_filter      (GdkXEvent      *gdk_xevent,
                                               GdkEvent       *event,
                                               gpointer        data);
@@ -351,7 +349,7 @@ gtk_pizza_move (GtkPizza     *pizza,
 
             child->x = x;
             child->y = y;
-
+            
             if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (pizza))
                 gtk_widget_queue_resize (widget);
             break;
@@ -709,7 +707,9 @@ gtk_pizza_size_allocate (GtkWidget     *widget,
         child = children->data;
         children = children->next;
 
+#ifndef __WXGTK20__
         gtk_pizza_position_child (pizza, child);
+#endif
         gtk_pizza_allocate_child (pizza, child);
     }
 }
@@ -759,9 +759,11 @@ gtk_pizza_expose (GtkWidget      *widget,
                   GdkEventExpose *event)
 {
     GtkPizza *pizza;
+#ifndef __WXGTK20__
     GtkPizzaChild *child;
     GdkEventExpose child_event;
     GList *children;
+#endif
 
     g_return_val_if_fail (widget != NULL, FALSE);
     g_return_val_if_fail (GTK_IS_PIZZA (widget), FALSE);
@@ -903,57 +905,6 @@ gtk_pizza_allocate_child (GtkPizza      *pizza,
 }
 
 static void
-gtk_pizza_position_child (GtkPizza      *pizza,
-                          GtkPizzaChild *child)
-{
-    gint x;
-    gint y;
-
-    x = child->x - pizza->xoffset;
-    y = child->y - pizza->yoffset;
-
-#ifndef __WXGTK20__
-    if (IS_ONSCREEN (x,y))
-    {
-        if (GTK_WIDGET_MAPPED (pizza) &&
-          GTK_WIDGET_VISIBLE (child->widget))
-        {
-            if (!GTK_WIDGET_MAPPED (child->widget))
-                gtk_widget_map (child->widget);
-        }
-
-        if (GTK_WIDGET_IS_OFFSCREEN (child->widget))
-            GTK_PRIVATE_UNSET_FLAG (child->widget, GTK_IS_OFFSCREEN);
-    }
-    else
-    {
-        if (!GTK_WIDGET_IS_OFFSCREEN (child->widget))
-            GTK_PRIVATE_SET_FLAG (child->widget, GTK_IS_OFFSCREEN);
-
-        if (GTK_WIDGET_MAPPED (child->widget))
-            gtk_widget_unmap (child->widget);
-    }
-#endif
-}
-
-#ifndef __WXGTK20__
-
-static void
-gtk_pizza_position_children (GtkPizza *pizza)
-{
-    GList *tmp_list;
-
-    tmp_list = pizza->children;
-    while (tmp_list)
-    {
-        GtkPizzaChild *child = tmp_list->data;
-        tmp_list = tmp_list->next;
-
-        gtk_pizza_position_child (pizza, child);
-    }
-}
-
-static void
 gtk_pizza_adjust_allocations_recurse (GtkWidget *widget,
                                        gpointer   cb_data)
 {
@@ -1000,8 +951,55 @@ gtk_pizza_adjust_allocations (GtkPizza *pizza,
     }
 }
 
-/* This function is used to find events to process while scrolling */
+#ifndef __WXGTK20__
+static void
+gtk_pizza_position_child (GtkPizza      *pizza,
+                          GtkPizzaChild *child)
+{
+    gint x;
+    gint y;
 
+    x = child->x - pizza->xoffset;
+    y = child->y - pizza->yoffset;
+
+    if (IS_ONSCREEN (x,y))
+    {
+        if (GTK_WIDGET_MAPPED (pizza) &&
+          GTK_WIDGET_VISIBLE (child->widget))
+        {
+            if (!GTK_WIDGET_MAPPED (child->widget))
+                gtk_widget_map (child->widget);
+        }
+
+        if (GTK_WIDGET_IS_OFFSCREEN (child->widget))
+            GTK_PRIVATE_UNSET_FLAG (child->widget, GTK_IS_OFFSCREEN);
+    }
+    else
+    {
+        if (!GTK_WIDGET_IS_OFFSCREEN (child->widget))
+            GTK_PRIVATE_SET_FLAG (child->widget, GTK_IS_OFFSCREEN);
+
+        if (GTK_WIDGET_MAPPED (child->widget))
+            gtk_widget_unmap (child->widget);
+    }
+}
+
+static void
+gtk_pizza_position_children (GtkPizza *pizza)
+{
+    GList *tmp_list;
+
+    tmp_list = pizza->children;
+    while (tmp_list)
+    {
+        GtkPizzaChild *child = tmp_list->data;
+        tmp_list = tmp_list->next;
+
+        gtk_pizza_position_child (pizza, child);
+    }
+}
+
+/* This function is used to find events to process while scrolling */
 static Bool
 gtk_pizza_expose_predicate (Display *display,
                   XEvent  *xevent,
@@ -1014,6 +1012,7 @@ gtk_pizza_expose_predicate (Display *display,
     else
         return False;
 }
+#endif /* __WXGTK20__ */
 
 /* This is the main routine to do the scrolling. Scrolling is
  * done by "Guffaw" scrolling, as in the Mozilla XFE, with
@@ -1030,6 +1029,15 @@ gtk_pizza_expose_predicate (Display *display,
 void
 gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
 {
+#ifdef __WXGTK20__
+    pizza->xoffset += dx;
+    pizza->yoffset += dy;
+
+    gtk_pizza_adjust_allocations (pizza, -dx, -dy);
+
+    if (pizza->bin_window)
+        gdk_window_scroll( pizza->bin_window, -dx, -dy );
+#else
     GtkWidget *widget;
     XEvent xevent;
     XID win;
@@ -1161,8 +1169,11 @@ gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
             }
         }
     }
+#endif /* __WXGTK20__ */
 }
 
+
+#ifndef __WXGTK20__
 /* The main event filter. Actually, we probably don't really need
  * to install this as a filter at all, since we are calling it
  * directly above in the expose-handling hack. But in case scrollbars
@@ -1250,7 +1261,6 @@ gtk_pizza_main_filter (GdkXEvent *gdk_xevent,
 
     return GDK_FILTER_CONTINUE;
 }
-
 #endif /* __WXGTK20__ */
 
 

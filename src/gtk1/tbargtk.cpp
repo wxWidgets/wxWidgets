@@ -396,9 +396,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
           mask = bitmap.GetMask()->GetBitmap();
         
         tool_pixmap = gtk_pixmap_new( pixmap, mask );
-#if (GTK_MINOR_VERSION > 0)
         gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
-#endif
         
         gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
 

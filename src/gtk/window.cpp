@@ -497,6 +497,14 @@ static int gtk_window_expose_callback( GtkWidget *widget,
     if (g_isIdle)
         wxapp_install_idle_handler();
 
+#ifdef __WXGTK20__
+    // This callback gets called in drawing-idle time under
+    // GTK 2.0, so we don't need to defer anything to idle
+    // time anymore.
+    
+    GtkPizza *pizza = GTK_PIZZA( widget );
+    if (gdk_event->window != pizza->bin_window) return FALSE;
+    
 #if 0
     if (win->GetName())
     {
@@ -510,16 +518,11 @@ static int gtk_window_expose_callback( GtkWidget *widget,
     }
 #endif
 
-#ifdef __WXGTK20__
-    // This callback gets called in drawing-idle time under
-    // GTK 2.0, so we don't need to defer anything to idle
-    // time anymore.
-    
     win->GetUpdateRegion() = wxRegion( gdk_event->region );
 
     win->GtkSendPaintEvents();
 
-    // Draw window less widgets
+    // Let parent window draw window less widgets
     (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, gdk_event);
 #else
     // This gets called immediately after an expose event
@@ -539,8 +542,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
     // win->GtkUpdate();
 #endif
 
-
-    return TRUE;
+    return FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -4261,21 +4263,13 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
         GetClientSize( &cw, &ch );
         m_clearRegion.Intersect( 0, 0, cw, ch );
     }
+#endif
+
     m_clipPaintRegion = TRUE;
 
     gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
 
     m_clipPaintRegion = FALSE;
-#else
-    wxCHECK_RET( GTK_PIZZA(m_wxwindow)->bin_window != NULL, wxT("window needs client area for scrolling") );
-
-    gdk_window_scroll( GTK_PIZZA(m_wxwindow)->bin_window, dx, dy );
-
-    GTK_PIZZA(m_wxwindow)->xoffset += dx;
-    GTK_PIZZA(m_wxwindow)->yoffset += dy;
-
-#endif
-
 }
 
 

@@ -7,7 +7,7 @@ wxWindows GUI library.
 wxWindows no longer supports GTK 1.0 (as did some early
 snapshots) so that you will need GTK 1.2 when using it.
 GTK 1.2.6 or above is recommended although some programs 
-will work with GTK 1.2.3 onwards. There is now beta support
+will work with GTK 1.2.3 onwards. There is now support
 for GTK 2.0.
 
 More info about the wxWindows project (and the Windows
@@ -26,6 +26,15 @@ su <type root password>
 make install
 ldconfig
 exit
+
+In order to use wxGTK with GTK 2.0 and its unicode
+support, you need to configure
+
+./configure --with-gtk --enable-gtk2 --enable-unicode
+etc.
+
+Sofar, support for GTK 2.0 has only been tested on
+Linux with glibc 2.2.
 
 When you run into problems, please read the INSTALL.txt and 
 follow those instructions. If you still don't have any success,
