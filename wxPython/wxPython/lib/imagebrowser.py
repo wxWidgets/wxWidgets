@@ -202,6 +202,7 @@ class ImageDialog(wxDialog):
             all_files = []
             for ftypes in self.fl_types[1:-1]:    # get list of all available image types
                 filter = self.fl_ext_types[ftypes]
+                print "filter = ", filter
                 self.fl_val = FindFiles(self, self.set_dir, filter)
                 all_files = all_files + self.fl_val.files   # add to list of files
             self.fl_list = all_files
@@ -305,8 +306,7 @@ class FindFiles:
                 f = f + "."
             else:
                 f = f + ch
-
-        return re.compile(f)
+        return re.compile(f+'$')
 
     def StripExt(self, file_nm):
         fl_fld = os.path.splitext(file_nm)
