@@ -722,6 +722,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     wxDir d;
     wxString eachFilename;
 
+    wxLogNull log;
     d.Open(dirName);
 
     if (d.IsOpened())
@@ -743,6 +744,8 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     // Now do the filenames -- but only if we're allowed to
     if ((GetWindowStyle() & wxDIRCTRL_DIR_ONLY) == 0)
     {
+        wxLogNull log;
+
         d.Open(dirName);
         
         if (d.IsOpened())
@@ -783,14 +786,18 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
             options = wxDIR_DIRS;
         }
 
-        wxDir dir2(path);
-        wxString str;
-        // Have to test for wxDIR_DIRS separately in case m_currentFilterStr is non-empty and
-        // and filters out any directories
-        if (dir2.GetFirst(& str, m_currentFilterStr, options) || dir2.GetFirst(& str, wxEmptyString, wxDIR_DIRS))
+        wxLogNull log;
+        wxDir dir2;
+        if (dir2.Open(path))
         {
-            m_treeCtrl->SetItemHasChildren(id);
-        }
+            wxString str;
+            // Have to test for wxDIR_DIRS separately in case m_currentFilterStr is non-empty and
+            // and filters out any directories
+            if (dir2.GetFirst(& str, m_currentFilterStr, options) || dir2.GetFirst(& str, wxEmptyString, wxDIR_DIRS))
+            {
+                m_treeCtrl->SetItemHasChildren(id);
+            }
+	}
     }
 
     // Add the sorted filenames
@@ -982,6 +989,7 @@ void wxGenericDirCtrl::FindChildFiles(wxTreeItemId id, int dirFlags, wxArrayStri
     wxDir d;
     wxString eachFilename;
 
+    wxLogNull log;
     d.Open(dirName);
 
     if (d.IsOpened())
@@ -1180,7 +1188,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     // 1) dir ctrl
     m_dirCtrl = new wxGenericDirCtrl(this, ID_DIRCTRL,
         defaultPath, wxPoint(5, 5),
-        wxSize(300, 200), wxDIRCTRL_DIR_ONLY);
+        wxSize(300, 200), wxDIRCTRL_DIR_ONLY|wxSUNKEN_BORDER);
 
     topsizer->Add( m_dirCtrl, 1, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
 
