@@ -1,0 +1,5 @@
+node radiobutton
+var label of text
+var value of bool
+var style of flags wxRB_GROUP
+derived from control

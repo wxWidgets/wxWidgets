@@ -817,12 +817,16 @@ trap 'rm -fr `echo "
             src/ogl/Makefile
             src/mmedia/Makefile
             src/stc/Makefile
+            src/xml/Makefile
             samples/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
             samples/ogl/ogledit/Makefile
             samples/ogl/studio/Makefile
             samples/stc/Makefile
+            utils/Makefile
+            utils/wxrc/Makefile
+            utils/wxrcedit/Makefile
          " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -906,12 +910,16 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             src/ogl/Makefile
             src/mmedia/Makefile
             src/stc/Makefile
+            src/xml/Makefile
             samples/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
             samples/ogl/ogledit/Makefile
             samples/ogl/studio/Makefile
             samples/stc/Makefile
+            utils/Makefile
+            utils/wxrc/Makefile
+            utils/wxrcedit/Makefile
          "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

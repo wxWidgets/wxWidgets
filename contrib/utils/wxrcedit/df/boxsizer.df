@@ -1,0 +1,6 @@
+node boxsizer
+type sizer
+icon 2
+childtype sizer_item
+derived from panel_item
+var orient of flags wxHORIZONTAL,wxVERTICAL

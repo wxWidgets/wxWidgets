@@ -1,0 +1,5 @@
+node menubar
+type panel
+icon 0
+childtype menu
+var style of flags wxMB_DOCKABLE

@@ -1,0 +1,3 @@
+# anything that may be placed into menu
+node menu_item
+abstract

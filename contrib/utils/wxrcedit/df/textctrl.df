@@ -1,0 +1,4 @@
+node textctrl
+var value of text
+var style of flags wxTE_PROCESS_ENTER,wxTE_PROCESS_TAB,wxTE_MULTILINE,wxTE_PASSWORD,wxTE_READONLY,wxHSCROLL
+derived from control

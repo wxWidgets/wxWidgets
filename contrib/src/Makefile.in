@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SUBDIRS=ogl mmedia stc
+CONTRIB_SUBDIRS=ogl mmedia stc xml
 
 all:
 	@for d in $(CONTRIB_SUBDIRS); do (cd $$d && $(MAKE)); done

@@ -8,6 +8,8 @@ all:
 clean:
 	cd src; make clean
 	cd samples; make clean
+	cd utils; make clean
+    
 
 samples:
 	cd samples; make

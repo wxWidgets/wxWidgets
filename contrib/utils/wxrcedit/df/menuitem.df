@@ -1,0 +1,9 @@
+node menuitem
+type normal
+icon 0
+var label of text
+var help of text
+var checkable of bool
+var checked of bool
+var enabled of bool
+derived from menu_item

@@ -1,0 +1,31 @@
+# $Id$
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../../..
+libsrc_dir = contrib/src/xml
+
+TARGET_LIBNAME=libwxxml
+
+LIBVERSION_CURRENT=0
+LIBVERSION_REVISION=1
+LIBVERSION_AGE=0
+
+HEADER_PATH=$(top_srcdir)/contrib/include/wx
+HEADER_SUBDIR=xml
+
+HEADERS=xh_all.h xh_bttn.h xh_chckb.h xh_chckl.h xh_choic.h xh_combo.h \
+        xh_dlg.h xh_gauge.h xh_html.h xh_menu.h xh_notbk.h xh_panel.h \
+        xh_radbt.h xh_radbx.h xh_sizer.h xh_slidr.h xh_spin.h xh_stbmp.h \
+        xh_sttxt.h xh_text.h xml.h xmlio.h xmlres.h
+
+
+OBJECTS=xml.o xmlbin.o xmlbinz.o xmlpars.o xmlres.o xmlrsall.o \
+        xh_bttn.o xh_chckb.o xh_chckl.o xh_choic.o xh_combo.o xh_dlg.o \
+        xh_gauge.o xh_html.o xh_menu.o xh_notbk.o xh_panel.o xh_radbt.o \
+        xh_radbx.o xh_sizer.o xh_slidr.o xh_spin.o xh_stbmp.o xh_sttxt.o \
+        xh_text.o \
+
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
+
+include $(top_builddir)/src/makelib.env
+

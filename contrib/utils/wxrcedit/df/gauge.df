@@ -1,0 +1,7 @@
+node gauge
+var style of flags wxGA_HORIZONTAL,wxGA_VERTICAL,wxGA_PROGRESSBAR,wxGA_SMOOTH
+var range of integer
+var value of integer
+var shadow of integer
+var bezel of integer
+derived from control

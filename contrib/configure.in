@@ -42,10 +42,14 @@ AC_OUTPUT([
             src/ogl/Makefile
             src/mmedia/Makefile
             src/stc/Makefile
+            src/xml/Makefile
             samples/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
             samples/ogl/ogledit/Makefile
             samples/ogl/studio/Makefile
             samples/stc/Makefile
+            utils/Makefile
+            utils/wxrc/Makefile
+            utils/wxrcedit/Makefile
          ])
