@@ -519,7 +519,7 @@ public:
 
     // do we have a header window?
     bool HasHeader() const
-        { return HasFlag(wxLC_REPORT) && !HasFlag(wxLC_NO_HEADER); }
+        { return InReportView() && !HasFlag(wxLC_NO_HEADER); }
 
     void HighlightAll( bool on );
 
@@ -1599,7 +1599,7 @@ void wxListLineData::DrawTextFormatted(wxDC *dc,
 
 bool wxListLineData::Highlight( bool on )
 {
-    wxCHECK_MSG( !m_owner->IsVirtual(), FALSE, _T("unexpected call to Highlight") );
+    wxCHECK_MSG( !IsVirtual(), FALSE, _T("unexpected call to Highlight") );
 
     if ( on == m_highlighted )
         return FALSE;
@@ -2291,7 +2291,7 @@ wxCoord wxListMainWindow::GetLineHeight() const
 
 wxCoord wxListMainWindow::GetLineY(size_t line) const
 {
-    wxASSERT_MSG( HasFlag(wxLC_REPORT), _T("only works in report mode") );
+    wxASSERT_MSG( InReportView(), _T("only works in report mode") );
 
     return LINE_SPACING + line*GetLineHeight();
 }
@@ -2450,7 +2450,7 @@ bool wxListMainWindow::HighlightLine( size_t line, bool highlight )
 
 void wxListMainWindow::RefreshLine( size_t line )
 {
-    if ( HasFlag(wxLC_REPORT) )
+    if ( InReportView() )
     {
         size_t visibleFrom, visibleTo;
         GetVisibleLinesRange(&visibleFrom, &visibleTo);
@@ -2472,7 +2472,7 @@ void wxListMainWindow::RefreshLines( size_t lineFrom, size_t lineTo )
 
     wxASSERT_MSG( lineTo < GetItemCount(), _T("invalid line range") );
 
-    if ( HasFlag(wxLC_REPORT) )
+    if ( InReportView() )
     {
         size_t visibleFrom, visibleTo;
         GetVisibleLinesRange(&visibleFrom, &visibleTo);
@@ -2503,7 +2503,7 @@ void wxListMainWindow::RefreshLines( size_t lineFrom, size_t lineTo )
 
 void wxListMainWindow::RefreshAfter( size_t lineFrom )
 {
-    if ( HasFlag(wxLC_REPORT) )
+    if ( InReportView() )
     {
         size_t visibleFrom, visibleTo;
         GetVisibleLinesRange(&visibleFrom, &visibleTo);
@@ -2605,7 +2605,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     dc.SetFont( GetFont() );
 
-    if ( HasFlag(wxLC_REPORT) )
+    if ( InReportView() )
     {
         int lineHeight = GetLineHeight();
 
@@ -2864,7 +2864,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     size_t count = GetItemCount(),
            current;
 
-    if ( HasFlag(wxLC_REPORT) )
+    if ( InReportView() )
     {
         current = y / GetLineHeight();
         if ( current < count )
@@ -3028,7 +3028,7 @@ void wxListMainWindow::MoveToItem(size_t item)
     int view_x = SCROLL_UNIT_X*GetScrollPos( wxHORIZONTAL );
     int view_y = hLine*GetScrollPos( wxVERTICAL );
 
-    if ( HasFlag(wxLC_REPORT) )
+    if ( InReportView() )
     {
         // the next we need the range of lines shown it might be different, so
         // recalculate it
@@ -3187,7 +3187,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_PRIOR:
             {
-                int steps = HasFlag(wxLC_REPORT) ? m_linesPerPage - 1 : m_current % m_linesPerPage;
+                int steps = InReportView() ? m_linesPerPage - 1 : m_current % m_linesPerPage;
 
                 int index = m_current - steps;
                 if (index < 0)
@@ -3199,7 +3199,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_NEXT:
             {
-                int steps = HasFlag(wxLC_REPORT)
+                int steps = InReportView()
                                ? m_linesPerPage - 1
                                : m_linesPerPage - (m_current % m_linesPerPage) - 1;
 
@@ -3213,7 +3213,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_LEFT:
-            if ( !HasFlag(wxLC_REPORT) )
+            if ( !InReportView() )
             {
                 int index = m_current - m_linesPerPage;
                 if (index < 0)
@@ -3224,7 +3224,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_RIGHT:
-            if ( !HasFlag(wxLC_REPORT) )
+            if ( !InReportView() )
             {
                 size_t index = m_current + m_linesPerPage;
 
@@ -3335,7 +3335,7 @@ void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
     {
         m_small_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
     }
-    else if ( HasFlag(wxLC_REPORT) && (m_small_image_list))
+    else if ( InReportView() && (m_small_image_list))
     {
         m_small_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
     }
@@ -3355,7 +3355,7 @@ void wxListMainWindow::GetImageSize( int index, int &width, int &height ) const
     {
         m_small_image_list->GetSize( index, width, height );
     }
-    else if ( HasFlag(wxLC_REPORT) && m_small_image_list )
+    else if ( InReportView() && m_small_image_list )
     {
         m_small_image_list->GetSize( index, width, height );
     }
@@ -3452,7 +3452,7 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
     wxCHECK_RET( col >= 0 && col < GetColumnCount(),
                  _T("invalid column index") );
 
-    wxCHECK_RET( HasFlag(wxLC_REPORT),
+    wxCHECK_RET( InReportView(),
                  _T("SetColumnWidth() can only be called in report mode.") );
 
     m_dirty = TRUE;
@@ -3856,7 +3856,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
 
     const int lineHeight = GetLineHeight();
 
-    if ( HasFlag(wxLC_REPORT) )
+    if ( InReportView() )
     {
         // all lines have the same height and we scroll one line per step
         int entireHeight = count*lineHeight + LINE_SPACING;
@@ -4267,7 +4267,7 @@ long wxListMainWindow::HitTest( int x, int y, int &flags )
 
     size_t count = GetItemCount();
 
-    if ( HasFlag(wxLC_REPORT) )
+    if ( InReportView() )
     {
         size_t current = y / GetLineHeight();
         if ( current < count )
@@ -4312,7 +4312,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     // this is unused variable
     int mode = 0;
     #endif
-    if ( HasFlag(wxLC_REPORT) )
+    if ( InReportView() )
     {
         #if 0
         // this is unused variable
@@ -4370,7 +4370,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
 void wxListMainWindow::InsertColumn( long col, wxListItem &item )
 {
     m_dirty = TRUE;
-    if ( HasFlag(wxLC_REPORT) )
+    if ( InReportView() )
     {
         if (item.m_width == wxLIST_AUTOSIZE_USEHEADER)
             item.m_width = GetTextLength( item.m_text );
@@ -4473,7 +4473,7 @@ int wxListMainWindow::GetCountPerPage() const
 
 void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 {
-    wxASSERT_MSG( HasFlag(wxLC_REPORT), _T("this is for report mode only") );
+    wxASSERT_MSG( InReportView(), _T("this is for report mode only") );
 
     if ( m_lineFrom == (size_t)-1 )
     {
@@ -4560,7 +4560,7 @@ void wxGenericListCtrl::CalculateAndSetHeaderHeight()
 
             m_headerWin->SetSize(m_headerWin->GetSize().x, m_headerHeight);
 
-            if ( HasFlag(wxLC_REPORT) && !HasFlag(wxLC_NO_HEADER) )
+            if ( HasHeader() )
                 ResizeReportView(TRUE);
         }
     }
@@ -4611,7 +4611,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
 
     m_mainWin = new wxListMainWindow( this, -1, wxPoint(0,0), size, style );
 
-    if ( HasFlag(wxLC_REPORT) )
+    if ( InReportView() )
     {
         CreateHeaderWindow();
 
@@ -4661,8 +4661,8 @@ void wxGenericListCtrl::SetWindowStyleFlag( long flag )
         m_mainWin->DeleteEverything();
 
         // has the header visibility changed?
-        bool hasHeader = HasFlag(wxLC_REPORT) && !HasFlag(wxLC_NO_HEADER),
-             willHaveHeader = (flag & wxLC_REPORT) && !(flag & wxLC_NO_HEADER);
+        bool hasHeader = HasHeader();
+        bool willHaveHeader = (flag & wxLC_REPORT) && !(flag & wxLC_NO_HEADER);
 
         if ( hasHeader != willHaveHeader )
         {

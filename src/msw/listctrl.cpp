@@ -359,7 +359,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     // for comctl32.dll v 4.70+ we want to have this attribute because it's
     // prettier (and also because wxGTK does it like this)
-    if ( HasFlag(wxLC_REPORT) && wxTheApp->GetComCtl32Version() >= 470 )
+    if ( InReportView() && wxTheApp->GetComCtl32Version() >= 470 )
     {
         ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE,
                       0, LVS_EX_FULLROWSELECT);
@@ -2297,12 +2297,10 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     // Reset the device origin since it may have been set
     dc.SetDeviceOrigin(0, 0);
 
-    bool drawHRules = ((GetWindowStyle() & wxLC_HRULES) != 0);
-    bool drawVRules = ((GetWindowStyle() & wxLC_VRULES) != 0);
+    bool drawHRules = HasFlag(wxLC_HRULES);
+    bool drawVRules = HasFlag(wxLC_VRULES);
 
-    if (!drawHRules && !drawVRules)
-        return;
-    if ((GetWindowStyle() & wxLC_REPORT) == 0)
+    if (!InReportView() || !drawHRules && !drawVRules)
         return;
 
     wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
@@ -2614,7 +2612,7 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
     if (info.m_mask & wxLIST_MASK_TEXT)
     {
         lvItem.mask |= LVIF_TEXT;
-        if ( ctrl->GetWindowStyleFlag() & wxLC_USER_TEXT )
+        if ( ctrl->HasFlag(wxLC_USER_TEXT) )
         {
             lvItem.pszText = LPSTR_TEXTCALLBACK;
         }

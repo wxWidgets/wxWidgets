@@ -155,8 +155,15 @@ public:
     bool SortItems( wxListCtrlCompare fn, long data );
     bool Update( long item );
 
-    // returns true if it is a virtual list control
-    bool IsVirtual() const { return (GetWindowStyle() & wxLC_VIRTUAL) != 0; }
+    // are we in report mode?
+    bool InReportView() const { return HasFlag(wxLC_REPORT); }
+
+    // are we in virtual report mode?
+    bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
+
+    // do we have a header window?
+    bool HasHeader() const
+        { return InReportView() && !HasFlag(wxLC_NO_HEADER); }
 
     // refresh items selectively (only useful for virtual list controls)
     void RefreshItem(long item);
