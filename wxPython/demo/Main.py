@@ -1012,10 +1012,6 @@ class DemoTaskBarIcon(wx.TaskBarIcon):
     def OnTaskBarClose(self, evt):
         self.frame.Close()
 
-        # because of the way wx.TaskBarIcon.PopupMenu is implemented we have to
-        # prod the main idle handler a bit to get the window to actually close
-        wx.GetApp().ProcessIdle()
-    
 
     def OnTaskBarChange(self, evt):
         icon = self.MakeIcon(images.getBlom10MaskedImage())
