@@ -754,7 +754,7 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
       if (quote_it)
         wxFprintf( stream ,wxT("'") );
 
-      wxFprintf( stream, val.c_str() );
+      wxFprintf( stream, (const wxChar*) val );
 
       if (quote_it)
         wxFprintf( stream, wxT("'") );
