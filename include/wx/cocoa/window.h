@@ -18,6 +18,8 @@
     #import <Foundation/NSGeometry.h>
 #endif //def __OBJC__
 
+DECLARE_WXCOCOA_OBJC_CLASS(NSAffineTransform);
+
 class wxWindowCocoaHider;
 class wxWindowCocoaScrollView;
 
@@ -70,6 +72,14 @@ public:
     // Add/remove children
     void CocoaAddChild(wxWindowCocoa *child);
     void CocoaRemoveFromParent(void);
+#ifdef __OBJC__
+    // Returns an autoreleased NSAffineTransform which can be applied
+    // to a graphics context currently using the view's coordinate system
+    // (such as the one locked when drawRect is called or after a call
+    // to [NSView lockFocus]) such that further drawing is done using
+    // the wxWidgets coordinate system.
+    WX_NSAffineTransform CocoaGetWxToBoundsTransform();
+#endif //def __OBJC__
 protected:
     // enable==false: disables the control
     // enable==true: enables the control IF it should be enabled
