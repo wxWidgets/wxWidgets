@@ -100,6 +100,33 @@ public:
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
 
+    //char* GetPrivData() const;
+    //int GetPrivDataLen() const;
+    //void SetPrivData( char *privData, int len );
+
+    %extend {
+        PyObject* GetPrivData() {
+            PyObject* data;
+            bool blocked = wxPyBeginBlockThreads();
+            data = PyString_FromStringAndSize(self->GetPrivData(),
+                                              self->GetPrivDataLen());
+            wxPyEndBlockThreads(blocked);
+            return data;
+        }
+
+        void SetPrivData(PyObject* data) {
+            if (! PyString_Check(data)) {
+                wxPyBLOCK_THREADS(PyErr_SetString(PyExc_TypeError,
+                                                  "Expected string object"));
+                return /* NULL */ ;
+            }
+
+            bool blocked = wxPyBeginBlockThreads();
+            self->SetPrivData(PyString_AS_STRING(data), PyString_GET_SIZE(data));
+            wxPyEndBlockThreads(blocked);
+        }
+    }
+    
 
     // NOTE: These are now inside of #if WXWIN_COMPATIBILITY_2_4, so be
     //       prepared to remove them...
