@@ -552,7 +552,7 @@ void wxGridCellEditor::HandleReturn(wxKeyEvent& event)
 bool wxGridCellEditor::IsAcceptedKey(wxKeyEvent& event)
 {
     // accept the simple key presses, not anything with Ctrl/Alt/Meta
-    return !(event.ControlDown() || event.AltDown());
+    return !(event.ControlDown() || event.AltDown() || event.GetKeyCode() == WXK_SHIFT);
 }
 
 void wxGridCellEditor::StartingKey(wxKeyEvent& event)
