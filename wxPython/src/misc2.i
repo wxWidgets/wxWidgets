@@ -303,14 +303,14 @@ enum wxSystemFeature
     wxSYS_CAN_ICONIZE_FRAME
 };
 
-// values for different screen designs
-enum wxSystemScreen
+enum wxSystemScreenType
 {
     wxSYS_SCREEN_NONE = 0,  //   not yet defined
-    wxSYS_SCREEN_DESKTOP,   //   >= 800x600
-    wxSYS_SCREEN_SMALL,     //   >= 640x480
+
+    wxSYS_SCREEN_TINY,      //   <
     wxSYS_SCREEN_PDA,       //   >= 320x240
-    wxSYS_SCREEN_TINY       //   <
+    wxSYS_SCREEN_SMALL,     //   >= 640x480
+    wxSYS_SCREEN_DESKTOP    //   >= 800x600
 };
 
 
@@ -330,10 +330,10 @@ public:
 
    // Get system screen design (desktop, pda, ..) used for
    // laying out various dialogs.
-   static wxSystemScreen GetScreen();
+   static wxSystemScreenType GetScreenType();
 
    // Override default.
-   static void SetScreen( wxSystemScreen screen );
+   static void SetScreenType( wxSystemScreenType screen );
 
 };
 
