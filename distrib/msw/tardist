@@ -64,6 +64,10 @@ rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
 
 rm -f $2/wx*-${WXVER}*.tar.gz
 
+# Copy setup files
+cp $1/include/wx/os2/setup0.h $1/include/wx/os2/setup.h
+cp $1/include/wx/msw/setup0.h $1/include/wx/msw/setup.h
+
 echo Tarring...
 
 ### Generic
@@ -132,10 +136,13 @@ gzip $2/wxX11-${WXVER}.tar
 # gzip $2/wxMSW-${WXVER}.tar
 
 ### wxMac
+cp $1/include/wx/mac/setup0.h $1/include/wx/setup.h
 cd $1
 cat $1/distrib/msw/mac.rsp $1/distrib/msw/generic.rsp $1/distrib/msw/cw.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/stc.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxmac_in.txt
 expandlines /tmp/wxmac_in.txt /tmp/wxmac.txt
 $TAR cf $2/wxMac-${WXVER}.tar -T /tmp/wxmac.txt
+
+rm -f $1/include/wx/setup.h
 
 echo Re-tarring wxMac in a subdirectory...
 cd $2

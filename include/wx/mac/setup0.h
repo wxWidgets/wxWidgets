@@ -708,7 +708,7 @@
 #define wxUSE_HTML          1
 
 // OpenGL canvas
-#define wxUSE_GLCANVAS       1
+#define wxUSE_GLCANVAS       0
 
 // wxTreeLayout class
 #define wxUSE_TREELAYOUT     1

@@ -53,6 +53,10 @@ copy %webfiles%\site\faq*.htm %src\docs\html
 copy %webfiles%\site\platform.htm %src\docs\html
 copy %webfiles%\site\i18n.htm %src\docs\html
 
+Rem Copy setup0.h files to setup.h
+copy %src%\include\wx\os2\setup0.h %src%\include\wx\os2\setup.h
+copy %src%\include\wx\msw\setup0.h %src%\include\wx\msw\setup.h
+
 cd %src
 echo Zipping...
 
@@ -78,6 +82,9 @@ call %WXWIN%\distrib\msw\rearchive wxOS2-%version%.zip wxWindows-%version% %dest
 zip32 -d %dest%\wxOS2-%version%.zip %dest%/src/gtk/descrip.mms %dest%/src/motif/descrip.mms
 
 echo Zipping wxMac distribution
+
+copy %src%\include\wx\mac\setup0.h %src%\include\wx\setup.h
+
 zip32 -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\generic.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\mac.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\cw.rsp
@@ -91,6 +98,9 @@ zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\xml.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\stc.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\contrib.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
+
+erase /Y %src%\include\wx\setup.h
+
 call %WXWIN%\distrib\msw\rearchive wxMac-%version%.zip wxWindows-%version% %dest%
 
 zip32 -d %dest%\wxMac-%version%.zip %dest%/src/gtk/descrip.mms %dest%/src/motif/descrip.mms
