@@ -59,16 +59,18 @@ public:
 
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
-                                    const wxRect& rect);
+                                    const wxRect& rect,
+                                    int flags = 0);
 
     virtual void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
                                   const wxSize& size,
                                   wxCoord position,
-                                  wxOrientation orient);
+                                  wxOrientation orient,
+                                  int flags = 0);
 
 
-    virtual wxPoint GetSplitterSashAndBorder(const wxWindow *win);
+    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 
 protected:
@@ -197,17 +199,32 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
 // sash drawing
 // ----------------------------------------------------------------------------
 
-wxPoint
-wxRendererGeneric::GetSplitterSashAndBorder(const wxWindow *win)
+wxSplitterRenderParams
+wxRendererGeneric::GetSplitterParams(const wxWindow *win)
 {
     // see below
-    return win->HasFlag(wxSP_3D) ? wxPoint(7, 2) : wxPoint(3, 0);
+    wxCoord sashWidth,
+            border;
+
+    if ( win->HasFlag(wxSP_3D) )
+    {
+        sashWidth = 7;
+        border = 3;
+    }
+    else // no 3D effect
+    {
+        sashWidth = 2;
+        border = 0;
+    }
+
+    return wxSplitterRenderParams(sashWidth, border, false);
 }
 
 void
 wxRendererGeneric::DrawSplitterBorder(wxWindow *win,
                                       wxDC& dc,
-                                      const wxRect& rectOrig)
+                                      const wxRect& rectOrig,
+                                      int WXUNUSED(falgs))
 {
     if ( win->HasFlag(wxSP_3D) )
     {
@@ -222,7 +239,8 @@ wxRendererGeneric::DrawSplitterSash(wxWindow *win,
                                     wxDC& dcReal,
                                     const wxSize& sizeReal,
                                     wxCoord position,
-                                    wxOrientation orient)
+                                    wxOrientation orient,
+                                    int WXUNUSED(flags))
 {
     // to avoid duplicating the same code for horizontal and vertical sashes,
     // simply mirror the DC instead if needed (i.e. if horz splitter)

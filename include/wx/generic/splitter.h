@@ -245,12 +245,18 @@ protected:
     // set the sash position and send an event about it having been changed
     void SetSashPositionAndNotify(int sashPos);
 
+    // callbacks executed when we detect that the mouse has entered or left
+    // the sash
+    virtual void OnEnterSash();
+    virtual void OnLeaveSash();
+
     // set the cursor appropriate for the current split mode
     void SetResizeCursor();
 
+    // redraw the splitter if its "hotness" changed if necessary
+    void RedrawIfHotSensitive(bool isHot);
+
     wxSplitMode m_splitMode;
-    bool        m_permitUnsplitAlways;
-    bool        m_needUpdating; // when in live mode, set this to TRUE to resize children in idle
     wxWindow*   m_windowOne;
     wxWindow*   m_windowTwo;
     int         m_dragMode;
@@ -265,6 +271,11 @@ protected:
     wxCursor    m_sashCursorWE;
     wxCursor    m_sashCursorNS;
     wxPen      *m_sashTrackerPen;
+
+    // when in live mode, set this to TRUE to resize children in idle
+    bool        m_needUpdating:1;
+    bool        m_permitUnsplitAlways:1;
+    bool        m_isHot:1;
 
 private:
     WX_DECLARE_CONTROL_CONTAINER();

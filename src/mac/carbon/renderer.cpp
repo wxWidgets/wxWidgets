@@ -57,7 +57,8 @@ public:
                                   wxDC& dc,
                                   const wxSize& size,
                                   wxCoord position,
-                                  wxOrientation orient);
+                                  wxOrientation orient,
+                                  int flags = 0);
 
 private:
     // the tree buttons
@@ -200,7 +201,8 @@ wxRendererMac::DrawSplitterSash(wxWindow *win,
                                 wxDC& dc,
                                 const wxSize& size,
                                 wxCoord position,
-                                wxOrientation orient)
+                                wxOrientation orient,
+                                int WXUNUSED(flags))
 {
     // VZ: we have to somehow determine if we're drawing a normal sash or
     //     a brushed metal one as they look quite differently... this is

@@ -38,6 +38,12 @@
     #include "wx/settings.h"
 #endif // GTK 2.0
 
+#ifdef __WXGTK20__
+    #define WXUNUSED_IN_GTK1(arg) arg
+#else
+    #define WXUNUSED_IN_GTK1(arg)
+#endif
+
 // ----------------------------------------------------------------------------
 // wxRendererGTK: our wxRendererNative implementation
 // ----------------------------------------------------------------------------
@@ -61,14 +67,16 @@ public:
 
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
-                                    const wxRect& rect) ;
+                                    const wxRect& rect,
+                                    int flags = 0);
     virtual void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
                                   const wxSize& size,
                                   wxCoord position,
-                                  wxOrientation orient);
+                                  wxOrientation orient,
+                                  int flags = 0);
 
-    virtual wxPoint GetSplitterSashAndBorder(const wxWindow *win);
+    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 };
 
 // ============================================================================
@@ -151,24 +159,42 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* WXUNUSED(win),
 // splitter sash drawing
 // ----------------------------------------------------------------------------
 
-// the full sash width (should be even)
-static const wxCoord SASH_SIZE = 10;
+// all this should probably be read from the current theme settings somehow?
+#ifdef __WXGTK20__
+    // the full sash size
+    static const wxCoord SASH_FULL_SIZE = 5;
+#else // GTK+ 1.x
+    // the full sash width (should be even)
+    static const wxCoord SASH_SIZE = 10;
 
-// margin around the sash
-static const wxCoord SASH_MARGIN = 5;
+    // margin around the sash
+    static const wxCoord SASH_MARGIN = 5;
 
-wxPoint
-wxRendererGTK::GetSplitterSashAndBorder(const wxWindow * WXUNUSED(win))
+    // the full sash size
+    static const wxCoord SASH_FULL_SIZE = SASH_SIZE + SASH_MARGIN;
+#endif // GTK+ 2.x/1.x
+
+wxSplitterRenderParams
+wxRendererGTK::GetSplitterParams(const wxWindow * WXUNUSED(win))
 {
-    // we don't draw any border, hence 0 for the second field, but we must
-    // leave some margin around the sash
-    return wxPoint(SASH_SIZE + SASH_MARGIN, 0);
+    // we don't draw any border, hence 0 for the second field
+    return wxSplitterRenderParams
+           (
+               SASH_FULL_SIZE,
+               0,
+#ifdef __WXGTK20__
+               true     // hot sensitive
+#else // GTK+ 1.x
+               false    // not
+#endif // GTK+ 2.x/1.x
+           );
 }
 
 void
 wxRendererGTK::DrawSplitterBorder(wxWindow * WXUNUSED(win),
                                   wxDC& WXUNUSED(dc),
-                                  const wxRect& WXUNUSED(rect))
+                                  const wxRect& WXUNUSED(rect),
+                                  int WXUNUSED(flags))
 {
     // nothing to do
 }
@@ -178,7 +204,8 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
                                 wxDC& dc,
                                 const wxSize& size,
                                 wxCoord position,
-                                wxOrientation orient)
+                                wxOrientation orient,
+                                int WXUNUSED_IN_GTK1(flags))
 {
     if ( !win->m_wxwindow->window )
     {
@@ -189,26 +216,43 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     // are we drawing vertical or horizontal splitter?
     const bool isVert = orient == wxVERTICAL;
 
-    // we must erase everything first, otherwise the garbage from the old sash
-    // is left when dragging it
-    //
-    // TODO: is this the right way to draw themed background?
     GdkRectangle rect;
     if ( isVert )
     {
         rect.x = position;
         rect.y = 0;
-        rect.width = SASH_SIZE + SASH_MARGIN;
+        rect.width = SASH_FULL_SIZE;
         rect.height = size.y;
     }
     else // horz
     {
         rect.x = 0;
         rect.y = position;
-        rect.height = SASH_SIZE + SASH_MARGIN;
+        rect.height = SASH_FULL_SIZE;
         rect.width = size.x;
     }
 
+#ifdef __WXGTK20__
+    gtk_paint_handle
+    (
+        win->m_wxwindow->style,
+        GTK_PIZZA(win->m_wxwindow)->bin_window,
+        flags & wxCONTROL_CURRENT ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
+        GTK_SHADOW_NONE,
+        NULL /* no clipping */,
+        win->m_wxwindow,
+        "paned",
+        rect.x,
+        rect.y,
+        rect.width,
+        rect.height,
+        isVert ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL
+    );
+#else // GTK+ 1.x
+    // we must erase everything first, otherwise the garbage from the old sash
+    // is left when dragging it
+    //
+    // TODO: is this the right way to draw themed background?
     gtk_paint_flat_box
     (
         win->m_wxwindow->style,
@@ -229,11 +273,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     typedef void (*GtkPaintLineFunc)(GtkStyle *, GdkWindow *,
                                                 GtkStateType,
                                                 GdkRectangle *, GtkWidget *,
-#ifdef __WXGTK20__
-                                                const gchar *,
-#else
                                                 gchar *,
-#endif
                                                 gint, gint, gint);
 
     GtkPaintLineFunc func = isVert ? gtk_paint_vline : gtk_paint_hline;
@@ -262,5 +302,6 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         isVert ? size.y - 2*SASH_SIZE : position,
         SASH_SIZE, SASH_SIZE
     );
+#endif // GTK+ 2.x/1.x
 }
 

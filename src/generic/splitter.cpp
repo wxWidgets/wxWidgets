@@ -109,6 +109,7 @@ void wxSplitterWindow::Init()
     m_sashTrackerPen = new wxPen(*wxBLACK, 2, wxSOLID);
 
     m_needUpdating = FALSE;
+    m_isHot = false;
 }
 
 wxSplitterWindow::~wxSplitterWindow()
@@ -116,11 +117,45 @@ wxSplitterWindow::~wxSplitterWindow()
     delete m_sashTrackerPen;
 }
 
+// ----------------------------------------------------------------------------
+// entering/leaving sash
+// ----------------------------------------------------------------------------
+
+void wxSplitterWindow::RedrawIfHotSensitive(bool isHot)
+{
+    if ( wxRendererNative::Get().GetSplitterParams(this).isHotSensitive )
+    {
+        m_isHot = isHot;
+
+        wxClientDC dc(this);
+        DrawSash(dc);
+    }
+    //else: we don't change our appearance, don't redraw to avoid flicker
+}
+
+void wxSplitterWindow::OnEnterSash()
+{
+    SetResizeCursor();
+
+    RedrawIfHotSensitive(true);
+}
+
+void wxSplitterWindow::OnLeaveSash()
+{
+    SetCursor(*wxSTANDARD_CURSOR);
+
+    RedrawIfHotSensitive(false);
+}
+
 void wxSplitterWindow::SetResizeCursor()
 {
     SetCursor(m_splitMode == wxSPLIT_VERTICAL ? m_sashCursorWE
                                               : m_sashCursorNS);
 }
+
+// ----------------------------------------------------------------------------
+// other event handlers
+// ----------------------------------------------------------------------------
 
 void wxSplitterWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
@@ -252,15 +287,10 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     }  // left up && dragging
     else if ((event.Moving() || event.Leaving() || event.Entering()) && (m_dragMode == wxSPLIT_DRAG_NONE))
     {
-        // Just change the cursor as required
-        if ( !event.Leaving() && SashHitTest(x, y) )
-        {
-            SetResizeCursor();
-        }
+        if ( event.Leaving() || !SashHitTest(x, y) )
+            OnLeaveSash();
         else
-        {
-            SetCursor(* wxSTANDARD_CURSOR);
-        }
+            OnEnterSash();
     }
     else if (event.Dragging() && (m_dragMode == wxSPLIT_DRAG_DRAGGING))
     {
@@ -387,12 +417,12 @@ bool wxSplitterWindow::SashHitTest(int x, int y, int tolerance)
 
 int wxSplitterWindow::GetSashSize() const
 {
-    return wxRendererNative::Get().GetSplitterSashAndBorder(this).x;
+    return wxRendererNative::Get().GetSplitterParams(this).widthSash;
 }
 
 int wxSplitterWindow::GetBorderSize() const
 {
-    return wxRendererNative::Get().GetSplitterSashAndBorder(this).y;
+    return wxRendererNative::Get().GetSplitterParams(this).border;
 }
 
 // Draw the sash
@@ -419,9 +449,9 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
                                 dc,
                                 GetClientSize(),
                                 m_sashPosition,
-                                m_splitMode == wxSPLIT_VERTICAL
-                                    ? wxVERTICAL
-                                    : wxHORIZONTAL
+                                m_splitMode == wxSPLIT_VERTICAL ? wxVERTICAL
+                                                                : wxHORIZONTAL,
+                                m_isHot ? wxCONTROL_CURRENT : 0
                             );
 }
 

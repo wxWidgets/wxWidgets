@@ -63,6 +63,29 @@ enum
 };
 
 // ----------------------------------------------------------------------------
+// helper structs
+// ----------------------------------------------------------------------------
+
+// wxSplitterWindow parameters
+struct WXDLLEXPORT wxSplitterRenderParams
+{
+    // the only way to initialize this struct is by using this ctor
+    wxSplitterRenderParams(wxCoord widthSash_, wxCoord border_, bool isSens_)
+        : widthSash(widthSash_), border(border_), isHotSensitive(isSens_)
+        {
+        }
+
+    // the width of the splitter sash
+    const wxCoord widthSash;
+
+    // the width of the border of the splitter window
+    const wxCoord border;
+
+    // true if the splitter changes its appearance when the mouse is over it
+    const bool isHotSensitive;
+};
+
+// ----------------------------------------------------------------------------
 // wxRendererNative: abstracts drawing methods needed by the native controls
 // ----------------------------------------------------------------------------
 
@@ -90,14 +113,16 @@ public:
     // drawn by DrawSash() blends into it well
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
-                                    const wxRect& rect) = 0;
+                                    const wxRect& rect,
+                                    int flags = 0) = 0;
 
     // draw a (vertical) sash
     virtual void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
                                   const wxSize& size,
                                   wxCoord position,
-                                  wxOrientation orient) = 0;
+                                  wxOrientation orient,
+                                  int flags = 0) = 0;
 
 
     // geometry functions
@@ -105,7 +130,7 @@ public:
 
     // get the splitter parameters: the x field of the returned point is the
     // sash width and the y field is the border width
-    virtual wxPoint GetSplitterSashAndBorder(const wxWindow *win) = 0;
+    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) = 0;
 
 
     // pseudo constructors
@@ -149,19 +174,21 @@ public:
 
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
-                                    const wxRect& rect)
+                                    const wxRect& rect,
+                                    int flags = 0)
         { m_rendererNative.DrawSplitterBorder(win, dc, rect); }
 
     virtual void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
                                   const wxSize& size,
                                   wxCoord position,
-                                  wxOrientation orient)
+                                  wxOrientation orient,
+                                  int flags = 0)
         { m_rendererNative.DrawSplitterSash(win, dc, size, position, orient); }
 
 
-    virtual wxPoint GetSplitterSashAndBorder(const wxWindow *win)
-        { return m_rendererNative.GetSplitterSashAndBorder(win); }
+    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
+        { return m_rendererNative.GetSplitterParams(win); }
 
 protected:
     wxRendererNative& m_rendererNative;
