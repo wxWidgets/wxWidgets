@@ -305,11 +305,6 @@ bool wxListCtrl::Create(wxWindow *parent,
     DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
                    LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS;
 
-    if ( m_windowStyle & wxCLIP_SIBLINGS )
-        wstyle |= WS_CLIPSIBLINGS;
-
-    if ( wxStyleHasBorder(m_windowStyle) )
-        wstyle |= WS_BORDER;
     m_baseStyle = wstyle;
 
     if ( !DoCreateControl(x, y, width, height) )
