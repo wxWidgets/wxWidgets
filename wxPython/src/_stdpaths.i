@@ -53,22 +53,29 @@ class doesn't help you to do it.", "");
 class wxStandardPaths
 {
 public:
-    
-    DocDeclStr(
-        static wxStandardPaths& , Get(),
-        "Return the global standard paths object", "");
+
+    DocStr(
+        Get,
+        "Return the global standard paths singleton", "");    
+    %extend {
+        static wxStandardPaths* Get() {
+            return (wxStandardPaths*) &wxStandardPaths::Get();
+        }
+    }
+
+
     
     DocDeclStr(
         virtual wxString , GetConfigDir() const,
         "Return the directory with system config files: /etc under Unix,
-c:\Documents and Settings\All Users\Application Data under Windows,
+'c:\\Documents and Settings\\All Users\\Application Data' under Windows,
 /Library/Preferences for Mac", "");
 
     
     DocDeclStr(
         virtual wxString , GetUserConfigDir() const,
         "Return the directory for the user config files: $HOME under Unix,
-c:\Documents and Settings\username under Windows,
+'c:\\Documents and Settings\\username' under Windows, and 
 ~/Library/Preferences under Mac
     
 Only use this if you have a single file to put there, otherwise
@@ -79,7 +86,7 @@ Only use this if you have a single file to put there, otherwise
         virtual wxString , GetDataDir() const,
         "Return the location of the application's global, (i.e. not
 user-specific,) data files: prefix/share/appname under Unix,
-c:\Program Files\appname under Windows,
+'c:\\Program Files\\appname' under Windows,
 appname.app/Contents/SharedSupport app bundle directory under Mac.", "");
 
     
@@ -93,8 +100,8 @@ host-specific.  Same as `GetDataDir` except under Unix where it is
     DocDeclStr(
         virtual wxString , GetUserDataDir() const,
         "Return the directory for the user-dependent application data files:
-$HOME/.appname under Unix, c:\Documents and
-Settings\username\Application Data\appname under Windows and
+$HOME/.appname under Unix, c:\\Documents and
+Settings\\username\\Application Data\\appname under Windows and
 ~/Library/Application Support/appname under Mac", "");
     
 
@@ -104,7 +111,7 @@ Settings\username\Application Data\appname under Windows and
 with the other machines
 
 Same as `GetUserDataDir` for all platforms except Windows where it is
-the 'Local Settings\Application Data\appname' directory.", "");
+the 'Local Settings\\Application Data\\appname' directory.", "");
 
 
     DocDeclStr(
@@ -119,12 +126,14 @@ Contents/Plugins app bundle subdirectory under Mac", "");
         void , SetInstallPrefix(const wxString& prefix),
         "Set the program installation directory which is /usr/local by default.
 This value will be used by other methods such as `GetDataDir` and
-`GetPluginsDir` as the prefix for what they return. (Unix only.)", "");
+`GetPluginsDir` as the prefix for what they return. (This function
+only has meaning on Unix systems.)", "");
     
 
     DocDeclStr(
         wxString , GetInstallPrefix() const,
-        "Get the program installation prefix. (Unix only.)", "");
+        "Get the program installation prefix. The default is the prefix where
+Python is installed. (This function only has meaning on Unix systems.)", "");
 #else
     %extend {
         void SetInstallPrefix(const wxString& prefix) {}

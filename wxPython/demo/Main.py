@@ -47,10 +47,7 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions/Updates', [
-        'StockButtons',
-        'Ticker',
-        'Choicebook',
-        'ListCtrl_edit',
+        'StandardPaths',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -228,6 +225,7 @@ _treeList = [
         'PrintFramework',
         'ShapedWindow',
         'Sound',
+        'StandardPaths',
         'Unicode',
         ]),
 
@@ -254,9 +252,10 @@ class MyLog(wx.PyLog):
         self.logTime = logTime
 
     def DoLogString(self, message, timeStamp):
-        if self.logTime:
-            message = time.strftime("%X", time.localtime(timeStamp)) + \
-                      ": " + message
+        #print message, timeStamp
+        #if self.logTime:
+        #    message = time.strftime("%X", time.localtime(timeStamp)) + \
+        #              ": " + message
         if self.tc:
             self.tc.AppendText(message + '\n')
 

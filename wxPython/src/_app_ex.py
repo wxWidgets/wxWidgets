@@ -165,6 +165,9 @@ your Mac."""
         if redirect:
             self.RedirectStdio(filename)
 
+        # Use Python's install prefix as the default  
+        wx.StandardPaths.Get().SetInstallPrefix(_sys.prefix)
+
         # This finishes the initialization of wxWindows and then calls
         # the OnInit that should be present in the derived class
         self._BootstrapApp()
