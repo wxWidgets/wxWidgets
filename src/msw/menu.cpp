@@ -676,13 +676,13 @@ void wxMenuBar::Init()
 {
     m_eventHandler = this;
     m_hMenu = 0;
-#if wxUSE_TOOLBAR && defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if wxUSE_TOOLBAR && defined(__WXWINCE__)
     m_toolBar = NULL;
 #endif
     // Not using a combined wxToolBar/wxMenuBar? then use
     // a commandbar in WinCE .NET just to implement the
     // menubar.
-#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
+#if defined(WINCE_WITH_COMMANDBAR)
     m_commandBar = NULL;
     m_adornmentsAdded = false;
 #endif
@@ -717,7 +717,7 @@ wxMenuBar::~wxMenuBar()
 {
     // In Windows CE (not .NET), the menubar is always associated
     // with a toolbar, which destroys the menu implicitly.
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(WINCE_WITHOUT_COMMANDBAR)
     if (GetToolBar())
         GetToolBar()->SetMenuBar(NULL);
 #else
@@ -725,7 +725,7 @@ wxMenuBar::~wxMenuBar()
     // which happens if we're attached to a frame
     if (m_hMenu && !IsAttached())
     {
-#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
+#if defined(WINCE_WITH_COMMANDBAR)
         ::DestroyWindow((HWND) m_commandBar);
         m_commandBar = (WXHWND) NULL;
 #else
@@ -744,12 +744,12 @@ void wxMenuBar::Refresh()
 {
     wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(WINCE_WITH_COMMANDBAR)
     if (GetToolBar())
     {
         CommandBar_DrawMenuBar((HWND) GetToolBar()->GetHWND(), 0);
     }
-#elif defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
+#elif defined(WINCE_WITHOUT_COMMANDBAR)
     if (m_commandBar)
         DrawMenuBar((HWND) m_commandBar);
 #else
@@ -763,8 +763,7 @@ WXHMENU wxMenuBar::Create()
     // since you have to use resources.
     // We'll have to find another way to add a menu
     // by changing/adding menu items to an existing menu.
-#if defined(__WXWINCE__) && !defined(__HANDHELDPC__) \
-  (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(WINCE_WITHOUT_COMMANDBAR)
     if ( m_hMenu != 0 )
         return m_hMenu;
 
@@ -1000,7 +999,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 
     if ( IsAttached() )
     {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(WINCE_WITHOUT_COMMANDAR)
         if (!GetToolBar())
             return FALSE;
         TBBUTTON tbButton; 
@@ -1054,7 +1053,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 
     if ( IsAttached() )
     {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(WINCE_WITHOUT_COMMANDAR)
         if (!GetToolBar())
             return FALSE;
         TBBUTTON tbButton; 
@@ -1105,7 +1104,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
     if ( IsAttached() )
     {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(WINCE_WITHOUT_COMMANDAR)
         if (GetToolBar())
         {
             if (!::SendMessage((HWND) GetToolBar()->GetHWND(), TB_DELETEBUTTON, (UINT) pos, (LPARAM) 0))
@@ -1175,7 +1174,7 @@ void wxMenuBar::Attach(wxFrame *frame)
 #if defined(__WXWINCE__)
     if (!m_hMenu)
         this->Create();
-#if _WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__)
+#if defined(WINCE_WITHOUT_COMMANDAR)
 
     // No idea why this was here, but it seems to be obsolete.
 	// Remove after testing with other WinCE combinations - April 2004
@@ -1212,7 +1211,7 @@ void wxMenuBar::Attach(wxFrame *frame)
 #endif // wxUSE_ACCEL
 }
 
-#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
+#if defined(WINCE_WITH_COMMANDAR)
 bool wxMenuBar::AddAdornments(long style)
 {
     if (m_adornmentsAdded || !m_commandBar)

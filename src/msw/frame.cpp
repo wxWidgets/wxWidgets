@@ -318,7 +318,7 @@ void wxFrame::PositionStatusBar()
 
 void wxFrame::AttachMenuBar(wxMenuBar *menubar)
 {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(WINCE_WITHOUT_COMMANDBAR)
     if (!GetToolBar())
     {
         wxToolBar* toolBar = new wxToolBar(this, -1,
@@ -354,7 +354,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
     }
     else // set new non NULL menu bar
     {
-#if !defined(__WXWINCE__) || (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
+#if !defined(__WXWINCE__) || defined(WINCE_WITH_COMMANDBAR)
         // Can set a menubar several times.
         if ( menubar->GetHMenu() )
         {
@@ -417,7 +417,8 @@ bool wxFrame::ShowFullScreen(bool show, long style)
     if (show)
     {
 #if wxUSE_TOOLBAR
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+
+#if defined(WINCE_WITH_COMMANDBAR)
         // TODO: hide commandbar
 #else
         wxToolBar *theToolBar = GetToolBar();
@@ -462,7 +463,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
     else
     {
 #if wxUSE_TOOLBAR
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(WINCE_WITHOUT_COMMANDBAR) 
         // TODO: show commandbar
 #else
         wxToolBar *theToolBar = GetToolBar();
@@ -508,7 +509,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
 
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(WINCE_WITHOUT_COMMANDBAR)
     // We may already have a toolbar from calling SetMenuBar.
     if (GetToolBar())
         return GetToolBar();
@@ -526,7 +527,7 @@ void wxFrame::PositionToolBar()
     wxToolBar *toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
     {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(WINCE_WITHOUT_COMMANDBAR)
         // We want to do something different in WinCE, because
         // the toolbar should be associated with the commandbar,
         // and not an independent window.
@@ -547,7 +548,7 @@ void wxFrame::PositionToolBar()
 
 		int x = 0;
 		int y = 0;
-#if defined(__WXWINCE__)
+#if defined(WINCE_WITH_COMMANDBAR)
 		// We're using a commandbar - so we have to allow for it.
 		if (GetMenuBar() && GetMenuBar()->GetCommandBar())
 		{
@@ -805,7 +806,7 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
         PositionToolBar();
 #endif // wxUSE_TOOLBAR
 
-#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
+#if defined(WINCE_WITH_COMMANDBAR)
 		// Position the menu command bar
 		if (GetMenuBar() && GetMenuBar()->GetCommandBar())
 		{
@@ -1027,7 +1028,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     }
 #endif // wxUSE_TOOLBAR
 
-#if defined(__WXWINCE__) && defined(__WINCE_STANDARDSDK__)
+#if defined(WINCE_WITH_COMMANDBAR)
 	if (GetMenuBar() && GetMenuBar()->GetCommandBar())
 	{
 		RECT rect;

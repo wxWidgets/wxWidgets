@@ -56,7 +56,7 @@
 #include <ole2.h>
 #include <shellapi.h>
 #include <commctrl.h>
-#if !defined(__HANDHELDPC__) && ((_WIN32_WCE < 400) || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(WINCE_WITHOUT_COMMANDBAR)
   #include <aygshell.h>
 #endif
 #include "wx/msw/wince/missing.h"
@@ -249,7 +249,7 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size, wxMenuB
     if (m_menuBar)
         m_menuBar->SetToolBar(this);
 
-#if !defined(__HANDHELDPC__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(WINCE_WITHOUT_COMMANDBAR)
     // Create the menubar.
     SHMENUBARINFO mbi;
     

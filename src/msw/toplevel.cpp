@@ -42,7 +42,7 @@
 #include "wx/module.h"
 
 #include "wx/msw/private.h"
-#if defined(__WXWINCE__)
+#if defined(__WXWINCE__) && !defined(__HANDHELDPC__)
   #include <ole2.h>
   #include <shellapi.h>
   // Standard SDK doesn't have aygshell.dll: see include/wx/msw/wince/libraries.h
@@ -413,9 +413,9 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
     WXDWORD exflags;
     WXDWORD flags = MSWGetCreateWindowFlags(&exflags);
 
-#if (defined(_WIN32_WCE) && _WIN32_WCE < 400) || \
+#if !defined(__HANDHELDPC__) && ((defined(_WIN32_WCE) && _WIN32_WCE < 400) || \
     defined(__POCKETPC__) || \
-    defined(__SMARTPHONE__)
+    defined(__SMARTPHONE__))
 	// Always expand to fit the screen in PocketPC or SmartPhone
 	wxSize sz(wxDefaultSize);
 #else // other (including normal desktop) Windows
@@ -758,7 +758,7 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
                      rect.x, rect.y, rect.width, rect.height,
                      flags);
 
-#if defined(__WXWINCE__) && _WIN32_WCE < 400
+#if !defined(__HANDHELDPC__) && (defined(__WXWINCE__) && (_WIN32_WCE < 400))
         ::SHFullScreen(GetHwnd(), SHFS_HIDETASKBAR | SHFS_HIDESIPBUTTON);
 #endif
 
@@ -768,7 +768,7 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
     }
     else // stop showing full screen
     {
-#if defined(__WXWINCE__) && _WIN32_WCE < 400
+#if !defined(__HANDHELDPC__) && (defined(__WXWINCE__) && (_WIN32_WCE < 400))
         ::SHFullScreen(GetHwnd(), SHFS_SHOWTASKBAR | SHFS_SHOWSIPBUTTON);
 #endif
         Maximize(m_fsIsMaximized);
@@ -964,7 +964,7 @@ wxDlgProc(HWND hDlg,
 
         // Standard SDK doesn't have aygshell.dll: see
         // include/wx/msw/wince/libraries.h
-#if defined(__WXWINCE__) && !defined(__WINCE_STANDARDSDK__)
+#if defined(__WXWINCE__) && !defined(__WINCE_STANDARDSDK__) && !defined(__HANDHELDPC__)
         SHINITDLGINFO shidi;
         shidi.dwMask = SHIDIM_FLAGS;
         shidi.dwFlags = SHIDIF_DONEBUTTON |
