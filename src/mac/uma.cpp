@@ -442,11 +442,12 @@ void UMAInsertMenuItem( MenuRef menu , const wxString& title , MenuItemIndex ite
 
 // quickdraw
 
+#if !TARGET_CARBON
+
 int gPrOpenCounter = 0 ;
 
-OSStatus UMAPrOpen(void *macPrintSession)
+OSStatus UMAPrOpen()
 {
-#if !TARGET_CARBON
     OSErr err = noErr ;
     ++gPrOpenCounter ;
     if ( gPrOpenCounter == 1 )
@@ -456,25 +457,10 @@ OSStatus UMAPrOpen(void *macPrintSession)
         wxASSERT( err == noErr ) ;
     }
     return err ;
-#else
-    OSStatus err = noErr ;
-    ++gPrOpenCounter ;
-    if ( gPrOpenCounter == 1 )
-    {
-  #if PM_USE_SESSION_APIS
-        err = PMCreateSession((PMPrintSession *)macPrintSession) ;
-  #else
-        err = PMBegin() ;
-  #endif
-        wxASSERT( err == noErr ) ;
-    }
-    return err ;
-#endif
 }
 
-OSStatus UMAPrClose(void *macPrintSession)
+OSStatus UMAPrClose()
 {
-#if !TARGET_CARBON
     OSErr err = noErr ;
     wxASSERT( gPrOpenCounter >= 1 ) ;
     if ( gPrOpenCounter == 1 )
@@ -485,24 +471,7 @@ OSStatus UMAPrClose(void *macPrintSession)
     }
     --gPrOpenCounter ;
     return err ;
-#else
-    OSStatus err = noErr ;
-    wxASSERT( gPrOpenCounter >= 1 ) ;
-    if ( gPrOpenCounter == 1 )
-    {
-  #if PM_USE_SESSION_APIS
-        err = PMRelease(*(PMPrintSession *)macPrintSession) ;
-        *(PMPrintSession *)macPrintSession = kPMNoReference;
-  #else
-        err = PMEnd() ;
-  #endif
-    }
-    --gPrOpenCounter ;
-    return err ;
-#endif
 }
-
-#if !TARGET_CARBON
 
 pascal QDGlobalsPtr GetQDGlobalsPtr (void) ;
 pascal QDGlobalsPtr GetQDGlobalsPtr (void)
