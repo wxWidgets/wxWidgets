@@ -80,10 +80,19 @@ int _System soclose(int);
 
 /* Global initialisers */
 
+#if !defined(__VISAGECPP__)
+
 int GSocket_Init()
 {
   return 1;
 }
+#else
+bool GSocket_Init()
+{
+  return 1;
+}
+
+#endif
 
 void GSocket_Cleanup()
 {
