@@ -966,6 +966,12 @@ Gets the window's title. Applicable only to frames and dialogs.
 
 \membersection{wxWindow::GetUpdateRegion}\label{wxwindowgetupdateregion}
 
+\membersection{wxWindow::GetToolTip}\label{wxwindowgettooltip}
+
+\constfunc{wxToolTip*}{GetToolTip}{\void}
+
+Get the associated tooltip or NULL if none.
+
 \constfunc{virtual wxRegion}{GetUpdateRegion}{\void}
 
 Returns the region specifying which parts of the window have been damaged. Should
@@ -2592,15 +2598,7 @@ create a new validator of this type.
 Attach a tooltip to the window.
 
 See also: \helpref{GetToolTip}{wxwindowgettooltip},
-          \helpref{wxToolTip}{wxtooltip}
-
-
-\membersection{wxWindow::GetToolTip}\label{wxwindowgettooltip}
-
-\constfunc{wxToolTip*}{GetToolTip}{\void}
-
-Get the associated tooltip or NULL if none.
-
+ \helpref{wxToolTip}{wxtooltip}
 
 \membersection{wxWindow::SetVirtualSize}\label{wxwindowsetvirtualsize}
 
@@ -2609,7 +2607,6 @@ Get the associated tooltip or NULL if none.
 \func{void}{SetVirtualSize}{\param{const wxSize\&}{ size}}
 
 Sets the virtual size of the window in pixels.
-
 
 \membersection{wxWindow::SetVirtualSizeHints}\label{wxwindowsetvirtualsizehints}
 
