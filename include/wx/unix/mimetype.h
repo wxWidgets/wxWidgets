@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        unix/mimetype.h
+// Name:        wx/unix/mimetype.h
 // Purpose:     classes and functions to manage MIME types
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -20,9 +20,9 @@
 
 #if (wxUSE_FILE && wxUSE_TEXTFILE)
 
-class wxMimeArrayString;
+class wxMimeTypeCommands;
 
-WX_DEFINE_ARRAY(wxMimeArrayString *, wxArrayTypeEntries);
+WX_DEFINE_ARRAY(wxMimeTypeCommands *, wxMimeCommandsArray);
 
 // this is the real wxMimeTypesManager for Unix
 class WXDLLEXPORT wxMimeTypesManagerImpl
@@ -86,7 +86,7 @@ private:
                   m_aIcons;         // Icon filenames
 
     // verb=command pairs for this file type
-    wxArrayTypeEntries m_aEntries;
+    wxMimeCommandsArray m_aEntries;
 
     // are we initialized?
     bool m_initialized;
@@ -130,18 +130,22 @@ private:
     bool WriteToMimeTypes (int index, bool delete_index);
     bool WriteToNSMimeTypes (int index, bool delete_index);
 
+    // ReadMailcap() helper
+    bool ProcessOtherMailcapField(struct MailcapLineData& data,
+                                  const wxString& curField);
+
     // functions used to do associations
 
     int AddToMimeData(const wxString& strType,
                       const wxString& strIcon,
-                      wxMimeArrayString *entry,
+                      wxMimeTypeCommands *entry,
                       const wxArrayString& strExtensions,
                       const wxString& strDesc,
                       bool replaceExisting = TRUE);
 
     bool DoAssociation(const wxString& strType,
                        const wxString& strIcon,
-                       wxMimeArrayString *entry,
+                       wxMimeTypeCommands *entry,
                        const wxArrayString& strExtensions,
                        const wxString& strDesc);
 
