@@ -243,7 +243,9 @@ static void gtk_listitem_deselect_callback( GtkWidget *widget, wxListBox *listbo
     gtk_listitem_select_cb( widget, listbox, FALSE );
 }
 
-static void gtk_listitem_select_cb( GtkWidget *widget, wxListBox *listbox, bool is_selection )
+static void gtk_listitem_select_cb( GtkWidget *widget,
+                                    wxListBox *listbox,
+                                    bool is_selection )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
@@ -255,9 +257,8 @@ static void gtk_listitem_select_cb( GtkWidget *widget, wxListBox *listbox, bool 
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
     event.SetEventObject( listbox );
 
-//    MSW doesn't do that either
-//    event.SetExtraLong( (long) is_selection );
-
+    // indicate whether this is a selection or a deselection
+    event.SetExtraLong( is_selection );
 
     if ((listbox->GetWindowStyleFlag() & wxLB_SINGLE) != 0)
     {

@@ -49,7 +49,7 @@
     #endif
 #endif
 
-    IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
 // ============================================================================
 // list box item declaration and implementation
@@ -675,20 +675,17 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     wxCommandEvent event(evtType, m_windowId);
     event.SetEventObject( this );
 
-    wxArrayInt aSelections;
-    int n, count = GetSelections(aSelections);
-    if ( count > 0 )
+    // retrieve the affected item
+    int n = SendMessage(GetHwnd(), LB_GETCARETINDEX, 0, 0);
+    if ( n != LB_ERR )
     {
-        n = aSelections[0];
         if ( HasClientObjectData() )
             event.SetClientObject( GetClientObject(n) );
         else if ( HasClientUntypedData() )
             event.SetClientData( GetClientData(n) );
+
         event.SetString( GetString(n) );
-    }
-    else
-    {
-        n = -1;
+        event.SetExtraLong( HasMultipleSelection() ? IsSelected(n) : TRUE );
     }
 
     event.m_commandInt = n;
