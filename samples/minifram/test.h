@@ -19,17 +19,32 @@ class MyApp: public wxApp
     bool InitToolbar(wxToolBar* toolBar);
 };
 
-// Define a new frame
-class MyFrame: public wxMiniFrame
+// Define a new mini frame
+class MyMiniFrame: public wxMiniFrame
 {
 public:
-    MyFrame(wxFrame *parent, wxWindowID id = -1, const wxString& title = "wxToolBar Sample",
+    MyMiniFrame(wxFrame *parent, wxWindowID id = -1, const wxString& title = "wxToolBar Sample",
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
 
     void OnCloseWindow(wxCloseEvent& event);
+    void OnReparent(wxCommandEvent& event);
     
 DECLARE_EVENT_TABLE()
 };
 
-#define ID_TOOLBAR  500
+// Define a new frame
+class MyMainFrame: public wxFrame
+{
+public:
+    MyMainFrame(wxFrame *parent, wxWindowID id = -1, const wxString& title = "wxToolBar Sample",
+        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
+
+    void OnCloseWindow(wxCloseEvent& event);
+    void OnReparent(wxCommandEvent& event);
+    
+DECLARE_EVENT_TABLE()
+};
+
+#define ID_TOOLBAR   500
+#define ID_REPARENT  501
 

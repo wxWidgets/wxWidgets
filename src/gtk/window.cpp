@@ -2383,12 +2383,23 @@ bool wxWindow::AcceptsFocus() const
 bool wxWindow::Reparent( wxWindow *newParent )
 {
     wxCHECK_MSG( (m_widget != NULL), (wxWindow*) NULL, _T("invalid window") );
-
-    gtk_widget_unparent( m_widget );
+    
+    wxWindow *oldParent = m_parent;
 
     if ( !wxWindowBase::Reparent(newParent) )
         return FALSE;
 
+    if (oldParent)
+    {
+        gtk_container_remove( GTK_CONTAINER(oldParent->m_wxwindow), m_widget );
+    }
+    
+    if (newParent)
+    {
+        /* insert GTK representation */
+        (*(newParent->m_insertCallback))(newParent, this);
+    }
+    
     return TRUE;
 }
 

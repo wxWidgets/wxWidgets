@@ -36,30 +36,48 @@
 #include "bitmaps/help.xpm"
 #endif
 
+// start wxWindows
+
 IMPLEMENT_APP(MyApp)
 
+// globas
+
+MyMainFrame   *main_frame = (MyMainFrame*) NULL;
+MyMiniFrame   *mini_frame = (MyMiniFrame*) NULL;
+wxButton      *button     = (wxButton*) NULL;
 
 // The `main program' equivalent, creating the windows and returning the
 // main frame
 bool MyApp::OnInit(void)
 {
+  // Create the mini frame window
+  mini_frame = new MyMiniFrame((wxFrame *) NULL, -1, "wxMiniFrame sample",
+     wxPoint(100, 100), wxSize(205, 100));
+
+  mini_frame->CreateToolBar(wxNO_BORDER|wxHORIZONTAL|wxTB_FLAT, ID_TOOLBAR);
+  InitToolbar(mini_frame->GetToolBar());
+  
   // Create the main frame window
-  MyFrame* frame = new MyFrame((wxFrame *) NULL, -1, (const wxString) "wxMiniFrame sample",
-     wxPoint(100, 100), wxSize(205, 45));
+  main_frame = new MyMainFrame((wxFrame *) NULL, -1, "wxFrame sample",
+     wxPoint(100, 100), wxSize(300, 200));
+     
+  main_frame->CreateToolBar(wxNO_BORDER|wxHORIZONTAL, ID_TOOLBAR);
+  InitToolbar(main_frame->GetToolBar());
+  
+  button = new wxButton( main_frame, ID_REPARENT, "Press to reparent!" );
 
 #ifdef __WXMSW__
-  frame->SetIcon(wxIcon("mondrian"));
+  main_frame->SetIcon(wxIcon("mondrian"));
+  mini_frame->SetIcon(wxIcon("mondrian"));
 #else
-  frame->SetIcon( wxIcon(mondrian_xpm) );
+  main_frame->SetIcon( wxIcon(mondrian_xpm) );
+  mini_frame->SetIcon( wxIcon(mondrian_xpm) );
 #endif
 
-  // Create the toolbar
-  frame->CreateToolBar(wxNO_BORDER|wxHORIZONTAL|wxTB_FLAT, ID_TOOLBAR);
-
-  InitToolbar(frame->GetToolBar());
-
-  frame->Show(TRUE);
-  SetTopWindow(frame);
+  SetTopWindow(main_frame);
+  
+  main_frame->Show(TRUE);
+  mini_frame->Show(TRUE);
 
   return TRUE;
 }
@@ -130,20 +148,50 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
   return TRUE;
 }
 
-BEGIN_EVENT_TABLE(MyFrame, wxMiniFrame)
-    EVT_CLOSE(MyFrame::OnCloseWindow)
+// MyMiniFrame
+
+BEGIN_EVENT_TABLE(MyMiniFrame, wxMiniFrame)
+    EVT_CLOSE  (              MyMiniFrame::OnCloseWindow)
+    EVT_BUTTON (ID_REPARENT,  MyMiniFrame::OnReparent)
 END_EVENT_TABLE()
 
-// Define my frame constructor
-MyFrame::MyFrame(wxFrame* parent, wxWindowID id, const wxString& title, const wxPoint& pos,
+MyMiniFrame::MyMiniFrame(wxFrame* parent, wxWindowID id, const wxString& title, const wxPoint& pos,
         const wxSize& size ) :
   wxMiniFrame(parent, id, title, pos, size )
 {
 }
 
-// - must delete all frames except for the main one.
-void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
+void MyMiniFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
   Destroy();
 }
+
+void MyMiniFrame::OnReparent(wxCommandEvent& WXUNUSED(event))
+{
+  button->Reparent( main_frame );
+}
+
+// MyMainFrame
+
+BEGIN_EVENT_TABLE(MyMainFrame, wxFrame)
+    EVT_CLOSE  (              MyMainFrame::OnCloseWindow)
+    EVT_BUTTON (ID_REPARENT,  MyMainFrame::OnReparent)
+END_EVENT_TABLE()
+
+MyMainFrame::MyMainFrame(wxFrame* parent, wxWindowID id, const wxString& title, const wxPoint& pos,
+        const wxSize& size ) :
+  wxFrame(parent, id, title, pos, size )
+{
+}
+
+void MyMainFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
+{
+  Destroy();
+}
+
+void MyMainFrame::OnReparent(wxCommandEvent& WXUNUSED(event))
+{
+  button->Reparent( mini_frame );
+}
+
 
