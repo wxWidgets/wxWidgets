@@ -186,7 +186,7 @@ wxSize wxStaticText::DoGetBestSize() const
     wxString curLine;
     for ( const wxChar *pc = m_label; ; pc++ )
     {
-        if ( *pc == wxT('\n') || *pc == wxT('\0') )
+        if ( *pc == wxT('\n') || *pc == wxT('\r') || *pc == wxT('\0') )
         {
             if ( !curLine )
             {
@@ -212,7 +212,7 @@ wxSize wxStaticText::DoGetBestSize() const
                 heightTextTotal++;  // FIXME: why is this necessary?
             }
 
-            if ( *pc == wxT('\n') ) {
+            if ( *pc == wxT('\n') || *pc == wxT('\r')) {
                curLine.Empty();
             }
             else {
