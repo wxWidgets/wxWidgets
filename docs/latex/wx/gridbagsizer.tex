@@ -29,16 +29,16 @@ rows and columns.
 
 \membersection{wxGridBagSizer::Add}\label{wxgridbagsizeradd}
 
-\func{bool}{Add}{\param{wxWindow* }{window}, \param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span = wxDefaultSpan}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{wxSizerItem*}{Add}{\param{wxWindow* }{window}, \param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span = wxDefaultSpan}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-\func{bool}{Add}{\param{wxSizer* }{sizer}, \param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span = wxDefaultSpan}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{wxSizerItem*}{Add}{\param{wxSizer* }{sizer}, \param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span = wxDefaultSpan}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-\func{bool}{Add}{\param{int }{width}, \param{int }{height}, \param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span = wxDefaultSpan}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{wxSizerItem*}{Add}{\param{int }{width}, \param{int }{height}, \param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span = wxDefaultSpan}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-\func{bool}{Add}{\param{wxGBSizerItem* }{item}}
+\func{wxSizerItem*}{Add}{\param{wxGBSizerItem* }{item}}
 
-The Add methods return true if the item was successfully placed at the
-given position, false if something was already there.
+The Add methods return a valid pointer if the item was successfully placed at the
+given position, NULL if something was already there.
 
 \membersection{wxGridBagSizer::CalcMin}\label{wxgridbagsizercalcmin}
 

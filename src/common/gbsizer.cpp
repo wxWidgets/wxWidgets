@@ -182,58 +182,58 @@ wxGridBagSizer::wxGridBagSizer(int vgap, int hgap )
 }
 
 
-bool wxGridBagSizer::Add( wxWindow *window,
-                          const wxGBPosition& pos, const wxGBSpan& span,
-                          int flag, int border,  wxObject* userData )
+wxSizerItem* wxGridBagSizer::Add( wxWindow *window,
+                                  const wxGBPosition& pos, const wxGBSpan& span,
+                                  int flag, int border,  wxObject* userData )
 {
     wxGBSizerItem* item = new wxGBSizerItem(window, pos, span, flag, border, userData);
     if ( Add(item) )
-        return true;
+        return item;
     else
     {
         delete item;
-        return false;
+        return (wxSizerItem*)NULL;
     }
 }
 
-bool wxGridBagSizer::Add( wxSizer *sizer,
+wxSizerItem* wxGridBagSizer::Add( wxSizer *sizer,
                           const wxGBPosition& pos, const wxGBSpan& span,
                           int flag, int border,  wxObject* userData )
 {
     wxGBSizerItem* item = new wxGBSizerItem(sizer, pos, span, flag, border, userData);
     if ( Add(item) )
-        return true;
+        return item;
     else
     {
         delete item;
-        return false;
+        return (wxSizerItem*)NULL;
     }
 }
 
-bool wxGridBagSizer::Add( int width, int height,
+wxSizerItem* wxGridBagSizer::Add( int width, int height,
                           const wxGBPosition& pos, const wxGBSpan& span,
                           int flag, int border,  wxObject* userData )
 {
     wxGBSizerItem* item = new wxGBSizerItem(width, height, pos, span, flag, border, userData);
     if ( Add(item) )
-        return true;
+        return item;
     else
     {
         delete item;
-        return false;
+        return (wxSizerItem*)NULL;
     }
 }
 
-bool wxGridBagSizer::Add( wxGBSizerItem *item )
+wxSizerItem* wxGridBagSizer::Add( wxGBSizerItem *item )
 {
-    wxCHECK_MSG( !CheckForIntersection(item), false,
+    wxCHECK_MSG( !CheckForIntersection(item), NULL,
                  wxT("An item is already at that position") );
     m_children.Append(item);
     item->SetGBSizer(this);
     if ( item->GetWindow() )
         item->GetWindow()->SetContainingSizer( this );
 
-    return true;
+    return item;
 }
 
 
@@ -613,19 +613,19 @@ wxGBPosition wxGridBagSizer::FindEmptyCell()
 // we'll try to make them automatically select a location for the item
 // anyway.
 
-void wxGridBagSizer::Add( wxWindow *window, int, int flag, int border, wxObject* userData )
+wxSizerItem* wxGridBagSizer::Add( wxWindow *window, int, int flag, int border, wxObject* userData )
 {
-    Add(window, FindEmptyCell(), wxDefaultSpan, flag, border, userData);
+    return Add(window, FindEmptyCell(), wxDefaultSpan, flag, border, userData);
 }
 
-void wxGridBagSizer::Add( wxSizer *sizer, int, int flag, int border, wxObject* userData )
+wxSizerItem* wxGridBagSizer::Add( wxSizer *sizer, int, int flag, int border, wxObject* userData )
 {
-    Add(sizer, FindEmptyCell(), wxDefaultSpan, flag, border, userData);
+    return Add(sizer, FindEmptyCell(), wxDefaultSpan, flag, border, userData);
 }
 
-void wxGridBagSizer::Add( int width, int height, int, int flag, int border, wxObject* userData )
+wxSizerItem* wxGridBagSizer::Add( int width, int height, int, int flag, int border, wxObject* userData )
 {
-    Add(width, height, FindEmptyCell(), wxDefaultSpan, flag, border, userData);
+    return Add(width, height, FindEmptyCell(), wxDefaultSpan, flag, border, userData);
 }
 
 
@@ -634,33 +634,60 @@ void wxGridBagSizer::Add( int width, int height, int, int flag, int border, wxOb
 // this class and should not be used.  Their implementation in this class
 // simply fails.
 
-void wxGridBagSizer::Add( wxSizerItem * )
-{ wxFAIL_MSG(wxT("Invalid Add form called.")); }
+wxSizerItem* wxGridBagSizer::Add( wxSizerItem * )
+{
+    wxFAIL_MSG(wxT("Invalid Add form called."));
+    return (wxSizerItem*)NULL;
+}
 
-void wxGridBagSizer::Prepend( wxWindow *, int, int, int, wxObject*  )
-{ wxFAIL_MSG(wxT("Prepend should not be used with wxGridBagSizer.")); }
+wxSizerItem* wxGridBagSizer::Prepend( wxWindow *, int, int, int, wxObject*  )
+{
+    wxFAIL_MSG(wxT("Prepend should not be used with wxGridBagSizer."));
+    return (wxSizerItem*)NULL;
+}
 
-void wxGridBagSizer::Prepend( wxSizer *, int, int, int, wxObject*  )
-{ wxFAIL_MSG(wxT("Prepend should not be used with wxGridBagSizer.")); }
+wxSizerItem* wxGridBagSizer::Prepend( wxSizer *, int, int, int, wxObject*  )
+{
+    wxFAIL_MSG(wxT("Prepend should not be used with wxGridBagSizer."));
+    return (wxSizerItem*)NULL;
+}
 
-void wxGridBagSizer::Prepend( int, int, int, int, int, wxObject*  )
-{ wxFAIL_MSG(wxT("Prepend should not be used with wxGridBagSizer.")); }
+wxSizerItem* wxGridBagSizer::Prepend( int, int, int, int, int, wxObject*  )
+{
+    wxFAIL_MSG(wxT("Prepend should not be used with wxGridBagSizer."));
+    return (wxSizerItem*)NULL;
+}
 
-void wxGridBagSizer::Prepend( wxSizerItem * )
-{ wxFAIL_MSG(wxT("Prepend should not be used with wxGridBagSizer.")); }
+wxSizerItem* wxGridBagSizer::Prepend( wxSizerItem * )
+{
+    wxFAIL_MSG(wxT("Prepend should not be used with wxGridBagSizer."));
+    return (wxSizerItem*)NULL;
+}
 
 
-void wxGridBagSizer::Insert( size_t, wxWindow *, int, int, int, wxObject*  )
-{ wxFAIL_MSG(wxT("Insert should not be used with wxGridBagSizer.")); }
+wxSizerItem* wxGridBagSizer::Insert( size_t, wxWindow *, int, int, int, wxObject*  )
+{
+    wxFAIL_MSG(wxT("Insert should not be used with wxGridBagSizer."));
+    return (wxSizerItem*)NULL;
+}
 
-void wxGridBagSizer::Insert( size_t, wxSizer *, int, int, int, wxObject*  )
-{ wxFAIL_MSG(wxT("Insert should not be used with wxGridBagSizer.")); }
+wxSizerItem* wxGridBagSizer::Insert( size_t, wxSizer *, int, int, int, wxObject*  )
+{
+    wxFAIL_MSG(wxT("Insert should not be used with wxGridBagSizer."));
+    return (wxSizerItem*)NULL;
+}
 
-void wxGridBagSizer::Insert( size_t, int, int, int, int, int, wxObject*  )
-{ wxFAIL_MSG(wxT("Insert should not be used with wxGridBagSizer.")); }
+wxSizerItem* wxGridBagSizer::Insert( size_t, int, int, int, int, int, wxObject*  )
+{
+    wxFAIL_MSG(wxT("Insert should not be used with wxGridBagSizer."));
+    return (wxSizerItem*)NULL;
+}
 
-void wxGridBagSizer::Insert( size_t, wxSizerItem * )
-{ wxFAIL_MSG(wxT("Insert should not be used with wxGridBagSizer.")); }
+wxSizerItem* wxGridBagSizer::Insert( size_t, wxSizerItem * )
+{
+    wxFAIL_MSG(wxT("Insert should not be used with wxGridBagSizer."));
+    return (wxSizerItem*)NULL;
+}
 
 
 //---------------------------------------------------------------------------

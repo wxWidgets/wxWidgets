@@ -89,6 +89,7 @@ void wxSizerItem::Init()
     m_sizer = NULL;
     m_show = true;
     m_userData = NULL;
+    m_zoneRect = wxRect( 0, 0, 0, 0 );
 }
 
 void wxSizerItem::Init(const wxSizerFlags& flags)
@@ -108,6 +109,7 @@ wxSizerItem::wxSizerItem( int width, int height, int proportion, int flag, int b
     , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
+    , m_zoneRect( 0, 0, 0, 0 )
     , m_show( true )
     , m_userData( userData )
 {
@@ -120,6 +122,7 @@ wxSizerItem::wxSizerItem( wxWindow *window, int proportion, int flag, int border
     , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
+    , m_zoneRect( 0, 0, 0, 0 )
     , m_show( true )
     , m_userData( userData )
 {
@@ -139,6 +142,7 @@ wxSizerItem::wxSizerItem( wxSizer *sizer, int proportion, int flag, int border, 
     , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
+    , m_zoneRect( 0, 0, 0, 0 )
     , m_show( true )
     , m_ratio( 0.0 )
     , m_userData( userData )
@@ -287,6 +291,7 @@ void wxSizerItem::SetDimension( wxPoint pos, wxSize size )
     if (IsSizer())
         m_sizer->SetDimension( pos.x, pos.y, size.x, size.y );
 
+    m_zoneRect = wxRect(pos, size);
     if (IsWindow())
         m_window->SetSize( pos.x, pos.y, size.x, size.y, wxSIZE_ALLOW_MINUS_ONE );
 
@@ -357,12 +362,14 @@ wxSizer::~wxSizer()
     WX_CLEAR_LIST(wxSizerItemList, m_children);
 }
 
-void wxSizer::Insert( size_t index, wxSizerItem *item )
+wxSizerItem* wxSizer::Insert( size_t index, wxSizerItem *item )
 {
     m_children.Insert( index, item );
 
     if( item->GetWindow() )
         item->GetWindow()->SetContainingSizer( this );
+
+    return item;
 }
 
 bool wxSizer::Remove( wxWindow *window )
@@ -1582,7 +1589,7 @@ static void GetStaticBoxBorders( wxStaticBox *box,
 
 #else
 #ifdef __WXGTK__
-    if ( box->GetLabel().IsEmpty() )
+    if ( box->GetLabel().empty() )
         *borderTop = 5;
     else
 #endif // __WXGTK__

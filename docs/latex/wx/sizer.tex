@@ -62,11 +62,11 @@ The destructor.
 
 \membersection{wxSizer::Add}\label{wxsizeradd}
 
-\func{void}{Add}{\param{wxWindow* }{window}, \param{int }{proportion = 0},\param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{wxSizerItem*}{Add}{\param{wxWindow* }{window}, \param{int }{proportion = 0},\param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-\func{void}{Add}{\param{wxSizer* }{sizer}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{wxSizerItem*}{Add}{\param{wxSizer* }{sizer}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-\func{void}{Add}{\param{int }{width}, \param{int }{height}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{wxSizerItem*}{Add}{\param{int }{width}, \param{int }{height}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
 Appends a child to the sizer.  wxSizer itself is an abstract class, but the parameters are
 equivalent in the derived classes that you will instantiate to use it so they are described
@@ -145,7 +145,7 @@ complex than the {\it proportion} and {\it flag} will allow for.}
 
 \membersection{wxSizer::AddSpacer}\label{wxsizeraddspacer}
 
-\func{void}{AddSpacer}{\param{int }{size}}
+\func{wxSizerItem*}{AddSpacer}{\param{int }{size}}
 
 Adds non-stretchable space to the sizer. More readable way of calling
 \helpref{Add}{wxsizeradd}(size, size, 0).
@@ -153,7 +153,7 @@ Adds non-stretchable space to the sizer. More readable way of calling
 
 \membersection{wxSizer::AddStretchSpacer}\label{wxsizeraddstretchspacer}
 
-\func{void}{AddStretchSpacer}{\param{int }{prop = 1}}
+\func{wxSizerItem*}{AddStretchSpacer}{\param{int }{prop = 1}}
 
 Adds stretchable space to the sizer. More readable way of calling
 \helpref{Add}{wxsizeradd}(0, 0, prop).
@@ -254,11 +254,11 @@ size of all the children and their borders or the minimal size set by
 
 \membersection{wxSizer::Insert}\label{wxsizerinsert}
 
-\func{void}{Insert}{\param{size\_t }{index}, \param{wxWindow* }{window}, \param{int }{proportion = 0},\param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{wxSizerItem*}{Insert}{\param{size\_t }{index}, \param{wxWindow* }{window}, \param{int }{proportion = 0},\param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-\func{void}{Insert}{\param{size\_t }{index}, \param{wxSizer* }{sizer}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{wxSizerItem*}{Insert}{\param{size\_t }{index}, \param{wxSizer* }{sizer}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-\func{void}{Insert}{\param{size\_t }{index}, \param{int }{width}, \param{int }{height}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{wxSizerItem*}{Insert}{\param{size\_t }{index}, \param{int }{width}, \param{int }{height}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
 Insert a child into the sizer before any existing item at {\it index}.
 
@@ -269,7 +269,7 @@ See \helpref{wxSizer::Add}{wxsizeradd} for the meaning of the other parameters.
 
 \membersection{wxSizer::InsertSpacer}\label{wxsizerinsertspacer}
 
-\func{void}{InsertSpacer}{\param{size\_t }{index}, \param{int }{size}}
+\func{wxSizerItem*}{InsertSpacer}{\param{size\_t }{index}, \param{int }{size}}
 
 Inserts non-stretchable space to the sizer. More readable way of calling
 \helpref{Insert}{wxsizerinsert}(size, size, 0).
@@ -277,7 +277,7 @@ Inserts non-stretchable space to the sizer. More readable way of calling
 
 \membersection{wxSizer::InsertStretchSpacer}\label{wxsizerinsertstretchspacer}
 
-\func{void}{InsertStretchSpacer}{\param{size\_t }{index}, \param{int }{prop = 1}}
+\func{wxSizerItem*}{InsertStretchSpacer}{\param{size\_t }{index}, \param{int }{prop = 1}}
 
 Inserts stretchable space to the sizer. More readable way of calling
 \helpref{Insert}{wxsizerinsert}(0, 0, prop).
@@ -294,11 +294,11 @@ the current dimension.
 
 \membersection{wxSizer::Prepend}\label{wxsizerprepend}
 
-\func{void}{Prepend}{\param{wxWindow* }{window}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{wxSizerItem*}{Prepend}{\param{wxWindow* }{window}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-\func{void}{Prepend}{\param{wxSizer* }{sizer}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{wxSizerItem*}{Prepend}{\param{wxSizer* }{sizer}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-\func{void}{Prepend}{\param{int }{width}, \param{int }{height}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border= 0}, \param{wxObject* }{userData = NULL}}
+\func{wxSizerItem*}{Prepend}{\param{int }{width}, \param{int }{height}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border= 0}, \param{wxObject* }{userData = NULL}}
 
 Same as \helpref{wxSizer::Add}{wxsizeradd}, but prepends the items to the beginning of the
 list of items (windows, subsizers or spaces) owned by this sizer.
@@ -306,7 +306,7 @@ list of items (windows, subsizers or spaces) owned by this sizer.
 
 \membersection{wxSizer::PrependSpacer}\label{wxsizerprependspacer}
 
-\func{void}{PrependSpacer}{\param{int }{size}}
+\func{wxSizerItem*}{PrependSpacer}{\param{int }{size}}
 
 Prepends non-stretchable space to the sizer. More readable way of calling
 \helpref{Prepend}{wxsizerprepend}(size, size, 0).
@@ -314,7 +314,7 @@ Prepends non-stretchable space to the sizer. More readable way of calling
 
 \membersection{wxSizer::PrependStretchSpacer}\label{wxsizerprependstretchspacer}
 
-\func{void}{PrepentStretchSpacer}{\param{int }{prop = 1}}
+\func{wxSizerItem*}{PrependStretchSpacer}{\param{int }{prop = 1}}
 
 Prepends stretchable space to the sizer. More readable way of calling
 \helpref{Prepend}{wxsizerprepend}(0, 0, prop).

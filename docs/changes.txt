@@ -165,6 +165,8 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
   variable any more (the compiler might warn you about this)
 - wxListItem::m_data is now of type wxUIntPtr, not long, for compatibility
   with 64 bit systems
+- wxSizer::Add/Insert returns pointer to wxSizerItem just added so conditions
+  writeen with if(Add(..)==true) will not work. Use if(Add(..)) instead.
 
 
 DEPRECATED METHODS SINCE 2.4.x
@@ -232,6 +234,8 @@ All (GUI):
 
 - recursive wxSizer::GetItem returns item of given window, sizer or nth index
 - wxLayoutConstraints now use best size, not current size, for AsIs() condition
+- wxSizer::Add/Insert etc. now returns pointer to wxSizerItem just added and this
+  item remembers its wxRect area (Brian A. Vanderburg II)
 
 Unix:
 

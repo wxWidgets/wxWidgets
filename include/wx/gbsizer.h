@@ -176,26 +176,26 @@ public:
 
     // The Add methods return true if the item was successfully placed at the
     // given position, false if something was already there.
-    bool Add( wxWindow *window,
-              const wxGBPosition& pos,
-              const wxGBSpan& span = wxDefaultSpan,
-              int flag = 0,
-              int border = 0,
-              wxObject* userData = NULL );
-    bool Add( wxSizer *sizer,
-              const wxGBPosition& pos,
-              const wxGBSpan& span = wxDefaultSpan,
-              int flag = 0,
-              int border = 0,
-              wxObject* userData = NULL );
-    bool Add( int width,
-              int height,
-              const wxGBPosition& pos,
-              const wxGBSpan& span = wxDefaultSpan,
-              int flag = 0,
-              int border = 0,
-              wxObject* userData = NULL );
-    bool Add( wxGBSizerItem *item );
+    wxSizerItem* Add( wxWindow *window,
+                      const wxGBPosition& pos,
+                      const wxGBSpan& span = wxDefaultSpan,
+                      int flag = 0,
+                      int border = 0,
+                      wxObject* userData = NULL );
+    wxSizerItem* Add( wxSizer *sizer,
+                      const wxGBPosition& pos,
+                      const wxGBSpan& span = wxDefaultSpan,
+                      int flag = 0,
+                      int border = 0,
+                      wxObject* userData = NULL );
+    wxSizerItem* Add( int width,
+                      int height,
+                      const wxGBPosition& pos,
+                      const wxGBSpan& span = wxDefaultSpan,
+                      int flag = 0,
+                      int border = 0,
+                      wxObject* userData = NULL );
+    wxSizerItem* Add( wxGBSizerItem *item );
 
 
     // Get/Set the size used for cells in the grid with no item.
@@ -270,22 +270,22 @@ public:
     // The Add base class virtuals should not be used with this class, but
     // we'll try to make them automatically select a location for the item
     // anyway.
-    virtual void Add( wxWindow *window, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
-    virtual void Add( wxSizer *sizer, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
-    virtual void Add( int width, int height, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+    virtual wxSizerItem* Add( wxWindow *window, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+    virtual wxSizerItem* Add( wxSizer *sizer, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+    virtual wxSizerItem* Add( int width, int height, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
 
     // The Insert and Prepend base class virtuals that are not appropriate for
     // this class and should not be used.  Their implementation in this class
     // simply fails.
-    virtual void Add( wxSizerItem *item );
-    virtual void Insert( size_t index, wxWindow *window, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
-    virtual void Insert( size_t index, wxSizer *sizer, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
-    virtual void Insert( size_t index, int width, int height, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
-    virtual void Insert( size_t index, wxSizerItem *item );
-    virtual void Prepend( wxWindow *window, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
-    virtual void Prepend( wxSizer *sizer, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
-    virtual void Prepend( int width,  int height,  int proportion = 0,  int flag = 0,  int border = 0,  wxObject* userData = NULL );
-    virtual void Prepend( wxSizerItem *item );
+    virtual wxSizerItem* Add( wxSizerItem *item );
+    virtual wxSizerItem* Insert( size_t index, wxWindow *window, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+    virtual wxSizerItem* Insert( size_t index, wxSizer *sizer, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+    virtual wxSizerItem* Insert( size_t index, int width, int height, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+    virtual wxSizerItem* Insert( size_t index, wxSizerItem *item );
+    virtual wxSizerItem* Prepend( wxWindow *window, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+    virtual wxSizerItem* Prepend( wxSizer *sizer, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+    virtual wxSizerItem* Prepend( int width,  int height,  int proportion = 0,  int flag = 0,  int border = 0,  wxObject* userData = NULL );
+    virtual wxSizerItem* Prepend( wxSizerItem *item );
 
 
 protected:
