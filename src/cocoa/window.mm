@@ -35,6 +35,11 @@
 #import <AppKit/NSBezierPath.h>
 #endif //def WXCOCOA_FILL_DUMMY_VIEW
 
+// A category for methods that are only present in Panther's SDK
+@interface NSView(wxNSViewPrePantherCompatibility)
+- (void)getRectsBeingDrawn:(const NSRect **)rects count:(int *)count;
+@end
+
 // ========================================================================
 // wxWindowCocoaHider
 // ========================================================================
@@ -356,12 +361,8 @@ bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
     const NSRect *rects = &rect; // The bounding box of the region
     int countRects = 1;
     // Try replacing the larger rectangle with a list of smaller ones:
-NS_DURING
-    //getRectsBeingDrawn:count: is a optimization that is only available on
-    //Panthar (10.3) and higher.  Check to see if it supports it -
-    if ( [GetNSView() respondsToSelector:@selector(getRectsBeingDrawn:count:)] )    objc_msgSend(GetNSView(),@selector(getRectsBeingDrawn:count:),&rects,&countRects);
-NS_HANDLER
-NS_ENDHANDLER
+    if ([GetNSView() respondsToSelector:@selector(getRectsBeingDrawn:count:)])
+        [GetNSView() getRectsBeingDrawn:&rects count:&countRects];
     m_updateRegion = wxRegion(rects,countRects);
 
     wxPaintEvent event(m_windowId);
