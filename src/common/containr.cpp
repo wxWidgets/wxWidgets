@@ -51,10 +51,16 @@ wxControlContainer::wxControlContainer(wxWindow *winParent)
 
 bool wxControlContainer::AcceptsFocus() const
 {
-    // We can accept focus only when at last one child will accept focus
+    // if we're not shown or disabled, we can't accept focus
     if ( m_winParent->IsShown() && m_winParent->IsEnabled() )
     {
+        // otherwise we can accept focus either if we have no children at all
+        // (in this case we're probably not used as a container) or only when
+        // at least one child will accept focus
         wxWindowList::Node *node = m_winParent->GetChildren().GetFirst();
+        if ( !node )
+            return TRUE;
+
         while ( node )
         {
             wxWindow *child = node->GetData();
@@ -398,7 +404,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
                        _T("SetFocusToChild() => first child (0x%08lx)."),
                        (unsigned long)child->GetHandle());
 
-            *childLastFocused = child;  // should be redundant, but it is not
+            *childLastFocused = child;
             child->SetFocusFromKbd();
             return TRUE;
         }
