@@ -67,11 +67,19 @@ public:
 
     ~wxAcceleratorTable();
 
-    inline wxAcceleratorTable& operator = (const wxAcceleratorTable& accel) { if (*this == accel) return (*this); Ref(accel); return *this; }
-    inline bool operator == (const wxAcceleratorTable& accel) { return m_refData == accel.m_refData; }
-    inline bool operator != (const wxAcceleratorTable& accel) { return m_refData != accel.m_refData; }
+    inline wxAcceleratorTable& operator = (const wxAcceleratorTable& accel)
+    { if (*this == accel) return (*this); Ref(accel); return *this; };
+    inline bool operator == (const wxAcceleratorTable& accel)
+    { return m_refData == accel.m_refData; };
+    inline bool operator != (const wxAcceleratorTable& accel)
+    { return m_refData != accel.m_refData; };
 
     bool Ok() const;
+    void SetHACCEL(WXHACCEL hAccel);
+    WXHACCEL GetHACCEL() const;
+
+    // translate the accelerator, return TRUE if done
+    bool Translate(wxWindow *window, WXMSG *msg) const;
 };
 
 WXDLLEXPORT_DATA(extern wxAcceleratorTable) wxNullAcceleratorTable;

@@ -3,20 +3,16 @@
 // Purpose:     MDI (Multiple Document Interface) classes.
 //              This doesn't have to be implemented just like Windows,
 //              it could be a tabbed design as in wxGTK.
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/10/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MDI_H_
 #define _WX_MDI_H_
-
-#ifdef __GNUG__
-#pragma interface "mdi.h"
-#endif
 
 #include "wx/frame.h"
 
@@ -55,40 +51,60 @@ public:
            long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
            const wxString& name = wxFrameNameStr);
 
-  void OnSize(wxSizeEvent& event);
-  void OnActivate(wxActivateEvent& event);
-  void OnSysColourChanged(wxSysColourChangedEvent& event);
+    // accessors
+    // ---------
 
-  void SetMenuBar(wxMenuBar *menu_bar);
+    // Get the active MDI child window (Windows only)
+    wxMDIChildFrame *GetActiveChild() const;
 
-  // Gets the size available for subwindows after menu size, toolbar size
-  // and status bar size have been subtracted. If you want to manage your own
-  // toolbar(s), don't call SetToolBar.
-  void GetClientSize(int *width, int *height) const;
+    // Get the client window
+    wxMDIClientWindow *GetClientWindow() const { return m_clientWindow; }
 
-  // Get the active MDI child window (Windows only)
-  wxMDIChildFrame *GetActiveChild() const ;
+    // Create the client window class (don't Create the window,
+    // just return a new class)
+    virtual wxMDIClientWindow *OnCreateClient(void);
 
-  // Get the client window
-  inline wxMDIClientWindow *GetClientWindow() const { return m_clientWindow; };
+    WXHMENU GetWindowMenu() const { return m_windowMenu; }
 
-  // Create the client window class (don't Create the window,
-  // just return a new class)
-  virtual wxMDIClientWindow *OnCreateClient() ;
+    // MDI operations
+    // --------------
+    virtual void Cascade();
+    virtual void Tile();
+    virtual void ArrangeIcons();
+    virtual void ActivateNext();
+    virtual void ActivatePrevious();
 
-  // MDI operations
-  virtual void Cascade();
-  virtual void Tile();
-  virtual void ArrangeIcons();
-  virtual void ActivateNext();
-  virtual void ActivatePrevious();
+    // handlers
+    // --------
+
+    // Responds to colour changes
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+    void OnSize(wxSizeEvent& event);
+
+    bool HandleActivate(int state, bool minimized, WXHWND activate);
+    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
+
+    // override window proc for MDI-specific message processing
+    virtual MRESULT OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
+    virtual MRESULT OS2DefWindowProc(HWND hwnd, WXUINT, WXWPARAM, WXLPARAM);
+    virtual bool OS2TranslateMessage(WXMSG* msg);
 
 protected:
+    virtual void InternalSetMenuBar();
 
-  // TODO maybe have this member
-  wxMDIClientWindow     *m_clientWindow;
+    wxMDIClientWindow *             m_clientWindow;
+    wxMDIChildFrame *               m_currentChild;
+    WXHMENU                         m_windowMenu;
 
-DECLARE_EVENT_TABLE()
+    // TRUE if MDI Frame is intercepting commands, not child
+    bool m_parentFrameActive;
+
+private:
+    friend class WXDLLEXPORT wxMDIChildFrame;
+
+    DECLARE_EVENT_TABLE()
 };
 
 class WXDLLEXPORT wxMDIChildFrame: public wxFrame
@@ -118,18 +134,31 @@ public:
            long style = wxDEFAULT_FRAME_STYLE,
            const wxString& name = wxFrameNameStr);
 
-  // Set menu bar
-  void SetMenuBar(wxMenuBar *menu_bar);
-  void SetClientSize(int width, int height);
-  void GetPosition(int *x, int *y) const ;
+    // MDI operations
+    virtual void Maximize(bool maximize = TRUE);
+    virtual void Restore();
+    virtual void Activate();
 
-  // MDI operations
-  virtual void Maximize();
-  virtual void Restore();
-  virtual void Activate();
-private:
-  // supress virtual function hiding warning
-  virtual void Maximize(bool maximize) { wxFrame::Maximize(maximize); };
+    // Handlers
+
+    bool HandleMDIActivate(long bActivate, WXHWND, WXHWND);
+    bool HandleSize(int x, int y, WXUINT);
+    bool HandleWindowPosChanging(void *lpPos);
+    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
+
+    virtual MRESULT OS2WindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual MRESULT OS2DefWindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual bool OS2TranslateMessage(WXMSG *msg);
+
+    virtual void OS2DestroyWindow();
+
+    // Implementation
+    bool ResetWindowStyle(void *vrect);
+
+protected:
+    virtual void DoGetPosition(int *x, int *y) const;
+    virtual void DoSetClientSize(int width, int height);
+    virtual void InternalSetMenuBar();
 };
 
 /* The client window is a child of the parent MDI frame, and itself
@@ -142,25 +171,31 @@ private:
 class WXDLLEXPORT wxMDIClientWindow: public wxWindow
 {
   DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
+
  public:
 
-  wxMDIClientWindow() ;
-  inline wxMDIClientWindow(wxMDIParentFrame *parent, long style = 0)
-  {
-      CreateClient(parent, style);
-  }
+    wxMDIClientWindow() { Init(); }
+    wxMDIClientWindow(wxMDIParentFrame *parent, long style = 0)
+    {
+        Init();
 
-  ~wxMDIClientWindow();
+        CreateClient(parent, style);
+    }
 
-  // Note: this is virtual, to allow overridden behaviour.
-  virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);
+    // Note: this is virtual, to allow overridden behaviour.
+    virtual bool CreateClient(wxMDIParentFrame *parent,
+                              long style = wxVSCROLL | wxHSCROLL);
 
-  // Explicitly call default scroll behaviour
-  void OnScroll(wxScrollEvent& event);
+    // Explicitly call default scroll behaviour
+    void OnScroll(wxScrollEvent& event);
 
 protected:
+    void Init() { m_scrollX = m_scrollY = 0; }
 
-DECLARE_EVENT_TABLE()
+    int m_scrollX, m_scrollY;
+
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

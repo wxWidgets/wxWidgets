@@ -1,16 +1,25 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        minifram.cpp
 // Purpose:     wxMiniFrame. Optional; identical to wxFrame if not supported.
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/10/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "minifram.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#include "wx/window.h"
+#include "wx/os2/private.h"
+
+#ifndef WX_PRECOMP
+#include "wx/setup.h"
+#include "wx/event.h"
+#include "wx/app.h"
+#include "wx/utils.h"
 #endif
 
 #include "wx/minifram.h"
@@ -18,5 +27,4 @@
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMiniFrame, wxFrame)
 #endif
-
 

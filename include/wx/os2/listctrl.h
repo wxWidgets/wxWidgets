@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        listctrl.h
 // Purpose:     wxListCtrl class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/10/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_LISTCTRL_H_
 #define _WX_LISTCTRL_H_
-
-#ifdef __GNUG__
-#pragma interface "listctrl.h"
-#endif
 
 #include "wx/control.h"
 #include "wx/event.h"
@@ -98,7 +94,7 @@ enum {
     wxLIST_NEXT_ALL,            // Searches for subsequent item by index
     wxLIST_NEXT_BELOW,          // Searches for an item below the specified item
     wxLIST_NEXT_LEFT,           // Searches for an item to the left of the specified item
-    wxLIST_NEXT_RIGHT,          // Searches for an item to the right of the specified item
+    wxLIST_NEXT_RIGHT           // Searches for an item to the right of the specified item
 };
 
 // Alignment flags for Arrange
@@ -188,6 +184,10 @@ class WXDLLEXPORT wxListCtrl: public wxControl
 
   // Attributes
   ////////////////////////////////////////////////////////////////////////////
+
+  // Sets the background colour (GetBackgroundColour already implicit in
+  // wxWindow class)
+  bool SetBackgroundColour(const wxColour& col);
 
   // Gets information about this column
   bool GetColumn(int col, wxListItem& item) const;
@@ -285,11 +285,11 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   // Returns the item or -1 if unsuccessful.
   long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const ;
 
-  // Implementation: converts wxWindows style to MSW style.
+  // Implementation: converts wxWindows style to OS2 style.
   // Can be a single style flag or a bit list.
   // oldStyle is 'normalised' so that it doesn't contain
   // conflicting styles.
-  long ConvertToMSWStyle(long& oldStyle, long style) const;
+  long ConvertToOS2Style(long& oldStyle, long style) const;
 
   // Gets one of the three image lists
   wxImageList *GetImageList(int which) const ;
@@ -390,15 +390,16 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   // data is arbitrary data to be passed to the sort function.
   bool SortItems(wxListCtrlCompare fn, long data);
 
-/* Why should we need this function? Leave for now.
- * We might need it because item data may have changed,
- * but the display needs refreshing (in string callback mode)
-  // Updates an item. If the list control has the wxLI_AUTO_ARRANGE style,
-  // the items will be rearranged.
-  bool Update(long item);
-*/
+  // IMPLEMENTATION
+  virtual bool OS2Command(WXUINT param, WXWORD id);
+  virtual bool OS2OnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
-  void Command(wxCommandEvent& event) { ProcessCommand(event); };
+  // bring the control in sync with current m_windowStyle value
+  void UpdateStyle();
+
+  // Add to pool: necessary because Windows needs to have a string
+  // still exist across 3 callbacks.
+  wxChar *AddPool(const wxString& str);
 
 protected:
   wxTextCtrl*       m_textCtrl;        // The control used for editing a label
@@ -412,40 +413,9 @@ protected:
   int               m_colCount;   // Windows doesn't have GetColumnCount so must
                                   // keep track of inserted/deleted columns
 
+private:
+  bool DoCreateControl(int x, int y, int w, int h);
 };
-
-class WXDLLEXPORT wxListEvent: public wxCommandEvent
-{
-  DECLARE_DYNAMIC_CLASS(wxListEvent)
-
- public:
-  wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
-
-  int           m_code;
-  long          m_itemIndex;
-  long          m_oldItemIndex;
-  int           m_col;
-  bool          m_cancelled;
-  wxPoint       m_pointDrag;
-
-  wxListItem    m_item;
-};
-
-typedef void (wxEvtHandler::*wxListEventFunction)(wxListEvent&);
-
-#define EVT_LIST_BEGIN_DRAG(id, fn) { wxEVT_COMMAND_LIST_BEGIN_DRAG, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
-#define EVT_LIST_BEGIN_RDRAG(id, fn) { wxEVT_COMMAND_LIST_BEGIN_RDRAG, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
-#define EVT_LIST_BEGIN_LABEL_EDIT(id, fn) { wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
-#define EVT_LIST_END_LABEL_EDIT(id, fn) { wxEVT_COMMAND_LIST_END_LABEL_EDIT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
-#define EVT_LIST_DELETE_ITEM(id, fn) { wxEVT_COMMAND_LIST_DELETE_ITEM, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
-#define EVT_LIST_DELETE_ALL_ITEMS(id, fn) { wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
-#define EVT_LIST_GET_INFO(id, fn) { wxEVT_COMMAND_LIST_GET_INFO, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
-#define EVT_LIST_SET_INFO(id, fn) { wxEVT_COMMAND_LIST_SET_INFO, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
-#define EVT_LIST_ITEM_SELECTED(id, fn) { wxEVT_COMMAND_LIST_ITEM_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
-#define EVT_LIST_ITEM_DESELECTED(id, fn) { wxEVT_COMMAND_LIST_ITEM_DESELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
-#define EVT_LIST_KEY_DOWN(id, fn) { wxEVT_COMMAND_LIST_KEY_DOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
-#define EVT_LIST_INSERT_ITEM(id, fn) { wxEVT_COMMAND_LIST_INSERT_ITEM, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
-#define EVT_LIST_COL_CLICK(id, fn) { wxEVT_COMMAND_LIST_COL_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
 
 #endif
     // _WX_LISTCTRL_H_

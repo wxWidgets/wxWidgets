@@ -143,6 +143,10 @@ class WXDLLEXPORT wxDC: public wxDCBase
     virtual void DoDrawSpline(wxList *points);
 #endif
 
+    // OS2-specific member variables
+    int               m_windowExtX;
+    int               m_windowExtY;
+
 //-----------------------------------------------------------------------------
 // Other virtuals from wxDCBase that are overridden here
 //-----------------------------------------------------------------------------

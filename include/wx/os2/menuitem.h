@@ -2,7 +2,7 @@
 // Name:        menuitem.h
 // Purpose:     wxMenuItem class
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     11.11.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -26,7 +26,7 @@
 // headers - only because ownerdrw.h is not always included and I don't want
 // to write #ifdef's everywhere...
 #if wxUSE_OWNER_DRAWN
-#include  "wx/ownerdrw.h"
+    #include  "wx/ownerdrw.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -55,15 +55,20 @@ public:
 
   // accessors (some more are inherited from wxOwnerDrawn or are below)
   bool              IsSeparator() const { return m_idItem == ID_SEPARATOR;  }
-  bool              IsEnabled()   const { return m_bEnabled;  }
-  bool              IsChecked()   const { return m_bChecked;  }
+  bool              IsEnabled()   const { return m_bEnabled;                }
+  bool              IsChecked()   const { return m_bChecked;                }
+  bool              IsSubMenu()   const { return GetSubMenu() != NULL;      }
 
   int               GetId()       const { return m_idItem;    }
   const wxString&   GetHelp()     const { return m_strHelp;   }
   wxMenu           *GetSubMenu()  const { return m_pSubMenu;  }
 
+  // the id for a popup menu is really its menu handle (as required by
+  // ::AppendMenu() API)
+  int               GetRealId()   const;
+
   // operations
-  void SetName(const wxString& strName) { m_strName = strName; }
+  void SetName(const wxString& strName);
   void SetHelp(const wxString& strHelp) { m_strHelp = strHelp; }
 
   void Enable(bool bDoEnable = TRUE);

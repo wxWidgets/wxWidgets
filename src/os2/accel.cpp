@@ -9,13 +9,19 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "accel.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifndef WX_PRECOMP
+#include <stdio.h>
+#include "wx/setup.h"
+#include "wx/window.h"
 #endif
 
-#include "wx/setup.h"
-#include "wx/accel.h"
-#include "wx/string.h"
+#include "wx/os2/accel.h"
+
+#include "wx/os2/private.h"
+
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
@@ -28,11 +34,9 @@ public:
     wxAcceleratorRefData();
     ~wxAcceleratorRefData();
 
-/* TODO: implementation
     inline HACCEL GetHACCEL() const { return m_hAccel; }
 protected:
     HACCEL      m_hAccel;
-*/
 };
 
 #define M_ACCELDATA ((wxAcceleratorRefData *)m_refData)
@@ -88,6 +92,32 @@ wxAcceleratorTable::wxAcceleratorTable(int n, wxAcceleratorEntry entries[])
 bool wxAcceleratorTable::Ok() const
 {
     // TODO
+    return FALSE;
+}
+
+void wxAcceleratorTable::SetHACCEL(WXHACCEL hAccel)
+{
+    if (!M_ACCELDATA)
+        m_refData = new wxAcceleratorRefData;
+
+    M_ACCELDATA->m_hAccel = (HACCEL) hAccel;
+}
+
+WXHACCEL wxAcceleratorTable::GetHACCEL() const
+{
+    if (!M_ACCELDATA)
+        return 0;
+    return (WXHACCEL) M_ACCELDATA->m_hAccel;
+}
+
+bool wxAcceleratorTable::Translate(wxWindow *window, WXMSG *wxmsg) const
+{
+    // TODO:
+/*
+    MSG *msg = (MSG *)wxmsg;
+
+    return Ok() && ::TranslateAccelerator(GetHwndOf(window), GetHaccel(), msg);
+*/
     return FALSE;
 }
 

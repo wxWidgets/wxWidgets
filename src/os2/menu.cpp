@@ -1,81 +1,110 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        menu.cpp
 // Purpose:     wxMenu, wxMenuBar, wxMenuItem
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/10/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
-// ============================================================================
-// headers & declarations
-// ============================================================================
-
-// wxWindows headers
-// -----------------
-
-#ifdef __GNUG__
-#pragma implementation "menu.h"
-#pragma implementation "menuitem.h"
+#ifndef WX_PRECOMP
+    #include "wx/frame.h"
+    #include "wx/menu.h"
+    #include "wx/utils.h"
+    #include "wx/intl.h"
 #endif
 
+#if wxUSE_OWNER_DRAWN
+    #include "wx/ownerdrw.h"
+#endif
+
+#include "wx/os2/private.h"
 #include "wx/menu.h"
 #include "wx/menuitem.h"
 #include "wx/log.h"
-#include "wx/utils.h"
 
 // other standard headers
-// ----------------------
 #include <string.h>
 
+// ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
+
+extern wxMenu *wxCurrentPopupMenu;
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// the (popup) menu title has this special id
+static const int idMenuTitle = -2;
+
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
+    IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
+    IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
 #endif
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-// Menus
+// ---------------------------------------------------------------------------
+// wxMenu construction, adding and removing menu items
+// ---------------------------------------------------------------------------
 
 // Construct a menu with optional title (then use append)
-wxMenu::wxMenu(const wxString& title, const wxFunction func)
+void wxMenu::Init(const wxString& title, const wxFunction func )
 {
     m_title = title;
     m_parent = NULL;
     m_eventHandler = this;
+    m_pInvokingWindow = NULL;
+    m_doBreak = FALSE ;
     m_noItems = 0;
     m_menuBar = NULL;
+    m_hMenu = 0; //(WXHMENU) CreatePopupMenu();
+    m_savehMenu = 0 ;
+    m_topLevelMenu = this;
     m_clientData = (void*) NULL;
-    if (m_title != "")
+
+    if ( !!m_title )
     {
-        Append(-2, m_title) ;
+        Append(idMenuTitle, m_title) ;
         AppendSeparator() ;
     }
 
     Callback(func);
-
-    // TODO create menu
 }
 
 // The wxWindow destructor will take care of deleting the submenus.
 wxMenu::~wxMenu()
 {
-    // TODO destroy menu and children
+    // free Windows resources
+    if ( m_hMenu )
+    {
+//        ::DestroyMenu((HMENU)m_hMenu);
+        m_hMenu = 0;
+    }
 
+    // delete submenus
     wxNode *node = m_menuItems.First();
-    while (node)
+    while ( node )
     {
         wxMenuItem *item = (wxMenuItem *)node->Data();
 
         // Delete child menus.
         // Beware: they must not be appended to children list!!!
         // (because order of delete is significant)
-        if (item->GetSubMenu())
+        if ( item->IsSubMenu() )
             item->DeleteSubMenu();
 
         wxNode *next = node->Next();
@@ -87,182 +116,290 @@ wxMenu::~wxMenu()
 
 void wxMenu::Break()
 {
-    // TODO
+    m_doBreak = TRUE;
 }
 
 // function appends a new item or submenu to the menu
 void wxMenu::Append(wxMenuItem *pItem)
 {
-    // TODO
+    wxCHECK_RET( pItem != NULL, wxT("can't append NULL item to the menu") );
 
-    wxCHECK_RET( pItem != NULL, "can't append NULL item to the menu" );
+#if wxUSE_ACCEL
+    // check for accelerators: they are given after '\t'
+    wxString label = pItem->GetName();
+    int posTab = label.Find(wxT('\t'));
+    if ( posTab != wxNOT_FOUND ) {
+        // parse the accelerator string
+        int keyCode = 0;
+        int accelFlags = wxACCEL_NORMAL;
+        wxString current;
+        for ( size_t n = (size_t)posTab + 1; n < label.Len(); n++ ) {
+            if ( (label[n] == '+') || (label[n] == '-') ) {
+                if ( current == _("ctrl") )
+                    accelFlags |= wxACCEL_CTRL;
+                else if ( current == _("alt") )
+                    accelFlags |= wxACCEL_ALT;
+                else if ( current == _("shift") )
+                    accelFlags |= wxACCEL_SHIFT;
+                else {
+                    wxLogDebug(wxT("Unknown accel modifier: '%s'"),
+                               current.c_str());
+                }
 
-    m_menuItems.Append(pItem);
+                current.Empty();
+            }
+            else {
+                current += wxTolower(label[n]);
+            }
+        }
 
-    m_noItems++;
+        if ( current.IsEmpty() ) {
+            wxLogDebug(wxT("No accel key found, accel string ignored."));
+        }
+        else {
+            if ( current.Len() == 1 ) {
+                // it's a letter
+                keyCode = wxToupper(current[0U]);
+            }
+            else {
+                // it should be a function key
+                if ( current[0U] == 'f' && isdigit(current[1U]) &&
+                     (current.Len() == 2 ||
+                     (current.Len() == 3 && isdigit(current[2U]))) ) {
+                    int n;
+                    wxSscanf(current.c_str() + 1, wxT("%d"), &n);
+
+                    keyCode = VK_F1 + n - 1;
+                }
+                else {
+                    wxLogDebug(wxT("Unrecognized accel key '%s', accel "
+                                  "string ignored."), current.c_str());
+                }
+            }
+        }
+
+        if ( keyCode ) {
+            // do add an entry
+            m_accelKeyCodes.Add(keyCode);
+            m_accelFlags.Add(accelFlags);
+            m_accelIds.Add(pItem->GetId());
+        }
+    }
+#endif // wxUSE_ACCEL
+
+    UINT flags = 0;
+
+    // TODO:
+/*
+    // if "Break" has just been called, insert a menu break before this item
+    // (and don't forget to reset the flag)
+    if ( m_doBreak ) {
+        flags |= MF_MENUBREAK;
+        m_doBreak = FALSE;
+    }
+
+    if ( pItem->IsSeparator() ) {
+        flags |= MF_SEPARATOR;
+    }
+
+    // id is the numeric id for normal menu items and HMENU for submenus as
+    // required by ::AppendMenu() API
+    UINT id;
+    wxMenu *submenu = pItem->GetSubMenu();
+    if ( submenu != NULL ) {
+        wxASSERT( submenu->GetHMenu() != (WXHMENU) NULL );
+
+        id = (UINT)submenu->GetHMenu();
+        submenu->m_topLevelMenu = m_topLevelMenu;
+        submenu->m_parent       = this;
+        submenu->m_savehMenu    = (WXHMENU)id;
+        submenu->m_hMenu        = 0;
+
+        flags |= MF_POPUP;
+    }
+    else {
+        id = pItem->GetId();
+    }
+
+    const char* pData;
+
+#if wxUSE_OWNER_DRAWN
+    if ( pItem->IsOwnerDrawn() ) {  // want to get {Measure|Draw}Item messages?
+        // item draws itself, pass pointer to it in data parameter
+        flags |= MF_OWNERDRAW;
+        pData = (const char*)pItem;
+    }
+    else
+#endif
+    {
+        // menu is just a normal string (passed in data parameter)
+        flags |= MF_STRING;
+        pData = label;
+    }
+    if ( !::AppendMenu(GetHmenu(), flags, id, pData) )
+    {
+        wxLogLastError("AppendMenu");
+    }
+    else
+    {
+        if ( id == idMenuTitle )
+        {
+            // visually select the menu title
+            MENUITEMINFO mii;
+            mii.cbSize = sizeof(mii);
+            mii.fMask = MIIM_STATE;
+            mii.fState = MFS_DEFAULT;
+
+            if ( !SetMenuItemInfo(GetHmenu(), (unsigned)id, FALSE, &mii) )
+            {
+                wxLogLastError(wxT("SetMenuItemInfo"));
+            }
+        }
+        m_menuItems.Append(pItem);
+        m_noItems++;
+    }
+*/
 }
 
 void wxMenu::AppendSeparator()
 {
-    // TODO
     Append(new wxMenuItem(this, ID_SEPARATOR));
 }
 
 // Pullright item
-void wxMenu::Append(int Id, const wxString& label, wxMenu *SubMenu, 
+void wxMenu::Append(int id,
+                    const wxString& label,
+                    wxMenu *SubMenu,
                     const wxString& helpString)
 {
-    Append(new wxMenuItem(this, Id, label, helpString, FALSE, SubMenu));
+    Append(new wxMenuItem(this, id, label, helpString, FALSE, SubMenu));
 }
 
 // Ordinary menu item
-void wxMenu::Append(int Id, const wxString& label, 
-                    const wxString& helpString, bool checkable)
+void wxMenu::Append(int id,
+                    const wxString& label,
+                    const wxString& helpString,
+                    bool checkable)
 {
-  // 'checkable' parameter is useless for Windows.
-    Append(new wxMenuItem(this, Id, label, helpString, checkable));
+    // 'checkable' parameter is useless for Windows.
+    Append(new wxMenuItem(this, id, label, helpString, checkable));
 }
 
+// delete item by id
 void wxMenu::Delete(int id)
 {
-    wxNode *node;
-    wxMenuItem *item;
+    wxMenuItem *item = NULL;
     int pos;
-
-    for (pos = 0, node = m_menuItems.First(); node; node = node->Next(), pos++) {
-	 item = (wxMenuItem *)node->Data();
-	 if (item->GetId() == id)
-		break;
+    wxNode *node;
+    for (pos = 0, node = m_menuItems.First(); node; node = node->Next(), pos++)
+    {
+        item = (wxMenuItem *)node->Data();
+        if ( item->GetId() == id )
+            break;
     }
 
-    if (!node)
-	return;
+    wxCHECK_RET( node, wxT("wxMenu::Delete(): item doesn't exist") );
+
+    HMENU menu = GetHmenu();
+
+    wxMenu *pSubMenu = item->GetSubMenu();
+    if ( pSubMenu != NULL )
+    {
+//        RemoveMenu(menu, (UINT)pos, MF_BYPOSITION);
+        pSubMenu->m_hMenu = pSubMenu->m_savehMenu;
+        pSubMenu->m_savehMenu = 0;
+        pSubMenu->m_parent = NULL;
+        //     RemoveChild(item->subMenu);
+        pSubMenu->m_topLevelMenu = NULL;
+        // TODO: Why isn't subMenu deleted here???
+        // Will put this in for now. Assuming this is supposed
+        // to delete the menu, not just remove it.
+        item->DeleteSubMenu();
+    }
+//    else
+//    {
+//        DeleteMenu(menu, (UINT)pos, MF_BYPOSITION);
+//    }
 
     m_menuItems.DeleteNode(node);
     delete item;
-
-    // TODO
 }
 
-void wxMenu::Enable(int Id, bool Flag)
+#if wxUSE_ACCEL
+
+// ---------------------------------------------------------------------------
+// accelerator helpers
+// ---------------------------------------------------------------------------
+
+// create the wxAcceleratorEntries for our accels and put them into provided
+// array - return the number of accels we have
+size_t wxMenu::CopyAccels(wxAcceleratorEntry *accels) const
 {
-    wxMenuItem *item = FindItemForId(Id);
-    wxCHECK_RET( item != NULL, "can't enable non-existing menu item" );
+    size_t count = GetAccelCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        (*accels++).Set(m_accelFlags[n], m_accelKeyCodes[n], m_accelIds[n]);
+    }
+
+    return count;
+}
+
+#endif // wxUSE_ACCEL
+
+// ---------------------------------------------------------------------------
+// wxMenu functions implemented in wxMenuItem
+// ---------------------------------------------------------------------------
+
+void wxMenu::Enable(int id, bool Flag)
+{
+    wxMenuItem *item = FindItemForId(id);
+    wxCHECK_RET( item != NULL, wxT("can't enable non-existing menu item") );
 
     item->Enable(Flag);
 }
 
-bool wxMenu::Enabled(int Id) const
+bool wxMenu::IsEnabled(int id) const
 {
-    wxMenuItem *item = FindItemForId(Id);
-    wxCHECK( item != NULL, FALSE );
+    wxMenuItem *item = FindItemForId(id);
+    wxCHECK_MSG( item != NULL, FALSE, wxT("invalid item id") );
 
     return item->IsEnabled();
 }
 
-void wxMenu::Check(int Id, bool Flag)
+void wxMenu::Check(int id, bool Flag)
 {
-    wxMenuItem *item = FindItemForId(Id);
-    wxCHECK_RET( item != NULL, "can't get status of non-existing menu item" );
+    wxMenuItem *item = FindItemForId(id);
+    wxCHECK_RET( item != NULL, wxT("can't get status of non-existing menu item") );
 
     item->Check(Flag);
 }
 
-bool wxMenu::Checked(int Id) const
+bool wxMenu::IsChecked(int id) const
 {
-    wxMenuItem *item = FindItemForId(Id);
-    wxCHECK( item != NULL, FALSE );
+    wxMenuItem *item = FindItemForId(id);
+    wxCHECK_MSG( item != NULL, FALSE, wxT("invalid item id") );
 
     return item->IsChecked();
-}
-
-void wxMenu::SetTitle(const wxString& label)
-{
-    m_title = label ;
-    // TODO
-}
-
-const wxString wxMenu::GetTitle() const
-{
-    return m_title;
 }
 
 void wxMenu::SetLabel(int id, const wxString& label)
 {
     wxMenuItem *item = FindItemForId(id) ;
-    if (item==NULL)
-        return;
+    wxCHECK_RET( item, wxT("wxMenu::SetLabel: no such item") );
 
-    if (item->GetSubMenu()==NULL)
-    {
-        // TODO
-    }
-    else
-    {
-        // TODO
-    }
     item->SetName(label);
 }
 
-wxString wxMenu::GetLabel(int Id) const
+wxString wxMenu::GetLabel(int id) const
 {
-    // TODO
-    return wxString("") ;
-}
+    wxString label;
+    wxMenuItem *pItem = FindItemForId(id) ;
+    if (pItem)
+        label = pItem->GetName() ;
+    else
+        wxFAIL_MSG(wxT("wxMenu::GetLabel: item doesn't exist"));
 
-// Finds the item id matching the given string, -1 if not found.
-int wxMenu::FindItem (const wxString& itemString) const
-{
-    char buf1[200];
-    char buf2[200];
-    wxStripMenuCodes ((char *)(const char *)itemString, buf1);
-
-    for (wxNode * node = m_menuItems.First (); node; node = node->Next ())
-    {
-      wxMenuItem *item = (wxMenuItem *) node->Data ();
-      if (item->GetSubMenu())
-      {
-        int ans = item->GetSubMenu()->FindItem(itemString);
-        if (ans > -1)
-          return ans;
-      }
-      if ( !item->IsSeparator() )
-      {
-        wxStripMenuCodes((char *)item->GetName().c_str(), buf2);
-        if (strcmp(buf1, buf2) == 0)
-          return item->GetId();
-      }
-    }
-
-    return -1;
-}
-
-wxMenuItem *wxMenu::FindItemForId(int itemId, wxMenu ** itemMenu) const
-{
-    if (itemMenu)
-        *itemMenu = NULL;
-    for (wxNode * node = m_menuItems.First (); node; node = node->Next ())
-    {
-        wxMenuItem *item = (wxMenuItem *) node->Data ();
-
-        if (item->GetId() == itemId)
-        {
-            if (itemMenu)
-                *itemMenu = (wxMenu *) this;
-            return item;
-        }
-
-        if (item->GetSubMenu())
-        {
-            wxMenuItem *ans = item->GetSubMenu()->FindItemForId (itemId, itemMenu);
-            if (ans)
-                return ans;
-        }
-    }
-
-    if (itemMenu)
-        *itemMenu = NULL;
-    return NULL;
+    return label;
 }
 
 void wxMenu::SetHelpString(int itemId, const wxString& helpString)
@@ -270,191 +407,378 @@ void wxMenu::SetHelpString(int itemId, const wxString& helpString)
     wxMenuItem *item = FindItemForId (itemId);
     if (item)
         item->SetHelp(helpString);
+    else
+        wxFAIL_MSG(wxT("wxMenu::SetHelpString: item doesn't exist"));
 }
 
 wxString wxMenu::GetHelpString (int itemId) const
 {
+    wxString help;
     wxMenuItem *item = FindItemForId (itemId);
-    wxString str("");
-    return (item == NULL) ? str : item->GetHelp();
+    if (item)
+        help = item->GetHelp();
+    else
+        wxFAIL_MSG(wxT("wxMenu::GetHelpString: item doesn't exist"));
+
+    return help;
 }
 
-void wxMenu::ProcessCommand(wxCommandEvent & event)
+// ---------------------------------------------------------------------------
+// wxMenu title
+// ---------------------------------------------------------------------------
+
+void wxMenu::SetTitle(const wxString& label)
+{
+    bool hasNoTitle = m_title.IsEmpty();
+    m_title = label;
+
+    HMENU hMenu = GetHmenu();
+// TODO
+/*
+    if ( hasNoTitle )
+    {
+        if ( !label.IsEmpty() )
+        {
+            if ( !InsertMenu(hMenu, 0u, MF_BYPOSITION | MF_STRING,
+                             (unsigned)idMenuTitle, m_title) ||
+                 !InsertMenu(hMenu, 1u, MF_BYPOSITION, (unsigned)-1, NULL) )
+            {
+                wxLogLastError(wxT("InsertMenu"));
+            }
+        }
+    }
+    else
+    {
+        if ( label.IsEmpty() )
+        {
+            // remove the title and the separator after it
+            if ( !RemoveMenu(hMenu, 0, MF_BYPOSITION) ||
+                 !RemoveMenu(hMenu, 0, MF_BYPOSITION) )
+            {
+                wxLogLastError("RemoveMenu");
+            }
+        }
+        else
+        {
+            // modify the title
+            if ( !ModifyMenu(hMenu, 0u,
+                        MF_BYPOSITION | MF_STRING,
+                        (unsigned)idMenuTitle, m_title) )
+            {
+                wxLogLastError("ModifyMenu");
+            }
+        }
+    }
+
+    // put the title string in bold face
+    if ( !m_title.IsEmpty() )
+    {
+        MENUITEMINFO mii;
+        mii.cbSize = sizeof(mii);
+        mii.fMask = MIIM_STATE;
+        mii.fState = MFS_DEFAULT;
+
+        if ( !SetMenuItemInfo(hMenu, (unsigned)idMenuTitle, FALSE, &mii) )
+        {
+            wxLogLastError("SetMenuItemInfo");
+        }
+    }
+*/
+}
+
+const wxString wxMenu::GetTitle() const
+{
+    return m_title;
+}
+
+// ---------------------------------------------------------------------------
+// event processing
+// ---------------------------------------------------------------------------
+
+bool wxMenu::OS2Command(WXUINT WXUNUSED(param), WXWORD id)
+{
+    // ignore commands from the menu title
+
+    if ( id != (WXWORD)idMenuTitle )
+    {
+        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
+        event.SetEventObject( this );
+        event.SetId( id );
+        event.SetInt( id );
+        ProcessCommand(event);
+    }
+
+    return TRUE;
+}
+
+bool wxMenu::ProcessCommand(wxCommandEvent & event)
 {
     bool processed = FALSE;
 
     // Try a callback
     if (m_callback)
     {
-            (void) (*(m_callback)) (*this, event);
-            processed = TRUE;
+        (void)(*(m_callback))(*this, event);
+        processed = TRUE;
     }
 
     // Try the menu's event handler
     if ( !processed && GetEventHandler())
     {
-            processed = GetEventHandler()->ProcessEvent(event);
+        processed = GetEventHandler()->ProcessEvent(event);
     }
-/* TODO
-    // Try the window the menu was popped up from (and up
-    // through the hierarchy)
-    if ( !processed && GetInvokingWindow())
-        processed = GetInvokingWindow()->ProcessEvent(event);
-*/
+
+    // Try the window the menu was popped up from (and up through the
+    // hierarchy)
+    wxWindow *win = GetInvokingWindow();
+    if ( !processed && win )
+        processed = win->GetEventHandler()->ProcessEvent(event);
+
+    return processed;
 }
 
-// Update a menu and all submenus recursively.
-// source is the object that has the update event handlers
-// defined for it. If NULL, the menu or associated window
-// will be used.
-void wxMenu::UpdateUI(wxEvtHandler* source)
-{
-  if (!source && GetInvokingWindow())
-    source = GetInvokingWindow()->GetEventHandler();
-  if (!source)
-    source = GetEventHandler();
-  if (!source)
-    source = this;
+// ---------------------------------------------------------------------------
+// Item search
+// ---------------------------------------------------------------------------
 
-  wxNode* node = GetItems().First();
-  while (node)
-  {
-    wxMenuItem* item = (wxMenuItem*) node->Data();
-    if ( !item->IsSeparator() )
+// Finds the item id matching the given string, -1 if not found.
+int wxMenu::FindItem (const wxString& itemString) const
+{
+    wxString itemLabel = wxStripMenuCodes(itemString);
+    for ( wxNode *node = m_menuItems.First(); node; node = node->Next() )
     {
-      wxWindowID id = item->GetId();
-      wxUpdateUIEvent event(id);
-      event.SetEventObject( source );
-
-      if (source->ProcessEvent(event))
-      {
-        if (event.GetSetText())
-          SetLabel(id, event.GetText());
-        if (event.GetSetChecked())
-          Check(id, event.GetChecked());
-        if (event.GetSetEnabled())
-          Enable(id, event.GetEnabled());
-      }
-
-      if (item->GetSubMenu())
-        item->GetSubMenu()->UpdateUI(source);
+        wxMenuItem *item = (wxMenuItem *)node->Data();
+        if ( item->IsSubMenu() )
+        {
+            int ans = item->GetSubMenu()->FindItem(itemString);
+            if ( ans != wxNOT_FOUND )
+                return ans;
+        }
+        else if ( !item->IsSeparator() )
+        {
+            wxString label = wxStripMenuCodes(item->GetName());
+            if ( itemLabel == label )
+                return item->GetId();
+        }
     }
-    node = node->Next();
-  }
+
+    return wxNOT_FOUND;
 }
 
-bool wxWindow::PopupMenu(wxMenu *menu, int x, int y)
+wxMenuItem *wxMenu::FindItemForId(int itemId, wxMenu ** itemMenu) const
 {
-    menu->SetInvokingWindow(this);
-    menu->UpdateUI();
+    if ( itemMenu )
+        *itemMenu = NULL;
 
-    // TODO
-    return FALSE;
+    wxMenuItem *item = NULL;
+    for ( wxNode *node = m_menuItems.First(); node && !item; node = node->Next() )
+    {
+        item = (wxMenuItem *)node->Data();
+
+        if ( item->GetId() == itemId )
+        {
+            if (itemMenu)
+                *itemMenu = (wxMenu *)this;
+        }
+        else if ( item->IsSubMenu() )
+        {
+            item = item->GetSubMenu()->FindItemForId(itemId, itemMenu);
+        }
+        else
+        {
+            // don't exit the loop
+            item = NULL;
+        }
+    }
+
+    return item;
 }
 
+// ---------------------------------------------------------------------------
+// other
+// ---------------------------------------------------------------------------
+
+void wxMenu::Attach(wxMenuBar *menubar)
+{
+    // menu can be in at most one menubar because otherwise they would both
+    // delete the menu pointer
+    wxASSERT_MSG( !m_menuBar, wxT("menu belongs to 2 menubars, expect a crash") );
+
+    m_menuBar = menubar;
+    m_savehMenu = m_hMenu;
+    m_hMenu = 0;
+}
+
+void wxMenu::Detach()
+{
+    wxASSERT_MSG( m_menuBar, wxT("can't detach menu if it's not attached") );
+
+    m_hMenu = m_savehMenu;
+    m_savehMenu = 0;
+}
+
+// ---------------------------------------------------------------------------
 // Menu Bar
-wxMenuBar::wxMenuBar()
+// ---------------------------------------------------------------------------
+
+void wxMenuBar::Init()
 {
     m_eventHandler = this;
     m_menuCount = 0;
     m_menus = NULL;
     m_titles = NULL;
     m_menuBarFrame = NULL;
-
-    // TODO
+    m_hMenu = 0;
 }
 
-wxMenuBar::wxMenuBar(int n, wxMenu *menus[], const wxString titles[])
+wxMenuBar::wxMenuBar()
 {
-    m_eventHandler = this;
-    m_menuCount = n;
-    m_menus = menus;
-    m_titles = new wxString[n];
-    int i;
-    for ( i = 0; i < n; i++ )
-	m_titles[i] = titles[i];
-    m_menuBarFrame = NULL;
+    Init();
+}
 
-    // TODO
+wxMenuBar::wxMenuBar( long WXUNUSED(style) )
+{
+    Init();
+}
+
+wxMenuBar::wxMenuBar(int count, wxMenu *menus[], const wxString titles[])
+{
+    Init();
+
+    m_menuCount = count;
+    m_menus = menus;
+    m_titles = new wxString[count];
+
+    int i;
+    for ( i = 0; i < count; i++ )
+        m_titles[i] = titles[i];
+
+    for ( i = 0; i < count; i++ )
+        m_menus[i]->Attach(this);
 }
 
 wxMenuBar::~wxMenuBar()
 {
-    int i;
-    for (i = 0; i < m_menuCount; i++)
+    for ( int i = 0; i < m_menuCount; i++ )
     {
         delete m_menus[i];
     }
+
     delete[] m_menus;
     delete[] m_titles;
-
-    // TODO
 }
+
+// ---------------------------------------------------------------------------
+// wxMenuBar helpers
+// ---------------------------------------------------------------------------
+
+void wxMenuBar::Refresh()
+{
+    wxCHECK_RET( m_menuBarFrame, wxT("can't refresh a menubar withotu a frame") );
+
+// TODO    DrawMenuBar((HWND)m_menuBarFrame->GetHWND()) ;
+}
+
+WXHMENU wxMenuBar::Create()
+{
+    if (m_hMenu != 0 )
+    return m_hMenu;
+
+    wxCHECK_MSG( !m_hMenu, TRUE, wxT("menubar already created") );
+
+    m_hMenu = 0; // TODO: (WXHMENU)::CreateMenu();
+
+    if ( !m_hMenu )
+    {
+        wxLogLastError("CreateMenu");
+    }
+    else
+    {
+        for ( int i = 0; i < m_menuCount; i++ )
+        {
+//            if ( !::AppendMenu((HMENU)m_hMenu, MF_POPUP | MF_STRING,
+//                               (UINT)m_menus[i]->GetHMenu(),
+//                               m_titles[i]) )
+//            {
+//                wxLogLastError("AppendMenu");
+//            }
+        }
+    }
+
+    return m_hMenu;
+}
+
+// ---------------------------------------------------------------------------
+// wxMenuBar functions forwarded to wxMenuItem
+// ---------------------------------------------------------------------------
 
 // Must only be used AFTER menu has been attached to frame,
 // otherwise use individual menus to enable/disable items
-void wxMenuBar::Enable(int id, bool flag)
+void wxMenuBar::Enable(int id, bool enable)
 {
     wxMenu *itemMenu = NULL;
     wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-    if (!item)
-        return;
 
-    // TODO
+    wxCHECK_RET( item, wxT("attempt to enable an item which doesn't exist") );
+
+    item->Enable(enable);
 }
 
-void wxMenuBar::EnableTop(int pos, bool flag)
+void wxMenuBar::EnableTop(int pos, bool enable)
 {
-    // TODO
+    int flag = 0; // TODO enable ? MF_ENABLED : MF_GRAYED;;
+
+//    EnableMenuItem((HMENU)m_hMenu, pos, MF_BYPOSITION | flag);
 }
 
 // Must only be used AFTER menu has been attached to frame,
 // otherwise use individual menus
-void wxMenuBar::Check(int id, bool flag)
+void wxMenuBar::Check(int id, bool check)
 {
     wxMenu *itemMenu = NULL;
     wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-    if (!item)
-        return;
 
-    if (!item->IsCheckable())
-        return ;
+    wxCHECK_RET( item, wxT("attempt to check an item which doesn't exist") );
+    wxCHECK_RET( item->IsCheckable(), wxT("attempt to check an uncheckable item") );
 
-    // TODO
+    item->Check(check);
 }
 
-bool wxMenuBar::Checked(int id) const
+bool wxMenuBar::IsChecked(int id) const
 {
     wxMenu *itemMenu = NULL;
     wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-    if (!item)
-        return FALSE;
 
-    // TODO
+    wxCHECK_MSG( item, FALSE, wxT("wxMenuBar::IsChecked(): no such item") );
+
+//    int flag = ::GetMenuState(GetHmenuOf(itemMenu), id, MF_BYCOMMAND);
+
+//    return (flag & MF_CHECKED) != 0;
     return FALSE;
 }
 
-bool wxMenuBar::Enabled(int id) const
+bool wxMenuBar::IsEnabled(int id) const
 {
     wxMenu *itemMenu = NULL;
     wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-    if (!item)
-        return FALSE;
 
-    // TODO
-    return FALSE ;
+    wxCHECK_MSG( item, FALSE, wxT("wxMenuBar::IsEnabled(): no such item") );
+
+//    int flag = ::GetMenuState(GetHmenuOf(itemMenu), id, MF_BYCOMMAND) ;
+
+    // don't "and" with MF_ENABLED because its value is 0
+//    return (flag & MF_DISABLED) == 0;
+    return FALSE;
 }
-
 
 void wxMenuBar::SetLabel(int id, const wxString& label)
 {
     wxMenu *itemMenu = NULL;
     wxMenuItem *item = FindItemForId(id, &itemMenu) ;
 
-    if (!item)
-        return;
+    wxCHECK_RET( item, wxT("wxMenuBar::SetLabel(): no such item") );
 
-    // TODO
+    item->SetName(label);
 }
 
 wxString wxMenuBar::GetLabel(int id) const
@@ -462,35 +786,204 @@ wxString wxMenuBar::GetLabel(int id) const
     wxMenu *itemMenu = NULL;
     wxMenuItem *item = FindItemForId(id, &itemMenu) ;
 
-    if (!item)
-        return wxString("");
+    wxCHECK_MSG( item, wxT(""), wxT("wxMenuBar::GetLabel(): no such item") );
 
-    // TODO
-    return wxString("") ;
+    return item->GetName();
 }
+
+void wxMenuBar::SetHelpString (int id, const wxString& helpString)
+{
+    wxMenu *itemMenu = NULL;
+    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
+
+    wxCHECK_RET( item, wxT("wxMenuBar::SetHelpString(): no such item") );
+
+    item->SetHelp(helpString);
+}
+
+wxString wxMenuBar::GetHelpString (int id) const
+{
+    wxMenu *itemMenu = NULL;
+    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
+
+    wxCHECK_MSG( item, wxT(""), wxT("wxMenuBar::GetHelpString(): no such item") );
+
+    return item->GetHelp();
+}
+
+// ---------------------------------------------------------------------------
+// wxMenuBar functions to work with the top level submenus
+// ---------------------------------------------------------------------------
+
+// NB: we don't support owner drawn top level items for now, if we do these
+//     functions would have to be changed to use wxMenuItem as well
 
 void wxMenuBar::SetLabelTop(int pos, const wxString& label)
 {
-    // TODO
+    UINT id;
+    UINT flagsOld = 0; // TODO: ::GetMenuState((HMENU)m_hMenu, pos, MF_BYPOSITION);
+    if ( flagsOld == 0xFFFFFFFF )
+    {
+        wxLogLastError(wxT("GetMenuState"));
+
+        return;
+    }
+
+//    if ( flagsOld & MF_POPUP )
+//    {
+//        // HIBYTE contains the number of items in the submenu in this case
+//        flagsOld &= 0xff ;
+//        id = (UINT)::GetSubMenu((HMENU)m_hMenu, pos) ;
+//    }
+//    else
+//    {
+//        id = pos;
+//    }
+
+//    if ( ::ModifyMenu(GetHmenu(), pos, MF_BYPOSITION | MF_STRING | flagsOld,
+//                      id, label) == 0xFFFFFFFF )
+//    {
+//        wxLogLastError("ModifyMenu");
+//    }
 }
 
 wxString wxMenuBar::GetLabelTop(int pos) const
 {
-    // TODO
-    return wxString("");
+    int len = 0; // TODO: ::GetMenuString((HMENU)m_hMenu, pos, NULL, 0, MF_BYCOMMAND);
+
+    len++;  // for the NUL character
+    wxString label;
+//    ::GetMenuString(GetHmenu(), pos, label.GetWriteBuf(len), len, MF_BYCOMMAND);
+    label.UngetWriteBuf();
+
+    return label;
 }
+
+// ---------------------------------------------------------------------------
+// wxMenuBar notifications
+// ---------------------------------------------------------------------------
 
 bool wxMenuBar::OnDelete(wxMenu *a_menu, int pos)
 {
+    if ( !m_menuBarFrame )
+        return TRUE;
+
     // TODO
+/*
+    if ( ::RemoveMenu((HMENU)m_hMenu, (UINT)pos, MF_BYPOSITION) )
+    {
+        // VZ: I'm not sure about what's going on here, so I leave an assert
+        wxASSERT_MSG( m_menus[pos] == a_menu, wxT("what is this parameter for??") );
+
+        a_menu->Detach();
+
+        if ( m_menuBarFrame )
+            Refresh();
+
+        return TRUE;
+    }
+    else
+    {
+        wxLogLastError("RemoveMenu");
+    }
+*/
     return FALSE;
 }
 
-bool wxMenuBar::OnAppend(wxMenu *a_menu, const char *title)
+bool wxMenuBar::OnAppend(wxMenu *a_menu, const wxChar *title)
 {
-    // TODO
-    return FALSE;
+    WXHMENU submenu = a_menu->GetHMenu();
+    if ( !submenu )
+        return FALSE;
+
+    if ( !m_menuBarFrame )
+        return TRUE;
+
+    a_menu->Attach(this);
+
+//    if ( !::AppendMenu(GetHmenu(), MF_POPUP | MF_STRING,
+//                       (UINT)submenu, title) )
+//    {
+//        wxLogLastError(wxT("AppendMenu"));
+//    }
+
+    Refresh();
+
+    return TRUE;
 }
+
+// ---------------------------------------------------------------------------
+// wxMenuBar construction
+// ---------------------------------------------------------------------------
+int wxMenuBar::FindMenu(const wxString& title)
+{
+    wxString menuTitle = wxStripMenuCodes(title);
+    for ( int i = 0; i < m_menuCount; i++ )
+    {
+        wxString title = wxStripMenuCodes(m_titles[i]);
+        if ( menuTitle == title )
+            return i;
+    }
+
+    return wxNOT_FOUND;
+
+}
+
+
+void wxMenuBar::ReplaceMenu(int pos, wxMenu * new_menu, const wxString& title)
+{
+    if (m_menuBarFrame) return;
+
+    if ( pos >= 0 && pos < m_menuCount )
+    {
+       wxMenu *old_menu = m_menus[pos];
+       m_menus[pos] = new_menu;
+       delete old_menu;
+    }
+
+}
+
+
+void wxMenuBar::Insert(int pos, wxMenu * menu, const wxString& title)
+{
+    if (m_menuBarFrame) return;
+    if ( pos < 0 && pos >= m_menuCount ) return;
+
+    m_menuCount ++;
+    wxMenu **new_menus = new wxMenu *[m_menuCount];
+    wxString *new_titles = new wxString[m_menuCount];
+    int i;
+
+    for (i = 0; i < pos; i++)
+    {
+        new_menus[i] = m_menus[i];
+        m_menus[i] = NULL;
+        new_titles[i] = m_titles[i];
+        m_titles[i] = wxT("");
+    }
+
+    new_menus[pos] = (wxMenu *)menu;
+    new_titles[i] = title;
+
+    for (i = pos+1; i < m_menuCount; i++)
+    {
+        new_menus[i] = m_menus[i-1];
+        m_menus[i-1] = NULL;
+        new_titles[i] = m_titles[i-1];
+        m_titles[i-1] = wxT("");
+    }
+    if (m_menus)
+    {
+        delete[]m_menus;
+        delete[]m_titles;
+    }
+    m_menus = new_menus;
+    m_titles = new_titles;
+
+    menu->SetParent(this);
+
+}
+
 
 void wxMenuBar::Append (wxMenu * menu, const wxString& title)
 {
@@ -503,11 +996,11 @@ void wxMenuBar::Append (wxMenu * menu, const wxString& title)
     int i;
 
     for (i = 0; i < m_menuCount - 1; i++)
-	{
+    {
         new_menus[i] = m_menus[i];
         m_menus[i] = NULL;
         new_titles[i] = m_titles[i];
-        m_titles[i] = "";
+        m_titles[i] = wxT("");
     }
     if (m_menus)
     {
@@ -520,7 +1013,7 @@ void wxMenuBar::Append (wxMenu * menu, const wxString& title)
     m_menus[m_menuCount - 1] = (wxMenu *)menu;
     m_titles[m_menuCount - 1] = title;
 
-    // TODO
+    menu->SetParent(this);
 }
 
 void wxMenuBar::Delete(wxMenu * menu, int i)
@@ -528,17 +1021,14 @@ void wxMenuBar::Delete(wxMenu * menu, int i)
     int j;
     int ii = (int) i;
 
-    if (menu != 0)
-    {
-	    for (ii = 0; ii < m_menuCount; ii++)
-        {
+    if (menu != 0) {
+        for (ii = 0; ii < m_menuCount; ii++) {
             if (m_menus[ii] == menu)
-            break;
-	    }
+                break;
+        }
         if (ii >= m_menuCount)
             return;
-    } else
-    {
+    } else {
         if (ii < 0 || ii >= m_menuCount)
             return;
         menu = m_menus[ii];
@@ -550,65 +1040,149 @@ void wxMenuBar::Delete(wxMenu * menu, int i)
     menu->SetParent(NULL);
 
     -- m_menuCount;
-    for (j = ii; j < m_menuCount; j++)
-    {
+    for (j = ii; j < m_menuCount; j++) {
         m_menus[j] = m_menus[j + 1];
         m_titles[j] = m_titles[j + 1];
     }
 }
 
-// Find the menu menuString, item itemString, and return the item id.
-// Returns -1 if none found.
-int wxMenuBar::FindMenuItem (const wxString& menuString, const wxString& itemString) const
+void wxMenuBar::Attach(wxFrame *frame)
 {
-    char buf1[200];
-    char buf2[200];
-    wxStripMenuCodes ((char *)(const char *)menuString, buf1);
+    wxASSERT_MSG( !m_menuBarFrame, wxT("menubar already attached!") );
+
+    m_menuBarFrame = frame;
+
+#if wxUSE_ACCEL
+    // create the accel table - we consider that the menubar construction is
+    // finished
+    size_t nAccelCount = 0;
     int i;
-    for (i = 0; i < m_menuCount; i++)
+    for ( i = 0; i < m_menuCount; i++ )
     {
-        wxStripMenuCodes ((char *)(const char *)m_titles[i], buf2);
-        if (strcmp (buf1, buf2) == 0)
-            return m_menus[i]->FindItem (itemString);
+        nAccelCount += m_menus[i]->GetAccelCount();
     }
-    return -1;
+
+    if ( nAccelCount )
+    {
+        wxAcceleratorEntry *accelEntries = new wxAcceleratorEntry[nAccelCount];
+
+        nAccelCount = 0;
+        for ( i = 0; i < m_menuCount; i++ )
+        {
+            nAccelCount += m_menus[i]->CopyAccels(&accelEntries[nAccelCount]);
+        }
+
+        m_accelTable = wxAcceleratorTable(nAccelCount, accelEntries);
+
+        delete [] accelEntries;
+    }
+#endif // wxUSE_ACCEL
 }
 
-wxMenuItem *wxMenuBar::FindItemForId (int Id, wxMenu ** itemMenu) const
+void wxMenuBar::Detach()
 {
-    if (itemMenu)
+//    ::DestroyMenu((HMENU)m_hMenu);
+    m_hMenu = NULL;
+    m_menuBarFrame = NULL;
+}
+
+
+// ---------------------------------------------------------------------------
+// wxMenuBar searching for menu items
+// ---------------------------------------------------------------------------
+
+// Find the itemString in menuString, and return the item id or wxNOT_FOUND
+int wxMenuBar::FindMenuItem(const wxString& menuString,
+                            const wxString& itemString) const
+{
+    wxString menuLabel = wxStripMenuCodes(menuString);
+    for ( int i = 0; i < m_menuCount; i++ )
+    {
+        wxString title = wxStripMenuCodes(m_titles[i]);
+        if ( menuString == title )
+            return m_menus[i]->FindItem(itemString);
+    }
+
+    return wxNOT_FOUND;
+}
+
+wxMenuItem *wxMenuBar::FindItemForId (int id, wxMenu **itemMenu) const
+{
+    if ( itemMenu )
         *itemMenu = NULL;
 
     wxMenuItem *item = NULL;
-    int i;
-    for (i = 0; i < m_menuCount; i++)
-        if ((item = m_menus[i]->FindItemForId (Id, itemMenu)))
-            return item;
+    for ( int i = 0; !item && (i < m_menuCount); i++ )
+    {
+        item = m_menus[i]->FindItemForId(id, itemMenu);
+    }
+
+    return item;
+}
+
+
+// ----------------------------------------------------------------------------
+// helper functions
+// ----------------------------------------------------------------------------
+
+wxWindow *wxMenu::GetWindow() const
+{
+    if ( m_pInvokingWindow != NULL )
+        return m_pInvokingWindow;
+    else if ( m_menuBar != NULL)
+        return m_menuBar->GetFrame();
+
     return NULL;
 }
 
-void wxMenuBar::SetHelpString (int Id, const wxString& helpString)
+WXHMENU wxMenu::GetHMenu() const
 {
-    int i;
-    for (i = 0; i < m_menuCount; i++)
+    if ( m_hMenu != 0 )
+        return m_hMenu;
+    else if ( m_savehMenu != 0 )
+        return m_savehMenu;
+
+    wxFAIL_MSG(wxT("wxMenu without HMENU"));
+
+    return 0;
+}
+
+// Update a menu and all submenus recursively. source is the object that has
+// the update event handlers defined for it. If NULL, the menu or associated
+// window will be used.
+void wxMenu::UpdateUI(wxEvtHandler* source)
+{
+    if (!source && GetInvokingWindow())
+        source = GetInvokingWindow()->GetEventHandler();
+    if (!source)
+        source = GetEventHandler();
+    if (!source)
+        source = this;
+
+    wxNode* node = GetItems().First();
+    while (node)
     {
-        if (m_menus[i]->FindItemForId (Id))
+        wxMenuItem* item = (wxMenuItem*) node->Data();
+        if ( !item->IsSeparator() )
         {
-            m_menus[i]->SetHelpString (Id, helpString);
-            return;
+            wxWindowID id = item->GetId();
+            wxUpdateUIEvent event(id);
+            event.SetEventObject( source );
+
+            if (source->ProcessEvent(event))
+            {
+                if (event.GetSetText())
+                    SetLabel(id, event.GetText());
+                if (event.GetSetChecked())
+                    Check(id, event.GetChecked());
+                if (event.GetSetEnabled())
+                    Enable(id, event.GetEnabled());
+            }
+
+            if (item->GetSubMenu())
+                item->GetSubMenu()->UpdateUI(source);
         }
+        node = node->Next();
     }
 }
-
-wxString wxMenuBar::GetHelpString (int Id) const
-{
-    int i;
-    for (i = 0; i < m_menuCount; i++)
-    {
-        if (m_menus[i]->FindItemForId (Id))
-            return wxString(m_menus[i]->GetHelpString (Id));
-    }
-    return wxString("");
-}
-
 

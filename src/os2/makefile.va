@@ -326,8 +326,14 @@ OS2OBJS = \
   ..\os2\$D\iniconf.obj \
   ..\os2\$D\joystick.obj \
   ..\os2\$D\listbox.obj \
+  ..\os2\$D\listctrl.obj \
+  ..\os2\$D\main.obj \
+  ..\os2\$D\mdi.obj \
+  ..\os2\$D\menu.obj \
+  ..\os2\$D\menuitem.obj \
+  ..\os2\$D\metafile.obj \
+  ..\os2\$D\minifram.obj \
   ..\os2\$D\window.obj
-
 
 OS2LIBOBJS = \
   accel.obj \
@@ -367,6 +373,13 @@ OS2LIBOBJS = \
   iniconf.obj \
   joystick.obj \
   listbox.obj \
+  listctrl.obj \
+  main.obj \
+  mdi.obj \
+  menu.obj \
+  menuitem.obj \
+  metafile.obj \
+  minifram.obj \
   window.obj
 
 HTMLOBJS = \
@@ -551,6 +564,13 @@ $(OS2LIBOBJS):
   copy ..\os2\$D\iniconf.obj
   copy ..\os2\$D\joystick.obj
   copy ..\os2\$D\listbox.obj
+  copy ..\os2\$D\listctrl.obj
+  copy ..\os2\$D\main.obj
+  copy ..\os2\$D\mdi.obj
+  copy ..\os2\$D\menu.obj
+  copy ..\os2\$D\menuitem.obj
+  copy ..\os2\$D\metafile.obj
+  copy ..\os2\$D\minifram.obj
   copy ..\os2\$D\window.obj
 
 # wxWindows library as DLL
