@@ -429,3 +429,8 @@ CVS: [VS] wxWindows/src/gtk button.cpp,1.53,1.54 checkbox.cpp,1.52,1.53 control.
 CVS: [VS] wxWindows/include/wx/gtk control.h,1.16,1.17
 CVS: [VS] wxWindows/docs changes.txt,1.255,1.256
 CVS: [VS] wxWindows/src/gtk control.cpp,1.27,1.28
+
+34. Accept '\r' as delimiter when parsing dates (bug #684617)
+
+CVS: [VZ] wxWindows/src/common datetime.cpp,1.73,1.74
+
