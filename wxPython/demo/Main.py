@@ -1310,8 +1310,8 @@ class wxPythonDemo(wx.Frame):
 
         if loadSource:
             self.LoadDemoSource()
-        self.UpdateNotebook()
         self.SetOverview(self.demoModules.name + " Overview", overviewText)
+        self.UpdateNotebook()
 
     #---------------------------------------------
     def ShutdownDemoModule(self):
