@@ -101,7 +101,7 @@ long      wxApp::s_lastModifiers = 0 ;
 
 
 bool      wxApp::s_macDefaultEncodingIsPC = true ;
-bool      wxApp::s_macSupportPCMenuShortcuts = true ;
+bool      wxApp::s_macSupportPCMenuShortcuts = false ;
 long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 long      wxApp::s_macPreferencesMenuItemId = 0 ;
 long      wxApp::s_macExitMenuItemId = wxID_EXIT ;
