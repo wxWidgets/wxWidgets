@@ -1705,30 +1705,25 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             HBITMAP buffer_bmap ;
 
 #if wxUSE_DC_CACHEING
-            if (TRUE)
-            {
-                // create a temp buffer bitmap and DCs to access it and the mask
-                wxDCCacheEntry* dcCacheEntry1 = FindDCInCache(NULL, source->GetHDC());
-                dc_mask = (HDC) dcCacheEntry1->m_dc;
+            // create a temp buffer bitmap and DCs to access it and the mask
+            wxDCCacheEntry* dcCacheEntry1 = FindDCInCache(NULL, source->GetHDC());
+            dc_mask = (HDC) dcCacheEntry1->m_dc;
 
-                wxDCCacheEntry* dcCacheEntry2 = FindDCInCache(dcCacheEntry1, GetHDC());
-                dc_buffer = (HDC) dcCacheEntry2->m_dc;
+            wxDCCacheEntry* dcCacheEntry2 = FindDCInCache(dcCacheEntry1, GetHDC());
+            dc_buffer = (HDC) dcCacheEntry2->m_dc;
 
-                wxDCCacheEntry* bitmapCacheEntry = FindBitmapInCache(GetHDC(),
-                    width, height);
+            wxDCCacheEntry* bitmapCacheEntry = FindBitmapInCache(GetHDC(),
+                width, height);
 
-                buffer_bmap = (HBITMAP) bitmapCacheEntry->m_bitmap;
-            }
-            else
-#endif
-            {
-                // create a temp buffer bitmap and DCs to access it and the mask
-                dc_mask = ::CreateCompatibleDC(GetHdcOf(*source));
-                dc_buffer = ::CreateCompatibleDC(GetHdc());
-                buffer_bmap = ::CreateCompatibleBitmap(GetHdc(), width, height);
-                ::SelectObject(dc_mask, (HBITMAP) mask->GetMaskBitmap());
-                ::SelectObject(dc_buffer, buffer_bmap);
-            }
+            buffer_bmap = (HBITMAP) bitmapCacheEntry->m_bitmap;
+#else // !wxUSE_DC_CACHEING
+            // create a temp buffer bitmap and DCs to access it and the mask
+            dc_mask = ::CreateCompatibleDC(GetHdcOf(*source));
+            dc_buffer = ::CreateCompatibleDC(GetHdc());
+            buffer_bmap = ::CreateCompatibleBitmap(GetHdc(), width, height);
+            ::SelectObject(dc_mask, (HBITMAP) mask->GetMaskBitmap());
+            ::SelectObject(dc_buffer, buffer_bmap);
+#endif // wxUSE_DC_CACHEING/!wxUSE_DC_CACHEING
 
             // copy dest to buffer
             if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
