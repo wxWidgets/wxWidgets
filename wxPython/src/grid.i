@@ -1543,9 +1543,16 @@ public:
             const wxString& name = wxPyPanelNameStr);
 
 
-    enum wxGridSelectionModes {wxGridSelectCells,
-                               wxGridSelectRows,
-                               wxGridSelectColumns};
+    enum wxGridSelectionModes {
+        wxGridSelectCells,
+        wxGridSelectRows,
+        wxGridSelectColumns
+    };
+    %pythoncode {
+        SelectCells =   wxGridSelectCells
+        SelectRows =    wxGridSelectRows
+        SelectColumns = wxGridSelectColumns,
+    }
 
     bool CreateGrid( int numRows, int numCols,
                      WXGRIDSELECTIONMODES selmode = wxGrid::wxGridSelectCells );
