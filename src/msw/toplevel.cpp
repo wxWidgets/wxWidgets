@@ -904,8 +904,10 @@ bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
 
 void wxTopLevelWindowMSW::RequestUserAttention(int flags)
 {
-    // check if we can use FlashWindowEx()
-#ifdef FLASHW_STOP
+    // check if we can use FlashWindowEx(): unfortunately an explicit test for
+    // FLASHW_STOP, for example, doesn't work because MSVC6 headers do #define
+    // it but don't provide FlashWindowEx() declaration
+#if WINVER >= 0x0500
     // available in the headers, check if it is supported by the system
     typedef BOOL (WINAPI *FlashWindowEx_t)(FLASHWINFO *pfwi);
     FlashWindowEx_t s_pfnFlashWindowEx = NULL;
@@ -938,7 +940,7 @@ void wxTopLevelWindowMSW::RequestUserAttention(int flags)
         s_pfnFlashWindowEx(&fwi);
     }
     else // FlashWindowEx() not available
-#endif // FLASHW_STOP
+#endif // FlashWindowEx() defined
     {
         wxUnusedVar(flags);
 #ifndef __WXWINCE__
