@@ -182,7 +182,19 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
     // and now we may finally size the control properly (if needed)
     if ( autoSize )
     {
-        SetBestSize(sizeOrig);
+        // we do the same thing as SetBestSize() but we need sizeBest here
+        wxSize sizeBest = DoGetBestSize();
+        if ( size.x != -1 )
+            sizeBest.x = sizeOrig.x;
+        if ( size.y != -1 )
+            sizeBest.y = sizeOrig.y;
+
+        SetSize(sizeBest);
+
+        // this is our true initial size, not the (1, 1) we had during
+        // CreateControl() call above: this is especially important if we're
+        // added to a sizer as we don't want to be shrunk to nothing by it
+        m_initialSize = sizeBest;
     }
 
     return TRUE;
