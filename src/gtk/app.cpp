@@ -154,7 +154,7 @@ bool wxYield()
     // We need to temporarily remove idle callbacks or the loop will
     // never finish.
     gtk_idle_remove( wxTheApp->m_idleTag );
-    
+
     while (gtk_events_pending())
         gtk_main_iteration();
 
@@ -219,7 +219,7 @@ bool wxApp::OnInitGui()
            use the same 64 colormap entries on 8-bit displays so you
            can use several rather graphics-heavy applications at the
            same time.
-	   NOTE: this doesn't really seem to work this way... */
+           NOTE: this doesn't really seem to work this way... */
 
         /*
         GdkColormap *cmap = gdk_colormap_new( gdk_visual_get_system(), TRUE );
@@ -246,13 +246,13 @@ bool wxApp::OnInitGui()
 
      for (int r = 0; r < 32; r++)
      {
-	for (int g = 0; g < 32; g++)
-	{
-	    for (int b = 0; b < 32; b++)
-	    {
-		int rr = (r << 3) | (r >> 2);
-		int gg = (g << 3) | (g >> 2);
-		int bb = (b << 3) | (b >> 2);
+        for (int g = 0; g < 32; g++)
+        {
+            for (int b = 0; b < 32; b++)
+            {
+                int rr = (r << 3) | (r >> 2);
+                int gg = (g << 3) | (g >> 2);
+                int bb = (b << 3) | (b >> 2);
 
                 GdkColor *colors = cmap->colors;
                 int max = 3 * (65536);
@@ -267,9 +267,9 @@ bool wxApp::OnInitGui()
                     if (sum < max) { index = i; max = sum; }
                 }
 
-		m_colorCube[ (r*1024) + (g*32) + b ] = index;
-	    }
-	}
+                m_colorCube[ (r*1024) + (g*32) + b ] = index;
+            }
+        }
     }
 
 
@@ -378,11 +378,12 @@ bool wxApp::Initialized()
 
 bool wxApp::Pending()
 {
-    return FALSE;
+    return gtk_events_pending();
 }
 
 void wxApp::Dispatch()
 {
+    gtk_main_iteration();
 }
 
 #if wxUSE_THREADS
@@ -402,7 +403,7 @@ void wxApp::ProcessPendingEvents()
         node = wxPendingEvents->First();
     }
 }
-#endif
+#endif // wxUSE_THREADS
 
 void wxApp::DeletePendingObjects()
 {
@@ -531,7 +532,7 @@ void wxApp::CleanUp()
         wxDebugContext::Dump();
         wxDebugContext::PrintStatistics();
     }
-#endif
+#endif // Debug
 
     // do this as the very last thing because everything else can log messages
     wxLog::DontCreateOnDemand();
@@ -576,19 +577,15 @@ int wxEntry( int argc, char *argv[] )
     wxTheApp->argc = argc;
     wxTheApp->argv = argv;
 
-    char name[200];
-    strcpy( name, argv[0] );
-    strcpy( name, wxFileNameFromPath(name) );
+    wxString name(wxFileNameFromPath(argv[0]));
     wxStripExtension( name );
     wxTheApp->SetAppName( name );
 
     if (!wxTheApp->OnInitGui())
         return 0;
 
-    /* Here frames insert themselves automatically
-     * into wxTopLevelWindows by getting created
-     * in OnInit(). */
-
+    // Here frames insert themselves automatically into wxTopLevelWindows by
+    // getting created in OnInit().
     if (!wxTheApp->OnInit())
         return 0;
 
