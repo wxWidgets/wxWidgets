@@ -723,6 +723,10 @@ size_t IC_CharSet::WC2MB(char *buf, const wchar_t *psz, size_t n)
         cres = iconv( w2m, ICONV_CHAR_CAST(&psz), &inbuf, &buf, &outbuf );
 
         res = n-outbuf;
+        
+        // iconv() doesn't set the trailing zero, but moves buf to
+        // that position
+        buf[0] = 0;
     }
     else
     {
