@@ -209,9 +209,31 @@ void wxChoice::Clear()
         m_strings->Clear();
 }
 
-void wxChoice::Delete( int WXUNUSED(n) )
+void wxChoice::Delete( int n )
 {
-    wxFAIL_MSG( wxT("wxChoice:Delete not implemented") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid choice") );
+
+    // VZ: apparently GTK+ doesn't have a built-in function to do it (not even
+    //     in 2.0), hence this dump implementation - still better than nothing
+    int i,
+        count = GetCount();
+
+    wxCHECK_RET( n >= 0 && n < count, _T("invalid index in wxChoice::Delete") );
+
+    wxArrayString items;
+    items.Alloc(count);
+    for ( i = 0; i < count; i++ )
+    {
+        if ( i != n )
+            items.Add(GetString(i));
+    }
+
+    Clear();
+
+    for ( i = 0; i < count - 1; i++ )
+    {
+        Append(items[i]);
+    }
 }
 
 int wxChoice::FindString( const wxString &string ) const

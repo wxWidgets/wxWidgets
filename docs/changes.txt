@@ -192,6 +192,7 @@ wxGTK:
 - fixed wxDC::Blit() to honour source DC's logical coordinates
 - implemented wxIdleEvent::RequestMore() for simple background tasks
   (unlike thread work)
+- implemented wxChoice::Delete()
 
 wxHTML:
 
