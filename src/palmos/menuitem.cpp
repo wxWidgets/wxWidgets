@@ -72,7 +72,7 @@
 bool wxMenuItemStreamingCallback( const wxObject *object, wxWriter * , wxPersister * , wxxVariantArray & )
 {
     const wxMenuItem * mitem = dynamic_cast<const wxMenuItem*>(object) ;
-    if ( mitem->GetMenu() && !mitem->GetMenu()->GetTitle().IsEmpty() )
+    if ( mitem->GetMenu() && !mitem->GetMenu()->GetTitle().empty() )
     {
         // we don't stream out the first two items for menus with a title, they will be reconstructed
         if ( mitem->GetMenu()->FindItemByPosition(0) == mitem || mitem->GetMenu()->FindItemByPosition(1) == mitem )
@@ -154,12 +154,6 @@ wxMenuItem::~wxMenuItem()
 
 // misc
 // ----
-
-// return the id for calling Win32 API functions
-int wxMenuItem::GetRealId() const
-{
-    return 0;
-}
 
 // get item state
 // --------------

@@ -76,8 +76,6 @@ public:
     // semi-private accessors
         // get the window which contains this menu
     wxWindow *GetWindow() const;
-        // get the menu handle
-    WXHMENU GetHMenu() const { return m_hMenu; }
 
 #if wxUSE_ACCEL
     // called by wxMenuBar to build its accel table from the accels of all menus
@@ -107,9 +105,6 @@ private:
 
     // the position of the first item in the current radio group or -1
     int m_startRadioGroup;
-
-    // the menu handle of this menu
-    WXHMENU m_hMenu;
 
 #if wxUSE_ACCEL
     // the accelerators for our menu items
@@ -183,9 +178,6 @@ public:
     void RebuildAccelTable();
 #endif // wxUSE_ACCEL
 
-        // get the menu handle
-    WXHMENU GetHMenu() const { return m_hMenu; }
-
     // if the menubar is modified, the display is not updated automatically,
     // call this function to update it (m_menuBarFrame should be !NULL)
     void Refresh();
@@ -200,8 +192,6 @@ protected:
 
     wxArrayString m_titles ;
     wxMenuInfoList m_menuInfos;
-
-    WXHMENU       m_hMenu;
 
     // Return the Palm position for a wxMenu which is sometimes different from
     // the wxWidgets position.

@@ -55,11 +55,6 @@ public:
     // wxMenuItemBase::IsCheckable() and wxOwnerDrawn::IsCheckable()
     bool IsCheckable() const { return wxMenuItemBase::IsCheckable(); }
 
-    // the id for a popup menu is really its menu handle (as required by
-    // ::AppendMenu() API), so this function will return either the id or the
-    // menu handle depending on what we're
-    int GetRealId() const;
-
     // mark item as belonging to the given radio group
     void SetAsRadioGroupStart();
     void SetRadioGroupStart(int start);

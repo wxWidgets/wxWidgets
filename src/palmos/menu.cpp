@@ -42,11 +42,6 @@
     #include "wx/ownerdrw.h"
 #endif
 
-// other standard headers
-#include <string.h>
-
-#include <Menu.h>
-
 // ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
@@ -654,6 +649,89 @@ void wxMenuBar::LoadMenu()
 
 void wxMenuBar::Attach(wxFrame *frame)
 {
+    // before attaching preprocess menus to not include wxID_EXIT item
+    // as PalmOS guidelines suggest
+
+    wxMenuItem *item;
+    wxMenu *menu;
+    int i;
+
+    while( item = FindItem(wxID_EXIT) )
+    {
+        menu = item->GetMenu();
+        if( !menu ) break; // something broken ?
+
+        size_t count = menu->GetMenuItemCount();
+        if( count == 0 ) break; // something broken ?
+
+        // if EXIT is last item in menu
+        if( menu->FindItemByPosition( count - 1 ) == item )
+        {
+            menu->Destroy( item );
+
+            // was more than one item?
+            // was previous separator ?
+            if( count > 2 )
+            {
+                item = menu->FindItemByPosition( count - 2 );
+                if(item && item->IsSeparator())
+                    menu->Destroy( item );
+            }
+        }
+
+        // if EXIT is first item in menu
+        else if( menu->FindItemByPosition( 0 ) == item )
+        {
+            menu->Destroy( item );
+
+            // was more than one item?
+            // was previous separator ?
+            if( count > 2 )
+            {
+                item = menu->FindItemByPosition( 0 );
+                if(item && item->IsSeparator())
+                    menu->Destroy( item );
+            }
+        }
+
+        // if EXIT is in the middle but before and after are selectors
+        else
+        {
+            i = 1; // 0 case already done
+            while ( (i < count) && (menu->FindItemByPosition( 0 ) != item) )
+            {
+                i++;
+            }
+
+            if (i >= count) break;
+            if (menu->FindItemByPosition( i ) != item) break;
+            menu->Destroy( item );
+            item = menu->FindItemByPosition( i );
+            if ( item &&
+                 item->IsSeparator() &&
+                 menu->FindItemByPosition( i-1 )->IsSeparator() )
+            {
+                // noe need for two neighbouring separators
+                menu->Destroy( item );
+            }
+        }
+    }
+
+    // check if we received any empty menu!
+    i = 0;
+    while(i < GetMenuCount())
+    {
+        menu = GetMenu(i);
+
+        if( menu && (menu->GetMenuItemCount()==0) )
+        {
+            menu = Remove( i );
+            delete menu;
+        }
+        else
+            i++;
+    }
+
     wxMenuBarBase::Attach(frame);
 
     LoadMenu();
