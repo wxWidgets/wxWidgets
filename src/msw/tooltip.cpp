@@ -63,10 +63,11 @@ static WNDPROC gs_wndprocToolTip = (WNDPROC)NULL;
 // private classes
 // ----------------------------------------------------------------------------
 
-// a simple wrapper around TOOLINFO Win32 structure
+// a wrapper around TOOLINFO Win32 structure
 #ifdef __VISUALC__
     #pragma warning( disable : 4097 ) // we inherit from a typedef - so what?
 #endif
+
 class wxToolInfo : public TOOLINFO
 {
 public:
@@ -75,11 +76,24 @@ public:
         // initialize all members
         ::ZeroMemory(this, sizeof(TOOLINFO));
 
+        // the structure TOOLINFO has been extended with a 4 byte field in
+        // version 4.70 of comctl32.dll and if we compile on a newer machine
+        // but run on one with the old version of comctl32, nothing will work
+        // because the library will detect that we rely on a more recent
+        // version of it. So we always use the old size - if we ever start
+        // using our lParam member, we'd have to check for comctl32 version
+        // during run-time
+#if defined(_WIN32_IE) && (_WIN32_IE >= 0x0300)
+        cbSize = sizeof(TOOLINFO) - sizeof(LPARAM);
+#else // old headers
         cbSize = sizeof(TOOLINFO);
+#endif // compile-time comctl32.dll version
+
         uFlags = TTF_IDISHWND;
         uId = (UINT)hwnd;
     }
 };
+
 #ifdef __VISUALC__
     #pragma warning( default : 4097 )
 #endif
@@ -252,8 +266,7 @@ void wxToolTip::Add(WXHWND hWnd)
 
     if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, 0, &ti) )
     {
-        wxLogSysError(_("Failed to create the tooltip '%s'"),
-                      m_text.c_str());
+        wxLogDebug(_T("Failed to create the tooltip '%s'"), m_text.c_str());
     }
 }
 

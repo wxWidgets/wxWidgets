@@ -62,6 +62,16 @@
     #define TVIS_FOCUSED            0x0001
 #endif
 
+#ifndef TV_FIRST
+    #define TV_FIRST                0x1100
+#endif
+
+// old headers might miss these messages (comctl32.dll 4.71+ only)
+#ifndef TVM_SETBKCOLOR
+    #define TVM_SETBKCOLOR          (TV_FIRST + 29)
+    #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -482,6 +492,30 @@ size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
     TraverseCounter counter(this, item, recursively);
 
     return counter.GetCount() - 1;
+}
+
+// ----------------------------------------------------------------------------
+// control colours
+// ----------------------------------------------------------------------------
+
+bool wxTreeCtrl::SetBackgroundColour(const wxColour &colour)
+{
+    if ( !wxWindowBase::SetBackgroundColour(colour) )
+        return FALSE;
+
+    SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0, colour.GetPixel());
+
+    return TRUE;
+}
+
+bool wxTreeCtrl::SetForegroundColour(const wxColour &colour)
+{
+    if ( !wxWindowBase::SetForegroundColour(colour) )
+        return FALSE;
+
+    SendMessage(GetHwnd(), TVM_SETTEXTCOLOR, 0, colour.GetPixel());
+
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------

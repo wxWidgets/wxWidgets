@@ -442,6 +442,10 @@ public:
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
+    // override some base class virtuals
+    virtual bool SetBackgroundColour(const wxColour &colour);
+    virtual bool SetForegroundColour(const wxColour &colour);
+
     // get/set the check state for the item (only for wxTR_MULTIPLE)
     bool IsItemChecked(const wxTreeItemId& item) const;
     void SetItemCheck(const wxTreeItemId& item, bool check = TRUE);
