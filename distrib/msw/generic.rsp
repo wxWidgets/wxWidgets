@@ -173,9 +173,9 @@ utils/hhp2cached/*.txt
 contrib/lib/dummy
 
 samples/samples.bkl
-
 samples/*.txt
 samples/makefile*
+samples/sample.r
 samples/*.xpm
 
 samples/access/*.cpp
@@ -382,6 +382,7 @@ samples/docview/*.ico
 samples/docview/*.bmp
 samples/docview/*.pro
 samples/docview/*.bkl
+samples/docview/*.r
 
 samples/docvwmdi/*.h
 samples/docvwmdi/*.cpp
@@ -666,6 +667,7 @@ samples/html/helpview/*.html
 samples/html/helpview/*.pro
 samples/html/helpview/test.zip
 samples/html/helpview/*.bkl
+samples/html/helpview/*.r
 
 samples/image/*.cpp
 samples/image/*.h
@@ -849,6 +851,7 @@ samples/minimal/*.ico
 samples/minimal/*.rc
 samples/minimal/*.pro
 samples/minimal/*.bkl
+samples/minimal/*.r
 
 samples/minifram/*.h
 samples/minifram/*.cpp
@@ -1301,6 +1304,7 @@ demos/forty/*.ico
 demos/forty/*.txt
 demos/forty/*.pro
 demos/forty/*.bkl
+demos/forty/*.r
 
 demos/fractal/*.cpp
 demos/fractal/*.h
