@@ -27,6 +27,7 @@ _treeList = [
     ('New since last release', [
         'wxRadioButton',
         'Throbber',
+        'wxPopupControl',
         ]),
 
     # managed windows == things with a caption you can close
@@ -108,6 +109,7 @@ _treeList = [
         'PyCrustWithFilling',
         'SplitTree',
         'TablePrint',
+        'Throbber',
         'wxCalendar',
         'wxCalendarCtrl',
         'wxDynamicSashWindow',
@@ -117,6 +119,7 @@ _treeList = [
         'wxIEHtmlWin',
         'wxLEDNumberCtrl',
         'wxMimeTypesManager',
+        'wxPopupControl',
         'wxRightTextCtrl',
         'wxStyledTextCtrl_1',
         'wxStyledTextCtrl_2',

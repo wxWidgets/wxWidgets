@@ -58,6 +58,9 @@ Added wxPython.lib.evtmgr by Rob Schecter, which is an easier, more
 "Pythonic" and more OO method of registering handlers for wxWindows
 events using the Publish/Subscribe pattern.
 
+Added wxPython.lib.popupctl by Gerrit van Dyk which is a combobox-like
+gizmo for poping up arbitrary controls.  It is currently using
+wxDialog because of some issues with wxPopupWindow...
 
 
 
