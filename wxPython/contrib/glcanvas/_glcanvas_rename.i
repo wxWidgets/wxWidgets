@@ -4,7 +4,6 @@
 #ifndef BUILDING_RENAMERS
 
 %rename(GLContext)                          wxGLContext;
-%rename(GLCanvasWithContext)                wxGLCanvasWithContext;
 %rename(GLCanvas)                           wxGLCanvas;
 
 #endif

@@ -125,7 +125,7 @@ public:
                const wxPalette& palette = wxNullPalette);
 
     %addtofunc wxGLCanvas   "val._setOORInfo(val)"
-    %name(wxGLCanvasWithContext)
+    %name(GLCanvasWithContext)
         wxGLCanvas( wxWindow *parent,
                     const wxGLContext *shared = NULL,
                     wxWindowID id = -1,
