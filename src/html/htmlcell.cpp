@@ -87,6 +87,8 @@ GetSelectedTextBgColour(const wxColour& WXUNUSED(clr))
 // wxHtmlCell
 //-----------------------------------------------------------------------------
 
+IMPLEMENT_ABSTRACT_CLASS(wxHtmlCell, wxObject)
+
 wxHtmlCell::wxHtmlCell() : wxObject()
 {
     m_Next = NULL;
@@ -251,6 +253,8 @@ bool wxHtmlCell::IsBefore(wxHtmlCell *cell) const
 //-----------------------------------------------------------------------------
 // wxHtmlWordCell
 //-----------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxHtmlWordCell, wxHtmlCell)
 
 wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
 {
@@ -519,6 +523,7 @@ wxCursor wxHtmlWordCell::GetCursor() const
 // wxHtmlContainerCell
 //-----------------------------------------------------------------------------
 
+IMPLEMENT_ABSTRACT_CLASS(wxHtmlContainerCell, wxHtmlCell)
 
 wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCell()
 {
@@ -1164,6 +1169,8 @@ void wxHtmlContainerCell::RemoveExtraSpacing(bool top, bool bottom)
 // wxHtmlColourCell
 // --------------------------------------------------------------------------
 
+IMPLEMENT_ABSTRACT_CLASS(wxHtmlColourCell, wxHtmlCell)
+
 void wxHtmlColourCell::Draw(wxDC& dc,
                             int x, int y,
                             int WXUNUSED(view_y1), int WXUNUSED(view_y2),
@@ -1210,6 +1217,8 @@ void wxHtmlColourCell::DrawInvisible(wxDC& dc,
 // wxHtmlFontCell
 // ---------------------------------------------------------------------------
 
+IMPLEMENT_ABSTRACT_CLASS(wxHtmlFontCell, wxHtmlCell)
+
 void wxHtmlFontCell::Draw(wxDC& dc,
                           int WXUNUSED(x), int WXUNUSED(y),
                           int WXUNUSED(view_y1), int WXUNUSED(view_y2),
@@ -1234,6 +1243,8 @@ void wxHtmlFontCell::DrawInvisible(wxDC& dc, int WXUNUSED(x), int WXUNUSED(y),
 // ---------------------------------------------------------------------------
 // wxHtmlWidgetCell
 // ---------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxHtmlWidgetCell, wxHtmlCell)
 
 wxHtmlWidgetCell::wxHtmlWidgetCell(wxWindow *wnd, int w)
 {

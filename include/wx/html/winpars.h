@@ -38,6 +38,7 @@ class WXDLLIMPEXP_HTML wxHtmlTagsModule;
 
 class WXDLLIMPEXP_HTML wxHtmlWinParser : public wxHtmlParser
 {
+    DECLARE_ABSTRACT_CLASS(wxHtmlWinParser)
     friend class wxHtmlWindow;
 
 public:

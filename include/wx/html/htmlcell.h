@@ -312,6 +312,7 @@ protected:
     wxString m_id;
             // unique identifier of the cell, generated from "id" property of tags
 
+    DECLARE_ABSTRACT_CLASS(wxHtmlCell)
     DECLARE_NO_COPY_CLASS(wxHtmlCell)
 };
 
@@ -349,6 +350,7 @@ protected:
     wxString m_Word;
     bool     m_allowLinebreak;
 
+    DECLARE_ABSTRACT_CLASS(wxHtmlWordCell)
     DECLARE_NO_COPY_CLASS(wxHtmlWordCell)
 };
 
@@ -456,6 +458,7 @@ protected:
             // if != -1 then call to Layout may be no-op
             // if previous call to Layout has same argument
 
+    DECLARE_ABSTRACT_CLASS(wxHtmlContainerCell)
     DECLARE_NO_COPY_CLASS(wxHtmlContainerCell)
 };
 
@@ -485,6 +488,7 @@ protected:
     wxColour m_Colour;
     unsigned m_Flags;
 
+    DECLARE_ABSTRACT_CLASS(wxHtmlColourCell)
     DECLARE_NO_COPY_CLASS(wxHtmlColourCell)
 };
 
@@ -508,6 +512,7 @@ public:
 protected:
     wxFont m_Font;
 
+    DECLARE_ABSTRACT_CLASS(wxHtmlFontCell)
     DECLARE_NO_COPY_CLASS(wxHtmlFontCell)
 };
 
@@ -543,6 +548,7 @@ protected:
     int m_WidthFloat;
             // width float is used in adjustWidth (it is in percents)
 
+    DECLARE_ABSTRACT_CLASS(wxHtmlWidgetCell)
     DECLARE_NO_COPY_CLASS(wxHtmlWidgetCell)
 };
 

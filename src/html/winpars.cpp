@@ -38,6 +38,7 @@
 // wxHtmlWinParser
 //-----------------------------------------------------------------------------
 
+IMPLEMENT_ABSTRACT_CLASS(wxHtmlWinParser, wxHtmlParser)
 
 wxList wxHtmlWinParser::m_Modules;
 
