@@ -2033,7 +2033,7 @@ long wxListMainWindow::GetNextItem( long item, int WXUNUSED(geometry), int state
 {
     long ret = 0;
     if (item > 0) ret = item;
-    if(item >= GetItemCount()) return -1;
+    if(ret >= GetItemCount()) return -1;
     wxNode *node = m_lines.Nth( ret );
     while (node)
     {
