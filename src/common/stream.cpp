@@ -593,6 +593,10 @@ wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
 
 off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
 {
+  //should be check and improve, just to remove a slight bug !
+  // I don't know whether it should be put as well in wxFileInputStream::OnSysSeek ?
+  if (m_lasterror==wxSTREAM_EOF) m_lasterror=wxSTREAM_NOERROR;
+
   return OnSysSeek(pos, mode);
 }
 
