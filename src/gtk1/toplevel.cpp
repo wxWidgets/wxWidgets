@@ -515,7 +515,11 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 {
     m_isBeingDeleted = TRUE;
     
-    gtk_window_set_focus( GTK_WINDOW(m_widget), NULL );
+    // it may also be GtkScrolledWindow in the case of an MDI child
+    if (GTK_IS_WINDOW(m_widget))
+    {
+        gtk_window_set_focus( GTK_WINDOW(m_widget), NULL );
+    }
 
     wxTopLevelWindows.DeleteObject( this );
 
