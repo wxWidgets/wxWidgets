@@ -2021,7 +2021,7 @@ void wxGrid::ShowCellEditControl()
                     break;
             }
 
-            // m_cellEditCtrl->SetFocus();
+            m_cellEditCtrl->SetFocus();
         }
     }
 }
