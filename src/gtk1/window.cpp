@@ -1233,6 +1233,10 @@ static gint gtk_window_key_release_callback( GtkWidget *widget,
 // the mouse events
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// mouse event processing helpers
+// ----------------------------------------------------------------------------
+
 // init wxMouseEvent with the info from gdk_event
 #define InitMouseEvent(win, event, gdk_event) \
     { \
@@ -1249,10 +1253,6 @@ static gint gtk_window_key_release_callback( GtkWidget *widget,
     event.m_x = (wxCoord)gdk_event->x - pt.x; \
     event.m_y = (wxCoord)gdk_event->y - pt.y; \
     }
-
-// ----------------------------------------------------------------------------
-// mouse event processing helper
-// ----------------------------------------------------------------------------
 
 static void AdjustEventButtonState(wxMouseEvent& event)
 {
@@ -1286,11 +1286,76 @@ static void AdjustEventButtonState(wxMouseEvent& event)
     }
 }
 
+// find the window to send the mouse event too
+static
+wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
+{
+    if (win->m_wxwindow)
+    {
+        GtkPizza *pizza = GTK_PIZZA(win->m_wxwindow);
+        x += pizza->xoffset;
+        y += pizza->yoffset;
+    }
+
+    wxNode *node = win->GetChildren().First();
+    while (node)
+    {
+        wxWindowGTK *child = (wxWindowGTK*)node->Data();
+
+        node = node->Next();
+        if (!child->IsShown())
+            continue;
+
+        if (child->IsTransparentForMouse())
+        {
+            // wxStaticBox is transparent in the box itself
+            int xx1 = child->m_x;
+            int yy1 = child->m_y;
+            int xx2 = child->m_x + child->m_width;
+            int yy2 = child->m_x + child->m_height;
+
+            // left
+            if (((x >= xx1) && (x <= xx1+10) && (y >= yy1) && (y <= yy2)) ||
+            // right
+                ((x >= xx2-10) && (x <= xx2) && (y >= yy1) && (y <= yy2)) ||
+            // top
+                ((x >= xx1) && (x <= xx2) && (y >= yy1) && (y <= yy1+10)) ||
+            // bottom
+                ((x >= xx1) && (x <= xx2) && (y >= yy2-1) && (y <= yy2)))
+            {
+                win = child;
+                x -= child->m_x;
+                y -= child->m_y;
+                break;
+            }
+
+        }
+        else
+        {
+            if ((child->m_wxwindow == (GtkWidget*) NULL) &&
+                (child->m_x <= x) &&
+                (child->m_y <= y) &&
+                (child->m_x+child->m_width  >= x) &&
+                (child->m_y+child->m_height >= y))
+            {
+                win = child;
+                x -= child->m_x;
+                y -= child->m_y;
+                break;
+            }
+        }
+    }
+
+    return win;
+}
+
 //-----------------------------------------------------------------------------
 // "button_press_event"
 //-----------------------------------------------------------------------------
 
-static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindowGTK *win )
+static gint gtk_window_button_press_callback( GtkWidget *widget,
+                                              GdkEventButton *gdk_event,
+                                              wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -1365,69 +1430,11 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     // a chance to correct this
     win->FixUpMouseEvent(widget, event.m_x, event.m_y);
 
-    // Some control don't have their own X window and thus cannot get
-    // any events.
-
-    if (!g_captureWindow)
-    {
-        wxCoord x = event.m_x;
-        wxCoord y = event.m_y;
-        if (win->m_wxwindow)
-        {
-            GtkPizza *pizza = GTK_PIZZA(win->m_wxwindow);
-            x += pizza->xoffset;
-            y += pizza->yoffset;
-        }
-
-        wxNode *node = win->GetChildren().First();
-        while (node)
-        {
-            wxWindowGTK *child = (wxWindowGTK*)node->Data();
-
-            node = node->Next();
-            if (!child->IsShown())
-                continue;
-
-            if (child->m_isStaticBox)
-            {
-                // wxStaticBox is transparent in the box itself
-                int xx1 = child->m_x;
-                int yy1 = child->m_y;
-                int xx2 = child->m_x + child->m_width;
-                int yy2 = child->m_x + child->m_height;
-
-                // left
-                if (((x >= xx1) && (x <= xx1+10) && (y >= yy1) && (y <= yy2)) ||
-                // right
-                    ((x >= xx2-10) && (x <= xx2) && (y >= yy1) && (y <= yy2)) ||
-                // top
-                    ((x >= xx1) && (x <= xx2) && (y >= yy1) && (y <= yy1+10)) ||
-                // bottom
-                    ((x >= xx1) && (x <= xx2) && (y >= yy2-1) && (y <= yy2)))
-                {
-                    win = child;
-                    event.m_x -= child->m_x;
-                    event.m_y -= child->m_y;
-                    break;
-                }
-
-            }
-            else
-            {
-                if ((child->m_wxwindow == (GtkWidget*) NULL) &&
-                    (child->m_x <= x) &&
-                    (child->m_y <= y) &&
-                    (child->m_x+child->m_width  >= x) &&
-                    (child->m_y+child->m_height >= y))
-                {
-                    win = child;
-                    event.m_x -= child->m_x;
-                    event.m_y -= child->m_y;
-                    break;
-                }
-            }
-        }
-    }
+    // find the correct window to send the event too: it may be a different one
+    // from the one which got it at GTK+ level because some control don't have
+    // their own X window and thus cannot get any events.
+    if ( !g_captureWindow )
+        win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
     event.SetEventObject( win );
 
@@ -1491,69 +1498,8 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     // same wxListBox hack as above
     win->FixUpMouseEvent(widget, event.m_x, event.m_y);
 
-    // Some control don't have their own X window and thus cannot get
-    // any events.
-
-    if (!g_captureWindow)
-    {
-        wxCoord x = event.m_x;
-        wxCoord y = event.m_y;
-        if (win->m_wxwindow)
-        {
-            GtkPizza *pizza = GTK_PIZZA(win->m_wxwindow);
-            x += pizza->xoffset;
-            y += pizza->yoffset;
-        }
-
-        wxNode *node = win->GetChildren().First();
-        while (node)
-        {
-            wxWindowGTK *child = (wxWindowGTK*)node->Data();
-
-            node = node->Next();
-            if (!child->IsShown())
-                continue;
-
-            if (child->m_isStaticBox)
-            {
-                // wxStaticBox is transparent in the box itself
-                int xx1 = child->m_x;
-                int yy1 = child->m_y;
-                int xx2 = child->m_x + child->m_width;
-                int yy2 = child->m_x + child->m_height;
-
-                // left
-                if (((x >= xx1) && (x <= xx1+10) && (y >= yy1) && (y <= yy2)) ||
-                // right
-                    ((x >= xx2-10) && (x <= xx2) && (y >= yy1) && (y <= yy2)) ||
-                // top
-                    ((x >= xx1) && (x <= xx2) && (y >= yy1) && (y <= yy1+10)) ||
-                // bottom
-                    ((x >= xx1) && (x <= xx2) && (y >= yy2-1) && (y <= yy2)))
-                {
-                    win = child;
-                    event.m_x -= child->m_x;
-                    event.m_y -= child->m_y;
-                    break;
-                }
-
-            }
-            else
-            {
-                if ((child->m_wxwindow == (GtkWidget*) NULL) &&
-                    (child->m_x <= x) &&
-                    (child->m_y <= y) &&
-                    (child->m_x+child->m_width  >= x) &&
-                    (child->m_y+child->m_height >= y))
-                {
-                    win = child;
-                    event.m_x -= child->m_x;
-                    event.m_y -= child->m_y;
-                    break;
-                }
-            }
-        }
-    }
+    if ( !g_captureWindow )
+        win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
     event.SetEventObject( win );
 
@@ -1624,66 +1570,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
     }
     else // no capture
     {
-        // Some control don't have their own X window and thus cannot get
-        // any events.
-
-        wxCoord x = event.m_x;
-        wxCoord y = event.m_y;
-        if (win->m_wxwindow)
-        {
-            GtkPizza *pizza = GTK_PIZZA(win->m_wxwindow);
-            x += pizza->xoffset;
-            y += pizza->yoffset;
-        }
-
-        wxNode *node = win->GetChildren().First();
-        while (node)
-        {
-            wxWindowGTK *child = (wxWindowGTK*)node->Data();
-
-            node = node->Next();
-            if (!child->IsShown())
-                continue;
-
-            if (child->m_isStaticBox)
-            {
-                // wxStaticBox is transparent in the box itself
-                int xx1 = child->m_x;
-                int yy1 = child->m_y;
-                int xx2 = child->m_x + child->m_width;
-                int yy2 = child->m_x + child->m_height;
-
-                // left
-                if (((x >= xx1) && (x <= xx1+10) && (y >= yy1) && (y <= yy2)) ||
-                // right
-                    ((x >= xx2-10) && (x <= xx2) && (y >= yy1) && (y <= yy2)) ||
-                // top
-                    ((x >= xx1) && (x <= xx2) && (y >= yy1) && (y <= yy1+10)) ||
-                // bottom
-                    ((x >= xx1) && (x <= xx2) && (y >= yy2-1) && (y <= yy2)))
-                {
-                    win = child;
-                    event.m_x -= child->m_x;
-                    event.m_y -= child->m_y;
-                    break;
-                }
-
-            }
-            else
-            {
-                if ((child->m_wxwindow == (GtkWidget*) NULL) &&
-                    (child->m_x <= x) &&
-                    (child->m_y <= y) &&
-                    (child->m_x+child->m_width  >= x) &&
-                    (child->m_y+child->m_height >= y))
-                {
-                    win = child;
-                    event.m_x -= child->m_x;
-                    event.m_y -= child->m_y;
-                    break;
-                }
-            }
-        }
+        win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
     }
 
     event.SetEventObject( win );
@@ -2376,7 +2263,6 @@ void wxWindowGTK::Init()
 
     m_insertCallback = (wxInsertChildFunction) NULL;
 
-    m_isStaticBox = FALSE;
     m_isRadioButton = FALSE;
     m_isFrame = FALSE;
     m_acceptsFocus = FALSE;

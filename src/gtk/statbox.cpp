@@ -58,12 +58,7 @@ bool wxStaticBox::Create( wxWindow *parent,
         return FALSE;
     }
 
-    m_isStaticBox = TRUE;
-
-    if (label.empty())
-        m_widget = gtk_frame_new( (char*) NULL );
-    else
-        m_widget = gtk_frame_new( m_label.mbc_str() );
+    m_widget = gtk_frame_new(m_label.empty() ? (char *)NULL : m_label.mbc_str());
 
     m_parent->DoAddChild( this );
 

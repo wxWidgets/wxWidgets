@@ -42,7 +42,9 @@ public:
 
     // implementation
 
-    void ApplyWidgetStyle();
+    virtual void ApplyWidgetStyle();
+
+    virtual bool IsTransparentForMouse() const { return TRUE; }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticBox)

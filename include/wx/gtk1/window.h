@@ -177,6 +177,9 @@ public:
                                  wxCoord& WXUNUSED(x),
                                  wxCoord& WXUNUSED(y)) { }
 
+    // is this window transparent for the mouse events (as wxStaticBox is)?
+    virtual bool IsTransparentForMouse() const { return FALSE; }
+
     // position and size of the window
     int                  m_x, m_y;
     int                  m_width, m_height;
@@ -211,7 +214,6 @@ public:
     bool                 m_hasVMT:1;
     bool                 m_sizeSet:1;
     bool                 m_resizing:1;
-    bool                 m_isStaticBox:1;       // faster than IS_KIND_OF
     bool                 m_isRadioButton:1;     // faster than IS_KIND_OF
     bool                 m_isListBox:1;         // faster than IS_KIND_OF
     bool                 m_isFrame:1;           // faster than IS_KIND_OF
