@@ -8238,8 +8238,8 @@ monodll_statline2.o: $(srcdir)/src/cocoa/statline2.mm $(MONODLL_ODEP)
 monodll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-monodll_gsockpm.o: $(srcdir)/src/os2/gsockpm.c $(MONODLL_ODEP)
-	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
+monodll_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_print.o: $(srcdir)/src/os2/print.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -11217,8 +11217,8 @@ monolib_statline2.o: $(srcdir)/src/cocoa/statline2.mm $(MONOLIB_ODEP)
 monolib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-monolib_gsockpm.o: $(srcdir)/src/os2/gsockpm.c $(MONOLIB_ODEP)
-	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+monolib_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_print.o: $(srcdir)/src/os2/print.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -14748,8 +14748,8 @@ coredll_utilsexc.o: $(srcdir)/src/cocoa/utilsexc.cpp $(COREDLL_ODEP)
 coredll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-coredll_gsockpm.o: $(srcdir)/src/os2/gsockpm.c $(COREDLL_ODEP)
-	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
+coredll_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 coredll_print.o: $(srcdir)/src/os2/print.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -17181,8 +17181,8 @@ corelib_utilsexc.o: $(srcdir)/src/cocoa/utilsexc.cpp $(CORELIB_ODEP)
 corelib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-corelib_gsockpm.o: $(srcdir)/src/os2/gsockpm.c $(CORELIB_ODEP)
-	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
+corelib_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_print.o: $(srcdir)/src/os2/print.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
