@@ -249,7 +249,9 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
         {
             temp[templen-1] = wxT(' ');
             temp[templen] = 0;
+#if 0 // VS - WHY was this here?!
             if (templen == 1) continue;
+#endif
             templen = 0;
             if (m_EncConv)
                 m_EncConv->Convert(temp);
