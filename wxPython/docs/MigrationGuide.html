@@ -18,7 +18,7 @@ have been added to wxPython.</p>
 <div class="section" id="wxname-change">
 <h1><a name="wxname-change">wxName Change</a></h1>
 <p>The <strong>wxWindows</strong> project and library is now known as
-<strong>wxWidgets</strong>.  Please see <a class="reference" href="http://www.wxwindows.org/name.htm">here</a> for more details.</p>
+<strong>wxWidgets</strong>.  Please see <a class="reference" href="http://www.wxwidgets.org/name.htm">here</a> for more details.</p>
 <p>This won't really affect wxPython all that much, other than the fact
 that the wxwindows.org domain name will be changing to wxwidgets.org,
 so mail list, CVS, and etc. addresses will be changing.  We're going
@@ -78,7 +78,7 @@ need to change it to isinstance(obj, wxFoo).</p>
 <p>All of the EVT_* functions are now instances of the wx.PyEventBinder
 class.  They have a __call__ method so they can still be used as
 functions like before, but making them instances adds some
-flexibility.</p>
+flexibility that I expect to take advantave of in the future.</p>
 <p>wx.EvtHandler (the base class for wx.Window) now has a Bind method that
 makes binding events to windows a little easier.  Here is its
 definition and docstring:</p>
@@ -137,7 +137,7 @@ values:</p>
 <p>If you create your own custom event types and EVT_* functions, and you
 want to be able to use them with the Bind method above then you should
 change your EVT_* to be an instance of wxPyEventBinder instead of a
-function.  If you used to have something like this:</p>
+function.  For example, if you used to have something like this:</p>
 <pre class="literal-block">
 myCustomEventType = wxNewEventType()
 def EVT_MY_CUSTOM_EVENT(win, id, func):
@@ -330,16 +330,39 @@ before that time.</p>
 the contribs (gizmos, stc, xrc, etc.) rather than building local
 copies of them.  If you build your own copies of wxPython please be
 aware that you now need to also build the ogl, stc, xrc, and gizmos
-libraries in addition to the main wx lib.  [[TODO: update the
-BUILD.*.txt files too!]]</p>
+libraries in addition to the main wx lib.</p>
 <p>The wxPython.h and other header files are now in
 .../wxPython/include/wx/wxPython instead of in wxPython/src.  You should
 include it via the &quot;wx/wxPython/wxPython.h&quot; path and add
-.../wxPython/include to your list of include paths.  [[TODO:  Install
-these headers on Linux...]]</p>
+.../wxPython/include to your list of include paths.  On OSX and
+unix-like systems the wxPython headers are installed to the same place
+that the wxWidgets headers are installed, so if you building wxPython
+compatible extensions on those platforms then your include path shoudl
+already be set properly.</p>
+<p>If you are also using SWIG for your extension then you'll need to
+adapt how the wxPython .i files are imported into your .i files.  See
+the wxPython sources for examples.  Your modules will need to at least
+<tt class="literal"><span class="pre">%import</span> <span class="pre">core.i</span></tt>, and possibly others if you need the definition of
+other classes.  Since you will need them to build your modules, the
+main wxPython .i files are also installed with the wxPython headers in
+an i_files sibdirectory.  It should be enough to pass a -I/pathname on
+the command line for it to find the files.</p>
+<p>The bulk of wxPython's setup.py has been moved to another module,
+wx/build/config.py.  This module will be installed as part of wxPython
+so 3rd party modules that wish to use the same setup/configuration
+code can do so simply by importing this module from their own setup.py
+scripts using <tt class="literal"><span class="pre">import</span> <span class="pre">wx.build.config</span></tt>.</p>
 <p>You no longer need to call wxClassInfo::CleanUpClasses() and
 wxClassInfo::InitializeClasses() in your extensions or when embedding
 wxPython.</p>
+<p>The usage of wxPyBeginAllowThreads and wxPyEndAllowThreads has changed
+slightly.  wxPyBeginAllowThreads now returns a boolean value that must
+be passed to the coresponding wxPyEndAllowThreads function call.  This
+is to help do the RightThing when calls to these two functions are
+nested, or if calls to external code in other extension modules that
+are wrapped in the standard Py_(BEGIN|END)_ALLOW_THERADS may result in
+wx event handlers being called (such as during the call to
+os.startfile.)</p>
 </div>
 <div class="section" id="two-or-three-phase-create">
 <h1><a name="two-or-three-phase-create">Two (or Three!) Phase Create</a></h1>
@@ -360,11 +383,11 @@ class MyDialog(wx.Dialog):
 <div class="section" id="sizers">
 <h1><a name="sizers">Sizers</a></h1>
 <p>The hack allowing the old &quot;option&quot; keyword parameter has been removed.
-If you use keyworkd args with wxSizer Add, Insert, or Prepend methods
-then you will need to use the &quot;proportion&quot; name instead of &quot;option&quot;.</p>
-<p>When adding a spacer to a sizer you now need to use a wxSize or a
+If you use keyworkd args with w.xSizer Add, Insert, or Prepend methods
+then you will need to use the <tt class="literal"><span class="pre">proportion</span></tt> name instead of <tt class="literal"><span class="pre">option</span></tt>.</p>
+<p>When adding a spacer to a sizer you now need to use a wx.Size or a
 2-integer sequence instead of separate width and height parameters.</p>
-<p>The wxGridBagSizer class (very similar to the RowColSizer in the
+<p>The wx.GridBagSizer class (very similar to the RowColSizer in the
 library) has been added to C++ and wrapped for wxPython.  It can also
 be used from XRC.</p>
 <p>You should not use AddWindow, AddSizer, AddSpacer (and similar for
@@ -485,7 +508,7 @@ this in the handler for the iewin.EVT_NewWindow2 event:</p>
 def OnNewWindow2(self, evt):
     evt.Cancel = True   
 </pre>
-<p>So how do you know what methods, events and properties that am ActiveX
+<p>So how do you know what methods, events and properties that an ActiveX
 control supports?  There is a funciton in wx.activex named GetAXInfo
 that returns a printable summary of the TypeInfo from the ActiveX
 instance passed in.  You can use this as an example of how to browse
@@ -532,25 +555,7 @@ when your last Frame is closed.  For wxPython apps it is usually
 enough if your main frame object holds the only reference to the
 wx.TaskBarIcon, then when the frame is closed Python reference
 counting takes care of the rest.</p>
-<p>If you are embedding wxPython in a C++ app, or are writing wxPython
-compatible extensions modules, then the usage of wxPyBeginAllowThreads
-and wxPyEndAllowThreads has changed slightly.  wxPyBeginAllowThreads
-now returns a boolean value that must be passed to the coresponding
-wxPyEndAllowThreads function call.  This is to help do the RightThing
-when calls to these two functions are nested, or if calls to external
-code in other extension modules that are wrapped in the standard
-Py_(BEGIN|END)_ALLOW_THERADS may result in wx event handlers being
-called (such as during the call to os.startfile.)</p>
-<p>The bulk of wxPython's setup.py has been moved to another module,
-wx/build/config.py.  This module will be installed as part of wxPython
-so 3rd party modules that wish to use the same setup/configuration
-code can do so simply by importing this module from their own setup.py
-scripts.</p>
 </div>
-</div>
-<hr class="footer" />
-<div class="footer">
-Generated on: 2004-03-26 21:09 UTC.
 </div>
 </body>
 </html>
