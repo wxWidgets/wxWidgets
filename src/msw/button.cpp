@@ -201,9 +201,12 @@ void wxButton::Command(wxCommandEvent & event)
 bool wxButton::MSWCommand(WXUINT param, WXWORD id)
 {
     bool processed = FALSE;
-    if ( param == BN_CLICKED || param == 1 ) // 1 for accelerator
+    switch ( param )
     {
-        processed = SendClickEvent();
+        case 1:                                             // 1 for accelerator
+        case BN_CLICKED:
+            processed = SendClickEvent();
+            break;
     }
 
     return processed;

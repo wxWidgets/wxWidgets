@@ -1458,7 +1458,16 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                 event.SetEventObject(this);
 
                 if ( GetEventHandler()->ProcessEvent(event) )
+                {
+                    wxButton *btn = wxDynamicCast(FindFocus(), wxButton);
+                    if ( btn )
+                    {
+                        // the button which has focus should be default
+                        btn->SetDefault();
+                    }
+
                     return TRUE;
+                }
             }
         }
 
