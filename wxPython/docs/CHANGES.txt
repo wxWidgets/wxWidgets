@@ -34,6 +34,21 @@ end of dragging and not after each CHANGING event (modified patch
 wx.glcanvas.GLCanvas: applied patch fixing problems with X server
 crash when using nVidia cards (patch 1155132)
 
+wx.lib.mixins.listctrl: Patches from Toni Brkic:
+   * Bugfix for TextEditMixin when the view can't be scrolled
+   * Enhancement for ListCtrlAutoWidthMixin, allowing it to manage 
+     the width of any column.
+
+wxMac: removal and reusing toolbar tools like the other platforms is
+now possible.
+
+wxMac: Correct radio tool selection after calling Realize a 2nd time.
+
+wxMSW: Applied patch #1166587, removes all flicker from wx.StaticBox
+
+Added wx.lib.foldpanelbar, Andrea Gavana's port of Jorgen Bodde's C++
+wxFoldPanelBar classes to Python.
+
 
 
 

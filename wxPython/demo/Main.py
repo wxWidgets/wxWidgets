@@ -47,10 +47,7 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions/Updates', [
-        'StandardPaths',
-        'MediaCtrl',
-        'DatePickerCtrl',
-        'MouseGestures',
+        'FoldPanelBar',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -154,6 +151,7 @@ _treeList = [
         'FileBrowseButton',
         'FloatBar',  
         'FloatCanvas',
+        'FoldPanelBar',
         'HtmlWindow',
         'IntCtrl',
         'MediaCtrl',
