@@ -164,7 +164,7 @@ public:
     // will also adjust its position/size)
     //
     // NB: the control should have toolbar as its parent
-    virtual bool AddControl(wxControl *control) { return FALSE; }
+    virtual bool AddControl(wxControl * WXUNUSED(control)) { return FALSE; }
 
     virtual void AddSeparator();
     virtual void ClearTools();

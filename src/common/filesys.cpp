@@ -161,11 +161,16 @@ wxString wxFileSystemHandler::GetAnchor(const wxString& location) const
 }
 
 
-wxString wxFileSystemHandler::FindFirst(const wxString& spec, int flags)  { return wxEmptyString; }
+wxString wxFileSystemHandler::FindFirst(const wxString& WXUNUSED(spec),
+                                        int WXUNUSED(flags))
+{
+    return wxEmptyString;
+}
 
-wxString wxFileSystemHandler::FindNext() { return wxEmptyString; }
-
-
+wxString wxFileSystemHandler::FindNext()
+{
+    return wxEmptyString;
+}
 
 //--------------------------------------------------------------------------------
 // wxLocalFSHandler
