@@ -49,13 +49,14 @@ TAG_HANDLER_BEGIN(MYBIND, "MYBIND")
 
         tag.ScanParam(wxT("X"), wxT("%i"), &ax);
         tag.ScanParam(wxT("Y"), wxT("%i"), &ay);
-        if (tag.HasParam("FLOAT")) fl = ax;
+        if (tag.HasParam(wxT("FLOAT")))
+            fl = ax;
 
-        wnd = new wxTextCtrl( m_WParser -> GetWindow(), -1, tag.GetParam("NAME"),
-                              wxPoint(0,0), wxSize(ax, ay), wxTE_MULTILINE );
-        wnd -> Show(TRUE);
+        wnd = new wxTextCtrl(m_WParser->GetWindow(), -1, tag.GetParam(wxT("NAME")),
+                             wxPoint(0,0), wxSize(ax, ay), wxTE_MULTILINE);
+        wnd->Show(TRUE);
 
-        m_WParser -> OpenContainer() -> InsertCell(new wxHtmlWidgetCell(wnd, fl));
+        m_WParser->GetContainer()->InsertCell(new wxHtmlWidgetCell(wnd, fl));
 
         return FALSE;
     }
