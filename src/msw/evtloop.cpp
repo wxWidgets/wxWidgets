@@ -227,8 +227,8 @@ bool wxEventLoopImpl::SendIdleMessage()
 wxEventLoopImpl::wxCatchAllResponse wxEventLoopImpl::OnCatchAll()
 {
     switch (::MessageBox(NULL, 
-            _T("An unhandled exception occurred. 'Abort' will terminate the program,\r\n"
-            "'Retry' will close the current dialog, 'Ignore' will try to continue."), 
+            _T("An unhandled exception occurred. 'Abort' will terminate the program,\r\n\
+'Retry' will close the current dialog, 'Ignore' will try to continue."),
             _T("Unhandled exception"), 
             MB_ABORTRETRYIGNORE|MB_ICONERROR|MB_TASKMODAL))
     {
