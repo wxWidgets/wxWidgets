@@ -575,7 +575,7 @@ void MyFrame::PasswordEntry(wxCommandEvent& WXUNUSED(event))
                                          _T("Password entry dialog"),
                                          wxEmptyString,
                                          this);
-    if ( !!pwd )
+    if ( !pwd.empty() )
     {
         wxMessageBox(wxString::Format(wxT("Your password is '%s'"), pwd.c_str()),
                      _T("Got password"), wxOK | wxICON_INFORMATION, this);
@@ -990,14 +990,18 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
                             max,    // range
                             this,   // parent
                             wxPD_CAN_ABORT |
+                            wxPD_CAN_SKIP |
                             wxPD_APP_MODAL |
                             // wxPD_AUTO_HIDE | -- try this as well
                             wxPD_ELAPSED_TIME |
                             wxPD_ESTIMATED_TIME |
-                            wxPD_REMAINING_TIME);
+                            wxPD_REMAINING_TIME |
+                            wxPD_SMOOTH);
 
     bool cont = true;
-    for ( int i = 0; i <= max; i++ )
+    bool skip = false;
+    // each skip will move progress about quarter forward
+    for ( int i = 0; i <= max; i = wxMin(i+(skip?int(max/4):1), max+1), skip = false )
     {
         #if wxUSE_STOPWATCH && wxUSE_LONGLONG
         // do (almost) the same operations as we did for the performance test
@@ -1018,25 +1022,27 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
         #else
         wxSleep(1);
         #endif
+
+        wxString msg;
+
         if ( i == max )
         {
-            cont = dialog.Update(i, _T("That's all, folks!"));
+            msg = _T("That's all, folks!");
         }
-        else if ( i == max / 2 )
+        else if ( i > max / 2 )
         {
-            cont = dialog.Update(i, _T("Only a half left (very long message)!"));
+            msg = _T("Only a half left (very long message)!");
         }
-        else
+
+#if wxUSE_STOPWATCH && wxUSE_LONGLONG
+        if ( (i % (max/100)) == 0 ) // // only 100 updates, this makes it much faster
         {
-            #if wxUSE_STOPWATCH && wxUSE_LONGLONG
-            if ( (i % (max/100)) == 0 ) // // only 100 updates, this makes it much faster
-            {
-                cont = dialog.Update(i);
-            }
-            #else
-            cont = dialog.Update(i);
-            #endif
+            cont = dialog.Update(i, msg, &skip);
         }
+#else
+        cont = dialog.Update(i, msg, &skip);
+#endif
+
         if ( !cont )
         {
             if ( wxMessageBox(_T("Do you really want to cancel?"),

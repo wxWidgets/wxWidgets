@@ -16,7 +16,7 @@
 #pragma interface "progdlgg.h"
 #endif
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 
 #if wxUSE_PROGRESSDLG
 
@@ -55,7 +55,7 @@ public:
        @param newmsg if used, new message to display
        @returns true if ABORT button has not been pressed
    */
-   virtual bool Update(int value, const wxString& newmsg = wxEmptyString);
+   virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
 
    /* Can be called to continue after the cancel button has been pressed, but
        the program decided to continue the operation (e.g., user didn't
@@ -68,6 +68,9 @@ public:
 protected:
    // callback for optional abort button
    void OnCancel(wxCommandEvent& event);
+
+   // callback for optional skip button
+   void OnSkip(wxCommandEvent& event);
 
    // callback to disable "hard" window closing
    void OnClose(wxCloseEvent& event);
@@ -108,8 +111,14 @@ private:
       Finished             // finished, waiting to be removed from screen
    } m_state;
 
-   // the abort button (or NULL if none)
+   // skip some portion
+   bool m_skip;
+
+#if !defined(__SMARTPHONE__)
+   // the abort and skip buttons (or NULL if none)
    wxButton *m_btnAbort;
+   wxButton *m_btnSkip;
+#endif
 
    // the maximum value
    int m_maximum;
