@@ -3699,7 +3699,7 @@ void wxGrid::CalcDimensions()
 
     // do set scrollbar parameters
     SetScrollbars( GRID_SCROLL_LINE, GRID_SCROLL_LINE,
-		   w, h, x, y, GetBatchCount() );
+		           w, h, x, y, GetBatchCount() != 0 );
 }
 
 
