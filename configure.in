@@ -3377,6 +3377,10 @@ EOF
         chmod +x change-install-names
       ;;
       
+      *-*-cygwin* | *-*-mingw32* )
+        TOOLCHAIN_DLL_DEFS="${TOOLCHAIN_DLL_DEFS} -DWXUSINGDLL=1"
+	;;
+      
     esac
 
     dnl set target to shared if not explicitly chose static before
