@@ -59,6 +59,7 @@ public:
     virtual void SetMessage(const wxString& message) { SetTitle(message); }
     virtual void SetPath(const wxString& path);
     virtual void SetFilterIndex(int filterIndex);
+    virtual void SetWildcard(const wxString& wildCard);
 
     // for multiple file selection
     virtual void GetPaths(wxArrayString& paths) const;
