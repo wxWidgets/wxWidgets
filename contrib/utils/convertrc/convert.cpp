@@ -55,14 +55,14 @@ bool wxConvertApp::OnInit()
 {
 //Initialize all image loaders(JPEG,BMP,PNG,and etc)
     wxInitAllImageHandlers();
-    SetAppName("wxConvertApp");
+    SetAppName(_T("wxConvertApp"));
 
     if (HandleCommandLine())
         return TRUE;
 
 
 // Create the main frame window
-    m_pFrame = new wxMainFrame(NULL, -1, "wxConvertApp", wxPoint(0, 0), wxSize(500, 400),
+    m_pFrame = new wxMainFrame(NULL, -1, _T("wxConvertApp"), wxPoint(0, 0), wxSize(500, 400),
         wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
 
     InitMenu();
@@ -77,12 +77,12 @@ void wxConvertApp::InitMenu()
     wxASSERT(m_pMenuBar);
 
     wxMenu *filemenu=new wxMenu;
-    filemenu->Append(ID_RC2WXR,"Convert RC file to WXR file");
-    filemenu->Append(ID_WXR2XML,"Convert WXR file to XML file");
-    filemenu->Append(ID_RC2XML,"Convert RC file to XML file");
+    filemenu->Append(ID_RC2WXR,_T("Convert RC file to WXR file"));
+    filemenu->Append(ID_WXR2XML,_T("Convert WXR file to XML file"));
+    filemenu->Append(ID_RC2XML,_T("Convert RC file to XML file"));
 
-    filemenu->Append(ID_QUIT, "E&xit");
-    m_pMenuBar->Append(filemenu,"&File");
+    filemenu->Append(ID_QUIT, _T("E&xit"));
+    m_pMenuBar->Append(filemenu,_T("&File"));
 
     m_pFrame->SetMenuBar(m_pMenuBar);
 }
@@ -120,25 +120,25 @@ wxMainFrame::~wxMainFrame()
 
 
 
-void wxMainFrame::OnQuit()
+void wxMainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }
 
 
-void wxMainFrame::OnRc2Wxr()
+void wxMainFrame::OnRc2Wxr(wxCommandEvent& WXUNUSED(event))
 {
     wxFileDialog filed(this);
-    filed.SetWildcard("*.rc");
+    filed.SetWildcard(_T("*.rc"));
     filed.SetStyle(wxOPEN);
 
     if (filed.ShowModal()!=wxID_OK)
         return;
 
-    wxFileDialog wxrfile(this,"Enter Desired WXR file name");
-    wxrfile.SetWildcard("*.wxr");
+    wxFileDialog wxrfile(this,_T("Enter Desired WXR file name"));
+    wxrfile.SetWildcard(_T("*.wxr"));
     wxrfile.SetStyle(wxOPEN);
-    wxrfile.SetFilename("resource.wxr");
+    wxrfile.SetFilename(_T("resource.wxr"));
 
     if (wxrfile.ShowModal()!=wxID_OK)
         return;
@@ -147,18 +147,18 @@ void wxMainFrame::OnRc2Wxr()
     convert.Convert(wxrfile.GetPath(),filed.GetPath());
 }
 
-void wxMainFrame::OnWXR2XML()
+void wxMainFrame::OnWXR2XML(wxCommandEvent& WXUNUSED(event))
 {
     wxFileDialog f(this);
-    f.SetWildcard("*.wxr");
+    f.SetWildcard(_T("*.wxr"));
     if (f.ShowModal()!=wxID_OK)
         return;
 
 
-    wxFileDialog xmlfile(this,"Enter Desired XML file name");
-    xmlfile.SetWildcard("*.xml");
+    wxFileDialog xmlfile(this,_T("Enter Desired XML file name"));
+    xmlfile.SetWildcard(_T("*.xml"));
     xmlfile.SetStyle(wxOPEN);
-    xmlfile.SetFilename("resource.xml");
+    xmlfile.SetFilename(_T("resource.xml"));
 
     if (xmlfile.ShowModal()!=wxID_OK)
         return;
@@ -168,17 +168,17 @@ void wxMainFrame::OnWXR2XML()
 
 }
 
-void wxMainFrame::OnRC2XML()
+void wxMainFrame::OnRC2XML(wxCommandEvent& WXUNUSED(event))
 {
     wxFileDialog f(this);
-    f.SetWildcard("*.rc");
+    f.SetWildcard(_T("*.rc"));
     if (f.ShowModal()!=wxID_OK)
         return;
 
-    wxFileDialog xmlfile(this,"Enter Desired XML file name");
-    xmlfile.SetWildcard("*.xml");
+    wxFileDialog xmlfile(this,_T("Enter Desired XML file name"));
+    xmlfile.SetWildcard(_T("*.xml"));
     xmlfile.SetStyle(wxOPEN);
-    xmlfile.SetFilename("resource.xml");
+    xmlfile.SetFilename(_T("resource.xml"));
 
     if (xmlfile.ShowModal()!=wxID_OK)
         return;
@@ -205,17 +205,17 @@ bool wxConvertApp::HandleCommandLine()
     target=argv[2];
 
 
-    if ((source.Find(".wxr")>0)&&(target.Find(".xml")>0))
+    if ((source.Find(_T(".wxr"))>0)&&(target.Find(_T(".xml"))>0))
         {
         trans_wxr2xml.Convert(source,target);
         return TRUE;
         }
-    else if ((source.Find(".rc")!=-1)&(target.Find(".wxr")!=-1))
+    else if ((source.Find(_T(".rc"))!=-1)&(target.Find(_T(".wxr"))!=-1))
         {
         trans_rc2wxr.Convert(source,target);
         return TRUE;
         }
-    else if ((source.Find(".rc")!=-1)&(target.Find(".xml")!=-1))
+    else if ((source.Find(_T(".rc"))!=-1)&(target.Find(_T(".xml"))!=-1))
         {
         trans_rc2xml.Convert(source,target);
         return TRUE;

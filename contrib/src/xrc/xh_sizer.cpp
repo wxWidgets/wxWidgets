@@ -206,7 +206,6 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
     // save state
     wxSizer *old_par = m_parentSizer;
     bool old_ins = m_isInside;
-    bool old_gbs = m_isGBS;
 
     // set new state
     m_parentSizer = sizer;
@@ -216,7 +215,6 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
     CreateChildren(m_parent, TRUE/*only this handler*/);
 
     // restore state
-    old_gbs = m_isGBS;    
     m_isInside = old_ins;
     m_parentSizer = old_par;
 

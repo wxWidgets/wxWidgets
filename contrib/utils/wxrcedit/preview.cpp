@@ -134,8 +134,7 @@ void PreviewFrame::MakeDirty()
     if (m_Dirty) return;
     m_Dirty = TRUE;
     m_LogCtrl->Clear();
-    m_LogCtrl->SetValue(_("Resource modified.\n"
-                   "Move mouse cursor over the preview window to refresh it."));
+    m_LogCtrl->SetValue(_("Resource modified.\nMove mouse cursor over the preview window to refresh it."));
 }
 
 

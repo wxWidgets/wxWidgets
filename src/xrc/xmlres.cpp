@@ -324,6 +324,7 @@ bool wxXmlResource::UpdateResources()
     bool modif;
 #   if wxUSE_FILESYSTEM
     wxFSFile *file = NULL;
+    wxUnusedVar(file);
     wxFileSystem fsys;
 #   endif
 
@@ -353,6 +354,7 @@ bool wxXmlResource::UpdateResources()
                 rt = false;
             }
             wxDELETE(file);
+            wxUnusedVar(file);
 #           else
             modif = wxDateTime(wxFileModificationTime(m_data[i].File)) > m_data[i].Time;
 #           endif
@@ -413,6 +415,7 @@ bool wxXmlResource::UpdateResources()
 
 #           if wxUSE_FILESYSTEM
 				wxDELETE(file);
+				wxUnusedVar(file);
 #           else
 				wxDELETE(stream);
 #           endif
@@ -1180,14 +1183,12 @@ static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = -2)
     index %= XRCID_TABLE_SIZE;
 
     XRCID_record *oldrec = NULL;
-    int matchcnt = 0;
     for (XRCID_record *rec = XRCID_Records[index]; rec; rec = rec->next)
     {
         if (wxStrcmp(rec->key, str_id) == 0)
         {
             return rec->id;
         }
-        matchcnt++;
         oldrec = rec;
     }
 

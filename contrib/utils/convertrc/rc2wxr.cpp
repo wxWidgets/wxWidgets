@@ -103,7 +103,7 @@ m_rc.Open(rcfile);
 
 m_filesize=m_rc.Length();
 
-if( (m_wxr  = fopen( wxrfile, "wt" )) == NULL )
+if( (m_wxr  = wxFopen( wxrfile, _T("wt") )) == NULL )
 
 {
 
@@ -131,7 +131,7 @@ tok=GetToken();
 
 
 
-if (tok=="DIALOG")
+if (tok==_T("DIALOG"))
 
 {
 
@@ -143,7 +143,7 @@ ParseDialog(prevtok);
 
 
 
-if (tok=="MENU")
+if (tok==_T("MENU"))
 
 {
 
@@ -233,7 +233,7 @@ tok=PeekToken();
 
 //Microsoft notation?
 
-if (tok=="DISCARDABLE")
+if (tok==_T("DISCARDABLE"))
 
 {
 
@@ -251,15 +251,15 @@ if (!tok.IsNumber())
 
 //Generate Dialog text
 
-fprintf(m_wxr,"static char *dialog%i = \"dialog(name = '%s',\\\n",dlgid,dlgname.c_str());
+wxFprintf(m_wxr,_T("static char *dialog%i = \"dialog(name = '%s',\\\n"),dlgid,dlgname.c_str());
 
 //be lazy about style for now. add it later
 
-fprintf(m_wxr,"style = 'wxRAISED_BORDER | wxCAPTION | wxTHICK_FRAME | wxSYSTEM_MENU',\\\n");
+wxFprintf(m_wxr,_T("style = 'wxRAISED_BORDER | wxCAPTION | wxTHICK_FRAME | wxSYSTEM_MENU',\\\n"));
 
 
 
-fprintf(m_wxr,"id = %i,\\\n",dlgid);
+wxFprintf(m_wxr,_T("id = %i,\\\n"),dlgid);
 
 
 
@@ -269,7 +269,7 @@ int x,y,width,height;
 
 ReadRect(x,y,width,height);
 
-fprintf(m_wxr,"x = %i, y = %i, width = %i, height = %i,\\\n",x,y,width,height);
+wxFprintf(m_wxr,_T("x = %i, y = %i, width = %i, height = %i,\\\n"),x,y,width,height);
 
 
 
@@ -285,17 +285,17 @@ wxString title;
 
 
 
-while ((tok!="BEGIN")&(tok!="{"))
+while ((tok!=_T("BEGIN"))&(tok!=_T("{")))
 
 {
 
-if (tok=="CAPTION")
+if (tok==_T("CAPTION"))
 
 {
 
 title=GetQuoteField();
 
-fprintf(m_wxr,"title = '%s',\\\n",title.c_str());
+wxFprintf(m_wxr,_T("title = '%s',\\\n"),title.c_str());
 
 }
 
@@ -303,17 +303,17 @@ tok=GetToken();
 
 }
 
-fprintf(m_wxr,"use_dialog_units = 1,\\\n");
+wxFprintf(m_wxr,_T("use_dialog_units = 1,\\\n"));
 
-fprintf(m_wxr,"use_system_defaults = 0,\\\n");
+wxFprintf(m_wxr,_T("use_system_defaults = 0,\\\n"));
 
 
 
-fprintf(m_wxr,"font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\\\n");
+wxFprintf(m_wxr,_T("font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\\\n"));
 
 ParseControls();
 
-fprintf(m_wxr,").\";\n\n");
+wxFprintf(m_wxr,_T(").\";\n\n"));
 
 }
 
@@ -351,35 +351,35 @@ wxString tok;
 
 tok=GetToken();
 
-while ((tok!="END")&(tok!="}"))
+while ((tok!=_T("END"))&(tok!=_T("}")))
 
 {
 
-if (tok=="LTEXT")
+if (tok==_T("LTEXT"))
 
     ParseStaticText();
 
-if (tok=="EDITTEXT")
+if (tok==_T("EDITTEXT"))
 
     ParseTextCtrl();
 
-if (tok=="PUSHBUTTON")
+if (tok==_T("PUSHBUTTON"))
 
     ParsePushButton();
 
-if (tok=="DEFPUSHBUTTON")
+if (tok==_T("DEFPUSHBUTTON"))
 
     ParsePushButton();
 
-if (tok=="GROUPBOX")
+if (tok==_T("GROUPBOX"))
 
     ParseGroupBox();
 
-if (tok=="COMBOBOX")
+if (tok==_T("COMBOBOX"))
 
     ParseComboBox();
 
-if (tok=="CONTROL")
+if (tok==_T("CONTROL"))
 
     ParseControlMS();
 
@@ -413,11 +413,11 @@ int x,y,width,height;
 
 ReadRect(x,y,width,height);
 
-fprintf(m_wxr,"  control = [%i,wxStaticText,'%s','0','%s',",m_controlid,phrase.c_str(),varname.c_str());
+wxFprintf(m_wxr,_T("  control = [%i,wxStaticText,'%s','0','%s',"),m_controlid,phrase.c_str(),varname.c_str());
 
-fprintf(m_wxr,"%i,%i,%i,%i,'',\\\n",x,y,width,height);
+wxFprintf(m_wxr,_T("%i,%i,%i,%i,'',\\\n"),x,y,width,height);
 
-fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
+wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
 
 }
 
@@ -439,11 +439,11 @@ int x,y,width,height;
 
 ReadRect(x,y,width,height);
 
-fprintf(m_wxr,"  control = [%i,wxTextCtrl,'','0','%s',",m_controlid,varname.c_str());
+wxFprintf(m_wxr,_T("  control = [%i,wxTextCtrl,'','0','%s',"),m_controlid,varname.c_str());
 
-fprintf(m_wxr,"%i,%i,%i,%i,'',\\\n",x,y,width,height);
+wxFprintf(m_wxr,_T("%i,%i,%i,%i,'',\\\n"),x,y,width,height);
 
-fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
+wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
 
 
 
@@ -469,19 +469,19 @@ m_controlid++;
 
 c=m_controlid;
 
-if (varname=="IDOK")
+if (varname==_T("IDOK"))
 
 c=wxID_OK;
 
 
 
-if (varname=="IDCANCEL")
+if (varname==_T("IDCANCEL"))
 
 c=wxID_CANCEL;
 
 
 
-if (varname=="IDAPPLY")
+if (varname==_T("IDAPPLY"))
 
 c=wxID_APPLY;
 
@@ -491,11 +491,11 @@ int x,y,width,height;
 
 ReadRect(x,y,width,height);
 
-fprintf(m_wxr,"  control = [%i,wxButton,'%s','0','%s',",c,phrase.c_str(),varname.c_str());
+wxFprintf(m_wxr,_T("  control = [%i,wxButton,'%s','0','%s',"),c,phrase.c_str(),varname.c_str());
 
-fprintf(m_wxr,"%i,%i,%i,%i,'',\\\n",x,y,width,height);
+wxFprintf(m_wxr,_T("%i,%i,%i,%i,'',\\\n"),x,y,width,height);
 
-fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
+wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
 
 
 
@@ -551,11 +551,11 @@ int x,y,width,height;
 
 ReadRect(x,y,width,height);
 
-fprintf(m_wxr,"  control = [%i,wxStaticBox,'%s','0','%s',",m_controlid,phrase.c_str(),varname.c_str());
+wxFprintf(m_wxr,_T("  control = [%i,wxStaticBox,'%s','0','%s',"),m_controlid,phrase.c_str(),varname.c_str());
 
-fprintf(m_wxr,"%i,%i,%i,%i,'',\\\n",x,y,width,height);
+wxFprintf(m_wxr,_T("%i,%i,%i,%i,'',\\\n"),x,y,width,height);
 
-fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
+wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
 
 
 
@@ -569,13 +569,13 @@ void rc2wxr::ReadRect(int & x, int & y, int & width, int & height)
 
 {
 
-x=atoi(GetToken());
+x=wxAtoi(GetToken());
 
-y=atoi(GetToken());
+y=wxAtoi(GetToken());
 
-width=atoi(GetToken());
+width=wxAtoi(GetToken());
 
-height=atoi(GetToken());
+height=wxAtoi(GetToken());
 
 
 
@@ -587,7 +587,7 @@ wxString rc2wxr::GetToken()
 
 {
 
-wxString tok="";
+wxString tok=wxEmptyString;
 
 
 
@@ -771,11 +771,11 @@ ReadRect(x,y,width,height);
 
 
 
-fprintf(m_wxr,"  control = [%i,wxChoice,'','0','%s',",m_controlid,varname.c_str());
+wxFprintf(m_wxr,_T("  control = [%i,wxChoice,'','0','%s',"),m_controlid,varname.c_str());
 
-fprintf(m_wxr,"%i,%i,%i,%i,[],\\\n",x,y,width,height);
+wxFprintf(m_wxr,_T("%i,%i,%i,%i,[],\\\n"),x,y,width,height);
 
-fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
+wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
 
 
 
@@ -789,39 +789,39 @@ void rc2wxr::ParseMenu(wxString name)
 
 {
 
-wxString tok="";
+wxString tok=wxEmptyString;
 
 static int menuid=0;
 
 menuid++;
 
-fprintf(m_wxr,"static char *MenuBar%i = \"menu(name = '%s',\\\n",menuid,name.c_str());
+wxFprintf(m_wxr,_T("static char *MenuBar%i = \"menu(name = '%s',\\\n"),menuid,name.c_str());
 
-fprintf(m_wxr,"menu = \\\n");
+wxFprintf(m_wxr,_T("menu = \\\n"));
 
-fprintf(m_wxr,"[\\\n");
+wxFprintf(m_wxr,_T("[\\\n"));
 
 
 
-while ((tok!="BEGIN")&(tok!="{"))
+while ((tok!=_T("BEGIN"))&(tok!=_T("{")))
 
    tok=GetToken();
 
 
 
-while ((tok!="END")&(tok!="}"))
+while ((tok!=_T("END"))&(tok!=_T("}")))
 
 {
 
    tok=GetToken();
 
-if (tok=="POPUP")
+if (tok==_T("POPUP"))
 
 	{
 
     ParsePopupMenu();
 
-	fprintf(m_wxr,"  ],\\\n");
+	wxFprintf(m_wxr,_T("  ],\\\n"));
 
 	}
 
@@ -829,7 +829,7 @@ if (tok=="POPUP")
 
 
 
-fprintf(m_wxr,"]).\";\n\n");
+wxFprintf(m_wxr,_T("]).\";\n\n"));
 
 }
 
@@ -853,31 +853,31 @@ int spot;
 
 //Remove /t because it causes problems
 
-spot=tok.First("\\t");
+spot=tok.First(_T("\\t"));
 
 tok=tok.Left(spot);
 
-fprintf(m_wxr,"  ['%s',%i,'',\\\n",tok.c_str(),menuitem);
+wxFprintf(m_wxr,_T("  ['%s',%i,'',\\\n"),tok.c_str(),menuitem);
 
-while ((tok!="BEGIN")&(tok!="{"))
+while ((tok!=_T("BEGIN"))&(tok!=_T("{")))
 
    tok=GetToken();
 
 
 
-while ((tok!="END")&(tok!="}"))
+while ((tok!=_T("END"))&(tok!=_T("}")))
 
 {
 
    tok=GetToken();
 
-if (tok=="MENUITEM")
+if (tok==_T("MENUITEM"))
 
 {
 
-if (PeekToken()=="SEPARATOR")
+if (PeekToken()==_T("SEPARATOR"))
 
-fprintf(m_wxr,"      [],\\\n");
+wxFprintf(m_wxr,_T("      [],\\\n"));
 
 else
 
@@ -887,13 +887,13 @@ tok=GetQuoteField();
 
 //Remove /t because it causes problems
 
-spot=tok.First("\\t");
+spot=tok.First(_T("\\t"));
 
 tok=tok.Left(spot);
 
 menuitem++;
 
-fprintf(m_wxr,"      ['%s',%i,''],\\\n",tok.c_str(),menuitem);
+wxFprintf(m_wxr,_T("      ['%s',%i,''],\\\n"),tok.c_str(),menuitem);
 
 }
 
@@ -951,15 +951,15 @@ kindctrl.MakeUpper();
 
 
 
-if (kindctrl=="MSCTLS_TRACKBAR32")
+if (kindctrl==_T("MSCTLS_TRACKBAR32"))
 
    ParseSlider(label,varname);
 
-if (kindctrl=="MSCTLS_PROGRESS32")
+if (kindctrl==_T("MSCTLS_PROGRESS32"))
 
    ParseProgressBar(label,varname);
 
-if (kindctrl=="BUTTON")
+if (kindctrl==_T("BUTTON"))
 
    ParseCtrlButton(label,varname);
 
@@ -973,7 +973,7 @@ if (kindctrl=="BUTTON")
 
 
 
-void rc2wxr::ParseSlider(wxString label, wxString varname)
+void rc2wxr::ParseSlider(wxString WXUNUSED(label), wxString varname)
 
 {
 
@@ -981,17 +981,17 @@ wxString tok;
 
 while (ReadOrs(tok));
 
-fprintf(m_wxr,"  control = [%i,wxSlider,'','wxSL_HORIZONTAL','%s',",m_controlid,varname.c_str());
+wxFprintf(m_wxr,_T("  control = [%i,wxSlider,'','wxSL_HORIZONTAL','%s',"),m_controlid,varname.c_str());
 
 int x,y,width,height;
 
 ReadRect(x,y,width,height);
 
-fprintf(m_wxr,"%i,%i,%i,%i,",x,y,width,height);
+wxFprintf(m_wxr,_T("%i,%i,%i,%i,"),x,y,width,height);
 
-fprintf(m_wxr," 1, 1, 10,\\\n");
+wxFprintf(m_wxr,_T(" 1, 1, 10,\\\n"));
 
-fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
+wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
 
 }
 
@@ -1003,7 +1003,7 @@ CONTROL         "Progress1",CG_IDC_PROGDLG_PROGRESS,"msctls_progress32",
 
 */
 
-void rc2wxr::ParseProgressBar(wxString label, wxString varname)
+void rc2wxr::ParseProgressBar(wxString WXUNUSED(label), wxString varname)
 
 {
 
@@ -1011,17 +1011,17 @@ wxString tok;
 
 while (ReadOrs(tok));
 
-fprintf(m_wxr,"  control = [%i,wxGauge,'','wxGA_HORIZONTAL','%s',",m_controlid,varname.c_str());
+wxFprintf(m_wxr,_T("  control = [%i,wxGauge,'','wxGA_HORIZONTAL','%s',"),m_controlid,varname.c_str());
 
 int x,y,width,height;
 
 ReadRect(x,y,width,height);
 
-fprintf(m_wxr,"%i,%i,%i,%i,",x,y,width,height);
+wxFprintf(m_wxr,_T("%i,%i,%i,%i,"),x,y,width,height);
 
-fprintf(m_wxr," 0, 10,\\\n");
+wxFprintf(m_wxr,_T(" 0, 10,\\\n"));
 
-fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
+wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
 
 }
 
@@ -1065,37 +1065,37 @@ int x,y,width,height;
 
 
 
-if (tok=="BS_AUTOCHECKBOX")
+if (tok==_T("BS_AUTOCHECKBOX"))
 
 {
 
-    fprintf(m_wxr,"  control = [%i,wxCheckBox,'%s','0','%s',",m_controlid,label.c_str(),varname.c_str());
+    wxFprintf(m_wxr,_T("  control = [%i,wxCheckBox,'%s','0','%s',"),m_controlid,label.c_str(),varname.c_str());
 
     while (ReadOrs(tok));
 
     ReadRect(x,y,width,height);
 
-    fprintf(m_wxr,"%i,%i,%i,%i,0,\\\n",x,y,width,height);
+    wxFprintf(m_wxr,_T("%i,%i,%i,%i,0,\\\n"),x,y,width,height);
 
-    fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
+    wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
 
 }
 
 
 
-if (tok=="BS_AUTORADIOBUTTON")
+if (tok==_T("BS_AUTORADIOBUTTON"))
 
 {
 
-    fprintf(m_wxr,"  control = [%i,wxRadioButton,'%s','0','%s',",m_controlid,label.c_str(),varname.c_str());
+    wxFprintf(m_wxr,_T("  control = [%i,wxRadioButton,'%s','0','%s',"),m_controlid,label.c_str(),varname.c_str());
 
     while(ReadOrs(tok));
 
     ReadRect(x,y,width,height);
 
-    fprintf(m_wxr,"%i,%i,%i,%i,0,\\\n",x,y,width,height);
+    wxFprintf(m_wxr,_T("%i,%i,%i,%i,0,\\\n"),x,y,width,height);
 
-    fprintf(m_wxr,"[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n");
+    wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
 
 }
 

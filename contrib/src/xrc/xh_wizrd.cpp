@@ -59,6 +59,8 @@ wxObject *wxWizardXmlHandler::DoCreateResource()
     else
     {
         wxWizardPage *page = NULL;
+        wxUnusedVar(page);
+
         if (m_class == wxT("wxWizardPageSimple"))
         {
             XRC_MAKE_INSTANCE(p, wxWizardPageSimple)

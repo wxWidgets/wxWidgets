@@ -256,9 +256,5 @@ void PropEditCtrlFile::OnDetails()
 
 wxString PropEditCtrlImageFile::GetFileTypes()
 {
-    return _("GIF files (*.gif)|*.gif|"
-             "JPEG files (*.jpg)|*.jpg|"
-             "PNG files (*.png)|*.png|"
-             "BMP files (*.bmp)|*.bmp|"
-             "All files (*)|*");
+    return _("GIF files (*.gif)|*.gif|JPEG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|BMP files (*.bmp)|*.bmp|All files (*)|*");
 }

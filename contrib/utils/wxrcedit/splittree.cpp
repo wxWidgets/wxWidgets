@@ -444,13 +444,12 @@ void wxTreeCompanionWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxSize clientSize = GetClientSize();
 	wxRect itemRect;
-	int cy=0;
 	wxTreeItemId h, lastH;
 	for(h=m_treeCtrl->GetFirstVisibleItem();h;h=m_treeCtrl->GetNextVisible(h))
 	{
 		if (m_treeCtrl->GetBoundingRect(h, itemRect))
 		{
-			cy = itemRect.GetTop();
+			int cy = itemRect.GetTop();
 			wxRect drawItemRect(0, cy, clientSize.x, itemRect.GetHeight());
 
 			lastH = h;
@@ -462,7 +461,7 @@ void wxTreeCompanionWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 	}
 	if (lastH.IsOk() && m_treeCtrl->GetBoundingRect(lastH, itemRect))
 	{
-		cy = itemRect.GetBottom();
+		int cy = itemRect.GetBottom();
 		dc.DrawLine(0, cy, clientSize.x, cy);
 	}
 }

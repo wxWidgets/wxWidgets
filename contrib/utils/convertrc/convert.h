@@ -17,14 +17,14 @@
 class wxMainFrame:public wxFrame
 {
 public:
-    void OnRC2XML();
-    void OnWXR2XML();
-    void OnRc2Wxr();
-    void OnQuit();
+    void OnRC2XML(wxCommandEvent& event);
+    void OnWXR2XML(wxCommandEvent& event);
+    void OnRc2Wxr(wxCommandEvent& event);
+    void OnQuit(wxCommandEvent& event);
     wxMainFrame(wxWindow* parent, wxWindowID id, 
         const wxString& title, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE,
-        const wxString& name = "frame");
+        const wxString& name = _T("frame"));
     virtual ~wxMainFrame();
 	
 protected:
