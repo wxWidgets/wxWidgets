@@ -205,7 +205,7 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
     }
     else
     {
-        wxCoord wText = width - POPUPWIDTH;
+        wxCoord wText = width - POPUPWIDTH - MARGIN;
         m_text->SetSize(0, 0, wText, height);
         m_choice->SetSize(0 + wText + MARGIN, 0, POPUPWIDTH, -1);
     }    
