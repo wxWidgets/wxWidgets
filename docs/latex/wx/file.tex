@@ -5,6 +5,8 @@ minimize the overhead of using it - in fact, there is hardly any overhead at
 all, but using it brings you automatic error checking and hides differences
 between platforms and compilers. wxFile also automatically closes the file in
 its destructor making it unnecessary to worry about forgetting to do it.
+wxFile is a wrapper around {\tt file descriptor.} - see also 
+\helpref{wxFFile}{wxffile} for a wrapper around {\tt FILE} structure.
 
 \wxheading{Derived from}
 
@@ -278,10 +280,11 @@ Writes the contents of the string to the file, returns TRUE on success.
 
 \section{\class{wxFFile}}\label{wxffile}
 
-A wxFFile performs raw file I/O. This is a very small class designed to
+wxFFile implements buffered file I/O. This is a very small class designed to
 minimize the overhead of using it - in fact, there is hardly any overhead at
 all, but using it brings you automatic error checking and hides differences
-between platforms and compilers.
+between platforms and compilers. It wraps inside it a {\tt FILE *} handle used
+by standard C IO library (also known as {\tt stdio}).
 
 \wxheading{Derived from}
 

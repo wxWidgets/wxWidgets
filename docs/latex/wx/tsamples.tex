@@ -415,3 +415,27 @@ Adding, inserting and deleting items and branches from the tree as well as
 sorting (in default alphabetical order as well as in custom one) is
 demonstrated here as well - try the corresponding menu entries.
 
+\subsection{Wizard sample}\label{samplewizard}
+
+This sample shows so-called wizard dialog (implemented using 
+\helpref{wxWizard}{wxwizard} and related classes). It shows almost all
+features supported:
+
+\begin{itemize}\itemsep=0pt
+\item Using bitmaps with the wizard and changing them depending on the page
+shown (notice that wxValidationPage in the sample has a different image from
+the other ones)
+\item Using \helpref{TransferDataFromWindow}{wxwindowtransferdatafromwindow} 
+to verify that the data entered is correct before passing to the next page
+(done in wxValidationPage which forces the user to check a checkbox before
+continuing).
+\item Using more elaborated techniques to allow returning to the previous
+page, but not continuing to the next one or vice versa (in wxRadioboxPage)
+\item This (wxRadioboxPage) page also shows how the page may process {\tt
+Cancel} button itself instead of relying on the wizard parent to do it.
+\item Normally, the order of the pages in the wizard is known at compile-time,
+but sometimes it depends on the user choices: wxCheckboxPage shows how to
+dynamically decide which page to display next (see also 
+\helpref{wxWizardPage}{wxwizardpage})
+\end{itemize}
+

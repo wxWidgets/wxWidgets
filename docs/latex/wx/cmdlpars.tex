@@ -31,6 +31,7 @@ giving it the command line to parse and optionally its description or use
 \end{enumerate}
 
 In the documentation below the following terminology is used:
+
 \begin{twocollist}\itemsep=0pt
 \twocolitem{switch}{This is a boolean option which can be given or not, but
 which doesn't have any value. We use the word switch to distinguish such boolean
@@ -126,7 +127,7 @@ of parameters effectively specified after calling
 
 \wxheading{See also}
 
-\helpref{wxApp::argc}{wxappargc} and \helpref{wxApp::argv}{wxappargv}
+\helpref{wxApp::argc}{wxappargc} and \helpref{wxApp::argv}{wxappargv}\\
 console sample
 
 %%%%%%%%%%%%% Methods by group %%%%%%%%%%%%%
@@ -146,7 +147,7 @@ the only restriction is that it must be done before calling
 To specify the command line to parse you may use either one of constructors
 accepting it (\helpref{wxCmdLineParser(argc, argv)}{wxcmdlineparserwxcmdlineparserargc} or 
 \helpref{wxCmdLineParser}{wxcmdlineparserwxcmdlineparserdescargc} usually) or,
-if you use \helpref{the default constructor}{wxcmdlineparserwxcmdlineparser},
+if you use \helpref{the default constructor}{wxcmdlineparserwxcmdlineparserdef},
 you can do it later by calling 
 \helpref{SetCmdLine}{wxcmdlineparsersetcmdlineargc}.
 
@@ -398,27 +399,27 @@ will not be helpful to the user unless the descriptions were indeed specified.
 
 \helpref{SetLogo}{wxcmdlineparsersetlogo}
 
-\membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfound}
+\membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfoundswitch}
 
 \constfunc{bool}{Found}{\param{const wxString\& }{name}}
 
 Returns TRUE if the given switch was found, FALSE otherwise.
 
-\membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfound}
+\membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfoundstringoption}
 
 \constfunc{bool}{Found}{\param{const wxString\& }{name}, \param{wxString* }{value}}
 
 Returns TRUE if an option taking a string value was found and stores the
 value in the provided pointer (which should not be NULL).
 
-\membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfound}
+\membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfoundintoption}
 
 \constfunc{bool}{Found}{\param{const wxString\& }{name}, \param{long* }{value}}
 
 Returns TRUE if an option taking an integer value was found and stores
 the value in the provided pointer (which should not be NULL).
 
-\membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfound}
+\membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfounddateoption}
 
 \constfunc{bool}{Found}{\param{const wxString\& }{name}, \param{wxDateTime* }{value}}
 
