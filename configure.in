@@ -3627,9 +3627,9 @@ dnl all additional libraries (except wxWindows itself) we link with
 dnl
 dnl note that we always link with -lm - extended.c uses floor() and is always
 dnl linked in
-EXTRA_LIBS="-lm $LIBS $ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK"
+EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -lm"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRA_LIBS="$EXTRA_LIBS $GUILIBS $PNG_LINK $JPEG_LINK $TIFF_LINK"
+    EXTRA_LIBS="$GUILIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $EXTRA_LIBS"
 fi
 
 dnl all the libraries needed to link wxWindows programs when using the
