@@ -271,7 +271,7 @@ void wxTopLevelWindowMac::MacInstallEventHandler()
         ::RemoveEventHandler((EventHandlerRef) m_macEventHandler);
         m_macEventHandler = NULL ;
     }
-	InstallWindowEventHandler(MAC_WXHWND(m_macWindow), wxMacWindowEventHandlerUPP, WXSIZEOF(eventList), eventList, this, &((EventHandlerRef)m_macEventHandler));
+	InstallWindowEventHandler(MAC_WXHWND(m_macWindow), wxMacWindowEventHandlerUPP, WXSIZEOF(eventList), eventList, this, (EventHandlerRef *)&m_macEventHandler);
 #endif
 }
 
