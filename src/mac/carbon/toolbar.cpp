@@ -573,19 +573,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
         toolbarrect.top = 0 ;
 */
     UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
-/*
-    {
-        wxToolBarToolsList::Node *node;
-        for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
-        {
-            wxToolBarTool* tool = (wxToolBarTool*) node->GetData() ; 
-            if ( tool->IsButton() )
-            {
-               UMADrawControl( (ControlRef) tool->GetControlHandle() ) ;
-            }
-        }
-    }
-*/
+
     event.Skip() ;
 }
 
