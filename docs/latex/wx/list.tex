@@ -254,7 +254,8 @@ Inserts the object before the given {\it node}.
 
 Returns {\tt TRUE} if the list is empty, {\tt FALSE} otherwise.
 
-\membersection{wxList::Item}\label{wxlistitem}
+% Use different label name to avoid clashing with wxListItem label
+\membersection{wxList::Item}\label{wxlistitemfunc}
 
 \constfunc{wxNode *}{Item}{\param{size\_t }{index}}
 
@@ -272,7 +273,7 @@ Returns the node associated with {\it object} if it is in the list, NULL otherwi
 
 \func{wxNode *}{Nth}{\param{int}{ n}}
 
-{\bf NB:} This function is deprecated, use \helpref{Item}{wxlistitem} instead.
+{\bf NB:} This function is deprecated, use \helpref{Item}{wxlistitemfunc} instead.
 
 Returns the {\it nth} node in the list, indexing from zero (NULL if the list is empty
 or the nth node could not be found).

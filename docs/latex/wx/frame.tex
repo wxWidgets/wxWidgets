@@ -262,6 +262,16 @@ Returns a pointer to the status bar currently associated with the frame (if any)
 
 \helpref{wxFrame::CreateStatusBar}{wxframecreatestatusbar}, \helpref{wxStatusBar}{wxstatusbar}
 
+\membersection{wxFrame::GetStatusBarPane}\label{wxframegetstatusbarpane}
+
+\func{int}{GetStatusBarPane}{\void}
+
+Returns the status bar pane used to display menu and toolbar help.
+
+\wxheading{See also}
+
+\helpref{wxFrame::SetStatusBarPane}{wxframesetstatusbarpane}
+
 \membersection{wxFrame::GetTitle}\label{wxframegettitle}
 
 \constfunc{wxString}{GetTitle}{\void}
@@ -530,6 +540,13 @@ Associates a status bar with the frame.
 \helpref{wxFrame::CreateStatusBar}{wxframecreatestatusbar}, \helpref{wxStatusBar}{wxstatusbar},\rtfsp
 \helpref{wxFrame::GetStatusBar}{wxframegetstatusbar}
 
+\membersection{wxFrame::SetStatusBarPane}\label{wxframesetstatusbarpane}
+
+\func{void}{SetStatusBarPane}{\param{int}{ n}}
+
+Set the status bar pane used to display menu and toolbar help.
+Using -1 disables help display.
+
 \membersection{wxFrame::SetStatusText}\label{wxframesetstatustext}
 
 \func{virtual void}{SetStatusText}{\param{const wxString\& }{ text}, \param{int}{ number = 0}}
@@ -623,40 +640,4 @@ This function has not been tested with MDI frames.
 \wxheading{See also}
 
 \helpref{wxFrame::IsFullScreen}{wxframeisfullscreen}
-
-\membersection{wxFrame::SetStatusBarPane}\label{wxframesetstatusbarpane}
-
-\func{void}{SetStatusBarPane}{\param{int}{ n}}
-
-Set the status bar pane used to display menu and toolbar help.
-Using -1 disables help display.
-
-\membersection{wxFrame::GetStatusBarPane}\label{wxframegetstatusbarpane}
-
-\func{int}{GetStatusBarPane}{\void}
-
-Returns the status bar pane used to display menu and toolbar help.
-
-\wxheading{See also}
-
-\helpref{wxFrame::SetStatusBarPane}{wxframesetstatusbarpane}
-
-\membersection{wxFrame::SetStatusBarPane}\label{wxframesetstatusbarpane}
-
-\func{void}{SetStatusBarPane}{\param{int}{ n}}
-
-Set the status bar pane used to display menu and toolbar help.
-Using -1 disables help display.
-
-\membersection{wxFrame::GetStatusBarPane}\label{wxframegetstatusbarpane}
-
-\func{int}{GetStatusBarPane}{\void}
-
-Returns the status bar pane used to display menu and toolbar help.
-
-\wxheading{See also}
-
-\helpref{wxFrame::SetStatusBarPane}{wxframesetstatusbarpane}
-
-
 
