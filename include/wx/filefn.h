@@ -253,16 +253,21 @@ WXDLLEXPORT bool wxMkdir(const wxString& dir, int perm = 0777);
 // Remove directory. Flags reserved for future use.
 WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
 
+// ----------------------------------------------------------------------------
 // separators in file names
+// ----------------------------------------------------------------------------
+
+// between file name and extension
 #define wxFILE_SEP_EXT        wxT('.')
+
+// between drive/volume name and the path
 #define wxFILE_SEP_DSK        wxT(':')
+
+// between the path components
 #define wxFILE_SEP_PATH_DOS   wxT('\\')
 #define wxFILE_SEP_PATH_UNIX  wxT('/')
 #define wxFILE_SEP_PATH_MAC   wxT(':')
-#define wxFILE_SEP_PATH_VMS   wxT('/') //This is the Unix way, but somtimes
-                                       //users will give the VMS native paths
-                                       //and than a ']' is needed.
-                                       //         Jouk
+#define wxFILE_SEP_PATH_VMS   wxT('.') // VMS also uses '[' and ']'
 
 // separator in the path list (as in PATH environment variable)
 // there is no PATH variable in Classic Mac OS so just use the
