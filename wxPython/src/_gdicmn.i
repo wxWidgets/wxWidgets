@@ -427,7 +427,12 @@ public:
         wxRect(const wxPoint& pos, const wxSize& size),
         "Create a new Rect from a position and size.", "",
          RectPS);
-    
+
+    DocCtorStrName(
+        wxRect(const wxSize& size),
+        "Create a new Rect from a size only.", "",
+         RectS);
+
     ~wxRect();
 
     int GetX() const;

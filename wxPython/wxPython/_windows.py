@@ -215,6 +215,9 @@ wxSingleChoiceDialog = wx._windows.SingleChoiceDialog
 wxSingleChoiceDialogPtr = wx._windows.SingleChoiceDialogPtr
 wxTextEntryDialog = wx._windows.TextEntryDialog
 wxTextEntryDialogPtr = wx._windows.TextEntryDialogPtr
+wxGetPasswordFromUserPromptStr = wx._windows.GetPasswordFromUserPromptStr
+wxPasswordEntryDialog = wx._windows.PasswordEntryDialog
+wxPasswordEntryDialogPtr = wx._windows.PasswordEntryDialogPtr
 wxFontData = wx._windows.FontData
 wxFontDataPtr = wx._windows.FontDataPtr
 wxFontDialog = wx._windows.FontDialog
@@ -338,6 +341,12 @@ wxPyPreviewFrame = wx._windows.PyPreviewFrame
 wxPyPreviewFramePtr = wx._windows.PyPreviewFramePtr
 wxPyPreviewControlBar = wx._windows.PyPreviewControlBar
 wxPyPreviewControlBarPtr = wx._windows.PyPreviewControlBarPtr
+wxPrintFactory = wx._windows.PrintFactory
+wxPrintFactoryPtr = wx._windows.PrintFactoryPtr
+wxPrintFactory_SetPrintFactory = wx._windows.PrintFactory_SetPrintFactory
+wxPrintFactory_GetFactory = wx._windows.PrintFactory_GetFactory
+wxPrintNativeDataBase = wx._windows.PrintNativeDataBase
+wxPrintNativeDataBasePtr = wx._windows.PrintNativeDataBasePtr
 
 
 d = globals()

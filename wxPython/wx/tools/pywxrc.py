@@ -298,6 +298,9 @@ class XmlResApp:
         if node.GetName() == "bitmap":
             return True
 
+        if node.GetName() == "icon":
+            return True
+
         # URLs in wxHtmlWindow:
         if node.GetName() == "url":
             return True

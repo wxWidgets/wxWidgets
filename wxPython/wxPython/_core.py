@@ -624,6 +624,7 @@ wxRect = wx._core.Rect
 wxRectPtr = wx._core.RectPtr
 wxRectPP = wx._core.RectPP
 wxRectPS = wx._core.RectPS
+wxRectS = wx._core.RectS
 wxIntersectRect = wx._core.IntersectRect
 wxPoint2D = wx._core.Point2D
 wxPoint2DPtr = wx._core.Point2DPtr

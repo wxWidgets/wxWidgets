@@ -5,6 +5,31 @@ Recent Changes for wxPython
 2.5.3.2
 -------
 
+New factory based printing framework.  (TODO: Say more about this!)
+
+wx.Sizer Add, Insert, and Prepend funcitons now return a reference to the
+wx.SizerItem that was added to the sizer.
+
+Added wx.Sizer.GetItem method which returns the wx.SizerItem for the given
+wx.Window, wx.Sizer or position index.
+
+wxMSW: wx.RadioButtons in the same group no longer have to be
+consecutive (there may be intervening controls). Without this fix, an
+out-of-sync assert is generated when clicking on a radio button and
+then calling GetValue().
+
+XRC: 
+    - added 'icon' property to wxFrame and wxDialog
+    - no longer ignores menu bitmaps on non-MSW platforms
+
+wxMSW: fix for [ 1052989 ] TextCtrl.SetBackgroundColour(wx.NullColour)
+bug.
+
+Added wx.PasswordEntryDialog analagous to wx.TextEntryDialog, allows
+detecting entering an empty string vs. cancel unlike the
+wx.GetPasswordFromUser dialog function.
+
+
 OGL patch from Shane Holloway:
 
     Two simple problems found in the new python ogl code.  First is
@@ -26,6 +51,14 @@ OGL patch from Shane Holloway:
 
 Fixed GetSaveData and SetSaveData in wx.lib.multisash to not depend on
 the default way that class objectss are converted to strings.
+
+Fixed problem in StyledTextCtrl.Set[H|V]ScrollBar that could leave the
+internal scrollbar visible.
+
+Added wx.StandardPaths which provides methods for determining standard
+system paths for each platform.
+
+
 
 
 

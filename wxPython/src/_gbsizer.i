@@ -368,7 +368,7 @@ rows and columns.", "");
     %extend {
         DocAStr(Add,
                 "Add(self, item, GBPosition pos, GBSpan span=DefaultSpan, int flag=0,
-int border=0, userData=None)",
+int border=0, userData=None) -> wx.GBSizerItem",
                 
                 "Adds an item to the sizer at the grid cell *pos*, optionally spanning
 more than one row or column as specified with *span*.  The remaining
@@ -377,12 +377,12 @@ args behave similarly to `wx.Sizer.Add`.
 Returns True if the item was successfully placed at the given cell
 position, False if something was already there.
 ", "");
-        bool Add( PyObject* item,
-                  const wxGBPosition& pos,
-                  const wxGBSpan& span = wxDefaultSpan,
-                  int flag = 0,
-                  int border = 0,
-                  PyObject* userData = NULL ) {
+        wxGBSizerItem* Add( PyObject* item,
+                            const wxGBPosition& pos,
+                            const wxGBSpan& span = wxDefaultSpan,
+                            int flag = 0,
+                            int border = 0,
+                            PyObject* userData = NULL ) {
 
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
@@ -393,19 +393,19 @@ position, False if something was already there.
             
             // Now call the real Add method if a valid item type was found
             if ( info.window )
-                return self->Add(info.window, pos, span, flag, border, data);
+                return (wxGBSizerItem*)self->Add(info.window, pos, span, flag, border, data);
             else if ( info.sizer )
-                return self->Add(info.sizer, pos, span, flag, border, data);
+                return (wxGBSizerItem*)self->Add(info.sizer, pos, span, flag, border, data);
             else if (info.gotSize)
-                return self->Add(info.size.GetWidth(), info.size.GetHeight(),
-                                 pos, span, flag, border, data);
-            return false;
+                return (wxGBSizerItem*)self->Add(info.size.GetWidth(), info.size.GetHeight(),
+                                                 pos, span, flag, border, data);
+            return NULL;
         }
     }
     
     DocDeclAStrName(
-        bool , Add( wxGBSizerItem *item ),
-        "Add(self, GBSizerItem item) -> bool",
+        wxGBSizerItem* , Add( wxGBSizerItem *item ),
+        "Add(self, GBSizerItem item) -> wx.GBSizerItem",
         "Add an item to the sizer using a `wx.GBSizerItem`.  Returns True if
 the item was successfully placed at its given cell position, False if
 something was already there.", "",

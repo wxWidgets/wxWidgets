@@ -146,6 +146,10 @@ added, if needed.", "");
     DocDeclStr(
         float , GetRatio(),
         "Set the ratio item attribute.", "");
+
+    DocDeclStr(
+        wxRect , GetRect(),
+        "Returns the rectangle that the sizer item should occupy", "");
     
 
     DocDeclStr(
@@ -378,7 +382,7 @@ public:
 
         DocAStr(Add,
                 "Add(self, item, int proportion=0, int flag=0, int border=0,
-    PyObject userData=None)",
+    PyObject userData=None) -> wx.SizerItem",
 
                 "Appends a child item to the sizer.", "
 
@@ -477,8 +481,8 @@ public:
         is more complex than the *proportion* and *flag* will allow for.
 ");
 
-        void Add(PyObject* item, int proportion=0, int flag=0, int border=0,
-                  PyObject* userData=NULL) {
+        wxSizerItem*  Add(PyObject* item, int proportion=0, int flag=0, int border=0,
+                          PyObject* userData=NULL) {
             
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
@@ -489,25 +493,27 @@ public:
             
             // Now call the real Add method if a valid item type was found
             if ( info.window )
-                self->Add(info.window, proportion, flag, border, data);
+                return self->Add(info.window, proportion, flag, border, data);
             else if ( info.sizer )
-                self->Add(info.sizer, proportion, flag, border, data);
+                return self->Add(info.sizer, proportion, flag, border, data);
             else if (info.gotSize)
-                self->Add(info.size.GetWidth(), info.size.GetHeight(),
-                          proportion, flag, border, data);
+                return self->Add(info.size.GetWidth(), info.size.GetHeight(),
+                                 proportion, flag, border, data);
+            else
+                return NULL;
         }
 
-//    virtual void AddSpacer(int size);
-//    virtual void AddStretchSpacer(int prop = 1);
+//    virtual wxSizerItem* AddSpacer(int size);
+//    virtual wxSizerItem* AddStretchSpacer(int prop = 1);
 
         DocAStr(Insert,
                 "Insert(self, int before, item, int proportion=0, int flag=0, int border=0,
-    PyObject userData=None)",
+    PyObject userData=None) -> wx.SizerItem",
 
                 "Inserts a new item into the list of items managed by this sizer before
 the item at index *before*.  See `Add` for a description of the parameters.", "");
-        void Insert(int before, PyObject* item, int proportion=0, int flag=0,
-                     int border=0, PyObject* userData=NULL) {
+        wxSizerItem* Insert(int before, PyObject* item, int proportion=0, int flag=0,
+                            int border=0, PyObject* userData=NULL) {
 
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
@@ -518,26 +524,28 @@ the item at index *before*.  See `Add` for a description of the parameters.", ""
             
             // Now call the real Insert method if a valid item type was found
             if ( info.window )
-                self->Insert(before, info.window, proportion, flag, border, data);
+                return self->Insert(before, info.window, proportion, flag, border, data);
             else if ( info.sizer )
-                self->Insert(before, info.sizer, proportion, flag, border, data);
+                return self->Insert(before, info.sizer, proportion, flag, border, data);
             else if (info.gotSize)
-                self->Insert(before, info.size.GetWidth(), info.size.GetHeight(),
-                             proportion, flag, border, data);
+                return self->Insert(before, info.size.GetWidth(), info.size.GetHeight(),
+                                    proportion, flag, border, data);
+            else
+                return NULL;
         }
 
 
-//    virtual void InsertSpacer(size_t index, int size);
-//    virtual void InsertStretchSpacer(size_t index, int prop = 1);
+//    virtual wxSizerItem* InsertSpacer(size_t index, int size);
+//    virtual wxSizerItem* InsertStretchSpacer(size_t index, int prop = 1);
         
         DocAStr(Prepend,
                 "Prepend(self, item, int proportion=0, int flag=0, int border=0,
-    PyObject userData=None)",
+    PyObject userData=None) -> wx.SizerItem",
 
                "Adds a new item to the begining of the list of sizer items managed by
 this sizer.  See `Add` for a description of the parameters.", "");
-        void Prepend(PyObject* item, int proportion=0, int flag=0, int border=0,
-                     PyObject* userData=NULL) {
+        wxSizerItem* Prepend(PyObject* item, int proportion=0, int flag=0, int border=0,
+                             PyObject* userData=NULL) {
 
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
@@ -548,16 +556,18 @@ this sizer.  See `Add` for a description of the parameters.", "");
             
             // Now call the real Prepend method if a valid item type was found
             if ( info.window )
-                self->Prepend(info.window, proportion, flag, border, data);
+                return self->Prepend(info.window, proportion, flag, border, data);
             else if ( info.sizer )
-                self->Prepend(info.sizer, proportion, flag, border, data);
+                return self->Prepend(info.sizer, proportion, flag, border, data);
             else if (info.gotSize)
-                self->Prepend(info.size.GetWidth(), info.size.GetHeight(),
-                              proportion, flag, border, data);
+                return self->Prepend(info.size.GetWidth(), info.size.GetHeight(),
+                                     proportion, flag, border, data);
+            else
+                return NULL;
         }
 
-//    virtual void PrependSpacer(int size);
-//    virtual void PrependStretchSpacer(int prop = 1);
+//    virtual wxSizerItem* PrependSpacer(int size);
+//    virtual wxSizerItem* PrependStretchSpacer(int prop = 1);
 
         DocAStr(Remove,
                 "Remove(self, item) -> bool",
@@ -610,6 +620,26 @@ was found and detached.", "");
         }
 
         
+        DocAStr(GetItem,
+                "GetItem(self, item) -> wx.SizerItem",
+                "Returns the `wx.SizerItem` which holds the *item* given.  The *item*
+parameter can be either a window, a sizer, or the zero-based index of
+the item to be detached.", "");
+        wxSizerItem* GetItem(PyObject* item) {
+            bool blocked = wxPyBeginBlockThreads();
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
+            wxPyEndBlockThreads(blocked);
+            if ( info.window )
+                return self->GetItem(info.window);
+            else if ( info.sizer )
+                return self->GetItem(info.sizer);
+            else if ( info.gotPos )
+                return self->GetItem(info.pos);
+            else
+                return NULL;
+        }
+
+        
         void _SetItemMinSize(PyObject* item, const wxSize& size) {
             bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
@@ -641,19 +671,19 @@ was found and detached.", "");
     }
     
     DocDeclAStrName(
-        void , Add( wxSizerItem *item ),
+        wxSizerItem* , Add( wxSizerItem *item ),
         "AddItem(self, SizerItem item)",
         "Adds a `wx.SizerItem` to the sizer.", "",
         AddItem);
     
     DocDeclAStrName(
-        void , Insert( size_t index, wxSizerItem *item ),
+        wxSizerItem* , Insert( size_t index, wxSizerItem *item ),
         "InsertItem(self, int index, SizerItem item)",
         "Inserts a `wx.SizerItem` to the sizer at the position given by *index*.", "",
         InsertItem);
     
     DocDeclAStrName(
-        void , Prepend( wxSizerItem *item ),
+        wxSizerItem* , Prepend( wxSizerItem *item ),
         "PrependItem(self, SizerItem item)",
         "Prepends a `wx.SizerItem` to the sizer.", "",
         PrependItem);

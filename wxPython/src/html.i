@@ -1045,7 +1045,7 @@ public:
     void PreviewText(const wxString &htmltext, const wxString& basepath = wxPyEmptyString);
     void PrintFile(const wxString &htmlfile);
     void PrintText(const wxString &htmltext, const wxString& basepath = wxPyEmptyString);
-    void PrinterSetup();
+//    void PrinterSetup();
     void PageSetup();
     void SetHeader(const wxString& header, int pg = wxPAGE_ALL);
     void SetFooter(const wxString& footer, int pg = wxPAGE_ALL);

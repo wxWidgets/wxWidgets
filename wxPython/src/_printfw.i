@@ -80,6 +80,7 @@ public:
 
     int GetQuality();
     wxPrintBin GetBin();
+    wxPrintMode GetPrintMode() const;
     
     void SetNoCopies(int v);
     void SetCollate(bool flag);
@@ -92,22 +93,29 @@ public:
     void SetPaperSize(const wxSize& sz);
     void SetQuality(int quality);
     void SetBin(wxPrintBin bin);
+    void SetPrintMode(wxPrintMode printMode);
+ 
+    wxString GetFilename() const;
+    void SetFilename( const wxString &filename );
+
+    %pythoncode { def __nonzero__(self): return self.Ok() }
+
+
+    // NOTE: These are now inside of #if WXWIN_COMPATIBILITY_2_4, so be
+    //       prepared to remove them...
+    
     // PostScript-specific data
     const wxString& GetPrinterCommand();
     const wxString& GetPrinterOptions();
     const wxString& GetPreviewCommand();
-    const wxString& GetFilename();
     const wxString& GetFontMetricPath();
     double GetPrinterScaleX();
     double GetPrinterScaleY();
     long GetPrinterTranslateX();
     long GetPrinterTranslateY();
-    wxPrintMode GetPrintMode();
-
     void SetPrinterCommand(const wxString& command);
     void SetPrinterOptions(const wxString& options);
     void SetPreviewCommand(const wxString& command);
-    void SetFilename(const wxString& filename);
     void SetFontMetricPath(const wxString& path);
     void SetPrinterScaleX(double x);
     void SetPrinterScaleY(double y);
@@ -115,12 +123,7 @@ public:
     void SetPrinterTranslateX(long x);
     void SetPrinterTranslateY(long y);
     void SetPrinterTranslation(long x, long y);
-    void SetPrintMode(wxPrintMode printMode);
 
-    wxOutputStream* GetOutputStream();
-    void SetOutputStream(wxOutputStream* outputstream);
-
-    %pythoncode { def __nonzero__(self): return self.Ok() }
 };
 
 //---------------------------------------------------------------------------
@@ -206,7 +209,10 @@ public:
     bool GetSelection() const;
     bool GetCollate() const;
     bool GetPrintToFile() const;
+
+    // WXWIN_COMPATIBILITY_2_4
     bool GetSetupDialog() const;
+    void SetSetupDialog(bool flag);
 
     void SetFromPage(int v);
     void SetToPage(int v);
@@ -217,7 +223,6 @@ public:
     void SetSelection(bool flag);
     void SetCollate(bool flag);
     void SetPrintToFile(bool flag);
-    void SetSetupDialog(bool flag);
 
     void EnablePrintToFile(bool flag);
     void EnableSelection(bool flag);
@@ -234,11 +239,6 @@ public:
 
     
     wxPrintData& GetPrintData();
-//     %addmethods {
-//         %new wxPrintData* GetPrintData() {
-//             return new wxPrintData(self->GetPrintData());  // force a copy
-//         }
-//     }
     void SetPrintData(const wxPrintData& printData);
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
@@ -253,11 +253,16 @@ public:
 
     wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = NULL);
 
-    wxPrintDialogData& GetPrintDialogData();
+    // TODO?: wxPrintDialog(wxWindow *parent, wxPrintData* data);
+    
+    virtual int ShowModal();
+
+    virtual wxPrintDialogData& GetPrintDialogData();
+    virtual wxPrintData& GetPrintData();
 
     %newobject GetPrintDC;
-    wxDC* GetPrintDC();
-    int ShowModal();
+    virtual wxDC *GetPrintDC();
+
 };
 
 
@@ -280,14 +285,16 @@ public:
     wxPrinter(wxPrintDialogData* data = NULL);
     ~wxPrinter();
 
-    void CreateAbortWindow(wxWindow* parent, wxPyPrintout* printout);
-    wxPrintDialogData& GetPrintDialogData();
-    bool Print(wxWindow *parent, wxPyPrintout *printout, int prompt=true);
-    wxDC* PrintDialog(wxWindow *parent);
-    void ReportError(wxWindow *parent, wxPyPrintout *printout, const wxString& message);
-    bool Setup(wxWindow *parent);
-    bool GetAbort();
+    virtual wxWindow *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
+    virtual void ReportError(wxWindow *parent, wxPrintout *printout, const wxString& message);
 
+    virtual bool Setup(wxWindow *parent);
+    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true);
+    virtual wxDC* PrintDialog(wxWindow *parent);
+    
+    virtual wxPrintDialogData& GetPrintDialogData() const;
+
+    bool GetAbort();
     static wxPrinterError GetLastError();
 };
 
@@ -772,6 +779,100 @@ public:
     void base_CreateButtons();
     void base_SetZoomControl(int zoom);
 };
+
+//---------------------------------------------------------------------------
+// wxPrintFactory
+//---------------------------------------------------------------------------
+
+class wxPrintFactory
+{
+public:
+    // wxPrintFactory() {}            *** It's an ABC
+    // virtual ~wxPrintFactory();
+    
+    virtual wxPrinterBase *CreatePrinter( wxPrintDialogData* data );
+
+    %nokwargs CreatePrintPreview;
+    virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
+                                                    wxPrintout *printout = NULL, 
+                                                    wxPrintDialogData *data = NULL );
+    virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
+                                                    wxPrintout *printout, 
+                                                    wxPrintData *data );
+
+    %nokwargs CreatePrintDialog;
+    virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
+                                                  wxPrintDialogData *data = NULL );
+    virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
+                                                  wxPrintData *data );
+                                                  
+    // What to do and what to show in the wxPrintDialog
+    // a) Use the generic print setup dialog or a native one?
+    virtual bool HasPrintSetupDialog();
+    virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );
+    
+    // b) Provide the "print to file" option ourselves or via print setup?
+    virtual bool HasOwnPrintToFile();
+    
+    // c) Show current printer
+    virtual bool HasPrinterLine();
+    virtual wxString CreatePrinterLine();
+    
+    // d) Show Status line for current printer?
+    virtual bool HasStatusLine();
+    virtual wxString CreateStatusLine();
+
+                                                  
+    virtual wxPrintNativeDataBase *CreatePrintNativeData();
+    
+    static void SetPrintFactory( wxPrintFactory *factory );
+    static wxPrintFactory *GetFactory();
+    //static wxPrintFactory *m_factory;
+};
+
+// class wxNativePrintFactory: public wxPrintFactory
+// {
+// public:
+//     virtual wxPrinterBase *CreatePrinter( wxPrintDialogData *data );
+    
+//     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
+//                                                     wxPrintout *printout = NULL, 
+//                                                     wxPrintDialogData *data = NULL );
+//     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
+//                                                     wxPrintout *printout,
+//                                                     wxPrintData *data );
+                                                    
+//     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
+//                                                   wxPrintDialogData *data = NULL );
+//     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
+//                                                   wxPrintData *data );
+                                                  
+//     virtual bool HasPrintSetupDialog();
+//     virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );
+//     virtual bool HasOwnPrintToFile();
+//     virtual bool HasPrinterLine();
+//     virtual wxString CreatePrinterLine();
+//     virtual bool HasStatusLine();
+//     virtual wxString CreateStatusLine();
+    
+//     virtual wxPrintNativeDataBase *CreatePrintNativeData();
+// };
+
+
+class wxPrintNativeDataBase: public wxObject
+{
+public:
+    wxPrintNativeDataBase();
+    virtual ~wxPrintNativeDataBase() {}
+    
+    virtual bool TransferTo( wxPrintData &data ) = 0;
+    virtual bool TransferFrom( const wxPrintData &data ) = 0; 
+    
+    virtual bool Ok() const = 0;
+    
+    int  m_ref;
+};
+
 
 
 //---------------------------------------------------------------------------

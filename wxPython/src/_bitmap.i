@@ -154,10 +154,6 @@ bit depths, the behaviour is platform dependent.", "");
     }    
 
     
-#ifdef __WXMSW__
-    void SetPalette(wxPalette& palette);
-#endif
-
     // wxGDIImage methods
 #ifdef __WXMSW__
     long GetHandle();
@@ -249,8 +245,8 @@ the ``type`` parameter.", "");
     
 
     
-#if wxUSE_PALETTE
     virtual wxPalette *GetPalette() const;
+#ifdef __WXMSW__
     virtual void SetPalette(const wxPalette& palette);
 #endif
     

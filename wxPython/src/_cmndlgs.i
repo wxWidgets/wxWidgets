@@ -252,7 +252,6 @@ example::
         void , SetFilterIndex(int filterIndex),
         "Sets the default filter index, starting from zero.", "");
     
-
     DocDeclStr(
         wxString , GetMessage() const,
         "Returns the message that will be displayed on the dialog.", "");
@@ -439,7 +438,7 @@ public:
                           const wxString& message,
                           const wxString& caption = wxPyGetTextFromUserPromptStr,
                           const wxString& defaultValue = wxPyEmptyString,
-                          long style = wxOK | wxCANCEL | wxCENTRE,
+                          long style = wxTextEntryDialogStyle,
                           const wxPoint& pos = wxDefaultPosition),
         "Constructor.  Use ShowModal method to show the dialog.", "");
 
@@ -451,6 +450,21 @@ or the original value if the user has pressed Cancel.", "");
     DocDeclStr(
         void , SetValue(const wxString& value),
         "Sets the default text value.", "");
+};
+
+//---------------------------------------------------------------------------
+
+MAKE_CONST_WXSTRING(GetPasswordFromUserPromptStr);
+
+class wxPasswordEntryDialog : public wxTextEntryDialog
+{
+public:
+    wxPasswordEntryDialog(wxWindow *parent,
+                      const wxString& message,
+                      const wxString& caption = wxPyGetPasswordFromUserPromptStr,
+                      const wxString& value = wxPyEmptyString,
+                      long style = wxTextEntryDialogStyle,
+                      const wxPoint& pos = wxDefaultPosition);
 };
 
 //---------------------------------------------------------------------------

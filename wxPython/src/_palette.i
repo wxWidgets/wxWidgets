@@ -30,7 +30,7 @@ public:
     
     DocDeclA(
         bool, GetRGB(int pixel, byte* OUTPUT, byte* OUTPUT, byte* OUTPUT),
-        "GetRGB(int pixel) -> (R,G,B)");
+        "GetRGB(self, int pixel) -> (R,G,B)");
 
     bool Ok();
 

@@ -2010,6 +2010,14 @@ public:
     wxWindow* GetGridColLabelWindow();
     wxWindow* GetGridCornerLabelWindow();
 
+    // Allow adjustment of scroll increment. The default is (15, 15).
+    void SetScrollLineX(int x);
+    void SetScrollLineY(int y);
+    int GetScrollLineX() const;
+    int GetScrollLineY() const;
+
+    int GetScrollX(int x) const;
+    int GetScrollY(int y) const;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

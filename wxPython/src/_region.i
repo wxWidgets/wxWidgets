@@ -57,9 +57,7 @@ public:
 
 
     void Clear();
-#ifndef __WXMAC__
     bool Offset(wxCoord x, wxCoord y);
-#endif
 
     wxRegionContain Contains(wxCoord x, wxCoord y);
     %name(ContainsPoint)wxRegionContain Contains(const wxPoint& pt);

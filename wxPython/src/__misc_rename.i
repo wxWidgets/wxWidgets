@@ -342,5 +342,6 @@
 %rename(VideoMode)                          wxVideoMode;
 %rename(DefaultVideoMode)                   wxDefaultVideoMode;
 %rename(Display)                            wxDisplay;
+%rename(StandardPaths)                      wxStandardPaths;
 
 #endif
