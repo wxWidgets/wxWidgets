@@ -974,6 +974,18 @@ class wxTreeCtrlPtr(wxControlPtr):
     def SetPyData(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_SetPyData,(self,) + _args, _kwargs)
         return val
+    def GetItemTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetItemTextColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def GetItemBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetItemBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def GetItemFont(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetItemFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) ; val.thisown = 1
+        return val
     def IsVisible(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_IsVisible,(self,) + _args, _kwargs)
         return val
