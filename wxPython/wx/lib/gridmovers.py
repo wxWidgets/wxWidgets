@@ -314,6 +314,7 @@ class GridColMover(wx.EvtHandler):
         self.colWin = ColDragWindow(self.grid,colImg,col)
         self.colWin.Show(False)
         self.lwin.CaptureMouse()
+        evt.Skip()
 
     def OnRelease(self,evt):
         if self.isDragging:
@@ -437,6 +438,7 @@ class GridRowMover(wx.EvtHandler):
         self.rowWin = RowDragWindow(self.grid,rowImg,row)
         self.rowWin.Show(False)
         self.lwin.CaptureMouse()
+        evt.Skip()
 
     def OnRelease(self,evt):
         if self.isDragging:
