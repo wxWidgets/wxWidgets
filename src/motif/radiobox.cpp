@@ -124,7 +124,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
     Arg args[3];
 
-    majorDim = (n + m_majorDim - 1) / majorDim;
+    m_majorDim = (n + m_majorDim - 1) / m_majorDim;
 
     XtSetArg (args[0], XmNorientation, ((style & wxHORIZONTAL) == wxHORIZONTAL ?
                                           XmHORIZONTAL : XmVERTICAL));
