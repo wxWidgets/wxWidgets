@@ -55,9 +55,6 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-#ifdef HAVE_LANGINFO_H
-  #include <langinfo.h>
-#endif
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     #define wxHAVE_WIN32_MB2WC
@@ -155,7 +152,7 @@ static size_t decode_utf16(const wxUint16* input, wxUint32& output)
         output = *input;
         return 1;
     }
-    else if ((input[1]<0xdc00) || (input[1]>=0xdfff))
+    else if ((input[1]<0xdc00) || (input[1]>0xdfff))
     {
         output = *input;
         return (size_t)-1;
