@@ -52,7 +52,6 @@
 
 #if defined(__WXMAC__)
     #include  "wx/mac/private.h"  // includes mac headers
-    #include  "wx/font.h"
 #endif
 
 #ifdef __WXWINCE__
@@ -943,7 +942,7 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
 #endif
     	CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, pathstyle);
     	::CFRelease( fullURLRef ) ;
-    	return wxMacCFStringHolder(cfString).AsString(wxFont::GetDefaultEncoding());
+    	return wxMacCFStringHolder(cfString).AsString(wxLocale::GetSystemEncoding());
     }
 
     strcpy(thePath, "");
