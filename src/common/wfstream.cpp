@@ -10,14 +10,14 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "fstream.h"
+#pragma implementation "wfstream.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 #include <stdio.h>
 #include <wx/stream.h>
-#include <wx/fstream.h>
+#include <wx/wfstream.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
