@@ -364,21 +364,5 @@ SOURCE=.\src\msw\gsockmsw.c
 # End Source File
 
 
-# Begin Source File
-
-SOURCE=.\src\common\y_tab.c
-
-!IF  "$(CFG)" == "wxBase - Win32 Release"
-
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxBase - Win32 Debug"
-
-# ADD CPP /W1
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
-# End Source File
 # End Target
 # End Project

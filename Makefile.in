@@ -607,13 +607,14 @@ BASE_DIST: ALL_DIST
 	cp $(WXDIR)/@PORT_FILES@ $(DISTDIR)/@PORT_FILES@
 	cp $(WXDIR)/@RPM_FILES@ $(DISTDIR)/@RPM_FILES@
 	cp $(WXDIR)/@RPM_SPEC@ $(DISTDIR)/@RPM_SPEC@
-	cp $(WXDIR)/wxBase.dsp $(DISTDIR)
+	cp $(WXDIR)/wxBase*.ds[pw] $(DISTDIR)
 	cp $(DOCDIR)/base/install.txt $(DISTDIR)/INSTALL.txt
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
 	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
 	cp $(DOCDIR)/base/todo.txt $(DISTDIR)/TODO.txt
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
-	cp $(WXDIR)/src/common/unzip.h $(DISTDIR)/src/common/unzip.h
+	cp $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
+	cp $(WXDIR)/src/common/unzip.h $(DISTDIR)/src/common
 	list='$(HEADERS)'; for p in $$list; do \
 	  cp $(WXDIR)/include/wx/$$p $(DISTDIR)/include/wx/$$p; \
 	done
