@@ -43,14 +43,18 @@ objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
 	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug) \
 	$(objdir_doc) $(objdir_examples)
 
+#	note that the i18n package is actually arch indep (once built)
+#	but must be built (and installed) during the arch any phase as
+#	it's pulled out of the wxGtk shared lib package.
+
 # Build stamps:
 build_arch_stamps=build-wxbase-shared-stamp build-wxbase-static-stamp \
                   build-wxbase-debug-stamp build-gtk-shared-stamp \
                   build-gtk-static-stamp build-gtk-debug-stamp \
                   build-contrib-shared-stamp build-contrib-static-stamp \
-                  build-gtk-py-stamp
+                  build-gtk-py-stamp build-i18n-stamp
 
-build_indep_stamps=build-examples-stamp build-doc-stamp build-i18n-stamp
+build_indep_stamps=build-examples-stamp build-doc-stamp
 
 build_stamps=$(build_arch_stamps) $(build_indep_stamps)
 
@@ -58,11 +62,16 @@ build_stamps=$(build_arch_stamps) $(build_indep_stamps)
 install_all_arch=install-wxbase-lib install-wxbase-dev install-wxbase-dbg \
                  install-gtk-lib install-gtk-dev install-gtk-dbg \
                  install-gtk-contrib install-gtk-contrib-dev install-gtk-py \
-                 install-headers
+                 install-headers install-i18n
 
-install_all_indep=install-i18n install-doc install-examples
+install_all_indep=install-examples install-doc
 
 install_all=$(install_all_arch) $(install_all_indep)
+
+
+wxconfig:=$(shell pwd)/$(objdir_gtk_shared)/wx-config \
+                --prefix=$(shell pwd) \
+                --exec-prefix=$(shell pwd)/$(objdir_gtk_shared)
 
 
 # The Rules:
@@ -236,7 +245,7 @@ build-gtk-py-stamp: build-gtk-shared-stamp
 	dh_testdir
 	touch docs/lgpl.txt
 	cd wxPython \
-		&& ./setup.py build IN_CVS_TREE=1
+		&& ./setup.py build IN_CVS_TREE=1 WX_CONFIG='$(wxconfig)'
 	touch $@
 
 build-doc-stamp: build-gtk-shared-stamp
@@ -430,7 +439,7 @@ install-examples: build-examples-stamp
 	dh_installdirs
 
 binary-common:
-	dh_testversion 1.1.17
+	dh_testversion 2
 	dh_testdir
 	dh_testroot
 	dh_installdocs
@@ -440,7 +449,7 @@ binary-common:
 	dh_strip -N$(package_gtk_dbg) -N$(package_wxbase_dbg)
 	dh_compress
 	dh_fixperms
-	dh_makeshlibs -N$(package_gtk_py)
+	dh_makeshlibs -N$(package_gtk_py) -V
 	dh_installdeb
 	dh_shlibdeps -ldebian/$(package_gtk_lib)/usr/lib
 	dh_gencontrol

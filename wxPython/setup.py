@@ -42,6 +42,10 @@ IN_CVS_TREE = 0    # Set to true if building in a full wxWindows CVS
                    # tree, otherwise will assume all needed files are
                    # available in the wxPython source distribution
 
+WX_CONFIG = "wx-config"    # Usually you shouldn't need to touch this,
+                           # but you can set it to pass an alternate
+                           # version of wx-config or alternate flags,
+                           # eg. as required by the .deb in-tree build.
 
 # Some MSW build settings
 
@@ -75,13 +79,20 @@ debug = '--debug' in sys.argv or '-g' in sys.argv
 #----------------------------------------------------------------------
 
 for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'CORE_ONLY',
-             'USE_SWIG', 'IN_CVS_TREE', 'FINAL', 'HYBRID',
-             'WXDLLVER', ]:
+             'USE_SWIG', 'IN_CVS_TREE', 'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if string.find(sys.argv[x], flag) == 0:
             pos = string.find(sys.argv[x], '=') + 1
             if pos > 0:
                 vars()[flag] = eval(sys.argv[x][pos:])
+                sys.argv[x] = ''
+
+for option in ['WX_CONFIG', 'WXDLLVER', ]:
+    for x in range(len(sys.argv)):
+        if string.find(sys.argv[x], option) == 0:
+            pos = string.find(sys.argv[x], '=') + 1
+            if pos > 0:
+                vars()[option] = sys.argv[x][pos:]
                 sys.argv[x] = ''
 
 sys.argv = filter(None, sys.argv)
@@ -172,11 +183,11 @@ elif os.name == 'posix':
     libdirs = []
     libs = []
 
-    cflags = os.popen('wx-config --cflags', 'r').read()[:-1] + ' ' + \
+    cflags = os.popen(WX_CONFIG + ' --cflags', 'r').read()[:-1] + ' ' + \
              os.popen('gtk-config --cflags', 'r').read()[:-1]
     cflags = string.split(cflags)
 
-    lflags = os.popen('wx-config --libs', 'r').read()[:-1]
+    lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
     lflags = string.split(lflags)
 
 

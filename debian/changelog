@@ -5,14 +5,30 @@ wxwindows2.2 (2.3.0) unstable; urgency=low
 
  -- Ron Lee <ron@debian.org>  Sat, 27 Jan 2001 01:51:24 -0800
 
-wxwindows2.2 (2.2.4) unstable; urgency=low
+wxwindows2.2 (2.2.6) unstable; urgency=low
 
+  * changed i18n package back to building during arch phase
+    so we can reap the .mo files as they are created. Closes: #86174
+  * OBCBLR Closes: #84692
+  * fix wxPython build gremlin.  Closes: #89209, #85129
+  * general buglet count reduced.
+
+ -- Ron <ron@debian.org>  Thu,  8 Mar 2001 21:10:07 -0800
+
+wxwindows2.2 (2.2.5.1) unstable; urgency=low
+
+  * "This One's for Dirk"  Closes: #84696
+  * 2.2.5 has known issues and will not be released for Debian.
   * Fixed parser.y for Alpha builds (#82949)
   * changed mesa dependency to the virtual libgl package and
     added Conflicts for the old 2.1 packages (which are now
     gone from woody anyway)  Closes: #80120, #70778, #70779, #70780
   * wxPython now builds as a single unit (including contrib)
     so removed the libwxgtk-python-contrib package
+  * updated translations
+  * new event table macro to enable code being written with 2.2
+    to be forward compatible with the changes in 2.4
+  * numerous sundry bugfixes
 
  -- Ron Lee <ron@debian.org>  Wed, 24 Jan 2001 18:51:24 -0800
 
