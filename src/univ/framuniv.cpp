@@ -103,6 +103,28 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     return pt;
 }
 
+void wxFrame::DoGetClientSize(int *width, int *height) const
+{
+    wxFrameBase::DoGetClientSize(width, height);
+#if wxUSE_MENUS
+    if ( m_frameMenuBar && height )
+    {
+        (*height) -= m_frameMenuBar->GetSize().y;
+    }
+#endif // wxUSE_MENUS
+}
+
+void wxFrame::DoSetClientSize(int width, int height)
+{
+#if wxUSE_MENUS
+    if ( m_frameMenuBar )
+    {
+        height += m_frameMenuBar->GetSize().y;
+    }
+#endif // wxUSE_MENUS
+    wxFrameBase::DoSetClientSize(width, height);
+}
+
 bool wxFrame::Enable(bool enable)
 {
     if (!wxFrameBase::Enable(enable))

@@ -49,6 +49,9 @@ public:
 protected:
     void OnSize(wxSizeEvent& event);
 
+    virtual void DoGetClientSize(int *width, int *height) const;
+    virtual void DoSetClientSize(int width, int height);
+
 #if wxUSE_MENUS
     // override to update menu bar position when the frame size changes
     virtual void PositionMenuBar();
