@@ -819,7 +819,8 @@ enum wxStretch
     wxSHRINK                  = 0x1000,
     wxGROW                    = 0x2000,
     wxEXPAND                  = wxGROW,
-    wxSHAPED                  = 0x4000
+    wxSHAPED                  = 0x4000,
+    wxADJUST_MINSIZE          = 0x8000
 };
 
 // ----------------------------------------------------------------------------
