@@ -50,6 +50,8 @@ public:
     wxBitmap  *my_horse_pcx;
     wxBitmap  *my_horse_pnm;
     wxBitmap  *my_horse_tiff;
+    wxBitmap  *my_horse_xpm;
+    
     wxBitmap  *my_smile_xbm;
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
@@ -144,6 +146,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     my_horse_pcx = (wxBitmap*) NULL;
     my_horse_pnm = (wxBitmap*) NULL;
     my_horse_tiff = (wxBitmap*) NULL;
+    my_horse_xpm = (wxBitmap*) NULL;
     my_smile_xbm = (wxBitmap*) NULL;
     my_square = (wxBitmap*) NULL;
     my_anti = (wxBitmap*) NULL;
@@ -195,7 +198,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     if ( !image.LoadFile( dir + wxString("horse.jpg")) )
         wxLogError("Can't load JPG image");
     else
-        my_horse_jpeg = new wxBitmap( image.ConvertToBitmap() );
+        my_horse_jpeg = new wxBitmap( image );
 #endif // wxUSE_LIBJPEG
 
 #if wxUSE_GIF
@@ -204,7 +207,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     if ( !image.LoadFile( dir + wxString("horse.gif")) )
         wxLogError("Can't load GIF image");
     else
-        my_horse_gif = new wxBitmap( image.ConvertToBitmap() );
+        my_horse_gif = new wxBitmap( image );
 #endif
 
 #if wxUSE_PCX
@@ -213,7 +216,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     if ( !image.LoadFile( dir + wxString("horse.pcx"), wxBITMAP_TYPE_PCX ) )
         wxLogError("Can't load PCX image");
     else
-        my_horse_pcx = new wxBitmap( image.ConvertToBitmap() );
+        my_horse_pcx = new wxBitmap( image );
 #endif
 
     image.Destroy();
@@ -221,9 +224,16 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     if ( !image.LoadFile( dir + wxString("horse.bmp"), wxBITMAP_TYPE_BMP ) )
         wxLogError("Can't load BMP image");
     else
-        my_horse_bmp = new wxBitmap( image.ConvertToBitmap() );
+        my_horse_bmp = new wxBitmap( image );
 
 #if wxUSE_XPM
+    image.Destroy();
+
+    if ( !image.LoadFile( dir + wxString("horse.xpm"), wxBITMAP_TYPE_XPM ) )
+        wxLogError("Can't load XPM image");
+    else
+        my_horse_xpm = new wxBitmap( image );
+
     if ( !image.SaveFile( dir + wxString("test.xpm"), wxBITMAP_TYPE_XPM ))
         wxLogError("Can't save file");
 #endif
@@ -234,7 +244,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     if ( !image.LoadFile( dir + wxString("horse.pnm"), wxBITMAP_TYPE_PNM ) )
         wxLogError("Can't load PNM image");
     else
-        my_horse_pnm = new wxBitmap( image.ConvertToBitmap() );
+        my_horse_pnm = new wxBitmap( image );
 #endif
 
 #if wxUSE_LIBTIFF
@@ -243,7 +253,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     if ( !image.LoadFile( dir + wxString("horse.tif"), wxBITMAP_TYPE_TIF ) )
         wxLogError("Can't load TIFF image");
     else
-        my_horse_tiff = new wxBitmap( image.ConvertToBitmap() );
+        my_horse_tiff = new wxBitmap( image );
 #endif
 
     CreateAntiAliasedBitmap();
@@ -267,6 +277,7 @@ MyCanvas::~MyCanvas()
     delete my_horse_bmp;
     delete my_horse_pcx;
     delete my_horse_tiff;
+    delete my_horse_xpm;
     delete my_smile_xbm;
     delete my_square;
     delete my_anti;
@@ -324,17 +335,21 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if (my_horse_tiff && my_horse_tiff->Ok())
         dc.DrawBitmap( *my_horse_tiff, 30, 1530 );
 
+    dc.DrawText( "XPM handler", 30, 1745 );
+    if (my_horse_xpm && my_horse_xpm->Ok())
+        dc.DrawBitmap( *my_horse_xpm, 30, 1760 );
+
     if (my_smile_xbm && my_smile_xbm->Ok())
     {
-        dc.DrawText( "XBM bitmap", 30, 1745 );
-        dc.DrawText( "(green on red)", 30, 1760 );
+        dc.DrawText( "XBM bitmap", 30, 1975 );
+        dc.DrawText( "(green on red)", 30, 1990 );
         dc.SetTextForeground( "GREEN" );
         dc.SetTextBackground( "RED" );
-        dc.DrawBitmap( *my_smile_xbm, 30, 1780 );
+        dc.DrawBitmap( *my_smile_xbm, 30, 2010 );
 
         dc.SetTextForeground( "BLACK" );
-        dc.DrawText( "After wxImage conversion", 150, 1745 );
-        dc.DrawText( "(red on white)", 150, 1760 );
+        dc.DrawText( "After wxImage conversion", 150, 1975 );
+        dc.DrawText( "(red on white)", 150, 1990 );
         dc.SetTextForeground( "RED" );
         wxImage i = my_smile_xbm->ConvertToImage();
         i.SetMaskColour( 255, 255, 255 );
@@ -342,7 +357,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
-        dc.DrawBitmap( i.ConvertToBitmap(), 150, 1780, TRUE );
+        dc.DrawBitmap( i.ConvertToBitmap(), 150, 2010, TRUE );
         dc.SetTextForeground( "BLACK" );
     }
 
@@ -363,15 +378,15 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     if (mono.Ok())
     {
-        dc.DrawText( "Mono bitmap", 30, 1865 );
-        dc.DrawText( "(red on green)", 30, 1880 );
+        dc.DrawText( "Mono bitmap", 30, 2095 );
+        dc.DrawText( "(red on green)", 30, 2110 );
         dc.SetTextForeground( "RED" );
         dc.SetTextBackground( "GREEN" );
-        dc.DrawBitmap( mono, 30, 1900 );
+        dc.DrawBitmap( mono, 30, 2130 );
 
         dc.SetTextForeground( "BLACK" );
-        dc.DrawText( "After wxImage conversion", 150, 1865 );
-        dc.DrawText( "(red on white)", 150, 1880 );
+        dc.DrawText( "After wxImage conversion", 150, 2095 );
+        dc.DrawText( "(red on white)", 150, 2110 );
         dc.SetTextForeground( "RED" );
         wxImage i = mono.ConvertToImage();
         i.SetMaskColour( 255,255,255 );
@@ -379,20 +394,20 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
-        dc.DrawBitmap( i.ConvertToBitmap(), 150, 1900, TRUE );
+        dc.DrawBitmap( i.ConvertToBitmap(), 150, 2130, TRUE );
         dc.SetTextForeground( "BLACK" );
     }
 
-    dc.DrawText("XPM bitmap", 30, 2000);
+    dc.DrawText("XPM bitmap", 30, 2230);
     if ( m_bmpSmileXpm.Ok() )
     {
-        dc.DrawBitmap(m_bmpSmileXpm, 30, 2020, TRUE);
+        dc.DrawBitmap(m_bmpSmileXpm, 30, 2250, TRUE);
     }
 
-    dc.DrawText("XPM icon", 150, 2000);
+    dc.DrawText("XPM icon", 150, 2230);
     if ( m_iconSmileXpm.Ok() )
     {
-        dc.DrawIcon(m_iconSmileXpm, 150, 2020);
+        dc.DrawIcon(m_iconSmileXpm, 150, 2250);
     }
 }
 
