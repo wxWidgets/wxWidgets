@@ -153,6 +153,16 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     SetCursor(wxCursor());
 #endif
 
+    // under wxGTK the method above causes the mouse
+    // to flicker so we set the standard cursor only
+    // when leaving the window and when moving over
+    // non-sash parts of the window. this should work
+    // on the other platforms as well, but who knows.
+#ifdef __WXGTK__
+    if (event.Leaving())
+        SetCursor(* wxSTANDARD_CURSOR);
+#endif
+
     if (event.LeftDown())
     {
         if ( SashHitTest(x, y) )
@@ -173,9 +183,6 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         m_dragMode = wxSPLIT_DRAG_NONE;
         ReleaseMouse();
 
-#ifdef __WXGTK__
-        SetCursor(* wxSTANDARD_CURSOR);
-#endif
         // Erase old tracker
         DrawSashTracker(m_oldX, m_oldY);
 
@@ -253,6 +260,13 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                     SetCursor(*m_sashCursorNS);
                 }
         }
+#ifdef __WXGTK__
+        else
+	{
+	    // where else do we unset the cursor?
+            SetCursor(* wxSTANDARD_CURSOR);
+	}
+#endif
     }
     else if (event.Dragging() && (m_dragMode == wxSPLIT_DRAG_DRAGGING)) 
     {

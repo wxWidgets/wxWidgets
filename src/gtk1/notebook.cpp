@@ -707,6 +707,12 @@ void wxNotebook::ApplyWidgetStyle()
     gtk_widget_set_style( m_widget, m_widgetStyle );
 }
 
+bool wxNotebook::IsOwnGtkWindow( GdkWindow *window )
+{
+    return ((m_widget->window == window) ||
+            (GTK_NOTEBOOK(m_widget)->panel == window));
+}
+
 //-----------------------------------------------------------------------------
 // wxNotebookEvent
 //-----------------------------------------------------------------------------

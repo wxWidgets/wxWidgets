@@ -67,14 +67,7 @@
         { (const wxEventTable *)NULL, &wxEvtHandler::sm_eventTableEntries[0] };
 
     const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
-        { { 0, 0, 0,
-    #ifdef __SGI_CC__
-        // stupid SGI compiler --- offer aug 98
-        0L }
-    #else // !SGI CC
-        NULL }
-    #endif // SGI/!SGI
-        };
+        { { 0, 0, 0, (wxObjectEventFunction) NULL, (wxObject*) NULL } };
 
 #endif // !USE_SHARED_LIBRARY
 

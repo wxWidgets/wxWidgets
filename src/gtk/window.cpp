@@ -1092,7 +1092,7 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
-    if (widget->window != gdk_event->window) return FALSE;
+    if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
     if ((widget->window) && (win->m_cursor.Ok()))
         gdk_window_set_cursor( widget->window, win->m_cursor.GetCursor() );
@@ -1144,16 +1144,16 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
-    if (widget->window != gdk_event->window) return FALSE;
+    if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
     if (widget->window)
         gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
 
 /*
-    printf( "OnLeave from " );
+    wxPrintf( _T("OnLeave from ") );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
+        wxPrintf( win->GetClassInfo()->GetClassName() );
+    wxPrintf( _T(".\n") );
 */
 
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );

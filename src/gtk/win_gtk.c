@@ -464,8 +464,10 @@ gtk_myfixed_size_request (GtkWidget      *widget,
 
   myfixed = GTK_MYFIXED (widget);
   
-  requisition->width = widget->requisition.width;
-  requisition->height = widget->requisition.height;
+  /* request very little, I'm not sure if requesting nothing
+     will always have positive effects on stability... */
+  requisition->width = 2;
+  requisition->height = 2;
 
   children = myfixed->children;
   while (children)

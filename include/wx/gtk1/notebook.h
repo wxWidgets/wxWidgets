@@ -164,6 +164,9 @@ public:
   bool DoPhase(int phase);
   void ApplyWidgetStyle();
 
+  // report if window belongs to notebook  
+  bool IsOwnGtkWindow( GdkWindow *window );
+
   // common part of all ctors
   void Init();
 
