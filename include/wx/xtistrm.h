@@ -35,23 +35,43 @@ const int wxNullObjectID = -1 ;
 Main interfaces for streaming out objects.
 */
 
+// ----------------------------------------------------------------------------
+// wxPersister
+//
+// This class will be asked during the streaming-out process about every single
+// property or object instance. It can veto streaming out by returning false
+// or modify the value before it is streamed-out.
+// ----------------------------------------------------------------------------
+
+class wxWriter ;
+class wxReader ;
+
 class wxPersister
 {
 public :
-    // will be called before a toplevel object is written, may veto even that (eg for objects that cannot be supported) by returning false
-    virtual bool BeforeWriteObject( const wxObject *WXUNUSED(object) , const wxClassInfo *WXUNUSED(classInfo) , const wxString &WXUNUSED(name)) { return true ; } 
+    // will be called before an object is written, may veto by returning false
+    virtual bool BeforeWriteObject( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object) , const wxClassInfo *WXUNUSED(classInfo) ) { return true ; } 
+
+    // will be called after this object has been written, may be needed for adjusting stacks
+    virtual void AfterWriteObject( wxWriter *WXUNUSED(writer)  , const wxObject *WXUNUSED(object) , const wxClassInfo *WXUNUSED(classInfo) ) {}
 
     // will be called before a property gets written, may change the value , eg replace a concrete wxSize by wxSize( -1 , -1 ) or veto
     // writing that property at all by returning false
-    virtual bool BeforeWriteProperty( const wxObject *WXUNUSED(object) , const wxClassInfo *WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(propInfo) , wxxVariant &WXUNUSED(value) )  { return true ; } 
+    virtual bool BeforeWriteProperty( wxWriter *WXUNUSED(writer)  , const wxPropertyInfo *WXUNUSED(propInfo) , wxxVariant &WXUNUSED(value) )  { return true ; } 
 
-    // will be called before a property with an object value gets written, may change the value , eg replace the instance, void it or veto
+    // will be called before a property gets written, may change the value , eg replace a concrete wxSize by wxSize( -1 , -1 ) or veto
     // writing that property at all by returning false
-    virtual bool BeforeWritePropertyAsObject( const wxObject *WXUNUSED(object) , const wxClassInfo *WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(propInfo) , wxxVariant &WXUNUSED(value) )  { return true ; } 
+    virtual bool BeforeWriteProperty( wxWriter *WXUNUSED(writer)  , const wxPropertyInfo *WXUNUSED(propInfo) , wxxVariantArray &WXUNUSED(value) )  { return true ; } 
 
-    // will be called before a delegate property gets written, you may change all informations about the event sink
-    virtual bool BeforeWriteDelegate( const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(propInfo) , 
-        const wxObject *&WXUNUSED(eventSink) , const wxHandlerInfo* &WXUNUSED(handlerInfo) )  { return true ; } 
+    // will be called after a property has been written out, may be needed for adjusting stacks
+    virtual void AfterWriteProperty( wxWriter *WXUNUSED(writer)  , const wxPropertyInfo *WXUNUSED(propInfo) ) {}
+
+    // will be called before this delegate gets written
+    virtual bool BeforeWriteDelegate( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(propInfo) , 
+        const wxObject *&WXUNUSED(eventSink) , const wxHandlerInfo* &WXUNUSED(handlerInfo) ) { return true ; } 
+
+    virtual void AfterWriteDelegate( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(propInfo) , 
+        const wxObject *&WXUNUSED(eventSink) , const wxHandlerInfo* &WXUNUSED(handlerInfo) ) { } 
 } ;
 
 class wxWriter : public wxObject
@@ -63,36 +83,53 @@ public :
     // with this call you start writing out a new top-level object
     void WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , const wxString &name ) ;
 
-    int GetObjectID(const wxObject *obj) ;
-    bool IsObjectKnown( const wxObject *obj ) ;
+    //
+    // Managing the object identity table a.k.a context
+    //
+    // these methods make sure that no object gets written twice, because sometimes multiple calls to the WriteObject will be 
+    // made without wanting to have duplicate objects written, the object identity table will be reset manually
 
+    virtual void ClearObjectContext() ;
+    
+    // gets the object Id for a passed in object in the context
+    int GetObjectID(const wxObject *obj) ;
+
+    // returns true if this object has already been written in this context
+    bool IsObjectKnown( const wxObject *obj ) ;
 
     //
     // streaming callbacks
     //
     // these callbacks really write out the values in the stream format
-    //
 
-    // start of writing an toplevel object name param is used for unique identification within the container
-    virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID , const wxString &name ) = 0 ;
+    // begins writing out a new toplevel entry which has the indicated unique name
+    virtual void DoBeginWriteTopLevelEntry( const wxString &name ) = 0 ;
+
+    // ends writing out a new toplevel entry which has the indicated unique name
+    virtual void DoEndWriteTopLevelEntry( const wxString &name ) = 0 ;
+
+    // start of writing an object having the passed in ID
+    virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID ) = 0 ;
 
     // end of writing an toplevel object name param is used for unique identification within the container
-    virtual void DoEndWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID , const wxString &name ) = 0 ;
+    virtual void DoEndWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID ) = 0 ;
 
-    // start of writing an object used as param
-    virtual void DoBeginWriteParamAsObject(const wxObject *parentObject, const wxClassInfo *parentClassInfo, const wxObject *valueObject, 
-        const wxClassInfo *valueObjectClassInfo, int valueObjectID , const wxPropertyInfo *propInfo ) = 0 ;
+    // writes a simple property in the stream format
+    virtual void DoWriteSimpleType( wxxVariant &value ) = 0 ;
 
-    // end of writing an object used as param
-    virtual void DoEndWriteParamAsObject(const wxObject *parentObject, const wxClassInfo *parentClassInfo, const wxObject *valueObject, 
-        const wxClassInfo *valueObjectClassInfo, int valueObjectID , const wxPropertyInfo *propInfo ) = 0 ;
+    // start of writing a complex property into the stream (
+    virtual void DoBeginWriteProperty( const wxPropertyInfo *propInfo ) = 0 ;
 
-    // insert an object reference to an already written object
-    virtual void DoWriteObjectReference(const wxObject *parentObject, const wxClassInfo *parentClassInfo, const wxObject *valueObject, 
-        const wxClassInfo *valueObjectClassInfo, int valueObjectID , const wxPropertyInfo *propInfo ) = 0 ;
+    // end of writing a complex property into the stream
+    virtual void DoEndWriteProperty( const wxPropertyInfo *propInfo ) = 0;
 
-    // writes a property in the stream format
-    virtual void DoWriteProperty( const wxObject *object, const wxClassInfo* classInfo , const wxPropertyInfo *propInfo , wxxVariant &value ) = 0 ;
+    virtual void DoBeginWriteElement() = 0 ;
+    virtual void DoEndWriteElement() = 0 ;
+    // insert an object reference to an already written object 
+    virtual void DoWriteRepeatedObject( int objectID ) = 0 ;
+
+    // insert a null reference
+    virtual void DoWriteNullObject() = 0 ;
 
     // writes a delegate in the stream format
     virtual void DoWriteDelegate( const wxObject *object,  const wxClassInfo* classInfo , const wxPropertyInfo *propInfo , 
@@ -105,6 +142,8 @@ private :
     struct wxWriterInternalPropertiesData ;
 
     void WriteAllProperties( const wxObject * obj , const wxClassInfo* ci , wxPersister *persister, wxWriterInternalPropertiesData * data ) ;
+    void WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , bool isEmbedded) ;
+    void FindConnectEntry(const wxWindow * evSource,const wxDelegateTypeInfo* dti, const wxObject* &sink , const wxHandlerInfo *&handler) ;
 } ;
 
 class wxXmlWriter : public wxWriter
@@ -120,30 +159,44 @@ public :
     // these callbacks really write out the values in the stream format
     //
 
-    // start of writing an toplevel object name param is used for unique identification within the container
-    virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID , const wxString &name ) ;
+    //
+    // streaming callbacks
+    //
+    // these callbacks really write out the values in the stream format
+
+    // begins writing out a new toplevel entry which has the indicated unique name
+    virtual void DoBeginWriteTopLevelEntry( const wxString &name )  ;
+
+    // ends writing out a new toplevel entry which has the indicated unique name
+    virtual void DoEndWriteTopLevelEntry( const wxString &name )  ;
+
+    // start of writing an object having the passed in ID
+    virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID ) ;
 
     // end of writing an toplevel object name param is used for unique identification within the container
-    virtual void DoEndWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID , const wxString &name ) ;
+    virtual void DoEndWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID ) ;
 
-    // start of writing an object used as param
-    virtual void DoBeginWriteParamAsObject(const wxObject *parentObject, const wxClassInfo *parentClassInfo, const wxObject *valueObject, 
-        const wxClassInfo *valueObjectClassInfo, int valueObjectID , const wxPropertyInfo *propInfo ) ;
+    // writes a simple property in the stream format
+    virtual void DoWriteSimpleType( wxxVariant &value )  ;
 
-    // end of writing an object used as param
-    virtual void DoEndWriteParamAsObject(const wxObject *parentObject, const wxClassInfo *parentClassInfo, const wxObject *valueObject, 
-        const wxClassInfo *valueObjectClassInfo, int valueObjectID , const wxPropertyInfo *propInfo ) ;
+    // start of writing a complex property into the stream (
+    virtual void DoBeginWriteProperty( const wxPropertyInfo *propInfo )  ;
 
-    // insert an object reference to an already written object or to a null object
-    virtual void DoWriteObjectReference(const wxObject *parentObject, const wxClassInfo *parentClassInfo, const wxObject *valueObject, 
-        const wxClassInfo *valueObjectClassInfo, int valueObjectID , const wxPropertyInfo *propInfo ) ;
+    // end of writing a complex property into the stream
+    virtual void DoEndWriteProperty( const wxPropertyInfo *propInfo ) ;
 
-    // writes a property in the stream format
-    virtual void DoWriteProperty( const wxObject *object, const wxClassInfo* classInfo , const wxPropertyInfo *propInfo , wxxVariant &value )  ;
+    virtual void DoBeginWriteElement() ;
+    virtual void DoEndWriteElement() ;
+
+    // insert an object reference to an already written object 
+    virtual void DoWriteRepeatedObject( int objectID )  ;
+
+    // insert a null reference
+    virtual void DoWriteNullObject()  ;
 
     // writes a delegate in the stream format
     virtual void DoWriteDelegate( const wxObject *object,  const wxClassInfo* classInfo , const wxPropertyInfo *propInfo , 
-        const wxObject *eventSink, int sinkObjectID , const wxClassInfo* eventSinkClassInfo , const wxHandlerInfo* handlerInfo ) ;
+        const wxObject *eventSink , int sinkObjectID , const wxClassInfo* eventSinkClassInfo , const wxHandlerInfo* handlerIndo ) ;
 private :
     struct wxXmlWriterInternal ;
     wxXmlWriterInternal* m_data ;
@@ -174,7 +227,7 @@ public :
     // Reads the component the reader is pointed at from the underlying format.  
     // The return value is the root object ID, which can
     // then be used to ask the depersister about that object
-    virtual int ReadObject( wxDepersister *depersist ) = 0 ;
+    virtual int ReadObject( const wxString &name , wxDepersister *depersist ) = 0 ;
 
 private :
     struct wxReaderInternal;
@@ -194,7 +247,7 @@ public:
     // Reads a component from XML.  The return value is the root object ID, which can
     // then be used to ask the depersister about that object
 
-    int ReadObject(wxDepersister *callbacks);
+    virtual int ReadObject( const wxString &name , wxDepersister *depersist ) ;
 
 private :
     int ReadComponent(wxXmlNode *parent, wxDepersister *callbacks);

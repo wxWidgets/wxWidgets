@@ -31,9 +31,12 @@
 #include "wx/txtstrm.h"
 
 #if wxUSE_EXTENDED_RTTI
+
+#include "wx/beforestd.h"
 #include <map>
 #include <vector>
 #include <string>
+#include "wx/afterstd.h"
 
 using namespace std ;
 
@@ -59,76 +62,120 @@ struct wxWriter::wxWriterInternalPropertiesData
     map< string , int > m_writtenProperties ;
 } ;
 
+void wxWriter::ClearObjectContext()
+{
+    delete m_data ;
+    m_data = new wxWriterInternal() ;
+    m_data->m_nextId = 0 ;
+}
+
 void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , const wxString &name )
 {
-    if ( persister->BeforeWriteObject( object , classInfo , name ) )
+    DoBeginWriteTopLevelEntry( name ) ;
+    WriteObject( object , classInfo , persister , false ) ;
+    DoEndWriteTopLevelEntry( name ) ;
+}
+
+void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , bool isEmbedded)
+{
+    if ( persister->BeforeWriteObject( this , object , classInfo ) )
     {
-        if ( object == NULL || IsObjectKnown( object ) )
-        {
-            DoWriteObjectReference( NULL , NULL , object , classInfo , GetObjectID(object) , NULL ) ;
-        }
+        if ( object == NULL )
+            DoWriteNullObject() ;
+        else if ( IsObjectKnown( object ) )
+            DoWriteRepeatedObject( GetObjectID(object) ) ;
         else
         {
             int oid = m_data->m_nextId++ ;
-            m_data->m_writtenObjects[object] = oid ;
+            if ( !isEmbedded )
+                m_data->m_writtenObjects[object] = oid ;
+
             // in case this object is a wxDynamicObject we also have to insert is superclass
             // instance with the same id, so that object relations are streamed out correctly
             const wxDynamicObject* dynobj = dynamic_cast<const wxDynamicObject *>( object ) ;
-            if ( dynobj )
+            if ( !isEmbedded && dynobj )
                 m_data->m_writtenObjects[dynobj->GetSuperClassInstance()] = oid ;
 
-            DoBeginWriteObject( object , classInfo , oid , name ) ;
+            DoBeginWriteObject( object , classInfo , oid ) ;
             wxWriterInternalPropertiesData data ;
             WriteAllProperties( object , classInfo , persister , &data ) ;
-            DoEndWriteObject( object , classInfo , oid , name  ) ;
+            DoEndWriteObject( object , classInfo , oid  ) ;
         }
+        persister->AfterWriteObject( this ,object , classInfo ) ;
     }
 }
 
+void wxWriter::FindConnectEntry(const wxWindow * evSource,const wxDelegateTypeInfo* dti, const wxObject* &sink , const wxHandlerInfo *&handler)
+{
+    wxList *dynamicEvents = evSource->GetDynamicEventTable() ;
+
+    if ( dynamicEvents )
+    {
+        wxList::compatibility_iterator node = dynamicEvents->GetFirst();
+        while (node)
+        {
+            wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+
+            // find the match
+            if ( entry->m_fn && (dti->GetEventType() == entry->m_eventType) &&
+                (entry->m_id == -1 ||
+                (entry->m_lastId == -1 && evSource->GetId() == entry->m_id) ||
+                (entry->m_lastId != -1 &&
+                (evSource->GetId()  >= entry->m_id && evSource->GetId() <= entry->m_lastId) ) ) &&
+                entry->m_eventSink
+                )
+            {
+                sink = entry->m_eventSink ;
+                const wxClassInfo* sinkClassInfo = sink->GetClassInfo() ;
+                const wxHandlerInfo* sinkHandler = sinkClassInfo->GetFirstHandler() ;
+                while ( sinkHandler )
+                {
+                    if ( sinkHandler->GetEventFunction() == entry->m_fn )
+                    {
+                        handler = sinkHandler ;
+                        break ;
+                    }
+                    sinkHandler = sinkHandler->GetNext() ;
+                }
+                break ;
+            }
+            node = node->GetNext();
+        }
+    }
+}
 void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci , wxPersister *persister, wxWriterInternalPropertiesData * data )
 {
     const wxPropertyInfo *pi = ci->GetFirstProperty() ;
     while( pi ) 
     {
+        // this property was not written yet in this object and we don't get a veto
         if ( data->m_writtenProperties.find( pi->GetName() ) == data->m_writtenProperties.end() )
         {
             data->m_writtenProperties[ pi->GetName() ] = 1 ;
-            const wxClassTypeInfo* cti = dynamic_cast< const wxClassTypeInfo* > ( pi->GetTypeInfo() ) ;
-            if ( cti )
+            DoBeginWriteProperty( pi ) ;
+            if ( pi->GetTypeInfo()->GetKind() == wxT_COLLECTION )
             {
-                const wxClassInfo* pci = cti->GetClassInfo() ;
-                wxxVariant value = pi->GetAccessor()->GetProperty(obj) ;
-                if ( persister->BeforeWritePropertyAsObject( obj , ci , pi , value ) )
+                wxxVariantArray data = pi->GetAccessor()->GetPropertyCollection(obj) ;
+                const wxTypeInfo * elementType = dynamic_cast< const wxCollectionTypeInfo* >( pi->GetTypeInfo() )->GetElementType() ;
+                for ( size_t i = 0 ; i < data.GetCount() ; ++i )
                 {
-                    wxObject *vobj = pci->VariantToInstance( value ) ;
-                    bool embeddedObject = cti->GetKind() == wxT_OBJECT ;
-
-                    if ( vobj == NULL || IsObjectKnown( vobj ) )
+                    DoBeginWriteElement() ;
+                    wxxVariant value = data[i] ;
+                    if ( persister->BeforeWriteProperty( this , pi , value ) )
                     {
-                        DoWriteObjectReference( obj , ci , vobj , pci , GetObjectID(vobj) , pi ) ;
-                    }
-                    else
-                    {
-                        int oid = m_data->m_nextId++ ;
-                        if ( !embeddedObject)
+                        const wxClassTypeInfo* cti = dynamic_cast< const wxClassTypeInfo* > ( elementType ) ;
+                        if ( cti )
                         {
-                            // insert this object and its id
-                            m_data->m_writtenObjects[vobj] = oid ;
-                            // in case this object is a wxDynamicObject we also have to insert is superclass
-                            // instance with the same id, so that object relations are streamed out correctly
-                            const wxDynamicObject* dynobj = dynamic_cast<const wxDynamicObject *>( vobj ) ;
-                            if ( dynobj )
-                                m_data->m_writtenObjects[dynobj->GetSuperClassInstance()] = oid ;
+                            const wxClassInfo* pci = cti->GetClassInfo() ;
+                            wxObject *vobj = pci->VariantToInstance( value ) ;
+                            WriteObject( vobj , (vobj ? vobj->GetClassInfo() : pci ) , persister , cti->GetKind()== wxT_OBJECT ) ;
                         }
-
-                        DoBeginWriteParamAsObject( obj , ci , vobj , pci , oid , pi ) ;
-                        if ( vobj != NULL )
-                        {
-                            wxWriterInternalPropertiesData data ;
-                            WriteAllProperties( vobj , pci , persister , &data ) ;
+                        else
+                        {                               
+                            DoWriteSimpleType( value ) ;
                         }
-                        DoEndWriteParamAsObject( obj , ci , vobj , pci , oid , pi   ) ;
                     }
+                    DoEndWriteElement() ;
                 }
             }
             else
@@ -138,46 +185,12 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
                 {
                     const wxObject* sink = NULL ;
                     const wxHandlerInfo *handler = NULL ;
-                    
+
                     const wxWindow * evSource = dynamic_cast<const wxWindow *>(obj) ;
                     wxASSERT_MSG( evSource , wxT("Illegal Object Class (Non-Window) as Event Source") ) ;
 
-                    wxList *dynamicEvents = evSource->GetDynamicEventTable() ;
-
-                    if ( dynamicEvents )
-                    {
-                        wxList::compatibility_iterator node = dynamicEvents->GetFirst();
-                        while (node)
-                        {
-                            wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
-
-                            // find the match
-                            if ( entry->m_fn && (dti->GetEventType() == entry->m_eventType) &&
-                                (entry->m_id == -1 ||
-                                (entry->m_lastId == -1 && evSource->GetId() == entry->m_id) ||
-                                (entry->m_lastId != -1 &&
-                                (evSource->GetId()  >= entry->m_id && evSource->GetId() <= entry->m_lastId) ) ) &&
-                                entry->m_eventSink
-                                )
-                            {
-                                sink = entry->m_eventSink ;
-                                const wxClassInfo* sinkClassInfo = sink->GetClassInfo() ;
-                                const wxHandlerInfo* sinkHandler = sinkClassInfo->GetFirstHandler() ;
-                                while ( sinkHandler )
-                                {
-                                    if ( sinkHandler->GetEventFunction() == entry->m_fn )
-                                    {
-                                        handler = sinkHandler ;
-                                        break ;
-                                    }
-                                    sinkHandler = sinkHandler->GetNext() ;
-                                }
-                                break ;
-                            }
-                            node = node->GetNext();
-                        }
-                        }
-                    if ( persister->BeforeWriteDelegate( obj , ci , pi , sink , handler ) )
+                    FindConnectEntry( evSource , dti , sink , handler ) ;
+                    if ( persister->BeforeWriteDelegate( this , obj , ci , pi , sink , handler ) )
                     {
                         if ( sink != NULL && handler != NULL )
                         {
@@ -189,12 +202,23 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
                 else
                 {
                     wxxVariant value = pi->GetAccessor()->GetProperty(obj) ;
-                    if ( persister->BeforeWriteProperty( obj , ci , pi , value ) )
+                    if ( persister->BeforeWriteProperty( this , pi , value ) )
                     {
-                        DoWriteProperty( obj , ci , pi , value ) ;
+                        const wxClassTypeInfo* cti = dynamic_cast< const wxClassTypeInfo* > ( pi->GetTypeInfo() ) ;
+                        if ( cti )
+                        {
+                            const wxClassInfo* pci = cti->GetClassInfo() ;
+                            wxObject *vobj = pci->VariantToInstance( value ) ;
+                            WriteObject( vobj , (vobj ? vobj->GetClassInfo() : pci ) , persister , cti->GetKind()== wxT_OBJECT ) ;
+                        }
+                        else
+                        {                               
+                            DoWriteSimpleType( value ) ;
+                        }
                     }
                 }
             }
+            DoEndWriteProperty( pi ) ;
         }
         pi = pi->GetNext() ;
     }
@@ -247,6 +271,18 @@ struct wxXmlWriter::wxXmlWriterInternal
     wxXmlNode *m_root ;
     wxXmlNode *m_current ;
     vector< wxXmlNode * > m_objectStack ;
+
+    void Push( wxXmlNode *newCurrent )
+    {
+        m_objectStack.push_back( m_current ) ;
+        m_current = newCurrent ;
+    }
+
+    void Pop()
+    {
+        m_current = m_objectStack.back() ;
+        m_objectStack.pop_back() ;
+    }
 } ;
 
 wxXmlWriter::wxXmlWriter( wxXmlNode * rootnode ) 
@@ -261,74 +297,88 @@ wxXmlWriter::~wxXmlWriter()
     delete m_data ;
 }
 
-// start of writing the root object
-void wxXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object), const wxClassInfo *classInfo, int objectID , const wxString &name  ) 
+void wxXmlWriter::DoBeginWriteTopLevelEntry( const wxString &name ) 
 {
-    wxXmlNode *onode;
-    onode = new wxXmlNode(wxXML_ELEMENT_NODE, name);
-    onode->AddProperty(wxString("class"), wxString(classInfo->GetClassName()));
-    onode->AddProperty(wxString("id"), wxString::Format( "%d" , objectID ) );
+    wxXmlNode *pnode;
+    pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("entry"));
+    pnode->AddProperty(wxString("name"), name);
+    m_data->m_current->AddChild(pnode) ;
+    m_data->Push( pnode ) ;
+}
 
-    m_data->m_current->AddChild(onode) ;
-    m_data->m_objectStack.push_back( m_data->m_current ) ;
-    m_data->m_current = onode ;
+void wxXmlWriter::DoEndWriteTopLevelEntry( const wxString &WXUNUSED(name) )
+{
+    m_data->Pop() ;
+}
+
+void wxXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object), const wxClassInfo *classInfo, int objectID   ) 
+{
+    wxXmlNode *pnode;
+    pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
+    pnode->AddProperty(wxT("class"), wxString(classInfo->GetClassName()));
+    pnode->AddProperty(wxT("id"), wxString::Format( "%d" , objectID ) );
+
+    m_data->m_current->AddChild(pnode) ;
+    m_data->Push( pnode ) ;
 }
 
 // end of writing the root object
-void wxXmlWriter::DoEndWriteObject(const wxObject *WXUNUSED(object), const wxClassInfo *WXUNUSED(classInfo), int WXUNUSED(objectID) , const wxString &WXUNUSED(name) ) 
+void wxXmlWriter::DoEndWriteObject(const wxObject *WXUNUSED(object), const wxClassInfo *WXUNUSED(classInfo), int WXUNUSED(objectID) ) 
 {
-    m_data->m_current = m_data->m_objectStack.back() ;
-    m_data->m_objectStack.pop_back() ;
+    m_data->Pop() ;
 }
 
 // writes a property in the stream format
-void wxXmlWriter::DoWriteProperty( const wxObject *WXUNUSED(obj), const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *pi , wxxVariant &value ) 
+void wxXmlWriter::DoWriteSimpleType( wxxVariant &value ) 
+{
+    wxXmlAddContentToNode( m_data->m_current ,value.GetAsString() ) ;
+}
+
+void wxXmlWriter::DoBeginWriteElement() 
 {
     wxXmlNode *pnode;
-    pnode = new wxXmlNode(wxXML_ELEMENT_NODE, pi->GetName() );
-    wxXmlAddContentToNode( pnode ,value.GetAsString() ) ;
-    m_data->m_current->AddChild(pnode);
+    pnode = new wxXmlNode(wxXML_ELEMENT_NODE, "element" );
+    m_data->m_current->AddChild(pnode) ;
+    m_data->Push( pnode ) ;
 }
 
-void wxXmlWriter::DoBeginWriteParamAsObject(const wxObject *WXUNUSED(parentObject), const wxClassInfo *WXUNUSED(parentClassInfo), const wxObject *WXUNUSED(valueObject), 
-                                            const wxClassInfo *valueObjectClassInfo, int valueObjectID , const wxPropertyInfo *propInfo )
+void wxXmlWriter::DoEndWriteElement() 
 {
-    wxXmlNode *onode;
-    onode = new wxXmlNode(wxXML_ELEMENT_NODE, propInfo->GetName());
-    onode->AddProperty(wxString("class"), wxString(valueObjectClassInfo->GetClassName()));
-    onode->AddProperty(wxString("id"), wxString::Format( "%d" , valueObjectID ) );
-    m_data->m_current->AddChild(onode) ;
-    m_data->m_objectStack.push_back( m_data->m_current ) ;
-    m_data->m_current = onode ;
+    m_data->Pop() ;
 }
+
+void wxXmlWriter::DoBeginWriteProperty(const wxPropertyInfo *pi )
+{
+    wxXmlNode *pnode;
+    pnode = new wxXmlNode(wxXML_ELEMENT_NODE, "prop" );
+    pnode->AddProperty(wxT("name"), pi->GetName() );
+    m_data->m_current->AddChild(pnode) ;
+    m_data->Push( pnode ) ;
+}
+
+void wxXmlWriter::DoEndWriteProperty(const wxPropertyInfo *WXUNUSED(propInfo) )
+{
+    m_data->Pop() ;
+}
+
+
 
 // insert an object reference to an already written object
-void wxXmlWriter::DoWriteObjectReference(const wxObject *WXUNUSED(parentObject), const wxClassInfo *WXUNUSED(parentClassInfo), const wxObject *valueObject, 
-                                         const wxClassInfo *valueObjectClassInfo, int valueObjectID , const wxPropertyInfo *propInfo ) 
+void wxXmlWriter::DoWriteRepeatedObject( int objectID ) 
 {
-    wxXmlNode *onode;
-    onode = new wxXmlNode(wxXML_ELEMENT_NODE, propInfo->GetName());
-    onode->AddProperty(wxString("class"), wxString(valueObjectClassInfo->GetClassName()));
-    if ( valueObject == NULL )
-    {
-        wxXmlNode* nullnode = new wxXmlNode(wxXML_TEXT_NODE, wxEmptyString, "null");
-        onode->AddChild(nullnode);
-    }
-    else
-    {
-        onode->AddProperty(wxString("id"), wxString::Format( "%d" , valueObjectID ) );
-    }
-
-    m_data->m_current->AddChild(onode) ;
+    wxXmlNode *pnode;
+    pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
+    pnode->AddProperty(wxString("href"), wxString::Format( "%d" , objectID ) );
+    m_data->m_current->AddChild(pnode) ;
 }
 
-void wxXmlWriter::DoEndWriteParamAsObject(const wxObject *WXUNUSED(parentObject), const wxClassInfo *WXUNUSED(parentClassInfo), const wxObject *WXUNUSED(valueObject), 
-                                          const wxClassInfo *WXUNUSED(valueObjectClassInfo), int WXUNUSED(valueObjectID) , const wxPropertyInfo *WXUNUSED(propInfo) )
+// insert a null reference
+void wxXmlWriter::DoWriteNullObject() 
 {
-    m_data->m_current = m_data->m_objectStack.back() ;
-    m_data->m_objectStack.pop_back() ;
+    wxXmlNode *pnode;
+    pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
+    m_data->m_current->AddChild(pnode) ;
 }
-
 
 // writes a delegate in the stream format
 void wxXmlWriter::DoWriteDelegate( const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *pi , 
@@ -336,12 +386,7 @@ void wxXmlWriter::DoWriteDelegate( const wxObject *WXUNUSED(object),  const wxCl
 {
     if ( eventSink != NULL && handlerInfo != NULL )
     {
-        wxXmlNode *pnode;
-        pnode = new wxXmlNode(wxXML_ELEMENT_NODE, pi->GetName() );
-        wxString s ;
-        s.Printf(wxT("%d.%s"), sinkObjectID , handlerInfo->GetName() ) ;
-        wxXmlAddContentToNode( pnode ,s ) ;
-        m_data->m_current->AddChild(pnode);
+        wxXmlAddContentToNode( m_data->m_current ,wxString::Format(wxT("%d.%s"), sinkObjectID , handlerInfo->GetName()) ) ;
     }
 }
 
@@ -402,32 +447,40 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     const wxClassInfo** createClassInfos ;
     wxXmlNode *children;
     int objectID;
+    wxString ObjectIdString ;
 
     children = node->GetChildren();
+    if (!children)
+    {
+        // check for a null object or href
+        if (node->GetPropVal("href" , &ObjectIdString ) )
+        {
+            objectID = atoi( ObjectIdString.c_str() ) ;
+            wxASSERT_MSG( HasObjectClassInfo( objectID ) , wxT("Forward hrefs are not supported") ) ;
+            return objectID ;
+        }
+        if ( !node->GetPropVal("id" , &ObjectIdString ) )
+        {
+            return wxNullObjectID;
+        }
+    }
     if (!node->GetPropVal("class", &className))
     {
         // No class name.  Eek. FIXME: error handling
         return wxInvalidObjectID;
     }
     classInfo = wxClassInfo::FindClass(className);
-    if (children && children->GetType() == wxXML_TEXT_NODE)
-    {
-        assert( wxXmlGetContentFromNode(node) == "null" ) ;
-        // this must be a NULL component reference.  We just bail out
-        return wxNullObjectID;
-    }
-
-    wxString ObjectIdString ;
+    wxASSERT_MSG( classInfo , wxString::Format(wxT("unknown class %s"),className ) ) ;
+    wxASSERT_MSG( !children || children->GetType() != wxXML_TEXT_NODE , wxT("objects cannot have XML Text Nodes") ) ;
     if (!node->GetPropVal("id", &ObjectIdString))
     {
+        wxASSERT_MSG(0,wxT("Objects must have an id attribute") ) ;
         // No object id.  Eek. FIXME: error handling
         return wxInvalidObjectID;
     }
-
     objectID = atoi( ObjectIdString.c_str() ) ;
     // is this object already has been streamed in, return it here
-    if ( HasObjectClassInfo( objectID ) )
-        return objectID ;
+    wxASSERT_MSG( !HasObjectClassInfo( objectID ) , wxString::Format(wxT("Doubly used id : %d"), objectID ) ) ;
 
     // new object, start with allocation
     // first make the object know to our internal registry
@@ -449,8 +502,10 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
 
     while( children )
     {
-        propertyNames.push_back( children->GetName().c_str() ) ;
-        propertyNodes[children->GetName().c_str()] = children ;
+        wxString name ;
+        children->GetPropVal( wxT("name") , &name ) ;
+        propertyNames.push_back( name.c_str() ) ;
+        propertyNodes[name.c_str()] = children->GetChildren() ;
         children = children->GetNext() ;
     }
 
@@ -506,7 +561,41 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
             {
                 wxXmlNode* prop = propiter->second ;
                 const wxPropertyInfo* pi = classInfo->FindPropertyInfo( propertyNames[j].c_str() ) ;
-                if ( pi->GetTypeInfo()->IsObjectType() )
+                if ( pi->GetTypeInfo()->GetKind() == wxT_COLLECTION )
+                {
+                    const wxTypeInfo * elementType = dynamic_cast< const wxCollectionTypeInfo* >( pi->GetTypeInfo() )->GetElementType() ;
+                    while( prop )
+                    {
+                        wxASSERT_MSG(prop->GetName() == wxT("element") , wxT("A non empty collection must consist of 'element' nodes")) ;
+                        wxXmlNode* elementContent = prop->GetChildren() ;
+                        wxASSERT_MSG(elementContent, wxT("An element node cannot be empty")) ;
+                        if ( elementType->IsObjectType() )
+                        {
+                            int valueId = ReadComponent( elementContent , callbacks ) ;
+                            if ( callbacks )
+                            {
+                                if ( valueId != wxInvalidObjectID )
+                                {
+                                    /*
+                                    callbacks->SetPropertyAsObject( objectID , classInfo , pi , valueId ) ;
+                                    */
+                                    if ( elementType->GetKind() == wxT_OBJECT && valueId != wxNullObjectID )
+                                        callbacks->DestroyObject( valueId , GetObjectClassInfo( valueId ) ) ;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            wxxVariant elementValue = ReadValue( prop , pi->GetAccessor() ) ;
+                            /*
+                            if ( callbacks )
+                                callbacks->SetProperty( objectID, classInfo ,pi ,  ) ;
+                            */
+                        }
+                        prop = prop->GetNext() ;
+                    }
+                }
+                else if ( pi->GetTypeInfo()->IsObjectType() )
                 {
                     int valueId = ReadComponent( prop , callbacks ) ;
                     if ( callbacks )
@@ -521,16 +610,19 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                 }
                 else if ( pi->GetTypeInfo()->IsDelegateType() )
                 {
-                    wxString resstring = wxXmlGetContentFromNode(prop) ;
-                    wxInt32 pos = resstring.Find('.') ;
-                    assert( pos != wxNOT_FOUND ) ;
-                    int sinkOid = atol(resstring.Left(pos)) ;
-                    wxString handlerName = resstring.Mid(pos+1) ;
-                    wxClassInfo* sinkClassInfo = GetObjectClassInfo( sinkOid ) ;
+                    if ( prop )
+                    {
+                        wxString resstring = prop->GetContent() ;
+                        wxInt32 pos = resstring.Find('.') ;
+                        assert( pos != wxNOT_FOUND ) ;
+                        int sinkOid = atol(resstring.Left(pos)) ;
+                        wxString handlerName = resstring.Mid(pos+1) ;
+                        wxClassInfo* sinkClassInfo = GetObjectClassInfo( sinkOid ) ;
 
-                    if (callbacks)
-                        callbacks->SetConnect( objectID , classInfo , dynamic_cast<const wxDelegateTypeInfo*>(pi->GetTypeInfo()) , sinkClassInfo ,
-                        sinkClassInfo->FindHandlerInfo(handlerName) ,  sinkOid ) ;
+                        if (callbacks)
+                            callbacks->SetConnect( objectID , classInfo , dynamic_cast<const wxDelegateTypeInfo*>(pi->GetTypeInfo()) , sinkClassInfo ,
+                            sinkClassInfo->FindHandlerInfo(handlerName) ,  sinkOid ) ;
+                    }
 
                 }
                 else
@@ -552,12 +644,26 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
 wxxVariant wxXmlReader::ReadValue(wxXmlNode *node,
                                   wxPropertyAccessor *accessor )
 {
-    return accessor->ReadValue(wxXmlGetContentFromNode( node ) ) ;
+    wxString content ;
+    if ( node )
+        content = node->GetContent() ;
+    return accessor->ReadValue(content) ;
 }
 
-int wxXmlReader::ReadObject(wxDepersister *callbacks)
+int wxXmlReader::ReadObject( const wxString &name , wxDepersister *callbacks)
 {
-    return ReadComponent( m_parent , callbacks ) ;
+    wxXmlNode *iter = m_parent->GetChildren() ;
+    while ( iter )
+    {
+        wxString entryName ;
+        if ( iter->GetPropVal("name", &entryName) )
+        {
+            if ( entryName == name )
+                return ReadComponent( iter->GetChildren() , callbacks ) ;
+        }
+        iter = iter->GetNext() ;
+    }
+    return wxInvalidObjectID ;
 }
 
 // ----------------------------------------------------------------------------
@@ -664,8 +770,8 @@ void wxRuntimeDepersister::SetPropertyAsObject(int objectID,
     }
 
     classInfo->SetProperty( o , propertyInfo->GetName() , valClassInfo->InstanceToVariant(valo) ) ;
-//    propertyInfo->GetAccessor()->SetProperty( o , 
-//        (dynamic_cast<const wxClassTypeInfo*>(propertyInfo->GetTypeInfo()))->GetClassInfo()->InstanceToVariant(valo) ) ;
+    //    propertyInfo->GetAccessor()->SetProperty( o , 
+    //        (dynamic_cast<const wxClassTypeInfo*>(propertyInfo->GetTypeInfo()))->GetClassInfo()->InstanceToVariant(valo) ) ;
 }
 
 void wxRuntimeDepersister::SetConnect(int eventSourceObjectID,
@@ -831,5 +937,9 @@ void wxCodeDepersister::SetConnect(int eventSourceObjectID,
     m_fp->WriteString( wxString::Format(  "\t%s->Connect( %s->GetId() , %d , (wxObjectEventFunction)(wxEventFunction) & %s::%s , NULL , %s ) ;" , 
         ehsource , ehsource , eventType , ehsinkClass , handlerName , ehsink ) );
 }
+
+#include <wx/arrimpl.cpp>
+
+WX_DEFINE_OBJARRAY(wxxVariantArray);
 
 #endif

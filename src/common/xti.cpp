@@ -33,8 +33,10 @@
 
 #if wxUSE_EXTENDED_RTTI
 
+#include "wx/beforestd.h"
 #include <map>
 #include <string>
+#include "wx/afterstd.h"
 
 using namespace std ;
 
@@ -167,6 +169,12 @@ template<> const wxTypeInfo* wxGetTypeInfo( wxString * )
 {
 	static wxBuiltInTypeInfo s_typeInfo( wxT_STRING ) ;
 	return &s_typeInfo ;
+}
+
+template<> const wxTypeInfo* wxGetTypeInfo( wxWindowList * )
+{
+    static wxCollectionTypeInfo s_typeInfo( (wxTypeInfo*) wxGetTypeInfo( (wxWindow **) NULL) ) ;
+    return &s_typeInfo ;
 }
 
 // this are compiler induced specialization which are never used anywhere
@@ -502,6 +510,24 @@ wxxVariant wxClassInfo::GetProperty(wxObject *object, const char *propertyName) 
     return accessor->GetProperty(object);
 }
 
+wxxVariantArray wxClassInfo::GetPropertyCollection(wxObject *object, const wxChar *propertyName) const 
+{
+    const wxPropertyAccessor *accessor;
+
+    accessor = FindAccessor(propertyName);
+    wxASSERT(accessor->HasGetter());
+    return accessor->GetPropertyCollection(object);
+}
+
+void wxClassInfo::AddPropertyCollection(wxObject *object, const wxChar *propertyName , const wxxVariant& value) const 
+{
+    const wxPropertyAccessor *accessor;
+
+    accessor = FindAccessor(propertyName);
+    wxASSERT(accessor->HasAdder());
+    accessor->AddToPropertyCollection( object , value ) ;
+}
+
 /*
 VARIANT TO OBJECT
 */
@@ -570,9 +596,9 @@ wxDynamicClassInfo::~wxDynamicClassInfo()
     delete[] GetParents() ;
 }
 
-wxObject *wxDynamicClassInfo::CreateObject() const 
+wxObject *wxDynamicClassInfo::AllocateObject() const 
 {
-    wxObject* parent = GetParents()[0]->CreateObject() ;
+    wxObject* parent = GetParents()[0]->AllocateObject() ;
     return new wxDynamicObject( parent , this ) ;
 }
 
@@ -617,7 +643,7 @@ wxxVariant wxDynamicClassInfo::GetProperty(wxObject *object, const char *propert
 
 void wxDynamicClassInfo::AddProperty( const wxChar *propertyName , const wxTypeInfo* typeInfo ) 
 {
-    new wxPropertyInfo( m_firstProperty , propertyName , "" , typeInfo , new wxGenericPropertyAccessor( propertyName ) , wxxVariant() ) ;
+    new wxPropertyInfo( m_firstProperty , propertyName , typeInfo , new wxGenericPropertyAccessor( propertyName ) , wxxVariant() ) ;
 }
 
 void wxDynamicClassInfo::AddHandler( const wxChar *handlerName , wxObjectEventFunction address , const wxClassInfo* eventClassInfo ) 

@@ -230,6 +230,13 @@ void wxSetToString( wxString &s , const wxSet<e> &data )
 // ----------------------------------------------------------------------------
 // Type Information
 // ----------------------------------------------------------------------------
+//
+//
+//  All data exposed by the RTTI is characterized using the following classes.
+//  The first characterization is done by wxTypeKind. All enums up to and including
+//  wxT_CUSTOM represent so called simple types. These cannot be divided any further.
+//  They can be converted to and from wxStrings, that's all.
+
 
 enum wxTypeKind
 {
@@ -246,11 +253,17 @@ enum wxTypeKind
     wxT_STRING, // must be wxString
     wxT_SET, // must be wxSet<> template
     wxT_ENUM,
-    wxT_OBJECT_PTR, // pointer to wxObject
-	wxT_OBJECT , // wxObject
     wxT_CUSTOM, // user defined type (e.g. wxPoint)
+    
+    wxT_LAST_SIMPLE_TYPE_KIND = wxT_CUSTOM ,
+
+    wxT_OBJECT_PTR, // object reference
+	wxT_OBJECT , // embedded object
+    wxT_COLLECTION , // collection
+
     wxT_DELEGATE , // for connecting against an event source
-    wxT_LAST_TYPE_KIND // sentinel for bad data, asserts, debugging
+    
+    wxT_LAST_TYPE_KIND = wxT_DELEGATE // sentinel for bad data, asserts, debugging
 };
 
 class WXDLLIMPEXP_BASE wxTypeInfo
@@ -300,6 +313,17 @@ public :
 	const wxClassInfo *GetClassInfo() const { return m_classInfo ; }
 private :
     wxClassInfo *m_classInfo; // Kind == wxT_OBJECT - could be NULL
+} ;
+
+class WXDLLIMPEXP_BASE wxCollectionTypeInfo : public wxTypeInfo
+{
+public :
+    wxCollectionTypeInfo( wxTypeInfo *elementType )
+    { m_kind = wxT_COLLECTION , m_elementType = elementType ; }
+
+    const wxTypeInfo* GetElementType() const { return m_elementType ; }
+private :
+    wxTypeInfo * m_elementType ;
 } ;
 
 // a delegate is an exposed event source
@@ -468,6 +492,10 @@ private :
     wxString m_name ;
 } ;
 
+#include <wx/dynarray.h>
+
+WX_DECLARE_OBJARRAY_WITH_DECL(wxxVariant, wxxVariantArray, class WXDLLIMPEXP_BASE);
+
 // ----------------------------------------------------------------------------
 // Property Support
 //
@@ -487,19 +515,37 @@ public :
     class SetAndGetByRefRetBool ;
     class GetByRef ;
 #endif
-    wxPropertyAccessor() { m_setterName = NULL ; m_getterName = NULL ; }
+    wxPropertyAccessor() { m_setterName = NULL ; m_getterName = NULL ; m_adderName = NULL ;}
     virtual ~wxPropertyAccessor() {}
+    
+    // Setting a simple property (non-collection)
     virtual void SetProperty(wxObject *object, const wxxVariant &value) const = 0 ;
+
+    // Getting a simple property (non-collection)
     virtual wxxVariant GetProperty(const wxObject *object) const = 0 ;
+
+    // Adding an element to a collection property
+    virtual void AddToPropertyCollection(wxObject *object, const wxxVariant &value) const 
+    { wxASSERT_MSG(0,wxT("Collection Operation called on non Collection Property")) ; }
+
+    // Getting a collection property
+    virtual wxxVariantArray GetPropertyCollection( const wxObject *obj) const 
+    { wxASSERT_MSG(0,wxT("Collection Operation called on non Collection Property")) ; return wxxVariantArray() ; }
+
     virtual bool HasSetter() const = 0 ;
     virtual bool HasGetter() const = 0 ;
+    virtual bool HasAdder() const = 0 ;
+
     const wxChar * GetGetterName() const { return m_setterName ; }
     const wxChar * GetSetterName() const { return m_getterName ; }
+    const wxChar * GetAdderName() const { return m_adderName ; }
+
     virtual wxxVariant ReadValue( const wxString &value ) const = 0 ;
     virtual void WriteValue( wxString& value , const wxObject *o ) const = 0 ;
 protected :
     const wxChar *m_setterName ;
     const wxChar *m_getterName ;
+    const wxChar *m_adderName ;
 };
 
 class WXDLLIMPEXP_BASE wxGenericPropertyAccessor : public wxPropertyAccessor
@@ -509,8 +555,11 @@ public :
     ~wxGenericPropertyAccessor() ; 
     virtual void SetProperty(wxObject *object, const wxxVariant &value) const ;
     virtual wxxVariant GetProperty(const wxObject *object) const ;
+
     virtual bool HasSetter() const { return true ; }
     virtual bool HasGetter() const { return true ; }
+    virtual bool HasAdder() const { return false ; }
+
     virtual wxxVariant ReadValue( const wxString &value ) const ;
     virtual void WriteValue( wxString& value , const wxObject *o ) const ;
 private :
@@ -530,28 +579,28 @@ public:
     typedef T (Klass::*getter_t)() const;
     typedef const T& (Klass::*getter_ref_t)() const;
 
-    wxPropertyAccessorT(setter_t setter, getter_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(setter_t setter, getter_t getter, const wxChar *s, const wxChar *g)
         : m_setter_bool( NULL ) , m_setter_ref_bool( NULL ) , m_setter(setter), m_setter_ref(NULL), m_getter(getter) ,m_getter_ref(NULL) {m_setterName = s;m_getterName=g ;}
 
     wxPropertyAccessorT( getter_t getter, const wxChar *g)
         : m_setter_bool( NULL ) , m_setter_ref_bool( NULL ) , m_setter(NULL), m_setter_ref(NULL), m_getter(getter) ,m_getter_ref(NULL) {m_setterName = "";m_getterName=g ;}
 
-    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetRetBool*,) setter_bool_t setter, getter_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetRetBool*,) setter_bool_t setter, getter_t getter, const wxChar *s, const wxChar *g)
     	: m_setter_bool( setter ) , m_setter_ref_bool( NULL ) , m_setter(NULL), m_setter_ref(NULL), m_getter(getter) , m_getter_ref(NULL){m_setterName = s;m_getterName=g ;}
 
-    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetByRef*,) setter_ref_t setter, getter_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetByRef*,) setter_ref_t setter, getter_t getter, const wxChar *s, const wxChar *g)
     	: m_setter_bool( NULL ) , m_setter_ref_bool( NULL ) , m_setter(NULL), m_setter_ref(setter), m_getter(getter) , m_getter_ref(NULL){m_setterName = s;m_getterName=g ;}
 
-    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetByRefRetBool*,) setter_ref_bool_t setter, getter_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetByRefRetBool*,) setter_ref_bool_t setter, getter_t getter, const wxChar *s, const wxChar *g)
     	: m_setter_bool( NULL ) , m_setter_ref_bool( setter ) , m_setter(NULL), m_setter_ref(NULL), m_getter(getter) , m_getter_ref(NULL){m_setterName = s;m_getterName=g ;}
 
-    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetAndGetByRef*,) setter_ref_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetAndGetByRef*,) setter_ref_t setter, getter_ref_t getter, const wxChar *s, const wxChar *g)
     	: m_setter_bool( NULL ) , m_setter_ref_bool( NULL ) , m_setter(NULL), m_setter_ref(setter), m_getter(NULL) , m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
 
-    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetAndGetByRefRetBool*,) setter_ref_bool_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetAndGetByRefRetBool*,) setter_ref_bool_t setter, getter_ref_t getter, const wxChar *s, const wxChar *g)
     	: m_setter_bool( NULL ) , m_setter_ref_bool( setter ) , m_setter(NULL), m_setter_ref(NULL), m_getter(NULL) , m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
 
-    wxPropertyAccessorT(WX_XTI_PARAM_FIX(GetByRef*,) setter_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(WX_XTI_PARAM_FIX(GetByRef*,) setter_t setter, getter_ref_t getter, const wxChar *s, const wxChar *g)
     	: m_setter_bool( NULL ) , m_setter_ref_bool( NULL ) , m_setter(NULL), m_setter(setter), m_getter(NULL) ,  m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
 
     // returns true if this accessor has a setter
@@ -560,6 +609,7 @@ public:
     // return true if this accessor has a getter
     bool HasGetter() const { return m_getter != NULL || m_getter_ref != NULL ; }
 
+    bool HasAdder() const { return true ; }
     // set the property this accessor is responsible for in an object
     void SetProperty(wxObject *o, const wxxVariant &v) const
     {
@@ -624,31 +674,118 @@ private :
     getter_ref_t m_getter_ref ;
 };
 
+template<class Klass, typename CollectionType , typename AddedElementType>
+class WXDLLIMPEXP_BASE wxPropertyCollectionAccessorT : public wxPropertyAccessor
+{
+public:
+
+    typedef void (Klass::*adder_t)(AddedElementType value);
+    typedef const CollectionType& (Klass::*getter_t)() const ;
+
+    wxPropertyCollectionAccessorT(adder_t adder, getter_t getter, const wxChar *a, const wxChar *g)
+        : m_getter(getter), m_adder(adder) { m_adderName = a;m_getterName=g ;}
+
+    ~wxPropertyCollectionAccessorT() {}
+
+    // returns true if this accessor has a setter
+    bool HasSetter() const { return false ;}
+
+    // return true if this accessor has a getter
+    bool HasGetter() const { return m_getter != NULL ;}
+
+    // return true if this accessor has a getter
+    bool HasAdder() const { return m_adder != NULL ;}
+
+    // set the property this accessor is responsible for in an object
+    void AddToPropertyCollection(wxObject *o, const wxxVariant &v) const
+    {
+        Klass *obj = dynamic_cast<Klass*>(o);
+		AddedElementType value ;
+
+		if ( wxGetTypeInfo((AddedElementType*)NULL)->GetKind() == wxT_OBJECT && v.GetTypeInfo()->GetKind() == wxT_OBJECT_PTR )
+			value = *v.Get<AddedElementType*>();
+		else
+			value = v.Get<AddedElementType>();
+
+        if (m_adder)
+            (obj->*(m_adder))(value);
+		else
+		{
+			wxASSERT_MSG(0 , wxT("SetPropertyCalled without a valid Setter") ) ;
+		}
+   }
+
+    // gets the property this accessor is responsible for from an object
+    wxxVariantArray GetPropertyCollection(const wxObject *o) const 
+    {
+        const Klass *obj = dynamic_cast<const Klass*>(o);
+
+        wxxVariantArray result ;
+        CollectionType::compatibility_iterator current = (obj->*(m_getter))().GetFirst();
+        while (current)
+        {
+            result.Add( new wxxVariant(current->GetData()) ) ;
+            current = current->GetNext();
+        }
+        return result ;
+    }
+
+
+    // set the property this accessor is responsible for in an object
+    void SetProperty(wxObject *WXUNUSED(o), const wxxVariant &WXUNUSED(v)) const
+    {
+        wxASSERT_MSG(0,wxT("SetProperty called on Collection Property")) ;
+    }
+
+    // gets the property this accessor is responsible for from an object
+    wxxVariant GetProperty(const wxObject *WXUNUSED(o)) const
+    {
+        wxASSERT_MSG(0,wxT("GetProperty called on Collection Property")) ;
+        return wxxVariant() ;
+    }
+
+    // write the property this accessor is responsible for from an object into
+    // a string
+    void WriteValue( wxString& s , const wxObject *o ) const
+    {
+        wxASSERT_MSG(0,wxT("WriteValue called on Collection Property")) ;
+    }
+
+    // read a wxxVariant having the correct type for the property this accessor
+    // is responsible for from a string
+    wxxVariant ReadValue( const wxString &value ) const
+    {
+        wxASSERT_MSG(0,wxT("ReadValue called on Collection Property")) ;
+        return wxxVariant() ;
+    }
+
+private :
+    getter_t m_getter;
+    adder_t m_adder;
+};
+
 class WXDLLIMPEXP_BASE wxPropertyInfo
 {
 public :
-	wxPropertyInfo( wxPropertyInfo* &iter , const wxChar *name , const wxChar *typeName , const wxTypeInfo* typeInfo , wxPropertyAccessor *accessor , wxxVariant dv ) :
-	   m_name( name ) , m_typeName(typeName) , m_typeInfo( typeInfo ) , m_accessor( accessor ) , m_defaultValue( dv )
+	wxPropertyInfo( wxPropertyInfo* &iter , const wxChar *name , const wxTypeInfo* typeInfo , wxPropertyAccessor *accessor , wxxVariant dv ) :
+	   m_name( name ) , m_typeInfo( typeInfo ) , m_accessor( accessor ) , m_defaultValue( dv ) , m_collectionElementTypeInfo(NULL)
 	{
-		m_next = NULL ;
-		if ( iter == NULL )
-			iter = this ;
-		else
-		{
-			wxPropertyInfo* i = iter ;
-			while( i->m_next )
-				i = i->m_next ;
-
-			i->m_next = this ;
-		}
+        Insert(iter) ;
 	}
+
+	wxPropertyInfo( wxPropertyInfo* &iter , const wxChar *name , const wxTypeInfo* collTypeInfo , const wxTypeInfo* elemTypeInfo , wxPropertyAccessor *accessor ) :
+	   m_name( name ) , m_typeInfo( collTypeInfo ) , m_accessor( accessor ) , m_collectionElementTypeInfo(elemTypeInfo)
+	{
+        Insert(iter) ;
+	}
+
 	// return the name of this property
 	const wxChar *		GetName() const { return m_name ; }
 
-	// return the typename of this property
-	const wxChar *		GetTypeName() const { return m_typeName ; }
+	// return the element type info of this property (for collections, otherwise NULL)
+	const wxTypeInfo *	GetCollectionElementTypeInfo() const { return m_collectionElementTypeInfo ; }
 
-	// return the type info of this property
+    // return the type info of this property
 	const wxTypeInfo *	GetTypeInfo() const { return m_typeInfo ; }
 
 	// return the accessor for this property
@@ -660,9 +797,25 @@ public :
 	// returns the default value of this property, its kind may be wxT_VOID if it is not valid
 	wxxVariant			GetDefaultValue() const { return m_defaultValue ; }
 private :
+    void Insert(wxPropertyInfo* &iter)
+    {
+		m_next = NULL ;
+		if ( iter == NULL )
+			iter = this ;
+		else
+		{
+			wxPropertyInfo* i = iter ;
+			while( i->m_next )
+				i = i->m_next ;
+
+			i->m_next = this ;
+		}
+    }
+
     const wxChar *      m_name;
     const wxChar *      m_typeName ;
     const wxTypeInfo*   m_typeInfo ;
+    const wxTypeInfo*   m_collectionElementTypeInfo ;
     wxPropertyAccessor* m_accessor ;
     wxxVariant m_defaultValue;
     // string representation of the default value
@@ -685,29 +838,33 @@ private :
 
 #define WX_PROPERTY( name , type , setter , getter ,defaultValue ) \
 	static wxPropertyAccessorT<class_t , type> _accessor##name( &setter , &getter , #setter , #getter ) ; \
-	static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
+	static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
 
 #define WX_PROPERTY_SET_RET_BOOL( name , type , setter , getter ,defaultValue ) \
 	static wxPropertyAccessorT<class_t , type> _accessor##name( (wxPropertyAccessor::SetRetBool*)NULL , &setter , &getter , #setter , #getter ) ; \
-	static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
+	static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
 
 #define WX_PROPERTY_SET_BY_REF( name , type , setter , getter ,defaultValue ) \
         static wxPropertyAccessorT<class_t , type> _accessor##name( (wxPropertyAccessor::SetByRef*)NULL, &setter , &getter , #setter , #getter ) ; \
-        static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
+        static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
 
 #define WX_PROPERTY_SET_BY_REF_RET_BOOL( name , type , setter , getter ,defaultValue ) \
         static wxPropertyAccessorT<class_t , type> _accessor##name( (wxPropertyAccessor::SetByRefRetBool*)NULL, &setter , &getter , #setter , #getter ) ; \
-        static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
+        static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
 
 #define WX_PROPERTY_SET_AND_GET_BY_REF_RET_BOOL( name , type , setter , getter ,defaultValue ) \
         static wxPropertyAccessorT<class_t , type> _accessor##name( (wxPropertyAccessor::SetAndGetByRefRetBool*)NULL, &setter , &getter , #setter , #getter ) ; \
-        static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
+        static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
 
 #else
 
 #define WX_PROPERTY( name , type , setter , getter ,defaultValue ) \
 	static wxPropertyAccessorT<class_t , type> _accessor##name( &setter , &getter , #setter , #getter ) ; \
-	static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
+	static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
+
+#define WX_PROPERTY_COLLECTION( name , colltype , addelemtype , adder , getter ) \
+	static wxPropertyCollectionAccessorT<class_t , colltype , addelemtype > _accessor##name( &adder , &getter , #adder , #getter ) ; \
+	static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (colltype*) NULL ) ,wxGetTypeInfo( (addelemtype*) NULL ) ,&_accessor##name ) ;
 
 #define WX_PROPERTY_SET_RET_BOOL( name , type , setter , getter ,defaultValue ) \
     WX_PROPERTY( name , type , setter , getter , defaultValue )
@@ -725,11 +882,11 @@ private :
 
 #define WX_READONLY_PROPERTY( name , type , getter ,defaultValue ) \
     static wxPropertyAccessorT<class_t , type> _accessor##name( &getter , #getter ) ; \
-    static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
+    static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
 
 #define WX_DELEGATE( name , eventType , eventClass ) \
     static wxDelegateTypeInfo _typeInfo##name( eventType , CLASSINFO( eventClass ) ) ; \
-    static wxPropertyInfo _propertyInfo##name( first , #name , NULL , &_typeInfo##name , NULL , wxxVariant() ) ; \
+    static wxPropertyInfo _propertyInfo##name( first , #name , &_typeInfo##name , NULL , wxxVariant() ) ; \
 
 // ----------------------------------------------------------------------------
 // Handler Info
@@ -1016,7 +1173,12 @@ public:
 
     virtual ~wxClassInfo() ;
 
-    virtual wxObject *CreateObject() const { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
+    // allocates an instance of this class, this object does not have to be initialized or fully constructed
+    // as this call will be followed by a call to Create
+    virtual wxObject *AllocateObject() const { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
+
+    // 'old naming' for AllocateObject staying here for backward compatibility
+    wxObject *CreateObject() const { return AllocateObject() ; }
 
     const wxChar       *GetClassName() const { return m_className; }
     const wxClassInfo **GetParents() const { return m_parents; }
@@ -1060,7 +1222,8 @@ public:
     // returns the first handler
     const wxHandlerInfo* GetFirstHandler() const { return m_firstHandler ; }
 
-    // Call the Create method for a class
+    // Call the Create upon an instance of the class, in the end the object is fully
+    // initialized
     virtual void Create (wxObject *object, int ParamCount, wxxVariant *Params) const
 	{
 		wxASSERT_MSG( ParamCount == m_constructorPropertiesCount , wxT("Illegal Parameter Count for Create Method")) ;
@@ -1070,12 +1233,16 @@ public:
     // get number of parameters for constructor
     virtual int GetCreateParamCount() const { return m_constructorPropertiesCount; }
 
-    // get i-th constructor parameter
-    virtual const wxChar* GetCreateParamName(int i) const { return m_constructorProperties[i] ; }
+    // get n-th constructor parameter
+    virtual const wxChar* GetCreateParamName(int n) const { return m_constructorProperties[n] ; }
 
-   // Runtime access to objects by property name, and variant data
-    virtual void SetProperty (wxObject *object, const wxChar *PropertyName, const wxxVariant &Value) const ;
-    virtual wxxVariant GetProperty (wxObject *object, const wxChar *PropertyName) const;
+    // Runtime access to objects for simple properties (get/set) by property name, and variant data
+    virtual void SetProperty (wxObject *object, const wxChar *propertyName, const wxxVariant &value) const ;
+    virtual wxxVariant GetProperty (wxObject *object, const wxChar *propertyName) const;
+
+    // Runtime access to objects for collection properties by property name
+    virtual wxxVariantArray GetPropertyCollection(wxObject *object, const wxChar *propertyName) const ;
+    virtual void AddPropertyCollection(wxObject *object, const wxChar *propertyName , const wxxVariant& value) const ;
 
 	// we must be able to cast variants to wxObject pointers, templates seem not to be suitable
 	wxObject* VariantToInstance( wxxVariant &data ) const
@@ -1157,7 +1324,7 @@ public :
     virtual ~wxDynamicClassInfo() ;
 
     // constructs a wxDynamicObject with an instance
-    virtual wxObject *CreateObject() const ;
+    virtual wxObject *AllocateObject() const ;
 
     // Call the Create method for a class
     virtual void Create (wxObject *object, int ParamCount, wxxVariant *Params) const ;
