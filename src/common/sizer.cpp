@@ -163,6 +163,36 @@ wxSize wxSizerItem::CalcMin()
 
 void wxSizerItem::SetDimension( wxPoint pos, wxSize size )
 {
+    if (m_flag & wxSHAPED)
+    {
+        // adjust aspect ratio
+        int rwidth = (int) (size.y * m_ratio);
+        if (rwidth > size.x)
+        {
+            // fit horizontally
+            int rheight = (int) (size.x / m_ratio);
+            // add vertical space
+            if (m_flag & wxALIGN_CENTER_VERTICAL)
+                pos.y += (size.y - rheight) / 2;
+            else if (m_flag & wxALIGN_BOTTOM)
+                pos.y += (size.y - rheight);
+            // use reduced dimensions
+            size.y =rheight;
+        }
+        else if (rwidth < size.x)
+        {
+            // add horizontal space
+            if (m_flag & wxALIGN_CENTER_HORIZONTAL)
+                pos.x += (size.x - rwidth) / 2;
+            else if (m_flag & wxALIGN_RIGHT)
+                pos.x += (size.x - rwidth);
+            size.x = rwidth;
+        }
+    }
+    
+    // This is what GetPosition() returns. Since we calculate
+    // borders afterwards, GetPosition() will be the left/top
+    // corner of the surrounding border.
     m_pos = pos;
 
     if (m_flag & wxWEST)
@@ -182,28 +212,6 @@ void wxSizerItem::SetDimension( wxPoint pos, wxSize size )
     if (m_flag & wxSOUTH)
     {
         size.y -= m_border;
-    }
-    if (m_flag & wxSHAPED) {
-        // adjust aspect ratio
-        int rwidth = (int) (size.y * m_ratio);
-        if (rwidth > size.x) {
-            // fit horizontally
-            int rheight = (int) (size.x / m_ratio);
-            // add vertical space
-            if (m_flag & wxALIGN_CENTER_VERTICAL)
-                pos.y += (size.y - rheight) / 2;
-            else if (m_flag & wxALIGN_BOTTOM)
-                pos.y += (size.y - rheight);
-            // use reduced dimensions
-            size.y =rheight;
-        } else if (rwidth < size.x) {
-            // add horizontal space
-            if (m_flag & wxALIGN_CENTER_HORIZONTAL)
-                pos.x += (size.x - rwidth) / 2;
-            else if (m_flag & wxALIGN_RIGHT)
-                pos.x += (size.x - rwidth);
-            size.x = rwidth;
-        }
     }
 
     if (IsSizer())
