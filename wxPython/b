@@ -49,7 +49,7 @@ elif [ "$1" = "t" ]; then
 # "i" --> install
 elif [ "$1" = "i" ]; then
     shift
-    CMD="$SETUP $FLAGS $OTHERFLAGS install $*"
+    CMD="$SETUP $FLAGS $OTHERFLAGS build_ext install $*"
 
 # "s" --> source dist
 elif [ "$1" = "s" ]; then
