@@ -1317,28 +1317,12 @@ void wxCSConv::SetName(const wxChar *charset)
     }
 }
 
-static inline bool DoesntNeedConv(wxFontEncoding enc)
-{
-    return enc == wxFONTENCODING_DEFAULT ||
-            enc == wxFONTENCODING_SYSTEM ||
-             enc == wxFONTENCODING_ISO8859_1;
-}
-
 wxMBConv *wxCSConv::DoCreate() const
 {
-#if wxUSE_FONTMAP
-    wxFontMapper * const fontMapper = wxFontMapper::Get();
-
-    wxFontEncoding encFromName = m_name ? fontMapper->CharsetToEncoding(m_name)
-                                        : wxFONTENCODING_SYSTEM;
-#endif // wxUSE_FONTMAP
-
-    // check for the special case of ASCII charset
-    if ( (!m_name && DoesntNeedConv(m_encoding))
-#if wxUSE_FONTMAP
-            || (m_name && DoesntNeedConv(encFromName))
-#endif // wxUSE_FONTMAP
-       )
+    // check for the special case of ASCII or ISO8859-1 charset: as we have
+    // special knowledge of it anyhow, we don't need to create a special
+    // conversion object
+    if ( m_encoding == wxFONTENCODING_ISO8859_1 )
     {
         // don't convert at all
         return NULL;
@@ -1354,9 +1338,18 @@ wxMBConv *wxCSConv::DoCreate() const
 
     // step (1)
 #ifdef HAVE_ICONV
+#if !wxUSE_FONTMAP
     if ( m_name )
+#endif // !wxUSE_FONTMAP
     {
-        wxMBConv_iconv *conv = new wxMBConv_iconv(m_name);
+        wxString name(m_name);
+
+#if wxUSE_FONTMAP
+        if ( name.empty() )
+            name = wxFontMapper::Get()->GetEncodingName(m_encoding);
+#endif // wxUSE_FONTMAP
+
+        wxMBConv_iconv *conv = new wxMBConv_iconv(name);
         if ( conv->IsOk() )
             return conv;
 
@@ -1378,8 +1371,13 @@ wxMBConv *wxCSConv::DoCreate() const
     // step (2)
     wxFontEncoding enc = m_encoding;
 #if wxUSE_FONTMAP
-    if ( enc == wxFONTENCODING_SYSTEM )
-        enc = encFromName;
+    if ( enc == wxFONTENCODING_SYSTEM && m_name )
+    {
+        // use "false" to suppress interactive dialogs -- we can be called from
+        // anywhere and popping up a dialog from here is the last thing we want to
+        // do
+        enc = wxFontMapper::Get()->CharsetToEncoding(m_name, false);
+    }
 #endif // wxUSE_FONTMAP
 
     switch ( enc )
