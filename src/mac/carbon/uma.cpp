@@ -318,7 +318,7 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
                 glyph += 13 ;
             if ( !explicitCommandKey )
                 modifiers |= kMenuNoCommandModifier ;
-          }
+        }
         else
         {
             switch( key )
@@ -379,7 +379,14 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
                     macKey = kDownArrowCharCode ;
                     glyph = kMenuDownArrowGlyph ;
                     break ;
+                default :
+                    macKey = toupper( key ) ;
+                    break ;
             }
+            // we now allow non command key shortcuts
+            // remove in case this gives problems
+            if ( !explicitCommandKey )
+                modifiers |= kMenuNoCommandModifier ;
         }
 
         // 1d and 1e have special meaning to SetItemCmd, so
