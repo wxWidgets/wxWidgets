@@ -6,6 +6,15 @@ height and all fields in one column having the same width, but all
 rows or all columns are not necessarily the same height or width as in
 the \helpref{wxGridSizer}{wxgridsizer}.
 
+Since wxWindows 2.5.0, wxFlexGridSizer can also size items equally in one
+direction but unequally ("flexibly") in the other. If the sizer is only
+flexible in one direction (this can be changed using 
+\helpref{SetFlexibleDrection}{wxflexgridsizersetflexibledrection}),
+it needs to be decided how the sizer should grow in the other ("non flexible")
+direction in order to fill the available space. The 
+\helpref{SetNonFlexibleGrowMode}{wxflexgridsizersetnonflexiblegrowmode} method
+serves this purpose.
+
 \wxheading{Derived from}
 
 \helpref{wxGridSizer}{wxgridsizer}\\
@@ -15,6 +24,7 @@ the \helpref{wxGridSizer}{wxgridsizer}.
 \wxheading{See also}
 
 \helpref{wxSizer}{wxsizer}, \helpref{Sizer overview}{sizeroverview}
+
 
 \membersection{wxFlexGridSizer::wxFlexGridSizer}\label{wxflexgridsizerwxflexgridsizer}
 
@@ -43,15 +53,94 @@ there is extra space available to the sizer.
 Specifies that row idx (starting from zero) should be grown if there
 is extra space available to the sizer.
 
+\membersection{wxFlexGridSizer::GetFlexibleDirection}\label{wxflexgridsizergetflexibledrection}
+
+\constfunc{int}{GetFlexibleDirections}{\void}
+
+Returns a wxOrientation value that specifies whether the sizer flexibly
+resizes its columns, rows, or both (default).
+
+\wxheading{Return value}
+
+One of the following values:
+
+\begin{twocollist}
+\twocolitem{wxVERTICAL}{Rows are flexibly sized.}
+\twocolitem{wxHORIZONTAL}{Columns are flexibly sized.}
+\twocolitem{wxBOTH}{Both rows and columns are flexibly sized (this is the default value).}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{SetFlexibleDrection}{wxflexgridsizersetflexibledrection}
+
+
+\membersection{wxFlexGridSizer::GetNonFlexibleGrowMode}\label{wxflexgridsizergetnonflexiblegrowmode}
+
+\constfunc{int}{GetNonFlexibleGrowMode}{\void}
+
+Returns the value that specifies how the sizer grows in the "non flexible"
+direction if there is one.
+
+\wxheading{Return value}
+
+One of the following values:
+
+\begin{twocollist}
+\twocolitem{wxFLEX\_GROWMODE\_NONE}{Sizer doesn't grow in the non flexible direction.}
+\twocolitem{wxFLEX\_GROWMODE\_SPECIFIED}{Sizer honors growable columns/rows set with
+\helpref{AddGrowableCol}{wxflexgridsizeraddgrowablecol} and 
+\helpref{AddGrowableRow}{wxflexgridsizeraddgrowablerow}.
+In this case equal sizing applies to minimum sizes of columns or
+rows (this is the default value).}
+\twocolitem{wxFLEX\_GROWMODE\_ALL}{Sizer equally stretches all columns or rows
+in the non flexible direction, whether they are growable or not in the flexbile
+direction.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{SetFlexibleDrection}{wxflexgridsizersetflexibledrection}, 
+\helpref{SetNonFlexibleGrowMode}{wxflexgridsizersetnonflexiblegrowmode}
+
+
 \membersection{wxFlexGridSizer::RemoveGrowableCol}\label{wxflexgridsizerremovegrowablecol}
 
 \func{void}{RemoveGrowableCol}{\param{size\_t }{idx}}
 
 Specifies that column idx is no longer growable.
 
+
 \membersection{wxFlexGridSizer::RemoveGrowableRow}\label{wxflexgridsizerremovegrowablerow}
 
 \func{void}{RemoveGrowableRow}{\param{size\_t }{idx}}
 
 Specifies that row idx is no longer growable.
+
+
+\membersection{wxFlexGridSizer::SetFlexibleDirection}{wxflexgridsizersetflexibledrection}
+
+\func{void}{SetFlexibleDirections}{\param{int }{direction}}
+
+Specifies whether the sizer should flexibly resize its columns, rows, or
+both. Argument {\t direction} can be {\tt wxVERTICAL}, {\tt wxHORIZONTAL} 
+or {\tt wxBOTH} (which is the default value). Any other value is ignored. See
+\helpref{GetFlexibleDirection()}{wxflexgridsizergetflexibledrection} for the
+explanation of these values.
+
+Note that this method does not trigger relayout.
+
+
+\membersection{wxFlexGridSizer::SetNonFlexibleGrowMode}{wxflexgridsizersetnonflexiblegrowmode}
+
+\func{void}{SetNonFlexibleGrowMode}{\param{int }{mode}}
+
+Specifies how the sizer should grow in the non flexible direction if
+there is one (so
+\helpref{SetFlexibleDirections()}{wxflexgridsizersetflexibledrection} must have
+been called previously). Argument {\it mode} can be one of those documented in
+\helpref{GetNonFlexibleGrowMode}{wxflexgridsizergetnonflexiblegrowmode}, please
+see there for their explanation.
+
+Note that this method does not trigger relayout.
 

@@ -1000,48 +1000,21 @@ void wxGridSizer::SetItemBounds( wxSizerItem *item, int x, int y, int w, int h )
 //---------------------------------------------------------------------------
 
 wxFlexGridSizer::wxFlexGridSizer( int rows, int cols, int vgap, int hgap )
-   : wxGridSizer( rows, cols, vgap, hgap )
-   , m_rowHeights( NULL )
-   , m_colWidths( NULL )
+               : wxGridSizer( rows, cols, vgap, hgap ),
+                 m_flexDirection(wxBOTH),
+                 m_growMode(wxFLEX_GROWMODE_SPECIFIED)
 {
 }
 
 wxFlexGridSizer::wxFlexGridSizer( int cols, int vgap, int hgap )
-   : wxGridSizer( cols, vgap, hgap )
-   , m_rowHeights( NULL )
-   , m_colWidths( NULL )
+               : wxGridSizer( cols, vgap, hgap ),
+                 m_flexDirection(wxBOTH),
+                 m_growMode(wxFLEX_GROWMODE_SPECIFIED)
 {
 }
 
 wxFlexGridSizer::~wxFlexGridSizer()
 {
-    if (m_rowHeights)
-        delete[] m_rowHeights;
-    if (m_colWidths)
-        delete[] m_colWidths;
-}
-
-void wxFlexGridSizer::CreateArrays()
-{
-    if (m_rowHeights)
-        delete[] m_rowHeights;
-    if (m_colWidths)
-        delete[] m_colWidths;
-
-    int nitems, nrows, ncols;
-    if ( (nitems = CalcRowsCols(nrows, ncols)) == 0 )
-    {
-        m_rowHeights =
-        m_colWidths = NULL;
-    }
-
-    m_rowHeights = new int[nrows];
-    m_colWidths = new int[ncols];
-
-    for (int col = 0; col < ncols; col++)
-        m_colWidths[ col ] = 0;
-    for (int row = 0; row < nrows; row++)
-        m_rowHeights[ row ] = 0;
 }
 
 void wxFlexGridSizer::RecalcSizes()
@@ -1054,36 +1027,63 @@ void wxFlexGridSizer::RecalcSizes()
     wxSize minsz( CalcMin() );
     wxPoint pt( GetPosition() );
     int    delta;
-    size_t idx,num;
+    size_t idx, num;
     wxArrayInt temp;
 
-    // Transfer only those rows into temp which exist in the sizer
-    // ignoring the superflouus ones. This prevents a segfault when
-    // calling AddGrowableRow( 3 ) if the sizer only has 2 rows.
-    for (idx = 0; idx < m_growableRows.GetCount(); idx++)
-        if (m_growableRows[idx] < nrows)
-            temp.Add( m_growableRows[idx] );
-    num = temp.GetCount();
-
-    if ((num > 0) && (sz.y > minsz.y))
+    // what to do with the rows? by default, resize them proportionally
+    if ( (m_flexDirection & wxVERTICAL) ||
+            (m_growMode == wxFLEX_GROWMODE_SPECIFIED) )
     {
-        delta = (sz.y - minsz.y) / num;
-        for (idx = 0; idx < num; idx++)
-            m_rowHeights[ temp[idx] ] += delta;
+        // Transfer only those rows into temp which exist in the sizer
+        // ignoring the superfluous ones. This prevents a segfault when
+        // calling AddGrowableRow( 3 ) if the sizer only has 2 rows.
+        for (idx = 0; idx < m_growableRows.GetCount(); idx++)
+        {
+            if (m_growableRows[idx] < nrows)
+                temp.Add( m_growableRows[idx] );
+        }
+
+        num = temp.GetCount();
+
+        if ((num > 0) && (sz.y > minsz.y))
+        {
+            delta = (sz.y - minsz.y) / num;
+            for (idx = 0; idx < num; idx++)
+                m_rowHeights[ temp[idx] ] += delta;
+        }
+        temp.Empty();
+    }
+    else if ( (m_growMode == wxFLEX_GROWMODE_ALL) && (sz.y > minsz.y) )
+    {
+        // rounding problem?
+        for ( int row = 0; row < nrows; ++row )
+            m_rowHeights[ row ] = sz.y / nrows;
     }
 
-    temp.Empty();
-    // See above
-    for (idx = 0; idx < m_growableCols.GetCount(); idx++)
-        if (m_growableCols[idx] < ncols)
-            temp.Add( m_growableCols[idx] );
-    num = temp.GetCount();
-
-    if ((num > 0) && (sz.x > minsz.x))
+    // the same logic as above but for the columns
+    if ( (m_flexDirection & wxHORIZONTAL) ||
+            (m_growMode == wxFLEX_GROWMODE_SPECIFIED) )
     {
-        delta = (sz.x - minsz.x) / num;
-        for (idx = 0; idx < num; idx++)
-            m_colWidths[ temp[idx] ] += delta;
+        // See above
+        for (idx = 0; idx < m_growableCols.GetCount(); idx++)
+        {
+            if (m_growableCols[idx] < ncols)
+                temp.Add( m_growableCols[idx] );
+        }
+
+        num = temp.GetCount();
+
+        if ((num > 0) && (sz.x > minsz.x))
+        {
+            delta = (sz.x - minsz.x) / num;
+            for (idx = 0; idx < num; idx++)
+                m_colWidths[ temp[idx] ] += delta;
+        }
+    }
+    else if ( (m_growMode == wxFLEX_GROWMODE_ALL) && (sz.x > minsz.x) )
+    {
+        for ( int col=0; col < ncols; ++col )
+            m_colWidths[ col ] = sz.x / ncols;
     }
 
     sz = wxSize( pt.x + sz.x, pt.y + sz.y );
@@ -1114,11 +1114,12 @@ void wxFlexGridSizer::RecalcSizes()
 
 wxSize wxFlexGridSizer::CalcMin()
 {
-    int nitems, nrows, ncols;
-    if ( (nitems = CalcRowsCols(nrows, ncols)) == 0 )
-        return wxSize(10,10);
+    int nrows, ncols;
+    if ( !CalcRowsCols(nrows, ncols) )
+        return wxSize(10, 10);
 
-    CreateArrays();
+    m_rowHeights.SetCount(nrows);
+    m_colWidths.SetCount(ncols);
 
     int                      i = 0;
     wxSizerItemList::Node   *node = m_children.GetFirst();
@@ -1136,6 +1137,34 @@ wxSize wxFlexGridSizer::CalcMin()
         node = node->GetNext();
         i++;
     }
+
+    // the logic above works when we resize flexibly in both directions but
+    // maybe this is not the case
+    if ( m_flexDirection != wxBOTH )
+    {
+        // select the array corresponding to the direction in which we do *not*
+        // resize flexibly
+        wxArrayInt& array = m_flexDirection == wxVERTICAL ? m_colWidths
+                                                          : m_rowHeights;
+
+        const int count = array.GetCount();
+
+        // find the largest value in this array
+        int n,
+            largest = 0;
+        for ( n = 0; n < count; ++n )
+        {
+            if ( array[n] > largest )
+                largest = array[n];
+        }
+
+        // and now fill it with the largest value
+        for ( n = 0; n < count; ++n )
+        {
+            array[n] = largest;
+        }
+    }
+
 
     int width = 0;
     for (int col = 0; col < ncols; col++)

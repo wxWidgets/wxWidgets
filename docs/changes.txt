@@ -17,6 +17,7 @@ All:
 - use true/false throughout the library instead of TRUE/FALSE
 - wxStopWatch::Start() resumes the stop watch if paused, as per the docs
 - added wxDirTraverser::OnOpenError() to customize the error handling
+- added wxArray::SetCount()
 
 wxBase:
 
@@ -24,6 +25,7 @@ wxBase:
 
 All GUI ports:
 
+- added wxFlexGridSizer::SetFlexibleDirection() (Szczepan Holyszewski)
 - implemented GetEditControl for wxGenericTreeCtrl (Peter Stieber)
 - improved contrib/utils/convertrc parsing (David J. Cooke)
 - fixed handling of URLs and filenames in wxFileSystem

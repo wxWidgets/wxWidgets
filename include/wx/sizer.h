@@ -339,8 +339,8 @@ public:
     wxGridSizer( int rows, int cols, int vgap, int hgap );
     wxGridSizer( int cols, int vgap = 0, int hgap = 0 );
 
-    void RecalcSizes();
-    wxSize CalcMin();
+    virtual void RecalcSizes();
+    virtual wxSize CalcMin();
 
     void SetCols( int cols )    { m_cols = cols; }
     void SetRows( int rows )    { m_rows = rows; }
@@ -370,28 +370,67 @@ private:
 // wxFlexGridSizer
 //---------------------------------------------------------------------------
 
+// the bevaiour for resizing wxFlexGridSizer cells in the "non-flexible"
+// direction
+enum wxFlexSizerGrowMode
+{
+    // don't resize the cells in non-flexible direction at all
+    wxFLEX_GROWMODE_NONE,
+
+    // uniformly resize only the specified ones (default)
+    wxFLEX_GROWMODE_SPECIFIED,
+
+    // uniformly resize all cells
+    wxFLEX_GROWMODE_ALL
+};
+
 class WXDLLEXPORT wxFlexGridSizer: public wxGridSizer
 {
 public:
+    // ctors/dtor
     wxFlexGridSizer( int rows, int cols, int vgap, int hgap );
     wxFlexGridSizer( int cols, int vgap = 0, int hgap = 0 );
-    ~wxFlexGridSizer();
+    virtual ~wxFlexGridSizer();
 
-    void RecalcSizes();
-    wxSize CalcMin();
 
+    // set the rows/columns which will grow (the others will remain of the
+    // constant initial size)
     void AddGrowableRow( size_t idx );
     void RemoveGrowableRow( size_t idx );
     void AddGrowableCol( size_t idx );
     void RemoveGrowableCol( size_t idx );
 
-protected:
-    int         *m_rowHeights;
-    int         *m_colWidths;
-    wxArrayInt  m_growableRows;
-    wxArrayInt  m_growableCols;
 
-    void CreateArrays();
+    // the sizer cells may grow in both directions, not grow at all or only
+    // grow in one direction but not the other
+
+    // the direction may be wxVERTICAL, wxHORIZONTAL or wxBOTH (default)
+    void SetFlexibleDirection(int direction) { m_flexDirection = direction; }
+    int GetFlexibleDirection() const { return m_flexDirection; }
+
+    // note that the grow mode only applies to the direction which is not
+    // flexible
+    void SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode) { m_growMode = mode; }
+    wxFlexSizerGrowMode GetNonFlexibleGrowMode() const { return m_growMode; }
+
+
+    // implementation
+    virtual void RecalcSizes();
+    virtual wxSize CalcMin();
+
+protected:
+    // the heights/widths of all rows/columns
+    wxArrayInt  m_rowHeights,
+                m_colWidths;
+
+    // indices of the growable columns and rows
+    wxArrayInt  m_growableRows,
+                m_growableCols;
+
+    // parameters describing whether the growable cells should be resized in
+    // both directions or only one
+    int m_flexDirection;
+    wxFlexSizerGrowMode m_growMode;
 
 private:
     DECLARE_CLASS(wxFlexGridSizer);
