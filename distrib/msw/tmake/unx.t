@@ -223,10 +223,11 @@ VP5 = @top_srcdir@/src/unix
 VP6 = @top_srcdir@/src/html
 VP7 = @top_srcdir@/src/png
 VP8 = @top_srcdir@/src/jpeg
-VP9 = @top_srcdir@/src/zlib
-VP10 = @top_srcdir@/src/iodbc
+VP9 = @top_srcdir@/src/tiff
+VP10 = @top_srcdir@/src/zlib
+VP11 = @top_srcdir@/src/iodbc
 
-VPATH = $(VP1):$(VP2):$(VP3):$(VP4):$(VP5):$(VP6):$(VP7):$(VP8):$(VP9):$(VP10)
+VPATH = $(VP1):$(VP2):$(VP3):$(VP4):$(VP5):$(VP6):$(VP7):$(VP8):$(VP9):$(VP10):$(VP11)
 
 top_srcdir = @top_srcdir@
 prefix = @prefix@
@@ -496,6 +497,40 @@ JPEGOBJS    = \
 		jquant1.o \
 		jquant2.o \
 		jdmerge.o
+
+TIFFOBJS	= \
+		tif_aux.o \
+		tif_close.o \
+		tif_codec.o \
+		tif_compress.o \
+		tif_dir.o \
+		tif_dirinfo.o \
+		tif_dirread.o \
+		tif_dirwrite.o \
+		tif_dumpmode.o \
+		tif_error.o \
+		tif_fax3.o \
+		tif_fax3sm.o \
+		tif_getimage.o \
+		tif_jpeg.o \
+		tif_flush.o \
+		tif_lzw.o \
+		tif_next.o \
+		tif_open.o \
+		tif_packbits.o \
+		tif_pixarlog.o \
+		tif_predict.o \
+		tif_print.o \
+		tif_read.o \
+		tif_swab.o \
+		tif_strip.o \
+		tif_thunder.o \
+		tif_tile.o \
+		tif_unix.o \
+		tif_version.o \
+		tif_warning.o \
+		tif_write.o \
+		tif_zip.o
 
 IODBC_OBJS = \
 		catalog.o \

@@ -133,6 +133,7 @@ image.cpp	C
 imagall.cpp	C
 imaggif.cpp	C
 imagjpeg.cpp	C	32
+imagtiff.cpp	C	32
 imagpcx.cpp	C	32
 imagpng.cpp	C	32
 imagpnm.cpp	C	32
