@@ -66,14 +66,8 @@
 
 #include <string.h>
 
-#if defined(__WIN95__) && !defined(__TWIN32__)
-#define wxUSE_RICHEDIT 1
-#else
-#define wxUSE_RICHEDIT 0
-#endif
-
 #if wxUSE_RICHEDIT && !defined(__GNUWIN32__)
-#include <richedit.h>
+    #include <richedit.h>
 #endif
 
 #if !USE_SHARED_LIBRARY
@@ -84,17 +78,17 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
   EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
   EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
 END_EVENT_TABLE()
-
-#endif
+#endif // USE_SHARED_LIBRARY
 
 // Text item
-wxTextCtrl::wxTextCtrl(void)
+wxTextCtrl::wxTextCtrl()
 #ifndef NO_TEXT_WINDOW_STREAM
- :streambuf()
+          : streambuf()
 #endif
 {
-  m_fileName = "";
+#if wxUSE_RICHEDIT
   m_isRich = FALSE;
+#endif
 }
 
 bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -128,24 +122,12 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   int width = size.x;
   int height = size.y;
 
-#ifdef __WIN32__
-  WXHGLOBAL m_globalHandle = 0;
-#else
-  // Obscure method from the MS Developer's Network Disk for
-  // using global memory instead of the local heap, which
-  // runs out far too soon. Solves the problem with
-  // failing to appear.
-
-  // Doesn't seem to work for Win95, so removing.
-  m_globalHandle=0;
-//  if ((wxGetOsVersion() != wxWINDOWS_NT) && (wxGetOsVersion() != wxWIN95))
-//    m_globalHandle = (WXHGLOBAL) GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT,
-//                         256L);
-#endif
-
   long msStyle = ES_LEFT | WS_VISIBLE | WS_CHILD | WS_TABSTOP;
   if (m_windowStyle & wxTE_MULTILINE)
-  msStyle |= ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL ; // WS_BORDER
+  {
+    msStyle |= ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL ; // WS_BORDER
+    m_windowStyle |= wxTE_PROCESS_ENTER;
+  }
   else
     msStyle |= ES_AUTOHSCROLL ;
 
@@ -157,7 +139,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   if (m_windowStyle & wxTE_PASSWORD) // hidden input
     msStyle |= ES_PASSWORD;
 
-  char *windowClass = "EDIT";
+  const char *windowClass = "EDIT";
+
 #if wxUSE_RICHEDIT
   if ( m_windowStyle & wxTE_MULTILINE )
   {
@@ -166,8 +149,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     windowClass = "RichEdit" ;
   }
   else
-#endif
     m_isRich = FALSE;
+#endif
 
   bool want3D;
   WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
@@ -178,7 +161,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   if (m_windowStyle & wxSIMPLE_BORDER)
   {
     windowClass = "EDIT";
-  m_isRich = FALSE;
+    m_isRich = FALSE;
   }
 #endif
 
@@ -190,7 +173,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   m_hWnd = (WXHWND)::CreateWindowEx(exStyle, windowClass, NULL,
                         msStyle,
                         0, 0, 0, 0, (HWND) ((wxWindow*)parent)->GetHWND(), (HMENU)m_windowId,
-                        m_globalHandle ? (HINSTANCE) m_globalHandle : wxGetInstance(), NULL);
+                        wxGetInstance(), NULL);
 
   wxCHECK_MSG( m_hWnd, FALSE, "Failed to create text ctrl" );
 
@@ -236,14 +219,16 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 }
 
 // Make sure the window style (etc.) reflects the HWND style (roughly)
-void wxTextCtrl::AdoptAttributesFromHWND(void)
+void wxTextCtrl::AdoptAttributesFromHWND()
 {
   wxWindow::AdoptAttributesFromHWND();
 
   HWND hWnd = (HWND) GetHWND();
   long style = GetWindowLong((HWND) hWnd, GWL_STYLE);
 
-    char buf[256];
+  // retrieve the style to see whether this is an edit or richedit ctrl
+#if wxUSE_RICHEDIT
+  char buf[256];
 
 #ifndef __WIN32__
   GetClassName((HWND) hWnd, buf, 256);
@@ -266,6 +251,7 @@ void wxTextCtrl::AdoptAttributesFromHWND(void)
     m_isRich = FALSE;
   else
     m_isRich = TRUE;
+#endif
 
   if (style & ES_MULTILINE)
     m_windowStyle |= wxTE_MULTILINE;
@@ -277,13 +263,13 @@ void wxTextCtrl::AdoptAttributesFromHWND(void)
     m_windowStyle |= wxTE_PROCESS_ENTER;
 }
 
-void wxTextCtrl::SetupColours(void)
+void wxTextCtrl::SetupColours()
 {
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
   SetForegroundColour(GetParent()->GetForegroundColour());
 }
 
-wxString wxTextCtrl::GetValue(void) const
+wxString wxTextCtrl::GetValue() const
 {
     int length = GetWindowTextLength((HWND) GetHWND());
     char *s = new char[length+1];
@@ -376,19 +362,19 @@ void wxTextCtrl::SetSize(int x, int y, int width, int height, int sizeFlags)
 }
 
 // Clipboard operations
-void wxTextCtrl::Copy(void)
+void wxTextCtrl::Copy()
 {
   HWND hWnd = (HWND) GetHWND();
   SendMessage(hWnd, WM_COPY, 0, 0L);
 }
 
-void wxTextCtrl::Cut(void)
+void wxTextCtrl::Cut()
 {
   HWND hWnd = (HWND) GetHWND();
   SendMessage(hWnd, WM_CUT, 0, 0L);
 }
 
-void wxTextCtrl::Paste(void)
+void wxTextCtrl::Paste()
 {
   HWND hWnd = (HWND) GetHWND();
   SendMessage(hWnd, WM_PASTE, 0, 0L);
@@ -426,13 +412,13 @@ void wxTextCtrl::SetInsertionPoint(long pos)
   SendMessage(hWnd, EM_REPLACESEL, 0, (LPARAM)nothing);
 }
 
-void wxTextCtrl::SetInsertionPointEnd(void)
+void wxTextCtrl::SetInsertionPointEnd()
 {
   long pos = GetLastPosition();
   SetInsertionPoint(pos);
 }
 
-long wxTextCtrl::GetInsertionPoint(void) const
+long wxTextCtrl::GetInsertionPoint() const
 {
 #if wxUSE_RICHEDIT
   if (m_isRich)
@@ -449,7 +435,7 @@ long wxTextCtrl::GetInsertionPoint(void) const
   return Pos&0xFFFF;
 }
 
-long wxTextCtrl::GetLastPosition(void) const
+long wxTextCtrl::GetLastPosition() const
 {
     HWND hWnd = (HWND) GetHWND();
 
@@ -587,16 +573,19 @@ bool wxTextCtrl::LoadFile(const wxString& file)
 // Returns TRUE if succeeds.
 bool wxTextCtrl::SaveFile(const wxString& file)
 {
-  wxString theFile(file);
-  if (theFile == "")
-    theFile = m_fileName;
-  if (theFile == "")
-    return FALSE;
-  m_fileName = theFile;
+    wxString theFile(file);
 
-  ofstream output((char*) (const char*) theFile);
-  if (output.bad())
-  return FALSE;
+    if (theFile == "")
+        theFile = m_fileName;
+
+    if (theFile == "")
+        return FALSE;
+
+    m_fileName = theFile;
+
+    ofstream output((char*) (const char*) theFile);
+    if (output.bad())
+        return FALSE;
 
     // This will only save 64K max
     unsigned long nbytes = SendMessage((HWND) GetHWND(), WM_GETTEXTLENGTH, 0, 0);
@@ -604,13 +593,13 @@ bool wxTextCtrl::SaveFile(const wxString& file)
     SendMessage((HWND) GetHWND(), WM_GETTEXT, (WPARAM)(nbytes+1), (LPARAM)tmp_buffer);
     char *pstr = tmp_buffer;
 
-  // Convert \r\n to just \n
-  while (*pstr)
-  {
-    if (*pstr != '\r')
-      output << *pstr;
-    pstr++;
-  }
+    // Convert \r\n to just \n
+    while (*pstr)
+    {
+      if (*pstr != '\r')
+        output << *pstr;
+      pstr++;
+    }
 
     farfree(tmp_buffer);
     SendMessage((HWND) GetHWND(), EM_SETMODIFY, FALSE, 0L);
@@ -641,19 +630,19 @@ void wxTextCtrl::WriteText(const wxString& text)
     delete[] newtext;
 }
 
-void wxTextCtrl::Clear(void)
+void wxTextCtrl::Clear()
 {
 //    SendMessage((HWND) GetHWND(), WM_SETTEXT, 0, (LPARAM)"");
     SetWindowText((HWND) GetHWND(), "");
 }
 
-bool wxTextCtrl::IsModified(void) const
+bool wxTextCtrl::IsModified() const
 {
     return (SendMessage((HWND) GetHWND(), EM_GETMODIFY, 0, 0) != 0);
 }
 
 // Makes 'unmodified'
-void wxTextCtrl::DiscardEdits(void)
+void wxTextCtrl::DiscardEdits()
 {
   SendMessage((HWND) GetHWND(), EM_SETMODIFY, FALSE, 0L);
 }
@@ -663,7 +652,7 @@ void wxTextCtrl::DiscardEdits(void)
  *
  */
  
-int wxTextCtrl::GetNumberOfLines(void) const
+int wxTextCtrl::GetNumberOfLines() const
 {
     return (int)SendMessage((HWND) GetHWND(), EM_GETLINECOUNT, (WPARAM)0, (LPARAM)0);
 }
@@ -850,7 +839,7 @@ int wxTextCtrl::overflow(int c)
 //=========================================================================
 // called then "endl" is output (gcc) or then explicit sync is done (Borland)
 //=========================================================================
-int wxTextCtrl::sync(void)
+int wxTextCtrl::sync()
 {
   // Verify that there are no characters in get area
   if ( gptr() && gptr() < egptr() )
@@ -877,7 +866,7 @@ int wxTextCtrl::sync(void)
 //=========================================================================
 // Should not be called by a "ostream". Used by a "istream"
 //=========================================================================
-int wxTextCtrl::underflow(void)
+int wxTextCtrl::underflow()
 {
   return EOF;
 }
@@ -961,54 +950,70 @@ WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
-    // Fix by Marcel Rasche to allow Alt-Ctrl insertion of special characters
-  switch(event.KeyCode())
-  {
-  case '{':
-  case '}':
-  case '[':
-  case ']':
-  case '|':
-  case '~':
-  case '\\':
-   {
-    char c=(char)event.KeyCode();
-    *this << c;
-   }
-   break;
-  }
-  if ( (event.KeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
-  {
-    wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
-    event.SetEventObject( this );
-    if ( GetEventHandler()->ProcessEvent(event) )
-      return;
-  }
-  else if ( event.KeyCode() == WXK_TAB ) {
-    wxNavigationKeyEvent event;
-    event.SetDirection(!(::GetKeyState(VK_SHIFT) & 0x100));
-    event.SetWindowChange(FALSE);
-    event.SetEventObject(this);
+    switch( event.KeyCode() )
+    {
+        // Fix by Marcel Rasche to allow Alt-Ctrl insertion of special characters
+        case '{':
+        case '}':
+        case '[':
+        case ']':
+        case '|':
+        case '~':
+        case '\\':
+            {
+                char c = (char)event.KeyCode();
+                *this << c;
+            }
+            break;
 
-    if ( GetEventHandler()->ProcessEvent(event) )
-      return;
-  }
+        case WXK_RETURN:
+            wxASSERT_MSG( m_windowStyle & wxTE_PROCESS_ENTER,
+                          "this text ctrl should never receive return" );
+            {
+                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+                event.SetEventObject( this );
+                if ( GetEventHandler()->ProcessEvent(event) )
+                    return;
+            }
 
-  event.Skip();
+        case WXK_TAB:
+            // only produce navigation event if we don't process TAB ourself
+            if ( !(m_windowStyle & wxTE_PROCESS_TAB) )
+            {
+                wxNavigationKeyEvent event;
+                event.SetDirection(!(::GetKeyState(VK_SHIFT) & 0x100));
+                event.SetWindowChange(FALSE);
+                event.SetEventObject(this);
+    
+                if ( GetEventHandler()->ProcessEvent(event) )
+                    return;
+            }
+    }
+    
+    // don't just call event.Skip() because this will cause TABs and ENTERs
+    // be passed upwards and we don't always want this - instead process it
+    // right here
+    Default();
 }
 
 long wxTextCtrl::MSWGetDlgCode()
 {
-  long lRc = DLGC_WANTCHARS | DLGC_WANTARROWS;
-  if ( m_windowStyle & wxTE_PROCESS_ENTER )
-    lRc |= DLGC_WANTMESSAGE;
-  else if ( m_windowStyle & wxTE_MULTILINE )
-    lRc |= DLGC_WANTMESSAGE;
-  // ??
-  if ( m_windowStyle & wxTE_PROCESS_TAB )
-    lRc |= DLGC_WANTTAB;
+    // we always want the characters and the arrows
+    long lRc = DLGC_WANTCHARS | DLGC_WANTARROWS;
 
-  return lRc;
+    // we may have several different cases:
+    // 1. normal case: both TAB and ENTER are used for dialog navigation
+    // 2. ctrl which wants TAB for itself: ENTER is used to pass to the next
+    //    control in the dialog
+    // 3. ctrl which wants ENTER for itself: TAB is used for dialog navigation
+    // 4. ctrl which wants both TAB and ENTER: Ctrl-ENTER is used to pass to
+    //    the next control
+    if ( m_windowStyle & wxTE_PROCESS_ENTER )
+        lRc |= DLGC_WANTMESSAGE;
+    if ( m_windowStyle & wxTE_PROCESS_TAB )
+        lRc |= DLGC_WANTTAB;
+    
+    return lRc;
 }
 
 void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
