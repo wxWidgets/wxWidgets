@@ -336,12 +336,6 @@ wxCursor::wxCursor(wxStockCursor id)
 {
     m_refData = new wxCursorRefData;
     M_CURSORDATA->m_cursorId = id;
-
-    WXDisplay* display = wxGetDisplay();
-    if (!display)
-      return;
-
-    WXCursor cursor = GetXCursor(display);
 }
 
 wxCursor::~wxCursor()
