@@ -329,6 +329,16 @@ wxLayoutObjectText::Layout(wxDC &dc, class wxLayoutList *llist)
              heightOld = m_Height;
 #endif // 0
 
+#ifdef __WXDEBUG__
+   CoordType a,b,c,d,e,f;
+   dc.GetTextExtent("test ", &a, &b, &c);
+   dc.GetTextExtent("test", &d, &e, &f);
+   wxASSERT(a != d);
+   wxASSERT(b == e);
+   wxASSERT(c == f);
+   dc.GetTextExtent(" ", &d, &e, &f);
+   wxASSERT(a > 0);
+#endif
    dc.GetTextExtent(m_Text, &m_Width, &m_Height, &descent);
 
 #if 0
