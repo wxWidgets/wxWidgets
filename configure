@@ -12183,7 +12183,7 @@ rm -f conftest*
         fi
 
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXext -lXt -lX11"
-        TOOLKIT_VPATH="\${top_srcdir}/src/x11 \${top_srcdir}/src/univ"
+        TOOLKIT_VPATH="\${top_srcdir}/src/x11 \${top_srcdir}/src/univ \${top_srcdir}/src/univ/themes"
         TOOLKIT=X11
         GUIDIST=X11_DIST
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__"

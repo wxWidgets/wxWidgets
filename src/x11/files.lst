@@ -26,7 +26,6 @@ ALL_SOURCES = \
 		x11/region.cpp \
 		x11/settings.cpp \
 		x11/timer.cpp \
-		x11/toolbar.cpp \
 		x11/toplevel.cpp \
 		x11/utils.cpp \
 		x11/window.cpp \
@@ -648,7 +647,6 @@ GUIOBJS = \
 		region.o \
 		settings.o \
 		timer.o \
-		toolbar.o \
 		toplevel.o \
 		utils.o \
 		window.o \
