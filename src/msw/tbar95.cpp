@@ -398,8 +398,8 @@ bool wxToolBar95::CreateTools()
 
     delete [] buttons;
 
-    // TBBUTTONINFO struct declaration is missing from mingw32 headers
-#if !defined(__GNUWIN32__) && !defined(__WATCOMC__)
+    // TBBUTTONINFO struct declaration is new (comctl32.dll 4.70+)
+#if !defined(__GNUWIN32__) && !defined(__WATCOMC__) && !defined(__BORLANDC__)
     // adjust the controls size to fit nicely in the toolbar
     size_t nControls = controlIds.GetCount();
     for ( size_t nCtrl = 0; nCtrl < nControls; nCtrl++ )

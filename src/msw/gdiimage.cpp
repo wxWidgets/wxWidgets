@@ -32,12 +32,12 @@
     #include "wx/string.h"
 #endif // WX_PRECOMP
 
+#include "wx/msw/private.h"
+
 #include "wx/app.h"
 
 #include "wx/msw/dib.h"
 #include "wx/msw/gdiimage.h"
-
-#include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
 // private classes
