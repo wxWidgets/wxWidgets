@@ -1053,9 +1053,9 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
            : wxFrame(parent, wxID_ANY, cmd),
              m_process(process),
              // in a real program we'd check that the streams are !NULL here
+             m_out(*process->GetOutputStream()),
              m_in(*process->GetInputStream()),
-             m_err(*process->GetErrorStream()),
-             m_out(*process->GetOutputStream())
+             m_err(*process->GetErrorStream())
 {
     m_process->SetNextHandler(this);
 
