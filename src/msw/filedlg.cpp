@@ -299,8 +299,8 @@ int wxFileDialog::ShowModal()
     // forward slashes) and also squeeze multiple consecutive slashes into one
     // as it doesn't like two backslashes in a row neither
 
-    wxString 	dir;
-    size_t 	i, len = m_dir.length();
+    wxString  dir;
+    size_t    i, len = m_dir.length();
     dir.reserve(len);
     for ( i = 0; i < len; i++ )
     {

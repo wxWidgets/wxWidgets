@@ -29,7 +29,7 @@ public:
     // Enumerate the fonts.
     bool Enumerate();
 
-    // Stop enumeration if FALSE is returned.
+    // Stop enumeration if false is returned.
     // By default, the enumerator stores the facenames in a list for
     // retrieval via GetFacenames().
     virtual bool OnFont(const wxFont& font);

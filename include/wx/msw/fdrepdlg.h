@@ -39,7 +39,7 @@ public:
     wxFindReplaceDialogImpl *GetImpl() const { return m_impl; }
 
     // override some base class virtuals
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
     virtual void SetTitle( const wxString& title);
     virtual wxString GetTitle() const;
 

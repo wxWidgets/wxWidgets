@@ -82,7 +82,7 @@ public:
     FINDREPLACE *GetPtrFindReplace() { return &m_findReplace; }
 
     // set/query the "closed by user" flag
-    void SetClosedByUser() { m_wasClosedByUser = TRUE; }
+    void SetClosedByUser() { m_wasClosedByUser = true; }
     bool WasClosedByUser() const { return m_wasClosedByUser; }
 
 private:
@@ -97,7 +97,7 @@ private:
     // the find replace data used by the dialog
     FINDREPLACE m_findReplace;
 
-    // TRUE if the user closed us, FALSE otherwise
+    // true if the user closed us, false otherwise
     bool m_wasClosedByUser;
 
     // registered Message for Dialog
@@ -133,7 +133,7 @@ wxFindReplaceDialogImpl::wxFindReplaceDialogImpl(wxFindReplaceDialog *dialog,
     m_hwndOwner = NULL;
     m_oldParentWndProc = NULL;
 
-    m_wasClosedByUser = FALSE;
+    m_wasClosedByUser = false;
 
     wxZeroMemory(m_findReplace);
 
@@ -260,7 +260,7 @@ LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
         // map flags from Windows
         wxEventType evtType;
 
-        bool replace = FALSE;
+        bool replace = false;
         if ( pFR->Flags & FR_DIALOGTERM )
         {
             // we have to notify the dialog that it's being closed by user and
@@ -278,13 +278,13 @@ LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
         {
             evtType = wxEVT_COMMAND_FIND_REPLACE;
 
-            replace = TRUE;
+            replace = true;
         }
         else if ( pFR->Flags & FR_REPLACEALL )
         {
             evtType = wxEVT_COMMAND_FIND_REPLACE_ALL;
 
-            replace = TRUE;
+            replace = true;
         }
         else
         {
@@ -372,7 +372,7 @@ void wxFindReplaceDialog::Init()
     m_FindReplaceData = NULL;
 
     // as we're created in the hidden state, bring the internal flag in sync
-    m_isShown = FALSE;
+    m_isShown = false;
 }
 
 wxFindReplaceDialog::wxFindReplaceDialog(wxWindow *parent,
@@ -404,7 +404,7 @@ wxFindReplaceDialog::~wxFindReplaceDialog()
     delete m_impl;
 
     // prevent the base class dtor from trying to hide us!
-    m_isShown = FALSE;
+    m_isShown = false;
 
     // and from destroying our window [again]
     m_hWnd = (WXHWND)NULL;
@@ -434,7 +434,7 @@ bool wxFindReplaceDialog::Show(bool show)
     if ( !wxWindowBase::Show(show) )
     {
         // visibility status didn't change
-        return FALSE;
+        return false;
     }
 
     // do we already have the dialog window?
@@ -443,16 +443,16 @@ bool wxFindReplaceDialog::Show(bool show)
         // yes, just use it
         (void)::ShowWindow(GetHwnd(), show ? SW_SHOW : SW_HIDE);
 
-        return TRUE;
+        return true;
     }
 
     if ( !show )
     {
         // well, it doesn't exist which is as good as being hidden
-        return TRUE;
+        return true;
     }
 
-    wxCHECK_MSG( m_FindReplaceData, FALSE, _T("call Create() first!") );
+    wxCHECK_MSG( m_FindReplaceData, false, _T("call Create() first!") );
 
     wxASSERT_MSG( !m_impl, _T("why don't we have the window then?") );
 
@@ -482,7 +482,7 @@ bool wxFindReplaceDialog::Show(bool show)
         delete m_impl;
         m_impl = NULL;
 
-        return FALSE;
+        return false;
     }
 
     // subclass parent window in order to get FINDMSGSTRING message
@@ -495,7 +495,7 @@ bool wxFindReplaceDialog::Show(bool show)
 
     m_hWnd = (WXHWND)hwnd;
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------

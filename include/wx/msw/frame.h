@@ -57,7 +57,7 @@ public:
     // Toolbar
 #if wxUSE_TOOLBAR
     virtual wxToolBar* CreateToolBar(long style = -1,
-                                     wxWindowID id = -1,
+                                     wxWindowID id = wxID_ANY,
                                      const wxString& name = wxToolBarNameStr);
 
     virtual void PositionToolBar();
@@ -103,7 +103,7 @@ public:
     virtual void SendSizeEvent();
 
     virtual wxPoint GetClientAreaOrigin() const;
-    
+
 protected:
     // common part of all ctors
     void Init();
@@ -133,7 +133,7 @@ protected:
     // handle WM_INITMENUPOPUP message
     bool HandleInitMenuPopup(WXHMENU hMenu);
 
-    virtual bool IsMDIChild() const { return FALSE; }
+    virtual bool IsMDIChild() const { return false; }
 
     // get default (wxWidgets) icon for the frame
     virtual WXHICON GetDefaultIcon() const;

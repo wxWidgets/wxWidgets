@@ -91,7 +91,7 @@ wxBEGIN_FLAGS( wxFrameStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -141,7 +141,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxFrame)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxFrame , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle) 
+wxCONSTRUCTOR_6( wxFrame , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle)
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
@@ -157,9 +157,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 
 #if wxUSE_STATUSBAR
     #if wxUSE_NATIVE_STATUSBAR
-        bool wxFrame::m_useNativeStatusBar = TRUE;
+        bool wxFrame::m_useNativeStatusBar = true;
     #else
-        bool wxFrame::m_useNativeStatusBar = FALSE;
+        bool wxFrame::m_useNativeStatusBar = false;
     #endif
 #endif // wxUSE_NATIVE_STATUSBAR
 
@@ -178,7 +178,7 @@ void wxFrame::Init()
     m_fsStatusBarHeight = 0;
     m_fsToolBarHeight = 0;
 
-    m_wasMinimized = FALSE;
+    m_wasMinimized = false;
 }
 
 bool wxFrame::Create(wxWindow *parent,
@@ -203,7 +203,7 @@ bool wxFrame::Create(wxWindow *parent,
 
 wxFrame::~wxFrame()
 {
-    m_isBeingDeleted = TRUE;
+    m_isBeingDeleted = true;
     DeleteAllBars();
 }
 
@@ -349,7 +349,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
 #elif defined(WINCE_WITHOUT_COMMANDBAR)
     if (!GetToolBar())
     {
-        wxToolBar* toolBar = new wxToolBar(this, -1,
+        wxToolBar* toolBar = new wxToolBar(this, wxID_ANY,
                          wxDefaultPosition, wxDefaultSize,
                          wxBORDER_NONE | wxTB_HORIZONTAL,
                          wxToolBarNameStr, menubar);
@@ -368,7 +368,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
         // adjust for menu / titlebar height
         rc.bottom -= (2*menuHeight-1);
 
-        MoveWindow((HWND) GetHWND(), rc.left, rc.top, rc.right, rc.bottom, FALSE);
+        ::MoveWindow((HWND) GetHWND(), rc.left, rc.top, rc.right, rc.bottom, FALSE);
     }
 #endif
 
@@ -436,11 +436,11 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     wxWindow::OnSysColourChanged(event);
 }
 
-// Pass TRUE to show full screen, FALSE to restore.
+// Pass true to show full screen, false to restore.
 bool wxFrame::ShowFullScreen(bool show, long style)
 {
     if ( IsFullScreen() == show )
-        return FALSE;
+        return false;
 
     if (show)
     {
@@ -457,8 +457,8 @@ bool wxFrame::ShowFullScreen(bool show, long style)
 
         if ((style & wxFULLSCREEN_NOTOOLBAR) && theToolBar)
         {
-            theToolBar->SetSize(-1,0);
-            theToolBar->Show(FALSE);
+            theToolBar->SetSize(wxDefaultCoord,0);
+            theToolBar->Show(false);
         }
 #endif // __WXWINCE__
 #endif // wxUSE_TOOLBAR
@@ -482,7 +482,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
             //m_fsStatusBarFields = theStatusBar->GetFieldsCount();
             //SetStatusBar((wxStatusBar*) NULL);
             //delete theStatusBar;
-            theStatusBar->Show(FALSE);
+            theStatusBar->Show(false);
         }
         else
             m_fsStatusBarFields = 0;
@@ -491,7 +491,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
     else
     {
 #if wxUSE_TOOLBAR
-#if defined(WINCE_WITHOUT_COMMANDBAR) 
+#if defined(WINCE_WITHOUT_COMMANDBAR)
         // TODO: show commandbar
 #else
         wxToolBar *theToolBar = GetToolBar();
@@ -499,8 +499,8 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         // restore the toolbar, menubar, and statusbar
         if (theToolBar && (m_fsStyle & wxFULLSCREEN_NOTOOLBAR))
         {
-            theToolBar->SetSize(-1, m_fsToolBarHeight);
-            theToolBar->Show(TRUE);
+            theToolBar->SetSize(wxDefaultCoord, m_fsToolBarHeight);
+            theToolBar->Show(true);
         }
 #endif // __WXWINCE__
 #endif // wxUSE_TOOLBAR
@@ -511,7 +511,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
             //CreateStatusBar(m_fsStatusBarFields);
             if (GetStatusBar())
             {
-                GetStatusBar()->Show(TRUE);
+                GetStatusBar()->Show(true);
                 PositionStatusBar();
             }
         }
@@ -590,13 +590,13 @@ void wxFrame::PositionToolBar()
         int tw, th;
         toolbar->GetPosition(&tx, &ty);
         toolbar->GetSize(&tw, &th);
-        
+
         // Adjust
         if (ty < 0 && (-ty == th))
             ty = 0;
         if (tx < 0 && (-tx == tw))
-            tx = 0;        
-        
+            tx = 0;
+
         int desiredW = tw;
         int desiredH = th;
 
@@ -609,23 +609,23 @@ void wxFrame::PositionToolBar()
             desiredW = width;
 //            if ( toolbar->GetWindowStyleFlag() & wxTB_FLAT )
 //                desiredW -= 3;
-        }        
+        }
 
         // use the 'real' MSW position here, don't offset relativly to the
         // client area origin
 
         // Optimise such that we don't have to always resize the toolbar
-        // when the frame changes, otherwise we'll get a lot of flicker.        
+        // when the frame changes, otherwise we'll get a lot of flicker.
         bool heightChanging wxDUMMY_INITIALIZE(true);
         bool widthChanging wxDUMMY_INITIALIZE(true);
-        
+
         if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
         {
             // It's OK if the current height is greater than what can be shown.
             heightChanging = (desiredH > th) ;
             widthChanging = (desiredW != tw) ;
-            
-            // The next time around, we may not have to set the size            
+
+            // The next time around, we may not have to set the size
             if (heightChanging)
                 desiredH = desiredH + 200;
         }
@@ -635,14 +635,14 @@ void wxFrame::PositionToolBar()
             widthChanging = (desiredW > tw) ;
             heightChanging = (desiredH != th) ;
 
-            // The next time around, we may not have to set the size            
+            // The next time around, we may not have to set the size
             if (widthChanging)
                 desiredW = desiredW + 200;
         }
-        
+
         if (tx != 0 || ty != 0 || widthChanging || heightChanging)
             toolbar->SetSize(x, y, desiredW, desiredH, wxSIZE_NO_ADJUSTMENTS);
-        
+
 #endif // __WXWINCE__
     }
 }
@@ -717,18 +717,18 @@ WXHICON wxFrame::GetDefaultIcon() const
 bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
 {
     if ( wxWindow::MSWTranslateMessage(pMsg) )
-        return TRUE;
+        return true;
 
 #if wxUSE_MENUS && wxUSE_ACCEL && !defined(__WXUNIVERSAL__)
     // try the menu bar accels
     wxMenuBar *menuBar = GetMenuBar();
     if ( !menuBar )
-        return FALSE;
+        return false;
 
     const wxAcceleratorTable& acceleratorTable = menuBar->GetAccelTable();
     return acceleratorTable.Translate(this, pMsg);
 #else
-    return FALSE;
+    return false;
 #endif // wxUSE_MENUS && wxUSE_ACCEL
 }
 
@@ -739,7 +739,7 @@ bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
 bool wxFrame::HandlePaint()
 {
     RECT rect;
-    if ( GetUpdateRect(GetHwnd(), &rect, FALSE) )
+    if ( ::GetUpdateRect(GetHwnd(), &rect, FALSE) )
     {
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         if ( m_iconized )
@@ -773,7 +773,7 @@ bool wxFrame::HandlePaint()
 
             ::EndPaint(GetHwnd(), &ps);
 
-            return TRUE;
+            return true;
         }
         else
  #endif
@@ -784,13 +784,13 @@ bool wxFrame::HandlePaint()
     else
     {
         // nothing to paint - processed
-        return TRUE;
+        return true;
     }
 }
 
 bool wxFrame::HandleSize(int x, int y, WXUINT id)
 {
-    bool processed = FALSE;
+    bool processed = false;
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 
     switch ( id )
@@ -803,9 +803,9 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
                 break;
 
             // restore all child frames too
-            IconizeChildFrames(FALSE);
+            IconizeChildFrames(false);
 
-            (void)SendIconizeEvent(FALSE);
+            (void)SendIconizeEvent(false);
 
             // fall through
 
@@ -815,11 +815,11 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
 
         case SIZEICONIC:
             // iconize all child frames too
-            IconizeChildFrames(TRUE);
+            IconizeChildFrames(true);
 
             (void)SendIconizeEvent();
 
-            m_iconized = TRUE;
+            m_iconized = true;
             break;
     }
 #endif
@@ -890,11 +890,11 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
         if ( ProcessCommand(id) )
         {
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
@@ -917,9 +917,9 @@ bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
         // items opening popup menus (they don't have them anyhow) but do clear
         // the status line - otherwise, we would be left with the help message
         // for the previous item which doesn't apply any more
-        DoGiveHelp(wxEmptyString, FALSE);
+        DoGiveHelp(wxEmptyString, false);
 
-        return FALSE;
+        return false;
     }
 
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
@@ -945,7 +945,7 @@ bool wxFrame::HandleMenuLoop(const wxEventType& evtType, WXWORD isPopup)
 WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXLRESULT rc = 0;
-    bool processed = FALSE;
+    bool processed = false;
 
     switch ( message )
     {
@@ -1027,7 +1027,7 @@ bool wxFrame::HandleInitMenuPopup(WXHMENU hMenu)
             }
         }
     }
-    
+
     wxMenuEvent event(wxEVT_MENU_OPEN, 0, menu);
     event.SetEventObject(this);
 

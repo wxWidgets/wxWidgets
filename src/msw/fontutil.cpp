@@ -102,11 +102,11 @@ bool wxNativeEncodingInfo::FromString(const wxString& s)
         if ( wxSscanf(tmp, _T("%u"), &charset) != 1 )
         {
             // should be a number!
-            return FALSE;
+            return false;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 wxString wxNativeEncodingInfo::ToString() const
@@ -141,7 +141,7 @@ wxString wxNativeEncodingInfo::ToString() const
 bool wxGetNativeFontEncoding(wxFontEncoding encoding,
                              wxNativeEncodingInfo *info)
 {
-    wxCHECK_MSG( info, FALSE, _T("bad pointer in wxGetNativeFontEncoding") );
+    wxCHECK_MSG( info, NULL, _T("bad pointer in wxGetNativeFontEncoding") );
 
     if ( encoding == wxFONTENCODING_DEFAULT )
     {
@@ -151,11 +151,11 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
     extern WXDLLIMPEXP_BASE long wxEncodingToCharset(wxFontEncoding encoding);
     info->charset = wxEncodingToCharset(encoding);
     if ( info->charset == -1 )
-        return FALSE;
+        return false;
 
     info->encoding = encoding;
 
-    return TRUE;
+    return true;
 }
 
 bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
@@ -171,12 +171,12 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
     if ( !hfont )
     {
         // no such font
-        return FALSE;
+        return false;
     }
 
     ::DeleteObject((HGDIOBJ)hfont);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
