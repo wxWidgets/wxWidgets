@@ -19,8 +19,10 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-
 #include "wx/defs.h"
+
+#if wxUSE_DATAOBJ
+
 #include "wx/string.h"
 #include "wx/bitmap.h"
 #include "wx/list.h"
@@ -478,5 +480,7 @@ private:
         void SetURL(const wxString& url) { SetText(url); }
     };
 #endif // __WXMSW__/!__WXMSW__
+
+#endif // wxUSE_DATAOBJ
 
 #endif // _WX_DATAOBJ_H_BASE_
