@@ -206,6 +206,12 @@ Deletes the given node from the list, returning {\tt true} if successful.
 Finds the given client {\it object} and deletes the appropriate node from the list, returning
 {\tt true} if successful. The application must delete the actual object separately.
 
+\membersection{wxList::Erase}\label{wxlisterase}
+
+\func{void}{Erase}{\param{wxNode<T> *}{node}}
+
+Removes element at given position.
+
 \membersection{wxList::Find}\label{wxlistfind}
 
 \func{wxNode<T> *}{Find}{\param{T *}{ object}}
