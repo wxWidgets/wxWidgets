@@ -14,7 +14,7 @@
 
 #include "wx/defs.h"
 #include "wx/window.h"
-#include "wx/dc.h"
+#include "wx/dcclient.h"
 #include "wx/frame.h"
 #include "wx/app.h"
 #include "wx/layout.h"
@@ -669,7 +669,8 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
 
         if (gdk_event->count == 0)
         {
-            wxEraseEvent eevent( win->GetId() );
+            wxClientDC dc(this);
+            wxEraseEvent eevent( win->GetId(), &dc );
             eevent.SetEventObject( win );
             win->GetEventHandler()->ProcessEvent(eevent);
 
@@ -771,7 +772,8 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
 
         win->m_clipPaintRegion = TRUE;
     
-        wxEraseEvent eevent( win->GetId() );
+        wxClientDC dc(this);
+        wxEraseEvent eevent( win->GetId(), &dc );
         eevent.SetEventObject( win );
         win->GetEventHandler()->ProcessEvent(eevent);
 
