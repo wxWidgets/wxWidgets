@@ -1,7 +1,6 @@
 install-sh
 Makefile
 template.mak
-TODO.txt
 configure.in
 config.guess
 config.sub
@@ -12,6 +11,7 @@ docs/gtk/*.html
 docs/gtk/*.txt
 
 include/wx/gtk/*.h
+include/install-sh
 
 src/Makefile
 src/Makefile.in

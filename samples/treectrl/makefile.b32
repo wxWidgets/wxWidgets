@@ -1,63 +1,16 @@
 #
-# File:		makefile.bcc
+# File:		makefile.b32
 # Author:	Julian Smart
-# Created:	1993
+# Created:	1999
 # Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# Copyright:
 #
-# "%W% %G%"
-#
-# Makefile : Builds treetest example (DOS).
-
-# WXWIN and BCCDIR are set by parent make
+# Makefile : Builds sample for 32-bit BC++
 
 WXDIR = $(WXWIN)
-!include $(WXDIR)\src\makeb32.env
-
-WXLIBDIR = $(WXDIR)\lib
-WXLIB = $(WXLIBDIR)\wx32.lib
-LIBS=$(WXLIB) cw32 import32 ole2w32
 
 TARGET=treetest
+OBJECTS = $(TARGET).obj
 
-!if "$(FINAL)" == "0"
-LINKFLAGS=/v /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
-OPT = -Od
-DEBUG_FLAGS= -v
-!else
-LINKFLAGS=/Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
-OPT = -Od
-DEBUG_FLAGS =
-!endif
-CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
-
-OBJECTS = treetest.obj
-
-$(TARGET).exe:	$(OBJECTS) $(TARGET).def $(TARGET).res
-  tlink32 $(LINKFLAGS) @&&!
-c0w32.obj $(OBJECTS)
-$(TARGET)
-nul
-$(LIBS)
-$(TARGET).def
-$(TARGET).res
-!
-
-.$(SRCSUFF).obj:
-	bcc32 $(CPPFLAGS) -c {$< }
-
-.c.obj:
-	bcc32 $(CPPFLAGS) -P- -c {$< }
-
-treetest.obj:      treetest.$(SRCSUFF)
-
-$(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
-    brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)
-
-clean:
-        -erase *.obj
-        -erase *.exe
-        -erase *.res
-        -erase *.map
-        -erase *.rws
+!include $(WXDIR)\src\makeprog.b32
 

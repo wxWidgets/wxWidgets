@@ -34,6 +34,11 @@
 
 #include "wx/generic/dirdlgg.h"
 
+// If compiled under Windows, this macro can cause problems
+#ifdef GetFirstChild
+#undef GetFirstChild
+#endif
+
 /* XPM */
 static char * icon1_xpm[] = {
 /* width height ncolors chars_per_pixel */

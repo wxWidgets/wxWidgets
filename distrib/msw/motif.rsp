@@ -92,6 +92,7 @@ src/make.env
 src/makeprog.env
 
 include/wx/motif/*.h
+include/install-sh
 
 docs/motif/*.txt
 docs/motif/makewx

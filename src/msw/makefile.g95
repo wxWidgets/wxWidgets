@@ -61,7 +61,7 @@ DOCDIR = $(WXDIR)\docs
 GENERICOBJS= \
   $(GENDIR)/choicdgg.$(OBJSUFF) \
   $(GENDIR)/colrdlgg.$(OBJSUFF) \
-  $(GENDIR)/dirdlg.$(OBJSUFF) \
+  $(GENDIR)/dirdlgg.$(OBJSUFF) \
   $(GENDIR)/fontdlgg.$(OBJSUFF) \
   $(GENDIR)/gridg.$(OBJSUFF) \
   $(GENDIR)/laywin.$(OBJSUFF) \

@@ -1,4 +1,10 @@
 src/make_cw.mcp
+include/wx_cw.pch
+include/wx_cw.pch++
+include/wx_cw_d.pch
+include/wx_cw_d.pch++
+
+samples/bombs/make_cw.mcp
 
 samples/checklst/make_cw.mcp
 
@@ -19,6 +25,8 @@ samples/docvwmdi/make_cw.mcp
 samples/dynamic/make_cw.mcp
 
 samples/forty/make_cw.mcp
+
+samples/fractal/make_cw.mcp
 
 samples/grid/make_cw.mcp
 
@@ -53,6 +61,8 @@ samples/ownerdrw/make_cw.mcp
 samples/png/make_cw.mcp
 
 samples/printing/make_cw.mcp
+
+samples/proplist/make_cw.mcp
 
 samples/Regtest/make_cw.mcp
 

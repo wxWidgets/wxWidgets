@@ -21,7 +21,7 @@
 #include "wx/string.h"
 #include "wx/control.h"
 
-#ifdef wxUSE_STD_IOSTREAM
+#if wxUSE_STD_IOSTREAM
 
 #if wxUSE_IOSTREAMH
 #include <iostream.h>

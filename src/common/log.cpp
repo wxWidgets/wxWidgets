@@ -389,7 +389,7 @@ void wxLogStderr::DoLogString(const char *szString)
 // wxLogStream implementation
 // ----------------------------------------------------------------------------
 
-#ifdef wxUSE_STD_IOSTREAM
+#if wxUSE_STD_IOSTREAM
 wxLogStream::wxLogStream(ostream *ostr)
 {
   if ( ostr == NULL )
@@ -410,7 +410,7 @@ void wxLogStream::DoLogString(const char *szString)
 // wxLogTextCtrl implementation
 // ----------------------------------------------------------------------------
 
-#ifdef wxUSE_STD_IOSTREAM
+#if wxUSE_STD_IOSTREAM
 wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
 // DLL mode in wxMSW, can't use it.
 #if defined(NO_TEXT_WINDOW_STREAM)

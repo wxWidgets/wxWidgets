@@ -10,62 +10,9 @@
 # Makefile : Builds 32bit wxtree library for 32-bit BC++
 
 WXDIR = $(WXWIN)
-!include $(WXDIR)\src\makeb32.env
 
-WXINC = $(WXDIR)\include
 TARGET=test
-TESTOBJECTS=test.obj
-LIBTARGET= $(WXLIBDIR)\wxprop.lib
-LIBS=$(WXLIBDIR)\wx32.lib $(LIBTARGET) cw32 import32 ole2w32
+OBJECTS=$(TARGET)
 
-!ifndef DEBUG
-DEBUG=0
-!endif
+!include $(WXDIR)\src\makeprog.b32
 
-!if "$(FINAL)" == "0"
-LINKFLAGS=/v /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
-OPT = -Od
-DEBUG_FLAGS= -v -DDEBUG=$(DEBUG)
-!else
-LINKFLAGS=/Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
-OPT = -O2
-DEBUG_FLAGS = -DDEBUG=$(DEBUG)
-!endif
-
-CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
-
-.$(SRCSUFF).obj:
-	bcc32 $(CPPFLAGS) -c {$< }
-
-.c.obj:
-	bcc32 $(CPPFLAGS) -P- -c {$< }
-
-OBJECTS = wxtree.obj
-
-all:    $(LIBTARGET)
-
-$(LIBTARGET):	$(OBJECTS)
-	erase $(LIBTARGET)
-	tlib $(LIBTARGET) /P32 @&&!
-+$(OBJECTS:.obj =.obj +)
-!
-
-wxtree.obj:	wxtree.$(SRCSUFF) wxtree.h
-
-$(TARGET).exe:	$(TESTOBJECTS) $(LIBTARGET) $(TARGET).def $(TARGET).res
-  tlink32 $(LINKFLAGS) @&&!
-c0w32.obj $(TESTOBJECTS)
-$(TARGET)
-nul
-$(LIBS) $(LIBTARGET)
-$(TARGET).def
-$(TARGET).res
-!
-
-test.obj:	test.$(SRCSUFF) test.h
-
-$(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
-    brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)
-
-clean:
-        -erase *.obj $(LIBTARGET) *.exe *.res *.map *.rws

@@ -646,24 +646,14 @@ all_execs:
     make -f makefile.b32 all_execs
     cd $(WXDIR)\src\msw
 
-all_libs:
-    cd $(WXDIR)\src\msw
-    make -f makefile.b32 ctl3d dib fafa gauge hytext itsy prologio rcparser wx wxgraph\
-          wxstring wxtree mfutils # wxxpm
-
-all_contribs:
-    cd $(WXDIR)\src\msw
-    make -f makefile.b32 ctl3d fafa wxstring itsy gauge # wxxpm
-
-# CONTRIB
-ctl3d:  $(CFG)
-        cd $(WXDIR)\src\msw\ctl3d\borland
-        make -f makefile.b32 -DCFG=$(CFG)
-        cd $(WXDIR)\src\msw
-
 wxxpm:	$(CFG)
 	cd $(WXDIR)\src\xpm
 	make -f makefile.b32 -DCFG=$(CFG) -DFINAL=$(FINAL) -DWXWIN=$(WXDIR) -DDEBUG=$(DEBUG)
+	cd $(WXDIR)\src\msw
+
+clean_wxxpm:	$(CFG)
+	cd $(WXDIR)\src\xpm
+	make -f makefile.b32 clean
 	cd $(WXDIR)\src\msw
 
 png:    $(CFG)
@@ -697,8 +687,8 @@ $(CFG): makefile.b32
 -w-pia
 -w-aus
 -w-rch
--Oxt
 -WE
+-tWM
 
 -I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/png;$(WXDIR)/src/zlib
 -I$(WXDIR)\include\wx\msw\gnuwin32
@@ -714,6 +704,7 @@ $(WIN95FLAG)
 ! $(CFG)
 
 #-I$(WXDIR)\src\common\wxxpm\libxpm.34b\lib
+# -Oxt
 
 clean: $(PERIPH_CLEAN_TARGET)
     erase $(LIBTARGET)

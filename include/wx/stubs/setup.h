@@ -120,6 +120,9 @@
                                   // Use zlib for compression in streams and PNG code
 #define wxUSE_LIBPNG        1
                                   // Use PNG bitmap code
+#define wxUSE_STD_IOSTREAM  1
+                                  // Use standard C++ streams if 1. If 0, use wxWin
+                                  // streams implementation.
 /*
  * Finer detail
  *

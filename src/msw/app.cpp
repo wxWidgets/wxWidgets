@@ -38,7 +38,10 @@
 #include "wx/msw/private.h"
 #include "wx/log.h"
 #include "wx/module.h"
+
+#if wxUSE_THREADS
 #include "wx/thread.h"
+#endif
 
 #if wxUSE_WX_RESOURCES
   #include "wx/resource.h"
@@ -868,11 +871,12 @@ void wxApp::OnIdle(wxIdleEvent& event)
         // idle events
         event.RequestMore(TRUE);
     }
-
+#if wxUSE_THREADS
     // give a chance to all other threads to perform GUI calls
     wxMutexGuiLeave();
     ::Sleep(0);
     wxMutexGuiEnter();
+#endif
 
     s_inOnIdle = FALSE;
 }

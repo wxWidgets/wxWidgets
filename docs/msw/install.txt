@@ -78,10 +78,21 @@ Borland C++ 4.5/5.0 compilation
    'XXX' not found in library.
 3. Change directory to a sample such as minimal, and type
   'make -f makefile.b32'.
+4. For release versions, recompile wxWindows and samples using
+   'make -f makefile.b32 clean'
+   'make -f makefile.b32 FINAL=1'
+   for the library and samples.
 
 Note: the wxWindows library and (some) samples compile in 16-bit mode
 using makefile.bcc, but at present the wxWindows resource system is switched
 off in this mode. See issues.txt for details.
+
+Borland C++Builder compilation
+------------------------------
+
+C++Builder compilation is the same as for Borland C++ above.
+It has only been tested with C++Builder 1.0 so far, and no
+project files are currently supplied.
 
 Watcom C++ 10.6 compilation
 ---------------------------
