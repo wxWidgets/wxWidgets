@@ -42,10 +42,12 @@ Improvements have been made to many areas, including:
 
 *** About wxWindows
 
-wxWindows is a comprehensive open-source, multi-platform C++
-GUI framework, that can be used to build commercial and free
-software. It's used by many organisations all over the world,
-including the company that invented the GUI.
+wxWindows is a comprehensive open-source, multi-platform C++ GUI
+framework, that can be used to build commercial and free
+software. First released in 1992, it's increasingly used by
+organisations and individuals all over the world due to its
+winning combination of sophistication, wide platform coverage,
+ease of use, unrestrictive licence and vibrant user community.
 
 For most ports, wxWindows adopts the native look and feel of
 each platform since it uses the native widget sets. There is also
