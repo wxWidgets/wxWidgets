@@ -865,8 +865,8 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     offset = offset + wxINT32_SWAP_ON_BE(dbuf[2]);
 
     stream.Read(dbuf, 4 * 2);
-    int width = (int)wxINT32_SWAP_ON_BE(dbuf[0]);
-    int height = (int)wxINT32_SWAP_ON_BE(dbuf[1]);
+    int width = wxINT32_SWAP_ON_BE((int)dbuf[0]);
+    int height = wxINT32_SWAP_ON_BE((int)dbuf[1]);
     if ( !IsBmp)height = height  / 2; // for icons divide by 2
 
     if ( width > 32767 )
@@ -888,7 +888,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
             int planes = (int)wxUINT16_SWAP_ON_BE( aWord );
         */
     stream.Read(&aWord, 2);
-    int bpp = (int)wxUINT16_SWAP_ON_BE(aWord);
+    int bpp = wxUINT16_SWAP_ON_BE((int)aWord);
     if ( bpp != 1 && bpp != 4 && bpp != 8 && bpp != 16 && bpp != 24 && bpp != 32 )
     {
         if (verbose)
@@ -897,7 +897,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     }
 
     stream.Read(dbuf, 4 * 4);
-    int comp = (int)wxINT32_SWAP_ON_BE(dbuf[0]);
+    int comp = wxINT32_SWAP_ON_BE((int)dbuf[0]);
     if ( comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 &&
          comp != BI_BITFIELDS )
     {
@@ -907,7 +907,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     }
 
     stream.Read(dbuf, 4 * 2);
-    int ncolors = (int)wxINT32_SWAP_ON_BE( dbuf[0] );
+    int ncolors = wxINT32_SWAP_ON_BE( (int)dbuf[0] );
     if (ncolors == 0)
         ncolors = 1 << bpp;
     /* some more sanity checks */
@@ -1035,8 +1035,8 @@ bool wxICOHandler::SaveFile(wxImage *image,
 
     ICONDIR IconDir;
     IconDir.idReserved = 0;
-    IconDir.idType = (wxUint16)wxUINT16_SWAP_ON_BE(type);
-    IconDir.idCount = (wxUint16)wxUINT16_SWAP_ON_BE(images);
+    IconDir.idType = wxUINT16_SWAP_ON_BE((wxUint16)type);
+    IconDir.idCount = wxUINT16_SWAP_ON_BE((wxUint16)images);
     stream.Write(&IconDir.idReserved, sizeof(IconDir.idReserved));
     stream.Write(&IconDir.idType, sizeof(IconDir.idType));
     stream.Write(&IconDir.idCount, sizeof(IconDir.idCount));
