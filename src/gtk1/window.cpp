@@ -2962,7 +2962,12 @@ GtkStyle *wxWindow::GetWidgetStyle()
 {
     if (m_widgetStyle) gtk_style_unref( m_widgetStyle );
 
-    m_widgetStyle = gtk_style_copy( gtk_rc_get_style( m_widget ) );
+    GtkStyle *def = gtk_rc_get_style( m_widget );
+
+    if (!def)
+        def = gtk_widget_get_default_style();
+
+    m_widgetStyle = gtk_style_copy( def );
 
     return m_widgetStyle;
 }

@@ -589,14 +589,12 @@ void wxTreeCtrl::SetIndent(unsigned int indent)
 {
     m_indent = indent;
     m_dirty = TRUE;
-    Refresh();
 }
 
 void wxTreeCtrl::SetSpacing(unsigned int spacing)
 {
     m_spacing = spacing;
     m_dirty = TRUE;
-    Refresh();
 }
 
 size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recursively)
@@ -2160,6 +2158,8 @@ void wxTreeCtrl::CalculatePositions()
 
 void wxTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
 {
+    if (m_dirty) return;
+
     wxClientDC dc(this);
     PrepareDC(dc);
 
@@ -2180,6 +2180,8 @@ void wxTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
 
 void wxTreeCtrl::RefreshLine( wxGenericTreeItem *item )
 {
+    if (m_dirty) return;
+
     wxClientDC dc(this);
     PrepareDC( dc );
 

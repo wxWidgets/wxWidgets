@@ -1168,6 +1168,8 @@ wxListMainWindow::~wxListMainWindow()
 
 void wxListMainWindow::RefreshLine( wxListLineData *line )
 {
+    if (m_dirty) return;
+    
     int x = 0;
     int y = 0;
     int w = 0;

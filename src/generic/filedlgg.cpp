@@ -347,7 +347,7 @@ void wxFileCtrl::Update()
     {
         InsertColumn( 0, _("Name"), wxLIST_FORMAT_LEFT, 130 );
         InsertColumn( 1, _("Size"), wxLIST_FORMAT_LEFT, 60 );
-        InsertColumn( 2, _("Date"), wxLIST_FORMAT_LEFT, 70 );
+        InsertColumn( 2, _("Date"), wxLIST_FORMAT_LEFT, 65 );
         InsertColumn( 3, _("Time"), wxLIST_FORMAT_LEFT, 50 );
         InsertColumn( 4, _("Permissions"), wxLIST_FORMAT_LEFT, 120 );
     }
@@ -397,9 +397,9 @@ void wxFileCtrl::Update()
 
     SortItems( ListCompare, 0 );
     
+    SetColumnWidth( 1, wxLIST_AUTOSIZE );
     SetColumnWidth( 2, wxLIST_AUTOSIZE );
     SetColumnWidth( 3, wxLIST_AUTOSIZE );
-    SetColumnWidth( 4, wxLIST_AUTOSIZE );
 }
 
 void wxFileCtrl::SetWild( const wxString &wild )

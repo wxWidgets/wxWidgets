@@ -398,7 +398,16 @@ static GdkFont *GtkGetDefaultGuiFont()
     {
         GtkWidget *widget = gtk_button_new();
         GtkStyle *def = gtk_rc_get_style( widget );
-        g_systemDefaultGuiFont = gdk_font_ref( def->font );
+        if (def)
+        {
+            g_systemDefaultGuiFont = gdk_font_ref( def->font );
+        }
+        else
+        {
+            def = gtk_widget_get_default_style();
+            if (def)
+                g_systemDefaultGuiFont = gdk_font_ref( def->font );
+        }
         gtk_widget_destroy( widget );
     }
     return g_systemDefaultGuiFont;
@@ -428,7 +437,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
         {
             font = GtkGetDefaultGuiFont();
         }
-        else
+        if (!font)
         {
             font = wxLoadQueryNearestFont( point_scale,
                                            M_FONTDATA->m_family,

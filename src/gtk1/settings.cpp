@@ -128,23 +128,29 @@ wxColour wxSystemSettings::GetSystemColour( int index )
         {
             if (!g_systemHighlightColour)
             {
-/*
-                g_systemHighlightColour = 
-	                new wxColour( 0      >> SHIFT,
-	                              0      >> SHIFT,
-			                      0x9c40 >> SHIFT );
-*/              
                 GtkWidget *widget = gtk_button_new();
                 GtkStyle *def = gtk_rc_get_style( widget );
-                int red = def->bg[GTK_STATE_SELECTED].red;
-                int green = def->bg[GTK_STATE_SELECTED].green;
-                int blue = def->bg[GTK_STATE_SELECTED].blue;
+                if (!def)
+                    def = gtk_widget_get_default_style();
+                if (def)
+                {
+                    int red = def->bg[GTK_STATE_SELECTED].red;
+                    int green = def->bg[GTK_STATE_SELECTED].green;
+                    int blue = def->bg[GTK_STATE_SELECTED].blue;
+                    g_systemHighlightColour = 
+	                    new wxColour( red    >> SHIFT,
+	                                  green  >> SHIFT,
+			                          blue   >> SHIFT );
+                }
+                else
+                {
+                    g_systemHighlightColour = 
+	                    new wxColour( 0      >> SHIFT,
+	                                  0      >> SHIFT,
+			                          0x9c40 >> SHIFT );
+                }
                 gtk_widget_destroy( widget );
 
-                g_systemHighlightColour = 
-	                new wxColour( red    >> SHIFT,
-	                              green  >> SHIFT,
-			                      blue   >> SHIFT );
             }
             return *g_systemHighlightColour;
         }
