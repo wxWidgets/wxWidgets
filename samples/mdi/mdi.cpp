@@ -172,8 +172,10 @@ MyFrame::MyFrame(wxWindow *parent,
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
 
+#if wxUSE_TOOLBAR
     CreateToolBar(wxNO_BORDER | wxTB_FLAT | wxTB_HORIZONTAL);
     InitToolBar(GetToolBar());
+#endif // wxUSE_TOOLBAR
 
     // Accelerators
     wxAcceleratorEntry entries[3];
@@ -297,6 +299,7 @@ void MyFrame::OnSize(wxSizeEvent&
 #endif
 }
 
+#if wxUSE_TOOLBAR
 void MyFrame::InitToolBar(wxToolBar* toolBar)
 {
     wxBitmap* bitmaps[8];
@@ -338,6 +341,7 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
     for (i = 0; i < 8; i++)
         delete bitmaps[i];
 }
+#endif // wxUSE_TOOLBAR
 
 // ---------------------------------------------------------------------------
 // MyCanvas
