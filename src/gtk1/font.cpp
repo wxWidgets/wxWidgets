@@ -93,6 +93,9 @@ public:
     void SetFaceName(const wxString& facename);
     void SetEncoding(wxFontEncoding encoding);
 
+    void SetNoAntiAliasing( bool no = TRUE ) { m_noAA = no; }
+    bool GetNoAntiAliasing() { return m_noAA; }
+    
     // and this one also modifies all the other font data fields
     void SetNativeFontInfo(const wxNativeFontInfo& info);
 
@@ -140,7 +143,6 @@ private:
     wxScaledFontList  m_scaled_xfonts;
 #endif // GTK 2.0/1.x
 
-    // the broken down font parameters
     int             m_pointSize;
     int             m_family,
                     m_style,
@@ -148,6 +150,7 @@ private:
     bool            m_underlined;
     wxString        m_faceName;
     wxFontEncoding  m_encoding;  // Unused under GTK 2.0
+    bool            m_noAA;      // No anti-aliasing
 
     // The native font info, basicly an XFLD under GTK 1.2 and
     // the pango font description under GTK 2.0.
@@ -188,6 +191,8 @@ void wxFontRefData::Init(int pointSize,
 
     m_underlined = underlined;
     m_encoding = encoding;
+    
+    m_noAA = FALSE;
 
 #ifdef __WXGTK20__
     // Create native font info
@@ -215,6 +220,8 @@ void wxFontRefData::Init(int pointSize,
 
 void wxFontRefData::InitFromNative()
 {
+    m_noAA = FALSE;
+
 #ifdef __WXGTK20__
     // Get native info
     PangoFontDescription *desc = m_nativeFontInfo.description;
@@ -391,6 +398,8 @@ wxFontRefData::wxFontRefData( const wxFontRefData& data )
     m_faceName = data.m_faceName;
     m_encoding = data.m_encoding;
 
+    m_noAA = data.m_noAA;
+    
     m_nativeFontInfo = data.m_nativeFontInfo;
 }
 
@@ -731,6 +740,13 @@ wxFontEncoding wxFont::GetEncoding() const
     return M_FONTDATA->m_encoding;
 }
 
+bool wxFont::GetNoAntiAliasing()
+{
+    wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
+
+    return M_FONTDATA->m_noAA;
+}
+
 wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( Ok(), (wxNativeFontInfo *)NULL, wxT("invalid font") );
@@ -814,11 +830,18 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
     M_FONTDATA->SetEncoding(encoding);
 }
 
-void wxFont::SetNativeFontInfo(const wxNativeFontInfo& info)
+void wxFont::SetNativeFontInfo( const wxNativeFontInfo& info )
 {
     Unshare();
 
-    M_FONTDATA->SetNativeFontInfo(info);
+    M_FONTDATA->SetNativeFontInfo( info );
+}
+
+void wxFont::SetNoAntiAliasing( bool no )
+{
+    Unshare();
+
+    M_FONTDATA->SetNoAntiAliasing( no );
 }
 
 // ----------------------------------------------------------------------------
