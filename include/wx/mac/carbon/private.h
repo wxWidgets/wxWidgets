@@ -500,7 +500,11 @@ public :
        
     // Flash the control for the specified amount of time
     virtual void Flash( ControlPartCode part , UInt32 ticks = 8 ) ;
+
     virtual void VisibilityChanged( bool shown ) ;
+    virtual void SuperChangedPosition() ;
+
+
     virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle ) ;
     virtual void SetBackground( const wxBrush &brush ) ;
     virtual ControlPartCode HandleKey(  SInt16 keyCode,  SInt16 charCode, EventModifiers modifiers ) ;

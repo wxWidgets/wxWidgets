@@ -163,6 +163,7 @@ public:
 
     virtual void         MacVisibilityChanged() ;
     virtual void         MacEnabledStateChanged() ;
+    virtual void         MacSuperChangedPosition() ;
 #ifndef __WXMAC_OSX__
     virtual void            MacControlUserPaneDrawProc(wxInt16 part) ;
     virtual wxInt16         MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y) ;
