@@ -443,9 +443,8 @@ protected:
     // find the first item starting with the given prefix after the given item
     wxTreeItemId FindItem(const wxTreeItemId& id, const wxString& prefix) const;
 
-    bool HasButtons(void) const
-        { return (m_imageListButtons != NULL)
-              || HasFlag(wxTR_TWIST_BUTTONS|wxTR_HAS_BUTTONS); }
+    bool HasButtons() const
+        { return HasFlag(wxTR_HAS_BUTTONS) && (m_imageListButtons != NULL); }
 
     void CalculateLineHeight();
     int  GetLineHeight(wxGenericTreeItem *item) const;
