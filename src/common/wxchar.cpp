@@ -1390,12 +1390,14 @@ int isascii( int c )
 #endif
 
 #if defined(__WXWINCE__)
+#if (_WIN32_WCE < 300)
 void *calloc( size_t num, size_t size )
 {
     void** ptr = (void **)malloc(num * size);
     memset( ptr, 0, num * size);
     return ptr;
 }
+#endif
 
 #if (_WIN32_WCE <= 211)
 int isspace(int c)
@@ -1405,3 +1407,4 @@ int isspace(int c)
 #endif
 
 #endif
+
