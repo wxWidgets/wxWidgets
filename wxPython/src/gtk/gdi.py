@@ -73,6 +73,9 @@ class wxMaskPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Destroy(self, *_args, **_kwargs):
+        val = apply(gdic.wxMask_Destroy,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxMask instance at %s>" % (self.this,)
 class wxMask(wxMaskPtr):
@@ -113,6 +116,9 @@ class wxIconPtr :
         return val
     def SetDepth(self, *_args, **_kwargs):
         val = apply(gdic.wxIcon_SetDepth,(self,) + _args, _kwargs)
+        return val
+    def CopyFromBitmap(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_CopyFromBitmap,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxIcon instance at %s>" % (self.this,)
@@ -902,9 +908,29 @@ def wxEmptyBitmap(*_args, **_kwargs):
     if val: val = wxBitmapPtr(val); val.thisown = 1
     return val
 
+def wxBitmapFromXPMData(*_args, **_kwargs):
+    val = apply(gdic.wxBitmapFromXPMData,_args,_kwargs)
+    if val: val = wxBitmapPtr(val); val.thisown = 1
+    return val
+
+def wxBitmapFromIcon(*_args, **_kwargs):
+    val = apply(gdic.wxBitmapFromIcon,_args,_kwargs)
+    if val: val = wxBitmapPtr(val); val.thisown = 1
+    return val
+
 def wxMaskColour(*_args, **_kwargs):
     val = apply(gdic.wxMaskColour,_args,_kwargs)
     if val: val = wxMaskPtr(val); val.thisown = 1
+    return val
+
+def wxEmptyIcon(*_args, **_kwargs):
+    val = apply(gdic.wxEmptyIcon,_args,_kwargs)
+    if val: val = wxIconPtr(val); val.thisown = 1
+    return val
+
+def wxIconFromXPMData(*_args, **_kwargs):
+    val = apply(gdic.wxIconFromXPMData,_args,_kwargs)
+    if val: val = wxIconPtr(val); val.thisown = 1
     return val
 
 def wxStockCursor(*_args, **_kwargs):
