@@ -79,7 +79,7 @@
 #define wxUSE_SCROLLBAR   1
                                     // Define 1 to compile contributed wxScrollBar class
 #define wxUSE_XPM_IN_X    1
-#define wxUSE_XPM_IN_MSW  1
+#define wxUSE_XPM_IN_MSW  0
                                     // Define 1 to support the XPM package in wxBitmap,
                                     // separated by platform. If 1, you must link in
                                     // the XPM library to your applications.
