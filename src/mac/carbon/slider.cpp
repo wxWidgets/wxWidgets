@@ -81,12 +81,16 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
 
+    //
+    // NB: (RN) Ticks here are sometimes off in the GUI if there
+    // is not as many ticks as there are values
+    //
     UInt16 tickMarks = 0 ;
     if ( style & wxSL_AUTOTICKS )
-        tickMarks = (maxValue - minValue);
+        tickMarks = (maxValue - minValue) + 1; //+1 for the 0 value
 
-    if (tickMarks > 20)
-        tickMarks = tickMarks/5; //keep the number of tickmarks from becoming unwieldly
+    while (tickMarks > 20)
+            tickMarks /= 5; //keep the number of tickmarks from becoming unwieldly
 
     m_peer = new wxMacControl() ;
     verify_noerr ( CreateSliderControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds ,
