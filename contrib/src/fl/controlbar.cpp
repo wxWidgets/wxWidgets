@@ -258,10 +258,6 @@ BEGIN_EVENT_TABLE( wxFrameLayout, wxEvtHandler )
     EVT_LEFT_DCLICK( wxFrameLayout::OnLDblClick   )
 
     EVT_IDLE       ( wxFrameLayout::OnIdle        )
-    EVT_SET_FOCUS  ( wxFrameLayout::OnSetFocus    )
-    EVT_KILL_FOCUS ( wxFrameLayout::OnKillFocus   )
-
-    EVT_ACTIVATE   ( wxFrameLayout::OnActivate    )
 
     EVT_ERASE_BACKGROUND( wxFrameLayout::OnEraseBackground )
 
@@ -1503,38 +1499,6 @@ void wxFrameLayout::OnIdle( wxIdleEvent& event )
     mCheckFocusWhenIdle = false;
 
     event.Skip();
-}
-
-
-void wxFrameLayout::OnKillFocus( wxFocusEvent& WXUNUSED(event) )
-{
-    //wxMessageBox( "wxFrameLayoutGot Kill Focus!" );
-    //ShowFloatedWindows( false );
-}
-
-void wxFrameLayout::OnSetFocus( wxFocusEvent& WXUNUSED(event) )
-{
-    //ShowFloatedWindows( true );
-}
-
-void wxFrameLayout::OnActivate( wxActivateEvent& WXUNUSED(event) )
-{
-#if 0
-    if ( event.GetActive() == false )               
-    {
-        wxWindow* focus = wxWindow::FindFocus();
-
-        if ( !focus || focus == &GetParentFrame() )
-        {
-            mCheckFocusWhenIdle = true;
-
-            if ( !focus )
-
-                wxMessageBox("Deactivated!" );
-
-        }
-    }
-#endif
 }
 
 void wxFrameLayout::GetPaneProperties( cbCommonPaneProperties& props, int alignment )
