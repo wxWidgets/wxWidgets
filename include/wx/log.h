@@ -67,13 +67,13 @@ enum
 // discarded unless the string "foo" has been added to the list of allowed
 // ones with AddTraceMask()
 
-#define wxTRACE_MemAlloc "memalloc" // trace memory allocation (new/delete)
-#define wxTRACE_Messages "messages" // trace window messages/X callbacks
-#define wxTRACE_ResAlloc "resalloc" // trace GDI resource allocation
-#define wxTRACE_RefCount "refcount" // trace various ref counting operations
+#define wxTRACE_MemAlloc wxT("memalloc") // trace memory allocation (new/delete)
+#define wxTRACE_Messages wxT("messages") // trace window messages/X callbacks
+#define wxTRACE_ResAlloc wxT("resalloc") // trace GDI resource allocation
+#define wxTRACE_RefCount wxT("refcount") // trace various ref counting operations
 
 #ifdef  __WXMSW__
-    #define wxTRACE_OleCalls "ole"  // OLE interface calls
+    #define wxTRACE_OleCalls wxT("ole")  // OLE interface calls
 #endif
 
 // the trace masks have been superceded by symbolic trace constants, they're
