@@ -290,9 +290,9 @@ static void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc,
 // Function: CompareFcn
 // Purpose: Used to sort the NN list alphabetically, case insensitive.
 //=============================================================================
-static int CompareFcn(wxString* first, wxString* second)
+static int CompareFcn(const wxString& first, const wxString& second)
 {
-    return wxStricmp(first->c_str(), second->c_str());
+    return wxStricmp(first.c_str(), second.c_str());
 } // CompareFcn
 
 //=============================================================================
