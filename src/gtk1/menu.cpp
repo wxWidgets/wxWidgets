@@ -203,7 +203,7 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
 }
 
 //-----------------------------------------------------------------------------
-// wxMenu
+// wxMenuItem
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem,wxObject)
@@ -218,19 +218,28 @@ wxMenuItem::wxMenuItem()
   m_menuItem = (GtkWidget *) NULL;
 }
 
-void wxMenuItem::SetText(const wxString& str)
+void wxMenuItem::SetName(const wxString& str)
 {
+  wxCHECK_RET( m_menuItem, "invalid menu item" );
+
   m_text = "";
-  for ( const char *pc = str; *pc != '\0'; pc++ ) {
+  for ( const char *pc = str; *pc != '\0'; pc++ ) 
+  {
     if ( *pc == '&' )
       pc++; // skip it
 
     m_text << *pc;
   }
+  
+  GtkLabel *label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
+  
+  gtk_label_set( label, m_text.c_str());
 }
 
 void wxMenuItem::Check( bool check )
 {
+  wxCHECK_RET( m_menuItem, "invalid menu item" );
+
   wxCHECK_RET( IsCheckable(), "Can't check uncheckable item!" )
 
   m_isChecked = check;
@@ -239,12 +248,16 @@ void wxMenuItem::Check( bool check )
 
 void wxMenuItem::Enable( bool enable ) 
 { 
+  wxCHECK_RET( m_menuItem, "invalid menu item" );
+
   gtk_widget_set_sensitive( m_menuItem, enable );
   m_isEnabled = enable; 
 }
 
 bool wxMenuItem::IsChecked() const
 {
+  wxCHECK_MSG( m_menuItem, FALSE, "invalid menu item" );
+
   wxCHECK( IsCheckable(), FALSE ); // can't get state of uncheckable item!
 
   bool bIsChecked = ((GtkCheckMenuItem*)m_menuItem)->active != 0;
@@ -253,6 +266,10 @@ bool wxMenuItem::IsChecked() const
 
   return bIsChecked;
 }
+
+//-----------------------------------------------------------------------------
+// wxMenuItem
+//-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 

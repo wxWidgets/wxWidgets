@@ -155,7 +155,7 @@ public:
   virtual bool OnClose();
 
   virtual void AddChild( wxWindow *child );
-  wxList *GetChildren();
+  wxList& GetChildren() const;
   virtual void RemoveChild( wxWindow *child );
   void SetReturnCode( int retCode );
   int GetReturnCode();

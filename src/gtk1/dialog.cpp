@@ -254,11 +254,11 @@ void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
     else 
     {
         // no child: go out !
-        if (!GetChildren()->First()) return;
+        if (!GetChildren().First()) return;
       
         // do we have exactly one child?
         wxWindow *child = (wxWindow *) NULL;
-        for(wxNode *node = GetChildren()->First(); node; node = node->Next())
+        for(wxNode *node = GetChildren().First(); node; node = node->Next())
         {
             wxWindow *win = (wxWindow *)node->Data();
             if (!IS_KIND_OF(win,wxFrame) && !IS_KIND_OF(win,wxDialog))

@@ -395,7 +395,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
     if (!g_capturing)
     {
-        wxNode *node = win->GetChildren()->First();
+        wxNode *node = win->GetChildren().First();
         while (node)
         {
             wxWindow *child = (wxWindow*)node->Data();
@@ -468,7 +468,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 
     if (!g_capturing)
     {
-        wxNode *node = win->GetChildren()->First();
+        wxNode *node = win->GetChildren().First();
         while (node)
         {
             wxWindow *child = (wxWindow*)node->Data();
@@ -531,7 +531,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 
     if (!g_capturing)
     {
-        wxNode *node = win->GetChildren()->First();
+        wxNode *node = win->GetChildren().First();
         while (node)
         {
             wxWindow *child = (wxWindow*)node->Data();
@@ -1308,17 +1308,14 @@ bool wxWindow::Destroy()
 
 bool wxWindow::DestroyChildren()
 {
-    if (GetChildren())
+    wxNode *node;
+    while ((node = m_children.First()) != (wxNode *)NULL)
     {
-        wxNode *node;
-        while ((node = GetChildren()->First()) != (wxNode *)NULL)
+        wxWindow *child;
+        if ((child = (wxWindow *)node->Data()) != (wxWindow *)NULL)
         {
-            wxWindow *child;
-            if ((child = (wxWindow *)node->Data()) != (wxWindow *)NULL)
-            {
-                delete child;
-                if (GetChildren()->Member(child)) delete node;
-            }
+            delete child;
+            if (m_children.Member(child)) delete node;
         }
     }
     return TRUE;
@@ -1658,7 +1655,7 @@ void wxWindow::Fit()
 
   int maxX = 0;
   int maxY = 0;
-  wxNode *node = GetChildren()->First();
+  wxNode *node = m_childrenFirst();
   while ( node )
   {
     wxWindow *win = (wxWindow *)node->Data();
@@ -1806,9 +1803,9 @@ void wxWindow::AddChild( wxWindow *child )
     m_children.Append( child );
 }
 
-wxList *wxWindow::GetChildren()
+wxList& wxWindow::GetChildren() const
 {
-    return (&m_children);
+    return m_children;
 }
 
 wxWindow *wxWindow::ReParent( wxWindow *newParent )
@@ -1830,7 +1827,7 @@ wxWindow *wxWindow::ReParent( wxWindow *newParent )
 
 void wxWindow::RemoveChild( wxWindow *child )
 {
-    if (GetChildren()) GetChildren()->DeleteObject( child );
+    m_children.DeleteObject( child );
     child->m_parent = (wxWindow *) NULL;
 }
 
@@ -2140,7 +2137,7 @@ bool wxWindow::Validate()
 {
   wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
 
-  wxNode *node = GetChildren()->First();
+  wxNode *node = m_children.First();
   while (node)
   {
     wxWindow *child = (wxWindow *)node->Data();
@@ -2155,7 +2152,7 @@ bool wxWindow::TransferDataToWindow()
 {
   wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
 
-  wxNode *node = GetChildren()->First();
+  wxNode *node = m_children.First();
   while (node)
   {
     wxWindow *child = (wxWindow *)node->Data();
@@ -2174,7 +2171,7 @@ bool wxWindow::TransferDataFromWindow()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
-  wxNode *node = GetChildren()->First();
+  wxNode *node = m_children.First();
   while (node)
   {
     wxWindow *child = (wxWindow *)node->Data();
@@ -2798,7 +2795,7 @@ bool wxWindow::DoPhase(int phase)
   {
     noChanges = 0;
     noFailures = 0;
-    wxNode *node = GetChildren()->First();
+    wxNode *node = m_children.first();
     while (node)
     {
       wxWindow *child = (wxWindow *)node->Data();
@@ -2843,7 +2840,7 @@ void wxWindow::ResetConstraints()
     constr->centreX.SetDone(FALSE);
     constr->centreY.SetDone(FALSE);
   }
-  wxNode *node = GetChildren()->First();
+  wxNode *node = m_children.First();
   while (node)
   {
     wxWindow *win = (wxWindow *)node->Data();
@@ -2902,7 +2899,7 @@ void wxWindow::SetConstraintSizes(bool recurse)
 
   if (recurse)
   {
-    wxNode *node = GetChildren()->First();
+    wxNode *node = m_children.First();
     while (node)
     {
       wxWindow *win = (wxWindow *)node->Data();

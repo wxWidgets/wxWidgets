@@ -48,9 +48,9 @@ public:
   int  GetId() const { return m_id; }
   bool IsSeparator() const { return m_id == ID_SEPARATOR; }
 
-    // the item's text
-  void SetText(const wxString& str);
-  const wxString& GetText() const { return m_text; }
+    // the item's text = name
+  void SetName(const wxString& str);
+  const wxString& GetName() const { return m_text; }
 
     // what kind of menu item we are
   void SetCheckable(bool checkable) { m_isCheckMenu = checkable; }

@@ -134,22 +134,26 @@ selection_handler( GtkWidget *WXUNUSED(widget), GtkSelectionData *selection_data
   
   if (!data_object) return;
   
-  if (data_object->GetDataSize() == 0) return;  
+  if (data_object->GetDataSize() == 0) return;
+
+  
   
   gint len = data_object->GetDataSize();
   guchar *bin_data = (guchar*) malloc( len );
   data_object->GetDataHere( (void*)bin_data );
   
-  if (selection_data->target == GDK_SELECTION_TYPE_STRING)
+  if (selection_data->target == GDK_TARGET_STRING)
   {
     gtk_selection_data_set( 
       selection_data, GDK_SELECTION_TYPE_STRING, 8*sizeof(gchar), bin_data, len );
   }
+/*
   else if (selection_data->target == g_textAtom)
   {
     gtk_selection_data_set( 
       selection_data, g_textAtom, 8*sizeof(gchar), bin_data, len );
   }
+*/
   free( bin_data );
 }
 
@@ -162,8 +166,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
 wxClipboard::wxClipboard()
 {
   m_data = (wxDataObject*) NULL;
-  m_clipboardWidget = gtk_window_new( GTK_WINDOW_POPUP );
-  gtk_widget_realize( m_clipboardWidget );
   
   gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
                       "selection_clear_event",
@@ -194,8 +196,13 @@ void wxClipboard::Clear()
      
   if (m_data)
   { 
+    if (gdk_selection_owner_get( g_clipboardAtom) == m_clipboardWidget->window)
+    {
+        gtk_selection_owner_set( (GtkWidget*) NULL, g_clipboardAtom, GDK_CURRENT_TIME );
+    }
+    
     delete m_data;
-    gtk_selection_owner_set( (GtkWidget*) NULL, GDK_SELECTION_PRIMARY, GDK_CURRENT_TIME );
+    m_data = (wxDataObject*) NULL;
   }
   
   m_receivedSize = 0;
@@ -213,6 +220,20 @@ void wxClipboard::Clear()
 
 void wxClipboard::SetData( wxDataObject *data )
 {
+  Clear();
+  
+/*
+   GTK 1.0.X cannot remove a target from a widget so if a widget
+   at first offers text and then a bitmap (and no longer text) to 
+   the clipboard, we seem too have to delete it.
+*/
+
+  if (m_clipboardWidget) gtk_widget_destroy( m_clipboardWidget );
+  
+  m_clipboardWidget = gtk_window_new( GTK_WINDOW_POPUP );
+  gtk_widget_realize( m_clipboardWidget );
+
+
   if (m_data) delete m_data;
   m_data = data;
   if (!m_data) return;
@@ -231,7 +252,8 @@ void wxClipboard::SetData( wxDataObject *data )
     case wxDF_TEXT:
       gtk_selection_add_handler( m_clipboardWidget, 
                                  g_clipboardAtom, 
-				 g_textAtom,
+				// g_textAtom,
+				 GDK_TARGET_STRING,
 				 selection_handler,
 				 NULL );
       break;

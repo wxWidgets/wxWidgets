@@ -455,11 +455,11 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
     else 
     {
         // no child: go out !
-        if (!GetChildren()->First()) return;
+        if (!GetChildren().First()) return;
       
         // do we have exactly one child?
         wxWindow *child = (wxWindow *) NULL;
-        for(wxNode *node = GetChildren()->First(); node; node = node->Next())
+        for(wxNode *node = GetChildren().First(); node; node = node->Next())
         {
             wxWindow *win = (wxWindow *)node->Data();
             if (!IS_KIND_OF(win,wxFrame) && !IS_KIND_OF(win,wxDialog)
@@ -537,7 +537,7 @@ wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& nam
 
     m_frameToolBar = OnCreateToolBar( style, id, name );
   
-    GetChildren()->DeleteObject( m_frameToolBar );
+    GetChildren().DeleteObject( m_frameToolBar );
     
     if (m_sizeSet) GtkOnSize( m_x, m_y, m_width, m_height );
   
