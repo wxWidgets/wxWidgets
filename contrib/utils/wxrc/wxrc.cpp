@@ -36,6 +36,8 @@
 class XmlResApp : public wxAppConsole
 {
 public:
+    // don't use builtin cmd line parsing:
+    virtual bool OnInit() { return true; } 
 
     virtual int OnRun();
     
