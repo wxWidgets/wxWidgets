@@ -54,7 +54,10 @@ class WXDLLEXPORT wxHelpControllerBase: public wxObject
 
 
 /* By default, if wxHTML is compiled in, use the
-   wxHelpControllerHtml. If not, use the external help controller. */
+   wxHelpControllerHtml. If not, use the external help controller.
+   (of course, we shouldn't do it for wxMSW)
+*/
+#ifndef __WXMSW__
 #if wxUSE_HTML
 #   include "wx/generic/helpwxht.h"
 #   define wxHelpController wxHelpControllerHtml
@@ -64,7 +67,7 @@ class WXDLLEXPORT wxHelpControllerBase: public wxObject
 #   define wxHelpController wxExtHelpController
 #   define sm_classwxHelpController sm_classwxExtHelpController
 #endif
-
+#endif // wxMSW
 
 #endif // wxUSE_HELP
 #endif
