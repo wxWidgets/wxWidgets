@@ -391,7 +391,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     }
 
     // set bitmap parameters
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid image") );
+    wxCHECK_MSG( image.Ok(), FALSE, wxT("invalid image") );
     SetWidth( width );
     SetHeight( bmpHeight );
     if (depth == -1) depth = wxDisplayDepth();
