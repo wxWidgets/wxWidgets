@@ -21,15 +21,19 @@
 #pragma hdrstop
 #endif
 
+#include <windows.h>
+
 #ifndef WX_PRECOMP
 #include "wx/defs.h"
+#include "wx/window.h"
+#include "wx/frame.h"
+#include "wx/utils.h"
 #endif
 
 #ifdef __WIN95__
 
-#include <wx/msw/taskbar.h>
 #include <string.h>
-#include <windows.h>
+#include <wx/msw/taskbar.h>
 #include <wx/msw/private.h>
 
 #ifdef __GNUWIN32__

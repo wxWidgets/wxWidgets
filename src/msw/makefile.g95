@@ -60,12 +60,9 @@ DOCDIR = $(WXDIR)\docs
 
 GENERICOBJS= \
   $(GENDIR)/choicdgg.$(OBJSUFF) \
-  $(GENDIR)/colrdlgg.$(OBJSUFF) \
   $(GENDIR)/dirdlgg.$(OBJSUFF) \
-  $(GENDIR)/fontdlgg.$(OBJSUFF) \
   $(GENDIR)/gridg.$(OBJSUFF) \
   $(GENDIR)/laywin.$(OBJSUFF) \
-  $(GENDIR)/msgdlgg.$(OBJSUFF) \
   $(GENDIR)/panelg.$(OBJSUFF) \
   $(GENDIR)/prop.$(OBJSUFF) \
   $(GENDIR)/propform.$(OBJSUFF) \
@@ -77,8 +74,11 @@ GENERICOBJS= \
   $(GENDIR)/tabg.$(OBJSUFF) \
   $(GENDIR)/textdlgg.$(OBJSUFF)
 
+#  $(GENDIR)/colrdlgg.$(OBJSUFF) \
+#  $(GENDIR)/fontdlgg.$(OBJSUFF) \
 #  $(GENDIR)/prntdlgg.$(OBJSUFF) \
 #  $(GENDIR)/printps.$(OBJSUFF) \
+#  $(GENDIR)/msgdlgg.$(OBJSUFF) \
 
 COMMONOBJS = \
   $(COMMDIR)/config.$(OBJSUFF) \

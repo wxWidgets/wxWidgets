@@ -39,6 +39,7 @@ typedef UINT MMRESULT;
 #define NO_JOYGETPOSEX
 #endif
 
+#include <wx/window.h>
 #include <wx/msw/joystick.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)

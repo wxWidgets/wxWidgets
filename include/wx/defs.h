@@ -976,7 +976,6 @@ typedef void*          gpointer;
 
 /* Stand-ins for GDK types */
 typedef gulong                  GdkAtom;
-typedef struct _GdkVisual       GdkVisual;
 typedef struct _GdkColor        GdkColor;
 typedef struct _GdkColormap     GdkColormap;
 typedef struct _GdkFont         GdkFont;
@@ -995,7 +994,42 @@ typedef struct _GtkList         GtkList;
 typedef struct _GtkToolbar      GtkToolbar;
 typedef struct _GtkNotebook     GtkNotebook;
 typedef struct _GtkNotebookPage GtkNotebookPage;
+
 #endif
+
+// This is required because of clashing macros in windows.h, which may be
+// included before or after wxWindows classes, and therefore must be
+// disabled here before any significant wxWindows headers are included.
+#ifdef __WXMSW__
+#ifdef GetClassInfo
+#undef GetClassInfo
+#endif
+
+#ifdef GetClassName
+#undef GetClassName
+#endif
+
+#ifdef DrawText
+#undef DrawText
+#endif
+
+#ifdef GetCharWidth
+#undef GetCharWidth
+#endif
+
+#ifdef StartDoc
+#undef StartDoc
+#endif
+
+#ifdef FindWindow
+#undef FindWindow
+#endif
+
+#ifdef FindResource
+#undef FindResource
+#endif
+#endif
+  // __WXMSW__
 
 #endif
     // _WX_DEFS_H_

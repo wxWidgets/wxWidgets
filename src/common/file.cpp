@@ -53,6 +53,9 @@
   #include  <windows.h>     // for GetTempFileName
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
   #include  <unistd.h>
+#ifdef __GNUWIN32__
+  #include <windows.h>
+#endif
 #elif (defined(__WXSTUBS__))
   // Have to ifdef this for different environments
   #include <io.h>

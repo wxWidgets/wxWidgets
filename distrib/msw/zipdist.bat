@@ -38,6 +38,12 @@ zip32 -@ %dest\ogl3.zip < %src\utils\ogl\distrib\ogl.rsp
 rem Tex2RTF
 zip32 -@ %dest\tex2rtf.zip < %src\distrib\msw\tex2rtf.rsp
 
+copy %src\docs\changes.txt %dest
+copy %src\docs\msw\install.txt %dest\install_msw.txt
+copy %src\docs\motif\install.txt %dest\install_motif.txt
+copy %src\docs\gtk\install.txt %dest\install_gtk.txt
+copy %src\docs\readme.txt %dest
+
 cd %dest
 
 echo wxWindows archived.

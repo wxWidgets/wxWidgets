@@ -28,7 +28,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx.h"
+    #include "wx/wx.h"
 #endif
 
 #if defined(__WIN95__)
@@ -52,6 +52,10 @@
 
 #ifdef GetNextSibling
 #undef GetNextSibling
+#endif
+
+#ifdef GetClassInfo
+#undef GetClassInfo
 #endif
 
 #include "wx/msw/treectrl.h"

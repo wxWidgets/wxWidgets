@@ -22,6 +22,8 @@
 
 #ifndef WX_PRECOMP
 #include <stdio.h>
+#include <wx/utils.h>
+#include <wx/brush.h>
 #endif
 
 #ifdef __WIN95__

@@ -21,6 +21,7 @@
 
 #include "wx/control.h"
 #include "wx/event.h"
+#include "wx/textctrl.h"
 
 #ifdef __GNUWIN32__
 #  ifdef GetFirstChild

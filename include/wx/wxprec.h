@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // check if to use precompiled headers
-#if (defined(__BORLANDC__) || defined(_MSC_VER) || defined(__WATCOMC__) || defined(__GNUWIN32__)) && defined(__WXMSW__)
+#if (defined(__BORLANDC__) || defined(_MSC_VER) || defined(__WATCOMC__)) && defined(__WXMSW__)
 #if !NOPCH
 #define WX_PRECOMP
 #endif
