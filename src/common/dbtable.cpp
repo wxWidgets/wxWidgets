@@ -770,8 +770,18 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
     }
 
     s.Empty();
+
+    bool exists = true;
+    if (checkTableExists)
+    {
+        if (pDb->Dbms() == dbmsPOSTGRES)
+            exists = pDb->TableExists(tableName, NULL, tablePath);
+        else
+            exists = pDb->TableExists(tableName, pDb->GetUsername(), tablePath);
+    }
+
     // Verify that the table exists in the database
-    if (checkTableExists && !pDb->TableExists(tableName, pDb->GetUsername(), tablePath))
+    if (!exists)
     {
         s = wxT("Table/view does not exist in the database");
         if ( *(pDb->dbInf.accessibleTables) == wxT('Y'))
@@ -782,13 +792,13 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
     else if (checkPrivileges)
     {
         // Verify the user has rights to access the table.
-        // Shortcut boolean evaluation to optimize out call to
-        // TablePrivileges
-        //
-        // Unfortunately this optimization doesn't seem to be
-        // reliable!
-        if (// *(pDb->dbInf.accessibleTables) == 'N' &&
-            !pDb->TablePrivileges(tableName, wxT("SELECT"), pDb->GetUsername(), pDb->GetUsername(), tablePath))
+        bool hasPrivs = true;
+        if (pDb->Dbms() == dbmsPOSTGRES)
+            hasPrivs = pDb->TablePrivileges(tableName, wxT("SELECT"), pDb->GetUsername(), NULL, tablePath);
+        else
+            hasPrivs = pDb->TablePrivileges(tableName, wxT("SELECT"), pDb->GetUsername(), pDb->GetUsername(), tablePath);
+
+        if (!hasPrivs)
             s = wxT("Connecting user does not have sufficient privileges to access this table.\n");
     }
 
@@ -2703,6 +2713,8 @@ wxVariant wxDbTable::GetColumn(const int colNumber) const
     {
         switch (colDefs[colNumber].SqlCtype)
         {
+            case SQL_WCHAR:
+            case SQL_WVARCHAR:
             case SQL_CHAR:
             case SQL_VARCHAR:
                 val = (wxChar *)(colDefs[colNumber].PtrDataObj);
@@ -2767,6 +2779,8 @@ void wxDbTable::SetColumn(const int colNumber, const wxVariant val)
 
         switch (colDefs[colNumber].SqlCtype)
         {
+            case SQL_WCHAR:
+            case SQL_WVARCHAR:
             case SQL_CHAR:
             case SQL_VARCHAR:
                 csstrncpyt((wxChar *)(colDefs[colNumber].PtrDataObj),
