@@ -493,6 +493,10 @@ bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding encoding)
     eds.dwCookie = (DWORD)&wpc;
     eds.pfnCallback = wxRichEditStreamIn;
 
+#ifndef SF_UNICODE
+#define SF_UNICODE 0x0010
+#endif
+
     if ( !::SendMessage(GetHwnd(), EM_STREAMIN,
                         SF_TEXT | SF_UNICODE | SFF_SELECTION,
                         (LPARAM)&eds) || eds.dwError )
