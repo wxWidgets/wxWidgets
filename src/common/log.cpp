@@ -535,8 +535,8 @@ const char *wxSysErrorMsg(unsigned long nErrCode)
                 0, NULL);
 
   // copy it to our buffer and free memory
-  strncpy(s_szBuf, (const char *)lpMsgBuf, SIZEOF(s_szBuf) - 1);
-  s_szBuf[SIZEOF(s_szBuf) - 1] = '\0';
+  strncpy(s_szBuf, (const char *)lpMsgBuf, WXSIZEOF(s_szBuf) - 1);
+  s_szBuf[WXSIZEOF(s_szBuf) - 1] = '\0';
   LocalFree(lpMsgBuf);
 
   // returned string is capitalized and ended with '\r\n' - bad

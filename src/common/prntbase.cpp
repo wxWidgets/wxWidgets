@@ -414,6 +414,8 @@ int wxPreviewControlBar::GetZoomControl(void)
     return (int)atoi(buf);
   }
   else return 0;
+#else
+  return 0;
 #endif
 }
 
@@ -455,6 +457,8 @@ bool wxPreviewFrame::OnClose(void)
   }
   delete printPreview;
   return TRUE;
+#else
+  return FALSE;
 #endif
 }
 

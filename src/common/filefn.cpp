@@ -40,8 +40,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#ifdef __UNIX__
 #include <unistd.h>
 #include <dirent.h>
+#endif
 
 #ifdef __WINDOWS__
 #ifndef __GNUWIN32__
@@ -719,7 +721,7 @@ wxDos2UnixFilename (char *s)
 }
 
 void 
-wxUnix2DosFilename (char *WXUNUSED(s))
+wxUnix2DosFilename (char *s)
 {
 // Yes, I really mean this to happen under DOS only! JACS
 #ifdef __WINDOWS__
