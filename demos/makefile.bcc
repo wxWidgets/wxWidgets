@@ -4,11 +4,19 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include <../build/msw/config.vc>
+!ifndef BCCDIR
+BCCDIR = $(MAKEDIR)\..
+!endif
+
+!include ../build/msw/config.bcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
 # -------------------------------------------------------------------------
+
+!if "$(BCCDIR)" == "\.."
+!error Your Borland compiler does not define MAKEDIR. Please define the BCCDIR variable, e.g. BCCDIR=d:\bc4
+!endif
 
 ### Variables: ###
 
@@ -16,41 +24,43 @@
 ### Conditionally set variables: ###
 
 
+MAKEARGS = 
+
 
 ### Targets: ###
 
-all: sub_bombs sub_dbbrowse sub_forty sub_fractal sub_life sub_poem
+all: bombs dbbrowse forty fractal life poem
 
-sub_bombs: 
+bombs: 
 	cd bombs
-	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
-	cd $(MAKEDIR)
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
 
-sub_dbbrowse: 
+dbbrowse: 
 	cd dbbrowse
-	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
-	cd $(MAKEDIR)
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
-sub_forty: 
+forty: 
 	cd forty
-	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
-	cd $(MAKEDIR)
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
-sub_fractal: 
+fractal: 
 	cd fractal
-	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
-	cd $(MAKEDIR)
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
-sub_life: 
+life: 
 	cd life
-	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
-	cd $(MAKEDIR)
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
-sub_poem: 
+poem: 
 	cd poem
-	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
-	cd $(MAKEDIR)
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
