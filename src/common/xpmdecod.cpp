@@ -4,7 +4,7 @@
 // Author:      John Cristy, Vaclav Slavik
 // RCS-ID:      $Id$
 // Copyright:   (c) John Cristy, Vaclav Slavik
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*

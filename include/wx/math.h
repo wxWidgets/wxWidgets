@@ -6,7 +6,7 @@
 // Created:     02/02/03
 // RCS-ID:      
 // Copyright:   (c)
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MATH_H_

@@ -7,7 +7,7 @@
 // Created:     10/06/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".

@@ -6,7 +6,7 @@
 // Created:     16.05.99
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /* THIS SHOULD NOT BE USED since you might include it once e.g. in window.h,

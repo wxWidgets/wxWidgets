@@ -6,7 +6,7 @@
 // Created:     03.04.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 // TODO:        - parsing of registry key names
 //              - support of other (than REG_SZ/REG_DWORD) registry types
 //              - add high level functions (RegisterOleServer, ...)

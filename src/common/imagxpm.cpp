@@ -4,7 +4,7 @@
 // Author:      Vaclav Slavik, Robert Roebling
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 Vaclav Slavik
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*

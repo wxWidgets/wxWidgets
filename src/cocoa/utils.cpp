@@ -6,7 +6,7 @@
 // Created:     2003/??/??
 // RCS-ID:      $Id:
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWidgets licence
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/setup.h"

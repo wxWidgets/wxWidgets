@@ -6,7 +6,7 @@
 // Created:     10/10/99
 // RCS-ID:      $$
 // Copyright:   (c) David Webster
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__

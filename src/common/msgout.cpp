@@ -6,7 +6,7 @@
 // Created:     17.07.02
 // RCS-ID:      $Id$
 // Copyright:   (c) the wxWidgets team
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

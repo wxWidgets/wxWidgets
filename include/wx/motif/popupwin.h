@@ -6,7 +6,7 @@
 // Created:     28.08.03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Mattia Barbon
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MOTIF_POPUPWIN_H_

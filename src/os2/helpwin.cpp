@@ -6,7 +6,7 @@
 // Created:     10/09/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef WX_PRECOMP

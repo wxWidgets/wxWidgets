@@ -6,7 +6,7 @@
 // Created:     04.06.02 (extracted from src/*/thread.cpp files)
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin (2002)
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // this file is supposed to be included only by the various thread.cpp

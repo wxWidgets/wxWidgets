@@ -6,7 +6,7 @@
 // Created:     28 Jan 02
 // RCS-ID:      $Id$
 // Copyright:   (c) 2002 George Policello
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

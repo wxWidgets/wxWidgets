@@ -6,7 +6,7 @@
 // Created:     9-Oct-2001
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CLNTDATAH__

@@ -5,7 +5,7 @@
 // Modified:    13.12.99 by VZ to derive from wxToolBarBase
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

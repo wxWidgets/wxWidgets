@@ -6,7 +6,7 @@
 // Created:     07.02.04 (extracted from textdlgg.cpp)
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __NUMDLGH_G__

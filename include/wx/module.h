@@ -6,7 +6,7 @@
 // Created:     04/11/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Wolfram Gloger and Guilhem Lavaux
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MODULE_H_

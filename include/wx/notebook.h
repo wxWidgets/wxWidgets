@@ -6,7 +6,7 @@
 // Created:     01.02.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996-2000 wxWidgets team
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_NOTEBOOK_H_BASE_

@@ -6,7 +6,7 @@
 // Created:     09.05.1999
 // RCS-ID:      $Id$
 // Copyright:   (c) Karsten Ballüder
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ////////////////////////////////////////////////////
 
 #ifndef __PROGDLGH_G__

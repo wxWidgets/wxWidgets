@@ -6,7 +6,7 @@
 // Created:     16/11/2002
 // RCS-ID:
 // Copyright:   (c) KOAN SAS ( www.koansoftware.com )
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CE_MISSING_H_

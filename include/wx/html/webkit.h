@@ -6,7 +6,7 @@
 // Created:     2004-4-16
 // RCS-ID:      $Id$
 // Copyright:   (c) Jethro Grassie / Kevin Ollivier
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_WEBKIT_H

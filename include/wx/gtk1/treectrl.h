@@ -6,7 +6,7 @@
 // Created:     08/08/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Denis Pershin
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TREECTRL_H_

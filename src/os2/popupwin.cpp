@@ -6,7 +6,7 @@
 // Created:     13.05.02
 // RCS-ID:      $Id$
 // Copyright:   (c) 2002 Dave Webster <dwebster@bhmi.com>
-// License:     wxWidgets licence
+// License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

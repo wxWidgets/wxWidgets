@@ -6,7 +6,7 @@
 // Created:     2003/02/15
 // RCS-ID:      $Id: 
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_STATTEXT_H__

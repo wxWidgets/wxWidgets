@@ -5,7 +5,7 @@
 // Created:
 // Id:          $Id$
 // Copyright:   (c) 2001 Robert Roebling
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GTKPOPUPWINH__

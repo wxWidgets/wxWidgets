@@ -5,7 +5,7 @@
 // Modified:    VZ pn 31.05.01: use typed lists, Unicode cleanup, Add/Remove
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

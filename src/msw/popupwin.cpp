@@ -6,7 +6,7 @@
 // Created:     08.05.02
 // RCS-ID:      $Id$
 // Copyright:   (c) 2002 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// License:     wxWidgets licence
+// License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

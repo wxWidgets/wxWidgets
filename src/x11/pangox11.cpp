@@ -2,7 +2,7 @@
  * This file gets included from dcclient.cpp and implements 
  * the X11 interface to Pango. 
  * Copyright (C) Owen Taylor and Robert Roebling.
- * Licence: The wxWidgets licence
+ * Licence: The wxWindows licence
  */
 
 /* Declaration */

@@ -7,7 +7,7 @@
 // Created:     10/12/99
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MSGBOXDLG_H_

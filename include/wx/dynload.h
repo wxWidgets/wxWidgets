@@ -7,7 +7,7 @@
 // Created:      03/12/01
 // RCS-ID:       $Id$
 // Copyright:    (c) 2001 Ron Lee <ron@debian.org>
-// Licence:      wxWidgets licence
+// Licence:      wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DYNAMICLOADER_H__

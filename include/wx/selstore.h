@@ -6,7 +6,7 @@
 // Created:     08.06.03 (extracted from src/generic/listctrl.cpp)
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000-2003 Vadim Zeitlin <vadim@wxwidgets.org>
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SELSTORE_H_

@@ -6,7 +6,7 @@
 // Created:     18.12.2002
 // RCS-ID:      $Id$
 // Copyright:   wxWidgets team
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #if wxUSE_STD_IOSTREAM

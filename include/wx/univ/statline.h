@@ -5,7 +5,7 @@
 // Created:     28.06.99
 // Version:     $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

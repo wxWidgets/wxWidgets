@@ -4,7 +4,7 @@
 // Author:      Vaclav Slavik
 // CVS-ID:      $Id$
 // Copyright:   (c) 2001 Vaclav Slavik
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_XPMDECOD_H_

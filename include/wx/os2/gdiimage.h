@@ -7,7 +7,7 @@
 // Created:     20.11.99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 David Webster
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // NB: this is a private header, it is not intended to be directly included by

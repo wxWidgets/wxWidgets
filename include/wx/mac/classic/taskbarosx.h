@@ -6,7 +6,7 @@
 // Created:     04/04/2003
 // RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton, 2003
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////
 
 #ifndef _TASKBAR_H_

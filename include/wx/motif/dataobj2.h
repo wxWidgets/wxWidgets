@@ -5,7 +5,7 @@
 // Created:     27.04.03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Mattia Barbon
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MOTIF_DATAOBJ2_H_

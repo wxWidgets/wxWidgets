@@ -2,7 +2,7 @@
  * Project: GSocket (Generic Socket) for WX
  * Name:    gsockpm.c
  * Purpose: GSocket: PM part
- * Licence: The wxWidgets licence
+ * Licence: The wxWindows licence
  * CVSID:   $Id$
  * ------------------------------------------------------------------------- */
 

@@ -4,7 +4,7 @@
 // Author:      Markus Sinner
 // Copyright:   (c) 2003 Herd Software Development
 // CVS-ID:      $Id$
-// Licence:     wxWidgets Licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"

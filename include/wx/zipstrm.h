@@ -3,7 +3,7 @@
 // Purpose:     wxZipInputStream for reading files from ZIP archive
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __ZIPSTREAM_H__

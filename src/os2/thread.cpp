@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Neis (2003)
 //
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__

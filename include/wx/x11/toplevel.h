@@ -6,7 +6,7 @@
 // Created:     20.09.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2002 Julian Smart
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_X11_TOPLEVEL_H_

@@ -5,7 +5,7 @@
 // Created:     25/09/99
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_HTMPRINT_H_

@@ -5,7 +5,7 @@
 // Created:     2000/03/05
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 

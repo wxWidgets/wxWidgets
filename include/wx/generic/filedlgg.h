@@ -6,7 +6,7 @@
 // Created:     8/17/99
 // Copyright:   (c) Robert Roebling
 // RCS-ID:      $Id$
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FILEDLGG_H_

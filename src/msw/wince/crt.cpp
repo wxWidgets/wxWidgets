@@ -6,7 +6,7 @@
 // Created:     03.04.04
 // RCS-ID:
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"

@@ -6,7 +6,7 @@
 // Created:     17/07/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 #ifndef __SCK_STREAM_H__
 #define __SCK_STREAM_H__

@@ -6,7 +6,7 @@
 // Created:     22.09.2003
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Stefan Neis <Stefan.Neis@t-online.de>
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_OS2_APPTBASE_H_

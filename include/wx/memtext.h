@@ -4,7 +4,7 @@
 // Created:     14.11.01
 // Author:      Morten Hanssen
 // Copyright:   (c) 2001 wxWidgets team
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MEMTEXT_H

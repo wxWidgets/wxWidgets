@@ -6,7 +6,7 @@
 // Created:     19.10.99 (extracted from msw/ole/dataobj.h)
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef   _WX_MSW_OLE_DATAFORM_H

@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     10/09/99
 // Copyright:   David Webster
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef   _INICONF_H

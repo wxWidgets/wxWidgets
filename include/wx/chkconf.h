@@ -6,7 +6,7 @@
 * Created:     09.08.00
 * RCS-ID:      $Id$
 * Copyright:   (c) 2000 Vadim Zeitlin <vadim@wxwidgets.org>
-* Licence:     wxWidgets licence
+* Licence:     wxWindows licence
 */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */

@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Stefan Csomor
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DND_H_

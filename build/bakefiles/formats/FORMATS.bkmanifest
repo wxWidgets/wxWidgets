@@ -4,9 +4,9 @@
 
     <format id="wx24dsp">
         <description>
-            src/wxWidgets.dsp which makes same files as 2.4 version
+            src/wxWindows.dsp which makes same files as 2.4 version
         </description>
-        <default-filename>wxWidgets.dsp</default-filename>
+        <default-filename>wxWindows.dsp</default-filename>
     </format>
     
     <format id="rpmspec">

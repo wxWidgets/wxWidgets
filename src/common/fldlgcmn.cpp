@@ -6,7 +6,7 @@
 // Created:     14.06.03 (extracted from src/*/filedlg.cpp)
 // RCS-ID:
 // Copyright:   (c) Robert Roebling
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

@@ -7,7 +7,7 @@
 // Created:     08.02.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 Stefan Csomor
-// License:     wxWidgets licence
+// License:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TOGGLEBUTTON_H_

@@ -6,7 +6,7 @@
 // Created:     06/01/02
 // RCS-ID:      $Id$
 // Copyright:   (c) Jesse Lovelace and original Boost authors (see below)
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 //  This class closely follows the implementation of the boost

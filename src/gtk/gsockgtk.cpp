@@ -2,7 +2,7 @@
  * Project: GSocket (Generic Socket) for WX
  * Name:    gsockgtk.c
  * Purpose: GSocket: GTK part
- * Licence: The wxWidgets licence
+ * Licence: The wxWindows licence
  * CVSID:   $Id$
  * -------------------------------------------------------------------------
  */

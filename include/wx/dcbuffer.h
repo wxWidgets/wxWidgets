@@ -6,7 +6,7 @@
 // Created:     16/03/02
 // RCS-ID:      $Id$
 // Copyright:   (c) Ron Lee
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DCBUFFER_H_

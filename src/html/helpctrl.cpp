@@ -6,7 +6,7 @@
 // Author:      Harm van der Heijden and Vaclav Slavik
 // RCS-ID:      $Id$
 // Copyright:   (c) Harm van der Heijden and Vaclav Slavik
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

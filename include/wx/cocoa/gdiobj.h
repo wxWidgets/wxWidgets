@@ -6,7 +6,7 @@
 // Created:     2002/11/27
 // RCS-ID:      
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWidgets licence
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GDIOBJ_H_

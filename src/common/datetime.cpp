@@ -13,7 +13,7 @@
 //               so long as the above copyright and this permission statement
 //               are retained in all copies.
 //
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 /*

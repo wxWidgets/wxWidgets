@@ -5,7 +5,7 @@
 // Version:     3.02
 // CVS-ID:      $Id$
 // Copyright:   (c) 1999 Guillermo Rodriguez Garcia
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GIFDECOD_H

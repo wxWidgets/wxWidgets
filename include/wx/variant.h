@@ -6,7 +6,7 @@
 // Created:     10/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_VARIANT_H_

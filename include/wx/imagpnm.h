@@ -4,7 +4,7 @@
 // Author:      Sylvain Bougnoux
 // RCS-ID:      $Id$
 // Copyright:   (c) Sylvain Bougnoux
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_IMAGPNM_H_

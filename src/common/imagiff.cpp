@@ -4,7 +4,7 @@
 // Author:      Steffen Gutmann, Thomas Meyer
 // RCS-ID:      $Id$
 // Copyright:   (c) Steffen Gutmann, 2002
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // Parts of this source are based on the iff loading algorithm found

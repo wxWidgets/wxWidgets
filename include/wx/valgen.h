@@ -6,7 +6,7 @@
 // Created:     Jan 22 1999
 // RCS-ID:
 // Copyright:   (c) 1999 Kevin Smith
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_VALGENH__

@@ -6,7 +6,7 @@
 // Created:     2003/08/02 (stubs from 22.03.2003)
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_PEN_H__

@@ -6,7 +6,7 @@
 // Created:     2002/12/09
 // RCS-ID:      $Id: 
 // Copyright:   (c) 2002 David Elliott
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_MENU_H__

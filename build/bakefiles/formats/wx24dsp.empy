@@ -28,35 +28,35 @@ commonHdrs.sort()
 HEADERS.insert(0, ('Common', commonHdrs))
 
 }@
-# Microsoft Developer Studio Project File - Name="wxWidgets" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="wxWindows" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=wxWidgets - Win32 Debug
+CFG=wxWindows - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "wxWidgets.mak".
+!MESSAGE NMAKE /f "wxWindows.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "wxWidgets.mak" CFG="wxWidgets - Win32 Debug"
+!MESSAGE NMAKE /f "wxWindows.mak" CFG="wxWindows - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "wxWidgets - Win32 Release Unicode DLL" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "wxWidgets - Win32 Debug Unicode DLL" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "wxWidgets - Win32 Release Unicode" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxWidgets - Win32 Debug Unicode" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxWidgets - Win32 Release DLL" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "wxWidgets - Win32 Debug DLL" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "wxWidgets - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxWidgets - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxWidgets - Win32 Release With Debug Info" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxWindows - Win32 Release Unicode DLL" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "wxWindows - Win32 Debug Unicode DLL" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "wxWindows - Win32 Release Unicode" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxWindows - Win32 Debug Unicode" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxWindows - Win32 Release DLL" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "wxWindows - Win32 Debug DLL" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "wxWindows - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxWindows - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxWindows - Win32 Release With Debug Info" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -64,7 +64,7 @@ CFG=wxWidgets - Win32 Debug
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 
-!IF  "$(CFG)" == "wxWidgets - Win32 Release Unicode DLL"
+!IF  "$(CFG)" == "wxWindows - Win32 Release Unicode DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -93,7 +93,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\expat.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /dll /machine:I386 /out:"../lib/wxmsw250u.dll"
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\expat.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /version:2.5 /dll /machine:I386 /out:"../lib/wxmsw250u.dll"
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Debug Unicode DLL"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -122,7 +122,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\expatd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /dll /debug /machine:I386 /out:"../lib/wxmsw250ud.dll" /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\expatd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /nologo /version:2.5 /dll /machine:I386 /out:"../lib/wxmsw250ud.dll"
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Release Unicode"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release Unicode"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -147,7 +147,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\lib\wxmswu.lib"
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Debug Unicode"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -172,7 +172,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\lib\wxmswud.lib"
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Release DLL"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -201,7 +201,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\expat.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /dll /machine:I386 /out:"../lib/wxmsw250.dll"
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\expat.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /version:2.5 /dll /machine:I386 /out:"../lib/wxmsw250.dll"
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Debug DLL"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -230,7 +230,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\expatd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /dll /debug /machine:I386 /out:"../lib/wxmsw250d.dll" /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\expatd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /nologo /version:2.5 /dll /machine:I386 /out:"../lib/wxmsw250d.dll"
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Release"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -255,7 +255,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\lib\wxmsw.lib"
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Debug"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -280,12 +280,12 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\lib\wxmswd.lib"
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Release With Debug Info"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release With Debug Info"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "wxWidgets___Win32_Release_With_Debug_Info"
-# PROP BASE Intermediate_Dir "wxWidgets___Win32_Release_With_Debug_Info"
+# PROP BASE Output_Dir "wxWindows___Win32_Release_With_Debug_Info"
+# PROP BASE Intermediate_Dir "wxWindows___Win32_Release_With_Debug_Info"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
@@ -309,15 +309,15 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "wxWidgets - Win32 Release Unicode DLL"
-# Name "wxWidgets - Win32 Debug Unicode DLL"
-# Name "wxWidgets - Win32 Release Unicode"
-# Name "wxWidgets - Win32 Debug Unicode"
-# Name "wxWidgets - Win32 Release DLL"
-# Name "wxWidgets - Win32 Debug DLL"
-# Name "wxWidgets - Win32 Release"
-# Name "wxWidgets - Win32 Debug"
-# Name "wxWidgets - Win32 Release With Debug Info"
+# Name "wxWindows - Win32 Release Unicode DLL"
+# Name "wxWindows - Win32 Debug Unicode DLL"
+# Name "wxWindows - Win32 Release Unicode"
+# Name "wxWindows - Win32 Debug Unicode"
+# Name "wxWindows - Win32 Release DLL"
+# Name "wxWindows - Win32 Debug DLL"
+# Name "wxWindows - Win32 Release"
+# Name "wxWindows - Win32 Debug"
+# Name "wxWindows - Win32 Release With Debug Info"
 # Begin Source File
 
 SOURCE="This project is deprecated, please see install.txt"
@@ -350,7 +350,7 @@ SOURCE=.\@src[4:].replace('/','\\')
 
 SOURCE=..\include\wx\msw\setup.h
 
-!IF  "$(CFG)" == "wxWidgets - Win32 Release Unicode DLL"
+!IF  "$(CFG)" == "wxWindows - Win32 Release Unicode DLL"
 
 # Begin Custom Build - Creating ..\lib\mswdllu\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\msw\setup.h
@@ -360,7 +360,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Debug Unicode DLL"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode DLL"
 
 # Begin Custom Build - Creating ..\lib\mswdllud\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\msw\setup.h
@@ -370,7 +370,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Release Unicode"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release Unicode"
 
 # Begin Custom Build - Creating ..\lib\mswu\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\msw\setup.h
@@ -380,7 +380,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Debug Unicode"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode"
 
 # Begin Custom Build - Creating ..\lib\mswud\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\msw\setup.h
@@ -390,7 +390,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Release DLL"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release DLL"
 
 # Begin Custom Build - Creating ..\lib\mswdll\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\msw\setup.h
@@ -400,7 +400,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Debug DLL"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug DLL"
 
 # Begin Custom Build - Creating ..\lib\mswdlld\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\msw\setup.h
@@ -410,7 +410,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Release"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release"
 
 # Begin Custom Build - Creating ..\lib\msw\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\msw\setup.h
@@ -420,7 +420,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Debug"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug"
 
 # Begin Custom Build - Creating ..\lib\mswd\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\msw\setup.h
@@ -430,7 +430,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "wxWidgets - Win32 Release With Debug Info"
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release With Debug Info"
 
 # Begin Custom Build - Creating ..\lib\msw\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\msw\setup.h

@@ -1,4 +1,4 @@
-                wxWidgets Free Documentation Licence, Version 3
+                wxWindows Free Documentation Licence, Version 3
                 ===============================================
 
   Copyright (c) 1998 Julian Smart, Robert Roebling et al
@@ -22,7 +22,7 @@
   manual or piece of documentation under the conditions for verbatim
   copying, provided also that any sections describing licensing conditions
   for this manual, such as, in particular, the GNU General Public Licence,
-  the GNU Library General Public Licence, and any wxWidgets Licence are
+  the GNU Library General Public Licence, and any wxWindows Licence are
   included exactly as in the original, and provided that the entire
   resulting derived work is distributed under the terms of a permission
   notice identical to this one.

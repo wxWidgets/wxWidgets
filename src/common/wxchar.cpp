@@ -6,7 +6,7 @@
 // Created:     09/04/99
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets copyright
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

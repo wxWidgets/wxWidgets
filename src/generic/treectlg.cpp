@@ -6,7 +6,7 @@
 // Modified:    22/10/98 - almost total rewrite, simpler interface (VZ)
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling and Julian Smart
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // =============================================================================

@@ -6,7 +6,7 @@
 // Created:     29/07/2002
 // RCS-ID:      $Id$
 // Copyright:   (c) Hans Van Leemputten
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ===========================================================================

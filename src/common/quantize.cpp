@@ -6,7 +6,7 @@
 // Created:     22/6/2000
 // RCS-ID:      $Id$
 // Copyright:   (c) Thomas G. Lane, Vaclav Slavik, Julian Smart
-// Licence:     wxWidgets licence + JPEG library licence
+// Licence:     wxWindows licence + JPEG library licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*

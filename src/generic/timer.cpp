@@ -4,7 +4,7 @@
 // Author:      Vaclav Slavik
 // Id:          $Id$
 // Copyright:   (c) Vaclav Slavik
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

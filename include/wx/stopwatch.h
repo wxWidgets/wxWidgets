@@ -5,7 +5,7 @@
 // Created:     26.06.03 (extracted from wx/timer.h)
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998-2003 wxWidgets team
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_STOPWATCH_H_

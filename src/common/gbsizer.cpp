@@ -8,7 +8,7 @@
 // Created:     03-Nov-2003
 // RCS-ID:      $Id$
 // Copyright:   (c) Robin Dunn
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
