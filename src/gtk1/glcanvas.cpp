@@ -322,7 +322,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
     wxCHECK_MSG( m_vi, FALSE, _T("required visual couldn't be found") );
 
     GdkVisual *visual = gdkx_visual_get( vi->visualid );
-    GdkColormap *colormap = gdk_colormap_new( gdkx_visual_get(vi->visualid), TRUE );
+    GdkColormap *colormap = gdk_colormap_new( visual, TRUE );
 
     gtk_widget_push_colormap( colormap );
     gtk_widget_push_visual( visual );
