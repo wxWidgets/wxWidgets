@@ -171,8 +171,12 @@ bool wxNativePrintFactory::HasPrintSetupDialog()
 wxDialog *wxNativePrintFactory::CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data )
 {
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    wxUnusedVar(parent);
+    wxUnusedVar(data);
     return NULL;
 #elif defined(__WXMAC__)
+    wxUnusedVar(parent);
+    wxUnusedVar(data);
     return NULL;
 #else
     // Only here do we need to provide the print setup

@@ -175,7 +175,7 @@ void PNGLINKAGEMODE wx_PNG_stream_writer( png_structp png_ptr, png_bytep data,
 // from pngerror.c
 // so that the libpng doesn't send anything on stderr
 void
-PNGLINKAGEMODE wx_png_error(png_structp png_ptr, png_const_charp message)
+PNGLINKAGEMODE wx_png_error(png_structp WXUNUSED(png_ptr), png_const_charp message)
 {
     wxLogFatalError( wxString::FromAscii(message) );
 }
