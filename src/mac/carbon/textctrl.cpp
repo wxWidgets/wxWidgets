@@ -575,6 +575,13 @@ OSStatus mUPOpenControl(ControlHandle theControl, long wxStyle )
         kTXNSystemDefaultEncoding,
         &varsp->fTXNRec, &varsp->fTXNFrame, (TXNObjectRefcon) tpvars);
 
+    if ( (wxStyle & wxTE_MULTILINE) && (wxStyle & wxTE_DONTWRAP) )
+    {
+        TXNControlTag tag = kTXNWordWrapStateTag ;
+        TXNControlData dat ;
+        dat.uValue = kTXNNoAutoWrap ;
+        TXNSetTXNObjectControls( varsp->fTXNRec , false , 1 , &tag , &dat ) ;
+    }
         Str255 fontName ;
         SInt16 fontSize ;
         Style fontStyle ;
@@ -1591,8 +1598,25 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
     if (!eat_key)
     {
-        // default handling
-        event.Skip() ;
+        // perform keystroke handling
+#if TARGET_CARBON
+        if ( m_macUsesTXN && wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
+            CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
+        else 
+#endif
+        {
+            EventRecord rec ;
+            if ( wxMacConvertEventToRecord(  (EventRef) wxTheApp->MacGetCurrentEvent() , &rec ) )
+            {
+                EventRecord *ev = &rec ;
+                short keycode ;
+                short keychar ;
+                keychar = short(ev->message & charCodeMask);
+                keycode = short(ev->message & keyCodeMask) >> 8 ;
+
+                ::HandleControlKey( (ControlHandle) m_macControl , keycode , keychar , ev->modifiers ) ;
+            }
+        }
     }
     if ( ( key >= 0x20 && key < WXK_START ) ||
          key == WXK_RETURN ||

@@ -972,6 +972,9 @@ wxApp::wxApp()
 {
   m_printMode = wxPRINT_WINDOWS;
   m_auto3D = TRUE;
+
+  m_macCurrentEvent = NULL ;
+  m_macCurrentEventHandlerCallRef = NULL ;
 }
 
 bool wxApp::Initialized()
@@ -1692,6 +1695,8 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
 
         if ( MacSendKeyDownEvent( focus , ev->message , ev->modifiers , ev->when , ev->where.h , ev->where.v ) == false )
         {
+#if 0
+            // we must handle control keys the other way round, otherwise text content is updated too late
             // has not been handled -> perform default
             wxControl* control = wxDynamicCast( focus , wxControl ) ;
             if ( control &&  control->GetMacControl() != NULL )
@@ -1702,6 +1707,7 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
                 keycode = short(ev->message & keyCodeMask) >> 8 ;
                 ::HandleControlKey( (ControlHandle) control->GetMacControl() , keycode , keychar , ev->modifiers ) ;
             }
+#endif
         }
     }
 }
