@@ -212,6 +212,9 @@ void DateTimeTestCase::TestTimeJDN()
         double jdn = dt.GetJulianDayNumber();
 
         CPPUNIT_ASSERT( jdn == d.jdn );
+
+        dt.Set(jdn);
+        CPPUNIT_ASSERT( dt.GetJulianDayNumber() == jdn );
     }
 }
 
