@@ -347,8 +347,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     m_focusWidget = m_text;
 
     PostCreation();
-
-    SetFont( parent->GetFont() );
+    InheritAttributes();
 
     wxSize size_best( DoGetBestSize() );
     wxSize new_size( size );

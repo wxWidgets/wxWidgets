@@ -75,8 +75,7 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
    m_parent->DoAddChild(this);
 
    PostCreation();
-
-   SetFont(parent->GetFont());
+   InheritAttributes();
 
    wxSize size_best(DoGetBestSize());
    wxSize new_size(size);
@@ -86,9 +85,6 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
       new_size.y = size_best.y;
    if ((new_size.x != size.x) || (new_size.y != size.y))
       SetSize(new_size.x, new_size.y);
-
-   SetBackgroundColour(parent->GetBackgroundColour());
-   SetForegroundColour(parent->GetForegroundColour());
 
    Show(TRUE);
 

@@ -127,9 +127,8 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
     m_parent->DoAddChild( this );
 
     PostCreation();
+    InheritAttributes();
 
-    SetFont( parent->GetFont() );
-    
     wxSize size_best( DoGetBestSize() );
     wxSize new_size( size );
     if (new_size.x == -1)
@@ -140,8 +139,6 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
         new_size.y = size_best.y;
     if ((new_size.x != size.x) || (new_size.y != size.y))
         SetSize( new_size.x, new_size.y );
-
-    SetBackgroundColour( parent->GetBackgroundColour() );
 
     SetValue( value );
 

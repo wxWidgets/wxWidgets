@@ -399,10 +399,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     m_parent->DoAddChild( this );
 
     PostCreation();
-
-    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX ) );
-    SetForegroundColour( parent->GetForegroundColour() );
-    SetFont( parent->GetFont() );
+    InheritAttributes();
 
     Show( TRUE );
 

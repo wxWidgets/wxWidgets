@@ -67,6 +67,10 @@ public:
     void ApplyWidgetStyle();
     bool IsOwnGtkWindow( GdkWindow *window );
 
+    // Since this wxButton doesn't derive from wxButtonBase (why?) we need
+    // to override this here too...
+    virtual bool ShouldInheritColours() const { return false; }
+    
 protected:
     virtual wxSize DoGetBestSize() const;
 

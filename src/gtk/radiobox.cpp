@@ -231,6 +231,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     m_parent->DoAddChild( this );
 
     PostCreation();
+    InheritAttributes();
 
     ApplyWidgetStyle();
 
@@ -250,9 +251,6 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     if (newSize.x == -1) newSize.x = ls.x;
     if (newSize.y == -1) newSize.y = ls.y;
     SetSize( newSize.x, newSize.y );
-
-    SetBackgroundColour( parent->GetBackgroundColour() );
-    SetForegroundColour( parent->GetForegroundColour() );
 
     Show( TRUE );
 

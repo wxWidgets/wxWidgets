@@ -111,13 +111,9 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
     m_parent->DoAddChild( this );
 
     PostCreation();
-
-    SetFont( parent->GetFont() );
+    InheritAttributes();
 
     SetBestSize(size);
-
-    SetBackgroundColour( parent->GetBackgroundColour() );
-    SetForegroundColour( parent->GetForegroundColour() );
 
     Show( TRUE );
 

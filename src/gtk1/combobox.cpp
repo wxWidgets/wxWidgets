@@ -158,6 +158,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     m_focusWidget = combo->entry;
 
     PostCreation();
+    InheritAttributes();
 
     ConnectWidget( combo->button );
 
@@ -189,9 +190,6 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         // This is required for tool bar support
         gtk_widget_set_usize( m_widget, new_size.x, new_size.y );
     }
-
-    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-    SetForegroundColour( parent->GetForegroundColour() );
 
     Show( TRUE );
 

@@ -129,8 +129,7 @@ bool wxRadioButton::Create( wxWindow *parent,
     m_parent->DoAddChild( this );
   
     PostCreation();
-
-    SetFont( parent->GetFont() );
+    InheritAttributes();
 
     wxSize size_best( DoGetBestSize() );
     wxSize new_size( size );
@@ -141,9 +140,6 @@ bool wxRadioButton::Create( wxWindow *parent,
     if ((new_size.x != size.x) || (new_size.y != size.y))
         SetSize( new_size.x, new_size.y );
         
-    SetBackgroundColour( parent->GetBackgroundColour() );
-    SetForegroundColour( parent->GetForegroundColour() );
-  
     Show( TRUE );
 
     return TRUE;

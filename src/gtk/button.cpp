@@ -136,8 +136,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     m_parent->DoAddChild( this );
 
     PostCreation();
-
-    SetFont( parent->GetFont() );
+    InheritAttributes();
 
     wxSize best_size( DoGetBestSize() );
     wxSize new_size( size );
@@ -149,9 +148,6 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
         SetSize( new_size.x, new_size.y );
 
     SetSize( new_size );
-
-    SetBackgroundColour( parent->GetBackgroundColour() );
-    SetForegroundColour( parent->GetForegroundColour() );
 
     Show( TRUE );
 

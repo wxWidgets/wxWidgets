@@ -111,7 +111,8 @@ bool wxStaticText::Create(wxWindow *parent,
 
     ApplyWidgetStyle();
 
-    wxControl::SetFont( parent->GetFont() );
+    InheritAttributes();
+//    wxControl::SetFont( parent->GetFont() );
     
     wxSize size_best( DoGetBestSize() );
     wxSize new_size( size );
@@ -122,8 +123,11 @@ bool wxStaticText::Create(wxWindow *parent,
     if ((new_size.x != size.x) || (new_size.y != size.y))
         SetSize( new_size.x, new_size.y );
 
-    SetBackgroundColour( parent->GetBackgroundColour() );
-    SetForegroundColour( parent->GetForegroundColour() );
+//     if (ShouldInheritColours())
+//     {
+//         SetBackgroundColour( parent->GetBackgroundColour() );
+//         SetForegroundColour( parent->GetForegroundColour() );
+//     }
     Show( TRUE );
 
     return TRUE;

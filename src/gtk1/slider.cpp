@@ -142,8 +142,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     m_parent->DoAddChild( this );
 
     PostCreation();
-
-    SetBackgroundColour( parent->GetBackgroundColour() );
+    InheritAttributes();
 
     Show( TRUE );
 

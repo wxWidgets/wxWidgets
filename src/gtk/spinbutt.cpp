@@ -151,8 +151,7 @@ bool wxSpinButton::Create(wxWindow *parent,
     m_parent->DoAddChild( this );
 
     PostCreation();
-
-    SetBackgroundColour( parent->GetBackgroundColour() );
+    InheritAttributes();
 
     Show( TRUE );
 
