@@ -1,86 +1,92 @@
-# Microsoft Developer Studio Project File - Name="wxvc6" - Package Owner=<4>
-# Microsoft Developer Studio Generated Build File, Format Version 6.00
+# Microsoft Developer Studio Project File - Name="wxvc_dll" - Package Owner=<4>
+# Microsoft Developer Studio Generated Build File, Format Version 5.00
 # ** DO NOT EDIT **
-# RCS-ID:      $Id$
 
-# TARGTYPE "Win32 (x86) Static Library" 0x0104
+# TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
-CFG=wxvc6 - Win32 Debug
+CFG=wxvc_dll - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "wxvc6.mak".
+!MESSAGE NMAKE /f "wxvc_dll.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "wxvc6.mak" CFG="wxvc6 - Win32 Debug"
+!MESSAGE NMAKE /f "wxvc_dll.mak" CFG="wxvc_dll - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "wxvc6 - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxvc6 - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxvc_dll - Win32 Release" (based on\
+ "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "wxvc_dll - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
-# PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
+MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "wxvc6 - Win32 Release"
+!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "Release"
-# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Output_Dir "wxvc_dll"
+# PROP BASE Intermediate_Dir "wxvc_dll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
-# PROP Intermediate_Dir "Release"
+# PROP Output_Dir "ReleaseDLL"
+# PROP Intermediate_Dir "ReleaseDLL"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O1 /Ob2 /I "../include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
-# ADD BASE RSC /l 0x809
-# ADD RSC /l 0x809
+# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O1 /Ob2 /I "../include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D WXMAKINGDLL=1 /Yu"wx/wxprec.h" /FD /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD BASE RSC /l 0x809 /d "NDEBUG"
+# ADD RSC /l 0x809 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comctl32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib uuid.lib rpcrt4.lib advapi32.lib winmm.lib /nologo /subsystem:windows /dll /machine:I386 /out:"ReleaseDLL/wxvc.dll"
 
-!ELSEIF  "$(CFG)" == "wxvc6 - Win32 Debug"
+!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "Debug"
-# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Output_Dir "wxvc_dl0"
+# PROP BASE Intermediate_Dir "wxvc_dl0"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug"
-# PROP Intermediate_Dir "Debug"
+# PROP Output_Dir "DebugDLL"
+# PROP Intermediate_Dir "DebugDLL"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /Z7 /Od /I "../include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
-# ADD BASE RSC /l 0x809
-# ADD RSC /l 0x809
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "..\include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D WXMAKINGDLL=1 /Yu"wx/wxprec.h" /FD /c
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD BASE RSC /l 0x809 /d "_DEBUG"
+# ADD RSC /l 0x809 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comctl32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib uuid.lib rpcrt4.lib advapi32.lib winmm.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"DebugDLL/wxvc.dll" /pdbtype:sept
 
 !ENDIF 
 
 # Begin Target
 
-# Name "wxvc6 - Win32 Release"
-# Name "wxvc6 - Win32 Debug"
+# Name "wxvc_dll - Win32 Release"
+# Name "wxvc_dll - Win32 Debug"
 # Begin Group "Common Files"
 
 # PROP Default_Filter ""
@@ -102,6 +108,10 @@ SOURCE=.\common\ctrlcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\dcbase.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\date.cpp
 # End Source File
 # Begin Source File
@@ -115,10 +125,6 @@ SOURCE=.\common\db.cpp
 # Begin Source File
 
 SOURCE=.\common\dbtable.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\dcbase.cpp
 # End Source File
 # Begin Source File
 
@@ -157,11 +163,11 @@ SOURCE=.\common\extended.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\ffile.cpp
+SOURCE=.\common\file.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\file.cpp
+SOURCE=.\common\ffile.cpp
 # End Source File
 # Begin Source File
 
@@ -213,20 +219,15 @@ SOURCE=.\common\http.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\imagbmp.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\image.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\imaggif.cpp
+SOURCE=.\common\imagbmp.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\imagjpeg.cpp
-# ADD CPP /I "../src/jpeg"
+SOURCE=.\common\imaggif.cpp
 # End Source File
 # Begin Source File
 
@@ -307,6 +308,10 @@ SOURCE=.\common\protocol.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\resourc2.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\resource.cpp
 # End Source File
 # Begin Source File
@@ -339,15 +344,15 @@ SOURCE=.\common\socket.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\strconv.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\stream.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\common\string.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\strconv.cpp
 # End Source File
 # Begin Source File
 
@@ -380,12 +385,6 @@ SOURCE=.\common\tokenzr.cpp
 # Begin Source File
 
 SOURCE=.\common\txtstrm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\unzip.c
-# ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -430,20 +429,10 @@ SOURCE=.\common\wxexpr.cpp
 # Begin Source File
 
 SOURCE=.\common\zipstrm.cpp
-# ADD CPP /I "zlib"
 # End Source File
 # Begin Source File
 
 SOURCE=.\common\zstream.cpp
-
-!IF  "$(CFG)" == "wxvc6 - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "wxvc6 - Win32 Debug"
-
-# SUBTRACT CPP /X
-
-!ENDIF 
-
 # End Source File
 # End Group
 # Begin Group "Generic Files"
@@ -451,11 +440,11 @@ SOURCE=.\common\zstream.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\generic\busyinfo.cpp
+SOURCE=.\generic\choicdgg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\choicdgg.cpp
+SOURCE=.\generic\busyinfo.cpp
 # End Source File
 # Begin Source File
 
@@ -521,11 +510,8 @@ SOURCE=.\generic\textdlgg.cpp
 
 SOURCE=.\generic\tipdlg.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=.\generic\wizard.cpp
-# End Source File
 # End Group
+
 # Begin Group "wxHTML Files"
 
 # PROP Default_Filter ""
@@ -602,6 +588,7 @@ SOURCE=.\html\mod_tables.cpp
 SOURCE=.\html\search.cpp
 # End Source File
 # End Group
+
 # Begin Group "MSW Files"
 
 # PROP Default_Filter ""
@@ -719,7 +706,7 @@ SOURCE=.\msw\dragimag.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\dummy.cpp
+SOURCE=.\msw\dummydll.cpp
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # Begin Source File
@@ -833,17 +820,7 @@ SOURCE=.\msw\penwin.cpp
 # Begin Source File
 
 SOURCE=.\msw\pnghand.cpp
-
-!IF  "$(CFG)" == "wxvc6 - Win32 Release"
-
 # ADD CPP /I "png" /I "zlib"
-
-!ELSEIF  "$(CFG)" == "wxvc6 - Win32 Debug"
-
-# ADD CPP /I "zlib" /I "png"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -911,10 +888,6 @@ SOURCE=.\msw\stattext.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\statline.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\msw\tabctrl.cpp
 # End Source File
 # Begin Source File
@@ -968,7 +941,6 @@ SOURCE=.\msw\window.cpp
 # Begin Source File
 
 SOURCE=.\msw\xpmhand.cpp
-# ADD CPP /I "../src/xpm"
 # End Source File
 # End Group
 # Begin Group "OLE Files"
@@ -1007,14 +979,6 @@ SOURCE=.\msw\ole\uuid.cpp
 SOURCE=.\png\png.c
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\png.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\png\pngconf.h
 # End Source File
 # Begin Source File
 
@@ -1072,6 +1036,12 @@ SOURCE=.\png\pngset.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\png\pngtest.c
+# ADD CPP /I "zlib"
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
 SOURCE=.\png\pngtrans.c
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
@@ -1101,7 +1071,7 @@ SOURCE=.\png\pngwutil.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
-# Begin Group "XPM files"
+# Begin Group "XPM Files"
 
 # PROP Default_Filter ""
 # Begin Source File
