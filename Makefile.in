@@ -1890,7 +1890,8 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/wince/helpwce.h \
 	wx/msw/wince/libraries.h \
 	wx/msw/wince/missing.h \
-	wx/msw/wince/tbarwce.h
+	wx/msw/wince/tbarwce.h \
+	wx/msw/wince/resources.h
 @COND_TOOLKIT_WINCE@GUI_HDR = $(COND_TOOLKIT_WINCE_GUI_HDR)
 @COND_TOOLKIT_GTK@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_GTK@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
@@ -3026,7 +3027,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_crt.o \
 	monodll_filedlgwce.o \
 	monodll_helpwce.o \
-	monodll_tbarwce.o
+	monodll_tbarwce.o \
+	monodll_menuce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
@@ -3885,7 +3887,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_crt.o \
 	monolib_filedlgwce.o \
 	monolib_helpwce.o \
-	monolib_tbarwce.o
+	monolib_tbarwce.o \
+	monolib_menuce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_taskbarcmn.o \
@@ -4916,7 +4919,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_crt.o \
 	coredll_filedlgwce.o \
 	coredll_helpwce.o \
-	coredll_tbarwce.o
+	coredll_tbarwce.o \
+	coredll_menuce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2)
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(LIBEXT)
@@ -5642,7 +5646,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_crt.o \
 	corelib_filedlgwce.o \
 	corelib_helpwce.o \
-	corelib_tbarwce.o
+	corelib_tbarwce.o \
+	corelib_menuce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3)
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1___advdll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
@@ -8101,6 +8106,9 @@ monodll_helpwce.o: $(srcdir)/src/msw/wince/helpwce.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_menuce.o: $(srcdir)/src/msw/wince/menuce.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(MONODLL_ODEP)
@@ -11041,6 +11049,9 @@ monolib_helpwce.o: $(srcdir)/src/msw/wince/helpwce.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_menuce.o: $(srcdir)/src/msw/wince/menuce.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(MONOLIB_ODEP)
@@ -14466,6 +14477,9 @@ coredll_helpwce.o: $(srcdir)/src/msw/wince/helpwce.cpp $(COREDLL_ODEP)
 coredll_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+coredll_menuce.o: $(srcdir)/src/msw/wince/menuce.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 coredll_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -16891,6 +16905,9 @@ corelib_helpwce.o: $(srcdir)/src/msw/wince/helpwce.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+corelib_menuce.o: $(srcdir)/src/msw/wince/menuce.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(CORELIB_ODEP)
