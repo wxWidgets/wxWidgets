@@ -3723,8 +3723,11 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             }
             return TRUE;
         }
-        result = TRUE;
+#if 0
+// There is no path to this code !!!!!!
+       result = TRUE;
         break;
+#endif
     }
 
     if (result && !GetBatchCount() )

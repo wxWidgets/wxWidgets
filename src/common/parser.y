@@ -157,7 +157,7 @@ void yyerror(char *s)
  */
 
 /* At least on alphaev6-dec-osf4.0e yywrap() must be #define'd */
-#ifdef __ALPHA__
+#if defined( __ALPHA__ ) && !defined( __VMS__ )
 #ifndef yywrap
 #define yywrap() 1
 #endif
