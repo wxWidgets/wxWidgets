@@ -43,16 +43,14 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxSliderNameStr);
 
-    virtual int GetValue() const ;
+    virtual int GetValue() const;
     virtual void SetValue(int);
-
-    virtual void DoGetSize(int *width, int *height) const;
 
     void GetSize(int *w, int *h) const;
 
     void GetPosition(int *x, int *y) const;
 
-    bool Show(bool show);
+    bool Show(bool show = TRUE);
 
     void SetRange(int minValue, int maxValue);
 
@@ -63,17 +61,17 @@ public:
     void SetTickFreq(int n, int pos);
     int GetTickFreq() const { return m_tickFreq; }
     void SetPageSize(int pageSize);
-    int GetPageSize() const ;
-    void ClearSel() ;
-    void ClearTicks() ;
+    int GetPageSize() const;
+    void ClearSel();
+    void ClearTicks();
     void SetLineSize(int lineSize);
-    int GetLineSize() const ;
-    int GetSelEnd() const ;
-    int GetSelStart() const ;
+    int GetLineSize() const;
+    int GetSelEnd() const;
+    int GetSelStart() const;
     void SetSelection(int minPos, int maxPos);
-    void SetThumbLength(int len) ;
-    int GetThumbLength() const ;
-    void SetTick(int tickPos) ;
+    void SetThumbLength(int len);
+    int GetThumbLength() const;
+    void SetTick(int tickPos);
 
     // IMPLEMENTATION
     WXHWND GetStaticMin() const { return m_staticMin; }
@@ -96,6 +94,8 @@ protected:
     int           m_pageSize;
     int           m_lineSize;
     int           m_tickFreq;
+
+    virtual void DoGetSize(int *width, int *height) const;
 
     virtual void DoSetSize(int x, int y,
                            int width, int height,
