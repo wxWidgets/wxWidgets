@@ -511,6 +511,18 @@ public:
 
 //---------------------------------------------------------------------------
 
+class wxContextMenuEvent : public wxCommandEvent
+{
+public:
+    wxContextMenuEvent(wxEventType type = wxEVT_NULL,
+                       wxWindowID id = 0,
+                       const wxPoint& pt = wxDefaultPosition);
+    const wxPoint& GetPosition();
+    void SetPosition(const wxPoint& pos);
+};
+
+//----------------------------------------------------------------------
+
 class  wxTimerEvent : public wxEvent
 {
 public:

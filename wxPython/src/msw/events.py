@@ -1030,6 +1030,27 @@ class wxWindowDestroyEvent(wxWindowDestroyEventPtr):
 
 
 
+class wxContextMenuEventPtr(wxCommandEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetPosition(self, *_args, **_kwargs):
+        val = apply(eventsc.wxContextMenuEvent_GetPosition,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) 
+        return val
+    def SetPosition(self, *_args, **_kwargs):
+        val = apply(eventsc.wxContextMenuEvent_SetPosition,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxContextMenuEvent instance at %s>" % (self.this,)
+class wxContextMenuEvent(wxContextMenuEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxContextMenuEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxTimerEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
