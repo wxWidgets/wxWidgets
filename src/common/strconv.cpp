@@ -418,7 +418,7 @@ static long CharsetToCodepage(const wxChar *name)
         path += cn;
         wxRegKey key(wxRegKey::HKCR, path);
 
-        if (!key.Exists()) continue;
+        if (!key.Exists()) break;
 
         // two cases: either there's an AliasForCharset string,
         // or there are Codepage and InternetEncoding dwords.
