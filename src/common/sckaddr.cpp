@@ -59,6 +59,12 @@
 #include <unistd.h>
 #include <netdb.h>
 
+#ifdef __SUN__
+extern "C" {
+   int gethostname(char *name, int namelen);
+};
+#endif
+
 #endif // __UNIX__
 
 #include "wx/sckaddr.h"
@@ -77,8 +83,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 #endif
 
 wxIPV4address::wxIPV4address()
-{
   m_addr = new sockaddr_in;
+{
   Clear();
 }
 

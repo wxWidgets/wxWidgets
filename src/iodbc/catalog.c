@@ -38,6 +38,10 @@
 
 #include	<itrace.h>
 
+#ifndef NULL
+#define NULL 0
+#endif
+
 static RETCODE 
 _iodbcdm_cata_state_ok (
     HSTMT hstmt,
