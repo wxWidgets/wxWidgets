@@ -2,7 +2,18 @@ wxWindows 2.0
 -------------
 
 Welcome to wxWindows 2.0, a sophisticated cross-platform C++
-framework for writing GUI applications.
+framework for writing advanced GUI applications using (where
+possible) the native controls.
+
+In addition to common and advanced GUI facilities such as frames, scrolling
+windows, toolbars, tree controls, icons, device contexts,
+printing, splitter windows and so on, there are wrappers for common
+file operations and facilities for writing TCP/IP applications.
+Where certain features are not available on a platform, such as MDI and
+tree controls on Unix, they are emulated.
+
+A detailed 700-page reference manual is supplied in HTML, PDF and
+Windows Help form.
 
 Platforms supported
 -------------------
@@ -44,7 +55,7 @@ in the individual directories:
   docs/gtk
   docs/motif
 
-License information
+Licence information
 -------------------
 
 For licensing information, please see the files:
@@ -55,4 +66,48 @@ For licensing information, please see the files:
   docs/gpl.txt
   docs/lgpl.txt
 
+Although this may seem complex, it is there to allow authors of
+proprietary/commercial applications to use wxWindows in
+addition to those writing GPL'ed applications. In summary,
+the licence is L-GPL plus a clause allowing unrestricted
+distribution of application binaries. To answer a FAQ, you
+don't have to distribute any source if you wish to write
+commercial applications using wxWindows.
+
+Documentation
+-------------
+
+See docs/changes.txt for a history of changes to wxWindows 2.0.
+See docs/html/index.htm for an HTML index of the major documents.
+
+The Windows help files are located in docs/winhelp.
+The PDF help files are located in docs/pdf.
+
+Further information
+-------------------
+
+The wxWindows Web site is located at:
+
+  http://wxwin.home.ml.org
+
+The wxGTK Web site (with further wxGTK-specific fiels and
+information) is located at:
+
+  http://www.freiburg.linux.de/~wxxt
+
+The main wxWindows ftp site is at:
+
+  ftp://www.remstar.com/pub/wxwin
+
+A wxWindows CD-ROM with the latest distribution plus an HTML
+front-end and hundreds of MB of compilers, utilities and other
+material may be ordered from the CD-ROM page:
+
+  http://wxwin.home.ml.org/cdrom
+
+or contact Julian Smart <julian.smart@ukonline.co.uk>.
+
+Good luck!
+
+The wxWindows Team, January 1999
 

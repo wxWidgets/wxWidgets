@@ -1,0 +1,15 @@
+wxWindows Buglist
+-----------------
+
+wxGTK:
+------
+
+wxMSW:
+------
+
+wxMotif:
+--------
+
+General:
+--------
+
