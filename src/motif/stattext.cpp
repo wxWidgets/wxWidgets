@@ -25,6 +25,7 @@
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
+#include <Xm/Frame.h>
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
 #include <Xm/PushBG.h>
@@ -61,6 +62,39 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
+    Widget borderWidget = NULL;
+    
+    // Decorate the label widget if a border style is specified.
+    if (style & wxSIMPLE_BORDER)
+    {
+        borderWidget = XtVaCreateManagedWidget
+                                   (
+                                    "simpleBorder",
+                                    xmFrameWidgetClass, parentWidget,
+                                    XmNshadowType, XmSHADOW_ETCHED_IN,
+                                    XmNshadowThickness, 1,
+                                    NULL
+                                   );
+    } else if (style & wxSUNKEN_BORDER)
+    {
+        borderWidget = XtVaCreateManagedWidget
+                                   (
+                                    "sunkenBorder",
+                                    xmFrameWidgetClass, parentWidget,
+                                    XmNshadowType, XmSHADOW_IN,
+                                    NULL
+                                   );
+    } else if (style & wxRAISED_BORDER)
+    {
+        borderWidget = XtVaCreateManagedWidget
+                                   (
+                                    "raisedBorder",
+                                    xmFrameWidgetClass, parentWidget,
+                                    XmNshadowType, XmSHADOW_OUT,
+                                    NULL
+                                   );
+    }
+
 #if 0 // gcc 2.95 doesn't like this apparently    
     // Use XmStringCreateLtoR(), since XmStringCreateSimple
     // doesn't obey separators.
@@ -72,9 +106,9 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     
     XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
 
-    m_mainWidget = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) name,
+    Widget labelWidget = XtVaCreateManagedWidget ((char*) (const char*) name,
                                          xmLabelWidgetClass,
-                                         parentWidget,
+                                         borderWidget ? borderWidget : parentWidget,
                                          XmNfontList, fontList,
                                          XmNlabelString, text,
                                          XmNalignment,
@@ -84,6 +118,8 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
                                          NULL);
 
     XmStringFree (text);
+
+    m_mainWidget = borderWidget ? borderWidget : labelWidget;
 
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
