@@ -221,6 +221,9 @@ void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )
     M_COLDATA->m_color.green = ((unsigned short)green) << SHIFT;
     M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
     M_COLDATA->m_color.pixel = 0;
+    
+    M_COLDATA->m_colormap = (GdkColormap*) NULL;
+    M_COLDATA->m_hasPixel = FALSE;
 }
 
 unsigned char wxColour::Red() const
