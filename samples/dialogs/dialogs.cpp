@@ -1135,7 +1135,12 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
     dc.SetFont(wxGetApp().m_canvasFont);
     dc.SetTextForeground(wxGetApp().m_canvasTextColour);
     dc.SetBackgroundMode(wxTRANSPARENT);
-    dc.DrawText(_T("wxWidgets common dialogs test application"), 10, 10);
+    dc.DrawText(
+                _T("wxWidgets common dialogs")
+#if !defined(__SMARTPHONE__)
+                _T(" test application")
+#endif
+                , 10, 10);
 }
 
 #if USE_MODAL_PRESENTATION
