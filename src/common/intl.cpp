@@ -300,6 +300,15 @@ static wxString GetFullSearchPath(const wxChar *lang)
     if ( pszLcPath != NULL )
         searchPath << GetAllMsgCatalogSubdirs(pszLcPath, lang);
 
+#ifdef __UNIX__
+    // add some standard ones and the one in the tree where wxWin was installed:
+    searchPath
+        << GetAllMsgCatalogSubdirs(wxString(wxGetInstallPrefix()) + wxT("/share/locale"), lang)
+        << GetAllMsgCatalogSubdirs(wxT("/usr/share/locale"), lang)
+        << GetAllMsgCatalogSubdirs(wxT("/usr/lib/locale"), lang)
+        << GetAllMsgCatalogSubdirs(wxT("/usr/local/share/locale"), lang);
+#endif // __UNIX__
+
     // then take the current directory
     // FIXME it should be the directory of the executable
 #ifdef __WXMAC__
@@ -309,15 +318,6 @@ static wxString GetFullSearchPath(const wxChar *lang)
     // generic search paths could be somewhere in the system folder preferences
 #else // !Mac
     searchPath << GetAllMsgCatalogSubdirs(wxT("."), lang);
-
-#ifdef __UNIX__
-    // and finally add some standard ones
-    searchPath
-        << GetAllMsgCatalogSubdirs(wxString(wxGetInstallPrefix()) + wxT("/share/locale"), lang)
-        << GetAllMsgCatalogSubdirs(wxT("/usr/share/locale"), lang)
-        << GetAllMsgCatalogSubdirs(wxT("/usr/lib/locale"), lang)
-        << GetAllMsgCatalogSubdirs(wxT("/usr/local/share/locale"), lang);
-#endif // __UNIX__
 
 #endif // platform
 
