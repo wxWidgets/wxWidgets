@@ -19,7 +19,7 @@ from wxPython.utils import wxConfig
 
 def main():
 
-    cfg = wxConfig('test6', 'TCS')
+    cfg = wxConfig('test6', 'TCS', ".testconfig")
 
     cmd = ''
     if len(sys.argv) > 1:
