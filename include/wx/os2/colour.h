@@ -92,7 +92,7 @@ public:
     //
     bool operator == (const wxColour& rColour) const
     {
-        return (m_isInit == rColour.m_isInit
+        return (m_bIsInit == rColour.m_bIsInit
                 && m_cRed   == rColour.m_cRed
                 && m_cGreen == rColour.m_cGreen
                 && m_cBlue  == rColour.m_cBlue
