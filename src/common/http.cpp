@@ -293,15 +293,16 @@ protected:
 
 size_t wxHTTPStream::OnSysRead(void *buffer, size_t bufsize)
 {
-  size_t ret;
+    if (m_httpsize > 0 && m_read_bytes >= m_httpsize)
+    {
+        m_lasterror = wxSTREAM_EOF;
+        return 0;
+    }
 
-  if (m_httpsize > 0 && m_read_bytes >= m_httpsize)
-    return 0;
+    size_t ret = wxSocketInputStream::OnSysRead(buffer, bufsize);
+    m_read_bytes += ret;
 
-  ret = wxSocketInputStream::OnSysRead(buffer, bufsize);
-  m_read_bytes += ret;
-
-  return ret;
+    return ret;
 }
 
 bool wxHTTP::Abort(void)
