@@ -1,8 +1,8 @@
 
-Installing wxWindows 2.2
+Installing wxWindows 2.3
 ------------------------
 
-This is wxWindows 2.2 for Microsoft Windows 3.1, 95, 98 and
+This is wxWindows 2.3 for Microsoft Windows 3.1, 95, 98 and
 Windows NT/Windows 2000. This is an official, stable release.
 
 IMPORTANT NOTE: If you experience problems installing, please
@@ -288,7 +288,7 @@ samples, and not all samples. The remaining samples can be made
 with the makefiles. See also the demos hierarchy which doesn't
 have any BC++ project files yet.
 
-Note (2): to make the png, xpm, zlib, jpeg and tiff libraries (needed for
+Note (2): to make the png, zlib, jpeg and tiff libraries (needed for
 some samples) you need to compile them with bc32.ide.
 
 Note (3): the debug version of the wxWindows library is about 40 MB, and the
@@ -412,15 +412,6 @@ Watcom C++.
 Note (3): if Watcom can't read the precompiled header when
 building a sample, try deleting src\msw\watcom.pch and
 compiling the sample again.
-Note (4): if you get _popen_ and _pclose_ link errors, try
-recompiling wxWindows with XPM support disabled in setup.h.
-Alternatively, make sure these lines exist at the top of
-src\xpm\xpmi.h:
-
-// Added by JACS for Watcom C++/wxWindows compilation (no popen/pclose functions)
-#ifdef __WATCOMC__
-#define NO_ZPIPE
-#endif
 
 Metrowerks CodeWarrior compilation
 ----------------------------------
