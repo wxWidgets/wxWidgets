@@ -346,8 +346,9 @@ public:                                                               \
                                                                       \
   class reverse_iterator                                              \
   {                                                                   \
-    typedef name::reference reference;                                \
-    typedef name::pointer pointer;                                    \
+    typedef T value_type;                                             \
+    typedef value_type& reference;                                    \
+    typedef value_type* pointer;                                      \
     typedef reverse_iterator itor;                                    \
     friend itor operator+(int o, const itor& it);                     \
     friend itor operator+(const itor& it, int o);                     \
@@ -371,8 +372,9 @@ public:                                                               \
                                                                       \
   class const_reverse_iterator                                        \
   {                                                                   \
-    typedef name::const_reference reference;                          \
-    typedef name::const_pointer pointer;                              \
+    typedef T value_type;                                             \
+    typedef const value_type& reference;                              \
+    typedef const value_type* pointer;                                \
     typedef const_reverse_iterator itor;                              \
     friend itor operator+(int o, const itor& it);                     \
     friend itor operator+(const itor& it, int o);                     \
