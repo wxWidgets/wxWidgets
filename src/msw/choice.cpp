@@ -116,8 +116,13 @@ int wxChoice::DoAppend(const wxString& item)
 
         size.y = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
-        // don't call our SetSize() as it ignores the height parameter
-        wxControl::DoSetSize(-1, -1, size.x, size.y, wxSIZE_USE_EXISTING);
+        // don't call our SetSize() as it ignores the height parameter and also
+        // short circuit wxComboBox::DoMoveWindow() as it does weird stuff with
+        // the height too
+        int x, y;
+        GetPosition(&x, &y);
+        AdjustForParentClientOrigin(x, y, 0);
+        wxWindow::DoMoveWindow(x, y, size.x, size.y);
     }
 
     return n;
