@@ -106,7 +106,7 @@ public:
 
   wxCoord GetCharHeight() const;
   wxCoord GetCharWidth() const;
-  bool CanGetTextExtent() const { return FALSE; }
+  bool CanGetTextExtent() const { return TRUE; }
   void DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                      wxCoord *descent = (wxCoord *) NULL,
                      wxCoord *externalLeading = (wxCoord *) NULL,
