@@ -803,11 +803,11 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         if ( scrollView )
         {
             HIViewAddSubview( scrollView , textView ) ;
-            m_macControl = scrollView ;
+            m_macControl = (WXWidget) scrollView ;
         }
         else
         {
-            m_macControl = textView ;
+            m_macControl = (WXWidget) textView ;
         }
 #else
         short featurSet;

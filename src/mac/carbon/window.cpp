@@ -461,6 +461,8 @@ void wxWindowMac::Init()
         wxMacSetupControlBackgroundUPP = NewControlColorUPP( wxMacSetupControlBackground ) ;
     }
 
+    // we need a valid font for the encodings
+    wxWindowBase::SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 }
 
 // Destructor
