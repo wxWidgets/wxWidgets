@@ -266,12 +266,9 @@ bool wxPCXHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(
 bool wxPCXHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char c;
-    off_t pos;
 
-    pos = stream.TellI();
-    stream.SeekI(0, wxFromStart);
     c = stream.GetC();
-    stream.SeekI(pos, wxFromStart);
+    stream.SeekI(-1, wxFromCurrent);
 
     // not very safe, but this is all we can get from PCX header :-(
     return (c == 10);
