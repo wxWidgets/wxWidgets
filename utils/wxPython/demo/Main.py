@@ -276,6 +276,7 @@ class wxPythonDemo(wxFrame):
     def OnCloseWindow(self, event):
         self.dying = true
         self.window = None
+        self.mainmenu = None
         self.Destroy()
 
     #---------------------------------------------

@@ -6,6 +6,7 @@ from wxPython.wx import *
 def runTest(frame, nb, log):
     dlg = wxMessageDialog(frame, 'Hello from Python and wxPython!',
                           'A Message Box', wxOK | wxICON_INFORMATION)
+                          #wxYES_NO | wxNO_DEFAULT | wxCANCEL | wxICON_INFORMATION)
     dlg.ShowModal()
     dlg.Destroy()
 
