@@ -1399,6 +1399,8 @@ This function is deprecated, use \helpref{wxString}{wxstring} class instead.
 
 \func{const char *}{wxGetTranslation}{\param{const char * }{str}}
 
+\func{const char *}{wxGetTranslation}{\param{const char * }{str}, \param{const char * }{strPlural}, \param{size\_t }{n}}
+
 This function returns the translation of string {\it str} in the current
 \helpref{locale}{wxlocale}. If the string is not found in any of the loaded
 message catalogs (see \helpref{internationalization overview}{internationalization}), the
@@ -1408,6 +1410,10 @@ is used very often, an alternative (and also common in Unix world) syntax is
 provided: the \helpref{\_()}{underscore} macro is defined to do the same thing
 as wxGetTranslation.
 
+The second form is used when retrieving translation of string that has
+different singular and plural form in English or different plural forms in some
+other language. \arg{strPlural} is plural form of the string in English and
+\arg{n} is used to determine the plural form.
 
 \membersection{::wxIsEmpty}\label{wxisempty}
 

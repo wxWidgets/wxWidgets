@@ -474,12 +474,19 @@ the Init() function).
 
 \constfunc{const char*}{GetString}{\param{const char }{*szOrigString}, \param{const char }{*szDomain = NULL}}
 
+\constfunc{const char*}{GetString}{\param{const char }{*szOrigString}, \param{const char }{*szOrigString2}, \param{size\_t }{n}, \param{const char }{*szDomain = NULL}}
+
 Retrieves the translation for a string in all loaded domains unless the szDomain
 parameter is specified (and then only this catalog/domain is searched).
 
 Returns original string if translation is not available
 (in this case an error message is generated the first time
 a string is not found; use \helpref{wxLogNull}{wxlogoverview} to suppress it).
+
+The second form is used when retrieving translation of string that has
+different singular and plural form in English or different plural forms in some
+other language. \arg{szOrigString2} is plural form of the string in English and
+\arg{n} is used to determine the plural form.
 
 \wxheading{Remarks}
 
