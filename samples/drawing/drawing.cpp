@@ -616,7 +616,6 @@ void MyCanvas::DrawDefault(wxDC& dc)
 
     // to the right
     wxPen pen = *wxRED_PEN;
-    pen.SetWidth(2);
     memdc.SetPen(pen);
     memdc.DrawLine( 10, 5,10, 5 );
     memdc.DrawLine( 10,10,11,10 );
@@ -1060,8 +1059,10 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( _T("This is the about dialog of the drawing sample.\n")
-                _T("Copyright (c) Robert Roebling 1999")
+    msg.Printf( wxT("This is the about dialog of the drawing sample.\n")
+                wxT("This sample tests various primitive drawing functions\n")
+                wxT("without any tests to prevent flicker.\n")
+                wxT("Copyright (c) Robert Roebling 1999")
               );
 
     wxMessageBox(msg, "About Drawing", wxOK | wxICON_INFORMATION, this);

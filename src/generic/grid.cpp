@@ -5536,6 +5536,9 @@ int wxGrid::GetColSize( int col )
 void wxGrid::SetDefaultCellBackgroundColour( const wxColour& col )
 {
     m_defaultCellAttr->SetBackgroundColour(col);
+#ifdef __WXGTK__
+    m_gridWin->SetBackgroundColour(col);
+#endif
 }
 
 void wxGrid::SetDefaultCellTextColour( const wxColour& col )

@@ -18,6 +18,10 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xatom.h>
+
 #define IS_ONSCREEN(x,y) ((x >= G_MINSHORT) && (x <= G_MAXSHORT) && \
                           (y >= G_MINSHORT) && (y <= G_MAXSHORT))
 
@@ -483,7 +487,7 @@ gtk_pizza_realize (GtkWidget *widget)
        GDK_VISIBILITY_NOTIFY_MASK;
     attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-    widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
+    widget->window = gdk_window_new(gtk_widget_get_parent_window (widget),
                                      &attributes, attributes_mask);
     gdk_window_set_user_data (widget->window, widget);
 
@@ -507,7 +511,7 @@ gtk_pizza_realize (GtkWidget *widget)
        GDK_LEAVE_NOTIFY_MASK        |
        GDK_FOCUS_CHANGE_MASK;
 
-    pizza->bin_window = gdk_window_new (widget->window,
+    pizza->bin_window = gdk_window_new(widget->window,
                                           &attributes, attributes_mask);
     gdk_window_set_user_data (pizza->bin_window, widget);
 
