@@ -223,6 +223,10 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
 
     def OnColBeginDrag(self, event):
         self.log.WriteText("OnColBeginDrag\n")
+        ## Show how to not allow a column to be resized
+        #if event.GetColumn() == 0:
+        #    event.Veto()
+
 
     def OnColDragging(self, event):
         self.log.WriteText("OnColDragging\n")
