@@ -46,7 +46,9 @@
 
 #ifndef __WIN16__
   #include "wx/spinbutt.h"
+#if wxUSE_CHECKLISTBOX
   #include "wx/checklst.h"
+#endif
 #endif
 
 #include "wx/valgen.h"

@@ -23,7 +23,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_HTML
+#if wxUSE_HTML && wxUSE_STREAMS
 #ifndef WXPRECOMP
 #include "wx/wx.h"
 #endif

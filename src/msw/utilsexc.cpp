@@ -122,7 +122,7 @@ public:
 };
 
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && wxUSE_STREAMS
 // ----------------------------------------------------------------------------
 // wxPipeStreams
 // ----------------------------------------------------------------------------
@@ -499,11 +499,13 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         ::CloseHandle(hpipeWrite[1]);
         ::CloseHandle(hpipeRead[0]);
 
+#if wxUSE_STREAMS
         // We can now initialize the wxStreams
         wxInputStream *inStream = new wxPipeInputStream(hpipeWrite[0]);
         wxOutputStream *outStream = new wxPipeOutputStream(hpipeRead[1]);
 
         handler->SetPipeStreams(inStream, outStream);
+#endif
     }
 
     // register the class for the hidden window used for the notifications

@@ -1,4 +1,21 @@
 include/wx/datetime.inl
+include/wx/sckipc.h
+include/wx/ipcbase.h
+include/wx/gtk/pen.h
+include/wx/defs.h
 src/msw/treectrl.cpp
+src/common/sckipc.cpp
+src/common/intl.cpp
+src/generic/scrolwin.cpp
+src/gtk/settings.cpp
 samples/treectrl/TreectrlVC.dsp
+samples/sockets/client.g95
+samples/sockets/server.g95
+samples/ipc/client.g95
+samples/ipc/server.g95
+
+src/xpm/makefile.b32
+configure
+configure.in
+docs/msw/install.txt
 

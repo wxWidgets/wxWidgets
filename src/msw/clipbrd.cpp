@@ -823,6 +823,6 @@ bool wxClipboard::GetData( wxDataObject& data )
 }
 
 #else
-    #error "Please turn wxUSE_CLIPBOARD on to compile this file."
+//    #error "Please turn wxUSE_CLIPBOARD on to compile this file."
 #endif // wxUSE_CLIPBOARD
 

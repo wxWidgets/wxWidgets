@@ -23,7 +23,10 @@
 #include "wx/font.h"        // for wxFont and wxFontEncoding
 #include "wx/fontutil.h"    // for wxNativeEncodingInfo
 
+#if wxUSE_CONFIG
 class WXDLLEXPORT wxConfigBase;
+#endif
+
 class WXDLLEXPORT wxWindow;
 
 // ----------------------------------------------------------------------------
@@ -102,6 +105,7 @@ public:
     // GetDefaultConfigPath()
     // ----------------------------------------------------------------------
 
+#if wxUSE_CONFIG
     // set the config object to use (may be NULL to use default)
     void SetConfig(wxConfigBase *config) { m_config = config; }
 
@@ -110,8 +114,11 @@ public:
 
     // return default config path
     static const wxChar *GetDefaultConfigPath();
+#endif
 
 protected:
+
+#if wxUSE_CONFIG
     // get the config object we're using - if it wasn't set explicitly, this
     // function will use wxConfig::Get() to get the global one
     wxConfigBase *GetConfig();
@@ -119,6 +126,7 @@ protected:
     // gets the root path for our settings - if itwasn't set explicitly, use
     // GetDefaultConfigPath()
     const wxString& GetConfigPath();
+#endif
 
     // change to the given (relative) path in the config, return TRUE if ok
     // (then GetConfig() will return something !NULL), FALSE if no config
@@ -142,8 +150,11 @@ protected:
                          wxFontEncoding encReplacement,
                          wxNativeEncodingInfo *info);
 
+#if wxUSE_CONFIG
     // config object and path (in it) to use
     wxConfigBase *m_config;
+#endif
+
     wxString  m_configRootPath;
 
     // the title for our dialogs

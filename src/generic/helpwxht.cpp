@@ -19,7 +19,7 @@
 #   pragma hdrstop
 #endif
 
-#if wxUSE_HTML
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WX_PRECOMP
 #   include "wx/string.h"

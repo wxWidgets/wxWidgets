@@ -50,7 +50,7 @@ all (GUI):
   MIME types if available (Unix only)
 - wxDC::DrawRotatedText() (based on contribution by Hans-Joachim Baader)
 - TIFF support added (libtiff required and included in the distribution)
-- PCX files can now be written (24 bit only so far)
+- PCX files can now be written (256 and 24 bits)
 - validators may work recursively if wxWS_EX_VALIDATE_RECURSIVELY is set
 - wxScrolledWindow now has keyboard interface
 - wxTextEntryDialog may be used for entering passwords (supports wxTE_PASSWORD)

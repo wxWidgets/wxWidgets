@@ -36,7 +36,7 @@
 #include "wx/defs.h"
 #endif
 
-#if wxUSE_SOCKETS && wxUSE_IPC
+#if wxUSE_SOCKETS && wxUSE_IPC && wxUSE_STREAMS
 
 #include <stdlib.h>
 #include <stdio.h>

@@ -35,8 +35,11 @@
 #endif // PCH
 
 #include "wx/fontmap.h"
+
+#if wxUSE_CONFIG
 #include "wx/config.h"
 #include "wx/memconf.h"
+#endif
 
 #include "wx/msgdlg.h"
 #include "wx/fontdlg.h"
@@ -188,7 +191,10 @@ private:
 
 wxFontMapper::wxFontMapper()
 {
+#if wxUSE_CONFIG
     m_config = NULL;
+#endif
+
     m_windowParent = NULL;
 }
 
@@ -199,6 +205,8 @@ wxFontMapper::~wxFontMapper()
 // ----------------------------------------------------------------------------
 // customisation
 // ----------------------------------------------------------------------------
+
+#if wxUSE_CONFIG
 
 /* static */ const wxChar *wxFontMapper::GetDefaultConfigPath()
 {
@@ -212,7 +220,6 @@ void wxFontMapper::SetConfigPath(const wxString& prefix)
 
     m_configRootPath = prefix;
 }
-
 
 // ----------------------------------------------------------------------------
 // get config object and path for it
@@ -250,9 +257,11 @@ const wxString& wxFontMapper::GetConfigPath()
 
     return m_configRootPath;
 }
+#endif
 
 bool wxFontMapper::ChangePath(const wxString& pathNew, wxString *pathOld)
 {
+#if wxUSE_CONFIG
     wxConfigBase *config = GetConfig();
     if ( !config )
         return FALSE;
@@ -273,11 +282,17 @@ bool wxFontMapper::ChangePath(const wxString& pathNew, wxString *pathOld)
     config->SetPath(path);
 
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 void wxFontMapper::RestorePath(const wxString& pathOld)
 {
+#if wxUSE_CONFIG
     GetConfig()->SetPath(pathOld);
+#else
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -338,6 +353,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
     // we're going to modify it, make a copy
     wxString cs = charset;
 
+#if wxUSE_CONFIG
     // first try the user-defined settings
     wxString pathOld;
     if ( ChangePath(FONTMAPPER_CHARSET_PATH, &pathOld) )
@@ -375,6 +391,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         RestorePath(pathOld);
     }
+#endif
 
     // if didn't find it there, try to reckognise it ourselves
     if ( encoding == wxFONTENCODING_SYSTEM )
@@ -473,7 +490,8 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         {
             encoding = gs_encodings[n];
 
-            // save the result in the config now
+#if wxUSE_CONFIG
+        // save the result in the config now
             if ( ChangePath(FONTMAPPER_CHARSET_PATH, &pathOld) )
             {
                 wxConfigBase *config = GetConfig();
@@ -487,6 +505,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
                 RestorePath(pathOld);
             }
+#endif
         }
         //else: cancelled
     }
@@ -507,6 +526,7 @@ bool wxFontMapper::TestAltEncoding(const wxString& configEntry,
     if ( wxGetNativeFontEncoding(encReplacement, info) &&
          wxTestFontEncoding(*info) )
     {
+#if wxUSE_CONFIG
         // remember the mapping in the config
         wxFontMapperPathChanger path(this, FONTMAPPER_FONT_FROM_ENCODING_PATH);
 
@@ -514,7 +534,7 @@ bool wxFontMapper::TestAltEncoding(const wxString& configEntry,
         {
             GetConfig()->Write(configEntry, info->ToString());
         }
-
+#endif
         return TRUE;
     }
 
@@ -553,6 +573,8 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     }
     configEntry += encName;
 
+#if wxUSE_CONFIG
+
     // do we have a font spec for this encoding?
     wxString pathOld;
     if ( ChangePath(FONTMAPPER_FONT_FROM_ENCODING_PATH, &pathOld) )
@@ -588,6 +610,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
         }
         //else: there is no information in config about this encoding
     }
+#endif
 
     // ask the user
     if ( interactive )
@@ -624,13 +647,15 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                 *info = retData.EncodingInfo();
                 info -> encoding = retData.GetEncoding();
 
-                // remember this in the config
+#if wxUSE_CONFIG
+            // remember this in the config
                 if ( ChangePath(FONTMAPPER_FONT_FROM_ENCODING_PATH, &pathOld) )
                 {
                     GetConfig()->Write(configEntry, info->ToString());
 
                     RestorePath(pathOld);
                 }
+#endif
 
                 return TRUE;
             }

@@ -22,7 +22,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_HTML
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #include "wx/html/helpctrl.h"
 #include "wx/wx.h"

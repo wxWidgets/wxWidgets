@@ -631,6 +631,11 @@
 #define wxUSE_NATIVE_STATUSBAR 0
 #endif
 
+#if !wxUSE_OWNER_DRAWN
+#undef wxUSE_CHECKLISTBOX
+#define wxUSE_CHECKLISTBOX 0
+#endif
+
 // Salford C++ doesn't like some of the memory operator definitions
 #ifdef __SALFORDC__
 #undef  wxUSE_MEMORY_TRACING

@@ -236,6 +236,8 @@ samples/sockets/client.b32
 samples/sockets/server.b32
 samples/sockets/client.bcc
 samples/sockets/server.bcc
+samples/sockets/client.g95
+samples/sockets/server.g95
 samples/sockets/*.xbm
 samples/sockets/*.xpm
 samples/sockets/*.ico
@@ -670,6 +672,8 @@ samples/ipc/client.bcc
 samples/ipc/server.bcc
 samples/ipc/client.dos
 samples/ipc/server.dos
+samples/ipc/client.g95
+samples/ipc/server.g95
 samples/ipc/*.rc
 samples/ipc/*.def
 samples/ipc/*.bmp

@@ -28,6 +28,10 @@
     #pragma hdrstop
 #endif
 
+#include "wx/setup.h"
+
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #include "wx/printdlg.h"
 #include "wx/dcprint.h"
 
@@ -182,3 +186,5 @@ int wxPageSetupDialog::ShowModal()
 #endif
 }
 
+#endif
+    // wxUSE_PRINTING_ARCHITECTURE

@@ -664,7 +664,7 @@ rtf:    $(DOCDIR)/winhelp/wx.rtf
 pdfrtf:    $(DOCDIR)/pdf/wx.rtf
 refpdfrtf: $(DOCDIR)/pdf/techref.rtf
 html:	wxhtml
-wxhtml:	$(DOCDIR)\html\wx\wx.htm
+wxhtml:	$(DOCDIR)\html\wx\wx.htm htb
 htmlhelp: $(DOCDIR)\html\wx\wx.chm
 ps:     wxps referencps
 wxps:	$(WXDIR)\docs\ps\wx.ps
@@ -828,7 +828,8 @@ htb:
 	cd $(WXDIR)\docs\html\wx
     -erase /Y wx.zip wx.htb
     zip32 wx.zip *.htm *.gif *.hhp *.hhc *.hhk
-    ren wx.zip wx.htb
+    -mkdir $(DOCDIR)\html\htb
+    move wx.zip $(DOCDIR)\html\htb\wx.htb
     cd $(THISDIR)
 
 # In order to force document reprocessing

@@ -104,6 +104,9 @@ wxMetafile::~wxMetafile()
 
 bool wxMetafile::SetClipboard(int width, int height)
 {
+#if !wxUSE_CLIPBOARD
+    return FALSE;
+#else
     if (!m_refData)
         return FALSE;
 
@@ -119,6 +122,7 @@ bool wxMetafile::SetClipboard(int width, int height)
         wxCloseClipboard();
 
     return success;
+#endif
 }
 
 bool wxMetafile::Play(wxDC *dc)

@@ -20,7 +20,9 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_SOCKETS
+#include "wx/setup.h"
+
+#if wxUSE_SOCKETS && wxUSE_STREAMS
 
 #ifndef __MWERKS__
 #include <memory.h>

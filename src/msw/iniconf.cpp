@@ -28,6 +28,8 @@
   #include  "wx/utils.h"
 #endif  //WX_PRECOMP
 
+#if wxUSE_CONFIG
+
 #include  "wx/dynarray.h"
 #include  "wx/log.h"
 #include  "wx/config.h"
@@ -487,3 +489,6 @@ bool wxIniConfig::RenameGroup(const wxString& oldName, const wxString& newName)
     // Not implemented
     return FALSE;
 }
+
+#endif
+    // wxUSE_CONFIG

@@ -35,6 +35,8 @@
     #include "wx/dcmemory.h"
 #endif
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #include "wx/msw/private.h"
 #include "wx/dcprint.h"
 #include "math.h"
@@ -593,3 +595,6 @@ bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
 
     return success;
 }
+
+#endif
+    // wxUSE_PRINTING_ARCHITECTURE

@@ -1219,6 +1219,8 @@ long wxExecute(const wxString& command, wxArrayString& output)
     process->Redirect();
 
     long rc = wxExecute(command, TRUE /* sync */, process);
+
+#if wxUSE_STREAMS
     if ( rc != -1 )
     {
         wxInputStream& is = *process->GetInputStream();
@@ -1232,6 +1234,7 @@ long wxExecute(const wxString& command, wxArrayString& output)
             output.Add(line);
         }
     }
+#endif
 
     return rc;
 #endif

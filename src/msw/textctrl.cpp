@@ -38,6 +38,8 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/module.h"
+
 #if wxUSE_CLIPBOARD
     #include "wx/clipbrd.h"
 #endif

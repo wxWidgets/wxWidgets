@@ -30,6 +30,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/msw/private.h"
@@ -419,3 +421,5 @@ LONG APIENTRY _EXPORT wxAbortProc(HDC WXUNUSED(hPr), int WXUNUSED(Code))
         return (!wxPrinterBase::sm_abortIt);
 }
 
+#endif
+    // wxUSE_PRINTING_ARCHITECTURE

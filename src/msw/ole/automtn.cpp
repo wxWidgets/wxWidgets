@@ -650,7 +650,8 @@ bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 		}
 	case VT_DATE:
 		{
-			struct tm tmTemp;
+#if wxUSE_TIMEDATE
+            struct tm tmTemp;
 			if (!TmFromOleDate(oleVariant.date, tmTemp))
 				return FALSE;
 
@@ -658,7 +659,9 @@ bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 			wxTime time(date, tmTemp.tm_hour, tmTemp.tm_min, tmTemp.tm_sec);
 
 			variant = time;
-			break;
+#endif
+
+            break;
 		}
 	case VT_I4:
 		{

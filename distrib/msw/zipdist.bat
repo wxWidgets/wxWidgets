@@ -22,6 +22,7 @@ echo CTRL-C if this is not correct.
 pause
 
 erase %dest\wx*.zip
+erase %dest\*.htb
 erase %dest\ogl3.zip
 erase %dest\tex2rtf2.zip
 erase %dest\jpeg.zip
@@ -51,6 +52,7 @@ zip32 -@ %dest\wx%version%_hlp.zip < %src\distrib\msw\wx_hlp.rsp
 zip32 -@ %dest\wx%version%_htm.zip < %src\distrib\msw\wx_html.rsp
 zip32 -@ %dest\wx%version%_pdf.zip < %src\distrib\msw\wx_pdf.rsp
 zip32 -@ %dest\wx%version%_wrd.zip < %src\distrib\msw\wx_word.rsp
+zip32 -@ %dest\wx%version%_htb.zip < %src\distrib\msw\wx_htb.rsp
 
 Rem PDF/HTML docs that should go into the Windows setup because
 Rem there are no WinHelp equivalents

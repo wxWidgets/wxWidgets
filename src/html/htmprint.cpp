@@ -26,7 +26,7 @@
 #include "wx/wx.h"
 #endif
 
-#if wxUSE_HTML & wxUSE_PRINTING_ARCHITECTURE
+#if wxUSE_HTML && wxUSE_PRINTING_ARCHITECTURE && wxUSE_STREAMS
 
 #include "wx/print.h"
 #include "wx/printdlg.h"
