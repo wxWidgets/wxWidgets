@@ -332,7 +332,7 @@ bool wxWindowDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
     memdc.SelectObject(bitmap);
     memdc.Blit(0, 0, 1, 1, (wxDC*) this, x1, y1);
     memdc.SelectObject(wxNullBitmap);
-    wxImage image(bitmap);
+    wxImage image(bitmap.ConvertToImage());
     col->Set(image.GetRed(0, 0), image.GetGreen(0, 0), image.GetBlue(0, 0));
     return TRUE;
 }
@@ -895,14 +895,14 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     wxBitmap use_bitmap;
     if ((w != ww) || (h != hh))
     {
-        wxImage image( bitmap );
+        wxImage image( bitmap.ConvertToImage() );
         image.Rescale( ww, hh );
 #if 0
         if (is_mono)
             use_bitmap = image.ConvertToMonoBitmap(255,255,255);
         else
 #endif
-            use_bitmap = image.ConvertToBitmap();
+            use_bitmap = image;
     }
     else
     {
@@ -1014,14 +1014,14 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     wxBitmap use_bitmap;
     if ((w != ww) || (h != hh))
     {
-        wxImage image( bitmap );
+        wxImage image( bitmap.ConvertToImage() );
         image.Rescale( ww, hh );
 #if 0
         if (is_mono)
             use_bitmap = image.ConvertToMonoBitmap(255,255,255);
         else
 #endif
-            use_bitmap = image.ConvertToBitmap();
+            use_bitmap = image;
     }
     else
     {
@@ -1217,7 +1217,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
         if ((bm_width != bm_ww) || (bm_height != bm_hh))
         {
-            wxImage image( memDC->m_selected );
+            wxImage image( memDC->m_selected.ConvertToImage() );
             image = image.Scale( bm_ww, bm_hh );
 
 #if 0
@@ -1225,7 +1225,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
                 use_bitmap = image.ConvertToMonoBitmap(255,255,255);
             else
 #endif
-                use_bitmap = image.ConvertToBitmap();
+                use_bitmap = image;
         }
         else
         {
@@ -1336,11 +1336,11 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
             XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, ClipByChildren );
 
             // scale image
-            wxImage image( bitmap );
+            wxImage image( bitmap.ConvertToImage() );
             image = image.Scale( ww, hh );
 
             // convert to bitmap
-            bitmap = image.ConvertToBitmap();
+            bitmap = image;
 
             // draw scaled bitmap
             XCopyArea( (Display*) m_display, (Window) bitmap.GetPixmap(), (Window) m_window, 

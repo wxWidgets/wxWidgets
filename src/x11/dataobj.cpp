@@ -351,7 +351,7 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
         return FALSE;
     }
 
-    m_bitmap = image.ConvertToBitmap();
+    m_bitmap = image;
 
     return m_bitmap.Ok();
 #else
@@ -365,7 +365,7 @@ void wxBitmapDataObject::DoConvertToPng()
     if (!m_bitmap.Ok())
         return;
 
-    wxImage image( m_bitmap );
+    wxImage image = m_bitmap.ConvertToImage();
     wxPNGHandler handler;
 
     wxCountingOutputStream count;
