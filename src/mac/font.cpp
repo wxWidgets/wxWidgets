@@ -121,6 +121,10 @@ void wxFontRefData::MacFindFont()
 	//sequence in order to degrade gracefully while trying to maintain most of the style
 	//information, meanwhile we just take the normal font and apply the features after
 	OSStatus status = ::ATSUFONDtoFontID(m_macFontNum, normal /*qdStyle*/, (UInt32*)&m_macATSUFontID); 
+    /*
+    status = ATSUFindFontFromName ( (Ptr) m_faceName , strlen( m_faceName ) ,
+        kFontFullName,	kFontMacintoshPlatform, kFontRomanScript , kFontNoLanguage  ,  (UInt32*)&m_macATSUFontID ) ;
+    */
 	wxASSERT_MSG( status == noErr , "couldn't retrieve font identifier" ) ;
 }
 
