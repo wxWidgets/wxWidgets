@@ -165,6 +165,10 @@ void wxToolBar::OnPaint(wxPaintEvent &event)
 {
     wxPaintDC dc(this);
     
+    wxSize clientSize = GetClientSize();
+    dc.SetPen( *wxBLACK_PEN );
+    dc.DrawLine( 0,0, clientSize.x,0 );
+    
     for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
           node;
           node = node->GetNext() )
@@ -200,6 +204,8 @@ bool wxToolBar::Realize()
         tool->m_y = 4;
         x += m_defaultWidth + 6;
     }
+    
+    SetSize( x+16, m_defaultHeight + 14 );
     
     return TRUE;
 }
