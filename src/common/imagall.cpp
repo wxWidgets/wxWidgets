@@ -55,9 +55,6 @@ void wxInitAllImageHandlers()
 #if wxUSE_IFF
   wxImage::AddHandler( new wxIFFHandler );
 #endif
-#if wxUSE_XPM
-  wxImage::AddHandler( new wxXPMHandler );
-#endif
 #if wxUSE_ICO_CUR
   wxImage::AddHandler( new wxICOHandler );
   wxImage::AddHandler( new wxCURHandler );
