@@ -658,6 +658,8 @@ void wxFrame::PositionToolBar()
 // on the desktop, but are iconized/restored with it
 void wxFrame::IconizeChildFrames(bool bIconize)
 {
+    m_iconized = bIconize;
+
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
           node;
           node = node->GetNext() )
@@ -788,14 +790,13 @@ bool wxFrame::HandlePaint()
     }
 }
 
-bool wxFrame::HandleSize(int x, int y, WXUINT id)
+bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
 {
-    bool processed = false;
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-
     switch ( id )
     {
-        case SIZENORMAL:
+        case SIZE_RESTORED:
+        case SIZE_MAXIMIZED:
             // only do it it if we were iconized before, otherwise resizing the
             // parent frame has a curious side effect of bringing it under it's
             // children
@@ -806,23 +807,14 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
             IconizeChildFrames(false);
 
             (void)SendIconizeEvent(false);
-
-            // fall through
-
-        case SIZEFULLSCREEN:
-            m_iconized = FALSE;
             break;
 
-        case SIZEICONIC:
+        case SIZE_MINIMIZED:
             // iconize all child frames too
             IconizeChildFrames(true);
-
-            (void)SendIconizeEvent();
-
-            m_iconized = true;
             break;
     }
-#endif
+#endif // !__WXWINCE__
 
     if ( !m_iconized )
     {
@@ -848,13 +840,11 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
             }
 
         }
-#endif
-
-
-        processed = wxWindow::HandleSize(x, y, id);
+#endif // WINCE_WITH_COMMANDBAR
     }
 
-    return processed;
+    // call the base class version to generate the appropriate events
+    return false;
 }
 
 bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)

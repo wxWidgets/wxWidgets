@@ -2285,31 +2285,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 #endif
 
         case WM_SIZE:
-            switch ( wParam )
-            {
-                case SIZE_MAXHIDE:
-                case SIZE_MAXSHOW:
-                    // we're not interested in these messages at all
-                    break;
-
-                case SIZE_MINIMIZED:
-                    // we shouldn't send sizev events for these messages as the
-                    // client size may be negative which breaks existing code
-                    //
-                    // OTOH we might send another (wxMinimizedEvent?) one or
-                    // add an additional parameter to wxSizeEvent if this is
-                    // useful to anybody
-                    break;
-
-                default:
-                    wxFAIL_MSG( _T("unexpected WM_SIZE parameter") );
-                    // fall through nevertheless
-
-                case SIZE_MAXIMIZED:
-                case SIZE_RESTORED:
-                    processed = HandleSize(LOWORD(lParam), HIWORD(lParam),
-                                           wParam);
-            }
+            processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);
             break;
 
 #if !defined(__WXWINCE__)
@@ -4187,16 +4163,40 @@ bool wxWindowMSW::HandleMoving(wxRect& rect)
     return rc;
 }
 
-bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h),
-                             WXUINT WXUNUSED(flag))
+bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
 {
-    // don't use w and h parameters as they specify the client size while
-    // according to the docs EVT_SIZE handler is supposed to receive the total
-    // size
-    wxSizeEvent event(GetSize(), m_windowId);
-    event.SetEventObject(this);
+    bool processed = false;
 
-    return GetEventHandler()->ProcessEvent(event);
+    switch ( wParam )
+    {
+        default:
+            wxFAIL_MSG( _T("unexpected WM_SIZE parameter") );
+            // fall through nevertheless
+
+        case SIZE_MAXHIDE:
+        case SIZE_MAXSHOW:
+            // we're not interested in these messages at all
+            break;
+
+        case SIZE_MINIMIZED:
+            processed = HandleMinimize();
+            break;
+
+        case SIZE_MAXIMIZED:
+            processed = HandleMaximize();
+            // fall through to send a normal size event as well
+
+        case SIZE_RESTORED:
+            // don't use w and h parameters as they specify the client size
+            // while according to the docs EVT_SIZE handler is supposed to
+            // receive the total size
+            wxSizeEvent event(GetSize(), m_windowId);
+            event.SetEventObject(this);
+
+            processed = GetEventHandler()->ProcessEvent(event);
+    }
+
+    return processed;
 }
 
 bool wxWindowMSW::HandleSizing(wxRect& rect)

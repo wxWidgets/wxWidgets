@@ -272,6 +272,7 @@ wxMSW:
 - fixed flat style for toolbars under XP, Windows Classic style
 - fixed truncation of transferred data in wxConnection under unicode build
 - wxChoice and wxComboBox dropdown background can be set now too (Adrian Lupei)
+- fixed wxMaximizeEvent generation in wxFrame
 
 wxUniv/X11:
 
