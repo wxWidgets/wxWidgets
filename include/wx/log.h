@@ -30,9 +30,10 @@ typedef unsigned long wxLogLevel;
 // headers
 // ----------------------------------------------------------------------------
 
+#include "wx/string.h"
+
 #if wxUSE_LOG
 
-#include "wx/string.h"
 #include "wx/arrstr.h"
 
 #ifndef __WXWINCE__
