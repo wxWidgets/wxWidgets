@@ -604,11 +604,17 @@ public:
     // we need HINSTANCE declaration to define WinMain()
     #include "wx/msw/wrapwin.h"
 
+    #ifdef SW_SHOWNORMAL
+    #define wxSW_SHOWNORMAL SW_SHOWNORMAL
+    #else
+    #define wxSW_SHOWNORMAL 0
+    #endif
+
     #define IMPLEMENT_WXWIN_MAIN \
         extern int wxEntry(HINSTANCE hInstance,                               \
                            HINSTANCE hPrevInstance = NULL,                    \
                            char *pCmdLine = NULL,                             \
-                           int nCmdShow = SW_NORMAL);                         \
+                           int nCmdShow = wxSW_SHOWNORMAL);                         \
         extern "C" int WINAPI WinMain(HINSTANCE hInstance,                    \
                                       HINSTANCE hPrevInstance,                \
                                       char *lpCmdLine,                        \

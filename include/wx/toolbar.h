@@ -55,7 +55,9 @@ enum
 #if wxUSE_TOOLBAR
     #include "wx/tbarbase.h"     // the base class for all toolbars
 
-    #if !wxUSE_TOOLBAR_NATIVE && !defined(__WXUNIVERSAL__)
+    // Simple toolbar no longer available, so we will need to have
+    // a generic toolbar at some point (perhaps the wxUniv toolbar)
+    #if 0 // !wxUSE_TOOLBAR_NATIVE && !defined(__WXUNIVERSAL__)
         #include "wx/tbarsmpl.h"
 
         class WXDLLEXPORT wxToolBar : public wxToolBarSimple
