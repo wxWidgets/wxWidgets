@@ -185,6 +185,12 @@ void wxRegion::Clear()
 
 bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
+    // workaround for a strange GTK/X11 bug: taking union with an empty
+    // rectangle results in an empty region which is definitely not what we
+    // want
+    if ( !width || !height )
+        return TRUE;
+
     GdkRectangle rect;
     rect.x = x;
     rect.y = y;
