@@ -46,6 +46,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
 
 bool wxPopupWindow::Create(wxWindow *parent, int flags)
 {
+    // popup windows are created hidden by default
+    Hide();
+
     return wxPopupWindowBase::Create(parent) &&
                wxWindow::Create(parent, -1,
                                 wxDefaultPosition, wxDefaultSize,

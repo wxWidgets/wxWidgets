@@ -121,8 +121,8 @@ wxWindowBase::wxWindowBase()
     m_maxWidth =
     m_maxHeight = -1;
 
-    // window is created enabled but it's not visible yet
-    m_isShown = false;
+    // window are created enabled and visible by default
+    m_isShown =
     m_isEnabled = true;
 
     // the default event handler is just this window
