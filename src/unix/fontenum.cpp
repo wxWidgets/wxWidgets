@@ -62,7 +62,7 @@ static char **CreateFontList(wxChar spacing, int *nFonts)
     pattern.Printf(wxT("-*-*-*-*-*-*-*-*-*-*-%c-*-*-*"), spacing);
 
     // get the list of all fonts
-    return XListFonts((Display *)wxGetDisplay(), pattern, 32767, nFonts);
+    return XListFonts((Display *)wxGetDisplay(), pattern.mb_str(), 32767, nFonts);
 }
 
 static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
@@ -74,7 +74,7 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
     for ( int n = 0; n < nFonts; n++ )
     {
         char *font = fonts[n];
-        if ( !wxString(font).Matches("-*-*-*-*-*-*-*-*-*-*-*-*-*-*") )
+        if ( !wxString(font).Matches(wxT("-*-*-*-*-*-*-*-*-*-*-*-*-*-*")) )
         {
             // it's not a full font name (probably an alias)
             continue;
@@ -84,16 +84,17 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
         char *family = dash + 1;
         dash = strchr(family, '-');
         *dash = '\0'; // !NULL because Matches() above succeeded
+        wxString fam(family);
 
-        if ( families.Index(family) == wxNOT_FOUND )
+        if ( families.Index(fam) == wxNOT_FOUND )
         {
-            if ( !This->OnFontFamily(family) )
+            if ( !This->OnFontFamily(fam) )
             {
                 // stop enumerating
                 return FALSE;
             }
 
-            families.Add(family);
+            families.Add(fam);
         }
         //else: already seen
     }
@@ -159,7 +160,7 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 
     // get the list of all fonts
     int nFonts;
-    char **fonts = XListFonts((Display *)wxGetDisplay(), pattern,
+    char **fonts = XListFonts((Display *)wxGetDisplay(), pattern.mb_str(),
                               32767, &nFonts);
 
     if ( !fonts )
@@ -173,7 +174,7 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
     for ( int n = 0; n < nFonts; n++ )
     {
         char *font = fonts[n];
-        if ( !wxString(font).Matches("-*-*-*-*-*-*-*-*-*-*-*-*-*-*") )
+        if ( !wxString(font).Matches(wxT("-*-*-*-*-*-*-*-*-*-*-*-*-*-*")) )
         {
             // it's not a full font name (probably an alias)
             continue;

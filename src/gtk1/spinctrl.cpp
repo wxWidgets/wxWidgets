@@ -165,7 +165,7 @@ void wxSpinCtrl::SetValue( const wxString& value )
     else
     {
         // invalid number - set text as is (wxMSW compatible)
-        gtk_entry_set_text( GTK_ENTRY(m_widget), value.c_str() );
+        gtk_entry_set_text( GTK_ENTRY(m_widget), value.mbc_str() );
     }
 }
 

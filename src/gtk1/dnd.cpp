@@ -401,7 +401,7 @@ GdkAtom wxDropTarget::GetMatchingPair()
         wxDataFormat format( formatAtom );
 
 #ifdef __WXDEBUG__
-        wxLogDebug("Drop target: drag has format: %s", format.GetId().c_str() );
+        wxLogDebug( wxT("Drop target: drag has format: %s"), format.GetId().c_str() );
 #endif // Debug
 
         if (m_dataObject->IsSupportedFormat( format ))

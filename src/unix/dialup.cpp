@@ -212,7 +212,7 @@ public:
       { m_started = TRUE; return wxTimer::Start(millisecs, FALSE); }
 
    virtual void Notify()
-      { wxLogTrace("Checking dial up network status."); m_dupman->CheckStatus(); }
+      { wxLogTrace(wxT("Checking dial up network status.")); m_dupman->CheckStatus(); }
 
    virtual void Stop()
       { if ( m_started ) wxTimer::Stop(); }
@@ -281,7 +281,7 @@ wxDialUpManagerImpl::Dial(const wxString &isp,
    m_IsOnline = -1;
    m_ISPname = isp;
    wxString cmd;
-   if(m_ConnectCommand.Find("%s"))
+   if(m_ConnectCommand.Find(wxT("%s")))
       cmd.Printf(m_ConnectCommand,m_ISPname.c_str());
    else
       cmd = m_ConnectCommand;
@@ -315,7 +315,7 @@ wxDialUpManagerImpl::HangUp(void)
    }
    m_IsOnline = -1;
    wxString cmd;
-   if(m_HangUpCommand.Find("%s"))
+   if(m_HangUpCommand.Find(wxT("%s")))
       cmd.Printf(m_HangUpCommand,m_ISPname.c_str(), m_DialProcess);
    else
       cmd = m_HangUpCommand;
@@ -361,11 +361,11 @@ void
 wxDialUpManagerImpl::SetWellKnownHost(const wxString& hostname, int portno)
 {
    /// does hostname contain a port number?
-   wxString port = hostname.After(':');
+   wxString port = hostname.After(wxT(':'));
    if(port.Length())
    {
-      m_BeaconHost = hostname.Before(':');
-      m_BeaconPort = atoi(port);
+      m_BeaconHost = hostname.Before(wxT(':'));
+      m_BeaconPort = wxAtoi(port);
    }
    else
    {
@@ -470,7 +470,7 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    struct sockaddr_in  serv_addr;
 
    m_IsOnline = 0; // assume false
-   if((hp = gethostbyname(m_BeaconHost)) == NULL)
+   if((hp = gethostbyname(m_BeaconHost.mb_str())) == NULL)
       return; // no DNS no net
    
    serv_addr.sin_family		= hp->h_addrtype;

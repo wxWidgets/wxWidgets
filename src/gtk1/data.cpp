@@ -31,7 +31,7 @@ wxResourceCache *wxTheResourceCache = (wxResourceCache *) NULL;
 XrmDatabase wxResourceDatabase;
 
 /* Useful buffer, initialized in wxCommonInit */
-char *wxBuffer = (char *) NULL;
+wxChar *wxBuffer = (wxChar *) NULL;
 
 /* Windows List */
 wxWindowList wxTopLevelWindows;
