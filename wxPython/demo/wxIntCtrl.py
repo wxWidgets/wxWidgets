@@ -11,11 +11,11 @@ class TestPanel( wxPanel ):
         panel = wxPanel( self, -1 )
 
         self.set_min = wxCheckBox( panel, -1, "Set minimum value:" )
-        self.min = wxIntCtrl( panel, size=wxSize( 50, 20 ) )
+        self.min = wxIntCtrl( panel, size=wxSize( 50, -1 ) )
         self.min.Enable( FALSE )
 
         self.set_max = wxCheckBox( panel, -1, "Set maximum value:" )
-        self.max = wxIntCtrl( panel, size=wxSize( 50, 20 ) )
+        self.max = wxIntCtrl( panel, size=wxSize( 50, -1 ) )
         self.max.Enable( FALSE )
 
         self.limit_target = wxCheckBox( panel, -1, "Limit control" )

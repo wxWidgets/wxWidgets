@@ -203,10 +203,6 @@ class TestValidateDialog(wxDialog):
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    if wxPlatform == "__WXMAC__":
-        wxMessageBox("This demo currently fails on the Mac. The problem is being looked into...", "Sorry")
-        return
-
     win = TestValidatorPanel(nb)
     return win
 
