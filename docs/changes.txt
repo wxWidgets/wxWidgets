@@ -100,6 +100,14 @@ All (GUI):
 - Added UpdateSize to wxSplitterWindow to allow layout while hidden
 - implemented Freeze/Thaw() for wxGenericTreeCtrl (Kevin Hock)
 - support for KOI8-U encoding added (Yuriy Tkachenko)
+- The old wxADJUST_MINSIZE behaviouris now the default behaviour for
+  sizer items that are windows.  This means that GetAdjustedBestSize
+  will now be called by default to determine the minimum size that a
+  window in a sizer should have.  If you want to still use the initial
+  size (and not the BestSize) then use the wxFIXED_MINSIZE flag.  When
+  windows are added to a sizer their initial size is made the window's
+  min size using SetSizeHints, and calls to wxSizer::SetItemMinSize
+  are also forwarded to SetSizeHints for window items.
 
 wxMSW:
 
