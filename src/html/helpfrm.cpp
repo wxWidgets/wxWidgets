@@ -216,8 +216,10 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
     CreateStatusBar();
 
     // toolbar?
-    if (style & wxHF_TOOLBAR) {
-        wxToolBar *toolBar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL | wxTB_DOCKABLE);
+    if (style & (wxHF_TOOLBAR | wxHF_FLATTOOLBAR)) {
+        wxToolBar *toolBar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL | 
+                                           wxTB_DOCKABLE | 
+                                           (style & wxHF_FLATTOOLBAR ? wxTB_FLAT : 0));
         toolBar->SetMargins( 2, 2 );
         AddToolbarButtons(toolBar, style);
         toolBar -> Realize();
