@@ -1201,8 +1201,8 @@ void draw_bezier_outline(FILE *file,
 			 FT_UInt glyph_index,
 			 int pos_x,
 			 int pos_y,
-             int scale_x,
-             int scale_y )
+             double scale_x,
+             double scale_y )
 {
   FT_Int load_flags = FT_LOAD_NO_BITMAP;
   FT_Glyph glyph;
