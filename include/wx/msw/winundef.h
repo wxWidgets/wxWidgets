@@ -17,174 +17,161 @@
 // GetCharWidth
 
 #ifdef GetCharWidth
-    #undef GetCharWidth
-#endif
-
-#ifndef __WIN16__
-inline BOOL  GetCharWidth(HDC dc, UINT first, UINT last, LPINT buffer)
-{
-#ifdef _UNICODE
-   return GetCharWidthW(dc, first, last, buffer);
-#else
-   return GetCharWidthA(dc, first, last, buffer);
-#endif
-}
+   #undef GetCharWidth
+   inline BOOL  GetCharWidth(HDC dc, UINT first, UINT last, LPINT buffer)
+   {
+   #ifdef _UNICODE
+      return GetCharWidthW(dc, first, last, buffer);
+   #else
+      return GetCharWidthA(dc, first, last, buffer);
+   #endif
+   }
 #endif
 
 // FindWindow
 
 #ifdef FindWindow
-    #undef FindWindow
-#endif
-
-#ifndef __WIN16__
-#ifdef _UNICODE
-inline HWND FindWindow(LPCWSTR classname, LPCWSTR windowname)
-{
-   return FindWindowW(classname, windowname);
-}
-#else
-inline HWND FindWindow(LPCSTR classname, LPCSTR windowname)
-{
-   return FindWindowA(classname, windowname);
-}
-#endif
+   #undef FindWindow
+   #ifdef _UNICODE
+   inline HWND FindWindow(LPCWSTR classname, LPCWSTR windowname)
+   {
+      return FindWindowW(classname, windowname);
+   }
+   #else
+   inline HWND FindWindow(LPCSTR classname, LPCSTR windowname)
+   {
+      return FindWindowA(classname, windowname);
+   }
+   #endif
 #endif
 
 // GetClassName
 
 #ifdef GetClassName
-    #undef GetClassName
-#endif
-
-#ifndef __WIN16__
-#ifdef _UNICODE
-inline int GetClassName(HWND h, LPWSTR classname, int maxcount)
-{
-   return GetClassNameW(h, classname, maxcount);
-}
-#else
-inline int GetClassName(HWND h, LPSTR classname, int maxcount)
-{
-   return GetClassNameA(h, classname, maxcount);
-}
-#endif
+   #undef GetClassName
+   #ifdef _UNICODE
+   inline int GetClassName(HWND h, LPWSTR classname, int maxcount)
+   {
+      return GetClassNameW(h, classname, maxcount);
+   }
+   #else
+   inline int GetClassName(HWND h, LPSTR classname, int maxcount)
+   {
+      return GetClassNameA(h, classname, maxcount);
+   }
+   #endif
 #endif
 
 // GetClassInfo
 
 #ifdef GetClassInfo
-    #undef GetClassInfo
-#endif
-
-#ifndef __WIN16__
-#ifdef _UNICODE
-inline BOOL GetClassInfo(HINSTANCE h, LPCWSTR name, LPWNDCLASSW winclass)
-{
-   return GetClassInfoW(h, name, winclass);
-}
-#else
-inline BOOL GetClassInfo(HINSTANCE h, LPCSTR name, LPWNDCLASSA winclass)
-{
-   return GetClassInfoA(h, name, winclass);
-}
-#endif
+   #undef GetClassInfo
+   #ifdef _UNICODE
+   inline BOOL GetClassInfo(HINSTANCE h, LPCWSTR name, LPWNDCLASSW winclass)
+   {
+      return GetClassInfoW(h, name, winclass);
+   }
+   #else
+   inline BOOL GetClassInfo(HINSTANCE h, LPCSTR name, LPWNDCLASSA winclass)
+   {
+      return GetClassInfoA(h, name, winclass);
+   }
+   #endif
 #endif
 
 // LoadAccelerators
 
 #ifdef LoadAccelerators
-    #undef LoadAccelerators
+   #undef LoadAccelerators
+   #ifdef _UNICODE
+   inline HACCEL LoadAccelerators(HINSTANCE h, LPCWSTR name)
+   {
+      return LoadAcceleratorsW(h, name);
+   }
+   #else
+   inline HACCEL LoadAccelerators(HINSTANCE h, LPCSTR name)
+   {
+      return LoadAcceleratorsA(h, name);
+   }
+   #endif
 #endif
-
-#ifndef __WIN16__
-#ifdef _UNICODE
-inline HACCEL LoadAccelerators(HINSTANCE h, LPCWSTR name)
-{
-   return LoadAcceleratorsW(h, name);
-}
-#else
-inline HACCEL LoadAccelerators(HINSTANCE h, LPCSTR name)
-{
-   return LoadAcceleratorsA(h, name);
-}
-#endif
-#endif
-
-// GetWindowProc... this isn't a Windows API function?!?!
-//ifdef GetWindowProc
-//   #undef GetWindowProc
-//endif
-
 
 // DrawText
 
 #ifdef DrawText
-    #undef DrawText
-#endif
-
-#ifndef __WIN16__
-#ifdef _UNICODE
-inline int DrawText(HDC h, LPCWSTR str, int count, LPRECT rect, UINT format)
-{
-   return DrawTextW(h, str, count, rect, format);
-}
-#else
-inline int DrawText(HDC h, LPCSTR str, int count, LPRECT rect, UINT format)
-{
-   return DrawTextA(h, str, count, rect, format);
-}
-#endif
+   #undef DrawText
+   #ifdef _UNICODE
+   inline int DrawText(HDC h, LPCWSTR str, int count, LPRECT rect, UINT format)
+   {
+      return DrawTextW(h, str, count, rect, format);
+   }
+   #else
+   inline int DrawText(HDC h, LPCSTR str, int count, LPRECT rect, UINT format)
+   {
+      return DrawTextA(h, str, count, rect, format);
+   }
+   #endif
 #endif
 
 // StartDoc
 
 #ifdef StartDoc
-    #undef StartDoc
+   #undef StartDoc
+   #ifdef _UNICODE
+   inline int StartDoc(HDC h, CONST DOCINFOW* info)
+   {
+      return StartDocW(h, info);
+   }
+   #else
+   inline int StartDoc(HDC h, CONST DOCINFOA* info)
+   {
+      return StartDocA(h, info);
+   }
+   #endif
 #endif
-
-#ifndef __WIN16__
-#ifdef _UNICODE
-inline int StartDoc(HDC h, CONST DOCINFOW* info)
-{
-   return StartDocW(h, info);
-}
-#else
-inline int StartDoc(HDC h, CONST DOCINFOA* info)
-{
-   return StartDocA(h, info);
-}
-#endif
-#endif
-
-// GetFirstChild... not a Windows API Function!?!?!
-//ifdef GetFirstChild
-//   #undef GetFirstChild
-//endif
-
-//ifdef GetNextChild
-//    #undef GetNextChild
-//endif
-
-//ifdef GetNextSibling
-//    #undef GetNextSibling
-//endif
 
 // GetObject
 
 #ifdef GetObject
-    #undef GetObject
+   #undef GetObject
+   inline int GetObject(HGDIOBJ h, int i, LPVOID buffer)
+   {
+   #ifdef _UNICODE
+      return GetObjectW(h, i, buffer);
+   #else
+      return GetObjectA(h, i, buffer);
+   #endif   
+   }
 #endif
 
-#ifndef __WIN16__
-inline int GetObject(HGDIOBJ h, int i, LPVOID buffer)
-{
-#ifdef _UNICODE
-   return GetObjectW(h, i, buffer);
-#else
-   return GetObjectA(h, i, buffer);
-#endif   
-}
+
+// For ming and cygwin
+
+// GetFirstChild
+#ifdef GetFirstChild
+   #undef GetFirstChild
+   inline HWND GetFirstChild(HWND h)
+   {
+      return GetTopWindow(h);
+   }
 #endif
+
+
+// GetNextSibling
+#ifdef GetNextSibling
+    #undef GetNextSibling
+    inline HWND GetNextSibling(HWND h)
+    {
+      return GetWindow(h, GW_HWNDNEXT);
+    }
+#endif
+
+// GetWindowProc
+//ifdef GetWindowProc
+//   #undef GetWindowProc
+//endif
+//ifdef GetNextChild
+//    #undef GetNextChild
+//endif
 
 #endif // _WX_WINUNDEF_H_
