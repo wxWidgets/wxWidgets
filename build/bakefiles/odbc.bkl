@@ -14,7 +14,7 @@
         <if cond="wxUSE_ODBC=='builtin'">wxodbc$(WXDEBUGFLAG)</if>
     </set>
     <set var="INC_ODBC">
-        <if cond="wxUSE_ODBC=='builtin'">$(SRCDIR)/src/odbc</if>
+        <if cond="wxUSE_ODBC=='builtin'">$(TOP_SRCDIR)/src/odbc</if>
     </set>
 
     <lib id="wxodbc" template="3rdparty_lib"

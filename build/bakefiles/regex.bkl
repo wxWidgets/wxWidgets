@@ -11,7 +11,7 @@
         <if cond="wxUSE_REGEX=='builtin'">wxregex$(WXDEBUGFLAG)</if>
     </set>
     <set var="INC_REGEX">
-        <if cond="wxUSE_REGEX=='builtin'">$(SRCDIR)/src/regex</if>
+        <if cond="wxUSE_REGEX=='builtin'">$(TOP_SRCDIR)/src/regex</if>
     </set>
 
     <lib id="wxregex" template="3rdparty_lib"

@@ -11,7 +11,7 @@
         <if cond="wxUSE_LIBPNG=='builtin'">wxpng$(WXDEBUGFLAG)</if>
     </set>
     <set var="INC_PNG">
-        <if cond="wxUSE_LIBPNG=='builtin'">$(SRCDIR)/src/png</if>
+        <if cond="wxUSE_LIBPNG=='builtin'">$(TOP_SRCDIR)/src/png</if>
     </set>
 
     <lib id="wxpng" template="3rdparty_lib"

@@ -11,7 +11,7 @@
         <if cond="wxUSE_LIBTIFF=='builtin'">wxtiff$(WXDEBUGFLAG)</if>
     </set>
     <set var="INC_TIFF">
-        <if cond="wxUSE_LIBTIFF=='builtin'">$(SRCDIR)/src/tiff</if>
+        <if cond="wxUSE_LIBTIFF=='builtin'">$(TOP_SRCDIR)/src/tiff</if>
     </set>
 
     <set var="TIFF_PLATFORM_SRC">

@@ -11,7 +11,7 @@
         <if cond="wxUSE_LIBJPEG=='builtin'">wxjpeg$(WXDEBUGFLAG)</if>
     </set>
     <set var="INC_JPEG">
-        <if cond="wxUSE_LIBJPEG=='builtin'">$(SRCDIR)/src/jpeg</if>
+        <if cond="wxUSE_LIBJPEG=='builtin'">$(TOP_SRCDIR)/src/jpeg</if>
     </set>
 
     <lib id="wxjpeg" template="3rdparty_lib"
