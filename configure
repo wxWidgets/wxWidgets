@@ -8999,7 +8999,7 @@ fi
             if test "$wxUSE_REGEX" = "sys" ; then
                 { echo "configure: error: system regex library not found! Use --with-regex to use built-in version" 1>&2; exit 1; }
             else
-                echo "configure: warning: system regex library not found, will compile built-in version instead" 1>&2
+                echo "configure: warning: system regex library not found, will use built-in instead" 1>&2
                 wxUSE_REGEX=builtin
             fi
         else
@@ -9099,7 +9099,7 @@ fi
             if test "$wxUSE_ZLIB" = "sys" ; then
                 { echo "configure: error: system zlib compression library not found! Use --with-zlib=builtin to use built-in version" 1>&2; exit 1; }
             else
-                echo "configure: warning: system zlib compression library not found, will compile built-in version instead" 1>&2
+                echo "configure: warning: system zlib compression library not found, will use built-in instead" 1>&2
                 wxUSE_ZLIB=builtin
             fi
         else
@@ -9122,7 +9122,7 @@ EOF
 
 
             if test "$wxUSE_LIBPNG" = "sys" -a "$wxUSE_ZLIB" != "sys" ; then
-        echo "configure: warning: system png library doesn't work without system zlib, will compile built-in instead" 1>&2
+        echo "configure: warning: system png library doesn't work without system zlib, will use built-in instead" 1>&2
         wxUSE_LIBPNG=builtin
     fi
 
@@ -9205,7 +9205,7 @@ fi
             if test "$wxUSE_LIBPNG" = "sys" ; then
                 { echo "configure: error: system png library not found! Use --with-libpng=builtin to use built-in version" 1>&2; exit 1; }
             else
-                echo "configure: warning: system png library not found, will compile built-in version instead" 1>&2
+                echo "configure: warning: system png library not found, will use built-in instead" 1>&2
                 wxUSE_LIBPNG=builtin
             fi
         else
@@ -9311,7 +9311,7 @@ fi
             if test "$wxUSE_LIBJPEG" = "sys" ; then
                 { echo "configure: error: system jpeg library not found! Use --with-libjpeg=builtin to use built-in version" 1>&2; exit 1; }
             else
-                echo "configure: warning: system jpeg library not found, will compile built-in version instead" 1>&2
+                echo "configure: warning: system jpeg library not found, will use built-in instead" 1>&2
                 wxUSE_LIBJPEG=builtin
             fi
         else
@@ -9412,7 +9412,7 @@ fi
             if test "$wxUSE_LIBTIFF" = "sys" ; then
                 { echo "configure: error: system tiff library not found! Use --with-libtiff=builtin to use built-in version" 1>&2; exit 1; }
             else
-                echo "configure: warning: system tiff library not found, will compile built-in version instead" 1>&2
+                echo "configure: warning: system tiff library not found, will use built-in instead" 1>&2
                 wxUSE_LIBTIFF=builtin
             fi
         else
@@ -9513,7 +9513,7 @@ fi
             if test "$wxUSE_FREETYPE" = "sys" ; then
                 { echo "configure: error: system freetype library not found! Use --with-freetype=builtin to use built-in version" 1>&2; exit 1; }
             else
-                echo "configure: warning: system freetype library not found, will compile built-in version instead" 1>&2
+                echo "configure: warning: system freetype library not found, will use built-in instead" 1>&2
                 wxUSE_FREETYPE=builtin
             fi
         else
@@ -12866,7 +12866,7 @@ else
 int main() {
 
 /* Ultrix mips cc rejects this.  */
-typedef int charset[2]; const charset x = {0,0};
+typedef int charset[2]; const charset x;
 /* SunOS 4.1.1 cc rejects this.  */
 char const *const *ccp;
 char **p;
@@ -12941,7 +12941,7 @@ for ac_kw in inline __inline__ __inline; do
 #include "confdefs.h"
 
 int main() {
-} int $ac_kw foo() {
+} $ac_kw foo() {
 ; return 0; }
 EOF
 if { (eval echo configure:12948: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then

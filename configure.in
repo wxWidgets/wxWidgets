@@ -1639,7 +1639,7 @@ if test "$wxUSE_REGEX" != "no"; then
             if test "$wxUSE_REGEX" = "sys" ; then
                 AC_MSG_ERROR([system regex library not found! Use --with-regex to use built-in version])
             else
-                AC_MSG_WARN([system regex library not found, will compile built-in version instead])
+                AC_MSG_WARN([system regex library not found, will use built-in instead])
                 wxUSE_REGEX=builtin
             fi
         else
@@ -1669,7 +1669,7 @@ if test "$wxUSE_ZLIB" != "no" ; then
             if test "$wxUSE_ZLIB" = "sys" ; then
                 AC_MSG_ERROR([system zlib compression library not found! Use --with-zlib=builtin to use built-in version])
             else
-                AC_MSG_WARN([system zlib compression library not found, will compile built-in version instead])
+                AC_MSG_WARN([system zlib compression library not found, will use built-in instead])
                 wxUSE_ZLIB=builtin
             fi
         else
@@ -1695,7 +1695,7 @@ if test "$wxUSE_LIBPNG" != "no" ; then
     dnl for the check below to have a chance to succeed, we must already have
     dnl libz somewhere
     if test "$wxUSE_LIBPNG" = "sys" -a "$wxUSE_ZLIB" != "sys" ; then
-        AC_MSG_WARN([system png library doesn't work without system zlib, will compile built-in instead])
+        AC_MSG_WARN([system png library doesn't work without system zlib, will use built-in instead])
         wxUSE_LIBPNG=builtin
     fi
 
@@ -1711,7 +1711,7 @@ if test "$wxUSE_LIBPNG" != "no" ; then
             if test "$wxUSE_LIBPNG" = "sys" ; then
                 AC_MSG_ERROR([system png library not found! Use --with-libpng=builtin to use built-in version])
             else
-                AC_MSG_WARN([system png library not found, will compile built-in version instead])
+                AC_MSG_WARN([system png library not found, will use built-in instead])
                 wxUSE_LIBPNG=builtin
             fi
         else
@@ -1764,7 +1764,7 @@ if test "$wxUSE_LIBJPEG" != "no" ; then
             if test "$wxUSE_LIBJPEG" = "sys" ; then
                 AC_MSG_ERROR([system jpeg library not found! Use --with-libjpeg=builtin to use built-in version])
             else
-                AC_MSG_WARN([system jpeg library not found, will compile built-in version instead])
+                AC_MSG_WARN([system jpeg library not found, will use built-in instead])
                 wxUSE_LIBJPEG=builtin
             fi
         else
@@ -1799,7 +1799,7 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             if test "$wxUSE_LIBTIFF" = "sys" ; then
                 AC_MSG_ERROR([system tiff library not found! Use --with-libtiff=builtin to use built-in version])
             else
-                AC_MSG_WARN([system tiff library not found, will compile built-in version instead])
+                AC_MSG_WARN([system tiff library not found, will use built-in instead])
                 wxUSE_LIBTIFF=builtin
             fi
         else
@@ -1834,7 +1834,7 @@ if test "$wxUSE_FREETYPE" != "no" ; then
             if test "$wxUSE_FREETYPE" = "sys" ; then
                 AC_MSG_ERROR([system freetype library not found! Use --with-freetype=builtin to use built-in version])
             else
-                AC_MSG_WARN([system freetype library not found, will compile built-in version instead])
+                AC_MSG_WARN([system freetype library not found, will use built-in instead])
                 wxUSE_FREETYPE=builtin
             fi
         else
