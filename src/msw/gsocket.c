@@ -6,6 +6,8 @@
  * -------------------------------------------------------------------------
  */
 
+#if defined(__GSOCKET_STANDALONE__) || defined(wxUSE_SOCKETS)
+
 #ifndef __GSOCKET_STANDALONE__
 
 #include "wx/setup.h"
@@ -23,12 +25,10 @@
  * be available and it must containt the app's instance
  * handle.
  */
-#define INSTANCE hInst    
+#define INSTANCE hInst
 
 #endif /* __GSOCKET_STANDALONE__ */
 
-
-#if defined(__GSOCKET_STANDALONE__) || defined(wxUSE_SOCKETS)
 
 #include <assert.h>
 #include <string.h>
@@ -137,7 +137,7 @@ GSocket *GSocket_new()
   socket->m_stream          = TRUE;
   socket->m_non_blocking    = FALSE;
   socket->m_timeout.tv_sec  = 10 * 60;  /* 10 minutes */
-  socket->m_timeout.tv_usec = 0;        
+  socket->m_timeout.tv_usec = 0;
 
   /* Allocate a new message number for this socket */
   EnterCriticalSection(&critical);
@@ -371,7 +371,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
   }
 
   return GSOCK_NOERROR;
-}    
+}
 
 /* GSocket_WaitConnection:
  *  Waits for an incoming client connection.
@@ -819,7 +819,7 @@ void _GSocket_Configure_Callbacks(GSocket *socket)
         case GSOCK_OUTPUT:     mask |= FD_WRITE; break;
         case GSOCK_CONNECTION: mask |= (FD_ACCEPT | FD_CONNECT); break;
         case GSOCK_LOST:       mask |= FD_CLOSE; break;
-      }        
+      }
     }
   }
 
@@ -929,7 +929,7 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
 int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
 {
   int ret;
-   
+
   ret = recv(socket->m_fd, buffer, size, 0);
 
   if (ret == SOCKET_ERROR)
@@ -948,7 +948,7 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
 int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
 {
   struct sockaddr from;
-  SOCKLEN_T fromlen; 
+  SOCKLEN_T fromlen;
   int ret;
 
   fromlen = sizeof(from);
@@ -1217,7 +1217,7 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   addr = &(((struct sockaddr_in *)address->m_addr)->sin_addr);
 
   addr->s_addr = inet_addr(hostname);
- 
+
   /* If it is a numeric host name, convert it now */
   if (addr->s_addr == INADDR_NONE)
   {
@@ -1264,7 +1264,7 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
     address->m_error = GSOCK_INVPORT;
     return GSOCK_INVOP;
   }
- 
+
   se = getservbyname(port, protocol);
   if (!se)
   {
@@ -1294,7 +1294,7 @@ GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port)
 
   assert(address != NULL);
   CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
- 
+
   addr = (struct sockaddr_in *)address->m_addr;
   addr->sin_port = htons(port);
 
@@ -1307,7 +1307,7 @@ GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t
   char *addr_buf;
   struct sockaddr_in *addr;
 
-  assert(address != NULL); 
+  assert(address != NULL);
   CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
 
   addr = (struct sockaddr_in *)address->m_addr;
@@ -1329,8 +1329,8 @@ unsigned long GAddress_INET_GetHostAddress(GAddress *address)
 {
   struct sockaddr_in *addr;
 
-  assert(address != NULL); 
-  CHECK_ADDRESS(address, INET, 0); 
+  assert(address != NULL);
+  CHECK_ADDRESS(address, INET, 0);
 
   addr = (struct sockaddr_in *)address->m_addr;
 
@@ -1341,8 +1341,8 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
 {
   struct sockaddr_in *addr;
 
-  assert(address != NULL); 
-  CHECK_ADDRESS(address, INET, 0); 
+  assert(address != NULL);
+  CHECK_ADDRESS(address, INET, 0);
 
   addr = (struct sockaddr_in *)address->m_addr;
   return ntohs(addr->sin_port);
