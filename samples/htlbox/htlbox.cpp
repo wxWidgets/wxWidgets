@@ -30,6 +30,13 @@
     #include "wx/app.h"
     #include "wx/frame.h"
     #include "wx/log.h"
+    #include "wx/sizer.h"
+
+    #include "wx/menu.h"
+    #include "wx/msgdlg.h"
+    #include "wx/textctrl.h"
+
+    #include "wx/dc.h"
 #endif
 
 #include "wx/htmllbox.h"
@@ -65,12 +72,12 @@ public:
 
     void OnLboxSelect(wxCommandEvent& event)
     {
-        wxLogMessage(_T("Listbox selection is now %d."), event.GetInt());
+        wxLogMessage(_T("Listbox selection is now %ld."), event.GetInt());
     }
 
     void OnLboxDClick(wxCommandEvent& event)
     {
-        wxLogMessage(_T("Listbox item %d double clicked."), event.GetInt());
+        wxLogMessage(_T("Listbox item %ld double clicked."), event.GetInt());
     }
 
 private:
