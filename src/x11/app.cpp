@@ -551,7 +551,9 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 win->GetClearRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
                                               XExposeEventGetWidth(event), XExposeEventGetHeight(event));
                                               
+#if !wxUSE_NANOX
                 if (event->xexpose.count == 0)
+#endif
                 {
                     // Only erase background, paint in idle time.
                     win->SendEraseEvents();

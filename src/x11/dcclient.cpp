@@ -1245,16 +1245,18 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 #endif
 
     XSetFont( (Display*) m_display, (GC) m_textGC, xfont->fid );
+#if !wxUSE_NANOX
     if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
-	{
+#endif
+    {
         XDrawString( (Display*) m_display, (Window) m_window, 
-            (GC) m_textGC, x, y + xfont->ascent, text.c_str(), text.Len() );
-	}
+            (GC) m_textGC, x, y + XFontStructGetAscent(xfont), text.c_str(), text.Len() );
+    }
 
 #if 0
     if (m_font.GetUnderlined())
     {
-        wxCoord ul_y = y + font->ascent;
+        wxCoord ul_y = y + XFontStructGetAscent(font);
         if (font->descent > 0) ul_y++;
         gdk_draw_line( m_window, m_textGC, x, ul_y, x + width, ul_y);
     }
@@ -1290,7 +1292,7 @@ void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoor
     int direction, ascent, descent2;
     XCharStruct overall;
 
-    XTextExtents( xfont, string.c_str(), string.Len(), &direction,
+    XTextExtents( xfont, (char*) string.c_str(), string.Len(), &direction,
         &ascent, &descent2, &overall);
 
     if (width)

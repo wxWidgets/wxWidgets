@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/motif/font.cpp
+// Name:        src/x11/font.cpp
 // Purpose:     wxFont class
 // Author:      Julian Smart
 // Modified by:

@@ -54,6 +54,9 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     Visual *xvisual = DefaultVisual( xdisplay, xscreen );
     Window xparent = RootWindow( xdisplay, xscreen );
     
+#if wxUSE_NANOX
+    long xattributes_mask = 0;
+#else
     XSetWindowAttributes xattributes;
     
     long xattributes_mask =
@@ -64,7 +67,8 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
     xattributes.override_redirect = True;
     xattributes.save_under = True;
-
+#endif
+    
     Window xwindow = XCreateWindow( xdisplay, xparent, pos.x, pos.y, size.x, size.y, 
        0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
     
@@ -83,12 +87,14 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
 
     XSetTransientForHint( xdisplay, xwindow, xparent );
 
+#if !wxUSE_NANOX
     XWMHints wm_hints;
     wm_hints.flags = InputHint | StateHint /* | WindowGroupHint */;
     wm_hints.input = True;
     wm_hints.initial_state = NormalState;
     XSetWMHints( xdisplay, xwindow, &wm_hints);
- 
+#endif
+    
     return TRUE;
 }
 

@@ -73,6 +73,7 @@ bool wxWindowIsVisible(Window win);
 #define XExposeEventGetY(event) event->exposure.y
 #define XExposeEventGetWidth(event) event->exposure.width
 #define XExposeEventGetHeight(event) event->exposure.height
+#define XFontStructGetAscent(f) f->info.baseline
 #else
 #define XEventGetWindow(event) event->xany.window
 #define XConfigureEventGetWidth(event) event->xconfigure.width
@@ -81,6 +82,7 @@ bool wxWindowIsVisible(Window win);
 #define XExposeEventGetY(event) event->xexpose.y
 #define XExposeEventGetWidth(event) event->xexpose.width
 #define XExposeEventGetHeight(event) event->xexpose.height
+#define XFontStructGetAscent(f) f->ascent
 #endif
 
 #endif

@@ -89,6 +89,7 @@ wxPaletteRefData::~wxPaletteRefData()
 
         if (pix_array_n > 0)
         {
+#if !wxUSE_NANOX
             //      XFreeColors(display, cmap, pix_array, pix_array_n, 0);
             // Be careful not to free '0' pixels...
             int i, j;
@@ -97,9 +98,10 @@ wxPaletteRefData::~wxPaletteRefData()
                 if(j > i) XFreeColors(display, cmap, &pix_array[i], j-i, 0);
                 while(j<pix_array_n && pix_array[j]==0) j++;
             }
+#endif
             delete [] pix_array;
         }
-
+        
         if (destroyable)
             XFreeColormap(display, cmap);
 

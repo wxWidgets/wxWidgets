@@ -5,7 +5,11 @@
 #ifndef _DUMMY_XLIBH_
 #define _DUMMY_XLIBH_
 
+/* Move away the typedef in XtoNX.h */
+#define XFontStruct XFontStruct1
 #include <XtoNX.h>
+#undef XFontStruct
+#undef XCharStruct
 
 /* Data types */
 
@@ -16,6 +20,20 @@ typedef unsigned long VisualID;
 typedef int Bool;
 typedef long XID;
 typedef XID KeySym;
+typedef struct {
+    GR_FONT_INFO info;
+    GR_FONT_ID fid;
+} XFontStruct;
+typedef struct {
+    short	lbearing;	/* origin to left edge of raster */
+    short	rbearing;	/* origin to right edge of raster */
+    short	width;		/* advance to next char's origin */
+    short	ascent;		/* baseline to top edge of raster */
+    short	descent;	/* baseline to bottom edge of raster */
+    unsigned short attributes;	/* per char flags (not predefined) */
+} XCharStruct;
+
+
 /* typedef unsigned long Time; */
 
 #define Success 0
@@ -30,12 +48,77 @@ typedef XID KeySym;
 #define PropertyChangeMask GR_EVENT_MASK_SELECTION_CHANGED
 #define GraphicsExpose GR_EVENT_TYPE_EXPOSURE
 #define GraphicsExposeMask GR_EVENT_MASK_EXPOSURE
+#define ColormapChangeMask 0
+#define FillSolid 0
+#define LineSolid 0
+#define LineOnOffDash 0
+#define CapNotLast 0
+#define CapRound 0
+#define CapProjecting 0
+#define CapButt 0
+#define JoinRound 0
+#define JoinBevel 0
+#define JoinMiter 0
+#define IncludeInferiors 0
+#define ClipByChildren 0
+#define DoRed 0
+#define DoGreen 0
+#define DoBlue 0
+
+#define GXcopy GR_MODE_COPY
+#define GXclear GR_MODE_CLEAR
+#ifndef GXxor
+#define GXxor GR_MODE_OR
+#endif
+#define GXinvert GR_MODE_INVERT
+#define GXorReverse GR_MODE_ORREVERSE
+#define GXandReverse GR_MODE_ANDREVERSE
+#define GXand GR_MODE_AND
+#define GXor GR_MODE_OR
+#define GXandInverted GR_MODE_ANDINVERTED
+#define GXnoop GR_MODE_NOOP
+#define GXnor GR_MODE_NOR
+#define GXequiv GR_MODE_EQUIV
+#define GXcopyInverted GR_MODE_COPYINVERTED
+#define GXorInverted GR_MODE_ORINVERTED
+#define GXnand GR_MODE_NAND
+#define GXset GR_MODE_SET
+
+inline void wxNoop() { /* Do nothing */ }
 
 #define XSynchronize(display,sync)
 #define XDefaultRootWindow(d) GR_ROOT_WINDOW_ID
 #define XFreePixmap(d, p) GrDestroyWindow(p)
 #define XFreeCursor(d, c) GrDestroyCursor(c)
+#define XFreeGC(d, gc) GrDestroyGC(gc)
+#define XSetBackground(d, gc, c) GrSetGCBackground(gc, c)
 #define DefaultVisual(d, s) ((Visual*) NULL)
+#define DefaultColormap(d, s) DefaultColormapOfScreen((Screen*) NULL)
+#define XSetFillStyle(d, gc, s) wxNoop()
+#define XSetLineAttributes(d, gc, a, b, c, e) wxNoop()
+#define XSetClipMask(d, gc, m) wxNoop()
+#define XSetTSOrigin(d, gc, x, y) wxNoop()
+#define XFillArc(d, w, gc, x, y, rx, ry, a1, a2) GrArcAngle(w, gc, x, y, rx, ry, a1, a2, GR_PIE)
+#define XDrawArc(d, w, gc, x, y, rx, ry, a1, a2) GrArcAngle(w, gc, x, y, rx, ry, a1, a2, GR_ARC)
+#define XDrawPoint(d, w, gc, x, y) GrPoint(w, gc, x, y)
+#define XFillPolygon(d, w, gc, p, n, s, m) GrFillPoly(w, gc, n, p)
+#define XDrawRectangle(d, w, gc, x, y, width, height) GrRect(w, gc, x, y, width, height)
+#define XSetClipOrigin(d, gc, x, y) GrSetGCClipOrigin(gc, x, y)
+#define XSetRegion(d, gc, r) GrSetGCRegion(gc, r)
+#define XSetTile(d, gc, p) wxNoop()
+#define XSetStipple(d, gc, p) wxNoop()
+#define XSetSubwindowMode(d, gc, mode) wxNoop()
+#define XFreeColormap(d, cmap) wxNoop()
+#define XSetTransientForHint(d, w, p) wxNoop()
+#define XUnionRegion(sr1,sr2,r)	GrUnionRegion(r,sr1,sr2)
+#define XIntersectRegion(sr1,sr2,r)	GrIntersectRegion(r,sr1,sr2)
+#define XEqualRegion(r1, r2) GrEqualRegion(r1, r2)
+#define XEmptyRegion(r) GrEmptyRegion(r)
+#define XOffsetRegion(r, x, y) GrOffsetRegion(r, x, y)
+#define XClipBox(r, rect) GrGetRegionBox(r, rect)
+#define XPointInRegion(r, x, y) GrPointInRegion(r, x, y)
+#define XXorRegion(sr1, sr2, r) GrXorRegion(r, sr1, sr2)
+
 
 /* These defines are wrongly defined in XtoNX.h, IMHO,
  * since they reference a static global.
@@ -163,6 +246,10 @@ typedef int (*XErrorHandler) (	    /* WARNING, this type not in Xlib spec */
 #define PointerMotionMask GR_EVENT_MASK_MOUSE_POSITION
 #endif
 
+#define ButtonMotionMask GR_EVENT_MASK_MOUSE_POSITION
+#define KeymapStateMask 0
+#define StructureNotifyMask GR_EVENT_MASK_UPDATE
+
 #ifndef FocusIn
 #define FocusIn GR_EVENT_TYPE_FOCUS_IN
 #define FocusOut GR_EVENT_TYPE_FOCUS_OUT
@@ -177,7 +264,7 @@ extern "C" {
 
 Colormap DefaultColormapOfScreen(Screen* /* screen */) ;
 int XSetGraphicsExposures( Display* /* display */, GC /* gc */, Bool /* graphics_exposures */) ;
-int XWarpPointer( Display* /* display */, Window /* srcW */, Window /* srcW */,
+int XWarpPointer( Display* /* display */, Window /* srcW */, Window /* destW */,
                  int /* srcX */, int /* srcY */,
                  unsigned int /* srcWidth */,
                  unsigned int /* srcHeight */,
@@ -197,7 +284,7 @@ int XCopyPlane(Display* /* display */, Drawable src, Drawable dest, GC gc,
               int dest_x, int dest_y, unsigned long /* plane */) ;
 
 XErrorHandler XSetErrorHandler (XErrorHandler /* handler */);
-Display *XOpenDisplay(const char *name);
+Display *XOpenDisplay(char *name);
 Screen *XScreenOfDisplay(Display* /* display */,
                          int /* screen_number */);
 int DisplayWidth(Display* /* display */, int /* screen */);
@@ -207,6 +294,14 @@ int XAllocColor(Display* /* display */, Colormap /* cmap */,
                 XColor* color);
 int XParseColor(Display* display, Colormap cmap,
                 const char* cname, XColor* color);
+int XDrawLine(Display* display, Window win, GC gc,
+              int x1, int y1, int x2, int y2);
+int XTextExtents( XFontStruct* font, char* s, int len, int* direction,
+        int* ascent, int* descent2, XCharStruct* overall);
+int XPending(Display *d);
+XFontStruct* XLoadQueryFont(Display* display, const char* fontSpec);
+int XFreeFont(Display* display, XFontStruct* fontStruct);
+int XQueryColor(Display* display, Colormap cmap, XColor* color);
 
 #ifdef __cpluplus
 }

@@ -8,60 +8,61 @@
 
 #if wxUSE_NANOX
 
+#include <ctype.h>
+#include <malloc.h>
+#include "wx/defs.h"
 #include "wx/x11/nanox/X11/Xlib.h"
 
 /* Expands to some compatibility functions (see XtoNX.h) */
 
 STATIC_FUNCTIONS
 
-Colormap DefaultColormapOfScreen(Screen* /* screen */)
-{
-    static GR_PALETTE* s_globalColormap = 0;
-    static bool s_init = FALSE;
+static GR_PALETTE* s_globalColormap = 0;
 
-    if (!s_init)
+Colormap DefaultColormapOfScreen(Screen* screen)
+{
+    if (!s_globalColormap)
     {
         s_globalColormap = (GR_PALETTE*) malloc(sizeof(GR_PALETTE));
        
         GrGetSystemPalette(s_globalColormap);
-        s_init = TRUE;
     }
 
     return s_globalColormap;
 }
 
-int XSetGraphicsExposures( Display* /* display */, GC /* gc */, Bool /* graphics_exposures */)
+int XSetGraphicsExposures( Display* display, GC gc, Bool graphics_exposures)
 {
     return Success ;
 }
 
-int XWarpPointer( Display* /* display */, Window /* srcW */, Window /* srcW */,
-                 int /* srcX */, int /* srcY */,
-                 unsigned int /* srcWidth */,
-                 unsigned int /* srcHeight */,
+int XWarpPointer( Display* display, Window srcW, Window destW,
+                 int srcX, int srcY,
+                 unsigned int srcWidth,
+                 unsigned int srcHeight,
                  int destX, int destY)
 {
     GrMoveCursor(destX, destY);
     return Success;
 }
 
-int XSetInputFocus(Display* /* display */, Window focus, int /* revert_to */, Time /* time */)
+int XSetInputFocus(Display* display, Window focus, int revert_to, Time time)
 {
     GrSetFocus(focus);
     return Success;
 }
 
-int XGetInputFocus(Display* /* display */, Window* /* focus_return */, int* /* revert_to_return */)
+int XGetInputFocus(Display* display, Window* focus_return, int* revert_to_return)
 {
     * focus_return = GrGetFocus();
     * revert_to_return = 0;
     return Success;
 }
 
-int XGrabPointer(Display* /* display */, Window /* grab_window */,
-                 Bool /* owner_events */, unsigned int /* event_mask */,
-                 int /* pointer_mode */, int /* keyboard_mode */,
-                 Window /* confine_to */, Cursor /* cursor */, Time /* time */)
+int XGrabPointer(Display* display, Window grab_window,
+                 Bool owner_events, unsigned int event_mask,
+                 int pointer_mode, int keyboard_mode,
+                 Window confine_to, Cursor cursor, Time time)
 {
     /* According to comments in srvevent.c in Nano-X, the pointer
      * is implicitly grabbed when a mouse button is down.
@@ -70,12 +71,12 @@ int XGrabPointer(Display* /* display */, Window /* grab_window */,
     return Success;
 }
 
-int XUngrabPointer(Display /* display */, Time /* time */)
+int XUngrabPointer(Display display, Time time)
 {
     return Success;
 }
 
-int XCopyArea(Display* /* display */, Drawable src, Drawable dest, GC gc,
+int XCopyArea(Display* display, Drawable src, Drawable dest, GC gc,
               int src_x, int src_y, unsigned int width, unsigned int height,
               int dest_x, int dest_y)
 {
@@ -85,9 +86,9 @@ int XCopyArea(Display* /* display */, Drawable src, Drawable dest, GC gc,
     return Success;
 }
 
-int XCopyPlane(Display* /* display */, Drawable src, Drawable dest, GC gc,
+int XCopyPlane(Display* display, Drawable src, Drawable dest, GC gc,
               int src_x, int src_y, unsigned int width, unsigned int height,
-              int dest_x, int dest_y, unsigned long /* plane */)
+              int dest_x, int dest_y, unsigned long plane)
 {
     GrCopyArea(dest, gc, dest_x, dest_y,
 			width, height, src,
@@ -145,7 +146,7 @@ typedef struct {
 
 
 Status XGetWindowAttributes(Display* display, Window w,
-                            XWindowAttributes* window_attributes_return)
+                            XWindowAttributes* window_attributes)
 {
     GR_WINDOW_INFO info;
     GrGetWindowInfo(w, & info);
@@ -158,7 +159,7 @@ Status XGetWindowAttributes(Display* display, Window w,
     window_attributes->depth = 0;
     window_attributes->visual = NULL;
     window_attributes->root = 0;
-    window_attributes->class = info.inputonly ? InputOnly : InputOutput ;
+    window_attributes->_class = info.inputonly ? InputOnly : InputOutput ;
     window_attributes->bit_gravity = 0;
     window_attributes->win_gravity = 0;
     window_attributes->backing_store = 0;
@@ -184,59 +185,139 @@ static void DefaultNanoXErrorHandler(GR_EVENT_ERROR* ep)
     {
         XErrorEvent errEvent;
         errEvent.type = ep->type;
-        errEvent.display = wxGlobalDisplay();
+        errEvent.display = NULL;
         errEvent.resourceid = ep->id;
         errEvent.serial = 0;
         errEvent.error_code = ep->code;
         errEvent.request_code = 0;
         errEvent.minor_code = 0;
-        (*g_ErrorHandler)(wxGlobalDisplay(), & errEvent);
+        (*g_ErrorHandler)(NULL, & errEvent);
     }
 }
 
 XErrorHandler XSetErrorHandler (XErrorHandler handler)
 {
     XErrorHandler oldHandler = g_ErrorHandler;
-    g_errorHandler = handler;
+    g_ErrorHandler = handler;
+    GrSetErrorHandler(DefaultNanoXErrorHandler);
     return oldHandler;
 }
 
-Screen *XScreenOfDisplay(Display*		/* display */,
-                         int /* screen_number */)
+static Screen s_screen;
+Screen *XScreenOfDisplay(Display*		display,
+                         int screen_number)
 {
-    static Screen s_screen;
     /* TODO: fill in the members. See Xlib.h */
     return & s_screen;
 }
 
-int DisplayWidth(Display* /* display */, int /* screen */)
+int DisplayWidth(Display* display, int screen)
 {
     return _display.display_width;
 }
 
-int DisplayHeight(Display* /* display */, int /* screen */)
+int DisplayHeight(Display* display, int screen)
 {
     return _display.display_height;
 }
 
-int DefaultDepth(Display* /* display */, int /* screen */)
+int DefaultDepth(Display* display, int screen)
 {
     return _display.display_bpp;
 }
 
-int XAllocColor(Display* /* display */, Colormap /* cmap */,
+int XAllocColor(Display* display, Colormap cmap,
                 XColor* color)
 {
     GR_PIXELVAL pixel;
-    GrFindColor(color, & pixel);
-    return pixel;
+    GrFindColor(GR_RGB(color->red, color->green, color->blue), & pixel);
+    color->pixel = pixel;
+    return 1;
 }
 
-int XParseColor(Display* /* display */, Colormap /* cmap */,
+int XParseColor(Display* display, Colormap cmap,
                 const char* cname, XColor* color)
 {
     /* TODO */
     return 0;
+}
+
+int XDrawLine(Display* display, Window win, GC gc,
+              int x1, int y1, int x2, int y2)
+{
+    GR_POINT points[2];
+    points[0].x = x1;
+    points[0].y = y1;
+    points[1].x = x2;
+    points[1].y = y2;
+
+    GrDrawLines(win, gc, points, 2);
+    return 1;
+}
+
+int XTextExtents( XFontStruct* font, char* s, int len, int* direction,
+                  int* ascent, int* descent2, XCharStruct* overall)
+{
+    GR_SIZE retwidth, retheight, retbase;
+    GR_GC_ID gc = GrNewGC();
+
+    *ascent = font->info.baseline;
+    *direction = 1; /* ? */
+    *descent2 = 0; /* ? */
+
+    GrSetGCFont(gc, font->fid);
+
+    /* TODO need to set the relevant flags for the character set.
+     * A good trick might be to pass a wxString instead of char*
+     * to this function.
+     */
+    
+    GrGetGCTextSize(gc, s, len, GR_TFASCII, & retwidth,
+                    & retheight, & retbase);
+    if (overall)
+    {
+        overall->width = retwidth;
+        overall->lbearing = 0;
+        overall->rbearing = 0;
+        overall->ascent = *ascent;
+        overall->descent = 0;
+        overall->attributes = 0;
+    }
+
+    GrDestroyGC(gc);
+    
+    return 1;
+}
+
+XFontStruct* XLoadQueryFont(Display* display, const char* fontSpec)
+{
+    /* TODO: map fontSpec to something sensible for Nano-X */
+    char *fontName = NULL;
+    XFontStruct* fontInfo = malloc(sizeof(XFontStruct));
+    fontInfo->fid = GrCreateFont(fontName, 0, 0);
+    GrGetFontInfo(fontInfo->fid, & fontInfo->info);
+    return fontInfo;
+}
+
+int XFreeFont(Display* display, XFontStruct* fontStruct)
+{
+    GrDestroyFont(fontStruct->fid);
+    free(fontStruct);
+    return 1;
+}
+
+int XQueryColor(Display* display, Colormap cmap, XColor* color)
+{
+    /* cmap is a GR_PALETTE */
+    if (color->pixel < cmap->count)
+    {
+        color->red = cmap->palette[color->pixel].r;
+        color->green = cmap->palette[color->pixel].g;
+        color->blue = cmap->palette[color->pixel].b;
+        return 1;
+    }
+    else
+        return 0;
 }
 
 #endif
