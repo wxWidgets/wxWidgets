@@ -125,7 +125,6 @@ bool wxTimer::Start(int milliseconds,bool mode)
 
 void wxTimer::Stop()
 {
-    m_milli = 0 ;
     if ( m_info->m_task.tmAddr )
     {
         RmvTime(  (QElemPtr) &m_info->m_task ) ;
