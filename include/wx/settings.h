@@ -15,6 +15,8 @@
 #include "wx/colour.h"
 #include "wx/font.h"
 
+class WXDLLEXPORT wxWindow;
+
 // possible values for wxSystemSettings::GetFont() parameter
 //
 // NB: wxMSW assumes that they have the same values as the parameters of
