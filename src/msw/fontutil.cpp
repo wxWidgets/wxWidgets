@@ -63,10 +63,29 @@ bool wxNativeEncodingInfo::FromString(const wxString& s)
     wxStringTokenizer tokenizer(s, _T(";"));
 
     wxString encid = tokenizer.GetNextToken();
+
+    // we support 2 formats: the old one (and still used if !wxUSE_FONTMAP)
+    // used the raw encoding values but the new one uses the encoding names
     long enc;
-    if ( !encid.ToLong(&enc) )
-        return FALSE;
-    encoding = (wxFontEncoding)enc;
+    if ( encid.ToLong(&enc) )
+    {
+        // old format, intepret as encoding -- but after minimal checks
+        if ( enc < 0 || enc >= wxFONTENCODING_MAX )
+            return false;
+
+        encoding = (wxFontEncoding)enc;
+    }
+    else // not a number, interpret as an encoding name
+    {
+#if wxUSE_FONTMAP
+        encoding = wxFontMapper::GetEncodingFromName(encid);
+        if ( encoding == wxFONTENCODING_MAX )
+#endif // wxUSE_FONTMAP
+        {
+            // failed to parse the name (or couldn't even try...)
+            return false;
+        }
+    }
 
     facename = tokenizer.GetNextToken();
 
@@ -94,7 +113,17 @@ wxString wxNativeEncodingInfo::ToString() const
 {
     wxString s;
 
-    s << (long)encoding << _T(';') << facename;
+    s
+#if wxUSE_FONTMAP
+      // use the encoding names as this is safer than using the numerical
+      // values which may change with time (because new encodings are
+      // inserted...)
+      << wxFontMapper::GetEncodingName(encoding)
+#else // !wxUSE_FONTMAP
+      // we don't have any choice but to use the raw value
+      << (long)encoding
+#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
+      << _T(';') << facename;
 
     // ANSI_CHARSET is assumed anyhow
     if ( charset != ANSI_CHARSET )
