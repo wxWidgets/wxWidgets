@@ -211,7 +211,7 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
         if (!image.LoadFile( filename, type )) return FALSE;
         if (image.Ok()) 
         {
-            *this = image.ConvertToBitmap();
+            *this = wxBitmap(image);
             return TRUE;
         }
         else return FALSE;
@@ -242,7 +242,7 @@ bool wxBitmap::SaveFile(const wxString& filename, int type, const wxPalette *pal
     wxBitmapHandler *handler = FindHandler(type);
 
     if ( handler == NULL ) { // try wxImage
-        wxImage image( *this );
+        wxImage image = this->ConvertToImage();
         if (image.Ok()) return image.SaveFile( filename, type );
         else return FALSE;
     }

@@ -249,7 +249,7 @@ bool wxWindowDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
     memdc.SelectObject(bitmap);
     memdc.Blit(0, 0, 1, 1, (wxDC*) this, x1, y1);
     memdc.SelectObject(wxNullBitmap);
-    wxImage image(bitmap);
+    wxImage image = bitmap.ConvertToImage();
     col->Set(image.GetRed(0, 0), image.GetGreen(0, 0), image.GetBlue(0, 0));
     return TRUE;
 }
@@ -938,7 +938,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
         wxASSERT_MSG( (bitmap.Ok()), "Bad source bitmap in wxWindowDC::Blit");
 
-        wxImage image(bitmap);
+        wxImage image = bitmap.ConvertToImage();
         if (!image.Ok())
         {
             sourcePixmap = (Pixmap) bitmap.GetPixmap();
@@ -949,7 +949,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
             int scaledH = (int) (bitmap.GetHeight() * scaleY);
 
             image = image.Scale(scaledW, scaledH);
-            scaledBitmap = new wxBitmap(image.ConvertToBitmap());
+            scaledBitmap = new wxBitmap(image);
             sourcePixmap = (Pixmap) scaledBitmap->GetPixmap();
         }
     }
@@ -1279,7 +1279,7 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
     double y1 = y;
 
     // Create image from the source bitmap after writing the text into it.
-    wxImage  image(src);
+    wxImage  image = src.ConvertToImage();
 
     int minx = roundmin(0, roundmin(x4, roundmin(x2, x3)));
     int miny = roundmin(0, roundmin(y4, roundmin(y2, y3)));
