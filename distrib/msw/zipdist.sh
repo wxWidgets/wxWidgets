@@ -73,8 +73,7 @@ dowise()
     # from within distrib/msw, to split off wisetop.txt and wisebott.txt.
     echo Calling 'makewise' to generate wxwin2.wse...
 
-    # TODO!!!!
-    call $WXWIN/distrib/msw/makewise.bat
+    sh $WXWIN/distrib/msw/makewise.sh
 
     rm -f $dest/setup.*
 
@@ -115,6 +114,19 @@ dowise()
     zip wxMSW-$version-setup.zip readme.txt setup.*
 }
 
+expandlines()
+{
+    toexpand=$1
+    outputfile=$2
+
+    rm -f $outputfile
+    touch $outputfile
+    for line in `cat $toexpand` ; do
+      if [ $line != "" ]; then
+        ls $line >> $outputfile
+      fi
+    done
+}
 
 # Process command line options.
 for i in "$@"; do
@@ -171,68 +183,116 @@ echo Zipping...
 
 # Below is the old-style separated-out format. This is retained only
 # for local use, and for creating wxMSW-xxx.zip.
-ls `cat $src/distrib/msw/generic.rsp` | zip -@ $dest/wxWindows-$version-gen.zip
-ls `cat $src/distrib/msw/makefile.rsp` | zip -@ -u $dest/wxWindows-$version-gen.zip
-ls `cat $src/distrib/msw/msw.rsp` | zip -@ $dest/wxWindows-$version-msw.zip
-ls `cat $src/distrib/msw/makefile.rsp` | zip -@ -u $dest/wxWindows-$version-msw.zip
-ls `cat $src/distrib/msw/gtk.rsp` | zip -@ $dest/wxWindows-$version-gtk.zip
-ls `cat $src/distrib/msw/makefile.rsp` | zip -@ -u $dest/wxWindows-$version-gtk.zip
-ls `cat $src/distrib/msw/stubs.rsp` | zip -@ $dest/wxWindows-$version-stubs.zip
-ls `cat $src/distrib/msw/motif.rsp` | zip -@ $dest/wxWindows-$version-mot.zip
-ls `cat $src/distrib/msw/makefile.rsp` | zip -@ -u $dest/wxWindows-$version-mot.zip
-# ls `cat $src/distrib/msw/user.rsp` | zip -@ $dest/wxWindows-$version-user.zip # Obsolete
 
-ls `cat $src/distrib/msw/docsrc.rsp` | zip -@ $dest/wxWindows-$version-DocSource.zip
-ls `cat $src/distrib/msw/wx_hlp.rsp` | zip -@ $dest/wxWindows-$version-WinHelp.zip
-ls `cat $src/distrib/msw/wx_html.rsp` | zip -@ $dest/wxWindows-$version-HTML.zip
-ls `cat $src/distrib/msw/wx_pdf.rsp` | zip -@ $dest/wxWindows-$version-PDF.zip
-ls `cat $src/distrib/msw/wx_word.rsp` | zip -@ $dest/wxWindows-$version-Word.zip
-ls `cat $src/distrib/msw/wx_htb.rsp` | zip -@ $dest/wxWindows-$version-HTB.zip
-ls `cat $src/distrib/msw/wx_chm.rsp` | zip -@ $dest/wxWindows-$version-HTMLHelp.zip
+# We can't use e.g. this:
+# ls `cat $src/distrib/msw/makefile.rsp` zip -@ -u $dest/wxWindows-$version-gen.zip
+# because there's not enough space on the command line, plus we need to ignore the
+# blank lines.
+
+expandlines $src/distrib/msw/generic.rsp temp.txt
+zip -@ $dest/wxWindows-$version-gen.zip < temp.txt
+
+expandlines $src/distrib/msw/makefile.rsp temp.txt
+zip -@ -u $dest/wxWindows-$version-gen.zip < temp.txt
+
+expandlines $src/distrib/msw/msw.rsp temp.txt
+zip -@ $dest/wxWindows-$version-msw.zip < temp.txt
+
+expandlines $src/distrib/msw/makefile.rsp temp.txt
+zip -@ -u $dest/wxWindows-$version-msw.zip < temp.txt
+
+expandlines $src/distrib/msw/gtk.rsp temp.txt
+zip -@ $dest/wxWindows-$version-gtk.zip < temp.txt
+
+expandlines $src/distrib/msw/makefile.rsp temp.txt
+zip -@ -u $dest/wxWindows-$version-gtk.zip < temp.txt
+
+expandlines $src/distrib/msw/stubs.rsp temp.txt
+zip -@ $dest/wxWindows-$version-stubs.zip < temp.txt
+
+expandlines $src/distrib/msw/motif.rsp temp.txt
+zip -@ $dest/wxWindows-$version-mot.zip < temp.txt
+
+expandlines $src/distrib/msw/makefile.rsp temp.txt
+zip -@ -u $dest/wxWindows-$version-mot.zip < temp.txt
+
+
+expandlines $src/distrib/msw/docsrc.rsp temp.txt
+zip -@ $dest/wxWindows-$version-DocSource.zip < temp.txt
+
+expandlines $src/distrib/msw/wx_hlp.rsp temp.txt
+zip -@ $dest/wxWindows-$version-WinHelp.zip < temp.txt
+
+expandlines $src/distrib/msw/wx_html.rsp temp.txt
+zip -@ $dest/wxWindows-$version-HTML.zip < temp.txt
+
+expandlines $src/distrib/msw/wx_pdf.rsp temp.txt
+zip -@ $dest/wxWindows-$version-PDF.zip < temp.txt
+
+expandlines $src/distrib/msw/wx_word.rsp temp.txt
+zip -@ $dest/wxWindows-$version-Word.zip < temp.txt
+
+expandlines $src/distrib/msw/wx_htb.rsp temp.txt
+zip -@ $dest/wxWindows-$version-HTB.zip < temp.txt
+
+expandlines $src/distrib/msw/wx_chm.rsp temp.txt
+zip -@ $dest/wxWindows-$version-HTMLHelp.zip < temp.txt
 
 # PDF/HTML docs that should go into the Windows setup because
 # there are no WinHelp equivalents
-ls `cat $src/distrib/msw/extradoc.rsp` | zip -@ $dest/extradoc.zip
+expandlines $src/distrib/msw/extradoc.rsp temp.txt
+zip -@ $dest/extradoc.zip < temp.txt
 
 # VC++ project files
-ls `cat $src/distrib/msw/vc.rsp` | zip -@ $dest/wxWindows-$version-vc.zip
+expandlines $src/distrib/msw/vc.rsp temp.txt
+zip -@ $dest/wxWindows-$version-vc.zip < temp.txt
 
 # BC++ project files
-ls `cat $src/distrib/msw/bc.rsp` | zip -@ $dest/wxWindows-$version-bc.zip
+expandlines $src/distrib/msw/bc.rsp temp.txt
+zip -@ $dest/wxWindows-$version-bc.zip < temp.txt
 
 # CodeWarrior project files
-ls `cat $src/distrib/msw/cw.rsp` | zip -@ $dest/wxWindows-$version-cw.zip
+expandlines $src/distrib/msw/cw.rsp temp.txt
+zip -@ $dest/wxWindows-$version-cw.zip < temp.txt
 
 # OGL 3
-ls `cat $src/distrib/msw/ogl.rsp` | zip -@ $dest/ogl3.zip
+expandlines $src/distrib/msw/ogl.rsp temp.txt
+zip -@ $dest/ogl3.zip < temp.txt
 
 # MMedia
-ls `cat $src/distrib/msw/mmedia.rsp` | zip -@ $dest/mmedia.zip
+expandlines $src/distrib/msw/mmedia.rsp temp.txt
+zip -@ $dest/mmedia.zip < temp.txt
 
 # STC (Scintilla widget)
-ls `cat $src/distrib/msw/stc.rsp` | zip -@ $dest/stc.zip
-
-# GLCanvas: obsolete, now in main library
-# ls `cat $src/distrib/msw/glcanvas.rsp` | zip -@ $dest/glcanvas.zip
+expandlines $src/distrib/msw/stc.rsp temp.txt
+zip -@ $dest/stc.zip < temp.txt
 
 # Tex2RTF
-ls `cat $src/distrib/msw/tex2rtf.rsp` | zip -@ $dest/tex2rtf2.zip
+expandlines $src/distrib/msw/tex2rtf.rsp temp.txt
+zip -@ $dest/tex2rtf2.zip < temp.txt
 
 # JPEG source
-ls `cat $src/distrib/msw/jpeg.rsp` | zip -@ $dest/jpeg.zip
+expandlines $src/distrib/msw/jpeg.rsp temp.txt
+zip -@ $dest/jpeg.zip < temp.txt
 
 # TIFF source
-ls `cat $src/distrib/msw/tiff.rsp` | zip -@ $dest/tiff.zip
+expandlines $src/distrib/msw/tiff.rsp temp.txt
+zip -@ $dest/tiff.zip < temp.txt
 
 # Dialog Editor source and binary
 rm -f  $dest/dialoged_source.zip
-ls `cat $src/distrib/msw/dialoged.rsp` | zip -@ $dest/dialoged_source.zip
+expandlines $src/distrib/msw/dialoged.rsp temp.txt
+zip -@ $dest/dialoged_source.zip < temp.txt
 zip -j $dest/dialoged.zip $dest/dialoged_source.zip $src/bin/dialoged.exe $src/docs/winhelp/dialoged.hlp $src/docs/winhelp/dialoged.cnt
 rm -f  $dest/dialoged_source.zip
 
 # Misc. utils not in the main distribution
-ls `cat $src/distrib/msw/utils.rsp` | zip -@ $dest/utils.zip
-ls `cat $src/distrib/msw/utilmake.rsp` | zip -@ -u $dest/utils.zip
+expandlines $src/distrib/msw/utils.rsp temp.txt
+zip -@ $dest/utils.zip < temp.txt
+expandlines $src/distrib/msw/utilmake.rsp temp.txt
+zip -@ -u $dest/utilmake.zip < temp.txt
+
+rm -f temp.txt
 
 cp $src/docs/changes.txt $dest
 cp $src/docs/msw/install.txt $dest/install_msw.txt
@@ -247,7 +307,7 @@ cp $src/docs/motif/makewxmotif $dest
 cp $src/docs/gtk/makewxgtk $dest
 
 # Skip WISE setup if wise is 0.
-if [ "$wise" = "1"] ; then
+if [ "$wise" = "1" ]; then
     dowise
 fi
 

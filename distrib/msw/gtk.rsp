@@ -9,13 +9,10 @@ docs/gtk/makewxgtk
 
 include/wx/gtk/*.h
 include/wx/gtk/*.xpm
-include/install-sh
-include/wx/install-sh
 
 src/gtk/files.lst
 src/gtk/*.cpp
 src/gtk/*.c
-src/gtk/*.inc
 src/gtk/*.xbm
 
 src/iodbc/*.c

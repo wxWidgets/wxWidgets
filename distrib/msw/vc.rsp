@@ -1,3 +1,8 @@
+wxBase.dsp
+wxBase.dsw
+wxBaseDll.dsp
+wxBaseDll.dsw
+
 src/wxvc.dsp
 src/wxvc.dsw
 src/wxvc_dll.dsp
@@ -138,6 +143,9 @@ samples/newgrid/NewgridVC.dsw
 samples/notebook/NotebookVC.dsp
 samples/notebook/NotebookVC.dsw
 
+samples/oleauto/OleautoVC.dsp
+samples/oleauto/OleautoVC.dsw
+
 samples/ownerdrw/OwnerDrwVC.dsp
 samples/ownerdrw/OwnerDrwVC.dsw
 
@@ -149,6 +157,9 @@ samples/png/PngVC.dsw
 
 samples/printing/PrintingVC.dsp
 samples/printing/PrintingVC.dsw
+
+samples/proplist/ProplistVC.dsp
+samples/proplist/ProplistVC.dsw
 
 samples/propsize/PropsizeVC.dsp
 samples/propsize/PropsizeVC.dsw
@@ -247,6 +258,9 @@ utils/tex2rtf/src/Tex2RTFVC.dsw
 utils/hhp2cached/hhp2cachedVC.dsp
 utils/hhp2cached/hhp2cachedVC.dsw
 
+utils/helpgen/src/HelpGenVC.dsp
+utils/helpgen/src/HelpGenVC.dsw
+
 contrib/src/ogl/OglVC.dsp
 contrib/src/ogl/OglVC.dsw
 
@@ -258,7 +272,8 @@ contrib/samples/ogl/studio/StudioVC.dsw
 contrib/src/xml/wxXMLVC.dsp
 contrib/src/xml/wxXMLVC.dsw
 
-contrib/samples/ogl/ogledit/OgleditVC.dsp
+contrib/samples/xml/XmlDemoVC.dsp
+contrib/samples/xml/XmlDemoVC.dsw
 
 contrib/src/mmedia/MmediaVC.dsp
 contrib/src/mmedia/MMediaVC.dsw
@@ -274,4 +289,10 @@ contrib/samples/stc/StcTestVC.dsw
 
 contrib/utils/wxrc/wxrcVC.dsp
 contrib/utils/wxrc/wxrcVC.dsw
+
+contrib/utils/convertrc/ConvertVC.dsp
+contrib/utils/convertrc/ConvertVC.dsw
+
+contrib/utils/wxrcedit/wxrceditVC.dsp
+contrib/utils/wxrcedit/wxrceditVC.dsw
 
