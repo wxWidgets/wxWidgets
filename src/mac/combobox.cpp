@@ -23,7 +23,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
 // right now we don't support editable comboboxes
 
-static nextPopUpMenuId = 1000 ;
+static int nextPopUpMenuId = 1000 ;
 MenuHandle NewUniqueMenu() 
 {
   MenuHandle handle = NewMenu( nextPopUpMenuId , "\pMenu" ) ;
