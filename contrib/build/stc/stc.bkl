@@ -3,6 +3,7 @@
 
 <makefile>
 
+    <set var="WX_DISABLE_PRECOMP_HEADERS">1</set>
     <include file="../../../build/bakefiles/common_contrib.bkl"/>
 
     <set var="STC_SRC">
