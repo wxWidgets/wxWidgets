@@ -169,8 +169,7 @@ protected:
     enum {
         IMG_Book = 0,
         IMG_Folder,
-        IMG_Page,
-        IMG_RootFolder
+        IMG_Page
     };
 
 protected:
