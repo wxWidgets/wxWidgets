@@ -100,7 +100,24 @@ typedef struct _LVITEMW {
     int iIndent;
 #endif
 } LV_ITEMW;
-typedef LV_ITEM LV_ITEMA;
+
+typedef struct tagLVITEMA
+{
+    UINT mask;
+    int iItem;
+    int iSubItem;
+    UINT state;
+    UINT stateMask;
+    LPSTR pszText;
+    int cchTextMax;
+    int iImage;
+    LPARAM lParam;
+#if (_WIN32_IE >= 0x0300)
+    int iIndent;
+#endif
+} LV_ITEMA;
+
+#define LV_ITEM LV_ITEMA;
 #endif
 
 #ifndef ListView_GetColumnWidth

@@ -41,6 +41,16 @@
 
 #include "wx/volume.h"
 
+#include <shellapi.h>
+
+#ifndef SHGetFileInfo
+#ifdef UNICODE
+#define SHGetFileInfo SHGetFileInfoW
+#else
+#define SHGetFileInfo SHGetFileInfoA
+#endif
+#endif
+
 #ifndef SHGFI_ATTRIBUTES
     #define SHGFI_ATTRIBUTES 2048
 #endif
