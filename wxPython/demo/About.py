@@ -1,4 +1,4 @@
-import sys, string
+import sys
 
 from   wxPython.wx       import *
 from   wxPython.html     import *
@@ -46,7 +46,7 @@ demo item so you can learn how to use the classes yourself.</p>
     def __init__(self, parent):
         wxDialog.__init__(self, parent, -1, 'About the wxPython demo',)
         html = wxHtmlWindow(self, -1, size=(420, -1))
-        py_version = string.split(sys.version)[0]
+        py_version = sys.version.split()[0]
         html.SetPage(self.text % (wx.__version__, py_version))
         btn = html.FindWindowById(wxID_OK)
         btn.SetDefault()

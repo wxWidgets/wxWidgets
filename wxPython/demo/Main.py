@@ -11,7 +11,7 @@
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-import sys, os, time, string
+import sys, os, time
 from   wxPython.wx import *
 from   wxPython.html import wxHtmlWindow
 
@@ -225,7 +225,7 @@ class MyTP(wxPyTipProvider):
 
 def opj(path):
     """Convert paths to the platform-specific separator"""
-    return apply(os.path.join, tuple(string.split(path, '/')))
+    return apply(os.path.join, tuple(path.split('/')))
 
 
 #---------------------------------------------------------------------------
@@ -513,7 +513,7 @@ class wxPythonDemo(wxFrame):
         self.curOverview = text
         lead = text[:6]
         if lead != '<html>' and lead != '<HTML>':
-            text = string.join(string.split(text, '\n'), '<br>')
+            text = '<br>'.join(text.split('\n'))
         self.ovr.SetPage(text)
         self.nb.SetPageText(0, name)
 

@@ -6,7 +6,7 @@ This is a way to save the startup time when running img2py on lots of
 files...
 """
 
-import sys, string
+import sys
 from wxPython.tools import img2py
 
 
@@ -100,6 +100,6 @@ command_lines = [
 
 
 for line in command_lines:
-    args = string.split(line)
+    args = line.split()
     img2py.main(args)
 

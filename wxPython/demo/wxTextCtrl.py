@@ -105,7 +105,7 @@ class TestPanel(wxPanel):
         start, end = self.tc.GetSelection()
         text = self.tc.GetValue()
         if wxPlatform == "__WXMSW__":  # This is why GetStringSelection was added
-            text = string.replace(text, '\n', '\r\n')
+            text = text.replace('\n', '\r\n')
         self.log.write("GetSelection(): (%d, %d)\n"
                        "\tGetStringSelection(): %s\n"
                        "\tSelectedText: %s\n" %

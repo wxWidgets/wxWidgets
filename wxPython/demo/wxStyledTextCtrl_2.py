@@ -45,7 +45,7 @@ class PythonSTC(wxStyledTextCtrl):
         self.CmdKeyAssign(ord('N'), wxSTC_SCMOD_CTRL, wxSTC_CMD_ZOOMOUT)
 
         self.SetLexer(wxSTC_LEX_PYTHON)
-        self.SetKeyWords(0, string.join(keyword.kwlist))
+        self.SetKeyWords(0, " ".join(keyword.kwlist))
 
         self.SetProperty("fold", "1")
         self.SetProperty("tab.timmy.whinge.level", "1")
@@ -151,7 +151,7 @@ class PythonSTC(wxStyledTextCtrl):
                 #lst = []
                 #for x in range(50000):
                 #    lst.append('%05d' % x)
-                #st = string.join(lst)
+                #st = " ".join(lst)
                 #print len(st)
                 #self.AutoCompShow(0, st)
 
@@ -167,7 +167,7 @@ class PythonSTC(wxStyledTextCtrl):
                 kw.sort()  # Python sorts are case sensitive
                 self.AutoCompSetIgnoreCase(false)  # so this needs to match
 
-                self.AutoCompShow(0, string.join(kw))
+                self.AutoCompShow(0, " ".join(kw))
         else:
             event.Skip()
 

@@ -14,7 +14,7 @@ Have fun with it,
 
 Harm van der Heijden (H.v.d.Heijden@phys.tue.nl)"""
 
-import random,re,string
+import random,re
 from wxPython.wx import *
 
 
@@ -47,7 +47,7 @@ class WordFetcher:
             m = reg.search(self.words[index:])
             if m and len(m.groups()[0]) >= self.min_length: break
             n = n - 1
-        if n: return string.lower(m.groups()[0])
+        if n: return m.groups()[0].lower()
         return "error"
 
 

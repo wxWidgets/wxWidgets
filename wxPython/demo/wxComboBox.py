@@ -1,4 +1,3 @@
-import string
 from wxPython.wx import *
 
 #---------------------------------------------------------------------------
@@ -35,7 +34,7 @@ class TestComboBox(wxPanel):
         cb = wxComboBox(self, 501, "default value", wxPoint(90, 80), wxSize(95, -1),
                         [], wxCB_SIMPLE)
         for item in sampleList:
-            cb.Append(item, string.upper(item))
+            cb.Append(item, item.upper())
         EVT_COMBOBOX(self, 501, self.EvtComboBox)
         EVT_TEXT(self, 501, self.EvtText)
 

@@ -1,8 +1,6 @@
 
 from wxPython.wx import *
 
-import string
-
 #---------------------------------------------------------------------------
 
 class wxFindPrefixListBox(wxListBox):
@@ -17,11 +15,11 @@ class wxFindPrefixListBox(wxListBox):
     def FindPrefix(self, prefix):
         self.log.WriteText('Looking for prefix: %s\n' % prefix)
         if prefix:
-            prefix = string.lower(prefix)
+            prefix = prefix.lower()
             length = len(prefix)
             for x in range(self.Number()):
                 text = self.GetString(x)
-                text = string.lower(text)
+                text = text.lower()
                 if text[:length] == prefix:
                     self.log.WriteText('Prefix %s is found.\n' % prefix)
                     return x

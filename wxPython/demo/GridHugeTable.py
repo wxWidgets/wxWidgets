@@ -47,6 +47,14 @@ class HugeTableGrid(wxGrid):
         # a reference to it and call it's Destroy method later.
         self.SetTable(table, true)
 
+        EVT_GRID_CELL_RIGHT_CLICK(self, self.OnRightDown)  #added
+
+    def OnRightDown(self, event):                          #added
+        print "hello"
+        print self.GetSelectedRows()                       #added
+
+
+
 
 
 #---------------------------------------------------------------------------
