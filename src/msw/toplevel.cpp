@@ -43,10 +43,6 @@
 #include "wx/msw/private.h"
 #include "wx/msw/winundef.h"
 
-#ifdef CreateDialog
-#undef CreateDialog
-#endif
-
 #include "wx/display.h"
 
 #ifndef ICON_BIG
@@ -345,10 +341,12 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
     if ( exflags )
     {
         ::SetWindowLong(GetHwnd(), GWL_EXSTYLE, exflags);
-        ::SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
+        ::SetWindowPos(GetHwnd(),
+                       exflags & WS_EX_TOPMOST ? HWND_TOPMOST : 0,
+                       0, 0, 0, 0,
                        SWP_NOSIZE |
                        SWP_NOMOVE |
-                       SWP_NOZORDER |
+                       (exflags & WS_EX_TOPMOST ? 0 : SWP_NOZORDER) |
                        SWP_NOACTIVATE);
     }
 
