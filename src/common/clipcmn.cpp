@@ -31,6 +31,8 @@
 #include "wx/clipbrd.h"
 #include "wx/module.h"
 
+#if wxUSE_CLIPBOARD
+
 // ----------------------------------------------------------------------------
 // wxClipboardModule: module responsible for initializing the global clipboard
 // object
@@ -75,3 +77,5 @@ void wxClipboardModule::OnExit()
 
     wxTheClipboard = (wxClipboard *)NULL;
 }
+
+#endif // wxUSE_CLIPBOARD
