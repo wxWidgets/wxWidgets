@@ -788,7 +788,9 @@ bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handler)
             {
                 handlerNext->SetPreviousHandler ( handlerPrev );
             }
+
             handler->SetNextHandler(NULL);
+            handler->SetPreviousHandler(NULL);
 
             return TRUE;
         }

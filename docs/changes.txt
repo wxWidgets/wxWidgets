@@ -185,6 +185,10 @@ All:
 
 - Spanish translations updated (Javier San Jose)
 
+All (GUI):
+
+- bug in wxWindow::RemoveEventHandler() fixed (Yingjun Zhang)
+
 wxMSW:
 
 - strip ampersands from strings returned by wxMenuBar::GetLabelTop()
