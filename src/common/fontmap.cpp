@@ -47,7 +47,7 @@
 // ----------------------------------------------------------------------------
 
 // the config paths we use
-static const wxChar* FONTMAPPER_ROOT_PATH = wxT("FontMapper");
+static const wxChar* FONTMAPPER_ROOT_PATH = wxT("wxWindows/FontMapper");
 static const wxChar* FONTMAPPER_CHARSET_PATH = wxT("Charsets");
 static const wxChar* FONTMAPPER_CHARSET_ALIAS_PATH = wxT("Aliases");
 static const wxChar* FONTMAPPER_FONT_FROM_ENCODING_PATH = wxT("Encodings");
@@ -223,7 +223,7 @@ wxConfigBase *wxFontMapper::GetConfig()
     if ( !m_config )
     {
         // try the default
-        m_config = wxConfig::Get();
+        m_config = wxConfig::Get(FALSE/*don't create on demand*/);
     }
 
     return m_config;
