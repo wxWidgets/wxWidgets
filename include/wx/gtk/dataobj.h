@@ -70,7 +70,7 @@ public:
   wxDataFormat();
   wxDataFormat( wxDataType type );
   wxDataFormat( const wxString &id );
-  wxDataFormat( const char *id );
+  wxDataFormat( const wxChar *id );
   wxDataFormat( wxDataFormat &format );
   wxDataFormat( const GdkAtom atom );
 
@@ -78,7 +78,7 @@ public:
   wxDataType GetType() const;
   
   wxString GetId() const;
-  void SetId( const char *id );
+  void SetId( const wxChar *id );
   
   GdkAtom GetAtom();
       
