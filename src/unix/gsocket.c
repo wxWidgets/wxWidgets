@@ -43,7 +43,7 @@
 #include <signal.h>
 
 #include "wx/gsocket.h"
-#include "gsockunx.h"
+#include "wx/unix/gsockunx.h"
 
 #ifndef SOCKLEN_T
 
@@ -161,9 +161,7 @@ void GSocket_Shutdown(GSocket *socket)
 
   /* If socket has been created, we shutdown it */
   if (socket->m_fd != -1) {
-    /* Only oriented connection should be shutdowned */
-    if (socket->m_oriented)
-      shutdown(socket->m_fd, 2);
+    shutdown(socket->m_fd, 2);
     close(socket->m_fd);
     socket->m_fd = -1;
   }

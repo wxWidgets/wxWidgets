@@ -516,7 +516,8 @@ MSW_HEADERS = \
 		msw/xpmhand.h
 
 UNIX_HEADERS = \
-		unix/execute.h
+		unix/execute.h \
+		unix/gsockunx.h
 
 GENERIC_HEADERS = \
 		generic/caret.h \
