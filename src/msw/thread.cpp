@@ -99,33 +99,43 @@ static bool gs_waitingForThread = FALSE;
 class wxMutexInternal
 {
 public:
-    HANDLE p_mutex;
+    wxMutexInternal()
+    {
+        m_mutex = ::CreateMutex(NULL, FALSE, NULL);
+        if ( !m_mutex )
+        {
+            wxLogSysError(_("Can not create mutex"));
+        }
+    }
+
+    ~wxMutexInternal() { if ( m_mutex ) CloseHandle(m_mutex); }
+
+public:
+    HANDLE m_mutex;
 };
 
 wxMutex::wxMutex()
 {
     m_internal = new wxMutexInternal;
-    m_internal->p_mutex = CreateMutex(NULL, FALSE, NULL);
-    if ( !m_internal->p_mutex )
-    {
-        wxLogSysError(_("Can not create mutex."));
-    }
 
     m_locked = 0;
 }
 
 wxMutex::~wxMutex()
 {
-    if (m_locked > 0)
-        wxLogDebug(wxT("Warning: freeing a locked mutex (%d locks)."), m_locked);
-    CloseHandle(m_internal->p_mutex);
+    if ( m_locked > 0 )
+    {
+        wxLogDebug(_T("Warning: freeing a locked mutex (%d locks)."), m_locked);
+    }
+
+    delete m_internal;
 }
 
 wxMutexError wxMutex::Lock()
 {
     DWORD ret;
 
-    ret = WaitForSingleObject(m_internal->p_mutex, INFINITE);
+    ret = WaitForSingleObject(m_internal->m_mutex, INFINITE);
     switch ( ret )
     {
         case WAIT_ABANDONED:
@@ -152,7 +162,7 @@ wxMutexError wxMutex::TryLock()
 {
     DWORD ret;
 
-    ret = WaitForSingleObject(m_internal->p_mutex, 0);
+    ret = WaitForSingleObject(m_internal->m_mutex, 0);
     if (ret == WAIT_TIMEOUT || ret == WAIT_ABANDONED)
         return wxMUTEX_BUSY;
 
@@ -165,7 +175,7 @@ wxMutexError wxMutex::Unlock()
     if (m_locked > 0)
         m_locked--;
 
-    BOOL ret = ReleaseMutex(m_internal->p_mutex);
+    BOOL ret = ReleaseMutex(m_internal->m_mutex);
     if ( ret == 0 )
     {
         wxLogSysError(_("Couldn't release a mutex"));
