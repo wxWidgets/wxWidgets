@@ -3435,7 +3435,7 @@ wxGridWindow::wxGridWindow( wxGrid *parent,
     m_owner = parent;
     m_rowLabelWin = rowLblWin;
     m_colLabelWin = colLblWin;
-    SetBackgroundColour( "WHITE" );
+    SetBackgroundColour(_T("WHITE"));
 }
 
 
@@ -3852,24 +3852,24 @@ void wxGrid::CalcDimensions()
     }
     else
     {
-	w = (w + GRID_SCROLL_LINE - 1)/GRID_SCROLL_LINE;
-	if ( x >= w )
-	    x = w - 1;
+        w = (w + GRID_SCROLL_LINE - 1)/GRID_SCROLL_LINE;
+        if ( x >= w )
+            x = w - 1;
     }
     if ( h <= ch )
     {
-	h = 0; y = 0;
+        h = 0; y = 0;
     }
     else
     {
-	h = (h + GRID_SCROLL_LINE - 1)/GRID_SCROLL_LINE;
-	if ( y >= h )
-	    y = h - 1;
+        h = (h + GRID_SCROLL_LINE - 1)/GRID_SCROLL_LINE;
+        if ( y >= h )
+            y = h - 1;
     }
 
     // do set scrollbar parameters
     SetScrollbars( GRID_SCROLL_LINE, GRID_SCROLL_LINE,
-		   w, h, x, y, (GetBatchCount() != 0));
+                   w, h, x, y, (GetBatchCount() != 0));
 }
 
 
@@ -8240,8 +8240,8 @@ void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
     if ( resizeExistingRows )
     {
         InitRowHeights();
-	if ( !GetBatchCount() )
-	    CalcDimensions();
+        if ( !GetBatchCount() )
+            CalcDimensions();
     }
 }
 
@@ -8275,8 +8275,8 @@ void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
     if ( resizeExistingCols )
     {
         InitColWidths();
-	if ( !GetBatchCount() )
-	    CalcDimensions();
+        if ( !GetBatchCount() )
+            CalcDimensions();
     }
 }
 
@@ -8404,33 +8404,35 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
         }
     }
 
-    if ( column ){
+    if ( column )
+    {
         SetColSize(col, extentMax);
         if ( !GetBatchCount() )
         {
-	    int cw, ch, dummy;
-	    m_gridWin->GetClientSize( &cw, &ch );
-	    wxRect rect ( CellToRect( 0, col ) );
-	    rect.y = 0;
-	    CalcScrolledPosition(rect.x, 0, &rect.x, &dummy);
-	    rect.width = cw - rect.x;
-	    rect.height = m_colLabelHeight;
-	    m_colLabelWin->Refresh( TRUE, &rect );
-	}
+            int cw, ch, dummy;
+            m_gridWin->GetClientSize( &cw, &ch );
+            wxRect rect ( CellToRect( 0, col ) );
+            rect.y = 0;
+            CalcScrolledPosition(rect.x, 0, &rect.x, &dummy);
+            rect.width = cw - rect.x;
+            rect.height = m_colLabelHeight;
+            m_colLabelWin->Refresh( TRUE, &rect );
+        }
     }
-    else{
+    else
+    {
         SetRowSize(row, extentMax);
         if ( !GetBatchCount() )
         {
-	    int cw, ch, dummy;
-	    m_gridWin->GetClientSize( &cw, &ch );
-	    wxRect rect ( CellToRect( row, 0 ) );
-	    rect.x = 0;
-	    CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
-	    rect.width = m_rowLabelWidth;
+            int cw, ch, dummy;
+            m_gridWin->GetClientSize( &cw, &ch );
+            wxRect rect ( CellToRect( row, 0 ) );
+            rect.x = 0;
+            CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
+            rect.width = m_rowLabelWidth;
             rect.height = ch - rect.y;
-	    m_rowLabelWin->Refresh( TRUE, &rect );
-	}
+            m_rowLabelWin->Refresh( TRUE, &rect );
+        }
     }
     if ( setAsMin )
     {
