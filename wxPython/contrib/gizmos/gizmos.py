@@ -349,6 +349,12 @@ class wxTreeListCtrlPtr(wxControlPtr):
     def SetSpacing(self, *_args, **_kwargs):
         val = gizmosc.wxTreeListCtrl_SetSpacing(self, *_args, **_kwargs)
         return val
+    def GetLineSpacing(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetLineSpacing(self, *_args, **_kwargs)
+        return val
+    def SetLineSpacing(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetLineSpacing(self, *_args, **_kwargs)
+        return val
     def GetImageList(self, *_args, **_kwargs):
         val = gizmosc.wxTreeListCtrl_GetImageList(self, *_args, **_kwargs)
         return val
@@ -419,6 +425,18 @@ class wxTreeListCtrlPtr(wxControlPtr):
         val = gizmosc.wxTreeListCtrl_GetColumn(self, *_args, **_kwargs)
         if val: val = wxTreeListColumnInfoPtr(val) 
         return val
+    def SetColumnAlignment(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetColumnAlignment(self, *_args, **_kwargs)
+        return val
+    def GetColumnAlignment(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetColumnAlignment(self, *_args, **_kwargs)
+        return val
+    def SetColumnImage(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetColumnImage(self, *_args, **_kwargs)
+        return val
+    def GetColumnImage(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetColumnImage(self, *_args, **_kwargs)
+        return val
     def GetItemText(self, *_args, **_kwargs):
         val = gizmosc.wxTreeListCtrl_GetItemText(self, *_args, **_kwargs)
         return val
@@ -458,6 +476,21 @@ class wxTreeListCtrlPtr(wxControlPtr):
         return val
     def SetItemFont(self, *_args, **_kwargs):
         val = gizmosc.wxTreeListCtrl_SetItemFont(self, *_args, **_kwargs)
+        return val
+    def GetItemBold(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetItemBold(self, *_args, **_kwargs)
+        return val
+    def GetItemTextColour(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetItemTextColour(self, *_args, **_kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def GetItemBackgroundColour(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetItemBackgroundColour(self, *_args, **_kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def GetItemFont(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetItemFont(self, *_args, **_kwargs)
+        if val: val = wxFontPtr(val) ; val.thisown = 1
         return val
     def IsVisible(self, *_args, **_kwargs):
         val = gizmosc.wxTreeListCtrl_IsVisible(self, *_args, **_kwargs)

@@ -62,6 +62,9 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/fontutil.h>
 #include <wx/dcbuffer.h>
 #include <wx/iconbndl.h>
+#ifdef __WXMAC__
+#include <wx/mac/private.h>
+#endif
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {

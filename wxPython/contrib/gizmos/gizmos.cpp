@@ -2691,6 +2691,63 @@ static PyObject *_wrap_wxTreeListCtrl_SetSpacing(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define wxTreeListCtrl_GetLineSpacing(_swigobj)  (_swigobj->GetLineSpacing())
+static PyObject *_wrap_wxTreeListCtrl_GetLineSpacing(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    unsigned int  _result;
+    wxPyTreeListCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTreeListCtrl_GetLineSpacing",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeListCtrl_GetLineSpacing. Expected _wxPyTreeListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (unsigned int )wxTreeListCtrl_GetLineSpacing(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTreeListCtrl_SetLineSpacing(_swigobj,_swigarg0)  (_swigobj->SetLineSpacing(_swigarg0))
+static PyObject *_wrap_wxTreeListCtrl_SetLineSpacing(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyTreeListCtrl * _arg0;
+    unsigned int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","spacing", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxTreeListCtrl_SetLineSpacing",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeListCtrl_SetLineSpacing. Expected _wxPyTreeListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeListCtrl_SetLineSpacing(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxTreeListCtrl_GetImageList(_swigobj)  (_swigobj->GetImageList())
 static PyObject *_wrap_wxTreeListCtrl_GetImageList(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3474,6 +3531,124 @@ static PyObject *_wrap_wxTreeListCtrl_GetColumn(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxTreeListCtrl_SetColumnAlignment(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetColumnAlignment(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTreeListCtrl_SetColumnAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyTreeListCtrl * _arg0;
+    size_t  _arg1;
+    wxTreeListColumnAlign  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","column","align", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxTreeListCtrl_SetColumnAlignment",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeListCtrl_SetColumnAlignment. Expected _wxPyTreeListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeListCtrl_SetColumnAlignment(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeListCtrl_GetColumnAlignment(_swigobj,_swigarg0)  (_swigobj->GetColumnAlignment(_swigarg0))
+static PyObject *_wrap_wxTreeListCtrl_GetColumnAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeListColumnAlign  _result;
+    wxPyTreeListCtrl * _arg0;
+    size_t  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","column", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxTreeListCtrl_GetColumnAlignment",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeListCtrl_GetColumnAlignment. Expected _wxPyTreeListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxTreeListColumnAlign )wxTreeListCtrl_GetColumnAlignment(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTreeListCtrl_SetColumnImage(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetColumnImage(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTreeListCtrl_SetColumnImage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyTreeListCtrl * _arg0;
+    size_t  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","column","image", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxTreeListCtrl_SetColumnImage",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeListCtrl_SetColumnImage. Expected _wxPyTreeListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeListCtrl_SetColumnImage(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeListCtrl_GetColumnImage(_swigobj,_swigarg0)  (_swigobj->GetColumnImage(_swigarg0))
+static PyObject *_wrap_wxTreeListCtrl_GetColumnImage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPyTreeListCtrl * _arg0;
+    size_t  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","column", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxTreeListCtrl_GetColumnImage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeListCtrl_GetColumnImage. Expected _wxPyTreeListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxTreeListCtrl_GetColumnImage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static wxString  wxPyTreeListCtrl_GetItemText(wxPyTreeListCtrl *self,const wxTreeItemId & item,int  column) {
             if (column < 0) column = self->GetMainColumn();
             return self->GetItemText(item, column);
@@ -4058,6 +4233,156 @@ static PyObject *_wrap_wxTreeListCtrl_SetItemFont(PyObject *self, PyObject *args
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeListCtrl_GetItemBold(_swigobj,_swigarg0)  (_swigobj->GetItemBold(_swigarg0))
+static PyObject *_wrap_wxTreeListCtrl_GetItemBold(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyTreeListCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeListCtrl_GetItemBold",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeListCtrl_GetItemBold. Expected _wxPyTreeListCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeListCtrl_GetItemBold. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTreeListCtrl_GetItemBold(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTreeListCtrl_GetItemTextColour(_swigobj,_swigarg0)  (_swigobj->GetItemTextColour(_swigarg0))
+static PyObject *_wrap_wxTreeListCtrl_GetItemTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxPyTreeListCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeListCtrl_GetItemTextColour",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeListCtrl_GetItemTextColour. Expected _wxPyTreeListCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeListCtrl_GetItemTextColour. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxTreeListCtrl_GetItemTextColour(_arg0,*_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxTreeListCtrl_GetItemBackgroundColour(_swigobj,_swigarg0)  (_swigobj->GetItemBackgroundColour(_swigarg0))
+static PyObject *_wrap_wxTreeListCtrl_GetItemBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxPyTreeListCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeListCtrl_GetItemBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeListCtrl_GetItemBackgroundColour. Expected _wxPyTreeListCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeListCtrl_GetItemBackgroundColour. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxTreeListCtrl_GetItemBackgroundColour(_arg0,*_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxTreeListCtrl_GetItemFont(_swigobj,_swigarg0)  (_swigobj->GetItemFont(_swigarg0))
+static PyObject *_wrap_wxTreeListCtrl_GetItemFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _result;
+    wxPyTreeListCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeListCtrl_GetItemFont",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeListCtrl_GetItemFont. Expected _wxPyTreeListCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeListCtrl_GetItemFont. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxFont (wxTreeListCtrl_GetItemFont(_arg0,*_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -5920,6 +6245,10 @@ static PyMethodDef gizmoscMethods[] = {
 	 { "wxTreeListCtrl_IsExpanded", (PyCFunction) _wrap_wxTreeListCtrl_IsExpanded, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_ItemHasChildren", (PyCFunction) _wrap_wxTreeListCtrl_ItemHasChildren, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_IsVisible", (PyCFunction) _wrap_wxTreeListCtrl_IsVisible, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeListCtrl_GetItemFont", (PyCFunction) _wrap_wxTreeListCtrl_GetItemFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeListCtrl_GetItemBackgroundColour", (PyCFunction) _wrap_wxTreeListCtrl_GetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeListCtrl_GetItemTextColour", (PyCFunction) _wrap_wxTreeListCtrl_GetItemTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeListCtrl_GetItemBold", (PyCFunction) _wrap_wxTreeListCtrl_GetItemBold, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_SetItemFont", (PyCFunction) _wrap_wxTreeListCtrl_SetItemFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_SetItemBackgroundColour", (PyCFunction) _wrap_wxTreeListCtrl_SetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_SetItemTextColour", (PyCFunction) _wrap_wxTreeListCtrl_SetItemTextColour, METH_VARARGS | METH_KEYWORDS },
@@ -5933,6 +6262,10 @@ static PyMethodDef gizmoscMethods[] = {
 	 { "wxTreeListCtrl_SetItemText", (PyCFunction) _wrap_wxTreeListCtrl_SetItemText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_GetItemImage", (PyCFunction) _wrap_wxTreeListCtrl_GetItemImage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_GetItemText", (PyCFunction) _wrap_wxTreeListCtrl_GetItemText, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeListCtrl_GetColumnImage", (PyCFunction) _wrap_wxTreeListCtrl_GetColumnImage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeListCtrl_SetColumnImage", (PyCFunction) _wrap_wxTreeListCtrl_SetColumnImage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeListCtrl_GetColumnAlignment", (PyCFunction) _wrap_wxTreeListCtrl_GetColumnAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeListCtrl_SetColumnAlignment", (PyCFunction) _wrap_wxTreeListCtrl_SetColumnAlignment, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_GetColumn", (PyCFunction) _wrap_wxTreeListCtrl_GetColumn, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_SetColumn", (PyCFunction) _wrap_wxTreeListCtrl_SetColumn, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_GetColumnText", (PyCFunction) _wrap_wxTreeListCtrl_GetColumnText, METH_VARARGS | METH_KEYWORDS },
@@ -5956,6 +6289,8 @@ static PyMethodDef gizmoscMethods[] = {
 	 { "wxTreeListCtrl_GetButtonsImageList", (PyCFunction) _wrap_wxTreeListCtrl_GetButtonsImageList, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_GetStateImageList", (PyCFunction) _wrap_wxTreeListCtrl_GetStateImageList, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_GetImageList", (PyCFunction) _wrap_wxTreeListCtrl_GetImageList, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeListCtrl_SetLineSpacing", (PyCFunction) _wrap_wxTreeListCtrl_SetLineSpacing, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeListCtrl_GetLineSpacing", (PyCFunction) _wrap_wxTreeListCtrl_GetLineSpacing, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_SetSpacing", (PyCFunction) _wrap_wxTreeListCtrl_SetSpacing, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_GetSpacing", (PyCFunction) _wrap_wxTreeListCtrl_GetSpacing, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeListCtrl_SetIndent", (PyCFunction) _wrap_wxTreeListCtrl_SetIndent, METH_VARARGS | METH_KEYWORDS },

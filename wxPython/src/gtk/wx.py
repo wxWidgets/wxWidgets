@@ -483,6 +483,7 @@ wxSHRINK = wxc.wxSHRINK
 wxGROW = wxc.wxGROW
 wxEXPAND = wxc.wxEXPAND
 wxNB_FIXEDWIDTH = wxc.wxNB_FIXEDWIDTH
+wxNB_TOP = wxc.wxNB_TOP
 wxNB_LEFT = wxc.wxNB_LEFT
 wxNB_RIGHT = wxc.wxNB_RIGHT
 wxNB_BOTTOM = wxc.wxNB_BOTTOM
