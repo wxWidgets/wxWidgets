@@ -137,18 +137,6 @@
         #define __HPUX__
     #endif /* HP-UX */
 
-    #if defined(__WXMAC__) && defined(__DARWIN__)
-        /* Mac OS X */
-
-        /*
-           Some code has been added to workaround defects(?) in the
-           bundled gcc compiler. These corrections are identified by:
-           __DARWIN__ for corrections necessary for Darwin (wxMac, wxMotif)
-         */
-
-        #include <Carbon/Carbon.h>
-    #endif /* __WXMAC__ && __DARWIN__ */
-
     #if defined(__CYGWIN__)
         #if !defined(wxSIZE_T_IS_UINT)
             #define wxSIZE_T_IS_UINT
@@ -167,8 +155,6 @@
        bundled gcc compiler. These corrections are identified by:
        __DARWIN__ for corrections necessary for Darwin (wxMac, wxMotif)
      */
-
-    #include <Carbon/Carbon.h>
 #elif defined(__OS2__)
     #if defined(__IBMCPP__)
         #define __VISAGEAVER__ __IBMCPP__
