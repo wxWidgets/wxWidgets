@@ -37,6 +37,25 @@
 #include <string.h>
 #include <stdlib.h>
 
+
+#include "wx/debug.h"
+#include "wx/strconv.h"
+#include "wx/intl.h"
+#include "wx/log.h"
+
+// ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
+
+WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
+
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+#if wxUSE_WCHAR_T
+
 #ifdef __SALFORDC__
   #include <clib.h>
 #endif
@@ -49,12 +68,6 @@
   #include <windows.h>
 #endif
 
-#include "wx/debug.h"
-#include "wx/strconv.h"
-#include "wx/intl.h"
-#include "wx/log.h"
-
-#if wxUSE_WCHAR_T
 #define BSWAP_UCS4(str, len) { unsigned _c; for (_c=0; _c<len; _c++) str[_c]=wxUINT32_SWAP_ALWAYS(str[_c]); }
 #define BSWAP_UTF16(str, len) { unsigned _c; for (_c=0; _c<len; _c++) str[_c]=wxUINT16_SWAP_ALWAYS(str[_c]); }
 
@@ -86,15 +99,6 @@
     #error "Weird sizeof(wchar_t): please report your platform details to wx-users mailing list"
 #endif
 
-// ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
-
-WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
-
-// ============================================================================
-// implementation
-// ============================================================================
 
 #ifdef WC_UTF16
 
@@ -969,7 +973,6 @@ public:
 // ----------------------------------------------------------------------------
 
 WXDLLEXPORT_DATA(wxMBConv) wxConvLibc, wxConvFile;
-WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
 
 #endif // wxUSE_WCHAR_T
 
