@@ -1040,6 +1040,7 @@ enum wxBorder
 #define wxSP_3DBORDER         0x0200
 #define wxSP_FULLSASH         0x0400
 #define wxSP_3D               (wxSP_3DBORDER | wxSP_3DSASH)
+#define wxSP_SASH_AQUA        0x0800
 
 /*
  * wxNotebook flags

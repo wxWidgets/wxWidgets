@@ -6,8 +6,9 @@ This class manages up to two subwindows. The current view can be
 split into two programmatically (perhaps from a menu command), and unsplit
 either programmatically or via the wxSplitterWindow user interface.
 
-Appropriate 3D shading for the Windows 95 user interface is an option.
-This is also recommended for GTK.
+Appropriate 3D shading for the Windows 95 user interface is an option -
+this is also recommended for GTK. Optionally, the sash can be made to
+look more like the native control under MacOS X.
 
 \wxheading{Window styles}
 
@@ -16,6 +17,7 @@ This is also recommended for GTK.
 \twocolitem{\windowstyle{wxSP\_3DSASH}}{Draws a 3D effect sash.}
 \twocolitem{\windowstyle{wxSP\_3DBORDER}}{Draws a 3D effect border.}
 \twocolitem{\windowstyle{wxSP\_FULLSASH}}{Draws the ends of the sash (so the window can be used without a border).}
+\twocolitem{\windowstyle{wxSP\_SASH\_AQUA}}{Draws a sash with an Aqua-like appearance.}
 \twocolitem{\windowstyle{wxSP\_BORDER}}{Draws a thin black border around the window.}
 \twocolitem{\windowstyle{wxSP\_NOBORDER}}{No border, and a black sash.}
 \twocolitem{\windowstyle{wxSP\_PERMIT\_UNSPLIT}}{Always allow to
