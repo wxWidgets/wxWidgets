@@ -66,7 +66,11 @@
 #elif defined(__WINDOWS__)
     // using LoadLibraryEx under Win32 to avoid name clash with LoadLibrary
 #   ifdef __WIN32__
-#      define wxDllOpen(lib)                  ::LoadLibraryEx(lib, 0, 0)
+#ifdef _UNICODE
+#      define wxDllOpen(lib)                  ::LoadLibraryExW(lib, 0, 0)
+#else
+#      define wxDllOpen(lib)                  ::LoadLibraryExA(lib, 0, 0)
+#endif
 #   else   // Win16
 #      define wxDllOpen(lib)                  ::LoadLibrary(lib)
 #   endif  // Win32/16
@@ -217,7 +221,7 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
     char                            zError[256] = "";
     wxDllOpen(zError, libname, handle);
 #else // !Mac
-    handle = wxDllOpen(libname);
+    handle = wxDllOpen(libname.c_str());
 #endif // OS
 
     if ( !handle )
@@ -260,7 +264,7 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
 #elif defined( __WXPM__ ) || defined(__EMX__)
     wxDllGetSymbol(dllHandle, symbol);
 #else
-    symbol = wxDllGetSymbol(dllHandle, name);
+    symbol = wxDllGetSymbol(dllHandle, name.mb_str());
 #endif
 
     if ( !symbol )
