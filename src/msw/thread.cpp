@@ -529,13 +529,106 @@ void wxThread::Sleep(unsigned long milliseconds)
 
 int wxThread::GetCPUCount()
 {
-    return -1;
+    SYSTEM_INFO si;
+    GetSystemInfo(&si);
+
+    return si.dwNumberOfProcessors;
 }
 
 bool wxThread::SetConcurrency(size_t level)
 {
+    wxASSERT_MSG( IsMain(), _T("should only be called from the main thread") );
+
     // ok only for the default one
-    return level == 0;
+    if ( level == 0 )
+        return 0;
+
+    // get system affinity mask first
+    HANDLE hProcess = ::GetCurrentProcess();
+    DWORD dwProcMask, dwSysMask;
+    if ( ::GetProcessAffinityMask(hProcess, &dwProcMask, &dwSysMask) == 0 )
+    {
+        wxLogLastError(_T("GetProcessAffinityMask"));
+
+        return FALSE;
+    }
+
+    // how many CPUs have we got?
+    if ( dwSysMask == 1 )
+    {
+        // don't bother with all this complicated stuff - on a single
+        // processor system it doesn't make much sense anyhow
+        return level == 1;
+    }
+
+    // calculate the process mask: it's a bit vector with one bit per
+    // processor; we want to schedule the process to run on first level
+    // CPUs
+    DWORD bit = 1;
+    while ( bit )
+    {
+        if ( dwSysMask & bit )
+        {
+            // ok, we can set this bit
+            dwProcMask |= bit;
+
+            // another process added
+            if ( !--level )
+            {
+                // and that's enough
+                break;
+            }
+        }
+
+        // next bit
+        bit <<= 1;
+    }
+
+    // could we set all bits?
+    if ( level != 0 )
+    {
+        wxLogDebug(_T("bad level %u in wxThread::SetConcurrency()"), level);
+
+        return FALSE;
+    }
+
+    // set it: we can't link to SetProcessAffinityMask() because it doesn't
+    // exist in Win9x, use RT binding instead
+
+    typedef BOOL (*SETPROCESSAFFINITYMASK)(HANDLE, DWORD *);
+
+    // can use static var because we're always in the main thread here
+    static SETPROCESSAFFINITYMASK pfnSetProcessAffinityMask = NULL;
+
+    if ( !pfnSetProcessAffinityMask )
+    {
+        HMODULE hModKernel = ::LoadLibrary(_T("kernel32"));
+        if ( hModKernel )
+        {
+            pfnSetProcessAffinityMask = (SETPROCESSAFFINITYMASK)
+                ::GetProcAddress(hModKernel, _T("SetProcessAffinityMask"));
+        }
+
+        // we've discovered a MT version of Win9x!
+        wxASSERT_MSG( pfnSetProcessAffinityMask,
+                      _T("this system has several CPUs but no "
+                         "SetProcessAffinityMask function?") );
+    }
+
+    if ( !pfnSetProcessAffinityMask )
+    {
+        // msg given above - do it only once
+        return FALSE;
+    }
+
+    if ( pfnSetProcessAffinityMask(hProcess, &dwProcMask) == 0 )
+    {
+        wxLogLastError(_T("SetProcessAffinityMask"));
+
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 // ctor and dtor
