@@ -104,7 +104,7 @@ static wxWindowMGL* wxGetTopLevelParent(wxWindowMGL *win)
 }
 
 // An easy way to capture screenshots:
-static void wxCaptureScreenshot()
+static void wxCaptureScreenshot(bool activeWindowOnly)
 {
 #ifdef __DOS__
     #define SCREENSHOT_FILENAME _T("sshot%03i.png")
@@ -119,9 +119,15 @@ static void wxCaptureScreenshot()
         screenshot.Printf(SCREENSHOT_FILENAME, screenshot_num++);
     } while ( wxFileExists(screenshot) && screenshot_num < 1000 );
     
-    g_displayDC->savePNGFromDC(screenshot.mb_str(), 0, 0, 
-                               g_displayDC->sizex(), 
-                               g_displayDC->sizey());
+    wxRect r(0, 0, g_displayDC->sizex(), g_displayDC->sizey());
+
+    if ( activeWindowOnly && gs_activeFrame )
+    {
+        r.Intersect(gs_activeFrame->GetRect());
+    }
+    
+    g_displayDC->savePNGFromDC(screenshot.mb_str(), 
+                               r.x, r. y, r.width, r.height);
     
     wxMessageBox(_("Screenshot captured: ") + wxString(screenshot));
 }
@@ -438,7 +444,7 @@ static bool wxHandleSpecialKeys(wxKeyEvent& event)
        )
     #endif
     {
-        wxCaptureScreenshot();
+        wxCaptureScreenshot(event.m_altDown/*only active wnd?*/);
         return TRUE;
     }
 
