@@ -12,13 +12,14 @@
 WXDIR = $(WXWIN)
 
 ZLIB = $(WXDIR)\lib\zlib.lib
+XPMLIB = $(WXDIR)\lib\xpm.lib
 
 !include $(WXDIR)\src\makeb32.env
 
 WXLIBDIR = $(WXDIR)\lib
 WXINC = $(WXDIR)\include\msw
 WXLIB = $(WXLIBDIR)\wx32.lib
-LIBS=$(WXLIB) $(ZLIB) cw32 import32 ole2w32
+LIBS=$(WXLIB) $(ZLIB) $(XPMLIB) cw32 import32 ole2w32
 
 !if "$(FINAL)" == "0"
 LINKFLAGS=/v /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib

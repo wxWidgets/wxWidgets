@@ -47,7 +47,7 @@ $(LIBTARGET):      $(OBJECTS)
 $(OBJECTS) $(PERIPH_LIBS)
 <<
 
-$(XPMDIR)\crbuffri.obj: $(XPMDIR)\attrib.c
+$(XPMDIR)\attrib.obj: $(XPMDIR)\attrib.c
 	 	cl @<<
 $(CPPFLAGS2) /c $*.c /Fo$@
 <<
@@ -82,12 +82,12 @@ $(XPMDIR)\data.obj: $(XPMDIR)\data.c
 $(CPPFLAGS2) /c $*.c /Fo$@
 <<
 
-$(XPMDIR)\data.obj: $(XPMDIR)\image.c
+$(XPMDIR)\image.obj: $(XPMDIR)\image.c
 	 	cl @<<
 $(CPPFLAGS2) /c $*.c /Fo$@
 <<
 
-$(XPMDIR)\data.obj: $(XPMDIR)\info.c
+$(XPMDIR)\info.obj: $(XPMDIR)\info.c
 	 	cl @<<
 $(CPPFLAGS2) /c $*.c /Fo$@
 <<
