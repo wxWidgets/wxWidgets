@@ -724,8 +724,6 @@ wxWindowDestroyEvent::wxWindowDestroyEvent(wxWindow *win)
     SetEventObject(win);
 }
 
-#endif // wxUSE_GUI
-
 void wxIdleEvent::CopyObject(wxObject& obj_d) const
 {
     wxIdleEvent *obj = (wxIdleEvent *)&obj_d;
@@ -739,6 +737,8 @@ wxChildFocusEvent::wxChildFocusEvent(wxWindow *win)
 {
     SetEventObject(win);
 }
+
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // wxEvtHandler
