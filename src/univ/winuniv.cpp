@@ -315,8 +315,6 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
         rectWin.height = size.y;
     }
 
-    wxWindowNative::Refresh(eraseBackground, &rectWin);
-
     // debugging helper
 #ifdef WXDEBUG_REFRESH
     static bool s_refreshDebug = FALSE;
@@ -334,6 +332,8 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
         #endif // __WXMSW__
     }
 #endif // WXDEBUG_REFRESH
+
+    wxWindowNative::Refresh(eraseBackground, &rectWin);
 }
 
 // ----------------------------------------------------------------------------

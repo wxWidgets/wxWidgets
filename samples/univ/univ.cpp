@@ -390,7 +390,21 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                                       wxPoint(10, 40));
 #else
-    wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello,\nMultiverse!"),
+    wxTextCtrl *text = new wxTextCtrl(this, -1,
+"I found that wxInputStream::GetC behaves differently in wxMSW and wxGTK.\n"
+"In wxGTK, the call GetC() blocks the execution of process and returns a\n"
+"valid character value when there is available data. In wxMSW, however,\n"
+"the call GetC() returns immediately and the return value seems to be\n"
+"random.\n"
+"\n"
+"I looked into the source code of MSW to make the behavior correspondent\n"
+"to GTK version of wxWindows. From the inspection, I found that OnSysRead\n"
+"is implemented in non-blocking mode by testing Eof() of the stream\n"
+"before calling ReadFile() function. I commented out the statements and\n"
+"the system behaved just like the GTK version.\n",
+#if 0
+            _T("Hello,\nMultiverse!"),
+#endif
                                       wxPoint(10, 30),
                                       wxSize(200, 150),
                                       wxTE_MULTILINE | wxHSCROLL);
@@ -465,8 +479,12 @@ void MyUnivFrame::OnListBox(wxCommandEvent& event)
 
 void MyUnivFrame::OnTextChange(wxCommandEvent& event)
 {
+#if 0
     wxLogDebug(_T("Text control value changed: now '%s'"),
                event.GetString().c_str());
+#else
+    wxLogDebug(_T("Text control value changed."));
+#endif
 }
 
 void MyUnivFrame::OnLeftUp(wxMouseEvent& event)

@@ -3104,6 +3104,12 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
     if (!m_widget) return;
     if (!m_widget->window) return;
 
+    // temporarily hide the caret to avoid nasty interactions between caret
+    // drawing and the window contents redraw
+#if 0 // def wxUSE_CARET -- doesn't seem to help :-(
+    wxCaretSuspend cs((wxWindow *)this);
+#endif // wxUSE_CARET
+
     if (eraseBackground && m_wxwindow && m_wxwindow->window)
     {
         if (rect)

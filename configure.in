@@ -721,6 +721,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_DATETIME=no
   DEFAULT_wxUSE_STOPWATCH=no
   DEFAULT_wxUSE_FILE=no
+  DEFAULT_wxUSE_FFILE=no
   DEFAULT_wxUSE_TEXTFILE=no
   DEFAULT_wxUSE_TIMEDATE=no
   DEFAULT_wxUSE_WAVE=no
@@ -859,6 +860,7 @@ else
   DEFAULT_wxUSE_DATETIME=yes
   DEFAULT_wxUSE_STOPWATCH=yes
   DEFAULT_wxUSE_FILE=yes
+  DEFAULT_wxUSE_FFILE=yes
   DEFAULT_wxUSE_TEXTFILE=yes
   DEFAULT_wxUSE_TIMEDATE=yes
   DEFAULT_wxUSE_WAVE=no
@@ -1071,6 +1073,7 @@ WX_ARG_ENABLE(longlong,      [  --enable-longlong       use wxLongLong class], w
 WX_ARG_ENABLE(log,           [  --enable-log            use logging system], wxUSE_LOG)
 WX_ARG_ENABLE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
 WX_ARG_ENABLE(file,          [  --enable-file           use wxFile classes], wxUSE_FILE)
+WX_ARG_ENABLE(ffile,         [  --enable-ffile          use wxFFile classes], wxUSE_FFILE)
 WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile classes], wxUSE_TEXTFILE)
 WX_ARG_ENABLE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
 WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
@@ -2999,6 +3002,10 @@ fi
 
 if test "$wxUSE_FILE" = "yes"; then
   AC_DEFINE(wxUSE_FILE)
+fi
+
+if test "$wxUSE_FFILE" = "yes"; then
+  AC_DEFINE(wxUSE_FFILE)
 fi
 
 if test "$wxUSE_FILESYSTEM" = "yes"; then

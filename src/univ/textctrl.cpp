@@ -911,6 +911,16 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
         textTotalNew += textTotal.c_str() + (size_t)to;
 #endif // WXDEBUG_TEXT_REPLACE
 
+    // remember the old selection and reset it immediately: we must do it
+    // before calling Refresh(anything) as, at least under GTK, this leads to
+    // an _immediate_ repaint (under MSW it is delayed) and hence parts of
+    // text would be redrawn as selected if we didn't reset the selection
+    int selStartOld = m_selStart,
+        selEndOld = m_selEnd;
+
+    m_selStart =
+    m_selEnd = -1;
+
     if ( IsSingleLine() )
     {
         // replace the part of the text with the new value
@@ -1187,17 +1197,15 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
     // must be first updated to reflect change in text coords, i.e. if we had
     // selection from 17 to 19 and we just removed this range, we don't have to
     // refresh anything, so we can't just use ClearSelection() here
-    if ( HasSelection() )
+    if ( selStartOld != -1 )
     {
         // refresh the parst of the selection outside the changed text (which
         // we already refreshed)
-        if ( m_selStart < from )
-            RefreshTextRange(m_selStart, from);
-        if ( to < m_selEnd )
-            RefreshTextRange(to, m_selEnd);
+        if ( selStartOld < from )
+            RefreshTextRange(selStartOld, from);
+        if ( to < selEndOld )
+            RefreshTextRange(to, selEndOld);
 
-        m_selStart =
-        m_selEnd = -1;
     }
 
     // now call it to do the rest (not related to refreshing)

@@ -440,6 +440,10 @@
  */
 #define wxUSE_FILE 0
 /*
+ * Use wxFFile class
+ */
+#define wxUSE_FFILE 0
+/*
  * Use wxTextFile class
  */
 #define wxUSE_TEXTFILE 0
