@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        palmos/utils.cpp
+// Name:        src/palmos/utils.cpp
 // Purpose:     Various utilities
-// Author:      William Osborne
-// Modified by:
+// Author:      William Osborne - minimal working wxPalmOS port
+// Modified by: Wlodzimierz ABX Skiba - real functionality
 // Created:     10/13/04
-// RCS-ID:      $Id:
-// Copyright:   (c) William Osborne
+// RCS-ID:      $Id$
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -204,6 +204,7 @@ wxString wxGetOsDescription()
     if(version)
     {
         wxString str = wxString::FromAscii(version);
+        MemPtrFree(version);
         if(!str.empty())
         {
             strOS << _(" ") << str;
