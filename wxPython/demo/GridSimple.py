@@ -33,6 +33,9 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
         self.SetCellEditor(6, 0, wxGridCellFloatEditor())
         self.SetCellValue(6, 0, "123.34")
 
+        self.SetCellValue(6, 3, "You can veto editing this cell")
+
+
         # attribute objects let you keep a set of formatting values
         # in one spot, and reuse them if needed
         attr = wxGridCellAttr()
@@ -168,14 +171,28 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
 
 
     def OnEditorShown(self, evt):
+        if evt.GetRow() == 6 and evt.GetCol() == 3 and \
+           wxMessageBox("Are you sure you wish to edit this cell?",
+                        "Checking", wxYES_NO) == wxNO:
+            evt.Veto()
+            return
+
         self.log.write("OnEditorShown: (%d,%d) %s\n" %
                        (evt.GetRow(), evt.GetCol(), evt.GetPosition()))
         evt.Skip()
 
+
     def OnEditorHidden(self, evt):
+        if evt.GetRow() == 6 and evt.GetCol() == 3 and \
+           wxMessageBox("Are you sure you wish to  finish editing this cell?",
+                        "Checking", wxYES_NO) == wxNO:
+            evt.Veto()
+            return
+
         self.log.write("OnEditorHidden: (%d,%d) %s\n" %
                        (evt.GetRow(), evt.GetCol(), evt.GetPosition()))
         evt.Skip()
+
 
     def OnEditorCreated(self, evt):
         self.log.write("OnEditorCreated: (%d, %d) %s\n" %

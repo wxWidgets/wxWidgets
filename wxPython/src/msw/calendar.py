@@ -35,80 +35,6 @@ def EVT_CALENDAR_WEEKDAY_CLICKED(win, id, fn):
     win.Connect(id, -1, wxEVT_CALENDAR_WEEKDAY_CLICKED, fn)
 
 
-class wxCalendarDateAttrPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def SetTextColour(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_SetTextColour,(self,) + _args, _kwargs)
-        return val
-    def SetBackgroundColour(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_SetBackgroundColour,(self,) + _args, _kwargs)
-        return val
-    def SetBorderColour(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_SetBorderColour,(self,) + _args, _kwargs)
-        return val
-    def SetFont(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_SetFont,(self,) + _args, _kwargs)
-        return val
-    def SetBorder(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_SetBorder,(self,) + _args, _kwargs)
-        return val
-    def SetHoliday(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_SetHoliday,(self,) + _args, _kwargs)
-        return val
-    def HasTextColour(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_HasTextColour,(self,) + _args, _kwargs)
-        return val
-    def HasBackgroundColour(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_HasBackgroundColour,(self,) + _args, _kwargs)
-        return val
-    def HasBorderColour(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_HasBorderColour,(self,) + _args, _kwargs)
-        return val
-    def HasFont(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_HasFont,(self,) + _args, _kwargs)
-        return val
-    def HasBorder(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_HasBorder,(self,) + _args, _kwargs)
-        return val
-    def IsHoliday(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_IsHoliday,(self,) + _args, _kwargs)
-        return val
-    def GetTextColour(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_GetTextColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
-        return val
-    def GetBackgroundColour(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_GetBackgroundColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
-        return val
-    def GetBorderColour(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_GetBorderColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
-        return val
-    def GetFont(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_GetFont,(self,) + _args, _kwargs)
-        if val: val = wxFontPtr(val) 
-        return val
-    def GetBorder(self, *_args, **_kwargs):
-        val = apply(calendarc.wxCalendarDateAttr_GetBorder,(self,) + _args, _kwargs)
-        return val
-    def __repr__(self):
-        return "<C wxCalendarDateAttr instance at %s>" % (self.this,)
-class wxCalendarDateAttr(wxCalendarDateAttrPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(calendarc.new_wxCalendarDateAttr,_args,_kwargs)
-        self.thisown = 1
-
-
-
-def wxCalendarDateAttrBorder(*_args,**_kwargs):
-    val = wxCalendarDateAttrPtr(apply(calendarc.new_wxCalendarDateAttrBorder,_args,_kwargs))
-    val.thisown = 1
-    return val
-
-
 class wxCalendarEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
@@ -143,6 +69,23 @@ class wxCalendarCtrlPtr(wxControlPtr):
     def GetDate(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_GetDate,(self,) + _args, _kwargs)
         if val: val = wxDateTimePtr(val) 
+        return val
+    def SetLowerDateLimit(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_SetLowerDateLimit,(self,) + _args, _kwargs)
+        return val
+    def GetLowerDateLimit(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_GetLowerDateLimit,(self,) + _args, _kwargs)
+        if val: val = wxDateTimePtr(val) 
+        return val
+    def SetUpperDateLimit(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_SetUpperDateLimit,(self,) + _args, _kwargs)
+        return val
+    def GetUpperDateLimit(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_GetUpperDateLimit,(self,) + _args, _kwargs)
+        if val: val = wxDateTimePtr(val) 
+        return val
+    def SetDateRange(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_SetDateRange,(self,) + _args, _kwargs)
         return val
     def EnableYearChange(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_EnableYearChange,(self,) + _args, _kwargs)
@@ -188,7 +131,6 @@ class wxCalendarCtrlPtr(wxControlPtr):
         return val
     def GetAttr(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_GetAttr,(self,) + _args, _kwargs)
-        if val: val = wxCalendarDateAttrPtr(val) 
         return val
     def SetAttr(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_SetAttr,(self,) + _args, _kwargs)
@@ -201,6 +143,12 @@ class wxCalendarCtrlPtr(wxControlPtr):
         return val
     def HitTest(self, *_args, **_kwargs):
         val = apply(calendarc.wxCalendarCtrl_HitTest,(self,) + _args, _kwargs)
+        return val
+    def Enable(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_Enable,(self,) + _args, _kwargs)
+        return val
+    def Show(self, *_args, **_kwargs):
+        val = apply(calendarc.wxCalendarCtrl_Show,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxCalendarCtrl instance at %s>" % (self.this,)
@@ -232,12 +180,11 @@ wxCAL_MONDAY_FIRST = calendarc.wxCAL_MONDAY_FIRST
 wxCAL_SHOW_HOLIDAYS = calendarc.wxCAL_SHOW_HOLIDAYS
 wxCAL_NO_YEAR_CHANGE = calendarc.wxCAL_NO_YEAR_CHANGE
 wxCAL_NO_MONTH_CHANGE = calendarc.wxCAL_NO_MONTH_CHANGE
+wxCAL_SEQUENTIAL_MONTH_SELECTION = calendarc.wxCAL_SEQUENTIAL_MONTH_SELECTION
+wxCAL_SHOW_SURROUNDING_WEEKS = calendarc.wxCAL_SHOW_SURROUNDING_WEEKS
 wxCAL_HITTEST_NOWHERE = calendarc.wxCAL_HITTEST_NOWHERE
 wxCAL_HITTEST_HEADER = calendarc.wxCAL_HITTEST_HEADER
 wxCAL_HITTEST_DAY = calendarc.wxCAL_HITTEST_DAY
-wxCAL_BORDER_NONE = calendarc.wxCAL_BORDER_NONE
-wxCAL_BORDER_SQUARE = calendarc.wxCAL_BORDER_SQUARE
-wxCAL_BORDER_ROUND = calendarc.wxCAL_BORDER_ROUND
 wxEVT_CALENDAR_DOUBLECLICKED = calendarc.wxEVT_CALENDAR_DOUBLECLICKED
 wxEVT_CALENDAR_SEL_CHANGED = calendarc.wxEVT_CALENDAR_SEL_CHANGED
 wxEVT_CALENDAR_DAY_CHANGED = calendarc.wxEVT_CALENDAR_DAY_CHANGED

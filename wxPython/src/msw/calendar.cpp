@@ -93,649 +93,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define new_wxCalendarDateAttr(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxCalendarDateAttr(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
-static PyObject *_wrap_new_wxCalendarDateAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxCalendarDateAttr * _result;
-    wxColour * _arg0;
-    wxColour * _arg1 = (wxColour *) &wxNullColour;
-    wxColour * _arg2 = (wxColour *) &wxNullColour;
-    wxFont * _arg3 = (wxFont *) &wxNullFont;
-    wxCalendarDateBorder  _arg4 = (wxCalendarDateBorder ) (wxCAL_BORDER_NONE);
-    wxColour  temp;
-    PyObject * _obj0 = 0;
-    wxColour  temp0;
-    PyObject * _obj1 = 0;
-    wxColour  temp1;
-    PyObject * _obj2 = 0;
-    PyObject * _argo3 = 0;
-    char *_kwnames[] = { "colText","colBack","colBorder","font","border", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OOOi:new_wxCalendarDateAttr",_kwnames,&_obj0,&_obj1,&_obj2,&_argo3,&_arg4)) 
-        return NULL;
-{
-    _arg0 = &temp;
-    if (! wxColour_helper(_obj0, &_arg0))
-        return NULL;
-}
-    if (_obj1)
-{
-    _arg1 = &temp0;
-    if (! wxColour_helper(_obj1, &_arg1))
-        return NULL;
-}
-    if (_obj2)
-{
-    _arg2 = &temp1;
-    if (! wxColour_helper(_obj2, &_arg2))
-        return NULL;
-}
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxFont_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxCalendarDateAttr. Expected _wxFont_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxCalendarDateAttr *)new_wxCalendarDateAttr(*_arg0,*_arg1,*_arg2,*_arg3,_arg4);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxCalendarDateAttr_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define new_wxCalendarDateAttrBorder(_swigarg0,_swigarg1) (new wxCalendarDateAttr(_swigarg0,_swigarg1))
-static PyObject *_wrap_new_wxCalendarDateAttrBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxCalendarDateAttr * _result;
-    wxCalendarDateBorder  _arg0;
-    wxColour * _arg1 = (wxColour *) &wxNullColour;
-    wxColour  temp;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "border","colBorder", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i|O:new_wxCalendarDateAttrBorder",_kwnames,&_arg0,&_obj1)) 
-        return NULL;
-    if (_obj1)
-{
-    _arg1 = &temp;
-    if (! wxColour_helper(_obj1, &_arg1))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxCalendarDateAttr *)new_wxCalendarDateAttrBorder(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxCalendarDateAttr_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_SetTextColour(_swigobj,_swigarg0)  (_swigobj->SetTextColour(_swigarg0))
-static PyObject *_wrap_wxCalendarDateAttr_SetTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxCalendarDateAttr * _arg0;
-    wxColour * _arg1;
-    PyObject * _argo0 = 0;
-    wxColour  temp;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","colText", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxCalendarDateAttr_SetTextColour",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_SetTextColour. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = &temp;
-    if (! wxColour_helper(_obj1, &_arg1))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxCalendarDateAttr_SetTextColour(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_SetBackgroundColour(_swigobj,_swigarg0)  (_swigobj->SetBackgroundColour(_swigarg0))
-static PyObject *_wrap_wxCalendarDateAttr_SetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxCalendarDateAttr * _arg0;
-    wxColour * _arg1;
-    PyObject * _argo0 = 0;
-    wxColour  temp;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","colBack", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxCalendarDateAttr_SetBackgroundColour",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_SetBackgroundColour. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = &temp;
-    if (! wxColour_helper(_obj1, &_arg1))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxCalendarDateAttr_SetBackgroundColour(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_SetBorderColour(_swigobj,_swigarg0)  (_swigobj->SetBorderColour(_swigarg0))
-static PyObject *_wrap_wxCalendarDateAttr_SetBorderColour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxCalendarDateAttr * _arg0;
-    wxColour * _arg1;
-    PyObject * _argo0 = 0;
-    wxColour  temp;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","col", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxCalendarDateAttr_SetBorderColour",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_SetBorderColour. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = &temp;
-    if (! wxColour_helper(_obj1, &_arg1))
-        return NULL;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxCalendarDateAttr_SetBorderColour(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_SetFont(_swigobj,_swigarg0)  (_swigobj->SetFont(_swigarg0))
-static PyObject *_wrap_wxCalendarDateAttr_SetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxCalendarDateAttr * _arg0;
-    wxFont * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","font", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxCalendarDateAttr_SetFont",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_SetFont. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxCalendarDateAttr_SetFont. Expected _wxFont_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxCalendarDateAttr_SetFont(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_SetBorder(_swigobj,_swigarg0)  (_swigobj->SetBorder(_swigarg0))
-static PyObject *_wrap_wxCalendarDateAttr_SetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxCalendarDateAttr * _arg0;
-    wxCalendarDateBorder  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","border", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxCalendarDateAttr_SetBorder",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_SetBorder. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxCalendarDateAttr_SetBorder(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_SetHoliday(_swigobj,_swigarg0)  (_swigobj->SetHoliday(_swigarg0))
-static PyObject *_wrap_wxCalendarDateAttr_SetHoliday(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxCalendarDateAttr * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","holiday", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxCalendarDateAttr_SetHoliday",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_SetHoliday. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxCalendarDateAttr_SetHoliday(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_HasTextColour(_swigobj)  (_swigobj->HasTextColour())
-static PyObject *_wrap_wxCalendarDateAttr_HasTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxCalendarDateAttr * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarDateAttr_HasTextColour",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_HasTextColour. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxCalendarDateAttr_HasTextColour(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_HasBackgroundColour(_swigobj)  (_swigobj->HasBackgroundColour())
-static PyObject *_wrap_wxCalendarDateAttr_HasBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxCalendarDateAttr * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarDateAttr_HasBackgroundColour",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_HasBackgroundColour. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxCalendarDateAttr_HasBackgroundColour(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_HasBorderColour(_swigobj)  (_swigobj->HasBorderColour())
-static PyObject *_wrap_wxCalendarDateAttr_HasBorderColour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxCalendarDateAttr * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarDateAttr_HasBorderColour",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_HasBorderColour. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxCalendarDateAttr_HasBorderColour(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_HasFont(_swigobj)  (_swigobj->HasFont())
-static PyObject *_wrap_wxCalendarDateAttr_HasFont(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxCalendarDateAttr * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarDateAttr_HasFont",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_HasFont. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxCalendarDateAttr_HasFont(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_HasBorder(_swigobj)  (_swigobj->HasBorder())
-static PyObject *_wrap_wxCalendarDateAttr_HasBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxCalendarDateAttr * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarDateAttr_HasBorder",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_HasBorder. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxCalendarDateAttr_HasBorder(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_IsHoliday(_swigobj)  (_swigobj->IsHoliday())
-static PyObject *_wrap_wxCalendarDateAttr_IsHoliday(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxCalendarDateAttr * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarDateAttr_IsHoliday",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_IsHoliday. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxCalendarDateAttr_IsHoliday(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_GetTextColour(_swigobj)  (_swigobj->GetTextColour())
-static PyObject *_wrap_wxCalendarDateAttr_GetTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxColour * _result;
-    wxCalendarDateAttr * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarDateAttr_GetTextColour",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_GetTextColour. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxCalendarDateAttr_GetTextColour(_arg0);
-    _result = (wxColour *) &_result_ref;
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_GetBackgroundColour(_swigobj)  (_swigobj->GetBackgroundColour())
-static PyObject *_wrap_wxCalendarDateAttr_GetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxColour * _result;
-    wxCalendarDateAttr * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarDateAttr_GetBackgroundColour",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_GetBackgroundColour. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxCalendarDateAttr_GetBackgroundColour(_arg0);
-    _result = (wxColour *) &_result_ref;
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_GetBorderColour(_swigobj)  (_swigobj->GetBorderColour())
-static PyObject *_wrap_wxCalendarDateAttr_GetBorderColour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxColour * _result;
-    wxCalendarDateAttr * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarDateAttr_GetBorderColour",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_GetBorderColour. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxCalendarDateAttr_GetBorderColour(_arg0);
-    _result = (wxColour *) &_result_ref;
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_GetFont(_swigobj)  (_swigobj->GetFont())
-static PyObject *_wrap_wxCalendarDateAttr_GetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxFont * _result;
-    wxCalendarDateAttr * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarDateAttr_GetFont",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_GetFont. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        const wxFont & _result_ref = wxCalendarDateAttr_GetFont(_arg0);
-    _result = (wxFont *) &_result_ref;
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define wxCalendarDateAttr_GetBorder(_swigobj)  (_swigobj->GetBorder())
-static PyObject *_wrap_wxCalendarDateAttr_GetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxCalendarDateBorder  _result;
-    wxCalendarDateAttr * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarDateAttr_GetBorder",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarDateAttr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarDateAttr_GetBorder. Expected _wxCalendarDateAttr_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxCalendarDateBorder )wxCalendarDateAttr_GetBorder(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 static void *SwigwxCalendarEventTowxCommandEvent(void *ptr) {
     wxCalendarEvent *src;
     wxCommandEvent *dest;
@@ -1120,6 +477,198 @@ static PyObject *_wrap_wxCalendarCtrl_GetDate(PyObject *self, PyObject *args, Py
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+    return _resultobj;
+}
+
+#define wxCalendarCtrl_SetLowerDateLimit(_swigobj,_swigarg0)  (_swigobj->SetLowerDateLimit(_swigarg0))
+static PyObject *_wrap_wxCalendarCtrl_SetLowerDateLimit(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCalendarCtrl * _arg0;
+    wxDateTime * _arg1 = (wxDateTime *) &wxDefaultDateTime;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","date", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxCalendarCtrl_SetLowerDateLimit",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarCtrl_SetLowerDateLimit. Expected _wxCalendarCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxCalendarCtrl_SetLowerDateLimit. Expected _wxDateTime_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxCalendarCtrl_SetLowerDateLimit(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxCalendarCtrl_GetLowerDateLimit(_swigobj)  (_swigobj->GetLowerDateLimit())
+static PyObject *_wrap_wxCalendarCtrl_GetLowerDateLimit(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDateTime * _result;
+    wxCalendarCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarCtrl_GetLowerDateLimit",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarCtrl_GetLowerDateLimit. Expected _wxCalendarCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxDateTime & _result_ref = wxCalendarCtrl_GetLowerDateLimit(_arg0);
+    _result = (wxDateTime *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxDateTime_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxCalendarCtrl_SetUpperDateLimit(_swigobj,_swigarg0)  (_swigobj->SetUpperDateLimit(_swigarg0))
+static PyObject *_wrap_wxCalendarCtrl_SetUpperDateLimit(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCalendarCtrl * _arg0;
+    wxDateTime * _arg1 = (wxDateTime *) &wxDefaultDateTime;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","date", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxCalendarCtrl_SetUpperDateLimit",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarCtrl_SetUpperDateLimit. Expected _wxCalendarCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxCalendarCtrl_SetUpperDateLimit. Expected _wxDateTime_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxCalendarCtrl_SetUpperDateLimit(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxCalendarCtrl_GetUpperDateLimit(_swigobj)  (_swigobj->GetUpperDateLimit())
+static PyObject *_wrap_wxCalendarCtrl_GetUpperDateLimit(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDateTime * _result;
+    wxCalendarCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCalendarCtrl_GetUpperDateLimit",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarCtrl_GetUpperDateLimit. Expected _wxCalendarCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxDateTime & _result_ref = wxCalendarCtrl_GetUpperDateLimit(_arg0);
+    _result = (wxDateTime *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxDateTime_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxCalendarCtrl_SetDateRange(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetDateRange(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxCalendarCtrl_SetDateRange(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCalendarCtrl * _arg0;
+    wxDateTime * _arg1 = (wxDateTime *) &wxDefaultDateTime;
+    wxDateTime * _arg2 = (wxDateTime *) &wxDefaultDateTime;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","lowerdate","upperdate", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OO:wxCalendarCtrl_SetDateRange",_kwnames,&_argo0,&_argo1,&_argo2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarCtrl_SetDateRange. Expected _wxCalendarCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxCalendarCtrl_SetDateRange. Expected _wxDateTime_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDateTime_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxCalendarCtrl_SetDateRange. Expected _wxDateTime_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxCalendarCtrl_SetDateRange(_arg0,*_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1699,7 +1248,7 @@ static PyObject *_wrap_wxCalendarCtrl_ResetAttr(PyObject *self, PyObject *args, 
 #define wxCalendarCtrl_HitTest(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->HitTest(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxCalendarCtrl_HitTest(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxCalendarHitTestResult  _result;
+    wxCalendarHitTestResult * _result;
     wxCalendarCtrl * _arg0;
     wxPoint * _arg1;
     wxDateTime * _arg2 = (wxDateTime *) NULL;
@@ -1710,6 +1259,7 @@ static PyObject *_wrap_wxCalendarCtrl_HitTest(PyObject *self, PyObject *args, Py
     PyObject * _argo2 = 0;
     PyObject * _argo3 = 0;
     char *_kwnames[] = { "self","pos","date","wd", NULL };
+    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|OO:wxCalendarCtrl_HitTest",_kwnames,&_argo0,&_obj1,&_argo2,&_argo3)) 
@@ -1742,7 +1292,70 @@ static PyObject *_wrap_wxCalendarCtrl_HitTest(PyObject *self, PyObject *args, Py
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxCalendarHitTestResult )wxCalendarCtrl_HitTest(_arg0,*_arg1,_arg2,_arg3);
+        _result = new wxCalendarHitTestResult (wxCalendarCtrl_HitTest(_arg0,*_arg1,_arg2,_arg3));
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxCalendarHitTestResult_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxCalendarCtrl_Enable(_swigobj,_swigarg0)  (_swigobj->Enable(_swigarg0))
+static PyObject *_wrap_wxCalendarCtrl_Enable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCalendarCtrl * _arg0;
+    bool  _arg1 = (bool ) TRUE;
+    PyObject * _argo0 = 0;
+    int tempbool1 = (int) TRUE;
+    char *_kwnames[] = { "self","enable", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxCalendarCtrl_Enable",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarCtrl_Enable. Expected _wxCalendarCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxCalendarCtrl_Enable(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxCalendarCtrl_Show(_swigobj,_swigarg0)  (_swigobj->Show(_swigarg0))
+static PyObject *_wrap_wxCalendarCtrl_Show(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCalendarCtrl * _arg0;
+    bool  _arg1 = (bool ) TRUE;
+    PyObject * _argo0 = 0;
+    int tempbool1 = (int) TRUE;
+    char *_kwnames[] = { "self","show", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxCalendarCtrl_Show",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarCtrl_Show. Expected _wxCalendarCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxCalendarCtrl_Show(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -1751,6 +1364,8 @@ static PyObject *_wrap_wxCalendarCtrl_HitTest(PyObject *self, PyObject *args, Py
 }
 
 static PyMethodDef calendarcMethods[] = {
+	 { "wxCalendarCtrl_Show", (PyCFunction) _wrap_wxCalendarCtrl_Show, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCalendarCtrl_Enable", (PyCFunction) _wrap_wxCalendarCtrl_Enable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarCtrl_HitTest", (PyCFunction) _wrap_wxCalendarCtrl_HitTest, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarCtrl_ResetAttr", (PyCFunction) _wrap_wxCalendarCtrl_ResetAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarCtrl_SetHoliday", (PyCFunction) _wrap_wxCalendarCtrl_SetHoliday, METH_VARARGS | METH_KEYWORDS },
@@ -1768,6 +1383,11 @@ static PyMethodDef calendarcMethods[] = {
 	 { "wxCalendarCtrl_EnableHolidayDisplay", (PyCFunction) _wrap_wxCalendarCtrl_EnableHolidayDisplay, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarCtrl_EnableMonthChange", (PyCFunction) _wrap_wxCalendarCtrl_EnableMonthChange, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarCtrl_EnableYearChange", (PyCFunction) _wrap_wxCalendarCtrl_EnableYearChange, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCalendarCtrl_SetDateRange", (PyCFunction) _wrap_wxCalendarCtrl_SetDateRange, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCalendarCtrl_GetUpperDateLimit", (PyCFunction) _wrap_wxCalendarCtrl_GetUpperDateLimit, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCalendarCtrl_SetUpperDateLimit", (PyCFunction) _wrap_wxCalendarCtrl_SetUpperDateLimit, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCalendarCtrl_GetLowerDateLimit", (PyCFunction) _wrap_wxCalendarCtrl_GetLowerDateLimit, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCalendarCtrl_SetLowerDateLimit", (PyCFunction) _wrap_wxCalendarCtrl_SetLowerDateLimit, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarCtrl_GetDate", (PyCFunction) _wrap_wxCalendarCtrl_GetDate, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarCtrl_SetDate", (PyCFunction) _wrap_wxCalendarCtrl_SetDate, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarCtrl_Create", (PyCFunction) _wrap_wxCalendarCtrl_Create, METH_VARARGS | METH_KEYWORDS },
@@ -1776,25 +1396,6 @@ static PyMethodDef calendarcMethods[] = {
 	 { "wxCalendarEvent_GetWeekDay", (PyCFunction) _wrap_wxCalendarEvent_GetWeekDay, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarEvent_GetDate", (PyCFunction) _wrap_wxCalendarEvent_GetDate, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxCalendarEvent", (PyCFunction) _wrap_new_wxCalendarEvent, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_GetBorder", (PyCFunction) _wrap_wxCalendarDateAttr_GetBorder, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_GetFont", (PyCFunction) _wrap_wxCalendarDateAttr_GetFont, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_GetBorderColour", (PyCFunction) _wrap_wxCalendarDateAttr_GetBorderColour, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_GetBackgroundColour", (PyCFunction) _wrap_wxCalendarDateAttr_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_GetTextColour", (PyCFunction) _wrap_wxCalendarDateAttr_GetTextColour, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_IsHoliday", (PyCFunction) _wrap_wxCalendarDateAttr_IsHoliday, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_HasBorder", (PyCFunction) _wrap_wxCalendarDateAttr_HasBorder, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_HasFont", (PyCFunction) _wrap_wxCalendarDateAttr_HasFont, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_HasBorderColour", (PyCFunction) _wrap_wxCalendarDateAttr_HasBorderColour, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_HasBackgroundColour", (PyCFunction) _wrap_wxCalendarDateAttr_HasBackgroundColour, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_HasTextColour", (PyCFunction) _wrap_wxCalendarDateAttr_HasTextColour, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_SetHoliday", (PyCFunction) _wrap_wxCalendarDateAttr_SetHoliday, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_SetBorder", (PyCFunction) _wrap_wxCalendarDateAttr_SetBorder, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_SetFont", (PyCFunction) _wrap_wxCalendarDateAttr_SetFont, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_SetBorderColour", (PyCFunction) _wrap_wxCalendarDateAttr_SetBorderColour, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_SetBackgroundColour", (PyCFunction) _wrap_wxCalendarDateAttr_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCalendarDateAttr_SetTextColour", (PyCFunction) _wrap_wxCalendarDateAttr_SetTextColour, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxCalendarDateAttrBorder", (PyCFunction) _wrap_new_wxCalendarDateAttrBorder, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxCalendarDateAttr", (PyCFunction) _wrap_new_wxCalendarDateAttr, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus
@@ -1927,12 +1528,11 @@ SWIGEXPORT(void) initcalendarc() {
 	 PyDict_SetItemString(d,"wxCAL_SHOW_HOLIDAYS", PyInt_FromLong((long) wxCAL_SHOW_HOLIDAYS));
 	 PyDict_SetItemString(d,"wxCAL_NO_YEAR_CHANGE", PyInt_FromLong((long) wxCAL_NO_YEAR_CHANGE));
 	 PyDict_SetItemString(d,"wxCAL_NO_MONTH_CHANGE", PyInt_FromLong((long) wxCAL_NO_MONTH_CHANGE));
+	 PyDict_SetItemString(d,"wxCAL_SEQUENTIAL_MONTH_SELECTION", PyInt_FromLong((long) wxCAL_SEQUENTIAL_MONTH_SELECTION));
+	 PyDict_SetItemString(d,"wxCAL_SHOW_SURROUNDING_WEEKS", PyInt_FromLong((long) wxCAL_SHOW_SURROUNDING_WEEKS));
 	 PyDict_SetItemString(d,"wxCAL_HITTEST_NOWHERE", PyInt_FromLong((long) wxCAL_HITTEST_NOWHERE));
 	 PyDict_SetItemString(d,"wxCAL_HITTEST_HEADER", PyInt_FromLong((long) wxCAL_HITTEST_HEADER));
 	 PyDict_SetItemString(d,"wxCAL_HITTEST_DAY", PyInt_FromLong((long) wxCAL_HITTEST_DAY));
-	 PyDict_SetItemString(d,"wxCAL_BORDER_NONE", PyInt_FromLong((long) wxCAL_BORDER_NONE));
-	 PyDict_SetItemString(d,"wxCAL_BORDER_SQUARE", PyInt_FromLong((long) wxCAL_BORDER_SQUARE));
-	 PyDict_SetItemString(d,"wxCAL_BORDER_ROUND", PyInt_FromLong((long) wxCAL_BORDER_ROUND));
 	 PyDict_SetItemString(d,"wxEVT_CALENDAR_DOUBLECLICKED", PyInt_FromLong((long) wxEVT_CALENDAR_DOUBLECLICKED));
 	 PyDict_SetItemString(d,"wxEVT_CALENDAR_SEL_CHANGED", PyInt_FromLong((long) wxEVT_CALENDAR_SEL_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_CALENDAR_DAY_CHANGED", PyInt_FromLong((long) wxEVT_CALENDAR_DAY_CHANGED));

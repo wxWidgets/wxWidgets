@@ -41,6 +41,8 @@ enum {
     wxCAL_SHOW_HOLIDAYS,
     wxCAL_NO_YEAR_CHANGE,
     wxCAL_NO_MONTH_CHANGE,
+    wxCAL_SEQUENTIAL_MONTH_SELECTION,
+    wxCAL_SHOW_SURROUNDING_WEEKS,
 };
 
 
@@ -49,6 +51,9 @@ enum wxCalendarHitTestResult
     wxCAL_HITTEST_NOWHERE,      // outside of anything
     wxCAL_HITTEST_HEADER,       // on the header (weekdays)
     wxCAL_HITTEST_DAY           // on a day in the calendar
+    wxCAL_HITTEST_INCMONTH,
+    wxCAL_HITTEST_DECMONTH,
+    wxCAL_HITTEST_SURROUNDING_WEEK
 };
 
 // border types for a date
@@ -176,6 +181,18 @@ public:
     void SetDate(const wxDateTime& date);
     const wxDateTime& GetDate() const;
 
+    // set/get the range in which selection can occur
+    // ---------------------------------------------
+
+    bool SetLowerDateLimit(const wxDateTime& date = wxDefaultDateTime);
+    const wxDateTime& GetLowerDateLimit() const;
+    bool SetUpperDateLimit(const wxDateTime& date = wxDefaultDateTime);
+    const wxDateTime& GetUpperDateLimit() const;
+
+    bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
+                      const wxDateTime& upperdate = wxDefaultDateTime);
+
+
     // calendar mode
     // -------------
 
@@ -230,6 +247,10 @@ public:
     wxCalendarHitTestResult HitTest(const wxPoint& pos,
                                     wxDateTime *date = NULL,
                                     wxDateTime::WeekDay *wd = NULL);
+
+
+    bool Enable(bool enable = TRUE);
+    bool Show(bool show = TRUE);
 
 };
 

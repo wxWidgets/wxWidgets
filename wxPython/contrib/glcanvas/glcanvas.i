@@ -94,7 +94,7 @@ public:
 
 
 
-class wxGLCanvas : public wxScrolledWindow {
+class wxGLCanvas : public wxWindow {
 public:
     wxGLCanvas(wxWindow *parent, wxWindowID id = -1,
                const wxPoint& pos = wxDefaultPosition,

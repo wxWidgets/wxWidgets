@@ -19,7 +19,6 @@
 #include <wx/setup.h>
 #undef wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 1
-#if wxUSE_GLCANVAS
 
 #include <wx/palette.h>
 #include <wx/scrolwin.h>
@@ -84,7 +83,7 @@ public:
    wxWindow*        m_window;
 };
 
-class wxGLCanvas: public wxScrolledWindow
+class wxGLCanvas: public wxWindow
 {
    DECLARE_CLASS(wxGLCanvas)
  public:
@@ -152,8 +151,6 @@ private:
 
 
 
-#endif
-    // wxUSE_GLCANVAS
 #endif
     // _WX_GLCANVAS_H_
 
