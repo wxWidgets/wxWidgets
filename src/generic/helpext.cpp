@@ -130,6 +130,7 @@ wxExtHelpController::DisplayHelp(const wxString &relativeURL)
 #else // UNIX
    wxString command;
 
+#ifndef __EMX__
    if(m_BrowserIsNetscape) // try re-loading first
    {
       wxString lockfile;
@@ -155,6 +156,7 @@ wxExtHelpController::DisplayHelp(const wxString &relativeURL)
             return TRUE;
       }
    }
+#endif
    command = m_BrowserName;
    command << wxT(" file://")
            << m_MapFile << WXEXTHELP_SEPARATOR << relativeURL;
