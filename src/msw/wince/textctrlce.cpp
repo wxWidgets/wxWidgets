@@ -167,7 +167,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     WXDWORD msStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
     wxSize sizeText(size), sizeBtn(size);
-    sizeBtn.x = GetBestSpinerSize(IsVertical(style)).x / 2;
+    sizeBtn.x = GetBestSpinnerSize(IsVertical(style)).x / 2;
 
     if ( sizeText.x == wxDefaultCoord )
     {
@@ -1088,7 +1088,7 @@ bool wxTextCtrl::AcceptsFocus() const
 
 void wxTextCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
-    int widthBtn = GetBestSpinerSize(IsVertical(GetWindowStyle())).x / 2;
+    int widthBtn = GetBestSpinnerSize(IsVertical(GetWindowStyle())).x / 2;
     int widthText = width - widthBtn - MARGIN_BETWEEN;
     if ( widthText <= 0 )
     {

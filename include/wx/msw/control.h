@@ -81,7 +81,7 @@ protected:
     // In wxMSW it was only wxSpinCtrl derived from wxSpinButton but in
     // WinCE of Smartphones this happens also for native wxTextCtrl,
     // wxChoice and others.
-    virtual wxSize GetBestSpinerSize(const bool is_vertical) const;
+    virtual wxSize GetBestSpinnerSize(const bool is_vertical) const;
 
     // create the control of the given Windows class: this is typically called
     // from Create() method of the derived class passing its label, pos and

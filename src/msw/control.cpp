@@ -212,7 +212,7 @@ wxSize wxControl::DoGetBestSize() const
 // In wxMSW it was only wxSpinCtrl derived from wxSpinButton but in
 // WinCE of Smartphones this happens also for native wxTextCtrl,
 // wxChoice and others.
-wxSize wxControl::GetBestSpinerSize(const bool is_vertical) const
+wxSize wxControl::GetBestSpinnerSize(const bool is_vertical) const
 {
     // take size according to layout
     wxSize bestSize(

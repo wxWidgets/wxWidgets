@@ -206,7 +206,7 @@ wxSpinButton::~wxSpinButton()
 
 wxSize wxSpinButton::DoGetBestSize() const
 {
-    return GetBestSpinerSize( (GetWindowStyle() & wxSP_VERTICAL) != 0 );
+    return GetBestSpinnerSize( (GetWindowStyle() & wxSP_VERTICAL) != 0 );
 }
 
 // ----------------------------------------------------------------------------

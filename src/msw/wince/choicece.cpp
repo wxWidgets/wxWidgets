@@ -149,7 +149,7 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
     WXDWORD msStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
     wxSize sizeText(size), sizeBtn(size);
-    sizeBtn.x = GetBestSpinerSize(IsVertical(style)).x;
+    sizeBtn.x = GetBestSpinnerSize(IsVertical(style)).x;
 
     if ( sizeText.x == wxDefaultCoord )
     {
@@ -478,7 +478,7 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 
 wxSize wxChoice::DoGetBestSize() const
 {
-    wxSize sizeBtn = GetBestSpinerSize(IsVertical(GetWindowStyle()));
+    wxSize sizeBtn = GetBestSpinnerSize(IsVertical(GetWindowStyle()));
     sizeBtn.x += DEFAULT_ITEM_WIDTH + MARGIN_BETWEEN;
 
     int y;
@@ -501,7 +501,7 @@ wxSize wxChoice::DoGetBestSize() const
 
 void wxChoice::DoMoveWindow(int x, int y, int width, int height)
 {
-    int widthBtn = GetBestSpinerSize(IsVertical(GetWindowStyle())).x;
+    int widthBtn = GetBestSpinnerSize(IsVertical(GetWindowStyle())).x;
     int widthText = width - widthBtn - MARGIN_BETWEEN;
     if ( widthText <= 0 )
     {
