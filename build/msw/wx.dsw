@@ -2,7 +2,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 # WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
 
 ###############################################################################
-Project: "advdll"=wx_advdll.dsp - Package Owner=<4>
+Project: "adv"=wx_adv.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -10,35 +10,11 @@ Package=<5>
 
 Package=<4>
 {{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name coredll
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name basedll
-End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "advlib"=wx_advlib.dsp - Package Owner=<4>
+Project: "base"=wx_base.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -46,29 +22,11 @@ Package=<5>
 
 Package=<4>
 {{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "basedll"=wx_basedll.dsp - Package Owner=<4>
+Project: "core"=wx_core.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -76,29 +34,11 @@ Package=<5>
 
 Package=<4>
 {{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "baselib"=wx_baselib.dsp - Package Owner=<4>
+Project: "dbgrid"=wx_dbgrid.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -106,29 +46,11 @@ Package=<5>
 
 Package=<4>
 {{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "coredll"=wx_coredll.dsp - Package Owner=<4>
+Project: "gl"=wx_gl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -136,32 +58,11 @@ Package=<5>
 
 Package=<4>
 {{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name basedll
-End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "corelib"=wx_corelib.dsp - Package Owner=<4>
+Project: "html"=wx_html.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -169,29 +70,11 @@ Package=<5>
 
 Package=<4>
 {{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "dbgriddll"=wx_dbgriddll.dsp - Package Owner=<4>
+Project: "net"=wx_net.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -199,41 +82,11 @@ Package=<5>
 
 Package=<4>
 {{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name advdll
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name odbcdll
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name coredll
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name basedll
-End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "dbgridlib"=wx_dbgridlib.dsp - Package Owner=<4>
+Project: "odbc"=wx_odbc.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -241,276 +94,6 @@ Package=<5>
 
 Package=<4>
 {{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "gldll"=wx_gldll.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "gllib"=wx_gllib.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "htmldll"=wx_htmldll.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name coredll
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name basedll
-End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "htmllib"=wx_htmllib.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "netdll"=wx_netdll.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name basedll
-End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "netlib"=wx_netlib.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "odbcdll"=wx_odbcdll.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name basedll
-End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "odbclib"=wx_odbclib.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
 }}}
 
 ###############################################################################
@@ -587,7 +170,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "xmldll"=wx_xmldll.dsp - Package Owner=<4>
+Project: "xml"=wx_xml.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -595,57 +178,6 @@ Package=<5>
 
 Package=<4>
 {{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name basedll
-End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "xmllib"=wx_xmllib.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-Begin Project Dependency
-Project_Dep_Name wxtiff
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxjpeg
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxpng
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxexpat
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxzlib
-End Project Dependency
-Begin Project Dependency
-Project_Dep_Name wxregex
-End Project Dependency
 }}}
 
 ###############################################################################
