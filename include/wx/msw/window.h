@@ -394,10 +394,7 @@ public:
     // normally just calls MSWGetBgBrushForChild() on the parent window but may
     // be overridden if the default background brush is not suitable for some
     // reason (e.g. wxStaticBox uses MSWGetSolidBgBrushForChild() instead)
-    virtual WXHBRUSH MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC)
-    {
-        return parent->MSWGetBgBrushForChild(hDC, this);
-    }
+    virtual WXHBRUSH MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC);
 
     // return the background brush to use for this window by quering the parent
     // windows via their MSWGetBgBrushForChild() recursively

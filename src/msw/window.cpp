@@ -4049,6 +4049,11 @@ wxColour wxWindowMSW::MSWGetBgColourForChild(wxWindow * WXUNUSED(child))
     return m_hasBgCol ? GetBackgroundColour() : wxNullColour;
 }
 
+WXHBRUSH wxWindowMSW::MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC)
+{
+    return parent->MSWGetBgBrushForChild(hDC, this);
+}
+
 WXHBRUSH wxWindow::MSWGetBgBrush(WXHDC hDC)
 {
     for ( wxWindow *win = this; win; win = win->GetParent() )
