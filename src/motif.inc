@@ -133,6 +133,7 @@ LIB_CPP_SRC=\
  motif/wave.cpp \
  motif/window.cpp \
 \
+ generic/caret.cpp \
  generic/choicdgg.cpp \
  generic/colrdlgg.cpp \
  generic/dcpsg.cpp \

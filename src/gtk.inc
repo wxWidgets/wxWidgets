@@ -134,6 +134,7 @@ LIB_CPP_SRC=\
 \
  unix/utilsunx.cpp \
 \
+ generic/caret.cpp \
  generic/choicdgg.cpp \
  generic/dcpsg.cpp \
  generic/colrdlgg.cpp \
