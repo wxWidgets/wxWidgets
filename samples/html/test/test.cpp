@@ -55,6 +55,7 @@
       void OnForward(wxCommandEvent& event);
 
    private:
+        wxHtmlWindow *m_Html;
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
    };
@@ -120,8 +121,8 @@
     // Create the main application window
       MyFrame *frame = new MyFrame("wxHtmlWindow testing application",
          wxPoint(50, 50), wxSize(640, 480));
-      MyFrame *frame2 = new MyFrame("wxHtmlWindow testing application",
-         wxPoint(150, 50), wxSize(640, 480));
+      MyFrame *frame2 = new MyFrame("wxHtmlWindow testing application, frame 2",
+         wxPoint(150, 50), wxSize(320, 240));
    
     // Show it and tell the application that it's our main window
     // @@@ what does it do exactly, in fact? is it necessary here?
@@ -140,7 +141,6 @@
 // main frame
 // ----------------------------------------------------------------------------
 
-wxHtmlWindow *html;
 
 // frame constructor
    MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
@@ -152,7 +152,7 @@ wxHtmlWindow *html;
 
       menuFile->Append(Minimal_About, "&Load wxWindows manual page");
       menuFile->AppendSeparator();
-      menuFile->Append(Minimal_Quit, "E&xit");
+      menuFile->Append(Minimal_Quit, "&Close frame");
       menuNav->Append(Minimal_Back, "Go &BACK");
       menuNav->Append(Minimal_Forward, "Go &FORWARD");
 
@@ -168,12 +168,12 @@ wxHtmlWindow *html;
 
       {
       wxConfig *cfg = new wxConfig("wxHtmlTest");
-      html = new wxHtmlWindow(this);
-      html -> SetRelatedFrame(this, "HTML : %s");
-      html -> SetRelatedStatusBar(0);
-      html -> ReadCustomization(cfg);
+      m_Html = new wxHtmlWindow(this);
+      m_Html -> SetRelatedFrame(this, "HTML : %s");
+      m_Html -> SetRelatedStatusBar(0);
+      m_Html -> ReadCustomization(cfg);
       delete cfg;
-      html -> LoadPage("test.htm");
+      m_Html -> LoadPage("test.htm");
       }
    }
 
@@ -185,25 +185,25 @@ wxHtmlWindow *html;
     // TRUE is to force the frame to close
     wxLogDebug("about to save config...");
     wxConfig *cfg = new wxConfig("wxHtmlTest");
-    html -> WriteCustomization(cfg);
+    m_Html -> WriteCustomization(cfg);
     delete cfg;
-      Close(TRUE);
+    Close(TRUE);
    }
 
    void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
    {
-   html -> LoadPage("fft.html");
+     m_Html -> LoadPage("fft.html");
    }
 
 
 
    void MyFrame::OnBack(wxCommandEvent& WXUNUSED(event))
    {
-   if (!html -> HistoryBack()) wxMessageBox("You reached prehistory era!");
+   if (!m_Html -> HistoryBack()) wxMessageBox("You reached prehistory era!");
    }
 
 
    void MyFrame::OnForward(wxCommandEvent& WXUNUSED(event))
    {
-   if (!html -> HistoryForward()) wxMessageBox("No more items in history!");
+   if (!m_Html -> HistoryForward()) wxMessageBox("No more items in history!");
    }
