@@ -6280,8 +6280,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     else
                     {
                         // at the bottom of a column
-                        HideCellEditControl();
-                        SaveEditControlValue();
+                        DisableCellEditControl();
                     }
                 }
                 break;
@@ -6300,8 +6299,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     else
                     {
                         // at left of grid
-                        HideCellEditControl();
-                        SaveEditControlValue();
+                        DisableCellEditControl();
                     }
                 }
                 else
@@ -6313,8 +6311,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     else
                     {
                         // at right of grid
-                        HideCellEditControl();
-                        SaveEditControlValue();
+                        DisableCellEditControl();
                     }
                 }
                 break;
@@ -6463,7 +6460,6 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     if ( m_currentCellCoords != wxGridNoCellCoords )
     {
-        HideCellEditControl();
         DisableCellEditControl();
 
         if ( IsVisible( m_currentCellCoords, FALSE ) )
@@ -9523,6 +9519,10 @@ int  wxGrid::GetRowMinimalAcceptableHeight() const
 void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
 {
     wxClientDC dc(m_gridWin);
+
+    //Cancel editting of cell
+    HideCellEditControl();
+    SaveEditControlValue();
 
     // init both of them to avoid compiler warnings, even if weo nly need one
     int row = -1,
