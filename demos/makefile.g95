@@ -1,8 +1,8 @@
 #
-# File:		makefile.g95
-# Author:	Julian Smart
-# Created:	1997
-# Updated:	
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1997
+# Updated:      
 # Copyright:
 #
 # "%W% %G%"
@@ -20,9 +20,9 @@ THISDIR=$(WXDIR)/demos
 # Please add new sample directories alphabetically to make it easier to
 # keep track.
 all clean:
-	-$(MAKE) -C bombs -f $(MAKEFILE) $@
-	-$(MAKE) -C life -f $(MAKEFILE) $@
-	-$(MAKE) -C forty -f $(MAKEFILE) $@
-	-$(MAKE) -C fractal -f $(MAKEFILE) $@
-	-$(MAKE) -C poem -f $(MAKEFILE) $@
-	-$(MAKE) -C dbbrowse -f $(MAKEFILE) $@
+        -$(MAKE) -C bombs -f $(MAKEFILE) $@
+        -$(MAKE) -C dbbrowse -f $(MAKEFILE) $@
+        -$(MAKE) -C life -f $(MAKEFILE) $@
+        -$(MAKE) -C forty -f $(MAKEFILE) $@
+        -$(MAKE) -C fractal -f $(MAKEFILE) $@
+        -$(MAKE) -C poem -f $(MAKEFILE) $@

@@ -1,9 +1,9 @@
 #
-# File:		makefile.vc
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.vc
+# Author:       Julian Smart
+# Created:      1993
+# Updated:
+# Copyright:    (c) 1993, AIAI, University of Edinburgh
 #
 # "%W% %G%"
 #
@@ -36,6 +36,8 @@ PNGSETUP=
 all:
         cd $(WXDIR)\demos\bombs
         nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\demos\dbbrowse
+        nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\demos\forty
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\demos\fractal
@@ -43,13 +45,13 @@ all:
         cd $(WXDIR)\demos\life
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\demos\poem
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\demos\dbbrowse
         nmake -f makefile.vc FINAL=$(FINAL)
 
 clean:
         cd $(WXDIR)\demos\bombs
         nmake -f makefile.vc clean
+        cd $(WXDIR)\demos\dbbrowse
+        nmake -f makefile.vc clean
         cd $(WXDIR)\demos\forty
         nmake -f makefile.vc clean
         cd $(WXDIR)\demos\fractal
@@ -57,7 +59,5 @@ clean:
         cd $(WXDIR)\demos\life
         nmake -f makefile.vc clean
         cd $(WXDIR)\demos\poem
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\demos\dbbrowse
         nmake -f makefile.vc clean
 
