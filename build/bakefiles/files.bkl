@@ -297,7 +297,6 @@
 <!-- ====================================================================== -->
 
 <set var="GUI_CMN_SRC">
-    src/generic/selstore.cpp
     src/generic/busyinfo.cpp
     src/generic/calctrl.cpp
     src/generic/choicdgg.cpp
@@ -313,8 +312,10 @@
     src/generic/numdlgg.cpp
     src/generic/panelg.cpp
     src/generic/progdlgg.cpp
+    src/generic/renderg.cpp
     src/generic/sashwin.cpp
     src/generic/scrlwing.cpp
+    src/generic/selstore.cpp
     src/generic/spinctlg.cpp
     src/generic/splash.cpp
     src/generic/splitter.cpp
@@ -433,6 +434,7 @@
     wx/listbox.h
     wx/radiobox.h
     wx/radiobut.h
+    wx/renderer.h
     wx/textctrl.h
     wx/slider.h
     wx/gauge.h
@@ -687,6 +689,7 @@
     src/gtk/notebook.cpp
     src/gtk/radiobox.cpp
     src/gtk/radiobut.cpp
+    src/gtk/renderer.cpp
     src/gtk/scrolbar.cpp
     src/gtk/scrolwin.cpp
     src/gtk/slider.cpp
@@ -1092,6 +1095,7 @@
     src/msw/printwin.cpp
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp
+    src/msw/renderer.cpp
     src/msw/scrolbar.cpp
     src/msw/slider95.cpp
     src/msw/spinbutt.cpp
@@ -1487,6 +1491,7 @@
     src/mac/radiobox.cpp
     src/mac/radiobut.cpp
     src/mac/region.cpp
+    src/mac/renderer.cpp
     src/mac/scrolbar.cpp
     src/mac/settings.cpp
     src/mac/slider.cpp
