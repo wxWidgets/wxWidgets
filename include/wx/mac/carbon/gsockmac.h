@@ -97,7 +97,6 @@ public:
 };
 
 /* Compatibility methods to support old C API (from gsocket.h) */
-#ifdef wxUSE_GSOCKET_CPLUSPLUS
 inline void GSocket_Shutdown(GSocket *socket)
 {   socket->Shutdown(); }
 inline GSocketError GSocket_SetLocal(GSocket *socket, GAddress *address)
@@ -144,7 +143,6 @@ inline GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname,
 inline void GSocket_destroy(GSocket *socket)
 {   delete socket; }
 
-#endif /* def wxUSE_GSOCKET_CPLUSPLUS */
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */

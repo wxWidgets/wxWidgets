@@ -593,25 +593,8 @@ GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
     //     so it doesn't need this table at all
     return NULL;
 #else // !__WXMAC__ || __DARWIN__
-#if defined(wxUSE_GSOCKET_CPLUSPLUS)
     static GSocketGUIFunctionsTableConcrete table;
     return &table;
-#else
-    static GSocketGUIFunctionsTable table =
-    {
-        _GSocket_GUI_Init,
-        _GSocket_GUI_Cleanup,
-        _GSocket_GUI_Init_Socket,
-        _GSocket_GUI_Destroy_Socket,
-#ifndef __WINDOWS__
-        _GSocket_Install_Callback,
-        _GSocket_Uninstall_Callback,
-#endif
-        _GSocket_Enable_Events,
-        _GSocket_Disable_Events
-    };
-    return &table;
-#endif // defined(wxUSE_GSOCKET_CPLUSPLUS)
 #endif // !__WXMAC__ || __DARWIN__
 }
 

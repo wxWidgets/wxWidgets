@@ -29,7 +29,6 @@
 #define FALSE 0
 #endif
 
-#ifdef wxUSE_GSOCKET_CPLUSPLUS
 class GSocketGUIFunctionsTableConcrete: public GSocketGUIFunctionsTable
 {
 public:
@@ -43,9 +42,7 @@ public:
     virtual void Enable_Events(GSocket *socket);
     virtual void Disable_Events(GSocket *socket);
 };
-#endif /* def wxUSE_GSOCKET_CPLUSPLUS */
 
-#ifdef wxUSE_GSOCKET_CPLUSPLUS
 class GSocket
 {
 public:
@@ -93,15 +90,6 @@ protected:
 public:
     /* DFE: We can't protect these data member until the GUI code is updated */
     /* protected: */
-#else /* def wxUSE_GSOCKET_CPLUSPLUS */
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-/* Definition of GSocket */
-struct _GSocket
-{
-#endif /* def wxUSE_GSOCKET_CPLUSPLUS */
   int m_fd;
   GAddress *m_local;
   GAddress *m_peer;
@@ -121,16 +109,7 @@ struct _GSocket
 
   char *m_gui_dependent;
 
-#ifndef wxUSE_GSOCKET_CPLUSPLUS
-  /* Function pointers */
-  struct GSocketBaseFunctionsTable *m_functions;
-#endif /* ndef wxUSE_GSOCKET_CPLUSPLUS */
 };
-#ifndef wxUSE_GSOCKET_CPLUSPLUS
-#ifdef __cplusplus
-}
-#endif  /* __cplusplus */
-#endif /* ndef wxUSE_GSOCKET_CPLUSPLUS */
 
 #ifdef __cplusplus
 extern "C" {
@@ -151,7 +130,6 @@ struct _GAddress
 #endif  /* __cplusplus */
 
 /* Compatibility methods to support old C API (from gsocket.h) */
-#ifdef wxUSE_GSOCKET_CPLUSPLUS
 inline void GSocket_Shutdown(GSocket *socket)
 {   socket->Shutdown(); }
 inline GSocketError GSocket_SetLocal(GSocket *socket, GAddress *address)
@@ -198,41 +176,11 @@ inline GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname,
 inline void GSocket_destroy(GSocket *socket)
 {   delete socket; }
 
-#endif /* def wxUSE_GSOCKET_CPLUSPLUS */
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-/* Input / Output */
-
-GSocketError _GSocket_Input_Timeout(GSocket *socket);
-GSocketError _GSocket_Output_Timeout(GSocket *socket);
-int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size);
-int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size);
-int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size);
-int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size);
-
-/* Callbacks */
-
-int  _GSocket_GUI_Init(void);
-void _GSocket_GUI_Cleanup(void);
-
-int  _GSocket_GUI_Init_Socket(GSocket *socket);
-void _GSocket_GUI_Destroy_Socket(GSocket *socket);
-
-void _GSocket_Enable_Events(GSocket *socket);
-void _GSocket_Disable_Events(GSocket *socket);
-void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event);
-void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event);
-
-void _GSocket_Enable(GSocket *socket, GSocketEvent event);
-void _GSocket_Disable(GSocket *socket, GSocketEvent event);
-
-#ifndef wxUSE_GSOCKET_CPLUSPLUS
-void _GSocket_Detected_Read(GSocket *socket);
-void _GSocket_Detected_Write(GSocket *socket);
-#endif /* ndef wxUSE_GSOCKET_CPLUSPLUS */
 
 /* GAddress */
 
