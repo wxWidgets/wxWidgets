@@ -498,8 +498,7 @@ static PyObject *_wrap_wxTopLevelWindow_SetIcon(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTopLevelWindow_SetIcon. Expected _wxIcon_p.");
         return NULL;
         }
@@ -535,8 +534,7 @@ static PyObject *_wrap_wxTopLevelWindow_SetIcons(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIconBundle_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIconBundle_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTopLevelWindow_SetIcons. Expected _wxIconBundle_p.");
         return NULL;
         }
@@ -2285,8 +2283,7 @@ static PyObject *_wrap_new_wxSplashScreenWindow(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOl:new_wxSplashScreenWindow",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxSplashScreenWindow. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -2346,8 +2343,7 @@ static PyObject *_wrap_wxSplashScreenWindow_SetBitmap(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSplashScreenWindow_SetBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -2464,8 +2460,7 @@ static PyObject *_wrap_new_wxSplashScreen(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OliOi|OOl:new_wxSplashScreen",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_arg4,&_obj5,&_obj6,&_arg7)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxSplashScreen. Expected _wxBitmap_p.");
         return NULL;
         }

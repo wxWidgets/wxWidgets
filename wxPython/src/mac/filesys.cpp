@@ -170,8 +170,7 @@ static PyObject *_wrap___wxMemoryFSHandler_AddFile_wxImage(PyObject *self, PyObj
         return NULL;
 }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxImage_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxImage_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of __wxMemoryFSHandler_AddFile_wxImage. Expected _wxImage_p.");
         return NULL;
         }
@@ -209,8 +208,7 @@ static PyObject *_wrap___wxMemoryFSHandler_AddFile_wxBitmap(PyObject *self, PyOb
         return NULL;
 }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of __wxMemoryFSHandler_AddFile_wxBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -681,8 +679,7 @@ static PyObject *_wrap_wxFileSystemHandler_OpenFile(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileSystem_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileSystem_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileSystemHandler_OpenFile. Expected _wxFileSystem_p.");
         return NULL;
         }
@@ -1419,8 +1416,7 @@ static PyObject *_wrap_wxInternetFSHandler_OpenFile(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileSystem_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileSystem_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxInternetFSHandler_OpenFile. Expected _wxFileSystem_p.");
         return NULL;
         }
@@ -1548,8 +1544,7 @@ static PyObject *_wrap_wxZipFSHandler_OpenFile(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileSystem_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileSystem_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxZipFSHandler_OpenFile. Expected _wxFileSystem_p.");
         return NULL;
         }
@@ -1792,8 +1787,7 @@ static PyObject *_wrap_wxMemoryFSHandler_OpenFile(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileSystem_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFileSystem_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMemoryFSHandler_OpenFile. Expected _wxFileSystem_p.");
         return NULL;
         }

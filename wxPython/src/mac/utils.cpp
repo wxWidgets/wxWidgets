@@ -4389,8 +4389,7 @@ static PyObject *_wrap_wxDateTime_IsEqualTo(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_IsEqualTo. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -4426,8 +4425,7 @@ static PyObject *_wrap_wxDateTime_IsEarlierThan(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_IsEarlierThan. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -4463,8 +4461,7 @@ static PyObject *_wrap_wxDateTime_IsLaterThan(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_IsLaterThan. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -4502,15 +4499,13 @@ static PyObject *_wrap_wxDateTime_IsStrictlyBetween(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_IsStrictlyBetween. Expected _wxDateTime_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxDateTime_IsStrictlyBetween. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -4548,15 +4543,13 @@ static PyObject *_wrap_wxDateTime_IsBetween(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_IsBetween. Expected _wxDateTime_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxDateTime_IsBetween. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -4592,8 +4585,7 @@ static PyObject *_wrap_wxDateTime_IsSameDate(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_IsSameDate. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -4629,8 +4621,7 @@ static PyObject *_wrap_wxDateTime_IsSameTime(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_IsSameTime. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -4668,15 +4659,13 @@ static PyObject *_wrap_wxDateTime_IsEqualUpTo(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_IsEqualUpTo. Expected _wxDateTime_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxTimeSpan_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxTimeSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxDateTime_IsEqualUpTo. Expected _wxTimeSpan_p.");
         return NULL;
         }
@@ -4713,8 +4702,7 @@ static PyObject *_wrap_wxDateTime_AddTS(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_AddTS. Expected _wxTimeSpan_p.");
         return NULL;
         }
@@ -4758,8 +4746,7 @@ static PyObject *_wrap_wxDateTime_AddDS(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_AddDS. Expected _wxDateSpan_p.");
         return NULL;
         }
@@ -4803,8 +4790,7 @@ static PyObject *_wrap_wxDateTime_SubtractTS(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_SubtractTS. Expected _wxTimeSpan_p.");
         return NULL;
         }
@@ -4848,8 +4834,7 @@ static PyObject *_wrap_wxDateTime_SubtractDS(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_SubtractDS. Expected _wxDateSpan_p.");
         return NULL;
         }
@@ -4893,8 +4878,7 @@ static PyObject *_wrap_wxDateTime_Subtract(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime_Subtract. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -4932,8 +4916,7 @@ static PyObject *_wrap_wxDateTime___add__TS(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime___add__TS. Expected _wxTimeSpan_p.");
         return NULL;
         }
@@ -4971,8 +4954,7 @@ static PyObject *_wrap_wxDateTime___add__DS(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime___add__DS. Expected _wxDateSpan_p.");
         return NULL;
         }
@@ -5010,8 +4992,7 @@ static PyObject *_wrap_wxDateTime___sub__DT(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime___sub__DT. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -5049,8 +5030,7 @@ static PyObject *_wrap_wxDateTime___sub__TS(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime___sub__TS. Expected _wxTimeSpan_p.");
         return NULL;
         }
@@ -5088,8 +5068,7 @@ static PyObject *_wrap_wxDateTime___sub__DS(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateTime___sub__DS. Expected _wxDateSpan_p.");
         return NULL;
         }
@@ -5234,8 +5213,7 @@ static PyObject *_wrap_wxDateTime_ParseFormat(PyObject *self, PyObject *args, Py
         return NULL;
 }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxDateTime_ParseFormat. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -5884,8 +5862,7 @@ static PyObject *_wrap_wxTimeSpan_Add(PyObject *self, PyObject *args, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTimeSpan_Add. Expected _wxTimeSpan_p.");
         return NULL;
         }
@@ -5929,8 +5906,7 @@ static PyObject *_wrap_wxTimeSpan_Subtract(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTimeSpan_Subtract. Expected _wxTimeSpan_p.");
         return NULL;
         }
@@ -6077,8 +6053,7 @@ static PyObject *_wrap_wxTimeSpan___add__(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTimeSpan___add__. Expected _wxTimeSpan_p.");
         return NULL;
         }
@@ -6116,8 +6091,7 @@ static PyObject *_wrap_wxTimeSpan___sub__(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTimeSpan___sub__. Expected _wxTimeSpan_p.");
         return NULL;
         }
@@ -6372,8 +6346,7 @@ static PyObject *_wrap_wxTimeSpan_IsEqualTo(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTimeSpan_IsEqualTo. Expected _wxTimeSpan_p.");
         return NULL;
         }
@@ -6409,8 +6382,7 @@ static PyObject *_wrap_wxTimeSpan_IsLongerThan(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTimeSpan_IsLongerThan. Expected _wxTimeSpan_p.");
         return NULL;
         }
@@ -6446,8 +6418,7 @@ static PyObject *_wrap_wxTimeSpan_IsShorterThan(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTimeSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTimeSpan_IsShorterThan. Expected _wxTimeSpan_p.");
         return NULL;
         }
@@ -7233,8 +7204,7 @@ static PyObject *_wrap_wxDateSpan_Add(PyObject *self, PyObject *args, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateSpan_Add. Expected _wxDateSpan_p.");
         return NULL;
         }
@@ -7278,8 +7248,7 @@ static PyObject *_wrap_wxDateSpan_Subtract(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateSpan_Subtract. Expected _wxDateSpan_p.");
         return NULL;
         }
@@ -7396,8 +7365,7 @@ static PyObject *_wrap_wxDateSpan___add__(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateSpan___add__. Expected _wxDateSpan_p.");
         return NULL;
         }
@@ -7435,8 +7403,7 @@ static PyObject *_wrap_wxDateSpan___sub__(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateSpan_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDateSpan___sub__. Expected _wxDateSpan_p.");
         return NULL;
         }

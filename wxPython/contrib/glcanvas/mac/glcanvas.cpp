@@ -335,8 +335,7 @@ static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args, PyObject *
     }
 }
     if (_argo7) {
-        if (_argo7 == Py_None) { _arg7 = NULL; }
-        else if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxPalette_p")) {
+        if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxPalette_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of new_wxGLCanvas. Expected _wxPalette_p.");
         return NULL;
         }
@@ -439,8 +438,7 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
     }
 }
     if (_argo8) {
-        if (_argo8 == Py_None) { _arg8 = NULL; }
-        else if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxPalette_p")) {
+        if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxPalette_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 9 of new_wxGLCanvasWithContext. Expected _wxPalette_p.");
         return NULL;
         }
