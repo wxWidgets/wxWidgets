@@ -30,7 +30,12 @@
 class WXDLLEXPORT wxDocMDIParentFrame: public wxMDIParentFrame
 {
 public:
+    wxDocMDIParentFrame();
     wxDocMDIParentFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id,
+        const wxString& title, const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT("frame"));
+
+    bool Create(wxDocManager *manager, wxFrame *parent, wxWindowID id,
         const wxString& title, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT("frame"));
 
@@ -44,6 +49,7 @@ public:
     void OnCloseWindow(wxCloseEvent& event);
 
 protected:
+    void Init();
     wxDocManager *m_docManager;
 
 private:

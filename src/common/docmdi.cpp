@@ -36,16 +36,33 @@ BEGIN_EVENT_TABLE(wxDocMDIParentFrame, wxMDIParentFrame)
     EVT_CLOSE(wxDocMDIParentFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
-wxDocMDIParentFrame::wxDocMDIParentFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title,
-  const wxPoint& pos, const wxSize& size, long style, const wxString& name):
-  wxMDIParentFrame(frame, id, title, pos, size, style, name)
+wxDocMDIParentFrame::wxDocMDIParentFrame()
 {
-  m_docManager = manager;
+    Init();
+}
+
+wxDocMDIParentFrame::wxDocMDIParentFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title,
+  const wxPoint& pos, const wxSize& size, long style, const wxString& name)
+{
+    Init();
+    Create(manager, frame, id, title, pos, size, style, name);
+}
+
+bool wxDocMDIParentFrame::Create(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title,
+  const wxPoint& pos, const wxSize& size, long style, const wxString& name)
+{
+    m_docManager = manager;
+    return wxMDIParentFrame::Create(frame, id, title, pos, size, style, name);
 }
 
 void wxDocMDIParentFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     Close();
+}
+
+void wxDocMDIParentFrame::Init()
+{
+    m_docManager = NULL;
 }
 
 void wxDocMDIParentFrame::OnMRUFile(wxCommandEvent& event)
@@ -108,11 +125,12 @@ wxDocMDIChildFrame::wxDocMDIChildFrame(wxDocument *doc, wxView *view, wxMDIParen
 bool wxDocMDIChildFrame::Create(wxDocument *doc, wxView *view, wxMDIParentFrame *frame, wxWindowID  id,
   const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
 {
-  m_childDocument = doc;
-  m_childView = view;
-    if (wxMDIChildFrame::Create(frame, id, title, pos, size, style, name)) {
-  if (view)
-    view->SetFrame(this);
+    m_childDocument = doc;
+    m_childView = view;
+    if (wxMDIChildFrame::Create(frame, id, title, pos, size, style, name))
+    {
+        if (view)
+            view->SetFrame(this);
         return TRUE;
     }
 
