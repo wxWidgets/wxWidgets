@@ -28,8 +28,8 @@ THISDIR = $(WXDIR)\src\msw
 
 # Set all these to 1 if you want to build a dynamic library
 !if "$(DLL)" == "1"
-WXMAKINGDLL=1
-WXBUILDDLL=1
+WXMAKINGDLL=0
+WXBUILDDLL=0
 !endif
 
 !include $(WXDIR)\src\makeb32.env
@@ -992,7 +992,6 @@ $(CFG): makefile.b32
 -I$(WXDIR)\include\wx\msw\gnuwin32
 
 -L$(BCCDIR)\lib;$(BCCDIR)\lib\psdk
--D_RTLDLL
 -D__WXWIN__
 -D__WXMSW__
 -D__WINDOWS__

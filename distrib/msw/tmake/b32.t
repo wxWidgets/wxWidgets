@@ -360,7 +360,6 @@ $(CFG): makefile.b32
 -I$(WXDIR)\include\wx\msw\gnuwin32
 
 -L$(BCCDIR)\lib;$(BCCDIR)\lib\psdk
--D_RTLDLL
 -D__WXWIN__
 -D__WXMSW__
 -D__WINDOWS__
