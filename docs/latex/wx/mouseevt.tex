@@ -62,11 +62,13 @@ functions that take a wxMouseEvent argument.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxMouseEvent::m\_altDown}
 
 \member{bool}{m\_altDown}
 
 true if the Alt key is pressed down.
+
 
 \membersection{wxMouseEvent::m\_controlDown}
 
@@ -74,11 +76,13 @@ true if the Alt key is pressed down.
 
 true if control key is pressed down.
 
+
 \membersection{wxMouseEvent::m\_leftDown}
 
 \member{bool}{m\_leftDown}
 
 true if the left mouse button is currently pressed down.
+
 
 \membersection{wxMouseEvent::m\_middleDown}
 
@@ -86,11 +90,13 @@ true if the left mouse button is currently pressed down.
 
 true if the middle mouse button is currently pressed down.
 
+
 \membersection{wxMouseEvent::m\_rightDown}
 
 \member{bool}{m\_rightDown}
 
 true if the right mouse button is currently pressed down.
+
 
 \membersection{wxMouseEvent::m\_metaDown}
 
@@ -98,11 +104,13 @@ true if the right mouse button is currently pressed down.
 
 true if the Meta key is pressed down.
 
+
 \membersection{wxMouseEvent::m\_shiftDown}
 
 \member{bool}{m\_shiftDown}
 
 true if shift is pressed down.
+
 
 \membersection{wxMouseEvent::m\_x}
 
@@ -110,11 +118,13 @@ true if shift is pressed down.
 
 X-coordinate of the event.
 
+
 \membersection{wxMouseEvent::m\_y}
 
 \member{long}{m\_y}
 
 Y-coordinate of the event.
+
 
 \membersection{wxMouseEvent::m\_wheelRotation}
 
@@ -122,11 +132,13 @@ Y-coordinate of the event.
 
 The distance the mouse wheel is rotated.
 
+
 \membersection{wxMouseEvent::m\_wheelDelta}
 
 \member{int}{m\_wheelDelta}
 
 The wheel delta, normally $120$.
+
 
 \membersection{wxMouseEvent::m\_linesPerAction}
 
@@ -134,6 +146,7 @@ The wheel delta, normally $120$.
 
 The configured number of lines (or whatever) to be scrolled per wheel
 action.
+
 
 
 \membersection{wxMouseEvent::wxMouseEvent}
@@ -159,11 +172,13 @@ Constructor. Valid event types are:
 \item {\bf wxEVT\_MOUSEWHEEL}
 \end{itemize}
 
+
 \membersection{wxMouseEvent::AltDown}
 
 \func{bool}{AltDown}{\void}
 
 Returns true if the Alt key was down at the time of the event.
+
 
 \membersection{wxMouseEvent::Button}\label{wxmouseeventbutton}
 
@@ -179,6 +194,7 @@ values of {\it button} are:
 \twocolitem{{\tt wxMOUSE\_BTN\_ANY}}{check if any button was pressed}
 \end{twocollist}
 
+
 \membersection{wxMouseEvent::ButtonDClick}
 
 \func{bool}{ButtonDClick}{\param{int}{ but = wxMOUSE\_BTN\_ANY}}
@@ -188,6 +204,7 @@ double click event. Otherwise the argument specifies which double click event
 was generated (see \helpref{Button}{wxmouseeventbutton} for the possible
 values).
 
+
 \membersection{wxMouseEvent::ButtonDown}
 
 \func{bool}{ButtonDown}{\param{int}{ but = -1}}
@@ -196,6 +213,7 @@ If the argument is omitted, this returns true if the event was a mouse
 button down event. Otherwise the argument specifies which button-down event
 was generated (see \helpref{Button}{wxmouseeventbutton} for the possible
 values).
+
 
 
 \membersection{wxMouseEvent::ButtonUp}
@@ -208,11 +226,13 @@ was generated (see \helpref{Button}{wxmouseeventbutton} for the possible
 values).
 
 
+
 \membersection{wxMouseEvent::ControlDown}
 
 \func{bool}{ControlDown}{\void}
 
 Returns true if the control key was down at the time of the event.
+
 
 \membersection{wxMouseEvent::Dragging}\label{wxmouseeventdragging}
 
@@ -224,6 +244,7 @@ Returns true if this was a dragging event (motion while a button is depressed).
 
 \helpref{Moving}{wxmouseeventmoving}
 
+
 \membersection{wxMouseEvent::Entering}\label{wxmouseevententering}
 
 \func{bool}{Entering}{\void}
@@ -231,6 +252,7 @@ Returns true if this was a dragging event (motion while a button is depressed).
 Returns true if the mouse was entering the window.
 
 See also \helpref{wxMouseEvent::Leaving}{wxmouseeventleaving}.
+
 
 \membersection{wxMouseEvent::GetButton}\label{wxmouseeventgetbutton}
 
@@ -241,6 +263,7 @@ if no button is involved (for mouse move, enter or leave event, for example).
 Otherwise {\tt wxMOUSE\_BTN\_LEFT} is returned for the left button down, up and
 double click events, {\tt wxMOUSE\_BTN\_MIDDLE} and {\tt wxMOUSE\_BTN\_RIGHT} 
 for the same events for the middle and the right buttons respectively.
+
 
 \membersection{wxMouseEvent::GetPosition}\label{wxmouseeventgetposition}
 
@@ -254,6 +277,7 @@ Sets *x and *y to the position at which the event occurred.
 
 Returns the physical mouse position in pixels.
 
+
 \membersection{wxMouseEvent::GetLogicalPosition}\label{wxmouseeventgetlogicalposition}
 
 \constfunc{wxPoint}{GetLogicalPosition}{\param{const wxDC\&}{ dc}}
@@ -262,12 +286,14 @@ Returns the logical mouse position in pixels (i.e. translated according to the
 translation set for the DC, which usually indicates that the window has been scrolled).
 
 
+
 \membersection{wxMouseEvent::GetLinesPerAction}\label{wxmouseeventgetlinesperaction}
 
 \constfunc{int}{GetLinesPerAction}{\void}
 
 Returns the configured number of lines (or whatever) to be scrolled per
 wheel action.  Defaults to three.
+
 
 \membersection{wxMouseEvent::GetWheelRotation}\label{wxmouseeventgetwheelrotation}
 
@@ -281,6 +307,7 @@ event is equal to 1 line or whatever, but you should be able to either
 do partial line scrolling or wait until +/-WheelDelta rotation values
 have been accumulated before scrolling.
 
+
 \membersection{wxMouseEvent::GetWheelDelta}\label{wxmouseeventgetwheeldelta}
 
 \constfunc{int}{GetWheelDelta}{\void}
@@ -289,17 +316,20 @@ Get wheel delta, normally $120$.  This is the threshold for action to be
 taken, and one such action (for example, scrolling one increment)
 should occur for each delta.
 
+
 \membersection{wxMouseEvent::GetX}\label{wxmouseeventgetx}
 
 \constfunc{long}{GetX}{\void}
 
 Returns X coordinate of the physical mouse event position.
 
+
 \membersection{wxMouseEvent::GetY}\label{wxmouseeventgety}
 
 \func{long}{GetY}{\void}
 
 Returns Y coordinate of the physical mouse event position.
+
 
 \membersection{wxMouseEvent::IsButton}
 
@@ -308,12 +338,14 @@ Returns Y coordinate of the physical mouse event position.
 Returns true if the event was a mouse button event (not necessarily a button down event -
 that may be tested using {\it ButtonDown}).
 
+
 \membersection{wxMouseEvent::IsPageScroll}
 
 \constfunc{bool}{IsPageScroll}{\void}
 
 Returns true if the system has been setup to do page scrolling with
 the mouse wheel instead of line scrolling.
+
 
 \membersection{wxMouseEvent::Leaving}\label{wxmouseeventleaving}
 
@@ -323,17 +355,20 @@ Returns true if the mouse was leaving the window.
 
 See also \helpref{wxMouseEvent::Entering}{wxmouseevententering}.
 
+
 \membersection{wxMouseEvent::LeftDClick}
 
 \constfunc{bool}{LeftDClick}{\void}
 
 Returns true if the event was a left double click.
 
+
 \membersection{wxMouseEvent::LeftDown}\label{wxmouseeventleftdown}
 
 \constfunc{bool}{LeftDown}{\void}
 
 Returns true if the left mouse button changed to down.
+
 
 \membersection{wxMouseEvent::LeftIsDown}\label{wxmouseeventleftisdown}
 
@@ -350,11 +385,13 @@ before the event happened.
 This event is usually used in the mouse event handlers which process "move
 mouse" messages to determine whether the user is (still) dragging the mouse.
 
+
 \membersection{wxMouseEvent::LeftUp}
 
 \constfunc{bool}{LeftUp}{\void}
 
 Returns true if the left mouse button changed to up.
+
 
 \membersection{wxMouseEvent::MetaDown}
 
@@ -362,17 +399,20 @@ Returns true if the left mouse button changed to up.
 
 Returns true if the Meta key was down at the time of the event.
 
+
 \membersection{wxMouseEvent::MiddleDClick}
 
 \constfunc{bool}{MiddleDClick}{\void}
 
 Returns true if the event was a middle double click.
 
+
 \membersection{wxMouseEvent::MiddleDown}
 
 \constfunc{bool}{MiddleDown}{\void}
 
 Returns true if the middle mouse button changed to down.
+
 
 \membersection{wxMouseEvent::MiddleIsDown}\label{wxmouseeventmiddleisdown}
 
@@ -381,19 +421,22 @@ Returns true if the middle mouse button changed to down.
 Returns true if the middle mouse button is currently down, independent
 of the current event type.
 
+
 \membersection{wxMouseEvent::MiddleUp}
 
 \constfunc{bool}{MiddleUp}{\void}
 
 Returns true if the middle mouse button changed to up.
 
+
 \membersection{wxMouseEvent::Moving}\label{wxmouseeventmoving}
 
 \constfunc{bool}{Moving}{\void}
 
-Returns true if this was a motion event (whether some buttons are currently
-pressed or not, use \helpref{Dragging}{wxmouseeventdragging} if you need to
-distinguish between these situations).
+Returns true if this was a motion event and no mouse buttons were pressed. 
+If any mouse button is held pressed, then this method returns \false and 
+\helpref{Dragging}{wxmouseeventdragging} returns \true.
+
 
 \membersection{wxMouseEvent::RightDClick}
 
@@ -401,11 +444,13 @@ distinguish between these situations).
 
 Returns true if the event was a right double click.
 
+
 \membersection{wxMouseEvent::RightDown}
 
 \constfunc{bool}{RightDown}{\void}
 
 Returns true if the right mouse button changed to down.
+
 
 \membersection{wxMouseEvent::RightIsDown}\label{wxmouseeventrightisdown}
 
@@ -414,11 +459,13 @@ Returns true if the right mouse button changed to down.
 Returns true if the right mouse button is currently down, independent
 of the current event type.
 
+
 \membersection{wxMouseEvent::RightUp}
 
 \constfunc{bool}{RightUp}{\void}
 
 Returns true if the right mouse button changed to up.
+
 
 \membersection{wxMouseEvent::ShiftDown}
 
