@@ -332,14 +332,6 @@ WXDLLEXPORT wxAcceleratorEntry *wxGetAccelFromString(const wxString& label);
 // Window search
 // ----------------------------------------------------------------------------
 
-// Find the window/widget with the given title or label.
-// Pass a parent to begin the search from, or NULL to look through
-// all windows.
-WXDLLEXPORT wxWindow* wxFindWindowByLabel(const wxString& title, wxWindow *parent = (wxWindow *) NULL);
-
-// Find window by name, and if that fails, by label.
-WXDLLEXPORT wxWindow* wxFindWindowByName(const wxString& name, wxWindow *parent = (wxWindow *) NULL);
-
 // Returns menu item id or -1 if none.
 WXDLLEXPORT int wxFindMenuItemId(wxFrame *frame, const wxString& menuString, const wxString& itemString);
 
@@ -347,6 +339,18 @@ WXDLLEXPORT int wxFindMenuItemId(wxFrame *frame, const wxString& menuString, con
 // is always present but may be less reliable than a native version.
 WXDLLEXPORT wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt);
 WXDLLEXPORT wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
+
+// NB: this function is obsolete, use wxWindow::FindWindowByLabel() instead
+//
+// Find the window/widget with the given title or label.
+// Pass a parent to begin the search from, or NULL to look through
+// all windows.
+WXDLLEXPORT wxWindow* wxFindWindowByLabel(const wxString& title, wxWindow *parent = (wxWindow *) NULL);
+
+// NB: this function is obsolete, use wxWindow::FindWindowByName() instead
+//
+// Find window by name, and if that fails, by label.
+WXDLLEXPORT wxWindow* wxFindWindowByName(const wxString& name, wxWindow *parent = (wxWindow *) NULL);
 
 // ----------------------------------------------------------------------------
 // Message/event queue helpers

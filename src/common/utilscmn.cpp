@@ -102,11 +102,6 @@
 // function protoypes
 // ----------------------------------------------------------------------------
 
-#if wxUSE_GUI
-    static wxWindow *wxFindWindowByLabel1(const wxString& title, wxWindow *parent);
-    static wxWindow *wxFindWindowByName1 (const wxString& title, wxWindow *parent);
-#endif // wxUSE_GUI
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -491,52 +486,9 @@ wxString wxStripMenuCodes(const wxString& in)
 wxWindow *
 wxFindWindowByLabel (const wxString& title, wxWindow * parent)
 {
-    if (parent)
-    {
-        return wxFindWindowByLabel1(title, parent);
-    }
-    else
-    {
-        for ( wxWindowList::Node * node = wxTopLevelWindows.GetFirst();
-              node;
-              node = node->GetNext() )
-        {
-            wxWindow *win = node->GetData();
-            wxWindow *retwin = wxFindWindowByLabel1 (title, win);
-            if (retwin)
-                return retwin;
-        }                        // for()
-
-    }
-    return (wxWindow *) NULL;
+    return wxWindow::FindWindowByLabel( title, parent );
 }
 
-// Recursive
-static wxWindow *
-wxFindWindowByLabel1 (const wxString& title, wxWindow * parent)
-{
-    if (parent)
-    {
-        if (parent->GetLabel() == title)
-            return parent;
-    }
-
-    if (parent)
-    {
-        for ( wxWindowList::Node * node = parent->GetChildren().GetFirst();
-              node;
-              node = node->GetNext() )
-        {
-            wxWindow *win = (wxWindow *)node->GetData();
-            wxWindow *retwin = wxFindWindowByLabel1 (title, win);
-            if (retwin)
-                return retwin;
-        }
-
-    }
-
-    return (wxWindow *) NULL;                        // Not found
-}
 
 /*
  * If parent is non-NULL, look through children for a name
@@ -545,54 +497,9 @@ wxFindWindowByLabel1 (const wxString& title, wxWindow * parent)
  */
 
 wxWindow *
-wxFindWindowByName (const wxString& title, wxWindow * parent)
+wxFindWindowByName (const wxString& name, wxWindow * parent)
 {
-    if (parent)
-    {
-        return wxFindWindowByName1 (title, parent);
-    }
-    else
-    {
-        for ( wxWindowList::Node * node = wxTopLevelWindows.GetFirst();
-              node;
-              node = node->GetNext() )
-        {
-            wxWindow *win = node->GetData();
-            wxWindow *retwin = wxFindWindowByName1 (title, win);
-            if (retwin)
-                return retwin;
-        }
-
-    }
-
-    // Failed? Try by label instead.
-    return wxFindWindowByLabel(title, parent);
-}
-
-// Recursive
-static wxWindow *
-wxFindWindowByName1 (const wxString& title, wxWindow * parent)
-{
-  if (parent)
-    {
-            if ( parent->GetName() == title )
-                        return parent;
-    }
-
-  if (parent)
-    {
-      for (wxNode * node = parent->GetChildren().First (); node; node = node->Next ())
-        {
-          wxWindow *win = (wxWindow *) node->Data ();
-          wxWindow *retwin = wxFindWindowByName1 (title, win);
-          if (retwin)
-            return retwin;
-        }                        // for()
-
-    }
-
-  return (wxWindow *) NULL;                        // Not found
-
+    return wxWindow::FindWindowByName( name, parent );
 }
 
 // Returns menu item id or -1 if none.

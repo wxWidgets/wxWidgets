@@ -870,7 +870,7 @@ bool wxWindowBase::IsExposed(int x, int y, int w, int h) const
 }
 
 // ----------------------------------------------------------------------------
-// find window by id or name
+// find child window by id or name
 // ----------------------------------------------------------------------------
 
 wxWindow *wxWindowBase::FindWindow( long id )
@@ -903,6 +903,125 @@ wxWindow *wxWindowBase::FindWindow( const wxString& name )
     }
 
     return (wxWindow *)res;
+}
+
+
+// find any window by id or name or label: If parent is non-NULL, look through
+// children for a label or title matching the specified string. If NULL, look
+// through all top-level windows.
+//
+// to avoid duplicating code we reuse the same helper function but with
+// different comparators
+
+typedef bool (*wxFindWindowCmp)(const wxWindow *win,
+                                const wxString& label, long id);
+
+static
+bool wxFindWindowCmpLabels(const wxWindow *win, const wxString& label,
+                           long WXUNUSED(id))
+{
+    return win->GetLabel() == label;
+}
+
+static
+bool wxFindWindowCmpNames(const wxWindow *win, const wxString& label,
+                          long WXUNUSED(id))
+{
+    return win->GetName() == label;
+}
+
+static
+bool wxFindWindowCmpIds(const wxWindow *win, const wxString& WXUNUSED(label),
+                        long id)
+{
+    return win->GetId() == id;
+}
+
+// recursive helper for the FindWindowByXXX() functions
+static
+wxWindow *wxFindWindowRecursively(const wxWindow *parent,
+                                  const wxString& label,
+                                  long id,
+                                  wxFindWindowCmp cmp)
+{
+    if ( parent )
+    {
+        // see if this is the one we're looking for
+        if ( (*cmp)(parent, label, id) )
+            return (wxWindow *)parent;
+
+        // It wasn't, so check all its children
+        for ( wxWindowList::Node * node = parent->GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
+        {
+            // recursively check each child
+            wxWindow *win = (wxWindow *)node->GetData();
+            wxWindow *retwin = wxFindWindowRecursively(win, label, id, cmp);
+            if (retwin)
+                return retwin;
+        }
+    }
+
+    // Not found
+    return NULL;
+}
+
+// helper for FindWindowByXXX()
+static
+wxWindow *wxFindWindowHelper(const wxWindow *parent,
+                             const wxString& label,
+                             long id,
+                             wxFindWindowCmp cmp)
+{
+    if ( parent )
+    {
+        // just check parent and all its children
+        return wxFindWindowRecursively(parent, label, id, cmp);
+    }
+
+    // start at very top of wx's windows
+    for ( wxWindowList::Node * node = wxTopLevelWindows.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        // recursively check each window & its children
+        wxWindow *win = node->GetData();
+        wxWindow *retwin = wxFindWindowRecursively(win, label, id, cmp);
+        if (retwin)
+            return retwin;
+    }
+
+    return NULL;
+}
+
+/* static */
+wxWindow *
+wxWindowBase::FindWindowByLabel(const wxString& title, const wxWindow *parent)
+{
+    return wxFindWindowHelper(parent, title, 0, wxFindWindowCmpLabels);
+}
+
+/* static */
+wxWindow *
+wxWindowBase::FindWindowByName(const wxString& title, const wxWindow *parent)
+{
+    wxWindow *win = wxFindWindowHelper(parent, title, 0, wxFindWindowCmpNames);
+
+    if ( !win )
+    {
+        // fall back to the label
+        win = FindWindowByLabel(title, parent);
+    }
+
+    return win;
+}
+
+/* static */
+wxWindow *
+wxWindowBase::FindWindowById( long id, const wxWindow* parent )
+{
+    return wxFindWindowHelper(parent, _T(""), id, wxFindWindowCmpIds);
 }
 
 // ----------------------------------------------------------------------------

@@ -2160,6 +2160,9 @@ Find a menu item identifier associated with the given frame's menu bar.
 
 \func{wxWindow *}{wxFindWindowByLabel}{\param{const wxString\& }{label}, \param{wxWindow *}{parent=NULL}}
 
+{\bf NB:} This function is obsolete, please use 
+\helpref{wxWindow::FindWindowByLabel}{wxwindowfindwindowbylabel} instead.
+
 Find a window by its label. Depending on the type of window, the label may be a window title
 or panel item label. If {\it parent} is NULL, the search will start from all top-level
 frames and dialog boxes; if non-NULL, the search will be limited to the given window hierarchy.
@@ -2172,6 +2175,9 @@ The search is recursive in both cases.
 \membersection{::wxFindWindowByName}\label{wxfindwindowbyname}
 
 \func{wxWindow *}{wxFindWindowByName}{\param{const wxString\& }{name}, \param{wxWindow *}{parent=NULL}}
+
+{\bf NB:} This function is obsolete, please use 
+\helpref{wxWindow::FindWindowByName}{wxwindowfindwindowbyname} instead.
 
 Find a window by its name (as given in a window constructor or {\bf Create} function call).
 If {\it parent} is NULL, the search will start from all top-level

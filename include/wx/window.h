@@ -423,14 +423,24 @@ public:
         // was changed, FALSE otherwise (error or newParent == oldParent)
     virtual bool Reparent( wxWindowBase *newParent );
 
+        // implementation mostly
+    virtual void AddChild( wxWindowBase *child );
+    virtual void RemoveChild( wxWindowBase *child );
+
+    // looking for windows
+    // -------------------
+
         // find window among the descendants of this one either by id or by
         // name (return NULL if not found)
     wxWindow *FindWindow( long id );
     wxWindow *FindWindow( const wxString& name );
 
-        // implementation mostly
-    virtual void AddChild( wxWindowBase *child );
-    virtual void RemoveChild( wxWindowBase *child );
+        // Find a window among any window (all return NULL if not found)
+    static wxWindow *FindWindowById( long id, const wxWindow *parent = NULL );
+    static wxWindow *FindWindowByName( const wxString& name,
+                                       const wxWindow *parent = NULL );
+    static wxWindow *FindWindowByLabel( const wxString& label,
+                                        const wxWindow *parent = NULL );
 
     // event handler stuff
     // -------------------
