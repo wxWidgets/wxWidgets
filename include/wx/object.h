@@ -204,7 +204,7 @@ class WXDLLEXPORT wxObject
 #endif
 
     // Causes problems for VC++
-#if wxUSE_ARRAY_MEMORY_OPERATORS && !defined(__VISUALC__) &6 !defined( __MWERKS__)
+#if wxUSE_ARRAY_MEMORY_OPERATORS && !defined(__VISUALC__) && !defined( __MWERKS__)
   void * operator new[] (size_t size, char * fileName = NULL, int lineNum = 0);
   void operator delete[] (void * buf);
 #endif
