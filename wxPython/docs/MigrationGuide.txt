@@ -454,7 +454,7 @@ wrappers will figure out what to do.
 behaviour for window items in sizers.  This means that the item's
 GetAdjustedBestSize will be called when calculating layout and the
 return value from that will be used for the minimum size.  Added
-wx.FIXED_SIZE flag for when you would like the old behavior but you
+wx.FIXED_MINSIZE flag for when you would like the old behavior but you
 should only need it when your desired size is smaller than the item's
 GetBestSize().
 
