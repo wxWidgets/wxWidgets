@@ -80,6 +80,7 @@ wxMSW:
 - fixed enhanced metafiles loading from files (Andreas Goebel)
 - wxRadioButtons no longer have to be consecutive in a group
 - fixed spurious selection of combobox text during resize
+- pass correct tool id (and not always -1) to EVT_TOOL_RCLICKED() handler
 
 wxWinCE:
 - Added support for MS Handheld PC 2000. This was done before 2.5.4,

@@ -1211,11 +1211,14 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
         return;
     }
 
-    if (event.RightDown())
+    if ( event.RightDown() )
     {
-        // For now, we don't have an id. Later we could
-        // try finding the tool.
-        OnRightClick((int)-1, event.GetX(), event.GetY());
+        // find the tool under the mouse
+        wxCoord x,y;
+        event.GetPosition(&x, &y);
+
+        wxToolBarToolBase *tool = FindToolForPosition(x, y);
+        OnRightClick(tool ? tool->GetId() : -1, x, y);
     }
     else
     {
