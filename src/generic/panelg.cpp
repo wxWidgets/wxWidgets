@@ -124,9 +124,10 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
-#ifndef __WXMAC__
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
-#endif
+#ifdef __WXMSW__
+    // panels don't have the same colour as normal windows under Windows
+    SetDefaultBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+#endif // __WXMSW__
 
     return true;
 }
