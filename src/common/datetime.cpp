@@ -390,13 +390,17 @@ static wxDateTime::WeekDay GetWeekDayFromName(const wxString& name, int flags)
     return wd;
 }
 
-// scans all digits and returns the resulting number
-static bool GetNumericToken(const wxChar*& p, unsigned long *number)
+// scans all digits (but no more than len) and returns the resulting number
+static bool GetNumericToken(size_t len, const wxChar*& p, unsigned long *number)
 {
+    size_t n = 1;
     wxString s;
     while ( wxIsdigit(*p) )
     {
         s += *p++;
+
+        if ( len && ++n > len )
+            break;
     }
 
     return !!s && s.ToULong(number);
@@ -2466,7 +2470,17 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
         }
 
         // start of a format specification
-        switch ( *++fmt )
+
+        // parse the optional width
+        size_t width = 0;
+        while ( isdigit(*++fmt) )
+        {
+            width *= 10;
+            width += *fmt - _T('0');
+        }
+
+        // then the format itself
+        switch ( *fmt )
         {
             case _T('a'):       // a weekday name
             case _T('A'):
@@ -2539,7 +2553,8 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 break;
 
             case _T('d'):       // day of a month (01-31)
-                if ( !GetNumericToken(input, &num) || (num > 31) || (num < 1) )
+                if ( !GetNumericToken(width, input, &num) ||
+                        (num > 31) || (num < 1) )
                 {
                     // no match
                     return (wxChar *)NULL;
@@ -2552,7 +2567,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 break;
 
             case _T('H'):       // hour in 24h format (00-23)
-                if ( !GetNumericToken(input, &num) || (num > 23) )
+                if ( !GetNumericToken(width, input, &num) || (num > 23) )
                 {
                     // no match
                     return (wxChar *)NULL;
@@ -2563,7 +2578,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 break;
 
             case _T('I'):       // hour in 12h format (01-12)
-                if ( !GetNumericToken(input, &num) || !num || (num > 12) )
+                if ( !GetNumericToken(width, input, &num) || !num || (num > 12) )
                 {
                     // no match
                     return (wxChar *)NULL;
@@ -2575,7 +2590,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 break;
 
             case _T('j'):       // day of the year
-                if ( !GetNumericToken(input, &num) || !num || (num > 366) )
+                if ( !GetNumericToken(width, input, &num) || !num || (num > 366) )
                 {
                     // no match
                     return (wxChar *)NULL;
@@ -2586,7 +2601,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 break;
 
             case _T('m'):       // month as a number (01-12)
-                if ( !GetNumericToken(input, &num) || !num || (num > 12) )
+                if ( !GetNumericToken(width, input, &num) || !num || (num > 12) )
                 {
                     // no match
                     return (wxChar *)NULL;
@@ -2597,7 +2612,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 break;
 
             case _T('M'):       // minute as a decimal number (00-59)
-                if ( !GetNumericToken(input, &num) || (num > 59) )
+                if ( !GetNumericToken(width, input, &num) || (num > 59) )
                 {
                     // no match
                     return (wxChar *)NULL;
@@ -2661,7 +2676,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 }
 
             case _T('S'):       // second as a decimal number (00-61)
-                if ( !GetNumericToken(input, &num) || (num > 61) )
+                if ( !GetNumericToken(width, input, &num) || (num > 61) )
                 {
                     // no match
                     return (wxChar *)NULL;
@@ -2691,7 +2706,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 break;
 
             case _T('w'):       // weekday as a number (0-6), Sunday = 0
-                if ( !GetNumericToken(input, &num) || (wday > 6) )
+                if ( !GetNumericToken(width, input, &num) || (wday > 6) )
                 {
                     // no match
                     return (wxChar *)NULL;
@@ -2820,18 +2835,21 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 break;
 
             case _T('y'):       // year without century (00-99)
-                if ( !GetNumericToken(input, &num) || (num > 99) )
+                if ( !GetNumericToken(width, input, &num) || (num > 99) )
                 {
                     // no match
                     return (wxChar *)NULL;
                 }
 
                 haveYear = TRUE;
-                year = 1900 + (wxDateTime_t)num;
+
+                // TODO should have an option for roll over date instead of
+                //      hard coding it here
+                year = (num > 30 ? 1900 : 2000) + (wxDateTime_t)num;
                 break;
 
             case _T('Y'):       // year with century
-                if ( !GetNumericToken(input, &num) )
+                if ( !GetNumericToken(width, input, &num) )
                 {
                     // no match
                     return (wxChar *)NULL;
