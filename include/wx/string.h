@@ -139,6 +139,8 @@ inline int Stricmp(const char *psz1, const char *psz2)
   return stricmp(psz1, psz2);
 #elif defined(__WATCOMC__)
   return stricmp(psz1, psz2);
+#elif defined(__DJGPP__)
+  return stricmp(psz1, psz2);
 #elif defined(__EMX__)
   return stricmp(psz1, psz2);
 #elif defined(__WXPM__)
