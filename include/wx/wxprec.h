@@ -14,7 +14,7 @@
 
 // check if to use precompiled headers: do it for most Windows compilers unless
 // explicitly disabled by defining NOPCH
-#if ((defined(__BORLANDC__) || defined(__VISUALC__) || defined(__WATCOMC__)) && defined(__WXMSW__)) || defined(__WXPM__)
+#if ((defined(__BORLANDC__) || defined(__VISUALC__) || defined(__WATCOMC__)) && defined(__WXMSW__)) || defined(__VISAGECPP__)
     #if !defined(NOPCH)
         #define WX_PRECOMP
     #endif
