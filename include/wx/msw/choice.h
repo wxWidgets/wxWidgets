@@ -96,9 +96,13 @@ protected:
 
     // MSW implementation
     virtual wxSize DoGetBestSize() const;
+    virtual void DoGetSize(int *w, int *h) const;
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
+
+    // get the real height of the control
+    int GetVisibleHeight() const;
 
     // free all memory we have (used by Clear() and dtor)
     void Free();

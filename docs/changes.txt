@@ -35,6 +35,9 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
   (when WXWIN_COMPATIBILITY_2_4 == 0)
 - wxID_SEPARATOR (id used for the menu separators) value changed from -1 to -2
 - wxGetNumberFromUser() is now in separate wx/numdlg.h, not wx/textdlg.h
+- wxChoice and wxCombobox now handle their size in the same way as in all the
+  other ports under MSW, new code is actually correct but different from weird
+  stuff they were doing before so the behaviour of your programs might change
 
 
 DEPRECATED METHODS SINCE 2.4.x

@@ -118,7 +118,7 @@ bool wxChoice::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    long msStyle = WS_CHILD | CBS_DROPDOWNLIST | WS_TABSTOP | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL /* | WS_CLIPSIBLINGS */;
+    long msStyle = WS_CHILD | CBS_DROPDOWNLIST | WS_TABSTOP | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
     if ( style & wxCB_SORT )
         msStyle |= CBS_SORT;
 
@@ -367,6 +367,11 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 // wxMSW specific helpers
 // ----------------------------------------------------------------------------
 
+int wxChoice::GetVisibleHeight() const
+{
+    return ::SendMessage(GetHwnd(), CB_GETITEMHEIGHT, (WPARAM)-1, 0);
+}
+
 void wxChoice::DoMoveWindow(int x, int y, int width, int height)
 {
     // here is why this is necessary: if the width is negative, the combobox
@@ -385,29 +390,65 @@ void wxChoice::DoMoveWindow(int x, int y, int width, int height)
     wxControl::DoMoveWindow(x, y, width, height);
 }
 
+void wxChoice::DoGetSize(int *w, int *h) const
+{
+    wxControl::DoGetSize(w, h);
+
+    // we need to return only the height of the visible part, not the entire
+    // height in the Windows sense which includes the height of the drop down
+    // list as well
+    if ( h )
+        *h = GetVisibleHeight();
+}
+
 void wxChoice::DoSetSize(int x, int y,
-                         int width, int WXUNUSED(height),
+                         int width, int height,
                          int sizeFlags)
 {
-    // Ignore height parameter because height doesn't mean 'initially
-    // displayed' height, it refers to the drop-down menu as well. The
-    // wxWindows interpretation is different; also, getting the size returns
-    // the _displayed_ size (NOT the drop down menu size) so
-    // setting-getting-setting size would not work.
+    int heightOrig = height;
 
-    wxControl::DoSetSize(x, y, width, -1, sizeFlags);
+    // the height which we must pass to Windows should be the total height of
+    // the control including the drop down list while the height given to us
+    // is, of course, just the height of the permanently visible part of it
+    if ( height != -1 )
+    {
+        // don't make the drop down list too tall, arbitrarily limit it to 40
+        // items max and also don't leave it empty
+        size_t nItems = GetCount();
+        if ( !nItems )
+            nItems = 9;
+        else if ( nItems > 39 )
+            nItems = 39;
+
+        // add space for the drop down list
+        const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
+        height += hItem*(nItems + 1);
+    }
+
+    wxControl::DoSetSize(x, y, width, height, sizeFlags);
+
+    // if the height specified for the visible part of the control is
+    // different from the current one, we need to change it separately
+    // as it is not affected by normal WM_SETSIZE
+    if ( height != -1 )
+    {
+        const int hVisibleCurrent = GetVisibleHeight();
+        if ( hVisibleCurrent != heightOrig )
+        {
+            SendMessage(GetHwnd(), CB_SETITEMHEIGHT, (WPARAM)-1, heightOrig);
+        }
+    }
 }
 
 wxSize wxChoice::DoGetBestSize() const
 {
     // find the widest string
-    int wLine;
     int wChoice = 0;
-    int nItems = GetCount();
-    for ( int i = 0; i < nItems; i++ )
+    const size_t nItems = GetCount();
+    for ( size_t i = 0; i < nItems; i++ )
     {
-        wxString str(GetString(i));
-        GetTextExtent(str, &wLine, NULL);
+        int wLine;
+        GetTextExtent(GetString(i), &wLine, NULL);
         if ( wLine > wChoice )
             wChoice = wLine;
     }
@@ -417,17 +458,10 @@ wxSize wxChoice::DoGetBestSize() const
     if ( wChoice == 0 )
         wChoice = 100;
 
-    // the combobox should be larger than the widest string
-    int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+    // the combobox should be slightly larger than the widest string
+    wChoice += 5*GetCharWidth();
 
-    wChoice += 5*cx;
-
-    // Choice drop-down list depends on number of items (limited to 10)
-    size_t nStrings = nItems == 0 ? 10 : wxMin(10, nItems) + 1;
-    int hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*nStrings;
-
-    return wxSize(wChoice, hChoice);
+    return wxSize(wChoice, GetVisibleHeight());
 }
 
 long wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
