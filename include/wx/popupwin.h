@@ -71,7 +71,7 @@ class WXDLLEXPORT wxPopupTransientWindow : public wxPopupWindow
 public:
     // ctors
     wxPopupTransientWindow() { Init(); }
-    wxPopupTransientWindow(wxWindow *parent);
+    wxPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE);
 
     virtual ~wxPopupTransientWindow();
 

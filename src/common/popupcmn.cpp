@@ -147,11 +147,11 @@ void wxPopupTransientWindow::Init()
     m_focus = (wxWindow *)NULL;
 }
 
-wxPopupTransientWindow::wxPopupTransientWindow(wxWindow *parent)
+wxPopupTransientWindow::wxPopupTransientWindow(wxWindow *parent, int style)
 {
     Init();
 
-    (void)Create(parent);
+    (void)Create(parent, style);
 }
 
 wxPopupTransientWindow::~wxPopupTransientWindow()

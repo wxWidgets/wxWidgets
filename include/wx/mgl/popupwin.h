@@ -20,7 +20,8 @@ class WXDLLEXPORT wxPopupWindow : public wxPopupWindowBase
 public:
     wxPopupWindow() { }
 
-    wxPopupWindow(wxWindow *parent) { (void)Create(parent); }
+    wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE)
+        { (void)Create(parent, flags); }
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE)
     {

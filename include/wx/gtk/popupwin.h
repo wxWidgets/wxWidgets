@@ -30,17 +30,18 @@ public:
 #ifdef __DARWIN__
     virtual ~wxPopupWindow() { }
 #endif
-    
-    wxPopupWindow(wxWindow *parent) { (void)Create(parent); }
+
+    wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE)
+        { (void)Create(parent, flags); }
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
     virtual bool Show( bool show = TRUE );
-    
+
     // implementation
     // --------------
 
     virtual void DoMoveWindow(int x, int y, int width, int height);
-    
+
     virtual void OnInternalIdle();
 
 
