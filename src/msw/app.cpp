@@ -43,7 +43,9 @@
   #include "wx/resource.h"
 #endif
 
+#if wxUSE_DRAG_AND_DROP
 #include <ole2.h>
+#endif
 #include <string.h>
 #include <ctype.h>
 
