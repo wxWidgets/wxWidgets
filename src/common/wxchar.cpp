@@ -774,10 +774,10 @@ private:
                ch == _T('0') || ch == _T(' ') || ch == _T('#');
     }
 
-    void SkipDigits(const wxChar **ppc)
+    void SkipDigits(const wxChar **ptpc)
     {
-        while ( **ppc >= _T('0') && **ppc <= _T('9') )
-            CopyFmtChar(*(*ppc)++);
+        while ( **ptpc >= _T('0') && **ptpc <= _T('9') )
+            CopyFmtChar(*(*ptpc)++);
     }
 
     // the translated format
