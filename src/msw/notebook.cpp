@@ -278,6 +278,18 @@ bool wxNotebook::DeletePage(int nPage)
   return TRUE;
 }
 
+// remove one page from the notebook, without deleting
+bool wxNotebook::RemovePage(int nPage)
+{
+  wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, "notebook page out of range" );
+
+  TabCtrl_DeleteItem(m_hwnd, nPage);
+
+  m_aPages.Remove(nPage);
+
+  return TRUE;
+}
+
 // remove all pages
 bool wxNotebook::DeleteAllPages()
 {

@@ -155,6 +155,7 @@ public:
   inline WXWidget GetWorkAreaWidget() const { return m_workArea; }
   inline WXWidget GetClientAreaWidget() const { return m_clientArea; }
   inline WXWidget GetTopWidget() const { return m_frameShell; }
+  inline WXWidget GetMainWindowWidget() const { return m_frameWidget; }
 
   // The widget that can have children on it
   WXWidget GetClientWidget() const;

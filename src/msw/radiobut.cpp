@@ -33,6 +33,18 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 // IMPLEMENT_DYNAMIC_CLASS(wxBitmapRadioButton, wxRadioButton)
 #endif
 
+bool wxRadioButton::MSWCommand(WXUINT param, WXWORD id)
+{
+  if (param == BN_CLICKED)
+  {
+    wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, m_windowId);
+    event.SetEventObject( this );
+    ProcessCommand(event);
+    return TRUE;
+  }
+  else return FALSE;
+}
+
 bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
        const wxString& label,
            const wxPoint& pos,

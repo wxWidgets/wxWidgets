@@ -120,7 +120,7 @@ Deletes all pages.
 
 \func{bool}{DeletePage}{\param{int}{ page}}
 
-Deletes the specified page.
+Deletes the specified page, and the associated window.
 
 \membersection{wxNotebook::GetImageList}\label{wxnotebookgetimagelist}
 
@@ -210,6 +210,12 @@ An event handler function, called when the page selection is changed.
 \wxheading{See also}
 
 \helpref{wxNotebookEvent}{wxnotebookevent}
+
+\membersection{wxNotebook::RemovePage}\label{wxnotebookremovepage}
+
+\func{bool}{RemovePage}{\param{int}{ page}}
+
+Deletes the specified page, without deleting the associated window.
 
 \membersection{wxNotebook::SetImageList}\label{wxnotebooksetimagelist}
 

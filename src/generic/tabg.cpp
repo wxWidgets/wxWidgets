@@ -597,6 +597,35 @@ wxTabControl *wxTabView::AddTab(int id, const wxString& label, wxTabControl *exi
   
   return tabControl;
 }
+
+// Remove the tab without deleting the window
+bool wxTabView::RemoveTab(int id)
+{
+  wxNode *layerNode = m_layers.First();
+  while (layerNode)
+  {
+    wxTabLayer *layer = (wxTabLayer *)layerNode->Data();
+    wxNode *tabNode = layer->First();
+    while (tabNode)
+    {
+      wxTabControl *tab = (wxTabControl *)tabNode->Data();
+      if (tab->GetId() == id)
+      {
+        if (id == m_tabSelection)
+          m_tabSelection = -1;
+        delete tab;
+        delete tabNode;
+
+        // The layout has changed
+        Layout();
+        return TRUE;
+      }
+      tabNode = tabNode->Next();
+    }
+    layerNode = layerNode->Next();
+  }
+  return FALSE;
+}
   
 // Returns the total height of the tabs component -- this may be several
 // times the height of a tab, if there are several tab layers (rows).
@@ -968,20 +997,26 @@ void wxTabView::SetTabSelection(int sel, bool activateTool)
 {
   int oldSel = m_tabSelection;
   wxTabControl *control = FindTabControlForId(sel);
+  wxTabControl *oldControl = FindTabControlForId(m_tabSelection);
 
   if (!OnTabPreActivate(sel, oldSel))
     return;
     
   if (control)
-    control->SetSelected((sel != 0)); // TODO ??
-  else
+    control->SetSelected((sel != -1)); // TODO ??
+  else if (sel != -1)
   {
-    wxMessageBox(_("Could not find tab for id"), _("Error"), wxOK);
+    wxFAIL_MSG(_("Could not find tab for id"));
     return;
   }
+
+  if (oldControl)
+    oldControl->SetSelected(FALSE);
     
   m_tabSelection = sel;
-  MoveSelectionTab(control);
+
+  if (control)
+    MoveSelectionTab(control);
   
   if (activateTool)
     OnTabActivate(sel, oldSel);

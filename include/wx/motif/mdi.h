@@ -16,18 +16,22 @@
 #pragma interface "mdi.h"
 #endif
 
+/*
+New MDI scheme using tabs. We can use a wxNotebook to implement the client
+window. wxMDIChildFrame can be implemented as an XmMainWindow widget
+as before, and is a child of the notebook _and_ of the parent frame...
+but wxMDIChildFrame::GetParent should return the parent frame.
+
+*/
+
 #include "wx/frame.h"
+#include "wx/notebook.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxFrameNameStr;
 WXDLLEXPORT_DATA(extern const char*) wxStatusLineNameStr;
 
 class WXDLLEXPORT wxMDIClientWindow;
 class WXDLLEXPORT wxMDIChildFrame;
-
-#if wxUSE_MDI_WIDGETS
-class XsMDICanvas;
-class wxXsMDIWindow;
-#endif
 
 class WXDLLEXPORT wxMDIParentFrame: public wxFrame
 {
@@ -87,12 +91,24 @@ public:
   virtual void ActivatePrevious();
 
 // Implementation
+
+  // Set the active child
   inline void SetActiveChild(wxMDIChildFrame* child) { m_activeChild = child; }
+
+  // Set the child's menubar into the parent frame
+  void SetChildMenuBar(wxMDIChildFrame* frame);
+
+  inline wxMenuBar* GetActiveMenuBar() const { return m_activeMenuBar; }
+
+  // Redirect events to active child first
+  virtual bool ProcessEvent(wxEvent& event);
+
 
 protected:
 
   wxMDIClientWindow*    m_clientWindow;
   wxMDIChildFrame*      m_activeChild;
+  wxMenuBar*            m_activeMenuBar;
 
 DECLARE_EVENT_TABLE()
 };
@@ -136,6 +152,13 @@ public:
   // Set icon
   virtual void SetIcon(const wxIcon& icon);
 
+  // Override wxFrame operations
+  void CaptureMouse();
+  void ReleaseMouse();
+  void Raise();
+  void Lower(void);
+  void SetSizeHints(int minW = -1, int minH = -1, int maxW = -1, int maxH = -1, int incW = -1, int incH = -1);
+
   // MDI operations
   virtual void Maximize();
   inline void Minimize() { Iconize(TRUE); };
@@ -145,16 +168,21 @@ public:
   virtual bool IsIconized() const ;
 
   bool Show(bool show);
-  void BuildClientArea(WXWidget parent);
+
+  inline WXWidget GetMainWidget() const { return m_mainWidget; };
   inline WXWidget GetTopWidget() const { return m_mainWidget; };
-#if wxUSE_MDI_WIDGETS
-  inline wxXsMDIWindow *GetMDIWindow() const { return m_mdiWindow; };
-#endif
+  inline WXWidget GetClientWidget() const { return m_mainWidget; };
+
+/*
   virtual void OnRaise();
   virtual void OnLower();
+*/
+
+  inline void SetMDIParentFrame(wxMDIParentFrame* parentFrame) { m_mdiParentFrame = parentFrame; }
+  inline wxMDIParentFrame* GetMDIParentFrame() const { return m_mdiParentFrame; }
 
 protected:
-  wxXsMDIWindow*    m_mdiWindow ;
+  wxMDIParentFrame* m_mdiParentFrame;
 };
 
 /* The client window is a child of the parent MDI frame, and itself
@@ -164,7 +192,7 @@ protected:
  * of the children. Phew! So the children are sort of 'adopted'...
  */
 
-class WXDLLEXPORT wxMDIClientWindow: public wxWindow
+class WXDLLEXPORT wxMDIClientWindow: public wxNotebook
 {
   DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
  public:
@@ -184,24 +212,16 @@ class WXDLLEXPORT wxMDIClientWindow: public wxWindow
    void GetSize(int *width, int *height) const ;
    void GetPosition(int *x, int *y) const ;
 
-
   // Note: this is virtual, to allow overridden behaviour.
   virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);
 
   // Explicitly call default scroll behaviour
   void OnScroll(wxScrollEvent& event);
 
-#if wxUSE_MDI_WIDGETS
-  inline XsMDICanvas* GetMDICanvas() const { return m_mdiCanvas; }
-  WXWidget GetTopWidget() const { return m_topWidget; }
-#endif
+  // Implementation
+  void OnPageChanged(wxNotebookEvent& event);
 
 protected:
-
-#if wxUSE_MDI_WIDGETS
-  XsMDICanvas*   m_mdiCanvas;
-  WXWidget       m_topWidget;
-#endif
 
 DECLARE_EVENT_TABLE()
 };

@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/wx.h"
+#include "wx/postscrp.h"
 
 #define _MAXPATHLEN 500
 

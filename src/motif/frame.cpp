@@ -287,6 +287,8 @@ wxFrame::~wxFrame()
 
   if (m_frameMenuBar)
   {
+    m_frameMenuBar->DestroyMenuBar();
+
 // Hack to stop core dump on Ultrix, OSF, for some strange reason.
 #if MOTIF_MENUBAR_DELETE_FIX
     GetMenuBar()->SetMainWidget((WXWidget) NULL);
@@ -486,6 +488,9 @@ void wxFrame::SetSize(int x, int y, int width, int height, int sizeFlags)
 
 bool wxFrame::Show(bool show)
 {
+  if (!m_frameShell)
+    return wxWindow::Show(show);
+
   m_visibleStatus = show; /* show-&-hide fix */
 
   m_isShown = show;
@@ -504,7 +509,8 @@ void wxFrame::Iconize(bool iconize)
   if (!iconize)
     Show(TRUE);
 
-  XtVaSetValues((Widget) m_frameShell, XmNiconic, (Boolean)iconize, NULL);
+  if (m_frameShell)
+    XtVaSetValues((Widget) m_frameShell, XmNiconic, (Boolean)iconize, NULL);
 }
 
 // Equivalent to maximize/restore in Windows
@@ -512,12 +518,15 @@ void wxFrame::Maximize(bool maximize)
 {
   Show(TRUE);
 
-  if (maximize)
+  if (maximize && m_frameShell)
     XtVaSetValues((Widget) m_frameShell, XmNiconic, FALSE, NULL);
 }
 
 bool wxFrame::IsIconized() const
 {
+  if (!m_frameShell)
+    return FALSE;
+
   Boolean iconic;
   XtVaGetValues((Widget) m_frameShell, XmNiconic, &iconic, NULL);
   return iconic;
@@ -540,6 +549,9 @@ void wxFrame::SetTitle(const wxString& title)
 void wxFrame::SetIcon(const wxIcon& icon)
 {
   m_icon = icon;
+
+  if (!m_frameShell)
+    return;
 
   // TODO
   /*
@@ -638,32 +650,16 @@ void wxFrame::SetMenuBar(wxMenuBar *menuBar)
     }
 
     // Currently can't set it twice
-    wxASSERT_MSG( (m_frameMenuBar == (wxMenuBar*) NULL), "Cannot set the menubar more than once");
-  
-    m_frameMenuBar = menuBar;
+//    wxASSERT_MSG( (m_frameMenuBar == (wxMenuBar*) NULL), "Cannot set the menubar more than once");
 
-  Widget menuBarW = XmCreateMenuBar ((Widget) m_frameWidget, "MenuBar", NULL, 0);
-  m_frameMenuBar->SetMainWidget( (WXWidget) menuBarW);
-
-  int i;
-  for (i = 0; i < menuBar->GetMenuCount(); i++)
+    if (m_frameMenuBar)
     {
-      wxMenu *menu = menuBar->GetMenu(i);
-      wxString title(menuBar->m_titles[i]);
-      menu->SetButtonWidget(menu->CreateMenu (menuBar, menuBarW, menu, title, TRUE));
-
-      /*
-       * COMMENT THIS OUT IF YOU DON'T LIKE A RIGHT-JUSTIFIED HELP MENU
-       */
-      wxStripMenuCodes ((char*) (const char*) title, wxBuffer);
-
-      if (strcmp (wxBuffer, "Help") == 0)
-	XtVaSetValues ((Widget) menuBarW, XmNmenuHelpWidget, (Widget) menu->GetButtonWidget(), NULL);
+        m_frameMenuBar->DestroyMenuBar();
+        delete m_frameMenuBar;
     }
 
-  XtRealizeWidget ((Widget) menuBarW);
-  XtManageChild ((Widget) menuBarW);
-  menuBar->SetMenuBarFrame(this);
+    m_frameMenuBar = menuBar;
+    m_frameMenuBar->CreateMenuBar(this);
 }
 
 void wxFrame::Fit()
@@ -1071,12 +1067,14 @@ void wxFrame::ChangeFont(bool keepOriginalSize)
 
 void wxFrame::ChangeBackgroundColour()
 {
-    // TODO
+    if (GetClientWidget())
+        DoChangeBackgroundColour(GetClientWidget(), m_backgroundColour);
 }
 
 void wxFrame::ChangeForegroundColour()
 {
-    // TODO
+    if (GetClientWidget())
+        DoChangeForegroundColour(GetClientWidget(), m_foregroundColour);
 }
 
 void wxCloseFrameCallback(Widget widget, XtPointer client_data, XmAnyCallbackStruct *cbs)

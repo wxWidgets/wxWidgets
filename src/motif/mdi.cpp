@@ -28,9 +28,6 @@
 #include <Xm/AtomMgr.h>
 #include <Xm/Protocols.h>
 
-#include "mdi/lib/XsMDICanvas.h"
-#include "mdi/lib/XsMotifWindow.h"
-
 #include "wx/motif/private.h"
 
 extern wxList wxModelessWindows;
@@ -39,10 +36,12 @@ extern wxList wxModelessWindows;
 extern void wxFrameFocusProc(Widget workArea, XtPointer clientData, 
                       XmAnyCallbackStruct *cbs);
 
+#define wxID_NOTEBOOK_CLIENT_AREA wxID_HIGHEST + 100
+
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
-IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxNotebook)
 
 BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
   EVT_SIZE(wxMDIParentFrame::OnSize)
@@ -50,165 +49,12 @@ BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
   EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
+BEGIN_EVENT_TABLE(wxMDIClientWindow, wxNotebook)
   EVT_SCROLL(wxMDIClientWindow::OnScroll)
+  EVT_NOTEBOOK_PAGE_CHANGED(wxID_NOTEBOOK_CLIENT_AREA, wxMDIClientWindow::OnPageChanged)
 END_EVENT_TABLE()
 
 #endif
-
-  /*
-static void _doNothingCallback (Widget, XtPointer, XtPointer)
-{
-}
-*/
-
-// wxXsMDIWindow represents the MDI child frame, as far as the MDI
-// package is concerned.
-// TODO: override raise, so we can tell which is the 'active'
-// (raised) window. We can also use it to send wxActivateEvents,
-// and switching menubars when we make the child frame menubar
-// appear on the parent frame.
-
-// Note: see XsMotifWindow.C, _XsMotifMenu::_processItem for
-// where user menu selections are processed.
-// When Close is selected, _win->close() is called.
-
-class wxXsMDIWindow: public XsMotifWindow
-{
-public:
-  wxMDIChildFrame* m_childFrame;
-
-  wxXsMDIWindow(const char* name, wxMDIChildFrame* frame): XsMotifWindow(name)
-  {
-    m_childFrame = frame;
-  }
-  virtual void setSize(Dimension w, Dimension h)
-  {
-      XsMotifWindow::setSize(w, h);
-
-      // Generate wxSizeEvent here, I think. Maybe also restore, maximize
-      // Probably don't need to generate size event here since work area
-      // is used (???)
-      wxSizeEvent event(wxSize(w, h), m_childFrame->GetId());
-      event.SetEventObject(m_childFrame);
-      m_childFrame->ProcessEvent(event);
-  }
-  virtual void close()
-  {
-      XsMotifWindow::close();
-      m_childFrame->Close();
-  }
-  virtual void raise()
-  {
-      XsMotifWindow::raise();
-      m_childFrame->OnRaise();
-  }
-  virtual void lower()
-  {
-      XsMotifWindow::lower();
-      m_childFrame->OnLower();
-  }
-  virtual void _buildClientArea(Widget parent)
-  {
-      m_childFrame->BuildClientArea((WXWidget) parent);
-
-    // Code from MDI sample
-#if 0
-   assert (parent != 0);
-   
-   Widget   pulldown;
-   Widget   cascade;
-   Widget   button;
-   
-// Create a main window with some dummy menus
-
-   Widget mainW = XtVaCreateWidget ("mainWin", xmMainWindowWidgetClass, parent,
-      XmNtopAttachment, XmATTACH_FORM, XmNbottomAttachment, XmATTACH_FORM,
-      XmNleftAttachment, XmATTACH_FORM, XmNrightAttachment, XmATTACH_FORM,
-      NULL);
-      
-// Create a menubar
-
-   Widget menuBar = XmCreateMenuBar (mainW, "menuBar", NULL, 0);
-
-// Create the "file" menu
-
-   pulldown = XmCreatePulldownMenu (menuBar, "pulldown", NULL, 0);
-   cascade = XtVaCreateManagedWidget ("fileMenu", xmCascadeButtonGadgetClass,
-      menuBar, XmNsubMenuId, pulldown, NULL);
-   
-   button = XtVaCreateManagedWidget ("openMenuItem", xmPushButtonGadgetClass,
-      pulldown, NULL);
-   XtAddCallback (button, XmNactivateCallback, _doNothingCallback, (XtPointer)this);
-      
-   button = XtVaCreateManagedWidget ("newMenuItem", xmPushButtonGadgetClass,
-      pulldown, NULL);
-   //   XtAddCallback (button, XmNactivateCallback, _newWindowCallback, (XtPointer)this);
-
-// Create the "edit" menu
-
-   pulldown = XmCreatePulldownMenu (menuBar, "pulldown", NULL, 0);
-   cascade = XtVaCreateManagedWidget ("editMenu", xmCascadeButtonGadgetClass,
-      menuBar, XmNsubMenuId, pulldown, NULL);
-   
-   button = XtVaCreateManagedWidget ("cutMenuItem", xmPushButtonGadgetClass,
-      pulldown, NULL);
-   XtAddCallback (button, XmNactivateCallback, _doNothingCallback, (XtPointer)this);
-      
-   button = XtVaCreateManagedWidget ("copyMenuItem", xmPushButtonGadgetClass,
-      pulldown, NULL);
-   XtAddCallback (button, XmNactivateCallback, _doNothingCallback, (XtPointer)this);
-
-   button = XtVaCreateManagedWidget ("pasteMenuItem", xmPushButtonGadgetClass,
-      pulldown, NULL);
-   XtAddCallback (button, XmNactivateCallback, _doNothingCallback, (XtPointer)this);
-
-// Create the help menu
-
-   pulldown = XmCreatePulldownMenu (menuBar, "pulldown", NULL, 0);
-   cascade = XtVaCreateManagedWidget ("helpMenu", xmCascadeButtonGadgetClass,
-      menuBar, XmNsubMenuId, pulldown, NULL);
-   
-   button = XtVaCreateManagedWidget ("aboutMenuItem", xmPushButtonGadgetClass,
-      pulldown, NULL);
-   XtAddCallback (button, XmNactivateCallback, _doNothingCallback, (XtPointer)this);
-      
-   XtVaSetValues (menuBar, XmNmenuHelpWidget, cascade, NULL);
-
-// Manage the menubar
-
-   XtManageChild (menuBar);
-   
-// Create the work area
-
-   const int nargs = 8;
-   Arg   args[nargs];
-   int n;
-	    
-   n = 0;
-   XtSetArg (args[n], XmNscrollingPolicy, XmAUTOMATIC); n++;
-   XtSetArg (args[n], XmNhighlightThickness, (Dimension)0);    n++;
-   XtSetArg (args[n], XmNeditMode, XmMULTI_LINE_EDIT); n++;
-   XtSetArg (args[n], XmNeditable, True); n++;
-   XtSetArg (args[n], XmNwordWrap, False); n++;
-   XtSetArg (args[n], XmNcursorPositionVisible, True);   n++;
-   XtSetArg (args[n], XmNverifyBell, True); n++;
-			      
-   assert (n <= nargs);
-				 
-   Widget scrolledText = XmCreateScrolledText (mainW, "scrolledText", args, n);
-   XtManageChild (scrolledText);
-   
-// Set the main window area
-
-   XtVaSetValues (mainW, XmNmenuBar, menuBar, XmNworkWindow,
-      XtParent (scrolledText), NULL);
-   
-   XtManageChild (mainW);
-#endif
-  }
-  void Show() { show(); }
-};
 
 // Parent frame
 
@@ -216,6 +62,7 @@ wxMDIParentFrame::wxMDIParentFrame()
 {
     m_clientWindow = (wxMDIClientWindow*) NULL;
     m_activeChild = (wxMDIChildFrame*) NULL;
+    m_activeMenuBar = (wxMenuBar*) NULL;
 }
 
 bool wxMDIParentFrame::Create(wxWindow *parent,
@@ -228,6 +75,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
 {
     m_clientWindow = (wxMDIClientWindow*) NULL;
     m_activeChild = (wxMDIChildFrame*) NULL;
+    m_activeMenuBar = (wxMenuBar*) NULL;
 
     bool success = wxFrame::Create(parent, id, title, pos, size, style, name);
     if (success)
@@ -237,8 +85,13 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
         // (we're in the constructor). How to resolve?
 
         m_clientWindow = OnCreateClient();
-	// Uses own style for client style
-	m_clientWindow->CreateClient(this, GetWindowStyleFlag());
+
+        // Uses own style for client style
+        m_clientWindow->CreateClient(this, GetWindowStyleFlag());
+
+        int w, h;
+        GetClientSize(& w, & h);
+        m_clientWindow->SetSize(0, 0, w, h);
         return TRUE;
     }
     else
@@ -247,8 +100,13 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
 
 wxMDIParentFrame::~wxMDIParentFrame()
 {
+    // Make sure we delete the client window last of all
+    RemoveChild(m_clientWindow);
+
     DestroyChildren();
+
     delete m_clientWindow;
+    m_clientWindow = NULL;
 }
 
 // Get size *available for subwindows* i.e. excluding menu bar.
@@ -259,7 +117,9 @@ void wxMDIParentFrame::GetClientSize(int *x, int *y) const
 
 void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
 {
-    wxFrame::SetMenuBar(menu_bar);
+    m_frameMenuBar = menu_bar;
+
+    SetChildMenuBar((wxMDIChildFrame*) NULL);
 }
 
 void wxMDIParentFrame::OnSize(wxSizeEvent& event)
@@ -293,6 +153,88 @@ wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
 wxMDIClientWindow *wxMDIParentFrame::OnCreateClient()
 {
 	return new wxMDIClientWindow ;
+}
+
+// Set the child's menu into the parent frame
+void wxMDIParentFrame::SetChildMenuBar(wxMDIChildFrame* child)
+{
+    wxMenuBar* oldMenuBar = m_activeMenuBar;
+
+    if (child == (wxMDIChildFrame*) NULL)  // No child: use parent frame
+    {
+        if (GetMenuBar() && (GetMenuBar() != m_activeMenuBar))
+        {
+	  //            if (m_activeMenuBar)
+	  //                m_activeMenuBar->DestroyMenuBar();
+
+            m_activeMenuBar = GetMenuBar();
+            m_activeMenuBar->CreateMenuBar(this);
+	    /*
+            if (oldMenuBar && XtIsManaged((Widget) oldMenuBar->GetMainWidget()))
+              XtUnmanageChild((Widget) oldMenuBar->GetMainWidget());
+	      */
+            if (oldMenuBar && oldMenuBar->GetMainWidget())
+              XtUnmapWidget((Widget) oldMenuBar->GetMainWidget());
+
+        }
+    }
+    else if (child->GetMenuBar() == (wxMenuBar*) NULL) // No child menu bar: use parent frame
+    {
+        if (GetMenuBar() && (GetMenuBar() != m_activeMenuBar))
+        {
+	  //            if (m_activeMenuBar)
+	  //                m_activeMenuBar->DestroyMenuBar();
+            m_activeMenuBar = GetMenuBar();
+            m_activeMenuBar->CreateMenuBar(this);
+	    /*
+            if (oldMenuBar && XtIsManaged((Widget) oldMenuBar->GetMainWidget()))
+              XtUnmanageChild((Widget) oldMenuBar->GetMainWidget());
+	      */
+            if (oldMenuBar && oldMenuBar->GetMainWidget())
+              XtUnmapWidget((Widget) oldMenuBar->GetMainWidget());
+        }
+    }
+    else // The child has a menubar
+    {
+        if (child->GetMenuBar() != m_activeMenuBar)
+        {
+	  //            if (m_activeMenuBar)
+	  //                m_activeMenuBar->DestroyMenuBar();
+
+            m_activeMenuBar = child->GetMenuBar();
+            m_activeMenuBar->CreateMenuBar(this);
+	    /*
+            if (oldMenuBar && XtIsManaged((Widget) oldMenuBar->GetMainWidget()))
+              XtUnmanageChild((Widget) oldMenuBar->GetMainWidget());
+	      */
+            if (oldMenuBar && oldMenuBar->GetMainWidget())
+              XtUnmapWidget((Widget) oldMenuBar->GetMainWidget());
+        }
+    }
+}
+
+// Redirect events to active child first
+bool wxMDIParentFrame::ProcessEvent(wxEvent& event)
+{
+    // Stops the same event being processed repeatedly
+    static wxEventType inEvent = wxEVT_NULL;
+    if (inEvent == event.GetEventType())
+        return FALSE;
+
+    inEvent = event.GetEventType();
+    
+    bool res = FALSE;
+    if (m_activeChild && event.IsKindOf(CLASSINFO(wxCommandEvent)))
+    {
+      res = m_activeChild->GetEventHandler()->ProcessEvent(event);
+    }
+
+    if (!res)
+      res = GetEventHandler()->wxEvtHandler::ProcessEvent(event);
+
+    inEvent = wxEVT_NULL;
+
+    return res;
 }
 
 // Responds to colour changes, and passes event on to children.
@@ -334,6 +276,7 @@ void wxMDIParentFrame::ActivatePrevious()
 
 wxMDIChildFrame::wxMDIChildFrame()
 {
+    m_mdiParentFrame = (wxMDIParentFrame*) NULL;
 }
 
 bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
@@ -346,12 +289,22 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 {
     SetName(name);
 
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
+    m_foregroundColour = *wxBLACK;
+    m_windowFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+
     if ( id > -1 )
         m_windowId = id;
     else
         m_windowId = (int)NewControlId();
 
-    if (parent) parent->AddChild(this);
+    wxMDIClientWindow* clientWindow = parent->GetClientWindow();
+
+    wxASSERT_MSG( (clientWindow != (wxWindow*) NULL), "Missing MDI client window.");
+
+    if (clientWindow) clientWindow->AddChild(this);
+
+    SetMDIParentFrame(parent);
 
     int x = pos.x; int y = pos.y;
     int width = size.x; int height = size.y;
@@ -359,10 +312,6 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
         width = 200; // TODO: give reasonable default
     if (height == -1)
         height = 200; // TODO: give reasonable default
-
-    wxMDIClientWindow* clientWindow = parent->GetClientWindow();
-    if (!clientWindow)
-        return FALSE;
 
     // We're deactivating the old child
     wxMDIChildFrame* oldActiveChild = parent->GetActiveChild();
@@ -373,21 +322,42 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
         oldActiveChild->GetEventHandler()->ProcessEvent(event);
     }
 
-    m_mdiWindow = new wxXsMDIWindow("mdiChildWindow", this);
-    clientWindow->GetMDICanvas()->add(m_mdiWindow);
-
     // This is the currently active child
     parent->SetActiveChild((wxMDIChildFrame*) this);
 
-    m_mdiWindow->Show();
+    // This time we'll try a bog-standard bulletin board for
+    // the 'frame'. A main window doesn't seem to work.
 
+    m_mainWidget = (WXWidget) XtVaCreateWidget("client",
+                    xmBulletinBoardWidgetClass, (Widget) clientWindow->GetTopWidget(),
+                    XmNmarginWidth, 0,
+                    XmNmarginHeight, 0,
+       /*
+                    XmNrightAttachment, XmATTACH_FORM,
+                    XmNleftAttachment, XmATTACH_FORM,
+                    XmNtopAttachment, XmATTACH_FORM,
+                    XmNbottomAttachment, XmATTACH_FORM,
+    */
+	            XmNresizePolicy, XmRESIZE_NONE,
+                    NULL);
+    
+    SetCanAddEventHandler(TRUE);
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+
+    ChangeBackgroundColour();
+
+    // Old stuff
 #if 0
-    m_mainWidget = (WXWidget) (Widget) (*m_mdiWindow);
 
     m_frameWidget = (WXWidget) XtVaCreateManagedWidget("main_window",
-                    xmMainWindowWidgetClass, (Widget) m_mainWidget,
+                    xmMainWindowWidgetClass, (Widget) clientWindow->GetTopWidget(),
                     XmNresizePolicy, XmRESIZE_NONE,
                     NULL);
+
+    // TODO: make sure this doesn't cause problems.
+    // I think ~wxFrame will do the right thing since it deletes m_frameWidget,
+    // then sets the main widget to NULL.
+    m_mainWidget = m_frameWidget;
 
     m_workArea = (WXWidget) XtVaCreateWidget("form",
                     xmFormWidgetClass, (Widget) m_frameWidget,
@@ -426,6 +396,8 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     XtAddCallback((Widget) m_workArea, XmNfocusCallback, 
                 (XtCallbackProc)wxFrameFocusProc, (XtPointer)this);
 
+    XtManageChild((Widget) m_mainWidget);
+
     if (x > -1)
       XtVaSetValues((Widget) m_mainWidget, XmNx, x, NULL);
     if (y > -1)
@@ -434,97 +406,54 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
       XtVaSetValues((Widget) m_mainWidget, XmNwidth, width, NULL);
     if (height > -1)
       XtVaSetValues((Widget) m_mainWidget, XmNheight, height, NULL);
+
 #endif
+
+    XtManageChild((Widget) m_mainWidget);
 
     SetTitle(title);
 
-    PreResize();
+    clientWindow->AddPage(this, title, TRUE);
+    clientWindow->Refresh();
 
-    m_mdiWindow->setSize(width, height);
+    // Positions the toolbar and status bar -- but we don't have any.
+    //    PreResize();
 
     wxModelessWindows.Append(this);
     return TRUE;
 }
 
-void wxMDIChildFrame::BuildClientArea(WXWidget parent)
-{
-    m_mainWidget = parent;
-
-    m_frameWidget = (WXWidget) XtVaCreateManagedWidget("main_window",
-                    xmMainWindowWidgetClass, (Widget) m_mainWidget,
-                    XmNresizePolicy, XmRESIZE_NONE,
-                    XmNtopAttachment, XmATTACH_FORM,
-                    XmNbottomAttachment, XmATTACH_FORM,
-                    XmNleftAttachment, XmATTACH_FORM,
-                    XmNrightAttachment, XmATTACH_FORM,
-                    NULL);
-
-    m_workArea = (WXWidget) XtVaCreateWidget("form",
-                    xmFormWidgetClass, (Widget) m_frameWidget,
-                    XmNresizePolicy, XmRESIZE_NONE,
-                    NULL);
-
-    m_clientArea = (WXWidget) XtVaCreateWidget("client",
-                    xmBulletinBoardWidgetClass, (Widget) m_workArea,
-                    XmNmarginWidth, 0,
-                    XmNmarginHeight, 0,
-                    XmNrightAttachment, XmATTACH_FORM,
-                    XmNleftAttachment, XmATTACH_FORM,
-                    XmNtopAttachment, XmATTACH_FORM,
-                    XmNbottomAttachment, XmATTACH_FORM,
-//                    XmNresizePolicy, XmRESIZE_ANY,
-                    NULL);
-
-    XtVaSetValues((Widget) m_frameWidget,
-      XmNworkWindow, (Widget) m_workArea,
-      NULL);
-
-    XtManageChild((Widget) m_clientArea);
-    XtManageChild((Widget) m_workArea);
-
-    wxASSERT_MSG ((wxWidgetHashTable->Get((long)m_workArea) == (wxObject*) NULL), "Widget table clash in frame.cpp") ;
-
-    wxAddWindowToTable((Widget) m_workArea, this);
-
-    XtTranslations ptr ;
-
-    XtOverrideTranslations((Widget) m_workArea,
-                ptr = XtParseTranslationTable("<Configure>: resize()"));
-
-    XtFree((char *)ptr);
-
-    XtAddCallback((Widget) m_workArea, XmNfocusCallback, 
-                (XtCallbackProc)wxFrameFocusProc, (XtPointer)this);
-
-    /*
-    int x = pos.x; int y = pos.y;
-    int width = size.x; int height = size.y;
-
-    if (x > -1)
-      XtVaSetValues((Widget) m_mainWidget, XmNx, x, NULL);
-    if (y > -1)
-      XtVaSetValues((Widget) m_mainWidget, XmNy, y, NULL);
-    if (width > -1)
-      XtVaSetValues((Widget) m_mainWidget, XmNwidth, width, NULL);
-    if (height > -1)
-      XtVaSetValues((Widget) m_mainWidget, XmNheight, height, NULL);
-      */
-
-    XtManageChild((Widget) m_frameWidget);
-}
-
 
 wxMDIChildFrame::~wxMDIChildFrame()
 {
-    wxMDIParentFrame* parentFrame = (wxMDIParentFrame*) GetParent() ;
-    if (parentFrame->GetActiveChild() == this)
-        parentFrame->SetActiveChild((wxMDIChildFrame*) NULL);
+    if (GetMDIParentFrame())
+    {
+        wxMDIParentFrame* parentFrame = GetMDIParentFrame();
 
-    wxMDIClientWindow* clientWindow = parentFrame->GetClientWindow();
-    clientWindow->GetMDICanvas()->remove(m_mdiWindow);
-    m_mainWidget = (WXWidget) 0;
+        if (parentFrame->GetActiveChild() == this)
+            parentFrame->SetActiveChild((wxMDIChildFrame*) NULL);
+        wxMDIClientWindow* clientWindow = parentFrame->GetClientWindow();
+
+        // Remove page if still there
+        if (clientWindow->RemovePage(this))
+          clientWindow->Refresh();
+
+        // Set the selection to the first remaining page
+        if (clientWindow->GetPageCount() > 0)
+        {
+            wxMDIChildFrame* child = (wxMDIChildFrame*)  clientWindow->GetPage(0);
+            parentFrame->SetActiveChild(child);
+            parentFrame->SetChildMenuBar(child);
+        }
+        else
+        {
+            parentFrame->SetActiveChild((wxMDIChildFrame*) NULL);
+            parentFrame->SetChildMenuBar((wxMDIChildFrame*) NULL);
+        }
+    }
 }
 
+#if 0
 // Implementation: intercept and act upon raise and lower commands.
 void wxMDIChildFrame::OnRaise()
 {
@@ -559,22 +488,23 @@ void wxMDIChildFrame::OnLower()
     // so make the active child NULL.
     parentFrame->SetActiveChild((wxMDIChildFrame*) NULL);
 }
+#endif
 
 // Set the client size (i.e. leave the calculation of borders etc.
 // to wxWindows)
 void wxMDIChildFrame::SetClientSize(int width, int height)
 {
-    wxFrame::SetClientSize(width, height);
+  wxWindow::SetClientSize(width, height);
 }
 
 void wxMDIChildFrame::GetClientSize(int* width, int* height) const
 {
-    wxFrame::GetClientSize(width, height);
+    wxWindow::GetSize(width, height);
 }
 
 void wxMDIChildFrame::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    wxWindow::SetSize(x, y, width, height, sizeFlags);
+  wxWindow::SetSize(x, y, width, height, sizeFlags);
 }
 
 void wxMDIChildFrame::GetSize(int* width, int* height) const
@@ -590,16 +520,18 @@ void wxMDIChildFrame::GetPosition(int *x, int *y) const
 bool wxMDIChildFrame::Show(bool show)
 {
     m_visibleStatus = show; /* show-&-hide fix */
-    return TRUE;
+    return wxWindow::Show(show);
 }
 
-void wxMDIChildFrame::SetMenuBar(wxMenuBar *menu_bar)
+void wxMDIChildFrame::SetMenuBar(wxMenuBar *menuBar)
 {
-    // TODO
-    // Currently, the menu appears on the child frame. 
-    // It should eventually be recreated on the main frame
-    // whenever the child is activated.
-    wxFrame::SetMenuBar(menu_bar);
+    // Don't create the underlying menubar yet; need to recreate
+    // it every time the child is activated.
+    m_frameMenuBar = menuBar;
+
+    // We make the assumption that if you're setting the menubar,
+    // this is the currently active child.
+    GetMDIParentFrame()->SetChildMenuBar(this);
 }
 
 // Set icon
@@ -618,68 +550,80 @@ void wxMDIChildFrame::SetIcon(const wxIcon& icon)
 void wxMDIChildFrame::SetTitle(const wxString& title)
 {
     m_title = title;
-    m_mdiWindow->setTitle(title);
-    m_mdiWindow->setIconName(title);
+    // TODO: set parent frame title
 }
 
 // MDI operations
 void wxMDIChildFrame::Maximize()
 {
-   m_mdiWindow->maximize();
+    // TODO
 }
 
 void wxMDIChildFrame::Iconize(bool iconize)
 {
-   if (iconize)
-      m_mdiWindow->minimize();
-   else
-      m_mdiWindow->restore();
+  // TODO
 }
 
 bool wxMDIChildFrame::IsIconized() const
 {
-    return m_mdiWindow->minimized();
+    return FALSE;
 }
 
 void wxMDIChildFrame::Restore()
 {
-    m_mdiWindow->restore();
+    // TODO
 }
 
 void wxMDIChildFrame::Activate()
 {
-    m_mdiWindow->raise();
+    // TODO
+}
+
+void wxMDIChildFrame::CaptureMouse()
+{
+  wxWindow::CaptureMouse();
+}
+
+void wxMDIChildFrame::ReleaseMouse()
+{
+  wxWindow::ReleaseMouse();
+}
+
+void wxMDIChildFrame::Raise()
+{
+  wxWindow::Raise();
+}
+
+void wxMDIChildFrame::Lower(void)
+{
+  wxWindow::Raise();
+}
+
+void wxMDIChildFrame::SetSizeHints(int WXUNUSED(minW), int WXUNUSED(minH), int WXUNUSED(maxW), int WXUNUSED(maxH), int WXUNUSED(incW), int WXUNUSED(incH))
+{
 }
 
 // Client window
 
 wxMDIClientWindow::wxMDIClientWindow()
 {
-    m_mdiCanvas = NULL;
-    m_topWidget = (WXWidget) 0;
 }
 
 wxMDIClientWindow::~wxMDIClientWindow()
 {
+    // By the time this destructor is called, the child frames will have been
+   // deleted and removed from the notebook/client window.
     DestroyChildren();
-    delete m_mdiCanvas;
 
     m_mainWidget = (WXWidget) 0;
-    m_topWidget = (WXWidget) 0;
 }
 
 bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
 {
-    m_windowParent = parent;
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
-    m_mdiCanvas = new XsMDICanvas("mdiClientWindow", (Widget) parent->GetClientWidget());
-    m_mainWidget = (WXWidget) m_mdiCanvas->GetDrawingArea();
-    //    m_topWidget = (WXWidget) m_mdiCanvas->GetBase();
-    m_topWidget = (WXWidget) (Widget) (*m_mdiCanvas);
+  //    m_windowParent = parent;
+    //    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
 
-    m_mdiCanvas->show();
-
-    return TRUE;
+    return wxNotebook::Create(parent, wxID_NOTEBOOK_CLIENT_AREA, wxPoint(0, 0), wxSize(100, 100), 0);
 }
 
 void wxMDIClientWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
@@ -713,3 +657,31 @@ void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
     Default(); // Default processing
 }
 
+void wxMDIClientWindow::OnPageChanged(wxNotebookEvent& event)
+{
+    // Notify child that it has been activated
+    if (event.GetOldSelection() != -1)
+    {
+        wxMDIChildFrame* oldChild = (wxMDIChildFrame*) GetPage(event.GetOldSelection());
+        if (oldChild)
+        {
+            wxActivateEvent event(wxEVT_ACTIVATE, FALSE, oldChild->GetId());
+            event.SetEventObject( oldChild );
+            oldChild->GetEventHandler()->ProcessEvent(event);
+        }
+    }
+    wxMDIChildFrame* activeChild = (wxMDIChildFrame*) GetPage(event.GetSelection());
+    if (activeChild)
+    {
+        wxActivateEvent event(wxEVT_ACTIVATE, TRUE, activeChild->GetId());
+        event.SetEventObject( activeChild );
+        activeChild->GetEventHandler()->ProcessEvent(event);
+
+        if (activeChild->GetMDIParentFrame())
+        {
+            activeChild->GetMDIParentFrame()->SetActiveChild(activeChild);
+            activeChild->GetMDIParentFrame()->SetChildMenuBar(activeChild);
+        }
+    }
+    event.Skip();
+}

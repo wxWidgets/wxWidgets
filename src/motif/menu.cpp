@@ -455,6 +455,7 @@ wxMenuBar::wxMenuBar()
     m_menus = NULL;
     m_titles = NULL;
     m_menuBarFrame = NULL;
+    m_mainWidget = (WXWidget) NULL;
 }
 
 wxMenuBar::wxMenuBar(int n, wxMenu *menus[], const wxString titles[])
@@ -745,6 +746,74 @@ wxString wxMenuBar::GetHelpString (int id) const
             return wxString(m_menus[i]->GetHelpString (id));
     }
     return wxString("");
+}
+
+// Create menubar
+bool wxMenuBar::CreateMenuBar(wxFrame* parent)
+{
+  if (m_mainWidget)
+  {
+    XtVaSetValues((Widget) parent->GetMainWindowWidget(), XmNmenuBar, (Widget) m_mainWidget, NULL);
+    /*
+    if (!XtIsManaged((Widget) m_mainWidget))
+      XtManageChild((Widget) m_mainWidget);
+      */
+    XtMapWidget((Widget) m_mainWidget);
+    return TRUE;
+  }
+
+  Widget menuBarW = XmCreateMenuBar ((Widget) parent->GetMainWindowWidget(), "MenuBar", NULL, 0);
+  m_mainWidget = (WXWidget) menuBarW;
+
+  int i;
+  for (i = 0; i < GetMenuCount(); i++)
+    {
+      wxMenu *menu = GetMenu(i);
+      wxString title(m_titles[i]);
+      menu->SetButtonWidget(menu->CreateMenu (this, menuBarW, menu, title, TRUE));
+
+      /*
+       * COMMENT THIS OUT IF YOU DON'T LIKE A RIGHT-JUSTIFIED HELP MENU
+       */
+      wxStripMenuCodes ((char*) (const char*) title, wxBuffer);
+
+      if (strcmp (wxBuffer, "Help") == 0)
+        XtVaSetValues ((Widget) menuBarW, XmNmenuHelpWidget, (Widget) menu->GetButtonWidget(), NULL);
+    }
+
+  XtVaSetValues((Widget) parent->GetMainWindowWidget(), XmNmenuBar, (Widget) m_mainWidget, NULL);
+  XtRealizeWidget ((Widget) menuBarW);
+  XtManageChild ((Widget) menuBarW);
+  SetMenuBarFrame(parent);
+
+  return TRUE;
+}
+
+// Destroy menubar, but keep data structures intact so we can recreate it.
+bool wxMenuBar::DestroyMenuBar()
+{
+  if (!m_mainWidget)
+  {
+      SetMenuBarFrame((wxFrame*) NULL);
+      return FALSE;
+  }
+
+  XtUnmanageChild ((Widget) m_mainWidget);
+  XtUnrealizeWidget ((Widget) m_mainWidget);
+
+  int i;
+  for (i = 0; i < GetMenuCount(); i++)
+    {
+      wxMenu *menu = GetMenu(i);
+      menu->DestroyMenu(TRUE);
+
+    }
+  XtDestroyWidget((Widget) m_mainWidget);
+  m_mainWidget = (WXWidget) 0;
+
+  SetMenuBarFrame((wxFrame*) NULL);
+
+  return TRUE;
 }
 
 //// Motif-specific

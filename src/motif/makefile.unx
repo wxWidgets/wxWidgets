@@ -179,13 +179,14 @@ EXTRA_C_SRC=\
   xmcombo/xmcombo.c # $(ZLIB_SRC)
 
 EXTRA_CPP_SRC=\
-  mdi/lib/XsComponent.C\
-  mdi/lib/XsMDICanvas.C\
-  mdi/lib/XsMDIWindow.C\
-  mdi/lib/XsMotifWindow.C\
-  mdi/lib/XsMoveOutline.C\
-  mdi/lib/XsOutline.C\
-  mdi/lib/XsResizeOutline.C
+
+#  mdi/lib/XsComponent.C\
+#  mdi/lib/XsMDICanvas.C\
+#  mdi/lib/XsMDIWindow.C\
+#  mdi/lib/XsMotifWindow.C\
+#  mdi/lib/XsMoveOutline.C\
+#  mdi/lib/XsOutline.C\
+#  mdi/lib/XsResizeOutline.C
 
 all:    $(WXLIB)
 

@@ -202,6 +202,16 @@ bool wxNotebook::DeletePage(int nPage)
     return TRUE;
 }
 
+// remove one page from the notebook, without deleting the window
+bool wxNotebook::RemovePage(int nPage)
+{
+    wxCHECK( IS_VALID_PAGE(nPage), FALSE );
+
+    m_aPages.Remove(nPage);
+
+    return TRUE;
+}
+
 // remove all pages
 bool wxNotebook::DeleteAllPages()
 {

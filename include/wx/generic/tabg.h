@@ -114,6 +114,9 @@ public:
   
   // Automatically positions tabs
   wxTabControl *AddTab(int id, const wxString& label, wxTabControl *existingTab = (wxTabControl *) NULL);
+
+  // Remove the tab without deleting the window
+  bool RemoveTab(int id);
   
   void ClearTabs(bool deleteTabs = TRUE);
 

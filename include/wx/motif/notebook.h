@@ -109,6 +109,9 @@ public:
     // get number of pages in the dialog
   int GetPageCount() const;
 
+  // Find the position of the wxNotebookPage, -1 if not found.
+  int FindPagePosition(wxNotebookPage* page) const;
+
     // set the currently selected page, return the index of the previously
     // selected one (or -1 on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
@@ -148,8 +151,12 @@ public:
 
   // operations
   // ----------
-    // remove one page from the notebook
+    // remove one page from the notebook, and delete the page.
   bool DeletePage(int nPage);
+  bool DeletePage(wxNotebookPage* page);
+    // remove one page from the notebook, without deleting the page.
+  bool RemovePage(int nPage);
+  bool RemovePage(wxNotebookPage* page);
     // remove all pages
   bool DeleteAllPages();
     // adds a new page to the notebook (it will be deleted ny the notebook,

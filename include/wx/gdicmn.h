@@ -331,9 +331,12 @@ extern void WXDLLEXPORT wxSetCursor(const wxCursor& cursor);
 // Load from a resource
 # define wxICON(X) wxIcon("" #X "")
 
-#elif defined(__WXGTK__) || defined(__WXMOTIF__)
+#elif defined(__WXGTK__)
 // Initialize from an included XPM
 # define wxICON(X) wxIcon( (const char**) X##_xpm )
+#elif defined(__WXMOTIF__)
+// Initialize from an included XPM
+# define wxICON(X) wxIcon( X##_xpm )
 #else
 
 // This will usually mean something on any platform

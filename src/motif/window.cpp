@@ -746,7 +746,11 @@ bool wxWindow::Show(bool show)
        }
        else
        {
-           XtMapWidget((Widget) GetTopWidget());
+           WXWidget topWidget = GetTopWidget();
+           if (GetTopWidget())
+             XtMapWidget((Widget) GetTopWidget());
+           else if (GetMainWidget())
+             XtMapWidget((Widget) GetMainWidget());
        }
     }
     else
@@ -759,7 +763,10 @@ bool wxWindow::Show(bool show)
        }
        else
        {
-           XtUnmapWidget((Widget) GetTopWidget());
+           if (GetTopWidget())
+             XtUnmapWidget((Widget) GetTopWidget());
+           else if (GetMainWidget())
+             XtUnmapWidget((Widget) GetMainWidget());
        }
     }
 

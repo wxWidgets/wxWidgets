@@ -188,6 +188,12 @@ class WXDLLEXPORT wxMenuBar: public wxEvtHandler
   inline WXWidget GetMainWidget() const { return m_mainWidget; }
   inline void SetMainWidget(WXWidget widget) { m_mainWidget = widget; }
 
+  // Create menubar
+  bool CreateMenuBar(wxFrame* frame);
+
+  // Destroy menubar, but keep data structures intact so we can recreate it.
+  bool DestroyMenuBar();
+
  public:
   wxEvtHandler *            m_eventHandler;
   int                       m_menuCount;
