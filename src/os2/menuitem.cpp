@@ -54,48 +54,6 @@
     #define OWNER_DRAWN_ONLY( code )
 #endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
 
-// ----------------------------------------------------------------------------
-// static function for translating menu labels
-// ----------------------------------------------------------------------------
-
-static wxString TextToLabel(
-  const wxString&                   rsTitle
-)
-{
-    wxString                        sTitle;
-    const wxChar*                   zPc;
-
-    if (rsTitle.IsEmpty())
-        return(sTitle);
-
-    for (zPc = rsTitle.c_str(); *zPc != wxT('\0'); zPc++)
-    {
-        if (*zPc == wxT('&'))
-        {
-            if (*(zPc + 1) == wxT('&'))
-            {
-                zPc++;
-                sTitle << wxT('&');
-            }
-            else
-                sTitle << wxT('~');
-        }
-        else
-        {
-            if ( *zPc == wxT('~'))
-            {
-                //
-                // Tildes must be doubled to prevent them from being
-                // interpreted as accelerator character prefix by PM ???
-                //
-                sTitle << *zPc;
-            }
-            sTitle << *zPc;
-        }
-    }
-    return(sTitle);
-} // end of TextToLabel
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -123,13 +81,13 @@ wxMenuItem::wxMenuItem(
 )
 : wxMenuItemBase( pParentMenu
                  ,nId
-                 ,TextToLabel(rsText)
+                 ,wxPMTextToLabel(rsText)
                  ,rsHelp
                  ,eKind
                  ,pSubMenu
                 )
 #if wxUSE_OWNER_DRAWN
-,  wxOwnerDrawn( TextToLabel(rsText)
+,  wxOwnerDrawn( wxPMTextToLabel(rsText)
                 ,eKind == wxITEM_CHECK
                )
 #endif // owner drawn
@@ -151,13 +109,13 @@ wxMenuItem::wxMenuItem(
 )
 : wxMenuItemBase( pParentMenu
                  ,nId
-                 ,TextToLabel(rsText)
+                 ,wxPMTextToLabel(rsText)
                  ,rsHelp
                  ,bIsCheckable ? wxITEM_CHECK : wxITEM_NORMAL
                  ,pSubMenu
                 )
 #if wxUSE_OWNER_DRAWN
-,  wxOwnerDrawn( TextToLabel(rsText)
+,  wxOwnerDrawn( wxPMTextToLabel(rsText)
                 ,bIsCheckable
                )
 #endif // owner drawn
@@ -417,7 +375,7 @@ void wxMenuItem::SetText(
     // Don't do anything if label didn't change
     //
 
-    wxString                        sText = TextToLabel(rText);
+    wxString                        sText = wxPMTextToLabel(rText);
     if (m_text == sText)
         return;
 

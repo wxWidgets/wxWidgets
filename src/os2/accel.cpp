@@ -210,3 +210,45 @@ bool wxAcceleratorTable::Translate(
     return (Ok() && rc);
 } // end of wxAcceleratorTable::Translate
 
+// ---------------------------------------------------------------------------
+// function for translating labels
+// ---------------------------------------------------------------------------
+
+wxString wxPMTextToLabel(
+  const wxString&                   rsTitle
+)
+{
+    wxString                        sTitle;
+    const wxChar*                   zPc;
+
+    if (rsTitle.IsEmpty())
+        return(sTitle);
+
+    for (zPc = rsTitle.c_str(); *zPc != wxT('\0'); zPc++)
+    {
+        if (*zPc == wxT('&'))
+        {
+            if (*(zPc + 1) == wxT('&'))
+            {
+                zPc++;
+                sTitle << wxT('&');
+            }
+            else
+                sTitle << wxT('~');
+        }
+        else
+        {
+            if ( *zPc == wxT('~'))
+            {
+                //
+                // Tildes must be doubled to prevent them from being
+                // interpreted as accelerator character prefix by PM ???
+                //
+                sTitle << *zPc;
+            }
+            sTitle << *zPc;
+        }
+    }
+    return(sTitle);
+} // end of wxPMTextToLabel
+

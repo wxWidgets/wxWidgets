@@ -61,47 +61,6 @@ USHORT                              wxMenu::m_nextMenuId = 0;
     IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
     IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
 
-// ----------------------------------------------------------------------------
-// static function for translating menu labels
-// ----------------------------------------------------------------------------
-
-static wxString TextToLabel(
-  const wxString&                   rsTitle
-)
-{
-    wxString                        sTitle = "";
-    const wxChar*                   zPc;
-
-    if (rsTitle.IsEmpty())
-        return sTitle;
-    for (zPc = rsTitle.c_str(); *zPc != wxT('\0'); zPc++ )
-    {
-        if (*zPc == wxT('&') )
-        {
-            if (*(zPc + 1) == wxT('&'))
-            {
-                zPc++;
-                sTitle << wxT('&');
-            }
-            else
-                sTitle << wxT('~');
-        }
-        else
-        {
-            if ( *zPc == wxT('~') )
-            {
-                //
-                // Tildes must be doubled to prevent them from being
-                // interpreted as accelerator character prefix by PM ???
-                //
-                sTitle << *zPc;
-            }
-            sTitle << *zPc;
-        }
-    }
-    return sTitle;
-} // end of TextToLabel
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -304,16 +263,10 @@ bool wxMenu::DoInsertOrAppend(
         m_bDoBreak = FALSE;
     }
 
-    if (pItem->IsSeparator())
-    {
-        rItem.afStyle |= MIS_SEPARATOR;
-    }
-
     //
     // Id is the numeric id for normal menu items and HMENU for submenus as
     // required by ::MM_INSERTITEM message API
     //
-
     if (pSubmenu != NULL)
     {
         wxASSERT_MSG(pSubmenu->GetHMenu(), wxT("invalid submenu"));
@@ -344,8 +297,13 @@ bool wxMenu::DoInsertOrAppend(
         pItem->m_vMenuData.afStyle = rItem.afStyle;
         pItem->m_vMenuData.hItem   = rItem.hItem;
     }
-    else if (!pItem->IsSeparator())
+    else
 #endif
+    if (pItem->IsSeparator())
+    {
+        rItem.afStyle = MIS_SEPARATOR;
+    }
+    else
     {
         //
         // Menu is just a normal string (passed in data parameter)
@@ -942,7 +900,7 @@ wxMenu* wxMenuBar::Replace(
 )
 {
     SHORT                            nId;
-    wxString                         sTitle = TextToLabel(rTitle);
+    wxString                         sTitle = wxPMTextToLabel(rTitle);
     wxMenu*                          pMenuOld = wxMenuBarBase::Replace( nPos
                                                                        ,pMenu
                                                                        ,sTitle
@@ -983,7 +941,7 @@ bool wxMenuBar::Insert(
 , const wxString&                   rTitle
 )
 {
-    wxString                        sTitle = TextToLabel(rTitle);
+    wxString                        sTitle = wxPMTextToLabel(rTitle);
 
     if (!wxMenuBarBase::Insert( nPos
                                ,pMenu
@@ -1024,7 +982,7 @@ bool wxMenuBar::Append(
 
     wxCHECK_MSG(hSubmenu, FALSE, wxT("can't append invalid menu to menubar"));
 
-    wxString                        sTitle = TextToLabel(rsTitle);
+    wxString                        sTitle = wxPMTextToLabel(rsTitle);
 
     if (!wxMenuBarBase::Append(pMenu, sTitle))
         return FALSE;
