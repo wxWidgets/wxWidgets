@@ -1371,6 +1371,8 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
             
         parent = GetParent( parent );
     }
+    
+    EnsureVisible( itemId );
 
     // ctrl press
     if (unselect_others)
