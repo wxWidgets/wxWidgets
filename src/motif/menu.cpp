@@ -11,16 +11,16 @@
 
 
 // ============================================================================
-// headers & declarations
+// declarations
 // ============================================================================
 
-// wxWindows headers
-// -----------------
-
 #ifdef __GNUG__
-#pragma implementation "menu.h"
-#pragma implementation "menuitem.h"
+    #pragma implementation "menu.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 #include "wx/menu.h"
 #include "wx/menuitem.h"
@@ -43,7 +43,6 @@
 #include "wx/motif/private.h"
 
 // other standard headers
-// ----------------------
 #include <string.h>
 
 #if !USE_SHARED_LIBRARY
@@ -55,7 +54,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
 // implementation
 // ============================================================================
 
+// ----------------------------------------------------------------------------
 // Menus
+// ----------------------------------------------------------------------------
 
 // Construct a menu with optional title (then use append)
 void wxMenu::Init(const wxString& title,
@@ -66,7 +67,6 @@ void wxMenu::Init(const wxString& title,
                  )
 {
     m_title = title;
-    m_parent = (wxEvtHandler*) NULL;
     m_eventHandler = this;
     m_noItems = 0;
     m_menuBar = NULL;
@@ -272,7 +272,7 @@ void wxMenu::SetLabel(int id, const wxString& label)
     if (item == (wxMenuItem*) NULL)
         return;
 
-    item->SetLabel(label);
+    item->SetText(label);
 }
 
 wxString wxMenu::GetLabel(int id) const
@@ -434,26 +434,13 @@ void wxMenu::UpdateUI(wxEvtHandler* source)
   }
 }
 
+// ----------------------------------------------------------------------------
 // Menu Bar
-wxMenuBar::wxMenuBar()
-{
-    m_eventHandler = this;
-    m_menuCount = 0;
-    m_menus = NULL;
-    m_titles = NULL;
-    m_menuBarFrame = NULL;
-    m_mainWidget = (WXWidget) NULL;
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENU);
-    m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENUTEXT);
-    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
-}
+// ----------------------------------------------------------------------------
 
-wxMenuBar::wxMenuBar(long WXUNUSED(style))
+void wxMenuBar::Init()
 {
     m_eventHandler = this;
-    m_menuCount = 0;
-    m_menus = NULL;
-    m_titles = NULL;
     m_menuBarFrame = NULL;
     m_mainWidget = (WXWidget) NULL;
     m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENU);
@@ -463,241 +450,124 @@ wxMenuBar::wxMenuBar(long WXUNUSED(style))
 
 wxMenuBar::wxMenuBar(int n, wxMenu *menus[], const wxString titles[])
 {
-    m_eventHandler = this;
-    m_menuCount = n;
-    m_menus = menus;
-    m_titles = new wxString[n];
-    int i;
-    for ( i = 0; i < n; i++ )
-        m_titles[i] = titles[i];
-    m_menuBarFrame = NULL;
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENU);
-    m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENUTEXT);
-    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    Init();
+
+    for ( int i = 0; i < n; i++ )
+    {
+        m_menus.Append(menus[i]);
+        m_titles.Add(titles[i]);
+    }
 }
 
 wxMenuBar::~wxMenuBar()
 {
-    int i;
-    for (i = 0; i < m_menuCount; i++)
-    {
-        delete m_menus[i];
-    }
-    delete[] m_menus;
-    delete[] m_titles;
+    // nothing to do: wxMenuBarBase will delete the menus
 }
 
-// Must only be used AFTER menu has been attached to frame,
-// otherwise use individual menus to enable/disable items
-void wxMenuBar::Enable(int id, bool flag)
+void wxMenuBar::EnableTop(size_t WXUNUSED(pos), bool WXUNUSED(flag))
 {
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-    if (!item)
-        return;
-    item->Enable(flag);
+    wxFAIL_MSG("TODO");
 }
 
-void wxMenuBar::EnableTop(int WXUNUSED(pos), bool WXUNUSED(flag))
+void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
 {
-    // TODO
-}
-
-// Must only be used AFTER menu has been attached to frame,
-// otherwise use individual menus
-void wxMenuBar::Check(int id, bool flag)
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-    if (!item)
+    wxMenu *menu = GetMenu(pos);
+    if ( !menu )
         return;
 
-    if (!item->IsCheckable())
-        return ;
-
-    item->Check(flag);
-}
-
-bool wxMenuBar::Checked(int id) const
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-    if (!item)
-        return FALSE;
-
-    return item->IsChecked();
-}
-
-bool wxMenuBar::Enabled(int id) const
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-    if (!item)
-        return FALSE;
-
-    return item->IsEnabled();
-}
-
-void wxMenuBar::SetLabel(int id, const wxString& label)
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-
-    if (!item)
-        return;
-
-    item->SetLabel(label);
-}
-
-wxString wxMenuBar::GetLabel(int id) const
-{
-    wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
-
-    if (!item)
-        return wxString("");
-
-    return item->GetLabel();
-}
-
-void wxMenuBar::SetLabelTop(int pos, const wxString& label)
-{
-    wxASSERT( (pos < m_menuCount) );
-
-    Widget w = (Widget) m_menus[pos]->GetButtonWidget();
+    Widget w = (Widget)menu->GetButtonWidget();
     if (w)
     {
-        XmString label_str = XmStringCreateSimple ((char*) (const char*) label);
-        XtVaSetValues (w,
-            XmNlabelString, label_str,
-            NULL);
-        XmStringFree (label_str);
+        wxXmString label_str(label);
+
+        XtVaSetValues(w,
+                      XmNlabelString, label_str(),
+                      NULL);
     }
 }
 
-wxString wxMenuBar::GetLabelTop(int pos) const
+wxString wxMenuBar::GetLabelTop(size_t pos) const
 {
-    wxASSERT( (pos < m_menuCount) );
+    wxString str;
 
-    Widget w = (Widget) m_menus[pos]->GetButtonWidget();
-    if (w)
+    wxMenu *menu = GetMenu(pos);
+    if ( menu )
     {
-        XmString text;
-        char *s;
-        XtVaGetValues (w,
-            XmNlabelString, &text,
-            NULL);
-
-        if (XmStringGetLtoR (text, XmSTRING_DEFAULT_CHARSET, &s))
+        Widget w = (Widget)menu->GetButtonWidget();
+        if (w)
         {
-            wxString str(s);
-            XtFree (s);
-            return str;
+            XmString text;
+            XtVaGetValues(w,
+                          XmNlabelString, &text,
+                          NULL);
+
+            char *s;
+            if ( XmStringGetLtoR(text, XmSTRING_DEFAULT_CHARSET, &s) )
+            {
+                str = s;
+
+                XtFree(s);
+            }
         }
-        else
-        {
-            return wxEmptyString;
-        }
     }
-    else
-        return wxEmptyString;
 
+    return str;
 }
 
-bool wxMenuBar::OnDelete(wxMenu *menu, int WXUNUSED(pos))
+bool wxMenuBar::Append(wxMenu * menu, const wxString& title)
 {
-    // Only applies to dynamic deletion (when set in frame)
-    if (!m_menuBarFrame)
-        return TRUE;
+    wxCHECK_MSG( menu, FALSE, wxT("invalid menu") );
+    wxCHECK_MSG( !menu->GetParent() && !menu->GetButtonWidget(), FALSE,
+                 wxT("menu already appended") );
 
-    menu->DestroyMenu(TRUE);
-    return TRUE;
-}
-
-bool wxMenuBar::OnAppend(wxMenu *menu, const char *title)
-{
-    // Only applies to dynamic append (when set in frame)
-    if (!m_menuBarFrame)
-        return TRUE;
-
-    // Probably should be an assert here
-    if (menu->GetParent())
-        return FALSE;
-
-    // Has already been appended
-    if (menu->GetButtonWidget())
-        return FALSE;
-
-    WXWidget w = menu->CreateMenu(this, GetMainWidget(), menu, title, TRUE);
-    menu->SetButtonWidget(w);
-
-    return TRUE;
-}
-
-void wxMenuBar::Append (wxMenu * menu, const wxString& title)
-{
-    if (!OnAppend(menu, title))
-        return;
-
-    m_menuCount ++;
-    wxMenu **new_menus = new wxMenu *[m_menuCount];
-    wxString *new_titles = new wxString[m_menuCount];
-    int i;
-
-    for (i = 0; i < m_menuCount - 1; i++)
+    if ( m_menuBarFrame )
     {
-        new_menus[i] = m_menus[i];
-        m_menus[i] = NULL;
-        new_titles[i] = m_titles[i];
-        m_titles[i] = "";
+        WXWidget w = menu->CreateMenu(this, GetMainWidget(), menu, title, TRUE);
+        wxCHECK_MSG( w, FALSE, wxT("failed to create menu") );
+        menu->SetButtonWidget(w);
     }
-    if (m_menus)
-    {
-        delete[]m_menus;
-        delete[]m_titles;
-    }
-    m_menus = new_menus;
-    m_titles = new_titles;
-
-    m_menus[m_menuCount - 1] = (wxMenu *)menu;
-    m_titles[m_menuCount - 1] = title;
 
     menu->SetMenuBar(this);
-    menu->SetParent(this);
+
+    m_titles.Add(title);
+
+    return wxMenuBarBase::Append(menu, title);
 }
 
-void wxMenuBar::Delete(wxMenu * menu, int i)
+bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
-    int j;
-    int ii = (int) i;
+    if ( !wxMenuBarBase::Insert(pos, menu, title) )
+        return FALSE;
 
-    if (menu != 0)
-    {
-        for (ii = 0; ii < m_menuCount; ii++)
-        {
-            if (m_menus[ii] == menu)
-                break;
-        }
-        if (ii >= m_menuCount)
-            return;
-    } else
-    {
-        if (ii < 0 || ii >= m_menuCount)
-            return;
-        menu = m_menus[ii];
-    }
+    wxFAIL_MSG(wxT("TODO"));
 
-    if (!OnDelete(menu, ii))
-        return;
+    return FALSE;
+}
 
-    menu->SetParent((wxEvtHandler*) NULL);
+wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
+{
+    if ( !wxMenuBarBase::Replace(pos, menu, title) )
+        return FALSE;
 
-    -- m_menuCount;
-    for (j = ii; j < m_menuCount; j++)
-    {
-        m_menus[j] = m_menus[j + 1];
-        m_titles[j] = m_titles[j + 1];
-    }
+    wxFAIL_MSG(wxT("TODO"));
+
+    return NULL;
+}
+
+wxMenu *wxMenuBar::Remove(size_t pos)
+{
+    wxMenu *menu = wxMenuBarBase::Remove(pos);
+    if ( !menu )
+        return NULL;
+
+    if ( m_menuBarFrame )
+        menu->DestroyMenu(TRUE);
+
+    menu->SetMenuBar(NULL);
+
+    m_titles.Remove(pos);
+
+    return menu;
 }
 
 // Find the menu menuString, item itemString, and return the item id.
@@ -707,8 +577,9 @@ int wxMenuBar::FindMenuItem (const wxString& menuString, const wxString& itemStr
     char buf1[200];
     char buf2[200];
     wxStripMenuCodes ((char *)(const char *)menuString, buf1);
-    int i;
-    for (i = 0; i < m_menuCount; i++)
+
+    size_t menuCount = GetMenuCount();
+    for (size_t i = 0; i < menuCount; i++)
     {
         wxStripMenuCodes ((char *)(const char *)m_titles[i], buf2);
         if (strcmp (buf1, buf2) == 0)
@@ -717,41 +588,17 @@ int wxMenuBar::FindMenuItem (const wxString& menuString, const wxString& itemStr
     return -1;
 }
 
-wxMenuItem *wxMenuBar::FindItemForId (int id, wxMenu ** itemMenu) const
+wxMenuItem *wxMenuBar::FindItem(int id, wxMenu ** itemMenu) const
 {
     if (itemMenu)
         *itemMenu = NULL;
 
     wxMenuItem *item = NULL;
-    int i;
-    for (i = 0; i < m_menuCount; i++)
+    size_t menuCount = GetMenuCount();
+    for (size_t i = 0; i < menuCount; i++)
         if ((item = m_menus[i]->FindItemForId (id, itemMenu)))
             return item;
         return NULL;
-}
-
-void wxMenuBar::SetHelpString (int id, const wxString& helpString)
-{
-    int i;
-    for (i = 0; i < m_menuCount; i++)
-    {
-        if (m_menus[i]->FindItemForId (id))
-        {
-            m_menus[i]->SetHelpString (id, helpString);
-            return;
-        }
-    }
-}
-
-wxString wxMenuBar::GetHelpString (int id) const
-{
-    int i;
-    for (i = 0; i < m_menuCount; i++)
-    {
-        if (m_menus[i]->FindItemForId (id))
-            return wxString(m_menus[i]->GetHelpString (id));
-    }
-    return wxString("");
 }
 
 // Create menubar
@@ -771,8 +618,8 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
     Widget menuBarW = XmCreateMenuBar ((Widget) parent->GetMainWindowWidget(), "MenuBar", NULL, 0);
     m_mainWidget = (WXWidget) menuBarW;
 
-    int i;
-    for (i = 0; i < GetMenuCount(); i++)
+    size_t menuCount = GetMenuCount();
+    for (size_t i = 0; i < menuCount; i++)
     {
         wxMenu *menu = GetMenu(i);
         wxString title(m_titles[i]);
@@ -816,8 +663,8 @@ bool wxMenuBar::DestroyMenuBar()
     XtUnmanageChild ((Widget) m_mainWidget);
     XtUnrealizeWidget ((Widget) m_mainWidget);
 
-    int i;
-    for (i = 0; i < GetMenuCount(); i++)
+    size_t menuCount = GetMenuCount();
+    for (size_t i = 0; i < menuCount; i++)
     {
         wxMenu *menu = GetMenu(i);
         menu->DestroyMenu(TRUE);
@@ -832,8 +679,6 @@ bool wxMenuBar::DestroyMenuBar()
 }
 
 //// Motif-specific
-
-extern wxApp *wxTheApp;
 static XtWorkProcId WorkProcMenuId;
 
 /* Since PopupMenu under Motif stills grab right mouse button events
@@ -1092,26 +937,30 @@ void wxMenu::SetFont(const wxFont& font)
     ChangeFont();
 }
 
-void wxMenuBar::SetBackgroundColour(const wxColour& col)
+bool wxMenuBar::SetBackgroundColour(const wxColour& col)
 {
-
     m_backgroundColour = col;
     if (m_mainWidget)
         wxDoChangeBackgroundColour(m_mainWidget, (wxColour&) col);
-    int i;
-    for (i = 0; i < m_menuCount; i++)
+
+    size_t menuCount = GetMenuCount();
+    for (size_t i = 0; i < menuCount; i++)
         m_menus[i]->SetBackgroundColour((wxColour&) col);
+
+    return TRUE;
 }
 
-void wxMenuBar::SetForegroundColour(const wxColour& col)
+bool wxMenuBar::SetForegroundColour(const wxColour& col)
 {
     m_foregroundColour = col;
     if (m_mainWidget)
         wxDoChangeForegroundColour(m_mainWidget, (wxColour&) col);
 
-    int i;
-    for (i = 0; i < m_menuCount; i++)
+    size_t menuCount = GetMenuCount();
+    for (size_t i = 0; i < menuCount; i++)
         m_menus[i]->SetForegroundColour((wxColour&) col);
+
+    return TRUE;
 }
 
 void wxMenuBar::ChangeFont(bool WXUNUSED(keepOriginalSize))
@@ -1119,13 +968,15 @@ void wxMenuBar::ChangeFont(bool WXUNUSED(keepOriginalSize))
     // Nothing to do for menubar, fonts are kept in wxMenus
 }
 
-void wxMenuBar::SetFont(const wxFont& font)
+bool wxMenuBar::SetFont(const wxFont& font)
 {
     m_font = font;
     ChangeFont();
 
-    int i;
-    for (i = 0; i < m_menuCount; i++)
+    size_t menuCount = GetMenuCount();
+    for (size_t i = 0; i < menuCount; i++)
         m_menus[i]->SetFont(font);
+
+    return TRUE;
 }
 

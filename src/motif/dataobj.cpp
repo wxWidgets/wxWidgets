@@ -33,7 +33,6 @@ Atom  g_textAtom = 0;
 
 wxDataFormat::wxDataFormat()
 {
-    if (!g_textAtom) g_textAtom = XInternAtom( (Display*) wxGetDisplay(), "STRING", FALSE );
     m_type = wxDF_INVALID;
     m_hasAtom = FALSE;
     m_atom = (Atom) 0;

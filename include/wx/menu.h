@@ -115,7 +115,9 @@ public:
     void SetHelpString(int id, const wxString& helpString);
     wxString GetHelpString(int id) const;
 
-    // need to override this one to avoid virtual function hiding
+    // need to override these ones to avoid virtual function hiding
+    virtual bool Enable(bool enable = TRUE) { return wxWindow::Enable(enable); }
+    virtual void SetLabel(const wxString& s) { wxWindow::SetLabel(s); }
     virtual wxString GetLabel() const { return wxWindow::GetLabel(); }
 
     // compatibility only: these functions are deprecated, use the new ones

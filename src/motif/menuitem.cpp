@@ -10,8 +10,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
-// headers & declarations
+// declarations
 // ============================================================================
+
+#ifdef __GNUG__
+    #pragma implementation "menuitem.h"
+#endif
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 #include "wx/menu.h"
 #include "wx/menuitem.h"
@@ -30,12 +38,13 @@
 
 #include "wx/motif/private.h"
 
-void wxMenuItemCallback (Widget w, XtPointer clientData,
-                         XtPointer ptr);
-void wxMenuItemArmCallback (Widget w, XtPointer clientData,
-                            XtPointer ptr);
-void wxMenuItemDisarmCallback (Widget w, XtPointer clientData,
-                               XtPointer ptr);
+// ----------------------------------------------------------------------------
+// functions prototypes
+// ----------------------------------------------------------------------------
+
+static void wxMenuItemCallback(Widget w, XtPointer clientData, XtPointer ptr);
+static void wxMenuItemArmCallback(Widget w, XtPointer clientData, XtPointer ptr);
+static void wxMenuItemDisarmCallback(Widget w, XtPointer clientData, XtPointer ptr);
 
 // ============================================================================
 // implementation
@@ -46,7 +55,7 @@ void wxMenuItemDisarmCallback (Widget w, XtPointer clientData,
 // ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 #endif  //USE_SHARED_LIBRARY
 
 // ----------------------------------------------------------------------------
@@ -59,23 +68,24 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
                        const wxString& strName, const wxString& strHelp,
                        bool bCheckable,
-                       wxMenu *pSubMenu) :
-m_strHelp(strHelp),
-m_bCheckable(bCheckable),
-m_strName(strName)
+                       wxMenu *pSubMenu)
 {
-    wxASSERT( pParentMenu != NULL );
+    wxASSERT_MSG( pParentMenu != NULL, wxT("menuitem should have a menu") );
 
-    m_pParentMenu = pParentMenu;
-    m_pSubMenu    = pSubMenu;
-    m_idItem      = id;
-    m_bEnabled    = TRUE;
-    m_bChecked    = FALSE;
+    // common init
+    m_parentMenu  = pParentMenu;
+    m_subMenu     = pSubMenu;
+    m_id          = id;
+    m_isEnabled   = TRUE;
+    m_isChecked   = FALSE;
+    m_help        = strHelp;
+    m_isCheckable = bCheckable;
+    m_text        = strName;
 
-    //// Motif-specific
-    m_menuBar = NULL;
+    // Motif-specific
+    m_menuBar      = NULL;
     m_buttonWidget = (WXWidget) NULL;
-    m_topMenu = NULL;
+    m_topMenu      = NULL;
 }
 
 wxMenuItem::~wxMenuItem()
@@ -88,10 +98,10 @@ wxMenuItem::~wxMenuItem()
 // delete the sub menu
 void wxMenuItem::DeleteSubMenu()
 {
-    wxASSERT( m_pSubMenu != NULL );
+    wxASSERT( m_subMenu != NULL );
 
-    delete m_pSubMenu;
-    m_pSubMenu = NULL;
+    delete m_subMenu;
+    m_subMenu = NULL;
 }
 
 // change item state
@@ -99,10 +109,11 @@ void wxMenuItem::DeleteSubMenu()
 
 void wxMenuItem::Enable(bool bDoEnable)
 {
-    if ( m_bEnabled != bDoEnable )
+    if ( m_isChecked != bDoEnable )
     {
-        if ( m_pSubMenu == NULL )
-        {     // normal menu item
+        if ( !IsSubMenu() )
+        {
+            // normal menu item
             if (m_buttonWidget)
                 XtSetSensitive( (Widget) m_buttonWidget, (Boolean) bDoEnable);
         }
@@ -114,7 +125,7 @@ void wxMenuItem::Enable(bool bDoEnable)
                 XtSetSensitive( (Widget) m_buttonWidget, (Boolean) bDoEnable);
         }
 
-        m_bEnabled = bDoEnable;
+        wxMenuItemBase::Enable(bDoEnable);
     }
 }
 
@@ -122,13 +133,20 @@ void wxMenuItem::Check(bool bDoCheck)
 {
     wxCHECK_RET( IsCheckable(), "only checkable items may be checked" );
 
-    if ( m_bChecked != bDoCheck )
+    if ( m_isChecked != bDoCheck )
     {
-        if (m_buttonWidget && XtIsSubclass ((Widget) m_buttonWidget, xmToggleButtonGadgetClass))
+        if ( m_buttonWidget )
         {
-            XtVaSetValues ( (Widget) m_buttonWidget, XmNset, (Boolean) bDoCheck, NULL);
+            wxASSERT_MSG( XtIsSubclass((Widget)m_buttonWidget,
+                                       xmToggleButtonGadgetClass),
+                          wxT("checkable menu item must be a toggle button") );
+
+            XtVaSetValues((Widget)m_buttonWidget,
+                          XmNset, (Boolean)bDoCheck,
+                          NULL);
         }
-        m_bChecked = bDoCheck;
+
+        wxMenuItemBase::Check(bDoCheck);
     }
 }
 
@@ -143,12 +161,12 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMen
     {
         // Id=-2 identifies a Title item.
         m_buttonWidget = (WXWidget) XtVaCreateManagedWidget
-            (wxStripMenuCodes(m_strName),
+            (wxStripMenuCodes(m_text),
             xmLabelGadgetClass, (Widget) menu, NULL);
     }
-    else if ((!m_strName.IsNull() && m_strName != "") && (!m_pSubMenu))
+    else if ((!m_text.IsNull() && m_text != "") && (!m_subMenu))
     {
-        wxString strName = wxStripMenuCodes(m_strName);
+        wxString strName = wxStripMenuCodes(m_text);
         if (IsCheckable())
         {
             m_buttonWidget = (WXWidget) XtVaCreateManagedWidget (strName,
@@ -160,13 +178,13 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMen
             m_buttonWidget = (WXWidget) XtVaCreateManagedWidget (strName,
             xmPushButtonGadgetClass, (Widget) menu,
             NULL);
-        char mnem = wxFindMnemonic (m_strName);
+        char mnem = wxFindMnemonic (m_text);
         if (mnem != 0)
             XtVaSetValues ((Widget) m_buttonWidget, XmNmnemonic, mnem, NULL);
 
         //// TODO: proper accelerator treatment. What does wxFindAccelerator
         //// look for?
-        strName = m_strName;
+        strName = m_text;
         char *accel = wxFindAccelerator (strName);
         if (accel)
             XtVaSetValues ((Widget) m_buttonWidget, XmNaccelerator, accel, NULL);
@@ -203,10 +221,10 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMen
         m_buttonWidget = (WXWidget) XtVaCreateManagedWidget ("separator",
             xmSeparatorGadgetClass, (Widget) menu, NULL);
     }
-    else if (m_pSubMenu)
+    else if (m_subMenu)
     {
-        m_buttonWidget = m_pSubMenu->CreateMenu (menuBar, menu, topMenu, m_strName, TRUE);
-        m_pSubMenu->SetButtonWidget(m_buttonWidget);
+        m_buttonWidget = m_subMenu->CreateMenu (menuBar, menu, topMenu, m_text, TRUE);
+        m_subMenu->SetButtonWidget(m_buttonWidget);
         XtAddCallback ((Widget) m_buttonWidget,
             XmNcascadingCallback,
             (XtCallbackProc) wxMenuItemArmCallback,
@@ -220,10 +238,10 @@ void wxMenuItem::DestroyItem(bool full)
 {
     if (GetId() == -2)
     {
-        ;			// Nothing
+        ;      // Nothing
 
     }
-    else if ((!m_strName.IsNull() && (m_strName != "")) && !m_pSubMenu)
+    else if ((!m_text.IsNull() && (m_text != "")) && !m_subMenu)
     {
         if (m_buttonWidget)
         {
@@ -241,7 +259,7 @@ void wxMenuItem::DestroyItem(bool full)
     }
     else if (GetId() == -1)
     {
-        ;			// Nothing
+        ;      // Nothing
 
     }
     else if (GetSubMenu())
@@ -251,7 +269,7 @@ void wxMenuItem::DestroyItem(bool full)
             XtRemoveCallback ((Widget) m_buttonWidget, XmNcascadingCallback,
                 wxMenuItemArmCallback, (XtPointer) this);
         }
-        m_pSubMenu->DestroyMenu(full);
+        m_subMenu->DestroyMenu(full);
         if (full)
             m_buttonWidget = NULL;
     }
@@ -263,12 +281,12 @@ void wxMenuItem::DestroyItem(bool full)
     }
 }
 
-void wxMenuItem::SetLabel(const wxString& label)
+void wxMenuItem::SetText(const wxString& label)
 {
     char mnem = wxFindMnemonic (label);
     wxString label2 = wxStripMenuCodes(label);
 
-    m_strName = label;
+    m_text = label;
 
     if (m_buttonWidget)
     {
@@ -291,6 +309,10 @@ void wxMenuItem::SetLabel(const wxString& label)
     }
 }
 
+// ----------------------------------------------------------------------------
+// Motif callbacks
+// ----------------------------------------------------------------------------
+
 void wxMenuItemCallback (Widget WXUNUSED(w), XtPointer clientData,
                          XtPointer WXUNUSED(ptr))
 {
@@ -301,7 +323,9 @@ void wxMenuItemCallback (Widget WXUNUSED(w), XtPointer clientData,
         {
             Boolean isChecked = FALSE;
             XtVaGetValues ((Widget) item->GetButtonWidget(), XmNset, & isChecked, NULL);
-            item->SetChecked(isChecked);
+
+            // only set the flag, don't actually check anything
+            item->wxMenuItemBase::Check(isChecked);
         }
         if (item->GetMenuBar() && item->GetMenuBar()->GetMenuBarFrame())
         {

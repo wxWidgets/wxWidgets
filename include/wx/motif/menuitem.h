@@ -9,107 +9,54 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _MENUITEM_H
-#define   _MENUITEM_H
+#ifndef _WX_MOTIF_MENUITEM_H
+#define _WX_MOTIF_MENUITEM_H
 
 #ifdef __GNUG__
-#pragma interface "menuitem.h"
+    #pragma interface "menuitem.h"
 #endif
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
-#include "wx/setup.h"
-
-// an exception to the general rule that a normal header doesn't include other
-// headers - only because ownerdrw.h is not always included and I don't want
-// to write #ifdef's everywhere...
-#if wxUSE_OWNER_DRAWN
-#include  "wx/ownerdrw.h"
-#endif
-
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// id for a separator line in the menu (invalid for normal item)
-// #define   ID_SEPARATOR    (-1)
 
 // ----------------------------------------------------------------------------
 // wxMenuItem: an item in the menu, optionally implements owner-drawn behaviour
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxMenuItem: public wxObject
-#if wxUSE_OWNER_DRAWN
-                            , public wxOwnerDrawn
-#endif
+
+class WXDLLEXPORT wxMenuItem: public wxMenuItemBase
 {
-DECLARE_DYNAMIC_CLASS(wxMenuItem)
-
 public:
-  // ctor & dtor
-  wxMenuItem(wxMenu *pParentMenu = NULL, int id = ID_SEPARATOR,
-             const wxString& strName = "", const wxString& wxHelp = "",
-             bool bCheckable = FALSE, wxMenu *pSubMenu = NULL);
-  virtual ~wxMenuItem();
+    // ctor & dtor
+    wxMenuItem(wxMenu *parentMenu = (wxMenu *)NULL,
+               int id = wxID_SEPARATOR,
+               const wxString& text = wxEmptyString,
+               const wxString& help = wxEmptyString,
+               bool isCheckable = FALSE,
+               wxMenu *subMenu = (wxMenu *)NULL);
+    ~wxMenuItem();
 
-  // accessors (some more are inherited from wxOwnerDrawn or are below)
-  bool              IsSeparator() const { return m_idItem == ID_SEPARATOR;  }
-  bool              IsEnabled()   const { return m_bEnabled;  }
-  bool              IsChecked()   const { return m_bChecked;  }
+    // accessors (some more are inherited from wxOwnerDrawn or are below)
+    virtual void SetText(const wxString& label);
+    virtual void Enable(bool enable = TRUE);
+    virtual void Check(bool check = TRUE);
 
-  int               GetId()       const { return m_idItem;    }
-  const wxString&   GetHelp()     const { return m_strHelp;   }
-  wxMenu           *GetSubMenu()  const { return m_pSubMenu;  }
+    void DeleteSubMenu();
 
-  // operations
-  void SetName(const wxString& strName) { m_strName = strName; }
-  void SetHelp(const wxString& strHelp) { m_strHelp = strHelp; }
+    // implementation from now on
+    void CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMenu);
+    void DestroyItem(bool full);
 
-  void Enable(bool bDoEnable = TRUE);
-  void Check(bool bDoCheck = TRUE);
+    WXWidget GetButtonWidget() const { return m_buttonWidget; }
 
-  void DeleteSubMenu();
+    wxMenuBar* GetMenuBar() const { return m_menuBar; }
+    void SetMenuBar(wxMenuBar* menuBar) { m_menuBar = menuBar; }
 
-  //// Motif-specific
-
-  // These two should probably exist for all ports
-  void SetLabel(const wxString& label);
-  wxString GetLabel() const { return m_strName; }
-  void CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMenu);
-  void DestroyItem(bool full);
-
-  inline WXWidget GetButtonWidget() const { return m_buttonWidget; }
-  inline void SetChecked(bool check) { m_bChecked = check; }
-  inline wxMenuBar* GetMenuBar() const { return m_menuBar; }
-  inline void SetMenuBar(wxMenuBar* menuBar) { m_menuBar = menuBar; }
-  inline wxMenu* GetTopMenu() const { return m_topMenu; }
-  inline void SetTopMenu(wxMenu* menu) { m_topMenu = menu; }
+    wxMenu* GetTopMenu() const { return m_topMenu; }
+    void SetTopMenu(wxMenu* menu) { m_topMenu = menu; }
 
 private:
-  int         m_idItem;         // numeric id of the item
-  wxString    m_strHelp;        // associated help string
-  wxMenu     *m_pSubMenu,       // may be NULL
-             *m_pParentMenu;    // menu this item is contained in
-  bool        m_bEnabled,       // enabled or greyed?
-              m_bChecked;       // checked? (only if checkable)
+    WXWidget    m_buttonWidget;
+    wxMenuBar*  m_menuBar;
+    wxMenu*     m_topMenu;        // Top-level menu e.g. popup-menu
 
-  //// Motif-specific
-  WXWidget    m_buttonWidget;
-  wxMenuBar*  m_menuBar;
-  wxMenu*     m_topMenu;        // Top-level menu e.g. popup-menu
-
-#if wxUSE_OWNER_DRAWN
-  // wxOwnerDrawn base class already has these variables - nothing to do
-
-#else   //!owner drawn
-  bool        m_bCheckable;     // can be checked?
-  wxString    m_strName;        // name or label of the item
-
-public:
-  const wxString&   GetName()     const { return m_strName;    }
-  bool              IsCheckable() const { return m_bCheckable; }
-#endif  //owner drawn
+    DECLARE_DYNAMIC_CLASS(wxMenuItem)
 };
 
-#endif  //_MENUITEM_H
+#endif  // _WX_MOTIF_MENUITEM_H

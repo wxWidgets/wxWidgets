@@ -9,28 +9,23 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MENU_H_
-#define _WX_MENU_H_
+#ifndef _WX_MOTIF_MENU_H_
+#define _WX_MOTIF_MENU_H_
 
 #ifdef __GNUG__
-#pragma interface "menu.h"
+    #pragma interface "menu.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/event.h"
+#include "wx/colour.h"
 #include "wx/font.h"
-#include "wx/gdicmn.h"
 
-class WXDLLEXPORT wxMenuItem;
-class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxMenu;
-
-WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
+class wxFrame;
 
 // ----------------------------------------------------------------------------
 // Menu
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxMenu: public wxEvtHandler
+
+class wxMenu : public wxEvtHandler
 {
   DECLARE_DYNAMIC_CLASS(wxMenu)
 
@@ -106,7 +101,6 @@ public:
   void Callback(const wxFunction func) { m_callback = func; }
 #endif // WXWIN_COMPATIBILITY
 
-  virtual void SetParent(wxEvtHandler *parent) { m_parent = parent; }
   void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
   wxEvtHandler *GetEventHandler() { return m_eventHandler; }
 
@@ -160,7 +154,6 @@ public:
   wxString          m_title;
   wxMenuBar *       m_menuBar;
   wxList            m_menuItems;
-  wxEvtHandler *    m_parent;
   wxEvtHandler *    m_eventHandler;
   void*             m_clientData;
   wxWindow*         m_pInvokingWindow;
@@ -191,54 +184,36 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// Menu Bar (a la Windows)
+// Menu Bar
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFrame;
-class WXDLLEXPORT wxMenuBar : public wxEvtHandler
+class wxMenuBar : public wxMenuBarBase
 {
-DECLARE_DYNAMIC_CLASS(wxMenuBar)
-
 public:
-    wxMenuBar( long style );
-    wxMenuBar();
+    wxMenuBar() { Init(); }
+    wxMenuBar(long WXUNUSED(style)) { Init(); }
     wxMenuBar(int n, wxMenu *menus[], const wxString titles[]);
-    ~wxMenuBar();
+    virtual ~wxMenuBar();
 
-    void Append(wxMenu *menu, const wxString& title);
-    // Must only be used AFTER menu has been attached to frame,
-    // otherwise use individual menus to enable/disable items
-    void Enable(int Id, bool Flag);
-    bool Enabled(int Id) const ;
-    bool IsEnabled(int Id) const { return Enabled(Id); };
-    void EnableTop(int pos, bool Flag);
-    void Check(int id, bool Flag);
-    bool Checked(int id) const ;
-    bool IsChecked(int Id) const { return Checked(Id); };
-    void SetLabel(int id, const wxString& label) ;
-    wxString GetLabel(int id) const ;
-    void SetLabelTop(int pos, const wxString& label) ;
-    wxString GetLabelTop(int pos) const ;
-    virtual void Delete(wxMenu *menu, int index = 0); /* Menu not destroyed */
-    virtual bool OnAppend(wxMenu *menu, const char *title);
-    virtual bool OnDelete(wxMenu *menu, int index);
+    // implement base class (pure) virtuals
+    // ------------------------------------
 
-    virtual void SetHelpString(int Id, const wxString& helpString);
-    virtual wxString GetHelpString(int Id) const ;
+    virtual bool Append( wxMenu *menu, const wxString &title );
+    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title);
+    virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title);
+    virtual wxMenu *Remove(size_t pos);
 
-    virtual int FindMenuItem(const wxString& menuString, const wxString& itemString) const ;
+    virtual int FindMenuItem(const wxString& menuString,
+                             const wxString& itemString) const;
+    virtual wxMenuItem* FindItem( int id, wxMenu **menu = NULL ) const;
 
-    // Find wxMenuItem for item ID, and return item's
-    // menu too if itemMenu is non-NULL.
-    wxMenuItem *FindItemForId(int itemId, wxMenu **menuForItem = NULL) const ;
+    virtual void EnableTop( size_t pos, bool flag );
+    virtual void SetLabelTop( size_t pos, const wxString& label );
+    virtual wxString GetLabelTop( size_t pos ) const;
 
-    void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
-    wxEvtHandler *GetEventHandler() { return m_eventHandler; }
+    // implementation only from now on
+    // -------------------------------
 
-    int GetMenuCount() const { return m_menuCount; }
-    wxMenu* GetMenu(int i) const { return m_menus[i]; }
-
-    //// Motif-specific
     wxFrame* GetMenuBarFrame() const { return m_menuBarFrame; }
     void SetMenuBarFrame(wxFrame* frame) { m_menuBarFrame = frame; }
     WXWidget GetMainWidget() const { return m_mainWidget; }
@@ -254,24 +229,25 @@ public:
     const wxColour& GetForegroundColour() const { return m_foregroundColour; }
     const wxFont& GetFont() const { return m_font; }
 
-    void SetBackgroundColour(const wxColour& colour);
-    void SetForegroundColour(const wxColour& colour);
-    void SetFont(const wxFont& colour);
+    virtual bool SetBackgroundColour(const wxColour& colour);
+    virtual bool SetForegroundColour(const wxColour& colour);
+    virtual bool SetFont(const wxFont& colour);
     void ChangeFont(bool keepOriginalSize = FALSE);
 
 public:
-    wxEvtHandler *            m_eventHandler;
-    int                       m_menuCount;
-    wxMenu **                 m_menus;
-    wxString *                m_titles;
-    wxFrame *                 m_menuBarFrame;
+    // common part of all ctors
+    void Init();
 
-    //// Motif-specific
-    WXWidget                  m_mainWidget;
+    wxArrayString m_titles;
+    wxFrame      *m_menuBarFrame;
 
-    wxColour                  m_foregroundColour;
-    wxColour                  m_backgroundColour;
-    wxFont                    m_font;
+    WXWidget      m_mainWidget;
+
+    wxColour      m_foregroundColour;
+    wxColour      m_backgroundColour;
+    wxFont        m_font;
+
+    DECLARE_DYNAMIC_CLASS(wxMenuBar)
 };
 
-#endif // _WX_MENU_H_
+#endif // _WX_MOTIF_MENU_H_
