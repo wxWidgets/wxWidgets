@@ -99,7 +99,6 @@ public:
     virtual void DoSetSize( int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO );
     virtual void OnInternalIdle();
     
-    bool             m_alreadySent;
     bool             m_hasFocus,
                      m_lostFocus;
     int              m_majorDim;
