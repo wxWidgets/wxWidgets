@@ -2311,15 +2311,9 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 break;
             }
 
-#ifndef __WXWINCE__
+#ifdef WM_PRINT
         case WM_PRINT:
             {
-#if wxUSE_LISTCTRL
-                // Don't call the wx handlers in this case
-                if ( wxIsKindOf(this, wxListCtrl) )
-                    break;
-#endif
-
                 if ( lParam & PRF_ERASEBKGND )
                     HandleEraseBkgnd((WXHDC)(HDC)wParam);
 
@@ -2327,7 +2321,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 processed = HandlePaint();
             }
             break;
-#endif
+#endif // WM_PRINT
 
         case WM_CLOSE:
 #ifdef __WXUNIVERSAL__

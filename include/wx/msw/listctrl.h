@@ -375,6 +375,11 @@ protected:
     // convert our styles to Windows
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
+    // special Windows message handling
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
+                                    WXWPARAM wParam,
+                                    WXLPARAM lParam);
+
 
     wxTextCtrl*       m_textCtrl;        // The control used for editing a label
     wxImageList *     m_imageListNormal; // The image list for normal icons

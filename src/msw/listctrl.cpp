@@ -2385,6 +2385,21 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     }
 }
 
+WXLRESULT
+wxListCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+#ifdef WM_PRINT
+    if ( nMsg == WM_PRINT )
+    {
+        // we should bypass our own WM_PRINT handling as we don't handle
+        // PRF_CHILDREN flag, so leave it to the native control itself
+        return MSWDefWindowProc(nMsg, wParam, lParam);
+    }
+#endif // WM_PRINT
+
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
+
 // ----------------------------------------------------------------------------
 // virtual list controls
 // ----------------------------------------------------------------------------
