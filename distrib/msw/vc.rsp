@@ -186,6 +186,8 @@ samples/scrollsub/ScrollsubVC.dsp
 samples/scrollsub/ScrollsubVC.dsw
 
 samples/sockets/ClientVC.dsp
+samples/sockets/ServerVC.dsp
+samples/sockets/ClientVC.dsw
 samples/sockets/ServerVC.dsw
 
 samples/splitter/SplitterVC.dsp
