@@ -394,9 +394,9 @@ bool MyApp::OnInit()
     {
         wxString filename;
         filename.Printf(wxT("%s%d.png"), (const wxChar*)rootName, i);
-	/* For some reason under wxX11, the 2nd LoadFile in this loop fails, with
-	   a BadMatch inside CreateFromImage (inside ConvertToBitmap). This happens even if you copy
-	   the first file over the second file. */
+    /* For some reason under wxX11, the 2nd LoadFile in this loop fails, with
+       a BadMatch inside CreateFromImage (inside ConvertToBitmap). This happens even if you copy
+       the first file over the second file. */
         if (image.LoadFile(filename, wxBITMAP_TYPE_PNG))
         {
             DragShape* newShape = new DragShape(image.ConvertToBitmap());

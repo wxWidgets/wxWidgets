@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -76,8 +76,8 @@ bool MyApp::OnInit(void)
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-	EVT_MENU(RESOURCE_QUIT, MyFrame::OnQuit)
-	EVT_MENU(RESOURCE_TEST1, MyFrame::OnTest1)
+    EVT_MENU(RESOURCE_QUIT, MyFrame::OnQuit)
+    EVT_MENU(RESOURCE_TEST1, MyFrame::OnTest1)
 END_EVENT_TABLE()
 
 // Define my frame constructor
@@ -89,7 +89,7 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
 
 void MyFrame::OnQuit(wxCommandEvent& event)
 {
-	Close(TRUE);
+    Close(TRUE);
 }
 
 void MyFrame::OnTest1(wxCommandEvent& event)
@@ -109,8 +109,8 @@ void MyFrame::OnTest1(wxCommandEvent& event)
 }
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
-	EVT_BUTTON(wxID_OK, MyDialog::OnOk)
-	EVT_BUTTON(wxID_CANCEL, MyDialog::OnCancel)
+    EVT_BUTTON(wxID_OK, MyDialog::OnOk)
+    EVT_BUTTON(wxID_CANCEL, MyDialog::OnCancel)
 END_EVENT_TABLE()
 
 

@@ -303,9 +303,9 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
 {
     wxWizard *wizard = new wxWizard(this, -1,
-					"Absolutely Useless Wizard",
-					wxBITMAP(wiztest));
-    
+                    "Absolutely Useless Wizard",
+                    wxBITMAP(wiztest));
+
     // a wizard page may be either an object of predefined class
     wxWizardPageSimple *page1 = new wxWizardPageSimple(wizard);
     wxStaticText *text = new wxStaticText(page1, -1,

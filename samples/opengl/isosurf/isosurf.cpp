@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -91,8 +91,8 @@ static void read_surface( char *filename )
    numverts = 0;
    while (!feof(f) && numverts<MAXVERTS) {
       fscanf( f, "%f %f %f  %f %f %f",
-	      &verts[numverts][0], &verts[numverts][1], &verts[numverts][2],
-	      &norms[numverts][0], &norms[numverts][1], &norms[numverts][2] );
+          &verts[numverts][0], &verts[numverts][1], &verts[numverts][2],
+          &norms[numverts][0], &norms[numverts][1], &norms[numverts][2] );
       numverts++;
    }
    numverts--;
@@ -263,12 +263,12 @@ bool MyApp::OnInit(void)
   int *gl_attrib = NULL;
 #else
   int gl_attrib[20] = { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1,
-			WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1,
-			WX_GL_DOUBLEBUFFER,
+            WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1,
+            WX_GL_DOUBLEBUFFER,
 #  ifdef __WXMAC__
-			GL_NONE };
+            GL_NONE };
 #  else
-			None };
+            None };
 #  endif
 #endif
 
@@ -366,13 +366,13 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
     wxGLCanvas::OnSize(event);
     
     // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
-		int w, h;
-		GetClientSize(&w, &h);
+    int w, h;
+    GetClientSize(&w, &h);
 #ifndef __WXMOTIF__
     if (GetContext())
 #endif
     {
-    SetCurrent();
+        SetCurrent();
         glViewport(0, 0, (GLint) w, (GLint) h);
     }
 }
@@ -381,39 +381,39 @@ void TestGLCanvas::OnChar(wxKeyEvent& event)
 {
     switch(event.KeyCode()) {
     case WXK_ESCAPE:
-	exit(0);
+    exit(0);
     case WXK_LEFT:
-	yrot -= 15.0;
-	break;
+    yrot -= 15.0;
+    break;
     case WXK_RIGHT:
-	yrot += 15.0;
-	break;
+    yrot += 15.0;
+    break;
     case WXK_UP:
-	xrot += 15.0;
-	break;
+    xrot += 15.0;
+    break;
     case WXK_DOWN:
-	xrot -= 15.0;
-	break;
+    xrot -= 15.0;
+    break;
     case 's': case 'S':
-	smooth = !smooth;
-	if (smooth) {
-	    glShadeModel(GL_SMOOTH);
-	} else {
-	    glShadeModel(GL_FLAT);
-	}
-	break;
+    smooth = !smooth;
+    if (smooth) {
+        glShadeModel(GL_SMOOTH);
+    } else {
+        glShadeModel(GL_FLAT);
+    }
+    break;
     case 'l': case 'L':
-	lighting = !lighting;
-	if (lighting) {
-	    glEnable(GL_LIGHTING);
-	} else {
-	    glDisable(GL_LIGHTING);
-	}
-	break;
+    lighting = !lighting;
+    if (lighting) {
+        glEnable(GL_LIGHTING);
+    } else {
+        glDisable(GL_LIGHTING);
+    }
+    break;
      default:
       {
         event.Skip();
-	return;
+    return;
       }
     }
 
@@ -427,17 +427,17 @@ void TestGLCanvas::OnMouseEvent(wxMouseEvent& event)
 
     //printf("%f %f %d\n", event.GetX(), event.GetY(), (int)event.LeftIsDown());
     if(event.LeftIsDown()) {
-	if(!dragging) {
-	    dragging = 1;
-	} else {
-	    yrot += (event.GetX() - last_x)*1.0;
-	    xrot += (event.GetY() - last_y)*1.0;
-	    Refresh(FALSE);
-	}
-	last_x = event.GetX();
-	last_y = event.GetY();
+    if(!dragging) {
+        dragging = 1;
+    } else {
+        yrot += (event.GetX() - last_x)*1.0;
+        xrot += (event.GetY() - last_y)*1.0;
+        Refresh(FALSE);
+    }
+    last_x = event.GetX();
+    last_y = event.GetY();
     } else
-	dragging = 0;
+    dragging = 0;
 }
 
 void TestGLCanvas::OnEraseBackground(wxEraseEvent& event)

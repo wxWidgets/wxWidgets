@@ -436,7 +436,7 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
             case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
             case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
             default: textCtrl.WriteText( "Huh?\n" ); break;
-	    }
+        }
     }
     textCtrl.WriteText( "\n" );
     

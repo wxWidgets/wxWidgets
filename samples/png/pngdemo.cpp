@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -87,6 +87,16 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, cons
   canvas = (MyCanvas *) NULL;
 }
 
+// frame destructor
+MyFrame::~MyFrame()
+{
+    if (g_TestBitmap)
+    {
+        delete g_TestBitmap;
+        g_TestBitmap = (wxBitmap *) NULL;
+    }
+}
+
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
@@ -128,16 +138,17 @@ void MyFrame::OnSaveFile(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnLoadFile(wxCommandEvent& WXUNUSED(event))
 {
-	// Show file selector.
-	wxString f = wxFileSelector(wxT("Open Image"), (const wxChar *) NULL,
+    // Show file selector.
+    wxString f = wxFileSelector(wxT("Open Image"), (const wxChar *) NULL,
                                     (const wxChar *) NULL, wxT("png"),
                                     wxT("PNG files (*.png)|*.png"));
 
-	if (f == "")
-	  return;
+    if (f == "")
+        return;
 
     if ( g_TestBitmap )
         delete g_TestBitmap;
+
     g_TestBitmap = new wxBitmap(f, wxBITMAP_TYPE_PNG);
     if (!g_TestBitmap->Ok())
     {

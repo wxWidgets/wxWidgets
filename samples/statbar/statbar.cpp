@@ -413,7 +413,7 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnUpdateStatusBarToggle(wxUpdateUIEvent& event)
 {
-	event.Check(GetStatusBar() != 0);
+    event.Check(GetStatusBar() != 0);
 }
 
 void MyFrame::OnStatusBarToggle(wxCommandEvent& WXUNUSED(event))

@@ -306,12 +306,12 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         (0-scroll_x < size_x) && (0-scroll_y < size_y))
     {
         // Has the region on screen been exposed?
-	    if (IsExposed(0,0,100,25))
-	    {
-	        wxLogMessage( wxT("Redraw first cell") );
+        if (IsExposed(0,0,100,25))
+        {
+            wxLogMessage( wxT("Redraw first cell") );
             dc.DrawRectangle( 0, 0, 100, 25 );
-	        dc.DrawText( "First Cell", 5, 5 );
-	    }
+            dc.DrawText( "First Cell", 5, 5 );
+        }
     }
 
 
@@ -321,12 +321,12 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         (200-scroll_x < size_x) && (0-scroll_y < size_y))
     {
         // Has the region on screen been exposed?
-	    if (IsExposed(200,0,100,25))
-	    {
-	        wxLogMessage( wxT("Redraw second cell") );
+        if (IsExposed(200,0,100,25))
+        {
+            wxLogMessage( wxT("Redraw second cell") );
             dc.DrawRectangle( 200, 0, 100, 25 );
-	        dc.DrawText( "Second Cell", 205, 5 );
-	    }
+            dc.DrawText( "Second Cell", 205, 5 );
+        }
     }
 
 }

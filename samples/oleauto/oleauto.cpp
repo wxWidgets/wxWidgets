@@ -201,26 +201,26 @@ void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox("Please ensure Excel is running, then press OK.\nThe active cell should then say 'wxWindows automation test!' in bold.");
 
-	wxAutomationObject excelObject, rangeObject;
-	if (!excelObject.GetInstance("Excel.Application"))
-	{
+    wxAutomationObject excelObject, rangeObject;
+    if (!excelObject.GetInstance("Excel.Application"))
+    {
         if (!excelObject.CreateInstance("Excel.Application"))
         {
-		    wxMessageBox("Could not create Excel object.");
-		    return;
+            wxMessageBox("Could not create Excel object.");
+            return;
         }
-	}
-	if (!excelObject.PutProperty("ActiveCell.Value", "wxWindows automation test!"))
-	{
-		wxMessageBox("Could not set active cell value.");
-		return;
-	}
+    }
+    if (!excelObject.PutProperty("ActiveCell.Value", "wxWindows automation test!"))
+    {
+        wxMessageBox("Could not set active cell value.");
+        return;
+    }
 #ifdef HAVE_BOOL
-	if (!excelObject.PutProperty("ActiveCell.Font.Bold", wxVariant((bool) TRUE)) )
-	{
-		wxMessageBox("Could not put Bold property to active cell.");
-		return;
-	}
+    if (!excelObject.PutProperty("ActiveCell.Font.Bold", wxVariant((bool) TRUE)) )
+    {
+        wxMessageBox("Could not put Bold property to active cell.");
+        return;
+    }
 #endif
 }
 

@@ -24,7 +24,7 @@
 
 #include "treelay.h"
 
-wxTreeLayoutStored *myTree = NULL;
+wxTreeLayoutStored *myTree = (wxTreeLayoutStored *) NULL;
 
 // A macro needed for some compilers (AIX) that need 'main' to be defined
 // in the application itself.
@@ -83,6 +83,17 @@ bool MyApp::OnInit()
 
   // Return the main frame window
   return TRUE;
+}
+
+int MyApp::OnExit()
+{
+    if (myTree)
+    {
+        delete myTree;
+        myTree = (wxTreeLayoutStored *) NULL;
+    }
+
+    return 0;
 }
 
 void MyApp::TreeTest(wxTreeLayoutStored& tree, wxDC& dc)

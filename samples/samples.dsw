@@ -831,7 +831,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "treectrl"=.\treectrl\treectrl.dsp - Package Owner=<4>
+Project: "treetest"=.\treectrl\treetest.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

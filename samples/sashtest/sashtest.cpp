@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -94,7 +94,7 @@ END_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size,
-	const long style):
+    const long style):
   wxMDIParentFrame(parent, id, title, pos, size, style)
 {
   // Create some dummy layout windows
@@ -273,7 +273,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event))
 }
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
-	EVT_MOUSE_EVENTS(MyCanvas::OnEvent)
+    EVT_MOUSE_EVENTS(MyCanvas::OnEvent)
 END_EVENT_TABLE()
 
 // Define a constructor for my canvas

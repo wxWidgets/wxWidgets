@@ -2871,7 +2871,7 @@ END_EVENT_TABLE()
 
 DbGridFrame::DbGridFrame(wxWindow *parent)
     : wxFrame (parent, -1, wxT("Database Table"),
-	            wxDefaultPosition, wxSize(400, 325))
+               wxDefaultPosition, wxSize(400, 325))
 {
     initialized = FALSE;
 }

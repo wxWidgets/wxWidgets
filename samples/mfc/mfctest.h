@@ -25,15 +25,15 @@
 class CMainWindow : public CFrameWnd
 {
 public:
-	CMainWindow();
+    CMainWindow();
 
-	//{{AFX_MSG( CMainWindow )
-	afx_msg void OnPaint();
-	afx_msg void OnAbout();
-	afx_msg void OnTest();
-	//}}AFX_MSG
+    //{{AFX_MSG( CMainWindow )
+    afx_msg void OnPaint();
+    afx_msg void OnAbout();
+    afx_msg void OnTest();
+    //}}AFX_MSG
 
-	DECLARE_MESSAGE_MAP()
+    DECLARE_MESSAGE_MAP()
 };
 
 // A dummy CWnd pointing to a wxWindow's HWND
@@ -52,7 +52,7 @@ class CDummyWindow: public CWnd
 class CTheApp : public CWinApp
 {
 public:
-	BOOL InitInstance();
+    BOOL InitInstance();
     int ExitInstance();
 
     // Override this to provide wxWindows message loop

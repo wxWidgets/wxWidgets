@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -159,8 +159,8 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
     wxGLCanvas::OnSize(event);
     
     // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
-		int w, h;
-		GetClientSize(&w, &h);
+    int w, h;
+    GetClientSize(&w, &h);
 #ifndef __WXMOTIF__
     if (GetContext())
 #endif
@@ -203,17 +203,17 @@ void TestGLCanvas::OnMouse( wxMouseEvent& event )
         /* drag in progress, simulate trackball */
         float spin_quat[4];
         trackball(spin_quat,
-	      (2.0*info.beginx -       sz.x) / sz.x,
-	      (     sz.y - 2.0*info.beginy) / sz.y,
-	      (     2.0*event.GetX() - sz.x) / sz.x,
-	      (    sz.y - 2.0*event.GetY()) / sz.y);
-	      
+          (2.0*info.beginx -       sz.x) / sz.x,
+          (     sz.y - 2.0*info.beginy) / sz.y,
+          (     2.0*event.GetX() - sz.x) / sz.x,
+          (    sz.y - 2.0*event.GetY()) / sz.y);
+          
         add_quats( spin_quat, info.quat, info.quat );
-	
+
         /* orientation has changed, redraw mesh */
-  	Refresh(FALSE);
+    Refresh(FALSE);
     }
-    
+
     info.beginx = event.GetX();
     info.beginy = event.GetY();
 }

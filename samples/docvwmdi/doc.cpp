@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -163,8 +163,8 @@ wxSTD ostream& DoodleSegment::SaveObject(wxSTD ostream& stream)
     DoodleLine *line = (DoodleLine *)node->Data();
     stream << line->x1 << " " << 
                    line->y1 << " " << 
-		   line->x2 << " " << 
-		   line->y2 << "\n";
+           line->x2 << " " << 
+           line->y2 << "\n";
     node = node->Next();
   }
 
@@ -184,8 +184,8 @@ wxOutputStream &DoodleSegment::SaveObject(wxOutputStream& stream)
     DoodleLine *line = (DoodleLine *)node->Data();
     text_stream << line->x1 << " " << 
                    line->y1 << " " << 
-		   line->x2 << " " << 
-		   line->y2 << "\n";
+           line->x2 << " " << 
+           line->y2 << "\n";
     node = node->Next();
   }
 
@@ -204,8 +204,8 @@ wxSTD istream& DoodleSegment::LoadObject(wxSTD istream& stream)
     DoodleLine *line = new DoodleLine;
     stream >> line->x1 >> 
                    line->y1 >> 
-		   line->x2 >> 
-		   line->y2;
+           line->x2 >> 
+           line->y2;
     lines.Append(line);
   }
   
@@ -224,8 +224,8 @@ wxInputStream &DoodleSegment::LoadObject(wxInputStream& stream)
     DoodleLine *line = new DoodleLine;
     text_stream >> line->x1 >> 
                    line->y1 >> 
-		   line->x2 >> 
-		   line->y2;
+           line->x2 >> 
+           line->y2;
     lines.Append(line);
   }
   

@@ -12,8 +12,9 @@
 // Define a new application
 class MyApp: public wxApp
 {
-  public:
-    bool OnInit();
+public:
+    virtual bool OnInit();
+    virtual int OnExit();
     void TreeTest(wxTreeLayoutStored& tree, wxDC& dc);
 };
 

@@ -60,7 +60,7 @@ char ipc_buffer[4000];
 wxListBox *the_list = NULL;
 
 MyConnection *the_connection = NULL;
-MyClient *my_client ;
+MyClient *my_client;
 
 // ============================================================================
 // implementation
@@ -121,10 +121,16 @@ int MyApp::OnExit()
     if (the_connection)
     {
         the_connection->Disconnect();
+        delete the_connection;
+        the_connection = NULL;
     }
 
     // will delete the connection too
+    // Update: Seems it didn't delete the_connection, because there's a leak.
+    // Deletion is now explicitly done a few lines up.
     delete my_client;
+
+
 
     return 0;
 }
@@ -205,11 +211,6 @@ wxConnectionBase *MyClient::OnMakeConnection()
 MyConnection::MyConnection()
             : wxConnection(ipc_buffer, WXSIZEOF(ipc_buffer))
 {
-}
-
-MyConnection::~MyConnection()
-{
-    the_connection = NULL;
 }
 
 bool MyConnection::OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format)

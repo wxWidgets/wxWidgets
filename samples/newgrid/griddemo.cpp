@@ -30,9 +30,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
-    #include "wx/colordlg.h"
-    #include "wx/fontdlg.h"
 #endif
+
+#include "wx/colordlg.h"
+#include "wx/fontdlg.h"
 
 #include "wx/grid.h"
 #include "wx/generic/gridctrl.h"
@@ -599,8 +600,8 @@ void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
         for ( int n = 0; n < grid->GetNumberRows(); )
             if ( grid->IsInSelection( n , 0 ) )
                 grid->DeleteRows( n, 1 );
-	    else
-	        n++;
+        else
+            n++;
         grid->EndBatch();
     }
 }
@@ -614,8 +615,8 @@ void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
         for ( int n = 0; n < grid->GetNumberCols(); )
             if ( grid->IsInSelection( 0 , n ) )
                 grid->DeleteCols( n, 1 );
-	    else
-	        n++;
+        else
+            n++;
         grid->EndBatch();
     }
 }
@@ -823,14 +824,13 @@ void GridFrame::OnEditorShown( wxGridEvent& ev )
 
     if ( (ev.GetCol() == 4) &&
          (ev.GetRow() == 0) &&
-	 (wxMessageBox(_T("Are you sure you wish to edit this cell"),
-	               _T("Checking"),wxYES_NO) == wxNO ) ) {
+     (wxMessageBox(_T("Are you sure you wish to edit this cell"),
+                   _T("Checking"),wxYES_NO) == wxNO ) ) {
 
-	 ev.Veto();
-	 return;
+     ev.Veto();
+     return;
     }
-		      
-	
+
     wxLogMessage( wxT("Cell editor shown.") );
 
     ev.Skip();
@@ -841,11 +841,11 @@ void GridFrame::OnEditorHidden( wxGridEvent& ev )
    
     if ( (ev.GetCol() == 4) &&
          (ev.GetRow() == 0) &&
-	 (wxMessageBox(_T("Are you sure you wish to finish editing this cell"),
-	               _T("Checking"),wxYES_NO) == wxNO ) ) {
+     (wxMessageBox(_T("Are you sure you wish to finish editing this cell"),
+                   _T("Checking"),wxYES_NO) == wxNO ) ) {
 
-	 ev.Veto();
-	 return;
+        ev.Veto();
+        return;
     }
 
     wxLogMessage( wxT("Cell editor hidden.") );

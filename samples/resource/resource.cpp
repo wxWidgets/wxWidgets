@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -120,7 +120,7 @@ MyApp::~MyApp()
 }
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
-	EVT_LEFT_DOWN( MyPanel::OnClick)
+    EVT_LEFT_DOWN( MyPanel::OnClick)
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, 
@@ -138,9 +138,9 @@ void MyPanel::OnClick( wxMouseEvent &WXUNUSED(event2) )
 
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-	EVT_MENU(RESOURCE_ABOUT, MyFrame::OnAbout)
-	EVT_MENU(RESOURCE_QUIT, MyFrame::OnQuit)
-	EVT_MENU(RESOURCE_TESTDIALOG, MyFrame::OnTestDialog)
+    EVT_MENU(RESOURCE_ABOUT, MyFrame::OnAbout)
+    EVT_MENU(RESOURCE_QUIT, MyFrame::OnQuit)
+    EVT_MENU(RESOURCE_TESTDIALOG, MyFrame::OnTestDialog)
 END_EVENT_TABLE()
 
 // Define my frame constructor
@@ -159,7 +159,7 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 {
-	Close(TRUE);
+    Close(TRUE);
 }
 
 void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event) )
@@ -176,8 +176,8 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event) )
 }
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
-  //	EVT_BUTTON(RESOURCE_OK, MyDialog::OnOk)
-	EVT_BUTTON(ID_BUTTON109, MyDialog::OnCancel)
+    //EVT_BUTTON(RESOURCE_OK, MyDialog::OnOk)
+    EVT_BUTTON(ID_BUTTON109, MyDialog::OnCancel)
 END_EVENT_TABLE()
 
 

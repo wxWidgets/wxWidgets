@@ -317,7 +317,8 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 #if wxUSE_GIF
     image.Destroy();
 
-    if ( !image.LoadFile( dir + wxString("horse.gif")) )
+    if ( !image.LoadFile( dir + wxString("horse.gif")))
+    //if ( !image.LoadFile( wxString("\\slidbar.gif"), wxBITMAP_TYPE_GIF, -2) )
         wxLogError(wxT("Can't load GIF image"));
     else
         my_horse_gif = new wxBitmap( image );
@@ -430,6 +431,7 @@ MyCanvas::~MyCanvas()
     delete my_horse_ico32;
     delete my_horse_ico16;
     delete my_horse_ico;
+    delete my_horse_cur;
     delete my_smile_xbm;
     delete my_square;
     delete my_anti;

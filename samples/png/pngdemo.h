@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -31,6 +31,7 @@ class MyFrame: public wxFrame
   public:
     MyCanvas *canvas;
     MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size);
+    virtual ~MyFrame();
 
     void OnActivate(bool) {}
     void OnLoadFile(wxCommandEvent& event);

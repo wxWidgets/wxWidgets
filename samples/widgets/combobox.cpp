@@ -457,7 +457,7 @@ void ComboboxWidgetsPage::OnUpdateUIDeleteButton(wxUpdateUIEvent& event)
     {
       unsigned long n;
       event.Enable(m_textDelete->GetValue().ToULong(&n) &&
-  		 (n < (unsigned)m_combobox->GetCount()));
+        (n < (unsigned)m_combobox->GetCount()));
     }
 }
 
@@ -482,8 +482,8 @@ void ComboboxWidgetsPage::OnUpdateUIAddSeveral(wxUpdateUIEvent& event)
 void ComboboxWidgetsPage::OnComboText(wxCommandEvent& event)
 {
     if (!m_combobox)
-	return;
-    
+        return;
+
     wxString s = event.GetString();
 
     wxASSERT_MSG( s == m_combobox->GetValue(),

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -94,7 +94,7 @@ bool MyApp::OnInit(void)
 }
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
-	EVT_JOYSTICK_EVENTS(MyCanvas::OnJoystickEvent)
+    EVT_JOYSTICK_EVENTS(MyCanvas::OnJoystickEvent)
 END_EVENT_TABLE()
 
 // Define a constructor for my canvas

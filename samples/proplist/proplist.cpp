@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -152,214 +152,219 @@ void MyApp::RegisterValidators(void)
 
 void MyApp::PropertyListTest(bool useDialog)
 {
-  if (m_childWindow)
-    return;
+    if (m_childWindow)
+        return;
 
-  wxPropertySheet *sheet = new wxPropertySheet;
+    wxPropertySheet *sheet = new wxPropertySheet;
 
-  sheet->AddProperty(new wxProperty("fred", 1.0, "real"));
-  sheet->AddProperty(new wxProperty("tough choice", (bool)TRUE, "bool"));
-  sheet->AddProperty(new wxProperty("ian", (long)45, "integer", new wxIntegerListValidator(-50, 50)));
-  sheet->AddProperty(new wxProperty("bill", 25.0, "real", new wxRealListValidator(0.0, 100.0)));
-  sheet->AddProperty(new wxProperty("julian", "one", "string"));
-  sheet->AddProperty(new wxProperty("bitmap", "none", "string", new wxFilenameListValidator("Select a bitmap file", "*.bmp")));
-  wxStringList *strings = new wxStringList(wxT("one"), wxT("two"), wxT("three"), NULL);
-  sheet->AddProperty(new wxProperty("constrained", "one", "string", new wxStringListValidator(strings)));
+    sheet->AddProperty(new wxProperty("fred", 1.0, "real"));
+    sheet->AddProperty(new wxProperty("tough choice", (bool)TRUE, "bool"));
+    sheet->AddProperty(new wxProperty("ian", (long)45, "integer", new wxIntegerListValidator(-50, 50)));
+    sheet->AddProperty(new wxProperty("bill", 25.0, "real", new wxRealListValidator(0.0, 100.0)));
+    sheet->AddProperty(new wxProperty("julian", "one", "string"));
+    sheet->AddProperty(new wxProperty("bitmap", "none", "string", new wxFilenameListValidator("Select a bitmap file", "*.bmp")));
+    wxStringList *strings = new wxStringList(wxT("one"), wxT("two"), wxT("three"), NULL);
+    sheet->AddProperty(new wxProperty("constrained", "one", "string", new wxStringListValidator(strings)));
 
-  wxStringList *strings2 = new wxStringList(wxT("earth"), wxT("fire"), wxT("wind"), wxT("water"), NULL);
-  sheet->AddProperty(new wxProperty("string list", strings2, "stringlist"));
+    wxStringList *strings2 = new wxStringList(wxT("earth"), wxT("fire"), wxT("wind"), wxT("water"), NULL);
+    sheet->AddProperty(new wxProperty("string list", strings2, "stringlist"));
 
-  wxPropertyListView *view =
-    new wxPropertyListView(NULL,
-     wxPROP_BUTTON_OK | wxPROP_BUTTON_CANCEL |
-     wxPROP_BUTTON_CHECK_CROSS|wxPROP_DYNAMIC_VALUE_FIELD|wxPROP_PULLDOWN|wxPROP_SHOWVALUES);
+    wxPropertyListView *view = new wxPropertyListView
+        (
+            NULL,
+            wxPROP_BUTTON_OK | wxPROP_BUTTON_CANCEL | wxPROP_BUTTON_CHECK_CROSS
+            |wxPROP_DYNAMIC_VALUE_FIELD|wxPROP_PULLDOWN|wxPROP_SHOWVALUES
+        );
 
-  wxDialog *propDialog = NULL;
-  wxPropertyListFrame *propFrame = NULL;
-  if (useDialog)
-  {
-    propDialog = new PropListDialog(view, NULL, "Property Sheet Test",
-		wxPoint(-1, -1), wxSize(400, 500), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODELESS);
-    m_childWindow = propDialog;
-  }
-  else
-  {
-    propFrame = new PropListFrame(view, NULL, "Property Sheet Test", wxPoint(-1, -1), wxSize(400, 500));
-    m_childWindow = propFrame;
-  }
-  
-  view->AddRegistry(&myListValidatorRegistry);
+    wxDialog *propDialog = NULL;
+    wxPropertyListFrame *propFrame = NULL;
+    if (useDialog)
+    {
+        propDialog = new PropListDialog(view, NULL, "Property Sheet Test",
+        wxPoint(-1, -1), wxSize(400, 500), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODELESS);
+        m_childWindow = propDialog;
+    }
+    else
+    {
+        propFrame = new PropListFrame(view, NULL, "Property Sheet Test", wxPoint(-1, -1), wxSize(400, 500));
+        m_childWindow = propFrame;
+    }
 
-  if (useDialog)
-  {
-    view->ShowView(sheet, (wxPanel *)propDialog);
-    propDialog->Centre(wxBOTH);
-    propDialog->Show(TRUE);
-  }
-  else
-  {
-    propFrame->Initialize();
-    view->ShowView(sheet, propFrame->GetPropertyPanel());
+    view->AddRegistry(&myListValidatorRegistry);
 
-    propFrame->Centre(wxBOTH);
-    propFrame->Show(TRUE);
-  }
+    if (useDialog)
+    {
+        view->ShowView(sheet, (wxPanel *)propDialog);
+        propDialog->Centre(wxBOTH);
+        propDialog->Show(TRUE);
+    }
+    else
+    {
+        propFrame->Initialize();
+        view->ShowView(sheet, propFrame->GetPropertyPanel());
+
+        propFrame->Centre(wxBOTH);
+        propFrame->Show(TRUE);
+    }
 }
 
 void MyApp::PropertyFormTest(bool useDialog)
 {
-  if (m_childWindow)
-    return;
+    if (m_childWindow)
+        return;
 
-  wxPropertySheet *sheet = new wxPropertySheet;
+    wxPropertySheet *sheet = new wxPropertySheet;
 
-  sheet->AddProperty(new wxProperty("fred", 25.0, "real", new wxRealFormValidator(0.0, 100.0)));
-  sheet->AddProperty(new wxProperty("tough choice", (bool)TRUE, "bool"));
-  sheet->AddProperty(new wxProperty("ian", (long)45, "integer", new wxIntegerFormValidator(-50, 50)));
-  sheet->AddProperty(new wxProperty("julian", "one", "string"));
-  wxStringList *strings = new wxStringList(wxT("one"), wxT("two"), wxT("three"), NULL);
-  sheet->AddProperty(new wxProperty("constrained", "one", "string", new wxStringFormValidator(strings)));
+    sheet->AddProperty(new wxProperty("fred", 25.0, "real", new wxRealFormValidator(0.0, 100.0)));
+    sheet->AddProperty(new wxProperty("tough choice", (bool)TRUE, "bool"));
+    sheet->AddProperty(new wxProperty("ian", (long)45, "integer", new wxIntegerFormValidator(-50, 50)));
+    sheet->AddProperty(new wxProperty("julian", "one", "string"));
+    wxStringList *strings = new wxStringList(wxT("one"), wxT("two"), wxT("three"), NULL);
+    sheet->AddProperty(new wxProperty("constrained", "one", "string", new wxStringFormValidator(strings)));
 
-  wxPropertyFormView *view = new wxPropertyFormView(NULL);
+    wxPropertyFormView *view = new wxPropertyFormView(NULL);
 
-  wxDialog *propDialog = NULL;
-  wxPropertyFormFrame *propFrame = NULL;
-  if (useDialog)
-  {
-    propDialog = new PropFormDialog(view, NULL, "Property Form Test",
-	  wxPoint(-1, -1), wxSize(380, 250), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL);
-    m_childWindow = propDialog;
-  }
-  else
-  {
-    propFrame = new PropFormFrame(view, NULL, "Property Form Test", wxPoint(-1,
-	  -1), wxSize(380, 250));
-    propFrame->Initialize();
-    m_childWindow = propFrame;
-  }
+    wxDialog *propDialog = NULL;
+    wxPropertyFormFrame *propFrame = NULL;
 
-  // BCC32 does not like ?:
-  wxWindow *panel ;
-  if ( propDialog )
-  {
-    panel = propDialog ;
-  }
-  else
-  {
-    panel = propFrame->GetPropertyPanel() ;
-  }
-    
-  wxLayoutConstraints* c;
+    if (useDialog)
+    {
+        propDialog = new PropFormDialog(view, NULL, "Property Form Test",
+        wxPoint(-1, -1), wxSize(380, 250), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL);
+        m_childWindow = propDialog;
+    }
+    else
+    {
+        propFrame = new PropFormFrame(view, NULL, "Property Form Test",
+            wxPoint(-1, -1), wxSize(380, 250));
+        propFrame->Initialize();
+        m_childWindow = propFrame;
+    }
+
+    // BCC32 does not like ?:
+    wxWindow *panel ;
+    if ( propDialog )
+    {
+        panel = propDialog;
+    }
+    else
+    {
+        panel = propFrame->GetPropertyPanel() ;
+    }
+
+    wxLayoutConstraints* c;
 
 #if 0
-  if (!propDialog)
-  {
-    c = new wxLayoutConstraints;
-    c->left.SameAs(m_childWindow, wxLeft, 4);
-    c->right.SameAs(m_childWindow, wxRight, 4);
-    c->top.SameAs(m_childWindow, wxTop, 4);
-    c->bottom.SameAs(m_childWindow, wxBottom, 40);
+    if (!propDialog)
+    {
+        c = new wxLayoutConstraints;
+        c->left.SameAs(m_childWindow, wxLeft, 4);
+        c->right.SameAs(m_childWindow, wxRight, 4);
+        c->top.SameAs(m_childWindow, wxTop, 4);
+        c->bottom.SameAs(m_childWindow, wxBottom, 40);
 
-    panel->SetConstraints(c);
-  }
+        panel->SetConstraints(c);
+    }
 #endif
  
-  // Add items to the panel
-  wxButton *okButton = new wxButton(panel, wxID_OK, "OK", wxPoint(-1, -1),
-    wxSize(80, 26), 0, wxDefaultValidator, "ok");
-  wxButton *cancelButton = new wxButton(panel, wxID_CANCEL, "Cancel",  wxPoint(-1, -1),
-    wxSize(80, 26), 0, wxDefaultValidator, "cancel");
-  wxButton *updateButton = new wxButton(panel, wxID_PROP_UPDATE, "Update",  wxPoint(-1, -1),
-    wxSize(80, 26), 0, wxDefaultValidator, "update");
-  wxButton *revertButton = new wxButton(panel, wxID_PROP_REVERT, "Revert",  wxPoint(-1, -1),
-    wxSize(80, 26), 0, wxDefaultValidator, "revert");
+    // Add items to the panel
+    wxButton *okButton = new wxButton(panel, wxID_OK, "OK", wxPoint(-1, -1),
+        wxSize(80, 26), 0, wxDefaultValidator, "ok");
+    wxButton *cancelButton = new wxButton(panel, wxID_CANCEL, "Cancel",  wxPoint(-1, -1),
+        wxSize(80, 26), 0, wxDefaultValidator, "cancel");
+    wxButton *updateButton = new wxButton(panel, wxID_PROP_UPDATE, "Update",  wxPoint(-1, -1),
+        wxSize(80, 26), 0, wxDefaultValidator, "update");
+    wxButton *revertButton = new wxButton(panel, wxID_PROP_REVERT, "Revert",  wxPoint(-1, -1),
+        wxSize(80, 26), 0, wxDefaultValidator, "revert");
 
-  c = new wxLayoutConstraints;
-  c->right.SameAs(panel, wxRight, 4);
-  c->bottom.SameAs(panel, wxBottom, 4);
-  c->height.AsIs();
-  c->width.AsIs();
-  revertButton->SetConstraints(c);
- 
-  c = new wxLayoutConstraints;
-  c->right.SameAs(revertButton, wxLeft, 4);
-  c->bottom.SameAs(panel, wxBottom, 4);
-  c->height.AsIs();
-  c->width.AsIs();
-  updateButton->SetConstraints(c);
+    c = new wxLayoutConstraints;
+    c->right.SameAs(panel, wxRight, 4);
+    c->bottom.SameAs(panel, wxBottom, 4);
+    c->height.AsIs();
+    c->width.AsIs();
+    revertButton->SetConstraints(c);
 
-  c = new wxLayoutConstraints;
-  c->right.SameAs(updateButton, wxLeft, 4);
-  c->bottom.SameAs(panel, wxBottom, 4);
-  c->height.AsIs();
-  c->width.AsIs();
-  cancelButton->SetConstraints(c);
+    c = new wxLayoutConstraints;
+    c->right.SameAs(revertButton, wxLeft, 4);
+    c->bottom.SameAs(panel, wxBottom, 4);
+    c->height.AsIs();
+    c->width.AsIs();
+    updateButton->SetConstraints(c);
 
-  c = new wxLayoutConstraints;
-  c->right.SameAs(cancelButton, wxLeft, 4);
-  c->bottom.SameAs(panel, wxBottom, 4);
-  c->height.AsIs();
-  c->width.AsIs();
-  okButton->SetConstraints(c);
+    c = new wxLayoutConstraints;
+    c->right.SameAs(updateButton, wxLeft, 4);
+    c->bottom.SameAs(panel, wxBottom, 4);
+    c->height.AsIs();
+    c->width.AsIs();
+    cancelButton->SetConstraints(c);
 
-  // The name of this text item matches the "fred" property
-  wxTextCtrl *text = new wxTextCtrl(panel, -1, "Fred", wxPoint(-1, -1), wxSize(
+    c = new wxLayoutConstraints;
+    c->right.SameAs(cancelButton, wxLeft, 4);
+    c->bottom.SameAs(panel, wxBottom, 4);
+    c->height.AsIs();
+    c->width.AsIs();
+    okButton->SetConstraints(c);
+
+    // The name of this text item matches the "fred" property
+    wxTextCtrl *text = new wxTextCtrl(panel, -1, "Fred", wxPoint(-1, -1), wxSize(
     200, -1), 0, wxDefaultValidator, "fred");
-  
-  c = new wxLayoutConstraints;
-  c->left.SameAs(panel, wxLeft, 4);
-  c->top.SameAs(panel, wxTop, 4);
-  c->height.AsIs();
-  c->width.AsIs();
-  text->SetConstraints(c);
 
-  wxCheckBox *checkBox = new wxCheckBox(panel, -1, "Yes or no", wxPoint(-1, -1),
-    wxSize(-1, -1), 0, wxDefaultValidator, "tough choice");
+    c = new wxLayoutConstraints;
+    c->left.SameAs(panel, wxLeft, 4);
+    c->top.SameAs(panel, wxTop, 4);
+    c->height.AsIs();
+    c->width.AsIs();
+    text->SetConstraints(c);
 
-  c = new wxLayoutConstraints;
-  c->left.SameAs(text, wxRight, 20);
-  c->top.SameAs(panel, wxTop, 4);
-  c->height.AsIs();
-  c->width.AsIs();
-  checkBox->SetConstraints(c);
-  
+    wxCheckBox *checkBox = new wxCheckBox(panel, -1, "Yes or no", wxPoint(-1, -1),
+        wxSize(-1, -1), 0, wxDefaultValidator, "tough choice");
+
+    c = new wxLayoutConstraints;
+    c->left.SameAs(text, wxRight, 20);
+    c->top.SameAs(panel, wxTop, 4);
+    c->height.AsIs();
+    c->width.AsIs();
+    checkBox->SetConstraints(c);
+
   wxSlider *slider = new wxSlider(panel, -1, -50, 50, 150, wxPoint(-1, -1),
     wxSize(200,10), 0, wxDefaultValidator, "ian");
 
-  c = new wxLayoutConstraints;
-  c->left.SameAs(panel, wxLeft, 4);
-  c->top.SameAs(text, wxBottom, 10);
-  c->height.AsIs();
-  c->width.AsIs();
-  slider->SetConstraints(c);
+    c = new wxLayoutConstraints;
+    c->left.SameAs(panel, wxLeft, 4);
+    c->top.SameAs(text, wxBottom, 10);
+    c->height.AsIs();
+    c->width.AsIs();
+    slider->SetConstraints(c);
 
-  wxListBox *listBox = new wxListBox(panel, -1, wxPoint(-1, -1), wxSize(200, 100),
-    0, NULL, 0, wxDefaultValidator, "constrained");
+    wxListBox *listBox = new wxListBox(panel, -1, wxPoint(-1, -1),
+        wxSize(200, 100), 0, NULL, 0, wxDefaultValidator, "constrained");
 
-  c = new wxLayoutConstraints;
-  c->left.SameAs(panel, wxLeft, 4);
-  c->top.SameAs(slider, wxBottom, 10);
-  c->height.AsIs();
-  c->width.AsIs();
-  listBox->SetConstraints(c);
+    c = new wxLayoutConstraints;
+    c->left.SameAs(panel, wxLeft, 4);
+    c->top.SameAs(slider, wxBottom, 10);
+    c->height.AsIs();
+    c->width.AsIs();
+    listBox->SetConstraints(c);
 
-  view->AddRegistry(&myFormValidatorRegistry);
+    view->AddRegistry(&myFormValidatorRegistry);
 
-  panel->SetAutoLayout(TRUE);
+    panel->SetAutoLayout(TRUE);
 
-  view->ShowView(sheet, panel);
-  view->AssociateNames();
-  view->TransferToDialog();
+    view->ShowView(sheet, panel);
+    view->AssociateNames();
+    view->TransferToDialog();
 
-  if (useDialog) {
-    propDialog->Layout();
-    propDialog->Centre(wxBOTH);
-    propDialog->Show(TRUE);
-  } else {
-    // panel->Layout();
-    propFrame->Centre(wxBOTH);
-    propFrame->Show(TRUE);
-  }
+    if (useDialog) {
+        propDialog->Layout();
+        propDialog->Centre(wxBOTH);
+        propDialog->Show(TRUE);
+    }
+    else
+    {
+        // panel->Layout();
+        propFrame->Centre(wxBOTH);
+        propFrame->Show(TRUE);
+    }
 }
 
 BEGIN_EVENT_TABLE(PropListFrame, wxPropertyListFrame)

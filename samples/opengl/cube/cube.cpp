@@ -279,8 +279,8 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
     wxGLCanvas::OnSize(event);
 
     // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
-		int w, h;
-		GetClientSize(&w, &h);
+    int w, h;
+    GetClientSize(&w, &h);
 #ifndef __WXMOTIF__
     if (GetContext())
 #endif
@@ -385,7 +385,7 @@ void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
         Action( m_Key, m_LastTime-m_StartTime, currTime-m_StartTime );
 
 #if defined(__WXMAC__) && !defined(__DARWIN__)
-        m_LastRedraw = currTime;	// wxStopWatch() doesn't work on Mac...
+        m_LastRedraw = currTime;    // wxStopWatch() doesn't work on Mac...
 #else
         m_LastRedraw = wxStopWatch(&m_secbase) - m_gsynct;
 #endif

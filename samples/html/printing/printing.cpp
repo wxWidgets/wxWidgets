@@ -44,9 +44,10 @@ class MyApp : public wxApp
 class MyFrame : public wxFrame
 {
     public:
-        // ctor(s)
+        // ctor and dtor
 
         MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+        virtual ~MyFrame();
 
         // event handlers (these functions should _not_ be virtual)
         void OnQuit(wxCommandEvent& event);
@@ -185,12 +186,18 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_Prn -> SetHeader(m_Name + "(@PAGENUM@/@PAGESCNT@)<hr>", wxPAGE_ALL);
 }
 
+// frame destructor
+MyFrame::~MyFrame()
+{
+    delete m_Prn;
+    m_Prn = (wxHtmlEasyPrinting *) NULL;
+}
+
 
 // event handlers
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    delete m_Prn;    
     // TRUE is to force the frame to close
     Close(TRUE);
 }
@@ -234,7 +241,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
     {
         m_Name = dialog.GetPath();
         m_Html -> LoadPage(m_Name);
-	m_Prn -> SetHeader(m_Name + "(@PAGENUM@/@PAGESCNT@)<hr>", wxPAGE_ALL);
+        m_Prn -> SetHeader(m_Name + "(@PAGENUM@/@PAGESCNT@)<hr>", wxPAGE_ALL);
     } 
 }
 

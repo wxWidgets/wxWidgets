@@ -195,13 +195,14 @@ void MyCanvas::OnPaint( wxPaintEvent &event )
     wxSize client_size = GetClientSize();
     wxLogDebug( "size %d %d client_size %d %d", size.x, size.y, client_size.x, client_size.y );
 #endif
-    
+
+    int i;
     dc.SetPen( *wxWHITE_PEN );
-    for (int i = 0; i < 20; i += 2)
+    for (i = 0; i < 20; i += 2)
        dc.DrawLine( i,i, i+100,i );
     
     dc.SetPen( *wxWHITE_PEN );
-    for (int i = 200; i < 220; i += 2)
+    for (i = 200; i < 220; i += 2)
        dc.DrawLine( i-200,i, i-100,i );
     
     wxRegion region( 110, 110, 80, 80 );

@@ -6,13 +6,13 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 class MyTaskBarIcon: public wxTaskBarIcon
 {
 public:
-	MyTaskBarIcon() {};
+    MyTaskBarIcon() {};
 
     virtual void OnMouseMove(wxEvent&);
     virtual void OnLButtonDown(wxEvent&);

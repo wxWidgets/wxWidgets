@@ -190,7 +190,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     widgetPtrsSet = TRUE;
 
     // Query the lookup table and display the result set
-	 lookup = new Clookup(tableName, colName, pDb, defDir);
+    lookup = new Clookup(tableName, colName, pDb, defDir);
     if (!lookup)
     {
         wxMessageBox(wxT("Error allocating memory for 'Clookup'object."),wxT("Error..."));
@@ -295,7 +295,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     widgetPtrsSet = TRUE;
 
     // Query the lookup table and display the result set
-	 lookup2 = new Clookup2(tableName, dispCol1, dispCol2, pDb, defDir);
+    lookup2 = new Clookup2(tableName, dispCol1, dispCol2, pDb, defDir);
     if (!lookup2)
     {
         wxMessageBox(wxT("Error allocating memory for 'Clookup2' object."),wxT("Error..."));

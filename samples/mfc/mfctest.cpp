@@ -134,9 +134,9 @@ IMPLEMENT_APP(MyApp)
 //
 CMainWindow::CMainWindow()
 {
-	LoadAccelTable( "MainAccelTable" );
-	Create( NULL, "Hello Foundation Application",
-		WS_OVERLAPPEDWINDOW, rectDefault, NULL, "MainMenu" );
+    LoadAccelTable( "MainAccelTable" );
+    Create( NULL, "Hello Foundation Application",
+        WS_OVERLAPPEDWINDOW, rectDefault, NULL, "MainMenu" );
 }
 
 // OnPaint:
@@ -148,16 +148,16 @@ CMainWindow::CMainWindow()
 //
 void CMainWindow::OnPaint()
 {
-	CString s = "Hello, Windows!";
-	CPaintDC dc( this );
-	CRect rect;
+    CString s = "Hello, Windows!";
+    CPaintDC dc( this );
+    CRect rect;
 
-	GetClientRect( rect );
-	dc.SetTextAlign( TA_BASELINE | TA_CENTER );
-	dc.SetTextColor( ::GetSysColor( COLOR_WINDOWTEXT ) );
-	dc.SetBkMode(TRANSPARENT);
-	dc.TextOut( ( rect.right / 2 ), ( rect.bottom / 2 ),
-				s, s.GetLength() );
+    GetClientRect( rect );
+    dc.SetTextAlign( TA_BASELINE | TA_CENTER );
+    dc.SetTextColor( ::GetSysColor( COLOR_WINDOWTEXT ) );
+    dc.SetBkMode(TRANSPARENT);
+    dc.TextOut( ( rect.right / 2 ), ( rect.bottom / 2 ),
+                s, s.GetLength() );
 }
 
 // OnAbout:
@@ -170,8 +170,8 @@ void CMainWindow::OnPaint()
 //
 void CMainWindow::OnAbout()
 {
-	CDialog about( "AboutBox", this );
-	about.DoModal();
+    CDialog about( "AboutBox", this );
+    about.DoModal();
 }
 
 void CMainWindow::OnTest()
@@ -190,11 +190,11 @@ void CMainWindow::OnTest()
 // receive no arguments and are void of return type, e.g., "void OnAbout()".
 //
 BEGIN_MESSAGE_MAP( CMainWindow, CFrameWnd )
-	//{{AFX_MSG_MAP( CMainWindow )
-	ON_WM_PAINT()
-	ON_COMMAND( IDM_ABOUT, OnAbout )
-	ON_COMMAND( IDM_TEST, OnTest )
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP( CMainWindow )
+    ON_WM_PAINT()
+    ON_COMMAND( IDM_ABOUT, OnAbout )
+    ON_COMMAND( IDM_TEST, OnTest )
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -209,16 +209,16 @@ END_MESSAGE_MAP()
 //
 BOOL CTheApp::InitInstance()
 {
-	TRACE( "HELLO WORLD\n" );
+    TRACE( "HELLO WORLD\n" );
 
-	SetDialogBkColor();     // hook gray dialogs (was default in MFC V1)
+    SetDialogBkColor();     // hook gray dialogs (was default in MFC V1)
 
     wxEntry((WXHINSTANCE) m_hInstance, (WXHINSTANCE) m_hPrevInstance, m_lpCmdLine, m_nCmdShow, FALSE);
 
 /*
-	m_pMainWnd = new CMainWindow();
-	m_pMainWnd->ShowWindow( m_nCmdShow );
-	m_pMainWnd->UpdateWindow();
+    m_pMainWnd = new CMainWindow();
+    m_pMainWnd->ShowWindow( m_nCmdShow );
+    m_pMainWnd->UpdateWindow();
 */
 
     if (wxTheApp && wxTheApp->GetTopWindow())
@@ -226,7 +226,7 @@ BOOL CTheApp::InitInstance()
         m_pMainWnd = new CDummyWindow((HWND) wxTheApp->GetTopWindow()->GetHWND());
     }
 
-	return TRUE;
+    return TRUE;
 }
 
 int CTheApp::ExitInstance()

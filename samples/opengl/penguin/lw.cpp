@@ -45,9 +45,9 @@
 #endif
 
 #define MK_ID(a,b,c,d) ((((wxUint32)(a))<<24)| \
-			(((wxUint32)(b))<<16)| \
-			(((wxUint32)(c))<< 8)| \
-			(((wxUint32)(d))    ))
+            (((wxUint32)(b))<<16)| \
+            (((wxUint32)(c))<< 8)| \
+            (((wxUint32)(d))    ))
 
 #define ID_FORM MK_ID('F','O','R','M')
 #define ID_LWOB MK_ID('L','W','O','B')
@@ -212,9 +212,9 @@ static void read_pols(FILE *f, int nbytes, lwObject *lwo)
       det_cnt = read_short(f);
       nbytes -= 2;
       while (det_cnt-- > 0) {
-	int cnt = read_short(f);
-	fseek(f, cnt*2+2, SEEK_CUR);
-	nbytes -= cnt*2+2;
+    int cnt = read_short(f);
+    fseek(f, cnt*2+2, SEEK_CUR);
+    nbytes -= cnt*2+2;
       }
     }
     face->material -= 1;
@@ -380,13 +380,13 @@ void lw_object_show(const lwObject *lw_object)
       prev_index_cnt = face->index_cnt;
       switch (face->index_cnt) {
       case 3:
-	glBegin(GL_TRIANGLES);
-	break;
+    glBegin(GL_TRIANGLES);
+    break;
       case 4:
-	glBegin(GL_QUADS);
-	break;
+    glBegin(GL_QUADS);
+    break;
       default:
-	glBegin(GL_POLYGON);
+    glBegin(GL_POLYGON);
       }
     }
 
@@ -394,8 +394,8 @@ void lw_object_show(const lwObject *lw_object)
     if (prev_material != face->material) {
       prev_material = face->material;
       glColor3f(lw_object->material[face->material].r,
-		lw_object->material[face->material].g,
-		lw_object->material[face->material].b);
+        lw_object->material[face->material].g,
+        lw_object->material[face->material].b);
     }
 
     /* update normal if necessary */

@@ -187,14 +187,14 @@ DECLARE_EVENT_TABLE()
 class DbGridFrame : public wxFrame
 {
 public:
-	bool     initialized;
+    bool     initialized;
 
-	DbGridFrame(wxWindow *parent);
+    DbGridFrame(wxWindow *parent);
 
-	void     OnCloseWindow(wxCloseEvent& event);
-	bool     Initialize();
+    void     OnCloseWindow(wxCloseEvent& event);
+    bool     Initialize();
 
-	DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 #endif
