@@ -32,7 +32,7 @@ class wxComboBox;
 //-----------------------------------------------------------------------------
 
 extern const char* wxComboBoxNameStr;
-extern const char* wxEmptyString;
+extern const wxChar* wxEmptyString;
 
 //-----------------------------------------------------------------------------
 // wxComboBox

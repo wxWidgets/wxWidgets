@@ -60,16 +60,16 @@ class WXDLLEXPORT wxFrame;
 // ----------------------------------------------------------------------------
 
 // Useful buffer (FIXME VZ: yeah, that is. To be removed!)
-WXDLLEXPORT_DATA(extern char*) wxBuffer;
+WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 
 // Make a copy of this string using 'new'
-WXDLLEXPORT char* copystring(const char *s);
+WXDLLEXPORT wxChar* copystring(const wxChar *s);
 
 // Matches string one within string two regardless of case
-WXDLLEXPORT bool StringMatch(char *one, char *two, bool subString = TRUE, bool exact = FALSE);
+WXDLLEXPORT bool StringMatch(wxChar *one, wxChar *two, bool subString = TRUE, bool exact = FALSE);
 
 // A shorter way of using strcmp
-#define wxStringEq(s1, s2) (s1 && s2 && (strcmp(s1, s2) == 0))
+#define wxStringEq(s1, s2) (s1 && s2 && (wxStrcmp(s1, s2) == 0))
 
 // ----------------------------------------------------------------------------
 // Miscellaneous functions
@@ -107,23 +107,23 @@ WXDLLEXPORT long wxGetCurrentId();
 // Various conversions
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(extern const char*) wxFloatToStringStr;
-WXDLLEXPORT_DATA(extern const char*) wxDoubleToStringStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxFloatToStringStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxDoubleToStringStr;
 
-WXDLLEXPORT void StringToFloat(char *s, float *number);
-WXDLLEXPORT char* FloatToString(float number, const char *fmt = wxFloatToStringStr);
-WXDLLEXPORT void StringToDouble(char *s, double *number);
-WXDLLEXPORT char* DoubleToString(double number, const char *fmt = wxDoubleToStringStr);
-WXDLLEXPORT void StringToInt(char *s, int *number);
-WXDLLEXPORT void StringToLong(char *s, long *number);
-WXDLLEXPORT char* IntToString(int number);
-WXDLLEXPORT char* LongToString(long number);
+WXDLLEXPORT void StringToFloat(wxChar *s, float *number);
+WXDLLEXPORT wxChar* FloatToString(float number, const wxChar *fmt = wxFloatToStringStr);
+WXDLLEXPORT void StringToDouble(wxChar *s, double *number);
+WXDLLEXPORT wxChar* DoubleToString(double number, const wxChar *fmt = wxDoubleToStringStr);
+WXDLLEXPORT void StringToInt(wxChar *s, int *number);
+WXDLLEXPORT void StringToLong(wxChar *s, long *number);
+WXDLLEXPORT wxChar* IntToString(int number);
+WXDLLEXPORT wxChar* LongToString(long number);
 
 // Convert 2-digit hex number to decimal
 WXDLLEXPORT int wxHexToDec(const wxString& buf);
 
 // Convert decimal integer to 2-character hex string
-WXDLLEXPORT void wxDecToHex(int dec, char *buf);
+WXDLLEXPORT void wxDecToHex(int dec, wxChar *buf);
 WXDLLEXPORT wxString wxDecToHex(int dec);
 
 // ----------------------------------------------------------------------------
@@ -131,7 +131,7 @@ WXDLLEXPORT wxString wxDecToHex(int dec);
 // ----------------------------------------------------------------------------
 
 // Execute another program. Returns 0 if there was an error, a PID otherwise.
-WXDLLEXPORT long wxExecute(char **argv, bool sync = FALSE,
+WXDLLEXPORT long wxExecute(wxChar **argv, bool sync = FALSE,
                            wxProcess *process = (wxProcess *) NULL);
 WXDLLEXPORT long wxExecute(const wxString& command, bool sync = FALSE,
                            wxProcess *process = (wxProcess *) NULL);
@@ -182,36 +182,36 @@ WXDLLEXPORT long wxGetFreeMemory();
 // NB: "char *" functions are deprecated, use wxString ones!
 
 // Get eMail address
-WXDLLEXPORT bool wxGetEmailAddress(char *buf, int maxSize);
+WXDLLEXPORT bool wxGetEmailAddress(wxChar *buf, int maxSize);
 WXDLLEXPORT wxString wxGetEmailAddress();
 
 // Get hostname.
-WXDLLEXPORT bool wxGetHostName(char *buf, int maxSize);
+WXDLLEXPORT bool wxGetHostName(wxChar *buf, int maxSize);
 WXDLLEXPORT wxString wxGetHostName();
 
 // Get FQDN
 WXDLLEXPORT wxString wxGetFullHostName();
 
 // Get user ID e.g. jacs (this is known as login name under Unix)
-WXDLLEXPORT bool wxGetUserId(char *buf, int maxSize);
+WXDLLEXPORT bool wxGetUserId(wxChar *buf, int maxSize);
 WXDLLEXPORT wxString wxGetUserId();
 
 // Get user name e.g. Julian Smart
-WXDLLEXPORT bool wxGetUserName(char *buf, int maxSize);
+WXDLLEXPORT bool wxGetUserName(wxChar *buf, int maxSize);
 WXDLLEXPORT wxString wxGetUserName();
 
 // Get current Home dir and copy to dest (returns pstr->c_str())
-WXDLLEXPORT const char* wxGetHomeDir(wxString *pstr);
+WXDLLEXPORT const wxChar* wxGetHomeDir(wxString *pstr);
 
 // Get the user's home dir (caller must copy --- volatile)
 // returns NULL is no HOME dir is known
-WXDLLEXPORT char* wxGetUserHome(const wxString& user = wxEmptyString);
+WXDLLEXPORT wxChar* wxGetUserHome(const wxString& user = wxEmptyString);
 
 // ----------------------------------------------------------------------------
 // Strip out any menu codes
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT char* wxStripMenuCodes(char *in, char *out = (char *) NULL);
+WXDLLEXPORT wxChar* wxStripMenuCodes(wxChar *in, wxChar *out = (wxChar *) NULL);
 WXDLLEXPORT wxString wxStripMenuCodes(const wxString& str);
 
 // ----------------------------------------------------------------------------
@@ -277,14 +277,14 @@ public:
 
 // Format a message on the standard error (UNIX) or the debugging
 // stream (Windows)
-WXDLLEXPORT void wxDebugMsg(const char *fmt ...) ;
+WXDLLEXPORT void wxDebugMsg(const wxChar *fmt ...) ;
 
 // Non-fatal error (continues)
-WXDLLEXPORT_DATA(extern const char*) wxInternalErrorStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxInternalErrorStr;
 WXDLLEXPORT void wxError(const wxString& msg, const wxString& title = wxInternalErrorStr);
 
 // Fatal error (exits)
-WXDLLEXPORT_DATA(extern const char*) wxFatalErrorStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxFatalErrorStr;
 WXDLLEXPORT void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr);
 
 // ----------------------------------------------------------------------------
@@ -297,7 +297,7 @@ WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry,
 WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file = wxEmptyString);
 WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file = wxEmptyString);
 
-WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file = wxEmptyString);
+WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, wxChar **value, const wxString& file = wxEmptyString);
 WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file = wxEmptyString);
 WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file = wxEmptyString);
 WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file = wxEmptyString);
@@ -308,8 +308,8 @@ void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 // MSW only: get user-defined resource from the .res file.
 // Returns NULL or newly-allocated memory, so use delete[] to clean up.
 #ifdef __WXMSW__
-WXDLLEXPORT extern const char* wxUserResourceStr;
-WXDLLEXPORT char* wxLoadUserResource(const wxString& resourceName, const wxString& resourceType = wxUserResourceStr);
+WXDLLEXPORT extern const wxChar* wxUserResourceStr;
+WXDLLEXPORT wxChar* wxLoadUserResource(const wxString& resourceName, const wxString& resourceType = wxUserResourceStr);
 
 // Implemented in utils.cpp: VC++, Win95 only. Sets up a console for standard
 // input/output

@@ -62,7 +62,7 @@
 // data
 //-----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(extern const char*) wxFileSelectorPromptStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorPromptStr;
 
 //-----------------------------------------------------------------------------
 // classes

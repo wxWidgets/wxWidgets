@@ -73,7 +73,7 @@ extern wxString wxExpandEnvVars(const wxString &sz);
 /*
   Split path into parts removing '..' in progress
  */
-extern void wxSplitPath(wxArrayString& aParts, const char *sz);
+extern void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
 
 // ----------------------------------------------------------------------------
 // abstract base class wxConfigBase which defines the interface for derived

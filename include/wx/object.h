@@ -59,13 +59,13 @@ typedef wxObject * (*wxObjectConstructorFn) (void);
 class WXDLLEXPORT wxClassInfo
 {
  public:
-   wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, wxObjectConstructorFn fn);
+   wxClassInfo(wxChar *cName, wxChar *baseName1, wxChar *baseName2, int sz, wxObjectConstructorFn fn);
 
    wxObject *CreateObject(void);
 
-   inline char *GetClassName(void) const { return m_className; }
-   inline char *GetBaseClassName1(void) const { return m_baseClassName1; }
-   inline char *GetBaseClassName2(void) const { return m_baseClassName2; }
+   inline wxChar *GetClassName(void) const { return m_className; }
+   inline wxChar *GetBaseClassName1(void) const { return m_baseClassName1; }
+   inline wxChar *GetBaseClassName2(void) const { return m_baseClassName2; }
    inline wxClassInfo* GetBaseClass1() const { return m_baseInfo1; }
    inline wxClassInfo* GetBaseClass2() const { return m_baseInfo2; }
    inline int GetSize(void) const { return m_objectSize; }
@@ -74,7 +74,7 @@ class WXDLLEXPORT wxClassInfo
    inline wxClassInfo* GetNext() const { return m_next; }
    bool IsKindOf(wxClassInfo *info) const;
 
-   static wxClassInfo *FindClass(char *c);
+   static wxClassInfo *FindClass(wxChar *c);
 
    // Initializes parent pointers and hash table for fast searching.
    static void InitializeClasses(void);
@@ -83,9 +83,9 @@ class WXDLLEXPORT wxClassInfo
    static void CleanUpClasses(void);
 
 public:
-   char*                    m_className;
-   char*                    m_baseClassName1;
-   char*                    m_baseClassName2;
+   wxChar*                  m_className;
+   wxChar*                  m_baseClassName1;
+   wxChar*                  m_baseClassName2;
    int                      m_objectSize;
    wxObjectConstructorFn    m_objectConstructor;
 
@@ -100,7 +100,7 @@ public:
    static wxHashTable*      sm_classTable;
 };
 
-WXDLLEXPORT wxObject* wxCreateDynamicObject(const char *name);
+WXDLLEXPORT wxObject* wxCreateDynamicObject(const wxChar *name);
 
 #if wxUSE_SERIAL
 WXDLLEXPORT wxObject* wxCreateStoredObject( wxInputStream& stream );
@@ -123,13 +123,13 @@ WXDLLEXPORT wxObject* wxCreateStoredObject( wxInputStream& stream );
 #define IMPLEMENT_DYNAMIC_CLASS(name, basename) \
 wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
    { return new name; }\
- wxClassInfo name::sm_class##name((char *) #name, (char *) #basename, (char *) NULL, (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
+ wxClassInfo name::sm_class##name((wxChar *) _T(#name), (wxChar *) _T(#basename), (wxChar *) NULL, (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
 
 // Multiple inheritance with two base classes
 #define IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2) \
 wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
    { return new name; }\
- wxClassInfo name::sm_class##name((char *) #name, (char *) #basename1, (char *) #basename2, (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
+ wxClassInfo name::sm_class##name((wxChar *) _T(#name), (wxChar *) _T(#basename1), (wxChar *) _T(#basename2), (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
 
 //////
 ////// for abstract classes
@@ -137,12 +137,13 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 
 // Single inheritance with one base class
 #define IMPLEMENT_ABSTRACT_CLASS(name, basename) \
- wxClassInfo name::sm_class##name((char *) #name, (char *) #basename, \
-		 (char *) NULL, (int) sizeof(name), (wxObjectConstructorFn) NULL);
+ wxClassInfo name::sm_class##name((wxChar *) _T(#name), (wxChar *) _T(#basename), \
+		 (wxChar *) NULL, (int) sizeof(name), (wxObjectConstructorFn) NULL);
 
 // Multiple inheritance with two base classes
 #define IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2) \
- wxClassInfo name::sm_class##name((char *) #name, (char *) #basename1, (char *) #basename2, (int) sizeof(name), (wxObjectConstructorFn) NULL);
+ wxClassInfo name::sm_class##name((wxChar *) _T(#name), (wxChar *) _T(#basename1), \
+		 (wxChar *) _T(#basename2), (int) sizeof(name), (wxObjectConstructorFn) NULL);
 
 #define IMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
 #define IMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2

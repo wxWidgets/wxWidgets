@@ -59,30 +59,30 @@ class WXDLLEXPORT wxHashTable: public wxObject
 
   // key and value are NOT necessarily the same
   void Put(long key, long value, wxObject *object);
-  void Put(long key, const char *value, wxObject *object);
+  void Put(long key, const wxChar *value, wxObject *object);
 
   // key and value are the same
   void Put(long value, wxObject *object);
-  void Put(const char *value, wxObject *object);
+  void Put(const wxChar *value, wxObject *object);
 
   // key and value not the same
   wxObject *Get(long key, long value) const;
-  wxObject *Get(long key, const char *value) const;
+  wxObject *Get(long key, const wxChar *value) const;
 
   // key and value are the same
   wxObject *Get(long value) const;
-  wxObject *Get(const char *value) const;
+  wxObject *Get(const wxChar *value) const;
 
   // Deletes entry and returns data if found
   wxObject *Delete(long key);
-  wxObject *Delete(const char *key);
+  wxObject *Delete(const wxChar *key);
 
   wxObject *Delete(long key, int value);
-  wxObject *Delete(long key, const char *value);
+  wxObject *Delete(long key, const wxChar *value);
 
   // Construct your own integer key from a string, e.g. in case
   // you need to combine it with something
-  long MakeKey(const char *string) const;
+  long MakeKey(const wxChar *string) const;
 
   // Way of iterating through whole hash table (e.g. to delete everything)
   // Not necessary, of course, if you're only storing pointers to

@@ -63,26 +63,26 @@ public:
   // static functions
   // ----------------
     // check whether a regular file by this name exists
-  static bool Exists(const char *name);
+  static bool Exists(const wxChar *name);
     // check whetther we can access the given file in given mode
     // (only read and write make sense here)
-  static bool Access(const char *name, OpenMode mode);
+  static bool Access(const wxChar *name, OpenMode mode);
 
   // ctors
   // -----
     // def ctor
   wxFile() { m_fd = fd_invalid; }
     // open specified file (may fail, use IsOpened())
-  wxFile(const char *szFileName, OpenMode mode = read);
+  wxFile(const wxChar *szFileName, OpenMode mode = read);
     // attach to (already opened) file
   wxFile(int fd) { m_fd = fd; }
 
   // open/close
     // create a new file (with the default value of bOverwrite, it will fail if
     // the file already exists, otherwise it will overwrite it and succeed)
-  bool Create(const char *szFileName, bool bOverwrite = FALSE,
+  bool Create(const wxChar *szFileName, bool bOverwrite = FALSE,
               int access = wxS_DEFAULT);
-  bool Open(const char *szFileName, OpenMode mode = read,
+  bool Open(const wxChar *szFileName, OpenMode mode = read,
             int access = wxS_DEFAULT);
   bool Close();  // Close is a NOP if not opened
 
@@ -97,7 +97,7 @@ public:
     // returns true on success
   size_t Write(const void *pBuf, size_t nCount);
     // returns true on success
-  bool Write(const wxString& s) { return Write(s.c_str(), s.Len()) != 0; }
+  bool Write(const wxString& s) { return Write(s.c_str(), s.Len()*sizeof(wxChar)) != 0; }
     // flush data not yet written
   bool Flush();
 

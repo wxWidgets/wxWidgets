@@ -94,7 +94,7 @@ public:
     // guess the type of file (m_file is supposed to be opened)
   wxTextFileType GuessType() const;
     // get the name of the file
-  const char *GetName() const { return m_strFile.c_str(); }
+  const wxChar *GetName() const { return m_strFile.c_str(); }
 
   // add/remove lines
     // add a line to the end
@@ -114,7 +114,7 @@ public:
 
   // get the file termination string
   // Note: implementation moved to textfile to prevent warning due to switch.
-  static const char *GetEOL(wxTextFileType type = typeDefault);
+  static const wxChar *GetEOL(wxTextFileType type = typeDefault);
 
   // dtor
   ~wxTextFile();

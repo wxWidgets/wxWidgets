@@ -778,7 +778,7 @@ public:
     {
         // GetVeto() will return FALSE anyhow...
         wxCHECK_RET( m_canVeto,
-                     "call to Veto() ignored (can't veto this event)" );
+                     _T("call to Veto() ignored (can't veto this event)") );
 
         m_veto = veto;
     }

@@ -40,7 +40,7 @@
 
 // due to circular header dependencies this function has to be declared here
 // (normally it's found in utils.h which includes itself list.h...)
-extern WXDLLEXPORT char* copystring(const char *s);
+extern WXDLLEXPORT wxChar* copystring(const wxChar *s);
 
 class WXDLLEXPORT wxObjectListNode;
 typedef wxObjectListNode wxNode;
@@ -77,7 +77,7 @@ typedef int (*wxListIterateFunction)(void *current);
 union wxListKeyValue
 {
     long integer;
-    char *string;
+    wxChar *string;
 };
 
 // a struct which may contain both types of keys
@@ -94,14 +94,14 @@ public:
         { m_keyType = wxKEY_NONE; }
     wxListKey(long i)
         { m_keyType = wxKEY_INTEGER; m_key.integer = i; }
-    wxListKey(const char *s)
-        { m_keyType = wxKEY_STRING; m_key.string = strdup(s); }
+    wxListKey(const wxChar *s)
+        { m_keyType = wxKEY_STRING; m_key.string = wxStrdup(s); }
     wxListKey(const wxString& s)
-        { m_keyType = wxKEY_STRING; m_key.string = strdup(s.c_str()); }
+        { m_keyType = wxKEY_STRING; m_key.string = wxStrdup(s.c_str()); }
 
     // accessors
     wxKeyType GetKeyType() const { return m_keyType; }
-    const char *GetString() const
+    const wxChar *GetString() const
         { wxASSERT( m_keyType == wxKEY_STRING ); return m_key.string; }
     long GetNumber() const
         { wxASSERT( m_keyType == wxKEY_INTEGER ); return m_key.integer; }
@@ -143,11 +143,11 @@ public:
     virtual ~wxNodeBase();
 
     // @@ no check is done that the list is really keyed on strings
-    const char *GetKeyString() const { return m_key.string; }
+    const wxChar *GetKeyString() const { return m_key.string; }
     long GetKeyInteger() const { return m_key.integer; }
 
     // Necessary for some existing code
-    void SetKeyString(char* s) { m_key.string = s; }
+    void SetKeyString(wxChar* s) { m_key.string = s; }
     void SetKeyInteger(long i) { m_key.integer = i; }
 
 #ifdef wxLIST_COMPATIBILITY
@@ -272,7 +272,7 @@ protected:
 
         // keyed append
     wxNodeBase *Append(long key, void *object);
-    wxNodeBase *Append(const char *key, void *object);
+    wxNodeBase *Append(const wxChar *key, void *object);
 
         // removes node from the list but doesn't delete it (returns pointer
         // to the node or NULL if it wasn't found in the list)
@@ -399,7 +399,7 @@ private:
                                                                             \
         nodetype *Append(long key, void *object)                            \
             { return (nodetype *)wxListBase::Append(key, object); }         \
-        nodetype *Append(const char *key, void *object)                     \
+        nodetype *Append(const wxChar *key, void *object)                   \
             { return (nodetype *)wxListBase::Append(key, object); }         \
                                                                             \
         nodetype *DetachNode(nodetype *node)                                \
@@ -474,7 +474,7 @@ public:
 // wxStringList class for compatibility with the old code
 // -----------------------------------------------------------------------------
 
-WX_DECLARE_LIST_2(char, wxStringListBase, wxStringListNode);
+WX_DECLARE_LIST_2(wxChar, wxStringListBase, wxStringListNode);
 
 class WXDLLEXPORT wxStringList : public wxStringListBase
 {
@@ -482,7 +482,7 @@ public:
     // ctors and such
         // default
     wxStringList() { DeleteContents(TRUE); }
-    wxStringList(const char *first ...);
+    wxStringList(const wxChar *first ...);
 
         // copying the string list: the strings are copied, too (extremely
         // inefficient!)
@@ -492,13 +492,13 @@ public:
 
     // operations
         // makes a copy of the string
-    wxNode *Add(const char *s)
+    wxNode *Add(const wxChar *s)
         { return (wxNode *)wxStringListBase::Append(copystring(s)); }
 
-    bool Delete(const char *s);
+    bool Delete(const wxChar *s);
 
-    char **ListToArray(bool new_copies = FALSE) const;
-    bool Member(const char *s) const;
+    wxChar **ListToArray(bool new_copies = FALSE) const;
+    bool Member(const wxChar *s) const;
 
     // alphabetic sort
     void Sort();

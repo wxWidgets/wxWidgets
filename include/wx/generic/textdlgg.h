@@ -20,8 +20,8 @@
 #include "wx/dialog.h"
 
 // Handy dialog functions (will be converted into classes at some point)
-WXDLLEXPORT_DATA(extern const char*) wxGetTextFromUserPromptStr;
-WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
+WXDLLEXPORT_DATA(extern const wxChar*) wxGetTextFromUserPromptStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 #define wxID_TEXT 3000
 

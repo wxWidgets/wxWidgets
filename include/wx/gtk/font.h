@@ -41,7 +41,7 @@ class wxFontNameDirectory;
 /*
 extern wxFontNameDirectory *wxTheFontNameDirectory;
 */
-extern const char* wxEmptyString;
+extern const wxChar* wxEmptyString;
 
 //-----------------------------------------------------------------------------
 // wxFont

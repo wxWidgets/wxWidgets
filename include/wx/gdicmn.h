@@ -219,7 +219,7 @@ class WXDLLEXPORT wxBrushList: public wxList
   wxBrush *FindOrCreateBrush(const wxColour& colour, int style);
 };
 
-WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
+WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 class WXDLLEXPORT wxFontList: public wxList
 {

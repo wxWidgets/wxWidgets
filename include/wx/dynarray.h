@@ -197,9 +197,9 @@ public:                                                             \
   void Remove(size_t uiIndex) { wxBaseArray::Remove(uiIndex); }     \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
-      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
-        "removing inexisting element in wxArray::Remove" );         \
-      wxBaseArray::Remove((size_t)iIndex); }                          \
+      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                  \
+        _T("removing inexisting element in wxArray::Remove") );     \
+      wxBaseArray::Remove((size_t)iIndex); }                        \
                                                                     \
   void Sort(CMPFUNC##T fCmp) { wxBaseArray::Sort((CMPFUNC)fCmp); }  \
 }
@@ -254,8 +254,8 @@ public:                                                             \
   void Remove(size_t uiIndex) { wxBaseArray::Remove(uiIndex); }     \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
-      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
-        "removing inexisting element in wxArray::Remove" );         \
+      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                  \
+        _T("removing inexisting element in wxArray::Remove") );     \
       wxBaseArray::Remove((size_t)iIndex); }                        \
                                                                     \
 private:                                                            \

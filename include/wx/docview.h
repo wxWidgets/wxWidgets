@@ -540,7 +540,7 @@ class WXDLLEXPORT wxFileHistory: public wxObject
 
  protected:
   // Last n files
-  char**            m_fileHistory;
+  wxChar**          m_fileHistory;
   // Number of files saved
   int               m_fileHistoryN;
   // Menus to maintain (may need several for an MDI app)
