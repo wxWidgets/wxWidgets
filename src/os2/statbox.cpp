@@ -39,9 +39,7 @@ bool wxStaticBox::Create(
                       ,rPos
                       ,rSize
                       ,lStyle
-#if wxUSE_VALIDATORS
                       ,wxDefaultValidator
-#endif
                       ,rsName
                      ))
     {

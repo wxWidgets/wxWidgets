@@ -191,7 +191,7 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() {
 void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     wxPyBeginBlockThreads();
     if (m_myInst.findCallback("SetBitmap")) {
-        PyObject* bo = wxPyConstructObject((void*)&bitmap, "wxBitmap");
+        PyObject* bo = wxPyConstructObject((void*)&bitmap, wxT("wxBitmap"));
         m_myInst.callCallback(Py_BuildValue("(O)", bo));
         Py_DECREF(bo);
     }
@@ -537,7 +537,7 @@ static PyObject *_wrap_wxDataFormat_GetId(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -713,43 +713,6 @@ static PyObject *_wrap_wxDataObject_GetAllFormats(PyObject *self, PyObject *args
     return _resultobj;
 }
 
-#define wxDataObject_GetDataSize(_swigobj,_swigarg0)  (_swigobj->GetDataSize(_swigarg0))
-static PyObject *_wrap_wxDataObject_GetDataSize(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    size_t  _result;
-    wxDataObject * _arg0;
-    wxDataFormat * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","format", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDataObject_GetDataSize",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDataObject_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDataObject_GetDataSize. Expected _wxDataObject_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataFormat_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDataObject_GetDataSize. Expected _wxDataFormat_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (size_t )wxDataObject_GetDataSize(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 #define wxDataObject_GetDataHere(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetDataHere(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxDataObject_GetDataHere(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -773,8 +736,7 @@ static PyObject *_wrap_wxDataObject_GetDataHere(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataFormat_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataFormat_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDataObject_GetDataHere. Expected _wxDataFormat_p.");
         return NULL;
         }
@@ -789,6 +751,42 @@ static PyObject *_wrap_wxDataObject_GetDataHere(PyObject *self, PyObject *args, 
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (bool )wxDataObject_GetDataHere(_arg0,*_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxDataObject_GetDataSize(_swigobj,_swigarg0)  (_swigobj->GetDataSize(_swigarg0))
+static PyObject *_wrap_wxDataObject_GetDataSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    size_t  _result;
+    wxDataObject * _arg0;
+    wxDataFormat * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","format", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDataObject_GetDataSize",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDataObject_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDataObject_GetDataSize. Expected _wxDataObject_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataFormat_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDataObject_GetDataSize. Expected _wxDataFormat_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (size_t )wxDataObject_GetDataSize(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -820,8 +818,7 @@ static PyObject *_wrap_wxDataObject_SetData(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataFormat_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataFormat_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDataObject_SetData. Expected _wxDataFormat_p.");
         return NULL;
         }
@@ -864,8 +861,7 @@ static PyObject *_wrap_wxDataObject_IsSupportedFormat(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataFormat_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataFormat_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDataObject_IsSupportedFormat. Expected _wxDataFormat_p.");
         return NULL;
         }
@@ -901,8 +897,7 @@ static PyObject *_wrap_new_wxDataObjectSimple(PyObject *self, PyObject *args, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxDataObjectSimple",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDataFormat_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDataFormat_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDataObjectSimple. Expected _wxDataFormat_p.");
         return NULL;
         }
@@ -979,8 +974,7 @@ static PyObject *_wrap_wxDataObjectSimple_SetFormat(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataFormat_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataFormat_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDataObjectSimple_SetFormat. Expected _wxDataFormat_p.");
         return NULL;
         }
@@ -1025,8 +1019,7 @@ static PyObject *_wrap_new_wxPyDataObjectSimple(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxPyDataObjectSimple",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDataFormat_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDataFormat_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPyDataObjectSimple. Expected _wxDataFormat_p.");
         return NULL;
         }
@@ -1265,7 +1258,7 @@ static PyObject *_wrap_wxTextDataObject_GetText(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1444,8 +1437,7 @@ static PyObject *_wrap_new_wxBitmapDataObject(PyObject *self, PyObject *args, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxBitmapDataObject",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxBitmapDataObject. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1516,8 +1508,7 @@ static PyObject *_wrap_wxBitmapDataObject_SetBitmap(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmapDataObject_SetBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1570,8 +1561,7 @@ static PyObject *_wrap_new_wxPyBitmapDataObject(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxPyBitmapDataObject",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPyBitmapDataObject. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1773,8 +1763,7 @@ static PyObject *_wrap_new_wxCustomDataObject(PyObject *self, PyObject *args, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxCustomDataObject",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDataFormat_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDataFormat_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxCustomDataObject. Expected _wxDataFormat_p.");
         return NULL;
         }
@@ -1998,7 +1987,7 @@ static PyObject *_wrap_wxURLDataObject_GetURL(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2110,8 +2099,7 @@ static PyObject *_wrap_wxMetafileDataObject_SetMetafile(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMetafile_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMetafile_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMetafileDataObject_SetMetafile. Expected _wxMetafile_p.");
         return NULL;
         }
@@ -2370,8 +2358,7 @@ static PyObject *_wrap_wxClipboard_IsSupported(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataFormat_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataFormat_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxClipboard_IsSupported. Expected _wxDataFormat_p.");
         return NULL;
         }
@@ -2407,8 +2394,7 @@ static PyObject *_wrap_wxClipboard_GetData(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataObject_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataObject_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxClipboard_GetData. Expected _wxDataObject_p.");
         return NULL;
         }
@@ -2534,22 +2520,19 @@ static PyObject *_wrap_new_wxDropSource(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDropSource. Expected _wxCursor_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxDropSource. Expected _wxCursor_p.");
         return NULL;
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxDropSource. Expected _wxCursor_p.");
         return NULL;
         }
@@ -2657,8 +2640,7 @@ static PyObject *_wrap_wxDropSource_SetData(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataObject_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDataObject_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDropSource_SetData. Expected _wxDataObject_p.");
         return NULL;
         }
@@ -2730,8 +2712,7 @@ static PyObject *_wrap_wxDropSource_SetCursor(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxDropSource_SetCursor. Expected _wxCursor_p.");
         return NULL;
         }
@@ -3674,8 +3655,8 @@ static PyMethodDef clip_dndcMethods[] = {
 	 { "new_wxDataObjectSimple", (PyCFunction) _wrap_new_wxDataObjectSimple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDataObject_IsSupportedFormat", (PyCFunction) _wrap_wxDataObject_IsSupportedFormat, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDataObject_SetData", (PyCFunction) _wrap_wxDataObject_SetData, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDataObject_GetDataHere", (PyCFunction) _wrap_wxDataObject_GetDataHere, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDataObject_GetDataSize", (PyCFunction) _wrap_wxDataObject_GetDataSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDataObject_GetDataHere", (PyCFunction) _wrap_wxDataObject_GetDataHere, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDataObject_GetAllFormats", (PyCFunction) _wrap_wxDataObject_GetAllFormats, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDataObject_GetFormatCount", (PyCFunction) _wrap_wxDataObject_GetFormatCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDataObject_GetPreferredFormat", (PyCFunction) _wrap_wxDataObject_GetPreferredFormat, METH_VARARGS | METH_KEYWORDS },

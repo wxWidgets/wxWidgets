@@ -16,7 +16,7 @@ program_dir = contrib/samples/gizmos/dynsash
 PROGRAM=dynsash
 OBJECTS=dynsash.o
 
-APPEXTRALIBS=$(top_builddir)/lib/libgizmos.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRALIBS=$(top_builddir)/lib/lib@WX_LIBRARY_BASENAME@_gizmos-@WX_RELEASE@.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makeprog.env

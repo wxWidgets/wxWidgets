@@ -203,16 +203,14 @@ class TestValidateDialog(wxDialog):
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
+    if wxPlatform == "__WXMAC__":
+        wxMessageBox("This demo currently fails on the Mac. The problem is being looked into...", "Sorry")
+        return
+
     win = TestValidatorPanel(nb)
     return win
 
 #----------------------------------------------------------------------
-
-
-
-
-
-
 
 
 
@@ -230,3 +228,11 @@ A validator has three major roles:
 Validators can be plugged into controls dynamically.
 
 """
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

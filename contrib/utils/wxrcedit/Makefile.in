@@ -25,7 +25,7 @@ DATAFILES = df/break.df df/control.df df/menu_item.df df/notebookpage.df \
             df/wxStaticLine.df df/wxStaticText.df df/wxTextCtrl.df \
             df/wxToolBar.df df/wxTreeCtrl.df 
             
-APPEXTRALIBS=$(top_builddir)/lib/libwxxrc.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRALIBS=$(top_builddir)/lib/lib@WX_LIBRARY_BASENAME@_xrc-@WX_RELEASE@.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makeprog.env

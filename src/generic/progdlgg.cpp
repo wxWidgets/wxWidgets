@@ -322,7 +322,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
 
     wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
 
-    if ( m_gauge )
+    if ( m_gauge && value < m_maximum )
     {
         m_gauge->SetValue(value + 1);
     }
@@ -404,6 +404,17 @@ void wxProgressDialog::Resume()
     // it may have been disabled by OnCancel(), so enable it back to let the
     // user interrupt us again if needed
     m_btnAbort->Enable();
+}
+
+bool wxProgressDialog::Show( bool show )
+{
+    // reenable other windows before hiding this one because otherwise
+    // Windows wouldn't give the focus back to the window which had
+    // been previously focused because it would still be disabled
+    if(!show)
+        ReenableOtherWindows();
+
+    return wxDialog::Show(show);
 }
 
 // ----------------------------------------------------------------------------

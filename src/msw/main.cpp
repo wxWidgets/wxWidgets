@@ -33,6 +33,12 @@
 
 #include "wx/msw/private.h"
 
+// Don't implement WinMain if we're building an MFC/wxWindows
+// hybrid app.
+#if wxUSE_MFC && !defined(NOMAIN)
+#define NOMAIN 1
+#endif
+
 // from src/msw/app.cpp
 extern void WXDLLEXPORT wxEntryCleanup();
 

@@ -151,10 +151,10 @@ enum wxStockCursor
 
 #ifdef __WXMSW__
     // Load from a resource
-    #define wxICON(X) wxIcon("" #X "")
+    #define wxICON(X) wxIcon(wxT(#X))
 #elif defined(__WXPM__)
     // Load from a resource
-    #define wxICON(X) wxIcon("" #X "")
+    #define wxICON(X) wxIcon(wxT(#X))
 #elif defined(__WXMGL__)
     // Initialize from an included XPM
     #define wxICON(X) wxIcon( (const char**) X##_xpm )
@@ -172,7 +172,7 @@ enum wxStockCursor
     #define wxICON(X) wxIcon( X##_xpm )
 #else
     // This will usually mean something on any platform
-    #define wxICON(X) wxIcon("" #X "")
+    #define wxICON(X) wxIcon(wxT(#X))
 #endif // platform
 
 /* Another macro: this one is for portable creation of bitmaps. We assume that
@@ -180,7 +180,7 @@ enum wxStockCursor
  */
 
 #if defined(__WXMSW__) || defined(__WXPM__)
-    #define wxBITMAP(name) wxBitmap(#name, wxBITMAP_TYPE_RESOURCE)
+    #define wxBITMAP(name) wxBitmap(wxT(#name), wxBITMAP_TYPE_RESOURCE)
 #elif defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__) || defined(__WXMAC__) || defined(__WXMGL__)
     // Initialize from an included XPM
     #define wxBITMAP(name) wxBitmap( (const char**) name##_xpm )
@@ -247,6 +247,7 @@ public:
     wxRealPoint operator-(const wxRealPoint& pt) const { return wxRealPoint(x - pt.x, y - pt.y); }
 
     bool operator==(const wxRealPoint& pt) const { return x == pt.x && y == pt.y; }
+    bool operator!=(const wxRealPoint& pt) const { return x != pt.x || y != pt.y; }
 };
 
 class WXDLLEXPORT wxPoint

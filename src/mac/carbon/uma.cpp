@@ -23,12 +23,14 @@
 
 static bool	sUMAHasAppearance = false ;
 static long sUMAAppearanceVersion = 0 ;
+static long sUMASystemVersion = 0 ;
 static bool sUMAHasAquaLayout = false ;
 static bool sUMASystemInitialized = false ;
 
 extern int gAGABackgroundColor ;
 bool UMAHasAppearance() { return sUMAHasAppearance ; }
 long UMAGetAppearanceVersion() { return sUMAAppearanceVersion ; }
+long UMAGetSystemVersion() { return sUMASystemVersion ; }
 
 static bool	sUMAHasWindowManager = false ;
 static long sUMAWindowManagerAttr = 0 ;
@@ -71,6 +73,9 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 	InitCursor();
 #endif
 
+    if ( Gestalt(gestaltSystemVersion, &sUMASystemVersion) != noErr)
+    	sUMASystemVersion = 0x0000 ;
+    	
 	long theAppearance ;
 	if ( Gestalt( gestaltAppearanceAttr, &theAppearance ) == noErr )
 	{
@@ -232,33 +237,157 @@ void UMAInsertSubMenuItem( MenuRef menu , StringPtr l , MenuItemIndex item , SIn
 	SetMenuItemHierarchicalID( menu , item , id ) ;
 }
 
+void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , SInt16 key , UInt8 modifiers )
+{
+	if ( key )
+	{
+	    SInt16 glyph = 0 ;
+	    SInt16 macKey = key ;
+	    if ( key >= WXK_F1 && key <= WXK_F15 )
+	    {
+	        macKey = kFunctionKeyCharCode ;
+	        glyph = kMenuF1Glyph + ( key - WXK_F1 ) ;
+	        if ( key >= WXK_F13 )
+	            glyph += 13 ;
+	        switch( key )
+	        {
+	            case WXK_F1 :
+	                macKey += ( 0x7a << 8 ) ;
+	                break ;
+	            case WXK_F2 :
+	                macKey += ( 0x78 << 8 ) ;
+	                break ;
+	            case WXK_F3 :
+	                macKey += ( 0x63 << 8 ) ;
+	                break ;
+	            case WXK_F4 :
+	                macKey += ( 0x76 << 8 ) ;
+	                break ;
+	            case WXK_F5 :
+	                macKey += ( 0x60 << 8 ) ;
+	                break ;
+	            case WXK_F6 :
+	                macKey += ( 0x61 << 8 ) ;
+	                break ;
+	            case WXK_F7 :
+	                macKey += ( 0x62 << 8 ) ;
+	                break ;
+	            case WXK_F8 :
+	                macKey += ( 0x64 << 8 ) ;
+	                break ;
+	            case WXK_F9 :
+	                macKey += ( 0x65 << 8 ) ;
+	                break ;
+	            case WXK_F10 :
+	                macKey += ( 0x6D << 8 ) ;
+	                break ;
+	            case WXK_F11 :
+	                macKey += ( 0x67 << 8 ) ;
+	                break ;
+	            case WXK_F12 :
+	                macKey += ( 0x6F << 8 ) ;
+	                break ;
+	            case WXK_F13 :
+	                macKey += ( 0x69 << 8 ) ;
+	                break ;
+	            case WXK_F14 :
+	                macKey += ( 0x6B << 8 ) ;
+	                break ;
+	            case WXK_F15 :
+	                macKey += ( 0x71 << 8 ) ;
+	                break ;
+	            default :
+	                break ;
+	        } ;
+	        // unfortunately this does not yet trigger the right key ,
+	        // for some reason mac justs picks the first function key menu
+	        // defined, so we turn this off
+	        macKey = 0 ;
+	        glyph = 0 ;
+  	    }
+	    else
+    	{
+    	    switch( key )
+    	    {
+    	        case WXK_BACK :
+    	            macKey = kBackspaceCharCode ;
+    	            glyph = kMenuDeleteLeftGlyph ;
+    	            break ;
+    	        case WXK_TAB :
+    	            macKey = kTabCharCode ;
+    	            glyph = kMenuTabRightGlyph ;
+    	            break ;
+    	        case kEnterCharCode :
+    	            macKey = kEnterCharCode ;
+    	            glyph = kMenuEnterGlyph ;
+    	            break ;
+    	        case WXK_RETURN :
+    	            macKey = kReturnCharCode ;
+    	            glyph = kMenuReturnGlyph ;
+    	            break ;
+    	        case WXK_ESCAPE :
+    	            macKey = kEscapeCharCode ;
+    	            glyph = kMenuEscapeGlyph ;
+    	            break ;
+    	        case WXK_SPACE :
+    	            macKey = ' ' ;
+    	            glyph = kMenuSpaceGlyph ;
+    	            break ;
+    	        case WXK_DELETE :
+    	            macKey = kDeleteCharCode ;
+    	            glyph = kMenuDeleteRightGlyph ;
+    	            break ;
+    	        case WXK_CLEAR :
+    	            macKey = kClearCharCode ;
+    	            glyph = kMenuClearGlyph ;
+    	            break ;
+    	        case WXK_PRIOR : // PAGE UP
+    	            macKey = kPageUpCharCode ;
+    	            glyph = kMenuPageUpGlyph ;
+    	            break ;
+    	        case WXK_NEXT :
+    	            macKey = kPageDownCharCode ;
+    	            glyph = kMenuPageDownGlyph ;
+    	            break ;
+    	        case WXK_LEFT :
+    	            macKey = kLeftArrowCharCode ;
+    	            glyph = kMenuLeftArrowGlyph ;
+    	            break ;
+    	        case WXK_UP :
+    	            macKey = kUpArrowCharCode ;
+    	            glyph = kMenuUpArrowGlyph ;
+    	            break ;
+    	        case WXK_RIGHT :
+    	            macKey = kRightArrowCharCode ;
+    	            glyph = kMenuRightArrowGlyph ;
+    	            break ;
+    	        case WXK_DOWN :
+    	            macKey = kDownArrowCharCode ;
+    	            glyph = kMenuDownArrowGlyph ;
+    	            break ;
+            }
+        }
+	    
+	    SetItemCmd( menu, item , macKey );
+	    SetMenuItemModifiers(menu, item , modifiers ) ;
+
+        if ( glyph )
+            SetMenuItemKeyGlyph(menu, item , glyph ) ;
+	}
+}
 
 void UMAAppendMenuItem( MenuRef menu , StringPtr l , SInt16 key, UInt8 modifiers ) 
 {
-	Str255 label ;
-	memcpy( label , l , l[0]+1 ) ;
-	if ( key )
-	{
-			int pos = label[0] ;
-			label[++pos] = '/';
-			label[++pos] = toupper( key );
-			label[0] = pos ;
-	}
-	MacAppendMenu( menu , label ) ;
+	MacAppendMenu(menu, "\pA");
+	SetMenuItemText(menu, (SInt16) ::CountMenuItems(menu), l);
+	UMASetMenuItemShortcut( menu ,  (SInt16) ::CountMenuItems(menu), key , modifiers ) ;
 }
 
 void UMAInsertMenuItem( MenuRef menu , StringPtr l , MenuItemIndex item , SInt16 key, UInt8 modifiers ) 
 {
-	Str255 label ;
-	memcpy( label , l , l[0]+1 ) ;
-	if ( key )
-	{
-			int pos = label[0] ;
-			label[++pos] = '/';
-			label[++pos] = toupper( key );
-			label[0] = pos ;
-	}
-	MacInsertMenuItem( menu , label , item) ;
+	MacInsertMenuItem( menu , "\p" , item) ;
+	SetMenuItemText(menu, item , l);
+	UMASetMenuItemShortcut( menu , item , key , modifiers ) ;
 }
 
 // quickdraw

@@ -13,7 +13,7 @@ PROGRAM=stctest
 
 OBJECTS=$(PROGRAM).o
 
-APPEXTRALIBS=$(top_builddir)/lib/libstc.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRALIBS=$(top_builddir)/lib/lib@WX_LIBRARY_BASENAME@_stc-@WX_RELEASE@.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 DATAFILES=stctest.cpp

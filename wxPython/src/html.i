@@ -21,6 +21,7 @@
 #include <wx/fs_zip.h>
 #include <wx/fs_inet.h>
 #include <wx/wfstream.h>
+#include <wx/filesys.h>
 
 #include "printfw.h"
 %}
@@ -37,8 +38,10 @@
 %extern controls.i
 %extern controls2.i
 %extern printfw.i
-
 %extern utils.i
+%extern filesys.i
+%extern streams.i
+
 
 %pragma(python) code = "import wx"
 
@@ -158,7 +161,9 @@ public:
     void InitParser(const wxString& source);
     void DoneParser();
     void DoParsing(int begin_pos, int end_pos);
+    void StopParsing();
     // wxObject* GetProduct();
+
     void AddTagHandler(wxHtmlTagHandler *handler);
     wxString* GetSource();
     void PushTagHandler(wxHtmlTagHandler* handler, wxString tags);
@@ -415,6 +420,7 @@ public:
     %name(SetWidthFloatFromTag)void SetWidthFloat(const wxHtmlTag& tag);
     void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP);
     void SetBackgroundColour(const wxColour& clr);
+    wxColour GetBackgroundColour();
     void SetBorder(const wxColour& clr1, const wxColour& clr2);
     wxHtmlCell* GetFirstCell();
 };
@@ -442,9 +448,75 @@ public:
 };
 
 
+//---------------------------------------------------------------------------
+// wxHtmlFilter
+//---------------------------------------------------------------------------
+
+
+%{ // here's the C++ version
+class wxPyHtmlFilter : public wxHtmlFilter {
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlFilter);
+public:
+    wxPyHtmlFilter() : wxHtmlFilter() {}
+
+    // returns TRUE if this filter is able to open&read given file
+    virtual bool CanRead(const wxFSFile& file) const {
+        bool rval = FALSE;
+        bool found;
+        wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "CanRead"))) {
+            PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file);  // cast away const
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
+            Py_DECREF(obj);
+        }
+        wxPyEndBlockThreads();
+        return rval;
+    }
+
+
+    // Reads given file and returns HTML document.
+    // Returns empty string if opening failed
+    virtual wxString ReadFile(const wxFSFile& file) const {
+        wxString rval;
+        bool found;
+        wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "ReadFile"))) {
+            PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file);  // cast away const
+            PyObject* ro;
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)", obj));
+            Py_DECREF(obj);
+            if (ro) {
+                rval = Py2wxString(ro);
+                Py_DECREF(ro);
+            }
+        }
+        wxPyEndBlockThreads();
+        return rval;
+    }
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_ABSTRACT_CLASS(wxPyHtmlFilter, wxHtmlFilter);
+%}
+
+
+// And now the version seen by SWIG
+
+%name(wxHtmlFilter) class wxPyHtmlFilter : public wxObject {
+public:
+    wxPyHtmlFilter();
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxHtmlFilter)"
+};
+
+
+// TODO: wxHtmlFilterHTML
+
 
 //---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+// wxHtmlWindow
 //---------------------------------------------------------------------------
 
 %{
@@ -455,7 +527,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxHW_SCROLLBAR_AUTO,
-                   const wxString& name = "htmlWindow")
+                   const wxString& name = wxPyHtmlWindowNameStr)
         : wxHtmlWindow(parent, id, pos, size, style, name)  {};
     wxPyHtmlWindow() : wxHtmlWindow() {};
 
@@ -478,7 +550,6 @@ public:
     DEC_PYCALLBACK__STRING(OnSetTitle);
     DEC_PYCALLBACK__CELLINTINT(OnCellMouseHover);
     DEC_PYCALLBACK__CELLINTINTME(OnCellClicked);
-//     DEC_PYCALLBACK_BOOL_STRING(OnOpeningURL);
     PYPRIVATE;
 };
 
@@ -486,14 +557,13 @@ IMPLEMENT_ABSTRACT_CLASS( wxPyHtmlWindow, wxHtmlWindow );
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 IMP_PYCALLBACK__CELLINTINT(wxPyHtmlWindow, wxHtmlWindow, OnCellMouseHover);
 IMP_PYCALLBACK__CELLINTINTME(wxPyHtmlWindow, wxHtmlWindow, OnCellClicked);
-// IMP_PYCALLBACK_BOOL_STRING(wxPyHtmlWindow, wxHtmlWindow, OnOpeningURL);
 
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     bool found;
     wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "OnLinkClicked"))) {
-        PyObject* obj = wxPyConstructObject((void*)&link, "wxHtmlLinkInfo", 0);
+        PyObject* obj = wxPyConstructObject((void*)&link, wxT("wxHtmlLinkInfo"), 0);
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
         Py_DECREF(obj);
     }
@@ -564,18 +634,45 @@ public:
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreHtmlWindow:val._setOORInfo(val)"
 
+    // Set HTML page and display it. !! source is HTML document itself,
+    // it is NOT address/filename of HTML document. If you want to
+    // specify document location, use LoadPage() istead
+    // Return value : FALSE if an error occured, TRUE otherwise
     bool SetPage(const wxString& source);
+
+    // Load HTML page from given location. Location can be either
+    // a) /usr/wxGTK2/docs/html/wx.htm
+    // b) http://www.somewhere.uk/document.htm
+    // c) ftp://ftp.somesite.cz/pub/something.htm
+    // In case there is no prefix (http:,ftp:), the method
+    // will try to find it itself (1. local file, then http or ftp)
+    // After the page is loaded, the method calls SetPage() to display it.
+    // Note : you can also use path relative to previously loaded page
+    // Return value : same as SetPage
     bool LoadPage(const wxString& location);
+
+    // Append to current page
     bool AppendToPage(const wxString& source);
+
+     // Returns full location of opened page
     wxString GetOpenedPage();
+
+    // Returns anchor within opened page
     wxString GetOpenedAnchor();
+
+    // Returns <TITLE> of opened page or empty string otherwise
     wxString GetOpenedPageTitle();
 
+    // Sets frame in which page title will  be displayed. Format is format of
+    // frame title, e.g. "HtmlHelp : %s". It must contain exactly one %s
     void SetRelatedFrame(wxFrame* frame, const wxString& format);
     wxFrame* GetRelatedFrame();
+
+    // After(!) calling SetRelatedFrame, this sets statusbar slot where messages
+    // will be displayed. Default is -1 = no messages.
     void SetRelatedStatusBar(int bar);
 
-    //void SetFonts(wxString normal_face, wxString fixed_face, int *LIST);
+    // Sets fonts to be used when displaying HTML page.
     %addmethods {
         void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes) {
             int* temp = int_LIST_helper(sizes);
@@ -587,19 +684,38 @@ public:
     }
 
     void SetTitle(const wxString& title);
+
+    // Sets space between text and window borders.
     void SetBorders(int b);
+
+    // Saves custom settings into cfg config. it will use the path 'path'
+    // if given, otherwise it will save info into currently selected path.
+    // saved values : things set by SetFonts, SetBorders.
     void ReadCustomization(wxConfigBase *cfg, wxString path = wxPyEmptyString);
     void WriteCustomization(wxConfigBase *cfg, wxString path = wxPyEmptyString);
+
+    // Goes to previous/next page (in browsing history)
+    // Returns TRUE if successful, FALSE otherwise
     bool HistoryBack();
     bool HistoryForward();
     bool HistoryCanBack();
     bool HistoryCanForward();
+
+    // Resets History
     void HistoryClear();
+
+    // Returns pointer to conteiners/cells structure.
     wxHtmlContainerCell* GetInternalRepresentation();
+
+    // Returns a pointer to the parser.
     wxHtmlWinParser* GetParser();
 
     bool ScrollToAnchor(const wxString& anchor);
     bool HasAnchor(const wxString& anchor);
+
+    //Adds input filter
+    static void AddFilter(wxPyHtmlFilter *filter);
+
 
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnSetTitle(const wxString& title);
@@ -609,12 +725,6 @@ public:
                             const wxMouseEvent& event);
 };
 
-// Static methods are mapped to stand-alone functions
-%inline %{
-    void wxHtmlWindow_AddFilter(wxHtmlFilter *filter) {
-        wxHtmlWindow::AddFilter(filter);
-    }
-%}
 
 
 //---------------------------------------------------------------------------
@@ -702,6 +812,7 @@ public:
     wxPyPtrTypeMap_Add("wxHtmlTagHandler", "wxPyHtmlTagHandler");
     wxPyPtrTypeMap_Add("wxHtmlWinTagHandler", "wxPyHtmlWinTagHandler");
     wxPyPtrTypeMap_Add("wxHtmlWindow", "wxPyHtmlWindow");
+    wxPyPtrTypeMap_Add("wxHtmlFilter", "wxPyHtmlFilter");
 %}
 
 //----------------------------------------------------------------------

@@ -195,7 +195,7 @@ class wxXMetaFile: public wxObject
   wxList metaRecords;
   wxList gdiObjects; // List of wxMetaRecord objects created with Create...,
                      // referenced by position in list by SelectObject
-  wxXMetaFile(char *file = NULL);
+  wxXMetaFile(const wxChar* file = NULL);
   ~wxXMetaFile(void);
 
   // After this is called, the metafile cannot be used for anything
@@ -204,7 +204,7 @@ class wxXMetaFile: public wxObject
 
   bool Play(wxDC *dc);
   inline bool Ok(void) const { return ok; }
-  bool ReadFile(char *file);
+  bool ReadFile(const wxChar *file);
 };
 
 #endif

@@ -36,6 +36,8 @@
     #include "wx/validate.h"
 #endif
 
+#include "wx/tooltip.h"
+
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
@@ -340,6 +342,23 @@ void wxRadioBox::SetLabel(const wxString& label)
 {
     wxStaticBox::SetLabel(label);
 }
+
+#if wxUSE_TOOLTIPS
+void wxRadioBox::DoSetToolTip(wxToolTip *tooltip)
+{
+    wxControl::DoSetToolTip(tooltip);
+
+    // Also set them for all Radio Buttons
+    size_t count = m_buttons.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if (tooltip)
+            m_buttons[n]->SetToolTip(tooltip->GetTip());
+        else
+            m_buttons[n]->SetToolTip(NULL);
+    }
+}
+#endif // wxUSE_TOOLTIPS
 
 // ----------------------------------------------------------------------------
 // buttons positioning

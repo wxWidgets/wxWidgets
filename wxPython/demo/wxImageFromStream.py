@@ -10,7 +10,7 @@ class TestPanel(wxPanel):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
 
-        data = open(opj('bitmaps/image.gif'), "rb").read()
+        data = open(opj('bitmaps/image.png'), "rb").read()
         stream = StringIO(data)
 
         bmp = wxBitmapFromImage( wxImageFromStream( stream ))
@@ -18,8 +18,7 @@ class TestPanel(wxPanel):
         wxStaticText(self, -1,
                      "This image was loaded from a Python file-like object:",
                      (15, 15))
-        wxStaticBitmap(self, -1, bmp, (15, 45))
-
+        wxStaticBitmap(self, -1, bmp, (15, 45))#, (bmp.GetWidth(), bmp.GetHeight()))
 
 
 

@@ -32,7 +32,7 @@ I STRONGLY recommend reading and understanding these macros!!
     class HTML_Handler_##name : public wxHtmlWinTagHandler                \
     {                                                                     \
         public:                                                           \
-            wxString GetSupportedTags() {return tags;}
+            wxString GetSupportedTags() {return wxT(tags);}
 
 
 

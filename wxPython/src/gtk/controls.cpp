@@ -210,8 +210,7 @@ static PyObject *_wrap_new_wxControl(PyObject *self, PyObject *args, PyObject *k
         return NULL;
 }
     if (_argo5) {
-        if (_argo5 == Py_None) { _arg5 = NULL; }
-        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxControl. Expected _wxValidator_p.");
         return NULL;
         }
@@ -320,8 +319,7 @@ static PyObject *_wrap_wxControl_Create(PyObject *self, PyObject *args, PyObject
         return NULL;
 }
     if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of wxControl_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -366,8 +364,7 @@ static PyObject *_wrap_wxControl_Command(PyObject *self, PyObject *args, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCommandEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCommandEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxControl_Command. Expected _wxCommandEvent_p.");
         return NULL;
         }
@@ -409,7 +406,7 @@ static PyObject *_wrap_wxControl_GetLabel(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -575,7 +572,7 @@ static PyObject *_wrap_wxControlWithItems_GetString(PyObject *self, PyObject *ar
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -748,7 +745,7 @@ static PyObject *_wrap_wxControlWithItems_GetStringSelection(PyObject *self, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -917,11 +914,10 @@ static PyObject *_wrap_wxControlWithItems_AppendItems(PyObject *self, PyObject *
         PyObject* item = PySequence_GetItem(_obj1, i);
 #if wxUSE_UNICODE
         PyObject* str  = PyObject_Unicode(item);
-        _arg1->Add(PyUnicode_AsUnicode(str));
 #else
         PyObject* str  = PyObject_Str(item);
-        _arg1->Add(PyString_AsString(str));
 #endif
+        _arg1->Add(Py2wxString(str));
         Py_DECREF(item);
         Py_DECREF(str);
     }
@@ -1024,8 +1020,7 @@ static PyObject *_wrap_new_wxButton(PyObject *self, PyObject *args, PyObject *kw
         return NULL;
 }
     if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of new_wxButton. Expected _wxValidator_p.");
         return NULL;
         }
@@ -1145,8 +1140,7 @@ static PyObject *_wrap_wxButton_Create(PyObject *self, PyObject *args, PyObject 
         return NULL;
 }
     if (_argo7) {
-        if (_argo7 == Py_None) { _arg7 = NULL; }
-        else if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of wxButton_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -1369,8 +1363,7 @@ static PyObject *_wrap_new_wxBitmapButton(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxBitmapButton. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1388,8 +1381,7 @@ static PyObject *_wrap_new_wxBitmapButton(PyObject *self, PyObject *args, PyObje
         return NULL;
 }
     if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of new_wxBitmapButton. Expected _wxValidator_p.");
         return NULL;
         }
@@ -1488,8 +1480,7 @@ static PyObject *_wrap_wxBitmapButton_Create(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxBitmapButton_Create. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1507,8 +1498,7 @@ static PyObject *_wrap_wxBitmapButton_Create(PyObject *self, PyObject *args, PyO
         return NULL;
 }
     if (_argo7) {
-        if (_argo7 == Py_None) { _arg7 = NULL; }
-        else if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of wxBitmapButton_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -1673,8 +1663,7 @@ static PyObject *_wrap_wxBitmapButton_SetBitmapDisabled(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmapButton_SetBitmapDisabled. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1710,8 +1699,7 @@ static PyObject *_wrap_wxBitmapButton_SetBitmapFocus(PyObject *self, PyObject *a
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmapButton_SetBitmapFocus. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1747,8 +1735,7 @@ static PyObject *_wrap_wxBitmapButton_SetBitmapSelected(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmapButton_SetBitmapSelected. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1784,8 +1771,7 @@ static PyObject *_wrap_wxBitmapButton_SetBitmapLabel(PyObject *self, PyObject *a
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmapButton_SetBitmapLabel. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1970,8 +1956,7 @@ static PyObject *_wrap_new_wxCheckBox(PyObject *self, PyObject *args, PyObject *
         return NULL;
 }
     if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of new_wxCheckBox. Expected _wxValidator_p.");
         return NULL;
         }
@@ -2091,8 +2076,7 @@ static PyObject *_wrap_wxCheckBox_Create(PyObject *self, PyObject *args, PyObjec
         return NULL;
 }
     if (_argo7) {
-        if (_argo7 == Py_None) { _arg7 = NULL; }
-        else if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of wxCheckBox_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -2274,8 +2258,7 @@ static PyObject *_wrap_new_wxChoice(PyObject *self, PyObject *args, PyObject *kw
     }
 }
     if (_argo7) {
-        if (_argo7 == Py_None) { _arg7 = NULL; }
-        else if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of new_wxChoice. Expected _wxValidator_p.");
         return NULL;
         }
@@ -2405,8 +2388,7 @@ static PyObject *_wrap_wxChoice_Create(PyObject *self, PyObject *args, PyObject 
     }
 }
     if (_argo8) {
-        if (_argo8 == Py_None) { _arg8 = NULL; }
-        else if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 9 of wxChoice_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -2729,8 +2711,7 @@ static PyObject *_wrap_new_wxComboBox(PyObject *self, PyObject *args, PyObject *
     }
 }
     if (_argo8) {
-        if (_argo8 == Py_None) { _arg8 = NULL; }
-        else if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 9 of new_wxComboBox. Expected _wxValidator_p.");
         return NULL;
         }
@@ -2872,8 +2853,7 @@ static PyObject *_wrap_wxComboBox_Create(PyObject *self, PyObject *args, PyObjec
     }
 }
     if (_argo9) {
-        if (_argo9 == Py_None) { _arg9 = NULL; }
-        else if (SWIG_GetPtrObj(_argo9,(void **) &_arg9,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo9,(void **) &_arg9,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 10 of wxComboBox_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -3051,7 +3031,7 @@ static PyObject *_wrap_wxComboBox_GetValue(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3459,7 +3439,7 @@ static PyObject *_wrap_wxComboBox_GetString(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3563,7 +3543,7 @@ static PyObject *_wrap_wxComboBox_GetStringSelection(PyObject *self, PyObject *a
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3779,8 +3759,7 @@ static PyObject *_wrap_new_wxGauge(PyObject *self, PyObject *args, PyObject *kwa
         return NULL;
 }
     if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of new_wxGauge. Expected _wxValidator_p.");
         return NULL;
         }
@@ -3890,8 +3869,7 @@ static PyObject *_wrap_wxGauge_Create(PyObject *self, PyObject *args, PyObject *
         return NULL;
 }
     if (_argo7) {
-        if (_argo7 == Py_None) { _arg7 = NULL; }
-        else if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of wxGauge_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -4796,7 +4774,7 @@ static PyObject *_wrap_wxStaticText_GetLabel(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -4940,8 +4918,7 @@ static PyObject *_wrap_new_wxListBox(PyObject *self, PyObject *args, PyObject *k
     }
 }
     if (_argo7) {
-        if (_argo7 == Py_None) { _arg7 = NULL; }
-        else if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of new_wxListBox. Expected _wxValidator_p.");
         return NULL;
         }
@@ -5071,8 +5048,7 @@ static PyObject *_wrap_wxListBox_Create(PyObject *self, PyObject *args, PyObject
     }
 }
     if (_argo8) {
-        if (_argo8 == Py_None) { _arg8 = NULL; }
-        else if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 9 of wxListBox_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -5643,8 +5619,7 @@ static PyObject *_wrap_new_wxCheckListBox(PyObject *self, PyObject *args, PyObje
     }
 }
     if (_argo7) {
-        if (_argo7 == Py_None) { _arg7 = NULL; }
-        else if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of new_wxCheckListBox. Expected _wxValidator_p.");
         return NULL;
         }
@@ -5774,8 +5749,7 @@ static PyObject *_wrap_wxCheckListBox_Create(PyObject *self, PyObject *args, PyO
     }
 }
     if (_argo8) {
-        if (_argo8 == Py_None) { _arg8 = NULL; }
-        else if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 9 of wxCheckListBox_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -6044,8 +6018,7 @@ static PyObject *_wrap_new_wxTextAttr(PyObject *self, PyObject *args, PyObject *
         return NULL;
 }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxTextAttr. Expected _wxFont_p.");
         return NULL;
         }
@@ -6186,8 +6159,7 @@ static PyObject *_wrap_wxTextAttr_SetFont(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTextAttr_SetFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -6421,15 +6393,13 @@ static PyObject *_wrap_wxTextAttr_Combine(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxTextAttr_Combine",_kwnames,&_argo0,&_argo1,&_argo2)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_Combine. Expected _wxTextAttr_p.");
         return NULL;
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTextAttr_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTextAttr_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTextAttr_Combine. Expected _wxTextAttr_p.");
         return NULL;
         }
@@ -6536,8 +6506,7 @@ static PyObject *_wrap_new_wxTextCtrl(PyObject *self, PyObject *args, PyObject *
         return NULL;
 }
     if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of new_wxTextCtrl. Expected _wxValidator_p.");
         return NULL;
         }
@@ -6658,8 +6627,7 @@ static PyObject *_wrap_wxTextCtrl_Create(PyObject *self, PyObject *args, PyObjec
         return NULL;
 }
     if (_argo7) {
-        if (_argo7 == Py_None) { _arg7 = NULL; }
-        else if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of wxTextCtrl_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -6714,7 +6682,7 @@ static PyObject *_wrap_wxTextCtrl_GetValue(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6792,7 +6760,7 @@ static PyObject *_wrap_wxTextCtrl_GetRange(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6859,7 +6827,7 @@ static PyObject *_wrap_wxTextCtrl_GetLineText(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -7028,7 +6996,7 @@ static PyObject *_wrap_wxTextCtrl_GetStringSelection(PyObject *self, PyObject *a
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -7373,8 +7341,7 @@ static PyObject *_wrap_wxTextCtrl_EmulateKeyPress(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTextCtrl_EmulateKeyPress. Expected _wxKeyEvent_p.");
         return NULL;
         }
@@ -7412,8 +7379,7 @@ static PyObject *_wrap_wxTextCtrl_SetStyle(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxTextAttr_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxTextAttr_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxTextCtrl_SetStyle. Expected _wxTextAttr_p.");
         return NULL;
         }
@@ -7449,8 +7415,7 @@ static PyObject *_wrap_wxTextCtrl_SetDefaultStyle(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTextAttr_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTextAttr_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTextCtrl_SetDefaultStyle. Expected _wxTextAttr_p.");
         return NULL;
         }
@@ -8218,7 +8183,7 @@ static PyObject *_wrap_wxTextCtrl_GetString(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -8305,8 +8270,7 @@ static PyObject *_wrap_new_wxScrollBar(PyObject *self, PyObject *args, PyObject 
         return NULL;
 }
     if (_argo5) {
-        if (_argo5 == Py_None) { _arg5 = NULL; }
-        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxScrollBar. Expected _wxValidator_p.");
         return NULL;
         }
@@ -8415,8 +8379,7 @@ static PyObject *_wrap_wxScrollBar_Create(PyObject *self, PyObject *args, PyObje
         return NULL;
 }
     if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of wxScrollBar_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -9046,8 +9009,7 @@ static PyObject *_wrap_new_wxStaticBitmap(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxStaticBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -9156,8 +9118,7 @@ static PyObject *_wrap_wxStaticBitmap_Create(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxStaticBitmap_Create. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -9244,8 +9205,7 @@ static PyObject *_wrap_wxStaticBitmap_SetBitmap(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStaticBitmap_SetBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -9281,8 +9241,7 @@ static PyObject *_wrap_wxStaticBitmap_SetIcon(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStaticBitmap_SetIcon. Expected _wxIcon_p.");
         return NULL;
         }
@@ -9392,8 +9351,7 @@ static PyObject *_wrap_new_wxRadioBox(PyObject *self, PyObject *args, PyObject *
     }
 }
     if (_argo9) {
-        if (_argo9 == Py_None) { _arg9 = NULL; }
-        else if (SWIG_GetPtrObj(_argo9,(void **) &_arg9,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo9,(void **) &_arg9,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 10 of new_wxRadioBox. Expected _wxValidator_p.");
         return NULL;
         }
@@ -9535,8 +9493,7 @@ static PyObject *_wrap_wxRadioBox_Create(PyObject *self, PyObject *args, PyObjec
     }
 }
     if (_argo10) {
-        if (_argo10 == Py_None) { _arg10 = NULL; }
-        else if (SWIG_GetPtrObj(_argo10,(void **) &_arg10,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo10,(void **) &_arg10,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 11 of wxRadioBox_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -9705,7 +9662,7 @@ static PyObject *_wrap_wxRadioBox_GetString(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9743,7 +9700,7 @@ static PyObject *_wrap_wxRadioBox_GetItemLabel(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9848,7 +9805,7 @@ static PyObject *_wrap_wxRadioBox_GetStringSelection(PyObject *self, PyObject *a
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10101,8 +10058,7 @@ static PyObject *_wrap_new_wxRadioButton(PyObject *self, PyObject *args, PyObjec
         return NULL;
 }
     if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of new_wxRadioButton. Expected _wxValidator_p.");
         return NULL;
         }
@@ -10222,8 +10178,7 @@ static PyObject *_wrap_wxRadioButton_Create(PyObject *self, PyObject *args, PyOb
         return NULL;
 }
     if (_argo7) {
-        if (_argo7 == Py_None) { _arg7 = NULL; }
-        else if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of wxRadioButton_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -10390,8 +10345,7 @@ static PyObject *_wrap_new_wxSlider(PyObject *self, PyObject *args, PyObject *kw
         return NULL;
 }
     if (_argo8) {
-        if (_argo8 == Py_None) { _arg8 = NULL; }
-        else if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 9 of new_wxSlider. Expected _wxValidator_p.");
         return NULL;
         }
@@ -10503,8 +10457,7 @@ static PyObject *_wrap_wxSlider_Create(PyObject *self, PyObject *args, PyObject 
         return NULL;
 }
     if (_argo9) {
-        if (_argo9 == Py_None) { _arg9 = NULL; }
-        else if (SWIG_GetPtrObj(_argo9,(void **) &_arg9,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo9,(void **) &_arg9,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 10 of wxSlider_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -11530,8 +11483,7 @@ static PyObject *_wrap_new_wxToggleButton(PyObject *self, PyObject *args, PyObje
         return NULL;
 }
     if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of new_wxToggleButton. Expected _wxValidator_p.");
         return NULL;
         }
@@ -11651,8 +11603,7 @@ static PyObject *_wrap_wxToggleButton_Create(PyObject *self, PyObject *args, PyO
         return NULL;
 }
     if (_argo7) {
-        if (_argo7 == Py_None) { _arg7 = NULL; }
-        else if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo7,(void **) &_arg7,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of wxToggleButton_Create. Expected _wxValidator_p.");
         return NULL;
         }

@@ -142,7 +142,7 @@ if [ $force ]; then
     fi
     msgdo mkdir -m 775 "$buildDir"
     msgdo cd "$buildDir"
-    msgdo ../configure --with-mac --with-opengl --enable-precomp=no $dFlag
+    msgdo ../configure --with-mac --with-opengl --enable-precomp=no --enable-geometry $dFlag
     cd $curDir
 
 else

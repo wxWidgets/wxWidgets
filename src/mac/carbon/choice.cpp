@@ -72,7 +72,10 @@ int wxChoice::DoAppend(const wxString& item)
 {
 	Str255 label;
 	wxMenuItem::MacBuildMenuString( label , NULL , NULL , item ,false);
-	AppendMenu( MAC_WXHMENU( m_macPopUpMenuHandle ) , label ) ;
+	MacAppendMenu(MAC_WXHMENU( m_macPopUpMenuHandle ) , "\pA");
+	SetMenuItemText(MAC_WXHMENU( m_macPopUpMenuHandle ) , 
+	    (SInt16) ::CountMenuItems(MAC_WXHMENU( m_macPopUpMenuHandle ) ), label);
+	// was AppendMenu( MAC_WXHMENU( m_macPopUpMenuHandle ) , label ) ;
 	m_strings.Add( item ) ;
 	m_datas.Add( NULL ) ;
 	int index = m_strings.GetCount()  - 1  ;
@@ -203,22 +206,68 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 void wxChoice::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId );
-	  event.SetInt(GetSelection());
-    event.SetEventObject(this);
-    event.SetString(GetStringSelection());
-    ProcessCommand(event);
+
+    int n = GetSelection();
+    // actually n should be made sure by the os to be a valid selection, but ...
+    if ( n > -1 )
+    {
+        event.SetInt( n );
+        event.SetString(GetStringSelection());
+        event.SetEventObject(this);
+
+        if ( HasClientObjectData() )
+            event.SetClientObject( GetClientObject(n) );
+        else if ( HasClientUntypedData() )
+            event.SetClientData( GetClientData(n) );
+
+        ProcessCommand(event);
+    }
 }
 
 wxSize wxChoice::DoGetBestSize() const
 {
-    // TODO should modify this to take into account string length ala wxGTK
-    return wxSize(100,20);
-}
+    int lbWidth = 100;  // some defaults
+    int lbHeight = 20;
+    int wLine;
+#if TARGET_CARBON
+    long metric ;
+    GetThemeMetric(kThemeMetricPopupButtonHeight , &metric );   
+    lbHeight = metric ; 
+#endif
+	{
+		wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetRootWindow() ) ) ; 
+ 		Rect drawRect ;
 
-/*
-void wxChoice::Command(wxCommandEvent & event)
-{
-    SetSelection (event.GetInt());
-    ProcessCommand (event);
+		wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
+
+		if ( font )
+		{
+			::TextFont( font->m_macFontNum ) ;
+			::TextSize( short(font->m_macFontSize) ) ;
+			::TextFace( font->m_macFontStyle ) ;
+		}
+		else
+		{
+	        ::TextFont( kFontIDMonaco ) ;
+	        ::TextSize( 9  );
+	        ::TextFace( 0 ) ;
+		}
+
+	    // Find the widest line
+	    for(int i = 0; i < GetCount(); i++) {
+	        wxString str(GetString(i));
+	        wLine = ::TextWidth( str.c_str() , 0 , str.Length() ) ;
+	        lbWidth = wxMax(lbWidth, wLine);
+	    }
+
+	    // Add room for the popup arrow
+	    lbWidth += 2 * lbHeight ;
+
+	    // And just a bit more
+	    int cy = 12 ;
+	    int cx = ::TextWidth( "X" , 0 , 1 ) ;
+	    lbWidth += cx ;
+	    
+	}
+    return wxSize(lbWidth, lbHeight);
 }
-*/

@@ -57,6 +57,7 @@ public:
     bool IsWindow();
     bool IsSizer();
     bool IsSpacer();
+    bool IsShown();
 
     wxWindow *GetWindow();
     void SetWindow( wxWindow *window );
@@ -70,6 +71,7 @@ public:
     void SetOption( int option );
     void SetFlag( int flag );
     void SetBorder( int border );
+    void Show(bool show);
 
     // wxObject* GetUserData();
     %addmethods {
@@ -196,11 +198,11 @@ public:
 
     def Remove(self, *args, **kw):
         if type(args[0]) == type(1):
-            apply(self.RemovePos, args, kw)
+            return apply(self.RemovePos, args, kw)
         elif string.find(args[0].this, 'Sizer') != -1:
-            apply(self.RemoveSizer, args, kw)
+            return apply(self.RemoveSizer, args, kw)
         else:
-            apply(self.RemoveWindow, args, kw)
+            return apply(self.RemoveWindow, args, kw)
 
     def AddMany(self, widgets):
         for childinfo in widgets:
@@ -262,6 +264,40 @@ public:
             return wxPy_ConvertList(&list, "wxSizerItem");
         }
     }
+
+
+    // Manage whether individual windows or sub-sizers are considered
+    // in the layout calculations or not.
+    %name(ShowWindow)void Show( wxWindow *window, bool show = TRUE );
+    %name(HideWindow)void Hide( wxWindow *window );
+    %name(ShowSizer)void Show( wxSizer *sizer, bool show = TRUE );
+    %name(HideSizer)void Hide( wxSizer *sizer );
+    %name(IsShownWindow)bool IsShown( wxWindow *window );
+    %name(IsShownSizer)bool IsShown( wxSizer *sizer );
+
+    %pragma(python) addtoclass = "
+    def Show(self, *args):
+        if string.find(args[0].this, 'Sizer') != -1:
+            apply(self.ShowSizer, args)
+        else:
+            apply(self.ShowWindow, args)
+
+    def Hide(self, *args):
+        if string.find(args[0].this, 'Sizer') != -1:
+            apply(self.HideSizer, args)
+        else:
+            apply(self.HideWindow, args)
+
+    def IsShown(self, *args):
+        if string.find(args[0].this, 'Sizer') != -1:
+            return apply(self.IsShownSizer, args)
+        else:
+            return apply(self.IsShownWindow, args)
+"
+
+    // Recursively call wxWindow::Show () on all sizer items.
+    void ShowItems (bool show);
+
 };
 
 
@@ -303,6 +339,7 @@ public:
     wxBoxSizer(int orient = wxHORIZONTAL);
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     int GetOrientation();
+    void SetOrientation(int orient);
     void RecalcSizes();
     wxSize CalcMin();
 };

@@ -147,8 +147,9 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"$SYMROOT/include/wx\" ]; then\n    mkdir -p \"$SYMROOT/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\nif [ ! -f \"$SYMROOT/include/wx/setup.h\" ]; then\n    cp \"$SRCROOT/../include/wx/mac/setup0.h\" \"$SYMROOT/include/wx/setup.h\" || exit 1\nfi\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
+			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"$SYMROOT/include/wx\" ]; then\n    mkdir -p \"$SYMROOT/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\nif [ ! -f \"$SYMROOT/include/wx/setup.h\" ]; then\n    cp \"$SRCROOT/../include/wx/mac/setup0.h\" \"$SYMROOT/include/wx/setup.h\" || exit 1\nfi\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
 		};
 		F5955E9D02CBA8B501000133 = {
 			fileRef = F5A8619E01FA022C0175ACA7;
@@ -1244,12 +1245,6 @@
 		};
 		F5955F5C02CBAB2601000133 = {
 			fileRef = F5A8611501FA022C0175ACA7;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5955F5D02CBAB2701000133 = {
-			fileRef = F5A8611401FA022C0175ACA7;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -3534,12 +3529,6 @@
 			settings = {
 			};
 		};
-		F5A0C5E802CF70D701000133 = {
-			fileRef = F5A8611401FA022C0175ACA7;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5A0C5E902CF70D701000133 = {
 			fileRef = F5A8611301FA022C0175ACA7;
 			isa = PBXBuildFile;
@@ -4666,10 +4655,12 @@
 				F5A85C1E01FA022A0175ACA7,
 				F5A85C1F01FA022A0175ACA7,
 				F5A85C2001FA022A0175ACA7,
+				F5CC83D90379C17C01000133,
 				F5A85C2101FA022A0175ACA7,
 				F5A85C2201FA022A0175ACA7,
 				F5A85C2301FA022A0175ACA7,
 				F5A85C2401FA022A0175ACA7,
+				F5CC83DA0379C17C01000133,
 				F5A85C2501FA022A0175ACA7,
 				F5A85C2601FA022A0175ACA7,
 				F5A85C2701FA022A0175ACA7,
@@ -4703,6 +4694,7 @@
 				F5A85C4401FA022A0175ACA7,
 				F5A85C4501FA022A0175ACA7,
 				F5A85C4601FA022A0175ACA7,
+				F5CC83DF0379C20901000133,
 				F5A85C4701FA022A0175ACA7,
 				F5A85C4801FA022A0175ACA7,
 				F5A85C4901FA022A0175ACA7,
@@ -4716,6 +4708,7 @@
 				F5A85C5101FA022A0175ACA7,
 				F5A85C5201FA022A0175ACA7,
 				F5A85C5301FA022A0175ACA7,
+				F5CC83E00379C20901000133,
 				F5A85C5401FA022A0175ACA7,
 				F5A85C5501FA022A0175ACA7,
 				F5A85C5601FA022A0175ACA7,
@@ -4729,6 +4722,7 @@
 				F5A85C5E01FA022A0175ACA7,
 				F5A85C5F01FA022A0175ACA7,
 				F5A85C6001FA022A0175ACA7,
+				F5CC83E10379C20901000133,
 				F5A85C6101FA022A0175ACA7,
 				F5A85C6201FA022A0175ACA7,
 				F5A85C6301FA022A0175ACA7,
@@ -4756,12 +4750,14 @@
 				F5A85CB301FA022A0175ACA7,
 				F5A85CB401FA022A0175ACA7,
 				F5A85CF901FA022B0175ACA7,
+				F5CC83E20379C20901000133,
 				F5A85CFA01FA022B0175ACA7,
 				F5A85CFB01FA022B0175ACA7,
 				F5A85CFC01FA022B0175ACA7,
 				F5A85CFD01FA022B0175ACA7,
 				F5A85CFF01FA022B0175ACA7,
 				F5A85D2101FA022B0175ACA7,
+				F5CC83E30379C20901000133,
 				F5A85D2201FA022B0175ACA7,
 				F5A85D2301FA022B0175ACA7,
 				F5A85D2401FA022B0175ACA7,
@@ -4775,6 +4771,7 @@
 				F5A85D2C01FA022B0175ACA7,
 				F5A85D2D01FA022B0175ACA7,
 				F5A85D2E01FA022B0175ACA7,
+				F5CC83E40379C20901000133,
 				F5A85D2F01FA022B0175ACA7,
 				F5A85D3001FA022B0175ACA7,
 				F5A85D3101FA022B0175ACA7,
@@ -4782,6 +4779,7 @@
 				F5A85D3301FA022B0175ACA7,
 				F5A85D3401FA022B0175ACA7,
 				F5A85D3501FA022B0175ACA7,
+				F5CC83E50379C20901000133,
 				F5A85D3601FA022B0175ACA7,
 				F5A85D3701FA022B0175ACA7,
 				F5A8703A01FA0B7F0175ACA7,
@@ -4800,6 +4798,7 @@
 				F5A85DAE01FA022B0175ACA7,
 				F5A85DAF01FA022B0175ACA7,
 				F5A85DF101FA022B0175ACA7,
+				F5CC83E60379C20901000133,
 				F5A85DF201FA022B0175ACA7,
 				F5A85E9701FA022B0175ACA7,
 				F5A85E9801FA022B0175ACA7,
@@ -4820,6 +4819,7 @@
 				F5A85F0C01FA022B0175ACA7,
 				F5A85F0D01FA022B0175ACA7,
 				F5A85F0E01FA022B0175ACA7,
+				F5CC83E70379C20901000133,
 				F5A85F1401FA022B0175ACA7,
 				F5A85F1501FA022B0175ACA7,
 				F5A85F1601FA022B0175ACA7,
@@ -4863,6 +4863,7 @@
 				F5A85F3D01FA022B0175ACA7,
 				F5A85F3E01FA022B0175ACA7,
 				F5A85F3F01FA022B0175ACA7,
+				F5CC83E80379C20901000133,
 				F5A85F4001FA022B0175ACA7,
 				F5A85F4101FA022B0175ACA7,
 				F5A85F4201FA022B0175ACA7,
@@ -4885,6 +4886,7 @@
 				F5A85F7E01FA022B0175ACA7,
 				F5A85F7F01FA022B0175ACA7,
 				F5A85F8001FA022B0175ACA7,
+				F5CC83E90379C20901000133,
 				F5A85F8201FA022B0175ACA7,
 				F5A85F8301FA022B0175ACA7,
 				F5A85F8401FA022B0175ACA7,
@@ -7004,6 +7006,7 @@
 				F5A8600201FA022B0175ACA7,
 				F5A8600301FA022B0175ACA7,
 				F5A8600401FA022B0175ACA7,
+				F5AC2EDC03803A3601000133,
 				F5A8600501FA022B0175ACA7,
 				F5A8600601FA022B0175ACA7,
 				F5A8600701FA022B0175ACA7,
@@ -7063,12 +7066,14 @@
 				F5A8603F01FA022C0175ACA7,
 				F5A8604001FA022C0175ACA7,
 				F5A8604101FA022C0175ACA7,
+				F5AC2EDD03803A3601000133,
 				F5A8604301FA022C0175ACA7,
 				F5A8604501FA022C0175ACA7,
 				F5A8604601FA022C0175ACA7,
 				F5A8604701FA022C0175ACA7,
 				F5A8604801FA022C0175ACA7,
 				F5A8604901FA022C0175ACA7,
+				F5AC2EDE03803A3601000133,
 				F5A8604A01FA022C0175ACA7,
 				F5A8604B01FA022C0175ACA7,
 				F5A8604C01FA022C0175ACA7,
@@ -8102,7 +8107,6 @@
 				F5A8611101FA022C0175ACA7,
 				F5A8611201FA022C0175ACA7,
 				F5A8611301FA022C0175ACA7,
-				F5A8611401FA022C0175ACA7,
 				F5A8611501FA022C0175ACA7,
 				F5A8611601FA022C0175ACA7,
 				F5A8611701FA022C0175ACA7,
@@ -8189,11 +8193,6 @@
 		F5A8611301FA022C0175ACA7 = {
 			isa = PBXFileReference;
 			path = m_list.cpp;
-			refType = 4;
-		};
-		F5A8611401FA022C0175ACA7 = {
-			isa = PBXFileReference;
-			path = m_meta.cpp;
 			refType = 4;
 		};
 		F5A8611501FA022C0175ACA7 = {
@@ -9388,6 +9387,51 @@
 			path = ../include/wx/listimpl.cpp;
 			refType = 2;
 		};
+		F5AC2EDC03803A3601000133 = {
+			isa = PBXFileReference;
+			path = execcmn.cpp;
+			refType = 4;
+		};
+		F5AC2EDD03803A3601000133 = {
+			isa = PBXFileReference;
+			path = radiocmn.cpp;
+			refType = 4;
+		};
+		F5AC2EDE03803A3601000133 = {
+			isa = PBXFileReference;
+			path = settcmn.cpp;
+			refType = 4;
+		};
+		F5AC2EE003803A3601000133 = {
+			fileRef = F5AC2EDD03803A3601000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5AC2EE103803A3601000133 = {
+			fileRef = F5AC2EDE03803A3601000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5AC2EE203803A3601000133 = {
+			fileRef = F5AC2EDC03803A3601000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5AC2EE303803A3601000133 = {
+			fileRef = F5AC2EDD03803A3601000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5AC2EE403803A3601000133 = {
+			fileRef = F5AC2EDE03803A3601000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F5C5D3DF01FA2D0A01D0F0BA = {
 			isa = PBXFrameworkReference;
 			name = System.framework;
@@ -9417,7 +9461,6 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "-d __UNIX__";
-				PRECOMPILE_PREFIX_HEADER = YES;
 				PREFIX_HEADER = ../include/wx_pb.h;
 				PRODUCT_NAME = libwx_macd.a;
 				REZ_EXECUTABLE = NO;
@@ -9438,6 +9481,7 @@
 				F5FD822202CCECE601000133,
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5C6AC4A020C2B1001000133 = {
 			buildActionMask = 2147483647;
@@ -9622,7 +9666,6 @@
 				F5955F5A02CBAB2501000133,
 				F5955F5B02CBAB2601000133,
 				F5955F5C02CBAB2601000133,
-				F5955F5D02CBAB2701000133,
 				F5955F5E02CBAB2701000133,
 				F5955F5F02CBAB2801000133,
 				F5955F6002CBAB2801000133,
@@ -9810,7 +9853,6 @@
 				F595601602CBAB9801000133,
 				F595601702CBAB9801000133,
 				F595601802CBAB9901000133,
-				F5D0E30A02CCEA1D01000133,
 				F5F5A6A002CDB27401000133,
 				F5F5A6A502CDB6CA01000133,
 				F5F5A6A602CDB6CA01000133,
@@ -9819,14 +9861,18 @@
 				F5F5A6A902CDB91E01000133,
 				F5F5A6AA02CDB92001000133,
 				F58E04FE02F11FA701A8020C,
+				F5AC2EE003803A3601000133,
+				F5AC2EE103803A3601000133,
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5C6AC4B020C2B1001000133 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5C6AC4C020C2B1001000133 = {
 			buildActionMask = 2147483647;
@@ -9836,6 +9882,178 @@
 				F5955E9F02CBA8B901000133,
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5CC83C20379B1A901000133 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"$SYMROOT/include/wx\" ]; then\n    mkdir -p \"$SYMROOT/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\nif [ ! -f \"$SYMROOT/include/wx/setup.h\" ]; then\n    cp \"$SRCROOT/../include/wx/mac/setup0.h\" \"$SYMROOT/include/wx/setup.h\" || exit 1\nfi\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
+		};
+		F5CC83C30379B20901000133 = {
+			fileRef = F5A8604501FA022C0175ACA7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83D90379C17C01000133 = {
+			isa = PBXFileReference;
+			path = artprov.h;
+			refType = 4;
+		};
+		F5CC83DA0379C17C01000133 = {
+			isa = PBXFileReference;
+			path = build.h;
+			refType = 4;
+		};
+		F5CC83DD0379C17C01000133 = {
+			fileRef = F5CC83D90379C17C01000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83DE0379C17C01000133 = {
+			fileRef = F5CC83DA0379C17C01000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83DF0379C20901000133 = {
+			isa = PBXFileReference;
+			name = dcbuffer.h;
+			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/dcbuffer.h;
+			refType = 0;
+		};
+		F5CC83E00379C20901000133 = {
+			isa = PBXFileReference;
+			name = display.h;
+			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/display.h;
+			refType = 0;
+		};
+		F5CC83E10379C20901000133 = {
+			isa = PBXFileReference;
+			name = features.h;
+			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/features.h;
+			refType = 0;
+		};
+		F5CC83E20379C20901000133 = {
+			isa = PBXFileReference;
+			name = hashmap.h;
+			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/hashmap.h;
+			refType = 0;
+		};
+		F5CC83E30379C20901000133 = {
+			isa = PBXFileReference;
+			name = iconbndl.h;
+			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/iconbndl.h;
+			refType = 0;
+		};
+		F5CC83E40379C20901000133 = {
+			isa = PBXFileReference;
+			name = ipc.h;
+			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/ipc.h;
+			refType = 0;
+		};
+		F5CC83E50379C20901000133 = {
+			isa = PBXFileReference;
+			name = listbase.h;
+			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/listbase.h;
+			refType = 0;
+		};
+		F5CC83E60379C20901000133 = {
+			isa = PBXFileReference;
+			name = msgout.h;
+			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/msgout.h;
+			refType = 0;
+		};
+		F5CC83E70379C20901000133 = {
+			isa = PBXFileReference;
+			name = ptr_scpd.h;
+			path = /Volumes/Users/gilles/cvs/wxWindows/include/wx/ptr_scpd.h;
+			refType = 0;
+		};
+		F5CC83E80379C20901000133 = {
+			isa = PBXFileReference;
+			path = thrimpl.cpp;
+			refType = 4;
+		};
+		F5CC83E90379C20901000133 = {
+			isa = PBXFileReference;
+			path = volume.h;
+			refType = 4;
+		};
+		F5CC83F50379C20901000133 = {
+			fileRef = F5CC83DF0379C20901000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83F60379C20901000133 = {
+			fileRef = F5CC83E00379C20901000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83F70379C20901000133 = {
+			fileRef = F5CC83E10379C20901000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83F80379C20901000133 = {
+			fileRef = F5CC83E20379C20901000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83F90379C20901000133 = {
+			fileRef = F5CC83E30379C20901000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83FA0379C20901000133 = {
+			fileRef = F5CC83E40379C20901000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83FB0379C20901000133 = {
+			fileRef = F5CC83E50379C20901000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83FC0379C20901000133 = {
+			fileRef = F5CC83E60379C20901000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83FD0379C20901000133 = {
+			fileRef = F5CC83E70379C20901000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83FE0379C20901000133 = {
+			fileRef = F5CC83E80379C20901000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CC83FF0379C20901000133 = {
+			fileRef = F5CC83E90379C20901000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F5D00F2901FDFB8401000133 = {
 			isa = PBXFileReference;
@@ -9853,12 +10071,6 @@
 			name = parser.c;
 			path = build/parser.c;
 			refType = 2;
-		};
-		F5D0E30A02CCEA1D01000133 = {
-			fileRef = F5D0E30802CCEA1D01000133;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F5F5A69F02CDB27401000133 = {
 			isa = PBXFileReference;
@@ -9935,8 +10147,21 @@
 		F5F5A6B602CDD62501000133 = {
 			buildActionMask = 2147483647;
 			files = (
+				F5CC83DD0379C17C01000133,
+				F5CC83DE0379C17C01000133,
+				F5CC83F50379C20901000133,
+				F5CC83F60379C20901000133,
+				F5CC83F70379C20901000133,
+				F5CC83F80379C20901000133,
+				F5CC83F90379C20901000133,
+				F5CC83FA0379C20901000133,
+				F5CC83FB0379C20901000133,
+				F5CC83FC0379C20901000133,
+				F5CC83FD0379C20901000133,
+				F5CC83FF0379C20901000133,
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5F5A6B702CDD62501000133 = {
 			buildActionMask = 2147483647;
@@ -10134,7 +10359,6 @@
 				F5A0C5E502CF70D501000133,
 				F5A0C5E602CF70D601000133,
 				F5A0C5E702CF70D601000133,
-				F5A0C5E802CF70D701000133,
 				F5A0C5E902CF70D701000133,
 				F5A0C5EA02CF70D701000133,
 				F5A0C5EB02CF70D801000133,
@@ -10318,14 +10542,21 @@
 				F5A0C6A102CF714801000133,
 				F5A0C6A202CF714801000133,
 				F58E04FF02F11FA701A8020C,
+				F5CC83C30379B20901000133,
+				F5CC83FE0379C20901000133,
+				F5AC2EE203803A3601000133,
+				F5AC2EE303803A3601000133,
+				F5AC2EE403803A3601000133,
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5F5A6B802CDD62501000133 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5F5A6B902CDD62501000133 = {
 			buildActionMask = 2147483647;
@@ -10335,9 +10566,11 @@
 				F5A0C69F02CF714701000133,
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5F5A6BA02CDD62501000133 = {
 			buildPhases = (
+				F5CC83C20379B1A901000133,
 				F5F5A6B602CDD62501000133,
 				F5F5A6B702CDD62501000133,
 				F5F5A6B802CDD62501000133,
@@ -10354,7 +10587,6 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "-d __UNIX__";
-				PRECOMPILE_PREFIX_HEADER = YES;
 				PREFIX_HEADER = ../include/wx_pb.h;
 				PRODUCT_NAME = libwx_mac.a;
 				REZ_EXECUTABLE = NO;

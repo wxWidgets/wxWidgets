@@ -17,7 +17,7 @@
 #include "wx/defs.h"
 #if wxUSE_HTML && wxUSE_STREAMS
 
-#ifdef __BORDLANDC__
+#ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
@@ -26,15 +26,16 @@
     #include "wx/intl.h"
 #endif
 
+#include "wx/strconv.h"
 #include "wx/html/htmlfilt.h"
 #include "wx/html/htmlwin.h"
 
 // utility function: read a wxString from a wxInputStream
-void wxPrivate_ReadString(wxString& str, wxInputStream* s)
+static void ReadString(wxString& str, wxInputStream* s, wxMBConv& conv)
 {
     size_t streamSize = s->GetSize();
 
-    if(streamSize == ~(size_t)0)
+    if (streamSize == ~(size_t)0)
     {
         const size_t bufSize = 4095;
         char buffer[bufSize+1];
@@ -45,17 +46,17 @@ void wxPrivate_ReadString(wxString& str, wxInputStream* s)
             s->Read(buffer, bufSize);
             lastRead = s->LastRead();
             buffer[lastRead] = 0;
-            str.Append(buffer);
+            str.Append(wxString(buffer, conv));
         }
-        while(lastRead == bufSize);
+        while (lastRead == bufSize);
     }
     else
     {
         char* src = new char[streamSize+1];
         s->Read(src, streamSize);
         src[streamSize] = 0;
-        str = src;
-        delete [] src;
+        str = wxString(src, conv);
+        delete[] src;
     }
 }
 
@@ -87,12 +88,12 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
     wxString doc, doc2;
 
     if (s == NULL) return wxEmptyString;
-    wxPrivate_ReadString(doc, s);
+    ReadString(doc, s, wxConvISO8859_1);
 
     doc.Replace(wxT("&"), wxT("&amp;"), TRUE);
     doc.Replace(wxT("<"), wxT("&lt;"), TRUE);
     doc.Replace(wxT(">"), wxT("&gt;"), TRUE);
-    doc2 = "<HTML><BODY><PRE>\n" + doc + "\n</PRE></BODY></HTML>";
+    doc2 = wxT("<HTML><BODY><PRE>\n") + doc + wxT("\n</PRE></BODY></HTML>");
     return doc2;
 }
 
@@ -127,25 +128,17 @@ bool wxHtmlFilterImage::CanRead(const wxFSFile& file) const
 
 wxString wxHtmlFilterImage::ReadFile(const wxFSFile& file) const
 {
-    return ("<HTML><BODY><IMG SRC=\"" + file.GetLocation() + "\"></BODY></HTML>");
+    wxString res = wxT("<HTML><BODY><IMG SRC=\"") + file.GetLocation() + wxT("\"></BODY></HTML>");
+    return res;
 }
 
 
 
 
 //--------------------------------------------------------------------------------
-// wxHtmlFilterPlainText
-//          filter for text/plain or uknown
+// wxHtmlFilterHTML
+//          filter for text/html
 //--------------------------------------------------------------------------------
-
-class wxHtmlFilterHTML : public wxHtmlFilter
-{
-    DECLARE_DYNAMIC_CLASS(wxHtmlFilterHTML)
-
-    public:
-        virtual bool CanRead(const wxFSFile& file) const;
-        virtual wxString ReadFile(const wxFSFile& file) const;
-};
 
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterHTML, wxHtmlFilter)
@@ -171,15 +164,43 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
         wxLogError(_("Cannot open HTML document: %s"), file.GetLocation().c_str());
         return wxEmptyString;
     }
-    wxPrivate_ReadString(doc, s);
 
-    // add meta tag if we obtained this through http:
-    if (file.GetMimeType().Find(_T("; charset=")) == 0)
+    // NB: We convert input file to wchar_t here in Unicode mode, based on 
+    //     either Content-Type header or <meta> tags. In ANSI mode, we don't
+    //     do it as it is done by wxHtmlParser (for this reason, we add <meta>
+    //     tag if we used Content-Type header).
+#if wxUSE_UNICODE
+    int charsetPos;    
+    if ((charsetPos = file.GetMimeType().Find(_T("; charset="))) != wxNOT_FOUND)
     {
-        wxString s(_T("<meta http-equiv=\"Content-Type\" content=\""));
-        s << file.GetMimeType() <<  _T("\">");
-        return s+doc;
+        wxString charset = file.GetMimeType().Mid(charsetPos + 10);
+        wxCSConv conv(charset);
+        ReadString(doc, s, conv);
     }
+    else
+    {
+        wxString tmpdoc;
+        ReadString(tmpdoc, s, wxConvISO8859_1);
+        wxString charset = wxHtmlParser::ExtractCharsetInformation(tmpdoc);
+        if (charset.empty())
+            doc = tmpdoc;
+        else
+        {
+            wxCSConv conv(charset);
+            doc = wxString(tmpdoc.mb_str(wxConvISO8859_1), conv);
+        }
+    }
+#else // !wxUSE_UNICODE
+    ReadString(doc, s, wxConvLibc);
+    // add meta tag if we obtained this through http:
+    if (!file.GetMimeType().empty())
+    {
+        wxString hdr;
+        wxString mime = file.GetMimeType();
+        hdr.Printf(_T("<meta http-equiv=\"Content-Type\" content=\"%s\">"), mime.c_str());
+        return hdr+doc;
+    }
+#endif
 
     return doc;
 }

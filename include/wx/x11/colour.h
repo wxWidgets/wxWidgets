@@ -48,7 +48,10 @@ public:
 
     // Implicit conversion from the colour name
     wxColour( const wxString &colourName ) { InitFromName(colourName); }
-    wxColour( const char *colourName ) { InitFromName(colourName); }
+    wxColour( const char *colourName ) { InitFromName( wxString::FromAscii(colourName) ); }
+#if wxUSE_UNICODE
+    wxColour( const wxChar *colourName ) { InitFromName( wxString(colourName) ); }
+#endif
 
     wxColour( const wxColour& col ) { Ref(col); }
     wxColour& operator = ( const wxColour& col ) { Ref(col); return *this; }

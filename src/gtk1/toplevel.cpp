@@ -25,6 +25,7 @@
 
 #include "wx/defs.h"
 
+#include "wx/log.h"
 #include "wx/dialog.h"
 #include "wx/control.h"
 #include "wx/app.h"
@@ -835,6 +836,11 @@ void wxTopLevelWindowGTK::OnInternalIdle()
         if ( g_delayedFocus &&
              wxGetTopLevelParent((wxWindow*)g_delayedFocus) == this )
         {
+            wxLogTrace(_T("focus"),
+                       _T("Setting focus from wxTLW::OnIdle() to %s(%s)"),
+                       g_delayedFocus->GetClassInfo()->GetClassName(),
+                       g_delayedFocus->GetLabel().c_str());
+
             g_delayedFocus->SetFocus();
             g_delayedFocus = NULL;
         }

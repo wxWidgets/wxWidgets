@@ -146,11 +146,11 @@ public:
     void Reset() { m_current = 0u; }
     void Reset(const wxRegion& region);
 
-    operator bool () const;
     bool HaveRects() const;
+    operator bool () const { return HaveRects(); }
 
-    void operator ++ ();
-    void operator ++ (int);
+    wxRegionIterator& operator ++ ();
+    wxRegionIterator operator ++ (int);
 
     wxCoord GetX() const;
     wxCoord GetY() const;

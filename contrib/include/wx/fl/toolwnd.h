@@ -19,6 +19,7 @@
 
 #include "wx/frame.h"
 #include "wx/dynarray.h"
+#include "wx/fl/fldefs.h"
 
 // fixed settings
 
@@ -26,18 +27,18 @@
 #define BTN_BOX_WIDTH        12
 #define BTN_X_WIEGHT         2
 
-class cbMiniButton;
+class WXFL_DECLSPEC cbMiniButton;
 
 typedef cbMiniButton* cbMinitButtonPtrT;
 
-WX_DEFINE_ARRAY( cbMinitButtonPtrT, cbMiniButtonArrayT );
+WXFL_DEFINE_ARRAY( cbMinitButtonPtrT, cbMiniButtonArrayT );
 
 /*
 A tool window is a special kind of frame that paints its own title, and
 can be used to implement small floating windows.
 */
 
-class wxToolWindow : public wxFrame
+class WXFL_DECLSPEC wxToolWindow : public wxFrame
 {
     DECLARE_DYNAMIC_CLASS( wxToolWindow )
 
@@ -221,7 +222,7 @@ public:
 cbCloseBox is a window close button, used in a wxToolWindow titlebar.
 */
 
-class cbCloseBox : public cbMiniButton
+class WXFL_DECLSPEC cbCloseBox : public cbMiniButton
 {
 public:
         // Draws the close button appearance.
@@ -232,7 +233,7 @@ public:
 cbCollapseBox is a window collapse button, used in a wxToolWindow titlebar.
 */
 
-class cbCollapseBox  : public cbMiniButton
+class WXFL_DECLSPEC cbCollapseBox  : public cbMiniButton
 {
 public:
     bool mIsAtLeft;
@@ -245,7 +246,7 @@ public:
 cbDockBox is a window dock button, used in a wxToolWindow titlebar.
 */
 
-class cbDockBox : public cbMiniButton
+class WXFL_DECLSPEC cbDockBox : public cbMiniButton
 {
 public:
         // Draws the dock button appearance.
@@ -257,7 +258,7 @@ cbFloatedBarWindow is a kind of wxToolWindow,
 implementing floating toolbars.
 */
 
-class cbFloatedBarWindow : public wxToolWindow
+class WXFL_DECLSPEC cbFloatedBarWindow : public wxToolWindow
 {
     DECLARE_DYNAMIC_CLASS( cbFloatedBarWindow )
 protected:

@@ -303,7 +303,7 @@ wxString wxRegKey::GetName(bool bShortPrefix) const
   wxString str = bShortPrefix ? aStdKeys[key].szShortName
                               : aStdKeys[key].szName;
   if ( !m_strKey.IsEmpty() )
-    str << "\\" << m_strKey;
+    str << _T("\\") << m_strKey;
 
   return str;
 }

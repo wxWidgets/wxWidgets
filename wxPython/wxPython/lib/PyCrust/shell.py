@@ -8,21 +8,34 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from wxPython.wx import *
-from wxPython.stc import *
 import keyword
 import os
 import sys
+import time
 from pseudo import PseudoFileIn
 from pseudo import PseudoFileOut
 from pseudo import PseudoFileErr
+from shellmenu import ShellMenu
 from version import VERSION
+
+try:
+    from deco.wxpy import wx
+except ImportError:
+    from wxPython import wx
+
+try:
+    from deco.wxpy import stc
+except ImportError:
+    from wxPython import stc
+
+True, False = 1, 0
 
 sys.ps3 = '<-- '  # Input prompt.
 
-NAVKEYS = (WXK_END, WXK_LEFT, WXK_RIGHT, WXK_UP, WXK_DOWN, WXK_PRIOR, WXK_NEXT)
+NAVKEYS = (wx.WXK_END, wx.WXK_LEFT, wx.WXK_RIGHT, 
+           wx.WXK_UP, wx.WXK_DOWN, wx.WXK_PRIOR, wx.WXK_NEXT)
 
-if wxPlatform == '__WXMSW__':
+if wx.wxPlatform == '__WXMSW__':
     faces = { 'times'  : 'Times New Roman',
               'mono'   : 'Courier New',
               'helv'   : 'Lucida Console',
@@ -32,11 +45,6 @@ if wxPlatform == '__WXMSW__':
               'lnsize' : 9,
               'backcol': '#FFFFFF',
             }
-    # Versions of wxPython prior to 2.3.2 had a sizing bug on Win platform.
-    # The font was 2 points too large. So we need to reduce the font size.
-    if (wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER) < (2, 3, 2):
-        faces['size'] -= 2
-        faces['lnsize'] -= 2
 else:  # GTK
     faces = { 'times'  : 'Times',
               'mono'   : 'Courier',
@@ -48,10 +56,46 @@ else:  # GTK
             }
 
 
+class ShellFrame(wx.wxFrame, ShellMenu):
+    """Frame containing the PyCrust shell component."""
+
+    name = 'PyCrust Shell Frame'
+    revision = __revision__
+
+    def __init__(self, parent=None, id=-1, title='PyShell', 
+                 pos=wx.wxDefaultPosition, size=wx.wxDefaultSize, 
+                 style=wx.wxDEFAULT_FRAME_STYLE, locals=None, 
+                 InterpClass=None, *args, **kwds):
+        """Create a PyCrust ShellFrame instance."""
+        wx.wxFrame.__init__(self, parent, id, title, pos, size, style)
+        intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % VERSION
+        intro += '\nSponsored by Orbtech - Your source for Python programming expertise.'
+        self.CreateStatusBar()
+        self.SetStatusText(intro.replace('\n', ', '))
+        import images
+        self.SetIcon(images.getPyCrustIcon())
+        self.shell = Shell(parent=self, id=-1, introText=intro, 
+                           locals=locals, InterpClass=InterpClass, 
+                           *args, **kwds)
+        # Override the shell so that status messages go to the status bar.
+        self.shell.setStatusText = self.SetStatusText
+        self.createMenus()
+        wx.EVT_CLOSE(self, self.OnCloseWindow)
+
+    def OnCloseWindow(self, event):
+        """Event handler for closing."""
+        # This isn't working the way I want, but I'll leave it for now.
+        if self.shell.waiting:
+            event.Veto(True)
+        else:
+            self.shell.destroy()
+            self.Destroy()
+
+
 class ShellFacade:
     """Simplified interface to all shell-related functionality.
 
-    This is a semi-transparent facade, in that all attributes of other are
+    This is a semi-transparent facade, in that all attributes of other are 
     still accessible, even though only some are visible to the user."""
 
     name = 'PyCrust Shell Interface'
@@ -59,19 +103,21 @@ class ShellFacade:
 
     def __init__(self, other):
         """Create a ShellFacade instance."""
-        methods = ['ask',
-                   'clear',
-                   'pause',
-                   'prompt',
-                   'quit',
-                   'redirectStderr',
-                   'redirectStdin',
-                   'redirectStdout',
-                   'run',
-                   'runfile',
-                   'wrap',
-                   'zoom',
-                  ]
+        methods = [
+            'about',
+            'ask',
+            'clear',
+            'pause',
+            'prompt',
+            'quit',
+            'redirectStderr',
+            'redirectStdin',
+            'redirectStdout',
+            'run',
+            'runfile',
+            'wrap',
+            'zoom',
+            ]
         for method in methods:
             self.__dict__[method] = getattr(other, method)
         d = self.__dict__
@@ -129,17 +175,17 @@ F8                Command-completion of History item.
         return list
 
 
-class Shell(wxStyledTextCtrl):
+class Shell(stc.wxStyledTextCtrl):
     """PyCrust Shell based on wxStyledTextCtrl."""
 
     name = 'PyCrust Shell'
     revision = __revision__
 
-    def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
-                 size=wxDefaultSize, style=wxCLIP_CHILDREN, introText='', \
+    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition, 
+                 size=wx.wxDefaultSize, style=wx.wxCLIP_CHILDREN, introText='', 
                  locals=None, InterpClass=None, *args, **kwds):
         """Create a PyCrust Shell instance."""
-        wxStyledTextCtrl.__init__(self, parent, id, pos, size, style)
+        stc.wxStyledTextCtrl.__init__(self, parent, id, pos, size, style)
         # Grab these so they can be restored by self.redirect* methods.
         self.stdin = sys.stdin
         self.stdout = sys.stdout
@@ -160,15 +206,15 @@ class Shell(wxStyledTextCtrl):
         if locals:
             shellLocals.update(locals)
         # Create a replacement for stdin.
-        self.reader = PseudoFileIn(self.readline)
+        self.reader = PseudoFileIn(self.readline, self.readlines)
         self.reader.input = ''
         self.reader.isreading = 0
         # Set up the interpreter.
-        self.interp = Interpreter(locals=shellLocals, \
-                                  rawin=self.raw_input, \
-                                  stdin=self.reader, \
-                                  stdout=PseudoFileOut(self.writeOut), \
-                                  stderr=PseudoFileErr(self.writeErr), \
+        self.interp = Interpreter(locals=shellLocals, 
+                                  rawin=self.raw_input, 
+                                  stdin=self.reader, 
+                                  stdout=PseudoFileOut(self.writeOut), 
+                                  stderr=PseudoFileErr(self.writeErr), 
                                   *args, **kwds)
         # Find out for which keycodes the interpreter will autocomplete.
         self.autoCompleteKeys = self.interp.getAutoCompleteKeys()
@@ -186,10 +232,13 @@ class Shell(wxStyledTextCtrl):
         self.history = []
         self.historyIndex = -1
         # Assign handlers for keyboard events.
-        EVT_KEY_DOWN(self, self.OnKeyDown)
-        EVT_CHAR(self, self.OnChar)
+        wx.EVT_KEY_DOWN(self, self.OnKeyDown)
+        wx.EVT_CHAR(self, self.OnChar)
         # Assign handlers for wxSTC events.
-        EVT_STC_UPDATEUI(self, id, self.OnUpdateUI)
+        stc.EVT_STC_UPDATEUI(self, id, self.OnUpdateUI)
+        # Assign handler for idle time.
+        self.waiting = False
+        wx.EVT_IDLE(self, self.OnIdle)
         # Configure various defaults and user preferences.
         self.config()
         # Display the introductory banner information.
@@ -207,15 +256,15 @@ class Shell(wxStyledTextCtrl):
         except: pass
 
     def destroy(self):
-        # del self.interp
+        del self.interp
         pass
 
     def config(self):
         """Configure shell based on user preferences."""
-        self.SetMarginType(1, wxSTC_MARGIN_NUMBER)
+        self.SetMarginType(1, stc.wxSTC_MARGIN_NUMBER)
         self.SetMarginWidth(1, 40)
 
-        self.SetLexer(wxSTC_LEX_PYTHON)
+        self.SetLexer(stc.wxSTC_LEX_PYTHON)
         self.SetKeyWords(0, ' '.join(keyword.kwlist))
 
         self.setStyles(faces)
@@ -231,10 +280,10 @@ class Shell(wxStyledTextCtrl):
         self.AutoCompSetIgnoreCase(self.autoCompleteCaseInsensitive)
         # Do we want to automatically pop up command argument help?
         self.autoCallTip = 1
-        self.CallTipSetBackground(wxColour(255, 255, 232))
+        self.CallTipSetBackground(wx.wxColour(255, 255, 232))
         self.wrap()
         try:
-            self.SetEndAtLastLine(false)
+            self.SetEndAtLastLine(False)
         except AttributeError:
             pass
 
@@ -247,7 +296,7 @@ class Shell(wxStyledTextCtrl):
             self.write(self.interp.introText)
         except AttributeError:
             pass
-        wxCallAfter(self.ScrollToLine, 0)
+        wx.wxCallAfter(self.ScrollToLine, 0)
 
     def setBuiltinKeywords(self):
         """Create pseudo keywords as part of builtins.
@@ -286,34 +335,54 @@ class Shell(wxStyledTextCtrl):
         """Configure font size, typeface and color for lexer."""
 
         # Default style
-        self.StyleSetSpec(wxSTC_STYLE_DEFAULT, "face:%(mono)s,size:%(size)d,back:%(backcol)s" % faces)
+        self.StyleSetSpec(stc.wxSTC_STYLE_DEFAULT, "face:%(mono)s,size:%(size)d,back:%(backcol)s" % faces)
 
         self.StyleClearAll()
 
         # Built in styles
-        self.StyleSetSpec(wxSTC_STYLE_LINENUMBER, "back:#C0C0C0,face:%(mono)s,size:%(lnsize)d" % faces)
-        self.StyleSetSpec(wxSTC_STYLE_CONTROLCHAR, "face:%(mono)s" % faces)
-        self.StyleSetSpec(wxSTC_STYLE_BRACELIGHT, "fore:#0000FF,back:#FFFF88")
-        self.StyleSetSpec(wxSTC_STYLE_BRACEBAD, "fore:#FF0000,back:#FFFF88")
+        self.StyleSetSpec(stc.wxSTC_STYLE_LINENUMBER, "back:#C0C0C0,face:%(mono)s,size:%(lnsize)d" % faces)
+        self.StyleSetSpec(stc.wxSTC_STYLE_CONTROLCHAR, "face:%(mono)s" % faces)
+        self.StyleSetSpec(stc.wxSTC_STYLE_BRACELIGHT, "fore:#0000FF,back:#FFFF88")
+        self.StyleSetSpec(stc.wxSTC_STYLE_BRACEBAD, "fore:#FF0000,back:#FFFF88")
 
         # Python styles
-        self.StyleSetSpec(wxSTC_P_DEFAULT, "face:%(mono)s" % faces)
-        self.StyleSetSpec(wxSTC_P_COMMENTLINE, "fore:#007F00,face:%(mono)s" % faces)
-        self.StyleSetSpec(wxSTC_P_NUMBER, "")
-        self.StyleSetSpec(wxSTC_P_STRING, "fore:#7F007F,face:%(mono)s" % faces)
-        self.StyleSetSpec(wxSTC_P_CHARACTER, "fore:#7F007F,face:%(mono)s" % faces)
-        self.StyleSetSpec(wxSTC_P_WORD, "fore:#00007F,bold")
-        self.StyleSetSpec(wxSTC_P_TRIPLE, "fore:#7F0000")
-        self.StyleSetSpec(wxSTC_P_TRIPLEDOUBLE, "fore:#000033,back:#FFFFE8")
-        self.StyleSetSpec(wxSTC_P_CLASSNAME, "fore:#0000FF,bold")
-        self.StyleSetSpec(wxSTC_P_DEFNAME, "fore:#007F7F,bold")
-        self.StyleSetSpec(wxSTC_P_OPERATOR, "")
-        self.StyleSetSpec(wxSTC_P_IDENTIFIER, "")
-        self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F")
-        self.StyleSetSpec(wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
+        self.StyleSetSpec(stc.wxSTC_P_DEFAULT, "face:%(mono)s" % faces)
+        self.StyleSetSpec(stc.wxSTC_P_COMMENTLINE, "fore:#007F00,face:%(mono)s" % faces)
+        self.StyleSetSpec(stc.wxSTC_P_NUMBER, "")
+        self.StyleSetSpec(stc.wxSTC_P_STRING, "fore:#7F007F,face:%(mono)s" % faces)
+        self.StyleSetSpec(stc.wxSTC_P_CHARACTER, "fore:#7F007F,face:%(mono)s" % faces)
+        self.StyleSetSpec(stc.wxSTC_P_WORD, "fore:#00007F,bold")
+        self.StyleSetSpec(stc.wxSTC_P_TRIPLE, "fore:#7F0000")
+        self.StyleSetSpec(stc.wxSTC_P_TRIPLEDOUBLE, "fore:#000033,back:#FFFFE8")
+        self.StyleSetSpec(stc.wxSTC_P_CLASSNAME, "fore:#0000FF,bold")
+        self.StyleSetSpec(stc.wxSTC_P_DEFNAME, "fore:#007F7F,bold")
+        self.StyleSetSpec(stc.wxSTC_P_OPERATOR, "")
+        self.StyleSetSpec(stc.wxSTC_P_IDENTIFIER, "")
+        self.StyleSetSpec(stc.wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F")
+        self.StyleSetSpec(stc.wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
 
-    def OnUpdateUI(self, evt):
+    def about(self):
+        """Display information about PyCrust."""
+        text = """
+PyCrust Version: %s
+Shell Revision: %s
+Interpreter Revision: %s
+Python Version: %s
+wxPython Version: %s
+Platform: %s""" % (VERSION, self.revision, self.interp.revision, 
+                   sys.version.split()[0], wx.__version__, sys.platform)
+        self.write(text.strip())
+
+    def OnIdle(self, event):
+        """Free the CPU to do other things."""
+        if self.waiting:
+            time.sleep(0.05)
+
+    def OnUpdateUI(self, event):
         """Check for matching braces."""
+        # If the auto-complete window is up let it do its thing.
+        if self.AutoCompActive():
+            return
         braceAtCaret = -1
         braceOpposite = -1
         charBefore = None
@@ -328,7 +397,7 @@ class Shell(wxStyledTextCtrl):
 
         # Check before.
         if charBefore and chr(charBefore) in '[]{}()' \
-        and styleBefore == wxSTC_P_OPERATOR:
+        and styleBefore == stc.wxSTC_P_OPERATOR:
             braceAtCaret = caretPos - 1
 
         # Check after.
@@ -340,7 +409,7 @@ class Shell(wxStyledTextCtrl):
             #***
             styleAfter = self.GetStyleAt(caretPos)
             if charAfter and chr(charAfter) in '[]{}()' \
-            and styleAfter == wxSTC_P_OPERATOR:
+            and styleAfter == stc.wxSTC_P_OPERATOR:
                 braceAtCaret = caretPos
 
         if braceAtCaret >= 0:
@@ -353,7 +422,7 @@ class Shell(wxStyledTextCtrl):
 
     def OnChar(self, event):
         """Keypress event handler.
-
+        
         Only receives an event if OnKeyDown calls event.Skip() for
         the corresponding event."""
 
@@ -364,25 +433,30 @@ class Shell(wxStyledTextCtrl):
         currpos = self.GetCurrentPos()
         stoppos = self.promptPosEnd
         # Return (Enter) needs to be ignored in this handler.
-        if key == WXK_RETURN:
+        if key == wx.WXK_RETURN:
             pass
         elif key in self.autoCompleteKeys:
             # Usually the dot (period) key activates auto completion.
             # Get the command between the prompt and the cursor.
             # Add the autocomplete character to the end of the command.
+            if self.AutoCompActive(): 
+                self.AutoCompCancel()
             command = self.GetTextRange(stoppos, currpos) + chr(key)
             self.write(chr(key))
-            if self.autoComplete: self.autoCompleteShow(command)
+            if self.autoComplete: 
+                self.autoCompleteShow(command)
         elif key == ord('('):
             # The left paren activates a call tip and cancels
             # an active auto completion.
-            if self.AutoCompActive(): self.AutoCompCancel()
+            if self.AutoCompActive(): 
+                self.AutoCompCancel()
             # Get the command between the prompt and the cursor.
             # Add the '(' to the end of the command.
             self.ReplaceSelection('')
             command = self.GetTextRange(stoppos, currpos) + '('
             self.write('(')
-            if self.autoCallTip: self.autoCallTipShow(command)
+            if self.autoCallTip: 
+                self.autoCallTipShow(command)
         else:
             # Allow the normal event handling to take place.
             event.Skip()
@@ -390,8 +464,12 @@ class Shell(wxStyledTextCtrl):
     def OnKeyDown(self, event):
         """Key down event handler."""
 
-        # Prevent modification of previously submitted commands/responses.
         key = event.KeyCode()
+        # If the auto-complete window is up let it do its thing.
+        if self.AutoCompActive():
+            event.Skip()
+            return
+        # Prevent modification of previously submitted commands/responses.
         controlDown = event.ControlDown()
         altDown = event.AltDown()
         shiftDown = event.ShiftDown()
@@ -399,44 +477,41 @@ class Shell(wxStyledTextCtrl):
         endpos = self.GetTextLength()
         selecting = self.GetSelectionStart() != self.GetSelectionEnd()
         # Return (Enter) is used to submit a command to the interpreter.
-        if not controlDown and key == WXK_RETURN:
-            if self.AutoCompActive(): self.AutoCompCancel()
-            if self.CallTipActive(): self.CallTipCancel()
+        if not controlDown and key == wx.WXK_RETURN:
+            if self.CallTipActive(): 
+                self.CallTipCancel()
             self.processLine()
         # Ctrl+Return (Cntrl+Enter) is used to insert a line break.
-        elif controlDown and key == WXK_RETURN:
-            if self.AutoCompActive(): self.AutoCompCancel()
-            if self.CallTipActive(): self.CallTipCancel()
+        elif controlDown and key == wx.WXK_RETURN:
+            if self.CallTipActive(): 
+                self.CallTipCancel()
             if currpos == endpos:
                 self.processLine()
             else:
                 self.insertLineBreak()
-        # If the auto-complete window is up let it do its thing.
-        elif self.AutoCompActive():
-            event.Skip()
         # Let Ctrl-Alt-* get handled normally.
         elif controlDown and altDown:
             event.Skip()
         # Clear the current, unexecuted command.
-        elif key == WXK_ESCAPE:
+        elif key == wx.WXK_ESCAPE:
             if self.CallTipActive():
                 event.Skip()
             else:
                 self.clearCommand()
         # Cut to the clipboard.
         elif (controlDown and key in (ord('X'), ord('x'))) \
-        or (shiftDown and key == WXK_DELETE):
+        or (shiftDown and key == wx.WXK_DELETE):
             self.Cut()
         # Copy to the clipboard.
         elif controlDown and not shiftDown \
-            and key in (ord('C'), ord('c'), WXK_INSERT):
+            and key in (ord('C'), ord('c'), wx.WXK_INSERT):
             self.Copy()
         # Copy to the clipboard, including prompts.
         elif controlDown and shiftDown \
-            and key in (ord('C'), ord('c'), WXK_INSERT):
+            and key in (ord('C'), ord('c'), wx.WXK_INSERT):
             self.CopyWithPrompts()
         # Home needs to be aware of the prompt.
-        elif key == WXK_HOME:
+        elif key == wx.WXK_HOME:
             home = self.promptPosEnd
             if currpos > home:
                 self.SetCurrentPos(home)
@@ -455,41 +530,41 @@ class Shell(wxStyledTextCtrl):
         # Paste from the clipboard.
         elif (controlDown and not shiftDown \
             and key in (ord('V'), ord('v'))) \
-        or (shiftDown and not controlDown and key == WXK_INSERT):
+        or (shiftDown and not controlDown and key == wx.WXK_INSERT):
             self.Paste()
         # Paste from the clipboard, run commands.
         elif controlDown and shiftDown \
             and key in (ord('V'), ord('v')):
             self.PasteAndRun()
         # Replace with the previous command from the history buffer.
-        elif (controlDown and key == WXK_UP) \
+        elif (controlDown and key == wx.WXK_UP) \
         or (altDown and key in (ord('P'), ord('p'))):
             self.OnHistoryReplace(step=+1)
         # Replace with the next command from the history buffer.
-        elif (controlDown and key == WXK_DOWN) \
+        elif (controlDown and key == wx.WXK_DOWN) \
         or (altDown and key in (ord('N'), ord('n'))):
             self.OnHistoryReplace(step=-1)
         # Insert the previous command from the history buffer.
-        elif (shiftDown and key == WXK_UP) and self.CanEdit():
+        elif (shiftDown and key == wx.WXK_UP) and self.CanEdit():
             self.OnHistoryInsert(step=+1)
         # Insert the next command from the history buffer.
-        elif (shiftDown and key == WXK_DOWN) and self.CanEdit():
+        elif (shiftDown and key == wx.WXK_DOWN) and self.CanEdit():
             self.OnHistoryInsert(step=-1)
         # Search up the history for the text in front of the cursor.
-        elif key == WXK_F8:
+        elif key == wx.WXK_F8:
             self.OnHistorySearch()
         # Don't backspace over the latest non-continuation prompt.
-        elif key == WXK_BACK:
+        elif key == wx.WXK_BACK:
             if selecting and self.CanEdit():
                 event.Skip()
             elif currpos > self.promptPosEnd:
                 event.Skip()
         # Only allow these keys after the latest prompt.
-        elif key in (WXK_TAB, WXK_DELETE):
+        elif key in (wx.WXK_TAB, wx.WXK_DELETE):
             if self.CanEdit():
                 event.Skip()
         # Don't toggle between insert mode and overwrite mode.
-        elif key == WXK_INSERT:
+        elif key == wx.WXK_INSERT:
             pass
         # Don't allow line deletion.
         elif controlDown and key in (ord('L'), ord('l')):
@@ -590,7 +665,7 @@ class Shell(wxStyledTextCtrl):
         # The user hit ENTER and we need to decide what to do. They could be
         # sitting on any line in the shell.
 
-        thepos = self.GetCurrentPos()
+        thepos = self.GetCurrentPos()        
         startpos = self.promptPosEnd
         endpos = self.GetTextLength()
         # If they hit RETURN inside the current command, execute the command.
@@ -685,12 +760,14 @@ class Shell(wxStyledTextCtrl):
         elif text[:ps2size] == ps2:
             text = text[ps2size:]
         return text
-
+    
     def push(self, command):
         """Send command to the interpreter for execution."""
         self.write(os.linesep)
-        busy = wxBusyCursor()
+        busy = wx.wxBusyCursor()
+        self.waiting = True
         self.more = self.interp.push(command)
+        self.waiting = False
         del busy
         if not self.more:
             self.addHistory(command.rstrip())
@@ -765,12 +842,20 @@ class Shell(wxStyledTextCtrl):
         self.prompt()
         try:
             while not reader.input:
-                wxYield()
+                wx.wxYieldIfNeeded()
             input = reader.input
         finally:
             reader.input = ''
             reader.isreading = 0
+        input = str(input)  # In case of Unicode.
         return input
+
+    def readlines(self):
+        """Replacement for stdin.readlines()."""
+        lines = []
+        while lines[-1:] != ['\n']:
+            lines.append(self.readline())
+        return lines
 
     def raw_input(self, prompt=''):
         """Return string based on user input."""
@@ -780,10 +865,10 @@ class Shell(wxStyledTextCtrl):
 
     def ask(self, prompt='Please enter your response:'):
         """Get response from the user using a dialog box."""
-        dialog = wxTextEntryDialog(None, prompt, \
-                                   'Input Dialog (Raw)', '')
+        dialog = wx.wxTextEntryDialog(None, prompt, 
+                                      'Input Dialog (Raw)', '')
         try:
-            if dialog.ShowModal() == wxID_OK:
+            if dialog.ShowModal() == wx.wxID_OK:
                 text = dialog.GetValue()
                 return text
         finally:
@@ -803,11 +888,11 @@ class Shell(wxStyledTextCtrl):
         >>> shell.run('print "this"')
         >>> print "this"
         this
-        >>>
+        >>> 
         """
         # Go to the very bottom of the text.
         endpos = self.GetTextLength()
-        self.SetCurrentPos(endpos)
+        self.SetCurrentPos(endpos)        
         command = command.rstrip()
         if prompt: self.prompt()
         if verbose: self.write(command)
@@ -828,11 +913,11 @@ class Shell(wxStyledTextCtrl):
 
     def autoCompleteShow(self, command):
         """Display auto-completion popup list."""
-        list = self.interp.getAutoCompleteList(command,
-                    includeMagic=self.autoCompleteIncludeMagic,
-                    includeSingle=self.autoCompleteIncludeSingle,
+        list = self.interp.getAutoCompleteList(command, 
+                    includeMagic=self.autoCompleteIncludeMagic, 
+                    includeSingle=self.autoCompleteIncludeSingle, 
                     includeDouble=self.autoCompleteIncludeDouble)
-        if list:
+        if list and len(list) < 2000:
             options = ' '.join(list)
             offset = 0
             self.AutoCompShow(offset, options)
@@ -898,7 +983,7 @@ class Shell(wxStyledTextCtrl):
 
     def CanPaste(self):
         """Return true if a paste should succeed."""
-        if self.CanEdit() and wxStyledTextCtrl.CanPaste(self):
+        if self.CanEdit() and stc.wxStyledTextCtrl.CanPaste(self):
             return 1
         else:
             return 0
@@ -929,26 +1014,28 @@ class Shell(wxStyledTextCtrl):
             command = command.replace(os.linesep + sys.ps2, os.linesep)
             command = command.replace(os.linesep + sys.ps1, os.linesep)
             command = self.lstripPrompt(text=command)
-            data = wxTextDataObject(command)
-            if wxTheClipboard.Open():
-                wxTheClipboard.SetData(data)
-                wxTheClipboard.Close()
+            data = wx.wxTextDataObject(command)
+            if wx.wxTheClipboard.Open():
+                wx.wxTheClipboard.UsePrimarySelection(False)
+                wx.wxTheClipboard.SetData(data)
+                wx.wxTheClipboard.Close()
 
     def CopyWithPrompts(self):
         """Copy selection, including prompts, and place it on the clipboard."""
         if self.CanCopy():
             command = self.GetSelectedText()
-            data = wxTextDataObject(command)
-            if wxTheClipboard.Open():
-                wxTheClipboard.SetData(data)
-                wxTheClipboard.Close()
+            data = wx.wxTextDataObject(command)
+            if wx.wxTheClipboard.Open():
+                wx.wxTheClipboard.UsePrimarySelection(False)
+                wx.wxTheClipboard.SetData(data)
+                wx.wxTheClipboard.Close()
 
     def Paste(self):
         """Replace selection with clipboard contents."""
-        if self.CanPaste() and wxTheClipboard.Open():
-            if wxTheClipboard.IsSupported(wxDataFormat(wxDF_TEXT)):
-                data = wxTextDataObject()
-                if wxTheClipboard.GetData(data):
+        if self.CanPaste() and wx.wxTheClipboard.Open():
+            if wx.wxTheClipboard.IsSupported(wx.wxDataFormat(wx.wxDF_TEXT)):
+                data = wx.wxTextDataObject()
+                if wx.wxTheClipboard.GetData(data):
                     self.ReplaceSelection('')
                     command = data.GetText()
                     command = command.rstrip()
@@ -958,14 +1045,14 @@ class Shell(wxStyledTextCtrl):
                     command = command.replace(os.linesep, '\n')
                     command = command.replace('\n', os.linesep + sys.ps2)
                     self.write(command)
-            wxTheClipboard.Close()
+            wx.wxTheClipboard.Close()
 
     def PasteAndRun(self):
         """Replace selection with clipboard contents, run commands."""
-        if wxTheClipboard.Open():
-            if wxTheClipboard.IsSupported(wxDataFormat(wxDF_TEXT)):
-                data = wxTextDataObject()
-                if wxTheClipboard.GetData(data):
+        if wx.wxTheClipboard.Open():
+            if wx.wxTheClipboard.IsSupported(wx.wxDataFormat(wx.wxDF_TEXT)):
+                data = wx.wxTextDataObject()
+                if wx.wxTheClipboard.GetData(data):
                     endpos = self.GetTextLength()
                     self.SetCurrentPos(endpos)
                     startpos = self.promptPosEnd
@@ -994,11 +1081,11 @@ class Shell(wxStyledTextCtrl):
                             command += '\n'
                             command += line
                     commands.append(command)
-                    for command in commands:
+                    for command in commands:    
                         command = command.replace('\n', os.linesep + sys.ps2)
                         self.write(command)
                         self.processLine()
-            wxTheClipboard.Close()
+            wx.wxTheClipboard.Close()
 
     def wrap(self, wrap=1):
         """Sets whether text is word wrapped."""
@@ -1009,214 +1096,8 @@ class Shell(wxStyledTextCtrl):
 
     def zoom(self, points=0):
         """Set the zoom level.
-
+        
         This number of points is added to the size of all fonts.
         It may be positive to magnify or negative to reduce."""
         self.SetZoom(points)
-
-
-wxID_SELECTALL = NewId()  # This *should* be defined by wxPython.
-ID_AUTOCOMP = NewId()
-ID_AUTOCOMP_SHOW = NewId()
-ID_AUTOCOMP_INCLUDE_MAGIC = NewId()
-ID_AUTOCOMP_INCLUDE_SINGLE = NewId()
-ID_AUTOCOMP_INCLUDE_DOUBLE = NewId()
-ID_CALLTIPS = NewId()
-ID_CALLTIPS_SHOW = NewId()
-
-
-class ShellMenu:
-    """Mixin class to add standard menu items."""
-
-    def createMenus(self):
-        m = self.fileMenu = wxMenu()
-        m.AppendSeparator()
-        m.Append(wxID_EXIT, 'E&xit', 'Exit PyCrust')
-
-        m = self.editMenu = wxMenu()
-        m.Append(wxID_UNDO, '&Undo \tCtrl+Z', 'Undo the last action')
-        m.Append(wxID_REDO, '&Redo \tCtrl+Y', 'Redo the last undone action')
-        m.AppendSeparator()
-        m.Append(wxID_CUT, 'Cu&t \tCtrl+X', 'Cut the selection')
-        m.Append(wxID_COPY, '&Copy \tCtrl+C', 'Copy the selection')
-        m.Append(wxID_PASTE, '&Paste \tCtrl+V', 'Paste')
-        m.AppendSeparator()
-        m.Append(wxID_CLEAR, 'Cle&ar', 'Delete the selection')
-        m.Append(wxID_SELECTALL, 'Select A&ll', 'Select all text')
-
-        m = self.autocompMenu = wxMenu()
-        m.Append(ID_AUTOCOMP_SHOW, 'Show Auto Completion', \
-                 'Show auto completion during dot syntax', 1)
-        m.Append(ID_AUTOCOMP_INCLUDE_MAGIC, 'Include Magic Attributes', \
-                 'Include attributes visible to __getattr__ and __setattr__', 1)
-        m.Append(ID_AUTOCOMP_INCLUDE_SINGLE, 'Include Single Underscores', \
-                 'Include attibutes prefixed by a single underscore', 1)
-        m.Append(ID_AUTOCOMP_INCLUDE_DOUBLE, 'Include Double Underscores', \
-                 'Include attibutes prefixed by a double underscore', 1)
-
-        m = self.calltipsMenu = wxMenu()
-        m.Append(ID_CALLTIPS_SHOW, 'Show Call Tips', \
-                 'Show call tips with argument specifications', 1)
-
-        m = self.optionsMenu = wxMenu()
-        m.AppendMenu(ID_AUTOCOMP, '&Auto Completion', self.autocompMenu, \
-                     'Auto Completion Options')
-        m.AppendMenu(ID_CALLTIPS, '&Call Tips', self.calltipsMenu, \
-                     'Call Tip Options')
-
-        m = self.helpMenu = wxMenu()
-        m.AppendSeparator()
-        m.Append(wxID_ABOUT, '&About...', 'About PyCrust')
-
-        b = self.menuBar = wxMenuBar()
-        b.Append(self.fileMenu, '&File')
-        b.Append(self.editMenu, '&Edit')
-        b.Append(self.optionsMenu, '&Options')
-        b.Append(self.helpMenu, '&Help')
-        self.SetMenuBar(b)
-
-        EVT_MENU(self, wxID_EXIT, self.OnExit)
-        EVT_MENU(self, wxID_UNDO, self.OnUndo)
-        EVT_MENU(self, wxID_REDO, self.OnRedo)
-        EVT_MENU(self, wxID_CUT, self.OnCut)
-        EVT_MENU(self, wxID_COPY, self.OnCopy)
-        EVT_MENU(self, wxID_PASTE, self.OnPaste)
-        EVT_MENU(self, wxID_CLEAR, self.OnClear)
-        EVT_MENU(self, wxID_SELECTALL, self.OnSelectAll)
-        EVT_MENU(self, wxID_ABOUT, self.OnAbout)
-        EVT_MENU(self, ID_AUTOCOMP_SHOW, \
-                 self.OnAutoCompleteShow)
-        EVT_MENU(self, ID_AUTOCOMP_INCLUDE_MAGIC, \
-                 self.OnAutoCompleteIncludeMagic)
-        EVT_MENU(self, ID_AUTOCOMP_INCLUDE_SINGLE, \
-                 self.OnAutoCompleteIncludeSingle)
-        EVT_MENU(self, ID_AUTOCOMP_INCLUDE_DOUBLE, \
-                 self.OnAutoCompleteIncludeDouble)
-        EVT_MENU(self, ID_CALLTIPS_SHOW, \
-                 self.OnCallTipsShow)
-
-        EVT_UPDATE_UI(self, wxID_UNDO, self.OnUpdateMenu)
-        EVT_UPDATE_UI(self, wxID_REDO, self.OnUpdateMenu)
-        EVT_UPDATE_UI(self, wxID_CUT, self.OnUpdateMenu)
-        EVT_UPDATE_UI(self, wxID_COPY, self.OnUpdateMenu)
-        EVT_UPDATE_UI(self, wxID_PASTE, self.OnUpdateMenu)
-        EVT_UPDATE_UI(self, wxID_CLEAR, self.OnUpdateMenu)
-        EVT_UPDATE_UI(self, ID_AUTOCOMP_SHOW, self.OnUpdateMenu)
-        EVT_UPDATE_UI(self, ID_AUTOCOMP_INCLUDE_MAGIC, self.OnUpdateMenu)
-        EVT_UPDATE_UI(self, ID_AUTOCOMP_INCLUDE_SINGLE, self.OnUpdateMenu)
-        EVT_UPDATE_UI(self, ID_AUTOCOMP_INCLUDE_DOUBLE, self.OnUpdateMenu)
-        EVT_UPDATE_UI(self, ID_CALLTIPS_SHOW, self.OnUpdateMenu)
-
-    def OnExit(self, event):
-        self.Close(true)
-
-    def OnUndo(self, event):
-        self.shell.Undo()
-
-    def OnRedo(self, event):
-        self.shell.Redo()
-
-    def OnCut(self, event):
-        self.shell.Cut()
-
-    def OnCopy(self, event):
-        self.shell.Copy()
-
-    def OnPaste(self, event):
-        self.shell.Paste()
-
-    def OnClear(self, event):
-        self.shell.Clear()
-
-    def OnSelectAll(self, event):
-        self.shell.SelectAll()
-
-    def OnAbout(self, event):
-        """Display an About PyCrust window."""
-        import sys
-        title = 'About PyCrust'
-        text = 'PyCrust %s\n\n' % VERSION + \
-               'Yet another Python shell, only flakier.\n\n' + \
-               'Half-baked by Patrick K. O\'Brien,\n' + \
-               'the other half is still in the oven.\n\n' + \
-               'Shell Revision: %s\n' % self.shell.revision + \
-               'Interpreter Revision: %s\n\n' % self.shell.interp.revision + \
-               'Python Version: %s\n' % sys.version.split()[0] + \
-               'wxPython Version: %s\n' % wx.__version__ + \
-               'Platform: %s\n' % sys.platform
-        dialog = wxMessageDialog(self, text, title, wxOK | wxICON_INFORMATION)
-        dialog.ShowModal()
-        dialog.Destroy()
-
-    def OnAutoCompleteShow(self, event):
-        self.shell.autoComplete = event.IsChecked()
-
-    def OnAutoCompleteIncludeMagic(self, event):
-        self.shell.autoCompleteIncludeMagic = event.IsChecked()
-
-    def OnAutoCompleteIncludeSingle(self, event):
-        self.shell.autoCompleteIncludeSingle = event.IsChecked()
-
-    def OnAutoCompleteIncludeDouble(self, event):
-        self.shell.autoCompleteIncludeDouble = event.IsChecked()
-
-    def OnCallTipsShow(self, event):
-        self.shell.autoCallTip = event.IsChecked()
-
-    def OnUpdateMenu(self, event):
-        """Update menu items based on current status."""
-        id = event.GetId()
-        if id == wxID_UNDO:
-            event.Enable(self.shell.CanUndo())
-        elif id == wxID_REDO:
-            event.Enable(self.shell.CanRedo())
-        elif id == wxID_CUT:
-            event.Enable(self.shell.CanCut())
-        elif id == wxID_COPY:
-            event.Enable(self.shell.CanCopy())
-        elif id == wxID_PASTE:
-            event.Enable(self.shell.CanPaste())
-        elif id == wxID_CLEAR:
-            event.Enable(self.shell.CanCut())
-        elif id == ID_AUTOCOMP_SHOW:
-            event.Check(self.shell.autoComplete)
-        elif id == ID_AUTOCOMP_INCLUDE_MAGIC:
-            event.Check(self.shell.autoCompleteIncludeMagic)
-        elif id == ID_AUTOCOMP_INCLUDE_SINGLE:
-            event.Check(self.shell.autoCompleteIncludeSingle)
-        elif id == ID_AUTOCOMP_INCLUDE_DOUBLE:
-            event.Check(self.shell.autoCompleteIncludeDouble)
-        elif id == ID_CALLTIPS_SHOW:
-            event.Check(self.shell.autoCallTip)
-
-
-class ShellFrame(wxFrame, ShellMenu):
-    """Frame containing the PyCrust shell component."""
-
-    name = 'PyCrust Shell Frame'
-    revision = __revision__
-
-    def __init__(self, parent=None, id=-1, title='PyShell', \
-                 pos=wxDefaultPosition, size=wxDefaultSize, \
-                 style=wxDEFAULT_FRAME_STYLE, locals=None, \
-                 InterpClass=None, *args, **kwds):
-        """Create a PyCrust ShellFrame instance."""
-        wxFrame.__init__(self, parent, id, title, pos, size, style)
-        intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % VERSION
-        intro += '\nSponsored by Orbtech - Your source for Python programming expertise.'
-        self.CreateStatusBar()
-        self.SetStatusText(intro.replace('\n', ', '))
-        import images
-        self.SetIcon(images.getPyCrustIcon())
-        self.shell = Shell(parent=self, id=-1, introText=intro, \
-                           locals=locals, InterpClass=InterpClass, \
-                           *args, **kwds)
-        # Override the shell so that status messages go to the status bar.
-        self.shell.setStatusText = self.SetStatusText
-        self.createMenus()
-        EVT_CLOSE(self, self.OnCloseWindow)
-
-    def OnCloseWindow(self, event):
-        self.shell.destroy()
-        self.Destroy()
 
