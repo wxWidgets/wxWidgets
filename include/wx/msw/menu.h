@@ -129,10 +129,13 @@ public:
         // get the menu handle
     WXHMENU GetHMenu() const;
 
-private:
-    bool              m_doBreak ;
+    // only for wxMenuBar
+    void Attach(wxMenuBar *menubar);
+    void Detach();
 
-public:
+private:
+    bool              m_doBreak;
+
     // This is used when m_hMenu is NULL because we don't want to
     // delete it in ~wxMenu (it's been added to a parent menu).
     // But we'll still need the handle for other purposes.
@@ -162,12 +165,16 @@ class WXDLLEXPORT wxMenuBar : public wxEvtHandler
 
 public:
     // ctors & dtor
+        // default constructor
     wxMenuBar();
+        // unused under MSW
     wxMenuBar(long style);
+        // menubar takes ownership of the menus arrays but copies the titles
     wxMenuBar(int n, wxMenu *menus[], const wxString titles[]);
     virtual ~wxMenuBar();
 
     // menubar construction
+    WXHMENU Create();
     void Append(wxMenu *menu, const wxString& title);
     virtual void Delete(wxMenu *menu, int index = 0); /* Menu not destroyed */
 
@@ -195,7 +202,8 @@ public:
     void SetLabelTop(int pos, const wxString& label) ;
     wxString GetLabelTop(int pos) const ;
 
-    // notifications
+    // notifications: return FALSE to prevent the menu from being
+    // appended/deleted
     virtual bool OnAppend(wxMenu *menu, const char *title);
     virtual bool OnDelete(wxMenu *menu, int index);
 
@@ -221,13 +229,35 @@ public:
     bool Checked(int id) const { return IsChecked(id); }
 #endif // WXWIN_COMPATIBILITY
 
-public:
-    wxEvtHandler *            m_eventHandler;
-    int                       m_menuCount;
-    wxMenu **                 m_menus;
-    wxString *                m_titles;
-    wxFrame *                 m_menuBarFrame;
-    WXHMENU                   m_hMenu;
+    // IMPLEMENTATION
+        // returns TRUE if we're attached to a frame
+    bool IsAttached() const { return m_menuBarFrame != NULL; }
+        // get the frame we live in
+    wxFrame *GetFrame() const { return m_menuBarFrame; }
+        // attach to a frame
+    void Attach(wxFrame *frame)
+    {
+        wxASSERT_MSG( !m_menuBarFrame, "menubar already attached!" );
+
+        m_menuBarFrame = frame;
+    }
+        // get the menu handle
+    WXHMENU GetHMenu() const { return m_hMenu; }
+
+protected:
+    // common part of all ctors
+    void Init();
+
+    // if the menubar is modified, the display is not updated automatically,
+    // call this function to update it (m_menuBarFrame should be !NULL)
+    void Refresh();
+
+    wxEvtHandler *m_eventHandler;
+    int           m_menuCount;
+    wxMenu      **m_menus;
+    wxString     *m_titles;
+    wxFrame      *m_menuBarFrame;
+    WXHMENU       m_hMenu;
 };
 
 #endif // _WX_MENU_H_

@@ -16,8 +16,6 @@
 #pragma interface "ownerdrw.h"
 #endif
 
-// No, don't do this: BC++ 5 complains that size_t already been defined.
-// typedef   unsigned int  size_t;
 #include <stddef.h>
 
 // ----------------------------------------------------------------------------
@@ -34,34 +32,34 @@ public:
   // ctor & dtor
   wxOwnerDrawn(const wxString& str = "",
                bool bCheckable = FALSE,
-               bool bMenuItem = FALSE); // @@ kludge for colors
+               bool bMenuItem = FALSE); // FIXME kludge for colors
   virtual ~wxOwnerDrawn() { }
 
   // fix appearance
-  inline void SetFont(const wxFont& font)
-  { m_font = font; m_bOwnerDrawn = TRUE; }
+  void SetFont(const wxFont& font)
+      { m_font = font; m_bOwnerDrawn = TRUE; }
 
-  inline wxFont& GetFont() const { return (wxFont &)m_font; }
+  wxFont& GetFont() const { return (wxFont &)m_font; }
 
-  inline void SetTextColour(const wxColour& colText)
-  { m_colText = colText; m_bOwnerDrawn = TRUE; }
+  void SetTextColour(const wxColour& colText)
+      { m_colText = colText; m_bOwnerDrawn = TRUE; }
 
-  inline wxColour& GetTextColour() const { return (wxColour&) m_colText; }
+  wxColour& GetTextColour() const { return (wxColour&) m_colText; }
 
-  inline void SetBackgroundColour(const wxColour& colBack)
-  { m_colBack = colBack; m_bOwnerDrawn = TRUE; }
+  void SetBackgroundColour(const wxColour& colBack)
+      { m_colBack = colBack; m_bOwnerDrawn = TRUE; }
 
-  inline wxColour& GetBackgroundColour() const
-  { return (wxColour&) m_colBack ; }
+  wxColour& GetBackgroundColour() const
+      { return (wxColour&) m_colBack ; }
 
-  inline void SetBitmaps(const wxBitmap& bmpChecked, 
-                         const wxBitmap& bmpUnchecked = wxNullBitmap)
-  { m_bmpChecked = bmpChecked;
-    m_bmpUnchecked = bmpUnchecked; 
-    m_bOwnerDrawn = TRUE;          }
+  void SetBitmaps(const wxBitmap& bmpChecked, 
+                  const wxBitmap& bmpUnchecked = wxNullBitmap)
+      { m_bmpChecked = bmpChecked;
+        m_bmpUnchecked = bmpUnchecked;
+        m_bOwnerDrawn = TRUE; }
 
-  inline const wxBitmap& GetBitmap(bool bChecked = TRUE) const
-  { return (bChecked ? m_bmpChecked : m_bmpUnchecked); }
+  const wxBitmap& GetBitmap(bool bChecked = TRUE) const
+      { return (bChecked ? m_bmpChecked : m_bmpUnchecked); }
 
   // the height of the menu checkmark (or bitmap) is determined by the font
   // for the current item, but the width should be always the same (for the
@@ -69,12 +67,15 @@ public:
   // the last item (and default width for the first one).
   //
   // NB: default is too small for bitmaps, but ok for checkmarks.
-  inline void SetMarginWidth(int nWidth)
-  { ms_nLastMarginWidth = m_nMarginWidth = (size_t) nWidth;
-    if ( ((size_t) nWidth) != ms_nDefaultMarginWidth ) m_bOwnerDrawn = TRUE; }
+  void SetMarginWidth(int nWidth)
+  {
+      ms_nLastMarginWidth = m_nMarginWidth = (size_t) nWidth;
+      if ( ((size_t) nWidth) != ms_nDefaultMarginWidth )
+          m_bOwnerDrawn = TRUE;
+  }
 
-  inline int GetMarginWidth() const { return (int) m_nMarginWidth; }
-  inline static int GetDefaultMarginWidth() { return (int) ms_nDefaultMarginWidth; }
+  int GetMarginWidth() const { return (int) m_nMarginWidth; }
+  static int GetDefaultMarginWidth() { return (int) ms_nDefaultMarginWidth; }
 
   // accessors
   void            SetName(const wxString& strName)  { m_strName = strName; }
@@ -86,8 +87,8 @@ public:
   // to be owner-drawn. Moreover, you can force owner-drawn to FALSE if you
   // want to change, say, the color for the item but only if it is owner-drawn
   // (see wxMenuItem::wxMenuItem for example)
-  inline bool     IsOwnerDrawn()  const             { return m_bOwnerDrawn;   }
-  inline void     ResetOwnerDrawn()                 { m_bOwnerDrawn = FALSE;  }
+  bool     IsOwnerDrawn()  const             { return m_bOwnerDrawn;   }
+  void     ResetOwnerDrawn()                 { m_bOwnerDrawn = FALSE;  }
 
 public:
   // constants used in OnDrawItem

@@ -2,30 +2,38 @@
 // Name:        menuitem.cpp
 // Purpose:     wxMenuItem implementation
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     11.11.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
+// ===========================================================================
+// declarations
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// headers
+// ---------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "menuitem.h"
+    #pragma implementation "menuitem.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/menu.h"
-#include "wx/font.h"
-#include "wx/bitmap.h"
-#include "wx/settings.h"
-#include "wx/font.h"
+    #include "wx/menu.h"
+    #include "wx/font.h"
+    #include "wx/bitmap.h"
+    #include "wx/settings.h"
+    #include "wx/font.h"
 #endif
 
 #include "wx/ownerdrw.h"
@@ -34,12 +42,18 @@
 #include <windows.h>
 
 #ifdef GetClassInfo
-#undef GetClassInfo
+    #undef GetClassInfo
 #endif
 
 #ifdef GetClassName
-#undef GetClassName
+    #undef GetClassName
 #endif
+
+// ---------------------------------------------------------------------------
+// convenience macro
+// ---------------------------------------------------------------------------
+
+#define GetHMenuOf(menu)    ((HMENU)menu->GetHMenu())
 
 // ============================================================================
 // implementation
@@ -77,12 +91,12 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
 #endif  //owner drawn
                         m_strHelp(strHelp)
 {
-  wxASSERT( pParentMenu != NULL );
+    wxASSERT_MSG( pParentMenu != NULL, "a menu item should have a parent" );
 
 #if  wxUSE_OWNER_DRAWN
     // set default menu colors
     #define SYS_COLOR(c) (wxSystemSettings::GetSystemColour(wxSYS_COLOUR_##c))
-    
+
     SetTextColour(SYS_COLOR(MENUTEXT));
     SetBackgroundColour(SYS_COLOR(MENU));
 
@@ -92,26 +106,31 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
     #undef  SYS_COLOR
 #endif
 
-  m_pParentMenu = pParentMenu;
-  m_pSubMenu    = pSubMenu;
-  m_idItem      = id;
-  m_bEnabled    = TRUE;
+    m_pParentMenu = pParentMenu;
+    m_pSubMenu    = pSubMenu;
+    m_bEnabled    = TRUE;
+    m_idItem      = id;
 }
 
-wxMenuItem::~wxMenuItem() 
+wxMenuItem::~wxMenuItem()
 {
 }
 
 // misc
 // ----
 
+// return the id for calling Win32 API functions
+int wxMenuItem::GetRealId() const
+{
+    return m_pSubMenu ? (int)m_pSubMenu->GetHMenu() : GetId();
+}
+
 // delete the sub menu
+// -------------------
 void wxMenuItem::DeleteSubMenu()
 {
-  wxASSERT( m_pSubMenu != NULL );
-
-  delete m_pSubMenu;
-  m_pSubMenu = NULL;
+    delete m_pSubMenu;
+    m_pSubMenu = NULL;
 }
 
 // change item state
@@ -119,39 +138,83 @@ void wxMenuItem::DeleteSubMenu()
 
 void wxMenuItem::Enable(bool bDoEnable)
 {
-  if ( m_bEnabled != bDoEnable ) {
-    if ( m_pSubMenu == NULL ) {     // normal menu item
-      EnableMenuItem((HMENU)m_pParentMenu->GetHMenu(), m_idItem, 
-                     MF_BYCOMMAND | (bDoEnable ? MF_ENABLED: MF_GRAYED));
-    }
-    else                            // submenu
-    {
-      wxMenu *father = m_pSubMenu->m_topLevelMenu ;
-      wxNode *node = father->m_menuItems.First() ;
-      int i = 0 ;
-      while (node) {
-        wxMenuItem *matched = (wxMenuItem*)node->Data();
-        if ( matched == this)
-          break;
-        i++;
-        node = node->Next();
-      }
-      EnableMenuItem((HMENU)father->m_savehMenu, i, 
-                     MF_BYPOSITION | (bDoEnable ? MF_ENABLED: MF_GRAYED));
-    }
+    if ( m_bEnabled != bDoEnable ) {
+        long rc = EnableMenuItem(GetHMenuOf(m_pParentMenu),
+                                 GetRealId(),
+                                 MF_BYCOMMAND |
+                                 (bDoEnable ? MF_ENABLED : MF_GRAYED));
 
-    m_bEnabled = bDoEnable;
-  }
+        if ( rc == -1 ) {
+            wxLogLastError("EnableMenuItem");
+        }
+
+        m_bEnabled = bDoEnable;
+    }
 }
 
 void wxMenuItem::Check(bool bDoCheck)
 {
-  wxCHECK_RET( IsCheckable(), "only checkable items may be checked" );
+    wxCHECK_RET( IsCheckable(), "only checkable items may be checked" );
 
-  if ( m_bChecked != bDoCheck ) {
-    CheckMenuItem((HMENU)m_pParentMenu->GetHMenu(), m_idItem, 
-                  MF_BYCOMMAND | (bDoCheck ? MF_CHECKED : MF_UNCHECKED));
+    if ( m_bChecked != bDoCheck ) {
+        long rc = CheckMenuItem(GetHMenuOf(m_pParentMenu),
+                                GetId(),
+                                MF_BYCOMMAND |
+                                (bDoCheck ? MF_CHECKED : MF_UNCHECKED));
 
-    m_bChecked = bDoCheck;
-  }
+        if ( rc == -1 ) {
+            wxLogLastError("CheckMenuItem");
+        }
+
+        m_bChecked = bDoCheck;
+    }
 }
+
+void wxMenuItem::SetName(const wxString& strName)
+{
+    // don't do anything if label didn't change
+    if ( m_strName == strName )
+        return;
+
+    m_strName = strName;
+
+    HMENU hMenu = GetHMenuOf(m_pParentMenu);
+
+    UINT id = GetRealId();
+    UINT flagsOld = ::GetMenuState(hMenu, id, MF_BYCOMMAND);
+    if ( flagsOld == 0xFFFFFFFF )
+    {
+        wxLogLastError("GetMenuState");
+    }
+    else
+    {
+        if ( IsSubMenu() )
+        {
+            // high byte contains the number of items in a submenu for submenus
+            flagsOld &= 0xFF;
+            flagsOld |= MF_POPUP;
+        }
+
+        LPCSTR data;
+#if wxUSE_OWNER_DRAWN
+        if ( IsOwnerDrawn() )
+        {
+            flagsOld |= MF_OWNERDRAW;
+            data = (LPCSTR)this;
+        }
+        else
+#endif  //owner drawn
+        {
+            flagsOld |= MF_STRING;
+            data = strName;
+        }
+
+        if ( ::ModifyMenu(hMenu, id,
+                          MF_BYCOMMAND | flagsOld,
+                          id, data) == 0xFFFFFFFF )
+        {
+            wxLogLastError("ModifyMenu");
+        }
+    }
+}
+

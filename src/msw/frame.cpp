@@ -398,7 +398,7 @@ wxStatusBar* wxFrame::CreateStatusBar(int number, long style, wxWindowID id,
     const wxString& name)
 {
   // VZ: calling CreateStatusBar twice is an error - why anyone would do it?
-  wxCHECK_MSG( m_frameStatusBar == NULL, FALSE, 
+  wxCHECK_MSG( m_frameStatusBar == NULL, FALSE,
                "recreating status bar in wxFrame" );
 
   m_frameStatusBar = OnCreateStatusBar(number, style, id,
@@ -449,48 +449,29 @@ void wxFrame::PositionStatusBar()
 
 void wxFrame::SetMenuBar(wxMenuBar *menu_bar)
 {
-  if (!menu_bar)
-  {
-    m_frameMenuBar = NULL;
-    return;
-  }
-  
-  if (menu_bar->m_menuBarFrame)
-   return;
+    if (!menu_bar)
+    {
+        m_frameMenuBar = NULL;
+        return;
+    }
 
-  int i;
-  HMENU menu = CreateMenu();
+    wxCHECK_RET( !menu_bar->GetFrame(), "this menubar is already attached" );
 
-  for (i = 0; i < menu_bar->m_menuCount; i ++)
-  {
-    HMENU popup = (HMENU)menu_bar->m_menus[i]->m_hMenu;
-    //
-    // After looking Bounds Checker result, it seems that all
-    // menus must be individually destroyed. So, don't reset m_hMenu,
-    // to  allow ~wxMenu to do the job.
-    //
-    menu_bar->m_menus[i]->m_savehMenu = (WXHMENU) popup;
-    // Uncommenting for the moment... JACS
-    menu_bar->m_menus[i]->m_hMenu = 0;
-    AppendMenu(menu, MF_POPUP | MF_STRING, (UINT)popup, menu_bar->m_titles[i]);
-  }
+    if (m_frameMenuBar)
+        delete m_frameMenuBar;
 
-  menu_bar->m_hMenu = (WXHMENU)menu;
-  if (m_frameMenuBar)
-    delete m_frameMenuBar;
+    m_hMenu = menu_bar->Create();
 
-  this->m_hMenu = (WXHMENU) menu;
+    if ( !m_hMenu )
+        return;
 
-  DWORD err = 0;
-  if (!SetMenu((HWND) GetHWND(), menu))
-  {
-#ifdef __WIN32__
-    err = GetLastError();
-#endif
-  }
+    if ( !::SetMenu((HWND)GetHWND(), (HMENU)m_hMenu) )
+    {
+        wxLogLastError("SetMenu");
+    }
 
-  m_frameMenuBar = menu_bar;
-  menu_bar->m_menuBarFrame = this;
+    m_frameMenuBar = menu_bar;
+    menu_bar->Attach(this);
 }
 
 #if 0
@@ -650,10 +631,10 @@ bool wxFrame::MSWOnPaint()
       // Hold a pointer to the dc so long as the OnPaint() message
       // is being processed
       HDC cdc = BeginPaint((HWND) GetHWND(), &ps);
-      
+
       // Erase background before painting or we get white background
       this->MSWDefWindowProc(WM_ICONERASEBKGND,(WORD)(LONG) ps.hdc,0L);
-      
+
       if (the_icon)
       {
         RECT rect;
@@ -798,7 +779,7 @@ bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
   if (m_acceleratorTable.Ok() &&
           ::TranslateAccelerator((HWND) GetHWND(), (HACCEL) m_acceleratorTable.GetHACCEL(), (MSG *)pMsg))
     return TRUE;
-  
+
   return FALSE;
 }
 
@@ -820,7 +801,7 @@ void wxFrame::OnSize(wxSizeEvent& event)
   {
     wxWindow *win = (wxWindow *)node->Data();
     if ( !win->IsKindOf(CLASSINFO(wxFrame))  &&
-         !win->IsKindOf(CLASSINFO(wxDialog)) && 
+         !win->IsKindOf(CLASSINFO(wxDialog)) &&
          (win != GetStatusBar()) &&
          (win != GetToolBar()) )
     {

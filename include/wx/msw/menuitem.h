@@ -55,15 +55,20 @@ public:
 
   // accessors (some more are inherited from wxOwnerDrawn or are below)
   bool              IsSeparator() const { return m_idItem == ID_SEPARATOR;  }
-  bool              IsEnabled()   const { return m_bEnabled;  }
-  bool              IsChecked()   const { return m_bChecked;  }
+  bool              IsEnabled()   const { return m_bEnabled;                }
+  bool              IsChecked()   const { return m_bChecked;                }
+  bool              IsSubMenu()   const { return GetSubMenu() != NULL;      }
 
   int               GetId()       const { return m_idItem;    }
   const wxString&   GetHelp()     const { return m_strHelp;   }
   wxMenu           *GetSubMenu()  const { return m_pSubMenu;  }
 
+  // the id for a popup menu is really its menu handle (as required by
+  // ::AppendMenu() API)
+  int               GetRealId()   const;
+
   // operations
-  void SetName(const wxString& strName) { m_strName = strName; }
+  void SetName(const wxString& strName);
   void SetHelp(const wxString& strHelp) { m_strHelp = strHelp; }
 
   void Enable(bool bDoEnable = TRUE);
