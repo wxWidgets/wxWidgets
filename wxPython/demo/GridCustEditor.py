@@ -46,7 +46,8 @@ class MyCellEditor(wxPyGridCellEditor):
         PaintBackground and do something meaningful there.
         """
         self.log.write("MyCellEditor: SetSize %s\n" % rect)
-        self._tc.SetDimensions(rect.x, rect.y, rect.width+2, rect.height+2)
+        self._tc.SetDimensions(rect.x, rect.y, rect.width+2, rect.height+2,
+                               wxSIZE_ALLOW_MINUS_ONE)
 
 
     def Show(self, show, attr):

@@ -4,6 +4,13 @@ from wxPython.wx import *
 #---------------------------------------------------------------------------
 
 class TestPanel(wxPanel):
+    def OnSetFocus(self, evt):
+        print "OnSetFocus"
+        evt.Skip()
+    def OnKillFocus(self, evt):
+        print "OnKillFocus"
+        evt.Skip()
+
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
         self.log = log
@@ -13,6 +20,8 @@ class TestPanel(wxPanel):
         t1.SetInsertionPoint(0)
         EVT_TEXT(self, 10, self.EvtText)
         EVT_CHAR(t1, self.EvtChar)
+        EVT_SET_FOCUS(t1, self.OnSetFocus)
+        EVT_KILL_FOCUS(t1, self.OnKillFocus)
 
 
         l2 = wxStaticText(self, -1, "Passsword")
