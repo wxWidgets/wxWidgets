@@ -13,6 +13,12 @@ wxMSW:
 OTHER CHANGES
 -------------
 
+2.2.5
+-----
+
+- wxTree/ListCtrl position fix (Mike Oliver <oliver@math.ucla.edu>)
+- Italian translations updated 
+
 2.2.4
 -----
 
