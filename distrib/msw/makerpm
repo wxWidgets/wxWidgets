@@ -74,7 +74,6 @@ dospinwxmgl()
 {
   echo Making wxMGL RPMs...
   RPM_ROOT=$WXDEST/wxmgl/rpm-root
-  export MGL_ROOT=/usr/lib/mgl5
 
   if [ ! -d $WXDEST ]; then
     mkdir $WXDEST
