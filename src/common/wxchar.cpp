@@ -354,6 +354,16 @@ WXDLLEXPORT FILE * wxFreopen(const wxChar *path, const wxChar *mode, FILE *strea
   return freopen(wxConvFile.cWX2MB(path), wxConvLibc.cWX2MB(mode), stream);
 }
 
+WXDLLEXPORT int wxRemove(const wxChar *path)
+{
+  return remove(wxConvFile.cWX2MB(path));
+}
+
+WXDLLEXPORT int wxRename(const wxChar *oldpath, const wxChar *newpath)
+{
+  return rename(wxConvFile.cWX2MB(oldpath), wxConvFile.cWX2MB(newpath));
+}
+
 int WXDLLEXPORT wxPrintf(const wxChar *fmt, ...)
 {
   va_list argptr;
