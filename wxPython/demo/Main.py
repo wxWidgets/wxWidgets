@@ -461,7 +461,7 @@ class wxPythonDemo(wx.Frame):
 
 
         # add the windows to the splitter and split it.
-        splitter2.SplitHorizontally(self.nb, self.log, 450)
+        splitter2.SplitHorizontally(self.nb, self.log, 425)
         splitter.SplitVertically(self.tree, splitter2, 180)
 
         splitter.SetMinimumPaneSize(20)
