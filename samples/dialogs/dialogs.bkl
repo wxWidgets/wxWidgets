@@ -9,4 +9,8 @@
         <rc-file>dialogs.rc</rc-file>
     </exe>
 
+    <wx-data id="data">
+        <files>tips.txt</files>
+    </wx-data>
+
 </makefile>
