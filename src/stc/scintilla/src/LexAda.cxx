@@ -321,7 +321,7 @@ static bool IsValidIdentifier(const SString& identifier) {
 	// First character can't be '_', so initialize the flag to true
 	bool lastWasUnderscore = true;
 
-	int length = identifier.length();
+	size_t length = identifier.length();
 
 	// Zero-length identifiers are not valid (these can occur inside labels)
 	if (length == 0) {
@@ -334,7 +334,7 @@ static bool IsValidIdentifier(const SString& identifier) {
 	}
 
 	// Check for only valid characters and no double underscores
-	for (int i = 0; i < length; i++) {
+	for (size_t i = 0; i < length; i++) {
 		if (!IsWordCharacter(identifier[i]) ||
 		        (identifier[i] == '_' && lastWasUnderscore)) {
 			return false;
@@ -355,8 +355,8 @@ static bool IsValidNumber(const SString& number) {
 	int hashPos = number.search("#");
 	bool seenDot = false;
 
-	int i = 0;
-	int length = number.length();
+	size_t i = 0;
+	size_t length = number.length();
 
 	if (length == 0)
 		return false; // Just in case
