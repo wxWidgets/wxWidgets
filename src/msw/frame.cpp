@@ -692,9 +692,7 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
         PositionToolBar();
 #endif // wxUSE_TOOLBAR
 
-        wxSizeEvent event(wxSize(x, y), m_windowId);
-        event.SetEventObject( this );
-        processed = GetEventHandler()->ProcessEvent(event);
+        processed = wxWindow::HandleSize(x, y, id);
     }
 
     return processed;

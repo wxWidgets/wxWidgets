@@ -3775,9 +3775,13 @@ bool wxWindowMSW::HandleMove(int x, int y)
     return GetEventHandler()->ProcessEvent(event);
 }
 
-bool wxWindowMSW::HandleSize(int w, int h, WXUINT WXUNUSED(flag))
+bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h),
+                             WXUINT WXUNUSED(flag))
 {
-    wxSizeEvent event(wxSize(w, h), m_windowId);
+    // don't use w and h parameters as they specify the client size while
+    // according to the docs EVT_SIZE handler is supposed to receive the total
+    // size
+    wxSizeEvent event(GetSize(), m_windowId);
     event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
