@@ -1,0 +1,133 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        moviectrl.tex
+%% Purpose:     wxMovieCtrl docs
+%% Author:      Ryan Norton <wxprojects@comcast.net>
+%% Modified by:
+%% Created:     11/7/2004
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Ryan Norton
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxMovieCtrl}}\label{wxmoviectrl}
+
+PRELIMINARY
+
+Plays movies - Currently Windows and Mac only.
+
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}
+
+\wxheading{Include files}
+
+<wx/moviectrl.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxMovieCtrl::wxMovieCtrl}\label{wxmoviectrlwxmoviectrl}
+
+\func{}{wxMovieCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{fileName}, \param{const wxString\& }{label = wxT("")}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
+
+
+\func{}{wxMovieCtrl}{\void}
+
+Contructors
+
+\docparam{parent}{parent of this control.  Must not be NULL.}
+\docparam{id}{id to use for events}
+\docparam{fileName}{File the movie is located at.}
+\docparam{label}{Control label - possible caption for the movie.}
+\docparam{pos}{Position to put control at.}
+\docparam{size}{Size to put the control at and to stretch movie to.}
+\docparam{style}{Optional styles.}
+\docparam{name}{Window name.}
+
+
+\membersection{wxMovieCtrl::Create}\label{wxmoviectrlcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{fileName}, \param{const wxString\& }{label = wxT("")}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
+
+Creates this control.  Returns \tt{false} if it can't load the movie located at \tt{fileName}
+
+
+\docparam{parent}{parent of this control.  Must not be NULL.}
+\docparam{id}{id to use for events}
+\docparam{fileName}{File the movie is located at.}
+\docparam{label}{Control label - possible caption for the movie.}
+\docparam{pos}{Position to put control at.}
+\docparam{size}{Size to put the control at and to stretch movie to.}
+\docparam{style}{Optional styles.}
+\docparam{name}{Window name.}
+
+
+\membersection{wxMovieCtrl::GetPlaybackRate}\label{wxmoviectrlgetplaybackrate}
+
+\func{double}{GetPlaybackRate}{\void}
+
+Obtains the current playback speed of the movie. 1.0 equals normal speed, 0.5 half, etc.
+
+
+\membersection{wxMovieCtrl::GetState}\label{wxmoviectrlgetstate}
+
+\func{wxMovieCtrlState}{GetState}{\void}
+
+Obtains the state the playback of the movie is in - 
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxMOVIECTRL\_STOPPED}}{The movie has stopped.}
+\twocolitem{{\bf wxMOVIECTRL\_PAUSED}}{The movie is paused.}
+\twocolitem{{\bf wxMOVIECTRL\_PLAYING}}{The movie is currently playing.}
+\end{twocollist}
+
+
+\membersection{wxMovieCtrl::Length}\label{wxmoviectrllength}
+
+\func{wxTimeSpan}{Length}{\void}
+
+Obtains the length - the total amount of time the movie has
+
+
+\membersection{wxMovieCtrl::Pause}\label{wxmoviectrlpause}
+
+\func{bool}{Pause}{\void}
+
+Pauses playback of the movie.
+
+
+\membersection{wxMovieCtrl::Play}\label{wxmoviectrlplay}
+
+\func{bool}{Play}{\void}
+
+Resumes playback of the movie.
+
+
+\membersection{wxMovieCtrl::Seek}\label{wxmoviectrlseek}
+
+\func{bool}{Seek}{\param{const wxTimeSpan\& }{where}}
+
+Seeks to a position within the movie.
+
+
+\membersection{wxMovieCtrl::SetPlaybackRate}\label{wxmoviectrlsetplaybackrate}
+
+\func{bool}{SetPlaybackRate}{\param{double }{dRate}}
+
+Sets the current playback speed of the movie. 1.0 equals normal speed, 0.5 half, etc.
+
+
+\membersection{wxMovieCtrl::Stop}\label{wxmoviectrlstop}
+
+\func{bool}{Stop}{\void}
+
+Stops the movie and rewinds the movie to the start.
+
+
+\membersection{wxMovieCtrl::Tell}\label{wxmoviectrltell}
+
+\func{wxTimeSpan}{Tell}{\void}
+
+Obtains the current position in time within the movie.

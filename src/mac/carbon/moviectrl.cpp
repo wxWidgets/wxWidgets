@@ -76,6 +76,8 @@ public:
             else
             {
                 Stop();
+                ::GoToBeginningOfMovie(m_movie);
+                wxASSERT( ::GetMoviesError() == noErr );
                 wxMovieEvent theEvent(wxEVT_MOVIE_FINISHED, m_parent->GetId());
                 m_parent->GetParent()->ProcessEvent(theEvent);
             }
@@ -234,7 +236,7 @@ bool wxMovieCtrl::Stop()
     if(::GetMoviesError() != noErr)
         return false;
     
-    ::GoToEndOfMovie(m_movie);
+    ::GoToBeginningOfMovie(m_movie);
     return ::GetMoviesError() == noErr;
 }
 
