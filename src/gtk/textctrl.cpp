@@ -604,6 +604,13 @@ void wxTextCtrl::WriteText( const wxString &text )
         gtk_editable_delete_selection( GTK_EDITABLE(m_text) );
         wxGtkTextInsert(m_text, m_defaultStyle, text.c_str(), text.Len());
 
+        // we called wxGtkTextInsert with correct font, no need to do anything
+        // in UpdateFontIfNeeded() any longer
+        if ( !text.empty() )
+        {
+            m_updateFont = TRUE;
+        }
+
         // Bring editable's cursor back uptodate.
         SET_EDITABLE_POS(m_text, gtk_text_get_point( GTK_TEXT(m_text) ));
 #endif // GTK 1.x/2.0
