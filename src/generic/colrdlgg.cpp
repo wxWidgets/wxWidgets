@@ -187,7 +187,11 @@ void wxGenericColourDialog::OnMouseEvent(wxMouseEvent& event)
       int ptr = (int)(selX + selY*8);
       OnCustomColourClick(ptr);
     }
+    else
+        event.Skip();
   }
+  else
+      event.Skip();
 }
 
 void wxGenericColourDialog::OnPaint(wxPaintEvent& event)
