@@ -118,18 +118,18 @@ bool MyApp::OnInit()
 {
     wxImage::AddHandler(new wxPNGHandler);
 
+    // create the main application window
+    MyFrame *frame = new MyFrame(_T("wxSplashScreen sample application"));
+
     wxBitmap bitmap;
     if (bitmap.LoadFile(_T("splash.png"), wxBITMAP_TYPE_PNG))
     {
         new wxSplashScreen(bitmap,
             wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
-            6000, NULL, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+            6000, frame, wxID_ANY, wxDefaultPosition, wxDefaultSize,
             wxSIMPLE_BORDER|wxSTAY_ON_TOP);
     }
     wxYield();
-
-    // create the main application window
-    MyFrame *frame = new MyFrame(_T("wxSplashScreen sample application"));
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
