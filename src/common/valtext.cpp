@@ -294,7 +294,7 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
 		wxBell();
 		return;
 	}
-	if ( (m_validatorStyle & wxFILTER_NUMERIC) && !isdigit(keyCode) && keyCode != '.' )
+	if ( (m_validatorStyle & wxFILTER_NUMERIC) && !isdigit(keyCode) && keyCode != '.' && keyCode != '-')
 	{
 		wxBell();
 		return;
@@ -309,6 +309,7 @@ static bool wxIsNumeric(const wxString& val)
 	for ( i = 0; i < (int)val.Length(); i++)
 	{
 		if ((!isdigit(val[i])) && (val[i] != '.'))
+		  if(!(i == 0) && (val[i] == '-'))
 			return FALSE;
 	}
 	return TRUE;
