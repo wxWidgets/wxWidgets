@@ -1779,7 +1779,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             case LVN_COLUMNCLICK:
             case LVN_ITEMCHANGED:
             case LVN_ITEMCHANGING:
-                if ( item != -1 )
+                if ( iItem != -1 )
                 {
                     if ( iItem >= GetItemCount() )
                     {
