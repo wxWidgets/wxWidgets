@@ -10,8 +10,8 @@
 # Use FINAL=1 argument to nmake to build final version with no debugging
 # info
 
-# Set WXDIR for your system
-WXDIR = j:\dev\wx2\wxWindows
+# Set and environment variable to point to WXDIR for your system
+WXDIR = $(WXWIN)
 
 WXUSINGDLL=0
 
