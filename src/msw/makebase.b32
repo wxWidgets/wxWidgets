@@ -44,7 +44,7 @@ PERIPH_CLEAN_TARGET=clean_zlib clean_regex $(PERIPH_CLEAN_TARGET)
 DUMMY=dummy
 !else
 DUMMY=dummydll
-LIBS= cw32mti import32 ole2w32 odbc32 zlib winpng jpeg tiff regex
+LIBS= cw32mti import32 ole2w32 odbc32 zlib regex
 !endif
 
 LIBTARGET=$(WXLIB)
@@ -58,95 +58,97 @@ MSWDIR=.
 DOCDIR = $(WXDIR)\docs
 
 COMMONOBJS = \
-    $(MSWDIR)\appcmn.obj \
-		$(MSWDIR)\clntdata.obj \
-		$(MSWDIR)\cmdline.obj \
-		$(MSWDIR)\config.obj \
-		$(MSWDIR)\datacmn.obj \
-		$(MSWDIR)\datetime.obj \
-		$(MSWDIR)\datstrm.obj \
-		$(MSWDIR)\db.obj \
-		$(MSWDIR)\dbtable.obj \
-		$(MSWDIR)\dircmn.obj \
-		$(MSWDIR)\dynarray.obj \
-		$(MSWDIR)\dynlib.obj \
-		$(MSWDIR)\dynload.obj \
-		$(MSWDIR)\encconv.obj \
-		$(MSWDIR)\event.obj \
-		$(MSWDIR)\extended.obj \
-		$(MSWDIR)\ffile.obj \
-		$(MSWDIR)\file.obj \
-		$(MSWDIR)\fileconf.obj \
-		$(MSWDIR)\filefn.obj \
-		$(MSWDIR)\filename.obj \
-		$(MSWDIR)\filesys.obj \
-		$(MSWDIR)\fontmap.obj \
-		$(MSWDIR)\fs_inet.obj \
-		$(MSWDIR)\fs_mem.obj \
-		$(MSWDIR)\fs_zip.obj \
-		$(MSWDIR)\ftp.obj \
-		$(MSWDIR)\hash.obj \
-		$(MSWDIR)\hashmap.obj \
-		$(MSWDIR)\http.obj \
-		$(MSWDIR)\intl.obj \
-		$(MSWDIR)\ipcbase.obj \
-		$(MSWDIR)\list.obj \
-		$(MSWDIR)\log.obj \
-		$(MSWDIR)\longlong.obj \
-		$(MSWDIR)\memory.obj \
-		$(MSWDIR)\mimecmn.obj \
-		$(MSWDIR)\module.obj \
-		$(MSWDIR)\msgout.obj \
-		$(MSWDIR)\mstream.obj \
-		$(MSWDIR)\object.obj \
-		$(MSWDIR)\process.obj \
-		$(MSWDIR)\protocol.obj \
-		$(MSWDIR)\regex.obj \
-		$(MSWDIR)\sckaddr.obj \
-		$(MSWDIR)\sckfile.obj \
-		$(MSWDIR)\sckipc.obj \
-		$(MSWDIR)\sckstrm.obj \
-		$(MSWDIR)\socket.obj \
-		$(MSWDIR)\strconv.obj \
-		$(MSWDIR)\stream.obj \
-		$(MSWDIR)\string.obj \
-		$(MSWDIR)\sysopt.obj \
-		$(MSWDIR)\textbuf.obj \
-		$(MSWDIR)\textfile.obj \
-		$(MSWDIR)\timercmn.obj \
-		$(MSWDIR)\tokenzr.obj \
-		$(MSWDIR)\txtstrm.obj \
-		$(MSWDIR)\unzip.obj \
-		$(MSWDIR)\url.obj \
-		$(MSWDIR)\utilscmn.obj \
-		$(MSWDIR)\variant.obj \
-		$(MSWDIR)\wfstream.obj \
-		$(MSWDIR)\wxchar.obj \
-		$(MSWDIR)\zipstrm.obj \
-		$(MSWDIR)\zstream.obj \
-		$(MSWDIR)\init.obj
+    $(OBJ_PATH)\appcmn.obj \
+		$(OBJ_PATH)\clntdata.obj \
+		$(OBJ_PATH)\cmdline.obj \
+		$(OBJ_PATH)\config.obj \
+		$(OBJ_PATH)\datetime.obj \
+		$(OBJ_PATH)\datstrm.obj \
+		$(OBJ_PATH)\db.obj \
+		$(OBJ_PATH)\dbtable.obj \
+		$(OBJ_PATH)\dircmn.obj \
+		$(OBJ_PATH)\dynarray.obj \
+		$(OBJ_PATH)\dynlib.obj \
+		$(OBJ_PATH)\dynload.obj \
+		$(OBJ_PATH)\encconv.obj \
+		$(OBJ_PATH)\event.obj \
+		$(OBJ_PATH)\extended.obj \
+		$(OBJ_PATH)\ffile.obj \
+		$(OBJ_PATH)\file.obj \
+		$(OBJ_PATH)\fileconf.obj \
+		$(OBJ_PATH)\filefn.obj \
+		$(OBJ_PATH)\filename.obj \
+		$(OBJ_PATH)\filesys.obj \
+		$(OBJ_PATH)\fontmap.obj \
+		$(OBJ_PATH)\fs_inet.obj \
+		$(OBJ_PATH)\fs_mem.obj \
+		$(OBJ_PATH)\fs_zip.obj \
+		$(OBJ_PATH)\ftp.obj \
+		$(OBJ_PATH)\hash.obj \
+		$(OBJ_PATH)\hashmap.obj \
+		$(OBJ_PATH)\http.obj \
+		$(OBJ_PATH)\intl.obj \
+		$(OBJ_PATH)\ipcbase.obj \
+		$(OBJ_PATH)\list.obj \
+		$(OBJ_PATH)\log.obj \
+		$(OBJ_PATH)\longlong.obj \
+		$(OBJ_PATH)\memory.obj \
+		$(OBJ_PATH)\mimecmn.obj \
+		$(OBJ_PATH)\module.obj \
+		$(OBJ_PATH)\msgout.obj \
+		$(OBJ_PATH)\mstream.obj \
+		$(OBJ_PATH)\object.obj \
+		$(OBJ_PATH)\process.obj \
+		$(OBJ_PATH)\protocol.obj \
+		$(OBJ_PATH)\regex.obj \
+		$(OBJ_PATH)\sckaddr.obj \
+		$(OBJ_PATH)\sckfile.obj \
+		$(OBJ_PATH)\sckipc.obj \
+		$(OBJ_PATH)\sckstrm.obj \
+		$(OBJ_PATH)\socket.obj \
+		$(OBJ_PATH)\strconv.obj \
+		$(OBJ_PATH)\stream.obj \
+		$(OBJ_PATH)\string.obj \
+		$(OBJ_PATH)\sysopt.obj \
+		$(OBJ_PATH)\textbuf.obj \
+		$(OBJ_PATH)\textfile.obj \
+		$(OBJ_PATH)\timercmn.obj \
+		$(OBJ_PATH)\tokenzr.obj \
+		$(OBJ_PATH)\txtstrm.obj \
+		$(OBJ_PATH)\unzip.obj \
+		$(OBJ_PATH)\url.obj \
+		$(OBJ_PATH)\utilscmn.obj \
+		$(OBJ_PATH)\variant.obj \
+		$(OBJ_PATH)\wfstream.obj \
+		$(OBJ_PATH)\wxchar.obj \
+		$(OBJ_PATH)\zipstrm.obj \
+		$(OBJ_PATH)\zstream.obj \
+		$(OBJ_PATH)\init.obj
 
-MSWOBJS = $(MSWDIR)\dde.obj \
-		$(MSWDIR)\dir.obj \
-		$(MSWDIR)\gsocket.obj \
-		$(MSWDIR)\gsockmsw.obj \
-		$(MSWDIR)\main.obj \
-		$(MSWDIR)\mimetype.obj \
-		$(MSWDIR)\regconf.obj \
-		$(MSWDIR)\registry.obj \
-		$(MSWDIR)\snglinst.obj \
-		$(MSWDIR)\thread.obj \
-		$(MSWDIR)\utils.obj \
-		$(MSWDIR)\utilsexc.obj \
-		$(MSWDIR)\volume.obj
+MSWOBJS = $(OBJ_PATH)\dde.obj \
+		$(OBJ_PATH)\dir.obj \
+		$(OBJ_PATH)\gsocket.obj \
+		$(OBJ_PATH)\gsockmsw.obj \
+		$(OBJ_PATH)\main.obj \
+		$(OBJ_PATH)\mimetype.obj \
+		$(OBJ_PATH)\regconf.obj \
+		$(OBJ_PATH)\registry.obj \
+		$(OBJ_PATH)\snglinst.obj \
+		$(OBJ_PATH)\thread.obj \
+		$(OBJ_PATH)\utils.obj \
+		$(OBJ_PATH)\utilsexc.obj \
+		$(OBJ_PATH)\volume.obj
 
 OBJECTS = $(COMMONOBJS) $(MSWOBJS)
 
 default:    wx
 
-wx:    $(ARCHINCDIR)\wx makesetuph makearchsetuph $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+wx:    $(ARCHINCDIR)\wx makesetuph makearchsetuph makeoutdir $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 
 all:    wx
+
+makeoutdir:
+    -mkdir $(OBJ_PATH)
 
 # Copy the in-CVS setup0.h to setup.h if necessary
 makesetuph:
@@ -193,170 +195,168 @@ dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\includ
 version.res:
     brc32 -r -i$(WXDIR)\include\ $(MSWDIR)\version.rc
 
-$(MSWDIR)\dde.obj: $(MSWDIR)\dde.$(SRCSUFF)
+$(OBJ_PATH)\dde.obj: $(MSWDIR)\dde.$(SRCSUFF)
 
-$(MSWDIR)\dir.obj: $(MSWDIR)\dir.$(SRCSUFF)
+$(OBJ_PATH)\dir.obj: $(MSWDIR)\dir.$(SRCSUFF)
 
-$(MSWDIR)\gsocket.obj: $(MSWDIR)\gsocket.c
+$(OBJ_PATH)\gsocket.obj: $(MSWDIR)\gsocket.c
 
-$(MSWDIR)\gsockmsw.obj: $(MSWDIR)\gsockmsw.c
+$(OBJ_PATH)\gsockmsw.obj: $(MSWDIR)\gsockmsw.c
 
-$(MSWDIR)\main.obj: $(MSWDIR)\main.$(SRCSUFF)
+$(OBJ_PATH)\main.obj: $(MSWDIR)\main.$(SRCSUFF)
 
-$(MSWDIR)\mimetype.obj: $(MSWDIR)\mimetype.$(SRCSUFF)
+$(OBJ_PATH)\mimetype.obj: $(MSWDIR)\mimetype.$(SRCSUFF)
 
-$(MSWDIR)\regconf.obj: $(MSWDIR)\regconf.$(SRCSUFF)
+$(OBJ_PATH)\regconf.obj: $(MSWDIR)\regconf.$(SRCSUFF)
 
-$(MSWDIR)\registry.obj: $(MSWDIR)\registry.$(SRCSUFF)
+$(OBJ_PATH)\registry.obj: $(MSWDIR)\registry.$(SRCSUFF)
 
-$(MSWDIR)\snglinst.obj: $(MSWDIR)\snglinst.$(SRCSUFF)
+$(OBJ_PATH)\snglinst.obj: $(MSWDIR)\snglinst.$(SRCSUFF)
 
-$(MSWDIR)\thread.obj: $(MSWDIR)\thread.$(SRCSUFF)
+$(OBJ_PATH)\thread.obj: $(MSWDIR)\thread.$(SRCSUFF)
 
-$(MSWDIR)\utils.obj: $(MSWDIR)\utils.$(SRCSUFF)
+$(OBJ_PATH)\utils.obj: $(MSWDIR)\utils.$(SRCSUFF)
 
-$(MSWDIR)\utilsexc.obj: $(MSWDIR)\utilsexc.$(SRCSUFF)
+$(OBJ_PATH)\utilsexc.obj: $(MSWDIR)\utilsexc.$(SRCSUFF)
 
-$(MSWDIR)\volume.obj: $(MSWDIR)\volume.$(SRCSUFF)
+$(OBJ_PATH)\volume.obj: $(MSWDIR)\volume.$(SRCSUFF)
 
 
 
 ########################################################
 # Common objects (always compiled)
 
-$(MSWDIR)\appcmn.obj: $(COMMDIR)\appcmn.$(SRCSUFF)
+$(OBJ_PATH)\appcmn.obj: $(COMMDIR)\appcmn.$(SRCSUFF)
 
-$(MSWDIR)\clntdata.obj: $(COMMDIR)\clntdata.$(SRCSUFF)
+$(OBJ_PATH)\clntdata.obj: $(COMMDIR)\clntdata.$(SRCSUFF)
 
-$(MSWDIR)\cmdline.obj: $(COMMDIR)\cmdline.$(SRCSUFF)
+$(OBJ_PATH)\cmdline.obj: $(COMMDIR)\cmdline.$(SRCSUFF)
 
-$(MSWDIR)\config.obj: $(COMMDIR)\config.$(SRCSUFF)
+$(OBJ_PATH)\config.obj: $(COMMDIR)\config.$(SRCSUFF)
 
-$(MSWDIR)\datacmn.obj: $(COMMDIR)\datacmn.$(SRCSUFF)
+$(OBJ_PATH)\datetime.obj: $(COMMDIR)\datetime.$(SRCSUFF)
 
-$(MSWDIR)\datetime.obj: $(COMMDIR)\datetime.$(SRCSUFF)
+$(OBJ_PATH)\datstrm.obj: $(COMMDIR)\datstrm.$(SRCSUFF)
 
-$(MSWDIR)\datstrm.obj: $(COMMDIR)\datstrm.$(SRCSUFF)
+$(OBJ_PATH)\db.obj: $(COMMDIR)\db.$(SRCSUFF)
 
-$(MSWDIR)\db.obj: $(COMMDIR)\db.$(SRCSUFF)
+$(OBJ_PATH)\dbtable.obj: $(COMMDIR)\dbtable.$(SRCSUFF)
 
-$(MSWDIR)\dbtable.obj: $(COMMDIR)\dbtable.$(SRCSUFF)
+$(OBJ_PATH)\dircmn.obj: $(COMMDIR)\dircmn.$(SRCSUFF)
 
-$(MSWDIR)\dircmn.obj: $(COMMDIR)\dircmn.$(SRCSUFF)
+$(OBJ_PATH)\dynarray.obj: $(COMMDIR)\dynarray.$(SRCSUFF)
 
-$(MSWDIR)\dynarray.obj: $(COMMDIR)\dynarray.$(SRCSUFF)
+$(OBJ_PATH)\dynlib.obj: $(COMMDIR)\dynlib.$(SRCSUFF)
 
-$(MSWDIR)\dynlib.obj: $(COMMDIR)\dynlib.$(SRCSUFF)
+$(OBJ_PATH)\dynload.obj: $(COMMDIR)\dynload.$(SRCSUFF)
 
-$(MSWDIR)\dynload.obj: $(COMMDIR)\dynload.$(SRCSUFF)
+$(OBJ_PATH)\encconv.obj: $(COMMDIR)\encconv.$(SRCSUFF)
 
-$(MSWDIR)\encconv.obj: $(COMMDIR)\encconv.$(SRCSUFF)
+$(OBJ_PATH)\event.obj: $(COMMDIR)\event.$(SRCSUFF)
 
-$(MSWDIR)\event.obj: $(COMMDIR)\event.$(SRCSUFF)
+$(OBJ_PATH)\extended.obj: $(COMMDIR)\extended.c
 
-$(MSWDIR)\extended.obj: $(COMMDIR)\extended.c
+$(OBJ_PATH)\ffile.obj: $(COMMDIR)\ffile.$(SRCSUFF)
 
-$(MSWDIR)\ffile.obj: $(COMMDIR)\ffile.$(SRCSUFF)
+$(OBJ_PATH)\file.obj: $(COMMDIR)\file.$(SRCSUFF)
 
-$(MSWDIR)\file.obj: $(COMMDIR)\file.$(SRCSUFF)
+$(OBJ_PATH)\fileconf.obj: $(COMMDIR)\fileconf.$(SRCSUFF)
 
-$(MSWDIR)\fileconf.obj: $(COMMDIR)\fileconf.$(SRCSUFF)
+$(OBJ_PATH)\filefn.obj: $(COMMDIR)\filefn.$(SRCSUFF)
 
-$(MSWDIR)\filefn.obj: $(COMMDIR)\filefn.$(SRCSUFF)
+$(OBJ_PATH)\filename.obj: $(COMMDIR)\filename.$(SRCSUFF)
 
-$(MSWDIR)\filename.obj: $(COMMDIR)\filename.$(SRCSUFF)
+$(OBJ_PATH)\filesys.obj: $(COMMDIR)\filesys.$(SRCSUFF)
 
-$(MSWDIR)\filesys.obj: $(COMMDIR)\filesys.$(SRCSUFF)
+$(OBJ_PATH)\fontmap.obj: $(COMMDIR)\fontmap.$(SRCSUFF)
 
-$(MSWDIR)\fontmap.obj: $(COMMDIR)\fontmap.$(SRCSUFF)
+$(OBJ_PATH)\fs_inet.obj: $(COMMDIR)\fs_inet.$(SRCSUFF)
 
-$(MSWDIR)\fs_inet.obj: $(COMMDIR)\fs_inet.$(SRCSUFF)
+$(OBJ_PATH)\fs_mem.obj: $(COMMDIR)\fs_mem.$(SRCSUFF)
 
-$(MSWDIR)\fs_mem.obj: $(COMMDIR)\fs_mem.$(SRCSUFF)
+$(OBJ_PATH)\fs_zip.obj: $(COMMDIR)\fs_zip.$(SRCSUFF)
 
-$(MSWDIR)\fs_zip.obj: $(COMMDIR)\fs_zip.$(SRCSUFF)
+$(OBJ_PATH)\ftp.obj: $(COMMDIR)\ftp.$(SRCSUFF)
 
-$(MSWDIR)\ftp.obj: $(COMMDIR)\ftp.$(SRCSUFF)
+$(OBJ_PATH)\hash.obj: $(COMMDIR)\hash.$(SRCSUFF)
 
-$(MSWDIR)\hash.obj: $(COMMDIR)\hash.$(SRCSUFF)
+$(OBJ_PATH)\hashmap.obj: $(COMMDIR)\hashmap.$(SRCSUFF)
 
-$(MSWDIR)\hashmap.obj: $(COMMDIR)\hashmap.$(SRCSUFF)
+$(OBJ_PATH)\http.obj: $(COMMDIR)\http.$(SRCSUFF)
 
-$(MSWDIR)\http.obj: $(COMMDIR)\http.$(SRCSUFF)
+$(OBJ_PATH)\intl.obj: $(COMMDIR)\intl.$(SRCSUFF)
 
-$(MSWDIR)\intl.obj: $(COMMDIR)\intl.$(SRCSUFF)
+$(OBJ_PATH)\ipcbase.obj: $(COMMDIR)\ipcbase.$(SRCSUFF)
 
-$(MSWDIR)\ipcbase.obj: $(COMMDIR)\ipcbase.$(SRCSUFF)
+$(OBJ_PATH)\list.obj: $(COMMDIR)\list.$(SRCSUFF)
 
-$(MSWDIR)\list.obj: $(COMMDIR)\list.$(SRCSUFF)
+$(OBJ_PATH)\log.obj: $(COMMDIR)\log.$(SRCSUFF)
 
-$(MSWDIR)\log.obj: $(COMMDIR)\log.$(SRCSUFF)
+$(OBJ_PATH)\longlong.obj: $(COMMDIR)\longlong.$(SRCSUFF)
 
-$(MSWDIR)\longlong.obj: $(COMMDIR)\longlong.$(SRCSUFF)
+$(OBJ_PATH)\memory.obj: $(COMMDIR)\memory.$(SRCSUFF)
 
-$(MSWDIR)\memory.obj: $(COMMDIR)\memory.$(SRCSUFF)
+$(OBJ_PATH)\mimecmn.obj: $(COMMDIR)\mimecmn.$(SRCSUFF)
 
-$(MSWDIR)\mimecmn.obj: $(COMMDIR)\mimecmn.$(SRCSUFF)
+$(OBJ_PATH)\module.obj: $(COMMDIR)\module.$(SRCSUFF)
 
-$(MSWDIR)\module.obj: $(COMMDIR)\module.$(SRCSUFF)
+$(OBJ_PATH)\msgout.obj: $(COMMDIR)\msgout.$(SRCSUFF)
 
-$(MSWDIR)\msgout.obj: $(COMMDIR)\msgout.$(SRCSUFF)
+$(OBJ_PATH)\mstream.obj: $(COMMDIR)\mstream.$(SRCSUFF)
 
-$(MSWDIR)\mstream.obj: $(COMMDIR)\mstream.$(SRCSUFF)
+$(OBJ_PATH)\object.obj: $(COMMDIR)\object.$(SRCSUFF)
 
-$(MSWDIR)\object.obj: $(COMMDIR)\object.$(SRCSUFF)
+$(OBJ_PATH)\process.obj: $(COMMDIR)\process.$(SRCSUFF)
 
-$(MSWDIR)\process.obj: $(COMMDIR)\process.$(SRCSUFF)
+$(OBJ_PATH)\protocol.obj: $(COMMDIR)\protocol.$(SRCSUFF)
 
-$(MSWDIR)\protocol.obj: $(COMMDIR)\protocol.$(SRCSUFF)
+$(OBJ_PATH)\regex.obj: $(COMMDIR)\regex.$(SRCSUFF)
 
-$(MSWDIR)\regex.obj: $(COMMDIR)\regex.$(SRCSUFF)
+$(OBJ_PATH)\sckaddr.obj: $(COMMDIR)\sckaddr.$(SRCSUFF)
 
-$(MSWDIR)\sckaddr.obj: $(COMMDIR)\sckaddr.$(SRCSUFF)
+$(OBJ_PATH)\sckfile.obj: $(COMMDIR)\sckfile.$(SRCSUFF)
 
-$(MSWDIR)\sckfile.obj: $(COMMDIR)\sckfile.$(SRCSUFF)
+$(OBJ_PATH)\sckipc.obj: $(COMMDIR)\sckipc.$(SRCSUFF)
 
-$(MSWDIR)\sckipc.obj: $(COMMDIR)\sckipc.$(SRCSUFF)
+$(OBJ_PATH)\sckstrm.obj: $(COMMDIR)\sckstrm.$(SRCSUFF)
 
-$(MSWDIR)\sckstrm.obj: $(COMMDIR)\sckstrm.$(SRCSUFF)
+$(OBJ_PATH)\socket.obj: $(COMMDIR)\socket.$(SRCSUFF)
 
-$(MSWDIR)\socket.obj: $(COMMDIR)\socket.$(SRCSUFF)
+$(OBJ_PATH)\strconv.obj: $(COMMDIR)\strconv.$(SRCSUFF)
 
-$(MSWDIR)\strconv.obj: $(COMMDIR)\strconv.$(SRCSUFF)
+$(OBJ_PATH)\stream.obj: $(COMMDIR)\stream.$(SRCSUFF)
 
-$(MSWDIR)\stream.obj: $(COMMDIR)\stream.$(SRCSUFF)
+$(OBJ_PATH)\string.obj: $(COMMDIR)\string.$(SRCSUFF)
 
-$(MSWDIR)\string.obj: $(COMMDIR)\string.$(SRCSUFF)
+$(OBJ_PATH)\sysopt.obj: $(COMMDIR)\sysopt.$(SRCSUFF)
 
-$(MSWDIR)\sysopt.obj: $(COMMDIR)\sysopt.$(SRCSUFF)
+$(OBJ_PATH)\textbuf.obj: $(COMMDIR)\textbuf.$(SRCSUFF)
 
-$(MSWDIR)\textbuf.obj: $(COMMDIR)\textbuf.$(SRCSUFF)
+$(OBJ_PATH)\textfile.obj: $(COMMDIR)\textfile.$(SRCSUFF)
 
-$(MSWDIR)\textfile.obj: $(COMMDIR)\textfile.$(SRCSUFF)
+$(OBJ_PATH)\timercmn.obj: $(COMMDIR)\timercmn.$(SRCSUFF)
 
-$(MSWDIR)\timercmn.obj: $(COMMDIR)\timercmn.$(SRCSUFF)
+$(OBJ_PATH)\tokenzr.obj: $(COMMDIR)\tokenzr.$(SRCSUFF)
 
-$(MSWDIR)\tokenzr.obj: $(COMMDIR)\tokenzr.$(SRCSUFF)
+$(OBJ_PATH)\txtstrm.obj: $(COMMDIR)\txtstrm.$(SRCSUFF)
 
-$(MSWDIR)\txtstrm.obj: $(COMMDIR)\txtstrm.$(SRCSUFF)
+$(OBJ_PATH)\unzip.obj: $(COMMDIR)\unzip.c
 
-$(MSWDIR)\unzip.obj: $(COMMDIR)\unzip.c
+$(OBJ_PATH)\url.obj: $(COMMDIR)\url.$(SRCSUFF)
 
-$(MSWDIR)\url.obj: $(COMMDIR)\url.$(SRCSUFF)
+$(OBJ_PATH)\utilscmn.obj: $(COMMDIR)\utilscmn.$(SRCSUFF)
 
-$(MSWDIR)\utilscmn.obj: $(COMMDIR)\utilscmn.$(SRCSUFF)
+$(OBJ_PATH)\variant.obj: $(COMMDIR)\variant.$(SRCSUFF)
 
-$(MSWDIR)\variant.obj: $(COMMDIR)\variant.$(SRCSUFF)
+$(OBJ_PATH)\wfstream.obj: $(COMMDIR)\wfstream.$(SRCSUFF)
 
-$(MSWDIR)\wfstream.obj: $(COMMDIR)\wfstream.$(SRCSUFF)
+$(OBJ_PATH)\wxchar.obj: $(COMMDIR)\wxchar.$(SRCSUFF)
 
-$(MSWDIR)\wxchar.obj: $(COMMDIR)\wxchar.$(SRCSUFF)
+$(OBJ_PATH)\zipstrm.obj: $(COMMDIR)\zipstrm.$(SRCSUFF)
 
-$(MSWDIR)\zipstrm.obj: $(COMMDIR)\zipstrm.$(SRCSUFF)
+$(OBJ_PATH)\zstream.obj: $(COMMDIR)\zstream.$(SRCSUFF)
 
-$(MSWDIR)\zstream.obj: $(COMMDIR)\zstream.$(SRCSUFF)
-
-$(MSWDIR)\init.obj: $(COMMDIR)\init.$(SRCSUFF)
+$(OBJ_PATH)\init.obj: $(COMMDIR)\init.$(SRCSUFF)
 
 
 
@@ -376,15 +376,7 @@ all_execs:
     ${MAKE} -f makefile.b32 all_execs
     cd $(WXDIR)\src\msw
 
-png:    $(CFG)
-        cd $(WXDIR)\src\png
-        ${MAKE} -f makefile.b32 wxUSE_GUI=0
-        cd $(WXDIR)\src\msw
 
-clean_png:
-        cd $(WXDIR)\src\png
-        ${MAKE} -f makefile.b32 clean
-        cd $(WXDIR)\src\msw
 
 zlib:   $(CFG)
         cd $(WXDIR)\src\zlib
@@ -396,15 +388,6 @@ clean_zlib:
         ${MAKE} -f makefile.b32 clean
         cd $(WXDIR)\src\msw
 
-jpeg:    $(CFG)
-        cd $(WXDIR)\src\jpeg
-        ${MAKE} -f makefile.b32 wxUSE_GUI=0
-        cd $(WXDIR)\src\msw
-
-clean_jpeg:
-        cd $(WXDIR)\src\jpeg
-        ${MAKE} -f makefile.b32 clean
-        cd $(WXDIR)\src\msw
 
 regex:   $(CFG)
         cd $(WXDIR)\src\regex
@@ -416,15 +399,7 @@ clean_regex:
         ${MAKE} -f makefile.b32 clean
         cd $(WXDIR)\src\msw
 
-tiff:   $(CFG)
-        cd $(WXDIR)\src\tiff
-        ${MAKE} -f makefile.b32 wxUSE_GUI=0 lib
-        cd $(WXDIR)\src\msw
 
-clean_tiff:
-        cd $(WXDIR)\src\tiff
-        ${MAKE} -f makefile.b32 clean
-        cd $(WXDIR)\src\msw
 
 $(CFG): makebase.b32
     copy &&!
@@ -455,16 +430,21 @@ $(WIN95FLAG)
 ! $(CFG)
 
 clean: $(PERIPH_CLEAN_TARGET)
-    -erase $(WXLIBDIR)\wx.tds
-    -erase $(WXLIBDIR)\wx.il?
-    -erase *.obj
-    -erase *.pch
-    -erase *.csm
-    -erase "wx32.#??"
+    -$(RM) $(WXLIBDIR)\*.tds
+    -$(RM) $(WXLIBDIR)\*.il?
+    -$(RM) $(OBJ_PATH)\*.obj
+    -$(RM) $(OBJ_PATH)\*.pch
+    -$(RM) $(OBJ_PATH)\*.csm
+    -$(RM) $(OBJ_PATH)\"wx32.#??"
 
-cleanall: clean
+cleancfg:
+    -$(RM) $(OBJ_PATH)\*.cfg
+
+
+cleanall: clean cleancfg
+
 
 self:
     cd $(WXWIN)\distrib\msw\tmake
-    tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
-    copy makefile.$(MFTYPE) $(WXWIN)\src\msw
+    perl -S tmake -tb32base wxwin.pro -o makebase.b32
+    copy makebase.b32 $(WXWIN)\src\msw

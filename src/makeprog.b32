@@ -101,8 +101,11 @@ $(TARGETRES)
 .c.obj:
 	bcc32 $(CPPFLAGS) -P- -c -n$(EXEDIR) {$< }
 
+!if "$(wxUSE_GUI)" != "0"
+#make resources only with GUI apps
 $(TARGETRES) :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
     brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include /i$(WXDIR)\contrib\include -fo$(EXEDIR)\$(<B).res $(TARGET)
+!endif
 
 clean:
         -$(RM) $(EXEDIR)\*.obj

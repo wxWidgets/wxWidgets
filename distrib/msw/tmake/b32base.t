@@ -18,7 +18,7 @@
 
         $isCFile = $file =~ /\.c$/;
         $file =~ s/cp?p?$/obj/;
-        $obj = "\$(MSWDIR)\\" . $file . " ";
+        $obj = "\$(OBJ_PATH)\\" . $file . " ";
         $project{"WXCOMMONOBJS"} .= $obj;
         $project{"WXCOBJS"} .= $obj if $isCFile;
     }
@@ -30,7 +30,7 @@
 
         my $isOleObj = $wxMSW{$file} =~ /\bO\b/;
         $file =~ s/cp?p?$/obj/;
-        my $obj = "\$(MSWDIR)\\" . $file . " ";
+        my $obj = "\$(OBJ_PATH)\\" . $file . " ";
 
         $project{"WXMSWOBJS"} .= $obj;
         if ( $isOleObj ) {
@@ -43,7 +43,7 @@
     foreach $file (sort keys %wxBase) {
         $isCFile = $file =~ /\.c$/;
         $file =~ s/cp?p?$/obj/;
-        $project{"WXCOMMONOBJS"} .= "\$(MSWDIR)\\" . $file . " ";
+        $project{"WXCOMMONOBJS"} .= "\$(OBJ_PATH)\\" . $file . " ";
         $project{"WXCOBJS"} .= $obj if $isCFile;
     }
 #$}
@@ -92,7 +92,7 @@ PERIPH_CLEAN_TARGET=clean_zlib clean_regex $(PERIPH_CLEAN_TARGET)
 DUMMY=dummy
 !else
 DUMMY=dummydll
-LIBS= cw32mti import32 ole2w32 odbc32 zlib winpng jpeg tiff regex
+LIBS= cw32mti import32 ole2w32 odbc32 zlib regex
 !endif
 
 LIBTARGET=$(WXLIB)
@@ -114,9 +114,12 @@ OBJECTS = $(COMMONOBJS) $(MSWOBJS)
 
 default:    wx
 
-wx:    $(ARCHINCDIR)\wx makesetuph makearchsetuph $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+wx:    $(ARCHINCDIR)\wx makesetuph makearchsetuph makeoutdir $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 
 all:    wx
+
+makeoutdir:
+    -mkdir $(OBJ_PATH)
 
 # Copy the in-CVS setup0.h to setup.h if necessary
 makesetuph:
@@ -168,9 +171,11 @@ version.res:
     my @objs = split;
     foreach (@objs) {
         $text .= $_ . ": ";
-        if ( $project{"WXOLEOBJS"} =~ /\Q$_/ ) { s/MSWDIR/OLEDIR/; }
         $suffix = $project{"WXCOBJS"} =~ /\Q$_/ ? "c" : '$(SRCSUFF)';
         s/obj$/$suffix/;
+        s/OBJ_PATH/MSWDIR/;
+        if ( $project{"WXOLEOBJS"} =~ /\Q$_/ ) { s/MSWDIR/OLEDIR/; }
+ 
         $text .= $_ . "\n\n";
     }
 #$}
@@ -184,7 +189,7 @@ version.res:
     foreach (@objs) {
         $text .= $_ . ": ";
         $suffix = $project{"WXCOBJS"} =~ /\Q$_/ ? "c" : '$(SRCSUFF)';
-        s/MSWDIR/COMMDIR/;
+        s/OBJ_PATH/COMMDIR/;
         s/obj$/$suffix/;
         $text .= $_ . "\n\n";
     }
@@ -206,15 +211,7 @@ all_execs:
     ${MAKE} -f makefile.b32 all_execs
     cd $(WXDIR)\src\msw
 
-png:    $(CFG)
-        cd $(WXDIR)\src\png
-        ${MAKE} -f makefile.b32 wxUSE_GUI=0
-        cd $(WXDIR)\src\msw
 
-clean_png:
-        cd $(WXDIR)\src\png
-        ${MAKE} -f makefile.b32 clean
-        cd $(WXDIR)\src\msw
 
 zlib:   $(CFG)
         cd $(WXDIR)\src\zlib
@@ -226,15 +223,6 @@ clean_zlib:
         ${MAKE} -f makefile.b32 clean
         cd $(WXDIR)\src\msw
 
-jpeg:    $(CFG)
-        cd $(WXDIR)\src\jpeg
-        ${MAKE} -f makefile.b32 wxUSE_GUI=0
-        cd $(WXDIR)\src\msw
-
-clean_jpeg:
-        cd $(WXDIR)\src\jpeg
-        ${MAKE} -f makefile.b32 clean
-        cd $(WXDIR)\src\msw
 
 regex:   $(CFG)
         cd $(WXDIR)\src\regex
@@ -246,15 +234,7 @@ clean_regex:
         ${MAKE} -f makefile.b32 clean
         cd $(WXDIR)\src\msw
 
-tiff:   $(CFG)
-        cd $(WXDIR)\src\tiff
-        ${MAKE} -f makefile.b32 wxUSE_GUI=0 lib
-        cd $(WXDIR)\src\msw
 
-clean_tiff:
-        cd $(WXDIR)\src\tiff
-        ${MAKE} -f makefile.b32 clean
-        cd $(WXDIR)\src\msw
 
 $(CFG): makebase.b32
     copy &&!
@@ -285,16 +265,21 @@ $(WIN95FLAG)
 ! $(CFG)
 
 clean: $(PERIPH_CLEAN_TARGET)
-    -erase $(WXLIBDIR)\wx.tds
-    -erase $(WXLIBDIR)\wx.il?
-    -erase *.obj
-    -erase *.pch
-    -erase *.csm
-    -erase "wx32.#??"
+    -$(RM) $(WXLIBDIR)\*.tds
+    -$(RM) $(WXLIBDIR)\*.il?
+    -$(RM) $(OBJ_PATH)\*.obj
+    -$(RM) $(OBJ_PATH)\*.pch
+    -$(RM) $(OBJ_PATH)\*.csm
+    -$(RM) $(OBJ_PATH)\"wx32.#??"
 
-cleanall: clean
+cleancfg:
+    -$(RM) $(OBJ_PATH)\*.cfg
+
+
+cleanall: clean cleancfg
+
 
 self:
     cd $(WXWIN)\distrib\msw\tmake
-    tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
-    copy makefile.$(MFTYPE) $(WXWIN)\src\msw
+    perl -S tmake -tb32base wxwin.pro -o makebase.b32
+    copy makebase.b32 $(WXWIN)\src\msw
