@@ -104,17 +104,6 @@ void wxWindowMac::Init()
     // generic
     InitBase();
 
-    // MSW specific
-    m_doubleClickAllowed = 0;
-    m_winCaptured = FALSE;
-
-    m_isBeingDeleted = FALSE;
-
-    m_useCtl3D = FALSE;
-    m_mouseInWindow = FALSE;
-
-    m_xThumbSize = 0;
-    m_yThumbSize = 0;
     m_backgroundTransparent = FALSE;
 
     // as all windows are created with WS_VISIBLE style...
@@ -149,8 +138,6 @@ wxWindowMac::~wxWindowMac()
 
         }
     }
-
-    m_isBeingDeleted = TRUE;
 
 #ifndef __WXUNIVERSAL__
     // VS: make sure there's no wxFrame with last focus set to us:
@@ -800,25 +787,9 @@ bool wxWindowMac::Show(bool show)
     if ( !wxWindowBase::Show(show) )
         return FALSE;
 
-/*
-    WindowRef window = (WindowRef) MacGetRootWindow() ;
-    wxWindowMac* win = wxFindWinFromMacWindow( window ) ;
-    if ( win == NULL && win->m_isBeingDeleted )
-        return FALSE ;
-*/
     MacSuperShown( show ) ;
     Refresh() ;
-/*
-    if ( !show )
-    {
-        if ( win && !win->m_isBeingDeleted )
-            Refresh() ;
-    }
-    else
-    {
-        Refresh() ;
-    }
-*/
+
     return TRUE;
 }
 
@@ -1397,21 +1368,6 @@ void wxWindowMac::SetupColours()
 
 void wxWindowMac::OnIdle(wxIdleEvent& event)
 {
-/*
-   // Check if we need to send a LEAVE event
-   if (m_mouseInWindow)
-   {
-       POINT pt;
-       ::GetCursorPos(&pt);
-       if (::WindowFromPoint(pt) != (HWND) GetHWND())
-       {
-           // Generate a LEAVE event
-           m_mouseInWindow = FALSE;
-           MSWOnMouseLeave(pt.x, pt.y, 0);
-       }
-    }
-*/
-
     // This calls the UI-update mechanism (querying windows for
     // menu/toolbar/control state information)
     UpdateWindowUI();

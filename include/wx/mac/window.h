@@ -165,7 +165,6 @@ public:
 //    void SetHWND(WXHWND hWnd) { m_hWnd = hWnd; }
     virtual WXWidget GetHandle() const { return (WXWidget) NULL ; }
 
-    bool GetUseCtl3D() const { return m_useCtl3D; }
     bool GetTransparentBackground() const { return m_backgroundTransparent; }
     void SetTransparent(bool t = TRUE) { m_backgroundTransparent = t; }
 
@@ -256,8 +255,6 @@ public:
     static wxWindowMac*  s_lastMouseWindow ;
 private:
 protected:
-//    RgnHandle            m_macUpdateRgn ;
-//    bool                 m_macEraseOnRedraw ;
     wxBrush              m_macBackgroundBrush ;
     wxRegion             m_macVisibleRegion ;
     int                  m_x ;
@@ -272,18 +269,7 @@ protected:
     void                 MacCreateScrollBars( long style ) ;
     void                 MacRepositionScrollBars() ;
 
-    // additional (MSW specific) flags
-    bool                 m_useCtl3D:1; // Using CTL3D for this control
-    bool                 m_backgroundTransparent:1;
-    bool                 m_mouseInWindow:1;
-    bool                 m_doubleClickAllowed:1;
-    bool                 m_winCaptured:1;
-
-    // the size of one page for scrolling
-    int                  m_xThumbSize;
-    int                  m_yThumbSize;
-
-//    WXHMENU               m_hMenu; // Menu, if any
+    bool                 m_backgroundTransparent ;
 
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;
