@@ -64,6 +64,11 @@
     #include <richedit.h>
 #endif
 
+// old mingw32 doesn't define this
+#ifndef CFM_CHARSET
+    #define CFM_CHARSET 0x08000000
+#endif // CFM_CHARSET
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
