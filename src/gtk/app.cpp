@@ -438,7 +438,7 @@ void wxApp::SetTopWindow( wxWindow *win )
 
 bool wxApp::Initialize()
 {
-    wxBuffer = new char[BUFSIZ + 512];
+    wxBuffer = new wxChar[BUFSIZ + 512];
 
     wxClassInfo::InitializeClasses();
 
@@ -528,7 +528,7 @@ void wxApp::CleanUp()
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
     if (wxDebugContext::CountObjectsLeft() > 0)
     {
-        wxLogDebug("There were memory leaks.\n");
+        wxLogDebug(_T("There were memory leaks.\n"));
         wxDebugContext::Dump();
         wxDebugContext::PrintStatistics();
     }
@@ -563,7 +563,7 @@ int wxEntry( int argc, char *argv[] )
     if (!wxTheApp)
     {
         wxCHECK_MSG( wxApp::GetInitializerFunction(), -1,
-                     "wxWindows error: No initializer - use IMPLEMENT_APP macro.\n" );
+                     _T("wxWindows error: No initializer - use IMPLEMENT_APP macro.\n") );
 
         wxAppInitializerFunction app_ini = wxApp::GetInitializerFunction();
 
@@ -572,7 +572,7 @@ int wxEntry( int argc, char *argv[] )
         wxTheApp = (wxApp*) test_app;
     }
 
-    wxCHECK_MSG( wxTheApp, -1, "wxWindows error: no application object" );
+    wxCHECK_MSG( wxTheApp, -1, _T("wxWindows error: no application object") );
 
     wxTheApp->argc = argc;
     wxTheApp->argv = argv;
