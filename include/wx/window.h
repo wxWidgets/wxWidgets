@@ -102,8 +102,9 @@ public:
     // creating the window
     // -------------------
 
-        // default ctor
-    wxWindowBase() { InitBase(); }
+        // default ctor, initializes everything which can be initialized before
+        // Create()
+    wxWindowBase();
 
         // pseudo ctor (can't be virtual, called from ctor)
     bool CreateBase(wxWindowBase *parent,
@@ -1025,10 +1026,6 @@ protected:
     int                   m_minVirtualHeight;
     int                   m_maxVirtualWidth;
     int                   m_maxVirtualHeight;
-
-    // common part of all ctors: it is not virtual because it is called from
-    // ctor
-    void InitBase();
 
     // override this to change the default (i.e. used when no style is
     // specified) border for the window class
