@@ -835,6 +835,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/combobox.cpp
     src/gtk/control.cpp
     src/gtk/dialog.cpp
+    src/gtk/filedlg.cpp
     src/gtk/fontdlg.cpp
     src/gtk/frame.cpp
     src/gtk/gauge.cpp

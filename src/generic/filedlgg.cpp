@@ -20,7 +20,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_FILEDLG
+#if wxUSE_FILEDLG && !defined(__WXGTK24__)
 
 // NOTE : it probably also supports MAC, untested
 #if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__) && !defined(__OS2__)
@@ -1416,5 +1416,5 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxGenericFileDialog);
 
 #endif // USE_GENERIC_FILEDIALOG
 
-#endif // wxUSE_FILEDLG
+#endif // wxUSE_FILEDLG && !defined(__WXGTK24__)
 

@@ -32,8 +32,18 @@ public:
                  long style = 0,
                  const wxPoint& pos = wxDefaultPosition);
     
-    virtual void SetPath(const wxString& path);
+    virtual void GetPaths(wxArrayString& paths) const;
+    virtual void GetFilenames(wxArrayString& files) const;
     
+    virtual void SetMessage(const wxString& message);
+    virtual void SetPath(const wxString& path);
+    virtual void SetDirectory(const wxString& dir);
+    virtual void SetFilename(const wxString& name);
+    virtual void SetWildcard(const wxString& wildCard);
+    virtual void SetFilterIndex(int filterIndex);
+            void UpdateFromDialog();
+            void UpdateDialog();
+            void DoSetPath(const wxString& path);
 private:
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
 };

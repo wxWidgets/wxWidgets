@@ -2543,7 +2543,27 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             save_LIBS="$LIBS"
             CFLAGS="$CFLAGS $GTK_CFLAGS"
             LIBS="$LIBS $GTK_LIBS"
+            
             AC_CHECK_FUNCS([pango_font_family_is_monospace])
+            
+            dnl test if we have at least GTK+ 2.4:
+            AC_MSG_CHECKING([if GTK+ is version >= 2.4])
+            AC_TRY_COMPILE([
+                            #include <gtk/gtk.h>
+                           ],
+                           [
+                            #if !GTK_CHECK_VERSION(2,4,0)
+                            #error "Not GTK+ 2.4"
+                            #endif
+                           ],
+                           [
+                            AC_DEFINE(__WXGTK24__)
+                            AC_MSG_RESULT([yes])
+                           ],
+                           [
+                            AC_MSG_RESULT([no])
+                           ])
+            
             CFLAGS="$save_CFLAGS"
             LIBS="$save_LIBS"
         else

@@ -38,6 +38,7 @@ Unix:
 wxGTK:
 
 - fixed wxFileDialog::SetWildcard()
+- native file dialog is now used if available (Zbigniew Zagorski)
 
 wxMac:
 
