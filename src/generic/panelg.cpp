@@ -49,8 +49,10 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
   bool ret = wxWindow::Create(parent, id, pos, size, style, name);
 
   if ( ret ) {
+#ifndef __WXGTK__
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
     SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+#endif
   }
 
   return ret;

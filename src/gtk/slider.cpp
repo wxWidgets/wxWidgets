@@ -2,9 +2,8 @@
 // Name:        slider.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -100,6 +99,8 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
   
   PostCreation();
   
+  SetBackgroundColour( parent->GetBackgroundColour() );
+
   Show( TRUE );
     
   return TRUE;

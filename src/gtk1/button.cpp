@@ -72,6 +72,8 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
 
   PostCreation();
+  
+  SetBackgroundColour( parent->GetBackgroundColour() );
 
   Show( TRUE );
 
@@ -88,43 +90,46 @@ void wxButton::SetDefault(void)
 
 void wxButton::SetLabel( const wxString &label )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid button" );
+  
   wxControl::SetLabel( label );
-  GtkButton *bin = GTK_BUTTON( m_widget );
-  GtkLabel *g_label = GTK_LABEL( bin->child );
-  gtk_label_set( g_label, GetLabel() );
+  
+  gtk_label_set( GTK_LABEL( GTK_BUTTON(m_widget)->child ), GetLabel() );
 }
 
 void wxButton::Enable( bool enable )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid button" );
+  
   wxControl::Enable( enable );
-  GtkButton *bin = GTK_BUTTON( m_widget );
-  GtkWidget *label = bin->child;
-  gtk_widget_set_sensitive( label, enable );
+  
+  gtk_widget_set_sensitive( GTK_BUTTON(m_widget)->child, enable );
 }
 
 void wxButton::SetFont( const wxFont &font )
 {
-  if (((wxFont*)&font)->Ok())
-    m_font = font;
-  else
-    m_font = *wxSWISS_FONT;
-
-  GtkButton *bin = GTK_BUTTON( m_widget );
-  GtkWidget *label = bin->child;
+  wxCHECK_RET( m_widget != NULL, "invalid button" );
   
-  GtkStyle *style = (GtkStyle*) NULL;
-  if (!m_hasOwnStyle)
-  {
-    m_hasOwnStyle = TRUE;
-    style = gtk_style_copy( gtk_widget_get_style( label ) );
-  }
-  else
-  {
-    style = gtk_widget_get_style( label );
-  }
+  wxControl::SetFont( font );
   
-  gdk_font_unref( style->font );
-  style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
-  
-  gtk_widget_set_style( label, style );
+  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, 
+    gtk_style_ref(
+      gtk_widget_get_style( m_widget ) ) );
 }
+
+void wxButton::SetBackgroundColour( const wxColour &colour )
+{
+  return;
+
+  wxCHECK_RET( m_widget != NULL, "invalid button" );
+
+  wxControl::SetBackgroundColour( colour );
+  
+  if (!m_backgroundColour.Ok()) return;
+  
+  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, 
+    gtk_style_ref(
+      gtk_widget_get_style( m_widget ) ) );
+}
+
+

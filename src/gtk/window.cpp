@@ -1113,6 +1113,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   m_resizing = FALSE;
   m_windowValidator = (wxValidator *) NULL;
   m_hasOwnStyle = FALSE;
+  m_scrollGC = (GdkGC*) NULL;
 }
 
 void wxWindow::PostCreation()
@@ -1947,23 +1948,35 @@ wxColour wxWindow::GetBackgroundColour() const
   return m_backgroundColour;
 }
 
-void wxWindow::SetBackgroundColourHelper( GdkWindow *window )
-{
-  if (!m_backgroundColour.Ok()) return;
-  
-  m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
-  gdk_window_set_background( window, m_backgroundColour.GetColor() );
-  gdk_window_clear( window );
-}
-
 void wxWindow::SetBackgroundColour( const wxColour &colour )
 {
   wxCHECK_RET( m_widget != NULL, "invalid window" );
 
   m_backgroundColour = colour;
+  if (!m_backgroundColour.Ok()) return;
   
-  GtkWidget *widget = m_wxwindow == NULL ? m_widget : m_wxwindow;
-  SetBackgroundColourHelper( widget->window );
+  if (m_wxwindow)
+  {
+    GdkWindow *window = m_wxwindow->window;
+    m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+    gdk_window_set_background( window, m_backgroundColour.GetColor() );
+    gdk_window_clear( window );
+  }
+  else
+  {
+    GtkStyle *style = gtk_widget_get_style( m_widget );
+    if (!m_hasOwnStyle)
+    {
+      m_hasOwnStyle = TRUE;
+      style = gtk_style_copy( style );
+    }
+    
+    m_backgroundColour.CalcPixel( gdk_window_get_colormap( m_widget->window ) );
+    style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+    style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+
+    gtk_widget_set_style( m_widget, style );
+  }
 }
 
 wxColour wxWindow::GetForegroundColour() const
@@ -2136,15 +2149,11 @@ void wxWindow::SetFont( const wxFont &font )
   else
     m_font = *wxSWISS_FONT;
 
-  GtkStyle *style = (GtkStyle*) NULL;
+  GtkStyle *style = gtk_widget_get_style( m_widget );
   if (!m_hasOwnStyle)
   {
     m_hasOwnStyle = TRUE;
-    style = gtk_style_copy( gtk_widget_get_style( m_widget ) );
-  }
-  else
-  {
-    style = gtk_widget_get_style( m_widget );
+    style = gtk_style_copy( style );
   }
 
   gdk_font_unref( style->font );

@@ -2,9 +2,8 @@
 // Name:        region.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/98
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

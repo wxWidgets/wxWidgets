@@ -479,7 +479,9 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
 {
   if (!Ok()) return FALSE;
   
-  if (m_isMemDC)
+  wxClientDC *csrc = (wxClientDC*)source;
+  
+  if (csrc->m_isMemDC)
   {
     wxMemoryDC* srcDC = (wxMemoryDC*)source;
     GdkBitmap* bmap = srcDC->m_selected.GetBitmap();
@@ -496,7 +498,6 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
     }
   }
 
-  wxClientDC *csrc = (wxClientDC*)source;
   gdk_window_copy_area ( m_window, m_penGC,
     XLOG2DEV(xdest), YLOG2DEV(ydest),
     csrc->GetWindow(),

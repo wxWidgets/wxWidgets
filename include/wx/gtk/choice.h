@@ -74,6 +74,8 @@ class wxChoice: public wxControl
     void SetStringSelection( const wxString &string );
     
     void SetFont( const wxFont &font );
+    void SetBackgroundColour( const wxColour &colour );
+
 };
 
 #endif // __GTKCHOICEH__

@@ -2,9 +2,8 @@
 // Name:        radiobut.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -63,6 +62,7 @@ class wxRadioButton: public wxControl
     virtual bool GetValue(void) const;
     void SetFont( const wxFont &font );
     void Enable( bool enable );
+    void SetBackgroundColour( const wxColour &colour );
 };
 
 #endif // __GTKRADIOBUTTONH__

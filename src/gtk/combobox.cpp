@@ -78,12 +78,14 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id, const wxString& value,
   
   for (int i = 0; i < n; i++)
   {
-    GtkWidget *list_item;
-    list_item = gtk_list_item_new_with_label( choices[i] ); 
+    GtkWidget *list_item = gtk_list_item_new_with_label( choices[i] ); 
   
+    m_clientData.Append( (wxObject*)NULL );
+    
     gtk_container_add( GTK_CONTAINER(list), list_item );
     
-    m_clientData.Append( (wxObject*)NULL );
+    gtk_widget_realize( list_item );
+    gtk_widget_realize( GTK_BIN(list_item)->child );
     
     gtk_widget_show( list_item );
     
@@ -97,6 +99,12 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id, const wxString& value,
   
   if (!value.IsNull()) SetValue( value );
     
+  gtk_widget_realize( GTK_COMBO(m_widget)->list );
+  gtk_widget_realize( GTK_COMBO(m_widget)->entry );
+  gtk_widget_realize( GTK_COMBO(m_widget)->button );
+  
+  SetBackgroundColour( parent->GetBackgroundColour() );
+
   Show( TRUE );
     
   return TRUE;
@@ -104,6 +112,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id, const wxString& value,
 
 void wxComboBox::Clear(void)
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   gtk_list_clear_items( GTK_LIST(list), 0, Number() );
   
@@ -112,11 +122,15 @@ void wxComboBox::Clear(void)
 
 void wxComboBox::Append( const wxString &item )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   Append( item, (char*)NULL );
 }
 
 void wxComboBox::Append( const wxString &item, char *clientData )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   
   GtkWidget *list_item = gtk_list_item_new_with_label( item ); 
@@ -127,12 +141,9 @@ void wxComboBox::Append( const wxString &item, char *clientData )
     gtk_widget_set_style( bin->child, 
       gtk_style_ref(
         gtk_widget_get_style( m_widget ) ) ); 
-  }
-  
-  if (m_backgroundColour != wxNullColour)
-  {
-    GtkBin *bin = GTK_BIN( list_item );
-    SetBackgroundColourHelper( bin->child->window );
+    gtk_widget_set_style( GTK_WIDGET(bin),
+      gtk_style_ref(
+        gtk_widget_get_style( m_widget ) ) ); 
   }
   
   gtk_signal_connect( GTK_OBJECT(list_item), "select", 
@@ -147,6 +158,8 @@ void wxComboBox::Append( const wxString &item, char *clientData )
 
 void wxComboBox::Delete( int n )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   GtkList *listbox = GTK_LIST( GTK_COMBO(m_widget)->list );
   
   GList *child = g_list_nth( listbox->children, n );
@@ -172,6 +185,8 @@ void wxComboBox::Delete( int n )
 
 int wxComboBox::FindString( const wxString &item )
 {
+  wxCHECK_MSG( m_widget != NULL, -1, "invalid combobox" );
+  
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   
   GList *child = GTK_LIST(list)->children;
@@ -192,6 +207,8 @@ int wxComboBox::FindString( const wxString &item )
 
 char* wxComboBox::GetClientData( int n )
 {
+  wxCHECK_MSG( m_widget != NULL, (char*)NULL, "invalid combobox" );
+  
   wxNode *node = m_clientData.Nth( n );
   if (node) return (char*)node->Data();
   
@@ -202,6 +219,8 @@ char* wxComboBox::GetClientData( int n )
 
 void wxComboBox::SetClientData( int n, char * clientData )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   wxNode *node = m_clientData.Nth( n );
   if (node) node->SetData( (wxObject*) clientData );
   
@@ -210,6 +229,8 @@ void wxComboBox::SetClientData( int n, char * clientData )
 
 int wxComboBox::GetSelection(void) const
 {
+  wxCHECK_MSG( m_widget != NULL, -1, "invalid combobox" );
+  
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   
   GList *selection = GTK_LIST(list)->selection;
@@ -232,6 +253,8 @@ int wxComboBox::GetSelection(void) const
 
 wxString wxComboBox::GetString( int n ) const
 {
+  wxCHECK_MSG( m_widget != NULL, "", "invalid combobox" );
+  
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   
   GList *child = g_list_nth( GTK_LIST(list)->children, n );
@@ -249,6 +272,8 @@ wxString wxComboBox::GetString( int n ) const
 
 wxString wxComboBox::GetStringSelection(void) const
 {
+  wxCHECK_MSG( m_widget != NULL, "", "invalid combobox" );
+  
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   
   GList *selection = GTK_LIST(list)->selection;
@@ -266,6 +291,8 @@ wxString wxComboBox::GetStringSelection(void) const
 
 int wxComboBox::Number(void) const
 {
+  wxCHECK_MSG( m_widget != NULL, 0, "invalid combobox" );
+  
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   
   GList *child = GTK_LIST(list)->children;
@@ -276,12 +303,16 @@ int wxComboBox::Number(void) const
 
 void wxComboBox::SetSelection( int n )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   gtk_list_select_item( GTK_LIST(list), n );
 }
 
 void wxComboBox::SetStringSelection( const wxString &string )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   int res = FindString( string );
   if (res == -1) return;
   SetSelection( res );
@@ -296,6 +327,8 @@ wxString wxComboBox::GetValue(void) const
 
 void wxComboBox::SetValue( const wxString& value )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
   wxString tmp = "";
   if (!value.IsNull()) tmp = value;
@@ -304,6 +337,8 @@ void wxComboBox::SetValue( const wxString& value )
 
 void wxComboBox::Copy(void)
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
 #if (GTK_MINOR_VERSION == 1)
   gtk_editable_copy_clipboard( GTK_EDITABLE(entry) );
@@ -314,6 +349,8 @@ void wxComboBox::Copy(void)
 
 void wxComboBox::Cut(void)
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
 #if (GTK_MINOR_VERSION == 1)
   gtk_editable_cut_clipboard( GTK_EDITABLE(entry) );
@@ -324,6 +361,8 @@ void wxComboBox::Cut(void)
 
 void wxComboBox::Paste(void)
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
 #if (GTK_MINOR_VERSION == 1)
   gtk_editable_paste_clipboard( GTK_EDITABLE(entry) );
@@ -334,6 +373,8 @@ void wxComboBox::Paste(void)
 
 void wxComboBox::SetInsertionPoint( long pos )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
   int tmp = (int) pos;
   gtk_entry_set_position( GTK_ENTRY(entry), tmp );
@@ -341,6 +382,8 @@ void wxComboBox::SetInsertionPoint( long pos )
 
 void wxComboBox::SetInsertionPointEnd(void)
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
   int pos = GTK_ENTRY(entry)->text_length;
   SetInsertionPoint( pos-1 );
@@ -361,6 +404,8 @@ long wxComboBox::GetLastPosition(void) const
 
 void wxComboBox::Replace( long from, long to, const wxString& value )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
   gtk_editable_delete_text( GTK_EDITABLE(entry), (gint)from, (gint)to );
   if (value.IsNull()) return;
@@ -370,6 +415,8 @@ void wxComboBox::Replace( long from, long to, const wxString& value )
 
 void wxComboBox::Remove(long from, long to)
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
   gtk_editable_delete_text( GTK_EDITABLE(entry), (gint)from, (gint)to );
 }
@@ -388,7 +435,7 @@ void wxComboBox::OnSize( wxSizeEvent &event )
 {
   wxControl::OnSize( event );
   
-  int w = 22;
+  int w = 21;
   
   gtk_widget_set_usize( GTK_COMBO(m_widget)->entry, m_width-w-1, m_height );
   
@@ -398,6 +445,8 @@ void wxComboBox::OnSize( wxSizeEvent &event )
 
 void wxComboBox::SetFont( const wxFont &font )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
   wxWindow::SetFont( font );
    
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
@@ -433,15 +482,34 @@ bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
 
 void wxComboBox::SetBackgroundColour( const wxColour &colour )
 {
-  wxWindow::SetBackgroundColour( colour );
+  return;
+
+  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
   
-  GtkWidget *list = GTK_COMBO(m_widget)->list;
+  m_backgroundColour = colour;
+  if (!m_backgroundColour.Ok()) return;
   
-  GList *child = GTK_LIST(list)->children;
+  GtkStyle *style = gtk_widget_get_style( m_widget );
+  if (!m_hasOwnStyle)
+  {
+    m_hasOwnStyle = TRUE;
+    style = gtk_style_copy( gtk_widget_get_style( m_widget ) );
+  }
+  
+  style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+  style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+
+  gtk_widget_set_style( m_widget, style );
+
+  gtk_widget_set_style( GTK_COMBO(m_widget)->button, gtk_style_ref( style ) );
+  gtk_widget_set_style( GTK_COMBO(m_widget)->entry, gtk_style_ref( style ) );
+  gtk_widget_set_style( GTK_COMBO(m_widget)->list, gtk_style_ref( style ) );
+  
+  GList *child = GTK_LIST( GTK_COMBO(m_widget)->list )->children;
   while (child)
   {
-    GtkBin *bin = (GtkBin*) child->data;
-    SetBackgroundColourHelper( bin->child->window );
+    GtkWidget *item = GTK_WIDGET(child->data);
+    gtk_widget_set_style( item, gtk_style_ref( style ) );
     child = child->next;
   }
 }

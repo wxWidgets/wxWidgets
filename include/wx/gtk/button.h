@@ -60,6 +60,7 @@ class wxButton: public wxControl
     void SetLabel( const wxString &label );
     void Enable( bool enable );
     void SetFont( const wxFont &font );
+    void SetBackgroundColour( const wxColour &colour );
 };
 
 #endif // __GTKBUTTONH__

@@ -81,6 +81,7 @@ class wxRadioBox: public wxControl
     void SetNumberOfRowsOrCols( int n );
     
     void SetFont( const wxFont &font );
+    void SetBackgroundColour( const wxColour &colour );
     void OnSize( wxSizeEvent &event );
     
   // implementation    

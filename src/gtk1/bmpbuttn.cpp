@@ -2,7 +2,7 @@
 // Name:        bmpbuttn.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $id$
+// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -85,6 +85,8 @@ bool wxBitmapButton::Create(  wxWindow *parent, wxWindowID id, const wxBitmap &b
 
   PostCreation();
   
+  SetBackgroundColour( parent->GetBackgroundColour() );
+
   Show( TRUE );
     
   return TRUE;
@@ -100,16 +102,22 @@ void wxBitmapButton::SetDefault(void)
 
 void wxBitmapButton::SetLabel( const wxString &label )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid button" );
+
   wxControl::SetLabel( label );
 }
 
 wxString wxBitmapButton::GetLabel(void) const
 {
+  wxCHECK_MSG( m_widget != NULL, "", "invalid button" );
+
   return wxControl::GetLabel();
 }
 
 void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid button" );
+
   m_bitmap = bitmap;
   if (!m_bitmap.Ok()) return;
   
@@ -121,7 +129,4 @@ void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
   
   gtk_pixmap_set( g_pixmap, m_bitmap.GetPixmap(), mask );
 }
-
-
-
 

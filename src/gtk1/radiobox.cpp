@@ -2,9 +2,8 @@
 // Name:        radiobox.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -127,6 +126,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
   
   SetLabel( title );
   
+  SetBackgroundColour( parent->GetBackgroundColour() );
+
   Show( TRUE );
     
   return TRUE;
@@ -168,6 +169,8 @@ void wxRadioBox::OnSize( wxSizeEvent &event )
 
 bool wxRadioBox::Show( bool show )
 {
+  wxCHECK_MSG( m_widget != NULL, FALSE, "invalid radiobox" );
+  
   wxWindow::Show( show );
 
   wxNode *node = m_boxes.First();
@@ -185,6 +188,8 @@ bool wxRadioBox::Show( bool show )
 
 int wxRadioBox::FindString( const wxString &s ) const
 {
+  wxCHECK_MSG( m_widget != NULL, -1, "invalid radiobox" );
+  
   int count = 0;
   
   wxNode *node = m_boxes.First();
@@ -204,6 +209,8 @@ int wxRadioBox::FindString( const wxString &s ) const
 
 void wxRadioBox::SetSelection( int n )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+  
   wxNode *node = m_boxes.Nth( n );
   
   if (!node)
@@ -219,6 +226,8 @@ void wxRadioBox::SetSelection( int n )
 
 int wxRadioBox::GetSelection(void) const
 {
+  wxCHECK_MSG( m_widget != NULL, -1, "invalid radiobox" );
+  
   int count = 0;
   
   wxNode *node = m_boxes.First();
@@ -237,6 +246,8 @@ int wxRadioBox::GetSelection(void) const
 
 wxString wxRadioBox::GetString( int n ) const
 {
+  wxCHECK_MSG( m_widget != NULL, "", "invalid radiobox" );
+  
   wxNode *node = m_boxes.Nth( n );
   
   if (!node)
@@ -253,18 +264,24 @@ wxString wxRadioBox::GetString( int n ) const
 
 wxString wxRadioBox::GetLabel( int item ) const
 {
+  wxCHECK_MSG( m_widget != NULL, "", "invalid radiobox" );
+  
   return GetString( item );
 }
 
 void wxRadioBox::SetLabel( const wxString& label )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+  
   wxControl::SetLabel( label );
-  GtkFrame *frame = GTK_FRAME( m_widget );
-  gtk_frame_set_label( frame, wxControl::GetLabel() );
+  
+  gtk_frame_set_label( GTK_FRAME(m_widget), wxControl::GetLabel() );
 }
 
 void wxRadioBox::SetLabel( int item, const wxString& label )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+  
   wxNode *node = m_boxes.Nth( item );
   
   if (!node)
@@ -376,7 +393,9 @@ void wxRadioBox::SetNumberOfRowsOrCols( int WXUNUSED(n) )
 
 void wxRadioBox::SetFont( const wxFont &font )
 {
-  wxWindow::SetFont( font );
+  wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+  
+  wxControl::SetFont( font );
    
   wxNode *node = m_boxes.First();
   while (node)
@@ -384,6 +403,29 @@ void wxRadioBox::SetFont( const wxFont &font )
     GtkButton *button = GTK_BUTTON( node->Data() );
     
     gtk_widget_set_style( button->child, 
+      gtk_style_ref(
+        gtk_widget_get_style( m_widget ) ) ); 
+    
+    node = node->Next();
+  }
+}
+
+void wxRadioBox::SetBackgroundColour( const wxColour &colour )
+{
+  return;
+
+  wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+  
+  wxControl::SetBackgroundColour( colour );
+  
+  if (!m_backgroundColour.Ok()) return;
+  
+  wxNode *node = m_boxes.First();
+  while (node)
+  {
+    GtkWidget *button = GTK_WIDGET( node->Data() );
+    
+    gtk_widget_set_style( button, 
       gtk_style_ref(
         gtk_widget_get_style( m_widget ) ) ); 
     

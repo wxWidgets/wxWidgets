@@ -237,8 +237,6 @@ public:
   void ConnectDnDWidget( GtkWidget *widget );
   void DisconnectDnDWidget( GtkWidget *widget );
   
-  void SetBackgroundColourHelper( GdkWindow *window );
-
   void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
     const wxSize &size, long style, const wxString &name );
   void PostCreation();

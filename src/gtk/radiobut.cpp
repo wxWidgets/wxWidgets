@@ -2,9 +2,8 @@
 // Name:        radiobut.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -70,6 +69,8 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
 
 void wxRadioButton::SetLabel( const wxString& label )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
+  
   wxControl::SetLabel( label );
   GtkButton *bin = GTK_BUTTON( m_widget );
   GtkLabel *g_label = GTK_LABEL( bin->child );
@@ -78,46 +79,50 @@ void wxRadioButton::SetLabel( const wxString& label )
 
 void wxRadioButton::SetValue( bool val )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
+  
   gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), val );
 }
 
 bool wxRadioButton::GetValue(void) const
 {
+  wxCHECK_MSG( m_widget != NULL, FALSE, "invalid radiobutton" );
+  
   return GTK_TOGGLE_BUTTON(m_widget)->active;
 }
 
 void wxRadioButton::Enable( bool enable )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
+  
   wxControl::Enable( enable );
-  GtkButton *bin = GTK_BUTTON( m_widget );
-  GtkWidget *label = bin->child;
-  gtk_widget_set_sensitive( label, enable );
+  
+  gtk_widget_set_sensitive( GTK_BUTTON(m_widget)->child, enable );
 }
 
 void wxRadioButton::SetFont( const wxFont &font )
 {
-  if (((wxFont*)&font)->Ok())
-    m_font = font;
-  else
-    m_font = *wxSWISS_FONT;
+  wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
   
-  GtkButton *bin = GTK_BUTTON( m_widget );
-  GtkWidget *label = bin->child;
+  wxControl::SetFont( font );
   
-  GtkStyle *style = (GtkStyle*) NULL;
-  if (!m_hasOwnStyle)
-  {
-    m_hasOwnStyle = TRUE;
-    style = gtk_style_copy( gtk_widget_get_style( label ) );
-  }
-  else
-  {
-    style = gtk_widget_get_style( label );
-  }
+  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, 
+    gtk_style_ref(
+      gtk_widget_get_style( m_widget ) ) );
+}
+
+void wxRadioButton::SetBackgroundColour( const wxColour &colour )
+{
+  return;
+
+  wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
+
+  wxControl::SetBackgroundColour( colour );
   
-  gdk_font_unref( style->font );
-  style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+  if (!m_backgroundColour.Ok()) return;
   
-  gtk_widget_set_style( label, style );
+  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, 
+    gtk_style_ref(
+      gtk_widget_get_style( m_widget ) ) );
 }
 

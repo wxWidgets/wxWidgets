@@ -67,7 +67,11 @@ bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label
     
   PostCreation();
   
+  gtk_widget_realize( GTK_BUTTON( m_widget )->child );
+  
   SetLabel( label );
+
+  SetBackgroundColour( parent->GetBackgroundColour() );
 
   Show( TRUE );
     
@@ -76,6 +80,8 @@ bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label
 
 void wxCheckBox::SetValue( bool state )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid checkbox" );
+
   if (state)
     gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), GTK_STATE_ACTIVE );
   else
@@ -84,49 +90,52 @@ void wxCheckBox::SetValue( bool state )
 
 bool wxCheckBox::GetValue() const
 {
-  GtkToggleButton *tb = GTK_TOGGLE_BUTTON(m_widget);
-  return tb->active;
+  wxCHECK_MSG( m_widget != NULL, FALSE, "invalid checkbox" );
+
+  return GTK_TOGGLE_BUTTON(m_widget)->active;
 }
 
 void wxCheckBox::SetLabel( const wxString& label )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid checkbox" );
+
   wxControl::SetLabel( label );
-  GtkButton *bin = GTK_BUTTON( m_widget );
-  GtkLabel *g_label = GTK_LABEL( bin->child );
-  gtk_label_set( g_label, GetLabel() );
+  
+  gtk_label_set( GTK_LABEL( GTK_BUTTON(m_widget)->child ), GetLabel() );
 }
 
 void wxCheckBox::Enable( bool enable )
 {
+  wxCHECK_RET( m_widget != NULL, "invalid checkbox" );
+
   wxControl::Enable( enable );
-  GtkButton *bin = GTK_BUTTON( m_widget );
-  GtkWidget *label = bin->child;
-  gtk_widget_set_sensitive( label, enable );
+  
+  gtk_widget_set_sensitive( GTK_BUTTON(m_widget)->child, enable );
 }
 
 void wxCheckBox::SetFont( const wxFont &font )
 {
-  if (((wxFont*)&font)->Ok())
-    m_font = font;
-  else
-    m_font = *wxSWISS_FONT;
+  wxCHECK_RET( m_widget != NULL, "invalid checkbox" );
+
+  wxControl::SetFont( font );
   
-  GtkButton *bin = GTK_BUTTON( m_widget );
-  GtkWidget *label = bin->child;
-  
-  GtkStyle *style = (GtkStyle*) NULL;
-  if (!m_hasOwnStyle)
-  {
-    m_hasOwnStyle = TRUE;
-    style = gtk_style_copy( gtk_widget_get_style( label ) );
-  }
-  else
-  {
-    style = gtk_widget_get_style( label );
-  }
-  
-  gdk_font_unref( style->font );
-  style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
-  
-  gtk_widget_set_style( label, style );
+  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, 
+    gtk_style_ref(
+      gtk_widget_get_style( m_widget ) ) );
 }
+
+void wxCheckBox::SetBackgroundColour( const wxColour &colour )
+{
+  return;
+
+  wxCHECK_RET( m_widget != NULL, "invalid checkbox" );
+
+  wxControl::SetBackgroundColour( colour );
+  
+  if (!m_backgroundColour.Ok()) return;
+  
+  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, 
+    gtk_style_ref(
+      gtk_widget_get_style( m_widget ) ) );
+}
+

@@ -62,6 +62,7 @@ class wxCheckBox: public wxControl
     void SetLabel( const wxString& label );
     void SetFont( const wxFont &font );
     void Enable( bool enable );
+    void SetBackgroundColour( const wxColour &colour );
 };
 
 #endif // __GTKCHECKBOXH__
