@@ -47,6 +47,8 @@
             $wxHTML{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "U" ) {
             $wxUNIX{$fields[0]} = $fields[2];
+        } elsif ( $fields[1] eq "B" ) {
+            $wxBase{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "W" ) {
             $wxWXINCLUDE{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "P" ) {
@@ -55,7 +57,7 @@
             $wxHTMLINCLUDE{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "F" ) {
             $wxMOTIFINCLUDE{$fields[0]} = $fields[2];
-        } elsif ( $fields[1] eq "B" ) {
+        } elsif ( $fields[1] eq "9" ) {
             $wxMSWINCLUDE{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "K" ) {
             $wxGTKINCLUDE{$fields[0]} = $fields[2];

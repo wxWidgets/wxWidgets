@@ -7,6 +7,7 @@
 #
 # Format of this file: TAB separated columns. The first column contains the
 # filename, the second a letter corresonding a directory:
+#  B	/src/common but only needed for the wxBase compilation
 #  G	/src/generic
 #  C	/src/common
 #  M	/src/msw
@@ -17,7 +18,7 @@
 #  W	/include/wx
 #  K	/include/wx/gtk        K for gtK
 #  F	/include/wx/motif      F for motiF
-#  B	/include/wx/msw        B for Bill Gates
+#  9	/include/wx/msw        9 for Windows 9x
 #  N	/include/wx/generic    N for geNeric
 #  L	/include/wx/html       L for htmL
 #  P	/include/wx/protocol
@@ -29,7 +30,6 @@
 #
 # Known flags:
 #  B	makes part of the base library too
-#  BO	only for the base library
 #  16	a generic file implementing Win32 control for Win16
 #  32	only can be compiled under Win32
 #  PS	PostScript related file, normally not compiled under Windows
@@ -130,7 +130,7 @@ imagjpeg.cpp	C	32
 imagpcx.cpp	C	32
 imagpng.cpp	C	32
 imagpnm.cpp	C	32
-init.cpp	C	B,BO
+init.cpp	B
 intl.cpp	C	B
 ipcbase.cpp	C
 layout.cpp	C
@@ -713,119 +713,119 @@ timer.h	F
 toolbar.h	F
 window.h	F
 
-accel.h	B
-app.h	B
-bitmap.h	B
-bmpbuttn.h	B
-brush.h	B
-button.h	B
-caret.h	B
-checkbox.h	B
-checklst.h	B
-choice.h	B
-clipbrd.h	B
-colordlg.h	B
-colour.h	B
-combobox.h	B
-control.h	B
-curico.h	B
-curicop.h	B
-cursor.h	B
-dc.h	B
-dcclient.h	B
-dcmemory.h	B
-dcprint.h	B
-dcscreen.h	B
-dde.h	B
-dialog.h	B
-dib.h	B
-dibutils.h	B
-dirdlg.h	B
-dragimag.h	B
-filedlg.h	B
-font.h	B
-fontdlg.h	B
-frame.h	B
-gauge.h	B
-gauge95.h	B
-gaugemsw.h	B
-gdiobj.h	B
-helpwin.h	B
-icon.h	B
-imaglist.h	B
-iniconf.h	B
-joystick.h	B
-listbox.h	B
-listctrl.h	B
-mdi.h	B
-menu.h	B
-menuitem.h	B
-metafile.h	B
-minifram.h	B
-msgdlg.h	B
-msvcrt.h	B
-notebook.h	B
-palette.h	B
-pen.h	B
-pnghand.h	B
-pngread.h	B
-printdlg.h	B
-printwin.h	B
-private.h	B
-radiobox.h	B
-radiobut.h	B
-regconf.h	B
-region.h	B
-registry.h	B
-scrolbar.h	B
-settings.h	B
-setup0.h	B
-slider.h	B
-slider95.h	B
-slidrmsw.h	B
-spinbutt.h	B
-statbmp.h	B
-statbox.h	B
-statbr95.h	B
-statline.h	B
-stattext.h	B
-tabctrl.h	B
-taskbar.h	B
-tbar95.h	B
-tbarmsw.h	B
-textctrl.h	B
-timer.h	B
-tooltip.h	B
-treectrl.h	B
-wave.h	B
-window.h	B
-winundef.h	B
-xpmhand.h	B
-# blank.cur	B
-# bullseye.cur	B
-# child.ico	B
-# clock.cur	B
-# error.ico	B
-# hand.cur	B
-# heart.cur	B
-# info.ico	B
-# magnif1.cur	B
-# mdi.ico	B
-# noentry.cur	B
-# pbrush.cur	B
-# pencil.cur	B
-# pntleft.cur	B
-# pntright.cur	B
-# query.cur	B
-# question.ico	B
-# roller.cur	B
-# size.cur	B
-# std.ico	B
-# tip.ico	B
-# warning.ico	B
-# watch1.cur	B
-# disable.bmp	B
-# wx.rc	B
+accel.h	9
+app.h	9
+bitmap.h	9
+bmpbuttn.h	9
+brush.h	9
+button.h	9
+caret.h	9
+checkbox.h	9
+checklst.h	9
+choice.h	9
+clipbrd.h	9
+colordlg.h	9
+colour.h	9
+combobox.h	9
+control.h	9
+curico.h	9
+curicop.h	9
+cursor.h	9
+dc.h	9
+dcclient.h	9
+dcmemory.h	9
+dcprint.h	9
+dcscreen.h	9
+dde.h	9
+dialog.h	9
+dib.h	9
+dibutils.h	9
+dirdlg.h	9
+dragimag.h	9
+filedlg.h	9
+font.h	9
+fontdlg.h	9
+frame.h	9
+gauge.h	9
+gauge95.h	9
+gaugemsw.h	9
+gdiobj.h	9
+helpwin.h	9
+icon.h	9
+imaglist.h	9
+iniconf.h	9
+joystick.h	9
+listbox.h	9
+listctrl.h	9
+mdi.h	9
+menu.h	9
+menuitem.h	9
+metafile.h	9
+minifram.h	9
+msgdlg.h	9
+msvcrt.h	9
+notebook.h	9
+palette.h	9
+pen.h	9
+pnghand.h	9
+pngread.h	9
+printdlg.h	9
+printwin.h	9
+private.h	9
+radiobox.h	9
+radiobut.h	9
+regconf.h	9
+region.h	9
+registry.h	9
+scrolbar.h	9
+settings.h	9
+setup0.h	9
+slider.h	9
+slider95.h	9
+slidrmsw.h	9
+spinbutt.h	9
+statbmp.h	9
+statbox.h	9
+statbr95.h	9
+statline.h	9
+stattext.h	9
+tabctrl.h	9
+taskbar.h	9
+tbar95.h	9
+tbarmsw.h	9
+textctrl.h	9
+timer.h	9
+tooltip.h	9
+treectrl.h	9
+wave.h	9
+window.h	9
+winundef.h	9
+xpmhand.h	9
+# blank.cur	9
+# bullseye.cur	9
+# child.ico	9
+# clock.cur	9
+# error.ico	9
+# hand.cur	9
+# heart.cur	9
+# info.ico	9
+# magnif1.cur	9
+# mdi.ico	9
+# noentry.cur	9
+# pbrush.cur	9
+# pencil.cur	9
+# pntleft.cur	9
+# pntright.cur	9
+# query.cur	9
+# question.ico	9
+# roller.cur	9
+# size.cur	9
+# std.ico	9
+# tip.ico	9
+# warning.ico	9
+# watch1.cur	9
+# disable.bmp	9
+# wx.rc	9
 
 execute.h	S
 

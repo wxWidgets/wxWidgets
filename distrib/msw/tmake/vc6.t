@@ -19,7 +19,6 @@
 
     foreach $file (sort keys %wxCommon) {
         next if $wxCommon{$file} =~ /\b16\b/;
-        next if $wxCommon{$file} =~ /\bBO\b/;
 
         my $tag = $file =~ /\.c$/ ? "WXCSRCS" : "WXCOMMONSRCS";
         $project{$tag} .= $file . " "
@@ -29,8 +28,8 @@
         next if $wxMSW{$file} =~ /\b16\b/;
 
         my $tag;
-	if ( $wxMSW{$file} =~ /\bO\b/ ) { $tag = "WXOLESRCS" }
-	else { $tag = $file =~ /\.c$/ ? "WXMSWCSRCS" : "WXMSWSRCS" }
+        if ( $wxMSW{$file} =~ /\bO\b/ ) { $tag = "WXOLESRCS" }
+        else { $tag = $file =~ /\.c$/ ? "WXMSWCSRCS" : "WXMSWSRCS" }
         $project{$tag} .= $file . " "
     }
 

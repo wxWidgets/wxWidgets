@@ -12,7 +12,7 @@
     IncludeTemplate("filelist.t");
 
     #! Generic
-    
+
     foreach $file (sort keys %wxGeneric) {
         #! native wxDirDlg can't be compiled due to GnuWin32/OLE limitations,
         #! so take the generic version
@@ -48,8 +48,18 @@
         $project{"WXMOTIF_GENERICDEPS"} .= $file2 . " "
     }
 
+    #! Base
+
+    foreach $file (sort keys %wxBase) {
+        ($fileobj = $file) =~ s/cp?p?$/\o/;
+        ($filedep = $file) =~ s/cp?p?$/\d/;
+
+        $project{"BASE_OBJS"} .= $fileobj . " ";
+        $project{"BASE_DEPS"} .= $filedep . " ";
+    }
+
     #! Common
-    
+
     foreach $file (sort keys %wxCommon) {
         ($fileobj = $file) =~ s/cp?p?$/\o/;
         ($filedep = $file) =~ s/cp?p?$/\d/;
@@ -59,9 +69,6 @@
             $project{"BASE_OBJS"} .= $fileobj . " ";
             $project{"BASE_DEPS"} .= $filedep . " ";
         }
-
-        #! if it's the wxBase-only file, nothing more to do with it
-        next if $wxCommon{$file} =~ /\bBO\b/;
 
         if ( $wxCommon{$file} !~ /\bR\b/ ) {    #! unless not for GTK
             $project{"WXGTK_COMMONOBJS"} .= $fileobj . " ";
@@ -80,7 +87,7 @@
     }
 
     #! GUI
-    
+
     foreach $file (sort keys %wxMSW) {
         #! Mingw32 doesn't have the OLE headers and has some troubles with
         #! socket code
