@@ -265,13 +265,17 @@ wxSize wxRadioBox::LayoutItems()
             for (int i1 = 0; i1< num_of_rows; i1++)
             {
                 GtkWidget *button = GTK_WIDGET( node->Data() );
-                GtkLabel *label = GTK_LABEL( GTK_BUTTON(button)->child );
-                GdkFont *font = m_widget->style->font;
-                int len = 22+gdk_string_measure( font, label->label );
-                if (len > max_len) max_len = len;
+		
+                GtkRequisition req;
+                req.width = 2;
+                req.height = 2;
+                (* GTK_WIDGET_CLASS( GTK_OBJECT(button)->klass )->size_request )
+                      (button, &req );
+		
+                if (req.width > max_len) max_len = req.width;
 
                 gtk_pizza_move( GTK_PIZZA(m_parent->m_wxwindow), button, m_x+x, m_y+y );
-                y += 22;
+                y += req.height;
 
                 node = node->Next();
                 if (!node) break;
@@ -296,7 +300,7 @@ wxSize wxRadioBox::LayoutItems()
         }
 
         res.x = x+4;
-        res.y += 9;
+        res.y += 4;
     }
     else
     {
@@ -305,12 +309,15 @@ wxSize wxRadioBox::LayoutItems()
         wxNode *node = m_boxes.First();
         while (node)
         {
-            GtkButton *button = GTK_BUTTON( node->Data() );
-            GtkLabel *label = GTK_LABEL( button->child );
+            GtkWidget *button = GTK_WIDGET( node->Data() );
 
-            GdkFont *font = m_widget->style->font;
-            int len = 22+gdk_string_measure( font, label->label );
-            if (len > max) max = len;
+            GtkRequisition req;
+            req.width = 2;
+            req.height = 2;
+            (* GTK_WIDGET_CLASS( GTK_OBJECT(button)->klass )->size_request )
+                  (button, &req );
+
+            if (req.width > max) max = req.width;
 
             node = node->Next();
         }
