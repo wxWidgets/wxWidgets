@@ -191,7 +191,7 @@ wxScrolledWindow(parent, -1, pos, size, style, name)
 #ifdef __WXMAC__
     // The app workspace colour is always white, but we should have
     // a contrast with the page.
-    wxSystemColour colourIndex = wxSYS_COLOUR_BTNFACE;
+    wxSystemColour colourIndex = wxSYS_COLOUR_3DDKSHADOW;
 #else
     wxSystemColour colourIndex = wxSYS_COLOUR_APPWORKSPACE;
 #endif    
@@ -228,7 +228,7 @@ void wxPreviewCanvas::OnSysColourChanged(wxSysColourChangedEvent& event)
 #ifdef __WXMAC__
     // The app workspace colour is always white, but we should have
     // a contrast with the page.
-    wxSystemColour colourIndex = wxSYS_COLOUR_BTNFACE;
+    wxSystemColour colourIndex = wxSYS_COLOUR_3DDKSHADOW;
 #else
     wxSystemColour colourIndex = wxSYS_COLOUR_APPWORKSPACE;
 #endif    
