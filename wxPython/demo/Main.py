@@ -995,7 +995,7 @@ class DemoTaskBarIcon(wx.TaskBarIcon):
         if "wxMSW" in wx.PlatformInfo:
             img.Scale(16, 16)
         elif "wxGTK" in wx.PlatformInfo:
-            img.Scale(22, 22)
+            img.Scale(20, 20)
         # wxMac can be any size upto 128.128....
         icon = wx.IconFromBitmap(img.ConvertToBitmap() )
         return icon
@@ -1018,7 +1018,7 @@ class DemoTaskBarIcon(wx.TaskBarIcon):
     
 
     def OnTaskBarChange(self, evt):
-        icon = self.MakeIcon(images.getRobinImage())
+        icon = self.MakeIcon(images.getBlom10MaskedImage())
         self.SetIcon(icon, "This is a new icon")
 
 

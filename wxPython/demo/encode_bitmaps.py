@@ -79,6 +79,8 @@ command_lines = [
     "-a -u -n Blom14 bmp_source/toblom14.png images.py",
     "-a -u -n Blom15 bmp_source/toblom15.png images.py",
 
+    "-a -u -n Blom10Masked -m #FFFFFF bmp_source/toblom10.png images.py",
+
 
     "   -u -c bmp_source/001.png throbImages.py",
     "-a -u -c bmp_source/002.png throbImages.py",
