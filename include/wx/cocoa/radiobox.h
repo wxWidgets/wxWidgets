@@ -6,7 +6,7 @@
 // Created:     2003/03/18
 // RCS-ID:      $Id:
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_RADIOBOX_H__
@@ -89,8 +89,8 @@ public:
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
     // change the individual radio button state
-    virtual void Enable(int n, bool enable = TRUE);
-    virtual void Show(int n, bool show = TRUE);
+    virtual bool Enable(int n, bool enable = true);
+    virtual void Show(int n, bool show = true);
     // layout parameters
     virtual int GetColumnCount() const;
     virtual int GetRowCount() const;

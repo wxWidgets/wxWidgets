@@ -408,12 +408,13 @@ void wxRadioBox::SetFocus()
 }
 
 // Enable a specific button
-void wxRadioBox::Enable(int item, bool enable)
+bool wxRadioBox::Enable(int item, bool enable)
 {
-    wxCHECK_RET( item >= 0 && item < GetCount(),
+    wxCHECK_MSG( item >= 0 && item < GetCount(), false,
                  wxT("invalid item in wxRadioBox::Enable()") );
 
     ::EnableWindow((*m_radioButtons)[item], enable);
+    return true;
 }
 
 // Show a specific button
@@ -477,7 +478,7 @@ wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
     int width  = GetNumHor() * (sizeBtn.x + cx1) + cx1;
 
     // Add extra space under the label, if it exists.
-    if (!wxControl::GetLabel().IsEmpty())
+    if (!wxControl::GetLabel().empty())
         height += cy1/2;
 
     // and also wide enough for its label
@@ -561,7 +562,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     y_offset += cy1;
 
     // Add extra space under the label, if it exists.
-    if (!wxControl::GetLabel().IsEmpty())
+    if (!wxControl::GetLabel().empty())
         y_offset += cy1/2;
 
     int startX = x_offset;

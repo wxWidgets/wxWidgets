@@ -2,6 +2,14 @@
 wxWidgets 2.5 Change Log - For more verbose changes, see the manual
 -------------------------------------------------------------------
 
+2.5.5
+-----
+
+wxPalmOS:
+
+- native wxRadioBox implementation
+
+
 2.5.4
 -----
 

@@ -67,19 +67,19 @@ public:
     virtual wxString GetString(int item) const;
     virtual void SetString(int item, const wxString& label) ;
 
-    virtual void Enable(int item, bool enable);
+    virtual bool Enable(int item, bool enable = true);
     virtual void Show(int item, bool show) ;
 
     virtual int GetColumnCount() const ;
     virtual int GetRowCount() const ;
 
 
-    virtual bool Enable(bool enable = TRUE);
+    virtual bool Enable(bool enable = true);
     virtual wxString GetLabel() const;
     virtual void SetLabel(const wxString& label) ;
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
 
-// Other external functions 
+// Other external functions
     void Command(wxCommandEvent& event);
     void SetFocus();
 
@@ -95,7 +95,7 @@ protected:
     int               m_noItems;
     int               m_noRowsOrCols;
 
-// Internal functions 
+// Internal functions
     virtual wxSize DoGetBestSize() const ;
     virtual void DoSetSize(int x, int y,
                            int width, int height,

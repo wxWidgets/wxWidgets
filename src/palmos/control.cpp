@@ -332,7 +332,7 @@ void wxControl::DoMoveWindow(int x, int y, int width, int height)
 bool wxControl::Enable(bool enable)
 {
     ControlType *control = (ControlType *)GetObjectPtr();
-    if( (IsPalmControl()) || (control == NULL))
+    if( !IsPalmControl() || (control == NULL))
         return false;
     if( CtlEnabled(control) == enable)
         return false;
@@ -343,7 +343,7 @@ bool wxControl::Enable(bool enable)
 bool wxControl::IsEnabled() const
 {
     ControlType *control = (ControlType *)GetObjectPtr();
-    if( (IsPalmControl()) || (control == NULL))
+    if( !IsPalmControl() || (control == NULL))
         return false;
     return CtlEnabled(control);
 }

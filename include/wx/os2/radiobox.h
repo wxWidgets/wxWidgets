@@ -101,10 +101,8 @@ public:
 
     void             Command(wxCommandEvent& rEvent);
     bool             ContainsHWND(WXHWND hWnd) const;
-    virtual bool     Enable(bool bEnable = TRUE);
-    void             Enable( int  nItem
-                            ,bool bEnable
-                           );
+    virtual bool     Enable(bool bEnable = true);
+    virtual bool     Enable(int  nItem, bool bEnable = true);
     int              FindString(const wxString& sStr) const;
 
     virtual WXHBRUSH OnCtlColor( WXHDC    hDC
@@ -119,7 +117,7 @@ public:
                                );
     void             SendNotificationEvent(void);
     virtual void     Show( int  nItem
-                          ,bool bShow =  TRUE
+                          ,bool bShow =  true
                          ) ;
     bool             Show(bool bShow);
     MRESULT          WindowProc( WXUINT   uMsg

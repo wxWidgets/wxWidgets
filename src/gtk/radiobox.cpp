@@ -517,11 +517,11 @@ int wxRadioBox::GetSelection(void) const
 
 wxString wxRadioBox::GetString( int n ) const
 {
-    wxCHECK_MSG( m_widget != NULL, wxT(""), wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid radiobox") );
 
     wxList::compatibility_iterator node = m_boxes.Item( n );
 
-    wxCHECK_MSG( node, wxT(""), wxT("radiobox wrong index") );
+    wxCHECK_MSG( node, wxEmptyString, wxT("radiobox wrong index") );
 
     GtkLabel *label = GTK_LABEL( BUTTON_CHILD(node->GetData()) );
 
@@ -575,19 +575,21 @@ bool wxRadioBox::Enable( bool enable )
     return true;
 }
 
-void wxRadioBox::Enable( int item, bool enable )
+bool wxRadioBox::Enable( int item, bool enable )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobox") );
 
     wxList::compatibility_iterator node = m_boxes.Item( item );
 
-    wxCHECK_RET( node, wxT("radiobox wrong index") );
+    wxCHECK_MSG( node, false, wxT("radiobox wrong index") );
 
     GtkButton *button = GTK_BUTTON( node->GetData() );
     GtkLabel *label = GTK_LABEL( BUTTON_CHILD(button) );
 
     gtk_widget_set_sensitive( GTK_WIDGET(button), enable );
     gtk_widget_set_sensitive( GTK_WIDGET(label), enable );
+
+    return true;
 }
 
 void wxRadioBox::Show( int item, bool show )
@@ -608,7 +610,7 @@ void wxRadioBox::Show( int item, bool show )
 
 wxString wxRadioBox::GetStringSelection() const
 {
-    wxCHECK_MSG( m_widget != NULL, wxT(""), wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid radiobox") );
 
     wxList::compatibility_iterator node = m_boxes.GetFirst();
     while (node)
@@ -629,7 +631,7 @@ wxString wxRadioBox::GetStringSelection() const
     }
 
     wxFAIL_MSG( wxT("wxRadioBox none selected") );
-    return wxT("");
+    return wxEmptyString;
 }
 
 bool wxRadioBox::SetStringSelection( const wxString &s )

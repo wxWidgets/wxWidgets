@@ -322,11 +322,11 @@ void wxRadioBox::SetString(int n, const wxString& label)
     m_buttons[n]->SetLabel(label);
 }
 
-void wxRadioBox::Enable(int n, bool enable)
+bool wxRadioBox::Enable(int n, bool enable)
 {
-    wxCHECK_RET( IsValid(n), _T("invalid index in wxRadioBox::Enable") );
+    wxCHECK_MSG( IsValid(n), false, _T("invalid index in wxRadioBox::Enable") );
 
-    m_buttons[n]->Enable(enable);
+    return m_buttons[n]->Enable(enable);
 }
 
 void wxRadioBox::Show(int n, bool show)

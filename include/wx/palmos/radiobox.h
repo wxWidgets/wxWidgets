@@ -17,6 +17,7 @@
 #endif
 
 class WXDLLEXPORT wxBitmap;
+class WXDLLEXPORT wxRadioButton;
 
 // ----------------------------------------------------------------------------
 // wxRadioBox
@@ -25,7 +26,10 @@ class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxRadioBox : public wxControl, public wxRadioBoxBase
 {
 public:
-    wxRadioBox();
+    wxRadioBox():m_radios(wxKEY_INTEGER,32)
+    {
+        Init();
+    }
 
     wxRadioBox(wxWindow *parent,
                wxWindowID id,
@@ -37,10 +41,13 @@ public:
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr)
+              :m_radios(wxKEY_INTEGER,n+1)
     {
+        Init();
         (void)Create(parent, id, title, pos, size, n, choices, majorDim,
                      style, val, name);
     }
+
     wxRadioBox(wxWindow *parent,
                wxWindowID id,
                const wxString& title,
@@ -51,7 +58,9 @@ public:
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr)
+              :m_radios(wxKEY_INTEGER,choices.GetCount()+1)
     {
+        Init();
         (void)Create(parent, id, title, pos, size, choices, majorDim,
                      style, val, name);
     }
@@ -86,10 +95,16 @@ public:
     virtual int GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
-    virtual void Enable(int n, bool enable = true);
+    virtual bool Enable(int n, bool enable = true);
     virtual void Show(int n, bool show = true);
     virtual int GetColumnCount() const;
     virtual int GetRowCount() const;
+
+    virtual void DoGetPosition( int *x, int *y ) const;
+    virtual void DoGetSize( int *width, int *height ) const;
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+
+    virtual wxPoint GetClientAreaOrigin() const;
 
     virtual bool Show(bool show = true);
     void SetFocus();
@@ -134,12 +149,17 @@ protected:
     int               m_noRowsOrCols;
     int               m_selectedButton;
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
     virtual wxSize DoGetBestSize() const;
 
 private:
+
+    void Init();
+    wxRadioButton *GetRadioButton(int i);
+
+    wxPoint m_pos;
+    wxSize m_size;
+    wxHashTable m_radios;
+
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
     DECLARE_NO_COPY_CLASS(wxRadioBox)
 };

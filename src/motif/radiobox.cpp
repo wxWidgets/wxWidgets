@@ -84,7 +84,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
     WXFontType fontType = m_font.GetFontType(XtDisplay(parentWidget));
 
-    if (label1 != "")
+    if (!label1.empty())
     {
         wxXmString text(label1);
         m_labelWidget = (WXWidget)
@@ -94,7 +94,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
                                                           : xmLabelGadgetClass,
                                        (Widget)m_mainWidget,
 #else
-                                       xmLabelWidgetClass, 
+                                       xmLabelWidgetClass,
                                        (Widget)m_mainWidget,
 #endif
                                        wxFont::GetFontTag(), fontType,
@@ -107,7 +107,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 #else
                                        XmNchildType, XmFRAME_TITLE_CHILD,
 #endif
-                                       XmNchildVerticalAlignment, 
+                                       XmNchildVerticalAlignment,
                                            XmALIGNMENT_CENTER,
                                        NULL);
     }
@@ -149,7 +149,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     ChangeFont(false);
 
     SetSelection (0);
- 
+
     XtRealizeWidget((Widget)m_mainWidget);
     XtManageChild (radioBoxWidget);
     XtManageChild ((Widget)m_mainWidget);
@@ -186,7 +186,7 @@ void wxRadioBox::SetString(int item, const wxString& label)
         return;
 
     Widget widget = (Widget) m_radioButtons[item];
-    if (label != "")
+    if (!label.empty())
     {
         wxString label1(wxStripMenuCodes(label));
         wxXmString text( label1 );
@@ -253,7 +253,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         XtVaSetValues ((Widget) m_mainWidget, XmNx, xx, NULL);
     if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        XtVaSetValues ((Widget) m_mainWidget, XmNy, yy, NULL);    
+        XtVaSetValues ((Widget) m_mainWidget, XmNy, yy, NULL);
 
     if (width > 0)
         XtVaSetValues ((Widget) m_mainWidget, XmNwidth, width, NULL);
@@ -265,12 +265,13 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 }
 
 // Enable a specific button
-void wxRadioBox::Enable(int n, bool enable)
+bool wxRadioBox::Enable(int n, bool enable)
 {
     if ((n < 0) || (n >= m_noItems))
-        return;
+        return false;
 
     XtSetSensitive ((Widget) m_radioButtons[n], (Boolean) enable);
+    return true;
 }
 
 // Enable all controls
@@ -299,9 +300,9 @@ void wxRadioBox::Show(int n, bool show)
   // It's main purpose isn't for allowing Show/Unshow dynamically,
   // but rather to provide a way to design wxRadioBox such:
   //
-  //        o Val1  o Val2   o Val3 
-  //        o Val4           o Val6 
-  //        o Val7  o Val8   o Val9 
+  //        o Val1  o Val2   o Val3
+  //        o Val4           o Val6
+  //        o Val7  o Val8   o Val9
   //
   // In my case, this is a 'direction' box, and the Show(5,False) is
   // coupled with an Enable(5,False)
@@ -328,7 +329,7 @@ wxString wxRadioBox::GetStringSelection () const
     if (sel > -1)
         return this->GetString (sel);
     else
-        return wxString("");
+        return wxEmptyString;
 }
 
 bool wxRadioBox::SetStringSelection (const wxString& s)

@@ -88,7 +88,7 @@ public:
     void SetString( int n, const wxString& label );
 
     void Show( int item, bool show );
-    void Enable( int item, bool enable );
+    virtual bool Enable( int item, bool enable = true );
 
     virtual wxString GetStringSelection() const;
     virtual bool SetStringSelection( const wxString& s );

@@ -83,7 +83,7 @@ public:
     void SetString(int item, const wxString& label) ;
     wxString GetString(int item) const;
     virtual bool Enable(bool enable = true);
-    void Enable(int item, bool enable);
+    virtual bool Enable(int item, bool enable = true);
     void Show(int item, bool show) ;
     virtual bool Show(bool show = true) ;
 
@@ -122,7 +122,6 @@ protected:
 
 private:
     void Init();
-
 
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 };

@@ -129,11 +129,11 @@ for further details.
 
 \membersection{wxRadioBox::Enable}\label{wxradioboxenable}
 
-\func{void}{Enable}{\param{bool}{ enable = {\tt true}}}
+\func{virtual bool}{Enable}{\param{bool}{ enable = {\tt true}}}
 
 Enables or disables the entire radiobox.
 
-\func{void}{Enable}{\param{int}{ n}, \param{bool}{ enable = {\tt true}}}
+\func{virtual bool}{Enable}{\param{int}{ n}, \param{bool}{ enable = {\tt true}}}
 
 Enables or disables an individual button in the radiobox.
 
@@ -151,6 +151,10 @@ implements the following methods:\par
 individual button in the radiobox.}
 \end{twocollist}}
 }
+
+\wxheading{See also}
+
+\helpref{wxWindow::Enable}{wxwindowenable}
 
 
 \membersection{wxRadioBox::FindString}\label{wxradioboxfindstring}

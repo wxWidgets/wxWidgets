@@ -32,7 +32,7 @@ class WXDLLEXPORT wxRadioBoxBase : public wxItemContainerImmutable
 {
 public:
     // change the individual radio button state
-    virtual void Enable(int n, bool enable = true) = 0;
+    virtual bool Enable(int n, bool enable = true) = 0;
     virtual void Show(int n, bool show = true) = 0;
 
     // layout parameters

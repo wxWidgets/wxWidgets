@@ -95,7 +95,7 @@ public:
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
 
-    virtual void Enable(int n, bool enable = true);
+    virtual bool Enable(int n, bool enable = true);
     virtual void Show(int n, bool show = true);
 
     // we also override the wxControl methods to avoid virtual function hiding
