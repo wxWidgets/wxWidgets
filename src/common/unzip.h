@@ -78,6 +78,13 @@ extern "C" {
 #   define OF(args) args
 #endif
 
+/*
+   And on some systems ZEXPORT is not defined neither -- work around this too
+ */
+#ifndef ZEXPORT
+#   define ZEXPORT
+#endif
+
 #if defined(STRICTUNZIP) || defined(STRICTZIPUNZIP)
 /* like the STRICT of WIN32, we define a pointer that cannot be converted
     from (void*) without cast */
