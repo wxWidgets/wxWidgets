@@ -80,10 +80,10 @@ wxMutexError wxMutex::Lock()
 
     err = pthread_mutex_lock(&(p_internal->p_mutex));
     if (err == EDEADLK)
-        return MUTEX_DEAD_LOCK;
+        return wxMUTEX_DEAD_LOCK;
 	
     m_locked++;
-    return MUTEX_NO_ERROR;
+    return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::TryLock()
@@ -91,15 +91,15 @@ wxMutexError wxMutex::TryLock()
     int err;
 
     if (m_locked)
-        return MUTEX_BUSY;
+        return wxMUTEX_BUSY;
 	
     err = pthread_mutex_trylock(&(p_internal->p_mutex));
     switch (err) 
     {
-        case EBUSY: return MUTEX_BUSY;
+        case EBUSY: return wxMUTEX_BUSY;
     }
     m_locked++;
-    return MUTEX_NO_ERROR;
+    return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::Unlock()
@@ -107,10 +107,10 @@ wxMutexError wxMutex::Unlock()
     if (m_locked > 0)
         m_locked--;
     else
-        return MUTEX_UNLOCKED;
+        return wxMUTEX_UNLOCKED;
 	
     pthread_mutex_unlock(&(p_internal->p_mutex));
-    return MUTEX_NO_ERROR;
+    return wxMUTEX_NO_ERROR;
 }
 
 //--------------------------------------------------------------------
@@ -195,7 +195,7 @@ wxThreadError wxThread::Create()
     struct sched_param sp;
 
     if (p_internal->state != STATE_IDLE)
-        return THREAD_RUNNING;
+        return wxTHREAD_RUNNING;
 
     // Change thread priority
     pthread_attr_init(&a);
@@ -216,11 +216,11 @@ wxThreadError wxThread::Create()
     {
         p_internal->state = STATE_IDLE;
         pthread_attr_destroy(&a);
-        return THREAD_NO_RESOURCE;
+        return wxTHREAD_NO_RESOURCE;
     }
     pthread_attr_destroy(&a);
 
-    return THREAD_NO_ERROR;
+    return wxTHREAD_NO_ERROR;
 }
 
 void wxThread::SetPriority(int prio)
@@ -259,19 +259,19 @@ wxThreadError wxThread::Destroy()
 	    p_internal->state = STATE_CANCELED;
     }
 
-    return THREAD_NO_ERROR;
+    return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Pause()
 {
     if (p_internal->state != STATE_RUNNING)
-        return THREAD_NOT_RUNNING;
+        return wxTHREAD_NOT_RUNNING;
 
     if (!p_internal->defer_destroy)
-        return THREAD_MISC_ERROR;
+        return wxTHREAD_MISC_ERROR;
 
     p_internal->state = STATE_PAUSING;
-    return THREAD_NO_ERROR;
+    return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Resume()
@@ -279,7 +279,7 @@ wxThreadError wxThread::Resume()
     if (p_internal->state == STATE_PAUSING || p_internal->state == STATE_PAUSED)
       p_internal->state = STATE_RUNNING;
 
-    return THREAD_NO_ERROR;
+    return wxTHREAD_NO_ERROR;
 }
 
 void *wxThread::Join()
