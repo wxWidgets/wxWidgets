@@ -64,6 +64,188 @@ static   long      gs_lastWhen = 0;
 // ============================================================================
 
 // ---------------------------------------------------------------------------
+// Carbon Events
+// ---------------------------------------------------------------------------
+
+#if TARGET_CARBON
+
+extern long wxMacTranslateKey(unsigned char key, unsigned char code) ;
+
+static const EventTypeSpec eventList[] = 
+{
+    { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
+    /*
+    	{ kEventClassKeyboard, kEventRawKeyDown } ,
+	    { kEventClassKeyboard, kEventRawKeyRepeat } ,
+	    { kEventClassKeyboard, kEventRawKeyUp } ,
+	    { kEventClassKeyboard, kEventRawKeyModifiersChanged } ,
+	*/
+    { kEventClassWindow , kEventWindowUpdate } ,
+    { kEventClassWindow , kEventWindowActivated } ,
+    { kEventClassWindow , kEventWindowDeactivated } ,
+    { kEventClassWindow , kEventWindowBoundsChanging } ,
+    { kEventClassWindow , kEventWindowBoundsChanged } ,
+    { kEventClassWindow , kEventWindowClose } ,
+
+    { kEventClassMouse , kEventMouseDown } ,
+    { kEventClassMouse , kEventMouseUp } ,
+    { kEventClassMouse , kEventMouseMoved } ,
+    { kEventClassMouse , kEventMouseDragged } ,
+
+} ;
+
+static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    EventRecord rec ;
+
+    if ( wxMacConvertEventToRecord( event , &rec ) )
+    {
+		wxTheApp->m_macCurrentEvent = &rec ;
+        wxWindow* focus = wxWindow::FindFocus() ;
+        if ( (focus != NULL) && !UMAMenuEvent(&rec) && wxTheApp->MacSendKeyDownEvent( focus , rec.message , rec.modifiers , rec.when , rec.where.h , rec.where.v ) )
+        {
+            // was handled internally
+            result = noErr ;
+        }
+    }
+
+    return result ;
+}
+
+static pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+
+	wxTopLevelWindowMac* toplevelWindow = (wxTopLevelWindowMac*) data ;
+	Point point ;
+	UInt32 modifiers = 0;
+	EventMouseButton button = 0 ;
+	UInt32 click = 0 ;
+	
+	GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL,
+		sizeof( Point ), NULL, &point );
+	GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL,
+		sizeof( UInt32 ), NULL, &modifiers );
+	GetEventParameter( event, kEventParamMouseButton, typeMouseButton, NULL,
+		sizeof( EventMouseButton ), NULL, &button );
+	GetEventParameter( event, kEventParamClickCount, typeUInt32, NULL,
+		sizeof( UInt32 ), NULL, &click );
+		
+	if ( button == 0 || GetEventKind( event ) == kEventMouseUp )
+		modifiers += btnState ;
+	
+	WindowRef window ;
+    short windowPart = ::FindWindow(point, &window);
+    if ( windowPart == inContent )
+    {
+		switch ( GetEventKind( event ) )
+		{
+			case kEventMouseDown :
+				toplevelWindow->MacFireMouseEvent( mouseDown , point.h , point.v , modifiers , EventTimeToTicks( GetEventTime( event ) ) ) ;
+				result = noErr ;
+				break ;
+			case kEventMouseUp :
+				toplevelWindow->MacFireMouseEvent( mouseUp , point.h , point.v , modifiers , EventTimeToTicks( GetEventTime( event ) ) ) ;
+				result = noErr ;
+				break ;
+			case kEventMouseMoved :
+				toplevelWindow->MacFireMouseEvent( nullEvent , point.h , point.v , modifiers , EventTimeToTicks( GetEventTime( event ) ) ) ;
+				result = noErr ;
+				break ;
+			case kEventMouseDragged :
+				toplevelWindow->MacFireMouseEvent( nullEvent , point.h , point.v , modifiers , EventTimeToTicks( GetEventTime( event ) ) ) ;
+				result = noErr ;
+				break ;
+			default :
+				break ;
+		}
+	}
+	
+	return result ;
+	
+
+}
+static pascal OSStatus WindowEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    OSStatus err = noErr ;
+
+	UInt32		attributes;
+	WindowRef windowRef ;
+	wxTopLevelWindowMac* toplevelWindow = (wxTopLevelWindowMac*) data ;
+	
+	GetEventParameter( event, kEventParamDirectObject, typeWindowRef, NULL,
+		sizeof( WindowRef ), NULL, &windowRef );
+		
+	switch( GetEventKind( event ) )
+	{
+		case kEventWindowUpdate :
+        	if ( !wxPendingDelete.Member(toplevelWindow) )
+				toplevelWindow->MacUpdate( EventTimeToTicks( GetEventTime( event ) ) ) ;
+			result = noErr ;
+			break ;
+		case kEventWindowActivated :
+				toplevelWindow->MacActivate( EventTimeToTicks( GetEventTime( event ) ) , true) ;
+			result = noErr ;
+			break ;
+		case kEventWindowDeactivated :
+				toplevelWindow->MacActivate( EventTimeToTicks( GetEventTime( event ) ) , false) ;
+			result = noErr ;
+			break ;
+		case kEventWindowClose :
+            	toplevelWindow->Close() ;
+			result = noErr ;
+			break ;
+		case kEventWindowBoundsChanged :
+			err = GetEventParameter( event, kEventParamAttributes, typeUInt32,
+						NULL, sizeof( UInt32 ), NULL, &attributes );
+			if ( err == noErr )
+			{
+				Rect newContentRect ;
+
+				GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL,
+					sizeof( newContentRect ), NULL, &newContentRect );
+				
+                toplevelWindow->SetSize( newContentRect.left , newContentRect.top , 
+                    newContentRect.right - newContentRect.left , 
+                    newContentRect.bottom - newContentRect.top, wxSIZE_USE_EXISTING);
+
+				result = noErr;
+			}
+			break ;
+		default :
+			break ;
+	}
+	return result ;
+}
+
+pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+
+    switch ( GetEventClass( event ) )
+    {
+        case kEventClassTextInput :
+        	result = TextInputEventHandler( handler, event , data ) ;
+            break ;
+        case kEventClassWindow :
+        	result = WindowEventHandler( handler, event , data ) ;
+        	break ;
+        case kEventClassMouse :
+        	result = MouseEventHandler( handler, event , data ) ;
+        	break ;
+        default :
+            break ;
+    }
+    return result ;
+}
+
+DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacWindowEventHandler )
+
+#endif
+
+// ---------------------------------------------------------------------------
 // wxWindowMac utility functions
 // ---------------------------------------------------------------------------
 
@@ -107,7 +289,9 @@ void wxTopLevelWindowMac::Init()
     m_macNoEraseUpdateRgn = NewRgn() ;
     m_macNeedsErasing = false ;
     m_macWindow = NULL ;
+#if TARGET_CARBON
     m_macEventHandler = NULL ;
+ #endif
 }
 
 class wxMacDeferredWindowDeleter : public wxObject
@@ -165,6 +349,7 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
         m_macEventHandler = NULL ;
     }
 #endif   
+
     wxRemoveMacWindowAssociation( this ) ;
 
     if ( wxModelessWindows.Find(this) )
@@ -212,59 +397,6 @@ void wxTopLevelWindowMac::SetIcon(const wxIcon& icon)
 {
     // this sets m_icon
     wxTopLevelWindowBase::SetIcon(icon);
-}
-
-#if TARGET_CARBON
-
-EventHandlerUPP wxMacWindowEventHandlerUPP = NULL ;
-
-extern long wxMacTranslateKey(unsigned char key, unsigned char code) ;
-
-pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
-{
-    OSStatus result = eventNotHandledErr ;
-    EventRecord rec ;
-    switch ( GetEventClass( event ) )
-    {
-        case kEventClassTextInput :
-            if ( wxMacConvertEventToRecord( event , &rec ) )
-            {
-    			wxTheApp->m_macCurrentEvent = &rec ;
-                wxWindow* focus = wxWindow::FindFocus() ;
-                if ( (focus != NULL) && !UMAMenuEvent(&rec) && wxTheApp->MacSendKeyDownEvent( focus , rec.message , rec.modifiers , rec.when , rec.where.h , rec.where.v ) )
-                {
-                    // was handled internally
-                    result = noErr ;
-                }
-            }
-            break ;
-        default :
-            break ;
-    }
-    return result ;
-}
-
-#endif
-
-void wxTopLevelWindowMac::MacInstallEventHandler()
-{
-#if TARGET_CARBON
-	if ( wxMacWindowEventHandlerUPP == NULL )
-	{
-	    wxMacWindowEventHandlerUPP = NewEventHandlerUPP( wxMacWindowEventHandler ) ;
-	}
-	    
-	static const EventTypeSpec eventList[] = 
-	{
-	    { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent }
-	} ;
-	if ( m_macEventHandler )
-	{
-        ::RemoveEventHandler((EventHandlerRef) m_macEventHandler);
-        m_macEventHandler = NULL ;
-    }
-	InstallWindowEventHandler(MAC_WXHWND(m_macWindow), wxMacWindowEventHandlerUPP, WXSIZEOF(eventList), eventList, this, &((EventHandlerRef)m_macEventHandler));    
-#endif
 }
 
 void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
@@ -376,8 +508,11 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         label = title ;
     UMASetWTitleC( (WindowRef)m_macWindow , label ) ;
     ::CreateRootControl( (WindowRef)m_macWindow , (ControlHandle*)&m_macRootControl ) ;
-    MacInstallEventHandler() ;
-
+#if TARGET_CARBON
+	InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
+	InstallWindowEventHandler(MAC_WXHWND(m_macWindow), GetwxMacWindowEventHandlerUPP(), 
+		GetEventTypeCount(eventList), eventList, this, &((EventHandlerRef)m_macEventHandler));    
+#endif
     m_macFocus = NULL ;
 }
 
@@ -444,26 +579,26 @@ void wxTopLevelWindowMac::Lower()
     ::SendBehind( (WindowRef)m_macWindow , NULL ) ;
 }
 
-void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
+void wxTopLevelWindowMac::MacFireMouseEvent( 
+	wxUint16 kind , wxInt32 x , wxInt32 y ,wxUint32 modifiers , long timestamp )
 {
-    EventRecord *ev = (EventRecord*) evr ;
     wxMouseEvent event(wxEVT_LEFT_DOWN);
-    bool isDown = !(ev->modifiers & btnState) ; // 1 is for up
-    bool controlDown = ev->modifiers & controlKey ; // for simulating right mouse
+    bool isDown = !(modifiers & btnState) ; // 1 is for up
+    bool controlDown = modifiers & controlKey ; // for simulating right mouse
     
     event.m_leftDown = isDown && !controlDown;
     
     event.m_middleDown = FALSE;
     event.m_rightDown = isDown && controlDown;
 
-    if ( ev->what == mouseDown )
+    if ( kind == mouseDown )
     {
         if ( controlDown )
             event.SetEventType(wxEVT_RIGHT_DOWN ) ;
         else
             event.SetEventType(wxEVT_LEFT_DOWN ) ;
     }
-    else if ( ev->what == mouseUp )
+    else if ( kind == mouseUp )
     {
         if ( controlDown )
             event.SetEventType(wxEVT_RIGHT_UP ) ;
@@ -475,12 +610,14 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
         event.SetEventType(wxEVT_MOTION ) ;
     }
 
-    event.m_shiftDown = ev->modifiers & shiftKey;
-    event.m_controlDown = ev->modifiers & controlKey;
-    event.m_altDown = ev->modifiers & optionKey;
-    event.m_metaDown = ev->modifiers & cmdKey;
+    event.m_shiftDown = modifiers & shiftKey;
+    event.m_controlDown = modifiers & controlKey;
+    event.m_altDown = modifiers & optionKey;
+    event.m_metaDown = modifiers & cmdKey;
 
-    Point       localwhere = ev->where ;
+    Point       localwhere ;
+    localwhere.h = x ;
+    localwhere.v = y ;
         
     GrafPtr     port ;  
     ::GetPort( &port ) ;
@@ -488,9 +625,9 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
     ::GlobalToLocal( &localwhere ) ;
     ::SetPort( port ) ;
 
-    if ( ev->what == mouseDown )
+    if ( kind == mouseDown )
     {
-        if ( ev->when - gs_lastWhen <= GetDblTime() )
+        if ( timestamp - gs_lastWhen <= GetDblTime() )
         {
             if ( abs( localwhere.h - gs_lastWhere.h ) < 3 && abs( localwhere.v - gs_lastWhere.v ) < 3 )
             {
@@ -506,7 +643,7 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
         }
         else
         {
-            gs_lastWhen = ev->when ;
+            gs_lastWhen = timestamp ;
         }
         gs_lastWhere = localwhere ;
     }
@@ -516,7 +653,7 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
     event.m_x += m_x;
     event.m_y += m_y;
 
-    event.m_timeStamp = ev->when;
+    event.m_timeStamp = timestamp;
     event.SetEventObject(this);
     if ( wxTheApp->s_captureWindow )
     {
@@ -528,7 +665,7 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
         event.SetEventObject( wxTheApp->s_captureWindow ) ;
         wxTheApp->s_captureWindow->GetEventHandler()->ProcessEvent( event ) ;
         
-        if ( ev->what == mouseUp )
+        if ( kind == mouseUp )
         {
             wxTheApp->s_captureWindow = NULL ;
             if ( !wxIsBusy() )
@@ -542,10 +679,12 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
         MacDispatchMouseEvent( event ) ;
     }
 }
+#if !TARGET_CARBON
 
 void wxTopLevelWindowMac::MacMouseDown( WXEVENTREF ev , short part)
 {
-    MacFireMouseEvent( ev ) ;
+    MacFireMouseEvent( mouseDown , ((EventRecord*)ev)->where.h , ((EventRecord*)ev)->where.v , 
+    	((EventRecord*)ev)->modifiers , ((EventRecord*)ev)->when ) ;
 }
 
 void wxTopLevelWindowMac::MacMouseUp( WXEVENTREF ev , short part)
@@ -554,7 +693,8 @@ void wxTopLevelWindowMac::MacMouseUp( WXEVENTREF ev , short part)
     {
         case inContent:     
             {
-                MacFireMouseEvent( ev ) ;
+			    MacFireMouseEvent( mouseUp , ((EventRecord*)ev)->where.h , ((EventRecord*)ev)->where.v , 
+			    	((EventRecord*)ev)->modifiers , ((EventRecord*)ev)->when ) ;
             }
             break ;
     }
@@ -566,15 +706,19 @@ void wxTopLevelWindowMac::MacMouseMoved( WXEVENTREF ev , short part)
     {
         case inContent:     
             {
-                MacFireMouseEvent( ev ) ;
+			    MacFireMouseEvent( nullEvent /*moved*/ , ((EventRecord*)ev)->where.h , ((EventRecord*)ev)->where.v , 
+			    	((EventRecord*)ev)->modifiers , ((EventRecord*)ev)->when ) ;
             }
             break ;
     }
 }
-void wxTopLevelWindowMac::MacActivate( WXEVENTREF ev , bool inIsActivating )
+
+#endif
+
+void wxTopLevelWindowMac::MacActivate( long timestamp , bool inIsActivating )
 {
     wxActivateEvent event(wxEVT_ACTIVATE, inIsActivating , m_windowId);
-    event.m_timeStamp = ((EventRecord*)ev)->when ;
+    event.m_timeStamp = timestamp ;
     event.SetEventObject(this);
     
     GetEventHandler()->ProcessEvent(event);
@@ -590,9 +734,13 @@ void wxTopLevelWindowMac::MacActivate( WXEVENTREF ev , bool inIsActivating )
         MacSuperEnabled( inIsActivating ) ;
 }
 
+#if !TARGET_CARBON
+
 void wxTopLevelWindowMac::MacKeyDown( WXEVENTREF ev ) 
 {
 }
+
+#endif
 
 void wxTopLevelWindowMac::SetTitle(const wxString& title)
 {
