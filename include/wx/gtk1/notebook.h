@@ -127,6 +127,9 @@ protected:
     virtual wxNotebookPage *DoRemovePage(int nPage);
 
 private:
+
+    int m_padding;
+
     DECLARE_DYNAMIC_CLASS(wxNotebook)
     DECLARE_EVENT_TABLE()
 };
