@@ -223,6 +223,11 @@
 #define wxUSE_FILEDLG 0
 
 /*
+ * Use wxFindReplaceDialog
+ */
+#define wxUSE_FINDREPLDLG 0
+
+/*
  * Use wxFontDialog
  */
 #define wxUSE_FONTDLG 0
@@ -1008,8 +1013,5 @@
 
 /* Define this if you are using gtk and gdk contains support for X11R6 XIM */
 #undef HAVE_XIM
-
-/* now check the settings self consistency */
-#include "wx/chkconf.h"
 
 #endif /* __WX_SETUP_H__ */

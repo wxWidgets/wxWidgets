@@ -68,7 +68,7 @@ public:
 
     bool Destroy();
 
-    virtual bool Show( bool show );
+    virtual bool Show( bool show = TRUE );
     virtual int ShowModal();
     virtual void EndModal( int retCode );
     virtual bool IsModal() const;

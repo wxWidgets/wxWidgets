@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/fdrepdlg.cpp
 // Purpose:     wxFindReplaceDialog class
-// Author:      Markus Greither
-// Modified by: 31.07.01: VZ: integrated into wxWindows
+// Author:      Markus Greither and Vadim Zeitlin
+// Modified by:
 // Created:     23/03/2001
 // RCS-ID:
 // Copyright:   (c) Markus Greither
@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "fdrepdlg.h"
+    #pragma implementation "mswfdrepdlg.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -60,14 +60,6 @@ UINT CALLBACK wxFindReplaceDialogHookProc(HWND hwnd,
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxFindReplaceDialog, wxDialog)
-
-IMPLEMENT_DYNAMIC_CLASS(wxFindDialogEvent, wxCommandEvent)
-
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_FIND)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_FIND_NEXT)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_FIND_REPLACE)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_FIND_REPLACE_ALL)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_FIND_CLOSE)
 
 // ----------------------------------------------------------------------------
 // wxFindReplaceDialogImpl: the internals of wxFindReplaceDialog
@@ -281,16 +273,7 @@ LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
             event.SetReplaceString(pFR->lpstrReplaceWith);
         }
 
-        // TODO: should we copy the strings to dialog->GetData() as well?
-
-        if ( !dialog->GetEventHandler()->ProcessEvent(event) )
-        {
-            // the event is not propagated upwards to the parent automatically
-            // because the dialog is a top level window, so do it manually as
-            // in 9 cases of 10 the message must be processed by the dialog
-            // owner and not the dialog itself
-            (void)dialog->GetParent()->GetEventHandler()->ProcessEvent(event);
-        }
+        dialog->Send(event);
     }
 
     WNDPROC wndProc = (WNDPROC)::GetWindowLong(hwnd, GWL_USERDATA);
@@ -323,15 +306,6 @@ UINT CALLBACK wxFindReplaceDialogHookProc(HWND hwnd,
     }
 
     return 0;
-}
-
-// ----------------------------------------------------------------------------
-// wxFindReplaceData
-// ----------------------------------------------------------------------------
-
-void wxFindReplaceData::Init()
-{
-    m_Flags = 0;
 }
 
 // ============================================================================

@@ -700,6 +700,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_COLOURDLG=no
   DEFAULT_wxUSE_DIRDLG=no
   DEFAULT_wxUSE_FILEDLG=no
+  DEFAULT_wxUSE_FINDREPLDLG=no
   DEFAULT_wxUSE_FONTDLG=no
   DEFAULT_wxUSE_MSGDLG=no
   DEFAULT_wxUSE_NUMBERDLG=no
@@ -857,6 +858,7 @@ else
   DEFAULT_wxUSE_COLOURDLG=yes
   DEFAULT_wxUSE_DIRDLG=yes
   DEFAULT_wxUSE_FILEDLG=yes
+  DEFAULT_wxUSE_FINDREPLDLG=yes
   DEFAULT_wxUSE_FONTDLG=yes
   DEFAULT_wxUSE_MSGDLG=yes
   DEFAULT_wxUSE_NUMBERDLG=yes
@@ -1246,6 +1248,7 @@ WX_ARG_ENABLE(commondlg,   [  --enable-commondlg      use common dialogs (wxDirD
 WX_ARG_ENABLE(choicedlg,   [  --enable-choicedlg      use wxChoiceDialog], wxUSE_CHOICEDLG)
 WX_ARG_ENABLE(coldlg,      [  --enable-coldlg         use wxColourDialog], wxUSE_COLOURDLG)
 WX_ARG_ENABLE(filedlg,     [  --enable-filedlg        use wxFileDialog], wxUSE_FILEDLG)
+WX_ARG_ENABLE(filedlg,     [  --enable-finddlg        use wxFindReplaceDialog], wxUSE_FINDREPLDLG)
 WX_ARG_ENABLE(fontdlg,     [  --enable-fontdlg        use wxFontDialog], wxUSE_FONTDLG)
 WX_ARG_ENABLE(dirdlg,      [  --enable-dirdlg         use wxDirDialog], wxUSE_DIRDLG)
 WX_ARG_ENABLE(msgdlg,      [  --enable-msgdlg         use wxMessageDialog], wxUSE_MSGDLG)
@@ -4385,6 +4388,10 @@ fi
 
 if test "$wxUSE_FILEDLG" = "yes"; then
     AC_DEFINE(wxUSE_FILEDLG)
+fi
+
+if test "$wxUSE_FINDREPLDLG" = "yes"; then
+    AC_DEFINE(wxUSE_FINDREPLDLG)
 fi
 
 if test "$wxUSE_FONTDLG" = "yes"; then

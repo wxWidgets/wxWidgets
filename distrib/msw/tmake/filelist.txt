@@ -62,6 +62,7 @@ dcpsg.cpp	Generic	NotMSW
 dirctrlg.cpp	Generic
 dirdlgg.cpp	Generic	NotWin32,NotOS2
 dragimgg.cpp	Generic	NotOS2
+fdrepdlg.cpp	Generic	NotMSW
 fontdlgg.cpp	Generic	Generic,NotOS2
 filedlgg.cpp	Generic	NotMSW,NotX,NotOS2
 grid.cpp	Generic
@@ -129,6 +130,7 @@ effects.cpp	Common
 encconv.cpp	Common	Base
 event.cpp	Common	Base
 extended.c	Common	Base
+fddlgcmn.cpp	Common
 ffile.cpp	Common	Base
 file.cpp	Common	Base
 fileconf.cpp	Common	Base
@@ -259,6 +261,7 @@ dropsrc.cpp	MSW	OLE
 droptgt.cpp	MSW	OLE
 enhmeta.cpp	MSW	Win32Only
 evtloop.cpp	MSW	LowLevel
+fdrepdlg.cpp	MSW	Win32Only
 filedlg.cpp	MSW
 font.cpp	MSW
 fontdlg.cpp	MSW
@@ -645,6 +648,7 @@ dynlib.h	WXH	Base
 encconv.h	WXH	Base
 event.h	WXH	Base
 expr.h	WXH
+fdrepdlg.h	WXH
 ffile.h	WXH	Base
 file.h	WXH	Base
 fileconf.h	WXH	Base
@@ -657,7 +661,6 @@ fontdlg.h	WXH
 fontenc.h	WXH	Base
 fontenum.h	WXH
 fontmap.h	WXH	Base
-fontdlg.h	WXH
 fontutil.h	WXH
 frame.h	WXH
 fs_inet.h	WXH	Base
@@ -964,6 +967,7 @@ dibutils.h	MSWH
 dirdlg.h	MSWH
 dragimag.h	MSWH
 enhmeta.h	MSWH	Win32Only
+fdrepdlg.h	MSWH
 filedlg.h	MSWH
 font.h	MSWH
 fontdlg.h	MSWH
@@ -1157,6 +1161,7 @@ dcpsg.h	GenericH
 dirctrlg.h	GenericH
 dirdlgg.h	GenericH	NotWin32
 dragimgg.h	GenericH	NotWin32
+fdrepdlg.h	GenericH	NotMSW
 fontdlgg.h	GenericH
 filedlgg.h	GenericH
 grid.h	GenericH

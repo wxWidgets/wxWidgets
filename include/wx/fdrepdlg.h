@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/fdrepdlg.h
+// Name:        wx/fdrepdlg.h
 // Purpose:     wxFindReplaceDialog class
-// Author:      Markus Greither
-// Modified by: 31.07.01: VZ: integrated into wxWindows
+// Author:      Markus Greither and Vadim Zeitlin
+// Modified by:
 // Created:     23/03/2001
 // RCS-ID:
 // Copyright:   (c) Markus Greither
@@ -22,6 +22,7 @@
 
 #include "wx/dialog.h"
 
+class WXDLLEXPORT wxFindDialogEvent;
 class WXDLLEXPORT wxFindReplaceDialog;
 class WXDLLEXPORT wxFindReplaceData;
 class WXDLLEXPORT wxFindReplaceDialogImpl;
@@ -37,7 +38,7 @@ enum wxFindReplaceFlags
     wxFR_DOWN       = 1,
 
     // whole word search/replace selected
-    wxFR_WHOLEWORD  = 2, 
+    wxFR_WHOLEWORD  = 2,
 
     // case sensitive search/replace selected (otherwise - case insensitive)
     wxFR_MATCHCASE  = 4
@@ -89,59 +90,51 @@ private:
     wxString m_FindWhat,
              m_ReplaceWith;
 
-    friend class wxFindReplaceDialog;
+    friend class wxFindReplaceDialogBase;
 };
 
 // ----------------------------------------------------------------------------
-// wxFindReplaceDialog: dialog for searching / replacing text
+// wxFindReplaceDialogBase
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFindReplaceDialog : public wxDialog
+class WXDLLEXPORT wxFindReplaceDialogBase : public wxDialog
 {
 public:
     // ctors and such
-    wxFindReplaceDialog() { Init(); }
-    wxFindReplaceDialog(wxWindow *parent,
-                        wxFindReplaceData *data,
-                        const wxString &title,
-                        int style = 0);
+    wxFindReplaceDialogBase() { m_FindReplaceData = NULL; }
+    wxFindReplaceDialogBase(wxWindow * WXUNUSED(parent),
+                            wxFindReplaceData *data,
+                            const wxString& WXUNUSED(title),
+                            int WXUNUSED(style) = 0)
+    {
+        m_FindReplaceData = data;
+    }
 
-    bool Create(wxWindow *parent,
-                wxFindReplaceData *data,
-                const wxString &title,
-                int style = 0);
-
-    virtual ~wxFindReplaceDialog();
+    virtual ~wxFindReplaceDialogBase();
 
     // find dialog data access
     const wxFindReplaceData *GetData() const { return m_FindReplaceData; }
-    void SetData(wxFindReplaceData *data);
+    void SetData(wxFindReplaceData *data) { m_FindReplaceData = data; }
 
-    // implementation only from now on
-
-    wxFindReplaceDialogImpl *GetImpl() const { return m_impl; }
-
-    // override some base class virtuals
-    virtual bool Show(bool show = TRUE);
-    virtual void SetTitle( const wxString& title);
-    virtual wxString GetTitle() const;
+    // implementation only, don't use
+    void Send(wxFindDialogEvent& event);
 
 protected:
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetClientSize(int *width, int *height) const;
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+    wxFindReplaceData *m_FindReplaceData;
 
-    void Init();
-
-    wxFindReplaceData      *m_FindReplaceData;
-    wxString                m_title;
-
-    wxFindReplaceDialogImpl *m_impl;
-
-    DECLARE_DYNAMIC_CLASS(wxFindReplaceDialog)
+    // the last string we searched for
+    wxString m_lastSearch;
 };
+
+// include wxFindReplaceDialog declaration
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    #include "wx/msw/fdrepdlg.h"
+#else
+    #define wxGenericFindReplaceDialog wxFindReplaceDialog
+    #define sm_classwxGenericFindReplaceDialog sm_classwxFindReplaceDialog
+
+    #include "wx/generic/fdrepdlg.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // wxFindReplaceDialog events

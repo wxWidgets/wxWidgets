@@ -11,6 +11,7 @@ wxBase:
 All (GUI):
 
 - support for virtual list control added
+- wxFindReplaceDialog added (based on work of Markus Greither)
 
 2.3.1
 -----
