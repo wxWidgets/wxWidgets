@@ -63,12 +63,11 @@ def _rename(d_new, d_old, modulename=None):
         else:
             # add everything else unchanged
             new = old
-        if _newnames.has_key(old):
+        if not _newnames.has_key(old):
             d_new[new] = obj
             _newnames[old] = prefix + new      # add fully qualified new name to lookup using old name as key
 
 # rename the wx namespace itself
-
 _rename(globals(), wx.__dict__)
 del wx
 
