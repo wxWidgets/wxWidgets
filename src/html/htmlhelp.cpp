@@ -219,7 +219,7 @@ static int IndexCompareFunc(const void *a, const void *b)
 
 
 
-bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg = FALSE)
+bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
 {
     wxFSFile *fi;
     wxFileSystem fsys;
@@ -532,7 +532,9 @@ void wxHtmlHelpController::CreateHelpWindow()
         return;
     }
 
+#if wxUSE_BUSYINFO
     wxBusyInfo busyinfo(_("Preparing help window..."));
+#endif
 
     if (m_Config) ReadCustomization(m_Config, m_ConfigRoot);
 
