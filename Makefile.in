@@ -22,10 +22,10 @@ include ./src/make.env
 	$(CCC) -c @DEP_INFO_FLAGS@ $(CFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
 .cpp.o :
-	$(CC) -c @DEP_INFO_FLAGS@ $(CPPFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
+	$(CC) -c @DEP_INFO_FLAGS@ $(CXXFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
 .cxx.o :
-	$(CC) -c @DEP_INFO_FLAGS@ $(CPPFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
+	$(CC) -c @DEP_INFO_FLAGS@ $(CXXFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
 ########################### Paths #################################
 

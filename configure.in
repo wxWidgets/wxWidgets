@@ -2305,9 +2305,8 @@ if test "$wxUSE_SHARED" = "yes"; then
         fi
       ;;
       *-*-darwin* )
-	TOOLKIT_DEF="${TOOLKIT_DEF} -D__UNIX__ -D__DARWIN__ -D__POWERPC__"
-	CFLAGS="${CFLAGS} -fno-common"
-	CPPFLAGS="${CPPFLAGS} -fno-common"
+        TOOLKIT_DEF="${TOOLKIT_DEF} -D__UNIX__ -D__DARWIN__ -D__POWERPC__"
+        CPPFLAGS="${CPPFLAGS} -fno-common"
         SHARED_LD="${CXX} -dynamiclib -o"
         PIC_FLAG="-dynamic -fPIC"
         if test "$wxUSE_OPENGL" = "yes"; then
@@ -2318,9 +2317,9 @@ if test "$wxUSE_SHARED" = "yes"; then
             WX_ALL="CREATE_LINKS"
         fi
         dnl add the resources target for wxMac
-	if test "$wxUSE_MAC" = 1 ; then
-	        WX_ALL="${WX_ALL} ./lib/lib${WX_LIBRARY}-${WX_RELEASE}.r"
-	fi
+        if test "$wxUSE_MAC" = 1 ; then
+                WX_ALL="${WX_ALL} ./lib/lib${WX_LIBRARY}-${WX_RELEASE}.r"
+        fi
         dnl the name of the shared library
         WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}-${WX_RELEASE}.dylib.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
         WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.dylib.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
@@ -3075,7 +3074,7 @@ if test "$wxUSE_THREADS" = "yes" ; then
   dnl we need to define _XOPEN_SOURCE=500 to get PTHREAD_MUTEX_RECURSIVE
   dnl with glibc 2.1+, it probably shouldn't hurt elsewhere?
   if test "x$wx_lib_glibc21" = "xyes"; then
-      CFLAGS="$CFLAGS -D_XOPEN_SOURCE=500"
+      CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=500"
   fi
 
   AC_CACHE_CHECK([for pthread_mutexattr_t], wx_cv_type_pthread_mutexattr_t,
@@ -3122,7 +3121,7 @@ if test "$wxUSE_THREADS" = "yes" ; then
   dnl building MT programs under Solaris with the native compiler requires -mt
   dnl switch
   if test "$USE_SOLARIS" = "yes" -a "$GCC" != "yes"; then
-      CFLAGS="${CFLAGS} -mt"
+      CPPFLAGS="${CFLAGS} -mt"
       CXXFLAGS="${CXXFLAGS} -mt"
       LDFLAGS="${LDFLAGS} -mt"
   fi
@@ -3136,8 +3135,7 @@ if test "$wxUSE_THREADS" = "yes"; then
 
   dnl must define _REENTRANT for multithreaded code except for Darwin/Mac OS X
   if test "$USE_DARWIN" != 1; then
-    CFLAGS="${CFLAGS} -D_REENTRANT"
-    CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+    CPPFLAGS="${CPPFLAGS} -D_REENTRANT"
   fi
 
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
@@ -3147,8 +3145,7 @@ else
   if test "$ac_cv_func_strtok_r" = "yes"; then
     AC_MSG_CHECKING(if -D_REENTRANT is needed)
     if test "$NEEDS_D_REENTRANT_FOR_R_FUNCS" = 1; then
-        CFLAGS="${CFLAGS} -D_REENTRANT"
-        CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+        CPPFLAGS="${CPPFLAGS} -D_REENTRANT"
         AC_MSG_RESULT(yes)
     else
         AC_MSG_RESULT(no)
@@ -3175,8 +3172,8 @@ fi
 
 if test "$wxUSE_MAC" = 1 ; then
   TOOLKIT_DEF="${TOOLKIT_DEF} -DTARGET_CARBON"
-  CFLAGS="${CFLAGS} -fpascal-strings"
-  CPPFLAGS="${CPPFLAGS} -cpp-precomp -fpascal-strings"
+  CPPFLAGS="${CPPFLAGS} -fpascal-strings"
+  CXXFLAGS="${CXXFLAGS} -cpp-precomp"
   AC_CHECK_PROG(REZ, Rez, Rez, /Developer/Tools/Rez)
   AC_CHECK_PROG(DEREZ, Derez, Derez, /Developer/Tools/Derez)
   RESCOMP=${REZ}
