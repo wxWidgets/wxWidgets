@@ -109,6 +109,8 @@ wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 
 typedef int (PASCAL *WSAAsyncSelectFunc)(SOCKET,HWND,u_int,long);
 
+LRESULT CALLBACK _GSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);
+
 /* Global variables */
 
 extern HINSTANCE INSTANCE;
@@ -119,9 +121,12 @@ static int firstAvailable;
 static WSAAsyncSelectFunc gs_WSAAsyncSelect = NULL;
 static HMODULE gs_wsock32dll = 0;
 
+bool GSocketGUIFunctionsTableConcrete::CanUseEventLoop()
+{   return true; }
+
 /* Global initializers */
 
-int _GSocket_GUI_Init(void)
+bool GSocketGUIFunctionsTableConcrete::OnInit()
 {
   static LPCTSTR pclassname = NULL;
   int i;
@@ -129,7 +134,7 @@ int _GSocket_GUI_Init(void)
   /* Create internal window for event notifications */
   hWin = wxCreateHiddenWindow(&pclassname, CLASSNAME, _GSocket_Internal_WinProc);
   if (!hWin)
-      return FALSE;
+      return false;
 
   /* Initialize socket list */
   InitializeCriticalSection(&critical);
@@ -145,16 +150,16 @@ int _GSocket_GUI_Init(void)
      sockets): */
   gs_wsock32dll = LoadLibraryA("wsock32.dll");
   if (!gs_wsock32dll)
-      return FALSE;
+      return false;
   gs_WSAAsyncSelect =(WSAAsyncSelectFunc)GetProcAddress(gs_wsock32dll,
                                                         "WSAAsyncSelect");
   if (!gs_WSAAsyncSelect)
-      return FALSE;
+      return false;
 
-  return TRUE;
+  return true;
 }
 
-void _GSocket_GUI_Cleanup(void)
+void GSocketGUIFunctionsTableConcrete::OnExit()
 {
   /* Destroy internal window */
   DestroyWindow(hWin);
@@ -173,7 +178,7 @@ void _GSocket_GUI_Cleanup(void)
 
 /* Per-socket GUI initialization / cleanup */
 
-int _GSocket_GUI_Init_Socket(GSocket *socket)
+bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
 {
   int i;
 
@@ -188,7 +193,7 @@ int _GSocket_GUI_Init_Socket(GSocket *socket)
     if (i == firstAvailable)    /* abort! */
     {
       LeaveCriticalSection(&critical);
-      return FALSE;
+      return false;
     }
   }
   socketList[i] = socket;
@@ -197,10 +202,10 @@ int _GSocket_GUI_Init_Socket(GSocket *socket)
 
   LeaveCriticalSection(&critical);
 
-  return TRUE;
+  return true;
 }
 
-void _GSocket_GUI_Destroy_Socket(GSocket *socket)
+void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
 {
   /* Remove the socket from the list */
   EnterCriticalSection(&critical);
@@ -284,7 +289,7 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
  *  events for internal processing, but we will only notify users
  *  when an appropiate callback function has been installed.
  */
-void _GSocket_Enable_Events(GSocket *socket)
+void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
 {
   assert (socket != NULL);
 
@@ -303,7 +308,7 @@ void _GSocket_Enable_Events(GSocket *socket)
 /* _GSocket_Disable_Events:
  *  Disable event notifications (when shutdowning the socket)
  */
-void _GSocket_Disable_Events(GSocket *socket)
+void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 {
   assert (socket != NULL);
 
