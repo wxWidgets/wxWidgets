@@ -75,7 +75,13 @@ FortyApp::~FortyApp()
 bool FortyApp::OnInit()
 {
     bool largecards = false;
-    m_dir = wxGetCwd();
+#ifndef __WXWINCE__
+    m_helpFile = wxGetCwd() + wxFILE_SEP_PATH + wxT("about.htm");
+    if (!wxFileExists(m_helpFile))
+#endif
+    {
+        m_helpFile = wxPathOnly(argv[0]) + wxFILE_SEP_PATH + wxT("about.htm");
+    }
 
     wxSize size(668,510);
 
@@ -234,8 +240,7 @@ void
 FortyFrame::Help(wxCommandEvent& event)
 {
 #if wxUSE_HTML
-    wxString htmlFile = wxGetApp().GetDir() + wxFILE_SEP_PATH + wxT("about.htm");
-    if (wxFileExists(htmlFile))
+    if (wxFileExists(wxGetApp().GetHelpFile()))
     {
         FortyAboutDialog dialog(this, wxID_ANY, wxT("Forty Thieves Instructions"));
         if (dialog.ShowModal() == wxID_OK)
@@ -326,7 +331,7 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
 {
 #if wxUSE_HTML
     wxString htmlText;
-    wxString htmlFile = wxGetApp().GetDir() + wxFILE_SEP_PATH + wxT("about.htm");
+    wxString htmlFile = wxGetApp().GetHelpFile();
 
     {
         wxTextFile file(htmlFile);

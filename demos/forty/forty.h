@@ -23,13 +23,13 @@ public:
     static const wxColour& BackgroundColour();
     static const wxColour& TextColour();
     static const wxBrush&  BackgroundBrush();
-    const wxString& GetDir() const { return m_dir; }
+    const wxString& GetHelpFile() const { return m_helpFile; }
 
 private:
     static wxColour* m_backgroundColour;
     static wxColour* m_textColour;
     static wxBrush*  m_backgroundBrush;
-    wxString m_dir;
+    wxString m_helpFile;
 };
 
 DECLARE_APP(FortyApp)
