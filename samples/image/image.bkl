@@ -5,7 +5,7 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="image" template="wx_sample">
+    <exe id="image" template="wx_sample" template_append="wx_append">
         <sources>image.cpp</sources>
         <wx-lib>core</wx-lib>
         <rc-file>image.rc</rc-file>

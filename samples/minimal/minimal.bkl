@@ -3,7 +3,7 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="minimal" template="wx_sample">
+    <exe id="minimal" template="wx_sample" template_append="wx_append">
         <sources>minimal.cpp</sources>
         <wx-lib>core</wx-lib>
         <rc-file>minimal.rc</rc-file>
