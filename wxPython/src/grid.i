@@ -1474,6 +1474,7 @@ public:
     bool CreateGrid( int numRows, int numCols,
                      WXGRIDSELECTIONMODES selmode = wxGrid::wxGridSelectCells );
     void SetSelectionMode(WXGRIDSELECTIONMODES selmode);
+    WXGRIDSELECTIONMODES GetSelectionMode();
 
 
     // ------ grid dimensions
@@ -1529,7 +1530,7 @@ public:
     void     EndBatch();
     int      GetBatchCount();
     void     ForceRefresh();
-    void     Refresh(bool eraseb=TRUE, wxRect* rect= NULL);
+    void     Refresh(bool eraseb=TRUE, const wxRect* rect= NULL);
 
 
     // ------ edit control functions
@@ -1761,6 +1762,13 @@ public:
     void ClearSelection();
     bool IsInSelection( int row, int col );
     // TODO: ??? bool IsInSelection( const wxGridCellCoords& coords )
+
+// TODO:  These need typemaps
+//     wxGridCellCoordsArray GetSelectedCells() const;
+//     wxGridCellCoordsArray GetSelectionBlockTopLeft() const;
+//     wxGridCellCoordsArray GetSelectionBlockBottomRight() const;
+//     wxArrayInt GetSelectedRows() const;
+//     wxArrayInt GetSelectedCols() const;
 
 
     // This function returns the rectangle that encloses the block of cells

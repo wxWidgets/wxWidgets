@@ -1794,3 +1794,6 @@ wxEVT_STC_ZOOM = stc_c.wxEVT_STC_ZOOM
 
 wx.wxStyledTextEventPtr       = wxStyledTextEventPtr
 wx.wxStyledTextCtrlPtr        = wxStyledTextCtrlPtr
+
+
+wxSTC_CARET_CENTER = wxSTC_CARET_STRICT

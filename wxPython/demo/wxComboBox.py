@@ -22,8 +22,8 @@ class TestComboBox(wxPanel):
                                wxPoint(8, 10))
 
         wxStaticText(self, -1, "Select one:", wxPoint(15, 50), wxSize(75, 18))
-        cb = wxComboBox(self, 500, "default value", wxPoint(80, 50), wxSize(95, -1),
-                        sampleList, wxCB_DROPDOWN|wxTE_PROCESS_ENTER)
+        cb = wxComboBox(self, 500, "default value", wxPoint(90, 50), wxSize(95, -1),
+                        sampleList, wxCB_DROPDOWN)#|wxTE_PROCESS_ENTER)
         EVT_COMBOBOX(self, 500, self.EvtComboBox)
         EVT_TEXT(self, 500, self.EvtText)
         EVT_TEXT_ENTER(self, 500, self.EvtTextEnter)
@@ -32,7 +32,7 @@ class TestComboBox(wxPanel):
 
         cb.Append("foo", "This is some client data for this item")
 
-        cb = wxComboBox(self, 501, "default value", wxPoint(80, 80), wxSize(95, -1),
+        cb = wxComboBox(self, 501, "default value", wxPoint(90, 80), wxSize(95, -1),
                         [], wxCB_SIMPLE)
         for item in sampleList:
             cb.Append(item, string.upper(item))
@@ -65,12 +65,15 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
 overview = """\
 A combobox is like a combination of an edit control and a listbox. It can be displayed as static list with editable or read-only text field; or a drop-down list with text field; or a drop-down list without a text field.
 
 """
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

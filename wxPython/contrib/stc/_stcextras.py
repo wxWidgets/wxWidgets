@@ -2,3 +2,6 @@
 
 wx.wxStyledTextEventPtr       = wxStyledTextEventPtr
 wx.wxStyledTextCtrlPtr        = wxStyledTextCtrlPtr
+
+
+wxSTC_CARET_CENTER = wxSTC_CARET_STRICT

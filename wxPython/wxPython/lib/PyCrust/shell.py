@@ -233,6 +233,7 @@ class Shell(wxStyledTextCtrl):
         self.autoCallTip = 1
         self.CallTipSetBackground(wxColour(255, 255, 232))
         self.wrap()
+        self.SetEndAtLastLine(false)
 
     def showIntro(self, text=''):
         """Display introductory text in the shell."""
@@ -243,6 +244,7 @@ class Shell(wxStyledTextCtrl):
             self.write(self.interp.introText)
         except AttributeError:
             pass
+        wxCallAfter(self.ScrollToLine, 0)
 
     def setBuiltinKeywords(self):
         """Create pseudo keywords as part of builtins.
