@@ -33,7 +33,7 @@ erase %dest\utils.zip
 erase %dest\extradoc.zip
 erase %dest\*-win32.zip
 
-if direxist %dest\wx deltree /Y %dest\wx
+if direxist %dest\wx del /sxyz %dest\wx\
 
 cd %src
 echo Zipping...
@@ -170,7 +170,7 @@ erase /Y contrib\docs\winhelp\stc.*
 erase /Y contrib\docs\htmlhelp\mmedia.*
 erase /Y contrib\docs\htmlhelp\stc.*
 erase /Y contrib\docs\pdf\*.*
-deltree /Y contrib\docs\latex\ogl
+del /sxzy contrib\docs\latex\ogl
 erase /Y src\mingegcs.bat
 erase /Y distrib
 

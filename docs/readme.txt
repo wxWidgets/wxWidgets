@@ -1,5 +1,8 @@
-wxWindows 2.2.3
+wxWindows 2.2.5
 ---------------
+
+README
+------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using (where
@@ -228,5 +231,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, 12th November, 2000
+The wxWindows Team, 28th January, 2001
 

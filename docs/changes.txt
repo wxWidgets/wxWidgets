@@ -18,7 +18,8 @@ OTHER CHANGES
 
 - fixed memory corruption/crash in wxStreamBuffer
 - wxTree/ListCtrl position fix (Mike Oliver <oliver@math.ucla.edu>)
-- Italian translations updated 
+- Italian translations updated
+- Windows 2000 toolbar colours problem fixed
 
 2.2.4
 -----

@@ -15,8 +15,8 @@
 // Bump-up with each new version
 #define wxMAJOR_VERSION    2
 #define wxMINOR_VERSION    2
-#define wxRELEASE_NUMBER   4
-#define wxVERSION_STRING   _T("wxWindows 2.2.4")
+#define wxRELEASE_NUMBER   5
+#define wxVERSION_STRING   _T("wxWindows 2.2.5")
 #define wxVERSION_NUMBER (wxMAJOR_VERSION * 1000) + (wxMINOR_VERSION * 100) + wxRELEASE_NUMBER
 #define wxBETA_NUMBER      0
 #define wxVERSION_FLOAT wxMAJOR_VERSION + (wxMINOR_VERSION/10.0) + (wxRELEASE_NUMBER/100.0) + (wxBETA_NUMBER/10000.0)
