@@ -70,8 +70,7 @@ wxBitmapRefData::wxBitmapRefData( const wxBitmapRefData& data)
     m_numColors = data.m_numColors;
     m_bitmapPalette = data.m_bitmapPalette;
     m_quality = data.m_quality;
-    m_cocoaNSBitmapImageRep = data.m_cocoaNSBitmapImageRep;
-    [m_cocoaNSBitmapImageRep retain];
+    m_cocoaNSBitmapImageRep = [data.m_cocoaNSBitmapImageRep copyWithZone:nil];
     m_bitmapMask = data.m_bitmapMask?new wxMask(*data.m_bitmapMask):NULL;
 }
 
@@ -140,6 +139,16 @@ WX_NSBitmapImageRep wxBitmap::GetNSBitmapImageRep()
     if(!M_BITMAPDATA)
         return NULL;
     return M_BITMAPDATA->m_cocoaNSBitmapImageRep;
+}
+
+void wxBitmap::SetNSBitmapImageRep(WX_NSBitmapImageRep bitmapImageRep)
+{
+    if(!M_BITMAPDATA)
+        return;
+    // NOTE: No checking is done to make sure width/height agree
+    [bitmapImageRep retain];
+    [M_BITMAPDATA->m_cocoaNSBitmapImageRep release];
+    M_BITMAPDATA->m_cocoaNSBitmapImageRep = bitmapImageRep;
 }
 
 void wxBitmap::SetWidth(int w)
@@ -249,6 +258,23 @@ bool wxBitmap::Create(int w, int h, int d)
     M_BITMAPDATA->m_depth = d;
 
     /* TODO: create new bitmap */
+    M_BITMAPDATA->m_cocoaNSBitmapImageRep = [[NSBitmapImageRep alloc]
+            initWithBitmapDataPlanes: NULL
+            pixelsWide: w
+            pixelsHigh: h
+            bitsPerSample: 8
+            samplesPerPixel: 3
+            hasAlpha: NO
+            isPlanar: NO
+            colorSpaceName: NSCalibratedRGBColorSpace
+            bytesPerRow: 0
+            bitsPerPixel: 0];
+
+    wxLogDebug("M_BITMAPDATA=%p NSBitmapImageRep bitmapData=%p", M_BITMAPDATA, [M_BITMAPDATA->m_cocoaNSBitmapImageRep bitmapData]);
+    M_BITMAPDATA->m_ok = true;
+    M_BITMAPDATA->m_numColors = 0;
+    M_BITMAPDATA->m_quality = 0;
+    M_BITMAPDATA->m_bitmapMask = NULL;
 
     return M_BITMAPDATA->m_ok;
 }

@@ -144,6 +144,7 @@ public:
 
     // wxCocoa
     WX_NSBitmapImageRep GetNSBitmapImageRep();
+    void SetNSBitmapImageRep(WX_NSBitmapImageRep bitmapImageRep);
 
     static void InitStandardHandlers() { }
     static void CleanUpHandlers() { }
