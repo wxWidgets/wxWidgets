@@ -102,7 +102,7 @@ spinctlg.cpp	Generic
 splash.cpp	Generic
 splitter.cpp	Generic
 statline.cpp	Generic	NotMSW,NotGTK,NotOS2,NotMGL,NotMac
-statusbr.cpp	Generic
+statusbr.cpp	Generic	NotMGL
 tabg.cpp	Generic	NotWin32,NotOS2
 tbarsmpl.cpp	Generic
 textdlgg.cpp	Generic
