@@ -2431,7 +2431,8 @@ void wxGridCellAttrData::UpdateAttrRows( size_t pos, int numRows )
                 else
                 {
                     // ...or remove the attribute
-                    m_attrs.RemoveAt((size_t)n);
+                    m_attrs[n].attr->DecRef();
+                    m_attrs.RemoveAt(n);
                     n--; count--;
                 }
             }
@@ -2464,7 +2465,8 @@ void wxGridCellAttrData::UpdateAttrCols( size_t pos, int numCols )
                 else
                 {
                     // ...or remove the attribute
-                    m_attrs.RemoveAt((size_t)n);
+                    m_attrs[n].attr->DecRef();
+                    m_attrs.RemoveAt(n);
                     n--; count--;
                 }
             }
@@ -2562,8 +2564,9 @@ void wxGridRowOrColAttrData::UpdateAttrRowsOrCols( size_t pos, int numRowsOrCols
                     rowOrCol += numRowsOrCols;
                 else
                 {
-                    m_rowsOrCols.RemoveAt((size_t)n);
-                    m_attrs.RemoveAt((size_t)n);
+                    m_rowsOrCols.RemoveAt(n);
+                    m_attrs[n]->DecRef();
+                    m_attrs.RemoveAt(n);
                     n--; count--;
                 }
             }
