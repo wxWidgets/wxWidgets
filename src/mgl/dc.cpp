@@ -33,6 +33,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/encinfo.h"
 #include "wx/fontmap.h"
 #include "wx/mgl/private.h"
 #include "wx/log.h"
