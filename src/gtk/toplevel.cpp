@@ -936,10 +936,17 @@ void wxTopLevelWindowGTK::Maximize(bool maximize)
 
 bool wxTopLevelWindowGTK::IsMaximized() const
 {
+#ifdef __WXGTK20__
+    if(!m_widget->window)
+        return false;
+
+    return gdk_window_get_state(m_widget->window) & GDK_WINDOW_STATE_MAXIMIZED;
+#else
   //    wxFAIL_MSG( _T("not implemented") );
 
     // This is an approximation
     return FALSE;
+#endif
 }
 
 void wxTopLevelWindowGTK::Restore()

@@ -234,6 +234,8 @@ wxGTK:
   in wxSystemSettings::GetMetric (Mart Raudsepp)
 - wxGTK uses GTK+ 2.x by default now, you have to pass --disable-gtk2 to
   configure if you want to use GTK+ 1.2
+- implemented wxTopLevel::IsMaximized() for GTK+2 and WMs that implement
+  freedesktop.org's wm-spec (Mart Raudsepp)
 
 wxMotif:
 
