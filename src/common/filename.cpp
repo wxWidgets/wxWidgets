@@ -135,23 +135,31 @@
 class wxFileHandle
 {
 public:
-    wxFileHandle(const wxString& filename)
+    enum OpenMode
+    {
+        Read,
+        Write
+    };
+
+    wxFileHandle(const wxString& filename, OpenMode mode)
     {
         m_hFile = ::CreateFile
                     (
-                     filename,          // name
-                     GENERIC_READ,      // access mask
-                     0,                 // no sharing
-                     NULL,              // no secutity attr
-                     OPEN_EXISTING,     // creation disposition
-                     0,                 // no flags
-                     NULL               // no template file
+                     filename,                      // name
+                     mode == Read ? GENERIC_READ    // access mask 
+                                  : GENERIC_WRITE,
+                     0,                             // no sharing
+                     NULL,                          // no secutity attr
+                     OPEN_EXISTING,                 // creation disposition
+                     0,                             // no flags
+                     NULL                           // no template file
                     );
 
         if ( m_hFile == INVALID_HANDLE_VALUE )
         {
-            wxLogSysError(_("Failed to open '%s' for reading"),
-                          filename.c_str());
+            wxLogSysError(_("Failed to open '%s' for %s"),
+                          filename.c_str(),
+                          mode == Read ? _("reading") : _("writing"));
         }
     }
 
@@ -187,32 +195,45 @@ private:
 // convert between wxDateTime and FILETIME which is a 64-bit value representing
 // the number of 100-nanosecond intervals since January 1, 1601.
 
-// the number of milliseconds between the Unix Epoch (January 1, 1970) and the
-// FILETIME reference point (January 1, 1601)
-static const wxLongLong FILETIME_EPOCH_OFFSET = wxLongLong(0xa97, 0x30b66800);
-
 static void ConvertFileTimeToWx(wxDateTime *dt, const FILETIME &ft)
 {
-    wxLongLong ll(ft.dwHighDateTime, ft.dwLowDateTime);
+    FILETIME ftLocal;
+    if ( !::FileTimeToLocalFileTime(&ft, &ftLocal) )
+    {
+        wxLogLastError(_T("FileTimeToLocalFileTime"));
+    }
 
-    // convert 100ns to ms
-    ll /= 10000;
+    SYSTEMTIME st;
+    if ( !::FileTimeToSystemTime(&ftLocal, &st) )
+    {
+        wxLogLastError(_T("FileTimeToSystemTime"));
+    }
 
-    // move it to our Epoch
-    ll -= FILETIME_EPOCH_OFFSET;
-
-    *dt = wxDateTime(ll);
+    dt->Set(st.wDay, wxDateTime::Month(st.wMonth - 1), st.wYear,
+            st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 }
 
 static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
 {
-    // do the reverse of ConvertFileTimeToWx()
-    wxLongLong ll = dt.GetValue();
-    ll += FILETIME_EPOCH_OFFSET;
-    ll *= 10000;
+    SYSTEMTIME st;
+    st.wDay = dt.GetDay();
+    st.wMonth = dt.GetMonth() + 1;
+    st.wYear = dt.GetYear();
+    st.wHour = dt.GetHour();
+    st.wMinute = dt.GetMinute();
+    st.wSecond = dt.GetSecond();
+    st.wMilliseconds = dt.GetMillisecond();
 
-    ft->dwHighDateTime = ll.GetHi();
-    ft->dwLowDateTime = ll.GetLo();
+    FILETIME ftLocal;
+    if ( !::SystemTimeToFileTime(&st, &ftLocal) )
+    {
+        wxLogLastError(_T("SystemTimeToFileTime"));
+    }
+
+    if ( !::LocalFileTimeToFileTime(&ftLocal, ft) )
+    {
+        wxLogLastError(_T("LocalFileTimeToFileTime"));
+    }
 }
 
 #endif // __WIN32__
@@ -1561,9 +1582,9 @@ void wxFileName::SplitPath(const wxString& fullpath,
 // time functions
 // ----------------------------------------------------------------------------
 
-bool wxFileName::SetTimes(const wxDateTime *dtCreate,
-                          const wxDateTime *dtAccess,
-                          const wxDateTime *dtMod)
+bool wxFileName::SetTimes(const wxDateTime *dtAccess,
+                          const wxDateTime *dtMod,
+                          const wxDateTime *dtCreate)
 {
 #if defined(__UNIX_LIKE__) || (defined(__DOS__) && defined(__WATCOMC__))
     if ( !dtAccess && !dtMod )
@@ -1582,7 +1603,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtCreate,
         return TRUE;
     }
 #elif defined(__WIN32__)
-    wxFileHandle fh(GetFullPath());
+    wxFileHandle fh(GetFullPath(), wxFileHandle::Write);
     if ( fh.IsOk() )
     {
         FILETIME ftAccess, ftCreate, ftWrite;
@@ -1626,13 +1647,13 @@ bool wxFileName::Touch()
 #else // other platform
     wxDateTime dtNow = wxDateTime::Now();
 
-    return SetTimes(NULL /* don't change create time */, &dtNow, &dtNow);
+    return SetTimes(&dtNow, &dtNow, NULL /* don't change create time */);
 #endif // platforms
 }
 
 bool wxFileName::GetTimes(wxDateTime *dtAccess,
                           wxDateTime *dtMod,
-                          wxDateTime *dtChange) const
+                          wxDateTime *dtCreate) const
 {
 #if defined(__UNIX_LIKE__) || defined(__WXMAC__) || (defined(__DOS__) && defined(__WATCOMC__))
     wxStructStat stBuf;
@@ -1642,13 +1663,13 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
             dtAccess->Set(stBuf.st_atime);
         if ( dtMod )
             dtMod->Set(stBuf.st_mtime);
-        if ( dtChange )
-            dtChange->Set(stBuf.st_ctime);
+        if ( dtCreate )
+            dtCreate->Set(stBuf.st_ctime);
 
         return TRUE;
     }
 #elif defined(__WIN32__)
-    wxFileHandle fh(GetFullPath());
+    wxFileHandle fh(GetFullPath(), wxFileHandle::Read);
     if ( fh.IsOk() )
     {
         FILETIME ftAccess, ftCreate, ftWrite;
@@ -1656,14 +1677,14 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
         if ( ::GetFileTime(fh,
                            dtMod ? &ftCreate : NULL,
                            dtAccess ? &ftAccess : NULL,
-                           dtChange ? &ftWrite : NULL) )
+                           dtCreate ? &ftWrite : NULL) )
         {
             if ( dtMod )
                 ConvertFileTimeToWx(dtMod, ftCreate);
             if ( dtAccess )
                 ConvertFileTimeToWx(dtAccess, ftAccess);
-            if ( dtChange )
-                ConvertFileTimeToWx(dtChange, ftWrite);
+            if ( dtCreate )
+                ConvertFileTimeToWx(dtCreate, ftWrite);
 
             return TRUE;
         }

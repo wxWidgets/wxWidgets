@@ -140,7 +140,10 @@ following functions:
 \membersection{Operations}
 
 These methods allow to work with the file creation, access and modification
-times:
+times. Note that not all filesystems under all platforms implement these times
+in the same way. For example, the access time under Windows has a resolution of
+one day (so it is really the access date and not time). The access time may be
+updated when the file is executed or not depending on the platform.
 
 \helpref{GetModificationTime}{wxfilenamegetmodificationtime}\\
 \helpref{GetTimes}{wxfilenamegettimes}\\
@@ -400,9 +403,9 @@ Return the short form of the path (returns identity on non-Windows platforms)
 
 \membersection{wxFileName::GetTimes}\label{wxfilenamegettimes}
 
-\constfunc{bool}{GetTimes}{\param{wxDateTime* }{dtAccess}, \param{wxDateTime* }{dtMod}, \param{wxDateTime* }{dtChange}}
+\constfunc{bool}{GetTimes}{\param{wxDateTime* }{dtAccess}, \param{wxDateTime* }{dtMod}, \param{wxDateTime* }{dtCreate}}
 
-return the last access, last modification and last change times
+return the last access, last modification and creation times
 (any of the pointers may be NULL)
 
 
@@ -584,7 +587,7 @@ full name is the file name + extension (but without the path)
 
 \membersection{wxFileName::SetTimes}\label{wxfilenamesettimes}
 
-\func{bool}{SetTimes}{\param{const wxDateTime* }{dtCreate}, \param{const wxDateTime* }{dtAccess}, \param{const wxDateTime* }{dtMod}}
+\func{bool}{SetTimes}{\param{const wxDateTime* }{dtAccess}, \param{const wxDateTime* }{dtMod}, \param{const wxDateTime* }{dtCreate}}
 
 set the file creation and last access/mod times
 (any of the pointers may be NULL)

@@ -90,7 +90,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_WCHAR
+    #define TEST_FILETIME
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -982,8 +982,8 @@ static void TestFileGetTimes()
 {
     wxFileName fn(_T("testdata.fc"));
 
-    wxDateTime dtAccess, dtMod, dtChange;
-    if ( !fn.GetTimes(&dtAccess, &dtMod, &dtChange) )
+    wxDateTime dtAccess, dtMod, dtCreate;
+    if ( !fn.GetTimes(&dtAccess, &dtMod, &dtCreate) )
     {
         wxPrintf(_T("ERROR: GetTimes() failed.\n"));
     }
@@ -992,9 +992,9 @@ static void TestFileGetTimes()
         static const wxChar *fmt = _T("%Y-%b-%d %H:%M:%S");
 
         wxPrintf(_T("File times for '%s':\n"), fn.GetFullPath().c_str());
-        wxPrintf(_T("Access:      \t%s\n"), dtAccess.Format(fmt).c_str());
-        wxPrintf(_T("Mod/creation:\t%s\n"), dtMod.Format(fmt).c_str());
-        wxPrintf(_T("Change:      \t%s\n"), dtChange.Format(fmt).c_str());
+        wxPrintf(_T("Creation:    \t%s\n"), dtCreate.Format(fmt).c_str());
+        wxPrintf(_T("Last read:   \t%s\n"), dtAccess.Format(fmt).c_str());
+        wxPrintf(_T("Last write:  \t%s\n"), dtMod.Format(fmt).c_str());
     }
 }
 

@@ -173,20 +173,20 @@ public:
 
     // time functions
 
-        // set the file creation and last access/mod times
+        // set the file last access/mod and creation times
         // (any of the pointers may be NULL)
-    bool SetTimes(const wxDateTime *dtCreate,
-                  const wxDateTime *dtAccess,
-                  const wxDateTime *dtMod);
+    bool SetTimes(const wxDateTime *dtAccess,
+                  const wxDateTime *dtMod,
+                  const wxDateTime *dtCreate);
 
         // set the access and modification times to the current moment
     bool Touch();
 
-        // return the last access, last modification and last change times
+        // return the last access, last modification and create times
         // (any of the pointers may be NULL)
     bool GetTimes(wxDateTime *dtAccess,
                   wxDateTime *dtMod,
-                  wxDateTime *dtChange) const;
+                  wxDateTime *dtCreate) const;
 
         // convenience wrapper: get just the last mod time of the file
     wxDateTime GetModificationTime() const
