@@ -1,20 +1,19 @@
-# Gizmos makefile for Watcom C++
+# STC makefile for Watcom C++
 
 WXDIR = ..\..\..
 
-EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
-!include $(WXDIR)\src\makewat.env
-
 SCINTILLA=$(WXDIR)\contrib\src\stc\scintilla
-
 S=$(SCINTILLA)\src
-
 STCEXTRACPPFLAGS=-D__WX__ -DSCI_LEXER -DLINK_LEXERS -I$(SCINTILLA)\include -I$(S)
+
+EXTRACPPFLAGS = -I$(WXDIR)\contrib\include $(STCEXTRACPPFLAGS)
+
+!include $(WXDIR)\src\makewat.env
 
 STCLIB = $(WXDIR)\lib\stc.lib
 THISDIR = $(WXDIR)\contrib\src\stc
 OUTPUTDIR = $(THISDIR)\
-EXTRACPPFLAGS = -I$(WXDIR)\contrib\include $(STCEXTRACPPFLAGS)
+
 
 NAME = stc
 LNK = $(name).lnk
@@ -74,6 +73,6 @@ clean:   .SYMBOLIC
 .cxx: $(S)
 
 .cxx.obj:
-    wpp386 $[*.cxx /w3 -zv $(STCEXTRACPPFLAGS) -I$(WXDIR)\include -I$(ARCHINCDIR)
+    $(CXX) $[*.cxx $(CXXFLAGS) $(STCEXTRACPPFLAGS) 
 
 
