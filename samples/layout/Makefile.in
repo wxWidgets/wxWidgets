@@ -53,12 +53,12 @@ BUILD = @BUILD@
 PLATFORM_WIN32 = @PLATFORM_WIN32@
 USE_MACVERSION = @USE_MACVERSION@
 PLATFORM_MACOSX = @PLATFORM_MACOSX@
+DEPS_TRACKING = @DEPS_TRACKING@
 TOOLKIT_VERSION = @TOOLKIT_VERSION@
 WXUNIV = @WXUNIV@
 TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
-DEPS_TYPE = @DEPS_TYPE@
-SHARED_LD_CXX = @SHARED_LD_CXX@
 CXX = @CXX@
+SHARED_LD_CXX = @SHARED_LD_CXX@
 includedir = @includedir@
 LN_S = @LN_S@
 CFLAGS = @CFLAGS@
@@ -74,6 +74,8 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_BUILD_DEBUG@WXDEBUGFLAG = d
 @COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)bk-deps $(CXX)
+@COND_DEPS_TRACKING_0@CXXC = $(CXX)
 @COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng
 @COND_WXUSE_LIBPNG_BUILTIN@LIB_PNG = wxpng
 @COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc
@@ -85,6 +87,8 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_WXUSE_ZLIB_BUILTIN@LIB_ZLIB = wxzlib
+@COND_DEPS_TRACKING_1@CCC = $(top_builddir)bk-deps $(CC)
+@COND_DEPS_TRACKING_0@CCC = $(CC)
 @COND_TOOLKIT_MAC@MACOSX_RESOURCES = Carbon.r ../../lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
 @COND_MONOLITHIC_0@WXLIB_BASE = wx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base-2.5
 @COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
@@ -105,7 +109,6 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p = $(RESCOMP) -d __DARWIN__ -t APPL -d __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(srcdir)/../../include -i $(srcdir) -o layout$(EXEEXT) Carbon.r ../../lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
 @COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex
 @COND_WXUSE_REGEX_BUILTIN@LIB_REGEX = wxregex
-@COND_DEPS_TYPE_GCC@DEPS_FLAG = -MMD -MT$@ -MF$@.d
 
 ### Targets: ###
 
@@ -124,16 +127,20 @@ layout_rc.o: $(srcdir)/layout.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) --include-dir $(srcdir)/../../include --include-dir $(srcdir)
 
 clean: 
-	rm -f ./*.o ./*.d
+	rm -f ./*.o
 	rm -f layout$(EXEEXT)
+
+distclean: clean
+	rm -f configure config.cache config.log config.status
+	rm -f bk-deps shared-ld-sh
 
 uninstall: 
 
 layout.o: $(srcdir)/layout.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -I$(srcdir) $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -I$(srcdir) $(CXXFLAGS) $<
 
 
 # Include dependency info, if present:
-@IF_GNU_MAKE@-include *.d
+@IF_GNU_MAKE@-include .deps/*.d
 
 .PHONY: all

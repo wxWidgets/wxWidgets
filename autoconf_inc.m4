@@ -268,3 +268,15 @@ dnl ### begin block COND_SHARED_0 ###
         COND_SHARED_0=
     fi
     AC_SUBST(COND_SHARED_0)
+dnl ### begin block COND_DEPS_TRACKING_1 ###
+    COND_DEPS_TRACKING_1="#"
+    if test "x$DEPS_TRACKING" = "x1" ; then
+        COND_DEPS_TRACKING_1=
+    fi
+    AC_SUBST(COND_DEPS_TRACKING_1)
+dnl ### begin block COND_DEPS_TRACKING_0 ###
+    COND_DEPS_TRACKING_0="#"
+    if test "x$DEPS_TRACKING" = "x0" ; then
+        COND_DEPS_TRACKING_0=
+    fi
+    AC_SUBST(COND_DEPS_TRACKING_0)

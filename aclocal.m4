@@ -1080,7 +1080,7 @@ dnl ---------------------------------------------------------------------------
 AC_DEFUN(AC_BAKEFILE_GNUMAKE,
 [
     dnl does make support "-include" (only GNU make does AFAIK)?
-    AC_CACHE_CHECK([if make is GNU make], wx_cv_prog_makeisgnu,
+    AC_CACHE_CHECK([if make is GNU make], bakefile_cv_prog_makeisgnu,
     [
         if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
                 egrep -s GNU > /dev/null); then
@@ -1458,12 +1458,66 @@ dnl ---------------------------------------------------------------------------
 
 AC_DEFUN(AC_BAKEFILE_DEPS,
 [
-    DEPS_TYPE=no
+    AC_MSG_CHECKING([for dependency tracking method])
+    DEPS_TRACKING=0
+
     if test "x$GCC" = "xyes"; then
-        DEPS_TYPE=gcc
+        DEPSMODE=gcc
+        DEPS_TRACKING=1
+        AC_MSG_RESULT([gcc])
+    else
+        AC_MSG_RESULT([none])
+    fi
+
+    if test $DEPS_TRACKING = 1 ; then
+        cat <<EOF >bk-deps
+#!/bin/sh
+
+# This script is part of Bakefile (http://bakefile.sf.net) autoconf script.
+# It is used to track C/C++ files dependencies in portable way.
+#
+# Permission is given to use this file in any way.
+
+DEPSMODE=$DEPSMODE
+DEPSDIR=.deps
+
+mkdir -p \$DEPSDIR
+
+if test \$DEPSMODE = gcc ; then
+    \${*} -MMD
+    status=\${?}
+    if test \${status} != 0 ; then
+        exit \${status}
+    fi
+    # move created file to the location we want it in:
+    while test \${#} -gt 0; do
+        case "\${1}" in
+            -o )
+                shift
+                objfile=\${1}
+            ;;
+            -* )
+            ;;
+            * )
+                srcfile=\${1}
+            ;;
+        esac
+        shift
+    done
+    depfile=\`basename \$srcfile | sed -e 's/\..*$/.d/g'\`
+    depobjname=\`echo \$depfile |sed -e 's/\.d/.o/g'\`
+    sed -e "s,\$depobjname:,\$objfile:,g" \$depfile >\${DEPSDIR}/\${objfile}.d
+    rm -f \$depfile
+    exit 0
+else
+    \${*}
+    exit \${?}
+fi
+EOF
+        chmod +x bk-deps
     fi
     
-    AC_SUBST(DEPS_TYPE)
+    AC_SUBST(DEPS_TRACKING)
 ])
 
 dnl ---------------------------------------------------------------------------

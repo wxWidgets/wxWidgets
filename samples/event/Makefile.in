@@ -53,12 +53,12 @@ BUILD = @BUILD@
 PLATFORM_WIN32 = @PLATFORM_WIN32@
 USE_MACVERSION = @USE_MACVERSION@
 PLATFORM_MACOSX = @PLATFORM_MACOSX@
+DEPS_TRACKING = @DEPS_TRACKING@
 TOOLKIT_VERSION = @TOOLKIT_VERSION@
 WXUNIV = @WXUNIV@
 TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
-DEPS_TYPE = @DEPS_TYPE@
-SHARED_LD_CXX = @SHARED_LD_CXX@
 CXX = @CXX@
+SHARED_LD_CXX = @SHARED_LD_CXX@
 includedir = @includedir@
 LN_S = @LN_S@
 CFLAGS = @CFLAGS@
@@ -74,6 +74,8 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_BUILD_DEBUG@WXDEBUGFLAG = d
 @COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)bk-deps $(CXX)
+@COND_DEPS_TRACKING_0@CXXC = $(CXX)
 @COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng
 @COND_PLATFORM_MAC_1@__event___mac_setfilecmd = $(SETFILE) -a C event$(EXEEXT)
 @COND_WXUSE_LIBPNG_BUILTIN@LIB_PNG = wxpng
@@ -103,9 +105,10 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p = $(RESCOMP) -d __DARWIN__ -t APPL -d __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(srcdir)/../../include -i $(srcdir) -o event$(EXEEXT) Carbon.r ../../lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
+@COND_DEPS_TRACKING_1@CCC = $(top_builddir)bk-deps $(CC)
+@COND_DEPS_TRACKING_0@CCC = $(CC)
 @COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex
 @COND_WXUSE_REGEX_BUILTIN@LIB_REGEX = wxregex
-@COND_DEPS_TYPE_GCC@DEPS_FLAG = -MMD -MT$@ -MF$@.d
 
 ### Targets: ###
 
@@ -114,7 +117,7 @@ all: event$(EXEEXT)
 install-strip: install
 
 clean: 
-	rm -f ./*.o ./*.d
+	rm -f ./*.o
 	rm -f event$(EXEEXT)
 
 install: all
@@ -122,18 +125,22 @@ install: all
 event_rc.o: $(srcdir)/event.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) --include-dir $(srcdir)/../../include --include-dir $(srcdir)
 
+distclean: clean
+	rm -f configure config.cache config.log config.status
+	rm -f bk-deps shared-ld-sh
+
+uninstall: 
+
 event.o: $(srcdir)/event.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -I$(srcdir) $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -I$(srcdir) $(CXXFLAGS) $<
 
 event$(EXEEXT): event.o $(__event___win32rc)
 	$(CXX) -o $@  event.o $(__event___win32rc)  -L$(top_builddir)lib $(__WXLIB_MONO_p) $(SAMPLES_RPATH_FLAG) $(__WXLIB_CORE_p) $(EXTRALIBS) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_TIFF_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p)
 	$(__event___mac_rezcmd)
 	$(__event___mac_setfilecmd)
 
-uninstall: 
-
 
 # Include dependency info, if present:
-@IF_GNU_MAKE@-include *.d
+@IF_GNU_MAKE@-include .deps/*.d
 
 .PHONY: all

@@ -53,12 +53,12 @@ BUILD = @BUILD@
 PLATFORM_WIN32 = @PLATFORM_WIN32@
 USE_MACVERSION = @USE_MACVERSION@
 PLATFORM_MACOSX = @PLATFORM_MACOSX@
+DEPS_TRACKING = @DEPS_TRACKING@
 TOOLKIT_VERSION = @TOOLKIT_VERSION@
 WXUNIV = @WXUNIV@
 TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
-DEPS_TYPE = @DEPS_TYPE@
-SHARED_LD_CXX = @SHARED_LD_CXX@
 CXX = @CXX@
+SHARED_LD_CXX = @SHARED_LD_CXX@
 includedir = @includedir@
 LN_S = @LN_S@
 CFLAGS = @CFLAGS@
@@ -74,6 +74,8 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_BUILD_DEBUG@WXDEBUGFLAG = d
 @COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)bk-deps $(CXX)
+@COND_DEPS_TRACKING_0@CXXC = $(CXX)
 @COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng
 @COND_WXUSE_LIBPNG_BUILTIN@LIB_PNG = wxpng
 @COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc
@@ -83,6 +85,8 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUSE_ODBC_BUILTIN@LIB_ODBC = wxodbc
 @COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
 @COND_WXUSE_ZLIB_BUILTIN@LIB_ZLIB = wxzlib
+@COND_DEPS_TRACKING_1@CCC = $(top_builddir)bk-deps $(CC)
+@COND_DEPS_TRACKING_0@CCC = $(CC)
 @COND_TOOLKIT_MAC@MACOSX_RESOURCES = Carbon.r ../../lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
 @COND_MONOLITHIC_0@WXLIB_BASE = wx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base-2.5
 @COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
@@ -104,7 +108,6 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_PLATFORM_MAC_1@__validate___mac_setfilecmd = $(SETFILE) -a C validate$(EXEEXT)
 @COND_PLATFORM_WIN32_1@__validate___win32rc = validate_rc.o
 @COND_WXUSE_REGEX_BUILTIN@LIB_REGEX = wxregex
-@COND_DEPS_TYPE_GCC@DEPS_FLAG = -MMD -MT$@ -MF$@.d
 @COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex
 
 ### Targets: ###
@@ -117,10 +120,14 @@ validate_rc.o: $(srcdir)/validate.rc
 install-strip: install
 
 clean: 
-	rm -f ./*.o ./*.d
+	rm -f ./*.o
 	rm -f validate$(EXEEXT)
 
 install: all
+
+distclean: clean
+	rm -f configure config.cache config.log config.status
+	rm -f bk-deps shared-ld-sh
 
 validate$(EXEEXT): validate.o $(__validate___win32rc)
 	$(CXX) -o $@  validate.o $(__validate___win32rc)  -L$(top_builddir)lib $(__WXLIB_MONO_p) $(SAMPLES_RPATH_FLAG) $(__WXLIB_CORE_p) $(EXTRALIBS) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_TIFF_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p)
@@ -128,12 +135,12 @@ validate$(EXEEXT): validate.o $(__validate___win32rc)
 	$(__validate___mac_setfilecmd)
 
 validate.o: $(srcdir)/validate.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -I$(srcdir) $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -I$(srcdir) $(CXXFLAGS) $<
 
 uninstall: 
 
 
 # Include dependency info, if present:
-@IF_GNU_MAKE@-include *.d
+@IF_GNU_MAKE@-include .deps/*.d
 
 .PHONY: all
