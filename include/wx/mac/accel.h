@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/string.h"
+#include "wx/event.h"
 
 class WXDLLEXPORT wxAcceleratorTable: public wxObject
 {
