@@ -22,7 +22,7 @@ WXLIB = $(WXLIBDIR)\wx32.lib
 WXPROPDIR = $(WXDIR)\utils\wxprop
 WXPROPINC = $(WXPROPDIR)\src
 WXPROPLIB = $(WXDIR)\lib\wxprop.lib
-LIBS=$(WXLIB) $(WXPROPLIB) cw32 import32
+LIBS=$(WXLIB) $(WXPROPLIB) cw32 import32 ole2w32
 INCFILE = includes.cfg
 
 TARGET=dialoged

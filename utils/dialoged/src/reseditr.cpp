@@ -653,7 +653,7 @@ wxItemResource *wxResourceManager::FindResourceForWindow(wxWindow *win)
     wxWindow *w = (wxWindow *)node->Data();
     if (w == win)
     {
-      return (wxItemResource *)node->key.integer;
+      return (wxItemResource *)node->GetKeyInteger();
     }
   }
   return NULL;
@@ -876,7 +876,11 @@ void wxResourceManager::AddItemsRecursively(long parent, wxItemResource *resourc
   else
     imageId = 3;
   
-  long id = m_editorResourceTree->AppendItem(parent, theString, imageId );
+  long id = m_editorResourceTree->InsertItem(parent, theString
+#ifdef __WXMSW__
+     , imageId
+#endif
+   );
 
   m_editorResourceTree->SetItemData(id, new wxResourceTreeData(resource));
 

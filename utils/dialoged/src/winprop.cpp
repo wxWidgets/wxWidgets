@@ -308,7 +308,7 @@ wxProperty *wxWindowPropertyInfo::GetProperty(wxString& name)
   }
   else if (name == "height")
   {
-    return new wxProperty("width", (long)resource->GetHeight(), "integer");
+    return new wxProperty("height", (long)resource->GetHeight(), "integer");
   }
   else if (name == "id")
   {
