@@ -52,8 +52,9 @@ public:
     void HandleOnFocus(wxFocusEvent& event);
     void HandleOnWindowDestroy(wxWindowBase *child);
 
-    // should be called from SetFocus()
-    void DoSetFocus();
+    // should be called from SetFocus(), returns FALSE if we did nothing with
+    // the focus and the default processing should take place
+    bool DoSetFocus();
 
 protected:
     // set the focus to the child which had it the last time
@@ -119,7 +120,8 @@ void classname::RemoveChild(wxWindowBase *child) \
  \
 void classname::SetFocus() \
 { \
-    container->DoSetFocus(); \
+    if ( !container->DoSetFocus() ) \
+        wxWindow::SetFocus(); \
 } \
  \
 void classname::OnChildFocus(wxChildFocusEvent& event) \

@@ -241,7 +241,7 @@ void wxControlContainer::HandleOnWindowDestroy(wxWindowBase *child)
 // focus handling
 // ----------------------------------------------------------------------------
 
-void wxControlContainer::DoSetFocus()
+bool wxControlContainer::DoSetFocus()
 {
     wxLogTrace(_T("focus"), _T("SetFocus on wxPanel 0x%08x."),
                m_winParent->GetHandle());
@@ -273,10 +273,7 @@ void wxControlContainer::DoSetFocus()
     //
     // RR: Removed for now. Let's see what happens..
 
-    if ( !SetFocusToChild() )
-    {
-        m_winParent->SetFocus();
-    }
+    return SetFocusToChild();
 }
 
 void wxControlContainer::HandleOnFocus(wxFocusEvent& event)
