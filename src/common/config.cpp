@@ -134,8 +134,7 @@ bool wxConfigBase::Read(const wxString& key, double* val) const
     wxString str;
     if (Read(key, & str))
     {
-        *val = wxAtof(str);
-        return TRUE;
+        return wxSscanf(str, _T("%g"), val) == 1;
     }
 
     return FALSE;
@@ -190,14 +189,15 @@ bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
 {
     long l;
     bool ret = Read(key, &l, (long) defVal);
-    *pi = (int) l;
+    if (ret)
+        *pi = (int) l;
     return ret;
 }
 
 bool wxConfigBase::Write(const wxString& key, double val)
 {
     wxString str;
-    str.Printf(wxT("%f"), val);
+    str.Printf(wxT("%g"), val);
     return Write(key, str);
 }
 
@@ -209,8 +209,7 @@ bool wxConfigBase::Write(const wxString& key, bool value)
 
 bool wxConfigBase::Write( const wxString &key, const wxChar *text )
 {
-	wxString str( text ) ;
-	return Write( key, str ) ;
+    return Write(key, str) ;
 }
 wxString wxConfigBase::ExpandEnvVars(const wxString& str) const
 {
