@@ -123,7 +123,8 @@ public:
                             int id = -1,
                             const wxString& title = wxEmptyString,
                             const wxBitmap& bitmap = wxNullBitmap,
-                            const wxPoint& pos = wxDefaultPosition);
+                            const wxPoint& pos = wxDefaultPosition,
+                            const wxSize& size = wxDefaultSize);
 
     // executes the wizard starting from the given page, returns TRUE if it was
     // successfully finished, FALSE if user cancelled it

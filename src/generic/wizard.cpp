@@ -367,9 +367,9 @@ wxWizard *wxWizardBase::Create(wxWindow *parent,
                                const wxString& title,
                                const wxBitmap& bitmap,
                                const wxPoint& pos,
-                               const wxSize& size)
+                               const wxSize& WXUNUSED(size))
 {
-    return new wxWizard(parent, id, title, bitmap, pos, size);
+    return new wxWizard(parent, id, title, bitmap, pos);
 }
 
 // ----------------------------------------------------------------------------
