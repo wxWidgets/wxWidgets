@@ -109,7 +109,7 @@ public:
                     const wxString& name = wxPyFrameNameStr);
 
     void Activate();
-    void Maximize(bool maximize);
+    void Maximize(bool maximize=true);
     void Restore();
 
 };
