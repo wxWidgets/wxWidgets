@@ -93,10 +93,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
                 // borders (free space between text and window borders)
                 // defaults to 10 pixels.
 
-        bool m_Scrollable;
-                // TRUE if you can scroll the window.
-                // If it is FALSE you can't scroll the window even if it's contents is larger
-                // than window.
+        bool m_Style;
 
 
     private:
@@ -122,7 +119,8 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
         wxHtmlWindow() : wxScrolledWindow() {};
         wxHtmlWindow(wxWindow *parent, wxWindowID id = -1, 
                      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                     const wxString& name = "htmlWindow", bool scrollable = TRUE);
+		     long style = wxHW_SCROLLBAR_AUTO,
+                     const wxString& name = "htmlWindow");
         ~wxHtmlWindow();
 
         bool SetPage(const wxString& source);

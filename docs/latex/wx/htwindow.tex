@@ -33,14 +33,15 @@ wxScrolledWindow
 
 Default constructor.
 
-\func{}{wxHtmlWindow}{\param{wxWindow }{*parent}, \param{wxWindowID }{id = -1}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{const wxString\& }{name = "htmlWindow"}, \param{bool }{scrollable = TRUE}}
+\func{}{wxHtmlWindow}{\param{wxWindow }{*parent}, \param{wxWindowID }{id = -1}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxHW_SCROLLBAR_AUTO}, \param{const wxString\& }{name = "htmlWindow"}}
 
 Constructor. The parameters are same as in wxScrollWindow ctor.
 (Too lazy to document it once again... :-)
 
 \wxheading{Parameters}
 
-\docparam{scrollable}{if false then no scrollbars are displayed, even if size of page is larger than window size}
+\docparam{style}{wxHW_SCROLLBAR_NEVER,  or wxHW_SCROLLBAR_AUTO. 
+Affects appearance of vertical scrollbar in the window.}
 
 
 
