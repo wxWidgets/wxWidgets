@@ -3298,6 +3298,13 @@ bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
     }
 #endif
 
+    // Don't send the event when in the process of being deleted.  This can
+    // only cause problems if the event handler tries to access the object.
+    if ( m_isBeingDeleted )
+    {
+        return FALSE;
+    }
+
     wxFocusEvent event(wxEVT_KILL_FOCUS, m_windowId);
     event.SetEventObject(this);
 
