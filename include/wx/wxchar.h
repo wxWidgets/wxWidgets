@@ -585,7 +585,9 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
             #define wxVsnprintf_    vswprintf
         #endif
     #else // ASCII
-        #if (defined(HAVE_VSNPRINTF) || defined(__WXMAC__))
+        // all versions of CodeWarrior supported by wxWindows apparently have
+        // vsnprintf()
+        #if defined(HAVE_VSNPRINTF) || defined(__MWERKS__)
             // assume we have snprintf() too if we have vsnprintf()
             #define wxVsnprintf_    vsnprintf
             #define wxSnprintf_     snprintf
