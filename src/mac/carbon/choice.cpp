@@ -57,12 +57,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 // ----------------------------------------------------------------------------
 int wxChoice::DoAppend(const wxString& item)
 {
-	Str255 label;
-	wxMenuItem::MacBuildMenuString( label , NULL , NULL , item ,false);
-	MacAppendMenu(MAC_WXHMENU( m_macPopUpMenuHandle ) , "\pA");
-	SetMenuItemText(MAC_WXHMENU( m_macPopUpMenuHandle ) , 
-	    (SInt16) ::CountMenuItems(MAC_WXHMENU( m_macPopUpMenuHandle ) ), label);
-	// was AppendMenu( MAC_WXHMENU( m_macPopUpMenuHandle ) , label ) ;
+	UMAAppendMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ) , item);
 	m_strings.Add( item ) ;
 	m_datas.Add( NULL ) ;
 	int index = m_strings.GetCount()  - 1  ;
