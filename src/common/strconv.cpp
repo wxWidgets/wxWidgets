@@ -71,9 +71,9 @@
 #include "wx/fontmap.h"
 
 #ifdef __WXMAC__
-#include "ATSUnicode.h"
-#include "TextCommon.h"
-#include "TextEncodingConverter.h"
+#include <ATSUnicode.h>
+#include <TextCommon.h>
+#include <TextEncodingConverter.h>
 
 #include  "wx/mac/private.h"  // includes mac headers
 #endif
@@ -1373,9 +1373,9 @@ public:
 #if SIZEOF_WCHAR_T == 4
 		wxMBConvUTF16BE converter ;
 		size_t unicharlen = converter.WC2MB( NULL , psz , 0 ) ;
-		byteBufferLen = unicharlen ;
-		ubuf = (UniChar*) malloc( byteBufferLen + 2 ) ;
-		converter.WC2MB( (char*) ubuf , psz, unicharlen ) ;
+		byteInLen = unicharlen ;
+		ubuf = (UniChar*) malloc( byteInLen + 2 ) ;
+		converter.WC2MB( (char*) ubuf , psz, unicharlen + 2 ) ;
 #else
 		ubuf = (UniChar*) psz ;
 #endif
