@@ -165,22 +165,10 @@ public:
 // include the declaration of the real platform-dependent class
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__)
-    #define wxHAS_SS_NATIVE
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/settings.h"
-#elif defined(__WXGTK__)
-    #define wxHAS_SS_NATIVE
-#elif defined(__WXMGL__)
-    #define wxHAS_SS_NATIVE
-#elif defined(__WXMAC__)
-    #define wxHAS_SS_NATIVE
-#elif defined(__WXPM__)
+// TODO: this should go away once wxOS2 has been updated to use wxSSNative
+#if defined(__WXPM__)
     #include "wx/os2/settings.h"
-#endif
-
-// TODO: this should go away once all ports are updated to use wxSSNative
-#ifdef wxHAS_SS_NATIVE
+#else
 
 class wxSystemSettings : public wxSystemSettingsNative
 {
@@ -193,7 +181,7 @@ public:
 #endif // __WXUNIVERSAL__
 };
 
-#endif // wxHAS_SS_NATIVE
+#endif // ! __WXPM__
 
 #endif
     // _WX_SETTINGS_H_BASE_
