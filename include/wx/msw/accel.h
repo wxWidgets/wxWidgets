@@ -58,7 +58,7 @@ DECLARE_DYNAMIC_CLASS(wxAcceleratorTable)
 public:
     wxAcceleratorTable();
     wxAcceleratorTable(const wxString& resource); // Load from .rc resource
-    wxAcceleratorTable(int n, wxAcceleratorEntry entries[]); // Load from array
+    wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]); // Load from array
 
     // Copy constructors
     inline wxAcceleratorTable(const wxAcceleratorTable& accel) { Ref(accel); }
