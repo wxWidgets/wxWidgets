@@ -55,6 +55,8 @@ char*           oglBuffer = NULL;
 
 wxList          oglObjectCopyMapping(wxKEY_INTEGER);
 
+
+
 void wxOGLInitialize()
 {
   g_oglBullseyeCursor = new wxCursor(wxCURSOR_BULLSEYE);
@@ -73,15 +75,6 @@ void wxOGLInitialize()
   // Initialize big buffer used when writing images
   oglBuffer = new char[3000];
 
-  if (!oglPopupDivisionMenu)
-  {
-    oglPopupDivisionMenu = new wxMenu("", (wxFunction)oglGraphicsDivisionMenuProc);
-    oglPopupDivisionMenu->Append(DIVISION_MENU_SPLIT_HORIZONTALLY, "Split horizontally");
-    oglPopupDivisionMenu->Append(DIVISION_MENU_SPLIT_VERTICALLY, "Split vertically");
-    oglPopupDivisionMenu->AppendSeparator();
-    oglPopupDivisionMenu->Append(DIVISION_MENU_EDIT_LEFT_EDGE, "Edit left edge");
-    oglPopupDivisionMenu->Append(DIVISION_MENU_EDIT_TOP_EDGE, "Edit top edge");
-  }
 }
 
 void wxOGLCleanUp()
@@ -92,11 +85,6 @@ void wxOGLCleanUp()
         oglBuffer = NULL;
     }
     oglBuffer = NULL;
-    if (oglPopupDivisionMenu)
-    {
-        delete oglPopupDivisionMenu;
-        oglPopupDivisionMenu = NULL;
-    }
     if (g_oglBullseyeCursor)
     {
         delete g_oglBullseyeCursor;
@@ -190,7 +178,7 @@ int FontSizeDialog(wxFrame *parent, int old_size)
     return 0;
   }
   return new_size;
-/*    
+/*
   char *strings[8];
   strings[0] = "4";
   strings[1] = "6";
@@ -563,7 +551,7 @@ void oglFindPolylineCentroid(wxList *points, double *x, double *y)
  * Used by functions below.
  *
  */
-void oglCheckLineIntersection(double x1, double y1, double x2, double y2, 
+void oglCheckLineIntersection(double x1, double y1, double x2, double y2,
                              double x3, double y3, double x4, double y4,
                              double *ratio1, double *ratio2)
 {
@@ -583,7 +571,7 @@ void oglCheckLineIntersection(double x1, double y1, double x2, double y2,
   // Check for intersection
   if ((line_constant < 1.0) && (line_constant > 0.0))
   {
-    // Now must check that other line hits 
+    // Now must check that other line hits
     if (((y4 - y3) < 0.005) && ((y4 - y3) > -0.005))
       k_line = ((x1 - x3) + line_constant*(x2 - x1))/(x4 - x3);
     else
@@ -603,7 +591,7 @@ void oglCheckLineIntersection(double x1, double y1, double x2, double y2,
  * (*x3, *y3) is the point where it hits.
  *
  */
-void oglFindEndForPolyline(double n, double xvec[], double yvec[], 
+void oglFindEndForPolyline(double n, double xvec[], double yvec[],
                            double x1, double y1, double x2, double y2, double *x3, double *y3)
 {
   int i;
@@ -645,7 +633,7 @@ void oglFindEndForPolyline(double n, double xvec[], double yvec[],
  *
  */
 
-void oglFindEndForBox(double width, double height, 
+void oglFindEndForBox(double width, double height,
                       double x1, double y1,         // Centre of box (possibly)
                       double x2, double y2,         // other end of line
                       double *x3, double *y3)       // End on box edge
@@ -672,7 +660,7 @@ void oglFindEndForBox(double width, double height,
  *
  */
 
-void oglFindEndForCircle(double radius, 
+void oglFindEndForCircle(double radius,
                          double x1, double y1,  // Centre of circle
                          double x2, double y2,  // Other end of line
                          double *x3, double *y3)
@@ -729,7 +717,7 @@ void oglGetArrowPoints(double x1, double y1, double x2, double y2,
  * This function assumes that the centre of the ellipse is at x1, y1, and the
  * ellipse has a width of width1 and a height of height1. It also assumes you are
  * wanting to draw an arc FROM point x2, y2 TOWARDS point x3, y3.
- * This function calculates the x,y coordinates of the intersection point of 
+ * This function calculates the x,y coordinates of the intersection point of
  * the arc with the ellipse.
  * Author: Ian Harrison
  */
@@ -754,7 +742,7 @@ void oglDrawArcToEllipse(double x1, double y1, double width1, double height1, do
       *y4 = (double)(y1 + b1);
     return;
   }
-*/  
+*/
   // Check that x2 != x3
   if (fabs(x2 - x3) < 0.05)
   {
@@ -783,7 +771,7 @@ void oglDrawArcToEllipse(double x1, double y1, double width1, double height1, do
 
   if (K >= 0)
   // In this case the line intersects the ellipse, so calculate intersection
-  { 
+  {
     if(x2 >= x1)
     {
       ellipse1_x = (double)(((F * -1) + sqrt(K)) / (2 * E));
@@ -804,7 +792,7 @@ void oglDrawArcToEllipse(double x1, double y1, double width1, double height1, do
   *x4 = ellipse1_x;
   *y4 = ellipse1_y;
 
-/*	    
+/*
   // Draw a little circle (radius = 2) at the end of the arc where it hits
   // the ellipse .
 
@@ -848,7 +836,7 @@ static char sg_HexArray[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
 unsigned int oglHexToDec(char* buf)
 {
   int firstDigit, secondDigit;
-  
+
   if (buf[0] >= 'A')
     firstDigit = buf[0] - 'A' + 10;
   else
@@ -858,7 +846,7 @@ unsigned int oglHexToDec(char* buf)
     secondDigit = buf[1] - 'A' + 10;
   else
     secondDigit = buf[1] - '0';
-    
+
   return firstDigit * 16 + secondDigit;
 }
 

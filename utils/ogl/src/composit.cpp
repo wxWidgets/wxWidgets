@@ -37,8 +37,6 @@
 // construct themselves.
 wxExprDatabase *GlobalwxExprDatabase = NULL;
 
-// Popup menu for editing divisions
-wxMenu *oglPopupDivisionMenu = NULL;
 
 /*
  * Division control point
@@ -1572,10 +1570,32 @@ bool wxDivisionShape::ResizeAdjoining(int side, double newPos, bool test)
  * Popup menu for editing divisions
  *
  */
+class OGLPopupDivisionMenu : public wxMenu {
+public:
+    OGLPopupDivisionMenu() : wxMenu() {
+        Append(DIVISION_MENU_SPLIT_HORIZONTALLY, "Split horizontally");
+        Append(DIVISION_MENU_SPLIT_VERTICALLY, "Split vertically");
+        AppendSeparator();
+        Append(DIVISION_MENU_EDIT_LEFT_EDGE, "Edit left edge");
+        Append(DIVISION_MENU_EDIT_TOP_EDGE, "Edit top edge");
+    }
 
-void oglGraphicsDivisionMenuProc(wxMenu& menu, wxCommandEvent& event)
+    void OnMenu(wxCommandEvent& event);
+
+    DECLARE_EVENT_TABLE();
+};
+
+BEGIN_EVENT_TABLE(OGLPopupDivisionMenu, wxMenu)
+    EVT_CUSTOM_RANGE(wxEVT_COMMAND_MENU_SELECTED,
+                     DIVISION_MENU_SPLIT_HORIZONTALLY,
+                     DIVISION_MENU_EDIT_BOTTOM_EDGE,
+                     OGLPopupDivisionMenu::OnMenu)
+END_EVENT_TABLE()
+
+
+void OGLPopupDivisionMenu::OnMenu(wxCommandEvent& event)
 {
-  wxDivisionShape *division = (wxDivisionShape *)menu.GetClientData();
+  wxDivisionShape *division = (wxDivisionShape *)GetClientData();
   switch (event.GetInt())
   {
     case DIVISION_MENU_SPLIT_HORIZONTALLY:
@@ -1714,6 +1734,8 @@ void wxDivisionShape::EditEdge(int side)
 // Popup menu
 void wxDivisionShape::PopupMenu(double x, double y)
 {
+  wxMenu* oglPopupDivisionMenu = new OGLPopupDivisionMenu;
+
   oglPopupDivisionMenu->SetClientData((void *)this);
   if (m_leftSide)
     oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_LEFT_EDGE, TRUE);
@@ -1737,6 +1759,7 @@ void wxDivisionShape::PopupMenu(double x, double y)
   int mouse_y = (int)(dc.LogicalToDeviceY((long)(y - y1*unit_y)));
 
   m_canvas->PopupMenu(oglPopupDivisionMenu, mouse_x, mouse_y);
+  delete oglPopupDivisionMenu;
 }
 
 void wxDivisionShape::SetLeftSideColour(const wxString& colour)

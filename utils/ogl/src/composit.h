@@ -225,8 +225,6 @@ class wxDivisionShape: public wxCompositeShape
   wxString              m_topSideStyle;
 };
 
-extern wxMenu *oglPopupDivisionMenu;
-extern void oglGraphicsDivisionMenuProc(wxMenu& menu, wxCommandEvent& event);
 
 #define DIVISION_MENU_SPLIT_HORIZONTALLY    1
 #define DIVISION_MENU_SPLIT_VERTICALLY      2
