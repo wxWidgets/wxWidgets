@@ -19,7 +19,7 @@
 #include <wx/string.h>
 
 // private
-struct _wxHashTable_NodeBase
+struct WXDLLEXPORT _wxHashTable_NodeBase
 {
     _wxHashTable_NodeBase() : m_nxt(0) {}
 
@@ -27,7 +27,7 @@ struct _wxHashTable_NodeBase
 };
 
 // private
-class _wxHashTableBase2
+class WXDLLEXPORT _wxHashTableBase2
 {
 public:
     typedef void (*NodeDtor)(_wxHashTable_NodeBase*);
@@ -378,7 +378,7 @@ inline bool grow_lf70( size_t buckets, size_t items )
 }
 
 // integer types
-class wxIntegerHash
+class WXDLLEXPORT wxIntegerHash
 {
 public:
     wxIntegerHash() {};
@@ -388,7 +388,7 @@ public:
     unsigned long operator()( unsigned int x ) const { return x; }
 };
 
-class wxIntegerEqual
+class WXDLLEXPORT wxIntegerEqual
 {
 public:
     wxIntegerEqual() {};
@@ -401,7 +401,7 @@ public:
 };
 
 // pointers
-class wxPointerHash
+class WXDLLEXPORT wxPointerHash
 {
 public:
     wxPointerHash() {};
@@ -409,7 +409,7 @@ public:
         { return (unsigned long)k; }
 };
 
-class wxPointerEqual
+class WXDLLEXPORT wxPointerEqual
 {
 public:
     wxPointerEqual() {};
@@ -418,7 +418,7 @@ public:
 };
 
 // wxString, char*, wxChar*
-class wxStringHash
+class WXDLLEXPORT wxStringHash
 {
 public:
     wxStringHash() {};
@@ -434,7 +434,7 @@ public:
 #endif
 };
 
-class wxStringEqual
+class WXDLLEXPORT wxStringEqual
 {
 public:
     wxStringEqual() {};
