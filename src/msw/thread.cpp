@@ -893,7 +893,10 @@ unsigned long wxThread::GetCurrentId()
 
 bool wxThread::SetConcurrency(size_t level)
 {
-#ifndef __WXWINCE__
+#ifdef __WXWINCE__
+    wxUnusedVar(level);
+    return false;
+#else
     wxASSERT_MSG( IsMain(), _T("should only be called from the main thread") );
 
     // ok only for the default one
@@ -983,9 +986,9 @@ bool wxThread::SetConcurrency(size_t level)
 
         return false;
     }
-#endif // !__WXWINCE__
 
     return true;
+#endif // __WXWINCE__/!__WXWINCE__
 }
 
 // ctor and dtor

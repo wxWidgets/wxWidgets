@@ -249,7 +249,7 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
     {
         wxLogLastError(wxT("GetIconInfo"));
 
-        return FALSE;
+        return false;
     }
 
     wxBitmapRefData *refData = new wxBitmapRefData;
@@ -272,9 +272,10 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
     // delete the old one now as we don't need it any more
     ::DeleteObject(iconInfo.hbmMask);
 
-    return TRUE;
+    return true;
 #else
-    return FALSE;
+    wxUnusedVar(icon);
+    return false;
 #endif
 }
 

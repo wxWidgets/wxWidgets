@@ -585,7 +585,10 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
 
 wxSize wxGetHiconSize(HICON hicon)
 {
-    wxSize size(32, 32);    // default
+    // default icon size on this hardware
+    // usually 32x32 but can be other (smaller) on pocket devices
+    wxSize size(::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON));
+
 #ifndef __WXWINCE__
     if ( hicon && wxGetOsVersion() != wxWIN32S )
     {
@@ -611,6 +614,8 @@ wxSize wxGetHiconSize(HICON hicon)
                 ::DeleteObject(info.hbmColor);
         }
     }
+#else
+    wxUnusedVar(hicon);
 #endif
     return size;
 }

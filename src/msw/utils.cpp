@@ -119,14 +119,14 @@ static const wxChar eUSERNAME[]  = wxT("UserName");
 bool wxGetHostName(wxChar *buf, int maxSize)
 {
 #if defined(__WXWINCE__)
-    return FALSE;
+    return false;
 #elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     DWORD nSize = maxSize;
     if ( !::GetComputerName(buf, &nSize) )
     {
         wxLogLastError(wxT("GetComputerName"));
 
-        return FALSE;
+        return false;
     }
 
     return TRUE;
@@ -231,7 +231,7 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 bool wxGetUserId(wxChar *buf, int maxSize)
 {
 #if defined(__WXWINCE__)
-    return FALSE;
+    return false;
 #elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     DWORD nSize = maxSize;
     if ( ::GetUserName(buf, &nSize) == 0 )
@@ -271,11 +271,11 @@ bool wxGetUserId(wxChar *buf, int maxSize)
 bool wxGetUserName(wxChar *buf, int maxSize)
 {
 #if defined(__WXWINCE__)
-    return FALSE;
+    return false;
 #elif defined(USE_NET_API)
     CHAR szUserName[256];
     if ( !wxGetUserId(szUserName, WXSIZEOF(szUserName)) )
-        return FALSE;
+        return false;
 
     // TODO how to get the domain name?
     CHAR *szDomain = "";
@@ -469,10 +469,10 @@ bool wxDirExists(const wxString& dir)
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
 #ifdef __WXWINCE__
-    return FALSE;
+    return false;
 #else
     if ( path.empty() )
-        return FALSE;
+        return false;
 
 // old w32api don't have ULARGE_INTEGER
 #if defined(__WIN32__) && \
@@ -817,14 +817,15 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc)
 // Execute a program in an Interactive Shell
 bool wxShell(const wxString& command)
 {
+    wxString cmd;
+
 #ifdef __WXWINCE__
-    return FALSE;
+    cmd = command;
 #else
     wxChar *shell = wxGetenv(wxT("COMSPEC"));
     if ( !shell )
         shell = (wxChar*) wxT("\\COMMAND.COM");
 
-    wxString cmd;
     if ( !command )
     {
         // just the shell
@@ -835,9 +836,9 @@ bool wxShell(const wxString& command)
         // pass the command to execute to the command processor
         cmd.Printf(wxT("%s /c %s"), shell, command.c_str());
     }
+#endif
 
     return wxExecute(cmd, wxEXEC_SYNC) == 0;
-#endif
 }
 
 // Shutdown or reboot the PC

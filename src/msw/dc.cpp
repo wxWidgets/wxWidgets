@@ -1766,15 +1766,13 @@ void wxDC::SetUserScale(double x, double y)
 {
     WXMICROWIN_CHECK_HDC
 
-#ifndef __WXWINCE__
     if ( x == m_userScaleX && y == m_userScaleY )
         return;
 
     m_userScaleX = x;
     m_userScaleY = y;
 
-    SetMapMode(m_mappingMode);
-#endif
+    this->SetMapMode(m_mappingMode);
 }
 
 void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)

@@ -937,6 +937,8 @@ bool wxRegKey::QueryValue(const wxChar *szValue,
                     wxLogLastError(_T("ExpandEnvironmentStrings"));
                 }
             }
+#else
+  wxUnusedVar(raw);
 #endif
             // __WXWINCE__
         }

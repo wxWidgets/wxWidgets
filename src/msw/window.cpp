@@ -4180,6 +4180,7 @@ bool wxWindowMSW::HandleSizing(wxRect& rect)
 bool wxWindowMSW::HandleGetMinMaxInfo(void *mmInfo)
 {
 #ifdef __WXWINCE__
+    wxUnusedVar(mmInfo);
     return false;
 #else
     MINMAXINFO *info = (MINMAXINFO *)mmInfo;

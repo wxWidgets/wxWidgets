@@ -575,8 +575,6 @@ bool wxToolBar::Realize()
         return TRUE;
     }
 
-    const bool isVertical = HasFlag(wxTB_VERTICAL);
-
 #if 0
     // delete all old buttons, if any
     for ( size_t pos = 0; pos < m_nButtons; pos++ )
@@ -586,7 +584,7 @@ bool wxToolBar::Realize()
             wxLogDebug(wxT("TB_DELETEBUTTON failed"));
         }
     }
-#endif
+#endif // 0
 
     // add the buttons and separators
     // ------------------------------
@@ -702,6 +700,9 @@ bool wxToolBar::Realize()
     delete [] buttons;
 
 #if 0
+
+    const bool isVertical = HasFlag(wxTB_VERTICAL);
+
     // Deal with the controls finally
     // ------------------------------
 
@@ -846,9 +847,9 @@ bool wxToolBar::Realize()
             SetRows(m_nButtons);
         }
     }
-#endif
+#endif // 0
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
