@@ -370,6 +370,9 @@ public:
     virtual wxObject *GetToolClientData(int toolid) const;
     virtual void SetToolClientData(int toolid, wxObject *clientData);
 
+    // returns tool pos, or wxNOT_FOUND if tool isn't found
+    virtual int GetToolPos(int id) const;
+
     // return TRUE if the tool is toggled
     virtual bool GetToolState(int toolid) const;
 

@@ -199,9 +199,7 @@ enum wxStockCursor
 class WXDLLEXPORT wxSize
 {
 public:
-    // members are public for compatibility (don't use them directly,
-    // especially that there names were chosen very unfortunately - they should
-    // have been called width and height)
+    // members are public for compatibility, don't use them directly.
     int x, y;
 
     // constructors

@@ -458,6 +458,22 @@ void wxToolBarBase::SetToolClientData(int id, wxObject *clientData)
     tool->SetClientData(clientData);
 }
 
+int wxToolBarBase::GetToolPos(int id) const
+{
+    size_t pos = 0;
+    wxToolBarToolsList::Node *node;
+
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+    {
+        if ( node->GetData()->GetId() == id )
+            return pos;
+
+        pos++;
+    }
+
+    return wxNOT_FOUND;
+}
+
 bool wxToolBarBase::GetToolState(int id) const
 {
     wxToolBarToolBase *tool = FindById(id);
