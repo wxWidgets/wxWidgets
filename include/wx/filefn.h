@@ -560,7 +560,7 @@ public:
     // wxFileConfig::Flush() for example
     wxUmaskChanger(int umaskNew)
     {
-        m_umaskOld = umaskNew == -1 ? -1 : umask((mode_t)umaskNew);
+        m_umaskOld = umaskNew == -1 ? -1 : (int)umask((mode_t)umaskNew);
     }
 
     ~wxUmaskChanger()
