@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 img2xpm.py  -- convert several image formats to XPM
 

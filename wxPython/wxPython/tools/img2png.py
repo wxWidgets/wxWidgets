@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 img2png.py  -- convert several image formats to PNG format
 
