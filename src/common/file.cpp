@@ -58,6 +58,7 @@
     // TODO: what to include?
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
     #include  <unistd.h>
+    #include  <time.h>
     #include  <sys/stat.h>
     #ifdef __GNUWIN32__
         #include "wx/msw/wrapwin.h"
