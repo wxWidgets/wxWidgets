@@ -29,9 +29,9 @@
 #include "wx/fl/dyntbar.h"
 #include "wx/fl/newbmpbtn.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxDynamicToolBar, wxControl )
+IMPLEMENT_DYNAMIC_CLASS( wxDynamicToolBar, wxToolBarBase )
 
-BEGIN_EVENT_TABLE( wxDynamicToolBar, wxControl )
+BEGIN_EVENT_TABLE( wxDynamicToolBar, wxToolBarBase )
 
     EVT_SIZE ( wxDynamicToolBar::OnSize  )
     EVT_PAINT( wxDynamicToolBar::OnPaint )
@@ -596,7 +596,7 @@ void wxDynamicToolBar::DoSetToggle( wxToolBarToolBase* tool, bool toggle )
 {
 }
 
-wxToolBarToolBase* wxDynamicToolBar::CreateTool( int id, const wxBitmap& bitmap1, const wxBitmap& bitmap2, bool toggle, wxObject* clientData, const wxString& shortHelpString, const wxString& longHelpString )
+wxToolBarToolBase* wxDynamicToolBar::CreateTool( int id, const wxString& label, const wxBitmap& bmpNormal, const wxBitmap& bmpDisabled, wxItemKind kind, wxObject *clientData, const wxString& shortHelp, const wxString& longHelp)
 {
     return NULL;
 }

@@ -100,8 +100,6 @@ wxDynamicToolBar manages containment and layout of tool windows.
 
 class wxDynamicToolBar : public wxToolBarBase
 {
-    DECLARE_DYNAMIC_CLASS(wxDynamicToolBar)
-
 protected:
     friend class wxDynamicToolBarSerializer;
 
@@ -247,18 +245,21 @@ public:
         // Creates a toolbar tool.
 
     virtual wxToolBarToolBase *CreateTool(int id,
-                                          const wxBitmap& bitmap1,
-                                          const wxBitmap& bitmap2,
-                                          bool toggle,
+                                          const wxString& label,
+                                          const wxBitmap& bmpNormal,
+                                          const wxBitmap& bmpDisabled,
+                                          wxItemKind kind,
                                           wxObject *clientData,
-                                          const wxString& shortHelpString,
-                                          const wxString& longHelpString);
+                                          const wxString& shortHelp,
+                                          const wxString& longHelp);
 
         // Creates a toolbar tool.
 
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
+private:
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxDynamicToolBar)
 };
 
 #endif /* __DYNTBAR_G__ */
