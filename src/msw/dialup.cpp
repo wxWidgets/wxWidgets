@@ -34,14 +34,16 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/intl.h"
+    #include "wx/event.h"
 #endif
 
 #include "wx/dynlib.h"
 
 #include "wx/dialup.h"
 
-// Doesn't yet compile under BC++: no wininet.h
-#ifndef __BORLANDC__
+// Doesn't yet compile under BC++ nor with mingw: no wininet.h
+#if !defined(__BORLANDC__) && !defined(__GNUWIN32_OLD__)
 
 #include <ras.h>
 #include <raserror.h>
