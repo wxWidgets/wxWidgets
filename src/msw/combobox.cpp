@@ -25,13 +25,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_COMBOBOX
 
 #ifndef WX_PRECOMP
-#include "wx/settings.h"
+    #include "wx/settings.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/combobox.h"
@@ -195,23 +196,38 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
 
 bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
+    wxString value;
+    int sel = -1;
     switch ( param )
     {
         case CBN_SELCHANGE:
-            if (GetSelection() > -1)
+            sel = GetSelection();
+            if ( sel > -1 )
             {
+                value = GetString(sel);
+
                 wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, GetId());
-                event.SetInt(GetSelection());
+                event.SetInt(sel);
                 event.SetEventObject(this);
-                event.SetString(GetStringSelection());
+                event.SetString(value);
                 ProcessCommand(event);
             }
-            break;
+            else
+            {
+                break;
+            }
+
+            // fall through: for compability with wxGTK, also send the text
+            // update event when the selection changes (this also seems more
+            // logical as the text does change)
 
         case CBN_EDITCHANGE:
             {
+                // if sel != -1, value was initialized above (and we can't use
+                // GetValue() here as it would return the old selection and we
+                // want the new one)
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
-                event.SetString(GetValue());
+                event.SetString(sel == -1 ? GetValue() : value);
                 event.SetEventObject(this);
                 ProcessCommand(event);
             }
@@ -417,39 +433,21 @@ long wxComboBox::GetLastPosition() const
 void wxComboBox::Replace(long from, long to, const wxString& value)
 {
 #if wxUSE_CLIPBOARD
-    HWND hWnd = GetHwnd();
-    long fromChar = from;
-    long toChar = to;
-
-    // Set selection and remove it
-#ifdef __WIN32__
-    SendMessage(hWnd, CB_SETEDITSEL, fromChar, toChar);
-#else
-    SendMessage(hWnd, CB_SETEDITSEL, (WPARAM)0, (LPARAM)MAKELONG(fromChar, toChar));
-#endif
-    SendMessage(hWnd, WM_CUT, (WPARAM)0, (LPARAM)0);
+    Remove(from, to);
 
     // Now replace with 'value', by pasting.
     wxSetClipboardData(wxDF_TEXT, (wxObject *)(const wxChar *)value, 0, 0);
 
     // Paste into edit control
-    SendMessage(hWnd, WM_PASTE, (WPARAM)0, (LPARAM)0L);
+    SendMessage(GetHwnd(), WM_PASTE, (WPARAM)0, (LPARAM)0L);
 #endif
 }
 
 void wxComboBox::Remove(long from, long to)
 {
-    HWND hWnd = GetHwnd();
-    long fromChar = from;
-    long toChar = to;
-
-    // Cut all selected text
-#ifdef __WIN32__
-    SendMessage(hWnd, CB_SETEDITSEL, fromChar, toChar);
-#else
-    SendMessage(hWnd, CB_SETEDITSEL, (WPARAM)0, (LPARAM)MAKELONG(fromChar, toChar));
-#endif
-    SendMessage(hWnd, WM_CUT, (WPARAM)0, (LPARAM)0);
+    // Set selection and remove it
+    SetSelection(from, to);
+    SendMessage(GetHwnd(), WM_CUT, (WPARAM)0, (LPARAM)0);
 }
 
 void wxComboBox::SetSelection(long from, long to)
@@ -466,13 +464,16 @@ void wxComboBox::SetSelection(long from, long to)
       toChar = -1;
     }
 
+    if ( 
 #ifdef __WIN32__
-    SendMessage(hWnd, CB_SETEDITSEL, (WPARAM)fromChar, (LPARAM)toChar);
-//    SendMessage(hWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
-#else
-    // WPARAM is 0: selection is scrolled into view
-    SendMessage(hWnd, CB_SETEDITSEL, (WPARAM)0, (LPARAM)MAKELONG(fromChar, toChar));
+    SendMessage(hWnd, CB_SETEDITSEL, (WPARAM)0, (LPARAM)MAKELONG(fromChar, toChar))
+#else // Win16
+    SendMessage(hWnd, CB_SETEDITSEL, (WPARAM)fromChar, (LPARAM)toChar)
 #endif
+        == CB_ERR )
+    {
+        wxLogDebug(_T("CB_SETEDITSEL failed"));
+    }
 }
 
 void wxComboBox::DoMoveWindow(int x, int y, int width, int height)
