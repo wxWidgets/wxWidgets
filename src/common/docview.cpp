@@ -1441,15 +1441,34 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
     wxDocTemplate **data = new wxDocTemplate *[noTemplates];
     int i;
     int n = 0;
-    for (i = 0; i < noTemplates; i++)
-    {
-        if (templates[i]->IsVisible())
-        {
-            strings.Add(templates[i]->m_description);
-            data[n] = templates[i];
-            n ++;
-        }
-    }
+	for (i = 0; i < noTemplates; i++)
+	{
+		if (templates[i]->IsVisible())
+		{
+			strings.Add(templates[i]->m_description);
+			if (!sort)
+			{
+				data[n] = templates[i];
+				n ++;
+			}
+		}
+	}  // for
+
+	if (sort)
+	{
+		// Yes, this will be slow, but template lists
+		// are typically short.
+		int j;
+		n = strings.Count();
+		for (i = 0; i < n; i++)
+		{
+			for (j = 0; j < noTemplates; j++)
+			{
+				if (strings[i] == templates[j]->m_description)
+					data[i] = templates[j];
+			}
+		}
+	}
 
     wxDocTemplate *theTemplate;
 
@@ -1495,10 +1514,29 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
         if ( templ->IsVisible() && !templ->GetViewName().empty() )
         {
             strings.Add(templ->m_viewTypeName);
-            data[n] = templ;
-            n ++;
+			if (!sort)
+			{
+				data[n] = templ;
+				n ++;
+			}
         }
     }
+
+	if (sort)
+	{
+		// Yes, this will be slow, but template lists
+		// are typically short.
+		int j;
+		n = strings.Count();
+		for (i = 0; i < n; i++)
+		{
+			for (j = 0; j < noTemplates; j++)
+			{
+				if (strings[i] == templates[j]->m_viewTypeName)
+					data[i] = templates[j];
+			}
+		}
+	}
 
     wxDocTemplate *theTemplate;
 
