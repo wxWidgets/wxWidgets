@@ -39,6 +39,7 @@
   #include "wx/hash.h"
 #endif
 
+#if wxUSE_WCHAR_T
 size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
   if (buf) {
@@ -83,6 +84,7 @@ size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
   return wcstombs((char *) NULL, pwz, 0);
 #endif // GNU
 }
+#endif
 
 #ifndef wxStrdup
 wxChar * WXDLLEXPORT wxStrdup(const wxChar *psz)
@@ -91,6 +93,18 @@ wxChar * WXDLLEXPORT wxStrdup(const wxChar *psz)
   wxChar *ret = (wxChar *) malloc(size);
   memcpy(ret, psz, size);
   return ret;
+}
+#endif
+
+#ifndef wxStricmp
+int WXDLLEXPORT wxStricmp(const wxChar *psz1, const wxChar *psz2)
+{
+  register wxChar c1, c2;
+  do {
+    c1 = wxTolower(*psz1++);
+    c2 = wxTolower(*psz2++);
+  } while ( c1 && (c1 == c2) );
+  return c1 - c2;
 }
 #endif
 

@@ -39,7 +39,7 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/dc.h"
-#include "wx/dialog.h"
+    #include "wx/dialog.h"
     #include "wx/menu.h"
     #include "wx/list.h"
     #include "wx/filedlg.h"
@@ -213,7 +213,7 @@ bool wxDocument::Save()
     bool ret = FALSE;
 
     if (!IsModified()) return TRUE;
-    if (m_documentFile == "" || !m_savedYet)
+    if (m_documentFile == _T("") || !m_savedYet)
         ret = SaveAs();
     else
         ret = OnSaveDocument(m_documentFile);
@@ -245,7 +245,7 @@ bool wxDocument::SaveAs()
     wxString ext("");
     wxSplitPath(fileName, & path, & name, & ext);
 
-    if (ext.IsEmpty() || ext == "")
+    if (ext.IsEmpty() || ext == _T(""))
     {
         fileName += ".";
         fileName += docTemplate->GetDefaultExtension();
@@ -274,7 +274,7 @@ bool wxDocument::OnSaveDocument(const wxString& file)
         return FALSE;
 
     wxString msgTitle;
-    if (wxTheApp->GetAppName() != "")
+    if (wxTheApp->GetAppName() != _T(""))
         msgTitle = wxTheApp->GetAppName();
     else
         msgTitle = wxString(_("File error"));
@@ -305,7 +305,7 @@ bool wxDocument::OnOpenDocument(const wxString& file)
         return FALSE;
 
     wxString msgTitle;
-    if (wxTheApp->GetAppName() != "")
+    if (wxTheApp->GetAppName() != _T(""))
         msgTitle = wxTheApp->GetAppName();
     else
         msgTitle = wxString(_("File error"));
@@ -355,12 +355,12 @@ bool wxDocument::Revert()
 // Get title, or filename if no title, else unnamed
 bool wxDocument::GetPrintableName(wxString& buf) const
 {
-    if (m_documentTitle != "")
+    if (m_documentTitle != _T(""))
     {
         buf = m_documentTitle;
         return TRUE;
     }
-    else if (m_documentFile != "")
+    else if (m_documentFile != _T(""))
     {
         buf = wxFileNameFromPath(m_documentFile);
         return TRUE;
@@ -395,7 +395,7 @@ bool wxDocument::OnSaveModified()
         GetPrintableName(title);
 
         wxString msgTitle;
-        if (wxTheApp->GetAppName() != "")
+        if (wxTheApp->GetAppName() != _T(""))
             msgTitle = wxTheApp->GetAppName();
         else
             msgTitle = wxString(_("Warning"));
@@ -947,8 +947,8 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
     // Existing document
     wxDocTemplate *temp = (wxDocTemplate *) NULL;
 
-    wxString path2("");
-    if (path != "")
+    wxString path2(_T(""));
+    if (path != _T(""))
         path2 = path;
 
     if (flags & wxDOC_SILENT)
@@ -1199,7 +1199,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     }
     else
     {
-        path = "";
+        path = _T("");
         return (wxDocTemplate *) NULL;
     }
 #if 0
@@ -1210,7 +1210,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     if (!temp)
         return (wxDocTemplate *) NULL;
 
-    char *pathTmp = wxFileSelector(_("Select a file"), "", "",
+    wxChar *pathTmp = wxFileSelector(_("Select a file"), _T(""), _T(""),
             temp->GetDefaultExtension(),
             temp->GetFileFilter(),
             0, wxTheApp->GetTopWindow());
@@ -1271,7 +1271,7 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
     int n = 0;
     for (i = 0; i < noTemplates; i++)
     {
-        if (templates[i]->IsVisible() && (templates[i]->GetViewName() != ""))
+        if (templates[i]->IsVisible() && (templates[i]->GetViewName() != _T("")))
         {
             strings[n] = WXSTRINGCAST templates[i]->m_viewTypeName;
             data[n] = (wxChar *)templates[i];
@@ -1445,7 +1445,7 @@ void wxDocParentFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
 {
     wxString f(m_docManager->GetHistoryFile(event.GetSelection() - wxID_FILE1));
-    if (f != "")
+    if (f != _T(""))
         (void)m_docManager->CreateDocument(f, wxDOC_SILENT);
 }
 
@@ -1690,7 +1690,7 @@ void wxCommandProcessor::SetMenuStrings()
         {
             wxCommand *command = (wxCommand *)m_currentCommand->Data();
             wxString commandName(command->GetName());
-            if (commandName == "") commandName = _("Unnamed command");
+            if (commandName == _T("")) commandName = _("Unnamed command");
             bool canUndo = command->CanUndo();
             if (canUndo)
                 buf = wxString(_("&Undo ")) + commandName;
@@ -1705,7 +1705,7 @@ void wxCommandProcessor::SetMenuStrings()
             {
                 wxCommand *redoCommand = (wxCommand *)m_currentCommand->Next()->Data();
                 wxString redoCommandName(redoCommand->GetName());
-                if (redoCommandName == "") redoCommandName = _("Unnamed command");
+                if (redoCommandName == _T("")) redoCommandName = _("Unnamed command");
                 buf = wxString(_("&Redo ")) + redoCommandName;
                 m_commandEditMenu->SetLabel(wxID_REDO, buf);
                 m_commandEditMenu->Enable(wxID_REDO, TRUE);
@@ -1732,7 +1732,7 @@ void wxCommandProcessor::SetMenuStrings()
                 // we've undone to the start of the list, but can redo the first.
                 wxCommand *redoCommand = (wxCommand *)m_commands.First()->Data();
                 wxString redoCommandName(redoCommand->GetName());
-                if (redoCommandName == "") redoCommandName = _("Unnamed command");
+                if (redoCommandName == _T("")) redoCommandName = _("Unnamed command");
                 buf = wxString(_("&Redo ")) + redoCommandName;
                 m_commandEditMenu->SetLabel(wxID_REDO, buf);
                 m_commandEditMenu->Enable(wxID_REDO, TRUE);
@@ -1854,7 +1854,7 @@ void wxFileHistory::Load(wxConfigBase& config)
     wxString buf;
     buf.Printf(_T("file%d"), m_fileHistoryN+1);
     wxString historyFile;
-    while ((m_fileHistoryN <= m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != ""))
+    while ((m_fileHistoryN <= m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != _T("")))
     {
         m_fileHistory[m_fileHistoryN] = copystring((const wxChar*) historyFile);
         m_fileHistoryN ++;

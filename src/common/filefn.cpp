@@ -277,7 +277,7 @@ bool wxFileExists(const char *pszFileName)
 bool
 wxIsAbsolutePath (const wxString& filename)
 {
-  if (filename != "")
+  if (filename != _T(""))
     {
       if (filename[0] == _T('/')
 #ifdef __VMS__
@@ -721,7 +721,7 @@ wxPathOnly (wxChar *path)
 // Return just the directory, or NULL if no directory
 wxString wxPathOnly (const wxString& path)
 {
-  if (path != "")
+  if (path != _T(""))
     {
       wxChar buf[_MAXPATHLEN];
 

@@ -601,7 +601,7 @@ wxFont *wxFontList::
           //          each_font->GetFontId () == FamilyOrFontId) /* New font system */
           //#else
           each_font->GetFamily () == FamilyOrFontId &&
-          ((each_font->GetFaceName() == "") || each_font->GetFaceName() == Face))
+          ((each_font->GetFaceName() == _T("")) || each_font->GetFaceName() == Face))
         //#endif
         return each_font;
     }
