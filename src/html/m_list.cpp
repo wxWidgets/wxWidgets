@@ -58,7 +58,12 @@ wxHtmlListmarkCell::wxHtmlListmarkCell(wxDC* dc, const wxColour& clr) : wxHtmlCe
 void wxHtmlListmarkCell::Draw(wxDC& dc, int x, int y, int WXUNUSED(view_y1), int WXUNUSED(view_y2))
 {
     dc.SetBrush(m_Brush);
-    dc.DrawEllipse(x + m_PosX + m_Width / 4, y + m_PosY + m_Height / 4, m_Width / 2, m_Width / 2);
+    //dc.DrawEllipse(x + m_PosX + m_Width / 4, y + m_PosY + m_Height / 4, m_Width / 2, m_Width / 2);
+    // This looks better IMHO (JACS) -- I tried to get ellipses/circles working but they can
+    // just look terrible, at least on Windows. TODO: maybe have configurable bullets,
+    // possibly with the app supplying bitmaps.
+    int size = (int) ((m_Width / 2.0) + 0.5);
+    dc.DrawRectangle(x + m_PosX + (m_Width - size)/2, y + m_PosY + (m_Height - size)/ 2, size, size);
 }
 
 
@@ -94,11 +99,15 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
 
             c = m_WParser->OpenContainer();
             c->SetWidthFloat(2 * m_WParser->GetCharWidth(), wxHTML_UNITS_PIXELS);
-            c->SetAlignHor(wxHTML_ALIGN_RIGHT);
             if (m_Numbering == 0)
+            {
+                // Centering gives more space after the bullet
+                c->SetAlignHor(wxHTML_ALIGN_CENTER);
                 c->InsertCell(new wxHtmlListmarkCell(m_WParser->GetDC(), m_WParser->GetActualColor()));
+            }
             else
             {
+                c->SetAlignHor(wxHTML_ALIGN_RIGHT);
                 wxString mark;
                 mark.Printf(wxT("%i."), m_Numbering);
                 c->InsertCell(new wxHtmlWordCell(mark, *(m_WParser->GetDC())));
