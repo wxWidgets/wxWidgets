@@ -331,6 +331,8 @@
 
 #define wxUSE_GEOMETRY  1
                                 // needed for wxCanvas
+#define wxUSE_MENUS               1
+
 
 #endif
     // _WX_SETUP_H_
