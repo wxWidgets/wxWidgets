@@ -432,7 +432,7 @@ all_execs:
 
 png:    $(CFG)
         cd $(WXDIR)\src\png
-        ${MAKE} -f makefile.b32
+        ${MAKE} -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\src\msw
 
 clean_png:
@@ -442,7 +442,7 @@ clean_png:
 
 zlib:   $(CFG)
         cd $(WXDIR)\src\zlib
-        ${MAKE} -f makefile.b32 lib
+        ${MAKE} -f makefile.b32 FINAL=$(FINAL) lib
         cd $(WXDIR)\src\msw
 
 clean_zlib:
@@ -452,7 +452,7 @@ clean_zlib:
 
 jpeg:    $(CFG)
         cd $(WXDIR)\src\jpeg
-        ${MAKE} -f makefile.b32
+        ${MAKE} -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\src\msw
 
 clean_jpeg:
@@ -462,7 +462,7 @@ clean_jpeg:
 
 regex:   $(CFG)
         cd $(WXDIR)\src\regex
-        ${MAKE} -f makefile.b32 lib
+        ${MAKE} -f makefile.b32 FINAL=$(FINAL) lib
         cd $(WXDIR)\src\msw
 
 clean_regex:
@@ -472,7 +472,7 @@ clean_regex:
 
 tiff:   $(CFG)
         cd $(WXDIR)\src\tiff
-        ${MAKE} -f makefile.b32 lib
+        ${MAKE} -f makefile.b32 FINAL=$(FINAL) lib
         cd $(WXDIR)\src\msw
 
 clean_tiff:
