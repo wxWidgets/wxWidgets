@@ -357,7 +357,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/ctrlcmn.cpp
     src/common/ctrlsub.cpp
     src/common/datacmn.cpp
-    src/common/dbgrid.cpp
     src/common/dcbase.cpp
     src/common/dlgcmn.cpp
     src/common/dndcmn.cpp
@@ -416,36 +415,25 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/wincmn.cpp
     src/common/xpmdecod.cpp
     src/generic/busyinfo.cpp
-    src/generic/calctrl.cpp
     src/generic/choicdgg.cpp
-    src/generic/dcbuffer.cpp
     src/generic/dcpsg.cpp
     src/generic/dirctrlg.cpp
     src/generic/dragimgg.cpp
-    src/generic/grid.cpp
-    src/generic/gridctrl.cpp
-    src/generic/gridsel.cpp
-    src/generic/helpext.cpp
-    src/generic/laywin.cpp
     src/generic/logg.cpp
     src/generic/numdlgg.cpp
     src/generic/panelg.cpp
     src/generic/progdlgg.cpp
     src/generic/renderg.cpp
-    src/generic/sashwin.cpp
     src/generic/scrlwing.cpp
     src/generic/selstore.cpp
     src/generic/spinctlg.cpp
-    src/generic/splash.cpp
     src/generic/splitter.cpp
     src/generic/tbarsmpl.cpp
     src/generic/textdlgg.cpp
-    src/generic/tipdlg.cpp
     src/generic/tipwin.cpp
     src/generic/treectlg.cpp
     src/generic/vlbox.cpp
     src/generic/vscroll.cpp
-    src/generic/wizard.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/bmpbuttn.h
@@ -467,39 +455,32 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dcscreen.h
     wx/dialog.h
     wx/dirdlg.h
+    wx/dragimag.h
     wx/filedlg.h
     wx/frame.h
     wx/gauge.h
     wx/gdicmn.h
     wx/generic/accel.h
-    wx/generic/calctrl.h
     wx/generic/choicdgg.h
     wx/generic/colrdlgg.h
     wx/generic/dcpsg.h
     wx/generic/dirctrlg.h
+    wx/generic/dragimgg.h
     wx/generic/filedlgg.h
     wx/generic/fontdlgg.h
-    wx/generic/grid.h
-    wx/generic/grid.h
-    wx/generic/gridctrl.h
-    wx/generic/helpext.h
     wx/generic/imaglist.h
-    wx/generic/laywin.h
     wx/generic/logg.h
     wx/generic/msgdlgg.h
     wx/generic/notebook.h
     wx/generic/panelg.h
     wx/generic/prntdlgg.h
     wx/generic/progdlgg.h
-    wx/generic/sashwin.h
     wx/generic/scrolwin.h
     wx/generic/spinctlg.h
-    wx/generic/splash.h
     wx/generic/splitter.h
     wx/generic/textdlgg.h
     wx/generic/timer.h
     wx/generic/treectlg.h
-    wx/generic/wizard.h
     wx/helphtml.h
     wx/icon.h
     wx/layout.h
@@ -538,7 +519,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/artprov.h
     wx/bitmap.h
     wx/busyinfo.h
-    wx/calctrl.h
     wx/caret.h
     wx/clipbrd.h
     wx/cmdproc.h
@@ -546,8 +526,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/colour.h
     wx/cshelp.h
     wx/dataobj.h
-    wx/dbgrid.h
-    wx/dcbuffer.h
     wx/dcmirror.h
     wx/dcps.h
     wx/dialup.h
@@ -556,7 +534,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dnd.h
     wx/docmdi.h
     wx/docview.h
-    wx/dragimag.h
     wx/effects.h
     wx/evtloop.h
     wx/fdrepdlg.h
@@ -569,7 +546,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/geometry.h
     wx/gifdecod.h
     wx/glcanvas.h
-    wx/grid.h
     wx/help.h
     wx/helpbase.h
     wx/helpwin.h
@@ -586,7 +562,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/imagtiff.h
     wx/imagxpm.h
     wx/joystick.h
-    wx/laywin.h
     wx/listbase.h
     wx/listctrl.h
     wx/matrix.h
@@ -605,11 +580,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/quantize.h
     wx/rawbmp.h
     wx/region.h
-    wx/sashwin.h
     wx/scopeguard.h
     wx/spinbutt.h
     wx/spinctrl.h
-    wx/splash.h
     wx/splitter.h
     wx/stack.h
     wx/statline.h
@@ -619,7 +592,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/tbarbase.h
     wx/tbarsmpl.h
     wx/tglbtn.h
-    wx/tipdlg.h
     wx/tipwin.h
     wx/tooltip.h
     wx/toplevel.h
@@ -630,13 +602,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/vms_x_fix.h
     wx/vscroll.h
     wx/wave.h
-    wx/wizard.h
     wx/xpmdecod.h
     wx/xpmhand.h
-
-    wx/generic/dragimgg.h
-    wx/generic/gridsel.h
-
 </set>
 
 
@@ -686,7 +653,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/evtloop.cpp
     src/gtk/font.cpp
     src/gtk/gdiobj.cpp
-    src/gtk/gsockgtk.c
+    <!-- src/gtk/gsockgtk.c FIXME -->
     src/gtk/icon.cpp
     src/gtk/main.cpp
     src/gtk/pen.cpp
@@ -868,7 +835,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/motif/frame.cpp
     src/motif/gauge.cpp
     src/motif/gdiobj.cpp
-    src/motif/gsockmot.c
+    <!-- src/motif/gsockmot.c FIXME -->
     src/motif/icon.cpp
     src/motif/listbox.cpp
     src/motif/main.cpp
@@ -997,7 +964,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/x11/evtloop.cpp
     src/x11/font.cpp
     src/x11/gdiobj.cpp
-    src/x11/gsockx11.c
+    <!-- src/x11/gsockx11.c FIXME -->
     src/x11/icon.cpp
     src/x11/joystick.cpp
     src/x11/main.cpp
@@ -1404,7 +1371,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/gdiimage.cpp
     src/os2/gdiobj.cpp
     src/os2/gsocket.c
-    src/os2/gsockpm.c
+    <!-- src/os2/gsockpm.c FIXME -->
     src/os2/helpwin.cpp
     src/os2/icon.cpp
     src/os2/iniconf.cpp
@@ -1970,6 +1937,52 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 
+<!-- ====================================================================== -->
+<!--                               wxAdvanced                               -->
+<!-- ====================================================================== -->
+
+<set var="ADVANCED_MSW_SRC" hints="files">
+</set>
+
+<set var="ADVANCED_MSW_HDR" hints="files">
+</set>
+
+<set var="ADVANCED_CMN_SRC" hints="files">
+    src/common/dbgrid.cpp
+    src/generic/calctrl.cpp
+    src/generic/dcbuffer.cpp
+    src/generic/grid.cpp
+    src/generic/gridctrl.cpp
+    src/generic/gridsel.cpp
+    src/generic/helpext.cpp
+    src/generic/laywin.cpp
+    src/generic/sashwin.cpp
+    src/generic/splash.cpp
+    src/generic/tipdlg.cpp
+    src/generic/wizard.cpp
+</set>
+
+<set var="ADVANCED_CMN_HDR" hints="files">
+    wx/calctrl.h
+    wx/dbgrid.h
+    wx/dcbuffer.h
+    wx/generic/calctrl.h
+    wx/generic/grid.h
+    wx/generic/gridctrl.h
+    wx/generic/gridsel.h
+    wx/generic/helpext.h
+    wx/generic/laywin.h
+    wx/generic/sashwin.h
+    wx/generic/splash.h
+    wx/generic/wizard.h
+    wx/grid.h
+    wx/laywin.h
+    wx/sashwin.h
+    wx/splash.h
+    wx/tipdlg.h
+    wx/wizard.h
+</set>
+
 
 <!-- ====================================================================== -->
 <!--                               wxHTML                                   -->
@@ -2122,6 +2135,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(NET_CMN_SRC) $(NET_PLATFORM_SRC)
     </set>
 
+    
+    <!-- wxAdvanced files: -->
+    <set var="ADVANCED_PLATFORM_SRC" hints="files">
+        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_SRC)</if>
+    </set>
+    <set var="ADVANCED_PLATFORM_HDR" hints="files">
+        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR)</if>
+    </set>
+    <set var="ADVANCED_SRC">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC)</set>
+    <set var="ADVANCED_HDR">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR)</set>
 
 
     <!-- GUI sources: -->
@@ -2186,7 +2209,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="ALL_HEADERS" make_var="1" hints="files">
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)
         $(NET_CMN_HDR) $(NET_PLATFORM_HDR)
-        $(ALL_GUI_HEADERS)
+        $(ALL_GUI_HEADERS) $(ADVANCED_HDR)
         $(HTML_HDR) $(XML_HDR)
         $(OPENGL_HDR)
     </set>

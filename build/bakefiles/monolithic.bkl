@@ -3,7 +3,9 @@
 <makefile>
     
     <set var="MONOLIB_GUI_SRC">
-        <if cond="USE_GUI=='1'">$(CORE_SRC) $(HTML_SRC)</if>
+        <if cond="USE_GUI=='1'">
+            $(CORE_SRC) $(ADVANCED_SRC) $(HTML_SRC)
+        </if>
     </set>
     <set var="MONOLIB_SRC">
         $(BASE_SRC) $(BASE_AND_GUI_SRC) $(NET_SRC) $(MONOLIB_GUI_SRC) $(XML_SRC)
@@ -24,6 +26,7 @@
         <define>wxUSE_BASE=1</define> 
         <sources>$(MONOLIB_SRC)</sources>
         <msvc-headers>$(ALL_HEADERS)</msvc-headers>
+        <msvc-copy-setup-h/>
     </lib>
 
 </makefile>

@@ -122,6 +122,9 @@
     <set var="WXLIB_CORE">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('core')))</if>
     </set>
+    <set var="WXLIB_ADV">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('adv')))</if>
+    </set>
     <set var="WXLIB_HTML">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('html')))</if>
     </set>
