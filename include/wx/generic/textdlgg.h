@@ -44,7 +44,7 @@ DECLARE_EVENT_TABLE()
 };
 
 wxString WXDLLEXPORT wxGetTextFromUser(const wxString& message, const wxString& caption = wxGetTextFromUserPromptStr,
-                        const wxString& default_value = wxEmptyString, wxWindow *parent = NULL,
+                        const wxString& default_value = wxEmptyString, wxWindow *parent = (wxWindow *) NULL,
                         int x = -1, int y = -1, bool centre = TRUE);
 
 #endif

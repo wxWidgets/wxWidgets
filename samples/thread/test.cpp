@@ -117,7 +117,7 @@ IMPLEMENT_APP	(MyApp)
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, "Minimal wxWindows App", 50, 50, 450, 340);
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "Minimal wxWindows App", 50, 50, 450, 340);
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;

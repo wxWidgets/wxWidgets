@@ -121,7 +121,7 @@ void wxGenericTreeItem::Reset()
   m_level = 0;
   m_children.DeleteContents( TRUE );
   m_isCollapsed = TRUE;
-  m_parent = NULL;
+  m_parent = (wxGenericTreeItem *) NULL;
 };
 
 void wxGenericTreeItem::GetItem( wxTreeItem &item ) const
@@ -182,7 +182,7 @@ wxGenericTreeItem *wxGenericTreeItem::FindItem( long itemId ) const
     if (res) return (wxGenericTreeItem*)(res);
     node = node->Next();
   };
-  return NULL;
+  return (wxGenericTreeItem *) NULL;
 };
 
 void wxGenericTreeItem::AddChild( wxGenericTreeItem *child )
@@ -346,8 +346,8 @@ END_EVENT_TABLE()
 
 wxTreeCtrl::wxTreeCtrl()
 {
-  m_current = NULL;
-  m_anchor = NULL;
+  m_current = (wxGenericTreeItem *) NULL;
+  m_anchor = (wxGenericTreeItem *) NULL;
   m_hasFocus = FALSE;
   m_xScroll = 0;
   m_yScroll = 0;
@@ -356,16 +356,16 @@ wxTreeCtrl::wxTreeCtrl()
   m_indent = 15;
   m_isCreated = FALSE;
   m_hilightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
-  m_imageList = NULL;
-  m_smallImageList = NULL;
+  m_imageList = (wxImageList *) NULL;
+  m_smallImageList = (wxImageList *) NULL;
 };
 
 wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
             const wxPoint& pos, const wxSize& size,
             long style, const wxString& name )
 {
-  m_current = NULL;
-  m_anchor = NULL;
+  m_current = (wxGenericTreeItem *) NULL;
+  m_anchor = (wxGenericTreeItem *) NULL;
   m_hasFocus = FALSE;
   m_xScroll = 0;
   m_yScroll = 0;
@@ -374,8 +374,8 @@ wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
   m_indent = 15;
   m_isCreated = FALSE;
   m_hilightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
-  m_imageList = NULL;
-  m_smallImageList = NULL;
+  m_imageList = (wxImageList *) NULL;
+  m_smallImageList = (wxImageList *) NULL;
   Create( parent, id, pos, size, style, name );
 };
 
@@ -402,7 +402,7 @@ int wxTreeCtrl::GetCount() const
 long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
       int selImage, long WXUNUSED(insertAfter) )
 {
-  wxGenericTreeItem *p = NULL;
+  wxGenericTreeItem *p = (wxGenericTreeItem *) NULL;
   if (parent == 0)
   {
     if (m_anchor) return -1;
@@ -446,7 +446,7 @@ long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
     if (!p->HasChildren()) p->m_hasChildren = TRUE;
 
     int ch = 0;
-    GetClientSize( NULL, &ch );
+    GetClientSize( (int *) NULL, &ch );
 
     PrepareDC( dc );
     
@@ -484,7 +484,7 @@ long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
 long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insertAfter) )
 {
   int oldMask = info.m_mask;
-  wxGenericTreeItem *p = NULL;
+  wxGenericTreeItem *p = (wxGenericTreeItem *) NULL;
   if (parent == 0)
   {
     if (m_anchor) return -1;
@@ -525,7 +525,7 @@ long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insert
     if (!p->HasChildren()) p->m_hasChildren = TRUE;
 
     int ch = 0;
-    GetClientSize( NULL, &ch );
+    GetClientSize( (int *) NULL, &ch );
 
     PrepareDC( dc );
     
@@ -645,7 +645,7 @@ void wxTreeCtrl::DeleteChildren( long item )
 bool wxTreeCtrl::DeleteAllItems()
 {
   delete m_anchor;
-  m_anchor = NULL;
+  m_anchor = (wxGenericTreeItem *) NULL;
   Refresh();
   return TRUE;
 };
@@ -1023,7 +1023,7 @@ void wxTreeCtrl::CalculatePositions()
 
 wxGenericTreeItem *wxTreeCtrl::FindItem( long itemId ) const
 {
-  if (!m_anchor) return NULL;
+  if (!m_anchor) return (wxGenericTreeItem *) NULL;
   return m_anchor->FindItem( itemId );
 };
 

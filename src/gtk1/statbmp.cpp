@@ -45,7 +45,7 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     
   if (m_bitmap.Ok())
   {
-    GdkBitmap *mask = NULL;
+    GdkBitmap *mask = (GdkBitmap *) NULL;
     if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
     m_widget = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );
     
@@ -71,7 +71,7 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
   
   if (m_bitmap.Ok())
   {
-    GdkBitmap *mask = NULL;
+    GdkBitmap *mask = (GdkBitmap *) NULL;
     if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
     gtk_pixmap_set( GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask );
   }

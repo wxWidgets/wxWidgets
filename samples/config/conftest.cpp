@@ -127,7 +127,7 @@ int MyApp::OnExit()
   // clean up: Set() returns the active config object as Get() does, but unlike
   // Get() it doesn't try to create one if there is none (definitely not what
   // we want here!)
-  delete wxConfigBase::Set(NULL);
+  delete wxConfigBase::Set((wxConfigBase *) NULL);
 
   return 0;
 }
@@ -138,7 +138,7 @@ int MyApp::OnExit()
 
 // main frame ctor
 MyFrame::MyFrame()
-       : wxFrame(NULL, -1, "wxConfig Demo")
+       : wxFrame((wxFrame *) NULL, -1, "wxConfig Demo")
 {
   // menu
   wxMenu *file_menu = new wxMenu;
@@ -205,7 +205,7 @@ void MyFrame::OnDelete(wxCommandEvent&)
   if ( wxConfigBase::Get()->DeleteAll() ) {
     wxLogMessage("Config file/registry key successfully deleted.");
 
-    delete wxConfigBase::Set(NULL);
+    delete wxConfigBase::Set((wxConfigBase *) NULL);
     wxConfigBase::DontCreateOnDemand();
   }
   else

@@ -45,8 +45,8 @@ END_EVENT_TABLE()
 wxSplitterWindow::wxSplitterWindow(void)
 {
     m_splitMode = wxSPLIT_VERTICAL;
-    m_windowOne = NULL;
-    m_windowTwo = NULL;
+    m_windowOne = (wxWindow *) NULL;
+    m_windowTwo = (wxWindow *) NULL;
     m_dragMode = wxSPLIT_DRAG_NONE;
     m_oldX = 0;
     m_oldY = 0;
@@ -55,15 +55,15 @@ wxSplitterWindow::wxSplitterWindow(void)
     m_sashSize = 7;
     m_borderSize = 2;
     m_sashPosition = 0;
-    m_sashCursorWE = NULL;
-    m_sashCursorNS = NULL;
-    m_sashTrackerPen = NULL;
-    m_lightShadowPen = NULL;
-    m_mediumShadowPen = NULL;
-    m_darkShadowPen = NULL;
-    m_faceBrush = NULL;
-    m_facePen = NULL;
-    m_hilightPen = NULL;
+    m_sashCursorWE = (wxCursor *) NULL;
+    m_sashCursorNS = (wxCursor *) NULL;
+    m_sashTrackerPen = (wxPen *) NULL;
+    m_lightShadowPen = (wxPen *) NULL;
+    m_mediumShadowPen = (wxPen *) NULL;
+    m_darkShadowPen = (wxPen *) NULL;
+    m_faceBrush = (wxBrush *) NULL;
+    m_facePen = (wxPen *) NULL;
+    m_hilightPen = (wxPen *) NULL;
     m_minimumPaneSize = 0;
 }
 
@@ -72,8 +72,8 @@ wxSplitterWindow::wxSplitterWindow(wxWindow *parent, wxWindowID id, const wxPoin
   :wxWindow(parent, id, pos, size, style, name)
 {
     m_splitMode = wxSPLIT_VERTICAL;
-    m_windowOne = NULL;
-    m_windowTwo = NULL;
+    m_windowOne = (wxWindow *) NULL;
+    m_windowTwo = (wxWindow *) NULL;
     m_dragMode = wxSPLIT_DRAG_NONE;
     m_oldX = 0;
     m_oldY = 0;
@@ -86,12 +86,12 @@ wxSplitterWindow::wxSplitterWindow(wxWindow *parent, wxWindowID id, const wxPoin
     m_sashCursorWE = new wxCursor(wxCURSOR_SIZEWE);
     m_sashCursorNS = new wxCursor(wxCURSOR_SIZENS);
     m_sashTrackerPen = new wxPen(*wxBLACK, 2, wxSOLID);
-    m_lightShadowPen = NULL;
-    m_mediumShadowPen = NULL;
-    m_darkShadowPen = NULL;
-    m_faceBrush = NULL;
-    m_facePen = NULL;
-    m_hilightPen = NULL;
+    m_lightShadowPen = (wxPen *) NULL;
+    m_mediumShadowPen = (wxPen *) NULL;
+    m_darkShadowPen = (wxPen *) NULL;
+    m_faceBrush = (wxBrush *) NULL;
+    m_facePen = (wxPen *) NULL;
+    m_hilightPen = (wxPen *) NULL;
 
     if ( style & wxSP_3D )
     {
@@ -198,7 +198,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 // We remove the first window from the view
                 wxWindow *removedWindow = m_windowOne;
                 m_windowOne = m_windowTwo;
-                m_windowTwo = NULL;
+                m_windowTwo = (wxWindow *) NULL;
 
                 OnUnsplit(removedWindow);
                 m_sashPosition = 0;
@@ -207,7 +207,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             {
                 // We remove the second window from the view
                 wxWindow *removedWindow = m_windowTwo;
-                m_windowTwo = NULL;
+                m_windowTwo = (wxWindow *) NULL;
                 OnUnsplit(removedWindow);
                 m_sashPosition = 0;
             }
@@ -228,7 +228,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 // We remove the first window from the view
                 wxWindow *removedWindow = m_windowOne;
                 m_windowOne = m_windowTwo;
-                m_windowTwo = NULL;
+                m_windowTwo = (wxWindow *) NULL;
 
                 OnUnsplit(removedWindow);
                 m_sashPosition = 0;
@@ -237,7 +237,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             {
                 // We remove the second window from the view
                 wxWindow *removedWindow = m_windowTwo;
-                m_windowTwo = NULL;
+                m_windowTwo = (wxWindow *) NULL;
                 OnUnsplit(removedWindow);
                 m_sashPosition = 0;
             }
@@ -573,7 +573,7 @@ void wxSplitterWindow::SizeWindows(void)
 void wxSplitterWindow::Initialize(wxWindow *window)
 {
     m_windowOne = window;
-    m_windowTwo = NULL;
+    m_windowTwo = (wxWindow *) NULL;
     m_sashPosition = 0;
 }
 
@@ -627,7 +627,7 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
     if ( toRemove == NULL || toRemove == m_windowTwo)
     {
         wxWindow *win = m_windowTwo ;
-        m_windowTwo = NULL;
+        m_windowTwo = (wxWindow *) NULL;
         m_sashPosition = 0;
         OnUnsplit(win);
         SizeWindows();
@@ -636,7 +636,7 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
     {
         wxWindow *win = m_windowOne ;
         m_windowOne = m_windowTwo;
-        m_windowTwo = NULL;
+        m_windowTwo = (wxWindow *) NULL;
         m_sashPosition = 0;
         OnUnsplit(win);
         SizeWindows();

@@ -66,7 +66,7 @@ public:
   void OnNavigationKey(wxNavigationKeyEvent& event);
 
 protected:
-  bool SetFocusToNextChild(wxNode *nodeCurrent = NULL, bool bForward = TRUE);
+  bool SetFocusToNextChild(wxNode *nodeCurrent = (wxNode *) NULL, bool bForward = TRUE);
 
 DECLARE_DYNAMIC_CLASS(wxPanel)
 DECLARE_EVENT_TABLE()

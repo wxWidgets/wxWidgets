@@ -39,7 +39,7 @@ wxTabControl::wxTabControl(wxTabView *v)
 {
   m_view = v;
   m_isSelected = FALSE;
-  m_labelFont = NULL;
+  m_labelFont = (wxFont *) NULL;
   m_offsetX = 0;
   m_offsetY = 0;
   m_width = 0;
@@ -510,7 +510,7 @@ wxTabView::wxTabView(long style)
   m_backgroundBrush = wxLIGHT_GREY_BRUSH;
   m_tabFont = wxTheFontList->FindOrCreateFont(9, wxSWISS, wxNORMAL, wxNORMAL);
   m_tabSelectedFont = wxTheFontList->FindOrCreateFont(9, wxSWISS, wxNORMAL, wxBOLD);
-  m_window = NULL;
+  m_window = (wxWindow *) NULL;
 }
 
 wxTabView::~wxTabView()
@@ -545,7 +545,7 @@ wxTabControl *wxTabView::AddTab(int id, const wxString& label, wxTabControl *exi
     {
       tabLayer = new wxTabLayer;
       m_layers.Append(tabLayer);
-      lastTabNode = NULL;
+      lastTabNode = (wxNode *) NULL;
     }
   }
   int layer = m_layers.Number() - 1;
@@ -556,7 +556,7 @@ wxTabControl *wxTabView::AddTab(int id, const wxString& label, wxTabControl *exi
   tabControl->SetRowPosition(tabLayer->Number());
   tabControl->SetColPosition(layer);
   
-  wxTabControl *lastTab = NULL;
+  wxTabControl *lastTab = (wxTabControl *) NULL;
   if (lastTabNode)
     lastTab = (wxTabControl *)lastTabNode->Data();
   
@@ -629,7 +629,7 @@ void wxTabView::Layout(void)
     layerNode = nextLayerNode;
   }
   
-  wxTabControl *lastTab = NULL;
+  wxTabControl *lastTab = (wxTabControl *) NULL;
   
   wxTabLayer *currentLayer = new wxTabLayer;
   m_layers.Append(currentLayer);
@@ -651,7 +651,7 @@ void wxTabView::Layout(void)
      {
        currentLayer = new wxTabLayer;
        m_layers.Append(currentLayer);
-       lastTab = NULL;
+       lastTab = (wxTabControl *) NULL;
      }
     }
     
@@ -771,7 +771,7 @@ bool wxTabView::OnEvent(wxMouseEvent& event)
   float x, y;
   event.Position(&x, &y);
   
-  wxTabControl *hitControl = NULL;
+  wxTabControl *hitControl = (wxTabControl *) NULL;
   
   wxNode *node = m_layers.First();
   while (node)
@@ -784,8 +784,8 @@ bool wxTabView::OnEvent(wxMouseEvent& event)
       if (control->HitTest((int)x, (int)y))
       {
         hitControl = control;
-        node = NULL;
-        node2 = NULL;
+        node = (wxNode *) NULL;
+        node2 = (wxNode *) NULL;
       }
       else
         node2 = node2->Next();
@@ -955,7 +955,7 @@ wxTabControl *wxTabView::FindTabControlForId(int id) const
     }
     node1 = node1->Next();
   }
-  return NULL;
+  return (wxTabControl *) NULL;
 }
 
 // Find tab control for layer, position (starting from zero)
@@ -963,11 +963,11 @@ wxTabControl *wxTabView::FindTabControlForPosition(int layer, int position) cons
 {
   wxNode *node1 = m_layers.Nth(layer);
   if (!node1)
-    return NULL;
+    return (wxTabControl *) NULL;
   wxTabLayer *tabLayer = (wxTabLayer *)node1->Data();
   wxNode *node2 = tabLayer->Nth(position);
   if (!node2)
-    return NULL;
+    return (wxTabControl *) NULL;
   return (wxTabControl *)node2->Data();
 }
 
@@ -993,7 +993,7 @@ wxNode *wxTabView::FindTabNodeAndColumn(wxTabControl *control, int *col) const
     }
     node1 = node1->Next();
   }
-  return NULL;
+  return (wxNode *) NULL;
 }
 
 int wxTabView::CalculateTabWidth(int noTabs, bool adjustView)
@@ -1024,7 +1024,7 @@ wxTabbedDialog::wxTabbedDialog(wxWindow *parent, wxWindowID id,
     long windowStyle, const wxString& name):
    wxDialog(parent, id, title, pos, size, windowStyle, name)
 {
-  m_tabView = NULL;
+  m_tabView = (wxTabView *) NULL;
 }
 
 wxTabbedDialog::~wxTabbedDialog(void)
@@ -1066,7 +1066,7 @@ wxTabbedPanel::wxTabbedPanel(wxWindow *parent, wxWindowID id, const wxPoint& pos
    const wxSize& size, long windowStyle, const wxString& name):
    wxPanel(parent, id, pos, size, windowStyle, name)
 {
-  m_tabView = NULL;
+  m_tabView = (wxTabView *) NULL;
 }
 
 wxTabbedPanel::~wxTabbedPanel(void)
@@ -1096,7 +1096,7 @@ IMPLEMENT_CLASS(wxPanelTabView, wxTabView)
 wxPanelTabView::wxPanelTabView(wxPanel *pan, long style): wxTabView(style), m_tabWindows(wxKEY_INTEGER)
 {
   m_panel = pan;
-  m_currentWindow = NULL;
+  m_currentWindow = (wxWindow *) NULL;
 
   if (m_panel->IsKindOf(CLASSINFO(wxTabbedDialog)))
     ((wxTabbedDialog *)m_panel)->SetTabView(this);
@@ -1139,7 +1139,7 @@ wxWindow *wxPanelTabView::GetTabWindow(int id) const
 {
   wxNode *node = m_tabWindows.Find((long)id);
   if (!node)
-    return NULL;
+    return (wxWindow *) NULL;
   return (wxWindow *)node->Data();    
 }
 

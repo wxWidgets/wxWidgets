@@ -149,10 +149,10 @@ void ScoreFile::ReadPlayersScore(
 
 	m_config->SetPath("/Players");
 	m_config->SetPath(player);
-	if (m_config->Read(&myScore, "Score") &&
-		m_config->Read(&myGames, "Games") &&
-		m_config->Read(&myWins, "Wins") &&
-		m_config->Read(&check, "Check"))
+	if (m_config->Read(&myScore, (const char *) "Score",0L) &&
+		m_config->Read(&myGames, (const char *) "Games",0L) &&
+		m_config->Read(&myWins, (const char *) "Wins",0L) &&
+		m_config->Read(&check, (const char *) "Check",0L))
 	{
 	    if (check != CalcCheck(player, myGames, myWins, myScore))
 		{

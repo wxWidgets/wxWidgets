@@ -38,8 +38,8 @@
 #endif
 
 #if !USE_SHARED_LIBRARY
-wxClassInfo wxObject::classwxObject("wxObject", NULL, NULL, sizeof(wxObject), NULL);
-wxClassInfo *wxClassInfo::first = NULL;
+wxClassInfo wxObject::classwxObject((char *) "wxObject", (char *) NULL, (char *) NULL, (int ) sizeof(wxObject), (wxObjectConstructorFn) NULL);
+wxClassInfo *wxClassInfo::first = (wxClassInfo *) NULL;
 #endif
 
 /*
@@ -48,7 +48,7 @@ wxClassInfo *wxClassInfo::first = NULL;
 
 wxObject::wxObject(void)
 {
-  m_refData = NULL;
+  m_refData = (wxObjectRefData *) NULL;
 }
 
 wxObject::~wxObject(void)
@@ -129,8 +129,8 @@ wxClassInfo::wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, 
   next = first;
   first = this;
 
-  baseInfo1 = NULL;
-  baseInfo2 = NULL;
+  baseInfo1 = (wxClassInfo *) NULL;
+  baseInfo2 = (wxClassInfo *) NULL;
 }
 
 wxObject *wxClassInfo::CreateObject(void)
@@ -138,7 +138,7 @@ wxObject *wxClassInfo::CreateObject(void)
   if (objectConstructor)
     return (wxObject *)(*objectConstructor)();
   else
-    return NULL;
+    return (wxObject *) NULL;
 }
 
 wxClassInfo *wxClassInfo::FindClass(char *c)
@@ -150,7 +150,7 @@ wxClassInfo *wxClassInfo::FindClass(char *c)
       return p;
     p = p->next;
   }
-  return NULL;
+  return (wxClassInfo *) NULL;
 }
 
 // Climb upwards through inheritance hierarchy.
@@ -216,7 +216,7 @@ wxObject *wxCreateDynamicObject(char *name)
       return info->CreateObject();
     info = info->next;
   }
-  return NULL;
+  return (wxObject *) NULL;
 }
 
 #ifdef USE_STORABLE_CLASSES
@@ -297,7 +297,7 @@ void wxObject::UnRef(void)
         if (m_refData->m_count == 0)
             delete m_refData;
     }
-    m_refData = NULL;
+    m_refData = (wxObjectRefData *) NULL;
 }
 
 /*

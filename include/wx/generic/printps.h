@@ -28,7 +28,7 @@ class WXDLLEXPORT wxPostScriptPrinter: public wxPrinterBase
   DECLARE_DYNAMIC_CLASS(wxPostScriptPrinter)
 
  public:
-  wxPostScriptPrinter(wxPrintData *data = NULL);
+  wxPostScriptPrinter(wxPrintData *data = (wxPrintData *) NULL);
   ~wxPostScriptPrinter(void);
 
   virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = TRUE);
@@ -46,7 +46,7 @@ class WXDLLEXPORT wxPostScriptPrintPreview: public wxPrintPreviewBase
   DECLARE_CLASS(wxPostScriptPrintPreview)
 
  public:
-  wxPostScriptPrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting = NULL, wxPrintData *data = NULL);
+  wxPostScriptPrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting = (wxPrintout *) NULL, wxPrintData *data = (wxPrintData *) NULL);
   ~wxPostScriptPrintPreview(void);
 
   virtual bool Print(bool interactive);

@@ -32,7 +32,7 @@ class wxTabControl: public wxObject
 {
 DECLARE_DYNAMIC_CLASS(wxTabControl)
 public:
-    wxTabControl(wxTabView *v = NULL);
+    wxTabControl(wxTabView *v = (wxTabView *) NULL);
     ~wxTabControl(void);
     
     virtual void OnDraw(wxDC& dc, bool lastInRow);
@@ -112,7 +112,7 @@ public:
   inline wxWindow* GetWindow(void) const { return m_window; }
   
   // Automatically positions tabs
-  wxTabControl *AddTab(int id, const wxString& label, wxTabControl *existingTab = NULL);
+  wxTabControl *AddTab(int id, const wxString& label, wxTabControl *existingTab = (wxTabControl *) NULL);
   
   void ClearTabs(bool deleteTabs = TRUE);
 

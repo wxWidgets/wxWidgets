@@ -30,7 +30,7 @@ class WXDLLEXPORT wxTextValidator: public wxValidator
 {
 DECLARE_DYNAMIC_CLASS(wxTextValidator)
 public:
-  wxTextValidator(long style = wxFILTER_NONE, wxString *val = NULL);
+  wxTextValidator(long style = wxFILTER_NONE, wxString *val = (wxString *) NULL);
   wxTextValidator(const wxTextValidator& val);
 
   ~wxTextValidator();

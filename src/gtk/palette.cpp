@@ -31,7 +31,7 @@ class wxPaletteRefData: public wxObjectRefData
 
 wxPaletteRefData::wxPaletteRefData(void)
 {
-  m_colormap = NULL;
+  m_colormap = (GdkColormap *) NULL;
 };
 
 wxPaletteRefData::~wxPaletteRefData(void)

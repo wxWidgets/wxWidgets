@@ -105,8 +105,8 @@ wxDate::wxDate (const wxString& dat)
 
     char *token = strtok(buf,"/-");
     month = atoi(token);
-    day   = atoi(strtok(NULL,"/-"));
-    year  = atoi(strtok(NULL," "));
+    day   = atoi(strtok((char *) NULL,"/-"));
+    year  = atoi(strtok((char *) NULL," "));
   }
 
   mdy_to_julian ();
@@ -148,8 +148,8 @@ void wxDate::operator = (const wxString& dat)
 
     char *token = strtok(buf,"/-");
     month = atoi(token);
-    day   = atoi(strtok(NULL,"/-"));
-    year  = atoi(strtok(NULL," "));
+    day   = atoi(strtok((char *) NULL,"/-"));
+    year  = atoi(strtok((char *) NULL," "));
   }
 
   mdy_to_julian ();
@@ -481,7 +481,7 @@ wxDate& wxDate::Set()
 
     mdy_to_julian();
 #else
-    time_t now = time(NULL);
+    time_t now = time((time_t *) NULL);
     struct tm *localTime = localtime(&now);
 
     month = localTime->tm_mon + 1;

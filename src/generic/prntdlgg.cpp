@@ -286,7 +286,7 @@ bool wxGenericPrintDialog::TransferDataFromWindow(void)
 
 wxDC *wxGenericPrintDialog::GetPrintDC(void)
 {
-  return new wxPostScriptDC(wxThePrintSetupData->GetPrinterFile(), FALSE, NULL);
+  return new wxPostScriptDC(wxThePrintSetupData->GetPrinterFile(), FALSE, (wxWindow *) NULL);
 }
 
 /*

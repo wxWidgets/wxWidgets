@@ -95,7 +95,7 @@ bool MyApp::OnInit(void)
   m_locale.AddCatalog("fileutils");  // 3) and another just for testing
   
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, _("Minimal wxWindows App"), 50, 50, 150, 40);
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, _("Minimal wxWindows App"), 50, 50, 150, 40);
 
   // Give it an icon
 #ifdef __WXMSW__

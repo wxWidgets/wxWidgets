@@ -212,7 +212,7 @@ wxString::wxString(const void *pStart, const void *pEnd)
 wxString::wxString(const wchar_t *pwz)
 {
   // first get necessary size
-  size_t nLen = wcstombs(NULL, pwz, 0);
+  size_t nLen = wcstombs((char *) NULL, pwz, 0);
 
   // empty?
   if ( nLen != 0 ) {
@@ -1077,7 +1077,7 @@ wxArrayString::wxArrayString()
 {
   m_nSize  =
   m_nCount = 0;
-  m_pItems = NULL;
+  m_pItems = (char **) NULL;
 }
 
 // copy ctor
@@ -1085,7 +1085,7 @@ wxArrayString::wxArrayString(const wxArrayString& src)
 {
   m_nSize  =
   m_nCount = 0;
-  m_pItems = NULL;
+  m_pItems = (char **) NULL;
 
   *this = src;
 }

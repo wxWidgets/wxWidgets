@@ -149,7 +149,7 @@ class WXDLLEXPORT wxLogStderr : public wxLog
 {
 public:
   // redirect log output to a FILE
-  wxLogStderr(FILE *fp = NULL);
+  wxLogStderr(FILE *fp = (FILE *) NULL);
 
 private:
   // implement sink function
@@ -164,7 +164,7 @@ class WXDLLEXPORT wxLogStream : public wxLog
 {
 public:
   // redirect log output to an ostream
-  wxLogStream(ostream *ostr = NULL);
+  wxLogStream(ostream *ostr = (ostream *) NULL);
 
 protected:
   // implement sink function
@@ -276,7 +276,7 @@ class WXDLLEXPORT wxLogNull
 {
 public:
   // ctor saves old log target, dtor restores it
-  wxLogNull() { m_pPrevLogger = wxLog::SetActiveTarget(NULL); }
+  wxLogNull() { m_pPrevLogger = wxLog::SetActiveTarget((wxLog *) NULL); }
  ~wxLogNull() { (void)wxLog::SetActiveTarget(m_pPrevLogger);  }
 
 private:

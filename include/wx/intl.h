@@ -61,14 +61,14 @@ public:
   wxLocale();
     // the ctor has a side effect of changing current locale
   wxLocale(const char *szName,              // name (for messages)
-           const char *szShort = NULL,      // dir prefix (for msg files)
-           const char *szLocale = NULL,     // locale (for setlocale)
+           const char *szShort = (const char *) NULL,      // dir prefix (for msg files)
+           const char *szLocale = (const char *) NULL,     // locale (for setlocale)
            bool bLoadDefault = TRUE)        // preload wxstd.mo?
     { Init(szName, szShort, szLocale, bLoadDefault); }
     // the same as a function (returns TRUE on success)
   bool Init(const char *szName,
-            const char *szShort = NULL,
-            const char *szLocale = NULL,
+            const char *szShort = (const char *) NULL,
+            const char *szLocale = (const char *) NULL,
             bool bLoadDefault = TRUE);
     // restores old locale
  ~wxLocale();
@@ -97,7 +97,7 @@ public:
   // domains are searched in the last to first order, i.e. catalogs
   // added later override those added before.
   const char *GetString(const char *szOrigString, 
-                        const char *szDomain = NULL) const;
+                        const char *szDomain = (const char *) NULL) const;
 
 private:
   // find catalog by name in a linked list, return NULL if !found
@@ -121,7 +121,7 @@ WXDLLEXPORT wxLocale* wxGetLocale();
 inline WXDLLEXPORT const char *wxGetTranslation(const char *sz)
 {
   wxLocale *pLoc = wxGetLocale();
-  return pLoc == NULL ? sz : pLoc->GetString(sz);
+  return pLoc == (wxLocale *) NULL ? sz : pLoc->GetString(sz);
 }
 
 #endif

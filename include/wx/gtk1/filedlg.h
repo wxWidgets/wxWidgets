@@ -79,16 +79,16 @@ class wxFileDialog: public wxDialog
 
 // File selector - backward compatibility
 
-char* wxFileSelector(const char *message = wxFileSelectorPromptStr, const char *default_path = NULL,
-         const char *default_filename = NULL, const char *default_extension = NULL,
+char* wxFileSelector(const char *message = wxFileSelectorPromptStr, const char *default_path = (const char *) NULL,
+         const char *default_filename = (const char *) NULL, const char *default_extension = (const char *) NULL,
          const char *wildcard = wxFileSelectorDefaultWildcardStr, int flags = 0,
-         wxWindow *parent = NULL, int x = -1, int y = -1);
+         wxWindow *parent = (wxWindow *) NULL, int x = -1, int y = -1);
 
-char* wxLoadFileSelector(const char *what, const char *extension, const char *default_name = NULL,
-         wxWindow *parent = NULL);
+char* wxLoadFileSelector(const char *what, const char *extension, const char *default_name = (const char *) NULL,
+         wxWindow *parent = (wxWindow *) NULL);
 
-char* wxSaveFileSelector(const char *what, const char *extension, const char *default_name = NULL,
-         wxWindow *parent = NULL);
+char* wxSaveFileSelector(const char *what, const char *extension, const char *default_name = (const char *) NULL,
+         wxWindow *parent = (wxWindow *) NULL);
 
 
 

@@ -52,7 +52,7 @@ wxNode::wxNode (wxList * the_list, wxNode * last_one, wxNode * next_one,
   previous = last_one;
   next = next_one;
   list = the_list;
-  key.string = NULL;
+  key.string = (char *) NULL;
 
   if (previous)
     previous->next = this;
@@ -126,8 +126,8 @@ wxNode::~wxNode (void)
 
 wxList::wxList (void)
 {
-  first_node = NULL;
-  last_node = NULL;
+  first_node = (wxNode *) NULL;
+  last_node = (wxNode *) NULL;
   n = 0;
   destroy_data = 0;
   key_type = wxKEY_NONE;
@@ -135,12 +135,12 @@ wxList::wxList (void)
 
 wxList::wxList (int N, wxObject * Objects[])
 {
-  wxNode *last = NULL;
+  wxNode *last = (wxNode *) NULL;
 
   int i;
   for (i = 0; i < N; i++)
     {
-      wxNode *next = new wxNode (this, last, NULL, Objects[i]);
+      wxNode *next = new wxNode (this, last, (wxNode *) NULL, Objects[i]);
       last = next;
       if (i == 0)
 	first_node = next;
@@ -154,8 +154,8 @@ wxList::wxList (const unsigned int the_key_type)
 {
   n = 0;
   destroy_data = 0;
-  first_node = NULL;
-  last_node = NULL;
+  first_node = (wxNode *) NULL;
+  last_node = (wxNode *) NULL;
   key_type = the_key_type;
 }
 
@@ -167,7 +167,7 @@ wxList::wxList (wxObject * first_one...)
 
   va_start (ap, first_one);
 
-  wxNode *last = new wxNode (this, NULL, NULL, first_one);
+  wxNode *last = new wxNode (this, (wxNode *) NULL, (wxNode *) NULL, first_one);
   first_node = last;
   n = 1;
 
@@ -183,7 +183,7 @@ wxList::wxList (wxObject * first_one...)
 	break;
       else
 	{
-	  wxNode *node = new wxNode (this, last, NULL, object);
+	  wxNode *node = new wxNode (this, last, (wxNode *) NULL, object);
 	  last = node;
 	  n++;
 	}
@@ -213,7 +213,7 @@ wxList::~wxList (void)
 
 wxNode *wxList::Append(wxObject *object)
 {
-    wxNode *node = new wxNode(this, last_node, NULL, object);
+    wxNode *node = new wxNode(this, last_node, (wxNode *) NULL, object);
     if (!first_node)
       first_node = node;
     last_node = node;
@@ -229,7 +229,7 @@ wxNode *wxList::Nth (int i) const
       if (j++ == i)
 	return current;
     }
-  return NULL;			// No such element
+  return (wxNode *) NULL;			// No such element
 
 }
 
@@ -243,7 +243,7 @@ wxNode *wxList::Find (long key) const
     current = current->Next();
   }
     
-  return NULL;			// Not found!
+  return (wxNode *) NULL;			// Not found!
 }
 
 wxNode *wxList::Find (const char *key) const
@@ -261,7 +261,7 @@ wxNode *wxList::Find (const char *key) const
       current = current->Next();
   }
 
-  return NULL;			// Not found!
+  return (wxNode *) NULL;			// Not found!
 
 }
 
@@ -273,7 +273,7 @@ wxNode *wxList::Member (wxObject * object) const
       if (each == object)
 	return current;
     }
-  return NULL;
+  return (wxNode *) NULL;
 }
 
 bool wxList::DeleteNode (wxNode * node)
@@ -305,7 +305,7 @@ bool wxList::DeleteObject (wxObject * object)
 // Insert new node at front of list
 wxNode *wxList::Insert (wxObject * object)
 {
-  wxNode *node = new wxNode (this, NULL, First (), object);
+  wxNode *node = new wxNode (this, (wxNode *) NULL, First (), object);
   first_node = node;
 
   if (!(node->Next ()))
@@ -319,7 +319,7 @@ wxNode *wxList::Insert (wxObject * object)
 // Insert new node before given node.
 wxNode *wxList::Insert (wxNode * position, wxObject * object)
 {
-  wxNode *prev = NULL;
+  wxNode *prev = (wxNode *) NULL;
   if (position)
     prev = position->Previous ();
 
@@ -339,7 +339,7 @@ wxNode *wxList::Insert (wxNode * position, wxObject * object)
 // Keyed append
 wxNode *wxList::Append (long key, wxObject * object)
 {
-  wxNode *node = new wxNode (this, last_node, NULL, object, key);
+  wxNode *node = new wxNode (this, last_node, (wxNode *) NULL, object, key);
   if (!first_node)
     first_node = node;
   last_node = node;
@@ -349,7 +349,7 @@ wxNode *wxList::Append (long key, wxObject * object)
 
 wxNode *wxList::Append (const char *key, wxObject * object)
 {
-  wxNode *node = new wxNode (this, last_node, NULL, object, key);
+  wxNode *node = new wxNode (this, last_node, (wxNode *) NULL, object, key);
   if (!first_node)
     first_node = node;
   last_node = node;
@@ -366,8 +366,8 @@ void wxList::Clear (void)
       delete current;
       current = next;
     }
-  first_node = NULL;
-  last_node = NULL;
+  first_node = (wxNode *) NULL;
+  last_node = (wxNode *) NULL;
   n = 0;
 }
 
@@ -389,7 +389,7 @@ wxObject *wxList::FirstThat(wxListIterateFunction F)
     { if ((*F)( each->Data ())) return each->Data();
       each = each->Next();
     }
-  return NULL;
+  return (wxNode *) NULL;
 }
 // Like FirstThat, but proceeds from the end backward
 wxObject *wxList::LastThat(wxListIterateFunction F)
@@ -399,7 +399,7 @@ wxObject *wxList::LastThat(wxListIterateFunction F)
     { if ((*F)( each->Data ())) return each->Data();
       each = each->Previous();
     }
-  return NULL;
+  return (wxNode *) NULL;
 }
 
 // (stefan.hammes@urz.uni-heidelberg.de)
@@ -474,8 +474,8 @@ wxStringList::wxStringList (const char *first...)
   n = 0;
   destroy_data = 0;
   key_type = wxKEY_NONE;
-  first_node = NULL;
-  last_node = NULL;
+  first_node = (wxNode *) NULL;
+  last_node = (wxNode *) NULL;
 
   if (!first)
     return;
@@ -484,7 +484,7 @@ wxStringList::wxStringList (const char *first...)
 
   va_start (ap, first);
 
-  wxNode *last = new wxNode (this, NULL, NULL, (wxObject *) copystring (first));
+  wxNode *last = new wxNode (this, (wxNode *) NULL, (wxNode *) NULL, (wxObject *) copystring (first));
   first_node = last;
   n = 1;
 
@@ -500,7 +500,7 @@ wxStringList::wxStringList (const char *first...)
 	break;
       else
 	{
-	  wxNode *node = new wxNode (this, last, NULL, (wxObject *) copystring (s));
+	  wxNode *node = new wxNode (this, last, (wxNode *) NULL, (wxObject *) copystring (s));
 	  last = node;
 	  n++;
 	}

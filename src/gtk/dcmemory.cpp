@@ -57,7 +57,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
   else
   {
     m_ok = FALSE;
-    m_window = NULL;
+    m_window = (GdkWindow *) NULL;
   }
 }
 

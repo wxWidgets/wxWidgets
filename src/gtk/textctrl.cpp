@@ -72,7 +72,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     bool bHasHScrollbar = (style & wxHSCROLL) != 0;
 
     // create our control...
-    m_text = gtk_text_new( NULL, NULL );
+    m_text = gtk_text_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
 
     // ... and put into the upper left hand corner of the table
     m_widget = gtk_table_new(bHasHScrollbar ? 2 : 1, 2, FALSE);

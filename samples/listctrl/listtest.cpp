@@ -58,7 +58,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, "wxListCtrl Test", 50, 50, 450, 340);
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "wxListCtrl Test", 50, 50, 450, 340);
 
   // This reduces flicker effects - even better would be to define OnEraseBackground
   // to do nothing. When the list control's scrollbars are show or hidden, the
@@ -175,8 +175,8 @@ bool MyApp::OnInit(void)
 MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
   wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
-	m_listCtrl = NULL;
-	m_logWindow = NULL;
+	m_listCtrl = (MyListCtrl *) NULL;
+	m_logWindow = (wxTextCtrl *) NULL;
 }
 
 MyFrame::~MyFrame(void)
@@ -203,8 +203,8 @@ void MyFrame::OnListView(wxCommandEvent& WXUNUSED(event))
 	m_logWindow->Clear();
 	m_listCtrl->DeleteAllItems();
 	m_listCtrl->SetSingleStyle(wxLC_LIST);
-    m_listCtrl->SetImageList(NULL, wxIMAGE_LIST_NORMAL);
-    m_listCtrl->SetImageList(NULL, wxIMAGE_LIST_SMALL);
+    m_listCtrl->SetImageList((wxImageList *) NULL, wxIMAGE_LIST_NORMAL);
+    m_listCtrl->SetImageList((wxImageList *) NULL, wxIMAGE_LIST_SMALL);
 
 	for ( int i=0; i < 30; i++)
 	{
@@ -219,7 +219,7 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
 	m_logWindow->Clear();
 	m_listCtrl->DeleteAllItems();
 	m_listCtrl->SetSingleStyle(wxLC_REPORT);
-    m_listCtrl->SetImageList(NULL, wxIMAGE_LIST_NORMAL);
+    m_listCtrl->SetImageList((wxImageList *) NULL, wxIMAGE_LIST_NORMAL);
     m_listCtrl->SetImageList(wxGetApp().m_imageListSmall, wxIMAGE_LIST_SMALL);
 
 	m_listCtrl->InsertColumn(0, "Column 1", wxLIST_FORMAT_LEFT, 140);

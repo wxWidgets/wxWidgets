@@ -37,13 +37,13 @@ wxHashTable::wxHashTable (int the_key_type, int size)
 {
   n = size;
   current_position = -1;
-  current_node = NULL;
+  current_node = (wxNode *) NULL;
 
   key_type = the_key_type;
   hash_table = new wxList *[size];
   int i;
   for (i = 0; i < size; i++)
-    hash_table[i] = NULL;
+    hash_table[i] = (wxList *) NULL;
 }
 
 wxHashTable::~wxHashTable (void)
@@ -59,7 +59,7 @@ bool wxHashTable::Create(int the_key_type, int size)
 {
   n = size;
   current_position = -1;
-  current_node = NULL;
+  current_node = (wxNode *) NULL;
 
   key_type = the_key_type;
   if (hash_table)
@@ -67,7 +67,7 @@ bool wxHashTable::Create(int the_key_type, int size)
   hash_table = new wxList *[size];
   int i;
   for (i = 0; i < size; i++)
-    hash_table[i] = NULL;
+    hash_table[i] = (wxList *) NULL;
   return TRUE;
 }
 
@@ -132,14 +132,14 @@ wxObject *wxHashTable::Get (long key, long value) const
 
   int position = (int) (k % n);
   if (!hash_table[position])
-    return NULL;
+    return (wxObject *) NULL;
   else
     {
       wxNode *node = hash_table[position]->Find (value);
       if (node)
 	return node->Data ();
       else
-	return NULL;
+	return (wxObject *) NULL;
     }
 }
 
@@ -152,14 +152,14 @@ wxObject *wxHashTable::Get (long key, const char *value) const
 
   int position = (int) (k % n);
   if (!hash_table[position])
-    return NULL;
+    return (wxObject *) NULL;
   else
     {
       wxNode *node = hash_table[position]->Find (value);
       if (node)
 	return node->Data ();
       else
-	return NULL;
+	return (wxObject *) NULL;
     }
 }
 
@@ -172,7 +172,7 @@ wxObject *wxHashTable::Get (long key) const
 
   int position = (int) (k % n);
   if (!hash_table[position])
-    return NULL;
+    return (wxObject *) NULL;
   else
     {
       wxNode *node = hash_table[position]->Find (k);
@@ -185,7 +185,7 @@ wxObject *wxHashTable::Get (const char *key) const
   int position = (int) (MakeKey (key) % n);
 
   if (!hash_table[position])
-    return NULL;
+    return (wxObject *) NULL;
   else
     {
       wxNode *node = hash_table[position]->Find (key);
@@ -202,7 +202,7 @@ wxObject *wxHashTable::Delete (long key)
 
   int position = (int) (k % n);
   if (!hash_table[position])
-    return NULL;
+    return (wxObject *) NULL;
   else
     {
       wxNode *node = hash_table[position]->Find (k);
@@ -213,7 +213,7 @@ wxObject *wxHashTable::Delete (long key)
 	  return data;
 	}
       else
-	return NULL;
+	return (wxObject *) NULL;
     }
 }
 
@@ -221,7 +221,7 @@ wxObject *wxHashTable::Delete (const char *key)
 {
   int position = (int) (MakeKey (key) % n);
   if (!hash_table[position])
-    return NULL;
+    return (wxObject *) NULL;
   else
     {
       wxNode *node = hash_table[position]->Find (key);
@@ -232,7 +232,7 @@ wxObject *wxHashTable::Delete (const char *key)
 	  return data;
 	}
       else
-	return NULL;
+	return (wxObject *) NULL;
     }
 }
 
@@ -245,7 +245,7 @@ wxObject *wxHashTable::Delete (long key, int value)
 
   int position = (int) (k % n);
   if (!hash_table[position])
-    return NULL;
+    return (wxObject *) NULL;
   else
     {
       wxNode *node = hash_table[position]->Find (value);
@@ -256,7 +256,7 @@ wxObject *wxHashTable::Delete (long key, int value)
 	  return data;
 	}
       else
-	return NULL;
+	return (wxObject *) NULL;
     }
 }
 
@@ -264,7 +264,7 @@ wxObject *wxHashTable::Delete (long key, const char *value)
 {
   int position = (int) (key % n);
   if (!hash_table[position])
-    return NULL;
+    return (wxObject *) NULL;
   else
     {
       wxNode *node = hash_table[position]->Find (value);
@@ -275,7 +275,7 @@ wxObject *wxHashTable::Delete (long key, const char *value)
 	  return data;
 	}
       else
-	return NULL;
+	return (wxObject *) NULL;
     }
 }
 
@@ -292,12 +292,12 @@ long wxHashTable::MakeKey (const char *string) const
 void wxHashTable::BeginFind (void)
 {
   current_position = -1;
-  current_node = NULL;
+  current_node = (wxNode *) NULL;
 }
 
 wxNode *wxHashTable::Next (void)
 {
-  wxNode *found = NULL;
+  wxNode *found = (wxNode *) NULL;
   bool end = FALSE;
   while (!end && !found)
     {
@@ -307,7 +307,7 @@ wxNode *wxHashTable::Next (void)
 	  if (current_position >= n)
 	    {
 	      current_position = -1;
-	      current_node = NULL;
+	      current_node = (wxNode *) NULL;
 	      end = TRUE;
 	    }
 	  else

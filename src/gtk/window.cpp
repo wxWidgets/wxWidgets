@@ -641,7 +641,7 @@ void gtk_window_drop_callback( GtkWidget *widget, GdkEvent *event, wxWindow *win
   {
     int x = 0;
     int y = 0;
-    gdk_window_get_pointer( widget->window, &x, &y, NULL );
+    gdk_window_get_pointer( widget->window, &x, &y, (GdkModifierType *) NULL );
     win->GetDropTarget()->Drop( event, x, y );
   }
   
@@ -715,9 +715,9 @@ END_EVENT_TABLE()
 
 wxWindow::wxWindow()
 {
-  m_widget = NULL;
-  m_wxwindow = NULL;
-  m_parent = NULL;
+  m_widget = (GtkWidget *) NULL;
+  m_wxwindow = (GtkWidget *) NULL;
+  m_parent = (wxWindow *) NULL;
   m_children.DeleteContents( FALSE );
   m_x = 0;
   m_y = 0;
@@ -725,28 +725,28 @@ wxWindow::wxWindow()
   m_height = 0;
   m_retCode = 0;
   m_eventHandler = this;
-  m_windowValidator = NULL;
+  m_windowValidator = (wxValidator *) NULL;
   m_windowId = -1;
   m_cursor = new wxCursor( wxCURSOR_ARROW );
   m_font = *wxSWISS_FONT;
   m_windowStyle = 0;
   m_windowName = "noname";
-  m_constraints = NULL;
-  m_constraintsInvolvedIn = NULL;
-  m_windowSizer = NULL;
-  m_sizerParent = NULL;
+  m_constraints = (wxLayoutConstraints *) NULL;
+  m_constraintsInvolvedIn = (wxList *) NULL;
+  m_windowSizer = (wxSizer *) NULL;
+  m_sizerParent = (wxWindow *) NULL;
   m_autoLayout = FALSE;
   m_sizeSet = FALSE;
   m_hasVMT = FALSE;
   m_needParent = TRUE;
   m_hasScrolling = FALSE;
-  m_hAdjust = NULL;
-  m_vAdjust = NULL;
+  m_hAdjust = (GtkAdjustment *) NULL;
+  m_vAdjust = (GtkAdjustment *) NULL;
   m_oldHorizontalPos = 0.0;
   m_oldVerticalPos = 0.0;
   m_isShown = FALSE;
   m_isEnabled = TRUE;
-  m_pDropTarget = NULL;
+  m_pDropTarget = (wxDropTarget *) NULL;
   m_resizing = FALSE;
 }
 
@@ -758,11 +758,11 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
   m_isEnabled = TRUE;
   m_needParent = TRUE;
   
-  m_cursor = NULL;
+  m_cursor = (wxCursor *) NULL;
   
   PreCreation( parent, id, pos, size, style, name );
   
-  m_widget = gtk_scrolled_window_new( NULL, NULL );
+  m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
   m_hasScrolling = TRUE;
   
   GtkScrolledWindow *s_window;
@@ -869,12 +869,12 @@ wxWindow::~wxWindow(void)
     // in other windows' constraintsInvolvedIn lists.
     UnsetConstraints(m_constraints);
     delete m_constraints;
-    m_constraints = NULL;
+    m_constraints = (wxLayoutConstraints *) NULL;
   }
   if (m_windowSizer)
   {
     delete m_windowSizer;
-    m_windowSizer = NULL;
+    m_windowSizer = (wxSizer *) NULL;
   }
   // If this is a child of a sizer, remove self from parent
   if (m_sizerParent) m_sizerParent->RemoveChild((wxWindow *)this);
@@ -899,7 +899,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   if (m_needParent && (parent == NULL))
     wxFatalError( _("Need complete parent."), name );
 
-  m_widget = NULL;
+  m_widget = (GtkWidget *) NULL;
   m_hasVMT = FALSE;
   m_parent = parent;
   m_children.DeleteContents( FALSE );
@@ -920,14 +920,14 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   m_foregroundColour = wxBLACK;
   m_windowStyle = style;
   m_windowName = name;
-  m_constraints = NULL;
-  m_constraintsInvolvedIn = NULL;
-  m_windowSizer = NULL;
-  m_sizerParent = NULL;
+  m_constraints = (wxLayoutConstraints *) NULL;
+  m_constraintsInvolvedIn = (wxList *) NULL;
+  m_windowSizer = (wxSizer *) NULL;
+  m_sizerParent = (wxWindow *) NULL;
   m_autoLayout = FALSE;
-  m_pDropTarget = NULL;
+  m_pDropTarget = (wxDropTarget *) NULL;
   m_resizing = FALSE;
-  m_windowValidator = NULL;
+  m_windowValidator = (wxValidator *) NULL;
 }
 
 void wxWindow::PostCreation(void)
@@ -1281,7 +1281,7 @@ void wxWindow::ClientToScreen( int *x, int *y )
 {
   // Does this look simple ?
 
-  GdkWindow *source = NULL;
+  GdkWindow *source = (GdkWindow *) NULL;
   if (m_wxwindow)
     source = m_wxwindow->window;
   else
@@ -1306,7 +1306,7 @@ void wxWindow::ClientToScreen( int *x, int *y )
 
 void wxWindow::ScreenToClient( int *x, int *y )
 {
-  GdkWindow *source = NULL;
+  GdkWindow *source = (GdkWindow *) NULL;
   if (m_wxwindow)
     source = m_wxwindow->window;
   else
@@ -1529,7 +1529,7 @@ void wxWindow::RemoveChild( wxWindow *child )
 {
   if (GetChildren())
  GetChildren()->DeleteObject( child );
-  child->m_parent = NULL;
+  child->m_parent = (wxWindow *) NULL;
 }
 
 void wxWindow::SetReturnCode( int retCode )
@@ -1574,18 +1574,18 @@ wxEvtHandler *wxWindow::PopEventHandler(bool deleteHandler)
 	{
 		wxEvtHandler *handlerA = GetEventHandler();
 		wxEvtHandler *handlerB = handlerA->GetNextHandler();
-		handlerA->SetNextHandler(NULL);
+		handlerA->SetNextHandler((wxEvtHandler *) NULL);
 		SetEventHandler(handlerB);
 		if ( deleteHandler )
 		{
 			delete handlerA;
-			return NULL;
+			return (wxEvtHandler *) NULL;
 		}
 		else
 			return handlerA;
 	}
 	else
-		return NULL;
+		return (wxEvtHandler *) NULL;
 }
 
 wxValidator *wxWindow::GetValidator(void)
@@ -1786,7 +1786,7 @@ static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 bool wxWindow::PopupMenu( wxMenu *menu, int WXUNUSED(x), int WXUNUSED(y) )
 {
   SetInvokingWindow( menu, this );
-  gtk_menu_popup( GTK_MENU(menu->m_menu), NULL, NULL, NULL, NULL, 0, 0 );
+  gtk_menu_popup( GTK_MENU(menu->m_menu), (GtkWidget *) NULL, (GtkWidget *) NULL, (GtkMenuPositionFunc) NULL, NULL, 0, 0 );
   return TRUE;
 }
 
@@ -1869,7 +1869,7 @@ void wxWindow::CaptureMouse(void)
         (GDK_BUTTON_PRESS_MASK | 
         GDK_BUTTON_RELEASE_MASK |
         GDK_POINTER_MOTION_MASK), 
-        NULL, NULL, GDK_CURRENT_TIME );
+        (GdkWindow *) NULL, (GdkCursor *) NULL, GDK_CURRENT_TIME );
 }
 
 void wxWindow::ReleaseMouse(void)
@@ -1924,7 +1924,7 @@ wxWindow *wxWindow::FindWindow( long id )
     if (res) return res;
     node = node->Next();
   }
-  return NULL;
+  return (wxWindow *) NULL;
 }
 
 wxWindow *wxWindow::FindWindow( const wxString& name )
@@ -1938,7 +1938,7 @@ wxWindow *wxWindow::FindWindow( const wxString& name )
     if (res) return res;
     node = node->Next();
   }
-  return NULL;
+  return (wxWindow *) NULL;
 }
 
 void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
@@ -2251,7 +2251,7 @@ void wxWindow::DeleteRelatedConstraints(void)
       node = next;
     }
     delete m_constraintsInvolvedIn;
-    m_constraintsInvolvedIn = NULL;
+    m_constraintsInvolvedIn = (wxList *) NULL;
   }
 }
 

@@ -53,7 +53,7 @@ wxBaseArray::wxBaseArray()
 {
   m_uiSize  =
   m_uiCount = 0;
-  m_pItems  = NULL;
+  m_pItems  = (long *) NULL;
 }
 
 // copy ctor
@@ -67,13 +67,20 @@ wxBaseArray::wxBaseArray(const wxBaseArray& src)
     memcpy(m_pItems, src.m_pItems, m_uiCount*sizeof(long));
   }
   else
-    m_pItems = NULL;
+    m_pItems = (long *) NULL;
 }
 
 // assignment operator
 wxBaseArray& wxBaseArray::operator=(const wxBaseArray& src)
 {
+#if 0
   wxDELETEA(m_pItems);
+#else
+	if ( (m_pItems)) { 
+		delete (m_pItems); 
+		(m_pItems) = 0; 
+	}
+#endif
 
   m_uiSize  = // not src.m_uiSize to save memory
   m_uiCount = src.m_uiCount;
@@ -83,7 +90,7 @@ wxBaseArray& wxBaseArray::operator=(const wxBaseArray& src)
     memcpy(m_pItems, src.m_pItems, m_uiCount*sizeof(long));
   }
   else
-    m_pItems = NULL;
+    m_pItems = (long *) NULL;
 
   return *this;
 }

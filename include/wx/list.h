@@ -43,7 +43,7 @@ class WXDLLEXPORT wxNode: public wxObject
     char *string;
   } key;
 
-  wxNode(wxList *the_list = NULL, wxNode *last_one = NULL, wxNode *next_one = NULL, wxObject *object = NULL);
+  wxNode(wxList *the_list = (wxList *) NULL, wxNode *last_one = (wxNode *) NULL, wxNode *next_one = (wxNode *) NULL, wxObject *object = (wxObject *) NULL);
   wxNode(wxList *the_list, wxNode *last_one, wxNode *next_one,
          wxObject *object, long the_key);
   wxNode(wxList *the_list, wxNode *last_one, wxNode *next_one,

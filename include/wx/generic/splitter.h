@@ -85,7 +85,7 @@ class WXDLLEXPORT wxSplitterWindow: public wxWindow
 
     // Removes the specified (or second) window from the view
     // Doesn't actually delete the window.
-    bool Unsplit(wxWindow *toRemove = NULL);
+    bool Unsplit(wxWindow *toRemove = (wxWindow *) NULL);
 
     // Is the window split?
     inline bool IsSplit(void) const { return (m_windowTwo != NULL); }

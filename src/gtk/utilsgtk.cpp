@@ -93,7 +93,7 @@ char* wxGetHomeDir( char *dest )
 
 char *wxGetUserHome( const wxString &user )
 {
-  struct passwd *who = NULL;
+  struct passwd *who = (struct passwd *) NULL;
 
   if (user.IsNull() || (user== "")) 
   {
@@ -375,11 +375,13 @@ static void GTK_EndProcessDetector(gpointer data, gint source,
 
   pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
 
-  /* wait4 is not standard, use at own risk */
+  /* wait4 is not part of any standard, use at own risk 
+   * not sure what wait4 does, but wait3 seems to be closest, whats a digit ;-)
+   * --- offer@sgi.com */
 #if !defined(__sgi)
   wait4(proc_data->pid, NULL, 0, NULL);
 #else
-  wait3(NULL, 0, NULL);
+  wait3((int *) NULL, 0, (rusage *) NULL);
 #endif
 
   close(source);
@@ -442,7 +444,7 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
     if (!sync) {
       data->process = process;
     } else {
-      data->process = NULL;
+      data->process = (wxProcess *) NULL;
       data->pid = -(data->pid);
 
       while (data->pid != 0)
@@ -466,7 +468,7 @@ long wxExecute( const wxString& command, bool sync, wxProcess *process )
     strncpy (tmp, command, sizeof(tmp) / sizeof(char) - 1);
     tmp[sizeof (tmp) / sizeof (char) - 1] = '\0';
     argv[argc++] = strtok (tmp, IFS);
-    while ((argv[argc++] = strtok(NULL, IFS)) != NULL)
+    while ((argv[argc++] = strtok((char *) NULL, IFS)) != NULL)
 	/* loop */ ;
     return wxExecute(argv, sync, process);
 };

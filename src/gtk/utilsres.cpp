@@ -83,7 +83,7 @@ static char *GetResourcePath(char *buf, char *name, bool create)
 // the Real User, then determine the Real home dir.
 static char *GetIniFile(char *dest, const char *filename)
 {
-    char *home = NULL;
+    char *home = (char *) NULL;
     if (filename && wxIsAbsolutePath(filename))
     {
       strcpy(dest, filename);
@@ -133,7 +133,7 @@ static void wxXMergeDatabases(void)
     if (XResourceManagerString(GDK_DISPLAY()) != NULL) {
         serverDB = XrmGetStringDatabase(XResourceManagerString(GDK_DISPLAY()));
     } else {
-        (void)GetIniFile(filename, NULL);
+        (void)GetIniFile(filename, (char *) NULL);
         serverDB = XrmGetFileDatabase(filename);
     }
     if (serverDB)
@@ -144,7 +144,7 @@ static void wxXMergeDatabases(void)
 
     if ((environment = getenv("XENVIRONMENT")) == NULL) {
         size_t len;
-        environment = GetIniFile(filename, NULL);
+        environment = GetIniFile(filename, (const char *) NULL);
         len = strlen(environment);
 #if !defined(SVR4) || defined(__sgi)
         (void)gethostname(environment + len, 1024 - len);
@@ -291,10 +291,10 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
 
 bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file )
 {
-    char *s = NULL;
+    char *s = (char *) NULL;
     bool succ = wxGetResource(section, entry, &s, file);
     if (succ) {
-        *value = (float)strtod(s, NULL);
+        *value = (float)strtod(s, (char **) NULL);
         delete[]s;
         return TRUE;
     } else
@@ -303,10 +303,10 @@ bool wxGetResource(const wxString& section, const wxString& entry, float *value,
 
 bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file )
 {
-    char *s = NULL;
+    char *s = (char *) NULL;
     bool succ = wxGetResource(section, entry, &s, file);
     if (succ) {
-        *value = strtol(s, NULL, 10);
+        *value = strtol(s, (char **) NULL, 10);
         delete[]s;
         return TRUE;
     } else
@@ -315,7 +315,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, long *value, 
 
 bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file )
 {
-    char *s = NULL;
+    char *s = (char *) NULL;
     bool succ = wxGetResource(section, entry, &s, file);
     if (succ) {
         // Handle True, False here
@@ -327,7 +327,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
             *value = FALSE;
         // Handle as Integer
         else
-            *value = (int)strtol(s, NULL, 10);
+            *value = (int)strtol(s, (char **) NULL, 10);
         delete[]s;
         return TRUE;
     } else

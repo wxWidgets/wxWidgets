@@ -37,13 +37,13 @@
 #include "doc.h"
 #include "view.h"
 
-MyFrame *frame = NULL;
+MyFrame *frame = (MyFrame *) NULL;
 
 IMPLEMENT_APP(MyApp)
 
 MyApp::MyApp(void)
 {
-    m_docManager = NULL;
+    m_docManager = (wxDocManager *) NULL;
 }
 
 bool MyApp::OnInit(void)
@@ -52,7 +52,7 @@ bool MyApp::OnInit(void)
   m_docManager = new wxDocManager;
 
   //// Create a template relating drawing documents to their views
-  (void) new wxDocTemplate(m_docManager, "Drawing", "*.drw", "", "drw", "Drawing Doc", "Drawing View",
+  (void) new wxDocTemplate((wxDocManager *) m_docManager, "Drawing", "*.drw", "", "drw", "Drawing Doc", "Drawing View",
           CLASSINFO(DrawingDocument), CLASSINFO(DrawingView));
 
   //// Create a template relating text documents to their views
@@ -60,7 +60,7 @@ bool MyApp::OnInit(void)
           CLASSINFO(TextEditDocument), CLASSINFO(TextEditView));
 
   //// Create the main frame window
-  frame = new MyFrame(m_docManager, NULL, "DocView Demo", wxPoint(0, 0), wxSize(500, 400), wxDEFAULT_FRAME_STYLE);
+  frame = new MyFrame((wxDocManager *) m_docManager, (wxFrame *) NULL, (const wxString) "DocView Demo", wxPoint(0, 0), wxSize(500, 400), wxDEFAULT_FRAME_STYLE);
 
   //// Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
@@ -72,7 +72,7 @@ bool MyApp::OnInit(void)
 
   //// Make a menubar
   wxMenu *file_menu = new wxMenu;
-  wxMenu *edit_menu = NULL;
+  wxMenu *edit_menu = (wxMenu *) NULL;
 
   file_menu->Append(wxID_NEW, "&New...");
   file_menu->Append(wxID_OPEN, "&Open...");
@@ -147,7 +147,7 @@ wxMDIChildFrame *MyApp::CreateChildFrame(wxDocument *doc, wxView *view, bool isC
   file_menu->AppendSeparator();
   file_menu->Append(wxID_EXIT, "E&xit");
 
-  wxMenu *edit_menu = NULL;
+  wxMenu *edit_menu = (wxMenu *) NULL;
 
   if (isCanvas)
   {
@@ -189,7 +189,7 @@ MyFrame::MyFrame(wxDocManager *manager, wxFrame *frame, const wxString& title,
     const wxPoint& pos, const wxSize& size, long type):
   wxDocMDIParentFrame(manager, frame, -1, title, pos, size, type, "myFrame")
 {
-  editMenu = NULL;
+  editMenu = (wxMenu *) NULL;
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )

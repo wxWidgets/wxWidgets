@@ -274,10 +274,10 @@ void wxDialog::SetIcon( const wxIcon &icon )
   if (!icon.Ok()) return;
   
   wxMask *mask = icon.GetMask();
-  GdkBitmap *bm = NULL;
+  GdkBitmap *bm = (GdkBitmap *) NULL;
   if (mask) bm = mask->GetBitmap();
   
-  gdk_window_set_icon( m_widget->window, NULL, icon.GetPixmap(), bm );
+  gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
 }
 
 

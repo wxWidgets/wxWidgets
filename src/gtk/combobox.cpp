@@ -191,7 +191,7 @@ char* wxComboBox::GetClientData( int n )
   
   wxFAIL_MSG( "wxComboBox: wrong index" );
   
-  return NULL;
+  return (char *) NULL;
 }
 
 void wxComboBox::SetClientData( int n, char * clientData )

@@ -40,8 +40,8 @@ struct kbListNode
        @param inext if not NULL, use this as next element in list
    */
    kbListNode( void *ielement,
-               kbListNode *iprev = NULL,
-               kbListNode *inext = NULL);
+               kbListNode *iprev = (kbListNode *) NULL,
+               kbListNode *inext = (kbListNode *) NULL);
    /// Destructor.
    ~kbListNode();
 };
@@ -63,7 +63,7 @@ public:
       /** Constructor.
           @param n if not NULL, the node to which to point
       */
-      iterator(kbListNode *n = NULL);
+      iterator(kbListNode *n = (kbListNode *) NULL);
       /** Dereference operator.
           @return the data pointer of the node belonging to this
           iterator
@@ -238,7 +238,7 @@ public: \
          { node = i.Node(); } \
       friend class name; \
    public: \
-      inline iterator(kbListNode *n = NULL) \
+      inline iterator(kbListNode *n = (kbListNode *) NULL) \
          : kbList::iterator(n) {} \
       inline type * operator*() \
          /* the cast is needed for MS VC++ 5.0 */ \
@@ -276,7 +276,7 @@ public: \
    ~name() \
    { \
       kbListNode *next; \
-      while ( first != NULL ) \
+      while ( first != (kbListNode *) NULL ) \
       { \
          next = first->next; \
          if(ownsEntries) \

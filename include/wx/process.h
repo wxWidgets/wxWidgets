@@ -25,7 +25,7 @@ class WXDLLEXPORT wxProcess: public wxEvtHandler
   DECLARE_DYNAMIC_CLASS(wxProcess)
  public:
 
-  wxProcess(wxEvtHandler *parent = NULL, int id = -1);
+  wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int id = -1);
   virtual ~wxProcess();
 
   virtual void OnTerminate(int pid);

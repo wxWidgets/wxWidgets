@@ -52,28 +52,28 @@ IMPLEMENT_APP(MyApp)
 // MyFrame
 //-----------------------------------------------------------------------------
 
-const  ID_FILECTRL   = 1000;
-const  ID_DIRCTRL    = 1001;
-const  ID_TOOLBAR    = 1002;
+const  int ID_FILECTRL   = 1000;
+const  int ID_DIRCTRL    = 1001;
+const  int ID_TOOLBAR    = 1002;
 
-const  ID_QUIT       = 100;
-const  ID_ABOUT      = 101;
+const  int ID_QUIT       = 100;
+const  int ID_ABOUT      = 101;
 
-const  ID_LIST       = 200;
-const  ID_REPORT     = 201;
-const  ID_ICON       = 202;
+const  int ID_LIST       = 200;
+const  int ID_REPORT     = 201;
+const  int ID_ICON       = 202;
 
-const  ID_SINGLE     = 203;
-const  ID_TREE       = 204;
-const  ID_COMMANDER  = 205;
+const  int ID_SINGLE     = 203;
+const  int ID_TREE       = 204;
+const  int ID_COMMANDER  = 205;
 
-const  ID_HOME       = 400;
-const  ID_PARENT     = 401;
-const  ID_MOUNT      = 402;
-const  ID_SEARCH     = 403;
+const  int ID_HOME       = 400;
+const  int ID_PARENT     = 401;
+const  int ID_MOUNT      = 402;
+const  int ID_SEARCH     = 403;
 
-const  ID_DELETE     = 501;
-const  ID_MD         = 502;
+const  int ID_DELETE     = 501;
+const  int ID_MD         = 502;
 
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
@@ -98,7 +98,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(void) :
-  wxFrame( NULL, -1, "wxFile", wxPoint(20,20), wxSize(470,360) )
+  wxFrame( (wxFrame *) NULL, -1, (char *) "wxFile", wxPoint(20,20), wxSize(470,360) )
 {
   wxMenu *file_menu = new wxMenu( "Menu 1" );
   file_menu->Append( ID_ABOUT, "About..");
@@ -125,34 +125,34 @@ MyFrame::MyFrame(void) :
   m_tb->SetMargins( 2, 2 );
   
   m_tb->AddSeparator();
-  m_tb->AddTool( ID_QUIT, wxBitmap( exit_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "Exit wxFile" );
+  m_tb->AddTool( ID_QUIT, wxBitmap( exit_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "Exit wxFile" );
   m_tb->AddSeparator();
-  m_tb->AddTool( ID_PARENT, wxBitmap( prev_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "Go to parent directory" );
-  m_tb->AddTool( ID_HOME, wxBitmap( home_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "Go to home directory" );
+  m_tb->AddTool( ID_PARENT, wxBitmap( prev_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "Go to parent directory" );
+  m_tb->AddTool( ID_HOME, wxBitmap( home_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "Go to home directory" );
   m_tb->AddSeparator();
-  m_tb->AddTool( ID_DELETE, wxBitmap( delete_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "Delete file" );
+  m_tb->AddTool( ID_DELETE, wxBitmap( delete_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "Delete file" );
   m_tb->AddSeparator();
-  m_tb->AddTool( ID_MD, wxBitmap( fileopen_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "Create directory" );
+  m_tb->AddTool( ID_MD, wxBitmap( fileopen_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "Create directory" );
   m_tb->AddSeparator();
-  m_tb->AddTool( ID_LIST, wxBitmap( listview_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "List view" );
-  m_tb->AddTool( ID_REPORT, wxBitmap( reportview_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "Report view" );
-  m_tb->AddTool( ID_ICON, wxBitmap( iconview_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "Icon view" );
+  m_tb->AddTool( ID_LIST, wxBitmap( listview_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "List view" );
+  m_tb->AddTool( ID_REPORT, wxBitmap( reportview_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "Report view" );
+  m_tb->AddTool( ID_ICON, wxBitmap( iconview_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "Icon view" );
   m_tb->AddSeparator();
-  m_tb->AddTool( ID_TREE, wxBitmap( treeview_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "Tree view" );
-  m_tb->AddTool( ID_COMMANDER, wxBitmap( commanderview_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "Commander view" );
-  m_tb->AddTool( ID_SINGLE, wxBitmap( singleview_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "Single view" );
+  m_tb->AddTool( ID_TREE, wxBitmap( treeview_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "Tree view" );
+  m_tb->AddTool( ID_COMMANDER, wxBitmap( commanderview_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "Commander view" );
+  m_tb->AddTool( ID_SINGLE, wxBitmap( singleview_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "Single view" );
   m_tb->AddSeparator();
-  m_tb->AddTool( ID_MOUNT, wxBitmap( search_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "Mount devices" );
+  m_tb->AddTool( ID_MOUNT, wxBitmap( search_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "Mount devices" );
   m_tb->AddSeparator();
-  m_tb->AddTool( ID_SEARCH, wxBitmap( save_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "Find file(s)" );
+  m_tb->AddTool( ID_SEARCH, wxBitmap( save_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "Find file(s)" );
   m_tb->AddSeparator();
-  m_tb->AddTool( ID_ABOUT, wxBitmap( help_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "About wxFile" );
+  m_tb->AddTool( ID_ABOUT, wxBitmap( help_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "About wxFile" );
   
   m_tb->Realize();
   
   m_splitter = new wxSplitterWindow( this, -1, wxPoint(0,0), wxSize(400,300), wxSP_3D );
   
-  m_leftFile = NULL;
+  m_leftFile = (wxFileCtrl *) NULL;
   m_dir = new wxDirCtrl( m_splitter, ID_DIRCTRL, "/", wxPoint(10,45), wxSize(200,330) );
   
   wxString homepath( "/home" );
@@ -167,7 +167,7 @@ MyFrame::MyFrame(void) :
   m_leftFile->m_lastFocus = m_rightFile;
     
   int x = 0;
-  GetClientSize( &x, NULL );
+  GetClientSize( &x, (int *) NULL );
   
   m_splitter->SplitVertically( m_dir, m_rightFile, x / 3 );
   m_splitter->SetMinimumPaneSize( 10 );
@@ -176,7 +176,7 @@ MyFrame::MyFrame(void) :
 void MyFrame::OnView( wxCommandEvent &event )
 {
   int x = 0;
-  GetClientSize( &x, NULL );
+  GetClientSize( &x, (int *) NULL );
   switch (event.GetId())
   {
     case ID_LIST:

@@ -103,14 +103,14 @@ END_EVENT_TABLE()
  
 wxPrinterBase::wxPrinterBase(wxPrintData *data)
 {
-  currentPrintout = NULL;
-  abortWindow = NULL;
+  currentPrintout = (wxPrintout *) NULL;
+  abortWindow = (wxWindow *) NULL;
   abortIt = FALSE;
   if (data)
     printData = (*data);
 }
 
-wxWindow *wxPrinterBase::abortWindow = NULL;
+wxWindow *wxPrinterBase::abortWindow = (wxWindow *) NULL;
 bool wxPrinterBase::abortIt = FALSE;
 
 wxPrinterBase::~wxPrinterBase(void)
@@ -122,7 +122,7 @@ void wxPrintAbortDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
   wxPrinterBase::abortIt = TRUE;
   wxPrinterBase::abortWindow->Show(FALSE);
   wxPrinterBase::abortWindow->Close(TRUE);
-  wxPrinterBase::abortWindow = NULL;
+  wxPrinterBase::abortWindow = (wxWindow *) NULL;
 }
 
 wxWindow *wxPrinterBase::CreateAbortWindow(wxWindow *parent, wxPrintout *WXUNUSED(printout))
@@ -150,8 +150,8 @@ void wxPrinterBase::ReportError(wxWindow *parent, wxPrintout *WXUNUSED(printout)
  
 wxPrintout::wxPrintout(const char *title)
 {
-  printoutTitle = title ? copystring(title) : NULL;
-  printoutDC = NULL;
+  printoutTitle = title ? copystring(title) : (char *) NULL;
+  printoutDC = (wxDC *) NULL;
   pageWidthMM = 0;
   pageHeightMM = 0;
   pageWidthPixels = 0;
@@ -257,15 +257,15 @@ wxPreviewControlBar::wxPreviewControlBar(wxPrintPreviewBase *preview, long butto
   wxPanel(parent, -1, pos, size, style, name)
 {
   printPreview = preview;
-  closeButton = NULL;
-  nextPageButton = NULL;
-  previousPageButton = NULL;
-  printButton = NULL;
-  zoomControl = NULL;
+  closeButton = (wxButton *) NULL;
+  nextPageButton = (wxButton *) NULL;
+  previousPageButton = (wxButton *) NULL;
+  printButton = (wxButton *) NULL;
+  zoomControl = (wxChoice *) NULL;
   buttonFlags = buttons;
 }
 
-wxFont *wxPreviewControlBar::buttonFont = NULL;
+wxFont *wxPreviewControlBar::buttonFont = (wxFont *) NULL;
 
 wxPreviewControlBar::~wxPreviewControlBar(void)
 {

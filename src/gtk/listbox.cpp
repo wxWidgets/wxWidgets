@@ -63,7 +63,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox,wxControl)
 
 wxListBox::wxListBox(void)
 {
-  m_list = NULL;
+  m_list = (GtkList *) NULL;
 }
 
 bool wxListBox::Create( wxWindow *parent, wxWindowID id, 
@@ -77,7 +77,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
   
   SetValidator( validator );
 
-  m_widget = gtk_scrolled_window_new( NULL, NULL );
+  m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
   gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(m_widget),
     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
   
@@ -191,7 +191,7 @@ char *wxListBox::GetClientData( int n ) const
 {
   wxNode *node = m_clientData.Nth( n );
   if (node) return ((char*)node->Data());
-  return NULL;
+  return (char *) NULL;
 }
 
 int wxListBox::GetSelection(void) const

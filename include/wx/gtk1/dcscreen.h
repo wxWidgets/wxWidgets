@@ -23,7 +23,7 @@ class WXDLLEXPORT wxScreenDC: public wxPaintDC
   ~wxScreenDC(void);
 
   static bool StartDrawingOnTop( wxWindow *window );
-  static bool StartDrawingOnTop( wxRectangle *rect = NULL );
+  static bool StartDrawingOnTop( wxRectangle *rect = (wxRectangle *) NULL );
   static bool EndDrawingOnTop(void);
 };
 

@@ -271,7 +271,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
     
     if (!(col->Ok())) {
       delete col;
-      return NULL;
+      return (wxColour *) NULL;
     }
     Append( colour, col );
     return col;
@@ -509,7 +509,7 @@ wxPen *wxPenList::FindOrCreatePen (const wxString& colour, int width, int style)
   if (the_colour)
     return FindOrCreatePen (*the_colour, width, style);
   else
-    return NULL;
+    return (wxPen *) NULL;
 }
 
 wxBrushList::~wxBrushList ()
@@ -559,7 +559,7 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxString& colour, int style)
   if (the_colour)
     return FindOrCreateBrush (*the_colour, style);
   else
-    return NULL;
+    return (wxBrush *) NULL;
 }
 
 void wxBrushList::RemoveBrush (wxBrush * brush)

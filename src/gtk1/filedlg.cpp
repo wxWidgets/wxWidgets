@@ -130,7 +130,7 @@ char *wxFileSelector(const char *title,
     return wxBuffer;
   }
   else
-    return NULL;
+    return (char *) NULL;
 }
 
 char* wxLoadFileSelector(const char *what, const char *extension, const char *default_name,
@@ -146,7 +146,7 @@ char* wxLoadFileSelector(const char *what, const char *extension, const char *de
   char wild[60];
   sprintf(wild, "*.%s", ext);
 
-  return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
+  return wxFileSelector (prompt, (const char *) NULL, default_name, ext, wild, 0, parent);
 }
 
 char* wxSaveFileSelector(const char *what, const char *extension, const char *default_name,
@@ -162,6 +162,6 @@ char* wxSaveFileSelector(const char *what, const char *extension, const char *de
   char wild[60];
   sprintf(wild, "*.%s", ext);
 
-  return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
+  return wxFileSelector (prompt, (const char *) NULL, default_name, ext, wild, 0, parent);
 }
 

@@ -86,7 +86,7 @@ wxDocument::wxDocument(wxDocument *parent)
   m_documentFile="";
   m_documentTitle="";
   m_documentParent=parent;
-  m_documentTemplate = NULL;
+  m_documentTemplate = (wxDocTemplate *) NULL;
   m_documentTypeName = "";
   m_savedYet = FALSE;
 }
@@ -149,7 +149,7 @@ bool wxDocument::DeleteAllViews(void)
 wxView *wxDocument::GetFirstView(void) const
 {
   if (m_documentViews.Number() == 0)
-    return NULL;
+    return (wxView *) NULL;
   return (wxView *)m_documentViews.First()->Data();
 }
 
@@ -462,7 +462,7 @@ wxView::wxView(wxDocument *doc)
   SetDocument(doc);
   
   m_viewTypeName = "";
-  m_viewFrame = NULL;
+  m_viewFrame = (wxFrame *) NULL;
 }
 
 wxView::~wxView(void)
@@ -575,7 +575,7 @@ wxDocTemplate::~wxDocTemplate(void)
 wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
 {
   if (!m_docClassInfo)
-    return NULL;
+    return (wxDocument *) NULL;
   wxDocument *doc = (wxDocument *)m_docClassInfo->CreateObject();
   doc->SetFilename(path);
   doc->SetDocumentTemplate(this);
@@ -587,14 +587,14 @@ wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
   else
   {
     delete doc;
-    return NULL;
+    return (wxDocument *) NULL;
   }
 }
 
 wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
 {
   if (!m_viewClassInfo)
-    return NULL;
+    return (wxView *) NULL;
   wxView *view = (wxView *)m_viewClassInfo->CreateObject();
   view->SetDocument(doc);
   if (view->OnCreate(doc, flags))
@@ -604,7 +604,7 @@ wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
   else
   {
     delete view;
-    return NULL;
+    return (wxView *) NULL;
   }
 }
 
@@ -626,9 +626,9 @@ wxDocManager::wxDocManager(long flags, bool initialize)
 {
   m_defaultDocumentNameCounter = 1;
   m_flags = flags;
-  m_currentView = NULL;
+  m_currentView = (wxView *) NULL;
   m_maxDocsOpen = 10000;
-  m_fileHistory = NULL;
+  m_fileHistory = (wxFileHistory *) NULL;
   if (initialize)
     Initialize();
 }
@@ -796,7 +796,7 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
   if (printout)
   {
     // Pass two printout objects: for preview, and possible printing.
-    wxPrintPreviewBase *preview = NULL;
+    wxPrintPreviewBase *preview = (wxPrintPreviewBase *) NULL;
 #ifdef __WXMSW__
     if ( wxTheApp->GetPrintMode() == wxPRINT_WINDOWS )
         preview = new wxWindowsPrintPreview(printout, view->OnCreatePrintout());
@@ -839,7 +839,7 @@ wxView *wxDocManager::GetCurrentView(void) const
         wxDocument* doc = (wxDocument*) m_docs.First()->Data();
         return doc->GetFirstView();
     }
-    return NULL;
+    return (wxView *) NULL;
 }
 
 // Extend event processing to search the view's event table
@@ -871,7 +871,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
   if (n == 0)
   {
     delete[] templates;
-    return NULL;
+    return (wxDocument *) NULL;
   }
 
   // If we've reached the max number of docs, close the
@@ -890,7 +890,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
         delete doc;
     }
     else
-      return NULL;
+      return (wxDocument *) NULL;
   }
   
   // New document: user chooses a template, unless there's only one.
@@ -924,11 +924,11 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
       return newDoc;
     }
     else
-      return NULL;
+      return (wxDocument *) NULL;
   }
 
   // Existing document
-  wxDocTemplate *temp = NULL;
+  wxDocTemplate *temp = (wxDocTemplate *) NULL;
 
   wxString path2("");
   if (path != "")
@@ -951,14 +951,14 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
       if (!newDoc->OnOpenDocument(path2))
       {
         delete newDoc;
-        return NULL;
+        return (wxDocument *) NULL;
       }
       AddFileToHistory(path2);
     }
     return newDoc;
   }
   else
-    return NULL;
+    return (wxDocument *) NULL;
 }
 
 wxView *wxDocManager::CreateView(wxDocument *doc, long flags)
@@ -981,7 +981,7 @@ wxView *wxDocManager::CreateView(wxDocument *doc, long flags)
   if (n == 0)
   {
     delete[] templates;
-    return NULL;
+    return (wxView *) NULL;
   }
   if (n == 1)
   {
@@ -1003,7 +1003,7 @@ wxView *wxDocManager::CreateView(wxDocument *doc, long flags)
     return view;
   }
   else
-    return NULL;
+    return (wxView *) NULL;
 }
 
 // Not yet implemented
@@ -1022,7 +1022,7 @@ wxDocument *wxDocManager::GetCurrentDocument(void) const
   if (m_currentView)
     return m_currentView->GetDocument();
   else
-    return NULL;
+    return (wxDocument *) NULL;
 }
 
 // Make a default document name
@@ -1038,7 +1038,7 @@ bool wxDocManager::MakeDefaultName(wxString& name)
 // Not yet implemented
 wxDocTemplate *wxDocManager::MatchTemplate(const wxString& WXUNUSED(path))
 {
-  return NULL;
+  return (wxDocTemplate *) NULL;
 }
 
 // File history management
@@ -1101,9 +1101,9 @@ static char *FindExtension(char *path)
       return ext;
     }
     else
-      return NULL;
+      return (char *) NULL;
   }
-  else return NULL;
+  else return (char *) NULL;
 }
 
 
@@ -1113,8 +1113,8 @@ wxDocTemplate *wxDocManager::FindTemplateForPath(const wxString& path)
 {
   char *theExt = FindExtension((char *)(const char *)path);
   if (!theExt)
-    return NULL;
-  wxDocTemplate *theTemplate = NULL;
+    return (wxDocTemplate *) NULL;
+  wxDocTemplate *theTemplate = (wxDocTemplate *) NULL;
 
   if (m_templates.Number() == 1)
     return (wxDocTemplate *)m_templates.First()->Data();
@@ -1170,7 +1170,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     path = pathTmp;
     char *theExt = FindExtension((char *)(const char *)path);
     if (!theExt)
-      return NULL;
+      return (wxDocTemplate *) NULL;
 
     // This is dodgy in that we're selecting the template on the
     // basis of the file extension, which may not be a standard
@@ -1182,7 +1182,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
   else
   {
     path = "";
-    return NULL;
+    return (wxDocTemplate *) NULL;
   }
 #else
   // In all other windowing systems, until we have more advanced
@@ -1190,7 +1190,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
   // _then_ pop up the file selector.
   wxDocTemplate *temp = SelectDocumentType(templates, noTemplates);
   if (!temp)
-    return NULL;
+    return (wxDocTemplate *) NULL;
 
   char *pathTmp = wxFileSelector(_("Select a file"), "", "",
      temp->GetDefaultExtension(),
@@ -1203,7 +1203,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     return temp;
   }
   else
-    return NULL;
+    return (wxDocTemplate *) NULL;
 #endif
 }
 
@@ -1227,7 +1227,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
   {
     delete[] strings;
     delete[] data;
-    return NULL;
+    return (wxDocTemplate *) NULL;
   }
   else if (n == 1)
   {
@@ -1310,7 +1310,7 @@ void wxDocManager::ActivateView(wxView *view, bool activate, bool WXUNUSED(delet
     if (activate)
       m_currentView = view;
     else
-      m_currentView = NULL;
+      m_currentView = (wxView *) NULL;
   }
 }
 
@@ -1373,8 +1373,8 @@ bool wxDocChildFrame::OnClose(void)
     {
       m_childView->Activate(FALSE);
       delete m_childView;
-      m_childView = NULL;
-      m_childDocument = NULL;
+      m_childView = (wxView *) NULL;
+      m_childDocument = (wxDocument *) NULL;
     }
     
     return ans;
@@ -1512,8 +1512,8 @@ wxCommand::~wxCommand(void)
 wxCommandProcessor::wxCommandProcessor(int maxCommands)
 {
   m_maxNoCommands = maxCommands;
-  m_currentCommand = NULL;
-  m_commandEditMenu = NULL;
+  m_currentCommand = (wxNode *) NULL;
+  m_commandEditMenu = (wxMenu *) NULL;
 }
 
 wxCommandProcessor::~wxCommandProcessor(void)
@@ -1581,8 +1581,8 @@ bool wxCommandProcessor::Undo(void)
 
 bool wxCommandProcessor::Redo(void)
 {
-  wxCommand *redoCommand = NULL;
-  wxNode *redoNode = NULL;
+  wxCommand *redoCommand = (wxCommand *) NULL;
+  wxNode *redoNode = (wxNode *) NULL;
   if (m_currentCommand && m_currentCommand->Next())
   {
     redoCommand = (wxCommand *)m_currentCommand->Next()->Data();
@@ -1693,7 +1693,7 @@ void wxCommandProcessor::ClearCommands(void)
     delete node;
     node = m_commands.First();
   }
-  m_currentCommand = NULL;
+  m_currentCommand = (wxNode *) NULL;
 }
 
 
@@ -1704,7 +1704,7 @@ void wxCommandProcessor::ClearCommands(void)
 wxFileHistory::wxFileHistory(int maxFiles)
 {
   m_fileMaxFiles = maxFiles;
-  m_fileMenu = NULL;
+  m_fileMenu = (wxMenu *) NULL;
   m_fileHistoryN = 0;
   m_fileHistory = new char *[m_fileMaxFiles];
 }
@@ -1739,7 +1739,7 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
   if (m_fileHistoryN == m_fileMaxFiles)
   {
     delete[] m_fileHistory[m_fileMaxFiles-1];
-    m_fileHistory[m_fileMaxFiles-1] = NULL;
+    m_fileHistory[m_fileMaxFiles-1] = (char *) NULL;
   }
   if (m_fileHistoryN < m_fileMaxFiles)
   {
@@ -1783,14 +1783,14 @@ void wxFileHistory::FileHistoryLoad(const wxString& resourceFile, const wxString
   m_fileHistoryN = 0;
   char buf[400];
   sprintf(buf, "file%d", m_fileHistoryN+1);
-  char *historyFile = NULL;
+  char *historyFile = (char *) NULL;
   while ((m_fileHistoryN <= m_fileMaxFiles) && wxGetResource(section, buf, &historyFile, resourceFile) && historyFile)
   {
     // wxGetResource allocates memory so this is o.k.
     m_fileHistory[m_fileHistoryN] = historyFile;
     m_fileHistoryN ++;
     sprintf(buf, "file%d", m_fileHistoryN+1);
-    historyFile = NULL;
+    historyFile = (char *) NULL;
   }
 #endif
 }

@@ -76,7 +76,7 @@ Pile::Pile(int x, int y, int dx, int dy)
 void Pile::Redraw(wxDC& dc )
 {
    wxWindow *frame = wxTheApp->GetTopWindow();
-   wxWindow *canvas = NULL;
+   wxWindow *canvas = (wxWindow *) NULL;
    if (frame)
    {
      wxNode *node = frame->GetChildren()->First();

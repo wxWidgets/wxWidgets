@@ -33,7 +33,7 @@ class wxRegionRefData: public wxObjectRefData
 
 wxRegionRefData::wxRegionRefData(void)
 {
-  m_region = NULL;
+  m_region = (GdkRegion *) NULL;
 }
 
 wxRegionRefData::~wxRegionRefData(void)

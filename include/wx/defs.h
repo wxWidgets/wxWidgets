@@ -30,8 +30,14 @@
 #include "wx/version.h"
 
 // Helps SGI compilation, apparently
-#if defined(__SGI__) && defined(__GNUG__)
+#if defined(__SGI__) 
+#if defined(__GNUG__)
 #define __need_wchar_t
+#else
+/* Note I use the term __SGI_CC__ for both cc and CC, its not a good idea to 
+ * mix gcc and cc/CC, the name mangling is different */
+#define __SGI_CC__
+#endif
 #endif
 
 // Eliminate double/float warnings
@@ -199,10 +205,27 @@ enum  ErrCode
 //  a question of style, because delete will do it itself anyhow, but it might
 //  be considered as an error by some overzealous debugging implementations of
 //  the library, so we do it ourselves)
+#if defined(__SGI_CC__)
+// Okay this is bad styling, but the native SGI compiler is very picky, it 
+// wont let you compare/assign between a NULL (void *) and another pointer
+// type. To be really clean we'd need to pass in another argument, the type 
+// of p. 
+// Also note the use of 0L, this would allow future possible 64bit support 
+// (as yet untested) by ensuring that we zero all the bits in a pointer 
+// (which is always the same length as a long (at least with the LP64 standard) 
+// --- offer aug 98
+#define wxDELETE(p)      if ( (p) ) { delete (p); (p) = 0L; }
+#else
 #define wxDELETE(p)      if ( (p) != NULL ) { delete (p); p = NULL; }
+#endif /* __SGI__CC__ */
 
 // delete an array and NULL it (see comments above)
-#define wxDELETEA(p)      if ( (p) != NULL ) { delete [] (p); p = NULL; }
+#if defined(__SGI_CC__)
+// see above comment.
+#define wxDELETEA(p)      if ( (p) ) { delete [] (p); p = 0L; }
+#else
+#define wxDELETEA(p)      if ( ((void *)) (p) != NULL ) { delete [] (p); (void *) p = NULL; }
+#endif /* __SGI__CC__ */
 
 /// size of statically declared array
 #define WXSIZEOF(array)   (sizeof(array)/sizeof(array[0]))
@@ -212,7 +235,7 @@ enum  ErrCode
 // ----------------------------------------------------------------------------
 
 // OS
-#if     defined(__HPUX__) || defined(____SVR4____) || defined(__LINUX__)
+#if     defined(__HPUX__) || defined(____SVR4____) || defined(__LINUX__) || defined(__sgi )
   #ifndef __UNIX__
     #define __UNIX__
   #endif

@@ -39,32 +39,32 @@ IMPLEMENT_APP(MyApp)
 // MyDialog
 //-----------------------------------------------------------------------------
 
-const  ID_RETURN            = 100;
-const  ID_HELLO             = 101;
+const  int ID_RETURN            = 100;
+const  int ID_HELLO             = 101;
 
-const  ID_CHECKBOX          = 110;
-const  ID_CHECKBOX_CHECK    = 110;
-const  ID_CHECKBOX_UNCHECK  = 112;
+const  int ID_CHECKBOX          = 110;
+const  int ID_CHECKBOX_CHECK    = 110;
+const  int ID_CHECKBOX_UNCHECK  = 112;
 
-const  ID_TEXTCTRL          = 115;
-const  ID_TEXTCTRL_SET      = 116;
-const  ID_TEXTCTRL_DEL      = 117;
+const  int ID_TEXTCTRL          = 115;
+const  int ID_TEXTCTRL_SET      = 116;
+const  int ID_TEXTCTRL_DEL      = 117;
 
-const  ID_CHOICE            = 120;
-const  ID_CHOICE_SEL_NUM    = 121;
-const  ID_CHOICE_SEL_STR    = 122;
-const  ID_CHOICE_CLEAR      = 123;
-const  ID_CHOICE_APPEND     = 124;
+const  int ID_CHOICE            = 120;
+const  int ID_CHOICE_SEL_NUM    = 121;
+const  int ID_CHOICE_SEL_STR    = 122;
+const  int ID_CHOICE_CLEAR      = 123;
+const  int ID_CHOICE_APPEND     = 124;
 
-const  ID_LISTBOX           = 130;
-const  ID_LISTBOX_SEL_NUM   = 131;
-const  ID_LISTBOX_SEL_STR   = 132;
-const  ID_LISTBOX_CLEAR     = 133;
-const  ID_LISTBOX_APPEND    = 134;
+const  int ID_LISTBOX           = 130;
+const  int ID_LISTBOX_SEL_NUM   = 131;
+const  int ID_LISTBOX_SEL_STR   = 132;
+const  int ID_LISTBOX_CLEAR     = 133;
+const  int ID_LISTBOX_APPEND    = 134;
 
-const  ID_RADIOBOX          = 130;
-const  ID_RADIOBOX_SEL_NUM  = 131;
-const  ID_RADIOBOX_SEL_STR  = 132;
+const  int ID_RADIOBOX          = 130;
+const  int ID_RADIOBOX_SEL_NUM  = 131;
+const  int ID_RADIOBOX_SEL_STR  = 132;
 
 BEGIN_EVENT_TABLE(MyDialog,wxDialog)
   EVT_BUTTON    (ID_RETURN,             MyDialog::OnReturnButton)
@@ -97,8 +97,8 @@ IMPLEMENT_DYNAMIC_CLASS(MyDialog, wxDialog)
 MyDialog::MyDialog( wxWindow *parent ) :
   wxDialog( parent, -1, "TestDialog", wxPoint(20,100), wxSize(700,400), wxDIALOG_MODAL )
 {
-  m_text1 = NULL;
-  m_text2 = NULL;
+  m_text1 = (wxStaticText *) NULL;
+  m_text2 = (wxStaticText *) NULL;
 
   (void)new wxStaticBox( this, -1, "CheckBox group", wxPoint(20,10), wxSize(140,180) );
   m_checkbox = new wxCheckBox( this, ID_CHECKBOX, "CheckBox", wxPoint(40,35), wxSize(100,30) );
@@ -443,7 +443,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(void) :
-  wxFrame( NULL, -1, "Robert's Test application", wxPoint(20,20), wxSize(470,360) )
+  wxFrame( (wxFrame *) NULL, -1, (char *) "Robert's Test application", wxPoint(20,20), wxSize(470,360) )
 {
   wxMenu *file_menu = new wxMenu( "Test" );
   file_menu->Append( ID_OPEN, "Open..");
@@ -471,8 +471,8 @@ MyFrame::MyFrame(void) :
   
   m_tb = CreateToolBar();
   m_tb->SetMargins( 2, 2 );
-  m_tb->AddTool( 0, wxBitmap( list_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "This is a button" );
-  m_tb->AddTool( 0, wxBitmap( folder_xpm ), wxNullBitmap, TRUE, -1, -1, NULL, "This is a toggle" );
+  m_tb->AddTool( 0, wxBitmap( list_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "This is a button" );
+  m_tb->AddTool( 0, wxBitmap( folder_xpm ), wxNullBitmap, TRUE, -1, -1, (wxObject *) NULL, "This is a toggle" );
   m_tb->Realize();
   
 //  m_timer.Start( 1000, TRUE );

@@ -106,8 +106,8 @@ bool DrawingView::OnClose(bool deleteWindow)
   // Clear the canvas in  case we're in single-window mode,
   // and the canvas stays.
   canvas->Clear();
-  canvas->view = NULL;
-  canvas = NULL;
+  canvas->view = (wxView *) NULL;
+  canvas = (MyCanvas *) NULL;
 
   wxString s(wxTheApp->GetAppName());
   if (frame)
@@ -128,7 +128,7 @@ bool DrawingView::OnClose(bool deleteWindow)
 void DrawingView::OnCut(wxCommandEvent& WXUNUSED(event) )
 {
     DrawingDocument *doc = (DrawingDocument *)GetDocument();
-    doc->GetCommandProcessor()->Submit(new DrawingCommand("Cut Last Segment", DOODLE_CUT, doc, NULL));
+    doc->GetCommandProcessor()->Submit(new DrawingCommand((const wxString) "Cut Last Segment", DOODLE_CUT, doc, (DoodleSegment *) NULL));
 }
 
 IMPLEMENT_DYNAMIC_CLASS(TextEditView, wxView)
@@ -208,7 +208,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
   if (!view)
     return;
     
-  static DoodleSegment *currentSegment = NULL;
+  static DoodleSegment *currentSegment = (DoodleSegment *) NULL;
 
   wxClientDC dc(this);
   PrepareDC(dc);
@@ -222,7 +222,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
     if (currentSegment->lines.Number() == 0)
     {
       delete currentSegment;
-      currentSegment = NULL;
+      currentSegment = (DoodleSegment *) NULL;
     }
     else
     {
@@ -232,7 +232,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
       doc->GetCommandProcessor()->Submit(new DrawingCommand("Add Segment", DOODLE_ADD, doc, currentSegment));
 
       view->GetDocument()->Modify(TRUE);
-      currentSegment = NULL;
+      currentSegment = (DoodleSegment *) NULL;
     }
   }
   

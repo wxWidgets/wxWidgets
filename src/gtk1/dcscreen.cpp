@@ -25,7 +25,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC,wxPaintDC)
 wxScreenDC::wxScreenDC(void)
 {
   m_ok = FALSE;
-  m_window = NULL;
+  m_window = (GdkWindow *) NULL;
   m_cmap = gdk_colormap_get_system();
   
   m_window = GDK_ROOT_PARENT();

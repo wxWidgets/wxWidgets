@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        minimal.cpp
-// Purpose:     Minimal wxWindows sample
+// Purpose:     Dynamic events wxWindows sample
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
@@ -44,20 +44,12 @@ class MyFrame: public wxFrame
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 	bool OnClose(void) { return TRUE; }
-
-   DECLARE_EVENT_TABLE()
-    
 };
 
 // ID for the menu commands
 #define MINIMAL_QUIT 	1
 #define MINIMAL_TEXT 	101
 #define MINIMAL_ABOUT 	102
-
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-	EVT_MENU(MINIMAL_QUIT, MyFrame::OnQuit)
-	EVT_MENU(MINIMAL_ABOUT, MyFrame::OnAbout)
-END_EVENT_TABLE()
 
 // Create a new application object
 IMPLEMENT_APP	(MyApp)
@@ -67,13 +59,15 @@ bool MyApp::OnInit(void)
 {
   // Create the main frame window
   MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "Minimal wxWindows App", 50, 50, 450, 340);
-
+  
+  frame->Connect( MINIMAL_QUIT,  -1, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)MyFrame::OnQuit );
+  frame->Connect( MINIMAL_ABOUT, -1, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)MyFrame::OnAbout );
+  
   // Give it an icon
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
-#endif
-#ifdef __WXGTK__
-  frame->SetIcon(wxIcon( mondrian_xpm ));
+#else
+  frame->SetIcon(wxIcon(mondrian_xpm));
 #endif
 
   // Make a menubar

@@ -34,7 +34,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxValidator, wxEvtHandler)
 
 wxValidator::wxValidator(void)
 {
-  m_validatorWindow = NULL;
+  m_validatorWindow = (wxWindow *) NULL;
 }
 
 wxValidator::~wxValidator()

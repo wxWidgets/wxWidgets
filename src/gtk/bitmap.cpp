@@ -28,7 +28,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMask,wxObject)
 
 wxMask::wxMask(void)
 {
-  m_bitmap = NULL;
+  m_bitmap = (GdkBitmap *) NULL;
 }
 
 wxMask::wxMask( const wxBitmap& WXUNUSED(bitmap), const wxColour& WXUNUSED(colour) )
@@ -83,15 +83,15 @@ class wxBitmapRefData: public wxObjectRefData
 
 wxBitmapRefData::wxBitmapRefData(void)
 {
-  m_pixmap = NULL;
-  m_bitmap = NULL;
-  m_mask = NULL;
+  m_pixmap = (GdkPixmap *) NULL;
+  m_bitmap = (GdkBitmap *) NULL;
+  m_mask = (wxMask *) NULL;
   m_width = 0;
   m_height = 0;
   m_bpp = 0;
-  m_palette = NULL;
+  m_palette = (wxPalette *) NULL;
 #ifdef USE_GDK_IMLIB
-  m_image = NULL;
+  m_image = (GdkImlibImage *) NULL;
 #endif
 }
 
@@ -122,7 +122,7 @@ wxBitmap::wxBitmap(void)
 wxBitmap::wxBitmap( int width, int height, int depth )
 {
   m_refData = new wxBitmapRefData();
-  M_BMPDATA->m_mask = NULL;
+  M_BMPDATA->m_mask = (wxMask *) NULL;
   M_BMPDATA->m_pixmap = 
     gdk_pixmap_new( (GdkWindow*) &gdk_root_parent, width, height, depth );
   M_BMPDATA->m_width = width;
@@ -189,7 +189,7 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth
 {
   m_refData = new wxBitmapRefData();
 
-  M_BMPDATA->m_mask = NULL;
+  M_BMPDATA->m_mask = (wxMask *) NULL;
   M_BMPDATA->m_bitmap = 
     gdk_bitmap_create_from_data( (GdkWindow*) &gdk_root_parent, (gchar *) bits, width, height );
   M_BMPDATA->m_width = width;
@@ -264,7 +264,7 @@ void wxBitmap::SetDepth( int depth )
 
 wxMask *wxBitmap::GetMask(void) const
 {
-  if (!Ok()) return NULL;
+  if (!Ok()) return (wxMask *) NULL;
   
   return M_BMPDATA->m_mask;
 }
@@ -310,7 +310,7 @@ bool wxBitmap::SaveFile( const wxString &name, int WXUNUSED(type),
   
   if (!M_BMPDATA->m_image) RecreateImage();
   
-  return gdk_imlib_save_image( M_BMPDATA->m_image, WXSTRINGCAST name, NULL );
+  return gdk_imlib_save_image( M_BMPDATA->m_image, WXSTRINGCAST name, (GdkImlibSaveInfo *) NULL );
 
 #endif
 
@@ -345,19 +345,19 @@ bool wxBitmap::LoadFile( const wxString &name, int WXUNUSED(type) )
         
 wxPalette *wxBitmap::GetPalette(void) const
 {
-  if (!Ok()) return NULL;
+  if (!Ok()) return (wxPalette *) NULL;
   return M_BMPDATA->m_palette;
 }
 
 GdkPixmap *wxBitmap::GetPixmap(void) const
 {
-  if (!Ok()) return NULL;
+  if (!Ok()) return (GdkPixmap *) NULL;
   return M_BMPDATA->m_pixmap;
 }
   
 GdkBitmap *wxBitmap::GetBitmap(void) const
 {
-  if (!Ok()) return NULL;
+  if (!Ok()) return (GdkBitmap *) NULL;
   
   return M_BMPDATA->m_bitmap;
 }
@@ -369,7 +369,7 @@ void wxBitmap::DestroyImage(void)
   if (M_BMPDATA->m_image)
   {
     gdk_imlib_destroy_image( M_BMPDATA->m_image );
-    M_BMPDATA->m_image = NULL;
+    M_BMPDATA->m_image = (GdkImlibImage *) NULL;
   }
 }
 

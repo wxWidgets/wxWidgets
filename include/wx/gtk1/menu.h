@@ -124,7 +124,7 @@ DECLARE_DYNAMIC_CLASS(wxMenu)
 
 public:
   // construction
-  wxMenu( const wxString& title = wxEmptyString, const wxFunction func = NULL );
+  wxMenu( const wxString& title = wxEmptyString, const wxFunction func = (wxFunction) NULL );
 
   // operations
     // title

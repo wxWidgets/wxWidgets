@@ -50,7 +50,7 @@ class wxFont: public wxGDIObject
   public:
     wxFont(void);
     wxFont( int PointSize, int FontIdOrFamily, int Style, int Weight,
-	   bool underlined = FALSE, const char *Face=NULL );
+	   bool underlined = FALSE, const char *Face= ( const char *) NULL );
     wxFont( int PointSize, const char *Face, int Family, int Style, int Weight, 
 	   bool underlined = FALSE );
     wxFont( const wxFont& font );

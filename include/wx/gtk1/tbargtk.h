@@ -52,9 +52,9 @@ class wxToolBarTool: public wxObject
     wxToolBarTool(void) {}; 
     wxToolBarTool( wxToolBar *owner, int theIndex = 0, 
       const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
-      bool toggle = FALSE, wxObject *clientData = NULL, 
+      bool toggle = FALSE, wxObject *clientData = (wxObject *) NULL, 
       const wxString& shortHelpString = "", const wxString& longHelpString = "",
-      GtkWidget *item = NULL );
+      GtkWidget *item = (GtkWidget *) NULL );
    ~wxToolBarTool(void);
 
   public:
@@ -110,7 +110,7 @@ class wxToolBar: public wxControl
     // If toggle is TRUE, the button toggles between the two states.
     virtual wxToolBarTool *AddTool( int toolIndex, const wxBitmap& bitmap, 
       const wxBitmap& pushedBitmap = wxNullBitmap, bool toggle = FALSE,
-      float xPos = -1, float yPos = -1, wxObject *clientData = NULL,
+      float xPos = -1, float yPos = -1, wxObject *clientData = (wxObject *)NULL,
       const wxString& helpString1 = "", const wxString& helpString2 = "");
     virtual void AddSeparator(void);
     virtual void ClearTools(void);

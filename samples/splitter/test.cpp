@@ -87,7 +87,7 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit(void)
 {
-	MyFrame* frame = new MyFrame(NULL, "wxSplitterWindow Example", wxPoint(50, 50), wxSize(400, 300));
+	MyFrame* frame = new MyFrame((wxFrame *) NULL, (char *) "wxSplitterWindow Example", wxPoint(50, 50), wxSize(400, 300));
 
 	// Show the frame
 	frame->Show(TRUE);

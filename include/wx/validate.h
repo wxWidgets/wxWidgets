@@ -43,7 +43,7 @@ public:
   // if you're passing a reference to a validator.
   // Another possibility is to always pass a pointer to a new validator
   // (so the calling code can use a copy constructor of the relevant class).
-  virtual wxValidator *Clone(void) const { return NULL; }
+  virtual wxValidator *Clone(void) const { return (wxValidator *) NULL; }
   inline bool Copy(const wxValidator& val) { m_validatorWindow = val.m_validatorWindow; return TRUE; }
 
   // Called when the value in the window must be validated.

@@ -80,9 +80,9 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
   m_oldPos = 0.0;
 
   if (style & wxSB_VERTICAL == wxSB_VERTICAL)
-    m_widget = gtk_hscrollbar_new( NULL );
+    m_widget = gtk_hscrollbar_new( (GtkAdjustment *) NULL );
   else
-    m_widget = gtk_vscrollbar_new( NULL );
+    m_widget = gtk_vscrollbar_new( (GtkAdjustment *) NULL );
     
   m_adjust = gtk_range_get_adjustment( GTK_RANGE(m_widget) );
   

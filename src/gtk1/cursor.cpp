@@ -31,7 +31,7 @@ class wxCursorRefData: public wxObjectRefData
 
 wxCursorRefData::wxCursorRefData(void)
 {
-  m_cursor = NULL;
+  m_cursor = (GdkCursor *) NULL;
 }
 
 wxCursorRefData::~wxCursorRefData(void)

@@ -46,12 +46,12 @@ class DrawingView: public wxView
   wxFrame *frame;
   MyCanvas *canvas;
   
-  DrawingView(void) { canvas = NULL; frame = NULL; };
+  DrawingView(void) { canvas = (MyCanvas *) NULL; frame = (wxFrame *) NULL; };
   ~DrawingView(void) {};
 
   bool OnCreate(wxDocument *doc, long flags);
   void OnDraw(wxDC *dc);
-  void OnUpdate(wxView *sender, wxObject *hint = NULL);
+  void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
   bool OnClose(bool deleteWindow = TRUE);
 
   void OnCut(wxCommandEvent& event);
@@ -67,12 +67,12 @@ class TextEditView: public wxView
   wxFrame *frame;
   MyTextWindow *textsw;
   
-  TextEditView(wxDocument *doc = NULL): wxView(doc) { frame = NULL; textsw = NULL; }
+  TextEditView(wxDocument *doc = (wxDocument *) NULL): wxView(doc) { frame = (wxFrame *) NULL; textsw = (MyTextWindow *) NULL; }
   ~TextEditView(void) {}
 
   bool OnCreate(wxDocument *doc, long flags);
   void OnDraw(wxDC *dc);
-  void OnUpdate(wxView *sender, wxObject *hint = NULL);
+  void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
   bool OnClose(bool deleteWindow = TRUE);
 };
 

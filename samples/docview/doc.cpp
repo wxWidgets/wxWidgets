@@ -203,7 +203,7 @@ bool DrawingCommand::Undo(void)
         doc->GetDoodleSegments().Append(segment);
         doc->Modify(TRUE);
         doc->UpdateAllViews();
-        segment = NULL;
+        segment = (DoodleSegment *) NULL;
       }
       doc->Modify(TRUE);
       doc->UpdateAllViews();

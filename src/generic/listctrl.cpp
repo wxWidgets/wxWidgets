@@ -647,9 +647,9 @@ END_EVENT_TABLE()
 
 wxListHeaderWindow::wxListHeaderWindow( void )
 {
-  m_owner = NULL;
-  m_currentCursor = NULL;
-  m_resizeCursor = NULL;
+  m_owner = (wxListMainWindow *) NULL;
+  m_currentCursor = (wxCursor *) NULL;
+  m_resizeCursor = (wxCursor *) NULL;
 };
 
 wxListHeaderWindow::wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner, 
@@ -659,13 +659,13 @@ wxListHeaderWindow::wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMain
 {
   m_owner = owner;
 //  m_currentCursor = wxSTANDARD_CURSOR;
-  m_currentCursor = NULL;
+  m_currentCursor = (wxCursor *) NULL;
   m_resizeCursor = new wxCursor( wxCURSOR_SIZEWE );
 };
 
 void wxListHeaderWindow::DoDrawRect( wxPaintDC *dc, int x, int y, int w, int h )
 {
-  const m_corner = 1;
+  const int m_corner = 1;
 
   dc->SetBrush( *wxTRANSPARENT_BRUSH );
 
@@ -843,22 +843,22 @@ wxListMainWindow::wxListMainWindow( void )
   m_mode = 0;
   m_lines.DeleteContents( TRUE );
   m_columns.DeleteContents( TRUE );
-  m_current = NULL;
+  m_current = (wxListLineData *) NULL;
   m_visibleLines = 0;
-  m_hilightBrush = NULL;
-  m_myFont = NULL;
+  m_hilightBrush = (wxBrush *) NULL;
+  m_myFont = (wxFont *) NULL;
   m_xScroll = 0;
   m_yScroll = 0;
   m_dirty = TRUE;
-  m_small_image_list = NULL;
-  m_normal_image_list = NULL;
+  m_small_image_list = (wxImageList *) NULL;
+  m_normal_image_list = (wxImageList *) NULL;
   m_small_spacing = 30;
   m_normal_spacing = 40;
   m_hasFocus = FALSE;
   m_usedKeys = TRUE;
   m_lastOnSame = FALSE;
 //  m_renameTimer = new wxListRenameTimer( this );
-  m_renameTimer = NULL;
+  m_renameTimer = (wxTimer *) NULL;
   m_isCreated = FALSE;
   m_dragCount = 0;
 };
@@ -871,12 +871,12 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
   m_mode = style;
   m_lines.DeleteContents( TRUE );
   m_columns.DeleteContents( TRUE );
-  m_current = NULL;
+  m_current = (wxListLineData *) NULL;
   m_dirty = TRUE;
   m_visibleLines = 0;
   m_hilightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
-  m_small_image_list = NULL;
-  m_normal_image_list = NULL;
+  m_small_image_list = (wxImageList *) NULL;
+  m_normal_image_list = (wxImageList *) NULL;
   m_small_spacing = 30;
   m_normal_spacing = 40;
 //  AllowDoubleClick( TRUE );
@@ -1100,13 +1100,13 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
   
   long hitResult = 0;
   wxNode *node = m_lines.First();
-  wxListLineData *line = NULL;
+  wxListLineData *line = (wxListLineData *) NULL;
   while (node)
   {
     line = (wxListLineData*)node->Data();
     hitResult = line->IsHit( x, y );
     if (hitResult) break;
-    line = NULL;
+    line = (wxListLineData *) NULL;
     node = node->Next();
   };
   
@@ -1869,7 +1869,7 @@ void wxListMainWindow::DeleteItem( long index )
   if (node)
   {
     wxListLineData *line = (wxListLineData*)node->Data();
-    if (m_current == line) m_current = NULL;
+    if (m_current == line) m_current = (wxListLineData *) NULL;
     DeleteLine( line );
     m_lines.DeleteNode( node );
   };
@@ -1885,7 +1885,7 @@ void wxListMainWindow::DeleteColumn( int col )
 void wxListMainWindow::DeleteAllItems( void )
 {
   m_dirty = TRUE;
-  m_current = NULL;
+  m_current = (wxListLineData *) NULL;
   wxNode *node = m_lines.First();
   while (node)
   {
@@ -1899,7 +1899,7 @@ void wxListMainWindow::DeleteAllItems( void )
 void wxListMainWindow::DeleteEverything( void )
 {
   m_dirty = TRUE;
-  m_current = NULL;
+  m_current = (wxListLineData *) NULL;
   wxNode *node = m_lines.First();
   while (node)
   {
@@ -1908,14 +1908,14 @@ void wxListMainWindow::DeleteEverything( void )
     node = node->Next();
   };
   m_lines.Clear();
-  m_current = NULL;
+  m_current = (wxListLineData *) NULL;
   m_columns.Clear();
 };
 
 void wxListMainWindow::EnsureVisible( long index )
 {
   wxListLineData *oldCurrent = m_current;
-  m_current = NULL;
+  m_current = (wxListLineData *) NULL;
   int i = index;
   wxNode *node = m_lines.Nth( i );
   if (node) m_current = (wxListLineData*)node->Data();
@@ -2092,9 +2092,9 @@ END_EVENT_TABLE()
 
 wxListCtrl::wxListCtrl(void)
 {
-  m_imageListNormal = NULL;
-  m_imageListSmall = NULL;
-  m_imageListState = NULL;
+  m_imageListNormal = (wxImageList *) NULL;
+  m_imageListSmall = (wxImageList *) NULL;
+  m_imageListState = (wxImageList *) NULL;
 }
 
 wxListCtrl::wxListCtrl( wxWindow *parent, wxWindowID id, 
@@ -2113,9 +2113,9 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-  m_imageListNormal = NULL;
-  m_imageListSmall = NULL;
-  m_imageListState = NULL;
+  m_imageListNormal = (wxImageList *) NULL;
+  m_imageListSmall = (wxImageList *) NULL;
+  m_imageListState = (wxImageList *) NULL;
   
   long s = style;
   
@@ -2131,7 +2131,7 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
   if (GetWindowStyleFlag() & wxLC_REPORT)
     m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(size.x,23) );
   else
-    m_headerWin = NULL;
+    m_headerWin = (wxListHeaderWindow *) NULL;
   
   return ret;
 };
@@ -2394,7 +2394,7 @@ wxImageList *wxListCtrl::GetImageList(int which)
   {
     return m_imageListState;
   };
-  return NULL;
+  return (wxImageList *) NULL;
 };
 
 void wxListCtrl::SetImageList( wxImageList *imageList, int which )

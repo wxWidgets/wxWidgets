@@ -49,7 +49,7 @@ wxLayoutWindow::OnMouse(wxMouseEvent& event)
    
    m_FindPos.x = event.GetX();
    m_FindPos.y = event.GetY();
-   m_FoundObject = NULL;
+   m_FoundObject = (wxLayoutObjectBase *) NULL;
 
 #ifdef   WXLAYOUT_DEBUG
    //doesn't work, undefined functions
@@ -112,14 +112,14 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       break;
    case WXK_END:
       p = m_llist.GetCursor();
-      p.x = m_llist.GetLineLength(m_llist.FindCurrentObject(NULL));
+      p.x = m_llist.GetLineLength(m_llist.FindCurrentObject((CoordType *) NULL));
       m_llist.SetCursor(p);
       break;
    case WXK_DELETE :
       if(event.ControlDown()) // delete to end of line
       {
          help = m_llist.GetLineLength(
-            m_llist.FindCurrentObject(NULL))
+            m_llist.FindCurrentObject((CoordType *) NULL))
             - m_llist.GetCursor().x;
          m_llist.Delete(help ? help : 1);
       }

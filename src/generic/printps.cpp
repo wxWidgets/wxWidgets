@@ -58,7 +58,7 @@ wxPostScriptPrinter::~wxPostScriptPrinter(void)
 bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 {
   abortIt = FALSE;
-  abortWindow = NULL;
+  abortWindow = (wxWindow *) NULL;
 
   if (!printout)
     return FALSE;
@@ -97,7 +97,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     printData.EnablePageNumbers(FALSE);
   
   // Create a suitable device context  
-  wxDC *dc = NULL;
+  wxDC *dc = (wxDC *) NULL;
   if (prompt)
   {
      wxGenericPrintDialog dialog(parent, & printData);
@@ -109,7 +109,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
   }
   else
   {
-     dc = new wxPostScriptDC(wxThePrintSetupData->GetPrinterFile(), FALSE, NULL);
+     dc = new wxPostScriptDC(wxThePrintSetupData->GetPrinterFile(), FALSE, (wxWindow *) NULL);
   }
 
   // May have pressed cancel.

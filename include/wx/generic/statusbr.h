@@ -44,7 +44,7 @@ public:
            const wxString& name = wxPanelNameStr);
 
   // Create status line
-  virtual void SetFieldsCount(int number=1, const int widths[] = NULL);
+  virtual void SetFieldsCount(int number=1, const int widths[] = (const int *) NULL);
   inline int GetFieldsCount() const { return m_nFields; }
 
   // Set status line text

@@ -139,11 +139,11 @@ public:
   // (and if the key is not found the default value is returned.)
     // read a string from the key
   virtual bool Read(wxString *pStr, const char *szKey,
-                    const char *szDefault = NULL) const = 0;
+                    const char *szDefault = (const char *) NULL) const = 0;
     // another version using statis buffer - it means it will be overwritten
     // after each call to this function!
   virtual const char *Read(const char *szKey,
-                           const char *szDefault = NULL) const;
+                           const char *szDefault = (const char *) NULL) const;
     // the same for longs
   virtual long Read(const char *szKey, long lDefault) const
     { long l; Read(&l, szKey, lDefault); return l; }

@@ -169,13 +169,13 @@ wxObject *wxObjectInputStream::SolveName(const wxString& name) const
 
     node = node->Next();
   }
-  return NULL;
+  return (wxObject *) NULL;
 }
 
 wxObject *wxObjectInputStream::GetParent() const
 {
   if (!m_current_info->parent)
-    return NULL;
+    return (wxObject *) NULL;
 
   return m_current_info->parent->object;
 }
@@ -186,7 +186,7 @@ wxObject *wxObjectInputStream::GetChild(int no) const
   wxObjectStreamInfo *info;
 
   if (!node)
-    return NULL;
+    return (wxObject *) NULL;
 
   info = (wxObjectStreamInfo *)node->Data();
 
@@ -214,7 +214,7 @@ bool wxObjectInputStream::ReadObjectDef(wxObjectStreamInfo *info)
   info->children_removed = 0;
 
   if (class_name == TAG_EMPTY_OBJECT)
-    info->object = NULL;
+    info->object = (wxObject *) NULL;
   else if (class_name == TAG_DUPLICATE_OBJECT) {
     info->object = SolveName(info->object_name);
     info->n_children = 0;
@@ -237,12 +237,12 @@ wxObjectStreamInfo *wxObjectInputStream::ProcessObjectDef(wxObjectStreamInfo *pa
   m_solver.Append(info);
 
   if (!ReadObjectDef(info))
-    return NULL;
+    return (wxObjectStreamInfo *) NULL;
 
   for (c=0;c<info->n_children;c++) {
     c_info = ProcessObjectDef(info);
     if (!c_info)
-      return NULL;
+      return (wxObjectStreamInfo *) NULL;
     info->children.Append(c_info);
   }
 
@@ -268,9 +268,9 @@ wxObject *wxObjectInputStream::LoadObject()
   wxObjectStreamInfo *info;
   wxObject *object;
 
-  info = ProcessObjectDef(NULL);
+  info = ProcessObjectDef((wxObjectStreamInfo *) NULL);
   if (!info)
-    return NULL;
+    return (wxObject *) NULL;
   ProcessObjectData(info);
 
   object = info->object;

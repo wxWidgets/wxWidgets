@@ -155,14 +155,14 @@ void wxScrolledWindow::OnScroll(wxScrollEvent& event)
   if (orient == wxHORIZONTAL)
   {
     if (m_xScrollingEnabled)
-      ScrollWindow(-m_xScrollPixelsPerLine * nScrollInc, 0, NULL);
+      ScrollWindow(-m_xScrollPixelsPerLine * nScrollInc, 0, (const wxRect *) NULL);
     else
       Refresh();
   }
   else
   {
     if (m_yScrollingEnabled)
-      ScrollWindow(0, -m_yScrollPixelsPerLine * nScrollInc, NULL);
+      ScrollWindow(0, -m_yScrollPixelsPerLine * nScrollInc, (const wxRect *) NULL);
     else
       Refresh();
   }

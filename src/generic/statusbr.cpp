@@ -53,8 +53,8 @@ END_EVENT_TABLE()
 
 wxStatusBar::wxStatusBar(void)
 {
-  m_statusWidths = NULL;
-  m_statusStrings = NULL;
+  m_statusWidths = (int *) NULL;
+  m_statusStrings = (wxString *) NULL;
   m_nFields = 0;
   m_borderX = wxTHICK_LINE_BORDER;
   m_borderY = wxTHICK_LINE_BORDER;
@@ -76,8 +76,8 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
-  m_statusWidths = NULL;
-  m_statusStrings = NULL;
+  m_statusWidths = (int *) NULL;
+  m_statusStrings = (wxString *) NULL;
   m_nFields = 0;
   m_borderX = wxTHICK_LINE_BORDER;
   m_borderY = wxTHICK_LINE_BORDER;

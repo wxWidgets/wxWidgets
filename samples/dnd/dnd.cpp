@@ -125,7 +125,7 @@ END_EVENT_TABLE()
 bool DnDApp::OnInit(void)
 {
   // create the main frame window
-  DnDFrame *frame = new DnDFrame(NULL, "Drag & Drop wxWindows App", 
+  DnDFrame *frame = new DnDFrame((wxFrame  *) NULL, "Drag & Drop wxWindows App", 
                                  50, 50, 450, 340);
 
   // activate it

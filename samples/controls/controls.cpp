@@ -92,14 +92,14 @@ IMPLEMENT_APP	(MyApp)
 // MyApp
 //----------------------------------------------------------------------
 
-const   MINIMAL_QUIT   = 100;
-const   MINIMAL_TEXT   = 101;
-const   MINIMAL_ABOUT  = 102;
+const   int MINIMAL_QUIT   = 100;
+const   int MINIMAL_TEXT   = 101;
+const   int MINIMAL_ABOUT  = 102;
 
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, "Controls wxWindows App", 50, 50, 500, 420 );
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "Controls wxWindows App", 50, 50, 500, 420 );
   
   // Give it an icon
 #ifdef __WXMSW__
@@ -127,31 +127,31 @@ bool MyApp::OnInit(void)
 // MyPanel
 //----------------------------------------------------------------------
 
-const  ID_NOTEBOOK          = 1000;
+const  int ID_NOTEBOOK          = 1000;
 
-const  ID_LISTBOX           = 130;
-const  ID_LISTBOX_SEL_NUM   = 131;
-const  ID_LISTBOX_SEL_STR   = 132;
-const  ID_LISTBOX_CLEAR     = 133;
-const  ID_LISTBOX_APPEND    = 134;
+const  int ID_LISTBOX           = 130;
+const  int ID_LISTBOX_SEL_NUM   = 131;
+const  int ID_LISTBOX_SEL_STR   = 132;
+const  int ID_LISTBOX_CLEAR     = 133;
+const  int ID_LISTBOX_APPEND    = 134;
 
-const  ID_CHOICE            = 120;
-const  ID_CHOICE_SEL_NUM    = 121;
-const  ID_CHOICE_SEL_STR    = 122;
-const  ID_CHOICE_CLEAR      = 123;
-const  ID_CHOICE_APPEND     = 124;
+const  int ID_CHOICE            = 120;
+const  int ID_CHOICE_SEL_NUM    = 121;
+const  int ID_CHOICE_SEL_STR    = 122;
+const  int ID_CHOICE_CLEAR      = 123;
+const  int ID_CHOICE_APPEND     = 124;
 
-const  ID_COMBO             = 140;
-const  ID_COMBO_SEL_NUM     = 141;
-const  ID_COMBO_SEL_STR     = 142;
-const  ID_COMBO_CLEAR       = 143;
-const  ID_COMBO_APPEND      = 144;
+const  int ID_COMBO             = 140;
+const  int ID_COMBO_SEL_NUM     = 141;
+const  int ID_COMBO_SEL_STR     = 142;
+const  int ID_COMBO_CLEAR       = 143;
+const  int ID_COMBO_APPEND      = 144;
 
-const  ID_TEXT              = 150;
+const  int ID_TEXT              = 150;
 
-const  ID_RADIOBOX          = 160;
-const  ID_RADIOBOX_SEL_NUM  = 161;
-const  ID_RADIOBOX_SEL_STR  = 162;
+const  int ID_RADIOBOX          = 160;
+const  int ID_RADIOBOX_SEL_NUM  = 161;
+const  int ID_RADIOBOX_SEL_STR  = 162;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_SIZE      (                       MyPanel::OnSize)

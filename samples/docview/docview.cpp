@@ -41,7 +41,7 @@
 #include "doc.h"
 #include "view.h"
 
-MyFrame *frame = NULL;
+MyFrame *frame = (MyFrame *) NULL;
 
 // In single window mode, don't have any child windows; use
 // main window.
@@ -51,7 +51,7 @@ IMPLEMENT_APP(MyApp)
 
 MyApp::MyApp(void)
 {
-    m_docManager = NULL;
+    m_docManager = (wxDocManager *) NULL;
 }
 
 bool MyApp::OnInit(void)
@@ -88,7 +88,7 @@ bool MyApp::OnInit(void)
           CLASSINFO(TextEditDocument), CLASSINFO(TextEditView));
 
   //// Create the main frame window
-  frame = new MyFrame(m_docManager, NULL, -1, "DocView Demo", wxPoint(0, 0), wxSize(500, 400), wxDEFAULT_FRAME_STYLE);
+  frame = new MyFrame(m_docManager, (wxFrame *) NULL, -1, "DocView Demo", wxPoint(0, 0), wxSize(500, 400), wxDEFAULT_FRAME_STYLE);
 
   //// Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
@@ -97,7 +97,7 @@ bool MyApp::OnInit(void)
 
   //// Make a menubar
   wxMenu *file_menu = new wxMenu;
-  wxMenu *edit_menu = NULL;
+  wxMenu *edit_menu = (wxMenu *) NULL;
 
   file_menu->Append(wxID_NEW, "&New...");
   file_menu->Append(wxID_OPEN, "&Open...");
@@ -138,7 +138,7 @@ bool MyApp::OnInit(void)
   menu_bar->Append(help_menu, "&Help");
 
   if (singleWindowMode)
-    frame->canvas = frame->CreateCanvas(NULL, frame);
+    frame->canvas = frame->CreateCanvas((wxView *) NULL, frame);
 
   //// Associate the menu bar with the frame
   frame->SetMenuBar(menu_bar);
@@ -189,7 +189,7 @@ wxFrame *MyApp::CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas)
     file_menu->Append(wxID_PREVIEW, "Print Pre&view");
   }
 
-  wxMenu *edit_menu = NULL;
+  wxMenu *edit_menu = (wxMenu *) NULL;
 
   if (isCanvas)
   {
@@ -234,8 +234,8 @@ MyFrame::MyFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxS
   wxDocParentFrame(manager, frame, id, title, pos, size, type)
 {
   // This pointer only needed if in single window mode
-  canvas = NULL;
-  editMenu = NULL;
+  canvas = (MyCanvas *) NULL;
+  editMenu = (wxMenu *) NULL;
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )

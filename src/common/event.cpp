@@ -62,9 +62,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxQueryNewPaletteEvent, wxEvent)
 const wxEventTable *wxEvtHandler::GetEventTable() const { return &wxEvtHandler::sm_eventTable; }
 
 const wxEventTable wxEvtHandler::sm_eventTable =
-	{ NULL, &wxEvtHandler::sm_eventTableEntries[0] };
+	{ (const wxEventTable *) NULL, &wxEvtHandler::sm_eventTableEntries[0] };
 
-const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] = { { 0, 0, 0, NULL } };
+const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] = { { 0, 0, 0,
+#ifdef __SGI_CC__
+// stupid SGI compiler --- offer aug 98
+	0L }
+#else 
+	NULL }
+#endif 
+};
 
 #endif
 
@@ -80,12 +87,12 @@ const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] = { { 0, 0, 0, NULL
 wxEvent::wxEvent(int theId)
 {
   m_eventType = wxEVT_NULL;
-  m_eventObject = NULL;
-  m_eventHandle = NULL;
+  m_eventObject = (wxObject *) NULL;
+  m_eventHandle = (char *) NULL;
   m_timeStamp = 0;
   m_id = theId;
   m_skipped = FALSE;
-  m_callbackUserData = NULL;
+  m_callbackUserData = (wxObject *) NULL;
 }
 
 /*
@@ -96,11 +103,11 @@ wxEvent::wxEvent(int theId)
 wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
 {
   m_eventType = commandType;
-  m_clientData = NULL;
+  m_clientData = (char *) NULL;
   m_extraLong = 0;
   m_commandInt = 0;
   m_id = theId;
-  m_commandString = NULL;
+  m_commandString = (char *) NULL;
 }
 
 /*
@@ -250,11 +257,11 @@ wxKeyEvent::wxKeyEvent(wxEventType type)
 
 wxEvtHandler::wxEvtHandler(void)
 {
-  m_clientData = NULL;
-  m_nextHandler = NULL;
-  m_previousHandler = NULL;
+  m_clientData = (char *) NULL;
+  m_nextHandler = (wxEvtHandler *) NULL;
+  m_previousHandler = (wxEvtHandler *) NULL;
   m_enabled = TRUE;
-  m_dynamicEvents = NULL;
+  m_dynamicEvents = (wxList *) NULL;
 }
 
 wxEvtHandler::~wxEvtHandler(void)
@@ -359,7 +366,13 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
   int i = 0;
   int commandId = event.GetId();
   
-  while (table.entries[i].m_fn != NULL)
+  while (table.entries[i].m_fn != 
+#ifdef __SGI_CC__
+								0L
+#else
+								NULL
+#endif
+		)
   {
 //    wxEventType eventType = (wxEventType) table.entries[i].m_eventType;
 

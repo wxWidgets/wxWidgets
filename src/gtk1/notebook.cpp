@@ -31,9 +31,9 @@ public:
     m_id = -1;
     m_text = "";
     m_image = -1;
-    m_page = NULL;
-    m_client = NULL;
-    m_parent = NULL;
+    m_page = (GtkNotebookPage *) NULL;
+    m_client = (wxWindow *) NULL;
+    m_parent = (GtkNotebook *) NULL;
   }
 
 //private:
@@ -114,7 +114,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebook,wxControl)
 
 void wxNotebook::Init()
 {
-  m_imageList = NULL;
+  m_imageList = (wxImageList *) NULL;
   m_pages.DeleteContents( TRUE );
   m_idHandler = 0;
 }
@@ -174,7 +174,7 @@ int wxNotebook::GetSelection() const
 
   GtkNotebookPage *g_page = GTK_NOTEBOOK(m_widget)->cur_page;
 
-  wxNotebookPage *page = NULL;
+  wxNotebookPage *page = (wxNotebookPage *) NULL;
 
   wxNode *node = m_pages.First();
   while (node)
@@ -220,7 +220,7 @@ int wxNotebook::GetPageImage( int page ) const
 
 wxNotebookPage* wxNotebook::GetNotebookPage(int page) const
 {
-  wxNotebookPage *nb_page = NULL;
+  wxNotebookPage *nb_page = (wxNotebookPage *) NULL;
 
   wxNode *node = m_pages.First();
   while (node)
@@ -233,7 +233,7 @@ wxNotebookPage* wxNotebook::GetNotebookPage(int page) const
 
   wxLogDebug( "Notebook page %d not found!", page );
 
-  return NULL;
+  return (wxNotebookPage *) NULL;
 }
 
 int wxNotebook::SetSelection( int page )
@@ -358,7 +358,7 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
   // the caption for the page and set the others parameters.
 
   // first, find the page
-  wxNotebookPage *page = NULL;
+  wxNotebookPage *page = (wxNotebookPage *) NULL;
 
   wxNode *node = m_pages.First();
   while (node)
@@ -390,7 +390,7 @@ wxWindow *wxNotebook::GetPage( int page ) const
 {
   wxNotebookPage* nb_page = GetNotebookPage(page);
   if (!nb_page)
-    return NULL;
+    return (wxWindow *) NULL;
   else
     return nb_page->m_client;
 }

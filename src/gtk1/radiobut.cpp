@@ -50,7 +50,7 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
   
   SetValidator( validator );
 
-  m_widget = gtk_radio_button_new_with_label( NULL, label );
+  m_widget = gtk_radio_button_new_with_label( (GSList *) NULL, label );
       
   SetLabel(label);
 

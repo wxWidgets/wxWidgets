@@ -27,7 +27,7 @@ wxMenuBar::wxMenuBar()
 {
   m_needParent = FALSE; // hmmm
 
-  PreCreation( NULL, -1, wxDefaultPosition, wxDefaultSize, 0, "menu" );
+  PreCreation( (wxWindow *) NULL, -1, wxDefaultPosition, wxDefaultSize, 0, "menu" );
 
   m_menus.DeleteContents( TRUE );
 
@@ -185,8 +185,8 @@ wxMenuItem::wxMenuItem()
   m_isCheckMenu = FALSE;
   m_isChecked = FALSE;
   m_isEnabled = TRUE;
-  m_subMenu = NULL;
-  m_menuItem = NULL;
+  m_subMenu = (wxMenu *) NULL;
+  m_menuItem = (GtkWidget *) NULL;
 }
 
 void wxMenuItem::SetText(const wxString& str)
@@ -231,7 +231,7 @@ wxMenu::wxMenu( const wxString& title, const wxFunction func )
 {
   m_title = title;
   m_items.DeleteContents( TRUE );
-  m_invokingWindow = NULL;
+  m_invokingWindow = (wxWindow *) NULL;
   m_menu = gtk_menu_new();  // Do not show!
   m_callback = func;
   m_eventHandler = this;
@@ -412,7 +412,7 @@ wxMenuItem *wxMenu::FindItem(int id) const
 
   wxLogDebug(_("wxMenu::FindItem: item %d not found."), id);
 
-  return NULL;
+  return (wxMenuItem *) NULL;
 }
 
 void wxMenu::SetInvokingWindow( wxWindow *win )

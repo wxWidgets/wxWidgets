@@ -50,7 +50,7 @@ class WXDLLEXPORT wxPrinterBase: public wxObject
   static  wxWindow *abortWindow;
   static  bool abortIt;
 
-  wxPrinterBase(wxPrintData *data = NULL);
+  wxPrinterBase(wxPrintData *data = (wxPrintData *) NULL);
   ~wxPrinterBase(void);
 
   virtual wxWindow *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
@@ -262,7 +262,7 @@ class WXDLLEXPORT wxPrintPreviewBase: public wxObject
  protected:
   bool isOk;
  public:
-  wxPrintPreviewBase(wxPrintout *printout, wxPrintout *printoutForPrinting = NULL, wxPrintData *data = NULL);
+  wxPrintPreviewBase(wxPrintout *printout, wxPrintout *printoutForPrinting = (wxPrintout *) NULL, wxPrintData *data = (wxPrintData *) NULL);
   ~wxPrintPreviewBase(void);
 
   virtual bool SetCurrentPage(int pageNum);

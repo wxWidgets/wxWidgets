@@ -62,8 +62,8 @@ class MyFrame: public wxFrame
 DECLARE_EVENT_TABLE()
 };
 
-wxBitmap *cellBitmap1 = NULL;
-wxBitmap *cellBitmap2 = NULL;
+wxBitmap *cellBitmap1 = (wxBitmap *) NULL;
+wxBitmap *cellBitmap2 = (wxBitmap *) NULL;
 
 // ID for the menu quit command
 #define GRID_QUIT 1
@@ -94,7 +94,7 @@ bool MyApp::OnInit(void)
 #endif
 
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, "wxGrid Sample", wxPoint(50, 50), wxSize(450, 300));
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "wxGrid Sample", wxPoint(50, 50), wxSize(450, 300));
   
   // Give it an icon
 #ifdef __WXMSW__
@@ -161,7 +161,7 @@ bool MyApp::OnInit(void)
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size):
   wxFrame(frame, -1, title, pos, size)
 {
-  grid = NULL;
+  grid = (wxGenericGrid *) NULL;
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -210,7 +210,7 @@ void MyFrame::ToggleDividers(wxCommandEvent& WXUNUSED(event))
       if (!grid->GetDividerPen())
         grid->SetDividerPen(wxThePenList->FindOrCreatePen("LIGHT GREY", 1, wxSOLID));
       else
-        grid->SetDividerPen(NULL);
+        grid->SetDividerPen((wxPen *) NULL);
       grid->Refresh();
 }
 

@@ -154,7 +154,7 @@ void wxCopyStatusDia::CopyFile( wxString &src, wxString &destDir )
     if (ret == wxNO) return;
   };
   
-  FILE *fs = NULL, *fd = NULL;
+  FILE *fs = (FILE *) NULL, *fd = (FILE *) NULL;
   if (!(fs = fopen(src, "rb"))) 
   {
     wxString s = "Cannot open source file ";

@@ -159,12 +159,12 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
   float WXUNUSED(xPos), float WXUNUSED(yPos), wxObject *clientData,
   const wxString& helpString1, const wxString& helpString2 )
 {
-  if (!bitmap.Ok()) return NULL;
+  if (!bitmap.Ok()) return (wxToolBarTool *) NULL;
 
   wxToolBarTool *tool = new wxToolBarTool( this, toolIndex, bitmap, pushedBitmap, toggle,
     clientData, helpString1, helpString2 );
 
-  GtkWidget *tool_pixmap = NULL;
+  GtkWidget *tool_pixmap = (GtkWidget *) NULL;
   
   wxCHECK_MSG( bitmap.GetBitmap() == NULL, (wxToolBarTool *)NULL, "wxToolBar doesn't support GdkBitmap" )
   
@@ -174,7 +174,7 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
   {
     GdkPixmap *pixmap = bitmap.GetPixmap();
 
-    GdkBitmap *mask = NULL;
+    GdkBitmap *mask = (GdkBitmap *) NULL;
     if (bitmap.GetMask()) mask = bitmap.GetMask()->GetBitmap();
     
     tool_pixmap = gtk_pixmap_new( pixmap, mask );
@@ -185,7 +185,7 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
   GtkToolbarChildType ctype = GTK_TOOLBAR_CHILD_BUTTON;
   if (toggle) ctype = GTK_TOOLBAR_CHILD_TOGGLEBUTTON;
 
-  tool->m_item = gtk_toolbar_append_element( m_toolbar, ctype, NULL, NULL, helpString1, "", tool_pixmap, 
+  tool->m_item = gtk_toolbar_append_element( m_toolbar, ctype, (GtkWidget *) NULL, (const char *) NULL, helpString1, "", tool_pixmap, 
                                              (GtkSignalFunc)gtk_toolbar_callback, (gpointer)tool );
 
   gtk_signal_connect( GTK_OBJECT(tool->m_item), "enter_notify_event", 

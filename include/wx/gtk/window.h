@@ -77,8 +77,8 @@ public:
            const wxString& name = wxPanelNameStr);
   virtual ~wxWindow();
 
-  virtual bool LoadFromResource(wxWindow *parent, const wxString& resourceName, const wxResourceTable *table = NULL);
-  virtual wxControl *CreateItem(const wxItemResource *childResource, const wxResourceTable *table = NULL);
+  virtual bool LoadFromResource(wxWindow *parent, const wxString& resourceName, const wxResourceTable *table = (const wxResourceTable *) NULL);
+  virtual wxControl *CreateItem(const wxItemResource *childResource, const wxResourceTable *table = (const wxResourceTable *) NULL);
 
   bool Close( bool force = FALSE );
   virtual bool Destroy();
@@ -139,7 +139,7 @@ public:
 
   void SetCursor( const wxCursor &cursor );
 
-  virtual void Refresh( bool eraseBackground = TRUE, const wxRect *rect = NULL );
+  virtual void Refresh( bool eraseBackground = TRUE, const wxRect *rect = (const wxRect *) NULL );
   virtual void Clear();
   virtual bool IsExposed( long x, long y );
   virtual bool IsExposed( long x, long y, long width, long height );
@@ -152,9 +152,9 @@ public:
   virtual int GetCharHeight(void) const;
   virtual int GetCharWidth(void) const;
   virtual void GetTextExtent( const wxString& string, int *x, int *y,
-                             int *descent = NULL,
-                             int *externalLeading = NULL,
-                             const wxFont *theFont = NULL, bool use16 = FALSE) const;
+                             int *descent = (int *) NULL,
+                             int *externalLeading = (int *) NULL,
+                             const wxFont *theFont = (const wxFont *) NULL, bool use16 = FALSE) const;
 
   virtual void SetDefaultBackgroundColour( const wxColour& col )
     { m_defaultBackgroundColour = col; }
@@ -219,7 +219,7 @@ public:
   virtual int GetScrollPos( int orient ) const;
   virtual int GetScrollThumb( int orient ) const;
   virtual int GetScrollRange( int orient ) const;
-  virtual void ScrollWindow( int dx, int dy, const wxRect* rect = NULL );
+  virtual void ScrollWindow( int dx, int dy, const wxRect* rect = (wxRect *) NULL );
 
   // return FALSE from here if the window doesn't want the focus
   virtual bool AcceptsFocus() const;

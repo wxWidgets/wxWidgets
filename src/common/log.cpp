@@ -140,7 +140,7 @@ void wxLogStatus(wxFrame *pFrame, const char *szFormat, ...)
     wxASSERT( gs_pFrame == NULL ); // should be reset!
     gs_pFrame = pFrame;
     wxLog::OnLog(wxLOG_Status, s_szBuf);
-    gs_pFrame = NULL;
+    gs_pFrame = (wxFrame *) NULL;
   }
 }
 
@@ -778,7 +778,7 @@ void wxLogWindow::OnFrameCreate(wxFrame *frame)
 
 void wxLogWindow::OnFrameDelete(wxFrame *frame)
 {
-  m_pLogFrame = NULL;
+  m_pLogFrame = (wxLogFrame *) NULL;
 }
 
 wxLogWindow::~wxLogWindow()
@@ -796,7 +796,7 @@ wxLogWindow::~wxLogWindow()
 // ----------------------------------------------------------------------------
 // static variables
 // ----------------------------------------------------------------------------
-wxLog      *wxLog::ms_pLogger      = NULL;
+wxLog      *wxLog::ms_pLogger      = (wxLog *) NULL;
 bool        wxLog::ms_bAutoCreate  = TRUE;
 wxTraceMask wxLog::ms_ulTraceMask  = (wxTraceMask)0;
 

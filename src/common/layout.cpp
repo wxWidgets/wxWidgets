@@ -92,7 +92,7 @@ int wxSizerMarginY(wxWindow *win)
 wxIndividualLayoutConstraint::wxIndividualLayoutConstraint()
 {
   myEdge = wxTop; relationship = wxUnconstrained; margin = 0; value = 0; percent = 0; otherEdge = wxTop;
-  done = FALSE; otherWin = NULL;
+  done = FALSE; otherWin = (wxWindow *) NULL;
 }
 
 wxIndividualLayoutConstraint::~wxIndividualLayoutConstraint()
@@ -140,7 +140,7 @@ bool wxIndividualLayoutConstraint::ResetIfWin(wxWindow *otherW)
   if (otherW == otherWin)
   {
     myEdge = wxTop; relationship = wxAsIs; margin = 0; value = 0; percent = 0; otherEdge = wxTop;
-    otherWin = NULL;
+    otherWin = (wxWindow *) NULL;
     return TRUE;
   }
   else
@@ -1211,7 +1211,7 @@ wxSizer::~wxSizer()
     if (!win->IsKindOf(CLASSINFO(wxSizer)))
 	{
       	delete node;
-  		win->SetSizerParent(NULL);
+  		win->SetSizerParent((wxWindow *) NULL);
 	}
     else
     {
@@ -1223,8 +1223,8 @@ wxSizer::~wxSizer()
 
   if (m_sizerParent) // && !m_sizerParent->IsKindOf(CLASSINFO(wxSizer)))
   {
-    m_sizerParent->SetSizer(NULL);
-	m_sizerParent = NULL;
+    m_sizerParent->SetSizer((wxSizer *) NULL);
+	m_sizerParent = (wxWindow *) NULL;
   }
 
 }

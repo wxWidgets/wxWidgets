@@ -56,7 +56,7 @@ static char *menu1 = NULL;
 #endif
 
 // Declare two frames
-MyFrame   *frame = NULL;
+MyFrame   *frame = (MyFrame *) NULL;
 
 IMPLEMENT_APP(MyApp)
 
@@ -86,7 +86,7 @@ bool MyApp::OnInit(void)
 #endif
 
   // Create the main frame window
-  frame = new MyFrame(NULL, -1, "wxWindows Resource Sample", wxPoint(0, 0), wxSize(300, 250));
+  frame = new MyFrame((wxFrame *) NULL, -1, (char *) "wxWindows Resource Sample", wxPoint(0, 0), wxSize(300, 250));
 
   // Give it a status line
   frame->CreateStatusBar(2);
@@ -144,7 +144,7 @@ END_EVENT_TABLE()
 MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size):
   wxFrame(parent, id, title, pos, size)
 {
-  panel = NULL;
+  panel = (wxWindow *) NULL;
 }
 
 void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )

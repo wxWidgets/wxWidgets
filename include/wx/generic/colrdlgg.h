@@ -76,10 +76,10 @@ class WXDLLEXPORT wxGenericColourDialog: public wxDialog
 //  static bool colourDialogCancelled;
  public:
   wxGenericColourDialog(void);
-  wxGenericColourDialog(wxWindow *parent, wxColourData *data = NULL);
+  wxGenericColourDialog(wxWindow *parent, wxColourData *data = (wxColourData *) NULL);
   ~wxGenericColourDialog(void);
 
-  bool Create(wxWindow *parent, wxColourData *data = NULL);
+  bool Create(wxWindow *parent, wxColourData *data = (wxColourData *) NULL);
 
   int ShowModal(void);
   wxColourData GetColourData(void) { return colourData; }

@@ -113,7 +113,7 @@
 # define PS_VIEWER_PROG NULL
 #endif
 
-wxPrintSetupData *wxThePrintSetupData = NULL;
+wxPrintSetupData *wxThePrintSetupData = (wxPrintSetupData *) NULL;
 
 // these should move into wxPostscriptDC:
 double UnderlinePosition = 0.0F;
@@ -141,7 +141,7 @@ static const char *wxPostScriptHeaderSpline = " \
 ";
 #else
 // No extra PS header for this spline implementation.
-static const char *wxPostScriptHeaderSpline = NULL;
+static const char *wxPostScriptHeaderSpline = (char *) NULL;
 
 #endif /* USE_XFIG_SPLINE_CODE */
 
@@ -173,7 +173,7 @@ wxPostScriptDC::wxPostScriptDC (void)
   m_maxY = -1000;
   m_title = "";
 
-  m_pstream = NULL;
+  m_pstream = (ofstream *) NULL;
 
 #ifdef __WXMSW__
   // Can only send to file in Windows
@@ -203,7 +203,7 @@ bool wxPostScriptDC::Create(const wxString& file, bool interactive, wxWindow *pa
   m_maxY = -1000;
   m_title = "";
   m_filename = file;
-  m_pstream = NULL;
+  m_pstream = (ofstream *) NULL;
 
 #ifdef __WXMSW__
   // Can only send to file in Windows
@@ -795,7 +795,7 @@ void wxPostScriptDC::SetPen (const wxPen& pen)
   static const char *long_dashed = "[4 8] 2";
   static const char *dotted_dashed = "[6 6 2 6] 4";
 
-  const char *psdash = NULL;
+  const char *psdash = (char *) NULL;
   switch (m_pen.GetStyle ())
     {
     case wxDOT:
@@ -1134,7 +1134,7 @@ void wxPostScriptDC::EndDoc (void)
   if (m_pstream)
     {
       delete m_pstream;
-      m_pstream = NULL;
+      m_pstream = (ofstream *) NULL;
     }
 
   // Write header now
@@ -1258,7 +1258,7 @@ void wxPostScriptDC::EndDoc (void)
   *m_pstream << "%%EndProlog\n";
 
   delete m_pstream;
-  m_pstream = NULL;
+  m_pstream = (ofstream *) NULL;
 
 #ifdef __VMS__
   char *tmp_file = "tmp.ps";
@@ -1281,7 +1281,7 @@ void wxPostScriptDC::EndDoc (void)
           char *argv[3];
           argv[0] = wxThePrintSetupData->GetPrintPreviewCommand();
           argv[1] = wxThePrintSetupData->GetPrinterFile();
-          argv[2] = NULL;
+          argv[2] = (char *) NULL;
 	  wxExecute (argv, TRUE);
           wxRemoveFile(wxThePrintSetupData->GetPrinterFile());
 	}
@@ -1300,7 +1300,7 @@ void wxPostScriptDC::EndDoc (void)
               argv[argc++] = opts;
               
           argv[argc++] = wxThePrintSetupData->GetPrinterFile();
-          argv[argc++] = NULL;
+          argv[argc++] = (char *) NULL;
 	  wxExecute (argv, TRUE);
           wxRemoveFile(wxThePrintSetupData->GetPrinterFile());
 	}
@@ -2257,9 +2257,9 @@ char *wxGetAFMPath(void)
 
 wxPrintSetupData::wxPrintSetupData(void)
 {
-  printerCommand = NULL;
-  previewCommand = NULL;
-  printerFlags = NULL;
+  printerCommand = (char *) NULL;
+  previewCommand = (char *) NULL;
+  printerFlags = (char *) NULL;
   printerOrient = PS_PORTRAIT;
   printerScaleX = (double)1.0;
   printerScaleY = (double)1.0;
@@ -2267,10 +2267,10 @@ wxPrintSetupData::wxPrintSetupData(void)
   printerTranslateY = 0;
   // 1 = Preview, 2 = print to file, 3 = send to printer
   printerMode = 3;
-  afmPath = NULL;
-  paperName = NULL;
+  afmPath = (char *) NULL;
+  paperName = (char *) NULL;
   printColour = TRUE;
-  printerFile = NULL;
+  printerFile = (char *) NULL;
 }
 
 wxPrintSetupData::~wxPrintSetupData(void)
@@ -2299,7 +2299,7 @@ void wxPrintSetupData::SetPrinterCommand(const char *cmd)
   if (cmd)
     printerCommand = copystring(cmd);
   else
-    printerCommand = NULL;
+    printerCommand = (char *) NULL;
 }
 
 void wxPrintSetupData::SetPrintPreviewCommand(const char *cmd)
@@ -2312,7 +2312,7 @@ void wxPrintSetupData::SetPrintPreviewCommand(const char *cmd)
   if (cmd)
     previewCommand = copystring(cmd);
   else
-    previewCommand = NULL;
+    previewCommand = (char *) NULL;
 }
 
 void wxPrintSetupData::SetPaperName(const char *name)
@@ -2325,7 +2325,7 @@ void wxPrintSetupData::SetPaperName(const char *name)
   if (name)
     paperName = copystring(name);
   else
-    paperName = NULL;
+    paperName = (char *) NULL;
 }
 
 void wxPrintSetupData::SetPrinterOptions(const char *flags)
@@ -2338,7 +2338,7 @@ void wxPrintSetupData::SetPrinterOptions(const char *flags)
   if (flags)
     printerFlags = copystring(flags);
   else
-    printerFlags = NULL;
+    printerFlags = (char *) NULL;
 }
 
 void wxPrintSetupData::SetPrinterFile(const char *f)
@@ -2351,7 +2351,7 @@ void wxPrintSetupData::SetPrinterFile(const char *f)
   if (f)
     printerFile = copystring(f);
   else
-    printerFile = NULL;
+    printerFile = (char *) NULL;
 }
 
 void wxPrintSetupData::SetPrinterOrientation(int orient)
@@ -2387,7 +2387,7 @@ void wxPrintSetupData::SetAFMPath(const char *f)
   if (f)
     afmPath = copystring(f);
   else
-    afmPath = NULL;
+    afmPath = (char *) NULL;
 }
 
 void wxPrintSetupData::SetColour(bool col)
@@ -2498,15 +2498,15 @@ void wxInitializePrintSetupData(bool init)
 #endif
 #if !defined(__VMS__) && !defined(__WXMSW__)
     wxThePrintSetupData->SetPrinterCommand("lpr");
-    wxThePrintSetupData->SetPrinterOptions(NULL);
-    wxThePrintSetupData->SetAFMPath(NULL);
+    wxThePrintSetupData->SetPrinterOptions((char *) NULL);
+    wxThePrintSetupData->SetAFMPath((char *) NULL);
 #endif
   }
   else
   {
     if (wxThePrintSetupData)
       delete wxThePrintSetupData;
-     wxThePrintSetupData = NULL;
+     wxThePrintSetupData = (wxPrintSetupData *) NULL;
   }
 }
 
@@ -2571,7 +2571,7 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const char *name)
   if (node)
     return (wxPrintPaperType *)node->Data();
   else
-    return NULL;
+    return (wxPrintPaperType *) NULL;
 }
 
 #endif

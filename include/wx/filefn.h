@@ -76,7 +76,7 @@ void WXDLLEXPORT wxStripExtension(char *buffer);
 void WXDLLEXPORT wxStripExtension(wxString& buffer);
 
 // Get a temporary filename, opening and closing the file.
-char* WXDLLEXPORT wxGetTempFileName(const wxString& prefix, char *buf = NULL);
+char* WXDLLEXPORT wxGetTempFileName(const wxString& prefix, char *buf = (char *) NULL);
 
 // Expand file name (~/ and ${OPENWINHOME}/ stuff)
 char* WXDLLEXPORT wxExpandPath(char *dest, const char *path);
@@ -125,7 +125,7 @@ bool WXDLLEXPORT wxRenameFile(const wxString& file1, const wxString& file2);
 // copies into buf.
 // IMPORTANT NOTE getcwd is know not to work under some releases
 // of Win32s 1.3, according to MS release notes!
-char* WXDLLEXPORT wxGetWorkingDirectory(char *buf = NULL, int sz = 1000);
+char* WXDLLEXPORT wxGetWorkingDirectory(char *buf = (char *) NULL, int sz = 1000);
 
 // Set working directory
 bool WXDLLEXPORT wxSetWorkingDirectory(const wxString& d);

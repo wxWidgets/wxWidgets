@@ -70,8 +70,8 @@ class wxPaintDC: public wxDC
     virtual void DrawText( const wxString &text, long x, long y, bool use16 = FALSE );
     virtual bool CanGetTextExtent(void) const;
     virtual void GetTextExtent( const wxString &string, long *width, long *height,
-                     long *descent = NULL, long *externalLeading = NULL,
-                     wxFont *theFont = NULL, bool use16 = FALSE );
+                     long *descent = (long *) NULL, long *externalLeading = (long *) NULL,
+                     wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE );
     virtual long GetCharWidth(void);
     virtual long GetCharHeight(void);
     

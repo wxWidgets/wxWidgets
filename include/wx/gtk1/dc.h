@@ -105,8 +105,8 @@ class wxDC: public wxObject
     virtual void DrawText( const wxString &text, long x, long y, bool use16 = FALSE ) = 0;
     virtual bool CanGetTextExtent(void) const = 0;
     virtual void GetTextExtent( const wxString &string, long *width, long *height,
-                     long *descent = NULL, long *externalLeading = NULL,
-                     wxFont *theFont = NULL, bool use16 = FALSE ) = 0;
+                     long *descent = (long *) NULL, long *externalLeading = (long *) NULL,
+                     wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE ) = 0;
     virtual long GetCharWidth(void) = 0;
     virtual long GetCharHeight(void) = 0;
     

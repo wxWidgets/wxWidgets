@@ -33,7 +33,7 @@
 // global data
 //-----------------------------------------------------------------------------
 
-wxApp *wxTheApp = NULL;
+wxApp *wxTheApp = (wxApp *)  NULL;
 wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 extern wxList wxPendingDelete;
@@ -80,7 +80,7 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 wxApp::wxApp()
 {
   m_idleTag = 0;
-  m_topWindow = NULL;
+  m_topWindow = (wxWindow *) NULL;
   m_exitOnFrameDelete = TRUE;
   wxTheApp = this;
 }
@@ -230,7 +230,7 @@ wxWindow *wxApp::GetTopWindow(void)
 {
   if (m_topWindow) return m_topWindow;
   wxNode *node = wxTopLevelWindows.First();
-  if (!node) return NULL;
+  if (!node) return (wxWindow *) NULL;
   return (wxWindow*)node->Data();
 }
 

@@ -29,13 +29,13 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
  public:
   // Create a printer DC
   wxPostScriptDC(void);
-  wxPostScriptDC(const wxString& output, bool interactive = TRUE, wxWindow *parent = NULL);
+  wxPostScriptDC(const wxString& output, bool interactive = TRUE, wxWindow *parent = (wxWindow *) NULL);
 
   ~wxPostScriptDC(void);
 
-  bool Create(const wxString& output, bool interactive = TRUE, wxWindow *parent = NULL);
+  bool Create(const wxString& output, bool interactive = TRUE, wxWindow *parent = (wxWindow *) NULL);
 
-  virtual bool PrinterDialog(wxWindow *parent = NULL);
+  virtual bool PrinterDialog(wxWindow *parent = (wxWindow *) NULL);
 
   inline virtual void BeginDrawing(void) {} ;
   inline virtual void EndDrawing(void) {} ;
@@ -99,8 +99,9 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
   long GetCharHeight(void);
   long GetCharWidth(void);
   void GetTextExtent(const wxString& string, long *x, long *y,
-                     long *descent = NULL, long *externalLeading = NULL,
-                     wxFont *theFont = NULL, bool use16 = FALSE);
+                     long *descent = (long *) NULL, 
+					 long *externalLeading = (long *) NULL,
+                     wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE);
   virtual void SetLogicalOrigin(long x, long y);
   virtual void CalcBoundingBox(long x, long y);
 
@@ -272,7 +273,7 @@ class WXDLLEXPORT wxPrintPaperType: public wxObject
   int heightPixels;
   char *pageName;
 
-  wxPrintPaperType(const char *name = NULL, int wmm = 0, int hmm = 0, int wp = 0, int hp = 0);
+  wxPrintPaperType(const char *name = (const char *) NULL, int wmm = 0, int hmm = 0, int wp = 0, int hp = 0);
   ~wxPrintPaperType(void);
 };
 

@@ -79,7 +79,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 //  if (((m_style & wxRA_VERTICAL) == wxRA_VERTICAL) && (n > 0))
   if (n > 0)
   {
-    GSList *radio_button_group = NULL;
+    GSList *radio_button_group = (GSList *) NULL;
     for (int i = 0; i < n; i++)
     {
       if (i) radio_button_group = gtk_radio_button_group( GTK_RADIO_BUTTON(m_radio) );

@@ -51,7 +51,7 @@
   @param   szFile and nLine - file name and line number of the ASSERT
            szMsg            - optional message explaining the reason
   */
-  void wxOnAssert(const char *szFile, int nLine, const char *szMsg = NULL);
+  void wxOnAssert(const char *szFile, int nLine, const char *szMsg = (const char *) NULL);
 
   /// generic assert macro
   #define   wxASSERT(cond)   if ( !(cond) ) wxOnAssert(__FILE__, __LINE__)

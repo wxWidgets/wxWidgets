@@ -68,8 +68,8 @@ wxFontRefData::wxFontRefData(void) : m_scaled_xfonts(wxKEY_INTEGER)
   m_weight = -1;
   m_underlined = FALSE;
   m_fontId = 0;
-  m_faceName = NULL;
-  m_font = NULL;
+  m_faceName = (char *) NULL;
+  m_font = (GdkFont *) NULL;
 }
 
 wxFontRefData::~wxFontRefData(void)
@@ -85,7 +85,7 @@ wxFontRefData::~wxFontRefData(void)
   if (m_faceName) 
   {
     delete m_faceName;
-    m_faceName = NULL;
+    m_faceName = (char *) NULL;
   }
   if (m_font) gdk_font_unref( m_font );
 }
@@ -267,7 +267,7 @@ GdkFont *wxFont::GetInternalFont(float scale) const
    
   long int_scale = long(scale * 100.0 + 0.5); // key for fontlist
   int point_scale = (M_FONTDATA->m_pointSize * 10 * int_scale) / 100;
-  GdkFont *font = NULL;
+  GdkFont *font = (GdkFont *) NULL;
 
   wxNode *node = M_FONTDATA->m_scaled_xfonts.Find(int_scale);
   if (node) 
@@ -440,7 +440,7 @@ static char *font_defaults[] = {
     "-${ScreenSwissBase}${ScreenStdSuffix}",
     "ScreenScript__",
     "-${ScreenScriptBase}${ScreenStdSuffix}",
-    NULL
+    (char *) NULL
 };
 
 enum {wxWEIGHT_NORMAL, wxWEIGHT_BOLD,  wxWEIGHT_LIGHT, wxNUM_WEIGHTS};
@@ -494,8 +494,8 @@ static void SearchResource(const char *prefix, const char **names, int count, ch
 
     k = 1 << count;
     
-    *v = NULL;
-    internal = NULL;
+    *v = (char *) NULL;
+    internal = (char *) NULL;
 
     for (i = 0; i < k; i++) {
 	strcpy(resource, prefix);
@@ -530,7 +530,7 @@ wxSuffixMap::~wxSuffixMap(void)
 	for (j = 0; j < wxNUM_STYLES; ++j)
 	    if (map[k][j]) {
 		delete[] map[k][j];
-		map[k][j] = NULL;
+		map[k][j] = (char *) NULL;
 	    }
 }
 
@@ -573,7 +573,7 @@ void wxSuffixMap::Initialize(const char *resname, const char *devresname)
 		    ++i;
 		} else if (v[i] == closer) {
 		    int newstrlen;
-		    const char *r = NULL; bool delete_r = FALSE;
+		    const char *r = (char *) NULL; bool delete_r = FALSE;
 		    char *name;
 	  
 		    name = v + startpos + 2;
@@ -684,7 +684,7 @@ wxFontNameItem::~wxFontNameItem(void)
 {
     if (name)
 	delete[] name;
-    name = NULL;
+    name = (char *) NULL;
 }
 
 #if WXDEBUG
@@ -740,7 +740,7 @@ void wxFontNameDirectory::Initialize(int fontid, int family, const char *resname
     char *fam, resource[256];
   
     sprintf(resource, "Family%s", resname);
-    SearchResource((const char *)resource, NULL, 0, (char **)&fam);
+    SearchResource((const char *)resource, (const char **) NULL, 0, (char **)&fam);
     if (fam) {
 	if      (!strcmp(fam, "Default"))	family = wxDEFAULT;
 	else if (!strcmp(fam, "Roman"))		family = wxROMAN;
@@ -771,7 +771,7 @@ char *wxFontNameDirectory::GetScreenName(int fontid, int weight, int style)
     if (item)
 	return item->GetScreenName(weight, style);
     // font does not exist
-    return NULL;
+    return (char *) NULL;
 }
 
 char *wxFontNameDirectory::GetPostScriptName(int fontid, int weight, int style)
@@ -780,7 +780,7 @@ char *wxFontNameDirectory::GetPostScriptName(int fontid, int weight, int style)
     if (item)
 	return item->GetPostScriptName(weight, style);
     // font does not exist
-    return NULL;
+    return (char *) NULL;
 }
 
 char *wxFontNameDirectory::GetAFMName(int fontid, int weight, int style)
@@ -789,7 +789,7 @@ char *wxFontNameDirectory::GetAFMName(int fontid, int weight, int style)
     if (item)
 	return item->GetAFMName(weight, style);
     // font does not exist
-    return NULL;
+    return (char *) NULL;
 }
 
 char *wxFontNameDirectory::GetFontName(int fontid)
@@ -798,7 +798,7 @@ char *wxFontNameDirectory::GetFontName(int fontid)
     if (item)
 	return item->GetName();
     // font does not exist
-    return NULL;
+    return (char *) NULL;
 }
 
 int wxFontNameDirectory::GetFontId(const char *name)

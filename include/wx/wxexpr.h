@@ -275,7 +275,7 @@ bool WXDLLEXPORT wxExprIsFunctor(wxExpr *expr, const wxString& functor);
 WXDLLEXPORT_DATA(extern wxExprDatabase*) thewxExprDatabase;
 
 // YACC/LEX can leave memory lying around...
-extern "C" WXDLLEXPORT wxExprCleanUp();
+extern "C" int WXDLLEXPORT wxExprCleanUp();
 
 #endif
 

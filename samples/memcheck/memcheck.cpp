@@ -58,7 +58,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL);
+  MyFrame *frame = new MyFrame((wxFrame *) NULL);
 
   // Give it an icon
 #ifdef wx_msw

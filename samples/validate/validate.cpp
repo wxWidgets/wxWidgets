@@ -41,7 +41,7 @@ MyData	g_data;
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, "Validation Test", 50, 50, 300, 250);
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "Validation Test", 50, 50, 300, 250);
 
   // Give it an icon
 #ifdef __WXMSW__

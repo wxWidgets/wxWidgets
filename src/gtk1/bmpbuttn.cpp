@@ -67,7 +67,7 @@ bool wxBitmapButton::Create(  wxWindow *parent, wxWindowID id, const wxBitmap &b
   
   if (m_bitmap.Ok())
   {
-    GdkBitmap *mask = NULL;
+    GdkBitmap *mask = (GdkBitmap *) NULL;
     if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
     GtkWidget *pixmap = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );
     
@@ -115,7 +115,7 @@ void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
   GtkButton *bin = GTK_BUTTON( m_widget );
   GtkPixmap *g_pixmap = GTK_PIXMAP( bin->child );
   
-  GdkBitmap *mask = NULL;
+  GdkBitmap *mask = (GdkBitmap *) NULL;
   if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
   
   gtk_pixmap_set( g_pixmap, m_bitmap.GetPixmap(), mask );

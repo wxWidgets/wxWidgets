@@ -57,8 +57,8 @@ Thread support:
   Requires Posix threads on commercial Unix system,
   which are always present. Just compile.
   
-  Requires SGI threads on IRIX, which are always present. 
-  Just compile.
+  On SGI Irix we first look for sprocs, then pthreads and
+  use the last one found.
   
 Python scripting language support:
 
@@ -95,6 +95,21 @@ set environment variables CC and CCC as
 	% setenv CCC CC
 	% ./configure options
 
+Using the SGI native compilers, it is recommended that you
+also set CFLAGS and CXXFLAGS before running configure. These 
+should be set to :
+
+CFLAGS="-mips3 -n32" 
+CXXFLAGS="-mips3 -n32"
+
+This is essential if you want to use the resultant binaries 
+on any other machine than the one it was compiled on. If you 
+have a 64bit machine (Octane) you should also do this to ensure 
+you don't accidently build the libraries as 64bit (which is 
+untested).
+
+The SGI native compiler support has only been tested on Irix 6.5.
+
 to see all the options please use:
 
 	./configure --help
@@ -111,6 +126,7 @@ configure for.
 
 Configure will complain if the system variable OSTYPE has 
 not been defined. And Make in some circumstances as well...
+
 
 * General options
 -------------------

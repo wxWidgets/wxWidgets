@@ -66,7 +66,7 @@ int orientation = wxPORTRAIT;
 
    
    MyFrame::MyFrame(void) :
-      wxFrame( NULL, -1, "wxLayout", wxPoint(20,20), wxSize(600,360) )
+      wxFrame( (wxFrame *) NULL, -1, (char *) "wxLayout", wxPoint(20,20), wxSize(600,360) )
 {
    CreateStatusBar( 1 );
   

@@ -126,8 +126,8 @@ class wxMDIChildFrame: public wxFrame
   virtual void Activate(void);
     
     // no status bars
-  virtual wxStatusBar* CreateStatusBar( int WXUNUSED(number), long WXUNUSED(style), 
-    wxWindowID WXUNUSED(id), const wxString& WXUNUSED(name) ) {return (wxStatusBar*)NULL; }
+  virtual wxStatusBar* CreateStatusBar( int WXUNUSED(number)=1, long WXUNUSED(style)=1, 
+    wxWindowID WXUNUSED(id)=1, const wxString& WXUNUSED(name)=WXSTRINGCAST NULL ) {return (wxStatusBar*)NULL; }
   virtual wxStatusBar *GetStatusBar() { return (wxStatusBar*)NULL; }
   virtual void SetStatusText( const wxString &WXUNUSED(text), int WXUNUSED(number) ) {}
   virtual void SetStatusWidths( int WXUNUSED(n), int *WXUNUSED(width) ) {}

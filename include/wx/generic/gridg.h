@@ -66,7 +66,7 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
 
   bool Create(wxWindow *parent, wxWindowID, const wxPoint& pos, const wxSize& size, long style = 0, const wxString& name = "grid");
 
-  bool CreateGrid(int nRows, int nCols, wxString **cellValues = NULL, short *widths = NULL,
+  bool CreateGrid(int nRows, int nCols, wxString **cellValues = (wxString **) NULL, short *widths = (short *) NULL,
      short defaultWidth = wxGRID_DEFAULT_CELL_WIDTH, short defaultHeight = wxGRID_DEFAULT_CELL_HEIGHT);
   void PaintGrid(wxDC& dc);
   void ClearGrid(void);
@@ -290,7 +290,7 @@ class WXDLLEXPORT wxGridCell: public wxObject
   wxBitmap *cellBitmap;
   int alignment;
 
-  wxGridCell(wxGenericGrid *window = NULL);
+  wxGridCell(wxGenericGrid *window = (wxGenericGrid *) NULL);
   ~wxGridCell(void);
   
   virtual wxString& GetTextValue(void) { return textValue; }

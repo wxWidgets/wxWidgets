@@ -59,7 +59,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, "wxTreeCtrl Test", 50, 50, 450, 340);
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "wxTreeCtrl Test", 50, 50, 450, 340);
 
   // This reduces flicker effects - even better would be to define OnEraseBackground
   // to do nothing. When the tree control's scrollbars are show or hidden, the
@@ -157,8 +157,8 @@ bool MyApp::OnInit(void)
 MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
   wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
-	m_treeCtrl = NULL;
-	m_logWindow = NULL;
+	m_treeCtrl = (MyTreeCtrl *) NULL;
+	m_logWindow = (wxTextCtrl *) NULL;
 }
 
 MyFrame::~MyFrame(void)

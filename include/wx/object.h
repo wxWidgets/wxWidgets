@@ -95,13 +95,13 @@ wxObject* WXDLLEXPORT wxCreateStoredObject( wxInputStream& stream );
 #define IMPLEMENT_DYNAMIC_CLASS(name, basename) \
 wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
    { return new name; }\
- wxClassInfo name::class##name(#name, #basename, NULL, sizeof(name), wxConstructorFor##name);
+ wxClassInfo name::class##name((char *) #name, (char *) #basename, (char *) NULL, (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
 
 // Multiple inheritance with two base classes
 #define IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2) \
 wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
    { return new name; }\
- wxClassInfo name::class##name(#name, #basename1, #basename2, sizeof(name), wxConstructorFor##name);
+ wxClassInfo name::class##name((char *) #name, (char *) #basename1, (char *) #basename2, (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
 
 //////
 ////// for abstract classes
@@ -109,11 +109,12 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 
 // Single inheritance with one base class
 #define IMPLEMENT_ABSTRACT_CLASS(name, basename) \
- wxClassInfo name::class##name(#name, #basename, NULL, sizeof(name), NULL);
+ wxClassInfo name::class##name((char *) #name, (char *) #basename, \
+		 (char *) NULL, (int) sizeof(name), (wxObjectConstructorFn) NULL);
 
 // Multiple inheritance with two base classes
 #define IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2) \
- wxClassInfo name::class##name(#name, #basename1, #basename2, sizeof(name), NULL);
+ wxClassInfo name::class##name((char *) #name, (char *) #basename1, (char *) #basename2, (int) sizeof(name), (wxObjectConstructorFn) NULL);
 
 #define IMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
 #define IMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2

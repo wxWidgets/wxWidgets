@@ -108,7 +108,7 @@ void wxPathList::AddEnvList (const wxString& envVariable)
 	  Add (copystring (token));
 	  while (token)
 	    {
-	      if ((token = strtok (NULL, PATH_TOKS)) != NULL)
+	      if ((token = strtok ((char *) NULL, PATH_TOKS)) != NULL)
 		Add (wxString(token));
 	    }
 	}
@@ -339,7 +339,7 @@ char *wxRealPath (char *path)
 char *wxCopyAbsolutePath(const wxString& filename)
 {
   if (filename == "")
-    return NULL;
+    return (char *) NULL;
 
   if (! IsAbsolutePath(wxExpandPath(wxBuffer, filename))) {
     char    buf[_MAXPATHLEN];
@@ -442,7 +442,7 @@ char *wxExpandPath(char *buf, const char *name)
 #endif
 	{
 	    register char  *start = d;
-	    register        braces = (*s == '{' || *s == '(');
+	    register int   braces = (*s == '{' || *s == '(');
 	    register char  *value;
 	    while ((*d++ = *s))
 		if (braces ? (*s == '}' || *s == ')') : !(isalnum(*s) || *s == '_') )
@@ -523,7 +523,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
   static char dest[_MAXPATHLEN];
 
   if (filename == "")
-    return NULL;
+    return (char *) NULL;
 
   strcpy (dest, WXSTRINGCAST filename);
 #ifdef __WXMSW__
@@ -531,9 +531,9 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
 #endif
 
   // Handle environment
-  char *val = NULL;
-  char *tcp = NULL;
-  if (envname != NULL && (val = getenv (WXSTRINGCAST envname)) != NULL &&
+  char *val = (char *) NULL;
+  char *tcp = (char *) NULL;
+  if (envname != WXSTRINGCAST NULL && (val = getenv (WXSTRINGCAST envname)) != NULL &&
      (tcp = strstr (dest, val)) != NULL)
     {
         strcpy (wxBuffer, tcp + strlen (val));
@@ -665,7 +665,7 @@ wxPathOnly (char *path)
 #endif
     }
 
-  return NULL;
+  return (char *) NULL;
 }
 
 // Return just the directory, or NULL if no directory
@@ -761,9 +761,9 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
 {
   char *outfile = wxGetTempFileName("cat");
 
-  FILE *fp1 = NULL;
-  FILE *fp2 = NULL;
-  FILE *fp3 = NULL;
+  FILE *fp1 = (FILE *) NULL;
+  FILE *fp2 = (FILE *) NULL;
+  FILE *fp3 = (FILE *) NULL;
   // Open the inputs and outputs
   if ((fp1 = fopen (WXSTRINGCAST file1, "rb")) == NULL ||
       (fp2 = fopen (WXSTRINGCAST file2, "rb")) == NULL ||
@@ -965,7 +965,7 @@ char *wxGetTempFileName(const wxString& prefix, char *buf)
     }
   cerr << _("wxWindows: error finding temporary file name.\n");
   if (buf) buf[0] = 0;
-  return NULL;
+  return (char *) NULL;
 #endif
 }
 
@@ -977,8 +977,8 @@ char *wxGetTempFileName(const wxString& prefix, char *buf)
 // Flags are reserved for future use.
 
 #ifndef __VMS__
-static DIR *wxDirStream = NULL;
-static char *wxFileSpec = NULL;
+static DIR *wxDirStream = (DIR *) NULL;
+static char *wxFileSpec = (char *) NULL;
 static int wxFindFileFlags = 0;
 #endif
 
@@ -1006,13 +1006,13 @@ char *wxFindFirstFile(const char *spec, int flags)
     p = ".";
     
   if ((wxDirStream=opendir(p))==NULL)
-    return NULL;
+    return (char *) NULL;
 
  /* MATTHEW: [5] wxFindNextFile can do the rest of the work */
   return wxFindNextFile();
 #endif
  // ifndef __VMS__
-  return NULL;
+  return (char *) NULL;
 }
 
 char *wxFindNextFile(void)
@@ -1022,7 +1022,7 @@ char *wxFindNextFile(void)
 
   /* MATTHEW: [2] Don't crash if we read too many times */
   if (!wxDirStream)
-    return NULL;
+    return (char *) NULL;
 
   // Find path only so we can concatenate
   // found file onto path
@@ -1066,11 +1066,11 @@ char *wxFindNextFile(void)
     }
   }
   closedir(wxDirStream);
-  wxDirStream = NULL;
+  wxDirStream = (DIR *) NULL;
 #endif
  // ifndef __VMS__
 
-  return NULL;
+  return (char *) NULL;
 }
 
 #elif defined(__WXMSW__)
@@ -1319,7 +1319,7 @@ bool wxFindFileInPath(wxString *pStr, const char *pszPath, const char *pszFile)
 
   wxString strFile;
   char *pc;
-  for ( pc = strtok(szPath, PATH_SEP); pc; pc = strtok(NULL, PATH_SEP) ) {
+  for ( pc = strtok(szPath, PATH_SEP); pc; pc = strtok((char *) NULL, PATH_SEP) ) {
     // search for the file in this directory
     strFile = pc;
     if ( !wxEndsWithPathSeparator(pc) )

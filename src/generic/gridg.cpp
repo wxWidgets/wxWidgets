@@ -57,17 +57,17 @@ END_EVENT_TABLE()
 wxGenericGrid::wxGenericGrid(void)
 {
   m_batchCount = 0;
-  m_hScrollBar = NULL;
-  m_vScrollBar = NULL;
+  m_hScrollBar = (wxScrollBar *) NULL;
+  m_vScrollBar = (wxScrollBar *) NULL;
   m_cellTextColour = *wxBLACK;
   m_cellBackgroundColour = *wxWHITE;
   m_labelTextColour = *wxBLACK;
 //  m_labelBackgroundColour = *wxLIGHT_GREY;
   m_labelBackgroundColour = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
-  m_labelBackgroundBrush = NULL;
-  m_labelTextFont = NULL;
-  m_cellTextFont = NULL;
-  m_textItem = NULL;
+  m_labelBackgroundBrush = (wxBrush *) NULL;
+  m_labelTextFont = (wxFont *) NULL;
+  m_cellTextFont = (wxFont *) NULL;
+  m_textItem = (wxTextCtrl *) NULL;
   m_currentRectVisible = FALSE;
   m_editable = TRUE;
 #if defined(__WIN95__)
@@ -79,14 +79,14 @@ wxGenericGrid::wxGenericGrid(void)
   m_dragRowOrCol = 0;
   m_dragStartPosition = 0;
   m_dragLastPosition = 0;
-  m_divisionPen = NULL;
+  m_divisionPen = (wxPen *) NULL;
   m_leftOfSheet = wxGRID_DEFAULT_SHEET_LEFT;
   m_topOfSheet = wxGRID_DEFAULT_SHEET_TOP;
   m_cellHeight = wxGRID_DEFAULT_CELL_HEIGHT;
   m_totalGridWidth = 0;
   m_totalGridHeight = 0;
-  m_colWidths = NULL;
-  m_rowHeights = NULL;
+  m_colWidths = (short *) NULL;
+  m_rowHeights = (short *) NULL;
   m_verticalLabelWidth = wxGRID_DEFAULT_VERTICAL_LABEL_WIDTH;
   m_horizontalLabelHeight = wxGRID_DEFAULT_HORIZONAL_LABEL_HEIGHT;
   m_verticalLabelAlignment = wxCENTRE;
@@ -102,32 +102,32 @@ wxGenericGrid::wxGenericGrid(void)
   m_editCreated = FALSE;
   m_totalRows = 0;
   m_totalCols = 0;
-  m_gridCells = NULL;
-  m_rowLabelCells = NULL;
-  m_colLabelCells = NULL;
-  m_textItem = NULL;
-  m_horizontalSashCursor = NULL;
-  m_verticalSashCursor = NULL;
+  m_gridCells = (wxGridCell ***) NULL;
+  m_rowLabelCells = (wxGridCell **) NULL;
+  m_colLabelCells = (wxGridCell **) NULL;
+  m_textItem = (wxTextCtrl *) NULL;
+  m_horizontalSashCursor = (wxCursor *) NULL;
+  m_verticalSashCursor = (wxCursor *) NULL;
 }
 
 bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
  long style, const wxString& name)
 {
   m_batchCount = 0;
-  m_editingPanel = NULL;
-  m_hScrollBar = NULL;
-  m_vScrollBar = NULL;
-  m_horizontalSashCursor = NULL;
-  m_verticalSashCursor = NULL;
+  m_editingPanel = (wxPanel *) NULL;
+  m_hScrollBar = (wxScrollBar *) NULL;
+  m_vScrollBar = (wxScrollBar *) NULL;
+  m_horizontalSashCursor = (wxCursor *) NULL;
+  m_verticalSashCursor = (wxCursor *) NULL;
   m_cellTextColour = *wxBLACK;
   m_cellBackgroundColour = *wxWHITE;
   m_labelTextColour = *wxBLACK;
 //  m_labelBackgroundColour = *wxLIGHT_GREY;
   m_labelBackgroundColour = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
-  m_labelBackgroundBrush = NULL;
+  m_labelBackgroundBrush = (wxBrush *) NULL;
   m_labelTextFont = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxBOLD);
   m_cellTextFont = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
-  m_textItem = NULL;
+  m_textItem = (wxTextCtrl *) NULL;
   m_currentRectVisible = FALSE;
   m_editable = TRUE;
 #if defined(__WIN95__)
@@ -140,7 +140,7 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
   m_dragStartPosition = 0;
   m_dragLastPosition = 0;
   m_divisionPen = wxThePenList->FindOrCreatePen("LIGHT GREY", 1, wxSOLID);
-  m_doubleBufferingBitmap = NULL;
+  m_doubleBufferingBitmap = (wxBitmap *) NULL;
 
   if (!m_horizontalSashCursor)
   {
@@ -155,8 +155,8 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
   m_cellHeight = wxGRID_DEFAULT_CELL_HEIGHT;
   m_totalGridWidth = 0;
   m_totalGridHeight = 0;
-  m_colWidths = NULL;
-  m_rowHeights = NULL;
+  m_colWidths = (short *) NULL;
+  m_rowHeights = (short *) NULL;
 
   m_verticalLabelWidth = wxGRID_DEFAULT_VERTICAL_LABEL_WIDTH;
   m_horizontalLabelHeight = wxGRID_DEFAULT_HORIZONAL_LABEL_HEIGHT;
@@ -180,10 +180,10 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
 
   m_totalRows = 0;
   m_totalCols = 0;
-  m_gridCells = NULL;
-  m_rowLabelCells = NULL;
-  m_colLabelCells = NULL;
-  m_textItem = NULL;
+  m_gridCells = (wxGridCell ***) NULL;
+  m_rowLabelCells = (wxGridCell **) NULL;
+  m_colLabelCells = (wxGridCell **) NULL;
+  m_textItem = (wxTextCtrl *) NULL;
 
   wxPanel::Create(parent, id, pos, size, style, name);
 
@@ -227,33 +227,33 @@ void wxGenericGrid::ClearGrid(void)
       delete[] m_gridCells[i];
     }
     delete[] m_gridCells;
-    m_gridCells = NULL;
+    m_gridCells = (wxGridCell ***) NULL;
   }
   if (m_colWidths)
     delete[] m_colWidths;
-  m_colWidths = NULL;
+  m_colWidths = (short *) NULL;
   if (m_rowHeights)
     delete[] m_rowHeights;
-  m_rowHeights = NULL;
+  m_rowHeights = (short *) NULL;
 
   if (m_rowLabelCells)
   {
     for (i = 0; i < m_totalRows; i++)
       delete m_rowLabelCells[i];
     delete[] m_rowLabelCells;
-    m_rowLabelCells = NULL;
+    m_rowLabelCells = (wxGridCell **) NULL;
   }
   if (m_colLabelCells)
   {
     for (i = 0; i < m_totalCols; i++)
       delete m_colLabelCells[i];
     delete[] m_colLabelCells;
-    m_colLabelCells = NULL;
+    m_colLabelCells = (wxGridCell **) NULL;
   }
   if (m_doubleBufferingBitmap)
   {
     delete m_doubleBufferingBitmap;
-    m_doubleBufferingBitmap = NULL;
+    m_doubleBufferingBitmap = (wxBitmap *) NULL;
   }
 }
 
@@ -287,7 +287,7 @@ bool wxGenericGrid::CreateGrid(int nRows, int nCols, wxString **cellValues, shor
         m_gridCells[i][j]->SetTextValue(cellValues[i][j]);
       }
       else
-        m_gridCells[i][j] = NULL;
+        m_gridCells[i][j] = (wxGridCell *) NULL;
 
   m_rowLabelCells = new wxGridCell *[nRows];
   for (i = 0; i < nRows; i++)
@@ -381,10 +381,10 @@ void wxGenericGrid::UpdateDimensions(void)
 wxGridCell *wxGenericGrid::GetCell(int row, int col)
 {
   if (!m_gridCells)
-    return NULL;
+    return (wxGridCell *) NULL;
 
   if ((row >= m_totalRows) || (col >= m_totalCols))
-    return NULL;
+    return (wxGridCell *) NULL;
     
   wxGridCell *cell = m_gridCells[row][col];
   if (!cell)
@@ -436,7 +436,7 @@ void wxGenericGrid::OnPaint(wxPaintEvent& WXUNUSED(event))
         // then don't complain, just don't double-buffer
         if (m_doubleBufferingBitmap)
             delete m_doubleBufferingBitmap;
-        m_doubleBufferingBitmap = NULL;
+        m_doubleBufferingBitmap = (wxBitmap *) NULL;
         useDoubleBuffering = FALSE;
     }
   }
@@ -1855,14 +1855,14 @@ wxGridCell *wxGenericGrid::GetLabelCell(int orientation, int pos)
     if (m_colLabelCells && pos < m_totalCols)
       return m_colLabelCells[pos];
     else
-      return NULL;
+      return (wxGridCell *) NULL;
   }
   else
   {
     if (m_rowLabelCells && pos < m_totalRows)
       return m_rowLabelCells[pos];
     else
-      return NULL;
+      return (wxGridCell *) NULL;
   }
 }
 
@@ -2093,7 +2093,7 @@ wxBitmap *wxGenericGrid::GetCellBitmap(int row, int col)
     return cell->GetCellBitmap();
   }
   else
-    return NULL;
+    return (wxBitmap *) NULL;
 }
 
 bool wxGenericGrid::InsertCols(int pos, int n, bool updateLabels)
@@ -2362,9 +2362,9 @@ void wxGenericGrid::SetGridCursor(int row, int col)
  
 wxGridCell::wxGridCell(wxGenericGrid *window)
 {
-  cellBitmap = NULL;
-  font = NULL;
-  backgroundBrush = NULL;
+  cellBitmap = (wxBitmap *) NULL;
+  font = (wxFont *) NULL;
+  backgroundBrush = (wxBrush *) NULL;
   if (window)
     textColour = window->GetCellTextColour();
   else

@@ -97,7 +97,7 @@ public:
 
       default:
         wxFAIL_MSG("bad file type in wxTextFile::GetEOL.");
-        return NULL;
+        return (const char *) NULL;
     }
   }
 

@@ -53,12 +53,12 @@
 
 #define SHIFT (8*(sizeof(short int)-sizeof(char)))
 
-wxColour *g_systemBtnFaceColour      = NULL;
-wxColour *g_systemBtnShadowColour    = NULL;
-wxColour *g_systemBtnHighlightColour = NULL;
-wxColour *g_systemHighlightColour    = NULL;
+wxColour *g_systemBtnFaceColour      = (wxColour *) NULL;
+wxColour *g_systemBtnShadowColour    = (wxColour *) NULL;
+wxColour *g_systemBtnHighlightColour = (wxColour *) NULL;
+wxColour *g_systemHighlightColour    = (wxColour *) NULL;
 
-wxFont *g_systemFont = NULL;
+wxFont *g_systemFont = (wxFont *) NULL;
 
 void wxSystemSettings::Done() {
   wxDELETE(g_systemBtnFaceColour);

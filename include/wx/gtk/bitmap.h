@@ -110,7 +110,7 @@ class wxBitmap: public wxObject
 
     void Resize( int height, int width );
 
-    bool SaveFile( const wxString &name, int type, wxPalette *palette = NULL );
+    bool SaveFile( const wxString &name, int type, wxPalette *palette = (wxPalette *) NULL );
     bool LoadFile( const wxString &name, int type = wxBITMAP_TYPE_XPM);
 
     wxPalette *GetPalette() const;

@@ -83,9 +83,9 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
   m_oldPos = 0.0;
 
   if (style & wxSL_VERTICAL == wxSL_VERTICAL)
-    m_widget = gtk_hscale_new( NULL );
+    m_widget = gtk_hscale_new( (GtkAdjustment *) NULL );
   else
-    m_widget = gtk_vscale_new( NULL );
+    m_widget = gtk_vscale_new( (GtkAdjustment *) NULL );
     
   m_adjust = gtk_range_get_adjustment( GTK_RANGE(m_widget) );
   

@@ -56,7 +56,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(void) :
-  wxFrame( NULL, -1, "wxConvert", wxPoint(20,20), wxSize(400,160) )
+  wxFrame( (wxFrame *) NULL, -1, (char *) "wxConvert", wxPoint(20,20), wxSize(400,160) )
 {
   CreateStatusBar( 1 );
   

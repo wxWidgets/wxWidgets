@@ -69,8 +69,8 @@ END_EVENT_TABLE()
 
 wxMDIParentFrame::wxMDIParentFrame(void)
 {
-  m_clientWindow = NULL;
-  m_currentChild = NULL;
+  m_clientWindow = (wxMDIClientWindow *) NULL;
+  m_currentChild = (wxMDIChildFrame *) NULL;
   m_parentFrameActive = TRUE;
 }
 
@@ -79,8 +79,8 @@ wxMDIParentFrame::wxMDIParentFrame( wxWindow *parent,
       const wxPoint& pos, const wxSize& size,
       long style, const wxString& name )
 {
-  m_clientWindow = NULL;
-  m_currentChild = NULL;
+  m_clientWindow = (wxMDIClientWindow *) NULL;
+  m_currentChild = (wxMDIChildFrame *) NULL;
   m_parentFrameActive = TRUE;
   Create( parent, id, title, pos, size, style, name );
 }
@@ -181,8 +181,8 @@ END_EVENT_TABLE()
 
 wxMDIChildFrame::wxMDIChildFrame(void)
 {
-  m_menuBar = NULL;
-  m_page = NULL;
+  m_menuBar = (wxMenuBar *) NULL;
+  m_page = (GtkNotebookPage *) NULL;
 }
 
 wxMDIChildFrame::wxMDIChildFrame( wxMDIParentFrame *parent,
@@ -190,8 +190,8 @@ wxMDIChildFrame::wxMDIChildFrame( wxMDIParentFrame *parent,
       const wxPoint& WXUNUSED(pos), const wxSize& size,
       long style, const wxString& name )
 {
-  m_menuBar = NULL;
-  m_page = NULL;
+  m_menuBar = (wxMenuBar *) NULL;
+  m_page = (GtkNotebookPage *) NULL;
   Create( parent, id, title, wxDefaultPosition, size, style, name );
 }
 
@@ -202,8 +202,8 @@ wxMDIChildFrame::~wxMDIChildFrame(void)
     wxMDIParentFrame *mdi_frame = (wxMDIParentFrame*)m_parent->m_parent;
     if (mdi_frame->m_currentChild == this)
     {
-      mdi_frame->SetMDIMenuBar( NULL );
-      mdi_frame->m_currentChild = NULL;
+      mdi_frame->SetMDIMenuBar( (wxMenuBar *) NULL );
+      mdi_frame->m_currentChild = (wxMDIChildFrame *) NULL;
     }
     delete m_menuBar;
   }
@@ -348,7 +348,7 @@ void wxMDIClientWindow::AddChild( wxWindow *child )
 
   gtk_notebook_set_page( GTK_NOTEBOOK(m_widget), m_children.Number()-1 );
   
-  gtk_page_change_callback( NULL, mdi_child->m_page, 0, this );
+  gtk_page_change_callback( (GtkNotebook *) NULL, mdi_child->m_page, 0, this );
 }
 
 

@@ -23,11 +23,11 @@
 #include <X11/Xutil.h>
 #include <X11/Xresource.h>
 
-wxResourceCache *wxTheResourceCache = NULL;
+wxResourceCache *wxTheResourceCache = (wxResourceCache *) NULL;
 XrmDatabase wxResourceDatabase;
 
 // Useful buffer, initialized in wxCommonInit
-char *wxBuffer = NULL;
+char *wxBuffer = (char *) NULL;
 
 // Windows List
 wxList wxTopLevelWindows;
@@ -37,7 +37,7 @@ wxList wxPendingDelete;
 
 // Current cursor, in order to hang on to
 // cursor handle when setting the cursor globally
-wxCursor *g_globalCursor = NULL;
+wxCursor *g_globalCursor = (wxCursor *) NULL;
 
 // Don't allow event propagation during drag
 bool g_blockEventsOnDrag = FALSE;
@@ -49,18 +49,18 @@ char **wx_msg_str = (char**)NULL;
 // Currently this can be Win95, Windows, Win32s, WinNT.
 // For some systems, you can't tell until run-time what services you
 // have. See wxGetOsVersion, which uses this string if present.
-char *wxOsVersion = NULL;
+char *wxOsVersion = (char *) NULL;
 
 // For printing several pages
 int wxPageNumber;
-wxPrintPaperDatabase* wxThePrintPaperDatabase = NULL;
+wxPrintPaperDatabase* wxThePrintPaperDatabase = (wxPrintPaperDatabase *) NULL;
 
 // GDI Object Lists
-wxBrushList      *wxTheBrushList = NULL;
-wxPenList        *wxThePenList = NULL;
-wxFontList       *wxTheFontList = NULL;
-wxColourDatabase *wxTheColourDatabase = NULL;
-wxBitmapList   *wxTheBitmapList = NULL;
+wxBrushList      *wxTheBrushList = (wxBrushList *) NULL;
+wxPenList        *wxThePenList = (wxPenList *) NULL;
+wxFontList       *wxTheFontList = (wxFontList *) NULL;
+wxColourDatabase *wxTheColourDatabase = (wxColourDatabase *) NULL;
+wxBitmapList   *wxTheBitmapList = (wxBitmapList *) NULL;
   
 
 // X only font names
@@ -103,9 +103,9 @@ wxColour *wxGREEN;
 wxColour *wxCYAN;
 wxColour *wxLIGHT_GREY;
 
-wxCursor *wxSTANDARD_CURSOR = NULL;
-wxCursor *wxHOURGLASS_CURSOR = NULL;
-wxCursor *wxCROSS_CURSOR = NULL;
+wxCursor *wxSTANDARD_CURSOR = (wxCursor *) NULL;
+wxCursor *wxHOURGLASS_CURSOR = (wxCursor *) NULL;
+wxCursor *wxCROSS_CURSOR = (wxCursor *) NULL;
 
 // 'Null' objects
 wxBitmap wxNullBitmap;
@@ -170,8 +170,8 @@ const char *wxUserResourceStr = "TEXT";
  */
 
 // Hand-coded IMPLEMENT... macro for wxObject (define static data)
-wxClassInfo wxObject::classwxObject("wxObject", NULL, NULL, sizeof(wxObject), NULL);
-wxClassInfo *wxClassInfo::first = NULL;
+wxClassInfo wxObject::classwxObject((char *) "wxObject", (char *) NULL, (char *) NULL, (int ) sizeof(wxObject), (wxObjectConstructorFn) NULL);
+wxClassInfo *wxClassInfo::first = (wxClassInfo *) NULL;
 
 #include "wx/button.h"
 #include "wx/bmpbuttn.h"
@@ -550,7 +550,14 @@ const wxEventTable *wxEvtHandler::GetEventTable() const { return &wxEvtHandler::
 const wxEventTable wxEvtHandler::sm_eventTable =
   { NULL, &wxEvtHandler::sm_eventTableEntries[0] };
 
-const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] = { { 0, 0, 0, NULL } };
+const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] = { { 0, 0, 0, 
+#ifdef __SGI_CC__
+	0L
+#else
+	NULL 
+#endif
+	} 
+};
 
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
   EVT_SIZE(wxFrame::OnSize)

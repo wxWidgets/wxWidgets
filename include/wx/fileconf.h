@@ -166,8 +166,8 @@ public:
   {
   public:
     // ctor
-    LineList(const wxString& str, LineList *pNext = NULL) : m_strLine(str)
-      { SetNext(pNext); SetPrev(NULL); }
+    LineList(const wxString& str, LineList *pNext = (LineList *) NULL) : m_strLine(str)
+      { SetNext(pNext); SetPrev((LineList *) NULL); }
 
     //
     LineList *Next() const              { return m_pNext;  }

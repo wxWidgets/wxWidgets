@@ -172,14 +172,14 @@ void
 StringToFloat (char *s, float *number)
 {
   if (s && *s && number)
-    *number = (float) strtod (s, NULL);
+    *number = (float) strtod (s, (char **) NULL);
 }
 
 void 
 StringToDouble (char *s, double *number)
 {
   if (s && *s && number)
-    *number = strtod (s, NULL);
+    *number = strtod (s, (char **) NULL);
 }
 
 char *
@@ -205,14 +205,14 @@ void
 StringToInt (char *s, int *number)
 {
   if (s && *s && number)
-    *number = (int) strtol (s, NULL, 10);
+    *number = (int) strtol (s, (char **) NULL, 10);
 }
 
 void 
 StringToLong (char *s, long *number)
 {
   if (s && *s && number)
-    *number = strtol (s, NULL, 10);
+    *number = strtol (s, (char **) NULL, 10);
 }
 
 char *
@@ -309,7 +309,7 @@ StringMatch (char *str1, char *str2, bool subString, bool exact)
 // [volatile]
 wxString wxNow( void )
 {
-  time_t now = time(NULL);
+  time_t now = time((time_t *) NULL);
   char *date = ctime(&now); 
   date[24] = '\0';
   return wxString(date);
@@ -344,7 +344,7 @@ wxGetEmailAddress (char *address, int maxSize)
 char *wxStripMenuCodes (char *in, char *out)
 {
   if (!in)
-    return NULL;
+    return (char *) NULL;
     
   if (!out)
     out = copystring(in);
@@ -408,7 +408,7 @@ wxFindWindowByLabel (const wxString& title, wxWindow * parent)
 	}			// for()
 
     }
-  return NULL;
+  return (wxWindow *) NULL;
 }
 
 // Recursive
@@ -433,7 +433,7 @@ wxFindWindowByLabel1 (const wxString& title, wxWindow * parent)
 
     }
 
-  return NULL;			// Not found
+  return (wxWindow *) NULL;			// Not found
 
 }
 
@@ -489,7 +489,7 @@ wxFindWindowByName1 (const wxString& title, wxWindow * parent)
 
     }
 
-  return NULL;			// Not found
+  return (wxWindow *) NULL;			// Not found
 
 }
 

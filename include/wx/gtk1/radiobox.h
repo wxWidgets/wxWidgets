@@ -48,7 +48,7 @@ class wxRadioBox: public wxControl
     wxRadioBox(void);
     inline wxRadioBox( wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-             int n = 0, const wxString choices[] = NULL,
+             int n = 0, const wxString choices[] = (const wxString *) NULL,
              int majorDim = 0, long style = wxRA_HORIZONTAL,
              const wxValidator& val = wxDefaultValidator, 
 	     const wxString& name = wxRadioBoxNameStr )
@@ -57,7 +57,7 @@ class wxRadioBox: public wxControl
     }
     bool Create( wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-             int n = 0, const wxString choices[] = NULL,
+             int n = 0, const wxString choices[] = (const wxString *) NULL,
              int majorDim = 0, long style = wxRA_HORIZONTAL,
              const wxValidator& val = wxDefaultValidator, 
 	     const wxString& name = wxRadioBoxNameStr );

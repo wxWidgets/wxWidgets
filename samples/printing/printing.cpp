@@ -39,7 +39,7 @@
 #include "printing.h"
 
 // Declare a frame
-MyFrame   *frame = NULL;
+MyFrame   *frame = (MyFrame *) NULL;
 int orientation = wxPORTRAIT;
 
 // Main proc
@@ -75,7 +75,7 @@ bool MyApp::OnInit(void)
   labelFont = new wxFont(12, wxROMAN, wxITALIC, wxBOLD);
 
   // Create the main frame window
-  frame = new MyFrame(NULL, "wxWindows Printing Demo", wxPoint(0, 0), wxSize(400, 400));
+  frame = new MyFrame((wxFrame *) NULL, (char *) "wxWindows Printing Demo", wxPoint(0, 0), wxSize(400, 400));
 
   // Give it a status line
   frame->CreateStatusBar(2);
@@ -156,7 +156,7 @@ END_EVENT_TABLE()
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size):
   wxFrame(frame, -1, title, pos, size)
 {
-  canvas = NULL;
+  canvas = (MyCanvas *) NULL;
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
@@ -531,7 +531,7 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
 // Writes a header on a page. Margin units are in millimetres.
 bool WritePageHeader(wxPrintout *printout, wxDC *dc, char *text, float mmToLogical)
 {
-  static wxFont *headerFont = NULL;
+  static wxFont *headerFont = (wxFont *) NULL;
   if (!headerFont)
   {
     headerFont = wxTheFontList->FindOrCreateFont(16, wxSWISS, wxNORMAL, wxBOLD);

@@ -49,7 +49,7 @@ void wxDropTarget::UnregisterWidget( GtkWidget *widget )
 {
   if (!widget) return;
   
-  gtk_widget_dnd_drop_set( widget, FALSE, NULL, 0, FALSE );
+  gtk_widget_dnd_drop_set( widget, FALSE, (gchar **) NULL, 0, FALSE );
 }
 
 void wxDropTarget::RegisterWidget( GtkWidget *widget )
@@ -169,7 +169,7 @@ wxDropSource::wxDropSource( wxWindow *win )
   m_widget = win->m_widget;
   if (win->m_wxwindow) m_widget = win->m_wxwindow;
   
-  m_data = NULL;
+  m_data = (wxDataObject *) NULL;
   m_retValue = Cancel;
 
   m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
@@ -205,13 +205,13 @@ wxDropSource::~wxDropSource(void)
    
 wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 {
-  if (gdk_dnd.dnd_grabbed) return None;
-  if (gdk_dnd.drag_really) return None;
+  if (gdk_dnd.dnd_grabbed) return (wxDropSource::DragResult) None;
+  if (gdk_dnd.drag_really) return (wxDropSource::DragResult) None;
   
   wxASSERT_MSG( m_data, "wxDragSource: no data" );
   
-  if (!m_data) return None;
-  if (m_data->GetDataSize() == 0) return None;
+  if (!m_data) return (wxDropSource::DragResult) None;
+  if (m_data->GetDataSize() == 0) return (wxDropSource::DragResult) None;
   
   GdkWindowPrivate *wp = (GdkWindowPrivate*) m_widget->window;
   
@@ -226,7 +226,7 @@ wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
   if (gdk_dnd.drag_startwindows)
   {
     g_free( gdk_dnd.drag_startwindows );
-    gdk_dnd.drag_startwindows = NULL;
+    gdk_dnd.drag_startwindows = (GdkWindow **) NULL;
   }
   gdk_dnd.drag_numwindows = gdk_dnd.drag_really = 0;
   
@@ -255,7 +255,7 @@ wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
   
   int x = 0;
   int y = 0;
-  gdk_window_get_pointer( m_widget->window, &x, &y, NULL );
+  gdk_window_get_pointer( m_widget->window, &x, &y, (GdkModifierType *) NULL );
   
   gdk_dnd_display_drag_cursor( x, y, FALSE, TRUE );
   
@@ -300,7 +300,7 @@ void wxDropSource::UnregisterWindow(void)
 {
   if (!m_widget) return;
   
-  gtk_widget_dnd_drag_set( m_widget, FALSE, NULL, 0 );
+  gtk_widget_dnd_drag_set( m_widget, FALSE, (gchar **) NULL, 0 );
   
   gtk_signal_disconnect_by_data( GTK_OBJECT(m_widget), (gpointer)this );
 }

@@ -28,8 +28,8 @@
 #include "layout.h"
 
 // Declare two frames
-MyFrame   *frame = NULL;
-wxMenuBar *menu_bar = NULL;
+MyFrame   *frame = (MyFrame *) NULL;
+wxMenuBar *menu_bar = (wxMenuBar *) NULL;
 
 IMPLEMENT_APP(MyApp)
 
@@ -40,7 +40,7 @@ MyApp::MyApp()
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  frame = new MyFrame(NULL, "wxWindows Layout Demo", 0, 0, 550, 500);
+  frame = new MyFrame((MyFrame *) NULL, (char *) "wxWindows Layout Demo", 0, 0, 550, 500);
 
   frame->SetAutoLayout(TRUE);
 
@@ -156,9 +156,9 @@ bool MyApp::OnInit(void)
 MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
   wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
-  panel = NULL;
-  text_window = NULL;
-  canvas = NULL;
+  panel = (wxPanel *) NULL;
+  text_window = (MyTextWindow *) NULL;
+  canvas = (MyWindow *) NULL;
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -171,7 +171,7 @@ END_EVENT_TABLE()
 
 void MyFrame::LoadFile(wxCommandEvent& WXUNUSED(event) )
 {
-      char *s = wxFileSelector("Load text file", NULL, NULL, NULL, "*.txt");
+      char *s = wxFileSelector("Load text file", (const char *) NULL, (const char *) NULL, (const char *) NULL, "*.txt");
       if (s)
       {
 #ifdef __WXMSW__
@@ -187,7 +187,7 @@ void MyFrame::Quit(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::TestSizers(wxCommandEvent& WXUNUSED(event) )
 {
-  SizerFrame *newFrame = new SizerFrame(NULL, "Sizer Test Frame", 50, 50, 500, 500);
+  SizerFrame *newFrame = new SizerFrame((MyFrame *) NULL, (char *) "Sizer Test Frame", 50, 50, 500, 500);
   newFrame->Show(TRUE);
 }
 

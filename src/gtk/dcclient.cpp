@@ -28,7 +28,7 @@
 #define  num_hatches 6
 
 static GdkPixmap  *hatches[num_hatches];
-static GdkPixmap **hatch_bitmap = NULL;
+static GdkPixmap **hatch_bitmap = (GdkPixmap **) NULL;
 
 //-----------------------------------------------------------------------------
 // constants
@@ -87,20 +87,20 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC,wxDC)
 
 wxPaintDC::wxPaintDC(void)
 {
-  m_penGC = NULL;
-  m_brushGC = NULL;
-  m_textGC = NULL;
-  m_bgGC = NULL;
-  m_cmap = NULL;
+  m_penGC = (GdkGC *) NULL;
+  m_brushGC = (GdkGC *) NULL;
+  m_textGC = (GdkGC *) NULL;
+  m_bgGC = (GdkGC *) NULL;
+  m_cmap = (GdkColormap *) NULL;
 }
 
 wxPaintDC::wxPaintDC( wxWindow *window )
 {
-  m_penGC = NULL;
-  m_brushGC = NULL;
-  m_textGC = NULL;
-  m_bgGC = NULL;
-  m_cmap = NULL;
+  m_penGC = (GdkGC *) NULL;
+  m_brushGC = (GdkGC *) NULL;
+  m_textGC = (GdkGC *) NULL;
+  m_bgGC = (GdkGC *) NULL;
+  m_cmap = (GdkColormap *) NULL;
   
   if (!window) return;
   GtkWidget *widget = window->m_wxwindow;
@@ -454,7 +454,7 @@ void wxPaintDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
   int xx = XLOG2DEV(x);
   int yy = YLOG2DEV(y);
   
-  GdkBitmap *mask = NULL;
+  GdkBitmap *mask = (GdkBitmap *) NULL;
   if (icon.GetMask()) mask = icon.GetMask()->GetBitmap();
     
   if (useMask && mask) 
@@ -468,7 +468,7 @@ void wxPaintDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
   
   if (useMask && mask) 
   {
-    gdk_gc_set_clip_mask( m_penGC, NULL );
+    gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
     gdk_gc_set_clip_origin( m_penGC, 0, 0 );
   }
 }
@@ -821,10 +821,10 @@ void wxPaintDC::DestroyClippingRegion(void)
 {
   wxDC::DestroyClippingRegion();
   
-  gdk_gc_set_clip_rectangle( m_penGC, NULL );
-  gdk_gc_set_clip_rectangle( m_brushGC, NULL );
-  gdk_gc_set_clip_rectangle( m_textGC, NULL );
-  gdk_gc_set_clip_rectangle( m_bgGC, NULL );
+  gdk_gc_set_clip_rectangle( m_penGC, (GdkRectangle *) NULL );
+  gdk_gc_set_clip_rectangle( m_brushGC, (GdkRectangle *) NULL );
+  gdk_gc_set_clip_rectangle( m_textGC, (GdkRectangle *) NULL );
+  gdk_gc_set_clip_rectangle( m_bgGC, (GdkRectangle *) NULL );
 }
 
 void wxPaintDC::SetUpDC(void)
@@ -850,12 +850,12 @@ void wxPaintDC::SetUpDC(void)
   if (!hatch_bitmap) 
   {
     hatch_bitmap    = hatches;
-    hatch_bitmap[0] = gdk_bitmap_create_from_data( NULL, bdiag_bits, bdiag_width, bdiag_height );
-    hatch_bitmap[1] = gdk_bitmap_create_from_data( NULL, cdiag_bits, cdiag_width, cdiag_height );
-    hatch_bitmap[2] = gdk_bitmap_create_from_data( NULL, fdiag_bits, fdiag_width, fdiag_height );
-    hatch_bitmap[3] = gdk_bitmap_create_from_data( NULL, cross_bits, cross_width, cross_height );
-    hatch_bitmap[4] = gdk_bitmap_create_from_data( NULL, horiz_bits, horiz_width, horiz_height );
-    hatch_bitmap[5] = gdk_bitmap_create_from_data( NULL, verti_bits, verti_width, verti_height );
+    hatch_bitmap[0] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, bdiag_bits, bdiag_width, bdiag_height );
+    hatch_bitmap[1] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, cdiag_bits, cdiag_width, cdiag_height );
+    hatch_bitmap[2] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, fdiag_bits, fdiag_width, fdiag_height );
+    hatch_bitmap[3] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, cross_bits, cross_width, cross_height );
+    hatch_bitmap[4] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, horiz_bits, horiz_width, horiz_height );
+    hatch_bitmap[5] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, verti_bits, verti_width, verti_height );
   }
 }
 

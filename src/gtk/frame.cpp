@@ -23,8 +23,8 @@
 #include "wx/dcclient.h"
 #include "wx/gtk/win_gtk.h"
 
-const wxMENU_HEIGHT    = 28;
-const wxSTATUS_HEIGHT  = 25;
+const int wxMENU_HEIGHT    = 28;
+const int wxSTATUS_HEIGHT  = 25;
 
 extern wxList wxTopLevelWindows;
 extern wxList wxPendingDelete;
@@ -92,13 +92,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
 
 wxFrame::wxFrame()
 {
-  m_frameMenuBar = NULL;
-  m_frameStatusBar = NULL;
-  m_frameToolBar = NULL;
+  m_frameMenuBar = (wxMenuBar *) NULL;
+  m_frameStatusBar = (wxStatusBar *) NULL;
+  m_frameToolBar = (wxToolBar *) NULL;
   m_sizeSet = FALSE;
   m_addPrivateChild = FALSE;
-  m_wxwindow = NULL;
-  m_mainWindow = NULL;
+  m_wxwindow = (GtkWidget *) NULL;
+  m_mainWindow = (GtkWidget *) NULL;
   wxTopLevelWindows.Insert( this );
 }
 
@@ -106,13 +106,13 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-  m_frameMenuBar = NULL;
-  m_frameStatusBar = NULL;
-  m_frameToolBar = NULL;
+  m_frameMenuBar = (wxMenuBar *) NULL;
+  m_frameStatusBar = (wxStatusBar *) NULL;
+  m_frameToolBar = (wxToolBar *) NULL;
   m_sizeSet = FALSE;
   m_addPrivateChild = FALSE;
-  m_wxwindow = NULL;
-  m_mainWindow = NULL;
+  m_wxwindow = (GtkWidget *) NULL;
+  m_mainWindow = (GtkWidget *) NULL;
   Create( parent, id, title, pos, size, style, name );
   wxTopLevelWindows.Insert( this );
 }
@@ -235,7 +235,7 @@ void wxFrame::GetClientSize( int *width, int *height ) const
     if (m_frameToolBar)
     {
       int y = 0;
-      m_frameToolBar->GetSize( NULL, &y );
+      m_frameToolBar->GetSize( (int *) NULL, &y );
       (*height) -= y;
     }
   }
@@ -249,7 +249,7 @@ void wxFrame::SetClientSize( int const width, int const height )
   if (m_frameToolBar)
   {
     int y = 0;
-    m_frameToolBar->GetSize( NULL, &y );
+    m_frameToolBar->GetSize( (int *) NULL, &y );
     h += y;
   }
   wxWindow::SetClientSize( width, h );
@@ -296,7 +296,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
   }
 
   int toolbar_height = 0;
-  if (m_frameToolBar) m_frameToolBar->GetSize( NULL, &toolbar_height );
+  if (m_frameToolBar) m_frameToolBar->GetSize( (int *) NULL, &toolbar_height );
   
   main_y += toolbar_height;
   main_height -= toolbar_height;
@@ -338,7 +338,7 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
       return;
       
     // do we have exactly one child?
-    wxWindow *child = NULL;
+    wxWindow *child = (wxWindow *) NULL;
     for(wxNode *node = GetChildren()->First(); node; node = node->Next())
     {
       wxWindow *win = (wxWindow *)node->Data();
@@ -470,7 +470,7 @@ wxStatusBar* wxFrame::CreateStatusBar( int number, long style, wxWindowID id, co
 
 wxStatusBar *wxFrame::OnCreateStatusBar( int number, long style, wxWindowID id, const wxString& name )
 {
-  wxStatusBar *statusBar = NULL;
+  wxStatusBar *statusBar = (wxStatusBar *) NULL;
     
   statusBar = new wxStatusBar(this, id, wxPoint(0, 0), wxSize(100, 20), style, name);
     
@@ -536,9 +536,9 @@ void wxFrame::SetIcon( const wxIcon &icon )
   if (!icon.Ok()) return;
   
   wxMask *mask = icon.GetMask();
-  GdkBitmap *bm = NULL;
+  GdkBitmap *bm = (GdkBitmap *) NULL;
   if (mask) bm = mask->GetBitmap();
   
-  gdk_window_set_icon( m_widget->window, NULL, icon.GetPixmap(), bm );
+  gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
 }
 

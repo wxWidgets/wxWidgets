@@ -26,8 +26,8 @@
 
 #include "pngdemo.h"
 
-MyFrame   *frame = NULL;
-wxBitmap  *g_TestBitmap = NULL;
+MyFrame   *frame = (MyFrame *) NULL;
+wxBitmap  *g_TestBitmap = (wxBitmap *) NULL;
 
 IMPLEMENT_APP(MyApp)
 
@@ -42,7 +42,7 @@ bool MyApp::OnInit(void)
 #endif
 
   // Create the main frame window
-  frame = new MyFrame(NULL, "wxPNGBitmap Demo", wxPoint(0, 0), wxSize(300, 300));
+  frame = new MyFrame((wxFrame *) NULL, "wxPNGBitmap Demo", wxPoint(0, 0), wxSize(300, 300));
 
   // Give it a status line
   frame->CreateStatusBar(2);
@@ -86,7 +86,7 @@ END_EVENT_TABLE()
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size):
   wxFrame(frame, -1, title, pos, size)
 {
-  canvas = NULL;
+  canvas = (MyCanvas *) NULL;
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -103,7 +103,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnLoadFile(wxCommandEvent& WXUNUSED(event))
 {
 	// Show file selector.
-	char *f = wxFileSelector("Open Image", NULL, NULL,"png",
+	char *f = wxFileSelector("Open Image", (const char *) NULL, (const char *) NULL,"png",
 		  "PNG files (*.png)|*.png");
 
 	if (!f)
@@ -115,7 +115,7 @@ void MyFrame::OnLoadFile(wxCommandEvent& WXUNUSED(event))
     if (!g_TestBitmap->Ok())
     {
         delete g_TestBitmap;
-        g_TestBitmap = NULL;
+        g_TestBitmap = (wxBitmap *) NULL;
     }
 
     canvas->Refresh();

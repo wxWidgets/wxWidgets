@@ -98,9 +98,9 @@ void WXDLLEXPORT wxDecToHex(int dec, char *buf);
 
 // Execute another program. Returns 0 if there was an error, a PID otherwise.
 long WXDLLEXPORT wxExecute(char **argv, bool Async = FALSE,
-                           wxProcess *process = NULL);
+                           wxProcess *process = (wxProcess *) NULL);
 long WXDLLEXPORT wxExecute(const wxString& command, bool Async = FALSE,
-                           wxProcess *process = NULL);
+                           wxProcess *process = (wxProcess *) NULL);
 
 #define wxSIGTERM 1
 
@@ -139,15 +139,15 @@ bool WXDLLEXPORT wxGetUserName(char *buf, int maxSize);
 /*
  * Strip out any menu codes
  */
-char* WXDLLEXPORT wxStripMenuCodes(char *in, char *out = NULL);
+char* WXDLLEXPORT wxStripMenuCodes(char *in, char *out = (char *) NULL);
 
 // Find the window/widget with the given title or label.
 // Pass a parent to begin the search from, or NULL to look through
 // all windows.
-wxWindow* WXDLLEXPORT wxFindWindowByLabel(const wxString& title, wxWindow *parent = NULL);
+wxWindow* WXDLLEXPORT wxFindWindowByLabel(const wxString& title, wxWindow *parent = (wxWindow *) NULL);
 
 // Find window by name, and if that fails, by label.
-wxWindow* WXDLLEXPORT wxFindWindowByName(const wxString& name, wxWindow *parent = NULL);
+wxWindow* WXDLLEXPORT wxFindWindowByName(const wxString& name, wxWindow *parent = (wxWindow *) NULL);
 
 // Returns menu item id or -1 if none.
 int WXDLLEXPORT wxFindMenuItemId(wxFrame *frame, const wxString& menuString, const wxString& itemString);
@@ -213,7 +213,7 @@ void WXDLLEXPORT wxDebugMsg(const char *fmt ...) ;
 void WXDLLEXPORT wxBell(void) ;
   
 // Get OS version
-int WXDLLEXPORT wxGetOsVersion(int *majorVsn=NULL,int *minorVsn=NULL) ;
+int WXDLLEXPORT wxGetOsVersion(int *majorVsn= (int *) NULL,int *minorVsn= (int *) NULL) ;
 
 // Set the cursor to the busy cursor for all windows
 class WXDLLEXPORT wxCursor;

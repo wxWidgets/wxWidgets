@@ -114,7 +114,7 @@ int wxChoice::FindString( const wxString &string ) const
   while (child)
   {
     GtkBin *bin = GTK_BIN( child->data );
-    GtkLabel *label = NULL;
+    GtkLabel *label = (GtkLabel *) NULL;
     if (bin->child) label = GTK_LABEL(bin->child);
     
     wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
@@ -163,7 +163,7 @@ wxString wxChoice::GetString( int n ) const
     GtkBin *bin = GTK_BIN( child->data );
     if (count == n)
     {
-      GtkLabel *label = NULL;
+      GtkLabel *label = (GtkLabel *) NULL;
       if (bin->child) label = GTK_LABEL(bin->child);
       
       wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
@@ -211,7 +211,7 @@ void wxChoice::SetSelection( int n )
   int tmp = n;
   gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );
   
-  gtk_choice_clicked_callback( NULL, this );
+  gtk_choice_clicked_callback( (GtkWidget *) NULL, this );
 }
 
 void wxChoice::SetStringSelection( const wxString &string )

@@ -221,14 +221,14 @@ public:
                 wxColour const *bg);
    void SetFont(int family=-1, int size = -1, int style=-1,
                 int weight=-1, int underline = -1,
-                char const *fg = NULL,
-                char const *bg = NULL);
+                char const *fg = (const char *) NULL,
+                char const *bg = (const char *) NULL);
    inline void SetFontFamily(int family) { SetFont(family); }
    inline void SetFontSize(int size) { SetFont(-1,size); }
    inline void SetFontStyle(int style) { SetFont(-1,-1,style); }
    inline void SetFontWeight(int weight) { SetFont(-1,-1,-1,weight); }
    inline void SetFontUnderline(bool ul) { SetFont(-1,-1,-1,-1,(int)ul); }
-   inline void SetFontColour(char const *fg, char const *bg = NULL) { SetFont(-1,-1,-1,-1,-1,fg,bg); }
+   inline void SetFontColour(char const *fg, char const *bg = (const char *) NULL) { SetFont(-1,-1,-1,-1,-1,fg,bg); }
       
    
    /** Draw the list on a given DC.
@@ -275,7 +275,7 @@ public:
    /// return a pointer to the default settings:
    wxLayoutObjectCmd const *GetDefaults(void) const { return m_DefaultSetting ; }
 
-   wxLayoutObjectList::iterator FindCurrentObject(CoordType *offset = NULL);
+   wxLayoutObjectList::iterator FindCurrentObject(CoordType *offset = (CoordType *) NULL);
    // get the length of the line with the object pointed to by i, offs 
    // only used to decide whether we are before or after linebreak
    CoordType GetLineLength(wxLayoutObjectList::iterator i,
@@ -316,7 +316,7 @@ protected:
    bool      m_Editable;
    /// find the object to the cursor position and returns the offset
    /// in there
-   wxLayoutObjectList::iterator FindObjectCursor(wxPoint *cpos, CoordType *offset = NULL);
+   wxLayoutObjectList::iterator FindObjectCursor(wxPoint *cpos, CoordType *offset = (CoordType *) NULL);
    
 };
 

@@ -38,7 +38,7 @@
 
 #include "mdi.h"
 
-MyFrame *frame = NULL;
+MyFrame *frame = (MyFrame *) NULL;
 wxList my_children;
 
 IMPLEMENT_APP(MyApp)
@@ -54,7 +54,7 @@ bool MyApp::OnInit(void)
 {
   // Create the main frame window
 
-  frame = new MyFrame(NULL, -1, "MDI Demo", wxPoint(0, 0), wxSize(500, 400),
+  frame = new MyFrame((wxFrame *) NULL, -1, (char *) "MDI Demo", wxPoint(0, 0), wxSize(500, 400),
    wxDEFAULT_FRAME | wxHSCROLL | wxVSCROLL);
 
   // Give it an icon (this is ignored in MDI mode: uses resources)
@@ -274,7 +274,7 @@ MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint&
 const long style):
   wxMDIChildFrame(parent, -1, title, pos, size, style)
 {
-  canvas = NULL;
+  canvas = (MyCanvas *) NULL;
   my_children.Append(this);
 }
 
@@ -330,24 +330,24 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
 #endif
   int currentX = 5;
 
-  toolBar->AddTool(0, *(bitmaps[0]), wxNullBitmap, FALSE, currentX, -1, NULL, "New file");
+  toolBar->AddTool(0, *(bitmaps[0]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "New file");
   currentX += width + 5;
-  toolBar->AddTool(1, *bitmaps[1], wxNullBitmap, FALSE, currentX, -1, NULL, "Open file");
+  toolBar->AddTool(1, *bitmaps[1], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Open file");
   currentX += width + 5;
-  toolBar->AddTool(2, *bitmaps[2], wxNullBitmap, FALSE, currentX, -1, NULL, "Save file");
-  currentX += width + 5;
-  toolBar->AddSeparator();
-  toolBar->AddTool(3, *bitmaps[3], wxNullBitmap, FALSE, currentX, -1, NULL, "Copy");
-  currentX += width + 5;
-  toolBar->AddTool(4, *bitmaps[4], wxNullBitmap, FALSE, currentX, -1, NULL, "Cut");
-  currentX += width + 5;
-  toolBar->AddTool(5, *bitmaps[5], wxNullBitmap, FALSE, currentX, -1, NULL, "Paste");
+  toolBar->AddTool(2, *bitmaps[2], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Save file");
   currentX += width + 5;
   toolBar->AddSeparator();
-  toolBar->AddTool(6, *bitmaps[6], wxNullBitmap, FALSE, currentX, -1, NULL, "Print");
+  toolBar->AddTool(3, *bitmaps[3], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Copy");
+  currentX += width + 5;
+  toolBar->AddTool(4, *bitmaps[4], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Cut");
+  currentX += width + 5;
+  toolBar->AddTool(5, *bitmaps[5], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Paste");
   currentX += width + 5;
   toolBar->AddSeparator();
-  toolBar->AddTool(7, *bitmaps[7], wxNullBitmap, TRUE, currentX, -1, NULL, "Help");
+  toolBar->AddTool(6, *bitmaps[6], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Print");
+  currentX += width + 5;
+  toolBar->AddSeparator();
+  toolBar->AddTool(7, *bitmaps[7], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Help");
 
   toolBar->Realize();
 

@@ -40,7 +40,7 @@
 
 IMPLEMENT_APP(MyApp)
 
-MyCanvas *myCanvas = NULL;
+MyCanvas *myCanvas = (MyCanvas *) NULL;
 
 // A macro needed for some compilers (AIX) that need 'main' to be defined
 // in the application itself.
@@ -53,7 +53,7 @@ bool MyApp::OnInit(void)
   m_canvasFont = *wxNORMAL_FONT;
 
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, "wxWindows dialogs example", wxPoint(50, 50), wxSize(400, 300));
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "wxWindows dialogs example", wxPoint(50, 50), wxSize(400, 300));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
@@ -78,7 +78,11 @@ bool MyApp::OnInit(void)
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_FILE_OPEN,  "&Open file");
   file_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file");
+#ifndef __WXGTK__
+  // don't add a menu entry for something that isn't in wxGTK. It only
+  // confuses the user
   file_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory");
+#endif
   file_menu->AppendSeparator();
   file_menu->Append(wxID_EXIT, "E&xit");
   wxMenuBar *menu_bar = new wxMenuBar;

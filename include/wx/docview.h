@@ -56,7 +56,7 @@ class WXDLLEXPORT wxDocument : public wxEvtHandler
 {
   DECLARE_ABSTRACT_CLASS(wxDocument)
  public:
-  wxDocument(wxDocument *parent = NULL);
+  wxDocument(wxDocument *parent = (wxDocument *) NULL);
   ~wxDocument(void);
 
   void SetFilename(const wxString& filename, bool notifyViews = FALSE);
@@ -114,7 +114,7 @@ class WXDLLEXPORT wxDocument : public wxEvtHandler
   inline wxList& GetViews(void) const { return (wxList&) m_documentViews; }
   wxView *GetFirstView(void) const;
 
-  virtual void UpdateAllViews(wxView *sender = NULL, wxObject *hint = NULL);
+  virtual void UpdateAllViews(wxView *sender = (wxView *) NULL, wxObject *hint = (wxObject *) NULL);
 
   // Remove all views (because we're closing the document)
   virtual bool DeleteAllViews(void);
@@ -146,7 +146,7 @@ class WXDLLEXPORT wxView: public wxEvtHandler
 {
   DECLARE_ABSTRACT_CLASS(wxView)
  public:
-  wxView(wxDocument *doc = NULL);
+  wxView(wxDocument *doc = (wxDocument *) NULL);
   ~wxView(void);
 
   inline wxDocument *GetDocument(void) const { return m_viewDocument; }
@@ -161,7 +161,7 @@ class WXDLLEXPORT wxView: public wxEvtHandler
   virtual void OnActivateView(bool activate, wxView *activeView, wxView *deactiveView);
   virtual void OnDraw(wxDC *dc) = 0;
   virtual void OnPrint(wxDC *dc, wxObject *info);
-  virtual void OnUpdate(wxView *sender, wxObject *hint = NULL);
+  virtual void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
   virtual void OnChangeFilename(void);
 
   // Called by framework if created automatically by the
@@ -212,7 +212,7 @@ class WXDLLEXPORT wxDocTemplate: public wxObject
   // template/document type
   wxDocTemplate(wxDocManager *manager, const wxString& descr, const wxString& filter, const wxString& dir,
      const wxString& ext, const wxString& docTypeName, const wxString& viewTypeName,
-     wxClassInfo *docClassInfo = NULL, wxClassInfo *viewClassInfo = NULL,
+     wxClassInfo *docClassInfo = (wxClassInfo *) NULL, wxClassInfo *viewClassInfo = (wxClassInfo *)NULL,
      long flags = wxDEFAULT_TEMPLATE_FLAGS);
 
   ~wxDocTemplate(void);
@@ -416,7 +416,7 @@ class WXDLLEXPORT wxDocPrintout: public wxPrintout
 {
   DECLARE_DYNAMIC_CLASS(wxDocPrintout)
  public:
-  wxDocPrintout(wxView *view = NULL, const wxString& title = "Printout");
+  wxDocPrintout(wxView *view = (wxView *) NULL, const wxString& title = "Printout");
   bool OnPrintPage(int page);
   bool HasPage(int page);
   bool OnBeginDocument(int startPage, int endPage);

@@ -127,7 +127,7 @@ class WXDLLEXPORT wxGenericPageSetupDialog: public wxDialog
   
   wxPageSetupData pageData;
 
-  wxGenericPageSetupDialog(wxWindow *parent, wxPageSetupData* data = NULL);
+  wxGenericPageSetupDialog(wxWindow *parent, wxPageSetupData* data = (wxPageSetupData*) NULL);
   ~wxGenericPageSetupDialog(void);
 
   virtual bool TransferDataFromWindow(void);

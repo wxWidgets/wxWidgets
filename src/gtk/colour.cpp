@@ -44,7 +44,7 @@ wxColourRefData::wxColourRefData(void)
   m_color.green = 0;
   m_color.blue = 0;
   m_color.pixel = 0;
-  m_colormap = NULL;
+  m_colormap = (GdkColormap *) NULL;
   m_hasPixel = FALSE;
 }
 
@@ -81,7 +81,7 @@ wxColour::wxColour( char red, char green, char blue )
   
 wxColour::wxColour( const wxString &colourName )
 {
-  wxNode *node = NULL;
+  wxNode *node = (wxNode *) NULL;
   if ( (wxTheColourDatabase) && (node = wxTheColourDatabase->Find(colourName)) ) 
   {
     wxColour *col = (wxColour*)node->Data();
@@ -95,7 +95,7 @@ wxColour::wxColour( const wxString &colourName )
     {
       wxFAIL_MSG( "wxColour: couldn't find colour" );
       delete m_refData;
-      m_refData = NULL;
+      m_refData = (wxObjectRefData *) NULL;
     }
   }
 }
@@ -124,7 +124,7 @@ wxColour& wxColour::operator = ( const wxColour& col )
 wxColour& wxColour::operator = ( const wxString& colourName ) 
 { 
   UnRef();
-  wxNode *node = NULL;
+  wxNode *node = (wxNode *) NULL;
   if ((wxTheColourDatabase) && (node = wxTheColourDatabase->Find(colourName)) ) 
   {
     wxColour *col = (wxColour*)node->Data();
@@ -137,7 +137,7 @@ wxColour& wxColour::operator = ( const wxString& colourName )
     {
       wxFAIL_MSG( "wxColour: couldn't find colour" );
       delete m_refData;
-      m_refData = NULL;
+      m_refData = (wxObjectRefData *) NULL;
     }
   }
   return *this; 
@@ -219,7 +219,7 @@ int wxColour::GetPixel(void)
 
 GdkColor *wxColour::GetColor(void)
 {
-  if (!Ok()) return NULL;
+  if (!Ok()) return (GdkColor *) NULL;
   
   return &M_COLDATA->m_color;
 }

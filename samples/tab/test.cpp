@@ -24,14 +24,14 @@
 #include "test.h"
 
 // Declare two frames
-MyDialog   *dialog = NULL;
+MyDialog   *dialog = (MyDialog *) NULL;
 
 IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  dialog = new MyDialog(NULL, -1, "Tabbed Dialog", wxPoint(-1, -1), wxSize(365, 390), wxDIALOG_MODAL|wxDEFAULT_DIALOG_STYLE);
+  dialog = new MyDialog((wxFrame *) NULL, -1, (char *) "Tabbed Dialog", wxPoint(-1, -1), wxSize(365, 390), wxDIALOG_MODAL|wxDEFAULT_DIALOG_STYLE);
 
   dialog->ShowModal();
 

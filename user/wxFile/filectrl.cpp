@@ -209,7 +209,7 @@ BEGIN_EVENT_TABLE(wxFileCtrl,wxListCtrl)
   EVT_SET_FOCUS     (wxFileCtrl::OnSetFocus)
 END_EVENT_TABLE()
 
-wxFileCtrl *wxFileCtrl::m_lastFocus = NULL;
+wxFileCtrl *wxFileCtrl::m_lastFocus = (wxFileCtrl *) NULL;
 
 wxFileCtrl::wxFileCtrl( void )
 {
@@ -290,7 +290,7 @@ void wxFileCtrl::Update( void )
     InsertColumn( 3, "Time", wxLIST_FORMAT_LEFT, 50 );
     InsertColumn( 4, "Permissions", wxLIST_FORMAT_LEFT, 120 );
   };
-  wxFileData *fd = NULL;
+  wxFileData *fd = (wxFileData *) NULL;
   wxListItem item;
   item.m_mask = wxLIST_MASK_TEXT + wxLIST_MASK_DATA;
   if (my_style & wxLC_ICON) item.m_mask += wxLIST_MASK_IMAGE;

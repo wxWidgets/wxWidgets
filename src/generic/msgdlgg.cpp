@@ -114,10 +114,10 @@ wxGenericMessageDialog::wxGenericMessageDialog(wxWindow *parent, const wxString&
 	c->centreX.SameAs	(spacingSizer, wxCentreX);
   	buttonSizer->SetConstraints(c);
 
-    wxButton *ok = NULL;
-  	wxButton *cancel = NULL;
-  	wxButton *yes = NULL;
-  	wxButton *no = NULL;
+    wxButton *ok = (wxButton *) NULL;
+  	wxButton *cancel = (wxButton *) NULL;
+  	wxButton *yes = (wxButton *) NULL;
+  	wxButton *no = (wxButton *) NULL;
 
   	if (style & wxYES_NO) {
     yes = new wxButton(this, wxID_YES, _("Yes"));
