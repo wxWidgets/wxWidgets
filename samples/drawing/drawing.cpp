@@ -273,7 +273,7 @@ bool MyApp::LoadImages()
 
     wxString path = pathList.FindValidPath(_T("pat4.bmp"));
     if ( !path )
-        return FALSE;
+        return false;
 
     /* 4 colour bitmap */
     gs_bmp4->LoadFile(path, wxBITMAP_TYPE_BMP);
@@ -284,21 +284,21 @@ bool MyApp::LoadImages()
 
     path = pathList.FindValidPath(_T("pat36.bmp"));
     if ( !path )
-        return FALSE;
+        return false;
     gs_bmp36->LoadFile(path, wxBITMAP_TYPE_BMP);
     wxMask* mask36 = new wxMask(*gs_bmp36, *wxBLACK);
     gs_bmp36->SetMask(mask36);
 
     path = pathList.FindValidPath(_T("image.bmp"));
     if ( !path )
-        return FALSE;
+        return false;
     gs_bmpNoMask->LoadFile(path, wxBITMAP_TYPE_BMP);
     gs_bmpWithMask->LoadFile(path, wxBITMAP_TYPE_BMP);
     gs_bmpWithColMask->LoadFile(path, wxBITMAP_TYPE_BMP);
 
     path = pathList.FindValidPath(_T("mask.bmp"));
     if ( !path )
-        return FALSE;
+        return false;
     gs_bmpMask->LoadFile(path, wxBITMAP_TYPE_BMP);
 
     wxMask *mask = new wxMask(*gs_bmpMask, *wxBLACK);
@@ -307,7 +307,7 @@ bool MyApp::LoadImages()
     mask = new wxMask(*gs_bmpWithColMask, *wxWHITE);
     gs_bmpWithColMask->SetMask(mask);
 
-    return TRUE;
+    return true;
 }
 
 // `Main program' equivalent: the program execution "starts" here
@@ -318,7 +318,7 @@ bool MyApp::OnInit()
                                  wxPoint(50, 50), wxSize(550, 340));
 
     // Show it and tell the application that it's our main window
-    frame->Show(TRUE);
+    frame->Show(true);
     SetTopWindow(frame);
 
     if ( !LoadImages() )
@@ -330,11 +330,11 @@ bool MyApp::OnInit()
         // stop here
         DeleteBitmaps();
 
-        return FALSE;
+        return false;
     }
 
     // ok, continue
-    return TRUE;
+    return true;
 }
 
 void MyApp::DeleteBitmaps()
@@ -370,14 +370,14 @@ END_EVENT_TABLE()
 #include "smile.xpm"
 
 MyCanvas::MyCanvas(MyFrame *parent)
-        : wxScrolledWindow(parent, -1, wxDefaultPosition, wxDefaultSize,
+        : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                            wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
 {
     m_owner = parent;
     m_show = Show_Default;
     m_smile_bmp = wxBitmap(smile_xpm);
     m_std_icon = wxArtProvider::GetIcon(wxART_INFORMATION);
-    m_clip = FALSE;
+    m_clip = false;
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)
@@ -525,7 +525,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush( *wxGREEN_BRUSH );
     dc.DrawRectangle(x, 10, rectSize, rectSize);
-    dc.DrawBitmap(m_std_icon, x + 5, 15, TRUE);
+    dc.DrawBitmap(m_std_icon, x + 5, 15, true);
     x += rectSize + 10;
     dc.DrawRectangle(x, 10, rectSize, rectSize);
     dc.DrawIcon(m_std_icon, x + 5, 15);
@@ -537,7 +537,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
     //dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
     if (m_smile_bmp.Ok())
-        dc.DrawBitmap(m_smile_bmp, x + rectSize - 20, rectSize - 10, TRUE);
+        dc.DrawBitmap(m_smile_bmp, x + rectSize - 20, rectSize - 10, true);
 
     dc.SetBrush( *wxBLACK_BRUSH );
     dc.DrawRectangle( 0, 160, 1000, 300 );
@@ -708,7 +708,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
 void MyCanvas::DrawText(wxDC& dc)
 {
     // set underlined font for testing
-    dc.SetFont( wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, TRUE) );
+    dc.SetFont( wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, true) );
     dc.DrawText( _T("This is text"), 110, 10 );
     dc.DrawRotatedText( _T("That is text"), 20, 10, -45 );
 
@@ -788,11 +788,11 @@ void MyCanvas::DrawImages(wxDC& dc)
     dc.DrawText(_T("original image"), 0, 0);
     dc.DrawBitmap(*gs_bmpNoMask, 0, 20, 0);
     dc.DrawText(_T("with colour mask"), 0, 100);
-    dc.DrawBitmap(*gs_bmpWithColMask, 0, 120, TRUE);
+    dc.DrawBitmap(*gs_bmpWithColMask, 0, 120, true);
     dc.DrawText(_T("the mask image"), 0, 200);
     dc.DrawBitmap(*gs_bmpMask, 0, 220, 0);
     dc.DrawText(_T("masked image"), 0, 300);
-    dc.DrawBitmap(*gs_bmpWithMask, 0, 320, TRUE);
+    dc.DrawBitmap(*gs_bmpWithMask, 0, 320, true);
 
     int cx = gs_bmpWithColMask->GetWidth(),
         cy = gs_bmpWithColMask->GetHeight();
@@ -805,7 +805,7 @@ void MyCanvas::DrawImages(wxDC& dc)
 
         dc.DrawText(rasterOperations[n].name, x, y - 20);
         memDC.SelectObject(*gs_bmpWithColMask);
-        dc.Blit(x, y, cx, cy, &memDC, 0, 0, rasterOperations[n].rop, TRUE);
+        dc.Blit(x, y, cx, cy, &memDC, 0, 0, rasterOperations[n].rop, true);
     }
 }
 
@@ -885,8 +885,8 @@ void MyCanvas::DrawRegions(wxDC& dc)
                 _T("should be offset by 10 pixels."),
                 10, 5 + 2*dc.GetCharHeight());
 
-    DrawRegionsHelper(dc, 10, TRUE);
-    DrawRegionsHelper(dc, 350, FALSE);
+    DrawRegionsHelper(dc, 10, true);
+    DrawRegionsHelper(dc, 350, false);
 }
 
 void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
@@ -922,11 +922,11 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
 
     if (m_smile_bmp.Ok())
     {
-        dc.DrawBitmap( m_smile_bmp, x + 150, y + 150, TRUE );
-        dc.DrawBitmap( m_smile_bmp, x + 130, y + 10,  TRUE );
-        dc.DrawBitmap( m_smile_bmp, x + 130, y + 280, TRUE );
-        dc.DrawBitmap( m_smile_bmp, x + 100, y + 70,  TRUE );
-        dc.DrawBitmap( m_smile_bmp, x + 200, y + 70,  TRUE );
+        dc.DrawBitmap( m_smile_bmp, x + 150, y + 150, true );
+        dc.DrawBitmap( m_smile_bmp, x + 130, y + 10,  true );
+        dc.DrawBitmap( m_smile_bmp, x + 130, y + 280, true );
+        dc.DrawBitmap( m_smile_bmp, x + 100, y + 70,  true );
+        dc.DrawBitmap( m_smile_bmp, x + 200, y + 70,  true );
     }
 }
 
@@ -1040,7 +1040,7 @@ END_EVENT_TABLE()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size,
+       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size,
                  wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
 {
     // set the frame icon
@@ -1079,8 +1079,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuUserScale->Append( UserScale_Restore, _T("&Restore to normal\tCtrl-0") );
 
     wxMenu *menuAxis = new wxMenu;
-    menuAxis->Append( AxisMirror_Horiz, _T("Mirror horizontally\tCtrl-M"), _T(""), TRUE );
-    menuAxis->Append( AxisMirror_Vertic, _T("Mirror vertically\tCtrl-N"), _T(""), TRUE );
+    menuAxis->Append( AxisMirror_Horiz, _T("Mirror horizontally\tCtrl-M"), _T(""), true );
+    menuAxis->Append( AxisMirror_Vertic, _T("Mirror vertically\tCtrl-N"), _T(""), true );
 
     wxMenu *menuLogical = new wxMenu;
     menuLogical->Append( LogicalOrigin_MoveDown, _T("Move &down\tCtrl-D") );
@@ -1095,8 +1095,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuColour->Append( Colour_TextForeground, _T("Text &foreground...") );
     menuColour->Append( Colour_TextBackground, _T("Text &background...") );
     menuColour->Append( Colour_Background, _T("Background &colour...") );
-    menuColour->Append( Colour_BackgroundMode, _T("&Opaque/transparent\tCtrl-B"), _T(""), TRUE );
-    menuColour->Append( Colour_TextureBackgound, _T("Draw textured back&ground\tCtrl-T"), _T(""), TRUE);
+    menuColour->Append( Colour_BackgroundMode, _T("&Opaque/transparent\tCtrl-B"), _T(""), true );
+    menuColour->Append( Colour_TextureBackgound, _T("Draw textured back&ground\tCtrl-T"), _T(""), true);
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
@@ -1120,11 +1120,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_xLogicalOrigin = 0;
     m_yLogicalOrigin = 0;
     m_xAxisReversed =
-    m_yAxisReversed = FALSE;
+    m_yAxisReversed = false;
     m_backgroundMode = wxSOLID;
     m_colourForeground = *wxRED;
     m_colourBackground = *wxBLUE;
-    m_textureBackground = FALSE;
+    m_textureBackground = false;
 
     m_canvas = new MyCanvas( this );
     m_canvas->SetScrollbars( 10, 10, 100, 240 );
@@ -1134,8 +1134,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
