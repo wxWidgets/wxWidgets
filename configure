@@ -11966,7 +11966,6 @@ fi; done
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
-            LN_S="${ac_cv_prog_LN_S}"
             TOOLKIT_DIR="${TOOLKIT_DIR}"
           
          
@@ -11983,7 +11982,7 @@ cat >> $CONFIG_STATUS <<\EOF
             if test ! -d include/wx/${TOOLKIT_DIR}; then
               mkdir include/wx/${TOOLKIT_DIR}
             fi
-            cp -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
+            mv -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
           
 exit 0
 EOF
