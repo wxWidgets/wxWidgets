@@ -348,6 +348,12 @@ elif os.name == 'posix':
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
     lflags = string.split(lflags)
 
+    # Some distros (e.g. Mandrake) put libGLU in /usr/X11R6/lib, but
+    # wx-config doesn't output that for some reason.  For now, just
+    # add it unconditionally but we should really check if the lib is
+    # really found there or wx-config should be fixed.
+    libdirs.append("/usr/X11R6/lib")
+
 
 else:
     raise 'Sorry Charlie...'
