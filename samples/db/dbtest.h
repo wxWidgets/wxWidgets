@@ -14,15 +14,16 @@
 #endif
 
 #include <wx/string.h>
+#include <wx/db.h>
 #include <wx/dbtable.h>
 
-enum		DialogModes {mView,mCreate,mEdit,mSearch};
+enum    DialogModes {mView,mCreate,mEdit,mSearch};
 
 // ID for the menu quit command
-#define FILE_CREATE			100
-#define FILE_EXIT				199
-#define EDIT_PARAMETERS		200
-#define ABOUT_DEMO			300
+#define FILE_CREATE            100
+#define FILE_EXIT                199
+#define EDIT_PARAMETERS        200
+#define ABOUT_DEMO            300
 
 // this seems to be missing, Robert Roebling (?)
 #ifndef MAX_PATH
@@ -30,13 +31,13 @@ enum		DialogModes {mView,mCreate,mEdit,mSearch};
 #endif
 
 // Name of the table to be created/opened
-const char	CONTACT_TABLE_NAME[]		=	"contacts";
+const char      CONTACT_TABLE_NAME[]        =    "contacts";
 
 // Nuber of columns in the above table
-const int	CONTACT_NO_COLS			= 12;		// 0-11
+const int       CONTACT_NO_COLS            = 12;        // 0-11
 
 // Global structure for holding ODBC connection information
-struct DbStuff DbConnectInf;
+struct DbStuff  DbConnectInf;
 
 enum Language {langENGLISH, langFRENCH, langGERMAN, langSPANISH, langOTHER};
 
@@ -56,19 +57,19 @@ const char paramFilename[] = "dbtest.cfg";
  */
 class CstructContact : public wxObject
 {
-	public:
-		char					Name[ 50+1 ];		//	Contact's name
-		char					Addr1[ 50+1 ];
-		char					Addr2[ 50+1 ];
-		char					City[ 25+1 ];
-		char					State[ 25+1 ];
-		char					PostalCode[ 15+1 ];
-		char					Country[ 20+1 ];
-		TIMESTAMP_STRUCT	JoinDate;			// Date on which this person joined the wxWindows project
-		Language				NativeLanguage;	// Enumerated type indicating person's native language
-		bool					IsDeveloper;		// Is this person a developer for wxWindows, or just a subscriber
-		int					Contributions;		// Something to show off an integer field
-		ULONG					LinesOfCode;		// Something to show off a 'long' field
+    public:
+        char               Name[50+1];          //    Contact's name
+        char               Addr1[50+1];
+        char               Addr2[50+1];
+        char               City[25+1];
+        char               State[25+1];
+        char               PostalCode[15+1];
+        char               Country[20+1];
+        TIMESTAMP_STRUCT   JoinDate;            // Date on which this person joined the wxWindows project
+        Language           NativeLanguage;      // Enumerated type indicating person's native language
+        bool               IsDeveloper;         // Is this person a developer for wxWindows, or just a subscriber
+        UCHAR              Contributions;       // Something to show off an integer field
+        ULONG              LinesOfCode;         // Something to show off a 'long' field
 };  // CstructContact
 
 
@@ -77,41 +78,41 @@ class CstructContact : public wxObject
 //
 class Ccontact : public wxTable, public CstructContact
 { 
-	private:
-		bool				 freeDbConn;
-		void				 SetupColumns();
+    private:
+        bool                 freeDbConn;
+        void                 SetupColumns();
 
-	public:
-		wxString			 whereStr;
-		wxString			 qryWhereStr;   // Where string returned from the query dialog
+    public:
+        wxString             whereStr;
+        wxString             qryWhereStr;   // Where string returned from the query dialog
 
-		Ccontact(wxDB *pwxDB=NULL);
-		~Ccontact();
+        Ccontact(wxDB *pwxDB=NULL);
+        ~Ccontact();
 
-		void				 Initialize();
-		bool				 CreateIndexes(void);
-		bool				 FetchByName(char *name);
+        void                 Initialize();
+        bool                 CreateIndexes(void);
+        bool                 FetchByName(char *name);
 
 };  // Ccontact class definition
 
 
 typedef struct Cparameters
 {
-	// The length of these strings were arbitrarily picked, and are
-	// dependent on the OS and database engine you will be using.
-	char	ODBCSource[100+1];
-	char	UserName[25+1];
-	char	Password[25+1];
-	char	DirPath[MAX_PATH+1];
+    // The length of these strings were arbitrarily picked, and are
+    // dependent on the OS and database engine you will be using.
+    char    ODBCSource[100+1];
+    char    UserName[25+1];
+    char    Password[25+1];
+    char    DirPath[MAX_PATH+1];
 } Cparameters;
 
 
 // Define a new application type
 class DatabaseDemoApp: public wxApp
 {
-	public:
-		Cparameters  params;
-		bool         OnInit();
+    public:
+        Cparameters  params;
+        bool         OnInit();
 };  // DatabaseDemoApp
 
 DECLARE_APP(DatabaseDemoApp)
@@ -119,22 +120,22 @@ DECLARE_APP(DatabaseDemoApp)
 // Define a new frame type
 class DatabaseDemoFrame: public wxFrame
 { 
-	private:
-		CeditorDlg		*pEditorDlg;
-		CparameterDlg	*pParamDlg;
+    private:
+        CeditorDlg      *pEditorDlg;
+        CparameterDlg   *pParamDlg;
 
-	public:
-		DatabaseDemoFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& sz);
+    public:
+        DatabaseDemoFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& sz);
 
-		void    OnCloseWindow(wxCloseEvent& event);
+        void    OnCloseWindow(wxCloseEvent& event);
         void    OnCreate(wxCommandEvent& event);
         void    OnExit(wxCommandEvent& event);
         void    OnEditParameters(wxCommandEvent& event);
         void    OnAbout(wxCommandEvent& event);
 
-		void	CreateDataTable();
-		void	BuildEditorDialog();
-		void	BuildParameterDialog(wxWindow *parent);
+        void    CreateDataTable();
+        void    BuildEditorDialog();
+        void    BuildParameterDialog(wxWindow *parent);
 
 DECLARE_EVENT_TABLE()
 };  // DatabaseDemoFrame
@@ -145,41 +146,42 @@ DECLARE_EVENT_TABLE()
 
 class CeditorDlg : public wxPanel
 {
-	private:
-		bool						 widgetPtrsSet;
-		wxString					 saveName;
+    private:
+        bool                         widgetPtrsSet;
+        wxString                     saveName;
 
-		// Pointers to all widgets on the dialog
-		wxButton		*pCreateBtn,  *pEditBtn,      *pDeleteBtn,  *pCopyBtn,  *pSaveBtn,  *pCancelBtn;
-		wxButton		*pPrevBtn,    *pNextBtn,      *pQueryBtn,   *pResetBtn, *pDoneBtn,  *pHelpBtn;
-		wxButton		*pNameListBtn;
-		wxTextCtrl		*pNameTxt,    *pAddress1Txt,  *pAddress2Txt,*pCityTxt,  *pStateTxt, *pCountryTxt,*pPostalCodeTxt;
-		wxStaticText	*pNameMsg,    *pAddress1Msg,  *pAddress2Msg,*pCityMsg,  *pStateMsg, *pCountryMsg,*pPostalCodeMsg;
-		wxTextCtrl		*pJoinDateTxt,*pContribTxt,   *pLinesTxt;
-		wxStaticText   *pJoinDateMsg,*pContribMsg,   *pLinesMsg;
-		wxRadioBox	*pDeveloperRadio;
-		wxChoice    *pNativeLangChoice;
-		wxStaticText	*pNativeLangMsg;
+        // Pointers to all widgets on the dialog
+        wxButton        *pCreateBtn,  *pEditBtn,      *pDeleteBtn,  *pCopyBtn,  *pSaveBtn,  *pCancelBtn;
+        wxButton        *pPrevBtn,    *pNextBtn,      *pQueryBtn,   *pResetBtn, *pDoneBtn,  *pHelpBtn;
+        wxButton        *pNameListBtn;
+        wxTextCtrl      *pNameTxt,    *pAddress1Txt,  *pAddress2Txt,*pCityTxt,  *pStateTxt, *pCountryTxt,*pPostalCodeTxt;
+        wxStaticText    *pNameMsg,    *pAddress1Msg,  *pAddress2Msg,*pCityMsg,  *pStateMsg, *pCountryMsg,*pPostalCodeMsg;
+        wxTextCtrl      *pJoinDateTxt,*pContribTxt,   *pLinesTxt;
+        wxStaticText    *pJoinDateMsg,*pContribMsg,   *pLinesMsg;
+        wxRadioBox      *pDeveloperRadio;
+        wxChoice        *pNativeLangChoice;
+        wxStaticText    *pNativeLangMsg;
 
-	public:
-		enum	DialogModes		 mode;
-		Ccontact					*Contact;	// this is the table object that will be being manipulated
+    public:
+        enum DialogModes     mode;
+        Ccontact            *Contact;    // this is the table object that will be being manipulated
 
-		CeditorDlg(wxWindow *parent);
-		void    OnCloseWindow(wxCloseEvent& event);
-		void    OnButton( wxCommandEvent &event );
-		void	OnCommand(wxWindow& win, wxCommandEvent& event);
- 		void	OnActivate(bool) {};  // necessary for hot keys
+        CeditorDlg(wxWindow *parent);
 
-		void	FieldsEditable();
-		void	SetMode(enum DialogModes m);
-		bool	PutData();
-		bool	GetData();
-		bool	Save();
-		bool	GetNextRec();
-		bool	GetPrevRec();
-		bool	GetRec(char *whereStr);
-		
+        void    OnCloseWindow(wxCloseEvent& event);
+        void    OnButton( wxCommandEvent &event );
+        void    OnCommand(wxWindow& win, wxCommandEvent& event);
+        void    OnActivate(bool) {};  // necessary for hot keys
+
+        void    FieldsEditable();
+        void    SetMode(enum DialogModes m);
+        bool    PutData();
+        bool    GetData();
+        bool    Save();
+        bool    GetNextRec();
+        bool    GetPrevRec();
+        bool    GetRec(char *whereStr);
+        
 DECLARE_EVENT_TABLE()
 };  // CeditorDlg
 
@@ -229,30 +231,31 @@ DECLARE_EVENT_TABLE()
 
 class CparameterDlg : public wxDialog
 {
-	private:
-		bool						 widgetPtrsSet;
-		enum	DialogModes		 mode;
-		bool						 saved;
-		Cparameters				 savedParamSettings;
+    private:
+        bool                 widgetPtrsSet;
+        enum DialogModes     mode;
+        bool                 saved;
+        Cparameters          savedParamSettings;
 
-		// Pointers to all widgets on the dialog
-		wxStaticText	*pParamODBCSourceMsg;
-		wxListBox		*pParamODBCSourceList;
-		wxStaticText	*pParamUserNameMsg,		*pParamPasswordMsg,	*pParamDirPathMsg;
-		wxTextCtrl		*pParamUserNameTxt,		*pParamPasswordTxt,	*pParamDirPathTxt;
-		wxButton			*pParamSaveBtn,			*pParamCancelBtn;
+        // Pointers to all widgets on the dialog
+        wxStaticText        *pParamODBCSourceMsg;
+        wxListBox           *pParamODBCSourceList;
+        wxStaticText        *pParamUserNameMsg,        *pParamPasswordMsg,    *pParamDirPathMsg;
+        wxTextCtrl          *pParamUserNameTxt,        *pParamPasswordTxt,    *pParamDirPathTxt;
+        wxButton            *pParamSaveBtn,            *pParamCancelBtn;
 
-	public:
-		CparameterDlg(wxWindow *parent);
-		void    OnCloseWindow(wxCloseEvent& event);
-		void    OnButton( wxCommandEvent &event );
-		void	OnCommand(wxWindow& win, wxCommandEvent& event);
- 		void	OnActivate(bool) {};  // necessary for hot keys
+    public:
+        CparameterDlg(wxWindow *parent);
 
-		bool	PutData();
-		bool	GetData();
-		bool	Save();
-		void	FillDataSourceList();
+        void    OnCloseWindow(wxCloseEvent& event);
+        void    OnButton( wxCommandEvent &event );
+        void    OnCommand(wxWindow& win, wxCommandEvent& event);
+        void    OnActivate(bool) {};  // necessary for hot keys
+
+        bool    PutData();
+        bool    GetData();
+        bool    Save();
+        void    FillDataSourceList();
 
 DECLARE_EVENT_TABLE()
 };  // CparameterDlg
@@ -266,8 +269,8 @@ DECLARE_EVENT_TABLE()
 #define PARAMETER_DIALOG_NAME_TEXT          404
 #define PARAMETER_DIALOG_PASSWORD_MSG       405
 #define PARAMETER_DIALOG_PASSWORD_TEXT      406
-#define PARAMETER_DIALOG_DIRPATH_MSG       407
-#define PARAMETER_DIALOG_DIRPATH_TEXT      408
+#define PARAMETER_DIALOG_DIRPATH_MSG        407
+#define PARAMETER_DIALOG_DIRPATH_TEXT       408
 #define PARAMETER_DIALOG_SAVE               409
 #define PARAMETER_DIALOG_CANCEL             410
 
@@ -277,83 +280,82 @@ DECLARE_EVENT_TABLE()
 // QUERY DIALOG
 enum qryOp
 {
-	qryOpEQ,
-	qryOpLT,
-	qryOpGT,
-	qryOpLE,
-	qryOpGE,
-	qryOpBEGINS,
-	qryOpCONTAINS,
-	qryOpLIKE,
-	qryOpBETWEEN
+    qryOpEQ,
+    qryOpLT,
+    qryOpGT,
+    qryOpLE,
+    qryOpGE,
+    qryOpBEGINS,
+    qryOpCONTAINS,
+    qryOpLIKE,
+    qryOpBETWEEN
 };
 
 
 // Query strings
-char * const langQRY_EQ										= "column = column | value";
-char * const langQRY_LT										= "column < column | value";
-char * const langQRY_GT										= "column > column | value";
-char * const langQRY_LE										= "column <= column | value";
-char * const langQRY_GE										= "column >= column | value";
-char * const langQRY_BEGINS								= "columns that BEGIN with the string entered";
-char * const langQRY_CONTAINS								= "columns that CONTAIN the string entered";
-char * const langQRY_LIKE									= "% matches 0 or more of any char; _ matches 1 char";
-char * const langQRY_BETWEEN								= "column BETWEEN value AND value";
+char * const langQRY_EQ           = "column = column | value";
+char * const langQRY_LT           = "column < column | value";
+char * const langQRY_GT           = "column > column | value";
+char * const langQRY_LE           = "column <= column | value";
+char * const langQRY_GE           = "column >= column | value";
+char * const langQRY_BEGINS       = "columns that BEGIN with the string entered";
+char * const langQRY_CONTAINS     = "columns that CONTAIN the string entered";
+char * const langQRY_LIKE         = "% matches 0 or more of any char; _ matches 1 char";
+char * const langQRY_BETWEEN      = "column BETWEEN value AND value";
 
 
 class CqueryDlg : public wxDialog
 {
-	private:
-		CcolInf	*colInf;		// Column inf. returned by db->GetColumns()
-		wxTable	*dbTable;
-		char		*masterTableName;
-		char		*pWhere;		// A pointer to the storage for the resulting where clause
-		wxDB		*pDB;
+    private:
+        CcolInf     *colInf;        // Column inf. returned by db->GetColumns()
+        wxTable     *dbTable;
+        char        *masterTableName;
+        char        *pWhere;        // A pointer to the storage for the resulting where clause
+        wxDB        *pDB;
 
-	public:
-		bool					widgetPtrsSet;
+    public:
+        bool                     widgetPtrsSet;
 
-		// Widget pointers
-		wxStaticText			*pQueryCol1Msg;
-		wxChoice				*pQueryCol1Choice;
-		wxStaticText			*pQueryNotMsg;
-		wxCheckBox			*pQueryNotCheck;
-		wxStaticText			*pQueryOperatorMsg;
-		wxChoice				*pQueryOperatorChoice;
-		wxStaticText			*pQueryCol2Msg;
-		wxChoice				*pQueryCol2Choice;
-		wxStaticText			*pQueryValue1Msg;
-		wxTextCtrl				*pQueryValue1Txt;
-		wxStaticText			*pQueryValue2Msg;
-		wxTextCtrl				*pQueryValue2Txt;
-		wxStaticText			*pQuerySqlWhereMsg;
-		wxTextCtrl			*pQuerySqlWhereMtxt;
-		wxButton				*pQueryAddBtn;
-		wxButton				*pQueryAndBtn;
-		wxButton				*pQueryOrBtn;
-		wxButton				*pQueryLParenBtn;
-		wxButton				*pQueryRParenBtn;
-		wxButton				*pQueryDoneBtn;
-		wxButton				*pQueryClearBtn;
-		wxButton				*pQueryCountBtn;
-		wxButton				*pQueryHelpBtn;
-		wxStaticBox			*pQueryHintGrp;
-		wxStaticText			*pQueryHintMsg;
+        // Widget pointers
+        wxStaticText            *pQueryCol1Msg;
+        wxChoice                *pQueryCol1Choice;
+        wxStaticText            *pQueryNotMsg;
+        wxCheckBox              *pQueryNotCheck;
+        wxStaticText            *pQueryOperatorMsg;
+        wxChoice                *pQueryOperatorChoice;
+        wxStaticText            *pQueryCol2Msg;
+        wxChoice                *pQueryCol2Choice;
+        wxStaticText            *pQueryValue1Msg;
+        wxTextCtrl              *pQueryValue1Txt;
+        wxStaticText            *pQueryValue2Msg;
+        wxTextCtrl              *pQueryValue2Txt;
+        wxStaticText            *pQuerySqlWhereMsg;
+        wxTextCtrl              *pQuerySqlWhereMtxt;
+        wxButton                *pQueryAddBtn;
+        wxButton                *pQueryAndBtn;
+        wxButton                *pQueryOrBtn;
+        wxButton                *pQueryLParenBtn;
+        wxButton                *pQueryRParenBtn;
+        wxButton                *pQueryDoneBtn;
+        wxButton                *pQueryClearBtn;
+        wxButton                *pQueryCountBtn;
+        wxButton                *pQueryHelpBtn;
+        wxStaticBox             *pQueryHintGrp;
+        wxStaticText            *pQueryHintMsg;
 
-		wxTextCtrl 				*pFocusTxt;
+        wxTextCtrl                 *pFocusTxt;
 
-		CqueryDlg(wxWindow *parent, wxDB *pDb, char *tblName[], char *pWhereArg);
+        CqueryDlg(wxWindow *parent, wxDB *pDb, char *tblName[], char *pWhereArg);
 
-		void    OnButton( wxCommandEvent &event );
-		void		OnCommand(wxWindow& win, wxCommandEvent& event);
-		void        OnCloseWindow(wxCloseEvent& event);
-		void		OnActivate(bool) {};  // necessary for hot keys
+        void        OnButton( wxCommandEvent &event );
+        void        OnCommand(wxWindow& win, wxCommandEvent& event);
+        void        OnCloseWindow(wxCloseEvent& event);
+        void        OnActivate(bool) {};  // necessary for hot keys
 
-//		bool		SetWidgetPtrs();
-		void		AppendToWhere(char *s);
-		void		ProcessAddBtn();
-		void		ProcessCountBtn();
-		bool		ValidateWhereClause();
+        void        AppendToWhere(char *s);
+        void        ProcessAddBtn();
+        void        ProcessCountBtn();
+        bool        ValidateWhereClause();
 
 DECLARE_EVENT_TABLE()
 };  // CqueryDlg
