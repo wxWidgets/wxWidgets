@@ -4824,19 +4824,8 @@ bool wxGenericListCtrl::SetItemState( long item, long state, long stateMask )
     return true;
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-bool wxGenericListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
-{
-    wxListItem info;
-    info.m_image = image;
-    info.m_mask = wxLIST_MASK_IMAGE;
-    info.m_itemId = item;
-    m_mainWin->SetItem( info );
-    return true;
-}
-#endif
-
-bool wxGenericListCtrl::SetItemImage( long item, int image )
+bool
+wxGenericListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
 {
     wxListItem info;
     info.m_image = image;

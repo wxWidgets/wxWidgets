@@ -160,10 +160,7 @@ public:
     bool SetItemState(long item, long state, long stateMask) ;
 
     // Sets the item image
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED(bool SetItemImage(long item, int image, int selImage)) ;
-#endif
-    bool SetItemImage(long item, int image) ;
+    bool SetItemImage(long item, int image, int selImage = -1) ;
 
     // Gets the item text
     wxString GetItemText(long item) const ;

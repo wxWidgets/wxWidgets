@@ -903,20 +903,7 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 }
 
 // Sets the item image
-#if WXWIN_COMPATIBILITY_2_4
 bool wxListCtrl::SetItemImage(long item, int image, int WXUNUSED(selImage))
-{
-    wxListItem info;
-
-    info.m_mask = wxLIST_MASK_IMAGE;
-    info.m_image = image;
-    info.m_itemId = item;
-
-    return SetItem(info);
-}
-#endif
-
-bool wxListCtrl::SetItemImage(long item, int image)
 {
     wxListItem info;
 
