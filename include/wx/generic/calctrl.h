@@ -18,10 +18,10 @@
 
 #include "wx/control.h"         // the base class
 #include "wx/dcclient.h"        // for wxPaintDC
-#include "wx/spinctrl.h"        // for wxSpinEvent
 
 class WXDLLEXPORT wxComboBox;
 class WXDLLEXPORT wxStaticText;
+class WXDLLEXPORT wxSpinCtrl;
 
 #define wxCalendarNameStr _T("CalendarCtrl")
 
@@ -77,7 +77,7 @@ public:
     const wxDateTime& GetUpperDateLimit() const { return m_highdate; }
 
     bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime, const wxDateTime& upperdate = wxDefaultDateTime);
-    
+
     // calendar mode
     // -------------
 
@@ -177,7 +177,7 @@ private:
     void OnDClick(wxMouseEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnMonthChange(wxCommandEvent& event);
-    void OnYearChange(wxSpinEvent& event);
+    void OnYearChange(wxCommandEvent& event);
 
     // override some base class virtuals
     virtual wxSize DoGetBestSize() const;
@@ -203,7 +203,7 @@ private:
 
     // is this date in the given range?
     bool IsDateInRange(const wxDateTime& date) const;
-    
+
     // range helpers
     bool ChangeYear(wxDateTime* target) const;
     bool ChangeMonth(wxDateTime* target) const;
@@ -252,10 +252,10 @@ private:
     wxControl *GetYearControl() const;
 
     // OnPaint helper-methods
-    
+
     // Highlight the [fromdate : todate] range using pen and brush
     void HighlightRange(wxPaintDC* dc, const wxDateTime& fromdate, const wxDateTime& todate, wxPen* pen, wxBrush* brush);
-    
+
     // Get the "coordinates" for the date relative to the month currently displayed.
     // using (day, week): upper left coord is (1, 1), lower right coord is (7, 6)
     // if the date isn't visible (-1, -1) is put in (day, week) and false is returned
@@ -292,10 +292,14 @@ private:
             m_rowOffset;
 
     wxRect m_leftArrowRect,
-            m_rightArrowRect;
+           m_rightArrowRect;
 
     // the week day names
     wxString m_weekdays[7];
+
+    // TRUE if SetDate() is being called as the result of changing the year in
+    // the year control
+    bool m_userChangedYear;
 
     DECLARE_DYNAMIC_CLASS(wxCalendarCtrl)
     DECLARE_EVENT_TABLE()

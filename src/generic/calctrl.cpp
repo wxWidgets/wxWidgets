@@ -38,6 +38,8 @@
 
 #if wxUSE_CALENDARCTRL
 
+#include "wx/spinctrl.h"
+
 #include "wx/calctrl.h"
 
 #define DEBUG_PAINT 0
@@ -64,6 +66,7 @@ class wxYearSpinCtrl : public wxSpinCtrl
 public:
     wxYearSpinCtrl(wxCalendarCtrl *cal);
 
+    void OnYearTextChange(wxCommandEvent& event) { m_cal->OnYearChange(event); }
     void OnYearChange(wxSpinEvent& event) { m_cal->OnYearChange(event); }
 
 private:
@@ -90,6 +93,7 @@ BEGIN_EVENT_TABLE(wxMonthComboBox, wxComboBox)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxYearSpinCtrl, wxSpinCtrl)
+    EVT_TEXT(-1, wxYearSpinCtrl::OnYearTextChange)
     EVT_SPINCTRL(-1, wxYearSpinCtrl::OnYearChange)
 END_EVENT_TABLE()
 
@@ -154,6 +158,8 @@ void wxCalendarCtrl::Init()
 {
     m_comboMonth = NULL;
     m_spinYear = NULL;
+
+    m_userChangedYear = FALSE;
 
     m_widthCol =
     m_heightRow = 0;
@@ -258,12 +264,19 @@ wxCalendarCtrl::~wxCalendarCtrl()
 
 bool wxCalendarCtrl::Destroy()
 {
-    if( m_staticYear ) m_staticYear->Destroy();
-    if( m_spinYear ) m_spinYear->Destroy();
-    if( m_comboMonth ) m_comboMonth->Destroy();
-    if( m_staticMonth ) m_staticMonth->Destroy();
+    if ( m_staticYear )
+        m_staticYear->Destroy();
+    if ( m_spinYear )
+        m_spinYear->Destroy();
+    if ( m_comboMonth )
+        m_comboMonth->Destroy();
+    if ( m_staticMonth )
+        m_staticMonth->Destroy();
 
-    m_staticYear = 0; m_spinYear = 0; m_comboMonth = 0; m_staticMonth = 0;
+    m_staticYear = NULL;
+    m_spinYear = NULL;
+    m_comboMonth = NULL;
+    m_staticMonth = NULL;
 
     return wxControl::Destroy();
 }
@@ -391,7 +404,7 @@ void wxCalendarCtrl::EnableMonthChange(bool enable)
 
 bool wxCalendarCtrl::SetDate(const wxDateTime& date)
 {
-    bool retval = FALSE;
+    bool retval = TRUE;
 
     bool sameMonth = m_date.GetMonth() == date.GetMonth(),
          sameYear = m_date.GetYear() == date.GetYear();
@@ -401,37 +414,40 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& date)
         if ( sameMonth && sameYear )
         {
             // just change the day
-            retval = TRUE;
             ChangeDay(date);
         }
         else
         {
-            if ( !AllowMonthChange() || (!AllowYearChange() && !sameYear) )
+            if ( AllowMonthChange() && (AllowYearChange() || sameYear) )
+            {
+                // change everything
+                m_date = date;
+
+                if ( !(GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) )
+                {
+                    // update the controls
+                    m_comboMonth->SetSelection(m_date.GetMonth());
+
+                    if ( AllowYearChange() )
+                    {
+                        if ( !m_userChangedYear )
+                            m_spinYear->SetValue(m_date.Format(_T("%Y")));
+                        else // don't overwrite what the user typed in
+                            m_userChangedYear = FALSE;
+                    }
+                }
+
+                // as the month changed, holidays did too
+                SetHolidayAttrs();
+
+                // update the calendar
+                Refresh();
+            }
+            else
             {
                 // forbidden
-                return retval;
+                retval = FALSE;
             }
-
-            // change everything
-            retval = TRUE;
-            m_date = date;
-
-            if ( !(GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) )
-            {
-                // update the controls
-                m_comboMonth->SetSelection(m_date.GetMonth());
-
-                if ( AllowYearChange() )
-                {
-                    m_spinYear->SetValue(m_date.Format(_T("%Y")));
-                }
-            }
-
-            // as the month changed, holidays did too
-            SetHolidayAttrs();
-
-            // update the calendar
-            Refresh();
         }
     }
 
@@ -1498,11 +1514,21 @@ void wxCalendarCtrl::OnMonthChange(wxCommandEvent& event)
     SetDateAndNotify(target);
 }
 
-void wxCalendarCtrl::OnYearChange(wxSpinEvent& event)
+void wxCalendarCtrl::OnYearChange(wxCommandEvent& event)
 {
+    int year = (int)event.GetInt();
+    if ( year == INT_MIN )
+    {
+        // invalid year in the spin control, ignore it
+        return;
+    }
+
+    // set the flag for SetDate(): otherwise it would overwrite the year
+    // typed in by the user
+    m_userChangedYear = TRUE;
+
     wxDateTime::Tm tm = m_date.GetTm();
 
-    int year = (int)event.GetInt();
     if ( tm.mday > wxDateTime::GetNumberOfDays(tm.mon, year) )
     {
         tm.mday = wxDateTime::GetNumberOfDays(tm.mon, year);
@@ -1520,7 +1546,6 @@ void wxCalendarCtrl::OnYearChange(wxSpinEvent& event)
         // inside the same year but a strange number of months forward/back..
         m_spinYear->SetValue(target.GetYear());
     }
-
 }
 
 // ----------------------------------------------------------------------------
