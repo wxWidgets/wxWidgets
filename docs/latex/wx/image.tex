@@ -451,10 +451,12 @@ mimetype to the named file}
 
 \membersection{wxImage::Rescale}\label{wximagerescale}
 
-\func{wxImage}{Rescale}{\param{int}{ width}, \param{int}{ height}}
+\func{wxImage \&}{Rescale}{\param{int}{ width}, \param{int}{ height}}
 
 Changes the size of the image in-place: after a call to this function, the
 image will have the given width and height.
+
+Returns the (modified) image itself.
 
 \wxheading{See also}
 

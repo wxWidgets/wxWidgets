@@ -255,7 +255,7 @@ public:
   wxImage Scale( int width, int height ) const;
 
   // rescales the image in place
-  void Rescale( int width, int height ) { *this = Scale(width, height); }
+  wxImage& Rescale( int width, int height ) { return *this = Scale(width, height); }
 
   // these routines are slow but safe
   void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
