@@ -677,7 +677,7 @@ bool wxSetWMDecorations(Window w, long style)
         wmProp.flags |= GR_WM_FLAGS_PROPS ;
     }
 
-    if (style & wxCLOSE)
+    if (style & wxCLOSE_BOX)
     {
         wmProp.props |= GR_WM_PROPS_CLOSEBOX ;
         wmProp.flags |= GR_WM_FLAGS_PROPS ;
@@ -753,7 +753,7 @@ bool wxSetWMDecorations(Window w, long style)
         if ((style & wxSYSTEM_MENU) != 0)
             hints.decorations |= MWM_DECOR_MENU;
         
-        if ((style & wxCLOSE) != 0)
+        if ((style & wxCLOSE_BOX) != 0)
             hints.functions |= MWM_FUNC_CLOSE;
         
         if ((style & wxMINIMIZE_BOX) != 0)

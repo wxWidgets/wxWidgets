@@ -459,7 +459,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         {
             m_gdkDecor |= GDK_DECOR_TITLE;
         }
-        if ((style & wxCLOSE) != 0)
+        if ((style & wxCLOSE_BOX) != 0)
         {
             m_gdkFunc |= GDK_FUNC_CLOSE;
         }

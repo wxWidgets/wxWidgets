@@ -976,7 +976,7 @@ enum wxBorder
 #define wxICONIZE               0x4000
 #define wxMINIMIZE              wxICONIZE
 #define wxMAXIMIZE              0x2000
-#define wxCLOSE                 0x1000
+#define wxCLOSE_BOX                 0x1000
 
 #define wxSYSTEM_MENU           0x0800
 #define wxMINIMIZE_BOX          0x0400
@@ -1011,10 +1011,10 @@ enum wxBorder
 
 #define wxDEFAULT_FRAME_STYLE \
   (wxSYSTEM_MENU | wxRESIZE_BORDER | \
-   wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxCLOSE | \
+   wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxCLOSE_BOX | \
    wxCAPTION | wxCLIP_CHILDREN)
 
-#define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU | wxCAPTION | wxCLOSE)
+#define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX)
 
 /*
  * wxExtDialog style flags
