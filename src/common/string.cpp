@@ -32,9 +32,9 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
-#include "wx/string.h"
-#include <wx/intl.h>
+  #include "wx/defs.h"
+  #include "wx/string.h"
+  #include "wx/intl.h"
 #endif
 
 #include <ctype.h>
@@ -62,13 +62,17 @@
 // static data
 // ----------------------------------------------------------------------------
 
-// for an empty string, GetStringData() will return this address
-static int g_strEmpty[] = { -1,     // ref count (locked)
-                             0,     // current length
-                             0,     // allocated memory
-                             0 };   // string data
+// for an empty string, GetStringData() will return this address: this
+// structure has the same layout as wxStringData and it's data() method will
+// return the empty string (dummy pointer)
+static const struct
+{
+  wxStringData data;
+  char dummy;
+} g_strEmpty = { {-1, 0, 0}, '\0' };
+
 // empty C style string: points to 'string data' byte of g_strEmpty
-extern const char *g_szNul = (const char *)(&g_strEmpty[3]);
+extern const char *g_szNul = &g_strEmpty.dummy;
 
 // ----------------------------------------------------------------------------
 // global functions

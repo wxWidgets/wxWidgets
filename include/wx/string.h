@@ -125,7 +125,7 @@ inline const wxString& wxGetEmptyString() { return *(wxString *)&g_szNul; }
 struct WXDLLEXPORT wxStringData
 {
   int     nRefs;        // reference count
-  size_t    nDataLength,  // actual string length
+  size_t  nDataLength,  // actual string length
           nAllocLength; // allocated memory size
 
   // mimics declaration 'char data[nAllocLength]'
