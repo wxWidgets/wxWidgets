@@ -11163,6 +11163,8 @@ EXPORTS
       DoMessage__5wxAppFv
       ;wxExit()
       wxExit__Fv
+      ;wxApp::DoMessage(void**)
+      DoMessage__5wxAppFPPv
       ;wxApp::Dispatch()
       Dispatch__5wxAppFv
       ;wxEntry(int,char**)

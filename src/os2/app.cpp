@@ -787,13 +787,22 @@ bool wxApp::DoMessage()
         }
 #endif // wxUSE_THREADS
 
+        //
         // Process the message
-        if (!ProcessMessage((WXMSG *)&svCurrentMsg))
-        {
-            ::WinDispatchMsg(vHabmain, (PQMSG)&svCurrentMsg);
-        }
+        //
+        DoMessage((WXMSG *)&svCurrentMsg);
     }
     return TRUE;
+} // end of wxApp::DoMessage
+
+void wxApp::DoMessage(
+  WXMSG*                            pMsg
+)
+{
+    if (!ProcessMessage((WXMSG *)&svCurrentMsg))
+    {
+        ::WinDispatchMsg(vHabmain, (PQMSG)&svCurrentMsg);
+    }
 } // end of wxApp::DoMessage
 
 //////////////////////////////////////////////////////////////////////////////

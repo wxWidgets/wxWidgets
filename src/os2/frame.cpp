@@ -341,15 +341,9 @@ void wxFrame::DoGetPosition(
     POINTL                          vPoint;
 
     ::WinQueryWindowRect(m_hFrame, &vRect);
-    vPoint.x = vRect.xLeft;
 
-    //
-    // OS/2 is backwards [WIN32 it is vRect.yTop]
-    //
-    vPoint.y = vRect.yBottom;
-
-    *pX = vPoint.x;
-    *pY = vPoint.y;
+    *pX = vRect.xRight - vRect.xLeft;
+    *pY = vRect.yTop - vRect.yBottom;
 } // end of wxFrame::DoGetPosition
 
 // ----------------------------------------------------------------------------
@@ -1356,6 +1350,7 @@ bool wxFrame::HandleSize(
             // restore all child frames too
             //
             IconizeChildFrames(FALSE);
+            (void)SendIconizeEvent(FALSE);
 
             //
             // fall through
@@ -1370,6 +1365,7 @@ bool wxFrame::HandleSize(
             // Iconize all child frames too
             //
             IconizeChildFrames(TRUE);
+            (void)SendIconizeEvent();
             m_bIconized = TRUE;
             break;
     }

@@ -120,11 +120,20 @@ wxAcceleratorTable::wxAcceleratorTable(
         USHORT                      uVirt = AF_CHAR;
 
         if (vaEntries[i].GetFlags() & wxACCEL_ALT)
+        {
             uVirt |= AF_ALT;
+            uVirt |= AF_VIRTUALKEY;
+        }
         if (vaEntries[i].GetFlags() & wxACCEL_SHIFT)
+        {
             uVirt |= AF_SHIFT;
+            uVirt |= AF_VIRTUALKEY;
+        }
         if (vaEntries[i].GetFlags() & wxACCEL_CTRL)
+        {
             uVirt |= AF_CONTROL;
+            uVirt |= AF_VIRTUALKEY;
+        }
 
         bool                        bIsVirtual;
         USHORT                      uKey = wxCharCodeWXToOS2( vaEntries[i].GetKeyCode()

@@ -1810,6 +1810,26 @@ void wxWindow::GetCaretPos(
 // popup menu
 // ---------------------------------------------------------------------------
 
+static void wxYieldForCommandsOnly()
+{
+    //
+    // Peek all WM_COMMANDs (it will always return WM_QUIT too but we don't
+    // want to process it here)
+    //
+    QMSG                            vMsg;
+
+    while (::WinPeekMsg( vHabmain
+                        ,&vMsg
+                        ,(HWND)0
+                        ,WM_COMMAND
+                        ,WM_COMMAND
+                        ,PM_REMOVE
+                       ) && vMsg.msg != WM_QUIT)
+    {
+        wxTheApp->DoMessage((WXMSG*)&vMsg);
+    }
+}
+
 bool wxWindow::DoPopupMenu(
   wxMenu*                           pMenu
 , int                               nX
@@ -1836,7 +1856,14 @@ bool wxWindow::DoPopupMenu(
                    ,0L
                    ,PU_MOUSEBUTTON2DOWN | PU_MOUSEBUTTON2 | PU_KEYBOARD
                   );
-    wxYield();
+    // we need to do it righ now as otherwise the events are never going to be
+    // sent to wxCurrentPopupMenu from HandleCommand()
+    //
+    // note that even eliminating (ugly) wxCurrentPopupMenu global wouldn't
+    // help and we'd still need wxYieldForCommandsOnly() as the menu may be
+    // destroyed as soon as we return (it can be a local variable in the caller
+    // for example) and so we do need to process the event immediately
+    wxYieldForCommandsOnly();
     wxCurrentPopupMenu = NULL;
 
     pMenu->SetInvokingWindow(NULL);
