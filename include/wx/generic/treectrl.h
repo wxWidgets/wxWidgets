@@ -31,6 +31,9 @@ WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
 #include "wx/pen.h"
 #include "wx/dynarray.h"
 
+//those defines should only be done in generic/treectrl.h, 
+//because wxMSW doesn't allow mutiple selection
+
 #ifndef wxTR_SINGLE
 #define wxTR_SINGLE                 0x0000
 #define wxTR_MULTIPLE               0x0020
