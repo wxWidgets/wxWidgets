@@ -1061,6 +1061,7 @@ wxCalendarEvent::wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type)
                : wxCommandEvent(type, cal->GetId())
 {
     m_date = cal->GetDate();
+    SetEventObject(cal);
 }
 
 #endif // wxUSE_CALENDARCTRL
