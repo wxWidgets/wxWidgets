@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #----------------------------------------------------------------------
 
-import sys, os, string, glob
+import sys, os, glob
 from distutils.core      import setup, Extension
 from distutils.file_util import copy_file
 from distutils.dir_util  import mkpath
@@ -144,7 +144,7 @@ bcpp_compiling = '-c' in sys.argv and 'my_bcpp' in sys.argv # Bad heuristic
 if bcpp_compiling:
     msg("Compiling wxPython by Borland C/C++ Compiler")
     HYBRID=0
-    WXBCPPLIBVER = string.replace(WXDLLVER,"_","")
+    WXBCPPLIBVER = WXDLLVER.replace("_","")
     # Version part of BCPP build LIBRARY name
     WXDLLVER="" # no dll ver path avaible
 
@@ -169,8 +169,8 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
              'UNDEF_NDEBUG', 'NO_SCRIPTS',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
-        if string.find(sys.argv[x], flag) == 0:
-            pos = string.find(sys.argv[x], '=') + 1
+        if sys.argv[x].find(flag) == 0:
+            pos = sys.argv[x].find('=') + 1
             if pos > 0:
                 vars()[flag] = eval(sys.argv[x][pos:])
                 sys.argv[x] = ''
@@ -178,8 +178,8 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
 # String options
 for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE', 'WXPORT']:
     for x in range(len(sys.argv)):
-        if string.find(sys.argv[x], option) == 0:
-            pos = string.find(sys.argv[x], '=') + 1
+        if sys.argv[x].find(option) == 0:
+            pos = sys.argv[x].find('=') + 1
             if pos > 0:
                 vars()[option] = sys.argv[x][pos:]
                 sys.argv[x] = ''
@@ -210,7 +210,7 @@ def Verify_WX_CONFIG():
         WX_CONFIG = 'wx%s%s%s-%s-config' % (WXPORT, uf, df, ver2)
 
         searchpath = os.environ["PATH"]
-        for p in string.split(searchpath, ':'):
+        for p in searchpath.split(':'):
             fp = os.path.join(p, WX_CONFIG)
             if os.path.exists(fp) and os.access(fp, os.X_OK):
                 # success
@@ -360,7 +360,7 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
     Verify_WX_CONFIG()
 
     cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1]
-    cflags = string.split(cflags)
+    cflags = cflags.split()
     if UNDEF_NDEBUG:
         cflags.append('-UNDEBUG')
     if debug:
@@ -368,7 +368,7 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
         cflags.append('-O0')
 
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
-    lflags = string.split(lflags)
+    lflags = lflags.split()
 
     NO_SCRIPTS = 1
     BUILD_DLLWIDGET = 0
@@ -407,7 +407,7 @@ elif os.name == 'posix':
 
     cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1] + ' ' + portcfg
 
-    cflags = string.split(cflags)
+    cflags = cflags.split()
     if UNDEF_NDEBUG:
         cflags.append('-UNDEBUG')
     if debug:
@@ -415,7 +415,7 @@ elif os.name == 'posix':
         cflags.append('-O0')
 
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
-    lflags = string.split(lflags)
+    lflags = lflags.split()
 
     # Some distros (e.g. Mandrake) put libGLU in /usr/X11R6/lib, but
     # wx-config doesn't output that for some reason.  For now, just
@@ -603,7 +603,7 @@ if BUILD_GLCANVAS or GL_ONLY:
     gl_libs = []
     if os.name == 'posix':
         gl_config = os.popen(WX_CONFIG + ' --gl-libs', 'r').read()[:-1]
-        gl_lflags = string.split(gl_config) + lflags
+        gl_lflags = gl_config.split() + lflags
         gl_libs = libs
     else:
         other_sources = [opj(location, 'msw/myglcanvas.cpp')]

@@ -1,5 +1,5 @@
 
-import sys, os, string
+import sys, os
 
 from distutils.msvccompiler import MSVCCompiler
 from distutils.bcppcompiler import BCPPCompiler
@@ -465,8 +465,8 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
 
             if force or newer(i_file, py_file) or newer(i_file, cpp_file):
                 # we need forward slashes here even on win32
-                cpp_file = string.join(string.split(cpp_file, '\\'), '/')
-                i_file = string.join(string.split(i_file, '\\'), '/')
+                cpp_file = '/'.join(cpp_file.split('\\'))
+                i_file = '/'.join(i_file.split('\\'))
 
                 cmd = ['./wxSWIG/wxswig'] + swig_args + ['-I'+dir, '-c', '-o', cpp_file, i_file]
                 spawn(cmd, verbose=1)
