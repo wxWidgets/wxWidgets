@@ -1040,9 +1040,12 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
     findInfo.flags = LVFI_STRING;
     if ( partial )
         findInfo.flags |= LVFI_PARTIAL;
-    findInfo.psz = WXSTRINGCAST str;
+    findInfo.psz = str;
 
-    return ListView_FindItem(GetHwnd(), (int) start, & findInfo);
+    // ListView_FindItem() excludes the first item from search and to look
+    // through all the items you need to start from -1 which is unnatural and
+    // inconsitent with the generic version - so we adjust the index
+    return ListView_FindItem(GetHwnd(), (int) start - 1, &findInfo);
 }
 
 // Find an item whose data matches this data, starting from the item after 'start'
