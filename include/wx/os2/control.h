@@ -12,6 +12,8 @@
 #ifndef _WX_CONTROL_H_
 #define _WX_CONTROL_H_
 
+#include "wx/dynarray.h"
+
 WXDLLEXPORT_DATA(extern const wxChar*) wxControlNameStr;
 
 // General item class
@@ -83,7 +85,7 @@ protected:
 
 protected:
    // For controls like radiobuttons which are really composite
-   wxList m_subControls;
+   wxArrayLong m_subControls;
 
    virtual wxSize DoGetBestSize() const;
 
