@@ -90,7 +90,7 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
         content = url.GetProtocol().GetContentType();
         if (content == wxEmptyString) content = GetMimeTypeFromExt(location);
         if (s)
-	{
+        {
             wxChar buf[256];
 
             wxGetTempFileName( _T("wxhtml"), buf);
@@ -98,12 +98,7 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
             m_Cache.Put(right, info);
 
             {   // ok, now copy it:
-#if defined(__VISAGECPP__)
-// VA thinks this is an ambiguous call
-                wxFileOutputStream sout((wxString)buf);
-#else
-                wxFileOutputStream sout(buf);
-#endif
+                wxFileOutputStream sout(wxString(buf));
                 s -> Read(sout); // copy the stream
             }
             delete s;
