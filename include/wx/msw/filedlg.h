@@ -37,8 +37,14 @@ public:
 
     virtual int ShowModal();
 
+protected:
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoGetSize( int *width, int *height ) const;
+    virtual void DoGetPosition( int *x, int *y ) const;
+
 private:
     wxArrayString m_fileNames;
+    bool m_bMovedWindow;
 
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
     DECLARE_NO_COPY_CLASS(wxFileDialog)

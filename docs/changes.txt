@@ -254,6 +254,7 @@ wxMSW:
 - fixed UNC paths handling in wxFileSystem (Daniel Nash)
 - set wxKeyEvent::m_uniChar in Unicode build
 - support for alpha channel in toolbar bitmaps (Jurgen Doornik)
+- wxFileDialog can now be moved and centered (Randall Fox)
 
 wxWinCE:
 
