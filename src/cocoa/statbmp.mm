@@ -15,7 +15,7 @@
     #include "wx/statbmp.h"
 #endif //WX_PRECOMP
 
-#import <AppKit/NSView.h>
+#import <AppKit/NSImageView.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
 BEGIN_EVENT_TABLE(wxStaticBitmap, wxControl)
@@ -32,7 +32,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID winid,
     if(!CreateControl(parent,winid,pos,size,style,wxDefaultValidator,name))
         return false;
     m_cocoaNSView = NULL;
-    SetNSView([[NSView alloc] initWithFrame: MakeDefaultNSRect(size)]);
+    SetNSView([[NSImageView alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     if(m_parent)
         m_parent->CocoaAddChild(this);
