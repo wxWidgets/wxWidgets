@@ -138,6 +138,7 @@ pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , unsigne
 
 OSErr wxApp::MacHandleAEODoc(const AppleEvent *event , AppleEvent *reply)
 {
+    SysBeep(40) ;
 	ProcessSerialNumber PSN ;
 	PSN.highLongOfPSN = 0 ;
 	PSN.lowLongOfPSN = kCurrentProcess ;

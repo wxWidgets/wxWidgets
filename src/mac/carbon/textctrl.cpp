@@ -680,12 +680,15 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     			}
            		if ( panel && panel->GetDefaultItem() )
            		{
-           			wxButton *def = panel->GetDefaultItem() ;
-    				wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
-   					event.SetEventObject(def);
-   					def->Command(event);
-               		event.Skip() ;
-                	return ;
+                    wxButton *def = wxDynamicCast(panel->GetDefaultItem(),
+                                                          wxButton);
+           			if ( def && def->IsEnabled() )
+           			{
+    				    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+   					    event.SetEventObject(def);
+   					    def->Command(event);
+                    	return ;
+                   }
            		}
             }
             //else: multiline controls need Enter for themselves

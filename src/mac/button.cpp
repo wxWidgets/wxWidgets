@@ -53,7 +53,8 @@ void wxButton::SetDefault()
     wxPanel *panel = wxDynamicCast(parent, wxPanel);
     if ( panel )
     {
-        btnOldDefault = panel->GetDefaultItem();
+        btnOldDefault = wxDynamicCast(panel->GetDefaultItem(),
+           wxButton);
         panel->SetDefaultItem(this);
     }
 

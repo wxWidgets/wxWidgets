@@ -264,11 +264,9 @@ void wxWindowMac::SetFocus()
 		    }
 			#endif // wxUSE_CARET
    			// panel wants to track the window which was the last to have focus in it
-    		wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
-    		if ( panel )
-    		{
-        		panel->SetLastFocus((wxWindow*)this);
-    		}
+            wxChildFocusEvent eventFocus(this);
+            (void)GetEventHandler()->ProcessEvent(eventFocus);
+
       #ifndef __WXUNIVERSAL__
 			wxControl* control = wxDynamicCast( gFocusWindow , wxControl ) ;
 			if ( control && control->GetMacControl() )
@@ -1482,18 +1480,10 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
     // notice that it's also important to do it upwards the tree becaus
     // otherwise when the top level panel gets focus, it won't set it back to
     // us, but to some other sibling
-    wxWindowMac *win = this;
-    while ( win )
-    {
-        wxWindowMac *parent = win->GetParent();
-        wxPanel *panel = wxDynamicCast(parent, wxPanel);
-        if ( panel )
-        {
-            panel->SetLastFocus(win);
-        }
-
-        win = parent;
-    }
+    
+    // CS:don't know if this is still needed:
+    //wxChildFocusEvent eventFocus(this);
+    //(void)GetEventHandler()->ProcessEvent(eventFocus);
 
     event.Skip();
 }
