@@ -772,11 +772,15 @@ Returns TRUE if the window is enabled for input, FALSE otherwise.
 
 \helpref{wxWindow::Enable}{wxwindowenable}
 
-\memebersection{wxWindow:IsExposed}\label{wxwindowisexposed}
+\membersection{wxWindow:IsExposed}\label{wxwindowisexposed}
 
 \constfunc{bool}{IsExposed}{\param{int }{x}, \param{int }{y}}
 
+\constfunc{bool}{IsExposed}{\param{wxPoint }{&pt}}
+
 \constfunc{bool}{IsExposed}{\param{int }{x}, \param{int }{y}, \param{int }{w}, \param{int }{h}}
+
+\constfunc{bool}{IsExposed}{\param{wxRectangle }{&rect}}
 
 Returns TRUE if the given point or rectange area has been exposed since the
 last repaint. Call this in an paint event handler to optimize redrawing by
@@ -810,7 +814,8 @@ window).
 
 \func{void}{Layout}{\void}
 
-Invokes the constraint-based layout algorithm for this window.
+Invokes the constraint-based layout algorithm or the sizer-based algorithm
+for this window.
 
 See \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} on when
 this function gets called automatically using auto layout.
@@ -1688,7 +1693,9 @@ Sets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxa
 \func{void}{SetAutoLayout}{\param{const bool}{ autoLayout}}
 
 Determines whether the \helpref{wxWindow::Layout}{wxwindowlayout} function will
-be called automatically when the window is resized.
+be called automatically when the window is resized. Use in connection with
+\helpref{wxWindow::SetSizer}{wxwindowsetsizer} and 
+\helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} for layouting subwindows.
 
 \wxheading{Parameters}
 
@@ -1827,8 +1834,9 @@ constraints.}
 \wxheading{Remarks}
 
 You must call \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} to tell a window to use
-the constraints automatically in OnSize; otherwise, you must
-override OnSize and call Layout explicitly.
+the constraints automatically in OnSize; otherwise, you must override OnSize and call Layout() 
+explicitly. When setting both a wxLayoutConstraints and a \helpref{wxSizer}{wxsizer}, only the
+sizer will have effect.
 
 \membersection{wxWindow::SetDropTarget}\label{wxwindowsetdroptarget}
 
@@ -2170,6 +2178,27 @@ If this function is called, the user will not be able to size the window outside
 given bounds.
 
 The resizing increments are only significant under Motif or Xt.
+
+\membersection{wxWindow::SetSizer}\label{wxwindowsetsizer}
+
+\func{void}{SetSizer}{\param{wxSizer* }{sizer}}
+
+Sets the window to have the given layout sizer. The window
+will then own the object, and will take care of its deletion.
+If an existing layout constraints object is already owned by the
+window, it will be deleted.
+
+\wxheading{Parameters}
+
+\docparam{sizer}{The sizer to set. Pass NULL to disassociate and delete the window's
+sizer.}
+
+\wxheading{Remarks}
+
+You must call \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} to tell a window to use
+the sizer automatically in OnSize; otherwise, you must override OnSize and call Layout() 
+explicitly. When setting both a wxSizer and a \helpref{wxLayoutConstraints}{wxlayoutconstraints}, 
+only the sizer will have effect.
 
 \membersection{wxWindow::SetTitle}\label{wxwindowsettitle}
 

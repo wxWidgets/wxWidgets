@@ -100,9 +100,22 @@ that are not static can have \helpref{validators}{wxvalidator} associated with t
 
 {\large {\bf Window layout}}
 
-\overview{Overview}{constraintsoverview}
+There are two different systems for layouting windows (and dialogs in particluar).
+One is based upon so-called sizers and it requires less typing, thinking and calculating
+and will in almost all cases produce dialogs looking equally well on all platforms, the
+other is based on so-called constraints and allows for more detailed layouts.
 
-These are the classes relevant to automated window layout.
+These are the classes relevant to the sizer-based layout.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxSizer}{wxsizer}}{Abstract base class}
+\twocolitem{\helpref{wxBoxSizer}{wxboxsizer}}{A sizer for laying out windows in a row or column}
+\twocolitem{\helpref{wxStaticBoxSizer}{wxstaticboxsizer}}{Same as wxBoxSizer, but with surrounding static box}
+\end{twocollist}
+
+\overview{Overview}{constraintsoverview} over the constraints-based layout.
+
+These are the classes relevant to constraints-based window layout.
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}}{Represents a single constraint dimension}
@@ -268,7 +281,8 @@ classes, functions and macros.
 \overview{Overview}{ipcoverview}
 
 wxWindows provides a simple interprocess communications facilities
-based on DDE.
+based on DDE. [Note that this is currently work in progress and may not
+function properly.]
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxDDEClient}{wxddeclient}}{Represents a client}

@@ -46,27 +46,32 @@ functions that take a wxTreeEvent argument.
 
 Constructor.
 
-\membersection{wxTreeEvent::m\_code}
+\membersection{wxTreeEvent::GetItem}
 
-\member{int}{m\_code}
+\constfunc{wxTreeItemId}{GetItem}{}
 
-Key code if the event is a keypress event.
+Returns he item (valid for all events).
 
-\membersection{wxTreeEvent::m\_itemIndex}
+\membersection{wxTreeEvent::GetOldItem}
 
-\member{wxTreeItem}{m\_item}
+\constfunc{wxTreeItemId}{GetOldItem}{}
 
-The item (valid for all events).
+Returns the old item index (valid for EVT\_TREE\_ITEM\_CHANGING and CHANGED events)
 
-\membersection{wxTreeEvent::m\_oldItem}
+\membersection{wxTreeEvent::GetPoint()}
 
-\member{long}{m\_oldItem}
+\constfunc{wxPoint}{GetPoint}{}
 
-The old item index (valid for EVT\_TREE\_ITEM\_CHANGING and CHANGED events)
+Returns the position of the mouse pointer if the event is a drag event.
 
-\membersection{wxTreeEvent::m\_pointDrag}
+\membersection{wxTreeEvent::GetCode}
 
-\member{wxPoint}{m\_pointDrag}
+\constfunc{int}{GetCode}{}
 
-The position of the mouse pointer if the event is a drag event.
+The key code if the event was is a key event.
 
+\membersection{wxTreeEvent::GetLabel}
+
+\constfunc{const wxString&}{GetLabel}{}
+
+Returns the label if the event was a begin or end edit label event.
