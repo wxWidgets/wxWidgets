@@ -60,6 +60,8 @@ If either {\it hotSpotX} or {\it hotSpotY} is -1, the hotspot will be the centre
 
 Constructs a cursor by passing a string resource name or filename.
 
+On MacOS when specifying a string resource name, first the color cursors 'crsr' and then the black/white cursors 'CURS' in the resource chain are scanned through.
+
 {\it hotSpotX} and {\it hotSpotY} are currently only used under Windows when loading from an
 icon file, to specify the cursor hotspot relative to the top left of the image.
 
@@ -75,6 +77,7 @@ than 127 will be foreground, colors less than this background. The mask (if any)
 In MSW the foreground will be white and the background black. The cursor is resized to 32x32
 In GTK, the two most frequent colors will be used for foreground and background. The cursor will be displayed
 at the size of the image.
+On MacOS the cursor is resized to 16x16 and currently only shown as black/white (mask respected).
 
 \func{}{wxCursor}{\param{const wxCursor\&}{ cursor}}
 
@@ -95,7 +98,7 @@ Copy constructor. This uses reference counting so is a cheap operation.
 \docparam{hotSpotY}{Hotspot y coordinate.}
 
 \docparam{type}{Icon type to load. Under Motif, {\it type} defaults to {\bf wxBITMAP\_TYPE\_XBM}. Under Windows,
-it defaults to {\bf wxBITMAP\_TYPE\_CUR\_RESOURCE}.
+it defaults to {\bf wxBITMAP\_TYPE\_CUR\_RESOURCE}. Under MacOS, it defaults to {\bf wxBITMAP\_TYPE\_MACCURSOR\_RESOURCE}.
 
 Under X, the permitted cursor types are:
 
