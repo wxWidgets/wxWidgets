@@ -55,6 +55,10 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_UNICODE
+    #error "HelpGen doesn't build in Unicode mode"
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
@@ -2186,6 +2190,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.35  2004/12/12 11:03:31  VZ
+   give an error message if we're built in Unicode mode (in response to bug 1079224)
+
    Revision 1.34  2004/11/23 09:53:31  JS
    Changed GPL to wxWindows Licence
 
