@@ -18,7 +18,7 @@
 // ---------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "window.h"
+    #pragma implementation "univwindow.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
