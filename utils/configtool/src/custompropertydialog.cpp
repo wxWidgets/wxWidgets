@@ -200,7 +200,7 @@ void ctCustomPropertyDialog::OnUpdatePropertyChoices( wxUpdateUIEvent& event )
  * Event handler for ID_PROPERTY_CHOICE_ADD
  */
 
-void ctCustomPropertyDialog::OnPropertyChoiceAdd( wxCommandEvent& event )
+void ctCustomPropertyDialog::OnPropertyChoiceAdd( wxCommandEvent& WXUNUSED(event) )
 {
     wxChoice* choice = (wxChoice* ) FindWindow(ID_CUSTOMPROPERTYTYPE);
     if ( choice->GetSelection() > -1 && choice->GetStringSelection() == wxT("choice") )
@@ -229,9 +229,9 @@ void ctCustomPropertyDialog::OnUpdatePropertyChoiceAdd( wxUpdateUIEvent& event )
  * Event handler for ID_PROPERTY_CHOICE_REMOVE
  */
 
-void ctCustomPropertyDialog::OnPropertyChoiceRemove( wxCommandEvent& event )
+void ctCustomPropertyDialog::OnPropertyChoiceRemove( wxCommandEvent& WXUNUSED(event) )
 {
-    wxChoice* choice = (wxChoice* ) FindWindow(ID_CUSTOMPROPERTYEDITORTYPE);
+    /* wxChoice* choice = (wxChoice* ) */ FindWindow(ID_CUSTOMPROPERTYEDITORTYPE);
     wxListBox* listBox = (wxListBox* ) FindWindow(ID_PROPERTY_CHOICES);
     if (listBox->GetSelection() > -1)
     {

@@ -112,7 +112,7 @@ bool ctConfigToolView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
     return TRUE;
 }
 
-void ctConfigToolView::OnDraw(wxDC *dc)
+void ctConfigToolView::OnDraw(wxDC *WXUNUSED(dc))
 {
 }
 
@@ -190,7 +190,7 @@ void ctConfigToolView::OnUpdate(wxView *WXUNUSED(sender), wxObject *hintObj)
 }
 
 // Clean up windows used for displaying the view.
-bool ctConfigToolView::OnClose(bool deleteWindow)
+bool ctConfigToolView::OnClose(bool WXUNUSED(deleteWindow))
 {
     if (!GetDocument()->Close())
         return FALSE;
@@ -387,37 +387,37 @@ ctConfigItem* ctConfigToolView::GetSelection()
 }
 
 /// Add a checkbox item
-void ctConfigToolView::OnAddCheckBoxItem(wxCommandEvent& event)
+void ctConfigToolView::OnAddCheckBoxItem(wxCommandEvent& WXUNUSED(event))
 {
     AddItem(ctTypeBoolCheck, _("New checkbox item"));
 }
 
 /// Add a radiobutton item
-void ctConfigToolView::OnAddRadioButtonItem(wxCommandEvent& event)
+void ctConfigToolView::OnAddRadioButtonItem(wxCommandEvent& WXUNUSED(event))
 {
     AddItem(ctTypeBoolRadio, _("New radio button item"));
 }
 
 /// Add a group item
-void ctConfigToolView::OnAddGroupItem(wxCommandEvent& event)
+void ctConfigToolView::OnAddGroupItem(wxCommandEvent& WXUNUSED(event))
 {
     AddItem(ctTypeGroup, _("New group item"));
 }
 
 /// Add a group option item
-void ctConfigToolView::OnAddCheckGroupItem(wxCommandEvent& event)
+void ctConfigToolView::OnAddCheckGroupItem(wxCommandEvent& WXUNUSED(event))
 {
     AddItem(ctTypeCheckGroup, _("New check group item"));
 }
 
 /// Add a group option item
-void ctConfigToolView::OnAddRadioGroupItem(wxCommandEvent& event)
+void ctConfigToolView::OnAddRadioGroupItem(wxCommandEvent& WXUNUSED(event))
 {
     AddItem(ctTypeRadioGroup, _("New radio group item"));
 }
 
 /// Add a string item
-void ctConfigToolView::OnAddStringItem(wxCommandEvent& event)
+void ctConfigToolView::OnAddStringItem(wxCommandEvent& WXUNUSED(event))
 {
     AddItem(ctTypeString, _("New string item"));
 }
@@ -456,7 +456,7 @@ void ctConfigToolView::AddItem(ctConfigType type, const wxString& msg)
 }
 
 /// Delete an item
-void ctConfigToolView::OnDeleteItem(wxCommandEvent& event)
+void ctConfigToolView::OnDeleteItem(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigItem* sel = GetSelection();
     if (sel)
@@ -472,7 +472,7 @@ void ctConfigToolView::OnDeleteItem(wxCommandEvent& event)
 }
 
 /// Rename an item
-void ctConfigToolView::OnRenameItem(wxCommandEvent& event)
+void ctConfigToolView::OnRenameItem(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigItem* sel = GetSelection();
     if (sel)
@@ -491,7 +491,7 @@ void ctConfigToolView::OnRenameItem(wxCommandEvent& event)
 }
 
 /// Copy an item to the clipboard
-void ctConfigToolView::OnCopy(wxCommandEvent& event)
+void ctConfigToolView::OnCopy(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     ctConfigItem* sel = GetSelection();
@@ -502,7 +502,7 @@ void ctConfigToolView::OnCopy(wxCommandEvent& event)
 }
 
 /// Copy an item to the clipboard and cut the item
-void ctConfigToolView::OnCut(wxCommandEvent& event)
+void ctConfigToolView::OnCut(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     ctConfigItem* sel = GetSelection();
@@ -517,7 +517,7 @@ void ctConfigToolView::OnCut(wxCommandEvent& event)
 }
 
 /// Paste an item from the clipboard to the tree
-void ctConfigToolView::OnPaste(wxCommandEvent& event)
+void ctConfigToolView::OnPaste(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     ctConfigItem* sel = GetSelection();
@@ -565,7 +565,7 @@ void ctConfigToolView::OnUpdatePaste(wxUpdateUIEvent& event)
 }
 
 /// Copy an item to the clipboard
-void ctConfigToolView::OnContextCopy(wxCommandEvent& event)
+void ctConfigToolView::OnContextCopy(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     ctConfigItem* sel = wxGetApp().GetMainFrame()->GetConfigTreeCtrl()->GetContextItem();
@@ -576,7 +576,7 @@ void ctConfigToolView::OnContextCopy(wxCommandEvent& event)
 }
 
 /// Copy an item to the clipboard and cut the item
-void ctConfigToolView::OnContextCut(wxCommandEvent& event)
+void ctConfigToolView::OnContextCut(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     ctConfigItem* sel = wxGetApp().GetMainFrame()->GetConfigTreeCtrl()->GetContextItem();
@@ -591,7 +591,7 @@ void ctConfigToolView::OnContextCut(wxCommandEvent& event)
 }
 
 /// Paste an item from the clipboard to the tree
-void ctConfigToolView::OnContextPasteBefore(wxCommandEvent& event)
+void ctConfigToolView::OnContextPasteBefore(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     ctConfigItem* sel = wxGetApp().GetMainFrame()->GetConfigTreeCtrl()->GetContextItem();
@@ -608,7 +608,7 @@ void ctConfigToolView::OnContextPasteBefore(wxCommandEvent& event)
 }
 
 /// Paste an item from the clipboard to the tree
-void ctConfigToolView::OnContextPasteAfter(wxCommandEvent& event)
+void ctConfigToolView::OnContextPasteAfter(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     ctConfigItem* sel = wxGetApp().GetMainFrame()->GetConfigTreeCtrl()->GetContextItem();
@@ -625,7 +625,7 @@ void ctConfigToolView::OnContextPasteAfter(wxCommandEvent& event)
 }
 
 /// Paste an item from the clipboard to the tree
-void ctConfigToolView::OnContextPasteAsChild(wxCommandEvent& event)
+void ctConfigToolView::OnContextPasteAsChild(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     ctConfigItem* sel = wxGetApp().GetMainFrame()->GetConfigTreeCtrl()->GetContextItem();
@@ -685,7 +685,7 @@ void ctConfigToolView::OnUpdateContextPasteAsChild(wxUpdateUIEvent& event)
 }
 
 /// Item help
-void ctConfigToolView::OnItemHelp(wxCommandEvent& event)
+void ctConfigToolView::OnItemHelp(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     if ( doc && GetSelection() )
@@ -706,7 +706,7 @@ void ctConfigToolView::OnUpdateItemHelp(wxUpdateUIEvent& event)
 }
 
 /// Add a custom property
-void ctConfigToolView::OnAddCustomProperty(wxCommandEvent& event)
+void ctConfigToolView::OnAddCustomProperty(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     ctConfigItem* sel = GetSelection();
@@ -751,7 +751,7 @@ void ctConfigToolView::OnAddCustomProperty(wxCommandEvent& event)
 }
 
 /// Edit a custom property
-void ctConfigToolView::OnEditCustomProperty(wxCommandEvent& event)
+void ctConfigToolView::OnEditCustomProperty(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     ctConfigItem* sel = GetSelection();
@@ -823,7 +823,7 @@ void ctConfigToolView::OnEditCustomProperty(wxCommandEvent& event)
 }
 
 /// Delete a custom property
-void ctConfigToolView::OnDeleteCustomProperty(wxCommandEvent& event)
+void ctConfigToolView::OnDeleteCustomProperty(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     ctConfigItem* sel = GetSelection();
@@ -908,7 +908,7 @@ void ctConfigToolView::OnTabSelect(wxNotebookEvent& event)
     }
 }
 
-void ctConfigToolView::OnSaveSetupFile(wxCommandEvent& event)
+void ctConfigToolView::OnSaveSetupFile(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     wxString setupStr = doc->GenerateSetup();
@@ -940,7 +940,7 @@ void ctConfigToolView::OnSaveSetupFile(wxCommandEvent& event)
     }    
 }
 
-void ctConfigToolView::OnSaveConfigureCommand(wxCommandEvent& event)
+void ctConfigToolView::OnSaveConfigureCommand(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     wxString configureStr = doc->GenerateConfigureCommand();
@@ -983,7 +983,7 @@ void ctConfigToolView::OnUpdateSaveConfigureCommand(wxUpdateUIEvent& event)
 }
 
 /// Find text
-void ctConfigToolView::OnFind(wxCommandEvent& event)
+void ctConfigToolView::OnFind(wxCommandEvent& WXUNUSED(event))
 {
     ctFindReplaceDialog* dialog = wxGetApp().GetMainFrame()->GetFindDialog();
     if (dialog)
@@ -1015,7 +1015,7 @@ void ctConfigToolView::OnUpdateFind(wxUpdateUIEvent& event)
 }
 
 /// Save default file type
-void ctConfigToolView::OnGo(wxCommandEvent& event)
+void ctConfigToolView::OnGo(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     wxString path = wxGetApp().GetSettings().m_lastSetupSaveDir;

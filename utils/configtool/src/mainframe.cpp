@@ -198,7 +198,7 @@ void ctMainFrame::OnCloseWindow(wxCloseEvent& event)
     Destroy();
 }
 
-void ctMainFrame::OnAbout(wxCommandEvent& event)
+void ctMainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg = wxGetApp().GetSettings().GetAppName() + wxT(" (c) Julian Smart");
     wxString caption = wxT("About ") + wxGetApp().GetSettings().GetAppName();
@@ -215,12 +215,12 @@ void ctMainFrame::OnNew(wxCommandEvent& event)
     wxGetApp().GetDocManager()->OnFileNew(event);
 }
 
-void ctMainFrame::OnExit(wxCommandEvent& event)
+void ctMainFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     Close();
 }
 
-void ctMainFrame::OnSettings(wxCommandEvent& event)
+void ctMainFrame::OnSettings(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().GetSettings().ShowSettingsDialog();
 }
@@ -359,7 +359,7 @@ wxMenuBar* ctMainFrame::CreateMenuBar()
 }
 
 /// Handles the Show Toolbar menu event.
-void ctMainFrame::OnShowToolbar(wxCommandEvent& event)
+void ctMainFrame::OnShowToolbar(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().GetSettings().m_showToolBar = !wxGetApp().GetSettings().m_showToolBar;
     GetToolBar()->Show(wxGetApp().GetSettings().m_showToolBar);
@@ -367,19 +367,19 @@ void ctMainFrame::OnShowToolbar(wxCommandEvent& event)
 }
 
 /// Handles the Help Contents menu event.
-void ctMainFrame::OnHelp(wxCommandEvent& event)
+void ctMainFrame::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().GetHelpController().DisplayContents();
 }
 
 /// Handles context help
-void ctMainFrame::OnContextHelp(wxCommandEvent& event)
+void ctMainFrame::OnContextHelp(wxCommandEvent& WXUNUSED(event))
 {
     wxContextHelp contextHelp;
 }
 
 /// Handles the Help Contents menu event for the reference manual.
-void ctMainFrame::OnReferenceHelp(wxCommandEvent& event)
+void ctMainFrame::OnReferenceHelp(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().GetReferenceHelpController().DisplayContents();
 }
@@ -467,7 +467,7 @@ void ctOutputWindow::CreateWindows()
 }
 
 /// Copies the text to the clipboard.
-void ctOutputWindow::OnCopyToClipboard(wxCommandEvent& event)
+void ctOutputWindow::OnCopyToClipboard(wxCommandEvent& WXUNUSED(event))
 {
     // Try to copy the selection first
     long int selFrom, selTo;
@@ -517,7 +517,7 @@ void ctOutputWindow::SetFilename(const wxString& filename)
 }
 
 /// Saves the file.
-void ctOutputWindow::OnSaveText(wxCommandEvent& event)
+void ctOutputWindow::OnSaveText(wxCommandEvent& WXUNUSED(event))
 {
     if (m_codeCtrl->IsModified())
     {
@@ -535,7 +535,7 @@ void ctOutputWindow::OnUpdateSaveText(wxUpdateUIEvent& event)
     event.Enable(m_doc && m_codeCtrl && m_codeCtrl->IsModified());
 }
 
-void ctOutputWindow::OnRegenerate(wxCommandEvent& event)
+void ctOutputWindow::OnRegenerate(wxCommandEvent& WXUNUSED(event))
 {
     if (m_doc)
     {

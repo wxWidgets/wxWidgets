@@ -93,12 +93,12 @@ bool ctApp::OnInit(void)
 
 #ifdef __WXMSW__
     // If the development version, go up a directory.
-    if ((m_appDir.Right(5).CmpNoCase("DEBUG") == 0) ||
-        (m_appDir.Right(11).CmpNoCase("DEBUGSTABLE") == 0) ||
-        (m_appDir.Right(7).CmpNoCase("RELEASE") == 0) ||
-        (m_appDir.Right(13).CmpNoCase("RELEASESTABLE") == 0) ||
-        (m_appDir.Right(10).CmpNoCase("RELEASEDEV") == 0) ||
-        (m_appDir.Right(8).CmpNoCase("DEBUGDEV") == 0)
+    if ((m_appDir.Right(5).CmpNoCase(_T("DEBUG")) == 0) ||
+        (m_appDir.Right(11).CmpNoCase(_T("DEBUGSTABLE")) == 0) ||
+        (m_appDir.Right(7).CmpNoCase(_T("RELEASE")) == 0) ||
+        (m_appDir.Right(13).CmpNoCase(_T("RELEASESTABLE")) == 0) ||
+        (m_appDir.Right(10).CmpNoCase(_T("RELEASEDEV")) == 0) ||
+        (m_appDir.Right(8).CmpNoCase(_T("DEBUGDEV")) == 0)
         )
         m_appDir = wxPathOnly(m_appDir);
 #endif

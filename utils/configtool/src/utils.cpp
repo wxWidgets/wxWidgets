@@ -27,6 +27,7 @@
 #include "wx/variant.h"
 #include "wx/cshelp.h"
 #include "wx/cmdline.h"
+#include "wx/imaglist.h"
 
 #include <math.h>
 
@@ -45,17 +46,17 @@ int apDetermineImageType(const wxString& filename)
     wxSplitPath(filename, & path, & name, & ext);
 
     ext.MakeLower();
-    if (ext == "jpg" || ext == "jpeg")
+    if (ext == _T("jpg") || ext == _T("jpeg"))
         return wxBITMAP_TYPE_JPEG;
-    else if (ext == "gif")
+    else if (ext == _T("gif"))
         return wxBITMAP_TYPE_GIF;
-    else if (ext == "bmp")
+    else if (ext == _T("bmp"))
         return wxBITMAP_TYPE_BMP;
-    else if (ext == "png")
+    else if (ext == _T("png"))
         return wxBITMAP_TYPE_PNG;
-    else if (ext == "pcx")
+    else if (ext == _T("pcx"))
         return wxBITMAP_TYPE_PCX;
-    else if (ext == "tif" || ext == "tiff")
+    else if (ext == _T("tif") || ext == _T("tiff"))
         return wxBITMAP_TYPE_TIF;
     else
         return -1;
@@ -158,7 +159,7 @@ wxFont apStringToFont(const wxString& str)
 int apFindNotebookPage(wxNotebook* notebook, const wxString& name)
 {
     int i;
-    for (i = 0; i < notebook->GetPageCount(); i++)
+    for (i = 0; i < (int)notebook->GetPageCount(); i++)
         if (name == notebook->GetPageText(i))
             return i;
     return -1;
@@ -175,11 +176,11 @@ void apViewHTMLFile(const wxString& url)
     TCHAR szCmdName[1024];
     DWORD dwType, dw = sizeof(szCmdName);
     LONG lRes;
-    lRes = RegOpenKey(HKEY_CLASSES_ROOT, "htmlfile\\shell\\open\\command", &hKey);
+    lRes = RegOpenKey(HKEY_CLASSES_ROOT, _T("htmlfile\\shell\\open\\command"), &hKey);
     if(lRes == ERROR_SUCCESS && RegQueryValueEx(hKey,(LPTSTR)NULL, NULL,
         &dwType, (LPBYTE)szCmdName, &dw) == ERROR_SUCCESS)
     {
-        strcat(szCmdName, (const char*) url);
+        wxStrcat(szCmdName, (const wxChar*) url);
         PROCESS_INFORMATION  piProcInfo;
         STARTUPINFO          siStartInfo;
         memset(&siStartInfo, 0, sizeof(STARTUPINFO));
@@ -312,7 +313,31 @@ wxString apFindAppPath(const wxString& argv0, const wxString& cwd, const wxStrin
 }
 
 // Adds a context-sensitive help button, for non-Windows platforms
-void apAddContextHelpButton(wxWindow* parent, wxSizer* sizer, int sizerFlags, int sizerBorder)
+void apAddContextHelpButton(wxWindow* 
+                                      #if defined(__WXGTK__) || defined(__WXMAC__)
+                                      parent
+                                      #else
+                                      WXUNUSED(parent)
+                                      #endif
+                                      , wxSizer* 
+                                                 #if defined(__WXGTK__) || defined(__WXMAC__)
+                                                 sizer
+                                                 #else
+                                                 WXUNUSED(sizer)
+                                                 #endif
+                                                 , int 
+                                                       #if defined(__WXGTK__) || defined(__WXMAC__)
+                                                       sizerFlags
+                                                       #else
+                                                       WXUNUSED(sizerFlags)
+                                                       #endif
+                                                       , int 
+                                                             #if defined(__WXGTK__) || defined(__WXMAC__)
+                                                             sizerBorder
+                                                             #else
+                                                             WXUNUSED(sizerBorder)
+                                                             #endif
+                                                             )
 {
 #if defined(__WXGTK__) || defined(__WXMAC__)
 #ifdef __WXMAC__
@@ -458,7 +483,7 @@ wxOutputStream& operator <<(wxOutputStream& stream, long l)
     return stream << str;
 }
 
-wxOutputStream& operator <<(wxOutputStream& stream, const char c)
+wxOutputStream& operator <<(wxOutputStream& stream, const wxChar c)
 {
     wxString str;
     str.Printf(_T("%c"), c);

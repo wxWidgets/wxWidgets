@@ -152,7 +152,7 @@ wxString ctSettings::GenerateFilename(const wxString& rootName)
     while (wxFileExists(fullFilename))
     {
         i ++;
-        postfixStr.Printf("%d", i);
+        postfixStr.Printf(_T("%d"), i);
         fullFilename = filename + postfixStr + wxT(".wxs");
     }
 
@@ -273,7 +273,7 @@ bool ctSettings::SaveConfig()
     return TRUE;
 }
 
-void ctSettings::ShowSettingsDialog(const wxString& page)
+void ctSettings::ShowSettingsDialog(const wxString& WXUNUSED(page))
 {
     ctSettingsDialog* dialog = new ctSettingsDialog(wxGetApp().GetTopWindow());
 //    if (!page.IsEmpty())

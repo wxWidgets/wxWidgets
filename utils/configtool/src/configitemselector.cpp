@@ -137,7 +137,7 @@ void ctConfigItemsSelector::CreateControls()
  * Event handler for ID_CONFIG_ADD
  */
 
-void ctConfigItemsSelector::OnConfigAdd( wxCommandEvent& event )
+void ctConfigItemsSelector::OnConfigAdd( wxCommandEvent& WXUNUSED(event) )
 {
     wxListBox* masterList = wxDynamicCast(FindWindow(ID_AVAILABLE_CONFIG_ITEMS), wxListBox);
     wxListBox* listBox = wxDynamicCast(FindWindow(ID_CONFIG_ITEMS), wxListBox);
@@ -159,7 +159,7 @@ void ctConfigItemsSelector::OnConfigAdd( wxCommandEvent& event )
  * Event handler for ID_CONFIG_REMOVE
  */
 
-void ctConfigItemsSelector::OnConfigRemove( wxCommandEvent& event )
+void ctConfigItemsSelector::OnConfigRemove( wxCommandEvent& WXUNUSED(event) )
 {
     wxListBox* listBox = wxDynamicCast(FindWindow(ID_CONFIG_ITEMS), wxListBox);
     if (listBox)

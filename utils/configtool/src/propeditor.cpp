@@ -163,7 +163,7 @@ void ctPropertyEditor::ClearEditor()
 }
 
 /// Handles detailed editing event.
-void ctPropertyEditor::OnEditDetails(wxCommandEvent& event)
+void ctPropertyEditor::OnEditDetails(wxCommandEvent& WXUNUSED(event))
 {
     wxWindow* parentFrame = this;
     while (parentFrame && !parentFrame->IsKindOf(CLASSINFO(wxFrame)))
@@ -435,7 +435,7 @@ ctProperty* ctPropertyEditor::FindProperty(int row)
 }
 
 /// Edit the details of this cell appropriately.
-bool ctPropertyEditor::EditDetails(wxWindow* parent)
+bool ctPropertyEditor::EditDetails(wxWindow* WXUNUSED(parent))
 {
     if (CanEditDetails())
     {
@@ -572,7 +572,7 @@ void ctPropertyEditor::OnChangeCell(wxGridEvent& event)
 }
 
 /// Double-click to show specialised editor.
-void ctPropertyEditor::OnDClickCell(wxGridEvent& event)
+void ctPropertyEditor::OnDClickCell(wxGridEvent& WXUNUSED(event))
 {
     wxWindow* parentFrame = this;
     while (parentFrame && !parentFrame->IsKindOf(CLASSINFO(wxFrame)))

@@ -261,7 +261,7 @@ void ctConfigItem::InitProperties()
 
 /// Do additional actions to apply the property to the internal
 /// representation.
-void ctConfigItem::ApplyProperty(ctProperty* prop, const wxVariant& oldValue)
+void ctConfigItem::ApplyProperty(ctProperty* prop, const wxVariant& WXUNUSED(oldValue))
 {
     ctConfigToolDoc* doc = GetDocument();
     bool oldModified = doc->IsModified();

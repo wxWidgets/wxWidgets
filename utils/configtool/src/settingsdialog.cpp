@@ -136,7 +136,7 @@ void ctSettingsDialog::OnCancel( wxCommandEvent& event )
  * Event handler for wxID_HELP
  */
 
-void ctSettingsDialog::OnHelp( wxCommandEvent& event )
+void ctSettingsDialog::OnHelp( wxCommandEvent& WXUNUSED(event) )
 {
     wxNotebook* notebook = (wxNotebook*) FindWindow(ID_NOTEBOOK);
 
@@ -376,7 +376,7 @@ void ctLocationSettingsDialog::OnUpdateWxwinHierarchy( wxUpdateUIEvent& event )
  * Event handler for ID_CHOOSE_WXWIN_HIERARCHY
  */
 
-void ctLocationSettingsDialog::OnChooseWxwinHierarchy( wxCommandEvent& event )
+void ctLocationSettingsDialog::OnChooseWxwinHierarchy( wxCommandEvent& WXUNUSED(event) )
 {
     wxTextCtrl* textCtrl = (wxTextCtrl*) FindWindow( ID_WXWIN_HIERARCHY );
     wxASSERT( textCtrl != NULL );
