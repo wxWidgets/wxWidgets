@@ -7678,8 +7678,8 @@ class Window(EvtHandler):
         ShouldInheritColours to return false, the colours will not be changed
         no matter what and only the font might.
 
-        This rather complicated logic is necessary in order to accomodate the
-        different usage scenarius. The most common one is when all default
+        This rather complicated logic is necessary in order to accommodate the
+        different usage scenarios. The most common one is when all default
         attributes are used and in this case, nothing should be inherited as
         in modern GUIs different controls use different fonts (and colours)
         than their siblings so they can't inherit the same value from the
