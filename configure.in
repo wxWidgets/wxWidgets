@@ -3068,6 +3068,8 @@ fi
 
 if test "$wxUSE_STATUSBAR" = "yes"; then
     AC_DEFINE(wxUSE_STATUSBAR)
+
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS statbar"
 fi
 
 if test "$wxUSE_TABDIALOG" = "yes"; then

@@ -919,6 +919,11 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/splitter/Makefile.in $(DISTDIR)/samples/splitter
 	cp $(SAMPDIR)/splitter/*.cpp $(DISTDIR)/samples/splitter
     
+	mkdir $(DISTDIR)/samples/statbar
+	cp $(SAMPDIR)/statbar/Makefile.in $(DISTDIR)/samples/statbar
+	cp $(SAMPDIR)/statbar/*.cpp $(DISTDIR)/samples/statbar
+	cp $(SAMPDIR)/statbar/*.xpm $(DISTDIR)/samples/statbar
+
 	mkdir $(DISTDIR)/samples/text
 	cp $(SAMPDIR)/text/Makefile.in $(DISTDIR)/samples/text
 	cp $(SAMPDIR)/text/makefile.unx $(DISTDIR)/samples/text

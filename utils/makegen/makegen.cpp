@@ -81,7 +81,9 @@ bool MakeGenApp::GenerateMakefile(const wxString& filename)
         return FALSE;
     }
 
-    wxFFile fileOut(m_outdir + filename, "w");
+    wxString fileOutName;
+    fileOutName << m_outdir << _T('/') << filename;
+    wxFFile fileOut(fileOutName, "w");
     if ( !fileOut.IsOpened() )
     {
         wxLogError(_T("Makefile '%s' couldn't be generated."), filename.c_str());
@@ -90,7 +92,7 @@ bool MakeGenApp::GenerateMakefile(const wxString& filename)
     }
 
     wxLogVerbose(_T("Generating '%s' for '%s'..."),
-                 (m_outdir + filename).c_str(), m_progname.c_str());
+                 fileOutName.c_str(), m_progname.c_str());
 
     size_t count = fileIn.GetLineCount();
     for ( size_t n = 0; n < count; n++ )

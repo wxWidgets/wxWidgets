@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# From configure.in Id
+# From configure.in Id: configure.in
 # Guess values for system-dependent variables and create Makefiles.
 # Generated automatically using autoconf version 2.13 
 # Copyright (C) 1992, 93, 94, 95, 96 Free Software Foundation, Inc.
@@ -674,6 +674,7 @@ trap 'rm -fr `echo "
             scroll/Makefile
             scrollsub/Makefile
             splitter/Makefile
+            statbar/Makefile
             text/Makefile
             thread/Makefile
             toolbar/Makefile
@@ -802,6 +803,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             scroll/Makefile
             scrollsub/Makefile
             splitter/Makefile
+            statbar/Makefile
             text/Makefile
             thread/Makefile
             toolbar/Makefile

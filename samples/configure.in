@@ -42,6 +42,7 @@ AC_OUTPUT([
             scroll/Makefile
             scrollsub/Makefile
             splitter/Makefile
+            statbar/Makefile
             text/Makefile
             thread/Makefile
             toolbar/Makefile

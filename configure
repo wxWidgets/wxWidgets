@@ -12853,6 +12853,8 @@ if test "$wxUSE_STATUSBAR" = "yes"; then
 #define wxUSE_STATUSBAR 1
 EOF
 
+
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS statbar"
 fi
 
 if test "$wxUSE_TABDIALOG" = "yes"; then
@@ -13126,7 +13128,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:13130: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:13132: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -13157,7 +13159,7 @@ fi
 
 if test "$wxUSE_GUI" = "yes"; then
     echo $ac_n "checking glcanvas subdirectory to use""... $ac_c" 1>&6
-echo "configure:13161: checking glcanvas subdirectory to use" >&5
+echo "configure:13163: checking glcanvas subdirectory to use" >&5
 if eval "test \"`echo '$''{'wx_cv_path_glcanvas'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else

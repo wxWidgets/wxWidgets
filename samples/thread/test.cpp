@@ -189,6 +189,7 @@ void *MyThread::Entry()
     text.Printf("Thread 0x%x started (priority = %d).\n",
                 GetId(), GetPriority());
     WriteText(text);
+    // wxLogMessage(text); -- test wxLog thread safeness
 
     for ( m_count = 0; m_count < 10; m_count++ )
     {
@@ -205,6 +206,7 @@ void *MyThread::Entry()
 
     text.Printf("Thread 0x%x finished.\n", GetId());
     WriteText(text);
+    // wxLogMessage(text); -- test wxLog thread safeness
 
     return NULL;
 }

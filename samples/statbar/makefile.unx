@@ -1,0 +1,23 @@
+# Purpose: makefile for statbar example (Unix)
+# Created: 2000-02-04
+
+CC = gcc
+
+PROGRAM = statbar
+
+OBJECTS = $(PROGRAM).o
+
+# implementation
+
+.SUFFIXES:	.o .cpp
+
+.cpp.o :
+	$(CC) -c `wx-config --cflags` -o $@ $<
+
+all:    $(PROGRAM)
+
+$(PROGRAM):	$(OBJECTS)
+	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
+
+clean:
+	rm -f *.o $(PROGRAM)

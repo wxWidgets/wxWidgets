@@ -1,0 +1,13 @@
+# Purpose: makefile for statbar example (UNIX).
+# Created: 2000-02-04
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../..
+program_dir = samples/statbar
+
+PROGRAM=statbar
+
+OBJECTS=$(PROGRAM).o
+
+include ../../src/makeprog.env
+

@@ -118,9 +118,9 @@ void wxWakeUpIdle()
         wxMutexGuiEnter();
 #endif
 
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
-    
+
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
         wxMutexGuiLeave();
@@ -204,7 +204,7 @@ gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
 
     // unblock other threads wishing to do some GUI things
     wxMutexGuiLeave();
-    
+
     g_mainThreadLocked = TRUE;
 
     // wake up other threads
@@ -219,7 +219,7 @@ gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
 
     // release lock again
     gdk_threads_leave();
-    
+
     return TRUE;
 }
 
@@ -250,7 +250,7 @@ wxApp::wxApp()
 #endif
 
     m_colorCube = (unsigned char*) NULL;
-    
+
     m_useBestVisual = FALSE;
 }
 
@@ -272,7 +272,7 @@ bool wxApp::OnInitGui()
     /* on some machines, the default visual is just 256 colours, so
        we make sure we get the best. this can sometimes be wasteful,
        of course, but what do these guys pay $30.000 for? */
-       
+
     if ((gdk_visual_get_best() != gdk_visual_get_system()) &&
         (m_useBestVisual))
     {
@@ -356,11 +356,11 @@ bool wxApp::ProcessIdle()
 void wxApp::OnIdle( wxIdleEvent &event )
 {
     static bool s_inOnIdle = FALSE;
-    
+
     /* Avoid recursion (via ProcessEvent default case) */
     if (s_inOnIdle)
         return;
-    
+
     s_inOnIdle = TRUE;
 
     /* Resend in the main thread events which have been prepared in other
@@ -512,7 +512,7 @@ void wxApp::CleanUp()
 
     if (wxTheColourDatabase)
         delete wxTheColourDatabase;
-        
+
     wxTheColourDatabase = (wxColourDatabase*) NULL;
 
     wxDeleteStockObjects();
@@ -565,7 +565,7 @@ int wxEntry( int argc, char *argv[] )
     /* GTK 1.2 up to version 1.2.3 has broken threads */
     if ((gtk_major_version == 1) &&
         (gtk_minor_version == 2) &&
-	    (gtk_micro_version < 4))
+        (gtk_micro_version < 4))
     {
         printf( "wxWindows warning: Disabled GUI threading due to outdated GTK version\n" );
     }
@@ -574,7 +574,7 @@ int wxEntry( int argc, char *argv[] )
         g_thread_init(NULL);
     }
 #endif
-    
+
     gtk_set_locale();
 
 #if wxUSE_WCHAR_T
@@ -613,7 +613,7 @@ int wxEntry( int argc, char *argv[] )
 #if wxUSE_UNICODE
     wxTheApp->argv = new wxChar*[argc+1];
     int mb_argc = 0;
-    while (mb_argc < argc) 
+    while (mb_argc < argc)
     {
         wxTheApp->argv[mb_argc] = wxStrdup(wxConvLibc.cMB2WX(argv[mb_argc]));
         mb_argc++;
@@ -654,7 +654,7 @@ int wxEntry( int argc, char *argv[] )
 
         if (wxTheApp->Initialized())
         {
-            retValue = wxTheApp->OnRun();
+            wxTheApp->OnRun();
 
             wxWindow *topWindow = wxTheApp->GetTopWindow();
             if (topWindow)
@@ -672,7 +672,8 @@ int wxEntry( int argc, char *argv[] )
                     wxTheApp->SetTopWindow( (wxWindow*) NULL );
                 }
             }
-            wxTheApp->OnExit();
+
+            retValue = wxTheApp->OnExit();
         }
     }
 

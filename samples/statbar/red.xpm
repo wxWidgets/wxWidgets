@@ -1,0 +1,29 @@
+/* XPM */
+static char *red_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"32 15 8 1",
+"  c Gray0",
+". c #00007b7b7b7b",
+"X c #7b7b7b7b7b7b",
+"o c Green",
+"O c Red",
+"+ c Yellow",
+"@ c None",
+"# c Gray100",
+/* pixels */
+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+"@@@@@@@@X    X@@@@@@X    X@@@@@@",
+"@@@@@@@        @@@@  OOOO  @@@@@",
+"@@@@@@X o#    .X@@X +#OOOO X@@@@",
+"@@@@@@  #o   .. @@ O#+OOOOO @@@@",
+"@@@@@@       .. @@ OOOOOOOO @@@@",
+"@@@@@@      .o. X@ OOOOOO+O X@@@",
+"@@@@@@     .oo. X@ OOOOO++O X@@@",
+"@@@@@@X  ..oo. XX@X OOO++O XX@@@",
+"@@@@@@@ .....  XXX@  OOOO  XXX@@",
+"@@@@@@@@X    XXXX@@@X    XXXX@@@",
+"@@@@@@@@@@@XXXXXX@@@@@@XXXXXX@@@",
+"@@@@@@@@@@@@@@X@@@@@@@@@@@X@@@@@"
+};
