@@ -79,6 +79,8 @@
                                 // Define 1 to use radio button control
 #define wxUSE_RADIOBTN     1
                                 // Unfortunately someone introduced this one, too
+#define wxUSE_RADIOBOX     1
+                                // And this... don't know which one is corect
 
 #define wxUSE_SCROLLBAR    1
                                 // Define 1 to compile contributed wxScrollBar class
@@ -92,6 +94,8 @@
 #define wxUSE_SPINBTN      1
                                 // Define 1 to compile spin button
 
+#define wxUSE_SPINCTRL     1
+                                // Define 1 to use wxSpinCtrl class
 
 #define wxUSE_STATLINE     1
                                 // use wxStaticLine class
@@ -104,6 +108,9 @@
 
 #define wxUSE_CARET        1
                                 // Define 1 to use wxCaret class
+
+#define wxUSE_SLIDER       1
+                                // Define 1 to use wxSlider class
 
 #define wxUSE_NEW_GRID     1
                                 // Define 1 to use the new wxGrid class
