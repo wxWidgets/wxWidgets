@@ -290,7 +290,7 @@ public:
 
 
     void SetDimension( int x, int y, int width, int height );
-    void SetMinSize(wxSize size);
+    void SetMinSize( const wxSize &size );
 
     wxSize GetSize();
     wxPoint GetPosition();
