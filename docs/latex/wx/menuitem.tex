@@ -26,7 +26,7 @@ wxOwnerDrawn (Windows only)\\
 
 \func{}{wxMenuItem}{\param{wxMenu*}{ parentMenu = NULL}, \param{int}{ id = ID\_SEPARATOR},
  \param{const wxString\& }{text = ""},  \param{const wxString\& }{helpString = ""},
- \param{wxItemKind }{kind = wxItem\_Normal}, \param{wxMenu*}{ subMenu = NULL}, }
+ \param{wxItemKind }{kind = wxITEM\_NORMAL}, \param{wxMenu*}{ subMenu = NULL}, }
 
 Constructs a wxMenuItem object.
 
@@ -42,8 +42,8 @@ ampersand character in the menu item text, the ampersand must be doubled.}
 
 \docparam{helpString}{Optional help string that will be shown on the status bar.}
 
-\docparam{kind}{May be {\tt wxItem\_Separator}, {\tt wxItem\_Normal}, 
-{\tt wxItem\_Check} or {\tt wxItem\_Radio}}
+\docparam{kind}{May be {\tt wxITEM\_SEPARATOR}, {\tt wxITEM\_NORMAL}, 
+{\tt wxITEM\_CHECK} or {\tt wxITEM\_RADIO}}
 
 \docparam{subMenu}{If non-NULL, indicates that the menu item is a submenu.}
 
@@ -105,8 +105,8 @@ Returns the menu item identifier.
 
 \constfunc{wxItemKind}{GetKind}{\void}
 
-Returns the item kind, one of {\tt wxItem\_Separator}, {\tt wxItem\_Normal}, 
-{\tt wxItem\_Check} or {\tt wxItem\_Radio}.
+Returns the item kind, one of {\tt wxITEM\_SEPARATOR}, {\tt wxITEM\_NORMAL}, 
+{\tt wxITEM\_CHECK} or {\tt wxITEM\_RADIO}.
 
 \membersection{wxMenuItem::GetLabel}\label{wxmenuitemgetlabel}
 
