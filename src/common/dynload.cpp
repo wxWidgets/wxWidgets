@@ -657,13 +657,16 @@ void wxPluginManager::Unload()
 
 #if WXWIN_COMPATIBILITY_2_2
 
-wxDllType wxDllLoader::LoadLibrary(const wxString &name)
+wxDllType wxDllLoader::LoadLibrary(const wxString &name, bool *success)
 {
     wxPluginLibrary *p = wxPluginManager::LoadLibrary
                          (
                             name,
                             wxDL_DEFAULT | wxDL_VERBATIM | wxDL_NOSHARE
                          );
+
+    if ( success )
+        *success = p != NULL;
 
     return p ? p->GetLibHandle() : 0;
 }

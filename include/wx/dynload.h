@@ -301,7 +301,7 @@ class WXDLLEXPORT wxDllLoader
 {
 public:
 
-    static wxDllType    LoadLibrary(const wxString& name);
+    static wxDllType    LoadLibrary(const wxString& name, bool *success = NULL);
     static void         UnloadLibrary(wxDllType dll);
 
     static wxDllType GetProgramHandle() { return wxDynamicLibrary::GetProgramHandle(); }
