@@ -1333,6 +1333,10 @@ AC_CHECK_FUNCS(nanosleep, AC_DEFINE(HAVE_NANOSLEEP), [
 dnl check for uname (POSIX) and gethostname (BSD)
 AC_CHECK_FUNCS(uname gethostname, break)
 
+dnl check for inet_addr, inet_aton, ...
+AC_CHECK_FUNCS(inet_addr)
+AC_CHECK_FUNCS(inet_aton)
+
 dnl ===========================================================================
 dnl Now we have all the info we need - use it!
 dnl ===========================================================================

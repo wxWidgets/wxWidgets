@@ -972,7 +972,15 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   addr = &(((struct sockaddr_in *)address->m_addr)->sin_addr);
 
   /* If it is a numeric host name, convert it now */
+#if HAVE_INET_ATON
   if (inet_aton(hostname, addr) == 0) {
+#elif HAVE_INET_ADDR
+  /* Fix from Guillermo Rodriguez Garcia <guille@iies.es> */
+  if ( (addr->s_addr = inet_addr(hostname)) == -1 ) {
+#else
+  /* Use gethostbyname by default */
+  if (1) {
+#endif
     struct in_addr *array_addr;
 
     /* It is a real name, we solve it */
