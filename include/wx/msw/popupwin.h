@@ -40,7 +40,7 @@ protected:
         // (because we are a child window)
         wxPopupWindowBase::DoGetPosition(x, y);
 
-        GetParent()->DoClientToScreen(x, y);
+        GetParent()->ClientToScreen(x, y);
     }
 };
 
