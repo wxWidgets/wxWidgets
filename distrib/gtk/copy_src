@@ -54,6 +54,11 @@ cd generic
 cp *.h ~/wxgtk_dist/wxGTK/include/wx/generic
 cd ..
 
+mkdir ~/wxgtk_dist/wxGTK/include/wx/unix
+cd unix
+cp *.h ~/wxgtk_dist/wxGTK/include/wx/unix
+cd ..
+
 mkdir ~/wxgtk_dist/wxGTK/include/wx/gtk
 cd gtk
 cp *.h ~/wxgtk_dist/wxGTK/include/wx/gtk
@@ -150,6 +155,11 @@ cp *.xbm ~/wxgtk_dist/wxGTK/src/gtk
 cp *.c ~/wxgtk_dist/wxGTK/src/gtk
 cp *.inc ~/wxgtk_dist/wxGTK/src/gtk
 cp *.cpp ~/wxgtk_dist/wxGTK/src/gtk
+cd ..
+
+cd unix
+mkdir ~/wxgtk_dist/wxGTK/src/unix
+cp *.cpp ~/wxgtk_dist/wxGTK/src/unix
 cd ..
 
 cd generic

@@ -79,7 +79,9 @@ public:
     bool              m_ownsPrimarySelection;
 
     wxDataBroker     *m_dataBroker;
-    GtkWidget        *m_clipboardWidget;
+    GtkWidget        *m_clipboardWidget;  /* for getting and offering data */
+    GtkWidget        *m_targetsWidget;    /* for getting list of supported formats */
+    bool              m_waiting;          /* querying data or formats is asynchronous */
 
     bool              m_formatSupported;
     GdkAtom           m_targetRequested;

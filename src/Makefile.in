@@ -104,7 +104,7 @@ install::
 	   $(includedir)/wx \
 	   $(includedir)/wx/gtk \
 	   $(includedir)/wx/motif \
-	   $(includedir)/wx/common \
+	   $(includedir)/wx/unix \
 	   $(includedir)/wx/generic \
 	   $(includedir)/wx/protocol \
 	   $(libdir)/wx/include/wx/gtk \
@@ -152,6 +152,12 @@ install::
 	  rm -f $(includedir)/wx/protocol/$$f ; \
 	  $(INSTALL_DATA) $$f $(includedir)/wx/protocol/$$f ; \
 	done
+	@echo "  Copying headers from /include/wx/unix"
+	@cd $(WXBASEDIR)/include/wx/unix ; \
+	for f in *.h ; do \
+	  rm -f $(includedir)/wx/unix/$$f ; \
+	  $(INSTALL_DATA) $$f $(includedir)/wx/unix/$$f ; \
+	done
 	@echo "  Moving setup.h to library path"
 	@if test "@TOOLKIT@" = "GTK" ; then \
 	  cd $(WXBASEDIR)/src ; \
@@ -172,12 +178,11 @@ install::
 	@cd $(WXBASEDIR)/src ; \
 	  rm -f $(libdir)/$(STATIC_LIBRARY) ; \
 	  $(INSTALL_DATA) $(WXBASEDIR)/lib/$(OS)/$(STATIC_LIBRARY) $(libdir)/$(STATIC_LIBRARY)
-	  $(STRIP) $(libdir)/$(STATIC_LIBRARY)
 	@if test -f $(WXBASEDIR)/lib/$(OS)/$(SHARED_LIBRARY) ; then \
 	  echo "  Copying shared library" ; \
 	    rm -f $(libdir)/lib$(LIB_TARGET).so* ; \
 	    $(INSTALL_PROGRAM) $(WXBASEDIR)/lib/$(OS)/$(SHARED_LIBRARY) $(libdir)/$(SHARED_LIBRARY) ; \
-	    $(STRIP) $(libdir)/$(SHARED_LIBRARY)
+	    $(STRIP) $(libdir)/$(SHARED_LIBRARY) ; \
 	    $(LN_S) $(SHARED_LIBRARY) $(libdir)/lib$(LIB_TARGET).so.$(LIB_MAJOR) ; \
 	    $(LN_S) $(SHARED_LIBRARY) $(libdir)/lib$(LIB_TARGET).so ; \
 	    echo " " ; \

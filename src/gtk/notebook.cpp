@@ -233,10 +233,6 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
     m_widget = gtk_notebook_new();
 
-#ifdef __WXDEBUG__
-    debug_focus_in( m_widget, "wxNotebook::m_widget", name );
-#endif
-
     gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
 
     m_idHandler = gtk_signal_connect (

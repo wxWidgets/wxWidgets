@@ -15,6 +15,8 @@
 
 #if wxUSE_CLIPBOARD
 
+#include "wx/utils.h"
+
 #include "glib.h"
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
@@ -60,30 +62,49 @@ struct _GtkSelectionData
 static void
 targets_selection_received( GtkWidget *WXUNUSED(widget), 
                             GtkSelectionData *selection_data, 
+#if (GTK_MINOR_VERSION > 0)
+                            guint32 WXUNUSED(time),
+#endif
 		            wxClipboard *clipboard )
 {
-    if (!wxTheClipboard) return;
+    if (!wxTheClipboard)
+    {
+        clipboard->m_waiting = FALSE;
+        return;
+    }
   
-    if (selection_data->length <= 0) return;
-  
-    // make sure we got the data in the correct form 
-    if (selection_data->type != GDK_SELECTION_TYPE_ATOM) return;
+    if (selection_data->length <= 0)
+    {
+        clipboard->m_waiting = FALSE;
+        return;
+    }
+    
+    /* make sure we got the data in the correct form */
+    if (selection_data->type != GDK_SELECTION_TYPE_ATOM)
+    {
+        clipboard->m_waiting = FALSE;
+        return;
+    }
   
     // the atoms we received, holding a list of targets (= formats) 
     GdkAtom *atoms = (GdkAtom *)selection_data->data;
 
     for (unsigned int i=0; i<selection_data->length/sizeof(GdkAtom); i++)
     {
-      char *name = gdk_atom_name (atoms[i]);
-      if (name) printf( "Format available: %s.\n", name );
+/*
+        char *name = gdk_atom_name (atoms[i]);
+        if (name) printf( "Format available: %s.\n", name );
+*/
       
         if (atoms[i] == clipboard->m_targetRequested)
         {
+            clipboard->m_waiting = FALSE;
             clipboard->m_formatSupported = TRUE;
             return;
         }
     }
 
+    clipboard->m_waiting = FALSE;
     return;
 }
 
@@ -94,28 +115,50 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
 static void 
 selection_received( GtkWidget *WXUNUSED(widget), 
                     GtkSelectionData *selection_data, 
+#if (GTK_MINOR_VERSION > 0)
+                    guint32 WXUNUSED(time),
+#endif
 		    wxClipboard *clipboard )
 {
-    if (!wxTheClipboard) return;
+    if (!wxTheClipboard)
+    {
+        clipboard->m_waiting = FALSE;
+        return;
+    }
   
     wxDataObject *data_object = clipboard->m_receivedData;
     
-    if (!data_object) return;
+    if (!data_object)
+    {
+        clipboard->m_waiting = FALSE;
+        return;
+    }
     
-    if (selection_data->length <= 0) return;
+    if (selection_data->length <= 0)
+    {
+        clipboard->m_waiting = FALSE;
+        return;
+    }
   
-    // make sure we got the data in the correct format
+    /* make sure we got the data in the correct format */
+    if (data_object->GetFormat().GetAtom() != selection_data->target)
+    {
+        clipboard->m_waiting = FALSE;
+        return;
+    }
     
-    if (data_object->GetFormat().GetAtom() != selection_data->target) return;
-    
-    // make sure we got the data in the correct form (selection type).
-    // if so, copy data to target object
+    /* make sure we got the data in the correct form (selection type).
+       if so, copy data to target object */
     
     switch (data_object->GetFormat().GetType())
     {
         case wxDF_TEXT:
 	{
-            if (selection_data->type != GDK_SELECTION_TYPE_STRING) return;
+            if (selection_data->type != GDK_SELECTION_TYPE_STRING)
+            {
+                clipboard->m_waiting = FALSE;
+                return;
+            }
 	    
 	    wxTextDataObject *text_object = (wxTextDataObject *) data_object;
 	    
@@ -128,16 +171,22 @@ selection_received( GtkWidget *WXUNUSED(widget),
 	
 	case wxDF_BITMAP:
 	{
-            if (selection_data->type != GDK_SELECTION_TYPE_BITMAP) return;
-	    
-	    return;
+            if (selection_data->type != GDK_SELECTION_TYPE_BITMAP)
+            {
+                clipboard->m_waiting = FALSE;
+                return;
+            }
 	    
 	    break;
 	}
 	
 	case wxDF_PRIVATE:
 	{
-            if (selection_data->type != GDK_SELECTION_TYPE_STRING) return;
+            if (selection_data->type != GDK_SELECTION_TYPE_STRING)
+            {
+                clipboard->m_waiting = FALSE;
+                return;
+            }
 	    
 	    wxPrivateDataObject *private_object = (wxPrivateDataObject *) data_object;
 	    
@@ -148,11 +197,13 @@ selection_received( GtkWidget *WXUNUSED(widget),
 	
 	default:
 	{
+            clipboard->m_waiting = FALSE;
 	    return;
 	}
     }
     
     wxTheClipboard->m_formatSupported = TRUE;
+    clipboard->m_waiting = FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -285,8 +336,25 @@ wxClipboard::wxClipboard()
   
     m_receivedData = (wxDataObject*) NULL;
 
+    /* we use m_targetsWidget to query what formats are available */
+    
+    m_targetsWidget = gtk_window_new( GTK_WINDOW_POPUP );
+    gtk_widget_realize( m_targetsWidget );
+
+    gtk_signal_connect( GTK_OBJECT(m_targetsWidget), 
+                        "selection_received",
+		        GTK_SIGNAL_FUNC( targets_selection_received ), 
+		        (gpointer) this );
+			
+    /* we use m_clipboardWidget to get and to offer data */
+    
     m_clipboardWidget = gtk_window_new( GTK_WINDOW_POPUP );
     gtk_widget_realize( m_clipboardWidget );
+
+    gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
+                        "selection_received",
+		        GTK_SIGNAL_FUNC( selection_received ), 
+		        (gpointer) this );
 
     gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
                         "selection_clear_event",
@@ -305,6 +373,7 @@ wxClipboard::~wxClipboard()
     Clear();  
   
     if (m_clipboardWidget) gtk_widget_destroy( m_clipboardWidget );
+    if (m_targetsWidget) gtk_widget_destroy( m_targetsWidget );
 }
 
 void wxClipboard::Clear()
@@ -454,27 +523,25 @@ bool wxClipboard::IsSupported( wxDataFormat format )
   
     wxCHECK_MSG( m_targetRequested, FALSE, "invalid clipboard format" );
     
-    /* add handler for target (= format) query */
-
-    gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
-                        "selection_received",
-		        GTK_SIGNAL_FUNC( targets_selection_received ), 
-		        (gpointer) this );
-  
     m_formatSupported = FALSE;
   
     /* perform query. this will set m_formatSupported to 
-     * TRUE if m_targetRequested is supported */
-    
-    gtk_selection_convert( m_clipboardWidget,
+       TRUE if m_targetRequested is supported.
+       alsom we have to wait for the "answer" from the 
+       clipboard owner which is an asynchronous process.
+       therefore we set m_waiting = TRUE here and wait
+       until the callback "targets_selection_received" 
+       sets it to FALSE */
+
+    m_waiting = TRUE;
+      
+    gtk_selection_convert( m_targetsWidget,
 			   g_clipboardAtom, 
 			   g_targetsAtom,
 			   GDK_CURRENT_TIME );
-
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_clipboardWidget), 
-		                   GTK_SIGNAL_FUNC( targets_selection_received ),
-		                   (gpointer) this );
-  
+			   
+    while (m_waiting) gtk_main_iteration();
+    
     if (!m_formatSupported) return FALSE;
     
     return TRUE;
@@ -502,21 +569,23 @@ bool wxClipboard::GetData( wxDataObject *data )
     
     m_formatSupported = FALSE;
   
-    gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
-                        "selection_received",
-		        GTK_SIGNAL_FUNC( selection_received ), 
-		        (gpointer) this );
+    /* ask for clipboard contents.  this will set 
+       m_formatSupported to TRUE if m_targetRequested 
+       is supported.
+       also, we have to wait for the "answer" from the 
+       clipboard owner which is an asynchronous process.
+       therefore we set m_waiting = TRUE here and wait
+       until the callback "targets_selection_received" 
+       sets it to FALSE */
 
-    /* ask for clipboard contents */
+    m_waiting = TRUE;
 
     gtk_selection_convert( m_clipboardWidget,
 			   g_clipboardAtom, 
 			   m_targetRequested,
 			   GDK_CURRENT_TIME );
   
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_clipboardWidget), 
-		                   GTK_SIGNAL_FUNC( selection_received ),
-		                   (gpointer) this );
+    while (m_waiting) gtk_main_iteration();
 
     /* this is a true error as we checked for the presence of such data before */
 

@@ -11,10 +11,10 @@
 #ifndef __GTK_MYFIXED_H__
 #define __GTK_MYFIXED_H__
 
-
 #include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
-
+#include <gtk/gtkadjustment.h>
+#include <gtk/gtkfeatures.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,13 +33,21 @@ typedef struct _GtkMyFixedChild   GtkMyFixedChild;
 struct _GtkMyFixed
 {
   GtkContainer container;
-
   GList *children;
+#if (GTK_MINOR_VERSION > 0)
+  GtkShadowType shadow_type;
+#endif
 };
 
 struct _GtkMyFixedClass
 {
   GtkContainerClass parent_class;
+
+#if (GTK_MINOR_VERSION > 0)
+  void  (*set_scroll_adjustments)   (GtkMyFixed     *myfixed,
+				     GtkAdjustment  *hadjustment,
+				     GtkAdjustment  *vadjustment);
+#endif
 };
 
 struct _GtkMyFixedChild
@@ -51,6 +59,10 @@ struct _GtkMyFixedChild
 
 guint      gtk_myfixed_get_type        (void);
 GtkWidget* gtk_myfixed_new             (void);
+#if (GTK_MINOR_VERSION > 0)
+void       gtk_myfixed_set_shadow_type (GtkMyFixed     *myfixed,
+				        GtkShadowType  type);
+#endif
 void       gtk_myfixed_put             (GtkMyFixed     *myfixed,
                                         GtkWidget      *widget,
                                         gint16         x,
@@ -59,7 +71,6 @@ void       gtk_myfixed_move            (GtkMyFixed     *myfixed,
                                         GtkWidget      *widget,
                                         gint16         x,
                                         gint16         y);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -105,9 +105,9 @@ class wxMenu : public wxEvtHandler
     DECLARE_DYNAMIC_CLASS(wxMenu)
 
 public:
-    // construction
     wxMenu( const wxString& title = wxEmptyString,
             const wxFunction func = (wxFunction) NULL );
+    ~wxMenu();
 
     // operations
         // title
@@ -171,8 +171,11 @@ public:
     wxWindow *GetInvokingWindow();
 
     // implementation only
-    GtkWidget     *m_menu;  // GtkMenu
-    GtkWidget     *m_owner;
+    GtkWidget       *m_menu;  // GtkMenu
+    GtkWidget       *m_owner;
+    
+    GtkAccelGroup   *m_accel;
+    GtkItemFactory  *m_factory;
 
 private:
     wxString       m_title;

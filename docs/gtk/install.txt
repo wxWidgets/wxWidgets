@@ -6,12 +6,16 @@ like to read install instructions just do (in the base dir):
 
 ./configure
 make
+su <type root password>
 make install
+ldconfig
+exit
+
 
 * The most simple errors
 ------------------------
 
-configure reports, that you don't have GTK 1.0.X installed
+configure reports, that you don't have GTK 1.X installed
 although you are certainly sure you have. Well, you have
 installed it, but you also have another version of the
 GTK installed, which you may need to removed including
@@ -53,18 +57,16 @@ this has no effect, but I tried...
 -----------------------
 
 wxWindows/GTK requires the GTK+ library to be installed on your system.
-It has to be a stable version, preferebly version 1.0.6. When using
-a version previous to 1.0.6 you'll might get crashes here and there.
+It has to be a stable version, preferebly version 1.2.1. It might also
+work with the 1.0 series, but I didn't test that any longer.
 
-wxWindows/GTK does NOT work with the 1.1.X versions of the GTK+ library
-and we will wait until the 1.2 version comes out and has stabilized
-until we'll work with that library.
+wxWindows/GTK does NOT work with the 1.1.X versions of the GTK+ library.
 
 You can get the newest version of the GTK+ from the GTK homepage
 at
   http://www.gtk.org
   
-We also mirror GTK+ 1.0.6 at my ftp site. You'll find information
+We also mirror GTK+ 1.2.1 at my ftp site. You'll find information
 about downloading at my homepage.
   
 * Additional libraries
@@ -92,7 +94,10 @@ You can enable thread support by running
 ./configure "--with-threads"
 make clean
 make
+su <type root password>
 make install
+ldconfig
+exit
   
 NB: I included thread support in wxWindows/Gtk, as this 
 problem will disappear in the near future when all major 

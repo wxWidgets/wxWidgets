@@ -1,10 +1,13 @@
 
 -------------------- High priority ---------------------
 
+DnD
+  -> Must be rewritten for GTK+ 1.2
+ 
 -------------------- Medium priority ---------------------
 
-Show accelerator in menus and control labels and actually implement them
-  -> Changed in GTK 1.2 (so let's do it for 1.2). Postponed.
+Show accelerator control labels and actually implement them
+  -> Changed in GTK 1.2 (so let's do it for 1.2). Difficult.
   
 -------------------- Low priority ---------------------
     
@@ -13,9 +16,6 @@ Right aligned checkboxes: focus highlighting is wrong, tooltips can't be set
 OwnerDraw for wxListCtrl and others
   -> Postponed.
   
-DnD
-  -> Must be rewritten for GTK+ 1.2
- 
 Implement wxPalette
   -> I never understood that. Postponed.
   

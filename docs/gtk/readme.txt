@@ -1,8 +1,11 @@
 
-  Welcome to wxWindows/Gtk 2.0.1,
+  Welcome to wxWindows/Gtk 2.1 beta 1,
 
-you have downloaded version 2.0.1 of the GTK+ 1.0 port of 
-the wxWindows GUI library.
+you have downloaded version 2.1 of the GTK+ 1.2 port of 
+the wxWindows GUI library. This is a developers release
+and is it not suited for production development. Beware
+that major changes can happen before a final release -
+Particularly the makefile system will change entirly.
  
 More information is available from my homepage at:
 
@@ -20,7 +23,10 @@ all systems
 
 ./configure
 make
+su <type root password>
+ldconfig
 make install
+exit
 
 Type the following to make the samples
 
@@ -42,7 +48,7 @@ DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know
 this has no effect, but I tried...
 
 The library produced by the install process will be called 
-libwx_gtk2.a (static) and libwx_gtk2.so.0.1 (shared) so that 
+libwx_gtk2.a (static) and libwx_gtk2.so.1.0 (shared) so that 
 once a binary incompatible version of wxWindows/Gtk comes out 
 we'll augment library version number to avoid linking problems.
 

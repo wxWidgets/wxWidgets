@@ -1132,6 +1132,8 @@ typedef struct _GtkToolbar      GtkToolbar;
 typedef struct _GtkTooltips     GtkTooltips;
 typedef struct _GtkNotebook     GtkNotebook;
 typedef struct _GtkNotebookPage GtkNotebookPage;
+typedef struct _GtkAccelGroup   GtkAccelGroup;
+typedef	struct _GtkItemFactory  GtkItemFactory;
 
 #endif
 

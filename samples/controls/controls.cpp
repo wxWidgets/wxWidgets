@@ -449,7 +449,7 @@ m_text(NULL), m_notebook(NULL)
     wxPanel *panel = (wxPanel*) NULL;
 
     panel = new wxPanel(m_notebook);
-    m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 5, choices );
+    m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 5, choices, wxLB_ALWAYS_SB );
     m_listbox->SetCursor(*wxCROSS_CURSOR);
 #if wxUSE_TOOLTIPS
     m_listbox->SetToolTip( "This is a list box" );
@@ -460,7 +460,7 @@ m_text(NULL), m_notebook(NULL)
     (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
-    button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
+    button = new wxButton( panel, ID_LISTBOX_FONT, "Set &Italic font", wxPoint(340,130), wxSize(140,30) );
 #if wxUSE_TOOLTIPS
     button->SetToolTip( "Press here to set italic font" );
 #endif // wxUSE_TOOLTIPS

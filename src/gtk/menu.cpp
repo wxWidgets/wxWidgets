@@ -72,19 +72,22 @@ wxMenuBar::wxMenuBar()
 void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
     m_menus.Append( menu );
-    wxString title2 = title;
-
-    int pos;
-    do
+    
+    wxString s = "";
+    for ( const char *pc = title; *pc != '\0'; pc++ )
     {
-        pos = title2.First( '&' );
-        if (pos != wxNOT_FOUND)
-            title2.Remove( pos, 1 );
-    } while (pos != wxNOT_FOUND);
+        if (*pc == '&')
+	{
+	    pc++; /* skip it */
+#if (GTK_MINOR_VERSION > 0)
+    //      s << '_';  not yet
+#endif
+        }
+        s << *pc;
+    }
 
-    menu->SetTitle(title2);
-
-    menu->m_owner = gtk_menu_item_new_with_label( WXSTRINGCAST(title2) );
+    menu->SetTitle(s);
+    menu->m_owner = gtk_menu_item_new_with_label( WXSTRINGCAST(s) );
     gtk_widget_show( menu->m_owner );
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
 
@@ -404,7 +407,13 @@ void wxMenuItem::SetName( const wxString& str )
     m_text = "";
     for ( const char *pc = str; *pc != '\0'; pc++ )
     {
-        if (*pc == '&') pc++; /* skip it */
+        if (*pc == '&')
+	{
+	    pc++; /* skip it */
+#if (GTK_MINOR_VERSION > 0)
+            m_text << '_';
+#endif
+        }
         m_text << *pc;
     }
 
@@ -457,7 +466,14 @@ wxMenu::wxMenu( const wxString& title, const wxFunction func )
     m_title = title;
     m_items.DeleteContents( TRUE );
     m_invokingWindow = (wxWindow *) NULL;
+    
+#if (GTK_MINOR_VERSION > 0)
+    m_accel = gtk_accel_group_new();
+    m_factory = gtk_item_factory_new( GTK_TYPE_MENU, "<main>", m_accel );
+    m_menu = gtk_item_factory_get_widget( m_factory, "<main>" );
+#else    
     m_menu = gtk_menu_new();  // Do not show!
+#endif
 
     m_callback = func;
     m_eventHandler = this;
@@ -471,6 +487,11 @@ wxMenu::wxMenu( const wxString& title, const wxFunction func )
     }
 
     m_owner = (GtkWidget*) NULL;
+}
+
+wxMenu::~wxMenu()
+{
+    /* how do we delete an item-factory ? */
 }
 
 void wxMenu::SetTitle( const wxString& title )
@@ -492,6 +513,7 @@ void wxMenu::AppendSeparator()
     GtkWidget *menuItem = gtk_menu_item_new();
     gtk_menu_append( GTK_MENU(m_menu), menuItem );
     gtk_widget_show( menuItem );
+    
     mitem->SetMenuItem(menuItem);
     m_items.Append( mitem );
 }
@@ -504,25 +526,58 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     mitem->SetHelp(helpStr);
     mitem->SetCheckable(checkable);
     const char *text = mitem->GetText();
+    
+#if (GTK_MINOR_VERSION > 0)
+    char buf[100];
+    strcpy( buf, "/" );
+    strcat( buf, text );
+    
+    GtkItemFactoryEntry entry;
+    entry.path = buf;
+    entry.accelerator = (gchar*) NULL;
+    entry.callback = (GtkItemFactoryCallback) gtk_menu_clicked_callback;
+    entry.callback_action = 0;
+    if (checkable)
+        entry.item_type = "<CheckItem>";
+    else
+        entry.item_type = "<Item>";
+    
+    gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
+    
+    /* in order to get the pointer to the item we need the item text _without_ underscores */
+    wxString s = "<main>/";
+    for ( const char *pc = text; *pc != '\0'; pc++ )
+    {
+        if (*pc == '_') pc++; /* skip it */
+        s << *pc;
+    }
+    
+    GtkWidget *menuItem = gtk_item_factory_get_item( m_factory, s );
+    
+#else
+
     GtkWidget *menuItem = checkable ? gtk_check_menu_item_new_with_label(text)
                                     : gtk_menu_item_new_with_label(text);
-
-    mitem->SetMenuItem(menuItem);
-
+				    
     gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
                         GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
-                        (gpointer*)this );
+                        (gpointer)this );
+			
+    gtk_menu_append( GTK_MENU(m_menu), menuItem );
+    gtk_widget_show( menuItem );
+    
+#endif
 
     gtk_signal_connect( GTK_OBJECT(menuItem), "select",
                         GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
-                        (gpointer*)this );
+                        (gpointer)this );
 
     gtk_signal_connect( GTK_OBJECT(menuItem), "deselect",
                         GTK_SIGNAL_FUNC(gtk_menu_nolight_callback),
-                        (gpointer*)this );
+                        (gpointer)this );
 
-    gtk_menu_append( GTK_MENU(m_menu), menuItem );
-    gtk_widget_show( menuItem );
+    mitem->SetMenuItem(menuItem);
+
     m_items.Append( mitem );
 }
 
@@ -590,14 +645,18 @@ void wxMenu::Append( wxMenuItem *item )
 
 int wxMenu::FindItem( const wxString itemString ) const
 {
-    wxString s( itemString );
-
-    int pos;
-    do
+    wxString s = "";
+    for ( const char *pc = itemString; *pc != '\0'; pc++ )
     {
-        pos = s.First( '&' );
-        if (pos != -1) s.Remove( pos, 1 );
-    } while (pos != -1);
+        if (*pc == '&')
+	{
+	    pc++; /* skip it */
+#if (GTK_MINOR_VERSION > 0)
+            s << '_';
+#endif
+        }
+        s << *pc;
+    }
 
     wxNode *node = m_items.First();
     while (node)

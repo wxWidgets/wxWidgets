@@ -58,6 +58,9 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
                        long style, const wxValidator& validator, const wxString &name )
 {
     m_needParent = TRUE;
+#if (GTK_MINOR_VERSION > 0)
+    m_acceptsFocus = TRUE;
+#endif
 
     PreCreation( parent, id, pos, size, style, name );
 

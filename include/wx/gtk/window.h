@@ -99,16 +99,6 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// (debug)
-//-----------------------------------------------------------------------------
-
-#ifdef __WXDEBUG__
-
-void debug_focus_in( GtkWidget* widget, const char* name, const char* window );
-
-#endif
-
-//-----------------------------------------------------------------------------
 // wxWindow
 //-----------------------------------------------------------------------------
 
@@ -485,7 +475,7 @@ public:
     GtkAdjustment       *m_hAdjust,*m_vAdjust;
     float                m_oldHorizontalPos;
     float                m_oldVerticalPos;
-    bool                 m_needParent;
+    bool                 m_needParent;    /* ! wxFrame, wxDialog, wxNotebookPage ?  */
     bool                 m_hasScrolling;
     bool                 m_isScrolling;
     bool                 m_hasVMT;
@@ -493,8 +483,9 @@ public:
     bool                 m_resizing;
     GdkGC               *m_scrollGC;
     GtkStyle            *m_widgetStyle;
-    bool                 m_isStaticBox;
-    bool                 m_acceptsFocus;
+    bool                 m_isStaticBox;   /* faster than IS_KIND_OF */
+    bool                 m_isFrame;       /* faster than IS_KIND_OF */
+    bool                 m_acceptsFocus;  /* ! wxStaticBox etc.  */
 
     wxInsertChildFunction  m_insertCallback;
 

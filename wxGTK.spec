@@ -4,7 +4,7 @@ Version: 2.1.0
 Release: 1
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxGTK210.tgz
+Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxGTK21b.tgz
 URL: http://www.freiburg.linux.de/~wxxt/docs.html
 Packager: Robert Roebling <roebling@ruf.uni-freiburg.de>
 Requires: gtk+ >= 1.2.0
