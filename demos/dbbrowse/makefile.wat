@@ -146,6 +146,11 @@ __WXLIB_CORE_p =
 __WXLIB_CORE_p = &
 	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
 !endif
+__WXLIB_DBGRID_p =
+!ifeq MONOLITHIC 0
+__WXLIB_DBGRID_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid.lib
+!endif
 __WXLIB_HTML_p =
 !ifeq MONOLITHIC 0
 __WXLIB_HTML_p = &
@@ -158,8 +163,7 @@ __WXLIB_MONO_p = &
 !endif
 __WXLIB_ODBC_p =
 !ifeq MONOLITHIC 0
-__WXLIB_ODBC_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc.lib
+__WXLIB_ODBC_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc.lib
 !endif
 __WXUNIV_DEFINE_p =
 !ifeq WXUNIV 1
@@ -239,6 +243,6 @@ $(OBJS)\dbbrowse.exe :  $(DBBROWSE_OBJECTS) $(OBJS)\dbbrowse_dbbrowse.res
 	@%append $(OBJS)\dbbrowse.lbc option incremental
 	@%append $(OBJS)\dbbrowse.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(DBBROWSE_OBJECTS)) do @%append $(OBJS)\dbbrowse.lbc file %i
-	@for %i in ( $(__WXLIB_ADV_p) $(__WXLIB_ODBC_p) $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\dbbrowse.lbc library %i
+	@for %i in ( $(__WXLIB_DBGRID_p) $(__WXLIB_ADV_p) $(__WXLIB_ODBC_p) $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\dbbrowse.lbc library %i
 	@%append $(OBJS)\dbbrowse.lbc option resource=$(OBJS)\dbbrowse_dbbrowse.res
 	wlink @$(OBJS)\dbbrowse.lbc

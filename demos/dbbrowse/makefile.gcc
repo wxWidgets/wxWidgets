@@ -131,6 +131,10 @@ __WXLIB_CORE_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core
 endif
 ifeq ($(MONOLITHIC),0)
+__WXLIB_DBGRID_p = \
+	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid
+endif
+ifeq ($(MONOLITHIC),0)
 __WXLIB_HTML_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html
 endif
@@ -139,8 +143,7 @@ __WXLIB_MONO_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 endif
 ifeq ($(MONOLITHIC),0)
-__WXLIB_ODBC_p = \
-	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc
+__WXLIB_ODBC_p = -lwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc
 endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -190,6 +193,6 @@ clean:
 	-if exist $(OBJS)\dbbrowse.exe del $(OBJS)\dbbrowse.exe
 
 $(OBJS)\dbbrowse.exe: $(DBBROWSE_OBJECTS) $(OBJS)\dbbrowse_dbbrowse_rc.o
-	$(CXX) -o $@ $(DBBROWSE_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   $(__WXLIB_ADV_p) $(__WXLIB_ODBC_p) $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+	$(CXX) -o $@ $(DBBROWSE_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   $(__WXLIB_DBGRID_p) $(__WXLIB_ADV_p) $(__WXLIB_ODBC_p) $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
 .PHONY: all clean

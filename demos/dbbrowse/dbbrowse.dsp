@@ -65,8 +65,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25ud_adv.lib wxmswuniv25ud_odbc.lib wxmswuniv25ud_html.lib wxmswuniv25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivud\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivud" /subsystem:windows
-# ADD LINK32 wxmswuniv25ud_adv.lib wxmswuniv25ud_odbc.lib wxmswuniv25ud_html.lib wxmswuniv25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivud\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivud" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv25ud_dbgrid.lib wxmswuniv25ud_adv.lib wxbase25ud_odbc.lib wxmswuniv25ud_html.lib wxmswuniv25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivud\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivud" /subsystem:windows
+# ADD LINK32 wxmswuniv25ud_dbgrid.lib wxmswuniv25ud_adv.lib wxbase25ud_odbc.lib wxmswuniv25ud_html.lib wxmswuniv25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivud\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivud" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 DLL Native Release Ansi"
 
@@ -90,8 +90,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25_adv.lib wxmsw25_odbc.lib wxmsw25_html.lib wxmsw25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswdll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswdll" /subsystem:windows
-# ADD LINK32 wxmsw25_adv.lib wxmsw25_odbc.lib wxmsw25_html.lib wxmsw25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswdll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswdll" /subsystem:windows
+# ADD BASE LINK32 wxmsw25_dbgrid.lib wxmsw25_adv.lib wxbase25_odbc.lib wxmsw25_html.lib wxmsw25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswdll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswdll" /subsystem:windows
+# ADD LINK32 wxmsw25_dbgrid.lib wxmsw25_adv.lib wxbase25_odbc.lib wxmsw25_html.lib wxmsw25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswdll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswdll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 DLL wxUniv Debug Unicode"
 
@@ -115,8 +115,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25ud_adv.lib wxmswuniv25ud_odbc.lib wxmswuniv25ud_html.lib wxmswuniv25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivuddll" /subsystem:windows
-# ADD LINK32 wxmswuniv25ud_adv.lib wxmswuniv25ud_odbc.lib wxmswuniv25ud_html.lib wxmswuniv25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivuddll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv25ud_dbgrid.lib wxmswuniv25ud_adv.lib wxbase25ud_odbc.lib wxmswuniv25ud_html.lib wxmswuniv25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivuddll" /subsystem:windows
+# ADD LINK32 wxmswuniv25ud_dbgrid.lib wxmswuniv25ud_adv.lib wxbase25ud_odbc.lib wxmswuniv25ud_html.lib wxmswuniv25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivuddll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 DLL wxUniv Release Unicode"
 
@@ -140,8 +140,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25u_adv.lib wxmswuniv25u_odbc.lib wxmswuniv25u_html.lib wxmswuniv25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivudll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswunivudll" /subsystem:windows
-# ADD LINK32 wxmswuniv25u_adv.lib wxmswuniv25u_odbc.lib wxmswuniv25u_html.lib wxmswuniv25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivudll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswunivudll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv25u_dbgrid.lib wxmswuniv25u_adv.lib wxbase25u_odbc.lib wxmswuniv25u_html.lib wxmswuniv25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivudll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswunivudll" /subsystem:windows
+# ADD LINK32 wxmswuniv25u_dbgrid.lib wxmswuniv25u_adv.lib wxbase25u_odbc.lib wxmswuniv25u_html.lib wxmswuniv25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivudll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswunivudll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 DLL wxUniv Release Ansi"
 
@@ -165,8 +165,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25_adv.lib wxmswuniv25_odbc.lib wxmswuniv25_html.lib wxmswuniv25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivdll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswunivdll" /subsystem:windows
-# ADD LINK32 wxmswuniv25_adv.lib wxmswuniv25_odbc.lib wxmswuniv25_html.lib wxmswuniv25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivdll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswunivdll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv25_dbgrid.lib wxmswuniv25_adv.lib wxbase25_odbc.lib wxmswuniv25_html.lib wxmswuniv25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivdll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswunivdll" /subsystem:windows
+# ADD LINK32 wxmswuniv25_dbgrid.lib wxmswuniv25_adv.lib wxbase25_odbc.lib wxmswuniv25_html.lib wxmswuniv25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivdll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswunivdll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 LIB Native Debug Unicode"
 
@@ -190,8 +190,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25ud_adv.lib wxmsw25ud_odbc.lib wxmsw25ud_html.lib wxmsw25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswud\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswud" /subsystem:windows
-# ADD LINK32 wxmsw25ud_adv.lib wxmsw25ud_odbc.lib wxmsw25ud_html.lib wxmsw25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswud\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswud" /subsystem:windows
+# ADD BASE LINK32 wxmsw25ud_dbgrid.lib wxmsw25ud_adv.lib wxbase25ud_odbc.lib wxmsw25ud_html.lib wxmsw25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswud\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswud" /subsystem:windows
+# ADD LINK32 wxmsw25ud_dbgrid.lib wxmsw25ud_adv.lib wxbase25ud_odbc.lib wxmsw25ud_html.lib wxmsw25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswud\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswud" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 DLL wxUniv Debug Ansi"
 
@@ -215,8 +215,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25d_adv.lib wxmswuniv25d_odbc.lib wxmswuniv25d_html.lib wxmswuniv25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivddll" /subsystem:windows
-# ADD LINK32 wxmswuniv25d_adv.lib wxmswuniv25d_odbc.lib wxmswuniv25d_html.lib wxmswuniv25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivddll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv25d_dbgrid.lib wxmswuniv25d_adv.lib wxbase25d_odbc.lib wxmswuniv25d_html.lib wxmswuniv25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivddll" /subsystem:windows
+# ADD LINK32 wxmswuniv25d_dbgrid.lib wxmswuniv25d_adv.lib wxbase25d_odbc.lib wxmswuniv25d_html.lib wxmswuniv25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivddll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 LIB Native Debug Ansi"
 
@@ -240,8 +240,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25d_adv.lib wxmsw25d_odbc.lib wxmsw25d_html.lib wxmsw25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswd\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswd" /subsystem:windows
-# ADD LINK32 wxmsw25d_adv.lib wxmsw25d_odbc.lib wxmsw25d_html.lib wxmsw25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswd\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswd" /subsystem:windows
+# ADD BASE LINK32 wxmsw25d_dbgrid.lib wxmsw25d_adv.lib wxbase25d_odbc.lib wxmsw25d_html.lib wxmsw25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswd\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswd" /subsystem:windows
+# ADD LINK32 wxmsw25d_dbgrid.lib wxmsw25d_adv.lib wxbase25d_odbc.lib wxmsw25d_html.lib wxmsw25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswd\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswd" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 DLL Native Release Unicode"
 
@@ -265,8 +265,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25u_adv.lib wxmsw25u_odbc.lib wxmsw25u_html.lib wxmsw25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswudll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswudll" /subsystem:windows
-# ADD LINK32 wxmsw25u_adv.lib wxmsw25u_odbc.lib wxmsw25u_html.lib wxmsw25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswudll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswudll" /subsystem:windows
+# ADD BASE LINK32 wxmsw25u_dbgrid.lib wxmsw25u_adv.lib wxbase25u_odbc.lib wxmsw25u_html.lib wxmsw25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswudll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswudll" /subsystem:windows
+# ADD LINK32 wxmsw25u_dbgrid.lib wxmsw25u_adv.lib wxbase25u_odbc.lib wxmsw25u_html.lib wxmsw25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswudll\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswudll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 LIB wxUniv Release Ansi"
 
@@ -290,8 +290,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25_adv.lib wxmswuniv25_odbc.lib wxmswuniv25_html.lib wxmswuniv25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswuniv\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswuniv" /subsystem:windows
-# ADD LINK32 wxmswuniv25_adv.lib wxmswuniv25_odbc.lib wxmswuniv25_html.lib wxmswuniv25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswuniv\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswuniv" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv25_dbgrid.lib wxmswuniv25_adv.lib wxbase25_odbc.lib wxmswuniv25_html.lib wxmswuniv25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswuniv\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswuniv" /subsystem:windows
+# ADD LINK32 wxmswuniv25_dbgrid.lib wxmswuniv25_adv.lib wxbase25_odbc.lib wxmswuniv25_html.lib wxmswuniv25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswuniv\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswuniv" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 LIB Native Release Unicode"
 
@@ -315,8 +315,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25u_adv.lib wxmsw25u_odbc.lib wxmsw25u_html.lib wxmsw25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswu\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswu" /subsystem:windows
-# ADD LINK32 wxmsw25u_adv.lib wxmsw25u_odbc.lib wxmsw25u_html.lib wxmsw25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswu\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswu" /subsystem:windows
+# ADD BASE LINK32 wxmsw25u_dbgrid.lib wxmsw25u_adv.lib wxbase25u_odbc.lib wxmsw25u_html.lib wxmsw25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswu\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswu" /subsystem:windows
+# ADD LINK32 wxmsw25u_dbgrid.lib wxmsw25u_adv.lib wxbase25u_odbc.lib wxmsw25u_html.lib wxmsw25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswu\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswu" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 LIB wxUniv Debug Ansi"
 
@@ -340,8 +340,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25d_adv.lib wxmswuniv25d_odbc.lib wxmswuniv25d_html.lib wxmswuniv25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivd\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivd" /subsystem:windows
-# ADD LINK32 wxmswuniv25d_adv.lib wxmswuniv25d_odbc.lib wxmswuniv25d_html.lib wxmswuniv25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivd\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivd" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv25d_dbgrid.lib wxmswuniv25d_adv.lib wxbase25d_odbc.lib wxmswuniv25d_html.lib wxmswuniv25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivd\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivd" /subsystem:windows
+# ADD LINK32 wxmswuniv25d_dbgrid.lib wxmswuniv25d_adv.lib wxbase25d_odbc.lib wxmswuniv25d_html.lib wxmswuniv25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivd\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswunivd" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 DLL Native Debug Unicode"
 
@@ -365,8 +365,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25ud_adv.lib wxmsw25ud_odbc.lib wxmsw25ud_html.lib wxmsw25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswuddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswuddll" /subsystem:windows
-# ADD LINK32 wxmsw25ud_adv.lib wxmsw25ud_odbc.lib wxmsw25ud_html.lib wxmsw25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswuddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswuddll" /subsystem:windows
+# ADD BASE LINK32 wxmsw25ud_dbgrid.lib wxmsw25ud_adv.lib wxbase25ud_odbc.lib wxmsw25ud_html.lib wxmsw25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswuddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswuddll" /subsystem:windows
+# ADD LINK32 wxmsw25ud_dbgrid.lib wxmsw25ud_adv.lib wxbase25ud_odbc.lib wxmsw25ud_html.lib wxmsw25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswuddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswuddll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 DLL Native Debug Ansi"
 
@@ -390,8 +390,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25d_adv.lib wxmsw25d_odbc.lib wxmsw25d_html.lib wxmsw25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswddll" /subsystem:windows
-# ADD LINK32 wxmsw25d_adv.lib wxmsw25d_odbc.lib wxmsw25d_html.lib wxmsw25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswddll" /subsystem:windows
+# ADD BASE LINK32 wxmsw25d_dbgrid.lib wxmsw25d_adv.lib wxbase25d_odbc.lib wxmsw25d_html.lib wxmsw25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswddll" /subsystem:windows
+# ADD LINK32 wxmsw25d_dbgrid.lib wxmsw25d_adv.lib wxbase25d_odbc.lib wxmsw25d_html.lib wxmsw25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswddll\dbbrowse.exe" /debug /libpath:".\..\..\lib\vc_mswddll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 LIB Native Release Ansi"
 
@@ -415,8 +415,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25_adv.lib wxmsw25_odbc.lib wxmsw25_html.lib wxmsw25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_msw\dbbrowse.exe" /libpath:".\..\..\lib\vc_msw" /subsystem:windows
-# ADD LINK32 wxmsw25_adv.lib wxmsw25_odbc.lib wxmsw25_html.lib wxmsw25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_msw\dbbrowse.exe" /libpath:".\..\..\lib\vc_msw" /subsystem:windows
+# ADD BASE LINK32 wxmsw25_dbgrid.lib wxmsw25_adv.lib wxbase25_odbc.lib wxmsw25_html.lib wxmsw25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_msw\dbbrowse.exe" /libpath:".\..\..\lib\vc_msw" /subsystem:windows
+# ADD LINK32 wxmsw25_dbgrid.lib wxmsw25_adv.lib wxbase25_odbc.lib wxmsw25_html.lib wxmsw25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_msw\dbbrowse.exe" /libpath:".\..\..\lib\vc_msw" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dbbrowse - Win32 LIB wxUniv Release Unicode"
 
@@ -440,8 +440,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25u_adv.lib wxmswuniv25u_odbc.lib wxmswuniv25u_html.lib wxmswuniv25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivu\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswunivu" /subsystem:windows
-# ADD LINK32 wxmswuniv25u_adv.lib wxmswuniv25u_odbc.lib wxmswuniv25u_html.lib wxmswuniv25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivu\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswunivu" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv25u_dbgrid.lib wxmswuniv25u_adv.lib wxbase25u_odbc.lib wxmswuniv25u_html.lib wxmswuniv25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivu\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswunivu" /subsystem:windows
+# ADD LINK32 wxmswuniv25u_dbgrid.lib wxmswuniv25u_adv.lib wxbase25u_odbc.lib wxmswuniv25u_html.lib wxmswuniv25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivu\dbbrowse.exe" /libpath:".\..\..\lib\vc_mswunivu" /subsystem:windows
 
 !ENDIF
 
