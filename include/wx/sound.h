@@ -27,9 +27,12 @@
 // ----------------------------------------------------------------------------
 
 // Flags for wxSound::Play
-#if WXWIN_COMPATIBILITY_2_4
-    // NB: we can't use enum because there would be ambiguity between the
-    //     two Play() prototypes when called without explicit parameters
+#if WXWIN_COMPATIBILITY_2_4 || defined(__BORLANDC__)
+    // NB: We can't use enum because there would be ambiguity between the
+    //     two Play() prototypes when called without explicit parameters.
+    //     We can't use enum with Borland's compiler either, because it's
+    //     broken and keeps reporting nonexistent ambiguities between
+    //     Play(unsigned) and static Play(const wxString&, unsigned).
     #define wxSOUND_SYNC  ((unsigned)0)
     #define wxSOUND_ASYNC ((unsigned)1)
     #define wxSOUND_LOOP  ((unsigned)2)
