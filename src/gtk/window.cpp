@@ -1772,6 +1772,9 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
+    wxASSERT_MSG( wxGetTopLevelParent(win) == g_activeFrame, wxT("unfocusing window that haven't gained focus properly") )
+    g_activeFrameLostFocus = TRUE;
+
     // VZ: this is really weird but GTK+ seems to call us from inside
     //     gtk_widget_grab_focus(), i.e. it first sends "focus_out" signal to
     //     this widget and then "focus_in". This is totally unexpected and
@@ -1815,9 +1818,6 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
         caret->OnKillFocus();
     }
 #endif // wxUSE_CARET
-
-    wxASSERT_MSG( wxGetTopLevelParent(win) == g_activeFrame, wxT("unfocusing window that haven't gained focus properly") )
-    g_activeFrameLostFocus = TRUE;
 
     wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
     event.SetEventObject( win );
