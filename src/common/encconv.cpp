@@ -359,15 +359,6 @@ static wxFontEncoding
 
     // Cyrillic
     {
-        /* unix    */ {wxFONTENCODING_ISO8859_13, wxFONTENCODING_ISO8859_4,
-                       wxFONTENCODING_ISO8859_15, wxFONTENCODING_ISO8859_1, STOP},
-        /* windows */ {wxFONTENCODING_CP1257, wxFONTENCODING_CP1252, STOP},
-        /* os2     */ {STOP},
-        /* mac     */ {STOP}   
-    },
-
-    // Russia and other KOI-8 users:
-    {
         /* unix    */ {wxFONTENCODING_KOI8, wxFONTENCODING_ISO8859_5, STOP},
         /* windows */ {wxFONTENCODING_CP1251, STOP},
         /* os2     */ {STOP},
