@@ -318,6 +318,8 @@ wxToolBarToolBase *wxToolBarBase::FindById(int id) const
             // found
             break;
         }
+
+        tool = NULL;
     }
 
     return tool;
