@@ -309,6 +309,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="NET_WIN32_SRC" hints="files">
     src/msw/gsocket.c
+    src/msw/urlmsw.cpp
 </set>
 <set var="NET_WIN32_HDR" hints="files">
     wx/msw/gsockmsw.h

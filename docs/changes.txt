@@ -34,6 +34,7 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - wxTabView::GetLayers() changed return type from wxList& to wxTabLayerList&
   (when WXWIN_COMPATIBILITY_2_4 == 0)
 - wxID_SEPARATOR (id used for the menu separators) value changed from -1 to -2
+- wxGetNumberFromUser() is now in separate wx/numdlg.h, not wx/textdlg.h
 
 
 DEPRECATED METHODS SINCE 2.4.x
@@ -146,6 +147,7 @@ wxMSW:
   wxEVT_COMMAND_COMBOBOX_SELECTED changed the selection
 - wxFileDialog now returns correct filter index for multiple-file dialogs
 - added wxTextCtrl::HitTest()
+- experimental wxURL implementation using WinInet functions (Hajo Kirchhoff)
 
 wxGTK:
 

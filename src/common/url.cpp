@@ -61,6 +61,9 @@ wxURL::wxURL(const wxString& url)
     m_protocol = NULL;
     m_error = wxURL_NOERR;
     m_url = url;
+#if wxUSE_URL_NATIVE
+    m_nativeImp = CreateNativeImpObject();
+#endif
 
 #if wxUSE_SOCKETS
     if ( ms_useDefaultProxy && !ms_proxyDefault )
@@ -157,10 +160,13 @@ void wxURL::CleanData()
 
 wxURL::~wxURL()
 {
-  CleanData();
+    CleanData();
 #if wxUSE_SOCKETS
-  if (m_proxy && m_proxy != ms_proxyDefault)
-    delete m_proxy;
+    if (m_proxy && m_proxy != ms_proxyDefault)
+        delete m_proxy;
+#endif
+#if wxUSE_URL_NATIVE
+    delete m_nativeImp;
 #endif
 }
 
@@ -284,6 +290,19 @@ wxInputStream *wxURL::GetInputStream()
     m_protocol->SetUser(m_user);
     m_protocol->SetPassword(m_password);
   }
+
+#if wxUSE_URL_NATIVE
+  // give the native implementation to return a better stream
+  // such as the native WinINet functionality under MS-Windows
+  if (m_nativeImp)
+  {
+    wxInputStream *rc;
+    rc = m_nativeImp->GetInputStream(this);
+    if (rc != 0)
+        return rc;
+  }
+  // else use the standard behaviour
+#endif // wxUSE_URL_NATIVE
 
 #if wxUSE_SOCKETS
     wxIPV4address addr;

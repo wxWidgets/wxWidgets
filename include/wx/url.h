@@ -37,6 +37,17 @@ typedef enum {
   wxURL_PROTOERR
 } wxURLError;
 
+#if wxUSE_URL_NATIVE
+class WXDLLIMPEXP_NET wxURL;
+
+class WXDLLIMPEXP_NET wxURLNativeImp : public wxObject
+{
+public:
+    virtual ~wxURLNativeImp() { }
+    virtual wxInputStream *GetInputStream(wxURL *owner) = 0;
+};
+#endif // wxUSE_URL_NATIVE
+
 class WXDLLIMPEXP_NET wxURL : public wxObject
 {
 public:
@@ -72,6 +83,14 @@ protected:
     wxHTTP *m_proxy;
 #endif // wxUSE_SOCKETS
 
+#if wxUSE_URL_NATIVE
+    friend class wxURLNativeImp;
+    // pointer to a native URL implementation object
+    wxURLNativeImp *m_nativeImp;
+    // Creates on the heap and returns a native 
+    // implementation object for the current platform.
+    static wxURLNativeImp *CreateNativeImpObject();
+#endif
     wxProtoInfo *m_protoinfo;
     wxProtocol *m_protocol;
 
