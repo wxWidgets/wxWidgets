@@ -207,6 +207,14 @@ wxSlider95::Create(wxWindow *parent,
     SetValue(value);
     SetPageSize((maxValue - minValue)/10);
 
+    // we need to position the labels correctly if we have them and if
+    // SetSize() hadn't been called before (when best size was determined by
+    // MSWCreateControl()) as in this case they haven't been put in place yet
+    if ( m_labels && size.x != wxDefaultCoord && size.y != wxDefaultCoord )
+    {
+        SetSize(size);
+    }
+
     return true;
 }
 
@@ -394,20 +402,15 @@ void wxSlider95::DoMoveWindow(int x, int y, int width, int height)
         return;
     }
 
+    // be careful to position the slider itself after moving the labels as
+    // otherwise our GetBoundingBox(), which is called from WM_SIZE handler,
+    // would return a wrong result and wrong size would be cached internally
     if ( HasFlag(wxSL_VERTICAL) )
     {
         int wLabel;
         int hLabel = GetLabelsSize(&wLabel);
 
         int xLabel = HasFlag(wxSL_LEFT) ? x + width - wLabel : x;
-
-        // position the slider itself along the left/right edge
-        ::MoveWindow(GetHwnd(),
-                     HasFlag(wxSL_LEFT) ? x : x + wLabel + HGAP,
-                     y + hLabel/2,
-                     width - wLabel - HGAP,
-                     height - hLabel,
-                     TRUE);
 
         // position all labels: min at the top, value in the middle and max at
         // the bottom
@@ -419,6 +422,14 @@ void wxSlider95::DoMoveWindow(int x, int y, int width, int height)
 
         ::MoveWindow((*m_labels)[SliderLabel_Max],
                      xLabel, y + height - hLabel, wLabel, hLabel, TRUE);
+
+        // position the slider itself along the left/right edge
+        ::MoveWindow(GetHwnd(),
+                     HasFlag(wxSL_LEFT) ? x : x + wLabel + HGAP,
+                     y + hLabel/2,
+                     width - wLabel - HGAP,
+                     height - hLabel,
+                     TRUE);
     }
     else // horizontal
     {
@@ -426,14 +437,6 @@ void wxSlider95::DoMoveWindow(int x, int y, int width, int height)
         int hLabel = GetLabelsSize(&wLabel);
 
         int yLabel = HasFlag(wxSL_TOP) ? y + height - hLabel : y;
-
-        // position the slider itself along the top/bottom edge
-        ::MoveWindow(GetHwnd(),
-                     x,
-                     HasFlag(wxSL_TOP) ? y : y + hLabel,
-                     width,
-                     height - hLabel,
-                     TRUE);
 
         // position all labels: min on the left, value in the middle and max to
         // the right
@@ -445,6 +448,14 @@ void wxSlider95::DoMoveWindow(int x, int y, int width, int height)
 
         ::MoveWindow((*m_labels)[SliderLabel_Max],
                      x + width - wLabel, yLabel, wLabel, hLabel, TRUE);
+
+        // position the slider itself along the top/bottom edge
+        ::MoveWindow(GetHwnd(),
+                     x,
+                     HasFlag(wxSL_TOP) ? y : y + hLabel,
+                     width,
+                     height - hLabel,
+                     TRUE);
     }
 }
 
@@ -621,6 +632,28 @@ bool wxSlider95::Show(bool show)
 
     if ( m_labels )
         m_labels->Show(show);
+
+    return true;
+}
+
+bool wxSlider95::Enable(bool enable)
+{
+    if ( !wxSliderBase::Enable(enable) )
+        return false;
+
+    if ( m_labels )
+        m_labels->Enable(enable);
+
+    return true;
+}
+
+bool wxSlider95::SetFont(const wxFont& font)
+{
+    if ( !wxSliderBase::SetFont(font) )
+        return false;
+
+    if ( m_labels )
+        m_labels->SetFont(font);
 
     return true;
 }
