@@ -734,9 +734,13 @@ public:
     virtual void GetPositionConstraint(int *x, int *y) const ;
 
         // sizers
-        // TODO: what are they and how do they work??
     void SetSizer( wxSizer *sizer );
     wxSizer *GetSizer() const { return m_windowSizer; }
+
+    // Track if this window is a member of a sizer
+    void SetContainingSizer(wxSizer* sizer) { m_containingSizer = sizer; }
+    wxSizer *GetContainingSizer() const { return m_containingSizer; }
+
 #endif // wxUSE_CONSTRAINTS
 
     // backward compatibility
@@ -840,10 +844,11 @@ protected:
     // constraints this window is involved in
     wxWindowList        *m_constraintsInvolvedIn;
 
-    // top level and the parent sizers
-    // TODO what's this and how does it work?)
+    // this window's sizer
     wxSizer             *m_windowSizer;
-    wxWindowBase        *m_sizerParent;
+
+    // The sizer this window is a member of, if any
+    wxSizer             *m_containingSizer;
 
     // Layout() window automatically when its size changes?
     bool                 m_autoLayout:1;
@@ -923,7 +928,7 @@ protected:
     // capture/release the mouse, used by Capture/ReleaseMouse()
     virtual void DoCaptureMouse() = 0;
     virtual void DoReleaseMouse() = 0;
-    
+
     // retrieve the position/size of the window
     virtual void DoGetPosition( int *x, int *y ) const = 0;
     virtual void DoGetSize( int *width, int *height ) const = 0;

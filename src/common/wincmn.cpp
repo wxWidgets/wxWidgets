@@ -152,6 +152,7 @@ void wxWindowBase::InitBase()
     m_constraints = (wxLayoutConstraints *) NULL;
     m_constraintsInvolvedIn = (wxWindowList *) NULL;
     m_windowSizer = (wxSizer *) NULL;
+    m_containingSizer = (wxSizer *) NULL;
     m_autoLayout = FALSE;
 #endif // wxUSE_CONSTRAINTS
 
@@ -256,6 +257,9 @@ wxWindowBase::~wxWindowBase()
         delete m_constraints;
         m_constraints = NULL;
     }
+
+    if ( m_containingSizer )
+        m_containingSizer->Remove((wxWindow*)this);
 
     if ( m_windowSizer )
         delete m_windowSizer;

@@ -514,6 +514,12 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetSizer(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetSizer,(self,) + _args, _kwargs)
         return val
+    def SetContainingSizer(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetContainingSizer,(self,) + _args, _kwargs)
+        return val
+    def GetContainingSizer(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetContainingSizer,(self,) + _args, _kwargs)
+        return val
     def GetValidator(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetValidator,(self,) + _args, _kwargs)
         return val

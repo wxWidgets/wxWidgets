@@ -564,6 +564,13 @@ implements the following methods:\par
 
 Returns a pointer to the window's layout constraints, or NULL if there are none.
 
+\membersection{wxWindow::GetContainingSizer}\label{wxwindowgetcontainingsizer}
+
+\constfunc{const wxSizer *}{GetContainingSizer}{\void}
+
+Return the sizer that this window is a member of, if any, otherwise
+{\tt NULL}.
+
 \membersection{wxWindow::GetDropTarget}\label{wxwindowgetdroptarget}
 
 \constfunc{wxDropTarget*}{GetDropTarget}{\void}
@@ -812,8 +819,10 @@ method:\par
 
 \constfunc{const wxSizer *}{GetSizer}{\void}
 
-Return the sizer associated with the window by a previous call to 
+Return the sizer associated with the window by a previous call to
 \helpref{SetSizer()}{wxwindowsetsizer} or {\tt NULL}.
+
+\membersection{wxWindow::GetTextExtent}\label{wxwindowgettextextent}
 
 \constfunc{virtual void}{GetTextExtent}{\param{const wxString\& }{string}, \param{int* }{x}, \param{int* }{y},
  \param{int* }{descent = NULL}, \param{int* }{externalLeading = NULL},
@@ -1927,8 +1936,8 @@ Sets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxa
 \func{void}{SetAutoLayout}{\param{bool}{ autoLayout}}
 
 Determines whether the \helpref{wxWindow::Layout}{wxwindowlayout} function will
-be called automatically when the window is resized. Use in connection with 
-\helpref{wxWindow::SetSizer}{wxwindowsetsizer} and 
+be called automatically when the window is resized. Use in connection with
+\helpref{wxWindow::SetSizer}{wxwindowsetsizer} and
 \helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} for laying out
 subwindows.
 
@@ -2006,6 +2015,14 @@ implements the following methods:\par
 \twocolitem{{\bf SetClientSizeWH(width, height)}}{}
 \end{twocollist}}
 }
+
+\membersection{wxWindow::SetContainingSizer}\label{wxwindowsetcontainingsizer}
+
+\func{void}{SetContainingSizer}{\param{wxSizer* }{sizer}}
+
+This normally does not need to be called by user code.  It is called
+when a window is added to a sizer, and is used so the window can
+remove itself from the sizer when it is destroyed.
 
 \membersection{wxWindow::SetCursor}\label{wxwindowsetcursor}
 
@@ -2107,7 +2124,7 @@ window if it has this style flag set.}
 events are propagared upwards to the window parent recursively until a handler
 for them is found. Using this style allows to prevent them from being
 propagated beyond this window. Notice that wxDialog has this style on by
-default for the reasons explained in the 
+default for the reasons explained in the
 \helpref{event processing overview}{eventprocessing}.}
 \twocolitem{\windowstyle{wxWS\_EX\_TRANSIENT}}{This can be used to prevent a
 window from being used as an implicit parent for the dialogs which were
@@ -2117,7 +2134,7 @@ any moment as creating childs of such windows results in fatal problems.}
 caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
 a wxEVT\_HELP event if the user clicked on an application window.
 This style cannot be used together with wxMAXIMIZE\_BOX or wxMINIMIZE\_BOX, so
-you should use the style of 
+you should use the style of
 {\tt wxDEFAULT\_FRAME\_STYLE & ~(wxMINIMIZE\_BOX | wxMAXIMIZE\_BOX)} for the
 frames having this style (the dialogs don't have minimize nor maximize box by
 default)}
@@ -2550,7 +2567,7 @@ See \helpref{Window styles}{windowstyles} for more information about flags.
 
 \func{virtual bool}{Show}{\param{bool}{ show = {\tt TRUE}}}
 
-Shows or hides the window. You may need to call \helpref{Raise}{wxwindowraise} 
+Shows or hides the window. You may need to call \helpref{Raise}{wxwindowraise}
 for a top level window if you want to bring it to top, although this is not
 needed if Show() is called immediately after the frame creation.
 
@@ -2571,7 +2588,7 @@ done because it already was in the requested state.
 
 \func{virtual void}{Thaw}{\void}
 
-Reenables window updating after a previous call to 
+Reenables window updating after a previous call to
 \helpref{Freeze}{wxwindowfreeze}.
 
 \membersection{wxWindow::TransferDataFromWindow}\label{wxwindowtransferdatafromwindow}

@@ -374,6 +374,10 @@ public:
     void SetSizer(wxSizer* sizer);
     wxSizer* GetSizer();
 
+        // Track if this window is a member of a sizer
+    void SetContainingSizer(wxSizer* sizer) { m_containingSizer = sizer; }
+    wxSizer *GetContainingSizer() const { return m_containingSizer; }
+
     wxValidator* GetValidator();
     void SetValidator(const wxValidator& validator);
 

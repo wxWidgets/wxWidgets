@@ -236,7 +236,7 @@ void wxSizerItem::DeleteWindows()
 {
     if (m_window)
          m_window->Destroy();
-         
+
     if (m_sizer)
         m_sizer->DeleteWindows();
 }
@@ -269,11 +269,13 @@ wxSizer::wxSizer()
 
 wxSizer::~wxSizer()
 {
+    Clear();
 }
 
 void wxSizer::Add( wxWindow *window, int option, int flag, int border, wxObject* userData )
 {
     m_children.Append( new wxSizerItem( window, option, flag, border, userData ) );
+    window->SetContainingSizer(this);
 }
 
 void wxSizer::Add( wxSizer *sizer, int option, int flag, int border, wxObject* userData )
@@ -289,6 +291,7 @@ void wxSizer::Add( int width, int height, int option, int flag, int border, wxOb
 void wxSizer::Prepend( wxWindow *window, int option, int flag, int border, wxObject* userData )
 {
     m_children.Insert( new wxSizerItem( window, option, flag, border, userData ) );
+    window->SetContainingSizer(this);
 }
 
 void wxSizer::Prepend( wxSizer *sizer, int option, int flag, int border, wxObject* userData )
@@ -304,6 +307,7 @@ void wxSizer::Prepend( int width, int height, int option, int flag, int border, 
 void wxSizer::Insert( int before, wxWindow *window, int option, int flag, int border, wxObject* userData )
 {
     m_children.Insert( before, new wxSizerItem( window, option, flag, border, userData ) );
+    window->SetContainingSizer(this);
 }
 
 void wxSizer::Insert( int before, wxSizer *sizer, int option, int flag, int border, wxObject* userData )
@@ -326,6 +330,7 @@ bool wxSizer::Remove( wxWindow *window )
         wxSizerItem *item = (wxSizerItem*)node->Data();
         if (item->GetWindow() == window)
         {
+            item->GetWindow()->SetContainingSizer(NULL);
             m_children.DeleteNode( node );
             return TRUE;
         }
@@ -366,9 +371,21 @@ bool wxSizer::Remove( int pos )
 
 void wxSizer::Clear( bool delete_windows )
 {
+    // First clear the ContainingSizer pointers
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxSizerItem *item = (wxSizerItem*)node->Data();
+        if (item->IsWindow())
+            item->GetWindow()->SetContainingSizer(NULL);
+        node = node->Next();
+    }
+
+    // Destroy the windows if needed
     if (delete_windows)
         DeleteWindows();
-        
+
+    // Now empty the list
     m_children.Clear();
 }
 
