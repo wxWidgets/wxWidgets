@@ -1199,9 +1199,9 @@ int WXDLLEXPORT wxStrnicmp(const wxChar *s1, const wxChar *s2, size_t n)
 #ifndef wxSetlocale
 WXDLLEXPORT wxWCharBuffer wxSetlocale(int category, const wxChar *locale)
 {
-    char *localeOld = setlocale(category, wxConvLocal.cWX2MB(locale));
+    char *localeOld = setlocale(category, wxConvLibc.cWX2MB(locale));
 
-    return wxWCharBuffer(wxConvLocal.cMB2WC(localeOld));
+    return wxWCharBuffer(wxConvLibc.cMB2WC(localeOld));
 }
 #endif
 
@@ -1369,7 +1369,7 @@ WXDLLEXPORT double wxStrtod(const wxChar *nptr, wxChar **endptr)
   }
 
   wxString data(nptr, nptr-start);
-  wxWX2MBbuf dat = data.mb_str(wxConvLocal);
+  wxWX2MBbuf dat = data.mb_str(wxConvLibc);
   char *rdat = wxMBSTRINGCAST dat;
   double ret = strtod(dat, &rdat);
 
@@ -1397,7 +1397,7 @@ WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base)
          (wxIsalpha(*nptr) && (wxToupper(*nptr) - wxT('A') + 10 < base))) nptr++;
 
   wxString data(start, nptr-start);
-  wxWX2MBbuf dat = data.mb_str(wxConvLocal);
+  wxWX2MBbuf dat = data.mb_str(wxConvLibc);
   char *rdat = wxMBSTRINGCAST dat;
   long int ret = strtol(dat, &rdat, base);
 
@@ -1454,7 +1454,7 @@ double   WXDLLEXPORT wxAtof(const wxChar *psz)
     else
         return 0.0;
 #else
-    return atof(wxConvLocal.cWX2MB(psz));
+    return atof(wxConvLibc.cWX2MB(psz));
 #endif
 }
 #endif
@@ -1462,12 +1462,12 @@ double   WXDLLEXPORT wxAtof(const wxChar *psz)
 #ifdef wxNEED_WX_STDLIB_H
 int      WXDLLEXPORT wxAtoi(const wxChar *psz)
 {
-  return atoi(wxConvLocal.cWX2MB(psz));
+  return atoi(wxConvLibc.cWX2MB(psz));
 }
 
 long     WXDLLEXPORT wxAtol(const wxChar *psz)
 {
-  return atol(wxConvLocal.cWX2MB(psz));
+  return atol(wxConvLibc.cWX2MB(psz));
 }
 
 wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
@@ -1477,7 +1477,7 @@ wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
     //     time getenv() is called, so it is OK to use static string
     //     buffer to hold the data.
     static wxWCharBuffer value((wxChar*)NULL);
-    value = wxConvLocal.cMB2WX(getenv(wxConvLocal.cWX2MB(name)));
+    value = wxConvLibc.cMB2WX(getenv(wxConvLibc.cWX2MB(name)));
     return value.data();
 #else
     return getenv(name);
@@ -1486,7 +1486,7 @@ wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
 
 int WXDLLEXPORT wxSystem(const wxChar *psz)
 {
-    return system(wxConvLocal.cWX2MB(psz));
+    return system(wxConvLibc.cWX2MB(psz));
 }
 
 #endif // wxNEED_WX_STDLIB_H
@@ -1500,7 +1500,7 @@ wxStrftime(wxChar *s, size_t maxsize, const wxChar *fmt, const struct tm *tm)
 
     wxCharBuffer buf(maxsize);
 
-    wxCharBuffer bufFmt(wxConvLocal.cWX2MB(fmt));
+    wxCharBuffer bufFmt(wxConvLibc.cWX2MB(fmt));
     if ( !bufFmt )
         return 0;
 
@@ -1508,7 +1508,7 @@ wxStrftime(wxChar *s, size_t maxsize, const wxChar *fmt, const struct tm *tm)
     if  ( !ret )
         return 0;
 
-    wxWCharBuffer wbuf = wxConvLocal.cMB2WX(buf);
+    wxWCharBuffer wbuf = wxConvLibc.cMB2WX(buf);
     if ( !wbuf )
         return 0;
 
