@@ -244,7 +244,10 @@ it if SHARED=1 unless you know what you are doing.
         
         <set var="WXTOPDIR"/> <!-- to be overriden on bakefile cmd line -->
 
-        <set var="TOOLKIT">MSW</set>
+        <set var="TOOLKIT">
+            <if cond="FORMAT!='msevc4prj'">MSW</if>
+            <if cond="FORMAT=='msevc4prj'">WINCE</if>
+        </set>
         <set var="TOOLKIT_LOWERCASE">$(TOOLKIT.lower())</set>
         <set var="TOOLKIT_VERSION"/>
         <set var="HOST_SUFFIX"/>
@@ -256,7 +259,7 @@ it if SHARED=1 unless you know what you are doing.
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRALIBS_OPENGL">
             <if cond="COMPILER=='wat'">opengl32.lib glu32.lib</if>
-            <if cond="COMPILER=='vc'">opengl32.lib glu32.lib</if>
+            <if cond="COMPILER in ['vc','evc']">opengl32.lib glu32.lib</if>
             <if cond="COMPILER=='gcc'">-lopengl32 -lglu32</if>
         </set>
         <set var="EXTRALIBS_SDL"/>
@@ -309,6 +312,8 @@ Set the version of your Mingw installation here.
         <set var="DEBUG_INFO">default</set>
         <set var="DEBUG_FLAG">default</set>
         <set var="MSLU">0</set>
+        <set var="CPPUNIT_CFLAGS"/>
+        <set var="CPPUNIT_LIBS"/>
     </if>
 
 
@@ -333,6 +338,13 @@ Set the version of your Mingw installation here.
         <set var="SHARED">0</set>
         <set var="WXUNIV">0</set>
         <set var="UNICODE">0</set>
+    </if>
+
+    <!-- No need for wxUniv on embedded devices (yet): -->
+    <if cond="FORMAT=='msevc4prj'">
+        <set var="WXUNIV">0</set>
+        <set var="UNICODE">1</set>
+        <set var="MONOLITHIC">1</set> <!-- sic! -->
     </if>
 
 </makefile>

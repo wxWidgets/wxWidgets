@@ -29,5 +29,10 @@
         <sources>$(MONOLIB_SRC) $(PLUGIN_MONOLIB_SRC)</sources>
         <msvc-headers>$(ALL_HEADERS)</msvc-headers>
     </lib>
+    
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS_MONOLIB" append="1">mono=monolib+monodll</set>
+    <!-- included by wx.bkl from opengl.bkl -->
+    <set var="MSVC6PRJ_MERGED_TARGETS_MONOLIB" append="1">gl=gllib+gldll</set>
 
 </makefile>
