@@ -3,7 +3,7 @@
 // Purpose:     wxTimer implementation
 // Author:      Vaclav Slavik
 // Id:          $Id$
-// Copyright:   (c) 2001-2002 SciTech Software, Inc. (www.scitechsoft.com)
+// Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
