@@ -3201,14 +3201,14 @@ if test "$wxUSE_MAC" = 1; then
     dnl since the carb resource *must* be included in the application
     MACRESCOMP="\$(RESCOMP) -d __DARWIN__ -t APPL Carbon.r ${LIBWXMACRES} -o"
     MACSETFILE="\$(SETFILE)"
-    MACRESWXCONFIG="${RESCOMP} -d __DARWIN__ -t APPL Carbon.r \$(top_builddir)/lib/${WX_RESOURCES_MACOSX_ASCII}} -o"
+    MACRESWXCONFIG="${RESCOMP} -d __DARWIN__ -t APPL Carbon.r \${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
 elif test "$wxUSE_COCOA" = 1; then
     AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
     AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
     AC_CHECK_PROG(SETFILE, SetFile, SetFile, /Developer/Tools/SetFile)
     MACRESCOMP="echo -n | \$(RESCOMP) -d __DARWIN__ -t APPL ${LIBWXMACRES} -o"
     MACSETFILE="\$(SETFILE)"
-    MACRESWXCONFIG="echo -n | ${RESCOMP} -d __DARWIN__ -t APPL \$(top_builddir)/lib/${WX_RESOURCES_MACOSX_ASCII}} -o"
+    MACRESWXCONFIG="echo -n | ${RESCOMP} -d __DARWIN__ -t APPL \${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
 else
     if test "$wxUSE_PM" = 1; then
         MACRESCOMP="emxbind -ep"
