@@ -67,7 +67,8 @@ protected:
 
 #if defined(__WXUNIVERSAL__) || \
     defined(__WXMOTIF__)     || \
-    defined(__WXMAC__)       || \
+    defined(__WXMAC__) && !defined(__WXMAC_OSX__)    || \
+    defined(__WXMAC_OSX__) && ( MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_2 ) || \
     defined(__WXCOCOA__)     || \
     defined(__WXWINCE__)     || \
     defined(__WXGPE__)
@@ -80,6 +81,8 @@ protected:
     #include "wx/gtk/fontdlg.h"
 #elif defined(__WXPM__)
     #include "wx/os2/fontdlg.h"
+#elif defined(__WXMAC__)
+    #include "wx/mac/fontdlg.h"
 #endif
 
 // ----------------------------------------------------------------------------
