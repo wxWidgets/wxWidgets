@@ -113,6 +113,26 @@ dummy = tag.GetParam("COLOR", TRUE);
    // dummy == "\"#0000FF\"" -- see the difference!!
 \end{verbatim}
 
+\membersection{wxHtmlTag::GetParamAsColour}\label{wxhtmltaggetparamascolour}
+
+\constfunc{bool}{GetParamAsColour}{\param{const wxString\& }{par}, \param{wxColour *}{clr}}
+
+Interprets tag parameter {\it par} as colour specification and saves its value
+into wxColour variable pointed by {\it clr}.
+
+Returns TRUE on success and FALSE if {\it par} is not colour specification or
+if the tag has no such parameter.
+
+\membersection{wxHtmlTag::GetParamAsInt}\label{wxhtmltaggetparamasint}
+
+\constfunc{bool}{GetParamAsInt}{\param{const wxString\& }{par}, \param{int *}{value}}
+
+Interprets tag parameter {\it par} as an integer and saves its value
+into int variable pointed by {\it value}.
+
+Returns TRUE on success and FALSE if {\it par} is not an integer or
+if the tag has no such parameter.
+
 \membersection{wxHtmlTag::HasEnding}\label{wxhtmltaghasending}
 
 \constfunc{bool}{HasEnding}{\void}
