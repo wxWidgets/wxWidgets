@@ -11910,7 +11910,7 @@ echo "$ac_t""$wx_cv_prog_icc" 1>&6
         WX_LIBRARY_IMPORTLIB="${WX_LIBRARY_NAME_SHARED}.a"
 
         SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_IMPORTLIB} -o"
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DWXUSINGDLL=1"
+        TOOLCHAIN_DLL_DEFS="${TOOLCHAIN_DLL_DEFS} -DWXUSINGDLL=1"
 
         PIC_FLAG="-UWXUSINGDLL -DWXMAKINGDLL=1 -D_DLL=1 -D_WINDLL=1"
 
@@ -18404,8 +18404,9 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 
+
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:18409: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:18410: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -18664,6 +18665,7 @@ s%@TOOLKIT_DIR@%$TOOLKIT_DIR%g
 s%@TOOLKIT_VPATH@%$TOOLKIT_VPATH%g
 s%@TOOLCHAIN_NAME@%$TOOLCHAIN_NAME%g
 s%@TOOLCHAIN_DEFS@%$TOOLCHAIN_DEFS%g
+s%@TOOLCHAIN_DLL_DEFS@%$TOOLCHAIN_DLL_DEFS%g
 s%@cross_compiling@%$cross_compiling%g
 s%@WXCONFIG_LIBS@%$WXCONFIG_LIBS%g
 s%@WXCONFIG_LIBS_GL@%$WXCONFIG_LIBS_GL%g

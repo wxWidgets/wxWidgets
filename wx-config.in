@@ -36,8 +36,14 @@ cppflags()
     then
         includes=-I@includedir@
     fi
+
     includes="-I@libdir@/wx/include/@TOOLCHAIN_NAME@ $includes"
-    echo $includes @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @WXCONFIG_INCLUDE@
+
+    if test $static_flag = yes ; then
+        echo $includes @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @WXCONFIG_INCLUDE@
+    else
+        echo $includes @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @TOOLCHAIN_DLL_DEFS@ @WXCONFIG_INCLUDE@
+    fi
 }
 
 if test $# -eq 0; then
