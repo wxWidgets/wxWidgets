@@ -1553,10 +1553,6 @@ USE_GUI=1
 TOOLKIT=
 TOOLKIT_INCLUDE=
 
-GUIOBJS=
-COMMONOBJS=
-GENERICOBJS=
-
 GUI_TK_LIBRARY=
 GUI_TK_LINK=
 
@@ -1598,12 +1594,6 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     fi
 
     TOOLKIT=MSW
-
-    GUIOBJS="\$(MSW_GUIOBJS)"
-    GUIHEADERS="\$(MSW_HEADERS)"
-    COMMONOBJS="\$(MSW_COMMONOBJS)"
-    GENERICOBJS="\$(MSW_GENERICOBJS)"
-    UNIXOBJS=
     GUIDIST=MSW_DIST
 
     dnl we should calculate these
@@ -1651,19 +1641,9 @@ dnl       GUI_TK_LIBRARY="$GTK_LIBS -gthread12"
 dnl    else
 dnl       GUI_TK_LIBRARY="$GTK_LIBS -lgthread"
 dnl    fi
-    TOOLKIT=GTK
 
     AFMINSTALL=afminstall
-
-    GUIOBJS="\$(GTK_GUIOBJS)"
-    GUIHEADERS="\$(GTK_HEADERS)"
-    COMMONOBJS="\$(GTK_COMMONOBJS)"
-    GENERICOBJS="\$(GTK_GENERICOBJS)"
-    GUIDEPS="\$(GTK_GUIDEPS)"
-    COMMONDEPS="\$(GTK_COMMONDEPS)"
-    GENERICDEPS="\$(GTK_GENERICDEPS)"
-    UNIXOBJS="\$(UNIX_OBJS)"
-    UNIXDEPS="\$(UNIX_DEPS)"
+    TOOLKIT=GTK
     GUIDIST=GTK_DIST
 
     dnl test for XIM support in libgdk
@@ -1709,16 +1689,6 @@ if test "$wxUSE_WINE" = 1; then
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     WXWINE=1
     TOOLKIT=MSW
-
-    GUIHEADERS="\$(MSW_HEADERS)"
-    GUIOBJS="\$(MSW_GUIOBJS)"
-    COMMONOBJS="\$(MSW_COMMONOBJS)"
-    GENERICOBJS="\$(MSW_GENERICOBJS)"
-    GUIDEPS="\$(MSW_GUIDEPS)"
-    COMMONDEPS="\$(MSW_COMMONDEPS)"
-    GENERICDEPS="\$(MSW_GENERICDEPS)"
-    UNIXOBJS="\$(UNIX_OBJS)"
-    UNIXDEPS="\$(UNIX_DEPS)"
     GUIDIST=MSW_DIST
 fi
 
@@ -1895,39 +1865,17 @@ if test "$wxUSE_MOTIF" = 1; then
     GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXext -lXt -lX11"
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     TOOLKIT=MOTIF
-
-    GUIHEADERS="\$(MOTIF_HEADERS)"
-    GUIOBJS="\$(MOTIF_GUIOBJS)"
-    COMMONOBJS="\$(MOTIF_COMMONOBJS)"
-    GENERICOBJS="\$(MOTIF_GENERICOBJS)"
-    GUIDEPS="\$(MOTIF_GUIDEPS)"
-    COMMONDEPS="\$(MOTIF_COMMONDEPS)"
-    GENERICDEPS="\$(MOTIF_GENERICDEPS)"
-    UNIXOBJS="\$(UNIX_OBJS)"
-    UNIXDEPS="\$(UNIX_DEPS)"
     GUIDIST=MOTIF_DIST
 fi
 
 if test "$wxUSE_MAC" = 1; then
     TOOLKIT=MAC
-    UNIXOBJS="\$(UNIX_OBJS)"
-    UNIXDEPS="\$(UNIX_DEPS)"
     dnl we can't call this MAC_DIST or autoconf thinks its a macro
     GUIDIST=MACX_DIST
 fi
 
 if test "$wxUSE_PM" = 1; then
     TOOLKIT=PM
-
-    GUIOBJS="\$(PM_GUIOBJS)"
-    GUIHEADERS="\$(PM_HEADERS)"
-    COMMONOBJS="\$(PM_COMMONOBJS)"
-    GENERICOBJS="\$(PM_GENERICOBJS)"
-    GUIDEPS="\$(PM_GUIDEPS)"
-    COMMONDEPS="\$(PM_COMMONDEPS)"
-    GENERICDEPS="\$(PM_GENERICDEPS)"
-    UNIXOBJS=
-    UNIXDEPS=
     GUIDIST=GTK_DIST
 fi
 
@@ -1955,10 +1903,8 @@ fi
     ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(OGLOBJS)"
 
     dnl ODBC objects are Unix only
-    if test "$TOOLKIT" != "MSW"; then
-        if test "$wxUSE_ODBC" = "yes" ; then
-            ALL_OBJECTS="${ALL_OBJECTS} \$(IODBCOBJS)"
-        fi
+    if test "$TOOLKIT" != "MSW" -a "$wxUSE_ODBC" = "yes" ; then
+        ALL_OBJECTS="${ALL_OBJECTS} \$(IODBCOBJS)"
     fi
 
     if test "$wxUSE_LIBJPEG" = "yes" ; then
@@ -3463,9 +3409,6 @@ if test "$wxUSE_ODBC" = "yes" ; then
     AC_DEFINE(wxUSE_ODBC)
     WXODBCFLAG="-D_IODBC_"
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
-    IODBCOBJS="\$(IODBC_OBJS)"
-else
-    IODBCOBJS=
 fi
 
 dnl ----------------------------------------------------------------
@@ -3996,16 +3939,6 @@ AC_SUBST(TOOLKIT_INCLUDE)
 AC_SUBST(WXCONFIG_INCLUDE)
 
 dnl what to compile
-AC_SUBST(GUIHEADERS)
-AC_SUBST(GUIOBJS)
-AC_SUBST(COMMONOBJS)
-AC_SUBST(GENERICOBJS)
-AC_SUBST(GUIDEPS)
-AC_SUBST(COMMONDEPS)
-AC_SUBST(GENERICDEPS)
-AC_SUBST(IODBCOBJS)
-AC_SUBST(UNIXOBJS)
-AC_SUBST(UNIXDEPS)
 AC_SUBST(ALL_OBJECTS)
 AC_SUBST(ALL_DEPFILES)
 
