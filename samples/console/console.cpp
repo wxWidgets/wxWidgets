@@ -256,7 +256,7 @@ static void TestDllLoad()
     }
     else
     {
-        typedef int (*strlenType)(char *);
+        typedef int (*strlenType)(const char *);
         strlenType pfnStrlen = (strlenType)wxDllLoader::GetSymbol(dllHandle, FUNC_NAME);
         if ( !pfnStrlen )
         {
