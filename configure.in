@@ -1909,8 +1909,8 @@ if test "$USE_WIN32" = 1 ; then
 fi
 
 if test "$USE_DARWIN" = 1; then
-    // Mac OS X/Darwin GCC uses precompiled headers by default
-    // this can cause problems both when compiling wxMac and wxBase
+    dnl Mac OS X/Darwin GCC uses precompiled headers by default
+    dnl this can cause problems both when compiling wxMac and wxBase
     if test "$wxUSE_PRECOMP" = "yes"; then
         CPPFLAGS="$CPPFLAGS -cpp-precomp"
     else
