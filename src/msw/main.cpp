@@ -69,7 +69,7 @@
 
 // wrap real wxEntry in a try-except block to be able to call
 // OnFatalException() if necessary
-#if wxUSE_ON_FATAL_EXCEPTION
+#if wxUSE_ON_FATAL_EXCEPTION && wxUSE_BASE
 
 // global pointer to exception information, only valid inside OnFatalException,
 // used by wxStackWalker and wxCrashReport
@@ -191,7 +191,7 @@ int wxEntry(int& argc, wxChar **argv)
     }
 }
 
-#endif // wxUSE_ON_FATAL_EXCEPTION
+#endif // wxUSE_ON_FATAL_EXCEPTION && wxUSE_BASE
 
 #if wxUSE_GUI
 
