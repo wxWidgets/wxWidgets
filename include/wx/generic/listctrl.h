@@ -582,6 +582,7 @@ class wxListCtrl: public wxControl
     bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
     bool DeleteItem( long item );
     bool DeleteAllItems(void) ;
+    void DeleteAllColumns(void) ;
     bool DeleteColumn( int col );
 //  wxText& Edit(long item) ;  // not supported in wxGLC
     bool EnsureVisible( long item );
