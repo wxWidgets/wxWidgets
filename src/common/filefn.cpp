@@ -1781,9 +1781,10 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
 #else // assume Unix
     const wxChar *pLastSeparator = wxStrrchr(pszFileName, wxFILE_SEP_PATH_UNIX);
 
-    if ( pDot == pszFileName )
+    if ( (pDot == pszFileName) || (*(pDot - 1) == wxFILE_SEP_PATH_UNIX) )
     {
-        // under Unix files like .profile are treated in a special way
+        // under Unix, dot may be (and commonly is) the first character of the
+        // filename, don't treat the entire filename as extension in this case
         pDot = NULL;
     }
 #endif // MSW/Unix
