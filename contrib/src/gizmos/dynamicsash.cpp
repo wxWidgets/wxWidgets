@@ -27,6 +27,10 @@
     #include "wx/wx.h"
 #endif
 
+#ifdef __WXMSW__
+#include "wx/mdi.h"
+#endif
+
 #include "wx/gizmos/dynamicsash.h"
 
 
@@ -452,7 +456,11 @@ wxWindow *wxDynamicSashWindowImpl::FindFrame() const {
     wxWindow *win;
 
     win = m_window->GetParent();
-    while (win && !win->IsTopLevel()) {
+    while (win && !win->IsTopLevel()
+#ifdef __WXMSW__
+           && ! wxIsKindOf(win, wxMDIChildFrame)  // not top-level but still a frame
+#endif
+        ) {
         win = win->GetParent();
     }
 
