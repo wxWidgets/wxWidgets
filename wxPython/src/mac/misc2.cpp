@@ -293,7 +293,7 @@ public:
         wxBitmap rval = wxNullBitmap;
         wxPyBeginBlockThreads();
         if ((wxPyCBH_findCallback(m_myInst, "CreateBitmap"))) {
-            PyObject* so = wxPyConstructObject((void*)&size, "wxSize", 0);
+            PyObject* so = wxPyConstructObject((void*)&size, wxT("wxSize"), 0);
             PyObject* ro;
             wxBitmap* ptr;
             PyObject* s1, *s2;
@@ -6269,7 +6269,7 @@ static PyObject *_wrap_wxProcess_GetInputStream(PyObject *self, PyObject *args, 
     if (_result) {
         _ptr = new wxPyInputStream(_result);
     }
-    _resultobj = wxPyConstructObject(_ptr, "wxInputStream", TRUE);
+    _resultobj = wxPyConstructObject(_ptr, wxT("wxInputStream"), TRUE);
 }
     return _resultobj;
 }
@@ -6304,7 +6304,7 @@ static PyObject *_wrap_wxProcess_GetErrorStream(PyObject *self, PyObject *args, 
     if (_result) {
         _ptr = new wxPyInputStream(_result);
     }
-    _resultobj = wxPyConstructObject(_ptr, "wxInputStream", TRUE);
+    _resultobj = wxPyConstructObject(_ptr, wxT("wxInputStream"), TRUE);
 }
     return _resultobj;
 }
@@ -8605,7 +8605,7 @@ static PyObject * wxFileType_GetIconInfo(wxFileType *self) {
                 wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(3);
                 PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(icon),
-                                                              "wxIcon", TRUE));
+                                                              wxT("wxIcon"), TRUE));
 #if wxUSE_UNICODE
                 PyTuple_SetItem(tuple, 1, PyUnicode_FromUnicode(iconFile.c_str(), iconFile.Len()));
 #else
