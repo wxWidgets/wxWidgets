@@ -709,6 +709,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LIBJPEG=no
   DEFAULT_wxUSE_LIBTIFF=no
   DEFAULT_wxUSE_ODBC=no
+  DEFAULT_wxUSE_FREETYPE=no
   DEFAULT_wxUSE_OPENGL=no
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=no
@@ -830,6 +831,7 @@ else
   DEFAULT_wxUSE_LIBJPEG=yes
   DEFAULT_wxUSE_LIBTIFF=yes
   DEFAULT_wxUSE_ODBC=no
+  DEFAULT_wxUSE_FREETYPE=no
   DEFAULT_wxUSE_OPENGL=no
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=yes
@@ -971,6 +973,7 @@ AC_ARG_WITH(gtk-exec-prefix, [  --with-gtk-exec-prefix=PFX  Exec prefix where GT
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
+WX_ARG_SYS_WITH(freetype,  [  --with-freetype         use freetype (font rasterizer)], wxUSE_FREETYPE)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
 fi
@@ -1944,6 +1947,9 @@ fi
     if test "$wxUSE_ZLIB" = "yes" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
     fi
+    if test "$wxUSE_FREETYPE" = "yes" ; then
+        ALL_OBJECTS="${ALL_OBJECTS} \$(FREETYPEOBJS)"
+    fi
     ALL_DEPFILES="\$(GUIDEPS) \$(COMMONDEPS) \$(GENERICDEPS) \$(UNIXDEPS) \$(HTMLDEPS) \$(OGLDEPS)"
 
     PORT_FILES="src/\$(TOOLKITDIR)/files.lst"
@@ -2847,6 +2853,25 @@ if test "$wxUSE_LIBTIFF" = "yes" -o "$wxUSE_LIBTIFF" = "sys" ; then
   fi
 fi
 
+FREETYPE_INCLUDE=
+if test "$wxUSE_FREETYPE" = "yes" -o "$wxUSE_FREETYPE" = "sys" ; then
+  AC_DEFINE(wxUSE_FREETYPE)
+  if test "$wxUSE_FREETYPE" = "yes" ; then
+    FREETYPE_INCLUDE="-I\${top_srcdir}/src/freetype"
+  else
+    FREETYPE_LINK=
+    AC_CHECK_HEADER(freetype.h,
+                    AC_CHECK_LIB(freetype, FT_Render_Glyph,
+                                 FREETYPE_LINK="-lfreetype",
+                                 ,
+                                 [-lm])
+                   )
+    if test "x$FREETYPE_LINK" = "x" ; then
+        AC_MSG_ERROR(system freetype library not found! Use --with-freetype=yes to use the built-in freetype)
+    fi
+  fi
+fi
+
 if test "$wxUSE_OPENGL" = "yes"; then
   AC_CHECK_HEADER(GL/gl.h, [
     AC_DEFINE(wxUSE_OPENGL)
@@ -3724,7 +3749,7 @@ dnl note that we always link with -lm - extended.c uses floor() and is always
 dnl linked in
 EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -lm"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRA_LIBS="$GUILIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $EXTRA_LIBS"
+    EXTRA_LIBS="$GUILIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $FREETYPE_LINK $EXTRA_LIBS"
 fi
 
 dnl all the libraries needed to link wxWindows programs when using the
@@ -3732,7 +3757,7 @@ dnl makefile system without libtool
 LD_LIBS="\${top_builddir}/lib/${WX_LIBRARY_NAME_STATIC} $EXTRA_LIBS"
 
 dnl all -I options we must pass to the compiler
-INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $TOOLKIT_INCLUDE"
+INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $FREETYPE_INCLUDE $TOOLKIT_INCLUDE"
 
 dnl wxGTK does not need TOOLKIT includes in wx-config
 if test "$wxUSE_GTK" = 1; then

@@ -144,6 +144,10 @@
 #define wxODBC_FWD_ONLY_CURSORS 1
 #define wxODBC_BACKWARD_COMPATABILITY 0
 /*
+ * Use freetype
+ */
+#define wxUSE_FREETYPE 0
+/*
  * Use Threads
  */
 #define wxUSE_THREADS 0
