@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_WXEXPRH__
@@ -205,59 +205,62 @@ class WXDLLEXPORT wxExpr
 
 class WXDLLEXPORT wxExprDatabase: public wxList
 {
-  DECLARE_DYNAMIC_CLASS(wxExprDatabase)
- private:
-  wxNode *position;              // Where we are in a search
-  wxHashTable *hash_table;
-  wxString attribute_to_hash;
- public:
-  int noErrors;
+private:
+    wxNode *position;              // Where we are in a search
+    wxHashTable *hash_table;
+    wxString attribute_to_hash;
 
-  wxExprDatabase(wxExprErrorHandler handler = 0);
+public:
+    int noErrors;
 
-  // Use hashing on both the functor, and the attribute of
-  // specified type (wxExprString or wxExprInteger) and name.
-  // So to find node 45
-  // (i.e. match the clause node(id=45, ...))
-  // it usually requires 1 look-up: the keys for functor and attribute
-  // are added together.
-  // Obviously if the attribute was missing in a clause, it would
-  // fail to be found by this method, but could be retrieved by a
-  // linear search using BeginFind and FindClauseByFunctor,
-  // or just searching through the list as per usual.
+    wxExprDatabase(wxExprErrorHandler handler = 0);
 
-  wxExprDatabase(wxExprType type, const wxString& attribute, int size = 500,
-                 wxExprErrorHandler handler = 0);
+    // Use hashing on both the functor, and the attribute of
+    // specified type (wxExprString or wxExprInteger) and name.
+    // So to find node 45
+    // (i.e. match the clause node(id=45, ...))
+    // it usually requires 1 look-up: the keys for functor and attribute
+    // are added together.
+    // Obviously if the attribute was missing in a clause, it would
+    // fail to be found by this method, but could be retrieved by a
+    // linear search using BeginFind and FindClauseByFunctor,
+    // or just searching through the list as per usual.
 
-  ~wxExprDatabase(void);
+    wxExprDatabase(wxExprType type, const wxString& attribute, int size = 500,
+            wxExprErrorHandler handler = 0);
 
-  void BeginFind(void) ;          // Initialise a search
-  wxExpr *FindClause(long id) ;  // Find a term based on an integer id attribute
-                                 // e.g. node(id=23, type=rectangle, ....).
+    ~wxExprDatabase(void);
 
-  // Find on basis of attribute/value pairs, e.g. type=rectangle
-  // This doesn't use hashing; it's a linear search.
-  wxExpr *FindClause(const wxString& word, const wxString& value);
-  wxExpr *FindClause(const wxString& word, long value);
-  wxExpr *FindClause(const wxString& word, double value);
-  wxExpr *FindClauseByFunctor(const wxString& functor);
+    void BeginFind(void) ;          // Initialise a search
+    wxExpr *FindClause(long id) ;  // Find a term based on an integer id attribute
+    // e.g. node(id=23, type=rectangle, ....).
 
-  wxExpr *HashFind(const wxString& functor, const wxString& value) const;
-  wxExpr *HashFind(const wxString& functor, long value) const;
+    // Find on basis of attribute/value pairs, e.g. type=rectangle
+    // This doesn't use hashing; it's a linear search.
+    wxExpr *FindClause(const wxString& word, const wxString& value);
+    wxExpr *FindClause(const wxString& word, long value);
+    wxExpr *FindClause(const wxString& word, double value);
+    wxExpr *FindClauseByFunctor(const wxString& functor);
 
-  void Append(wxExpr *expr);  // Does cleverer things if hashing is on
-  void ClearDatabase(void);
-  inline int GetErrorCount() const { return noErrors; }
-  bool Read(const wxString& filename);
-  bool ReadFromString(const wxString& buffer);
-  bool Write(const wxString& fileName);
-  bool Write(ostream& stream);
-  void WriteLisp(ostream& stream);
-  
-  // Compatibility
-  inline bool ReadProlog(char *filename) { return Read(wxString(filename)); }
-  inline bool ReadPrologFromString(char *buffer) { return ReadFromString(wxString(buffer)); }
-  inline void WriteProlog(ostream& stream) { Write(stream); }
+    wxExpr *HashFind(const wxString& functor, const wxString& value) const;
+    wxExpr *HashFind(const wxString& functor, long value) const;
+
+    void Append(wxExpr *expr);  // Does cleverer things if hashing is on
+    void ClearDatabase(void);
+    inline int GetErrorCount() const { return noErrors; }
+    bool Read(const wxString& filename);
+    bool ReadFromString(const wxString& buffer);
+    bool Write(const wxString& fileName);
+    bool Write(ostream& stream);
+    void WriteLisp(ostream& stream);
+
+    // Compatibility
+    inline bool ReadProlog(char *filename) { return Read(wxString(filename)); }
+    inline bool ReadPrologFromString(char *buffer) { return ReadFromString(wxString(buffer)); }
+    inline void WriteProlog(ostream& stream) { Write(stream); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxExprDatabase)
 };
 
 // Function call-style interface - some more convenience wrappers/unwrappers

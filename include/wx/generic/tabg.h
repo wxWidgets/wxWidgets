@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __TABGH_G__
@@ -28,14 +28,14 @@ class WXDLLEXPORT wxTabView;
  * A wxTabControl is the internal and visual representation
  * of the tab.
  */
- 
+
 class WXDLLEXPORT wxTabControl: public wxObject
 {
 DECLARE_DYNAMIC_CLASS(wxTabControl)
 public:
     wxTabControl(wxTabView *v = (wxTabView *) NULL);
     ~wxTabControl(void);
-    
+
     virtual void OnDraw(wxDC& dc, bool lastInRow);
     inline void SetLabel(const wxString& str) { m_controlLabel = str; }
     inline wxString GetLabel(void) const { return m_controlLabel; }
@@ -48,20 +48,20 @@ public:
 
     inline void SetPosition(int x, int y) { m_offsetX = x; m_offsetY = y; }
     inline void SetSize(int x, int y) { m_width = x; m_height = y; }
-    
+
     inline void SetRowPosition(int r) { m_rowPosition = r; }
     inline int GetRowPosition() const { return m_rowPosition; }
     inline void SetColPosition(int c) { m_colPosition = c; }
     inline int GetColPosition() const { return m_colPosition; }
-    
+
     inline int GetX(void) const { return m_offsetX; }
     inline int GetY(void) const { return m_offsetY; }
     inline int GetWidth(void) const { return m_width; }
     inline int GetHeight(void) const { return m_height; }
-    
+
     inline int GetId(void) const { return m_id; }
     inline void SetId(int i) { m_id = i; }
-    
+
     virtual bool HitTest(int x, int y) const ;
 
 protected:
@@ -77,19 +77,14 @@ protected:
     int             m_rowPosition; // Position in row from 0
     int             m_colPosition; // Position in col from 0
 };
- 
+
 /*
  * Each wxTabLayer is a list of tabs. E.g. there
  * are 3 layers in the MS Word Options dialog.
  */
- 
+
 class WXDLLEXPORT wxTabLayer: public wxList
 {
-  DECLARE_DYNAMIC_CLASS(wxTabLayer)
-  public:
-    wxTabLayer(void)
-    {
-    }
 };
 
 /*

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_POSTSCRPH__
@@ -49,10 +49,10 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
 
  public:
   // Create a printer DC
-  wxPostScriptDC(void);
+  wxPostScriptDC();
   wxPostScriptDC(const wxString& output, bool interactive = TRUE, wxWindow *parent = (wxWindow *) NULL);
 
-  ~wxPostScriptDC(void);
+  ~wxPostScriptDC();
 
   bool Create(const wxString& output, bool interactive = TRUE, wxWindow *parent = (wxWindow *) NULL);
 
@@ -92,25 +92,25 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
 #endif
   void DrawText(const wxString& text, long x, long y, bool use16 = FALSE);
 
-  void Clear(void);
+  void Clear();
   void SetFont(const wxFont& font);
   void SetPen(const wxPen& pen);
   void SetBrush(const wxBrush& brush);
   void SetLogicalFunction(int function);
   void SetBackground(const wxBrush& brush);
   void SetClippingRegion(long x, long y, long width, long height);
-  void DestroyClippingRegion(void);
+  void DestroyClippingRegion();
 
   bool StartDoc(const wxString& message);
-  void EndDoc(void);
-  void StartPage(void);
-  void EndPage(void);
+  void EndDoc();
+  void StartPage();
+  void EndPage();
 
-  long GetCharHeight(void);
-  long GetCharWidth(void);
+  long GetCharHeight();
+  long GetCharWidth();
   void GetTextExtent(const wxString& string, long *x, long *y,
-                     long *descent = (long *) NULL, 
-					 long *externalLeading = (long *) NULL,
+                     long *descent = (long *) NULL,
+                     long *externalLeading = (long *) NULL,
                      wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE);
   virtual void SetLogicalOrigin(long x, long y);
   virtual void CalcBoundingBox(long x, long y);
@@ -165,8 +165,8 @@ class WXDLLEXPORT wxPostScriptPrintDialog: public wxDialog
 DECLARE_CLASS(wxPostScriptPrintDialog)
 public:
     wxPostScriptPrintDialog (wxWindow *parent, const wxString& title,
-		      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-			  long style = wxDEFAULT_DIALOG_STYLE);
+          const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+          long style = wxDEFAULT_DIALOG_STYLE);
 
     virtual int ShowModal(void) ;
 };
@@ -197,15 +197,15 @@ WXDLLEXPORT void wxSetPrinterFile(const char *f);
 WXDLLEXPORT void wxSetAFMPath(const char *f);
 
 // Get current values
-WXDLLEXPORT char* wxGetPrinterCommand(void);
-WXDLLEXPORT char* wxGetPrintPreviewCommand(void);
-WXDLLEXPORT char* wxGetPrinterOptions(void);
-WXDLLEXPORT int wxGetPrinterOrientation(void);
+WXDLLEXPORT char* wxGetPrinterCommand();
+WXDLLEXPORT char* wxGetPrintPreviewCommand();
+WXDLLEXPORT char* wxGetPrinterOptions();
+WXDLLEXPORT int wxGetPrinterOrientation();
 WXDLLEXPORT void wxGetPrinterScaling(double* x, double* y);
 WXDLLEXPORT void wxGetPrinterTranslation(long *x, long *y);
-WXDLLEXPORT int wxGetPrinterMode(void);
-WXDLLEXPORT char* wxGetPrinterFile(void);
-WXDLLEXPORT char* wxGetAFMPath(void);
+WXDLLEXPORT int wxGetPrinterMode();
+WXDLLEXPORT char* wxGetPrinterFile();
+WXDLLEXPORT char* wxGetAFMPath();
 
 /*
  * PostScript print setup information
@@ -213,55 +213,57 @@ WXDLLEXPORT char* wxGetAFMPath(void);
 
 class WXDLLEXPORT wxPrintSetupData: public wxObject
 {
+public:
+    char *printerCommand;
+    char *previewCommand;
+    char *printerFlags;
+    char *printerFile;
+    int printerOrient;
+    double printerScaleX;
+    double printerScaleY;
+    long printerTranslateX;
+    long printerTranslateY;
+    // 1 = Preview, 2 = print to file, 3 = send to printer
+    int printerMode;
+    char *afmPath;
+    // A name in the paper database (see wx_print.h: the printing framework)
+    char *paperName;
+    bool printColour;
+
+public:
+    wxPrintSetupData();
+    ~wxPrintSetupData();
+
+    void SetPrinterCommand(const char *cmd);
+    void SetPaperName(const char *paper);
+    void SetPrintPreviewCommand(const char *cmd);
+    void SetPrinterOptions(const char *flags);
+    void SetPrinterFile(const char *f);
+    void SetPrinterOrientation(int orient);
+    void SetPrinterScaling(double x, double y);
+    void SetPrinterTranslation(long x, long y);
+    // 1 = Preview, 2 = print to file, 3 = send to printer
+    void SetPrinterMode(int mode);
+    void SetAFMPath(const char *f);
+    void SetColour(bool col);
+
+    // Get current values
+    char *GetPrinterCommand();
+    char *GetPrintPreviewCommand();
+    char *GetPrinterOptions();
+    char *GetPrinterFile();
+    char *GetPaperName();
+    int GetPrinterOrientation();
+    void GetPrinterScaling(double* x, double* y);
+    void GetPrinterTranslation(long *x, long *y);
+    int GetPrinterMode();
+    char *GetAFMPath();
+    bool GetColour();
+
+    void operator=(wxPrintSetupData& data);
+
+private:
   DECLARE_DYNAMIC_CLASS(wxPrintSetupData)
-
- public:
-  char *printerCommand;
-  char *previewCommand;
-  char *printerFlags;
-  char *printerFile;
-  int printerOrient;
-  double printerScaleX;
-  double printerScaleY;
-  long printerTranslateX;
-  long printerTranslateY;
-  // 1 = Preview, 2 = print to file, 3 = send to printer
-  int printerMode;
-  char *afmPath;
-  // A name in the paper database (see wx_print.h: the printing framework)
-  char *paperName;
-  bool printColour;
- public:
-  wxPrintSetupData(void);
-  ~wxPrintSetupData(void);
-
-  void SetPrinterCommand(const char *cmd);
-  void SetPaperName(const char *paper);
-  void SetPrintPreviewCommand(const char *cmd);
-  void SetPrinterOptions(const char *flags);
-  void SetPrinterFile(const char *f);
-  void SetPrinterOrientation(int orient);
-  void SetPrinterScaling(double x, double y);
-  void SetPrinterTranslation(long x, long y);
-  // 1 = Preview, 2 = print to file, 3 = send to printer
-  void SetPrinterMode(int mode);
-  void SetAFMPath(const char *f);
-  void SetColour(bool col);
-
-  // Get current values
-  char *GetPrinterCommand(void);
-  char *GetPrintPreviewCommand(void);
-  char *GetPrinterOptions(void);
-  char *GetPrinterFile(void);
-  char *GetPaperName(void);
-  int GetPrinterOrientation(void);
-  void GetPrinterScaling(double* x, double* y);
-  void GetPrinterTranslation(long *x, long *y);
-  int GetPrinterMode(void);
-  char *GetAFMPath(void);
-  bool GetColour(void);
-
-  void operator=(wxPrintSetupData& data);
 };
 
 WXDLLEXPORT_DATA(extern wxPrintSetupData*) wxThePrintSetupData;
@@ -274,32 +276,35 @@ WXDLLEXPORT extern void wxInitializePrintSetupData(bool init = TRUE);
 
 class WXDLLEXPORT wxPrintPaperType: public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxPrintPaperType)
+public:
+    wxPrintPaperType(const char *name = (const char *) NULL, int wmm = 0, int hmm = 0, int wp = 0, int hp = 0);
+    ~wxPrintPaperType();
 
- public:
-  int widthMM;
-  int heightMM;
-  int widthPixels;
-  int heightPixels;
-  char *pageName;
+public:
+    int widthMM;
+    int heightMM;
+    int widthPixels;
+    int heightPixels;
+    char *pageName;
 
-  wxPrintPaperType(const char *name = (const char *) NULL, int wmm = 0, int hmm = 0, int wp = 0, int hp = 0);
-  ~wxPrintPaperType(void);
+private:
+    DECLARE_DYNAMIC_CLASS(wxPrintPaperType)
 };
 
 class WXDLLEXPORT wxPrintPaperDatabase: public wxList
 {
-  DECLARE_DYNAMIC_CLASS(wxPrintPaperDatabase)
+public:
+    wxPrintPaperDatabase();
+    ~wxPrintPaperDatabase();
 
- public:
-  wxPrintPaperDatabase(void);
-  ~wxPrintPaperDatabase(void);
+    void CreateDatabase();
+    void ClearDatabase();
 
-  void CreateDatabase(void);
-  void ClearDatabase(void);
+    void AddPaperType(const char *name, int wmm, int hmm, int wp, int hp);
+    wxPrintPaperType *FindPaperType(const char *name);
 
-  void AddPaperType(const char *name, int wmm, int hmm, int wp, int hp);
-  wxPrintPaperType *FindPaperType(const char *name);
+private:
+    DECLARE_DYNAMIC_CLASS(wxPrintPaperDatabase)
 };
 
 WXDLLEXPORT_DATA(extern wxPrintPaperDatabase*) wxThePrintPaperDatabase;

@@ -186,21 +186,22 @@ WXDLLEXPORT bool wxFindFileInPath(wxString *pStr, const char *pszPath, const cha
 // ----------------------------------------------------------------------------
 
 // Path searching
-class WXDLLEXPORT wxPathList: public wxStringList
+class WXDLLEXPORT wxPathList : public wxStringList
 {
-  DECLARE_DYNAMIC_CLASS(wxPathList)
+public:
+    void AddEnvList(const wxString& envVariable);    // Adds all paths in environment variable
+    void Add(const wxString& path);
+    wxString FindValidPath(const wxString& filename);   // Find the first full path
+    // for which the file exists
+    wxString FindAbsoluteValidPath(const wxString& filename);   // Find the first full path
+    // for which the file exists; ensure it's an absolute
+    // path that gets returned.
+    void EnsureFileAccessible(const wxString& path); // Given full path and filename,
+    // add path to list
+    bool Member(const wxString& path);
 
-  public:
-  void AddEnvList(const wxString& envVariable);    // Adds all paths in environment variable
-  void Add(const wxString& path);
-  wxString FindValidPath(const wxString& filename);   // Find the first full path
-                                         // for which the file exists
-  wxString FindAbsoluteValidPath(const wxString& filename);   // Find the first full path
-                                         // for which the file exists; ensure it's an absolute
-                                         // path that gets returned.
-  void EnsureFileAccessible(const wxString& path); // Given full path and filename,
-                                         // add path to list
-  bool Member(const wxString& path);
+private:
+    DECLARE_DYNAMIC_CLASS(wxPathList)
 };
 
 #endif
