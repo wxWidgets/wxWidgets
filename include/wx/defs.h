@@ -143,6 +143,12 @@
 #endif
 #endif
 
+// "old" GNUWIN32 is the one without Norlander's headers: it lacks the standard
+// Win32 headers and we define the used stuff ourselves for it in
+// wx/msw/gnuwin32/extra.h
+#if defined(__MINGW32__) && !wxUSE_NORLANDER_HEADERS
+    #define __GNUWIN32_OLD__
+#endif
 
 //////////////////////////////////////////////////////////////////////////////////
 // Currently Only MS-Windows/NT, XView and Motif are supported

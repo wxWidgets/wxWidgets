@@ -85,6 +85,8 @@ public:
     void OnToolLeftClick(wxCommandEvent& event);
     void OnToolEnter(wxCommandEvent& event);
 
+    void OnCombo(wxCommandEvent& event);
+
 private:
     void DoEnablePrint();
     void DoToggleHelp();
@@ -105,7 +107,9 @@ enum
 {
     IDM_TOOLBAR_TOGGLETOOLBAR = 200,
     IDM_TOOLBAR_ENABLEPRINT,
-    IDM_TOOLBAR_TOGGLEHELP
+    IDM_TOOLBAR_TOGGLEHELP,
+
+    ID_COMBO = 1000
 };
 
 // ----------------------------------------------------------------------------
@@ -124,6 +128,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(IDM_TOOLBAR_TOGGLEHELP, MyFrame::OnToggleHelp)
 
     EVT_MENU(-1, MyFrame::OnToolLeftClick)
+
+    EVT_COMBOBOX(ID_COMBO, MyFrame::OnCombo)
 
     EVT_TOOL_ENTER(ID_TOOLBAR, MyFrame::OnToolEnter)
 END_EVENT_TABLE()
@@ -205,9 +211,19 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
   toolBar->AddTool(wxID_NEW, *(toolBarBitmaps[0]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "New file");
   currentX += width + 5;
   toolBar->AddTool(wxID_OPEN, *(toolBarBitmaps[1]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Open file");
+  toolBar->AddSeparator();
+
+  wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO);
+  combo->Append("This");
+  combo->Append("is a");
+  combo->Append("combobox");
+  combo->Append("in a");
+  combo->Append("toolbar");
+  toolBar->AddControl(combo);
 
   if ( !smallicons )
   {
+      toolBar->AddSeparator();
       currentX += width + 5;
       toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 1");
       currentX += width + 5;
@@ -341,6 +357,11 @@ void MyFrame::OnToolLeftClick(wxCommandEvent& event)
     {
         DoToggleHelp();
     }
+}
+
+void MyFrame::OnCombo(wxCommandEvent& event)
+{
+    wxLogStatus(_T("Combobox string '%s' selected"), event.GetString().c_str());
 }
 
 void MyFrame::DoEnablePrint()
