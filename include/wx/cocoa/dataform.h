@@ -42,7 +42,7 @@ public:
     // application-specific formats
     //
     wxString GetId(void) const;
-    void     SetId(const wxChar* pId);
+    void     SetId(const wxChar* WXUNUSED(pId)) { /* TODO */ }
 
 private:
     unsigned int                    m_uFormat;
