@@ -9,9 +9,11 @@
 %{?_without_unicode: %{expand: %%define unicode 0}}
 
 %if %{unicode}
-%define wxconfigname wxbaseu-%{ver2}-config
+%define wxconfigname base-unicode-release-%{ver2}
+%define wxconfiglinkname wxbaseu-%{ver2}-config
 %else
-%define wxconfigname wxbase-%{ver2}-config
+%define wxconfigname base-ansi-release-%{ver2}
+%define wxconfiglinkname wxbase-%{ver2}-config
 %endif
 
 %if %{unicode}
@@ -106,6 +108,23 @@ rm -rf $RPM_BUILD_ROOT
 %postun
 /sbin/ldconfig
 
+%post devel
+# link wx-config when you install RPM.
+ln -sf %{_libdir}/wx/config/%{wxconfigname} %{_bindir}/wx-config
+# link wx-config with explicit name.
+ln -sf %{_libdir}/wx/config/%{wxconfigname} %{_bindir}/%{wxconfiglinkname}
+                                                                                   
+%preun devel
+if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
+  SUM1=`md5sum %{_libdir}/wx/config/%{wxconfigname} | cut -c 0-32`
+  SUM2=`md5sum %{_bindir}/wx-config | cut -c 0-32`
+  if test "x$SUM1" = "x$SUM2" ; then
+    rm -f %{_bindir}/wx-config
+  fi
+fi
+                                                                                   
+rm -f %{_bindir}/%{wxconfiglinkname}
+
 %files -f wxstd.lang
 %defattr (-,root,root)
 %doc COPYING.LIB *.txt
@@ -118,8 +137,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libwx_base*.so
 %dir %{_libdir}/wx
 %{_libdir}/wx/*
-%{_bindir}/wxbase*-%{ver2}-config
-%{_bindir}/wx-config
 %{_datadir}/aclocal/*.m4
 
 %files static
