@@ -145,7 +145,7 @@ public:
     MyImageFrame(wxFrame *parent, const wxBitmap& bitmap)
         : wxFrame(parent, -1, _T("Double click to save"),
                   wxDefaultPosition, wxDefaultSize,
-                  wxCAPTION | wxSYSTEM_MENU),
+                  wxCAPTION | wxSYSTEM_MENU | wxCLOSE_BOX),
                   m_bitmap(bitmap)
     {
         SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
