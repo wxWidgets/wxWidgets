@@ -28,11 +28,11 @@ enum {
 
 enum {
     wxPLATFORM_CURRENT = -1,
-    
+
     wxPLATFORM_UNIX = 0,
     wxPLATFORM_WINDOWS,
     wxPLATFORM_OS2,
-    wxPLATFORM_MAC,
+    wxPLATFORM_MAC
 };
 
 WX_DEFINE_ARRAY(wxFontEncoding, wxFontEncodingArray);
@@ -47,10 +47,10 @@ WX_DEFINE_ARRAY(wxFontEncoding, wxFontEncodingArray);
 class WXDLLEXPORT wxEncodingConverter : public wxObject
 {
     public:
-    
+
             wxEncodingConverter();
             ~wxEncodingConverter() { if (m_Table) delete[] m_Table; }
-    
+
             // Initialize convertion. Both output or input encoding may
             // be wxFONTENCODING_UNICODE, but only if wxUSE_UNICODE is set to 1.
             //
@@ -58,17 +58,17 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
             // as a string in input_enc encoding and will output string in
             // output_enc encoding.
             //
-            // You must call this method before calling Convert. You may call 
+            // You must call this method before calling Convert. You may call
             // it more than once in order to switch to another conversion
             //
             // Method affects behaviour of Convert() in case input character
             // cannot be converted because it does not exist in output encoding:
-            //     wxCONVERT_STRICT -- 
-            //              follow behaviour of GNU Recode - just copy unconvertable 
-            //              characters to output and don't change them (it's integer 
+            //     wxCONVERT_STRICT --
+            //              follow behaviour of GNU Recode - just copy unconvertable
+            //              characters to output and don't change them (it's integer
             //              value will stay the same)
             //     wxCONVERT_SUBSTITUTE --
-            //              try some (lossy) substitutions - e.g. replace 
+            //              try some (lossy) substitutions - e.g. replace
             //              unconvertable latin capitals with acute by ordinary
             //              capitals, replace en-dash or em-dash by '-' etc.
             //     both modes gurantee that output string will have same length
@@ -79,7 +79,7 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
             // to Unicode with non-Unicode build of wxWindows or if input
             // or output encoding is not supported.)
             bool Init(wxFontEncoding input_enc, wxFontEncoding output_enc, int method = wxCONVERT_STRICT);
-            
+
             // Convert input string according to settings passed to Init.
             // Note that you must call Init before using Convert!
             void Convert(const wxChar* input, wxChar* output);
@@ -91,7 +91,7 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
             void Convert(const wxChar* input, char* output);
             void Convert(const char* input, char* output);
             void Convert(char* str) { Convert(str, str); }
-#endif        
+#endif
             // Return equivalent(s) for given font that are used
             // under given platform. wxPLATFORM_CURRENT means the plaform
             // this binary was compiled for
@@ -109,8 +109,8 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
             // that you loose special chars like quotation marks or em-dashes
             // but you shouldn't loose any diacritics and language-specific
             // characters when converting between equivalent encodings).
-            // 
-            // Convert() method is not limited to converting between 
+            //
+            // Convert() method is not limited to converting between
             // equivalent encodings, it can convert between arbitrary
             // two encodings!
             //
@@ -123,16 +123,16 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
             // encoding is native for this platform or not)
             static wxFontEncodingArray GetPlatformEquivalents(wxFontEncoding enc, int platform = wxPLATFORM_CURRENT);
 
-            // Similar to GetPlatformEquivalent, but this one will return ALL 
+            // Similar to GetPlatformEquivalent, but this one will return ALL
             // equivalent encodings, regardless the platform, including itself.
             static wxFontEncodingArray GetAllEquivalents(wxFontEncoding enc);
 
     private:
-    
+
             wxChar *m_Table;
             bool m_UnicodeInput, m_UnicodeOutput;
             bool m_JustCopy;
-            
+
 };
 
 
