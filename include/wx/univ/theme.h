@@ -101,7 +101,7 @@ struct WXDLLEXPORT wxThemeInfo
 // without it, an over optimizing linker may discard the object module
 // containing the theme implementation entirely
 #define WX_USE_THEME(themename)                                             \
-    extern bool wxThemeUse##themename;                                      \
+    WXDLLEXPORT_DATA(extern bool) wxThemeUse##themename;                    \
     static struct wxThemeUserFor##themename                                 \
     {                                                                       \
         wxThemeUserFor##themename() { wxThemeUse##themename = TRUE; }       \
@@ -117,7 +117,7 @@ struct WXDLLEXPORT wxThemeInfo
 
 // and this one must be inserted in the source file
 #define WX_IMPLEMENT_THEME(classname, themename, themedesc)                 \
-    bool wxThemeUse##themename = TRUE;                                      \
+    WXDLLEXPORT_DATA(bool) wxThemeUse##themename = TRUE;                    \
     wxTheme *wxCtorFor##themename() { return new classname; }               \
     wxThemeInfo classname::ms_info##themename(wxCtorFor##themename,         \
                                               wxT( #themename ), themedesc)
