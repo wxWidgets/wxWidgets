@@ -1092,11 +1092,11 @@ void wxTextCtrl::SearchForBrackets()
             for (int n = current.Len()-1; n >= 0; n--)
             {
                 // ignore chars
-                if (current[n] == '\'')
+                if (current[(size_t) (n)] == '\'')
                 {
                     for (int m = n-1; m >= 0; m--)
                     {
-                        if (current[m] == '\'')
+                        if (current[(size_t) (m)] == '\'')
                         {
                             if (m == 0 || current[(size_t) (m-1)] != '\\')
                                 break;
@@ -1107,11 +1107,11 @@ void wxTextCtrl::SearchForBrackets()
                 }
                 
                 // ignore strings
-                if (current[n] == '\"')
+                if (current[(size_t) (n)] == '\"')
                 {
                     for (int m = n-1; m >= 0; m--)
                     {
-                        if (current[m] == '\"')
+                        if (current[(size_t) (m)] == '\"')
                         {
                             if (m == 0 || current[(size_t) (m-1)] != '\\')
                                 break;
@@ -1121,7 +1121,7 @@ void wxTextCtrl::SearchForBrackets()
                     continue;
                 }
             
-                if (current[n] == antibracket)
+                if (current[(size_t) (n)] == antibracket)
                 {
                     count--;
                     if (count == 0)
@@ -1135,7 +1135,7 @@ void wxTextCtrl::SearchForBrackets()
                         return;
                     }
                 }
-                else if (current[n] == bracket)
+                else if (current[(size_t) (n)] == bracket)
                 {
                     count++;
                 }
@@ -1147,7 +1147,7 @@ void wxTextCtrl::SearchForBrackets()
 
     bracket = ' ';
     if ((int)current.Len() > m_cursorX)
-        bracket = current[m_cursorX];
+        bracket = current[(size_t) (m_cursorX)];
     if (bracket == '(' || bracket == '[' || bracket == '{')
     {
         char antibracket = ')';
@@ -1168,11 +1168,11 @@ void wxTextCtrl::SearchForBrackets()
             for (int n = start; n < (int)current.Len(); n++)
             {
                 // ignore chars
-                if (current[n] == '\'')
+                if (current[(size_t) (n)] == '\'')
                 {
                     for (int m = n+1; m < (int)current.Len(); m++)
                     {
-                        if (current[m] == '\'')
+                        if (current[(size_t) (m)] == '\'')
                         {
                             if (m == 0 || (current[(size_t) (m-1)] != '\\') || (m >= 2 && current[(size_t) (m-2)] == '\\'))
                                 break;
@@ -1183,11 +1183,11 @@ void wxTextCtrl::SearchForBrackets()
                 }
                 
                 // ignore strings
-                if (current[n] == '\"')
+                if (current[(size_t) (n)] == '\"')
                 {
                     for (int m = n+1; m < (int)current.Len(); m++)
                     {
-                        if (current[m] == '\"')
+                        if (current[(size_t) (m)] == '\"')
                         {
                             if (m == 0 || (current[(size_t) (m-1)] != '\\') || (m >= 2 && current[(size_t) (m-2)] == '\\'))
                                 break;
@@ -1197,7 +1197,7 @@ void wxTextCtrl::SearchForBrackets()
                     continue;
                 }
                 
-                if (current[n] == antibracket)
+                if (current[(size_t) (n)] == antibracket)
                 {
                     count--;
                     if (count == 0)
@@ -1211,7 +1211,7 @@ void wxTextCtrl::SearchForBrackets()
                         return;
                     }
                 }
-                else if (current[n] == bracket)
+                else if (current[(size_t) (n)] == bracket)
                 {
                     count++;
                 }
@@ -1515,7 +1515,7 @@ void wxTextCtrl::DoDClick()
     wxString line( m_lines[ m_cursorY ].m_text );
     if (m_cursorX >= (int)line.Len()) return;
     int p = m_cursorX;
-    char ch = line[p];
+    char ch = line[(size_t) (p)];
     if (((ch >= 'a') && (ch <= 'z')) ||
         ((ch >= 'A') && (ch <= 'Z')) ||
         ((ch >= '0') && (ch <= '9')) ||
@@ -1525,7 +1525,7 @@ void wxTextCtrl::DoDClick()
         m_selEndY = m_cursorY;
         if (p > 0)
         {
-            ch = line[p-1];
+            ch = line[(size_t) (p-1)];
             while (((ch >= 'a') && (ch <= 'z')) ||
                    ((ch >= 'A') && (ch <= 'Z')) ||
                    ((ch >= '0') && (ch <= '9')) ||
@@ -1533,7 +1533,7 @@ void wxTextCtrl::DoDClick()
             {
                 p--;
                 if (p == 0) break;
-                ch = line[p-1];
+                ch = line[(size_t) (p-1)];
             }
         }
         m_selStartX = p;
@@ -1541,7 +1541,7 @@ void wxTextCtrl::DoDClick()
         p = m_cursorX;
         if (p < (int)line.Len())
         {
-            ch = line[p];
+            ch = line[(size_t) (p)];
             while (((ch >= 'a') && (ch <= 'z')) ||
                    ((ch >= 'A') && (ch <= 'Z')) ||
                    ((ch >= '0') && (ch <= '9')) ||
@@ -1549,7 +1549,7 @@ void wxTextCtrl::DoDClick()
             {
                 if (p >= (int)line.Len()) break;
                 p++;
-                ch = line[p];
+                ch = line[(size_t) (p)];
             }
         }
         m_selEndX = p;
@@ -1717,7 +1717,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
             wxString red( ' ', line.Len() );
             if (m_bracketX < (int)line.Len())
             {
-                red.SetChar( m_bracketX, line[m_bracketX] );
+                red.SetChar( m_bracketX, line[(size_t) (m_bracketX)] );
                 line.SetChar( m_bracketX, ' ' );
                 dc.SetTextForeground( *wxRED );
                 dc.DrawText( red, x, y );
@@ -1748,7 +1748,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
                 }
             } else
             if ((m_variables.Index( token ) != wxNOT_FOUND) ||
-                ((token.Len() > 2) && (token[0] == 'w') && (token[1] == 'x')))
+                ((token.Len() > 2) && (token[(size_t) (0)] == 'w') && (token[(size_t) (1)] == 'x')))
             {
                 size_t end_pos = pos + token.Len();
                 for (size_t i = pos; i < end_pos; i++)
@@ -1757,7 +1757,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
                     line[i] = ' ';
                 }
             } else
-            if ((token.Len() >= 2) && (token[0] == '/') && (token[1] == '/') && (m_lang == wxSOURCE_LANG_CPP))
+            if ((token.Len() >= 2) && (token[(size_t) (0)] == '/') && (token[(size_t) (1)] == '/') && (m_lang == wxSOURCE_LANG_CPP))
             {
                 size_t end_pos = pos + token.Len();
                 for (size_t i = pos; i < end_pos; i++)
@@ -1766,7 +1766,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
                     line[i] = ' ';
                 }
             } else
-            if ((token[0] == '#') &&
+            if ((token[(size_t) (0)] == '#') &&
                 ((m_lang == wxSOURCE_LANG_PYTHON) || (m_lang == wxSOURCE_LANG_PERL)))
             {
                 size_t end_pos = pos + token.Len();
@@ -1776,7 +1776,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
                     line[i] = ' ';
                 }
             } else
-            if ((token[0] == '"') || (token[0] == '\''))
+            if ((token[(size_t) (0)] == '"') || (token[(size_t) (0)] == '\''))
             {
                 size_t end_pos = pos + token.Len();
                 for (size_t i = pos; i < end_pos; i++)
