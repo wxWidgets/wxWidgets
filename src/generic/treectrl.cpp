@@ -950,7 +950,7 @@ void wxTreeCtrl::Collapse(const wxTreeItemId& itemId)
   wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_COLLAPSING, GetId() );
   event.m_item = item;
   event.SetEventObject( this );
-  if ( ProcessEvent( event ) && event.m_code )
+  if ( ProcessEvent( event ) && !event.IsAllowed() )
   {
     // cancelled by program
     return;
