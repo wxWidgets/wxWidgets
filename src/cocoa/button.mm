@@ -17,7 +17,7 @@
 #endif
 
 #import <AppKit/NSButton.h>
-#import <Foundation/NSString.h>
+#include "wx/cocoa/string.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 BEGIN_EVENT_TABLE(wxButton, wxButtonBase)
@@ -41,7 +41,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID winid,
     [m_cocoaNSView release];
 
     [GetNSButton() setBezelStyle:NSRoundedBezelStyle];
-    [GetNSButton() setTitle:[NSString stringWithCString: label.c_str()]];
+    [GetNSButton() setTitle:wxNSStringWithWxString(label)];
     [GetNSControl() sizeToFit];
 
     if(m_parent)

@@ -14,7 +14,7 @@
 #include "wx/log.h"
 
 #import <AppKit/NSButton.h>
-#import <Foundation/NSString.h>
+#include "wx/cocoa/string.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 // wxRadioButtonBase == wxControl
@@ -37,7 +37,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID winid,
     SetNSButton([[NSButton alloc] initWithFrame: cocoaRect]);
     [m_cocoaNSView release];
     [GetNSButton() setButtonType: NSRadioButton];
-    [GetNSButton() setTitle:[NSString stringWithCString: label.c_str()]];
+    [GetNSButton() setTitle:wxNSStringWithWxString(label)];
     [GetNSControl() sizeToFit];
 
     if(m_parent)
