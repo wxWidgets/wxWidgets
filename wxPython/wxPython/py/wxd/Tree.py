@@ -18,7 +18,10 @@ import Parameters as wx
 
 
 class TreeCtrl(Control):
-    """"""
+    """A tree control presents information as a hierarchy, with items
+    that may be expanded to show further items. Items in a tree
+    control are referenced by wx.TreeItemId handles, which may be
+    tested for validity by calling TreeItemId.IsOk()."""
 
     def AddRoot(self):
         """"""
@@ -354,49 +357,47 @@ class TreeItemAttr:
 
 
 class TreeItemData(Object):
-    """"""
+    """TreeItemData is some (arbitrary) user class associated with
+    some item. The main advantage of having this class is that
+    TreeItemData objects are destroyed automatically by the tree and
+    the memory and any other resources associated with a tree item
+    will be automatically freed when it is deleted."""
+
+    def __init__(self, obj=wx.NULL):
+        """Associate any Python object with tree item using
+        wxTreeItemData as container."""
+        pass
 
     def GetData(self):
-        """"""
+        """Return the Python object."""
         pass
 
     def GetId(self):
-        """"""
+        """Return the item associated with this node."""
         pass
 
-    def SetData(self):
-        """"""
+    def SetData(self, obj):
+        """Associate Python object with tree item."""
         pass
 
-    def SetId(self):
-        """"""
-        pass
-
-    def __init__(self):
-        """"""
+    def SetId(self, id):
+        """Set the item associated with this node."""
         pass
 
 
 class TreeItemId:
-    """"""
+    """Item in a TreeCtrl."""
+
+## You wouldn't create these directly.
+
+##     def __init__(self):
+##         """"""
+##         pass
 
     def IsOk(self):
-        """"""
+        """Return True if item is valid."""
         pass
 
     def Ok(self):
-        """"""
+        """Synonym for IsOk."""
         pass
-
-    def __cmp__(self):
-        """"""
-        pass
-
-    def __del__(self):
-        """"""
-        pass
-
-    def __init__(self):
-        """"""
-        pass
-

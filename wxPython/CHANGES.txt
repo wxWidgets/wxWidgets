@@ -2,7 +2,7 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-2.4.0.8
+2.4.1
 -------
 
 Added wxScrolledPanel from Wil Sadkin
@@ -23,6 +23,16 @@ the wxPython package and rename wxFooBar --> FooBar.  That means that
 people can do imports without "import *" and can use names like
 wx.Frame instead of wx.wxFrame.  This is phase 1 of a full transition
 to the new namespace.
+
+Updated Scintilla to 1.51.
+
+Patrick O'Brien's PyCrust package has been renamed to Py and now
+includes several new tools.  As part of the change the location of the
+pacakge has changed as well, it is now accessible as "from wxPython
+import py" (or "from wx import py" using the new namespace.)  There
+are still some transition moudules in the wxPython.lib.PyCrust mackage
+that will issue a warning and then import what is needed from the new
+package.  These will be removed in a future release.
 
 
 

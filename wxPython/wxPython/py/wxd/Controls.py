@@ -1126,11 +1126,11 @@ class Notebook(Control):
         """"""
         pass
 
-    def AddPage(self, pPage, strText, bSelect=False, imageId=-1):
+    def AddPage(self, page, text, select=False, imageId=-1):
         """"""
         pass
 
-    def AdvanceSelection(self, bForward=True):
+    def AdvanceSelection(self, forward=True):
         """"""
         pass
 
@@ -1147,7 +1147,7 @@ class Notebook(Control):
         """"""
         pass
 
-    def DeletePage(self, nPage):
+    def DeletePage(self, page):
         """"""
         pass
 
@@ -1155,7 +1155,7 @@ class Notebook(Control):
         """"""
         pass
 
-    def GetPage(self, nPage):
+    def GetPage(self, page):
         """"""
         pass
 
@@ -1163,11 +1163,11 @@ class Notebook(Control):
         """"""
         pass
 
-    def GetPageImage(self, nPage):
+    def GetPageImage(self, page):
         """"""
         pass
 
-    def GetPageText(self, nPage):
+    def GetPageText(self, page):
         """"""
         pass
 
@@ -1179,11 +1179,11 @@ class Notebook(Control):
         """"""
         pass
 
-    def InsertPage(self, nPage, pPage, strText, bSelect=False, imageId=-1):
+    def InsertPage(self, index, page, text, select=False, imageId=-1):
         """"""
         pass
 
-    def RemovePage(self, nPage):
+    def RemovePage(self, page):
         """"""
         pass
 
@@ -1199,7 +1199,7 @@ class Notebook(Control):
         """"""
         pass
 
-    def SetPageImage(self, nPage, nImage):
+    def SetPageImage(self, page, image):
         """"""
         pass
 
@@ -1207,11 +1207,11 @@ class Notebook(Control):
         """"""
         pass
 
-    def SetPageText(self, nPage, strText):
+    def SetPageText(self, page, text):
         """"""
         pass
 
-    def SetSelection(self, nPage):
+    def SetSelection(self, page):
         """"""
         pass
 

@@ -16,13 +16,15 @@ python = sys.executable
 pythonw = 'start ' + os.path.join(os.path.split(python)[0], 'pythonw.exe')
 scriptdir = os.getcwd()
 
-scripts = [ ("img2png", 0),
-            ("img2py",  0),
-            ("img2xpm", 0),
-            ("xrced",   1),
-            ("pyshell", 1),
-            ("pycrust", 1),
-            ("pycwrap", 1),
+scripts = [ ("img2png",    0),
+            ("img2py",     0),
+            ("img2xpm",    0),
+            ("xrced",      1),
+            ("pyshell",    1),
+            ("pycrust",    1),
+            ("pywrap",     1),
+            ("pyalamode",  1),
+            ("pyalacarte", 1),
             ("helpviewer", 1),
             ]
 

@@ -9,6 +9,7 @@ from __future__ import nested_scopes
 
 import cStringIO
 import inspect
+import sys
 import tokenize
 import types
 
@@ -200,6 +201,10 @@ def getRoot(command, terminator=None):
     effects.  The command would normally terminate with a '(' or
     '.'. The terminator and anything after the terminator will be
     dropped."""
+    command = command.split('\n')[-1]
+    if command.startswith(sys.ps2):
+        command = command[len(sys.ps2):]
+    command = command.lstrip()
     command = rtrimTerminus(command, terminator)
     tokens = getTokens(command)
     if not tokens:
@@ -207,13 +212,17 @@ def getRoot(command, terminator=None):
     if tokens[-1][0] is tokenize.ENDMARKER:
         # Remove the end marker.
         del tokens[-1]
+    if not tokens:
+        return ''
     if terminator == '.' and \
            (tokens[-1][1] <> '.' or tokens[-1][0] is not tokenize.OP):
         # Trap decimals in numbers, versus the dot operator.
         return ''
     else:
         # Strip off the terminator.
-        command = command[:-1]
+        if terminator and command.endswith(terminator):
+            size = 0 - len(terminator)
+            command = command[:size]
     command = command.rstrip()
     tokens = getTokens(command)
     tokens.reverse()
@@ -293,7 +302,7 @@ def getTokens(command):
     return tokens    
 
 def rtrimTerminus(command, terminator=None):
-    """Return command minus anything that fillows the final terminator."""
+    """Return command minus anything that follows the final terminator."""
     if terminator:
         pieces = command.split(terminator)
         if len(pieces) > 1:

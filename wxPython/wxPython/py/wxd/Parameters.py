@@ -36,6 +36,7 @@ _params = (
     'DefaultValidator',
     'EmptyString',
     'EVT_NULL',
+    'HORIZONTAL',
     'HSCROLL',
     'NO_BORDER',
     'NULL',

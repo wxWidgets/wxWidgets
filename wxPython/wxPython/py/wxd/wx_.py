@@ -1,4 +1,8 @@
 """Decorator classes for documentation and shell scripting.
+
+Information contained in this module, and all modules imported by this
+module, is covered by the wxWindows Free Documentation Licence.  See
+the LICENSE.txt file for details.
 """
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
