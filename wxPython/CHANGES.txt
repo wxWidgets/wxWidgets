@@ -2,8 +2,21 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-2.3.3
------
+2.3.3.2
+-------
+Updated XRCed and wxTimeCtrl contribs.
+
+Show a couple new wxGrid features in the demo.
+
+Several bug fixes in wxWindows.
+
+Added wxHtmlFilter.
+
+
+
+
+2.3.3.1
+-------
 Added wxSplashScreen.
 
 Added wxGenericDirCtrl.

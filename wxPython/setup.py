@@ -322,11 +322,11 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
 
 
 elif os.name == 'posix':
-    # Set flags for Unix type platforms
+    # Set flags for other Unix type platforms
 
     WXDIR = '..'              # assumes IN_CVS_TREE
     WXPLAT = '__WXGTK__'      # and assumes GTK...
-    GENDIR = 'gtk'            # Need to allow for Motif eventually too
+    GENDIR = 'gtk'            # Need to allow for X11 and/or Motif eventually too
 
     includes = ['src']
     defines = [('SWIG_GLOBAL', None),
@@ -357,7 +357,9 @@ else:
 # Check if the version file needs updated
 #----------------------------------------------------------------------
 
-#if IN_CVS_TREE and newer('setup.py', 'src/__version__.py'):
+# Always do it since the version string can change based on the UNICODE flag
+
+##if IN_CVS_TREE and newer('setup.py', 'src/__version__.py'):
 open('src/__version__.py', 'w').write("ver = '%s'\n" % VERSION)
 
 
