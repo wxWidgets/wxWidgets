@@ -23,7 +23,7 @@
   #include "wx/defs.h"
 #endif
 
-#if wxUSE_STREAMS
+#if wxUSE_STREAMS && wxUSE_PROTOCOL_FILE
 
 #include <stdio.h>
 #include "wx/wfstream.h"
@@ -46,5 +46,5 @@ wxInputStream *wxFileProto::GetInputStream(const wxString& path)
   return new wxFileInputStream(path);
 }
 
-#endif
+#endif // wxUSE_STREAMS && wxUSE_PROTOCOL_FILE
 
