@@ -57,7 +57,45 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
         if (c == _T('.')) {ext = loc.Right(l2-i-1); break;}
         if ((c == _T('/')) || (c == _T('\\')) || (c == _T(':'))) {return wxEmptyString;}
     }
-    if (m_MimeMng == NULL) m_MimeMng = new wxMimeTypesManager;
+
+    if (m_MimeMng == NULL) {
+        m_MimeMng = new wxMimeTypesManager;
+
+        static const wxFileTypeInfo fallbacks[] =
+        {
+            wxFileTypeInfo("image/jpeg",
+                           "",
+                           "",
+                           "JPEG image (from fallback)",
+                           "jpg", "jpeg", NULL),
+            wxFileTypeInfo("image/gif",
+                           "",
+                           "",
+                           "GIF image (from fallback)",
+                           "gif", NULL),
+            wxFileTypeInfo("image/png",
+                           "",
+                           "",
+                           "PNG image (from fallback)",
+                           "png", NULL),
+            wxFileTypeInfo("image/bmp",
+                           "",
+                           "",
+                           "windows bitmap image (from fallback)",
+                           "bmp", NULL),
+            wxFileTypeInfo("text/html",
+                           "",
+                           "",
+                           "HTML document (from fallback)",
+                           "htm", "html", NULL),
+
+            // must terminate the table with this!
+            wxFileTypeInfo()
+        };
+
+        m_MimeMng -> AddFallbacks(fallbacks);
+    }
+
     ft = m_MimeMng -> GetFileTypeFromExtension(ext);
     if (ft && (ft -> GetMimeType(&mime))) return mime;
     else return wxEmptyString;
