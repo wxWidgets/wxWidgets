@@ -567,8 +567,10 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 {
     dc.SetPen( wxPen( "black", width, wxSOLID) );
     dc.SetBrush( *wxRED_BRUSH );
+    dc.DrawText(wxString::Format("Testing lines of width %d", width), x + 10, y - 10);
     dc.DrawRectangle( x+10, y+10, 100, 190 );
 
+    dc.DrawText("Solid/dot/short dash/long dash/dot dash", x + 150, y + 10);
     dc.SetPen( wxPen( "black", width, wxSOLID) );
     dc.DrawLine( x+20, y+20, 100, y+20 );
     dc.SetPen( wxPen( "black", width, wxDOT) );
@@ -580,6 +582,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.SetPen( wxPen( "black", width, wxDOT_DASH) );
     dc.DrawLine( x+20, y+60, 100, y+60 );
 
+    dc.DrawText("Misc hatches", x + 150, y + 70);
     dc.SetPen( wxPen( "black", width, wxBDIAGONAL_HATCH) );
     dc.DrawLine( x+20, y+70, 100, y+70 );
     dc.SetPen( wxPen( "black", width, wxCROSSDIAG_HATCH) );
@@ -593,6 +596,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.SetPen( wxPen( "black", width, wxVERTICAL_HATCH) );
     dc.DrawLine( x+20, y+120, 100, y+120 );
 
+    dc.DrawText("User dash", x + 150, y + 140);
     wxPen ud( "black", width, wxUSER_DASH );
     wxDash dash1[1];
     dash1[0] = 0;
@@ -967,6 +971,7 @@ void MyCanvas::DrawCircles(wxDC& dc)
     dc.DrawText("And arcs", 0, y);
     dc.DrawArc(x - r, y, x + r, y, x, y);
     dc.DrawArc(x + 4*r, y, x + 2*r, y, x + 3*r, y);
+    dc.DrawArc(x + 5*r, y, x + 5*r, y, x + 6*r, y);
 
     y += 2*r;
     dc.DrawEllipticArc(x - r, y, 2*r, r, 0, 90);
@@ -1055,9 +1060,9 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
         case Show_Lines:
             DrawTestLines( 0, 100, 0, dc );
-            DrawTestLines( 0, 300, 1, dc );
-            DrawTestLines( 0, 500, 2, dc );
-            DrawTestLines( 0, 700, 6, dc );
+            DrawTestLines( 0, 320, 1, dc );
+            DrawTestLines( 0, 540, 2, dc );
+            DrawTestLines( 0, 760, 6, dc );
             break;
 
         case Show_Polygons:
@@ -1123,7 +1128,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(File_ShowMask, "wx&Mask screen\tF5");
     menuFile->Append(File_ShowOps, "&ROP screen\tF6");
     menuFile->Append(File_ShowRegions, "Re&gions screen\tF7");
-    menuFile->Append(File_ShowCircles, "&Circles&gions screen\tF8");
+    menuFile->Append(File_ShowCircles, "&Circles screen\tF8");
     menuFile->AppendSeparator();
     menuFile->Append(File_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
