@@ -3092,7 +3092,7 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
 
     if ( numRows >= curNumRows )
     {
-        m_data.Clear();  // don't release memory just yet
+        m_data.Clear();
     }
     else
     {
@@ -5308,6 +5308,13 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
     //
     else if ( event.Moving() && !event.IsButton() )
     {
+        if( coords.GetRow() < 0 || coords.GetCol() < 0 )
+        {
+            // out of grid cell area
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
+            return;
+        }
+
         int dragRow = YToEdgeOfRow( y );
         int dragCol = XToEdgeOfCol( x );
 
@@ -5320,7 +5327,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             return;
         }
 
-        if ( dragRow >= 0 && dragRow < GetNumberRows())
+        if ( dragRow >= 0 )
         {
             m_dragRowOrCol = dragRow;
 
@@ -5338,7 +5345,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             return;
         }
 
-        if ( dragCol >= 0 && dragCol < GetNumberCols())
+        if ( dragCol >= 0 )
         {
             m_dragRowOrCol = dragCol;
 
@@ -7331,11 +7338,12 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
         defaultDist = 1;
     size_t i_max = coord / defaultDist,
            i_min = 0;
+
     if (BorderArray.IsEmpty())
     {
-        if((int) i_max <= nMax)
+        if((int) i_max < nMax)
             return i_max;
-        return maxOnOverflow ? (int)i_max : -1;
+        return maxOnOverflow ? nMax - 1 : -1;
     }
 
     if ( i_max >= BorderArray.GetCount())
