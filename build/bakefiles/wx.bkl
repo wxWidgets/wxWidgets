@@ -129,26 +129,30 @@
         <mkdir id="libdir">
             <dir>$(LIBDIRNAME)</dir>
         </mkdir>
-        <mkdir id="libdir_wx">
+        <mkdir id="libdir_setup">
             <depends>libdir</depends>
+            <dir>$(SETUPHDIR)</dir>            
+        </mkdir>
+        <mkdir id="libdir_setup_wx">
+            <depends>libdir_setup</depends>
             <dependency-of>setup_h</dependency-of>
-            <dir>$(LIBDIRNAME)/wx</dir>            
+            <dir>$(SETUPHDIR)/wx</dir>            
         </mkdir>
 
-        <set var="SETUP_H_DIR">
+        <set var="SETUP_H_SUBDIR">
             <if cond="WXUNIV=='1'">univ</if>
             <if cond="WXUNIV=='0'">msw</if>
         </set>
         
         <copy-file-to-file-if-not-exist id="master_setup.h">
-            <src>$(SRCDIR)/include/wx/$(SETUP_H_DIR)/setup0.h</src>
-            <dst>$(SRCDIR)/include/wx/$(SETUP_H_DIR)/setup.h</dst>
+            <src>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup0.h</src>
+            <dst>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup.h</dst>
             <dependency-of>setup_h</dependency-of>
         </copy-file-to-file-if-not-exist>
         <copy-file-to-file-if-not-exist id="setup.h">
             <dependency-of>setup_h</dependency-of>
-            <src>$(SRCDIR)/include/wx/$(SETUP_H_DIR)/setup.h</src>
-            <dst>$(LIBDIRNAME)/wx/setup.h</dst>
+            <src>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup.h</src>
+            <dst>$(SETUPHDIR)/wx/setup.h</dst>
         </copy-file-to-file-if-not-exist>
     </if>
 

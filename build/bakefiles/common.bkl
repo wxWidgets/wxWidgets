@@ -163,10 +163,20 @@
     
     <set var="LIBDIRNAME" make_var="1">
         <if cond="FORMAT=='autoconf'">$(top_builddir)lib</if>
-        <if cond="FORMAT!='autoconf'">
-            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER)_$(CFG_NAME_PART)
+        <if cond="FORMAT!='autoconf' and SHARED=='0'">
+            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER)_lib$(CFG)
+        </if>
+        <if cond="FORMAT!='autoconf' and SHARED=='1'">
+            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER)_dll$(CFG)
         </if>
     </set>
+    
+    <if cond="FORMAT!='autoconf'">
+        <set var="SETUPHDIR" make_var="1">
+            $(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
+        </set>
+    </if>
+    
 
     
     <!-- =============================================================== -->
@@ -253,14 +263,7 @@
         <define>$(UNICODE_DEFINE)</define>
         <include>$(TOP_SRCDIR)include</include>
         <lib-path>$(LIBDIRNAME)</lib-path>        
-        <include cond="FORMAT!='autoconf'">$(LIBDIRNAME)</include>
-        <include>$(INC_TIFF)</include>
-        <include>$(INC_JPEG)</include>
-        <include>$(INC_PNG)</include>
-        <include>$(INC_ZLIB)</include>
-        <include>$(INC_ODBC)</include>
-        <include>$(INC_REGEX)</include>
-        <include>$(INC_EXPAT)</include>
+        <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
     </template>
 
     <!-- for both GUI and wxBase libs/samples: -->
@@ -400,16 +403,28 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
         <depends cond="FORMAT=='autoconf'">wxodbc</depends>
         <depends>wxregex</depends>
     </template>
+
+    <template id="wx_3rdparty_includes">
+        <include>$(INC_TIFF)</include>
+        <include>$(INC_JPEG)</include>
+        <include>$(INC_PNG)</include>
+        <include>$(INC_ZLIB)</include>
+        <include>$(INC_ODBC)</include>
+        <include>$(INC_REGEX)</include>
+        <include>$(INC_EXPAT)</include>
+    </template>
     
-    <template id="wx_lib" template="wx_lib_b"/>
-    <template id="wx_base_lib" template="wx_lib_b">
+    <template id="wx_lib" template="wx_lib_b,wx_3rdparty_includes"/>
+    <template id="wx_base_lib" template="wx_lib_b,wx_3rdparty_includes">
         <define>wxUSE_GUI=0</define> 
     </template>
 
-    <template id="wx_dll" template="wx_dll_b,wx_3rdparty_dependencies"
-                          template_append="wx_append_nomono"/>
-    <template id="wx_base_dll" template="wx_dll_b,wx_3rdparty_dependencies"
-                               template_append="wx_append_base_nomono">
+    <template id="wx_dll"
+              template="wx_dll_b,wx_3rdparty_dependencies,wx_3rdparty_includes"
+              template_append="wx_append_nomono"/>
+    <template id="wx_base_dll"
+              template="wx_dll_b,wx_3rdparty_dependencies,wx_3rdparty_includes"
+              template_append="wx_append_base_nomono">
         <define>wxUSE_GUI=0</define> 
     </template>
                            
