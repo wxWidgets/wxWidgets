@@ -6,7 +6,7 @@
 // Created:     06/01/99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 VZ
-// Licence:     GPL
+// Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -2186,7 +2186,11 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.34  2004/11/23 09:53:31  JS
+   Changed GPL to wxWindows Licence
+
    Revision 1.33  2004/11/12 03:30:07  RL
+
    Cruft cleanup from MJW, strip the tabs out of sound.cpp
 
    Revision 1.32  2004/11/10 21:02:58  VZ
