@@ -1013,8 +1013,8 @@ bool wxDb::setConnectionOptions(void)
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
         return(DispAllErrors(henv, hdbc));
 
-    retcode = SQLSetConnectOption(hdbc, SQL_AUTOCOMMIT, SQL_AUTOCOMMIT_OFF);
-    retcode = SQLSetConnectOption(hdbc, SQL_OPT_TRACE, SQL_OPT_TRACE_OFF);
+    /* retcode = */ SQLSetConnectOption(hdbc, SQL_AUTOCOMMIT, SQL_AUTOCOMMIT_OFF);
+    /* retcode = */ SQLSetConnectOption(hdbc, SQL_OPT_TRACE, SQL_OPT_TRACE_OFF);
 //  SQLSetConnectOption(hdbc, SQL_TXN_ISOLATION, SQL_TXN_READ_COMMITTED);  // No dirty reads
 
     // By default, MS Sql Server closes cursors on commit and rollback.  The following
@@ -1026,7 +1026,7 @@ bool wxDb::setConnectionOptions(void)
     {
         const long SQL_PRESERVE_CURSORS = 1204L;
         const long SQL_PC_ON = 1L;
-        retcode = SQLSetConnectOption(hdbc, SQL_PRESERVE_CURSORS, SQL_PC_ON);
+        /* retcode = */ SQLSetConnectOption(hdbc, SQL_PRESERVE_CURSORS, SQL_PC_ON);
     }
 
     // Display the connection options to verify them
@@ -2192,7 +2192,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
     //fill in column information (name, datatype)
     for (colNum = 0; colNum < noCols; colNum++) 
     {
-        if (SQLColAttributes(hstmt, colNum+1, SQL_COLUMN_NAME,
+        if (SQLColAttributes(hstmt, (UWORD)(colNum+1), SQL_COLUMN_NAME,
             name, sizeof(name),
             &Sword, &Sdword) != SQL_SUCCESS)
         {
@@ -2203,7 +2203,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
   
         wxStrncpy(pColInf[colNum].colName, name, DB_MAX_COLUMN_NAME_LEN);
         
-        if (SQLColAttributes(hstmt, colNum+1, SQL_COLUMN_TYPE,
+        if (SQLColAttributes(hstmt, (UWORD)(colNum+1), SQL_COLUMN_TYPE,
             NULL, 0, &Sword, &Sdword) != SQL_SUCCESS)
         {
             DispAllErrors(henv, hdbc, hstmt);
@@ -2240,7 +2240,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
 #ifdef __WXDEBUG__
             default:
                 wxString errMsg;
-                errMsg.Printf(wxT("SQL Data type %d currently not supported by wxWidgets"), Sdword);
+                errMsg.Printf(wxT("SQL Data type %ld currently not supported by wxWidgets"), (long)Sdword);
                 wxLogDebug(errMsg,wxT("ODBC DEBUG MESSAGE"));
 #endif
         }
@@ -2371,7 +2371,7 @@ int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCo
     }  // while
 
     tempStr.Trim();     // Get rid of any unneeded blanks
-    if (!tempStr.IsEmpty())
+    if (!tempStr.empty())
     {
         for (i=0; i<noCols; i++)
         {   // Find the Column name
@@ -2500,7 +2500,7 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
 
             // MySQL, SQLServer, and Access cannot accept a user name when looking up column names, so we
             // use the call below that leaves out the user name
-            if (!UserID.IsEmpty() &&
+            if (!UserID.empty() &&
                 Dbms() != dbmsMY_SQL &&
                 Dbms() != dbmsACCESS &&
                 Dbms() != dbmsMS_SQL_SERVER)
@@ -2655,7 +2655,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, UWORD *numCols, const wx
 
         // MySQL, SQLServer, and Access cannot accept a user name when looking up column names, so we
         // use the call below that leaves out the user name
-        if (!UserID.IsEmpty() &&
+        if (!UserID.empty() &&
             Dbms() != dbmsMY_SQL &&
             Dbms() != dbmsACCESS &&
             Dbms() != dbmsMS_SQL_SERVER)
@@ -2910,7 +2910,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
 
         // MySQL, SQLServer, and Access cannot accept a user name when looking up column names, so we
         // use the call below that leaves out the user name
-        if (!UserID.IsEmpty() &&
+        if (!UserID.empty() &&
             Dbms() != dbmsMY_SQL &&
             Dbms() != dbmsACCESS &&
             Dbms() != dbmsMS_SQL_SERVER)
@@ -3149,7 +3149,7 @@ int wxDb::GetColumnCount(const wxString &tableName, const wxChar *userID)
 
     // MySQL, SQLServer, and Access cannot accept a user name when looking up column names, so we
     // use the call below that leaves out the user name
-    if (!UserID.IsEmpty() &&
+    if (!UserID.empty() &&
         Dbms() != dbmsMY_SQL &&
         Dbms() != dbmsACCESS &&
         Dbms() != dbmsMS_SQL_SERVER)
@@ -3242,7 +3242,7 @@ wxDbInf *wxDb::GetCatalog(const wxChar *userID)
         SQLFreeStmt(hstmt, SQL_CLOSE);   // Close if Open
         tblNameSave.Empty();
 
-        if (!UserID.IsEmpty() &&
+        if (!UserID.empty() &&
             Dbms() != dbmsMY_SQL &&
             Dbms() != dbmsACCESS &&
             Dbms() != dbmsMS_SQL_SERVER)
@@ -3347,7 +3347,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
     wxString UserID;
     convertUserID(userID,UserID);
 
-    if (!UserID.IsEmpty() &&
+    if (!UserID.empty() &&
         Dbms() != dbmsMY_SQL &&
         Dbms() != dbmsACCESS &&
         Dbms() != dbmsINTERBASE &&
@@ -3478,7 +3478,7 @@ bool wxDb::TableExists(const wxString &tableName, const wxChar *userID, const wx
 
     // Some databases cannot accept a user name when looking up table names,
     // so we use the call below that leaves out the user name
-    if (!UserID.IsEmpty() &&
+    if (!UserID.empty() &&
         Dbms() != dbmsMY_SQL &&
         Dbms() != dbmsACCESS &&
         Dbms() != dbmsMS_SQL_SERVER &&
@@ -3548,7 +3548,7 @@ bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, cons
 
     // Some databases cannot accept a user name when looking up table names,
     // so we use the call below that leaves out the user name
-    if (!Schema.IsEmpty() &&
+    if (!Schema.empty() &&
         Dbms() != dbmsMY_SQL &&
         Dbms() != dbmsACCESS &&
         Dbms() != dbmsMS_SQL_SERVER)
@@ -4292,9 +4292,11 @@ bool wxDbGetDataSource(HENV henv, wxChar *Dsn, SWORD DsnMaxLength, wxChar *DsDes
  */
 {
     SWORD cb1,cb2;
+    SWORD lengthDsn = (SWORD)(DsnMaxLength*sizeof(wxChar));
+    SWORD lengthDsDesc = (SWORD)(DsDescMaxLength*sizeof(wxChar));
 
-    if (SQLDataSources(henv, direction, (SQLTCHAR FAR *) Dsn, DsnMaxLength*sizeof(wxChar), &cb1,
-                             (SQLTCHAR FAR *) DsDesc, DsDescMaxLength*sizeof(wxChar), &cb2) == SQL_SUCCESS)
+    if (SQLDataSources(henv, direction, (SQLTCHAR FAR *) Dsn, lengthDsn, &cb1,
+                       (SQLTCHAR FAR *) DsDesc, lengthDsDesc, &cb2) == SQL_SUCCESS)
         return true;
     else
         return false;

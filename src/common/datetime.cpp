@@ -500,7 +500,7 @@ static bool GetNumericToken(size_t len, const wxChar*& p, unsigned long *number)
             break;
     }
 
-    return !s.IsEmpty() && s.ToULong(number);
+    return !s.empty() && s.ToULong(number);
 }
 
 // scans all alphabetic characters and returns the resulting string
@@ -542,8 +542,8 @@ wxDateTime::Tm::Tm(const struct tm& tm, const TimeZone& tz)
     mday = (wxDateTime::wxDateTime_t)tm.tm_mday;
     mon = (wxDateTime::Month)tm.tm_mon;
     year = 1900 + tm.tm_year;
-    wday = tm.tm_wday;
-    yday = tm.tm_yday;
+    wday = (wxDateTime::wxDateTime_t)tm.tm_wday;
+    yday = (wxDateTime::wxDateTime_t)tm.tm_yday;
 }
 
 bool wxDateTime::Tm::IsValid() const
@@ -559,7 +559,7 @@ void wxDateTime::Tm::ComputeWeekDay()
     // compute the week day from day/month/year: we use the dumbest algorithm
     // possible: just compute our JDN and then use the (simple to derive)
     // formula: weekday = (JDN + 1.5) % 7
-    wday = (wxDateTime::WeekDay)(GetTruncatedJDN(mday, mon, year) + 2) % 7;
+    wday = (wxDateTime::wxDateTime_t)((wxDateTime::WeekDay)(GetTruncatedJDN(mday, mon, year) + 2) % 7);
 }
 
 void wxDateTime::Tm::AddMonths(int monDiff)
@@ -2392,7 +2392,7 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                         fmt += *p;
                     }
 
-                    if ( !fmt.IsEmpty() )
+                    if ( !fmt.empty() )
                     {
                         // we've only got the flags and width so far in fmt
                         fmt.Prepend(_T('%'));
@@ -2964,7 +2964,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     wxString am, pm, token = GetAlphaToken(input);
 
                     GetAmPmStrings(&am, &pm);
-                    if (am.IsEmpty() && pm.IsEmpty())
+                    if (am.empty() && pm.empty())
                         return (wxChar *)NULL;  // no am/pm strings defined
                     if ( token.CmpNoCase(pm) == 0 )
                     {
