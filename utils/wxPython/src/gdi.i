@@ -82,10 +82,12 @@ public:
 #endif
 
     wxBitmap GetSubBitmap( const wxRect& rect );
+#ifdef __WXMSW__
     bool CopyFromIcon(const wxIcon& icon);
     bool CopyFromCursor(const wxCursor& cursor);
     int GetQuality();
     void SetQuality(int q);
+#endif
 };
 
 

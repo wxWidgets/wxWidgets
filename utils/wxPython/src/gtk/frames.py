@@ -30,6 +30,10 @@ class wxFramePtr(wxWindowPtr):
         val = apply(framesc.wxFrame_CreateToolBar,(self,) + _args, _kwargs)
         if val: val = wxToolBarPtr(val) 
         return val
+    def GetIcon(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_GetIcon,(self,) + _args, _kwargs)
+        if val: val = wxIconPtr(val) 
+        return val
     def GetMenuBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_GetMenuBar,(self,) + _args, _kwargs)
         if val: val = wxMenuBarPtr(val) 
@@ -54,6 +58,12 @@ class wxFramePtr(wxWindowPtr):
     def Maximize(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_Maximize,(self,) + _args, _kwargs)
         return val
+    def IsMaximized(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_IsMaximized,(self,) + _args, _kwargs)
+        return val
+    def Restore(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_Restore,(self,) + _args, _kwargs)
+        return val
     def SetAcceleratorTable(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_SetAcceleratorTable,(self,) + _args, _kwargs)
         return val
@@ -77,6 +87,19 @@ class wxFramePtr(wxWindowPtr):
         return val
     def SetToolBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_SetToolBar,(self,) + _args, _kwargs)
+        return val
+    def MakeModal(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_MakeModal,(self,) + _args, _kwargs)
+        return val
+    def GetClientAreaOrigin(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_GetClientAreaOrigin,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def Command(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_Command,(self,) + _args, _kwargs)
+        return val
+    def ProcessCommand(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_ProcessCommand,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxFrame instance at %s>" % (self.this,)

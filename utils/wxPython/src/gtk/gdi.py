@@ -47,6 +47,10 @@ class wxBitmapPtr :
     def SetDepth(self, *_args, **_kwargs):
         val = apply(gdic.wxBitmap_SetDepth,(self,) + _args, _kwargs)
         return val
+    def GetSubBitmap(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_GetSubBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
+        return val
     def __repr__(self):
         return "<C wxBitmap instance at %s>" % (self.this,)
 class wxBitmap(wxBitmapPtr):

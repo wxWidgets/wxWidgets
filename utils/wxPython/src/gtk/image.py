@@ -162,6 +162,7 @@ class wxImagePtr :
         return val
     def Rescale(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_Rescale,(self,) + _args, _kwargs)
+        if val: val = wxImagePtr(val) 
         return val
     def SetRGB(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_SetRGB,(self,) + _args, _kwargs)
@@ -223,6 +224,16 @@ class wxImagePtr :
         return val
     def HasMask(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_HasMask,(self,) + _args, _kwargs)
+        return val
+    def Rotate(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_Rotate,(self,) + _args, _kwargs)
+        if val: val = wxImagePtr(val) ; val.thisown = 1
+        return val
+    def Replace(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_Replace,(self,) + _args, _kwargs)
+        return val
+    def CountColours(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_CountColours,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxImage instance at %s>" % (self.this,)

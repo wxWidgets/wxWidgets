@@ -29,6 +29,18 @@ class wxSizerItemPtr :
     def SetDimension(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizerItem_SetDimension,(self,) + _args, _kwargs)
         return val
+    def SetRatioWH(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizerItem_SetRatioWH,(self,) + _args, _kwargs)
+        return val
+    def SetRatioSize(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizerItem_SetRatioSize,(self,) + _args, _kwargs)
+        return val
+    def SetRatio(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizerItem_SetRatio,(self,) + _args, _kwargs)
+        return val
+    def GetRatio(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizerItem_GetRatio,(self,) + _args, _kwargs)
+        return val
     def IsWindow(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizerItem_IsWindow,(self,) + _args, _kwargs)
         return val
@@ -205,6 +217,13 @@ class wxBoxSizerPtr(wxSizerPtr):
     def GetOrientation(self, *_args, **_kwargs):
         val = apply(sizersc.wxBoxSizer_GetOrientation,(self,) + _args, _kwargs)
         return val
+    def RecalcSizes(self, *_args, **_kwargs):
+        val = apply(sizersc.wxBoxSizer_RecalcSizes,(self,) + _args, _kwargs)
+        return val
+    def CalcMin(self, *_args, **_kwargs):
+        val = apply(sizersc.wxBoxSizer_CalcMin,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
     def __repr__(self):
         return "<C wxBoxSizer instance at %s>" % (self.this,)
 class wxBoxSizer(wxBoxSizerPtr):
@@ -223,11 +242,43 @@ class wxStaticBoxSizerPtr(wxBoxSizerPtr):
         val = apply(sizersc.wxStaticBoxSizer_GetStaticBox,(self,) + _args, _kwargs)
         if val: val = wxStaticBoxPtr(val) 
         return val
+    def RecalcSizes(self, *_args, **_kwargs):
+        val = apply(sizersc.wxStaticBoxSizer_RecalcSizes,(self,) + _args, _kwargs)
+        return val
+    def CalcMin(self, *_args, **_kwargs):
+        val = apply(sizersc.wxStaticBoxSizer_CalcMin,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
     def __repr__(self):
         return "<C wxStaticBoxSizer instance at %s>" % (self.this,)
 class wxStaticBoxSizer(wxStaticBoxSizerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(sizersc.new_wxStaticBoxSizer,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxNotebookSizerPtr(wxSizerPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def RecalcSizes(self, *_args, **_kwargs):
+        val = apply(sizersc.wxNotebookSizer_RecalcSizes,(self,) + _args, _kwargs)
+        return val
+    def CalcMin(self, *_args, **_kwargs):
+        val = apply(sizersc.wxNotebookSizer_CalcMin,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def GetNotebook(self, *_args, **_kwargs):
+        val = apply(sizersc.wxNotebookSizer_GetNotebook,(self,) + _args, _kwargs)
+        if val: val = wxNotebookPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxNotebookSizer instance at %s>" % (self.this,)
+class wxNotebookSizer(wxNotebookSizerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(sizersc.new_wxNotebookSizer,_args,_kwargs)
         self.thisown = 1
 
 

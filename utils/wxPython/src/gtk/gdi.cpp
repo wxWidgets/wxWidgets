@@ -1479,6 +1479,43 @@ static PyObject *_wrap_wxBitmap_SetDepth(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+#define wxBitmap_GetSubBitmap(_swigobj,_swigarg0)  (_swigobj->GetSubBitmap(_swigarg0))
+static PyObject *_wrap_wxBitmap_GetSubBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxBitmap * _arg0;
+    wxRect * _arg1;
+    PyObject * _argo0 = 0;
+    wxRect  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","rect", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxBitmap_GetSubBitmap",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmap_GetSubBitmap. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxRect_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxBitmap (wxBitmap_GetSubBitmap(_arg0,*_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 #define new_wxMask(_swigarg0) (new wxMask(_swigarg0))
 static PyObject *_wrap_new_wxMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7215,6 +7252,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "delete_wxIcon", (PyCFunction) _wrap_delete_wxIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxIcon", (PyCFunction) _wrap_new_wxIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMask", (PyCFunction) _wrap_new_wxMask, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_GetSubBitmap", (PyCFunction) _wrap_wxBitmap_GetSubBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmap_SetDepth", (PyCFunction) _wrap_wxBitmap_SetDepth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmap_SetHeight", (PyCFunction) _wrap_wxBitmap_SetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmap_SetWidth", (PyCFunction) _wrap_wxBitmap_SetWidth, METH_VARARGS | METH_KEYWORDS },

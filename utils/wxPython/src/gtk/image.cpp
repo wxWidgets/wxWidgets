@@ -990,11 +990,13 @@ static PyObject *_wrap_wxImage_Scale(PyObject *self, PyObject *args, PyObject *k
 #define wxImage_Rescale(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Rescale(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxImage_Rescale(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    wxImage * _result;
     wxImage * _arg0;
     int  _arg1;
     int  _arg2;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self","width","height", NULL };
+    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxImage_Rescale",_kwnames,&_argo0,&_arg1,&_arg2)) 
@@ -1008,11 +1010,17 @@ static PyObject *_wrap_wxImage_Rescale(PyObject *self, PyObject *args, PyObject 
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxImage_Rescale(_arg0,_arg1,_arg2);
+        wxImage & _result_ref = wxImage_Rescale(_arg0,_arg1,_arg2);
+    _result = (wxImage *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxImage_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
     return _resultobj;
 }
 
@@ -1686,7 +1694,121 @@ static PyObject *_wrap_wxImage_HasMask(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
+#define wxImage_Rotate(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->Rotate(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxImage_Rotate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxImage * _result;
+    wxImage * _arg0;
+    double  _arg1;
+    wxPoint * _arg2;
+    bool  _arg3 = (bool ) TRUE;
+    wxPoint * _arg4 = (wxPoint *) NULL;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    int tempbool3 = (int) TRUE;
+    wxPoint  temp0;
+    PyObject * _obj4 = 0;
+    char *_kwnames[] = { "self","angle","centre_of_rotation","interpolating","offset_after_rotation", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OdO|iO:wxImage_Rotate",_kwnames,&_argo0,&_arg1,&_obj2,&tempbool3,&_obj4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_Rotate. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    _arg3 = (bool ) tempbool3;
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxPoint_helper(_obj4, &_arg4))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxImage (wxImage_Rotate(_arg0,_arg1,*_arg2,_arg3,_arg4));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxImage_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxImage_Replace(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->Replace(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_wxImage_Replace(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxImage * _arg0;
+    unsigned char  _arg1;
+    unsigned char  _arg2;
+    unsigned char  _arg3;
+    unsigned char  _arg4;
+    unsigned char  _arg5;
+    unsigned char  _arg6;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","r1","g1","b1","r2","g2","b2", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Obbbbbb:wxImage_Replace",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_Replace. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxImage_Replace(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxImage_CountColours(_swigobj,_swigarg0)  (_swigobj->CountColours(_swigarg0))
+static PyObject *_wrap_wxImage_CountColours(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    unsigned long  _result;
+    wxImage * _arg0;
+    unsigned long  _arg1 = (unsigned long ) (unsigned long)-1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","stopafter", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|l:wxImage_CountColours",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_CountColours. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (unsigned long )wxImage_CountColours(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
 static PyMethodDef imagecMethods[] = {
+	 { "wxImage_CountColours", (PyCFunction) _wrap_wxImage_CountColours, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_Replace", (PyCFunction) _wrap_wxImage_Replace, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_Rotate", (PyCFunction) _wrap_wxImage_Rotate, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_HasMask", (PyCFunction) _wrap_wxImage_HasMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_SetMask", (PyCFunction) _wrap_wxImage_SetMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetMaskBlue", (PyCFunction) _wrap_wxImage_GetMaskBlue, METH_VARARGS | METH_KEYWORDS },
