@@ -45,6 +45,7 @@ wxDialogXmlHandler::wxDialogXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxNO_3D);
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
     XRC_ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
+    XRC_ADD_STYLE(wxDIALOG_EX_METAL);
     XRC_ADD_STYLE(wxMAXIMIZE_BOX);
     XRC_ADD_STYLE(wxMINIMIZE_BOX);
 
