@@ -17,8 +17,8 @@ fi
 
 DEST=wxPython-$1/docs
 
-mkdir -p _distrib_bld/$DEST
-cd _distrib_bld
+mkdir -p _build_docs/$DEST
+cd _build_docs
 mkdir $DEST/wx
 mkdir $DEST/ogl
 
@@ -36,18 +36,18 @@ cp $DEST/ogl/ogl.htm $DEST/ogl/index.htm
 
 
 # **** zip the docs into "books"
-cd $DEST
-cd wx
+pushd $DEST
+pushd wx
 zip ../wx.zip *
-cd ..
+popd
 rm -r wx
 
-cd ogl
+pushd ogl
 zip ../ogl.zip *
-cd ..
+popd
 rm -r ogl
 
-cd ..
+popd
 cp ../distrib/viewdocs.py $DEST
 cp ../distrib/README.viewdocs.txt $DEST/README.txt
 
@@ -58,6 +58,6 @@ gzip -9 ../dist/wxPythonDocs-$1.tar
 
 # **** Cleanup
 cd ..
-rm -r _distrib_bld
+rm -r _build_docs
 
 
