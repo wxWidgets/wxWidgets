@@ -11,6 +11,8 @@
 
 # updated mcf
 
+WXWIN=../../..
+
 top_srcdir = ../../..
 top_builddir = ../../..
 
@@ -18,11 +20,11 @@ VPATH= $(top_srcdir)/utils/wxMMedia2/lib
 
 LIBTARGET=libwxmmedia2
 
-OBJECTS=sndbase.o sndcodec.o sndpcm.o sndcpcm.o sndulaw.o sndfile.o sndoss.o\
-	sndaiff.o sndwav.o \
+OBJECTS=sndbase.o sndcodec.o sndpcm.o sndcpcm.o sndulaw.o sndfile.o \
+        sndaiff.o sndwav.o sndwin.o \
 	g711.o g721.o g723_24.o g723_40.o g72x.o \
-	cdbase.o cdunix.o \
-	vidbase.o vidxanm.o
+        sndg72x.o cdbase.o  \
+        vidbase.o
 
 # include $(top_builddir)/src/makelib.env
 include $(top_builddir)/src/makelib.g95
