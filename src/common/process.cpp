@@ -142,10 +142,10 @@ bool wxProcess::IsErrorAvailable() const
 // ----------------------------------------------------------------------------
 
 /* static */
-wxKillError wxProcess::Kill(int pid, wxSignal sig)
+wxKillError wxProcess::Kill(int pid, wxSignal sig, int flags)
 {
     wxKillError rc;
-    (void)wxKill(pid, sig, &rc);
+    (void)wxKill(pid, sig, &rc, flags);
 
     return rc;
 }

@@ -156,7 +156,7 @@ WXDLLIMPEXP_BASE wxString wxDecToHex(int dec);
 // Process management
 // ----------------------------------------------------------------------------
 
-// NB: for backwars compatibility reasons the values of wxEXEC_[A]SYNC *must*
+// NB: for backwards compatibility reasons the values of wxEXEC_[A]SYNC *must*
 //     be 0 and 1, don't change!
 
 enum
@@ -171,8 +171,8 @@ enum
     // is done by default)
     wxEXEC_NOHIDE   = 2,
 
-    // under Unix, if the process is the group leader then killing -pid kills
-    // all children as well as pid
+    // under Unix, if the process is the group leader then passing wxKILL_CHILDREN to wxKill
+    // kills all children as well as pid
     wxEXEC_MAKE_GROUP_LEADER = 4
 };
 
@@ -228,6 +228,12 @@ enum wxKillError
     wxKILL_ERROR            // another, unspecified error
 };
 
+enum wxKillFlags
+{
+    wxKILL_NOCHILDREN = 0,  // don't kill children
+    wxKILL_CHILDREN = 1     // kill children
+};
+
 enum wxShutdownFlags
 {
     wxSHUTDOWN_POWEROFF,    // power off the computer
@@ -243,7 +249,8 @@ WXDLLIMPEXP_BASE bool wxShutdown(wxShutdownFlags wFlags);
 // return detailed error in rc if not NULL
 WXDLLIMPEXP_BASE int wxKill(long pid,
                        wxSignal sig = wxSIGTERM,
-                       wxKillError *rc = NULL);
+                       wxKillError *rc = NULL,
+                       int flags = wxKILL_NOCHILDREN);
 
 // Execute a command in an interactive shell window (always synchronously)
 // If no command then just the shell

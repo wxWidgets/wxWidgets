@@ -200,9 +200,9 @@ void wxMilliSleep(unsigned long milliseconds)
 // process management
 // ----------------------------------------------------------------------------
 
-int wxKill(long pid, wxSignal sig, wxKillError *rc)
+int wxKill(long pid, wxSignal sig, wxKillError *rc, int flags)
 {
-    int err = kill((pid_t)pid, (int)sig);
+    int err = kill((pid_t) (flags & wxKILL_CHILDREN) ? -pid : pid, (int)sig);
     if ( !err )
        *rc = wxKILL_OK;
     else

@@ -126,8 +126,7 @@ bool wxSetEnv(const wxString& var, const wxChar *value)
 // process management
 // ----------------------------------------------------------------------------
 
-// structure used to pass parameters from wxKill() to wxEnumFindByPidProc()
-int wxKill(long pid, wxSignal sig, wxKillError *krc)
+int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
 {
     return 0;
 }

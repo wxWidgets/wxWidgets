@@ -301,7 +301,7 @@ bool wxGetUserName(wxChar *buf, int maxSize)
   return TRUE;
 }
 
-int wxKill(long pid, wxSignal sig , wxKillError *rc )
+int wxKill(long pid, wxSignal sig , wxKillError *rc, int flags)
 {
     // TODO
     return 0;

@@ -155,7 +155,7 @@ Returns {\tt true} if the child process standard output stream is opened.
 
 \membersection{wxProcess::Kill}\label{wxprocesskill}
 
-\func{static wxKillError}{Kill}{\param{int}{ pid}, \param{wxSignal}{ signal = wxSIGNONE}}
+\func{static wxKillError}{Kill}{\param{int}{ pid}, \param{wxSignal}{ signal = wxSIGNONE}, \param{int }{flags = wxKILL\_NOCHILDREN}}
 
 Send the specified signal to the given process. Possible signal values are:
 
@@ -184,6 +184,11 @@ enum wxSignal
 {\tt wxSIGNONE}, {\tt wxSIGKILL} and {\tt wxSIGTERM} have the same meaning
 under both Unix and Windows but all the other signals are equivalent to
 {\tt wxSIGTERM} under Windows.
+
+The {\it flags} parameter can be wxKILL\_NOCHILDREN (the default),
+or wxKILL\_CHILDREN, in which case the child processes of this
+process will be killed too. Note that under Unix, for wxKILL\_CHILDREN
+to work you should have created the process passing wxEXEC\_MAKE_GROUP\_LEADER.
 
 Returns the element of {\tt wxKillError} enum:
 

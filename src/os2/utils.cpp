@@ -132,6 +132,7 @@ int wxKill(
   long                              lPid
 , wxSignal                          eSig
 , wxKillError*                      peError
+, int                               flags
 )
 {
     return((int)::DosKillProcess(0, (PID)lPid));

@@ -577,9 +577,9 @@ happening, i.e. with this flag the child process window will be shown normally.
 
 Under Unix the flag {\tt wxEXEC\_MAKE\_GROUP\_LEADER} may be used to ensure
 that the new process is a group leader (this will create a new session if
-needed). Calling \helpref{wxKill}{wxkill} with the argument of -pid where pid
-is the process ID of the new process will kill this process as well as all of
-its children (except those which have started their own session).
+needed). Calling \helpref{wxKill}{wxkill} passing wxKILL\_CHILDREN will
+will kill this process as well as all of its children (except those which have
+started their own session).
 
 Finally, you may use the third overloaded version of this function to execute
 a process (always synchronously) and capture its output in the array
@@ -629,7 +629,7 @@ application. See \helpref{wxCloseEvent}{wxcloseevent} and \helpref{wxApp}{wxapp}
 
 \membersection{::wxKill}\label{wxkill}
 
-\func{int}{wxKill}{\param{long}{ pid}, \param{int}{ sig = wxSIGTERM}, \param{wxKillError }{*rc = NULL}}
+\func{int}{wxKill}{\param{long}{ pid}, \param{int}{ sig = wxSIGTERM}, \param{wxKillError }{*rc = NULL}, \param{int }{flags = 0}}
 
 Equivalent to the Unix kill function: send the given signal {\it sig} to the
 process with PID {\it pid}. The valid signal values are
@@ -673,6 +673,12 @@ enum wxKillError
     wxKILL_ERROR            // another, unspecified error
 };
 \end{verbatim}
+
+The {\it flags} parameter can be wxKILL\_NOCHILDREN (the default),
+or wxKILL\_CHILDREN, in which case the child processes of this
+process will be killed too. Note that under Unix, for wxKILL\_CHILDREN
+to work you should have created the process by passing wxEXEC\_MAKE_GROUP\_LEADER
+to wxExecute.
 
 \wxheading{See also}
 

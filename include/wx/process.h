@@ -43,7 +43,7 @@ class WXDLLIMPEXP_BASE wxProcess : public wxEvtHandler
 {
 public:
     // kill the process with the given PID
-    static wxKillError Kill(int pid, wxSignal sig = wxSIGTERM);
+    static wxKillError Kill(int pid, wxSignal sig = wxSIGTERM, int flags = wxKILL_NOCHILDREN);
 
     // test if the given process exists
     static bool Exists(int pid);

@@ -23,6 +23,7 @@ All:
 - use wxStream::GetLength() instead of deprecated GetSize()
 - wxGetOsDescription() is now more precise (Olly Betts)
 - XRC supports system fonts and colours (Ray Gilbert)
+- Added flags argument to wxKill/wxProcess::Kill to kill child processes.
 
 All (GUI):
 
