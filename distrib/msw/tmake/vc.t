@@ -167,7 +167,7 @@ HTMLOBJS = #$ ExpandList("WXHTMLOBJS");
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 ARCHINCDIR=$(WXDIR)\lib\msw$(INCEXT)
-SETUP_H=$(ARCHINCDIR)\wx\setup.h 
+SETUP_H=$(ARCHINCDIR)\wx\setup.h
 
 # Normal, static library
 all:    dirs $(SETUP_H) $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib jpeg tiff regex $(LIBTARGET)
@@ -179,7 +179,7 @@ $(ARCHINCDIR)\wx:
 $(SETUP_H):
     copy $(WXDIR)\include\wx\msw\setup.h $@
 
-dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D $(JPEGDIR)\$D $(TIFFDIR)\$D $(REGEXDIR)\$D $(ARCHINCDIR)\wx
+dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D $(JPEGDIR)\$D $(TIFFDIR)\$D $(REGEXDIR)\$D $(ARCHINCDIR)\wx $(WXDIR)\$D
 
 $D:
     mkdir $D
@@ -207,6 +207,10 @@ $(TIFFDIR)\$D:
 
 $(REGEXDIR)\$D:
     mkdir $(REGEXDIR)\$D
+
+$(WXDIR)\$D:
+    mkdir $(WXDIR)\$D
+
 
 # wxWindows library as DLL
 dll:
