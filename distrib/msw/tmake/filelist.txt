@@ -1494,6 +1494,7 @@ scrolwin.h	GenericH
 spinctlg.h	GenericH
 splash.h	GenericH
 splitter.h	GenericH
+statline.h	GenericH	NotMSW,NotMac,NotMGL,NotMicro,NotGTK,NotX11,NotOS2,NotUniv
 statusbr.h	GenericH
 tabg.h	GenericH	NotWin32
 textdlgg.h	GenericH
