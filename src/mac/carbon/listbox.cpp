@@ -71,7 +71,7 @@ static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrow
     long ref = GetControlReference( browser ) ;
     if ( ref )
     {
-        wxListBox* list = wxDynamicCast( ref , wxListBox ) ;
+        wxListBox* list = wxDynamicCast( (wxObject*) ref , wxListBox ) ;
         for ( size_t i = 0 ; i < list->m_idArray.GetCount() ; ++i )
             if ( list->m_idArray[i] == (long) itemID )
             {
@@ -128,7 +128,7 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
     		    long ref = GetControlReference( browser ) ;
     		    if ( ref )
     		    {
-    		        wxListBox* list = wxDynamicCast( ref , wxListBox ) ;
+    		        wxListBox* list = wxDynamicCast( (wxObject*) ref , wxListBox ) ;
     		        for ( size_t i = 0 ; i < list->m_idArray.GetCount() ; ++i )
     		            if ( list->m_idArray[i] == (long) itemID )
     		            {
