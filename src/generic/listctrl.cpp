@@ -981,11 +981,7 @@ wxListTextCtrl::wxListTextCtrl( wxWindow *parent, const wxWindowID id,
     bool *accept, wxString *res, wxListMainWindow *owner,
     const wxString &value, const wxPoint &pos, const wxSize &size,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-    int style, const wxValidator* validator, const wxString &name ) :
-#  else
     int style, const wxValidator& validator, const wxString &name ) :
-#  endif
 #endif
   wxTextCtrl( parent, id, value, pos, size, style, validator, name )
 {
@@ -2576,11 +2572,7 @@ wxListCtrl::~wxListCtrl()
 bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-      long style, const wxValidator *validator,
-#  else
       long style, const wxValidator &validator,
-#  endif
 #endif
       const wxString &name )
 {

@@ -182,11 +182,7 @@ class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
                     const wxString &value = wxEmptyString,
                     const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-                    int style = 0, const wxValidator* validator = wxDefaultValidator,
-#  else
                     int style = 0, const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
                     const wxString &name = wxTextCtrlNameStr );
     void OnChar( wxKeyEvent &event );
@@ -211,11 +207,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-               const wxValidator *validator = wxDefaultValidator,
-#  else
                const wxValidator &validator = wxDefaultValidator,
-#  endif
 #endif
                const wxString& name = wxTreeCtrlNameStr)
     {
@@ -229,11 +221,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-                const wxValidator *validator = wxDefaultValidator,
-#  else
                 const wxValidator &validator = wxDefaultValidator,
-#  endif
 #endif
                 const wxString& name = wxTreeCtrlNameStr);
 

@@ -47,11 +47,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size, long style,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator,
-#  else
            const wxValidator& validator,
-#  endif
 #endif
            const wxString& name)
 {
@@ -159,11 +155,7 @@ bool wxBitmapRadioButton::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size, long style,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator,
-#  else
            const wxValidator& validator,
-#  endif
 #endif
            const wxString& name)
 {

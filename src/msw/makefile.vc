@@ -350,22 +350,22 @@ test:   $(MSWDIR)\$D\wave.obj
 test2:  ..\common\Debug\config.obj
 
 $D:
-    mkdir $D
+    md $D
 
 $(COMMDIR)\$D:
-    mkdir $(COMMDIR)\$D
+    md $(COMMDIR)\$D
 
 $(MSWDIR)\$D:
-    mkdir $(MSWDIR)\$D
+    md $(MSWDIR)\$D
 
 $(GENDIR)\$D:
-    mkdir $(GENDIR)\$D
+    md $(GENDIR)\$D
 
 $(OLEDIR)\$D:
-    mkdir $(OLEDIR)\$D
+    md $(OLEDIR)\$D
 
 $(HTMLDIR)\$D:
-    mkdir $(HTMLDIR)\$D
+    md $(HTMLDIR)\$D
 
 # wxWindows library as DLL
 dll:
@@ -727,7 +727,7 @@ $(DOCDIR)/pdf/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
 
 $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex
         cd $(DOCDIR)\latex\wx
-        -mkdir $(DOCDIR)\html\wx
+        -md $(DOCDIR)\html\wx
         -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
         -erase $(DOCDIR)\html\wx\*.con
         -erase $(DOCDIR)\html\wx\*.ref
@@ -743,7 +743,7 @@ $(DOCDIR)\html\wx\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\html\wx\wx.hhp
 
 $(DOCDIR)\html\porting\port.htm:         $(DOCDIR)\latex\porting\porting.tex
         cd $(DOCDIR)\latex\porting
-        -mkdir $(DOCDIR)\html\porting
+        -md $(DOCDIR)\html\porting
         -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\porting\porting.tex $(DOCDIR)\html\porting\port.htm -twice -html
         -erase $(DOCDIR)\html\porting\*.con
         -erase $(DOCDIR)\html\porting\*.ref
@@ -753,7 +753,7 @@ $(DOCDIR)\html\porting\port.htm:         $(DOCDIR)\latex\porting\porting.tex
 
 $(DOCDIR)\html\proplist\prop.htm:         $(DOCDIR)\latex\proplist\prop.tex $(DOCDIR)\latex\proplist\body.tex $(DOCDIR)\latex\proplist\classes.tex $(DOCDIR)\latex\proplist\changes.tex
         cd $(DOCDIR)\latex\proplist
-        -mkdir $(DOCDIR)\html\proplist
+        -md $(DOCDIR)\html\proplist
         -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\proplist\prop.tex $(DOCDIR)\html\proplist\prop.htm -twice -html
         -erase $(DOCDIR)\html\proplist\*.con
         -erase $(DOCDIR)\html\proplist\*.ref

@@ -12,10 +12,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/setup.h"
     #include "wx/frame.h"
@@ -28,61 +24,83 @@
 #endif // WX_PRECOMP
 
 #include "wx/os2/private.h"
-#include "wx/statusbr.h"
-#include "wx/toolbar.h"
+
+#if wxUSE_STATUSBAR
+    #include "wx/statusbr.h"
+#endif // wxUSE_STATUSBAR
+
+#if wxUSE_TOOLBAR
+    #include "wx/toolbar.h"
+#endif // wxUSE_TOOLBAR
+
 #include "wx/menuitem.h"
 #include "wx/log.h"
+
+// ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
 
 extern wxWindowList wxModelessWindows;
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern wxChar wxFrameClassName[];
 extern wxMenu *wxCurrentPopupMenu;
 
+// ----------------------------------------------------------------------------
+// event tables
+// ----------------------------------------------------------------------------
+
 #if !USE_SHARED_LIBRARY
-BEGIN_EVENT_TABLE(wxFrame, wxWindow)
-  EVT_SIZE(wxFrame::OnSize)
-  EVT_ACTIVATE(wxFrame::OnActivate)
-  EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
-  EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
-  EVT_IDLE(wxFrame::OnIdle)
-  EVT_CLOSE(wxFrame::OnCloseWindow)
+BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
+    EVT_ACTIVATE(wxFrame::OnActivate)
+    EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 #endif
 
-bool wxFrame::m_useNativeStatusBar = FALSE;
+// ============================================================================
+// implementation
+// ============================================================================
 
-wxFrame::wxFrame()
+// ----------------------------------------------------------------------------
+// static class members
+// ----------------------------------------------------------------------------
+
+#if wxUSE_NATIVE_STATUSBAR
+    bool wxFrame::m_useNativeStatusBar = TRUE;
+#else
+    bool wxFrame::m_useNativeStatusBar = FALSE;
+#endif
+
+// ----------------------------------------------------------------------------
+// creation/destruction
+// ----------------------------------------------------------------------------
+
+void wxFrame::Init()
 {
-  m_frameToolBar = NULL ;
-  m_frameMenuBar = NULL;
-  m_frameStatusBar = NULL;
+    m_iconized = FALSE;
 
-  m_iconized = FALSE;
-}
-
-bool wxFrame::Create(wxWindow *parent,
-           wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
-{
 #if wxUSE_TOOLTIPS
     m_hwndToolTip = 0;
 #endif
+}
 
+bool wxFrame::Create(wxWindow *parent,
+                     wxWindowID id,
+                     const wxString& title,
+                     const wxPoint& pos,
+                     const wxSize& size,
+                     long style,
+                     const wxString& name)
+{
   SetName(name);
   m_windowStyle = style;
   m_frameMenuBar = NULL;
-  m_frameToolBar = NULL ;
+  m_frameToolBar = NULL;
   m_frameStatusBar = NULL;
 
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
 
-//  m_icon = NULL;
   if ( id > -1 )
     m_windowId = id;
   else
@@ -119,13 +137,9 @@ wxFrame::~wxFrame()
   m_isBeingDeleted = TRUE;
   wxTopLevelWindows.DeleteObject(this);
 
-  if (m_frameStatusBar)
-    delete m_frameStatusBar;
-  if (m_frameMenuBar)
-    delete m_frameMenuBar;
-
-/* New behaviour March 1998: check if it's the last top-level window */
-//  if (wxTheApp && (this == wxTheApp->GetTopWindow()))
+// TODO:
+/*
+  DeleteAllBars();
 
   if (wxTheApp && (wxTopLevelWindows.Number() == 0))
   {
@@ -133,7 +147,7 @@ wxFrame::~wxFrame()
 
     if (wxTheApp->GetExitOnFrameDelete())
     {
-//       PostQuitMessage(0);
+       PostQuitMessage(0);
     }
   }
 
@@ -144,9 +158,6 @@ wxFrame::~wxFrame()
   // Try to bring the parent to the top.
   // MT:Only do this if this frame is currently the active window, else weird
   // things start to happen
-
-// TODO:
-/*
   if ( wxGetActiveWindow() == this )
   if (GetParent() && GetParent()->GetHWND())
     ::BringWindowToTop((HWND) GetParent()->GetHWND());
@@ -161,12 +172,14 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
   RECT rect;
   ::GetClientRect(GetHwnd(), &rect);
 
+#if wxUSE_STATUSBAR
   if ( GetStatusBar() )
   {
     int statusX, statusY;
     GetStatusBar()->GetClientSize(&statusX, &statusY);
     rect.bottom -= statusY;
   }
+#endif // wxUSE_STATUSBAR
 
   wxPoint pt(GetClientAreaOrigin());
   rect.bottom -= pt.y;
@@ -199,12 +212,14 @@ void wxFrame::DoSetClientSize(int width, int height)
   int actual_width = rect2.right - rect2.left - rect.right + width;
   int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
 
+#if wxUSE_STATUSBAR
   if ( GetStatusBar() )
   {
     int statusX, statusY;
     GetStatusBar()->GetClientSize(&statusX, &statusY);
     actual_height += statusY;
   }
+#endif // wxUSE_STATUSBAR
 
   wxPoint pt(GetClientAreaOrigin());
   actual_width += pt.y;
@@ -248,73 +263,61 @@ void wxFrame::DoGetPosition(int *x, int *y) const
 */
 }
 
+// ----------------------------------------------------------------------------
+// variations around ::ShowWindow()
+// ----------------------------------------------------------------------------
+
+void wxFrame::DoShowWindow(int nShowCmd)
+{
+// TODO:
+/*
+    ::ShowWindow(GetHwnd(), nShowCmd);
+
+    m_iconized = nShowCmd == SW_MINIMIZE;
+*/
+}
+
 bool wxFrame::Show(bool show)
 {
 // TODO:
 /*
-  int cshow;
-  if (show)
-    cshow = SW_SHOW;
-  else
-    cshow = SW_HIDE;
+    DoShowWindow(show ? SW_SHOW : SW_HIDE);
 
-  if (!show)
-  {
-    // Try to highlight the correct window (the parent)
-    HWND hWndParent = 0;
-    if (GetParent())
+    if ( show )
     {
-      hWndParent = (HWND) GetParent()->GetHWND();
-      if (hWndParent)
-        ::BringWindowToTop(hWndParent);
+        ::BringWindowToTop(GetHwnd());
+
+        wxActivateEvent event(wxEVT_ACTIVATE, TRUE, m_windowId);
+        event.SetEventObject( this );
+        GetEventHandler()->ProcessEvent(event);
     }
-  }
-
-  ShowWindow(GetHwnd(), (BOOL)cshow);
-  if (show)
-  {
-    BringWindowToTop(GetHwnd());
-
-    wxActivateEvent event(wxEVT_ACTIVATE, TRUE, m_windowId);
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(event);
-  }
-  return TRUE;
+    else
+    {
+        // Try to highlight the correct window (the parent)
+        if ( GetParent() )
+        {
+            HWND hWndParent = GetHwndOf(GetParent());
+            if (hWndParent)
+                ::BringWindowToTop(hWndParent);
+        }
+    }
 */
-  return FALSE;
+    return TRUE;
 }
 
 void wxFrame::Iconize(bool iconize)
 {
-// TODO:
-/*
-  if (!iconize)
-    Show(TRUE);
-
-  int cshow;
-  if (iconize)
-    cshow = SW_MINIMIZE;
-  else
-    cshow = SW_RESTORE;
-  ShowWindow(GetHwnd(), (BOOL)cshow);
-  m_iconized = iconize;
-*/
+//    DoShowWindow(iconize ? SW_MINIMIZE : SW_RESTORE);
 }
 
-// Equivalent to maximize/restore in Windows
 void wxFrame::Maximize(bool maximize)
 {
-// TODO:
-/*
-  Show(TRUE);
-  int cshow;
-  if (maximize)
-    cshow = SW_MAXIMIZE;
-  else
-    cshow = SW_RESTORE;
-  ShowWindow(GetHwnd(), cshow);
-  m_iconized = FALSE;
-*/
+//    DoShowWindow(maximize ? SW_MAXIMIZE : SW_RESTORE);
+}
+
+void wxFrame::Restore()
+{
+//    DoShowWindow(SW_RESTORE);
 }
 
 bool wxFrame::IsIconized() const
@@ -324,99 +327,63 @@ bool wxFrame::IsIconized() const
   ((wxFrame *)this)->m_iconized = (::IsIconic(GetHwnd()) != 0);
   return m_iconized;
 */
-  return FALSE;
+    return FALSE;
 }
 
 // Is it maximized?
 bool wxFrame::IsMaximized() const
 {
-//    return (::IsZoomed(GetHwnd()) != 0) ;
-  return FALSE;
+// TODO:
+/*
+    return (::IsZoomed(GetHwnd()) != 0);
+*/
+    return FALSE;
 }
 
 void wxFrame::SetIcon(const wxIcon& icon)
 {
+    wxFrameBase::SetIcon(icon);
+
 // TODO:
 /*
-  m_icon = icon;
-  if ( m_icon.Ok() )
-    SendMessage(GetHwnd(), WM_SETICON,
-                (WPARAM)TRUE, (LPARAM)(HICON) m_icon.GetHICON());
+    if ( m_icon.Ok() )
+    {
+        SendMessage(GetHwnd(), WM_SETICON,
+                    (WPARAM)TRUE, (LPARAM)(HICON) m_icon.GetHICON());
+    }
 */
 }
 
 #if wxUSE_STATUSBAR
-wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
-    const wxString& name)
+wxStatusBar *wxFrame::OnCreateStatusBar(int number,
+                                        long style,
+                                        wxWindowID id,
+                                        const wxString& name)
 {
     wxStatusBar *statusBar = NULL;
-    {
-        statusBar = new wxStatusBar(this, id, wxPoint(0, 0), wxSize(100, 20),
-            style, name);
 
-        // Set the height according to the font and the border size
-        wxClientDC dc(statusBar);
-        dc.SetFont(statusBar->GetFont());
+    statusBar = wxFrameBase::OnCreateStatusBar(number, style, id, name);
 
-        long x, y;
-        dc.GetTextExtent("X", &x, &y);
-
-        int height = (int)( (y  * 1.1) + 2* statusBar->GetBorderY());
-
-        statusBar->SetSize(-1, -1, 100, height);
-    }
-
-  statusBar->SetFieldsCount(number);
-  return statusBar;
-}
-
-wxStatusBar* wxFrame::CreateStatusBar(int number, long style, wxWindowID id,
-    const wxString& name)
-{
-  // VZ: calling CreateStatusBar twice is an error - why anyone would do it?
-  wxCHECK_MSG( m_frameStatusBar == NULL, FALSE,
-               wxT("recreating status bar in wxFrame") );
-
-  m_frameStatusBar = OnCreateStatusBar(number, style, id,
-    name);
-  if ( m_frameStatusBar )
-  {
-    PositionStatusBar();
-    return m_frameStatusBar;
-  }
-  else
-    return NULL;
-}
-
-void wxFrame::SetStatusText(const wxString& text, int number)
-{
-  wxCHECK_RET( m_frameStatusBar != NULL, wxT("no statusbar to set text for") );
-
-  m_frameStatusBar->SetStatusText(text, number);
-}
-
-void wxFrame::SetStatusWidths(int n, const int widths_field[])
-{
-  wxCHECK_RET( m_frameStatusBar != NULL, wxT("no statusbar to set widths for") );
-
-  m_frameStatusBar->SetStatusWidths(n, widths_field);
-  PositionStatusBar();
+    return statusBar;
 }
 
 void wxFrame::PositionStatusBar()
 {
-  // native status bar positions itself
-  if (m_frameStatusBar)
-  {
-      int w, h;
-      GetClientSize(&w, &h);
-      int sw, sh;
-      m_frameStatusBar->GetSize(&sw, &sh);
+// TODO:
+/*
+    // native status bar positions itself
+    if ( m_frameStatusBar )
+    {
+        int w, h;
+        GetClientSize(&w, &h);
+        int sw, sh;
+        m_frameStatusBar->GetSize(&sw, &sh);
 
-      // Since we wish the status bar to be directly under the client area,
-      // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
-      m_frameStatusBar->SetSize(0, h, w, sh);
-  }
+        // Since we wish the status bar to be directly under the client area,
+        // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
+        m_frameStatusBar->SetSize(0, h, w, sh);
+    }
+*/
 }
 #endif // wxUSE_STATUSBAR
 
@@ -467,6 +434,8 @@ void wxFrame::InternalSetMenuBar()
 // Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
+// TODO:
+/*
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
     Refresh();
 
@@ -479,6 +448,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 
     // Propagate the event to the non-top-level children
     wxWindow::OnSysColourChanged(event);
+*/
 }
 
 /*
@@ -555,57 +525,8 @@ bool wxFrame::OS2Create(int id, wxWindow *parent, const wxChar *wclass, wxWindow
   // style instead of WS_OVERLAPPED
   if (width > -1 && height > -1)
     ::PostMessage(GetHwnd(), WM_SIZE, SIZE_RESTORED, MAKELPARAM(width, height));
-
-  return TRUE;
 */
-  return FALSE;
-}
-
-// Default resizing behaviour - if only ONE subwindow, resize to client
-// rectangle size
-void wxFrame::OnSize(wxSizeEvent& event)
-{
-    // if we're using constraints - do use them
-#if wxUSE_CONSTRAINTS
-    if ( GetAutoLayout() )
-    {
-        Layout();
-        return;
-    }
-#endif
-
-    // do we have _exactly_ one child?
-    wxWindow *child = NULL;
-    for ( wxWindowList::Node *node = GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        wxWindow *win = node->GetData();
-        if ( !win->IsTopLevel()
-#if wxUSE_STATUSBAR
-                && (win != GetStatusBar())
-#endif // wxUSE_STATUSBAR
-#if wxUSE_TOOLBAR
-                && (win != GetToolBar())
-#endif // wxUSE_TOOLBAR
-           )
-        {
-            if ( child )
-                return;     // it's our second subwindow - nothing to do
-            child = win;
-        }
-    }
-
-    if ( child ) {
-        // we have exactly one child - set it's size to fill the whole frame
-        int clientW, clientH;
-        GetClientSize(&clientW, &clientH);
-
-        int x = 0;
-        int y = 0;
-
-        child->SetSize(x, y, clientW, clientH);
-    }
+  return TRUE;
 }
 
 // Default activation behaviour - set the focus for the first child
@@ -637,67 +558,11 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     }
 }
 
-// The default implementation for the close window event.
-void wxFrame::OnCloseWindow(wxCloseEvent& event)
-{
-    Destroy();
-}
-
-// Destroy the window (delayed, if a managed window)
-bool wxFrame::Destroy()
-{
-  if (!wxPendingDelete.Member(this))
-    wxPendingDelete.Append(this);
-  return TRUE;
-}
-
-// Default menu selection behaviour - display a help string
-void wxFrame::OnMenuHighlight(wxMenuEvent& event)
-{
-  if (GetStatusBar())
-  {
-    wxString help;
-    int menuId = event.GetMenuId();
-    if ( menuId != -1 )
-    {
-      wxMenuBar *menuBar = GetMenuBar();
-      if (menuBar && menuBar->FindItem(menuId))
-      {
-        help = menuBar->GetHelpString(menuId);
-      }
-    }
-
-    // set status text even if the string is empty - this will at
-    // least remove the string from the item which was previously
-    // selected
-    SetStatusText(help);
-  }
-}
-
-wxMenuBar *wxFrame::GetMenuBar() const
-{
-  return m_frameMenuBar;
-}
-
-bool wxFrame::ProcessCommand(int id)
-{
-    wxMenuBar *bar = GetMenuBar() ;
-    if ( !bar )
-        return FALSE;
-
-    wxMenuItem *item = bar->FindItem(id);
-
-    if ( item &&  item->IsCheckable() )
-    {
-        bar->Check(id, !bar->IsChecked(id)) ;
-    }
-
-    wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, id);
-    commandEvent.SetInt( id );
-    commandEvent.SetEventObject( this );
-
-    return GetEventHandler()->ProcessEvent(commandEvent);
-}
+// ----------------------------------------------------------------------------
+// wxFrame size management: we exclude the areas taken by menu/status/toolbars
+// from the client area, so the client area is what's really available for the
+// frame contents
+// ----------------------------------------------------------------------------
 
 // Checks if there is a toolbar, and returns the first free client position
 wxPoint wxFrame::GetClientAreaOrigin() const
@@ -744,28 +609,20 @@ void wxFrame::DoClientToScreen(int *x, int *y) const
     wxWindow::DoClientToScreen(x, y);
 }
 
+// ----------------------------------------------------------------------------
+// tool/status bar stuff
+// ----------------------------------------------------------------------------
+
 #if wxUSE_TOOLBAR
+
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
-    wxCHECK_MSG( m_frameToolBar == NULL, FALSE,
-                 wxT("recreating toolbar in wxFrame") );
-
-    wxToolBar* toolBar = OnCreateToolBar(style, id, name);
-    if (toolBar)
+    if ( wxFrameBase::CreateToolBar(style, id, name) )
     {
-        SetToolBar(toolBar);
         PositionToolBar();
-        return toolBar;
     }
-    else
-    {
-        return NULL;
-    }
-}
 
-wxToolBar* wxFrame::OnCreateToolBar(long style, wxWindowID id, const wxString& name)
-{
-    return new wxToolBar(this, id, wxDefaultPosition, wxDefaultSize, style, name);
+    return m_frameToolBar;
 }
 
 void wxFrame::PositionToolBar()
@@ -775,32 +632,39 @@ void wxFrame::PositionToolBar()
     RECT rect;
     ::GetClientRect(GetHwnd(), &rect);
 
+#if wxUSE_STATUSBAR
     if ( GetStatusBar() )
     {
-      int statusX, statusY;
-      GetStatusBar()->GetClientSize(&statusX, &statusY);
-      rect.bottom -= statusY;
+        int statusX, statusY;
+        GetStatusBar()->GetClientSize(&statusX, &statusY);
+        rect.bottom -= statusY;
     }
+#endif // wxUSE_STATUSBAR
 
-    if (GetToolBar())
+    if ( GetToolBar() )
     {
         int tw, th;
-        GetToolBar()->GetSize(& tw, & th);
+        GetToolBar()->GetSize(&tw, &th);
 
-        if (GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL)
+        if ( GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL )
         {
-            // Use the 'real' MSW position
-            GetToolBar()->SetSize(0, 0, tw, rect.bottom, wxSIZE_NO_ADJUSTMENTS);
+            th = rect.bottom;
         }
         else
         {
-            // Use the 'real' MSW position
-            GetToolBar()->SetSize(0, 0, rect.right, th, wxSIZE_NO_ADJUSTMENTS);
+            tw = rect.right;
         }
+
+        // Use the 'real' MSW position here
+        GetToolBar()->SetSize(0, 0, tw, th, wxSIZE_NO_ADJUSTMENTS);
     }
 */
 }
 #endif // wxUSE_TOOLBAR
+
+// ----------------------------------------------------------------------------
+// frame state (iconized/maximized/...)
+// ----------------------------------------------------------------------------
 
 // propagate our state change to all child frames: this allows us to emulate X
 // Windows behaviour where child frames float independently of the parent one
@@ -820,20 +684,6 @@ void wxFrame::IconizeChildFrames(bool bIconize)
     }
 }
 
-
-// make the window modal (all other windows unresponsive)
-void wxFrame::MakeModal(bool modal)
-{
-    if (modal) {
-        wxEnableTopLevelWindows(FALSE);
-        Enable(TRUE);           // keep this window enabled
-    }
-    else {
-        wxEnableTopLevelWindows(TRUE);
-    }
-}
-
-
 // ===========================================================================
 // message processing
 // ===========================================================================
@@ -844,9 +694,11 @@ void wxFrame::MakeModal(bool modal)
 
 bool wxFrame::OS2TranslateMessage(WXMSG* pMsg)
 {
+// TODO:
+/*
     if ( wxWindow::OS2TranslateMessage(pMsg) )
         return TRUE;
-
+*/
     // try the menu bar accels
     wxMenuBar *menuBar = GetMenuBar();
     if ( !menuBar )
@@ -944,10 +796,20 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
             m_iconized = TRUE;
             break;
     }
-*/
+
     if ( !m_iconized )
     {
         // forward WM_SIZE to status bar control
+#if wxUSE_NATIVE_STATUSBAR
+        if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
+        {
+            wxSizeEvent event(wxSize(x, y), m_frameStatusBar->GetId());
+            event.SetEventObject( m_frameStatusBar );
+
+            ((wxStatusBar95 *)m_frameStatusBar)->OnSize(event);
+        }
+#endif // wxUSE_NATIVE_STATUSBAR
+
         PositionStatusBar();
         PositionToolBar();
 
@@ -955,18 +817,20 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
         event.SetEventObject( this );
         processed = GetEventHandler()->ProcessEvent(event);
     }
-
+*/
     return processed;
 }
 
 bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 {
+// TODO:
+/*
     if ( control )
     {
         // In case it's e.g. a toolbar.
         wxWindow *win = wxFindWinFromHandle(control);
         if ( win )
-            return win->OS2Command(cmd, id);
+            return win->MSWCommand(cmd, id);
     }
 
     // handle here commands from menus and accelerators
@@ -977,7 +841,7 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
             wxMenu *popupMenu = wxCurrentPopupMenu;
             wxCurrentPopupMenu = NULL;
 
-            return popupMenu->OS2Command(cmd, id);
+            return popupMenu->MSWCommand(cmd, id);
         }
 
         if ( ProcessCommand(id) )
@@ -985,7 +849,7 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
             return TRUE;
         }
     }
-
+*/
     return FALSE;
 }
 
@@ -1003,14 +867,13 @@ bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
     {
         item = nItem;
     }
-*/
     else
     {
         // don't give hints for separators (doesn't make sense) nor for the
         // items opening popup menus (they don't have them anyhow)
         return FALSE;
     }
-
+*/
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
     event.SetEventObject( this );
 
@@ -1023,7 +886,7 @@ bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
 
 MRESULT wxFrame::OS2WindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-    MRESULT rc = 0;
+    long rc = 0;
     bool processed = FALSE;
 
 // TODO:
@@ -1074,10 +937,12 @@ MRESULT wxFrame::OS2WindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLPA
             processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);
             break;
     }
-*/
+
     if ( !processed )
-        rc = wxWindow::OS2WindowProc(hwnd, message, wParam, lParam);
+        rc = wxWindow::MSWWindowProc(message, wParam, lParam);
 
     return rc;
+*/
+    return (MRESULT)0;
 }
 

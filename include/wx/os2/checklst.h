@@ -32,11 +32,7 @@ public:
                  const wxString choices[] = NULL,
                  long style = 0,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-                 const wxValidator* validator = wxDefaultValidator,
-#  else
                  const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
                  const wxString& name = wxListBoxNameStr);
 

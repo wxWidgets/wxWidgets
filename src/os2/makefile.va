@@ -353,7 +353,7 @@ COMLIBOBJS2 = \
   utilscmn.obj \
   valgen.obj \
   validate.obj \
-  valtext.obj 
+  valtext.obj
 
 COMLIBOBJS3 = \
   variant.obj \
@@ -518,6 +518,7 @@ OS2LIBOBJS2 = \
   window.obj
 
 HTMLOBJS = \
+  ..\html\$D\helpctrl.obj \
   ..\html\$D\helpdata.obj \
   ..\html\$D\helpfrm.obj \
   ..\html\$D\htmlcell.obj \
@@ -537,6 +538,7 @@ HTMLOBJS = \
   ..\html\$D\winpars.obj
 
 HTMLLIBOBJS = \
+  helpctrl.obj \
   helpdata.obj \
   helpfrm.obj \
   htmlcell.obj \
@@ -701,6 +703,7 @@ $(GENLIBOBJS):
   copy ..\generic\$D\treectrl.obj
 
 $(HTMLLIBOBJS):
+  copy ..\html\$D\helpctrl.obj
   copy ..\html\$D\helpdata.obj
   copy ..\html\$D\helpfrm.obj
   copy ..\html\$D\htmlcell.obj

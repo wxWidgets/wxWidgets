@@ -27,11 +27,7 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxButtonNameStr)
   {
@@ -42,11 +38,7 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxButtonNameStr);
 

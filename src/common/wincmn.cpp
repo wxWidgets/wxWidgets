@@ -159,11 +159,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
                               const wxSize& WXUNUSED(size),
                               long style,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-                              const wxValidator* validator,
-#  else
                               const wxValidator& validator,
-#  endif
 #endif
                               const wxString& name)
 {
@@ -619,18 +615,6 @@ void wxWindowBase::SetCaret(wxCaret *caret)
 // validators
 // ----------------------------------------------------------------------------
 
-#  if defined(__VISAGECPP__)
-void wxWindowBase::SetValidator(const wxValidator* validator)
-{
-    if ( m_windowValidator )
-        delete m_windowValidator;
-
-    m_windowValidator = (wxValidator *)validator->Clone();
-
-    if ( m_windowValidator )
-        m_windowValidator->SetWindow(this) ;
-}
-#  else
 void wxWindowBase::SetValidator(const wxValidator& validator)
 {
     if ( m_windowValidator )
@@ -641,7 +625,6 @@ void wxWindowBase::SetValidator(const wxValidator& validator)
     if ( m_windowValidator )
         m_windowValidator->SetWindow(this) ;
 }
-#  endif // __VISAGECPP__
 #endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------

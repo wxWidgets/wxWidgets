@@ -27,11 +27,7 @@ class WXDLLEXPORT wxRadioButton: public wxControl
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxRadioButtonNameStr)
   {
@@ -43,11 +39,7 @@ class WXDLLEXPORT wxRadioButton: public wxControl
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxRadioButtonNameStr);
 
@@ -76,11 +68,7 @@ class WXDLLEXPORT wxBitmapRadioButton: public wxRadioButton
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxBitmapRadioButtonNameStr)
   {
@@ -92,11 +80,7 @@ class WXDLLEXPORT wxBitmapRadioButton: public wxRadioButton
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxBitmapRadioButtonNameStr);
 

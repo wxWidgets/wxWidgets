@@ -29,6 +29,10 @@
 #define INCL_DOSERRORS
 #define INCL_DOS
 #include <os2.h>
+#define PURE_32
+#include <upm.h>
+#include <netcons.h>
+#include <netbios.h>
 
 #include <ctype.h>
 #include <direct.h>

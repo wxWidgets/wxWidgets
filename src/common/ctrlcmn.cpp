@@ -43,11 +43,7 @@ bool wxControlBase::CreateControl(wxWindowBase *parent,
                                   const wxSize& size,
                                   long style,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-                                  const wxValidator* validator,
-#  else
                                   const wxValidator& validator,
-#  endif
 #endif
                                   const wxString& name)
 {

@@ -197,11 +197,7 @@ wxTreeTextCtrl::wxTreeTextCtrl( wxWindow *parent, const wxWindowID id,
     bool *accept, wxString *res, wxTreeCtrl *owner,
     const wxString &value, const wxPoint &pos, const wxSize &size,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-    int style, const wxValidator* validator, const wxString &name ) :
-#  else
     int style, const wxValidator& validator, const wxString &name ) :
-#  endif
 #endif
   wxTextCtrl( parent, id, value, pos, size, style, validator, name )
 {
@@ -523,7 +519,7 @@ void wxTreeCtrl::Init()
   m_dragCount = 0;
 
   m_renameTimer = new wxTreeRenameTimer( this );
-  
+
   m_normalFont = wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT );
   m_boldFont = wxFont( m_normalFont.GetPointSize(),
                             m_normalFont.GetFamily(),
@@ -536,11 +532,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos, const wxSize& size,
                         long style,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-            const wxValidator *validator,
-#  else
             const wxValidator &validator,
-#  endif
 #endif
             const wxString& name )
 {
@@ -843,7 +835,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parentId,
     }
 
     wxClientDC dc(this);
-    wxGenericTreeItem *item = 
+    wxGenericTreeItem *item =
         new wxGenericTreeItem( parent, text, dc, image, selImage, data );
 
     if ( data != NULL )
@@ -871,7 +863,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
     {
         data->m_pItem = m_anchor;
     }
-  
+
     if (!HasFlag(wxTR_MULTIPLE))
     {
         m_current = m_key_current = m_anchor;
@@ -1602,7 +1594,7 @@ void wxTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     dc.SetFont( m_normalFont );
     dc.SetPen( m_dottedPen );
-    
+
     // this is now done dynamically
     //if(GetImageList() == NULL)
     // m_lineHeight = (int)(dc.GetCharHeight() + 4);

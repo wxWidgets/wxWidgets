@@ -32,14 +32,7 @@
 
 #include "wx/validate.h"
 
-#if defined(__VISAGECPP__)
-// treated as a static global class by VA and thus cannot use in this form.
-// Defined as a pointer and then explicity allocated and deallocated
-// by user if desired
-const wxValidator* wxDefaultValidator = NULL;
-#else
 const wxValidator wxDefaultValidator;
-#endif
 
 #if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxValidator, wxEvtHandler)

@@ -382,7 +382,7 @@ void wxWindow::SetTitle(
   const wxString&                   rTitle
 )
 {
-    ::WinSetWindowText(GetHwnd(), title.c_str());
+    ::WinSetWindowText(GetHwnd(), rTitle.c_str());
 }
 
 wxString wxWindow::GetTitle() const
@@ -392,24 +392,77 @@ wxString wxWindow::GetTitle() const
 
 void wxWindow::CaptureMouse()
 {
-    // TODO:
+    HWND                            hWnd = GetHwnd();
+
+    if (hWnd && !m_bWinCaptured)
+    {
+        ::WinSetCapture(HWND_DESKTOP, hWnd);
+        m_bWinCaptured = TRUE;
+    }
 }
 
 void wxWindow::ReleaseMouse()
 {
-    // TODO:
+    if ( m_bWinCaptured )
+    {
+        ::WinSetCapture(HWND_DESKTOP, NULLHANDLE);
+        m_bWinCaptured = FALSE;
+    }
 }
 
-bool wxWindow::SetFont(const wxFont& f)
+bool wxWindow::SetFont(
+  const wxFont&                     rFont
+)
 {
-    // TODO:
+    if (!wxWindowBase::SetFont(rFont))
+    {
+        // nothing to do
+        return(FALSE);
+    }
+
+    HWND                            hWnd = GetHwnd();
+
+    if (hWnd != 0)
+    {
+        wxChar                      zFont[128];
+
+        sprintf(zFont, "%d.%s", rFont.GetPointSize(), rFont.GetFaceName().c_str());
+        return(::WinSetPresParam(hWnd, PP_FONTNAMESIZE, strlen(zFont), (PVOID)zFont));
+    }
     return(TRUE);
 }
 
-bool wxWindow::SetCursor(const wxCursor& cursor) // check if base implementation is OK
+bool wxWindow::SetCursor(
+  const wxCursor&                   rCursor
+) // check if base implementation is OK
 {
-    // TODO:
-    return(TRUE);
+    if ( !wxWindowBase::SetCursor(rCursor))
+    {
+        // no change
+        return FALSE;
+    }
+
+    wxASSERT_MSG( m_cursor.Ok(),
+                  wxT("cursor must be valid after call to the base version"));
+
+    HWND                            hWnd = GetHwnd();
+    POINTL                          vPoint;
+    RECTL                           vRect;
+    HPS                             hPS;
+    HRGN                            hRGN;
+
+    hPS = ::WinGetPS(hWnd);
+
+    ::WinQueryPointerPos(HWND_DESKTOP, &vPoint);
+    ::WinQueryWindowRect(hWnd, &vRect);
+
+    hRGN = ::GpiCreateRegion(hPS, 1L, &vRect);
+
+    if ((::GpiPtInRegion(hPS, hRGN, &vPoint) == PRGN_INSIDE) && !wxIsBusy())
+    {
+//        ::SetCursor((HCURSOR)m_cursor.GetHCURSOR());
+    }
+    return TRUE;
 }
 
 void wxWindow::WarpPointer(int x_pos, int y_pos)

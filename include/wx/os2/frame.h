@@ -12,36 +12,23 @@
 #ifndef _WX_FRAME_H_
 #define _WX_FRAME_H_
 
-#include "wx/window.h"
-#include "wx/os2/accel.h"
-#include "wx/icon.h"
-
-WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxStatusLineNameStr;
-
-class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxStatusBar;
-class WXDLLEXPORT wxToolBar;
-
-class WXDLLEXPORT wxFrame : public wxWindow
+class WXDLLEXPORT wxFrame : public wxFrameBase
 {
-    DECLARE_DYNAMIC_CLASS(wxFrame)
-
 public:
-    wxFrame();
+    // construction
+    wxFrame() { Init(); }
     wxFrame(wxWindow *parent,
-        wxWindowID id,
-        const wxString& title,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize,
-        long style = wxDEFAULT_FRAME_STYLE,
-        const wxString& name = wxFrameNameStr)
+            wxWindowID id,
+            const wxString& title,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxDEFAULT_FRAME_STYLE,
+            const wxString& name = wxFrameNameStr)
     {
+        Init();
+
         Create(parent, id, title, pos, size, style, name);
     }
-
-    ~wxFrame();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -51,32 +38,26 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual bool Destroy();
+    virtual ~wxFrame();
 
-    void OnSize(wxSizeEvent& event);
-    void OnMenuHighlight(wxMenuEvent& event);
-    void OnActivate(wxActivateEvent& event);
-    void OnIdle(wxIdleEvent& event);
-    void OnCloseWindow(wxCloseEvent& event);
-
-    bool Show(bool show);
-
-    void DetachMenuBar();
-    // Set menu bar
-    void SetMenuBar(wxMenuBar *menu_bar);
-    virtual wxMenuBar *GetMenuBar() const;
-
-    // Call this to simulate a menu command
-    bool Command(int id) { return ProcessCommand(id); }
-
-    // process menu command: returns TRUE if processed
-    bool ProcessCommand(int id);
-
-    // make the window modal (all other windows unresponsive)
-    virtual void MakeModal(bool modal = TRUE);
-
-    // Set icon
+    // implement base class pure virtuals
+    virtual void Maximize(bool maximize = TRUE);
+    virtual bool IsMaximized() const;
+    virtual void Iconize(bool iconize = TRUE);
+    virtual bool IsIconized() const;
+    virtual void Restore();
+    virtual void SetMenuBar(wxMenuBar *menubar);
     virtual void SetIcon(const wxIcon& icon);
+
+    // implementation only from now on
+    // -------------------------------
+
+    // override some more virtuals
+    virtual bool Show(bool show = TRUE);
+
+    // event handlers
+    void OnActivate(wxActivateEvent& event);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // Toolbar
 #if wxUSE_TOOLBAR
@@ -84,62 +65,28 @@ public:
                                      wxWindowID id = -1,
                                      const wxString& name = wxToolBarNameStr);
 
-    virtual wxToolBar *OnCreateToolBar(long style, wxWindowID id, const wxString& name);
-
-    virtual void SetToolBar(wxToolBar *toolbar) { m_frameToolBar = toolbar; }
-    virtual wxToolBar *GetToolBar() const { return m_frameToolBar; }
-
     virtual void PositionToolBar();
 #endif // wxUSE_TOOLBAR
 
-#if wxUSE_STATUSBAR
     // Status bar
-    virtual wxStatusBar* CreateStatusBar(int number = 1,
-                                         long style = wxST_SIZEGRIP,
-                                         wxWindowID id = 0,
-                                         const wxString& name = wxStatusLineNameStr);
-
-    wxStatusBar *GetStatusBar() const { return m_frameStatusBar; }
-    void SetStatusBar(wxStatusBar *statusBar) { m_frameStatusBar = statusBar; }
+#if wxUSE_STATUSBAR
+    virtual wxStatusBar* OnCreateStatusBar(int number = 1,
+                                           long style = wxST_SIZEGRIP,
+                                           wxWindowID id = 0,
+                                           const wxString& name = wxStatusLineNameStr);
 
     virtual void PositionStatusBar();
-    virtual wxStatusBar *OnCreateStatusBar(int number,
-                                           long style,
-                                           wxWindowID id,
-                                           const wxString& name);
 
-    // Set status line text
-    virtual void SetStatusText(const wxString& text, int number = 0);
+    // Hint to tell framework which status bar to use: the default is to use
+    // native one for the platforms which support it (Win32), the generic one
+    // otherwise
 
-    // Set status line widths
-    virtual void SetStatusWidths(int n, const int widths_field[]);
-
-    // Hint to tell framework which status bar to use
     // TODO: should this go into a wxFrameworkSettings class perhaps?
-    static void UseNativeStatusBar(bool useNative) { m_useNativeStatusBar = useNative; };
-    static bool UsesNativeStatusBar() { return m_useNativeStatusBar; };
+    static void UseNativeStatusBar(bool useNative)
+        { m_useNativeStatusBar = useNative; };
+    static bool UsesNativeStatusBar()
+        { return m_useNativeStatusBar; };
 #endif // wxUSE_STATUSBAR
-
-    // Iconize
-    virtual void Iconize(bool iconize);
-
-    virtual bool IsIconized() const;
-
-    // Is it maximized?
-    virtual bool IsMaximized() const;
-
-    // Compatibility
-    bool Iconized() const { return IsIconized(); }
-
-    virtual void Maximize(bool maximize);
-    //  virtual bool LoadAccelerators(const wxString& table);
-
-    // Responds to colour changes
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
-    // Query app for menu item updates (called from OnIdle)
-    void DoMenuUpdates();
-    void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
 
     WXHMENU GetWinMenu() const { return m_hMenu; }
 
@@ -147,8 +94,7 @@ public:
     // frame has a toolbar)
     virtual wxPoint GetClientAreaOrigin() const;
 
-    // Implementation only from here
-        // event handlers
+    // event handlers
     bool HandlePaint();
     bool HandleSize(int x, int y, WXUINT flag);
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
@@ -158,13 +104,19 @@ public:
                    wxWindow *wx_win, const wxChar *title,
                    int x, int y, int width, int height, long style);
 
-  // tooltip management
+    // tooltip management
 #if wxUSE_TOOLTIPS
     WXHWND GetToolTipCtrl() const { return m_hwndToolTip; }
     void SetToolTipCtrl(WXHWND hwndTT) { m_hwndToolTip = hwndTT; }
 #endif // tooltips
 
 protected:
+    // common part of all ctors
+    void Init();
+
+    // common part of Iconize(), Maximize() and Restore()
+    void DoShowWindow(int nShowCmd);
+
     // override base class virtuals
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoGetSize(int *width, int *height) const;
@@ -174,6 +126,9 @@ protected:
 
     virtual void DoClientToScreen(int *x, int *y) const;
     virtual void DoScreenToClient(int *x, int *y) const;
+
+    // helper
+    void DetachMenuBar();
 
     // a plug in for MDI frame classes which need to do something special when
     // the menubar is set
@@ -188,20 +143,12 @@ protected:
     // window proc for the frames
     MRESULT OS2WindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
-    wxMenuBar *           m_frameMenuBar;
-    wxIcon                m_icon;
     bool                  m_iconized;
     WXHICON               m_defaultIcon;
 
 #if wxUSE_STATUSBAR
-    wxStatusBar *         m_frameStatusBar;
-
     static bool           m_useNativeStatusBar;
 #endif // wxUSE_STATUSBAR
-
-#if wxUSE_TOOLBAR
-    wxToolBar*            m_frameToolBar;
-#endif // wxUSE_TOOLBAR
 
 private:
 #if wxUSE_TOOLTIPS
@@ -209,6 +156,7 @@ private:
 #endif // tooltips
 
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxFrame)
 };
 
 #endif

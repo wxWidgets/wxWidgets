@@ -260,11 +260,7 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
                                const wxPoint& pos, const wxSize& size,
                                int nStrings, const wxString choices[],
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-                               long style, const wxValidator* val,
-#  else
                                long style, const wxValidator& val,
-#  endif
 #endif
                                const wxString& name)
               : wxListBox()

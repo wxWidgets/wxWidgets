@@ -28,11 +28,7 @@ class WXDLLEXPORT wxGauge: public wxControl
            const wxSize& size = wxDefaultSize,
            long style = wxGA_HORIZONTAL,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxGaugeNameStr)
   {
@@ -45,11 +41,7 @@ class WXDLLEXPORT wxGauge: public wxControl
            const wxSize& size = wxDefaultSize,
            long style = wxGA_HORIZONTAL,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxGaugeNameStr);
 

@@ -30,11 +30,7 @@ public:
            const wxSize& size = wxDefaultSize,
            long style = wxSL_HORIZONTAL,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxSliderNameStr)
   {
@@ -49,11 +45,7 @@ public:
            const wxSize& size = wxDefaultSize,
            long style = wxSL_HORIZONTAL,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxSliderNameStr);
 

@@ -381,11 +381,7 @@ class WXDLLEXPORT wxListTextCtrl: public wxTextCtrl
                     const wxString &value = "",
                     const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-                    int style = 0, const wxValidator* validator = wxDefaultValidator,
-#  else
                     int style = 0, const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
                     const wxString &name = "wxListTextCtrlText" );
     void OnChar( wxKeyEvent &event );
@@ -515,11 +511,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
     wxListCtrl( wxWindow *parent, wxWindowID id = -1,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-      long style = wxLC_ICON, const wxValidator* validator = wxDefaultValidator,
-#  else
       long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
        const wxString &name = "listctrl" )
     {
@@ -529,11 +521,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
     bool Create( wxWindow *parent, wxWindowID id = -1,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-      long style = wxLC_ICON, const wxValidator* validator = wxDefaultValidator,
-#  else
       long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
        const wxString &name = "listctrl" );
     void OnSize( wxSizeEvent &event );

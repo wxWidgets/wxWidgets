@@ -28,11 +28,7 @@ class WXDLLEXPORT wxCheckBox: public wxControl
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxCheckBoxNameStr)
   {
@@ -43,11 +39,7 @@ class WXDLLEXPORT wxCheckBox: public wxControl
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxCheckBoxNameStr);
 
@@ -77,11 +69,7 @@ class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxCheckBoxNameStr)
   {
@@ -92,11 +80,7 @@ class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-           const wxValidator* validator = wxDefaultValidator,
-#  else
            const wxValidator& validator = wxDefaultValidator,
-#  endif
 #endif
            const wxString& name = wxCheckBoxNameStr);
 

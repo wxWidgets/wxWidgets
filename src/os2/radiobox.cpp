@@ -144,11 +144,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
         int n, const wxString choices[],
         int majorDim, long style,
 #if wxUSE_VALIDATORS
-#  if defined(__VISAGECPP__)
-        const wxValidator* val, const wxString& name)
-#  else
         const wxValidator& val, const wxString& name)
-#  endif
 #endif
 {
     m_selectedButton = -1;
