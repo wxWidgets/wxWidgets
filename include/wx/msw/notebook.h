@@ -27,6 +27,15 @@
 // wxNotebook
 // ----------------------------------------------------------------------------
 
+/*
+ * Flags returned by HitTest
+ */
+
+#define wxNB_HITTEST_NOWHERE           1
+#define wxNB_HITTEST_ONICON            2
+#define wxNB_HITTEST_ONLABEL           4
+#define wxNB_HITTEST_ONITEM            6
+
 class WXDLLEXPORT wxNotebook : public wxNotebookBase
 {
 public:
@@ -103,6 +112,9 @@ public:
     // style.
   void SetTabSize(const wxSize& sz);
 
+
+  // Hit test
+  int HitTest(const wxPoint& pt, long& flags);
   // calculate the size of the notebook from the size of its page
   virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
 
