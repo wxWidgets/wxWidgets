@@ -387,7 +387,7 @@ void wxURL::SetProxy(const wxString& url_proxy)
             return;
 
         hostname = tmp_str(0, pos);
-        port = tmp_str(pos, tmp_str.Length()-pos);
+        port = tmp_str(pos+1, tmp_str.Length()-pos);
 
         addr.Hostname(hostname);
         addr.Service(port);
