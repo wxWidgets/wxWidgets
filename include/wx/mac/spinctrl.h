@@ -60,6 +60,9 @@ public:
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = _T("wxSpinCtrl"));
 
+    // wxTextCtrl-like method
+    void SetSelection(long from, long to);
+
     virtual ~wxSpinCtrl();
 
     // operations

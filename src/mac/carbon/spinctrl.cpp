@@ -319,4 +319,15 @@ void wxSpinCtrl::SetRange(int min, int max)
     m_btn->SetRange(min, max);
 }
 
+void wxSpinCtrl::SetSelection(long from, long to)
+{
+    // if from and to are both -1, it means (in wxWindows) that all text should
+    // be selected
+    if ( (from == -1) && (to == -1) )
+    {
+        from = 0;     
+    }
+    m_text->SetSelection(from, to);
+}     
+
 #endif // wxUSE_SPINCTRL
