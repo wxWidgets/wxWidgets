@@ -174,6 +174,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Fit(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Fit,(self,) + _args, _kwargs)
         return val
+    def FitInside(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_FitInside,(self,) + _args, _kwargs)
+        return val
     def GetBackgroundColour(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetBackgroundColour,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
@@ -456,6 +459,10 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def GetVirtualSizeTuple(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetVirtualSizeTuple,(self,) + _args, _kwargs)
+        return val
+    def GetBestVirtualSize(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetBestVirtualSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def SetClientSizeWH(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetClientSizeWH,(self,) + _args, _kwargs)

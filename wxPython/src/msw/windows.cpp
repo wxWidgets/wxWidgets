@@ -1700,6 +1700,34 @@ static PyObject *_wrap_wxWindow_Fit(PyObject *self, PyObject *args, PyObject *kw
     return _resultobj;
 }
 
+#define wxWindow_FitInside(_swigobj)  (_swigobj->FitInside())
+static PyObject *_wrap_wxWindow_FitInside(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_FitInside",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_FitInside. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxWindow_FitInside(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxWindow_GetBackgroundColour(_swigobj)  (_swigobj->GetBackgroundColour())
 static PyObject *_wrap_wxWindow_GetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4805,6 +4833,36 @@ static PyObject *_wrap_wxWindow_GetVirtualSizeTuple(PyObject *self, PyObject *ar
     o = PyInt_FromLong((long) (*_arg2));
     _resultobj = t_output_helper(_resultobj, o);
 }
+    return _resultobj;
+}
+
+#define wxWindow_GetBestVirtualSize(_swigobj)  (_swigobj->GetBestVirtualSize())
+static PyObject *_wrap_wxWindow_GetBestVirtualSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetBestVirtualSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetBestVirtualSize. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxSize (wxWindow_GetBestVirtualSize(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -12055,6 +12113,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_SetCursor", (PyCFunction) _wrap_wxWindow_SetCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetClientSize", (PyCFunction) _wrap_wxWindow_SetClientSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetClientSizeWH", (PyCFunction) _wrap_wxWindow_SetClientSizeWH, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetBestVirtualSize", (PyCFunction) _wrap_wxWindow_GetBestVirtualSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetVirtualSizeTuple", (PyCFunction) _wrap_wxWindow_GetVirtualSizeTuple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetVirtualSize", (PyCFunction) _wrap_wxWindow_GetVirtualSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetVirtualSizeWH", (PyCFunction) _wrap_wxWindow_SetVirtualSizeWH, METH_VARARGS | METH_KEYWORDS },
@@ -12145,6 +12204,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_GetChildren", (PyCFunction) _wrap_wxWindow_GetChildren, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetBorder", (PyCFunction) _wrap_wxWindow_GetBorder, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetBackgroundColour", (PyCFunction) _wrap_wxWindow_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_FitInside", (PyCFunction) _wrap_wxWindow_FitInside, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Fit", (PyCFunction) _wrap_wxWindow_Fit, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_FindWindowByName", (PyCFunction) _wrap_wxWindow_FindWindowByName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_FindWindowById", (PyCFunction) _wrap_wxWindow_FindWindowById, METH_VARARGS | METH_KEYWORDS },

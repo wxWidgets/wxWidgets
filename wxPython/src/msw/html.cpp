@@ -1120,6 +1120,34 @@ static PyObject *_wrap_wxHtmlParser_DoParsing(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxHtmlParser_StopParsing(_swigobj)  (_swigobj->StopParsing())
+static PyObject *_wrap_wxHtmlParser_StopParsing(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlParser * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlParser_StopParsing",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlParser_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlParser_StopParsing. Expected _wxHtmlParser_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlParser_StopParsing(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxHtmlParser_AddTagHandler(_swigobj,_swigarg0)  (_swigobj->AddTagHandler(_swigarg0))
 static PyObject *_wrap_wxHtmlParser_AddTagHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6512,6 +6540,7 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlParser_PushTagHandler", (PyCFunction) _wrap_wxHtmlParser_PushTagHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlParser_GetSource", (PyCFunction) _wrap_wxHtmlParser_GetSource, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlParser_AddTagHandler", (PyCFunction) _wrap_wxHtmlParser_AddTagHandler, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlParser_StopParsing", (PyCFunction) _wrap_wxHtmlParser_StopParsing, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlParser_DoParsing", (PyCFunction) _wrap_wxHtmlParser_DoParsing, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlParser_DoneParser", (PyCFunction) _wrap_wxHtmlParser_DoneParser, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlParser_InitParser", (PyCFunction) _wrap_wxHtmlParser_InitParser, METH_VARARGS | METH_KEYWORDS },
