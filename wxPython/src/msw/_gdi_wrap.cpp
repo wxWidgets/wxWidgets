@@ -20329,7 +20329,7 @@ static PyObject *_wrap_BrushList_FindOrCreateBrush(PyObject *, PyObject *args, P
     PyObject *resultobj;
     wxBrushList *arg1 = (wxBrushList *) 0 ;
     wxColour *arg2 = 0 ;
-    int arg3 ;
+    int arg3 = (int) wxSOLID ;
     wxBrush *result;
     wxColour temp2 ;
     PyObject * obj0 = 0 ;
@@ -20339,16 +20339,18 @@ static PyObject *_wrap_BrushList_FindOrCreateBrush(PyObject *, PyObject *args, P
         (char *) "self",(char *) "colour",(char *) "style", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:BrushList_FindOrCreateBrush",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:BrushList_FindOrCreateBrush",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxBrushList, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         arg2 = &temp2;
         if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
     }
-    {
-        arg3 = (int)(SWIG_As_int(obj2)); 
-        if (SWIG_arg_fail(3)) SWIG_fail;
+    if (obj2) {
+        {
+            arg3 = (int)(SWIG_As_int(obj2)); 
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
