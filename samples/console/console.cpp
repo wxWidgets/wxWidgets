@@ -32,8 +32,8 @@
 //#define TEST_ARRAYS
 //#define TEST_LOG
 //#define TEST_STRINGS
-//#define TEST_THREADS
-#define TEST_TIME
+#define TEST_THREADS
+//#define TEST_TIME
 //#define TEST_LONGLONG
 
 // ============================================================================
@@ -392,6 +392,8 @@ void TestThreadSuspend()
         thread->Resume();
     }
 
+    puts("Waiting until it terminates now");
+
     // wait until the thread terminates
     gs_cond.Wait();
 
@@ -406,6 +408,12 @@ void TestThreadDelete()
     // terminated will lead to a crash!
 
     puts("\n*** Testing thread delete function ***");
+
+    MyDetachedThread *thread0 = new MyDetachedThread(30, 'W');
+
+    thread0->Delete();
+
+    puts("\nDeleted a thread which didn't start to run yet.");
 
     MyDetachedThread *thread1 = new MyDetachedThread(30, 'Y');
 
@@ -429,19 +437,19 @@ void TestThreadDelete()
 
     puts("\nDeleted a sleeping thread.");
 
-    MyJoinableThread *thread3 = new MyJoinableThread(20);
-    thread3->Run();
+    MyJoinableThread thread3(20);
+    thread3.Run();
 
-    thread3->Delete();
+    thread3.Delete();
 
     puts("\nDeleted a joinable thread.");
 
-    MyJoinableThread *thread4 = new MyJoinableThread(2);
-    thread4->Run();
+    MyJoinableThread thread4(2);
+    thread4.Run();
 
     wxThread::Sleep(300);
 
-    thread4->Delete();
+    thread4.Delete();
 
     puts("\nDeleted a joinable thread which already terminated.");
 
@@ -598,11 +606,11 @@ int main(int argc, char **argv)
     if ( argc > 1 && argv[1][0] == 't' )
         wxLog::AddTraceMask("thread");
 
-    if ( 0 )
+    if ( 1 )
         TestDetachedThreads();
-    if ( 0 )
+    if ( 1 )
         TestJoinableThreads();
-    if ( 0 )
+    if ( 1 )
         TestThreadSuspend();
     if ( 1 )
         TestThreadDelete();
