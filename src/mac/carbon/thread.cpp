@@ -114,15 +114,39 @@ MPCriticalRegionID gs_guiCritical = kInvalidID;
     to use two indices one for each 32 bit part as the MP implementation is limited
     to longs.
     
-    I have two implementations for mutexes :
+    I have three implementations for mutexes :
     version A based on a binary semaphore, problem - not reentrant, version B based 
     on a critical region, allows for reentrancy, performance implications not
-    yet tested
+    yet tested, and third a plain pthreads implementation
 
     The same for condition internal, one implementation by Aj Lavin and the other one
     copied from the thrimpl.cpp which I assume has been more broadly tested, I've just
     replaced the interlock increment with the appropriate PPC calls 
 */
+
+// ----------------------------------------------------------------------------
+// wxCriticalSection
+// ----------------------------------------------------------------------------
+
+wxCriticalSection::wxCriticalSection()
+{
+    MPCreateCriticalRegion( (MPCriticalRegionID*) &m_critRegion ) ;
+}
+
+wxCriticalSection::~wxCriticalSection()
+{
+    MPDeleteCriticalRegion( (MPCriticalRegionID) m_critRegion ) ;
+}
+
+void wxCriticalSection::Enter()
+{
+    MPEnterCriticalRegion( (MPCriticalRegionID) m_critRegion , kDurationForever ) ;
+}    
+
+void wxCriticalSection::Leave()
+{
+    MPExitCriticalRegion((MPCriticalRegionID) m_critRegion ) ;
+}
 
 // ----------------------------------------------------------------------------
 // wxMutex implementation
