@@ -906,6 +906,13 @@ functions that take a wxSocketEvent argument.
 
 Constructor.
 
+\membersection{wxSocketEvent::Socket}\label{wxsocketeventsocket}
+
+\constfunc{wxSocketBase *}{Socket}{\void}
+
+Returns the socket object to which this event refers to. This makes
+it possible to use the same event handler for different sockets.
+
 \membersection{wxSocketEvent::SocketEvent}\label{wxsocketeventsocketevent}
 
 \constfunc{wxSocketNotify}{SocketEvent}{\void}

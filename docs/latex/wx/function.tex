@@ -140,19 +140,6 @@ See \helpref{wxFindFirstFile}{wxfindfirstfile} for an example.
 
 Returns the Windows directory under Windows; on other platforms returns the empty string.
 
-\membersection{::wxInitAllImageHandlers}\label{wxinitallimagehandlers}
-
-\func{void}{wxInitAllImageHandlers}{\void}
-
-Adds some common image format handlers, which, depending on wxWindows
-configuration, can be handlers for BMP (loading) (always installed), GIF
-(loading), PCX (loading and saving), PNM (loading and saving as raw rgb),
-PNG (loading and saving), JPEG (loading and saving), file formats.
-
-\wxheading{See also}
-
-\helpref{wxImage}{wximage}, \helpref{wxImageHandler}{wximagehandler}
-
 \membersection{::wxIsAbsolutePath}
 
 \func{bool}{wxIsAbsolutePath}{\param{const wxString\& }{filename}}
@@ -1548,6 +1535,17 @@ It does not raise a signal in the receiving process.
 \wxheading{Include files}
 
 <wx/utils.h>
+
+\membersection{::wxInitAllImageHandlers}\label{wxinitallimagehandlers}
+
+\func{void}{wxInitAllImageHandlers}{\void}
+
+Initializes all available image handlers. For a list of available handlers,
+see \helpref{wxImage}{wximage}.
+
+\wxheading{See also}
+
+\helpref{wxImage}{wximage}, \helpref{wxImageHandler}{wximagehandler}
 
 \membersection{::wxIsBusy}\label{wxisbusy}
 
