@@ -1373,3 +1373,20 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 
 #endif // wxStrtok
 
+// ----------------------------------------------------------------------------
+// missing C RTL functions
+// ----------------------------------------------------------------------------
+
+#if defined( __MWERKS__ ) && !defined(__MACH__)
+#if __MSL__ < 0x00008000
+char *strdup(const char *s)
+{
+        return strcpy( (char*) malloc( strlen( s ) + 1 ) , s ) ;
+}
+#endif
+int isascii( int c )
+{
+        return ( c >= 0 && c < 128 ) ;
+}
+#endif // __MWERKS__
+
