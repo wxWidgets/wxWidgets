@@ -92,7 +92,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_DLLLOADER
+    #define TEST_EXECUTE
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -551,7 +551,7 @@ static void TestExecute()
     #define SHELL_COMMAND "echo hi from shell"
     #define REDIRECT_COMMAND COMMAND // "date"
 #elif defined(__WXMSW__)
-    #define COMMAND "command.com -c 'echo hi'"
+    #define COMMAND "command.com /c echo hi"
     #define SHELL_COMMAND "echo hi"
     #define REDIRECT_COMMAND COMMAND
 #else
