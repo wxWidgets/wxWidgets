@@ -53,7 +53,7 @@ const int wxSTC_STYLE_LINENUMBER  = 33;
 const int wxSTC_STYLE_BRACELIGHT  = 34;
 const int wxSTC_STYLE_BRACEBAD    = 35;
 const int wxSTC_STYLE_CONTROLCHAR = 36;
-const int wxSTC_STYLE_MAX         = 63;
+const int wxSTC_STYLE_MAX         = 127;
 const int wxSTC_STYLE_MASK        = 31;
 
 const int wxSTC_MARKER_MAX        = 31;
@@ -111,7 +111,12 @@ enum {
     wxSTC_CMD_ZOOMIN,
     wxSTC_CMD_ZOOMOUT,
     wxSTC_CMD_DELWORDLEFT,
-    wxSTC_CMD_DELWORDRIGHT
+    wxSTC_CMD_DELWORDRIGHT,
+    wxSTC_CMD_LINECUT,
+    wxSTC_CMD_LINEDELETE,
+    wxSTC_CMD_LINETRANSPOSE,
+    wxSTC_CMD_LOWERCASE,
+    wxSTC_CMD_UPPERCASE
 };
 
 
