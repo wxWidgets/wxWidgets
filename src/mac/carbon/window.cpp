@@ -148,6 +148,22 @@ wxWindowMac::~wxWindowMac()
     
     m_isBeingDeleted = TRUE;
 
+#ifndef __WXUNIVERSAL__
+    // VS: make sure there's no wxFrame with last focus set to us:
+    for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
+    {
+        wxFrame *frame = wxDynamicCast(win, wxFrame);
+        if ( frame )
+        {
+            if ( frame->GetLastFocus() == this )
+            {
+                frame->SetLastFocus((wxWindow*)NULL);
+            }
+            break;
+        }
+    }
+#endif // __WXUNIVERSAL__
+
     if ( s_lastMouseWindow == this )
     {
         s_lastMouseWindow = NULL ;
