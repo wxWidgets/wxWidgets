@@ -629,6 +629,13 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 {
     // 1) Add event to list of pending events of this event handler
 
+    wxEvent *eventCopy = event.Clone();
+
+    // we must be able to copy the events here so the event class must
+    // implement Clone() properly instead of just providing a NULL stab for it
+    wxCHECK_RET( eventCopy,
+                 _T("events of this type aren't supposed to be posted") );
+
 #if defined(__VISAGECPP__)
     wxENTER_CRIT_SECT( m_eventsLocker);
 #else
@@ -638,9 +645,7 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
     if ( !m_pendingEvents )
       m_pendingEvents = new wxList;
 
-    wxEvent *event2 = event.Clone();
-
-    m_pendingEvents->Append(event2);
+    m_pendingEvents->Append(eventCopy);
 
 #if defined(__VISAGECPP__)
     wxLEAVE_CRIT_SECT( m_eventsLocker);
