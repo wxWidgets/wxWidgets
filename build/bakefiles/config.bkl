@@ -163,6 +163,14 @@ Acts according to DEBUG_INFO by default.
         </description>
     </option>
     
+    <option name="USE_RTTI">
+        <values>0,1</values>
+        <default-value>1</default-value>
+        <description>
+            Enable run-time type information (RTTI) in compiled code.
+        </description>
+    </option>
+    
     <option name="USE_THREADS">
         <values>0,1</values>
         <default-value>1</default-value>
@@ -337,6 +345,7 @@ Set the version of your Mingw installation here.
         <set var="MONOLITHIC">0</set>
         <set var="USE_GUI">1</set>
         <set var="USE_EXCEPTIONS">1</set>
+        <set var="USE_RTTI">1</set>
         <set var="USE_THREADS">1</set>
         <set var="DEBUG_INFO">default</set>
         <set var="DEBUG_FLAG">default</set>

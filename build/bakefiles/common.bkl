@@ -247,6 +247,10 @@
         <if cond="USE_EXCEPTIONS=='1'">on</if>
         <if cond="USE_EXCEPTIONS=='0'">off</if>
     </set>
+    <set var="RTTIFLAG">
+        <if cond="USE_RTTI=='1'">on</if>
+        <if cond="USE_RTTI=='0'">off</if>
+    </set>
     <set var="THREADSFLAG">
         <if cond="USE_THREADS=='1'">multi</if>
         <if cond="USE_THREADS=='0'">single</if>
@@ -280,7 +284,7 @@
         <optimize>$(OPTIMIZEFLAG)</optimize>
         <threading>$(THREADSFLAG)</threading>
         <runtime-libs>$(RUNTIME_LIBS)</runtime-libs>
-        <cxx-rtti>$(EXCEPTIONSFLAG)</cxx-rtti>
+        <cxx-rtti>$(RTTIFLAG)</cxx-rtti>
         <cxx-exceptions>$(EXCEPTIONSFLAG)</cxx-exceptions>
         <if cond="FORMAT!='autoconf'">
             <cppflags>$(EXTRACFLAGS)</cppflags>
