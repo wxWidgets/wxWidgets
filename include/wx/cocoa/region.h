@@ -14,6 +14,8 @@
 
 #include "wx/generic/region.h"
 
+typedef struct _NSRect NSRect;
+
 class WXDLLEXPORT wxRegion : public wxRegionGeneric
 {
     DECLARE_DYNAMIC_CLASS(wxRegion);
@@ -41,6 +43,10 @@ public:
     {}
     wxRegion& operator= (const wxRegion& r)
     {   return *(wxRegion*)&(this->wxRegionGeneric::operator=(r)); }
+
+    // Cocoa-specific creation
+    wxRegion(const NSRect& rect);
+    wxRegion(const NSRect *rects, int count);
 
     // Use the non-transparent pixels of a wxBitmap for the region to combine
     // with this region.  If the bitmap has a mask then it will be used,
