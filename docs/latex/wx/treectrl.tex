@@ -233,13 +233,23 @@ Creates the tree control. See \helpref{wxTreeCtrl::wxTreeCtrl}{wxtreectrlconstr}
 
 \func{void}{Delete}{\param{const wxTreeItemId\&}{ item}}
 
-Deletes the specified item.
+Deletes the specified item. A {\tt EVT\_TREE\_DELETE\_ITEM} event will be
+generated.
 
 \membersection{wxTreeCtrl::DeleteAllItems}\label{wxtreectrldeleteallitems}
 
 \func{void}{DeleteAllItems}{\void}
 
-Deletes all the items in the control.
+Deletes all the items in the control. Note that this will {\bf not} generate
+any events unlike \helpref{Delete}{wxtreectrldelete} method.
+
+\membersection{wxTreeCtrl::DeleteChildren}\label{wxtreectrldeletechildren}
+
+\func{void}{DeleteChildren}{\param{const wxTreeItemId\& }{item}}
+
+Deletes all children of the given item (but not the item itself). Note that
+this will {\bf not} generate any events unlike 
+\helpref{Delete}{wxtreectrldelete} method.
 
 \membersection{wxTreeCtrl::EditLabel}\label{wxtreectrleditlabel}
 
