@@ -34,7 +34,7 @@ variety of platforms. The second part details the wxWindows code organization an
 its goal it to make wxWindows as uniform as possible without imposing too
 many restrictions on the programmer.
 <P>
-Acknowledgements: This guide is partly based on <A 
+Acknowledgements: This guide is partly based on <A
 HREF=http://www.mozilla.org/docs/tplist/catBuild/portable-cpp.html target=_top>
 C++ portability guide</A> by David Williams.
 
@@ -100,14 +100,15 @@ C++ portability guide</A> by David Williams.
     <LI><A HREF="#indentation">Indent your code with 4 spaces (no tabs!)</A></LI>
     <LI><A HREF="#class_decl">Order of parts in a class declarations</A></LI>
   </OL>
-  
+
   <BR>
   <LI>More about naming conventions</LI>
   <OL>
     <LI><A HREF="#wx_prefix">Use wx or WX prefix for all public symbols</A></LI>
-    <LI><A HREF="#wxdllexport">Use WXDLLEXPORT with all classes/functions in 
+    <LI><A HREF="#wxdllexport">Use WXDLLEXPORT with all classes/functions in
                                wxMSW/common code</A></LI>
     <LI><A HREF="#set_get">Use Set/Get prefixes for accessors</A></LI>
+    <LI><A HREF="#constants">wxNAMING_CONSTANTS</A></LI>
   </OL>
 
   <BR>
@@ -123,7 +124,7 @@ C++ portability guide</A> by David Williams.
 <H3>General C++ Rules</H3>
 <UL>
   <LI>New or not widely supported C++ features</LI>
-  
+
   <P>The usage of all features in this section is not recommended for one reason: they appeared in C++ relatively recently and are not yet
 supported by all compilers. Moreover, when they're supported, there are
 differences between different vendor's implementations. It's understandable that
@@ -133,7 +134,7 @@ of your favourite C++ abilities are indicated.
   <P>Just to suppress any doubts that there are compilers which don't support
 these new features, you can think about Win16 (a.k.a. Win 3.1) compilers,
 <I>none</I> of which supports <I>any</I> feature from the list below.
-  
+
   <OL>
     <P><LI><A NAME="no_templates"></A><B>Don't use C++ templates</B></LI><P>
 Besides the reasons mentioned above, template usage also makes the
@@ -145,7 +146,7 @@ most commonly, polymorphic containers (in the sense that they can contain object
 any type without compromising C++ type system, i.e. using <TT>void *</TT>
 is out of question). wxWindows provides <A HREF="TODO">dynamic
 arrays and lists</A> which are sufficient in 99% of cases - please don't hesitate
-to use them. Lack of template is not a reason to use static arrays or 
+to use them. Lack of template is not a reason to use static arrays or
 type-less (passing by <TT>void *</TT>) containers.
 
     <P><LI><A NAME="no_exceptions"></A><B>Don't use C++ exceptions</B></LI><P>
@@ -180,10 +181,10 @@ might help here:<P>
 void ReadAddressBookFile(const wxString& strName)
 {
   wxFile file;
-  
+
   if ( !file.Open(strFile) )
     return;
-  
+
   ...process it...
 }
         </PRE>
@@ -193,19 +194,19 @@ void ReadAddressBookFile(const wxString& strName)
 bool ReadAddressBookFile(const wxString& strName)
 {
   wxFile file;
-  
+
   if ( !file.Open(strFile) ) {
     // wxFile logged an error because file couldn't be opened which
     // contains the system error code, however it doesn't know what
     // this file is for and an error message "can't open $GLCW.ADB"
     // can be quite confusing for the user. Here we say what we mean.
-    wxLogError("Can't read address book from '%s'!", 
+    wxLogError("Can't read address book from '%s'!",
 	       strName.c_str());
     return false;
   }
-  
+
   ...process it...
-    
+
   return true;
 }
 	</PRE>
@@ -217,22 +218,22 @@ bool ReadAddressBookFile(const wxString& strName)
 bool ReadAddressBookFile(const wxString& strName)
 {
   wxFile file;
-  
+
   // start a block inside which all log messages are suppressed
   {
     wxLogNull noLog;
     if ( !file.Open(strFile) )
       return false;
   }
-  
+
   ...process it...
-  
+
   return true;
 }
         </PRE></LI>
     </UL>
   </OL>
-    
+
     <P><LI><A NAME="no_rtti"></A><B>Don't use RTTI</B></LI><P>
 RTTI stands for Run-Time Type Information and there is probably no other
 reason not to use it except the portability issue and the fact that it adds
@@ -240,7 +241,7 @@ reason not to use it except the portability issue and the fact that it adds
 in the implementations I'm aware of).
 <P><U>Workaround</U>: use wxWindows RTTI system which allows you to do almost
 everything which the new C++ RTTI, except that, of course, you have to use
-macros instead of the (horrible looking, BTW) <TT>dynamic_cast</TT>. 
+macros instead of the (horrible looking, BTW) <TT>dynamic_cast</TT>.
 
     <P><LI><A NAME="no_namespaces"></A><B>Don't use namespaces</B></LI><P>
 This topic is subject to change with time, however for the moment all wxWindows
@@ -312,17 +313,17 @@ you can try the following:
   private:
    class PrivateLibClass *m_pObject;
   };
-  
+
   // in the .cpp file
   class PrivateLibClass { ... };
-  
+
   PublicLibClass::PublicLibClass()
   {
     m_pObject = new PrivateLibClass;
-    
+
     ...
   }
-  
+
   PublicLibClass::~PublicLibClass()
   {
     delete m_pObject;
@@ -337,14 +338,14 @@ an example of a more general interface/implementation separation idea).
   <LI>General recommendations</B></LI><P>
 While the recommendations in the previous section may not apply to you if you're
 only working with perfect compilers which implement the very newest directives of
-C++ standard, this section contains compiler- (and language-) independent advice 
+C++ standard, this section contains compiler- (and language-) independent advice
 which <B>must</B> be followed if you wish to write correct, i.e. working, programs. It
-also contains some C/C++ specific remarks in the end which are less 
+also contains some C/C++ specific remarks in the end which are less
 important.
   <OL>
     <P><LI><A NAME="no_globals"></A><B>No global variables with constructors</B></LI><P>
 In C++, the constructors of global variables are called before the
-<TT>main()</TT> function (or <TT>WinMain()</TT> or any other program entry point) 
+<TT>main()</TT> function (or <TT>WinMain()</TT> or any other program entry point)
 starts executing. Thus, there is no possibility to initialize <I>anything</I>
 before the constructor call. The order of construction is largely
 implementation-defined, meaning that there is no guarantee that one global
@@ -423,7 +424,7 @@ sizes are different. A small table illustrates it quite well:
 Although close to the heart of many C programmers (I plead guilty), code like
 classical <TT>if ( (c = getchar()) != EOF )</TT> is bad because it prevents you
 from enabling "assignment in conditional expression" warning (see also
-<A HREF="#no_warnings">above</A>) warning which is helpful to detect common
+<A HREF="#no_warnings">above</A>) which is helpful to detect common
 mistypes like <TT>if ( x = 2 )</TT> instead of <TT>if ( x == 2 )</TT>.
 
     <P><LI><A NAME="no_comment_code"></A><B>Use <TT>#if 0</TT> rather than comments to temporarily
@@ -495,10 +496,10 @@ like files without terminating new-line. Such files also give a warning message
 when loaded to vim (the Unix programmer's editor of choice :-)), so please think
 about terminating the last line.
   </OL>
-  
+
   <BR>
   <LI>Style choices</B></LI><P>
-  All wxWindows specific style guidelines are specified in the next 
+  All wxWindows specific style guidelines are specified in the next
 section, here are the choices which are not completely arbitrary,
 but have some deeper and not wxWindows-specific meaning.
 
@@ -518,9 +519,9 @@ following code fragment is:
   void Foo::Bar(int x_)
   {
     ...
-      
+
     x = x_;
-    
+
     ...
   }
 </PRE>
@@ -591,7 +592,7 @@ However, the <TT>const</TT> keyword is confusing here, adds nothing to the code
 and even cannot be removed if <TT>Foo()</TT> is virtual and overridden (because
 the names are mangled differently). So, <I>for arguments passed by value</I>
 you shouldn't use <TT>const</TT>.
-<P>Of course, it doesn't apply to functions such as 
+<P>Of course, it doesn't apply to functions such as
 <TT>void PrintMessage(const char *text)</TT> where <TT>const</TT> is mandatory.
   </OL>
 </UL>
@@ -607,7 +608,7 @@ The wxWindows files for each supported platform have their own subdirectories
 in "include" and "src". So, for example, there is "src/msw", "include/gtk"
 etc. There are also two special subdirectories called "common" and
 "generic". The common subdirectory contains the files which are platform
-independent (wxObject, wxString, ...) and the generic one the generic 
+independent (wxObject, wxString, ...) and the generic one the generic
 implementations of GUI widgets, i.e. those which use only other wxWindows
 classes to implement them. For the platforms where the given functionality
 cannot be implemented natively, the generic implementation is used and the native
@@ -712,12 +713,12 @@ usage 'public domain' (the copyright holder does not assert the copyright).<P>
     <P><LI><A NAME="indentation"></LI><B>Indent your code with 4 spaces (no tabs!)</B>
     <P><LI><A NAME="class_decl"></LI><B>Order of parts in a class declarations</B><P>
   </OL>
-  
+
   <P><LI>More about naming conventions</LI><P>
   <OL>
     <P><LI><A NAME="wx_prefix"></LI><B>Use wx or WX prefix for all public symbols</B>.
 wx should be used for functions and classes, WX for macros.
-    <P><LI><A NAME="wxdllexport"</LI><B>Use WXDLLEXPORT with all classes/functions in 
+    <P><LI><A NAME="wxdllexport"</LI><B>Use WXDLLEXPORT with all classes/functions in
                                 wxMSW/common code</B>
 The title says it all - every public (in the sense that it is not internal to
 the library) function or class should have WXDLLEXPORT macro in its
@@ -734,14 +735,33 @@ keyword ordering for exporting data.
 
 <P>There also several other places where you should take care of shared
 library case: all IMPLEMENT_xxx macros which are usually used in the
-corresponding .cpp files must be taken inside 
+corresponding .cpp files must be taken inside
 "<TT>&#35;if !USE_SHARED_LIBRARY</TT>" and in the <TT>&#35;if USE_SHARED_LIBRARY</TT>
 case you should put them inside <TT>common/cmndata.cpp</TT> file.
 
     <P><LI><A NAME="set_get"></LI><B>Use Set/Get prefixes for accessors</B><P>
-There is a convention in wxWindows to prefix the accessors (i.e. any simple, in 
-general, inline function which does nothing else except changing or returning 
+There is a convention in wxWindows to prefix the accessors (i.e. any simple, in
+general, inline function which does nothing else except changing or returning
 the value of a member variable) with either <TT>Set</TT> or <TT>Get</TT>.
+
+    <P><LI><A NAME="constants"></LI><B>wxNAMING_CONSTANTS</B><P>
+The constants in wxWindows code should be defined using <TT>enum</TT> C++
+keyword (and not with <TT>#define</TT> or <TT>static const int</TT>). They
+should be declared in the global scope (and not inside class declaration) and
+their names should start with a <TT>wx</TT> prefix. Finally, the constants
+should be in all capital letters (except the first 2) to make it easier to
+distinguish them from the variables with underscores separating the words.
+
+<P>For example, file-related constants should be declared like this:
+<pre>
+enum
+{
+    wxFILEOPEN_READ,
+    wxFILEOPEN_WRITE,
+    wxFILEOPEN_READWRITE
+};
+</pre>
+
   </OL>
 
   <P><LI>Miscellaneous</LI><P>
@@ -751,7 +771,7 @@ It's really a trivial piece of advice, but remember that using forward declarati
 instead of including the header of corresponding class is better because not
 only does it minimize the compile time, it also simplifies the dependencies
 between different source files.
-<P>On a related subject, in general, you should try not to include other 
+<P>On a related subject, in general, you should try not to include other
 headers from a header file.
 
     <P><LI><A NAME="debug_macros"></LI><B>Use debugging macros</B><P>
@@ -764,7 +784,7 @@ stubs for not (yet) implemented functions which silently return incorrect
 values - otherwise, a person using a not implemented function has no idea that
 it is, in fact, not implemented.
 <P>As all debugging macros only do something useful if the symbol
-<TT>__DEBUG__</TT> is defined, you should compile your programs in debug mode to profit
+<TT>__WXDEBUG__</TT> is defined, you should compile your programs in debug mode to profit
 from them.
   </OL>
 </UL>
