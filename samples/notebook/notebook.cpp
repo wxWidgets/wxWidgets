@@ -335,6 +335,12 @@ int MyFrame::SelectFlag(int id, int nb, int lb, int chb)
     return 0;
 }
 
+#ifdef __SMARTPHONE__
+    #define MARGIN 0
+#else
+    #define MARGIN 4
+#endif
+
 #define RECREATE( wxBookType , idBook, oldBook , newBook )                         \
 {                                                                                  \
     int flags;                                                                     \
@@ -403,7 +409,7 @@ int MyFrame::SelectFlag(int id, int nb, int lb, int chb)
         CreateInitialPages(newBook);                                               \
     }                                                                              \
                                                                                    \
-    m_sizerFrame->Insert(0, newBook, 5, wxEXPAND | wxALL, 4);                      \
+    m_sizerFrame->Insert(0, newBook, 5, wxEXPAND | wxALL, MARGIN);                 \
                                                                                    \
     m_sizerFrame->Hide(newBook);                                                   \
 }
