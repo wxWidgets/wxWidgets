@@ -60,10 +60,9 @@ The destructor.
 
 \func{void}{Add}{\param{int }{width}, \param{int }{height}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-Adds the {\it window} to the sizer. As wxSizer itself is an abstract class, the parameters
-have no meaning in the wxSizer class itself, but as there currently is only one class
-deriving directly from wxSizer and this class does not override these methods, the meaning
-of the parameters is described here:
+Appends a child to the sizer.  wxSizer itself is an abstract class, but the parameters are
+equivalent in the derived classes that you will instantiate to use it so they are described
+here:
 
 \docparam{window}{The window to be added to the sizer. Its initial size (either set explicitly by the
 user or calculated internally when using wxDefaultSize) is interpreted as the minimal and in many
