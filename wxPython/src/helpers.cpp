@@ -97,6 +97,7 @@ PyObject* wxPyPtrTypeMap = NULL;
 // This gets run when the DLL is loaded.  We just need to save a handle.
 //----------------------------------------------------------------------
 
+extern "C"
 BOOL WINAPI DllMain(
     HINSTANCE   hinstDLL,    // handle to DLL module
     DWORD       fdwReason,   // reason for calling function
