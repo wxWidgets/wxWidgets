@@ -45,7 +45,8 @@ private:
 #define SWIG_TypeName        SWIG_Python_TypeName
 #define SWIG_TypeQuery       SWIG_Python_TypeQuery
 #define SWIG_TypeClientData  SWIG_Python_TypeClientData
-
+#define SWIG_PackData        SWIG_Python_PackData
+#define SWIG_UnpackData      SWIG_Python_UnpackData
 
 /***********************************************************************
  * common.swg for wxPython
@@ -59,35 +60,34 @@ private:
 
 #include <string.h>
 
-#if defined(_WIN32) || defined(__WIN32__)
-#       if defined(_MSC_VER)
-#               if defined(STATIC_LINKED)
-#                       define SWIGEXPORT(a) a
-#                       define SWIGIMPORT(a) extern a
-#               else
-#                       define SWIGEXPORT(a) __declspec(dllexport) a
-#                       define SWIGIMPORT(a) extern a
-#               endif
-#       else
-#               if defined(__BORLANDC__)
-#                       define SWIGEXPORT(a) a _export
-#                       define SWIGIMPORT(a) a _export
-#               else
-#                       define SWIGEXPORT(a) a
-#                       define SWIGIMPORT(a) a
-#               endif
-#       endif
+#if defined(_WIN32) || defined(__WIN32__) || defined(__CYGWIN__)
+#  if defined(_MSC_VER) || defined(__GNUC__)
+#    if defined(STATIC_LINKED)
+#      define SWIGEXPORT(a) a
+#      define SWIGIMPORT(a) extern a
+#    else
+#      define SWIGEXPORT(a) __declspec(dllexport) a
+#      define SWIGIMPORT(a) extern a
+#    endif
+#  else
+#    if defined(__BORLANDC__)
+#      define SWIGEXPORT(a) a _export
+#      define SWIGIMPORT(a) a _export
+#    else
+#      define SWIGEXPORT(a) a
+#      define SWIGIMPORT(a) a
+#    endif
+#  endif
 #else
-#       define SWIGEXPORT(a) a
-#       define SWIGIMPORT(a) a
+#  define SWIGEXPORT(a) a
+#  define SWIGIMPORT(a) a
 #endif
 
 #ifdef SWIG_GLOBAL
-#define SWIGRUNTIME(a) SWIGEXPORT(a)
+#  define SWIGRUNTIME(a) SWIGEXPORT(a)
 #else
-#define SWIGRUNTIME(a) static a
+#  define SWIGRUNTIME(a) static a
 #endif
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -97,10 +97,10 @@ typedef void *(*swig_converter_func)(void *);
 typedef struct swig_type_info *(*swig_dycast_func)(void **);
 
 typedef struct swig_type_info {
-  const char             *name;                 
+  const char             *name;
   swig_converter_func     converter;
   const char             *str;
-  void                   *clientdata;	
+  void                   *clientdata;
   swig_dycast_func        dcast;
   struct swig_type_info  *next;
   struct swig_type_info  *prev;
@@ -114,12 +114,15 @@ SWIGIMPORT(swig_type_info *) SWIG_TypeDynamicCast(swig_type_info *, void **);
 SWIGIMPORT(const char *)     SWIG_TypeName(const swig_type_info *);
 SWIGIMPORT(swig_type_info *) SWIG_TypeQuery(const char *);
 SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
+SWIGIMPORT(char *)           SWIG_PackData(char *, void *, int);
+SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
 
 
 #ifdef __cplusplus
 }
 
 #endif
+
 
 /***********************************************************************
  * pyrun.swg for wxPython
@@ -130,7 +133,6 @@ SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
  * anyway.
  *
  ************************************************************************/
-
 
 #include "Python.h"
 
@@ -162,8 +164,6 @@ typedef struct swig_const_info {
     swig_type_info **ptype;
 } swig_const_info;
 
-
-
 /* Common SWIG API */
 #define SWIG_ConvertPtr(obj, pp, type, flags) \
   SWIG_Python_ConvertPtr(obj, pp, type, flags)
@@ -179,33 +179,26 @@ typedef struct swig_const_info {
   SWIG_Python_addvarlink(p, name, get_attr, set_attr)
 #define SWIG_ConvertPacked(obj, ptr, sz, ty, flags) \
   SWIG_Python_ConvertPacked(obj, ptr, sz, ty, flags)
-#define SWIG_PackData(c, ptr, sz) \
-  SWIG_Python_PackData(c, ptr, sz)
-#define SWIG_UnpackData(c, ptr, sz) \
-  SWIG_Python_UnpackData(c, ptr, sz)
 #define SWIG_NewPackedObj(ptr, sz, type) \
   SWIG_Python_NewPackedObj(ptr, sz, type)
 #define SWIG_InstallConstants(d, constants) \
   SWIG_Python_InstallConstants(d, constants)
 
 
-SWIGEXPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
-SWIGEXPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
-SWIGEXPORT(void *)	      SWIG_Python_MustGetPtr(PyObject *, swig_type_info *, int, int);
+SWIGIMPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
+SWIGIMPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
+SWIGIMPORT(void *)            SWIG_Python_MustGetPtr(PyObject *, swig_type_info *, int, int);
+SWIGIMPORT(PyObject *)        SWIG_Python_newvarlink(void);
+SWIGIMPORT(void)              SWIG_Python_addvarlink(PyObject *, char *, PyObject *(*)(void), int (*)(PyObject *));
+SWIGIMPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int sz, swig_type_info *, int);
+SWIGIMPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
+SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
-SWIGEXPORT(PyObject *)        SWIG_Python_newvarlink(void);
-SWIGEXPORT(void)              SWIG_Python_addvarlink(PyObject *, char *, PyObject *(*)(void), int (*)(PyObject *));
-SWIGEXPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int sz, swig_type_info *, int);
-SWIGEXPORT(char *)            SWIG_Python_PackData(char *c, void *, int);
-SWIGEXPORT(char *)            SWIG_Python_UnpackData(char *c, void *, int);
-SWIGEXPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
-SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
 
 /* Contract support */
 
 #define SWIG_contract_assert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, (char *) msg ); goto fail; } else
-
 
 #ifdef __cplusplus
 }
@@ -12054,7 +12047,7 @@ static PyObject *_wrap_FindDialogEvent_GetFlags(PyObject *self, PyObject *args, 
 static PyObject *_wrap_FindDialogEvent_GetFindString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFindDialogEvent *arg1 = (wxFindDialogEvent *) 0 ;
-    wxString result;
+    wxString *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -12064,16 +12057,19 @@ static PyObject *_wrap_FindDialogEvent_GetFindString(PyObject *self, PyObject *a
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxFindDialogEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->GetFindString();
+        {
+            wxString const &_result_ref = (arg1)->GetFindString();
+            result = (wxString *) &_result_ref;
+        }
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
 #if wxUSE_UNICODE
-        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
 #else
-        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
 #endif
     }
     return resultobj;
@@ -12103,7 +12099,13 @@ static PyObject *_wrap_FindDialogEvent_GetReplaceString(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -12315,7 +12317,13 @@ static PyObject *_wrap_FindReplaceData_GetFindString(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -12343,7 +12351,13 @@ static PyObject *_wrap_FindReplaceData_GetReplaceString(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -14902,7 +14916,13 @@ static PyObject *_wrap_PrintData_GetPrinterName(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -15318,7 +15338,13 @@ static PyObject *_wrap_PrintData_GetPrinterCommand(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -15346,7 +15372,13 @@ static PyObject *_wrap_PrintData_GetPrinterOptions(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -15374,7 +15406,13 @@ static PyObject *_wrap_PrintData_GetPreviewCommand(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -15402,7 +15440,13 @@ static PyObject *_wrap_PrintData_GetFilename(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -15430,7 +15474,13 @@ static PyObject *_wrap_PrintData_GetFontMetricPath(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;

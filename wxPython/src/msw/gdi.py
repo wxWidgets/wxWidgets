@@ -123,6 +123,9 @@ def ColourRGB(*args, **kwargs):
     val.thisown = 1
     return val
 
+Color = Colour
+NamedColor = NamedColour    
+
 class Palette(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPalette instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2408,8 +2411,12 @@ class DC(core.Object):
         """SetPalette(Palette palette)"""
         return _gdi.DC_SetPalette(*args, **kwargs)
 
+    def SetClippingRegionXY(*args, **kwargs):
+        """SetClippingRegionXY(int x, int y, int width, int height)"""
+        return _gdi.DC_SetClippingRegionXY(*args, **kwargs)
+
     def SetClippingRegion(*args, **kwargs):
-        """SetClippingRegion(int x, int y, int width, int height)"""
+        """SetClippingRegion(Point pt, Size sz)"""
         return _gdi.DC_SetClippingRegion(*args, **kwargs)
 
     def SetClippingRect(*args, **kwargs):

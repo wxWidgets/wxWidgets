@@ -164,6 +164,11 @@ def SystemSettings_SetScreenType(*args, **kwargs):
     """SystemSettings_SetScreenType(wxSystemScreenType screen)"""
     return _misc.SystemSettings_SetScreenType(*args, **kwargs)
 
+# backwards compatibility aliasses
+SystemSettings_GetSystemColour = SystemSettings_GetColour
+SystemSettings_GetSystemFont   = SystemSettings_GetFont
+SystemSettings_GetSystemMetric = SystemSettings_GetMetric
+
 class SystemOptions(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSystemOptions instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -977,6 +982,10 @@ class Timer(core.EvtHandler):
         """IsOneShot() -> bool"""
         return _misc.Timer_IsOneShot(*args, **kwargs)
 
+    def GetId(*args, **kwargs):
+        """GetId() -> int"""
+        return _misc.Timer_GetId(*args, **kwargs)
+
 
 class TimerPtr(Timer):
     def __init__(self, this):
@@ -1478,14 +1487,6 @@ def LogSysError(*args, **kwargs):
     """LogSysError(wxString msg)"""
     return _misc.LogSysError(*args, **kwargs)
 
-def LogTrace(*args, **kwargs):
-    """LogTrace(wxString msg)"""
-    return _misc.LogTrace(*args, **kwargs)
-
-def LogTraceMask(*args, **kwargs):
-    """LogTraceMask(wxString mask, wxString msg)"""
-    return _misc.LogTraceMask(*args, **kwargs)
-
 def LogGeneric(*args, **kwargs):
     """LogGeneric(unsigned long level, wxString msg)"""
     return _misc.LogGeneric(*args, **kwargs)
@@ -1515,6 +1516,13 @@ class LogNullPtr(LogNull):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = LogNull
 _misc.LogNull_swigregister(LogNullPtr)
+
+def LogTrace(*args):
+    """
+    LogTrace(unsigned long mask, wxString msg)
+    LogTrace(wxString mask, wxString msg)
+    """
+    return _misc.LogTrace(*args)
 
 class PyLog(Log):
     def __repr__(self):
