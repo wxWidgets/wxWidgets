@@ -158,7 +158,7 @@ WXDLLVER = '%d%d' % (VER_MAJOR, VER_MINOR)
 #----------------------------------------------------------------------
 
 def msg(text):
-    if sys.setup_is_main:
+    if hasattr(sys, 'setup_is_main') and sys.setup_is_main:
         print text
 
 
