@@ -97,19 +97,24 @@ public:
 */
 };
 
+
+/*
+The code is wrong and doesn't compile. Chris Breeze als reported, that
+some functions of wxTransformMatrix cannot work because it is not
+known if he matrix has been inverted. Be careful when using it.
+
 // Transform X value from logical to device
 inline double wxTransformMatrix::TransformX(double x) const
 {
-//	return (m_isIdentity ? x : (x * m_matrix[0][0] + y * m_matrix[1][0] + m_matrix[2][0]));
-  return 0;
+	return (m_isIdentity ? x : (x * m_matrix[0][0] + y * m_matrix[1][0] + m_matrix[2][0]));
 }
 
 // Transform Y value from logical to device
 inline double wxTransformMatrix::TransformY(double y) const
 {
-//	return (m_isIdentity ? y : (x * m_matrix[0][1] + y * m_matrix[1][1] + m_matrix[2][1]));
-  return 0;
+	return (m_isIdentity ? y : (x * m_matrix[0][1] + y * m_matrix[1][1] + m_matrix[2][1]));
 }
+*/
 
 // Is the matrix the identity matrix?
 // Perhaps there's some kind of optimization we can do to make this

@@ -18,6 +18,7 @@
 #include "wx/postscrp.h"
 #include "wx/intl.h"
 #include "wx/log.h"
+#include "wx/memory.h"
 
 #include "unistd.h"
 
@@ -285,6 +286,18 @@ int wxEntry( int argc, char *argv[] )
 
   wxClassInfo::InitializeClasses();
   
+#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+
+#if !defined(_WINDLL)
+  streambuf* sBuf = new wxDebugStreamBuf;
+#else
+  streambuf* sBuf = NULL;
+#endif
+  ostream* oStr = new ostream(sBuf) ;
+  wxDebugContext::SetStream(oStr, sBuf);
+
+#endif
+  
   if (!wxTheApp)
   {
     if (!wxApp::GetInitializerFunction())
@@ -346,6 +359,20 @@ int wxEntry( int argc, char *argv[] )
   wxTheApp->OnExit();
   
   wxApp::CommonCleanUp();
+  
+#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+  // At this point we want to check if there are any memory
+  // blocks that aren't part of the wxDebugContext itself,
+  // as a special case. Then when dumping we need to ignore
+  // wxDebugContext, too.
+  if (wxDebugContext::CountObjectsLeft() > 0)
+  {
+    wxTrace("There were memory leaks.\n");
+    wxDebugContext::Dump();
+    wxDebugContext::PrintStatistics();
+  }
+  wxDebugContext::SetStream(NULL, NULL);
+#endif
   
   return retValue;
 };

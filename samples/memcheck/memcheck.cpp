@@ -31,7 +31,7 @@
 #error You must set WXDEBUG to 1 on the 'make' command line or make.env.
 #endif
 
-#define new WXDEBUG_NEW
+// #define new WXDEBUG_NEW
 
 // Define a new application type
 class MyApp: public wxApp
@@ -81,7 +81,7 @@ bool MyApp::OnInit(void)
   frame->Show(TRUE);
 
 //  wxDebugContext::SetCheckpoint();
-  wxDebugContext::SetFile("debug.log");
+//  wxDebugContext::SetFile("debug.log");
 
   wxString *thing = new wxString; // WXDEBUG_NEW wxString;
   wxDate* date = new wxDate;
@@ -92,9 +92,9 @@ bool MyApp::OnInit(void)
 
   const char *data = (const char*) thing ;
 
-  wxDebugContext::PrintClasses();
-  wxDebugContext::Dump();
-  wxDebugContext::PrintStatistics();
+//  wxDebugContext::PrintClasses();
+//  wxDebugContext::Dump();
+//  wxDebugContext::PrintStatistics();
 
   // Don't delete these two objects, to force wxApp to flag a memory leak.
 //  delete thing;

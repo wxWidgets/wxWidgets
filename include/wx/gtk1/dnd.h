@@ -35,7 +35,7 @@ class wxTextDragSource;
 // wxDropTarget
 //-------------------------------------------------------------------------
 
-class wxDropTarget: wxObject
+class wxDropTarget: public wxObject
 {
   public:
 

@@ -52,7 +52,6 @@ class MyFrame: public wxFrame
   public:
   
     MyFrame(void);
-    void OnSize( wxSizeEvent &event );
     void OnCommand( wxCommandEvent &event );
     void OnAbout( wxCommandEvent &event );
     void OnView( wxCommandEvent &event );

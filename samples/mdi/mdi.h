@@ -34,8 +34,6 @@ class MyCanvas: public wxScrolledWindow
     DECLARE_EVENT_TABLE()
 };
 
-#ifdef __WXMSW__
-
 class TestRibbon: public wxToolBar
 {
   public:
@@ -48,17 +46,13 @@ class TestRibbon: public wxToolBar
   DECLARE_EVENT_TABLE()
 };
 
-#endif
-
 // Define a new frame
 class MyFrame: public wxMDIParentFrame
 {
   public:
     wxTextCtrl *textWindow;
     
-#ifdef __WXMSW__    
     TestRibbon* toolBar;
-#endif
 
     MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, const long style);
     bool OnClose(void);

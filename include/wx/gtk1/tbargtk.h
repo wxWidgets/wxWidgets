@@ -112,6 +112,8 @@ class wxToolBar: public wxControl
       const wxString& helpString1 = "", const wxString& helpString2 = "");
     virtual void AddSeparator(void);
     virtual void ClearTools(void);
+    
+    virtual void Layout(void);
 
     virtual void EnableTool(int toolIndex, bool enable);
     virtual void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on

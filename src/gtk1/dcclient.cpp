@@ -649,6 +649,46 @@ void wxPaintDC::SetBrush( const wxBrush &brush )
   };
 };
 
+// CMB 21/7/98: Added SetBackground. Sets background brush
+// for Clear() and bg colour for shapes filled with cross-hatch brush
+void wxPaintDC::SetBackground( const wxBrush &brush )
+{
+  if (!Ok()) return;
+  
+  if (m_backgroundBrush == brush) return;
+  
+  m_backgroundBrush = brush;
+  
+  if (!m_backgroundBrush.Ok()) return;
+  
+  m_backgroundBrush.GetColour().CalcPixel( m_cmap );
+  gdk_gc_set_background( m_brushGC, m_backgroundBrush.GetColour().GetColor() );
+  gdk_gc_set_foreground( m_bgGC, m_backgroundBrush.GetColour().GetColor() );
+  
+  GdkFill fillStyle = GDK_SOLID;
+  switch (m_backgroundBrush.GetStyle())
+  {
+    case wxSOLID:
+    case wxTRANSPARENT:
+      break;
+    default:
+      fillStyle = GDK_STIPPLED;
+  };
+ 
+  gdk_gc_set_fill( m_bgGC, fillStyle );
+  
+  if (m_backgroundBrush.GetStyle() == wxSTIPPLE)
+  {
+    gdk_gc_set_stipple( m_bgGC, m_backgroundBrush.GetStipple()->GetPixmap() );
+  };
+  
+  if (IS_HATCH(m_backgroundBrush.GetStyle()))
+  {
+    int num = m_backgroundBrush.GetStyle() - wxBDIAGONAL_HATCH;
+    gdk_gc_set_stipple( m_bgGC, hatches[num] );
+  };
+};
+
 void wxPaintDC::SetLogicalFunction( int function )
 {
   if (m_logicalFunction == function) return;
@@ -693,6 +733,14 @@ void wxPaintDC::SetTextBackground( const wxColour &col )
 void wxPaintDC::SetBackgroundMode( int mode )
 {
   m_backgroundMode = mode;
+
+  // CMB 21/7/98: fill style of cross-hatch brushes is affected by
+  // transparent/solid background mode
+  if (m_brush.GetStyle() != wxSOLID && m_brush.GetStyle() != wxTRANSPARENT)
+  {
+    gdk_gc_set_fill( m_brushGC,
+      (m_backgroundMode == wxTRANSPARENT) ? GDK_STIPPLED : GDK_OPAQUE_STIPPLED);
+  }
 };
 
 void wxPaintDC::SetPalette( const wxPalette& WXUNUSED(palette) )

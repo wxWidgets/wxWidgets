@@ -387,7 +387,7 @@ int wxMemStruct::ValidateNode ()
 	    ErrorMsg ("Object already deleted");
 	else {
 	    // Can't use the error routines as we have no recognisable object.
-	    wxTrace("Can't verify memory struct - all bets are off!\n");
+	    // wxTrace("Can't verify memory struct - all bets are off!\n");
 	}
 	return 0;
     }

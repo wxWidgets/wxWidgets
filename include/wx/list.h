@@ -76,11 +76,6 @@ class WXDLLEXPORT wxList: public wxObject
   wxList(int N, wxObject *Objects[]);
   wxList(wxObject *object, ...);
   
-#ifdef USE_STORABLE_CLASSES
-  wxList( istream &stream, char *data );
-  virtual void StoreObject( ostream &stream );
-#endif
-  
   ~wxList(void);
 
   inline int Number(void) const { return n; }

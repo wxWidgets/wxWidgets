@@ -119,6 +119,9 @@ class wxDC: public wxObject
     virtual void SetBrush( const wxBrush &brush ) = 0;
     virtual wxBrush *GetBrush(void) { return &m_brush; };
 
+    virtual void SetBackground( const wxBrush &brush ) = 0;
+    virtual wxBrush *GetBackground(void) { return &m_backgroundBrush; };
+
     virtual void SetLogicalFunction( int function ) = 0;
     virtual int GetLogicalFunction(void) { return m_logicalFunction; };
     

@@ -10,7 +10,7 @@
 
 #include "wx/frame.h"
 
-void wxFrame::OnIdle(wxIdleEvent& event)
+void wxFrame::OnIdle(wxIdleEvent& WXUNUSED(event) )
 {
   DoMenuUpdates();
 }

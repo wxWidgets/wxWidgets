@@ -80,6 +80,7 @@ class wxPaintDC: public wxDC
     virtual void SetFont( const wxFont &font );
     virtual void SetPen( const wxPen &pen );
     virtual void SetBrush( const wxBrush &brush );
+    virtual void SetBackground( const wxBrush &brush );
     virtual void SetLogicalFunction( int function );
     virtual void SetTextForeground( const wxColour &col );
     virtual void SetTextBackground( const wxColour &col );

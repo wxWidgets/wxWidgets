@@ -21,17 +21,10 @@
 #include "wx/mdi.h"
 #endif
 
-#ifdef __WXMSW__
-#ifdef __WIN95__
-#include <wx/tbar95.h>
-#else
-#include <wx/tbarmsw.h>
-#endif
-#endif
+#include <wx/toolbar.h>
 
 #ifdef __WXGTK__
-//#include "list.xpm"
-//#include "folder.xpm"
+#include "folder.xpm"
 #endif
 
 #include "mdi.h"
@@ -105,10 +98,8 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
         wxTE_MULTILINE|wxSUNKEN_BORDER);
     textWindow->SetValue("A help window");
 
-#ifdef __WXMSW__
     toolBar = new TestRibbon(this, 0, 0, 100, 30, wxNO_BORDER, wxVERTICAL, 1);
     SetToolBar(toolBar);
-#endif
 }
 
 void MyFrame::OnQuit(wxCommandEvent& event)
@@ -257,14 +248,12 @@ void MyFrame::OnSize(wxSizeEvent& event)
     int tw = 0;
     int th = 0;
     
-#ifdef __WXMSW__
     wxWindow* tbar = GetToolBar();
     if (tbar)
     {
         tbar->GetSize(&tw, &th);
         tbar->SetSize(w, th);
     }
-#endif
 
     textWindow->SetSize(0, th, 200, h-th);
     GetClientWindow()->SetSize(200, th, w - 200, h-th);
@@ -316,8 +305,6 @@ bool MyChild::OnClose(void)
   return TRUE;
 }
 
-#ifdef __WXMSW__
-
 BEGIN_EVENT_TABLE(TestRibbon, wxToolBar)
     EVT_PAINT(TestRibbon::OnPaint)
 END_EVENT_TABLE()
@@ -328,6 +315,7 @@ TestRibbon::TestRibbon(wxFrame *frame, int x, int y, int w, int h,
 {
     wxBitmap* bitmaps[8];
 
+#ifdef __WXMSW__
     bitmaps[0] = new wxBitmap("icon1", wxBITMAP_TYPE_RESOURCE);
     bitmaps[1] = new wxBitmap("icon2", wxBITMAP_TYPE_RESOURCE);
     bitmaps[2] = new wxBitmap("icon3", wxBITMAP_TYPE_RESOURCE);
@@ -336,6 +324,16 @@ TestRibbon::TestRibbon(wxFrame *frame, int x, int y, int w, int h,
     bitmaps[5] = new wxBitmap("icon6", wxBITMAP_TYPE_RESOURCE);
     bitmaps[6] = new wxBitmap("icon7", wxBITMAP_TYPE_RESOURCE);
     bitmaps[7] = new wxBitmap("icon8", wxBITMAP_TYPE_RESOURCE);
+#else
+    bitmaps[0] = new wxBitmap( folder_xpm );
+    bitmaps[1] = new wxBitmap( folder_xpm );
+    bitmaps[2] = new wxBitmap( folder_xpm );
+    bitmaps[3] = new wxBitmap( folder_xpm );
+    bitmaps[4] = new wxBitmap( folder_xpm );
+    bitmaps[5] = new wxBitmap( folder_xpm );
+    bitmaps[6] = new wxBitmap( folder_xpm );
+    bitmaps[7] = new wxBitmap( folder_xpm );
+#endif
 
 #ifdef __WXMSW__
   int width = 24;
@@ -403,4 +401,3 @@ void TestRibbon::OnPaint(wxPaintEvent& event)
   dc.DrawLine(0, h-1, w, h-1);
 }
 
-#endif

@@ -308,7 +308,7 @@ void wxLog::DoLog(wxLogLevel level, const char *szString)
   }
 }
 
-void wxLog::DoLogString(const char *szString)
+void wxLog::DoLogString(const char *WXUNUSED(szString))
 {
   wxFAIL_MSG("DoLogString must be overrided if it's called.");
 }
@@ -558,19 +558,19 @@ wxLogFrame::wxLogFrame(const char *szTitle)
   // @@ what about status bar? needed (for menu prompts)?
 }
 
-void wxLogFrame::OnClose(wxCommandEvent& event)
+void wxLogFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 {
   // just hide the window
   Show(FALSE);
 }
 
-void wxLogFrame::OnCloseWindow(wxCloseEvent& event)
+void wxLogFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
   // just hide the window
   Show(FALSE);
 }
 
-void wxLogFrame::OnSave(wxCommandEvent& event)
+void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
   // get the file name
   // -----------------
@@ -583,9 +583,9 @@ void wxLogFrame::OnSave(wxCommandEvent& event)
   // open file
   // ---------
   wxFile file;
-  bool bOk;
+  bool bOk = FALSE; 
   if ( wxFile::Exists(szFileName) ) {
-    bool bAppend;
+    bool bAppend = FALSE;
     wxString strMsg;
     strMsg.Printf(_("Append log to file '%s' "
                     "(choosing [No] will overwrite it)?"), szFileName);
@@ -637,7 +637,7 @@ void wxLogFrame::OnSave(wxCommandEvent& event)
   }
 }
 
-void wxLogFrame::OnClear(wxCommandEvent& event)
+void wxLogFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 {
   m_pTextCtrl->Clear();
 }

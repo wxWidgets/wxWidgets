@@ -736,7 +736,11 @@ wxDos2UnixFilename (char *s)
 }
 
 void 
+#ifdef __WXMSW__
 wxUnix2DosFilename (char *s)
+#else
+wxUnix2DosFilename (char *WXUNUSED(s))
+#endif
 {
 // Yes, I really mean this to happen under DOS only! JACS
 #ifdef __WXMSW__
@@ -1346,7 +1350,7 @@ void WXDLLEXPORT wxSplitPath(const char *pszFileName,
   uint nPosDos = pSepDos ? pSepDos - pszFileName : 0;
   if ( nPosDos > nPosUnix )
     nPosUnix = nPosDos;
-  uint nLen = Strlen(pszFileName);
+//  uint nLen = Strlen(pszFileName);
 
   if ( pstrPath )
     *pstrPath = wxString(pszFileName, nPosUnix);

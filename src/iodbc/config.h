@@ -1,7 +1,9 @@
 #ifndef _LINUX_CONFIG_H
 #define _LINUX_CONFIG_H
 
+#ifdef __LINUX__
 #include <linux/autoconf.h>
+#endif
 
 /*
  * Defines for what uname() should return 

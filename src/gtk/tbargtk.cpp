@@ -106,9 +106,17 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
 
 bool wxToolBar::OnLeftClick( int toolIndex, bool toggleDown )
 {
+  wxCommandEvent event( wxEVENT_TYPE_MENU_COMMAND, toolIndex );
+  event.SetEventObject( this );
+  event.SetInt( toolIndex );
+  event.SetExtraLong( (long) toggleDown);
+  
+/*
   wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, toolIndex);
   event.SetEventObject(this);
+  event.SetInt( toolIndex );
   event.SetExtraLong((long) toggleDown);
+*/
 
   GetEventHandler()->ProcessEvent(event);
 
@@ -117,8 +125,9 @@ bool wxToolBar::OnLeftClick( int toolIndex, bool toggleDown )
 
 void wxToolBar::OnRightClick( int toolIndex, float WXUNUSED(x), float WXUNUSED(y) )
 {
-  wxCommandEvent event(wxEVT_COMMAND_TOOL_RCLICKED, toolIndex);
-  event.SetEventObject(this);
+  wxCommandEvent event( wxEVENT_TYPE_MENU_COMMAND, toolIndex );
+  event.SetEventObject( this );
+  event.SetInt( toolIndex );
 
   GetEventHandler()->ProcessEvent(event);
 };
@@ -127,6 +136,7 @@ void wxToolBar::OnMouseEnter( int toolIndex )
 {
   wxCommandEvent event(wxEVT_COMMAND_TOOL_ENTER, toolIndex);
   event.SetEventObject(this);
+  event.SetInt( toolIndex );
 
   GetEventHandler()->ProcessEvent(event);
 };
@@ -167,6 +177,29 @@ void wxToolBar::AddSeparator(void)
 
 void wxToolBar::ClearTools(void)
 {
+};
+
+void wxToolBar::Layout(void)
+{
+  m_x = 0;
+  m_y = 0;
+  m_width = 100;
+  m_height = 0;
+  
+  wxNode *node = m_tools.First();
+  while (node)
+  {
+    wxToolBarTool *tool = (wxToolBarTool*)node->Data();
+    if (tool->m_bitmap1.Ok())
+    {
+      int tool_height = tool->m_bitmap1.GetHeight();
+      if (tool_height > m_height) m_height = tool_height;
+    };
+    
+    node = node->Next();
+  };
+  
+  m_height += 10;
 };
 
 void wxToolBar::EnableTool(int toolIndex, bool enable)

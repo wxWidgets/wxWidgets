@@ -210,40 +210,6 @@ wxList::~wxList (void)
     }
 }
 
-#ifdef USE_STORABLE_CLASSES
-wxList::wxList( istream &stream, char *WXUNUSED(data) )
-{
-  char buf[200];
-  unsigned int num;
-  stream.read( (char*)(&num), sizeof(num) );
-  for (unsigned int i = 0; i < num; i++)
-  {
-    int len;
-    stream.read( (char*)(&len), sizeof(len) );
-    stream.read( (char*)(&buf), len );
-    buf[len] = 0;
-    Append( wxCreateStoredObject( buf, stream, NULL ) );
-  };
-};
-
-void wxList::StoreObject( ostream &stream )
-{
-  unsigned int num = Number();
-  stream.write( (char*)(&num), sizeof(num) );
-  wxNode *node = First();
-  while (node)
-  {
-    wxObject *obj = (wxObject*) node->Data();
-    wxClassInfo *obj_info = obj->GetClassInfo();
-    int len = strlen(obj_info->className);
-    stream.write( (char*)(&len), sizeof(len) );
-    stream.write( obj_info->className, len );
-    obj->StoreObject( stream );
-    node = node->Next();
-  };
-};
-#endif
-  
 wxNode *wxList::Append(wxObject *object)
 {
     wxNode *node = new wxNode(this, last_node, NULL, object);

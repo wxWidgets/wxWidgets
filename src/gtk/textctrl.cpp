@@ -308,7 +308,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &WXUNUSED(event) )
 {
 };
 
-int wxTextCtrl::overflow(int c)
+int wxTextCtrl::overflow( int WXUNUSED(c) )
 {
   int len = pptr() - pbase();
   char *txt = new char[len+1];

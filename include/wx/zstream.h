@@ -16,7 +16,7 @@
 #endif
 
 #include <wx/stream.h>
-#include "zlib.h"
+#include "../zlib/zlib.h"
 
 class wxZlibInputStream: public wxFilterInputStream {
  public:
@@ -27,7 +27,7 @@ class wxZlibInputStream: public wxFilterInputStream {
 
  protected:
   size_t DoRead(void *buffer, size_t size);
-  off_t DoSeekInput(off_t pos, wxSeekMode WXUNUSED(mode)) { return wxInvalidOffset; }
+  off_t DoSeekInput(off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode)) { return wxInvalidOffset; }
   off_t DoTellInput() const { return wxInvalidOffset; }
 
  protected:
@@ -47,7 +47,7 @@ class wxZlibOutputStream: public wxFilterOutputStream {
 
  protected:
   size_t DoWrite(const void *buffer, size_t size);
-  off_t DoSeekOutput(off_t pos, wxSeekMode WXUNUSED(mode)) { return wxInvalidOffset; }
+  off_t DoSeekOutput(off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode)) { return wxInvalidOffset; }
   off_t DoTellOutput() const { return wxInvalidOffset; }
 
  protected:

@@ -129,7 +129,8 @@ char* wxDatabase::GetErrorClass(void) {
   return sqlstate;
 }
 
-bool wxDatabase::Open(char *thedatasource, bool exclusive, bool readOnly, char *username, char *password)
+bool wxDatabase::Open(char *thedatasource, bool WXUNUSED(exclusive), 
+  bool WXUNUSED(readOnly), char *username, char *password)
 {
   err_occured = FALSE;
   
@@ -198,7 +199,7 @@ char *wxDatabase::GetDatabaseName(void)
   char nameBuf[400];
   int nameSize = 0;
 
-  retcode = SQLGetInfo(hDBC, SQL_DATABASE_NAME, nameBuf, sizeof(nameBuf), (short *)&nameSize);
+  retcode = SQLGetInfo(hDBC, SQL_DATABASE_NAME, (unsigned char*)nameBuf, sizeof(nameBuf), (short *)&nameSize);
 
   if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
     return NULL;
@@ -230,15 +231,15 @@ bool wxDatabase::InWaitForDataSource(void)
   return FALSE;
 }
 
-void wxDatabase::SetLoginTimeout(long seconds)
+void wxDatabase::SetLoginTimeout(long WXUNUSED(seconds))
 {
 }
 
-void wxDatabase::SetQueryTimeout(long seconds)
+void wxDatabase::SetQueryTimeout(long WXUNUSED(seconds))
 {
 }
 
-void wxDatabase::SetSynchronousMode(bool synchronous)
+void wxDatabase::SetSynchronousMode(bool WXUNUSED(synchronous))
 {
 }
 
@@ -263,11 +264,11 @@ void wxDatabase::Cancel(void)
 }
 
 // Overridables
-void wxDatabase::OnSetOptions(wxRecordSet *recordSet)
+void wxDatabase::OnSetOptions(wxRecordSet *WXUNUSED(recordSet))
 {
 }
 
-void wxDatabase::OnWaitForDataSource(bool stillExecuting)
+void wxDatabase::OnWaitForDataSource(bool WXUNUSED(stillExecuting))
 {
 }
 
@@ -335,7 +336,7 @@ void wxDatabase::ResetRecordSets(void)
 bool wxDatabase::GetInfo(long infoType, long *buf)
 {
   short sz = 0;
-  retcode = SQLGetInfo(hDBC, (UWORD)infoType, (char *)buf, sizeof(buf), &sz);
+  retcode = SQLGetInfo(hDBC, (UWORD)infoType, (unsigned char*)buf, sizeof(buf), &sz);
   
   if (retcode != SQL_ERROR)
     return TRUE;
@@ -349,7 +350,7 @@ bool wxDatabase::GetInfo(long infoType, char *buf, int bufSize)
     bufSize = sizeof(buf);
     
   short sz = 0;
-  retcode = SQLGetInfo(hDBC, (UWORD)infoType, buf, bufSize, &sz);
+  retcode = SQLGetInfo(hDBC, (UWORD)infoType, (unsigned char*)buf, bufSize, &sz);
   
   if (retcode != SQL_ERROR)
     return TRUE;
@@ -386,7 +387,7 @@ wxString wxDatabase::GetODBCVersionString(bool implementation)
   int bufSize = sizeof(buf);
     
   short sz = 0;
-  retcode = SQLGetInfo(hDBC, (UWORD)SQL_ODBC_VER, buf, bufSize, &sz);
+  retcode = SQLGetInfo(hDBC, (UWORD)SQL_ODBC_VER, (unsigned char*)buf, bufSize, &sz);
   
   if (hDBC != 0 && noDBC)
   {
@@ -427,7 +428,7 @@ float wxDatabase::GetODBCVersionFloat(bool implementation)
   int bufSize = sizeof(buf);
  
   short sz = 0;
-  retcode = SQLGetInfo(hDBC, (UWORD)SQL_ODBC_VER, buf, bufSize, &sz);
+  retcode = SQLGetInfo(hDBC, (UWORD)SQL_ODBC_VER, (unsigned char*)buf, bufSize, &sz);
 
   if (hDBC != 0 && noDBC)
   {
@@ -485,7 +486,7 @@ wxRecordSet::~wxRecordSet(void)
 }
 
 // If SQL is non-NULL, table and columns can be NULL.
-bool wxRecordSet::BeginQuery(int openType, char *sql, int options)
+bool wxRecordSet::BeginQuery(int WXUNUSED(openType), char *WXUNUSED(sql), int WXUNUSED(options))
 {
   // Needs to construct an appropriate SQL statement. By default
   // (i.e. if table and columns are provided) then
@@ -565,7 +566,7 @@ void wxRecordSet::FillVars(int recnum) {
   
   do {
     ((wxQueryCol*)node->Data())->FillVar(recnum);
-  } while (node = node->Next());
+  } while ((node = node->Next()));
 }
 
 bool wxRecordSet::GetResultSet(void)
@@ -796,7 +797,7 @@ bool wxRecordSet::GetTables(void)
 bool wxRecordSet::GetColumns(char* table)
 {
   char* name=NULL;
-  char* wildcard = "%";
+//  char* wildcard = "%";
 
   name = table ? table : tablename;
   
@@ -836,7 +837,7 @@ bool wxRecordSet::GetColumns(char* table)
 bool wxRecordSet::GetPrimaryKeys(char* table)
 {
   char* name=NULL;
-  char* wildcard = "%";
+//  char* wildcard = "%";
 
   name = table ? table : tablename;
   
@@ -875,7 +876,7 @@ bool wxRecordSet::GetForeignKeys(char* PkTableName, char * FkTableName)
 {
   char* Pkname=NULL;
   char* Fkname=NULL;
-  char* wildcard = "%";
+//  char* wildcard = "%";
 
 // Try to disable situation: both PkTableName and FkTableName are NULL 
 //   set Pkname from tablename
@@ -1371,7 +1372,7 @@ void wxRecordSet::SetFieldDirty(const char* name, bool dirty)
   ((wxQueryCol*)node->Data())->SetFieldDirty(cursor, dirty);
 }
 
-void wxRecordSet::SetFieldNull(void *p, bool isNull)
+void wxRecordSet::SetFieldNull(void *WXUNUSED(p), bool WXUNUSED(isNull))
 {
 }
    
@@ -1534,7 +1535,7 @@ long wxQueryCol::GetSize(int row) {
   wxNode* node = fields.Nth(row);
   
   if (!node)
-    return NULL;
+    return 0;
   
   return ((wxQueryField*)node->Data())->GetSize();
 }
@@ -1599,7 +1600,7 @@ bool wxQueryField::AllocData(void) {
     {
       if (data) // JACS
         delete[] (char*)data;
-      if (data = new char[size+1])
+      if ((data = new char[size+1]))
       {
         char *str = (char *)data;
         int i;
@@ -1613,7 +1614,7 @@ bool wxQueryField::AllocData(void) {
     {
       if (data) // JACS
         delete (long*)data;
-      if (data = new long)
+      if ((data = new long))
         *(long*)data = 0L;
       break;
     }
@@ -1621,7 +1622,7 @@ bool wxQueryField::AllocData(void) {
     {
       if (data)
         delete (short*)data;
-      if (data = new short)
+      if ((data = new short))
         *(short*)data = 0;
       break;
     }
@@ -1630,7 +1631,7 @@ bool wxQueryField::AllocData(void) {
     {
       if (data)
         delete (double*)data;
-      if (data = new double)
+      if ((data = new double))
         *(double*)data = 0;
       break;
     }
@@ -1638,7 +1639,7 @@ bool wxQueryField::AllocData(void) {
     {
       if (data)
         delete (float*)data;
-      if (data = new float)
+      if ((data = new float))
         *(float*)data = (float)0;
       break;
     }

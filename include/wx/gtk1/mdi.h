@@ -68,9 +68,6 @@ class wxMDIParentFrame: public wxFrame
     void GetClientSize(int *width, int *height) const;
     wxMDIChildFrame *GetActiveChild(void) const;
     
-    virtual void SetToolBar( wxToolBar *toolbar );
-    virtual wxWindow *GetToolBar(void) const;
-  
     wxMDIClientWindow *GetClientWindow(void) const; 
     virtual wxMDIClientWindow *OnCreateClient(void);
   
@@ -95,7 +92,6 @@ class wxMDIParentFrame: public wxFrame
     wxMDIClientWindow              *m_clientWindow;
     bool                            m_parentFrameActive;
     wxMenuBar                      *m_mdiMenuBar;
-    wxToolBar                      *m_toolBar;
 
   DECLARE_EVENT_TABLE()    
 };

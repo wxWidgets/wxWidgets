@@ -1417,7 +1417,6 @@ void wxWindow::SetFocus(void)
 
 bool wxWindow::OnClose(void)
 {
-  printf( "OnClose event.\n" );
   return TRUE;
 };
 
@@ -1431,6 +1430,21 @@ void wxWindow::AddChild( wxWindow *child )
   // for wxFrame, wxDialog, wxWindow and 
   // wxMDIParentFrame.
 
+  // wxFrame and wxDialog as children aren't placed into the parents
+  
+  if (child->IsKindOf(CLASSINFO(wxFrame)) || child->IsKindOf(CLASSINFO(wxDialog)))
+  {
+    m_children.Append( child );
+    
+    if ((child->m_x != -1) && (child->m_y != -1))
+      gtk_widget_set_uposition( child->m_widget, child->m_x, child->m_y );
+      
+    return;
+  }
+  
+  // In the case of an wxMDIChildFrame descendant, we use the 
+  // client windows's AddChild()
+  
   if (IsKindOf(CLASSINFO(wxMDIParentFrame)))
   {
     if (child->IsKindOf(CLASSINFO(wxMDIChildFrame)))
@@ -1440,30 +1454,32 @@ void wxWindow::AddChild( wxWindow *child )
       { 
         client->AddChild( child );
         return;
-      };
-    };
-  };
+      }
+    }
+  }
   
-  // wxNotebooks are very special, so they have their own AddChild
+  // wxNotebook is very special, so it has a private AddChild()
   
   if (IsKindOf(CLASSINFO(wxNotebook)))
   {
     wxNotebook *tab = (wxNotebook*)this;
     tab->AddChild( child );
     return;
-  };
+  }
+  
+  // wxFrame has a private AddChild
+  
+  if (IsKindOf(CLASSINFO(wxFrame)))
+  {
+    wxFrame *frame = (wxFrame*)this;
+    frame->AddChild( child );
+    return;
+  }
+  
+  // All the rest
   
   m_children.Append( child );
-  if (child->IsKindOf(CLASSINFO(wxFrame)) || child->IsKindOf(CLASSINFO(wxDialog)))
-  {
-    if ((child->m_x != -1) && (child->m_y != -1))
-      gtk_widget_set_uposition( child->m_widget, child->m_x, child->m_y );
-  }
-  else
-  {
-    if (m_wxwindow)
-      gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), child->m_widget, child->m_x, child->m_y );
-  };
+  if (m_wxwindow) gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), child->m_widget, child->m_x, child->m_y );
   gtk_widget_set_usize( child->m_widget, child->m_width, child->m_height );
 };
 

@@ -23,7 +23,7 @@
 #endif
 
 #include   "wxllist.h"
-#include   "iostream"
+#include   "iostream.h"
 
 #include   <wx/dc.h>
 #include   <wx/postscrp.h>

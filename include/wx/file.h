@@ -21,8 +21,6 @@
 #include  "wx/filefn.h"
 
 // ----------------------------------------------------------------------------
-<<<<<<< file.h
-=======
 // constants
 // ----------------------------------------------------------------------------
 
@@ -47,7 +45,6 @@ const off_t ofsInvalid = (off_t)-1;
 #define wxS_DEFAULT   (wxS_IRUSR | wxS_IWUSR | wxS_IRGRP | wxS_IROTH)
 
 // ----------------------------------------------------------------------------
->>>>>>> 1.7
 // class wxFile: raw file IO
 //
 // NB: for space efficiency this class has no virtual functions, including
@@ -78,11 +75,6 @@ public:
   wxFile(int fd) { m_fd = fd; }
 
   // open/close
-<<<<<<< file.h
-  bool Create(const char *szFileName, bool bOverwrite = FALSE);
-  bool Open(const char *szFileName, OpenMode mode = read);
-  inline bool Close();  // Close is a NOP if not opened
-=======
     // create a new file (with the default value of bOverwrite, it will fail if
     // the file already exists, otherwise it will overwrite it and succeed)
   bool Create(const char *szFileName, bool bOverwrite = FALSE,
@@ -90,7 +82,6 @@ public:
   bool Open(const char *szFileName, OpenMode mode = read,
             int access = wxS_DEFAULT);
   bool Close();  // Close is a NOP if not opened
->>>>>>> 1.7
 
   // assign an existing file descriptor and get it back from wxFile object
   void Attach(int fd) { Close(); m_fd = fd; }

@@ -25,8 +25,8 @@ public:
 
    //virtual void OnDraw(wxDC &dc);
    void OnPaint(wxPaintEvent &WXUNUSED(event));
-   virtual void OnMouse(wxMouseEvent& event);
-   virtual void OnChar(wxKeyEvent& event);
+   /*virtual*/ void OnMouse(wxMouseEvent& event);
+   /*virtual*/ void OnChar(wxKeyEvent& event);
    void UpdateScrollbars(void);
    void Print(void);
    void Erase(void)

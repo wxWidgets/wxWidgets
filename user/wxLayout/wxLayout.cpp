@@ -39,7 +39,7 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
    BEGIN_EVENT_TABLE(MyFrame,wxFrame)
    EVT_MENU    (-1,       MyFrame::OnCommand)
    EVT_COMMAND (-1,-1,    MyFrame::OnCommand)
-   EVT_CHAR    (wxLayoutWindow::OnChar)
+   EVT_CHAR    (  wxLayoutWindow::OnChar  )
    END_EVENT_TABLE()
 
    MyFrame::MyFrame(void) :

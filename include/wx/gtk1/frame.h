@@ -21,6 +21,7 @@
 #include "wx/window.h"
 #include "wx/menu.h"
 #include "wx/statusbr.h"
+#include "wx/toolbar.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -42,8 +43,9 @@ extern const char *wxFrameNameStr;
 
 class wxFrame: public wxWindow
 {
+  DECLARE_DYNAMIC_CLASS(wxFrame)
 public:
-  // construction
+
   wxFrame();
   wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
@@ -54,38 +56,35 @@ public:
   ~wxFrame();
   bool Destroy();
 
-  // operations
-    //
   virtual bool Show( bool show );
   virtual void Enable( bool enable );
 
-    // frame size
   virtual void GetClientSize( int *width, int *height ) const;
-    // set minimal size for the frame (@@@ other params not implemented)
-  void SetSizeHints(int minW, int minH,
-                    int maxW = -1, int maxH = -1,
-                    int incW = -1);
+  
+    // set minimal/maxmimal size for the frame
+  virtual void SetSizeHints( int minW, int minH, int maxW, int maxH, int incW = -1 );
 
-    // status bar
   virtual bool CreateStatusBar( int number = 1 );
-  wxStatusBar *GetStatusBar();
+  virtual wxStatusBar *GetStatusBar();
   virtual void SetStatusText( const wxString &text, int number = 0 );
   virtual void SetStatusWidths( int n, int *width );
 
-    // menu bar
-  void SetMenuBar( wxMenuBar *menuBar );
-  wxMenuBar *GetMenuBar();
+  virtual wxToolBar *CreateToolBar( int style = 0, 
+                                    int orientation = wxHORIZONTAL, int rowsOrColumns = 1 );
+  virtual wxToolBar *GetToolBar();
+  
+  virtual void SetMenuBar( wxMenuBar *menuBar );
+  virtual wxMenuBar *GetMenuBar();
 
-    // frame title
   void SetTitle( const wxString &title );
   wxString GetTitle() const { return m_title; }
 
-  // implementation
-  void OnActivate( wxActivateEvent &event ) { } // called from docview.cpp
+  void OnActivate( wxActivateEvent &WXUNUSED(event) ) { } // called from docview.cpp
   void OnSize( wxSizeEvent &event );
   void OnCloseWindow( wxCloseEvent& event );
   void OnIdle(wxIdleEvent& event);
 
+  virtual void AddChild( wxWindow *child );
   virtual void GtkOnSize( int x, int y, int width, int height );
 
 private:
@@ -99,10 +98,12 @@ private:
   GtkWidget    *m_mainWindow;
   wxMenuBar    *m_frameMenuBar;
   wxStatusBar  *m_frameStatusBar;
+  wxToolBar    *m_frameToolBar;
+  int           m_toolBarHeight;
   bool          m_doingOnSize;
+  bool          m_addPrivateChild;   // for toolbar (and maybe menubar)
   wxString      m_title;
 
-  DECLARE_DYNAMIC_CLASS(wxFrame)
   DECLARE_EVENT_TABLE()
 };
 

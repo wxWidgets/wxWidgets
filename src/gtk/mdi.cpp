@@ -69,7 +69,6 @@ wxMDIParentFrame::wxMDIParentFrame(void)
   m_clientWindow = NULL;
   m_currentChild = NULL;
   m_parentFrameActive = TRUE;
-  m_toolBar = NULL;
 };
 
 wxMDIParentFrame::wxMDIParentFrame( wxWindow *parent,
@@ -80,7 +79,6 @@ wxMDIParentFrame::wxMDIParentFrame( wxWindow *parent,
   m_clientWindow = NULL;
   m_currentChild = NULL;
   m_parentFrameActive = TRUE;
-  m_toolBar = NULL;
   Create( parent, id, title, pos, size, style, name );
 };
 
@@ -130,16 +128,6 @@ void wxMDIParentFrame::SetMDIMenuBar( wxMenuBar *menu_bar )
 void wxMDIParentFrame::GetClientSize(int *width, int *height ) const
 {
   wxFrame::GetClientSize( width, height );
-};
-
-void wxMDIParentFrame::SetToolBar( wxToolBar *toolbar )
-{
-  m_toolBar = toolbar;
-};
-
-wxWindow *wxMDIParentFrame::GetToolBar(void) const
-{
-  return m_toolBar;
 };
 
 wxMDIChildFrame *wxMDIParentFrame::GetActiveChild(void) const
@@ -250,7 +238,8 @@ static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
   while (node)
   {
     wxMenuItem *menuitem = (wxMenuItem*)node->Data();
-    if (menuitem->GetSubMenu()) SetInvokingWindow( menuitem->GetSubMenu(), win );
+    if (menuitem->IsSubMenu())
+      SetInvokingWindow( menuitem->GetSubMenu(), win );
     node = node->Next();
   };
 };
@@ -346,7 +335,7 @@ void wxMDIClientWindow::AddChild( wxWindow *child )
   
   gtk_signal_connect( GTK_OBJECT(child->m_widget), "size_allocate",
     GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)child );
-
+    
   gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), child->m_widget, label_widget );
   
   mdi_child->m_page = (GtkNotebookPage*) (g_list_last(GTK_NOTEBOOK(m_widget)->children)->data);

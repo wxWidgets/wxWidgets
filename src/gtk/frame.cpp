@@ -77,7 +77,9 @@ wxFrame::wxFrame()
   m_doingOnSize = FALSE;
   m_frameMenuBar = NULL;
   m_frameStatusBar = NULL;
+  m_frameToolBar = NULL;
   m_sizeSet = FALSE;
+  m_addPrivateChild = FALSE;
   wxTopLevelWindows.Insert( this );
 };
 
@@ -85,7 +87,12 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
+  m_doingOnSize = FALSE;
+  m_frameMenuBar = NULL;
+  m_frameStatusBar = NULL;
+  m_frameToolBar = NULL;
   m_sizeSet = FALSE;
+  m_addPrivateChild = FALSE;
   Create( parent, id, title, pos, size, style, name );
   wxTopLevelWindows.Insert( this );
 };
@@ -130,9 +137,6 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
   GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
 
   gtk_container_add( GTK_CONTAINER(m_mainWindow), m_wxwindow );
-
-  m_frameMenuBar = NULL;
-  m_frameStatusBar = NULL;
 
   gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
     GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );
@@ -195,6 +199,12 @@ void wxFrame::GetClientSize( int *width, int *height ) const
   {
     if (m_frameMenuBar) (*height) -= wxMENU_HEIGHT;
     if (m_frameStatusBar) (*height) -= wxSTATUS_HEIGHT;
+    if (m_frameToolBar)
+    {
+      int y = 0;
+      m_frameToolBar->GetSize( NULL, &y );
+      (*height) -= y;
+    }
   };
 };
 
@@ -236,6 +246,12 @@ void wxFrame::GtkOnSize( int x, int y, int width, int height )
     main_height -= wxMENU_HEIGHT;
   };
 
+  int toolbar_height = 0;
+  if (m_frameToolBar) m_frameToolBar->GetSize( NULL, &toolbar_height );
+  
+  main_y += toolbar_height;
+  main_height -= toolbar_height;
+  
   gtk_widget_set_uposition( GTK_WIDGET(m_wxwindow), main_x, main_y );
   gtk_widget_set_usize( GTK_WIDGET(m_wxwindow), main_width, main_height );
 
@@ -245,6 +261,12 @@ void wxFrame::GtkOnSize( int x, int y, int width, int height )
     gtk_widget_set_usize( m_frameMenuBar->m_widget, width-2, wxMENU_HEIGHT-2 );
   };
 
+  if (m_frameToolBar)
+  {
+    gtk_widget_set_uposition( m_frameToolBar->m_widget, 1, wxMENU_HEIGHT );
+    gtk_widget_set_usize( m_frameToolBar->m_widget, width-2, toolbar_height );
+  };
+  
   if (m_frameStatusBar)
   {
     m_frameStatusBar->SetSize( 0, main_height-wxSTATUS_HEIGHT, width, wxSTATUS_HEIGHT );
@@ -265,7 +287,7 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
     // no child: go out !
     if (!GetChildren()->First())
       return;
-
+      
     // do we have exactly one child?
     wxWindow *child = NULL;
     for(wxNode *node = GetChildren()->First(); node; node = node->Next())
@@ -273,8 +295,9 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
       wxWindow *win = (wxWindow *)node->Data();
       if (!win->IsKindOf(CLASSINFO(wxFrame)) &&
           !win->IsKindOf(CLASSINFO(wxDialog))
-#if 0 // not in m_children anyway
+#if 0  // not in m_children anyway
           && (win != m_frameMenuBar) &&
+             (win != m_frameToolBar) &&
              (win != m_frameStatusBar)
 #endif
          )
@@ -291,6 +314,25 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
     GetClientSize(&client_x, &client_y);
     child->SetSize( 1, 1, client_x-2, client_y);
   }
+};
+
+void wxFrame::AddChild( wxWindow *child )
+{
+  if (m_addPrivateChild)
+  {
+    gtk_myfixed_put( GTK_MYFIXED(m_mainWindow), child->m_widget, child->m_x, child->m_y );
+      
+    gtk_widget_set_usize( child->m_widget, child->m_width, child->m_height );
+  }
+  else
+  {
+    m_children.Append( child );
+    
+    if (m_wxwindow)
+      gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), child->m_widget, child->m_x, child->m_y );
+      
+    gtk_widget_set_usize( child->m_widget, child->m_width, child->m_height );
+  }    
 };
 
 static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
@@ -329,6 +371,27 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
   }
 };
 
+wxMenuBar *wxFrame::GetMenuBar(void)
+{
+  return m_frameMenuBar;
+};
+
+wxToolBar *wxFrame::CreateToolBar( int style, int WXUNUSED(orientation), int WXUNUSED(rowsOrColumns) )
+{
+  m_addPrivateChild = TRUE;
+  
+  m_frameToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, style );
+  
+  m_addPrivateChild = FALSE;
+  
+  return m_frameToolBar;
+};
+
+wxToolBar *wxFrame::GetToolBar(void)
+{
+  return m_frameToolBar;
+};
+
 bool wxFrame::CreateStatusBar( int number )
 {
   if (m_frameStatusBar)
@@ -350,14 +413,9 @@ void wxFrame::SetStatusWidths( int n, int *width )
   if (m_frameStatusBar) m_frameStatusBar->SetStatusWidths( n, width );
 };
 
-wxStatusBar *wxFrame::GetStatusBar()
+wxStatusBar *wxFrame::GetStatusBar(void)
 {
   return m_frameStatusBar;
-};
-
-wxMenuBar *wxFrame::GetMenuBar()
-{
-  return m_frameMenuBar;
 };
 
 void wxFrame::SetTitle( const wxString &title )
@@ -366,9 +424,9 @@ void wxFrame::SetTitle( const wxString &title )
   gtk_window_set_title( GTK_WINDOW(m_widget), title );
 };
 
-void wxFrame::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW)
+void wxFrame::SetSizeHints(int minW, int minH, int maxW, int maxH, int WXUNUSED(incW) )
 {
-  // VZ: I don't know a way to set the max size for the window in GTK and have
-  //     no idea about what incW might be
-  gtk_widget_set_usize(m_widget, minW, minH);
+  if (m_wxwindow)
+    gdk_window_set_hints( m_wxwindow->window, -1, -1, 
+	                  minW, minH, maxW, maxH, GDK_HINT_MIN_SIZE | GDK_HINT_MIN_SIZE );
 }

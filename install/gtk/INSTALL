@@ -4,8 +4,48 @@
 wxGTK uses GNU configure. If you have problems with your make use GNU
 make instead.
 
+* Additional libraries
+-----------------------
+
+wxGTK requires the GTK (The Gimp Toolkit) to be installed,
+which probably makes sense.
+
+There will be a few more features of wxGTK, which will 
+require further libraries (on some platforms). These
+features will be optional. I hope to teach configure
+to check that out automatically.
+
+Thread support:
+
+  Requires pthreads under Linux with glibc 2. pthreads are
+  always present on such systems, so just compile.
+  
+  Requires pcthreads under Linux with libc 5. If you
+  haven't installed pcthreads, there will be no thread
+  support in wxGTK, but the library will compile.
+  
+Python scripting language support:
+
+  Requires Python. Soon to come.
+  
+* Other things to do
+-----------------------------
+
+Copy the two files from ~/wxGTK/misc/imlib to your
+home directory. You may also edit imrc by hand as
+you like. The palette file is required when using
+wxGTK in 256-colour mode.
+
+If you want to use wxGTK's ODBC support, you'll have
+to create a .odbc.ini file. The readme file in 
+~/wxGTK/src/iodbc tells you what to do.
+
+
 * Create your configuration
 -----------------------------
+
+This must be done in ~/wxGTK/install/gtk
+
 Usage:
 	./configure options
 
@@ -47,10 +87,12 @@ The following options handle the kind of library you want to build.
 				broken.
 				
 	--with-mem_tracing      Add built-in memory tracing.
-	                        Not yet.
 				
-	--with-debug		Add debug info to object
+	--with-debug_info	Add debug info to object
 	                        files.
+
+	--with-debug_flag	Define __DEBUG__ and __WXDEBUG__ when
+	                        compiling.
 
 * Feature Options
 -------------------
@@ -65,36 +107,10 @@ producing a shared library, wxGTK's configure system auto-
 matically enables all features, as long as they are already
 implemented.
 
-* Additional libraries
------------------------
-
-[Note: Currently wxGTK will compile out-of-the-box
- with no extra libraries required. Support for
- OpenGl, threads, Python and hopefully ODBC
- support will soon be added.]
-
-wxGTK requires the GTK (The Gimp Toolkit) to be installed,
-which probably makes sense.
-
-There will be a few more features of wxGTK, which will 
-require further libraries (on some platforms). These
-features will be optional. I hope to teach configure
-to check that out automatically.
-
-Thread support:
-
-  Requires pthreads under Linux without glibc or glibc 2.
-  
-OpenGl:
-
-  Requires OpenGl or MesaGl.
-  
-Python scripting language support:
-
-  Requires Python.
-  
 * Compiling
 -------------
+
+This must be done in ~/wxGTK
 
 First you have to create all makefiles in all subdirectories:
 
@@ -144,7 +160,7 @@ will do the work for you.
 --------------------------
 
 I propose to put all contributed programs in the directory
-"user", with a directory of its own.
+"~/wcGTK/user", with a directory of its own.
 
 This directory then should include the following files:
 

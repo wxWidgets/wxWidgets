@@ -470,16 +470,11 @@ MyFrame::MyFrame(void) :
   m_canvas = new MyCanvas( this, -1, wxPoint(2,62), wxSize(300-4,120-4) );
   m_canvas->SetScrollbars( 10, 10, 50, 50 );
   
-  m_tb = new wxToolBar( this, -1, wxPoint(2,60), wxSize(300-4,26) );
+  m_tb = CreateToolBar();
   m_tb->SetMargins( 2, 2 );
-  
-  wxBitmap *bm = new wxBitmap( list_xpm );
-  m_tb->AddTool( 0, *bm, wxNullBitmap, FALSE, -1, -1, NULL, "This is a button" );
-  bm = new wxBitmap( folder_xpm );
-  m_tb->AddTool( 0, *bm, wxNullBitmap, TRUE, -1, -1, NULL, "This is a toggle" );
-  
+  m_tb->AddTool( 0, wxBitmap( list_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "This is a button" );
+  m_tb->AddTool( 0, wxBitmap( folder_xpm ), wxNullBitmap, TRUE, -1, -1, NULL, "This is a toggle" );
   m_tb->Layout();
-  m_tb->Show( TRUE );
   
 //  m_timer.Start( 1000, TRUE );
 };

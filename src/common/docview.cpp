@@ -811,7 +811,7 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
         preview = new wxWindowsPrintPreview(printout, view->OnCreatePrintout());
     else
 #endif
-        preview = new wxPostScriptPrintPreview(printout, view->OnCreatePrintout());
+       preview = new wxPostScriptPrintPreview(printout, view->OnCreatePrintout());
 
     wxPreviewFrame *frame = new wxPreviewFrame(preview, (wxFrame *)wxTheApp->GetTopWindow(), "Print Preview",
 		wxPoint(100, 100), wxSize(600, 650));
