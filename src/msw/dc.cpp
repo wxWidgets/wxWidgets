@@ -1529,8 +1529,8 @@ void wxDC::SetMapMode(int mode)
         ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
 
     SetViewportExtEx(GetHdc(), VIEWPORT_EXTENT, VIEWPORT_EXTENT, NULL);
-    m_windowExtX = (int)MS_XDEV2LOGREL(VIEWPORT_EXTENT);
-    m_windowExtY = (int)MS_YDEV2LOGREL(VIEWPORT_EXTENT);
+    m_windowExtX = (int)MS_XDEV2LOG(VIEWPORT_EXTENT);
+    m_windowExtY = (int)MS_YDEV2LOG(VIEWPORT_EXTENT);
     ::SetWindowExtEx(GetHdc(), m_windowExtX, m_windowExtY, NULL);
     ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
     ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
@@ -1609,7 +1609,8 @@ wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
 
 wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
 {
-    return (wxCoord) ((x)/(m_logicalScaleX*m_userScaleX*m_signX*m_scaleX));
+	// axis orientation is not taken into account for conversion of a distance
+    return (wxCoord) ((x)/(m_logicalScaleX*m_userScaleX*m_scaleX));
 }
 
 wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
@@ -1621,7 +1622,8 @@ wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
 
 wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
 {
-    return (wxCoord) ((y)/(m_logicalScaleY*m_userScaleY*m_signY*m_scaleY));
+	// axis orientation is not taken into account for conversion of a distance
+	return (wxCoord) ((y)/(m_logicalScaleY*m_userScaleY*m_scaleY));
 }
 
 wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
@@ -1631,7 +1633,8 @@ wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
 
 wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
 {
-    return (wxCoord) (x*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX);
+	// axis orientation is not taken into account for conversion of a distance
+    return (wxCoord) (x*m_logicalScaleX*m_userScaleX*m_scaleX);
 }
 
 wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
@@ -1641,7 +1644,8 @@ wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
 
 wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 {
-    return (wxCoord) (y*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY);
+	// axis orientation is not taken into account for conversion of a distance
+    return (wxCoord) (y*m_logicalScaleY*m_userScaleY*m_scaleY);
 }
 
 // ---------------------------------------------------------------------------
