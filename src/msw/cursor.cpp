@@ -96,7 +96,7 @@ wxCursorRefData::wxCursorRefData()
   m_width = 32;
   m_height = 32;
 
-  refData->m_destroyCursor = TRUE;
+  m_destroyCursor = TRUE;
 }
 
 void wxCursorRefData::Free()
