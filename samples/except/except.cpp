@@ -270,9 +270,17 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDialog(wxCommandEvent& WXUNUSED(event))
 {
-    MyDialog dlg(this);
+    try
+    {
+        MyDialog dlg(this);
 
-    dlg.ShowModal();
+        dlg.ShowModal();
+    }
+    catch ( ... )
+    {
+        Destroy();
+        throw;
+    }
 }
 
 void MyFrame::OnThrowString(wxCommandEvent& WXUNUSED(event))
