@@ -104,6 +104,12 @@ public:
   // Redirect events to active child first
   virtual bool ProcessEvent(wxEvent& event);
 
+protected:
+  virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+  virtual void DoSetClientSize(int width, int height);
+
 
 protected:
 

@@ -606,13 +606,13 @@ bool MyApp::OnInit()
 //    randomize();
   pages[0] = 0;
 
-  TheMainWindow = new MainWindow(NULL, -1, "wxPoem", wxPoint(XPos, YPos), wxSize(100, 100), wxCAPTION|wxMINIMIZE_BOX|wxSYSTEM_MENU);
+  TheMainWindow = new MainWindow(NULL, 500, "wxPoem", wxPoint(XPos, YPos), wxSize(100, 100), wxCAPTION|wxMINIMIZE_BOX|wxSYSTEM_MENU);
 
 #ifdef wx_x
   TheMainWindow->SetIcon(Icon("wxpoem"));
 #endif
 
-  TheMainWindow->canvas = new MyCanvas(TheMainWindow, -1, wxDefaultPosition, wxDefaultSize);
+  TheMainWindow->canvas = new MyCanvas(TheMainWindow, 501, wxDefaultPosition, wxDefaultSize);
 
   popupMenu = new wxMenu("", (wxFunction)PopupFunction);
   popupMenu->Append(POEM_NEXT, "Next poem/page");
@@ -695,7 +695,7 @@ void MainWindow::OnChar(wxKeyEvent& event)
     canvas->OnChar(event);
 }
 
-BEGIN_EVENT_TABLE(MyCanvas, wxPanel)
+BEGIN_EVENT_TABLE(MyCanvas, wxWindow)
     EVT_MOUSE_EVENTS(MyCanvas::OnMouseEvent)
     EVT_CHAR(MyCanvas::OnChar)
     EVT_PAINT(MyCanvas::OnPaint)
@@ -703,7 +703,7 @@ END_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxFrame *frame, wxWindowID id, const wxPoint& pos, const wxSize& size):
- wxPanel(frame, id, pos, size)
+ wxWindow(frame, id, pos, size)
 {
 }
 

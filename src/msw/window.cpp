@@ -1254,12 +1254,8 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             case VK_DOWN:
             case VK_UP:
             {
-/*
-//            if ( ::GetKeyState(VK_CONTROL) & 0x100 ) // Don't understand purpose of this test
-                if (!MSWOnChar((WORD)wParam, lParam))
-                    return Default();
-*/
-              break;
+                return Default();
+                break;
             }
             default:
                 if (!MSWOnChar((WORD)wParam, lParam))

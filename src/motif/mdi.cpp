@@ -133,7 +133,7 @@ void wxMDIParentFrame::OnSize(wxSizeEvent& event)
 
 void wxMDIParentFrame::GetClientSize(int *width, int *height) const
 {
-    return wxWindow::GetClientSize(width. height);
+    wxWindow::GetClientSize(width, height);
 }
 
 void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
@@ -240,12 +240,12 @@ void wxMDIParentFrame::DoSetSize(int x, int y,
                                  int width, int height,
                                  int sizeFlags)
 {
-    return wxWindow::DoSetSize(x, y, width, height, sizeFlags);
+    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
 }
 
 void wxMDIParentFrame::DoSetClientSize(int width, int height)
 {
-    return wxWindow::DoSetClientSize(width, height);
+    wxWindow::DoSetClientSize(width, height);
 }
 
 // Responds to colour changes, and passes event on to children.

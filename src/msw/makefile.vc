@@ -25,10 +25,10 @@ LIBTARGET=$(WXLIB)
 DUMMYOBJ=$D\dummy.obj
 !endif
 
-# Please set these according to the settings in wx_setup.h, so we can include
+# Please set these according to the settings in setup.h, so we can include
 # the appropriate libraries in wx.lib
 
-# This one overrides the others, to be consistent with the settings in wx_setup.h
+# This one overrides the others, to be consistent with the settings in setup.h
 MINIMAL_WXWINDOWS_SETUP=0
 
 PERIPH_LIBS=
@@ -356,10 +356,14 @@ $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /c /Tp dummydll.cpp
 <<
 
 # If taking wxWindows from CVS, setup.h doesn't exist yet.
-$(WXDIR)\include\wx\msw\setup.h: $(WXDIR)\include\wx\msw\setup0.h
-    cd "$(WXDIR)"\include\wx\msw
-    if not exist setup.h copy setup0.h setup.h
-    cd "$(WXDIR)"\src\msw
+# Actually the 'if not exist setup.h' test doesn't work
+# (copies the file anyway)
+# we'll have to comment this rule out.
+
+#$(WXDIR)\include\wx\msw\setup.h: $(WXDIR)\include\wx\msw\setup0.h
+#    cd "$(WXDIR)"\include\wx\msw
+#    if not exist setup.h copy setup0.h setup.h
+#    cd "$(WXDIR)"\src\msw
 
 ..\common\$D\extended.obj:     ..\common\extended.c
         cl @<<

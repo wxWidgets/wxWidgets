@@ -86,6 +86,7 @@ END_EVENT_TABLE()
 wxWindow::wxWindow()
 {
     // Generic
+    m_isWindow = TRUE; // An optimization
     m_windowId = 0;
     m_windowStyle = 0;
     m_windowParent = NULL;
@@ -265,6 +266,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                       const wxString& name)
 {
     // Generic
+    m_isWindow = TRUE; // An optimization
     m_windowId = 0;
     m_windowStyle = 0;
     m_windowParent = NULL;

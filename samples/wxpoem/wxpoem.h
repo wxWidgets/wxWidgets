@@ -29,7 +29,7 @@ class MyApp: public wxApp
 DECLARE_APP(MyApp)
 
 // Define a new canvas which can receive some events
-class MyCanvas: public wxPanel
+class MyCanvas: public wxWindow
 {
   public:
     MyCanvas(wxFrame *frame, wxWindowID id, const wxPoint& pos, const wxSize& size);

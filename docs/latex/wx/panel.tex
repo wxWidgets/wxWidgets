@@ -5,6 +5,10 @@ It contains minimal extra functionality over and above its parent class wxWindow
 purpose is to be similar in appearance and functionality to a dialog, but with the flexibility of
 having any window as a parent.
 
+{\it Note:} if not all characters are being intercepted by your OnKeyDown or OnChar handler,
+it may be because you are using the wxTAB\_TRAVERSAL style, which grabs some keypresses for use
+by child controls.
+
 \wxheading{Derived from}
 
 \helpref{wxWindow}{wxwindow}\\
