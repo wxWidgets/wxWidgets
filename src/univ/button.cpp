@@ -138,7 +138,7 @@ wxSize wxButton::DoGetBestClientSize() const
 
     // for compatibility with other ports, the buttons default size is never
     // less than the standard one, but not when display not PDAs.
-    if (wxSystemSettings::GetScreen() < wxSYS_SCREEN_PDA)
+    if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_PDA)
     {
         if ( !(GetWindowStyle() & wxBU_EXACTFIT) )
         {

@@ -2481,7 +2481,7 @@ static PyObject *_wrap_wxSystemSettings_GetScreen(PyObject *self, PyObject *args
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxSystemScreen )wxSystemSettings::GetScreen();
+    _result = (wxSystemScreen )wxSystemSettings::GetScreenType();
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;

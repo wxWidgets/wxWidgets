@@ -1109,13 +1109,13 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 #endif
     buttonsizer->Add( butNewDir, 0, wxALL, 5 );
 
-    if (wxSystemSettings::GetScreen() >= wxSYS_SCREEN_PDA)
+    if (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA)
         mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 0 );
     else
         mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 5 );
 
     wxBoxSizer *staticsizer = new wxBoxSizer( wxHORIZONTAL );
-    if (wxSystemSettings::GetScreen() < wxSYS_SCREEN_PDA)
+    if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_PDA)
         staticsizer->Add( new wxStaticText( this, -1, _("Current directory:") ), 0, wxRIGHT, 10 );
     m_static = new wxStaticText( this, -1, m_dir );
     staticsizer->Add( m_static, 1 );
@@ -1131,48 +1131,48 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     m_list->SetNewDirControl(butNewDir);
     m_list->SetGoToParentControl(butDirUp);
 
-    if (wxSystemSettings::GetScreen() >= wxSYS_SCREEN_PDA)
+    if (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA)
     {
-    // PDAs have a different screen layout
-    mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
+        // PDAs have a different screen layout
+        mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
 
-    wxBoxSizer *choicesizer = new wxBoxSizer( wxHORIZONTAL );
-    m_choice = new wxChoice( this, ID_CHOICE );
-    choicesizer->Add( m_choice, 1, wxCENTER|wxALL, 5 );
-    mainsizer->Add( choicesizer, 0, wxEXPAND );
+        wxBoxSizer *choicesizer = new wxBoxSizer( wxHORIZONTAL );
+        m_choice = new wxChoice( this, ID_CHOICE );
+        choicesizer->Add( m_choice, 1, wxCENTER|wxALL, 5 );
+        mainsizer->Add( choicesizer, 0, wxEXPAND );
 
-    wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
-    m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxPROCESS_ENTER );
-    textsizer->Add( m_text, 1, wxCENTER | wxALL, 5 );
-    mainsizer->Add( textsizer, 0, wxEXPAND );
+        wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
+        m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxPROCESS_ENTER );
+        textsizer->Add( m_text, 1, wxCENTER | wxALL, 5 );
+        mainsizer->Add( textsizer, 0, wxEXPAND );
 
-    m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden files") );
-    m_check->SetValue( s_lastShowHidden );
-    textsizer->Add( m_check, 0, wxCENTER|wxALL, 5 );
+        m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden files") );
+        m_check->SetValue( s_lastShowHidden );
+        textsizer->Add( m_check, 0, wxCENTER|wxALL, 5 );
 
-    buttonsizer = new wxBoxSizer( wxHORIZONTAL );
-    buttonsizer->Add( new wxButton( this, wxID_OK, _("OK") ), 0, wxCENTER | wxALL, 5 );
-    buttonsizer->Add( new wxButton( this, wxID_CANCEL, _("Cancel") ), 0, wxCENTER | wxALL, 5 );
-    mainsizer->Add( buttonsizer, 0, wxALIGN_RIGHT );
+        buttonsizer = new wxBoxSizer( wxHORIZONTAL );
+        buttonsizer->Add( new wxButton( this, wxID_OK, _("OK") ), 0, wxCENTER | wxALL, 5 );
+        buttonsizer->Add( new wxButton( this, wxID_CANCEL, _("Cancel") ), 0, wxCENTER | wxALL, 5 );
+        mainsizer->Add( buttonsizer, 0, wxALIGN_RIGHT );
     }
     else
     {
-    mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
+        mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
-    wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
-    m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxPROCESS_ENTER );
-    textsizer->Add( m_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
-    textsizer->Add( new wxButton( this, wxID_OK, _("OK") ), 0, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
-    mainsizer->Add( textsizer, 0, wxEXPAND );
+        wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
+        m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxPROCESS_ENTER );
+        textsizer->Add( m_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
+        textsizer->Add( new wxButton( this, wxID_OK, _("OK") ), 0, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
+        mainsizer->Add( textsizer, 0, wxEXPAND );
 
-    wxBoxSizer *choicesizer = new wxBoxSizer( wxHORIZONTAL );
-    m_choice = new wxChoice( this, ID_CHOICE );
-    choicesizer->Add( m_choice, 1, wxCENTER|wxALL, 10 );
-    m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden files") );
-    m_check->SetValue( s_lastShowHidden );
-    choicesizer->Add( m_check, 0, wxCENTER|wxALL, 10 );
-    choicesizer->Add( new wxButton( this, wxID_CANCEL, _("Cancel") ), 0, wxCENTER | wxALL, 10 );
-    mainsizer->Add( choicesizer, 0, wxEXPAND );
+        wxBoxSizer *choicesizer = new wxBoxSizer( wxHORIZONTAL );
+        m_choice = new wxChoice( this, ID_CHOICE );
+        choicesizer->Add( m_choice, 1, wxCENTER|wxALL, 10 );
+        m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden files") );
+        m_check->SetValue( s_lastShowHidden );
+        choicesizer->Add( m_check, 0, wxCENTER|wxALL, 10 );
+        choicesizer->Add( new wxButton( this, wxID_CANCEL, _("Cancel") ), 0, wxCENTER | wxALL, 10 );
+        mainsizer->Add( choicesizer, 0, wxEXPAND );
     }
 
     m_choice->Append( firstWildText, (void*) new wxString( firstWild ) );

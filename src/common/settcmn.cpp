@@ -36,12 +36,12 @@
 // static data
 // ----------------------------------------------------------------------------
 
-wxSystemScreen wxSystemSettings::ms_screen = wxSYS_SCREEN_NONE;
+wxSystemScreenType wxSystemSettings::ms_screen = wxSYS_SCREEN_NONE;
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 
-wxSystemScreen wxSystemSettings::GetScreen()
+wxSystemScreenType wxSystemSettings::GetScreenType()
 {
     if (ms_screen == wxSYS_SCREEN_NONE)
 #ifndef __WXUNIV__
@@ -72,7 +72,7 @@ wxSystemScreen wxSystemSettings::GetScreen()
     return ms_screen;
 }
     
-void wxSystemSettings::SetScreen( wxSystemScreen screen )
+void wxSystemSettings::SetScreenType( wxSystemScreenType screen )
 {
     ms_screen = screen;
 }

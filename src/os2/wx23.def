@@ -5044,7 +5044,7 @@ EXPORTS
       ms_screen__16wxSystemSettings
       ;wxSystemSettings::SetScreen(wxSystemScreen)
       SetScreen__16wxSystemSettingsF14wxSystemScreen
-      ;wxSystemSettings::GetScreen()
+      ;wxSystemSettings::GetScreenType()
       GetScreen__16wxSystemSettingsFv
   ;From object file:  ..\common\sizer.cpp
     ;PUBDEFs (Symbols available from object file):
