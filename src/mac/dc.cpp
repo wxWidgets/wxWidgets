@@ -236,7 +236,11 @@ wxDC::wxDC()
     m_pen = *wxBLACK_PEN;
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
+#ifdef __WXDEBUG__
+    // needed to debug possible errors with two active drawing methods at the same time on 
+    // the same DC
     m_macCurrentPortStateHelper = NULL ;
+#endif
     m_macATSUIStyle = NULL ;
     m_macAliasWasEnabled = false;
     m_macForegroundPixMap = NULL ;
@@ -251,8 +255,10 @@ wxDC::~wxDC(void)
 
 void wxDC::MacSetupPort(wxMacPortStateHelper* help) const
 {
+#ifdef __WXDEBUG__
     wxASSERT( m_macCurrentPortStateHelper == NULL ) ;
     m_macCurrentPortStateHelper = help ;
+#endif
     SetClip( (RgnHandle) m_macCurrentClipRgn);
     m_macFontInstalled = false ;
     m_macBrushInstalled = false ;
@@ -261,8 +267,10 @@ void wxDC::MacSetupPort(wxMacPortStateHelper* help) const
 
 void wxDC::MacCleanupPort(wxMacPortStateHelper* help) const
 {
+#ifdef __WXDEBUG__
     wxASSERT( m_macCurrentPortStateHelper == help ) ;
     m_macCurrentPortStateHelper = NULL ;
+#endif
     if( m_macATSUIStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUIStyle);
@@ -462,12 +470,6 @@ void wxDC::DestroyClippingRegion()
     wxMacPortSetter helper(this) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
     m_clipping = FALSE;
-}
-
-void wxDC::DoGetSize( int* width, int* height ) const
-{
-    *width = m_maxX-m_minX;
-    *height = m_maxY-m_minY;
 }
 
 void wxDC::DoGetSizeMM( int* width, int* height ) const
@@ -1289,11 +1291,13 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
                               double angle)
 {
     wxCHECK_RET( Ok(), wxT("wxDC::DoDrawRotatedText  Invalid window dc") );
+
     if (angle == 0.0 )
     {
         DrawText(str, x, y);
         return;
     }
+
     if ( str.Length() == 0 )
         return ;
         
@@ -1385,10 +1389,12 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 {
     wxCHECK_RET(Ok(), wxT("wxDC::DoDrawText  Invalid DC"));
+
     wxMacPortSetter helper(this) ;
     long xx = XLOG2DEVMAC(x);
     long yy = YLOG2DEVMAC(y);
 #if TARGET_CARBON
+
     bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
     if ( IsKindOf(CLASSINFO( wxPrinterDC ) ) || m_font.GetNoAntiAliasing() )
         useDrawThemeText = false ;
@@ -1815,7 +1821,7 @@ void wxDC::MacInstallFont() const
             (qdStyle & condense) ? &kTrue : &kFalse ,
             (qdStyle & extend) ? &kTrue : &kFalse ,
     } ;
-    status = ::ATSUSetAttributes((ATSUStyle)m_macATSUIStyle, sizeof(atsuTags)/sizeof(ATSUAttributeTag),
+    status = ::ATSUSetAttributes((ATSUStyle)m_macATSUIStyle, sizeof(atsuTags)/sizeof(ATSUAttributeTag) ,
         atsuTags, atsuSizes, atsuValues);
     wxASSERT_MSG( status == noErr , wxT("couldn't set create ATSU style") ) ;
 }
