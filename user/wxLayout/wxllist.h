@@ -1058,7 +1058,7 @@ public:
    wxLayoutDataObject(void)
       {
          SetId("application/wxlayoutlist");
-         m_format.SetAtom((GdkAtom) 222222);
+         //m_format.SetAtom((GdkAtom) 222222);
       }
 };
 

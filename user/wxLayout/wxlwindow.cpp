@@ -168,7 +168,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    {
       // found is only true if we are really over an object, not just
       // behind it
-      if(found && u)
+      if(found && u && ! m_Selecting)
       {
          if(!m_HandCursor)
             SetCursor(wxCURSOR_HAND);
@@ -331,6 +331,9 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
          {
             switch(keyCode)
             {
+            case WXK_INSERT:
+               Copy();
+               break;
             case WXK_DELETE :
             case 'd':
                m_llist->Delete(1);
@@ -349,6 +352,12 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                break;
             case 'v':
                Paste();
+               break;
+            case 'c':
+               Copy();
+               break;
+            case 'x':
+               Cut();
                break;
 #ifdef WXLAYOUT_DEBUG
             case WXK_F1:
@@ -382,7 +391,10 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                   Paste();
                break;
             case WXK_DELETE :
-               m_llist->Delete(1);
+               if(event.ShiftDown())
+                  Cut();
+               else
+                  m_llist->Delete(1);
                break;
             case WXK_BACK: // backspace
                if(m_llist->MoveCursorHorizontally(-1)) m_llist->Delete(1);

@@ -228,8 +228,8 @@ wxLayoutObjectText::Draw(wxDC &dc, wxPoint const &coords,
       long width, height, descent;
 
       if(begin < 0) begin = 0;
-      if(end > m_Text.Length()) end = m_Text.Length();
-      
+      if( end > (signed)m_Text.Length() )
+         end = m_Text.Length();
       
       str = m_Text.Mid(0, begin);
       dc.DrawText(str, xpos, ypos);

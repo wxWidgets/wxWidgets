@@ -169,7 +169,7 @@ public:
        @param labelfield field to use in statusbar for URLs/userdata labels, or -1 to disable
        @param cursorfield field to use for cursor position, or -1 to disable
    */
-   inline SetStatusBar(class wxStatusBar *bar,
+   void SetStatusBar(class wxStatusBar *bar,
                        int labelfield = -1,
                        int cursorfield = -1)
       {
