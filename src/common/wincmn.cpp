@@ -115,8 +115,6 @@ wxWindowBase::wxWindowBase()
     m_parent = (wxWindow *)NULL;
     m_windowId = wxID_ANY;
 
-    m_initialSize = wxDefaultSize;
-    
     // no constraints on the minimal window size
     m_minWidth =
     m_minHeight =
@@ -195,7 +193,7 @@ wxWindowBase::wxWindowBase()
 bool wxWindowBase::CreateBase(wxWindowBase *parent,
                               wxWindowID id,
                               const wxPoint& WXUNUSED(pos),
-                              const wxSize& size,
+                              const wxSize& WXUNUSED(size),
                               long style,
                               const wxValidator& wxVALIDATOR_PARAM(validator),
                               const wxString& name)
@@ -224,10 +222,6 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     SetWindowStyleFlag(style);
     SetParent(parent);
 
-    // Save the size passed to the ctor (if any.)  This will be used later as
-    // the minimal size if the window is added to a sizer.
-    m_initialSize = size;
-    
 #if wxUSE_VALIDATORS
     SetValidator(validator);
 #endif // wxUSE_VALIDATORS
@@ -597,6 +591,27 @@ wxSize wxWindowBase::DoGetBestSize() const
             return GetMinSize();
         else
             return GetSize();
+    }
+}
+
+void wxWindowBase::SetBestSize(const wxSize& size)
+{
+    // the size only needs to be changed if the current size is incomplete,
+    // i.e. one of the components was specified as default -- so if both
+    // were given, simply don't do anything
+    if ( size.x == -1 || size.y == -1 )
+    {
+        wxSize sizeBest = DoGetBestSize();
+        if ( size.x != -1 )
+            sizeBest.x = size.x;
+        if ( size.y != -1 )
+            sizeBest.y = size.y;
+
+        SetSize(sizeBest);
+
+        // don't shrink the control below its best size
+        m_minWidth = sizeBest.x;
+        m_minHeight = sizeBest.y;
     }
 }
 
@@ -1628,7 +1643,7 @@ void wxWindowBase::SetSizerAndFit(wxSizer *sizer, bool deleteOld)
     sizer->SetSizeHints( (wxWindow*) this );
 }
 
-   
+
 void wxWindowBase::SetContainingSizer(wxSizer* sizer)
 {
     // adding a window to a sizer twice is going to result in fatal and
@@ -1637,17 +1652,10 @@ void wxWindowBase::SetContainingSizer(wxSizer* sizer)
     // pointer; so try to detect this as early as possible
     wxASSERT_MSG( !sizer || m_containingSizer != sizer,
                   _T("Adding a window to the same sizer twice?") );
-    
-    m_containingSizer = sizer;
 
-    // If there was an initial size for this window, and if a minsize has not
-    // been set, then set the initial size as the minsize.  This helps with
-    // sizer layout when a larger than GetBestSize size is needed for
-    // controls.
-    if (m_initialSize != wxDefaultSize && GetMinSize() == wxDefaultSize)
-        SetSizeHints(m_initialSize);
+    m_containingSizer = sizer;
 }
-   
+
 #if wxUSE_CONSTRAINTS
 
 void wxWindowBase::SatisfyConstraints()

@@ -93,7 +93,7 @@ struct WXDLLEXPORT wxVisualAttributes
 
 // different window variants, on platforms like eg mac uses different
 // rendering sizes
-enum wxWindowVariant 
+enum wxWindowVariant
 {
     wxWINDOW_VARIANT_NORMAL,  // Normal size
     wxWINDOW_VARIANT_SMALL,   // Smaller size (about 25 % smaller than normal)
@@ -190,7 +190,7 @@ public:
     // sets the window variant, calls internally DoSetVariant if variant has changed
     void SetWindowVariant( wxWindowVariant variant ) ;
     wxWindowVariant GetWindowVariant() const { return m_windowVariant ; }
-        
+
 
         // window id uniquely identifies the window among its siblings unless
         // it is -1 which means "don't care"
@@ -365,7 +365,7 @@ public:
         // Override this method to control the values given to Sizers etc.
     virtual wxSize GetMaxSize() const { return wxSize( m_maxWidth, m_maxHeight ); }
     virtual wxSize GetMinSize() const { return wxSize( m_minWidth, m_minHeight ); }
-    
+
         // Methods for accessing the virtual size of a window.  For most
         // windows this is just the client area of the window, but for
         // some like scrolled windows it is more or less independent of
@@ -453,7 +453,7 @@ public:
         // not all windows/controls can do this without looking wrong.
     virtual void ApplyParentThemeBackground(const wxColour& WXUNUSED(bg))
         { /* do nothing */ }
-    
+
 
     // focus and keyboard handling
     // ---------------------------
@@ -1111,9 +1111,6 @@ protected:
     wxAccessible*       m_accessible;
 #endif
 
-    // Initial window size, used as minimal size in Sizers
-    wxSize              m_initialSize;
-    
     // Virtual size (scrolling)
     wxSize                m_virtualSize;
 
@@ -1121,7 +1118,7 @@ protected:
     int                   m_minVirtualHeight;
     int                   m_maxVirtualWidth;
     int                   m_maxVirtualHeight;
-    
+
     wxWindowVariant       m_windowVariant ;
 
     // override this to change the default (i.e. used when no style is
@@ -1141,22 +1138,7 @@ protected:
     // smarter SetSize / convenience function for expanding wxDefaultSize.
     // Note that it does not influence the value returned by GetBestSize
     // at all.
-    void SetBestSize(const wxSize& size)
-    {
-        // the size only needs to be changed if the current size is incomplete,
-        // i.e. one of the components was specified as default -- so if both
-        // were given, simply don't do anything
-        if ( size.x == -1 || size.y == -1 )
-        {
-            wxSize sizeBest = DoGetBestSize();
-            if ( size.x != -1 )
-                sizeBest.x = size.x;
-            if ( size.y != -1 )
-                sizeBest.y = size.y;
-
-            SetSize(sizeBest);
-        }
-    }
+    void SetBestSize(const wxSize& size);
 
     // more pure virtual functions
     // ---------------------------
