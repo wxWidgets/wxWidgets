@@ -1947,8 +1947,8 @@ static void wxYieldForCommandsOnly()
     //
     QMSG                            vMsg;
 
-    while (::WinPeekMsg(vHabmain, &vMsg, (HWND)0, WM_COMMAND,
-           WM_COMMAND,PM_REMOVE) && vMsg.msg != WM_QUIT)
+    while (::WinPeekMsg(vHabmain, &vMsg, (HWND)0, WM_COMMAND, WM_COMMAND, PM_REMOVE)
+           && vMsg.msg != WM_QUIT)
     {
         wxTheApp->DoMessage((WXMSG*)&vMsg);
     }
@@ -1962,9 +1962,10 @@ bool wxWindowOS2::DoPopupMenu(
 , int                               nY
 )
 {
-    HWND                            hWnd = GetHwnd();
-    HWND                            hWndParent = GetParent() ? GetWinHwnd(GetParent()) : (HWND)0;
+    HWND                            hWndOwner = GetHwnd();
+    HWND                            hWndParent = GetHwnd();
     HWND                            hMenu = GetHmenuOf(pMenu);
+    bool                            bIsWaiting = TRUE;
 
     pMenu->SetInvokingWindow(this);
     pMenu->UpdateUI();
@@ -1975,21 +1976,25 @@ bool wxWindowOS2::DoPopupMenu(
     wxCurrentPopupMenu = pMenu;
 
     ::WinPopupMenu( hWndParent
-                   ,hWnd
+                   ,hWndOwner
                    ,hMenu
                    ,nX
                    ,nY
                    ,0L
-                   ,PU_MOUSEBUTTON2DOWN | PU_MOUSEBUTTON2 | PU_KEYBOARD
+                   ,PU_HCONSTRAIN | PU_VCONSTRAIN | PU_MOUSEBUTTON2DOWN | PU_MOUSEBUTTON2
                   );
-    // we need to do it righ now as otherwise the events are never going to be
-    // sent to wxCurrentPopupMenu from ;()
-    //
-    // note that even eliminating (ugly) wxCurrentPopupMenu global wouldn't
-    // help and we'd still need wxYieldForCommandsOnly() as the menu may be
-    // destroyed as soon as we return (it can be a local variable in the caller
-    // for example) and so we do need to process the event immediately
-    wxYieldForCommandsOnly();
+    while(bIsWaiting)
+    {
+        QMSG                        vMsg;
+
+        while (::WinPeekMsg(vHabmain, &vMsg, (HWND)0, WM_COMMAND, WM_COMMAND, PM_REMOVE)
+               && vMsg.msg != WM_QUIT)
+        {
+            wxTheApp->DoMessage((WXMSG*)&vMsg);
+        }
+        if (vMsg.msg == WM_DESTROY || vMsg.msg == WM_QUIT)
+            break;
+    }
     wxCurrentPopupMenu = NULL;
 
     pMenu->SetInvokingWindow(NULL);

@@ -210,21 +210,6 @@ void wxFrame::Raise()
                      );
 }
 
-// generate an artificial resize event
-void wxFrame::SendSizeEvent()
-{
-    if (!m_bIconized)
-    {
-        RECTL                       vRect = wxGetWindowRect(GetHwnd());
-
-        (void)::WinPostMsg( m_hFrame
-                           ,WM_SIZE
-                           ,MPFROM2SHORT(vRect.xRight - vRect.xLeft, vRect.yTop - vRect.yBottom)
-                           ,MPFROM2SHORT(vRect.xRight - vRect.xLeft, vRect.yTop - vRect.yBottom)
-                          );
-    }
-}
-
 #if wxUSE_STATUSBAR
 wxStatusBar* wxFrame::OnCreateStatusBar(
   int                               nNumber

@@ -320,7 +320,7 @@ void wxTextCtrl::WriteText(
   const wxString&                   rsValue
 )
 {
-    ::WinSetWindowText(GetHwnd(), rsValue.c_str());
+    ::WinSendMsg(GetHwnd(), MLM_INSERT, MPARAM((PCHAR)rsValue.c_str()), MPARAM(0));
     AdjustSpaceLimit();
 } // end of wxTextCtrl::WriteText
 
@@ -1131,7 +1131,7 @@ wxSize wxTextCtrl::DoGetBestSize() const
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
-        hText *= wxMin(GetNumberOfLines(), 5);
+        hText *= wxMax(GetNumberOfLines(), 5);
     }
     //else: for single line control everything is ok
     return wxSize(wText, hText);

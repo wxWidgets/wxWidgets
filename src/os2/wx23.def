@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  F:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1341,6 +1341,10 @@ EXPORTS
       ;wxDocument::OnOpenDocument(const wxString&)
       OnOpenDocument__10wxDocumentFRC8wxString
   ;From object file:  ..\common\dseldlg.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxDirSelector(const wxString&,const wxString&,long,const wxPoint&,wxWindow*)
+      wxDirSelector__FRC8wxStringT1lRC7wxPointP8wxWindow
+      wxDirSelectorPromptStr
   ;From object file:  ..\common\dynarray.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxBaseArray::Add(long)
@@ -1768,7 +1772,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2238,6 +2242,8 @@ EXPORTS
       __ne__10wxFontBaseCFRC6wxFont
       ;wxFontBase::GetFamilyString() const
       GetFamilyString__10wxFontBaseCFv
+      ;wxFontBase::SetDefaultEncoding(wxFontEncoding)
+      SetDefaultEncoding__10wxFontBaseF14wxFontEncoding
       ;wxFontBase::IsFixedWidth() const
       IsFixedWidth__10wxFontBaseCFv
       ;wxFontBase::New(int,int,int,int,unsigned long,const wxString&,wxFontEncoding)
@@ -3134,6 +3140,8 @@ EXPORTS
       __vft12wxPNGHandler8wxObject
       ;wxConstructorForwxPNGHandler()
       wxConstructorForwxPNGHandler__Fv
+      wx_png_error
+      wx_png_warning
       _PNG_stream_reader
       ;wxPNGHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
       SaveFile__12wxPNGHandlerFP7wxImageR14wxOutputStreamUl
@@ -3144,8 +3152,6 @@ EXPORTS
       _PNG_stream_writer
       ;wxPNGHandler::sm_classwxPNGHandler
       sm_classwxPNGHandler__12wxPNGHandler
-      png_silent_error
-      png_silent_warning
   ;From object file:  ..\common\imagpnm.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPNMHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
@@ -5767,7 +5773,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -6568,6 +6574,8 @@ EXPORTS
       SetForegroundColour__12wxWindowBaseFRC8wxColour
       ;wxWindowBase::SetBackgroundColour(const wxColour&)
       SetBackgroundColour__12wxWindowBaseFRC8wxColour
+      ;wxWindowBase::RemoveEventHandler(wxEvtHandler*)
+      RemoveEventHandler__12wxWindowBaseFP12wxEvtHandler
       ;wxWindowBase::Destroy()
       Destroy__12wxWindowBaseFv
       ;wxWindowBase::SetConstraints(wxLayoutConstraints*)
@@ -7358,7 +7366,126 @@ EXPORTS
       ;wxPostScriptDC::ms_PSScaleFactor
       ms_PSScaleFactor__14wxPostScriptDC
   ;From object file:  ..\generic\dirdlgg.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxGenericDirDialog::OnOK(wxCommandEvent&)
+      OnOK__18wxGenericDirDialogFR14wxCommandEvent
+      ;wxGenericDirDialog::OnTreeSelected(wxTreeEvent&)
+      OnTreeSelected__18wxGenericDirDialogFR11wxTreeEvent
+      ;wxGenericDirDialog::OnShowHidden(wxCommandEvent&)
+      OnShowHidden__18wxGenericDirDialogFR14wxCommandEvent
+      ;wxGenericDirDialog::GetEventTable() const
+      GetEventTable__18wxGenericDirDialogCFv
+      ;wxGenericDirDialog::GetPath() const
+      GetPath__18wxGenericDirDialogCFv
+      ;wxGenericDirDialog::OnNew(wxCommandEvent&)
+      OnNew__18wxGenericDirDialogFR14wxCommandEvent
+      __vft18wxGenericDirDialog8wxObject
+      ;wxGenericDirDialog::wxGenericDirDialog(wxWindow*,const wxString&,const wxString&,long,const wxPoint&,const wxSize&,const wxString&)
+      __ct__18wxGenericDirDialogFP8wxWindowRC8wxStringT2lRC7wxPointRC6wxSizeT2
+      ;wxGenericDirDialog::ShowModal()
+      ShowModal__18wxGenericDirDialogFv
+      ;wxGenericDirDialog::SetPath(const wxString&)
+      SetPath__18wxGenericDirDialogFRC8wxString
+      ;wxGenericDirDialog::sm_eventTable
+      sm_eventTable__18wxGenericDirDialog
+      ;wxGenericDirDialog::sm_eventTableEntries
+      sm_eventTableEntries__18wxGenericDirDialog
+      ;wxGenericDirDialog::OnCloseWindow(wxCloseEvent&)
+      OnCloseWindow__18wxGenericDirDialogFR12wxCloseEvent
+      ;wxGenericDirDialog::OnTreeKeyDown(wxTreeEvent&)
+      OnTreeKeyDown__18wxGenericDirDialogFR11wxTreeEvent
   ;From object file:  ..\generic\dirctrlg.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxDirItemData::wxDirItemData(const wxString&,const wxString&,unsigned long)
+      __ct__13wxDirItemDataFRC8wxStringT1Ul
+      ;wxGenericDirCtrl::sm_eventTableEntries
+      sm_eventTableEntries__16wxGenericDirCtrl
+      ;wxGenericDirCtrl::sm_classwxGenericDirCtrl
+      sm_classwxGenericDirCtrl__16wxGenericDirCtrl
+      ;wxDirFilterListCtrl::sm_classwxDirFilterListCtrl
+      sm_classwxDirFilterListCtrl__19wxDirFilterListCtrl
+      __vft19wxDirFilterListCtrl8wxObject
+      __vft16wxGenericDirCtrl8wxObject
+      ;setdrive(int)
+      setdrive__Fi
+      ;wxDirFilterListCtrl::Init()
+      Init__19wxDirFilterListCtrlFv
+      ;wxConstructorForwxGenericDirCtrl()
+      wxConstructorForwxGenericDirCtrl__Fv
+      ;wxGenericDirCtrl::wxGenericDirCtrl()
+      __ct__16wxGenericDirCtrlFv
+      ;wxDirItemData::SetNewDirName(const wxString&)
+      SetNewDirName__13wxDirItemDataFRC8wxString
+      ;wxGenericDirCtrl::ExpandPath(const wxString&)
+      ExpandPath__16wxGenericDirCtrlFRC8wxString
+      ;wxDirFilterListCtrl::Create(wxGenericDirCtrl*,const int,const wxPoint&,const wxSize&,long)
+      Create__19wxDirFilterListCtrlFP16wxGenericDirCtrlCiRC7wxPointRC6wxSizel
+      ;wxGenericDirCtrl::sm_eventTable
+      sm_eventTable__16wxGenericDirCtrl
+      ;wxGenericDirCtrl::OnSize(wxSizeEvent&)
+      OnSize__16wxGenericDirCtrlFR11wxSizeEvent
+      ;wxGenericDirCtrl::OnEndEditItem(wxTreeEvent&)
+      OnEndEditItem__16wxGenericDirCtrlFR11wxTreeEvent
+      __vft13wxDirItemData12wxClientData
+      ;wxGenericDirCtrl::Init()
+      Init__16wxGenericDirCtrlFv
+      __vft19wxDirFilterListCtrl15wxItemContainer
+      ;wxDirItemData::~wxDirItemData()
+      __dt__13wxDirItemDataFv
+      ;wxGenericDirCtrl::ParseFilter(const wxString&,wxArrayString&,wxArrayString&)
+      ParseFilter__16wxGenericDirCtrlFRC8wxStringR13wxArrayStringT2
+      ;wxDirFilterListCtrl::GetEventTable() const
+      GetEventTable__19wxDirFilterListCtrlCFv
+      ;wxGenericDirCtrl::ExpandDir(wxTreeItemId)
+      ExpandDir__16wxGenericDirCtrlF12wxTreeItemId
+      ;wxDirFilterListCtrl::sm_eventTableEntries
+      sm_eventTableEntries__19wxDirFilterListCtrl
+      ;wxDirFilterListCtrl::OnSelFilter(wxCommandEvent&)
+      OnSelFilter__19wxDirFilterListCtrlFR14wxCommandEvent
+      ;wxGenericDirCtrl::SetFilterIndex(int)
+      SetFilterIndex__16wxGenericDirCtrlFi
+      ;wxDirFilterListCtrl::FillFilterList(const wxString&,int)
+      FillFilterList__19wxDirFilterListCtrlFRC8wxStringi
+      ;wxGenericDirCtrl::SetupSections()
+      SetupSections__16wxGenericDirCtrlFv
+      ;wxGenericDirCtrl::ShowHidden(unsigned long)
+      ShowHidden__16wxGenericDirCtrlFUl
+      ;wxGenericDirCtrl::OnCollapseItem(wxTreeEvent&)
+      OnCollapseItem__16wxGenericDirCtrlFR11wxTreeEvent
+      ;wxDirItemData::HasSubDirs() const
+      HasSubDirs__13wxDirItemDataCFv
+      ;wxGenericDirCtrl::GetPath() const
+      GetPath__16wxGenericDirCtrlCFv
+      ;wxGenericDirCtrl::GetFilePath() const
+      GetFilePath__16wxGenericDirCtrlCFv
+      ;wxGenericDirCtrl::Create(wxWindow*,const int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&,int,const wxString&)
+      Create__16wxGenericDirCtrlFP8wxWindowCiRC8wxStringRC7wxPointRC6wxSizelT3iT3
+      ;wxIsDriveAvailable(const wxString&)
+      wxIsDriveAvailable__FRC8wxString
+      ;wxGenericDirCtrl::SetPath(const wxString&)
+      SetPath__16wxGenericDirCtrlFRC8wxString
+      ;wxGenericDirCtrl::SetFilter(const wxString&)
+      SetFilter__16wxGenericDirCtrlFRC8wxString
+      ;wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent&)
+      OnBeginEditItem__16wxGenericDirCtrlFR11wxTreeEvent
+      ;wxDirFilterListCtrl::sm_eventTable
+      sm_eventTable__19wxDirFilterListCtrl
+      ;wxGenericDirCtrl::OnExpandItem(wxTreeEvent&)
+      OnExpandItem__16wxGenericDirCtrlFR11wxTreeEvent
+      ;wxGenericDirCtrl::FindChild(wxTreeItemId,const wxString&,unsigned long&)
+      FindChild__16wxGenericDirCtrlF12wxTreeItemIdRC8wxStringRUl
+      ;wxGenericDirCtrl::AddSection(const wxString&,const wxString&,int)
+      AddSection__16wxGenericDirCtrlFRC8wxStringT1i
+      ;wxGenericDirCtrl::GetEventTable() const
+      GetEventTable__16wxGenericDirCtrlCFv
+      ;wxGenericDirCtrl::~wxGenericDirCtrl()
+      __dt__16wxGenericDirCtrlFv
+      ;wxGenericDirCtrl::DoResize()
+      DoResize__16wxGenericDirCtrlFv
+      ;wxDirItemData::HasFiles(const wxString&) const
+      HasFiles__13wxDirItemDataCFRC8wxString
+      ;wxGenericDirCtrl::ExtractWildcard(const wxString&,int,wxString&,wxString&)
+      ExtractWildcard__16wxGenericDirCtrlFRC8wxStringiR8wxStringT3
   ;From object file:  ..\generic\dragimgg.cpp
   ;From object file:  ..\generic\fontdlgg.cpp
     ;PUBDEFs (Symbols available from object file):
@@ -9259,6 +9386,22 @@ EXPORTS
       ;wxLogWindow::wxLogWindow(wxFrame*,const char*,unsigned long,unsigned long)
       __ct__11wxLogWindowFP7wxFramePCcUlT3
   ;From object file:  ..\generic\numdlgg.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxGetNumberFromUser(const wxString&,const wxString&,const wxString&,long,long,long,wxWindow*,const wxPoint&)
+      wxGetNumberFromUser__FRC8wxStringN21lN24P8wxWindowRC7wxPoint
+      ;wxNumberEntryDialog::GetEventTable() const
+      GetEventTable__19wxNumberEntryDialogCFv
+      ;wxNumberEntryDialog::sm_eventTableEntries
+      sm_eventTableEntries__19wxNumberEntryDialog
+      ;wxNumberEntryDialog::OnOK(wxCommandEvent&)
+      OnOK__19wxNumberEntryDialogFR14wxCommandEvent
+      ;wxNumberEntryDialog::wxNumberEntryDialog(wxWindow*,const wxString&,const wxString&,const wxString&,long,long,long,const wxPoint&)
+      __ct__19wxNumberEntryDialogFP8wxWindowRC8wxStringN22lN25RC7wxPoint
+      ;wxNumberEntryDialog::OnCancel(wxCommandEvent&)
+      OnCancel__19wxNumberEntryDialogFR14wxCommandEvent
+      __vft19wxNumberEntryDialog8wxObject
+      ;wxNumberEntryDialog::sm_eventTable
+      sm_eventTable__19wxNumberEntryDialog
   ;From object file:  ..\generic\panelg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPanel::OnSysColourChanged(wxSysColourChangedEvent&)
@@ -12235,8 +12378,6 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxFrame::HandleMenuSelect(unsigned short,unsigned short,unsigned long)
       HandleMenuSelect__7wxFrameFUsT1Ul
-      ;wxFrame::SendSizeEvent()
-      SendSizeEvent__7wxFrameFv
       ;wxFrame::OS2TranslateMessage(void**)
       OS2TranslateMessage__7wxFrameFPPv
       ;wxFrame::HandlePaint()
@@ -14230,6 +14371,8 @@ EXPORTS
       Show__19wxTopLevelWindowOS2FUl
       ;wxTopLevelWindowOS2::IsIconized() const
       IsIconized__19wxTopLevelWindowOS2CFv
+      ;wxTopLevelWindowOS2::SendSizeEvent()
+      SendSizeEvent__19wxTopLevelWindowOS2Fv
       wxDlgProc
       wxModelessWindows
   ;From object file:  ..\os2\utils.cpp

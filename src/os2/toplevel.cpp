@@ -593,6 +593,11 @@ void wxTopLevelWindowOS2::DoShowWindow(
 )
 {
     ::WinShowWindow(m_hFrame, (BOOL)(nShowCmd & SWP_SHOW));
+
+    //
+    // Need to artificially send a size event as wxApps often expect to do some
+    // final child control sizing
+    SendSizeEvent();
     m_bIconized = nShowCmd == SWP_MINIMIZE;
 } // end of wxTopLevelWindowOS2::DoShowWindow
 
@@ -715,6 +720,21 @@ void wxTopLevelWindowOS2::Restore()
 {
     DoShowWindow(SWP_RESTORE);
 } // end of wxTopLevelWindowOS2::Restore
+
+// generate an artificial resize event
+void wxTopLevelWindowOS2::SendSizeEvent()
+{
+    if (!m_bIconized)
+    {
+        RECTL                       vRect = wxGetWindowRect(GetHwnd());
+
+        (void)::WinPostMsg( m_hFrame
+                           ,WM_SIZE
+                           ,MPFROM2SHORT(vRect.xRight - vRect.xLeft, vRect.yTop - vRect.yBottom)
+                           ,MPFROM2SHORT(vRect.xRight - vRect.xLeft, vRect.yTop - vRect.yBottom)
+                          );
+    }
+} // end of wxTopLevelWindowOS2::SendSizeEvent
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowOS2 fullscreen
