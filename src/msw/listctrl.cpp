@@ -101,6 +101,14 @@
     #define HDM_GETITEMRECT (HDM_FIRST+7)
 #endif
 
+#ifndef LVCF_IMAGE
+    #define LVCF_IMAGE             0x0010
+#endif
+
+#ifndef LVCFMT_BITMAP_ON_RIGHT
+    #define LVCFMT_BITMAP_ON_RIGHT 0x1000
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -1767,10 +1775,13 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         wxStrncpy(lvi.pszText, text, lvi.cchTextMax);
                     }
 
+#if defined(_WIN32_IE) && _WIN32_IE >= 0x300 \
+        && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
                     if ( lvi.mask & LVIF_IMAGE )
                     {
                         lvi.iImage = OnGetItemImage(item);
                     }
+#endif
 
                     // a little dose of healthy paranoia: as we never use
                     // LVM_SETCALLBACKMASK we're not supposed to get these ones
@@ -2276,6 +2287,8 @@ static void wxConvertToMSWListCol(int col, const wxListItem& item,
             lvCol.cx = item.m_width;
     }
 
+#if defined(_WIN32_IE) && _WIN32_IE >= 0x300 \
+        && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         if ( wxTheApp->GetComCtl32Version() >= 470 )
@@ -2285,6 +2298,7 @@ static void wxConvertToMSWListCol(int col, const wxListItem& item,
         }
         //else: it doesn't support item images anyhow
     }
+#endif
 }
 
 // ----------------------------------------------------------------------------
