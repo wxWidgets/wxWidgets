@@ -657,7 +657,7 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
                             wxPD_REMAINING_TIME);
 
     bool cont = TRUE;
-    for ( int i = 0; i <= max && cont; i++ )
+    for ( int i = 0; i <= max; i++ )
     {
         wxSleep(1);
         if ( i == max )
@@ -671,6 +671,17 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
         else
         {
             cont = dialog.Update(i);
+        }
+
+        if ( !cont )
+        {
+            if ( wxMessageBox("Do you really want to cancel?\n"
+                              "Second line.", // message
+                              "Dialogs question",  // caption
+                              wxYES_NO | wxCENTRE) == wxYES )
+                break;
+
+            dialog.Resume();
         }
     }
 
