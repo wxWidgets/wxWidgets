@@ -654,6 +654,11 @@ long wxExecute(wxChar **argv,
 
         execvp (*mb_argv, mb_argv);
 
+        fprintf(stderr, "execvp(");
+        for ( char **ppc = mb_argv; *ppc; ppc++ )
+            fprintf(stderr, "%s%s", ppc == mb_argv ? "" : ", ", *ppc);
+        fprintf(stderr, ") failed with error %d!\n", errno);
+
         // there is no return after successful exec()
         _exit(-1);
 
