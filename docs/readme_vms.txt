@@ -129,9 +129,24 @@ $  ass $disk2:[joukj.public.gtk.gtk.glib],-
 
 
  -Known problems :
-   -The calendar sample in wxMOTIF puts the boxes of the month and year
-     selection on top of each other.
-     
+   wxMOTIF :
+       -The calendar sample puts the boxes of the month and year selection on
+        top of each other.
+       -The caret sample: sometimes a non blinking caret remains in the
+        window.
+       -checklist sample: There is no way to check/uncheck since this box is
+        missing
+       -conftest sample: The boxes in the window are too small to display
+        texts with the fonts specified.
+       -controls sample: radiobox does not appear on the screen
+       -Some samples crash due to colour allocation problems
+        i.e. -drawing,image
+
+   wxGTK :
+       -In the calendar sample options can only be switched on and not off
+        again.
+       -image sample: after clicking "about" the colourmap is permanently
+        changed resulting in strange images
      
 Finally :
  I like the idea of Robert Roebling that CD's with classical music should be

@@ -34,7 +34,7 @@ gtk : setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--.samples.calendar]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	set default [-.samples.caret]
+	set default [-.caret]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.checklst]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
@@ -43,6 +43,8 @@ gtk : setup.h
 	set default [-.controls]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.dialogs]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.dnd]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.drawing]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
@@ -73,7 +75,7 @@ motif : setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [--.samples.calendar]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	set default [-.samples.caret]
+	set default [-.caret]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.checklst]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)

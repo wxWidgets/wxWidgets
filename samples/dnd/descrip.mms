@@ -2,11 +2,11 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                              *
-# Date : 10 November 1999                                                     *
+# Date : 6 October 2000                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
-	define wx [---.include.wx]
+	define wx [--.include.wx]
 
 .ifdef __WXMOTIF__
 CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
@@ -27,32 +27,21 @@ CXX_DEFINE =
 
 all :
 .ifdef __WXMOTIF__
-	$(MMS)$(MMSQUALIFIERS) dialoged.exe
+	$(MMS)$(MMSQUALIFIERS) dnd.exe
 .else
 .ifdef __WXGTK__
-	$(MMS)$(MMSQUALIFIERS) dialoged_gtk.exe
+	$(MMS)$(MMSQUALIFIERS) dnd_gtk.exe
 .endif
 .endif
-
-OBJECTS=dialoged.obj,reseditr.obj,dlghndlr.obj,reswrite.obj,winprop.obj,\
-	edtree.obj,edlist.obj,symbtabl.obj,winstyle.obj
 
 .ifdef __WXMOTIF__
-dialoged.exe : $(OBJECTS)
-	cxxlink $(OBJECTS),[---.lib]vms/opt
+dnd.exe : dnd.obj
+	cxxlink dnd,[--.lib]vms/opt
 .else
 .ifdef __WXGTK__
-dialoged_gtk.exe : $(OBJECTS)
-	cxxlink/exec=dialoged_gtk.exe $(OBJECTS),[---.lib]vms_gtk/opt
+dnd_gtk.exe : dnd.obj
+	cxxlink/exec=dnd_gtk.exe dnd,[--.lib]vms_gtk/opt
 .endif
 .endif
 
-dialoged.obj : dialoged.cpp
-reseditr.obj : reseditr.cpp
-dlghndlr.obj : dlghndlr.cpp
-reswrite.obj : reswrite.cpp
-winprop.obj : winprop.cpp
-edtree.obj : edtree.cpp
-edlist.obj : edlist.cpp
-symbtabl.obj : symbtabl.cpp
-winstyle.obj : winstyle.cpp
+dnd.obj : dnd.cpp
