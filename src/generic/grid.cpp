@@ -2018,58 +2018,95 @@ void wxGridCellAttr::GetAlignment(int *hAlign, int *vAlign) const
 
 wxGridCellRenderer* wxGridCellAttr::GetRenderer(wxGrid* grid, int row, int col) const
 {
-    wxGridCellRenderer* renderer = NULL;
+    wxGridCellRenderer *renderer;
 
-    if ( m_defGridAttr == this || grid == NULL )
+    if ( m_renderer && this != m_defGridAttr )
     {
-        renderer = m_renderer;      // use local attribute
-        if ( renderer )
-            renderer->IncRef();
+        // use the cells renderer if it has one
+        renderer = m_renderer;
+        renderer->IncRef();
+    }
+    else // no non default cell renderer
+    {
+        // get default renderer for the data type
+        if ( grid )
+        {
+            // GetDefaultRendererForCell() will do IncRef() for us
+            renderer = grid->GetDefaultRendererForCell(row, col);
+        }
+        else
+        {
+            renderer = NULL;
+        }
+
+        if ( !renderer )
+        {
+            if ( this != m_defGridAttr )
+            {
+                // if we still don't have one then use the grid default
+                // (no need for IncRef() here neither)
+                renderer = m_defGridAttr->GetRenderer(NULL, 0, 0);
+            }
+            else // default grid attr
+            {
+                // use m_renderer which we had decided not to use initially
+                renderer = m_renderer;
+                if ( renderer )
+                    renderer->IncRef();
+            }
+        }
     }
 
-    if ( !renderer && grid )        // get renderer for the data type
-    {
-        // GetDefaultRendererForCell() will do IncRef() for us
-        renderer = grid->GetDefaultRendererForCell(row, col);
-    }
-
-    if ( !renderer )
-    {
-        // if we still don't have one then use the grid default
-        // (no need for IncRef() here neither)
-        renderer = m_defGridAttr->GetRenderer(NULL,0,0);
-    }
-
-    if ( !renderer)
-    {
-        wxFAIL_MSG(wxT("Missing default cell attribute"));
-    }
+    // we're supposed to always find something
+    wxASSERT_MSG(renderer, wxT("Missing default cell renderer"));
 
     return renderer;
 }
 
+// same as above, except for s/renderer/editor/g
 wxGridCellEditor* wxGridCellAttr::GetEditor(wxGrid* grid, int row, int col) const
 {
-    wxGridCellEditor* editor = NULL;
+    wxGridCellEditor *editor;
 
-    if ( m_defGridAttr != this || grid == NULL )
+    if ( m_editor && this != m_defGridAttr )
     {
-        editor = m_editor;      // use local attribute
-        if ( editor )
-            editor->IncRef();
+        // use the cells editor if it has one
+        editor = m_editor;
+        editor->IncRef();
+    }
+    else // no non default cell editor
+    {
+        // get default editor for the data type
+        if ( grid )
+        {
+            // GetDefaultEditorForCell() will do IncRef() for us
+            editor = grid->GetDefaultEditorForCell(row, col);
+        }
+        else
+        {
+            editor = NULL;
+        }
+
+        if ( !editor )
+        {
+            if ( this != m_defGridAttr )
+            {
+                // if we still don't have one then use the grid default
+                // (no need for IncRef() here neither)
+                editor = m_defGridAttr->GetEditor(NULL, 0, 0);
+            }
+            else // default grid attr
+            {
+                // use m_editor which we had decided not to use initially
+                editor = m_editor;
+                if ( editor )
+                    editor->IncRef();
+            }
+        }
     }
 
-    if ( !editor && grid )                   // get renderer for the data type
-        editor = grid->GetDefaultEditorForCell(row, col);
-
-    if ( !editor )
-        // if we still don't have one then use the grid default
-        editor = m_defGridAttr->GetEditor(NULL,0,0);
-
-    if ( !editor )
-    {
-        wxFAIL_MSG(wxT("Missing default cell attribute"));
-    }
+    // we're supposed to always find something
+    wxASSERT_MSG(editor, wxT("Missing default cell editor"));
 
     return editor;
 }

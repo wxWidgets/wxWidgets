@@ -63,11 +63,15 @@ Unix ports:
 2.3.3
 -----
 
-All:
+wxBase:
 
 - fixes to the command line parsing error and usage messages
 - modified wxFileName::CreateTempFileName() to open the file atomically
   (if possible) and, especially, not to leak the file descriptors under Unix
+
+All (GUI):
+
+- fixed using custom renderers in wxGrid which was broken in 2.3.2
 
 wxMSW:
 
