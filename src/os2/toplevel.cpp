@@ -291,6 +291,7 @@ bool wxTopLevelWindowOS2::CreateDialog(
                       ,nHeight
                       ,SWP_MOVE | SWP_SIZE | SWP_ZORDER | SWP_SHOW
                      );
+    ::WinQueryWindowPos(GetHwnd(), GetSwp());
     m_hFrame = m_hWnd;
     SubclassWin(m_hWnd);
     return TRUE;
@@ -501,152 +502,6 @@ wxTopLevelWindowOS2::~wxTopLevelWindowOS2()
     }
 } // end of wxTopLevelWindowOS2::~wxTopLevelWindowOS2
 
-//
-//  IF we have child controls in the Frame's client we need to alter
-//  the y position, because, OS/2 controls are positioned relative to
-//  wxWindows orgin (top left) not the OS/2 origin (bottom left)
-//
-void wxTopLevelWindowOS2::AlterChildPos()
-{
-    //
-    // OS/2 is the only OS concerned about this
-    //
-    wxWindow*                               pChild = NULL;
-    wxControl*                              pCtrl = NULL;
-    RECTL                                   vRect;
-    SWP                                     vSwp;
-
-    if (GetAutoLayout)
-        //
-        // Auto layouts taken care of elsewhere
-        //
-        return;
-
-    ::WinQueryWindowRect(GetHwnd(), &vRect);
-    for (wxWindowList::Node* pNode = GetChildren().GetFirst();
-         pNode;
-         pNode = pNode->GetNext())
-    {
-        wxWindow*                   pChild = pNode->GetData();
-
-        ::WinQueryWindowPos(pChild->GetHWND(), &vSwp);
-        vSwp.y += (vRect.yTop - m_vSwpClient.cy);
-        if (pChild->IsKindOf(CLASSINFO(wxControl)))
-        {
-            pCtrl = wxDynamicCast(pChild, wxControl);
-            //
-            // Must deal with controls that have margins like ENTRYFIELD.  The SWP
-            // struct of such a control will have and origin offset from its intended
-            // position by the width of the margins.
-            //
-            vSwp.y -= pCtrl->GetYComp();
-            vSwp.x -= pCtrl->GetXComp();
-        }
-        ::WinSetWindowPos( pChild->GetHWND()
-                          ,HWND_TOP
-                          ,vSwp.x
-                          ,vSwp.y
-                          ,vSwp.cx
-                          ,vSwp.cy
-                          ,SWP_MOVE
-                         );
-        ::WinQueryWindowPos(pChild->GetHWND(), &vSwp);
-        pChild = NULL;
-    }
-    ::WinQueryWindowPos(GetHwnd(), &m_vSwpClient);
-} // end of wxTopLevelWindowOS2::AlterChildPos
-
-void wxTopLevelWindowOS2::UpdateInternalSize(
-  wxWindow*                         pChild
-, int                               nChildWidth
-, int                               nChildHeight
-)
-{
-    int                             nWidthAdjust = 0;
-    int                             nHeightAdjust = 0;
-    int                             nPosX;
-    int                             nPosY;
-    bool                            bNewYSize = FALSE;
-    bool                            bNewXSize = FALSE;
-
-    //
-    // Under OS/2, if we have a srolled window as the child, the
-    // scrollbars will be SIBLINGS of the scrolled window.  So, in
-    // order to be able to display the scrollbars properly we have to
-    // resize the scrolled window.  Of course, that means dealing with
-    // child windows of that window as well, because OS/2 does not
-    // tend to put them in the right place.
-    //
-    if (nChildHeight != m_vSwpClient.cy)
-        bNewYSize = TRUE;
-    if (nChildWidth != m_vSwpClient.cx)
-        bNewXSize = TRUE;
-    if (bNewXSize || bNewYSize)
-        pChild->SetSize( 0
-                        ,0
-                        ,nChildWidth
-                        ,nChildHeight
-                       );
-    if(bNewYSize)
-    {
-        //
-        // This is needed SetSize will mess up the OS/2 child window
-        // positioning because we position in wxWindows coordinates,
-        // not OS/2 coordinates.
-        //
-        pChild->MoveChildren(m_vSwpClient.cy - nChildHeight);
-        pChild->Refresh();
-    }
-
-    if (pChild->GetScrollBarHorz() != NULLHANDLE ||
-        pChild->GetScrollBarVert() != NULLHANDLE)
-    {
-        if (bNewXSize || bNewYSize)
-        {
-            pChild->GetSize( &nChildWidth
-                            ,&nChildHeight
-                           );
-            if (pChild->GetScrollBarHorz() != NULLHANDLE)
-                nHeightAdjust = 20;
-            if (pChild->GetScrollBarVert() != NULLHANDLE)
-                nWidthAdjust = 20;
-            pChild->GetPosition( &nPosX
-                                ,&nPosY
-                               );
-            ::WinSetWindowPos( pChild->GetHWND()
-                              ,HWND_TOP
-                              ,nPosX
-                              ,nPosY + nHeightAdjust
-                              ,nChildWidth - nWidthAdjust
-                              ,nChildHeight - nHeightAdjust
-                              ,SWP_MOVE | SWP_SIZE
-                             );
-        }
-        if (bNewYSize && !m_sbInitialized)
-        {
-            //
-            // Only need to readjust child control positions of
-            // scrolled windows once on initialization.  After that
-            // the sizing takes care of things itself.
-            //
-            pChild->MoveChildren(nHeightAdjust);
-            m_sbInitialized = TRUE;
-        }
-        if (bNewXSize || bNewYSize)
-        {
-            //
-            // Always refresh to keep scollbars visible.  They are
-            // children of the Toplevel window, not the child panel.
-            //
-            pChild->Refresh();
-        }
-    }
-    //
-    // This brings the internal "last size" up to date.
-    //
-    ::WinQueryWindowPos(GetHwnd(), &m_vSwpClient);
-} // end of wxTopLevelWindowOS2::UpdateInternalSize
-
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowOS2 client size
 // ----------------------------------------------------------------------------
@@ -739,6 +594,34 @@ bool wxTopLevelWindowOS2::Show(
         ::WinQueryWindowPos(m_hWnd, &m_vSwpClient);
         ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)~0, 0);
         ::WinEnableWindow(m_hFrame, TRUE);
+
+        //
+        // Deal with children
+        //
+        MoveChildren(m_vSwpClient.cy - vSwp.cy);
+
+
+        //
+        // Need to handle the case of a single child that not a control
+        // as this is probably a panel with its own children
+        //
+        if (GetChildren().GetCount() > 0)
+        {
+            for (wxWindowList::Node* pNode = GetChildren().GetFirst();
+                 pNode;
+                 pNode = pNode->GetNext())
+            {
+                wxWindow*                   pChild = pNode->GetData();
+
+                if ( GetChildren().GetCount() == 1 &&
+                    !pChild->IsKindOf(CLASSINFO(wxControl))
+                   )
+                    pChild->MoveChildren(m_vSwpClient.cy - vSwp.cy);
+                pChild->Refresh();
+                pChild = NULL;
+            }
+        }
+
         vEvent.SetEventObject(this);
         GetEventHandler()->ProcessEvent(vEvent);
     }

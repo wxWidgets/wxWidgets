@@ -1079,7 +1079,6 @@ bool wxFrame::HandleSize(
 
         vEvent.SetEventObject(this);
         bProcessed = GetEventHandler()->ProcessEvent(vEvent);
-        AlterChildPos();
     }
     return bProcessed;
 } // end of wxFrame::HandleSize

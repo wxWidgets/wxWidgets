@@ -1,4 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////
 // Name:        windows.cpp
 // Purpose:     wxWindow
 // Author:      David Webster
@@ -767,6 +766,7 @@ void wxWindowOS2::SetScrollbar(
     SBCDATA                         vInfo;
     ULONG                           ulStyle = WS_VISIBLE | WS_SYNCPAINT;
     SWP                             vSwp;
+    SWP                             vSwpOwner;
     RECTL                           vRect;
     HWND                            hWndParent;
     HWND                            hWndClient;
@@ -789,6 +789,7 @@ void wxWindowOS2::SetScrollbar(
         hWndClient = hWndParent;
     }
     ::WinQueryWindowPos(hWndClient, &vSwp);
+    ::WinQueryWindowPos(hWnd, &vSwpOwner);
 
     if (nPageSize > 1 && nRange > 0)
     {
@@ -805,6 +806,18 @@ void wxWindowOS2::SetScrollbar(
         ulStyle |= SBS_HORZ;
         if (m_hWndScrollBarHorz == 0L)
         {
+            //
+            // Since the scrollbars are usually created before the owner is
+            // sized either via an OnSize event directly or via sizers or
+            // layout constraints, we will initially just use the coords of
+            // the parent window (this is usually a frame client window). But
+            // the bars themselves, are children of the parent frame (i.e
+            // siblings of the frame client.  The owner, however is the actual
+            // window being scrolled (or at least the one responsible for
+            // handling the scroll events). The owner will be resized later,
+            // as it is usually a child of a top level window, and when that
+            // is done its scrollbars will be resized and repositioned as well.
+            //
             m_hWndScrollBarHorz = ::WinCreateWindow( hWndParent
                                                     ,WC_SCROLLBAR
                                                     ,(PSZ)NULL
@@ -822,11 +835,22 @@ void wxWindowOS2::SetScrollbar(
         }
         else
         {
+            //
+            // The owner (the scrolled window) is a child of the Frame's
+            // client window, usually.  The scrollbars are children of the
+            // frame, itself, and thus are positioned relative to the frame's
+            // origin, not the frame's client window origin.
+            // The starting x position is the same as the starting x position
+            // of the owner, but in terms of the parent frame.
+            // The starting y position is 20 pels below the origin of the
+            // owner in terms of the parent frame.
+            // The horz bar is the same width as the owner and 20 pels high.
+            //
             ::WinSetWindowPos( m_hWndScrollBarHorz
                               ,HWND_TOP
-                              ,vSwp.x
-                              ,vSwp.y
-                              ,vSwp.cx - 20
+                              ,vSwp.x + vSwpOwner.x
+                              ,(vSwp.y + vSwpOwner.y) - 20
+                              ,vSwpOwner.cx
                               ,20
                               ,SWP_MOVE | SWP_SIZE | SWP_SHOW | SWP_ACTIVATE | SWP_ZORDER
                              );
@@ -849,6 +873,18 @@ void wxWindowOS2::SetScrollbar(
         ulStyle |= SBS_VERT;
         if (m_hWndScrollBarVert == 0L)
         {
+            //
+            // Since the scrollbars are usually created before the owner is
+            // sized either via an OnSize event directly or via sizers or
+            // layout constraints, we will initially just use the coords of
+            // the parent window (this is usually a frame client window). But
+            // the bars themselves, are children of the parent frame (i.e
+            // siblings of the frame client.  The owner, however is the actual
+            // window being scrolled (or at least the one responsible for
+            // handling the scroll events). The owner will be resized later,
+            // as it is usually a child of a top level window, and when that
+            // is done its scrollbars will be resized and repositioned as well.
+            //
             m_hWndScrollBarVert = ::WinCreateWindow( hWndParent
                                                     ,WC_SCROLLBAR
                                                     ,(PSZ)NULL
@@ -866,12 +902,28 @@ void wxWindowOS2::SetScrollbar(
         }
         else
         {
+            ::WinQueryWindowPos(hWnd, &vSwpOwner);
+            //
+            // The owner (the scrolled window) is a child of the Frame's
+            // client window, usually.  The scrollbars are children of the
+            // frame, itself and thus are positioned relative to the frame's
+            // origin, not the frame's client window's origin.
+            // Thus, the x position will be frame client's x (usually a few
+            // pels inside the parent frame, plus the width of the owner.
+            // Since we may be using sizers or layout constraints for multiple
+            // child scrolled windows, the y position will be the frame client's
+            // y pos plus the scrolled windows y position, yielding the y
+            // position of the scrollbar relative to the parent frame (the vert
+            // scrollbar is on the right and starts at the bottom of the
+            // owner window).
+            // It is 20 pels wide and the same height as the owner.
+            //
             ::WinSetWindowPos( m_hWndScrollBarVert
                               ,HWND_TOP
-                              ,vSwp.x + vSwp.cx - 20
-                              ,vSwp.y + 20
+                              ,vSwp.x + vSwpOwner.x + vSwpOwner.cx
+                              ,vSwp.y + vSwpOwner.y
                               ,20
-                              ,vSwp.cy - 20
+                              ,vSwpOwner.cy
                               ,SWP_ACTIVATE | SWP_MOVE | SWP_SIZE | SWP_SHOW
                              );
             ::WinSendMsg( m_hWndScrollBarVert
@@ -1523,6 +1575,55 @@ void wxWindowOS2::DoMoveWindow(
                       ,(LONG)nHeight
                       ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
                      );
+    if (m_vWinSwp.cx == 0 && m_vWinSwp.cy == 0 && m_vWinSwp.fl == 0)
+        //
+        // Uninitialized
+        //
+        ::WinQueryWindowPos(GetHwnd(), &m_vWinSwp);
+    else
+    {
+        int                         nYDiff = m_vWinSwp.cy - nHeight;
+
+        //
+        // Handle resizing of scrolled windows.  The target or window to
+        // be scrolled is the owner (gets the scroll notificaitons).  The
+        // parent is usually the parent frame of the scrolled panel window.
+        // In order to show the scrollbars the target window will be shrunk
+        // by the size of the scroll bar widths (20) and moved in the X and Y
+        // directon.  That value will be computed as part of the diff for
+        // moving the children.  Everytime the window is sized the
+        // toplevel OnSize is going to resize the panel to fit the client
+        // or the whole sizer and will need to me resized. This will send
+        // a WM_SIZE out which will be intercepted by the ScrollHelper
+        // which will cause the scrollbars to be displayed via the SetScrollbar
+        // call in CWindow.
+        //
+        if ( pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
+             pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
+           )
+        {
+            int                     nAdjustWidth  = 0;
+            int                     nAdjustHeight = 0;
+            SWP                     vSwpScroll;
+
+            if (GetScrollBarHorz() != NULLHANDLE)
+                nAdjustHeight = 20L;
+            if (GetScrollBarVert() != NULLHANDLE)
+                nAdjustWidth = 20L;
+            ::WinQueryWindowPos(GetHWND(), &vSwpScroll);
+            ::WinSetWindowPos( GetHWND()
+                              ,HWND_TOP
+                              ,vSwpScroll.x
+                              ,vSwpScroll.y + nAdjustHeight
+                              ,vSwpScroll.cx - nAdjustWidth
+                              ,vSwpScroll.cy - nAdjustHeight
+                              ,SWP_MOVE | SWP_SIZE
+                             );
+            nYDiff += 20;
+        }
+        MoveChildren(nYDiff);
+        ::WinQueryWindowPos(GetHwnd(), &m_vWinSwp);
+    }
 } // end of wxWindowOS2::DoMoveWindow
 
 //
@@ -4018,6 +4119,7 @@ void wxWindowOS2::MoveChildren(
                           ,vSwp.cy
                           ,SWP_MOVE | SWP_ZORDER
                          );
+        ::WinQueryWindowPos(GetHwndOf(pWin), pWin->GetSwp());
         if (pWin->IsKindOf(CLASSINFO(wxRadioBox)))
         {
             wxRadioBox*     pRadioBox;
@@ -4062,6 +4164,8 @@ void wxWindowOS2::MoveChildren(
 //
 //  3)  The controls are children of a panel, which in turn is a child of
 //      a frame.
+//      The panel may be one of many, in which case the same treatment
+//      as 1 applies. It may be the only child, though.
 //      This is the nastiest case.  A panel is created as the only child of
 //      the frame and as such, when a frame has only one child, the child is
 //      expanded to fit the entire client area of the frame.  Because the
@@ -4102,12 +4206,16 @@ int wxWindowOS2::GetOS2ParentHeight(
         else
             return(pParent->GetClientSize().y);
     }
-
     //
-    // Case 3 -- this is for any window that is the sole child of a Frame.
-    //           The grandparent must exist and it must be of type CFrame
-    //           and it's height must be different. Otherwise the standard
-    //           applies.
+    // Case 3a -- One of many Frame children.  Will be positioned normally
+    //
+    else if (pParent->GetChildren().GetCount() > 1)
+        return(pParent->GetClientSize().y);
+    //
+    // Case 3b -- this is for any window that is the sole child of a Frame.
+    //            The grandparent must exist and it must be of type CFrame
+    //            and it's height must be different. Otherwise the standard
+    //            applies.
     //
     else
     {
@@ -4142,111 +4250,6 @@ int wxWindowOS2::GetOS2ParentHeight(
 // OS/2 needs a lot extra manipulation to deal with layouts
 // for canvas windows, particularly scrolled ones.
 //
-void wxWindowOS2::OS2Layout(
-  int                               nWidth
-, int                               nHeight
-)
-{
-    //
-    // Frames laying out canvas windows need the held.
-    // Dialogs or Frames laying out child controls do not.
-    //
-    if (IsKindOf(CLASSINFO(wxFrame)))
-    {
-        RECTL                       vRectFrame;
-        RECTL                       vRectClient;
-        RECTL                       vRectChild;
-        RECTL                       vRectHorz;
-        RECTL                       vRectVert;
-        SWP                         vSwpFrame;
-        SWP                         vSwpClient;
-        SWP                         vSwpChild;
-        SWP                         vSwpHorz;
-        SWP                         vSwpVert;
-        wxFrame*                    pFrame = wxDynamicCast(this, wxFrame);
-        bool                        bNewYSize = FALSE;
-        bool                        bNewXSize = FALSE;
-
-        ::WinQueryWindowPos(pFrame->GetFrame(), &vSwpFrame);
-        ::WinQueryWindowPos(GetHwnd(), &vSwpClient);
-
-        if (vSwpClient.cy != pFrame->GetSwpClient()->cy)
-            bNewYSize = TRUE;
-        if (vSwpClient.cx != pFrame->GetSwpClient()->cx)
-            bNewXSize = TRUE;
-
-        for (wxWindowList::Node* pNode = GetChildren().GetFirst();
-             pNode;
-             pNode = pNode->GetNext())
-        {
-            wxWindow*               pChild = pNode->GetData();
-            int                     nWidthAdjust = 0;
-            int                     nHeightAdjust = 0;
-
-            if ( pChild->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
-                 pChild->IsKindOf(CLASSINFO(wxScrolledWindow))
-               )
-            {
-                if(bNewYSize)
-                {
-                    //
-                    // This is needed SetSize will mess up the OS/2 child window
-                    // positioning because we position in wxWindows coordinates,
-                    // not OS/2 coordinates.
-                    //
-                    pChild->MoveChildren(pFrame->GetSwpClient()->cy - vSwpClient.cy);
-                    pChild->Refresh();
-                }
-                ::WinQueryWindowPos(pChild->GetHWND(), &vSwpChild);
-
-                //
-                // Reset the child window size to account for scrollbars
-                //
-                if (pChild->GetScrollBarHorz() != NULLHANDLE)
-                    nHeightAdjust = 20;
-                if (pChild->GetScrollBarVert() != NULLHANDLE)
-                    nWidthAdjust = 20;
-                ::WinSetWindowPos( pChild->GetHWND()
-                                  ,HWND_TOP
-                                  ,vSwpChild.x
-                                  ,vSwpChild.y + nHeightAdjust
-                                  ,vSwpChild.cx - nWidthAdjust
-                                  ,vSwpChild.cy - nHeightAdjust
-                                  ,SWP_MOVE | SWP_SIZE
-                                 );
-
-                //
-                // Reset the scrollbar sizes...they will be all messed up after
-                // auto layouts
-                //
-                if (pChild->GetScrollBarHorz() != NULLHANDLE)
-                {
-                    ::WinSetWindowPos( pChild->GetScrollBarHorz()
-                                      ,HWND_TOP
-                                      ,vSwpClient.x + vSwpChild.x
-                                      ,vSwpClient.y + vSwpChild.y
-                                      ,vSwpChild.cx - 20
-                                      ,20
-                                      ,SWP_MOVE | SWP_SIZE | SWP_SHOW | SWP_ACTIVATE | SWP_ZORDER
-                                     );
-                }
-                if (pChild->GetScrollBarVert() != NULLHANDLE)
-                {
-                    ::WinSetWindowPos( pChild->GetScrollBarVert()
-                                      ,HWND_TOP
-                                      ,vSwpClient.x + vSwpChild.x + vSwpChild.cx - 20
-                                      ,vSwpClient.y + vSwpChild.y  + 20
-                                      ,20
-                                      ,vSwpChild.cy - 20
-                                      ,SWP_MOVE | SWP_SIZE | SWP_SHOW | SWP_ACTIVATE | SWP_ZORDER
-                                     );
-                }
-            }
-        }
-        ::WinQueryWindowPos(GetHwnd(), pFrame->GetSwpClient());
-    }
-} // end of wxWindowOS2::OS2Layout
-
 wxWindowCreationHook::wxWindowCreationHook(
   wxWindow*                         pWinBeingCreated
 )
