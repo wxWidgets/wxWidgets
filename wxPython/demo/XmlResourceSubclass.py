@@ -38,17 +38,24 @@ class MyCustomPanel(wx.Panel):
         # silly example.  It could just as easily have been done in
         # the resource.  We do it in the EVT_WINDOW_CREATE handler 
         # because the window doesn't really exist yet in the __init__.
-        t = wx.StaticText(self, -1, "MyCustomPanel")
-        f = t.GetFont()
-        f.SetWeight(wx.BOLD)
-        f.SetPointSize(f.GetPointSize()+2)
-        t.SetFont(f)
-        self.t = t
+        if self is evt.GetEventObject():
+            t = wx.StaticText(self, -1, "MyCustomPanel")
+            f = t.GetFont()
+            f.SetWeight(wx.BOLD)
+            f.SetPointSize(f.GetPointSize()+2)
+            t.SetFont(f)
+            self.t = t
+            # On OSX the EVT_SIZE happens before EVT_WINDOW_CREATE !?!
+            # so give it another kick
+            wx.CallAfter(self.OnSize, None)
+            
 
     def OnSize(self, evt):
-        sz = self.GetSize()
-        w, h = self.t.GetTextExtent(self.t.GetLabel())
-        self.t.SetPosition(((sz.width-w)/2, (sz.height-h)/2))
+        if hasattr(self, 't'):
+            sz = self.GetSize()
+            w, h = self.t.GetTextExtent(self.t.GetLabel())
+            print w, h
+            self.t.SetPosition(((sz.width-w)/2, (sz.height-h)/2))
     
 #----------------------------------------------------------------------
 
@@ -73,7 +80,9 @@ class TestPanel(wx.Panel):
         res.LoadFromString(resourceText)
 
         # Now create a panel from the resource data
-        panel = res.LoadPanel(self, "MyPanel")
+        #panel = res.LoadPanel(self, "MyPanel")
+        panel = MyCustomPanel()
+        panel.Create(self, -1)
 
         # and do the layout
         sizer = wx.BoxSizer(wx.VERTICAL)
