@@ -3,9 +3,13 @@
 
 WXDIR = $(%WXWIN)
 
+EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
+THISDIR = $(WXDIR)\contrib\samples\gizmos\multicell
+
+
 PROGRAM = mtest
-OBJECTS = $(PROGRAM).obj ..\src\multicell.obj
-EXTRAINC=-I..\include
+EXTRALIBS = $(WXDIR)\lib\gizmos_w.lib
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
 
 !include $(WXDIR)\src\makeprog.wat
 

@@ -1,14 +1,14 @@
-#
-# Makefile for WATCOM
-#
-# Created by Julian Smart, January 1999
-# 
-#
+# Purpose: makefile for multicell example (Watcom)
+# Created 2000-07-28
 
 WXDIR = $(%WXWIN)
 
-PROGRAM = minimal
-OBJECTS = $(PROGRAM).obj
+EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
+THISDIR = $(WXDIR)\contrib\samples\gizmos\splittree
+
+PROGRAM = tree
+EXTRALIBS = $(WXDIR)\lib\gizmos_w.lib
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
 
 !include $(WXDIR)\src\makeprog.wat
 
