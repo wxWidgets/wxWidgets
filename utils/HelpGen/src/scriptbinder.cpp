@@ -20,7 +20,9 @@
 #include "wx/wx.h"
 #endif
 
-#include <malloc.h>
+#ifdef HAVE_MALLOC_H
+#  include <malloc.h>
+#endif
 #include <string.h>
 #include <memory.h>
 

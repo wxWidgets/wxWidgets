@@ -21,12 +21,9 @@
 #endif
 
 #if defined( wxUSE_TEMPLATE_STL )
-
-	#include <map>
+#  include <map>
 #else
-
-	#include "wxstlac.h"
-
+#  include "wxstlac.h"
 #endif
 
 #include "sourcepainter.h"

@@ -10,8 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "srcparser.h"
-#pragma interface
+#  pragma implementation "srcparser.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -25,7 +24,9 @@
 #include "wx/wx.h"
 #endif
 
-#include <malloc.h>
+#ifdef HAVE_MALLOC_H
+#  include <malloc.h>
+#endif
 #include <stdio.h>
 
 #include "srcparser.h"

@@ -17,7 +17,9 @@
 #endif
 
 #include <stddef.h>
-#include <sys/types.h>
+#if !defined(__WXMAC__) || defined(__DARWIN__)
+#  include <sys/types.h>
+#endif
 #include <memory.h>
 #include <limits.h>
 #include <new.h>
@@ -599,15 +601,16 @@ public:\
 
 #define ___WXSTL_COMMA ,
 
-#define __DEFINE_MAP(ARG_IS_UNIQUE, KEY_TYPE, VAL_TYPE, FUNCTOR ) __DEFINE_ASOC_CLASS( ARG_IS_UNIQUE,\
+#define __DEFINE_MAP(ARG_IS_UNIQUE, KEY_TYPE, VAL_TYPE, FUNCTOR ) \
+__DEFINE_ASOC_CLASS( ARG_IS_UNIQUE,\
 FUNCTOR,\
 __WXSTLMAP_##KEY_TYPE##VAL_TYPE##ARG_IS_UNIQUE, \
 struct key_value_pair   { KEY_TYPE first ; \
-						  VAL_TYPE second;\
-						  key_value_pair() {}\
-						  key_value_pair( const KEY_TYPE& key ___WXSTL_COMMA const VAL_TYPE& value ) \
-							: first(key) ___WXSTL_COMMA second( value ) {} \
-						} , \
+                          VAL_TYPE second;\
+                          key_value_pair() {}\
+                          key_value_pair( const KEY_TYPE& key ___WXSTL_COMMA const VAL_TYPE& value ) \
+                            : first(key) ___WXSTL_COMMA second( value ) {} \
+                         } , \
 KEY_TYPE,\
 VAL_TYPE,\
 mData.first, mData.second, x.first, x.second, \
@@ -626,7 +629,8 @@ inline insert_result_iterator insert( const value_type& x )\
 	return result;\
 } )
 
-#define __DEFINE_SET(ARG_IS_UNIQUE, KEY_TYPE, FUNCTOR ) __DEFINE_ASOC_CLASS( ARG_IS_UNIQUE,\
+#define __DEFINE_SET(ARG_IS_UNIQUE, KEY_TYPE, FUNCTOR ) \
+__DEFINE_ASOC_CLASS( ARG_IS_UNIQUE,\
 FUNCTOR,\
 __WXSTLSET_##TYPE##ARG_IS_UNIQUE, \
 KEY_TYPE,\
