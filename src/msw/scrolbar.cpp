@@ -375,4 +375,21 @@ void wxScrollBar::Command(wxCommandEvent& event)
     ProcessCommand(event);
 }
 
+wxSize wxScrollBar::DoGetBestSize() const
+{
+    int w = 100;
+    int h = 100;
+
+    if ( IsVertical() )
+    {
+        w = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+    }
+    else
+    {
+        h = wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+    }
+
+    return wxSize(w, h);
+}
+
 #endif // wxUSE_SCROLLBAR

@@ -60,6 +60,9 @@ public:
                              WXWORD pos, WXHWND control);
 
 protected:
+
+    wxSize DoGetBestSize() const;
+
     int m_pageSize;
     int m_viewSize;
     int m_objectSize;
