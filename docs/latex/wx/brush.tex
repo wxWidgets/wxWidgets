@@ -62,6 +62,7 @@ data using the reference counting, are not affected.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxBrush::wxBrush}\label{wxbrushctor}
 
 \func{}{wxBrush}{\void}
@@ -117,6 +118,7 @@ If a stipple brush is created, the brush style will be set to wxSTIPPLE.
 
 \helpref{wxBrushList}{wxbrushlist}, \helpref{wxColour}{wxcolour}, \helpref{wxColourDatabase}{wxcolourdatabase}
 
+
 \membersection{wxBrush::\destruct{wxBrush}}\label{wxbrushdtor}
 
 \func{}{\destruct{wxBrush}}{\void}
@@ -133,6 +135,7 @@ the application should try to clean up all brushes itself. This is because
 wxWidgets cannot know if a pointer to the brush object is stored in an
 application data structure, and there is a risk of double deletion.
 
+
 \membersection{wxBrush::GetColour}\label{wxbrushgetcolour}
 
 \constfunc{wxColour\&}{GetColour}{\void}
@@ -142,6 +145,7 @@ Returns a reference to the brush colour.
 \wxheading{See also}
 
 \helpref{wxBrush::SetColour}{wxbrushsetcolour}
+
 
 \membersection{wxBrush::GetStipple}\label{wxbrushgetstipple}
 
@@ -153,6 +157,7 @@ this bitmap may be non-NULL but uninitialised (\helpref{wxBitmap::Ok}{wxbitmapok
 \wxheading{See also}
 
 \helpref{wxBrush::SetStipple}{wxbrushsetstipple}
+
 
 \membersection{wxBrush::GetStyle}\label{wxbrushgetstyle}
 
@@ -178,6 +183,7 @@ Returns the brush style, one of:
 \helpref{wxBrush::SetStyle}{wxbrushsetstyle}, \helpref{wxBrush::SetColour}{wxbrushsetcolour},\rtfsp
 \helpref{wxBrush::SetStipple}{wxbrushsetstipple}
 
+
 \membersection{wxBrush::IsHatch}\label{wxbrushishatch}
 
 \constfunc{bool}{IsHatch}{\void}
@@ -188,6 +194,7 @@ Returns true if the style of the brush is any of hatched fills.
 
 \helpref{wxBrush::GetStyle}{wxbrushgetstyle}
 
+
 \membersection{wxBrush::Ok}\label{wxbrushok}
 
 \constfunc{bool}{Ok}{\void}
@@ -195,6 +202,7 @@ Returns true if the style of the brush is any of hatched fills.
 Returns true if the brush is initialised. It will return false if the default
 constructor has been used (for example, the brush is a member of a class, or
 NULL has been assigned to it).
+
 
 \membersection{wxBrush::SetColour}\label{wxbrushsetcolour}
 
@@ -213,6 +221,7 @@ Sets the brush colour using red, green and blue values.
 \wxheading{See also}
 
 \helpref{wxBrush::GetColour}{wxbrushgetcolour}
+
 
 \membersection{wxBrush::SetStipple}\label{wxbrushsetstipple}
 
@@ -242,6 +251,7 @@ supported, Windows 98 and NT as well as GTK support arbitrary bitmaps.
 
 \helpref{wxBitmap}{wxbitmap}
 
+
 \membersection{wxBrush::SetStyle}\label{wxbrushsetstyle}
 
 \func{void}{SetStyle}{\param{int}{ style}}
@@ -267,12 +277,14 @@ Sets the brush style.
 
 \helpref{wxBrush::GetStyle}{wxbrushgetstyle}
 
+
 \membersection{wxBrush::operator $=$}\label{wxbrushassignment}
 
 \func{wxBrush\&}{operator $=$}{\param{const wxBrush\& }{brush}}
 
 Assignment operator, using reference counting. Returns a reference
 to `this'.
+
 
 \membersection{wxBrush::operator $==$}\label{wxbrushequals}
 
@@ -282,6 +294,7 @@ Equality operator. Two brushes are equal if they contain pointers
 to the same underlying brush data. It does not compare each attribute,
 so two independently-created brushes using the same parameters will
 fail the test.
+
 
 \membersection{wxBrush::operator $!=$}\label{wxbrushnotequals}
 
@@ -338,6 +351,7 @@ backward compatibility with earlier versions of wxWidgets.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxBrushList::wxBrushList}\label{wxbrushlistconstr}
 
 \func{void}{wxBrushList}{\void}
@@ -345,33 +359,27 @@ backward compatibility with earlier versions of wxWidgets.
 Constructor. The application should not construct its own brush list:
 use the object pointer {\bf wxTheBrushList}.
 
+
 \membersection{wxBrushList::AddBrush}\label{wxbrushlistaddbrush}
 
 \func{void}{AddBrush}{\param{wxBrush *}{brush}}
 
 Used internally by wxWidgets to add a brush to the list.
 
+
 \membersection{wxBrushList::FindOrCreateBrush}\label{wxbrushlistfindorcreatebrush}
 
-\func{wxBrush *}{FindOrCreateBrush}{\param{const wxColour\& }{colour}, \param{int}{ style}}
+\func{wxBrush *}{FindOrCreateBrush}{\param{const wxColour\& }{colour}, \param{int}{ style = wxSOLID}}
 
 Finds a brush with the specified attributes and returns it, else creates a new brush, adds it
 to the brush list, and returns it.
-
-\func{wxBrush *}{FindOrCreateBrush}{\param{const wxString\& }{colourName}, \param{int}{ style}}
-
-Finds a brush with the specified attributes and returns it, else creates a new brush, adds it
-to the brush list, and returns it.
-
-Finds a brush of the given specification, or creates one and adds it to the list.
 
 \wxheading{Parameters}
 
 \docparam{colour}{Colour object.}
 
-\docparam{colourName}{Colour name, which should be in the colour database.}
-
 \docparam{style}{Brush style. See \helpref{wxBrush::SetStyle}{wxbrushsetstyle} for a list of styles.}
+
 
 \membersection{wxBrushList::RemoveBrush}\label{wxbrushlistremovebrush}
 

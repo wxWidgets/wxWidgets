@@ -456,7 +456,7 @@ public:
 
     void AddBrush(wxBrush *brush);
     void RemoveBrush(wxBrush *brush);
-    wxBrush *FindOrCreateBrush(const wxColour& colour, int style);
+    wxBrush *FindOrCreateBrush(const wxColour& colour, int style = wxSOLID);
 };
 
 class WXDLLEXPORT wxFontList : public wxList
