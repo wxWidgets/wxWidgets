@@ -127,6 +127,8 @@ bool wxGIFDecoder::ConvertToImage(wxImage *image) const
         image->SetMask(FALSE);
 
     // Set the palette
+    // Palette creation not yet implemented on wxGTK
+#ifndef __WXGTK__
     if (pal)
     {
         unsigned char* r = new unsigned char[256];
@@ -141,6 +143,7 @@ bool wxGIFDecoder::ConvertToImage(wxImage *image) const
         image->SetPalette(wxPalette(256, r, g, b));
         delete[] r; delete[] g; delete[] b;
     }
+#endif
 
     /* copy image data */
     for (i = 0; i < (GetWidth() * GetHeight()); i++, src++)
