@@ -324,6 +324,7 @@ bool wxMenu::DoInsertOrAppend(
         //
         // Menu is just a normal string (passed in data parameter)
         //
+        wxSetShortCutKey((wxChar*)pItem->GetText().c_str());
         vItem.afStyle |= MIS_TEXT;
         pData = (char*)pItem->GetText().c_str();
     }
@@ -730,6 +731,8 @@ WXHMENU wxMenuBar::Create()
                 return NULLHANDLE;
             }
 
+            m_menus[i]->m_vMenuData.iPosition = i;
+
             rc = (APIRET)::WinSendMsg(hMenuBar, MM_INSERTITEM, (MPARAM)&m_menus[i]->m_vMenuData, (MPARAM)m_titles[i].c_str());
             if (rc == MIT_MEMERROR || rc == MIT_ERROR)
             {
@@ -910,6 +913,8 @@ bool wxMenuBar::Append(
 
     wxCHECK_MSG(hSubmenu, FALSE, wxT("can't append invalid menu to menubar"));
 
+    wxSetShortCutKey((wxChar*)rTitle.c_str());
+
     wxString Title = TextToLabel(rTitle);
     if (!wxMenuBarBase::Append(pMenu, Title))
         return FALSE;
@@ -1068,4 +1073,24 @@ wxMenuItem* wxMenuBar::FindItem(
     }
     return pItem;
 } // end of wxMenuBar::FindItem
+
+//
+// wxWindows' default shortcut identifier is WIN32's "&" but
+// OS2's is "~" so we have to change this and must watch for the
+// sequence, "&&" converting only the first one
+//
+void wxSetShortCutKey(
+  wxChar*                           zText
+)
+{
+    for (int i = 0; zText[i] != '\0'; i++)
+    {
+        if (zText[i] == '&')
+        {
+            zText[i] = '~';
+            if (zText[i+1] == '&')
+                i++;
+        }
+    }
+}
 

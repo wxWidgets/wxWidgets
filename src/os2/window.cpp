@@ -1674,12 +1674,12 @@ bool wxWindow::OS2ProcessMessage(
                 }
             }
         }
+        //
+        // Let Dialogs process
+        //
+        if (::WinSendMsg(pQMsg->hwnd, WM_QUERYDLGCODE, pQMsg, 0));
+            return TRUE;
     }
-    //
-    // Let Dialogs process
-    //
-    if (::WinSendMsg(pQMsg->hwnd, WM_QUERYDLGCODE, pQMsg, 0));
-        return TRUE;
 
 #if wxUSE_TOOLTIPS
     if ( m_tooltip )

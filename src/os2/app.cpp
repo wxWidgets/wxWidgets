@@ -93,12 +93,6 @@ HICON wxDEFAULT_MDIPARENTFRAME_ICON  = (HICON) NULL;
 
 HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
 
-MRESULT EXPENTRY wxWndProc( HWND
-                           ,ULONG
-                           ,MPARAM
-                           ,MPARAM
-                          );
-
 // ===========================================================================
 // implementation
 // ===========================================================================
