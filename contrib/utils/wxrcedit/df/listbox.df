@@ -1,5 +1,0 @@
-node listbox
-var style of flags wxLB_SINGLE,wxLB_MULTIPLE,wxLB_EXTENDED,wxLB_HSCROLL,wxLB_ALWAYS_SB,wxLB_NEEDED_SB,wxLB_SORT
-var selection of integer
-var content of not_implemented
-derived from control
