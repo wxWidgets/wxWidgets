@@ -249,7 +249,7 @@ WXWidget wxTopLevelWindowMotif::GetShellWidget() const
 }
 
 bool wxTopLevelWindowMotif::ShowFullScreen( bool show,
-                                            long style = wxFULLSCREEN_ALL )
+                                            long style )
 {
     // TODO, see wxGTK
     return FALSE;
@@ -271,7 +271,7 @@ void wxTopLevelWindowMotif::Restore()
                        NULL );
 }
 
-void wxTopLevelWindowMotif::Iconize( bool iconize = TRUE )
+void wxTopLevelWindowMotif::Iconize( bool iconize )
 {
     Widget shell = GetShell( this );
     if( !shell ) return;
@@ -299,7 +299,7 @@ bool wxTopLevelWindowMotif::IsIconized() const
     return iconic;
 }
 
-void wxTopLevelWindowMotif::Maximize( bool maximize = TRUE )
+void wxTopLevelWindowMotif::Maximize( bool maximize )
 {
     Show( TRUE );
 

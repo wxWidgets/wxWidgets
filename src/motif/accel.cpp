@@ -99,7 +99,7 @@ bool wxAcceleratorEntry::MatchesEvent(const wxKeyEvent& event) const
     bool eventAltDown = event.AltDown();
     bool eventCtrlDown = event.ControlDown();
     bool eventShiftDown = event.ShiftDown();
-    int  eventKeyCode = event.KeyCode();
+    int  eventKeyCode = event.GetKeyCode();
 
     bool accAltDown = ((GetFlags() & wxACCEL_ALT) == wxACCEL_ALT);
     bool accCtrlDown = ((GetFlags() & wxACCEL_CTRL) == wxACCEL_CTRL);
