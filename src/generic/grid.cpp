@@ -31,7 +31,7 @@
     #include "wx/dcclient.h"
     #include "wx/settings.h"
     #include "wx/log.h"
-    #include "wx/sizer.h"
+    #include "wx/layout.h"
 #endif
 
 #include "wx/generic/grid.h"
@@ -953,46 +953,29 @@ void wxGrid::Create()
     int colLblH = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
     int rowLblW = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
 
+    m_cornerLabelWin = new wxGridCornerLabelWindow( this,
+                                                    -1,
+                                                    wxPoint(0, 0),
+                                                    wxSize(rowLblW, colLblH) );
+
     m_rowLabelWin = new wxGridRowLabelWindow( this,
                                               -1,
-                                              wxDefaultPosition,
-                                              wxSize(rowLblW,-1) );
+                                              wxPoint(0, colLblH),
+                                              wxSize(rowLblW, -1) );
 
     m_colLabelWin = new wxGridColLabelWindow( this,
                                               -1,
-                                              wxDefaultPosition,
+                                              wxPoint(rowLblW, 0),
                                               wxSize(-1, colLblH ) );
-
-    m_cornerLabelWin = new wxGridCornerLabelWindow( this,
-                                                    -1,
-                                                    wxDefaultPosition,
-                                                    wxSize(rowLblW, colLblH ) );
 
     m_gridWin = new wxGridWindow( this,
                                   m_rowLabelWin,
                                   m_colLabelWin,
                                   -1,
-                                  wxDefaultPosition,
+                                  wxPoint(rowLblW, colLblH),
                                   wxDefaultSize );
 
     SetTargetWindow( m_gridWin );
-
-    m_mainSizer = new wxBoxSizer( wxVERTICAL );
-
-    m_topSizer = new wxBoxSizer( wxHORIZONTAL );
-    m_topSizer->Add( m_cornerLabelWin, 0 );
-    m_topSizer->Add( m_colLabelWin, 1 );
-
-    m_mainSizer->Add( m_topSizer, 0, wxEXPAND );
-
-    m_middleSizer = new wxBoxSizer( wxHORIZONTAL );
-    m_middleSizer->Add( m_rowLabelWin, 0, wxEXPAND );
-    m_middleSizer->Add( m_gridWin, 1, wxEXPAND );
-
-    m_mainSizer->Add( m_middleSizer, 1, wxEXPAND );
-
-    SetAutoLayout( TRUE );
-    SetSizer( m_mainSizer );
 }
 
 
@@ -1145,6 +1128,25 @@ void wxGrid::CalcDimensions()
                        right/GRID_SCROLL_LINE, bottom/GRID_SCROLL_LINE,
                        x, y );
     }
+}
+
+
+void wxGrid::CalcWindowSizes()
+{
+    int cw, ch;
+    GetClientSize( &cw, &ch );
+    
+    if ( m_cornerLabelWin->IsShown() )
+        m_cornerLabelWin->SetSize( 0, 0, m_rowLabelWidth, m_colLabelHeight );
+
+    if ( m_colLabelWin->IsShown() )
+        m_colLabelWin->SetSize( m_rowLabelWidth, 0, cw-m_rowLabelWidth, m_colLabelHeight);
+
+    if ( m_rowLabelWin->IsShown() )
+        m_rowLabelWin->SetSize( 0, m_colLabelHeight, m_rowLabelWidth, ch-m_colLabelHeight);
+
+    if ( m_gridWin->IsShown() )
+        m_gridWin->SetSize( m_rowLabelWidth, m_colLabelHeight, cw-m_rowLabelWidth, ch-m_colLabelHeight);
 }
 
 
@@ -2396,14 +2398,10 @@ void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 }
 
 
-// This is just here to make sure that CalcDimensions gets called when
-// the grid view is resized... then the size event is skipped to allow
-// the box sizers to handle everything
-//
 void wxGrid::OnSize( wxSizeEvent& event )
 {
+    CalcWindowSizes();
     CalcDimensions();
-    event.Skip();
 }
 
 
@@ -3899,150 +3897,46 @@ wxString wxGrid::GetColLabelValue( int col )
 
 void wxGrid::SetRowLabelSize( int width )
 {
-    wxSize sz;
-    
     width = wxMax( width, 0 );
     if ( width != m_rowLabelWidth )
     {
-        // Hiding the row labels (and possible the corner label)
-        //
         if ( width == 0 )
         {
             m_rowLabelWin->Show( FALSE );
-
-            // If the col labels are on display we need to hide the
-            // corner label and remove it from the top sizer
-            //
-            if ( m_colLabelHeight > 0 )
-            {
-                m_cornerLabelWin->Show( FALSE );
-                m_topSizer->Remove( m_cornerLabelWin );
-            }
-            
-            m_middleSizer->Remove( m_rowLabelWin );
+            m_cornerLabelWin->Show( FALSE );
         }
-        else
+        else if ( m_rowLabelWidth == 0 )
         {
-            // Displaying the row labels (and possibly the corner
-            // label) after being hidden
-            //
-            if ( m_rowLabelWidth == 0 )
-            {
-                m_rowLabelWin->Show( TRUE );
-                
-                if ( m_colLabelHeight > 0 )
-                {
-                    m_cornerLabelWin->Show( TRUE );
-                    m_topSizer->Prepend( m_cornerLabelWin, 0 );
-                }
-
-                m_middleSizer->Prepend( m_rowLabelWin, 0, wxEXPAND );
-            }
-
-
-            // set the width of the corner label if it is on display
-            //
-            if ( m_colLabelHeight > 0 )
-            {
-                wxList& childList = m_topSizer->GetChildren();
-                wxNode *node = childList.First();
-                while (node)
-                {
-                    wxSizerItem *item = (wxSizerItem*)node->Data();
-                    if ( item->GetWindow() == m_cornerLabelWin )
-                    {
-                        item->SetInitSize( width, m_colLabelHeight );
-                        break;
-                    }
-                    node = node->Next();
-                }
-            }
-
-            // set the width of the row labels
-            //
-            wxList& childList = m_middleSizer->GetChildren();
-            wxNode *node = childList.First();
-            while (node)
-            {
-                wxSizerItem *item = (wxSizerItem*)node->Data();
-                if ( item->GetWindow() == m_rowLabelWin )
-                {
-                    sz = item->GetWindow()->GetSize();
-                    item->SetInitSize( width, sz.GetHeight() );
-                    break;
-                }
-                node = node->Next();
-            }            
+            m_rowLabelWin->Show( TRUE );
+            if ( m_colLabelHeight > 0 ) m_cornerLabelWin->Show( TRUE );
         }
-    
+        
         m_rowLabelWidth = width;
-        m_mainSizer->Layout();
+        CalcWindowSizes();
+        Refresh( TRUE );
     }
 }
 
 
 void wxGrid::SetColLabelSize( int height )
 {
-    wxSize sz;
-
-    if ( height < 0 ) height = 0;
+    height = wxMax( height, 0 );
     if ( height != m_colLabelHeight )
     {
-        // hiding the column labels
-        //
         if ( height == 0 )
         {
-            m_cornerLabelWin->Show( FALSE );
             m_colLabelWin->Show( FALSE );
-
-            // Note: this call will actually delete the sizer
-            //
-            m_mainSizer->Remove( m_topSizer );
-            m_topSizer = (wxBoxSizer *)NULL;
+            m_cornerLabelWin->Show( FALSE );
         }
-        else
+        else if ( m_colLabelHeight == 0 )
         {
-            // column labels to be displayed after being hidden
-            //
-            if ( m_colLabelHeight == 0 )
-            {
-                // recreate the top sizer
-                //
-                m_topSizer = new wxBoxSizer( wxHORIZONTAL );
-
-                if ( m_rowLabelWidth > 0 )
-                    m_topSizer->Add( m_cornerLabelWin, 0 );
-
-                m_topSizer->Add( m_colLabelWin, 1 );
-                m_mainSizer->Prepend( m_topSizer, 0, wxEXPAND );
-
-                // only show the corner label if the row labels are
-                // also displayed
-                //
-                if ( m_rowLabelWidth > 0 )
-                    m_cornerLabelWin->Show( TRUE );
-                
-                m_colLabelWin->Show( TRUE );
-            }
-            
-            wxList& childList = m_topSizer->GetChildren();
-            wxNode *node = childList.First();
-            while (node)
-            {
-                wxSizerItem *item = (wxSizerItem*)node->Data();
-
-                if ( (item->GetWindow() == m_cornerLabelWin && m_rowLabelWidth > 0) ||
-                     item->GetWindow() == m_colLabelWin )
-                {
-                    sz = item->GetWindow()->GetSize();
-                    item->SetInitSize( sz.GetWidth(), height );
-                }
-                node = node->Next();
-            }
+            m_colLabelWin->Show( TRUE );
+            if ( m_rowLabelWidth > 0 ) m_cornerLabelWin->Show( TRUE );
         }
-    
+
         m_colLabelHeight = height;
-        m_mainSizer->Layout();
+        CalcWindowSizes();
+        Refresh( TRUE );
     }
 }
 

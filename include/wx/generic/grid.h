@@ -866,10 +866,6 @@ protected:
     wxGridColLabelWindow     *m_colLabelWin;
     wxGridCornerLabelWindow  *m_cornerLabelWin;
 
-    wxBoxSizer               *m_mainSizer;
-    wxBoxSizer               *m_topSizer;
-    wxBoxSizer               *m_middleSizer;
-
     wxGridTableBase          *m_table;
 
     int m_left;
@@ -948,6 +944,7 @@ protected:
     void Create();
     void Init();
     void CalcDimensions();
+    void CalcWindowSizes();
     bool Redimension( wxGridTableMessage& );
 
 
