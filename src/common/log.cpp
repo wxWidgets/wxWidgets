@@ -362,17 +362,13 @@ void wxLogStream::DoLogString(const char *szString)
 // ----------------------------------------------------------------------------
 wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
 // @@@ TODO: in wxGTK wxTextCtrl doesn't derive from streambuf
-#ifndef __WXGTK__
              : wxLogStream(new ostream(pTextCtrl))
-#endif //GTK
 {
 }
 
 wxLogTextCtrl::~wxLogTextCtrl()
 {
-  #ifndef __WXGTK__
-    delete m_ostr;
-  #endif //GTK
+  delete m_ostr;
 }
 
 // ----------------------------------------------------------------------------

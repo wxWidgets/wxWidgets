@@ -673,10 +673,6 @@ bool wxFileConfig::DeleteAll()
   if ( remove(szFile) == -1 )
     wxLogSysError(_("can't delete user configuration file '%s'"), szFile);
 
-  szFile = m_strGlobalFile;
-  if ( remove(szFile) )
-    wxLogSysError(_("can't delete system configuration file '%s'"), szFile);
-
   m_strLocalFile = m_strGlobalFile = "";
   Init();
 
@@ -1339,8 +1335,10 @@ wxString FilterOut(const wxString& str)
         break;
 
       case '"':
-        if ( bQuote )
+        if ( bQuote ) {
           c = '"';
+          break;
+        }
         //else: fall through
 
       default:
