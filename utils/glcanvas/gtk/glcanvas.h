@@ -103,9 +103,8 @@ class wxGLCanvas: public wxScrolledWindow
 
  // implementation
   
-    virtual void SetSize( int x, int y, int width, int height,
+    virtual void DoSetSize( int x, int y, int width, int height,
       int sizeFlags = wxSIZE_AUTO );
-    virtual void SetSize( int width, int height );
     
     virtual GtkWidget *GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );

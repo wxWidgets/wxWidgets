@@ -214,6 +214,8 @@ bool wxGLCanvas::Create( wxWindow *parent, wxWindowID id,
       GDK_ENTER_NOTIFY_MASK	|
       GDK_LEAVE_NOTIFY_MASK );
     
+    GTK_WIDGET_SET_FLAGS( m_glWidget, GTK_CAN_FOCUS );
+    
     gtk_widget_pop_visual();
     gtk_widget_pop_colormap();
     
@@ -276,7 +278,7 @@ void wxGLCanvas::SetColour( const char *colour )
     if (m_glContext) m_glContext->SetColour( colour );
 }
 
-void wxGLCanvas::SetSize( int x, int y, int width, int height, int sizeFlags )
+void wxGLCanvas::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     if (m_resizing) return; // I don't like recursions
     m_resizing = TRUE;
@@ -349,11 +351,6 @@ void wxGLCanvas::SetSize( int x, int y, int width, int height, int sizeFlags )
     GetEventHandler()->ProcessEvent( event );
 
     m_resizing = FALSE;
-}
-
-void wxGLCanvas::SetSize( int width, int height )
-{
-    SetSize( -1, -1, width, height, wxSIZE_USE_EXISTING );
 }
 
 GtkWidget *wxGLCanvas::GetConnectWidget()
