@@ -177,7 +177,7 @@ bool wxTextFile::OnWrite(wxTextFileType typeNew, wxMBConv& conv)
     if ( !fn.IsAbsolute() )
         fn.Normalize();
 
-    wxTempFile fileTmp(fn.GetFullName());
+    wxTempFile fileTmp(fn.GetFullPath());
 
     if ( !fileTmp.IsOpened() ) {
         wxLogError(_("can't write buffer '%s' to disk."), m_strBufferName.c_str());
