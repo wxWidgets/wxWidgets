@@ -21,7 +21,6 @@
 #if wxUSE_COMBOBOX
 
 #include "wx/object.h"
-#include "wx/control.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -40,7 +39,7 @@ extern const wxChar* wxEmptyString;
 // wxComboBox
 //-----------------------------------------------------------------------------
 
-class wxComboBox : public wxControl
+class wxComboBox : public wxControl, public wxComboBoxBase
 {
 public:
     inline wxComboBox() {}
@@ -55,7 +54,9 @@ public:
     {
         Create(parent, id, value, pos, size, n, choices, style, validator, name);
     }
+
     ~wxComboBox();
+
     bool Create(wxWindow *parent, wxWindowID id,
            const wxString& value = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
@@ -65,34 +66,17 @@ public:
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxComboBoxNameStr);
 
-    int Append( const wxString &item );
-    int Append( const wxString &item, void* clientData );
-    int Append( const wxString &item, wxClientData* clientData );
-
-    int Insert( const wxString &item, int pos );
-    int Insert( const wxString &item, int pos, void* clientData );
-    int Insert( const wxString &item, int pos, wxClientData* clientData );
-
-    void SetClientData( int n, void* clientData );
-    void* GetClientData( int n ) const;
-    void SetClientObject( int n, wxClientData* clientData );
-    wxClientData* GetClientObject( int n ) const;
-
-    void SetClientObject( wxClientData *data )  { wxControl::SetClientObject( data ); }
-    wxClientData *GetClientObject() const       { return wxControl::GetClientObject(); }
-    void SetClientData( void *data )            { wxControl::SetClientData( data ); }
-    void *GetClientData() const                 { return wxControl::GetClientData(); }
-
     void Clear();
     void Delete( int n );
 
-    int FindString( const wxString &item );
+    virtual int FindString( const wxString &item ) const;
     int GetSelection() const;
     wxString GetString( int n ) const;
     wxString GetStringSelection() const;
-    int GetCount() const { return Number(); }
-    int Number() const;
+    int GetCount() const;
+    int Number() const { return GetCount(); }
     void SetSelection( int n );
+    void Select( int n ) { return SetSelection( n ); }
     void SetStringSelection( const wxString &string );
     void SetString(int n, const wxString &text);
 
@@ -103,11 +87,11 @@ public:
     void Cut();
     void Paste();
     void SetInsertionPoint( long pos );
-    void SetInsertionPointEnd();
+    void SetInsertionPointEnd() { SetInsertionPoint( -1 ); }
     long GetInsertionPoint() const;
     long GetLastPosition() const;
+    void Remove(long from, long to) { Replace(from, to, wxEmptyString); }
     void Replace( long from, long to, const wxString& value );
-    void Remove( long from, long to );
     void SetSelection( long from, long to );
     void SetEditable( bool editable );
 
@@ -125,17 +109,25 @@ public:
 
     void DisableEvents();
     void EnableEvents();
-    int AppendCommon( const wxString &item );
-    int InsertCommon( const wxString &item, int pos );
     GtkWidget* GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
 
+    wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
+
 protected:
+    virtual int DoAppend(const wxString& item);
+    virtual int DoInsert(const wxString& item, int pos);
+
+    virtual void DoSetItemClientData( int n, void* clientData );
+    virtual void* DoGetItemClientData( int n ) const;
+    virtual void DoSetItemClientObject( int n, wxClientData* clientData );
+    virtual wxClientData* DoGetItemClientObject( int n ) const;
+
     virtual wxSize DoGetBestSize() const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxComboBox)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
     DECLARE_EVENT_TABLE()
 };
 

@@ -95,6 +95,8 @@ class WXDLLEXPORT wxComboBox: public wxComboBoxBase , public wxControl
     virtual int GetCount() const { return m_choice->GetCount() ; }
     void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
 
+    wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
+
 protected:
     virtual int DoAppend(const wxString& item) ;
     virtual int DoInsert(const wxString& item, int pos) ;

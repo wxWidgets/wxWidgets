@@ -223,7 +223,7 @@ void wxComboBox::SetFocus()
     gtk_widget_grab_focus( m_focusWidget );
 }
 
-int wxComboBox::AppendCommon( const wxString &item )
+int wxComboBox::DoAppend( const wxString &item )
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
 
@@ -245,36 +245,19 @@ int wxComboBox::AppendCommon( const wxString &item )
 
     gtk_widget_show( list_item );
 
-    EnableEvents();
+    const int count = GetCount();
 
-    return GetCount() - 1;
-}
-
-int wxComboBox::Append( const wxString &item )
-{
+    if ( (int)m_clientDataList.GetCount() < count )
     m_clientDataList.Append( (wxObject*) NULL );
+    if ( (int)m_clientObjectList.GetCount() < count )
     m_clientObjectList.Append( (wxObject*) NULL );
 
-    return AppendCommon( item );
+    EnableEvents();
+
+    return count - 1;
 }
 
-int wxComboBox::Append( const wxString &item, void *clientData )
-{
-    m_clientDataList.Append( (wxObject*) clientData );
-    m_clientObjectList.Append( (wxObject*)NULL );
-
-    return AppendCommon( item );
-}
-
-int wxComboBox::Append( const wxString &item, wxClientData *clientData )
-{
-    m_clientDataList.Append( (wxObject*) NULL );
-    m_clientObjectList.Append( (wxObject*) clientData );
-
-    return AppendCommon( item );
-}
-
-int wxComboBox::InsertCommon( const wxString &item, int pos )
+int wxComboBox::DoInsert( const wxString &item, int pos )
 {
     wxCHECK_MSG( !(GetWindowStyle() & wxCB_SORT), -1,
                     wxT("can't insert into sorted list"));
@@ -282,10 +265,10 @@ int wxComboBox::InsertCommon( const wxString &item, int pos )
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
 
     int count = GetCount();
+    wxCHECK_MSG( (pos >= 0) && (pos <= count), -1, wxT("invalid index") );
+
     if (pos == count)
-    {
-        return AppendCommon(item);
-    }
+        return Append(item);
 
     DisableEvents();
 
@@ -308,60 +291,19 @@ int wxComboBox::InsertCommon( const wxString &item, int pos )
 
     gtk_widget_show( list_item );
 
+    count = GetCount();
+
+    if ( (int)m_clientDataList.GetCount() < count )
+    m_clientDataList.Insert( pos, (wxObject*) NULL );
+    if ( (int)m_clientObjectList.GetCount() < count )
+    m_clientObjectList.Insert( pos, (wxObject*) NULL );
+
     EnableEvents();
 
     return pos;
 }
 
-int wxComboBox::Insert( const wxString &item, int pos )
-{
-    const int count = GetCount();
-    wxCHECK_MSG( (pos >= 0) && (pos <= count), -1, wxT("invalid index") );
-
-    if (pos == count)
-    {
-        return Append(item);
-    }
-
-    m_clientDataList.Insert( pos, (wxObject*) NULL );
-    m_clientObjectList.Insert( pos, (wxObject*) NULL );
-
-    return InsertCommon( item, pos );
-}
-
-int wxComboBox::Insert( const wxString &item, int pos, void *clientData )
-{
-    int count = GetCount();
-    wxCHECK_MSG( (pos >= 0) && (pos <= count), -1, wxT("invalid index") );
-
-    if (pos == count)
-    {
-        return Append(item, clientData);
-    }
-
-    m_clientDataList.Insert( pos, (wxObject*) clientData );
-    m_clientObjectList.Insert( pos, (wxObject*)NULL );
-
-    return InsertCommon( item, pos );
-}
-
-int wxComboBox::Insert( const wxString &item, int pos, wxClientData *clientData )
-{
-    int count = GetCount();
-    wxCHECK_MSG( (pos >= 0) && (pos <= count), -1, wxT("invalid index") );
-
-    if (pos == count)
-    {
-        return Append(item, clientData);
-    }
-
-    m_clientDataList.Insert( pos, (wxObject*) NULL );
-    m_clientObjectList.Insert( pos, (wxObject*) clientData );
-
-    return InsertCommon( item, pos );
-}
-
-void wxComboBox::SetClientData( int n, void* clientData )
+void wxComboBox::DoSetItemClientData( int n, void* clientData )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -371,7 +313,7 @@ void wxComboBox::SetClientData( int n, void* clientData )
     node->SetData( (wxObject*) clientData );
 }
 
-void* wxComboBox::GetClientData( int n ) const
+void* wxComboBox::DoGetItemClientData( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid combobox") );
 
@@ -380,7 +322,7 @@ void* wxComboBox::GetClientData( int n ) const
     return node ? node->GetData() : NULL;
 }
 
-void wxComboBox::SetClientObject( int n, wxClientData* clientData )
+void wxComboBox::DoSetItemClientObject( int n, wxClientData* clientData )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -393,7 +335,7 @@ void wxComboBox::SetClientObject( int n, wxClientData* clientData )
     node->SetData( (wxObject*) clientData );
 }
 
-wxClientData* wxComboBox::GetClientObject( int n ) const
+wxClientData* wxComboBox::DoGetItemClientObject( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, (wxClientData*)NULL, wxT("invalid combobox") );
 
@@ -409,7 +351,7 @@ void wxComboBox::Clear()
     DisableEvents();
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
-    gtk_list_clear_items( GTK_LIST(list), 0, Number() );
+    gtk_list_clear_items( GTK_LIST(list), 0, GetCount() );
 
     wxList::compatibility_iterator node = m_clientObjectList.GetFirst();
     while (node)
@@ -479,7 +421,7 @@ void wxComboBox::SetString(int n, const wxString &text)
     }
 }
 
-int wxComboBox::FindString( const wxString &item )
+int wxComboBox::FindString( const wxString &item ) const
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
 
@@ -578,7 +520,7 @@ wxString wxComboBox::GetStringSelection() const
     return wxT("");
 }
 
-int wxComboBox::Number() const
+int wxComboBox::GetCount() const
 {
     wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid combobox") );
 
@@ -668,15 +610,11 @@ void wxComboBox::SetInsertionPoint( long pos )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
+    if ( pos == GetLastPosition() )
+        pos = -1;
+
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
     gtk_entry_set_position( GTK_ENTRY(entry), (int)pos );
-}
-
-void wxComboBox::SetInsertionPointEnd()
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
-
-    SetInsertionPoint( -1 );
 }
 
 long wxComboBox::GetInsertionPoint() const
@@ -706,14 +644,6 @@ void wxComboBox::Replace( long from, long to, const wxString& value )
 #else
     gtk_editable_insert_text( GTK_EDITABLE(entry), value.c_str(), value.Length(), &pos );
 #endif
-}
-
-void wxComboBox::Remove(long from, long to)
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
-
-    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-    gtk_editable_delete_text( GTK_EDITABLE(entry), (gint)from, (gint)to );
 }
 
 void wxComboBox::SetSelection( long from, long to )

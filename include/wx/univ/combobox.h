@@ -279,54 +279,7 @@ public:
 
     void SetStringSelection(const wxString& WXUNUSED(s)) {  }
 
-    // we have to redefine these functions here to avoid ambiguities in classes
-    // deriving from us which would arise otherwise because we inherit these
-    // methods (with different signatures) from both wxItemContainer via
-    // wxComboBoxBase (with "int n" parameter) and from wxEvtHandler via
-    // wxControl and wxComboControl (without)
-    //
-    // hopefully, a smart compiler can optimize away these simple inline
-    // wrappers so we don't suffer much from this
-
-    void SetClientData(void *data)
-    {
-        wxControl::SetClientData(data);
-    }
-
-    void *GetClientData() const
-    {
-        return wxControl::GetClientData();
-    }
-
-    void SetClientObject(wxClientData *data)
-    {
-        wxControl::SetClientObject(data);
-    }
-
-    wxClientData *GetClientObject() const
-    {
-        return wxControl::GetClientObject();
-    }
-
-    void SetClientData(int n, void* clientData)
-    {
-        wxItemContainer::SetClientData(n, clientData);
-    }
-
-    void* GetClientData(int n) const
-    {
-        return wxItemContainer::GetClientData(n);
-    }
-
-    void SetClientObject(int n, wxClientData* clientData)
-    {
-        wxItemContainer::SetClientObject(n, clientData);
-    }
-
-    wxClientData* GetClientObject(int n) const
-    {
-        return wxItemContainer::GetClientObject(n);
-    }
+    wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
 protected:
     virtual int DoAppend(const wxString& item);
