@@ -17,6 +17,13 @@ Also wxTheColourDatabase and added a library module (in the
 wxPython.lib.colourdb module) to load LOTS more colour names into the
 colour database.
 
+Added wxWakeUpMainThread, wxMutexGuiEnter, wxMutexGuiLeave,
+wxMutexGuiLocker and wxThread_IsMain to assist with dealing with GUI
+access from non-GUI threads.
+
+wxPyOnDemandOutputWindow is now thread safe if non-GUI threads use
+print, sys.stdout.write, etc.
+
 
 
 

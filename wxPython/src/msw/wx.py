@@ -1535,10 +1535,8 @@ class wxPyOnDemandOutputWindow:
         self.title  = title
         self.parent = None
 
-
     def SetParent(self, parent):
         self.parent = parent
-
 
     def OnCloseWindow(self, event):
         if self.frame != None:
@@ -1546,9 +1544,13 @@ class wxPyOnDemandOutputWindow:
         self.frame = None
         self.text  = None
 
-
-    # this provides the file-like output behaviour
+    # These methods provide the file-like output behaviour.
     def write(self, str):
+        if not wxThread_IsMain():
+            # Aquire the GUI mutex before making GUI calls.  Mutex is released
+            # when locker is deleted a the end of this function.
+            locker = wxMutexGuiLocker()
+
         if not self.frame:
             self.frame = wxFrame(self.parent, -1, self.title)
             self.text  = wxTextCtrl(self.frame, -1, "",
@@ -1558,11 +1560,11 @@ class wxPyOnDemandOutputWindow:
             EVT_CLOSE(self.frame, self.OnCloseWindow)
         self.text.AppendText(str)
 
-
     def close(self):
         if self.frame != None:
+            if not wxThread_IsMain():
+                locker = wxMutexGuiLocker()
             self.frame.Close()
-
 
 
 _defRedirect = (wxPlatform == '__WXMSW__')

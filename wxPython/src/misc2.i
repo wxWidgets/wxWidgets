@@ -382,10 +382,28 @@ public:
 
 //----------------------------------------------------------------------
 
+bool wxSafeYield(wxWindow* win=NULL);
 void wxPostEvent(wxEvtHandler *dest, wxEvent& event);
 void wxWakeUpIdle();
 
-bool wxSafeYield(wxWindow* win=NULL);
+
+void wxWakeUpMainThread();
+void wxMutexGuiEnter();
+void wxMutexGuiLeave();
+
+
+class wxMutexGuiLocker  {
+public:
+    wxMutexGuiLocker();
+    ~wxMutexGuiLocker();
+};
+
+
+%inline %{
+    bool wxThread_IsMain() {
+        return wxThread::IsMain();
+    }
+%}
 
 //----------------------------------------------------------------------
 
