@@ -54,8 +54,8 @@ class WXDLLEXPORT wxSoundFormatBase {
   virtual wxSoundFormatType GetType() const { return wxSOUND_NOFORMAT; }
   virtual wxSoundFormatBase *Clone() const;
 
-  virtual wxUint32 GetTimeFromByte(wxUint32 bytes) const = 0;
-  virtual wxUint32 GetByteFromTime(wxUint32 time) const = 0;
+  virtual wxUint32 GetTimeFromBytes(wxUint32 bytes) const = 0;
+  virtual wxUint32 GetBytesFromTime(wxUint32 time) const = 0;
  
   virtual bool operator !=(const wxSoundFormatBase& frmt2) const;
 };

@@ -46,12 +46,12 @@ wxSoundFormatBase *wxSoundFormatUlaw::Clone() const
   return ulaw;
 }
 
-wxUint32 wxSoundFormatUlaw::GetTimeFromByte(wxUint32 bytes) const
+wxUint32 wxSoundFormatUlaw::GetTimeFromBytes(wxUint32 bytes) const
 {
   return (bytes / m_srate);
 }
 
-wxUint32 wxSoundFormatUlaw::GetByteFromTime(wxUint32 time) const
+wxUint32 wxSoundFormatUlaw::GetBytesFromTime(wxUint32 time) const
 {
   return time * m_srate;
 }

@@ -155,7 +155,7 @@ FAIL_WITH(m_output->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
   wxDataOutputStream data(*m_output);
   data.BigEndianOrdered(FALSE);
 
-  len = m_sndformat->GetByteFromTime(time);
+  len = m_sndformat->GetBytesFromTime(time);
 
   len += HEADER_SIZE;
 
@@ -185,7 +185,7 @@ FAIL_WITH(m_output->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
     bits_p_spl = pcm->GetBPS();
     channels   = pcm->GetChannels();
     byte_p_spl = pcm->GetBPS() / 8;
-    byte_p_sec = pcm->GetByteFromTime(1);
+    byte_p_sec = pcm->GetBytesFromTime(1);
     format     = 1;
     data << format << channels << sample_fq
          << byte_p_sec << byte_p_spl << bits_p_spl;
@@ -200,7 +200,7 @@ FAIL_WITH(m_output->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
   }
 
   WRITE_SIGNATURE(DATA_SIGNATURE);
-  data.Write32(m_sndformat->GetByteFromTime(time));
+  data.Write32(m_sndformat->GetBytesFromTime(time));
   return TRUE;
 }
 

@@ -168,7 +168,7 @@ bool wxSoundFileStream::Record(unsigned long time)
   if (!PrepareToRecord(time))
     return FALSE;
 
-  m_len = m_sndformat->GetByteFromTime(time);
+  m_len = m_sndformat->GetBytesFromTime(time);
 
   if (!StartProduction(wxSOUND_INPUT))
     return FALSE;

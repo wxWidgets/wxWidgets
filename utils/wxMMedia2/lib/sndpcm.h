@@ -41,8 +41,8 @@ class wxSoundFormatPcm : public wxSoundFormatBase {
   wxSoundFormatType GetType() const { return wxSOUND_PCM; }
   wxSoundFormatBase *Clone() const;
 
-  wxUint32 GetTimeFromByte(wxUint32 bytes) const;
-  wxUint32 GetByteFromTime(wxUint32 time) const;
+  wxUint32 GetTimeFromBytes(wxUint32 bytes) const;
+  wxUint32 GetBytesFromTime(wxUint32 time) const;
 
   bool operator!=(const wxSoundFormatBase& frmt2) const;
 

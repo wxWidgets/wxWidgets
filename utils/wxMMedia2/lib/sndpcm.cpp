@@ -64,12 +64,12 @@ wxSoundFormatBase *wxSoundFormatPcm::Clone() const
   return new_pcm;
 }
 
-wxUint32 wxSoundFormatPcm::GetTimeFromByte(wxUint32 bytes) const
+wxUint32 wxSoundFormatPcm::GetTimeFromBytes(wxUint32 bytes) const
 {
   return (bytes / (m_srate * (m_bps / 8) * m_nchan));
 }
 
-wxUint32 wxSoundFormatPcm::GetByteFromTime(wxUint32 time) const
+wxUint32 wxSoundFormatPcm::GetBytesFromTime(wxUint32 time) const
 {
   return (time * (m_srate * (m_bps / 8) * m_nchan));
 }
