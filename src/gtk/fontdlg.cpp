@@ -127,9 +127,9 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
     wxString m_message( _("Choose font") );
     m_widget = gtk_font_selection_dialog_new( wxGTK_CONV( m_message ) );
 
-    int x = (gdk_screen_width () - 400) / 2;
-    int y = (gdk_screen_height () - 400) / 2;
-    gtk_widget_set_uposition( m_widget, x, y );
+    if (parent)
+        gtk_window_set_transient_for(GTK_WINDOW(m_widget),
+                                     GTK_WINDOW(parent->m_widget));
 
     GtkFontSelectionDialog *sel = GTK_FONT_SELECTION_DIALOG(m_widget);
 
