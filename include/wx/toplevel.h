@@ -53,18 +53,6 @@ enum
                                wxFULLSCREEN_NOCAPTION
 };
 
-// Flags for interactive frame manipulation functions (only in wxUniversal):
-enum
-{
-    wxINTERACTIVE_MOVE           = 0x00000001,
-    wxINTERACTIVE_RESIZE         = 0x00000002,
-    wxINTERACTIVE_RESIZE_S       = 0x00000010,
-    wxINTERACTIVE_RESIZE_N       = 0x00000020,
-    wxINTERACTIVE_RESIZE_W       = 0x00000040,
-    wxINTERACTIVE_RESIZE_E       = 0x00000080,
-    wxINTERACTIVE_WAIT_FOR_INPUT = 0x10000000
-};
-
 // ----------------------------------------------------------------------------
 // wxTopLevelWindow: a top level (as opposed to child) window
 // ----------------------------------------------------------------------------
@@ -118,12 +106,6 @@ public:
 #if WXWIN_COMPATIBILITY_2
     bool Iconized() const { return IsIconized(); }
 #endif // WXWIN_COMPATIBILITY_2
-
-
-#ifdef __WXUNIVERSAL__
-    // move/resize the frame interactively, i.e. let the user do it
-    virtual void InteractiveMove(int flags = wxINTERACTIVE_MOVE);
-#endif
 
     // implementation only from now on
     // -------------------------------

@@ -64,6 +64,18 @@ enum
     wxHT_TOPLEVEL_ANY_BUTTON      =   0x1F000000
 };
 
+// Flags for interactive frame manipulation functions (only in wxUniversal):
+enum
+{
+    wxINTERACTIVE_MOVE           = 0x00000001,
+    wxINTERACTIVE_RESIZE         = 0x00000002,
+    wxINTERACTIVE_RESIZE_S       = 0x00000010,
+    wxINTERACTIVE_RESIZE_N       = 0x00000020,
+    wxINTERACTIVE_RESIZE_W       = 0x00000040,
+    wxINTERACTIVE_RESIZE_E       = 0x00000080,
+    wxINTERACTIVE_WAIT_FOR_INPUT = 0x10000000
+};
+
 // ----------------------------------------------------------------------------
 // the actions supported by this control
 // ----------------------------------------------------------------------------
@@ -122,6 +134,9 @@ public:
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = -1,
                                const wxString& strArg = wxEmptyString);
+
+    // move/resize the frame interactively, i.e. let the user do it
+    virtual void InteractiveMove(int flags = wxINTERACTIVE_MOVE);
 
 protected:
     // handle titlebar button click event
