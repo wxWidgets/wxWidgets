@@ -29,6 +29,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif //WX_PRECOMP
 
 #include "wx/timer.h"

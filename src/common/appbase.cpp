@@ -25,6 +25,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/intl.h"
     #if wxUSE_LOG
         #include "wx/log.h"
     #endif // wxUSE_LOG
@@ -470,10 +472,12 @@ wxFontMapper *wxConsoleAppTraitsBase::CreateFontMapper()
 
 #endif // wxUSE_FONTMAP
 
+#ifdef __WXDEBUG__
 bool wxConsoleAppTraitsBase::ShowAssertDialog(const wxString& msg)
 {
     return wxAppTraitsBase::ShowAssertDialog(msg);
 }
+#endif
 
 bool wxConsoleAppTraitsBase::HasStderr()
 {

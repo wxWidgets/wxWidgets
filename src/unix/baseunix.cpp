@@ -25,9 +25,12 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/intl.h"
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"
+#include "wx/unix/execute.h"
 
 // for waitpid()
 #include <sys/types.h>
@@ -98,10 +101,10 @@ int wxConsoleAppTraits::GetOSVersion(int *verMaj, int *verMin)
         minor = -1;
     }
 
-    if ( majorVsn )
-        *majorVsn = major;
-    if ( minorVsn )
-        *minorVsn = minor;
+    if ( verMaj )
+        *verMaj = major;
+    if ( verMin )
+        *verMin = minor;
 
     return wxUNIX;
 }
