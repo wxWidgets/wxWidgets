@@ -105,18 +105,18 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             event.m_clientData = GetClientData(event.m_commandInt);
             wxString str(GetString(event.m_commandInt));
             if (str != "")
-                event.m_commandString = copystring((char *)(const char *)str);
+            {
+		event.m_commandString = str;
+            }
         }
         else
         {
             event.m_commandInt = -1 ;
-            event.m_commandString = copystring("") ;
+            event.m_commandString.Empty();
         }
 
         event.SetEventObject( this );
         ProcessCommand(event);
-        if (event.m_commandString)
-            delete[] event.m_commandString ;
         return TRUE;
     }
     else if (param == LBN_DBLCLK)

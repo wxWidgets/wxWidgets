@@ -15,7 +15,7 @@ EXTRAINC = -I..\..\src
 EXTRALIBS = $(WXDIR)\lib\fl.lib
 EXTRAFLAGS = /DwxDUMMY_OBJ_INCLUDED
 PROGRAM=fl_demo
-OBJECTS = $(PROGRAM).obj
+OBJECTS = $(PROGRAM).obj settingsdlg.obj wxinfo.obj
 
 !include $(WXDIR)\src\makeprog.vc
 
