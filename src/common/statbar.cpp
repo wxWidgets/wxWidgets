@@ -29,6 +29,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/frame.h"
     #include "wx/statusbr.h"
 #endif //WX_PRECOMP
 
