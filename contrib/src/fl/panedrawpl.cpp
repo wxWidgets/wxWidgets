@@ -279,7 +279,13 @@ void cbPaneDrawPlugin::OnMouseMove( cbMotionEvent& event )
 
                     mBarContentHitted = TRUE;
 
+                    // In Windows, at least, the frame needs to have a null cursor
+                    // else child windows (such as text windows) inherit the cursor
+#if 1
+                    mpLayout->GetParentFrame().SetCursor( wxNullCursor );
+#else
                     mpLayout->GetParentFrame().SetCursor( *mpLayout->mpNormalCursor );
+#endif
                 }
 
                 // TBD:: fire something like "mouse-over-bar" event
@@ -344,7 +350,13 @@ void cbPaneDrawPlugin::OnMouseMove( cbMotionEvent& event )
             mpLayout->ReleaseEventsFromPane( event.mpPane );
             mpLayout->ReleaseEventsFromPlugin( this );
 
+            // In Windows, at least, the frame needs to have a null cursor
+            // else child windows (such as text windows) inherit the cursor
+#if 1
+            mpLayout->GetParentFrame().SetCursor( wxNullCursor );
+#else
             mpLayout->GetParentFrame().SetCursor( *mpLayout->mpNormalCursor );
+#endif
 
             mResizeCursorOn = FALSE;
         }
@@ -499,7 +511,13 @@ void cbPaneDrawPlugin::OnLButtonUp( cbLeftUpEvent& event )
         mpLayout->ReleaseEventsFromPane( event.mpPane );
         mpLayout->ReleaseEventsFromPlugin( this );
 
+        // In Windows, at least, the frame needs to have a null cursor
+        // else child windows (such as text windows) inherit the cursor
+#if 1
+        mpLayout->GetParentFrame().SetCursor( wxNullCursor );
+#else
         mpLayout->GetParentFrame().SetCursor( *mpLayout->mpNormalCursor );
+#endif
 
         if ( mRowHandleHitted )
         {

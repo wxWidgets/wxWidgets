@@ -1035,6 +1035,7 @@ void cbRowLayoutPlugin::OnLayoutRows( cbLayoutRowsEvent& event )
     for ( i = 0; i != mpPane->GetRowList().Count(); ++i )
     {
         cbRowInfo& row = *mpPane->GetRowList()[ i ];
+        //mpPane->CalcLengthRatios(& row);
 
         // setup "has-handle" flags for rows, which depend on the existance 
         // of not-fixed bars in the row

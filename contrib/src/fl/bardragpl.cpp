@@ -651,9 +651,7 @@ void cbBarDragPlugin::OnMouseMove( cbMotionEvent& event )
 		else
 			mpCurCursor = mpLayout->mpNECursor;
 	}
-
 	if ( pPrevCurs != mpCurCursor )
-
 		mpLayout->GetParentFrame().SetCursor( *mpCurCursor );
 }
 
@@ -695,7 +693,13 @@ void cbBarDragPlugin::OnLButtonUp( cbLeftUpEvent& event )
 	
 		mHintRect.width = -1;
 
-		mpLayout->GetParentFrame().SetCursor( *mpLayout->mpNormalCursor );
+        // In Windows, at least, the frame needs to have a null cursor
+        // else child windows (such as text windows) inherit the cursor
+#if 1
+        mpLayout->GetParentFrame().SetCursor( wxNullCursor );
+#else
+        mpLayout->GetParentFrame().SetCursor( *mpLayout->mpNormalCursor );
+#endif
 
 		mpLayout->ReleaseEventsFromPane( event.mpPane );
 		mpLayout->ReleaseEventsFromPlugin( this );
