@@ -156,6 +156,9 @@
     #elif defined(__WATCOMC__) && (__WATCOMC__ >= 1100)
         // Watcom 11+ supports bool
         #define HAVE_BOOL
+    #elif defined(__DIGITALMARS__)
+        // DigitalMars supports bool
+        #define HAVE_BOOL
     #elif defined(__GNUWIN32__)
         // Cygwin supports bool
         #define HAVE_BOOL
@@ -241,6 +244,8 @@ typedef int wxWindowID;
         #define HAVE_EXPLICIT
     #elif defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
         // Metrowerks CW6 or higher has explicit
+        #define HAVE_EXPLICIT
+    #elif defined(__DIGITALMARS__)
         #define HAVE_EXPLICIT
     #endif
 #endif // !HAVE_EXPLICIT

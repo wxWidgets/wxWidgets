@@ -39,7 +39,7 @@
 #endif //WX_PRECOMP
 
 // FreeBSD & Watcom require this, it probably doesn't hurt for others
-#if defined(__UNIX__) || defined(__WATCOMC__)
+#if defined(__UNIX__) || defined(__WATCOMC__) || defined(__DIGITALMARS__)
     #include <sys/types.h>
 #endif
 

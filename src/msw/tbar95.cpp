@@ -47,6 +47,13 @@
     #include "malloc.h"
 #endif
 
+// ----------------------------------------------------------------------------
+// Toolbar define value missing 
+// ----------------------------------------------------------------------------
+#if defined(__DIGITALMARS__) 
+#define CCS_VERT                0x00000080L
+#endif
+
 #include "wx/msw/private.h"
 
 #ifndef __TWIN32__

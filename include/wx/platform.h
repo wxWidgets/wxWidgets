@@ -276,6 +276,14 @@
     #define __X__
 #endif
 
+#ifdef __SC__
+    #ifdef __DMC__
+         #define __DIGITALMARS__
+    #else
+         #define __SYMANTEC__
+    #endif
+#endif
+
 /*
    This macro can be used to test the gcc version and can be used like this:
 
@@ -294,7 +302,7 @@
    This macro can be used to check that the version of mingw32 compiler is
    at least maj.min
  */
-#if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || defined( __CYGWIN__ )
+#if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || defined( __CYGWIN__ ) || defined(__DIGITALMARS__)
     #include "wx/msw/gccpriv.h"
 #else
     #undef wxCHECK_W32API_VERSION

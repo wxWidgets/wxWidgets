@@ -152,7 +152,7 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
       HBITMAP hbmpOld = (HBITMAP)SelectObject(hdcMem, hbmpCheck);
 
       // then draw a check mark into it
-#if defined(__WIN32__) && !defined(__SC__)
+#if defined(__WIN32__) && !defined(__SYMANTEC__)
       RECT rect;
       rect.left   = 0;
       rect.top    = 0;
