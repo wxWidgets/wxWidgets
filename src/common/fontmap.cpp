@@ -89,10 +89,6 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_ISO8859_14,
     wxFONTENCODING_ISO8859_15,
     wxFONTENCODING_KOI8,
-    wxFONTENCODING_GB2312,
-    wxFONTENCODING_BIG5,
-    wxFONTENCODING_SHIFT_JIS,
-    wxFONTENCODING_EUC_JP,
     wxFONTENCODING_CP932,
     wxFONTENCODING_CP936,
     wxFONTENCODING_CP949,
@@ -108,6 +104,7 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_CP437,
     wxFONTENCODING_UTF7,
     wxFONTENCODING_UTF8,
+    wxFONTENCODING_EUC_JP,
 };
 
 // the descriptions for them
@@ -129,10 +126,6 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Celtic (ISO-8859-14)" ),
     wxTRANSLATE( "Western European with Euro (ISO-8859-15)" ),
     wxTRANSLATE( "KOI8-R" ),
-    wxTRANSLATE( "Chinese Simplified (GB2312)" ),
-    wxTRANSLATE( "Chinese Traditional (BIG5)" ),
-    wxTRANSLATE( "Japanese (Shift-JIS)" ),
-    wxTRANSLATE( "Extended Unix Codepage for Japanese (EUC-JP)" ),
     wxTRANSLATE( "Windows Japanese (CP 932)" ),
     wxTRANSLATE( "Windows Chinese Simplified (CP 936)" ),
     wxTRANSLATE( "Windows Korean (CP 949)" ),
@@ -148,6 +141,7 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Windows/DOS OEM (CP 437)" ),
     wxTRANSLATE( "Unicode 7 bit (UTF-7)" ),
     wxTRANSLATE( "Unicode 8 bit (UTF-8)" ),
+    wxTRANSLATE( "Extended Unix Codepage for Japanese (EUC-JP)" ),
 };
 
 // and the internal names (these are not translated on purpose!)
@@ -169,10 +163,6 @@ static const wxChar* gs_encodingNames[] =
     wxT( "iso-8859-14" ),
     wxT( "iso-8859-15" ),
     wxT( "koi8-r" ),
-    wxT( "gb2312" ),
-    wxT( "big5" ),
-    wxT( "shift-jis" ),
-    wxT( "euc-jp" ),
     wxT( "windows-932" ),
     wxT( "windows-936" ),
     wxT( "windows-949" ),
@@ -188,8 +178,12 @@ static const wxChar* gs_encodingNames[] =
     wxT( "windows-437" ),
     wxT( "utf-7" ),
     wxT( "utf-8" ),
+    wxT( "euc-jp" ),
 };
 
+wxCOMPILE_TIME_ASSERT( WXSIZEOF(gs_encodingDescs) == WXSIZEOF(gs_encodings) &&
+                       WXSIZEOF(gs_encodingNames) == WXSIZEOF(gs_encodings),
+                       EncodingsArraysNotInSync );
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -398,10 +392,7 @@ wxString wxFontMapper::GetEncodingDescription(wxFontEncoding encoding)
         return _("Default encoding");
     }
 
-    size_t count = WXSIZEOF(gs_encodingDescs);
-
-    wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
-                  wxT("inconsitency detected - forgot to update one of the arrays?") );
+    const size_t count = WXSIZEOF(gs_encodingDescs);
 
     for ( size_t i = 0; i < count; i++ )
     {
@@ -425,10 +416,7 @@ wxString wxFontMapper::GetEncodingName(wxFontEncoding encoding)
         return _("default");
     }
 
-    size_t count = WXSIZEOF(gs_encodingNames);
-
-    wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
-                  wxT("inconsistency detected - forgot to update one of the arrays?") );
+    const size_t count = WXSIZEOF(gs_encodingNames);
 
     for ( size_t i = 0; i < count; i++ )
     {
@@ -686,10 +674,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         msg.Printf(_("The charset '%s' is unknown. You may select\nanother charset to replace it with or choose\n[Cancel] if it cannot be replaced"), charset.c_str());
 
         // the list of choices
-        size_t count = WXSIZEOF(gs_encodingDescs);
-
-        wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
-                      wxT("inconsitency detected - forgot to update one of the arrays?") );
+        const size_t count = WXSIZEOF(gs_encodingDescs);
 
         wxString *encodingNamesTranslated = new wxString[count];
 
