@@ -42,6 +42,7 @@ GENERICOBJS= $(OUTPUTDIR)\busyinfo.obj &
 	$(OUTPUTDIR)\progdlgg.obj &
 	$(OUTPUTDIR)\sashwin.obj &
 	$(OUTPUTDIR)\scrlwing.obj &
+	$(OUTPUTDIR)\selstore.obj &
 	$(OUTPUTDIR)\spinctlg.obj &
 	$(OUTPUTDIR)\splash.obj &
 	$(OUTPUTDIR)\splitter.obj &
@@ -697,6 +698,9 @@ $(OUTPUTDIR)\utilsexc.obj:     $(MSWDIR)\utilsexc.cpp
 $(OUTPUTDIR)\uuid.obj:     $(OLEDIR)\uuid.cpp
   *$(CXX) $(CXXFLAGS) $<
 
+$(OUTPUTDIR)\uxtheme.obj:     $(MSWDIR)\uxtheme.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
 $(OUTPUTDIR)\volume.obj:     $(MSWDIR)\volume.cpp
   *$(CXX) $(CXXFLAGS) $<
 
@@ -1163,6 +1167,9 @@ $(OUTPUTDIR)\sashwin.obj:     $(GENDIR)\sashwin.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\scrlwing.obj:     $(GENDIR)\scrlwing.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
+$(OUTPUTDIR)\selstore.obj:     $(GENDIR)\selstore.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\spinctlg.obj:     $(GENDIR)\spinctlg.cpp

@@ -71,6 +71,7 @@ GENERICOBJS= accel.obj &
 	progdlgg.obj &
 	sashwin.obj &
 	scrlwing.obj &
+	selstore.obj &
 	spinctlg.obj &
 	splash.obj &
 	splitter.obj &
@@ -1038,6 +1039,9 @@ sashwin.obj:     $(GENDIR)\sashwin.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 scrlwing.obj:     $(GENDIR)\scrlwing.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+selstore.obj:     $(GENDIR)\selstore.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 spinctlg.obj:     $(GENDIR)\spinctlg.cpp

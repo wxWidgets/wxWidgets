@@ -741,6 +741,10 @@ SOURCE=.\generic\scrlwing.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\selstore.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\spinctlg.cpp
 # End Source File
 # Begin Source File
@@ -1992,6 +1996,10 @@ SOURCE=..\include\wx\scrolbar.h
 # Begin Source File
 
 SOURCE=..\include\wx\scrolwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\selstore.h
 # End Source File
 # Begin Source File
 

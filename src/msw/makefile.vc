@@ -105,6 +105,7 @@ GENERICOBJS= $(GENDIR)\$D\busyinfo.obj \
 		$(GENDIR)\$D\progdlgg.obj \
 		$(GENDIR)\$D\sashwin.obj \
 		$(GENDIR)\$D\scrlwing.obj \
+		$(GENDIR)\$D\selstore.obj \
 		$(GENDIR)\$D\spinctlg.obj \
 		$(GENDIR)\$D\splash.obj \
 		$(GENDIR)\$D\splitter.obj \

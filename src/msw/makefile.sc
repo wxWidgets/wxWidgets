@@ -45,6 +45,7 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 		$(GENDIR)\progdlgg.obj \
 		$(GENDIR)\sashwin.obj \
 		$(GENDIR)\scrlwing.obj \
+		$(GENDIR)\selstore.obj \
 		$(GENDIR)\spinctlg.obj \
 		$(GENDIR)\splash.obj \
 		$(GENDIR)\splitter.obj \
@@ -317,6 +318,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
 		$(MSWDIR)\ole\uuid.obj \
+		$(MSWDIR)\uxtheme.obj \
 		$(MSWDIR)\volume.obj \
 		$(MSWDIR)\wave.obj \
 		$(MSWDIR)\window.obj

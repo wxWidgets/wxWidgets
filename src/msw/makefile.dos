@@ -72,6 +72,7 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 		$(GENDIR)\progdlgg.obj \
 		$(GENDIR)\sashwin.obj \
 		$(GENDIR)\scrlwing.obj \
+		$(GENDIR)\selstore.obj \
 		$(GENDIR)\spinctlg.obj \
 		$(GENDIR)\splash.obj \
 		$(GENDIR)\splitter.obj \
@@ -287,6 +288,7 @@ MSWOBJS2 = $(MSWDIR)\palette.obj \
 		$(MSWDIR)\toplevel.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
+		$(MSWDIR)\uxtheme.obj \
 		$(MSWDIR)\volume.obj \
 		$(MSWDIR)\wave.obj \
 		$(MSWDIR)\window.obj
@@ -768,6 +770,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(MSWDIR)/utilsexc.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(MSWDIR)/uxtheme.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
@@ -1468,6 +1475,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(GENDIR)/scrlwing.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(GENDIR)/selstore.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

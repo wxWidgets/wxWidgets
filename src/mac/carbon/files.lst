@@ -805,7 +805,6 @@ GENERICOBJS = \
 		gridctrl.o \
 		gridsel.o \
 		helpext.o \
-		htmllbox.o \
 		imaglist.o \
 		laywin.o \
 		listctrl.o \
@@ -829,8 +828,6 @@ GENERICOBJS = \
 		tipdlg.o \
 		tipwin.o \
 		treectlg.o \
-		vlbox.o \
-		vscroll.o \
 		wizard.o
 
 GUIOBJS = \

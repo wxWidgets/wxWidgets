@@ -89,6 +89,7 @@ GENERICOBJS= $(MSWDIR)\busyinfo.obj \
 		$(MSWDIR)\progdlgg.obj \
 		$(MSWDIR)\sashwin.obj \
 		$(MSWDIR)\scrlwing.obj \
+		$(MSWDIR)\selstore.obj \
 		$(MSWDIR)\spinctlg.obj \
 		$(MSWDIR)\splash.obj \
 		$(MSWDIR)\splitter.obj \
@@ -299,6 +300,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\toplevel.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
+		$(MSWDIR)\uxtheme.obj \
 		$(MSWDIR)\volume.obj \
 		$(MSWDIR)\wave.obj \
 		$(MSWDIR)\window.obj
@@ -486,6 +488,8 @@ $(MSWDIR)\toplevel.obj: $(MSWDIR)\toplevel.$(SRCSUFF)
 $(MSWDIR)\utils.obj: $(MSWDIR)\utils.$(SRCSUFF)
 
 $(MSWDIR)\utilsexc.obj: $(MSWDIR)\utilsexc.$(SRCSUFF)
+
+$(MSWDIR)\uxtheme.obj: $(MSWDIR)\uxtheme.$(SRCSUFF)
 
 $(MSWDIR)\volume.obj: $(MSWDIR)\volume.$(SRCSUFF)
 
@@ -777,6 +781,8 @@ $(MSWDIR)\progdlgg.obj: $(GENDIR)\progdlgg.$(SRCSUFF)
 $(MSWDIR)\sashwin.obj: $(GENDIR)\sashwin.$(SRCSUFF)
 
 $(MSWDIR)\scrlwing.obj: $(GENDIR)\scrlwing.$(SRCSUFF)
+
+$(MSWDIR)\selstore.obj: $(GENDIR)\selstore.$(SRCSUFF)
 
 $(MSWDIR)\spinctlg.obj: $(GENDIR)\spinctlg.$(SRCSUFF)
 

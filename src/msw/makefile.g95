@@ -94,6 +94,7 @@ GENERICOBJS = \
 		$(GENDIR)/progdlgg.$(OBJSUFF) \
 		$(GENDIR)/sashwin.$(OBJSUFF) \
 		$(GENDIR)/scrlwing.$(OBJSUFF) \
+		$(GENDIR)/selstore.$(OBJSUFF) \
 		$(GENDIR)/spinctlg.$(OBJSUFF) \
 		$(GENDIR)/splash.$(OBJSUFF) \
 		$(GENDIR)/splitter.$(OBJSUFF) \

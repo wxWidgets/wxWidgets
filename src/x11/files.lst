@@ -64,6 +64,7 @@ ALL_SOURCES = \
 		generic/progdlgg.cpp \
 		generic/sashwin.cpp \
 		generic/scrlwing.cpp \
+		generic/selstore.cpp \
 		generic/spinctlg.cpp \
 		generic/splash.cpp \
 		generic/splitter.cpp \
@@ -412,6 +413,7 @@ ALL_HEADERS = \
 		sckstrm.h \
 		scrolbar.h \
 		scrolwin.h \
+		selstore.h \
 		settings.h \
 		sizer.h \
 		slider.h \
@@ -810,6 +812,7 @@ GENERICOBJS = \
 		progdlgg.o \
 		sashwin.o \
 		scrlwing.o \
+		selstore.o \
 		spinctlg.o \
 		splash.o \
 		splitter.o \
