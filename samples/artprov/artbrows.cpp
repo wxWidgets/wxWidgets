@@ -96,6 +96,7 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
     ART_ICON(wxART_NORMAL_FILE)
     ART_ICON(wxART_TICK_MARK)
     ART_ICON(wxART_CROSS_MARK)
+    ART_ICON(wxART_MISSING_IMAGE)
 }
 
 
