@@ -23,30 +23,44 @@ LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng regex zlib jpeg tiff o
 # Note: you may need to remove some libraries for earlier versions of BC++, as below
 #LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib tiff
 
+!if "$(wxUSE_GUI)" == "0"
+LINKOUT = /ap
+!else
+LINKOUT = /aa
+!endif
+
 !if "$(FINAL)" == "0"
 #LINKFLAGS=/v /c /Tpe $(LNKCFG) $(EXTRALINKFLAGS)
-LINKFLAGS=/v /c /aa -L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk $(EXTRALINKFLAGS)
+LINKFLAGS=/v /c $(LINKOUT) -L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk $(EXTRALINKFLAGS)
 OPT = -Od
 DEBUG_FLAGS= -v
 !else
 #LINKFLAGS=/Tpe +$(LNKCFG) $(EXTRALINKFLAGS)
-LINKFLAGS=/aa -L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk $(EXTRALINKFLAGS)
+LINKFLAGS=$(LINKOUT) -L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk $(EXTRALINKFLAGS)
 OPT = -Od
 DEBUG_FLAGS =
 !endif
 
 CPPFLAGS=$(CPPFLAGS) $(DEBUG_FLAGS) $(OPT)
 
+!if "$(wxUSE_GUI)" == "0"
+TARGETRES = 
+STARTUP = c0x32.obj	
+!else
+TARGETRES = $(TARGET).res
+STARTUP = c0w32.obj
+!endif
+
 all: $(TARGET).exe $(EXTRATARGETS)
 
-$(TARGET).exe:	$(OBJECTS) $(TARGET).res
+$(TARGET).exe:	$(OBJECTS) $(TARGETRES)
   $(LINK) $(LINKFLAGS) @&&!
-c0w32.obj $(OBJECTS)
+$(STARTUP) $(OBJECTS)
 $(TARGET)
 nul
 $(LIBS)
 
-$(TARGET).res
+$(TARGETRES)
 !
 
 .$(SRCSUFF).obj:

@@ -92,6 +92,7 @@ GENERICOBJS= $(MSWDIR)\accel.obj \
 		$(MSWDIR)\laywin.obj \
 		$(MSWDIR)\listctrl.obj \
 		$(MSWDIR)\logg.obj \
+		$(MSWDIR)\mdig.obj \
 		$(MSWDIR)\msgdlgg.obj \
 		$(MSWDIR)\numdlgg.obj \
 		$(MSWDIR)\panelg.obj \
@@ -208,6 +209,7 @@ COMMONOBJS = \
 		$(MSWDIR)\menucmn.obj \
 		$(MSWDIR)\mimecmn.obj \
 		$(MSWDIR)\module.obj \
+		$(MSWDIR)\msgout.obj \
 		$(MSWDIR)\mstream.obj \
 		$(MSWDIR)\nbkbase.obj \
 		$(MSWDIR)\object.obj \
@@ -681,6 +683,8 @@ $(MSWDIR)\mimecmn.obj: $(COMMDIR)\mimecmn.$(SRCSUFF)
 
 $(MSWDIR)\module.obj: $(COMMDIR)\module.$(SRCSUFF)
 
+$(MSWDIR)\msgout.obj: $(COMMDIR)\msgout.$(SRCSUFF)
+
 $(MSWDIR)\mstream.obj: $(COMMDIR)\mstream.$(SRCSUFF)
 
 $(MSWDIR)\nbkbase.obj: $(COMMDIR)\nbkbase.$(SRCSUFF)
@@ -824,6 +828,8 @@ $(MSWDIR)\laywin.obj: $(GENDIR)\laywin.$(SRCSUFF)
 $(MSWDIR)\listctrl.obj: $(GENDIR)\listctrl.$(SRCSUFF)
 
 $(MSWDIR)\logg.obj: $(GENDIR)\logg.$(SRCSUFF)
+
+$(MSWDIR)\mdig.obj: $(GENDIR)\mdig.$(SRCSUFF)
 
 $(MSWDIR)\msgdlgg.obj: $(GENDIR)\msgdlgg.$(SRCSUFF)
 
