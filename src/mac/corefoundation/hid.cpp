@@ -152,15 +152,19 @@ USB Product Name
 		//Get [product] name
 		m_szProductName = wxMacCFStringHolder( (CFStringRef) CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductKey)), false ).AsString();
         
-	CFNumberGetValue(
-				(CFNumberRef) CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductIDKey)),	
+        CFNumberRef nref = (CFNumberRef) CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductIDKey));
+        
+        if (nref)
+        CFNumberGetValue(
+				nref,	
 				kCFNumberIntType,
                 &m_nProductId
 				);
 
-
+        nref = (CFNumberRef) CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDVendorIDKey));
+        if (nref)
 	CFNumberGetValue(
-				(CFNumberRef) CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDVendorIDKey)),	
+				nref,	
 				kCFNumberIntType,
                 &m_nManufacturerId
 				);
