@@ -168,7 +168,7 @@ void BombsCanvasClass::Refresh(int xc1, int yc1, int xc2, int yc2)
 void BombsCanvasClass::OnEvent(wxMouseEvent& event)
 {
   long fx, fy;
-  event.Position(&fx, &fy);
+  event.GetPosition(&fx, &fy);
   int x = fx/(x_cell*X_UNIT);
   int y = fy/(y_cell*Y_UNIT);
   if (x<field_width && y<field_height)
