@@ -174,7 +174,7 @@ typedef short INT16;
 #elif (_MSC_VER >= 1200) || (__BORLANDC__ >= 0x550) \
       || wxCHECK_W32API_VERSION( 0, 5 ) \
       || ((defined(__MINGW32__) || defined(__CYGWIN__)) \
-      && ((__GNUC__>2) || ((__GNUC__==2) && (__GNUC_MINOR__>95)))) \
+      && ((__GNUC__>2) || ((__GNUC__==2) && (__GNUC_MINOR__>=95)))) \
       || (defined(__MWERKS__) && defined(__WXMSW__))
 
 /* INT32 is defined in windows.h  for these compilers */
