@@ -350,6 +350,7 @@ wxLongLong wxGetLocalTimeMillis()
     millival += upTime.lo / 1000 ;
     millival += ( ( (UInt64) upTime.hi ) << 32 ) / 1000 ;
     val = millival ;
+    return val ;
 #else // no gettimeofday() nor ftime()
     // We use wxGetLocalTime() to get the seconds since
     // 00:00:00 Jan 1st 1970 and then whatever is available

@@ -262,10 +262,6 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-
-    Rect bounds ;
-    Str255 title ;
-
     if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, style ,
                             wxDefaultValidator, name) )
     {

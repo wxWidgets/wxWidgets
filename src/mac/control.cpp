@@ -819,7 +819,6 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
         ControlHandle   control ;
         Point       localwhere ;
         SInt16      controlpart ;
-        WindowRef   window = (WindowRef) MacGetRootWindow() ;
         
         localwhere.h = x ;
         localwhere.v = y ;
@@ -840,20 +839,7 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
     
         if ( event.m_metaDown )
             modifiers |= cmdKey ;
-/*
-#if TARGET_CARBON
-        control = FindControlUnderMouse( localwhere , window , &controlpart ) ;
-#else
-        controlpart = FindControl( localwhere , window , &control ) ;
-#endif
-*/
         {
-        /*
-            if ( AcceptsFocus() && FindFocus() != this )
-            {
-                SetFocus() ;
-            }
-        */
             control = (ControlHandle) m_macControl ;
             if ( control && ::IsControlActive( control ) )
             {

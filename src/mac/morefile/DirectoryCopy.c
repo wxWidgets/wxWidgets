@@ -260,7 +260,7 @@ static	void	CopyLevel(long sourceDirID,
 						  long dstDirID,
 						  EnumerateGlobals *theGlobals)
 {
-	long currentSrcDirID;
+	long currentSrcDirID = 0 ;
 	long newDirID;
 	short index = 1;
 	
@@ -325,6 +325,7 @@ static	void	CopyLevel(long sourceDirID,
 					}
 					else	/* error handling for DirCreate */
 					{
+ 						/* note that currentSrcDirID has not been initialised when entering this execution path */
 						if ( theGlobals->errorHandler != NULL )
 						{
 							theGlobals->bailout = CallCopyErrProc(theGlobals->errorHandler, theGlobals->error, dirCreateOp,

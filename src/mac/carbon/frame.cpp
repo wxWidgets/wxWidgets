@@ -132,7 +132,8 @@ bool wxFrame::Enable(bool enable)
 
 	if ( m_frameMenuBar && m_frameMenuBar == wxMenuBar::MacGetInstalledMenuBar() )
 	{
-		for ( int i = 0 ; i < m_frameMenuBar->GetMenuCount() ; ++ i )
+ 		int iMaxMenu = m_frameMenuBar->GetMenuCount(); 
+		for ( int i = 0 ; i < iMaxMenu ; ++ i )
 		{
 			m_frameMenuBar->EnableTop( i , enable ) ;
 		}

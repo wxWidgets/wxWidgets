@@ -473,9 +473,6 @@ GAddress *GSocket_GetPeer(GSocket *socket)
  */
 GSocketError GSocket_SetServer(GSocket *sck)
 {
-  int type;
-  int arg = 1;
-
   assert(sck != NULL);
 
   /* must not be in use */
@@ -545,9 +542,6 @@ GSocketError GSocket_SetServer(GSocket *sck)
 GSocket *GSocket_WaitConnection(GSocket *socket)
 {
   GSocket *connection = NULL ;
-  GSocketError err;
-
-  int arg = 1;
 
   assert(socket != NULL);
 
@@ -640,8 +634,6 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
  */
 GSocketError GSocket_SetNonOriented(GSocket *sck)
 {
-  int arg = 1;
-
   assert(sck != NULL);
 
   if (sck->m_endpoint != kOTInvalidEndpointRef )
@@ -726,12 +718,9 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
  */
 GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 {
-  int ret;
-  int arg = 1;
   InetAddress addr ;
   TEndpointInfo	info;
-  OTFlags flags = 0;
-  OSStatus		err = kOTNoError;
+   OSStatus		err = kOTNoError;
   TCall peer ;
 
   assert(sck != NULL);
@@ -932,7 +921,6 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
  */
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
-  OTResult	state ;
   assert(socket != NULL);
   wxMacProcessNotifierEvents() ;
   /*
@@ -1327,8 +1315,6 @@ GSocketError GAddress_INET_SetAnyAddress(GAddress *address)
 GSocketError GAddress_INET_SetHostAddress(GAddress *address,
                                           unsigned long hostaddr)
 {
-  struct in_addr *addr;
-
   assert(address != NULL);
 
   CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
@@ -1354,7 +1340,6 @@ service_entry gServices[] =
 GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
                                        const char *protocol)
 {
-  InetAddress *addr;
   int i ;
 
   assert(address != NULL);
@@ -1389,8 +1374,6 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
 
 GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port)
 {
-  InetAddress *addr;
-
   assert(address != NULL);
   CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
   address->m_port = port ;

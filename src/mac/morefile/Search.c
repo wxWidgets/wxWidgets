@@ -762,7 +762,7 @@ pascal	OSErr	IndexedSearch(CSParamPtr pb,
 	static Size				searchStackSize = 0;	/* size of static handle */
 	SearchPositionRecPtr	catPosition;
 	long					modDate;
-	short					index;
+	short					index = -1 ;
 	ExtendedTMTask			timerTask;
 	OSErr					result;
 	short					realVRefNum;

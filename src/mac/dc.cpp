@@ -958,8 +958,8 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
 
 	PolyHandle polygon = OpenPoly();
 
-	x1 = XLOG2DEVMAC(points[0].x + xoffset);
-	y1 = YLOG2DEVMAC(points[0].y + yoffset);
+	x2 = x1 = XLOG2DEVMAC(points[0].x + xoffset);
+	y2 = y1 = YLOG2DEVMAC(points[0].y + yoffset);
 	::MoveTo(x1,y1);
 
 	for (int i = 1; i < n; i++)
@@ -1439,7 +1439,7 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     if ( 0 )
     {
         m_macFormerAliasState = IsAntiAliasedTextEnabled(&m_macFormerAliasSize);
-        SetAntiAliasedTextEnabled(true, m_scaleY * font->m_macFontSize);
+        SetAntiAliasedTextEnabled(true, SInt16(m_scaleY * font->m_macFontSize));
         m_macAliasWasEnabled = true ;
     }
 
@@ -1467,9 +1467,10 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 	wxASSERT_MSG( status == noErr , "couldn't create the layout of the rotated text" );
 
-    if ( abs(angle) > 0 )
+    int iAngle = int( angle );
+    if ( abs(iAngle) > 0 )
     {
-        Fixed atsuAngle = IntToFixed( angle ) ;
+        Fixed atsuAngle = IntToFixed( iAngle ) ;
     	ByteCount angleSize = sizeof(Fixed) ;
     	ATSUAttributeTag rotationTag = kATSULineRotationTag ;
     	ATSUAttributeValuePtr	angleValue = &atsuAngle ;
@@ -1865,7 +1866,7 @@ void wxDC::MacInstallFont() const
 
     OSStatus status = noErr ;
 
-    Fixed atsuSize = IntToFixed(m_scaleY * font->m_macFontSize) ;
+    Fixed atsuSize = IntToFixed( int(m_scaleY * font->m_macFontSize) ) ;
 
     Style qdStyle = font->m_macFontStyle ;
 	ATSUFontID	atsuFont = font->m_macATSUFontID ;
@@ -1934,13 +1935,13 @@ void wxDC::MacInstallFont() const
 
 Pattern gHatchPatterns[] =
 {
-    { 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF } ,
-    { 0x01 , 0x02 , 0x04 , 0x08 , 0x10 , 0x20 , 0x40 , 0x80 } ,
-    { 0x80 , 0x40 , 0x20 , 0x10 , 0x08 , 0x04 , 0x02 , 0x01 } ,
-    { 0x10 , 0x10 , 0x10 , 0xFF , 0x10 , 0x10 , 0x10 , 0x10 } ,
-    { 0x00 , 0x00 , 0x00 , 0xFF , 0x00 , 0x00 , 0x00 , 0x00 } ,
-    { 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 } ,
-    { 0x81 , 0x42 , 0x24 , 0x18 , 0x18 , 0x24 , 0x42 , 0x81 } ,
+     { { 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF } },
+     { { 0x01 , 0x02 , 0x04 , 0x08 , 0x10 , 0x20 , 0x40 , 0x80 } },
+     { { 0x80 , 0x40 , 0x20 , 0x10 , 0x08 , 0x04 , 0x02 , 0x01 } },
+     { { 0x10 , 0x10 , 0x10 , 0xFF , 0x10 , 0x10 , 0x10 , 0x10 } },
+     { { 0x00 , 0x00 , 0x00 , 0xFF , 0x00 , 0x00 , 0x00 , 0x00 } },
+     { { 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 } },
+     { { 0x81 , 0x42 , 0x24 , 0x18 , 0x18 , 0x24 , 0x42 , 0x81 } } 
 } ;
 
 static void wxMacGetHatchPattern(int hatchStyle, Pattern *pattern)
@@ -2040,7 +2041,6 @@ void wxDC::MacInstallPen() const
 	        case wxUSER_DASH :
 	            {
 	                wxDash* dash ;
-	                int number = m_pen.GetDashes(&dash) ;
 	                // right now we don't allocate larger pixmaps
 	                for ( int i = 0 ; i < 8 ; ++i )
 	                {

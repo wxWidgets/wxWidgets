@@ -119,6 +119,7 @@ wxDirData::wxDirData(const wxString& dirname)
 	m_index = 0 ;
 
 	OSErr err = FSpGetDirectoryID( &fsspec , &m_dirId , &m_isDir ) ;
+        wxASSERT_MSG( err == noErr , "Error accessing directory") ;
 }
 
 wxDirData::~wxDirData()

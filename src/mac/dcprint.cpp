@@ -150,8 +150,8 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 		m_ok = FALSE;
 		return;
     }
-	m_maxX = rPaper.right - rPaper.left ;
-	m_maxY = rPaper.bottom - rPaper.top ;
+	m_maxX = wxCoord(rPaper.right - rPaper.left) ;
+	m_maxY = wxCoord(rPaper.bottom - rPaper.top);
 #else
 	m_maxX = (**(THPrint)m_printData.m_macPrintSettings).rPaper.right - (**(THPrint)m_printData.m_macPrintSettings).rPaper.left ;
 	m_maxY = (**(THPrint)m_printData.m_macPrintSettings).rPaper.bottom - (**(THPrint)m_printData.m_macPrintSettings).rPaper.top ;

@@ -202,8 +202,6 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     wxCHECK_MSG( data, FALSE, wxT("data is invalid") );
 
-    wxDataFormat format = data->GetPreferredFormat();
-
     /* we can only store one wxDataObject */
     Clear();
 
@@ -336,7 +334,7 @@ bool wxClipboard::GetData( wxDataObject& data )
 {
     wxCHECK_MSG( m_open, FALSE, wxT("clipboard not open") );
 
-    int formatcount = data.GetFormatCount() + 1 ;
+    size_t formatcount = data.GetFormatCount() + 1 ;
     wxDataFormat *array = new wxDataFormat[ formatcount  ];
     array[0] = data.GetPreferredFormat();
     data.GetAllFormats( &array[1] );
