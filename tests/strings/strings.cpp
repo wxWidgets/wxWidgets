@@ -156,11 +156,11 @@ void StringTestCase::Constructors()
 void StringTestCase::ConstructorsWithConversion()
 {
     // Déj`a in UTF-8 and wchar_t:
-    const char utf8[] = {0x44,0xC3,0xA9,0x6A,0xC3,0xA0,0};
+    const unsigned char utf8[] = {0x44,0xC3,0xA9,0x6A,0xC3,0xA0,0};
     const wchar_t wchar[] = {0x44,0xE9,0x6A,0xE0,0};
-    const char utf8sub[] = {0x44,0xC3,0xA9,0x6A,0}; // "Dej"
+    const unsigned char utf8sub[] = {0x44,0xC3,0xA9,0x6A,0}; // "Dej"
 
-    wxString s1(utf8, wxConvUTF8);
+    wxString s1((char *)utf8, wxConvUTF8);
     wxString s2(wchar, wxConvUTF8);
 
 #if wxUSE_UNICODE
@@ -171,8 +171,8 @@ void StringTestCase::ConstructorsWithConversion()
     CPPUNIT_ASSERT( s2 == utf8 );
 #endif
 
-    wxString sub(utf8sub, wxConvUTF8); // "Dej" substring
-    wxString s3(utf8, wxConvUTF8, 4);
+    wxString sub((char *)utf8sub, wxConvUTF8); // "Dej" substring
+    wxString s3((char *)utf8, wxConvUTF8, 4);
     wxString s4(wchar, wxConvUTF8, 3);
 
     CPPUNIT_ASSERT( s3 == sub );
