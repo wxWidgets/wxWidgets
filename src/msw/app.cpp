@@ -445,6 +445,15 @@ void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
 void wxApp::CleanUp()
 {
   //// COMMON CLEANUP
+
+  // flush the logged messages if any
+  wxLog *pLog = wxLog::GetActiveTarget();
+  if ( pLog != NULL && pLog->HasPendingMessages() )
+    pLog->Flush();
+
+  // One last chance for pending objects to be cleaned up
+  wxTheApp->DeletePendingObjects();
+
   wxModule::CleanUpModules();
 
 #if wxUSE_WX_RESOURCES
@@ -608,6 +617,9 @@ int wxEntry(WXHINSTANCE hInstance,
       {
           retValue = wxTheApp->OnRun();
       }
+      else
+        // We want to initialize, but not run or exit immediately.
+        return 1;
   }
   //else: app initialization failed, so we skipped OnRun()
 
@@ -629,12 +641,6 @@ int wxEntry(WXHINSTANCE hInstance,
   }
 
   wxTheApp->OnExit();
-
-  // flush the logged messages if any
-  wxLog *pLog = wxLog::GetActiveTarget();
-  if ( pLog != NULL && pLog->HasPendingMessages() )
-    pLog->Flush();
-
 
   wxApp::CleanUp();
 

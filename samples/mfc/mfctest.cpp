@@ -74,8 +74,6 @@ class MyApp: public wxApp
     wxFrame *CreateFrame(void);
  };
 
-DECLARE_APP(MyApp)
-
 class MyCanvas: public wxScrolledWindow
 {
   public:
@@ -103,10 +101,6 @@ DECLARE_EVENT_TABLE()
 // For drawing lines in a canvas
 long xpos = -1;
 long ypos = -1;
-
-// Initialise this in OnInit, not statically
-wxPen *red_pen;
-wxFont *small_font;
 
 // ID for the menu quit command
 #define HELLO_QUIT 1
@@ -219,6 +213,8 @@ BOOL CTheApp::InitInstance()
 
 int CTheApp::ExitInstance()
 {
+  // OnExit isn't called by CleanUp so must be called explicitly.
+  wxTheApp->OnExit();
   wxApp::CleanUp();
 
   return CWinApp::ExitInstance();
@@ -252,12 +248,6 @@ bool MyApp::OnInit(void)
   // Don't exit app when the top level frame is deleted
 //  SetExitOnFrameDelete(FALSE);
   
-  // Create a red pen
-  red_pen = new wxPen("RED", 3, wxSOLID);
-
-  // Create a small font
-  small_font = new wxFont(10, wxSWISS, wxNORMAL, wxNORMAL);
-
   wxFrame* frame = CreateFrame();
   return TRUE;
 }
@@ -289,8 +279,7 @@ wxFrame *MyApp::CreateFrame(void)
       subframe->GetClientSize(&width, &height);
 
       MyCanvas *canvas = new MyCanvas(subframe, wxPoint(0, 0), wxSize(width, height));
-      wxCursor *cursor = new wxCursor(wxCURSOR_PENCIL);
-      canvas->SetCursor(*cursor);
+      canvas->SetCursor(wxCursor(wxCURSOR_PENCIL));
       subframe->canvas = canvas;
 
       // Give it scrollbars
@@ -317,7 +306,7 @@ void MyCanvas::OnPaint(wxPaintEvent& event)
 {
     wxPaintDC dc(this);
 
-    dc.SetFont(* small_font);
+    dc.SetFont(* wxSWISS_FONT);
     dc.SetPen(* wxGREEN_PEN);
     dc.DrawLine(0, 0, 200, 200);
     dc.DrawLine(200, 0, 0, 200);
