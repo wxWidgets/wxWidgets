@@ -90,6 +90,8 @@ public:
                           const wxRect *rect = (const wxRect *) NULL );
     virtual void Update();
     virtual void Clear();
+    virtual void Freeze();
+    virtual void Thaw();
 
     virtual bool SetCursor( const wxCursor &cursor );
     virtual bool SetFont( const wxFont &font );

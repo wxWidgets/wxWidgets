@@ -1194,6 +1194,21 @@ void wxWindowMSW::Clear()
     dc.Clear();
 }
 
+static inline void SendSetRedraw(HWND hwnd, bool on)
+{
+    ::SendMessage(hwnd, WM_SETREDRAW, (WPARAM)on, 0);
+}
+
+void wxWindowMSW::Freeze()
+{
+    SendSetRedraw(FALSE);
+}
+
+void wxWindowMSW::Thaw()
+{
+    SendSetRedraw(TRUE);
+}
+
 void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)
 {
     HWND hWnd = GetHwnd();
