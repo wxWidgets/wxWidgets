@@ -264,7 +264,7 @@ selection_handler( GtkWidget *WXUNUSED(widget), GtkSelectionData *selection_data
 	if (data_object->GetFormat().GetAtom() != selection_data->target)
 	{
 	    node = node->Next();
-	    break;
+	    continue;
 	}
 	
 	switch (data_object->GetFormat().GetType())
