@@ -1,0 +1,156 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        tunicode.tex
+%% Purpose:     Overview of the Unicode support in wxWindows
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     22.09.99
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+%% Licence:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Unicode support in wxWindows}\label{unicode}
+
+This section briefly describes the state of the Unicode support in wxWindows.
+Read it if you want to know more about how to write programs able to work with
+characters from languages other than English.
+
+\subsection{What is Unicode?}
+
+Starting with release 2.1 wxWindows has support for compiling in Unicode mode
+on the platforms which support it. Unicode is a standard for character
+encoding which addreses the shortcomings of the previous, 8 bit standards, by
+using 16 bit for encoding each character. This allows to have 65536 characters
+instead of the usual 256 and is sufficient to encode all of the world
+languages at once. More details about Unicode may be found at {\tt www.unicode.org}.
+
+% TODO expand on it, say that Unicode extends ASCII, mention ISO8859, ...
+
+As this solution is obviously preferable to the previous ones (think of
+incompatible encodings for the same language, locale chaos and so on), many
+modern ooperating systems support it. The probably first example is Windows NT
+which uses only Unicode internally since its very first version.
+
+Writing internationalized programs is much easier with Unicode and, as the
+support for it improves, it should become more and more so. Moreover, in the
+Windows NT/2000 case, even the program which uses only standard ASCII can profit
+from using Unicode because they will work more efficiently - there will be no
+need for the system to convert all strings hte program uses to/from Unicode
+each time a system call is made.
+
+\subsection{Unicode and ANSI modes}
+
+As not all platforms supported by wxWindows support Unicode (fully) yet, in
+many cases it is unwise to write a program which can only work in Unicode
+environment. A better solution is to write programs in such way that they may
+be compiled either in ANSI (traditional) mode or in the Unicode one.
+
+This can be achieved quite simply by using the means provided by wxWindows.
+Basicly, there are only a few things to watch out for:
+\begin{itemize}
+\item Character type ({\tt char} or {\tt wchar\_t})
+\item Literal strings (i.e. {\tt "Hello, world!"} or {\tt '*'})
+\item String functions ({\tt strlen()}, {\tt strcpy()}, ...)
+\end{itemize}
+
+Let's look at them in order. First of all, each character in an Unicode
+program takes 2 bytes instead of usual one, so another type should be used to
+store the characters ({\tt char} only holds 1 byte usually). This type is
+called {\tt wchar\_t} which stands for {\it wide-character type}.
+
+Also, the string and character constants should be encoded on 2 bytes instead
+of one. This is achieved by using the standard C (and C++) way: just put the
+letter {\tt 'L'} after any string constant and it becomes a {\it long}
+constant, i.e. a wide character one. To make things a bit more readable, you
+are also allowed to prefix the constant with {\tt 'L'} instead of putting it
+after it.
+
+Finally, the standard C functions don't work with {\tt wchar\_t} strings, so
+another set of functions exists which do the same thing but accept 
+{\tt wchar\_t *} instead of {\tt char *}. For example, a function to get the
+length of a wide-character string is called {\tt wcslen()} (compare with 
+{\tt strlen()} - you see that the only difference is that the "str" prefix
+standing for "string" has been replaced with "wcs" standing for
+"wide-character string").
+
+To summarize, here is a brief example of how a program which can be compiled
+in both ANSI and Unicode modes could look like:
+
+\begin{verbatim}
+#ifdef __UNICODE__
+    wchar_t wch = L'*';
+    const wchar_t *ws = L"Hello, world!";
+    int len = wcslen(ws);
+#else // ANSI
+    char ch = '*';
+    const char *s = "Hello, world!";
+    int len = strlen(s);
+#endif // Unicode/ANSI
+\end{verbatim}
+
+Of course, it would be nearly impossibly to write such programs if it had to
+be done this way (try to imagine the number of {\tt #ifdef UNICODE} an average
+program would have had!). Luckily, there is another way - see the next
+section.
+
+\subsection{Unicode support in wxWindows}
+
+In wxWindows, the code fragment froim above should be written instead:
+
+\begin{verbatim}
+    wxChar ch = T('*');
+    wxString s = T("Hello, world!");
+    int len = s.Len();
+\end{verbatim}
+
+What happens here? First of all, you see that there are no more {\tt #ifdef}s
+at all. Instead, we define some types and macros which behave differently in
+the Unicode and ANSI builds and allows us to avoid using conditional
+compilation in the program itself.
+
+We have a {\tt wxChar} type which maps either on {\tt char} or {\tt wchar\_t} 
+depending on the mode in which program is being compiled. There is no need for
+a separate type for strings though, because the standard 
+\helpref{wxString}{wxstring} supports Unicode, i.e. it stores iether ANSI or
+Unicode strings depending on the mode.
+
+Finally, there is a special {\tt T()} macro which should enclose all literal
+strings in the program. As it's easy to see comparing the last fragment with
+the one above, this macro expands to nothing in the (usual) ANSI mode and
+prefixes {\tt 'L'} to its argument in the Unicode mode.
+
+The important conclusion is that if you use {\tt wxChar} instead of 
+{\tt char}, avoid using C style strings and use {\tt wxString} instead and
+don't forget to enclose all string literals inside {\tt T()} macro, your
+program automatically becomes (almost) Unicode compliant!
+
+Just let us state once again the rules:
+\begin{itemize}
+\item Always use {\tt wxChar} instead of {\tt char}
+\item Always enclose literal string constants in {\tt T()} macro unless
+they're already converted to the right representation (another standard
+wxWindows macro {\tt \_()} does it, so there is no need for {\tt T()} in this
+case) or you intend to pass the constant directly to an external function
+which doesn't accept wide-character strings.
+\item Use {\tt wxString} instead of C style strings.
+\end{itemize}
+
+\subsection{Unicode and the outside world}
+
+We have seen that it was easy to write Unicode programs using wxWindows types
+and macros, but it has been also mentioned that it isn't quite enough.
+Although everything works fine inside the program, things can get nasty when
+it tries to communicate with the outside world which, sadly, often expects
+ANSI strings (a notable exception is the entire Win32 API which accepts either
+Unicode or ANSI strings and which thus makes it unnecessary to ever perform
+any convertions in the program).
+
+To get a ANSI string from a wxString, you may use 
+\helpref{mb\_str()}{wxstringmbstr} function which always returns an ANSI
+string (independently of the mode - while the usual 
+\helpref{c\_str()}{wxstringcstr} returns a pointer to the internal
+representation which is either ASCII or Unicode). More rarely used, but still
+useful, is \helpref{wc\_str()}{wxstringwcstr} function which always returns
+the Unicode string.
+
+% TODO describe fn_str(), wx_str(), wxCharBuf classes, ...

@@ -4,11 +4,19 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "font.h"
+    #pragma implementation "font.h"
 #endif
 
 #include "wx/font.h"
@@ -16,35 +24,85 @@
 #include "wx/log.h"
 #include "wx/gdicmn.h"
 #include "wx/tokenzr.h"
+
 #include <strings.h>
 
 #include "gdk/gdk.h"
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // local data
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-/*
-extern wxFontNameDirectory *wxTheFontNameDirectory;
-*/
+#if wxUSE_FONTNAMEDIRECTORY
+    extern wxFontNameDirectory *wxTheFontNameDirectory;
+#endif
 
-//-----------------------------------------------------------------------------
-// wxFont
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
 
-class wxFontRefData: public wxObjectRefData
+// returns TRUE if there are any fonts matching this font spec
+static bool wxTestFontSpec(const wxString& fontspec);
+
+static GdkFont *wxLoadQueryFont( int pointSize,
+                                 int family,
+                                 int style,
+                                 int weight,
+                                 bool underlined,
+                                 const wxString &facename,
+                                 wxFontEncoding encoding );
+
+static GdkFont *wxLoadQueryNearestFont( int pointSize,
+                                        int family,
+                                        int style,
+                                        int weight,
+                                        bool underlined,
+                                        const wxString &facename,
+                                        wxFontEncoding encoding);
+
+// ----------------------------------------------------------------------------
+// wxFontRefData
+// ----------------------------------------------------------------------------
+
+class wxFontRefData : public wxObjectRefData
 {
 public:
+    wxFontRefData(int size = wxDEFAULT,
+                  int family = wxDEFAULT,
+                  int style = wxDEFAULT,
+                  int weight = wxDEFAULT,
+                  bool underlined = FALSE,
+                  const wxString& faceName = wxEmptyString,
+                  wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+        : m_scaled_xfonts(wxKEY_INTEGER)
+    {
+        Init(size, family, style, weight, underlined, faceName, encoding);
+    }
 
-    wxFontRefData();
     wxFontRefData( const wxFontRefData& data );
-    ~wxFontRefData();
 
+    virtual ~wxFontRefData();
+
+protected:
+    // common part of all ctors
+    void Init(int pointSize,
+              int family,
+              int style,
+              int weight,
+              bool underlined,
+              const wxString& faceName,
+              wxFontEncoding encoding);
+
+private:
     wxList    m_scaled_xfonts;
+
     int       m_pointSize;
-    int       m_family, m_style, m_weight;
+    int       m_family,
+              m_style,
+              m_weight;
     bool      m_underlined;
     wxString  m_faceName;
+    wxFontEncoding m_encoding;
 
     bool      m_byXFontName;
     GdkFont  *m_font;
@@ -52,28 +110,59 @@ public:
     friend wxFont;
 };
 
-wxFontRefData::wxFontRefData() : m_scaled_xfonts(wxKEY_INTEGER)
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxFontRefData
+// ----------------------------------------------------------------------------
+
+void wxFontRefData::Init(int pointSize,
+                         int family,
+                         int style,
+                         int weight,
+                         bool underlined,
+                         const wxString& faceName,
+                         wxFontEncoding encoding)
 {
+    if (family == wxDEFAULT)
+        m_family = wxSWISS;
+    else
+        m_family = family;
+
+    m_faceName = faceName;
+
+    if (style == wxDEFAULT)
+        m_style = wxNORMAL;
+    else
+        m_style = style;
+
+    if (weight == wxDEFAULT)
+        m_weight = wxNORMAL;
+    else
+        m_weight = weight;
+
+    if (pointSize == wxDEFAULT)
+        m_pointSize = 12;
+    else
+        m_pointSize = pointSize;
+
+    m_underlined = underlined;
+    m_encoding = encoding;
+
     m_byXFontName = FALSE;
-    m_pointSize = 12;
-    m_family = wxSWISS;
-    m_style = wxNORMAL;
-    m_weight = wxNORMAL;
-    m_underlined = FALSE;
     m_font = (GdkFont *) NULL;
 }
 
-wxFontRefData::wxFontRefData( const wxFontRefData& data ) : m_scaled_xfonts(wxKEY_INTEGER)
+wxFontRefData::wxFontRefData( const wxFontRefData& data )
+             : m_scaled_xfonts(wxKEY_INTEGER)
 {
-    m_byXFontName = FALSE;
-    m_pointSize = data.m_pointSize;
-    m_family = data.m_family;
-    m_style = data.m_style;
-    m_weight = data.m_weight;
-    m_underlined = data.m_underlined;
-    m_faceName = data.m_faceName;
-    m_font = (GdkFont *) NULL;
-    if (data.m_font) m_font = gdk_font_ref( data.m_font );
+    Init(data.m_pointSize, data.m_family, data.m_style, data.m_weight,
+         data.m_underlined, data.m_faceName, data.m_encoding);
+
+    if (data.m_font)
+        m_font = gdk_font_ref( data.m_font );
 }
 
 wxFontRefData::~wxFontRefData()
@@ -86,23 +175,31 @@ wxFontRefData::~wxFontRefData()
         gdk_font_unref( font );
         node = next;
     }
-    if (m_font) gdk_font_unref( m_font );
+
+    if (m_font)
+        gdk_font_unref( m_font );
 }
 
-//-----------------------------------------------------------------------------
-
-#define M_FONTDATA ((wxFontRefData *)m_refData)
+// ----------------------------------------------------------------------------
+// wxFont
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
-wxFont::wxFont()
+void wxFont::Init()
 {
-    if (wxTheFontList) wxTheFontList->Append( this );
+    if (wxTheFontList)
+        wxTheFontList->Append( this );
 }
 
 wxFont::wxFont( GdkFont *font, char *xFontName )
 {
-    if (!xFontName) return;
+    if (!xFontName)
+        return;
+
+    // VZ: this ctor ddidn't append the font to wxTheFontList before, but
+    //     there is no reason to not do it, is there?
+    Init();
 
     m_refData = new wxFontRefData();
 
@@ -145,71 +242,45 @@ wxFont::wxFont( GdkFont *font, char *xFontName )
     else if (M_FONTDATA->m_faceName == _T("UTOPIA")) M_FONTDATA->m_family = wxSCRIPT;
 }
 
-wxFont::wxFont( int pointSize, int family, int style, int weight, bool underlined, const wxString& face )
+bool wxFont::Create( int pointSize,
+                     int family,
+                     int style,
+                     int weight,
+                     bool underlined,
+                     const wxString& face,
+                     wxFontEncoding encoding )
 {
-    m_refData = new wxFontRefData();
+    m_refData = new wxFontRefData(pointSize, family, style, weight,
+                                  underlined, face, encoding);
 
-    if (family == wxDEFAULT)
-        M_FONTDATA->m_family = wxSWISS;
-    else
-        M_FONTDATA->m_family = family;
+    Init();
 
-    if (!face.IsEmpty()) M_FONTDATA->m_faceName = face;
-
-    if (style == wxDEFAULT)
-        M_FONTDATA->m_style = wxNORMAL;
-    else
-        M_FONTDATA->m_style = style;
-
-    if (weight == wxDEFAULT)
-        M_FONTDATA->m_weight = wxNORMAL;
-    else
-        M_FONTDATA->m_weight = weight;
-
-    if (pointSize == wxDEFAULT)
-        M_FONTDATA->m_pointSize = 12;
-    else
-        M_FONTDATA->m_pointSize = pointSize;
-
-    M_FONTDATA->m_underlined = underlined;
-
-    if (wxTheFontList) wxTheFontList->Append( this );
-
+    return TRUE;
 }
 
-wxFont::wxFont( const wxFont& font )
+void wxFont::Unshare()
 {
-    Ref( font );
-
-    if (wxTheFontList) wxTheFontList->Append( this );
+    if (!m_refData)
+    {
+        m_refData = new wxFontRefData();
+    }
+    else
+    {
+        wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
+        UnRef();
+        m_refData = ref;
+    }
 }
 
 wxFont::~wxFont()
 {
-    if (wxTheFontList) wxTheFontList->DeleteObject( this );
+    if (wxTheFontList)
+        wxTheFontList->DeleteObject( this );
 }
 
-wxFont& wxFont::operator = ( const wxFont& font )
-{
-    if (*this == font) return (*this);
-    Ref( font );
-    return *this;
-}
-
-bool wxFont::operator == ( const wxFont& font ) const
-{
-    return m_refData == font.m_refData;
-}
-
-bool wxFont::operator != ( const wxFont& font ) const
-{
-    return m_refData != font.m_refData;
-}
-
-bool wxFont::Ok() const
-{
-    return (m_refData != NULL);
-}
+// ----------------------------------------------------------------------------
+// accessors
+// ----------------------------------------------------------------------------
 
 int wxFont::GetPointSize() const
 {
@@ -232,44 +303,11 @@ int wxFont::GetFamily() const
     return M_FONTDATA->m_family;
 }
 
-wxString wxFont::GetFamilyString() const
-{
-    wxCHECK_MSG( Ok(), _T("wxDEFAULT"), _T("invalid font") );
-
-    switch (M_FONTDATA->m_family)
-    {
-        case wxDECORATIVE:   return wxString(_T("wxDECORATIVE"));
-        case wxROMAN:        return wxString(_T("wxROMAN"));
-        case wxSCRIPT:       return wxString(_T("wxSCRIPT"));
-        case wxSWISS:        return wxString(_T("wxSWISS"));
-        case wxMODERN:       return wxString(_T("wxMODERN"));
-        case wxTELETYPE:     return wxString(_T("wxTELETYPE"));
-        default:             return _T("wxDEFAULT");
-    }
-
-    return "wxDEFAULT";
-}
-
 int wxFont::GetStyle() const
 {
     wxCHECK_MSG( Ok(), 0, _T("invalid font") );
 
     return M_FONTDATA->m_style;
-}
-
-wxString wxFont::GetStyleString() const
-{
-    wxCHECK_MSG( Ok(), _T("wxDEFAULT"), _T("invalid font") );
-
-    switch (M_FONTDATA->m_style)
-    {
-        case wxNORMAL:   return wxString(_T("wxNORMAL"));
-        case wxSLANT:    return wxString(_T("wxSLANT"));
-        case wxITALIC:   return wxString(_T("wxITALIC"));
-        default:         return wxString(_T("wxDEFAULT"));
-    }
-
-    return wxString(_T("wxDEFAULT"));
 }
 
 int wxFont::GetWeight() const
@@ -279,21 +317,6 @@ int wxFont::GetWeight() const
     return M_FONTDATA->m_weight;
 }
 
-wxString wxFont::GetWeightString() const
-{
-    wxCHECK_MSG( Ok(), _T("wxDEFAULT"), _T("invalid font") );
-
-    switch (M_FONTDATA->m_weight)
-    {
-        case wxNORMAL:   return wxString(_T("wxNORMAL"));
-        case wxBOLD:     return wxString(_T("wxBOLD"));
-        case wxLIGHT:    return wxString(_T("wxLIGHT"));
-        default:         return wxString(_T("wxDEFAULT"));
-    }
-
-    return wxString(_T("wxDEFAULT"));
-}
-
 bool wxFont::GetUnderlined() const
 {
     wxCHECK_MSG( Ok(), FALSE, _T("invalid font") );
@@ -301,19 +324,17 @@ bool wxFont::GetUnderlined() const
     return M_FONTDATA->m_underlined;
 }
 
-void wxFont::Unshare()
+
+wxFontEncoding wxFont::GetEncoding() const
 {
-    if (!m_refData)
-    {
-        m_refData = new wxFontRefData();
-    }
-    else
-    {
-        wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
-        UnRef();
-        m_refData = ref;
-    }
+    wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, _T("invalid font") );
+
+    return M_FONTDATA->m_encoding;
 }
+
+// ----------------------------------------------------------------------------
+// change font attributes
+// ----------------------------------------------------------------------------
 
 void wxFont::SetPointSize(int pointSize)
 {
@@ -357,23 +378,29 @@ void wxFont::SetUnderlined(bool underlined)
     M_FONTDATA->m_underlined = underlined;
 }
 
-//-----------------------------------------------------------------------------
-// get internal representation of font
-//-----------------------------------------------------------------------------
+void wxFont::SetEncoding(wxFontEncoding encoding)
+{
+    Unshare();
 
-static GdkFont *wxLoadQueryNearestFont( int point_size, int family, int style, int weight,
-                                        bool underlined, const wxString &facename );
+    M_FONTDATA->m_encoding = encoding;
+}
+
+// ----------------------------------------------------------------------------
+// get internal representation of font
+// ----------------------------------------------------------------------------
 
 GdkFont *wxFont::GetInternalFont( float scale ) const
 {
     if (!Ok())
     {
         wxFAIL_MSG( _T("invalid font") );
+
         return (GdkFont*) NULL;
     }
 
     /* short cut if the special X font constructor has been used */
-    if (M_FONTDATA->m_byXFontName) return M_FONTDATA->m_font;
+    if (M_FONTDATA->m_byXFontName)
+        return M_FONTDATA->m_font;
 
     long int_scale = long(scale * 100.0 + 0.5); /* key for fontlist */
     int point_scale = (M_FONTDATA->m_pointSize * 10 * int_scale) / 100;
@@ -386,7 +413,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
     }
     else
     {
-/*
+#if 0
         if ((int_scale == 100) &&
                 (M_FONTDATA->m_family == wxSWISS) &&
                 (M_FONTDATA->m_style == wxNORMAL) &&
@@ -397,11 +424,17 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
             font = gdk_font_load( "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*" );
         }
         else
-*/
+#endif // 0
         {
-            font = wxLoadQueryNearestFont( point_scale, M_FONTDATA->m_family, M_FONTDATA->m_style,
-                    M_FONTDATA->m_weight, M_FONTDATA->m_underlined, M_FONTDATA->m_faceName );
+            font = wxLoadQueryNearestFont( point_scale,
+                                           M_FONTDATA->m_family,
+                                           M_FONTDATA->m_style,
+                                           M_FONTDATA->m_weight,
+                                           M_FONTDATA->m_underlined,
+                                           M_FONTDATA->m_faceName,
+                                           M_FONTDATA->m_encoding );
         }
+
         M_FONTDATA->m_scaled_xfonts.Append( int_scale, (wxObject*)font );
     }
 
@@ -417,13 +450,31 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
 // local utilities to find a X font
 //-----------------------------------------------------------------------------
 
-static GdkFont*wxLoadQueryFont( int pointSize, int family, int style, int weight,
-                                bool WXUNUSED(underlined), const wxString &facename )
+// returns TRUE if there are any fonts matching this font spec
+static bool wxTestFontSpec(const wxString& fontSpec)
 {
-    wxChar *xfamily = (wxChar*) NULL;
-    wxChar *xstyle = (wxChar*) NULL;
-    wxChar *xweight = (wxChar*) NULL;
+    GdkFont *test = gdk_font_load( wxConvCurrent->cWX2MB(fontSpec) );
+    if ( test )
+    {
+        gdk_font_unref( test );
 
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
+static GdkFont *wxLoadQueryFont( int pointSize,
+                                 int family,
+                                 int style,
+                                 int weight,
+                                 bool WXUNUSED(underlined),
+                                 const wxString &facename,
+                                 wxFontEncoding encoding )
+{
+    wxString xfamily;
     switch (family)
     {
         case wxDECORATIVE: xfamily = _T("lucida"); break;
@@ -435,17 +486,20 @@ static GdkFont*wxLoadQueryFont( int pointSize, int family, int style, int weight
         default:           xfamily = _T("*");
     }
 
+    wxString fontSpec;
     if (!facename.IsEmpty())
     {
-        wxSprintf( wxBuffer, _T("-*-%s-*-*-normal-*-*-*-*-*-*-*-*-*"), facename.c_str() );
-        GdkFont *test = gdk_font_load( wxConvCurrent->cWX2MB(wxBuffer) );
-        if (test)
+        fontSpec.Printf(_T("-*-%s-*-*-normal-*-*-*-*-*-*-*-*-*"),
+                        facename.c_str());
+
+        if ( wxTestFontSpec(fontSpec) )
         {
-            gdk_font_unref( test );
-            xfamily = WXSTRINGCAST facename;
+            xfamily = facename;
         }
+        //else: no such family, use default one instead
     }
 
+    wxString xstyle;
     switch (style)
     {
         case wxITALIC:     xstyle = _T("i"); break;
@@ -453,6 +507,8 @@ static GdkFont*wxLoadQueryFont( int pointSize, int family, int style, int weight
         case wxNORMAL:     xstyle = _T("r"); break;
         default:           xstyle = _T("*"); break;
     }
+
+    wxString xweight;
     switch (weight)
     {
         case wxBOLD:       xweight = _T("bold"); break;
@@ -461,46 +517,156 @@ static GdkFont*wxLoadQueryFont( int pointSize, int family, int style, int weight
         default:           xweight = _T("*"); break;
     }
 
-    wxSprintf( wxBuffer, _T("-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-*-*"),
-        xfamily, xweight, xstyle, pointSize);
+    wxString xregistry, xencoding;
+    if ( encoding == wxFONTENCODING_DEFAULT )
+    {
+        // use the apps default
+        encoding = wxFont::GetDefaultEncoding();
+    }
 
-    return gdk_font_load( wxConvCurrent->cWX2MB(wxBuffer) );
+    bool test = TRUE;   // should we test for availability of encoding?
+    switch ( encoding )
+    {
+        case wxFONTENCODING_ISO8859_1:
+        case wxFONTENCODING_ISO8859_2:
+        case wxFONTENCODING_ISO8859_3:
+        case wxFONTENCODING_ISO8859_4:
+        case wxFONTENCODING_ISO8859_5:
+        case wxFONTENCODING_ISO8859_6:
+        case wxFONTENCODING_ISO8859_7:
+        case wxFONTENCODING_ISO8859_8:
+        case wxFONTENCODING_ISO8859_9:
+        case wxFONTENCODING_ISO8859_10:
+        case wxFONTENCODING_ISO8859_11:
+        case wxFONTENCODING_ISO8859_13:
+        case wxFONTENCODING_ISO8859_14:
+        case wxFONTENCODING_ISO8859_15:
+            {
+                int cp = encoding - wxFONTENCODING_ISO8859_1 + 1;
+                xregistry = _T("iso8859");
+                xencoding.Printf(_T("%d"), cp);
+            }
+            break;
+
+        case wxFONTENCODING_KOI8:
+            xregistry = _T("koi8");
+            if ( wxTestFontSpec(_T("-*-*-*-*-*-*-*-*-*-*-*-*-koi8-1")) )
+            {
+                xencoding = _T("1");
+
+                // test passed, no need to do it once more
+                test = FALSE;
+            }
+            else
+            {
+                xencoding = _T("*");
+            }
+            break;
+
+        case wxFONTENCODING_CP1250:
+        case wxFONTENCODING_CP1251:
+        case wxFONTENCODING_CP1252:
+            {
+                int cp = encoding - wxFONTENCODING_CP1250 + 1250;
+                fontSpec.Printf(_T("-*-*-*-*-*-*-*-*-*-*-*-*-microsoft-cp%d"),
+                                cp);
+                if ( wxTestFontSpec(fontSpec) )
+                {
+                    xregistry = _T("microsoft");
+                    xencoding.Printf(_T("cp%d"), cp);
+
+                    // test passed, no need to do it once more
+                    test = FALSE;
+                }
+                else
+                {
+                    // fall back to LatinX
+                    xregistry = _T("iso8859");
+                    xencoding.Printf(_T("%d"), cp - 1249);
+                }
+            }
+            break;
+
+        case wxFONTENCODING_SYSTEM:
+        default:
+            test = FALSE;
+            xregistry =
+            xencoding = _T("*");
+    }
+
+    if ( test )
+    {
+        fontSpec.Printf(_T("-*-*-*-*-*-*-*-*-*-*-*-*-%s-%s"),
+                        xregistry.c_str(), xencoding.c_str());
+        if ( !wxTestFontSpec(fontSpec) )
+        {
+            // this encoding isn't available - what to do?
+            xregistry =
+            xencoding = _T("*");
+        }
+    }
+
+    // construct the X font spec from our data
+    fontSpec.Printf(_T("-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-%s-%s"),
+                    xfamily.c_str(), xweight.c_str(), xstyle.c_str(),
+                    pointSize, xregistry.c_str(), xencoding.c_str());
+
+    return gdk_font_load( wxConvCurrent->cWX2MB(fontSpec) );
 }
 
-static GdkFont *wxLoadQueryNearestFont( int point_size, int family, int style, int weight,
-                                        bool underlined, const wxString &facename )
+static GdkFont *wxLoadQueryNearestFont( int pointSize,
+                                        int family,
+                                        int style,
+                                        int weight,
+                                        bool underlined,
+                                        const wxString &facename,
+                                        wxFontEncoding encoding )
 {
-    GdkFont *font = wxLoadQueryFont( point_size, family, style, weight, underlined, facename );
+    GdkFont *font = wxLoadQueryFont( pointSize, family, style, weight,
+                                     underlined, facename, encoding );
 
     if (!font)
     {
         /* search up and down by stepsize 10 */
-        int max_size = point_size + 20 * (1 + (point_size/180));
-        int min_size = point_size - 20 * (1 + (point_size/180));
+        int max_size = pointSize + 20 * (1 + (pointSize/180));
+        int min_size = pointSize - 20 * (1 + (pointSize/180));
 
         int i;
 
         /* Search for smaller size (approx.) */
-        for (i=point_size-10; !font && i >= 10 && i >= min_size; i -= 10)
-            font = wxLoadQueryFont(i, family, style, weight, underlined, facename );
+        for ( i = pointSize - 10; !font && i >= 10 && i >= min_size; i -= 10 )
+        {
+            font = wxLoadQueryFont(i, family, style, weight, underlined,
+                                   facename, encoding );
+        }
 
         /* Search for larger size (approx.) */
-        for (i=point_size+10; !font && i <= max_size; i += 10)
-            font = wxLoadQueryFont( i, family, style, weight, underlined, facename );
+        for ( i = pointSize + 10; !font && i <= max_size; i += 10 )
+        {
+            font = wxLoadQueryFont( i, family, style, weight, underlined,
+                                    facename, encoding );
+        }
 
         /* Try default family */
-        if (!font && family != wxDEFAULT)
-            font = wxLoadQueryFont( point_size, wxDEFAULT, style, weight, underlined, facename );
+        if ( !font && family != wxDEFAULT )
+        {
+            font = wxLoadQueryFont( pointSize, wxDEFAULT, style, weight,
+                                    underlined, facename, encoding );
+        }
 
         /* Bogus font */
-        if (!font)
-            font = wxLoadQueryFont(120, wxDEFAULT, wxNORMAL, wxNORMAL, underlined, facename );
+        if ( !font )
+        {
+            font = wxLoadQueryFont(120, wxDEFAULT, wxNORMAL, wxNORMAL,
+                                   underlined, facename, encoding );
+        }
     }
 
     return font;
 }
 
-/*
+// wow, what's this stuff? Is it used/useful? (VZ)
+#if 0
 
 //-----------------------------------------------------------------------------
 // face names and index functions
@@ -1047,4 +1213,4 @@ int wxFontNameDirectory::GetFamily(int fontid)
     return wxDEFAULT;
 }
 
-*/
+#endif // 0

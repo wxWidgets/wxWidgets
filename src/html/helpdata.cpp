@@ -82,8 +82,8 @@ static int IndexCompareFunc(const void *a, const void *b)
 class HP_Parser : public wxHtmlParser
 {
     public:
-        void AddText(const char* text) {}
-        wxObject* GetProduct() {return NULL;}
+        void AddText(const char* WXUNUSED(text)) { }
+        wxObject* GetProduct() { return NULL; }
 };
 
 

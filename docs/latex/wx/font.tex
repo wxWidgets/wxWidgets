@@ -41,7 +41,8 @@ wxSWISS\_FONT}
 Default constructor.
 
 \func{}{wxFont}{\param{int}{ pointSize}, \param{int}{ family}, \param{int}{ style}, \param{int}{ weight},
- \param{const bool}{ underline = FALSE}, \param{const wxString\& }{faceName = ""}}
+ \param{const bool}{ underline = FALSE}, \param{const wxString\& }{faceName = ""},
+ \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
 
 Creates a font object.
 
@@ -69,6 +70,22 @@ Creates a font object.
 
 \docparam{faceName}{An optional string specifying the actual typeface to be used. If the empty string,
 a default typeface will chosen based on the family.}
+
+\docparam{encoding}{An encoding which may be one of
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxFONTENCODING\_SYSTEM}}{Default system encoding.}
+\twocolitem{{\bf wxFONTENCODING\_DEFAULT}}{Default application encoding: this
+is the encoding set by calls to 
+\helpref{SetDefaultEncoding}{wxfontsetdefaultencoding} and which may beset to,
+say, KOI8 to create all fonts by default with KOI8 encoding. Initially, the
+default application encoding is the same as default system encoding.}
+\twocolitem{{\bf wxFONTENCODING\_ISO8859\_1...15}}{ISO8859 encodings.}
+\twocolitem{{\bf wxFONTENCODING\_KOI8}}{The standard russian encoding for Internet.}
+\twocolitem{{\bf wxFONTENCODING\_CP1250...1252}}{Windows encodings similar to ISO8859 (but not identical).}
+\end{twocollist}
+If the specified encoding isn't available, no font is created.
+}
 
 \wxheading{Remarks}
 

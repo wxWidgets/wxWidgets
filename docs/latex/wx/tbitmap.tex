@@ -30,7 +30,7 @@ XPM icon file to be available at run-time.
 #endif
 \end{verbatim}
 
-A macro, wxICON, is available which creates an icon using an XPM
+A macro, \helpref{wxICON}{wxicon}, is available which creates an icon using an XPM
 on the appropriate platform, or an icon resource on Windows.
 
 \begin{verbatim}
@@ -46,6 +46,30 @@ wxIcon icon(mondrian_xpm);
 wxIcon icon("mondrian");
 #endif
 \end{verbatim}
+
+There is also a corresponding \helpref{wxBITMAP}{wxbitmap} macro which allows
+to create the bitmaps in much the same way as \helpref{wxICON}{wxicon} creates
+icons. It assumes that bitmaps live in resources under Windows or OS2 and XPM
+files under all other platforms (for XPMs, the corresponding file must be
+included before this macro is used, of course, and the name of the bitmap
+should be the same as the resource name under Windows with {\tt \_xpm}
+suffix). For example:
+
+\begin{verbatim}
+// an easy and portable way to create a bitmap
+wxBitmap bmp(wxBITMAP(bmpname));
+
+// which is roughly equivalent to the following
+#if defined(__WXMSW__) || defined(__WXPM__)
+    wxBitmap bmp("bmpname", wxBITMAP_TYPE_RESOURCE);
+#else // Unix
+    wxBitmap bmp(bmpname_xpm, wxBITMAP_TYPE_XPM);
+#endif
+\end{verbatim}
+
+You should always use wxICON and wxBITMAP macros because they work for any
+platform (unlike the code above which doesn't deal with wxMac, wxBe, ...) and
+are more short and clear than versions with {\tt #ifdef}s.
 
 \subsection{Supported bitmap file formats}\label{supportedbitmapformats}
 

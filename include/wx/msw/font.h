@@ -13,88 +13,85 @@
 #define _WX_FONT_H_
 
 #ifdef __GNUG__
-#pragma interface "font.h"
+    #pragma interface "font.h"
 #endif
 
 #include "wx/gdiobj.h"
 
-class WXDLLEXPORT wxFont;
-
-class WXDLLEXPORT wxFontRefData: public wxGDIRefData
-{
-    friend class WXDLLEXPORT wxFont;
-public:
-    wxFontRefData(void);
-    wxFontRefData(const wxFontRefData& data);
-    ~wxFontRefData(void);
-protected:
-  bool          m_temporary;   // If TRUE, the pointer to the actual font
-                               // is temporary and SHOULD NOT BE DELETED by
-                               // destructor
-  int           m_pointSize;
-  int           m_family;
-  int           m_fontId;
-  int           m_style;
-  int           m_weight;
-  bool          m_underlined;
-  wxString      m_faceName;
-  WXHFONT       m_hFont;
-
-};
-
-#define M_FONTDATA ((wxFontRefData *)m_refData)
-
 WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
-// Font
-class WXDLLEXPORT wxFont: public wxGDIObject
+// ----------------------------------------------------------------------------
+// wxFont
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxFont : public wxFontBase
 {
-  DECLARE_DYNAMIC_CLASS(wxFont)
 public:
-  wxFont(void);
-  wxFont(int PointSize, int Family, int Style, int Weight, bool underlined = FALSE, const wxString& Face = wxEmptyString);
-  inline wxFont(const wxFont& font) { Ref(font); }
+    // ctors and such
+    wxFont() { Init(); }
+    wxFont(const wxFont& font) { Init(); Ref(font); }
 
-  ~wxFont(void);
+    wxFont(int size,
+           int family,
+           int style,
+           int weight,
+           bool underlined = FALSE,
+           const wxString& face = wxEmptyString,
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+    {
+        Init();
 
-  bool Create(int PointSize, int Family, int Style, int Weight, bool underlined = FALSE, const wxString& Face = wxEmptyString);
+        (void)Create(size, family, style, weight, underlined, face, encoding);
+    }
 
-  // Internal
-  virtual bool RealizeResource(void);
-  virtual WXHANDLE GetResourceHandle(void) ;
-  virtual bool FreeResource(bool force = FALSE);
-/*
-  virtual bool UseResource(void);
-  virtual bool ReleaseResource(void);
-*/
+    bool Create(int size,
+                int family,
+                int style,
+                int weight,
+                bool underlined = FALSE,
+                const wxString& face = wxEmptyString,
+                wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
-  virtual bool IsFree() const;
-  virtual bool Ok(void) const { return (m_refData != NULL) ; }
+    virtual ~wxFont();
 
-  inline int GetPointSize(void) const { return M_FONTDATA->m_pointSize; }
-  inline int GetFamily(void) const { return M_FONTDATA->m_family; }
-  inline int GetFontId(void) const { return M_FONTDATA->m_fontId; } /* New font system */
-  inline int GetStyle(void) const { return M_FONTDATA->m_style; }
-  inline int GetWeight(void) const { return M_FONTDATA->m_weight; }
-  wxString GetFamilyString(void) const ;
-  wxString GetFaceName(void) const ;
-  wxString GetStyleString(void) const ;
-  wxString GetWeightString(void) const ;
-  inline bool GetUnderlined(void) const { return M_FONTDATA->m_underlined; }
+    // implement base class pure virtuals
+    virtual int GetPointSize() const;
+    virtual int GetFamily() const;
+    virtual int GetStyle() const;
+    virtual int GetWeight() const;
+    virtual bool GetUnderlined() const;
+    virtual wxString GetFaceName() const;
+    virtual wxFontEncoding GetEncoding() const;
 
-  void SetPointSize(int pointSize);
-  void SetFamily(int family);
-  void SetStyle(int style);
-  void SetWeight(int weight);
-  void SetFaceName(const wxString& faceName);
-  void SetUnderlined(bool underlined);
+    virtual void SetPointSize(int pointSize);
+    virtual void SetFamily(int family);
+    virtual void SetStyle(int style);
+    virtual void SetWeight(int weight);
+    virtual void SetFaceName(const wxString& faceName);
+    virtual void SetUnderlined(bool underlined);
+    virtual void SetEncoding(wxFontEncoding encoding);
 
-  wxFont& operator = (const wxFont& font) { if (*this == font) return (*this); Ref(font); return *this; }
-  bool operator == (const wxFont& font) const { return m_refData == font.m_refData; }
-  bool operator != (const wxFont& font) const { return m_refData != font.m_refData; }
+    // implementation only from now on
+    // -------------------------------
+
+    int GetFontId() const;
+    virtual bool IsFree() const;
+    virtual bool RealizeResource();
+    virtual WXHANDLE GetResourceHandle();
+    virtual bool FreeResource(bool force = FALSE);
+    /*
+       virtual bool UseResource();
+       virtual bool ReleaseResource();
+     */
 
 protected:
-  void Unshare();
+    // common part of all ctors
+    void Init();
+
+    void Unshare();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxFont)
 };
 
 #endif

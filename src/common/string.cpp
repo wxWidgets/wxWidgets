@@ -1279,6 +1279,10 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 // ----------------------------------------------------------------------------
 // misc other operations
 // ----------------------------------------------------------------------------
+
+// returns TRUE if the string matches the pattern which may contain '*' and
+// '?' metacharacters (as usual, '?' matches any character and '*' any number
+// of them)
 bool wxString::Matches(const wxChar *pszMask) const
 {
   // check char by char
@@ -1289,8 +1293,8 @@ bool wxString::Matches(const wxChar *pszMask) const
         if ( *pszTxt == _T('\0') )
           return FALSE;
 
-        pszTxt++;
-        pszMask++;
+        // pszText and pszMask will be incremented in the loop statement
+
         break;
 
       case _T('*'):

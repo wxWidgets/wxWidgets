@@ -149,6 +149,16 @@ enum wxStockCursor
     #define wxICON(X) wxIcon("" #X "")
 #endif // platform
 
+/* Another macro: this one is for portable creation of bitmaps. We assume that
+   under Unix bitmaps live in XPMs and under Windows they're in ressources.
+ */
+
+#if defined(__WXMSW__) || defined(__WXPM__)
+    #define wxBITMAP(name) wxBitmap(#name, wxBITMAP_TYPE_RESOURCE)
+#else // !(Windows || OS2)
+    #define wxBITMAP(name) wxBitmap(name##_xpm, wxBITMAP_TYPE_XPM)
+#endif // platform
+
 // ===========================================================================
 // classes
 // ===========================================================================

@@ -362,6 +362,7 @@ public:
 
     // File history management
     virtual void AddFileToHistory(const wxString& file);
+    virtual void RemoveFileFromHistory(int i);
     virtual int GetNoHistoryFiles() const;
     virtual wxString GetHistoryFile(int i) const;
     virtual void FileHistoryUseMenu(wxMenu *menu);
@@ -553,6 +554,7 @@ public:
 
     // Operations
     virtual void AddFileToHistory(const wxString& file);
+    virtual void RemoveFileFromHistory(int i);
     virtual int GetMaxFiles() const { return m_fileMaxFiles; }
     virtual void UseMenu(wxMenu *menu);
 

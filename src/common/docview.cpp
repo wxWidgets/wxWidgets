@@ -98,6 +98,12 @@
 
 static inline wxString FindExtension(const wxChar *path);
 
+// ----------------------------------------------------------------------------
+// local constants
+// ----------------------------------------------------------------------------
+
+static const char *s_MRUEntryFormat = _T("&%d %s");
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -1095,6 +1101,12 @@ void wxDocManager::AddFileToHistory(const wxString& file)
         m_fileHistory->AddFileToHistory(file);
 }
 
+void wxDocManager::RemoveFileFromHistory(int i)
+{
+    if (m_fileHistory)
+        m_fileHistory->RemoveFileFromHistory(i);
+}
+
 wxString wxDocManager::GetHistoryFile(int i) const
 {
     wxString histFile;
@@ -1482,9 +1494,27 @@ void wxDocParentFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 
 void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
 {
-    wxString f(m_docManager->GetHistoryFile(event.GetSelection() - wxID_FILE1));
-    if (f != _T(""))
-        (void)m_docManager->CreateDocument(f, wxDOC_SILENT);
+    int n = event.GetSelection() - wxID_FILE1;  // the index in MRU list
+    wxString filename(m_docManager->GetHistoryFile(n));
+    if ( !filename.IsEmpty() )
+    {
+        // verify that the file exists before doing anything else
+        if ( wxFile::Exists(filename) )
+        {
+            // try to open it
+            (void)m_docManager->CreateDocument(filename, wxDOC_SILENT);
+        }
+        else
+        {
+            // remove the bogus filename from the MRU list and notify the user
+            // about it
+            m_docManager->RemoveFileFromHistory(n);
+
+            wxLogError(_("The file '%s' doesn't exist and couldn't be opened.\n"
+                         "It has been also removed from the MRU files list."),
+                       filename.c_str());
+        }
+    }
 }
 
 // Extend event processing to search the view's event table
@@ -1855,7 +1885,7 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
         if (m_fileHistory[i])
         {
             wxString buf;
-            buf.Printf(_T("&%d %s"), i+1, m_fileHistory[i]);
+            buf.Printf(s_MRUEntryFormat, i+1, m_fileHistory[i]);
             wxNode* node = m_fileMenus.First();
             while (node)
             {
@@ -1864,6 +1894,49 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
                 node = node->Next();
             }
         }
+}
+
+void wxFileHistory::RemoveFileFromHistory(int i)
+{
+    wxCHECK_RET( i < m_fileHistoryN,
+                 _T("invalid index in wxFileHistory::RemoveFileFromHistory") );
+
+    wxNode* node = m_fileMenus.First();
+    while ( node )
+    {
+        wxMenu* menu = (wxMenu*) node->Data();
+
+        // wxMenu::Delete() is missing from wxGTK, so this can't be done :-(
+#if 0
+        // delete the menu items
+        menu->Delete(wxID_FILE1 + i);
+#endif
+
+        // delete the element from the array (could use memmove() too...)
+        delete [] m_fileHistory[i];
+
+        int j;
+        for ( j = i; j < m_fileHistoryN - 1; j++ )
+        {
+            m_fileHistory[j] = m_fileHistory[j + 1];
+        }
+
+        // shuffle filenames up
+        wxString buf;
+        for ( j = i; j < m_fileHistoryN - 1; j++ )
+        {
+            buf.Printf(s_MRUEntryFormat, j + 1, m_fileHistory[j]);
+            menu->SetLabel(wxID_FILE1 + j, buf);
+        }
+
+        // to be removed as soon as wxMenu::Delete() is implemented
+#if 1
+        menu->SetLabel(wxID_FILE1 + m_fileHistoryN - 1, _T(""));
+#endif
+
+        node = node->Next();
+    }
+    m_fileHistoryN--;
 }
 
 wxString wxFileHistory::GetHistoryFile(int i) const
@@ -1929,7 +2002,7 @@ void wxFileHistory::AddFilesToMenu()
                 if (m_fileHistory[i])
                 {
                     wxString buf;
-                    buf.Printf(_T("&%d %s"), i+1, m_fileHistory[i]);
+                    buf.Printf(s_MRUEntryFormat, i+1, m_fileHistory[i]);
                     menu->Append(wxID_FILE1+i, buf);
                 }
             }
@@ -1949,7 +2022,7 @@ void wxFileHistory::AddFilesToMenu(wxMenu* menu)
             if (m_fileHistory[i])
             {
                 wxString buf;
-                buf.Printf(_T("&%d %s"), i+1, m_fileHistory[i]);
+                buf.Printf(s_MRUEntryFormat, i+1, m_fileHistory[i]);
                 menu->Append(wxID_FILE1+i, buf);
             }
         }

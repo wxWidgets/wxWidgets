@@ -1928,6 +1928,23 @@ base classes.
 
 <wx/object.h>
 
+\membersection{wxBITMAP}\label{wxbitmap}
+
+\func{}{wxBITMAP}{bitmapName}
+
+This macro loads a bitmap from either application resources (on the platforms
+for which they exist, i.e. Windows and OS2) or from an XPM file. It allows to
+avoid using {\tt #ifdef}s when creating bitmaps.
+
+\wxheading{See also}
+
+\helpref{Bitmaps and icons overview}{wxbitmapoverview},
+\helpref{wxICON}{wxicon}
+
+\wxheading{Include files}
+
+<wx/gdicmn.h>
+
 \membersection{WXDEBUG\_NEW}\label{debugnew}
 
 \func{}{WXDEBUG\_NEW}{arg}
@@ -1974,6 +1991,23 @@ Example:
 \wxheading{See also}
 
 \helpref{RTTI overview}{runtimeclassoverview}
+
+\membersection{wxICON}\label{wxicon}
+
+\func{}{wxICON}{iconName}
+
+This macro loads an icon from either application resources (on the platforms
+for which they exist, i.e. Windows and OS2) or from an XPM file. It allows to
+avoid using {\tt #ifdef}s when creating icons.
+
+\wxheading{See also}
+
+\helpref{Bitmaps and icons overview}{wxbitmapoverview},
+\helpref{wxBITMAP}{wxbitmap}
+
+\wxheading{Include files}
+
+<wx/gdicmn.h>
 
 \membersection{WXTRACE}\label{trace}
 
