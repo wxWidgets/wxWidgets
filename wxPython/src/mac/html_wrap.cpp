@@ -5886,11 +5886,12 @@ static PyObject *_wrap_new_HtmlWindow(PyObject *self, PyObject *args, PyObject *
         }
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxPyHtmlWindow *)new wxPyHtmlWindow(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5,(wxString const &)*arg6);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -5918,11 +5919,12 @@ static PyObject *_wrap_new_PreHtmlWindow(PyObject *self, PyObject *args, PyObjec
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_PreHtmlWindow",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxPyHtmlWindow *)new wxPyHtmlWindow();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -7179,11 +7181,12 @@ static PyObject *_wrap_HtmlWindow_GetClassDefaultAttributes(PyObject *self, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxPyHtmlWindow::GetClassDefaultAttributes((wxWindowVariant )arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     {
         wxVisualAttributes * resultptr;
@@ -7212,11 +7215,12 @@ static PyObject *_wrap_new_HtmlDCRenderer(PyObject *self, PyObject *args, PyObje
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_HtmlDCRenderer",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxHtmlDCRenderer *)new wxHtmlDCRenderer();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlDCRenderer, 1);
     return resultobj;
@@ -7545,11 +7549,12 @@ static PyObject *_wrap_new_HtmlPrintout(PyObject *self, PyObject *args, PyObject
         }
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxHtmlPrintout *)new wxHtmlPrintout((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlPrintout, 1);
     {
@@ -7947,11 +7952,12 @@ static PyObject *_wrap_new_HtmlEasyPrinting(PyObject *self, PyObject *args, PyOb
         SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxHtmlEasyPrinting *)new wxHtmlEasyPrinting((wxString const &)*arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlEasyPrinting, 1);
     {
@@ -9642,11 +9648,12 @@ static PyObject *_wrap_new_HtmlHelpFrame(PyObject *self, PyObject *args, PyObjec
         SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxHtmlHelpFrame *)new wxHtmlHelpFrame(arg1,arg2,(wxString const &)*arg3,arg4,arg5);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlHelpFrame, 1);
     {
@@ -10042,11 +10049,12 @@ static PyObject *_wrap_new_HtmlHelpController(PyObject *self, PyObject *args, Py
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxHtmlHelpController *)new wxHtmlHelpController(arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlHelpController, 1);
     return resultobj;

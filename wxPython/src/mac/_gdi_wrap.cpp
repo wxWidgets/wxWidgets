@@ -906,11 +906,12 @@ static PyObject *_wrap_new_GDIObject(PyObject *self, PyObject *args, PyObject *k
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_GDIObject",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxGDIObject *)new wxGDIObject();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxGDIObject, 1);
     return resultobj;
@@ -1558,11 +1559,12 @@ static PyObject *_wrap_new_Palette(PyObject *self, PyObject *args, PyObject *kwa
     if ((SWIG_ConvertPtr(obj3,(void **)(&arg4),SWIGTYPE_p_unsigned_char,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxPalette *)new wxPalette(arg1,(unsigned char const *)arg2,(unsigned char const *)arg3,(unsigned char const *)arg4);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPalette, 1);
     return resultobj;
@@ -1750,11 +1752,12 @@ static PyObject *_wrap_new_Pen(PyObject *self, PyObject *args, PyObject *kwargs)
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxPen *)new wxPen(*arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPen, 1);
     return resultobj;
@@ -2287,11 +2290,12 @@ static PyObject *_wrap_new_Brush(PyObject *self, PyObject *args, PyObject *kwarg
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxBrush *)new wxBrush((wxColour const &)*arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBrush, 1);
     return resultobj;
@@ -2615,11 +2619,12 @@ static PyObject *_wrap_new_Bitmap(PyObject *self, PyObject *args, PyObject *kwar
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxBitmap *)new wxBitmap((wxString const &)*arg1,(wxBitmapType )arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 1);
     {
@@ -2684,11 +2689,12 @@ static PyObject *_wrap_new_EmptyBitmap(PyObject *self, PyObject *args, PyObject 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxBitmap *)new wxBitmap(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 1);
     return resultobj;
@@ -2715,11 +2721,12 @@ static PyObject *_wrap_new_BitmapFromIcon(PyObject *self, PyObject *args, PyObje
         SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxBitmap *)new wxBitmap((wxIcon const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 1);
     return resultobj;
@@ -2752,11 +2759,12 @@ static PyObject *_wrap_new_BitmapFromImage(PyObject *self, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxBitmap *)new wxBitmap((wxImage const &)*arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 1);
     return resultobj;
@@ -2777,11 +2785,12 @@ static PyObject *_wrap_new_BitmapFromXPMData(PyObject *self, PyObject *args, PyO
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_BitmapFromXPMData",kwnames,&obj0)) goto fail;
     arg1 = obj0;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxBitmap *)new_wxBitmap(arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 1);
     return resultobj;
@@ -2816,11 +2825,12 @@ static PyObject *_wrap_new_BitmapFromBits(PyObject *self, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxBitmap *)new_wxBitmap(arg1,arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 1);
     return resultobj;
@@ -3476,11 +3486,12 @@ static PyObject *_wrap_new_Mask(PyObject *self, PyObject *args, PyObject *kwargs
         }
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxMask *)new_wxMask((wxBitmap const &)*arg1,(wxColour const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxMask, 1);
     return resultobj;
@@ -3529,11 +3540,12 @@ static PyObject *_wrap_new_Icon(PyObject *self, PyObject *args, PyObject *kwargs
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxIcon *)new wxIcon((wxString const &)*arg1,(wxBitmapType )arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxIcon, 1);
     {
@@ -3584,11 +3596,12 @@ static PyObject *_wrap_new_EmptyIcon(PyObject *self, PyObject *args, PyObject *k
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_EmptyIcon",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxIcon *)new wxIcon();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxIcon, 1);
     return resultobj;
@@ -3615,11 +3628,12 @@ static PyObject *_wrap_new_IconFromLocation(PyObject *self, PyObject *args, PyOb
         SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxIcon *)new wxIcon((wxIconLocation const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxIcon, 1);
     return resultobj;
@@ -3646,11 +3660,12 @@ static PyObject *_wrap_new_IconFromBitmap(PyObject *self, PyObject *args, PyObje
         SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxIcon *)new_wxIcon((wxBitmap const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxIcon, 1);
     return resultobj;
@@ -3671,11 +3686,12 @@ static PyObject *_wrap_new_IconFromXPMData(PyObject *self, PyObject *args, PyObj
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_IconFromXPMData",kwnames,&obj0)) goto fail;
     arg1 = obj0;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxIcon *)new_wxIcon(arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxIcon, 1);
     return resultobj;
@@ -4433,11 +4449,12 @@ static PyObject *_wrap_new_Cursor(PyObject *self, PyObject *args, PyObject *kwar
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxCursor *)new_wxCursor((wxString const *)arg1,arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCursor, 1);
     {
@@ -4492,11 +4509,12 @@ static PyObject *_wrap_new_StockCursor(PyObject *self, PyObject *args, PyObject 
     arg1 = (int) SWIG_AsInt(obj0); 
     if (PyErr_Occurred()) SWIG_fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxCursor *)new wxCursor(arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCursor, 1);
     return resultobj;
@@ -4523,11 +4541,12 @@ static PyObject *_wrap_new_CursorFromImage(PyObject *self, PyObject *args, PyObj
         SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxCursor *)new wxCursor((wxImage const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCursor, 1);
     return resultobj;
@@ -4604,11 +4623,12 @@ static PyObject *_wrap_new_Region(PyObject *self, PyObject *args, PyObject *kwar
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxRegion *)new wxRegion(arg1,arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRegion, 1);
     return resultobj;
@@ -4651,11 +4671,12 @@ static PyObject *_wrap_new_RegionFromBitmap(PyObject *self, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxRegion *)new wxRegion((wxBitmap const &)*arg1,(wxColour const &)*arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRegion, 1);
     return resultobj;
@@ -4686,11 +4707,12 @@ static PyObject *_wrap_new_RegionFromPoints(PyObject *self, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxRegion *)new_wxRegion(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRegion, 1);
     {
@@ -5527,11 +5549,12 @@ static PyObject *_wrap_new_RegionIterator(PyObject *self, PyObject *args, PyObje
         SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxRegionIterator *)new wxRegionIterator((wxRegion const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRegionIterator, 1);
     return resultobj;
@@ -7477,11 +7500,12 @@ static PyObject *_wrap_new_Font(PyObject *self, PyObject *args, PyObject *kwargs
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxFont *)new wxFont(arg1,arg2,arg3,arg4,arg5,(wxString const &)*arg6,(wxFontEncoding )arg7);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxFont, 1);
     {
@@ -7541,11 +7565,12 @@ static PyObject *_wrap_new_FontFromNativeInfo(PyObject *self, PyObject *args, Py
         SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxFont *)new wxFont((wxNativeFontInfo const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxFont, 1);
     return resultobj;
@@ -7571,11 +7596,12 @@ static PyObject *_wrap_new_FontFromNativeInfoString(PyObject *self, PyObject *ar
         temp1 = True;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxFont *)new_wxFont((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxFont, 1);
     {
@@ -7632,11 +7658,12 @@ static PyObject *_wrap_new_Font2(PyObject *self, PyObject *args, PyObject *kwarg
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxFont *)new_wxFont(arg1,(wxFontFamily )arg2,arg3,(wxString const &)*arg4,(wxFontEncoding )arg5);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxFont, 1);
     {
@@ -8548,11 +8575,12 @@ static PyObject *_wrap_Font_GetDefaultEncoding(PyObject *self, PyObject *args, P
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":Font_GetDefaultEncoding",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)wxFont::GetDefaultEncoding();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_FromInt((int)result);
     return resultobj;
@@ -8573,11 +8601,12 @@ static PyObject *_wrap_Font_SetDefaultEncoding(PyObject *self, PyObject *args, P
     arg1 = (wxFontEncoding) SWIG_AsInt(obj0); 
     if (PyErr_Occurred()) SWIG_fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxFont::SetDefaultEncoding((wxFontEncoding )arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
@@ -8602,11 +8631,12 @@ static PyObject *_wrap_new_FontEnumerator(PyObject *self, PyObject *args, PyObje
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_FontEnumerator",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxPyFontEnumerator *)new wxPyFontEnumerator();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPyFontEnumerator, 1);
     return resultobj;
@@ -14921,11 +14951,12 @@ static PyObject *_wrap_new_MemoryDC(PyObject *self, PyObject *args, PyObject *kw
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_MemoryDC",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxMemoryDC *)new wxMemoryDC();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxMemoryDC, 1);
     return resultobj;
@@ -14947,11 +14978,12 @@ static PyObject *_wrap_new_MemoryDCFromDC(PyObject *self, PyObject *args, PyObje
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDC,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxMemoryDC *)new wxMemoryDC(arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxMemoryDC, 1);
     return resultobj;
@@ -15020,11 +15052,12 @@ static PyObject *_wrap_new_BufferedDC__SWIG_0(PyObject *self, PyObject *args) {
         SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxBufferedDC *)new wxBufferedDC(arg1,(wxBitmap const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBufferedDC, 1);
     return resultobj;
@@ -15050,11 +15083,12 @@ static PyObject *_wrap_new_BufferedDC__SWIG_1(PyObject *self, PyObject *args) {
         if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxBufferedDC *)new wxBufferedDC(arg1,(wxSize const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBufferedDC, 1);
     return resultobj;
@@ -15141,11 +15175,12 @@ static PyObject *_wrap_new_BufferedDCInternalBuffer(PyObject *self, PyObject *ar
         if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxBufferedDC *)new wxBufferedDC(arg1,(wxSize const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBufferedDC, 1);
     return resultobj;
@@ -15236,11 +15271,12 @@ static PyObject *_wrap_new_BufferedPaintDC(PyObject *self, PyObject *args, PyObj
         }
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxBufferedPaintDC *)new wxBufferedPaintDC(arg1,(wxBitmap const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBufferedPaintDC, 1);
     return resultobj;
@@ -15265,11 +15301,12 @@ static PyObject *_wrap_new_ScreenDC(PyObject *self, PyObject *args, PyObject *kw
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_ScreenDC",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxScreenDC *)new wxScreenDC();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxScreenDC, 1);
     return resultobj;
@@ -15392,11 +15429,12 @@ static PyObject *_wrap_new_ClientDC(PyObject *self, PyObject *args, PyObject *kw
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxClientDC *)new wxClientDC(arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxClientDC, 1);
     return resultobj;
@@ -15425,11 +15463,12 @@ static PyObject *_wrap_new_PaintDC(PyObject *self, PyObject *args, PyObject *kwa
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxPaintDC *)new wxPaintDC(arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPaintDC, 1);
     return resultobj;
@@ -15458,11 +15497,12 @@ static PyObject *_wrap_new_WindowDC(PyObject *self, PyObject *args, PyObject *kw
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxWindowDC *)new wxWindowDC(arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxWindowDC, 1);
     return resultobj;
@@ -15500,11 +15540,12 @@ static PyObject *_wrap_new_MirrorDC(PyObject *self, PyObject *args, PyObject *kw
     arg2 = (bool) SWIG_AsBool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxMirrorDC *)new wxMirrorDC(*arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxMirrorDC, 1);
     return resultobj;
@@ -15538,11 +15579,12 @@ static PyObject *_wrap_new_PostScriptDC(PyObject *self, PyObject *args, PyObject
         SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxPostScriptDC *)new wxPostScriptDC((wxPrintData const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPostScriptDC, 1);
     return resultobj;
@@ -15688,11 +15730,12 @@ static PyObject *_wrap_new_MetaFile(PyObject *self, PyObject *args, PyObject *kw
         }
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxMetaFile *)new wxMetaFile((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxMetaFile, 1);
     {
@@ -15934,11 +15977,12 @@ static PyObject *_wrap_new_MetaFileDC(PyObject *self, PyObject *args, PyObject *
         }
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxMetaFileDC *)new wxMetaFileDC((wxString const &)*arg1,arg2,arg3,(wxString const &)*arg4);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxMetaFileDC, 1);
     {
@@ -16014,11 +16058,12 @@ static PyObject *_wrap_new_PrinterDC(PyObject *self, PyObject *args, PyObject *k
         SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxPrinterDC *)new wxPrinterDC((wxPrintData const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrinterDC, 1);
     return resultobj;
@@ -16063,11 +16108,12 @@ static PyObject *_wrap_new_ImageList(PyObject *self, PyObject *args, PyObject *k
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxImageList *)new wxImageList(arg1,arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -17322,11 +17368,12 @@ static PyObject *_wrap_new_ColourDatabase(PyObject *self, PyObject *args, PyObje
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_ColourDatabase",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxColourDatabase *)new wxColourDatabase();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxColourDatabase, 1);
     return resultobj;

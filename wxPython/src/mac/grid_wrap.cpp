@@ -8068,11 +8068,12 @@ static PyObject *_wrap_new_Grid(PyObject *self, PyObject *args, PyObject *kwargs
         }
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxGrid *)new wxGrid(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5,(wxString const &)*arg6);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -8100,11 +8101,12 @@ static PyObject *_wrap_new_PreGrid(PyObject *self, PyObject *args, PyObject *kwa
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_PreGrid",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxGrid *)new wxGrid();
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     {
         resultobj = wxPyMake_wxObject(result); 
@@ -14382,11 +14384,12 @@ static PyObject *_wrap_Grid_GetClassDefaultAttributes(PyObject *self, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxGrid::GetClassDefaultAttributes((wxWindowVariant )arg1);
         
         wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
+        if (PyErr_Occurred()) SWIG_fail;    
     }
     {
         wxVisualAttributes * resultptr;

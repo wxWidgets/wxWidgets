@@ -13,7 +13,7 @@ import _core
 wx = _core 
 __docfilter__ = wx.__DocFilter(globals()) 
 import warnings
-warnings.warn("This module is deprecated.  Please use the wx.lib.ogl pacakge instead.",    
+warnings.warn("This module is deprecated.  Please use the wx.lib.ogl package instead.",    
               DeprecationWarning, stacklevel=2)
 
 #---------------------------------------------------------------------------
