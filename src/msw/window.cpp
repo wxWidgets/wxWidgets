@@ -2317,7 +2317,7 @@ void wxWindow::MSWDetachWindowMenu()
                 continue;
             }
 
-            if ( wxStrcmp(buf, wxT("&Window")) == 0 )
+            if ( wxStrcmp(buf, _("&Window")) == 0 )
             {
                 if ( !::RemoveMenu(hMenu, i, MF_BYPOSITION) )
                 {
