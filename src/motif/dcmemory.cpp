@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/dcmemory.h"
+#include "wx/settings.h"
 #include "wx/utils.h"
 
 #include <Xm/Xm.h>
@@ -50,6 +51,7 @@ wxMemoryDC::wxMemoryDC(void)
     m_oldFont = (WXFont) valReturn.font;
     SetBrush (* wxWHITE_BRUSH);
     SetPen (* wxBLACK_PEN);
+    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));    
 };
 
 wxMemoryDC::wxMemoryDC( wxDC* dc )
