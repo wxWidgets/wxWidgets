@@ -40,7 +40,8 @@ WX_RELEASE = 2.5
 WX_VERSION = $(WX_RELEASE).4
 LIBDIRNAME = $(top_builddir)lib
 TEST_CXXFLAGS = $(__test_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(srcdir) $(__DLLFLAG_p) $(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	-I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(CPPFLAGS) \
+	$(CXXFLAGS)
 TEST_OBJECTS =  \
 	test_test.o \
 	test_archivetest.o \
