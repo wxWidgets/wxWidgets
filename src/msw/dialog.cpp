@@ -440,6 +440,22 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
 
     switch ( message )
     {
+#ifdef __WXWINCE__
+        // react to pressing the OK button in the title
+        case WM_COMMAND:
+            if (LOWORD(wParam) == IDOK)
+            {
+                wxButton *btn = wxDynamicCast(FindWindow(wxID_CANCEL), wxButton);
+                if ( btn && btn->IsEnabled() )
+                {
+                    // if we do have a cancel button, do press it
+                    btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+                    processed = TRUE;
+                    break;
+                }
+            }
+            break;
+#endif            
         case WM_CLOSE:
             // if we can't close, tell the system that we processed the
             // message - otherwise it would close us

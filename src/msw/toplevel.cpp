@@ -915,7 +915,7 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
 
 // the DialogProc for all wxWindows dialogs
 LONG APIENTRY _EXPORT
-wxDlgProc(HWND WXUNUSED(hDlg),
+wxDlgProc(HWND hDlg,
           UINT message,
           WPARAM WXUNUSED(wParam),
           LPARAM WXUNUSED(lParam))
@@ -926,6 +926,16 @@ wxDlgProc(HWND WXUNUSED(hDlg),
             // for this message, returning TRUE tells system to set focus to
             // the first control in the dialog box, but as we set the focus
             // ourselves, we return FALSE from here as well, so fall through
+#ifdef __WXWINCE__
+        {
+            SHINITDLGINFO shidi;
+            shidi.dwMask = SHIDIM_FLAGS;
+            shidi.dwFlags = SHIDIF_DONEBUTTON |
+                            SHIDIF_SIZEDLGFULLSCREEN;
+            shidi.hDlg = hDlg;
+            SHInitDialog( &shidi );
+        }
+#endif
 
         default:
             // for all the other ones, FALSE means that we didn't process the
