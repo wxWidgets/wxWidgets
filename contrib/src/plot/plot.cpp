@@ -136,7 +136,7 @@ wxPlotOnOffCurve::wxPlotOnOffCurve( int offsetY )
 
 void wxPlotOnOffCurve::Add( wxInt32 on, wxInt32 off, void *clientData )
 {
-    wxASSERT_MSG( on > 0, wxT("plot index < 0") );
+    wxASSERT_MSG( on > 0, _T("plot index < 0") );
     wxASSERT( on <= off );
 
     if (m_minX == -1)
@@ -204,7 +204,7 @@ BEGIN_EVENT_TABLE(wxPlotArea, wxWindow)
 END_EVENT_TABLE()
 
 wxPlotArea::wxPlotArea( wxPlotWindow *parent )
-        : wxWindow( parent, -1, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER, "plotarea" )
+        : wxWindow( parent, -1, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER, _T("plotarea") )
 {
     m_owner = parent;
     
@@ -462,7 +462,7 @@ BEGIN_EVENT_TABLE(wxPlotXAxisArea, wxWindow)
 END_EVENT_TABLE()
 
 wxPlotXAxisArea::wxPlotXAxisArea( wxPlotWindow *parent )
-        : wxWindow( parent, -1, wxDefaultPosition, wxSize(-1,40), 0, "plotxaxisarea" )
+        : wxWindow( parent, -1, wxDefaultPosition, wxSize(-1,40), 0, _T("plotxaxisarea") )
 {
     m_owner = parent;
     
@@ -543,7 +543,7 @@ void wxPlotXAxisArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
     
     dc.SetBrush( *wxWHITE_BRUSH );
-    dc.SetPen( *wxTRANSPARENT_PEN );
+    dc.SetPen( *_TRANSPARENT_PEN );
     dc.DrawRectangle( 4, 5, client_width-14, 10 );
     dc.DrawRectangle( 0, 20, client_width, 20 );
     dc.SetPen( *wxBLACK_PEN );
@@ -558,14 +558,14 @@ void wxPlotXAxisArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxString label;
             if (range < 50)
             {
-                label.Printf( wxT("%f"), current );
-                while (label.Last() == wxT('0')) 
+                label.Printf( _T("%f"), current );
+                while (label.Last() == _T('0')) 
                     label.RemoveLast();
-                if ((label.Last() == wxT('.')) || (label.Last() == wxT(',')))
-                    label.Append( wxT('0') );
+                if ((label.Last() == _T('.')) || (label.Last() == _T(',')))
+                    label.Append( _T('0') );
             }
             else
-                label.Printf( wxT("%d"), (int)floor(current) );
+                label.Printf( _T("%d"), (int)floor(current) );
             dc.DrawText( label, x-4, 20 );
         }
 
@@ -589,7 +589,7 @@ BEGIN_EVENT_TABLE(wxPlotYAxisArea, wxWindow)
 END_EVENT_TABLE()
 
 wxPlotYAxisArea::wxPlotYAxisArea( wxPlotWindow *parent )
-        : wxWindow( parent, -1, wxDefaultPosition, wxSize(60,-1), 0, "plotyaxisarea" )
+        : wxWindow( parent, -1, wxDefaultPosition, wxSize(60,-1), 0, _T("plotyaxisarea") )
 {
     m_owner = parent;
     
@@ -664,14 +664,14 @@ void wxPlotYAxisArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxString label;
             if (range < 50)
             {
-                label.Printf( wxT("%f"), current );
-                while (label.Last() == wxT('0')) 
+                label.Printf( _T("%f"), current );
+                while (label.Last() == _T('0')) 
                     label.RemoveLast();
-                if ((label.Last() == wxT('.')) || (label.Last() == wxT(',')))
-                    label.Append( wxT('0') );
+                if ((label.Last() == _T('.')) || (label.Last() == _T(',')))
+                    label.Append( _T('0') );
             }
             else
-                label.Printf( wxT("%d"), (int)floor(current) );
+                label.Printf( _T("%d"), (int)floor(current) );
             dc.DrawText( label, 5, y-7 );
         }
 
@@ -713,7 +713,7 @@ BEGIN_EVENT_TABLE(wxPlotWindow, wxScrolledWindow)
 END_EVENT_TABLE()
 
 wxPlotWindow::wxPlotWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, int flag )
-        : wxScrolledWindow( parent, id, pos, size, flag, "plotcanvas" )
+        : wxScrolledWindow( parent, id, pos, size, flag, _T("plotcanvas") )
 {
     m_xUnitsPerValue = 1.0;
     m_xZoom = 1.0;
@@ -1052,7 +1052,7 @@ static wxBitmap *GetEnlargeBitmap()
         s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
 
         #if defined(__WXMSW__) || defined(__WXPM__)
-            s_bitmap = new wxBitmap("plot_enl_bmp", wxBITMAP_TYPE_RESOURCE);
+            s_bitmap = new wxBitmap(_T("plot_enl_bmp"), wxBITMAP_TYPE_RESOURCE);
         #else
             s_bitmap = new wxBitmap( plot_enl_xpm );
         #endif
@@ -1071,7 +1071,7 @@ static wxBitmap *GetShrinkBitmap()
         s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
 
         #if defined(__WXMSW__) || defined(__WXPM__)
-            s_bitmap = new wxBitmap("plot_shr_bmp", wxBITMAP_TYPE_RESOURCE);
+            s_bitmap = new wxBitmap(_T("plot_shr_bmp"), wxBITMAP_TYPE_RESOURCE);
         #else
             s_bitmap = new wxBitmap( plot_shr_xpm );
         #endif
@@ -1090,7 +1090,7 @@ static wxBitmap *GetZoomInBitmap()
         s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
 
         #if defined(__WXMSW__) || defined(__WXPM__)
-            s_bitmap = new wxBitmap("plot_zin_bmp", wxBITMAP_TYPE_RESOURCE);
+            s_bitmap = new wxBitmap(_T("plot_zin_bmp"), wxBITMAP_TYPE_RESOURCE);
         #else
             s_bitmap = new wxBitmap( plot_zin_xpm );
         #endif
@@ -1109,7 +1109,7 @@ static wxBitmap *GetZoomOutBitmap()
         s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
 
         #if defined(__WXMSW__) || defined(__WXPM__)
-            s_bitmap = new wxBitmap("plot_zot_bmp", wxBITMAP_TYPE_RESOURCE);
+            s_bitmap = new wxBitmap(_T("plot_zot_bmp"), wxBITMAP_TYPE_RESOURCE);
         #else
             s_bitmap = new wxBitmap( plot_zot_xpm );
         #endif
@@ -1128,7 +1128,7 @@ static wxBitmap *GetUpBitmap()
         s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
 
         #if defined(__WXMSW__) || defined(__WXPM__)
-            s_bitmap = new wxBitmap("plot_up_bmp", wxBITMAP_TYPE_RESOURCE);
+            s_bitmap = new wxBitmap(_T("plot_up_bmp"), wxBITMAP_TYPE_RESOURCE);
         #else
             s_bitmap = new wxBitmap( plot_up_xpm );
         #endif
@@ -1147,7 +1147,7 @@ static wxBitmap *GetDownBitmap()
         s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
 
         #if defined(__WXMSW__) || defined(__WXPM__)
-            s_bitmap = new wxBitmap("plot_dwn_bmp", wxBITMAP_TYPE_RESOURCE);
+            s_bitmap = new wxBitmap(_T("plot_dwn_bmp"), wxBITMAP_TYPE_RESOURCE);
         #else
             s_bitmap = new wxBitmap( plot_dwn_xpm );
         #endif

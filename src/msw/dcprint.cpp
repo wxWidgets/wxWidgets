@@ -229,7 +229,6 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
     deviceName.clear();
 
     LPDEVNAMES  lpDevNames;
-    LPTSTR      lpszDriverName;
     LPTSTR      lpszDeviceName;
     LPTSTR      lpszPortName;
 
@@ -263,7 +262,6 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
     if (pd.hDevNames)
     {
         lpDevNames = (LPDEVNAMES)GlobalLock(pd.hDevNames);
-        lpszDriverName = (LPTSTR)lpDevNames + lpDevNames->wDriverOffset;
         lpszDeviceName = (LPTSTR)lpDevNames + lpDevNames->wDeviceOffset;
         lpszPortName   = (LPTSTR)lpDevNames + lpDevNames->wOutputOffset;
 

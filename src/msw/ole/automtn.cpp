@@ -949,7 +949,6 @@ BOOL TmFromOleDate(DATE dtSrc, struct tm& tmDest)
 	if (dtSrc > MAX_DATE || dtSrc < MIN_DATE) // about year 100 to about 9999
 		return FALSE;
 
-	long nDays;             // Number of days since Dec. 30, 1899
 	long nDaysAbsolute;     // Number of days since 1/1/0
 	long nSecsInDay;        // Time in seconds since midnight
 	long nMinutesInDay;     // Minutes in day
@@ -963,9 +962,6 @@ BOOL TmFromOleDate(DATE dtSrc, struct tm& tmDest)
 	BOOL bLeap4 = TRUE;     // TRUE if 4 year block includes leap year
 
 	double dblDate = dtSrc; // tempory serial date
-
-	// If a valid date, then this conversion should not overflow
-	nDays = (long)dblDate;
 
 	// Round to the second
 	dblDate += ((dtSrc > 0.0) ? HALF_SECOND : -HALF_SECOND);

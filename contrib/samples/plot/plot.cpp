@@ -103,15 +103,15 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame( (wxFrame *)NULL, -1, "wxPlotWindow sample",
+       : wxFrame( (wxFrame *)NULL, -1, _T("wxPlotWindow sample"),
                   wxPoint(20,20), wxSize(470,500) )
 {
     wxMenu *file_menu = new wxMenu();
-    file_menu->Append( ID_ABOUT, "&About..");
-    file_menu->Append( ID_QUIT, "E&xit\tAlt-X");
+    file_menu->Append( ID_ABOUT, _T("&About.."));
+    file_menu->Append( ID_QUIT, _T("E&xit\tAlt-X"));
 
     wxMenuBar *menu_bar = new wxMenuBar();
-    menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(file_menu, _T("&File"));
 
     SetMenuBar( menu_bar );
 
@@ -132,7 +132,7 @@ MyFrame::MyFrame()
     oo->Add( 1000, 2000 );
     m_plot->Add( oo );
   
-    m_log = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
+    m_log = new wxTextCtrl( this, -1, _T("This is the log window.\n"), wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
     delete old_log;
     
@@ -152,23 +152,23 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-  (void)wxMessageBox( "wxPlotWindow Demo\n"
-                      "Robert Roebling (c) 1999,2000",
-                      "About wxPlotWindow Demo", wxICON_INFORMATION | wxOK );
+  (void)wxMessageBox( _T("wxPlotWindow Demo\n"
+                         "Robert Roebling (c) 1999,2000"),
+                      _T("About wxPlotWindow Demo"), wxICON_INFORMATION | wxOK );
 }
 
 void MyFrame::OnPlotClick( wxPlotEvent &event )
 {
     double x = event.GetPosition() * m_plot->GetUnitsPerValue();
     double y = event.GetCurve()->GetY( event.GetPosition() );
-    wxLogMessage( "Clicked on curve at x coordinate: %f, value: %f", x, y );
+    wxLogMessage( _T("Clicked on curve at x coordinate: %f, value: %f"), x, y );
 }
 
 void MyFrame::OnPlotDClick( wxPlotEvent &event )
 {
     double x = event.GetPosition() * m_plot->GetUnitsPerValue();
     double y = event.GetCurve()->GetY( event.GetPosition() );
-    wxLogMessage( "Double clicked on curve at x coordinate: %f, value: %f", x, y );
+    wxLogMessage( _T("Double clicked on curve at x coordinate: %f, value: %f"), x, y );
 }
 
 //-----------------------------------------------------------------------------

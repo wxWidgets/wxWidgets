@@ -4427,8 +4427,6 @@ wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
 // WM_KEYDOWN one
 bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
 {
-    bool ctrlDown = FALSE;
-
     int id;
     if ( isASCII )
     {
@@ -4453,7 +4451,7 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
                     break;
 
                 default:
-                    ctrlDown = TRUE;
+                    //ctrlDown = TRUE;
                     break;
             }
         }
