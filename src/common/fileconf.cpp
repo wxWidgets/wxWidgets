@@ -113,9 +113,12 @@ wxString wxFileConfig::GetLocalDir()
   wxString strDir;
   
   wxGetHomeDir(&strDir);
-
-  if (strDir.Last() != '/' && strDir.Last() != '\\')
-    strDir += "/";
+  
+#ifdef  __UNIX__
+  if (strDir.Last() != '/') strDir << '/';
+#else
+  if (strDir.Last() != '\\') strDir << '\\';
+#endif
 
   return strDir;
 }
@@ -149,7 +152,7 @@ wxString wxFileConfig::GetLocalFileName(const char *szFile)
     if ( strchr(szFile, '.') == NULL )
       str << ".ini";
   #endif
-
+  
   return str;
 }
 

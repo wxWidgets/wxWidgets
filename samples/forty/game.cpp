@@ -288,11 +288,12 @@ void Game::Redraw(wxDC& dc)
 
 		// Initialise the card bitmap to the background colour
 		wxMemoryDC memoryDC;
-		memoryDC.SelectObject(m_bmapCard);
+		memoryDC.SelectObject(*m_bmapCard);
 		memoryDC.SetBrush(FortyApp::BackgroundBrush());
 		memoryDC.DrawRectangle(0, 0, CardWidth, CardHeight);
-		memoryDC.SelectObject(m_bmap);
+		memoryDC.SelectObject(*m_bmap);
 		memoryDC.DrawRectangle(0, 0, CardWidth, CardHeight);
+		memoryDC.SelectObject(wxNullBitmap);
 	}
 }
 
