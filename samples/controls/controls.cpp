@@ -554,6 +554,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
 // --------------- TEST CODE ----------------------
 
+  // layout constraints
+
   panel = new wxPanel(m_notebook);
   panel->SetAutoLayout( true );
 
@@ -576,7 +578,22 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   wxButton *pMyButton2 = new wxButton(panel, -1, "Test Button 2" );
   pMyButton2->SetConstraints( c );
 
-  m_notebook->AddPage(panel, "test layout");
+  m_notebook->AddPage(panel, "wxLayoutConstraint");
+
+  // sizer
+
+  panel = new wxPanel(m_notebook);
+  panel->SetAutoLayout( true );
+
+  wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
+  
+  sizer->Add( new wxButton(panel, -1, "Test Button" ), 3, wxALL, 10 );
+  sizer->Add( 20,20, 1 );
+  sizer->Add( new wxButton(panel, -1, "Test Button 2" ), 3, wxGROW|wxALL, 10 );
+  
+  panel->SetSizer( sizer );
+
+  m_notebook->AddPage(panel, "wxSizer");
 
 // --------------- TEST CODE ----------------------
 
