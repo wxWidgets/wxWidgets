@@ -231,6 +231,9 @@ public:
     
     static long          MacRemoveBordersFromStyle( long style ) ;
     virtual void         MacSuperChangedPosition() ;
+    // the absolute coordinates of this item within the toplevel window may have changed
+    virtual void		 MacUpdateDimensions() {}
+    // the absolute coortinates of this window's root have changed
     virtual void         MacTopLevelWindowChangedPosition() ;
     virtual void         MacSuperShown( bool show ) ;
     virtual void         MacSuperEnabled( bool enable ) ;
