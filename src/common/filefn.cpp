@@ -1415,8 +1415,11 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     bool needsANSI = TRUE;
 
     #if !defined(HAVE_WGETCWD) || wxUSE_UNICODE_MSLU
-        wxCharBuffer c_buffer(sz);
-        char *cbuf = (char*)(const char*)c_buffer;
+        // This is not legal code as the compiler 
+        // is allowed destroy the wxCharBuffer.
+        // wxCharBuffer c_buffer(sz);
+        // char *cbuf = (char*)(const char*)c_buffer;
+        char cbuf[_MAXPATHLEN];
     #endif
 
     #ifdef HAVE_WGETCWD
