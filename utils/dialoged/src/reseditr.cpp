@@ -1552,15 +1552,15 @@ void wxResourceManager::DistributePositions(int command)
         
         item->Move(controlX, controlY);
         
-        int resX = resource->GetWidth();
-        int resY = resource->GetHeight();
+        int resX = controlX;
+        int resY = controlY;
         
         // Also update the associated resource
         // We need to convert to dialog units if this is not a dialog or panel, but
         // the parent resource specifies dialog units.
         if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
         {
-            wxPoint convertedPos = item->GetParent()->ConvertPixelsToDialog(wxPoint(pos.x, pos.y));
+            wxPoint convertedPos = item->GetParent()->ConvertPixelsToDialog(wxPoint(resX, resY));
             resX = convertedPos.x;
             resY = convertedPos.y;
         }

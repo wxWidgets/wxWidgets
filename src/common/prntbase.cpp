@@ -653,6 +653,8 @@ bool wxPrintPreviewBase::PaintPage(wxWindow *canvas, wxDC& dc)
 
 bool wxPrintPreviewBase::RenderPage(int pageNum)
 {
+    wxBusyCursor busy;
+
     int canvasWidth, canvasHeight;
 
     if (!m_previewCanvas)

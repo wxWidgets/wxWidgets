@@ -949,6 +949,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         case EN_ERRSPACE:
         case EN_HSCROLL:
         case EN_VSCROLL:
+            return FALSE;
         default:
             return FALSE;
     }

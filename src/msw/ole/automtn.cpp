@@ -20,17 +20,18 @@
 #pragma hdrstop
 #endif
 
+#include "wx/defs.h"
+
+// Watcom C++ gives a linker error if this is compiled in.
+// With Borland C++, all samples crash if this is compiled in.
+#if !defined(__WATCOMC__) && !(defined(__BORLANDC__) && (__BORLANDC__ < 0x500))
+
 #include "wx/log.h"
+#include "wx/msw/ole/automtn.h"
+#include "wx/msw/private.h"
 
 #include <math.h>
 #include <time.h>
-
-// Watcom C++ gives a linker error if this is compiled in.
-#ifndef __WATCOMC__
-
-#include "wx/msw/ole/automtn.h"
-
-#include "wx/msw/private.h"
 
 #include <wtypes.h>
 #include <unknwn.h>
