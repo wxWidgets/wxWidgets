@@ -166,6 +166,7 @@ lboxcmn.cpp	C
 list.cpp	C	B
 log.cpp	C	B
 longlong.cpp	C	B
+matrix.cpp	C
 memory.cpp	C
 menucmn.cpp	C
 mimecmn.cpp	C	32,B
