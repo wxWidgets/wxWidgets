@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
+#include <time.h>
 
 #ifndef WX_PRECOMP
   #include "wx/defs.h"
@@ -343,6 +344,16 @@ WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base)
 #endif
 
 #ifdef wxNEED_WX_STDIO_H
+WXDLLEXPORT FILE * wxFopen(const wxChar *path, const wxChar *mode)
+{
+  return fopen(wxConvFile.cWX2MB(path), wxConvLibc.cWX2MB(mode));
+}
+
+WXDLLEXPORT FILE * wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream)
+{
+  return freopen(wxConvFile.cWX2MB(path), wxConvLibc.cWX2MB(mode), stream);
+}
+
 int WXDLLEXPORT wxPrintf(const wxChar *fmt, ...)
 {
   va_list argptr;
@@ -464,4 +475,22 @@ int      WXDLLEXPORT wxSystem(const wxChar *psz)
   return system(wxConvLibc.cWX2MB(psz));
 }
 
+#endif
+
+#ifdef wxNEED_WX_TIME_H
+WXDLLEXPORT size_t   wxStrftime(wxChar *s, size_t max, const wxChar *fmt, const struct tm *tm)
+{
+  if (!max) return 0;
+  char *buf = (char *)malloc(max);
+  size_t ret = strftime(buf, max, wxConvLibc.cWX2MB(fmt), tm);
+  if (ret) {
+    wxStrcpy(s, wxConvLibc.cMB2WX(buf));
+    free(buf);
+    return wxStrlen(s);
+  } else {
+    free(buf);
+    *s = 0;
+    return 0;
+  }
+}
 #endif
