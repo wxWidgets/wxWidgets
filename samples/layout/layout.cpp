@@ -529,8 +529,8 @@ MyGridBagSizerFrame::MyGridBagSizerFrame(const wxChar *title, int x, int y )
     m_hideBtn = new wxButton(p, GBS_HIDE_BTN, _T("Hide this item -->"));
     m_gbs->Add(m_hideBtn, POS(12, 3));
 
-    m_hideTxt = new wxTextCtrl(p, -1, _T("pos(12,4), size(250, -1)"),
-                                wxDefaultPosition, wxSize(250,-1));
+    m_hideTxt = new wxTextCtrl(p, -1, _T("pos(12,4), size(150, -1)"),
+                                wxDefaultPosition, wxSize(150,-1));
     m_gbs->Add( m_hideTxt, POS(12,4) );
     
     m_showBtn = new wxButton(p, GBS_SHOW_BTN, _T("<-- Show it again"));
