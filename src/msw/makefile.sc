@@ -83,6 +83,7 @@ COMMONOBJS = \
   $(COMMDIR)\timercmn.obj \
   $(COMMDIR)\utilscmn.obj \
   $(COMMDIR)\validate.obj \
+  $(COMMDIR)\valgen.obj \
   $(COMMDIR)\valtext.obj \
   $(COMMDIR)\date.obj \
   $(COMMDIR)\hash.obj \

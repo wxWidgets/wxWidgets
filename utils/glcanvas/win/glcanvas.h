@@ -18,6 +18,8 @@
 
 #include <wx/scrolwin.h>
 
+#include <windows.h>
+
 #include "gl/gl.h"
 
 class wxGLContext: public wxObject

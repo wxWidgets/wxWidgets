@@ -23,8 +23,6 @@
 #include <wx/frame.h>
 #endif
 
-#include "GL/gl.h"
-
 #include "glcanvas.h"
 
 /*

@@ -124,6 +124,7 @@ COMMONOBJS = \
   $(MSWDIR)\timercmn.obj \
   $(MSWDIR)\utilscmn.obj \
   $(MSWDIR)\validate.obj \
+  $(MSWDIR)\valgen.obj \
   $(MSWDIR)\valtext.obj \
   $(MSWDIR)\variant.obj \
   $(MSWDIR)\date.obj \
@@ -525,6 +526,8 @@ $(MSWDIR)\timercmn.obj:     $(COMMDIR)\timercmn.$(SRCSUFF)
 $(MSWDIR)\utilscmn.obj:     $(COMMDIR)\utilscmn.$(SRCSUFF)
 
 $(MSWDIR)\validate.obj:     $(COMMDIR)\validate.$(SRCSUFF)
+
+$(MSWDIR)\valgen.obj:     $(COMMDIR)\valgen.$(SRCSUFF)
 
 $(MSWDIR)\valtext.obj:     $(COMMDIR)\valtext.$(SRCSUFF)
 

@@ -69,6 +69,7 @@ COMMONOBJS = cmndata.obj \
   timercmn.obj \
   utilscmn.obj \
   validate.obj \
+  valgen.obj \
   valtext.obj \
   date.obj \
   hash.obj \
@@ -597,6 +598,9 @@ utilscmn.obj:     $(COMMDIR)\utilscmn.cpp
 
 validate.obj:     $(COMMDIR)\validate.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\validate.cpp /BINARY validate.obj
+
+valgen.obj:     $(COMMDIR)\valgen.cpp
+  $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\valgen.cpp /BINARY valgen.obj
 
 valtext.obj:     $(COMMDIR)\valtext.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\valtext.cpp /BINARY valtext.obj

@@ -112,6 +112,7 @@ COMMONOBJS = \
   $(COMMDIR)\timercmn.obj \
   $(COMMDIR)\utilscmn.obj \
   $(COMMDIR)\validate.obj \
+  $(COMMDIR)\valgen.obj \
   $(COMMDIR)\valtext.obj \
   $(COMMDIR)\date.obj \
   $(COMMDIR)\hash.obj \
@@ -923,6 +924,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(COMMDIR)/validate.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/valgen.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

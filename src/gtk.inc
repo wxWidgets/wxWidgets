@@ -54,6 +54,7 @@ LIB_CPP_SRC=\
  common/objstrm.cpp \
  common/sckstrm.cpp \
  common/validate.cpp \
+ common/valgen.cpp \
  common/valtext.cpp \
  common/variant.cpp \
  common/socket.cpp \

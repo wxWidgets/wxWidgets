@@ -22,6 +22,10 @@
 typedef void            WXIDISPATCH;
 typedef unsigned short* WXBSTR;
 
+#ifdef GetObject
+#undef GetObject
+#endif
+
 /*
  * wxAutomationObject
  * Wraps up an IDispatch pointer and invocation; does variant conversion.

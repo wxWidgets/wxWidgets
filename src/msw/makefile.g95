@@ -111,6 +111,7 @@ COMMONOBJS = \
   $(COMMDIR)/timercmn.$(OBJSUFF) \
   $(COMMDIR)/utilscmn.$(OBJSUFF) \
   $(COMMDIR)/validate.$(OBJSUFF) \
+  $(COMMDIR)/valgen.$(OBJSUFF) \
   $(COMMDIR)/valtext.$(OBJSUFF) \
   $(COMMDIR)/date.$(OBJSUFF) \
   $(COMMDIR)/wxexpr.$(OBJSUFF) \
