@@ -208,7 +208,9 @@
 /*
  * Use GUI
  */
+#ifndef wxUSE_GUI
 #define wxUSE_GUI 0
+#endif
 /*
  * Don't use GUI (defined to 1 when compiling/using base only)
  */
