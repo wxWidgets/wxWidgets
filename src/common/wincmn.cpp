@@ -305,6 +305,7 @@ bool wxWindowBase::DestroyChildren()
 
         wxASSERT_MSG( child, wxT("children list contains empty nodes") );
 
+        child->Show(FALSE);
         delete child;
 
         wxASSERT_MSG( !GetChildren().Find(child),

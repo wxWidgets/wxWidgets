@@ -1736,6 +1736,8 @@ wxTextCoord wxTextCtrl::GetRowsPerLine(wxTextCoord line) const
 wxTextCoord wxTextCtrl::GetRowCount() const
 {
     wxTextCoord count = GetLineCount();
+    if (count == 0)
+        return 0;
     if ( WrapLines() )
     {
         count = GetFirstRowOfLine(count - 1) +

@@ -66,7 +66,7 @@ enum
 class WXDLLEXPORT wxWindow : public wxWindowNative
 {
 public:
-    // ctors and creatie functions
+    // ctors and create functions
     // ---------------------------
 
     wxWindow() { Init(); }

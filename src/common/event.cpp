@@ -890,9 +890,32 @@ void wxEvtHandler::ProcessPendingEvents()
 bool wxEvtHandler::ProcessEvent(wxEvent& event)
 {
 #if wxUSE_GUI
+
+    // We have to use the actual window or processing events from wxWindowNative
+    // destructor won't work (we don't see the wxWindow class)
+#ifdef __WXDEBUG__
     // check that our flag corresponds to reality
-    wxASSERT_MSG( m_isWindow == IsKindOf(CLASSINFO(wxWindow)),
+    wxClassInfo* info = NULL;
+#ifdef __WXUNIVERSAL__
+#  if defined(__WXMSW__)
+    info = CLASSINFO(wxWindowMSW);
+#  elif defined(__WXGTK__)
+    info = CLASSINFO(wxWindowGTK);
+#  elif defined(__WXMGL__)
+    info = CLASSINFO(wxWindowMGL);
+#  elif defined(__WXMAC__)
+    info = CLASSINFO(wxWindowMac);
+#  elif defined(__WXMOTIF__)
+    info = CLASSINFO(wxWindowMotif);
+#  endif
+#else
+    info = CLASSINFO(wxWindow);
+#endif
+
+    wxASSERT_MSG( m_isWindow == IsKindOf(info),
                   _T("this should [not] be a window but it is [not]") );
+#endif
+
 #endif // wxUSE_GUI
 
     // An event handler can be enabled or disabled

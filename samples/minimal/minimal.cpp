@@ -107,6 +107,13 @@ END_EVENT_TABLE()
 // not wxApp)
 IMPLEMENT_APP(MyApp)
 
+#ifdef __WXUNIVERSAL__
+    #include "wx/univ/theme.h"
+
+    WX_USE_THEME(win32);
+    WX_USE_THEME(gtk);
+#endif // __WXUNIVERSAL__
+
 // ============================================================================
 // implementation
 // ============================================================================
