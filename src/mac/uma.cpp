@@ -23,12 +23,14 @@
 
 static bool	sUMAHasAppearance = false ;
 static long sUMAAppearanceVersion = 0 ;
+static long sUMASystemVersion = 0 ;
 static bool sUMAHasAquaLayout = false ;
 static bool sUMASystemInitialized = false ;
 
 extern int gAGABackgroundColor ;
 bool UMAHasAppearance() { return sUMAHasAppearance ; }
 long UMAGetAppearanceVersion() { return sUMAAppearanceVersion ; }
+long UMAGetSystemVersion() { return sUMASystemVersion ; }
 
 static bool	sUMAHasWindowManager = false ;
 static long sUMAWindowManagerAttr = 0 ;
@@ -71,6 +73,9 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 	InitCursor();
 #endif
 
+    if ( Gestalt(gestaltSystemVersion, &sUMASystemVersion) != noErr)
+    	sUMASystemVersion = 0x0000 ;
+    	
 	long theAppearance ;
 	if ( Gestalt( gestaltAppearanceAttr, &theAppearance ) == noErr )
 	{
