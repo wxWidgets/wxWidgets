@@ -98,6 +98,12 @@ int XmlResApp::OnRun()
         { wxCMD_LINE_NONE }
     };
 
+#if wxUSE_GUI
+    // VS: I need reasonable output to console from wxCmdLineParser
+    wxLog::SetTimestamp(NULL);
+    delete wxLog::SetActiveTarget(new wxLogStderr);
+#endif
+
     wxXmlDocument::AddHandler(new wxXmlIOHandlerBinZ);
 
     wxCmdLineParser parser(cmdLineDesc, argc, argv);
