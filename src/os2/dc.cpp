@@ -659,14 +659,28 @@ void wxDC::DoDrawLine(
 )
 {
     POINTL                          vPoint[2];
+    COLORREF                        vColor = 0x00ffffff;
 
-    vY1 = OS2Y(vY1,0);
-    vY2 = OS2Y(vY2,0);
-
+    //
+    // Might be a memory DC with no Paint rect.
+    //
+    if (!(m_vRclPaint.yTop == 0 &&
+          m_vRclPaint.yBottom == 0 &&
+          m_vRclPaint.xRight == 0 &&
+          m_vRclPaint.xLeft == 0))
+    {
+        vY1 = OS2Y(vY1,0);
+        vY2 = OS2Y(vY2,0);
+    }
     vPoint[0].x = vX1;
     vPoint[0].y = vY1;
     vPoint[1].x = vX2;
     vPoint[1].y = vY2;
+    if (m_pen.Ok())
+    {
+        vColor = m_pen.GetColour().GetPixel();
+    }
+    ::GpiSetColor(m_hPS, vColor);
     ::GpiMove(m_hPS, &vPoint[0]);
     ::GpiLine(m_hPS, &vPoint[1]);
     CalcBoundingBox(vX1, vY1);
@@ -979,7 +993,7 @@ void wxDC::DoDrawRectangle(
     int                             nIsTRANSPARENT = 0;
 
     //
-    // Might be a memory DC with no Paint rect
+    // Might be a memory DC with no Paint rect.
     //
     if (!(m_vRclPaint.yTop == 0 &&
           m_vRclPaint.yBottom == 0 &&
@@ -1056,7 +1070,14 @@ void wxDC::DoDrawRoundedRectangle(
     POINTL                          vPoint[2];
     LONG                            lControl;
 
-    vY = OS2Y(vY,vHeight);
+    //
+    // Might be a memory DC with no Paint rect.
+    //
+    if (!(m_vRclPaint.yTop == 0 &&
+          m_vRclPaint.yBottom == 0 &&
+          m_vRclPaint.xRight == 0 &&
+          m_vRclPaint.xLeft == 0))
+        vY = OS2Y(vY,vHeight);
 
     wxCoord                         vX2 = (vX + vWidth);
     wxCoord                         vY2 = (vY + vHeight);
@@ -1248,6 +1269,7 @@ void wxDC::DoDrawBitmap(
                 // 5) Blit this to the screen PS
                 //
                 HBITMAP                 hMask = (HBITMAP)pMask->GetMaskBitmap();
+                HBITMAP                 hOldMask   = NULLHANDLE;
                 HBITMAP                 hOldBitmap = NULLHANDLE;
                 HBITMAP                 hNewBitmap = NULLHANDLE;
                 unsigned char*          pucBits;     // buffer that will contain the bitmap data
@@ -1274,10 +1296,6 @@ void wxDC::DoDrawBitmap(
 
                 memset(&vHeader, '\0', 16);
                 vHeader.cbFix           = 16;
-                vHeader.cx              = (ULONG)rBmp.GetWidth();
-                vHeader.cy              = (ULONG)rBmp.GetHeight();
-                vHeader.cPlanes         = 1L;
-                vHeader.cBitCount       = 24;
 
                 memset(&vInfo, '\0', 16);
                 vInfo.cbFix           = 16;
@@ -1334,6 +1352,8 @@ void wxDC::DoDrawBitmap(
                     vError = ::WinGetLastError(vHabmain);
                     sError = wxPMErrorToStr(vError);
                 }
+                ::GpiQueryBitmapInfoHeader(hBitmap, &vHeader);
+                vInfo.cBitCount = 24;
                 if ((lScans = ::GpiQueryBitmapBits( hPS
                                                    ,0L
                                                    ,(LONG)rBmp.GetHeight()
@@ -1344,17 +1364,24 @@ void wxDC::DoDrawBitmap(
                     vError = ::WinGetLastError(vHabmain);
                     sError = wxPMErrorToStr(vError);
                 }
-                if ((hOldBitmap = ::GpiSetBitmap(hPS, hMask)) == HBM_ERROR)
+                if ((hOldMask = ::GpiSetBitmap(hPS, hMask)) == HBM_ERROR)
                 {
                     vError = ::WinGetLastError(vHabmain);
                     sError = wxPMErrorToStr(vError);
                 }
+                ::GpiQueryBitmapInfoHeader(hMask, &vHeader);
+                vInfo.cBitCount = 24;
                 if ((lScans = ::GpiQueryBitmapBits( hPS
                                                    ,0L
                                                    ,(LONG)rBmp.GetHeight()
                                                    ,(PBYTE)pucBitsMask
                                                    ,&vInfo
                                                   )) == GPI_ALTERROR)
+                {
+                    vError = ::WinGetLastError(vHabmain);
+                    sError = wxPMErrorToStr(vError);
+                }
+                if (( hMask = ::GpiSetBitmap(hPS, hOldMask)) == HBM_ERROR)
                 {
                     vError = ::WinGetLastError(vHabmain);
                     sError = wxPMErrorToStr(vError);
@@ -1367,12 +1394,20 @@ void wxDC::DoDrawBitmap(
                 pucData     = pucBits;
                 pucDataMask = pucBitsMask;
 
+                //
+                // 16 bit kludge really only kinda works.  The mask gets applied
+                // where needed but the original bitmap bits are dorked sometimes
+                //
+                bool                    bpp16 = (wxDisplayDepth() == 16);
+
                 for (i = 0; i < rBmp.GetHeight(); i++)
                 {
                     for (j = 0; j < rBmp.GetWidth(); j++)
                     {
                         // Byte 1
-                        if (*pucDataMask == 0xFF) // leave bitmap byte alone
+                        if (bpp16 && *pucDataMask == 0xF8) // 16 bit display gobblygook
+                            pucData++;
+                        else if (*pucDataMask == 0xFF) // leave bitmap byte alone
                             pucData++;
                         else
                         {
@@ -1380,7 +1415,9 @@ void wxDC::DoDrawBitmap(
                             pucData++;
                         }
                         // Byte 2
-                        if (*(pucDataMask + 1) == 0xFF) // leave bitmap byte alone
+                        if (bpp16 && *(pucDataMask + 1) == 0xFC) // 16 bit display gobblygook
+                            pucData++;
+                        else if (*(pucDataMask + 1) == 0xFF) // leave bitmap byte alone
                             pucData++;
                         else
                         {
@@ -1389,7 +1426,9 @@ void wxDC::DoDrawBitmap(
                         }
 
                         // Byte 3
-                        if (*(pucDataMask + 2) == 0xFF) // leave bitmap byte alone
+                        if (bpp16 && *(pucDataMask + 2) == 0xF8) // 16 bit display gobblygook
+                            pucData++;
+                        else if (*(pucDataMask + 2) == 0xFF) // leave bitmap byte alone
                             pucData++;
                         else
                         {
@@ -1407,6 +1446,10 @@ void wxDC::DoDrawBitmap(
                 //
                 // Create a new bitmap
                 //
+                vHeader.cx              = (ULONG)rBmp.GetWidth();
+                vHeader.cy              = (ULONG)rBmp.GetHeight();
+                vHeader.cPlanes         = 1L;
+                vHeader.cBitCount       = 24;
                 if ((hNewBitmap = ::GpiCreateBitmap( hPS
                                                     ,&vHeader
                                                     ,CBM_INIT
@@ -1439,6 +1482,7 @@ void wxDC::DoDrawBitmap(
                 free(pucBits);
                 free(pucBitsMask);
                 ::GpiSetBitmap(hPS, NULLHANDLE);
+                ::GpiDeleteBitmap(hNewBitmap);
                 ::GpiDestroyPS(hPS);
                 ::DevCloseDC(hDC);
             }
@@ -1650,13 +1694,21 @@ void wxDC::DrawAnyText(
                   ,&vTextY
                  );
     vPtlStart.x = vX;
-    vPtlStart.y = OS2Y(vY,vTextY);
+    if (!(m_vRclPaint.yTop == 0 &&
+          m_vRclPaint.yBottom == 0 &&
+          m_vRclPaint.xRight == 0 &&
+          m_vRclPaint.xLeft == 0))
+        vPtlStart.y = OS2Y(vY,vTextY);
+    else
+        vPtlStart.y = vY;
 
-    lHits = ::GpiCharStringAt( m_hPS
-                              ,&vPtlStart
-                              ,rsText.length()
-                              ,(PCH)rsText.c_str()
-                             );
+    PCH                             pzStr = (PCH)rsText.c_str();
+
+    ::GpiMove(m_hPS, &vPtlStart);
+    lHits = ::GpiCharString( m_hPS
+                            ,rsText.length()
+                            ,pzStr
+                           );
     if (lHits != GPI_OK)
     {
         wxLogLastError(wxT("TextOut"));
