@@ -447,6 +447,10 @@ void MyTextCtrl::OnText(wxCommandEvent& event)
     {
         wxLogMessage(_T("Text changed in control '%s'"), data);
     }
+    else
+    {
+        wxLogMessage(_T("Text changed in some control"));
+    }
 }
 
 void MyTextCtrl::OnChar(wxKeyEvent& event)
