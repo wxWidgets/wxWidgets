@@ -46,7 +46,7 @@
 
 //extern wxDbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 
-#if wxUSE_NEW_GRID
+#if wxUSE_GRID
 #include "wx/grid.h"
 #include "wx/generic/gridctrl.h"
 #include "wx/dbgrid.h"
@@ -96,7 +96,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_BINARY, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_BINARY (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -104,7 +104,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_BIT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_BIT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -112,7 +112,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_BOOKMARK, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_BOOKMARK (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -120,7 +120,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_CHAR, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_CHAR (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -128,7 +128,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_DATE, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_DATE (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -136,7 +136,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_DEFAULT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_DEFAULT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -144,7 +144,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_DOUBLE, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_DOUBLE (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -152,7 +152,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_FLOAT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_FLOAT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -160,7 +160,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_GUID, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_GUID (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -168,7 +168,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_DAY (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -176,7 +176,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_HOUR, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_DAY_TO_HOUR (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -184,7 +184,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_MINUTE, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_DAY_TO_MINUTE (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -192,7 +192,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_SECOND, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_DAY_TO_SECOND (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -200,7 +200,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_HOUR (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -208,7 +208,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_MINUTE, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_HOUR_TO_MINUTE (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -216,7 +216,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_SECOND, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_HOUR_TO_SECOND (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -224,7 +224,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_MINUTE (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -232,7 +232,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE_TO_SECOND, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_MINUTE_TO_SECOND (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -240,7 +240,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_MONTH, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_MONTH (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -248,7 +248,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_SECOND, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_SECOND (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -256,7 +256,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_YEAR (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -264,7 +264,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR_TO_MONTH, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_INTERVAL_YEAR_TO_MONTH (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -272,7 +272,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_LONG, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_LONG (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -280,7 +280,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_NUMERIC, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_NUMERIC (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -288,7 +288,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_SBIGINT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_SBIGINT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -296,7 +296,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_SHORT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_SHORT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -304,7 +304,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_SLONG, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_SLONG (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -312,7 +312,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_SSHORT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_SSHORT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -320,7 +320,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_STINYINT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_STINYINT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -328,7 +328,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_TIME, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_TIME (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -336,7 +336,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_TIMESTAMP, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_TIMESTAMP (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -344,7 +344,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_TINYINT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_TINYINT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -352,7 +352,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_TYPE_DATE, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_TYPE_DATE (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -360,7 +360,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_TYPE_TIME, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_TYPE_TIME (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -368,7 +368,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_TYPE_TIMESTAMP, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_TYPE_TIMESTAMP (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -376,7 +376,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_UBIGINT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_UBIGINT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -384,7 +384,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_ULONG, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_ULONG (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -392,7 +392,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_USHORT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_USHORT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -400,7 +400,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_UTINYINT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_UTINYINT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -408,7 +408,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_VARBOOKMARK, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_VARBOOKMARK (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -418,7 +418,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_DATE, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_DATE (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -426,7 +426,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_INTERVAL, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_INTERVAL (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -434,7 +434,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_TIME, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_TIME (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -442,7 +442,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_TIMESTAMP, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_TIMESTAMP (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -450,7 +450,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_LONGVARCHAR, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_LONGVARCHAR (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -458,7 +458,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_BINARY, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_BINARY (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -466,7 +466,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_VARBINARY, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_VARBINARY (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -474,7 +474,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_LONGVARBINARY, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_LOGVARBINARY (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -482,7 +482,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_BIGINT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_BIGINT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -490,7 +490,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_TINYINT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_TINYINT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -498,7 +498,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_BIT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_BIT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -506,7 +506,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_GUID, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_GUID (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -515,7 +515,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_CHAR, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_CHAR (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -523,7 +523,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_INTEGER, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_INTEGER (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -531,7 +531,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_SMALLINT, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_SAMLLINT (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -539,7 +539,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_REAL, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_REAL (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -547,7 +547,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_DOUBLE, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_DOUBLE (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -555,7 +555,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_NUMERIC, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_NUMERIC (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -563,7 +563,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_DATE, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_DATE (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -571,7 +571,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_TIME, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_TIME (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -579,7 +579,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_TIMESTAMP, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_TIMESTAMP (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -587,7 +587,7 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_VARCHAR, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_VARCHAR (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -597,12 +597,12 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
     if (DataTypeSupported(pDb,SQL_C_TCHAR, &nativeDataTypeName))
     {
         nativeDataTypeName = wxT("SQL_C_TCHAR (") + nativeDataTypeName;
-        nativeDataTypeName += wxT(")");
+        nativeDataTypeName += wxT(")\n");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 
-    wxLogMessage(wxT("\n"));
+    wxLogMessage(wxT("Done\n"));
 }  // CheckSupportForAllDataTypes()
 
 
@@ -622,7 +622,7 @@ bool DatabaseDemoApp::OnInit()
     file_menu->Append(FILE_CREATE_ID, wxT("&Create CONTACT table"));
     file_menu->Append(FILE_RECREATE_TABLE, wxT("&Recreate CONTACT table"));
     file_menu->Append(FILE_RECREATE_INDEXES, wxT("&Recreate CONTACT indexes"));
-#if wxUSE_NEW_GRID
+#if wxUSE_GRID
     file_menu->Append(FILE_DBGRID_TABLE,  wxT("&Open DB Grid example"));
 #endif
     file_menu->Append(FILE_EXIT, wxT("E&xit"));
@@ -820,7 +820,7 @@ BEGIN_EVENT_TABLE(DatabaseDemoFrame, wxFrame)
     EVT_MENU(FILE_CREATE_ID, DatabaseDemoFrame::OnCreate)
     EVT_MENU(FILE_RECREATE_TABLE, DatabaseDemoFrame::OnRecreateTable)
     EVT_MENU(FILE_RECREATE_INDEXES, DatabaseDemoFrame::OnRecreateIndexes)
-#if wxUSE_NEW_GRID
+#if wxUSE_GRID
     EVT_MENU(FILE_DBGRID_TABLE, DatabaseDemoFrame::OnDbGridTable)
 #endif
     EVT_MENU(FILE_EXIT, DatabaseDemoFrame::OnExit)
@@ -881,7 +881,7 @@ void DatabaseDemoFrame::OnRecreateIndexes(wxCommandEvent& WXUNUSED(event))
 }  // DatabaseDemoFrame::OnRecreateIndexes()
 
 
-#if wxUSE_NEW_GRID
+#if wxUSE_GRID
 void DatabaseDemoFrame::OnDbGridTable(wxCommandEvent& WXUNUSED(event))
 {
     DbGridFrame *frame = new DbGridFrame(this);
@@ -2788,7 +2788,8 @@ void DisplayDbDiagnostics(wxDb *pDb)
     wxString s, t;
     bool comma = FALSE;
 
-    s = langDBINF_DB_NAME;
+    s =  wxT("Diagnostics Output\n");
+    s += langDBINF_DB_NAME;
     s += pDb->dbInf.dbmsName;
     s += wxT("\n");
 
@@ -3117,11 +3118,12 @@ void DisplayDbDiagnostics(wxDb *pDb)
         s += wxT("\n");
     }
 
+    s += wxT("End of Diagnostics\n");
     wxLogMessage(s);
 
 }  // DisplayDbDiagnostics()
 
-#if wxUSE_NEW_GRID
+#if wxUSE_GRID
 
 BEGIN_EVENT_TABLE(DbGridFrame, wxFrame)
  //   EVT_CLOSE(DbGridFrame::OnCloseWindow)
@@ -3136,7 +3138,7 @@ DbGridFrame::DbGridFrame(wxWindow *parent)
 }
 
 
-void DbGridFrame::OnCloseWindow(wxCloseEvent& event)
+void DbGridFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     this->Destroy();
 }
@@ -3154,7 +3156,7 @@ bool DbGridFrame::Initialize()
                              new wxGridCellEnumRenderer,
                              new wxGridCellEnumEditor);
                              
-    wxString NativeLangChoice( wxString::Format("%s:%s,%s,%s,%s,%s",wxGRID_VALUE_CHOICEINT, 
+    wxString NativeLangChoice( wxString::Format(wxT("%s:%s,%s,%s,%s,%s"),wxGRID_VALUE_CHOICEINT, 
                             wxT("English"),
                             wxT("French"),
                             wxT("German"),
@@ -3238,7 +3240,7 @@ bool DbGridFrame::Initialize()
     return TRUE;
 }  // DbGridFrame::Initialize()
 
-#endif // #if wxUSE_NEW_GRID
+#endif // #if wxUSE_GRID
 
 /*
     TEST CODE FOR TESTING THE wxDbCreateDataSource() FUNCTION
