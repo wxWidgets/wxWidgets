@@ -455,6 +455,64 @@ $D\dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\w
 $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /c /Tp dummydll.cpp
 <<
 
+# Compile certain files with no optimization (some files cause a
+# compiler crash for buggy versions of VC++, e.g. 4.0)
+noopt:
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\datetime.obj /c /Tp $(COMMDIR)\datetime.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\encconv.obj /c /Tp $(COMMDIR)\encconv.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\fileconf.obj /c /Tp $(COMMDIR)\fileconf.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\resource.obj /c /Tp $(COMMDIR)\resource.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\textfile.obj /c /Tp $(COMMDIR)\textfile.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\choicdgg.obj /c /Tp $(GENDIR)\choicdgg.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\grid.obj /c /Tp $(GENDIR)\grid.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\logg.obj /c /Tp $(GENDIR)\logg.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(GENDIR)\$D\proplist.obj /c /Tp $(GENDIR)\proplist.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\clipbrd.obj /c /Tp $(MSWDIR)\clipbrd.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\control.obj /c /Tp $(MSWDIR)\control.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\listbox.obj /c /Tp $(MSWDIR)\listbox.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\mdi.obj /c /Tp $(MSWDIR)\mdi.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\menu.obj /c /Tp $(MSWDIR)\menu.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\notebook.obj /c /Tp $(MSWDIR)\notebook.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\tbar95.obj /c /Tp $(MSWDIR)\tbar95.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\treectrl.obj /c /Tp $(MSWDIR)\treectrl.cpp
+<<
+	cl @<<
+$(CPPFLAGS2) /Od /Fo$(HTMLDIR)\$D\helpfrm.obj /c /Tp $(HTMLDIR)\helpfrm.cpp
+<<
+
 # If taking wxWindows from CVS, setup.h doesn't exist yet.
 # Actually the 'if not exist setup.h' test doesn't work
 # (copies the file anyway)

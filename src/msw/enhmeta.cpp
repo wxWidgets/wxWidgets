@@ -225,6 +225,8 @@ wxEnhMetaFileDC::~wxEnhMetaFileDC()
 // wxEnhMetaFileDataObject
 // ----------------------------------------------------------------------------
 
+#if wxUSE_DRAG_AND_DROP
+
 wxDataFormat
 wxEnhMetaFileDataObject::GetPreferredFormat(Direction WXUNUSED(dir)) const
 {
@@ -376,5 +378,6 @@ bool wxEnhMetaFileDataObject::SetData(const wxDataFormat& format,
 
     return TRUE;
 }
+#endif // wxUSE_DRAG_AND_DROP
 
 #endif // wxUSE_ENH_METAFILE

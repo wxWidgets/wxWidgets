@@ -32,6 +32,14 @@ class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;
 class WXDLLEXPORT wxToolBar;
 
+// Styles for ShowFullScreen
+#define wxFULLSCREEN_NOMENUBAR      0x01
+#define wxFULLSCREEN_NOTOOLBAR      0x02
+#define wxFULLSCREEN_NOSTATUSBAR    0x04
+#define wxFULLSCREEN_NOBORDER       0x08
+#define wxFULLSCREEN_NOCAPTION      0x10
+#define wxFULLSCREEN_ALL            (wxFULLSCREEN_NOMENUBAR | wxFULLSCREEN_NOTOOLBAR | wxFULLSCREEN_NOSTATUSBAR | wxFULLSCREEN_NOBORDER | wxFULLSCREEN_NOCAPTION)
+
 // ----------------------------------------------------------------------------
 // wxFrame is a top-level window with optional menubar, statusbar and toolbar
 //

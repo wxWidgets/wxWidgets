@@ -27,8 +27,9 @@
         #if !wxUSE_WIN_METAFILES_ALWAYS
             typedef wxEnhMetaFile wxMetafile;
             typedef wxEnhMetaFileDC wxMetafileDC;
+#if wxUSE_DRAG_AND_DROP
             typedef wxEnhMetaFileDataObject wxMetafileDataObject;
-
+#endif
             // this flag will be set if wxMetafile class is wxEnhMetaFile
             #define wxMETAFILE_IS_ENH
         #endif // wxUSE_WIN_METAFILES_ALWAYS

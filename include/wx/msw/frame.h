@@ -52,6 +52,8 @@ public:
     virtual void Restore();
     virtual void SetMenuBar(wxMenuBar *menubar);
     virtual void SetIcon(const wxIcon& icon);
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
+    virtual bool IsFullScreen() const { return m_fsIsShowing; };
 
     // implementation only from now on
     // -------------------------------
@@ -146,6 +148,17 @@ protected:
 #if wxUSE_STATUSBAR
     static bool           m_useNativeStatusBar;
 #endif // wxUSE_STATUSBAR
+
+    // Data to save/restore when calling ShowFullScreen
+    long                  m_fsStyle; // Passed to ShowFullScreen
+    wxRect                m_fsOldSize;
+    long                  m_fsOldWindowStyle;
+    int                   m_fsStatusBarFields; // 0 for no status bar
+    int                   m_fsStatusBarHeight;
+    int                   m_fsToolBarHeight;
+//    WXHMENU               m_fsMenu;
+    bool                  m_fsIsMaximized;
+    bool                  m_fsIsShowing;
 
 private:
 #if wxUSE_TOOLTIPS

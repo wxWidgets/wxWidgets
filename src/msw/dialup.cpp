@@ -56,6 +56,14 @@
 
 #include <wininet.h>
 
+// Not in VC++ 5
+#ifndef INTERNET_CONNECTION_LAN
+#define INTERNET_CONNECTION_LAN 2
+#endif
+#ifndef INTERNET_CONNECTION_PROXY
+#define INTERNET_CONNECTION_PROXY 4
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------

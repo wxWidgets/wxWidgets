@@ -951,7 +951,7 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
     {BGR_BUTTONSHADOW,  COLOR_BTNSHADOW},   // dark grey
     {BGR_BUTTONFACE,    COLOR_BTNFACE},     // bright grey
     {BGR_BUTTONHILIGHT, COLOR_BTNHIGHLIGHT},// white
-    {BGR_BACKGROUNDSEL, COLOR_HIGHLIGHT},   // blue
+/*    {BGR_BACKGROUNDSEL, COLOR_HIGHLIGHT},   // blue */
     {BGR_BACKGROUND,    COLOR_WINDOW}       // magenta
   };
 

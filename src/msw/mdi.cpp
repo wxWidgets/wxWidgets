@@ -724,7 +724,7 @@ void wxMDIChildFrame::DoSetClientSize(int width, int height)
   int actual_width = rect2.right - rect2.left - rect.right + width;
   int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
 
-  if (GetStatusBar())
+  if (GetStatusBar() && GetStatusBar()->IsShown())
   {
     int sx, sy;
     GetStatusBar()->GetSize(&sx, &sy);
@@ -1033,7 +1033,7 @@ bool wxMDIChildFrame::HandleWindowPosChanging(void *pos)
             lpPos->cy = rectClient.bottom - rectClient.top;
         }
         wxMDIParentFrame* pFrameWnd = (wxMDIParentFrame *)GetParent();
-        if (pFrameWnd && pFrameWnd->GetToolBar())
+        if (pFrameWnd && pFrameWnd->GetToolBar() && pFrameWnd->GetToolBar()->IsShown())
         {
             pFrameWnd->GetToolBar()->Refresh();
         }

@@ -98,6 +98,16 @@ void wxFrame::Init()
 #if wxUSE_TOOLTIPS
     m_hwndToolTip = 0;
 #endif
+
+    // Data to save/restore when calling ShowFullScreen
+    m_fsStyle = 0;
+    m_fsOldWindowStyle = 0;
+    m_fsStatusBarFields = 0;
+    m_fsStatusBarHeight = 0;
+    m_fsToolBarHeight = 0;
+//    m_fsMenu = 0;
+    m_fsIsMaximized = FALSE;
+    m_fsIsShowing = FALSE;
 }
 
 bool wxFrame::Create(wxWindow *parent,
@@ -183,7 +193,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
   ::GetClientRect(GetHwnd(), &rect);
 
 #if wxUSE_STATUSBAR
-  if ( GetStatusBar() )
+  if ( GetStatusBar() && GetStatusBar()->IsShown() )
   {
     int statusX, statusY;
     GetStatusBar()->GetClientSize(&statusX, &statusY);
@@ -220,7 +230,7 @@ void wxFrame::DoSetClientSize(int width, int height)
   int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
 
 #if wxUSE_STATUSBAR
-  if ( GetStatusBar() )
+  if ( GetStatusBar() && GetStatusBar()->IsShown())
   {
     int statusX, statusY;
     GetStatusBar()->GetClientSize(&statusX, &statusY);
@@ -499,6 +509,123 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     wxWindow::OnSysColourChanged(event);
 }
 
+// Pass TRUE to show full screen, FALSE to restore.
+bool wxFrame::ShowFullScreen(bool show, long style)
+{
+    if (show)
+    {
+        if (IsFullScreen())
+            return FALSE;
+
+        m_fsIsShowing = TRUE;
+        m_fsStyle = style;
+
+	     wxToolBar *theToolBar = GetToolBar();
+	     wxStatusBar *theStatusBar = GetStatusBar();
+
+        int dummyWidth;
+
+        if (theToolBar)
+            theToolBar->GetSize(&dummyWidth, &m_fsToolBarHeight);
+        if (theStatusBar)
+            theStatusBar->GetSize(&dummyWidth, &m_fsStatusBarHeight);
+
+        // zap the toolbar, menubar, and statusbar
+
+        if ((style & wxFULLSCREEN_NOTOOLBAR) && theToolBar)
+        {
+            theToolBar->SetSize(-1,0);
+            theToolBar->Show(FALSE);
+        }
+
+        if (style & wxFULLSCREEN_NOMENUBAR)
+            SetMenu((HWND)GetHWND(), (HMENU) NULL);
+
+        // Save the number of fields in the statusbar
+        if ((style & wxFULLSCREEN_NOSTATUSBAR) && theStatusBar)
+        {
+            m_fsStatusBarFields = theStatusBar->GetFieldsCount();
+            SetStatusBar((wxStatusBar*) NULL);
+	         delete theStatusBar;
+        }
+        else
+            m_fsStatusBarFields = 0;
+
+        // zap the frame borders
+
+        // save the 'normal' window style
+        m_fsOldWindowStyle = GetWindowLong((HWND)GetHWND(), GWL_STYLE);
+
+	    // save the old position, width & height, maximize state
+        m_fsOldSize = GetRect();
+	     m_fsIsMaximized = IsMaximized();
+
+	    // decide which window style flags to turn off
+        LONG newStyle = m_fsOldWindowStyle;
+        LONG offFlags = 0;
+
+        if (style & wxFULLSCREEN_NOBORDER)
+            offFlags |= WS_BORDER;
+        if (style & wxFULLSCREEN_NOCAPTION)
+            offFlags |= (WS_CAPTION | WS_SYSMENU);
+
+        newStyle &= (~offFlags);
+
+        // change our window style to be compatible with full-screen mode
+        SetWindowLong((HWND)GetHWND(), GWL_STYLE, newStyle);
+
+        // resize to the size of the desktop
+        int width, height;
+
+        RECT rect;
+        ::GetWindowRect(GetDesktopWindow(), &rect);
+        width = rect.right - rect.left;
+        height = rect.bottom - rect.top;
+
+        SetSize(width, height);
+
+        // now flush the window style cache and actually go full-screen
+        SetWindowPos((HWND)GetHWND(), HWND_TOP, 0, 0, width, height, SWP_FRAMECHANGED);
+
+        wxSizeEvent event(wxSize(width, height), GetId());
+        GetEventHandler()->ProcessEvent(event);
+
+        return TRUE;
+    }
+    else
+    {
+        if (!IsFullScreen())
+            return FALSE;
+
+        m_fsIsShowing = FALSE;
+
+        wxToolBar *theToolBar = GetToolBar();
+
+        // restore the toolbar, menubar, and statusbar
+        if (theToolBar && (m_fsStyle & wxFULLSCREEN_NOTOOLBAR))
+        {
+            theToolBar->SetSize(-1, m_fsToolBarHeight);
+            theToolBar->Show(TRUE);
+        }
+
+        if ((m_fsStyle & wxFULLSCREEN_NOSTATUSBAR) && (m_fsStatusBarFields > 0))
+        {
+            CreateStatusBar(m_fsStatusBarFields);
+            PositionStatusBar();
+        }
+
+        if ((m_fsStyle & wxFULLSCREEN_NOMENUBAR) && (m_hMenu != 0))
+            SetMenu((HWND)GetHWND(), (HMENU)m_hMenu);
+
+        Maximize(m_fsIsMaximized);
+        SetWindowLong((HWND)GetHWND(),GWL_STYLE, m_fsOldWindowStyle);
+        SetWindowPos((HWND)GetHWND(),HWND_TOP,m_fsOldSize.x, m_fsOldSize.y,
+            m_fsOldSize.width, m_fsOldSize.height, SWP_FRAMECHANGED);
+
+        return TRUE;
+    }
+}
+
 /*
  * Frame window
  *
@@ -643,7 +770,7 @@ void wxFrame::PositionToolBar()
     }
 #endif // wxUSE_STATUSBAR
 
-    if ( GetToolBar() )
+    if ( GetToolBar() && GetToolBar()->IsShown() )
     {
         int tw, th;
         GetToolBar()->GetSize(&tw, &th);
