@@ -25,7 +25,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxRadioBoxNameStr;
 // ----------------------------------------------------------------------------
 // wxRadioBoxBase is not a normal base class, but rather a mix-in because the
 // real wxRadioBox derives from different classes on different platforms: for
-// example, it is a wxStaticBox in wxUniv but not in wxMSW
+// example, it is a wxStaticBox in wxUniv and wxMSW but not in other ports
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxRadioBoxBase
