@@ -106,6 +106,18 @@ edited and reloaded, all from within the demo.  You can switch back
 and forth between the default and your edited version, and any errors
 ocurring upon the reload are reported on the Demo tab.
 
+Added a menu item in the demo that will open a PyShell window that has
+the app and demo frame preloaded in the namespace.  This is another
+good way to explore and play with the objects in the currently running
+sample.  For example, load the Button sample and then do the following
+in the PyShell::
+
+	>>> b = frame.demoPage.GetChildren()[0]
+	>>> for x in range(0, 500, 10):
+	...     b.Move((x, 50))
+	...     app.Yield(True)
+	...     wx.MilliSleep(10)
+
 
 
 

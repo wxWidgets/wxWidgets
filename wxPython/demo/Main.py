@@ -297,7 +297,8 @@ try:
 
         def ShowPosition(self, pos):
             line = self.LineFromPosition(pos)
-            self.EnsureVisible(line)
+            #self.EnsureVisible(line)
+            self.GotoLine(line)
 
         def GetLastPosition(self):
             return self.GetLength()
@@ -355,9 +356,12 @@ try:
             # White space
             self.SetViewWhiteSpace(False)   # Don't view white space
     
-            # EOL
-            #self.SetEOLMode(wx.stc.STC_EOL_CRLF)  # Just leave it at the default (autosense)
-            self.SetViewEOL(False)    
+            # EOL: Since we are loading/saving ourselves, and the
+            # strings will always have \n's in them, set the STC to
+            # edit them that way.            
+            self.SetEOLMode(wx.stc.STC_EOL_LF)
+            self.SetViewEOL(False)
+            
             # No right-edge mode indicator
             self.SetEdgeMode(stc.STC_EDGE_NONE)
     
@@ -506,6 +510,7 @@ class DemoCodePanel(wx.Panel):
 
         self.box = wx.BoxSizer(wx.VERTICAL)
         self.box.Add(self.controlBox, 0, wx.EXPAND)
+        self.box.Add(wx.StaticLine(self), 0, wx.EXPAND)
         self.box.Add(self.editor, 1, wx.EXPAND)
         
         self.box.Fit(self)
@@ -610,7 +615,7 @@ class DemoCodePanel(wx.Panel):
                 wx.LogMessage("Created directory for modified demos: %s" % GetModifiedDirectory())
             
         # Save
-        f = open(modifiedFilename, "w")
+        f = open(modifiedFilename, "wt")
         source = self.editor.GetText()
         try:
             f.write(source)
@@ -712,7 +717,7 @@ class DemoModules:
 
     def LoadFromFile(self, modID, filename):
         self.modules[modID][2] = filename
-        file = open(filename, "r")
+        file = open(filename, "rt")
         self.LoadFromSource(modID, file.read())
         file.close()
 
@@ -789,7 +794,7 @@ class DemoModules:
         filename = self.modules[modID][2]
 
         try:        
-            file = open(filename, "w")
+            file = open(filename, "wt")
             file.write(source)
         finally:
             file.close()
@@ -980,6 +985,7 @@ class wxPythonDemo(wx.Frame):
         self.demoPage = None
         self.codePage = None
         self.useModified = False
+        self.shell = None
 
         icon = images.getMondrianIcon()
         self.SetIcon(icon)
@@ -1063,15 +1069,18 @@ class wxPythonDemo(wx.Frame):
        # 
 
         # Make a Help menu
-        helpID = wx.NewId()
-        findID = wx.NewId()
-        findnextID = wx.NewId()
         menu = wx.Menu()
         findItem = menu.Append(-1, '&Find\tCtrl-F', 'Find in the Demo Code')
         findnextItem = menu.Append(-1, 'Find &Next\tF3', 'Find Next')
         menu.AppendSeparator()
+
+        shellItem = menu.Append(-1, 'Open Py&Shell Window\tF5',
+                                'An interactive interpreter window with the demo app and frame objects in the namesapce')
+        menu.AppendSeparator()
         helpItem = menu.Append(-1, '&About\tCtrl-H', 'wxPython RULES!!!')
         wx.App_SetMacAboutMenuItemId(helpItem.GetId())
+
+        self.Bind(wx.EVT_MENU, self.OnOpenShellWindow, shellItem)
         self.Bind(wx.EVT_MENU, self.OnHelpAbout, helpItem)
         self.Bind(wx.EVT_MENU, self.OnHelpFind,  findItem)
         self.Bind(wx.EVT_MENU, self.OnFindNext,  findnextItem)
@@ -1271,6 +1280,7 @@ class wxPythonDemo(wx.Frame):
         module = self.demoModules.GetActive()
         self.ShutdownDemoModule()
         overviewText = ""
+        prevSelect = -1
         
         # o If the demo returns a window it is placed in a tab.
         # o Otherwise, a placeholder tab is created, informing the user that the
@@ -1282,7 +1292,9 @@ class wxPythonDemo(wx.Frame):
             if hasattr(module, "overview"):
                 overviewText = module.overview
 
-            # in case runTest is modal, make sure things look right...
+            # in case runTest is modal, make sure things look right
+            # before it starts...            
+            prevSelect = self.UpdateNotebook()
             wx.YieldIfNeeded()
 
             try:
@@ -1294,8 +1306,9 @@ class wxPythonDemo(wx.Frame):
         else:
             # There was a previous error in compiling or exec-ing
             self.demoPage = DemoErrorPanel(self.nb, self.codePage, self.demoModules.GetErrorInfo(), self)
+            
         self.SetOverview(self.demoModules.name + " Overview", overviewText)
-        self.UpdateNotebook()
+        self.UpdateNotebook(prevSelect)
 
     #---------------------------------------------
     def ShutdownDemoModule(self):
@@ -1360,8 +1373,10 @@ class wxPythonDemo(wx.Frame):
         UpdatePage(self.codePage, "Demo Code")
         UpdatePage(self.demoPage, "Demo")
 
-        if select >= 0:
+        if select >= 0 and select < nb.GetPageCount():
             nb.SetSelection(select)
+            
+        return select
             
     #---------------------------------------------
     def SetOverview(self, name, text):
@@ -1441,6 +1456,33 @@ class wxPythonDemo(wx.Frame):
         event.GetDialog().Destroy()
 
 
+    def OnOpenShellWindow(self, evt):
+        if self.shell:
+            # if it already exists then just make sure it's visible
+            s = self.shell
+            if s.IsIconized():
+                s.Iconize(False)
+            s.Raise()
+        else:
+            # Make a PyShell window
+            from wx import py
+            namespace = { 'wx'    : wx,
+                          'app'   : wx.GetApp(),
+                          'frame' : self,
+                          }
+            self.shell = py.shell.ShellFrame(None, locals=namespace)
+            self.shell.SetSize((640,480))
+            self.shell.Show()
+
+            # Hook the close event of the main frame window so that we
+            # close the shell at the same time if it still exists            
+            def CloseShell(evt):
+                if self.shell:
+                    self.shell.Close()
+                evt.Skip()
+            self.Bind(wx.EVT_CLOSE, CloseShell)
+
+        
     #---------------------------------------------
     def OnCloseWindow(self, event):
         self.dying = True
