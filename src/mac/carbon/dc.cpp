@@ -1497,7 +1497,46 @@ void wxDC::MacInstallPen() const
 	}
 	else
 	{
-		::PenPat(GetQDGlobalsBlack(&blackColor));
+	    Pattern pat = *GetQDGlobalsBlack(&blackColor) ;
+	    switch( penStyle )
+	    {
+	        case wxDOT :
+                for ( int i = 0 ; i < 8 ; ++i )
+                {
+                    pat.pat[i] = 0xCC ;
+                }
+	            break ;
+	        case wxLONG_DASH :
+                for ( int i = 0 ; i < 8 ; ++i )
+                {
+                    pat.pat[i] = 0xFE ;
+                }
+	            break ;
+	        case wxSHORT_DASH :
+                for ( int i = 0 ; i < 8 ; ++i )
+                {
+                    pat.pat[i] = 0xEE ;
+                }
+	            break ;
+	        case wxDOT_DASH :
+                for ( int i = 0 ; i < 8 ; ++i )
+                {
+                    pat.pat[i] = 0x6F ;
+                }
+	            break ;
+	        case wxUSER_DASH :
+	            {
+	                wxDash* dash ;
+	                int number = m_pen.GetDashes(&dash) ;
+	                // right now we don't allocate larger pixmaps
+	                for ( int i = 0 ; i < 8 ; ++i )
+	                {
+	                    pat.pat[i] = dash[0] ;
+	                }
+	            }
+	            break ;
+	    }
+		::PenPat(&pat);
 	}
 
 	short mode = patCopy ;
@@ -1506,11 +1545,11 @@ void wxDC::MacInstallPen() const
 	
 	switch( m_logicalFunction )
 	{
-		case wxCOPY:       // src
-			mode = patCopy ;
+		case wxCOPY:       // only foreground color, leave background (thus not patCopy)
+			mode = patOr ;
 			break ;
 		case wxINVERT:     // NOT dst
-			::PenPat(GetQDGlobalsBlack(&blackColor));
+//			::PenPat(GetQDGlobalsBlack(&blackColor));
 			mode = patXor ;
 			break ;
 		case wxXOR:        // src XOR dst
@@ -1605,9 +1644,46 @@ void wxDC::MacInstallBrush() const
 		wxMacGetHatchPattern(brushStyle, &pat);
 		::PenPat(&pat);
 	}
-	else
+	else if ( m_brush.GetStyle() == wxSTIPPLE || m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
 	{
-		::PenPat(GetQDGlobalsBlack(&blackColor));
+	    // for these the text fore (and back for MASK_OPAQUE) colors are used
+	    wxBitmap* bitmap = m_brush.GetStipple() ;
+	    int width = bitmap->GetWidth() ;
+	    int height = bitmap->GetHeight() ;
+	    int depth = bitmap->GetDepth() ;
+	    if ( m_brush.GetStyle() == wxSTIPPLE )
+	    {
+	        GWorldPtr gw = bitmap->GetHBITMAP() ;
+	        if ( width == 8 && height == 8 && depth == 1)
+	        {
+	            Pattern pat ;
+                LockPixels( GetGWorldPixMap( gw ) ) ;
+                BitMap* gwbitmap = (BitMap*) *GetGWorldPixMap( gw ) ; // since the color depth is 1 it is a BitMap
+	            int alignment = gwbitmap->rowBytes & 0x7FFF ;
+                UInt8 *gwbits = (UInt8*) gwbitmap->baseAddr ;
+                for ( int i = 0 ; i < 8 ; ++i )
+                {
+                    pat.pat[i] = gwbits[i*alignment+0] ;
+                }
+                UnlockPixels( GetGWorldPixMap( gw ) ) ;
+	            
+	            ::PenPat( &pat ) ;
+	        }
+	        else
+	        {
+		        ::PenPat(GetQDGlobalsBlack(&blackColor));
+		    }
+	    }
+	    else if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+	    {
+	        ::RGBForeColor( &m_textForegroundColour.GetPixel() );
+	        ::RGBForeColor( &m_textBackgroundColour.GetPixel() );
+		    ::PenPat(GetQDGlobalsBlack(&blackColor));
+	    }
+	}
+    else
+    {
+	    ::PenPat(GetQDGlobalsBlack(&blackColor));
 	}
 
 	
