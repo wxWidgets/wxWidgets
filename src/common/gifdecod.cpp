@@ -282,10 +282,14 @@ int wxGIFDecoder::getcode(int bits, int ab_fin)
                 code = ab_fin;
                 break;
             }
+
+            /* prefetch data */
+            m_f->Read((void *) m_buffer, m_restbyte);
+            m_bufp = m_buffer;
         }
 
         /* read next byte and isolate the bits we need */
-        m_lastbyte = (unsigned char)m_f->GetC();
+        m_lastbyte = (unsigned char) (*m_bufp++);
         mask       = (1 << (bits - m_restbits)) - 1;
         code       = code + ((m_lastbyte & mask) << m_restbits);
         m_restbyte--;
@@ -335,7 +339,7 @@ int wxGIFDecoder::dgif(IMAGEN *img, int interl, int bits)
     pass     = 1;
     pos = x = y = 0;
 
-    /* reset static globals */
+    /* reset decoder vars */
     m_restbits = 0;
     m_restbyte = 0;
     m_lastbyte = 0;
