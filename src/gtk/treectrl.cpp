@@ -6,7 +6,7 @@
 // Created:     07/05/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Denis Pershin
-// Licence:     wxWindows licence
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -25,74 +25,67 @@
 #endif
 
 #include "wx/gtk/treectrl.h"
+#include <wx/textctrl.h>
 #include "wx/log.h"
 
 #include <gtk/gtk.h>
 
-static void wxConvertToGtkTreeItem(wxTreeCtrl *owner, wxTreeItem& info, GtkTreeItem **gtkItem);
-static void wxConvertFromGtkTreeItem(wxTreeItem& info, GtkTreeItem *gtkItem);
+//static void wxConvertToGtkTreeItem(wxTreeCtrl *owner, wxTreeItem& info, GtkTreeItem **gtkItem);
+//static void wxConvertFromGtkTreeItem(wxTreeItem& info, GtkTreeItem *gtkItem);
 static void gtk_treectrl_count_callback (GtkWidget *widget, gpointer data);
 // static void gtk_treectrl_next_callback (GtkWidget *widget, gpointer data);
 // static void gtk_treectrl_next_visible_callback (GtkWidget *widget, gpointer data);
 // static void gtk_treectrl_next_selected_callback (GtkWidget *widget, gpointer data);
 
-static void gtk_treeitem_expand_callback(GtkWidget *WXUNUSED(widget), wxTreeItem *treeitem);
-static void gtk_treeitem_collapse_callback( GtkWidget *WXUNUSED(widget), wxTreeItem *treeitem);
-static void gtk_treeitem_select_callback( GtkWidget *WXUNUSED(widget), wxTreeItem *treeitem);
+static void gtk_treeitem_expand_callback(GtkWidget *widget, wxTreeItemId *treeitem);
+static void gtk_treeitem_collapse_callback(GtkWidget *widget, wxTreeItemId *treeitem);
+static void gtk_treeitem_select_callback(GtkWidget *widget, wxTreeItemId *treeitem);
 
-static void gtk_treeitem_expand_callback(GtkWidget *widget, wxTreeItem *treeitem)
-{
+static void gtk_treeitem_expand_callback(GtkWidget *widget, wxTreeItemId *treeitem) {
   wxTreeCtrl *owner = (wxTreeCtrl *)gtk_object_get_data(GTK_OBJECT(widget), "owner");
   if (owner == NULL)
     return;
 
-  long id = (long)gtk_object_get_data(GTK_OBJECT(widget), "id");
-  owner->SendExpanding(id);
-  owner->SendExpanded(id);
+//  long id = (long)gtk_object_get_data(GTK_OBJECT(widget), "id");
+  owner->SendExpanding(GTK_TREE_ITEM(widget));
+  owner->SendExpanded(GTK_TREE_ITEM(widget));
 };
 
-static void gtk_treeitem_collapse_callback(GtkWidget *widget, wxTreeItem *treeitem)
-{
+static void gtk_treeitem_collapse_callback(GtkWidget *widget, wxTreeItemId *treeitem) {
   wxTreeCtrl *owner = (wxTreeCtrl *)gtk_object_get_data(GTK_OBJECT(widget), "owner");
   if (owner == NULL)
     return;
 
-  long id = (long)gtk_object_get_data(GTK_OBJECT(widget), "id");
-  owner->SendCollapsing(id);
-  owner->SendCollapsed(id);
+//  long id = (long)gtk_object_get_data(GTK_OBJECT(widget), "id");
+  owner->SendCollapsing(GTK_TREE_ITEM(widget));
+  owner->SendCollapsed(GTK_TREE_ITEM(widget));
 };
 
-static void gtk_treeitem_select_callback(GtkWidget *widget, wxTreeItem *treeitem)
-{
+static void gtk_treeitem_select_callback(GtkWidget *widget, wxTreeItemId *treeitem) {
   wxTreeCtrl *owner = (wxTreeCtrl *)gtk_object_get_data(GTK_OBJECT(widget), "owner");
   if (owner == NULL)
     return;
 
-  long id = (long)gtk_object_get_data(GTK_OBJECT(widget), "id");
-  owner->SendSelChanging(id);
-  owner->SendSelChanged(id);
+//  long id = (long)gtk_object_get_data(GTK_OBJECT(widget), "id");
+  owner->SendSelChanging(GTK_TREE_ITEM(widget));
+  owner->SendSelChanged(GTK_TREE_ITEM(widget));
 }
 
 #if !USE_SHARED_LIBRARY
-  IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
-  IMPLEMENT_DYNAMIC_CLASS(wxTreeItem, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
+
 #endif
 
-wxTreeCtrl::wxTreeCtrl()
-{
+void wxTreeCtrl::Init() {
   m_imageListNormal = NULL;
   m_imageListState = NULL;
   m_textCtrl = NULL;
-  m_curitemId = 1;
 }
 
-bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-            long style, const wxValidator& validator, const wxString& name)
-{
-  m_imageListNormal = NULL;
-  m_imageListState = NULL;
-  m_textCtrl = NULL;
-  m_curitemId = 1;
+bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
+                        const wxSize& size, long style,
+                        const wxValidator& validator, const wxString& name) {
+  Init();
 
   int x = pos.x;
   int y = pos.y;
@@ -114,24 +107,30 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, con
 
   m_needParent = TRUE;
   
+printf("precreate\n");
   PreCreation( parent, id, pos, size, style, name );
 
-  m_widget = gtk_scrolled_window_new(NULL, NULL);
-  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(m_widget),
-                                 GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+printf("1\n");
 
+  m_widget = gtk_scrolled_window_new(NULL, NULL);
+printf("2\n");
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(m_widget),
+      GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+printf("3\n");
   m_tree = GTK_TREE(gtk_tree_new());
 
+printf("4\n");
   gtk_container_add(GTK_CONTAINER(m_widget), GTK_WIDGET(m_tree));
+printf("5\n");
+//  gtk_widget_set_parent(GTK_WIDGET(m_tree), m_widget);
+printf("6\n");
   gtk_widget_show(GTK_WIDGET(m_tree));
-
-  wxSystemSettings settings;
-  SetBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_WINDOW));
-  SetForegroundColour(parent->GetForegroundColour());
 
   SetName(name);
   SetValidator(validator);
 
+printf("postcreate\n");
   PostCreation();
 
   gtk_widget_realize(GTK_WIDGET(m_tree));
@@ -141,14 +140,13 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, con
   return TRUE;
 }
 
-wxTreeCtrl::~wxTreeCtrl()
-{
-  wxDELETE(m_textCtrl);
+wxTreeCtrl::~wxTreeCtrl(void) {
+  if (m_textCtrl)
+    delete m_textCtrl;
 }
 
 // Attributes
-static void gtk_treectrl_count_callback (GtkWidget *widget, gpointer data)
-{
+static void gtk_treectrl_count_callback (GtkWidget *widget, gpointer data) {
   int count = (*((int *)data));
 
   count++;
@@ -156,8 +154,7 @@ static void gtk_treectrl_count_callback (GtkWidget *widget, gpointer data)
     gtk_container_foreach(GTK_CONTAINER(widget), gtk_treectrl_count_callback, data);
 }
 
-int wxTreeCtrl::GetCount() const
-{
+size_t wxTreeCtrl::GetCount() const {
   int count = 0;
 
   if (m_anchor != NULL)
@@ -165,125 +162,394 @@ int wxTreeCtrl::GetCount() const
   return count;
 }
 
-int wxTreeCtrl::GetIndent() const
-{
+unsigned int wxTreeCtrl::GetIndent() const {
   return m_tree->indent_value;
 }
 
-void wxTreeCtrl::SetIndent(int indent)
-{
+void wxTreeCtrl::SetIndent(unsigned int indent) {
   m_tree->indent_value = indent;
 }
 
-wxImageList *wxTreeCtrl::GetImageList(int which) const
-{
-  if (which == wxIMAGE_LIST_NORMAL) {
-    return m_imageListNormal;
-  }
-  else
-  if (which == wxIMAGE_LIST_STATE) {
-    return m_imageListState;
-  }
-  return NULL;
+wxImageList *wxTreeCtrl::GetImageList() const {
+  return m_imageListNormal;
 }
 
-void wxTreeCtrl::SetImageList(wxImageList *imageList, int which)
-{
-  if (which == wxIMAGE_LIST_NORMAL)
-    m_imageListNormal = imageList;
-  else
-    if (which == wxIMAGE_LIST_STATE)
-      m_imageListState = imageList;
+wxImageList *wxTreeCtrl::GetStateImageList() const {
+  return m_imageListState;
 }
 
-long wxTreeCtrl::GetNextItem(long item, int code) const
-{
-  switch (code) {
-    case wxTREE_NEXT_CARET:
-//      flag = TVGN_CARET;
-      break;
-    case wxTREE_NEXT_CHILD:
-//      flag = TVGN_CHILD;
-      break;
-    case wxTREE_NEXT_DROPHILITE:
-//      flag = TVGN_DROPHILITE;
-      break;
-    case wxTREE_NEXT_FIRSTVISIBLE:
-//      flag = TVGN_FIRSTVISIBLE;
-      break;
-    case wxTREE_NEXT_NEXT:
-//      flag = TVGN_NEXT;
-      break;
-    case wxTREE_NEXT_NEXTVISIBLE:
-//      flag = TVGN_NEXTVISIBLE;
-      break;
-    case wxTREE_NEXT_PARENT:
-//      flag = TVGN_PARENT;
-      break;
-    case wxTREE_NEXT_PREVIOUS:
-//      flag = TVGN_PREVIOUS;
-      break;
-    case wxTREE_NEXT_PREVIOUSVISIBLE:
-//      flag = TVGN_PREVIOUSVISIBLE;
-      break;
-    case wxTREE_NEXT_ROOT:
-//      flag = TVGN_ROOT;
-      break;
-
-    default :
-      break;
-  }
-//  return (long) TreeView_GetNextItem( (HWND) GetHWND(), (HTREEITEM) item, flag);
-  return 0;
+void wxTreeCtrl::SetImageList(wxImageList *imageList) {
+  m_imageListNormal = imageList;
 }
 
-bool wxTreeCtrl::ItemHasChildren(long item) const
-{
-  GtkTreeItem *p;
+void wxTreeCtrl::SetStateImageList(wxImageList *imageList) {
+  m_imageListState = imageList;
+}
+
+wxString wxTreeCtrl::GetItemText(const wxTreeItemId &item) const {
+  char *t;
+
+  if (!item.IsOk())
+    return wxString("");
+
+  GtkLabel *l = GTK_LABEL(gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)item), "w_label"));
+  gtk_label_get(l, &t);
+
+  return t;
+}
+
+int wxTreeCtrl::GetItemImage(const wxTreeItemId& item) const {
+  if (!item.IsOk())
+    return (-1);
+
+  return (int)gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)item), "image");
+}
+
+int wxTreeCtrl::GetItemSelectedImage(const wxTreeItemId& item) const {
+  if (!item.IsOk())
+    return (-1);
+
+  return (int)gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)item), "selectedImage");
+}
+
+wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const {
+  if (!item.IsOk())
+    return NULL;
+
+  return (wxTreeItemData *)gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)item), "data");
+}
+
+void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text) {
+  if (!item.IsOk())
+    return;
+
+  GtkLabel *l = GTK_LABEL(gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)item), "w_label"));
+  gtk_label_set(l, text);
+}
+
+void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image) {
+  if (!item.IsOk())
+    return;
+
+  gtk_object_set_data(GTK_OBJECT((GtkTreeItem *)item), "image", (void *)image);
+}
+
+void wxTreeCtrl::SetItemSelectedImage(const wxTreeItemId& item, int image) {
+  if (!item.IsOk())
+    return;
+
+  gtk_object_set_data(GTK_OBJECT((GtkTreeItem *)item), "selectedImage", (void *)image);
+}
+
+void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data) {
+  if (!item.IsOk())
+    return;
+
+  gtk_object_set_data(GTK_OBJECT((GtkTreeItem *)item), "data", data);
+}
+
+bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const {
+#warning "Need to implement IsVisible"
+  return FALSE;
+}
+
+bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const {
   int count = 0;
 
-  p = findGtkTreeItem(item);
-  
-  gtk_container_foreach(GTK_CONTAINER(p), gtk_treectrl_count_callback, &count);
+  gtk_container_foreach(GTK_CONTAINER((GtkTreeItem *)item), gtk_treectrl_count_callback, &count);
 
   return (count != 0);
 }
 
-static GtkTreeItem *findItem(GtkTreeItem *p, long id)
-{
-  GtkTreeItem *q;
+bool wxTreeCtrl::IsExpanded(const wxTreeItemId& item) const {
+  return (((GtkTreeItem *)item)->expanded != 0);
+}
 
-  if (((long)gtk_object_get_data(GTK_OBJECT(p), "id")) == id)
-      return p;
+bool wxTreeCtrl::IsSelected(const wxTreeItemId& item) const {
+#warning "Need to implement IsSelected"
+  return FALSE;
+}
 
-  if (p->subtree == NULL)
-    return NULL;
+wxTreeItemId wxTreeCtrl::GetRootItem() const {
+  return m_anchor;
+}
 
-  GtkTree *tree = GTK_TREE(p->subtree);
+wxTreeItemId wxTreeCtrl::GetSelection() const {
+#warning "Need to complete gtk_treectrl_next_selected_callback"
+  GtkTreeItem *next = NULL;
 
-  GList *list = gtk_container_children(GTK_CONTAINER(tree));
-  guint len = g_list_length(list);
+  GList *list = gtk_container_children(GTK_CONTAINER(m_anchor));
+  next = GTK_TREE_ITEM(list->data);
+//  gtk_container_foreach(GTK_CONTAINER(m_anchor), gtk_treectrl_next_selected_callback, &next);
 
-  for (guint i=0; i<len;i++) {
-    GList *l = g_list_nth(list, i);
-    if (!GTK_IS_TREE_ITEM(l->data))
-      continue;
-    q = GTK_TREE_ITEM(l->data);
-    GtkTreeItem *ret = findItem(q, id);
-    if (ret != NULL)
-      return ret;
-  }
+  return next;
+}
+
+wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const {
+#warning "data 'parent' is missing!!!"
+  if (item.IsOk())
+    return (GtkTreeItem *)gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)item), "parent");
 
   return NULL;
 }
 
-GtkTreeItem *wxTreeCtrl::findGtkTreeItem(long id) const
-{
-  return findItem(m_anchor, id);
+wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item, long& cookie) const {
+#warning "Need to implement GetFirstChild"
+  return NULL;
 }
 
-long wxTreeCtrl::GetChild(long item) const
-{
+wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& item, long& cookie) const {
+#warning "Need to implement GetNextChild"
+  return NULL;
+}
+
+wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const {
+#warning "Need to implement GetNextSibling"
+  return NULL;
+}
+
+wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const {
+#warning "Need to implement GetPrevSibling"
+  return NULL;
+}
+
+wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const {
+#warning "Need to implement GetFirstVisibleItem"
+  return NULL;
+}
+
+wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const {
+#warning "Need to implement GetNextVisible"
+  return NULL;
+}
+
+wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const {
+#warning "Need to implement GetPrevVisible"
+  return NULL;
+}
+
+wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text, int image,
+                     int selectedImage, wxTreeItemData *data) {
+  return p_InsertItem(0, text, image, selectedImage, data);
+}
+
+wxTreeItemId wxTreeCtrl::PrependItem(const wxTreeItemId& parent,
+                         const wxString& text, int image, int selectedImage,
+                         wxTreeItemData *data) {
+#warning "Need to implement PrependItem"
+  return NULL;
+}
+
+wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
+                        const wxTreeItemId& idPrevious, const wxString& text,
+                        int image, int selectedImage, wxTreeItemData *data) {
+#warning "Need to implement InsertItem"
+  return NULL;
+}
+
+wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parent,
+                        const wxString& text, int image, int selectedImage,
+											  wxTreeItemData *data) {
+  return p_InsertItem(parent, text, image, selectedImage, data);
+}
+
+wxTreeItemId wxTreeCtrl::p_InsertItem(GtkTreeItem *p,
+                        const wxString& text, int image, int selectedImage,
+											  wxTreeItemData *data) {
+  GtkTreeItem *item;
+
+printf("begin insert\n");
+
+  item = GTK_TREE_ITEM(gtk_tree_item_new());
+
+  GtkHBox *m_box = GTK_HBOX(gtk_hbox_new(FALSE, 0));
+  gtk_container_add (GTK_CONTAINER (item), GTK_WIDGET(m_box));
+
+  gtk_object_set_data(GTK_OBJECT(item), "w_box", m_box);
+
+  const wxBitmap *bmp;
+  const wxImageList *list;
+  if ((list = GetImageList(wxIMAGE_LIST_NORMAL)) != NULL)
+    if ((bmp = list->GetBitmap(image)) != NULL)
+      if (bmp->Ok()) {
+        GdkBitmap *mask = NULL;
+        if (bmp->GetMask())
+          mask = bmp->GetMask()->GetBitmap();
+        GtkPixmap *m_image_widget = GTK_PIXMAP(gtk_pixmap_new(bmp->GetPixmap(), mask));
+        gtk_misc_set_alignment (GTK_MISC (m_image_widget), 0.0, 0.5);
+        gtk_box_pack_start(GTK_BOX(m_box), GTK_WIDGET(m_image_widget), FALSE, FALSE, 0);
+        gtk_object_set_data(GTK_OBJECT(item), "w_image", (void *)m_image_widget);
+        gtk_object_set_data(GTK_OBJECT(item), "image", (void *)image);
+        gtk_widget_show (GTK_WIDGET(m_image_widget));
+      }
+  GtkLabel *m_label_widget = GTK_LABEL(gtk_label_new ((char *)(const char *)text));
+  gtk_misc_set_alignment (GTK_MISC (m_label_widget), 0.5, 0.5);
+  gtk_box_pack_start(GTK_BOX(m_box), GTK_WIDGET(m_label_widget), FALSE, FALSE, 0);
+  gtk_object_set_data(GTK_OBJECT(item), "w_label", m_label_widget);
+  gtk_widget_show (GTK_WIDGET(m_label_widget));
+
+  gtk_widget_show(GTK_WIDGET(m_box));
+
+  gtk_object_set_data(GTK_OBJECT(item), "owner", this);
+
+  if (p != 0) {
+    if (p->subtree == NULL) {
+      GtkTree *tree = GTK_TREE(gtk_tree_new());
+      gtk_tree_item_set_subtree(GTK_TREE_ITEM(p), GTK_WIDGET(tree));
+      gtk_widget_show(GTK_WIDGET(tree));
+      p->expanded = 1;
+    }
+
+    gtk_container_add(GTK_CONTAINER(p->subtree), GTK_WIDGET(item));
+  } else {
+printf("Adding root\n");
+printf("m_tree = %p\n", m_tree);
+    m_anchor = item;
+    gtk_container_add(GTK_CONTAINER(m_tree), GTK_WIDGET(item));
+  }
+
+/*
+  if ((info.m_mask & wxTREE_MASK_CHILDREN) != 0) {
+    GtkTree *tree = GTK_TREE(gtk_tree_new());
+    gtk_tree_item_set_subtree(GTK_TREE_ITEM(item), GTK_WIDGET(tree));
+    gtk_widget_show(GTK_WIDGET(tree));
+  }
+*/
+
+  gtk_object_set_data(GTK_OBJECT(item), "data", data);
+
+  gtk_widget_show(GTK_WIDGET(item));
+
+  gtk_signal_connect(GTK_OBJECT(item), "select",
+    GTK_SIGNAL_FUNC(gtk_treeitem_select_callback), (gpointer)this );
+
+  gtk_signal_connect(GTK_OBJECT(item), "deselect",
+    GTK_SIGNAL_FUNC(gtk_treeitem_select_callback), (gpointer)this );
+
+  gtk_signal_connect(GTK_OBJECT(item), "expand",
+    GTK_SIGNAL_FUNC(gtk_treeitem_expand_callback), (gpointer)this );
+  gtk_signal_connect(GTK_OBJECT(item), "collapse",
+    GTK_SIGNAL_FUNC(gtk_treeitem_collapse_callback), (gpointer)this );
+
+  return item;
+}
+
+void wxTreeCtrl::Delete(const wxTreeItemId& item) {
+  if (!item.IsOk())
+    return;
+
+  GtkTreeItem *parent = GTK_TREE_ITEM(GTK_WIDGET((GtkTreeItem *)item)->parent);
+  if (parent == NULL)
+    return;
+
+  gtk_container_remove(GTK_CONTAINER(parent), GTK_WIDGET((GtkTreeItem *)item));
+
+  return;
+}
+
+void wxTreeCtrl::DeleteAllItems() {
+  gtk_tree_item_remove_subtree(m_anchor);
+}
+
+void wxTreeCtrl::Expand(const wxTreeItemId& item) {
+  if (!item.IsOk())
+    return;
+
+  gtk_tree_item_expand(GTK_TREE_ITEM((GtkTreeItem *)item));
+}
+
+void wxTreeCtrl::Collapse(const wxTreeItemId& item) {
+  if (!item.IsOk())
+    return;
+
+  gtk_tree_item_collapse(GTK_TREE_ITEM((GtkTreeItem *)item));
+}
+
+void wxTreeCtrl::CollapseAndReset(const wxTreeItemId& item) {
+  if (!item.IsOk())
+    return;
+
+  gtk_tree_item_collapse(GTK_TREE_ITEM((GtkTreeItem *)item));
+  gtk_tree_item_remove_subtree(GTK_TREE_ITEM((GtkTreeItem *)item));
+}
+
+void wxTreeCtrl::Toggle(const wxTreeItemId& item) {
+  if (!item.IsOk())
+    return;
+
+  if (((GtkTreeItem *)item)->expanded)
+    gtk_tree_item_collapse(GTK_TREE_ITEM((GtkTreeItem *)item));
+  else
+    gtk_tree_item_expand(GTK_TREE_ITEM((GtkTreeItem *)item));
+}
+
+void wxTreeCtrl::Unselect() {
+#warning "Need to implement Unselect"
+}
+
+void wxTreeCtrl::SelectItem(const wxTreeItemId& item) {
+  if (!item.IsOk())
+    return;
+
+  gtk_tree_item_select((GtkTreeItem *)item);
+}
+
+void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item) {
+#warning "Need to implement EnsureVisible"
+}
+
+void wxTreeCtrl::ScrollTo(const wxTreeItemId& item) {
+#warning "Need to implement ScrollTo"
+}
+
+wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
+                          wxClassInfo* textControlClass) {
+    wxASSERT( textControlClass->IsKindOf(CLASSINFO(wxTextCtrl)) );
+#warning "Need to implement EditLabel"
+    return m_textCtrl;
+}
+
+wxTextCtrl* wxTreeCtrl::GetEditControl() const {
+  return m_textCtrl;
+}
+
+void wxTreeCtrl::EndEditLabel(const wxTreeItemId& item, bool discardChanges) {
+#warning "Need to implement EndEditLabel"
+}
+
+void wxTreeCtrl::ExpandItem(const wxTreeItemId& item, int action) {
+  switch (action) {
+    case wxTREE_EXPAND_EXPAND:
+      Expand(item);
+      break;
+
+    case wxTREE_EXPAND_COLLAPSE:
+      Collapse(item);
+      break;
+
+    case wxTREE_EXPAND_COLLAPSE_RESET:
+      CollapseAndReset(item);
+      break;
+
+    case wxTREE_EXPAND_TOGGLE:
+      Toggle(item);
+      break;
+
+    default:
+      wxFAIL_MSG("unknown action in wxTreeCtrl::ExpandItem");
+  }
+}
+
+wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
+                            const wxString& text, int image, int selImage,
+                            long insertAfter) {
+//  InsertItem(parent, insertAfter, text, image, selImage);
+  #warning "Need to implement InsertItem"
+  return NULL;
+}
+
+/* Old functions
+long wxTreeCtrl::GetChild(long item) const {
   GtkTreeItem *p;
   GtkTreeItem *next = NULL;
 
@@ -297,19 +563,7 @@ long wxTreeCtrl::GetChild(long item) const
   return (-1);
 }
 
-long wxTreeCtrl::GetParent(long item) const
-{
-  GtkTreeItem *p;
-
-  p = findGtkTreeItem(item);
-  if (p != NULL)
-    return (long)gtk_object_get_data(GTK_OBJECT(p), "parent");
-
-  return (-1);
-}
-
-long wxTreeCtrl::GetFirstVisibleItem() const
-{
+long wxTreeCtrl::GetFirstVisibleItem(void) const {
   GtkTreeItem *next = NULL;
 
   GList *list = gtk_container_children(GTK_CONTAINER(m_anchor));
@@ -322,8 +576,7 @@ long wxTreeCtrl::GetFirstVisibleItem() const
   return (-1);
 }
 
-long wxTreeCtrl::GetNextVisibleItem(long item) const
-{
+long wxTreeCtrl::GetNextVisibleItem(long item) const {
   GtkTreeItem *p;
   GtkTreeItem *next = NULL;
 
@@ -338,33 +591,13 @@ long wxTreeCtrl::GetNextVisibleItem(long item) const
   return (-1);
 }
 
-long wxTreeCtrl::GetSelection() const
-{
-  GtkTreeItem *next = NULL;
-
-  GList *list = gtk_container_children(GTK_CONTAINER(m_anchor));
-  next = GTK_TREE_ITEM(list->data);;
-//  gtk_container_foreach(GTK_CONTAINER(m_anchor), gtk_treectrl_next_selected_callback, &next);
-
-  if (next != NULL)
-    return (long)gtk_object_get_data(GTK_OBJECT(next), "id");
-  
-  return (-1);
-}
-
-long wxTreeCtrl::GetRootItem() const
-{
-  return (long)gtk_object_get_data(GTK_OBJECT(m_anchor), "id");
-}
-
-bool wxTreeCtrl::GetItem(wxTreeItem& info) const
-{
+bool wxTreeCtrl::GetItem(wxTreeItem& info) const {
   GtkTreeItem *p;
 
   p = findGtkTreeItem(info.m_itemId);
 
   if (p == NULL) {
-    wxLogError("TreeCtrl::GetItem failed.");
+    wxLogSysError("TreeCtrl::GetItem failed");
     return FALSE;
   }
 
@@ -373,14 +606,13 @@ bool wxTreeCtrl::GetItem(wxTreeItem& info) const
   return TRUE;
 }
 
-bool wxTreeCtrl::SetItem(wxTreeItem& info)
-{
+bool wxTreeCtrl::SetItem(wxTreeItem& info) {
   GtkTreeItem *p;
 
   p = findGtkTreeItem(info.m_itemId);
 
   if (p == NULL) {
-    wxLogError("TreeCtrl::SetItem failed.");
+    wxLogSysError("TreeCtrl::SetItem failed");
     return FALSE;
   }
 
@@ -389,8 +621,7 @@ bool wxTreeCtrl::SetItem(wxTreeItem& info)
   return TRUE;
 }
 
-int wxTreeCtrl::GetItemState(long item, long stateMask) const
-{
+int wxTreeCtrl::GetItemState(long item, long stateMask) const {
   wxTreeItem info;
 
   info.m_mask = wxTREE_MASK_STATE ;
@@ -403,8 +634,7 @@ int wxTreeCtrl::GetItemState(long item, long stateMask) const
   return info.m_state;
 }
 
-bool wxTreeCtrl::SetItemState(long item, long state, long stateMask)
-{
+bool wxTreeCtrl::SetItemState(long item, long state, long stateMask) {
   wxTreeItem info;
 
   info.m_mask = wxTREE_MASK_STATE ;
@@ -414,113 +644,11 @@ bool wxTreeCtrl::SetItemState(long item, long state, long stateMask)
 
   return SetItem(info);
 }
-
-bool wxTreeCtrl::SetItemImage(long item, int image, int selImage)
-{
-  wxTreeItem info;
-
-  info.m_mask = wxTREE_MASK_IMAGE ;
-  info.m_image = image;
-  if (selImage > -1) {
-    info.m_selectedImage = selImage;
-    info.m_mask |= wxTREE_MASK_SELECTED_IMAGE;
-  }
-  info.m_itemId = item;
-
-  return SetItem(info);
-}
-
-wxString wxTreeCtrl::GetItemText(long item) const
-{
-  wxTreeItem info;
-
-  info.m_mask = wxTREE_MASK_TEXT ;
-  info.m_itemId = item;
-
-  if (!GetItem(info))
-    return wxString("");
-  return info.m_text;
-}
-
-void wxTreeCtrl::SetItemText(long item, const wxString& str)
-{
-  wxTreeItem info;
-
-  info.m_mask = wxTREE_MASK_TEXT ;
-  info.m_itemId = item;
-  info.m_text = str;
-
-  SetItem(info);
-}
-
-long wxTreeCtrl::GetItemData(long item) const
-{
-  wxTreeItem info;
-
-  info.m_mask = wxTREE_MASK_DATA ;
-  info.m_itemId = item;
-
-  if (!GetItem(info))
-    return 0;
-  return info.m_data;
-}
-
-bool wxTreeCtrl::SetItemData(long item, long data)
-{
-  wxTreeItem info;
-
-  info.m_mask = wxTREE_MASK_DATA ;
-  info.m_itemId = item;
-  info.m_data = data;
-
-  return SetItem(info);
-}
-
-bool wxTreeCtrl::GetItemRect(long item, wxRectangle& rect, bool textOnly) const
-{
-/*
-  RECT rect2;
-
-  *(HTREEITEM*)& rect2 = (HTREEITEM) item;
-  bool success = (::SendMessage((HWND) GetHWND(), TVM_GETITEMRECT, (WPARAM)textOnly,
-    (LPARAM)&rect2) != 0);
-
-  rect.x = rect2.left;
-  rect.y = rect2.top;
-  rect.width = rect2.right - rect2.left;
-  rect.height = rect2.bottom - rect2.left;
-  return success;
 */
-  wxFAIL_MSG("Not implemented");
-
-  return FALSE;
-}
-
-wxTextCtrl* wxTreeCtrl::GetEditControl() const
-{
-  return m_textCtrl;
-}
 
 // Operations
-bool wxTreeCtrl::DeleteItem(long item)
-{
-  GtkTreeItem *p;
-
-  p = findGtkTreeItem(item);
-  if (p == NULL)
-    return FALSE;
-
-  GtkTreeItem *parent = GTK_TREE_ITEM(GTK_WIDGET(p)->parent);
-  if (parent == NULL)
-    return FALSE;
-
-  gtk_container_remove(GTK_CONTAINER(parent), GTK_WIDGET(p));
-
-  return TRUE;
-}
-
-bool wxTreeCtrl::DeleteChildren(long item)
-{
+/*
+bool wxTreeCtrl::DeleteChildren(long item) {
   GtkTreeItem *p;
 
   p = findGtkTreeItem(item);
@@ -531,46 +659,10 @@ bool wxTreeCtrl::DeleteChildren(long item)
 
   return TRUE;
 }
+*/
 
-bool wxTreeCtrl::ExpandItem(long item, int action)
-{
-  GtkTreeItem *p;
-
-  p = findGtkTreeItem(item);
-
-  if (p == NULL)
-    return FALSE;
-
-  switch (action) {
-    case wxTREE_EXPAND_EXPAND:
-      gtk_tree_item_expand(GTK_TREE_ITEM(p));
-      break;
-
-    case wxTREE_EXPAND_COLLAPSE:
-      gtk_tree_item_collapse(GTK_TREE_ITEM(p));
-      break;
-
-    case wxTREE_EXPAND_COLLAPSE_RESET:
-      gtk_tree_item_collapse(GTK_TREE_ITEM(p));
-      gtk_tree_item_remove_subtree(GTK_TREE_ITEM(p));
-      break;
-
-    case wxTREE_EXPAND_TOGGLE:
-      if (p->expanded)
-        gtk_tree_item_collapse(GTK_TREE_ITEM(p));
-      else
-        gtk_tree_item_expand(GTK_TREE_ITEM(p));
-      break;
-
-    default:
-      wxFAIL_MSG("unknown action in wxTreeCtrl::ExpandItem");
-  }
-
-  return TRUE;
-}
-
-long wxTreeCtrl::InsertItem(long parent, wxTreeItem& info, long insertAfter)
-{
+/*
+long wxTreeCtrl::InsertItem(long parent, wxTreeItem& info, long insertAfter) {
   GtkTreeItem *p;
   GtkTreeItem *item = NULL;
 
@@ -633,262 +725,49 @@ long wxTreeCtrl::InsertItem(long parent, const wxString& label, int image,
 
   return InsertItem(parent, info, insertAfter);
 }
-
-bool wxTreeCtrl::SelectItem(long item)
-{
-  GtkTreeItem *p;
-
-  p = findGtkTreeItem(item);
-  if (p == NULL)
-    return FALSE;
-
-  gtk_tree_item_select(p);
-  return TRUE;
-}
-
-bool wxTreeCtrl::ScrollTo(long item)
-{
-  wxFAIL_MSG("Not implemented");
-
-  return FALSE; // Still unimplemented
-}
-
-bool wxTreeCtrl::DeleteAllItems()
-{
-  gtk_tree_item_remove_subtree(m_anchor);
-  return TRUE;
-}
-
-wxTextCtrl* wxTreeCtrl::EditLabel(long item, wxClassInfo* textControlClass)
-{
-    wxASSERT( (textControlClass->IsKindOf(CLASSINFO(wxTextCtrl))) );
-
-/*
-    HWND hWnd = (HWND) TreeView_EditLabel((HWND) GetHWND(), item);
-
-    if (m_textCtrl)
-    {
-      m_textCtrl->UnsubclassWin();
-      m_textCtrl->SetHWND(0);
-      delete m_textCtrl;
-      m_textCtrl = NULL;
-    }
-
-    m_textCtrl = (wxTextCtrl*) textControlClass->CreateObject();
-    m_textCtrl->SetHWND((WXHWND) hWnd);
-    m_textCtrl->SubclassWin((WXHWND) hWnd);
-
-*/	
-    wxFAIL_MSG("Not implemented");
-
-    return m_textCtrl;
-}
-
-// End label editing, optionally cancelling the edit
-bool wxTreeCtrl::EndEditLabel(bool cancel)
-{
-/*
-    bool success = (TreeView_EndEditLabelNow((HWND) GetHWND(), cancel) != 0);
-
-    if (m_textCtrl)
-    {
-      m_textCtrl->UnsubclassWin();
-      m_textCtrl->SetHWND(0);
-      delete m_textCtrl;
-      m_textCtrl = NULL;
-    }
-    return success;
-*/
-  wxFAIL_MSG("Not implemented");
-
-  return FALSE;
-}
-
-long wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
-{
-/*
-    TV_HITTESTINFO hitTestInfo;
-  hitTestInfo.pt.x = (int) point.x;
-  hitTestInfo.pt.y = (int) point.y;
-
-    TreeView_HitTest((HWND) GetHWND(), & hitTestInfo);
-
-  flags = 0;
-  if ( hitTestInfo.flags & TVHT_ABOVE )
-    flags |= wxTREE_HITTEST_ABOVE;
-  if ( hitTestInfo.flags & TVHT_BELOW )
-    flags |= wxTREE_HITTEST_BELOW;
-  if ( hitTestInfo.flags & TVHT_NOWHERE )
-    flags |= wxTREE_HITTEST_NOWHERE;
-  if ( hitTestInfo.flags & TVHT_ONITEMBUTTON )
-    flags |= wxTREE_HITTEST_ONITEMBUTTON;
-  if ( hitTestInfo.flags & TVHT_ONITEMICON )
-    flags |= wxTREE_HITTEST_ONITEMICON;
-  if ( hitTestInfo.flags & TVHT_ONITEMINDENT )
-    flags |= wxTREE_HITTEST_ONITEMINDENT;
-  if ( hitTestInfo.flags & TVHT_ONITEMLABEL )
-    flags |= wxTREE_HITTEST_ONITEMLABEL;
-  if ( hitTestInfo.flags & TVHT_ONITEMRIGHT )
-    flags |= wxTREE_HITTEST_ONITEMRIGHT;
-  if ( hitTestInfo.flags & TVHT_ONITEMSTATEICON )
-    flags |= wxTREE_HITTEST_ONITEMSTATEICON;
-  if ( hitTestInfo.flags & TVHT_TOLEFT )
-    flags |= wxTREE_HITTEST_TOLEFT;
-  if ( hitTestInfo.flags & TVHT_TORIGHT )
-    flags |= wxTREE_HITTEST_TORIGHT;
-
-  return (long) hitTestInfo.hItem ;
-*/
-  wxFAIL_MSG("Not implemented");
-
-  return 0;
-}
-
-/*
-wxImageList *wxTreeCtrl::CreateDragImage(long item)
-{
-}
 */
 
-bool wxTreeCtrl::SortChildren(long item)
-{
-  wxFAIL_MSG("Not implemented");
-
-  return FALSE; // Still unimplemented
-}
-
-bool wxTreeCtrl::EnsureVisible(long item)
-{
-  wxFAIL_MSG("Not implemented");
-
-  return FALSE; // Still unimplemented
-}
-
-void wxTreeCtrl::SendExpanding(long item)
-{
+void wxTreeCtrl::SendExpanding(const wxTreeItemId& item) {
   wxTreeEvent event(wxEVT_COMMAND_TREE_ITEM_EXPANDING, GetId());
   event.SetEventObject(this);
   ProcessEvent(event);
 }
 
-void wxTreeCtrl::SendExpanded(long item)
-{
+void wxTreeCtrl::SendExpanded(const wxTreeItemId& item) {
   wxTreeEvent event(wxEVT_COMMAND_TREE_ITEM_EXPANDED, GetId());
   event.SetEventObject(this);
   ProcessEvent(event);
 }
 
-void wxTreeCtrl::SendCollapsing(long item)
-{
+void wxTreeCtrl::SendCollapsing(const wxTreeItemId& item) {
   wxTreeEvent event(wxEVT_COMMAND_TREE_ITEM_COLLAPSING, GetId());
   event.SetEventObject(this);
   ProcessEvent(event);
 }
 
-void wxTreeCtrl::SendCollapsed(long item)
-{
+void wxTreeCtrl::SendCollapsed(const wxTreeItemId& item) {
   wxTreeEvent event(wxEVT_COMMAND_TREE_ITEM_COLLAPSED, GetId());
   event.SetEventObject(this);
   ProcessEvent(event);
 }
 
-void wxTreeCtrl::SendSelChanging(long item)
-{
+void wxTreeCtrl::SendSelChanging(const wxTreeItemId& item) {
   wxTreeEvent event(wxEVT_COMMAND_TREE_SEL_CHANGED, GetId());
   event.SetEventObject(this);
   ProcessEvent(event);
 }
 
-void wxTreeCtrl::SendSelChanged(long item)
-{
+void wxTreeCtrl::SendSelChanged(const wxTreeItemId& item) {
   wxTreeEvent event(wxEVT_COMMAND_TREE_SEL_CHANGING, GetId());
   event.SetEventObject(this);
   ProcessEvent(event);
 }
 
-// Tree item structure
-wxTreeItem::wxTreeItem()
-{
-  m_mask = 0;
-  m_itemId = 0;
-  m_state = 0;
-  m_stateMask = 0;
-  m_image = -1;
-  m_selectedImage = -1;
-  m_children = 0;
-  m_data = 0;
-}
-
-// If getFullInfo is TRUE, we explicitly query for more info if we haven't got it all.
-
-static void wxConvertFromGtkTreeItem(wxTreeItem& info, GtkTreeItem *gtkItem)
-{
-  GtkLabel *l;
-  char *t;
-
-  info.m_data = (long)gtk_object_get_data(GTK_OBJECT(gtkItem), "data");
-  info.m_itemId = (long)gtk_object_get_data(GTK_OBJECT(gtkItem), "id");
-  info.m_image = (int)gtk_object_get_data(GTK_OBJECT(gtkItem), "image");
-  info.m_selectedImage = (int)gtk_object_get_data(GTK_OBJECT(gtkItem), "selectedImage");
-
-  info.m_mask = 0;
-  info.m_state = 0;
-  info.m_stateMask = 0;
-  l = GTK_LABEL(gtk_object_get_data(GTK_OBJECT(gtkItem), "label"));
-  gtk_label_get(l, &t);
-  info.m_text = t;
-}
-
-static void wxConvertToGtkTreeItem(wxTreeCtrl *owner, wxTreeItem& info, GtkTreeItem **gtkItem)
-{
-  GtkTreeItem *item = (*gtkItem);
-
-  if (item == NULL) {
-    item = GTK_TREE_ITEM(gtk_tree_item_new());
-
-    GtkHBox *m_box = GTK_HBOX(gtk_hbox_new(FALSE, 0));
-    gtk_container_add (GTK_CONTAINER (item), GTK_WIDGET(m_box));
-
-    gtk_object_set_data(GTK_OBJECT(item), "box", m_box);
-
-    const wxBitmap *bmp;
-    const wxImageList *list;
-    if (owner != NULL)
-    if ((list = owner->GetImageList(wxIMAGE_LIST_NORMAL)) != NULL)
-      if ((bmp = list->GetBitmap(info.m_image)) != NULL)
-        if (bmp->Ok()) {
-          GdkBitmap *mask = NULL;
-          if (bmp->GetMask())
-            mask = bmp->GetMask()->GetBitmap();
-          GtkPixmap *m_image_widget = GTK_PIXMAP(gtk_pixmap_new(bmp->GetPixmap(), mask));
-          gtk_misc_set_alignment (GTK_MISC (m_image_widget), 0.0, 0.5);
-          gtk_box_pack_start(GTK_BOX(m_box), GTK_WIDGET(m_image_widget), FALSE, FALSE, 0);
-          gtk_object_set_data(GTK_OBJECT(item), "image", m_image_widget);
-          gtk_widget_show (GTK_WIDGET(m_image_widget));
-        }
-
-    GtkLabel *m_label_widget = GTK_LABEL(gtk_label_new ((char *)(const char *)info.m_text));
-    gtk_misc_set_alignment (GTK_MISC (m_label_widget), 0.5, 0.5);
-
-    gtk_box_pack_start(GTK_BOX(m_box), GTK_WIDGET(m_label_widget), FALSE, FALSE, 0);
-    gtk_object_set_data(GTK_OBJECT(item), "label", m_label_widget);
-
-    gtk_widget_show (GTK_WIDGET(m_label_widget));
-
-    gtk_widget_show(GTK_WIDGET(m_box));
-    gtk_object_set_data(GTK_OBJECT(item), "id", (gpointer)info.m_itemId);
-    gtk_object_set_data(GTK_OBJECT(item), "owner", owner);
-    (*gtkItem) = item;
-  }
-}
-
 // Tree event
 IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxCommandEvent)
 
-wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
-           : wxCommandEvent(commandType, id)
-{
+wxTreeEvent::wxTreeEvent(wxEventType commandType, int id):
+  wxCommandEvent(commandType, id) {
   m_code = 0;
-  m_oldItem = 0;
+  m_itemOld = 0;
 }
-

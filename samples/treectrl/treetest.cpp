@@ -109,7 +109,7 @@ bool MyApp::OnInit()
 
   frame->m_treeCtrl->SetImageList(wxGetApp().m_imageListNormal, wxIMAGE_LIST_NORMAL);
 
-  long rootId = frame->m_treeCtrl->InsertItem(0, "Root", 0);
+  wxTreeItemId rootId = frame->m_treeCtrl->AddRoot("Root", 0);
 
   char buf[20];
   int i;
@@ -119,20 +119,20 @@ bool MyApp::OnInit()
   {
 	sprintf(buf, "Folder child %d", i);
     str = buf;
-    long id = frame->m_treeCtrl->InsertItem(rootId, str, 0);
+    wxTreeItemId id = frame->m_treeCtrl->AppendItem(rootId, str, 0);
 	int j;
     for ( j = 0; j < 5; j++)
     {
 	  sprintf(buf, "File child %d", j);
       str = buf;
-      frame->m_treeCtrl->InsertItem(id, str, 1);
+      frame->m_treeCtrl->AppendItem(id, str, 1);
     }
   }
   for ( i = 0; i < 10; i++)
   {
 	sprintf(buf, "File child %d", i);
     str = buf;
-    frame->m_treeCtrl->InsertItem(rootId, str, 1);
+    frame->m_treeCtrl->AppendItem(rootId, str, 1);
   }
 
   frame->CreateStatusBar(3);
