@@ -209,8 +209,7 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
 
     if ( !m_hWnd )
     {
-        wxLogError(_("Can't create list control window, check "
-                     "that comctl32.dll is installed."));
+        wxLogError(_("Can't create list control window, check that comctl32.dll is installed."));
 
         return FALSE;
     }
@@ -600,6 +599,9 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     if (info.m_mask & wxLIST_MASK_DATA)
         lvItem.mask |= LVIF_PARAM;
 
+    if (info.m_mask & wxLIST_MASK_IMAGE)
+        lvItem.mask |= LVIF_IMAGE;
+
     if ( info.m_mask & wxLIST_MASK_STATE )
     {
         lvItem.mask |= LVIF_STATE;
@@ -633,7 +635,12 @@ bool wxListCtrl::SetItem(wxListItem& info)
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
-        m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
+        wxListItemAttr *attr;
+        attr = (wxListItemAttr*) m_attrs.Get(item.iItem);
+
+        if (attr == NULL)
+            m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
+        else *attr = *info.GetAttributes();
 
         m_hasAnyAttr = TRUE;
     }
@@ -777,7 +784,7 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
     rect.x = rect2.left;
     rect.y = rect2.top;
     rect.width = rect2.right - rect2.left;
-    rect.height = rect2.bottom - rect2.left;
+    rect.height = rect2.bottom - rect2.top;
     return success;
 }
 
@@ -952,7 +959,7 @@ bool wxListCtrl::DeleteAllColumns()
     {
         if ( ListView_DeleteColumn(GetHwnd(), 0) == 0 )
         {
-            wxLogLastError("ListView_DeleteColumn");
+            wxLogLastError(wxT("ListView_DeleteColumn"));
 
             return FALSE;
         }
@@ -1040,10 +1047,13 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
 
     findInfo.flags = LVFI_STRING;
     if ( partial )
-        findInfo.flags |= LVFI_STRING;
-    findInfo.psz = WXSTRINGCAST str;
+        findInfo.flags |= LVFI_PARTIAL;
+    findInfo.psz = str;
 
-    return ListView_FindItem(GetHwnd(), (int) start, & findInfo);
+    // ListView_FindItem() excludes the first item from search and to look
+    // through all the items you need to start from -1 which is unnatural and
+    // inconsitent with the generic version - so we adjust the index
+    return ListView_FindItem(GetHwnd(), (int) start - 1, &findInfo);
 }
 
 // Find an item whose data matches this data, starting from the item after 'start'
@@ -1122,7 +1132,12 @@ long wxListCtrl::InsertItem(wxListItem& info)
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
-        m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
+        wxListItemAttr *attr;
+        attr = (wxListItemAttr*) m_attrs.Get(item.iItem);
+
+        if (attr == NULL)
+            m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
+        else *attr = *info.GetAttributes();
 
         m_hasAnyAttr = TRUE;
     }
@@ -1436,7 +1451,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     event.m_code = wxCharCodeMSWToWX(wVKey);
                 }
 
-                event.m_item.m_data = GetItemData(lItem);
+                if ( lItem != -1 )
+                {
+                    // fill the other fields too
+                    event.m_item.m_text = GetItemText(lItem);
+                    event.m_item.m_data = GetItemData(lItem);
+                }
             }
             break;
 
@@ -1458,6 +1478,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
             event.m_itemIndex = nmLV->iItem;
+            event.m_item.m_text = GetItemText(nmLV->iItem);
             event.m_item.m_data = GetItemData(nmLV->iItem);
             break;
 
@@ -1487,6 +1508,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     {
                         eventType = wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
                         event.m_itemIndex = lvhti.iItem;
+                        event.m_pointDrag.x = lvhti.pt.x;
+                        event.m_pointDrag.y = lvhti.pt.y;
                     }
                 }
             }

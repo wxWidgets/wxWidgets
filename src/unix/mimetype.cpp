@@ -9,8 +9,16 @@
 // Licence:     wxWindows license (part of wxExtra library)
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef    __GNUG__
-#pragma implementation "mimetype.h"
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+#ifdef __GNUG__
+    #pragma implementation "mimetype.h"
 #endif
 
 // for compilers that support precompilation, includes "wx.h".
@@ -24,7 +32,7 @@
   #include "wx/defs.h"
 #endif
 
-#if (wxUSE_FILE && wxUSE_TEXTFILE) || defined(__WXMSW__)
+#if wxUSE_FILE && wxUSE_TEXTFILE
 
 #ifndef WX_PRECOMP
   #include "wx/string.h"
@@ -53,6 +61,22 @@
 
 // in case we're compiling in non-GUI mode
 class WXDLLEXPORT wxIcon;
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// MIME code tracing mask
+#define TRACE_MIME _T("mime")
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+// there are some fields which we don't understand but for which we don't give
+// warnings as we know that they're not important - this function is used to
+// test for them
+static bool IsKnownUnimportantField(const wxString& field);
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -873,17 +897,26 @@ wxFileTypeImpl::GetEntry(const wxFileType::MessageParameters& params) const
     wxString command;
     MailCapEntry *entry = m_manager->m_aEntries[m_index[0]];
     while ( entry != NULL ) {
-        // notice that an empty command would always succeed (it's ok)
+        // get the command to run as the test for this entry
         command = wxFileType::ExpandCommand(entry->GetTestCmd(), params);
 
-        if ( command.IsEmpty() || (wxSystem(command) == 0) ) {
-            // ok, passed
-            wxLogTrace(wxT("Test '%s' for mime type '%s' succeeded."),
+        // don't trace the test result if there is no test at all
+        if ( command.IsEmpty() )
+        {
+            // no test at all, ok
+            break;
+        }
+
+        if ( wxSystem(command) == 0 ) {
+            // ok, test passed
+            wxLogTrace(TRACE_MIME,
+                       wxT("Test '%s' for mime type '%s' succeeded."),
                        command.c_str(), params.GetMimeType().c_str());
             break;
         }
         else {
-            wxLogTrace(wxT("Test '%s' for mime type '%s' failed."),
+            wxLogTrace(TRACE_MIME,
+                       wxT("Test '%s' for mime type '%s' failed."),
                        command.c_str(), params.GetMimeType().c_str());
         }
 
@@ -1189,7 +1222,8 @@ void wxMimeTypesManagerImpl::AddMailcapInfo(const wxString& strType,
 
 bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
 {
-    wxLogTrace(wxT("--- Parsing mime.types file '%s' ---"), strFileName.c_str());
+    wxLogTrace(TRACE_MIME, wxT("--- Parsing mime.types file '%s' ---"),
+               strFileName.c_str());
 
     wxTextFile file(strFileName);
     if ( !file.Open() )
@@ -1345,7 +1379,8 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
 bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                                          bool fallback)
 {
-    wxLogTrace(wxT("--- Parsing mailcap file '%s' ---"), strFileName.c_str());
+    wxLogTrace(TRACE_MIME, wxT("--- Parsing mailcap file '%s' ---"),
+               strFileName.c_str());
 
     wxTextFile file(strFileName);
     if ( !file.Open() )
@@ -1480,25 +1515,23 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                                 }
                                 else {
                                     // no, it's a simple flag
-                                    // TODO support the flags:
-                                    //  1. create an xterm for 'needsterminal'
-                                    //  2. append "| $PAGER" for 'copiousoutput'
                                     if ( curField == wxT("needsterminal") )
                                         needsterminal = TRUE;
-                                    else if ( curField == wxT("copiousoutput") )
+                                    else if ( curField == wxT("copiousoutput")) {
+                                        // copiousoutput impies that the
+                                        // viewer is a console program
+                                        needsterminal =
                                         copiousoutput = TRUE;
-                                    else if ( curField == wxT("textualnewlines") )
-                                        ;   // ignore
-                                    else
+                                    }
+                                    else {
+                                        // unknown flag
                                         ok = FALSE;
+                                    }
                                 }
 
                                 if ( !ok )
                                 {
-                                    // we don't understand this field, but
-                                    // Netscape stores info in it, so don't warn
-                                    // about it
-                                    if ( curField.Left(16u) != "x-mozilla-flags=" )
+                                    if ( !IsKnownUnimportantField(curField) )
                                     {
                                         // don't flood the user with error
                                         // messages if we don't understand
@@ -1543,6 +1576,19 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                          strFileName.c_str(), nLine + 1);
         }
         else {
+            // support for flags:
+            //  1. create an xterm for 'needsterminal'
+            //  2. append "| $PAGER" for 'copiousoutput'
+            if ( copiousoutput ) {
+                const wxChar *p = wxGetenv(_T("PAGER"));
+                strOpenCmd << _T(" | ") << (p ? p : _T("more"));
+            }
+
+            if ( needsterminal ) {
+                strOpenCmd.Printf(_T("xterm -e sh -c '%s'"),
+                                  strOpenCmd.c_str());
+            }
+
             MailCapEntry *entry = new MailCapEntry(strOpenCmd,
                                                    strPrintCmd,
                                                    strTest);
@@ -1636,6 +1682,29 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
     }
 
     return mimetypes.GetCount();
+}
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+static bool IsKnownUnimportantField(const wxString& fieldAll)
+{
+    static const wxChar *knownFields[] =
+    {
+        _T("x-mozilla-flags"),
+        _T("nametemplate"),
+        _T("textualnewlines"),
+    };
+
+    wxString field = fieldAll.BeforeFirst(_T('='));
+    for ( size_t n = 0; n < WXSIZEOF(knownFields); n++ )
+    {
+        if ( field.CmpNoCase(knownFields[n]) == 0 )
+            return TRUE;
+    }
+
+    return FALSE;
 }
 
 #endif

@@ -55,8 +55,11 @@ public:
  */
 
 #define wxSW_NOBORDER         0x0000
-#define wxSW_3D               0x0010
+//#define wxSW_3D               0x0010
 #define wxSW_BORDER           0x0020
+#define wxSW_3DSASH           0x0040
+#define wxSW_3DBORDER         0x0080
+#define wxSW_3D (wxSW_3DSASH | wxSW_3DBORDER)
 
 /*
  * wxSashWindow allows any of its edges to have a sash which can be dragged
@@ -74,12 +77,23 @@ public:
 // Public API
 
     // Default constructor
-    wxSashWindow();
+    wxSashWindow()
+    {
+        Init();
+    }
 
     // Normal constructor
     wxSashWindow(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = "sashWindow");
+        const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = "sashWindow")
+    {
+        Init();
+        Create(parent, id, pos, size, style, name);
+    }
+
     ~wxSashWindow();
+
+    bool Create(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = "sashWindow");
 
     // Set whether there's a sash in this position
     void SetSashVisible(wxSashEdgePosition edge, bool sash);
@@ -151,7 +165,9 @@ public:
     // Initialize colours
     void InitColours();
 
-protected:
+private:
+    void Init();
+
     wxSashEdge  m_sashes[4];
     int         m_dragMode;
     wxSashEdgePosition m_draggingEdge;

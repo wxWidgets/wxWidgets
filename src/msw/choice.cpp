@@ -32,6 +32,7 @@
     #include "wx/choice.h"
     #include "wx/utils.h"
     #include "wx/log.h"
+    #include "wx/brush.h"
     #include "wx/settings.h"
 #endif
 
@@ -59,17 +60,17 @@ bool wxChoice::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    long msStyle = WS_CHILD | CBS_DROPDOWNLIST | WS_TABSTOP | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
+    long msStyle = WS_CHILD | CBS_DROPDOWNLIST | WS_TABSTOP | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL /* | WS_CLIPSIBLINGS */;
     if ( style & wxCB_SORT )
         msStyle |= CBS_SORT;
 
-    // the experience shows that wxChoice vs. wxComboBox distinction confuses
+    // Experience shows that wxChoice vs. wxComboBox distinction confuses
     // quite a few people - try to help them
     wxASSERT_MSG( !(style & wxCB_DROPDOWN) &&
                   !(style & wxCB_READONLY) &&
                   !(style & wxCB_SIMPLE),
-                  wxT("this style flag is ignored by wxChoice, you "
-                     "probably want to use a wxComboBox") );
+                  _T("this style flag is ignored by wxChoice, you ")
+                  _T("probably want to use a wxComboBox") );
 
     if ( !MSWCreateControl(wxT("COMBOBOX"), msStyle) )
         return FALSE;
@@ -102,7 +103,21 @@ int wxChoice::DoAppend(const wxString& item)
     int n = (int)SendMessage(GetHwnd(), CB_ADDSTRING, 0, (LONG)item.c_str());
     if ( n == CB_ERR )
     {
-        wxLogLastError("SendMessage(CB_ADDSTRING)");
+        wxLogLastError(wxT("SendMessage(CB_ADDSTRING)"));
+    }
+
+    // if we were created empty, the choice is too small to show any items, so
+    // resize it - but as we do it once only, give it some reasonable size
+    if ( GetCount() == 1 )
+    {
+        wxSize size = GetSize();
+        int cx, cy;
+        wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+
+        size.y = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
+
+        // don't call our SetSize() as it ignores the height parameter
+        wxControl::DoSetSize(-1, -1, size.x, size.y, wxSIZE_USE_EXISTING);
     }
 
     return n;
@@ -201,7 +216,7 @@ wxString wxChoice::GetString(int n) const
     if (len) {
         if ( ::SendMessage(GetHwnd(), CB_GETLBTEXT, n,
                            (LPARAM)str.GetWriteBuf(len)) == CB_ERR ) {
-            wxLogLastError("SendMessage(CB_GETLBTEXT)");
+            wxLogLastError(wxT("SendMessage(CB_GETLBTEXT)"));
         }
         str.UngetWriteBuf();
     }
@@ -286,9 +301,13 @@ wxSize wxChoice::DoGetBestSize() const
 
     wChoice += 5*cx;
 
-    // Choice drop-down list depends on number of items (limited to 10)
-    size_t nStrings = nItems == 0 ? 10 : wxMin(10, nItems) + 1;
-    int hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*nStrings;
+    if ( nItems > 10 )
+    {
+        // don't make the control too big
+        nItems = 10;
+    }
+
+    int hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*(nItems + 1);
 
     return wxSize(wChoice, hChoice);
 }
@@ -336,4 +355,37 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
     return TRUE;
 }
+
+WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam)
+{
+#if wxUSE_CTL3D
+    if ( m_useCtl3D )
+    {
+        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
+        return (WXHBRUSH) hbrush;
+    }
+#endif // wxUSE_CTL3D
+
+    HDC hdc = (HDC)pDC;
+    if (GetParent()->GetTransparentBackground())
+        SetBkMode(hdc, TRANSPARENT);
+    else
+        SetBkMode(hdc, OPAQUE);
+
+    wxColour colBack = GetBackgroundColour();
+
+    if (!IsEnabled())
+        colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+
+    ::SetBkColor(hdc, wxColourToRGB(colBack));
+    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+
+    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+
+    return (WXHBRUSH)brush->GetResourceHandle();
+}
+
 

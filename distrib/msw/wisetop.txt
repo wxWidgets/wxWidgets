@@ -1,7 +1,7 @@
 Document Type: WSE
 item: Global
   Version=5.0
-  Title=wxWindows 2.1.14 Installation
+  Title=wxWindows 2.2.3 Installation
   Flags=00000100
   Split=1420
   Languages=65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000000001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=D:\wx2\wxWindows\deliver\setup.exe
+  EXE Filename=D:\wx2stable\wxWindows\deliver\setup.exe
   FTP Cluster Size=20
   Variable Name1=_SYS_
   Variable Default1=C:\WINDOWS\SYSTEM
@@ -47,7 +47,7 @@ item: End Block
 end
 item: Set Variable
   Variable=APPTITLE
-  Value=wxWindows 2.1.14
+  Value=wxWindows 2.2.3
 end
 item: Set Variable
   Variable=GROUP
@@ -62,7 +62,7 @@ item: Set Variable
   Value=wx2
 end
 item: Display Graphic
-  Pathname=D:\wx2\wxWindows\distrib\msw\wxwin01.bmp
+  Pathname=D:\wx2stable\wxWindows\distrib\msw\wxwin01.bmp
   X Position=16
   Y Position=16
 end
@@ -207,7 +207,9 @@ item: Custom Dialog Set
     item: Static
       Rectangle=86 41 256 130
       Create Flags=01010000000000000000000000000000
-      Text=This installation program will install %APPTITLE%. It will need about 25 MB of hard disk space.
+      Text=This installation program will install %APPTITLE%. It will need 30-130 MB of hard disk space,
+      Text=depending on the disk cluster size. Allow further disk space for compiling the library
+      Text=and samples.
       Text=
       Text=Press the Next button to start the installation. You can press the Cancel button now if you do not want to install %APPTITLE% at this time.
       Text French=Ce programme d'installation va installer %APPTITLE%.

@@ -4,17 +4,23 @@
 //                        Robin Dunn <robin@aldunn.com>
 // The License.txt file describes the conditions under which this software may be distributed.
 
+#include <ctype.h>
 
 #include "Platform.h"
 #include "wx/stc/stc.h"
 
+
+#ifdef __WXGTK__
+#include <gtk/gtk.h>
+#endif
+
 Point Point::FromLong(long lpoint) {
-    return Point(lpoint & 0xFFFF, lpoint >> 32);
+    return Point(lpoint & 0xFFFF, lpoint >> 16);
 }
 
 wxRect wxRectFromPRectangle(PRectangle prc) {
     wxRect rc(prc.left, prc.top,
-              prc.right-prc.left+1, prc.bottom-prc.top+1);
+              prc.right-prc.left, prc.bottom-prc.top);
     return rc;
 }
 
@@ -105,14 +111,15 @@ Font::Font() {
 Font::~Font() {
 }
 
-void Font::Create(const char *faceName, int size, bool bold, bool italic) {
+void Font::Create(const char *faceName, int characterSet, int size, bool bold, bool italic) {
     Release();
     id = new wxFont(size,
                     wxDEFAULT,
                     italic ? wxITALIC :  wxNORMAL,
                     bold ? wxBOLD : wxNORMAL,
                     false,
-                    faceName);
+                    faceName,
+                    wxFONTENCODING_DEFAULT);
 }
 
 
@@ -181,12 +188,20 @@ void Surface::BrushColor(Colour back) {
 }
 
 void Surface::SetFont(Font &font_) {
-    hdc->SetFont(*font_.GetID());
+  if (font_.GetID()) {
+      hdc->SetFont(*font_.GetID());
+    }
 }
 
 int Surface::LogPixelsY() {
     return hdc->GetPPI().y;
 }
+
+
+int Surface::DeviceHeightFont(int points) {
+    return points * LogPixelsY() / 72;
+}
+
 
 void Surface::MoveTo(int x_, int y_) {
     x = x_;
@@ -232,7 +247,7 @@ void Surface::FillRectangle(PRectangle rc, Surface &surfacePattern) {
 void Surface::RoundedRectangle(PRectangle rc, Colour fore, Colour back) {
     PenColour(fore);
     BrushColor(back);
-    hdc->DrawRoundedRectangle(wxRectFromPRectangle(rc), 8);
+    hdc->DrawRoundedRectangle(wxRectFromPRectangle(rc), 4);
 }
 
 void Surface::Ellipse(PRectangle rc, Colour fore, Colour back) {
@@ -242,7 +257,8 @@ void Surface::Ellipse(PRectangle rc, Colour fore, Colour back) {
 }
 
 void Surface::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
-    hdc->Blit(rc.left, rc.top, rc.Width(), rc.Height(),
+    wxRect r = wxRectFromPRectangle(rc);
+    hdc->Blit(r.x, r.y, r.width, r.height,
               surfaceSource.hdc, from.x, from.y, wxCOPY);
 }
 
@@ -344,7 +360,8 @@ void Surface::SetClip(PRectangle rc) {
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 }
 
-
+void Surface::FlushCachedState() {
+}
 
 Window::~Window() {
 }
@@ -365,7 +382,8 @@ PRectangle Window::GetPosition() {
 }
 
 void Window::SetPosition(PRectangle rc) {
-    id->SetSize(rc.left, rc.top, rc.Width(), rc.Height());
+    wxRect r = wxRectFromPRectangle(rc);
+    id->SetSize(r);
 }
 
 void Window::SetPositionRelative(PRectangle rc, Window) {
@@ -374,7 +392,7 @@ void Window::SetPositionRelative(PRectangle rc, Window) {
 
 PRectangle Window::GetClientPosition() {
     wxSize sz = id->GetClientSize();
-    return  PRectangle(0, 0, sz.x - 1, sz.y - 1);
+    return  PRectangle(0, 0, sz.x, sz.y);
 }
 
 void Window::Show(bool show) {
@@ -386,7 +404,8 @@ void Window::InvalidateAll() {
 }
 
 void Window::InvalidateRectangle(PRectangle rc) {
-    id->Refresh(false, &wxRectFromPRectangle(rc));
+    wxRect r = wxRectFromPRectangle(rc);
+    id->Refresh(false, &r);
 }
 
 void Window::SetFont(Font &font) {
@@ -432,6 +451,76 @@ void Window::SetTitle(const char *s) {
 }
 
 
+class wxSTCListBox : public wxListBox {
+public:
+    wxSTCListBox(wxWindow* parent, wxWindowID id)
+        : wxListBox(parent, id, wxDefaultPosition, wxDefaultSize,
+                    0, NULL, wxLB_SINGLE | wxLB_SORT | wxSIMPLE_BORDER)
+        {}
+
+    void OnFocus(wxFocusEvent& event) {
+        GetParent()->SetFocus();
+        event.Skip();
+    }
+
+#ifdef __WXGTK__
+    void DoSetFirstItem(int n);
+#endif
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxSTCListBox, wxListBox)
+    EVT_SET_FOCUS(wxSTCListBox::OnFocus)
+END_EVENT_TABLE()
+
+
+
+
+#ifdef __WXGTK__
+    // This can be removed after 2.2.2 I think
+void wxSTCListBox::DoSetFirstItem( int n )
+{
+    wxCHECK_RET( m_list, wxT("invalid listbox") );
+
+    if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (m_list))
+        return;
+
+    // terribly efficient
+    const gchar *vadjustment_key = "gtk-vadjustment";
+    guint vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
+
+    GtkAdjustment *adjustment =
+       (GtkAdjustment*) gtk_object_get_data_by_id (GTK_OBJECT (m_list), vadjustment_key_id);
+    wxCHECK_RET( adjustment, wxT("invalid listbox code") );
+
+    GList *target = g_list_nth( m_list->children, n );
+    wxCHECK_RET( target, wxT("invalid listbox index") );
+
+    GtkWidget *item = GTK_WIDGET(target->data);
+    wxCHECK_RET( item, wxT("invalid listbox code") );
+
+    // find the last item before this one which is already realized
+    size_t nItemsBefore;
+    for ( nItemsBefore = 0; item && (item->allocation.y == -1); nItemsBefore++ )
+    {
+        target = target->prev;
+        if ( !target )
+        {
+            // nothing we can do if there are no allocated items yet
+            return;
+        }
+
+        item = GTK_WIDGET(target->data);
+    }
+
+    gtk_adjustment_set_value(adjustment,
+                             item->allocation.y +
+                                nItemsBefore*item->allocation.height);
+}
+#endif
+
 
 ListBox::ListBox() {
 }
@@ -440,8 +529,32 @@ ListBox::~ListBox() {
 }
 
 void ListBox::Create(Window &parent, int ctrlID) {
-    id = new wxListBox(parent.id, ctrlID, wxDefaultPosition, wxDefaultSize,
-                       0, NULL, wxLB_SINGLE | wxLB_SORT);
+    id = new wxSTCListBox(parent.id, ctrlID);
+//    id = new wxListBox(parent.id, ctrlID,  wxDefaultPosition, wxDefaultSize,
+//                       0, NULL, wxLB_SINGLE | wxLB_SORT | wxSIMPLE_BORDER);
+}
+
+PRectangle ListBox::GetDesiredRect() {
+    wxSize sz = ((wxListBox*)id)->GetBestSize();
+    PRectangle rc;
+    rc.top = 0;
+    rc.left = 0;
+    if (sz.x > 150)   // TODO: A better way to determine these max sizes
+        sz.x = 150;
+    if (sz.y > 100)
+        sz.y = 100;
+    rc.right = sz.x;
+    rc.bottom = sz.y;
+
+    return rc;
+}
+
+void ListBox::SetAverageCharWidth(int width) {
+    aveCharWidth = width;
+}
+
+void ListBox::SetFont(Font &font) {
+    Window::SetFont(font);
 }
 
 void ListBox::Clear() {
@@ -458,6 +571,13 @@ int ListBox::Length() {
 
 void ListBox::Select(int n) {
     ((wxListBox*)id)->SetSelection(n);
+#ifdef __WXGTK__
+    if (n > 4)
+        n = n - 4;
+    else
+        n = 1;
+    ((wxListBox*)id)->SetFirstItem(n);
+#endif
 }
 
 int ListBox::GetSelection() {
@@ -465,7 +585,14 @@ int ListBox::GetSelection() {
 }
 
 int ListBox::Find(const char *prefix) {
-    return ((wxListBox*)id)->FindString(prefix);
+    if (prefix) {
+        for (int x=0; x < ((wxListBox*)id)->Number(); x++) {
+            wxString text = ((wxListBox*)id)->GetString(x);
+            if (text.StartsWith(prefix))
+                return x;
+        }
+    }
+    return -1;
 }
 
 void ListBox::GetValue(int n, char *value, int len) {

@@ -156,10 +156,15 @@ void yyerror(char *s)
  * the UNIX flex expects a proper function.
  */
 
-/* Not sure if __SC__ is the appropriate thing
- * to test
+/* At least on alphaev6-dec-osf4.0e yywrap() must be #define'd.
+ * RL: ... but on Debian/Alpha(linux) it must not, so hopefully
+ *     testing for __OSF__ here is what we really want.
  */
-
+#ifdef __OSF__
+#ifndef yywrap
+#define yywrap() 1
+#endif
+#else
 /* HH: Added test for __WX_SETUP_H__ for gnuwin builds
  * using configure */ 
 #if !defined(__SC__) && !defined(__GNUWIN32__) 
@@ -175,3 +180,5 @@ int yywrap() { return 1; }
 #elif defined(__WX_SETUP_H__)
 int yywrap() { return 1; }
 #endif
+#endif
+

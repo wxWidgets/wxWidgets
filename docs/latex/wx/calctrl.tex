@@ -6,18 +6,443 @@
 %% Created:     03.01.00
 %% RCS-ID:      $Id$
 %% Copyright:   (c) Vadim Zeitlin
-%% Licence:     wxWindows licence
+%% License:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{\class{wxCalendarCtrl}}\label{wxcalendarctrl}
 
-The calendar control allows the user to pick a date interactively.
+The calendar control allows the user to pick a date interactively. For this,
+it displays a window containing several parts: the control to pick the month
+and the year at the top (either or both of them may be disabled) and a month
+area below them which shows all the days in the month. The user can move the
+current selection using the keyboard and select the date (generating 
+{\tt EVT\_CALENDAR} event) by pressing {\tt <Return>} or double clicking it.
+
+It has advanced possibilities for the customization of its display. All global
+settings (such as colours and fonts used) can, of course, be changed. But
+also, the display style for each day in the month can be set independently
+using \helpref{wxCalendarDateAttr}{wxcalendardateattr} class.
+
+An item without custom attributes is drawn with the default colours and
+font and without border, but setting custom attributes with 
+\helpref{SetAttr}{wxcalendarctrlsetattr} allows to modify its appearance. Just
+create a custom attribute object and set it for the day you want to be
+displayed specially (note that the control will take ownership of the pointer,
+i.e. it will delete it itself). A day may be marked as being a holiday, even
+if it is not reckognized as oen by \helpref{wxDateTime}{tdateholidays} using 
+\helpref{SetHoliday}{wxcalendardateattrsetholiday} method.
+
+As the attributes are specified for each day, they may change when the month
+is changed, so you will often want to update them in 
+{\tt EVT\_CALENDAR\_MONTH} event handler.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
 
 \wxheading{Include files}
 
 <wx/calctrl.h>
 
-\wxheading{See also:}
+\wxheading{Window styles}
 
-\helpref{Calendar sample}{samplecalendar}
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=4pt
+\twocolitem{\windowstyle{wxCAL\_SUNDAY\_FIRST}}{Show Sunday as the first day in the week}
+\twocolitem{\windowstyle{wxCAL\_MONDAY\_FIRST}}{Show Monday as the first day in the week}
+\twocolitem{\windowstyle{wxCAL\_SHOW\_HOLIDAYS}}{Highlight holidays in the calendar}
+\twocolitem{\windowstyle{wxCAL\_NO\_YEAR\_CHANGE}}{Disable the year changing}
+\twocolitem{\windowstyle{wxCAL\_NO\_MONTH\_CHANGE}}{Disable the month (and, implicitly, the year) changing}
+\end{twocollist}
+
+The default calendar style is {\tt wxCAL\_SHOW\_HOLIDAYS}.
+
+\wxheading{Event table macros}
+
+To process input from a calendar control, use these event handler macros to
+direct input to member functions that take a 
+\helpref{wxCalendarEvent}{wxcalendarevent} argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=7pt
+\twocolitem{{\bf EVT\_CALENDAR(id, func)}}{A day was double clickedi n the calendar.}
+\twocolitem{{\bf EVT\_CALENDAR\_SEL\_CHANGED(id, func)}}{The selected date changed.}
+\twocolitem{{\bf EVT\_CALENDAR\_DAY(id, func)}}{The selected day changed.}
+\twocolitem{{\bf EVT\_CALENDAR\_MONTH(id, func)}}{The selected month changed.}
+\twocolitem{{\bf EVT\_CALENDAR\_YEAR(id, func)}}{The selected year changed.}
+\twocolitem{{\bf EVT\_CALENDAR\_WEEKDAY\_CLICKED(id, func)}}{User clicked on the week day header}
+\end{twocollist}%
+
+Note that changing the selected date will result in either of 
+{\tt EVT\_CALENDAR\_DAY}, {\tt MONTH} or {\tt YEAR} events and 
+{\tt EVT\_CALENDAR\_SEL\_CHANGED} one.
+
+\wxheading{Constants}
+
+The following are the possible return values for 
+\helpref{HitTest}{wxcalendarctrlhittest} method:
+{\small \begin{verbatim}
+enum wxCalendarHitTestResult
+\{
+    wxCAL_HITTEST_NOWHERE,      // outside of anything
+    wxCAL_HITTEST_HEADER,       // on the header (weekdays)
+    wxCAL_HITTEST_DAY           // on a day in the calendar
+\};
+\end{verbatim}}
+
+\wxheading{See also}
+
+\helpref{Calendar sample}{samplecalendar}\\
+\helpref{wxCalendarDateAttr}{wxcalendardateattr}\\
+\helpref{wxCalendarEvent}{wxcalendarevent}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxCalendarCtrl::wxCalendarCtrl}\label{wxcalendarctrlwxcalendarctrldef}
+
+\func{}{wxCalendarCtrl}{\void}
+
+Default constructor, use \helpref{Create}{wxcalendarctrlcreate} after it.
+
+\membersection{wxCalendarCtrl::wxCalendarCtrl}\label{wxcalendarctrlwxcalendarctrl}
+
+\func{}{wxCalendarCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxDateTime\& }{date = wxDefaultDateTime}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxCAL\_SHOW\_HOLIDAYS}, \param{const wxString\& }{name = wxCalendarNameStr}}
+
+Does the same as \helpref{Create}{wxcalendarctrlcreate} method.
+
+\membersection{wxCalendarCtrl::Create}\label{wxcalendarctrlcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxDateTime\& }{date = wxDefaultDateTime}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxCAL\_SHOW\_HOLIDAYS}, \param{const wxString\& }{name = wxCalendarNameStr}}
+
+Creates the control. See \helpref{wxWindow}{wxwindowctor} for the meaning of
+the parameters and the control overview for the possible styles.
+
+\membersection{wxCalendarCtrl::\destruct{wxCalendarCtrl}}\label{wxcalendarctrldtor}
+
+\func{}{\destruct{wxCalendarCtrl}}{\void}
+
+Destroys the control.
+
+\membersection{wxCalendarCtrl::SetDate}\label{wxcalendarctrlsetdate}
+
+\func{void}{SetDate}{\param{const wxDateTime\& }{date}}
+
+Sets the current date.
+
+\membersection{wxCalendarCtrl::GetDate}\label{wxcalendarctrlgetdate}
+
+\constfunc{const wxDateTime\&}{GetDate}{\void}
+
+Gets the currently selected date.
+
+\membersection{wxCalendarCtrl::EnableYearChange}\label{wxcalendarctrlenableyearchange}
+
+\func{void}{EnableYearChange}{\param{bool }{enable = TRUE}}
+
+This function should be used instead of changing {\tt wxCAL\_NO\_YEAR\_CHANGE}
+style bit directly. It allows or disallows the user to chaneg the year
+interactively.
+
+\membersection{wxCalendarCtrl::EnableMonthChange}\label{wxcalendarctrlenablemonthchange}
+
+\func{void}{EnableMonthChange}{\param{bool }{enable = TRUE}}
+
+This function should be used instead of changing 
+{\tt wxCAL\_NO\_MONTH\_CHANGE} style bit. It allows or disallows the user to
+change the month interactively. Note that if the month can not be changed, the
+year can not be changed neither.
+
+\membersection{wxCalendarCtrl::EnableHolidayDisplay}\label{wxcalendarctrlenableholidaydisplay}
+
+\func{void}{EnableHolidayDisplay}{\param{bool }{display = TRUE}}
+
+This function should be used instead of changing {\tt wxCAL\_SHOW\_HOLIDAYS}
+style bit directly. It enables or disables the special highlighting of the
+holidays.
+
+\membersection{wxCalendarCtrl::SetHeaderColours}\label{wxcalendarctrlsetheadercolours}
+
+\func{void}{SetHeaderColours}{\param{const wxColour\& }{colFg}, \param{const wxColour\& }{colBg}}
+
+Set the colours used for painting the weekdays at the top of the control.
+
+\membersection{wxCalendarCtrl::GetHeaderColourFg}\label{wxcalendarctrlgetheadercolourfg}
+
+\constfunc{const wxColour\&}{GetHeaderColourFg}{\void}
+
+Gets the foreground colour of the header part of the calendar window.
+
+\wxheading{See also}
+
+\helpref{SetHeaderColours}{wxcalendarctrlsetheadercolours}
+
+\membersection{wxCalendarCtrl::GetHeaderColourBg}\label{wxcalendarctrlgetheadercolourbg}
+
+\constfunc{const wxColour\&}{GetHeaderColourBg}{\void}
+
+Gets the background colour of the header part of the calendar window.
+
+\wxheading{See also}
+
+\helpref{SetHeaderColours}{wxcalendarctrlsetheadercolours}
+
+\membersection{wxCalendarCtrl::SetHighlightColours}\label{wxcalendarctrlsethighlightcolours}
+
+\func{void}{SetHighlightColours}{\param{const wxColour\& }{colFg}, \param{const wxColour\& }{colBg}}
+
+Set the colours to be used for highlighting the currently selected date.
+
+\membersection{wxCalendarCtrl::GetHighlightColourFg}\label{wxcalendarctrlgethighlightcolourfg}
+
+\constfunc{const wxColour\&}{GetHighlightColourFg}{\void}
+
+Gets the foreground highlight colour.
+
+\wxheading{See also}
+
+\helpref{SetHighlightColours}{wxcalendarctrlsethighlightcolours}
+
+\membersection{wxCalendarCtrl::GetHighlightColourBg}\label{wxcalendarctrlgethighlightcolourbg}
+
+\constfunc{const wxColour\&}{GetHighlightColourBg}{\void}
+
+Gets the background highlight colour.
+
+\wxheading{See also}
+
+\helpref{SetHighlightColours}{wxcalendarctrlsethighlightcolours}
+
+\membersection{wxCalendarCtrl::SetHolidayColours}\label{wxcalendarctrlsetholidaycolours}
+
+\func{void}{SetHolidayColours}{\param{const wxColour\& }{colFg}, \param{const wxColour\& }{colBg}}
+
+Sets the colours to be used for the holidays highlighting (only used if the
+window style includes {\tt wxCAL\_SHOW\_HOLIDAYS} flag).
+
+\membersection{wxCalendarCtrl::GetHolidayColourFg}\label{wxcalendarctrlgetholidaycolourfg}
+
+\constfunc{const wxColour\&}{GetHolidayColourFg}{\void}
+
+Return the foregound colour currently used for holiday highlighting.
+
+\wxheading{See also}
+
+\helpref{SetHolidayColours}{wxcalendarctrlsetholidaycolours}
+
+\membersection{wxCalendarCtrl::GetHolidayColourBg}\label{wxcalendarctrlgetholidaycolourbg}
+
+\constfunc{const wxColour\&}{GetHolidayColourBg}{\void}
+
+Return the background colour currently used for holiday highlighting.
+
+\wxheading{See also}
+
+\helpref{SetHolidayColours}{wxcalendarctrlsetholidaycolours}
+
+\membersection{wxCalendarCtrl::GetAttr}\label{wxcalendarctrlgetattr}
+
+\constfunc{wxCalendarDateAttr *}{GetAttr}{\param{size\_t }{day}}
+
+Returns the attribute for the given date (should be in the range $1\ldots31$).
+
+The returned pointer may be {\tt NULL}.
+
+\membersection{wxCalendarCtrl::SetAttr}\label{wxcalendarctrlsetattr}
+
+\func{void}{SetAttr}{\param{size\_t }{day}, \param{wxCalendarDateAttr* }{attr}}
+
+Associates the attribute with the specified date (in the range $1\ldots31$).
+
+If the pointer is {\tt NULL}, the items attribute is cleared.
+
+\membersection{wxCalendarCtrl::SetHoliday}\label{wxcalendarctrlsetholiday}
+
+\func{void}{SetHoliday}{\param{size\_t }{day}}
+
+Marks the specified day as being a holiday in the current month.
+
+\membersection{wxCalendarCtrl::ResetAttr}\label{wxcalendarctrlresetattr}
+
+\func{void}{ResetAttr}{\param{size\_t }{day}}
+
+Clears any attributes associated with the given day (in the range
+$1\ldots31$).
+
+\membersection{wxCalendarCtrl::HitTest}\label{wxcalendarctrlhittest}
+
+\func{wxCalendarHitTestResult}{HitTest}{\param{const wxPoint\& }{pos}, \param{wxDateTime* }{date = NULL}, \param{wxDateTime::WeekDay* }{wd = NULL}}
+
+Returns one of {\tt wxCAL\_HITTEST\_XXX} 
+\helpref{constants}{wxcalendarctrl} and fills either {\it date} or 
+{\it wd} pointer with the corresponding value depending on the hit test code.
+
+\section{\class{wxCalendarDateAttr}}\label{wxcalendardateattr}
+
+wxCalendarDateAttr is a custom attributes for a calendar date. The objects of
+this class are used with \helpref{wxCalendarCtrl}{wxcalendarctrl}.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Constants}
+
+Here are the possible kinds of borders which may be used to decorate a date:
+
+{\small \begin{verbatim}
+enum wxCalendarDateBorder
+{
+    wxCAL\_BORDER\_NONE,          // no border (default)
+    wxCAL\_BORDER\_SQUARE,        // a rectangular border
+    wxCAL\_BORDER\_ROUND          // a round border
+}
+\end{verbatim}}
+
+\wxheading{See also}
+
+\helpref{wxCalendarCtrl}{wxcalendarctrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxCalendarDateAttr::wxCalendarDateAttr}\label{wxcalendardateattrwxcalendardateattr}
+
+\func{}{wxCalendarDateAttr}{\void}
+
+\func{}{wxCalendarDateAttr}{\param{const wxColour\& }{colText}, \param{const wxColour\& }{colBack = wxNullColour}, \param{const wxColour\& }{colBorder = wxNullColour}, \param{const wxFont\& }{font = wxNullFont}, \param{wxCalendarDateBorder }{border = wxCAL\_BORDER\_NONE}}
+
+\func{}{wxCalendarDateAttr}{\param{wxCalendarDateBorder }{border}, \param{const wxColour\& }{colBorder = wxNullColour}}
+
+The constructors.
+
+\membersection{wxCalendarDateAttr::SetTextColour}\label{wxcalendardateattrsettextcolour}
+
+\func{void}{SetTextColour}{\param{const wxColour\& }{colText}}
+
+Sets the text (foreground) colour to use.
+
+\membersection{wxCalendarDateAttr::SetBackgroundColour}\label{wxcalendardateattrsetbackgroundcolour}
+
+\func{void}{SetBackgroundColour}{\param{const wxColour\& }{colBack}}
+
+Sets the text background colour to use.
+
+\membersection{wxCalendarDateAttr::SetBorderColour}\label{wxcalendardateattrsetbordercolour}
+
+\func{void}{SetBorderColour}{\param{const wxColour\& }{col}}
+
+Sets the border colour to use.
+
+\membersection{wxCalendarDateAttr::SetFont}\label{wxcalendardateattrsetfont}
+
+\func{void}{SetFont}{\param{const wxFont\& }{font}}
+
+Sets the font to use.
+
+\membersection{wxCalendarDateAttr::SetBorder}\label{wxcalendardateattrsetborder}
+
+\func{void}{SetBorder}{\param{wxCalendarDateBorder }{border}}
+
+Sets the \helpref{border kind}{wxcalendardateattr}
+
+\membersection{wxCalendarDateAttr::SetHoliday}\label{wxcalendardateattrsetholiday}
+
+\func{void}{SetHoliday}{\param{bool }{holiday}}
+
+Display the date with this attribute as a holiday.
+
+\membersection{wxCalendarDateAttr::HasTextColour}\label{wxcalendardateattrhastextcolour}
+
+\constfunc{bool}{HasTextColour}{\void}
+
+Returns {\tt TRUE} if this item has a non default text foreground colour.
+
+\membersection{wxCalendarDateAttr::HasBackgroundColour}\label{wxcalendardateattrhasbackgroundcolour}
+
+\constfunc{bool}{HasBackgroundColour}{\void}
+
+Returns {\tt TRUE} if this attribute specifies a non default text background colour.
+
+\membersection{wxCalendarDateAttr::HasBorderColour}\label{wxcalendardateattrhasbordercolour}
+
+\constfunc{bool}{HasBorderColour}{\void}
+
+Returns {\tt TRUE} if this attribute specifies a non default border colour.
+
+\membersection{wxCalendarDateAttr::HasFont}\label{wxcalendardateattrhasfont}
+
+\constfunc{bool}{HasFont}{\void}
+
+Returns {\tt TRUE} if this attribute specifies a non default font.
+
+\membersection{wxCalendarDateAttr::HasBorder}\label{wxcalendardateattrhasborder}
+
+\constfunc{bool}{HasBorder}{\void}
+
+Returns {\tt TRUE} if this attribute specifies a non default (i.e. any) border.
+
+\membersection{wxCalendarDateAttr::IsHoliday}\label{wxcalendardateattrisholiday}
+
+\constfunc{bool}{IsHoliday}{\void}
+
+Returns {\tt TRUE} if this attribute specifies that this item should be
+displayed as a holiday.
+
+\membersection{wxCalendarDateAttr::GetTextColour}\label{wxcalendardateattrgettextcolour}
+
+\constfunc{const wxColour\&}{GetTextColour}{\void}
+
+Returns the text colour to use for the item with this attribute.
+
+\membersection{wxCalendarDateAttr::GetBackgroundColour}\label{wxcalendardateattrgetbackgroundcolour}
+
+\constfunc{const wxColour\&}{GetBackgroundColour}{\void}
+
+Returns the background colour to use for the item with this attribute.
+
+\membersection{wxCalendarDateAttr::GetBorderColour}\label{wxcalendardateattrgetbordercolour}
+
+\constfunc{const wxColour\&}{GetBorderColour}{\void}
+
+Returns the border colour to use for the item with this attribute.
+
+\membersection{wxCalendarDateAttr::GetFont}\label{wxcalendardateattrgetfont}
+
+\constfunc{const wxFont\&}{GetFont}{\void}
+
+Returns the font to use for the item with this attribute.
+
+\membersection{wxCalendarDateAttr::GetBorder}\label{wxcalendardateattrgetborder}
+
+\constfunc{wxCalendarDateBorder}{GetBorder}{\void}
+
+Returns the \helpref{border}{wxcalendardateattr} to use for the item with this attribute.
+
+\section{\class{wxCalendarEvent}}\label{wxcalendarevent}
+
+The wxCalendarEvent class is used together with 
+\helpref{wxCalendarCtrl}{wxcalendarctrl}.
+
+\wxheading{See also}
+
+\helpref{wxCalendarCtrl}{wxcalendarctrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxCalendarEvent::GetDate}{wxcalendareventgetdate}
+
+\constfunc{const wxDateTime&}{GetDate}{\void}
+
+Returns the date. This function may be called for all event types except 
+{\tt EVT\_CALENDAR\_WEEKDAY\_CLICKED} one for which it doesn't make sense.
+
+\membersection{wxCalendarEvent::GetWeekDay}{wxcalendareventgetweekday}
+
+\constfunc{wxDateTime::WeekDay}{GetWeekDay}{\void}
+
+Returns the week day on which the user clicked in 
+{\tt EVT\_CALENDAR\_WEEKDAY\_CLICKED} handler. It doesn't make sense to call
+this function in other handlers.
 

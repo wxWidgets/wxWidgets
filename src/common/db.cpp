@@ -1,10 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        db.cpp
-// Purpose:     Implementation of the wxDB class.  The wxDB class represents a connection
-//              to an ODBC data source.  The wxDB class allows operations on the data
+// Purpose:     Implementation of the wxDb class.  The wxDb class represents a connection
+//              to an ODBC data source.  The wxDb class allows operations on the data
 //              source such as opening and closing the data source.
 // Author:      Doug Card
 // Modified by: George Tasker
+//              Bart Jourquin
+//              Mark Johnson
 // Mods:        Dec, 1998:
 //                -Added support for SQL statement logging and database cataloging
 // Mods:        April, 1999
@@ -35,6 +37,7 @@
 
 #include "wx/wxprec.h"
 
+
 // Use this line for wxWindows v1.x
 //#include "wx_ver.h"
 // Use this line for wxWindows v2.x
@@ -42,7 +45,7 @@
 
 #if wxMAJOR_VERSION == 2
     #ifdef __GNUG__
-    #pragma implementation "db.h"
+        #pragma implementation "db.h"
     #endif
 #endif
 
@@ -66,6 +69,7 @@
     #include "wx/filefn.h"
     #include "wx/wxchar.h"
 #endif
+
 
 #if wxMAJOR_VERSION == 1
 #    if defined(wx_msw) || defined(wx_x)
@@ -94,6 +98,7 @@
 
 WXDLLEXPORT_DATA(wxDbList*) PtrBegDbList = 0;
 
+
 char const *SQL_LOG_FILENAME         = "sqllog.txt";
 char const *SQL_CATALOG_FILENAME     = "catalog.txt";
 
@@ -102,61 +107,155 @@ char const *SQL_CATALOG_FILENAME     = "catalog.txt";
 #endif
 
 // SQL Log defaults to be used by GetDbConnection
-wxSqlLogState SQLLOGstate = sqlLogOFF;
+wxDbSqlLogState SQLLOGstate = sqlLogOFF;
 
-//char SQLLOGfn[DB_PATH_MAX+1] = SQL_LOG_FILENAME;
-char *SQLLOGfn         = (char*) SQL_LOG_FILENAME;
+//char SQLLOGfn[wxDB_PATH_MAX+1] = SQL_LOG_FILENAME;
+//wxChar *SQLLOGfn         = (wxChar*) SQL_LOG_FILENAME;
+static wxString SQLLOGfn = SQL_LOG_FILENAME;
 
-// The wxDB::errorList is copied to this variable when the wxDB object
+// The wxDb::errorList is copied to this variable when the wxDb object
 // is closed.  This way, the error list is still available after the
 // database object is closed.  This is necessary if the database
 // connection fails so the calling application can show the operator
-// why the connection failed.  Note: as each wxDB object is closed, it
-// will overwrite the errors of the previously destroyed wxDB object in
-// this variable.
+// why the connection failed.  Note: as each wxDb object is closed, it
+// will overwrite the errors of the previously destroyed wxDb object in
+// this variable.  NOTE: This occurs during a CLOSE, not a FREEing of the
+// connection
 char DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
 
-
-/********** wxColFor Constructor **********/
-wxColFor::wxColFor()
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
+// This type defines the return row-struct form 
+// SQLTablePrivileges, and is used by wxDB::TablePrivileges.
+typedef struct 
 {
-    i_Nation = 0;                // 0=EU, 1=UK, 2=International, 3=US
-    s_Field  = "";
+   char        tableQual[129];
+   char        tableOwner[129];
+   char        tableName[129];
+   char        grantor[129];
+   char        grantee[129];
+   char        privilege[129];
+   char        grantable[4];
+} wxDbTablePrivilegeInfo;
+#endif
+
+
+/********** wxDbColFor Constructor **********/
+wxDbColFor::wxDbColFor()
+{
+    s_Field = "";
     int i;
     for (i=0;i<7;i++)
     {
         s_Format[i] = "";
-        s_Menge[i]  = "";
-        i_Menge[i]  = 0;
+        s_Amount[i] = "";
+        i_Amount[i] = 0;
     }
-    Format(1,DB_DATA_TYPE_VARCHAR,0,0,0);      // the Function that does the work
-}  // wxColFor::wxColFor()
+    i_Nation      = 0;                     // 0=EU, 1=UK, 2=International, 3=US
+    i_dbDataType  = 0;
+    i_sqlDataType = 0;
+    Format(1,DB_DATA_TYPE_VARCHAR,0,0,0);  // the Function that does the work
+}  // wxDbColFor::wxDbColFor()
 
 
-wxColFor::~wxColFor()
+wxDbColFor::~wxDbColFor()
 {
-}  // wxColFor::~wxColFor()
+}  // wxDbColFor::~wxDbColFor()
 
 
-int wxColFor::Format(int Nation,int dbDataType,SWORD sqlDataType,short columnSize,short decimalDigits)
+/********** wxDbColInf Con / Destructor **********/
+wxDbColInf::wxDbColInf()
+{
+    catalog[0]      = 0;
+    schema[0]       = 0;
+    tableName[0]    = 0;
+    colName[0]      = 0;
+    sqlDataType     = 0;
+    typeName[0]     = 0;
+    columnSize      = 0;
+    bufferLength    = 0;
+    decimalDigits   = 0;
+    numPrecRadix    = 0;
+    nullable        = 0;
+    remarks[0]      = 0;
+    dbDataType      = 0;
+    PkCol           = 0;
+    PkTableName[0]  = 0;
+    FkCol           = 0;
+    FkTableName[0]  = 0;
+    pColFor         = NULL;
+}  // wxDbColInf::wxDbColFor()
+
+
+wxDbColInf::~wxDbColInf()
+{
+    if (pColFor)
+        delete pColFor;
+    pColFor = NULL;
+}  // wxDbColInf::~wxDbColInf()
+
+
+/********** wxDbTableInf Constructor ********/
+wxDbTableInf::wxDbTableInf()
+{
+    tableName[0]    = 0;
+    tableType[0]    = 0;
+    tableRemarks[0] = 0;
+    numCols         = 0;
+    pColInf         = NULL;
+}  // wxDbTableInf::wxDbTableFor()
+
+
+/********** wxDbTableInf Constructor ********/
+wxDbTableInf::~wxDbTableInf()
+{
+    if (pColInf)
+        delete [] pColInf;
+    pColInf = NULL;
+}  // wxDbTableInf::~wxDbTableInf()
+
+
+/********** wxDbInf Constructor *************/
+wxDbInf::wxDbInf()
+{
+    catalog[0]      = 0; 
+    schema[0]       = 0;
+    numTables       = 0;
+    pTableInf       = NULL;
+}  // wxDbInf::wxDbFor()
+
+
+/********** wxDbInf Destructor *************/
+wxDbInf::~wxDbInf()
+{
+	if (pTableInf)
+		delete [] pTableInf;
+	pTableInf = NULL;
+}  // wxDbInf::~wxDbInf()
+
+
+/*************************************************/
+
+
+int wxDbColFor::Format(int Nation,int dbDataType,SWORD sqlDataType,short columnSize,short decimalDigits)
 {
     // ----------------------------------------------------------------------------------------
     // -- 19991224 : mj10777@gmx.net : Create
     // There is still a lot of work to do here, but it is a start
     // It handles all the basic data-types that I have run into up to now
-    // The main work will have be with Dates and float Formatting (US 1,000.00 ; EU 1.000,00)
-    // There are wxWindow plans for locale support and the new wxDateTime.
-    // - if they define some constants (wxEUROPEAN) that can be gloably used,
+    // The main work will have be with Dates and float Formatting 
+    //    (US 1,000.00 ; EU 1.000,00)
+    // There are wxWindow plans for locale support and the new wxDateTime.  If
+    //    they define some constants (wxEUROPEAN) that can be gloably used,
     //    they should be used here.
     // ----------------------------------------------------------------------------------------
-    // There should also be a Function to scan in a string to fill the variable
+    // There should also be a function to scan in a string to fill the variable
     // ----------------------------------------------------------------------------------------
     wxString Temp0;
-    i_Nation      = Nation;                                 // 0 = timestamp , 1=EU, 2=UK, 3=International, 4=US
+    i_Nation      = Nation;                                       // 0 = timestamp , 1=EU, 2=UK, 3=International, 4=US
     i_dbDataType  = dbDataType;
     i_sqlDataType = sqlDataType;
-    s_Field.Printf("%s%d",s_Menge[1].c_str(),i_Menge[1]);   // OK for VARCHAR, INTEGER and FLOAT
-    if (i_dbDataType == 0)                                  // Filter unsupported dbDataTypes
+    s_Field.Printf(wxT("%s%d"),s_Amount[1].c_str(),i_Amount[1]);  // OK for VARCHAR, INTEGER and FLOAT
+    if (i_dbDataType == 0)                                        // Filter unsupported dbDataTypes
     {
         if ((i_sqlDataType == SQL_VARCHAR) || (i_sqlDataType == SQL_LONGVARCHAR))
             i_dbDataType = DB_DATA_TYPE_VARCHAR;
@@ -176,17 +275,17 @@ int wxColFor::Format(int Nation,int dbDataType,SWORD sqlDataType,short columnSiz
     switch(i_dbDataType)     // -A-> Still a lot of proper formatting to do
     {
         case DB_DATA_TYPE_VARCHAR:
-            s_Field = "%s";        //
+            s_Field = "%s";
             break;
         case DB_DATA_TYPE_INTEGER:
-            s_Field = "%d";        //
+            s_Field = "%d";
             break;
         case DB_DATA_TYPE_FLOAT:
             if (decimalDigits == 0)
                 decimalDigits = 2;
             Temp0 = "%";
-            Temp0.Printf("%s%d.%d",Temp0.c_str(),columnSize,decimalDigits);
-            s_Field.Printf("%sf",Temp0.c_str());        //
+            Temp0.Printf(wxT("%s%d.%d"),Temp0.c_str(),columnSize,decimalDigits);
+            s_Field.Printf(wxT("%sf"),Temp0.c_str());
             break;
         case DB_DATA_TYPE_DATE:
             if (i_Nation == 0)      // timestamp       YYYY-MM-DD HH:MM:SS.SSS (tested for SYBASE)
@@ -211,15 +310,15 @@ int wxColFor::Format(int Nation,int dbDataType,SWORD sqlDataType,short columnSiz
             }
             break;
         default:
-            s_Field.Printf("-E-> unknown Format(%d)-sql(%d)",dbDataType,sqlDataType);        //
+            s_Field.Printf(wxT("Unknown Format(%d)-SQL(%d)"),dbDataType,sqlDataType);        //
             break;
     };
     return TRUE;
-}  // wxColFor::Format()
+}  // wxDbColFor::Format()
 
 
-/********** wxDB Constructor **********/
-wxDB::wxDB(HENV &aHenv, bool FwdOnlyCursors)
+/********** wxDb Constructor **********/
+wxDb::wxDb(HENV &aHenv, bool FwdOnlyCursors)
 {
     int i;
 
@@ -227,32 +326,32 @@ wxDB::wxDB(HENV &aHenv, bool FwdOnlyCursors)
     sqlLogState   = sqlLogOFF;    // By default, logging is turned off
     nTables       = 0;
 
-    wxStrcpy(sqlState,"");
-    wxStrcpy(errorMsg,"");
+    wxStrcpy(sqlState,wxT(""));
+    wxStrcpy(errorMsg,wxT(""));
     nativeError = cbErrorMsg = 0;
     for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
-        wxStrcpy(errorList[i], "");
+        wxStrcpy(errorList[i], wxT(""));
 
     // Init typeInf structures
-    wxStrcpy(typeInfVarchar.TypeName,"");
+    wxStrcpy(typeInfVarchar.TypeName,wxT(""));
     typeInfVarchar.FsqlType      = 0;
     typeInfVarchar.Precision     = 0;
     typeInfVarchar.CaseSensitive = 0;
     typeInfVarchar.MaximumScale  = 0;
 
-    wxStrcpy(typeInfInteger.TypeName,"");
+    wxStrcpy(typeInfInteger.TypeName,wxT(""));
     typeInfInteger.FsqlType      = 0;
     typeInfInteger.Precision     = 0;
     typeInfInteger.CaseSensitive = 0;
     typeInfInteger.MaximumScale  = 0;
 
-    wxStrcpy(typeInfFloat.TypeName,"");
+    wxStrcpy(typeInfFloat.TypeName,wxT(""));
     typeInfFloat.FsqlType      = 0;
     typeInfFloat.Precision     = 0;
     typeInfFloat.CaseSensitive = 0;
     typeInfFloat.MaximumScale  = 0;
 
-    wxStrcpy(typeInfDate.TypeName,"");
+    wxStrcpy(typeInfDate.TypeName,wxT(""));
     typeInfDate.FsqlType      = 0;
     typeInfDate.Precision     = 0;
     typeInfDate.CaseSensitive = 0;
@@ -275,11 +374,11 @@ wxDB::wxDB(HENV &aHenv, bool FwdOnlyCursors)
     // Mark database as not open as of yet
     dbIsOpen = FALSE;
 
-} // wxDB::wxDB()
+} // wxDb::wxDb()
 
 
-/********** wxDB::Open() **********/
-bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
+/********** wxDb::Open() **********/
+bool wxDb::Open(char *Dsn, char *Uid, char *AuthStr)
 {
     assert(Dsn && wxStrlen(Dsn));
     dsn        = Dsn;
@@ -306,6 +405,7 @@ bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
     retcode = SQLConnect(hdbc, (UCHAR FAR *) Dsn, SQL_NTS,
                          (UCHAR FAR *) Uid, SQL_NTS,
                          (UCHAR FAR *) AuthStr,SQL_NTS);
+
     if (retcode == SQL_SUCCESS_WITH_INFO)
         DispAllErrors(henv, hdbc);
     else if (retcode != SQL_SUCCESS)
@@ -376,8 +476,8 @@ bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
     // SQL_INTEGER            type name = 'LONG', Precision = 10
 
     // VARCHAR = Variable length character string
-    if (! getDataTypeInfo(SQL_VARCHAR, typeInfVarchar))
-        if (! getDataTypeInfo(SQL_CHAR, typeInfVarchar))
+    if (!getDataTypeInfo(SQL_VARCHAR, typeInfVarchar))
+        if (!getDataTypeInfo(SQL_CHAR, typeInfVarchar))
             return(FALSE);
         else
             typeInfVarchar.FsqlType = SQL_CHAR;
@@ -385,11 +485,12 @@ bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
         typeInfVarchar.FsqlType = SQL_VARCHAR;
 
     // Float
-    if (! getDataTypeInfo(SQL_DOUBLE, typeInfFloat))
-        if (! getDataTypeInfo(SQL_REAL, typeInfFloat))
-            if (! getDataTypeInfo(SQL_FLOAT, typeInfFloat))
-                if (! getDataTypeInfo(SQL_DECIMAL, typeInfFloat))
-                    if (! getDataTypeInfo(SQL_NUMERIC, typeInfFloat))
+    if (!getDataTypeInfo(SQL_DOUBLE,typeInfFloat))
+
+        if (!getDataTypeInfo(SQL_REAL,typeInfFloat))
+            if (!getDataTypeInfo(SQL_FLOAT,typeInfFloat))
+                if (!getDataTypeInfo(SQL_DECIMAL,typeInfFloat))
+                    if (!getDataTypeInfo(SQL_NUMERIC,typeInfFloat))
                         return(FALSE);
                     else
                         typeInfFloat.FsqlType = SQL_NUMERIC;
@@ -402,28 +503,31 @@ bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
     else
         typeInfFloat.FsqlType = SQL_DOUBLE;
 
+
     // Integer
-    if (! getDataTypeInfo(SQL_INTEGER, typeInfInteger))
+    if (!getDataTypeInfo(SQL_INTEGER, typeInfInteger))     
+    {
         // If SQL_INTEGER is not supported, use the floating point
         // data type to store integers as well as floats
-        if (! getDataTypeInfo(typeInfFloat.FsqlType, typeInfInteger))
+        if (!getDataTypeInfo(typeInfFloat.FsqlType, typeInfInteger))
             return(FALSE);
         else
             typeInfInteger.FsqlType = typeInfFloat.FsqlType;
+    }
     else
         typeInfInteger.FsqlType = SQL_INTEGER;
 
     // Date/Time
     if (Dbms() != dbmsDBASE)
-   {
-        if (! getDataTypeInfo(SQL_TIMESTAMP, typeInfDate))
+    {
+        if (! getDataTypeInfo(SQL_TIMESTAMP,typeInfDate))
             return(FALSE);
         else
             typeInfDate.FsqlType = SQL_TIMESTAMP;
     }
     else
     {
-        if (! getDataTypeInfo(SQL_DATE, typeInfDate))
+        if (!getDataTypeInfo(SQL_DATE,typeInfDate))
             return(FALSE);
         else
             typeInfDate.FsqlType = SQL_DATE;
@@ -440,11 +544,11 @@ bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
     // Completed Successfully
     return(TRUE);
 
-} // wxDB::Open()
+} // wxDb::Open()
 
 
-/********** wxDB::setConnectionOptions() **********/
-bool wxDB::setConnectionOptions(void)
+/********** wxDb::setConnectionOptions() **********/
+bool wxDb::setConnectionOptions(void)
 /*
  * NOTE: The Intersolv/Oracle 7 driver was "Not Capable" of setting the login timeout.
  */
@@ -488,11 +592,11 @@ bool wxDB::setConnectionOptions(void)
     // Completed Successfully
     return(TRUE);
 
-} // wxDB::setConnectionOptions()
+} // wxDb::setConnectionOptions()
 
 
-/********** wxDB::getDbInfo() **********/
-bool wxDB::getDbInfo(void)
+/********** wxDb::getDbInfo() **********/
+bool wxDb::getDbInfo(void)
 {
     SWORD cb;
     RETCODE retcode;
@@ -547,7 +651,10 @@ bool wxDB::getDbInfo(void)
 
     if (SQLGetInfo(hdbc, SQL_PROCEDURES, (UCHAR*) dbInf.procedureSupport, 2, &cb) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc));
-
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
+    if (SQLGetInfo(hdbc, SQL_ACCESSIBLE_TABLES, (UCHAR*) dbInf.accessibleTables, 2, &cb) != SQL_SUCCESS)
+        return(DispAllErrors(henv, hdbc));
+#endif
     if (SQLGetInfo(hdbc, SQL_CURSOR_COMMIT_BEHAVIOR, (UCHAR*) &dbInf.cursorCommitBehavior, sizeof(dbInf.cursorCommitBehavior), &cb) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc));
 
@@ -619,16 +726,18 @@ bool wxDB::getDbInfo(void)
     cout << "SQL Conf. Level: ";
     switch(dbInf.sqlConfLvl)
     {
-        case SQL_OSC_MINIMUM:     cout << "Minimum Grammer";     break;
-        case SQL_OSC_CORE:        cout << "Core Grammer";        break;
-        case SQL_OSC_EXTENDED:    cout << "Extended Grammer";    break;
+        case SQL_OSC_MINIMUM:     cout << "Minimum Grammar";     break;
+        case SQL_OSC_CORE:        cout << "Core Grammar";        break;
+        case SQL_OSC_EXTENDED:    cout << "Extended Grammar";    break;
     }
     cout << endl;
 
     cout << "Max. Connections: "       << dbInf.maxConnections   << endl;
     cout << "Outer Joins: "            << dbInf.outerJoins       << endl;
     cout << "Support for Procedures: " << dbInf.procedureSupport << endl;
-
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
+    cout << "All tables accessible : " << dbInf.accessibleTables << endl;
+#endif
     cout << "Cursor COMMIT Behavior: ";
     switch(dbInf.cursorCommitBehavior)
     {
@@ -791,21 +900,21 @@ bool wxDB::getDbInfo(void)
     // Completed Successfully
     return(TRUE);
 
-} // wxDB::getDbInfo()
+} // wxDb::getDbInfo()
 
 
-/********** wxDB::getDataTypeInfo() **********/
-bool wxDB::getDataTypeInfo(SWORD fSqlType, wxSqlTypeInfo &structSQLTypeInfo)
+/********** wxDb::getDataTypeInfo() **********/
+bool wxDb::getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo)
 {
 /*
  * fSqlType will be something like SQL_VARCHAR.  This parameter determines
  * the data type inf. is gathered for.
  *
- * wxSqlTypeInfo is a structure that is filled in with data type information,
+ * wxDbSqlTypeInfo is a structure that is filled in with data type information,
  */
     RETCODE retcode;
-    SDWORD cbRet;
-
+    SDWORD  cbRet;
+   
     // Get information about the data type specified
     if (SQLGetTypeInfo(hstmt, fSqlType) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc, hstmt));
@@ -823,17 +932,29 @@ bool wxDB::getDataTypeInfo(SWORD fSqlType, wxSqlTypeInfo &structSQLTypeInfo)
     // Obtain columns from the record
     if (SQLGetData(hstmt, 1, SQL_C_CHAR, (UCHAR*) structSQLTypeInfo.TypeName, DB_TYPE_NAME_LEN, &cbRet) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc, hstmt));
+   
 
+    // BJO 20000503: no more needed with new GetColumns...
+#if  OLD_GETCOLUMNS
     // BJO 991209
     if (Dbms() == dbmsMY_SQL)
     {
-        if (!strcmp(structSQLTypeInfo.TypeName, "middleint")) strcpy(structSQLTypeInfo.TypeName, "mediumint");
-        if (!strcmp(structSQLTypeInfo.TypeName, "middleint unsigned")) strcpy(structSQLTypeInfo.TypeName, "mediumint unsigned");
-        if (!strcmp(structSQLTypeInfo.TypeName, "integer")) strcpy(structSQLTypeInfo.TypeName, "int");
-        if (!strcmp(structSQLTypeInfo.TypeName, "integer unsigned")) strcpy(structSQLTypeInfo.TypeName, "int unsigned");
-        if (!strcmp(structSQLTypeInfo.TypeName, "middleint")) strcpy(structSQLTypeInfo.TypeName, "mediumint");
-        if (!strcmp(structSQLTypeInfo.TypeName, "varchar")) strcpy(structSQLTypeInfo.TypeName, "char");
+        if (!wxStrcmp(structSQLTypeInfo.TypeName, "middleint")) wxStrcpy(structSQLTypeInfo.TypeName, "mediumint");
+        if (!wxStrcmp(structSQLTypeInfo.TypeName, "middleint unsigned")) wxStrcpy(structSQLTypeInfo.TypeName, "mediumint unsigned");
+        if (!wxStrcmp(structSQLTypeInfo.TypeName, "integer")) wxStrcpy(structSQLTypeInfo.TypeName, "int");
+        if (!wxStrcmp(structSQLTypeInfo.TypeName, "integer unsigned")) wxStrcpy(structSQLTypeInfo.TypeName, "int unsigned");
+        if (!wxStrcmp(structSQLTypeInfo.TypeName, "middleint")) wxStrcpy(structSQLTypeInfo.TypeName, "mediumint");
+        if (!wxStrcmp(structSQLTypeInfo.TypeName, "varchar")) wxStrcpy(structSQLTypeInfo.TypeName, "char");
     }
+    
+    // BJO 20000427 : OpenLink driver 
+    if (!wxStrncmp(dbInf.driverName, "oplodbc", 7) ||
+        !wxStrncmp(dbInf.driverName, "OLOD", 4))    
+    {
+        if (!wxStrcmp(structSQLTypeInfo.TypeName, "double precision"))
+            wxStrcpy(structSQLTypeInfo.TypeName, "real");
+    }
+#endif
 
     if (SQLGetData(hstmt, 3, SQL_C_LONG, (UCHAR*) &structSQLTypeInfo.Precision, 0, &cbRet) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc, hstmt));
@@ -855,11 +976,11 @@ bool wxDB::getDataTypeInfo(SWORD fSqlType, wxSqlTypeInfo &structSQLTypeInfo)
     // Completed Successfully
     return(TRUE);
 
-} // wxDB::getDataTypeInfo()
+} // wxDb::getDataTypeInfo()
 
 
-/********** wxDB::Close() **********/
-void wxDB::Close(void)
+/********** wxDb::Close() **********/
+void wxDb::Close(void)
 {
     // Close the Sql Log file
     if (fpSqlLog)
@@ -896,8 +1017,8 @@ void wxDB::Close(void)
         tiu = (wxTablesInUse *)pNode->Data();
         if (tiu->pDb == this)
         {
-            s.sprintf("(%-20s)     tableID:[%6lu]     pDb:[%p]", tiu->tableName,tiu->tableID,tiu->pDb);
-            s2.sprintf("Orphaned found using pDb:[%p]",this);
+            s.sprintf(wxT("(%-20s)     tableID:[%6lu]     pDb:[%p]"), tiu->tableName,tiu->tableID,tiu->pDb);
+            s2.sprintf(wxT("Orphaned found using pDb:[%p]"),this);
             wxLogDebug (s.c_str(),s2.c_str());
         }
         pNode = pNode->Next();
@@ -909,11 +1030,11 @@ void wxDB::Close(void)
     for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
         wxStrcpy(DBerrorList[i],errorList[i]);
 
-} // wxDB::Close()
+} // wxDb::Close()
 
 
-/********** wxDB::CommitTrans() **********/
-bool wxDB::CommitTrans(void)
+/********** wxDb::CommitTrans() **********/
+bool wxDb::CommitTrans(void)
 {
     if (this)
     {
@@ -925,11 +1046,11 @@ bool wxDB::CommitTrans(void)
     // Completed successfully
     return(TRUE);
 
-} // wxDB::CommitTrans()
+} // wxDb::CommitTrans()
 
 
-/********** wxDB::RollbackTrans() **********/
-bool wxDB::RollbackTrans(void)
+/********** wxDb::RollbackTrans() **********/
+bool wxDb::RollbackTrans(void)
 {
     // Rollback the transaction
     if (SQLTransact(henv, hdbc, SQL_ROLLBACK) != SQL_SUCCESS)
@@ -938,11 +1059,11 @@ bool wxDB::RollbackTrans(void)
     // Completed successfully
     return(TRUE);
 
-} // wxDB::RollbackTrans()
+} // wxDb::RollbackTrans()
 
 
-/********** wxDB::DispAllErrors() **********/
-bool wxDB::DispAllErrors(HENV aHenv, HDBC aHdbc, HSTMT aHstmt)
+/********** wxDb::DispAllErrors() **********/
+bool wxDb::DispAllErrors(HENV aHenv, HDBC aHdbc, HSTMT aHstmt)
 {
 //    char odbcErrMsg[DB_MAX_ERROR_MSG_LEN];
     wxString odbcErrMsg;
@@ -950,62 +1071,65 @@ bool wxDB::DispAllErrors(HENV aHenv, HDBC aHdbc, HSTMT aHstmt)
     while (SQLError(aHenv, aHdbc, aHstmt, (UCHAR FAR *) sqlState, &nativeError, (UCHAR FAR *) errorMsg, SQL_MAX_MESSAGE_LENGTH - 1, &cbErrorMsg) == SQL_SUCCESS)
     {
         odbcErrMsg.sprintf("SQL State = %s\nNative Error Code = %li\nError Message = %s\n", sqlState, nativeError, errorMsg);
-        logError(odbcErrMsg.GetData(), sqlState);
+        logError(odbcErrMsg.c_str(), sqlState);
         if (!silent)
         {
 #ifdef DBDEBUG_CONSOLE
             // When run in console mode, use standard out to display errors.
-            cout << odbcErrMsg.GetData() << endl;
+            cout << odbcErrMsg.c_str() << endl;
             cout << "Press any key to continue..." << endl;
             getchar();
 #endif
-        }
 
 #ifdef __WXDEBUG__
-        wxLogDebug(odbcErrMsg.GetData(),"DEBUG MESSAGE from DispAllErrors()");
+            wxLogDebug(odbcErrMsg.c_str(),wxT("ODBC DEBUG MESSAGE from DispAllErrors()"));
 #endif
+        }
     }
 
     return(FALSE);  // This function always returns false.
 
-} // wxDB::DispAllErrors()
+} // wxDb::DispAllErrors()
 
 
-/********** wxDB::GetNextError() **********/
-bool wxDB::GetNextError(HENV aHenv, HDBC aHdbc, HSTMT aHstmt)
+/********** wxDb::GetNextError() **********/
+bool wxDb::GetNextError(HENV aHenv, HDBC aHdbc, HSTMT aHstmt)
 {
     if (SQLError(aHenv, aHdbc, aHstmt, (UCHAR FAR *) sqlState, &nativeError, (UCHAR FAR *) errorMsg, SQL_MAX_MESSAGE_LENGTH - 1, &cbErrorMsg) == SQL_SUCCESS)
         return(TRUE);
     else
         return(FALSE);
 
-} // wxDB::GetNextError()
+} // wxDb::GetNextError()
 
 
-/********** wxDB::DispNextError() **********/
-void wxDB::DispNextError(void)
+/********** wxDb::DispNextError() **********/
+void wxDb::DispNextError(void)
 {
-//    char odbcErrMsg[DB_MAX_ERROR_MSG_LEN];
     wxString odbcErrMsg;
 
     odbcErrMsg.sprintf("SQL State = %s\nNative Error Code = %li\nError Message = %s\n", sqlState, nativeError, errorMsg);
-    logError(odbcErrMsg.GetData(), sqlState);
+    logError(odbcErrMsg.c_str(), sqlState);
 
     if (silent)
         return;
 
 #ifdef DBDEBUG_CONSOLE
     // When run in console mode, use standard out to display errors.
-    cout << odbcErrMsg.GetData() << endl;
+    cout << odbcErrMsg.c_str() << endl;
     cout << "Press any key to continue..."  << endl;
     getchar();
 #endif
 
-} // wxDB::DispNextError()
+#ifdef __WXDEBUG__
+    wxLogDebug(odbcErrMsg,wxT("ODBC DEBUG MESSAGE"));
+#endif  // __WXDEBUG__
+
+} // wxDb::DispNextError()
 
 
-/********** wxDB::logError() **********/
-void wxDB::logError(const char *errMsg, const char *SQLState)
+/********** wxDb::logError() **********/
+void wxDb::logError(const char *errMsg, const char *SQLState)
 {
     assert(errMsg && wxStrlen(errMsg));
 
@@ -1029,201 +1153,200 @@ void wxDB::logError(const char *errMsg, const char *SQLState)
     // Add the errmsg to the sql log
     WriteSqlLog(errMsg);
 
-}  // wxDB::logError()
+}  // wxDb::logError()
 
 
-/**********wxDB::TranslateSqlState()  **********/
-int wxDB::TranslateSqlState(const char *SQLState)
+/**********wxDb::TranslateSqlState()  **********/
+int wxDb::TranslateSqlState(const wxChar *SQLState)
 {
-    if (!wxStrcmp(SQLState, "01000"))
+    if (!wxStrcmp(SQLState, wxT("01000")))
         return(DB_ERR_GENERAL_WARNING);
-    if (!wxStrcmp(SQLState, "01002"))
+    if (!wxStrcmp(SQLState, wxT("01002")))
         return(DB_ERR_DISCONNECT_ERROR);
-    if (!wxStrcmp(SQLState, "01004"))
+    if (!wxStrcmp(SQLState, wxT("01004")))
         return(DB_ERR_DATA_TRUNCATED);
-    if (!wxStrcmp(SQLState, "01006"))
+    if (!wxStrcmp(SQLState, wxT("01006")))
         return(DB_ERR_PRIV_NOT_REVOKED);
-    if (!wxStrcmp(SQLState, "01S00"))
+    if (!wxStrcmp(SQLState, wxT("01S00")))
         return(DB_ERR_INVALID_CONN_STR_ATTR);
-    if (!wxStrcmp(SQLState, "01S01"))
+    if (!wxStrcmp(SQLState, wxT("01S01")))
         return(DB_ERR_ERROR_IN_ROW);
-    if (!wxStrcmp(SQLState, "01S02"))
+    if (!wxStrcmp(SQLState, wxT("01S02")))
         return(DB_ERR_OPTION_VALUE_CHANGED);
-    if (!wxStrcmp(SQLState, "01S03"))
+    if (!wxStrcmp(SQLState, wxT("01S03")))
         return(DB_ERR_NO_ROWS_UPD_OR_DEL);
-    if (!wxStrcmp(SQLState, "01S04"))
+    if (!wxStrcmp(SQLState, wxT("01S04")))
         return(DB_ERR_MULTI_ROWS_UPD_OR_DEL);
-    if (!wxStrcmp(SQLState, "07001"))
+    if (!wxStrcmp(SQLState, wxT("07001")))
         return(DB_ERR_WRONG_NO_OF_PARAMS);
-    if (!wxStrcmp(SQLState, "07006"))
+    if (!wxStrcmp(SQLState, wxT("07006")))
         return(DB_ERR_DATA_TYPE_ATTR_VIOL);
-    if (!wxStrcmp(SQLState, "08001"))
+    if (!wxStrcmp(SQLState, wxT("08001")))
         return(DB_ERR_UNABLE_TO_CONNECT);
-    if (!wxStrcmp(SQLState, "08002"))
+    if (!wxStrcmp(SQLState, wxT("08002")))
         return(DB_ERR_CONNECTION_IN_USE);
-    if (!wxStrcmp(SQLState, "08003"))
+    if (!wxStrcmp(SQLState, wxT("08003")))
         return(DB_ERR_CONNECTION_NOT_OPEN);
-    if (!wxStrcmp(SQLState, "08004"))
+    if (!wxStrcmp(SQLState, wxT("08004")))
         return(DB_ERR_REJECTED_CONNECTION);
-    if (!wxStrcmp(SQLState, "08007"))
+    if (!wxStrcmp(SQLState, wxT("08007")))
         return(DB_ERR_CONN_FAIL_IN_TRANS);
-    if (!wxStrcmp(SQLState, "08S01"))
+    if (!wxStrcmp(SQLState, wxT("08S01")))
         return(DB_ERR_COMM_LINK_FAILURE);
-    if (!wxStrcmp(SQLState, "21S01"))
+    if (!wxStrcmp(SQLState, wxT("21S01")))
         return(DB_ERR_INSERT_VALUE_LIST_MISMATCH);
-    if (!wxStrcmp(SQLState, "21S02"))
+    if (!wxStrcmp(SQLState, wxT("21S02")))
         return(DB_ERR_DERIVED_TABLE_MISMATCH);
-    if (!wxStrcmp(SQLState, "22001"))
+    if (!wxStrcmp(SQLState, wxT("22001")))
         return(DB_ERR_STRING_RIGHT_TRUNC);
-    if (!wxStrcmp(SQLState, "22003"))
+    if (!wxStrcmp(SQLState, wxT("22003")))
         return(DB_ERR_NUMERIC_VALUE_OUT_OF_RNG);
-    if (!wxStrcmp(SQLState, "22005"))
+    if (!wxStrcmp(SQLState, wxT("22005")))
         return(DB_ERR_ERROR_IN_ASSIGNMENT);
-    if (!wxStrcmp(SQLState, "22008"))
+    if (!wxStrcmp(SQLState, wxT("22008")))
         return(DB_ERR_DATETIME_FLD_OVERFLOW);
-    if (!wxStrcmp(SQLState, "22012"))
+    if (!wxStrcmp(SQLState, wxT("22012")))
         return(DB_ERR_DIVIDE_BY_ZERO);
-    if (!wxStrcmp(SQLState, "22026"))
+    if (!wxStrcmp(SQLState, wxT("22026")))
         return(DB_ERR_STR_DATA_LENGTH_MISMATCH);
-    if (!wxStrcmp(SQLState, "23000"))
+    if (!wxStrcmp(SQLState, wxT("23000")))
         return(DB_ERR_INTEGRITY_CONSTRAINT_VIOL);
-    if (!wxStrcmp(SQLState, "24000"))
+    if (!wxStrcmp(SQLState, wxT("24000")))
         return(DB_ERR_INVALID_CURSOR_STATE);
-    if (!wxStrcmp(SQLState, "25000"))
+    if (!wxStrcmp(SQLState, wxT("25000")))
         return(DB_ERR_INVALID_TRANS_STATE);
-    if (!wxStrcmp(SQLState, "28000"))
+    if (!wxStrcmp(SQLState, wxT("28000")))
         return(DB_ERR_INVALID_AUTH_SPEC);
-    if (!wxStrcmp(SQLState, "34000"))
+    if (!wxStrcmp(SQLState, wxT("34000")))
         return(DB_ERR_INVALID_CURSOR_NAME);
-    if (!wxStrcmp(SQLState, "37000"))
+    if (!wxStrcmp(SQLState, wxT("37000")))
         return(DB_ERR_SYNTAX_ERROR_OR_ACCESS_VIOL);
-    if (!wxStrcmp(SQLState, "3C000"))
+    if (!wxStrcmp(SQLState, wxT("3C000")))
         return(DB_ERR_DUPLICATE_CURSOR_NAME);
-    if (!wxStrcmp(SQLState, "40001"))
+    if (!wxStrcmp(SQLState, wxT("40001")))
         return(DB_ERR_SERIALIZATION_FAILURE);
-    if (!wxStrcmp(SQLState, "42000"))
+    if (!wxStrcmp(SQLState, wxT("42000")))
         return(DB_ERR_SYNTAX_ERROR_OR_ACCESS_VIOL2);
-    if (!wxStrcmp(SQLState, "70100"))
+    if (!wxStrcmp(SQLState, wxT("70100")))
         return(DB_ERR_OPERATION_ABORTED);
-    if (!wxStrcmp(SQLState, "IM001"))
+    if (!wxStrcmp(SQLState, wxT("IM001")))
         return(DB_ERR_UNSUPPORTED_FUNCTION);
-    if (!wxStrcmp(SQLState, "IM002"))
+    if (!wxStrcmp(SQLState, wxT("IM002")))
         return(DB_ERR_NO_DATA_SOURCE);
-    if (!wxStrcmp(SQLState, "IM003"))
+    if (!wxStrcmp(SQLState, wxT("IM003")))
         return(DB_ERR_DRIVER_LOAD_ERROR);
-    if (!wxStrcmp(SQLState, "IM004"))
+    if (!wxStrcmp(SQLState, wxT("IM004")))
         return(DB_ERR_SQLALLOCENV_FAILED);
-    if (!wxStrcmp(SQLState, "IM005"))
+    if (!wxStrcmp(SQLState, wxT("IM005")))
         return(DB_ERR_SQLALLOCCONNECT_FAILED);
-    if (!wxStrcmp(SQLState, "IM006"))
+    if (!wxStrcmp(SQLState, wxT("IM006")))
         return(DB_ERR_SQLSETCONNECTOPTION_FAILED);
-    if (!wxStrcmp(SQLState, "IM007"))
+    if (!wxStrcmp(SQLState, wxT("IM007")))
         return(DB_ERR_NO_DATA_SOURCE_DLG_PROHIB);
-    if (!wxStrcmp(SQLState, "IM008"))
+    if (!wxStrcmp(SQLState, wxT("IM008")))
         return(DB_ERR_DIALOG_FAILED);
-    if (!wxStrcmp(SQLState, "IM009"))
+    if (!wxStrcmp(SQLState, wxT("IM009")))
         return(DB_ERR_UNABLE_TO_LOAD_TRANSLATION_DLL);
-    if (!wxStrcmp(SQLState, "IM010"))
+    if (!wxStrcmp(SQLState, wxT("IM010")))
         return(DB_ERR_DATA_SOURCE_NAME_TOO_LONG);
-    if (!wxStrcmp(SQLState, "IM011"))
+    if (!wxStrcmp(SQLState, wxT("IM011")))
         return(DB_ERR_DRIVER_NAME_TOO_LONG);
-    if (!wxStrcmp(SQLState, "IM012"))
+    if (!wxStrcmp(SQLState, wxT("IM012")))
         return(DB_ERR_DRIVER_KEYWORD_SYNTAX_ERROR);
-    if (!wxStrcmp(SQLState, "IM013"))
+    if (!wxStrcmp(SQLState, wxT("IM013")))
         return(DB_ERR_TRACE_FILE_ERROR);
-    if (!wxStrcmp(SQLState, "S0001"))
+    if (!wxStrcmp(SQLState, wxT("S0001")))
         return(DB_ERR_TABLE_OR_VIEW_ALREADY_EXISTS);
-    if (!wxStrcmp(SQLState, "S0002"))
+    if (!wxStrcmp(SQLState, wxT("S0002")))
         return(DB_ERR_TABLE_NOT_FOUND);
-    if (!wxStrcmp(SQLState, "S0011"))
+    if (!wxStrcmp(SQLState, wxT("S0011")))
         return(DB_ERR_INDEX_ALREADY_EXISTS);
-    if (!wxStrcmp(SQLState, "S0012"))
+    if (!wxStrcmp(SQLState, wxT("S0012")))
         return(DB_ERR_INDEX_NOT_FOUND);
-    if (!wxStrcmp(SQLState, "S0021"))
+    if (!wxStrcmp(SQLState, wxT("S0021")))
         return(DB_ERR_COLUMN_ALREADY_EXISTS);
-    if (!wxStrcmp(SQLState, "S0022"))
+    if (!wxStrcmp(SQLState, wxT("S0022")))
         return(DB_ERR_COLUMN_NOT_FOUND);
-    if (!wxStrcmp(SQLState, "S0023"))
+    if (!wxStrcmp(SQLState, wxT("S0023")))
         return(DB_ERR_NO_DEFAULT_FOR_COLUMN);
-    if (!wxStrcmp(SQLState, "S1000"))
+    if (!wxStrcmp(SQLState, wxT("S1000")))
         return(DB_ERR_GENERAL_ERROR);
-    if (!wxStrcmp(SQLState, "S1001"))
+    if (!wxStrcmp(SQLState, wxT("S1001")))
         return(DB_ERR_MEMORY_ALLOCATION_FAILURE);
-    if (!wxStrcmp(SQLState, "S1002"))
+    if (!wxStrcmp(SQLState, wxT("S1002")))
         return(DB_ERR_INVALID_COLUMN_NUMBER);
-    if (!wxStrcmp(SQLState, "S1003"))
+    if (!wxStrcmp(SQLState, wxT("S1003")))
         return(DB_ERR_PROGRAM_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1004"))
+    if (!wxStrcmp(SQLState, wxT("S1004")))
         return(DB_ERR_SQL_DATA_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1008"))
+    if (!wxStrcmp(SQLState, wxT("S1008")))
         return(DB_ERR_OPERATION_CANCELLED);
-    if (!wxStrcmp(SQLState, "S1009"))
+    if (!wxStrcmp(SQLState, wxT("S1009")))
         return(DB_ERR_INVALID_ARGUMENT_VALUE);
-    if (!wxStrcmp(SQLState, "S1010"))
+    if (!wxStrcmp(SQLState, wxT("S1010")))
         return(DB_ERR_FUNCTION_SEQUENCE_ERROR);
-    if (!wxStrcmp(SQLState, "S1011"))
+    if (!wxStrcmp(SQLState, wxT("S1011")))
         return(DB_ERR_OPERATION_INVALID_AT_THIS_TIME);
-    if (!wxStrcmp(SQLState, "S1012"))
+    if (!wxStrcmp(SQLState, wxT("S1012")))
         return(DB_ERR_INVALID_TRANS_OPERATION_CODE);
-    if (!wxStrcmp(SQLState, "S1015"))
+    if (!wxStrcmp(SQLState, wxT("S1015")))
         return(DB_ERR_NO_CURSOR_NAME_AVAIL);
-    if (!wxStrcmp(SQLState, "S1090"))
+    if (!wxStrcmp(SQLState, wxT("S1090")))
         return(DB_ERR_INVALID_STR_OR_BUF_LEN);
-    if (!wxStrcmp(SQLState, "S1091"))
+    if (!wxStrcmp(SQLState, wxT("S1091")))
         return(DB_ERR_DESCRIPTOR_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1092"))
+    if (!wxStrcmp(SQLState, wxT("S1092")))
         return(DB_ERR_OPTION_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1093"))
+    if (!wxStrcmp(SQLState, wxT("S1093")))
         return(DB_ERR_INVALID_PARAM_NO);
-    if (!wxStrcmp(SQLState, "S1094"))
+    if (!wxStrcmp(SQLState, wxT("S1094")))
         return(DB_ERR_INVALID_SCALE_VALUE);
-    if (!wxStrcmp(SQLState, "S1095"))
+    if (!wxStrcmp(SQLState, wxT("S1095")))
         return(DB_ERR_FUNCTION_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1096"))
+    if (!wxStrcmp(SQLState, wxT("S1096")))
         return(DB_ERR_INF_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1097"))
+    if (!wxStrcmp(SQLState, wxT("S1097")))
         return(DB_ERR_COLUMN_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1098"))
+    if (!wxStrcmp(SQLState, wxT("S1098")))
         return(DB_ERR_SCOPE_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1099"))
+    if (!wxStrcmp(SQLState, wxT("S1099")))
         return(DB_ERR_NULLABLE_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1100"))
+    if (!wxStrcmp(SQLState, wxT("S1100")))
         return(DB_ERR_UNIQUENESS_OPTION_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1101"))
+    if (!wxStrcmp(SQLState, wxT("S1101")))
         return(DB_ERR_ACCURACY_OPTION_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1103"))
+    if (!wxStrcmp(SQLState, wxT("S1103")))
         return(DB_ERR_DIRECTION_OPTION_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1104"))
+    if (!wxStrcmp(SQLState, wxT("S1104")))
         return(DB_ERR_INVALID_PRECISION_VALUE);
-    if (!wxStrcmp(SQLState, "S1105"))
+    if (!wxStrcmp(SQLState, wxT("S1105")))
         return(DB_ERR_INVALID_PARAM_TYPE);
-    if (!wxStrcmp(SQLState, "S1106"))
+    if (!wxStrcmp(SQLState, wxT("S1106")))
         return(DB_ERR_FETCH_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1107"))
+    if (!wxStrcmp(SQLState, wxT("S1107")))
         return(DB_ERR_ROW_VALUE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1108"))
+    if (!wxStrcmp(SQLState, wxT("S1108")))
         return(DB_ERR_CONCURRENCY_OPTION_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1109"))
+    if (!wxStrcmp(SQLState, wxT("S1109")))
         return(DB_ERR_INVALID_CURSOR_POSITION);
-    if (!wxStrcmp(SQLState, "S1110"))
+    if (!wxStrcmp(SQLState, wxT("S1110")))
         return(DB_ERR_INVALID_DRIVER_COMPLETION);
-    if (!wxStrcmp(SQLState, "S1111"))
+    if (!wxStrcmp(SQLState, wxT("S1111")))
         return(DB_ERR_INVALID_BOOKMARK_VALUE);
-    if (!wxStrcmp(SQLState, "S1C00"))
+    if (!wxStrcmp(SQLState, wxT("S1C00")))
         return(DB_ERR_DRIVER_NOT_CAPABLE);
-    if (!wxStrcmp(SQLState, "S1T00"))
+    if (!wxStrcmp(SQLState, wxT("S1T00")))
         return(DB_ERR_TIMEOUT_EXPIRED);
 
     // No match
     return(0);
 
-}  // wxDB::TranslateSqlState()
+}  // wxDb::TranslateSqlState()
 
 
-/**********  wxDB::Grant() **********/
-bool wxDB::Grant(int privileges, const char *tableName, const char *userList)
+/**********  wxDb::Grant() **********/
+bool wxDb::Grant(int privileges, const char *tableName, const char *userList)
 {
-//    char sqlStmt[DB_MAX_STATEMENT_LEN];
     wxString sqlStmt;
 
     // Build the grant statement
@@ -1264,20 +1387,19 @@ bool wxDB::Grant(int privileges, const char *tableName, const char *userList)
     sqlStmt += userList;
 
 #ifdef DBDEBUG_CONSOLE
-    cout << endl << sqlStmt.GetData() << endl;
+    cout << endl << sqlStmt.c_str() << endl;
 #endif
 
-    WriteSqlLog(sqlStmt.GetData());
+    WriteSqlLog(sqlStmt.c_str());
 
-    return(ExecSql(sqlStmt.GetData()));
+    return(ExecSql(sqlStmt.c_str()));
 
-}  // wxDB::Grant()
+}  // wxDb::Grant()
 
 
-/********** wxDB::CreateView() **********/
-bool wxDB::CreateView(const char *viewName, const char *colList, const char *pSqlStmt, bool attemptDrop)
+/********** wxDb::CreateView() **********/
+bool wxDb::CreateView(const char *viewName, const char *colList, const char *pSqlStmt, bool attemptDrop)
 {
-//    char sqlStmt[DB_MAX_STATEMENT_LEN];
     wxString sqlStmt;
 
     // Drop the view first
@@ -1298,19 +1420,19 @@ bool wxDB::CreateView(const char *viewName, const char *colList, const char *pSq
     sqlStmt += " AS ";
     sqlStmt += pSqlStmt;
 
-    WriteSqlLog(sqlStmt.GetData());
+    WriteSqlLog(sqlStmt.c_str());
 
 #ifdef DBDEBUG_CONSOLE
-    cout << sqlStmt.GetData() << endl;
+    cout << sqlStmt.c_str() << endl;
 #endif
 
-    return(ExecSql(sqlStmt.GetData()));
+    return(ExecSql(sqlStmt.c_str()));
 
-}  // wxDB::CreateView()
+}  // wxDb::CreateView()
 
 
-/********** wxDB::DropView()  **********/
-bool wxDB::DropView(const char *viewName)
+/********** wxDb::DropView()  **********/
+bool wxDb::DropView(const char *viewName)
 {
 /*
  * NOTE: This function returns TRUE if the View does not exist, but
@@ -1323,20 +1445,20 @@ bool wxDB::DropView(const char *viewName)
 
     sqlStmt.sprintf("DROP VIEW %s", viewName);
 
-    WriteSqlLog(sqlStmt.GetData());
+    WriteSqlLog(sqlStmt.c_str());
 
 #ifdef DBDEBUG_CONSOLE
-    cout << endl << sqlStmt.GetData() << endl;
+    cout << endl << sqlStmt.c_str() << endl;
 #endif
 
-    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.GetData(), SQL_NTS) != SQL_SUCCESS)
+    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
     {
         // Check for "Base table not found" error and ignore
         GetNextError(henv, hdbc, hstmt);
-        if (wxStrcmp(sqlState,"S0002"))  // "Base table not found"
+        if (wxStrcmp(sqlState,wxT("S0002")))  // "Base table not found"
         {
             // Check for product specific error codes
-            if (!((Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(sqlState,"42000"))))  // 5.x (and lower?)
+            if (!((Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(sqlState,wxT("42000")))))  // 5.x (and lower?)
             {
                 DispNextError();
                 DispAllErrors(henv, hdbc, hstmt);
@@ -1352,11 +1474,11 @@ bool wxDB::DropView(const char *viewName)
 
     return TRUE;
 
-}  // wxDB::DropView()
+}  // wxDb::DropView()
 
 
-/********** wxDB::ExecSql()  **********/
-bool wxDB::ExecSql(const char *pSqlStmt)
+/********** wxDb::ExecSql()  **********/
+bool wxDb::ExecSql(const char *pSqlStmt)
 {
     SQLFreeStmt(hstmt, SQL_CLOSE);
     if (SQLExecDirect(hstmt, (UCHAR FAR *) pSqlStmt, SQL_NTS) == SQL_SUCCESS)
@@ -1367,11 +1489,11 @@ bool wxDB::ExecSql(const char *pSqlStmt)
         return(FALSE);
     }
 
-}  // wxDB::ExecSql()
+}  // wxDb::ExecSql()
 
 
-/********** wxDB::GetNext()  **********/
-bool wxDB::GetNext(void)
+/********** wxDb::GetNext()  **********/
+bool wxDb::GetNext(void)
 {
     if (SQLFetch(hstmt) == SQL_SUCCESS)
         return(TRUE);
@@ -1381,11 +1503,11 @@ bool wxDB::GetNext(void)
         return(FALSE);
     }
 
-}  // wxDB::GetNext()
+}  // wxDb::GetNext()
 
 
-/********** wxDB::GetData()  **********/
-bool wxDB::GetData(UWORD colNo, SWORD cType, PTR pData, SDWORD maxLen, SDWORD FAR *cbReturned)
+/********** wxDb::GetData()  **********/
+bool wxDb::GetData(UWORD colNo, SWORD cType, PTR pData, SDWORD maxLen, SDWORD FAR *cbReturned)
 {
     assert(pData);
     assert(cbReturned);
@@ -1398,11 +1520,11 @@ bool wxDB::GetData(UWORD colNo, SWORD cType, PTR pData, SDWORD maxLen, SDWORD FA
         return(FALSE);
     }
 
-}  // wxDB::GetData()
+}  // wxDb::GetData()
 
 
-/********** wxDB::GetKeyFields() **********/
-int wxDB::GetKeyFields(char *tableName, wxColInf* colInf,int noCols)
+/********** wxDb::GetKeyFields() **********/
+int wxDb::GetKeyFields(char *tableName, wxDbColInf* colInf, int noCols)
 {
     char         szPkTable[DB_MAX_TABLE_NAME_LEN+1];  /* Primary key table name */
     char         szFkTable[DB_MAX_TABLE_NAME_LEN+1];  /* Foreign key table name */
@@ -1450,8 +1572,8 @@ int wxDB::GetKeyFields(char *tableName, wxColInf* colInf,int noCols)
             for (i=0;i<noCols;i++)                          // Find the Column name
                 if (!wxStrcmp(colInf[i].colName,szPkCol))   // We have found the Column
                     colInf[i].PkCol = iKeySeq;              // Which Primary Key is this (first, second usw.) ?
-        }   // if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
-    }    // while ((retcode == SQL_SUCCESS) || (retcode == SQL_SUCCESS_WITH_INFO))
+        }  // if
+    }  // while
     SQLFreeStmt(hstmt, SQL_CLOSE);  /* Close the cursor (the hstmt is still allocated).      */
 
     /*---------------------------------------------------------------------*/
@@ -1481,16 +1603,18 @@ int wxDB::GetKeyFields(char *tableName, wxColInf* colInf,int noCols)
             GetData( 5, SQL_C_SSHORT, &iKeySeq,    0,                        &cb);
             GetData( 7, SQL_C_CHAR,   szFkTable,   DB_MAX_TABLE_NAME_LEN+1,  &cb);
             GetData( 8, SQL_C_CHAR,   szFkCol,     DB_MAX_COLUMN_NAME_LEN+1, &cb);
-            Temp0.Printf("%s[%s] ",Temp0.c_str(),szFkTable);  // [ ] in case there is a blank in the Table name
-        }  // if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
-    }   // while ((retcode == SQL_SUCCESS) || (retcode == SQL_SUCCESS_WITH_INFO))
+            Temp0.Printf(wxT("%s[%s] "),Temp0.c_str(),szFkTable);  // [ ] in case there is a blank in the Table name
+        }  // if
+    }  // while
     Temp0.Trim();     // Get rid of any unneeded blanks
-    if (Temp0 != "")
+    if (Temp0 != wxT(""))
     {
-        for (i=0;i<noCols;i++)                          // Find the Column name
-            if (!wxStrcmp(colInf[i].colName,szPkCol))   // We have found the Column, store the Information
-                strcpy(colInf[i].PkTableName,Temp0);    // Name of the Tables where this Primary Key is used as a Foreign Key
-    }  // if (Temp0 != "")
+        for (i=0;i<noCols;i++)
+        {   // Find the Column name
+            if (!wxStrcmp(colInf[i].colName,szPkCol))           // We have found the Column, store the Information
+                wxStrcpy(colInf[i].PkTableName,Temp0.c_str());  // Name of the Tables where this Primary Key is used as a Foreign Key
+        }
+    }  // if
     SQLFreeStmt(hstmt, SQL_CLOSE);  /* Close the cursor (the hstmt is still allocated). */
 
     /*---------------------------------------------------------------------*/
@@ -1524,29 +1648,30 @@ int wxDB::GetKeyFields(char *tableName, wxColInf* colInf,int noCols)
                 if (!wxStrcmp(colInf[i].colName,szFkCol))       // We have found the (Foreign Key) Column
                 {
                     colInf[i].FkCol = iKeySeq;                  // Which Foreign Key is this (first, second usw.) ?
-                    strcpy(colInf[i].FkTableName,szPkTable);    // Name of the Table where this Foriegn is the Primary Key
-                } // if (!wxStrcmp(colInf[i].colName,szFkCol))
-            }  // for (i=0;i<noCols;i++)
-        }   // if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
-    }    // while ((retcode == SQL_SUCCESS) || (retcode == SQL_SUCCESS_WITH_INFO))
+                    wxStrcpy(colInf[i].FkTableName,szPkTable);  // Name of the Table where this Foriegn is the Primary Key
+                } // if
+            }  // for
+        }  // if
+    }  // while
     SQLFreeStmt(hstmt, SQL_CLOSE);  /* Close the cursor (the hstmt is still allocated). */
 
-    /*---------------------------------------------------------------------*/
     return TRUE;
-}  // wxDB::GetKeyFields()
+
+}  // wxDb::GetKeyFields()
 
 
-/********** wxDB::GetColumns() **********/
-wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
+#if OLD_GETCOLUMNS
+/********** wxDb::GetColumns() **********/
+wxDbColInf *wxDb::GetColumns(char *tableName[], const char *userID)
 /*
  *        1) The last array element of the tableName[] argument must be zero (null).
  *            This is how the end of the array is detected.
- *        2) This function returns an array of wxColInf structures.  If no columns
+ *        2) This function returns an array of wxDbColInf structures.  If no columns
  *            were found, or an error occured, this pointer will be zero (null).  THE
  *            CALLING FUNCTION IS RESPONSIBLE FOR DELETING THE MEMORY RETURNED WHEN IT
  *            IS FINISHED WITH IT.  i.e.
  *
- *            wxColInf *colInf = pDb->GetColumns(tableList, userID);
+ *            wxDbColInf *colInf = pDb->GetColumns(tableList, userID);
  *            if (colInf)
  *            {
  *                // Use the column inf
@@ -1560,14 +1685,14 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
  *        userID == ""    ... UserID set equal to 'this->uid'
  *        userID != ""    ... UserID set equal to 'userID'
  *
- * NOTE: ALL column bindings associated with this wxDB instance are unbound
- *       by this function.  This function should use its own wxDB instance
+ * NOTE: ALL column bindings associated with this wxDb instance are unbound
+ *       by this function.  This function should use its own wxDb instance
  *       to avoid undesired unbinding of columns.
  */
 {
     int      noCols = 0;
     int      colNo  = 0;
-    wxColInf *colInf = 0;
+    wxDbColInf *colInf = 0;
 
     RETCODE  retcode;
     SDWORD   cb;
@@ -1595,7 +1720,7 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
         UserID = UserID.Upper();
 
     // Pass 1 - Determine how many columns there are.
-    // Pass 2 - Allocate the wxColInf array and fill in
+    // Pass 2 - Allocate the wxDbColInf array and fill in
     //                the array with the column information.
     int pass;
     for (pass = 1; pass <= 2; pass++)
@@ -1604,13 +1729,13 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
         {
             if (noCols == 0)  // Probably a bogus table name(s)
                 break;
-            // Allocate n wxColInf objects to hold the column information
-            colInf = new wxColInf[noCols+1];
+            // Allocate n wxDbColInf objects to hold the column information
+            colInf = new wxDbColInf[noCols+1];
             if (!colInf)
                 break;
             // Mark the end of the array
-            wxStrcpy(colInf[noCols].tableName, "");
-            wxStrcpy(colInf[noCols].colName, "");
+            wxStrcpy(colInf[noCols].tableName, wxT(""));
+            wxStrcpy(colInf[noCols].colName, wxT(""));
             colInf[noCols].sqlDataType = 0;
         }
         // Loop through each table name
@@ -1627,14 +1752,14 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
 
             // MySQL and Access cannot accept a user name when looking up column names, so we
             // use the call below that leaves out the user name
-            if (wxStrcmp(UserID.GetData(),"") &&
+            if (wxStrcmp(UserID.c_str(),wxT("")) &&
                  Dbms() != dbmsMY_SQL &&
                  Dbms() != dbmsACCESS)
             {
                 retcode = SQLColumns(hstmt,
                                      NULL, 0,                                // All qualifiers
-                                     (UCHAR *) UserID.GetData(), SQL_NTS,    // Owner
-                                     (UCHAR *) TableName.GetData(), SQL_NTS,
+                                     (UCHAR *) UserID.c_str(), SQL_NTS,    // Owner
+                                     (UCHAR *) TableName.c_str(), SQL_NTS,
                                      NULL, 0);                               // All columns
             }
             else
@@ -1642,7 +1767,7 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
                 retcode = SQLColumns(hstmt,
                                      NULL, 0,                                // All qualifiers
                                      NULL, 0,                                // Owner
-                                     (UCHAR *) TableName.GetData(), SQL_NTS,
+                                     (UCHAR *) TableName.c_str(), SQL_NTS,
                                      NULL, 0);                               // All columns
             }
             if (retcode != SQL_SUCCESS)
@@ -1675,8 +1800,8 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
                         GetData(10, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].numPrecRadix, 0,                        &cb);
                         GetData(11, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].nullable,     0,                        &cb);
                         GetData(12, SQL_C_CHAR,   (UCHAR*)  colInf[colNo].remarks,      254+1,                    &cb);
-
-                        // Determine the wxDB data type that is used to represent the native data type of this data source
+        
+                        // Determine the wxDb data type that is used to represent the native data type of this data source
                         colInf[colNo].dbDataType = 0;
                         if (!wxStricmp(typeInfVarchar.TypeName,colInf[colNo].typeName))
                         {
@@ -1713,29 +1838,30 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
     SQLFreeStmt(hstmt, SQL_CLOSE);
     return colInf;
 
-}  // wxDB::GetColumns()
+}  // wxDb::GetColumns()
 
 
-/********** wxDB::GetColumns() **********/
-wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
-/*
- * Same as the above GetColumns() function except this one gets columns
- * only for a single table, and if 'numCols' is not NULL, the number of
- * columns stored in the returned wxColInf is set in '*numCols'
- *
- * userID is evaluated in the following manner:
- *        userID == NULL  ... UserID is ignored
- *        userID == ""    ... UserID set equal to 'this->uid'
- *        userID != ""    ... UserID set equal to 'userID'
- *
- * NOTE: ALL column bindings associated with this wxDB instance are unbound
- *       by this function.  This function should use its own wxDB instance
- *       to avoid undesired unbinding of columns.
- */
+/********** wxDb::GetColumns() **********/
+
+wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char *userID)
+//
+// Same as the above GetColumns() function except this one gets columns
+// only for a single table, and if 'numCols' is not NULL, the number of
+// columns stored in the returned wxDbColInf is set in '*numCols'
+//
+// userID is evaluated in the following manner:
+//        userID == NULL  ... UserID is ignored
+//        userID == ""    ... UserID set equal to 'this->uid'
+//        userID != ""    ... UserID set equal to 'userID'
+//
+// NOTE: ALL column bindings associated with this wxDb instance are unbound
+//       by this function.  This function should use its own wxDb instance
+//       to avoid undesired unbinding of columns.
+
 {
     int       noCols = 0;
     int       colNo  = 0;
-    wxColInf *colInf = 0;
+    wxDbColInf *colInf = 0;
 
     RETCODE  retcode;
     SDWORD   cb;
@@ -1763,7 +1889,7 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
         UserID = UserID.Upper();
 
     // Pass 1 - Determine how many columns there are.
-    // Pass 2 - Allocate the wxColInf array and fill in
+    // Pass 2 - Allocate the wxDbColInf array and fill in
     //                the array with the column information.
     int pass;
     for (pass = 1; pass <= 2; pass++)
@@ -1772,13 +1898,13 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
         {
             if (noCols == 0)  // Probably a bogus table name(s)
                 break;
-            // Allocate n wxColInf objects to hold the column information
-            colInf = new wxColInf[noCols+1];
+            // Allocate n wxDbColInf objects to hold the column information
+            colInf = new wxDbColInf[noCols+1];
             if (!colInf)
                 break;
             // Mark the end of the array
-            wxStrcpy(colInf[noCols].tableName, "");
-            wxStrcpy(colInf[noCols].colName, "");
+            wxStrcpy(colInf[noCols].tableName, wxT(""));
+            wxStrcpy(colInf[noCols].colName, wxT(""));
             colInf[noCols].sqlDataType = 0;
         }
 
@@ -1792,14 +1918,14 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
 
         // MySQL and Access cannot accept a user name when looking up column names, so we
         // use the call below that leaves out the user name
-        if (wxStrcmp(UserID.GetData(),"") &&
+        if (wxStrcmp(UserID.c_str(),wxT("")) &&
              Dbms() != dbmsMY_SQL &&
              Dbms() != dbmsACCESS)
         {
             retcode = SQLColumns(hstmt,
                                  NULL, 0,                                // All qualifiers
-                                 (UCHAR *) UserID.GetData(), SQL_NTS,    // Owner
-                                 (UCHAR *) TableName.GetData(), SQL_NTS,
+                                 (UCHAR *) UserID.c_str(), SQL_NTS,    // Owner
+                                 (UCHAR *) TableName.c_str(), SQL_NTS,
                                  NULL, 0);                               // All columns
         }
         else
@@ -1807,7 +1933,7 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
             retcode = SQLColumns(hstmt,
                                  NULL, 0,                                 // All qualifiers
                                  NULL, 0,                                 // Owner
-                                 (UCHAR *) TableName.GetData(), SQL_NTS,
+                                 (UCHAR *) TableName.c_str(), SQL_NTS,
                                  NULL, 0);                                // All columns
         }
         if (retcode != SQL_SUCCESS)
@@ -1849,15 +1975,23 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
                     colInf[colNo].FkCol = 0;           // Foreign key column   0=No; 1= First Key, 2 = Second Key etc.
                     colInf[colNo].FkTableName[0] = 0;  // Foreign key table name
 
-                    // Determine the wxDB data type that is used to represent the native data type of this data source
+                    // BJO 20000428 : Virtuoso returns type names with upper cases!
+                    if (Dbms() == dbmsVIRTUOSO)
+                    {
+                        wxString s =  colInf[colNo].typeName;
+                        s = s.MakeLower();
+                        wxStrcmp(colInf[colNo].typeName, s.c_str());        
+                    }
+                       
+                    // Determine the wxDb data type that is used to represent the native data type of this data source
                     colInf[colNo].dbDataType = 0;
                     if (!wxStricmp(typeInfVarchar.TypeName,colInf[colNo].typeName))
                     {
                         if (colInf[colNo].columnSize < 1)
                         {
-                             // IODBC does not return a correct columnSize, so we set
-                             // columnSize = bufferLength if no column size was returned
-                             colInf[colNo].columnSize = colInf[colNo].bufferLength;
+                            // IODBC does not return a correct columnSize, so we set
+                            // columnSize = bufferLength if no column size was returned
+                            colInf[colNo].columnSize = colInf[colNo].bufferLength;
                         }
                         colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
                     }
@@ -1866,8 +2000,8 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
                     else if (!wxStricmp(typeInfFloat.TypeName,colInf[colNo].typeName))
                         colInf[colNo].dbDataType = DB_DATA_TYPE_FLOAT;
                     else if (!wxStricmp(typeInfDate.TypeName,colInf[colNo].typeName))
-                        colInf[colNo].dbDataType = DB_DATA_TYPE_DATE;
-
+                        colInf[colNo].dbDataType = DB_DATA_TYPE_DATE;     
+            
                     colNo++;
                 }
             }
@@ -1893,11 +2027,355 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
         *numCols = noCols;
     return colInf;
 
-}  // wxDB::GetColumns()
+}  // wxDb::GetColumns()
 
 
-/********** wxDB::GetColumnCount() **********/
-int wxDB::GetColumnCount(char *tableName, const char *userID)
+#else  // New GetColumns
+
+
+/*
+    BJO 20000503
+    These are tentative new GetColumns members which should be more database
+    independant and which always returns the columns in the order they were 
+    created.
+
+    - The first one (wxDbColInf *wxDb::GetColumns(char *tableName[], const 
+      char* userID)) calls the second implementation for each separate table
+      before merging the results. This makes the code easier to maintain as 
+      only one member (the second) makes the real work
+    - wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const 
+      char *userID) is a little bit improved 
+    - It doesn't anymore rely on the type-name to find out which database-type 
+      each column has
+    - It ends by sorting the columns, so that they are returned in the same 
+      order they were created
+*/
+
+typedef struct
+{
+    int noCols;
+    wxDbColInf *colInf;
+} _TableColumns;
+
+
+wxDbColInf *wxDb::GetColumns(char *tableName[], const char* userID)
+{
+    int i, j;
+    // The last array element of the tableName[] argument must be zero (null).
+    // This is how the end of the array is detected.
+
+    int noCols = 0;
+
+    // How many tables ?
+    int tbl;
+    for (tbl = 0 ; tableName[tbl]; tbl++); 
+    
+    // Create a table to maintain the columns for each separate table
+    _TableColumns *TableColumns = new _TableColumns[tbl];
+    
+    // Fill the table
+    for (i = 0 ; i < tbl ; i++)
+        
+    {
+        TableColumns[i].colInf = GetColumns(tableName[i], &TableColumns[i].noCols, userID);
+        if (TableColumns[i].colInf == NULL) 
+            return NULL;
+        noCols += TableColumns[i].noCols;
+    }
+    
+    // Now merge all the separate table infos
+    wxDbColInf *colInf = new wxDbColInf[noCols+1];
+    
+    // Mark the end of the array
+    wxStrcpy(colInf[noCols].tableName, wxT(""));
+    wxStrcpy(colInf[noCols].colName, wxT(""));
+    colInf[noCols].sqlDataType = 0;
+    
+    // Merge ...
+    int offset = 0;
+    
+    for (i = 0 ; i < tbl ; i++)
+    {
+        for (j = 0 ; j < TableColumns[i].noCols ; j++)
+        {
+            colInf[offset++] = TableColumns[i].colInf[j];        
+        }
+    }
+    
+    delete [] TableColumns;
+    
+    return colInf;
+}  // wxDb::GetColumns()  -- NEW
+
+
+wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char *userID)
+//
+// Same as the above GetColumns() function except this one gets columns
+// only for a single table, and if 'numCols' is not NULL, the number of
+// columns stored in the returned wxDbColInf is set in '*numCols'
+//
+// userID is evaluated in the following manner:
+//        userID == NULL  ... UserID is ignored
+//        userID == ""    ... UserID set equal to 'this->uid'
+//        userID != ""    ... UserID set equal to 'userID'
+//
+// NOTE: ALL column bindings associated with this wxDb instance are unbound
+//       by this function.  This function should use its own wxDb instance
+//       to avoid undesired unbinding of columns.
+{
+    SWORD       noCols = 0;
+    int         colNo  = 0;
+    wxDbColInf *colInf = 0;
+    
+    RETCODE  retcode;
+    SDWORD   cb;
+    
+    wxString UserID;
+    wxString TableName;
+    
+    if (userID)
+    {
+        if (!wxStrlen(userID))
+            UserID = uid;
+        else
+            UserID = userID;
+    }
+    else
+        UserID = "";
+    
+    // dBase does not use user names, and some drivers fail if you try to pass one
+    if (Dbms() == dbmsDBASE)
+        UserID = "";
+    
+    // Oracle user names may only be in uppercase, so force
+    // the name to uppercase
+    if (Dbms() == dbmsORACLE)
+        UserID = UserID.Upper();
+    
+    // Pass 1 - Determine how many columns there are.
+    // Pass 2 - Allocate the wxDbColInf array and fill in
+    //                the array with the column information.
+    int pass;
+    for (pass = 1; pass <= 2; pass++)
+    {
+        if (pass == 2)
+        {
+            if (noCols == 0)  // Probably a bogus table name(s)
+                break;
+            // Allocate n wxDbColInf objects to hold the column information
+            colInf = new wxDbColInf[noCols+1];
+            if (!colInf)
+                break;
+            // Mark the end of the array
+            wxStrcpy(colInf[noCols].tableName, wxT(""));
+            wxStrcpy(colInf[noCols].colName, wxT(""));
+            colInf[noCols].sqlDataType = 0;
+        }
+        
+        TableName = tableName;
+        // Oracle table names are uppercase only, so force
+        // the name to uppercase just in case programmer forgot to do this
+        if (Dbms() == dbmsORACLE)
+            TableName = TableName.Upper();
+        
+        SQLFreeStmt(hstmt, SQL_CLOSE);
+        
+        // MySQL and Access cannot accept a user name when looking up column names, so we
+        // use the call below that leaves out the user name
+        if (wxStrcmp(UserID.c_str(),wxT("")) &&
+            Dbms() != dbmsMY_SQL &&
+            Dbms() != dbmsACCESS)
+        {
+            retcode = SQLColumns(hstmt,
+                                 NULL, 0,                              // All qualifiers
+                                 (UCHAR *) UserID.c_str(), SQL_NTS,    // Owner
+                                 (UCHAR *) TableName.c_str(), SQL_NTS,
+                                 NULL, 0);                             // All columns
+        }
+        else
+        {
+            retcode = SQLColumns(hstmt,
+                                 NULL, 0,                              // All qualifiers
+                                 NULL, 0,                              // Owner
+                                 (UCHAR *) TableName.c_str(), SQL_NTS,
+                                 NULL, 0);                             // All columns
+        }
+        if (retcode != SQL_SUCCESS)
+        {  // Error occured, abort
+            DispAllErrors(henv, hdbc, hstmt);
+            if (colInf)
+                delete [] colInf;
+            SQLFreeStmt(hstmt, SQL_CLOSE);
+            if (numCols)
+                *numCols = 0;
+            return(0);
+        }
+        
+        while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)
+        {
+            if (pass == 1)  // First pass, just add up the number of columns
+                noCols++;
+            else  // Pass 2; Fill in the array of structures
+            {
+                if (colNo < noCols)  // Some extra error checking to prevent memory overwrites
+                {
+                    // NOTE: Only the ODBC 1.x fields are retrieved
+                    GetData( 1, SQL_C_CHAR,   (UCHAR*)  colInf[colNo].catalog,      128+1,                    &cb);
+                    GetData( 2, SQL_C_CHAR,   (UCHAR*)  colInf[colNo].schema,       128+1,                    &cb);
+                    GetData( 3, SQL_C_CHAR,   (UCHAR*)  colInf[colNo].tableName,    DB_MAX_TABLE_NAME_LEN+1,  &cb);
+                    GetData( 4, SQL_C_CHAR,   (UCHAR*)  colInf[colNo].colName,      DB_MAX_COLUMN_NAME_LEN+1, &cb);
+                    GetData( 5, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].sqlDataType,  0,                        &cb);
+                    GetData( 6, SQL_C_CHAR,   (UCHAR*)  colInf[colNo].typeName,     128+1,                    &cb);
+                    GetData( 7, SQL_C_SLONG,  (UCHAR*) &colInf[colNo].columnSize,   0,                        &cb);                
+                    GetData( 8, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].bufferLength, 0,                        &cb);
+                    GetData( 9, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].decimalDigits,0,                        &cb);
+                    GetData(10, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].numPrecRadix, 0,                        &cb);
+                    GetData(11, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].nullable,     0,                        &cb);
+                    GetData(12, SQL_C_CHAR,   (UCHAR*)  colInf[colNo].remarks,      254+1,                    &cb);
+                    // Start Values for Primary/Foriegn Key (=No)
+                    colInf[colNo].PkCol = 0;           // Primary key column   0=No; 1= First Key, 2 = Second Key etc.
+                    colInf[colNo].PkTableName[0] = 0;  // Tablenames where Primary Key is used as a Foreign Key
+                    colInf[colNo].FkCol = 0;           // Foreign key column   0=No; 1= First Key, 2 = Second Key etc.
+                    colInf[colNo].FkTableName[0] = 0;  // Foreign key table name
+                    
+#ifdef _IODBC_          
+                    // IODBC returns the columnSize in bufferLength.. (bug)
+                    colInf[colNo].columnSize = colInf[colNo].bufferLength;          
+#endif
+                    
+                    // Determine the wxDb data type that is used to represent the native data type of this data source
+                    colInf[colNo].dbDataType = 0;
+                    // Get the intern datatype
+                    switch (colInf[colNo].sqlDataType)
+                    {
+                        case SQL_VARCHAR:
+                        case SQL_CHAR:
+                            colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;             
+                        break;
+                        
+                        case SQL_TINYINT:
+                        case SQL_SMALLINT:
+                        case SQL_INTEGER:
+                            colInf[colNo].dbDataType = DB_DATA_TYPE_INTEGER;     
+                            break;
+                        case SQL_DOUBLE:
+                        case SQL_DECIMAL:
+                        case SQL_NUMERIC:
+                        case SQL_FLOAT:
+                        case SQL_REAL:
+                            colInf[colNo].dbDataType = DB_DATA_TYPE_FLOAT;   
+                            break;
+                        case SQL_DATE:
+                            colInf[colNo].dbDataType = DB_DATA_TYPE_DATE;   
+                            break;
+#ifdef __WXDEBUG__
+                        default:
+                            wxString errMsg;
+                            errMsg.sprintf("SQL Data type %d currently not supported by wxWindows", colInf[colNo].sqlDataType);
+                            wxLogDebug(errMsg,wxT("ODBC DEBUG MESSAGE"));
+#endif              
+                    }
+                    colNo++;
+                }
+            }
+        }
+        if (retcode != SQL_NO_DATA_FOUND)
+        {  // Error occured, abort
+            DispAllErrors(henv, hdbc, hstmt);
+            if (colInf)
+                delete [] colInf;
+            SQLFreeStmt(hstmt, SQL_CLOSE);
+            if (numCols)
+                *numCols = 0;
+            return(0);
+        }
+    }
+    
+    SQLFreeStmt(hstmt, SQL_CLOSE);
+    
+    // Store Primary and Foreign Keys
+    GetKeyFields(tableName,colInf,noCols);
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Now sort the the columns in order to make them appear in the right order
+    ///////////////////////////////////////////////////////////////////////////
+    
+    // Build a generic SELECT statement which returns 0 rows
+    wxString Stmt;
+    
+    Stmt.sprintf("select * from %s where 0=1", tableName);
+    
+    // Execute query  
+    if (SQLExecDirect(hstmt, (UCHAR FAR *) Stmt.c_str(), SQL_NTS) != SQL_SUCCESS)
+    {
+        DispAllErrors(henv, hdbc, hstmt);
+        return NULL;
+    } 
+    
+    // Get the number of result columns
+    if (SQLNumResultCols (hstmt, &noCols) != SQL_SUCCESS)
+    {
+        DispAllErrors(henv, hdbc, hstmt);
+        return NULL;
+    }
+    
+    if (noCols == 0) // Probably a bogus table name
+        return NULL;
+    
+    //  Get the name 
+    int i;
+    short colNum;
+    UCHAR name[100];
+    SWORD Sword;
+    SDWORD Sdword;
+    for (colNum = 0; colNum < noCols; colNum++)
+    { 
+        if (SQLColAttributes(hstmt,colNum+1, SQL_COLUMN_NAME, 
+            name, sizeof(name), 
+            &Sword, &Sdword) != SQL_SUCCESS)
+        {
+            DispAllErrors(henv, hdbc, hstmt);
+            return NULL;
+        } 
+        
+        wxString Name1 = name;
+        Name1 = Name1.Upper();
+        
+        // Where is this name in the array ?
+        for (i = colNum ; i < noCols ; i++)
+        {
+            wxString Name2 =  colInf[i].colName;
+            Name2 = Name2.Upper();
+            if (Name2 == Name1)
+            {
+                if (colNum != i) // swap to sort
+                {
+                    wxDbColInf tmpColInf = colInf[colNum];
+                    colInf[colNum] =  colInf[i];
+                    colInf[i] = tmpColInf;
+                }
+                break;
+            } 
+        }     
+    } 
+    SQLFreeStmt(hstmt, SQL_CLOSE);
+
+    ///////////////////////////////////////////////////////////////////////////
+    // End sorting
+    ///////////////////////////////////////////////////////////////////////////
+
+    if (numCols)
+        *numCols = noCols;
+    return colInf;
+    
+}  // wxDb::GetColumns()
+
+
+#endif  // #else OLD_GETCOLUMNS
+
+
+/********** wxDb::GetColumnCount() **********/
+int wxDb::GetColumnCount(char *tableName, const char *userID)
 /*
  * Returns a count of how many columns are in a table.
  * If an error occurs in computing the number of columns
@@ -1908,8 +2386,8 @@ int wxDB::GetColumnCount(char *tableName, const char *userID)
  *        userID == ""    ... UserID set equal to 'this->uid'
  *        userID != ""    ... UserID set equal to 'userID'
  *
- * NOTE: ALL column bindings associated with this wxDB instance are unbound
- *       by this function.  This function should use its own wxDB instance
+ * NOTE: ALL column bindings associated with this wxDb instance are unbound
+ *       by this function.  This function should use its own wxDb instance
  *       to avoid undesired unbinding of columns.
  */
 {
@@ -1928,11 +2406,11 @@ int wxDB::GetColumnCount(char *tableName, const char *userID)
             UserID = userID;
     }
     else
-        UserID = "";
+        UserID = wxT("");
 
     // dBase does not use user names, and some drivers fail if you try to pass one
     if (Dbms() == dbmsDBASE)
-        UserID = "";
+        UserID = wxT("");
 
     // Oracle user names may only be in uppercase, so force
     // the name to uppercase
@@ -1952,14 +2430,14 @@ int wxDB::GetColumnCount(char *tableName, const char *userID)
 
             // MySQL and Access cannot accept a user name when looking up column names, so we
             // use the call below that leaves out the user name
-            if (wxStrcmp(UserID.GetData(),"") &&
+            if (wxStrcmp(UserID.c_str(),wxT("")) &&
                  Dbms() != dbmsMY_SQL &&
                  Dbms() != dbmsACCESS)
             {
                 retcode = SQLColumns(hstmt,
                                      NULL, 0,                                // All qualifiers
-                                     (UCHAR *) UserID.GetData(), SQL_NTS,    // Owner
-                                     (UCHAR *) TableName.GetData(), SQL_NTS,
+                                     (UCHAR *) UserID.c_str(), SQL_NTS,      // Owner
+                                     (UCHAR *) TableName.c_str(), SQL_NTS,
                                      NULL, 0);                               // All columns
             }
             else
@@ -1967,7 +2445,7 @@ int wxDB::GetColumnCount(char *tableName, const char *userID)
                 retcode = SQLColumns(hstmt,
                                      NULL, 0,                                // All qualifiers
                                      NULL, 0,                                // Owner
-                                     (UCHAR *) TableName.GetData(), SQL_NTS,
+                                     (UCHAR *) TableName.c_str(), SQL_NTS,
                                      NULL, 0);                               // All columns
             }
             if (retcode != SQL_SUCCESS)
@@ -1993,11 +2471,11 @@ int wxDB::GetColumnCount(char *tableName, const char *userID)
     SQLFreeStmt(hstmt, SQL_CLOSE);
     return noCols;
 
-}  // wxDB::GetColumnCount()
+}  // wxDb::GetColumnCount()
 
 
-/********** wxDB::GetCatalog() *******/
-wxDbInf *wxDB::GetCatalog(char *userID)
+/********** wxDb::GetCatalog() *******/
+wxDbInf *wxDb::GetCatalog(char *userID)
 /*
  * ---------------------------------------------------------------------
  * -- 19991203 : mj10777@gmx.net : Create                         ------
@@ -2015,8 +2493,8 @@ wxDbInf *wxDB::GetCatalog(char *userID)
  *        userID == ""    ... UserID set equal to 'this->uid'
  *        userID != ""    ... UserID set equal to 'userID'
  *
- * NOTE: ALL column bindings associated with this wxDB instance are unbound
- *       by this function.  This function should use its own wxDB instance
+ * NOTE: ALL column bindings associated with this wxDb instance are unbound
+ *       by this function.  This function should use its own wxDb instance
  *       to avoid undesired unbinding of columns.
  */
 {
@@ -2025,7 +2503,6 @@ wxDbInf *wxDB::GetCatalog(char *userID)
     int      pass;
     RETCODE  retcode;
     SDWORD   cb;
-//    char     tblNameSave[DB_MAX_TABLE_NAME_LEN+1];
     wxString tblNameSave;
 
     wxString UserID;
@@ -2038,11 +2515,11 @@ wxDbInf *wxDB::GetCatalog(char *userID)
             UserID = userID;
     }
     else
-        UserID = "";
+        UserID = wxT("");
 
     // dBase does not use user names, and some drivers fail if you try to pass one
     if (Dbms() == dbmsDBASE)
-        UserID = "";
+        UserID = wxT("");
 
     // Oracle user names may only be in uppercase, so force
     // the name to uppercase
@@ -2051,28 +2528,25 @@ wxDbInf *wxDB::GetCatalog(char *userID)
 
     //-------------------------------------------------------------
     pDbInf = new wxDbInf;          // Create the Database Arrray
-    pDbInf->catalog[0]     = 0;
-    pDbInf->schema[0]      = 0;
-    pDbInf->numTables      = 0;    // Counter for Tables
-    pDbInf->pTableInf      = NULL; // Array of Tables
     //-------------------------------------------------------------
     // Table Information
     // Pass 1 - Determine how many Tables there are.
     // Pass 2 - Create the Table array and fill it
     //        - Create the Cols array = NULL
     //-------------------------------------------------------------
+
     for (pass = 1; pass <= 2; pass++)
     {
         SQLFreeStmt(hstmt, SQL_CLOSE);   // Close if Open
-        tblNameSave = "";
+        tblNameSave = wxT("");
 
-        if (wxStrcmp(UserID.GetData(),"") &&
-             Dbms() != dbmsMY_SQL &&
-             Dbms() != dbmsACCESS)
+        if (wxStrcmp(UserID.c_str(),wxT("")) &&
+            Dbms() != dbmsMY_SQL &&
+            Dbms() != dbmsACCESS)
         {
             retcode = SQLTables(hstmt,
                                 NULL, 0,                             // All qualifiers
-                                (UCHAR *) UserID.GetData(), SQL_NTS, // User specified
+                                (UCHAR *) UserID.c_str(), SQL_NTS,   // User specified
                                 NULL, 0,                             // All tables
                                 NULL, 0);                            // All columns
         }
@@ -2084,6 +2558,7 @@ wxDbInf *wxDB::GetCatalog(char *userID)
                                 NULL, 0,           // All tables
                                 NULL, 0);          // All columns
         }
+
         if (retcode != SQL_SUCCESS)
         {
             DispAllErrors(henv, hdbc, hstmt);
@@ -2091,7 +2566,7 @@ wxDbInf *wxDB::GetCatalog(char *userID)
             SQLFreeStmt(hstmt, SQL_CLOSE);
             return pDbInf;
         }
-
+    
         while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)   // Table Information
         {
             if (pass == 1)  // First pass, just count the Tables
@@ -2107,24 +2582,18 @@ wxDbInf *wxDB::GetCatalog(char *userID)
             {
                 if (pDbInf->pTableInf == NULL)   // Has the Table Array been created
                 {  // no, then create the Array
-                    pDbInf->pTableInf = new wxTableInf[pDbInf->numTables];
-                    for (noTab=0;noTab<pDbInf->numTables;noTab++)
-                    {
-                        (pDbInf->pTableInf+noTab)->tableName[0]    = 0;
-                        (pDbInf->pTableInf+noTab)->tableType[0]    = 0;
-                        (pDbInf->pTableInf+noTab)->tableRemarks[0] = 0;
-                        (pDbInf->pTableInf+noTab)->numCols         = 0;
-                        (pDbInf->pTableInf+noTab)->pColInf         = NULL;
-                    }
+                    pDbInf->pTableInf = new wxDbTableInf[pDbInf->numTables];
                     noTab = 0;
-                } // if (pDbInf->pTableInf == NULL)   // Has the Table Array been created
+                } // if (pDbInf->pTableInf == NULL)   // Has the Table Array been created   
+
                 GetData( 3, SQL_C_CHAR,   (UCHAR*)  (pDbInf->pTableInf+noTab)->tableName,    DB_MAX_TABLE_NAME_LEN+1, &cb);
                 GetData( 4, SQL_C_CHAR,   (UCHAR*)  (pDbInf->pTableInf+noTab)->tableType,    30+1,                    &cb);
                 GetData( 5, SQL_C_CHAR,   (UCHAR*)  (pDbInf->pTableInf+noTab)->tableRemarks, 254+1,                   &cb);
+
                 noTab++;
-            }  // if (pass == 2)  We now know the amount of Tables
-        }   // while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)
-    }    // for (pass = 1; pass <= 2; pass++)
+            }  // if
+        }  // while
+    }  // for
     SQLFreeStmt(hstmt, SQL_CLOSE);
 
     // Query how many columns are in each table
@@ -2132,12 +2601,14 @@ wxDbInf *wxDB::GetCatalog(char *userID)
     {
         (pDbInf->pTableInf+noTab)->numCols = GetColumnCount((pDbInf->pTableInf+noTab)->tableName,UserID);
     }
+
     return pDbInf;
-}  // wxDB::GetCatalog()
+
+}  // wxDb::GetCatalog()
 
 
-/********** wxDB::Catalog() **********/
-bool wxDB::Catalog(const char *userID, const char *fileName)
+/********** wxDb::Catalog() **********/
+bool wxDb::Catalog(const char *userID, const char *fileName)
 /*
  * Creates the text file specified in 'filename' which will contain
  * a minimal data dictionary of all tables accessible by the user specified
@@ -2148,8 +2619,8 @@ bool wxDB::Catalog(const char *userID, const char *fileName)
  *        userID == ""    ... UserID set equal to 'this->uid'
  *        userID != ""    ... UserID set equal to 'userID'
  *
- * NOTE: ALL column bindings associated with this wxDB instance are unbound
- *       by this function.  This function should use its own wxDB instance
+ * NOTE: ALL column bindings associated with this wxDb instance are unbound
+ *       by this function.  This function should use its own wxDb instance
  *       to avoid undesired unbinding of columns.
  */
 {
@@ -2180,24 +2651,24 @@ bool wxDB::Catalog(const char *userID, const char *fileName)
             UserID = userID;
     }
     else
-        UserID = "";
+        UserID = wxT("");
 
     // dBase does not use user names, and some drivers fail if you try to pass one
     if (Dbms() == dbmsDBASE)
-        UserID = "";
+        UserID = wxT("");
 
     // Oracle user names may only be in uppercase, so force
     // the name to uppercase
     if (Dbms() == dbmsORACLE)
         UserID = UserID.Upper();
 
-    if (wxStrcmp(UserID.GetData(),"") &&
+    if (wxStrcmp(UserID.c_str(),wxT("")) &&
          Dbms() != dbmsMY_SQL &&
          Dbms() != dbmsACCESS)
     {
         retcode = SQLColumns(hstmt,
                              NULL, 0,                                // All qualifiers
-                             (UCHAR *) UserID.GetData(), SQL_NTS,    // User specified
+                             (UCHAR *) UserID.c_str(), SQL_NTS,      // User specified
                              NULL, 0,                                // All tables
                              NULL, 0);                               // All columns
     }
@@ -2217,12 +2688,12 @@ bool wxDB::Catalog(const char *userID, const char *fileName)
     }
 
     wxString outStr;
-    tblNameSave = "";
+    tblNameSave = wxT("");
     int cnt = 0;
 
     while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)
     {
-        if (wxStrcmp(tblName,tblNameSave.GetData()))
+        if (wxStrcmp(tblName,tblNameSave.c_str()))
         {
             if (cnt)
                 fputs("\n", fp);
@@ -2231,9 +2702,9 @@ bool wxDB::Catalog(const char *userID, const char *fileName)
             fputs("===================== ", fp);
             fputs("========= ", fp);
             fputs("=========\n", fp);
-            outStr.sprintf("%-32s %-32s %-21s %9s %9s\n",
-                "TABLE NAME", "COLUMN NAME", "DATA TYPE", "PRECISION", "LENGTH");
-            fputs(outStr.GetData(), fp);
+            outStr.sprintf(wxT("%-32s %-32s %-21s %9s %9s\n"),
+                wxT("TABLE NAME"), wxT("COLUMN NAME"), wxT("DATA TYPE"), wxT("PRECISION"), wxT("LENGTH"));
+            fputs(outStr.c_str(), fp);
             fputs("================================ ", fp);
             fputs("================================ ", fp);
             fputs("===================== ", fp);
@@ -2251,7 +2722,7 @@ bool wxDB::Catalog(const char *userID, const char *fileName)
 
         outStr.sprintf("%-32s %-32s (%04d)%-15s %9d %9d\n",
             tblName, colName, sqlDataType, typeName, precision, length);
-        if (fputs(outStr.GetData(), fp) == EOF)
+        if (fputs(outStr.c_str(), fp) == EOF)
         {
             SQLFreeStmt(hstmt, SQL_CLOSE);
             fclose(fp);
@@ -2268,10 +2739,10 @@ bool wxDB::Catalog(const char *userID, const char *fileName)
     fclose(fp);
     return(retcode == SQL_NO_DATA_FOUND);
 
-}  // wxDB::Catalog()
+}  // wxDb::Catalog()
 
 
-bool wxDB::TableExists(const char *tableName, const char *userID, const char *tablePath)
+bool wxDb::TableExists(const char *tableName, const char *userID, const char *tablePath)
 /*
  * Table name can refer to a table, view, alias or synonym.  Returns true
  * if the object exists in the database.  This function does not indicate
@@ -2286,22 +2757,22 @@ bool wxDB::TableExists(const char *tableName, const char *userID, const char *ta
 {
     wxString UserID;
     wxString TableName;
-
+    
     assert(tableName && wxStrlen(tableName));
-
-    if (Dbms() == dbmsDBASE)
+    
+    if (Dbms() == dbmsDBASE) 
     {
         wxString dbName;
         if (tablePath && wxStrlen(tablePath))
-            dbName.sprintf("%s/%s.dbf",tablePath,tableName);
+            dbName.sprintf("%s\\%s.dbf",tablePath,tableName);      
         else
             dbName.sprintf("%s.dbf",tableName);
-
+        
         bool exists;
-        exists = wxFileExists(dbName.GetData());
+        exists = wxFileExists(dbName.c_str());    
         return exists;
     }
-
+    
     if (userID)
     {
         if (!wxStrlen(userID))
@@ -2311,59 +2782,152 @@ bool wxDB::TableExists(const char *tableName, const char *userID, const char *ta
     }
     else
         UserID = "";
-
+    
     // Oracle user names may only be in uppercase, so force
     // the name to uppercase
     if (Dbms() == dbmsORACLE)
         UserID = UserID.Upper();
-
+    
     TableName = tableName;
     // Oracle table names are uppercase only, so force
     // the name to uppercase just in case programmer forgot to do this
     if (Dbms() == dbmsORACLE)
         TableName = TableName.Upper();
-
+    
     SQLFreeStmt(hstmt, SQL_CLOSE);
     RETCODE retcode;
-
+    
     // MySQL and Access cannot accept a user name when looking up table names, so we
     // use the call below that leaves out the user name
     if (wxStrcmp(UserID,"") &&
-         Dbms() != dbmsMY_SQL &&
-         Dbms() != dbmsACCESS)
+        Dbms() != dbmsMY_SQL &&
+        Dbms() != dbmsACCESS)
     {
         retcode = SQLTables(hstmt,
-                            NULL, 0,                                    // All qualifiers
-                            (UCHAR *) UserID.GetData(), SQL_NTS,        // All owners
-                            (UCHAR FAR *)TableName.GetData(), SQL_NTS,
-                            NULL, 0);                                   // All table types
+                            NULL, 0,                                  // All qualifiers
+                            (UCHAR *) UserID.c_str(), SQL_NTS,        // All owners
+                            (UCHAR FAR *)TableName.c_str(), SQL_NTS,
+                            NULL, 0);                                 // All table types
     }
     else
     {
         retcode = SQLTables(hstmt,
-                            NULL, 0,                                    // All qualifiers
-                            NULL, 0,                                    // All owners
-                            (UCHAR FAR *)TableName.GetData(), SQL_NTS,
-                            NULL, 0);                                   // All table types
+                            NULL, 0,                                  // All qualifiers
+                            NULL, 0,                                  // All owners
+                            (UCHAR FAR *)TableName.c_str(), SQL_NTS,
+                            NULL, 0);                                 // All table types
     }
     if (retcode != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc, hstmt));
-
+    
     retcode = SQLFetch(hstmt);
     if (retcode  != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
     {
         SQLFreeStmt(hstmt, SQL_CLOSE);
         return(DispAllErrors(henv, hdbc, hstmt));
     }
-
+    
     SQLFreeStmt(hstmt, SQL_CLOSE);
+
     return(TRUE);
+    
+}  // wxDb::TableExists()
 
-}  // wxDB::TableExists()
+
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
+/********** wxDB::TablePrivileges() **********/
+bool wxDB::TablePrivileges(const char *tableName, const char* priv,
+                      const char *userID, const char *tablePath)
+{
+    wxDbTablePrivilegeInfo  result;
+    SDWORD  cbRetVal;
+    RETCODE retcode;
+    
+    //We probably need to be able to dynamically set this based on 
+    //the driver type, and state.
+    char curRole[]="public";
+    
+    //Prologue here similar to db::TableExists()
+    wxString UserID;
+    wxString TableName;
+    
+    assert(tableName && wxStrlen(tableName));
+    
+    if (userID)
+    {
+        if (!wxStrlen(userID))
+            UserID = uid;
+        else
+            UserID = userID;
+    }
+    else
+        UserID = "";
+    
+    // Oracle user names may only be in uppercase, so force 
+    // the name to uppercase
+    if (Dbms() == dbmsORACLE)
+        UserID = UserID.Upper();
+    
+    TableName = tableName;
+    // Oracle table names are uppercase only, so force 
+    // the name to uppercase just in case programmer forgot to do this
+    if (Dbms() == dbmsORACLE)
+        TableName = TableName.Upper();
+    
+    SQLFreeStmt(hstmt, SQL_CLOSE);
+    
+    retcode = SQLTablePrivileges(hstmt,
+                                 NULL, 0,                                    // All qualifiers
+                                 NULL, 0,                                    // All owners
+                                 (UCHAR FAR *)TableName.GetData(), SQL_NTS);  
+    
+#ifdef DBDEBUG_CONSOLE 
+    fprintf(stderr ,"SQLTablePrivileges() returned %i \n",retcode);
+#endif
+    retcode = SQLBindCol (hstmt, 1, SQL_C_CHAR , &result.tableQual, 128, &cbRetVal);
+    
+    retcode = SQLBindCol (hstmt, 2, SQL_C_CHAR , &result.tableOwner, 128, &cbRetVal);
+    
+    retcode = SQLBindCol (hstmt, 3, SQL_C_CHAR , &result.tableName, 128, &cbRetVal);
+    
+    retcode = SQLBindCol (hstmt, 4, SQL_C_CHAR , &result.grantor, 128, &cbRetVal);
+    
+    retcode = SQLBindCol (hstmt, 5, SQL_C_CHAR , &result.grantee, 128, &cbRetVal);
+    
+    retcode = SQLBindCol (hstmt, 6, SQL_C_CHAR , &result.privilege, 128, &cbRetVal);
+    
+    retcode = SQLBindCol (hstmt, 7, SQL_C_CHAR , &result.grantable, 3, &cbRetVal);
+    
+    retcode = SQLFetch(hstmt);
+    while (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO) 
+    {
+#ifdef DBDEBUG_CONSOLE
+        fprintf(stderr,"Scanning %s privilege  on table %s.%s  granted by %s to %s\n",
+                result.privilege,result.tabowner,result.tabname,
+                result.grantor, result.grantee);
+#endif 
+        if (UserID.IsSameAs(result.tableOwner,false) )
+            return TRUE;
+        
+        if (UserID.IsSameAs(result.grantee,false) &&
+            !strcmp(result.privilege,priv))
+            return TRUE;
+        
+        if (!strcmp(result.grantee,curRole) &&
+            !strcmp(result.privilege,priv))
+            return TRUE;
+        
+        retcode = SQLFetch(hstmt);
+    } 
+    
+    return FALSE;
+
+}  // wxDB::TablePrivileges
+#endif
 
 
-/********** wxDB::SqlLog() **********/
-bool wxDB::SqlLog(wxSqlLogState state, const char *filename, bool append)
+/********** wxDb::SetSqlLogging() **********/
+bool wxDb::SetSqlLogging(wxDbSqlLogState state, const char *filename, bool append)
 {
     assert(state == sqlLogON  || state == sqlLogOFF);
     assert(state == sqlLogOFF || filename);
@@ -2390,11 +2954,11 @@ bool wxDB::SqlLog(wxSqlLogState state, const char *filename, bool append)
     sqlLogState = state;
     return(TRUE);
 
-}  // wxDB::SqlLog()
+}  // wxDb::SetSqlLogging()
 
 
-/********** wxDB::WriteSqlLog() **********/
-bool wxDB::WriteSqlLog(const char *logMsg)
+/********** wxDb::WriteSqlLog() **********/
+bool wxDb::WriteSqlLog(const wxChar *logMsg)
 {
     assert(logMsg);
 
@@ -2407,18 +2971,18 @@ bool wxDB::WriteSqlLog(const char *logMsg)
 
     return(TRUE);
 
-}  // wxDB::WriteSqlLog()
+}  // wxDb::WriteSqlLog()
 
 
-/********** wxDB::Dbms() **********/
-wxDBMS wxDB::Dbms(void)
+/********** wxDb::Dbms() **********/
+wxDBMS wxDb::Dbms(void)
 /*
  * Be aware that not all database engines use the exact same syntax, and not
  * every ODBC compliant database is compliant to the same level of compliancy.
  * Some manufacturers support the minimum Level 1 compliancy, and others up
  * through Level 3.  Others support subsets of features for levels above 1.
  *
- * If you find an inconsistency between the wxDB class and a specific database
+ * If you find an inconsistency between the wxDb class and a specific database
  * engine, and an identifier to this section, and special handle the database in
  * the area where behavior is non-conforming with the other databases.
  *
@@ -2445,24 +3009,45 @@ wxDBMS wxDB::Dbms(void)
  *
  * SYBASE (Enterprise)
  *        - If a column is part of the Primary Key, the column cannot be NULL
+ *        - Maximum row size is somewhere in the neighborhood of 1920 bytes
  *
  * MY_SQL
  *        - If a column is part of the Primary Key, the column cannot be NULL
  *        - Cannot support selecting for update [::CanSelectForUpdate()].  Always returns FALSE
+ *        - Columns that are part of primary or secondary keys must be defined as being NOT NULL
+ *            when they are created.  Some code is added in ::CreateIndex to try to adjust the
+ *            column definition if it is not defined correctly, but it is experimental
+ *        - Does not support sub-queries in SQL statements
  *
  * POSTGRES
  *        - Does not support the keywords 'ASC' or 'DESC' as of release v6.5.0
- *
+ *        - Does not support sub-queries in SQL statements
  *
  */
 {
     wxChar baseName[25+1];
-
     wxStrncpy(baseName,dbInf.dbmsName,25);
+    baseName[25] = 0;
+
+    // BJO 20000428 : add support for Virtuoso
+    if (!wxStricmp(dbInf.dbmsName,"OpenLink Virtuoso VDBMS"))
+      return(dbmsVIRTUOSO);
+    
+
     if (!wxStricmp(dbInf.dbmsName,"Adaptive Server Anywhere"))
         return(dbmsSYBASE_ASA);
-    if (!wxStricmp(dbInf.dbmsName,"SQL Server"))  // Sybase Adaptive Server
-        return(dbmsSYBASE_ASE);
+    
+    // BJO 20000427 : The "SQL Server" string is also returned by SQLServer when
+    // connected through an OpenLink driver.
+    // Is it also returned by Sybase Adapatitve server?    
+    // OpenLink driver name is OLOD3032.DLL for msw and oplodbc.so for unix 
+    if (!wxStricmp(dbInf.dbmsName,"SQL Server"))       
+    {
+      if (!wxStrncmp(dbInf.driverName, "oplodbc", 7) ||
+          !wxStrncmp(dbInf.driverName, "OLOD", 4))
+            return dbmsMS_SQL_SERVER; else return dbmsSYBASE_ASE;
+    }
+
     if (!wxStricmp(dbInf.dbmsName,"Microsoft SQL Server"))
         return(dbmsMS_SQL_SERVER);
     if (!wxStricmp(dbInf.dbmsName,"MySQL"))
@@ -2481,17 +3066,20 @@ wxDBMS wxDB::Dbms(void)
         return(dbmsACCESS);
     if (!wxStricmp(dbInf.dbmsName,"MySQL"))
         return(dbmsMY_SQL);
+    if (!wxStricmp(baseName,"Sybase"))             
+      return(dbmsSYBASE_ASE);
 
     baseName[5] = 0;
     if (!wxStricmp(baseName,"DBASE"))
         return(dbmsDBASE);
 
     return(dbmsUNIDENTIFIED);
-}  // wxDB::Dbms()
+
+}  // wxDb::Dbms()
 
 
 /********** wxDbGetConnection() **********/
-wxDB WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCursors)
+wxDb WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCursors)
 {
     wxDbList *pList;
 
@@ -2501,7 +3089,9 @@ wxDB WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCurso
     {
         // The database connection must be for the same datasource
         // name and must currently not be in use.
-        if (pList->Free && (! wxStrcmp(pDbConfig->Dsn, pList->Dsn)))  // Found a free connection
+        if (pList->Free &&
+            (pList->PtrDb->FwdOnlyCursors() == FwdOnlyCursors) &&
+            (!wxStrcmp(pDbConfig->Dsn, pList->Dsn)))  // Found a free connection
         {
             pList->Free = FALSE;
             return(pList->PtrDb);
@@ -2519,7 +3109,7 @@ wxDB WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCurso
         pList->PtrNext->PtrPrev = pList;
         pList = pList->PtrNext;
     }
-    else    // Empty list
+    else  // Empty list
     {
         // Create the first node on the list
         pList = PtrBegDbList = new wxDbList;
@@ -2530,12 +3120,12 @@ wxDB WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCurso
     pList->PtrNext = 0;
     pList->Free = FALSE;
     wxStrcpy(pList->Dsn, pDbConfig->Dsn);
-    pList->PtrDb = new wxDB(pDbConfig->Henv,FwdOnlyCursors);
+    pList->PtrDb = new wxDb(pDbConfig->Henv,FwdOnlyCursors);
 
     // Connect to the datasource
     if (pList->PtrDb->Open(pDbConfig->Dsn, pDbConfig->Uid, pDbConfig->AuthStr))
     {
-        pList->PtrDb->SqlLog(SQLLOGstate,SQLLOGfn,TRUE);
+        pList->PtrDb->SetSqlLogging(SQLLOGstate,SQLLOGfn,TRUE);
         return(pList->PtrDb);
     }
     else  // Unable to connect, destroy list item
@@ -2544,9 +3134,9 @@ wxDB WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCurso
             pList->PtrPrev->PtrNext = 0;
         else
             PtrBegDbList = 0;                // Empty list again
-        pList->PtrDb->CommitTrans();    // Commit any open transactions on wxDB object
-        pList->PtrDb->Close();            // Close the wxDB object
-        delete pList->PtrDb;                // Deletes the wxDB object
+        pList->PtrDb->CommitTrans();    // Commit any open transactions on wxDb object
+        pList->PtrDb->Close();            // Close the wxDb object
+        delete pList->PtrDb;                // Deletes the wxDb object
         delete pList;                        // Deletes the linked list object
         return(0);
     }
@@ -2555,15 +3145,15 @@ wxDB WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCurso
 
 
 /********** wxDbFreeConnection() **********/
-bool WXDLLEXPORT wxDbFreeConnection(wxDB *pDb)
+bool WXDLLEXPORT wxDbFreeConnection(wxDb *pDb)
 {
     wxDbList *pList;
 
     // Scan the linked list searching for the database connection
     for (pList = PtrBegDbList; pList; pList = pList->PtrNext)
     {
-        if (pList->PtrDb == pDb)        // Found it!!!
-            return(pList->Free = TRUE);
+        if (pList->PtrDb == pDb)  // Found it, now free it!!!
+            return (pList->Free = TRUE);
     }
 
     // Never found the database object, return failure
@@ -2581,9 +3171,9 @@ void WXDLLEXPORT wxDbCloseConnections(void)
     for (pList = PtrBegDbList; pList; pList = pNext)
     {
         pNext = pList->PtrNext;       // Save the pointer to next
-        pList->PtrDb->CommitTrans();  // Commit any open transactions on wxDB object
-        pList->PtrDb->Close();        // Close the wxDB object
-        delete pList->PtrDb;          // Deletes the wxDB object
+        pList->PtrDb->CommitTrans();  // Commit any open transactions on wxDb object
+        pList->PtrDb->Close();        // Close the wxDb object
+        delete pList->PtrDb;          // Deletes the wxDb object
         delete pList;                 // Deletes the linked list object
     }
 
@@ -2612,27 +3202,27 @@ int WXDLLEXPORT wxDbConnectionsInUse(void)
 
 
 /********** wxDbSqlLog() **********/
-bool wxDbSqlLog(wxSqlLogState state, char *filename)
+bool wxDbSqlLog(wxDbSqlLogState state, const wxChar *filename)
 {
     bool append = FALSE;
     wxDbList *pList;
 
     for (pList = PtrBegDbList; pList; pList = pList->PtrNext)
     {
-        if (!pList->PtrDb->SqlLog(state,filename,append))
+        if (!pList->PtrDb->SetSqlLogging(state,filename,append))
             return(FALSE);
         append = TRUE;
     }
 
     SQLLOGstate = state;
-    wxStrcpy(SQLLOGfn,filename);
+    SQLLOGfn = filename;
 
     return(TRUE);
 
 }  // wxDbSqlLog()
 
 
-#if 0
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
 /********** wxDbCreateDataSource() **********/
 int wxDbCreateDataSource(const char *driverName, const char *dsn, const char *description,
                          bool sysDSN, const char *defDir, wxWindow *parent)
@@ -2669,7 +3259,7 @@ int wxDbCreateDataSource(const char *driverName, const char *dsn, const char *de
     while (k != wxNOT_FOUND);
 
     result = SQLConfigDataSource((HWND)parent->GetHWND(), dsnLocation,
-                                 driverName, setupStr.GetData());
+                                 driverName, setupStr.c_str());
 
     if (!result)
     {
@@ -2682,26 +3272,25 @@ int wxDbCreateDataSource(const char *driverName, const char *dsn, const char *de
         SQLInstallerError(1,&retcode,errMsg,500,&cb);
         if (retcode)
         {
-//            logError(errMsg, sqlState);
-//            if (!silent)
-//            {
+            if (!silent)
+            {
 #ifdef DBDEBUG_CONSOLE
-                // When run in console mode, use standard out to display errors.
-                cout << errMsg << endl;
-                cout << "Press any key to continue..." << endl;
-                getchar();
+               // When run in console mode, use standard out to display errors.
+               cout << errMsg << endl;
+               cout << "Press any key to continue..." << endl;
+               getchar();
 #endif  // DBDEBUG_CONSOLE
-//            }
 
 #ifdef __WXDEBUG__
-            wxLogDebug(errMsg,"DEBUG MESSAGE");
+               wxLogDebug(errMsg,wxT("ODBC DEBUG MESSAGE"));
 #endif  // __WXDEBUG__
+            }
         }
     }
     else
        result = TRUE;
 
-#else  // __WXMSW__
+#else  // using iODBC, so this function is not supported
 #ifdef __WXDEBUG__
     wxLogDebug("wxDbCreateDataSource() not available except under MSW","DEBUG MESSAGE");
 #endif
@@ -2733,7 +3322,7 @@ bool wxDbGetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD D
 
 
 // Change this to 0 to remove use of all deprecated functions
-#if 1
+#if wxODBC_BACKWARD_COMPATABILITY
 /********************************************************************
  ********************************************************************
  *
@@ -2742,9 +3331,9 @@ bool wxDbGetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD D
  *
  ********************************************************************
  ********************************************************************/
-bool SqlLog(sqlLog state, char *filename)
+bool SqlLog(sqlLog state, const wxChar *filename)
 {
-    return wxDbSqlLog((enum wxSqlLogState)state, filename);
+    return wxDbSqlLog((enum wxDbSqlLogState)state, filename);
 }
 /***** DEPRECATED: use wxGetDataSource() *****/
 bool GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDescMax,
@@ -2753,12 +3342,12 @@ bool GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDes
     return wxDbGetDataSource(henv, Dsn, DsnMax, DsDesc, DsDescMax, direction);
 }
 /***** DEPRECATED: use wxDbGetConnection() *****/
-wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors)
+wxDb WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors)
 {
     return wxDbGetConnection((wxDbConnectInf *)pDbStuff, FwdOnlyCursors);
 }
 /***** DEPRECATED: use wxDbFreeConnection() *****/
-bool WXDLLEXPORT FreeDbConnection(wxDB *pDb)
+bool WXDLLEXPORT FreeDbConnection(wxDb *pDb)
 {
     return wxDbFreeConnection(pDb);
 }
@@ -2773,9 +3362,6 @@ int WXDLLEXPORT NumberDbConnectionsInUse(void)
     return wxDbConnectionsInUse();
 }
 #endif
-
-
-
 
 
 #endif

@@ -188,12 +188,9 @@ void MyCanvas::OnMouseDown( wxMouseEvent &event )
         int x,y;
         CalcUnscrolledPosition( pt.x, pt.y, &x, &y );
         wxLogMessage( "Mouse down event at: %d %d, scrolled: %d %d", pt.x, pt.y, x, y );
-    }
-    
-    if (event.LeftIsDown() &&
-        event.LeftDown())
-    {
-        wxLogMessage( "Error: both LeftDown() and LeftIsDown() are TRUE!" );
+
+        if ( !event.LeftIsDown() )
+            wxLogMessage( "Error: LeftIsDown() should be TRUE if for LeftDown()" );
     }
 }
 

@@ -175,6 +175,13 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
   wxPaintDC dc(this);
 
+#ifdef __WXPM__
+    RECTL wrectl;
+
+    ::WinQueryWindowRect(GetHWND(), &wrectl);
+    ::WinFillRect(dc.GetHDC(), &wrectl, CLR_BLACK);
+#else
+
   int i;
   if ( GetFont().Ok() )
     dc.SetFont(GetFont());
@@ -186,6 +193,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 #   ifdef __WXMSW__
         dc.SetFont(wxNullFont);
 #   endif // MSW
+#endif
 }
 
 void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)

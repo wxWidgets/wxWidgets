@@ -96,6 +96,8 @@ protected:
     WXWidget*     m_widgetList ;
     WXWidget      m_formWidget;
     wxStringList  m_stringList;
+    wxList        m_clientList;    // contains the client data for the items
+
 
     virtual void DoSetSize(int x, int y,
                            int width, int height,

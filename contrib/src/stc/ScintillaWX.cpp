@@ -14,6 +14,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+#include <ctype.h>
+
 #include "ScintillaWX.h"
 #include "wx/stc/stc.h"
 
@@ -60,6 +62,29 @@ void  wxSTCDropTarget::OnLeave() {
 }
 
 
+class wxSTCCallTip : public wxWindow {
+public:
+    wxSTCCallTip(wxWindow* parent, int ID, CallTip* ct)
+        : wxWindow(parent, ID)
+        {
+            m_ct = ct;
+        }
+
+    void OnPaint(wxPaintEvent& evt) {
+        wxPaintDC dc(this);
+        Surface surfaceWindow;
+        surfaceWindow.Init(&dc);
+        m_ct->PaintCT(&surfaceWindow);
+        surfaceWindow.Release();
+    }
+
+    CallTip*    m_ct;
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxSTCCallTip, wxWindow)
+    EVT_PAINT(wxSTCCallTip::OnPaint)
+END_EVENT_TABLE()
 
 //----------------------------------------------------------------------
 // Constructor/Destructor
@@ -193,9 +218,8 @@ void ScintillaWX::NotifyParent(SCNotification scn) {
 void ScintillaWX::Copy() {
     if (currentPos != anchor) {
         char* text = CopySelectionRange();
-        textDO.SetText(text);
         wxTheClipboard->Open();
-        wxTheClipboard->SetData(&textDO);
+        wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
     }
 }
@@ -236,7 +260,7 @@ bool ScintillaWX::CanPaste() {
 }
 
 void ScintillaWX::CreateCallTipWindow(PRectangle) {
-    ct.wCallTip = new wxWindow(wDraw.GetID(), -1);
+    ct.wCallTip = new wxSTCCallTip(wDraw.GetID(), -1, &ct);
     ct.wDraw = ct.wCallTip;
 }
 
@@ -249,8 +273,6 @@ void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
 
     if (!enabled)
         popup.GetID()->Enable(cmd, enabled);
-
-    // TODO:  need to create event handler mappings for the cmd ID
 }
 
 
@@ -259,18 +281,18 @@ void ScintillaWX::ClaimSelection() {
 }
 
 
-LRESULT ScintillaWX::DefWndProc(UINT /*iMessage*/, WPARAM /*wParam*/, LPARAM /*lParam*/) {
+long ScintillaWX::DefWndProc(unsigned int /*iMessage*/, unsigned long /*wParam*/, long /*lParam*/) {
     return 0;
 }
 
-LRESULT ScintillaWX::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
-    switch (iMessage) {
-    case EM_CANPASTE:
-        return CanPaste();
-    default:
+long ScintillaWX::WndProc(unsigned int iMessage, unsigned long wParam, long lParam) {
+//      switch (iMessage) {
+//      case EM_CANPASTE:
+//          return CanPaste();
+//      default:
         return ScintillaBase::WndProc(iMessage, wParam, lParam);
-    }
-    return 0;
+//      }
+//      return 0;
 }
 
 
@@ -293,6 +315,11 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
         FullPaint();
     }
     paintState = notPainting;
+#ifdef __WXGTK__
+    // On wxGTK the editor window paints can overwrite the listbox...
+    if (ac.Active())
+        ((wxWindow*)ac.lb.GetID())->Refresh(TRUE);
+#endif
 }
 
 
@@ -384,10 +411,36 @@ void ScintillaWX::DoButtonMove(Point pt) {
 
 
 void ScintillaWX::DoAddChar(char ch) {
+    //bool acActiveBeforeCharAdded = ac.Active();
     AddChar(ch);
+    //if (acActiveBeforeCharAdded)
+    //    AutoCompleteChanged(ch);
 }
 
 int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt) {
+    switch (key) {
+        case WXK_DOWN: key = SCK_DOWN; break;
+        case WXK_UP: key = SCK_UP; break;
+        case WXK_LEFT: key = SCK_LEFT; break;
+        case WXK_RIGHT: key = SCK_RIGHT; break;
+        case WXK_HOME: key = SCK_HOME; break;
+        case WXK_END: key = SCK_END; break;
+        case WXK_PRIOR: key = SCK_PRIOR; break;
+        case WXK_NEXT: key = SCK_NEXT; break;
+        case WXK_DELETE: key = SCK_DELETE; break;
+        case WXK_INSERT: key = SCK_INSERT; break;
+        case WXK_ESCAPE: key = SCK_ESCAPE; break;
+        case WXK_BACK: key = SCK_BACK; break;
+        case WXK_TAB: key = SCK_TAB; break;
+        case WXK_RETURN: key = SCK_RETURN; break;
+        case WXK_ADD: key = SCK_ADD; break;
+        case WXK_SUBTRACT: key = SCK_SUBTRACT; break;
+        case WXK_DIVIDE: key = SCK_DIVIDE; break;
+        case WXK_CONTROL: key = 0; break;
+        case WXK_ALT: key = 0; break;
+        case WXK_SHIFT: key = 0; break;
+    }
+
     return KeyDown(key, shift, ctrl, alt);
 }
 
@@ -401,6 +454,9 @@ void ScintillaWX::DoContextMenu(Point pt) {
     ContextMenu(pt);
 }
 
+void ScintillaWX::DoOnListBox() {
+    AutoCompleteCompleted();
+}
 
 //----------------------------------------------------------------------
 
@@ -433,12 +489,13 @@ void ScintillaWX::DoDragLeave() {
 // Redraw all of text area. This paint will not be abandoned.
 void ScintillaWX::FullPaint() {
     paintState = painting;
-    rcPaint = GetTextRectangle();
-    wxClientDC dc(wMain.GetID());
-    Surface surfaceWindow;
-    surfaceWindow.Init(&dc);
-    Paint(&surfaceWindow, rcPaint);
-    surfaceWindow.Release();
+//      rcPaint = GetTextRectangle();
+//      wxClientDC dc(wMain.GetID());
+//      Surface surfaceWindow;
+//      surfaceWindow.Init(&dc);
+//      Paint(&surfaceWindow, rcPaint);
+//      surfaceWindow.Release();
+    wMain.GetID()->Refresh(FALSE);
     paintState = notPainting;
 }
 

@@ -148,7 +148,6 @@ public:
     bool         m_needComputeScaleX,
                  m_needComputeScaleY; // not yet used
 
-    float        m_scaleFactor;  // wxPSDC wants to have this. Will disappear.
     
 private:
     DECLARE_ABSTRACT_CLASS(wxDC)

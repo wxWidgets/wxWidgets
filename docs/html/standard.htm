@@ -9,10 +9,10 @@
 
 <font face="Arial, Lucida Sans, Helvetica">
 
-<table width=100% border=4 cellpadding=5 cellspacing=0>
+<table width=100% border=0 cellpadding=5 cellspacing=0>
 <tr>
-<td bgcolor="#660000">
-<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<td bgcolor="#C4ECF9">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#000000">
 wxWindows Programmer Style Guide
 </font>
 </td>
@@ -50,6 +50,7 @@ C++ portability guide</A> by David Williams.
     <LI><A HREF="#no_stl">Don't use STL</A></LI>
     <LI><A HREF="#no_fordecl">Don't declare variables inside <TT>for()</TT></A></LI>
     <LI><A HREF="#no_nestedclasses">Don't use nested classes</A></LI>
+    <LI><A HREF="#no_newlogicalops">Don't use new logical operators keywords</A></LI>
   </OL>
   <BR>
   <LI>Other compiler limitations</LI>
@@ -270,30 +271,34 @@ The scope of a variable declared inside <TT>for()</TT> statement changed several
 years ago, however many compilers still will complain about second declaration
 of <TT>i</TT> in the following code:
 <PRE>
-  for ( int i = 0; i < 10; i++ ) {
+  for ( int i = 0; i &lt; 10; i++ ) {
     ...
   }
 
   ...
 
-  for ( int i = 0; i < 10; i++ ) {
+  for ( int i = 0; i &lt; 10; i++ ) {
     ...
   }
 </PRE>
-Even if it's perfectly legal now.
+even though if it's perfectly legal now.
 <P><U>Workaround</U>: write this instead:
 <PRE>
   int i;
-  for ( i = 0; i < 10; i++ ) {
+  for ( i = 0; i &lt; 10; i++ ) {
     ...
   }
 
   ...
 
-  for ( i = 0; i < 10; i++ ) {
+  for ( i = 0; i &lt; 10; i++ ) {
     ...
   }
 </PRE>
+or, even better, use different names for the variables in the different for
+loops (in particular, avoid mute variable names like <tt>i<tt> above) - then
+you can declare them in the loop statement and don't pollute the outer name
+space with local loop variables.
 
   <P><LI><A NAME="no_nestedclasses"></A><B>Don't use nested classes</B></LI><P>
 Nested classes are, without doubt, a very good thing because they allow to hide
@@ -338,10 +343,27 @@ you can try the following:
 <P>A nice side effect is that you don't need to recompile all the files
 including the header if you change the PrivateLibClass declaration (it's
 an example of a more general interface/implementation separation idea).
+
+<P><LI><A NAME="no_newlogicalops"></A><B>Don't use new logical operators keywords</B></LI><P>
+The C++ standard has introduced the following new reserved words: <tt>or</tt>,
+<tt>and</tt>, <tt>not</tt>, <tt>xor</tt>, <tt>bitand</tt>, <tt>bitor</tt>,
+<tt>compl</tt>, <tt>and_eq</tt>, <tt>or_eq</tt>, <tt>not_eq</tt>,
+<tt>or_eq</tt> which can be used instead of the usual C operations &#38;&#38;,
+&#124;&#124;, &#126; etc.
+<P>This wonderful (and not backwards compatible in addition to being
+absolutely useless) new feature means that these new keywords should not be
+used as the variable names - even if current compilers usually will accept
+this, your code will break in the future. For most of the keywords, using them
+as variable names is quite unlikely, but <tt>or</tt> and <tt>compl</tt> were
+used in the wxWindows sources which seems to indicate that they are the most
+likely candidates.
+<P>It goes without saying that these new keywords should not be used instead
+of the tradional C operators neither both because most compilers don't accept
+them and because using them in C code makes it less readable.
 </OL>
 
   <BR>
-  <LI>Other compiler limitations</B></LI><P>
+  <LI>Other compiler limitations</LI><P>
 This section lists the less obvious limitations of the current C++ compilers
 which are less restrictive than the ones mentioned in the previous section but
 are may be even more dangerous as a program which compiles perfectly well on
@@ -351,18 +373,18 @@ compile on another platform and/or with another compiler.
 <OL>
   <P><LI><A NAME="no_ternarywithobjects"></A><B>Use ternary operator ?: carefully</B></LI><P>
   The ternary operator <TT>?:</TT> shouldn't be used with objects (i.e. if any
-of its operands are objects) because some compilers (notable Borland C++) fail
+of its operands are objects) because some compilers (notably Borland C++) fail
 to compile such code.
 <P><U>Workaround</U>: use <TT>if/else</TT> instead.
 <PRE>
     wxString s1, s2;
 
     // Borland C++ won't compile the line below
-    wxString s = s1.Len() < s2.Len() ? s1 : s2;
+    wxString s = s1.Len() &lt; s2.Len() ? s1 : s2;
 
     // but any C++ compiler will compile this
     wxString s;
-    if ( s1.Len() < s2.Len() )
+    if ( s1.Len() &lt; s2.Len() )
         s = s1;
     else
         s = s2;
@@ -388,7 +410,7 @@ it has a destructor, remember to add an empty default constructor to it.
 </OL>
 
   <BR>
-  <LI>General recommendations</B></LI><P>
+  <LI>General recommendations</LI><P>
 While the recommendations in the previous section may not apply to you if you're
 only working with perfect compilers which implement the very newest directives of
 C++ standard, this section contains compiler- (and language-) independent advice
@@ -585,7 +607,7 @@ put another one after it.
   </OL>
 
   <BR>
-  <LI>Unix/DOS differences</B></LI><P>
+  <LI>Unix/DOS differences</LI><P>
   Two operating systems supported by wxWindows right now are (different flavours
 of) Unix and Windows 3.1/95/NT (although Mac, OS/2 and other ports exist/are
 being developed as well). The main differences between them are summarized
@@ -634,18 +656,19 @@ i.e. <TT>GetId</TT> is the same as <TT>GetID</TT>.
   </OL>
 
   <BR>
-  <LI>Style choices</B></LI><P>
+  <LI>Style choices</LI><P>
   All wxWindows specific style guidelines are specified in the next
 section, here are the choices which are not completely arbitrary,
 but have some deeper and not wxWindows-specific meaning.
 
   <OL>
     <P><LI><A NAME="naming_conv"></A><B>Naming conventions: use <TT>m_</TT> for members</B></LI><P>
-It's extremely important to write readable code. One of the first steps in this
-direction is the choice of naming convention. It may be quite vague or strictly
-define the names of all the variables and function in the program, however it
-surely must somehow allow the reader to distinguish between variable and
-functions and local variables and member variables from the first glance.
+We all know how important it is to write readable code. One of the first steps
+in this direction is the choice of naming convention. It may be quite vague or
+strictly define the names of all the variables and function in the program,
+however it surely must somehow allow the reader to distinguish between
+variable and functions and local variables and member variables from the first
+glance.
 <P>The first requirement is commonly respected, but for some strange reasons, the
 second isn't, even if it's much more important because, after all, the immediate
 context usually allows you to distinguish a variable from a function in

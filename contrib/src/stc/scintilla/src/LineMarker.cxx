@@ -51,20 +51,6 @@ void LineMarker::Draw(Surface *surface, PRectangle &rc) {
 
 	} else if (markType == SC_MARK_PLUS) {
 		int armSize = dimOn2-2;
-		Point xpts[] = {
-    		Point(centreX - armSize, centreY),
-    		Point(centreX, centreY),
-    		Point(centreX, centreY - armSize),
-    		Point(centreX, centreY - armSize),
-    		Point(centreX, centreY),
-    		Point(centreX + armSize, centreY),
-    		Point(centreX + armSize, centreY),
-    		Point(centreX, centreY),
-    		Point(centreX, centreY + armSize),
-    		Point(centreX, centreY + armSize),
-    		Point(centreX, centreY),
-    		Point(centreX - armSize, centreY),
-		};
 		Point pts[] = {
     		Point(centreX - armSize, centreY - 1),
     		Point(centreX - 1, centreY - 1),
@@ -89,12 +75,6 @@ void LineMarker::Draw(Surface *surface, PRectangle &rc) {
     		Point(centreX + armSize, centreY -1),
     		Point(centreX + armSize, centreY +1),
     		Point(centreX - armSize, centreY + 1),
-		};
-		Point xpts[] = {
-    		Point(centreX - armSize, centreY),
-    		Point(centreX + armSize, centreY),
-    		Point(centreX + armSize, centreY),
-    		Point(centreX - armSize, centreY),
 		};
 		surface->Polygon(pts, sizeof(pts) / sizeof(pts[0]),
                  		fore.allocated, back.allocated);

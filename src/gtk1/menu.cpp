@@ -36,6 +36,45 @@ static wxString GetHotKey( const wxMenuItem& item );
 #endif
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+static wxString wxReplaceUnderscore( const wxString& title )
+{
+    const wxChar *pc;
+    
+    /* GTK 1.2 wants to have "_" instead of "&" for accelerators */
+    wxString str;
+    for ( pc = title; *pc != wxT('\0'); pc++ )
+    {
+        if (*pc == wxT('&'))
+        {
+#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+            str << wxT('_');
+        }
+        else if (*pc == wxT('/'))
+        {
+            str << wxT('\\');
+#endif
+        }
+        else
+        {
+#if __WXGTK12__
+            if ( *pc == wxT('_') )
+            {
+                // underscores must be doubled to prevent them from being
+                // interpreted as accelerator character prefix by GTK
+                str << *pc;
+            }
+#endif // GTK+ 1.2
+
+            str << *pc;
+        }
+    }
+    return str;
+}
+
+//-----------------------------------------------------------------------------
 // wxMenuBar
 //-----------------------------------------------------------------------------
 
@@ -221,36 +260,7 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
 
 bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
 {
-    const wxChar *pc;
-
-    /* GTK 1.2 wants to have "_" instead of "&" for accelerators */
-    wxString str;
-    for ( pc = title; *pc != wxT('\0'); pc++ )
-    {
-        if (*pc == wxT('&'))
-        {
-#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
-            str << wxT('_');
-        }
-        else if (*pc == wxT('/'))
-        {
-            str << wxT('\\');
-#endif
-        }
-        else
-        {
-#if __WXGTK12__
-            if ( *pc == wxT('_') )
-            {
-                // underscores must be doubled to prevent them from being
-                // interpreted as accelerator character prefix by GTK
-                str << *pc;
-            }
-#endif // GTK+ 1.2
-
-            str << *pc;
-        }
-    }
+    wxString str( wxReplaceUnderscore( title ) );
 
     /* this doesn't have much effect right now */
     menu->SetTitle( str );
@@ -275,6 +285,7 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
     /* in order to get the pointer to the item we need the item text _without_ underscores */
     wxString tmp = wxT("<main>/");
+    const wxChar *pc;
     for ( pc = str; *pc != wxT('\0'); pc++ )
     {
        // contrary to the common sense, we must throw out _all_ underscores,
@@ -379,7 +390,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
 {
-    if (menu->GetTitle() == menuString)
+    if (wxMenuItem::GetLabelFromText(menu->GetTitle()) == wxMenuItem::GetLabelFromText(menuString))
     {
         int res = menu->FindItem( itemString );
         if (res != wxNOT_FOUND)
@@ -472,7 +483,25 @@ wxString wxMenuBar::GetLabelTop( size_t pos ) const
 
     wxMenu* menu = node->GetData();
 
-    return menu->GetTitle();
+    wxString label;
+    wxString text( menu->GetTitle() );
+#if (GTK_MINOR_VERSION > 0)
+    for ( const wxChar *pc = text.c_str(); *pc; pc++ )
+    {
+        if ( *pc == wxT('_') || *pc == wxT('&') )
+        {
+            // '_' is the escape character for GTK+ and '&' is the one for
+            // wxWindows - skip both of them
+            continue;
+        }
+
+        label += *pc;
+    }
+#else // GTK+ 1.0
+    label = text;
+#endif // GTK+ 1.2/1.0
+
+    return label;
 }
 
 void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
@@ -483,7 +512,22 @@ void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
 
     wxMenu* menu = node->GetData();
 
-    menu->SetTitle( label );
+    wxString str( wxReplaceUnderscore( label ) );
+
+    menu->SetTitle( str );
+
+    if (menu->m_owner)
+    {
+        GtkLabel *label = GTK_LABEL( GTK_BIN(menu->m_owner)->child );
+
+        /* set new text */
+        gtk_label_set( label, str.mb_str());
+
+        /* reparse key accel */
+        (void)gtk_label_parse_uline (GTK_LABEL(label), str.mb_str() );
+        gtk_accel_label_refetch( GTK_ACCEL_LABEL(label) );
+    }
+
 }
 
 //-----------------------------------------------------------------------------
@@ -523,7 +567,8 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 
     wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, id );
     event.SetEventObject( menu );
-    event.SetInt(id );
+    if (item->IsCheckable())
+        event.SetInt( item->IsChecked() );
 
 #if wxUSE_MENU_CALLBACK
     if (menu->GetCallback())
@@ -638,21 +683,25 @@ wxMenuItem::~wxMenuItem()
 wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 {
     wxString label;
-#if (GTK_MINOR_VERSION > 0)
+    
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
     {
-        if ( *pc == wxT('_') || *pc == wxT('&') )
+        if ( *pc == wxT('_')  )
         {
-            // '_' is the escape character for GTK+ and '&' is the one for
-            // wxWindows - skip both of them
+            // wxGTK escapes "xxx_xxx" to "xxx__xxx"
+            pc++;
+            label += *pc;
+            continue;
+        }
+        
+        if ( *pc == wxT('&') )
+        {
+            // wxMSW escapes &
             continue;
         }
 
         label += *pc;
     }
-#else // GTK+ 1.0
-    label = text;
-#endif // GTK+ 1.2/1.0
 
     return label;
 }
@@ -763,11 +812,21 @@ bool wxMenuItem::IsChecked() const
 
 wxString wxMenuItem::GetFactoryPath() const
 {
-    /* in order to get the pointer to the item we need the item text _without_
-       underscores */
+    /* in order to get the pointer to the item we need the item text
+       _without_ underscores */
     wxString path( wxT("<main>/") );
-    path += GetLabel();
 
+    for ( const wxChar *pc = m_text.c_str(); *pc; pc++ )
+    {
+        if ( *pc == wxT('_') || *pc == wxT('&') )
+        {
+            // remove '_' and '&' unconditionally
+            continue;
+        }
+        
+        path += *pc;
+    }
+    
     return path;
 }
 
@@ -904,8 +963,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         // due to an apparent bug in GTK+, we have to use a static buffer here -
         // otherwise GTK+ 1.2.2 manages to override the memory we pass to it
         // somehow! (VZ)
-        static char s_accel[32]; // must be big enough for <control><alt><shift>F12
-        strncpy(s_accel, GetHotKey(*mitem).mb_str(), WXSIZEOF(s_accel));
+        static char s_accel[50]; // must be big enougg
+        wxString tmp( GetHotKey(*mitem) );
+        strncpy(s_accel, tmp.mb_str(), WXSIZEOF(s_accel));
         entry.accelerator = s_accel;
 #else // !wxUSE_ACCEL
         entry.accelerator = (char*) NULL;
@@ -962,6 +1022,12 @@ bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
     // index
     if ( !GtkAppend(item) )
         return FALSE;
+
+    if ( m_style & wxMENU_TEAROFF )
+    {
+        // change the position as the first item is the tear-off marker
+        pos++;
+    }
 
     GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
     gpointer data = g_list_last(menu_shell->children)->data;
@@ -1039,6 +1105,20 @@ static wxString GetHotKey( const wxMenuItem& item )
             case WXK_F11:
             case WXK_F12:
                 hotkey << wxT('F') << code - WXK_F1 + 1;
+                break;
+                
+                // GTK seems to use XStringToKeySym here
+            case WXK_NUMPAD_INSERT:
+                hotkey << wxT("KP_Insert" );
+                break;
+            case WXK_NUMPAD_DELETE:
+                hotkey << wxT("KP_Delete" );
+                break;
+            case WXK_INSERT:
+                hotkey << wxT("Insert" );
+                break;
+            case WXK_DELETE:
+                hotkey << wxT("Delete" );
                 break;
 
                 // if there are any other keys wxGetAccelFromString() may return,

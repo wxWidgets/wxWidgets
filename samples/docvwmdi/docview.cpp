@@ -78,17 +78,17 @@ bool MyApp::OnInit(void)
   wxMenu *file_menu = new wxMenu;
   wxMenu *edit_menu = (wxMenu *) NULL;
 
-  file_menu->Append(wxID_NEW, "&New...");
-  file_menu->Append(wxID_OPEN, "&Open...");
+  file_menu->Append(wxID_NEW, "&New...\tCtrl-N");
+  file_menu->Append(wxID_OPEN, "&Open...\tCtrl-X");
 
   file_menu->AppendSeparator();
-  file_menu->Append(wxID_EXIT, "E&xit");
+  file_menu->Append(wxID_EXIT, "E&xit\tAlt-X");
   
   // A nice touch: a history of files visited. Use this menu.
   m_docManager->FileHistoryUseMenu(file_menu);
 
   wxMenu *help_menu = new wxMenu;
-  help_menu->Append(DOCVIEW_ABOUT, "&About");
+  help_menu->Append(DOCVIEW_ABOUT, "&About\tF1");
 
   wxMenuBar *menu_bar = new wxMenuBar;
 

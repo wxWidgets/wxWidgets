@@ -1,39 +1,57 @@
 #
-# File:		makefile.unx
+# File:		Makefile
 # Author:	Julian Smart
-# Created:	1998
+# Created:	1999
 # Updated:	
-# Copyright:	(c) 1998 Julian Smart
+# Copyright:	(c) 2000 Julian Smart
 #
-# "%W% %G%"
+# Makefile for OGL demo (GTK version)
 #
-# Makefile for OGL Studio (UNIX).
+# This makefile requires wxWindows/GTK to be 
+# installed (possibly using "make install")
+# on your system.
+#
 
-PROGRAM=studio
+CPP = gcc -g
+CC = gcc
+WXCONFIG=../../../../wx-config
+WXINCLUDE=-I../../../../include -I../../../include
+WXLIB=-L../../../../lib -L../../../src/ogl
 
-OBJECTS=$(PROGRAM).o doc.o shapes.o symbols.o view.o cspalette.o\
-  mainfrm.o project.o dialogs.o csprint.o
+OBJECTS=studio.o cspalette.o csprint.o dialogs.o doc.o mainfrm.o project.o shapes.o symbols.o view.o
 
-EXTRACPPFLAGS=-I$(WXDIR)/utils/ogl/src -I./bitmaps
-EXTRALDLIBS=-logl$(GUISUFFIX)
+studio: $(OBJECTS)
+	$(CPP) -o studio $(OBJECTS) `$(WXCONFIG) --libs` $(WXLIB) -logl
 
-#WXDIR=/home/jacs/wx2
+studio.o: studio.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c studio.cpp
 
-include $(WXDIR)/src/makeprog.env
+cspalette.o: cspalette.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c cspalette.cpp
 
-cleanogl:
-	cd $(WXDIR)/utils/ogl/src; make -f makefile.unx cleanmotif
+doc.o: doc.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c doc.cpp
 
-ogl:
-	cd $(WXDIR)/utils/ogl/src; make -f makefile.unx motif
+view.o: view.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c view.cpp
 
-wx:
-	cd $(WXDIR)/src/motif; make -f makefile.unx motif
+dialogs.o: dialogs.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c dialogs.cpp
 
-cleanwx:
-	cd $(WXDIR)/src/motif; make -f makefile.unx cleanmotif
+mainfrm.o: mainfrm.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c mainfrm.cpp
 
-cleanall: cleanmotif cleanogl cleanwx
+project.o: project.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c project.cpp
 
-makeall: wx ogl motif
+shapes.o: shapes.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c shapes.cpp
 
+symbols.o: symbols.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c symbols.cpp
+
+csprint.o: csprint.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c csprint.cpp
+
+clean: 
+	rm -f *.o studio

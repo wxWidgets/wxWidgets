@@ -113,20 +113,26 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
      */
     HDC dcSrc = ::CreateCompatibleDC(NULL);
     HDC dcDst = ::CreateCompatibleDC(NULL);
-    SelectObject(dcSrc, (HBITMAP)mask->GetMaskBitmap());
-    SelectObject(dcDst, iconInfo.hbmColor);
+    HGDIOBJ hSrcOld = SelectObject(dcSrc, (HBITMAP)mask->GetMaskBitmap()),
+            hDstOld = SelectObject(dcDst, iconInfo.hbmColor);
 
     BitBlt(dcDst, 0, 0, bmp.GetWidth(), bmp.GetHeight(), dcSrc, 0, 0, SRCAND);
 
-    SelectObject(dcDst, NULL);
-    SelectObject(dcSrc, NULL);
+    SelectObject(dcDst, hSrcOld);
+    SelectObject(dcSrc, hDstOld);
     DeleteDC(dcDst);
     DeleteDC(dcSrc);
 
     HICON hicon = ::CreateIconIndirect(&iconInfo);
+
+    if ( !::DeleteObject(iconInfo.hbmMask) )
+    {
+        wxLogLastError(_T("DeleteObject"));
+    }
+
     if ( !hicon )
     {
-        wxLogLastError("CreateIconIndirect");
+        wxLogLastError(wxT("CreateIconIndirect"));
     }
     else
     {

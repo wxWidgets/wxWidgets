@@ -398,8 +398,7 @@ wxConnectionBase *wxDDEClient::MakeConnection(const wxString& WXUNUSED(host),
                              (PCONVCONTEXT)NULL);
     if ( !hConv )
     {
-        DDELogError(wxString::Format(_("Failed to create connection to "
-                                       "server '%s' on topic '%s'"),
+        DDELogError(wxString::Format(_("Failed to create connection to server '%s' on topic '%s'"),
                                      server.c_str(), topic.c_str()));
     }
     else
@@ -761,7 +760,7 @@ _DDECallback(WORD wType,
                     if (data)
                     {
                         if (user_size < 0)
-                            user_size = wxStrlen(data) + 1;
+                            user_size = wxStrlen((wxChar*)data) + 1;
 
                         HDDEDATA handle = DdeCreateDataHandle(DDEIdInst,
                                                               (LPBYTE)data,
@@ -792,7 +791,7 @@ _DDECallback(WORD wType,
 
                     connection->OnPoke(connection->m_topicName,
                                        item_name,
-                                       connection->m_bufPtr,
+                                       (wxChar*)connection->m_bufPtr,
                                        (int)len,
                                        (wxIPCFormat) wFmt);
 
@@ -918,7 +917,7 @@ static HSZ DDEAtomFromString(const wxString& s)
 {
     wxASSERT_MSG( DDEIdInst, _T("DDE not initialized") );
 
-    HSZ hsz = DdeCreateStringHandle(DDEIdInst, (char*) s.c_str(), DDE_CP);
+    HSZ hsz = DdeCreateStringHandle(DDEIdInst, (wxChar*) s.c_str(), DDE_CP);
     if ( !hsz )
     {
         DDELogError(_("Failed to create DDE string"));

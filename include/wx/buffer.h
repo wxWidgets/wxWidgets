@@ -54,6 +54,7 @@ public:
      return *this;
    }
 
+   const char *data() const { return m_str; }
    operator const char *() const { return m_str; }
    char operator[](size_t n) const { return m_str[n]; }
 
@@ -103,6 +104,7 @@ public:
      return *this;
    }
 
+   const wchar_t *data() const { return m_wcs; }
    operator const wchar_t *() const { return m_wcs; }
    wchar_t operator[](size_t n) const { return m_wcs[n]; }
 

@@ -105,15 +105,5 @@ wxOS2 -a wxWindows wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/motif \
       wxWindows/lib wxWindows/samples wxWindows/misc !wxWindows/misc/implib \
       wxWindows/testconf
 
-wxPython -a wxWindows wxWindows/utils wxWindows/utils/wxPython \
-	!wxWindows/docs \
-	!wxWindows/distrib !wxWindows/include !wxWindows/lib !wxWindows/locale \
-	!wxWindows/misc !wxWindows/samples !wxWindows/src !wxWindows/tests \
-	!wxWindows/user !wxWindows/utils/HelpGen !wxWindows/utils/HelpHTML \
-	!wxWindows/utils/dialoged  !wxWindows/utils/framelayout  \
-	!wxWindows/utils/nplugin  !wxWindows/utils/projgen !wxWindows/utils/serialize \
-	!wxWindows/utils/tex2rtf  !wxWindows/utils/wxMMedia2 \
-	!wxWindows/utils/wxOLE  !wxWindows/utils/wxtree
-
 
 

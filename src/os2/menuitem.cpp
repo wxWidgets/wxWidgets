@@ -155,6 +155,8 @@ wxMenuItem::wxMenuItem(
     m_text        = TextToLabel(rText);
     m_isCheckable = bCheckable;
     m_help        = rStrHelp;
+    memset(&m_vMenuData, '\0', sizeof(m_vMenuData));
+    m_vMenuData.id= nId;
 } // end of wxMenuItem::wxMenuItem
 
 wxMenuItem::~wxMenuItem()
@@ -233,13 +235,13 @@ void wxMenuItem::Enable(
         bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
                                  ,MM_SETITEMATTR
                                  ,MPFROM2SHORT(GetRealId(), TRUE)
-                                 ,MPFROM2SHORT(MIA_DISABLED, MIA_DISABLED)
+                                 ,MPFROM2SHORT(MIA_DISABLED, FALSE)
                                 );
     else
         bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
                                  ,MM_SETITEMATTR
                                  ,MPFROM2SHORT(GetRealId(), TRUE)
-                                 ,MPFROM2SHORT(MIA_DISABLED, FALSE)
+                                 ,MPFROM2SHORT(MIA_DISABLED, MIA_DISABLED)
                                 );
     if (!bOk)
     {
@@ -271,7 +273,7 @@ void wxMenuItem::Check(
                                 );
     if (!bOk)
     {
-        wxLogLastError("EnableMenuItem");
+        wxLogLastError("CheckMenuItem");
     }
     wxMenuItemBase::Check(bCheck);
 } // end of wxMenuItem::Check

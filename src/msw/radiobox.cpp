@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobox.cpp
-// Purpose:     wxRadioBox
+// Name:        msw/radiobox.cpp
+// Purpose:     wxRadioBox implementation
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
@@ -32,6 +32,7 @@
     #include "wx/bitmap.h"
     #include "wx/brush.h"
     #include "wx/radiobox.h"
+    #include "wx/settings.h"
     #include "wx/log.h"
 #endif
 
@@ -97,6 +98,7 @@ static WXFARPROC s_wndprocRadioBtn = (WXFARPROC)NULL;
 // wxRadioBox
 // ---------------------------------------------------------------------------
 
+// returns the number of rows
 int wxRadioBox::GetNumVer() const
 {
     if ( m_windowStyle & wxRA_SPECIFY_ROWS )
@@ -109,6 +111,7 @@ int wxRadioBox::GetNumVer() const
     }
 }
 
+// returns the number of columns
 int wxRadioBox::GetNumHor() const
 {
     if ( m_windowStyle & wxRA_SPECIFY_ROWS )
@@ -125,6 +128,9 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
 {
     if ( cmd == BN_CLICKED )
     {
+        if (id == GetId())
+            return TRUE;
+
         int selectedButton = -1;
 
         for ( int i = 0; i < m_noItems; i++ )
@@ -137,7 +143,14 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
             }
         }
 
-        wxASSERT_MSG( selectedButton != -1, wxT("click from alien button?") );
+        if ( selectedButton == -1 )
+        {
+            // just ignore it - due to a hack with WM_NCHITTEST handling in our
+            // wnd proc, we can receive dummy click messages when we click near
+            // the radiobox edge (this is ugly but Julian wouldn't let me get
+            // rid of this...)
+            return FALSE;
+        }
 
         if ( selectedButton != m_selectedButton )
         {
@@ -197,7 +210,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     m_selectedButton = -1;
     m_noItems = 0;
 
-    m_majorDim =  majorDim == 0 ? n : majorDim;
+    m_majorDim = majorDim == 0 ? n : majorDim;
     m_noRowsOrCols = majorDim;
 
     // common initialization
@@ -251,7 +264,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 
         if ( !hwndBtn )
         {
-            wxLogLastError("CreateWindow(radio btn)");
+            wxLogLastError(wxT("CreateWindow(radio btn)"));
 
             return FALSE;
         }
@@ -362,6 +375,75 @@ wxString wxRadioBox::GetString(int N) const
     return wxGetWindowText(m_radioButtons[N]);
 }
 
+// ----------------------------------------------------------------------------
+// size calculations
+// ----------------------------------------------------------------------------
+
+wxSize wxRadioBox::GetMaxButtonSize() const
+{
+    // calculate the max button size
+    int widthMax = 0,
+        heightMax = 0;
+    for ( int i = 0 ; i < m_noItems; i++ )
+    {
+        int width, height;
+        if ( m_radioWidth[i] < 0 )
+        {
+            GetTextExtent(wxGetWindowText(m_radioButtons[i]), &width, &height);
+
+            // adjust the size to take into account the radio box itself
+            // FIXME this is totally bogus!
+            width += RADIO_SIZE;
+            height *= 3;
+            height /= 2;
+        }
+        else
+        {
+            width = m_radioWidth[i];
+            height = m_radioHeight[i];
+        }
+
+        if ( widthMax < width )
+            widthMax = width;
+        if ( heightMax < height )
+            heightMax = height;
+    }
+
+    return wxSize(widthMax, heightMax);
+}
+
+wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
+{
+    // the radiobox should be big enough for its buttons
+    int cx1, cy1;
+    wxGetCharSize(m_hWnd, &cx1, &cy1, &GetFont());
+
+    int extraHeight = cy1;
+
+#if defined(CTL3D) && !CTL3D
+    // Requires a bigger group box in plain Windows
+    extraHeight *= 3;
+    extraHeight /= 2;
+#endif
+
+    int height = GetNumVer() * sizeBtn.y + cy1/2 + extraHeight;
+    int width  = GetNumHor() * (sizeBtn.x + cx1) + cx1;
+
+    // and also wide enough for its label
+    int widthLabel;
+    GetTextExtent(GetTitle(), &widthLabel, NULL);
+    widthLabel += RADIO_SIZE; // FIXME this is bogus too
+    if ( widthLabel > width )
+        width = widthLabel;
+
+    return wxSize(width, height);
+}
+
+wxSize wxRadioBox::DoGetBestSize() const
+{
+    return GetTotalButtonSize(GetMaxButtonSize());
+}
+
 // Restored old code.
 void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
@@ -386,106 +468,89 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int x_offset = xx;
 #endif
 
-    int current_width, cyf;
-
-    int cx1,cy1;
+    int cx1, cy1;
     wxGetCharSize(m_hWnd, &cx1, &cy1, & GetFont());
 
     // Attempt to have a look coherent with other platforms: We compute the
     // biggest toggle dim, then we align all items according this value.
-    int maxWidth =  -1;
-    int maxHeight = -1;
+    wxSize maxSize = GetMaxButtonSize();
+    int maxWidth = maxSize.x,
+        maxHeight = maxSize.y;
 
-    int i;
-    for (i = 0 ; i < m_noItems; i++)
+    wxSize totSize = GetTotalButtonSize(maxSize);
+    int totWidth = totSize.x,
+        totHeight = totSize.y;
+
+    // only change our width/height if asked for
+    if ( width == -1 )
     {
-        int eachWidth;
-        int eachHeight;
-        if (m_radioWidth[i]<0)
-        {
-            // It's a labelled toggle
-            GetTextExtent(wxGetWindowText(m_radioButtons[i]),
-                          &current_width, &cyf);
-            eachWidth = (int)(current_width + RADIO_SIZE);
-            eachHeight = (int)((3*cyf)/2);
-        }
+        if ( sizeFlags & wxSIZE_AUTO_WIDTH )
+            width = totWidth;
         else
-        {
-            eachWidth = m_radioWidth[i];
-            eachHeight = m_radioHeight[i];
-        }
-
-        if (maxWidth<eachWidth)
-            maxWidth = eachWidth;
-        if (maxHeight<eachHeight)
-            maxHeight = eachHeight;
+            width = widthOld;
     }
 
-    if (m_hWnd)
+    if ( height == -1 )
     {
-        int totWidth;
-        int totHeight;
-
-        int nbHor = GetNumHor(),
-            nbVer = GetNumVer();
-
-        // this formula works, but I don't know why.
-        // Please, be sure what you do if you modify it!!
-        if (m_radioWidth[0]<0)
-            totHeight = (nbVer * maxHeight) + cy1/2;
+        if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
+            height = totHeight;
         else
-            totHeight = nbVer * (maxHeight+cy1/2);
-        totWidth  = nbHor * (maxWidth+cx1);
-
-        int extraHeight = cy1;
-
-#if defined(CTL3D) && !CTL3D
-        // Requires a bigger group box in plain Windows
-        extraHeight *= 3;
-        extraHeight /= 2;
-#endif
-
-        // only change our width/height if asked for
-        if ( width == -1 )
-        {
-            if ( sizeFlags & wxSIZE_AUTO_WIDTH )
-                width = totWidth + cx1;
-            else
-                width = widthOld;
-        }
-
-        if ( height == -1 )
-        {
-            if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
-                height = totHeight + extraHeight;
-            else
-                height = heightOld;
-        }
-
-        ::MoveWindow(GetHwnd(), xx, yy, width, height, TRUE);
-
-        x_offset += cx1;
-        y_offset += cy1;
+            height = heightOld;
     }
+
+    ::MoveWindow(GetHwnd(), xx, yy, width, height, TRUE);
+
+    // Now position all the buttons: the current button will be put at
+    // wxPoint(x_offset, y_offset) and the new row/column will start at
+    // startX/startY. The size of all buttons will be the same wxSize(maxWidth,
+    // maxHeight) except for the buttons in the last column which should extend
+    // to the right border of radiobox and thus can be wider than this.
+
+    // Also, remember that wxRA_SPECIFY_COLS means that we arrange buttons in
+    // left to right order and m_majorDim is the number of columns while
+    // wxRA_SPECIFY_ROWS means that the buttons are arranged top to bottom and
+    // m_majorDim is the number of rows.
+
+    x_offset += cx1;
+    y_offset += cy1;
 
 #if defined(CTL3D) && (!CTL3D)
     y_offset += (int)(cy1/2); // Fudge factor since buttons overlapped label
     // JACS 2/12/93. CTL3D draws group label quite high.
 #endif
+
     int startX = x_offset;
     int startY = y_offset;
 
-    for ( i = 0 ; i < m_noItems; i++)
+    for ( int i = 0; i < m_noItems; i++ )
     {
-        // Bidimensional radio adjustment
-        if (i&&((i%m_majorDim)==0)) // Why is this omitted for i = 0?
+        // the last button in the row may be wider than the other ones as the
+        // radiobox may be wider than the sum of the button widths (as it
+        // happens, for example, when the radiobox label is very long)
+        bool isLastInTheRow;
+        if ( m_windowStyle & wxRA_SPECIFY_COLS )
         {
-            if (m_windowStyle & wxRA_VERTICAL)
+            // item is the last in its row if it is a multiple of the number of
+            // columns or if it is just the last item
+            int n = i + 1;
+            isLastInTheRow = ((n % m_majorDim) == 0) || (n == m_noItems);
+        }
+        else // wxRA_SPECIFY_ROWS
+        {
+            // item is the last in the row if it is in the last columns
+            isLastInTheRow = i >= (m_noItems/m_majorDim)*m_majorDim;
+        }
+
+        // is this the start of new row/column?
+        if ( i && (i % m_majorDim == 0) )
+        {
+            if ( m_windowStyle & wxRA_SPECIFY_ROWS )
             {
+                // start of new column
                 y_offset = startY;
                 x_offset += maxWidth + cx1;
             }
-            else
+            else // start of new row
             {
                 x_offset = startX;
                 y_offset += maxHeight;
@@ -493,23 +558,19 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
                     y_offset += cy1/2;
             }
         }
-        int eachWidth;
-        int eachHeight;
-        if (m_radioWidth[i]<0)
-        {
-            // It's a labeled item
-            GetTextExtent(wxGetWindowText(m_radioButtons[i]),
-                          &current_width, &cyf);
 
-            // How do we find out radio button bitmap size!!
-            // By adjusting them carefully, manually :-)
-            eachWidth = (int)(current_width + RADIO_SIZE);
-            eachHeight = (int)((3*cyf)/2);
+        int widthBtn;
+        if ( isLastInTheRow )
+        {
+            // make the button go to the end of radio box
+            widthBtn = startX + width - x_offset - 2*cx1;
+            if ( widthBtn < maxWidth )
+                widthBtn = maxWidth;
         }
         else
         {
-            eachWidth = m_radioWidth[i];
-            eachHeight = m_radioHeight[i];
+            // normal button, always of the same size
+            widthBtn = maxWidth;
         }
 
         // VZ: make all buttons of the same, maximal size - like this they
@@ -517,17 +578,22 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         //     shown (otherwise they are not when the mouse pointer is in the
         //     radiobox part not belonging to any radiobutton)
         ::MoveWindow((HWND)m_radioButtons[i],
-                     x_offset, y_offset, maxWidth, maxHeight,
+                     x_offset, y_offset, widthBtn, maxHeight,
                      TRUE);
 
-        if (m_windowStyle & wxRA_SPECIFY_ROWS)
+        // where do we put the next button?
+        if ( m_windowStyle & wxRA_SPECIFY_ROWS )
         {
+            // below this one
             y_offset += maxHeight;
             if (m_radioWidth[0]>0)
                 y_offset += cy1/2;
         }
         else
-            x_offset += maxWidth + cx1;
+        {
+            // to the right of this one
+            x_offset += widthBtn + cx1;
+        }
     }
 }
 
@@ -716,11 +782,12 @@ bool wxRadioBox::SetFont(const wxFont& font)
     WXHFONT hfont = wxFont(font).GetResourceHandle();
     for ( int n = 0; n < m_noItems; n++ )
     {
-        ::SendMessage((HWND)m_radioButtons[n], WM_SETFONT, (WPARAM)hfont, 0L);
-    }
+        HWND hwndBtn = (HWND)m_radioButtons[n];
+        ::SendMessage(hwndBtn, WM_SETFONT, (WPARAM)hfont, 0L);
 
-    // this is needed because otherwise the buttons are not redrawn correctly
-    Refresh();
+        // otherwise the buttons are not redrawn correctly
+        ::InvalidateRect(hwndBtn, NULL, FALSE /* don't erase bg */);
+    }
 
     return TRUE;
 }
@@ -768,6 +835,39 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
+
+WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam)
+{
+#if wxUSE_CTL3D
+    if ( m_useCtl3D )
+    {
+        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
+        return (WXHBRUSH) hbrush;
+    }
+#endif // wxUSE_CTL3D
+
+    HDC hdc = (HDC)pDC;
+    if (GetParent()->GetTransparentBackground())
+        SetBkMode(hdc, TRANSPARENT);
+    else
+        SetBkMode(hdc, OPAQUE);
+
+    wxColour colBack = GetBackgroundColour();
+
+    if (!IsEnabled())
+        colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+
+    ::SetBkColor(hdc, wxColourToRGB(colBack));
+    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+
+    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+
+    return (WXHBRUSH)brush->GetResourceHandle();
+}
+
 
 // ---------------------------------------------------------------------------
 // window proc for radio buttons
@@ -828,25 +928,60 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
                 bool processed = TRUE;
 
+                bool horz = (radiobox->GetWindowStyle() & wxRA_SPECIFY_COLS) != 0;
+                int num = radiobox->Number(),
+                    rows = radiobox->GetNumVer(),
+                    cols = radiobox->GetNumHor();
+
                 int selOld = radiobox->GetSelection();
                 int selNew = selOld;
 
+                // wrapping will be handled below for the cases when we
+                // add/substract more than 1 but here otherwise as it's simpler
                 switch ( wParam )
                 {
                     case VK_UP:
-                        selNew--;
+                        if ( horz )
+                            selNew -= cols;
+                        else
+                        {
+                            if ( selNew )
+                                selNew--;
+                            else
+                                selNew = num - 1;
+                        }
                         break;
 
                     case VK_LEFT:
-                        selNew -= radiobox->GetNumVer();
+                        if ( horz )
+                        {
+                            if ( selNew )
+                                selNew--;
+                            else
+                                selNew = num - 1;
+                        }
+                        else
+                            selNew -= rows;
                         break;
 
                     case VK_DOWN:
-                        selNew++;
+                        if ( horz )
+                            selNew += cols;
+                        else
+                        {
+                            if ( ++selNew == num )
+                                selNew = 0;
+                        }
                         break;
 
                     case VK_RIGHT:
-                        selNew += radiobox->GetNumVer();
+                        if ( horz )
+                        {
+                            if ( ++selNew == num )
+                                selNew = 0;
+                        }
+                        else
+                            selNew += rows;
                         break;
 
                     default:
@@ -856,9 +991,28 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                 if ( processed )
                 {
                     // ensure that selNew is in range [0..num)
-                    int num = radiobox->Number();
-                    selNew += num;
-                    selNew %= num;
+                    if ( selNew >= num )
+                    {
+                        selNew -= num;
+
+                        int dim = horz ? cols : rows;
+                        selNew += dim - 1;
+                        selNew %= dim;
+                    }
+                    else if ( selNew < 0 )
+                    {
+                        selNew += num;
+
+                        int dim = horz ? cols : rows;
+                        if ( selNew % dim == 0 )
+                        {
+                            selNew -= dim - 1;
+                        }
+                        else
+                        {
+                            selNew++;
+                        }
+                    }
 
                     if ( selNew != selOld )
                     {

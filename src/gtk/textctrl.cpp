@@ -98,6 +98,8 @@ END_EVENT_TABLE()
 wxTextCtrl::wxTextCtrl()
 {
     m_modified = FALSE;
+    m_text =
+    m_vScrollbar = (GtkWidget *)NULL;
 }
 
 wxTextCtrl::wxTextCtrl( wxWindow *parent,
@@ -337,6 +339,13 @@ void wxTextCtrl::SetValue( const wxString &value )
     {
         gtk_entry_set_text( GTK_ENTRY(m_text), tmp.mbc_str() );
     }
+
+    // GRG, Jun/2000: Changed this after a lot of discussion in
+    //   the lists. wxWindows 2.2 will have a set of flags to
+    //   customize this behaviour.
+    SetInsertionPoint(0);
+
+    m_modified = FALSE;
 }
 
 void wxTextCtrl::WriteText( const wxString &text )
@@ -614,7 +623,7 @@ bool wxTextCtrl::Enable( bool enable )
         // nothing to do
         return FALSE;
     }
-    
+
     if (m_windowStyle & wxTE_MULTILINE)
     {
         gtk_text_set_editable( GTK_TEXT(m_text), enable );
@@ -735,7 +744,7 @@ bool wxTextCtrl::CanCut() const
     // Can cut if there's a selection
     long from, to;
     GetSelection(& from, & to);
-    return (from != to) ;
+    return (from != to) && (IsEditable());
 }
 
 bool wxTextCtrl::CanPaste() const
@@ -778,8 +787,9 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 
     if (!(GTK_EDITABLE(m_text)->has_selection))
     {
-        if (from) *from = 0;
-        if (to)   *to = 0;
+        long i = GetInsertionPoint();
+        if (from) *from = i;
+        if (to)   *to = i;
         return;
     }
 
@@ -812,6 +822,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
     {
         wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
         event.SetEventObject(this);
+        event.SetString(GetValue());
         if (GetEventHandler()->ProcessEvent(event)) return;
     }
 

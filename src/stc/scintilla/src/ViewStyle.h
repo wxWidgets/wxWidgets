@@ -15,8 +15,21 @@ public:
 	MarginStyle();
 };
 
+class FontNames {
+private:
+	char *names[STYLE_MAX + 1];
+	int max;
+public:
+	FontNames();
+	~FontNames();
+	void Clear();
+	const char *Save(const char *name);
+};
+
+enum WhiteSpaceVisibility {wsInvisible=0, wsVisibleAlways=1, wsVisibleAfterIndent=2};
 class ViewStyle {
 public:
+	FontNames fontNames;
 	Style styles[STYLE_MAX + 1];
 	LineMarker markers[MARKER_MAX + 1];
 	Indicator indicators[INDIC_MAX + 1];
@@ -29,6 +42,7 @@ public:
 	ColourPair selforeground;
 	bool selbackset;
 	ColourPair selbackground;
+	ColourPair selbackground2;
 	ColourPair selbar;
 	ColourPair selbarlight;
 	// Margins are ordered: Line Numbers, Selection Margin, Spacing Margin
@@ -40,11 +54,13 @@ public:
 	MarginStyle ms[margins];
 	int fixedColumnWidth;
 	int zoomLevel;
-	bool viewWhitespace;
+	WhiteSpaceVisibility viewWhitespace;
+	bool viewIndentationGuides;
 	bool viewEOL;
 	bool showMarkedLines;
 	ColourPair caretcolour;
 	ColourPair edgecolour;
+	int edgeState;
 	
 	ViewStyle();
 	ViewStyle(const ViewStyle &source);
@@ -54,6 +70,7 @@ public:
 	void Refresh(Surface &surface);
 	void ResetDefaultStyle();
 	void ClearStyles();
+	void SetStyleFontName(int styleIndex, const char *name);
 };
 
 #endif

@@ -1,19 +1,13 @@
 
-   Welcome to wxWindows/Gtk 2.1.14
+   Welcome to wxWindows/Gtk 2.2
 
-you have downloaded a beta version of the GTK+ 1.2 port of 
-the wxWindows GUI library. Although this is not yet the
-final stable release wxGTK 2.2, the current version has
-been tested carefully on many systems and has been found
-to work better than any other previous version.
-
-This is the last beta release. wxWindows is now in a code
-freeze and only bugs will be corrected.
+you have downloaded version 2.2 of the GTK port of the 
+wxWindows GUI library.
 
 wxWindows no longer supports GTK 1.0 (as did some early
 snapshots) so that you will need GTK 1.2 when using it.
-GTK 1.2.6 is recommended although some programs will work
-with GTK 1.2.3 onwards.
+GTK 1.2.6 or above is recommended although some programs 
+will work with GTK 1.2.3 onwards.
 
 More information is available from my homepage at:
 
@@ -44,7 +38,7 @@ VERSION OF GTK, WXGTK, WHAT DISTRIBUTION YOU USE AND WHAT ERROR
 WAS REPORTED. I know this has no effect, but I tried...
 
 The library produced by the install process will be called 
-libwx_gtk.a (static) and libwx_gtk-2.1.so.14.0.0 (shared) so 
+libwx_gtk.a (static) and libwx_gtk-2.2.so.0.1.1 (shared) so
 that once a binary incompatible version of wxWindows/Gtk comes 
 out we'll augment the library version number to avoid linking 
 problems.

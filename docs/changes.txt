@@ -1,7 +1,210 @@
-wxWindows 2 Change Log
-----------------------
+wxWindows 2.2 Change Log
+========================
 
-2.1.14
+INCOMPATIBLE CHANGES
+--------------------
+
+wxMSW:
+
+- wxListCtrl::Find() parameter meaning changed, see docs for details
+  (starting item is now included in the search, use 0 to search from the
+   beginning)
+
+OTHER CHANGES
+-------------
+
+2.2.6
+-----
+
+wxMSW:
+
+- wxChoice sizing bug introduced in 2.2.5 fixed (oops) and calculating of
+  the size of initially empty wxChoice controls fixed as well
+
+2.2.5
+-----
+
+- fixed memory corruption/crash in wxStreamBuffer
+- wxTree/ListCtrl position fix (Mike Oliver <oliver@math.ucla.edu>)
+- Italian translations updated
+- Windows 2000 toolbar colours problem fixed
+
+2.2.4
+-----
+
+- chinese translations added
+- wxTreeEvent::GetPoint() returns correct position for ITEM_XXX_CLICK events
+
+2.2.3
+-----
+
+wxGTK:
+
+- frames created with wxDefaultSize will have some reasonable default size and
+  not be created with 0 size
+
+2.2.2
+-----
+
+wxGTK:
+
+- better (implicit) themes support
+
+2.2.1
+-----
+
+wxBase:
+
+- Fixed logic bug in wxDateTime::ParseDate.
+- wxDB: replaced German variable names with English.
+- wxDbGetConnection() did not check for the correct scrolling
+  of cursors when re-using a cached database connection.
+    
+All (GUI):
+
+- Corrected uninitialized variable in wxDocument constructor.
+- DocView now finds more appropriate parent frame for dialogs.
+- Filter index checked, then path to find correct doc template.
+- Unicode compile fixes.
+- Generic list control column sizing bug fixed.
+- Corrected wxComboBox validation behaviour.
+- Added EVT_UPDATE_UI_RANGE macro.
+- Some DB sample problems corrected.
+- wxGrid fixes.
+- Fixed low resolution problem with wxPostScriptDC.
+
+wxMSW:
+
+- Removed delayed loading for winmm in VC++ makefile (problems
+  reported); USE_GLCANVAS now a variable in makefile.vc.
+- Comments added to setup.h.
+- wxCommandEvent::IsChecked now works for menu items.
+- wxDEFAULT font size handled properly.
+- Mods for Cygwin 1.1.
+- Updated VC++ project and makefiles for consistency. DLL now
+  has version number in name.
+- Added insertion point functions implementation for wxComboBox.
+- Handle wxNO_FULL_REPAINT_ON_RESIZE for MDI children.
+- Fixed problem with iconizing miniframes.
+- Fixed bug with radiobox size being miscalculated if the label was
+  too long.
+- The MSW radiobutton now informs about its state in the event (m_int)
+  as wxGTK did.
+
+wxGTK:
+
+- Please see docs/gtk/changes.txt.
+
+wxMotif:
+
+- Small compilation fixes
+
+Documentation:
+
+- Added wxDb documentation.
+- Added notes for Cygwin 1.1 to MSW install.txt.
+
+2.2.0
+-----
+
+wxBase:
+
+- Fixed bug with directories with trailing (back)slashes in wxPathExists
+- wxString: added wxArrayString::operator==() and !=()
+- Fixes for wxCmdLineParser
+- Added wxGetLocalTimeMillis
+- Completed Czech translations
+- Some stream corrections
+- added missing consts to wxPoint operators
+- wxDateTime ParseFormat fixes
+- wxFile::Open(write_append) will create file if it doesn't exist
+- small fixes to MIME mailcap test command handling, more MIME tests in the sample
+
+All (GUI):
+
+- wxGenericDragImage now allows virtual image drawing, and
+  flicker-free dragging is now possible
+- Added wxPrinter::GetLastError
+- Fixed wxLogGui reentrancy problem
+- Paper names now translated
+- wxGrid fixes
+- Generic validator now caters for more cases (integers in
+  wxTextCtrl, strings in wxChoice, wxComboBox)
+- Fixed crash when docview On... functions return FALSE. Show
+  error message when an non-existent filename is typed into the Open
+  File dialog.
+- Corrected Baltic font encoding handling
+- wxImage: enhanced TIFF code, added new platform-independent BMP
+  writing code
+- wxKeyEvent::GetKeyCode() and HasModifiers() added and documented
+- Fixed wxPropertyForm crashes in sample
+- wxWizard now calls TransferDataFromWindow() before calling
+  wxWizardPage::GetNext() fixing an obvious bug
+
+wxMSW:
+
+- wxWindow::GetCharWidth/Height now calculated accurately.
+  This will affect all .wxr dialog resources, so for
+  backward compatibility, please set
+  wxDIALOG_UNIT_COMPATIBILITY to 1 in setup.h
+- wxListCtrl: set item text in LIST_ITEM_ACTIVATED events
+- wxTextCtrl: implemented setting colours for rich edit controls
+- wxColour now accepts both grey and gray
+- BC++ DLL compilation fixed
+- Watcom C++ makefiles improved for JPEG and TIFF compilation
+- Fixed submenu accelerator bug
+- Fixed dialog focus bug (crash if the previous window to have
+  the focus was destroyed before the dialog closed)
+- Too-small default wxTextCtrl height fixed
+- fixed "missing" initial resize of wxMDIChildFrame
+- wxFrame restores focus better
+- Now ignore wxTHICK_FRAME in wxWindow constructor: only relevant to
+  frames anddialogs, interferes with other window styles otherwise
+  (sometimes you'd get a thick frame in a subwindow)
+- wxTextCtrl insertion point set to the beginning of the control by SetValue
+- Fix so wxMDIParentFrame is actually shown when Show(TRUE) is called.
+- wxFileDialog: adjusts struct size if there's an error (struct
+  sizes can be different on different versions of Windows)
+- wxImageList::GetSize() documented and added to wxMSW
+- fixed default dialog style to make them non resizeable again
+- fixed wxFrame::IsShown() which always returned TRUE before
+
+wxGTK:
+
+- Please see docs/gtk/changes.txt.
+
+wxMotif:
+
+- Small compilation fixes
+
+Documentation:
+
+- wxCaret documented
+
+2.1.16
+------
+
+wxBase:
+
+All (GUI):
+
+wxMSW:
+
+- Various bug fixes
+- Added wxCHMHelpController, for invoking MS HTML Help
+  files. This works under VC++ only
+- Modal dialog handling improved
+- Printer dialog now modal
+
+wxGTK:
+
+- Various bug fixes
+
+wxMotif:
+
+- Various bug fixes
+
+2.1.15
 ------
 
 Documentation:
@@ -50,7 +253,7 @@ all (GUI):
   MIME types if available (Unix only)
 - wxDC::DrawRotatedText() (based on contribution by Hans-Joachim Baader)
 - TIFF support added (libtiff required and included in the distribution)
-- PCX files can now be written (24 bit only so far)
+- PCX files can now be written (256 and 24 bits)
 - validators may work recursively if wxWS_EX_VALIDATE_RECURSIVELY is set
 - wxScrolledWindow now has keyboard interface
 - wxTextEntryDialog may be used for entering passwords (supports wxTE_PASSWORD)

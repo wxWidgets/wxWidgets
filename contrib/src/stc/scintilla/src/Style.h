@@ -10,11 +10,15 @@ class Style {
 public:
 	ColourPair fore;
 	ColourPair back;
+	bool aliasOfDefaultFont;
 	bool bold;
 	bool italic;
 	int size;
-	char fontName[100];
+	const char *fontName;
+	int characterSet;
 	bool eolFilled;
+	bool underline;
+	bool visible;
 
 	Font font;
 	unsigned int lineHeight;
@@ -25,13 +29,15 @@ public:
 	unsigned int spaceWidth;
 
 	Style();
+	Style(const Style &source);
 	~Style();
 	Style &operator=(const Style &source);
-	void Clear(Colour fore_=Colour(0,0,0), Colour back_=Colour(0xff,0xff,0xff),
-           	int size_=Platform::DefaultFontSize(), 
-		const char *fontName_=Platform::DefaultFont(), 
-		bool bold_=false, bool italic_=false, bool eolFilled_=false);
-	void Realise(Surface &surface, int zoomLevel);
+	void Clear(Colour fore_, Colour back_,
+           	int size_, 
+		const char *fontName_, int characterSet_,
+		bool bold_, bool italic_, bool eolFilled_, bool underline_, bool visible_);
+	bool EquivalentFontTo(const Style *other) const;
+	void Realise(Surface &surface, int zoomLevel, Style *defaultStyle=0);
 };
 
 #endif

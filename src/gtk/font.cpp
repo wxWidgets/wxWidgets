@@ -71,7 +71,7 @@ private:
     wxString        m_faceName;
     wxFontEncoding  m_encoding;
 
-    friend wxFont;
+    friend class wxFont;
 };
 
 // ============================================================================
@@ -397,7 +397,7 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
 
 static GdkFont *g_systemDefaultGuiFont = (GdkFont*) NULL;
 
-static GdkFont *GtkGetDefaultGuiFont()
+GdkFont *GtkGetDefaultGuiFont()
 {
     if (!g_systemDefaultGuiFont)
     {

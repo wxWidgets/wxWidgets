@@ -2,7 +2,51 @@
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}
 
-The functions defined in wxWindows are described here.
+The functions and macros defined in wxWindows are described here.
+
+\section{Version macros}\label{versionfunctions}
+
+The following constants are defined in wxWindows:
+
+\begin{itemize}\itemsep=0pt
+\item {\tt wxMAJOR\_VERSION} is the major version of wxWindows
+\item {\tt wxMINOR\_VERSION} is the minor version of wxWindows
+\item {\tt wxRELASE\_NUMBER} is the release number
+\end{itemize}
+
+For example, the values or these constants for wxWindows 2.1.15 are 2, 1 and
+15.
+
+Additionally, {\tt wxVERSION\_STRING} is a user-readable string containing
+the full wxWindows version and {\tt wxVERSION\_NUMBER} is a combination of the
+three version numbers above: for 2.1.15, it is 2115 and it is 2200 for
+wxWindows 2.2.
+
+\wxheading{Include files}
+
+<wx/version.h> or <wx/defs.h>
+
+\membersection{wxCHECK\_VERSION}\label{wxcheckversion}
+
+\func{bool}{wxCHECK\_VERSION}{\param{}{major, minor, release}}
+
+This is a macro which evaluates to true if the current wxWindows version is at
+least major.minor.release.
+
+For example, to test if the program is compiled with wxWindows 2.2 or higher,
+the following can be done:
+
+\begin{verbatim}
+    wxString s;
+#if wxCHECK_VERSION(2, 2, 0)
+    if ( s.StartsWith("foo") )
+#else // replacement code for old version
+    if ( strncmp(s, "foo", 3) == 0 )
+#endif
+    {
+        ...
+    }
+\end{verbatim}
 
 \section{Thread functions}\label{threadfunctions}
 
@@ -21,8 +65,8 @@ The functions defined in wxWindows are described here.
 This function must be called when any thread other than the main GUI thread
 wants to get access to the GUI library. This function will block the execution
 of the calling thread until the main thread (or any other thread holding the
-main GUI lock) leaves the GUI library and no other other thread will enter
-the GUI library until the calling thread calls \helpref{::wxMutexGuiLeave()}{wxmutexguileave}.
+main GUI lock) leaves the GUI library and no other thread will enter the GUI
+library until the calling thread calls \helpref{::wxMutexGuiLeave()}{wxmutexguileave}.
 
 Typically, these functions are used like this:
 
@@ -45,7 +89,7 @@ Note that under GTK, no creation of top-level windows is allowed in any
 thread but the main one.
 
 This function is only defined on platforms which support preemptive
-threads. 
+threads.
 
 \membersection{::wxMutexGuiLeave}\label{wxmutexguileave}
 
@@ -86,7 +130,7 @@ slashes.
 Returns TRUE if the file exists. It also returns TRUE if the file is
 a directory.
 
-\membersection{::wxFileModificationTime}
+\membersection{::wxFileModificationTime}\label{wxfilemodificationtime}
 
 \func{time\_t}{wxFileModificationTime}{\param{const wxString\& }{filename}}
 
@@ -270,7 +314,7 @@ wxSplitPath() will correctly handle filenames with both DOS and Unix path separa
 Windows, however it will not consider backslashes as path separators under Unix (where backslash
 is a valid character in a filename).
 
-On entry, {\it fullname} should be non NULL (it may be empty though).
+On entry, {\it fullname} should be non-NULL (it may be empty though).
 
 On return, {\it path} contains the file path (without the trailing separator), {\it name}
 contains the file name and {\it ext} contains the file extension without leading dot. All
@@ -632,7 +676,7 @@ to be used for entering passwords as the function name implies.
  \param{const wxString\& }{default\_value = ``"}, \param{wxWindow *}{parent = NULL},\\
  \param{int}{ x = -1}, \param{int}{ y = -1}, \param{bool}{ centre = TRUE}}
 
-Pop up a dialog box with title set to {\it caption}, message {\it message}, and a
+Pop up a dialog box with title set to {\it caption}, {\it message}, and a
 \rtfsp{\it default\_value}.  The user may type in text and press OK to return this text,
 or press Cancel to return the empty string.
 
@@ -1056,6 +1100,21 @@ The clipboard must have previously been opened for this call to succeed.
 
 \section{Miscellaneous functions}\label{miscellany}
 
+\membersection{::wxDROP\_ICON}\label{wxdropicon} 
+
+\func{wxIconOrCursor}{wxDROP\_ICON}{\param{const char *}{name}}
+
+This macro creates either a cursor (MSW) or an icon (elsewhere) with the given
+name. Under MSW, the cursor is loaded from the resource file and the icon is
+loaded from XPM file under other platforms.
+
+This macro should be used with 
+\helpref{wxDropSource constructor}{wxdropsourcewxdropsource}.
+
+\wxheading{Include files}
+
+<wx/dnd.h>
+
 \membersection{::wxNewId}
 
 \func{long}{wxNewId}{\void}
@@ -1260,6 +1319,8 @@ wxWindows errors. See also \helpref{wxFatalError}{wxfatalerror}.
 
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}}
 
+\func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}, \param{wxArrayString\& }{errors}}
+
 Executes another program in Unix or Windows.
 
 The first form takes a command string, such as {\tt "emacs file.txt"}.
@@ -1267,8 +1328,8 @@ The first form takes a command string, such as {\tt "emacs file.txt"}.
 The second form takes an array of values: a command, any number of
 arguments, terminated by NULL.
 
-The semantics of the third version is different from the first two and is
-described in more details below.
+The semantics of the third and fourth versions is different from the first two
+and is described in more details below.
 
 If {\it sync} is FALSE (the default), flow of control immediately returns.
 If TRUE, the current application waits until the other program has terminated.
@@ -1285,13 +1346,14 @@ For asynchronous execution, however, the return value is the process id and
 zero value indicates that the command could not be executed.
 
 If callback isn't NULL and if execution is asynchronous (note that callback
-parameter can not be non NULL for synchronous execution), 
+parameter can not be non-NULL for synchronous execution), 
 \helpref{wxProcess::OnTerminate}{wxprocessonterminate} will be called when
 the process finishes.
 
 Finally, you may use the third overloaded version of this function to execute
 a process (always synchronously) and capture its output in the array 
-{\it output}.
+{\it output}. The fourth version adds the possibility to additionally capture
+the messages from standard error output in the {\it errors} array.
 
 See also \helpref{wxShell}{wxshell}, \helpref{wxProcess}{wxprocess}, 
 \helpref{Exec sample}{sampleexec}.
@@ -1397,21 +1459,6 @@ Return the (current) user's home directory.
 
 <wx/utils.h>
 
-\membersection{::wxGetElapsedTime}\label{wxgetelapsedtime}
-
-\func{long}{wxGetElapsedTime}{\param{bool}{ resetTimer = TRUE}}
-
-Gets the time in milliseconds since the last \helpref{::wxStartTimer}{wxstarttimer}.
-
-If {\it resetTimer} is TRUE (the default), the timer is reset to zero
-by this call.
-
-See also \helpref{wxTimer}{wxtimer}.
-
-\wxheading{Include files}
-
-<wx/timer.h>
-
 \membersection{::wxGetFreeMemory}\label{wxgetfreememory}
 
 \func{long}{wxGetFreeMemory}{\void}
@@ -1439,7 +1486,7 @@ Returns the mouse position in screen coordinates.
 \func{wxString}{wxGetOsDescription}{\void}
 
 Returns the string containing the description of the current platform in a
-user-readable form. For example, this function may return strings like
+user-readable form. For example, this function may return strings like  
 {\tt Windows NT Version 4.0} or {\tt Linux 2.2.2 i386}.
 
 \wxheading{See also}
@@ -1457,7 +1504,7 @@ user-readable form. For example, this function may return strings like
 Gets operating system version information.
 
 \begin{twocollist}\itemsep=0pt
-\twocolitemruled{Platform}{Return tyes}
+\twocolitemruled{Platform}{Return types}
 \twocolitem{Macintosh}{Return value is wxMACINTOSH.}
 \twocolitem{GTK}{Return value is wxGTK, For GTK 1.0, {\it major} is 1, {\it minor} is 0. }
 \twocolitem{Motif}{Return value is wxMOTIF\_X, {\it major} is X version, {\it minor} is X revision.}
@@ -1741,18 +1788,6 @@ as a keyboard shortkey in Windows and Motif) and $\backslash$t (tab in Windows).
 
 <wx/utils.h>
 
-\membersection{::wxStartTimer}\label{wxstarttimer}
-
-\func{void}{wxStartTimer}{\void}
-
-Starts a stopwatch; use \helpref{::wxGetElapsedTime}{wxgetelapsedtime} to get the elapsed time.
-
-See also \helpref{wxTimer}{wxtimer}.
-
-\wxheading{Include files}
-
-<wx/timer.h>
-
 \membersection{::wxToLower}\label{wxtolower}
 
 \func{char}{wxToLower}{\param{char }{ch}}
@@ -1862,7 +1897,7 @@ function.
 
 Note that wxYield will not flush the message logs. This is intentional as
 calling wxYield is usually done to quickly update the screen and popping up a
-message box dialog may be undesirable. If you do with to flush the log
+message box dialog may be undesirable. If you do wish to flush the log
 messages immediately (otherwise it will be done during the next idle loop
 iteration), call \helpref{wxLog::FlushActive}{wxlogflushactive}.
 
@@ -1876,7 +1911,7 @@ iteration), call \helpref{wxLog::FlushActive}{wxlogflushactive}.
 
 This functions wakes up the (internal and platform dependent) idle system, i.e. it
 will force the system to send an idle event even if the system currently {\it is}
-idle and thus would not send any idle event until after some other event would get
+ idle and thus would not send any idle event until after some other event would get
 sent. This is also useful for sending events between two threads and is used by
 the corresponding functions \helpref{::wxPostEvent}{wxpostevent} and 
 \helpref{wxEvtHandler::AddPendingEvent}{wxevthandleraddpendingevent}.
@@ -2008,7 +2043,7 @@ dynamically. The same as DECLARE\_ABSTRACT\_CLASS.
 \func{}{DECLARE\_DYNAMIC\_CLASS}{className}
 
 Used inside a class declaration to declare that the objects of this class should be dynamically
-createable from run-time type information.
+creatable from run-time type information.
 
 Example:
 
@@ -2162,6 +2197,18 @@ avoid using {\tt \#ifdef}s when creating bitmaps.
 
 <wx/gdicmn.h>
 
+\membersection{wxConstCast}\label{wxconstcast}
+
+\func{}{wxConstCast}{ptr, classname}
+
+This macro expands into {\tt const\_cast<classname *>(ptr)} if the compiler
+supports {\it const\_cast} or into an old, C-style cast, otherwise.
+
+\wxheading{See also}
+
+\helpref{wxDynamicCast}{wxdynamiccast}\\
+\helpref{wxStaticCast}{wxstaticcast}
+
 \membersection{WXDEBUG\_NEW}\label{debugnew}
 
 \func{}{WXDEBUG\_NEW}{arg}
@@ -2185,7 +2232,7 @@ In non-debug mode, this is defined as the normal new operator.
 
 This macro returns the pointer {\it ptr} cast to the type {\it classname *} if
 the pointer is of this type (the check is done during the run-time) or NULL
-otherwise. Usage of this macro is prefered over obsoleted wxObject::IsKindOf()
+otherwise. Usage of this macro is preferred over obsoleted wxObject::IsKindOf()
 function.
 
 The {\it ptr} argument may be NULL, in which case NULL will be returned.
@@ -2201,13 +2248,15 @@ Example:
     }
     else
     {
-        // no window has the focus or it's not a text control
+        // no window has the focus or it is not a text control
     }
 \end{verbatim}
 
 \wxheading{See also}
 
-\helpref{RTTI overview}{runtimeclassoverview}
+\helpref{RTTI overview}{runtimeclassoverview}\\
+\helpref{wxConstCast}{wxconstcast}\\
+\helpref{wxStatiicCast}{wxstaticcast}
 
 \membersection{wxICON}\label{wxiconmacro}
 
@@ -2225,6 +2274,17 @@ avoid using {\tt \#ifdef}s when creating icons.
 \wxheading{Include files}
 
 <wx/gdicmn.h>
+
+\membersection{wxStaticCast}\label{wxstaticcast}
+
+\func{}{wxStaticCast}{ptr, classname}
+
+This macro checks that the cast is valid in debug mode (an assert failure will
+result if {\tt wxDynamicCast(ptr, classname) == NULL}) and then returns the
+result of executing an equivalent of {\tt static\_cast<classname *>(ptr)}.
+
+\helpref{wxDynamicCast}{wxdynamiccast}\\
+\helpref{wxConstCast}{wxconstcast}
 
 \membersection{WXTRACE}\label{trace}
 
@@ -2268,14 +2328,12 @@ files and loading user interface elements from resources.
 
 \normalbox{Please note that this use of the word `resource' is different from that used when talking
 about initialisation file resource reading and writing, using such functions
-as wxWriteResource and wxGetResource. It's just an unfortunate clash of terminology.}
+as wxWriteResource and wxGetResource. It is just an unfortunate clash of terminology.}
 
 \helponly{For an overview of the wxWindows resource mechanism, see \helpref{the wxWindows resource system}{resourceformats}.}
 
 See also \helpref{wxWindow::LoadFromResource}{wxwindowloadfromresource} for
 loading from resource data.
-
-{\bf Warning:} this needs updating for wxWindows 2.
 
 \membersection{::wxResourceAddIdentifier}\label{wxresourceaddidentifier}
 
@@ -2300,15 +2358,15 @@ wxWindows bitmap resource identifier. For example, if the .WXR file contains
 the following:
 
 \begin{verbatim}
-static const wxString\& aiai_resource = "bitmap(name = 'aiai_resource',\
-  bitmap = ['aiai', wxBITMAP_TYPE_BMP_RESOURCE, 'WINDOWS'],\
-  bitmap = ['aiai.xpm', wxBITMAP_TYPE_XPM, 'X']).";
+static const wxString\& project_resource = "bitmap(name = 'project_resource',\
+  bitmap = ['project', wxBITMAP_TYPE_BMP_RESOURCE, 'WINDOWS'],\
+  bitmap = ['project.xpm', wxBITMAP_TYPE_XPM, 'X']).";
 \end{verbatim}
 
 then this function can be called as follows:
 
 \begin{verbatim}
-  wxBitmap *bitmap  = wxResourceCreateBitmap("aiai_resource");
+  wxBitmap *bitmap  = wxResourceCreateBitmap("project_resource");
 \end{verbatim}
 
 \membersection{::wxResourceCreateIcon}
@@ -2320,15 +2378,15 @@ wxWindows icon resource identifier. For example, if the .WXR file contains
 the following:
 
 \begin{verbatim}
-static const wxString\& aiai_resource = "icon(name = 'aiai_resource',\
-  icon = ['aiai', wxBITMAP_TYPE_ICO_RESOURCE, 'WINDOWS'],\
-  icon = ['aiai', wxBITMAP_TYPE_XBM_DATA, 'X']).";
+static const wxString\& project_resource = "icon(name = 'project_resource',\
+  icon = ['project', wxBITMAP_TYPE_ICO_RESOURCE, 'WINDOWS'],\
+  icon = ['project', wxBITMAP_TYPE_XBM_DATA, 'X']).";
 \end{verbatim}
 
 then this function can be called as follows:
 
 \begin{verbatim}
-  wxIcon *icon = wxResourceCreateIcon("aiai_resource");
+  wxIcon *icon = wxResourceCreateIcon("project_resource");
 \end{verbatim}
 
 \membersection{::wxResourceCreateMenuBar}
@@ -2387,9 +2445,9 @@ dialog(name = 'dialog1',
   title = 'Test dialog box',
   x = 312, y = 234, width = 400, height = 300,
   modal = 0,
-  control = [wxGroupBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,
+  control = [1000, wxStaticBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],
-  control = [wxMultiText, 'Multitext', 'wxVERTICAL_LABEL', 'multitext3',
+  control = [1001, wxTextCtrl, '', 'wxTE_MULTILINE', 'text3',
       156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]]).
@@ -2415,7 +2473,7 @@ wxWindows resource data.
 
 \membersection{::wxResourceParseString}\label{wxresourceparsestring}
 
-\func{bool}{wxResourceParseString}{\param{const wxString\& }{resource}, \param{wxResourceTable *}{table = NULL}}
+\func{bool}{wxResourceParseString}{\param{char*}{ s}, \param{wxResourceTable *}{table = NULL}}
 
 Parses a string containing one or more wxWindows resource objects. If
 the resource objects are global static data that are included into the
@@ -2425,17 +2483,17 @@ containing the resource data, to make it known to wxWindows.
 {\it resource} should contain data with the following form:
 
 \begin{verbatim}
-static const wxString\& dialog1 = "dialog(name = 'dialog1',\
-  style = 'wxCAPTION | wxDEFAULT_DIALOG_STYLE',\
-  title = 'Test dialog box',\
-  x = 312, y = 234, width = 400, height = 300,\
-  modal = 0,\
-  control = [wxGroupBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
-  control = [wxMultiText, 'Multitext', 'wxVERTICAL_LABEL', 'multitext3',\
-      156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]]).";
+dialog(name = 'dialog1',
+  style = 'wxCAPTION | wxDEFAULT_DIALOG_STYLE',
+  title = 'Test dialog box',
+  x = 312, y = 234, width = 400, height = 300,
+  modal = 0,
+  control = [1000, wxStaticBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],
+  control = [1001, wxTextCtrl, '', 'wxTE_MULTILINE', 'text3',
+      156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]]).
 \end{verbatim}
 
 This function will typically be used after calling \helpref{wxLoadUserResource}{wxloaduserresource} to
@@ -2443,10 +2501,10 @@ load an entire {\tt .wxr file} into a string.
 
 \membersection{::wxResourceRegisterBitmapData}\label{registerbitmapdata}
 
-\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{const wxString\& }{xbm\_data}, \param{int }{width},
+\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{char* }{xbm\_data}, \param{int }{width},
 \param{int }{height}, \param{wxResourceTable *}{table = NULL}}
 
-\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{const wxString\& *}{xpm\_data}}
+\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{char** }{xpm\_data}}
 
 Makes \verb$#$included XBM or XPM bitmap data known to the wxWindows resource system. 
 This is required if other resources will use the bitmap data, since otherwise there
@@ -2504,7 +2562,7 @@ meaningless.
 
 \func{void}{wxLogVerbose}{\param{const char*}{ formatString}, \param{...}{}}
 
-For verbose output. Normally, it's suppressed, but
+For verbose output. Normally, it is suppressed, but
 might be activated if the user wishes to know more details about the program
 progress (another, but possibly confusing name for the same function is {\bf wxLogInfo}).
 
@@ -2528,7 +2586,7 @@ Mostly used by wxWindows itself, but might be handy for logging errors after
 system call (API function) failure. It logs the specified message text as well
 as the last system error code ({\it errno} or {\it ::GetLastError()} depending
 on the platform) and the corresponding error message. The second form
-of this function takes the error code explitly as the first argument.
+of this function takes the error code explicitly as the first argument.
 
 \wxheading{See also}
 
@@ -2615,9 +2673,89 @@ Returns the error message corresponding to the given system error code. If
 \helpref{wxSysErrorCode}{wxsyserrorcode},
 \helpref{wxLogSysError}{wxlogsyserror}
 
+\section{Time functions}\label{timefunctions}
+
+The functions in this section deal with getting the current time and
+starting/stopping the global timers. Please note that the timer functions are
+deprecated because they work with one global timer only and 
+\helpref{wxTimer}{wxtimer} and/or \helpref{wxStopWatch}{wxstopwatch} classes
+should be used instead. For retrieving the current time, you may also use 
+\helpref{wxDateTime::Now}{wxdatetimenow} or 
+\helpref{wxDateTime::UNow}{wxdatetimeunow} methods.
+
+\membersection{::wxGetElapsedTime}\label{wxgetelapsedtime}
+
+\func{long}{wxGetElapsedTime}{\param{bool}{ resetTimer = TRUE}}
+
+Gets the time in milliseconds since the last \helpref{::wxStartTimer}{wxstarttimer}.
+
+If {\it resetTimer} is TRUE (the default), the timer is reset to zero
+by this call.
+
+See also \helpref{wxTimer}{wxtimer}.
+
+\wxheading{Include files}
+
+<wx/timer.h>
+
+\membersection{::wxGetLocalTime}\label{wxgetlocaltime}
+
+\func{long}{wxGetLocalTime}{\void}
+
+Returns the number of seconds since local time 00:00:00 Jan 1st 1970.
+
+\wxheading{See also}
+
+\helpref{wxDateTime::Now}{wxdatetimenow}
+
+\wxheading{Include files}
+
+<wx/timer.h>
+
+\membersection{::wxGetLocalTimeMillis}\label{wxgetlocaltimemillis}
+
+\func{wxLongLone}{wxGetLocalTimeMillis}{\void}
+
+Returns the number of milliseconds since local time 00:00:00 Jan 1st 1970.
+
+\wxheading{See also}
+
+\helpref{wxDateTime::Now}{wxdatetimenow},\\
+\helpref{wxLongLone}{wxlonglong}
+
+\wxheading{Include files}
+
+<wx/timer.h>
+
+\membersection{::wxGetUTCTime}\label{wxgetutctime}
+
+\func{long}{wxGetUTCTime}{\void}
+
+Returns the number of seconds since GMT 00:00:00 Jan 1st 1970.
+
+\wxheading{See also}
+
+\helpref{wxDateTime::Now}{wxdatetimenow}
+
+\wxheading{Include files}
+
+<wx/timer.h>
+
+\membersection{::wxStartTimer}\label{wxstarttimer}
+
+\func{void}{wxStartTimer}{\void}
+
+Starts a stopwatch; use \helpref{::wxGetElapsedTime}{wxgetelapsedtime} to get the elapsed time.
+
+See also \helpref{wxTimer}{wxtimer}.
+
+\wxheading{Include files}
+
+<wx/timer.h>
+
 \section{Debugging macros and functions}\label{debugmacros}
 
-Useful macros and functins for error checking and defensive programming. ASSERTs are only
+Useful macros and functions for error checking and defensive programming. ASSERTs are only
 compiled if \_\_WXDEBUG\_\_ is defined, whereas CHECK macros stay in release
 builds.
 
