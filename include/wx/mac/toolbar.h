@@ -63,6 +63,7 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
 	virtual wxString MacGetToolTipString( wxPoint &where ) ;
 	void OnPaint(wxPaintEvent& event) ;
 	void OnMouse(wxMouseEvent& event) ;
+	virtual void MacSuperChangedPosition() ;
 protected:
     // common part of all ctors
     void Init();

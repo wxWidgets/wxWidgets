@@ -1276,10 +1276,9 @@ wxCoord   wxDC::GetCharWidth(void) const
 
 	MacInstallFont() ;
 
-	FontInfo fi ;
-	::GetFontInfo( &fi ) ;
+    int width = ::TextWidth( "n" , 0 , 1 ) ;
 
-	return YDEV2LOGREL((fi.descent + fi.ascent) / 2) ;
+	return YDEV2LOGREL(width) ;
 }
 
 wxCoord   wxDC::GetCharHeight(void) const
