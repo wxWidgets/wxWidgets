@@ -19,7 +19,7 @@ LIBVERSION_CURRENT=1
 LIBVERSION_REVISION=0
 LIBVERSION_AGE=0
 
-include ./files.lst
+include $(top_srcdir)/$(libsrc_dir)/files.lst
 
 OBJECTS = $(FL_OBJECTS)
 
