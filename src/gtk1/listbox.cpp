@@ -13,6 +13,7 @@
 #pragma implementation "listbox.h"
 #endif
 
+#include "wx/dynarray.h"
 #include "wx/listbox.h"
 
 //-----------------------------------------------------------------------------
@@ -68,7 +69,15 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
   
   m_list = GTK_LIST( gtk_list_new() );
-  gtk_list_set_selection_mode( GTK_LIST(m_list), GTK_SELECTION_BROWSE );
+  
+  // @@ what's the difference between BROWSE and SINGLE?
+  GtkSelectionMode mode = GTK_SELECTION_BROWSE;
+  if ( style & wxLB_MULTIPLE )
+    mode = GTK_SELECTION_MULTIPLE;
+  else if ( style & wxLB_EXTENDED )
+    mode = GTK_SELECTION_EXTENDED;
+
+  gtk_list_set_selection_mode( GTK_LIST(m_list), mode );
   
   gtk_container_add (GTK_CONTAINER(m_widget), GTK_WIDGET(m_list) );
   gtk_widget_show( GTK_WIDGET(m_list) );
@@ -108,6 +117,7 @@ void wxListBox::Append( const wxString &item )
 
 void wxListBox::Append( const wxString &WXUNUSED(item), char *WXUNUSED(clientData) )
 {
+  wxFAIL_MSG("wxListBox::Append(clientdata) not implemented");
 };
 
 void wxListBox::Clear(void)
@@ -142,6 +152,8 @@ int wxListBox::FindString( const wxString &item ) const
 
 char *wxListBox::GetClientData( const int WXUNUSED(n) ) const
 {
+  wxFAIL_MSG("wxListBox::GetClientData not implemented");
+
   return NULL;
 };
 
@@ -162,9 +174,29 @@ int wxListBox::GetSelection(void) const
   return -1;
 };
 
-int wxListBox::GetSelections( int **WXUNUSED(selections) ) const
+int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
-  return 0;
+  // get the number of selected items first
+  GList *child = m_list->children;
+  int count = 0;
+  for ( child = m_list->children; child != NULL; child = child->next ) {
+    if ( GTK_WIDGET(child->data)->state == GTK_STATE_SELECTED ) 
+      count++;
+  }
+
+  aSelections.Empty();
+  
+  if ( count > 0 ) {
+    // now fill the list
+    aSelections.Alloc(count); // optimization attempt
+    int i = 0;
+    for ( child = m_list->children; child != NULL; child = child->next, i++ ) {
+      if ( GTK_WIDGET(child->data)->state == GTK_STATE_SELECTED ) 
+        aSelections.Add(i);
+    }
+  }
+  
+  return count;
 };
 
 wxString wxListBox::GetString( int n ) const
