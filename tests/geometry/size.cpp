@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/geometry/size.cpp
 // Purpose:     wxSize unit test
-// Author:      Vadim Zeitlin
+// Author:      Wlodzimierz ABX Skiba
 // Created:     2004-12-14
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 wxWindows
