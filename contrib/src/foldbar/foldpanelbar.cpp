@@ -69,7 +69,7 @@ void wxFoldPanelBar::Create( wxWindow *parent, wxWindowID id, const wxPoint &pos
 
     // the fold panel area
 
-    m_foldPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL);
+    m_foldPanel = new wxPanel(this, wxID_ANY, position, size, wxNO_BORDER|wxTAB_TRAVERSAL);
 
     // the extra area for some icons / context menu etc
 
