@@ -41,7 +41,7 @@
 //===========================================================================
 //
 // Implementation
-// 
+//
 //===========================================================================
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -67,7 +67,7 @@ DEFINE_EVENT_TYPE(wxEVT_MEDIA_STOP);
 // Searches for a backend that is installed on the system (backends
 // starting with lower characters in the alphabet are given priority),
 // and creates the control from it
-// 
+//
 // This searches by searching the global RTTI hashtable, class by class,
 // attempting to call CreateControl on each one found that is a derivative
 // of wxMediaBackend - if it succeededs Create returns true, otherwise
@@ -75,9 +75,9 @@ DEFINE_EVENT_TYPE(wxEVT_MEDIA_STOP);
 //---------------------------------------------------------------------------
 bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
                 const wxString& fileName,
-                const wxPoint& pos, 
+                const wxPoint& pos,
                 const wxSize& size,
-                long style, 
+                long style,
                 const wxString& szBackend,
                 const wxValidator& validator,
                 const wxString& name)
@@ -113,7 +113,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
         {
             if(!DoCreate(classInfo, parent, id,
                          pos, size, style, validator, name))
-                continue;        
+                continue;
 
             if (!fileName.empty())
             {
@@ -135,9 +135,9 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
 
 bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
                 const wxURI& location,
-                const wxPoint& pos, 
+                const wxPoint& pos,
                 const wxSize& size,
-                long style, 
+                long style,
                 const wxString& szBackend,
                 const wxValidator& validator,
                 const wxString& name)
@@ -170,7 +170,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
         {
             if(!DoCreate(classInfo, parent, id,
                          pos, size, style, validator, name))
-                continue;        
+                continue;
 
             if (m_imp->Load(location))
                 return true;
@@ -192,24 +192,24 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
 //---------------------------------------------------------------------------
 bool wxMediaCtrl::DoCreate(wxClassInfo* classInfo,
                             wxWindow* parent, wxWindowID id,
-                            const wxPoint& pos, 
+                            const wxPoint& pos,
                             const wxSize& size,
-                            long style, 
+                            long style,
                             const wxValidator& validator,
                             const wxString& name)
 {
     m_imp = (wxMediaBackend*)classInfo->CreateObject();
-    
+
     if( m_imp->CreateControl(this, parent, id, pos, size,
                              style, validator, name) )
     {
-        this->Connect(GetId(), wxEVT_MEDIA_FINISHED, 
+        this->Connect(GetId(), wxEVT_MEDIA_FINISHED,
                         (wxObjectEventFunction) (wxEventFunction)
-                        (wxMediaEventFunction) 
+                        (wxMediaEventFunction)
                             &wxMediaCtrl::OnMediaFinished);
         return true;
     }
-    
+
     delete m_imp;
     return false;
 }
@@ -221,7 +221,7 @@ bool wxMediaCtrl::DoCreate(wxClassInfo* classInfo,
 // Search through the RTTI hashmap one at a
 // time, attempting to create each derivative
 // of wxMediaBackend
-// 
+//
 //
 // STL isn't compatable with and will have a compilation error
 // on a wxNode, however, wxHashTable::compatibility_iterator is
@@ -295,7 +295,7 @@ bool wxMediaCtrl::Load(const wxURI& location)
 // wxMediaCtrl::GetDuration
 // wxMediaCtrl::GetState
 // wxMediaCtrl::DoGetBestSize
-// 
+//
 // 1) Check to see whether the backend exists and is loading
 // 2) Call the backend's version of the method, returning success
 //    if the backend's version succeeds
@@ -372,7 +372,7 @@ wxSize wxMediaCtrl::DoGetBestSize() const
 
 //---------------------------------------------------------------------------
 // wxMediaCtrl::DoMoveWindow
-// 
+//
 // 1) Call parent's version so that our control's window moves where
 //    it's supposed to
 // 2) If the backend exists and is loaded, move the video
@@ -396,7 +396,7 @@ bool wxMediaCtrl::IsLooped()
     return m_bLoop;
 }
 
-void wxMediaCtrl::OnMediaFinished(const wxMediaEvent& WXUNUSED(evt))
+void wxMediaCtrl::OnMediaFinished(wxMediaEvent& WXUNUSED(evt))
 {
     if(m_bLoop)
     {

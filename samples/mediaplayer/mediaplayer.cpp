@@ -12,7 +12,7 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // MediaPlayer
 //
-// This is a simple example of how to use all the funtionality of 
+// This is a simple example of how to use all the funtionality of
 // the wxMediaCtrl class in wxWidgets.
 //
 // To use this sample, simply select Open File from the file menu,
@@ -53,7 +53,7 @@
 #include "wx/textdlg.h"     //for getting user text from OpenURL
 
 // ----------------------------------------------------------------------------
-// Bail out if the user doesn't want one of the 
+// Bail out if the user doesn't want one of the
 // things we need
 // ----------------------------------------------------------------------------
 
@@ -207,7 +207,7 @@ const wxChar* wxGetMediaStateText(int nState)
 // the wxApp exists, and thus will crash the application if you try it.
 //
 // IMPLEMENT_APP does this, and also implements the platform-specific entry
-// routine, such as main or WinMain().  Use IMPLEMENT_APP_NO_MAIN if you do 
+// routine, such as main or WinMain().  Use IMPLEMENT_APP_NO_MAIN if you do
 // not desire this behavior.
 // ----------------------------------------------------------------------------
 IMPLEMENT_APP(MyApp)
@@ -253,8 +253,8 @@ MyFrame::MyFrame(const wxString& title)
     wxMenu *menuFile = new wxMenu;
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_ABOUT,  
-                     _T("&About...\tF1"), 
+    helpMenu->Append(wxID_ABOUT,
+                     _T("&About...\tF1"),
                      _T("Show about dialog"));
 
     menuFile->Append(wxID_OPENFILE, _T("&Open File"), _T("Open a File"));
@@ -263,12 +263,12 @@ MyFrame::MyFrame(const wxString& title)
     menuFile->Append(wxID_PAUSE, _T("P&ause"), _T("Pause playback"));
     menuFile->Append(wxID_STOP, _T("&Stop"), _T("Stop playback"));
     menuFile->AppendSeparator();
-    menuFile->AppendCheckItem(wxID_LOOP, 
-                              _T("&Loop"), 
+    menuFile->AppendCheckItem(wxID_LOOP,
+                              _T("&Loop"),
                               _T("Loop Selected Media"));
     menuFile->AppendSeparator();
-    menuFile->Append(wxID_EXIT, 
-                     _T("E&xit\tAlt-X"), 
+    menuFile->Append(wxID_EXIT,
+                     _T("E&xit\tAlt-X"),
                      _T("Quit this program"));
 
     wxMenuBar *menuBar = new wxMenuBar();
@@ -322,10 +322,10 @@ MyFrame::MyFrame(const wxString& title)
     ResetStatus();
     SetStatusText(m_basestatus);
 #endif // wxUSE_STATUSBAR
-    
+
     //
     //  Connect events.
-    // 
+    //
     //  There are two ways in wxWidgets to use events -
     //  Message Maps and Connections.
     //
@@ -339,7 +339,7 @@ MyFrame::MyFrame(const wxString& title)
     //  END_EVENT_TABLE()
     //
     //  Where MyFrame is the class with the DECLARE_MESSAGE_MAP
-    //  in it.  EVT_XXX(XXX) are each of your handlers, such 
+    //  in it.  EVT_XXX(XXX) are each of your handlers, such
     //  as EVT_MENU for menu events and the XXX inside
     //  is the parameters to the event macro - in the case
     //  of EVT_MENU the menu id and then the function to call.
@@ -366,19 +366,19 @@ MyFrame::MyFrame(const wxString& title)
     //
     //  The third is the function handler for the event -
     //  You need to cast it to the specific event handler
-    //  type, then to a wxEventFunction, then to a 
+    //  type, then to a wxEventFunction, then to a
     //  wxObjectEventFunction - I.E.
     //  (wxObjectEventFunction)(wxEventFunction)
     //  (wxCommandEventFunction) &MyFrame::MyHandler
     //
-    //  The fourth is an optional userdata param - 
+    //  The fourth is an optional userdata param -
     //  this is of historical relevance only and is
     //  there only for backwards compatability.
     //
     //  The fifth is the context in which to call the
     //  handler - by default (this param is optional)
     //  this.  For example in your event handler
-    //  if you were to call "this->MyFunc()" 
+    //  if you were to call "this->MyFunc()"
     //  it would literally do this->MyFunc.  However,
     //  if you were to pass myHandler as the fifth
     //  parameter, for instance, you would _really_
@@ -389,48 +389,48 @@ MyFrame::MyFrame(const wxString& title)
     //
     // Menu events
     //
-    this->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, 
-                  (wxObjectEventFunction) (wxEventFunction) 
+    this->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
+                  (wxObjectEventFunction) (wxEventFunction)
                   (wxCommandEventFunction) &MyFrame::OnQuit);
-    
-    this->Connect(wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED, 
-                  (wxObjectEventFunction) (wxEventFunction) 
+
+    this->Connect(wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED,
+                  (wxObjectEventFunction) (wxEventFunction)
                   (wxCommandEventFunction) &MyFrame::OnAbout);
 
-    this->Connect(wxID_LOOP, wxEVT_COMMAND_MENU_SELECTED, 
-                  (wxObjectEventFunction) (wxEventFunction) 
+    this->Connect(wxID_LOOP, wxEVT_COMMAND_MENU_SELECTED,
+                  (wxObjectEventFunction) (wxEventFunction)
                   (wxCommandEventFunction) &MyFrame::OnLoop);
 
-    this->Connect(wxID_OPENFILE, wxEVT_COMMAND_MENU_SELECTED, 
-                  (wxObjectEventFunction) (wxEventFunction) 
+    this->Connect(wxID_OPENFILE, wxEVT_COMMAND_MENU_SELECTED,
+                  (wxObjectEventFunction) (wxEventFunction)
                   (wxCommandEventFunction) &MyFrame::OnOpenFile);
 
-    this->Connect(wxID_PLAY, wxEVT_COMMAND_MENU_SELECTED, 
-                  (wxObjectEventFunction) (wxEventFunction) 
+    this->Connect(wxID_PLAY, wxEVT_COMMAND_MENU_SELECTED,
+                  (wxObjectEventFunction) (wxEventFunction)
                   (wxCommandEventFunction) &MyFrame::OnPlay);
 
-    this->Connect(wxID_PAUSE, wxEVT_COMMAND_MENU_SELECTED, 
-                  (wxObjectEventFunction) (wxEventFunction) 
+    this->Connect(wxID_PAUSE, wxEVT_COMMAND_MENU_SELECTED,
+                  (wxObjectEventFunction) (wxEventFunction)
                   (wxCommandEventFunction) &MyFrame::OnPause);
 
-    this->Connect(wxID_STOP, wxEVT_COMMAND_MENU_SELECTED, 
-                  (wxObjectEventFunction) (wxEventFunction) 
+    this->Connect(wxID_STOP, wxEVT_COMMAND_MENU_SELECTED,
+                  (wxObjectEventFunction) (wxEventFunction)
                   (wxCommandEventFunction) &MyFrame::OnStop);
 
 
     //
     // Slider events
     //
-    this->Connect(wxID_SLIDER, wxEVT_COMMAND_SLIDER_UPDATED, 
-                  (wxObjectEventFunction) (wxEventFunction) 
+    this->Connect(wxID_SLIDER, wxEVT_COMMAND_SLIDER_UPDATED,
+                  (wxObjectEventFunction) (wxEventFunction)
                   (wxCommandEventFunction) &MyFrame::OnSeek);
 
     //
     // Media Control events
     //
-    this->Connect(wxID_MEDIACTRL, wxEVT_MEDIA_STOP, 
-                  (wxObjectEventFunction) (wxEventFunction) 
-                  (wxCommandEventFunction) &MyFrame::OnMediaStop);
+    this->Connect(wxID_MEDIACTRL, wxEVT_MEDIA_STOP,
+                  (wxObjectEventFunction) (wxEventFunction)
+                  (wxMediaEventFunction) &MyFrame::OnMediaStop);
 
     //
     // End of Events
@@ -451,7 +451,7 @@ MyFrame::MyFrame(const wxString& title)
 // ----------------------------------------------------------------------------
 // MyFrame Destructor
 //
-// 1) Deletes child objects implicitly 
+// 1) Deletes child objects implicitly
 // 2) Delete our timer explicitly
 // ----------------------------------------------------------------------------
 MyFrame::~MyFrame()
@@ -462,16 +462,16 @@ MyFrame::~MyFrame()
 // ----------------------------------------------------------------------------
 // MyFrame::ResetStatus
 //
-// Here we just make a simple status string with some useful info about 
+// Here we just make a simple status string with some useful info about
 // the media that we won't change later - such as the length of the media.
 //
 // We then append some other info that changes in MyTimer::Notify, then
-// set the status bar to this text.  
+// set the status bar to this text.
 //
 // In real applications, you'd want to find a better way to do this,
 // such as static text controls (wxStaticText).
-//  
-// We display info here in seconds (wxMediaCtrl uses milliseconds - that's why 
+//
+// We display info here in seconds (wxMediaCtrl uses milliseconds - that's why
 // we divide by 1000).
 //
 // We also reset our loop counter here.
@@ -505,7 +505,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 // ----------------------------------------------------------------------------
 // MyFrame::OnAbout
-// 
+//
 // Called from help->about.
 // Gets some info about this application.
 // ----------------------------------------------------------------------------
@@ -553,7 +553,7 @@ void MyFrame::OnOpenFile(wxCommandEvent& WXUNUSED(event))
 
 // ----------------------------------------------------------------------------
 // MyFrame::OnPlay
-// 
+//
 // Called from file->play.
 // Resumes the media if it is paused or stopped.
 // ----------------------------------------------------------------------------
@@ -565,7 +565,7 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 
 // ----------------------------------------------------------------------------
 // MyFrame::OnPause
-// 
+//
 // Called from file->pause.
 // Pauses the media in-place.
 // ----------------------------------------------------------------------------
@@ -577,7 +577,7 @@ void MyFrame::OnPause(wxCommandEvent& WXUNUSED(event))
 
 // ----------------------------------------------------------------------------
 // MyFrame::OnStop
-// 
+//
 // Called from file->stop.
 // Where it stops depends on whether you can seek in the
 // media control or not - if you can it stops and seeks to the beginning,
@@ -592,7 +592,7 @@ void MyFrame::OnStop(wxCommandEvent& WXUNUSED(event))
 
 // ----------------------------------------------------------------------------
 // MyFrame::OnSeek
-// 
+//
 // Called from file->seek.
 // Called when the user moves the slider -
 // seeks to a position within the media
@@ -605,7 +605,7 @@ void MyFrame::OnSeek(wxCommandEvent& WXUNUSED(event))
 
 // ----------------------------------------------------------------------------
 // MyFrame::OnMediaStop
-// 
+//
 // Called when the media is about to stop playing.
 // Here we just increase our loop counter
 // ----------------------------------------------------------------------------
@@ -625,7 +625,7 @@ void MyFrame::OnMediaStop(wxMediaEvent& WXUNUSED(event))
 //
 // 1) Update our slider with the position were are in in the media
 // 2) Update our status bar with the base text from MyFrame::ResetStatus,
-//    append some non-static (changing) info to it, then set the 
+//    append some non-static (changing) info to it, then set the
 //    status bar text to that result
 // ----------------------------------------------------------------------------
 void MyTimer::Notify()

@@ -2,7 +2,7 @@
 // Name:        wx/mediactrl.h
 // Purpose:     wxMediaCtrl class
 // Author:      Ryan Norton <wxprojects@comcast.net>
-// Modified by: 
+// Modified by:
 // Created:     11/07/04
 // RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
@@ -66,166 +66,6 @@ enum wxMediaTimeFormat
 
 // ----------------------------------------------------------------------------
 //
-// wxMediaCtrl
-//
-// ----------------------------------------------------------------------------
-
-class wxMediaCtrl : public wxControl
-{
-public:
-    wxMediaCtrl() : m_imp(NULL), m_bLoaded(false), m_bLoop(false)
-    {                                                                   }
-
-    wxMediaCtrl(wxWindow* parent, wxWindowID id, 
-                const wxString& fileName = wxT(""),
-                const wxPoint& pos = wxDefaultPosition, 
-                const wxSize& size = wxDefaultSize,
-                long style = 0, 
-                const wxString& szBackend = wxT(""),
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxT("mediaCtrl"))
-                : m_imp(NULL), m_bLoaded(false), m_bLoop(false)
-    {   Create(parent, id, fileName, pos, size, style, 
-               szBackend, validator, name);                             }
-
-    wxMediaCtrl(wxWindow* parent, wxWindowID id, 
-                const wxURI& location,
-                const wxPoint& pos = wxDefaultPosition, 
-                const wxSize& size = wxDefaultSize,
-                long style = 0, 
-                const wxString& szBackend = wxT(""),
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxT("mediaCtrl"))
-                : m_imp(NULL), m_bLoop(false)
-    {   Create(parent, id, location, pos, size, style, 
-               szBackend, validator, name);                             }
-
-    ~wxMediaCtrl();
-
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& fileName = wxT(""),
-                const wxPoint& pos = wxDefaultPosition, 
-                const wxSize& size = wxDefaultSize,
-                long style = 0, 
-                const wxString& szBackend = wxT(""),
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxT("mediaCtrl"));
-
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxURI& location,
-                const wxPoint& pos = wxDefaultPosition, 
-                const wxSize& size = wxDefaultSize,
-                long style = 0, 
-                const wxString& szBackend = wxT(""),
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxT("mediaCtrl"));
-
-    bool DoCreate(wxClassInfo* instance,
-                wxWindow* parent, wxWindowID id,
-                const wxPoint& pos = wxDefaultPosition, 
-                const wxSize& size = wxDefaultSize,
-                long style = 0, 
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxT("mediaCtrl"));
-
-    static wxClassInfo* NextBackend();
-
-
-    bool Play();
-    bool Pause();
-    bool Stop();
-
-    bool Load(const wxString& fileName);
-    bool Load(const wxURI& location);
-
-    void Loop(bool bLoop = true);
-    bool IsLooped();
-
-    wxMediaState GetState();
-
-    double GetPlaybackRate();
-    bool SetPlaybackRate(double dRate);
-
-    bool SetPosition(wxLongLong where);
-    wxLongLong GetPosition();
-    wxLongLong GetDuration();
-
-protected:
-    void OnMediaFinished(const class wxMediaEvent& evt);
-    virtual void DoMoveWindow(int x, int y, int w, int h);
-    wxSize DoGetBestSize() const;
-
-    class wxMediaBackend* m_imp;
-    bool m_bLoaded;
-    bool m_bLoop;
-
-    DECLARE_DYNAMIC_CLASS(wxMediaCtrl);
-};
-
-// ----------------------------------------------------------------------------
-//
-// wxMediaBackend
-//
-// Currently an internal class - API stability not gauranteed.
-//
-// ----------------------------------------------------------------------------
-
-class wxMediaBackend : public wxObject
-{
-public:
-    wxMediaBackend()
-    {                                   }
-
-    virtual ~wxMediaBackend();
-
-    virtual bool CreateControl(wxControl* WXUNUSED(ctrl), 
-                               wxWindow* WXUNUSED(parent), 
-                               wxWindowID WXUNUSED(id), 
-                               const wxPoint& WXUNUSED(pos), 
-                               const wxSize& WXUNUSED(size),
-                               long WXUNUSED(style), 
-                               const wxValidator& WXUNUSED(validator),
-                               const wxString& WXUNUSED(name))
-    {   return false;                   }
-
-    virtual bool Play() 
-    {   return false;                   }
-    virtual bool Pause() 
-    {   return false;                   }
-    virtual bool Stop() 
-    {   return false;                   }
-
-    virtual bool Load(const wxString& WXUNUSED(fileName)) 
-    {   return false;                   }
-    virtual bool Load(const wxURI& WXUNUSED(location)) 
-    {   return false;                   }
-
-    virtual bool SetPosition(wxLongLong WXUNUSED(where)) 
-    {   return 0;                       }
-    virtual wxLongLong GetPosition() 
-    {   return 0;                       }
-    virtual wxLongLong GetDuration() 
-    {   return 0;                       }
-
-    virtual void Move(int WXUNUSED(x), int WXUNUSED(y), 
-                      int WXUNUSED(w), int WXUNUSED(h)) 
-    {                                   }
-    virtual wxSize GetVideoSize() const 
-    {   return wxSize(0,0);             }
-
-    virtual double GetPlaybackRate() 
-    {   return 0.0;                     }
-    virtual bool SetPlaybackRate(double WXUNUSED(dRate)) 
-    {   return false;                   }
-
-    virtual wxMediaState GetState()
-    {   return wxMEDIASTATE_STOPPED;    }
-
-    DECLARE_CLASS(wxMediaBackend)
-};
-
-// ----------------------------------------------------------------------------
-//
 // wxMediaEvent
 //
 // ----------------------------------------------------------------------------
@@ -257,12 +97,172 @@ public:
     // Allocates a copy of this object.
     // Required for wxEvtHandler::AddPendingEvent
     // ------------------------------------------------------------------------
-    virtual wxEvent *Clone() const 
+    virtual wxEvent *Clone() const
     {   return new wxMediaEvent(*this);     }
 
 
     // Put this class on wxWidget's RTTI table
     DECLARE_DYNAMIC_CLASS(wxMediaEvent)
+};
+
+// ----------------------------------------------------------------------------
+//
+// wxMediaCtrl
+//
+// ----------------------------------------------------------------------------
+
+class wxMediaCtrl : public wxControl
+{
+public:
+    wxMediaCtrl() : m_imp(NULL), m_bLoaded(false), m_bLoop(false)
+    {                                                                   }
+
+    wxMediaCtrl(wxWindow* parent, wxWindowID id,
+                const wxString& fileName = wxT(""),
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& szBackend = wxT(""),
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxT("mediaCtrl"))
+                : m_imp(NULL), m_bLoaded(false), m_bLoop(false)
+    {   Create(parent, id, fileName, pos, size, style,
+               szBackend, validator, name);                             }
+
+    wxMediaCtrl(wxWindow* parent, wxWindowID id,
+                const wxURI& location,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& szBackend = wxT(""),
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxT("mediaCtrl"))
+                : m_imp(NULL), m_bLoop(false)
+    {   Create(parent, id, location, pos, size, style,
+               szBackend, validator, name);                             }
+
+    ~wxMediaCtrl();
+
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxString& fileName = wxT(""),
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& szBackend = wxT(""),
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxT("mediaCtrl"));
+
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxURI& location,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& szBackend = wxT(""),
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxT("mediaCtrl"));
+
+    bool DoCreate(wxClassInfo* instance,
+                wxWindow* parent, wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxT("mediaCtrl"));
+
+    static wxClassInfo* NextBackend();
+
+
+    bool Play();
+    bool Pause();
+    bool Stop();
+
+    bool Load(const wxString& fileName);
+    bool Load(const wxURI& location);
+
+    void Loop(bool bLoop = true);
+    bool IsLooped();
+
+    wxMediaState GetState();
+
+    double GetPlaybackRate();
+    bool SetPlaybackRate(double dRate);
+
+    bool SetPosition(wxLongLong where);
+    wxLongLong GetPosition();
+    wxLongLong GetDuration();
+
+protected:
+    void OnMediaFinished(wxMediaEvent& evt);
+    virtual void DoMoveWindow(int x, int y, int w, int h);
+    wxSize DoGetBestSize() const;
+
+    class wxMediaBackend* m_imp;
+    bool m_bLoaded;
+    bool m_bLoop;
+
+    DECLARE_DYNAMIC_CLASS(wxMediaCtrl);
+};
+
+// ----------------------------------------------------------------------------
+//
+// wxMediaBackend
+//
+// Currently an internal class - API stability not gauranteed.
+//
+// ----------------------------------------------------------------------------
+
+class wxMediaBackend : public wxObject
+{
+public:
+    wxMediaBackend()
+    {                                   }
+
+    virtual ~wxMediaBackend();
+
+    virtual bool CreateControl(wxControl* WXUNUSED(ctrl),
+                               wxWindow* WXUNUSED(parent),
+                               wxWindowID WXUNUSED(id),
+                               const wxPoint& WXUNUSED(pos),
+                               const wxSize& WXUNUSED(size),
+                               long WXUNUSED(style),
+                               const wxValidator& WXUNUSED(validator),
+                               const wxString& WXUNUSED(name))
+    {   return false;                   }
+
+    virtual bool Play()
+    {   return false;                   }
+    virtual bool Pause()
+    {   return false;                   }
+    virtual bool Stop()
+    {   return false;                   }
+
+    virtual bool Load(const wxString& WXUNUSED(fileName))
+    {   return false;                   }
+    virtual bool Load(const wxURI& WXUNUSED(location))
+    {   return false;                   }
+
+    virtual bool SetPosition(wxLongLong WXUNUSED(where))
+    {   return 0;                       }
+    virtual wxLongLong GetPosition()
+    {   return 0;                       }
+    virtual wxLongLong GetDuration()
+    {   return 0;                       }
+
+    virtual void Move(int WXUNUSED(x), int WXUNUSED(y),
+                      int WXUNUSED(w), int WXUNUSED(h))
+    {                                   }
+    virtual wxSize GetVideoSize() const
+    {   return wxSize(0,0);             }
+
+    virtual double GetPlaybackRate()
+    {   return 0.0;                     }
+    virtual bool SetPlaybackRate(double WXUNUSED(dRate))
+    {   return false;                   }
+
+    virtual wxMediaState GetState()
+    {   return wxMEDIASTATE_STOPPED;    }
+
+    DECLARE_CLASS(wxMediaBackend)
 };
 
 //Event ID to give to our events
