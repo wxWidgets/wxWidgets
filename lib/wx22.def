@@ -11098,6 +11098,8 @@ EXPORTS
       GetEventTable__7wxFrameCFv
       ;wxFrame::DetachMenuBar()
       DetachMenuBar__7wxFrameFv
+      wxFrameMainWndProc
+      wxFrameWndProc
       ;wxFrame::SetClient(wxWindow*)
       SetClient__7wxFrameFP8wxWindow
   ;From object file:  ..\os2\gauge.cpp
