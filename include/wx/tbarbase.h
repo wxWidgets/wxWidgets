@@ -335,12 +335,12 @@ public:
     virtual void SetToolSeparation(int separation)
         { m_toolSeparation = separation; }
 
-    virtual wxSize GetToolMargins() { return wxSize(m_xMargin, m_yMargin); }
+    virtual wxSize GetToolMargins() { return GetToolMargins(); }
     virtual int GetToolPacking() { return m_toolPacking; }
     virtual int GetToolSeparation() { return m_toolSeparation; }
 
     // for compatibility
-    wxSize GetMargins() const { return GetToolMargins(); }
+    wxSize GetMargins() const { return wxSize(m_xMargin, m_yMargin); }
 
     // toolbar geometry
     // ----------------
