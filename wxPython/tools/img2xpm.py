@@ -25,11 +25,8 @@ Options:
 import sys, os, glob, getopt, string
 from wxPython.wx import *
 
-if wxPlatform == "__WXGTK__":
-    raise SystemExit, "This tool can not be used on wxGTK until wxGTK can save XPM files."
-
 wxInitAllImageHandlers()
-
+app = wxPySimpleApp()     # just to let global initialization to take place...
 
 def convert(file, maskClr, outputDir, outputName):
     if string.lower(os.path.splitext(file)[1]) == ".ico":

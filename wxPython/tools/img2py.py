@@ -32,7 +32,7 @@ Options:
 
 
 
-import sys, os, glob, getopt, tempfile
+import sys, os, glob, getopt, tempfile, string
 import cPickle, cStringIO, zlib
 import img2xpm
 
@@ -40,11 +40,20 @@ import img2xpm
 def crunch_data(data, compressed):
     # convert the lines to a Python list, pickle it and compress the result.
     lines = []
-    for line in data[2:]:  # skip the first two lines
-        lines.append(line[1:-3])  # chop one char from the front and three from the end
+    for line in data:
+        if line[0] == "\"":
+            # the line is typically (but not always):
+            #      [quote] <data> [quote][comma][newline]
 
-    # chop one extra char from the last line
-    lines[-1] = lines[-1][:-1]
+            # chop one char from the front
+            line = line[1:]
+
+            # now find the final quote and truncate there
+            quote = string.rfind(line, "\"")
+
+            # and append the remaining data to our list
+            lines.append(line[:quote])
+
 
     # pickle, crunch and convert it to a form suitable for embedding in code
     data = cPickle.dumps(lines)
