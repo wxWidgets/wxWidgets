@@ -1169,7 +1169,7 @@ wxListMainWindow::~wxListMainWindow()
 void wxListMainWindow::RefreshLine( wxListLineData *line )
 {
     if (m_dirty) return;
-    
+
     int x = 0;
     int y = 0;
     int w = 0;
@@ -2676,13 +2676,15 @@ wxListCtrl::~wxListCtrl()
 {
 }
 
-bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos, const wxSize &size,
-      long style, 
+bool wxListCtrl::Create(wxWindow *parent,
+                        wxWindowID id,
+                        const wxPoint &pos,
+                        const wxSize &size,
+                        long style,
 #if wxUSE_VALIDATORS
-      const wxValidator &validator,
+                        const wxValidator &validator,
 #endif
-      const wxString &name )
+                        const wxString &name)
 {
     m_imageListNormal = (wxImageList *) NULL;
     m_imageListSmall = (wxImageList *) NULL;
@@ -2690,28 +2692,16 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
     m_mainWin = (wxListMainWindow*) NULL;
     m_headerWin = (wxListHeaderWindow*) NULL;
 
-    long s = style;
-
-#ifdef __VMS__
-#pragma message disable codcauunr
-   // VMS reports on this part the warning:
-   // statement either is unreachable or causes unreachable code
-#endif
-   if ((s & wxLC_REPORT == 0) &&
-        (s & wxLC_LIST == 0) &&
-        (s & wxLC_ICON == 0))
+    if ( !(style & (wxLC_REPORT | wxLC_LIST | wxLC_ICON)) )
     {
-        s = s | wxLC_LIST;
+        style = style | wxLC_LIST;
     }
-#ifdef __VMS__
-#pragma message enable codcauunr
-#endif
 
     bool ret = wxControl::Create( parent,
-                                  id, 
-                                  pos, 
-                                  size, 
-                                  s, 
+                                  id,
+                                  pos,
+                                  size,
+                                  style,
 #if wxUSE_VALIDATORS
                                   validator,
 #endif
@@ -2721,9 +2711,10 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
     SetValidator( validator );
 #endif
 
-    if (s & wxSUNKEN_BORDER) s -= wxSUNKEN_BORDER;
+    if (style & wxSUNKEN_BORDER)
+        style -= wxSUNKEN_BORDER;
 
-    m_mainWin = new wxListMainWindow( this, -1, wxPoint(0,0), size, s );
+    m_mainWin = new wxListMainWindow( this, -1, wxPoint(0,0), size, style );
 
     if (HasFlag(wxLC_REPORT))
         m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(size.x,23), wxTAB_TRAVERSAL );
@@ -3112,7 +3103,7 @@ long wxListCtrl::InsertColumn( long col, wxListItem &item )
     wxASSERT( m_headerWin );
     m_mainWin->InsertColumn( col, item );
     m_headerWin->Refresh();
-    
+
     return 0;
 }
 
