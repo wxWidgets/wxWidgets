@@ -45,6 +45,7 @@
 #endif
 
 class WXDLLEXPORT wxTextCtrl;
+class WXDLLEXPORT wxTextCtrlBase;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -122,6 +123,13 @@ public:
     {
         return !HasTextColour() && !HasBackgroundColour() && !HasFont();
     }
+
+    // return the attribute having the valid font and colours: it uses the
+    // attributes set in attr and falls back first to attrDefault and then to
+    // the text control font/colours for those attributes which are not set
+    static wxTextAttr Combine(const wxTextAttr& attr,
+                              const wxTextAttr& attrDef,
+                              const wxTextCtrlBase *text);
 
 private:
     wxColour m_colText,

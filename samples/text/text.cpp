@@ -814,6 +814,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 wxTE_AUTO_URL |
                                 wxHSCROLL);
 
+
 #if 1
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);
@@ -826,7 +827,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->AppendText(_T("And the next 10 characters should be green and italic\n"));
     m_textrich->SetDefaultStyle(wxTextAttr(*wxCYAN, *wxBLUE));
     m_textrich->AppendText(_T("This text should be cyan on blue\n"));
-    m_textrich->SetDefaultStyle(*wxBLUE);
+    m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE, *wxWHITE));
     m_textrich->AppendText(_T("And this should be in blue and the text you ")
                            _T("type should be in blue as well"));
 #else

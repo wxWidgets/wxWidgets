@@ -1,3 +1,75 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxTextAttr %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxTextAttr}}\label{wxtextattr}
+
+wxTextAttr represents the attributes, or style, for a range of text in a\rtfsp
+\helpref{wxTextCtrl}{wxtextctrl}.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/textctrl.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTextAttr::wxTextAttr}\label{wxtextattrctor}
+
+\func{}{wxTextAttr}{\void}
+
+\func{}{wxTextAttr}{\param{const wxColour\& }{colText}, \param{const wxColour\& }{colBack = wxNullColour}, \param{const wxFont\& }{font = wxNullFont}}
+
+The constructors initialize one or more of the text foreground and background
+colours and font. The values not initialized in the constructor can be set
+later, otherwise \helpref{wxTextCtrl::SetStyle}{wxtextctrlsetstyle} will use
+the default values for them.
+
+\membersection{wxTextAttr::GetBackgroundColour}
+
+\constfunc{const wxColour\&}{GetBackgroundColour}{\void}
+
+Return the background colour specified by this attribute.
+
+\membersection{wxTextAttr::GetFont}
+
+\constfunc{const wxFont\&}{GetFont}{\void}
+
+Return the text font specified by this attribute.
+
+\membersection{wxTextAttr::GetTextColour}
+
+\constfunc{const wxColour\&}{GetTextColour}{\void}
+
+Return the text colour specified by this attribute.
+
+\membersection{wxTextAttr::HasBackgroundColour}
+
+\constfunc{bool}{HasBackgroundColour}{\void}
+
+Returns {\tt TRUE} if this style specifies the background colour to use.
+
+\membersection{wxTextAttr::HasFont}
+
+\constfunc{bool}{HasFont}{\void}
+
+Returns {\tt TRUE} if this style specifies the font to use.
+
+\membersection{wxTextAttr::HasTextColour}
+
+\constfunc{bool}{HasTextColour}{\void}
+
+Returns {\tt TRUE} if this style specifies the foreground colour to use.
+
+\membersection{wxTextAttr::IsDefault}
+
+\constfunc{bool}{IsDefault}{\void}
+
+Returns {\tt TRUE} if this style specifies any non-default attributes.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxTextCtrl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxTextCtrl}}\label{wxtextctrl}
 
 A text control allows text to be displayed and edited. It may be
@@ -44,6 +116,38 @@ it to always show it. It doesn't do anything under other platforms.}
 
 See also \helpref{window styles overview}{windowstyles} and
 \helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlconstr}.
+
+\wxheading{wxTextCtrl styles}
+
+Multi-line text controls support the styles, i.e. provide a possibility to set
+colours and font for individual characters in it (note that under Windows {\tt
+wxTE\_RICH} style is required for style support). To use the styles you can
+either call \helpref{SetDefaultStyle}{wxtextctrlsetdefaultstyle} before
+inserting the text or call \helpref{SetStyle}{wxtextctrlsetstyle} later to
+change the style of the text already in the control (the first solution is
+much more efficient).
+
+In either case, if the style doesn't specify some of the attributes (for
+example you only want to set the text colour but without changing the font nor
+the text background), the values of the default style will be used for them.
+If there is no default style, the attributes of the text control itself are
+used.
+
+So the following code correctly describes what it does: the second call
+to \helpref{SetDefaultStyle}{wxtextctrlsetdefaultstyle} doesn't change the
+text foreground colour (which stays red) while the last one doesn't change the
+background colour (which stays grey):
+
+{\small%
+\begin{verbatim}
+    text->SetDefaultStyle(wxTextAttr(*wxRED));
+    text->AppendText("Red text\n");
+    text->SetDefaultStyle(wxTextAttr(wxNullColour, *wxLIGHT_GREY));
+    text->AppendText("Red on grey text\n");
+    text->SetDefaultStyle(wxTextAttr(*wxBLUE);
+    text->AppendText("Blue on grey text\n");
+\end{verbatim}
+}%
 
 \wxheading{wxTextCtrl and C++ streams}
 
@@ -284,6 +388,16 @@ Copies the selected text to the clipboard and removes the selection.
 \func{void}{DiscardEdits}{\void}
 
 Resets the internal `modified' flag as if the current edits had been saved.
+
+\membersection{wxTextCtrl::GetDefaultStyle}{wxtextctrlgetdefaultstyle}
+
+\constfunc{const wxTextAttr\& }{GetDefaultStyle}{\void}
+
+Returns the style currently used for the new text.
+
+\wxheading{See also}
+
+\helpref{SetDefaultStyle}{wxtextctrlsetdefaultstyle}
 
 \membersection{wxTextCtrl::GetInsertionPoint}\label{wxtextctrlgetinsertionpoint}
 
@@ -554,6 +668,32 @@ Saves the contents of the control in a text file.
 
 TRUE if the operation was successful, FALSE otherwise.
 
+\membersection{wxTextCtrl::SetDefaultStyle}\label{wxtextctrlsetdefaultstyle}
+
+\func{bool}{SetDefaultStyle}{\param{const wxTextAttr\& }{style}}
+
+Changes the default style to use for the new text which is going to be added
+to the control using \helpref{WriteText}{wxtextctrlwritetext} or\rtfsp
+\helpref{AppendText}{wxtextctrlappendtext}.
+
+If either of the font, foreground, or background colour is not set in\rtfsp
+{\it style}, the values of the previous default style are used for them. If
+the previous default style didn't set them neither, the global font or colours
+of the text control itself are used as fall back.
+
+\wxheading{Parameters}
+
+\docparam{style}{The style for the new text.}
+
+\wxheading{Return value}
+
+{\tt TRUE} on success, {\tt FALSE} if an error occured - may also mean that
+the styles are not supported under this platform.
+
+\wxheading{See also}
+
+\helpref{GetDefaultStyle}{wxtextctrlgetdefaultstyle}
+
 \membersection{wxTextCtrl::SetEditable}\label{wxtextctrlseteditable}
 
 \func{virtual void}{SetEditable}{\param{const bool}{ editable}}
@@ -616,6 +756,27 @@ Selects the text starting at the first position up to (but not including) the ch
 \docparam{from}{The first position.}
 
 \docparam{to}{The last position.}
+
+\membersection{wxTextCtrl::SetStyle}\label{wxtextctrlsetstyle}
+
+\func{bool}{SetStyle}{\param{long }{start}, \param{long }{end}, \param{const wxTextAttr\& }{style}}
+
+Changes the style of the selection. If either of the font, foreground, or
+background colour is not set in {\it style}, the values of\rtfsp
+\helpref{GetDefaultStyle()}{wxtextctrlgetdefaultstyle} are used.
+
+\wxheading{Parameters}
+
+\docparam{start}{The start of selection to change.}
+
+\docparam{end}{The end of selection to change.}
+
+\docparam{style}{The new style for the selection.}
+
+\wxheading{Return value}
+
+{\tt TRUE} on success, {\tt FALSE} if an error occured - may also mean that
+the styles are not supported under this platform.
 
 \membersection{wxTextCtrl::SetValue}\label{wxtextctrlsetvalue}
 

@@ -69,6 +69,41 @@ wxTextCtrlBase::~wxTextCtrlBase()
 // style functions - not implemented here
 // ----------------------------------------------------------------------------
 
+/* static */
+wxTextAttr wxTextAttr::Combine(const wxTextAttr& attr,
+                               const wxTextAttr& attrDef,
+                               const wxTextCtrlBase *text)
+{
+    wxFont font = attr.GetFont();
+    if ( !font.Ok() )
+    {
+        font = attrDef.GetFont();
+
+        if ( text && !font.Ok() )
+            font = text->GetFont();
+    }
+
+    wxColour colFg = attr.GetTextColour();
+    if ( !colFg.Ok() )
+    {
+        colFg = attrDef.GetTextColour();
+
+        if ( text && !colFg.Ok() )
+            colFg = text->GetForegroundColour();
+    }
+
+    wxColour colBg = attr.GetBackgroundColour();
+    if ( !colBg.Ok() )
+    {
+        colBg = attrDef.GetBackgroundColour();
+
+        if ( text && !colBg.Ok() )
+            colBg = text->GetBackgroundColour();
+    }
+
+    return wxTextAttr(colFg, colBg, font);
+}
+
 // apply styling to text range
 bool wxTextCtrlBase::SetStyle(long WXUNUSED(start), long WXUNUSED(end),
                               const wxTextAttr& WXUNUSED(style))
@@ -78,9 +113,11 @@ bool wxTextCtrlBase::SetStyle(long WXUNUSED(start), long WXUNUSED(end),
 }
 
 // change default text attributes
-bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr &style)
+bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
 {
-    m_defaultStyle = style;
+    // keep the old attributes if the new style doesn't specify them
+    m_defaultStyle = wxTextAttr::Combine(style, m_defaultStyle, this);
+
     return TRUE;
 }
 

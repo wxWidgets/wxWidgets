@@ -42,6 +42,28 @@ extern bool       g_blockEventsOnDrag;
 extern wxCursor   g_globalCursor;
 
 // ----------------------------------------------------------------------------
+// helpers
+// ----------------------------------------------------------------------------
+
+static void wxGtkTextInsert(GtkWidget *text,
+                            const wxTextAttr& attr,
+                            const char *txt,
+                            size_t len)
+{
+    GdkFont *font = attr.HasFont() ? attr.GetFont().GetInternalFont()
+                                   : NULL;
+
+    GdkColor *colFg = attr.HasTextColour() ? attr.GetTextColour().GetColor()
+                                           : NULL;
+
+    GdkColor *colBg = attr.HasBackgroundColour()
+                        ? attr.GetBackgroundColour().GetColor()
+                        : NULL;
+
+    gtk_text_insert( GTK_TEXT(text), font, colFg, colBg, txt, len );
+}
+
+// ----------------------------------------------------------------------------
 // "insert_text" for GtkEntry
 // ----------------------------------------------------------------------------
 
@@ -245,7 +267,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
 
     m_parent->DoAddChild( this );
-    
+
     m_focusWidget = m_text;
 
     PostCreation();
@@ -425,31 +447,20 @@ void wxTextCtrl::WriteText( const wxString &text )
     {
         // After cursor movements, gtk_text_get_point() is wrong by one.
         gtk_text_set_point( GTK_TEXT(m_text), GTK_EDITABLE(m_text)->current_pos );
-        
+
         // if we have any special style, use it
         if ( !m_defaultStyle.IsDefault() )
         {
-            GdkFont *font = m_defaultStyle.HasFont()
-                                ? m_defaultStyle.GetFont().GetInternalFont()
-                                : NULL;
-
-            GdkColor *colFg = m_defaultStyle.HasTextColour()
-                                ? m_defaultStyle.GetTextColour().GetColor()
-                                : NULL;
-
-            GdkColor *colBg = m_defaultStyle.HasBackgroundColour()
-                                ? m_defaultStyle.GetBackgroundColour().GetColor()
-                                : NULL;
-
             GetInsertionPoint();
-            gtk_text_insert( GTK_TEXT(m_text), font, colFg, colBg, txt, -1 );
+
+            wxGtkTextInsert(m_text, m_defaultStyle, txt, txtlen);
         }
         else // no style
         {
             gint len = GTK_EDITABLE(m_text)->current_pos;
             gtk_editable_insert_text( GTK_EDITABLE(m_text), txt, txtlen, &len );
         }
-        
+
         // Bring editable's cursor back uptodate.
         GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
     }
@@ -465,7 +476,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         // Bring entry's cursor uptodate.
         gtk_entry_set_position( GTK_ENTRY(m_text), GTK_EDITABLE(m_text)->current_pos );
     }
-    
+
     m_modified = TRUE;
 }
 
@@ -1075,7 +1086,7 @@ bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
     return TRUE;
 }
 
-bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr &style )
+bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
 {
     /* VERY dirty way to do that - removes the required text and re-adds it
        with styling (FIXME) */
@@ -1109,19 +1120,13 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr &style )
         size_t txtlen = tmp.length();
 #endif
 
-        GdkFont *font = style.HasFont()
-                            ? style.GetFont().GetInternalFont()
-                            : NULL;
-
-        GdkColor *colFg = style.HasTextColour()
-                            ? style.GetTextColour().GetColor()
-                            : NULL;
-
-        GdkColor *colBg = style.HasBackgroundColour()
-                            ? style.GetBackgroundColour().GetColor()
-                            : NULL;
-
-        gtk_text_insert( GTK_TEXT(m_text), font, colFg, colBg, txt, txtlen );
+        // use the attributes from style which are set in it and fall back
+        // first to the default style and then to the text control default
+        // colours for the others
+        wxGtkTextInsert(m_text,
+                        wxTextAttr::Combine(style, m_defaultStyle, this),
+                        txt,
+                        txtlen);
 
         /* does not seem to help under GTK+ 1.2 !!!
         gtk_editable_set_position( GTK_EDITABLE(m_text), old_pos ); */
