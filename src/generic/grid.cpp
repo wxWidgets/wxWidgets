@@ -1656,11 +1656,9 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
         }
         else
         {
-            if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
-            {
-                m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+            m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+            if ( m_rowLabelWin->GetCursor() == m_rowResizeCursor )
                 m_rowLabelWin->SetCursor( *wxSTANDARD_CURSOR );
-            }
         }
     }
 }
@@ -1845,11 +1843,9 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         }
         else
         {
-            if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
-            {
-                m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+            m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+            if ( m_colLabelWin->GetCursor() == m_colResizeCursor )
                 m_colLabelWin->SetCursor( *wxSTANDARD_CURSOR );
-            }
         }
     }
 }
