@@ -161,7 +161,12 @@ inline wxClassInfo *wxClassInfo::GetBaseByName(const wxChar *name)
     wxClassInfo *classInfo = (wxClassInfo *)sm_classTable->Get(name);
 
     // this must be fixed, other things risk work wrongly later if you get this
-    wxASSERT_MSG( classInfo, _T("base class unknown to wxWindows RTTI") );
+    wxASSERT_MSG( classInfo,
+                  wxString::Format
+                  (
+                    _T("base class '%s' is unknown to wxWindows RTTI"),
+                    name
+                  ) );
 
     return classInfo;
 }
