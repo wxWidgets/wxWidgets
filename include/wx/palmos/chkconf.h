@@ -14,6 +14,10 @@
 #ifndef _WX_PALMOS_CHKCONF_H_
 #define _WX_PALMOS_CHKCONF_H_
 
+#if WXWIN_COMPATIBILITY_2_4
+    #error "wxPalmOS port was introduced after 2.4.X"
+#endif
+
 /*
  * disable the settings which don't work for some compilers
  */
@@ -21,7 +25,6 @@
 /*
  * If using PostScript-in-MSW in Univ, must enable PostScript
  */
-
 #if defined(__WXUNIVERSAL__) && wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW && !wxUSE_POSTSCRIPT
 #undef wxUSE_POSTSCRIPT
 #define wxUSE_POSTSCRIPT 1

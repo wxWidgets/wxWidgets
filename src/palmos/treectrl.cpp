@@ -456,22 +456,6 @@ wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
     return 0;
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-
-wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item,
-                                       long& cookie) const
-{
-    return 0;
-}
-
-wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
-                                      long& cookie) const
-{
-    return 0;
-}
-
-#endif // WXWIN_COMPATIBILITY_2_4
-
 wxTreeItemId wxTreeCtrl::GetLastChild(const wxTreeItemId& item) const
 {
     return 0;
@@ -532,19 +516,6 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
 {
     return 0;
 }
-
-// for compatibility only
-#if WXWIN_COMPATIBILITY_2_4
-
-wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
-                                    const wxString& text,
-                                    int image, int selImage,
-                                    long insertAfter)
-{
-    return 0;
-}
-
-#endif // WXWIN_COMPATIBILITY_2_4
 
 wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                                  int image, int selectedImage,
@@ -620,12 +591,6 @@ void wxTreeCtrl::CollapseAndReset(const wxTreeItemId& item)
 void wxTreeCtrl::Toggle(const wxTreeItemId& item)
 {
 }
-
-#if WXWIN_COMPATIBILITY_2_4
-void wxTreeCtrl::ExpandItem(const wxTreeItemId& item, int action)
-{
-}
-#endif
 
 void wxTreeCtrl::Unselect()
 {

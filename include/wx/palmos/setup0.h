@@ -42,7 +42,7 @@
 // in the version after it completely.
 //
 // Recommended setting: 0 (please update your code)
-#define WXWIN_COMPATIBILITY_2_4 1
+#define WXWIN_COMPATIBILITY_2_4 0
 
 // Set to 0 for accurate dialog units, else 1 to be as per 2.1.16 and before.
 // If migrating between versions, your dialogs may seem to shrink.
