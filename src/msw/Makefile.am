@@ -104,6 +104,7 @@ libwx_msw_la_SOURCES = \
  zstream.cpp \
 \
  choicdgg.cpp \
+ dcpsg.cpp \
  gridg.cpp \
  laywin.cpp \
  panelg.cpp \
