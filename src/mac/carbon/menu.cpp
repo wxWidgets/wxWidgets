@@ -406,23 +406,64 @@ void wxMenu::MacBeforeDisplay( bool isSubMenu )
         {
             subMenu->MacBeforeDisplay( true ) ;
         }
-        else
+        else // normal item
         {
             #if TARGET_CARBON
             if ( UMAGetSystemVersion() >= 0x1000 )
             {
-                if ( item->GetId() == wxApp::s_macPreferencesMenuItemId || item->GetId() == wxApp::s_macExitMenuItemId)
+                // what we do here is to hide the special items which are
+                // shown in the application menu anyhow -- it doesn't make
+                // sense to show them in their normal place as well
+                if ( item->GetId() == wxApp::s_macPreferencesMenuItemId ||
+                        item->GetId() == wxApp::s_macExitMenuItemId )
                 {
-                    ChangeMenuItemAttributes( MAC_WXHMENU( GetHMenu() ) , pos + 1, kMenuItemAttrHidden, 0 );
-                    if ( GetMenuItems().GetCount() == pos + 1 &&
-                            previousItem != NULL &&
-                                previousItem->IsSeparator() )
+                    ChangeMenuItemAttributes( MAC_WXHMENU( GetHMenu() ),
+                                              pos + 1, kMenuItemAttrHidden, 0 );
+
+                    // also check for a separator which was used just to
+                    // separate this item from the others, so don't leave
+                    // separator at the menu start or end nor 2 consecutive
+                    // separators
+                    wxMenuItemList::Node *nextNode = node->GetNext();
+                    wxMenuItem *next = nextNode ? nextNode->GetData() : NULL;
+
+                    size_t posSeptoHide;
+                    if ( !previousItem && next && next->IsSeparator() )
                     {
-                        ChangeMenuItemAttributes( MAC_WXHMENU( GetHMenu() ) , pos , kMenuItemAttrHidden, 0 );
+                        // next (i.e. second as we must be first) item is
+                        // the separator to hide
+                        wxASSERT_MSG( pos == 0, _T("should be the menu start") );
+                        posSeptoHide = 2;
+                    }
+                    else if ( GetMenuItems().GetCount() == pos + 1 &&
+                                previousItem != NULL &&
+                                    previousItem->IsSeparator() )
+                    {
+                        // prev item is a trailing separator we want to hide
+                        posSeptoHide = pos;
+                    }
+                    else if ( previousItem && previousItem->IsSeparator() &&
+                                next && next->IsSeparator() )
+                    {
+                        // two consecutive separators, this is one too many
+                        posSeptoHide = pos;
+                    }
+                    else // no separators to hide
+                    {
+                        posSeptoHide = 0;
+                    }
+
+                    if ( posSeptoHide )
+                    {
+                        // hide the separator as well
+                        ChangeMenuItemAttributes( MAC_WXHMENU( GetHMenu() ),
+                                                  posSeptoHide,
+                                                  kMenuItemAttrHidden,
+                                                  0 );
                     }
                 }
             }
-            #endif
+            #endif // TARGET_CARBON
         }
         previousItem = item ;
     }
