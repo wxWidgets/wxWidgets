@@ -174,7 +174,7 @@ bool wxDialog::Create(wxWindow *parent,
 #ifdef __WXMICROWIN__
     extern const wxChar *wxFrameClassName;
     
-    int msflags = WS_OVERLAPPED;
+    int msflags = WS_OVERLAPPED|WS_POPUP;
     if (style & wxCAPTION)
         msflags |= WS_CAPTION;
     if (style & wxCLIP_CHILDREN)
