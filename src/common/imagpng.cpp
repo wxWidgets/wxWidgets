@@ -23,7 +23,7 @@
   #include "wx/defs.h"
 #endif
 
-#if wxUSE_STREAMS && wxUSE_LIBPNG
+#if wxUSE_LIBPNG
 
 #include "wx/image.h"
 #include "wx/bitmap.h"
@@ -56,6 +56,8 @@
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 #endif
+
+#if wxUSE_LIBPNG
 
 #if defined(__VISAGECPP__)
 #define LINKAGEMODE _Optlink
@@ -353,5 +355,6 @@ bool wxPNGHandler::CanRead( wxInputStream& stream )
     return (hdr[0] == 0x89 && hdr[1] == 'P' && hdr[2] == 'N' && hdr[3] == 'G');
 }
 
-#endif  // wxUSE_STREAMS && wxUSE_LIBPNG
+#endif  // wxUSE_STREAMS
 
+#endif  // wxUSE_LIBPNG

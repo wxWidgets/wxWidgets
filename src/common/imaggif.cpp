@@ -23,7 +23,7 @@
 #  include "wx/defs.h"
 #endif
 
-#if wxUSE_STREAMS && wxUSE_GIF
+#if wxUSE_GIF
 
 #include "wx/image.h"
 #include "wx/gifdecod.h"
@@ -37,6 +37,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
 //-----------------------------------------------------------------------------
 // wxGIFHandler
 //-----------------------------------------------------------------------------
+
+#if wxUSE_STREAMS
 
 bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose )
 {
@@ -89,4 +91,6 @@ bool wxGIFHandler::CanRead( wxInputStream& stream )
     return ok;
 }
 
-#endif  // wxUSE_STREAMS && wxUSE_GIF
+#endif  // wxUSE_STREAMS
+
+#endif  // wxUSE_GIF

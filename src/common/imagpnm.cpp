@@ -23,7 +23,7 @@
 #  include "wx/setup.h"
 #endif
 
-#if wxUSE_STREAMS && wxUSE_PNM
+#if wxUSE_PNM
 
 #include "wx/image.h"
 #include "wx/log.h"
@@ -37,6 +37,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxPNMHandler,wxImageHandler)
 #endif
 
+#if wxUSE_STREAMS
 
 void Skip_Comment(wxInputStream &stream)
 {
@@ -155,5 +156,6 @@ bool wxPNMHandler::CanRead( wxInputStream& stream )
 }
 
 
-#endif // wxUSE_STREAMS && wxUSE_PNM
+#endif // wxUSE_STREAMS
 
+#endif // wxUSE_PNM
