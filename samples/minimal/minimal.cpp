@@ -178,6 +178,17 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("This is a minimal sample\nA second line in the message box",
-                 "About Minimal", wxOK | wxICON_INFORMATION, this);
+    wxString msg;
+    msg.Printf("This is the about dialog of minimal sample.\n"
+               "Welcome to %s"
+#ifdef wxBETA_NUMBER
+               " (beta %d)!"
+#endif // wxBETA_NUMBER
+               , wxVERSION_STRING
+#ifdef wxBETA_NUMBER
+               , wxBETA_NUMBER
+#endif // wxBETA_NUMBER
+              );
+
+    wxMessageBox(msg, "About Minimal", wxOK | wxICON_INFORMATION, this);
 }
