@@ -3,10 +3,10 @@ msgstr ""
 "Project-Id-Version: wxWindows-2.2\n"
 "POT-Creation-Date: 2000-10-16 04:14+0930\n"
 "PO-Revision-Date: 2000-08-11 11:11+0200\n"
-"Last-Translator: Mark Johnson <wxWindows@mj10777.de>\n"
+"Last-Translator: Robert Roebling <robert@roebling.de>\n"
 "Language-Team: wxWindows Team <wx-devel@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso8859-2\n"
+"Content-Type: text/plain; charset=iso8859-1\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: ../src/generic/dirdlgg.cpp:550
@@ -42,7 +42,7 @@ msgstr " Seitenansicht"
 
 #: ../src/generic/filedlgg.cpp:328
 msgid " bytes "
-msgstr " bytes "
+msgstr " Bytes "
 
 #: ../src/common/paper.cpp:124
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -80,7 +80,7 @@ msgstr "%i von %i"
 #: ../src/common/cmdline.cpp:735
 #, c-format
 msgid "%s (or %s)"
-msgstr " %s (oder %s)"
+msgstr "%s (oder %s)"
 
 #: ../src/generic/logg.cpp:239
 #, c-format
@@ -112,7 +112,7 @@ msgstr "%s ist keine Icon-Resourcenangabe"
 #: ../src/common/resource.cpp:3085
 #, c-format
 msgid "%s: ill-formed resource file syntax."
-msgstr "%s: falsch formatierte Resourcendatei-Syntax"
+msgstr "%s: falscher  Resourcendatei-Syntax"
 
 #: ../src/generic/logg.cpp:473 ../src/generic/tipdlg.cpp:170
 msgid "&Close"
@@ -140,11 +140,11 @@ msgstr "&Nächster Tip"
 
 #: ../src/common/docview.cpp:1945 ../src/common/docview.cpp:1956
 msgid "&Redo"
-msgstr "&Wiederholen"
+msgstr "&Wiederherstellen"
 
 #: ../src/common/docview.cpp:1939 ../src/common/docview.cpp:1966
 msgid "&Redo "
-msgstr "&Wiederholen "
+msgstr "&Wiederherstellen "
 
 #: ../src/generic/logg.cpp:469 ../src/generic/logg.cpp:770
 msgid "&Save..."
@@ -209,7 +209,7 @@ msgstr "'%s' sollte nur alphabetische Zeichen enthalten."
 #: ../src/common/valtext.cpp:172
 #, c-format
 msgid "'%s' should only contain alphabetic or numeric characters."
-msgstr "'%s' sollte nur alphanumersche Zeichen enthalten."
+msgstr "'%s' sollte nur alphanumerische Zeichen enthalten."
 
 #: ../src/html/helpfrm.cpp:679
 msgid "(Help)"
@@ -318,7 +318,7 @@ msgstr "A4 Blatt, 210 x 297 mm"
 
 #: ../src/common/paper.cpp:114
 msgid "A4 small sheet, 210 x 297 mm"
-msgstr "A4 klein Blatt, 210 x 297 mm"
+msgstr "A4 kleines Blatt, 210 x 297 mm"
 
 #: ../src/common/paper.cpp:115
 msgid "A5 sheet, 148 x 210 mm"
@@ -388,15 +388,15 @@ msgstr "BMP: Kann noch nicht mit 4bit verschlüsseltem Code umgehen."
 
 #: ../src/common/imagbmp.cpp:266 ../src/common/imagbmp.cpp:278
 msgid "BMP: Couldn't allocate memory."
-msgstr "BMP: Speicher konnte nicht allokiert werden."
+msgstr "BMP: Speicher konnte nicht alloziert werden."
 
 #: ../src/common/imagbmp.cpp:62
 msgid "BMP: Couldn't save invalid image."
-msgstr "BMP: Konnte ungültige Format nicht sichern."
+msgstr "BMP: Konnte ungültiges Bild nicht sichern."
 
 #: ../src/common/imagbmp.cpp:154
 msgid "BMP: Couldn't write data."
-msgstr "BMP: Datei konnte nich gesichert werden."
+msgstr "BMP: Datei konnte nich geschrieben werden."
 
 #: ../src/common/imagbmp.cpp:131
 msgid "BMP: Couldn't write the file header."
@@ -404,15 +404,15 @@ msgstr "BMP: Dateikopf konnte nicht geschrieben werden."
 
 #: ../src/common/imagbmp.cpp:257
 msgid "BMP: Encoding doesn't match bitdepth."
-msgstr "BMP: Verschlüsselung entspricht der Bittiefe nicht."
+msgstr "BMP: Verschlüsselung entspricht nicht der Bittiefe."
 
 #: ../src/common/imagbmp.cpp:220
 msgid "BMP: Image height > 32767 pixels for file."
-msgstr "BMP: Bildhöhe > 32767 pixels."
+msgstr "BMP: Bildhöhe > 32767 Pixel."
 
 #: ../src/common/imagbmp.cpp:214
 msgid "BMP: Image width > 32767 pixels for file."
-msgstr "BMP: Bildbreite > 32767 pixels."
+msgstr "BMP: Bildbreite > 32767 Pixel."
 
 #: ../src/common/imagbmp.cpp:234
 msgid "BMP: Unknown bitdepth in file."
@@ -522,8 +522,7 @@ msgstr "Kann nicht rückgängig machen "
 #: ../src/common/image.cpp:953
 #, c-format
 msgid "Can't check image format of file '%s': file does not exist."
-msgstr ""
-"Kann Bildformat nicht überprüfen bei Datei '%s': Datei nicht vorhanden."
+msgstr "Kann Bildformat nicht überprüfen bei Datei '%s': Datei nicht vorhanden."
 
 #: ../src/msw/registry.cpp:409
 #, c-format
@@ -548,11 +547,11 @@ msgstr "Kann Registrierungsschlüssel '%s' nicht anlegen."
 
 #: ../src/msw/utilsexc.cpp:418
 msgid "Can't create the inter-process read pipe"
-msgstr "Kann 'inter-process- read-pipe' nicht erzeugen"
+msgstr "Kann 'inter-process read-pipe' nicht erzeugen"
 
 #: ../src/msw/utilsexc.cpp:430
 msgid "Can't create the inter-process write pipe"
-msgstr "Kann 'inter-process-write-pipe' nicht erzeugen"
+msgstr "Kann 'inter-process write-pipe' nicht erzeugen"
 
 #: ../src/msw/thread.cpp:494
 msgid "Can't create thread"
@@ -754,7 +753,7 @@ msgstr "Baltisch (ISO-8859-13)"
 
 #: ../src/common/fontmap.cpp:98
 msgid "Central European (ISO-8859-2/Latin 2)"
-msgstr "Zentral Europäisch (ISO-8859-2/Latin 2)"
+msgstr "Zentral-Europäisch (ISO-8859-2/Latin 2)"
 
 #: ../src/msw/dialup.cpp:767
 msgid "Choose ISP to dial"
@@ -896,12 +895,12 @@ msgstr "Konnte Zwischenablage-Format '%s' nicht registrieren."
 
 #: ../src/msw/thread.cpp:198
 msgid "Couldn't release a mutex"
-msgstr "Kann Mutex nicht freigeben."
+msgstr "Konnte einen Mutex nicht freigeben."
 
 #: ../src/msw/listctrl.cpp:615
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
-msgstr "Kann keine Informationen über ListControl %d bekommen."
+msgstr "Kann keine Informationen über List-Control %d bekommen."
 
 #: ../src/msw/thread.cpp:933
 msgid "Couldn't terminate thread"
@@ -917,7 +916,7 @@ msgstr "Neues Verzeichnis anlegen"
 
 #: ../src/generic/filedlgg.cpp:890
 msgid "Current directory:"
-msgstr "Aktuelle Verzeichnis"
+msgstr "Aktuelles Verzeichnis"
 
 #: ../src/common/fontmap.cpp:101
 msgid "Cyrillic (Latin 5)"
@@ -984,7 +983,7 @@ msgstr "Möchten Sie die Änderungen im Dokument %s sichern?"
 
 #: ../src/html/htmlwin.cpp:216
 msgid "Done"
-msgstr ":-) Ich habe fertig"
+msgstr "Ich habe fertig :-)"
 
 #: ../src/generic/progdlgg.cpp:313
 msgid "Done."
@@ -1465,7 +1464,7 @@ msgstr "Icon %s nicht gefunden."
 
 #: ../src/common/resource.cpp:251
 msgid "Ill-formed resource file syntax."
-msgstr "Ungültige Syntax in 'resource file'"
+msgstr "Ungültige Syntax in Resource-Datei"
 
 #: ../src/generic/dirdlgg.cpp:268 ../src/generic/filedlgg.cpp:717
 msgid "Illegal directory name."
@@ -1498,7 +1497,7 @@ msgstr "Hilfe-Index"
 #: ../src/common/fontmap.cpp:108
 #, fuzzy
 msgid "Indian (ISO-8859-12)"
-msgstr "Nordisch (ISO-8859-10)"
+msgstr "Indisch (ISO-8859-12)"
 
 #: ../src/common/imagtiff.cpp:171
 msgid "Invalid TIFF image index."
@@ -1566,12 +1565,12 @@ msgstr "Laden : "
 #: ../src/common/imagpnm.cpp:72
 msgid "Loading Grey Ascii PNM image is not yet implemented."
 msgstr ""
-"Das Laden von 'Grey Ascii PNM'-Bilddateien wird z.Zt. nicht unterstützt."
+"Das Laden von Graustufen Ascii PNM-Bilddateien wird z.Zt. nicht unterstützt."
 
 #: ../src/common/imagpnm.cpp:75
 msgid "Loading Grey Raw PNM image is not yet implemented."
 msgstr ""
-"Das Laden von 'Grey Ascii PNM'-Bilddateien wird z.Zt. nicht unterstützt."
+"Das Laden von Graustufen Ascii PNM-Bilddateien wird z.Zt. nicht unterstützt."
 
 #: ../src/generic/logg.cpp:534
 #, c-format
@@ -1709,7 +1708,7 @@ msgstr "Öffne HTLM Dokument"
 #: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:604
 #: ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:744
 msgid "Operation not permitted."
-msgstr "Ausführung nicht erlaubt"
+msgstr "Ausführung nicht erlaubt."
 
 #: ../src/common/cmdline.cpp:590
 #, c-format
@@ -1961,8 +1960,7 @@ msgstr "Registrierungsschlüssel '%s' bereits vorhanden."
 #: ../src/msw/registry.cpp:496
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
-msgstr ""
-"Registriersschlüssel '%s' existiert nicht, Umbenennung daher nicht möglich."
+msgstr "Registriersschlüssel '%s' existiert nicht, Umbenennung daher nicht möglich."
 
 #: ../src/msw/registry.cpp:623
 #, c-format
@@ -2040,11 +2038,11 @@ msgstr "Alle Bücher durchsuchen"
 
 #: ../src/html/helpfrm.cpp:628
 msgid "Searching..."
-msgstr "Suchen..."
+msgstr "Suche..."
 
 #: ../src/generic/dirdlgg.cpp:191
 msgid "Sections"
-msgstr "Optionen"
+msgstr "Bereiche"
 
 #: ../src/common/ffile.cpp:221
 #, c-format
@@ -2090,7 +2088,7 @@ msgstr "Alles zeigen"
 
 #: ../src/html/helpfrm.cpp:365
 msgid "Show all items in index"
-msgstr "Alle Themen im Index anzeigen"
+msgstr "Alle Einträge im Index anzeigen"
 
 #: ../src/generic/filedlgg.cpp:913
 msgid "Show hidden files"
@@ -2277,7 +2275,7 @@ msgstr "Zeit"
 
 #: ../src/generic/tipdlg.cpp:162
 msgid "Tip of the Day"
-msgstr "Tip des Tages"
+msgstr "Tipp des Tages"
 
 #: ../src/generic/tipdlg.cpp:138
 msgid "Tips not available, sorry!"
@@ -2440,7 +2438,7 @@ msgstr "Westeuropäisch (ISO-8859-1/Latin 1)"
 #: ../src/common/fontmap.cpp:111
 #, fuzzy
 msgid "Western European with Euro (ISO-8859-15/Latin 0)"
-msgstr "Westeuropäisch neu (ISO-8859-15/Latin 0)"
+msgstr "Westeuropäisch mit Euro (ISO-8859-15/Latin 0)"
 
 #: ../src/html/helpfrm.cpp:406
 msgid "Whole words only"
@@ -2657,7 +2655,7 @@ msgstr "Kann Datei '%s' nicht schließen"
 #: ../src/common/file.cpp:257
 #, c-format
 msgid "can't close file descriptor %d"
-msgstr "Kann Dateibeschreibung '%s' nicht schließen"
+msgstr "Kann Datei-Deskriptor '%s' nicht schließen"
 
 #: ../src/common/file.cpp:555 ../src/common/file.cpp:565
 #, c-format
@@ -2672,7 +2670,7 @@ msgstr "Kann Datei '%s' nicht anlegen."
 #: ../src/common/fileconf.cpp:917
 #, c-format
 msgid "can't delete user configuration file '%s'"
-msgstr "Kann  Konfigurationsdatei '%s' nicht löschen."
+msgstr "Kann Konfigurationsdatei '%s' nicht löschen."
 
 #: ../src/common/file.cpp:436
 #, c-format
@@ -2724,7 +2722,7 @@ msgstr "Kann Benutzer-Konfigurationsdatei nicht öffnen."
 #: ../src/common/file.cpp:283
 #, c-format
 msgid "can't read from file descriptor %d"
-msgstr "Kann Dateibeschreibung '%d' nicht lesen"
+msgstr "Kann Datei-Deskriptor '%d' nicht lesen"
 
 #: ../src/common/file.cpp:550 ../src/common/file.cpp:560
 #, c-format

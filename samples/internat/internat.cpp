@@ -115,7 +115,8 @@ bool MyApp::OnInit()
   };
 
   // there are very few systems right now which support locales other than "C"
-  m_locale.Init(language, langid, "C");
+  m_locale.Init(NULL, "de", "");
+//  m_locale.Init(language, langid, "C");
                // note that under GTK starting from version 1.2.8 if
                // you set locale to "C" and then use ASCII characters above
                // #128 in GUI elements, they will be truncated (it seems GTK
