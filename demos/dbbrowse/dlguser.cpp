@@ -36,6 +36,12 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
   wxDialog(parent, ID_DIALOG_DSN, title)
 {
  int chSize;                          // Height of Font * 1.4 = Height of wxTextCtrl
+
+ float ratio = 1.4;
+#ifdef __WXMOTIF__
+ ratio = 2.1;
+#endif
+
  SetBackgroundColour("wheat");
  pDoc = p_Doc;
  wxLayoutConstraints* layout;
@@ -55,7 +61,7 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
  
  m_UserName = new wxTextCtrl(this, -1, "");
  m_UserName->SetFont(* pDoc->ft_Doc);
- chSize = m_UserName->GetCharHeight()*1.4;
+ chSize = (int) (m_UserName->GetCharHeight()*ratio);
 
  layout = new wxLayoutConstraints;
  layout->left.SameAs(m_Label1, wxRight, 10);
