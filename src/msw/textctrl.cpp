@@ -353,10 +353,8 @@ void wxTextCtrl::AdoptAttributesFromHWND()
 
 void wxTextCtrl::SetupColours()
 {
-    // FIXME why is bg colour not inherited from parent?
-
     wxColour bkgndColour;
-    if (IsEditable())
+    if (IsEditable() || (m_windowStyle & wxTE_MULTILINE))
         bkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
     else
         bkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);

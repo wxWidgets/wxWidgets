@@ -118,7 +118,9 @@ void wxWindowBase::InitBase()
     wxSystemSettings settings;
 
     m_backgroundColour = settings.GetSystemColour(wxSYS_COLOUR_BTNFACE);
-    m_foregroundColour = *wxBLACK;  // TODO take this from sys settings too?
+    // m_foregroundColour = *wxBLACK;  // TODO take this from sys settings too?
+    m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
+
 #if !defined(__WXMAC__) && !defined(__WXGTK__)
     m_font = *wxSWISS_FONT;         //      and this?
 #else
