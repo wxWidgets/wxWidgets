@@ -200,7 +200,6 @@ extern LONG APIENTRY _EXPORT
 #if wxUSE_GUI
 
 #include <wx/gdicmn.h>
-#include <wx/log.h>
 
 // make conversion from wxColour and COLORREF a bit less painful
 inline COLORREF wxColourToRGB(const wxColour& c)
