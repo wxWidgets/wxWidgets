@@ -219,6 +219,7 @@
         <include>$(INC_ZLIB)</include>
         <include>$(INC_ODBC)</include>
         <include>$(INC_REGEX)</include>
+        <include>$(INC_EXPAT)</include>
     </template>
 
     <!-- for both GUI and wxBase libs/samples: -->
