@@ -27,11 +27,18 @@ wxStyledTextEditor also supports setting markers in the margin...
 
 
 ...and indicators within the text.  You can use these for whatever
-you want in your application.  Drag and Drop of text works, as well
-as virtually unlimited Undo and Redo capabilities, (right click to
-try it out.)
+you want in your application.  Cut, Copy, Paste, Drag and Drop of
+text works, as well as virtually unlimited Undo and Redo
+capabilities, (right click to try it out.)
 
 """
+
+if wxPlatform == '__WXMSW__':
+    face1 = 'Ariel'
+    face2 = 'Times New Roman'
+else:
+    face1 = 'Helvetica'
+    face2 = 'Times'
 
 
 #----------------------------------------------------------------------
@@ -41,21 +48,54 @@ def runTest(frame, nb, log):
 
     ed.SetText(demoText)
 
+
+    # make some styles
+    ed.StyleSetSpec(1, "size:9,bold,face:%s,fore:#0000FF" % face1)
+    ed.StyleSetSpec(2, "face:%s,italic,fore:#FF0000,size:8" % face2)
+    ed.StyleSetSpec(3, "face:%s,bold,size:9" % face2)
+    ed.StyleSetSpec(4, "face:%s,size:6" % face1)
+
+
+    # now set some text to those styles...  Normally this would be
+    # done in an event handler that happens when text needs displayed.
+    ed.StartStyling(98, 0xff)
+    ed.SetStyleFor(6, 1)  # set style for 6 characters using style 1
+
+    ed.StartStyling(190, 0xff)
+    ed.SetStyleFor(20, 2)
+
+    ed.StartStyling(310, 0xff)
+    ed.SetStyleFor(4, 3)
+    ed.SetStyleFor(2, 0)
+    ed.SetStyleFor(10, 4)
+
+
+    # line numbers in the margin
     ed.SetMarginType(0, wxSTC_MARGIN_NUMBER)
     ed.SetMarginWidth(0, 22)
     ed.StyleSetSpec(wxSTC_STYLE_LINENUMBER, "size:6,face:Ariel")
 
+    # setup some markers
     ed.SetMarginType(1, wxSTC_MARGIN_SYMBOL)
-    ed.MarkerDefine(0, wxSTC_MARK_ROUNDRECT, "#DD0FCC", "RED")
+    ed.MarkerDefine(0, wxSTC_MARK_ROUNDRECT, "#CCFF00", "RED")
     ed.MarkerDefine(1, wxSTC_MARK_CIRCLE, "FOREST GREEN", "SIENNA")
     ed.MarkerDefine(2, wxSTC_MARK_SHORTARROW, "blue", "blue")
     ed.MarkerDefine(3, wxSTC_MARK_ARROW, "#00FF00", "#00FF00")
 
+    # put some markers on some lines
     ed.MarkerAdd(17, 0)
     ed.MarkerAdd(18, 1)
     ed.MarkerAdd(19, 2)
     ed.MarkerAdd(20, 3)
     ed.MarkerAdd(20, 0)
+
+
+    # and finally, an indicator or two
+    ed.IndicatorSetStyle(0, wxSTC_INDIC_SQUIGGLE)
+    ed.IndicatorSetColour(0, wxRED)
+
+    ed.StartStyling(836, wxSTC_INDICS_MASK)
+    ed.SetStyleFor(10, wxSTC_INDIC0_MASK)
 
 
     return ed
