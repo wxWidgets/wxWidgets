@@ -51,10 +51,10 @@ Files
 -----
 
 The distribution is available in archive formats appropriate to the
-target system. Documentation is available mainly in zip format,
-and in .tgz format where appropriate. Some add-on libraries (such
-as the Object Graphics Library) are available in zip form only.
-In the following, x.y.z represents the current version number.
+target system. Documentation is available mainly in zip format.
+Some add-on libraries (such as the Object Graphics Library) are
+available in zip form only. In the following, x.y.z represents
+the current version number.
 
 wxWindows for GTK distribution
 ------------------------------
@@ -216,5 +216,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, 23rd May, 2000
+The wxWindows Team, 24th May, 2000
 

@@ -13,6 +13,8 @@ wxMSW:
 - Various bug fixes
 - Added wxCHMHelpController, for invoking MS HTML Help
   files. This works under VC++ only
+- Modal dialog handling improved
+- Printer dialog now modal
 
 wxGTK:
 
