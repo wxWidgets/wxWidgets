@@ -613,7 +613,7 @@ int wxEntry(
     {
         if (wxTheApp->OnInit())
         {
-            nRetValue = wxTheApp->OnRun();
+            wxTheApp->OnRun();
         }
         // Normal exit
         wxWindow*                   pTopWindow = wxTheApp->GetTopWindow();
@@ -641,7 +641,7 @@ int wxEntry(
     printf("wxTheApp->OnExit ");
     fflush(stdout);
 #endif
-    wxTheApp->OnExit();
+    nRetValue = wxTheApp->OnExit();
 #if wxUSE_CONSOLEDEBUG
     printf("wxApp::CleanUp ");
     fflush(stdout);
