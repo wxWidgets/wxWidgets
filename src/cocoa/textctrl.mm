@@ -36,12 +36,19 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID winid,
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
     m_cocoaNSView = NULL;
-    SetNSTextField([[NSTextField alloc] initWithFrame:NSMakeRect(0,0,30,30)]);
+    SetNSTextField([[NSTextField alloc] initWithFrame:MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     [GetNSTextField() setStringValue:[NSString stringWithCString:value.c_str()]];
     [GetNSControl() sizeToFit];
+    NSRect currentFrame = [m_cocoaNSView frame];
+    if(currentFrame.size.width < 70)
+    {
+        currentFrame.size.width = 70;
+        [m_cocoaNSView setFrame:currentFrame];
+    }
     if(m_parent)
         m_parent->CocoaAddChild(this);
+    SetInitialFrameRect(pos,size);
     return true;
 }
 
