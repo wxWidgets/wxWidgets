@@ -409,7 +409,7 @@ public:
 
 //----------------------------------------------------------------------
 
-bool wxSafeYield(wxWindow* win=NULL);
+bool wxSafeYield(wxWindow* win=NULL, bool onlyIfNeeded=FALSE);
 void wxPostEvent(wxEvtHandler *dest, wxEvent& event);
 void wxWakeUpIdle();
 
