@@ -108,15 +108,6 @@ bool WXDLLEXPORT wxOKlibc()
   return TRUE;
 }
 
-#ifndef HAVE_WCSLEN
-size_t   WXDLLEXPORT wcslen(const wchar_t *s)
-{
-  size_t len = 0;
-  while (s[len]) len++;
-  return len;
-}
-#endif
-
 // ============================================================================
 // printf() functions business
 // ============================================================================
