@@ -248,7 +248,7 @@ void wxGenericFontDialog::CreateWidgets()
   m_previewer = new wxFontPreviewer(this);
 
   wxButton *okButton = new wxButton(this, wxID_OK, _("OK"));
-  wxButton *cancelButton = new wxButton(this, wxID_OK, _("Cancel"));
+  wxButton *cancelButton = new wxButton(this, wxID_CANCEL, _("Cancel"));
 
   familyChoice->SetStringSelection( wxFontFamilyIntToString(dialogFont.GetFamily()) );
   styleChoice->SetStringSelection(wxFontStyleIntToString(dialogFont.GetStyle()));
