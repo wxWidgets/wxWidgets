@@ -1016,8 +1016,9 @@ long wxGetFreeMemory()
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
 #if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
+    // the case to "char *" is needed for AIX 4.3
     struct statfs fs;
-    if ( statfs(path, &fs) != 0 )
+    if ( statfs((char *)path.fn_str(), &fs) != 0 )
     {
         wxLogSysError("Failed to get file system statistics");
 

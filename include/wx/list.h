@@ -131,6 +131,8 @@ private:
 
 WXDLLEXPORT_DATA(extern wxListKey) wxDefaultListKey;
 
+class WXDLLEXPORT wxListBase;
+
 class WXDLLEXPORT wxNodeBase
 {
 friend class wxListBase;

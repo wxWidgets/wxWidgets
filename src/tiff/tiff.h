@@ -52,19 +52,23 @@
  * 32-bit quantities	int32/uint32
  * strings		unsigned char*
  */
+#ifndef _AIX43 /* int{8,16,32} already defined on AIX */
 #ifdef __STDC__
 typedef	signed char int8;	/* NB: non-ANSI compilers may not grok */
 #else
 typedef	char int8;
 #endif
-typedef	unsigned char uint8;
 typedef	short int16;
+#endif
+typedef	unsigned char uint8;
 typedef	unsigned short uint16;	/* sizeof (uint16) must == 2 */
 #if defined(__alpha) || (defined(_MIPS_SZLONG) && _MIPS_SZLONG == 64)
 typedef	int int32;
 typedef	unsigned int uint32;	/* sizeof (uint32) must == 4 */
 #else
+#ifndef _AIX43
 typedef	long int32;
+#endif
 typedef	unsigned long uint32;	/* sizeof (uint32) must == 4 */
 #endif
 #endif /* _TIFF_DATA_TYPEDEFS_ */

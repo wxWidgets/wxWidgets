@@ -67,6 +67,8 @@ public:
 // wxDir: portable equivalent of {open/read/close}dir functions
 // ----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxDirData;
+
 class WXDLLEXPORT wxDir
 {
 public:
