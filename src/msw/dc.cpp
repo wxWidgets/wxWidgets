@@ -137,7 +137,8 @@ private:
 
 wxColourChanger::wxColourChanger(wxDC& dc) : m_dc(dc)
 {
-    if ( dc.GetBrush().GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+    const wxBrush& brush = dc.GetBrush();
+    if ( brush.Ok() && brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
     {
         HDC hdc = GetHdcOf(dc);
         m_colFgOld = ::GetTextColor(hdc);
