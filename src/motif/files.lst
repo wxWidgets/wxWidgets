@@ -190,6 +190,7 @@ ALL_SOURCES = \
 		motif/clipbrd.cpp \
 		motif/colour.cpp \
 		motif/combobox.cpp \
+		motif/combobox_native.cpp \
 		motif/control.cpp \
 		motif/cursor.cpp \
 		motif/data.cpp \
@@ -826,6 +827,7 @@ GUIOBJS = \
 		clipbrd.o \
 		colour.o \
 		combobox.o \
+		combobox_native.o \
 		control.o \
 		cursor.o \
 		data.o \

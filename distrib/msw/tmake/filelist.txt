@@ -575,6 +575,7 @@ choice.cpp	Motif
 clipbrd.cpp	Motif
 colour.cpp	Motif
 combobox.cpp	Motif
+combobox_native.cpp	Motif
 control.cpp	Motif
 cursor.cpp	Motif
 data.cpp	Motif

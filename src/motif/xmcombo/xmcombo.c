@@ -112,6 +112,9 @@
 #include <Xm/TextF.h>
 #include <Xm/List.h>
 #include <Xm/LabelP.h>
+
+#if (XmVersion < 2000)
+
 #include <string.h>
 #include <ctype.h> /* define toupper */
 #include "combop.h"
@@ -3556,3 +3559,5 @@ Widget XmCreateComboBox(Widget parent, String name, ArgList arglist,
 } /* XmCreateComboBox */
 
 /* Ende von ComboBox.c */
+
+#endif /* XmVersion < 2000 */

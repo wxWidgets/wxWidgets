@@ -108,6 +108,14 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// Routines used in both wxTextCtrl/wxListBox and nativa wxComboBox
+// (defined in src/motif/listbox.cpp or src/motif/textctrl.cpp
+// ----------------------------------------------------------------------------
+
+int wxDoFindStringInList( Widget listWidget, const wxString& str );
+int wxDoGetSelectionInList(Widget listWidget);
+
+// ----------------------------------------------------------------------------
 // executes one main loop iteration (implemented in src/motif/evtloop.cpp)
 // ----------------------------------------------------------------------------
 

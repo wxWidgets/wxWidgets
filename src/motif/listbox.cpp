@@ -272,12 +272,12 @@ void wxListBox::DoSetItems(const wxArrayString& items, void** clientData)
     m_noItems = items.GetCount();
 }
 
-int wxListBox::FindString(const wxString& s) const
+int wxDoFindStringInList(Widget w, const wxString& s)
 {
     wxXmString str( s );
     int *positions = NULL;
     int no_positions = 0;
-    bool success = XmListGetMatchPos ((Widget) m_mainWidget, str(),
+    bool success = XmListGetMatchPos (w, str(),
                                       &positions, &no_positions);
 
     if (success)
@@ -289,6 +289,11 @@ int wxListBox::FindString(const wxString& s) const
     }
     else
         return -1;
+}
+
+int wxListBox::FindString(const wxString& s) const
+{
+    return wxDoFindStringInList( (Widget)m_mainWidget, s );
 }
 
 void wxListBox::Clear()
@@ -415,9 +420,8 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
 }
 
 // Get single selection, for single choice list items
-int wxListBox::GetSelection() const
+int wxDoGetSelectionInList(Widget listBox)
 {
-    Widget listBox = (Widget) m_mainWidget;
     int *posList = NULL;
     int posCnt = 0;
     bool flag = XmListGetSelectedPos (listBox, &posList, &posCnt);
@@ -431,6 +435,11 @@ int wxListBox::GetSelection() const
     }
     else
         return -1;
+}
+
+int wxListBox::GetSelection() const
+{
+    return wxDoGetSelectionInList((Widget) m_mainWidget);
 }
 
 // Find string for position
