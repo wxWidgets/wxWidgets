@@ -935,14 +935,13 @@ bool wxWindowMac::SetBackgroundColour(const wxColour& col )
 
 bool wxWindowMac::MacCanFocus() const
 {
-#if 0
-    // there is currently no way to determinate whether the window is running in full keyboard
-    // access mode, therefore we cannot rely on these features yet
+    // there is currently no way to determine whether the window is running in full keyboard
+    // access mode, therefore we cannot rely on these features, yet the only other way would be
+    // to issue a SetKeyboardFocus event and verify after whether it succeeded, this would risk problems
+    // in event handlers...
     UInt32 features = 0 ;
     GetControlFeatures( (ControlRef) m_macControl , &features ) ;
     return features & ( kControlSupportsFocus | kControlGetsFocusOnClick ) ; 
-#endif
-    return true ;
 }
 
 
