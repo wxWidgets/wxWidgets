@@ -5,9 +5,9 @@ top_builddir = ../../..
 
 VPATH= $(top_srcdir)/utils/ogl/src
 
-LIBTARGET=$(top_builddir)/lib/libogl.a
+LIBTARGET=$(top_builddir)/lib/libogl
 
-OBJECTS=basic.o   bmpshape.o  composit.o  divided.o  lines.o    misc.o
+OBJECTS=basic.o   bmpshape.o  composit.o  divided.o  lines.o    misc.o \
         basic2.o  canvas.o    constrnt.o  drawn.o    mfutils.o  ogldiag.o
 
 
