@@ -43,6 +43,7 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#vcdebug">How do you use VC++&#39;s memory leak checking instead of that in wxWindows?</a></li>
 <li><a href="#shortcutproblem">Why are menu hotkeys or shortcuts not working in my application?</a></li>
 <li><a href="#regconfig">Why can I not write to the HKLM part of the registry with wxRegConfig?</a></li>
+<li><a href="#access">Is MS Active Accessibility supported?</a></li>
 </ul>
 <hr>
 
@@ -112,6 +113,23 @@ the following:
     &lt;/dependency&gt;
 &lt;/assembly&gt;
 </pre>
+
+If you want to add it to your application permanently,
+you can also include it in your .rc file using this
+line:<P>
+
+<PRE>
+  1 24 "winxp.manifest"
+</PRE>
+
+In wxWindows 2.5, this will be in the wx/msw/wx.rc and
+so will happen automatically so long as you include wx.rc
+in your own .rc file.<P>
+
+For an explanation of this syntax, please see
+<a href="http://delphi.about.com/library/bluc/text/uc111601a.htm" target=_new>this
+article</a>.
+<P>
 
 <h3><a name="compilers">What compilers are supported?</a></h3>
 
@@ -198,25 +216,26 @@ You can compile wxWindows as a DLL (see above, VC++/BC++ only at present). You s
 compile your programs for release using non-debugging and space-optimisation options, but
 take with VC++ 5/6 space optimisation: it can sometimes cause problems.<P>
 
-Statically-linked wxWindows 2 programs are smaller than wxWindows 1.xx programs, because of the way
-wxWindows 2 has been designed to reduce dependencies between classes, and other
-techniques. The linker will not include code from the library that is not (directly or
-indirectly) referenced
-by your application. So for example, the &#39;minimal&#39; sample is less than 500KB using VC++ 6
-(note that this figure may be greater for the latest version of wxWindows).<P>
-
 If you want to distribute really small executables, you can
 use <a href="http://www.un4seen.com/petite/" target=_top>Petite</a>
 by Ian Luck. This nifty utility compresses Windows executables by around 50%, so your 500KB executable
 will shrink to a mere 250KB. With this sort of size, there is reduced incentive to
-use DLLs. Another good compression tool is <a href="http://upx.sourceforge.net/" target=_top>UPX</a>.
+use DLLs. Another good compression tool (probably better than Petite) is <a href="http://upx.sourceforge.net/" target=_top>UPX</a>.
 <P>
 
 Please do not be surprised if MinGW produces a statically-linked minimal executable of 1 MB. Firstly, gcc
 produces larger executables than some compilers. Secondly, this figure will
 include most of the overhead of wxWindows, so as your application becomes more
-complex, the overhead becomes proportionaly less significant. And thirdly, trading executable compactness
-for the enormous increase in productivity you get with wxWindows is almost always well worth it.
+complex, the overhead becomes proportionally less significant. And thirdly, trading executable compactness
+for the enormous increase in productivity you get with wxWindows is almost always well worth it.<P>
+
+If you have a really large executable compiled with MinGW (for example 20MB) then
+you need to configure wxWindows to compile without debugging information: see
+docs/msw/install.txt for details. You may find that using configure instead
+of makefile.g95 is easier, particularly since you can maintain debug and
+release versions of the library simultaneously, in different directories.
+Also, run 'strip' after linking to remove all traces of debug info.
+<P>
 
 <H3><a name="mfc">Is wxWindows compatible with MFC?</a></H3>
 
@@ -463,6 +482,13 @@ bool myGlobalConfig::Write (const wxString& key, const wxString& value)
     return wxConfig::Write (new_key, value);
 }
 </pre>
+
+<H3><a name="#access">Is MS Active Accessibility supported?</a></H3>
+
+This is being worked on. Please see <a href="http://www.wxwindows.org/access.htm">this page</a>
+for the current status.
+
+<P>
 
 </font>
 

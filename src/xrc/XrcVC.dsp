@@ -228,6 +228,14 @@ SOURCE=.\xh_tree.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_split.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_wizrd.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xh_unkwn.cpp
 # End Source File
 # Begin Source File

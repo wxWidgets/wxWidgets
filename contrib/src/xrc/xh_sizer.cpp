@@ -139,6 +139,8 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
 
         wxCHECK_MSG(m_parentSizer != NULL ||
                 ((IsOfClass(parentNode, wxT("wxPanel")) ||
+                  IsOfClass(parentNode, wxT("wxWizardPage")) ||
+                  IsOfClass(parentNode, wxT("wxWizardPageSimple")) ||
                   IsOfClass(parentNode, wxT("wxFrame")) ||
                   IsOfClass(parentNode, wxT("wxDialog"))) &&
                  parentNode->GetType() == wxXML_ELEMENT_NODE), NULL,

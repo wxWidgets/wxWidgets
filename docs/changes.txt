@@ -112,6 +112,8 @@ All (GUI):
   wxMessageOutput::Set(new wxMessageOutputLog); to your program
   (you will need to #include <wx/msgout.h>)
 
+- Backported XRC handlers for wxSplitterWindow and wxWizard.
+
 wxMSW:
 
 ! build system changed: setup.h is not a static file in include/wx any more

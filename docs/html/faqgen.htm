@@ -40,6 +40,7 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#base">What is wxBase?</a></li>
 <li><a href="#univ">What is wxUniversal?</a></li>
 <li><a href="#jave">What about Java?</a></li>
+<li><a href="#dotnet">What about .NET/Mono?</a></li>
 <li><a href="#help">How can I help the project?</a></li>
 </ul>
 <hr>
@@ -268,6 +269,40 @@ You may find more about wxUniversal <a href=wxuniv.htm>here</a>.
 The Java honeymoon period is over :-) and people are realising that it cannot
 meet all their cross-platform development needs. We don&#39;t anticipate a major threat
 from Java, and the level of interest in wxWindows is as high as ever.<P>
+
+<H3><a name="dotnet">What about .NET/Mono?</a></H3>
+
+Microsoft is spending a lot on promoting the .NET initiative, which
+is a set of languages, APIs and web service components for Windows.
+Ximian has started an open source version of .NET, mostly for Linux.
+C&#35; is Microsoft's alternative to Java, supporting 'managed code',
+garbage collection and various other Java-like language features.<P>
+
+Although this may be attractive to some developers, there
+is a variety of reasons why the .NET/Mono combination is unlikely
+to make wxWindows redundant. Please note that the following comments
+are Julian Smart's opinions.<P>
+
+<ol>
+<li>Not everyone wants or needs net services.
+<li>C++ will be used for a long time to come; compared with C++, C&#35; is a recent development and its future is not certain.
+<li>Mono Forms may only target Winelib (at least to begin with), so the end result is not as native as
+wxWindows (I'm aware there is GTK&#35; for use with the C&#35; language).
+<li>C&#35; is usually byte-compiled and therefore slower. Plus, .NET adds a layer of overhead to the client computer
+that wxWindows does not require.
+<li>Mono hasn't proven its long-term viability yet (it's a complex system of components); wxWindows is ready now.
+<li>You may not wish to buy into Microsoft marketing spin and APIs.
+<li>.NET might never be implemented on some platforms, especially Mac and embedded variants of Linux.
+<li>wxPython and other language variants provide further reasons for wxWindows to continue.
+<li>The same issue exists for Qt: if Qt sales remain strong, it's a good indication that
+the market for a C++-based approach is still there. (Either that, or everyone's turning to wxWindows!)
+</ol>
+
+There is nothing to stop folk from developing a C&#35; version of the wxWindows API;
+we already have bindings to Python, Perl, JavaScript, Lua, Basic, and Eiffel.
+Update: a <a href="http://wxnet.sourceforge.net/" target=_new>wx.NET</a> project is now in progress.
+
+<P>
 
 <H3><a name="help">How can I help the project?</a></H3>
 

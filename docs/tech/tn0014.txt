@@ -299,6 +299,23 @@ position                   Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxScrolledWindow] wxHSCROLL | wxVSCROLL
 
+wxSplitterWindow
+----------------
+position                   Position                -1,-1
+size                       Size                    -1,-1
+style                      Style[wxSplitterWindow] wxSP_3D
+sashpos                    Integer                 0
+                           (Initial sash position)
+minsize                    Integer                 -1
+                           (Minimal panel size)
+orientation                "horizontal"|"vertical" horizontal
+
+wxSplitterWindow must have at least one and at most two children objects.
+If there's only one child object, it is passed to wxSplitterWindow::Initialize
+and the splitter is created unsplitted. If there are two children, the
+splitter is created splitted, either horizontally or vertically depending
+on the value of "orientation" attribute.
+
 
 
 5. More features

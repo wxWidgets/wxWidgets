@@ -47,6 +47,7 @@ OBJECTS=&
     $(OUTPUTDIR)\xh_unkwn.obj &
     $(OUTPUTDIR)\xh_frame.obj &
     $(OUTPUTDIR)\xh_scwin.obj &
-    $(OUTPUTDIR)\xh_split.obj
+    $(OUTPUTDIR)\xh_split.obj &
+    $(OUTPUTDIR)\xh_wizrd.obj
 
 !include $(WXDIR)\src\makelib.wat

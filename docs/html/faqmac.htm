@@ -38,6 +38,7 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#smarterrors">What are the smart preprocessing errors with the Apple Developer Tools?</a></li>
 <li><a href="#aboutmenu">How does wxMac support the standard Apple About menu item and Help menu?</a></li>
 <li><a href="#findericon">How do I add an icon to my application?</a></li>
+<li><a href="#switching">How can I easily switch between different versions of wxWindows in CodeWarrior?</a></li>
 </ul>
 <hr>
 
@@ -213,6 +214,22 @@ file with a 'icns' resource with id (-16455). Include this .r file in
 your project and in the CodeWarrior Settings add a check mark under Linker:Output
 Flags/Finder Flags/Has Custom Icon.
 <P>
+
+<h3><a name="switching">How can I easily switch between different versions of wxWindows in CodeWarrior?</a></h3>
+
+Sometimes you want to test your application against different versions
+of wxWindows, for example a stable version of wxWindows versus a development version.
+The easiest way to do this is to create a symbolic path.<P>
+
+Under Edit-Preferences in General:Source Trees, type a name (for example WXWIN)
+and choose a path for it. Now reselect your include and lib paths for a last
+time, in the settings for each configuration, but make them relative to the symbolic name.
+<P>
+
+From now on you can just change the path associated with the symbolic name.
+
+<P>
+
 
 </font>
 
