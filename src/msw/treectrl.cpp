@@ -854,6 +854,9 @@ static int CALLBACK TreeView_CompareCallback(wxTreeItemData *pItem1,
                                              wxTreeItemData *pItem2,
                                              wxTreeCtrl *tree)
 {
+    wxCHECK_MSG( pItem1 && pItem2, 0,
+                 _T("sorting tree without data doesn't make sense") );
+
     return tree->OnCompareItems(pItem1->GetId(), pItem2->GetId());
 }
 
