@@ -85,9 +85,12 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
 {
     wxSpinCtrl *spin = (wxSpinCtrl *)::GetWindowLong(hwnd, GWL_USERDATA);
 
-    // forward some messages (the key ones only so far) to the spin ctrl
+    // forward some messages (the key and focus ones only so far) to
+    // the spin ctrl
     switch ( message )
     {
+        case WM_SETFOCUS:
+        case WM_KILLFOCUS:
         case WM_CHAR:
         case WM_DEADCHAR:
         case WM_KEYUP:
