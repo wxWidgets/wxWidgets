@@ -356,6 +356,9 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap,
     bitmap->SetHeight(bm.bmHeight);
     bitmap->SetDepth(bm.bmBitsPixel);
 
+    // use 0xc0c0c0 as transparent colour by default
+    bitmap->SetMask(new wxMask(*bitmap, *wxLIGHT_GREY));
+
     return true;
 }
 
