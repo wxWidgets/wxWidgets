@@ -806,11 +806,11 @@ wxFrame *wxLogWindow::GetFrame() const
   return m_pLogFrame;
 }
 
-void wxLogWindow::OnFrameCreate(wxFrame *WXUNUSED(frame))
+void wxLogWindow::OnFrameCreate(wxFrame * WXUNUSED(frame))
 {
 }
 
-void wxLogWindow::OnFrameDelete(wxFrame *WXUNUSED(frame))
+void wxLogWindow::OnFrameDelete(wxFrame * WXUNUSED(frame))
 {
   m_pLogFrame = (wxLogFrame *)NULL;
 }

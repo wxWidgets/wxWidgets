@@ -152,7 +152,8 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 {
   int id = menu->FindMenuIdByMenuItem(widget);
 
-  wxASSERT( id != -1 ); // should find it!
+  // should find it for normal (not popup) menu
+  wxASSERT( (id != -1) || (menu->GetInvokingWindow() != NULL) ); 
 
   if (!menu->IsEnabled(id)) return;
 

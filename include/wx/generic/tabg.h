@@ -85,9 +85,7 @@ protected:
 
 class WXDLLEXPORT wxTabLayer: public wxList
 {
-// Why did someone remove this, please?
-DECLARE_DYNAMIC_CLASS(wxTabLayer)
-  wxTabLayer():wxList() {}
+  DECLARE_DYNAMIC_CLASS(wxTabLayer)
 };
 
 /*
