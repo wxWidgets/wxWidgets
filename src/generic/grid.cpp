@@ -3573,14 +3573,15 @@ void wxGridWindow::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 // Internal helper macros for simpler use of that function
 
 static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
-                           const wxArrayInt& BorderArray, bool maxOnOverflow);
+                           const wxArrayInt& BorderArray, int nMax,
+                           bool maxOnOverflow);
 
 #define internalXToCol(x) CoordToRowOrCol(x, m_defaultColWidth, \
                                           WXGRID_MIN_COL_WIDTH, \
-                                          m_colRights, TRUE)
+                                          m_colRights, m_numCols, TRUE)
 #define internalYToRow(y) CoordToRowOrCol(y, m_defaultRowHeight, \
                                           WXGRID_MIN_ROW_HEIGHT, \
-                                          m_rowBottoms, TRUE)
+                                          m_rowBottoms, m_numRows, TRUE)
 /////////////////////////////////////////////////////////////////////
 
 IMPLEMENT_DYNAMIC_CLASS( wxGrid, wxScrolledWindow )
@@ -4558,7 +4559,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
             {
                 if ( !event.ShiftDown() && !event.ControlDown() )
                     ClearSelection();
-                else if ( m_selection )
+                if ( m_selection )
                 {
                     if ( event.ShiftDown() )
                     {
@@ -7323,7 +7324,8 @@ void wxGrid::XYToCell( int x, int y, wxGridCellCoords& coords )
 // of m_rowBottoms/m_ColRights to speed up the search!
 
 static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
-                           const wxArrayInt& BorderArray, bool maxOnOverflow)
+                           const wxArrayInt& BorderArray, int nMax,
+                           bool maxOnOverflow)
 {
     if (!defaultDist)
         defaultDist = 1;
@@ -7331,6 +7333,8 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
            i_min = 0;
     if (BorderArray.IsEmpty())
     {
+        if((int) i_max <= nMax)
+            return i_max;
         return maxOnOverflow ? (int)i_max : -1;
     }
 
@@ -7371,14 +7375,14 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
 int wxGrid::YToRow( int y )
 {
     return CoordToRowOrCol(y, m_defaultRowHeight,
-                           WXGRID_MIN_ROW_HEIGHT, m_rowBottoms, FALSE);
+                           WXGRID_MIN_ROW_HEIGHT, m_rowBottoms, m_numRows, FALSE);
 }
 
 
 int wxGrid::XToCol( int x )
 {
     return CoordToRowOrCol(x, m_defaultColWidth,
-                           WXGRID_MIN_COL_WIDTH, m_colRights, FALSE);
+                           WXGRID_MIN_COL_WIDTH, m_colRights, m_numCols, FALSE);
 }
 
 
