@@ -632,23 +632,18 @@ void wxHtmlWindow::OnCellMouseHover(wxHtmlCell * WXUNUSED(cell),
 
 void wxHtmlWindow::OnDraw(wxDC& dc)
 {
-    int x, y;
-    wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
-    int v_y, v_h;
+    if (m_tmpCanDrawLocks > 0 || m_Cell == NULL) return;
 
-    if (m_tmpCanDrawLocks > 0) return;
+    int x, y;
+    wxRect rect = GetUpdateRegion().GetBox();
 
     dc.SetMapMode(wxMM_TEXT);
     dc.SetBackgroundMode(wxTRANSPARENT);
     GetViewStart(&x, &y);
 
-    while (upd)
-    {
-        v_y = upd.GetY();
-        v_h = upd.GetH();
-        if (m_Cell) m_Cell->Draw(dc, 0, 0, y * wxHTML_SCROLL_STEP + v_y, y * wxHTML_SCROLL_STEP + v_h + v_y);
-        upd++;
-    }
+    m_Cell->Draw(dc, 0, 0, 
+                 y * wxHTML_SCROLL_STEP + rect.GetTop(), 
+                 y * wxHTML_SCROLL_STEP + rect.GetBottom());
 }
 
 
