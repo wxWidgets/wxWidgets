@@ -369,6 +369,9 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     if (style & wxSIMPLE_BORDER) win_type = GTK_WINDOW_POPUP;
 
     m_widget = gtk_window_new( win_type );
+    
+    if (!name.IsEmpty())
+        gtk_window_set_wmclass( GTK_WINDOW(m_widget), name.mb_str(), name.mb_str() );
 
 #ifdef __WXDEBUG__
     debug_focus_in( m_widget, _T("wxFrame::m_widget"), name );

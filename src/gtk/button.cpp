@@ -80,7 +80,13 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
   
     SetValidator( validator );
 
-    m_widget = gtk_button_new_with_label( m_label.mbc_str() );
+    m_widget = gtk_button_new_with_label( "" );
+    
+#if (GTK_MINOR_VERSION > 0)    
+    if (style & wxNO_BORDER)
+       gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
+#endif
+
     SetLabel(label);
 
     if (newSize.x == -1) newSize.x = 15+gdk_string_measure( m_widget->style->font, label.mbc_str() );

@@ -212,9 +212,11 @@ bool wxDialog::Create( wxWindow *parent,
     PreCreation( parent, id, pos, size, style, name );
 
     m_widget = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+    
+    if (!name.IsEmpty())
+        gtk_window_set_wmclass( GTK_WINDOW(m_widget), name.mb_str(), name.mb_str() );
+    
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
-
-    gtk_widget_set( m_widget, "GtkWindow::allow_shrink", TRUE, NULL);
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_dialog_delete_callback), (gpointer)this );

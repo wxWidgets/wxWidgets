@@ -77,12 +77,12 @@ END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
-        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER )
+        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER | wxTAB_TRAVERSAL )
 {
 
-//  (void) new wxButton( this, -1, "wxButton", wxPoint(10,10) );
+  (void) new wxButton( this, -1, "wxButton", wxPoint(10,10) );
   
-//  (void) new wxTextCtrl( this, -1, "wxTextCtrl", wxPoint(10,50) );
+  (void) new wxTextCtrl( this, -1, "wxTextCtrl", wxPoint(10,50) );
   
   (void) new wxRadioButton( this, -1, "Disable", wxPoint(10,90) );
   
@@ -95,9 +95,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         "examples."
     };
   
-//  (void) new wxComboBox( this, -1, "This", wxPoint(10,130), wxDefaultSize, 5, choices );
+  (void) new wxComboBox( this, -1, "This", wxPoint(10,130), wxDefaultSize, 5, choices );
   
-//  (void) new wxRadioBox( this, -1, "This", wxPoint(10,200), wxDefaultSize, 5, choices );
+  (void) new wxRadioBox( this, -1, "This", wxPoint(10,200), wxDefaultSize, 5, choices );
 }
 
 MyCanvas::~MyCanvas()
