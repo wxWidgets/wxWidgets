@@ -39,12 +39,14 @@ SPyObj_AsUnsignedLong(PyObject * obj)
   }
 }
 
+#if !defined(_MSC_VER)
 SWIG_STATIC_INLINE PyObject* 
 SPyObj_FromLongLong(long long value)
 {
   return (value > (long)(LONG_MAX)) ?
     PyLong_FromLongLong(value) : PyInt_FromLong((long)value); 
 }
+#endif
 
 SWIG_STATIC_INLINE PyObject* 
 SPyObj_FromUnsignedLong(unsigned long value)
@@ -53,12 +55,14 @@ SPyObj_FromUnsignedLong(unsigned long value)
     PyLong_FromUnsignedLong(value) : PyInt_FromLong((long)value); 
 }
 
+#if !defined(_MSC_VER)
 SWIG_STATIC_INLINE PyObject* 
 SPyObj_FromUnsignedLongLong(unsigned long long value)
 {
   return (value > (unsigned long long)(LONG_MAX)) ?
     PyLong_FromUnsignedLongLong(value) : PyInt_FromLong((long)value); 
 }
+#endif
 
 SWIG_STATIC_INLINE long
 SPyObj_AsLongInRange(PyObject * obj, long min_value, long max_value)
@@ -88,12 +92,12 @@ SPyObj_AsUnsignedLongInRange(PyObject *obj, unsigned long max_value)
 
 SWIG_STATIC_INLINE signed char
 SPyObj_AsSignedChar(PyObject *obj) { 
-  return SPyObj_AsLongInRange(obj, SCHAR_MIN, SCHAR_MAX);
+  return (signed char)SPyObj_AsLongInRange(obj, SCHAR_MIN, SCHAR_MAX);
 }
 
 SWIG_STATIC_INLINE short
 SPyObj_AsShort(PyObject *obj) { 
-  return SPyObj_AsLongInRange(obj, SHRT_MIN, SHRT_MAX);
+  return (short)SPyObj_AsLongInRange(obj, SHRT_MIN, SHRT_MAX);
 }
 
 SWIG_STATIC_INLINE int
@@ -103,12 +107,12 @@ SPyObj_AsInt(PyObject *obj) {
 
 SWIG_STATIC_INLINE unsigned char
 SPyObj_AsUnsignedChar(PyObject *obj) { 
-  return SPyObj_AsUnsignedLongInRange(obj, UCHAR_MAX);
+  return (unsigned char)SPyObj_AsUnsignedLongInRange(obj, UCHAR_MAX);
 }
 
 SWIG_STATIC_INLINE unsigned short 
 SPyObj_AsUnsignedShort(PyObject *obj) { 
-  return SPyObj_AsUnsignedLongInRange(obj, USHRT_MAX);
+  return (unsigned short)SPyObj_AsUnsignedLongInRange(obj, USHRT_MAX);
 }
 
 SWIG_STATIC_INLINE unsigned int
@@ -116,6 +120,7 @@ SPyObj_AsUnsignedInt(PyObject *obj) {
   return SPyObj_AsUnsignedLongInRange(obj, UINT_MAX);
 }
 
+#if !defined(_MSC_VER)
 SWIG_STATIC_INLINE long long
 SPyObj_AsLongLong(PyObject *obj) {
   return PyInt_Check(obj) ?
@@ -127,6 +132,7 @@ SPyObj_AsUnsignedLongLong(PyObject *obj) {
   return PyLong_Check(obj) ?
     PyLong_AsUnsignedLongLong(obj) : SPyObj_AsUnsignedLong(obj);
 }
+#endif
 
 SWIG_STATIC_INLINE double
 SPyObj_AsDouble(PyObject *obj) {
@@ -171,7 +177,7 @@ SPyObj_FromCharPtr(const char* cptr) {
  
 SWIG_STATIC_INLINE int
 SPyObj_AsBool(PyObject *obj) {
-  return SPyObj_AsLongLong(obj) ?  1 : 0;
+    return SPyObj_AsLong/*Long*/(obj) ?  1 : 0;
 }
 
 
