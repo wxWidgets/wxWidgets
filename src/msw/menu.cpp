@@ -632,22 +632,6 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
     return m_titles[pos];
 }
 
-int wxMenuBar::FindMenu(const wxString& title)
-{
-    wxString menuTitle = wxStripMenuCodes(title);
-
-    size_t count = GetMenuCount();
-    for ( size_t i = 0; i < count; i++ )
-    {
-        wxString title = wxStripMenuCodes(m_titles[i]);
-        if ( menuTitle == title )
-            return i; 
-    }
-
-    return wxNOT_FOUND;
-
-}
-
 // ---------------------------------------------------------------------------
 // wxMenuBar construction
 // ---------------------------------------------------------------------------

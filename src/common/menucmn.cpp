@@ -544,6 +544,26 @@ wxMenu *wxMenuBarBase::Remove(size_t pos)
     return menu;
 }
 
+int wxMenuBarBase::FindMenu(const wxString& title)
+{
+    wxString label = wxMenuItem::GetLabelFromText(title);
+
+    size_t count = GetMenuCount();
+    for ( size_t i = 0; i < count; i++ )
+    {
+        wxString title2 = GetLabelTop(i);
+        if ( (title2 == title) ||
+             (wxMenuItem::GetLabelFromText(title2) == label) )
+        {
+            // found
+            return (int)i; 
+        }
+    }
+
+    return wxNOT_FOUND;
+
+}
+
 // ---------------------------------------------------------------------------
 // wxMenuBar functions forwarded to wxMenuItem
 // ---------------------------------------------------------------------------

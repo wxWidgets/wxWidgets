@@ -297,6 +297,9 @@ public:
     // if menu is !NULL, it will be filled with wxMenu this item belongs to
     virtual wxMenuItem* FindItem(int id, wxMenu **menu = NULL) const = 0;
 
+    // find menu by its caption, return wxNOT_FOUND on failure
+    int FindMenu(const wxString& title);
+
     // item access
     // -----------
 

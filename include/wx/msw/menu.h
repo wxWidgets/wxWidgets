@@ -153,7 +153,6 @@ public:
 
     // implementation from now on
     WXHMENU Create();
-    int  FindMenu(const wxString& title);
     void Detach();
 
         // returns TRUE if we're attached to a frame
