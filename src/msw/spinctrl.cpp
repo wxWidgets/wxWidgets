@@ -42,6 +42,8 @@
     #include <commctrl.h>
 #endif
 
+#include <limits.h>         // for INT_MIN
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -69,6 +71,7 @@ static const int MARGIN_BETWEEN = 1;
 
 bool wxSpinCtrl::Create(wxWindow *parent,
                         wxWindowID id,
+                        const wxString& value,
                         const wxPoint& pos,
                         const wxSize& size,
                         long style,
@@ -149,7 +152,35 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // associate the text window with the spin button
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
 
+    if ( !value.IsEmpty() )
+    {
+        SetValue(value);
+    }
+
     return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxTextCtrl-like methods
+// ----------------------------------------------------------------------------
+
+void wxSpinCtrl::SetValue(const wxString& text)
+{
+    if ( ::SetWindowText((HWND)m_hwndBuddy, text.c_str()) )
+    {
+        wxLogLastError("SetWindowText(buddy)");
+    }
+}
+
+int wxSpinCtrl::GetValue() const
+{
+    wxString val = wxGetWindowText(m_hwndBuddy);
+
+    long n;
+    if ( (wxSscanf(val, wxT("%lu"), &n) != 1) )
+        n = INT_MIN;
+
+    return n;
 }
 
 // ----------------------------------------------------------------------------

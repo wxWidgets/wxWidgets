@@ -70,9 +70,6 @@ bool wxButton::Create(wxWindow *parent,
     if ( !CreateBase(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    // Validator was set in CreateBase
-    //SetValidator(validator);
-
     parent->AddChild((wxButton *)this);
 
     m_backgroundColour = parent->GetBackgroundColour() ;
@@ -104,8 +101,10 @@ bool wxButton::Create(wxWindow *parent,
     wxSize nsize( GetSize() );
     if ((nsize.x < 80) || (nsize.y < 23))
     {
-        if ((size.x == -1) && (nsize.x < 80)) nsize.x = 80;
-	if ((size.y == -1) && (nsize.y < 23)) nsize.y = 23;
+        if ((size.x == -1) && (nsize.x < 80))
+            nsize.x = 80;
+        if ((size.y == -1) && (nsize.y < 23))
+            nsize.y = 23;
         SetSize( nsize );
     }
 
@@ -234,7 +233,7 @@ bool wxButton::MSWCommand(WXUINT param, WXWORD id)
     bool processed = FALSE;
     switch ( param )
     {
-        case 1:                                             // 1 for accelerator
+        case 1: // means that the message came from an accelerator
         case BN_CLICKED:
             processed = SendClickEvent();
             break;
@@ -255,3 +254,28 @@ WXHBRUSH wxButton::OnCtlColor(WXHDC pDC,
   return (WXHBRUSH) backgroundBrush->GetResourceHandle();
 }
 
+long wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    // make sure that we won't have BS_DEFPUSHBUTTON style any more if the
+    // focus is being transfered to another button with the same parent -
+    // otherwise, we could finish with 2 default buttons inside one panel
+    if ( (nMsg == WM_KILLFOCUS) &&
+         (GetWindowLong(GetHwnd(), GWL_STYLE) & BS_DEFPUSHBUTTON) )
+    {
+        wxWindow *parent = GetParent();
+        wxWindow *win = wxFindWinFromHandle((WXHWND)wParam);
+        if ( win && win->GetParent() == parent )
+        {
+            wxPanel *panel = wxDynamicCast(parent, wxPanel);
+            if ( panel )
+            {
+                panel->SetDefaultItem(this);
+            }
+            // else: I don't know what to do - we'll still have the problem
+            //       with multiple default buttons in a dialog...
+        }
+    }
+
+    // let the base class do all real processing
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}

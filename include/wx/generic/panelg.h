@@ -6,11 +6,11 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __PANELH_G__
-#define __PANELH_G__
+#ifndef _WX_GENERIC_PANEL_H_
+#define _WX_GENERIC_PANEL_H_
 
 #ifdef __GNUG__
 #pragma interface "panelg.h"
@@ -100,4 +100,4 @@ private:
 };
 
 #endif
-    // __PANELH_G__
+    // _WX_GENERIC_PANEL_H_

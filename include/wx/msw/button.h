@@ -53,6 +53,7 @@ public:
 
     // implementation from now on
     virtual void Command(wxCommandEvent& event);
+    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual WXHBRUSH OnCtlColor(WXHDC pDC,
                                 WXHWND pWnd,

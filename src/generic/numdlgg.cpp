@@ -45,6 +45,8 @@
   #include "wx/statline.h"
 #endif
 
+#include "wx/spinctrl.h"
+
 // this is where wxGetNumberFromUser() is declared
 #include "wx/generic/textdlgg.h"
 
@@ -69,7 +71,7 @@ public:
     void OnCancel(wxCommandEvent& event);
 
 protected:
-    wxTextCtrl *m_spinctrl; // TODO replace it with wxSpinCtrl once it's done
+    wxSpinCtrl *m_spinctrl;
 
     long m_value, m_min, m_max;
 
@@ -107,12 +109,12 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     m_min = min;
 
     wxBeginBusyCursor();
-    
+
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     // 1) text message
     topsizer->Add( CreateTextSizer( message ), 0, wxALL, 10 );
-    
+
     // 2) prompt and text ctrl
     wxBoxSizer *inputsizer = new wxBoxSizer( wxHORIZONTAL );
     // prompt if any
@@ -121,9 +123,9 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     // spin ctrl
     wxString valStr;
     valStr.Printf(wxT("%lu"), m_value);
-    m_spinctrl = new wxTextCtrl(this, -1, valStr, wxDefaultPosition, wxSize( 140, -1 ) );
+    m_spinctrl = new wxSpinCtrl(this, -1, valStr, wxDefaultPosition, wxSize( 140, -1 ) );
     inputsizer->Add( m_spinctrl, 1, wxCENTER | wxLEFT | wxRIGHT, 10 );
-    // add both    
+    // add both
     topsizer->Add( inputsizer, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
 
 #if wxUSE_STATLINE
@@ -133,7 +135,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
 
     // 4) buttons
     topsizer->Add( CreateButtonSizer( wxOK|wxCANCEL ), 0, wxCENTRE | wxALL, 10 );
-    
+
     SetSizer( topsizer );
     SetAutoLayout( TRUE );
 
@@ -149,8 +151,8 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
 
 void wxNumberEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
-    if ( (wxSscanf(m_spinctrl->GetValue(), wxT("%lu"), &m_value) != 1) ||
-         (m_value < m_min) || (m_value > m_max) )
+    m_value = m_spinctrl->GetValue();
+    if ( m_value < m_min || m_value > m_max )
     {
         // not a number or out of range
         m_value = -1;

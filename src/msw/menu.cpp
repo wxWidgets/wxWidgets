@@ -150,6 +150,7 @@ void wxMenu::Append(wxMenuItem *pItem)
     wxAcceleratorEntry *accel = wxGetAccelFromString(pItem->GetText());
     if ( accel ) {
         m_accels.Add(accel);
+        accel->m_command = pItem->GetId();
     }
 #endif // wxUSE_ACCEL
 
