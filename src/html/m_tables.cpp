@@ -543,7 +543,6 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
         {
             wxHtmlTableCell *oldt = m_Table;
             wxHtmlContainerCell *oldcont;
-            int m_OldAlign;
 
             oldcont = c = m_WParser->OpenContainer();
 
