@@ -131,7 +131,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     }
     else
     {
-        dc = new wxPostScriptDC(wxThePrintSetupData->GetPrinterFile(), FALSE, (wxWindow *) NULL);
+        dc = new wxPostScriptDC(GetPrintDialogData().GetPrintData());
     }
 
     // May have pressed cancel.
