@@ -88,13 +88,12 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 all: wxrc$(EXEEXT)
 
 clean: 
-	rm -rf ./.deps
+	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f wxrc$(EXEEXT)
 
 distclean: clean
-	rm -f configure config.cache config.log config.status
-	rm -f bk-deps shared-ld-sh
+	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 install: all
 

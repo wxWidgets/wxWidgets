@@ -21,6 +21,7 @@ LDFLAGS = @LDFLAGS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
 RESCOMP = @RESCOMP@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
+SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 SETFILE = @SETFILE@
 TOOLCHAIN_NAME = @TOOLCHAIN_NAME@
 TOOLKIT = @TOOLKIT@
@@ -36,7 +37,7 @@ LIBDIRNAME = $(top_builddir)lib
 TEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir) $(__DLLFLAG_p) -I../../../samples $(CXXFLAGS)
+	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../../samples $(CXXFLAGS)
 TEST_OBJECTS =  \
 	test_test.o \
 	$(__test___win32rc)
@@ -104,8 +105,8 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include \
 	$(__INC_TIFF_p_1) $(__INC_JPEG_p_1) $(__INC_PNG_p_1) $(__INC_ZLIB_p_1) \
 	$(__INC_ODBC_p_1) $(__INC_REGEX_p_1) $(__INC_EXPAT_p_1) -i $(srcdir) \
-	$(__DLLFLAG_p_1) -i ../../../samples -o test$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r ../../../samples/sample.r
+	$(__DLLFLAG_p_1) -i $(srcdir)/../../../samples -o test$(EXEEXT) Carbon.r \
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
 @COND_MONOLITHIC_0@	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
@@ -127,15 +128,17 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_PLATFORM_MAC_1@__test___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C test$(EXEEXT)
 @COND_PLATFORM_WIN32_1@__test___win32rc = test_test_rc.o
+@COND_PLATFORM_MACOSX_1@__test_bundle___depname = test_bundle
 
 ### Targets: ###
 
-all: test$(EXEEXT) data
+all: test$(EXEEXT) $(__test_bundle___depname) data
 
 clean: 
-	rm -rf ./.deps
+	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f test$(EXEEXT)
+	rm -rf test.app
 
 data: 
 	@mkdir -p .
@@ -146,8 +149,7 @@ data:
 	done
 
 distclean: clean
-	rm -f configure config.cache config.log config.status
-	rm -f bk-deps shared-ld-sh
+	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 install: all
 
@@ -157,12 +159,36 @@ test$(EXEEXT): $(TEST_OBJECTS) $(__test___win32rc)
 	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__test___mac_rezcmd)
 	$(__test___mac_setfilecmd)
+	$(SAMPLES_RPATH_POSTLINK)
+
+test.app/Contents: test$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+	mkdir -p test.app/Contents
+	mkdir -p test.app/Contents/MacOS
+	mkdir -p test.app/Contents/Resources
+	
+	
+	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+	-e "s/EXECUTABLE/test/" \
+	-e "s/VERSION/2.5.0/" \
+	$(top_srcdir)/src/mac/Info.plist.in >test.app/Contents/Info.plist
+	
+	
+	echo -n "APPL????" >test.app/Contents/PkgInfo
+	
+	
+	ln -f test$(EXEEXT) test.app/Contents/MacOS/test
+	
+	
+	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc test.app/Contents/Resources/test.rsrc
+	ln -f $(top_srcdir)/src/mac/wxmac.icns test.app/Contents/Resources/wxmac.icns
+
+@COND_PLATFORM_MACOSX_1@test_bundle: test.app/Contents
 
 test_test.o: $(srcdir)/test.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_test_rc.o: $(srcdir)/test.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__INC_EXPAT_p_2) --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir ../../../samples
+	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__INC_EXPAT_p_2) --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples
 
 uninstall: 
 
@@ -170,4 +196,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean data distclean install uninstall
+.PHONY: all clean data distclean install test_bundle uninstall

@@ -22,7 +22,7 @@ INSTALL = @INSTALL@
 all: cube isosurf penguin
 
 clean: 
-	rm -rf ./.deps
+	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	(cd cube && $(MAKE) clean)
 	(cd isosurf && $(MAKE) clean)
@@ -32,18 +32,11 @@ cube:
 	(cd cube && $(MAKE) all)
 
 distclean: clean
-	rm -f configure config.cache config.log config.status
-	rm -f bk-deps shared-ld-sh
+	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 install: all
-	(cd cube && $(MAKE) install)
-	(cd isosurf && $(MAKE) install)
-	(cd penguin && $(MAKE) install)
 
 install-strip: install
-	(cd cube && $(MAKE) install-strip)
-	(cd isosurf && $(MAKE) install-strip)
-	(cd penguin && $(MAKE) install-strip)
 
 isosurf: 
 	(cd isosurf && $(MAKE) all)

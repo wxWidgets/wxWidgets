@@ -22,22 +22,17 @@ INSTALL = @INSTALL@
 all: styles wxedit
 
 clean: 
-	rm -rf ./.deps
+	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	(cd styles && $(MAKE) clean)
 	(cd wxedit && $(MAKE) clean)
 
 distclean: clean
-	rm -f configure config.cache config.log config.status
-	rm -f bk-deps shared-ld-sh
+	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 install: all
-	(cd styles && $(MAKE) install)
-	(cd wxedit && $(MAKE) install)
 
 install-strip: install
-	(cd styles && $(MAKE) install-strip)
-	(cd wxedit && $(MAKE) install-strip)
 
 styles: 
 	(cd styles && $(MAKE) all)
