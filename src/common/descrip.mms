@@ -116,6 +116,7 @@ OBJECTS1=framecmn.obj,\
 		textfile.obj,\
 		timercmn.obj,\
 		tokenzr.obj,\
+		treebase.obj,\
 		txtstrm.obj,\
 		unzip.obj,\
 		url.obj,\
@@ -214,6 +215,7 @@ SOURCES = \
 		textfile.cpp,\
 		timercmn.cpp,\
 		tokenzr.cpp,\
+		treebase.cpp,\
 		txtstrm.cpp,\
 		unzip.c,\
 		url.cpp,\
@@ -342,6 +344,7 @@ textcmn.obj : textcmn.cpp
 textfile.obj : textfile.cpp
 timercmn.obj : timercmn.cpp
 tokenzr.obj : tokenzr.cpp
+treebase.obj : treebase.cpp
 txtstrm.obj : txtstrm.cpp
 unzip.obj : unzip.c
 url.obj : url.cpp

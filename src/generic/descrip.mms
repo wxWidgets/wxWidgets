@@ -30,6 +30,7 @@ OBJECTS = \
 		choicdgg.obj,\
 		colrdlgg.obj,\
 		dcpsg.obj,\
+		dirctrlg.obj,\
 		dirdlgg.obj,\
 		fontdlgg.obj,\
 		grid.obj,\
@@ -59,7 +60,7 @@ OBJECTS = \
 		tabg.obj,\
 		textdlgg.obj,\
 		tipdlg.obj,\
-		treectrl.obj,\
+		treectlg.obj,\
 		wizard.obj
 
 SOURCES = \
@@ -69,6 +70,7 @@ SOURCES = \
 		choicdgg.cpp,\
 		colrdlgg.cpp,\
 		dcpsg.cpp,\
+		dirctrlg.cpp,\
 		dirdlgg.cpp,\
 		filedlgg.cpp,\
 		fontdlgg.cpp,\
@@ -101,7 +103,7 @@ SOURCES = \
 		tabg.cpp,\
 		textdlgg.cpp,\
 		tipdlg.cpp,\
-		treectrl.cpp,\
+		treectlg.cpp,\
 		wizard.cpp
 
 .ifdef __WXMOTIF__
@@ -128,6 +130,7 @@ caret.obj : caret.cpp
 choicdgg.obj : choicdgg.cpp
 colrdlgg.obj : colrdlgg.cpp
 dcpsg.obj : dcpsg.cpp
+dirctrlg.obj : dirctrlg.cpp
 dirdlgg.obj : dirdlgg.cpp
 filedlgg.obj : filedlgg.cpp
 fontdlgg.obj : fontdlgg.cpp
@@ -160,5 +163,5 @@ tbarsmpl.obj : tbarsmpl.cpp
 tabg.obj : tabg.cpp
 textdlgg.obj : textdlgg.cpp
 tipdlg.obj : tipdlg.cpp
-treectrl.obj : treectrl.cpp
+treectlg.obj : treectlg.cpp
 wizard.obj : wizard.cpp

@@ -622,6 +622,13 @@ long wxExecute(wxChar **argv,
         return exitcode;
 #endif // wxUSE_GUI
     }
+#ifdef __VMS
+   // VMS does not recognise exit as a return and complains about
+   // a missing return
+   // I think VMS is wrong in this
+   //     JJ
+   return 0;
+#endif
 }
 
 #undef ARGS_CLEANUP
