@@ -13,6 +13,8 @@
 #pragma implementation "joystick.h"
 #endif
 
+#include <wx/setup.h>
+
 #include <wx/joystick.h>
 
 #if wxUSE_JOYSTICK
