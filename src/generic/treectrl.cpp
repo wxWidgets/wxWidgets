@@ -957,7 +957,7 @@ bool wxTreeCtrl::TagNextChildren(wxGenericTreeItem *crt_item, wxGenericTreeItem 
 
     size_t count = children.Count();
     for (size_t n=(size_t)(index+1); n<count; ++n)
-      if (TagAllChildrenUntilLast(children[n], last_item, select)) return true;
+      if (TagAllChildrenUntilLast(children[n], last_item, select)) return TRUE;
 
     return TagNextChildren(parent, last_item, select);
 }
@@ -967,17 +967,17 @@ bool wxTreeCtrl::TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxGenericT
   crt_item->SetHilight(select);
   RefreshLine(crt_item);
   
-  if (crt_item==last_item) return true;
+  if (crt_item==last_item) return TRUE;
 
   if (crt_item->HasChildren())
     {
       wxArrayGenericTreeItems& children = crt_item->GetChildren();
       size_t count = children.Count();
       for ( size_t n = 0; n < count; ++n )
-	if (TagAllChildrenUntilLast(children[n], last_item, select)) return true;
+	if (TagAllChildrenUntilLast(children[n], last_item, select)) return TRUE;
     }
 	
-  return false;
+  return FALSE;
 }
 
 void wxTreeCtrl::SelectItemRange(wxGenericTreeItem *item1, wxGenericTreeItem *item2)
@@ -1016,8 +1016,8 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
     // to keep going anyhow !!!
     if (is_single) 
     {
-        unselect_others=true;
-        extended_select=false;
+        unselect_others=TRUE;
+        extended_select=FALSE;
     }
 
     wxGenericTreeItem *item = itemId.m_pItem;
@@ -1047,7 +1047,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
     }
     else
     {
-        bool select=true; // the default
+        bool select=TRUE; // the default
 
 	// Check if we need to toggle hilight (ctrl mode)
 	if (!unselect_others)

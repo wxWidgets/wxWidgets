@@ -341,13 +341,31 @@ long wxExecute(char **argv, bool sync, wxProcess *handler)
 
 bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
-    DWORD nSize = maxSize;
+#if defined(__WIN32__) && !defined(__TWIN32__)
+    DWORD nSize = maxSize ;
     if ( !::GetComputerName(buf, &nSize) )
     {
         wxLogLastError("GetComputerName");
 
         return FALSE;
     }
+#else
+    char *sysname;
+    const char *default_host = "noname";
+static const char WX_SECTION[] = "wxWindows";
+static const char eHOSTNAME[]  = "HostName";
 
+    if ((sysname = getenv("SYSTEM_NAME")) == NULL) {
+       GetProfileString(WX_SECTION, eHOSTNAME, default_host, buf, maxSize - 1);
+    } else
+      strncpy(buf, sysname, maxSize - 1);
+    buf[maxSize] = '\0';
+    if ( *buf == '\0' )
+    {
+        wxLogLastError("GetComputerName");
+
+        return FALSE;
+    }
+#endif
     return TRUE;
 }
