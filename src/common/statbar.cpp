@@ -38,7 +38,7 @@
 // wxStatusBarBase implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxWindow)
+// IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxWindow)     This doesn't beling here, RR
 
 // ----------------------------------------------------------------------------
 // ctor/dtor
