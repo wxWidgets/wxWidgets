@@ -507,6 +507,7 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
           : wxTreeCtrl(parent, id, pos, size, style)
 {
     m_reverseSort = FALSE;
+    m_imageListNormal = NULL;
 
     CreateImageList();
 
