@@ -2135,7 +2135,9 @@ wxLayoutList::GetCursorScreenPos(wxDC &dc)
   have changed.
 */
 void
-wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll)
+wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll,
+                     wxPoint *cpos = NULL,
+                     wxPoint *csize = NULL)
 {
    // first, make sure everything is calculated - this might not be
    // needed, optimise it later
@@ -2150,7 +2152,8 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll)
    {
       if(! wasDirty)
          ApplyStyle(line->GetStyleInfo(), dc);
-      if(forceAll || line->IsDirty())
+      if(forceAll || line->IsDirty()
+         || (cpos && line->GetLineNumber() == cpos->y))
       {
          // The following Layout() calls will update our
          // m_CurrentStyleInfo if needed.
@@ -2158,9 +2161,12 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll)
             line->Layout(dc, this,
                          (wxPoint *)&m_CursorScreenPos,
                          (wxPoint *)&m_CursorSize, m_CursorPos.x);
+         if(cpos && line->GetLineNumber() == cpos->y)
+            line->Layout(dc, this,
+                         cpos,
+                         csize, cpos->x);
          else
             line->Layout(dc, this);
-
          // little condition to speed up redrawing:
          if(bottom != -1 && line->GetPosition().y > bottom)
             break;
@@ -2169,12 +2175,20 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll)
       line->RecalculatePositions(1, this);
       line = line->GetNextLine();
    }
-
+   
    // can only be 0 if we are on the first line and have no next line
    wxASSERT(m_CursorSize.x != 0 || (m_CursorLine &&
                                     m_CursorLine->GetNextLine() == NULL &&
                                     m_CursorLine == m_FirstLine));
    AddCursorPosToUpdateRect();
+}
+
+wxPoint
+wxLayoutList::GetScreenPos(wxDC &dc, const wxPoint &cpos, wxPoint *csize = NULL)
+{
+   wxPoint pos = cpos;
+   Layout(dc, -1, false, &pos, csize);
+   return pos;
 }
 
 void

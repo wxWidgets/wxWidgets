@@ -932,9 +932,23 @@ public:
        @param dc the wxDC to draw on
        @param bottom optional y coordinate where to stop calculating
        @param forceAll force re-layout of all lines
+       @param cpos Can hold a cursorposition, and will be overwritten
+       with the corresponding DC position.
+       @param csize Will hold the cursor size relating to cpos.
    */
-   void Layout(wxDC &dc, CoordType bottom = -1, bool forceAll = false);
+   void Layout(wxDC &dc, CoordType bottom = -1, bool forceAll = false,
+               wxPoint *cpos = NULL,
+               wxPoint *csize = NULL);
 
+   /** Returns the screen coordinates relating to a given cursor
+       position and the size of the cursor at that position.
+       @param dc for which to calculate it
+       @param cpos Cursor position to look for.
+       @param csize If non-NULL, will be set to the cursor size.
+       @return The cursor position on the DC.
+   */
+   wxPoint GetScreenPos(wxDC &dc, const wxPoint &cpos, wxPoint *csize = NULL);
+   
    /** Calculates new sizes for everything in the list, like Layout()
        but this is needed after the list got changed.
        @param dc the wxDC to draw on
