@@ -223,7 +223,6 @@ ALL_SOURCES = \
 		mac/palette.cpp \
 		mac/pen.cpp \
 		mac/pnghand.cpp \
-		mac/print.cpp \
 		mac/printdlg.cpp \
 		mac/printmac.cpp \
 		mac/radiobox.cpp \
@@ -885,7 +884,6 @@ GUIOBJS = \
 		palette.o \
 		pen.o \
 		pnghand.o \
-		print.o \
 		printdlg.o \
 		printmac.o \
 		radiobox.o \

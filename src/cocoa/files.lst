@@ -503,6 +503,7 @@ ALL_HEADERS = \
 		cocoa/NSTextField.h \
 		cocoa/NSView.h \
 		cocoa/NSWindow.h \
+		cocoa/ObjcAssociate.h \
 		cocoa/ObjcPose.h \
 		cocoa/app.h \
 		cocoa/bitmap.h \

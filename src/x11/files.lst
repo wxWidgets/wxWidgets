@@ -504,6 +504,7 @@ ALL_HEADERS = \
 		x11/pen.h \
 		x11/print.h \
 		x11/private.h \
+		x11/privx.h \
 		x11/region.h \
 		x11/reparent.h \
 		x11/textctrl.h \

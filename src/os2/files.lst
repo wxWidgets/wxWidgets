@@ -54,6 +54,7 @@ ALL_SOURCES = \
 		common/cshelp.cpp \
 		common/ctrlcmn.cpp \
 		common/ctrlsub.cpp \
+		common/datacmn.cpp \
 		common/datetime.cpp \
 		common/datstrm.cpp \
 		common/db.cpp \
@@ -649,6 +650,7 @@ COMMONOBJS = \
 		cshelp.o \
 		ctrlcmn.o \
 		ctrlsub.o \
+		datacmn.o \
 		datetime.o \
 		datstrm.o \
 		db.o \
