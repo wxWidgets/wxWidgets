@@ -53,7 +53,8 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     m_windowStyle = style;
     m_noItems = n;
     m_selected = 0;
-    m_backgroundColour = parent->GetBackgroundColour();
+    //    m_backgroundColour = parent->GetBackgroundColour();
+    m_backgroundColour = * wxWHITE;
     m_foregroundColour = parent->GetForegroundColour();
 
     SetName(name);
@@ -760,9 +761,10 @@ void wxListBox::ChangeBackgroundColour()
 
     /* TODO: should scrollbars be affected? Should probably have separate
      * function to change them (by default, taken from wxSystemSettings)
-    DoChangeBackgroundColour((WXWidget) hsb, m_backgroundColour, TRUE);
-    DoChangeBackgroundColour((WXWidget) vsb, m_backgroundColour, TRUE);
-    */
+     */
+    wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+    DoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
+    DoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
 
     DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
 }

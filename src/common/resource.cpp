@@ -1770,6 +1770,8 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
 
   /* wxRadioBox/wxRadioButton */
   { "wxRB_GROUP", wxRB_GROUP },
+  { "wxRA_SPECIFY_COLS", wxRA_SPECIFY_COLS },
+  { "wxRA_SPECIFY_ROWS", wxRA_SPECIFY_ROWS },
   { "wxRA_HORIZONTAL", wxRA_HORIZONTAL },
   { "wxRA_VERTICAL", wxRA_VERTICAL },
 

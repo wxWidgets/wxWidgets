@@ -81,6 +81,7 @@ public:
   void SetTitle(const wxString& title);
   wxString GetTitle() const ;
 
+  void OnSize(wxSizeEvent& event);
   bool OnClose();
   void OnCharHook(wxKeyEvent& event);
   void OnPaint(wxPaintEvent& event);

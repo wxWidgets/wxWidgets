@@ -386,17 +386,46 @@ void wxRadioBox::Command (wxCommandEvent & event)
 
 void wxRadioBox::ChangeFont(bool keepOriginalSize)
 {
-    // TODO
+    wxWindow::ChangeFont(keepOriginalSize);
+
+    XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay((Widget) GetTopWidget()));
+
+    int i;
+    for (i = 0; i < m_noItems; i++)
+    {
+        WXWidget radioButton = m_radioButtons[i];
+
+        XtVaSetValues ((Widget) radioButton,
+                       XmNfontList, fontList,
+		       XmNtopAttachment, XmATTACH_FORM,
+                       NULL);
+    }
 }
 
 void wxRadioBox::ChangeBackgroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
+
+    int i;
+    for (i = 0; i < m_noItems; i++)
+    {
+        WXWidget radioButton = m_radioButtons[i];
+
+        DoChangeBackgroundColour(radioButton, m_backgroundColour, TRUE);
+    }
 }
 
 void wxRadioBox::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
+
+    int i;
+    for (i = 0; i < m_noItems; i++)
+    {
+        WXWidget radioButton = m_radioButtons[i];
+
+        DoChangeForegroundColour(radioButton, m_foregroundColour);
+    }
 }
 
 void wxRadioBoxCallback (Widget w, XtPointer clientData,

@@ -1036,7 +1036,8 @@ void * wxDebugAlloc(size_t size, char * fileName, int lineNum, bool isObject, bo
     return (void *)malloc(size);
   }
   
-    char * buf = (char *) malloc(wxDebugContext::TotSize (size));
+    int totSize = wxDebugContext::TotSize (size);
+    char * buf = (char *) malloc(totSize);
     if (!buf) {
 	wxLogDebug("Call to malloc (%ld) failed.", (long)size);
 	return 0;

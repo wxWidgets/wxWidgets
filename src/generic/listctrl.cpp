@@ -1369,10 +1369,10 @@ void wxListMainWindow::OnArrowChar( wxListLineData *newCurrent, bool shiftDown )
 
 void wxListMainWindow::OnChar( wxKeyEvent &event )
 {
-  wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, m_parent->GetId() );
+  wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetParent()->GetId() );
   le.m_code = event.KeyCode();
-  le.SetEventObject( m_parent );
-  m_parent->GetEventHandler()->ProcessEvent( le );
+  le.SetEventObject( GetParent() );
+  GetParent()->GetEventHandler()->ProcessEvent( le );
   
 /*
   if (event.KeyCode() == WXK_TAB)

@@ -441,6 +441,10 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 		     NULL);
 
       m_hScrollBar = (WXWidget) hScrollBar;
+
+      wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+      DoChangeBackgroundColour(m_hScrollBar, backgroundColour, TRUE);
+
       m_hScroll = TRUE;
   }
   if (m_windowStyle & wxVSCROLL)
@@ -464,8 +468,16 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 		     NULL);
 
       m_vScrollBar = (WXWidget) vScrollBar;
+      wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+      DoChangeBackgroundColour(m_vScrollBar, backgroundColour, TRUE);
+
       m_vScroll = TRUE;
   }
+
+  // Scrolled widget needs to have its colour changed or we get
+  // a little blue square where the scrollbars abutt
+  wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+  DoChangeBackgroundColour(m_scrolledWindow, backgroundColour, TRUE);
 
   if (m_hScrollBar || m_vScrollBar)
     XmScrolledWindowSetAreas ((Widget) m_scrolledWindow, (Widget) m_hScrollBar, (Widget) m_vScrollBar, (Widget) m_drawingArea);

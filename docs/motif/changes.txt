@@ -75,3 +75,17 @@ More recently:
   on the scrollbars is required.
 - wxListCtrl assumed that one of the args to GetClientSize can be NULL:
   corrected.
+
+18/12/98
+--------
+
+- Removed major bug whereby dialogs were unmanaged automatically
+  when any button was pressed.
+- Fixed colours of wxWindow scrollbars, made list and text controls
+  have a white background.
+- Fixed dialog colour setting.
+- Added settable fonts and colours for wxMenu/wxMenuBar. Now
+  they have sensible colours by default.
+- Fixed a bug in wxStaticBox.
+- Controls sample runs, though wxRadioBox doesn't appear and
+  the notebook flickers for a while.

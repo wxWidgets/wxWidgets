@@ -18,6 +18,8 @@
 
 #include "wx/defs.h"
 #include "wx/event.h"
+#include "wx/font.h"
+#include "wx/gdicmn.h"
 
 class WXDLLEXPORT wxMenuItem;
 class WXDLLEXPORT wxMenuBar;
@@ -115,6 +117,15 @@ public:
   void DestroyMenu(bool full);
   WXWidget FindMenuItem(int id, wxMenuItem **it = NULL) const;
 
+  const wxColour& GetBackgroundColour() const { return m_backgroundColour; }
+  const wxColour& GetForegroundColour() const { return m_foregroundColour; }
+  const wxFont& GetFont() const { return m_font; }
+
+  void SetBackgroundColour(const wxColour& colour);
+  void SetForegroundColour(const wxColour& colour);
+  void SetFont(const wxFont& colour);
+  void ChangeFont(bool keepOriginalSize = FALSE);
+
 public:
   wxFunction        m_callback;
 
@@ -135,6 +146,9 @@ public:
   wxMenu*           m_topLevelMenu ;
   wxMenu*           m_menuParent;
   bool              m_ownedByMenuBar;
+  wxColour          m_foregroundColour;
+  wxColour          m_backgroundColour;
+  wxFont            m_font;
 };
 
 // ----------------------------------------------------------------------------
@@ -194,6 +208,15 @@ class WXDLLEXPORT wxMenuBar: public wxEvtHandler
   // Destroy menubar, but keep data structures intact so we can recreate it.
   bool DestroyMenuBar();
 
+  const wxColour& GetBackgroundColour() const { return m_backgroundColour; }
+  const wxColour& GetForegroundColour() const { return m_foregroundColour; }
+  const wxFont& GetFont() const { return m_font; }
+
+  void SetBackgroundColour(const wxColour& colour);
+  void SetForegroundColour(const wxColour& colour);
+  void SetFont(const wxFont& colour);
+  void ChangeFont(bool keepOriginalSize = FALSE);
+
  public:
   wxEvtHandler *            m_eventHandler;
   int                       m_menuCount;
@@ -204,6 +227,9 @@ class WXDLLEXPORT wxMenuBar: public wxEvtHandler
   //// Motif-specific
   WXWidget                  m_mainWidget;
 
+  wxColour                  m_foregroundColour;
+  wxColour                  m_backgroundColour;
+  wxFont                    m_font;
 };
 
 #endif // _WX_MENU_H_

@@ -15,8 +15,10 @@ labelled buttons.
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxRA\_HORIZONTAL}}{Lays the radiobox out in rows.}
-\twocolitem{\windowstyle{wxRA\_VERTICAL}}{Lays the radiobox out in columns.}
+\twocolitem{\windowstyle{wxRA\_SPECIFY\_ROWS}}{The major dimension parameter refers to the
+maximum number of rows.}
+\twocolitem{\windowstyle{wxRA\_SPECIFY\_COLS}}{The major dimension parameter refers to the
+maximum number of columns.}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.
@@ -45,7 +47,7 @@ Default constructor.
 \func{}{wxRadioBox}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{label},\rtfsp
 \param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
 \param{int}{ n = 0}, \param{const wxString}{ choices[] = NULL},\rtfsp
-\param{int}{ majorDimension = 0}, \param{long}{ style = wxRA\_HORIZONTAL},\rtfsp
+\param{int}{ majorDimension = 0}, \param{long}{ style = wxRA\_SPECIFY\_COLS},\rtfsp
 \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
 \param{const wxString\& }{name = ``radioBox"}}
 
@@ -67,7 +69,7 @@ Constructor, creating and showing a radiobox.
 
 \docparam{choices}{An array of choices with which to initialize the radiobox.}
 
-\docparam{majorDimension}{Specifies the number of rows (if style is wxRA\_VERTICAL) or columns (if style is wxRA\_HORIZONTAL) for a two-dimensional
+\docparam{majorDimension}{Specifies the maximum number of rows (if style contains wxRA\_SPECIFY\_ROWS) or columns (if style contains wxRA\_SPECIFY\_COLS) for a two-dimensional
 radiobox.}
 
 \docparam{style}{Window style. See \helpref{wxRadioBox}{wxradiobox}.}
@@ -91,7 +93,7 @@ Destructor, destroying the radiobox item.
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{label},\rtfsp
 \param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
 \param{int}{ n = 0}, \param{const wxString}{ choices[] = NULL},\rtfsp
-\param{int}{ majorDimension = 0}, \param{long}{ style = wxRA\_HORIZONTAL},\rtfsp
+\param{int}{ majorDimension = 0}, \param{long}{ style = wxRA\_SPECIFY\_COLS},\rtfsp
 \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
 \param{const wxString\& }{name = ``radioBox"}}
 

@@ -114,10 +114,11 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
 		     XmNrightAttachment, XmATTACH_FORM,
 		     NULL);
 
-    m_mainWidget = (Widget) formWidget;
+    m_mainWidget = (WXWidget) frameWidget;
+    m_formWidget = (WXWidget) formWidget;
 
     SetCanAddEventHandler(TRUE);
-    AttachWidget (parent, m_mainWidget, (WXWidget) frameWidget, pos.x, pos.y, size.x, size.y);
+    AttachWidget (parent, (WXWidget) frameWidget, (WXWidget) formWidget, pos.x, pos.y, size.x, size.y);
     ChangeBackgroundColour();
 
     return TRUE;

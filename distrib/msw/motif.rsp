@@ -7,7 +7,7 @@ config.sub
 wx-config.in
 mkinstalldirs
 
-makeenvs/*.env
+src/makeenvs/*.env
 
 src/Makefile
 src/Makefile.in

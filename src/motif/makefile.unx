@@ -91,7 +91,6 @@ LIB_CPP_SRC=\
  dcmemory.cpp \
  dcscreen.cpp \
  dialog.cpp \
- dirdlg.cpp \
  dnd.cpp \
  filedlg.cpp \
  font.cpp \
@@ -136,6 +135,7 @@ LIB_CPP_SRC=\
 \
  ../generic/choicdgg.cpp \
  ../generic/colrdlgg.cpp \
+ ../generic/dirdlgg.cpp \
  ../generic/fontdlgg.cpp \
  ../generic/gridg.cpp \
  ../generic/helpext.cpp \
@@ -156,6 +156,7 @@ LIB_CPP_SRC=\
 
 # If you're not using the generic ones, you
 # may wish to define platform-specific ones
+# dirdlg.cpp \
 # treectrl.cpp \
 # listctrl.cpp \
 # imaglist.cpp \

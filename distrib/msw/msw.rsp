@@ -4,6 +4,10 @@ docs/licence.txt
 distrib/msw/*.rsp
 distrib/msw/*.bat
 
+tools/gettext/xgettext.exe
+tools/gettext/msgfmt.exe
+tools/gettext/msgunfmt.exe
+
 src/makeb32.env
 src/makebcc.env
 src/makemsw.env

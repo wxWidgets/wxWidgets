@@ -47,6 +47,7 @@ extern wxList wxPendingDelete;
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxPanel)
 
 BEGIN_EVENT_TABLE(wxDialog, wxPanel)
+  EVT_SIZE(wxDialog::OnSize)
   EVT_BUTTON(wxID_OK, wxDialog::OnOK)
   EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
   EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
@@ -566,6 +567,16 @@ bool wxDialog::OnClose(void)
     closing.DeleteObject(this);
 
     return FALSE;
+}
+
+void wxDialog::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+  // if we're using constraints - do use them
+  #if wxUSE_CONSTRAINTS
+    if ( GetAutoLayout() ) {
+      Layout();
+    }
+  #endif
 }
 
 void wxDialog::OnCloseWindow(wxCloseEvent& event)

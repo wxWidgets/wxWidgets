@@ -80,7 +80,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     m_modified = FALSE;
     m_processedDefault = FALSE;
     m_fileName = "";
-    m_backgroundColour = parent->GetBackgroundColour();
+    //    m_backgroundColour = parent->GetBackgroundColour();
+    m_backgroundColour = * wxWHITE;
     m_foregroundColour = parent->GetForegroundColour();
 
     SetName(name);
@@ -649,46 +650,51 @@ void wxTextCtrl::ChangeBackgroundColour()
 {
     wxWindow::ChangeBackgroundColour();
 
-    Widget parent = XtParent ((Widget) m_mainWidget);
-    Widget hsb, vsb;
+    /* TODO: should scrollbars be affected? Should probably have separate
+     * function to change them (by default, taken from wxSystemSettings)
+     */
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+        Widget parent = XtParent ((Widget) m_mainWidget);
+        Widget hsb, vsb;
 
-    XtVaGetValues (parent,
+        XtVaGetValues (parent,
 		     XmNhorizontalScrollBar, &hsb,
 		     XmNverticalScrollBar, &vsb,
 		     NULL);
+        wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+        if (hsb)
+            DoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
+        if (vsb)
+            DoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
 
-    /* TODO: should scrollbars be affected? Should probably have separate
-     * function to change them (by default, taken from wxSystemSettings)
-    if (hsb)
-        DoChangeBackgroundColour((WXWidget) hsb, m_backgroundColour, TRUE);
-    if (vsb)
-        DoChangeBackgroundColour((WXWidget) vsb, m_backgroundColour, TRUE);
-     */
-
-    DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
+        DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
+    }
 }
 
 void wxTextCtrl::ChangeForegroundColour()
 {
     wxWindow::ChangeForegroundColour();
 
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+        Widget parent = XtParent ((Widget) m_mainWidget);
+        Widget hsb, vsb;
 
-    Widget parent = XtParent ((Widget) m_mainWidget);
-    Widget hsb, vsb;
-
-    XtVaGetValues (parent,
+        XtVaGetValues (parent,
 		     XmNhorizontalScrollBar, &hsb,
 		     XmNverticalScrollBar, &vsb,
 		     NULL);
 
-    /* TODO: should scrollbars be affected? Should probably have separate
-     * function to change them (by default, taken from wxSystemSettings)
-    if (hsb)
-        DoChangeForegroundColour((WXWidget) hsb, m_foregroundColour);
-    if (vsb)
-        DoChangeForegroundColour((WXWidget) vsb, m_foregroundColour);
-     */
-    DoChangeForegroundColour((WXWidget) parent, m_foregroundColour);
+        /* TODO: should scrollbars be affected? Should probably have separate
+         * function to change them (by default, taken from wxSystemSettings)
+        if (hsb)
+            DoChangeForegroundColour((WXWidget) hsb, m_foregroundColour);
+        if (vsb)
+            DoChangeForegroundColour((WXWidget) vsb, m_foregroundColour);
+         */
+        DoChangeForegroundColour((WXWidget) parent, m_foregroundColour);
+    }
 }
 
 static void wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr)

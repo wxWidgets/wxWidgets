@@ -182,6 +182,8 @@ bool wxToolBar::CreateTools()
                    (XtPointer) this);
             }
 
+            DoChangeBackgroundColour((WXWidget) button, m_backgroundColour, TRUE);
+
             // For each button, if there is a mask, we must create
             // a new wxBitmap that has the correct background colour
             // for the button. Otherwise the background will just be

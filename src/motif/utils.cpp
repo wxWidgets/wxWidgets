@@ -1240,3 +1240,43 @@ void wxAllocColor(Display *d,Colormap cmp,XColor *xc)
    }
 
 
+// These functions duplicate those in wxWindow, but are needed
+// for use outside of wxWindow (e.g. wxMenu, wxMenuBar).
+
+// Change a widget's foreground and background colours.
+
+void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour)
+{
+  // When should we specify the foreground, if it's calculated
+  // by wxComputeColours?
+  // Solution: say we start with the default (computed) foreground colour.
+  // If we call SetForegroundColour explicitly for a control or window,
+  // then the foreground is changed.
+  // Therefore SetBackgroundColour computes the foreground colour, and
+  // SetForegroundColour changes the foreground colour. The ordering is
+  // important.
+
+  XtVaSetValues ((Widget) widget,
+		   XmNforeground, foregroundColour.AllocColour(XtDisplay((Widget) widget)),
+		   NULL);
+}
+
+void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour)
+{
+  wxComputeColours (XtDisplay((Widget) widget), & backgroundColour,
+			    (wxColour*) NULL);
+
+  XtVaSetValues ((Widget) widget,
+		   XmNbackground, g_itemColors[wxBACK_INDEX].pixel,
+		   XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel,
+		   XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel,
+		   XmNforeground, g_itemColors[wxFORE_INDEX].pixel,
+		   NULL);
+
+  if (changeArmColour)
+    XtVaSetValues ((Widget) widget,
+    		   XmNarmColor, g_itemColors[wxSELE_INDEX].pixel,
+               NULL);
+}
+
+

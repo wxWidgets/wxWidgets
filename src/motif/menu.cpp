@@ -28,6 +28,7 @@
 #include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/frame.h"
+#include "wx/settings.h"
 
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
@@ -81,6 +82,9 @@ wxMenu::wxMenu(const wxString& title, const wxFunction func)
         Append(ID_SEPARATOR, m_title) ;
         AppendSeparator() ;
     }
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENU);
+    m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENUTEXT);
+    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 
     Callback(func);
 }
@@ -456,6 +460,9 @@ wxMenuBar::wxMenuBar()
     m_titles = NULL;
     m_menuBarFrame = NULL;
     m_mainWidget = (WXWidget) NULL;
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENU);
+    m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENUTEXT);
+    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 }
 
 wxMenuBar::wxMenuBar(int n, wxMenu *menus[], const wxString titles[])
@@ -468,6 +475,9 @@ wxMenuBar::wxMenuBar(int n, wxMenu *menus[], const wxString titles[])
     for ( i = 0; i < n; i++ )
 	m_titles[i] = titles[i];
     m_menuBarFrame = NULL;
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENU);
+    m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENUTEXT);
+    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 }
 
 wxMenuBar::~wxMenuBar()
@@ -781,6 +791,10 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
         XtVaSetValues ((Widget) menuBarW, XmNmenuHelpWidget, (Widget) menu->GetButtonWidget(), NULL);
     }
 
+  SetBackgroundColour(m_backgroundColour);
+  SetForegroundColour(m_foregroundColour);
+  SetFont(m_font);
+
   XtVaSetValues((Widget) parent->GetMainWindowWidget(), XmNmenuBar, (Widget) m_mainWidget, NULL);
   XtRealizeWidget ((Widget) menuBarW);
   XtManageChild ((Widget) menuBarW);
@@ -921,6 +935,10 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
       item->CreateItem (menu, menuBar, topMenu);
     }
 
+  SetBackgroundColour(m_backgroundColour);
+  SetForegroundColour(m_foregroundColour);
+  SetFont(m_font);
+
   return buttonWidget;
 }
 
@@ -986,3 +1004,128 @@ WXWidget wxMenu::FindMenuItem (int id, wxMenuItem ** it) const
     *it = (wxMenuItem*) NULL;
   return (WXWidget) NULL;
 }
+
+void wxMenu::SetBackgroundColour(const wxColour& col)
+{
+    m_backgroundColour = col;
+    if (m_menuWidget)
+       wxDoChangeBackgroundColour(m_menuWidget, (wxColour&) col);
+    if (m_buttonWidget)
+       wxDoChangeBackgroundColour(m_buttonWidget, (wxColour&) col, TRUE);
+
+    wxNode* node = m_menuItems.First();
+    while (node)
+    {
+        wxMenuItem* item = (wxMenuItem*) node->Data();
+        if (item->GetButtonWidget())
+        {
+          // This crashes because it uses gadgets
+	  //            wxDoChangeBackgroundColour(item->GetButtonWidget(), (wxColour&) col, TRUE);
+        }
+        if (item->GetSubMenu())
+          item->GetSubMenu()->SetBackgroundColour((wxColour&) col);
+        node = node->Next();
+    }
+}
+
+void wxMenu::SetForegroundColour(const wxColour& col)
+{
+    m_foregroundColour = col;
+    if (m_menuWidget)
+       wxDoChangeForegroundColour(m_menuWidget, (wxColour&) col);
+    if (m_buttonWidget)
+       wxDoChangeForegroundColour(m_buttonWidget, (wxColour&) col);
+
+    wxNode* node = m_menuItems.First();
+    while (node)
+    {
+        wxMenuItem* item = (wxMenuItem*) node->Data();
+        if (item->GetButtonWidget())
+        {
+          // This crashes because it uses gadgets
+	  //            wxDoChangeForegroundColour(item->GetButtonWidget(), (wxColour&) col);
+        }
+        if (item->GetSubMenu())
+          item->GetSubMenu()->SetForegroundColour((wxColour&) col);
+        node = node->Next();
+    }
+}
+
+void wxMenu::ChangeFont(bool keepOriginalSize)
+{
+// lesstif 0.87 hangs when setting XmNfontList
+#ifndef LESSTIF_VERSION	
+    if (!m_font.Ok() || !m_menuWidget)
+        return;
+
+    XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay((Widget) m_menuWidget));
+
+    XtVaSetValues ((Widget) m_menuWidget,
+		   XmNfontList, fontList,
+		   NULL);
+    if (m_buttonWidget)
+    {
+      XtVaSetValues ((Widget) m_buttonWidget,
+		   XmNfontList, fontList,
+		   NULL);
+    }
+    wxNode* node = m_menuItems.First();
+    while (node)
+    {
+        wxMenuItem* item = (wxMenuItem*) node->Data();
+        if (m_menuWidget && item->GetButtonWidget() && m_font.Ok())
+        {
+          XtVaSetValues ((Widget) item->GetButtonWidget(),
+		   XmNfontList, fontList,
+		   NULL);
+        }
+        if (item->GetSubMenu())
+          item->GetSubMenu()->ChangeFont(keepOriginalSize);
+        node = node->Next();
+    }
+#endif
+}
+
+void wxMenu::SetFont(const wxFont& font)
+{
+    m_font = font;
+    ChangeFont();
+}
+
+void wxMenuBar::SetBackgroundColour(const wxColour& col)
+{
+
+    m_backgroundColour = col;
+    if (m_mainWidget)
+       wxDoChangeBackgroundColour(m_mainWidget, (wxColour&) col);
+    int i;
+    for (i = 0; i < m_menuCount; i++)
+      m_menus[i]->SetBackgroundColour((wxColour&) col);
+}
+
+void wxMenuBar::SetForegroundColour(const wxColour& col)
+{
+    m_foregroundColour = col;
+    if (m_mainWidget)
+       wxDoChangeForegroundColour(m_mainWidget, (wxColour&) col);
+
+    int i;
+    for (i = 0; i < m_menuCount; i++)
+      m_menus[i]->SetForegroundColour((wxColour&) col);
+}
+
+void wxMenuBar::ChangeFont(bool keepOriginalSize)
+{
+  // Nothing to do for menubar, fonts are kept in wxMenus
+}
+
+void wxMenuBar::SetFont(const wxFont& font)
+{
+    m_font = font;
+    ChangeFont();
+
+    int i;
+    for (i = 0; i < m_menuCount; i++)
+      m_menus[i]->SetFont(font);
+}
+

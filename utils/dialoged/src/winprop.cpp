@@ -1371,13 +1371,13 @@ wxProperty *wxRadioBoxPropertyInfo::GetProperty(wxString& name)
   if (name == "orientation")
   {
     wxString orient;
-    if (m_propertyWindow->GetWindowStyleFlag() & wxRA_HORIZONTAL)
-      orient = "wxRA_HORIZONTAL";
+    if (m_propertyWindow->GetWindowStyleFlag() & wxRA_SPECIFY_COLS)
+      orient = "wxRA_SPECIFY_COLS";
     else
-      orient = "wxRA_VERTICAL";
+      orient = "wxRA_SPECIFY_ROWS";
 
     return new wxProperty("orientation", orient, "string",
-       new wxStringListValidator(new wxStringList("wxRA_HORIZONTAL", "wxRA_VERTICAL",
+       new wxStringListValidator(new wxStringList("wxRA_SPECIFY_COLS", "wxRA_SPECIFY_ROWS",
           NULL)));
   }
   else if (name == "values")
@@ -1405,17 +1405,17 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
   {
     long windowStyle = radioBox->GetWindowStyleFlag();
     wxString val(property->GetValue().StringValue());
-    if (val == "wxRA_HORIZONTAL")
+    if (val == "wxRA_SPECIFY_COLS")
     {
-      if (windowStyle & wxRA_VERTICAL)
-        windowStyle -= wxRA_VERTICAL;
-      windowStyle |= wxRA_HORIZONTAL;
+      if (windowStyle & wxRA_SPECIFY_ROWS)
+        windowStyle -= wxRA_SPECIFY_ROWS;
+      windowStyle |= wxRA_SPECIFY_COLS;
     }
     else
     {
-      if (windowStyle & wxRA_HORIZONTAL)
-        windowStyle -= wxRA_HORIZONTAL;
-      windowStyle |= wxRA_VERTICAL;
+      if (windowStyle & wxRA_SPECIFY_COLS)
+        windowStyle -= wxRA_SPECIFY_COLS;
+      windowStyle |= wxRA_SPECIFY_ROWS;
     }
     radioBox->SetWindowStyleFlag(windowStyle);
     wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(radioBox);

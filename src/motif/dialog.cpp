@@ -117,9 +117,10 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
 
     wxASSERT_MSG( (parentWidget != (Widget) 0), "Could not find a suitable parent shell for dialog." );
 
-    Arg args[1];
+    Arg args[2];
     XtSetArg (args[0], XmNdefaultPosition, False);
-    Widget dialogShell = XmCreateBulletinBoardDialog(parentWidget, (char*) (const char*) name, args, 1);
+    XtSetArg (args[1], XmNautoUnmanage, False);
+    Widget dialogShell = XmCreateBulletinBoardDialog(parentWidget, (char*) (const char*) name, args, 2);
     m_mainWidget = (WXWidget) dialogShell;
 
     // We don't want margins, since there is enough elsewhere.
@@ -474,7 +475,8 @@ int wxDialog::ShowModal()
     wxModalShowingStack.Insert((wxObject *)TRUE);
         
     m_modalShowing = TRUE;
-    XtAddGrab((Widget) m_mainWidget, TRUE, FALSE);
+    //    XtAddGrab((Widget) m_mainWidget, TRUE, FALSE);
+
     XEvent event;
 
     // Loop until we signal that the dialog should be closed
@@ -710,18 +712,20 @@ static void wxUnmapBulletinBoard(Widget WXUNUSED(dialog), wxDialog *WXUNUSED(cli
   */
 }
 
-void wxDialog::ChangeFont(bool WXUNUSED(keepOriginalSize))
+void wxDialog::ChangeFont(bool keepOriginalSize)
 {
-    // TODO
+    wxWindow::ChangeFont(keepOriginalSize);
 }
 
 void wxDialog::ChangeBackgroundColour()
 {
-    // TODO
+    if (GetMainWidget())
+        DoChangeBackgroundColour(GetMainWidget(), m_backgroundColour);
 }
 
 void wxDialog::ChangeForegroundColour()
 {
-    // TODO
+    if (GetMainWidget())
+        DoChangeForegroundColour(GetMainWidget(), m_foregroundColour);
 }
 

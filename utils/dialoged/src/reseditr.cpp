@@ -2117,8 +2117,8 @@ void wxResourceEditorFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
 
 void wxResourceEditorFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
-	  manager->Clear(TRUE, FALSE) ;
-      this->Close();
+      manager->Clear(TRUE, FALSE) ;
+      this->Destroy();
 }
 
 void wxResourceEditorFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
