@@ -117,6 +117,12 @@ int _System soclose(int);
 #  endif
 #endif
 
+#else 
+   /* undefine for OSX - its really an int */
+#  ifdef __DARWIN__
+#    undef SOCKLEN_T
+#    define SOCKLEN_T int
+#  endif
 #endif /* SOCKLEN_T */
 
 /*
@@ -1406,7 +1412,7 @@ void GSocket::Detected_Write()
 
     m_establishing = false;
 
-    getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, &len);
+    getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, (int*) &len);
 
     if (error)
     {
