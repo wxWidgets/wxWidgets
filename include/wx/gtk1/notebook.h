@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tabctrl.h
-// Purpose:     wxTabCtrl class
+// Name:        notebook.h
+// Purpose:     wxNotebook class
 // Author:      Robert Roebling
 // Modified by:
 // RCS-ID:      $Id$
@@ -8,8 +8,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TABCTRLH__
-#define __TABCTRLH__
+#ifndef __NOTEBOOKH__
+#define __NOTEBOOKH__
 
 #ifdef __GNUG__
 #pragma interface "notebook.h"
@@ -186,4 +186,4 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
   },
 
 #endif
-    // __TABCTRLH__
+    // __NOTEBOOKH__

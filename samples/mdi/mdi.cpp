@@ -29,6 +29,11 @@
 #endif
 #endif
 
+#ifdef __WXGTK__
+//#include "list.xpm"
+//#include "folder.xpm"
+#endif
+
 #include "mdi.h"
 
 MyFrame *frame = NULL;
@@ -85,10 +90,10 @@ bool MyApp::OnInit(void)
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
-    EVT_MENU(MDI_QUIT, MyFrame::OnQuit)
     EVT_MENU(MDI_ABOUT, MyFrame::OnAbout)
     EVT_MENU(MDI_NEW_WINDOW, MyFrame::OnNewWindow)
     EVT_SIZE(MyFrame::OnSize)
+    EVT_MENU(MDI_QUIT, MyFrame::OnQuit)
 END_EVENT_TABLE()
 
 // Define my frame constructor
@@ -270,8 +275,8 @@ void MyFrame::OnSize(wxSizeEvent& event)
 // duplicate event handlers here.
 
 BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
-  EVT_MENU(MDI_CHILD_QUIT, MyChild::OnQuit)
   EVT_SIZE( MyChild::OnSize)
+  EVT_MENU(MDI_CHILD_QUIT, MyChild::OnQuit)
 END_EVENT_TABLE()
 
 MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size,

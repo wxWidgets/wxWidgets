@@ -61,7 +61,7 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
   gtk_menu_bar_append( GTK_MENU_BAR(m_menubar), root_menu );
 };
     
-int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
+static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
 {
   if (menu->m_title == menuString)
   {
@@ -91,7 +91,48 @@ int wxMenuBar::FindMenuItem( const wxString &menuString, const wxString &itemStr
   return -1;
 };
 
-    
+// Find a wxMenuItem using its id. Recurses down into sub-menus
+static wxMenuItem* FindMenuItemByIdRecursive( const wxMenu* menu, int id )
+{
+  wxMenuItem* result = menu->FindItemForId( id );
+
+  wxNode *node = menu->m_items.First();
+  while (node && result == 0)
+  {
+    wxMenuItem *item = (wxMenuItem*)node->Data();
+    if (item->m_subMenu) result = FindMenuItemByIdRecursive( item->m_subMenu, id );
+    node = node->Next();
+  };
+  return result;
+};
+
+wxMenuItem* wxMenuBar::FindMenuItemById( int id ) const
+{
+  wxMenuItem* result = 0;
+  wxNode *node = m_menus.First();
+  while (node && result == 0)
+  {
+    wxMenu *menu = (wxMenu*)node->Data();
+    result = FindMenuItemByIdRecursive( menu, id );
+    node = node->Next();
+  }
+  return result;
+}
+
+bool wxMenuBar::IsChecked( int id ) const
+{
+  wxMenuItem* item = FindMenuItemById( id );
+  if (item) return item->IsChecked();
+  return FALSE;
+}
+
+bool wxMenuBar::IsEnabled( int id ) const
+{
+  wxMenuItem* item = FindMenuItemById( id );
+  if (item) return item->IsEnabled();
+  return FALSE;
+}
+
 //-----------------------------------------------------------------------------
 // wxMenu
 //-----------------------------------------------------------------------------
@@ -123,6 +164,29 @@ wxMenuItem::wxMenuItem(void)
   m_helpStr = "";
   m_menuItem = NULL;
 };
+
+void wxMenuItem::Check( bool check )
+{
+  if ( IsCheckable() )
+  {
+    m_checked = check;
+    gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
+  }
+}
+
+bool wxMenuItem::IsChecked() const
+{
+  if ( IsCheckable() )
+  {
+    return ((GtkCheckMenuItem*)m_menuItem)->active != 0;
+  }
+  return FALSE;
+}
+
+void wxMenuItem::Enable( bool enable )
+{
+  m_isEnabled = enable;
+}
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
@@ -219,9 +283,22 @@ int wxMenu::FindItem( const wxString itemString ) const
   return -1;
 };
 
-void wxMenu::Check( int WXUNUSED(id), bool WXUNUSED(Flag) )
+wxMenuItem* wxMenu::FindItemForId( int id ) const
 {
-  // I'm just too lazy
+  wxNode *node = m_items.First();
+  while (node)
+  {
+    wxMenuItem *item = (wxMenuItem*)node->Data();
+    if (item->m_id == id) return item;
+    node = node->Next();
+  }
+  return NULL;
+}
+
+void wxMenu::Check( int id, bool Flag )
+{
+  wxMenuItem* item = FindItemForId( id );
+  if (item) item->Check(Flag);
 };
 
 void wxMenu::Enable( int id, bool enable )

@@ -21,7 +21,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarTool,wxObject)
   
-wxToolBarTool::wxToolBarTool( wxToolBarGTK *owner, int theIndex, 
+wxToolBarTool::wxToolBarTool( wxToolBar *owner, int theIndex, 
       const wxBitmap& bitmap1, const  wxBitmap& bitmap2,
       bool toggle, wxObject *clientData,
       const wxString& shortHelpString, const wxString& longHelpString )
@@ -45,7 +45,7 @@ wxToolBarTool::~wxToolBarTool(void)
 };
 
 //-----------------------------------------------------------------------------
-// wxToolBarGTK
+// wxToolBar
 //-----------------------------------------------------------------------------
 
 static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget), wxToolBarTool *tool )
@@ -59,27 +59,27 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget), wxToolBarTool *to
 
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolBarGTK,wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxToolBar,wxControl)
 
-BEGIN_EVENT_TABLE(wxToolBarGTK, wxControl)
+BEGIN_EVENT_TABLE(wxToolBar, wxControl)
 END_EVENT_TABLE()
 
-wxToolBarGTK::wxToolBarGTK(void)
+wxToolBar::wxToolBar(void)
 {
 };
 
-wxToolBarGTK::wxToolBarGTK( wxWindow *parent, wxWindowID id, 
+wxToolBar::wxToolBar( wxWindow *parent, wxWindowID id, 
   const wxPoint& pos, const wxSize& size,
   long style, const wxString& name )
 {
   Create( parent, id, pos, size, style, name );
 };
 
-wxToolBarGTK::~wxToolBarGTK(void)
+wxToolBar::~wxToolBar(void)
 {
 };
 
-bool wxToolBarGTK::Create( wxWindow *parent, wxWindowID id, 
+bool wxToolBar::Create( wxWindow *parent, wxWindowID id, 
   const wxPoint& pos, const wxSize& size,
   long style, const wxString& name )
 {
@@ -104,7 +104,7 @@ bool wxToolBarGTK::Create( wxWindow *parent, wxWindowID id,
   return TRUE;
 };
 
-bool wxToolBarGTK::OnLeftClick( int toolIndex, bool toggleDown )
+bool wxToolBar::OnLeftClick( int toolIndex, bool toggleDown )
 {
   wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, toolIndex);
   event.SetEventObject(this);
@@ -115,7 +115,7 @@ bool wxToolBarGTK::OnLeftClick( int toolIndex, bool toggleDown )
   return TRUE;
 };
 
-void wxToolBarGTK::OnRightClick( int toolIndex, float WXUNUSED(x), float WXUNUSED(y) )
+void wxToolBar::OnRightClick( int toolIndex, float WXUNUSED(x), float WXUNUSED(y) )
 {
   wxCommandEvent event(wxEVT_COMMAND_TOOL_RCLICKED, toolIndex);
   event.SetEventObject(this);
@@ -123,7 +123,7 @@ void wxToolBarGTK::OnRightClick( int toolIndex, float WXUNUSED(x), float WXUNUSE
   GetEventHandler()->ProcessEvent(event);
 };
 
-void wxToolBarGTK::OnMouseEnter( int toolIndex )
+void wxToolBar::OnMouseEnter( int toolIndex )
 {
   wxCommandEvent event(wxEVT_COMMAND_TOOL_ENTER, toolIndex);
   event.SetEventObject(this);
@@ -131,7 +131,7 @@ void wxToolBarGTK::OnMouseEnter( int toolIndex )
   GetEventHandler()->ProcessEvent(event);
 };
 
-wxToolBarTool *wxToolBarGTK::AddTool( int toolIndex, const wxBitmap& bitmap, 
+wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap, 
   const wxBitmap& pushedBitmap, bool toggle,
   float WXUNUSED(xPos), float WXUNUSED(yPos), wxObject *clientData,
   const wxString& helpString1, const wxString& helpString2 )
@@ -160,48 +160,48 @@ wxToolBarTool *wxToolBarGTK::AddTool( int toolIndex, const wxBitmap& bitmap,
   return tool;
 };
 
-void wxToolBarGTK::AddSeparator(void)
+void wxToolBar::AddSeparator(void)
 {
   gtk_toolbar_append_space( m_toolbar );
 };
 
-void wxToolBarGTK::ClearTools(void)
+void wxToolBar::ClearTools(void)
 {
 };
 
-void wxToolBarGTK::EnableTool(int toolIndex, bool enable)
+void wxToolBar::EnableTool(int toolIndex, bool enable)
 {
 };
 
-void wxToolBarGTK::ToggleTool(int toolIndex, bool toggle)
+void wxToolBar::ToggleTool(int toolIndex, bool toggle)
 {
 };
 
-void wxToolBarGTK::SetToggle(int toolIndex, bool toggle) 
+void wxToolBar::SetToggle(int toolIndex, bool toggle) 
 {
 };
 
-wxObject *wxToolBarGTK::GetToolClientData(int index) const
+wxObject *wxToolBar::GetToolClientData(int index) const
 {
 };
 
-bool wxToolBarGTK::GetToolState(int toolIndex) const
+bool wxToolBar::GetToolState(int toolIndex) const
 {
 };
 
-bool wxToolBarGTK::GetToolEnabled(int toolIndex) const
+bool wxToolBar::GetToolEnabled(int toolIndex) const
 {
 };
 
-void wxToolBarGTK::SetMargins(int x, int y)
+void wxToolBar::SetMargins(int x, int y)
 {
 };
 
-void wxToolBarGTK::SetToolPacking(int packing)
+void wxToolBar::SetToolPacking(int packing)
 {
 };
 
-void wxToolBarGTK::SetToolSeparation(int separation)
+void wxToolBar::SetToolSeparation(int separation)
 {
 };
 

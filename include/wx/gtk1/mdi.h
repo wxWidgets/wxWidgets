@@ -22,6 +22,7 @@
 #include "wx/control.h"
 #include "wx/panel.h"
 #include "wx/frame.h"
+#include "wx/toolbar.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -63,30 +64,40 @@ class wxMDIParentFrame: public wxFrame
       long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
       const wxString& name = wxFrameNameStr );
 
-  void OnSize( wxSizeEvent& event );
-  void OnActivate( wxActivateEvent& event );
 
-  void SetMenuBar( wxMenuBar *menu_bar );
-  void GetClientSize(int *width, int *height) const;
-  wxMDIChildFrame *GetActiveChild(void) const;
-  
-  wxMDIClientWindow *GetClientWindow(void) const; 
-  virtual wxMDIClientWindow *OnCreateClient(void);
-  
-  virtual void Cascade(void) {};
-  virtual void Tile(void) {};
-  virtual void ArrangeIcons(void) {};
-  virtual void ActivateNext(void);
-  virtual void ActivatePrevious(void);
-
-  void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void GetClientSize(int *width, int *height) const;
+    wxMDIChildFrame *GetActiveChild(void) const;
     
- protected:
-    wxMDIClientWindow *             m_clientWindow;
-    wxMDIChildFrame *               m_currentChild;
-    bool                            m_parentFrameActive;
+    virtual void SetToolBar( wxToolBar *toolbar );
+    virtual wxWindow *GetToolBar(void) const;
+  
+    wxMDIClientWindow *GetClientWindow(void) const; 
+    virtual wxMDIClientWindow *OnCreateClient(void);
+  
+    virtual void Cascade(void) {};
+    virtual void Tile(void) {};
+    virtual void ArrangeIcons(void) {};
+    virtual void ActivateNext(void);
+    virtual void ActivatePrevious(void);
 
-//  DECLARE_EVENT_TABLE()    
+    void OnActivate( wxActivateEvent& event );
+    void OnSysColourChanged( wxSysColourChangedEvent& event );
+    
+ //private: 
+ 
+    wxMDIChildFrame                *m_currentChild;
+    
+    void SetMDIMenuBar( wxMenuBar *menu_bar );
+    virtual void GtkOnSize( int x, int y, int width, int height );
+    
+ private:
+ 
+    wxMDIClientWindow              *m_clientWindow;
+    bool                            m_parentFrameActive;
+    wxMenuBar                      *m_mdiMenuBar;
+    wxToolBar                      *m_toolBar;
+
+  DECLARE_EVENT_TABLE()    
 };
 
 //-----------------------------------------------------------------------------
@@ -120,9 +131,19 @@ class wxMDIChildFrame: public wxPanel
     virtual void Restore(void) {};
     virtual void Activate(void);
     
+    bool Destroy(void);
+    void OnCloseWindow( wxCloseEvent& event );
+    
   public:
   
-    wxString    m_title;
+    wxString           m_title;
+    wxMenuBar         *m_menuBar;
+    
+//  private:
+  
+    GtkNotebookPage   *m_page;
+    
+  DECLARE_EVENT_TABLE()    
 };
 
 //-----------------------------------------------------------------------------

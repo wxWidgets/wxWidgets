@@ -26,7 +26,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxRadioBox;
+class wxMDIChildFrame;
 
 class wxFrame;
 
@@ -73,16 +73,18 @@ class wxFrame: public wxWindow
     
   //private:    
     
-    void GtkOnSize( int x, int y, int width, int height );
+    virtual void GtkOnSize( int x, int y, int width, int height );
     void DoMenuUpdates(void);
     void DoMenuUpdates(wxMenu* menu);
+    
     
   private:
   
     friend        wxWindow;
+    friend        wxMDIChildFrame;
     
-    GtkWidget    *m_mainWindow;
     wxMenuBar    *m_frameMenuBar;
+    GtkWidget    *m_mainWindow;
     wxStatusBar  *m_frameStatusBar;
     bool          m_doingOnSize;
     wxString      m_title;

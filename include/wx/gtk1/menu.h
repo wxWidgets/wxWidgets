@@ -48,6 +48,9 @@ class wxMenuBar: public wxWindow
     wxMenuBar(void);
     void Append( wxMenu *menu, const wxString &title );
     int FindMenuItem( const wxString &menuString, const wxString &itemString ) const;
+    wxMenuItem* FindMenuItemById( int id ) const;
+    bool IsChecked( int id ) const;
+    bool IsEnabled( int id ) const;
     
     wxList       m_menus;
     GtkWidget   *m_menubar;
@@ -76,14 +79,16 @@ class wxMenuItem: public wxObject
     
     GtkWidget    *m_menuItem;  // GtkMenuItem
     
-  bool              IsSeparator() const { return m_id == ID_SEPARATOR;  }
-  bool              IsEnabled()   const { return m_isEnabled;  }
-  bool              IsChecked()   const { return m_checked;  }
-
-  int               GetId()       const { return m_id;    }
-  const wxString&   GetHelp()     const { return m_helpStr;   }
-  wxMenu           *GetSubMenu()  const { return m_subMenu;  }
-  
+    bool IsCheckable()         const { return m_isCheckMenu; }
+    bool IsSeparator()         const { return m_id == ID_SEPARATOR;  }
+    bool IsEnabled()           const { return m_isEnabled;  }
+    int  GetId()               const { return m_id; }
+    const wxString& GetHelp()  const { return m_helpStr; }
+    wxMenu *GetSubMenu()       const { return m_subMenu; }
+    
+    void Check( bool check );
+    bool IsChecked() const;
+    void Enable( bool enable );
 };
 
 class wxMenu: public wxEvtHandler
@@ -99,6 +104,7 @@ class wxMenu: public wxEvtHandler
     void Append( int id, const wxString &item,
       wxMenu *subMenu, const wxString &helpStr = "" );
     int FindItem( const wxString itemString ) const;
+    wxMenuItem* FindItemForId( int id ) const;
     void Break(void) {};
     void Check(int id, bool Flag);
     void Enable( int id, bool enable );

@@ -65,8 +65,8 @@ bool gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(
 //-----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
-  EVT_CLOSE(wxFrame::OnCloseWindow)
   EVT_SIZE(wxFrame::OnSize)
+  EVT_CLOSE(wxFrame::OnCloseWindow)
   EVT_IDLE(wxFrame::OnIdle)
 END_EVENT_TABLE()
 
@@ -172,9 +172,12 @@ void wxFrame::Enable( bool enable )
   gtk_widget_set_sensitive( m_mainWindow, enable );
 };
 
-void wxFrame::OnCloseWindow( wxCloseEvent& WXUNUSED(event) )
+void wxFrame::OnCloseWindow( wxCloseEvent &event )
 {
-  this->Destroy();
+    if ( GetEventHandler()->OnClose() || event.GetForce())
+    {
+        this->Destroy();
+    }
 };
 
 bool wxFrame::Destroy(void)
@@ -290,7 +293,7 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
   }
 };
 
-void SetInvokingWindow( wxMenu *menu, wxWindow *win )
+static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
   menu->SetInvokingWindow( win );
   wxNode *node = menu->m_items.First();
@@ -305,18 +308,24 @@ void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 {
   m_frameMenuBar = menuBar;
-
-  wxNode *node = m_frameMenuBar->m_menus.First();
-  while (node)
+  
+  if (m_frameMenuBar)
   {
-    wxMenu *menu = (wxMenu*)node->Data();
-    SetInvokingWindow( menu, this );
-    node = node->Next();
-  };
-
-  m_frameMenuBar->m_parent = this;
-  gtk_myfixed_put( GTK_MYFIXED(m_mainWindow),
-    m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
+    if (m_frameMenuBar->m_parent != this)
+    {
+      wxNode *node = m_frameMenuBar->m_menus.First();
+      while (node)
+      {
+        wxMenu *menu = (wxMenu*)node->Data();
+        SetInvokingWindow( menu, this );
+        node = node->Next();
+      };
+  
+      m_frameMenuBar->m_parent = this;
+      gtk_myfixed_put( GTK_MYFIXED(m_mainWindow),
+        m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
+    }
+  }
 };
 
 bool wxFrame::CreateStatusBar( int number )

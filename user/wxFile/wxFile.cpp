@@ -129,7 +129,7 @@ MyFrame::MyFrame(void) :
   SetStatusText( "Welcome", 0 );
   SetStatusText( "wxFile v0.2 by Robert Roebling.", 1 );
   
-  m_tb = new wxToolBarGTK( this, ID_TOOLBAR, wxPoint(2,60), wxSize(300-4,26) );
+  m_tb = new wxToolBar( this, ID_TOOLBAR, wxPoint(2,60), wxSize(300-4,26) );
   m_tb->SetMargins( 2, 2 );
   
   wxBitmap *bm;

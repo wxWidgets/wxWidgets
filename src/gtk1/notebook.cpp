@@ -153,6 +153,9 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
   PreCreation( parent, id, pos, size, style, name );
 
   m_widget = gtk_notebook_new();
+  
+  gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
+  
   m_idHandler = gtk_signal_connect
                 (
                   GTK_OBJECT(m_widget), "switch_page",

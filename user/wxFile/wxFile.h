@@ -63,7 +63,7 @@ class MyFrame: public wxFrame
     void OnTreeSelected( wxTreeEvent &event );
     void OnTreeKeyDown( wxTreeEvent &event );
     
-    wxToolBarGTK       *m_tb;
+    wxToolBar          *m_tb;
     wxSplitterWindow   *m_splitter;
     wxFileCtrl         *m_rightFile;
     wxFileCtrl         *m_leftFile;

@@ -141,7 +141,7 @@ class MyFrame: public wxFrame
     void OnAbout( wxCommandEvent &event );
     void OnQuit( wxCommandEvent &event );
     
-    wxToolBarGTK     *m_tb;
+    wxToolBar    *m_tb;
     MyCanvas         *m_canvas;
     
     MyTimer m_timer;

@@ -470,7 +470,7 @@ MyFrame::MyFrame(void) :
   m_canvas = new MyCanvas( this, -1, wxPoint(2,62), wxSize(300-4,120-4) );
   m_canvas->SetScrollbars( 10, 10, 50, 50 );
   
-  m_tb = new wxToolBarGTK( this, -1, wxPoint(2,60), wxSize(300-4,26) );
+  m_tb = new wxToolBar( this, -1, wxPoint(2,60), wxSize(300-4,26) );
   m_tb->SetMargins( 2, 2 );
   
   wxBitmap *bm = new wxBitmap( list_xpm );

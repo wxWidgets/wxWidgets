@@ -24,7 +24,7 @@
 //-----------------------------------------------------------------------------
 
 class wxToolBarTool;
-class wxToolBarGTK;
+class wxToolBar;
 
 //-----------------------------------------------------------------------------
 // constants
@@ -50,7 +50,7 @@ class wxToolBarTool: public wxObject
   public:
 
     wxToolBarTool(void) {}; 
-    wxToolBarTool( wxToolBarGTK *owner, int theIndex = 0, 
+    wxToolBarTool( wxToolBar *owner, int theIndex = 0, 
       const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
       bool toggle = FALSE, wxObject *clientData = NULL, 
       const wxString& shortHelpString = "", const wxString& longHelpString = "");
@@ -70,24 +70,24 @@ class wxToolBarTool: public wxObject
     bool                  m_isMenuCommand;
     wxString              m_shortHelpString;
     wxString              m_longHelpString;
-    wxToolBarGTK         *m_owner;
+    wxToolBar            *m_owner;
 };
 
 //-----------------------------------------------------------------------------
-// wxToolBarGTK
+// wxToolBar
 //-----------------------------------------------------------------------------
 
-class wxToolBarGTK: public wxControl
+class wxToolBar: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxToolBarGTK)
+  DECLARE_DYNAMIC_CLASS(wxToolBar)
   
   public:
 
-    wxToolBarGTK(void);
-    wxToolBarGTK( wxWindow *parent, wxWindowID id, 
+    wxToolBar(void);
+    wxToolBar( wxWindow *parent, wxWindowID id, 
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
       long style = 0, const wxString& name = wxToolBarNameStr );
-   ~wxToolBarGTK(void);
+   ~wxToolBar(void);
 
    bool Create( wxWindow *parent, wxWindowID id, 
      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,

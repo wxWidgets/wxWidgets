@@ -28,7 +28,7 @@
 class wxDC;
 class wxPaintDC;
 class wxMemoryDC;
-class wxToolBarGTK;
+class wxToolBar;
 class wxBitmapButton;
 class wxStaticBitmap;
 
@@ -56,7 +56,7 @@ class wxMask: public wxObject
     friend wxBitmap;
     friend wxDC;
     friend wxPaintDC;
-    friend wxToolBarGTK;
+    friend wxToolBar;
     friend wxBitmapButton;
     friend wxStaticBitmap;
     
@@ -116,7 +116,7 @@ class wxBitmap: public wxObject
     friend wxDC;
     friend wxPaintDC;
     friend wxMemoryDC;
-    friend wxToolBarGTK;
+    friend wxToolBar;
     friend wxBitmapButton;
     friend wxStaticBitmap;
 
