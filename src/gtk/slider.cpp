@@ -132,8 +132,10 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     m_adjust = gtk_range_get_adjustment( GTK_RANGE(m_widget) );
 
+#ifdef __WXGTK20__
     if (style & wxSL_INVERSE)
         gtk_range_set_inverted( GTK_RANGE(m_widget), TRUE );
+#endif
 
     GtkEnableEvents();
 
