@@ -106,13 +106,26 @@ Destructor.
 \membersection{wxInputStream::Peek}
 \func{char}{Peek}{\void}
 
+Returns the first character in the input queue without removing it.
+
 \membersection{wxInputStream::GetC}
 \func{char}{GetC}{\void}
+
+Returns the first character in the input queue and removes it.
 
 \membersection{wxInputStream::Read}
 \func{wxInputStream&}{Read}{\param{void *}{buffer}, \param{size_t}{ size}}
 
+Reads the specified amount of bytes and stores the data in \it{buffer}.
+\it{WARNING !} The buffer needs absolutely to have at least the specified size.
+
+This function returns a reference on the current object, so the user can test
+any states of the stream right away.
+
 \func{wxInputStream&}{Read}{\param{wxOutputStream&}{ stream_out}}
+
+Reads data from the input queue and stores them in the specified output stream.
+The data is read until an error is raised by one of the two streams.
 
 % ------------------
 % Position functions
@@ -121,8 +134,12 @@ Destructor.
 \membersection{wxInputStream::SeekI}
 \func{off_t}{SeekI}{\param{off_t}{ pos}, \param{wxSeekMode}{ mode = wxFromStart}}
 
+Changes the stream current position.
+
 \membersection{wxInputStream::TellI}
 \constfunc{off_t}{TellI}{\void}
+
+Returns the current stream position.
 
 % ---------------
 % State functions
@@ -131,8 +148,12 @@ Destructor.
 \membersection{wxInputStream::InputStreamBuffer}
 \func{wxStreamBuffer *}{InputStreamBuffer}{\void}
 
+Returns the stream buffer associated with the input stream.
+
 \membersection{wxInputStream::LastRead}
 \constfunc{size_t}{LastRead}{\void}
+
+Returns the last amount of bytes read.
 
 % -----------------------------------------------------------------------------
 % wxOutputStream
@@ -152,35 +173,59 @@ Destructor.
 % ctor & dtor
 % -----------
 
-\membersection{wxOutputStream::wxInputStream}
+\membersection{wxOutputStream::wxOutputStream}
 \func{}{wxOutputStream}{\void}
+
+Creates a dummy wxOutputStream object.
 
 \func{}{wxOutputStream}{\param{wxStreamBuffer *}{sbuf}}
 
+Creates an input stream using the specified stream buffer \it{sbuf}. This
+stream buffer can point to another stream.
+
 \membersection{wxOutputStream::\destruct{wxOutputStream}}
 \func{}{\destruct{wxOutputStream}}
+
+Destructor.
 
 % -----------
 % IO function
 % -----------
 
 \membersection{wxOutputStream::PutC}
-\func{char}{PutC}{\void}
+\func{void}{PutC}{\param{char}{ c}}
+
+Puts the specified character in the output queue and increments the
+stream position.
 
 \membersection{wxOutputStream::Write}
 \func{wxOutputStream&}{Write}{\param{const void *}{buffer}, \param{size_t}{ size}}
 
+Writes the specified amount of bytes using the data of \it{buffer}.
+\it{WARNING !} The buffer needs absolutely to have at least the specified size.
+
+This function returns a reference on the current object, so the user can test
+any states of the stream right away.
+
 \func{wxOutputStream&}{Write}{\param{wxInputStream&}{ stream_in}}
+
+Reads data from the specified input stream and stores them 
+in the current stream. The data is read until an error is raised
+by one of the two streams.
 
 % ------------------
 % Position functions
 % ------------------
 
 \membersection{wxOutputStream::SeekO}
-\func{off_t}{SeekO}{\param{off_t}{ pos}, \param{wxSeekMode}{ mode = wxFromStart}}
+\func{off_t}{SeekO}{\param{off_t}{ pos}, \param{wxSeekMode}}
+
+Changes the stream current position.
 
 \membersection{wxOutputStream::TellO}
 \constfunc{off_t}{TellO}{\void}
+
+Returns the current stream position.
 
 % ---------------
 % State functions
@@ -188,6 +233,8 @@ Destructor.
 
 \membersection{wxOutputStream::OutputStreamBuffer}
 \func{wxStreamBuffer *}{OutputStreamBuffer}{\void}
+
+Returns the stream buffer associated with the output stream.
 
 \membersection{wxOutputStream::LastWrite}
 \constfunc{size_t}{LastWrite}{\void}
