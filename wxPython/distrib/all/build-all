@@ -320,6 +320,7 @@ fi
 # ---------------------------------------------------------------------------
 # Final disposition of build results...
 
+chmod a+r $STAGING_DIR/*
 
 if [ $KIND = dryrun ]; then
     # we're done
@@ -329,10 +330,12 @@ fi
 
 if [ $KIND = daily ]; then 
 
-    destdir=$UPLOAD_PREVIEW_ROOT/$DAILY
+    destdir=$UPLOAD_DAILY_ROOT/$DAILY
     echo "Copying to the starship at $destdir..."
     ssh $UPLOAD_HOST "mkdir -p $destdir"
     scp $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+    ssh $UPLOAD_HOST "cd $destdir && ls -al"
+
 
     echo "Cleaning up staging dir..."
     rm $STAGING_DIR/*
@@ -342,6 +345,18 @@ if [ $KIND = daily ]; then
     # only N days worth
 
     # TODO:  Send email to wxPython-dev?
+    cat <<EOF  | mail -s "New test build uploaded" robin@alldunn.com
+Hi,
+
+A new test build of wxPython has been uploaded to starship.  
+
+   Version: $VERSION
+   Pythons: $PYVER
+   URL:     http://starship.python.net/crew/robind/wxPython/daily/$DAILY
+
+Have fun!
+R'bot
+EOF
 
     exit 0
 fi
