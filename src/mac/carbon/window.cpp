@@ -2273,6 +2273,18 @@ void wxWindowMac::MacPaintBorders( int left , int top )
         FrameRect( &rect ) ;
 #endif
     }
+
+    if ( MacGetTopLevelWindow() && m_peer->NeedsFocusRect() && m_peer->HasFocus() )
+    {
+        int w , h ;
+        int x , y ;
+        x = y = 0 ;
+        MacWindowToRootWindow( &x , &y ) ;
+        GetSize( &w , &h ) ;
+        Rect rect = {y , x , h + y , w + x } ;
+        DrawThemeFocusRect( &rect , true ) ;
+    }
+
 }
 
 void wxWindowMac::RemoveChild( wxWindowBase *child )
@@ -2696,7 +2708,7 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
     bool handled = false ;
     Rect updatebounds ;
     GetRegionBounds( updatergn , &updatebounds ) ;
-    
+//    wxLogDebug("update for %s bounds %d , %d , %d , %d",typeid(*this).name() , updatebounds.left , updatebounds.top , updatebounds.right , updatebounds.bottom ) ;
     if ( !EmptyRgn(updatergn) )
     {
         RgnHandle newupdate = NewRgn() ;
@@ -2705,14 +2717,14 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
         SetRectRgn( newupdate , origin.x , origin.y , origin.x + point.x , origin.y+point.y ) ;
         SectRgn( newupdate , updatergn , newupdate ) ;
         
-//        if (!EmptyRgn(newupdate))
-//        {
+        // first send an erase event to the entire update area
+        {
             wxWindowDC dc(this);
             dc.SetClippingRegion(wxRegion(updatergn));
             wxEraseEvent eevent( GetId(), &dc );
             eevent.SetEventObject( this );
             GetEventHandler()->ProcessEvent( eevent );
-//        }
+        }
         
         // calculate a client-origin version of the update rgn and set m_updateRegion to that
         OffsetRgn( newupdate , -origin.x , -origin.y ) ;
@@ -2726,11 +2738,36 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
             event.m_timeStamp = time ;
             event.SetEventObject(this);
             handled = GetEventHandler()->ProcessEvent(event); 
+        }
+        
+        // now we cannot rely on having its borders drawn by a window itself, as it does not
+        // get the updateRgn wide enough to always do so, so we do it from the parent
+        // this would also be the place to draw any custom backgrounds for native controls
+        // in Composited windowing
+        for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
+        {
+            wxWindowMac *child = node->GetData();
+            if (child == m_vScrollBar) continue;
+            if (child == m_hScrollBar) continue;
+            if (child->IsTopLevel()) continue;
+            if (!child->IsShown()) continue;
 
-            // paint custom borders
-            wxNcPaintEvent eventNc( GetId() );
-            eventNc.SetEventObject( this );
-            GetEventHandler()->ProcessEvent( eventNc );
+            if ( child->MacGetTopBorderSize() )
+            {
+                int x,y;
+                child->GetPosition( &x, &y );
+                int w,h;
+                child->GetSize( &w, &h );
+                Rect childRect = { y , x , y + h , x + w } ;
+                OffsetRect( &childRect , MacGetLeftBorderSize() , MacGetTopBorderSize() ) ;
+                if ( RectInRgn( &childRect , updatergn ) )
+                {
+                    // paint custom borders
+                    wxNcPaintEvent eventNc( child->GetId() );
+                    eventNc.SetEventObject( child );
+                    child->GetEventHandler()->ProcessEvent( eventNc );
+                }
+            }     
         }
     }
     return handled ;
