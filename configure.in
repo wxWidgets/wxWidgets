@@ -1773,7 +1773,7 @@ if test "$wxUSE_MOTIF" = 1; then
                 version = XpmLibraryVersion();
             ],
             [
-                AC_MSG_RESULT(found in default search path),
+                AC_MSG_RESULT(found in default search path)
                 COMPILED_X_PROGRAM=0
             ],
             [
