@@ -29,11 +29,223 @@
 #include "wx/thread.h"
 #endif
 #include "wx/timer.h"
+#include "wx/hash.h"
+#include "wx/module.h"
 #include "wx/x11/private.h"
 #include "X11/Xlib.h"
 
 #include <sys/time.h>
 #include <unistd.h>
+
+// ----------------------------------------------------------------------------
+// wxSocketTable
+// ----------------------------------------------------------------------------
+
+typedef void (*wxSocketCallback) (int fd, void* data);
+
+class wxSocketTableEntry: public wxObject
+{
+  public:
+    wxSocketTableEntry()
+    {
+        m_fdInput = -1; m_fdOutput = -1;
+        m_callbackInput = NULL; m_callbackOutput = NULL;
+        m_dataInput = NULL; m_dataOutput = NULL;
+    }
+    
+    int m_fdInput;
+    int m_fdOutput;
+    wxSocketCallback m_callbackInput;
+    wxSocketCallback m_callbackOutput;
+    void* m_dataInput;
+    void* m_dataOutput;
+};
+
+typedef enum
+{ wxSocketTableInput, wxSocketTableOutput } wxSocketTableType ;
+
+class wxSocketTable: public wxHashTable
+{
+  public:
+    wxSocketTable(): wxHashTable(wxKEY_INTEGER)
+    {
+    }
+    ~wxSocketTable()
+    {
+        DeleteContents(TRUE);
+    }
+
+    wxSocketTableEntry* FindEntry(int fd);
+
+    void RegisterCallback(int fd, wxSocketTableType socketType, wxSocketCallback callback, void* data);
+
+    void UnregisterCallback(int fd, wxSocketTableType socketType);
+
+    bool CallCallback(int fd, wxSocketTableType socketType);
+
+    void FillSets(fd_set* readset, fd_set* writeset, int* highest);
+
+    void ProcessEvents(fd_set* readset, fd_set* writeset);
+};
+
+wxSocketTableEntry* wxSocketTable::FindEntry(int fd)
+{
+    wxSocketTableEntry* entry = (wxSocketTableEntry*) Get(fd);
+    return entry;
+}
+
+void wxSocketTable::RegisterCallback(int fd, wxSocketTableType socketType, wxSocketCallback callback, void* data)
+{
+    wxSocketTableEntry* entry = FindEntry(fd);
+    if (!entry)
+    {
+        entry = new wxSocketTableEntry();
+        Put(fd, entry);
+    }
+
+    if (socketType == wxSocketTableInput)
+    {
+        entry->m_fdInput = fd;
+        entry->m_dataInput = data;
+        entry->m_callbackInput = callback;
+    }
+    else
+    {
+        entry->m_fdOutput = fd;
+        entry->m_dataOutput = data;
+        entry->m_callbackOutput = callback;
+    }
+}
+
+void wxSocketTable::UnregisterCallback(int fd, wxSocketTableType socketType)
+{
+    wxSocketTableEntry* entry = FindEntry(fd);
+    if (entry)
+    {
+        if (socketType == wxSocketTableInput)
+        {
+            entry->m_fdInput = -1;
+            entry->m_dataInput = NULL;
+            entry->m_callbackInput = NULL;
+        }
+        else
+        {
+            entry->m_fdOutput = -1;
+            entry->m_dataOutput = NULL;
+            entry->m_callbackOutput = NULL;
+        }
+        if (entry->m_fdInput == -1 && entry->m_fdOutput == -1)
+        {
+            Delete(fd);
+            delete entry;
+        }
+    }
+}
+
+bool wxSocketTable::CallCallback(int fd, wxSocketTableType socketType)
+{
+    wxSocketTableEntry* entry = FindEntry(fd);
+    if (entry)
+    {
+        if (socketType == wxSocketTableInput)
+        {
+            if (entry->m_fdInput != -1 && entry->m_callbackInput)
+            {
+                (entry->m_callbackInput) (entry->m_fdInput, entry->m_dataInput);
+            }
+        }
+        else
+        {
+            if (entry->m_fdOutput != -1 && entry->m_callbackOutput)
+            {
+                (entry->m_callbackOutput) (entry->m_fdOutput, entry->m_dataOutput);
+            }
+        }
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+void wxSocketTable::FillSets(fd_set* readset, fd_set* writeset, int* highest)
+{
+    BeginFind();
+    wxNode* node = Next();
+    while (node)
+    {
+        wxSocketTableEntry* entry = (wxSocketTableEntry*) node->Data();
+
+        if (entry->m_fdInput != -1)
+        {
+            FD_SET(entry->m_fdInput, readset);
+            if (entry->m_fdInput > *highest)
+                * highest = entry->m_fdInput;
+        }
+
+        if (entry->m_fdOutput != -1)
+        {
+            FD_SET(entry->m_fdOutput, writeset);
+            if (entry->m_fdOutput > *highest)
+                * highest = entry->m_fdOutput;
+        }
+
+        node = Next();
+    }
+}
+
+void wxSocketTable::ProcessEvents(fd_set* readset, fd_set* writeset)
+{
+    BeginFind();
+    wxNode* node = Next();
+    while (node)
+    {
+        wxSocketTableEntry* entry = (wxSocketTableEntry*) node->Data();
+
+        if (entry->m_fdInput != -1 && FD_ISSET(entry->m_fdInput, readset))
+        {
+            (entry->m_callbackInput) (entry->m_fdInput, entry->m_dataInput);
+        }
+
+        if (entry->m_fdOutput != -1 && FD_ISSET(entry->m_fdOutput, writeset))
+        {
+            (entry->m_callbackOutput) (entry->m_fdOutput, entry->m_dataOutput);
+        }
+
+        node = Next();
+    }
+}
+
+wxSocketTable* wxTheSocketTable = NULL;
+
+class wxSocketTableModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxSocketTableModule)
+public:
+    wxSocketTableModule() {}
+    bool OnInit() { wxTheSocketTable = new wxSocketTable; return TRUE; };
+    void OnExit() { delete wxTheSocketTable; wxTheSocketTable = NULL; };
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxSocketTableModule, wxModule)
+
+// Implement registration functions as C functions so they
+// can be called from gsock11.c
+
+extern "C" void wxRegisterSocketCallback(int fd, wxSocketTableType socketType, wxSocketCallback callback, void* data)
+{
+    if (wxTheSocketTable)
+    {
+        wxTheSocketTable->RegisterCallback(fd, socketType, callback, data);
+    }
+}
+
+extern "C" void wxUnregisterSocketCallback(int fd, wxSocketTableType socketType)
+{
+    if (wxTheSocketTable)
+    {
+        wxTheSocketTable->UnregisterCallback(fd, socketType);
+    }
+}
 
 // ----------------------------------------------------------------------------
 // wxEventLoopImpl
@@ -226,10 +438,6 @@ bool wxEventLoop::Dispatch()
 
     // TODO allowing for threads, as per e.g. wxMSW
 
-#if 0
-    XNextEvent((Display*) wxGetDisplay(), & event);
-#endif
-
     // This now waits until either an X event is received,
     // or the select times out. So we should now process
     // wxTimers in a reasonably timely fashion. However it
@@ -254,17 +462,31 @@ bool wxEventLoop::Dispatch()
         tv.tv_usec=10000; // TODO make this configurable
         int fd = ConnectionNumber((Display*) wxGetDisplay());
         fd_set readset;
+        fd_set writeset;
+        int highest = fd;
         FD_ZERO(&readset);
+        FD_ZERO(&writeset);
+        
         FD_SET(fd, &readset);
-        if (select(fd+1, &readset, NULL, NULL, & tv) == 0)
+
+        if (wxTheSocketTable)
+            wxTheSocketTable->FillSets(& readset, & writeset, & highest);
+        
+        if (select(highest+1, &readset, &writeset, NULL, & tv) == 0)
         {
             // Timed out, so no event to process
             return TRUE;
         }
         else
         {
-            // An event was pending, so get it
-            XNextEvent((Display*) wxGetDisplay(), & event);
+            // An X11 event was pending, so get it
+            if (FD_ISSET(fd, & readset))
+                XNextEvent((Display*) wxGetDisplay(), & event);
+
+            // Check if any socket events were pending,
+            // and if so, call their callbacks
+            if (wxTheSocketTable)
+                wxTheSocketTable->ProcessEvents(& readset, & writeset);
         }
 #endif
     } else

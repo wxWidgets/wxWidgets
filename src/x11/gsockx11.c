@@ -10,25 +10,31 @@
 #if wxUSE_SOCKETS
 
 #include <stdlib.h>
-// #include <X11/Intrinsic.h>
 #include "wx/gsocket.h"
 #include "wx/unix/gsockunx.h"
 
-// TODO: Raw X11 version
-#if 0
+/*
+ * TODO: have these in a common header instead of being repeated
+ * in evtloop.cpp and gsockx11.c
+ */
 
-extern XtAppContext wxGetAppContext();
+typedef void (*wxSocketCallback) (int fd, void* data);
 
-static void _GSocket_Motif_Input(XtPointer data, int *fid,
-                                 XtInputId *id)
+typedef enum
+{ wxSocketTableInput, wxSocketTableOutput } wxSocketTableType ;
+
+void wxRegisterSocketCallback(int fd, wxSocketTableType socketType, wxSocketCallback cback, void* data);
+void wxUnregisterSocketCallback(int fd, wxSocketTableType socketType);
+
+
+static void _GSocket_X11_Input(int *fid, void* data)
 {
   GSocket *socket = (GSocket *)data;
 
   _GSocket_Detected_Read(socket);
 }
 
-static void _GSocket_Motif_Output(XtPointer data, int *fid,
-                                  XtInputId *id)
+static void _GSocket_X11_Output(int *fid, void* data)
 {
   GSocket *socket = (GSocket *)data;
 
@@ -70,22 +76,22 @@ void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
     default: return;
   }
 
-  if (m_id[c] != -1)
-    XtRemoveInput(m_id[c]);
+  //  if (m_id[c] != -1)
+  //    XtRemoveInput(m_id[c]);
 
   if (c == 0)
   {
-     m_id[0] = XtAppAddInput(wxGetAppContext(), socket->m_fd,
-                             (XtPointer *)XtInputReadMask,
-                             (XtInputCallbackProc) _GSocket_Motif_Input,
-                             (XtPointer) socket);
+      m_id[0] = socket->m_fd;
+
+      wxRegisterSocketCallback(socket->m_fd, wxSocketTableInput,
+                               (wxSocketCallback) _GSocket_X11_Input, (void*) socket);
   }
   else
   {
-     m_id[1] = XtAppAddInput(wxGetAppContext(), socket->m_fd,
-                             (XtPointer *)XtInputWriteMask,
-                             (XtInputCallbackProc) _GSocket_Motif_Output,
-                             (XtPointer) socket);
+      m_id[1] = socket->m_fd;
+
+      wxRegisterSocketCallback(socket->m_fd, wxSocketTableOutput,
+                               (wxSocketCallback) _GSocket_X11_Output, (void*) socket);
   }
 }
 
@@ -104,7 +110,12 @@ void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
   }
 
   if (m_id[c] != -1)
-    XtRemoveInput(m_id[c]);
+  {
+      if (c == 0)
+          wxUnregisterSocketCallback(m_id[c], wxSocketTableInput);
+      else
+          wxUnregisterSocketCallback(m_id[c], wxSocketTableOutput);
+  }
 
   m_id[c] = -1;
 }
@@ -125,8 +136,5 @@ void _GSocket_Disable_Events(GSocket *socket)
 
 /* some compilers don't like having empty source files */
 static int wxDummyGsockVar = 0;
-
-#endif
- // 0
 
 #endif /* wxUSE_SOCKETS/!wxUSE_SOCKETS */
