@@ -1,0 +1,173 @@
+#
+# File:		makefile.nt
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds samples for Win95, MSVC++ 4.0
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+THISDIR=$(WXDIR)\samples
+
+!include $(WXDIR)\src\ntwxwin.mak
+
+DEBUG_FLAGS="/Zi /FR"
+LINK_DEBUG_FLAGS="/RELEASE"
+
+all:
+        cd $(WXDIR)\samples\splitter
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\resource
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\events
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\controls
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\listctrl
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\treectrl
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\validate
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\mdi
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\minimal
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\layout
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\printing
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\tbarsmpl
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\tbar95
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\tbarmsw
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\dialogs
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\docview
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\controls
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\nativdlg
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\grid
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\internat
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\ownerdrw
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\checklst
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\dnd
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\joytest
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\regtest
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\taskbar
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\memcheck
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        cd $(WXDIR)\samples\hello
+#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        cd $(WXDIR)\samples\fractal
+#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        cd $(WXDIR)\samples\ipc
+#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        cd $(WXDIR)\samples\wxpoem
+#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        cd $(WXDIR)\samples\types
+#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        cd $(WXDIR)\samples\pressup
+#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        cd $(WXDIR)\samples\bombs
+#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        cd $(WXDIR)\samples\animate
+#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        cd $(WXDIR)\samples\panel
+#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        cd $(WXDIR)\samples\odbc
+#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+
+clean:
+        cd $(WXDIR)\samples\splitter
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\mdi
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\minimal
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\layout
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\printing
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\tbarsmpl
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\tbarmsw
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\tbar95
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\dialogs
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\resource
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\listctrl
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\treectrl
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\validate
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\events
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\docview
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\controls
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\nativdlg
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\grid
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\internat
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\checklst
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\ownerdrw
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\dnd
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\joytest
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\regtest
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\taskbar
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\memcheck
+        nmake -f makefile.nt clean
+#        cd $(WXDIR)\samples\hello
+#        nmake -f makefile.nt clean
+#        cd $(WXDIR)\samples\fractal
+#        nmake -f makefile.nt clean
+#        cd $(WXDIR)\samples\ipc
+#        nmake -f makefile.nt clean
+#        cd $(WXDIR)\samples\types
+#        nmake -f makefile.nt clean
+#        cd $(WXDIR)\samples\pressup
+#        nmake -f makefile.nt clean
+#        cd $(WXDIR)\samples\bombs
+#        nmake -f makefile.nt clean
+#        cd $(WXDIR)\samples\odbc
+#        nmake -f makefile.nt clean
+#        cd $(WXDIR)\samples\animate
+#        nmake -f makefile.nt clean
+#        cd $(WXDIR)\samples\panel
+#        nmake -f makefile.nt clean
+#        cd $(WXDIR)\samples\wxpoem
+#        nmake -f makefile.nt clean
+

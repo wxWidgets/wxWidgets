@@ -1,0 +1,72 @@
+#
+# File:		makefile.g95
+# Author:	Julian Smart
+# Created:	1997
+# Updated:	
+# Copyright:
+#
+# "%W% %G%"
+#
+# Makefile : Builds samples for Win95, GnuWin32
+# info
+
+# Set WXDIR for your system
+WXDIR = ..
+
+THISDIR=$(WXDIR)/samples
+
+all:
+	        cd $(WXDIR)/samples/splitter; make -f makefile.g95
+	        cd $(WXDIR)/samples/resource; make -f makefile.g95
+	        cd $(WXDIR)/samples/events; make -f makefile.g95
+	        cd $(WXDIR)/samples/controls; make -f makefile.g95
+	        cd $(WXDIR)/samples/listctrl; make -f makefile.g95
+	        cd $(WXDIR)/samples/treectrl; make -f makefile.g95
+	        cd $(WXDIR)/samples/validate; make -f makefile.g95
+	        cd $(WXDIR)/samples/mdi; make -f makefile.g95
+	        cd $(WXDIR)/samples/minimal; make -f makefile.g95
+	        cd $(WXDIR)/samples/layout; make -f makefile.g95
+	        cd $(WXDIR)/samples/printing; make -f makefile.g95
+	        cd $(WXDIR)/samples/tbarsmpl; make -f makefile.g95
+	        cd $(WXDIR)/samples/tbar95; make -f makefile.g95
+	        cd $(WXDIR)/samples/tbarmsw; make -f makefile.g95
+	        cd $(WXDIR)/samples/dialogs; make -f makefile.g95
+	        cd $(WXDIR)/samples/docview; make -f makefile.g95
+	        cd $(WXDIR)/samples/controls; make -f makefile.g95
+	        cd $(WXDIR)/samples/nativdlg; make -f makefile.g95
+	        cd $(WXDIR)/samples/grid; make -f makefile.g95
+	        cd $(WXDIR)/samples/internat; make -f makefile.g95
+	        cd $(WXDIR)/samples/checklst; make -f makefile.g95
+	        cd $(WXDIR)/samples/dnd; make -f makefile.g95
+	        cd $(WXDIR)/samples/ownerdrw; make -f makefile.g95
+	        cd $(WXDIR)/samples/joytest; make -f makefile.g95
+	        cd $(WXDIR)/samples/regtest; make -f makefile.g95
+	        cd $(WXDIR)/samples/memcheck; make -f makefile.g95
+
+clean:
+	        cd $(WXDIR)/samples/splitter; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/mdi; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/minimal; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/layout; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/printing; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/tbarsmpl; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/tbarmsw; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/tbar95; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/dialogs; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/resource; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/listctrl; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/treectrl; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/validate; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/events; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/docview; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/controls; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/nativdlg; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/grid; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/internat; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/checklst; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/dnd; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/ownerdrw; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/regtest; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/joytest; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/memcheck; make -f makefile.g95 clean
+
