@@ -632,8 +632,8 @@ public:
     // in the table name or column name, the returned string will have the
     // correct enclosing marks around the name to allow it to be properly 
     // included in a SQL statement
-    const wxString  SQLTableName(const char *tableName);
-    const wxString  SQLColumnName(const char *colName);
+    const wxString  SQLTableName(const wxChar *tableName);
+    const wxString  SQLColumnName(const wxChar *colName);
 
     void         LogError(const wxString &errMsg, const wxString &SQLState = wxEmptyString) 
                         { logError(errMsg, SQLState); }
@@ -694,12 +694,11 @@ void  WXDLLEXPORT  wxDbCloseConnections(void);
 int   WXDLLEXPORT  wxDbConnectionsInUse(void);
 
 
-//TODO: document
 // Writes a message to the wxLog window (stdout usually) when an internal error
 // situation occurs.  This function only works in DEBUG builds
 const wxChar WXDLLEXPORT *wxDbLogExtendedErrorMsg(const wxChar *userText, wxDb *pDb,
-                                                  char *ErrFile, int ErrLine);
-//TODO: end document
+                                                  wxChar *ErrFile, int ErrLine);
+
 
 // This function sets the sql log state for all open wxDb objects
 bool  WXDLLEXPORT  wxDbSqlLog(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME);

@@ -3272,7 +3272,7 @@ bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, cons
 }  // wxDb::TablePrivileges
 
 
-const wxString wxDb::SQLTableName(const char *tableName)
+const wxString wxDb::SQLTableName(const wxChar *tableName)
 {
     wxString TableName;
 
@@ -3286,7 +3286,7 @@ const wxString wxDb::SQLTableName(const char *tableName)
 }  // wxDb::SQLTableName()
 
 
-const wxString wxDb::SQLColumnName(const char *colName)
+const wxString wxDb::SQLColumnName(const wxChar *colName)
 {
     wxString ColName;
 
@@ -3722,7 +3722,7 @@ int WXDLLEXPORT wxDbConnectionsInUse(void)
 /********** wxDbLogExtendedErrorMsg() **********/
 // DEBUG ONLY function
 const wxChar WXDLLEXPORT *wxDbLogExtendedErrorMsg(const wxChar *userText, wxDb *pDb,
-                             char *ErrFile, int ErrLine)
+                             wxChar *ErrFile, int ErrLine)
 {
     static wxString msg;
     msg = userText;
