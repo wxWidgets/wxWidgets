@@ -1,5 +1,0 @@
-# Make wxMotif using the configure system
-chmod a+x configure config.sub setup/general/* config.guess setup/shared/*
-./configure --with-shared --with-motif --with-debug_flag --with-debug_info --without-threads
-make
-
