@@ -79,6 +79,8 @@ public:
     #include "wx/motif/dataform.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/dataform.h"
+#elif defined(__WXPM__)
+    #include "wx/os2/dataform.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -208,12 +210,12 @@ public:
 
     // implement base class pure virtuals
     // ----------------------------------
-    virtual wxDataFormat GetPreferredFormat(Direction WXUNUSED(dir) = Get) const
+    virtual wxDataFormat GetPreferredFormat(wxDataObjectBase::Direction WXUNUSED(dir) = Get) const
         { return m_format; }
-    virtual size_t GetFormatCount(Direction WXUNUSED(dir) = Get) const
+    virtual size_t GetFormatCount(wxDataObjectBase::Direction WXUNUSED(dir) = Get) const
         { return 1; }
     virtual void GetAllFormats(wxDataFormat *formats,
-                               Direction WXUNUSED(dir) = Get) const
+                               wxDataObjectBase::Direction WXUNUSED(dir) = Get) const
         { *formats = m_format; }
     virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const
         { return GetDataSize(); }
@@ -254,9 +256,9 @@ public:
 
     // implement base class pure virtuals
     // ----------------------------------
-    virtual wxDataFormat GetPreferredFormat(Direction dir = Get) const;
-    virtual size_t GetFormatCount(Direction dir = Get) const;
-    virtual void GetAllFormats(wxDataFormat *formats, Direction dir = Get) const;
+    virtual wxDataFormat GetPreferredFormat(wxDataObjectBase::Direction dir = Get) const;
+    virtual size_t GetFormatCount(wxDataObjectBase::Direction dir = Get) const;
+    virtual void GetAllFormats(wxDataFormat *formats, wxDataObjectBase::Direction dir = Get) const;
     virtual size_t GetDataSize(const wxDataFormat& format) const;
     virtual bool GetDataHere(const wxDataFormat& format, void *buf) const;
     virtual bool SetData(const wxDataFormat& format, size_t len, const void *buf);
