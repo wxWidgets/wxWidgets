@@ -667,7 +667,11 @@ wxSize wxWizard::GetManualPageSize() const
 {
     // default width and height of the page
     static const int DEFAULT_PAGE_WIDTH = 270;
-    static const int DEFAULT_PAGE_HEIGHT = 290;
+    //static const int DEFAULT_PAGE_HEIGHT = 290;
+    // For compatibility with 2.4: there's too much
+    // space under the bitmap, probably due to differences in
+    // the sizer implementation. This makes it reasonable again.
+    static const int DEFAULT_PAGE_HEIGHT = 270;
 
     wxSize totalPageSize(DEFAULT_PAGE_WIDTH,DEFAULT_PAGE_HEIGHT);
 
