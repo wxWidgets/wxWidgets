@@ -47,7 +47,7 @@ LIBTARGET=$(WXDIR)\lib\wxxrc$(LIBEXT).lib
 EXTRATARGETS=$(D)
 
 OBJECTS=$(EXPAT_OBJS) \
-        $(D)\xml.obj \
+        $(D)\xml.obj xmlres.obj \
         $(D)\xmlrsall.obj $(D)\xh_bttn.obj $(D)\xh_chckb.obj $(D)\xh_chckl.obj \
 		$(D)\xh_choic.obj $(D)\xh_combo.obj $(D)\xh_dlg.obj \
         $(D)\xh_frame.obj $(D)\xh_gauge.obj $(D)\xh_html.obj $(D)\xh_menu.obj \
@@ -57,7 +57,7 @@ OBJECTS=$(EXPAT_OBJS) \
         $(D)\xh_text.obj $(D)\xh_listb.obj $(D)\xh_toolb.obj \
         $(D)\xh_bmpbt.obj $(D)\xh_cald.obj $(D)\xh_listc.obj $(D)\xh_scrol.obj \
         $(D)\xh_stbox.obj $(D)\xh_tree.obj $(D)\xh_stlin.obj $(D)\xh_bmp.obj \
-        $(D)\xh_unkwn.obj
+        $(D)\xh_unkwn.obj $(D)\xh_gdctl.obj
 
 !include $(WXDIR)\src\makelib.vc
 
