@@ -145,6 +145,8 @@ VERSION=`python -c "import setup;print setup.VERSION"`
 #echo VERSION=$VERSION
 #exit 0
 
+echo "Getting started at " `date`
+
 # ---------------------------------------------------------------------------
 # Make the sources and other basic stuff.
 
@@ -324,6 +326,7 @@ chmod a+r $STAGING_DIR/*
 
 if [ $KIND = dryrun ]; then
     # we're done
+    echo "Finished at " `date`
     exit 0
 fi
 
@@ -366,6 +369,8 @@ Have fun!
 R'bot
 
 EOF
+
+    echo "Finished at " `date`
     exit 0
 fi
 
@@ -386,6 +391,7 @@ if [ $KIND = release ]; then
     rm $STAGING_DIR/*
     rmdir $STAGING_DIR
 
+    echo "Finished at " `date`
     exit 0
 fi
 
