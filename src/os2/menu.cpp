@@ -344,7 +344,7 @@ bool wxMenu::DoInsertOrAppend(
         pItem->m_vMenuData.afStyle = rItem.afStyle;
         pItem->m_vMenuData.hItem   = rItem.hItem;
     }
-    else
+    else if (!pItem->IsSeparator())
 #endif
     {
         //
