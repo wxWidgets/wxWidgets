@@ -19,19 +19,18 @@
 #pragma hdrstop
 #endif
 
-#include <wx/setup.h>
-
 #if wxUSE_GLCANVAS
 
 #ifndef WX_PRECOMP
-#include <wx/frame.h>
+    #include "wx/frame.h"
+    #include "wx/settings.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
-#include <wx/msw/private.h>
-#include <wx/settings.h>
-#include <wx/log.h>
+#include "wx/msw/private.h"
 
-#include <wx/glcanvas.h>
+#include "wx/glcanvas.h"
 
 static const wxChar *wxGLCanvasClassName = wxT("wxGLCanvasClass");
 static const wxChar *wxGLCanvasClassNameNoRedraw = wxT("wxGLCanvasClassNR");
