@@ -41,8 +41,9 @@ wxMSW:
   alt or shift) are now possible
 - Compile fixes for Watcom C++ added
 - Compile fixes for Cygwin 1.0 added
+- Use SetForegroundWindow() in wxWindow::Raise() instead of BringWindowToTop()
 - Replaced wxYield() call in PopupMenu() by a much safer
-  wxYieldForCommandsOnly() - fixes tree ctrl bug
+  wxYieldForCommandsOnly() - fixes tree ctrl popup menu bug and other ones
 - Enter processing in wxSpinCtrl fixed
 - Fixed bug in determining the best listbox size
 - Fix for wxFrame's last focus bug
@@ -53,8 +54,7 @@ wxMSW:
 wxGTK:
 
 - Fixed slider rounding bug
-- Added code to set wxFont's default encoding to
-  wxLocale::GetSystemEncoding()
+- Added code to set wxFont's default encoding to wxLocale::GetSystemEncoding()
 - We now send iconize events
 - Fix for discrepancies between wxNotebookEvent and wxNotebook
   GetSelection() results
