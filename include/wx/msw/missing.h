@@ -184,6 +184,7 @@ typedef struct {
 #define LVM_SETUNICODEFORMAT 0x2005
 #endif
 
+
 // ----------------------------------------------------------------------------
 // Toolbar define value missing
 // ----------------------------------------------------------------------------
@@ -590,6 +591,17 @@ typedef struct {
 
 #ifndef OFN_ENABLESIZING
     #define OFN_ENABLESIZING 0x00800000
+#endif
+
+// ------------------ For Flashing Window -------------
+#if (defined(__BORLANDC__) && (__BORLANDC__ < 550))
+typedef struct {
+    UINT  cbSize;
+    HWND  hwnd;
+    DWORD dwFlags;
+    UINT  uCount;
+    DWORD dwTimeout;
+} FLASHWINFO, *PFLASHWINFO;
 #endif
 
 // In addition, include stuff not defined in WinCE
