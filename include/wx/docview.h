@@ -565,7 +565,7 @@ public:
     // Operations
     virtual void AddFileToHistory(const wxString& file);
     virtual void RemoveFileFromHistory(size_t i);
-    virtual int GetMaxFiles() const { return m_fileMaxFiles; }
+    virtual int GetMaxFiles() const { return (int)m_fileMaxFiles; }
     virtual void UseMenu(wxMenu *menu);
 
     // Remove menu from the list (MDI child may be closing)
