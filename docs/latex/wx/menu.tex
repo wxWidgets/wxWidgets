@@ -53,6 +53,13 @@ Constructs a wxMenu object.
 
 Destructor, destroying the menu.
 
+Note: under Motif, a popup menu must have a valid parent (the window
+it was last popped up on) when being destroyed. Therefore, make sure
+you delete or re-use the popup menu {\it before} destroying the
+parent window. Re-use in this context means popping up the menu on
+a different window from last time, which causes an implicit destruction
+and recreation of internal data structures.
+
 \membersection{wxMenu::Append}\label{wxmenuappend}
 
 \func{void}{Append}{\param{int}{ id}, \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp

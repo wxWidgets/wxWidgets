@@ -286,6 +286,9 @@ wxDialog::~wxDialog()
     // Note that this might need to be done for wxFrame also.
     DestroyChildren();
 
+    // This causes a crash in e.g. the resource sample when closing
+    // the example dialog. TODO: Probably not necessary (?)
+#if 0
     // Now process all events, because otherwise
     // this might remain on the screen.
     Display* display;
@@ -301,6 +304,7 @@ wxDialog::~wxDialog()
       XtAppNextEvent((XtAppContext) wxTheApp->GetAppContext(), &event);
       XtDispatchEvent(&event);
     }
+#endif
 }
 
 // By default, pressing escape cancels the dialog

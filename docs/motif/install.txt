@@ -81,6 +81,12 @@ Notes:
   I'd prefer you to fix the problem and send the fix to me :-) or at
   least let me know about it.
 
+- Thread support is switched off by default in setup.h (wxUSE_THREADS)
+  because standard Unices often do not have the necessary thread library
+  installed. Please see ../docs/gtk/install.txt for more details on this.
+  For Linux, the problem is expected to go away with future
+  distributions of the operating system.
+
 - If you have trouble compiling the file y_tab.c, or have strange
   linking errors, check whether you're using a C or C++ compiler for this file.
   You should specify a C compiler in the CCLEX variable in src/make.env.

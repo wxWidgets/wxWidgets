@@ -179,19 +179,19 @@ bool MyFrame::OnClose(void)
 }
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
-	EVT_BUTTON(RESOURCE_OK, MyDialog::OnOk)
-	EVT_BUTTON(RESOURCE_CANCEL, MyDialog::OnCancel)
+  //	EVT_BUTTON(RESOURCE_OK, MyDialog::OnOk)
+	EVT_BUTTON(ID_BUTTON109, MyDialog::OnCancel)
 END_EVENT_TABLE()
 
 
 void MyDialog::OnOk(wxCommandEvent& WXUNUSED(event) )
 {
-  EndModal(RESOURCE_OK);
+  //  EndModal(RESOURCE_OK);
 }
 
 void MyDialog::OnCancel(wxCommandEvent& WXUNUSED(event) )
 {
-  EndModal(RESOURCE_CANCEL);
+  EndModal(ID_BUTTON109);
 }
 
 

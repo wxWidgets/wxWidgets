@@ -1,6 +1,44 @@
 wxWindows 2.0 Change Log
 ------------------------
 
+Beta 2, ??? 1998
+--------------------------
+
+wxGTK:
+
+wxMSW:
+
+- 16-bit BC++ compilation/linking works albeit without the resource system.
+
+wxMotif:
+
+- Cured wxScreenDC origin problem so e.g. sash window sash is drawn at
+  the right place.
+- Cured some widget table clashes.
+- Added thread support (Robert).
+- wxPoem sample now works.
+
+General:
+
+- Rearranged documentation a bit.
+- Sash window uses area of first frame/dialog to paint over when drawing
+  the dragged sash, not just the sash window itself (it clipped to the right
+  or below).
+- Made resource sample use the correct Cancel button id.
+- Moved wxProp to main library (generic directory), created proplist
+  sample.
+- Added bombs and fractal samples.
+
+Beta 1, December 24th 1998
+--------------------------
+
+wxGTK:
+
+- Various
+
+wxMSW, wxMotif: not in sync with this release.
+
+
 Alpha 18, December 29th 1998
 ----------------------------
 

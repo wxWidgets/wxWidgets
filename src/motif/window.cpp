@@ -2259,12 +2259,7 @@ bool wxAddWindowToTable(Widget w, wxWindow *win)
 //  printf("Adding widget %ld, name = %s\n", w, win->GetClassInfo()->GetClassName());
   if ((oldItem = (wxWindow *)wxWidgetHashTable->Get ((long) w)))
   {
-    char buf[300];
-    sprintf(buf, "Widget table clash: new widget is %ld, %s", (long)w, win->GetClassInfo()->GetClassName());
-    wxError (buf);
-    fflush(stderr);
-    sprintf(buf, "Old widget was %s", oldItem->GetClassInfo()->GetClassName());
-    wxError (buf);
+    wxLogError("Widget table clash: new widget is %ld, %s", (long)w, win->GetClassInfo()->GetClassName());
     return FALSE;
   }
 
@@ -3266,8 +3261,23 @@ void wxWindow::ChangeBackgroundColour()
 {
     if (GetMainWidget())
         DoChangeBackgroundColour(GetMainWidget(), m_backgroundColour);
+
+    // This not necessary
+#if 0
+
     if (m_scrolledWindow && (GetMainWidget() != m_scrolledWindow))
+    {
         DoChangeBackgroundColour(m_scrolledWindow, m_backgroundColour);
+        // Have to set the scrollbar colours back since
+        // the scrolled window seemed to change them
+        wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE) ;
+
+        if (m_hScrollBar)
+          DoChangeBackgroundColour(m_hScrollBar, backgroundColour);
+        if (m_vScrollBar)
+          DoChangeBackgroundColour(m_vScrollBar, backgroundColour);
+    }
+#endif
 }
 
 void wxWindow::ChangeForegroundColour()

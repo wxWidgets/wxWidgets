@@ -36,6 +36,7 @@ class WXDLLEXPORT wxStaticBox: public wxControl
   {
     Create(parent, id, label, pos, size, style, name);
   }
+  ~wxStaticBox();
 
   bool Create(wxWindow *parent, wxWindowID id,
            const wxString& label,

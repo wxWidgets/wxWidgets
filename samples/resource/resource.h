@@ -55,5 +55,7 @@ class MyDialog : public wxDialog
 #define RESOURCE_QUIT       4
 #define RESOURCE_TEST1      2
 
+/*
 #define RESOURCE_OK         1
 #define RESOURCE_CANCEL     2
+*/

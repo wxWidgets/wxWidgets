@@ -28,7 +28,10 @@
 #include "wx/log.h"
 #include "wx/module.h"
 #include "wx/memory.h"
+
+#if wxUSE_THREADS
 #include "wx/thread.h"
+#endif
 
 #if wxUSE_WX_RESOURCES
 #include "wx/resource.h"
@@ -299,9 +302,12 @@ int wxApp::MainLoop()
       {
         if (!ProcessIdle())
         { 
+	  // TODO: Robert, what's this for?
+#if wxUSE_THREADS
           wxMutexGuiLeave();
           usleep(20);  
           wxMutexGuiEnter();
+#endif
 	}
       }
       

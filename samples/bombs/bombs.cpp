@@ -79,9 +79,9 @@ BombsFrameClass::BombsFrameClass(wxFrame *parent, const wxString& title, const w
   wxMenu *menu2 = new wxMenu;
   menu2->Append(IDM_RESTART, "&Restart"); // , "Clear the play field");
   menu2->AppendSeparator();
-  menu2->Append(IDM_EASY, "&Easy", (char*)NULL, TRUE); // "10x10 play field", TRUE);
-  menu2->Append(IDM_MEDIUM, "&Medium", (char*)NULL, TRUE); // "15x15 play field", TRUE);
-  menu2->Append(IDM_DIFFICULT, "&Difficult", (char*)NULL, TRUE); // "25x20 play field", TRUE);
+  menu2->Append(IDM_EASY, "&Easy", wxEmptyString, TRUE); // "10x10 play field", TRUE);
+  menu2->Append(IDM_MEDIUM, "&Medium", wxEmptyString, TRUE); // "15x15 play field", TRUE);
+  menu2->Append(IDM_DIFFICULT, "&Difficult", wxEmptyString, TRUE); // "25x20 play field", TRUE);
   menuBar1->Append(menu2, "&Game");
   SetMenuBar(menuBar1);
   menuBar=menuBar1;

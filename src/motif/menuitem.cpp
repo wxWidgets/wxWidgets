@@ -70,6 +70,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
   m_pSubMenu    = pSubMenu;
   m_idItem      = id;
   m_bEnabled    = TRUE;
+  m_bChecked    = FALSE;
 
   //// Motif-specific
   m_menuBar = NULL;
@@ -310,6 +311,7 @@ void wxMenuItemCallback (Widget w, XtPointer clientData,
 	{
           wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, item->GetId());
           commandEvent.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
+          commandEvent.SetInt( item->GetId() );
 
 	  item->GetMenuBar()->GetMenuBarFrame()->GetEventHandler()->ProcessEvent(commandEvent);
 	}
@@ -317,6 +319,8 @@ void wxMenuItemCallback (Widget w, XtPointer clientData,
 	{
 	  wxCommandEvent event (wxEVT_COMMAND_MENU_SELECTED, item->GetId());
 	  event.SetEventObject(item->GetTopMenu());
+          event.SetInt( item->GetId() );
+
 	  item->GetTopMenu()->ProcessCommand (event);
 	}
     }

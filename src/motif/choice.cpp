@@ -148,6 +148,7 @@ wxChoice::~wxChoice()
     if (GetMainWidget())
     {
         DetachWidget(GetMainWidget()); // Removes event handlers
+        DetachWidget(m_formWidget);
 
         XtDestroyWidget((Widget) m_formWidget);
         m_formWidget = (WXWidget) 0;

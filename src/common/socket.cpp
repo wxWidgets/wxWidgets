@@ -834,6 +834,7 @@ void wxSocketBase::SetupCallbacks()
       m_internal->sock_inputid = XtAppAddInput (wxAPP_CONTEXT, m_fd,
 					(XtPointer *) XtInputReadMask,
 					(XtInputCallbackProc) wx_socket_read,
+					(XtPointer) this);
     }
   }
   else

@@ -688,7 +688,7 @@ void wxListBoxCallback (Widget w, XtPointer clientData,
     if (item->InSetValue())
         return;
 
-    wxCommandEvent event (wxEVT_COMMAND_LISTBOX_SELECTED);
+    wxCommandEvent event (wxEVT_COMMAND_LISTBOX_SELECTED, item->GetId());
     switch (cbs->reason)
     {
         case XmCR_MULTIPLE_SELECT:

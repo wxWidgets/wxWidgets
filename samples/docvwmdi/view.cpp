@@ -54,7 +54,7 @@ bool DrawingView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
     // X seems to require a forced resize
     int x, y;
     frame->GetSize(&x, &y);
-    frame->SetSize(x, y);
+    frame->SetSize(-1, -1, x, y);
 #endif
     frame->Show(TRUE);
 
@@ -146,7 +146,7 @@ bool TextEditView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
   // X seems to require a forced resize
   int x, y;
   frame->GetSize(&x, &y);
-  frame->SetSize(x, y);
+  frame->SetSize(-1, -1, x, y);
 #endif
 
   frame->Show(TRUE);

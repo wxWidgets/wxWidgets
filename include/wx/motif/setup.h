@@ -123,6 +123,10 @@
 
 #define wxUSE_TIMEDATE      1
                                   // Use time and date
+
+#define wxUSE_THREADS       0
+                                  // Use threads
+
 /*
  * Finer detail
  *

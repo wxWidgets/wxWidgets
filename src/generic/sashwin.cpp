@@ -115,13 +115,21 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
 	{
         if ( sashHit != wxSASH_NONE )
         {
-	        CaptureMouse();
+            CaptureMouse();
 
     	    // Required for X to specify that
-	        // that we wish to draw on top of all windows
-	        // - and we optimise by specifying the area
-	        // for creating the overlap window.
-	        wxScreenDC::StartDrawingOnTop(this);
+            // that we wish to draw on top of all windows
+            // - and we optimise by specifying the area
+            // for creating the overlap window.
+            // Find the first frame or dialog and use this to specify
+            // the area to draw on.
+            wxWindow* parent = this;
+
+            while (parent && !parent->IsKindOf(CLASSINFO(wxDialog)) &&
+                             !parent->IsKindOf(CLASSINFO(wxFrame)))
+              parent = parent->GetParent();
+
+            wxScreenDC::StartDrawingOnTop(parent);
 
             // We don't say we're dragging yet; we leave that
             // decision for the Dragging() branch, to ensure

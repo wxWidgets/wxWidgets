@@ -98,7 +98,6 @@ LIB_CPP_SRC=\
  frame.cpp \
  gauge.cpp \
  gdiobj.cpp \
- helpxxxx.cpp \
  icon.cpp \
  listbox.cpp \
  joystick.cpp \

@@ -155,16 +155,17 @@ void wxScrollBar::Command(wxCommandEvent& event)
 void wxScrollBar::ChangeFont(bool keepOriginalSize)
 {
     // TODO
+    // Do anything for a scrollbar? A font will never be seen.
 }
 
 void wxScrollBar::ChangeBackgroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
 }
 
 void wxScrollBar::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
 }
 
 static void wxScrollBarCallback(Widget widget, XtPointer clientData,

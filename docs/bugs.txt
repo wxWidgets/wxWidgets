@@ -10,6 +10,29 @@ wxMSW:
 wxMotif:
 --------
 
+- wxNotebook and property list frame do not appear properly when
+  first shown.
+  Workaround: resize the window (manually or programmatically) to
+  make the window appear.
+  This also happens with other windows, e.g. the sizer
+  dialog in the layout sample.
+
+- wxSashWindow borders aren't repainted properly if the sashtest
+  sample is exposed (after being under another window).
+
+- If a popup wxMenu is destroyed after its parent window has been
+  destroyed, we get the message "Object XXX does not have windowed
+  ancestor".
+  Workaround: delete the menu before deleting the window on which it
+  was popped up.
+  Possible fix: call menu->DestroyMenu() before deleting the window,
+  if the window knows about the menu that was last popped up (hard
+  to know this with confidence).
+
+- In wxGrid, cell highlight is not drawn/erased properly.
+
+- Setting the size of a hidden window may show that window.
+
 General:
 --------
 

@@ -1024,7 +1024,7 @@ void wxGenericGrid::AdjustScrollbars(void)
   if (m_hScrollBar && !m_hScrollBar->IsShown())
     horizScrollBarHeight = 0;
 
-  if (m_hScrollBar)
+  if (m_hScrollBar && m_hScrollBar->IsShown())
   {
     int nCols = GetCols();
     m_hScrollBar->SetScrollbar(m_hScrollBar->GetThumbPosition(), wxMax(noHorizSteps, 1), (noHorizSteps == 0) ? 1 : nCols, wxMax(noHorizSteps, 1));
@@ -1038,7 +1038,7 @@ void wxGenericGrid::AdjustScrollbars(void)
 
   }
 
-  if (m_vScrollBar)
+  if (m_vScrollBar && m_vScrollBar->IsShown())
   {
     int nRows = GetRows();
 

@@ -30,7 +30,7 @@
 
 #include "typetest.h"
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "mondrian.xpm"
 #endif
 

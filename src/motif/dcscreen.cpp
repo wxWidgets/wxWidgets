@@ -66,7 +66,8 @@ bool wxScreenDC::StartDrawingOnTop(wxWindow* window)
   wxRect rect;
   int x, y, width, height;
   window->GetPosition(& x, & y);
-  window->ClientToScreen(& x, & y);
+  if (window->GetParent())
+      window->GetParent()->ClientToScreen(& x, & y);
   window->GetSize(& width, & height);
   rect.x = x; rect.y = y;
   rect.width = width; rect.height = height;

@@ -7,10 +7,11 @@
 #
 # "%W% %G%"
 #
-# Makefile for docvwmdi example (UNIX).
+# Makefile for proplist example (UNIX).
 
-PROGRAM=docview
+PROGRAM=test
 
-OBJECTS=$(PROGRAM).o doc.o view.o
+OBJECTS=$(PROGRAM).o
 
 include ../../src/makeprog.env
+

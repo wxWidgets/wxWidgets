@@ -13,14 +13,19 @@
 #pragma implementation "thread.h"
 #endif
 
-#include <stdio.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <errno.h>
+#include "wx/defs.h"
+
+#if wxUSE_THREADS
+
 #include "wx/module.h"
 #include "wx/thread.h"
 #include "wx/utils.h"
 #include "wx/log.h"
+
+#include <stdio.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <errno.h>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -434,4 +439,5 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
 
-
+#endif
+  // wxUSE_THREADS

@@ -29,7 +29,7 @@
 #include "wx/file.h"
 #include "wx/log.h"
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "mondrian.xpm"
 #endif
 
@@ -95,14 +95,10 @@ bool MyApp::OnInit(void)
   m_locale.AddCatalog("fileutils");  // 3) and another just for testing
   
   // Create the main frame window
-  MyFrame *frame = new MyFrame((wxFrame *) NULL, _("Minimal wxWindows App"), 50, 50, 150, 40);
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, _("International wxWindows App"), 50, 50, 150, 40);
 
   // Give it an icon
-#ifdef __WXMSW__
-  frame->SetIcon(wxIcon("mondrian"));
-#else
-  frame->SetIcon(wxIcon(mondrian_xpm));
-#endif
+  frame->SetIcon(wxICON(mondrian));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;

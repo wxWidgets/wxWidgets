@@ -9,6 +9,7 @@ docs/upgrade.txt
 docs/todo.txt
 docs/licence.txt
 docs/symbols.txt
+docs/bugs.txt
 docs/*.html
 
 src/*.inc

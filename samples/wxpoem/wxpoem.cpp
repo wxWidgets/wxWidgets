@@ -35,7 +35,7 @@
 
 #include "wxpoem.h"
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "corner1.xpm"
 #include "corner2.xpm"
 #include "corner3.xpm"
@@ -157,6 +157,14 @@ MainWindow::MainWindow(wxFrame *frame, wxWindowID id, const wxString& title,
    const wxPoint& pos, const wxSize& size, long style):
   wxFrame(frame, id, title, pos, size, style)
 {
+}
+
+MainWindow::~MainWindow()
+{
+  // Note: this must be done before the main window/canvas are destroyed
+  // or we get an error (no parent window for menu item button)
+  delete popupMenu;
+  popupMenu = NULL;
 }
 
 // Read the poetry buffer, either for finding the size
@@ -639,7 +647,7 @@ bool MyApp::OnInit()
   Corner3 = new wxIcon("icon_3");
   Corner4 = new wxIcon("icon_4");
 #endif
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
   Corner1 = new wxIcon( corner1_xpm );
   Corner2 = new wxIcon( corner2_xpm );
   Corner3 = new wxIcon( corner3_xpm );
@@ -658,17 +666,14 @@ int MyApp::OnExit()
   if (backingBitmap)
     delete backingBitmap;
   delete HelpController;
-  delete popupMenu;
   delete GreyPen;
   delete DarkGreyPen;
   delete WhitePen;
 
-//#ifdef __WXMSW__
   delete Corner1;
   delete Corner2;
   delete Corner3;
   delete Corner4;
-//#endif
 
   delete NormalFont;
   delete BoldFont;
@@ -1070,7 +1075,7 @@ bool Compile(void)
 
 void PopupFunction(wxMenu& /*menu*/, wxCommandEvent& event)
 {
-  switch (event.m_commandInt)
+  switch (event.GetId())
   {
      case POEM_NEXT:
        // Another poem/page

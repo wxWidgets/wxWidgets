@@ -124,6 +124,11 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
     return TRUE;
 }
 
+wxStaticBox::~wxStaticBox()
+{
+   DetachWidget(m_formWidget);
+}
+
 void wxStaticBox::SetLabel(const wxString& label)
 {
     if (!m_labelWidget)
@@ -194,10 +199,14 @@ void wxStaticBox::ChangeFont(bool keepOriginalSize)
 void wxStaticBox::ChangeBackgroundColour()
 {
     wxWindow::ChangeBackgroundColour();
+    if (m_labelWidget)
+        DoChangeBackgroundColour(m_labelWidget, m_backgroundColour);
 }
 
 void wxStaticBox::ChangeForegroundColour()
 {
     wxWindow::ChangeForegroundColour();
+    if (m_labelWidget)
+        DoChangeForegroundColour(m_labelWidget, m_foregroundColour);
 }
 
