@@ -144,9 +144,8 @@ void wxStaticText::SetLabel( const wxString &label )
         gtk_label_set_markup( GTK_LABEL(m_widget), wxGTK_CONV( colorlabel ) );
     }
     else
-#else
-        gtk_label_set( GTK_LABEL(m_widget), wxGTK_CONV( m_label ) );
 #endif
+        gtk_label_set( GTK_LABEL(m_widget), wxGTK_CONV( m_label ) );
 
     // adjust the label size to the new label unless disabled
     if (!HasFlag(wxST_NO_AUTORESIZE))
