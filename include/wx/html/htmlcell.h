@@ -285,6 +285,11 @@ public:
     wxString ConvertToText(wxHtmlSelection *sel) const;
 
 protected:
+    void Split(wxDC& dc,
+               const wxPoint& selFrom, const wxPoint& selTo,
+               wxString& s1, wxString& s2, wxString& s3,
+               unsigned& pos1, unsigned& pos2);
+    
     wxString m_Word;
 };
 
