@@ -10,7 +10,7 @@ wxPython/demo/README.txt
 wxPython/demo/*.xml
 wxPython/demo/data/*.png
 wxPython/demo/data/*.htm
-wxPython/demo/data/*.bpm
+wxPython/demo/data/*.bmp
 
 wxPython/distrib/build.py
 
