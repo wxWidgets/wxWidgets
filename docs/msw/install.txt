@@ -225,7 +225,7 @@ Compiling using the makefiles:
    your Borland C++ installation, and it uses the FAT (short
    name) form with no spaces.
    Reboot if needed for the changes to autoexec.bat to take effect.   
-2. Change directory to wx\src\msw. Type 'make -f makefile.b32' to
+2. Change directory to src\msw. Type 'make -f makefile.b32' to
    make the wxWindows core library. Ignore the warnings about
    'XXX' not found in library.
 3. Change directory to a sample or demo such as samples\minimal, and type
