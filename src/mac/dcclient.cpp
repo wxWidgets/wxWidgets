@@ -45,33 +45,37 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
 
 wxWindowDC::wxWindowDC() 
 {
+    m_window = NULL ;
 }
 
-wxWindowDC::wxWindowDC(wxWindow *the_canvas) 
+wxWindowDC::wxWindowDC(wxWindow *window) 
 {
-    wxTopLevelWindowMac* rootwindow = the_canvas->MacGetTopLevelWindow() ;
+    m_window = window ;
+    wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
     WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
     
     int x , y ;
     x = y = 0 ;
-    the_canvas->MacWindowToRootWindow( &x , &y ) ;
+    window->MacWindowToRootWindow( &x , &y ) ;
     m_macLocalOrigin.x = x ;
     m_macLocalOrigin.y = y ;
-    CopyRgn( (RgnHandle) the_canvas->MacGetVisibleRegion().GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
+    CopyRgn( (RgnHandle) window->MacGetVisibleRegion().GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
     m_macPort = UMAGetWindowPort( windowref ) ;
-    m_minY = m_minX =  0;
-    wxSize size = the_canvas->GetSize() ;
-    m_maxX = size.x  ;
-    m_maxY = size.y ; 
-
-     m_ok = TRUE ;
-  SetBackground(the_canvas->MacGetBackgroundBrush());
+    m_ok = TRUE ;
+    SetBackground(window->MacGetBackgroundBrush());
 }
 
 wxWindowDC::~wxWindowDC()
 {
+}
+
+void wxWindowDC::DoGetSize( int* width, int* height ) const
+{
+    wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
+
+    m_window->GetSize(width, height);
 }
 
 /*
@@ -80,10 +84,12 @@ wxWindowDC::~wxWindowDC()
 
 wxClientDC::wxClientDC()
 {
+    m_window = NULL ;
 }
 
 wxClientDC::wxClientDC(wxWindow *window)
 {
+    m_window = window ;
     wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
     if (!rootwindow)
         return;
@@ -102,9 +108,7 @@ wxClientDC::wxClientDC(wxWindow *window)
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn ,(RgnHandle)  m_macCurrentClipRgn ) ;
     m_macPort = UMAGetWindowPort( windowref ) ;
-    m_minY = m_minX =  0;
-    m_maxX = size.x  ;
-    m_maxY = size.y ; 
+
     m_ok = TRUE ;
     SetBackground(window->MacGetBackgroundBrush());
     SetFont( window->GetFont() ) ;
@@ -114,16 +118,26 @@ wxClientDC::~wxClientDC()
 {
 }
 
+void wxClientDC::DoGetSize(int *width, int *height) const
+{
+    wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
+
+    m_window->GetClientSize( width, height );
+}
+
+
 /*
  * wxPaintDC
  */
 
 wxPaintDC::wxPaintDC()
 {
+    m_window = NULL ;
 }
 
 wxPaintDC::wxPaintDC(wxWindow *window)
 {
+    m_window = window ;
     wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
     WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
     wxPoint origin = window->GetClientAreaOrigin() ;
@@ -141,9 +155,7 @@ wxPaintDC::wxPaintDC(wxWindow *window)
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
     m_macPort = UMAGetWindowPort( windowref ) ;
-    m_minY = m_minX =  0;
-    m_maxX = size.x  ;
-    m_maxY = size.y ; 
+
     m_ok = TRUE ;
     SetBackground(window->MacGetBackgroundBrush());
     SetFont( window->GetFont() ) ;
@@ -152,3 +164,12 @@ wxPaintDC::wxPaintDC(wxWindow *window)
 wxPaintDC::~wxPaintDC()
 {
 }
+
+void wxPaintDC::DoGetSize(int *width, int *height) const
+{
+    wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
+
+    m_window->GetClientSize( width, height );
+}
+
+
