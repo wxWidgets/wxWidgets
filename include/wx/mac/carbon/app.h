@@ -21,7 +21,11 @@
 #include "wx/gdicmn.h"
 #include "wx/event.h"
 
+#ifdef __DARWIN__
 #include <CoreFoundation/CoreFoundation.h>
+#else
+#include <CoreFoundation.h>
+#endif
 
 class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxWindowMac;
