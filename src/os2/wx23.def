@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  ..\\..\\LIB\WX.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1923,8 +1923,6 @@ EXPORTS
       IsWild__10wxFileNameF12wxPathFormat
       ;wxFileName::Assign(const wxString&,const wxString&,const wxString&,wxPathFormat)
       Assign__10wxFileNameFRC8wxStringN2112wxPathFormat
-      ;wxFileName::Mkdir(int)
-      Mkdir__10wxFileNameFi
       ;wxFileName::Clear()
       Clear__10wxFileNameFv
       ;wxFileName::wxFileExists()
@@ -1939,14 +1937,14 @@ EXPORTS
       PrependDir__10wxFileNameFRC8wxString
       ;wxFileName::GetPathSeparators(wxPathFormat)
       GetPathSeparators__10wxFileNameF12wxPathFormat
+      ;wxFileName::Mkdir(const wxString&,int,unsigned long)
+      Mkdir__10wxFileNameFRC8wxStringiUl
       ;wxFileName::IsPathSeparator(char,wxPathFormat)
       IsPathSeparator__10wxFileNameFc12wxPathFormat
       ;wxFileName::IsAbsolute(wxPathFormat)
       IsAbsolute__10wxFileNameF12wxPathFormat
       ;wxFileName::GetFullPath(wxPathFormat) const
       GetFullPath__10wxFileNameCF12wxPathFormat
-      ;wxFileName::Mkdir(const wxString&,int)
-      Mkdir__10wxFileNameFRC8wxStringi
       ;wxFileName::FileName(const wxString&)
       FileName__10wxFileNameFRC8wxString
       ;wxFileName::wxPathExists(const wxString&)
@@ -1963,14 +1961,20 @@ EXPORTS
       wxPathExists__10wxFileNameFv
       ;wxFileName::SetCwd()
       SetCwd__10wxFileNameFv
+      ;wxFileName::GetShortPath() const
+      GetShortPath__10wxFileNameCFv
       ;wxFileName::GetHomeDir()
       GetHomeDir__10wxFileNameFv
       ;wxFileName::AppendDir(const wxString&)
       AppendDir__10wxFileNameFRC8wxString
+      ;wxFileName::Mkdir(int,unsigned long)
+      Mkdir__10wxFileNameFiUl
       ;wxFileName::IsRelative(wxPathFormat)
       IsRelative__10wxFileNameF12wxPathFormat
       ;wxFileName::Rmdir()
       Rmdir__10wxFileNameFv
+      ;wxFileName::GetLongPath() const
+      GetLongPath__10wxFileNameCFv
       ;wxFileName::wxFileExists(const wxString&)
       wxFileExists__10wxFileNameFRC8wxString
       ;wxFileName::InsertDir(int,const wxString&)
@@ -2833,18 +2837,26 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxLocale::Init(int,int)
       Init__8wxLocaleFiT1
+      ;wxLocaleModule::sm_classwxLocaleModule
+      sm_classwxLocaleModule__14wxLocaleModule
       ;wxLanguageInfoArray::Insert(const wxLanguageInfo&,unsigned int)
       Insert__19wxLanguageInfoArrayFRC14wxLanguageInfoUi
       ;wxMsgCatalog::wxMsgCatalog()
       __ct__12wxMsgCatalogFv
       ;wxLocale::~wxLocale()
       __dt__8wxLocaleFv
+      ;wxLocale::GetSystemLanguage()
+      GetSystemLanguage__8wxLocaleFv
+      ;wxLocale::CreateLanguagesDB()
+      CreateLanguagesDB__8wxLocaleFv
       ;wxLanguageInfoArray::Index(const wxLanguageInfo&,unsigned long) const
       Index__19wxLanguageInfoArrayCFRC14wxLanguageInfoUl
       ;wxLanguageInfoArray::wxLanguageInfoArray(const wxLanguageInfoArray&)
       __ct__19wxLanguageInfoArrayFRC19wxLanguageInfoArray
       ;wxMsgCatalog::~wxMsgCatalog()
       __dt__12wxMsgCatalogFv
+      ;wxConstructorForwxLocaleModule()
+      wxConstructorForwxLocaleModule__Fv
       ;wxLocale::GetSysName() const
       GetSysName__8wxLocaleCFv
       ;wxLanguageInfoArray::DoEmpty()
@@ -2855,10 +2867,10 @@ EXPORTS
       AddCatalog__8wxLocaleFPCc
       ;wxMsgCatalog::Load(const char*,const char*,unsigned long)
       Load__12wxMsgCatalogFPCcT1Ul
-      ;wxLocale::wxLocale()
-      __ct__8wxLocaleFv
       ;wxLocale::InitLanguagesDB()
       InitLanguagesDB__8wxLocaleFv
+      ;wxLocale::wxLocale()
+      __ct__8wxLocaleFv
       ;wxLanguageInfoArray::Add(const wxLanguageInfo&)
       Add__19wxLanguageInfoArrayFRC14wxLanguageInfo
       ;wxLocale::AddLanguage(const wxLanguageInfo&)
@@ -2867,14 +2879,16 @@ EXPORTS
       Init__8wxLocaleFPCcN21UlT4
       ;wxLocale::GetString(const char*,const char*) const
       GetString__8wxLocaleCFPCcT1
+      ;wxLocale::ms_languagesDB
+      ms_languagesDB__8wxLocale
       ;wxGetLocale()
       wxGetLocale__Fv
       ;NoTransErr::ms_suppressCount
       ms_suppressCount__10NoTransErr
       ;wxLanguageInfoArray::~wxLanguageInfoArray()
       __dt__19wxLanguageInfoArrayFv
-      ;wxLocale::GetSystemLanguage() const
-      GetSystemLanguage__8wxLocaleCFv
+      ;wxLocale::DestroyLanguagesDB()
+      DestroyLanguagesDB__8wxLocaleFv
       ;wxMsgCatalog::GetString(const char*) const
       GetString__12wxMsgCatalogCFPCc
       ;wxLocale::FindCatalog(const char*) const
@@ -12003,8 +12017,12 @@ EXPORTS
       sm_classwxMenu__6wxMenu
       ;wxMenu::UpdateAccel(wxMenuItem*)
       UpdateAccel__6wxMenuFP10wxMenuItem
+      ;wxMenuBar::FindItem(int,unsigned long,wxMenu**) const
+      FindItem__9wxMenuBarCFiUlPP6wxMenu
       ;wxMenuBar::FindItem(int,wxMenu**) const
       FindItem__9wxMenuBarCFiPP6wxMenu
+      ;wxMenu::FindItem(int,unsigned long,wxMenu**) const
+      FindItem__6wxMenuCFiUlPP6wxMenu
       ;wxMenu::DoInsertOrAppend(wxMenuItem*,unsigned int)
       DoInsertOrAppend__6wxMenuFP10wxMenuItemUi
       ;wxMenuBar::Detach()
