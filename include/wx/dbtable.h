@@ -187,8 +187,8 @@ public:
 #if WXWIN_COMPATIBILITY_2_4
     wxDEPRECATED(
         wxDbTable(wxDb *pwxDb, const wxString &tblName, const UWORD numColumns,
-                  const wxChar *qryTblName=wxEmptyString, bool qryOnly = !wxDB_QUERY_ONLY,
-                  const wxString &tblPath=wxEmptyString)
+                  const wxChar *qryTblName, bool qryOnly,
+                  const wxString &tblPath)
     );
 #endif // WXWIN_COMPATIBILITY_2_4
 
