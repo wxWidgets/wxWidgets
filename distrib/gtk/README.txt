@@ -23,6 +23,7 @@ the help file.  To help you save disk space I'm now using Microsoft's
 HTML Help format.  If your system doesn't know what to do with the help
 file, you can install the HTML Help Viewer as part of IE 4+, NT
 Service Pack 4+, or the HTML Workshop at
+
 http://msdn.microsoft.com/workshop/author/htmlhelp/download.asp.
 
 
@@ -43,6 +44,57 @@ Or you can send mail directly to the list using this address:
        wxpython-users@starship.python.net
 
 ----------------------------------------------------------------------
+
+What's new in 2.1b2
+--------------------
+
+Added the missing wxWindow.GetUpdateRegion() method.
+
+Made a new change in SWIG (update your patches everybody) that
+provides a fix for global shadow objects that get an exception in
+their __del__ when their extension module has already been deleted.
+It was only a 1 line change in .../SWIG/Modules/pycpp.cxx at about
+line 496 if you want to do it by hand.
+
+It is now possible to run through MainLoop more than once in any one
+process.  The cleanup that used to happen as MainLoop completed (and
+prevented it from running again) has been delayed until the wxc module
+is being unloaded by Python.
+
+I fixed a bunch of stuff in the C++ version of wxGrid so it wouldn't
+make wxPython look bad.
+
+wxWindow.PopupMenu() now takes a wxPoint instead of  x,y.  Added
+wxWindow.PopupMenuXY to be consistent with some other methods.
+
+Added wxGrid.SetEditInPlace and wxGrid.GetEditInPlace.
+
+You can now provide your own app.MainLoop method.  See
+wxPython/demo/demoMainLoop.py for an example and some explaination.
+
+Got the in-place-edit for the wxTreeCtrl fixed and added some demo
+code to show how to use it.
+
+Put the wxIcon constructor back in for GTK as it now has one that
+matches MSW's.
+
+Added wxGrid.GetCells
+
+Added wxSystemSettings static methods as functions with names like
+wxSystemSettings_GetSystemColour.
+
+Removed wxPyMenu since using menu callbacks have been depreciated in
+wxWindows.  Use wxMenu and events instead.
+
+Added alternate wxBitmap constructor (for MSW only) as
+      wxBitmapFromData(data, type, width, height, depth = 1)
+
+Added a helper function named wxPyTypeCast that can convert shadow
+objects of one type into shadow objects of another type.  (Like doing
+a down-cast.)  See the implementation in wx.py for some docs.
+
+
+
 
 
 What's new in 2.1b1
@@ -101,6 +153,9 @@ wxGIFHandler and wxBMPHandler.
 
 Added new methods to wxTextCtrl.
 
+Fixed some problems with how SWIG was wrapping some wxTreeCtrl
+methods.
+
 
 
 What's new in 2.0b8
@@ -137,7 +192,7 @@ with the 2.0 version of wxWindows.
 
 I have finally started documenting wxPython.  There are several pages
 in the wxWindows documentation tree specifically about wxPython, and I
-have added notes within the class references about where wxPython
+have added notes within the class references about where and how wxPython
 diverges from wxWindows.
 
 Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
@@ -195,7 +250,6 @@ down a nasty DECREF bug.  Okay so I have to confess that it was just a
 DSM (Dumb Stupid Mistake) on my part but it was nasty none the less
 because the behavior was so different on different platforms.
 
-
 The dynamicly loaded module on Solaris is still segfaulting, so it
 must have been a different issue all along...
 
@@ -215,6 +269,8 @@ version segfault shortly after starting up.
 
 3. Varioius bug fixes, enhancements, etc.
 
+----------------------------------------------------------------------
+
 
 
 Build Instructions
@@ -230,8 +286,8 @@ I added a few minor features to SWIG to control some of the code
 generation.  If you want to playaround with this the patches are in
 wxPython/SWIG.patches and they should be applied to the 1.1p5 version
 of SWIG.  These new patches are documented at
-http://starship.skyport.net/crew/robind/python/#swig, and they should
-also end up in the 1.2 version of SWIG.
+http://starship.skyport.net/crew/robind/#swig, and they should also
+end up in the 1.2 version of SWIG.
 
 wxPython is organized as a Python package.  This means that the
 directory containing the results of the build process should be a
@@ -262,23 +318,24 @@ above.
 5. If it builds successfully, congratulations!  Move on to the next
 step.  If not then you can try mailing me for help.  Also, I will
 always have a pre-built win32 version of this extension module at
-http://starship.skyport.net/crew/robind/python.
+http://alldunn.com/wxPython/.
 
-6. Change to the $(WXWIN)/utils/wxPython/tests directory.
+6. Change to the $(WXWIN)/utils/wxPython/demo directory.
 
-7. Try executing the test programs.  Note that some of these print
-diagnositc or test info to standard output, so they will require the
-console version of python.  For example:
+7. Try executing the demo program.  For example:
 
-    python test1.py
+    python demo.py
 
-To run them without requiring a console, you can use the pythonw.exe
+To run it without requiring a console, you can use the pythonw.exe
 version of Python either from the command line or from a shortcut.
 
 
 
 Unix
 ----
+0. I configure wxWindows like this, YMMV:
+
+./configure  --with-gtk --disable-shared --enable-threads --disable-unicode
 
 1. Change into the $(WXWIN)/utils/wxPython/src directory.
 
@@ -307,14 +364,11 @@ module:
 
 5. Change to the $(WXWIN)/utils/wxPython/tests directory.
 
-6. Try executing the test programs.  For example:
+6. Try executing the demo program.  For example:
 
-    python test1.py
+    python demo.py
 
-    
-------------------------
-10/20/1998
-
+----------------
 Robin Dunn
 robin@alldunn.com
 

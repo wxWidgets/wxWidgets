@@ -335,8 +335,7 @@ Unix
 ----
 0. I configure wxWindows like this, YMMV:
 
-./configure  --with-gtk --without-shared --with-threads --without-unicode --with-libjpeg
-
+./configure  --with-gtk --disable-shared --enable-threads --disable-unicode
 
 1. Change into the $(WXWIN)/utils/wxPython/src directory.
 

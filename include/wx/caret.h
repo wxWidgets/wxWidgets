@@ -12,6 +12,10 @@
 #ifndef _WX_CARET_H_BASE_
 #define _WX_CARET_H_BASE_
 
+#ifdef __GNUG__
+#pragma interface "caret.h"
+#endif
+
 // ---------------------------------------------------------------------------
 // forward declarations
 // ---------------------------------------------------------------------------

@@ -148,6 +148,18 @@ cp *.c ~/wxgtk_dist/wxGTK/src/gtk
 cp *.cpp ~/wxgtk_dist/wxGTK/src/gtk
 cd ..
 
+cd msw
+mkdir ~/wxgtk_dist/wxGTK/src/msw
+cp Makefile.am ~/wxgtk_dist/wxGTK/src/msw
+cp Makefile.in ~/wxgtk_dist/wxGTK/src/msw
+cd ..
+
+cd motif
+mkdir ~/wxgtk_dist/wxGTK/src/motif
+cp Makefile.am ~/wxgtk_dist/wxGTK/src/motif
+cp Makefile.in ~/wxgtk_dist/wxGTK/src/motif
+cd ..
+
 cd common
 mkdir ~/wxgtk_dist/wxGTK/src/common
 cp glob.inc ~/wxgtk_dist/wxGTK/src/common
@@ -197,9 +209,7 @@ cd ..
 cd jpeg
 mkdir ~/wxgtk_dist/wxGTK/src/jpeg
 cp * ~/wxgtk_dist/wxGTK/src/jpeg
-cd ..
-
-cd ..
+cd ../..
 
 echo Utils dir..
 
@@ -292,10 +302,6 @@ cp ./lib/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/lib
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/lib/sizers
 cp ./lib/sizers/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/lib/sizers
 
-mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/tests
-cp ./tests/README.txt ~/wxgtk_dist/wxGTK/utils/wxPython/tests
-cp ./tests/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/tests
-
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/demo
 cp ./demo/README.txt ~/wxgtk_dist/wxGTK/utils/wxPython/demo
 cp ./demo/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/demo
@@ -303,25 +309,7 @@ cp ./demo/*.pyc ~/wxgtk_dist/wxGTK/utils/wxPython/demo
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/demo/bitmaps
 cp ./demo/bitmaps/* ~/wxgtk_dist/wxGTK/utils/wxPython/demo/bitmaps
 
-mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/tests/bitmaps
-cp ./tests/bitmaps/* ~/wxgtk_dist/wxGTK/utils/wxPython/tests/bitmaps
-cd ..
-
-echo wxOLE..
-
-cd wxOLE
-mkdir ~/wxgtk_dist/wxGTK/utils/wxOLE
-mkdir ~/wxgtk_dist/wxGTK/utils/wxOLE/gtk
-cp ./gtk/wxole.* ~/wxgtk_dist/wxGTK/utils/wxOLE/gtk
-mkdir ~/wxgtk_dist/wxGTK/utils/wxOLE/samples
-mkdir ~/wxgtk_dist/wxGTK/utils/wxOLE/samples/servlet
-cp ./samples/servlet/Makefile ~/wxgtk_dist/wxGTK/utils/wxOLE/samples/servlet
-cp ./samples/servlet/*.xpm ~/wxgtk_dist/wxGTK/utils/wxOLE/samples/servlet
-cp ./samples/servlet/*.cpp ~/wxgtk_dist/wxGTK/utils/wxOLE/samples/servlet
-cp ./samples/servlet/*.gnorba ~/wxgtk_dist/wxGTK/utils/wxOLE/samples/servlet
-
 cd ../..
-
 
 echo Samples dir..
 
@@ -404,16 +392,17 @@ cp *.h ~/wxgtk_dist/wxGTK/samples/db
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/db
 cd ..
 
-echo DDE sample..
-
-cd dde
-mkdir ~/wxgtk_dist/wxGTK/samples/dde
-cp Makefile.am ~/wxgtk_dist/wxGTK/samples/dde
-cp Makefile.in ~/wxgtk_dist/wxGTK/samples/dde
-cp *.cpp ~/wxgtk_dist/wxGTK/samples/dde
-cp *.h ~/wxgtk_dist/wxGTK/samples/dde
-cp *.xpm ~/wxgtk_dist/wxGTK/samples/dde
-cd ..
+#echo DDE sample..
+#
+#cd dde
+#mkdir ~/wxgtk_dist/wxGTK/samples/dde
+#cp Makefile.am ~/wxgtk_dist/wxGTK/samples/dde
+#cp Makefile.in ~/wxgtk_dist/wxGTK/samples/dde
+#cp *.cpp ~/wxgtk_dist/wxGTK/samples/dde
+#cp *.h ~/wxgtk_dist/wxGTK/samples/dde
+#cp *.xpm ~/wxgtk_dist/wxGTK/samples/dde
+#cd ..
+#
 
 echo Dialogs sample..
 
@@ -726,16 +715,6 @@ cp Makefile.in ~/wxgtk_dist/wxGTK/samples/splitter
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/splitter
 cd ..
 
-echo Tab sample..
-
-cd tab
-mkdir ~/wxgtk_dist/wxGTK/samples/tab
-cp Makefile.am ~/wxgtk_dist/wxGTK/samples/tab
-cp Makefile.in ~/wxgtk_dist/wxGTK/samples/tab
-cp *.cpp ~/wxgtk_dist/wxGTK/samples/tab
-cp *.h ~/wxgtk_dist/wxGTK/samples/tab
-cd ..
-
 echo Text sample..
 
 cd text
@@ -832,4 +811,4 @@ cp README.txt ~/wxgtk_dist/wxGTK/utils/wxPython
 cp Setup ~/wxgtk_dist/wxGTK/utils/wxPython/src
 
 cd ~/wxgtk_dist
-tar ch wxGTK | gzip -f9 > wxGTK-2.1.0-b7b.tgz
+tar ch wxGTK | gzip -f9 > wxGTK-2.1.0-b8b.tgz

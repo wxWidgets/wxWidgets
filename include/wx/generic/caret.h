@@ -9,14 +9,26 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#if 0 //def __GNUG__
-    #pragma implementation "caret.h"
-#endif
-
 #ifndef _WX_CARET_H_
 #define _WX_CARET_H_
 
+#ifdef __GNUG__
+#pragma interface "caret.h"
+#endif
+
 #include "wx/timer.h"
+
+class wxCaret;
+
+class wxCaretTimer : public wxTimer
+{
+public:
+    wxCaretTimer(wxCaret *caret);
+    virtual void Notify();
+
+private:
+    wxCaret *m_caret;
+};
 
 class wxCaret : public wxCaretBase
 {
@@ -46,23 +58,13 @@ protected:
 
     // draw the caret on the given DC
     void DoDraw(wxDC *dc);
-
+    
 private:
     // GTK specific initialization
     void InitGeneric();
 
-    class CaretTimer : public wxTimer
-    {
-    public:
-        CaretTimer(wxCaret *caret) { m_caret = caret; }
-
-        virtual void Notify() { m_caret->Blink(); }
-
-    private:
-        wxCaret *m_caret;
-    } m_timer;
-
-    bool    m_blinkedOut;   // TRUE => caret hidden right now
+    wxCaretTimer  m_timer;
+    bool          m_blinkedOut;   // TRUE => caret hidden right now
 };
 
 #endif // _WX_CARET_H_

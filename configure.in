@@ -2148,7 +2148,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl TODO some samples are never built so far:
     dnl      mfc, nativdlg, oleauto, ownerdrw, proplist
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS bombs controls dialogs drawing dynamic \
-                     forty fractal image richedit wxpoem"
+                     forty fractal image wxpoem"
 fi
 
 dnl for convenience, sort the files to build in alphabetical order
@@ -2262,29 +2262,20 @@ dnl             samples/Makefile samples/minimal/Makefile
             samples/help/Makefile
             samples/image/Makefile
             samples/internat/Makefile
-            samples/joytest/Makefile
             samples/layout/Makefile
             samples/listctrl/Makefile
             samples/mdi/Makefile
             samples/memcheck/Makefile
-            samples/mfc/Makefile
             samples/minifram/Makefile
             samples/minimal/Makefile
-            samples/nativdlg/Makefile
             samples/notebook/Makefile
-            samples/oleauto/Makefile
-            samples/ownerdrw/Makefile
             samples/png/Makefile
             samples/printing/Makefile
             samples/proplist/Makefile
-            samples/regtest/Makefile
             samples/resource/Makefile
-            samples/richedit/Makefile
             samples/sashtest/Makefile
             samples/scroll/Makefile
             samples/splitter/Makefile
-            samples/tab/Makefile
-            samples/taskbar/Makefile
             samples/text/Makefile
             samples/thread/Makefile
             samples/toolbar/Makefile

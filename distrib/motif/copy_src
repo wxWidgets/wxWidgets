@@ -289,17 +289,6 @@ cp *.h ~/wxmotif_dist/wxMotif/samples/db
 cp *.xpm ~/wxmotif_dist/wxMotif/samples/db
 cd ..
 
-echo DDE sample..
-
-cd dde
-mkdir ~/wxmotif_dist/wxMotif/samples/dde
-cp Makefile.am ~/wxmotif_dist/wxMotif/samples/dde
-cp Makefile.in ~/wxmotif_dist/wxMotif/samples/dde
-cp *.cpp ~/wxmotif_dist/wxMotif/samples/dde
-cp *.h ~/wxmotif_dist/wxMotif/samples/dde
-cp *.xpm ~/wxmotif_dist/wxMotif/samples/dde
-cd ..
-
 echo Dialogs sample..
 
 cd dialogs
@@ -611,8 +600,6 @@ cp Makefile.in ~/wxmotif_dist/wxMotif/samples/splitter
 cp *.cpp ~/wxmotif_dist/wxMotif/samples/splitter
 cd ..
 
-echo Tab sample..
-
 cd tab
 mkdir ~/wxmotif_dist/wxMotif/samples/tab
 cp Makefile.am ~/wxmotif_dist/wxMotif/samples/tab
@@ -711,4 +698,4 @@ cp *.xpm ~/wxmotif_dist/wxMotif/samples/wxsocket
 cd ../..
 
 cd ~/wxmotif_dist
-tar ch wxMotif | gzip -f9 > wxMotif-2.1.0-b7.tgz
+tar ch wxMotif | gzip -f9 > wxMotif-2.1.0-b8.tgz

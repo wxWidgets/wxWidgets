@@ -17,8 +17,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if 0 //def __GNUG__
-    #pragma implementation "caret.h"
+#ifdef __GNUG__
+#pragma implementation "caret.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -45,6 +45,16 @@ static int gs_blinkTime = 500;  // in milliseconds
 // ============================================================================
 // implementation
 // ============================================================================
+
+wxCaretTimer::wxCaretTimer(wxCaret *caret) 
+{ 
+    m_caret = caret; 
+}
+
+void wxCaretTimer::Notify() 
+{ 
+    m_caret->Blink(); 
+}
 
 // ----------------------------------------------------------------------------
 // wxCaret static functions and data
