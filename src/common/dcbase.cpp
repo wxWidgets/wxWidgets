@@ -30,8 +30,6 @@
 
 #include "wx/dc.h"
 
-#include <math.h>
-
 // bool wxDCBase::sm_cacheing = false;
 
 // ============================================================================
@@ -319,7 +317,7 @@ void wxDCBase::DoDrawSpline( wxList *points )
     if (node == NULL)
         // empty list
         return;
-    
+
     p = (wxPoint *)node->GetData();
 
     x1 = p->x;
@@ -766,7 +764,7 @@ void wxDCBase::Rotate( wxList* points, double angle, wxPoint center )
 {
     if( angle != 0.0 )
     {
-        double pi(3.1415926536);
+        double pi(M_PI);
         double dSinA = -sin(angle*2.0*pi/360.0);
         double dCosA = cos(angle*2.0*pi/360.0);
         for ( wxNode* node = points->First(); node; node = node->Next() )
@@ -794,7 +792,7 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
                                         wxCoord w, wxCoord h,
                                         double sa, double ea )
 {
-    double pi = 3.1415926535;
+    double pi = M_PI;
     double sar = 0;
     double ear = 0;
     int xsa = 0;

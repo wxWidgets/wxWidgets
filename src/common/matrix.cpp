@@ -25,12 +25,12 @@
 
 #ifndef WX_PRECOMP
 #include "wx/defs.h"
+#include "wx/math.h"
 #endif
 
 #include "wx/matrix.h"
-#include <math.h>
 
-static const double pi = 3.1415926535;
+static const double pi = M_PI;
 
 wxTransformMatrix::wxTransformMatrix(void)
 {

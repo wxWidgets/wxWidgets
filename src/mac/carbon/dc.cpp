@@ -23,7 +23,6 @@
 #include "wx/log.h"
 
 #if __MSL__ >= 0x6000
-#include "math.h"
 namespace std {}
 using namespace std ;
 #endif
@@ -47,11 +46,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 #define twips2mm        0.0176388888889
 #define mm2pt            2.83464566929
 #define pt2mm            0.352777777778
-#if !defined( __DARWIN__ ) || defined(__MWERKS__)
-#ifndef M_PI
-const double M_PI = 3.14159265358979 ;
-#endif
-#endif
+
 const double RAD2DEG  = 180.0 / M_PI;
 const short kEmulatedMode = -1 ;
 const short kUnsupportedMode = -2 ;

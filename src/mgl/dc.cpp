@@ -39,7 +39,6 @@
 #include "wx/log.h"
 
 #include <string.h>
-#include <math.h>
 #include <mgraph.hpp>
 
 
@@ -47,10 +46,6 @@
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
 
 const double mm2inches      = 0.0393700787402;
 const double inches2mm      = 25.4;

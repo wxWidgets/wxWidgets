@@ -54,7 +54,6 @@
 #endif
 
 #include <string.h>
-#include <math.h>
 
 #if wxUSE_COMMON_DIALOGS && !defined(__WXMICROWIN__)
     #include <commdlg.h>
@@ -93,11 +92,6 @@ static const int VIEWPORT_EXTENT = 1000;
 
 static const int MM_POINTS = 9;
 static const int MM_METRIC = 10;
-
-// usually this is defined in math.h
-#ifndef M_PI
-    static const double M_PI = 3.14159265358979323846;
-#endif // M_PI
 
 // ROPs which don't have standard names (see "Ternary Raster Operations" in the
 // MSDN docs for how this and other numbers in wxDC::Blit() are obtained)

@@ -29,11 +29,6 @@
 #include "wx/geometry.h"
 #include "wx/datstrm.h"
 
-// normally this is defined in <math.h>
-#ifndef M_PI
-    #define M_PI 3.14159265358979323846
-#endif
-
 //
 // wxPoint2D
 //

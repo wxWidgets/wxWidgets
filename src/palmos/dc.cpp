@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,6 @@
 #endif
 
 #include <string.h>
-#include <math.h>
 
 #ifndef AC_SRC_ALPHA
 #define AC_SRC_ALPHA 1
@@ -71,11 +70,6 @@ static const int VIEWPORT_EXTENT = 1000;
 
 static const int MM_POINTS = 9;
 static const int MM_METRIC = 10;
-
-// usually this is defined in math.h
-#ifndef M_PI
-    static const double M_PI = 3.14159265358979323846;
-#endif // M_PI
 
 #define DSTCOPY 0x00AA0029
 
