@@ -1152,10 +1152,8 @@ AC_ARG_ENABLE(sdltest, [  --disable-sdltest       Do not try to compile and run 
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
     if test "x$enable_sdltest" = "xyes" ; then
       ac_save_CFLAGS="$CFLAGS"
-      ac_save_CXXFLAGS="$CXXFLAGS"
       ac_save_LIBS="$LIBS"
       CFLAGS="$CFLAGS $SDL_CFLAGS"
-      CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
       LIBS="$LIBS $SDL_LIBS"
 dnl
 dnl Now check if the installed SDL is sufficiently new. (Also sanity
@@ -1221,7 +1219,6 @@ int main (int argc, char *argv[])
 
 ],, no_sdl=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
        CFLAGS="$ac_save_CFLAGS"
-       CXXFLAGS="$ac_save_CXXFLAGS"
        LIBS="$ac_save_LIBS"
      fi
   fi
@@ -1241,7 +1238,6 @@ int main (int argc, char *argv[])
        else
           echo "*** Could not run SDL test program, checking why..."
           CFLAGS="$CFLAGS $SDL_CFLAGS"
-          CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
           LIBS="$LIBS $SDL_LIBS"
           AC_TRY_LINK([
 #include <stdio.h>
@@ -1266,7 +1262,6 @@ int main(int argc, char *argv[])
           echo "*** or that you have moved SDL since it was installed. In the latter case, you"
           echo "*** may want to edit the sdl-config script: $SDL_CONFIG" ])
           CFLAGS="$ac_save_CFLAGS"
-          CXXFLAGS="$ac_save_CXXFLAGS"
           LIBS="$ac_save_LIBS"
        fi
      fi
@@ -1790,9 +1785,9 @@ AC_DEFUN([AC_BAKEFILE_DEPS],
         esac
         AC_MSG_RESULT([gcc])
     elif test "x$MWCC" = "xyes"; then
-        DEPSMODE=mwcc
+        DEPSMODE=gcc
         DEPS_TRACKING=1
-        DEPSFLAG_MWCC="-MM"
+        DEPSFLAG_GCC="-MMD"
         AC_MSG_RESULT([mwcc])
     else
         AC_MSG_RESULT([none])
@@ -1963,7 +1958,7 @@ AC_DEFUN([AC_BAKEFILE],
     AC_BAKEFILE_DEPS
     AC_BAKEFILE_RES_COMPILERS
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.1.4"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.1.5"
     
     m4_include([autoconf_inc.m4])
     
@@ -2474,7 +2469,6 @@ cat <<EOF >bk-deps
 DEPSMODE=${DEPSMODE}
 DEPSDIR=.deps
 DEPSFLAG_GCC="${DEPSFLAG_GCC}"
-DEPSFLAG_MWCC="${DEPSFLAG_MWCC}"
 
 mkdir -p ${D}DEPSDIR
 
@@ -2511,31 +2505,6 @@ if test ${D}DEPSMODE = gcc ; then
             rm -f ${D}depfile
         fi
     fi
-    exit 0
-elif test ${D}DEPSMODE = mwcc ; then
-    ${D}*
-    status=${D}?
-    if test ${D}{status} != 0 ; then
-        exit ${D}{status}
-    fi
-    # Run mwcc again with -MM and redirect into the dep file we want
-    # NOTE: We can't use shift here because we need ${D}* to be valid
-    prevarg=
-    for arg in ${D}* ; do
-        if test "${D}prevarg" = "-o"; then
-            objfile=${D}arg
-        else
-            case "${D}arg" in
-                -* )
-                ;;
-                * )
-                    srcfile=${D}arg
-                ;;
-            esac
-        fi
-        prevarg="${D}arg"
-    done
-    ${D}* ${D}DEPSFLAG_MWCC >${D}{DEPSDIR}/${D}{objfile}.d
     exit 0
 else
     ${D}*
