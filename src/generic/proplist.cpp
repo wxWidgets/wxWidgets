@@ -45,6 +45,7 @@
 #include "wx/sizer.h"
 #include "wx/module.h"
 #include "wx/intl.h"
+#include "wx/artprov.h"
 
 #include "wx/colordlg.h"
 #include "wx/proplist.h"
@@ -53,27 +54,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-
-// ----------------------------------------------------------------------------
-// XPMs
-// ----------------------------------------------------------------------------
-
-// XPM hack: make the arrays const
-#define static static const
-
-#ifndef __WXMSW__
-    #include "wx/generic/cross.xpm"
-    #include "wx/generic/tick.xpm"
-#endif
-
-#undef static
-
-// ----------------------------------------------------------------------------
-// accessor functions for the bitmaps (may return NULL, check for it!)
-// ----------------------------------------------------------------------------
-
-static wxBitmap *GetTickBitmap();
-static wxBitmap *GetCrossBitmap();
 
 // ----------------------------------------------------------------------------
 // Property text edit control
@@ -460,13 +440,13 @@ bool wxPropertyListView::CreateControls()
 
     if (m_buttonFlags & wxPROP_BUTTON_CHECK_CROSS)
     {
-        wxBitmap *tickBitmap = GetTickBitmap();
-        wxBitmap *crossBitmap = GetCrossBitmap();
+        wxBitmap tickBitmap = wxArtProvider::GetBitmap(wxART_TICK_MARK);
+        wxBitmap crossBitmap = wxArtProvider::GetBitmap(wxART_CROSS_MARK);
 
-        if ( tickBitmap && crossBitmap )
+        if ( tickBitmap.Ok() && crossBitmap.Ok() )
         {
-            m_confirmButton = new wxBitmapButton(panel, wxID_PROP_CHECK, *tickBitmap, wxPoint(-1, -1), smallButtonSize );
-            m_cancelButton = new wxBitmapButton(panel, wxID_PROP_CROSS, *crossBitmap, wxPoint(-1, -1), smallButtonSize );
+            m_confirmButton = new wxBitmapButton(panel, wxID_PROP_CHECK, tickBitmap, wxPoint(-1, -1), smallButtonSize );
+            m_cancelButton = new wxBitmapButton(panel, wxID_PROP_CROSS, crossBitmap, wxPoint(-1, -1), smallButtonSize );
         }
         else
         {
@@ -1846,47 +1826,5 @@ void wxPropertyStringListEditorDialog::ShowCurrentSelection()
   m_stringText->Enable(TRUE);
 }
 
-// ----------------------------------------------------------------------------
-// global functions
-// ----------------------------------------------------------------------------
-
-// FIXME MT-UNSAFE
-static wxBitmap *GetTickBitmap()
-{
-    static wxBitmap* s_tickBitmap = (wxBitmap *) NULL;
-    static bool s_loaded = FALSE;
-
-    if ( !s_loaded )
-    {
-        s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
-
-        #if defined(__WXMSW__) || defined(__WXPM__)
-            s_tickBitmap = new wxBitmap(_T("tick_bmp"), wxBITMAP_TYPE_RESOURCE);
-        #else
-            s_tickBitmap = new wxBitmap( tick_xpm );
-        #endif
-    }
-
-    return s_tickBitmap;
-}
-
-static wxBitmap *GetCrossBitmap()
-{
-    static wxBitmap* s_crossBitmap = (wxBitmap *) NULL;
-    static bool s_loaded = FALSE;
-
-    if ( !s_loaded )
-    {
-        s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
-
-        #if defined(__WXMSW__) || defined(__WXPM__)
-            s_crossBitmap =  new wxBitmap(_T("cross_bmp"), wxBITMAP_TYPE_RESOURCE);
-        #else // XPMs
-            s_crossBitmap =  new wxBitmap( cross_xpm );
-        #endif // BMPs/XPMs
-    }
-
-    return s_crossBitmap;
-}
 
 #endif // wxUSE_PROPSHEET

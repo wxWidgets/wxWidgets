@@ -92,6 +92,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxDefaultArtProviderModule, wxModule)
 #include "../../art/dir_up.xpm"
 #include "../../art/exefile.xpm"
 #include "../../art/deffile.xpm"
+#include "../../art/tick.xpm"
+#include "../../art/cross.xpm"
 
 #undef static
 
@@ -129,6 +131,8 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
     ART(wxART_GO_DIR_UP,                           dir_up)
     ART(wxART_EXECUTABLE_FILE,                     exefile)
     ART(wxART_NORMAL_FILE,                         deffile)
+    ART(wxART_TICK_MARK,                           tick)
+    ART(wxART_CROSS_MARK,                          cross)
 
     return wxNullBitmap;
 }

@@ -71,6 +71,8 @@ typedef wxString wxArtID;
 #define wxART_GO_DIR_UP                _T("go_dir_up")
 #define wxART_EXECUTABLE_FILE          _T("executable_file")
 #define wxART_NORMAL_FILE              _T("normal_file")
+#define wxART_TICK_MARK                _T("tick")
+#define wxART_CROSS_MARK               _T("cross")
 
 // ----------------------------------------------------------------------------
 // wxArtProvider class

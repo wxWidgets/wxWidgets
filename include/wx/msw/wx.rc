@@ -83,14 +83,6 @@ WXCURSOR_RIGHT_ARROW    CURSOR  DISCARDABLE     "wx/msw/rightarr.cur"
 //wxDEFAULT_MDIPARENTFRAME      ICON "wx/msw/mdi.ico"
 //wxDEFAULT_MDICHILDFRAME       ICON "wx/msw/child.ico"
 
-// Standard large icons
-/* we don't use these files any more, use Windows standard icons instead
-wxICON_QUESTION	ICON "wx/msw/question.ico"
-wxICON_WARNING	ICON "wx/msw/warning.ico"
-wxICON_ERROR	ICON "wx/msw/error.ico"
-wxICON_INFO	ICON "wx/msw/info.ico"
-*/
-
 // Standard small icons
 wxICON_SMALL_CLOSED_FOLDER      ICON "wx/msw/folder1.ico"
 wxICON_SMALL_OPEN_FOLDER        ICON "wx/msw/folder2.ico"
@@ -112,10 +104,6 @@ wxDISABLE_BUTTON_BITMAP         BITMAP  WXINCDIR"wx/msw/disable.bmp"
 wxDISABLE_BUTTON_BITMAP         BITMAP  "wx/msw/disable.bmp"
 #endif
 
-
-// For src/generic/proplist.cpp
-tick_bmp                BITMAP  "wx/msw/tick.bmp"
-cross_bmp               BITMAP  "wx/msw/cross.bmp"
 
 // For wxContextHelpButton
 csquery                 BITMAP "wx/msw/csquery.bmp"
