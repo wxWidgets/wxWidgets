@@ -424,6 +424,14 @@
 // Recommended setting: 0
 #define wxUSE_POPUPWIN     1
 
+// wxTipWindow allows to implement the custom tooltips, it is used by the
+// context help classes. Requires wxUSE_POPUPWIN.
+//
+// Default is 1
+//
+// Recommended setting: 1 (may be set to 0)
+#define wxUSE_TIPWINDOW    1
+
 // Each of the settings below corresponds to one wxWindows control. They are
 // all switched on by default but may be disabled if you are sure that your
 // program (including any standard dialogs it can show!) doesn't need them and
