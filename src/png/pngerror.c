@@ -109,9 +109,9 @@ static PNG_CONST char png_digit[16] = {
    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
    'F' };
 
-size_t wxstrnlen( const char *s, size_t maxlen )
+static size_t wxstrnlen( const char *s, size_t maxlen )
 {
-	int i ;
+	size_t i ;
 	for ( i = 0 ; s[i] && i < maxlen ; ++i )
 		;
 	return i ;
