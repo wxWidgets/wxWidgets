@@ -22,7 +22,8 @@
 
 // macro implements remaining (not inline) methods of template list
 // (it's private to this file)
-#define _DEFINE_OBJARRAY(T, name)                                                 \
+#undef  _DEFINE_OBJARRAY
+#define _DEFINE_OBJARRAY(T, name)                                             \
 name::~name()                                                                 \
 {                                                                             \
   Empty();                                                                    \
@@ -30,7 +31,7 @@ name::~name()                                                                 \
                                                                               \
 void name::DoCopy(const name& src)                                            \
 {                                                                             \
-  for ( uint ui = 0; ui < src.Count(); ui++ )                                 \
+  for ( size_t ui = 0; ui < src.Count(); ui++ )                               \
     Add(src[ui]);                                                             \
 }                                                                             \
                                                                               \
@@ -49,19 +50,19 @@ name::name(const name& src)                                                   \
                                                                               \
 void name::Empty()                                                            \
 {                                                                             \
-  for ( uint ui = 0; ui < Count(); ui++ )                                     \
-    delete (T*)BaseArray::Item(ui);                                           \
+  for ( size_t ui = 0; ui < Count(); ui++ )                                   \
+    delete (T*)wxBaseArray::Item(ui);                                         \
                                                                               \
-  BaseArray::Clear();                                                         \
+  wxBaseArray::Clear();                                                       \
 }                                                                             \
                                                                               \
-void name::Remove(uint uiIndex)                                               \
+void name::Remove(size_t uiIndex)                                             \
 {                                                                             \
-  wxCHECK( uiIndex < Count() );                                               \
+  wxCHECK_RET( uiIndex < Count(), "bad index in " #name "::Remove()" );       \
                                                                               \
-  delete (T*)BaseArray::Item(uiIndex);                                        \
+  delete (T*)wxBaseArray::Item(uiIndex);                                      \
                                                                               \
-  BaseArray::Remove(uiIndex);                                                 \
+  wxBaseArray::Remove(uiIndex);                                               \
 }                                                                             \
                                                                               \
 void name::Add(const T& item)                                                 \
@@ -71,20 +72,20 @@ void name::Add(const T& item)                                                 \
     Add(pItem);                                                               \
 }                                                                             \
                                                                               \
-void name::Insert(const T& item, uint uiIndex)                                \
+void name::Insert(const T& item, size_t uiIndex)                              \
 {                                                                             \
   T* pItem = new T(item);                                                     \
   if ( pItem != NULL )                                                        \
     Insert(pItem, uiIndex);                                                   \
 }                                                                             \
                                                                               \
-int name::Index(const T& Item, Bool bFromEnd) const                           \
+int name::Index(const T& Item, bool bFromEnd) const                           \
 {                                                                             \
   if ( bFromEnd ) {                                                           \
     if ( Count() > 0 ) {                                                      \
-      uint ui = Count() - 1;                                                  \
+      size_t ui = Count() - 1;                                                \
       do {                                                                    \
-        if ( (T*)BaseArray::Item(ui) == &Item )                               \
+        if ( (T*)wxBaseArray::Item(ui) == &Item )                             \
           return ui;                                                          \
         ui--;                                                                 \
       }                                                                       \
@@ -92,8 +93,8 @@ int name::Index(const T& Item, Bool bFromEnd) const                           \
     }                                                                         \
   }                                                                           \
   else {                                                                      \
-    for( uint ui = 0; ui < Count(); ui++ ) {                                  \
-      if( (T*)BaseArray::Item(ui) == &Item )                                  \
+    for( size_t ui = 0; ui < Count(); ui++ ) {                                \
+      if( (T*)wxBaseArray::Item(ui) == &Item )                                \
         return ui;                                                            \
     }                                                                         \
   }                                                                           \
@@ -105,7 +106,3 @@ int name::Index(const T& Item, Bool bFromEnd) const                           \
 // old value would provoke a compile-time error if this file is not included
 #undef  WX_DEFINE_OBJARRAY
 #define WX_DEFINE_OBJARRAY(name) _DEFINE_OBJARRAY(_L##name, name)
-
-// don't pollute preprocessor's name space
-#undef  _DEFINE_OBJARRAY
-
