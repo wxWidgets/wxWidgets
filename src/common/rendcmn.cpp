@@ -25,6 +25,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/log.h"
+    #include "wx/intl.h"
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"
