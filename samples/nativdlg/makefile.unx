@@ -1,76 +1,17 @@
 #
 # File:		makefile.unx
 # Author:	Julian Smart
-# Created:	1993
+# Created:	1998
 # Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# Copyright:	(c) 1998 Julian Smart
 #
 # "%W% %G%"
 #
-# Makefile for resource example (UNIX).
+# Makefile for nativdlg example (UNIX).
+# Actually, this is a Windows-specific example...
 
-WXDIR = ../..
+PROGRAM=nativdlg
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/make.env
+OBJECTS=$(PROGRAM).o
 
-OBJECTS=$(OBJDIR)/resource.$(OBJSUFF)
-
-.SUFFIXES:
-
-all:	$(OBJDIR) resource$(GUISUFFIX)
-
-wxmotif:
-	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx motif
-
-wxxview:
-	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx xview
-
-wxhp:
-	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx hp
-
-# For SGI, include -lPW on your LDLIBS
-motif:	wxmotif
-	$(MAKE) -f makefile.unx all GUISUFFIX=_motif GUI=-Dwx_motif GUISUFFIX=_motif OPT='$(OPT)' LDLIBS='$(MOTIFLDLIBS)' WXLIB=$(WXDIR)/lib/libwx_motif.a OPTIONS='$(OPTIONS)' DEBUG='$(DEBUG)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)' XVIEW_LINK=
-
-xview:	wxxview
-	$(MAKE) -f makefile.unx GUI=-Dwx_xview GUISUFFIX=_ol CC=$(CC) OPTIONS='$(OPTIONS)' DEBUG='$(DEBUG)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)' LDLIBS='$(XVIEWLDLIBS)'
-
-hp:	wxhp
-	$(MAKE) -f makefile.unx GUI=-Dwx_motif GUISUFFIX=_hp CC=CC OPT='' DEBUG='$(DEBUG)' WARN='-w' \
-           XINCLUDE='$(HPXINCLUDE)' \
-           XLIB='$(HPXLIB)' \
-           XVIEW_LINK='' \
-           LDLIBS='$(HPLDLIBS)'
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-resource$(GUISUFFIX): $(OBJDIR)/resource.$(OBJSUFF) $(WXLIB)
-	$(CC) $(LDFLAGS) -o resource$(GUISUFFIX) $(OBJDIR)/resource.$(OBJSUFF) $(XVIEW_LINK) $(LDLIBS)
-
-$(OBJDIR)/resource.$(OBJSUFF):        resource.$(SRCSUFF) resource.h
-	$(CC) -c $(CPPFLAGS) -o $@ resource.$(SRCSUFF)
-
-clean_motif:
-	$(MAKE) -f makefile.unx GUISUFFIX=_motif cleanany
-
-clean_ol:
-	$(MAKE) -f makefile.unx GUISUFFIX=_ol cleanany
-
-clean_hp:
-	$(MAKE) -f makefile.unx GUISUFFIX=_hp cleanany
-
-cleanany:
-	rm -f $(OBJECTS) resource$(GUISUFFIX) core
-
-wxclean_ol:
-	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx clean_ol
-
-wxclean_motif:
-	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx clean_motif
-
-wxclean_hp:
-	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx clean_hp
-
+include ../../src/makeprog.env

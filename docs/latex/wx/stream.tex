@@ -79,7 +79,7 @@ See \helpref{Read}{wxstreambufreadbuf}
 
 \membersection{wxStreamBuffer::WriteBack}
 
-\func{size\_t}{WriteBack}{\param{const char *}{buffer}, \param{size\_t}{ size}}
+\func{size\_t}{WriteBack}{\param{const char*}{ buffer}, \param{size\_t}{ size}}
 
 This function is only useful in ``read'' mode. It puts the specified \it{buffer}
 in the input queue of the stream buf. By this way, the next
@@ -127,7 +127,7 @@ Frees all internal buffers and resets to initial state all variables.
 
 \membersection{wxStreamBuffer::SetBufferIO}
 
-\func{void}{SetBufferIO}{\param{char *}{ buffer\_start}, \param{char *}{ buffer\_end}}
+\func{void}{SetBufferIO}{\param{char*}{ buffer\_start}, \param{char*}{ buffer\_end}}
 
 Specifies which pointers to use for stream buffering. You need to pass a pointer on the
 start of the buffer end and another on the end.
@@ -212,7 +212,7 @@ Returns the amount of available datas in the buffer.
 % --------------
 \membersection{wxStreamBuffer::Stream}
 
-\func{wxStreamBase *}{Stream}{\void}
+\func{wxStreamBase*}{Stream}{\void}
 
 Returns the stream parent of the stream buffer.
 

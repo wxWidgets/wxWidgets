@@ -23,7 +23,9 @@ wxMotif:
 
 - Setting the size of a hidden window may show that window.
 
-- Motif-specific wxImage functions not yet implemented.
+- wxRadioBox sometimes doesn't show (e.g. in controls sample).
+
+- wxStaticText doesn't wrap.
 
 General:
 --------

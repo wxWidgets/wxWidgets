@@ -33,14 +33,14 @@ enum wxDragResult
 
 \membersection{wxDropSource::wxDropSource}\label{wxdropsourcewxdropsource}
 
-\func{}{wxDropSource}{\param{wxWindow }{*win = NULL}}
+\func{}{wxDropSource}{\param{wxWindow*}{ win = NULL}}
 
 Default/wxGTK-specific constructor. If you use the default constructor you must
 call \helpref{wxDropSource::SetData}{wxdropsourcesetdata} later.
 
 {\it win} is required by wxGTK and therefore should always be set.
 
-\func{}{wxDropSource}{\param{wxDataObject }{\&data}, \param{wxWindow }{*win = NULL}}
+\func{}{wxDropSource}{\param{wxDataObject\& }{data}, \param{wxWindow*}{ win = NULL}}
 
 \wxheading{Parameters}
 
@@ -54,7 +54,7 @@ call \helpref{wxDropSource::SetData}{wxdropsourcesetdata} later.
 
 \membersection{wxDropSource::SetData}\label{wxdropsourcesetdata}
 
-\func{void}{SetData}{\param{wxDataObject }{\&data}}
+\func{void}{SetData}{\param{wxDataObject\&}{ data}}
 
 Sets the data \helpref{data object}{wxdataobject} associated with the drop source.
 

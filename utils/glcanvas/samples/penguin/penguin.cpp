@@ -106,7 +106,9 @@ void TestGLCanvas::OnPaint( wxPaintEvent& event )
     /* must always be here */
     wxPaintDC dc(this);
 
+#ifndef __WXMOTIF__
     if (!GetContext()) return;
+#endif
 
     SetCurrent();
     
@@ -149,7 +151,9 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
     int width, height;
     GetClientSize(& width, & height);
 
+#ifndef __WXMOTIF__
     if (GetContext())
+#endif
     {
         SetCurrent();
         glViewport(0, 0, width, height);
@@ -197,7 +201,7 @@ void TestGLCanvas::OnMouse( wxMouseEvent& event )
         add_quats( spin_quat, info.quat, info.quat );
 	
         /* orientation has changed, redraw mesh */
-  	Refresh();
+  	Refresh(FALSE);
     }
     
     info.beginx = event.GetX();

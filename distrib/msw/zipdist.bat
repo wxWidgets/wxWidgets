@@ -11,6 +11,9 @@ echo CTRL-C if this is not correct.
 pause
 
 erase %dest\wx200*.zip
+erase %dest\glcanvas.zip
+erase %dest\ogl3.zip
+erase %dest\tex2rtf2.zip
 
 cd %src
 echo Zipping...
@@ -20,8 +23,9 @@ zip32 -@ %dest\wx200msw.zip < %src\distrib\msw\msw.rsp
 zip32 -@ %dest\wx200gtk.zip < %src\distrib\msw\gtk.rsp
 zip32 -@ %dest\wx200stubs.zip < %src\distrib\msw\stubs.rsp
 zip32 -@ %dest\wx200mot.zip < %src\distrib\msw\motif.rsp
-zip32 -@ %dest\wx200doc.zip < %src\distrib\msw\docsrc.rsp
+zip32 -@ %dest\wx200user.zip < %src\distrib\msw\user.rsp
 
+zip32 -@ %dest\wx200doc.zip < %src\distrib\msw\docsrc.rsp
 zip32 -@ %dest\wx200hlp.zip < %src\distrib\msw\wx_hlp.rsp
 zip32 -@ %dest\wx200htm.zip < %src\distrib\msw\wx_html.rsp
 zip32 -@ %dest\wx200pdf.zip < %src\distrib\msw\wx_pdf.rsp

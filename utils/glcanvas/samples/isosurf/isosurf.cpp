@@ -387,7 +387,7 @@ void TestGLCanvas::OnChar(wxKeyEvent& event)
 	break;
     }
 
-    Refresh();
+    Refresh(FALSE);
 }
 
 void TestGLCanvas::OnMouseEvent(wxMouseEvent& event)
@@ -402,7 +402,7 @@ void TestGLCanvas::OnMouseEvent(wxMouseEvent& event)
 	} else {
 	    yrot += (event.GetX() - last_x)*1.0;
 	    xrot += (event.GetY() - last_y)*1.0;
-	    Refresh();
+	    Refresh(FALSE);
 	}
 	last_x = event.GetX();
 	last_y = event.GetY();

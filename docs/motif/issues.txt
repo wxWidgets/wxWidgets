@@ -3,8 +3,6 @@ Outstanding issues
 
 (see also todo.txt)
 
-- wxTreeCtrl, wxListCtrl need some debugging (probably mostly
-  wxMotif scrolling issues).
 - wxTextCtrl doesn't work as a stream buffer in Linux/gcc
 - No wxSpinButton
 - Need a way of specifying default settings for colour/font/etc.

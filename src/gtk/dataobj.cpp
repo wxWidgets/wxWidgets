@@ -241,7 +241,7 @@ void wxDataBroker::WriteData( wxDataFormat& format, void *dest ) const
 	
 	if (dobj->GetFormat().GetAtom() == format.GetAtom())
 	{
-	    return dobj->WriteData( dest );
+	    dobj->WriteData( dest );
 	}
     
         node = node->Next();
@@ -279,7 +279,7 @@ wxString wxDataObject::GetFormatId() const
 
 GdkAtom wxDataObject::GetFormatAtom() const
 {
-    GdkAtom ret = m_format.GetAtom();
+    GdkAtom ret = ((wxDataObject*) this)->m_format.GetAtom();
     return ret;
 }  
 

@@ -25,14 +25,6 @@ src/gtk/*.c
 src/gtk/*.inc
 src/gtk/*.xbm
 
-src/gdk_imlib/*.c
-src/gdk_imlib/*.h
-src/gdk_imlib/AUTHORS
-src/gdk_imlib/AUDIT
-src/gdk_imlib/COPYING.LIB
-src/gdk_imlib/README
-src/gdk_imlib/ChangeLog
-
 src/iodbc/*.c
 src/iodbc/*.ci
 src/iodbc/*.h
@@ -94,33 +86,4 @@ setup/shared/sharedSysV
 
 misc/afm/*.afm
 misc/gs_afm/*.afm
-misc/imlib/imrc
-misc/imlib/*.pal
-
-user/Makefile
-
-user/wxConvert/*.cpp
-user/wxConvert/*.h
-user/wxConvert/Makefile
-user/wxConvert/Makefile.in
-
-user/wxFile/*.cpp
-user/wxFile/*.h
-user/wxFile/Makefile
-user/wxFile/Makefile.in
-user/wxFile/*.xpm
-
-user/wxTest/*.cpp
-user/wxTest/*.h
-user/wxTest/Makefile
-user/wxTest/Makefile.in
-user/wxTest/*.xpm
-user/wxTest/*.png
-
-user/wxLayout/*.cpp
-user/wxLayout/*.h
-user/wxLayout/Makefile
-user/wxLayout/Makefile.in
-user/wxLayout/*.xpm
-user/wxLayout/*.png
 

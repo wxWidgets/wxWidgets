@@ -5,6 +5,10 @@ utils/glcanvas/win/make*.*
 utils/glcanvas/src/*.cpp
 utils/glcanvas/src/*.h
 utils/glcanvas/src/make*.*
+utils/glcanvas/motif/*.cpp
+utils/glcanvas/motif/*.h
+utils/glcanvas/motif/make*.*
+utils/glcanvas/motif/*.txt
 utils/glcanvas/samples/cube/*.cpp
 utils/glcanvas/samples/cube/*.h
 utils/glcanvas/samples/cube/*.rc
