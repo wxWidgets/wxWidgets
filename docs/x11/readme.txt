@@ -16,7 +16,8 @@ Information on how to install can be found in the file
 install.txt, but if you cannot wait, this should work on
 many systems:
 
-./configure --with-x11 --with-universal
+./configure --with-x11 --disable-shared --with-x11 --with-debug_flag --enable-log --with-debug_info --enable-debug --without-threads --without-sockets -without-odbc -with-libjpeg --enable-debug_cntxt --disable-no_rtti"
+
 make
 su <type root password>
 make install

@@ -728,6 +728,8 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     info = CLASSINFO(wxWindowMSW);
 #  elif defined(__WXGTK__)
     info = CLASSINFO(wxWindowGTK);
+#  elif defined(__WXX11__)
+    info = CLASSINFO(wxWindowX11);
 #  elif defined(__WXMGL__)
     info = CLASSINFO(wxWindowMGL);
 #  elif defined(__WXPM__)

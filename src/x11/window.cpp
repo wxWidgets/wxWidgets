@@ -147,7 +147,8 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     Window window = XCreateSimpleWindow(wxGlobalDisplay(), parentWindow,
         x, y, w, h, 0,
         m_backgroundColour.AllocColour(wxGlobalDisplay()),
-        m_foregroundColour.AllocColour(wxGlobalDisplay()));
+					m_foregroundColour.AllocColour(wxGlobalDisplay()));
+    m_mainWidget = (WXWindow) window;
 
     // Select event types wanted
     XSelectInput(wxGlobalDisplay(), window,

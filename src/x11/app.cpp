@@ -598,6 +598,9 @@ void wxApp::DeletePendingObjects()
 // Create an application context
 bool wxApp::OnInitGui()
 {
+    if (!wxAppBase::OnInitGui())
+	return FALSE;
+    
     // TODO: parse argv and get display to pass to XOpenDisplay
     Display* dpy = XOpenDisplay(NULL);
     m_initialDisplay = (WXDisplay*) dpy;
@@ -643,8 +646,12 @@ Window wxGetWindowParent(Window window)
 {
     Window parent, root = 0;
     unsigned int noChildren = 0;
-    if (XQueryTree((Display*) wxGetDisplay(), window, & root, & parent,
-        NULL, & noChildren))
+    Window* children = NULL;
+    int res = XQueryTree((Display*) wxGetDisplay(), window, & root, & parent,
+			 & children, & noChildren);
+    if (children)
+        XFree(children);
+    if (res)
         return parent;
     else
         return (Window) 0;

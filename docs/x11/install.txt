@@ -43,7 +43,7 @@ COMPILING USING CONFIGURE
 If you compile wxWindows on Linux for the first time and don't like to read 
 install instructions just do (in the base dir):
 
-> ./configure --with-x11 --with-universal
+> ./configure --with-x11
 > make
 > su <type root password>
 > make install

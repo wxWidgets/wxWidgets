@@ -61,7 +61,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     XWMHints wm_hints;
     
     long xattributes_mask =
-        CWEventMask |
+        CWOverrideRedirect |
         CWBorderPixel | CWBackPixel;
     xattributes.background_pixel = BlackPixel( xdisplay, xscreen );
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );

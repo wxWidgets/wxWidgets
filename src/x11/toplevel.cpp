@@ -93,7 +93,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     XWMHints wm_hints;
     
     long xattributes_mask =
-        CWEventMask |
+        CWOverrideRedirect |
         CWBorderPixel | CWBackPixel;
     xattributes.background_pixel = BlackPixel( xdisplay, xscreen );
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
