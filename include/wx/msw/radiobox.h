@@ -78,6 +78,8 @@ public:
     // implementation only from now on
     // -------------------------------
 
+    virtual bool SetFont(const wxFont& font);
+
     long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     WXHWND *GetRadioButtons() const { return m_radioButtons; }
     bool ContainsHWND(WXHWND hWnd) const;

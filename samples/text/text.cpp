@@ -340,13 +340,13 @@ void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
             case WXK_NUMPAD_SUBTRACT: key = "NUMPAD_SUBTRACT"; break;
             case WXK_NUMPAD_DECIMAL: key = "NUMPAD_DECIMAL"; break;
 
-	    default:
+            default:
             {
                if ( wxIsprint((int)keycode) )
                    key.Printf( _T("'%c'") , (char)keycode);
                else
-		   key.Printf( _T("unknown (%ld)"), keycode);
-	    }
+                   key.Printf( _T("unknown (%ld)"), keycode);
+            }
         }
     }
 
@@ -417,21 +417,25 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
             // go to position 10
             SetInsertionPoint(10);
             break;
-	    
+
         case WXK_F4:
-	    if (!m_hasCapture)
-	    {
+            if (!m_hasCapture)
+            {
                 wxLogDebug( wxT("Now capturing mouse and events.") );
-	        m_hasCapture = TRUE;
-	        CaptureMouse();
-	    }
-	    else
-	    {
+                m_hasCapture = TRUE;
+                CaptureMouse();
+            }
+            else
+            {
                 wxLogDebug( wxT("Stopped capturing mouse and events.") );
-	        m_hasCapture = TRUE;
-	        ReleaseMouse();
-	    }
+                m_hasCapture = TRUE;
+                ReleaseMouse();
+            }
             break;
+
+        case WXK_F5:
+            // insert a blank line
+            WriteText("\n");
     }
 
     LogEvent( _("Key down"), event);

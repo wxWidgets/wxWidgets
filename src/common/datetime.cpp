@@ -553,9 +553,25 @@ wxDateTime& wxDateTime::Set(const struct tm& tm)
     struct tm tm2(tm);
     time_t timet = mktime(&tm2);
 
-    if ( timet == (time_t)(-1) )
+    if ( timet == (time_t)-1 )
     {
-        wxFAIL_MSG(_T("Invalid time"));
+        // mktime() rather unintuitively fails for Jan 1, 1970 if the hour is
+        // less than timezone - try to make it work for this case
+        if ( tm2.tm_year == 70 && tm2.tm_mon == 0 && tm2.tm_mday == 1 )
+        {
+            // add timezone to make sure that date is in range
+            tm2.tm_sec -= GetTimeZone();
+
+            timet = mktime(&tm2);
+            if ( timet != (time_t)-1 )
+            {
+                timet += GetTimeZone();
+
+                return Set(timet);
+            }
+        }
+
+        wxFAIL_MSG( _T("mktime() failed") );
 
         return ms_InvDateTime;
     }

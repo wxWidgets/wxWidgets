@@ -30,12 +30,12 @@
 // what to test?
 
 //#define TEST_ARRAYS
-//#define TEST_DIR
+#define TEST_DIR
 //#define TEST_LOG
 //#define TEST_MIME
 //#define TEST_STRINGS
 //#define TEST_THREADS
-#define TEST_TIME
+//#define TEST_TIME
 //#define TEST_LONGLONG
 
 // ============================================================================

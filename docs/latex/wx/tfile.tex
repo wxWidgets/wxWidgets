@@ -1,6 +1,6 @@
 \section{File classes and functions overview}\label{wxfileoverview}
 
-Classes: \helpref{wxFile}{wxfile}, \helpref{wxTempFile}{wxtempfile}, 
+Classes: \helpref{wxFile}{wxfile}, \helpref{wxDir}{wxdir}, \helpref{wxTempFile}{wxtempfile}, 
 \helpref{wxTextFile}{wxtextfile}
 
 Functions: see \helpref{file functions}{filefunctions}.
@@ -25,3 +25,6 @@ and program source files. It can be also used to work with files with "non
 native" line termination characters and write them as "native" files if needed
 (in fact, the files may be written in any format).
 
+wxDir is a helper class for enumerating the files or subdirectories of a
+directory. It may be used to enumerate all files, only files satisfying the
+given template mask or only non-hidden files.

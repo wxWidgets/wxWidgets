@@ -91,15 +91,6 @@ wxDirData::wxDirData(const wxString& dirname)
          : m_dirname(dirname)
 {
     m_handle = INVALID_HANDLE_VALUE;
-
-    // throw away the trailing slashes
-    size_t n = m_dirname.length();
-    wxCHECK_RET( n, _T("empty dir name in wxDir") );
-
-    while ( n > 0 && wxIsPathSeparator(m_dirname[--n]) )
-        ;
-
-    m_dirname.Truncate(n + 1);
 }
 
 wxDirData::~wxDirData()
@@ -115,6 +106,8 @@ void wxDirData::Close()
         {
             wxLogLastError(_T("FindClose"));
         }
+
+        m_handle = INVALID_HANDLE_VALUE;
     }
 }
 
@@ -131,8 +124,11 @@ bool wxDirData::Read(wxString *filename)
     if ( m_handle == INVALID_HANDLE_VALUE )
     {
         // open first
-        m_handle = ::FindFirstFile(!m_filespec ? _T("*.*") : m_filespec.c_str(),
-                                   &finddata);
+        wxString filespec;
+        filespec << m_dirname << _T('\\')
+                 << (!m_filespec ? _T("*.*") : m_filespec.c_str());
+
+        m_handle = ::FindFirstFile(filespec, &finddata);
 
         first = TRUE;
     }
@@ -141,7 +137,7 @@ bool wxDirData::Read(wxString *filename)
     {
         DWORD err = ::GetLastError();
 
-        if ( err != ERROR_NO_MORE_FILES )
+        if ( err != ERROR_FILE_NOT_FOUND )
         {
             wxLogSysError(err, _("Can not enumerate files in directory '%s'"),
                           m_dirname.c_str());
@@ -151,12 +147,10 @@ bool wxDirData::Read(wxString *filename)
         return FALSE;
     }
 
-    bool matches = FALSE;
-
     const wxChar *name;
     DWORD attr;
 
-    while ( !matches )
+    for ( ;; )
     {
         if ( first )
         {
@@ -205,11 +199,17 @@ bool wxDirData::Read(wxString *filename)
         // finally, check whether it's a hidden file
         if ( !(m_flags & wxDIR_HIDDEN) )
         {
-            matches = !(attr & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM));
+            if ( attr & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM) )
+            {
+                // it's a hidden file, skip it
+                continue;
+            }
         }
-    }
 
-    *filename = name;
+        *filename = name;
+
+        break;
+    }
 
     return TRUE;
 }

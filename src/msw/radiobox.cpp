@@ -182,7 +182,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 {
     // initialize members
     m_selectedButton = -1;
-    m_noItems = n;
+    m_noItems = 0;
 
     m_majorDim =  majorDim == 0 ? n : majorDim;
     m_noRowsOrCols = majorDim;
@@ -196,6 +196,7 @@ bool wxRadioBox::Create(wxWindow *parent,
         return FALSE;
 
     // and now create the buttons
+    m_noItems = n;
 #if RADIOBTN_PARENT_IS_RADIOBOX
     HWND hwndParent = GetHwnd();
 #else
@@ -658,7 +659,7 @@ bool wxRadioBox::ContainsHWND(WXHWND hWnd) const
     return FALSE;
 }
 
-void wxRadioBox::Command (wxCommandEvent & event)
+void wxRadioBox::Command(wxCommandEvent & event)
 {
     SetSelection (event.m_commandInt);
     ProcessCommand (event);
@@ -685,6 +686,24 @@ void wxRadioBox::SendNotificationEvent()
     event.SetString( GetString(m_selectedButton) );
     event.SetEventObject( this );
     ProcessCommand(event);
+}
+
+bool wxRadioBox::SetFont(const wxFont& font)
+{
+    if ( !wxControl::SetFont(font) )
+    {
+        // nothing to do
+        return FALSE;
+    }
+
+    // also set the font of our radio buttons
+    WXHFONT hfont = wxFont(font).GetResourceHandle();
+    for ( int n = 0; n < m_noItems; n++ )
+    {
+        ::SendMessage((HWND)m_radioButtons[n], WM_SETFONT, (WPARAM)hfont, 0L);
+    }
+
+    return TRUE;
 }
 
 long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
