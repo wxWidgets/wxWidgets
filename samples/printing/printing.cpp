@@ -547,6 +547,7 @@ dc->SetFont(headerFont);
     int pageWidthMM, pageHeightMM;
 
     printout->GetPageSizeMM(&pageWidthMM, &pageHeightMM);
+    wxUnusedVar(pageHeightMM);
 
     int leftMargin = 10;
     int topMargin = 10;
