@@ -3240,6 +3240,9 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
 
     if ( m_table )
     {
+        if (IsCellEditControlEnabled())
+            EnableCellEditControl(FALSE);
+
         bool ok = m_table->InsertRows( pos, numRows );
 
         // the table will have sent the results of the insert row
@@ -3322,24 +3325,23 @@ bool wxGrid::DeleteRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
         return FALSE;
     }
 
-    if ( m_table && m_table->DeleteRows( pos, numRows ) )
+    if ( m_table )
     {
-        // the table will have sent the results of the delete row
-        // operation to this view object as a grid table message
-        //
-        if ( m_numRows > 0 )
-            SetEditControlValue();
-        else
-            HideCellEditControl();
+        if (IsCellEditControlEnabled())
+            EnableCellEditControl(FALSE);
 
-        ClearSelection();
-        if ( !GetBatchCount() ) Refresh();
-        return TRUE;
+        if (m_table->DeleteRows( pos, numRows ))
+        {
+
+            // the table will have sent the results of the delete row
+            // operation to this view object as a grid table message
+            //
+            ClearSelection();
+            if ( !GetBatchCount() ) Refresh();
+            return TRUE;
+        }
     }
-    else
-    {
-        return FALSE;
-    }
+    return FALSE;
 }
 
 
@@ -3355,7 +3357,9 @@ bool wxGrid::InsertCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
 
     if ( m_table )
     {
-        HideCellEditControl();
+        if (IsCellEditControlEnabled())
+            EnableCellEditControl(FALSE);
+
         bool ok = m_table->InsertCols( pos, numCols );
 
         // the table will have sent the results of the insert col
@@ -3429,24 +3433,22 @@ bool wxGrid::DeleteCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
         return FALSE;
     }
 
-    if ( m_table && m_table->DeleteCols( pos, numCols ) )
+    if ( m_table )
     {
-        // the table will have sent the results of the delete col
-        // operation to this view object as a grid table message
-        //
-        if ( m_numCols > 0 )
-            SetEditControlValue();
-        else
-            HideCellEditControl();
+        if (IsCellEditControlEnabled())
+            EnableCellEditControl(FALSE);
 
-        ClearSelection();
-        if ( !GetBatchCount() ) Refresh();
-        return TRUE;
+        if ( m_table->DeleteCols( pos, numCols ) )
+        {
+            // the table will have sent the results of the delete col
+            // operation to this view object as a grid table message
+            //
+            ClearSelection();
+            if ( !GetBatchCount() ) Refresh();
+            return TRUE;
+        }
     }
-    else
-    {
-        return FALSE;
-    }
+    return FALSE;
 }
 
 
