@@ -74,7 +74,7 @@ public:
 
     void GetItemsRecursively(const wxTreeItemId& idParent, long cookie);
 
-    void CreateImageList(int size = 32);
+    void CreateImageList(int size = 16);
 
     void AddTestItemsToTree(size_t numChildren, size_t depth);
 

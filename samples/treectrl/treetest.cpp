@@ -417,7 +417,7 @@ void MyFrame::OnSetImageSize(wxCommandEvent& event)
     long size = wxGetNumberFromUser("Enter the size for the images to use",
                                     "Size: ",
                                     "TreeCtrl sample",
-                                    32);
+                                    16);
     if ( size == -1 )
         return;
 
