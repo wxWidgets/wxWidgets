@@ -713,7 +713,7 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
                        wxMenu *subMenu)
           : wxMenuItemBase(parentMenu, id, text, help, kind, subMenu)
 {
-    Init();
+    Init(text);
 }
 
 wxMenuItem::wxMenuItem(wxMenu *parentMenu,
@@ -725,15 +725,15 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
           : wxMenuItemBase(parentMenu, id, text, help,
                            isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu)
 {
-    Init();
+    Init(text);
 }
 
-void wxMenuItem::Init()
+void wxMenuItem::Init(const wxString& text)
 {
     m_labelWidget = (GtkWidget *) NULL;
     m_menuItem = (GtkWidget *) NULL;
 
-    DoSetText(m_text);
+    DoSetText(text);
 }
 
 wxMenuItem::~wxMenuItem()
