@@ -4,18 +4,18 @@ dnl Do not modify, all changes will be overwritten!
 
     dnl Conditions:
 
-dnl ### begin block COND_BUILD_debug ###
-    COND_BUILD_debug="#"
+dnl ### begin block COND_BUILD_DEBUG ###
+    COND_BUILD_DEBUG="#"
     if test "x$BUILD" = "xdebug" ; then
-        COND_BUILD_debug=""
+        COND_BUILD_DEBUG=""
     fi
-    AC_SUBST(COND_BUILD_debug)
-dnl ### begin block COND_BUILD_release ###
-    COND_BUILD_release="#"
+    AC_SUBST(COND_BUILD_DEBUG)
+dnl ### begin block COND_BUILD_RELEASE ###
+    COND_BUILD_RELEASE="#"
     if test "x$BUILD" = "xrelease" ; then
-        COND_BUILD_release=""
+        COND_BUILD_RELEASE=""
     fi
-    AC_SUBST(COND_BUILD_release)
+    AC_SUBST(COND_BUILD_RELEASE)
 dnl ### begin block COND_DEPS_TRACKING_0 ###
     COND_DEPS_TRACKING_0="#"
     if test "x$DEPS_TRACKING" = "x0" ; then
@@ -322,72 +322,6 @@ dnl ### begin block COND_WXUNIV_1 ###
         COND_WXUNIV_1=""
     fi
     AC_SUBST(COND_WXUNIV_1)
-dnl ### begin block COND_WXUSE_LIBJPEG_builtin ###
-    COND_WXUSE_LIBJPEG_builtin="#"
-    if test "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
-        COND_WXUSE_LIBJPEG_builtin=""
-    fi
-    AC_SUBST(COND_WXUSE_LIBJPEG_builtin)
-dnl ### begin block COND_WXUSE_LIBPNG_builtin ###
-    COND_WXUSE_LIBPNG_builtin="#"
-    if test "x$wxUSE_LIBPNG" = "xbuiltin" ; then
-        COND_WXUSE_LIBPNG_builtin=""
-    fi
-    AC_SUBST(COND_WXUSE_LIBPNG_builtin)
-dnl ### begin block COND_WXUSE_LIBTIFF_builtin ###
-    COND_WXUSE_LIBTIFF_builtin="#"
-    if test "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
-        COND_WXUSE_LIBTIFF_builtin=""
-    fi
-    AC_SUBST(COND_WXUSE_LIBTIFF_builtin)
-dnl ### begin block COND_WXUSE_ODBC_builtin ###
-    COND_WXUSE_ODBC_builtin="#"
-    if test "x$wxUSE_ODBC" = "xbuiltin" ; then
-        COND_WXUSE_ODBC_builtin=""
-    fi
-    AC_SUBST(COND_WXUSE_ODBC_builtin)
-dnl ### begin block COND_WXUSE_REGEX_builtin ###
-    COND_WXUSE_REGEX_builtin="#"
-    if test "x$wxUSE_REGEX" = "xbuiltin" ; then
-        COND_WXUSE_REGEX_builtin=""
-    fi
-    AC_SUBST(COND_WXUSE_REGEX_builtin)
-dnl ### begin block COND_WXUSE_ZLIB_builtin ###
-    COND_WXUSE_ZLIB_builtin="#"
-    if test "x$wxUSE_ZLIB" = "xbuiltin" ; then
-        COND_WXUSE_ZLIB_builtin=""
-    fi
-    AC_SUBST(COND_WXUSE_ZLIB_builtin)
-dnl ### begin block COND_PLATFORM_MAC_1 ###
-    COND_PLATFORM_MAC_1="#"
-    if test "x$PLATFORM_MAC" = "x1" ; then
-        COND_PLATFORM_MAC_1=""
-    fi
-    AC_SUBST(COND_PLATFORM_MAC_1)
-dnl ### begin block COND_SHARED_1 ###
-    COND_SHARED_1="#"
-    if test "x$SHARED" = "x1" ; then
-        COND_SHARED_1=""
-    fi
-    AC_SUBST(COND_SHARED_1)
-dnl ### begin block COND_SHARED_0 ###
-    COND_SHARED_0="#"
-    if test "x$SHARED" = "x0" ; then
-        COND_SHARED_0=""
-    fi
-    AC_SUBST(COND_SHARED_0)
-dnl ### begin block COND_BUILD_DEBUG ###
-    COND_BUILD_DEBUG="#"
-    if test "x$BUILD" = "xdebug" ; then
-        COND_BUILD_DEBUG=""
-    fi
-    AC_SUBST(COND_BUILD_DEBUG)
-dnl ### begin block COND_BUILD_RELEASE ###
-    COND_BUILD_RELEASE="#"
-    if test "x$BUILD" = "xrelease" ; then
-        COND_BUILD_RELEASE=""
-    fi
-    AC_SUBST(COND_BUILD_RELEASE)
 dnl ### begin block COND_WXUSE_LIBJPEG_BUILTIN ###
     COND_WXUSE_LIBJPEG_BUILTIN="#"
     if test "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
@@ -424,3 +358,21 @@ dnl ### begin block COND_WXUSE_ZLIB_BUILTIN ###
         COND_WXUSE_ZLIB_BUILTIN=""
     fi
     AC_SUBST(COND_WXUSE_ZLIB_BUILTIN)
+dnl ### begin block COND_PLATFORM_MAC_1 ###
+    COND_PLATFORM_MAC_1="#"
+    if test "x$PLATFORM_MAC" = "x1" ; then
+        COND_PLATFORM_MAC_1=""
+    fi
+    AC_SUBST(COND_PLATFORM_MAC_1)
+dnl ### begin block COND_SHARED_1 ###
+    COND_SHARED_1="#"
+    if test "x$SHARED" = "x1" ; then
+        COND_SHARED_1=""
+    fi
+    AC_SUBST(COND_SHARED_1)
+dnl ### begin block COND_SHARED_0 ###
+    COND_SHARED_0="#"
+    if test "x$SHARED" = "x0" ; then
+        COND_SHARED_0=""
+    fi
+    AC_SUBST(COND_SHARED_0)
