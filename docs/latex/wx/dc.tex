@@ -52,8 +52,8 @@ released for each drawing operation.
 
 \membersection{wxDC::Blit}\label{wxdcblit}
 
-\func{bool}{Blit}{\param{long}{ xdest}, \param{long}{ ydest}, \param{long}{ width}, \param{long}{ height},
-  \param{wxDC* }{source}, \param{long}{ xsrc}, \param{long}{ ysrc}, \param{int}{ logicalFunc = wxCOPY},
+\func{bool}{Blit}{\param{wxCoord}{ xdest}, \param{wxCoord}{ ydest}, \param{wxCoord}{ width}, \param{wxCoord}{ height},
+  \param{wxDC* }{source}, \param{wxCoord}{ xsrc}, \param{wxCoord}{ ysrc}, \param{int}{ logicalFunc = wxCOPY},
   \param{bool }{useMask = FALSE}}
 
 Copy from a source DC to this DC, specifying the destination
@@ -116,7 +116,7 @@ Clears the device context using the current background brush.
 
 \membersection{wxDC::CrossHair}\label{wxdccrosshair}
 
-\func{void}{CrossHair}{\param{long}{ x}, \param{long}{ y}}
+\func{void}{CrossHair}{\param{wxCoord}{ x}, \param{wxCoord}{ y}}
 
 Displays a cross hair using the current pen. This is a vertical
 and horizontal line the height and width of the window, centred
@@ -131,35 +131,35 @@ See also \helpref{wxDC::SetClippingRegion}{wxdcsetclippingregion}.
 
 \membersection{wxDC::DeviceToLogicalX}\label{wxdcdevicetologicalx}
 
-\func{long}{DeviceToLogicalX}{\param{long}{ x}}
+\func{wxCoord}{DeviceToLogicalX}{\param{wxCoord}{ x}}
 
 Convert device X coordinate to logical coordinate, using the current
 mapping mode.
 
 \membersection{wxDC::DeviceToLogicalXRel}\label{wxdcdevicetologicalxrel}
 
-\func{long}{DeviceToLogicalXRel}{\param{long}{ x}}
+\func{wxCoord}{DeviceToLogicalXRel}{\param{wxCoord}{ x}}
 
 Convert device X coordinate to relative logical coordinate, using the current
 mapping mode. Use this function for converting a width, for example.
 
 \membersection{wxDC::DeviceToLogicalY}\label{wxdcdevicetologicaly}
 
-\func{long}{DeviceToLogicalY}{\param{long}{ y}}
+\func{wxCoord}{DeviceToLogicalY}{\param{wxCoord}{ y}}
 
 Converts device Y coordinate to logical coordinate, using the current
 mapping mode.
 
 \membersection{wxDC::DeviceToLogicalYRel}\label{wxdcdevicetologicalyrel}
 
-\func{long}{DeviceToLogicalYRel}{\param{long}{ y}}
+\func{wxCoord}{DeviceToLogicalYRel}{\param{wxCoord}{ y}}
 
 Convert device Y coordinate to relative logical coordinate, using the current
 mapping mode. Use this function for converting a height, for example.
 
 \membersection{wxDC::DrawArc}\label{wxdcdrawarc}
 
-\func{void}{DrawArc}{\param{long}{ x1}, \param{long}{ y1}, \param{long}{ x2}, \param{long}{ y2}, \param{double}{ xc}, \param{double}{ yc}}
+\func{void}{DrawArc}{\param{wxCoord}{ x1}, \param{wxCoord}{ y1}, \param{wxCoord}{ x2}, \param{wxCoord}{ y2}, \param{double}{ xc}, \param{double}{ yc}}
 
 Draws an arc of a circle, centred on ({\it xc, yc}), with starting point ({\it x1, y1})
 and ending at ({\it x2, y2}).   The current pen is used for the outline
@@ -169,14 +169,14 @@ The arc is drawn in an anticlockwise direction from the start point to the end p
 
 \membersection{wxDC::DrawBitmap}\label{wxdcdrawbitmap}
 
-\func{void}{DrawBitmap}{\param{const wxBitmap\&}{ bitmap}, \param{long}{ x}, \param{long}{ y}, \param{bool}{ transparent}}
+\func{void}{DrawBitmap}{\param{const wxBitmap\&}{ bitmap}, \param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{bool}{ transparent}}
 
 Draw a bitmap on the device context at the specified point. If {\it transparent} is TRUE and the bitmap has
 a transparency mask, the bitmap will be drawn transparently.
 
 \membersection{wxDC::DrawEllipse}\label{wxdcdrawellipse}
 
-\func{void}{DrawEllipse}{\param{long}{ x}, \param{long}{ y}, \param{long}{ width}, \param{long}{ height}}
+\func{void}{DrawEllipse}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
 
 Draws an ellipse contained in the rectangle with the given top left corner, and with the
 given size.  The current pen is used for the outline and the current brush for
@@ -184,7 +184,7 @@ filling the shape.
 
 \membersection{wxDC::DrawEllipticArc}\label{wxdcdrawellipticarc}
 
-\func{void}{DrawEllipticArc}{\param{long}{ x}, \param{long}{ y}, \param{long}{ width}, \param{long}{ height},
+\func{void}{DrawEllipticArc}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height},
  \param{double}{ start}, \param{double}{ end}}
 
 Draws an arc of an ellipse. The current pen is used for drawing the arc and
@@ -205,23 +205,23 @@ complete ellipse will be drawn.
 
 \membersection{wxDC::DrawIcon}\label{wxdcdrawicon}
 
-\func{void}{DrawIcon}{\param{const wxIcon\&}{ icon}, \param{long}{ x}, \param{long}{ y}}
+\func{void}{DrawIcon}{\param{const wxIcon\&}{ icon}, \param{wxCoord}{ x}, \param{wxCoord}{ y}}
 
 Draw an icon on the display (does nothing if the device context is PostScript).
 This can be the simplest way of drawing bitmaps on a window.
 
 \membersection{wxDC::DrawLine}\label{wxdcdrawline}
 
-\func{void}{DrawLine}{\param{long}{ x1}, \param{long}{ y1}, \param{long}{ x2}, \param{long}{ y2}}
+\func{void}{DrawLine}{\param{wxCoord}{ x1}, \param{wxCoord}{ y1}, \param{wxCoord}{ x2}, \param{wxCoord}{ y2}}
 
 Draws a line from the first point to the second. The current pen is used
 for drawing the line.
 
 \membersection{wxDC::DrawLines}\label{wxdcdrawlines}
 
-\func{void}{DrawLines}{\param{int}{ n}, \param{wxPoint}{ points[]}, \param{long}{ xoffset = 0}, \param{long}{ yoffset = 0}}
+\func{void}{DrawLines}{\param{int}{ n}, \param{wxPoint}{ points[]}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0}}
 
-\func{void}{DrawLines}{\param{wxList *}{points}, \param{long}{ xoffset = 0}, \param{long}{ yoffset = 0}}
+\func{void}{DrawLines}{\param{wxList *}{points}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0}}
 
 Draws lines using an array of {\it points} of size {\it n}, or list of
 pointers to points, adding the optional offset coordinate. The current
@@ -233,10 +233,10 @@ of wxPoint objects.}
 
 \membersection{wxDC::DrawPolygon}\label{wxdcdrawpolygon}
 
-\func{void}{DrawPolygon}{\param{int}{ n}, \param{wxPoint}{ points[]}, \param{long}{ xoffset = 0}, \param{long}{ yoffset = 0},\\
+\func{void}{DrawPolygon}{\param{int}{ n}, \param{wxPoint}{ points[]}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0},\\
   \param{int }{fill\_style = wxODDEVEN\_RULE}}
 
-\func{void}{DrawPolygon}{\param{wxList *}{points}, \param{long}{ xoffset = 0}, \param{long}{ yoffset = 0},\\
+\func{void}{DrawPolygon}{\param{wxList *}{points}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0},\\
   \param{int }{fill\_style = wxODDEVEN\_RULE}}
 
 Draws a filled polygon using an array of {\it points} of size {\it n},
@@ -256,21 +256,31 @@ of wxPoint objects.}
 
 \membersection{wxDC::DrawPoint}\label{wxdcdrawpoint}
 
-\func{void}{DrawPoint}{\param{long}{ x}, \param{long}{ y}}
+\func{void}{DrawPoint}{\param{wxCoord}{ x}, \param{wxCoord}{ y}}
 
 Draws a point using the current pen.
 
 \membersection{wxDC::DrawRectangle}\label{wxdcdrawrectangle}
 
-\func{void}{DrawRectangle}{\param{long}{ x}, \param{long}{ y}, \param{long}{ width}, \param{long}{ height}}
+\func{void}{DrawRectangle}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
 
 Draws a rectangle with the given top left corner, and with the given
 size.  The current pen is used for the outline and the current brush
 for filling the shape.
 
+\membersection{wxDC::DrawRotatedText}\label{wxdcdrawrotatedtext}
+
+\func{void}{DrawRotatedText}{\param{const wxString\& }{text}, \param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{double}{ angle}}
+
+Draws the text rotated by {\it angle} degrees.
+
+\wxheading{See also}
+
+\helpref{DrawText}{wxdcdrawtext}
+
 \membersection{wxDC::DrawRoundedRectangle}\label{wxdcdrawroundedrectangle}
 
-\func{void}{DrawRoundedRectangle}{\param{long}{ x}, \param{long}{ y}, \param{long}{ width}, \param{long}{ height}, \param{double}{ radius = 20}}
+\func{void}{DrawRoundedRectangle}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}, \param{double}{ radius = 20}}
 
 Draws a rectangle with the given top left corner, and with the given
 size.  The corners are quarter-circles using the given radius. The
@@ -294,7 +304,7 @@ pen.  Doesn't delete the wxList and contents. The spline is drawn
 using a series of lines, using an algorithm taken from the X drawing
 program `XFIG'.
 
-\func{void}{DrawSpline}{\param{long}{ x1}, \param{long}{ y1}, \param{long}{ x2}, \param{long}{ y2}, \param{long}{ x3}, \param{long}{ y3}}
+\func{void}{DrawSpline}{\param{wxCoord}{ x1}, \param{wxCoord}{ y1}, \param{wxCoord}{ x2}, \param{wxCoord}{ y2}, \param{wxCoord}{ x3}, \param{wxCoord}{ y3}}
 
 Draws a three-point spline using the current pen.
 
@@ -303,7 +313,7 @@ of wxPoint objects.}
 
 \membersection{wxDC::DrawText}\label{wxdcdrawtext}
 
-\func{void}{DrawText}{\param{const wxString\& }{text}, \param{long}{ x}, \param{long}{ y}}
+\func{void}{DrawText}{\param{const wxString\& }{text}, \param{wxCoord}{ x}, \param{wxCoord}{ y}}
 
 Draws a text string at the specified point, using the current text font,
 and the current text foreground and background colours.
@@ -335,7 +345,7 @@ Ends a document page (only relevant when outputting to a printer).
 
 \membersection{wxDC::FloodFill}\label{wxdcfloodfill}
 
-\func{void}{FloodFill}{\param{long}{ x}, \param{long}{ y}, \param{wxColour *}{colour}, \param{int}{ style=wxFLOOD\_SURFACE}}
+\func{void}{FloodFill}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxColour *}{colour}, \param{int}{ style=wxFLOOD\_SURFACE}}
 
 Flood fills the device context starting from the given point, in the given colour,
 and using a style:
@@ -361,19 +371,19 @@ Gets the current brush (see \helpref{wxDC::SetBrush}{wxdcsetbrush}).
 
 \membersection{wxDC::GetCharHeight}\label{wxdcgetcharheight}
 
-\func{long}{GetCharHeight}{\void}
+\func{wxCoord}{GetCharHeight}{\void}
 
 Gets the character height of the currently set font.
 
 \membersection{wxDC::GetCharWidth}\label{wxdcgetcharwidth}
 
-\func{long}{GetCharWidth}{\void}
+\func{wxCoord}{GetCharWidth}{\void}
 
 Gets the average character width of the currently set font.
 
 \membersection{wxDC::GetClippingBox}\label{wxdcgetclippingbox}
 
-\func{void}{GetClippingBox}{\param{long}{ *x}, \param{long}{ *y}, \param{long}{ *width}, \param{long}{ *height}}
+\func{void}{GetClippingBox}{\param{wxCoord}{ *x}, \param{wxCoord}{ *y}, \param{wxCoord}{ *width}, \param{wxCoord}{ *height}}
 
 Gets the rectangle surrounding the current clipping region.
 
@@ -413,7 +423,7 @@ Gets the current pen (see \helpref{wxDC::SetPen}{wxdcsetpen}).
 
 \membersection{wxDC::GetPixel}\label{wxdcgetpixel}
 
-\func{bool}{GetPixel}{\param{long}{ x}, \param{long}{ y}, \param{wxColour *}{colour}}
+\func{bool}{GetPixel}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxColour *}{colour}}
 
 Sets {\it colour} to the colour at the specified location. Windows only; an X implementation
 is being worked on. Not available for wxPostScriptDC or wxMetafileDC.
@@ -423,7 +433,7 @@ required as a parameter.}
 
 \membersection{wxDC::GetSize}\label{wxdcgetsize}
 
-\func{void}{GetSize}{\param{long *}{width}, \param{long *}{height}}
+\func{void}{GetSize}{\param{wxCoord *}{width}, \param{wxCoord *}{height}}
 
 For a PostScript device context, this gets the maximum size of graphics
 drawn so far on the device context.
@@ -436,7 +446,7 @@ application, the following code will scale the graphic to fit on the
 printer page:
 
 \begin{verbatim}
-  long w, h;
+  wxCoord w, h;
   dc.GetSize(&w, &h);
   double scaleX=(double)(maxX/w);
   double scaleY=(double)(maxY/h);
@@ -459,8 +469,8 @@ Gets the current text background colour (see \helpref{wxDC::SetTextBackground}{w
 
 \membersection{wxDC::GetTextExtent}\label{wxdcgettextextent}
 
-\func{void}{GetTextExtent}{\param{const wxString\& }{string}, \param{long *}{w}, \param{long *}{h},\\
-  \param{long *}{descent = NULL}, \param{long *}{externalLeading = NULL}, \param{wxFont *}{font = NULL}}
+\func{void}{GetTextExtent}{\param{const wxString\& }{string}, \param{wxCoord *}{w}, \param{wxCoord *}{h},\\
+  \param{wxCoord *}{descent = NULL}, \param{wxCoord *}{externalLeading = NULL}, \param{wxFont *}{font = NULL}}
 
 Gets the dimensions of the string using the currently selected font.
 \rtfsp{\it string} is the text string to measure, {\it w} and {\it h} are
@@ -492,53 +502,53 @@ Gets the current text foreground colour (see \helpref{wxDC::SetTextForeground}{w
 
 \membersection{wxDC::LogicalToDeviceX}\label{wxdclogicaltodevicex}
 
-\func{long}{LogicalToDeviceX}{\param{long}{ x}}
+\func{wxCoord}{LogicalToDeviceX}{\param{wxCoord}{ x}}
 
 Converts logical X coordinate to device coordinate, using the current
 mapping mode.
 
 \membersection{wxDC::LogicalToDeviceXRel}\label{wxdclogicaltodevicexrel}
 
-\func{long}{LogicalToDeviceXRel}{\param{long}{ x}}
+\func{wxCoord}{LogicalToDeviceXRel}{\param{wxCoord}{ x}}
 
 Converts logical X coordinate to relative device coordinate, using the current
 mapping mode. Use this for converting a width, for example.
 
 \membersection{wxDC::LogicalToDeviceY}\label{wxdclogicaltodevicey}
 
-\func{long}{LogicalToDeviceY}{\param{long}{ y}}
+\func{wxCoord}{LogicalToDeviceY}{\param{wxCoord}{ y}}
 
 Converts logical Y coordinate to device coordinate, using the current
 mapping mode.
 
 \membersection{wxDC::LogicalToDeviceYRel}\label{wxdclogicaltodeviceyrel}
 
-\func{long}{LogicalToDeviceYRel}{\param{long}{ y}}
+\func{wxCoord}{LogicalToDeviceYRel}{\param{wxCoord}{ y}}
 
 Converts logical Y coordinate to relative device coordinate, using the current
 mapping mode. Use this for converting a height, for example.
 
 \membersection{wxDC::MaxX}\label{wxdcmaxx}
 
-\func{long}{MaxX}{\void}
+\func{wxCoord}{MaxX}{\void}
 
 Gets the maximum horizontal extent used in drawing commands so far.
 
 \membersection{wxDC::MaxY}\label{wxdcmaxy}
 
-\func{long}{MaxY}{\void}
+\func{wxCoord}{MaxY}{\void}
 
 Gets the maximum vertical extent used in drawing commands so far.
 
 \membersection{wxDC::MinX}\label{wxdcminx}
 
-\func{long}{MinX}{\void}
+\func{wxCoord}{MinX}{\void}
 
 Gets the minimum horizontal extent used in drawing commands so far.
 
 \membersection{wxDC::MinY}\label{wxdcminy}
 
-\func{long}{MinY}{\void}
+\func{wxCoord}{MinY}{\void}
 
 Gets the minimum vertical extent used in drawing commands so far.
 
@@ -550,7 +560,7 @@ Returns TRUE if the DC is ok to use.
 
 \membersection{wxDC::SetDeviceOrigin}\label{wxdcsetdeviceorigin}
 
-\func{void}{SetDeviceOrigin}{\param{long}{ x}, \param{long}{ y}}
+\func{void}{SetDeviceOrigin}{\param{wxCoord}{ x}, \param{wxCoord}{ y}}
 
 Sets the device origin (i.e., the origin in pixels after scaling has been
 applied).
@@ -573,7 +583,7 @@ whether text will be drawn with a background colour or not.
 
 \membersection{wxDC::SetClippingRegion}\label{wxdcsetclippingregion}
 
-\func{void}{SetClippingRegion}{\param{long}{ x}, \param{long}{ y}, \param{long}{ width}, \param{long}{ height}}
+\func{void}{SetClippingRegion}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
 
 \func{void}{SetClippingRegion}{\param{const wxRegion\&}{ region}}
 
