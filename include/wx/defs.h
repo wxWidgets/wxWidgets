@@ -1928,6 +1928,7 @@ typedef GtkWidget *WXWidget;
 
 #ifndef __WXGTK20__
 #define GTK_OBJECT_GET_CLASS(object) (GTK_OBJECT(object)->klass)
+#define GTK_CLASS_TYPE(klass) ((klass)->type)
 #endif
 
 #ifdef __WXGTK20__
