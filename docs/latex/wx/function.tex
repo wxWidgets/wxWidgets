@@ -121,7 +121,9 @@ Returns a string containing the current (or working) directory.
 
 \func{bool}{wxGetHostName}{\param{const wxString\& }{buf}, \param{int }{sz}}
 
-Copies the current host machine's name into the supplied buffer.
+Copies the current host machine's name into the supplied buffer. Please note
+that the returned name is {\it not} fully qualified, i.e. it does not include
+the domain name.
 
 Under Windows or NT, this function first looks in the environment
 variable SYSTEM\_NAME; if this is not found, the entry {\bf HostName}\rtfsp
@@ -999,7 +1001,7 @@ arguments, terminated by NULL.
 If {\it sync} is FALSE (the default), flow of control immediately returns.
 If TRUE, the current application waits until the other program has terminated.
 
-In the case of synchronous execution, the return value is trhe exit code of
+In the case of synchronous execution, the return value is the exit code of
 the process (which terminates by the moment the function returns) and will be
 $-1$ if the process couldn't be started and typically 0 if the process
 terminated successfully.
@@ -1319,6 +1321,19 @@ Now obsolete: use \helpref{wxWindow::Close}{wxwindowclose} instead.
 
 <wx/utils.h>
 
+\membersection{::wxSafeYield}{wxsafeyield}
+
+\func{bool}{wxSafeYield}{\param{wxWindow*}{ win = NULL}}
+
+This function is similar to wxYield, except that it disables the user input to
+the given window {\it win} or to all program windows if {\it win} is NULL.
+
+Returns the result of the call to \helpref{::wxYield}{wxyield}.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
 \membersection{::wxSetDisplayName}\label{wxsetdisplayname}
 
 \func{void}{wxSetDisplayName}{\param{const wxString\& }{displayName}}
@@ -1489,7 +1504,8 @@ multitasking is cooperative) other processes will not respond.
 Caution should be exercised, however, since yielding may allow the
 user to perform actions which are not compatible with the current task.
 Disabling menu items or whole menus during processing can avoid unwanted
-reentrance of code.
+reentrance of code: see \helpref{::wxSafeYield}{wxsafeyield} for a better
+function.
 
 \wxheading{Include files}
 
