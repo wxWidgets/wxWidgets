@@ -164,8 +164,8 @@ you need to derive a class from wxConnection and another from
 wxClient. The custom wxConnection class will receive
 communications in a `conversation' with a server.  and the custom
 wxServer is required so that a user-overridden
-\helpref{wxDDEClient::OnMakeConnection}{wxddeclientonmakeconnection}
-member can return a wxDDEConnection of the required class, when a
+\helpref{wxClient::OnMakeConnection}{wxddeclientonmakeconnection}
+member can return a wxConnection of the required class, when a
 connection is made.
 
 For example:
@@ -196,7 +196,7 @@ the derived wxClient. In the following, command line arguments
 are used to pass the host name (the name of the machine the
 server is running on) and the server name (identifying the server
 process). Calling
-\helpref{wxDDEClient::MakeConnection}{wxddeclientmakeconnection}\rtfsp
+\helpref{wxClient::MakeConnection}{wxddeclientmakeconnection}\rtfsp
 implicitly creates an instance of {\bf MyConnection} if the
 request for a connection is accepted, and the client then
 requests an {\it Advise} loop from the server (an Advise loop is
@@ -218,7 +218,4 @@ where the server calls the client when data has changed).
   }
   connection->StartAdvise("Item");
 \end{verbatim}
-
-Note that it is no longer necessary to call wxDDEInitialize or wxDDECleanUp, since
-wxWidgets will do this by itself if necessary.
 
