@@ -3,16 +3,10 @@ lib/dummy
 docs/licence.txt
 docs/mac/*.txt
 docs/mac/*.hqx
+docs/mac/*.sh
+docs/mac/*.applescript
 
-distrib/msw/*.rsp
-distrib/msw/*.bat
 distrib/mac/*-sh
-
-src/*.mcp
-src/jpeg/*.mcp
-src/png/*.mcp
-src/tiff/*.mcp
-src/zlib/*.mcp
 
 src/common/dosyacc.c
 src/common/doslex.c
@@ -26,6 +20,7 @@ src/mac/*.r
 src/mac/*.h
 src/mac/*.lst
 src/mac/morefile/*.c
+src/mac/morefile/*.cpp
 src/mac/morefile/*.h
 src/mac/Info.plist.in
 src/mac/wxmac.icns
@@ -40,9 +35,6 @@ src/mac/ldef/*.c
 src/mac/ldef/*.mcp
 
 src/mac/macsock/*.lib
-
-src/mac/morefile/*.h
-src/mac/morefile/*.cpp
 
 include/wx_pb.h
 include/wx/mac/*.h

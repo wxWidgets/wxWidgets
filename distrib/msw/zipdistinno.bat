@@ -87,7 +87,7 @@ copy %src%\include\wx\mac\setup0.h %src%\include\wx\setup.h
 
 zip32 -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\generic.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\mac.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\cw.rsp
+zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\cw_mac.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tiff.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\jpeg.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\utils.rsp
