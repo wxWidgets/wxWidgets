@@ -142,6 +142,8 @@ public:
                                   ,const wxRect* pRect = (wxRect *)NULL
                                  );
 
+    inline HWND                   GetScrollBarHorz(void) const {return m_hWndScrollBarHorz;}
+    inline HWND                   GetScrollBarVert(void) const {return m_hWndScrollBarVert;};
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget(wxDropTarget* pDropTarget);
 #endif // wxUSE_DRAG_AND_DROP
@@ -539,6 +541,7 @@ protected:
 #endif // wxUSE_TOOLTIPS
 
     int  GetOS2ParentHeight(wxWindowOS2* pParent);
+    virtual void OS2Layout(int nWidth, int nHeight);
 
 private:
     // common part of all ctors
@@ -561,9 +564,11 @@ private:
     // the helper functions used by HandleChar/KeyXXX methods
     wxKeyEvent CreateKeyEvent(wxEventType evType, int id, WXLPARAM lp) const;
 
+
     DECLARE_DYNAMIC_CLASS(wxWindowOS2);
     DECLARE_NO_COPY_CLASS(wxWindowOS2)
     DECLARE_EVENT_TABLE()
+
 private:
     HWND                            m_hWndScrollBarHorz;
     HWND                            m_hWndScrollBarVert;

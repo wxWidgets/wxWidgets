@@ -127,6 +127,7 @@ public:
     // method updates any internal sizing parameters such as OS/2's SWP struct
     inline virtual void AlterChildPos(void) { }
     inline virtual void UpdateInternalSize( wxWindow* WXUNUSED(pChild)
+                                           ,int WXUNUSED(nWidth)
                                            ,int WXUNUSED(nHeight)
                                           ) { }
 

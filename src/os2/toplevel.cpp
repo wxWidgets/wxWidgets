@@ -56,6 +56,7 @@ wxWindowList wxModelessWindows;
 extern void          wxAssociateWinWithHandle( HWND         hWnd
                                               ,wxWindowOS2* pWin
                                              );
+bool                 wxTopLevelWindowOS2::m_sbInitialized = FALSE;
 
 // ============================================================================
 // wxTopLevelWindowMSW implementation
@@ -515,6 +516,12 @@ void wxTopLevelWindowOS2::AlterChildPos()
     RECTL                                   vRect;
     SWP                                     vSwp;
 
+    if (GetAutoLayout)
+        //
+        // Auto layouts taken care of elsewhere
+        //
+        return;
+
     ::WinQueryWindowRect(GetHwnd(), &vRect);
     for (wxWindowList::Node* pNode = GetChildren().GetFirst();
          pNode;
@@ -551,10 +558,92 @@ void wxTopLevelWindowOS2::AlterChildPos()
 
 void wxTopLevelWindowOS2::UpdateInternalSize(
   wxWindow*                         pChild
-, int                               nHeight
+, int                               nChildWidth
+, int                               nChildHeight
 )
 {
-    pChild->MoveChildren(m_vSwpClient.cy - nHeight);
+    int                             nWidthAdjust = 0;
+    int                             nHeightAdjust = 0;
+    int                             nPosX;
+    int                             nPosY;
+    bool                            bNewYSize = FALSE;
+    bool                            bNewXSize = FALSE;
+
+    //
+    // Under OS/2, if we have a srolled window as the child, the
+    // scrollbars will be SIBLINGS of the scrolled window.  So, in
+    // order to be able to display the scrollbars properly we have to
+    // resize the scrolled window.  Of course, that means dealing with
+    // child windows of that window as well, because OS/2 does not
+    // tend to put them in the right place.
+    //
+    if (nChildHeight != m_vSwpClient.cy)
+        bNewYSize = TRUE;
+    if (nChildWidth != m_vSwpClient.cx)
+        bNewXSize = TRUE;
+    if (bNewXSize || bNewYSize)
+        pChild->SetSize( 0
+                        ,0
+                        ,nChildWidth
+                        ,nChildHeight
+                       );
+    if(bNewYSize)
+    {
+        //
+        // This is needed SetSize will mess up the OS/2 child window
+        // positioning because we position in wxWindows coordinates,
+        // not OS/2 coordinates.
+        //
+        pChild->MoveChildren(m_vSwpClient.cy - nChildHeight);
+        pChild->Refresh();
+    }
+
+    if (pChild->GetScrollBarHorz() != NULLHANDLE ||
+        pChild->GetScrollBarVert() != NULLHANDLE)
+    {
+        if (bNewXSize || bNewYSize)
+        {
+            pChild->GetSize( &nChildWidth
+                            ,&nChildHeight
+                           );
+            if (pChild->GetScrollBarHorz() != NULLHANDLE)
+                nHeightAdjust = 20;
+            if (pChild->GetScrollBarVert() != NULLHANDLE)
+                nWidthAdjust = 20;
+            pChild->GetPosition( &nPosX
+                                ,&nPosY
+                               );
+            ::WinSetWindowPos( pChild->GetHWND()
+                              ,HWND_TOP
+                              ,nPosX
+                              ,nPosY + nHeightAdjust
+                              ,nChildWidth - nWidthAdjust
+                              ,nChildHeight - nHeightAdjust
+                              ,SWP_MOVE | SWP_SIZE
+                             );
+        }
+        if (bNewYSize && !m_sbInitialized)
+        {
+            //
+            // Only need to readjust child control positions of
+            // scrolled windows once on initialization.  After that
+            // the sizing takes care of things itself.
+            //
+            pChild->MoveChildren(nHeightAdjust);
+            m_sbInitialized = TRUE;
+        }
+        if (bNewXSize || bNewYSize)
+        {
+            //
+            // Always refresh to keep scollbars visible.  They are
+            // children of the Toplevel window, not the child panel.
+            //
+            pChild->Refresh();
+        }
+    }
+    //
+    // This brings the internal "last size" up to date.
+    //
     ::WinQueryWindowPos(GetHwnd(), &m_vSwpClient);
 } // end of wxTopLevelWindowOS2::UpdateInternalSize
 

@@ -33,8 +33,6 @@ enum wxRegionOp { wxRGN_AND         // Creates the intersection of the two combi
 
 class WXDLLEXPORT wxRegion : public wxGDIObject
 {
-DECLARE_DYNAMIC_CLASS(wxRegion);
-    friend class WXDLLEXPORT wxRegionIterator;
 public:
     wxRegion( wxCoord x
              ,wxCoord y
@@ -66,6 +64,10 @@ public:
     // Clear current region
     //
     void Clear(void);
+
+    bool Offset( wxCoord x
+                ,wxCoord y
+               );
 
     //
     // Union rectangle or region with this.
@@ -208,6 +210,14 @@ public:
     //
     WXHRGN GetHRGN(void) const;
     void   SetPS(HPS hPS);
+
+protected:
+    virtual wxObjectRefData* CreateData(void) const;
+    virtual wxObjectRefData* CloneData(wxObjectRefData* pData) const;
+    
+    friend class WXDLLEXPORT wxRegionIterator;
+    DECLARE_DYNAMIC_CLASS(wxRegion);
+
 }; // end of CLASS wxRegion
 
 class WXDLLEXPORT wxRegionIterator : public wxObject

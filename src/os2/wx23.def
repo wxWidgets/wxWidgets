@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1772,7 +1772,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2167,12 +2167,10 @@ EXPORTS
       ms_root__16wxLocalFSHandler
       ;wxFileSystemHandler::GetMimeTypeFromExt(const wxString&)
       GetMimeTypeFromExt__19wxFileSystemHandlerFRC8wxString
-      ;wxFSFile::sm_classwxFSFile
-      sm_classwxFSFile__8wxFSFile
-      ;wxFileSystemModule::sm_classwxFileSystemModule
-      sm_classwxFileSystemModule__18wxFileSystemModule
       ;wxFileSystem::m_Handlers
       m_Handlers__12wxFileSystem
+      ;wxFileSystemModule::sm_classwxFileSystemModule
+      sm_classwxFileSystemModule__18wxFileSystemModule
       ;wxFileSystemHandler::FindNext()
       FindNext__19wxFileSystemHandlerFv
       ;wxFileSystem::CleanUpHandlers()
@@ -2774,8 +2772,8 @@ EXPORTS
       CopyHashTable__17_wxHashTableBase2FPP21_wxHashTable_NodeBaseUiP17_wxHashTableBase2T1PFP17_wxHashTableBase2P21_wxHashTable_NodeBase_UlPFP21_wxHashTable_NodeBase_P21_wxHashTable_NodeBase
       ;wxStringHash::wxCharStringHash(const char*)
       wxCharStringHash__12wxStringHashFPCc
-      ;_wxHashTableBase2::s_primes
-      s_primes__17_wxHashTableBase2
+      ;_wxHashTableBase2::ms_primes
+      ms_primes__17_wxHashTableBase2
       ;_wxHashTableBase2::DummyProcessNode(_wxHashTable_NodeBase*)
       DummyProcessNode__17_wxHashTableBase2FP21_wxHashTable_NodeBase
       ;_wxHashTableBase2::DeleteNodes(unsigned int,_wxHashTable_NodeBase**,void(*)(_wxHashTable_NodeBase*))
@@ -5797,7 +5795,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -14332,6 +14330,8 @@ EXPORTS
       CreateFrame__19wxTopLevelWindowOS2FRC8wxStringRC7wxPointRC6wxSize
       ;wxTopLevelWindowOS2::~wxTopLevelWindowOS2()
       __dt__19wxTopLevelWindowOS2Fv
+      ;wxTopLevelWindowOS2::UpdateInternalSize(wxWindow*,int,int)
+      UpdateInternalSize__19wxTopLevelWindowOS2FP8wxWindowiT2
       ;wxTopLevelWindowOS2::ShowFullScreen(unsigned long,long)
       ShowFullScreen__19wxTopLevelWindowOS2FUll
       ;wxTopLevelWindowOS2::CreateDialog(unsigned long,const wxString&,const wxPoint&,const wxSize&)
@@ -14340,6 +14340,8 @@ EXPORTS
       DoShowWindow__19wxTopLevelWindowOS2Fi
       ;wxTopLevelWindowOS2::Init()
       Init__19wxTopLevelWindowOS2Fv
+      ;wxTopLevelWindowOS2::m_sbInitialized
+      m_sbInitialized__19wxTopLevelWindowOS2
       ;wxTopLevelWindowOS2::OS2GetCreateWindowFlags(long*) const
       OS2GetCreateWindowFlags__19wxTopLevelWindowOS2CFPl
       ;wxTopLevelWindowOS2::Iconize(unsigned long)
@@ -14358,8 +14360,6 @@ EXPORTS
       Maximize__19wxTopLevelWindowOS2FUl
       ;wxTopLevelWindowOS2::EnableCloseButton(unsigned long)
       EnableCloseButton__19wxTopLevelWindowOS2FUl
-      ;wxTopLevelWindowOS2::UpdateInternalSize(wxWindow*,int)
-      UpdateInternalSize__19wxTopLevelWindowOS2FP8wxWindowi
       ;wxTopLevelWindowOS2::DoGetClientSize(int*,int*) const
       DoGetClientSize__19wxTopLevelWindowOS2CFPiT1
       ;wxTopLevelWindowOS2::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
@@ -14668,6 +14668,8 @@ EXPORTS
       ;wxWindow::WarpPointer(int,int)
       WarpPointer__8wxWindowFiT1
       wxCurrentPopupMenu
+      ;wxWindow::OS2Layout(int,int)
+      OS2Layout__8wxWindowFiT1
       ;wxWindow::MoveChildren(int)
       MoveChildren__8wxWindowFi
       ;wxWindow::HandleShow(unsigned long,int)

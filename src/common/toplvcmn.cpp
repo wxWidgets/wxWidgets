@@ -162,9 +162,13 @@ void wxTopLevelWindowBase::OnSize(wxSizeEvent& WXUNUSED(event))
             static const int ofs = 0;
 #endif
 
-            child->SetSize(ofs, ofs, clientW - 2*ofs, clientH - 2*ofs);
 #ifdef __WXPM__
-            UpdateInternalSize(child, clientH);
+            // OS/2 PM has to do a LOT of stuff to get things
+            // positioned right, especially if the child is a
+            // scrolled window.
+            UpdateInternalSize(child, clientW, clientH);
+#else
+            child->SetSize(ofs, ofs, clientW - 2*ofs, clientH - 2*ofs);
 #endif
         }
     }

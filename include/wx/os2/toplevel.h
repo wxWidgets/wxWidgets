@@ -85,8 +85,10 @@ public:
     //
            virtual void AlterChildPos(void); // OS/2 child control positioning
            virtual void UpdateInternalSize( wxWindow* pChild
+                                           ,int       nWidth
                                            ,int       nHeight
                                           );
+           PSWP         GetSwpClient(void) { return &m_vSwpClient; }
 protected:
     //
     // Common part of all ctors
@@ -157,6 +159,7 @@ protected:
     WXHWND                          m_hFrame;
     SWP                             m_vSwp;
     SWP                             m_vSwpClient;
+    static bool                     m_sbInitialized;
 }; // end of CLASS wxTopLevelWindowOS2
 
 //
