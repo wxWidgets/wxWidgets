@@ -1080,10 +1080,6 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
 	return enc ;
 }
 
-#endif // wxUSE_BASE
-
-#if wxUSE_GUI
-
 
 //
 // CFStringRefs (Carbon only)
@@ -1232,9 +1228,6 @@ void wxMacConvertNewlines10To13( wxChar * data )
 // Common Event Support
 // ----------------------------------------------------------------------------
 
-#endif // wxUSE_GUI
-
-#if wxUSE_BASE
 
 extern ProcessSerialNumber gAppProcess ;
 
