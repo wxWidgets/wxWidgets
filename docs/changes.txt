@@ -130,6 +130,7 @@ wxHTML:
 - fixed wxHtmlHelpController's cache files handling on big endian machines
 - added blocking and redirecting capabilities to wxHtmlWindow via
   wxHtmlWindow::OnOpeningURL()
+- fixed alignment handling in tables
 
 2.3.2
 -----

@@ -524,13 +524,11 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
     TAG_HANDLER_VARS
         wxHtmlTableCell* m_Table;
         wxString m_tAlign, m_rAlign;
-        int m_OldAlign;
 
     TAG_HANDLER_CONSTR(TABLE)
     {
         m_Table = NULL;
         m_tAlign = m_rAlign = wxEmptyString;
-        m_OldAlign = wxHTML_ALIGN_LEFT;
     }
 
 
@@ -548,14 +546,14 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
 
             c->SetWidthFloat(tag, m_WParser->GetPixelScale());
             m_Table = new wxHtmlTableCell(c, tag, m_WParser->GetPixelScale());
-            m_OldAlign = m_WParser->GetAlign();
+            int oldAlign = m_WParser->GetAlign();
             m_tAlign = wxEmptyString;
             if (tag.HasParam(wxT("ALIGN")))
                 m_tAlign = tag.GetParam(wxT("ALIGN"));
 
             ParseInner(tag);
 
-            m_WParser->SetAlign(m_OldAlign);
+            m_WParser->SetAlign(oldAlign);
             m_WParser->SetContainer(oldcont);
             m_WParser->CloseContainer();
             
@@ -578,29 +576,29 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             // new cell
             else
             {
-                m_WParser->SetAlign(m_OldAlign);
                 c = m_WParser->SetContainer(new wxHtmlContainerCell(m_Table));
                 m_Table->AddCell(c, tag);
 
                 m_WParser->OpenContainer();
 
                 if (tag.GetName() == wxT("TH")) /*header style*/
-                {
                     m_WParser->SetAlign(wxHTML_ALIGN_CENTER);
-                }
+                else
+                    m_WParser->SetAlign(wxHTML_ALIGN_LEFT);
 
-                {
-                    wxString als;
+                wxString als;
 
-                    als = m_rAlign;
-                    if (tag.HasParam(wxT("ALIGN")))
-                        als = tag.GetParam(wxT("ALIGN"));
-                    als.MakeUpper();
-                    if (als == wxT("RIGHT"))
-                        m_WParser->SetAlign(wxHTML_ALIGN_RIGHT);
-                    else if (als == wxT("CENTER"))
-                        m_WParser->SetAlign(wxHTML_ALIGN_CENTER);
-                }
+                als = m_rAlign;
+                if (tag.HasParam(wxT("ALIGN")))
+                    als = tag.GetParam(wxT("ALIGN"));
+                als.MakeUpper();
+                if (als == wxT("RIGHT"))
+                    m_WParser->SetAlign(wxHTML_ALIGN_RIGHT);
+                else if (als == wxT("LEFT"))
+                    m_WParser->SetAlign(wxHTML_ALIGN_LEFT);
+                else if (als == wxT("CENTER"))
+                    m_WParser->SetAlign(wxHTML_ALIGN_CENTER);
+
                 m_WParser->OpenContainer();
             }
         }
