@@ -844,14 +844,12 @@ bool wxRemoveFile(const wxString& file)
 
 bool wxMkdir(const wxString& dir)
 {
-#ifdef __VMS__
+#if defined(__WXSTUBS__)
+  return FALSE;
+#elif defined(__VMS__)
 	return FALSE;
 #elif (defined(__GNUWIN32__) && !defined(__MINGW32__)) || !defined(__WXMSW__)
-#if defined(__WIN32__) // Could happen in __WXSTUBS__ mode
-  return (mkdir(WXSTRINGCAST dir) == 0);
-#else
   return (mkdir (WXSTRINGCAST dir, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH) == 0);
-#endif
 #else
   return (mkdir(WXSTRINGCAST dir) == 0);
 #endif
