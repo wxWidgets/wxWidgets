@@ -212,7 +212,7 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
 
 #if wxUSE_RICHEDIT
-    EVT_RIGHT_UP(wxTextCtrl::OnRightClick)
+    EVT_CONTEXT_MENU(wxTextCtrl::OnContextMenu)
 #endif
 
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
@@ -2030,7 +2030,7 @@ void wxTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
     event.Enable(GetLastPosition() > 0);
 }
 
-void wxTextCtrl::OnRightClick(wxMouseEvent& event)
+void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
 {
 #if wxUSE_RICHEDIT
     if (IsRich())
@@ -2048,7 +2048,7 @@ void wxTextCtrl::OnRightClick(wxMouseEvent& event)
             m_privateContextMenu->AppendSeparator();
             m_privateContextMenu->Append(wxID_SELECTALL, _("Select &All"));
         }
-        PopupMenu(m_privateContextMenu, event.GetPosition());
+        PopupMenu(m_privateContextMenu);
         return;
     }
     else

@@ -188,7 +188,7 @@ public:
 
     // Show a context menu for Rich Edit controls (the standard
     // EDIT control has one already)
-    void OnRightClick(wxMouseEvent& event);
+    void OnContextMenu(wxContextMenuEvent& event);
 
     // be sure the caret remains invisible if the user
     // called HideNativeCaret() before
