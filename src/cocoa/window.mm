@@ -147,6 +147,7 @@ bool wxWindowCocoaHider::Cocoa_drawRect(const NSRect& rect)
 wxWindowCocoaScroller::wxWindowCocoaScroller(wxWindow *owner)
 :   m_owner(owner)
 {
+    wxAutoNSAutoreleasePool pool;
     wxASSERT(owner);
     wxASSERT(owner->GetNSView());
     m_cocoaNSScrollView = [[NSScrollView alloc]
