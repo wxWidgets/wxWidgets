@@ -40,6 +40,14 @@ class TestGrid(wxGrid):
 
     def OnLabelClick(self, event):
         self.log.WriteText("OnLabelClick: (%d, %d)\n" % (event.m_row, event.m_col))
+        #if event.m_row >= 10:
+        #    self.SetLabelValue(wxVERTICAL, 'XX', event.m_row)
+        #    self.Refresh()
+        #else:
+        #    size = self.GetLabelSize(wxVERTICAL)
+        #    print size
+        #    self.SetLabelSize(wxVERTICAL, size+10)
+        #    self.Refresh()
 
 #---------------------------------------------------------------------------
 

@@ -202,19 +202,20 @@ class wxPyPrintout : public wxPrintout {
 public:
     wxPyPrintout(const wxString& title) : wxPrintout(title) {}
 
-    PYCALLBACK_BOOL_INTINT(wxPrintout, OnBeginDocument);
-    PYCALLBACK__(wxPrintout, OnEndDocument);
-    PYCALLBACK__(wxPrintout, OnBeginPrinting);
-    PYCALLBACK__(wxPrintout, OnEndPrinting);
-    PYCALLBACK__(wxPrintout, OnPreparePrinting);
-    PYCALLBACK_BOOL_INT_pure(wxPrintout, OnPrintPage);
-    PYCALLBACK_BOOL_INT(wxPrintout, HasPage);
+    DEC_PYCALLBACK_BOOL_INTINT(OnBeginDocument);
+    DEC_PYCALLBACK__(OnEndDocument);
+    DEC_PYCALLBACK__(OnBeginPrinting);
+    DEC_PYCALLBACK__(OnEndPrinting);
+    DEC_PYCALLBACK__(OnPreparePrinting);
+    DEC_PYCALLBACK_BOOL_INT_pure(OnPrintPage);
+    DEC_PYCALLBACK_BOOL_INT(HasPage);
 
 
     // Since this one would be tough and ugly to do with the Macros...
     void GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
         bool hadErr = false;
 
+        bool doSave = wxPyRestoreThread();
         if (m_myInst.findCallback("GetPageInfo")) {
             PyObject* result = m_myInst.callCallbackObj(Py_BuildValue("()"));
             if (result && PyTuple_Check(result) && PyTuple_Size(result) == 4) {
@@ -244,19 +245,29 @@ public:
                 PyErr_Print();
             }
             Py_DECREF(result);
-#ifdef WXP_WITH_THREAD
-            PyEval_SaveThread();
-#endif
         }
         else
             wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
+
+        wxPySaveThread(doSave);
     }
+
     void base_GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
         wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
     }
 
     PYPRIVATE;
 };
+
+IMP_PYCALLBACK_BOOL_INTINT(wxPyPrintout, wxPrintout, OnBeginDocument);
+IMP_PYCALLBACK__(wxPyPrintout, wxPrintout, OnEndDocument);
+IMP_PYCALLBACK__(wxPyPrintout, wxPrintout, OnBeginPrinting);
+IMP_PYCALLBACK__(wxPyPrintout, wxPrintout, OnEndPrinting);
+IMP_PYCALLBACK__(wxPyPrintout, wxPrintout, OnPreparePrinting);
+IMP_PYCALLBACK_BOOL_INT_pure(wxPyPrintout, wxPrintout, OnPrintPage);
+IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
+
+
 %}
 
 

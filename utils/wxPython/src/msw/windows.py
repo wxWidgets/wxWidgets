@@ -110,6 +110,10 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxWindow_GetConstraints,(self,) + _args, _kwargs)
         if val: val = wxLayoutConstraintsPtr(val) 
         return val
+    def GetEventHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetEventHandler,(self,) + _args, _kwargs)
+        if val: val = wxEvtHandlerPtr(val) 
+        return val
     def GetFont(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetFont,(self,) + _args, _kwargs)
         if val: val = wxFontPtr(val) 
@@ -217,6 +221,13 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Move(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Move,(self,) + _args, _kwargs)
         return val
+    def PopEventHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_PopEventHandler,(self,) + _args, _kwargs)
+        if val: val = wxEvtHandlerPtr(val) 
+        return val
+    def PushEventHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_PushEventHandler,(self,) + _args, _kwargs)
+        return val
     def PopupMenuXY(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_PopupMenuXY,(self,) + _args, _kwargs)
         return val
@@ -298,6 +309,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def SetCursor(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetCursor,(self,) + _args, _kwargs)
+        return val
+    def SetEventHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetEventHandler,(self,) + _args, _kwargs)
         return val
     def SetTitle(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetTitle,(self,) + _args, _kwargs)

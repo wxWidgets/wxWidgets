@@ -11,7 +11,7 @@
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-# ensure the main extension module is loaded, in case the embedded modules
+# ensure the main extension module is loaded, in case the add-on modules
 # (such as utils,) are used standalone.  This hack should go away soon.
 import wxc
 

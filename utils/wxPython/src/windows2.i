@@ -131,15 +131,9 @@ public:
                 for (col=0; col < self->GetCols(); col++) {
                     wxGridCell* cell = self->GetCell(row, col);
 
-#ifdef WXP_WITH_THREAD
-                    PyEval_RestoreThread(wxPyEventThreadState);
-                    wxPyInEvent = true;
-#endif
+                    bool doSave = wxPyRestoreThread();
                     PyObject* pyCell = wxPyConstructObject(cell, "wxGridCell");
-#ifdef WXP_WITH_THREAD
-                    PyEval_SaveThread();
-                    wxPyInEvent = false;
-#endif
+                    wxPySaveThread(doSave);
 
                     if (PyList_Append(rowList, pyCell) == -1)
                         return NULL;

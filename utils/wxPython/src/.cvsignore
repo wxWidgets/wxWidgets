@@ -6,6 +6,7 @@ Setup.in.new
 Setup.save
 Setup.save
 Setup.test
+_make.bat
 build.local
 compile.py
 config.c

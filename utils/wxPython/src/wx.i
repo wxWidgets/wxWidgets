@@ -49,7 +49,7 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "2.1b3"
+#define __version__ "2.1b4"
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;

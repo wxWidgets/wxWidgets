@@ -247,13 +247,9 @@ public:
     }
 
     ~wxPyTreeItemData() {
-#ifdef WXP_WITH_THREAD
-        PyEval_RestoreThread(wxPyEventThreadState);
-#endif
+        bool doSave = wxPyRestoreThread();
 	Py_DECREF(m_obj);
-#ifdef WXP_WITH_THREAD
-        PyEval_SaveThread();
-#endif
+        wxPySaveThread(doSave);
     }
 
     PyObject* GetData() {

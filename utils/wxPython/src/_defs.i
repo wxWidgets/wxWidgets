@@ -181,10 +181,14 @@ enum {
     wxNO_3D,
 //wxOVERRIDE_KEY_TRANSLATIONS,
     wxTAB_TRAVERSAL,
+    wxWANTS_CHARS,
     wxHORIZONTAL,
     wxVERTICAL,
     wxBOTH,
     wxCENTER_FRAME,
+    wxCENTRE_ON_SCREEN,
+    wxCENTER_ON_SCREEN,
+
     wxSTAY_ON_TOP,
     wxICONIZE,
     wxMINIMIZE,
@@ -204,6 +208,11 @@ enum {
 
     wxFRAME_TOOL_WINDOW,
     wxFRAME_FLOAT_ON_PARENT,
+    wxED_CLIENT_MARGIN,
+    wxED_BUTTONS_BOTTOM,
+    wxED_BUTTONS_RIGHT,
+    wxED_STATIC_LINE,
+    wxEXT_DIALOG_STYLE,
 
     wxCLIP_CHILDREN,
 
@@ -266,6 +275,7 @@ enum {
     wxTR_EDIT_LABELS,
     wxTR_LINES_AT_ROOT,
     wxTR_MULTIPLE,
+    wxTR_SINGLE,
     wxTR_HAS_VARIABLE_ROW_HEIGHT,
     wxLC_ICON,
     wxLC_SMALL_ICON,
@@ -304,6 +314,8 @@ enum {
     wxCANCEL,
     wxYES,
     wxNO,
+    wxNO_DEFAULT,
+    wxYES_DEFAULT,
     wxICON_EXCLAMATION,
     wxICON_HAND,
     wxICON_QUESTION,
@@ -311,6 +323,16 @@ enum {
     wxICON_STOP,
     wxICON_ASTERISK,
     wxICON_MASK,
+    wxICON_WARNING,
+    wxICON_ERROR,
+
+    wxFORWARD,
+    wxBACKWARD,
+    wxRESET,
+    wxHELP,
+    wxMORE,
+    wxSETUP,
+
     wxCENTRE,
     wxCENTER,
     wxSIZE_AUTO_WIDTH,
@@ -370,6 +392,7 @@ enum {
     wxID_YES,
     wxID_NO,
     wxID_STATIC,
+
     wxBITMAP_TYPE_BMP,
     wxBITMAP_TYPE_BMP_RESOURCE,
     wxBITMAP_TYPE_ICO,
@@ -406,9 +429,36 @@ enum {
     wxPD_ESTIMATED_TIME,
     wxPD_REMAINING_TIME,
 
-    wxNO_DEFAULT,
     wxMENU_TEAROFF,
+    wxMB_DOCKABLE,
     wxNO_FULL_REPAINT_ON_RESIZE,
+
+    wxLEFT,
+    wxRIGHT,
+    wxUP,
+    wxDOWN,
+    wxALL,
+    wxTOP,
+    wxBOTTOM,
+
+    wxNORTH,
+    wxSOUTH,
+    wxEAST,
+    wxWEST,
+
+    wxSTRETCH_NOT,
+    wxSHRINK,
+    wxGROW,
+    wxEXPAND,
+
+    wxNB_FIXEDWIDTH,
+
+    wxLI_HORIZONTAL,
+    wxLI_VERTICAL,
+
+
+    wxHW_SCROLLBAR_NEVER,
+    wxHW_SCROLLBAR_AUTO,
 
 };
 

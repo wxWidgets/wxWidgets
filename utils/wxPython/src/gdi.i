@@ -474,8 +474,8 @@ extern wxFont *wxNORMAL_FONT;
 extern wxFont *wxSMALL_FONT;
 extern wxFont *wxITALIC_FONT;
 extern wxFont *wxSWISS_FONT;
-extern wxPen *wxRED_PEN;
 
+extern wxPen *wxRED_PEN;
 extern wxPen *wxCYAN_PEN;
 extern wxPen *wxGREEN_PEN;
 extern wxPen *wxBLACK_PEN;
@@ -510,7 +510,6 @@ extern wxCursor *wxHOURGLASS_CURSOR;
 extern wxCursor *wxCROSS_CURSOR;
 
 extern wxBitmap wxNullBitmap;
-//extern wxMask   wxNullMask;
 extern wxIcon   wxNullIcon;
 extern wxCursor wxNullCursor;
 extern wxPen    wxNullPen;

@@ -45,6 +45,15 @@ Or you can send mail directly to the list using this address:
 
 ----------------------------------------------------------------------
 
+What's new in 2.1b4
+--------------------
+
+Much more support for event-less callbacks and add-on modules
+
+Created add-on module with wxOGL classes.
+
+
+
 What's new in 2.1b3
 --------------------
 
