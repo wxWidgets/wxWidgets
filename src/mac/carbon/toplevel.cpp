@@ -557,7 +557,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         // for some reason returning eventNotHandledErr does not lead to the correct behaviour
         // so we try sending them the correct control directly
         wxTopLevelWindowMac* toplevelWindow = (wxTopLevelWindowMac*) data ;
-        if ( toplevelWindow && control )
+        if ( cEvent.GetKind() == kEventMouseDown && toplevelWindow && control )
         {
             EventModifiers modifiers = cEvent.GetParameter<EventModifiers>(kEventParamKeyModifiers, typeUInt32) ;
             Point clickLocation = windowMouseLocation ;
