@@ -65,7 +65,7 @@ wxTopLevelWindowBase::~wxTopLevelWindowBase()
     bool shouldExit = IsLastBeforeExit();
 
     wxTopLevelWindows.DeleteObject(this);
-
+    
     if ( shouldExit )
     {
         // then do it
@@ -80,8 +80,16 @@ bool wxTopLevelWindowBase::Destroy()
     if ( !wxPendingDelete.Member(this) )
         wxPendingDelete.Append(this);
 
-    // but hide it immediately
-    Hide();
+    if (wxTopLevelWindows.GetCount() > 1)
+    {
+        // Hide it immediately. This should
+        // not be done if this TLW is the
+        // only one left since we then would
+        // risk not to get any idle events
+        // at all anymore during which we 
+        // could delete any pending events.
+        Hide();
+    }
 
     return TRUE;
 }
