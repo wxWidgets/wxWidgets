@@ -140,9 +140,14 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
         {
             wxString cit;
             wxEncodingConverter *encconv = m_WParser -> GetEncodingConverter();
-            cit = m_WParser -> GetSource() -> Mid(tag.GetBeginPos(), tag.GetEndPos1() - tag.GetBeginPos());
-            wxString cit2(encconv ? encconv -> Convert(cit) : cit);
-            c -> InsertCell(new wxHtmlPRECell(cit2, *(m_WParser -> GetDC())));
+            cit = m_WParser -> GetSource() -> Mid(tag.GetBeginPos(), 
+                                       tag.GetEndPos1() - tag.GetBeginPos());
+            if (encconv)
+                c -> InsertCell(new wxHtmlPRECell(encconv -> Convert(cit), 
+                                                  *(m_WParser -> GetDC())));
+            else
+                c -> InsertCell(new wxHtmlPRECell(cit, 
+                                                  *(m_WParser -> GetDC())));
         }
 
         m_WParser -> SetFontUnderlined(underlined);
