@@ -87,4 +87,4 @@ class wxObjectInputStream : public wxFilterInputStream {
   // wxUSE_STREAMS && wxUSE_SERIAL
 
 #endif
-  // _WX_WXOBJSTRM_H__
+// _WX_WXOBJSTRM_H__
