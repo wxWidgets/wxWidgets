@@ -1,18 +1,18 @@
 
    Welcome to wxWidgets/Gtk 2.5
 
-You have downloaded version 2.5 of the GTK port of the 
+You have downloaded version 2.5 of the GTK+ port of the 
 wxWidgets GUI library.
 
-wxWidgets no longer supports GTK 1.0 (as did some early
-snapshots) so that you will need GTK 1.2 when using it.
-GTK 1.2.6 or above is recommended although some programs 
-will work with GTK 1.2.3 onwards. There is now support
-for GTK 2.0.
+wxWidgets no longer supports GTK 1.0.x (as did some early
+snapshots) and support for GTK 1.2.x will be phased out
+over time. Nearly all work is now done on GTK 2.0.x and
+quite a few of the enhancements of GTK+ 2.2.x and even
+GTK 2.4.x are used. 
 
-More info about the wxWidgets project (including the
-Windows, X11/Motif and other ports) can be found at the main
-wxWidgets homepage at:
+More info about the wxWidgets project (including all the
+other ports and version of wxWidgets) can be found at the
+main wxWidgets homepage at:
 
                   http://www.wxwidgets.org
   
@@ -20,8 +20,8 @@ Information on how to install can be found in the file
 INSTALL.txt, but if you cannot wait, this should work on
 many systems:
 
-    mkdir gtk
-    cd gtk
+    mkdir build_gtk
+    cd build_gtk
     ../configure --with-gtk
     make
     su <type root password>
@@ -32,10 +32,6 @@ In order to use wxGTK with GTK 2.0 you need to use --enable-gtk2
 configure option. To build the library in Unicode mode (all
 strings will be wide strings and so on) you need to configure
 with GTK 2.0 and add --enable-unicode.
-
-Note that so far, support for GTK 2.0 has only been tested on
-Linux with glibc 2.2.
-
 
 Please note that it is strongly advised to build the library in
 a separate directory, as shown above, as it allows you to have
@@ -51,17 +47,10 @@ A DESCRIPTION OF YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR
 VERSION OF GTK, WXGTK, WHAT DISTRIBUTION YOU USE AND WHAT ERROR 
 WAS REPORTED. I know this has no effect, but I tried...
 
-The library produced by the install process will be called 
-libwx_gtk.a (static, only buil if --disable-shared configure
-switch was used or if shared libraries are not supported at all
-on your platform which is quite unlikely) and
-libwx_gtk-2.2.so.0.0.0 (shared) so that once a binary
-incompatible version of wxWidgets/Gtk comes out we'll augment
-the library version number to avoid linking problems.
-
 Please send problems concerning installation, feature requests, 
-bug reports or comments to the wxWidgets users list. Information 
-on how to subscribe is available from my homepage.
+bug reports or comments to the wxWidgets users list. These can
+be found at http://www.wxwidgets.org and more specifically at 
+http://lists.wxwidgets.org.
 
 Do NOT send any comments directly to me.
 
@@ -72,6 +61,4 @@ claim to be suitable for any special or general purpose.
   Regards,
 
     Robert Roebling
-
-
 

@@ -24,6 +24,9 @@ All:
 - wxGetOsDescription() is now more precise (Olly Betts)
 - XRC supports system fonts and colours (Ray Gilbert)
 - Added flags argument to wxKill/wxProcess::Kill to kill child processes.
+- Added wxPrintFactory classes so that it is possible to add a new
+  print system backend at run-time. This was required by the new GNOME
+  printing stuff in the GTK port.
 
 All (GUI):
 
@@ -42,12 +45,20 @@ Unix:
 
 wxGTK:
 
+- Added printing support by way of using libgnomeprint. The library
+  now checks at runtime, if the library is installed and will use it
+  if it is. Otherwise, it will fall back to the old PostScript printing
+  code, from which the Pango drawing code was removed.
+- Implemented/improved wxDC::DrawRotatedText()
 - fixed wxFileDialog::SetWildcard()
 - native file dialog is now used if available (Zbigniew Zagorski)
 - implemented wxTextCtrl::Freeze() and Thaw(). The GtkTextBuffer
   is not a valid one during frozen state. Get a pointer to it right
   after wxTextCtrl creation if you really need to. (Mart Raudsepp)
-- 
+- Changed calls to GTK+ 2.4.x functions so that the code checks at
+  runtime, which library version is installed so that these functions
+  are only called with GTK+ 2.4.x installed and should yield linker
+  errors otherwise.
 
 wxMac:
 
@@ -59,6 +70,10 @@ wxMSW:
 - fixed enhanced metafiles loading from files (Andreas Goebel)
 - wxRadioButtons no longer have to be consecutive in a group
 - fixed spurious selection of combobox text during resize
+
+wxWinCE:
+- Added support for MS Handheld PC 2000. This was done before 2.5.4,
+  but not mentioned anywhere.
 
 wxUniv:
 
