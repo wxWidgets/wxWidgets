@@ -38,12 +38,12 @@ Platforms supported
 wxWidgets currently supports the following platforms:
 
 - Windows 95/98/ME, Windows NT, Windows 2000, Windows XP, Pocket PC
-- Most Unix variants with GTK+
-- Most Unix variants with X11
+- Most Unix variants with GTK+ 1 and GTK+ 2
+- Most Unix variants with X11 (beta)
 - Most Unix variants with Motif/Lesstif
-- MacOS 9.x and 10.x using Carbon (10.4 and above preferred)
-- MacOS 10.x using Cocoa
-- OS/2 (alpha)
+- MacOS 9.x and 10.x using Carbon (10.3 and above preferred)
+- MacOS 10.x using Cocoa (beta)
+- OS/2 (beta)
 
 Most popular C++ compilers are supported; see the install.txt
 file for each platform (available via docs/html/index.htm) for details.
@@ -53,68 +53,7 @@ Files
 -----
 
 The distribution is available in archive formats appropriate to the
-target system. Documentation is available mainly in zip format.
-In the following, x.y.z represents the current version number.
-
-wxWidgets for GTK+ distribution
--------------------------------
-
-wxGTK-x.y.z.tar.gz                 wxGTK source distribution. You will
-                                   need the HTML, HTB and/or PDF documentation
-                                   (see below)
-wxGTK-demos-x.y.z.tar.gz           wxGTK demos source
-wxGTK-samples-x.y.z.tar.gz         wxGTK samples source
-wxGTK-x.y.z-0.src.rpm              wxGTK Linux source as an RPM, without manuals
-wxGTK-x.y.z-0.i386.rpm             wxGTK Linux binaries as an RPM, without manuals
-wxGTK-devel-x.y.z-0.i386.rpm       wxGTK Linux minimum development system as an RPM
-wxGTK-gl-x.y.z-0.i386.rpm          Add-on OpenGL binary as an RPM
-
-wxWidgets for X11 and Motif distribution
-----------------------------------------
-
-wxX11-x.y.z.tar.gz                 wxX11 and wxMotif source distribution, without
-                                   documentation.
-
-wxWidgets for MS Windows distribution
--------------------------------------
-
-setup.exe, setup-*.bin             Setup files in floppy-disk-sized chunks
-wxMSW-x.y.z-setup.zip              Zip archive containing the
-                                   setup files
-wxMSW-x.y.z.zip                    Zip archive containing all the files that are
-                                   in the setup distribution
-
-As well as the core source, the wxMSW distribution contains:
-
-- Windows HTML Help versions of the documentation (docs/htmlhelp);
-- a Tex2RTF binary;
-- Life! sample binary.
-
-wxWidgets for MacOS distribution
---------------------------------
-
-wxMac-x.y.z.zip                    Zip archive containing all
-                                   source files (excludes documentation)
-wxMac-x.y.z.tar.gz                 Gzipped tar archive containing all
-                                   source files (excludes documentation).
-                                   You might prefer this format if building on
-                                   MacOS X, since it preserves file permissions.
-
-wxWidgets for OS/2 distribution
--------------------------------
-
-wxOS2-x.y.z.zip                    Zip archive containing all source files
-                                   (excludes documentation)
-
-Documentation files
--------------------
-
-wxWidgets-x.y.z-WinHelp.zip        WinHelp documentation
-wxWidgets-x.y.z-PDF.zip            Acrobat PDF documentation
-wxWidgets-x.y.z-HTML.zip           HTML documentation
-wxWidgets-x.y.z-HTMLHelp.zip       Windows HTML Help documentation
-wxWidgets-x.y.z-HTB.zip            wxHTML documentation (for
-                                   use with the helpview utility)
+target system. See the download pages for details.
 
 Installation
 ------------
@@ -175,7 +114,6 @@ support (i.e. MS Windows), see src/regex/COPYRIGHT file for Henry Spencer's
 regular expression library copyright.
 
 If you use wxXML classes or XRC, see src/expat/COPYING for licence details.
-
 
 Documentation
 -------------
