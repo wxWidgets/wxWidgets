@@ -291,7 +291,11 @@ wxTypeInfo( kind , to , from , name)
 
 wxDelegateTypeInfo::wxDelegateTypeInfo( int eventType , wxClassInfo* eventClass , converterToString_t to , converterFromString_t from ) :
 wxTypeInfo ( wxT_DELEGATE , to , from , wxEmptyString )
-{ m_eventClass = eventClass ; m_eventType = eventType ;}
+{ m_eventClass = eventClass ; m_eventType = eventType ; m_lastEventType = -1 ;}
+
+wxDelegateTypeInfo::wxDelegateTypeInfo( int eventType , int lastEventType , wxClassInfo* eventClass , converterToString_t to , converterFromString_t from ) :
+wxTypeInfo ( wxT_DELEGATE , to , from , wxEmptyString )
+{ m_eventClass = eventClass ; m_eventType = eventType ; m_lastEventType = lastEventType; }
 
 void wxTypeInfo::Register()
 {    
