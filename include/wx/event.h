@@ -83,8 +83,8 @@ typedef int wxEventType;
 
 #define BEGIN_DECLARE_EVENT_TYPES()
 #define END_DECLARE_EVENT_TYPES()
-#define DECLARE_EVENT_TYPE(name, value) extern wxEventType name;
-#define DEFINE_EVENT_TYPE(name) wxEventType name = wxNewEventType();
+#define DECLARE_EVENT_TYPE(name, value) extern const wxEventType name;
+#define DEFINE_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
 
 // generate a new unique event type
 extern WXDLLEXPORT wxEventType wxNewEventType();
@@ -1483,7 +1483,6 @@ struct WXDLLEXPORT wxEventTableEntryBase
 // an entry from a static event table
 struct WXDLLEXPORT wxEventTableEntry : public wxEventTableEntryBase
 {
-    int m_eventType;
     wxEventTableEntry(const int& evType, int id, int idLast,
                       wxObjectEventFunction fn, wxObject *data)
                  : wxEventTableEntryBase(id, idLast, fn, data),
