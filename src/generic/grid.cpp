@@ -2542,12 +2542,25 @@ wxGridCellAttr *wxGridCellAttrProvider::GetAttr(int row, int col,
                             attr->MergeWith(attrrow);
                             attrrow->DecRef();
                         }
+
+                        // This is a binary compatible workaround for the fact that
+                        // wxGridCellAttr::MergeWith doesn't merge m_oveflow.
+                        // DO NOT port this fix to 2.5, it should be done the
+                        // Right Way there instead.
+                        if (attrrow)
+                            attr->SetOverflow(attrrow->GetOverflow());
+                        if (attrcol)
+                            attr->SetOverflow(attrcol->GetOverflow());
+                        if (attrcell)
+                            attr->SetOverflow(attrcell->GetOverflow());
+
+
                         //store merge attr if cache implemented
                         //attr->IncRef();
                         //m_data->m_mergeAttr.SetAttr(attr, row, col);
                     }
                     else
-        {
+                    {
                         // one or none is non null return it or null.
                         if(attrrow) attr = attrrow;
                         if(attrcol) attr = attrcol;
@@ -4761,7 +4774,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     else if ( event.RightDown() )
     {
         row = YToRow(y);
-        if ( row >=0 && 
+        if ( row >=0 &&
 	    !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, row, -1, event ) )
         {
             // no default action at the moment
@@ -7488,7 +7501,7 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
     if (coord < 0)
         return clipToMinMax && (nMax > 0) ? 0 : -1;
 
-	
+
     if (!defaultDist)
         defaultDist = 1;
 
@@ -7899,10 +7912,10 @@ bool wxGrid::MovePageUp()
 
         int y = GetRowTop(row);
         int newRow = internalYToRow( y - ch + 1 );
-        
+
         if ( newRow == row )
         {
-	    //row > 0 , so newrow can never be less than 0 here. 
+	    //row > 0 , so newrow can never be less than 0 here.
             newRow = row - 1;
         }
 
@@ -7929,7 +7942,7 @@ bool wxGrid::MovePageDown()
         int newRow = internalYToRow( y + ch );
         if ( newRow == row )
         {
-            // row < m_numRows , so newrow can't overflow here.	
+            // row < m_numRows , so newrow can't overflow here.
             newRow = row + 1;
         }
 
