@@ -39,6 +39,7 @@ class WXDLLIMPEXP_BASE wxList;
     class WXDLLIMPEXP_CORE wxDC;
     class WXDLLIMPEXP_CORE wxMenu;
     class WXDLLIMPEXP_CORE wxWindow;
+    class WXDLLIMPEXP_CORE wxWindowBase;
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
@@ -546,10 +547,10 @@ public:
     bool IsSelection() const { return (m_extraLong != 0); }
 
     void SetExtraLong(long extraLong) { m_extraLong = extraLong; }
-    long GetExtraLong() const { return m_extraLong ; }
+    long GetExtraLong() const { return m_extraLong; }
 
     void SetInt(int i) { m_commandInt = i; }
-    long GetInt() const { return m_commandInt ; }
+    long GetInt() const { return m_commandInt; }
 
     virtual wxEvent *Clone() const { return new wxCommandEvent(*this); }
 
@@ -619,8 +620,8 @@ public:
     wxScrollEvent(wxEventType commandType = wxEVT_NULL,
                   int winid = 0, int pos = 0, int orient = 0);
 
-    int GetOrientation() const { return (int) m_extraLong ; }
-    int GetPosition() const { return m_commandInt ; }
+    int GetOrientation() const { return (int) m_extraLong; }
+    int GetPosition() const { return m_commandInt; }
     void SetOrientation(int orient) { m_extraLong = (long) orient; }
     void SetPosition(int pos) { m_commandInt = pos; }
 
@@ -652,8 +653,8 @@ public:
         {    m_commandInt = event.m_commandInt;
             m_extraLong = event.m_extraLong;    }
 
-    int GetOrientation() const { return (int) m_extraLong ; }
-    int GetPosition() const { return m_commandInt ; }
+    int GetOrientation() const { return (int) m_extraLong; }
+    int GetPosition() const { return m_commandInt; }
     void SetOrientation(int orient) { m_extraLong = (long) orient; }
     void SetPosition(int pos) { m_commandInt = pos; }
 
@@ -798,7 +799,7 @@ public:
     wxPoint GetPosition() const { return wxPoint(m_x, m_y); }
 
     // Find the logical position of the event given the DC
-    wxPoint GetLogicalPosition(const wxDC& dc) const ;
+    wxPoint GetLogicalPosition(const wxDC& dc) const;
 
     // Compatibility
 #if WXWIN_COMPATIBILITY
@@ -1507,10 +1508,10 @@ public:
             (GetEventType() == wxEVT_JOY_BUTTON_UP)); }
 
     // Was it a move event?
-    bool IsMove() const { return (GetEventType() == wxEVT_JOY_MOVE) ; }
+    bool IsMove() const { return (GetEventType() == wxEVT_JOY_MOVE); }
 
     // Was it a zmove event?
-    bool IsZMove() const { return (GetEventType() == wxEVT_JOY_ZMOVE) ; }
+    bool IsZMove() const { return (GetEventType() == wxEVT_JOY_ZMOVE); }
 
     // Was it a down event from button 1, 2, 3, 4 or any?
     bool ButtonDown(int but = wxJOY_BUTTON_ANY) const
@@ -1640,14 +1641,14 @@ public:
     static void SetUpdateInterval(long updateInterval) { sm_updateInterval = updateInterval; }
 
     // Returns the current interval between updates in milliseconds
-    static long GetUpdateInterval() { return sm_updateInterval ; }
+    static long GetUpdateInterval() { return sm_updateInterval; }
 
     // Can we update this window?
-    static bool CanUpdate(wxWindow* win) ;
+    static bool CanUpdate(wxWindowBase *win);
 
     // Reset the update time to provide a delay until the next
     // time we should update
-    static void ResetUpdateTime() ;
+    static void ResetUpdateTime();
 
     // Specify how wxWindows will send update events: to
     // all windows, or only to those which specify that they
@@ -1655,7 +1656,7 @@ public:
     static void SetMode(wxUpdateUIMode mode) { sm_updateMode = mode; }
 
     // Returns the UI update mode
-    static wxUpdateUIMode GetMode() { return sm_updateMode ; }
+    static wxUpdateUIMode GetMode() { return sm_updateMode; }
 
     virtual wxEvent *Clone() const { return new wxUpdateUIEvent(*this); }
 
@@ -2019,10 +2020,10 @@ public:
     static void SetMode(wxIdleMode mode) { sm_idleMode = mode; }
 
     // Returns the idle event mode
-    static wxIdleMode GetMode() { return sm_idleMode ; }
+    static wxIdleMode GetMode() { return sm_idleMode; }
 
     // Can we send an idle event?
-    static bool CanSend(wxWindow* win) ;
+    static bool CanSend(wxWindow* win);
 
 protected:
     bool m_requestMore;

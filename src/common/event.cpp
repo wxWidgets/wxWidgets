@@ -390,7 +390,7 @@ long wxUpdateUIEvent::sm_updateInterval = 0;
 wxUpdateUIMode wxUpdateUIEvent::sm_updateMode = wxUPDATE_UI_PROCESS_ALL;
 
 // Can we update?
-bool wxUpdateUIEvent::CanUpdate(wxWindow* win)
+bool wxUpdateUIEvent::CanUpdate(wxWindowBase *win)
 {
     // Don't update if we've switched global updating off
     // and this window doesn't support updates.
