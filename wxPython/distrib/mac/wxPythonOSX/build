@@ -157,6 +157,8 @@ if [ -z "$skipconfig" ]; then
 	--with-opengl \
 	--enable-geometry \
 	--enable-optimise \
+	--enable-sound \
+	--enable-display \
 	--enable-precomp=no \
 	\
 	--with-libjpeg=builtin \
