@@ -147,11 +147,16 @@ wxSize wxButton::DoGetBestSize() const
     // the button height is proportional to the height of the font used
     int hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hChar);
 
-    wxSize sz = GetDefaultSize();
-    if (wBtn > sz.x) sz.x = wBtn;
-    if (hBtn > sz.y) sz.y = hBtn;
+    if (!HasFlag(wxBU_EXACTFIT))
+    {
+        wxSize sz = GetDefaultSize();
+        if (wBtn > sz.x) sz.x = wBtn;
+        if (hBtn > sz.y) sz.y = hBtn;
+        return sz;
+    }
+    else
+        return wxSize(wBtn, hBtn);
 
-    return sz;
 }
 
 /* static */
