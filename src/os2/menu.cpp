@@ -73,7 +73,7 @@ static wxString TextToLabel(const wxString& rTitle)
                 pc++;
                 Title << wxT('&');
             }
-            else 
+            else
                 Title << wxT('~');
         }
 //         else if (*pc == wxT('/'))
@@ -169,7 +169,9 @@ wxMenu::~wxMenu()
     //
     // Delete accels
     //
+#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
     WX_CLEAR_ARRAY(m_vAccels);
+#endif
 #endif // wxUSE_ACCEL
 } // end of wxMenu::~wxMenu
 
@@ -710,10 +712,12 @@ WXHMENU wxMenuBar::Create()
             ERRORID                 vError;
             wxString                sError;
             MENUITEM                vItem;
+            HWND                    hSubMenu;
 
             //
             // Set the parent and owner of the submenues to be the menubar, not the desktop
             //
+            hSubMenu = m_menus[i]->m_vMenuData.hwndSubMenu;
             if (!::WinSetParent(m_menus[i]->m_vMenuData.hwndSubMenu, hMenuBar, FALSE))
             {
                 vError = ::WinGetLastError(vHabmain);

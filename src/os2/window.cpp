@@ -1954,7 +1954,6 @@ MRESULT wxWindow::OS2WindowProc(
                 bProcessed = HandleMouseEvent(uMsg, x, y, (WXUINT)wParam);
             }
             break;
-
         case WM_SYSCOMMAND:
             bProcessed = HandleSysCommand(wParam, lParam);
             break;

@@ -674,7 +674,9 @@ void wxImage::CleanUpHandlers()
         wxImageHandler *handler = (wxImageHandler *)node->Data();
         wxNode *next = node->Next();
         delete handler;
+#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
         delete node;
+#endif
         node = next;
     }
 }

@@ -309,7 +309,9 @@ void wxApp::CleanUp()
     //
     // This will flush the old messages if any
     //
+#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
     delete wxLog::SetActiveTarget(new wxLogStderr);
+#endif
 #endif // wxUSE_LOG
 
     //
@@ -368,7 +370,9 @@ void wxApp::CleanUp()
 
     delete wxPendingEvents;
 #if wxUSE_THREADS
+#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
     delete wxPendingEventsLocker;
+#endif
     // If we don't do the following, we get an apparent memory leak.
     ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
 #endif
@@ -398,7 +402,9 @@ void wxApp::CleanUp()
 
 #if wxUSE_LOG
     // do it as the very last thing because everything else can log messages
+#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
     delete wxLog::SetActiveTarget(NULL);
+#endif
 #endif // wxUSE_LOG
 } // end of wxApp::CleanUp
 

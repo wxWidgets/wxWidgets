@@ -862,8 +862,8 @@ bool wxFrame::OS2Create(
                              ,0L
                              ,0L
                              ,0L
-                             ,NULLHANDLE
-                             ,HWND_TOP
+                             ,m_hFrame
+                             ,HWND_BOTTOM
                              ,(unsigned long)FID_CLIENT
                              ,NULL
                              ,NULL
