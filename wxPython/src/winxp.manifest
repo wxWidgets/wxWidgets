@@ -3,7 +3,7 @@
 <assemblyIdentity
     version="0.64.1.0"
     processorArchitecture="x86"
-    name="Controls"
+    name="Python"
     type="win32"
 />
 <description>Python Interpreter</description>
