@@ -129,6 +129,7 @@ inline wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_dash = data.m_dash;
     m_stipple = data.m_stipple;
     m_cocoaNSColor = [data.m_cocoaNSColor retain];
+    m_cocoaDash = NULL;
 }
 
 inline void wxPenRefData::FreeCocoaNSColor()
