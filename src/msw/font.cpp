@@ -328,69 +328,7 @@ bool wxFont::RealizeResource()
 
     BYTE ff_underline = M_FONTDATA->m_underlined;
 
-    wxFontEncoding encoding = M_FONTDATA->m_encoding;
-    if ( encoding == wxFONTENCODING_DEFAULT )
-    {
-        encoding = wxFont::GetDefaultEncoding();
-    }
-
-    DWORD charset;
-    switch ( encoding )
-    {
-        case wxFONTENCODING_ISO8859_1:
-        case wxFONTENCODING_ISO8859_15:
-        case wxFONTENCODING_CP1250:
-            charset = ANSI_CHARSET;
-            break;
-#if !defined(__WIN16__)
-        case wxFONTENCODING_ISO8859_2:
-        case wxFONTENCODING_CP1252:
-            charset = EASTEUROPE_CHARSET;
-            break;
-
-        case wxFONTENCODING_ISO8859_4:
-        case wxFONTENCODING_ISO8859_10:
-            charset = BALTIC_CHARSET;
-            break;
-
-        case wxFONTENCODING_ISO8859_5:
-        case wxFONTENCODING_CP1251:
-            charset = RUSSIAN_CHARSET;
-            break;
-
-        case wxFONTENCODING_ISO8859_6:
-            charset = ARABIC_CHARSET;
-            break;
-
-        case wxFONTENCODING_ISO8859_7:
-            charset = GREEK_CHARSET;
-            break;
-
-        case wxFONTENCODING_ISO8859_8:
-            charset = HEBREW_CHARSET;
-            break;
-
-        case wxFONTENCODING_ISO8859_9:
-            charset = TURKISH_CHARSET;
-            break;
-
-        case wxFONTENCODING_ISO8859_11:
-            charset = THAI_CHARSET;
-            break;
-#endif // BC++ 16-bit
-
-        case wxFONTENCODING_CP437:
-            charset = OEM_CHARSET;
-            break;
-
-        default:
-            wxFAIL_MSG(wxT("unsupported encoding"));
-            // fall through
-
-        case wxFONTENCODING_SYSTEM:
-            charset = ANSI_CHARSET;
-    }
-
+    DWORD charset = wxCharsetFromEncoding(GetEncoding());
     HFONT hFont = ::CreateFont
                   (
                    nHeight,             // height
@@ -576,3 +514,80 @@ wxFontEncoding wxFont::GetEncoding() const
 {
     return M_FONTDATA->m_encoding;
 }
+
+// ----------------------------------------------------------------------------
+// public functions
+// ----------------------------------------------------------------------------
+
+int wxCharsetFromEncoding(wxFontEncoding encoding, bool *exact)
+{
+    if ( encoding == wxFONTENCODING_DEFAULT )
+    {
+        encoding = wxFont::GetDefaultEncoding();
+    }
+
+    if ( exact )
+        *exact = TRUE;
+
+    int charset;
+    switch ( encoding )
+    {
+        case wxFONTENCODING_ISO8859_1:
+        case wxFONTENCODING_ISO8859_15:
+        case wxFONTENCODING_CP1250:
+            charset = ANSI_CHARSET;
+            break;
+
+#if !defined(__WIN16__)
+        case wxFONTENCODING_ISO8859_2:
+        case wxFONTENCODING_CP1252:
+            charset = EASTEUROPE_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_4:
+        case wxFONTENCODING_ISO8859_10:
+            charset = BALTIC_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_5:
+        case wxFONTENCODING_CP1251:
+            charset = RUSSIAN_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_6:
+            charset = ARABIC_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_7:
+            charset = GREEK_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_8:
+            charset = HEBREW_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_9:
+            charset = TURKISH_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_11:
+            charset = THAI_CHARSET;
+            break;
+#endif // BC++ 16-bit
+
+        case wxFONTENCODING_CP437:
+            charset = OEM_CHARSET;
+            break;
+
+        default:
+            if ( exact )
+                *exact = FALSE;
+            // fall through
+
+        case wxFONTENCODING_SYSTEM:
+            charset = ANSI_CHARSET;
+    }
+
+    return charset;
+}
+

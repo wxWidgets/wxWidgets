@@ -95,6 +95,8 @@ protected:
     void DoEnumerateFamilies(bool fixedWidthOnly,
                              wxFontEncoding encoding = wxFONTENCODING_SYSTEM);
 
+    void DoChangeFont(const wxFont& font, const wxColour& col = wxNullColour);
+
     void Resize(const wxSize& size, const wxFont& font = wxNullFont);
 
     wxTextCtrl *m_textctrl;
@@ -180,7 +182,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size)
+       : wxFrame((wxFrame *)NULL, -1, title, pos, size), m_textctrl(NULL)
 {
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
@@ -219,8 +221,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_canvas = new MyCanvas(this);
 
     // create a status bar just for fun (by default with 1 pane only)
-    CreateStatusBar(2);
-    SetStatusText("Welcome to wxWindows!");
+    CreateStatusBar();
+    SetStatusText("Welcome to wxWindows font demo!");
 }
 
 
@@ -263,35 +265,45 @@ void MyFrame::DoEnumerateFamilies(bool fixedWidthOnly, wxFontEncoding encoding)
     class MyFontEnumerator : public wxFontEnumerator
     {
     public:
-        MyFontEnumerator() { m_n = 0; }
+        bool GotAny() const { return !m_facenames.IsEmpty(); }
 
-        bool GotAny() const { return m_n; }
-
-        const wxString& GetText() const { return m_text; }
+        const wxArrayString& GetFacenames() const { return m_facenames; }
 
     protected:
         virtual bool OnFontFamily(const wxString& family)
         {
-            wxString text;
-            text.Printf("Font family %d: %s\n", ++m_n, family.c_str());
-            m_text += text;
+            m_facenames.Add(family);
 
             return TRUE;
         }
 
     private:
-        size_t m_n;
-
-        wxString m_text;
+        wxArrayString m_facenames;
     } fontEnumerator;
 
     fontEnumerator.EnumerateFamilies(encoding, fixedWidthOnly);
 
     if ( fontEnumerator.GotAny() )
     {
-        wxLogMessage("Enumerating %s font families:\n%s",
-                     fixedWidthOnly ? "fixed width" : "all",
-                     fontEnumerator.GetText().c_str());
+        int n, nFacenames = fontEnumerator.GetFacenames().GetCount();
+        wxLogStatus(this, "Found %d %sfonts",
+                    nFacenames, fixedWidthOnly ? "fixed width " : "");
+
+        wxString *facenames = new wxString[nFacenames];
+        for ( n = 0; n < nFacenames; n++ )
+            facenames[n] = fontEnumerator.GetFacenames().Item(n);
+
+        n = wxGetSingleChoiceIndex("Choose a facename", "Font demo",
+                                   nFacenames, facenames, this);
+        if ( n != -1 )
+        {
+            wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+                        wxFONTWEIGHT_NORMAL, FALSE, facenames[n], encoding);
+
+            DoChangeFont(font);
+        }
+
+        delete [] facenames;
     }
     else
     {
@@ -328,13 +340,28 @@ void MyFrame::OnEnumerateFamiliesForEncoding(wxCommandEvent& WXUNUSED(event))
     };
 
     int n = wxGetSingleChoiceIndex("Choose an encoding", "Font demo",
-                                   WXSIZEOF(encodingNames), encodingNames,
+                                   WXSIZEOF(encodingNames),
+                                   (char **)encodingNames,
                                    this);
 
     if ( n != -1 )
     {
         DoEnumerateFamilies(FALSE, encodings[n]);
     }
+}
+
+void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
+{
+    Resize(GetSize(), font);
+
+    m_canvas->SetTextFont(font);
+    if ( col.Ok() )
+        m_canvas->SetColour(col);
+    m_canvas->Refresh();
+
+    m_textctrl->SetFont(font);
+    if ( col.Ok() )
+        m_textctrl->SetForegroundColour(col);
 }
 
 void MyFrame::OnSelectFont(wxCommandEvent& WXUNUSED(event))
@@ -350,14 +377,7 @@ void MyFrame::OnSelectFont(wxCommandEvent& WXUNUSED(event))
         wxFont font = retData.GetChosenFont();
         wxColour colour = retData.GetColour();
 
-        Resize(GetSize(), font);
-
-        m_canvas->SetTextFont(font);
-        m_canvas->SetColour(colour);
-        m_canvas->Refresh();
-
-        m_textctrl->SetFont(font);
-        m_textctrl->SetForegroundColour(colour);
+        DoChangeFont(font, colour);
     }
 }
 
@@ -384,6 +404,9 @@ void MyFrame::OnSize(wxSizeEvent& event)
 
 void MyFrame::Resize(const wxSize& size, const wxFont& font)
 {
+    if ( !m_textctrl )
+        return;
+
     wxCoord h;
     if ( font.Ok() )
     {

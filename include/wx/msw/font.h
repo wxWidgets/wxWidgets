@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FONT_H_
@@ -16,9 +16,14 @@
     #pragma interface "font.h"
 #endif
 
-#include "wx/gdiobj.h"
+// ----------------------------------------------------------------------------
+// public functions
+// ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
+// convert wxFontEncoding into one of Windows XXX_CHARSET constants (fill exact
+// parameter if it's not NULL with TRUE if encoding is realyl supported under
+// Windows and FALSE if not and we just chose something close to it)
+extern int wxCharsetFromEncoding(wxFontEncoding encoding, bool *exact = NULL);
 
 // ----------------------------------------------------------------------------
 // wxFont

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -149,7 +149,7 @@ void wxFillLogFont(LOGFONT *logFont, wxFont *font)
                          break;
       case wxDEFAULT:
       default:           ff_family = FF_SWISS;
-                         ff_face = "MS Sans Serif" ; 
+                         ff_face = "MS Sans Serif" ;
     }
 
     if (font->GetStyle() == wxITALIC || font->GetStyle() == wxSLANT)
@@ -194,7 +194,7 @@ void wxFillLogFont(LOGFONT *logFont, wxFont *font)
     logFont->lfItalic = ff_italic;
     logFont->lfUnderline = (BYTE)ff_underline;
     logFont->lfStrikeOut = 0;
-    logFont->lfCharSet = ANSI_CHARSET;
+    logFont->lfCharSet = wxCharsetFromEncoding(font->GetEncoding());
     logFont->lfOutPrecision = OUT_DEFAULT_PRECIS;
     logFont->lfClipPrecision = CLIP_DEFAULT_PRECIS;
     logFont->lfQuality = PROOF_QUALITY;
@@ -202,80 +202,127 @@ void wxFillLogFont(LOGFONT *logFont, wxFont *font)
     wxStrcpy(logFont->lfFaceName, ff_face);
 }
 
-wxFont wxCreateFontFromLogFont(LOGFONT *logFont) // , bool createNew)
+wxFont wxCreateFontFromLogFont(LOGFONT *logFont)
 {
-  int fontFamily = wxSWISS;
-  int fontStyle = wxNORMAL;
-  int fontWeight = wxNORMAL;
-  int fontPoints = 10;
-  bool fontUnderline = FALSE;
-  wxChar *fontFace = NULL;
+    int fontFamily = wxSWISS;
+    int fontStyle = wxNORMAL;
+    int fontWeight = wxNORMAL;
+    int fontPoints = 10;
+    bool fontUnderline = FALSE;
+    wxChar *fontFace = NULL;
 
-//  int lfFamily = logFont->lfPitchAndFamily & 0xF0;
-  int lfFamily = logFont->lfPitchAndFamily;
-  if (lfFamily & FIXED_PITCH)
-    lfFamily -= FIXED_PITCH;
-  if (lfFamily & VARIABLE_PITCH)
-    lfFamily -= VARIABLE_PITCH;
-  
-  switch (lfFamily)
-  {
-    case FF_ROMAN:
-      fontFamily = wxROMAN;
-      break;
-    case FF_SWISS:
-      fontFamily = wxSWISS;
-      break;
-    case FF_SCRIPT:
-      fontFamily = wxSCRIPT;
-      break;
-    case FF_MODERN:
-      fontFamily = wxMODERN;
-      break;
-    case FF_DECORATIVE:
-      fontFamily = wxDECORATIVE;
-      break;
-    default:
-      fontFamily = wxSWISS;
-      break;
-  }
-  switch (logFont->lfWeight)
-  {
-    case FW_LIGHT:
-      fontWeight = wxLIGHT;
-      break;
-    case FW_NORMAL:
-      fontWeight = wxNORMAL;
-      break;
-    case FW_BOLD:
-      fontWeight = wxBOLD;
-      break;
-    default:
-      fontWeight = wxNORMAL;
-      break;
-  }
-  if (logFont->lfItalic)
-    fontStyle = wxITALIC;
-  else
-    fontStyle = wxNORMAL;
+    int lfFamily = logFont->lfPitchAndFamily;
+    if (lfFamily & FIXED_PITCH)
+        lfFamily -= FIXED_PITCH;
+    if (lfFamily & VARIABLE_PITCH)
+        lfFamily -= VARIABLE_PITCH;
 
-  if (logFont->lfUnderline)
-    fontUnderline = TRUE;
-    
-  if  (logFont->lfFaceName)
-    fontFace = logFont->lfFaceName;
+    switch (lfFamily)
+    {
+        case FF_ROMAN:
+            fontFamily = wxROMAN;
+            break;
+        case FF_SWISS:
+            fontFamily = wxSWISS;
+            break;
+        case FF_SCRIPT:
+            fontFamily = wxSCRIPT;
+            break;
+        case FF_MODERN:
+            fontFamily = wxMODERN;
+            break;
+        case FF_DECORATIVE:
+            fontFamily = wxDECORATIVE;
+            break;
+        default:
+            fontFamily = wxSWISS;
+            break;
+    }
+    switch (logFont->lfWeight)
+    {
+        case FW_LIGHT:
+            fontWeight = wxLIGHT;
+            break;
+        case FW_NORMAL:
+            fontWeight = wxNORMAL;
+            break;
+        case FW_BOLD:
+            fontWeight = wxBOLD;
+            break;
+        default:
+            fontWeight = wxNORMAL;
+            break;
+    }
+    if (logFont->lfItalic)
+        fontStyle = wxITALIC;
+    else
+        fontStyle = wxNORMAL;
 
-  HDC dc2 = ::GetDC(NULL);
+    if (logFont->lfUnderline)
+        fontUnderline = TRUE;
 
-  if ( logFont->lfHeight < 0 )
-	logFont->lfHeight = - logFont->lfHeight;
-  fontPoints = abs(72*logFont->lfHeight/GetDeviceCaps(dc2, LOGPIXELSY));
-  ::ReleaseDC(NULL, dc2);
+    if  (logFont->lfFaceName)
+        fontFace = logFont->lfFaceName;
 
-//  if ( createNew )
-  	return wxFont(fontPoints, fontFamily, fontStyle, fontWeight, fontUnderline, fontFace);
-//  else
-//	return wxTheFontList->FindOrCreateFont(fontPoints, fontFamily, fontStyle, fontWeight, fontUnderline, fontFace);
+    wxFontEncoding fontEncoding;
+    switch ( logFont->lfCharSet )
+    {
+        default:
+            wxFAIL_MSG(wxT("unsupported charset"));
+            // fall through
+
+        case ANSI_CHARSET:
+            fontEncoding = wxFONTENCODING_ISO8859_1;
+            break;
+
+        case EASTEUROPE_CHARSET:
+            fontEncoding = wxFONTENCODING_ISO8859_2;
+            break;
+
+        case BALTIC_CHARSET:
+            fontEncoding = wxFONTENCODING_ISO8859_4;
+            break;
+
+        case RUSSIAN_CHARSET:
+            fontEncoding = wxFONTENCODING_CP1251;
+            break;
+
+        case ARABIC_CHARSET:
+            fontEncoding = wxFONTENCODING_ISO8859_6;
+            break;
+
+        case GREEK_CHARSET:
+            fontEncoding = wxFONTENCODING_ISO8859_7;
+            break;
+
+        case HEBREW_CHARSET:
+            fontEncoding = wxFONTENCODING_ISO8859_8;
+            break;
+
+        case TURKISH_CHARSET:
+            fontEncoding = wxFONTENCODING_ISO8859_9;
+            break;
+
+        case THAI_CHARSET:
+            fontEncoding = wxFONTENCODING_ISO8859_11;
+            break;
+
+
+        case OEM_CHARSET:
+            fontEncoding = wxFONTENCODING_CP437;
+            break;
+    }
+
+    HDC dc2 = ::GetDC(NULL);
+
+    if ( logFont->lfHeight < 0 )
+        logFont->lfHeight = - logFont->lfHeight;
+    fontPoints = abs(72*logFont->lfHeight/GetDeviceCaps(dc2, LOGPIXELSY));
+    ::ReleaseDC(NULL, dc2);
+
+    return wxFont(fontPoints, fontFamily, fontStyle,
+                  fontWeight, fontUnderline, fontFace,
+                  fontEncoding);
 }
 
 
