@@ -42,6 +42,8 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
 
+    virtual WXHBRUSH MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC);
+
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox)
 };

@@ -38,6 +38,7 @@
 #include "wx/statbox.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/notebook.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -132,6 +133,20 @@ wxSize wxStaticBox::DoGetBestSize() const
     int hBox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
     return wxSize(wBox, hBox);
+}
+
+WXHBRUSH
+wxStaticBox::MSWGetBgBrushForSelf(wxWindow *parent, WXHDC WXUNUSED(pDC))
+{
+    // we can't use pattern brushes because, apparently, the window proc of our
+    // class does something which invalidates the brush origin before drawing
+    // with it and so any patetrn brush is used incorrectly as can be seen by
+    // putting a static box inside a (themed) notebook
+    //
+    // so always use solid brush for painting the background (note that this
+    // only applies to the background of the box label, not the insides of the
+    // box itself)
+    return parent->MSWGetSolidBgBrushForChild(this);
 }
 
 #endif // wxUSE_STATBOX
