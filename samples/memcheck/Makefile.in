@@ -7,17 +7,17 @@ OS=@OS@
 RULE=bin
 
 # define library name
-BIN_TARGET=thread
+BIN_TARGET=memcheck
 # define library sources
 BIN_SRC=\
-test.cpp
+memcheck.cpp
 
 #define library objects
 BIN_OBJ=\
-test.o
+memcheck.o
 
 # additional things needed to link
-BIN_LINK= $(THREADS_LINK)
+BIN_LINK=
 
 # additional things needed to compile
 ADD_COMPILE=

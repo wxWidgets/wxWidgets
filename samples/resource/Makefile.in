@@ -7,17 +7,17 @@ OS=@OS@
 RULE=bin
 
 # define library name
-BIN_TARGET=thread
+BIN_TARGET=resource
 # define library sources
 BIN_SRC=\
-test.cpp
+resource.cpp
 
 #define library objects
 BIN_OBJ=\
-test.o
+resource.o
 
 # additional things needed to link
-BIN_LINK= $(THREADS_LINK)
+BIN_LINK=
 
 # additional things needed to compile
 ADD_COMPILE=

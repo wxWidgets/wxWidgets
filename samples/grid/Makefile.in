@@ -7,7 +7,7 @@ OS=@OS@
 RULE=bin
 
 # define library name
-BIN_TARGET=test
+BIN_TARGET=grid
 # define library sources
 BIN_SRC=\
 test.cpp

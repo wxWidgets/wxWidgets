@@ -7,7 +7,7 @@ OS=@OS@
 RULE=bin
 
 # define library name
-BIN_TARGET=test
+BIN_TARGET=mdi
 # define library sources
 BIN_SRC=\
 mdi.cpp

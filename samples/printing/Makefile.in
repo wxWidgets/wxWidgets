@@ -7,7 +7,7 @@ OS=@OS@
 RULE=bin
 
 # define library name
-BIN_TARGET=TEST
+BIN_TARGET=printing
 # define library sources
 BIN_SRC=\
 printing.cpp
