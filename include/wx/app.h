@@ -95,7 +95,7 @@ public:
     // reason, you must override it (instead of just overriding OnInit(), as
     // usual, for app-specific initializations), do not forget to call the base
     // class version!
-    virtual bool Initialize(int argc, wxChar **argv);
+    virtual bool Initialize(int& argc, wxChar **argv);
 
     // Called before OnRun(), this is a good place to do initialization -- if
     // anything fails, return false from here to prevent the program from
@@ -314,7 +314,7 @@ public:
         // very first initialization function
         //
         // Override: very rarely
-    virtual bool Initialize(int argc, wxChar **argv);
+    virtual bool Initialize(int& argc, wxChar **argv);
 
         // a platform-dependent version of OnInit(): the code here is likely to
         // depend on the toolkit. default version does nothing.

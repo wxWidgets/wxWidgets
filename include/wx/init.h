@@ -24,8 +24,9 @@
 // this function also creates wxTheApp as a side effect, if IMPLEMENT_APP
 // hadn't been used a dummy default application object is created
 //
-// note that the parameters may be modified
-extern bool WXDLLEXPORT wxEntryStart(int argc, wxChar **argv);
+// note that the parameters may be modified, this is why we pass them by
+// reference!
+extern bool WXDLLEXPORT wxEntryStart(int& argc, wxChar **argv);
 
 // free the resources allocated by the library in wxEntryStart() and shut it
 // down (wxEntryStart() may be called again afterwards if necessary)
@@ -41,7 +42,7 @@ extern void WXDLLEXPORT wxEntryCleanup();
 // but this one always exists under all platforms
 //
 // returns the program exit code
-extern int WXDLLEXPORT wxEntry(int argc, wxChar **argv);
+extern int WXDLLEXPORT wxEntry(int& argc, wxChar **argv);
 
 
 // ----------------------------------------------------------------------------

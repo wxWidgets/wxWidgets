@@ -87,6 +87,20 @@ public:
     }
 };
 
+// class to ensure that wxAppBase::CleanUp() is called if our Initialize()
+// fails
+class wxCallAppCleanup
+{
+public:
+    wxCallAppCleanup(wxApp *app) : m_app(app) { }
+    ~wxCallAppCleanup() { if ( m_app ) m_app->CleanUp(); }
+
+    void Dismiss() { m_app = NULL; }
+
+private:
+    wxApp *m_app;
+};
+
 // another tiny class which simply exists to ensure that wxEntryCleanup is
 // always called
 class wxCleanupOnExit
@@ -180,7 +194,7 @@ static bool DoCommonPostInit()
     return wxModule::InitializeModules();
 }
 
-bool wxEntryStart(int argc, wxChar **argv)
+bool wxEntryStart(int& argc, wxChar **argv)
 {
     // do minimal, always necessary, initialization
     // --------------------------------------------
@@ -229,18 +243,25 @@ bool wxEntryStart(int argc, wxChar **argv)
         return false;
     }
 
+    wxCallAppCleanup callAppCleanup(wxTheApp);
+
+    // for compatibility call the old initialization function too
+    if ( !wxTheApp->OnInitGui() )
+        return false;
+
 
     // common initialization after wxTheApp creation
     // ---------------------------------------------
 
     if ( !DoCommonPostInit() )
-    {
         return false;
-    }
 
 
     // prevent the smart pointer from destroying its contents
     app.release();
+
+    // and the cleanup object from doing cleanup
+    callAppCleanup.Dismiss();
 
     return true;
 }
@@ -248,7 +269,7 @@ bool wxEntryStart(int argc, wxChar **argv)
 #if wxUSE_UNICODE
 
 // we provide a wxEntryStart() wrapper taking "char *" pointer too
-bool wxEntryStart(int argc, char **argv)
+bool wxEntryStart(int& argc, char **argv)
 {
     ConvertArgsToUnicode(argc, argv);
 
@@ -339,7 +360,7 @@ void wxEntryCleanup()
     #define wxEntryReal wxEntry
 #endif // !(__WXMSW__ && wxUSE_ON_FATAL_EXCEPTION)
 
-int wxEntryReal(int argc, wxChar **argv)
+int wxEntryReal(int& argc, wxChar **argv)
 {
     // library initialization
     if ( !wxEntryStart(argc, argv) )

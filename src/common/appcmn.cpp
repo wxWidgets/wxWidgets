@@ -73,18 +73,10 @@ wxAppBase::wxAppBase()
     m_exitOnFrameDelete = Later;
 }
 
-bool wxAppBase::Initialize(int argc, wxChar **argv)
+bool wxAppBase::Initialize(int& argc, wxChar **argv)
 {
     if ( !wxAppConsole::Initialize(argc, argv) )
         return false;
-
-    // for compatibility call the old initialization function too
-    if ( !OnInitGui() )
-    {
-        wxAppConsole::CleanUp();
-
-        return false;
-    }
 
 #if wxUSE_THREADS
     wxPendingEventsLocker = new wxCriticalSection;

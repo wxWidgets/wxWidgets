@@ -126,7 +126,7 @@ private:
 public:
 
     // Implementation
-    virtual bool  Initialize(int argc, wxChar **argv);
+    virtual bool  Initialize(int& argc, wxChar **argv);
     virtual void  CleanUp(void);
 
     static bool  RegisterWindowClasses(HAB vHab);

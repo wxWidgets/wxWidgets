@@ -121,7 +121,7 @@ wxAppConsole::~wxAppConsole()
 // initilization/cleanup
 // ----------------------------------------------------------------------------
 
-bool wxAppConsole::Initialize(int argc, wxChar **argv)
+bool wxAppConsole::Initialize(int& argc, wxChar **argv)
 {
     // remember the command line arguments
     this->argc = argc;

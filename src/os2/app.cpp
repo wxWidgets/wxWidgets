@@ -226,7 +226,7 @@ void wxApp::HandleSockets()
 //
 // Initialize
 //
-bool wxApp::Initialize(int argc, wxChar **argv)
+bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     if ( !wxAppBase::Initialize(argc, argv) )
         return false;
@@ -469,104 +469,6 @@ void wxApp::CleanUp()
 
     wxAppBase::CleanUp();
 } // end of wxApp::CleanUp
-
-//----------------------------------------------------------------------
-// Main wxWindows entry point
-//----------------------------------------------------------------------
-int wxEntry(
-  int                               argc
-, char*                             argv[]
-)
-{
-    HAB                             vHab = 0;
-
-    if (!wxApp::Initialize(vHab))
-        return 0;
-
-    //
-    // create the application object or ensure that one already exists
-    //
-    if (!wxTheApp)
-    {
-        // The app may have declared a global application object, but we recommend
-        // the IMPLEMENT_APP macro is used instead, which sets an initializer
-        // function for delayed, dynamic app object construction.
-        wxCHECK_MSG( wxApp::GetInitializerFunction(), 0,
-                     wxT("No initializer - use IMPLEMENT_APP macro.") );
-        wxTheApp = (*wxApp::GetInitializerFunction()) ();
-    }
-    wxCHECK_MSG( wxTheApp, 0, wxT("You have to define an instance of wxApp!") );
-    wxTheApp->argc = argc;
-
-#if wxUSE_UNICODE
-    wxTheApp->argv = new wxChar*[argc+1];
-
-    int                             nArgc = 0;
-
-    while (nArgc < argc)
-    {
-          wxTheApp->argv[nArgc] = wxStrdup(wxConvLibc.cMB2WX(argv[nArgc]));
-          nArgc++;
-    }
-    wxTheApp->argv[nArgc] = (wxChar *)NULL;
-#else
-    wxTheApp->argv = argv;
-#endif
-
-    wxString                        sName(wxFileNameFromPath(argv[0]));
-
-    wxStripExtension(sName);
-    wxTheApp->SetAppName(sName);
-
-    int                             nRetValue = 0;
-
-    if (!wxTheApp->OnInitGui())
-        nRetValue = -1;
-
-    if (nRetValue == 0)
-    {
-        if (wxTheApp->OnInit())
-        {
-            wxTheApp->OnRun();
-        }
-        // Normal exit
-        wxWindow*                   pTopWindow = wxTheApp->GetTopWindow();
-        if (pTopWindow)
-        {
-            // Forcibly delete the window.
-            if (pTopWindow->IsKindOf(CLASSINFO(wxFrame)) ||
-                pTopWindow->IsKindOf(CLASSINFO(wxDialog)) )
-            {
-                pTopWindow->Close(TRUE);
-                wxTheApp->DeletePendingObjects();
-            }
-            else
-            {
-                delete pTopWindow;
-                wxTheApp->SetTopWindow(NULL);
-            }
-        }
-    }
-    else // app initialization failed
-    {
-        wxLogLastError(" Gui initialization failed, exitting");
-    }
-#if wxUSE_CONSOLEDEBUG
-    printf("wxTheApp->OnExit ");
-    fflush(stdout);
-#endif
-    nRetValue = wxTheApp->OnExit();
-#if wxUSE_CONSOLEDEBUG
-    printf("wxApp::CleanUp ");
-    fflush(stdout);
-#endif
-    wxApp::CleanUp();
-#if wxUSE_CONSOLEDEBUG
-    printf("return %i ", nRetValue);
-    fflush(stdout);
-#endif
-    return(nRetValue);
-} // end of wxEntry
 
 bool wxApp::OnInitGui()
 {

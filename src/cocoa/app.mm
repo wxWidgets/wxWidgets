@@ -111,99 +111,6 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
 // functions
 // ============================================================================
 
-//----------------------------------------------------------------------
-// wxEntry
-//----------------------------------------------------------------------
-
-int WXDLLEXPORT wxEntryStart( int WXUNUSED(argc), char *WXUNUSED(argv)[] )
-{
-    return wxApp::Initialize();
-}
-
-int WXDLLEXPORT wxEntryInitGui()
-{
-    return wxTheApp->OnInitGui();
-}
-
-void WXDLLEXPORT wxEntryCleanup()
-{
-    wxApp::CleanUp();
-}
-
-int wxEntry( int argc, char *argv[])
-{
-    if (!wxEntryStart(argc, argv)) {
-        return 0;
-    }
-    wxLogDebug("Creating application");
-   // create the application object or ensure that one already exists
-    if (!wxTheApp)
-    {
-        // The app may have declared a global application object, but we recommend
-        // the IMPLEMENT_APP macro is used instead, which sets an initializer
-        // function for delayed, dynamic app object construction.
-        wxCHECK_MSG( wxApp::GetInitializerFunction(), 0,
-                     wxT("No initializer - use IMPLEMENT_APP macro.") );
-
-        wxTheApp = (wxApp*) (*wxApp::GetInitializerFunction()) ();
-    }
-
-    wxCHECK_MSG( wxTheApp, 0, wxT("You have to define an instance of wxApp!") );
-
-    // Mac OS X passes a process serial number command line argument when
-    // the application is launched from the Finder. This argument must be
-    // removed from the command line arguments before being handled by the
-    // application (otherwise applications would need to handle it)
-
-    if (argc > 1) {
-        char theArg[6] = "";
-        strncpy(theArg, argv[1], 5);
-
-        if (strcmp(theArg, "-psn_") == 0) {
-            // assume the argument is always the only one and remove it
-            --argc;
-        }
-    }
-
-    wxTheApp->argc = argc;
-    wxTheApp->argv = argv;
-
-    wxLogDebug("initializing gui");
-    // GUI-specific initialization, such as creating an app context.
-    wxEntryInitGui();
-
-    // Here frames insert themselves automatically
-    // into wxTopLevelWindows by getting created
-    // in OnInit().
-
-    int retValue = 0;
-
-    wxLogDebug("Time to run");
-    retValue = wxTheApp->OnRun();
-
-    wxWindow *topWindow = wxTheApp->GetTopWindow();
-    if ( topWindow )
-    {
-        // Forcibly delete the window.
-        if ( topWindow->IsKindOf(CLASSINFO(wxFrame)) ||
-                topWindow->IsKindOf(CLASSINFO(wxDialog)) )
-        {
-            topWindow->Close(TRUE);
-        }
-        else
-        {
-            delete topWindow;
-            wxTheApp->SetTopWindow(NULL);
-        }
-    }
-
-    wxTheApp->OnExit();
-
-    wxEntryCleanup();
-
-    return retValue;
-}
-
 void wxApp::Exit()
 {
     wxApp::CleanUp();
@@ -229,11 +136,25 @@ END_EVENT_TABLE()
 #endif
 
 // ----------------------------------------------------------------------------
-// wxApp static functions
+// wxApp initialization/cleanup
 // ----------------------------------------------------------------------------
 
-bool wxApp::Initialize(int argc, wxChar **argv)
+bool wxApp::Initialize(int& argc, wxChar **argv)
 {
+    // Mac OS X passes a process serial number command line argument when
+    // the application is launched from the Finder. This argument must be
+    // removed from the command line arguments before being handled by the
+    // application (otherwise applications would need to handle it)
+    if ( argc > 1 )
+    {
+        static const wxChar *ARG_PSN = _T("-psn_");
+        if ( wxStrncmp(argv[1], ARG_PSN, sizeof(ARG_PSN) - 1) == 0 )
+        {
+            // remove this argument
+            memmove(argv, argv + 1, argc--);
+        }
+    }
+
     // VZ: apparently this needs to be done a.s.a.p., right? it is done after
     //     wxClassInfo::InitializeClasses() now but usd to be done before, I
     //     hope it's not a problem -- if it is, please let me know, David (if

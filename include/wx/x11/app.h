@@ -89,7 +89,7 @@ protected:
     
 public:
     // Implementation
-    virtual bool Initialize();
+    virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
     
     void DeletePendingObjects();

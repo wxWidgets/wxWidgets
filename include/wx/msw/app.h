@@ -36,7 +36,7 @@ public:
     virtual ~wxApp();
 
     // override base class (pure) virtuals
-    virtual bool Initialize(int argc, wxChar **argv);
+    virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
 
     virtual int MainLoop();

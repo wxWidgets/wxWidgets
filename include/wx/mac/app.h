@@ -91,7 +91,7 @@ protected:
 public:
 
     // Implementation
-    virtual bool Initialize(int argc, wxChar **argv);
+    virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
     
     bool IsExiting() { return !m_keepGoing ; }

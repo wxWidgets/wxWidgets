@@ -383,8 +383,14 @@ void wxApp::Dispatch()
     wxEventLoop::GetActive()->Dispatch();
 }
 
-bool wxApp::Initialize(int argc, wxChar **argv)
+bool wxApp::Initialize(int& argc, wxChar **argv)
 {
+#ifdef __DJGPP__
+    // VS: disable long filenames under DJGPP as the very first thing,
+    //     since SciTech MGL doesn't like them much...
+    wxSetEnv(wxT("LFN"), wxT("N"));
+#endif
+
     // must do it before calling wxAppBase::Initialize(), because fonts are
     // needed by stock lists which are created there
     wxTheFontsManager = new wxFontsManager;
@@ -422,129 +428,3 @@ void wxApp::CleanUp()
     MGL_exit();
 }
 
-
-int wxEntryStart(int argc, char *argv[])
-{
-    return wxApp::Initialize() ? 0 : -1;
-}
-
-
-int wxEntryInitGui()
-{
-    return wxTheApp->OnInitGui() ? 0 : -1;
-}
-
-
-void wxEntryCleanup()
-{
-    wxApp::CleanUp();
-}
-
-
-
-int wxEntry(int argc, char *argv[])
-{
-#ifdef __DJGPP__
-    // VS: disable long filenames under DJGPP as the very first thing,
-    //     since SciTech MGL doesn't like them much...
-    wxSetEnv(wxT("LFN"), wxT("N"));
-#endif
-
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    // This seems to be necessary since there are 'rogue'
-    // objects present at this point (perhaps global objects?)
-    // Setting a checkpoint will ignore them as far as the
-    // memory checking facility is concerned.
-    // Of course you may argue that memory allocated in globals should be
-    // checked, but this is a reasonable compromise.
-    wxDebugContext::SetCheckpoint();
-#endif
-    int err = wxEntryStart(argc, argv);
-    if ( err )
-        return err;
-
-    if ( !wxTheApp )
-    {
-        wxCHECK_MSG( wxApp::GetInitializerFunction(), -1,
-                     wxT("wxWindows error: No initializer - use IMPLEMENT_APP macro.\n") );
-
-        wxAppInitializerFunction app_ini = wxApp::GetInitializerFunction();
-
-        wxObject *test_app = app_ini();
-
-        wxTheApp = (wxApp*) test_app;
-    }
-
-    wxCHECK_MSG( wxTheApp, -1, wxT("wxWindows error: no application object") );
-
-    wxTheApp->argc = argc;
-#if wxUSE_UNICODE
-    wxTheApp->argv = new wxChar*[argc+1];
-    int mb_argc = 0;
-    while (mb_argc < argc)
-    {
-        wxTheApp->argv[mb_argc] = wxStrdup(wxConvLibc.cMB2WX(argv[mb_argc]));
-        mb_argc++;
-    }
-    wxTheApp->argv[mb_argc] = (wxChar *)NULL;
-#else
-    wxTheApp->argv = argv;
-#endif
-
-    wxString name(wxFileNameFromPath(argv[0]));
-    wxStripExtension(name);
-    wxTheApp->SetAppName(name);
-
-    int retValue;
-    retValue = wxEntryInitGui();
-
-    // Here frames insert themselves automatically into wxTopLevelWindows by
-    // getting created in OnInit().
-    if ( retValue == 0 )
-    {
-        if ( !wxTheApp->OnInit() )
-            retValue = -1;
-    }
-
-    if ( retValue == 0 )
-    {
-        /* delete pending toplevel windows (typically a single
-           dialog) so that, if there isn't any left, we don't
-           call OnRun() */
-        wxTheApp->DeletePendingObjects();
-
-        if ( wxTheApp->Initialized() )
-        {
-            wxTheApp->OnRun();
-
-            wxWindow *topWindow = wxTheApp->GetTopWindow();
-            if ( topWindow )
-            {
-                /* Forcibly delete the window. */
-                if (topWindow->IsKindOf(CLASSINFO(wxFrame)) ||
-                    topWindow->IsKindOf(CLASSINFO(wxDialog)) )
-                {
-                    topWindow->Close(TRUE);
-                    wxTheApp->DeletePendingObjects();
-                }
-                else
-                {
-                    delete topWindow;
-                    wxTheApp->SetTopWindow((wxWindow*) NULL);
-                }
-            }
-
-#if wxUSE_LOG
-            // flush the logged messages if any
-            wxLog *log = wxLog::GetActiveTarget();
-            if (log != NULL && log->HasPendingMessages())
-                log->Flush();
-#endif // wxUSE_LOG
-            retValue = wxTheApp->OnExit();
-        }
-    }
-
-    wxEntryCleanup();
-
-    return retValue;
-}

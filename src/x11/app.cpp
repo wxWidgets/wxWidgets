@@ -49,8 +49,6 @@ extern wxList wxPendingDelete;
 wxHashTable *wxWidgetHashTable = NULL;
 wxHashTable *wxClientWidgetHashTable = NULL;
 
-// This is set within wxEntryStart -- too early on
-// to put these in wxTheApp
 static bool g_showIconic = FALSE;
 static wxSize g_initialSize = wxDefaultSize;
 
@@ -93,10 +91,109 @@ BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxApp::OnIdle)
 END_EVENT_TABLE()
 
-bool wxApp::Initialize(int argc, wxChar **argv)
+bool wxApp::Initialize(int& argc, wxChar **argv)
 {
-    if ( !wxAppBase::Initialize(argc, argv) )
+#if defined(__WXDEBUG__) && !wxUSE_NANOX
+    // install the X error handler
+    gs_pfnXErrorHandler = XSetErrorHandler( wxXErrorHandler );
+#endif // __WXDEBUG__
+
+    char *displayName = NULL;
+    bool syncDisplay = FALSE;
+
+    int argcOrig = argc;
+    for ( int i = 0; i < argcOrig; i++ )
+    {
+        if (wxStrcmp( argv[i], _T("-display") ) == 0)
+        {
+            if (i < (argc - 1))
+            {
+                argv[i++] = NULL;
+
+                displayName = argv[i];
+
+                argv[i] = NULL;
+                argc -= 2;
+            }
+        }
+        else if (wxStrcmp( argv[i], _T("-geometry") ) == 0)
+        {
+            if (i < (argc - 1))
+            {
+                argv[i++] = NULL;
+
+                int w, h;
+                if (wxSscanf(argv[i], _T("%dx%d"), &w, &h) != 2)
+                {
+                    wxLogError( _("Invalid geometry specification '%s'"),
+                                wxString::FromAscii(argv[i]).c_str() );
+                }
+                else
+                {
+                    g_initialSize = wxSize(w, h);
+                }
+
+                argv[i] = NULL;
+                argc -= 2;
+            }
+        }
+        else if (wxStrcmp( argv[i], _T("-sync") ) == 0)
+        {
+            syncDisplay = TRUE;
+
+            argv[i] = NULL;
+            argc--;
+        }
+        else if (wxStrcmp( argv[i], _T("-iconic") ) == 0)
+        {
+            g_showIconic = TRUE;
+
+            argv[i] = NULL;
+            argc--;
+        }
+    }
+
+    if ( argc != argcOrig )
+    {
+        // remove the argumens we consumed
+        for ( int i = 0; i < argc; i++ )
+        {
+            while ( !argv[i] )
+            {
+                memmove(argv + i, argv + i + 1, argcOrig - i);
+            }
+        }
+    }
+
+    // X11 display stuff
+    Display *xdisplay = XOpenDisplay( displayName );
+    if (!xdisplay)
+    {
+        wxLogError( _("wxWindows could not open display. Exiting.") );
         return false;
+    }
+
+    if ( !wxAppBase::Initialize(argc, argv) )
+    {
+        XCloseDisplay(xdisplay);
+
+        return false;
+    }
+
+    if (syncDisplay)
+        XSynchronize(xdisplay, True);
+
+    ms_display = (WXDisplay*) xdisplay;
+
+    XSelectInput( xdisplay, XDefaultRootWindow(xdisplay), PropertyChangeMask);
+
+    // Misc.
+    wxSetDetectableAutoRepeat( TRUE );
+
+#if wxUSE_UNICODE
+    // Glib's type system required by Pango
+    g_type_init();
+#endif
 
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
@@ -117,198 +214,6 @@ void wxApp::CleanUp()
 
     wxAppBase::CleanUp();
 }
-
-// NB: argc and argv may be changed here, pass by reference!
-int wxEntryStart( int& argc, char *argv[] )
-{
-#ifdef __WXDEBUG__
-#if !wxUSE_NANOX
-    // install the X error handler
-    gs_pfnXErrorHandler = XSetErrorHandler( wxXErrorHandler );
-#endif
-#endif // __WXDEBUG__
-
-    char *displayName = NULL;
-    bool syncDisplay = FALSE;
-
-    int i;
-    for (i = 0; i < argc; i++)
-    {
-        if (strcmp( argv[i], "-display") == 0)
-        {
-            if (i < (argc - 1))
-            {
-                i ++;
-                displayName = argv[i];
-                continue;
-            }
-        }
-        else if (strcmp( argv[i], "-geometry") == 0)
-        {
-            if (i < (argc - 1))
-            {
-                i ++;
-                int w, h;
-                if (sscanf(argv[i], "%dx%d", &w, &h) != 2)
-                {
-                    wxLogError( _("Invalid geometry specification '%s'"), wxString::FromAscii(argv[i]).c_str() );
-                }
-                else
-                {
-                    g_initialSize = wxSize(w, h);
-                }
-                continue;
-            }
-        }
-        else if (strcmp( argv[i], "-sync") == 0)
-        {
-            syncDisplay = TRUE;
-            continue;
-        }
-        else if (strcmp( argv[i], "-iconic") == 0)
-        {
-            g_showIconic = TRUE;
-
-            continue;
-        }
-
-    }
-
-    // X11 display stuff
-    Display* xdisplay = XOpenDisplay( displayName );
-    if (!xdisplay)
-    {
-        wxLogError( _("wxWindows could not open display. Exiting.") );
-        return -1;
-    }
-
-    if (syncDisplay)
-        XSynchronize(xdisplay, True);
-
-    wxApp::ms_display = (WXDisplay*) xdisplay;
-
-    XSelectInput( xdisplay, XDefaultRootWindow(xdisplay), PropertyChangeMask);
-
-    // Misc.
-    wxSetDetectableAutoRepeat( TRUE );
-
-#if wxUSE_UNICODE
-    // Glib's type system required by Pango
-    g_type_init();
-#endif
-
-    if (!wxApp::Initialize())
-        return -1;
-
-    return 0;
-}
-
-int wxEntryInitGui()
-{
-    int retValue = 0;
-
-    if ( !wxTheApp->OnInitGui() )
-        retValue = -1;
-
-    return retValue;
-}
-
-
-int wxEntry( int argc, char *argv[] )
-{
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    // This seems to be necessary since there are 'rogue'
-    // objects present at this point (perhaps global objects?)
-    // Setting a checkpoint will ignore them as far as the
-    // memory checking facility is concerned.
-    // Of course you may argue that memory allocated in globals should be
-    // checked, but this is a reasonable compromise.
-    wxDebugContext::SetCheckpoint();
-#endif
-    int err = wxEntryStart(argc, argv);
-    if (err)
-        return err;
-
-    if (!wxTheApp)
-    {
-        if (!wxApp::GetInitializerFunction())
-        {
-            printf( "wxWindows error: No initializer - use IMPLEMENT_APP macro.\n" );
-            return 0;
-        }
-
-        wxTheApp = (wxApp*) (* wxApp::GetInitializerFunction()) ();
-    }
-
-    if (!wxTheApp)
-    {
-        printf( "wxWindows error: wxTheApp == NULL\n" );
-        return 0;
-    }
-
-    // Command line argument stuff
-    wxTheApp->argc = argc;
-#if wxUSE_UNICODE
-    wxTheApp->argv = new wxChar*[argc+1];
-    int mb_argc = 0;
-    while (mb_argc < argc)
-    {
-        wxString tmp = wxString::FromAscii( argv[mb_argc] );
-        wxTheApp->argv[mb_argc] = wxStrdup( tmp.c_str() );
-        mb_argc++;
-    }
-    wxTheApp->argv[mb_argc] = (wxChar *)NULL;
-#else
-    wxTheApp->argv = argv;
-#endif
-
-    if (wxTheApp->argc > 0)
-    {
-        wxFileName fname( wxTheApp->argv[0] );
-        wxTheApp->SetAppName( fname.GetName() );
-    }
-
-    wxTheApp->m_showIconic = g_showIconic;
-    wxTheApp->m_initialSize = g_initialSize;
-
-    int retValue;
-    retValue = wxEntryInitGui();
-
-    // Here frames insert themselves automatically into wxTopLevelWindows by
-    // getting created in OnInit().
-    if ( retValue == 0 )
-    {
-        if ( !wxTheApp->OnInit() )
-            retValue = -1;
-    }
-
-    if ( retValue == 0 )
-    {
-        if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
-    }
-
-    // flush the logged messages if any
-    wxLog *pLog = wxLog::GetActiveTarget();
-    if ( pLog != NULL && pLog->HasPendingMessages() )
-        pLog->Flush();
-
-    delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
-    // for further messages
-
-    if (wxTheApp->GetTopWindow())
-    {
-        delete wxTheApp->GetTopWindow();
-        wxTheApp->SetTopWindow(NULL);
-    }
-
-    wxTheApp->DeletePendingObjects();
-
-    wxTheApp->OnExit();
-
-    wxApp::CleanUp();
-
-    return retValue;
-};
 
 wxApp::wxApp()
 {

@@ -58,7 +58,7 @@ public:
     bool SendIdleEvents();
     bool SendIdleEvents( wxWindow* win );
 
-    virtual bool Initialize(int argc, wxChar **argv);
+    virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
 
     static bool InitialzeVisual();

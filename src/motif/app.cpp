@@ -86,7 +86,7 @@ END_EVENT_TABLE()
     }
 #endif // __WXDEBUG__
 
-bool wxApp::Initialize(int argc, wxChar **argv)
+bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     if ( !wxAppBase::Initialize(argc, argv) )
         return false;
@@ -112,108 +112,8 @@ void wxApp::Exit()
 }
 
 // ============================================================================
-// wxEntry*
+// wxApp
 // ============================================================================
-
-int wxEntryStart( int argc, char* argv[] )
-{
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    // This seems to be necessary since there are 'rogue'
-    // objects present at this point (perhaps global objects?)
-    // Setting a checkpoint will ignore them as far as the
-    // memory checking facility is concerned.
-    // Of course you may argue that memory allocated in globals should be
-    // checked, but this is a reasonable compromise.
-    wxDebugContext::SetCheckpoint();
-#endif
-
-    if (!wxApp::Initialize())
-        return -1;
-
-    return 0;
-}
-
-int wxEntryInitGui()
-{
-    int retValue = 0;
-
-    // GUI-specific initialization, such as creating an app context.
-    if (!wxTheApp->OnInitGui())
-        retValue = -1;
-
-    return retValue;
-}
-
-void wxEntryCleanup()
-{
-    // So dialog boxes aren't used for further messages
-    delete wxLog::SetActiveTarget(new wxLogStderr);
-
-    // flush the logged messages if any
-    wxLog *pLog = wxLog::GetActiveTarget();
-    if ( pLog != NULL && pLog->HasPendingMessages() )
-        pLog->Flush();
-
-    wxApp::CleanUp();
-}
-
-int wxEntry( int argc, char *argv[] )
-{
-    int retValue = 0;
-
-    retValue = wxEntryStart( argc, argv );
-    if (retValue) return retValue;
-
-    if (!wxTheApp)
-    {
-        if (!wxApp::GetInitializerFunction())
-        {
-            printf( "wxWindows error: No initializer - use IMPLEMENT_APP macro.\n" );
-            return 0;
-        };
-
-        wxTheApp = (wxApp*) (* wxApp::GetInitializerFunction()) ();
-    };
-
-    if (!wxTheApp)
-    {
-        printf( "wxWindows error: wxTheApp == NULL\n" );
-        return 0;
-    };
-
-    wxTheApp->SetClassName(wxFileNameFromPath(argv[0]));
-    wxTheApp->SetAppName(wxFileNameFromPath(argv[0]));
-
-    wxTheApp->argc = argc;
-    wxTheApp->argv = argv;
-
-    // GUI-specific initialization, such as creating an app context.
-    retValue = wxEntryInitGui();
-    if (retValue) return retValue;
-
-    // Here frames insert themselves automatically into wxTopLevelWindows by
-    // getting created in OnInit().
-
-    if (wxTheApp->OnInit())
-    {
-        if (wxTheApp->Initialized())
-            wxTheApp->OnRun();
-    }
-
-    if (wxTheApp->GetTopWindow())
-    {
-        delete wxTheApp->GetTopWindow();
-        wxTheApp->SetTopWindow(NULL);
-    }
-
-    wxTheApp->DeletePendingObjects();
-
-    retValue = wxTheApp->OnExit();
-
-    wxEntryCleanup();
-
-    return retValue;
-}
 
 wxApp::wxApp()
 {

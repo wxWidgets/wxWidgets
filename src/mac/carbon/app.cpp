@@ -447,7 +447,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxAppEventHandler )
 WXIMPORT char std::__throws_bad_alloc ;
 #endif
 
-bool wxApp::Initialize(int argc, wxChar **argv)
+bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     int error = 0 ;
 
@@ -534,6 +534,20 @@ bool wxApp::Initialize(int argc, wxChar **argv)
     wxMacSetupConverters() ;
 
     s_macCursorRgn = ::NewRgn() ;
+
+    // Mac OS X passes a process serial number command line argument when
+    // the application is launched from the Finder. This argument must be
+    // removed from the command line arguments before being handled by the
+    // application (otherwise applications would need to handle it)
+    if ( argc > 1 )
+    {
+        static const wxChar *ARG_PSN = _T("-psn_");
+        if ( wxStrncmp(argv[1], ARG_PSN, sizeof(ARG_PSN) - 1) == 0 )
+        {
+            // remove this argument
+            memmove(argv, argv + 1, argc--);
+        }
+    }
 
     if ( !wxAppBase::Initialize(argc, argv) )
         return false;
@@ -634,7 +648,7 @@ void wxApp::CleanUp()
 }
 
 //----------------------------------------------------------------------
-// wxEntry
+// misc initialization stuff
 //----------------------------------------------------------------------
 
 // extern variable for shared library resource id
@@ -812,126 +826,6 @@ pascal void __wxterminate(void)
 }
 
 #endif /* WXMAKINGDLL && !__DARWIN__ */
-
-int WXDLLEXPORT wxEntryStart( int WXUNUSED(argc), char *WXUNUSED(argv)[] )
-{
-    return wxApp::Initialize();
-}
-
-int WXDLLEXPORT wxEntryInitGui()
-{
-    return wxTheApp->OnInitGui();
-}
-
-void WXDLLEXPORT wxEntryCleanup()
-{
-    wxApp::CleanUp();
-}
-
-int wxEntry( int argc, char *argv[] , bool enterLoop )
-{
-#ifdef __MWERKS__
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    // This seems to be necessary since there are 'rogue'
-    // objects present at this point (perhaps global objects?)
-    // Setting a checkpoint will ignore them as far as the
-    // memory checking facility is concerned.
-    // Of course you may argue that memory allocated in globals should be
-    // checked, but this is a reasonable compromise.
-    wxDebugContext::SetCheckpoint();
-#endif
-#endif
-    if (!wxEntryStart(argc, argv)) {
-        return 0;
-    }
-   // create the application object or ensure that one already exists
-    if (!wxTheApp)
-    {
-        // The app may have declared a global application object, but we recommend
-        // the IMPLEMENT_APP macro is used instead, which sets an initializer
-        // function for delayed, dynamic app object construction.
-        wxCHECK_MSG( wxApp::GetInitializerFunction(), 0,
-                     wxT("No initializer - use IMPLEMENT_APP macro.") );
-
-        wxTheApp = (wxApp*) (*wxApp::GetInitializerFunction()) ();
-    }
-
-    wxCHECK_MSG( wxTheApp, 0, wxT("You have to define an instance of wxApp!") );
-
-#ifdef __DARWIN__
-    // Mac OS X passes a process serial number command line argument when
-    // the application is launched from the Finder. This argument must be
-    // removed from the command line arguments before being handled by the
-    // application (otherwise applications would need to handle it)
-
-    if (argc > 1) {
-        if (strncmp(argv[1], "-psn_", 5) == 0) {
-            // assume the argument is always the only one and remove it
-            --argc;
-        }
-    }
-#else
-    argc = 0 ; // currently we don't support files as parameters
-#endif
-    // we could try to get the open apple events here to adjust argc and argv better
-
-    wxTheApp->argc = argc;
-#if wxUSE_UNICODE
-    wxTheApp->argv = new wxChar*[argc+1];
-    int mb_argc ;
-    for ( mb_argc = 0; mb_argc < argc; mb_argc++ )
-    {
-        wxTheApp->argv[mb_argc] = wxStrdup(wxConvLocal.cMB2WX(argv[mb_argc]));
-    }
-    wxTheApp->argv[mb_argc] = (wxChar *)NULL;
-#else
-    wxTheApp->argv = argv;
-#endif
-
-    // GUI-specific initialization, such as creating an app context.
-    wxEntryInitGui();
-
-    // Here frames insert themselves automatically
-    // into wxTopLevelWindows by getting created
-    // in OnInit().
-
-    int retValue = 0;
-
-    if ( wxTheApp->OnInit() )
-    {
-        if ( enterLoop )
-        {
-            retValue = wxTheApp->OnRun();
-        }
-        else
-            // We want to initialize, but not run or exit immediately.
-            return 1;
-    }
-    //else: app initialization failed, so we skipped OnRun()
-
-    wxWindow *topWindow = wxTheApp->GetTopWindow();
-    if ( topWindow )
-    {
-        // Forcibly delete the window.
-        if ( topWindow->IsKindOf(CLASSINFO(wxFrame)) ||
-                topWindow->IsKindOf(CLASSINFO(wxDialog)) )
-        {
-            topWindow->Close(TRUE);
-            wxTheApp->DeletePendingObjects();
-        }
-        else
-        {
-            delete topWindow;
-            wxTheApp->SetTopWindow(NULL);
-        }
-    }
-
-    wxTheApp->OnExit();
-
-    wxEntryCleanup();
-
-    return retValue;
-}
 
 #if TARGET_CARBON
 

@@ -258,7 +258,7 @@ private:
 };
 
 //// Initialize
-bool wxApp::Initialize(int argc, wxChar **argv)
+bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     if ( !wxAppBase::Initialize(argc, argv) )
         return false;

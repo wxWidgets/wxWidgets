@@ -82,7 +82,7 @@ protected:
     
 public:
     // Implementation
-    virtual bool Initialize(int argc, wxChar **argv);
+    virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
     
     // Motif-specific
