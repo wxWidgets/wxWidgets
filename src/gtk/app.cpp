@@ -319,6 +319,20 @@ void wxapp_uninstall_thread_wakeup()
 #endif // wxUSE_THREADS
 
 //-----------------------------------------------------------------------------
+// Access to the root window global
+//-----------------------------------------------------------------------------
+
+GtkWidget* wxGetRootWindow()
+{
+    if (gs_RootWindow == NULL)
+    {
+        gs_RootWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+        gtk_widget_realize( gs_RootWindow );
+    }
+    return gs_RootWindow;
+}
+
+//-----------------------------------------------------------------------------
 // wxApp
 //-----------------------------------------------------------------------------
 
@@ -369,9 +383,10 @@ bool wxApp::OnInitGui()
 
     // if this is a wxGLApp (derived from wxApp), and we've already
     // chosen a specific visual, then derive the GdkVisual from that
-    if (m_glVisualInfo != NULL) {
+    if (m_glVisualInfo != NULL)
+    {
 #ifdef __WXGTK20__
-        /* seems gtk_widget_set_default_visual no longer exists? */
+        // seems gtk_widget_set_default_visual no longer exists?
         GdkVisual* vis = gtk_widget_get_default_visual();
 #else
         GdkVisual* vis = gdkx_visual_get( 
@@ -385,12 +400,11 @@ bool wxApp::OnInitGui()
         visual = vis;
     }
     
-    /* on some machines, the default visual is just 256 colours, so
-       we make sure we get the best. this can sometimes be wasteful,
-       of course, but what do these guys pay $30.000 for? */
+    // On some machines, the default visual is just 256 colours, so
+    // we make sure we get the best. This can sometimes be wasteful.
 
-    else if ((gdk_visual_get_best() != gdk_visual_get_system()) &&
-        (m_useBestVisual))
+    else
+    if ((gdk_visual_get_best() != gdk_visual_get_system()) && (m_useBestVisual))
     {
 #ifdef __WXGTK20__
         /* seems gtk_widget_set_default_visual no longer exists? */
@@ -406,10 +420,10 @@ bool wxApp::OnInitGui()
         visual = vis;
     }
 
-    /* Nothing to do for 15, 16, 24, 32 bit displays */
+    // Nothing to do for 15, 16, 24, 32 bit displays
     if (visual->depth > 8) return TRUE;
 
-    /* initialize color cube for 8-bit color reduction dithering */
+    // initialize color cube for 8-bit color reduction dithering
 
     GdkColormap *cmap = gtk_widget_get_default_colormap();
 
@@ -446,16 +460,11 @@ bool wxApp::OnInitGui()
                 }
                 else
                 {
-#if (GTK_MINOR_VERSION > 0)
-                    /* assume 8-bit true or static colors. this really
-                       exists. */
+                    // assume 8-bit true or static colors. this really exists
                     GdkVisual* vis = gdk_colormap_get_visual( cmap );
                     index = (r >> (5 - vis->red_prec)) << vis->red_shift;
                     index |= (g >> (5 - vis->green_prec)) << vis->green_shift;
                     index |= (b >> (5 - vis->blue_prec)) << vis->blue_shift;
-#else
-                    wxFAIL_MSG( wxT("Unsupported graphics hardware") );
-#endif
                 }
                 m_colorCube[ (r*1024) + (g*32) + b ] = index;
             }
@@ -463,6 +472,20 @@ bool wxApp::OnInitGui()
     }
 
     return TRUE;
+}
+
+GdkVisual *wxApp::GetGdkVisual()
+{
+    GdkVisual *visual = NULL;
+    
+    if (m_glVisualInfo)
+        visual = gdkx_visual_get( ((XVisualInfo *) wxTheApp->m_glVisualInfo)->visualid );
+    else
+        visual = gdk_window_get_visual( wxGetRootWindow()->window );
+        
+    wxASSERT( visual );
+    
+    return visual;
 }
 
 bool wxApp::ProcessIdle()
@@ -670,19 +693,6 @@ void wxApp::CleanUp()
 }
 
 //-----------------------------------------------------------------------------
-// Access to the root window global
-//-----------------------------------------------------------------------------
-
-GtkWidget* wxGetRootWindow()
-{
-    if (gs_RootWindow == NULL) {
-        gs_RootWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-        gtk_widget_realize( gs_RootWindow );
-    }
-    return gs_RootWindow;
-}
-
-//-----------------------------------------------------------------------------
 // wxEntry
 //-----------------------------------------------------------------------------
 
@@ -690,8 +700,8 @@ GtkWidget* wxGetRootWindow()
 int wxEntryStart( int& argc, char *argv[] )
 {
 #if wxUSE_THREADS
-    /* GTK 1.2 up to version 1.2.3 has broken threads */
-   if ((gtk_major_version == 1) &&
+    // GTK 1.2 up to version 1.2.3 has broken threads
+    if ((gtk_major_version == 1) &&
         (gtk_minor_version == 2) &&
         (gtk_micro_version < 4))
     {
@@ -766,7 +776,6 @@ void wxEntryCleanup()
 
     gdk_threads_leave();
 }
-
 
 
 int wxEntry( int argc, char *argv[] )

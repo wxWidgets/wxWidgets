@@ -76,9 +76,12 @@ public:
 #endif
     unsigned char  *m_colorCube;
 
-    // used by the the wxGLApp and wxGLCanvas class for GL-based X visual 
+    // Used by the the wxGLApp and wxGLCanvas class for GL-based X visual
     // selection; this is actually an XVisualInfo*
     void           *m_glVisualInfo;
+    // This returns the current visual: either that used by wxRootWindow
+    // or the XVisualInfo* for SGI.
+    GdkVisual      *GetGdkVisual();
     
 private:
     // true if we're inside an assert modal dialog

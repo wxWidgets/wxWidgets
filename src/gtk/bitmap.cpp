@@ -111,8 +111,7 @@ bool wxMask::Create( const wxBitmap& bitmap,
     unsigned char green = colour.Green();
     unsigned char blue = colour.Blue();
 
-    GdkVisual *visual = gdk_window_get_visual( wxGetRootWindow()->window );
-    wxASSERT( visual );
+    GdkVisual *visual = wxTheApp->GetGdkVisual();
 
     int bpp = visual->depth;
     if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
@@ -121,12 +120,18 @@ bool wxMask::Create( const wxBitmap& bitmap,
         red = red & 0xf8;
         green = green & 0xf8;
         blue = blue & 0xf8;
-    }
+    } else
     if (bpp == 16)
     {
         red = red & 0xf8;
         green = green & 0xfc;
         blue = blue & 0xf8;
+    } else
+    if (bpp == 12)
+    {
+        red = red & 0xf0;
+        green = green & 0xf0;
+        blue = blue & 0xf0;
     }
 
     color.red = 0;
@@ -268,8 +273,7 @@ bool wxBitmap::Create( int width, int height, int depth )
 
     wxCHECK_MSG( (width > 0) && (height > 0), FALSE, wxT("invalid bitmap size") )
 
-    GdkVisual *visual = gdk_window_get_visual( wxGetRootWindow()->window );
-    wxASSERT( visual );
+    GdkVisual *visual = wxTheApp->GetGdkVisual();
 
     if (depth == -1) depth = visual->depth;
 
@@ -298,8 +302,7 @@ bool wxBitmap::CreateFromXpm( const char **bits )
 {
     wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )
 
-    GdkVisual *visual = gdk_window_get_visual( wxGetRootWindow()->window );
-    wxASSERT( visual );
+    GdkVisual *visual = wxTheApp->GetGdkVisual();
 
     m_refData = new wxBitmapRefData();
 
@@ -344,8 +347,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 
         SetDepth( 1 );
 
-        GdkVisual *visual = gdk_window_get_visual( wxGetRootWindow()->window );
-        wxASSERT( visual );
+        GdkVisual *visual = wxTheApp->GetGdkVisual();
 
         // Create picture image
 
@@ -439,17 +441,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 
         SetPixmap( gdk_pixmap_new( wxGetRootWindow()->window, width, height, -1 ) );
 
-        // Retrieve depth, using XVisualInfo from app, if set
-        GdkVisual *visual;
-        if (wxTheApp->m_glVisualInfo)
-        {
-            visual = gdkx_visual_get( ((XVisualInfo *) wxTheApp->m_glVisualInfo)->visualid );
-        }
-        else
-        {
-            visual = gdk_window_get_visual( wxGetRootWindow()->window );
-        }
-        wxASSERT( visual );
+        GdkVisual *visual = wxTheApp->GetGdkVisual();
 
         int bpp = visual->depth;
 
@@ -613,12 +605,12 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
                         guint32 pixel = 0;
                         switch (b_o)
                         {
-                            case RGB: pixel = ((r & 0xf8) << 7) | ((g & 0xfc) << 2) | ((b & 0xf8) >> 3); break;
-                            case RBG: pixel = ((r & 0xf8) << 7) | ((b & 0xfc) << 2) | ((g & 0xf8) >> 3); break;
-                            case GRB: pixel = ((g & 0xf8) << 7) | ((r & 0xfc) << 2) | ((b & 0xf8) >> 3); break;
-                            case GBR: pixel = ((g & 0xf8) << 7) | ((b & 0xfc) << 2) | ((r & 0xf8) >> 3); break;
-                            case BRG: pixel = ((b & 0xf8) << 7) | ((r & 0xfc) << 2) | ((g & 0xf8) >> 3); break;
-                            case BGR: pixel = ((b & 0xf8) << 7) | ((g & 0xfc) << 2) | ((r & 0xf8) >> 3); break;
+                            case RGB: pixel = ((r & 0xf8) << 8) | ((g & 0xfc) << 3) | ((b & 0xf8) >> 3); break;
+                            case RBG: pixel = ((r & 0xf8) << 8) | ((b & 0xfc) << 3) | ((g & 0xf8) >> 3); break;
+                            case GRB: pixel = ((g & 0xf8) << 8) | ((r & 0xfc) << 3) | ((b & 0xf8) >> 3); break;
+                            case GBR: pixel = ((g & 0xf8) << 8) | ((b & 0xfc) << 3) | ((r & 0xf8) >> 3); break;
+                            case BRG: pixel = ((b & 0xf8) << 8) | ((r & 0xfc) << 3) | ((g & 0xf8) >> 3); break;
+                            case BGR: pixel = ((b & 0xf8) << 8) | ((g & 0xfc) << 3) | ((r & 0xf8) >> 3); break;
                         }
                         gdk_image_put_pixel( data_image, x, y, pixel );
                         break;
@@ -725,8 +717,9 @@ wxImage wxBitmap::ConvertToImage() const
     if (GetPixmap())
     {
         GdkVisual *visual = gdk_window_get_visual( GetPixmap() );
-
-        if (visual == NULL) visual = gdk_window_get_visual( wxGetRootWindow()->window );
+        if (visual == NULL)
+            visual = wxTheApp->GetGdkVisual();
+        
         bpp = visual->depth;
         if (bpp == 16) bpp = visual->red_prec + visual->green_prec + visual->blue_prec;
         red_shift_right = visual->red_shift;
@@ -956,8 +949,7 @@ bool wxBitmap::LoadFile( const wxString &name, int type )
 
     if (!wxFileExists(name)) return FALSE;
 
-    GdkVisual *visual = gdk_window_get_visual( wxGetRootWindow()->window );
-    wxASSERT( visual );
+    GdkVisual *visual = wxTheApp->GetGdkVisual();
 
     if (type == wxBITMAP_TYPE_XPM)
     {
