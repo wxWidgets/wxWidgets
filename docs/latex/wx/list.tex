@@ -175,7 +175,8 @@ The key string is copied and stored by the list implementation.
 
 \func{void}{Clear}{\void}
 
-Clears the list (but does not delete the client data stored with each node).
+Clears the list (but does not delete the client data stored with each node
+unless you called DeleteContents(TRUE), in which case it deletes data).
 
 \membersection{wxList::DeleteContents}\label{wxlistdeletecontents}
 
