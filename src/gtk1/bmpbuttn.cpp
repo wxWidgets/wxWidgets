@@ -263,20 +263,6 @@ void wxBitmapButton::OnSetBitmap()
     }
 }
 
-wxSize wxBitmapButton::DoGetBestSize() const
-{
-    wxSize best;
-    
-    if (m_bmpNormal.Ok())
-    {
-        int border = HasFlag(wxNO_BORDER) ? 4 : 10;
-        best.x = m_bmpNormal.GetWidth()+border;
-        best.y = m_bmpNormal.GetHeight()+border;
-    }
-    CacheBestSize(best);
-    return best;
-}
-
 bool wxBitmapButton::Enable( bool enable )
 {
     if ( !wxWindow::Enable(enable) )
