@@ -310,8 +310,15 @@ wxRegionIterator::wxRegionIterator(const wxRegionIterator& iterator)
     : wxObject()
     , m_current(iterator.m_current)
     , m_numRects(iterator.m_numRects)
-    , m_rects(iterator.m_rects)
+    , m_rects(NULL)
 {
+    int i;
+    if (iterator.m_rects)
+    {
+        m_rects = new wxRect[iterator.m_numRects];
+        for (i = 0; i < iterator.m_numRects; i++)
+            m_rects[i] = iterator.m_rects[i];
+    }
 }
 
 wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& iterator)
