@@ -43,6 +43,8 @@ typedef xmlNodePtr (*type_xmlNewChild)(xmlNodePtr, xmlNsPtr, const xmlChar *, co
 typedef xmlChar * (*type_xmlNodeListGetString)(xmlDocPtr, xmlNodePtr, int);
 typedef xmlNodePtr (*type_xmlDocGetRootElement)(xmlDocPtr);
 typedef xmlNodePtr (*type_xmlDocSetRootElement)(xmlDocPtr doc, xmlNodePtr root);
+typedef void (*(*type_xmlFree))(void *);
+typedef int (*type_xmlKeepBlanksDefault)(int);
 
 static struct
 {
@@ -62,6 +64,8 @@ static struct
     type_xmlNodeListGetString xmlNodeListGetString;
     type_xmlDocGetRootElement xmlDocGetRootElement;
     type_xmlDocSetRootElement xmlDocSetRootElement;
+    type_xmlFree xmlFree;
+    type_xmlKeepBlanksDefault xmlKeepBlanksDefault;
 } gs_libxmlDLL;
 
 static bool gs_libxmlLoaded = FALSE;
@@ -88,17 +92,37 @@ static bool LoadLibxml()
     gs_libxmlLoadFailed = TRUE;
 
     wxLogDebug("Loading libxml.so.2...");
+    {
+    wxLogNull lg;
 #ifdef __UNIX__
     gs_libxmlDLL.Handle = 
+        wxDllLoader::LoadLibrary(_T("wxlibxml.so.2"), &gs_libxmlLoaded);
+    if (!gs_libxmlLoaded) gs_libxmlDLL.Handle = 
         wxDllLoader::LoadLibrary(_T("libxml.so.2"), &gs_libxmlLoaded);
 #endif
+#ifdef __WXMSW__
+    gs_libxmlDLL.Handle = 
+        wxDllLoader::LoadLibrary(_T("wxlibxml2.dll"), &gs_libxmlLoaded);
+    if (!gs_libxmlLoaded) gs_libxmlDLL.Handle = 
+        wxDllLoader::LoadLibrary(_T("libxml2.dll"), &gs_libxmlLoaded);
+#endif
+    }
     
-    if (!gs_libxmlLoaded) return FALSE;
+    if (!gs_libxmlLoaded) 
+    {
+        wxLogError(_("Failed to load libxml shared library."));
+        return FALSE;
+    }
     
 #define LOAD_SYMBOL(sym) \
     gs_libxmlDLL.sym = \
         (type_##sym)wxDllLoader::GetSymbol(gs_libxmlDLL.Handle, _T(#sym)); \
-    if (!gs_libxmlDLL.sym) { ReleaseLibxml(); return FALSE; }
+    if (!gs_libxmlDLL.sym) \
+    { \
+        ReleaseLibxml(); \
+        wxLogError(_("Failed to load libxml shared library.")); \
+        return FALSE; \
+    }
 
     LOAD_SYMBOL(xmlCreatePushParserCtxt)
     LOAD_SYMBOL(xmlNewText)
@@ -114,6 +138,8 @@ static bool LoadLibxml()
     LOAD_SYMBOL(xmlNodeListGetString)
     LOAD_SYMBOL(xmlDocGetRootElement)
     LOAD_SYMBOL(xmlDocSetRootElement)
+    LOAD_SYMBOL(xmlFree)
+    LOAD_SYMBOL(xmlKeepBlanksDefault)
 
 #undef LOAD_SYMBOL    
 
@@ -153,7 +179,7 @@ static wxXmlProperty *CreateWXProperty(xmlDocPtr doc, xmlAttrPtr attr)
         gs_libxmlDLL.xmlNodeListGetString(doc, attr->children, 1);
     wxXmlProperty *prop = 
         new wxXmlProperty(attr->name, val, CreateWXProperty(doc, attr->next));
-    free(val);
+    (*gs_libxmlDLL.xmlFree)(val);
     return prop;
 }
 
@@ -187,6 +213,7 @@ bool wxXmlIOHandlerLibxml::Load(wxInputStream& stream, wxXmlDocument& doc)
     if (res > 0)
     {
         bool okay = TRUE;
+        gs_libxmlDLL.xmlKeepBlanksDefault(0);
         ctxt = gs_libxmlDLL.xmlCreatePushParserCtxt(NULL, NULL, 
                                                buffer, res, ""/*docname*/);
         while ((res = stream.Read(buffer, 1024).LastRead()) > 0) 
@@ -249,6 +276,7 @@ bool wxXmlIOHandlerLibxml::Save(wxOutputStream& stream, const wxXmlDocument& doc
 
     wxASSERT_MSG(doc.GetRoot() != NULL, _("Trying to save empty document!"));
     
+    gs_libxmlDLL.xmlKeepBlanksDefault(0);
     dc = gs_libxmlDLL.xmlNewDoc((xmlChar*)doc.GetVersion().mb_str());
     
     gs_libxmlDLL.xmlDocSetRootElement(dc, 
@@ -262,7 +290,7 @@ bool wxXmlIOHandlerLibxml::Save(wxOutputStream& stream, const wxXmlDocument& doc
     gs_libxmlDLL.xmlDocDumpMemory(dc, &buffer, &size);
     gs_libxmlDLL.xmlFreeDoc(dc);
     stream.Write(buffer, size);
-    free(buffer);
+    (*gs_libxmlDLL.xmlFree)(buffer);
     return stream.LastWrite() == (unsigned)size;
 }
 

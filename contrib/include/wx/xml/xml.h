@@ -64,7 +64,7 @@ enum wxXmlIOType
 // Example: in <img src="hello.gif" id="3"/> "src" is property with value
 //          "hello.gif" and "id" is prop. with value "3".
 
-class WXDLLEXPORT wxXmlProperty
+class wxXmlProperty
 {
     public:
         wxXmlProperty() : m_Next(NULL) {}
@@ -94,7 +94,7 @@ class WXDLLEXPORT wxXmlProperty
 // element with name="title", irrelevant content and one child (wxXML_TEXT_NODE
 // with content="hi").
 
-class WXDLLEXPORT wxXmlNode
+class wxXmlNode
 {
     public:
         wxXmlNode() : m_Properties(NULL), m_Parent(NULL), 
@@ -165,7 +165,7 @@ class WXDLLEXPORT wxXmlNode
 // internal representation is independant on libxml and you can use 
 // it without libxml (see Load/SaveBinary).
 
-class WXDLLEXPORT wxXmlDocument : public wxObject
+class wxXmlDocument : public wxObject
 {
     public:
         wxXmlDocument() : wxObject(), m_Version(_T("1.0")), m_Root(NULL)  {}
@@ -184,8 +184,6 @@ class WXDLLEXPORT wxXmlDocument : public wxObject
         bool Load(wxInputStream& stream, wxXmlIOType io_type = wxXML_IO_AUTO);
         
         // Saves document as .xml file.
-        // NOTE: Any call to this method will result into linking against libxml
-        //       and app's binary size will grow by ca. 250kB
         bool Save(const wxString& filename, wxXmlIOType io_type) const;
         bool Save(wxOutputStream& stream, wxXmlIOType io_type) const;
         
@@ -221,7 +219,7 @@ class WXDLLEXPORT wxXmlDocument : public wxObject
 // wxXmlIOHandler takes care of loading and/or saving XML data.
 // see xmlio.h for available handlers
 
-class WXDLLEXPORT wxXmlIOHandler : public wxObject
+class wxXmlIOHandler : public wxObject
 {
     public:
         wxXmlIOHandler() {}

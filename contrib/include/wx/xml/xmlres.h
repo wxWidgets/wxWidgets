@@ -40,7 +40,7 @@ enum
 
 
 
-class WXDLLEXPORT wxXmlResourceDataRecord
+class wxXmlResourceDataRecord
 {
     public:
         wxXmlResourceDataRecord() : Doc(NULL), Time(wxDateTime::Now()) {}
@@ -57,7 +57,7 @@ WX_DECLARE_OBJARRAY(wxXmlResourceDataRecord, wxXmlResourceDataRecords);
 // (or derived forms, either binary or zipped -- see manual for
 // details). 
 
-class WXDLLEXPORT wxXmlResource : public wxObject
+class wxXmlResource : public wxObject
 {
     public:
         wxXmlResource();
@@ -152,7 +152,7 @@ extern wxXmlResource *wxTheXmlResource;
 #define XMLID(str_id) wxXmlResource::GetXMLID(str_id)
 
 
-class WXDLLEXPORT wxXmlResourceHandler : public wxObject
+class wxXmlResourceHandler : public wxObject
 {
     public:
         wxXmlResourceHandler();
