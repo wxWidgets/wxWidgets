@@ -733,7 +733,9 @@ void wxApp::CleanUp()
 
 #if wxUSE_THREADS
     delete wxPendingEvents;
+    wxPendingEvents = NULL;
     delete wxPendingEventsLocker;
+    wxPendingEventsLocker = NULL;
 #endif
 
     // check for memory leaks
