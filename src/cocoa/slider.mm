@@ -38,8 +38,6 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID winid,
 
 wxSlider::~wxSlider()
 {
-    CocoaRemoveFromParent();
-    SetNSView(NULL);
 }
 
 #endif // wxUSE_SLIDER

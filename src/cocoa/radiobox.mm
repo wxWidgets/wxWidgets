@@ -39,8 +39,6 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
 
 wxRadioBox::~wxRadioBox()
 {
-    CocoaRemoveFromParent();
-    SetNSView(NULL);
 }
 
     // selection

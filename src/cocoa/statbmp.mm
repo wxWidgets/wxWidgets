@@ -38,8 +38,6 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID winid,
 
 wxStaticBitmap::~wxStaticBitmap()
 {
-    CocoaRemoveFromParent();
-    SetNSView(NULL);
 }
 
 void wxStaticBitmap::SetIcon(const wxIcon& icon)

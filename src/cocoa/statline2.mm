@@ -36,7 +36,5 @@ bool wxStaticLine::Create(wxWindow *parent, wxWindowID winid,
 
 wxStaticLine::~wxStaticLine()
 {
-    CocoaRemoveFromParent();
-    SetNSView(NULL);
 }
 
