@@ -487,20 +487,19 @@ public:
 class wxColourDatabase : public wxObject {
 public:
 
-    wxColour *FindColour(const wxString& colour) ;
-    wxColour *FindColourNoAdd(const wxString& colour) const;
+    wxColourDatabase();
+    ~wxColourDatabase();
+
+    // find colour by name or name for the given colour
+    wxColour Find(const wxString& name) const;
     wxString FindName(const wxColour& colour) const;
 
-    %addmethods {
-        void AddColour(const wxString& name, wxColour* colour) {
-            // make a copy since the python one will be GC'd
-            wxColour* c = new wxColour(*colour);
-            self->AddColour(name, c);
-        }
+    // add a new colour to the database
+    void AddColour(const wxString& name, const wxColour& colour);
 
+    %addmethods {
         void Append(const wxString& name, int red, int green, int blue) {
-            wxColour* c = new wxColour(red, green, blue);
-            self->AddColour(name, c);
+            self->AddColour(name, wxColour(red, green, blue));
         }
     }
 };
