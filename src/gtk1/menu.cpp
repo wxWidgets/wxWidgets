@@ -172,7 +172,8 @@ static void gtk_menu_open_callback( GtkWidget *widget, wxMenu *menu )
     wxMenuEvent event( wxEVT_MENU_OPEN, -1 );
     event.SetEventObject( menu );
 
-    if (menu->GetEventHandler()->ProcessEvent(event))
+    wxEvtHandler* handler = menu->GetEventHandler();
+    if (handler && handler->ProcessEvent(event))
         return;
 
     wxWindow *win = menu->GetInvokingWindow();
@@ -375,7 +376,7 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
     buf << wxT('/') << str.c_str();
 
     /* local buffer in multibyte form */
-    char cbuf[400]; 
+    char cbuf[400];
     strcpy(cbuf, wxGTK_CONV(buf) );
 
     GtkItemFactoryEntry entry;
@@ -493,10 +494,10 @@ static wxMenu *CopyMenu (wxMenu *menu)
         else
           menucopy->Append (itemid, text, CopyMenu(submenu),
                             menu->GetHelpString(itemid));
-    
+
         node = node->GetNext();
     }
-  
+
     return menucopy;
 }
 
@@ -700,30 +701,38 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
     if (!menu->IsEnabled(id))
         return;
 
-    wxMenuItem* item = menu->FindChildItem( id );
-    wxCHECK_RET( item, wxT("error in menu item callback") );
-
-    if (item->IsCheckable())
+    if ( menu->IsAttached() ) // is this menu on a menubar?
     {
-        bool isReallyChecked = item->IsChecked(),
-             isInternallyChecked = item->wxMenuItemBase::IsChecked();
+        wxFrame* frame = menu->GetMenuBar()->GetFrame();
+        frame->ProcessCommand(id);
+    }
+    else
+    {
+        wxMenuItem* item = menu->FindChildItem( id );
+        wxCHECK_RET( item, wxT("error in menu item callback") );
 
-        // ensure that the internal state is always consistent with what is
-        // shown on the screen
-        item->wxMenuItemBase::Check(isReallyChecked);
-
-        // we must not report the events for the radio button going up nor the
-        // events resulting from the calls to wxMenuItem::Check()
-        if ( (item->GetKind() == wxITEM_RADIO && !isReallyChecked) ||
-             (isInternallyChecked == isReallyChecked) )
+        if (item->IsCheckable())
         {
-            return;
+            bool isReallyChecked = item->IsChecked(),
+                isInternallyChecked = item->wxMenuItemBase::IsChecked();
+
+            // ensure that the internal state is always consistent with what is
+            // shown on the screen
+            item->wxMenuItemBase::Check(isReallyChecked);
+
+            // we must not report the events for the radio button going up nor the
+            // events resulting from the calls to wxMenuItem::Check()
+            if ( (item->GetKind() == wxITEM_RADIO && !isReallyChecked) ||
+                 (isInternallyChecked == isReallyChecked) )
+            {
+                return;
+            }
+
+            // the user pressed on the menu item: report the event below
         }
 
-        // the user pressed on the menu item: report the event below
+        menu->SendEvent(id, item->IsCheckable() ? item->IsChecked() : -1);
     }
-
-    menu->SendEvent(id, item->IsCheckable() ? item->IsChecked() : -1);
 }
 
 //-----------------------------------------------------------------------------
@@ -744,7 +753,8 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
     wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, id );
     event.SetEventObject( menu );
 
-    if (menu->GetEventHandler()->ProcessEvent(event))
+    wxEvtHandler* handler = menu->GetEventHandler();
+    if (handler && handler->ProcessEvent(event))
         return;
 
     wxWindow *win = menu->GetInvokingWindow();
@@ -769,7 +779,8 @@ static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
     wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, -1 );
     event.SetEventObject( menu );
 
-    if (menu->GetEventHandler()->ProcessEvent(event))
+    wxEvtHandler* handler = menu->GetEventHandler();
+    if (handler && handler->ProcessEvent(event))
         return;
 
     wxWindow *win = menu->GetInvokingWindow();
@@ -861,7 +872,7 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
             // "&" is doubled to indicate "&" instead of accelerator
             continue;
         }
-        
+
         label += *pc;
     }
     return label;
@@ -876,7 +887,7 @@ void wxMenuItem::SetText( const wxString& str )
     wxString label1 = wxStripMenuCodes(str.BeforeFirst('\t'));
     if (oldLabel == label1)
         return;
-    
+
     DoSetText(str);
 
     if (m_menuItem)
@@ -895,7 +906,7 @@ void wxMenuItem::SetText( const wxString& str )
             if (m_text[n] != wxT('\\'))
                 tmp += m_text[n];
         }
-        
+
         gtk_label_set_text_with_mnemonic( GTK_LABEL(label), wxGTK_CONV(tmp) );
 #else
         // set new text
@@ -929,7 +940,7 @@ void wxMenuItem::DoSetText( const wxString& str )
 #if GTK_CHECK_VERSION(2, 0, 0)
         else if ( *pc == wxT('_') )    // escape underscores
         {
-            m_text << wxT("__"); 
+            m_text << wxT("__");
         }
         else if (*pc == wxT('/'))      // we have to escape slashes
         {
@@ -954,7 +965,7 @@ void wxMenuItem::DoSetText( const wxString& str )
         }
         ++pc;
     }
-    
+
     m_hotKey = wxT("");
 
     if(*pc == wxT('\t'))
@@ -1184,7 +1195,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
                             GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
                             (gpointer)this );
-                            
+
         gtk_menu_append( GTK_MENU(m_menu), menuItem );
         gtk_widget_show( menuItem );
 
@@ -1270,7 +1281,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
         wxString path( mitem->GetFactoryPath() );
         menuItem = gtk_item_factory_get_widget( m_factory, wxGTK_CONV( path ) );
-        
+
         if (!menuItem)
             wxLogError( wxT("Wrong menu path: %s\n"), path.c_str() );
     }
@@ -1278,7 +1289,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
     if ( !mitem->IsSeparator() )
     {
         wxASSERT_MSG( menuItem, wxT("invalid menuitem") );
-    
+
         gtk_signal_connect( GTK_OBJECT(menuItem), "select",
                             GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
                             (gpointer)this );
