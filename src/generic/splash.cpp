@@ -22,12 +22,17 @@
 
 #if wxUSE_SPLASH
 
+#ifdef __WXGTK20__
+    #include <gtk/gtk.h>
+#endif
+
 #ifndef WX_PRECOMP
 #include "wx/dcmemory.h"
 #include "wx/dcclient.h"
 #endif
 
 #include "wx/splash.h"
+
 
 /*
  * wxSplashScreen
@@ -50,6 +55,11 @@ END_EVENT_TABLE()
 wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style):
     wxFrame(parent, id, wxEmptyString, wxPoint(0, 0), wxSize(100, 100), style)
 {
+#ifdef __WXGTK20__
+    gtk_window_set_type_hint(GTK_WINDOW(m_widget),
+                             GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);
+#endif
+    
     m_window = NULL;
     m_splashStyle = splashStyle;
     m_milliseconds = milliseconds;
