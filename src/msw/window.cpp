@@ -1891,6 +1891,10 @@ static void wxYieldForCommandsOnly()
     {
         wxTheApp->DoMessage((WXMSG *)&msg);
     }
+    
+    // If we retrieved a WM_QUIT, insert back into the message queue.
+    if (msg.message == WM_QUIT)
+        ::PostQuitMessage(0);
 }
 
 bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
