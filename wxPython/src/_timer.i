@@ -26,13 +26,27 @@ enum {
 
 // Timer event type
 %constant wxEventType wxEVT_TIMER;
-   
+
 
 //---------------------------------------------------------------------------
 
 
 %{
-IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
+//IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
+
+void wxPyTimer::Notify() {
+    bool found;
+    wxPyBeginBlockThreads();
+    if ((found = wxPyCBH_findCallback(m_myInst, "Notify")))
+        wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));
+    wxPyEndBlockThreads();
+    if (! found)
+        wxTimer::Notify();
+}   
+void wxPyTimer::base_Notify() {
+    wxTimer::Notify();
+}
+
 %}
 
 
@@ -40,7 +54,13 @@ IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
 %name(Timer) class wxPyTimer : public wxEvtHandler
 {
 public:
-    %pythonAppend wxPyTimer         "self._setCallbackInfo(self, Timer)"
+    %pythonAppend wxPyTimer         "self._setCallbackInfo(self, Timer, 0)"
+
+//     %pythonAppend wxTimer
+//     "if hasattr(self, 'Notify'):
+//             print 'bound EVT_TIMER to self.Notify'
+//             self.Bind(EVT_TIMER, self.Notify)
+//             self.SetOwner(self)";
 
     // if you don't call SetOwner() or provide an owner in the contstructor
     // then you must override Notify() inorder to receive the timer
@@ -49,7 +69,7 @@ public:
     wxPyTimer(wxEvtHandler *owner=NULL, int id = -1);
     virtual ~wxPyTimer();
 
-    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=1);
 
     // Set the owner instance that will receive the EVT_TIMER events using the
     // given id.
@@ -81,11 +101,11 @@ public:
 
     // return the timer ID
     int GetId() const;
-   
+
 };
 
 
-%pythoncode {    
+%pythoncode {
 %# For backwards compatibility with 2.4
 class PyTimer(Timer):
     def __init__(self, notify):
@@ -98,7 +118,7 @@ class PyTimer(Timer):
 
 
 EVT_TIMER = wx.PyEventBinder( wxEVT_TIMER, 1 )
-                   
+
 };
 
 

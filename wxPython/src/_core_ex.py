@@ -117,7 +117,7 @@ def CallAfter(callable, *args, **kw):
 
 class FutureCall:
     """
-    A convenience class for wxTimer, that calls the given callable
+    A convenience class for wx.Timer, that calls the given callable
     object once after the given amount of milliseconds, passing any
     positional or keyword args.  The return value of the callable is
     availbale after it has been run with the GetResult method.
@@ -134,6 +134,7 @@ class FutureCall:
         self.callable = callable
         self.SetArgs(*args, **kwargs)
         self.runCount = 0
+        self.running = False
         self.hasRun = False
         self.result = None
         self.timer = None
@@ -155,6 +156,7 @@ class FutureCall:
         self.Stop()
         self.timer = wx.PyTimer(self.Notify)
         self.timer.Start(self.millis, wx.TIMER_ONE_SHOT)
+        self.running = True
     Restart = Start
 
 
@@ -201,9 +203,12 @@ class FutureCall:
         """
         if self.callable and getattr(self.callable, 'im_self', True):
             self.runCount += 1
+            self.running = False
             self.result = self.callable(*self.args, **self.kwargs)
         self.hasRun = True
-        wx.CallAfter(self.Stop)
+        if not self.running:
+            # if it wasn't restarted, then cleanup
+            wx.CallAfter(self.Stop)
 
 
 #----------------------------------------------------------------------------
