@@ -461,7 +461,12 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( style & wxTE_DONTWRAP )
     {
         // automatically scroll the control horizontally as necessary
-        msStyle |= WS_HSCROLL;
+        //
+        // NB: ES_AUTOHSCROLL is needed for richedit controls or they don't
+        //     show horz scrollbar at all, even in spite of WS_HSCROLL, and as
+        //     it doesn't seem to do any harm for plain edit controls, add it
+        //     always
+        msStyle |= WS_HSCROLL | ES_AUTOHSCROLL;
     }
 
     if ( style & wxTE_READONLY )
