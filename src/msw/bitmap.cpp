@@ -1198,6 +1198,33 @@ bool wxBitmap::GetRawData(wxRawBitmapData *data)
     return TRUE;
 }
 
+void wxBitmap::UngetRawData(wxRawBitmapData *data)
+{
+    wxCHECK_RET( data, _T("NULL pointer in wxBitmap::UngetRawData()") );
+
+    // AlphaBlend() wants to have premultiplied source alpha but wxRawBitmap
+    // API uses normal, not premultiplied, colours, so adjust them here now
+    wxRawBitmapIterator p(data);
+    unsigned char *pixels = data->GetPixels();
+
+    const int w = data->GetWidth();
+    const int h = data->GetHeight();
+
+    for ( int y = 0; y < h; y++ )
+    {
+        for ( int x = 0; x < w; x++ )
+        {
+            const unsigned alpha = p.Alpha();
+            p.Red() *= alpha;
+            p.Red() /= 255
+            p.Blue() *= alpha;
+            p.Blue() /= 255
+            p.Green() *= alpha;
+            p.Green() /= 255
+        }
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxMask
 // ----------------------------------------------------------------------------

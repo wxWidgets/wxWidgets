@@ -133,7 +133,7 @@ public:
 
     // raw bitmap access support functions
     bool GetRawData(wxRawBitmapData *data);
-    void UngetRawData(wxRawBitmapData *) { /* nothing to do here */ }
+    void UngetRawData(wxRawBitmapData *);
 
 #if wxUSE_PALETTE
     wxPalette* GetPalette() const;
