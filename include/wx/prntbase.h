@@ -197,7 +197,7 @@ public:
                    const wxString& title = wxT("Print Preview"),
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   long style = wxDEFAULT_FRAME_STYLE|wxFULL_REPAINT_ON_RESIZE,
+                   long style = wxDEFAULT_FRAME_STYLE,
                    const wxString& name = wxT("frame"));
     ~wxPreviewFrame();
 
