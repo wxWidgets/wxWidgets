@@ -31,7 +31,11 @@ the remaining size available to application windows.
 \twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Displays a resizeable border around the window (Motif only).}
 \end{twocollist}
 
-See also \helpref{window styles overview}{windowstyles}.
+See also \helpref{window styles overview}{windowstyles}. Currently the GTK port of wxWindows
+ignores all the window styles listed above as there is no standard way (yet) to inform the
+window manager about such options. Therefore, the only relevant window style flag which
+the GTK port recognizes is \windowstyle{wxSIMPLE\_BORDER} which brings up a frame without
+any window decorations. This can be used for a splash screen or specialized tooltip etc.
 
 \wxheading{Remarks}
 

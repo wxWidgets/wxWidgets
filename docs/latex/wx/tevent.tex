@@ -37,6 +37,9 @@ work, because event tables are searched up through the hierarchy of windows. In 
 case, the button's event table will be searched, then the parent panel's, then the frame's.
 
 As mentioned before, the member functions that handle events do not have to be virtual.
+Indeed, the member functions should not be virtual as the event handler ignores that
+the functions are virtual, i.e. overriding a virtual member function in a derived class
+will not have any effect.
 These member functions take an event argument, and the class of event differs according
 to the type of event and the class of the originating window. For size
 events, \helpref{wxSizeEvent}{wxsizeevent} is used. For menu commands and most control
@@ -70,6 +73,45 @@ protected:
 When an event is received from the windowing system, wxWindows calls \helpref{wxEvtHandler::ProcessEvent}{wxevthandlerprocessevent} on
 the first event handler object belonging to the window generating the event.
 
+It may be noted that wxWindows' event processing system implements something
+very close to virtual methods in normal C++, i.e. it is possible to alter
+the behaviour of a class by overriding its event handling functions. In
+many cases this works even for changing the behaviour of native controls.
+E.g. it is possible to filter out a number of key events sent by the
+system to a native text control by overriding wxTextCtrl and defining a
+handler for key events using EVT_KEY_DOWN. This would in-deed prevent
+any key events from being sent to the native control - which might not be
+what is desired. In this case the event handler function has to call Skip()
+so as to indicate that it did NOT handle the event at all.
+
+In practice, this would look like this if the derived text control only
+accepts 'a' to 'z' and 'A' to 'Z':
+
+{\small%
+\begin{verbatim}
+void MyTextCtrl::OnChar(wxKeyEvent& event)
+{
+    if ( isalpha( event.KeyCode() ) )
+    {
+       // key code is within legal range. we call event.Skip() so the
+       // event can be processed either in the base wxWindows class
+       // or the native control.
+       
+       event.Skip(); 
+    }
+    else
+    {
+       // illegal key hit. we don't call event.Skip() so the
+       // event is not processed anywhere else.
+       
+       wxBell();
+    }
+}
+
+\end{verbatim}
+}%
+
+
 The normal order of event table searching by ProcessEvent is as follows:
 
 \begin{enumerate}\itemsep=0pt
@@ -90,6 +132,36 @@ recursively applied to the parent window's event handler. If this returns TRUE, 
 Note that your application may wish to override ProcessEvent to redirect processing of
 events. This is done in the document/view framework, for example, to allow event handlers
 to be defined in the document or view.
+
+As mentioned above, only command events are recursively applied to the parents event
+handler. As this quite often causes confusion for users, here is a list of system
+events which will NOT get sent to the parent's event handler:
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxEvent}{wxevent}}{The event base class}
+\twocolitem{\helpref{wxActivateEvent}{wxactivateevent}}{A window or application activation event}
+\twocolitem{\helpref{wxCloseEvent}{wxcloseevent}}{A close window or end session event}
+\twocolitem{\helpref{wxEraseEvent}{wxeraseevent}}{An erase background event}
+\twocolitem{\helpref{wxFocusEvent}{wxfocusevent}}{A window focus event}
+\twocolitem{\helpref{wxKeyEvent}{wxkeyevent}}{A keypress event}
+\twocolitem{\helpref{wxIdleEvent}{wxidleevent}}{An idle event}
+\twocolitem{\helpref{wxInitDialogEvent}{wxinitdialogevent}}{A dialog initialisation event}
+\twocolitem{\helpref{wxJoystickEvent}{wxjoystickevent}}{A joystick event}
+\twocolitem{\helpref{wxMenuEvent}{wxmenuevent}}{A menu event}
+\twocolitem{\helpref{wxMouseEvent}{wxmouseevent}}{A mouse event}
+\twocolitem{\helpref{wxMoveEvent}{wxmoveevent}}{A move event}
+\twocolitem{\helpref{wxPaintEvent}{wxpaintevent}}{A paint event}
+\twocolitem{\helpref{wxQueryLayoutInfoEvent}{wxquerylayoutinfoevent}}{Used to query layout information}
+\twocolitem{\helpref{wxSizeEvent}{wxsizeevent}}{A size event}
+\twocolitem{\helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent}}{A system colour change event}
+\twocolitem{\helpref{wxUpdateUIEvent}{wxupdateuievent}}{A user interface update event}
+\end{twocollist}
+
+In some cases, it might be desired by the programmer to get a certain number
+of system events in a parent window, e.g. all key events sent to, but not
+used by, the native controls in a dialog. In this case, a special event handler
+will have to be written that will override ProcessEvent() in order to pass
+all events (or any selection of them) to the parent window. See next section.
 
 \subsection{Pluggable event handlers}
 
