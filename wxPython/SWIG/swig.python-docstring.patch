@@ -1,10 +1,10 @@
 Index: Source/Modules/python.cxx
 ===================================================================
 RCS file: /cvsroot/SWIG/Source/Modules/python.cxx,v
-retrieving revision 1.33
-diff -u -4 -r1.33 python.cxx
---- Source/Modules/python.cxx	9 Dec 2003 02:52:07 -0000	1.33
-+++ Source/Modules/python.cxx	11 Dec 2003 18:11:22 -0000
+retrieving revision 1.35
+diff -u -4 -r1.35 python.cxx
+--- Source/Modules/python.cxx	13 Dec 2003 23:52:31 -0000	1.35
++++ Source/Modules/python.cxx	19 Dec 2003 02:04:45 -0000
 @@ -54,8 +54,17 @@
  static  int       have_constructor;
  static  int       have_repr;
@@ -52,7 +52,7 @@ diff -u -4 -r1.33 python.cxx
    }
  
  
-@@ -441,8 +456,246 @@
+@@ -441,8 +456,256 @@
    }
  
  
@@ -199,10 +199,15 @@ diff -u -4 -r1.33 python.cxx
 +          if (Strcmp(type, "void") == 0)
 +            type = NULL;
 +          else {
-+            type = SwigType_base(type);
-+            Node* lookup = Swig_symbol_clookup(type, 0);
-+            if (lookup)
-+              type = Getattr(lookup, "sym:name");
++            SwigType* qt = SwigType_typedef_resolve_all(type);
++            if (SwigType_isenum(qt))
++              type = NewString("int");
++            else {
++              type = SwigType_base(type);
++              Node* lookup = Swig_symbol_clookup(type, 0);
++              if (lookup)
++                type = Getattr(lookup, "sym:name");
++            }
 +          }     
 +        }
 +        
@@ -267,9 +272,14 @@ diff -u -4 -r1.33 python.cxx
 +      // Do the param type too?
 +      if (showTypes) {
 +        SwigType* type =  SwigType_base(Getattr(p, "type"));
-+        lookup = Swig_symbol_clookup(type, 0);
-+        if (lookup)
-+          type = Getattr(lookup, "sym:name");
++        SwigType* qt = SwigType_typedef_resolve_all(type);
++        if (SwigType_isenum(qt))
++          type = NewString("int");
++        else {
++          lookup = Swig_symbol_clookup(type, 0);
++          if (lookup)
++            type = Getattr(lookup, "sym:name");
++        }
 +        Printf(doc, "%s ", type);
 +      }
 +
@@ -299,7 +309,7 @@ diff -u -4 -r1.33 python.cxx
     *    Check if there is a %addtofunc directive and it has text
     * ------------------------------------------------------------ */
  
-@@ -1663,9 +1916,11 @@
+@@ -1700,9 +1963,11 @@
  	  Printf(f_shadow, modern ? "(object)" : "(_object)");
  	}
        }
@@ -312,7 +322,7 @@ diff -u -4 -r1.33 python.cxx
          Printv(f_shadow,tab4,"__swig_setmethods__ = {}\n",NIL);
          if (Len(base_class)) {
            Printf(f_shadow,"%sfor _s in [%s]: __swig_setmethods__.update(_s.__swig_setmethods__)\n",tab4,base_class);
-@@ -1798,16 +2053,22 @@
+@@ -1835,16 +2100,22 @@
  	  Delete(pyaction);
  	  Printv(f_shadow,pycode,"\n",NIL);
  	} else {
@@ -342,7 +352,7 @@ diff -u -4 -r1.33 python.cxx
          }
  
        }
-@@ -1822,14 +2083,20 @@
+@@ -1859,14 +2130,20 @@
    virtual int staticmemberfunctionHandler(Node *n) {
      String *symname = Getattr(n,"sym:name");
      Language::staticmemberfunctionHandler(n);
@@ -367,7 +377,7 @@ diff -u -4 -r1.33 python.cxx
                 " = staticmethod(", symname, ")\n", NIL);
  
          if (!modern) {
-@@ -1914,8 +2181,10 @@
+@@ -1951,8 +2228,10 @@
   	    }
  
              Printv(f_shadow, tab4, "def __init__(self, *args",
@@ -378,7 +388,7 @@ diff -u -4 -r1.33 python.cxx
              if (!modern) {
                Printv(f_shadow, tab8, "_swig_setattr(self, ", rclassname, ", 'this', ", 
                       funcCallHelper(Swig_name_construct(symname), allow_kwargs), ")\n", NIL);
-@@ -1929,9 +2198,9 @@
+@@ -1966,9 +2245,9 @@
                Printv(f_shadow, tab8, "self.thisown = 1\n", NIL);
                Printv(f_shadow, tab8, "del newobj.thisown\n", NIL);
              }
@@ -389,7 +399,7 @@ diff -u -4 -r1.33 python.cxx
    	  }
  	  have_constructor = 1;
  	} else {
-@@ -1947,8 +2216,10 @@
+@@ -1984,8 +2263,10 @@
  	  } else {
  
              Printv(f_shadow_stubs, "\ndef ", symname, "(*args",
@@ -400,7 +410,7 @@ diff -u -4 -r1.33 python.cxx
                     funcCallHelper(Swig_name_construct(symname), allow_kwargs), "\n", NIL);
  	    Printv(f_shadow_stubs, tab4, "val.thisown = 1\n", NIL);
              if ( have_addtofunc(n) )
-@@ -1980,13 +2251,15 @@
+@@ -2017,13 +2298,15 @@
  	Delete(pyaction);
  	Printv(f_shadow,pycode,"\n", NIL);
        } else {

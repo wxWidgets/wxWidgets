@@ -4,7 +4,7 @@ RCS file: /cvsroot/SWIG/Source/Swig/swig.h,v
 retrieving revision 1.76
 diff -u -4 -r1.76 swig.h
 --- Source/Swig/swig.h	11 Nov 2003 20:16:35 -0000	1.76
-+++ Source/Swig/swig.h	11 Dec 2003 19:45:06 -0000
++++ Source/Swig/swig.h	18 Dec 2003 22:03:45 -0000
 @@ -350,8 +350,10 @@
  extern void Swig_print_tags(File *obj, Node *root);
  extern void Swig_print_tree(Node *obj);
@@ -19,14 +19,14 @@ diff -u -4 -r1.76 swig.h
 Index: Source/Modules/main.cxx
 ===================================================================
 RCS file: /cvsroot/SWIG/Source/Modules/main.cxx,v
-retrieving revision 1.23
-diff -u -4 -r1.23 main.cxx
---- Source/Modules/main.cxx	8 Dec 2003 23:42:37 -0000	1.23
-+++ Source/Modules/main.cxx	11 Dec 2003 19:45:07 -0000
-@@ -85,15 +85,17 @@
-      -v              - Run in verbose mode\n\
-      -version        - Print SWIG version number\n\
+retrieving revision 1.27
+diff -u -4 -r1.27 main.cxx
+--- Source/Modules/main.cxx	16 Dec 2003 03:43:51 -0000	1.27
++++ Source/Modules/main.cxx	18 Dec 2003 22:03:45 -0000
+@@ -87,15 +87,17 @@
       -Wall           - Enable all warning messages\n\
+      -Wallkw         - Enable warning messages for all the languages keywords\n\
+      -Werror         - Force to treat the warnings as errors\n\
       -w<n>           - Suppress warning number <n>\n\
 +     -xmlout <file>  - Write an XML version of the parse tree to file after normal processing\n\
  \n";
@@ -41,7 +41,7 @@ diff -u -4 -r1.23 main.cxx
  // -----------------------------------------------------------------------------
  // check_suffix(char *name)
  //
-@@ -222,8 +224,9 @@
+@@ -224,8 +226,9 @@
    int     includecount = 0;
    extern  int check_suffix(char *);
    int     dump_tags = 0;
@@ -51,7 +51,7 @@ diff -u -4 -r1.23 main.cxx
    int     dump_typedef = 0;
    int     dump_classes = 0;
    int     werror = 0;
-@@ -482,8 +485,20 @@
+@@ -490,8 +493,20 @@
  	    Swig_mark_arg(i);
  	  } else if (strcmp(argv[i],"-dump_tree") == 0) {
  	    dump_tree = 1;
@@ -72,7 +72,7 @@ diff -u -4 -r1.23 main.cxx
  	    Swig_mark_arg(i);
  	    Swig_contract_mode_set(0);
  	  } else if (strcmp(argv[i],"-browse") == 0) {
-@@ -725,8 +740,11 @@
+@@ -736,8 +751,11 @@
        }
      }
      if (dump_tree) {
@@ -90,7 +90,7 @@ RCS file: /cvsroot/SWIG/Source/Modules/xml.cxx,v
 retrieving revision 1.8
 diff -u -4 -r1.8 xml.cxx
 --- Source/Modules/xml.cxx	31 Oct 2003 17:42:40 -0000	1.8
-+++ Source/Modules/xml.cxx	11 Dec 2003 19:45:07 -0000
++++ Source/Modules/xml.cxx	18 Dec 2003 22:03:45 -0000
 @@ -109,9 +109,9 @@
  				Printf(stderr,"*** Can't open '%s'\n", outfile);
  				SWIG_exit(EXIT_FAILURE);
