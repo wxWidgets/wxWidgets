@@ -740,6 +740,17 @@ public:
             return self->SortItems(wxPyListCtrl_SortItems, (long)func);
         }
     }
+
+
+    %addmethods {
+        wxWindow* GetMainWindow() {
+        #ifdef __WXMSW__
+            return self;
+        #else
+            return (wxWindow*)m_mainWin;
+        #endif
+        }
+    }
 };
 
 
