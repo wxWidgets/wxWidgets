@@ -357,12 +357,12 @@ bool wxString::AllocBuffer(size_t nLen)
   // 2) sizeof(wxStringData) for housekeeping info
   wxStringData* pData = (wxStringData*)
     malloc(sizeof(wxStringData) + (nLen + EXTRA_ALLOC + 1)*sizeof(wxChar));
-  
+
   if ( pData == NULL ) {
     // allocation failures are handled by the caller
     return FALSE;
   }
-  
+
   pData->nRefs        = 1;
   pData->nDataLength  = nLen;
   pData->nAllocLength = nLen + EXTRA_ALLOC;
@@ -416,7 +416,7 @@ bool wxString::AllocBeforeWrite(size_t nLen)
 
       pData = (wxStringData*)
           realloc(pData, sizeof(wxStringData) + (nLen + 1)*sizeof(wxChar));
-      
+
       if ( pData == NULL ) {
         // allocation failures are handled by the caller
         // keep previous data since reallocation failed
@@ -451,7 +451,7 @@ bool wxString::Alloc(size_t nLen)
         // allocation failure handled by caller
         return FALSE;
       }
-      
+
       pData->nRefs = 1;
       pData->nDataLength = 0;
       pData->nAllocLength = nLen;
@@ -759,43 +759,53 @@ wxString operator+(const wxChar *psz, const wxString& str)
 // ===========================================================================
 
 #if wxUSE_UNICODE
-wxString wxString::FromAscii( char *ascii )
+
+wxString wxString::FromAscii(const char *ascii)
 {
     if (!ascii)
        return wxEmptyString;
-       
+
     size_t len = strlen( ascii );
     wxString res;
-    res.AllocBuffer( len );
-    wchar_t *dest = (wchar_t*)(const wchar_t*) res.c_str();
-    
-    for (size_t i = 0; i < len+1; i++)
-       dest[i] = (wchar_t) ascii[i];
-       
+
+    if ( len )
+    {
+        wxStringBuffer buf(res, len);
+
+        wchar_t *dest = buf;
+
+        for ( ;; )
+        {
+           if ( (*dest++ = (wchar_t)(unsigned char)*ascii++) == L'\0' )
+               break;
+        }
+    }
+
     return res;
 }
 
 const wxCharBuffer wxString::ToAscii() const
 {
-    if (IsNull())
-       return wxCharBuffer( (const char*)NULL );
+    // this will allocate enough space for the terminating NUL too
+    wxCharBuffer buffer(length());
 
-    size_t len = Len();
-    wxCharBuffer buffer( len ); // allocates len+1
-    
-    char *dest = (char*)(const char*) buffer;
-    
-    for (size_t i = 0; i < len+1; i++)
+    signed char *dest = (signed char *)buffer.data();
+
+    const wchar_t *pwc = c_str();
+    for ( ;; )
     {
-        if (m_pchData[i] > 127)
-            dest[i] = '_';
-        else
-            dest[i] = (char) m_pchData[i];
+        *dest++ = *pwc > SCHAR_MAX ? '_' : *pwc;
+
+        // the output string can't have embedded NULs anyhow, so we can safely
+        // stop at first of them even if we do have any
+        if ( !*pwc++ )
+            break;
     }
-    
+
     return buffer;
 }
-#endif
+
+#endif // Unicode
 
 // ---------------------------------------------------------------------------
 // simple sub-string extraction
@@ -1048,7 +1058,7 @@ wxString& wxString::MakeUpper()
     wxFAIL_MSG( _T("out of memory in wxString::MakeUpper") );
     return *this;
   }
-    
+
   for ( wxChar *p = m_pchData; *p; p++ )
     *p = (wxChar)wxToupper(*p);
 
@@ -2237,7 +2247,7 @@ size_t wxArrayString::Add(const wxString& str, size_t nInsert)
     Grow(nInsert);
 
     for (size_t i = 0; i < nInsert; i++)
-    {   
+    {
         // the string data must not be deleted!
         str.GetStringData()->Lock();
 

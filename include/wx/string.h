@@ -446,24 +446,27 @@ public:
 
     // implicit conversion to C string
     operator const wxChar*() const { return m_pchData; }
+
     // explicit conversion to C string (use this with printf()!)
     const wxChar* c_str()   const { return m_pchData; }
-    // identical to c_str()
+    // identical to c_str(), for wxWin 1.6x compatibility
     const wxChar* wx_str()  const { return m_pchData; }
-    // identical to c_str()
+    // identical to c_str(), for MFC compatibility
     const wxChar* GetData() const { return m_pchData; }
 
-    // conversion to plain ascii: this is usefull for
-    // converting numbers or strings which are certain
-    // not to contain special chars (typically system
-    // functions, X atoms, environment variables etc.)
+    // conversion to/from plain (i.e. 7 bit) ASCII: this is useful for
+    // converting numbers or strings which are certain not to contain special
+    // chars (typically system functions, X atoms, environment variables etc.)
+    //
+    // the behaviour of these functions with the strings containing anything
+    // else than 7 bit ASCII characters is undefined, use at your own risk.
 #if wxUSE_UNICODE
-    static wxString FromAscii( char *ascii );
+    static wxString FromAscii(const char *ascii);
     const wxCharBuffer ToAscii() const;
-#else
-    static wxString FromAscii( char *ascii ) { return wxString( ascii ); }
-    const char *ToAscii() const { return m_pchData; }
-#endif
+#else // ANSI
+    static wxString FromAscii(const char *ascii) { return wxString( ascii ); }
+    const char *ToAscii() const { return c_str(); }
+#endif // Unicode/!Unicode
 
     // conversions with (possible) format convertions: have to return a
     // buffer with temporary data
@@ -1147,20 +1150,20 @@ public:
 
 class WXDLLEXPORT wxStringBuffer
 {
-    DECLARE_NO_COPY_CLASS(wxStringBuffer)
-    
 public:
     wxStringBuffer(wxString& str, size_t lenWanted = 1024)
         : m_str(str), m_buf(NULL)
         { m_buf = m_str.GetWriteBuf(lenWanted); }
-    
+
     ~wxStringBuffer() { m_str.UngetWriteBuf(); }
-    
+
     operator wxChar*() const { return m_buf; }
-    
+
 private:
     wxString& m_str;
     wxChar   *m_buf;
+
+    DECLARE_NO_COPY_CLASS(wxStringBuffer)
 };
 
 // ---------------------------------------------------------------------------
