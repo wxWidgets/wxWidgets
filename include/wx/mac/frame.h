@@ -58,14 +58,6 @@ public:
 
     virtual ~wxFrameMac();
 
-    // implement base class pure virtuals
-    virtual void Maximize(bool maximize = TRUE);
-    virtual bool IsMaximized() const;
-    virtual void Iconize(bool iconize = TRUE);
-    virtual bool IsIconized() const;
-    virtual void Restore();
-    virtual void SetIcon(const wxIcon& icon);
-
     // implementation only from now on
     // -------------------------------
 
@@ -120,7 +112,6 @@ protected:
     virtual void DoSetClientSize(int width, int height);
 
 protected:
-  bool                  m_iconized;
 #if wxUSE_STATUSBAR
     static bool           m_useNativeStatusBar;
 #endif // wxUSE_STATUSBAR

@@ -66,10 +66,6 @@ public:
 
     virtual bool Destroy();
     bool Show(bool show);
-    void Iconize(bool iconize);
-    virtual bool IsIconized() const;
-
-    virtual bool IsTopLevel() const { return TRUE; }
 
     void SetModal(bool flag);
     virtual bool IsModal() const;

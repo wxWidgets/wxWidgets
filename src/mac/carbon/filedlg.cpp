@@ -560,7 +560,11 @@ pascal Boolean CrossPlatformFilterCallback (
 		if (theItem->descriptorType == typeFSS && !theInfo->isFolder)
 		{
 		  FSSpec	spec;
-		  memcpy( &spec , *theItem->dataHandle , sizeof(FSSpec) ) ;
+#if TARGET_CARBON
+		  ::AEGetDescData(theItem, &spec, sizeof(FSSpec) ) ;
+#else
+		  memcpy( &spec , (*theItem->dataHandle) , sizeof(FSSpec) ) ;
+#endif
 		  display = CheckFile( spec.name , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
 		}
 	}

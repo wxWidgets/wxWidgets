@@ -24,7 +24,7 @@
 // Lists to keep track of windows, so we can disable/enable them
 // for modal dialogs
 wxList wxModalDialogs;
-wxList wxModelessWindows;  // Frames and modeless dialogs
+//wxList wxModelessWindows;  // Frames and modeless dialogs
 extern wxList wxPendingDelete;
 
 #if !USE_SHARED_LIBRARY
@@ -129,16 +129,6 @@ void wxDialog::OnCharHook(wxKeyEvent& event)
   event.Skip();
 }
 
-void wxDialog::Iconize(bool WXUNUSED(iconize))
-{
-	// mac dialogs cannot be iconized
-}
-
-bool wxDialog::IsIconized() const
-{
-	// mac dialogs cannot be iconized
-    return FALSE;
-}
 
 void wxDialog::DoSetClientSize(int width, int height)
 {

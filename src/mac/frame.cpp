@@ -25,7 +25,7 @@
 
 #include <wx/mac/uma.h>
 
-extern wxList wxModelessWindows;
+extern wxWindowList wxModelessWindows;
 extern wxList wxPendingDelete;
 
 #if !USE_SHARED_LIBRARY
@@ -163,39 +163,6 @@ bool wxFrameMac::Enable(bool enable)
 	}
 
     return TRUE;
-}
-// Equivalent to maximize/restore in Windows
-void wxFrameMac::Maximize(bool maximize)
-{
-    // TODO
-}
-
-bool wxFrameMac::IsIconized() const
-{
-    // TODO
-    return FALSE;
-}
-
-void wxFrameMac::Iconize(bool iconize)
-{
-    // TODO
-}
-
-// Is the frame maximized?
-bool wxFrameMac::IsMaximized(void) const
-{
-    // TODO
-    return FALSE;
-}
-
-void wxFrameMac::Restore()
-{
-    // TODO
-}
-
-void wxFrameMac::SetIcon(const wxIcon& icon)
-{
-   wxFrameBase::SetIcon(icon);
 }
 
 wxStatusBar *wxFrameMac::OnCreateStatusBar(int number, long style, wxWindowID id,
