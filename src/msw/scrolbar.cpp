@@ -124,7 +124,7 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
 {
     // current and max positions
     int position,
-        maxPos;
+        maxPos, trackPos = pos;
 
 #ifdef __WIN32__
     // when we're dragging the scrollbar we can't use pos parameter because it
@@ -145,7 +145,7 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
             wxLogLastError(_T("GetScrollInfo"));
         }
 
-        pos = scrollInfo.nTrackPos;
+        trackPos = scrollInfo.nTrackPos;
         position = scrollInfo.nPos;
         maxPos = scrollInfo.nMax;
     }
@@ -201,12 +201,12 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
             break;
 
         case SB_THUMBPOSITION:
-            nScrollInc = pos - position;
+            nScrollInc = trackPos - position;
             scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
             break;
 
         case SB_THUMBTRACK:
-            nScrollInc = pos - position;
+            nScrollInc = trackPos - position;
             scrollEvent = wxEVT_SCROLL_THUMBTRACK;
             break;
 
