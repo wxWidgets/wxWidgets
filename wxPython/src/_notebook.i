@@ -321,6 +321,7 @@ public:
     // returns True if we have wxLB_TOP or wxLB_BOTTOM style
     bool IsVertical() const;
 
+    wxListView* GetListView();    
 };
 
 

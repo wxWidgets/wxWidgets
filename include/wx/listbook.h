@@ -111,6 +111,8 @@ public:
 
     virtual bool DeleteAllPages();
 
+    wxListView* GetListView() { return m_list; }
+
 protected:
     virtual wxWindow *DoRemovePage(size_t page);
 
