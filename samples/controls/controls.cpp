@@ -1276,6 +1276,13 @@ void MyPanel::OnUpdateShowProgress( wxUpdateUIEvent& event )
 void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
 {
     int max = m_spinbutton->GetValue();
+    
+    if ( max <= 0 )
+    {
+        wxLogError(_T("You must set positive range!"));
+        return;
+    }
+    
     wxProgressDialog dialog("Progress dialog example",
                             "An informative message",
                             max,    // range
