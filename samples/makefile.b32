@@ -29,7 +29,11 @@ COMPIL=1
 PNGSETUP=
 # Need wxUSE_ODBC; define this to compile db sample
 ODBCSETUP=
-WXUSINGDLL=0
+WXUSINGDLL=1
+
+!if "$(FINAL)" == ""
+FINAL=0
+!endif
 
 #
 # Please keep samples list up-to-date, in alphabetical order
