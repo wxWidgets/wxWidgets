@@ -166,43 +166,6 @@ WXDLLEXPORT wxString wxMacFindFolder(short vRefNum,
                                      OSType folderType,
                                      Boolean createFolder);
 
-#if wxUSE_GUI
-
-GWorldPtr         wxMacCreateGWorld( int width , int height , int depth ) ;
-void                 wxMacDestroyGWorld( GWorldPtr gw ) ;
-PicHandle         wxMacCreatePict( GWorldPtr gw , GWorldPtr mask = NULL ) ;
-CIconHandle     wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth , short iconSize  ) ;
-void                 wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
-CTabHandle         wxMacCreateColorTable( int numColors ) ;
-void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType = 0 ) ;
-
-#define MAC_WXCOLORREF(a) (*((RGBColor*)&(a)))
-#define MAC_WXHBITMAP(a) (GWorldPtr(a))
-#define MAC_WXHMETAFILE(a) (PicHandle(a))
-#define MAC_WXHICON(a) (CIconHandle(a))
-#define MAC_WXHCURSOR(a) (CursHandle(a))
-#define MAC_WXHRGN(a) (RgnHandle(a))
-#define MAC_WXHWND(a) (WindowPtr(a))
-#define MAC_WXRECPTR(a) ((Rect*)a)
-#define MAC_WXPOINTPTR(a) ((Point*)a)
-#define MAC_WXHMENU(a) ((MenuHandle)a)
-
-struct wxOpaqueWindowRef
-{
-    wxOpaqueWindowRef( WindowRef ref ) { m_data = ref ; }
-    operator WindowRef() { return m_data ; } 
-private :
-    WindowRef m_data ;
-} ;
-
-wxWindow *              wxFindControlFromMacControl(ControlRef inControl ) ;
-wxTopLevelWindowMac*    wxFindWinFromMacWindow( WindowRef inWindow ) ;
-wxMenu*                 wxFindMenuFromMacMenu(MenuRef inMenuRef) ;
-
-extern wxWindow* g_MacLastWindow ;
-pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data ) ;
-Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true ) ;
-
 template<typename T> EventParamType wxMacGetEventParamType() { wxFAIL_MSG( wxT("Unknown Param Type") ) ; return 0 ; }
 template<> inline EventParamType wxMacGetEventParamType<RgnHandle>() { return typeQDRgnHandle ; }
 template<> inline EventParamType wxMacGetEventParamType<ControlRef>() { return typeControlRef ; }
@@ -222,12 +185,12 @@ template<> inline EventParamType wxMacGetEventParamType<void*>() { return typeVo
 template<> inline EventParamType wxMacGetEventParamType<Collection>() { return typeCollection ; }
 template<> inline EventParamType wxMacGetEventParamType<CGContextRef>() { return typeCGContextRef ; }
 /*
-These are ambiguous
-template<> EventParamType wxMacGetEventParamType<GrafPtr>() { return typeGrafPtr ; }
-template<> EventParamType wxMacGetEventParamType<OSStatus>() { return typeOSStatus ; }
-template<> EventParamType wxMacGetEventParamType<CFIndex>() { return typeCFIndex ; }
-template<> EventParamType wxMacGetEventParamType<GWorldPtr>() { return typeGWorldPtr ; }
-*/
+ These are ambiguous
+ template<> EventParamType wxMacGetEventParamType<GrafPtr>() { return typeGrafPtr ; }
+ template<> EventParamType wxMacGetEventParamType<OSStatus>() { return typeOSStatus ; }
+ template<> EventParamType wxMacGetEventParamType<CFIndex>() { return typeCFIndex ; }
+ template<> EventParamType wxMacGetEventParamType<GWorldPtr>() { return typeGWorldPtr ; }
+ */
 
 class wxMacCarbonEvent
 {
@@ -244,14 +207,14 @@ public :
         m_eventRef = event ;
         m_release = release ;
     }
-
+    
     wxMacCarbonEvent(UInt32 inClassID,UInt32 inKind,EventTime inWhen = 0 /*now*/,EventAttributes inAttributes=kEventAttributeNone) 
     {
         m_eventRef = NULL ;
         verify_noerr( MacCreateEvent( NULL , inClassID, inKind,inWhen,inAttributes,&m_eventRef) ) ;
         m_release = true ;
     }
-
+    
     ~wxMacCarbonEvent()
     {
         if ( m_release )
@@ -273,7 +236,7 @@ public :
             m_release = true ;
         return err ;
     }
-
+    
     OSStatus GetParameter( EventParamName inName, EventParamType inDesiredType, UInt32 inBufferSize, void * outData) ;
     
     template <typename T> OSStatus GetParameter( EventParamName inName, EventParamType type , T *data )
@@ -297,7 +260,7 @@ public :
         verify_noerr( GetParameter<T>( inName, inDesiredType , &value ) ) ;
         return value ;
     }
-
+    
     OSStatus SetParameter( EventParamName inName, EventParamType inType, UInt32 inSize, const void * inData) ;
     template <typename T> OSStatus SetParameter( EventParamName inName, EventParamType inDesiredType , const T *data )
     {
@@ -336,12 +299,49 @@ public :
         return ::SetEventTime( m_eventRef , inWhen ? inWhen : GetCurrentEventTime() ) ;
     }
     operator EventRef () { return m_eventRef; }
-     
+    
     bool IsValid() { return m_eventRef != 0 ; }  
 protected :
     EventRef m_eventRef ;
     bool     m_release ;
 } ;
+
+#if wxUSE_GUI
+
+GWorldPtr         wxMacCreateGWorld( int width , int height , int depth ) ;
+void                 wxMacDestroyGWorld( GWorldPtr gw ) ;
+PicHandle         wxMacCreatePict( GWorldPtr gw , GWorldPtr mask = NULL ) ;
+CIconHandle     wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth , short iconSize  ) ;
+void                 wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
+CTabHandle         wxMacCreateColorTable( int numColors ) ;
+void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType = 0 ) ;
+
+#define MAC_WXCOLORREF(a) (*((RGBColor*)&(a)))
+#define MAC_WXHBITMAP(a) (GWorldPtr(a))
+#define MAC_WXHMETAFILE(a) (PicHandle(a))
+#define MAC_WXHICON(a) (CIconHandle(a))
+#define MAC_WXHCURSOR(a) (CursHandle(a))
+#define MAC_WXHRGN(a) (RgnHandle(a))
+#define MAC_WXHWND(a) (WindowPtr(a))
+#define MAC_WXRECPTR(a) ((Rect*)a)
+#define MAC_WXPOINTPTR(a) ((Point*)a)
+#define MAC_WXHMENU(a) ((MenuHandle)a)
+
+struct wxOpaqueWindowRef
+{
+    wxOpaqueWindowRef( WindowRef ref ) { m_data = ref ; }
+    operator WindowRef() { return m_data ; } 
+private :
+    WindowRef m_data ;
+} ;
+
+wxWindow *              wxFindControlFromMacControl(ControlRef inControl ) ;
+wxTopLevelWindowMac*    wxFindWinFromMacWindow( WindowRef inWindow ) ;
+wxMenu*                 wxFindMenuFromMacMenu(MenuRef inMenuRef) ;
+
+extern wxWindow* g_MacLastWindow ;
+pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data ) ;
+Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true ) ;
 
 class wxMacControl
 {
