@@ -297,9 +297,40 @@ typedef int wxWindowID;
     #define WXUNUSED(identifier) identifier
 #endif
 
-/*
- * Making or using wxWindows as a Windows DLL
- */
+// ----------------------------------------------------------------------------
+// portable calling conventions macros
+// ----------------------------------------------------------------------------
+
+// wxCALLBACK should be used for the functions which are called back by
+// Windows (such as compare function for wxListCtrl)
+#if defined(__WXMSW__)
+    #if defined(__MINGW32__)
+        #define wxCALLBACK __attribute__((stdcall))
+    #else
+        // both VC++ and Borland understand this
+        #define wxCALLBACK _stdcall
+    #endif
+#else
+    // no stdcall under Unix
+    #define wxCALLBACK
+#endif // platform
+
+// callling convention for the qsort(3) callback
+
+#if defined(__VISUALC__)
+  #define   wxCMPFUNC_CONV    _cdecl
+#elif defined(__VISAGECPP__)
+  #define   wxCMPFUNC_CONV    _Optlink
+#else   // !Visual C++
+  #define   wxCMPFUNC_CONV
+#endif  // compiler
+
+// compatibility :-(
+#define CMPFUNC_CONV wxCMPFUNC_CONV
+
+// ----------------------------------------------------------------------------
+// Making or using wxWindows as a Windows DLL
+// ----------------------------------------------------------------------------
 
 #if defined(__WXMSW__)
 

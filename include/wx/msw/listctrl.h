@@ -173,7 +173,7 @@ public:
 };
 
 // type of compare function for wxListCtrl sort operation
-typedef int (CALLBACK *wxListCtrlCompare)(long item1, long item2, long sortData);
+typedef int (wxCALLBACK *wxListCtrlCompare)(long item1, long item2, long sortData);
 
 class WXDLLEXPORT wxListCtrl: public wxControl
 {

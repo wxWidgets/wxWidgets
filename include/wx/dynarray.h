@@ -43,15 +43,7 @@
  callback compare function for quick sort
  must return negative value, 0 or positive value if pItem1 <, = or > pItem2
  */
-
-#if defined(__VISUALC__)
-  #define   CMPFUNC_CONV    _cdecl
-#elif defined(__VISAGECPP__)
-  #define   CMPFUNC_CONV    _Optlink
-#else   // !Visual C++
-  #define   CMPFUNC_CONV
-#endif  // compiler
-typedef int (CMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
+typedef int (wxCMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
 
 // ----------------------------------------------------------------------------
 /**
