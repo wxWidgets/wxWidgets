@@ -1,0 +1,68 @@
+\section{\class{wxStringList}}\label{wxstringlist}
+
+A string list is a list which is assumed to contain strings, with a
+specific member functions. Memory is allocated when strings are added to
+the list, and deallocated by the destructor or by the {\bf Delete}\rtfsp
+member.
+
+\wxheading{Derived from}
+
+\helpref{wxList}{wxlist}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxString}{wxstring}, \helpref{wxList}{wxlist}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxStringList::wxStringList}
+
+\func{}{wxStringList}{\void}
+
+Constructor.
+
+\func{void}{wxStringList}{\param{char* }{first}, ...}
+
+Constructor, taking NULL-terminated string argument list. wxStringList
+allocates memory for the strings.
+
+\membersection{wxStringList::\destruct{wxStringList}}
+
+\func{}{\destruct{wxStringList}}{\void}
+
+Deletes string list, deallocating strings.
+
+\membersection{wxStringList::Add}
+
+\func{wxNode *}{Add}{\param{const wxString\& }{s}}
+
+Adds string to list, allocating memory.
+
+\membersection{wxStringList::Delete}
+
+\func{void}{Delete}{\param{const wxString\& }{s}}
+
+Searches for string and deletes from list, deallocating memory.
+
+\membersection{wxStringList::ListToArray}
+
+\func{char*}{ListToArray}{\param{bool}{ new\_copies = FALSE}}
+
+Converts the list to an array of strings, only allocating new memory if
+\rtfsp{\bf new\_copies} is TRUE.
+
+\membersection{wxStringList::Member}
+
+\func{bool}{Member}{\param{const wxString\& }{s}}
+
+Returns TRUE if {\bf s} is a member of the list (tested using {\bf strcmp}).
+
+\membersection{wxStringList::Sort}
+
+\func{void}{Sort}{\void}
+
+Sorts the strings in ascending alphabetical order. Note that all nodes
+(but not strings) get deallocated and new ones allocated.
+
+

@@ -1,0 +1,36 @@
+\section{Font overview}\label{wxfontoverview}
+
+Class: \helpref{wxFont}{wxfont}
+
+A font is an object which determines the appearance of text, primarily
+when drawing text to a canvas or device context. A font is determined by
+up to six parameters:
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{Point size}{This is the standard way of referring to text size.}
+\twocolitem{Family}{Supported families are:
+  {\bf wxDEFAULT, wxDECORATIVE, wxROMAN, wxSCRIPT, wxSWISS, wxMODERN}.
+  {\bf wxMODERN} is a fixed pitch font; the others are either fixed or variable pitch.}
+\twocolitem{Style}{The value can be {\bf wxNORMAL, wxSLANT} or {\bf wxITALIC}.}
+\twocolitem{Weight}{The value can be {\bf wxNORMAL, wxLIGHT} or {\bf wxBOLD}.}
+\twocolitem{Underlining}{The value can be TRUE or FALSE.}
+\twocolitem{Face name}{An optional string specifying the actual typeface to be used. If NULL,
+a default typeface will chosen based on the family.}
+\end{twocollist}
+
+Specifying a family, rather than a specific typeface name, ensures a degree of portability
+across platforms because a suitable font will be chosen for the given font family.
+
+Under Windows, the face name can be one of the installed fonts on the user's system. Since
+the choice of fonts differs from system to system, either choose standard Windows fonts,
+or if allowing the user to specify a face name, store the family id with any file that
+might be transported to a different Windows machine or other platform.
+
+\normalbox{{\bf Note:} There is currently a difference between the appearance of fonts on the
+two platforms, if the mapping mode is anything other than MM\_TEXT.
+Under X, font size is always specified in points. Under MS Windows, the
+unit for text is points but the text is scaled according to the
+current mapping mode. However, user scaling on a device canvas will
+also scale fonts under both environments.}
+
+

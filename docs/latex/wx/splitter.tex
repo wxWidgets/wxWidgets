@@ -1,0 +1,340 @@
+\section{\class{wxSplitterWindow}}\label{wxsplitterwindow}
+
+\overview{wxSplitterWindow overview}{wxsplitterwindowoverview}
+
+This class manages up to two subwindows. The current view can be
+split into two programmatically (perhaps from a menu command), and unsplit
+either programmatically or via the wxSplitterWindow user interface.
+
+Appropriate 3D shading for the Windows 95 user interface is an option.
+
+\wxheading{Window styles}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxSP\_3D}}{Draws a 3D effect border and sash.}
+\twocolitem{\windowstyle{wxSP\_BORDER}}{Draws a thin black border around the window, and a black sash.}
+\twocolitem{\windowstyle{wxSP\_NOBORDER}}{No border, and a black sash.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Derived from}
+
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxSplitterWindow::wxSplitterWindow}\label{wxsplitterwindowconstr}
+
+\func{}{wxSplitterWindow}{\void}
+
+Default constructor.
+
+\func{}{wxSplitterWindow}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id}, \param{int }{x},\rtfsp
+\param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{const long }{style=wxSP\_3D}, \param{const wxString\&}{ name = "splitterWindow"}}
+
+Constructor for creating the window.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The parent of the splitter window.}
+
+\docparam{id}{The window identifier.}
+
+\docparam{pos}{The window position.}
+
+\docparam{size}{The window size.}
+
+\docparam{style}{The window style. See \helpref{wxSplitterWindow}{wxsplitterwindow}.}
+
+\docparam{name}{The window name.}
+
+\wxheading{Remarks}
+
+After using this constructor, you must create either one or two subwindows
+with the splitter window as parent, and then call one of \helpref{wxSplitterWindow::Initialize}{wxsplitterwindowinitialize},\rtfsp
+\helpref{wxSplitterWindow::SplitVertically}{wxsplitterwindowsplitvertically} and \helpref{wxSplitterWindow::SplitHorizontally}{wxsplitterwindowsplithorizontally} in
+order to set the pane(s).
+
+You can create two windows, with one hidden when not being shown; or you can
+create and delete the second pane on demand.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::Initialize}{wxsplitterwindowinitialize}, \helpref{wxSplitterWindow::SplitVertically}{wxsplitterwindowsplitvertically},\rtfsp
+\helpref{wxSplitterWindow::SplitHorizontally}{wxsplitterwindowsplithorizontally},\rtfsp
+\helpref{wxSplitterWindow::Create}{wxsplitterwindowcreate}
+
+\membersection{wxSplitterWindow::\destruct{wxSplitterWindow}}
+
+\func{}{\destruct{wxSplitterWindow}}{\void}
+
+Destroys the wxSplitterWindow and its children.
+
+\membersection{wxSplitterWindow::Create}\label{wxsplitterwindowcreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id}, \param{int }{x},\rtfsp
+\param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{const long }{style=wxSP\_3D}, \param{const wxString\&}{ name = "splitterWindow"}}
+
+Creation function, for two-step construction. See \helpref{wxSplitterWindow::wxSplitterWindow}{wxsplitterwindowconstr} for
+details.
+
+\membersection{wxSplitterWindow::GetMinimumPaneSize}\label{wxsplitterwindowgetminimumpanesize}
+
+\constfunc{int}{GetMinimumPaneSize}{\void}
+
+Returns the current minimum pane size (defaults to zero).
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::SetMinimumPaneSize}{wxsplitterwindowsetminimumpanesize}
+
+\membersection{wxSplitterWindow::GetSashPosition}\label{wxsplitterwindowgetsashposition}
+
+\func{int}{GetSashPosition}{\void}
+
+Returns the current sash position.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::SetSashPosition}{wxsplitterwindowsetsashposition}
+
+\membersection{wxSplitterWindow::GetSplitMode}\label{wxsplitterwindowgetsplitmode}
+
+\constfunc{int}{GetSplitMode}{\void}
+
+Gets the split mode.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::SetSplitMode}{wxsplitterwindowsetsplitmode}, \helpref{wxSplitterWindow::SplitVertically}{wxsplitterwindowsplitvertically},\rtfsp
+\helpref{wxSplitterWindow::SplitHorizontally}{wxsplitterwindowsplithorizontally}.
+
+\membersection{wxSplitterWindow::GetWindow1}\label{wxsplitterwindowgetwindow1}
+
+\constfunc{wxWindow*}{GetWindow1}{\void}
+
+Returns the left/top or only pane.
+
+\membersection{wxSplitterWindow::GetWindow2}\label{wxsplitterwindowgetwindow2}
+
+\constfunc{wxWindow*}{GetWindow2}{\void}
+
+Returns the right/bottom pane.
+
+\membersection{wxSplitterWindow::Initialize}\label{wxsplitterwindowinitialize}
+
+\func{void}{Initialize}{\param{wxWindow* }{window}}
+
+Initializes the splitter window to have one pane.
+
+\wxheading{Parameters}
+
+\docparam{window}{The pane for the unsplit window.}
+
+\wxheading{Remarks}
+
+This should be called if you wish to initially view only a single pane in the splitter window.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::SplitVertically}{wxsplitterwindowsplitvertically},\rtfsp
+\helpref{wxSplitterWindow::SplitHorizontally}{wxsplitterwindowsplithorizontally}.
+
+\membersection{wxSplitterWindow::IsSplit}\label{wxsplitterwindowissplit}
+
+\constfunc{bool}{IsSplit}{\void}
+
+Returns TRUE if the window is split, FALSE otherwise.
+
+\membersection{wxSplitterWindow::OnDoubleClickSash}\label{wxsplitterwindowondoubleclicksash}
+
+\func{virtual void}{OnDoubleClickSash}{\param{int }{x}, \param{int }{y}}
+
+Application-overridable function called when the sash is double-clicked with
+the left mouse button.
+
+\wxheading{Parameters}
+
+\docparam{x}{The x position of the mouse cursor.}
+
+\docparam{y}{The y position of the mouse cursor.}
+
+\wxheading{Remarks}
+
+The default implementation of this function calls \helpref{Unsplit}{wxsplitterwindowunsplit} if
+the minimum pane size is zero.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::Unsplit}{wxsplitterwindowunsplit}
+
+\membersection{wxSplitterWindow::OnUnsplit}\label{wxsplitterwindowonunsplit}
+
+\func{virtual void}{OnUnsplit}{\param{wxWindow* }{removed}}
+
+Application-overridable function called when the window is unsplit, either
+programmatically or using the wxSplitterWindow user interface.
+
+\wxheading{Parameters}
+
+\docparam{removed}{The window being removed.}
+
+\wxheading{Remarks}
+
+The default implementation of this function simply hides {\it removed}. You
+may wish to delete the window.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::Unsplit}{wxsplitterwindowunsplit}
+
+\membersection{wxSplitterWindow::SetSashPosition}\label{wxsplitterwindowsetsashposition}
+
+\func{void}{SetSashPosition}{\param{const int }{position}, \param{const bool}{ redraw = TRUE}}
+
+Sets the sash position.
+
+\wxheading{Parameters}
+
+\docparam{position}{The sash position in pixels.}
+
+\docparam{redraw}{If TRUE, resizes the panes and redraws the sash and border.}
+
+\wxheading{Remarks}
+
+Does not currently check for an out-of-range value.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::GetSashPosition}{wxsplitterwindowgetsashposition}
+
+\membersection{wxSplitterWindow::SetMinimumPaneSize}\label{wxsplitterwindowsetminimumpanesize}
+
+\func{void}{SetMinimumPaneSize}{\param{const int }{paneSize}}
+
+Sets the minimum pane size.
+
+\wxheading{Parameters}
+
+\docparam{paneSize}{Minimum pane size in pixels.}
+
+\wxheading{Remarks}
+
+The default minimum pane size is zero, which means that either pane can be reduced to zero by dragging
+the sash, thus removing one of the panes. To prevent this behaviour (and veto out-of-range sash dragging),
+set a minimum size, for example 20 pixels.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::GetMinimumPaneSize}{wxsplitterwindowgetminimumpanesize}
+
+\membersection{wxSplitterWindow::SetSplitMode}\label{wxsplitterwindowsetsplitmode}
+
+\func{void}{SetSplitMode}{\param{const int }{mode}}
+
+Sets the split mode.
+
+\wxheading{Parameters}
+
+\docparam{mode}{Can be wxSPLIT\_VERTICAL or wxSPLIT\_HORIZONTAL.}
+
+\wxheading{Remarks}
+
+Only sets the internal variable; does not update the display.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::GetSplitMode}{wxsplitterwindowgetsplitmode}, \helpref{wxSplitterWindow::SplitVertically}{wxsplitterwindowsplitvertically},\rtfsp
+\helpref{wxSplitterWindow::SplitHorizontally}{wxsplitterwindowsplithorizontally}.
+
+\membersection{wxSplitterWindow::SplitHorizontally}\label{wxsplitterwindowsplithorizontally}
+
+\func{bool}{SplitHorizontally}{\param{wxWindow* }{window1}, \param{wxWindow* }{window2},
+ \param{const int}{ sashPosition = -1}}
+
+Initializes the top and bottom panes of the splitter window.
+
+\wxheading{Parameters}
+
+\docparam{window1}{The top pane.}
+
+\docparam{window2}{The bottom pane.}
+
+\docparam{sashPosition}{The initial position of the sash. If the value is -1, a default position
+is chosen.}
+
+\wxheading{Return value}
+
+TRUE if successful, FALSE otherwise (the window was already split).
+
+\wxheading{Remarks}
+
+This should be called if you wish to initially view two panes. It can also be called at any subsequent time,
+but the application should check that the window is not currently split using \helpref{IsSplit}{wxsplitterwindowissplit}.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::SplitVertically}{wxsplitterwindowsplitvertically}, \helpref{wxSplitterWindow::IsSplit}{wxsplitterwindowissplit},\rtfsp
+\helpref{wxSplitterWindow::Unsplit}{wxsplitterwindowunsplit}.
+
+\membersection{wxSplitterWindow::SplitVertically}\label{wxsplitterwindowsplitvertically}
+
+\func{bool}{SplitVertically}{\param{wxWindow* }{window1}, \param{wxWindow* }{window2},
+ \param{const int}{ sashPosition = -1}}
+
+Initializes the left and right panes of the splitter window.
+
+\wxheading{Parameters}
+
+\docparam{window1}{The left pane.}
+
+\docparam{window2}{The right pane.}
+
+\docparam{sashPosition}{The initial position of the sash. If the value is -1, a default position
+is chosen.}
+
+\wxheading{Return value}
+
+TRUE if successful, FALSE otherwise (the window was already split).
+
+\wxheading{Remarks}
+
+This should be called if you wish to initially view two panes. It can also be called at any subsequent time,
+but the application should check that the window is not currently split using \helpref{IsSplit}{wxsplitterwindowissplit}.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::SplitHorizontally}{wxsplitterwindowsplithorizontally}, \helpref{wxSplitterWindow::IsSplit}{wxsplitterwindowissplit},\rtfsp
+\helpref{wxSplitterWindow::Unsplit}{wxsplitterwindowunsplit}.
+
+\membersection{wxSplitterWindow::Unsplit}\label{wxsplitterwindowunsplit}
+
+\func{bool}{Unsplit}{\param{wxWindow* }{toRemove = NULL}}
+
+Unsplits the window.
+
+\wxheading{Parameters}
+
+\docparam{toRemove}{The pane to remove, or NULL to remove the right or bottom pane.}
+
+\wxheading{Return value}
+
+TRUE if successful, FALSE otherwise (the window was not split).
+
+\wxheading{Remarks}
+
+This call will not actually delete the pane being removed; it calls \helpref{OnUnsplit}{wxsplitterwindowonunsplit}\rtfsp
+which can be overridden for the desired behaviour. By default, the pane being removed is hidden.
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::SplitHorizontally}{wxsplitterwindowsplithorizontally}, \helpref{wxSplitterWindow::SplitVertically}{wxsplitterwindowsplitvertically},\rtfsp
+\helpref{wxSplitterWindow::IsSplit}{wxsplitterwindowissplit}, \helpref{wxSplitterWindow::OnUnsplit}{wxsplitterwindowonunsplit}
+
+
+

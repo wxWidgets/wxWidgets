@@ -1,0 +1,40 @@
+\section{\class{wxSysColourChangedEvent}}\label{wxsyscolourchangedevent}
+
+This class is used for system colour change events, which are generated
+when the user changes the colour settings using the control panel.
+This is only appropriate under Windows.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Event table macros}
+
+To process a system colour changed event, use this event handler macro to direct input to a member
+function that takes a wxSysColourChanged argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_SYS\_COLOUR\_CHANGED(func)}}{Process a wxEVT\_SYS\_COLOUR\_CHANGED event.}
+\end{twocollist}%
+
+\wxheading{Remarks}
+
+The default event handler for this event propagates the event to child windows, since
+Windows only sends the events to top-level windows. If
+intercepting this event for a top-level window, remember to call the base class handler,
+or to pass the event on to the window's children explicitly.
+
+\wxheading{See also}
+
+\helpref{wxWindow::OnSysColourChanged}{wxwindowonsyscolourchanged}, \helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxSysColourChangedEvent::wxSysColourChanged}
+
+\func{}{wxSysColourChanged}{\void}
+
+Constructor.
+

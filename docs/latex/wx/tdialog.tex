@@ -1,0 +1,31 @@
+\section{wxDialog overview}\label{wxdialogoverview}
+
+Classes: \helpref{wxDialog}{wxdialog}
+
+A dialog box is similar to a panel, in that it is a window which can
+be used for placing controls, with the following exceptions:
+
+\begin{enumerate}
+\item A surrounding frame is implicitly created.
+\item Extra functionality is automatically given to the dialog box,
+  such as tabbing between items (currently Windows only).
+\item If the dialog box is {\it modal}, the calling program is blocked
+  until the dialog box is dismissed.
+\end{enumerate}
+
+Under Windows 3, modal dialogs have to be emulated using
+modeless dialogs and a message loop. This is because Windows 3 expects
+the contents of a modal dialog to be loaded from a resource file or
+created on receipt of a dialog initialization message. This is too
+restrictive for wxWindows, where any window may be created and displayed
+before its contents are created.
+
+For a set of dialog convenience functions, including file selection, see
+\rtfsp\helpref{Dialog functions}{dialogfunctions}.
+
+See also \helpref{wxPanel}{wxpanel} and \helpref{wxWindow}{wxwindow} for inherited
+member functions. Validation of data in controls is covered
+in \helpref{Validator overview}{validatoroverview}.
+
+
+

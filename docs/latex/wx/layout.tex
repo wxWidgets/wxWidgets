@@ -1,0 +1,94 @@
+\section{\class{wxLayoutConstraints}}\label{wxlayoutconstraints}
+
+Objects of this class can be associated with a window to define its
+layout constraints, with respect to siblings or its parent.
+
+The class consists of the following eight constraints of class wxIndividualLayoutConstraint,
+some or all of which should be accessed directly to set the appropriate
+constraints.
+
+\begin{itemize}\itemsep=0pt
+\item {\bf left:} represents the left hand edge of the window
+\item {\bf right:} represents the right hand edge of the window
+\item {\bf top:} represents the top edge of the window
+\item {\bf bottom:} represents the bottom edge of the window
+\item {\bf width:} represents the width of the window
+\item {\bf height:} represents the height of the window
+\item {\bf centreX:} represents the horizontal centre point of the window
+\item {\bf centreY:} represents the vertical centre point of the window
+\end{itemize}
+
+Most constraints are initially set to have the relationship wxUnconstrained,
+which means that their values should be calculated by looking at known constraints.
+The exceptions are {\it width} and {\it height}, which are set to wxAsIs to
+ensure that if the user does not specify a constraint, the existing
+width and height will be used, to be compatible with panel items which often
+have take a default size. If the constraint is wxAsIs, the dimension will
+not be changed.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{Overview and examples}{constraintsoverview},\rtfsp
+\helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}, \helpref{wxWindow::SetConstraints}{wxwindowsetconstraints}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLayoutConstraints::wxLayoutConstraints}
+
+\func{}{wxLayoutConstraints}{\void}
+
+Constructor.
+
+\membersection{wxLayoutConstraints::bottom}
+
+\member{wxIndividualLayoutConstraint}{bottom}
+
+Constraint for the bottom edge.
+
+\membersection{wxLayoutConstraints::centreX}
+
+\member{wxIndividualLayoutConstraint}{centreX}
+
+Constraint for the horizontal centre point.
+
+\membersection{wxLayoutConstraints::centreY}
+
+\member{wxIndividualLayoutConstraint}{centreY}
+
+Constraint for the vertical centre point.
+
+\membersection{wxLayoutConstraints::height}
+
+\member{wxIndividualLayoutConstraint}{height}
+
+Constraint for the height.
+
+\membersection{wxLayoutConstraints::left}
+
+\member{wxIndividualLayoutConstraint}{left}
+
+Constraint for the left-hand edge.
+
+\membersection{wxLayoutConstraints::right}
+
+\member{wxIndividualLayoutConstraint}{right}
+
+Constraint for the right-hand edge.
+
+\membersection{wxLayoutConstraints::top}
+
+\member{wxIndividualLayoutConstraint}{top}
+
+Constraint for the top edge.
+
+\membersection{wxLayoutConstraints::width}
+
+\member{wxIndividualLayoutConstraint}{width}
+
+Constraint for the width.
+
+

@@ -1,0 +1,90 @@
+\section{\class{wxTaskBarIcon}}\label{wxtaskbaricon}
+
+This class represents a Windows 95 taskbar icon, appearing in the `system tray' and responding to
+mouse clicks. An icon has an optional tooltip. This class is only supported for Windows 95/NT.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTaskBarIcon::wxTaskBarIcon}\label{wxtaskbariconconstr}
+
+\func{}{wxTaskBarIcon}{\void}
+
+Default constructor.
+
+\membersection{wxTaskBarIcon::\destruct{wxTaskBarIcon}}
+
+\func{}{\destruct{wxTaskBarIcon}}{\void}
+
+Destroys the wxTaskBarIcon object, removing the icon if not already removed.
+
+\membersection{wxTaskBarIcon::IsIconInstalled}\label{wxtaskbariconisiconinstalled}
+
+\func{bool}{IsIconInstalled}{\void}
+
+Returns TRUE if \helpref{SetIcon}{wxtaskbariconseticon} was called with no subsequent \helpref{RemoveIcon}{wxtaskbariconremoveicon}.
+
+\membersection{wxTaskBarIcon::IsOK}\label{wxtaskbariconisok}
+
+\func{bool}{IsOK}{\void}
+
+Returns TRUE if the object initialized successfully.
+
+\membersection{wxTaskBarIcon::OnLButtonDown}\label{wxtaskbaricononlbuttondown}
+
+\func{virtual void}{OnLButtonDown}{\void}
+
+Override this function to intercept left mouse button down events.
+
+\membersection{wxTaskBarIcon::OnLButtonDClick}\label{wxtaskbaricononlbuttondclick}
+
+\func{virtual void}{OnLButtonDClick}{\void}
+
+Override this function to intercept left mouse button double-click events.
+
+\membersection{wxTaskBarIcon::OnLButtonUp}\label{wxtaskbaricononlbuttonup}
+
+\func{virtual void}{OnLButtonUp}{\void}
+
+Override this function to intercept left mouse button up events.
+
+\membersection{wxTaskBarIcon::OnRButtonDown}\label{wxtaskbaricononrbuttondown}
+
+\func{virtual void}{OnRButtonDown}{\void}
+
+Override this function to intercept right mouse button down events.
+
+\membersection{wxTaskBarIcon::OnRButtonDClick}\label{wxtaskbaricononrbuttondclick}
+
+\func{virtual void}{OnRButtonDClick}{\void}
+
+Override this function to intercept right mouse button double-click events.
+
+\membersection{wxTaskBarIcon::OnRButtonUp}\label{wxtaskbaricononrbuttonup}
+
+\func{virtual void}{OnRButtonUp}{\void}
+
+Override this function to intercept right mouse button up events.
+
+\membersection{wxTaskBarIcon::OnMouseMove}\label{wxtaskbaricononmousemove}
+
+\func{virtual void}{OnMouseMove}{\void}
+
+Override this function to intercept mouse move events.
+
+\membersection{wxTaskBarIcon::RemoveIcon}\label{wxtaskbariconremoveicon}
+
+\func{bool}{RemoveIcon}{\void}
+
+Removes the icon previously set with \helpref{SetIcon}{wxtaskbariconseticon}.
+
+\membersection{wxTaskBarIcon::SetIcon}\label{wxtaskbariconseticon}
+
+\func{bool}{SetIcon}{\param{const wxIcon\&}{ icon}, \param{const wxString\& }{tooltip}}
+
+Sets the icon, and optional tooltip text.
+
+

@@ -1,0 +1,59 @@
+\section{\class{wxIdleEvent}}\label{wxidleevent}
+
+This class is used for idle events, which are generated when the system is idle.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Event table macros}
+
+To process an idle event, use this event handler macro to direct input to a member
+function that takes a wxIdleEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_IDLE(func)}}{Process a wxEVT\_IDLE event.}
+\end{twocollist}%
+
+\wxheading{Remarks}
+
+Idle events can be caught by the wxApp class, or by top-level window classes.
+
+\wxheading{See also}
+
+\helpref{wxApp::OnIdle}{wxapponidle}, \helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxIdleEvent::wxIdleEvent}
+
+\func{}{wxIdleEvent}{\void}
+
+Constructor.
+
+\membersection{wxIdleEvent::RequestMore}\label{wxidleeventrequestmore}
+
+\func{void}{RequestMore}{\param{bool}{ needMore = TRUE}}
+
+Tells wxWindows that more processing is required. This function can be called by an OnIdle
+handler for a window or window event handler to indicate that wxApp::OnIdle should
+forward the OnIdle event once more to the application windows. If no window calls this function
+during OnIdle, then the application will remain in a passive event loop (not calling OnIdle) until a
+new event is posted to the application by the windowing system.
+
+\wxheading{See also}
+
+\helpref{wxIdleEvent::MoreRequested}{wxidleeventmorerequested}, \helpref{wxApp::OnIdle}{wxapponidle}
+
+\membersection{wxIdleEvent::MoreRequested}\label{wxidleeventmorerequested}
+
+\constfunc{bool}{MoreRequested}{\void}
+
+Returns TRUE if the OnIdle function processing this event requested more processing time.
+
+\wxheading{See also}
+
+\helpref{wxIdleEvent::RequestMore}{wxidleeventrequestmore}, \helpref{wxApp::OnIdle}{wxapponidle}
+

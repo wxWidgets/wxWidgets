@@ -1,0 +1,67 @@
+\section{\class{wxTreeEvent}}\label{wxtreeevent}
+
+A tree event holds information about events associated with wxTreeCtrl objects.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Event table macros}
+
+To process input from a tree control, use these event handler macros to direct input to member
+functions that take a wxTreeEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_TREE\_BEGIN\_DRAG(id, func)}}{Begin dragging with the left mouse button.}
+\twocolitem{{\bf EVT\_TREE\_BEGIN\_RDRAG(id, func)}}{Begin dragging with the right mouse button.}
+\twocolitem{{\bf EVT\_TREE\_BEGIN\_LABEL\_EDIT(id, func)}}{Begin editing a label.}
+\twocolitem{{\bf EVT\_TREE\_END\_LABEL\_EDIT(id, func)}}{Finish editing a label.}
+\twocolitem{{\bf EVT\_TREE\_DELETE\_ITEM(id, func)}}{Delete an item.}
+\twocolitem{{\bf EVT\_TREE\_GET\_INFO(id, func)}}{Request information from the application.}
+\twocolitem{{\bf EVT\_TREE\_SET\_INFO(id, func)}}{Information is being supplied.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDED(id, func)}}{Parent has been expanded.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDING(id, func)}}{Parent is being expanded.}
+\twocolitem{{\bf EVT\_TREE\_SEL\_CHANGED(id, func)}}{Selection has changed.}
+\twocolitem{{\bf EVT\_TREE\_SEL\_CHANGING(id, func)}}{Selection is changing.}
+\twocolitem{{\bf EVT\_TREE\_KEY\_DOWN(id, func)}}{A key has been pressed.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{wxTreeCtrl}{wxtreectrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTreeEvent::wxTreeEvent}
+
+\func{}{wxTreeEvent}{\param{WXTYPE }{commandType = 0}, \param{int }{id = 0}}
+
+Constructor.
+
+\membersection{wxTreeEvent::m\_code}
+
+\member{int}{m\_code}
+
+Key code if the event is a keypress event.
+
+\membersection{wxTreeEvent::m\_itemIndex}
+
+\member{wxTreeItem}{m\_item}
+
+The item.
+
+\membersection{wxTreeEvent::m\_oldItem}
+
+\member{long}{m\_oldItem}
+
+The old item index.
+
+\membersection{wxTreeEvent::m\_pointDrag}
+
+\member{wxPoint}{m\_pointDrag}
+
+The position of the mouse pointer if the event is a drag event.
+

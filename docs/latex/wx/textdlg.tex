@@ -1,0 +1,64 @@
+\section{\class{wxTextEntryDialog}}\label{wxtextentrydialog}
+
+This class represents a dialog that requests a one-line text string from the user.
+It is implemented as a generic wxWindows dialog.
+
+\wxheading{Derived from}
+
+\helpref{wxDialog}{wxdialog}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxTextEntryDialog overview}{wxtextentrydialogoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTextEntryDialog::wxTextEntryDialog}\label{wxtextentrydialogconstr}
+
+\func{}{wxTextEntryDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message = "Please enter text"},\rtfsp
+\param{const wxString\& }{defaultValue = ""}, \param{long }{style = wxOK \pipe wxCANCEL \pipe wxCENTRE}, \param{const wxPoint\& }{pos = wxDefaultPosition}}
+
+Constructor. Use \helpref{wxTextEntryDialog::ShowModal}{wxtextentrydialogshowmodal} to show the dialog.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window.}
+
+\docparam{message}{Message to show on the dialog.}
+
+\docparam{defaultValue}{The default value, which may be the empty string.}
+
+\docparam{style}{A dialog style, specifying the buttons (wxOK, wxCANCEL) and an optional wxCENTRE style.}
+
+\docparam{pos}{Dialog position.}
+
+\membersection{wxTextEntryDialog::\destruct{wxTextEntryDialog}}
+
+\func{}{\destruct{wxTextEntryDialog}}{\void}
+
+Destructor.
+
+\membersection{wxTextEntryDialog::GetValue}\label{wxtextentrydialoggetvalue}
+
+\constfunc{wxString}{GetValue}{\void}
+
+Returns the text that the user has entered if the user has pressed OK, or the original value
+if the user has pressed Cancel.
+
+\membersection{wxTextEntryDialog::SetValue}\label{wxtextentrydialogsetvalue}
+
+\func{void}{SetValue}{\param{const wxString\& }{value}}
+
+Sets the default text value.
+
+\membersection{wxTextEntryDialog::ShowModal}\label{wxtextentrydialogshowmodal}
+
+\func{int}{ShowModal}{\void}
+
+Shows the dialog, returning wxID\_OK if the user pressed OK, and wxOK\_CANCEL
+otherwise.
+
+

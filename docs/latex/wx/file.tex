@@ -1,0 +1,169 @@
+\section{\class{wxFile}}\label{wxfile}
+
+A wxFile performs raw file I/O. Note that wxFile::Flush is not implemented on some Windows compilers
+due to a missing fsync function, which reduces the usefulness of this class.
+
+\wxheading{Derived from}
+
+None.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFile::wxFile}\label{wxfileconstr}
+
+\func{}{wxFile}{\void}
+
+Default constructor.
+
+\func{}{wxFile}{\param{const char*}{ filename}, \param{wxFile::OpenMode}{ mode = wxFile::read}}
+
+Opens a file with the given mode.
+
+\func{}{wxFile}{\param{int}{ fd}}
+
+Opens a file with the given file descriptor, which has already been opened.
+
+\wxheading{Parameters}
+
+\docparam{filename}{The filename.}
+
+\docparam{mode}{The mode in which to open the file. May be one of {\bf wxFile::read}, {\bf wxFile::write} and {\bf wxFile::read\_write}.}
+
+\docparam{fd}{An existing file descriptor.}
+
+\membersection{wxFile::\destruct{wxFile}}
+
+\func{}{\destruct{wxFile}}{\void}
+
+Destructor. This is not virtual, for efficiency.
+
+\membersection{wxFile::Attach}\label{wxfileattach}
+
+\func{void}{Attach}{\param{int}{ fd}}
+
+Attaches an existing file descriptor to the wxFile object.
+
+\membersection{wxFile::Close}\label{wxfileclose}
+
+\func{void}{Close}{\void}
+
+Closes the file.
+
+\membersection{wxFile::Create}\label{wxfilecreate}
+
+\func{bool}{Create}{\param{const char*}{ filename}, \param{bool}{ overwrite = FALSE}}
+
+Creates a file for writing. If the file already exists, setting {\bf overwrite} to TRUE
+will ensure it is overwritten.
+
+\membersection{wxFile::Eof}\label{wxfileeof}
+
+\constfunc{bool}{Eof}{\void}
+
+Returns TRUE if the end of the file has been reached.
+
+\membersection{wxFile::Exists}\label{wxfileexists}
+
+\func{static bool}{Exists}{\param{const char*}{ filename}}
+
+Returns TRUE if the file exists.
+
+\membersection{wxFile::Flush}\label{wxfileflush}
+
+\func{bool}{Flush}{\void}
+
+Flushes the file descriptor. Not implemented for some Windows compilers.
+
+\membersection{wxFile::IsOpened}\label{wxfileisopened}
+
+\constfunc{bool}{IsOpened}{\void}
+
+Returns TRUE if the file has been opened.
+
+\membersection{wxFile::Length}\label{wxfilelength}
+
+\constfunc{off\_t}{Length}{\void}
+
+Returns the length of the file.
+
+\membersection{wxFile::Open}\label{wxfileopen}
+
+\func{bool}{Open}{\param{const char*}{ filename}, \param{wxFile::OpenMode}{ mode = wxFile::read}}
+
+Opens the file, returning TRUE if successful.
+
+\wxheading{Parameters}
+
+\docparam{filename}{The filename.}
+
+\docparam{mode}{The mode in which to open the file. May be one of {\bf wxFile::read}, {\bf wxFile::write} and {\bf wxFile::read\_write}.}
+
+\membersection{wxFile::Read}\label{wxfileread}
+
+\func{off\_t}{Read}{\param{void*}{ buffer}, \param{off\_t}{ count}}
+
+Reads the specified number of bytes into a buffer, returning the actual number read.
+
+\wxheading{Parameters}
+
+\docparam{buffer}{A buffer to receive the data.}
+
+\docparam{count}{The number of bytes to read.}
+
+\wxheading{Return value}
+
+The number of bytes read, or the symbol {\bf ofsInvalid} (-1) if there was an error.
+
+\membersection{wxFile::Seek}\label{wxfileseek}
+
+\func{off\_t}{Seek}{\param{off\_t }{ofs}, \param{wxFile::SeekMode }{mode = wxFile::FromStart}}
+
+Seeks to the specified position.
+
+\wxheading{Parameters}
+
+\docparam{ofs}{Offset to seek to.}
+
+\docparam{mode}{One of {\bf wxFile::FromStart}, {\bf wxFile::FromEnd}, {\bf wxFile::FromCurrent}.}
+
+\wxheading{Return value}
+
+The actual offset position achieved, or ofsInvalid on failure.
+
+\membersection{wxFile::SeekEnd}\label{wxfileseekend}
+
+\func{off\_t}{SeekEnd}{\param{off\_t }{ofs = 0}}
+
+Moves the file pointer to the specified number of bytes before the end of the file.
+
+\wxheading{Parameters}
+
+\docparam{ofs}{Number of bytes before the end of the file.}
+
+\wxheading{Return value}
+
+The actual offset position achieved, or ofsInvalid on failure.
+
+\membersection{wxFile::Tell}\label{wxfiletell}
+
+\constfunc{off\_t}{Tell}{\void}
+
+Returns the current position.
+
+\membersection{wxFile::Write}\label{wxfilewrite}
+
+\func{bool}{Write}{\param{const void*}{ buffer}, \param{off\_t}{ count}}
+
+Writes the specified number of bytes from a buffer.
+
+\wxheading{Parameters}
+
+\docparam{buffer}{A buffer containing the data.}
+
+\docparam{count}{The number of bytes to write.}
+
+\wxheading{Return value}
+
+TRUE if the operation was successful.
+
+

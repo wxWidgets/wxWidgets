@@ -1,0 +1,103 @@
+\section{\class{wxClipboard}}\label{wxclipboard}
+
+There is one wxClipboard object referenced by the pointer
+wxTheClipboard, initialized by calling \helpref{wxInitClipboard}{wxinitclipboard}.
+Under X, clipboard manipulation must be done by using this class, and
+such code will work under MS Windows also. Under MS Windows, you have the
+alternative of using the normal clipboard functions.
+
+The documentation for this class will be expanded in due course. At present,
+wxClipboard is only used in the wxMediaWindow add-on library.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxClipboardClient}{wxclipboardclient}, \helpref{wxInitClipboard}{wxinitclipboard}.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxClipboard::GetClipboardClient}
+
+\func{wxClipboardClient *}{GetClipboardClient}{\void}
+
+Get the clipboard client directly. Will be NULL if clipboard data
+is a string, or if some other application owns the clipboard. 
+This can be useful for shortcutting data translation, if the
+clipboard user can check for a specific client.
+
+\membersection{wxClipboard::GetClipboardData}
+
+\func{char*}{GetClipboardData}{\param{const wxString\& }{format}, \param{long *}{length}, \param{long}{ time}}
+
+Get data from the clipboard.
+
+\membersection{wxClipboard::GetClipboardString}
+
+\func{wxString}{GetClipboardString}{\param{long}{ time}}
+
+Get the data from the clipboard in the format ``TEXT".
+
+\membersection{wxClipboard::SetClipboardClient}
+
+\func{void}{SetClipboardClient}{\param{wxClipboardClient *}{client}, \param{long}{ time}}
+
+Set the clipboard data owner.
+
+\membersection{wxClipboard::SetClipboardString}
+
+\func{void}{SetClipboardString}{\param{const wxString\& }{data}, \param{long}{ time}}
+
+Set the clipboard string; does not require a client.
+
+\section{\class{wxClipboardClient}}\label{wxclipboardclient}
+
+Implemented under X and MS Windows, a clipboard client holds data
+belonging to the clipboard. For plain text, a client is not necessary.
+
+wxClipboardClient is an abstract class for which the virtual functions
+BeingReplaced and GetData must be overridden.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxClipboard}{wxclipboard}, \helpref{wxInitClipboard}{wxinitclipboard}.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxClipboardClient::formats}
+
+\member{wxStringList}{formats}
+
+This list should be filled in with strings indicating the formats
+this client can provide. Almost all clients will provide``TEXT".
+Format names should be 4 characters long, so things will work
+out on the Macintosh.
+
+\membersection{wxClipboardClient::BeingReplaced}
+
+\func{void}{BeingReplaced}{\void}
+
+This method is called when the client is losing the selection.
+
+\membersection{wxClipboardClient::GetData}
+
+\func{char*}{GetData}{\param{const wxString\& }{format}, \param{long *}{size}}
+
+This method is called when someone wants the data this client is
+supplying to the clipboard.
+
+{\it format} is a string indicating the
+format of the data - one of the strings from the ``formats"
+list.
+
+{\it size} should be filled with the size of the resulting
+data. In the case of text, {\it size} does not count the
+NULL terminator.
+
+

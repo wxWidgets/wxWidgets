@@ -1,0 +1,96 @@
+\section{\class{wxCheckBox}}\label{wxcheckbox}
+
+A checkbox is a labelled box which is either on (checkmark is visible)
+or off (no checkmark).
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Window styles}
+
+There are no special styles for wxCheckBox.
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{See also}
+
+\helpref{wxRadioButton}{wxradiobutton}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxCheckBox::wxCheckBox}\label{wxcheckboxconstr}
+
+\func{}{wxCheckBox}{\void}
+
+Default constructor.
+
+\func{}{wxCheckBox}{\param{wxWindow* }{parent}, \param{const wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{label}, \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize}, \param{long}{ style = 0},\rtfsp
+\param{const wxValidator\& }{val}, \param{const wxString\& }{name = ``checkBox"}}
+
+Constructor, creating and showing a checkbox.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Checkbox identifier. A value of -1 indicates a default value.}
+
+\docparam{label}{Text to be displayed next to the checkbox.}
+
+\docparam{pos}{Checkbox position. If the position (-1, -1) is specified then a default position is chosen.}
+
+\docparam{size}{Checkbox size. If the default size (-1, -1) is specified then a default size is chosen.}
+
+\docparam{style}{Window style. See \helpref{wxCheckBox}{wxcheckbox}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxCheckBox::Create}{wxcheckboxcreate}, \helpref{wxValidator}{wxvalidator}
+
+\membersection{wxCheckBox::\destruct{wxCheckBox}}
+
+\func{}{\destruct{wxCheckBox}}{\void}
+
+Destructor, destroying the checkbox.
+
+\membersection{wxCheckBox::Create}\label{wxcheckboxcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{label}, \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize}, \param{long}{ style = 0},\rtfsp
+\param{const wxValidator\& }{val}, \param{const wxString\& }{name = ``checkBox"}}
+
+Creates the checkbox for two-step construction. See \helpref{wxCheckBox::wxCheckBox}{wxcheckboxconstr}\rtfsp
+for details.
+
+\membersection{wxCheckBox::GetValue}\label{wxcheckboxgetvalue}
+
+\constfunc{bool}{GetValue}{\void}
+
+Gets the state of the checkbox.
+
+\wxheading{Return value}
+
+Returns TRUE if it is checked, FALSE otherwise.
+
+\membersection{wxCheckBox::SetValue}\label{wxcheckboxsetvalue}
+
+\func{void}{SetValue}{\param{const bool}{ state}}
+
+Sets the checkbox to the given state.
+
+\wxheading{Parameters}
+
+\docparam{state}{If TRUE, the check is on, otherwise it is off.}
+
+

@@ -1,0 +1,770 @@
+\section{\class{wxToolBarBase}}\label{wxtoolbarbase}
+
+{\bf wxToolBarBase} is the base class for a number of toolbar classes.  The most portable
+one of these is the generic \helpref{wxToolBarSimple}{wxtoolbarsimple} class. {\bf wxToolBarBase} defines
+automatic scrolling management functionality which is identical to \helpref{wxScrolledWindow}{wxscrolledwindow},
+so please refer to this class also.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Remarks}
+
+Because there is a variety of toolbar classes, you may wish to choose which class
+is best for your application on each platform, and define {\bf wxToolBar} appropriately. For example:
+
+\begin{verbatim}
+#if WIN95
+class wxToolBar: public wxToolBar95
+#elif defined(wx_msw)
+class wxToolBar: public wxToolBarMSW
+#else
+class wxToolBar: public wxToolBarSimple
+#endif
+{
+};
+\end{verbatim}
+
+TODO: maybe change the confusing names: GetDefaultSize becomes GetToolBitmapSize, and
+GetDefaultButtonSize becomes GetToolSize. Document SetRows for wxToolBar95, and make it
+part of the base API?
+
+\wxheading{Event handling}
+
+Derive a new class from an existing toolbar class, and override appropriate virtual functions.
+
+TODO: make consistent with other event handling; have wxToolBarEvent and appropriate macros.
+
+\wxheading{See also}
+
+\overview{Toolbar overview}{wxtoolbaroverview},\rtfsp
+\helpref{wxToolBarSimple}{wxtoolbarsimple},\rtfsp
+\helpref{wxToolBarMSW}{wxtoolbarmsw},\rtfsp
+\helpref{wxToolBar95}{wxtoolbar95},\rtfsp
+\helpref{wxScrolledWindow}{wxscrolledwindow}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxToolBarBase::wxToolBarBase}\label{wxtoolbarbaseconstr}
+
+\func{}{wxToolBarBase}{\void}
+
+Default constructor.
+
+%\wxheading{See also}
+%
+%\helpref{wxToolBarBase::Create}{wxtoolbarbasecreate}
+%
+\membersection{wxToolBarBase::\destruct{wxToolBarBase}}
+
+\func{void}{\destruct{wxToolBarBase}}{\void}
+
+Toolbar destructor.
+
+\membersection{wxToolBarBase::AddSeparator}\label{wxtoolbarbaseaddseparator}
+
+\func{void}{AddSeparator}{\void}
+
+Adds a separator for spacing groups of tools.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::AddTool}{wxtoolbarbaseaddtool}, \helpref{wxToolBarBase::SetToolSeparation}{wxtoolbarbasesettoolseparation}
+
+\membersection{wxToolBarBase::AddTool}\label{wxtoolbarbaseaddtool}
+
+\func{wxToolBarBaseTool*}{AddTool}{\param{const int}{ toolIndex}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
+\param{const wxBitmap\&}{ bitmap2 = (wxBitmap *)NULL}, \param{const bool}{ isToggle = FALSE},\rtfsp
+\param{const float}{ xPos = -1}, \param{const float}{ yPos = -1},\rtfsp
+\param{wxObject *}{clientData = NULL}, \param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
+
+Adds a tool to the toolbar.
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{An integer by which
+the tool may be identified in subsequent operations.}
+
+\docparam{isToggle}{Specifies whether the tool is a toggle or not: a toggle tool may be in
+two states, whereas a non-toggle tool is just a button.}
+
+\docparam{bitmap1}{The primary tool bitmap for toggle and button tools.}
+
+\docparam{bitmap2}{The second bitmap specifies the on-state bitmap for a toggle
+tool. If this is NULL, either an inverted version of the primary bitmap is
+used for the on-state of a toggle tool (monochrome displays) or a black
+border is drawn around the tool (colour displays). Note that to pass a NULL value,
+you need to cast it to (wxBitmap *) so that C++ can construct an appropriate temporary
+wxBitmap object.}
+
+\docparam{xPos}{Specifies the x position of the tool if automatic layout is not suitable.}
+
+\docparam{yPos}{Specifies the y position of the tool if automatic layout is not suitable.}
+
+\docparam{clientData}{An optional pointer to client data which can be
+retrieved later using \helpref{wxToolBarBase::GetToolClientData}{wxtoolbarbasegettoolclientdata}.}
+
+\docparam{shortHelpString}{Used for displaying a tooltip for the tool in the
+Windows 95 implementation of wxButtonBar. Pass the empty string if this is not required.}
+
+\docparam{longHelpString}{Used to displayer longer help, such as status line help.
+Pass the empty string if this is not required.}
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::AddSeparator}{wxtoolbarbaseaddseparator}
+
+\membersection{wxToolBarBase::CreateTools}\label{wxtoolbarbasecreatetools}
+
+\func{bool}{CreateTools}{\void}
+
+Call this function after all tools have been added to the toolbar, to actually
+create the tools.
+
+\wxheading{Remarks}
+
+Strictly speaking, this is required only for the Windows 95 version of wxButtonBar,
+but for portability it should be called anyway.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::AddTool}{wxtoolbarbaseaddtool}
+
+\membersection{wxToolBarBase::DrawTool}\label{wxtoolbarbasedrawtool}
+
+\func{void}{DrawTool}{\param{wxMemoryDC\& }{memDC}, \param{wxToolBarBaseTool* }{tool}}
+
+Draws the specified tool onto the canvas using the given memory device context.
+
+\wxheading{Parameters}
+
+\docparam{memDC}{A memory DC to be used for drawing the tool.}
+
+\docparam{tool}{Tool to be drawn.}
+
+\wxheading{Remarks}
+
+For internal use only.
+
+\membersection{wxToolBarBase::EnableTool}\label{wxtoolbarbaseenabletool}
+
+\func{void}{EnableTool}{\param{const int }{toolIndex}, \param{const bool}{ enable}}
+
+Enables or disables the tool.
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{Tool to enable or disable.}
+
+\docparam{enable}{If TRUE, enables the tool, otherwise disables it.}
+
+\wxheading{Remarks}
+
+For \helpref{wxToolBarSimple}{wxtoolbarsimple}, does nothing. Some other implementations
+will change the visible state of the tool to indicate that it is disabled.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::GetToolEnabled}{wxtoolbarbasegettoolenabled},\rtfsp
+%\helpref{wxToolBarBase::SetToolState}{wxtoolbarbasesettoolstate},\rtfsp
+\helpref{wxToolBarBase::ToggleTool}{wxtoolbarbasetoggletool}
+
+\membersection{wxToolBarBase::FindToolForPosition}\label{wxtoolbarbasefindtoolforposition}
+
+\constfunc{wxToolBarBaseTool*}{FindToolForPosition}{\param{const float}{ x}, \param{const float}{ y}}
+
+Finds a tool for the given mouse position.
+
+\wxheading{Parameters}
+
+\docparam{x}{X position.}
+
+\docparam{y}{Y position.}
+
+\wxheading{Return value}
+
+A pointer to a tool if a tool is found, or NULL otherwise.
+
+\wxheading{Remarks}
+
+Used internally, and should not need to be used by the programmer.
+
+\membersection{wxToolBarBase::GetDefaultButtonSize}\label{wxtoolbarbasegetdefaultbuttonsize}
+
+\func{wxSize}{GetDefaultButtonSize}{\void}
+
+Returns the size of a whole button, which is usually larger than a tool bitmap because
+of added 3D effects.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::SetDefaultSize}{wxtoolbarbasesetdefaultsize},\rtfsp
+\helpref{wxToolBarBase::GetDefaultSize}{wxtoolbarbasegetdefaultsize}
+
+\membersection{wxToolBarBase::GetDefaultSize}\label{wxtoolbarbasegetdefaultsize}
+
+\func{wxSize}{GetDefaultSize}{\void}
+
+Returns the size of bitmap that the toolbar expects to have. The default bitmap size is 16 by 15 pixels.
+
+\wxheading{Remarks}
+
+Note that this is the size of the bitmap you pass to \helpref{wxToolBarBase::AddTool}{wxtoolbarbaseaddtool},
+and not the eventual size of the tool button.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::SetDefaultSize}{wxtoolbarbasesetdefaultsize},\rtfsp
+\helpref{wxToolBarBase::GetDefaultButtonSize}{wxtoolbarbasegetdefaultbuttonsize}
+
+\membersection{wxToolBarBase::GetMargins}\label{wxtoolbarbasegetmargins}
+
+\constfunc{wxSize}{GetMargins}{\void}
+
+Returns the left/right and top/bottom margins, which are also used for inter-toolspacing.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::SetMargins}{wxtoolbarbasesetmargins}
+
+\membersection{wxToolBarBase::GetMaxSize}\label{wxtoolbarbasegetmaxsize}
+
+\constfunc{void}{GetMaxSize}{\param{float*}{ w}, \param{float*}{ h}}
+
+Gets the maximum size taken up by the tools after layout, including margins.
+This can be used to size a frame around the toolbar canvas.
+
+\wxheading{Parameters}
+
+\docparam{w}{Receives the maximum horizontal size.}
+
+\docparam{h}{Receives the maximum vertical size.}
+
+\membersection{wxToolBarBase::GetToolClientData}\label{wxtoolbarbasegettoolclientdata}
+
+\constfunc{wxObject*}{GetToolClientData}{\param{const int }{toolIndex}}
+
+Get any client data associated with the tool.
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{Index of the tool, as passed to \helpref{wxToolBarBase::AddTool}{wxtoolbarbaseaddtool}.}
+
+\wxheading{Return value}
+
+Client data, or NULL if there is none.
+
+\membersection{wxToolBarBase::GetToolEnabled}\label{wxtoolbarbasegettoolenabled}
+
+\constfunc{bool}{GetToolEnabled}{\param{const int }{toolIndex}}
+
+Called to determine whether a tool is enabled (responds to user input).
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{Index of the tool in question.}
+
+\wxheading{Return value}
+
+TRUE if the tool is enabled, FALSE otherwise.
+
+%\wxheading{See also}
+%
+%\helpref{wxToolBarBase::SetToolEnabled}{wxtoolbarbasesettoolenabled}
+%
+\membersection{wxToolBarBase::GetToolLongHelp}\label{wxtoolbarbasegettoollonghelp}
+
+\constfunc{wxString}{GetToolLongHelp}{\param{const int }{toolIndex}}
+
+Returns the long help for the given tool.
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{The tool in question.}
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::SetToolLongHelp}{wxtoolbarbasesettoollonghelp},\rtfsp
+\helpref{wxToolBarBase::SetToolShortHelp}{wxtoolbarbasesettoolshorthelp}\rtfsp
+
+\membersection{wxToolBarBase::GetToolPacking}\label{wxtoolbarbasegettoolpacking}
+
+\constfunc{int}{GetToolPacking}{\void}
+
+Returns the value used for packing tools.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::SetToolPacking}{wxtoolbarbasesettoolpacking}
+
+\membersection{wxToolBarBase::GetToolSeparation}\label{wxtoolbarbasegettoolseparation}
+
+\constfunc{int}{GetToolSeparation}{\void}
+
+Returns the default separator size.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::SetToolSeparation}{wxtoolbarbasesettoolseparation}
+
+\membersection{wxToolBarBase::GetToolShortHelp}\label{wxtoolbarbasegettoolshorthelp}
+
+\constfunc{wxString}{GetToolShortHelp}{\param{const int }{toolIndex}}
+
+Returns the short help for the given tool.
+
+Returns the long help for the given tool.
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{The tool in question.}
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::GetToolLongHelp}{wxtoolbarbasegettoollonghelp},\rtfsp
+\helpref{wxToolBarBase::SetToolShortHelp}{wxtoolbarbasesettoolshorthelp}\rtfsp
+
+\membersection{wxToolBarBase::GetToolState}\label{wxtoolbarbasegettoolstate}
+
+\constfunc{bool}{GetToolState}{\param{const int }{toolIndex}}
+
+Gets the on/off state of a toggle tool.
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{The tool in question.}
+
+\wxheading{Return value}
+
+TRUE if the tool is toggled on, FALSE otherwise.
+
+%\wxheading{See also}
+%
+%\helpref{wxToolBarBase::SetToolState}{wxtoolbarbasesettoolstate}
+%
+\membersection{wxToolBarBase::Layout}\label{wxtoolbarbaselayout}
+
+\func{void}{Layout}{\void}
+
+Called by the application after the tools have been added to
+automatically lay the tools out on the canvas. If you have given
+absolute positions when adding the tools, do not call this.
+
+\membersection{wxToolBarBase::OnLeftClick}\label{wxtoolbarbaseonleftclick}
+
+\func{bool}{OnLeftClick}{\param{int}{ toolIndex}, \param{bool}{ toggleDown}}
+
+Called when the user clicks on a tool with the left mouse button. The
+programmer should override this function to detect left tool clicks.
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{The identifier passed to \helpref{wxToolBarBase::AddTool}{wxtoolbarbaseaddtool}.}
+
+\docparam{toggleDown}{TRUE if the tool is a toggle and the toggle is down, otherwise is FALSE.}
+
+\wxheading{Return value}
+
+If the tool is a toggle and this function returns FALSE, the toggle
+toggle state (internal and visual) will not be changed. This provides a way of
+specifying that toggle operations are not permitted in some circumstances.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::OnMouseEnter}{wxtoolbarbaseonmouseenter},\rtfsp
+\helpref{wxToolBarBase::OnRightClick}{wxtoolbarbaseonrightclick}
+
+\membersection{wxToolBarBase::OnMouseEnter}\label{wxtoolbarbaseonmouseenter}
+
+\func{void}{OnMouseEnter}{\param{int}{ toolIndex}}
+
+This is called when the mouse cursor moves into a tool or out of
+the toolbar.
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{Greater than -1 if the mouse cursor has moved into the tool,
+or -1 if the mouse cursor has moved. The
+programmer can override this to provide extra information about the tool,
+such as a short description on the status line.}
+
+\wxheading{Remarks}
+
+With some derived toolbar classes, if the mouse moves quickly out of the toolbar, wxWindows may not be able to
+detect it. Therefore this function may not always be called when expected.
+
+\membersection{wxToolBarBase::OnRightClick}\label{wxtoolbarbaseonrightclick}
+
+\func{void}{OnRightClick}{\param{int}{ toolIndex}, \param{float}{ x}, \param{float}{ y}}
+
+Called when the user clicks on a tool with the right mouse button. The
+programmer should override this function to detect right tool clicks.
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{The identifier passed to \helpref{wxToolBarBase::AddTool}{wxtoolbarbaseaddtool}.}
+
+\docparam{x}{The x position of the mouse cursor.}
+
+\docparam{y}{The y position of the mouse cursor.}
+
+\wxheading{Remarks}
+
+A typical use of this member might be to pop up a menu.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::OnMouseEnter}{wxtoolbarbaseonmouseenter},\rtfsp
+\helpref{wxToolBarBase::OnLeftClick}{wxtoolbarbaseonleftclick}
+
+\membersection{wxToolBarBase::SetDefaultSize}\label{wxtoolbarbasesetdefaultsize}
+
+\func{void}{SetDefaultSize}{\param{const wxSize\&}{ size}}
+
+Sets the default size of each tool bitmap. The default bitmap size is 16 by 15 pixels.
+
+\wxheading{Parameters}
+
+\docparam{size}{The size of the bitmaps in the toolbar.}
+
+\wxheading{Remarks}
+
+This should be called to tell the toolbar what the tool bitmap size is. Call
+it before you add tools.
+
+Note that this is the size of the bitmap you pass to \helpref{wxToolBarBase::AddTool}{wxtoolbarbaseaddtool},
+and not the eventual size of the tool button.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::GetDefaultSize}{wxtoolbarbasegetdefaultsize},\rtfsp
+\helpref{wxToolBarBase::GetDefaultButtonSize}{wxtoolbarbasegetdefaultbuttonsize}
+
+\membersection{wxToolBarBase::SetMargins}\label{wxtoolbarbasesetmargins}
+
+\func{void}{SetMargins}{\param{const wxSize\&}{ size}}
+
+\func{void}{SetMargins}{\param{const int}{ x}, \param{const int}{ y}}
+
+Set the values to be used as margins for the toolbar.
+
+\wxheading{Parameters}
+
+\docparam{size}{Margin size.}
+
+\docparam{x}{Left margin, right margin and inter-tool separation value.}
+
+\docparam{y}{Top margin, bottom margin and inter-tool separation value.}
+
+\wxheading{Remarks}
+
+This must be called before the tools are added if absolute positioning is to be used, and the
+default (zero-size) margins are to be overridden.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::GetMargins}{wxtoolbarbasegetmargins}, \helpref{wxSize}{wxsize}
+
+\membersection{wxToolBarBase::SetToolLongHelp}\label{wxtoolbarbasesettoollonghelp}
+
+\func{void}{SetToolLongHelp}{\param{int }{toolIndex}, \param{const wxString\& }{helpString}}
+
+Sets the long help for the given tool.
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{The tool in question.}
+
+\docparam{helpString}{A string for the long help.}
+
+\wxheading{Remarks}
+
+You might use the long help for displaying the tool purpose on the status line.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::GetToolLongHelp}{wxtoolbarbasegettoollonghelp},\rtfsp
+\helpref{wxToolBarBase::SetToolShortHelp}{wxtoolbarbasesettoolshorthelp},\rtfsp
+
+\membersection{wxToolBarBase::SetToolPacking}\label{wxtoolbarbasesettoolpacking}
+
+\func{void}{SetToolPacking}{\param{const int}{ packing}}
+
+Sets the value used for spacing tools. The default value is 1.
+
+\wxheading{Parameters}
+
+\docparam{packing}{The value for packing.}
+
+\wxheading{Remarks}
+
+The packing is used for spacing in the vertical direction if the toolbar is horizontal,
+and for spacing in the horizontal direction if the toolbar is vertical.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::GetToolPacking}{wxtoolbarbasegettoolpacking}
+
+\membersection{wxToolBarBase::SetToolShortHelp}\label{wxtoolbarbasesettoolshorthelp}
+
+\func{void}{SetToolShortHelp}{\param{const int }{toolIndex}, \param{const wxString\& }{helpString}}
+
+Sets the short help for the given tool.
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{The tool in question.}
+
+\docparam{helpString}{The string for the short help.}
+
+\wxheading{Remarks}
+
+An application might use short help for identifying the tool purpose in a tooltip.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::GetToolShortHelp}{wxtoolbarbasegettoolshorthelp}, \helpref{wxToolBarBase::SetToolLongHelp}{wxtoolbarbasesettoollonghelp}
+
+\membersection{wxToolBarBase::SetToolSeparation}\label{wxtoolbarbasesettoolseparation}
+
+\func{void}{SetToolSeparation}{\param{const int}{ separation}}
+
+Sets the default separator size. The default value is 5.
+
+\wxheading{Parameters}
+
+\docparam{separation}{The separator size.}
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::AddSeparator}{wxtoolbarbaseaddseparator}
+
+\membersection{wxToolBarBase::ToggleTool}\label{wxtoolbarbasetoggletool}
+
+\func{void}{ToggleTool}{\param{const int }{toolIndex}, \param{const bool}{ toggle}}
+
+Toggles a tool on or off.
+
+\wxheading{Parameters}
+
+\docparam{toolIndex}{Tool in question.}
+
+\docparam{toggle}{If TRUE, toggles the tool on, otherwise toggles it off.}
+
+\wxheading{Remarks}
+
+Only applies to a tool that has been specified as a toggle tool.
+
+\wxheading{See also}
+
+\helpref{wxToolBarBase::GetToolState}{wxtoolbarbasegettoolstate}
+
+\section{\class{wxToolBar95}}\label{wxtoolbar95}
+
+This class should be used when a 3D-effect toolbar is required under Windows 95.
+It uses the native toolbar control.
+
+\wxheading{Derived from}
+
+\helpref{wxToolBarBase}{wxtoolbarbase}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Window styles}
+
+There are no specific styles for this class.
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Remarks}
+
+Note that this toolbar paints tools to reflect user-selected colours.
+The toolbar orientation must always be {\bf wxVERTICAL}.
+
+For member functions, see the documentation for \helpref{wxToolBarBase}{wxtoolbarbase}.
+
+\wxheading{See also}
+
+\overview{Toolbar overview}{wxtoolbaroverview},\rtfsp
+\helpref{wxToolBarBase}{wxtoolbarbase},\rtfsp
+\helpref{wxToolBarSimple}{wxtoolbarsimple},\rtfsp
+\helpref{wxToolBarMSW}{wxtoolbarmsw}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxToolBar95::wxToolBar95}\label{wxtoolbar95constr}
+
+\func{}{wxToolBar95}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{const long }{style = 0}, \param{const int }{orientation = wxVERTICAL},\rtfsp
+\param{const int }{nRowsOrColumns = 1}, \param{const wxString\& }{name = ``toolBar"}}
+
+Constructs a toolbar.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{pos}{Window position. If the position (-1, -1) is specified then a default position is chosen.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then a default size is chosen.}
+
+\docparam{orientation}{Specifies a wxVERTICAL or wxHORIZONTAL orientation for laying out
+the toolbar.}
+
+\docparam{nRowsOrColumns}{Specifies the number of rows or
+columns, whose meaning depends on {\it orientation}.  If laid out
+vertically, {\it nRowsOrColumns} specifies the number of rows to draw
+before the next column is started; if horizontal, it refers to the
+number of columns to draw before the next row is started.}
+
+\docparam{style}{Window style. See \helpref{wxToolBar95}{wxtoolbar95}.}
+
+\docparam{name}{Window name.}
+
+\section{\class{wxToolBarMSW}}\label{wxtoolbarmsw}
+
+This class should be used when a 3D-effect toolbar is required for Windows versions earlier
+than Windows 95.
+
+\wxheading{Derived from}
+
+\helpref{wxToolBarBase}{wxtoolbarbase}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Window styles}
+
+There are no specific styles for this class.
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Remarks}
+
+Note that this toolbar does not paint tools to reflect user-selected colours: grey shading is used.
+
+For member functions, see the documentation for \helpref{wxToolBarBase}{wxtoolbarbase}.
+
+\wxheading{See also}
+
+\overview{Toolbar overview}{wxtoolbaroverview},\rtfsp
+\helpref{wxToolBarBase}{wxtoolbarbase},\rtfsp
+\helpref{wxToolBarSimple}{wxtoolbarsimple},\rtfsp
+\helpref{wxToolBar95}{wxtoolbar95}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxToolBarMSW::wxToolBarMSW}\label{wxtoolbarmswconstr}
+
+\func{}{wxToolBarMSW}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{const long }{style = 0}, \param{const int }{orientation = wxVERTICAL},\rtfsp
+\param{const int }{nRowsOrColumns = 1}, \param{const wxString\& }{name = ``toolBar"}}
+
+Constructs a toolbar.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{pos}{Window position. If the position (-1, -1) is specified then a default position is chosen.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then a default size is chosen.}
+
+\docparam{orientation}{Specifies a wxVERTICAL or wxHORIZONTAL orientation for laying out
+the toolbar.}
+
+\docparam{nRowsOrColumns}{Specifies the number of rows or
+columns, whose meaning depends on {\it orientation}.  If laid out
+vertically, {\it nRowsOrColumns} specifies the number of rows to draw
+before the next column is started; if horizontal, it refers to the
+number of columns to draw before the next row is started.}
+
+\docparam{style}{Window style. See \helpref{wxToolBarMSW}{wxtoolbarmsw}.}
+
+\docparam{name}{Window name.}
+
+
+\section{\class{wxToolBarSimple}}\label{wxtoolbarsimple}
+
+This is the generic toolbar class which has an identical appearance
+on all platforms.
+
+\wxheading{Derived from}
+
+\helpref{wxToolBarBase}{wxtoolbarbase}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxTB\_3DBUTTONS}}{Gives the simple toolbar a mild 3D look to its buttons.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Remarks}
+
+In this class, disabling a toolbar tool does not change its appearance.
+
+For member functions, see the documentation for \helpref{wxToolBarBase}{wxtoolbarbase}.
+
+\wxheading{See also}
+
+\overview{Toolbar overview}{wxtoolbaroverview},\rtfsp
+\helpref{wxToolBarBase}{wxtoolbarbase},\rtfsp
+\helpref{wxToolBarSimple}{wxtoolbarsimple},\rtfsp
+\helpref{wxToolBar95}{wxtoolbar95}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxToolBarSimple::wxToolBarSimple}\label{wxtoolbarsimpleconstr}
+
+\func{}{wxToolBarSimple}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{const long }{style = 0}, \param{const int }{orientation = wxVERTICAL},\rtfsp
+\param{const int }{nRowsOrColumns = 1}, \param{const wxString\& }{name = ``toolBar"}}
+
+Constructs a toolbar.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{pos}{Window position. If the position (-1, -1) is specified then a default position is chosen.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then a default size is chosen.}
+
+\docparam{orientation}{Specifies a wxVERTICAL or wxHORIZONTAL orientation for laying out
+the toolbar.}
+
+\docparam{nRowsOrColumns}{Specifies the number of rows or
+columns, whose meaning depends on {\it orientation}.  If laid out
+vertically, {\it nRowsOrColumns} specifies the number of rows to draw
+before the next column is started; if horizontal, it refers to the
+number of columns to draw before the next row is started.}
+
+\docparam{style}{Window style. See \helpref{wxToolBarSimple}{wxtoolbarsimple}.}
+
+\docparam{name}{Window name.}
+
+
+

@@ -1,0 +1,177 @@
+\section{Interprocess communication overview}\label{ipcoverview}
+
+Classes: \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEConnection}{wxddeconnection},
+\rtfsp\helpref{wxDDEClient}{wxddeclient}.
+
+TODO: rewrite.
+
+The following describes how wxWindows implements DDE.  The following
+three classes are central.
+
+\begin{enumerate}\itemsep=0pt
+\item wxDDEClient. This represents the client application, and is used
+only within a client program.
+\item wxDDEServer. This represents the server application, and is used
+only within a server program.
+\item wxDDEConnection. This represents the connection from the current
+client or server to the other application (server or client), and can be used
+in both server and client programs. Most DDE
+transactions operate on this object.
+\end{enumerate}
+
+Messages between applications are usually identified by three variables:
+connection object, topic name and item name.  A data string is a fourth
+element of some messages. To create a connection (a conversation in
+Windows parlance), the client application sends the message
+MakeConnection to the client object, with a string service name to
+identify the server and a topic name to identify the topic for the
+duration of the connection. Under UNIX, the service name must contain an
+integer port identifier.
+
+The server then responds and either vetos the connection or allows it.
+If allowed, a connection object is created which persists until the
+connection is closed.  The connection object is then used for subsequent
+messages between client and server.
+
+To create a working server, the programmer must:
+
+\begin{enumerate}\itemsep=0pt
+\item Derive a class from wxDDEServer.
+\item Override the handler OnAcceptConnection for accepting or rejecting a connection,
+on the basis of the topic argument. This member must create and return a connection
+object if the connection is accepted.
+\item Create an instance of your server object, and call Create to
+activate it, giving it a service name.
+\item Derive a class from wxDDEConnection.
+\item Provide handlers for various messages that are sent to the server
+side of a wxDDEConnection.
+\end{enumerate}
+
+To create a working client, the programmer must:
+
+\begin{enumerate}\itemsep=0pt
+\item Derive a class from wxDDEClient.
+\item Override the handler OnMakeConnection to create and return
+an appropriate connection object.
+\item Create an instance of your client object.
+\item Derive a class from wxDDEConnection.
+\item Provide handlers for various messages that are sent to the client
+side of a wxDDEConnection.
+\item When appropriate, create a new connection by sending a MakeConnection
+message to the client object, with arguments host name (processed in UNIX only),
+service name, and topic name for this connection. The client object will call OnMakeConnection
+to create a connection object of the desired type.
+\item Use the wxDDEConnection member functions to send messages to the server.
+\end{enumerate}
+
+\subsection{Data transfer}
+
+These are the ways that data can be transferred from one application to
+another.
+
+\begin{itemize}\itemsep=0pt
+\item {\bf Execute:} the client calls the server with a data string representing
+a command to be executed. This succeeds or fails, depending on the
+server's willingness to answer. If the client wants to find the result
+of the Execute command other than success or failure, it has to explicitly
+call Request.
+\item {\bf Request:} the client asks the server for a particular data string
+associated with a given item string. If the server is unwilling to
+reply, the return value is NULL. Otherwise, the return value is a string
+(actually a pointer to the connection buffer, so it should not be
+deallocated by the application).
+\item {\bf Poke:} The client sends a data string associated with an item
+string directly to the server. This succeeds or fails.
+\item {\bf Advise:} The client asks to be advised of any change in data
+associated with a particular item. If the server agrees, the server will
+send an OnAdvise message to the client along with the item and data.
+\end{itemize}
+
+The default data type is wxCF\_TEXT (ASCII text), and the default data
+size is the length of the null-terminated string. Windows-specific data
+types could also be used on the PC.
+
+\subsection{Examples}
+
+See the sample programs {\it server}\/ and {\it client}\/ in the IPC
+samples directory.  Run the server, then the client. This demonstrates
+using the Execute, Request, and Poke commands from the client, together
+with an Advise loop: selecting an item in the server list box causes
+that item to be highlighted in the client list box.
+
+See also the source for wxHelp, which is a DDE server, and the files
+wx\_help.h and wx\_help.cc which implement the client interface to
+wxHelp.
+
+\subsection{More DDE details}
+
+A wxDDEClient object represents the client part of a client-server DDE
+(Dynamic Data Exchange) conversation (available in both
+Windows and UNIX).
+
+To create a client which can communicate with a suitable server,
+you need to derive a class from wxDDEConnection and another from wxDDEClient.
+The custom wxDDEConnection class will intercept communications in
+a `conversation' with a server, and the custom wxDDEServer is required
+so that a user-overriden \helpref{wxDDEClient::OnMakeConnection}{wxddeclientonmakeconnection} member can return
+a wxDDEConnection of the required class, when a connection is made.
+
+For example:
+
+\begin{verbatim}
+class MyConnection: public wxDDEConnection
+{
+ public:
+  MyConnection(void)::wxDDEConnection(ipc_buffer, 3999) {}
+  ~MyConnection(void) { }
+  Bool OnAdvise(char *topic, char *item, char *data, int size, int format)
+  { wxMessageBox(topic, data); }
+};
+
+class MyClient: public wxDDEClient
+{
+ public:
+  MyClient(void) {}
+  wxDDEConnection *OnMakeConnection(void) { return new MyConnection; }
+};
+
+\end{verbatim}
+
+Here, {\bf MyConnection} will respond to \helpref{OnAdvise}{wxddeconnectiononadvise} messages sent
+by the server.
+
+When the client application starts, it must first call \helpref{wxIPCInitialize}{wxipcinitialize}\rtfsp
+before creating an instance of the derived wxDDEClient. In the following, command line
+arguments are used to pass the host name (the name of the machine the server is running
+on) and the server name (identifying the server process). Calling \helpref{wxDDEClient::MakeConnection}{wxddeclientmakeconnection}\rtfsp
+implicitly creates an instance of {\bf MyConnection} if the request for a
+connection is accepted, and the client then requests an {\it Advise} loop
+from the server, where the server calls the client when data has changed.
+
+\begin{verbatim}
+  wxIPCInitialize();
+
+  char *server = "4242";
+  char hostName[256];
+  wxGetHostName(hostName, sizeof(hostName));
+
+  char *host = hostName;
+
+  if (argc > 1)
+    server = argv[1];
+  if (argc > 2)
+    host = argv[2];
+
+  // Create a new client
+  MyClient *client = new MyClient;
+  the_connection = (MyConnection *)client->MakeConnection(host, server, "IPC TEST");
+
+  if (!the_connection)
+  {
+    wxMessageBox("Failed to make connection to server", "Client Demo Error");
+    return NULL;
+  }
+  the_connection->StartAdvise("Item");
+\end{verbatim}
+
+

@@ -1,0 +1,93 @@
+\section{\class{wxFileHistory}}\label{wxfilehistory}
+
+The wxFileHistory encapsulates a user interface convenience, the
+list of most recently visited files as shown on a menu (usually the File menu).
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\overview{wxFileHistory overview}{wxfilehistoryoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileHistory::m\_fileHistory}
+
+\member{char**}{m\_fileHistory}
+
+A character array of strings corresponding to the most recently opened
+files.
+
+\membersection{wxFileHistory::m\_fileHistoryN}
+
+\member{int}{m\_fileHistoryN}
+
+The number of files stored in the history array.
+
+\membersection{wxFileHistory::m\_fileMaxFiles}
+
+\member{int}{m\_fileMaxFiles}
+
+The maximum number of files to be stored and displayed on the menu.
+
+\membersection{wxFileHistory::m\_fileMenu}
+
+\member{wxMenu*}{m\_fileMenu}
+
+The file menu used to display the file history list (if enabled).
+
+\membersection{wxFileHistory::wxFileHistory}
+
+\func{}{wxFileHistory}{\param{int}{ maxFiles = 9}}
+
+Constructor. Pass the maximum number of files that should be stored and displayed.
+
+\membersection{wxFileHistory::\destruct{wxFileHistory}}
+
+\func{}{\destruct{wxFileHistory}}{\void}
+
+Destructor.
+
+\membersection{wxFileHistory::AddFileToHistory}
+
+\func{void}{AddFileToHistory}{\param{const wxString\& }{filename}}
+
+Adds a file to the file history list, if the object has a pointer to an appropriate file menu.
+
+\membersection{wxFileHistory::FileHistoryLoad}
+
+\func{void}{FileHistoryLoad}{\param{const wxString\& }{resourceFile}, \param{const wxString\& }{sectionName}}
+
+Loads the file history from a resource file, using the given section. This must be called
+explicitly by the application.
+
+\membersection{wxFileHistory::FileHistorySave}
+
+\func{void}{FileHistorySave}{\param{const wxString\& }{resourceFile}, \param{const wxString\& }{sectionName}}
+
+Saves the file history into a resource file, using the given section. This must be called
+explicitly by the application.
+
+\membersection{wxFileHistory::FileHistoryUseMenu}
+
+\func{void}{FileHistoryUseMenu}{\param{wxMenu* }{menu}}
+
+Use this menu for appending recently-visited document filenames, for convenient
+access. Calling this function with a valid menu pointer enables the history
+list functionality.
+
+\membersection{wxFileHistory::GetMaxFiles}
+
+\func{int}{GetMaxFiles}{\void}
+
+Returns the maximum number of files that can be stored.
+
+\membersection{wxFileHistory::GetNoHistoryFiles}
+
+\func{int}{GetNoHistoryFiles}{\void}
+
+Returns the number of files currently stored in the file history.
+
+

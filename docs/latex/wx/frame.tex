@@ -1,0 +1,445 @@
+\section{\class{wxFrame}}\label{wxframe}
+
+A frame is a window whose size and position can (usually) be changed by the user. It usually has
+thick borders and a title bar, and can optionally contain a menu bar, toolbar and
+status bar. A frame can contain any window that is not a frame or dialog.
+
+\wxheading{Derived from}
+
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxICONIZE}}{Display the frame iconized (minimized) (Windows only).}
+\twocolitem{\windowstyle{wxCAPTION}}{Puts a caption on the frame.}
+\twocolitem{\windowstyle{wxDEFAULT\_FRAME\_STYLE}}{Defined as {\bf wxMINIMIZE\_BOX \pipe wxMAXIMIZE\_BOX \pipe wxTHICK\_FRAME \pipe wxSYSTEM\_MENU \pipe wxCAPTION}.}
+\twocolitem{\windowstyle{wxMINIMIZE}}{Identical to {\bf wxICONIZE}.}
+\twocolitem{\windowstyle{wxMINIMIZE\_BOX}}{Displays a minimize box on the frame (Windows and Motif only).}
+\twocolitem{\windowstyle{wxMAXIMIZE}}{Displays the frame maximized (Windows only).}
+\twocolitem{\windowstyle{wxMAXIMIZE\_BOX}}{Displays a maximize box on the frame (Windows and Motif only).}
+\twocolitem{\windowstyle{wxSTAY\_ON\_TOP}}{Stay on top of other windows (Windows only).}
+\twocolitem{\windowstyle{wxSYSTEM\_MENU}}{Displays a system menu (Windows and Motif only).}
+\twocolitem{\windowstyle{wxTHICK\_FRAME}}{Displays a thick frame around the window (Windows and Motif only).}
+\twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Displays a resizeable border around the window (Motif only).}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Remarks}
+
+An application should normally define an \helpref{OnCloseWindow}{wxwindowonclosewindow} handler for the
+frame to respond to system close events, for example so that related data and subwindows can be cleaned up.
+
+\wxheading{See also}
+
+\helpref{wxMDIParentFrame}{wxmdiparentframe}, \helpref{wxMDIChildFrame}{wxmdichildframe},\rtfsp
+\helpref{wxMiniFrame}{wxminiframe}, \helpref{wxDialog}{wxdialog}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFrame::wxFrame}\label{wxframeconstr}
+
+\func{}{wxFrame}{\void}
+
+Default constructor.
+
+\func{}{wxFrame}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id},\rtfsp
+\param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = wxDEFAULT\_FRAME\_STYLE},\rtfsp
+\param{const wxString\& }{name = ``frame"}}
+
+Constructor, creating the window.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The window parent. This may be NULL. If it is non-NULL, the frame will
+always be displayed on top of the parent window on Windows.}
+
+\docparam{id}{The window identifier. It may take a value of -1 to indicate a default value.}
+
+\docparam{title}{The caption to be displayed on the frame's title bar.}
+
+\docparam{pos}{The window position. A value of (-1, -1) indicates a default position, chosen by
+either the windowing system or wxWindows, depending on platform.}
+
+\docparam{size}{The window size. A value of (-1, -1) indicates a default size, chosen by
+either the windowing system or wxWindows, depending on platform.}
+
+\docparam{style}{The window style. See \helpref{wxFrame}{wxframe}.}
+
+\docparam{name}{The name of the window. This parameter is used to associate a name with the item,
+allowing the application user to set Motif resource values for
+individual windows.}
+
+\wxheading{Remarks}
+
+For Motif, MWM (the Motif Window Manager) should be running for any window styles to work
+(otherwise all styles take effect).
+
+\wxheading{See also}
+
+\helpref{wxFrame::Create}{wxframecreate}
+
+\membersection{wxFrame::\destruct{wxFrame}}
+
+\func{void}{\destruct{wxFrame}}{\void}
+
+Destructor. Destroys all child windows and menu bar if present.
+
+\membersection{wxFrame::Centre}\label{wxframecentre}
+
+\func{void}{Centre}{\param{const int}{ direction = wxBOTH}}
+
+Centres the frame on the display.
+
+\wxheading{Parameters}
+
+\docparam{direction}{The parameter may be {\tt wxHORIZONTAL}, {\tt wxVERTICAL} or {\tt wxBOTH}.}
+
+\membersection{wxFrame::Command}\label{wxframecommand}
+
+\func{void}{Command}{\param{int }{id}}
+
+Simulate a menu command.
+
+\wxheading{Parameters}
+
+\docparam{id}{The identifier for a menu item.}
+
+\membersection{wxFrame::Create}\label{wxframecreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id},\rtfsp
+\param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = wxDEFAULT\_FRAME\_STYLE},\rtfsp
+\param{const wxString\& }{name = ``frame"}}
+
+Used in two-step frame construction. See \helpref{wxFrame::wxFrame}{wxframeconstr}\rtfsp
+for further details.
+
+\membersection{wxFrame::CreateStatusBar}\label{wxframecreatestatusbar}
+
+\func{virtual bool}{CreateStatusBar}{\param{const int}{ number = 1}}
+
+Creates a status bar at the bottom of the frame.
+
+\wxheading{Parameters}
+
+\docparam{number}{The number of fields to create. Specify a
+value greater than 1 to create a multi-field status bar.}
+
+\wxheading{Return value}
+
+TRUE if the status bar was created successfully.
+
+\wxheading{Remarks}
+
+The width of the status bar is the whole width of the frame (adjusted automatically when
+resizing), and the height and text size are chosen by the host windowing system.
+
+By default, the status bar is an instance of wxStatusBar. To use a different class,
+override \helpref{wxFrame::OnCreateStatusBar}{wxframeoncreatestatusbar}.
+
+Note that you can put controls and other windows on the status bar if you wish.
+
+\wxheading{See also}
+
+\helpref{wxFrame::SetStatusText}{wxframesetstatustext},\rtfsp
+\helpref{wxFrame::OnCreateStatusBar}{wxframeoncreatestatusbar},\rtfsp
+\helpref{wxFrame::GetStatusBar}{wxframegetstatusbar}
+
+\membersection{wxFrame::GetMenuBar}\label{wxframegetmenubar}
+
+\constfunc{wxMenuBar*}{GetMenuBar}{\void}
+
+Returns a pointer to the menubar currently associated with the frame (if any).
+
+\wxheading{See also}
+
+\helpref{wxFrame::SetMenuBar}{wxframesetmenubar}, \helpref{wxMenuBar}{wxmenubar}, \helpref{wxMenu}{wxmenu}
+
+\membersection{wxFrame::GetStatusBar}\label{wxframegetstatusbar}
+
+\func{wxStatusBar*}{GetStatusBar}{\void}
+
+Returns a pointer to the status bar currently associated with the frame (if any).
+
+\wxheading{See also}
+
+\helpref{wxFrame::CreateStatusBar}{wxframecreatestatusbar}, \helpref{wxStatusBar}{wxstatusbar}
+
+\membersection{wxFrame::GetTitle}\label{wxframegettitle}
+
+\func{wxString\&}{GetTitle}{\void}
+
+Gets a temporary pointer to the frame title. See
+\helpref{wxFrame::SetTitle}{wxframesettitle}.
+
+\membersection{wxFrame::Iconize}\label{wxframeiconize}
+
+\func{void}{Iconize}{\param{const bool}{ iconize}}
+
+Iconizes or restores the frame.
+
+\wxheading{Parameters}
+
+\docparam{izonize}{If TRUE, iconizes the frame; if FALSE, shows and restores it.}
+
+\wxheading{See also}
+
+\helpref{wxFrame::IsIconized}{wxframeisiconized}, \helpref{wxFrame::Maximize}{wxframemaximize}.
+
+\membersection{wxFrame::IsIconized}\label{wxframeisiconized}
+
+\func{bool}{IsIconized}{\void}
+
+Returns TRUE if the frame is iconized.
+
+\membersection{wxFrame::LoadAccelerators}\label{wxframeloadaccelerators}
+
+\func{void}{LoadAccelerators}{\param{const wxString\& }{table}}
+
+Loads a keyboard accelerator table for this frame.
+
+\wxheading{Parameters}
+
+\docparam{table}{Accelerator table to load.}
+
+\wxheading{Return value}
+
+TRUE if the operation was successful, FALSE otherwise.
+
+\wxheading{Remarks}
+
+Accelerator tables map keystrokes onto control and menu identifiers, so the
+programmer does not have to explicitly program this correspondence.
+
+See the hello demo ({\tt hello.cpp} and {\tt hello.rc}) for
+an example of accelerator usage. This is a fragment from {\tt hello.rc}:
+
+\begin{verbatim}
+#define HELLO_LOAD_FILE  111
+
+menus_accel ACCELERATORS
+{
+
+"^L", HELLO_LOAD_FILE
+
+}
+\end{verbatim}
+
+This function only works under Windows.
+
+% huh? If you call LoadAccelerators, you need to override wxFrame::OnActivate to do nothing.
+
+\membersection{wxFrame::Maximize}\label{wxframemaximize}
+
+\func{void}{Maximize}{\param{const bool }{maximize}}
+
+Maximizes or restores the frame.
+
+\wxheading{Parameters}
+
+\docparam{maximize}{If TRUE, maximizes the frame, otherwise it restores it}.
+
+\wxheading{Remarks}
+
+This function only works under Windows.
+
+\wxheading{See also}
+
+\helpref{wxFrame::Iconize}{wxframeiconize}
+
+\membersection{wxFrame::OnActivate}
+
+\func{void}{OnActivate}{\param{bool}{ active}}
+
+Called when a window is activated or deactivated (MS Windows
+only). If the window is being activated, {\it active} is TRUE, else it
+is FALSE.
+
+If you call wxFrame::LoadAccelerators, you need to override this function e.g.
+
+\begin{verbatim}
+   void OnActivate(bool) {};
+\end{verbatim}
+
+\membersection{wxFrame::OnCreateStatusBar}\label{wxframeoncreatestatusbar}
+
+\func{virtual wxStatusBar*}{OnCreateStatusBar}{\param{const int }{number}}
+
+Virtual function called when a status bar is requested by \helpref{wxFrame::CreateStatusBar}{wxframecreatestatusbar}.
+
+\wxheading{Parameters}
+
+\docparam{number}{The number of fields to create.}
+
+\wxheading{Return value}
+
+A status bar object.
+
+\wxheading{Remarks}
+
+An application can override this function to return a different kind of status bar. The default
+implementation returns an instance of \helpref{wxStatusBar}{wxstatusbar}.
+
+\wxheading{See also}
+
+\helpref{wxFrame::CreateStatusBar}{wxframecreatestatusbar}, \helpref{wxStatusBar}{wxstatusbar}.
+
+\membersection{wxFrame::OnMenuCommand}\label{wxframeonmenucommand}
+
+\func{void}{OnMenuCommand}{\param{wxCommandEvent\&}{ event}}
+
+See \helpref{wxWindow::OnMenuCommand}{wxwindowonmenucommand}.
+
+\membersection{wxFrame::OnMenuHighlight}\label{wxframeonmenuhighlight}
+
+\func{void}{OnMenuHighlight}{\param{wxMenuEvent\&}{ event}}
+
+See \helpref{wxWindow::OnMenuHighlight}{wxwindowonmenuhighlight}.
+
+\membersection{wxFrame::OnSize}\label{wxframeonsize}
+
+\func{void}{OnSize}{\param{wxSizeEvent\& }{event}}
+
+See \helpref{wxWindow::OnSize}{wxwindowonsize}.
+
+The default {\bf wxFrame::OnSize} implementation looks for a single subwindow,
+and if one is found, resizes it to fit
+inside the frame. Override this member if more complex behaviour
+is required (for example, if there are several subwindows).
+
+\membersection{wxFrame::SetIcon}\label{wxframeseticon}
+
+\func{void}{SetIcon}{\param{const wxIcon\& }{icon}}
+
+Sets the icon for this frame.
+
+\wxheading{Parameters}
+
+\docparam{icon}{The icon to associate with this frame.}
+
+\wxheading{Remarks}
+
+The frame takes a `copy' of {\it icon}, but since it uses reference
+counting, the copy is very quick. It is safe to delete {\it icon} after
+calling this function.
+
+Under Windows, instead of using {\bf SetIcon}, you can add the
+following lines to your MS Windows resource file:
+
+\begin{verbatim}
+wxSTD_MDIPARENTFRAME ICON icon1.ico
+wxSTD_MDICHILDFRAME  ICON icon2.ico
+wxSTD_FRAME          ICON icon3.ico
+\end{verbatim}
+
+where icon1.ico will be used for the MDI parent frame, icon2.ico
+will be used for MDI child frames, and icon3.ico will be used for
+non-MDI frames.
+
+If these icons are not supplied, and {\bf SetIcon} is not called either,
+then the following defaults apply if you have included wx.rc.
+
+\begin{verbatim}
+wxDEFAULT_FRAME               ICON std.ico
+wxDEFAULT_MDIPARENTFRAME      ICON mdi.ico
+wxDEFAULT_MDICHILDFRAME       ICON child.ico
+\end{verbatim}
+
+You can replace std.ico, mdi.ico and child.ico with your own defaults
+for all your wxWindows application. Currently they show the same icon.
+
+{\it Note:} a wxWindows application linked with subsystem equal to 4.0
+(i.e. marked as a Windows 95 application) doesn't respond properly
+to wxFrame::SetIcon. To work around this until a solution is found,
+mark your program as a 3.5 application. This will also ensure
+that Windows provides small icons for the application automatically.
+
+See also \helpref{wxIcon}{wxicon}.
+
+\membersection{wxFrame::SetMenuBar}\label{wxframesetmenubar}
+
+\func{void}{SetMenuBar}{\param{wxMenuBar* }{menuBar}}
+
+Tells the frame to show the given menu bar.
+
+\wxheading{Parameters}
+
+\docparam{menuBar}{The menu bar to associate with the frame.}
+
+\wxheading{Remarks}
+
+If the frame is destroyed, the
+menu bar and its menus will be destroyed also, so do not delete the menu
+bar explicitly (except by resetting the frame's menu bar to another
+frame or NULL).
+
+Under Windows, a call to \helpref{wxFrame::OnSize}{wxframeonsize} is generated, so be sure to initialize
+data members properly before calling {\bf SetMenuBar}.
+
+Note that it is not possible to call this function twice for the same frame object.
+
+\wxheading{See also}
+
+\helpref{wxFrame::GetMenuBar}{wxframegetmenubar}, \helpref{wxMenuBar}{wxmenubar}, \helpref{wxMenu}{wxmenu}.
+
+\membersection{wxFrame::SetStatusText}\label{wxframesetstatustext}
+
+\func{virtual void}{SetStatusText}{\param{const wxString\& }{ text}, \param{const int}{ number = 0}}
+
+Sets the status bar text and redraws the status bar.
+
+\wxheading{Parameters}
+
+\docparam{text}{The text for the status field.}
+
+\docparam{number}{The status field (starting from zero).}
+
+\wxheading{Remarks}
+
+Use an empty string to clear the status bar.
+
+\wxheading{See also}
+
+\helpref{wxFrame::CreateStatusBar}{wxframecreatestatusbar}, \helpref{wxStatusBar}{wxstatusbar}
+
+\membersection{wxFrame::SetStatusWidths}\label{wxframesetstatuswidths}
+
+\func{virtual void}{SetStatusWidths}{\param{const int}{ n}, \param{const int *}{widths}}
+
+Sets the widths of the fields in the status bar.
+
+\wxheading{Parameters}
+
+\wxheading{n}{The number of fields in the status bar. It must be the
+same used in \helpref{CreateStatusBar}{wxframecreatestatusbar}.}
+
+\docparam{widths}{Must contain an array of {\it n} integers, each of which is a status field width
+in pixels. A value of -1 indicates that the field is variable width; at least one
+field must be -1. You should delete this array after calling {\bf SetStatusWidths}.}
+
+\wxheading{Remarks}
+
+The widths of the variable fields are calculated from the total width of all fields,
+minus the sum of widths of the non-variable fields, divided by the number of 
+variable fields.
+
+\membersection{wxFrame::SetTitle}\label{wxframesettitle}
+
+\func{virtual void}{SetTitle}{\param{const wxString\& }{ title}}
+
+Sets the frame title.
+
+\wxheading{Parameters}
+
+\docparam{title}{The frame title.}
+
+\wxheading{See also}
+
+\helpref{wxFrame::GetTitle}{wxframegettitle}
+

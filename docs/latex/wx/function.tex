@@ -1,0 +1,1665 @@
+\chapter{Functions}\label{functions}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}
+
+The functions defined in wxWindows are described here.
+
+\section{File functions}\label{filefunctions}
+
+See also \helpref{wxPathList}{wxpathlist}.
+
+\membersection{::wxDirExists}
+
+\func{bool}{wxDirExists}{\param{const wxString\& }{dirname}}
+
+Returns TRUE if the directory exists.
+
+\membersection{::wxDos2UnixFilename}
+
+\func{void}{Dos2UnixFilename}{\param{const wxString\& }{s}}
+
+Converts a DOS to a UNIX filename by replacing backslashes with forward
+slashes.
+
+\membersection{::wxFileExists}
+
+\func{bool}{wxFileExists}{\param{const wxString\& }{filename}}
+
+Returns TRUE if the file exists.
+
+\membersection{::wxFileNameFromPath}
+
+\func{wxString}{wxFileNameFromPath}{\param{const wxString\& }{path}}
+
+Returns a temporary pointer to the filename for a full path.
+Copy this pointer for long-term use.
+
+\membersection{::wxFindFirstFile}\label{wxfindfirstfile}
+
+\func{wxString}{wxFindFirstFile}{\param{const wxString\& }{spec}, \param{int}{ flags = 0}}
+
+This function does directory searching; returns the first file
+that matches the path {\it spec}, or NULL. Use \helpref{wxFindNextFile}{wxfindnextfile} to
+get the next matching file.
+
+{\it spec} may contain wildcards.
+
+{\it flags} is reserved for future use.
+
+The returned filename is a pointer to static memory so should
+not be freed.
+
+For example:
+
+\begin{verbatim}
+  wxString f = wxFindFirstFile("/home/project/*.*");
+  while (f)
+  {
+    ...
+    f = wxFindNextFile();
+  }
+\end{verbatim}
+
+\membersection{::wxFindNextFile}\label{wxfindnextfile}
+
+\func{wxString}{wxFindFirstFile}{\void}
+
+Returns the next file that matches the path passed to \helpref{wxFindFirstFile}{wxfindfirstfile}.
+
+\membersection{::wxIsAbsolutePath}
+
+\func{bool}{wxIsAbsolutePath}{\param{const wxString\& }{filename}}
+
+Returns TRUE if the argument is an absolute filename, i.e. with a slash
+or drive name at the beginning.
+
+\membersection{::wxPathOnly}
+
+\func{wxString}{wxPathOnly}{\param{const wxString\& }{path}}
+
+Returns a temporary pointer to the directory part of the filename. Copy this
+pointer for long-term use.
+
+\membersection{::wxUnix2DosFilename}
+
+\func{void}{wxUnix2DosFilename}{\param{const wxString\& }{s}}
+
+Converts a UNIX to a DOS filename by replacing forward
+slashes with backslashes.
+
+\membersection{::wxConcatFiles}
+
+\func{bool}{wxConcatFiles}{\param{const wxString\& }{file1}, \param{const wxString\& }{file2},
+\param{const wxString\& }{file3}}
+
+Concatenates {\it file1} and {\it file2} to {\it file3}, returning
+TRUE if successful.
+
+\membersection{::wxCopyFile}
+
+\func{bool}{wxCopyFile}{\param{const wxString\& }{file1}, \param{const wxString\& }{file2}}
+
+Copies {\it file1} to {\it file2}, returning TRUE if successful.
+
+\membersection{::wxGetHostName}\label{wxgethostname}
+
+\func{bool}{wxGetHostName}{\param{const wxString\& }{buf}, \param{int }{sz}}
+
+Copies the current host machine's name into the supplied buffer.
+
+Under Windows or NT, this function first looks in the environment
+variable SYSTEM\_NAME; if this is not found, the entry {\bf HostName}\rtfsp
+in the {\bf wxWindows} section of the WIN.INI file is tried.
+
+Returns TRUE if successful, FALSE otherwise.
+
+\membersection{::wxGetEmailAddress}\label{wxgetemailaddress}
+
+\func{bool}{wxGetEmailAddress}{\param{const wxString\& }{buf}, \param{int }{sz}}
+
+Copies the user's email address into the supplied buffer, by
+concatenating the values returned by \helpref{wxGetHostName}{wxgethostname}\rtfsp
+and \helpref{wxGetUserId}{wxgetuserid}.
+
+Returns TRUE if successful, FALSE otherwise.
+
+\membersection{::wxGetUserId}\label{wxgetuserid}
+
+\func{bool}{wxGetUserId}{\param{const wxString\& }{buf}, \param{int }{sz}}
+
+Copies the current user id into the supplied buffer.
+
+Under Windows or NT, this function first looks in the environment
+variables USER and LOGNAME; if neither of these is found, the entry {\bf UserId}\rtfsp
+in the {\bf wxWindows} section of the WIN.INI file is tried.
+
+Returns TRUE if successful, FALSE otherwise.
+
+\membersection{::wxGetUserName}\label{wxgetusername}
+
+\func{bool}{wxGetUserName}{\param{const wxString\& }{buf}, \param{int }{sz}}
+
+Copies the current user name into the supplied buffer.
+
+Under Windows or NT, this function looks for the entry {\bf UserName}\rtfsp
+in the {\bf wxWindows} section of the WIN.INI file. If PenWindows
+is running, the entry {\bf Current} in the section {\bf User} of
+the PENWIN.INI file is used.
+
+Returns TRUE if successful, FALSE otherwise.
+
+\membersection{::wxGetWorkingDirectory}
+
+\func{wxString}{wxGetWorkingDirectory}{\param{const wxString\& }{buf=NULL}, \param{int }{sz=1000}}
+
+Copies the current working directory into the buffer if supplied, or
+copies the working directory into new storage (which you must delete yourself)
+if the buffer is NULL.
+
+{\it sz} is the size of the buffer if supplied.
+
+\membersection{::wxGetTempFileName}
+
+\func{wxString}{wxGetTempFileName}{\param{const wxString\& }{prefix}, \param{const wxString\& }{buf=NULL}}
+
+Makes a temporary filename based on {\it prefix}, opens and closes the file,
+and places the name in {\it buf}. If {\it buf} is NULL, new store
+is allocated for the temporary filename using {\it new}.
+
+Under Windows, the filename will include the drive and name of the
+directory allocated for temporary files (usually the contents of the
+TEMP variable). Under UNIX, the {\tt /tmp} directory is used.
+
+It is the application's responsibility to create and delete the file.
+
+\membersection{::wxIsWild}\label{wxiswild}
+
+\func{bool}{wxIsWild}{\param{const wxString\& }{pattern}}
+
+Returns TRUE if the pattern contains wildcards. See \helpref{wxMatchWild}{wxmatchwild}.
+
+\membersection{::wxMatchWild}\label{wxmatchwild}
+
+\func{bool}{wxMatchWild}{\param{const wxString\& }{pattern}, \param{const wxString\& }{text}, \param{bool}{ dot\_special}}
+
+Returns TRUE if the {\it pattern}\/ matches the {\it text}\/; if {\it
+dot\_special}\/ is TRUE, filenames beginning with a dot are not matched
+with wildcard characters. See \helpref{wxIsWild}{wxiswild}.
+
+\membersection{::wxMkdir}
+
+\func{bool}{wxMkdir}{\param{const wxString\& }{dir}}
+
+Makes the directory {\it dir}, returning TRUE if successful.
+
+\membersection{::wxRemoveFile}
+
+\func{bool}{wxRemoveFile}{\param{const wxString\& }{file}}
+
+Removes {\it file}, returning TRUE if successful.
+
+\membersection{::wxRenameFile}
+
+\func{bool}{wxRenameFile}{\param{const wxString\& }{file1}, \param{const wxString\& }{file2}}
+
+Renames {\it file1} to {\it file2}, returning TRUE if successful.
+
+\membersection{::wxRmdir}
+
+\func{bool}{wxRmdir}{\param{const wxString\& }{dir}, \param{int}{ flags=0}}
+
+Removes the directory {\it dir}, returning TRUE if successful. Does not work under VMS.
+
+The {\it flags} parameter is reserved for future use.
+
+\membersection{::wxSetWorkingDirectory}
+
+\func{bool}{wxSetWorkingDirectory}{\param{const wxString\& }{dir}}
+
+Sets the current working directory, returning TRUE if the operation succeeded.
+Under MS Windows, the current drive is also changed if {\it dir} contains a drive specification.
+
+\section{String functions}
+
+\membersection{::copystring}
+
+\func{char*}{copystring}{\param{const char* }{s}}
+
+Makes a copy of the string {\it s} using the C++ new operator, so it can be
+deleted with the {\it delete} operator.
+
+\membersection{::wxStringMatch}
+
+\func{bool}{wxStringMatch}{\param{const wxString\& }{s1}, \param{const wxString\& }{s2},\\
+  \param{bool}{ subString = TRUE}, \param{bool}{ exact = FALSE}}
+
+Returns TRUE if the substring {\it s1} is found within {\it s2},
+ignoring case if {\it exact} is FALSE. If {\it subString} is FALSE,
+no substring matching is done.
+
+\membersection{::wxStringEq}\label{wxstringeq}
+
+\func{bool}{wxStringEq}{\param{const wxString\& }{s1}, \param{const wxString\& }{s2}}
+
+A macro defined as:
+
+\begin{verbatim}
+#define wxStringEq(s1, s2) (s1 && s2 && (strcmp(s1, s2) == 0))
+\end{verbatim}
+
+\membersection{::wxTransferFileToStream}\label{wxtransferfiletostream}
+
+\func{bool}{wxTransferFileToStream}{\param{const wxString\& }{filename}, \param{ostream\& }{stream}}
+
+Copies the given file to {\it stream}. Useful when converting an old application to
+use streams (within the document/view framework, for example).
+
+Use of this function requires the file wx\_doc.h to be included.
+
+\membersection{::wxTransferStreamToFile}\label{wxtransferstreamtofile}
+
+\func{bool}{wxTransferStreamToFile}{\param{istream\& }{stream} \param{const wxString\& }{filename}}
+
+Copies the given stream to the file {\it filename}. Useful when converting an old application to
+use streams (within the document/view framework, for example).
+
+Use of this function requires the file wx\_doc.h to be included.
+
+\section{Dialog functions}\label{dialogfunctions}
+
+Below are a number of convenience functions for getting input from the
+user or displaying messages. Note that in these functions the last three
+parameters are optional. However, it is recommended to pass a parent frame
+parameter, or (in MS Windows or Motif) the wrong window frame may be brought to
+the front when the dialog box is popped up.
+
+\membersection{::wxFileSelector}\label{wxfileselector}
+
+\func{wxString}{wxFileSelector}{\param{const wxString\& }{message}, \param{const wxString\& }{default\_path = NULL},\\
+  \param{const wxString\& }{default\_filename = NULL}, \param{const wxString\& }{default\_extension = NULL},\\
+  \param{const wxString\& }{wildcard = ``*.*''}, \param{int }{flags = 0}, \param{wxWindow *}{parent = NULL},\\
+  \param{int}{ x = -1}, \param{int}{ y = -1}}
+
+Pops up a file selector box. In Windows, this is the common file selector
+dialog. In X, this is a file selector box with somewhat less functionality.
+The path and filename are distinct elements of a full file pathname.
+If path is NULL, the current directory will be used. If filename is NULL,
+no default filename will be supplied. The wildcard determines what files
+are displayed in the file selector, and file extension supplies a type
+extension for the required filename. Flags may be a combination of wxOPEN,
+wxSAVE, wxOVERWRITE\_PROMPT, wxHIDE\_READONLY, or 0. They are only significant
+at present in Windows.
+
+Both the X and Windows versions implement a wildcard filter. Typing a
+filename containing wildcards (*, ?) in the filename text item, and
+clicking on Ok, will result in only those files matching the pattern being
+displayed. In the X version, supplying no default name will result in the
+wildcard filter being inserted in the filename text item; the filter is
+ignored if a default name is supplied.
+
+Under Windows (only), the wildcard may be a specification for multiple
+types of file with a description for each, such as:
+
+\begin{verbatim}
+ "BMP files (*.bmp) | *.bmp | GIF files (*.gif) | *.gif"
+\end{verbatim}
+
+The application must check for a NULL return value (the user pressed
+Cancel). For example:
+
+\begin{verbatim}
+const wxString\& s = wxFileSelector("Choose a file to open");
+if (s)
+{
+  ...
+}
+\end{verbatim}
+
+Remember that the returned pointer is temporary and should be copied
+if other wxWindows calls will be made before the value is to be used.
+
+\membersection{::wxGetTextFromUser}\label{wxgettextfromuser}
+
+\func{wxString}{wxGetTextFromUser}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Input text"},\\
+  \param{const wxString\& }{default\_value = ``"}, \param{wxWindow *}{parent = NULL},\\
+  \param{int}{ x = -1}, \param{int}{ y = -1}, \param{bool}{ centre = TRUE}}
+
+Pop up a dialog box with title set to {\it caption}, message {\it message}, and a
+\rtfsp{\it default\_value}.  The user may type in text and press OK to return this text,
+or press Cancel to return NULL.
+
+If {\it centre} is TRUE, the message text (which may include new line characters)
+is centred; if FALSE, the message is left-justified.
+
+\membersection{::wxGetMultipleChoice}\label{wxgetmultiplechoice}
+
+\func{int}{wxGetMultipleChoice}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
+  \param{int }{nsel}, \param{int *}{selection},
+  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
+  \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+
+Pops up a dialog box containing a message, OK/Cancel buttons and a multiple-selection
+listbox. The user may choose one or more item(s) and press OK or Cancel.
+
+The number of initially selected choices, and array of the selected indices,
+are passed in; this array will contain the user selections on exit, with
+the function returning the number of selections. {\it selection} must be
+as big as the number of choices, in case all are selected.
+
+If Cancel is pressed, -1 is returned.
+
+{\it choices} is an array of {\it n} strings for the listbox.
+
+If {\it centre} is TRUE, the message text (which may include new line characters)
+is centred; if FALSE, the message is left-justified.
+
+\membersection{::wxGetSingleChoice}\label{wxgetsinglechoice}
+
+\func{wxString}{wxGetSingleChoice}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
+  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
+  \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+
+Pops up a dialog box containing a message, OK/Cancel buttons and a single-selection
+listbox. The user may choose an item and press OK to return a string or
+Cancel to return NULL.
+
+{\it choices} is an array of {\it n} strings for the listbox.
+
+If {\it centre} is TRUE, the message text (which may include new line characters)
+is centred; if FALSE, the message is left-justified.
+
+\membersection{::wxGetSingleChoiceIndex}\label{wxgetsinglechoiceindex}
+
+\func{int}{wxGetSingleChoiceIndex}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
+  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
+  \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+
+As {\bf wxGetSingleChoice} but returns the index representing the selected string.
+If the user pressed cancel, -1 is returned.
+
+\membersection{::wxGetSingleChoiceData}\label{wxgetsinglechoicedata}
+
+\func{wxString}{wxGetSingleChoiceData}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
+  \param{const wxString\& }{client\_data[]}, \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1},\\
+  \param{int}{ y = -1}, \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+
+As {\bf wxGetSingleChoice} but takes an array of client data pointers
+corresponding to the strings, and returns one of these pointers.
+
+\membersection{::wxMessageBox}\label{wxmessagebox}
+
+\func{int}{wxMessageBox}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Message"}, \param{int}{ style = wxOK \pipe wxCENTRE},\\
+  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1}}
+
+General purpose message dialog.  {\it style} may be a bit list of the
+following identifiers:
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxYES\_NO}{Puts Yes and No buttons on the message box. May be combined with
+wxCANCEL.}
+\twocolitem{wxCANCEL}{Puts a Cancel button on the message box. May be combined with
+wxYES\_NO or wxOK.}
+\twocolitem{wxOK}{Puts an Ok button on the message box. May be combined with wxCANCEL.}
+\twocolitem{wxCENTRE}{Centres the text.}
+\twocolitem{wxICON\_EXCLAMATION}{Under Windows, displays an exclamation mark symbol.}
+\twocolitem{wxICON\_HAND}{Under Windows, displays a hand symbol.}
+\twocolitem{wxICON\_QUESTION}{Under Windows, displays a question mark symbol.}
+\twocolitem{wxICON\_INFORMATION}{Under Windows, displays an information symbol.}
+\end{twocollist}
+
+The return value is one of: wxYES, wxNO, wxCANCEL, wxOK.
+
+For example:
+
+\begin{verbatim}
+  ...
+  int answer = wxMessageBox("Quit program?", "Confirm",
+                            wxYES_NO | wxCANCEL, main_frame);
+  if (answer == wxYES)
+    delete main_frame;
+  ...
+\end{verbatim}
+
+{\it message} may contain newline characters, in which case the
+message will be split into separate lines, to cater for large messages.
+
+Under Windows, the native MessageBox function is used unless wxCENTRE
+is specified in the style, in which case a generic function is used.
+This is because the native MessageBox function cannot centre text.
+The symbols are not shown when the generic function is used.
+
+\section{GDI functions}\label{gdifunctions}
+
+The following are relevant to the GDI (Graphics Device Interface).
+
+\membersection{::wxColourDisplay}
+
+\func{bool}{wxColourDisplay}{\void}
+
+Returns TRUE if the display is colour, FALSE otherwise.
+
+\membersection{::wxDisplayDepth}
+
+\func{int}{wxDisplayDepth}{\void}
+
+Returns the depth of the display (a value of 1 denotes a monochrome display).
+
+\membersection{::wxMakeMetaFilePlaceable}\label{wxmakemetafileplaceable}
+
+\func{bool}{wxMakeMetaFilePlaceable}{\param{const wxString\& }{filename}, \param{int }{minX}, \param{int }{minY},
+ \param{int }{maxX}, \param{int }{maxY}, \param{float }{scale=1.0}}
+
+Given a filename for an existing, valid metafile (as constructed using \helpref{wxMetaFileDC}{wxmetafiledc})
+makes it into a placeable metafile by prepending a header containing the given
+bounding box. The bounding box may be obtained from a device context after drawing
+into it, using the functions wxDC::MinX, wxDC::MinY, wxDC::MaxX and wxDC::MaxY.
+
+In addition to adding the placeable metafile header, this function adds
+the equivalent of the following code to the start of the metafile data:
+
+\begin{verbatim}
+ SetMapMode(dc, MM_ANISOTROPIC);
+ SetWindowOrg(dc, minX, minY);
+ SetWindowExt(dc, maxX - minX, maxY - minY);
+\end{verbatim}
+
+This simulates the MM\_TEXT mapping mode, which wxWindows assumes.
+
+Placeable metafiles may be imported by many Windows applications, and can be
+used in RTF (Rich Text Format) files.
+
+{\it scale} allows the specification of scale for the metafile.
+
+This function is only available under Windows.
+
+\membersection{::wxSetCursor}\label{wxsetcursor}
+
+\func{void}{wxSetCursor}{\param{wxCursor *}{cursor}}
+
+Globally sets the cursor; only has an effect in MS Windows.
+See also \helpref{wxCursor}{wxcursor}, \helpref{wxWindow::SetCursor}{wxwindowsetcursor}.
+
+\section{System event functions}
+
+The wxWindows system event implementation is incomplete and
+experimental, but is intended to be a platform-independent way of
+intercepting and sending events, including defining
+application-specific events and handlers.
+
+Ultimately it is intended to be used as a way of testing wxWindows
+applications using scripts, although there are currently
+problems with this (especially with modal dialogs).
+
+All this is documented more to provoke comments and suggestions, and
+jog my own memory, rather than to be used, since it has not been
+tested. However {\bf wxSendEvent} will probably work if you
+instantiate the event structure properly for a command event type (see
+the code in {\tt wb\_panel.cpp} for \helpref{wxWindow::OnDefaultAction}{wxwindowondefaultaction}\rtfsp
+which uses {\bf wxSendEvent} to send a command to the default button).
+
+\membersection{::wxAddPrimaryEventHandler}
+
+\func{bool}{wxAddPrimaryEventHandler}{\param{wxEventHandler}{ handlerFunc}}
+
+Add a primary event handler---the normal event handler for this
+event. For built-in events, these would include moving and resizing
+windows. User-defined primary events might include the code to
+select an image in a diagram (which could of course be achieved by a series
+of external events for mouse-clicking, but would be more difficult to specify
+and less robust).
+
+Returns TRUE if it succeeds.
+
+An event handler takes a pointer to a wxEvent and a boolean flag which is
+TRUE if the event was externally generated, and returns a boolean which is
+TRUE if that event was handled.
+
+\membersection{::wxAddSecondaryEventHandler}
+
+\func{bool}{wxAddSecondaryEventHandler}{\param{wxEventHandler}{ handlerFunc}, \param{bool}{ pre},\\
+  \param{bool}{ override}, \param{bool }{append}}
+
+Add a secondary event handler, pre = TRUE iff it should be called before the
+event is executed. override = TRUE iff the handler is allowed to override
+all subsequent events by returning TRUE. Returns TRUE if succeeds.
+
+A secondary event handler is an application-defined handler that may
+intercept normal events, possibly overriding them. A primary event handler
+provides the normal behaviour for the event.
+
+An event handler takes a pointer to a wxEvent and a boolean flag which is
+TRUE if the event was externally generated, and returns a boolean which is
+TRUE if that event was handled.
+
+\membersection{::wxNotifyEvent}
+
+\func{bool}{wxNotifyEvent}{\param{wxEvent\&}{ event}, \param{bool}{ pre}}
+
+Notify the system of the event you are about to execute/have just
+executed.  If TRUE is returned and pre = TRUE, the calling code should
+not execute the event (since it has been intercepted by a handler and
+vetoed).
+
+These events are always internal, because they're generated from within
+the main application code.
+
+\membersection{::wxRegisterEventClass}
+
+\func{void}{wxRegisterEventClass}{\param{WXTYPE}{ eventClassId},\param{WXTYPE}{ superClassId},\\
+  \param{wxEventConstructor}{ constructor}, \param{const wxString\& }{description}}
+
+Register a new event class (derived from wxEvent), giving the new
+event class type, its superclass, a function for creating a new event
+object of this class, and an optional description.
+
+\membersection{::wxRegisterEventName}
+
+\func{void}{wxRegisterEventName}{\param{WXTYPE}{ eventTypeId},\param{WXTYPE}{ eventClassId},\\
+  \param{const wxString\& }{eventName}}
+
+Register the name of the event. This will allow a simple command
+language where giving the event type name and some arguments will
+cause a new event of class {\it eventClassId} to be created, with given
+event type, and some arguments, allows an event to be dynamically
+constructed and sent.
+
+\membersection{::wxRegisterExternalEventHandlers}
+
+\func{void}{wxRegisterExternalEventHandlers}{\void}
+
+Define this and link before wxWindows library to allow registering
+events from `outside' the main application.
+
+\membersection{::wxRemoveSecondaryEventHandler}
+
+\func{bool}{wxRemoveSecondaryEventHandler}{\param{wxEventHandler}{ handlerFunc}, \param{bool}{ pre}}
+
+Remove a secondary event handler. Returns TRUE if it succeeds.
+
+\membersection{::wxSendEvent}\label{wxsendevent}
+
+\func{bool}{wxSendEvent}{\param{wxEvent\&}{ event}, \param{bool}{ external}}
+
+Send an event to the system; usually it will be external, but set
+external to FALSE if calling from within the main application in
+response to other events.
+
+Returns TRUE if the event was processed.
+
+\section{Printer settings}\label{printersettings}
+
+The following functions are used to control PostScript printing. Under
+Windows, PostScript output can only be sent to a file.
+
+\membersection{::wxGetPrinterCommand}
+
+\func{wxString}{wxGetPrinterCommand}{\void}
+
+Gets the printer command used to print a file. The default is {\tt lpr}.
+
+\membersection{::wxGetPrinterFile}
+
+\func{wxString}{wxGetPrinterFile}{\void}
+
+Gets the PostScript output filename.
+
+\membersection{::wxGetPrinterMode}
+
+\func{int}{wxGetPrinterMode}{\void}
+
+Gets the printing mode controlling where output is sent (PS\_PREVIEW, PS\_FILE or PS\_PRINTER).
+The default is PS\_PREVIEW.
+
+\membersection{::wxGetPrinterOptions}
+
+\func{wxString}{wxGetPrinterOptions}{\void}
+
+Gets the additional options for the print command (e.g. specific printer). The default is nothing.
+
+\membersection{::wxGetPrinterOrientation}
+
+\func{int}{wxGetPrinterOrientation}{\void}
+
+Gets the orientation (PS\_PORTRAIT or PS\_LANDSCAPE). The default is PS\_PORTRAIT.
+
+\membersection{::wxGetPrinterPreviewCommand}
+
+\func{wxString}{wxGetPrinterPreviewCommand}{\void}
+
+Gets the command used to view a PostScript file. The default depends on the platform.
+
+\membersection{::wxGetPrinterScaling}
+
+\func{void}{wxGetPrinterScaling}{\param{float *}{x}, \param{float *}{y}}
+
+Gets the scaling factor for PostScript output. The default is 1.0, 1.0.
+
+\membersection{::wxGetPrinterTranslation}
+
+\func{void}{wxGetPrinterTranslation}{\param{float *}{x}, \param{float *}{y}}
+
+Gets the translation (from the top left corner) for PostScript output. The default is 0.0, 0.0.
+
+\membersection{::wxSetPrinterCommand}
+
+\func{void}{wxSetPrinterCommand}{\param{const wxString\& }{command}}
+
+Sets the printer command used to print a file. The default is {\tt lpr}.
+
+\membersection{::wxSetPrinterFile}
+
+\func{void}{wxSetPrinterFile}{\param{const wxString\& }{filename}}
+
+Sets the PostScript output filename.
+
+\membersection{::wxSetPrinterMode}
+
+\func{void}{wxSetPrinterMode}{\param{int }{mode}}
+
+Sets the printing mode controlling where output is sent (PS\_PREVIEW, PS\_FILE or PS\_PRINTER).
+The default is PS\_PREVIEW.
+
+\membersection{::wxSetPrinterOptions}
+
+\func{void}{wxSetPrinterOptions}{\param{const wxString\& }{options}}
+
+Sets the additional options for the print command (e.g. specific printer). The default is nothing.
+
+\membersection{::wxSetPrinterOrientation}
+
+\func{void}{wxSetPrinterOrientation}{\param{int}{ orientation}}
+
+Sets the orientation (PS\_PORTRAIT or PS\_LANDSCAPE). The default is PS\_PORTRAIT.
+
+\membersection{::wxSetPrinterPreviewCommand}
+
+\func{void}{wxSetPrinterPreviewCommand}{\param{const wxString\& }{command}}
+
+Sets the command used to view a PostScript file. The default depends on the platform.
+
+\membersection{::wxSetPrinterScaling}
+
+\func{void}{wxSetPrinterScaling}{\param{float }{x}, \param{float }{y}}
+
+Sets the scaling factor for PostScript output. The default is 1.0, 1.0.
+
+\membersection{::wxSetPrinterTranslation}
+
+\func{void}{wxSetPrinterTranslation}{\param{float }{x}, \param{float }{y}}
+
+Sets the translation (from the top left corner) for PostScript output. The default is 0.0, 0.0.
+
+\section{Clipboard functions}\label{clipsboard}
+
+These clipboard functions are implemented for Windows only.
+
+\membersection{::wxClipboardOpen}
+
+\func{bool}{wxClipboardOpen}{\void}
+
+Returns TRUE if this application has already opened the clipboard.
+
+\membersection{::wxCloseClipboard}
+
+\func{bool}{wxCloseClipboard}{\void}
+
+Closes the clipboard to allow other applications to use it.
+
+\membersection{::wxEmptyClipboard}
+
+\func{bool}{wxEmptyClipboard}{\void}
+
+Empties the clipboard.
+
+\membersection{::wxEnumClipboardFormats}
+
+\func{int}{wxEnumClipboardFormats}{\param{int}{dataFormat}}
+
+Enumerates the formats found in a list of available formats that belong
+to the clipboard. Each call to this  function specifies a known
+available format; the function returns the format that appears next in
+the list. 
+
+{\it dataFormat} specifies a known format. If this parameter is zero,
+the function returns the first format in the list. 
+
+The return value specifies the next known clipboard data format if the
+function is successful. It is zero if the {\it dataFormat} parameter specifies
+the last  format in the list of available formats, or if the clipboard
+is not open. 
+
+Before it enumerates the formats function, an application must open the clipboard by using the 
+wxOpenClipboard function. 
+
+\membersection{::wxGetClipboardData}
+
+\func{wxObject *}{wxGetClipboardData}{\param{int}{dataFormat}}
+
+Gets data from the clipboard.
+
+{\it dataFormat} may be one of:
+
+\begin{itemize}\itemsep=0pt
+\item wxCF\_TEXT or wxCF\_OEMTEXT: returns a pointer to new memory containing a null-terminated text string.
+\item wxCF\_BITMAP: returns a new wxBitmap.
+\end{itemize}
+
+The clipboard must have previously been opened for this call to succeed.
+
+\membersection{::wxGetClipboardFormatName}
+
+\func{bool}{wxGetClipboardFormatName}{\param{int}{dataFormat}, \param{const wxString\& }{formatName}, \param{int}{maxCount}}
+
+Gets the name of a registered clipboard format, and puts it into the buffer {\it formatName} which is of maximum
+length {\it maxCount}. {\it dataFormat} must not specify a predefined clipboard format.
+
+\membersection{::wxIsClipboardFormatAvailable}
+
+\func{bool}{wxIsClipboardFormatAvailable}{\param{int}{dataFormat}}
+
+Returns TRUE if the given data format is available on the clipboard.
+
+\membersection{::wxOpenClipboard}
+
+\func{bool}{wxOpenClipboard}{\void}
+
+Opens the clipboard for passing data to it or getting data from it.
+
+\membersection{::wxRegisterClipboardFormat}
+
+\func{int}{wxRegisterClipboardFormat}{\param{const wxString\& }{formatName}}
+
+Registers the clipboard data format name and returns an identifier.
+
+\membersection{::wxSetClipboardData}
+
+\func{bool}{wxSetClipboardData}{\param{int}{dataFormat}, \param{wxObject *}{data}, \param{int}{width}, \param{int}{height}}
+
+Passes data to the clipboard.
+
+{\it dataFormat} may be one of:
+
+\begin{itemize}\itemsep=0pt
+\item wxCF\_TEXT or wxCF\_OEMTEXT: {\it data} is a null-terminated text string.
+\item wxCF\_BITMAP: {\it data} is a wxBitmap.
+\item wxCF\_DIB: {\it data} is a wxBitmap. The bitmap is converted to a DIB (device independent bitmap).
+\item wxCF\_METAFILE: {\it data} is a wxMetaFile. {\it width} and {\it height} are used to give recommended dimensions.
+\end{itemize}
+
+The clipboard must have previously been opened for this call to succeed.
+
+\section{Miscellaneous functions}\label{miscellany}
+
+\membersection{::NewId}
+
+\func{long}{NewId}{\void}
+
+Generates an integer identifier unique to this run of the program.
+
+\membersection{::RegisterId}
+
+\func{void}{RegisterId}{\param{long}{ id}}
+
+Ensures that ids subsequently generated by {\bf NewId} do not clash with
+the given {\bf id}.
+
+\membersection{::wxBeginBusyCursor}\label{wxbeginbusycursor}
+
+\func{void}{wxBeginBusyCursor}{\param{wxCursor *}{cursor = wxHOURGLASS\_CURSOR}}
+
+Changes the cursor to the given cursor for all windows in the application.
+Use \helpref{wxEndBusyCursor}{wxendbusycursor} to revert the cursor back
+to its previous state. These two calls can be nested, and a counter
+ensures that only the outer calls take effect.
+
+See also \helpref{wxIsBusy}{wxisbusy}.
+
+\membersection{::wxBell}
+
+\func{void}{wxBell}{\void}
+
+Ring the system bell.
+
+\membersection{::wxCleanUp}\label{wxcleanup}
+
+\func{void}{wxCleanUp}{\void}
+
+Normally, wxWindows will call this cleanup function for you. However, if
+you call \helpref{wxEntry}{wxentry} in order to initialize wxWindows
+manually, then you should also call wxCleanUp before terminating wxWindows,
+if wxWindows does not get a chance to do it.
+
+\membersection{::wxCreateDynamicObject}\label{wxcreatedynamicobject}
+
+\func{wxObject *}{wxCreateDynamicObject}{\param{const wxString\& }{className}}
+
+Creates and returns an object of the given class, if the class has been
+registered with the dynamic class system using DECLARE... and IMPLEMENT... macros.
+
+\membersection{::wxDebugMsg}
+
+\func{void}{wxDebugMsg}{\param{const wxString\& }{fmt}, \param{...}{}}
+
+Display a debugging message; under Windows, this will appear on the
+debugger command window, and under UNIX, it will be written to standard
+error.
+
+The syntax is identical to {\bf printf}: pass a format string and a
+variable list of arguments.
+
+Note that under Windows, you can see the debugging messages without a
+debugger if you have the DBWIN debug log application that comes with
+Microsoft C++.
+
+{\bf Tip:} under Windows, if your application crashes before the
+message appears in the debugging window, put a wxYield call after
+each wxDebugMsg call. wxDebugMsg seems to be broken under WIN32s
+(at least for Watcom C++): preformat your messages and use OutputDebugString
+instead.
+
+\membersection{::wxDisplaySize}
+
+\func{void}{wxDisplaySize}{\param{int *}{width}, \param{int *}{height}}
+
+Gets the physical size of the display in pixels.
+
+\membersection{::wxEntry}\label{wxentry}
+
+This initializes wxWindows in a platform-dependent way. Use this if you
+are not using the default wxWindows entry code (e.g. main or WinMain). For example,
+you can initialize wxWindows from an Microsoft Foundation Classes application using
+this function. See also \helpref{wxCleanUp}{wxcleanup}.
+
+\func{void}{wxEntry}{\param{HANDLE}{ hInstance}, \param{HANDLE}{ hPrevInstance},
+ \param{const wxString\& }{commandLine}, \param{int}{ cmdShow}, \param{bool}{ enterLoop = TRUE}}
+
+wxWindows initialization under Windows (non-DLL). If {\it enterLoop} is FALSE, the
+function will return immediately after calling wxApp::OnInit. Otherwise, the wxWindows
+message loop will be entered.
+
+\func{void}{wxEntry}{\param{HANDLE}{ hInstance}, \param{HANDLE}{ hPrevInstance},
+ \param{WORD}{ wDataSegment}, \param{WORD}{ wHeapSize}, \param{const wxString\& }{ commandLine}}
+
+wxWindows initialization under Windows (for applications constructed as a DLL).
+
+\func{int}{wxEntry}{\param{int}{ argc}, \param{const wxString\& *}{argv}}
+
+wxWindows initialization under UNIX.
+
+\membersection{::wxError}\label{wxerror}
+
+\func{void}{wxError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Internal Error"}}
+
+Displays {\it msg} and continues. This writes to standard error under
+UNIX, and pops up a message box under Windows. Used for internal
+wxWindows errors. See also \helpref{wxFatalError}{wxfatalerror}.
+
+\membersection{::wxEndBusyCursor}\label{wxendbusycursor}
+
+\func{void}{wxEndBusyCursor}{\void}
+
+Changes the cursor back to the original cursor, for all windows in the application.
+Use with \helpref{wxBeginBusyCursor}{wxbeginbusycursor}.
+
+See also \helpref{wxIsBusy}{wxisbusy}.
+
+\membersection{::wxExecute}\label{wxexecute}
+
+\func{long}{wxExecute}{\param{const wxString\& }{command}, \param{bool }{sync = FALSE}}
+
+\func{long}{wxExecute}{\param{const wxString\& *}{argv}, \param{bool }{sync = FALSE}}
+
+Executes another program in UNIX or Windows.
+
+The first form takes a command string, such as {\tt "emacs file.txt"}.
+
+The second form takes an array of values: a command, any number of
+arguments, terminated by NULL.
+
+If {\it sync} is FALSE (the default), flow of control immediately returns.
+If TRUE, the current application waits until the other program has terminated.
+
+If execution is asynchronous, the return value is the process id,
+otherwise it is a status value.  A zero value indicates that the command could not
+be executed.
+
+See also \helpref{wxShell}{wxshell}.
+
+\membersection{::wxExit}\label{wxexit}
+
+\func{void}{wxExit}{\void}
+
+Exits application after calling \helpref{wxApp::OnExit}{wxapponexit}.
+Should only be used in an emergency: normally the top-level frame
+should be deleted (after deleting all other frames) to terminate the
+application. See \helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow} and \helpref{wxApp}{wxapp}.
+
+\membersection{::wxFatalError}\label{wxfatalerror}
+
+\func{void}{wxFatalError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Fatal Error"}}
+
+Displays {\it msg} and exits. This writes to standard error under UNIX,
+and pops up a message box under Windows. Used for fatal internal
+wxWindows errors. See also \helpref{wxError}{wxerror}.
+
+\membersection{::wxFindMenuItemId}
+
+\func{int}{wxFindMenuItemId}{\param{wxFrame *}{frame}, \param{const wxString\& }{menuString}, \param{const wxString\& }{itemString}}
+
+Find a menu item identifier associated with the given frame's menu bar.
+
+\membersection{::wxFindWindowByLabel}
+
+\func{wxWindow *}{wxFindWindowByLabel}{\param{const wxString\& }{label}, \param{wxWindow *}{parent=NULL}}
+
+Find a window by its label. Depending on the type of window, the label may be a window title
+or panel item label. If {\it parent} is NULL, the search will start from all top-level
+frames and dialog boxes; if non-NULL, the search will be limited to the given window hierarchy.
+The search is recursive in both cases.
+
+\membersection{::wxFindWindowByName}\label{wxfindwindowbyname}
+
+\func{wxWindow *}{wxFindWindowByName}{\param{const wxString\& }{name}, \param{wxWindow *}{parent=NULL}}
+
+Find a window by its name (as given in a window constructor or {\bf Create} function call).
+If {\it parent} is NULL, the search will start from all top-level
+frames and dialog boxes; if non-NULL, the search will be limited to the given window hierarchy.
+The search is recursive in both cases.
+
+If no such named window is found, {\bf wxFindWindowByLabel} is called.
+
+\membersection{::wxGetActiveWindow}\label{wxgetactivewindow}
+
+\func{wxWindow *}{wxGetActiveWindow}{\void}
+
+Gets the currently active window (Windows only).
+
+\membersection{::wxGetDisplayName}\label{wxgetdisplayname}
+
+\func{wxString}{wxGetDisplayName}{\void}
+
+Under X only, returns the current display name. See also \helpref{wxSetDisplayName}{wxsetdisplayname}.
+
+\membersection{::wxGetHomeDir}
+
+\func{wxString}{wxGetHomeDir}{\param{const wxString\& }{buf}}
+
+Fills the buffer with a string representing the user's home directory (UNIX only).
+
+\membersection{::wxGetHostName}
+
+\func{bool}{wxGetHostName}{\param{const wxString\& }{buf}, \param{int}{ bufSize}}
+
+Copies the host name of the machine the program is running on into the
+buffer {\it buf}, of maximum size {\it bufSize}, returning TRUE if
+successful. Under UNIX, this will return a machine name. Under Windows,
+this returns ``windows''.
+
+\membersection{::wxGetElapsedTime}\label{wxgetelapsedtime}
+
+\func{long}{wxGetElapsedTime}{\param{bool}{ resetTimer = TRUE}}
+
+Gets the time in milliseconds since the last \helpref{::wxStartTimer}{wxstarttimer}.
+
+If {\it resetTimer} is TRUE (the default), the timer is reset to zero
+by this call.
+
+See also \helpref{wxTimer}{wxtimer}.
+
+\membersection{::wxGetFreeMemory}
+
+\func{long}{wxGetFreeMemory}{\void}
+
+Returns the amount of free memory in Kbytes under environments which
+support it, and -1 if not supported. Currently, returns a positive value
+under Windows, and -1 under UNIX.
+
+\membersection{::wxGetMousePosition}
+
+\func{void}{wxGetMousePosition}{\param{int* }{x}, \param{int* }{y}}
+
+Returns the mouse position in screen coordinates.
+
+\membersection{::wxGetOsVersion}
+
+\func{int}{wxGetOsVersion}{\param{int *}{major = NULL}, \param{int *}{minor = NULL}}
+
+Gets operating system version information.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitemruled{Platform}{Return tyes}
+\twocolitem{Macintosh}{Return value is wxMACINTOSH.}
+\twocolitem{Motif}{Return value is wxMOTIF\_X, {\it major} is X version, {\it minor} is X revision.}
+\twocolitem{OS/2}{Return value is wxOS2\_PM.}
+\twocolitem{Windows 3.1}{Return value is wxWINDOWS, {\it major} is 3, {\it minor} is 1.}
+\twocolitem{Windows NT}{Return value is wxWINDOWS\_NT, {\it major} is 3, {\it minor} is 1.}
+\twocolitem{Windows 95}{Return value is wxWIN95, {\it major} is 3, {\it minor} is 1.}
+\twocolitem{Win32s (Windows 3.1)}{Return value is wxWIN32S, {\it major} is 3, {\it minor} is 1.}
+\twocolitem{Watcom C++ 386 supervisor mode (Windows 3.1)}{Return value is wxWIN386, {\it major} is 3, {\it minor} is 1.}
+\end{twocollist}
+
+\membersection{::wxGetResource}\label{wxgetresource}
+
+\func{bool}{wxGetResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
+ \param{const wxString\& *}{value}, \param{const wxString\& }{file = NULL}}
+
+\func{bool}{wxGetResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
+ \param{float *}{value}, \param{const wxString\& }{file = NULL}}
+
+\func{bool}{wxGetResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
+ \param{long *}{value}, \param{const wxString\& }{file = NULL}}
+
+\func{bool}{wxGetResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
+ \param{int *}{value}, \param{const wxString\& }{file = NULL}}
+
+Gets a resource value from the resource database (for example, WIN.INI, or
+.Xdefaults). If {\it file} is NULL, WIN.INI or .Xdefaults is used,
+otherwise the specified file is used.
+
+Under X, if an application class (wxApp::wx\_class) has been defined,
+it is appended to the string /usr/lib/X11/app-defaults/ to try to find
+an applications default file when merging all resource databases.
+
+The reason for passing the result in an argument is that it
+can be convenient to define a default value, which gets overridden
+if the value exists in the resource file. It saves a separate
+test for that resource's existence, and it also allows
+the overloading of the function for different types.
+
+See also \helpref{wxWriteResource}{wxwriteresource}.
+
+\membersection{::wxGetUserId}
+
+\func{bool}{wxGetUserId}{\param{const wxString\& }{buf}, \param{int}{ bufSize}}
+
+Copies the user's login identity (such as ``jacs'') into the buffer {\it
+buf}, of maximum size {\it bufSize}, returning TRUE if successful.
+Under Windows, this returns ``user''.
+
+\membersection{::wxGetUserName}
+
+\func{bool}{wxGetUserName}{\param{const wxString\& }{buf}, \param{int}{ bufSize}}
+
+Copies the user's name (such as ``Julian Smart'') into the buffer {\it
+buf}, of maximum size {\it bufSize}, returning TRUE if successful.
+Under Windows, this returns ``unknown''.
+
+\membersection{::wxKill}\label{wxkill}
+
+\func{int}{wxKill}{\param{long}{ pid}, \param{int}{ sig}}
+
+Under UNIX (the only supported platform), equivalent to the UNIX kill function.
+Returns 0 on success, -1 on failure.
+
+Tip: sending a signal of 0 to a process returns -1 if the process does not exist.
+It does not raise a signal in the receiving process.
+
+\membersection{::wxInitClipboard}\label{wxinitclipboard}
+
+\func{void}{wxInitClipboard}{\void}
+
+Initializes the generic clipboard system by creating an instance of
+the class \helpref{wxClipboard}{wxclipboard}.
+
+\membersection{::wxIPCCleanUp}\label{wxipccleanup}
+
+\func{void}{wxIPCCleanUp}{\void}
+
+Call this when your application is terminating, if you have
+called \helpref{wxIPCInitialize}{wxipcinitialize}.
+
+\membersection{::wxIPCInitialize}\label{wxipcinitialize}
+
+\func{void}{wxIPCInitialize}{\void}
+
+Initializes for interprocess communication operation. May
+be called multiple times without harm.
+
+See also \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEClient}{wxddeclient}, \helpref{wxDDEConnection}{wxddeconnection}
+and the relevant section of the user manual.
+
+\membersection{::wxIsBusy}\label{wxisbusy}
+
+\func{bool}{wxIsBusy}{\void}
+
+Returns TRUE if between two \helpref{wxBeginBusyCursor}{wxbeginbusycursor} and\rtfsp
+\helpref{wxEndBusyCursor}{wxendbusycursor} calls.
+
+\membersection{::wxLoadUserResource}\label{wxloaduserresource}
+
+\func{wxString}{wxLoadUserResource}{\param{const wxString\& }{resourceName}, \param{const wxString\& }{resourceType=``TEXT"}}
+
+Loads a user-defined Windows resource as a string. If the resource is found, the function creates
+a new character array and copies the data into it. A pointer to this data is returned. If unsuccessful, NULL is returned.
+
+The resource must be defined in the {\tt .rc} file using the following syntax:
+
+\begin{verbatim}
+myResource TEXT file.ext
+\end{verbatim}
+
+where {\tt file.ext} is a file that the resource compiler can find.
+
+One use of this is to store {\tt .wxr} files instead of including the data in the C++ file; some compilers
+cannot cope with the long strings in a {\tt .wxr} file. The resource data can then be parsed
+using \helpref{wxResourceParseString}{wxresourceparsestring}.
+
+This function is available under Windows only.
+
+\membersection{::wxNow}\label{wxnow}
+
+\func{wxString}{wxNow}{\void}
+
+Returns a string representing the current date and time.
+
+\membersection{::wxPostDelete}\label{wxpostdelete}
+
+\func{void}{wxPostDelete}{\param{wxObject *}{object}}
+
+Under X, tells the system to delete the specified object when
+all other events have been processed. In some environments, it is
+necessary to use this instead of deleting a frame directly with the
+delete operator, because X will still send events to the window.
+
+Now obsolete: use \helpref{wxWindow::Close}{wxwindowclose} instead.
+
+\membersection{::wxSetDisplayName}\label{wxsetdisplayname}
+
+\func{void}{wxSetDisplayName}{\param{const wxString\& }{displayName}}
+
+Under X only, sets the current display name. This is the X host and display name such
+as ``colonsay:0.0", and the function indicates which display should be used for creating
+windows from this point on. Setting the display within an application allows multiple
+displays to be used.
+
+See also \helpref{wxGetDisplayName}{wxgetdisplayname}.
+
+\membersection{::wxShell}\label{wxshell}
+
+\func{bool}{wxShell}{\param{const wxString\& }{command = NULL}}
+
+Executes a command in an interactive shell window. If no command is
+specified, then just the shell is spawned.
+
+See also \helpref{wxExecute}{wxexecute}.
+
+\membersection{::wxSleep}
+
+\func{void}{wxSleep}{\param{int}{ secs}}
+
+Under X, sleeps for the specified number of seconds.
+
+\membersection{::wxStripMenuCodes}
+
+\func{void}{wxStripMenuCodes}{\param{const wxString\& }{in}, \param{const wxString\& }{out}}
+
+Strips any menu codes from {\it in} and places the result
+in {\it out}. Menu codes include \& (mark the next character with an underline
+as a keyboard shortkey in Windows and Motif) and $\backslash$t (tab in Windows).
+
+\membersection{::wxStartTimer}\label{wxstarttimer}
+
+\func{void}{wxStartTimer}{\void}
+
+Starts a stopwatch; use \helpref{::wxGetElapsedTime}{wxgetelapsedtime} to get the elapsed time.
+
+See also \helpref{wxTimer}{wxtimer}.
+
+\membersection{::wxToLower}\label{wxtolower}
+
+\func{char}{wxToLower}{\param{char }{ch}}
+
+Converts the character to lower case. This is implemented as a macro for efficiency.
+
+\membersection{::wxToUpper}\label{wxtoupper}
+
+\func{char}{wxToUpper}{\param{char }{ch}}
+
+Converts the character to upper case. This is implemented as a macro for efficiency.
+
+\membersection{::wxTrace}\label{wxtrace}
+
+\func{void}{wxTrace}{\param{const wxString\& }{fmt}, \param{...}{}}
+
+Takes printf-style variable argument syntax. Output
+is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugcontextoverview}).
+
+\membersection{::wxTraceLevel}\label{wxtracelevel}
+
+\func{void}{wxTraceLevel}{\param{int}{ level}, \param{const wxString\& }{fmt}, \param{...}{}}
+
+Takes printf-style variable argument syntax. Output
+is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugcontextoverview}).
+The first argument should be the level at which this information is appropriate.
+It will only be output if the level returned by wxDebugContext::GetLevel is equal to or greater than
+this value.
+
+\membersection{::wxWriteResource}\label{wxwriteresource}
+
+\func{bool}{wxWriteResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
+ \param{const wxString\& }{value}, \param{const wxString\& }{file = NULL}}
+
+\func{bool}{wxWriteResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
+ \param{float }{value}, \param{const wxString\& }{file = NULL}}
+
+\func{bool}{wxWriteResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
+ \param{long }{value}, \param{const wxString\& }{file = NULL}}
+
+\func{bool}{wxWriteResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
+ \param{int }{value}, \param{const wxString\& }{file = NULL}}
+
+Writes a resource value into the resource database (for example, WIN.INI, or
+.Xdefaults). If {\it file} is NULL, WIN.INI or .Xdefaults is used,
+otherwise the specified file is used.
+
+Under X, the resource databases are cached until the internal function
+\rtfsp{\bf wxFlushResources} is called automatically on exit, when
+all updated resource databases are written to their files.
+
+Note that it is considered bad manners to write to the .Xdefaults
+file under UNIX, although the WIN.INI file is fair game under Windows.
+
+See also \helpref{wxGetResource}{wxgetresource}.
+
+\membersection{::wxYield}
+
+\func{bool}{wxYield}{\void}
+
+Yields control to pending messages in the windowing system. This can be useful, for example, when a
+time-consuming process writes to a text window. Without an occasional
+yield, the text window will not be updated properly, and (since Windows
+multitasking is cooperative) other processes will not respond.
+
+Caution should be exercised, however, since yielding may allow the
+user to perform actions which are not compatible with the current task.
+Disabling menu items or whole menus during processing can avoid unwanted
+reentrance of code.
+
+\section{Macros}\label{macros}
+
+These macros are defined in wxWindows.
+
+\membersection{CLASSINFO}\label{classinfo}
+
+\func{wxClassInfo *}{CLASSINFO}{className}
+
+Returns a pointer to the wxClassInfo object associated with this class.
+
+\membersection{WXDEBUG\_NEW}\label{debugnew}
+
+\func{}{WXDEBUG\_NEW}{arg}
+
+This is defined in debug mode to be call the redefined new operator
+with filename and line number arguments. The definition is:
+
+\begin{verbatim}
+#define WXDEBUG_NEW new(__FILE__,__LINE__)
+\end{verbatim}
+
+In non-debug mode, this is defined as the normal new operator.
+
+\membersection{DECLARE\_ABSTRACT\_CLASS}
+
+\func{}{DECLARE\_ABSTRACT\_CLASS}{className}
+
+Used inside a class declaration to declare that the class should be
+made known to the class hierarchy, but objects of this class cannot be created
+dynamically. The same as DECLARE\_CLASS.
+
+Example:
+
+\begin{verbatim}
+class wxCommand: public wxObject
+{
+  DECLARE_ABSTRACT_CLASS(wxCommand)
+
+ private:
+  ...
+ public:
+  ...
+};
+\end{verbatim}
+
+\membersection{DECLARE\_APP}\label{declareapp}
+
+\func{}{DECLARE\_APP}{className}
+
+This is used in headers to create a forward declaration of the wxGetApp function implemented
+by IMPLEMENT\_APP. It creates the declaration {\tt className\& wxGetApp(void)}.
+
+Example:
+
+\begin{verbatim}
+  DECLARE_APP(MyApp)
+\end{verbatim}
+
+\membersection{DECLARE\_CLASS}
+
+\func{}{DECLARE\_CLASS}{className}
+
+Used inside a class declaration to declare that the class should be
+made known to the class hierarchy, but objects of this class cannot be created
+dynamically. The same as DECLARE\_ABSTRACT\_CLASS.
+
+\membersection{DECLARE\_DYNAMIC\_CLASS}
+
+\func{}{DECLARE\_DYNAMIC\_CLASS}{className}
+
+Used inside a class declaration to declare that the objects of this class should be dynamically
+createable from run-time type information.
+
+Example:
+
+\begin{verbatim}
+class wxFrame: public wxWindow
+{
+  DECLARE_DYNAMIC_CLASS(wxFrame)
+
+ private:
+  const wxString\& frameTitle;
+ public:
+  ...
+};
+\end{verbatim}
+
+\membersection{IMPLEMENT\_ABSTRACT\_CLASS}
+
+\func{}{IMPLEMENT\_ABSTRACT\_CLASS}{className, baseClassName}
+
+Used in a C++ implementation file to complete the declaration of
+a class that has run-time type information. The same as IMPLEMENT\_CLASS.
+
+Example:
+
+\begin{verbatim}
+IMPLEMENT_ABSTRACT_CLASS(wxCommand, wxObject)
+
+wxCommand::wxCommand(void)
+{
+...
+}
+\end{verbatim}
+
+\membersection{IMPLEMENT\_ABSTRACT\_CLASS2}
+
+\func{}{IMPLEMENT\_ABSTRACT\_CLASS2}{className, baseClassName1, baseClassName2}
+
+Used in a C++ implementation file to complete the declaration of
+a class that has run-time type information and two base classes. The same as IMPLEMENT\_CLASS2.
+
+\membersection{IMPLEMENT\_APP}\label{implementapp}
+
+\func{}{IMPLEMENT\_APP}{className}
+
+This is used in the application class implementation file to make the application class known to
+wxWindows for dynamic construction. You use this instead of
+
+Old form:
+
+\begin{verbatim}
+  MyApp myApp;
+\end{verbatim}
+
+New form:
+
+\begin{verbatim}
+  IMPLEMENT_APP(MyApp)
+\end{verbatim}
+
+See also \helpref{DECLARE\_APP}{declareapp}.
+
+\membersection{IMPLEMENT\_CLASS}
+
+\func{}{IMPLEMENT\_CLASS}{className, baseClassName}
+
+Used in a C++ implementation file to complete the declaration of
+a class that has run-time type information. The same as IMPLEMENT\_ABSTRACT\_CLASS.
+
+\membersection{IMPLEMENT\_CLASS2}
+
+\func{}{IMPLEMENT\_CLASS2}{className, baseClassName1, baseClassName2}
+
+Used in a C++ implementation file to complete the declaration of a
+class that has run-time type information and two base classes. The
+same as IMPLEMENT\_ABSTRACT\_CLASS2.
+
+\membersection{IMPLEMENT\_DYNAMIC\_CLASS}
+
+\func{}{IMPLEMENT\_DYNAMIC\_CLASS}{className, baseClassName}
+
+Used in a C++ implementation file to complete the declaration of
+a class that has run-time type information, and whose instances
+can be created dynamically.
+
+Example:
+
+\begin{verbatim}
+IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
+
+wxFrame::wxFrame(void)
+{
+...
+}
+\end{verbatim}
+
+\membersection{IMPLEMENT\_DYNAMIC\_CLASS2}
+
+\func{}{IMPLEMENT\_DYNAMIC\_CLASS2}{className, baseClassName1, baseClassName2}
+
+Used in a C++ implementation file to complete the declaration of
+a class that has run-time type information, and whose instances
+can be created dynamically. Use this for classes derived from two
+base classes.
+
+\membersection{WXTRACE}\label{trace}
+
+\func{}{WXTRACE}{formatString, ...}
+
+Calls wxTrace with printf-style variable argument syntax. Output
+is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugcontextoverview}).
+
+\membersection{WXTRACELEVEL}\label{tracelevel}
+
+\func{}{WXTRACELEVEL}{level, formatString, ...}
+
+Calls wxTraceLevel with printf-style variable argument syntax. Output
+is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugcontextoverview}).
+The first argument should be the level at which this information is appropriate.
+It will only be output if the level returned by wxDebugContext::GetLevel is equal to or greater than
+this value.
+
+\section{wxWindows resource functions}\label{resourcefuncs}
+
+\overview{wxWindows resource system}{resourceformats}
+
+This section details functions for manipulating wxWindows (.WXR) resource
+files and loading user interface elements from resources.
+
+\normalbox{Please note that this use of the word `resource' is different from that used when talking
+about initialisation file resource reading and writing, using such functions
+as wxWriteResource and wxGetResource. It's just an unfortunate clash of terminology.}
+
+\helponly{For an overview of the wxWindows resource mechanism, see \helpref{the wxWindows resource system}{resourceformats}.}
+
+See also \helpref{wxWindow::LoadFromResource}{wxwindowloadfromresource} for
+loading from resource data.
+
+\membersection{::wxResourceAddIdentifier}\label{wxresourceaddidentifier}
+
+\func{bool}{wxResourceAddIdentifier}{\param{const wxString\& }{name}, \param{int }{value}}
+
+Used for associating a name with an integer identifier (equivalent to dynamically\rtfsp
+\verb$#$defining a name to an integer). Unlikely to be used by an application except
+perhaps for implementing resource functionality for interpreted languages.
+
+\membersection{::wxResourceClear}
+
+\func{void}{wxResourceClear}{\void}
+
+Clears the wxWindows resource table.
+
+\membersection{::wxResourceCreateBitmap}
+
+\func{wxBitmap *}{wxResourceCreateBitmap}{\param{const wxString\& }{resource}}
+
+Creates a new bitmap from a file, static data, or Windows resource, given a valid
+wxWindows bitmap resource identifier. For example, if the .WXR file contains
+the following:
+
+\begin{verbatim}
+static const wxString\& aiai_resource = "bitmap(name = 'aiai_resource',\
+  bitmap = ['aiai', wxBITMAP_TYPE_BMP_RESOURCE, 'WINDOWS'],\
+  bitmap = ['aiai.xpm', wxBITMAP_TYPE_XPM, 'X']).";
+\end{verbatim}
+
+then this function can be called as follows:
+
+\begin{verbatim}
+  wxBitmap *bitmap  = wxResourceCreateBitmap("aiai_resource");
+\end{verbatim}
+
+\membersection{::wxResourceCreateIcon}
+
+\func{wxIcon *}{wxResourceCreateIcon}{\param{const wxString\& }{resource}}
+
+Creates a new icon from a file, static data, or Windows resource, given a valid
+wxWindows icon resource identifier. For example, if the .WXR file contains
+the following:
+
+\begin{verbatim}
+static const wxString\& aiai_resource = "icon(name = 'aiai_resource',\
+  icon = ['aiai', wxBITMAP_TYPE_ICO_RESOURCE, 'WINDOWS'],\
+  icon = ['aiai', wxBITMAP_TYPE_XBM_DATA, 'X']).";
+\end{verbatim}
+
+then this function can be called as follows:
+
+\begin{verbatim}
+  wxIcon *icon = wxResourceCreateIcon("aiai_resource");
+\end{verbatim}
+
+\membersection{::wxResourceCreateMenuBar}
+
+\func{wxMenuBar *}{wxResourceCreateMenuBar}{\param{const wxString\& }{resource}}
+
+Creates a new menu bar given a valid wxWindows menubar resource
+identifier. For example, if the .WXR file contains the following:
+
+\begin{verbatim}
+static const wxString\& menuBar11 = "menu(name = 'menuBar11',\
+  menu = \
+  [\
+    ['&File', 1, '', \
+      ['&Open File', 2, 'Open a file'],\
+      ['&Save File', 3, 'Save a file'],\
+      [],\
+      ['E&xit', 4, 'Exit program']\
+    ],\
+    ['&Help', 5, '', \
+      ['&About', 6, 'About this program']\
+    ]\
+  ]).";
+\end{verbatim}
+
+then this function can be called as follows:
+
+\begin{verbatim}
+  wxMenuBar *menuBar = wxResourceCreateMenuBar("menuBar11");
+\end{verbatim}
+
+
+\membersection{::wxResourceGetIdentifier}
+
+\func{int}{wxResourceGetIdentifier}{\param{const wxString\& }{name}}
+
+Used for retrieving the integer value associated with an identifier.
+A zero value indicates that the identifier was not found.
+
+See \helpref{wxResourceAddIdentifier}{wxresourceaddidentifier}.
+
+\membersection{::wxResourceParseData}\label{wxresourcedata}
+
+\func{bool}{wxResourceParseData}{\param{const wxString\& }{resource}, \param{wxResourceTable *}{table = NULL}}
+
+Parses a string containing one or more wxWindows resource objects. If
+the resource objects are global static data that are included into the
+C++ program, then this function must be called for each variable
+containing the resource data, to make it known to wxWindows.
+
+{\it resource} should contain data in the following form:
+
+\begin{verbatim}
+dialog(name = 'dialog1',
+  style = 'wxCAPTION | wxDEFAULT_DIALOG_STYLE',
+  title = 'Test dialog box',
+  x = 312, y = 234, width = 400, height = 300,
+  modal = 0,
+  control = [wxGroupBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],
+  control = [wxMultiText, 'Multitext', 'wxVERTICAL_LABEL', 'multitext3',
+      156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]]).
+\end{verbatim}
+
+This function will typically be used after including a {\tt .wxr} file into
+a C++ program as follows:
+
+\begin{verbatim}
+#include "dialog1.wxr"
+\end{verbatim}
+
+Each of the contained resources will declare a new C++ variable, and each
+of these variables should be passed to wxResourceParseData.
+
+\membersection{::wxResourceParseFile}
+
+\func{bool}{wxResourceParseFile}{\param{const wxString\& }{filename}, \param{wxResourceTable *}{table = NULL}}
+
+Parses a file containing one or more wxWindows resource objects
+in C++-compatible syntax. Use this function to dynamically load
+wxWindows resource data.
+
+\membersection{::wxResourceParseString}\label{wxresourceparsestring}
+
+\func{bool}{wxResourceParseString}{\param{const wxString\& }{resource}, \param{wxResourceTable *}{table = NULL}}
+
+Parses a string containing one or more wxWindows resource objects. If
+the resource objects are global static data that are included into the
+C++ program, then this function must be called for each variable
+containing the resource data, to make it known to wxWindows.
+
+{\it resource} should contain data with the following form:
+
+\begin{verbatim}
+static const wxString\& dialog1 = "dialog(name = 'dialog1',\
+  style = 'wxCAPTION | wxDEFAULT_DIALOG_STYLE',\
+  title = 'Test dialog box',\
+  x = 312, y = 234, width = 400, height = 300,\
+  modal = 0,\
+  control = [wxGroupBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
+  control = [wxMultiText, 'Multitext', 'wxVERTICAL_LABEL', 'multitext3',\
+      156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]]).";
+\end{verbatim}
+
+This function will typically be used after calling \helpref{wxLoadUserResource}{wxloaduserresource} to
+load an entire {\tt .wxr file} into a string.
+
+\membersection{::wxResourceRegisterBitmapData}\label{registerbitmapdata}
+
+\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{const wxString\& }{xbm\_data}, \param{int }{width},
+\param{int }{height}, \param{wxResourceTable *}{table = NULL}}
+
+\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{const wxString\& *}{xpm\_data}}
+
+Makes \verb$#$included XBM or XPM bitmap data known to the wxWindows resource system. 
+This is required if other resources will use the bitmap data, since otherwise there
+is no connection between names used in resources, and the global bitmap data.
+
+\membersection{::wxResourceRegisterIconData}
+
+Another name for \helpref{wxResourceRegisterBitmapData}{registerbitmapdata}.
+

@@ -1,0 +1,38 @@
+\section{\class{wxMoveEvent}}\label{wxmoveevent}
+
+A move event holds information about move change events.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Event table macros}
+
+To process a move event, use this event handler macro to direct input to a member
+function that takes a wxMoveEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_MOVE(func)}}{Process a wxEVT\_MOVE event, which is generated
+when a window is moved.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{wxWindow::OnMove}{wxwindowonmove}, \helpref{wxPoint}{wxpoint}, \helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMoveEvent::wxMoveEvent}
+
+\func{}{wxMoveEvent}{\param{const wxPoint\& }{pt}, \param{int }{id = 0}}
+
+Constructor.
+
+\membersection{wxMoveEvent::GetPosition}\label{wxmoveeventgetposition}
+
+\constfunc{wxPoint}{GetPosition}{\void}
+
+Returns the position of the window generating the move change event.
+

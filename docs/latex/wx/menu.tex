@@ -1,0 +1,611 @@
+\section{\class{wxMenu}}\label{wxmenu}
+
+A menu is a popup (or pull down) list of items, one of which may be
+selected before the menu goes away (clicking elsewhere dismisses the
+menu).  Menus may be used to construct either menu bars or popup menus.
+
+A menu item has an integer ID associated with it which can be used to
+identify the selection, or to change the menu item in some way.
+
+\wxheading{Derived from}
+
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Event handling}
+
+If the menu is part of a menubar, then \helpref{wxMenuBar}{wxmenubar} event processing is used.
+
+With a popup menu, there is a variety of ways to handle a menu selection event
+(wxEVT\_COMMAND\_MENU\_SELECTED).
+
+\begin{enumerate}\itemsep=0pt
+\item Define a callback of type wxFunction, which you pass to the wxMenu constructor.
+The callback takes a reference to a window, and a reference to a \helpref{wxCommandEvent}{wxcommandevent}.
+\item Derive a new class from wxMenu and define event table entries using the EVT\_MENU macro.
+\item Set a new event handler for wxMenu, using an object whose class has EVT\_MENU entries.
+\item Provide EVT\_MENU handlers in the window which pops up the menu, or in an ancestor of
+this window.
+\end{enumerate}
+
+\wxheading{See also}
+
+\helpref{wxMenuBar}{wxmenubar}, \helpref{wxWindow::PopupMenu}{wxwindowpopupmenu},\rtfsp
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMenu::wxMenu}\label{wxmenuconstr}
+
+\func{}{wxMenu}{\param{const wxString\& }{title = ""}, \param{const wxFunction}{ func = NULL}}
+
+Constructs a wxMenu object.
+
+\wxheading{Parameters}
+
+\docparam{title}{A title for the popup menu: the empty string denotes no title.}
+
+\docparam{func}{A callback function if the menu is used as a popup using \helpref{wxWindow::PopupMenu}{wxwindowpopupmenu}.}
+
+\membersection{wxMenu::\destruct{wxMenu}}
+
+\func{}{\destruct{wxMenu}}{\void}
+
+Destructor, destroying the menu.
+
+\membersection{wxMenu::Append}\label{wxmenuappend}
+
+\func{void}{Append}{\param{const int}{ id}, \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
+\param{const bool}{ checkable = FALSE}}
+
+Adds a string item to the end of the menu.
+
+\func{void}{Append}{\param{const int}{ id}, \param{const wxString\& }{ item}, \param{wxMenu *}{subMenu},\rtfsp
+\param{const wxString\& }{helpString = ""}}
+
+Adds a pull-right submenu to the end of the menu.
+
+\func{void}{Append}{\param{wxMenuItem*}{ menuItem}}
+
+Adds a menu item object. You can specify various extra properties of a menu item this way,
+such as bitmaps and fonts.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu command identifier.}
+
+\docparam{item}{The string to appear on the menu item.}
+
+\docparam{menu}{Pull-right submenu.}
+
+\docparam{checkable}{If TRUE, this item is checkable.}
+
+\docparam{helpString}{An optional help string associated with the item.
+By default, \helpref{wxFrame::OnMenuHighlight}{wxframeonmenuhighlight} displays
+this string in the status line.}
+
+\docparam{menuItem}{A menuitem object. It will be owned by the wxMenu object after this function
+is called, so do not delete it yourself.}
+
+\wxheading{Remarks}
+
+This command can be used after the menu has been shown, as well as on initial
+creation of a menu or menubar.
+
+\wxheading{See also}
+
+\helpref{wxMenu::AppendSeparator}{wxmenuappendseparator}, \helpref{wxMenu::SetLabel}{wxmenusetlabel}, \helpref{wxMenu::GetHelpString}{wxmenugethelpstring},\rtfsp
+\helpref{wxMenu::SetHelpString}{wxmenusethelpstring}, \helpref{wxMenuItem}{wxmenuitem}
+
+\membersection{wxMenu::AppendSeparator}\label{wxmenuappendseparator}
+
+\func{void}{AppendSeparator}{\void}
+
+Adds a separator to the end of the menu.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Append}{wxmenuappend}
+
+\membersection{wxMenu::Break}\label{wxmenubreak}
+
+\func{void}{Break}{\void}
+
+Inserts a break in a menu, causing the next appended item to appear in a new column.
+
+\membersection{wxMenu::Check}\label{wxmenucheck}
+
+\func{void}{Check}{\param{const int}{ id}, \param{const bool}{ check}}
+
+Checks or unchecks the menu item.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\docparam{check}{If TRUE, the item will be checked, otherwise it will be unchecked.}
+
+\wxheading{See also}
+
+\helpref{wxMenu::IsChecked}{wxmenuischecked}
+
+\membersection{wxMenu::Enable}\label{wxmenuenable}
+
+\func{void}{Enable}{\param{const int}{ id}, \param{const bool}{ enable}}
+
+Enables or disables (greys out) a menu item.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\docparam{enable}{TRUE to enable the menu item, FALSE to disable it.}
+
+\wxheading{See also}
+
+\helpref{wxMenu::IsEnabled}{wxmenuisenabled}
+
+\membersection{wxMenu::FindItem}\label{wxmenufinditem}
+
+\constfunc{int}{FindItem}{\param{const wxString\& }{itemString}}
+
+Finds the menu item id for a menu item string.
+
+\wxheading{Parameters}
+
+\docparam{itemString}{Menu item string to find.}
+
+\wxheading{Return value}
+
+Menu item identifier, or -1 if none is found.
+
+\wxheading{Remarks}
+
+Any special menu codes are stripped out of source and target strings
+before matching.
+
+\wxheading{See also}
+
+\helpref{wxMenu::FindItemForId}{wxmenufinditemforid}
+
+\membersection{wxMenu::FindItemForId}\label{wxmenufinditemforid}
+
+\constfunc{wxMenuItem*}{FindItemForId}{\param{const int}{ id}}
+
+Finds the menu item object associated with the given menu item identifier.
+
+\wxheading{Parameters}
+
+\docparam{id}{Menu item identifier.}
+
+\wxheading{Return value}
+
+Returns the menu item object, or NULL if it is not found.
+
+\wxheading{See also}
+
+\helpref{wxMenu::FindItem}{wxmenufinditem}
+
+\membersection{wxMenu::GetHelpString}\label{wxmenugethelpstring}
+
+\constfunc{wxString}{GetHelpString}{\param{const int}{ id}}
+
+Returns the help string associated with a menu item.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\wxheading{Return value}
+
+The help string, or the empty string if there is no help string or the
+item was not found.
+
+\wxheading{See also}
+
+\helpref{wxMenu::SetHelpString}{wxmenusethelpstring}, \helpref{wxMenu::Append}{wxmenuappend}
+
+\membersection{wxMenu::GetLabel}\label{wxmenugetlabel}
+
+\constfunc{wxString}{GetLabel}{\param{const int}{ id}}
+
+Returns a menu item label.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\wxheading{Return value}
+
+The item label, or the empty string if the item was not found.
+
+\wxheading{See also}
+
+\helpref{wxMenu::SetLabel}{wxmenusetlabel}
+
+\membersection{wxMenu::GetTitle}\label{wxmenugettitle}
+
+\constfunc{wxString}{GetTitle}{\void}
+
+Returns the title of the menu.
+
+\wxheading{Remarks}
+
+This is relevant only to popup menus.
+
+\wxheading{See also}
+
+\helpref{wxMenu::SetTitle}{wxmenusettitle}
+
+\membersection{wxMenu::IsChecked}\label{wxmenuischecked}
+
+\constfunc{bool}{IsChecked}{\param{const int}{ id}}
+
+Determines whether a menu item is checked.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\wxheading{Return value}
+
+TRUE if the menu item is checked, FALSE otherwise.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Check}{wxmenucheck}
+
+\membersection{wxMenu::IsEnabled}\label{wxmenuisenabled}
+
+\constfunc{bool}{IsEnabled}{\param{const int}{ id}}
+
+Determines whether a menu item is enabled.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\wxheading{Return value}
+
+TRUE if the menu item is enabled, FALSE otherwise.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Enable}{wxmenuenable}
+
+\membersection{wxMenu::SetHelpString}\label{wxmenusethelpstring}
+
+\func{void}{SetHelpString}{\param{const int}{ id}, \param{const wxString\& }{helpString}}
+
+Sets an item's help string.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\docparam{helpString}{The help string to set.}
+
+\wxheading{See also}
+
+\helpref{wxMenu::GetHelpString}{wxmenugethelpstring}
+
+\membersection{wxMenu::SetLabel}\label{wxmenusetlabel}
+
+\func{void}{SetLabel}{\param{const int}{ id}, \param{const wxString\& }{label}}
+
+Sets the label of a menu item.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\docparam{label}{The menu item label to set.}
+
+\wxheading{See also}
+
+\helpref{wxMenu::Append}{wxmenuappend}, \helpref{wxMenu::GetLabel}{wxmenugetlabel}
+
+\membersection{wxMenu::SetTitle}\label{wxmenusettitle}
+
+\func{void}{SetTitle}{\param{const wxString\& }{title}}
+
+Sets the title of the menu.
+
+\wxheading{Parameters}
+
+\docparam{title}{The title to set.}
+
+\wxheading{Remarks}
+
+This is relevant only to popup menus.
+
+\wxheading{See also}
+
+\helpref{wxMenu::SetTitle}{wxmenusettitle}
+
+\section{\class{wxMenuBar}}\label{wxmenubar}
+
+A menu bar is a series of menus accessible from the top of a frame.
+
+\wxheading{Derived from}
+
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Event handling}
+
+To respond to a menu selection, provide a handler for EVT\_MENU, in the frame
+that contains the menu bar.
+
+\wxheading{See also}
+
+\helpref{wxMenu}{wxmenu}, \helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMenuBar::wxMenuBar}\label{wxmenubarconstr}
+
+\func{void}{wxMenuBar}{\void}
+
+Default constructor.
+
+\func{void}{wxMenuBar}{\param{const int}{ n}, \param{wxMenu*}{ menus[]}, \param{const wxString }{titles[]}}
+
+Construct a menu bar from arrays of menus and titles.
+
+\wxheading{Parameters}
+
+\docparam{n}{The number of menus.}
+
+\docparam{menus}{An array of menus. Do not use this array again - it now belongs to the
+menu bar.}
+
+\docparam{titles}{An array of title strings. Deallocate this array after creating the menu bar.}
+
+\membersection{wxMenuBar::\destruct{wxMenuBar}}
+
+\func{void}{\destruct{wxMenuBar}}{\void}
+
+Destructor, destroying the menu bar and removing it from the parent frame (if any).
+
+\membersection{wxMenuBar::Append}\label{wxmenubarappend}
+
+\func{void}{Append}{\param{wxMenu *}{menu}, \param{const wxString\& }{title}}
+
+Adds the item to the end of the menu bar.
+
+\wxheading{Parameters}
+
+\docparam{menu}{The menu to add. Do not deallocate this menu after calling {\bf Append}.}
+
+\docparam{title}{The title of the menu.}
+
+\membersection{wxMenuBar::Check}\label{wxmenubarcheck}
+
+\func{void}{Check}{\param{const int}{ id}, \param{const bool}{ check}}
+
+Checks or unchecks a menu item.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\docparam{check}{If TRUE, checks the menu item, otherwise the item is unchecked.}
+
+\wxheading{Remarks}
+
+Only use this when the menu bar has been associated
+with a frame; otherwise, use the wxMenu equivalent call.
+
+\membersection{wxMenuBar::Enable}\label{wxmenubarenable}
+
+\func{void}{Enable}{\param{const int}{ id}, \param{const bool}{ enable}}
+
+Enables or disables (greys out) a menu item.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\docparam{enable}{TRUE to enable the item, FALSE to disable it.}
+
+\wxheading{Remarks}
+
+Only use this when the menu bar has been
+associated with a frame; otherwise, use the wxMenu equivalent call.
+
+\membersection{wxMenuBar::EnableTop}\label{wxmenubarenabletop}
+
+\func{void}{EnableTop}{\param{const int}{ pos}, \param{const bool}{ enable}}
+
+Enables or disables a whole menu.
+
+\wxheading{Parameters}
+
+\docparam{pos}{The position of the menu, starting from zero.}
+
+\docparam{enable}{TRUE to enable the menu, FALSE to disable it.}
+
+\wxheading{Remarks}
+
+Only use this when the menu bar has been
+associated with a frame.
+
+\membersection{wxMenuBar::FindMenuItem}\label{wxmenubarfindmenuitem}
+
+\constfunc{int}{FindMenuItem}{\param{const wxString\& }{menuString}, \param{const wxString\& }{itemString}}
+
+Finds the menu item id for a menu name/menu item string pair.
+
+\wxheading{Parameters}
+
+\docparam{menuString}{Menu title to find.}
+
+\docparam{itemString}{Item to find.}
+
+\wxheading{Return value}
+
+The menu item identifier, or -1 if none was found.
+
+\wxheading{Remarks}
+
+Any special menu codes are stripped out of source and target strings
+before matching.
+
+\membersection{wxMenuBar::FindItemById}\label{wxmenubarfinditembyid}
+
+\constfunc{wxMenuItem *}{FindItemById}{\param{const int}{ id}}
+
+Finds the menu item object associated with the given menu item identifier,
+
+\wxheading{Parameters}
+
+\docparam{id}{Menu item identifier.}
+
+\wxheading{Return value}
+
+The found menu item object, or NULL if one was not found.
+
+\membersection{wxMenuBar::GetHelpString}\label{wxmenubargethelpstring}
+
+\constfunc{wxString}{GetHelpString}{\param{const int}{ id}}
+
+Gets the help string associated with the menu item identifer.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\wxheading{Return value}
+
+The help string, or the empty string if there was no help string or the menu item
+was not found.
+
+\wxheading{See also}
+
+\helpref{wxMenuBar::SetHelpString}{wxmenubarsethelpstring}
+
+\membersection{wxMenuBar::GetLabel}\label{wxmenubargetlabel}
+
+\constfunc{wxString}{GetLabel}{\param{const int}{ id}}
+
+Gets the label associated with a menu item.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\wxheading{Return value}
+
+The menu item label, or the empty string if the item was not found.
+
+\wxheading{Remarks}
+
+Use only after the menubar has been associated with a frame.
+
+\membersection{wxMenuBar::GetLabelTop}\label{wxmenubargetlabeltop}
+
+\constfunc{wxString}{GetLabelTop}{\param{const int}{ pos}}
+
+Returns the label of a top-level menu.
+
+\wxheading{Parameters}
+
+\docparam{pos}{Position of the menu on the menu bar, starting from zero.}
+
+\wxheading{Return value}
+
+The menu label, or the empty string if the menu was not found.
+
+\wxheading{Remarks}
+
+Use only after the menubar has been associated with a frame.
+
+\wxheading{See also}
+
+\helpref{wxMenuBar::SetLabelTop}{wxmenubarsetlabeltop}
+
+\membersection{wxMenuBar::IsChecked}\label{wxmenubarischecked}
+
+\constfunc{bool}{IsChecked}{\param{const int}{ id}}
+
+Determines whether an item is checked.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\wxheading{Return value}
+
+TRUE if the item was found and is checked, FALSE otherwise.
+
+\membersection{wxMenuBar::IsEnabled}\label{wxmenubarisenabled}
+
+\constfunc{bool}{IsEnabled}{\param{const int}{ id}}
+
+Determines whether an item is enabled.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\wxheading{Return value}
+
+TRUE if the item was found and is enabled, FALSE otherwise.
+
+\membersection{wxMenuBar::SetHelpString}\label{wxmenubarsethelpstring}
+
+\func{void}{SetHelpString}{\param{const int}{ id}, \param{const wxString\& }{helpString}}
+
+Sets the help string associated with a menu item.
+
+\wxheading{Parameters}
+
+\docparam{id}{Menu item identifier.}
+
+\docparam{helpString}{Help string to associate with the menu item.}
+
+\wxheading{See also}
+
+\helpref{wxMenuBar::GetHelpString}{wxmenubargethelpstring}
+
+\membersection{wxMenuBar::SetLabel}\label{wxmenubarsetlabel}
+
+\func{void}{SetLabel}{\param{const int}{ id}, \param{const wxString\& }{label}}
+
+Sets the label of a menu item.
+
+\wxheading{Parameters}
+
+\docparam{id}{Menu item identifier.}
+
+\docparam{label}{Menu item label.}
+
+\wxheading{Remarks}
+
+Use only after the menubar has been associated with a frame.
+
+\wxheading{See also}
+
+\helpref{wxMenuBar::GetLabel}{wxmenubargetlabel}
+
+\membersection{wxMenuBar::SetLabelTop}\label{wxmenubarsetlabeltop}
+
+\func{void}{SetLabelTop}{\param{const int}{ pos}, \param{const wxString\& }{label}}
+
+Sets the label of a top-level menu.
+
+\wxheading{Parameters}
+
+\docparam{pos}{The position of a menu on the menu bar, starting from zero.}
+
+\docparam{label}{The menu label.}
+
+\wxheading{Remarks}
+
+Use only after the menubar has been associated with a frame.
+
+\wxheading{See also}
+
+\helpref{wxMenuBar::GetLabelTop}{wxmenubargetlabeltop}
+

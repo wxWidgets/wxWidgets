@@ -1,0 +1,41 @@
+\section{\class{wxNode}}\label{wxnode}
+
+A node structure used in linked lists (see \helpref{wxList}{wxlist}).
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxList}{wxlist}, \helpref{wxHashTable}{wxhashtable}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxNode::Data}
+
+\func{wxObject *}{Data}{\void}
+
+Retrieves the client data pointer associated with the node. This will
+have to be cast to the correct type.
+
+\membersection{wxNode::Next}
+
+\func{wxNode *}{Next}{\void}
+
+Retrieves the next node (NULL if at end of list).
+
+\membersection{wxNode::Previous}
+
+\func{wxNode *}{Previous}{\void}
+
+Retrieves the previous node (NULL if at start of list).
+
+\membersection{wxNode::SetData}
+
+\func{void}{SetData}{\param{wxObject *}{data}}
+
+Sets the data associated with the node (usually the pointer will have been
+set when the node was created).
+
+

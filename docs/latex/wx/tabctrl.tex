@@ -1,0 +1,95 @@
+\section{\class{wxTabCtrl}}\label{wxtabctrl}
+
+This class represents a tab control, which manages multiple tabs.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTabCtrl::wxTabCtrl}\label{wxtabctrlconstr}
+
+\func{}{wxTabCtrl}{\void}
+
+Default constructor.
+
+\func{}{wxTabCtrl}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size}, \param{const long}{ style = 0}, \param{const wxString\& }{name = "tabCtrl"}}
+
+Constructs a tab control.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The parent window. Must be non-NULL.}
+
+\docparam{id}{The window identifier.}
+
+\docparam{pos}{The window position.}
+
+\docparam{size}{The window size.}
+
+\docparam{style}{The window style. Its value is a bit list of zero or more of {\bf wxTC\_MULTILINE},
+ {\bf wxTC\_RIGHTJUSTIFY}, {\bf wxTC\_FIXEDWIDTH} and {\bf wxTC\_OWNERDRAW}.}
+
+\membersection{wxTabCtrl::\destruct{wxTabCtrl}}
+
+\func{}{\destruct{wxTabCtrl}}{\void}
+
+Destroys the wxTabCtrl object.
+
+\membersection{wxTabCtrl::Create}\label{wxtabctrlcreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{const wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size}, \param{const long}{ style = 0}, \param{const wxString\& }{name = "tabCtrl"}}
+
+Creates a tab control. See \helpref{wxTabCtrl::wxTabCtrl}{wxtabctrlconstr} for a description
+of the parameters.
+
+\membersection{wxTabCtrl::GetImageList}\label{wxtabctrlgetimagelist}
+
+\constfunc{wxImageList*}{GetImageList}{\void}
+
+Returns the associated image list.
+
+\wxheading{See also}
+
+\helpref{wxImageList}{wximagelist}, \helpref{wxTabCtrl::SetImageList}{wxtabctrlsetimagelist}
+
+\membersection{wxTabCtrl::GetItemCount}\label{wxtabctrlgetitemcount}
+
+\constfunc{int}{GetItemCount}{\void}
+
+Returns the number of tabs in the tab control.
+
+\membersection{wxTabCtrl::GetItemRect}\label{wxtabctrlgetitemrect}
+
+\constfunc{bool}{GetItemRect}{\param{const int item}, \param{wxRect\&}{ rect}}
+
+Returns the rectangle bounding the given tab.
+
+\wxheading{See also}
+
+\helpref{wxRect}{wxrect}
+
+\membersection{wxTabCtrl::GetRowCount}\label{wxtabctrlgetrowcount}
+
+\constfunc{bool}{GetRowCount}{\void}
+
+Returns the number of rows in the tab control.
+
+\membersection{wxTabCtrl::GetSelection}\label{wxtabctrlgetselection}
+
+\constfunc{int}{GetSelection}{\void}
+
+Returns the index for the currently selected tab.
+
+\wxheading{See also}
+
+\helpref{wxTabCtrl::SetSelection}{wxtabctrlsetselection}
+
+
+

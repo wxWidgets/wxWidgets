@@ -1,0 +1,17 @@
+[OPTIONS]
+BMROOT=d:\wx2\utils\dialoged\docs ; Assume that bitmaps are where the source is
+TITLE=Dialog Editor Manual
+CONTENTS=Contents
+COMPRESS=HIGH
+
+[FILES]
+dialoged.rtf
+
+[CONFIG]
+CreateButton("Up", "&Up", "JumpId(`dialoged.hlp', `Contents')")
+BrowseButtons()
+
+[MAP]
+
+[BITMAPS]
+

@@ -1,0 +1,63 @@
+\chapter{Change log}\label{changes}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+March 15th 1997, Version 1.7
+
+\begin{itemize}\itemsep=0pt
+\item Added fix to wx\_rprop.cpp to avoid Fafa bitmap buttons growing every time the
+button edited.
+\item Added fix to wx\_resed.cpp, case wxID\_EXIT, to clean up properly on exit, avoiding double deletion of wxBitmap.
+\end{itemize}
+
+May 6th 1996, Version 1.6
+
+\begin{itemize}\itemsep=0pt
+\item Added panel editing in addition to dialog box editing.
+\item Cured some bugs with changing window styles such as wxUSER\_COLOURS and label position.
+\item Now preserves syntax of bitmap resources in wxr files.
+\end{itemize}
+
+March 1996, Version 1.5
+
+\begin{itemize}\itemsep=0pt
+\item Changed behaviour of New tool, and changed File menu to include New project and New dialog items.
+Behaviour should be more standard now.
+\end{itemize}
+
+March 1st 1996, Version 1.4
+
+\begin{itemize}\itemsep=0pt
+\item Items (but not dialogs) can now have duplicate names.
+\item Can pass a filename to the program from the command line.
+\item Cured bizarre error caused by a Windows combobox sending
+a fake left-mouse-up error when losing the focus (switching to another
+window). This fix will be in wxWindows 1.66.
+\item Rewritten code to use only the new type system, and to take account of
+of new window style partitioning (flags for different items may have the same value).
+Again, wxWindows 1.66 will have the new style values, to make room for more window
+styles.
+\end{itemize}
+
+January 28th 1996, Version 1.2
+
+\begin{itemize}\itemsep=0pt
+\item Now starts off in non-user-colour mode under Windows
+\item Dragging item drags other selected items
+\item wxMessage saves size correctly, if used in conjunction with wxWin 1.66
+\end{itemize}
+
+January 19th 1996, Version 1.1
+
+\begin{itemize}\itemsep=0pt
+\item Cured crash bug when quitting dialog window
+\item Added Clear menu item
+\item Added window type name to property window
+\end{itemize}
+
+December 19th 1995, Version 1.0
+
+\begin{itemize}\itemsep=0pt
+\item First release.
+\end{itemize}
+

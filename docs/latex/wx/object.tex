@@ -1,0 +1,213 @@
+\section{\class{wxObject}}\label{wxobject}
+
+This is the root class of all wxWindows classes.
+It declares a virtual destructor which ensures that
+destructors get called for all derived class objects where necessary.
+
+wxObject is the hub of a dynamic object creation
+scheme, enabling a program to create instances of a class only knowing
+its string class name, and to query the class hierarchy.
+
+The class contains optional debugging versions
+of {\bf new} and {\bf delete}, which can help trace memory allocation
+and deallocation problems.
+
+wxObject can be used to implement reference counted objects, such as
+wxPen, wxBitmap and others.
+
+\wxheading{See also}
+
+\helpref{wxClassInfo}{wxclassinfo}, \helpref{Debugging overview}{debuggingoverview},\rtfsp
+\helpref{wxObjectRefData}{wxobjectrefdata}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxObject::wxObject}\label{wxobjectconstr}
+
+\func{}{wxObject}{\void}
+
+Default constructor.
+
+\membersection{wxObject::\destruct{wxObject}}
+
+\func{}{wxObject}{\void}
+
+Destructor. Performs dereferencing, for those objects
+that use reference counting.
+
+\membersection{wxObject::m\_refData}\label{wxobjectmrefdata}
+
+\member{wxObjectRefData* }{m\_refData}
+
+Pointer to an object which is the object's reference-counted data.
+
+\wxheading{See also}
+
+\helpref{wxObject::Ref}{wxobjectref}, \helpref{wxObject::UnRef}{wxobjectunref},\rtfsp
+\helpref{wxObject::SetRefData}{wxobjectsetrefdata},\rtfsp
+\helpref{wxObject::GetRefData}{wxobjectgetrefdata},\rtfsp
+\helpref{wxObjectRefData}{wxobjectrefdata}
+
+\membersection{wxObject::Dump}\label{wxobjectdump}
+
+\func{void}{Dump}{\param{ostream\&}{ stream}}
+
+A virtual function that should be redefined by derived classes to allow dumping of
+memory states.
+
+\wxheading{Parameters}
+
+\docparam{stream}{Stream on which to output dump information.}
+
+\wxheading{Remarks}
+
+Currently wxWindows does not define Dump for derived classes, but
+programmers may wish to use it for their own applications. Be sure to
+call the Dump member of the class's base class to allow all information to be dumped.
+
+The implementation of this function just writes the class name of the object.
+If DEBUG is undefined or zero, the implementation is empty.
+
+\membersection{wxObject::GetClassInfo}\label{wxobjectgetclassinfo}
+
+\func{wxClassInfo *}{GetClassInfo}{\void}
+
+This virtual function is redefined for every class that requires run-time
+type information, when using DECLARE\_CLASS macros.
+
+\membersection{wxObject::GetRefData}\label{wxobjectgetrefdata}
+
+\constfunc{wxObjectRefData*}{GetRefData}{\void}
+
+Returns the {\bf m\_refData} pointer.
+
+\wxheading{See also}
+
+\helpref{wxObject::Ref}{wxobjectref}, \helpref{wxObject::UnRef}{wxobjectunref}, \helpref{wxObject::m\_refData}{wxobjectmrefdata},\rtfsp
+\helpref{wxObject::SetRefData}{wxobjectsetrefdata},\rtfsp
+\helpref{wxObjectRefData}{wxobjectrefdata}
+
+\membersection{wxObject::IsKindOf}\label{wxobjectiskindof}
+
+\func{bool}{IsKindOf}{\param{wxClassInfo *}{info}}
+
+Determines whether this class is a subclass of (or the same class as)
+the given class.
+
+\wxheading{Parameters}
+
+\docparam{info}{A pointer to a class information object, which may be obtained
+by using the CLASSINFO macro.}
+
+\wxheading{Return value}
+
+TRUE if the class represented by {\it info} is the same class as
+this one or is derived from it.
+
+\wxheading{Example}
+
+\begin{verbatim}
+  bool tmp = obj->IsKindOf(CLASSINFO(wxFrame));
+\end{verbatim}
+
+\membersection{wxObject::Ref}\label{wxobjectref}
+
+\func{void}{Ref}{\param{const wxObject\& }{clone}}
+
+Makes this object refer to the data in {\it clone}.
+
+\wxheading{Parameters}
+
+\docparam{clone}{The object to `clone'.}
+
+\wxheading{Remarks}
+
+First this function calls \helpref{wxObject::UnRef}{wxobjectunref} on itself
+to decrement (and perhaps free) the data it is currently referring to.
+
+It then sets its own m\_refData to point to that of {\it clone}, and increments the reference count
+inside the data.
+
+\wxheading{See also}
+
+\helpref{wxObject::UnRef}{wxobjectunref}, \helpref{wxObject::m\_refData}{wxobjectmrefdata},\rtfsp
+\helpref{wxObject::SetRefData}{wxobjectsetrefdata}, \helpref{wxObject::GetRefData}{wxobjectgetrefdata},\rtfsp
+\helpref{wxObjectRefData}{wxobjectrefdata}
+
+\membersection{wxObject::SetRefData}\label{wxobjectsetrefdata}
+
+\func{void}{SetRefData}{\param{wxObjectRefData*}{ data}}
+
+Sets the {\bf m\_refData} pointer.
+
+\wxheading{See also}
+
+\helpref{wxObject::Ref}{wxobjectref}, \helpref{wxObject::UnRef}{wxobjectunref}, \helpref{wxObject::m\_refData}{wxobjectmrefdata},\rtfsp
+\helpref{wxObject::GetRefData}{wxobjectgetrefdata},\rtfsp
+\helpref{wxObjectRefData}{wxobjectrefdata}
+
+\membersection{wxObject::UnRef}\label{wxobjectunref}
+
+\func{void}{UnRef}{\void}
+
+Decrements the reference count in the associated data, and if it is zero, deletes the data.
+The {\bf m\_refData} member is set to NULL.
+
+\wxheading{See also}
+
+\helpref{wxObject::Ref}{wxobjectref}, \helpref{wxObject::m\_refData}{wxobjectmrefdata},\rtfsp
+\helpref{wxObject::SetRefData}{wxobjectsetrefdata}, \helpref{wxObject::GetRefData}{wxobjectgetrefdata},\rtfsp
+\helpref{wxObjectRefData}{wxobjectrefdata}
+
+\membersection{wxObject::operator new}\label{wxobjectnew}
+
+\func{void *}{new}{\param{size\_t }{size}, \param{const wxString\& }{filename = NULL}, \param{int}{ lineNum = 0}}
+
+The {\it new} operator is defined for debugging versions of the library only, when
+the identifier DEBUG is defined and is more than zero. It takes over memory allocation, allowing
+wxDebugContext operations.
+
+\membersection{wxObject::operator delete}\label{wxobjectdelete}
+
+\func{void}{delete}{\param{void }{buf}}
+
+The {\it delete} operator is defined for debugging versions of the library only, when
+the identifier DEBUG is defined and is more than zero. It takes over memory deallocation, allowing
+wxDebugContext operations.
+
+\section{\class{wxObjectRefData}}\label{wxobjectrefdata}
+
+This class is used to store reference-counted data. Derive classes from this to
+store your own data. When retrieving information from a {\bf wxObject}'s reference data,
+you will need to cast to your own derived class.
+
+\wxheading{Friends}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxObject}{wxobject}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxObjectRefData::m\_count}
+
+\member{int}{m\_count}
+
+Reference count. When this goes to zero during a \helpref{wxObject::UnRef}{wxobjectunref}, an object
+can delete the {\bf wxObjectRefData} object.
+
+\membersection{wxObjectRefData::wxObjectRefData}\label{wxobjectrefdataconstr}
+
+\func{}{wxObjectRefData}{\void}
+
+Default constructor. Initialises the {\bf m\_count} member to 1.
+
+\membersection{wxObjectRefData::\destruct{wxObjectRefData}}
+
+\func{}{wxObjectRefData}{\void}
+
+Destructor.
+
+

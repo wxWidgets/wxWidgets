@@ -1,0 +1,78 @@
+\section{\class{wxDocParentFrame}}\label{wxdocparentframe}
+
+The wxDocParentFrame class provides a default top-level frame for
+applications using the document/view framework. This class can only be used for SDI (not MDI) parent frames.
+
+It cooperates with the \helpref{wxView}{wxview}, \helpref{wxDocument}{wxdocument},
+\rtfsp\helpref{wxDocManager}{wxdocmanager} and \helpref{wxDocTemplates}{wxdoctemplate} classes.
+
+See the example application in {\tt samples/docview}.
+
+\wxheading{Derived from}
+
+\helpref{wxFrame}{wxframe}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{Document/view overview}{docviewoverview}, \helpref{wxFrame}{wxframe}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDocParentFrame::wxDocParentFrame}
+
+\func{}{wxDocParentFrame}{\param{wxFrame *}{parent},
+ \param{const wxString\& }{title}, \param{int}{ x}, \param{int}{ y}, \param{int}{ width}, \param{int}{ height},
+ \param{long}{ style}, \param{const wxString\& }{name}}
+
+Constructor.
+
+\membersection{wxDocParentFrame::\destruct{wxDocParentFrame}}
+
+\func{}{\destruct{wxDocParentFrame}}{\void}
+
+Destructor.
+
+\membersection{wxDocParentFrame::OnClose}
+
+\func{bool}{OnClose}{\void}
+
+Deletes all views and documents. If no user input cancelled the
+operation, the function returns TRUE and the application will exit.
+
+Since understanding how document/view clean-up takes place can be difficult,
+the implementation of this function is shown below.
+
+\begin{verbatim}
+bool wxDocParentFrame::OnClose(void)
+{
+  // Delete all views and documents
+  wxNode *node = docManager->GetDocuments().First();
+  while (node)
+  {
+    wxDocument *doc = (wxDocument *)node->Data();
+    wxNode *next = node->Next();
+
+    if (!doc->Close())
+      return FALSE;
+
+    // Implicitly deletes the document when the last
+    // view is removed (deleted)
+    doc->DeleteAllViews();
+
+    // Check document is deleted
+    if (docManager->GetDocuments().Member(doc))
+      delete doc;
+
+    // This assumes that documents are not connected in
+    // any way, i.e. deleting one document does NOT
+    // delete another.
+    node = next;
+  }
+  return TRUE;
+}
+\end{verbatim}
+
+

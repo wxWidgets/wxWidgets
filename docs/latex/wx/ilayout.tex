@@ -1,0 +1,133 @@
+\section{\class{wxIndividualLayoutConstraint}}\label{wxindividuallayoutconstraint}
+
+Objects of this class are stored in the wxIndividualLayoutConstraint class
+as one of eight possible constraints that a window can be involved in.
+
+Constraints are initially set to have the relationship wxUnconstrained,
+which means that their values should be calculated by looking at known constraints.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{Overview and examples}{constraintsoverview},\rtfsp
+\helpref{wxLayoutConstraints}{wxlayoutconstraints}, \helpref{wxWindow::SetConstraints}{wxwindowsetconstraints}.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\subsection{Edges and relationships}
+
+TODO: put this in a different section.
+
+The {\it wxEdge}\index{wxEdge} enumerated type specifies the type of edge or dimension of a window.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxLeft}{The left edge.}
+\twocolitem{wxTop}{The top edge.}
+\twocolitem{wxRight}{The right edge.}
+\twocolitem{wxBottom}{The bottom edge.}
+\twocolitem{wxCentreX}{The x-coordinate of the centre of the window.}
+\twocolitem{wxCentreY}{The y-coordinate of the centre of the window.}
+\end{twocollist}
+
+The {\it wxRelationship}\index{wxRelationship} enumerated type specifies the relationship that
+this edge or dimension has with another specified edge or dimension. Normally, the user
+doesn't use these directly because functions such as {\it Below} and {\it RightOf} are a convenience
+for using the more general {\it Set} function.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxUnconstrained}{The edge or dimension is unconstrained (the default for edges.}
+\twocolitem{wxAsIs}{The edge or dimension is to be taken from the current window position or size (the
+default for dimensions.}
+\twocolitem{wxAbove}{The edge should be above another edge.}
+\twocolitem{wxBelow}{The edge should be below another edge.}
+\twocolitem{wxLeftOf}{The edge should be to the left of another edge.}
+\twocolitem{wxRightOf}{The edge should be to the right of another edge.}
+\twocolitem{wxSameAs}{The edge or dimension should be the same as another edge or dimension.}
+\twocolitem{wxPercentOf}{The edge or dimension should be a percentage of another edge or dimension.}
+\twocolitem{wxAbsolute}{The edge or dimension should be a given absolute value.}
+\end{twocollist}
+
+\membersection{wxIndividualLayoutConstraint::wxIndividualLayoutConstraint}
+
+\func{void}{wxIndividualLayoutConstraint}{\void}
+
+Constructor. Not used by the end-user.
+
+\membersection{wxIndividualLayoutConstraint::Above}
+
+\func{void}{Above}{\param{wxWindow *}{otherWin}, \param{int}{ margin = 0}}
+
+Constrains this edge to be above the given window, with an
+optional margin. Implicitly, this is relative to the top edge of the other window.
+
+\membersection{wxIndividualLayoutConstraint::Absolute}
+
+\func{void}{Absolute}{\param{int}{ value}}
+
+Constrains this edge or dimension to be the given absolute value.
+
+\membersection{wxIndividualLayoutConstraint::AsIs}
+
+\func{void}{AsIs}{\void}
+
+Sets this edge or constraint to be whatever the window's value is
+at the moment. If either of the width and height constraints
+are {\it as is}, the window will not be resized, but moved instead.
+This is important when considering panel items which are intended
+to have a default size, such as a button, which may take its size
+from the size of the button label.
+
+\membersection{wxIndividualLayoutConstraint::Below}
+
+\func{void}{Below}{\param{wxWindow *}{otherWin}, \param{int}{ margin = 0}}
+
+Constrains this edge to be below the given window, with an
+optional margin. Implicitly, this is relative to the bottom edge of the other window.
+
+\membersection{wxIndividualLayoutConstraint::Unconstrained}
+
+\func{void}{Unconstrained}{\void}
+
+Sets this edge or dimension to be unconstrained, that is, dependent on
+other edges and dimensions from which this value can be deduced.
+
+\membersection{wxIndividualLayoutConstraint::LeftOf}
+
+\func{void}{LeftOf}{\param{wxWindow *}{otherWin}, \param{int}{ margin = 0}}
+
+Constrains this edge to be to the left of the given window, with an
+optional margin. Implicitly, this is relative to the left edge of the other window.
+
+\membersection{wxIndividualLayoutConstraint::PercentOf}
+
+\func{void}{PercentOf}{\param{wxWindow *}{otherWin}, \param{wxEdge}{ edge}, \param{int}{ margin = 0}}
+
+Constrains this edge or dimension to be to a percentage of the given window, with an
+optional margin.
+
+\membersection{wxIndividualLayoutConstraint::RightOf}
+
+\func{void}{RightOf}{\param{wxWindow *}{otherWin}, \param{int}{ margin = 0}}
+
+Constrains this edge to be to the right of the given window, with an
+optional margin. Implicitly, this is relative to the right edge of the other window.
+
+\membersection{wxIndividualLayoutConstraint::SameAs}
+
+\func{void}{SameAs}{\param{wxWindow *}{otherWin}, \param{wxEdge}{ edge}, \param{int}{ margin = 0}}
+
+Constrains this edge or dimension to be to the same as the edge of the given window, with an
+optional margin.
+
+\membersection{wxIndividualLayoutConstraint::Set}
+
+\func{void}{Set}{\param{wxRelationship}{ rel}, \param{wxWindow *}{otherWin}, \param{wxEdge}{ otherEdge},
+ \param{int}{ value = 0}, \param{int}{ margin = 0}}
+
+Sets the properties of the constraint. Normally called by one of the convenience
+functions such as Above, RightOf, SameAs.
+
+

@@ -1,0 +1,67 @@
+\section{\class{wxDDEClient}}\label{wxddeclient}
+
+\overview{Interprocess communications overview}{ipcoverview}
+
+A wxDDEClient object represents the client part of a client-server DDE
+(Dynamic Data Exchange) conversation (available in {\it both}\/
+Windows and UNIX).
+
+To create a client which can communicate with a suitable server,
+you need to derive a class from wxDDEConnection and another from wxDDEClient.
+The custom wxDDEConnection class will intercept communications in
+a `conversation' with a server, and the custom wxDDEServer is required
+so that a user-overriden \helpref{wxDDEClient::OnMakeConnection}{wxddeclientonmakeconnection} member can return
+a wxDDEConnection of the required class, when a connection is made.
+
+\wxheading{Derived from}
+
+wxDDEObject
+
+\wxheading{See also}
+
+\helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEConnection}{wxddeconnection},
+the chapter on interprocess communication in the user manual, and
+the programs in {\tt samples/ipc}.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDDEClient::wxDDEClient}
+
+\func{}{wxDDEClient}{\void}
+
+Constructs a client object.
+
+\membersection{wxDDEClient::MakeConnection}\label{wxddeclientmakeconnection}
+
+\func{wxDDEConnection *}{MakeConnection}{\param{const wxString\& }{host}, \param{const wxString\& }{service}, \param{const wxString\& }{topic}}
+
+Tries to make a connection with a server specified by the host
+(machine name under UNIX, ignored under Windows), service name (must
+contain an integer port number under UNIX), and topic string. If the
+server allows a connection, a wxDDEConnection object will be returned.
+The type of wxDDEConnection returned can be altered by overriding
+the \helpref{wxDDEClient::OnMakeConnection}{wxddeclientonmakeconnection} member to return your own
+derived connection object.
+
+\membersection{wxDDEClient::OnMakeConnection}\label{wxddeclientonmakeconnection}
+
+\func{wxDDEConnection *}{OnMakeConnection}{\void}
+
+The type of \helpref{wxDDEConnection}{wxddeconnection} returned from a \helpref{wxDDEClient::MakeConnection}{wxddeclientmakeconnection} call can
+be altered by deriving the {\bf OnMakeConnection} member to return your
+own derived connection object. By default, an ordinary wxDDEConnection
+object is returned.
+
+The advantage of deriving your own connection class is that it will
+enable you to intercept messages initiated by the server, such
+as \helpref{wxDDEConnection::OnAdvise}{wxddeconnectiononadvise}. You may also want to
+store application-specific data in instances of the new class.
+
+\membersection{wxDDEClient::ValidHost}
+
+\func{bool}{ValidHost}{\param{const wxString\& }{host}}
+
+Returns TRUE if this is a valid host name, FALSE otherwise. This always
+returns TRUE under MS Windows.
+
+

@@ -1,0 +1,334 @@
+\chapter{Classes by category}\label{classesbycat}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+A classification of wxWindows classes by category.
+\twocolwidtha{5cm}
+
+{\large {\bf Managed windows}}
+
+There are several types of window that are directly controlled by the
+window manager (such as MS Windows, or the Motif Window Manager).
+Frames may contain windows, and dialog boxes may directly contain controls.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDialog}{wxdialog}}{Dialog box}
+\twocolitem{\helpref{wxFrame}{wxframe}}{Normal frame}
+\twocolitem{\helpref{wxMDIParentFrame}{wxmdiparentframe}}{MDI parent frame}
+\twocolitem{\helpref{wxMDIChildFrame}{wxmdichildframe}}{MDI child frame}
+\twocolitem{\helpref{wxMiniFrame}{wxminiframe}}{A frame with a small title bar}
+\twocolitem{\helpref{wxTabbedDialog}{wxtabbeddialog}}{Tabbed dialog}
+\end{twocollist}
+
+See also {\bf Common dialogs}.
+
+{\large {\bf Miscellaneous windows}}
+
+The following are a variety of windows that are derived from wxWindow.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxGrid}{wxgrid}}{A grid (table) window}
+\twocolitem{\helpref{wxPanel}{wxpanel}}{A window whose colour changes according to current user settings}
+\twocolitem{\helpref{wxScrolledWindow}{wxscrolledwindow}}{Window with automatically managed scrollbars}
+\twocolitem{\helpref{wxSplitterWindow}{wxsplitterwindow}}{Window which can be split vertically or horizontally}
+\twocolitem{\helpref{wxStatusBar}{wxstatusbar}}{Implements the status bar on a frame}
+\twocolitem{\helpref{wxStatusBar95}{wxstatusbar95}}{Implements a Windows 95 status bar on a frame}
+\twocolitem{\helpref{wxTabbedPanel}{wxtabbedpanel}}{Tabbed panel}
+\end{twocollist}
+
+{\large {\bf Toolbar classes}}
+
+\overview{Overview}{wxtoolbaroverview}
+
+These are the toolbar classes.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxToolBarBase}{wxtoolbarbase}}{Toolbar base class}
+\twocolitem{\helpref{wxToolBarSimple}{wxtoolbarsimple}}{A simple, cross-platform toolbar class}
+\twocolitem{\helpref{wxToolBarMSW}{wxtoolbarmsw}}{A Windows-only toolbar class}
+\twocolitem{\helpref{wxToolBar95}{wxtoolbar95}}{A Windows 95-only toolbar class}
+\end{twocollist}
+
+{\large {\bf Common dialogs}}
+
+\overview{Overview}{commondialogsoverview}
+
+Common dialogs are ready-made dialog classes which are frequently used
+in an application.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDialog}{wxdialog}}{Base class for common dialogs}
+\twocolitem{\helpref{wxColourDialog}{wxcolourdialog}}{Colour chooser dialog}
+\twocolitem{\helpref{wxDirDialog}{wxdirdialog}}{Directory selector dialog}
+\twocolitem{\helpref{wxFileDialog}{wxfiledialog}}{File selector dialog}
+\twocolitem{\helpref{wxMultipleChoiceDialog}{wxmultiplechoicedialog}}{Dialog to get one or more selections from a list}
+\twocolitem{\helpref{wxSingleChoiceDialog}{wxsinglechoicedialog}}{Dialog to get a single selection from a list and return the string}
+\twocolitem{\helpref{wxTextEntryDialog}{wxtextentrydialog}}{Dialog to get a single line of text from the user}
+\twocolitem{\helpref{wxFontDialog}{wxfontdialog}}{Font chooser dialog}
+\twocolitem{\helpref{wxPageSetupDialog}{wxpagesetupdialog}}{Standard page setup dialog}
+\twocolitem{\helpref{wxPrintDialog}{wxprintdialog}}{Standard print dialog}
+\twocolitem{\helpref{wxMessageDialog}{wxmessagedialog}}{Simple message box dialog}
+\end{twocollist}
+
+{\large {\bf Controls}}
+
+Typically, these are small windows which provide interaction with the user. Controls
+that are not static can have \helpref{validators}{wxvalidator} associated with them.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxControl}{wxcontrol}}{The base class for controls}
+\twocolitem{\helpref{wxButton}{wxbutton}}{Push button control, displaying text}
+\twocolitem{\helpref{wxBitmapButton}{wxbitmapbutton}}{Push button control, displaying a bitmap}
+\twocolitem{\helpref{wxCheckBox}{wxcheckbox}}{Checkbox control}
+\twocolitem{\helpref{wxCheckListBox}{wxchecklistbox}}{A listbox with a checkbox to the left of each item}
+\twocolitem{\helpref{wxChoice}{wxchoice}}{Choice control (a combobox without the editable area)}
+\twocolitem{\helpref{wxComboBox}{wxcombobox}}{A choice with an editable area}
+\twocolitem{\helpref{wxGauge}{wxgauge}}{A control to represent a varying quantity, such as time remaining}
+\twocolitem{\helpref{wxStaticBox}{wxstaticbox}}{A static, or group box for visually grouping related controls}
+\twocolitem{\helpref{wxListBox}{wxlistbox}}{A list of strings for single or multiple selection}
+\twocolitem{\helpref{wxListCtrl}{wxlistctrl}}{A control for displaying lists of strings and/or icons, plus a multicolumn report view}
+\twocolitem{\helpref{wxTabCtrl}{wxtabctrl}}{Manages several tabs}
+\twocolitem{\helpref{wxTextCtrl}{wxtextctrl}}{Single or multline text editing control}
+\twocolitem{\helpref{wxTreeCtrl}{wxtreectrl}}{Tree (hierachy) control}
+\twocolitem{\helpref{wxScrollBar}{wxscrollbar}}{Scrollbar control}
+\twocolitem{\helpref{wxSpinButton}{wxspinbutton}}{A spin or `up-down' control}
+\twocolitem{\helpref{wxStaticText}{wxstatictext}}{One or more lines of non-editable text}
+\twocolitem{\helpref{wxStaticBitmap}{wxstaticbitmap}}{A control to display a bitmap}
+\twocolitem{\helpref{wxRadioBox}{wxradiobox}}{A group of radio buttons}
+\twocolitem{\helpref{wxRadioButton}{wxradiobutton}}{A round button to be used with others in a mutually exclusive way}
+\twocolitem{\helpref{wxSlider}{wxslider}}{A slider that can be dragged by the user}
+\end{twocollist}
+
+{\large {\bf Menus}}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxMenu}{wxmenu}}{Displays a series of menu items for selection}
+\twocolitem{\helpref{wxMenuBar}{wxmenubar}}{Contains a series of menus for use with a frame}
+\twocolitem{\helpref{wxMenuItem}{wxmenuitem}}{Represents a single menu item}
+\end{twocollist}
+
+{\large {\bf Window layout}}
+
+\overview{Overview}{constraintsoverview}
+
+These are the classes relevant to automated window layout.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}}{Represents a single constraint dimension}
+\twocolitem{\helpref{wxLayoutConstraints}{wxlayoutconstraints}}{Represents the constraints for a window class}
+\end{twocollist}
+
+{\large {\bf Device contexts}}
+
+\overview{Overview}{dcoverview}
+
+Device contexts are surfaces that may be drawn on, and provide an
+abstraction that allows parameterisation of your drawing code
+by passing different device contexts.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxClientDC}{wxclientdc}}{A device context to access the client area outside {\bf OnPaint} events}
+\twocolitem{\helpref{wxPaintDC}{wxpaintdc}}{A device context to access the client area inside {\bf OnPaint} events}
+\twocolitem{\helpref{wxWindowDC}{wxwindowdc}}{A device context to access the non-client area}
+\twocolitem{\helpref{wxScreenDC}{wxscreendc}}{A device context to access the entire screen}
+\twocolitem{\helpref{wxDC}{wxdc}}{The device context base class}
+\twocolitem{\helpref{wxMemoryDC}{wxmemorydc}}{A device context for drawing into bitmaps}
+\twocolitem{\helpref{wxMetaFileDC}{wxmetafiledc}}{A device context for drawing into metafiles}
+\twocolitem{\helpref{wxPostScriptDC}{wxpostscriptdc}}{A device context for drawing into PostScript files}
+\twocolitem{\helpref{wxPrinterDC}{wxprinterdc}}{A device context for drawing to printers}
+\end{twocollist}
+
+{\large {\bf Graphics device interface}}
+
+\overview{Bitmaps overview}{wxbitmapoverview}
+
+These classes are related to drawing on device contexts and windows.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxColour}{wxcolour}}{Represents the red, blue and green elements of a colour}
+\twocolitem{\helpref{wxBitmap}{wxbitmap}}{Represents a bitmap}
+\twocolitem{\helpref{wxBrush}{wxbrush}}{Used for filling areas on a device context}
+\twocolitem{\helpref{wxBrushList}{wxbrushlist}}{The list of previously-created brushes}
+\twocolitem{\helpref{wxCursor}{wxcursor}}{A small, transparent bitmap representing the cursor}
+\twocolitem{\helpref{wxFont}{wxfont}}{Represents fonts}
+\twocolitem{\helpref{wxFontList}{wxfontlist}}{The list of previously-created fonts}
+\twocolitem{\helpref{wxIcon}{wxicon}}{A small, transparent bitmap for assigning to frames and drawing on device contexts}
+\twocolitem{\helpref{wxImageList}{wximagelist}}{A list of images, used with some controls}
+\twocolitem{\helpref{wxMask}{wxmask}}{Represents a mask to be used with a bitmap for transparent drawing}
+\twocolitem{\helpref{wxPen}{wxpen}}{Used for drawing lines on a device context}
+\twocolitem{\helpref{wxPenList}{wxpenlist}}{The list of previously-created pens}
+\twocolitem{\helpref{wxPalette}{wxpalette}}{Represents a table of indices into RGB values}
+\twocolitem{\helpref{wxRegion}{wxregion}}{Represents a simple or complex region on a window or device context}
+\end{twocollist}
+
+{\large {\bf Events}}
+
+\overview{Overview}{eventhandlingoverview}
+
+An event object contains information about a specific event. Event handlers
+(usually member functions) have a single, event argument.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxActivateEvent}{wxactivateevent}}{A window or application activation event}
+\twocolitem{\helpref{wxCloseEvent}{wxcloseevent}}{A close window or end session event}
+\twocolitem{\helpref{wxCommandEvent}{wxcommandevent}}{An event from a variety of standard controls}
+\twocolitem{\helpref{wxDropFilesEvent}{wxdropfilesevent}}{A drop files event}
+\twocolitem{\helpref{wxEraseEvent}{wxeraseevent}}{An erase background event}
+\twocolitem{\helpref{wxEvent}{wxevent}}{The event base class}
+\twocolitem{\helpref{wxFocusEvent}{wxfocusevent}}{A window focus event}
+\twocolitem{\helpref{wxKeyEvent}{wxkeyevent}}{A keypress event}
+\twocolitem{\helpref{wxIdleEvent}{wxidleevent}}{An idle event}
+\twocolitem{\helpref{wxInitDialogEvent}{wxinitdialogevent}}{A dialog initialisation event}
+\twocolitem{\helpref{wxJoystickEvent}{wxjoystickevent}}{A joystick event}
+\twocolitem{\helpref{wxListEvent}{wxlistevent}}{A list control event}
+\twocolitem{\helpref{wxMenuEvent}{wxmenuevent}}{A menu event}
+\twocolitem{\helpref{wxMouseEvent}{wxmouseevent}}{A mouse event}
+\twocolitem{\helpref{wxMoveEvent}{wxmoveevent}}{A move event}
+\twocolitem{\helpref{wxPaintEvent}{wxpaintevent}}{A paint event}
+%\twocolitem{\helpref{wxSessionEvent}{wxsessionevent}}{A session ending event}
+\twocolitem{\helpref{wxSizeEvent}{wxsizeevent}}{A size event}
+\twocolitem{\helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent}}{A system colour change event}
+\twocolitem{\helpref{wxTreeEvent}{wxtreeevent}}{A tree control event}
+\twocolitem{\helpref{wxUpdateUIEvent}{wxupdateuievent}}{A user interface update event}
+\end{twocollist}
+
+{\large {\bf Validators}}
+
+These are the window validators, used for filtering and validating
+user input.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxValidator}{wxvalidator}}{Base validator class.}
+\twocolitem{\helpref{wxTextValidator}{wxtextvalidator}}{Text control validator class.}
+\end{twocollist}
+
+{\large {\bf Data structures}}
+
+These are the data structure classes supported by wxWindows.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxExpr}{wxexpr}}{A class for flexible I/O}
+\twocolitem{\helpref{wxExprDatabase}{wxexprdatabase}}{A class for flexible I/O}
+\twocolitem{\helpref{wxDate}{wxdate}}{A class for date manipulation}
+\twocolitem{\helpref{wxHashTable}{wxhashtable}}{A simple hash table implementation}
+\twocolitem{\helpref{wxList}{wxlist}}{A simple linked list implementation}
+\twocolitem{\helpref{wxNode}{wxnode}}{Represents a node in the wxList implementation}
+\twocolitem{\helpref{wxObject}{wxobject}}{The root class for most wxWindows classes}
+\twocolitem{\helpref{wxPathList}{wxpathlist}}{A class to help search multiple paths}
+\twocolitem{\helpref{wxPoint}{wxpoint}}{Representation of a point}
+\twocolitem{\helpref{wxRect}{wxrect}}{A class representing a rectangle}
+\twocolitem{\helpref{wxRegion}{wxregion}}{A class representing a region}
+\twocolitem{\helpref{wxString}{wxstring}}{A string class}
+\twocolitem{\helpref{wxStringList}{wxstringlist}}{A class representing a list of strings}
+\twocolitem{\helpref{wxRealPoint}{wxrealpoint}}{Representation of a point using floating point numbers}
+\twocolitem{\helpref{wxSize}{wxsize}}{Representation of a size}
+\twocolitem{\helpref{wxTime}{wxtime}}{A class for time manipulation}
+\end{twocollist}
+
+{\large {\bf Run-time class information system}}
+
+\overview{Overview}{runtimeclassoverview}
+
+wxWindows supports run-time manipulation of class information, and dynamic
+creation of objects given class names.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxClassInfo}{wxclassinfo}}{Holds run-time class information}
+\twocolitem{\helpref{wxObject}{wxobject}}{Root class for classes with run-time information}
+\twocolitem{\helpref{Macros}{macros}}{Macros for manipulating run-time information}
+\end{twocollist}
+
+{\large {\bf Debugging features}}
+
+\overview{Overview}{debuggingoverview}
+
+wxWindows supports some aspects of debugging an application through
+classes, functions and macros.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDebugContext}{wxdebugcontext}}{Provides various debugging facilities}
+\twocolitem{\helpref{wxDebugStreamBuf}{wxdebugstreambuf}}{A stream buffer writing to the debug stream}
+\twocolitem{\helpref{wxObject}{wxobject}}{Provides optional debugging versions of {\bf new} and {\bf delete}}
+\twocolitem{\helpref{wxTrace}{wxtrace}}{Tracing facility}
+\twocolitem{\helpref{wxTraceLevel}{wxtracelevel}}{Tracing facility with levels}
+\twocolitem{\helpref{WXDEBUG\_NEW}{debugnew}}{Use this macro to give further debugging information}
+\twocolitem{\helpref{WXTRACE}{trace}}{Trace macro}
+\twocolitem{\helpref{WXTRACELEVEL}{tracelevel}}{Trace macro with levels}
+\end{twocollist}
+
+{\large {\bf Interprocess communication}}
+
+\overview{Overview}{ipcoverview}
+
+wxWindows provides a simple interprocess communications facilities
+based on DDE.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDDEClient}{wxddeclient}}{Represents a client}
+\twocolitem{\helpref{wxDDEConnection}{wxddeconnection}}{Represents the connection between a client and a server}
+\twocolitem{\helpref{wxDDEServer}{wxddeserver}}{Represents a server}
+%TODO: put this somewhere \twocolitem{\helpref{wxHelpInstance}{wxhelpinstance}}{A specialised client}
+\end{twocollist}
+
+{\large {\bf Document/view framework}}
+
+\overview{Overview}{docviewoverview}
+
+wxWindows supports a document/view framework which provides
+housekeeping for a document-centric application.
+
+TODO: MDI frame classes for documents; make it unnecessary to convert
+between streams and files (overridable method that uses filenames instead of streams).
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDocument}{wxdocument}}{Represents a document}
+\twocolitem{\helpref{wxView}{wxview}}{Represents a view}
+\twocolitem{\helpref{wxDocTemplate}{wxdoctemplate}}{Manages the relationship between a document class and a veiw class}
+\twocolitem{\helpref{wxDocManager}{wxdocmanager}}{Manages the documents and views in an application}
+\twocolitem{\helpref{wxDocChildFrame}{wxdocchildframe}}{A child frame for showing a document view}
+\twocolitem{\helpref{wxDocParentFrame}{wxdocparentframe}}{A parent frame to contain views}
+\end{twocollist}
+
+{\large {\bf Printing framework}}
+
+\overview{Overview}{printingoverview}
+
+A printing and previewing framework is implemented to
+make it relatively straighforward to provide document printing
+facilities.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxPreviewFrame}{wxpreviewframe}}{Frame for displaying a print preview}
+\twocolitem{\helpref{wxPreviewCanvas}{wxpreviewcanvas}}{Canvas for displaying a print preview}
+\twocolitem{\helpref{wxPreviewControlBar}{wxpreviewcontrolbar}}{Standard control bar for a print preview}
+\twocolitem{\helpref{wxPrintData}{wxprintdata}}{Represents information about the document being printed}
+\twocolitem{\helpref{wxPrintDialog}{wxprintdialog}}{Standard print dialog}
+\twocolitem{\helpref{wxPrinter}{wxprinter}}{Class representing the printer}
+\twocolitem{\helpref{wxPrinterDC}{wxprinterdc}}{Printer device context}
+\twocolitem{\helpref{wxPrintout}{wxprintout}}{Class representing a particular printout}
+\twocolitem{\helpref{wxPrintPreview}{wxprintpreview}}{Class representing a print preview}
+\end{twocollist}
+
+{\large {\bf Database classes}}
+
+\overview{Database classes overview}{odbcoverview}
+
+wxWindows provides a set of classes for accessing Microsoft's ODBC (Open Database Connectivity)
+product.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDatabase}{wxdatabase}}{Database class}
+\twocolitem{\helpref{wxQueryCol}{wxquerycol}}{Class representing a column}
+\twocolitem{\helpref{wxQueryField}{wxqueryfield}}{Class representing a field}
+\twocolitem{\helpref{wxRecordSet}{wxrecordset}}{Class representing one or more record}
+\end{twocollist}
+
+{\large {\bf Miscellaneous}}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxApp}{wxapp}}{Application class}
+\twocolitem{\helpref{wxTimer}{wxtimer}}{Timer class}
+\twocolitem{\helpref{wxSystemSettings}{wxsystemsettings}}{System settings class}
+\end{twocollist}
+
+

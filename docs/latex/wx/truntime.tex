@@ -1,0 +1,93 @@
+\section{Run time class information overview}\label{runtimeclassoverview}
+
+Classes: \helpref{wxObject}{wxobject}, \helpref{wxClassInfo}{wxclassinfo}.
+
+One of the failings of C++ is that no run-time information is provided
+about a class and its position in the inheritance hierarchy.
+Another is that instances of a class cannot be created just by knowing the name of a class,
+which makes facilities such as persistent storage hard to implement.
+
+Most C++ GUI frameworks overcome these limitations by means of a set of
+macros and functions and wxWindows (from version 1.62) is no exception.
+Each class that you wish to be known the type system should have
+a macro such as DECLARE\_DYNAMIC\_CLASS just inside the class declaration.
+The macro IMPLEMENT\_DYNAMIC\_CLASS should be in the implementation file.
+
+Variations on these \helpref{macros}{macros} are used for multiple inheritance, and abstract
+classes that cannot be instantiated dynamically or otherwise.
+
+DECLARE\_DYNAMIC\_CLASS inserts a static wxClassInfo declaration into the
+class, initialized by IMPLEMENT\_DYNAMIC\_CLASS. When initialized, the
+wxClassInfo object inserts itself into a linked list (accessed through
+wxClassInfo::first and wxClassInfo::next pointers). The linked list
+is fully created by the time all global initialisation is done.
+
+IMPLEMENT\_DYNAMIC\_CLASS is a macro that not only initialises the static
+wxClassInfo member, but defines a global function capable of creating a
+dynamic object of the class in question. A pointer to this function is
+stored in wxClassInfo, and is used when an object should be created
+dynamically.
+
+wxObject::IsKindOf uses the linked list of wxClassInfo. It takes
+a wxClassInfo argument, so use CLASSINFO(className) to return an
+appropriate wxClassInfo pointer to use in this function.
+
+The function \helpref{wxCreateDynamicObject}{wxcreatedynamicobject} can be used
+to construct a new object of a given type, by supplying a string name.
+If you have a pointer to the wxClassInfo object instead, then you
+can simply call wxClassInfo::CreateObject.
+
+\subsection{wxClassInfo}\label{wxclassinfooverview}
+
+\overview{Run time class information overview}{runtimeclassoverview}
+
+Class: \helpref{wxClassInfo}{wxclassinfo}
+
+This class stores meta-information about classes. An application
+may use macros such as DECLARE\_DYNAMIC\_CLASS and IMPLEMENT\_DYNAMIC\_CLASS
+to record run-time information about a class, including:
+
+\begin{itemize}\itemsep=0pt
+\item its position in the inheritance hierarchy;
+\item the base class name(s) (up to two base classes are permitted);
+\item a string representation of the class name;
+\item a function that can be called to construct an instance of this class.
+\end{itemize}
+
+The DECLARE\_... macros declare a static wxClassInfo variable in a class, which is initialized
+by macros of the form IMPLEMENT\_... in the implementation C++ file. Classes whose instances may be
+constructed dynamically are given a global constructor function which returns a new object.
+
+You can get the wxClassInfo for a class by using the CLASSINFO macro, e.g. CLASSINFO(wxFrame).
+You can get the wxClassInfo for an object using wxObject::GetClassInfo.
+
+See also \helpref{wxObject}{wxobject} and \helpref{wxCreateDynamicObject}{wxcreatedynamicobject}.
+
+\subsection{Example}
+
+In a header file wx\_frame.h:
+
+\begin{verbatim}
+class wxFrame: public wxWindow
+{
+  DECLARE_DYNAMIC_CLASS(wxFrame)
+
+ private:
+  char *frameTitle;
+ public:
+  ...
+};
+\end{verbatim}
+
+In a C++ file wx\_frame.cc:
+
+\begin{verbatim}
+IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
+
+wxFrame::wxFrame(void)
+{
+...
+}
+\end{verbatim}
+
+

@@ -1,0 +1,1759 @@
+\chapter{Alphabetical class reference}\label{classref}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+To be written.
+
+\begin{comment}
+
+\overview{Property classes overview}{propertyoverview}
+
+
+\section{\class{wxBoolFormValidator}: wxPropertyFormValidator}\label{wxboolformvalidator}
+
+\overview{Validator classes}{validatorclasses}
+
+This class validates a boolean value for a form view. The associated panel item must be a wxCheckBox.
+
+\membersection{wxBoolFormValidator::wxBoolFormValidator}
+
+\func{void}{wxBoolFormValidator}{\param{long }{flags=0}}
+
+Constructor.
+
+\section{\class{wxBoolListValidator}: wxPropertyListValidator}\label{wxboollistvalidator}
+
+\overview{Validator classes}{validatorclasses}
+
+This class validates a boolean value for a list view.
+
+\membersection{wxBoolListValidator::wxBoolListValidator}
+
+\func{void}{wxBoolListValidator}{\param{long }{flags=0}}
+
+Constructor.
+
+\section{\class{wxIntegerFormValidator}: wxPropertyFormValidator}\label{wxintegerformvalidator}
+
+\overview{Validator classes}{validatorclasses}
+
+This class validates a range of integer values for a form view. The associated panel item must be a wxText
+or wxSlider.
+
+\membersection{wxIntegerFormValidator::wxIntegerFormValidator}
+
+\func{void}{wxIntegerFormValidator}{\param{long }{min=0}, \param{long }{max=0},
+ \param{long}{ flags=0}}
+
+Constructor. Assigning zero to minimum and maximum values indicates that there is no range to check.
+
+
+\section{\class{wxIntegerListValidator}: wxPropertyListValidator}\label{wxintegerlistvalidator}
+
+\overview{Validator classes}{validatorclasses}
+
+This class validates a range of integer values for a list view.
+
+\membersection{wxIntegerListValidator::wxIntegerListValidator}
+
+\func{void}{wxIntegerListValidator}{\param{long }{min=0}, \param{long }{max=0},
+ \param{long}{ flags=wxPROP\_ALLOW\_TEXT\_EDITING}}
+
+Constructor. Assigning zero to minimum and maximum values indicates that there is no range to check.
+
+\section{\class{wxFilenameListValidator}: wxPropertyListValidator}\label{wxfilenamelistvalidator}
+
+\overview{Validator classes}{validatorclasses}
+
+This class validates a filename for a list view, allowing the user to edit it textually and also popping up
+a file selector in ``detailed editing" mode.
+
+\membersection{wxFilenameListValidator::wxFilenameListValidator}
+
+\func{void}{wxFilenameListValidator}{\param{wxString }{message = ``Select a file"}, \param{wxString }{wildcard = ``*.*"},
+  \param{long}{ flags=0}}
+
+Constructor. Supply an optional message and wildcard.
+
+\section{\class{wxListOfStringsListValidator}: wxPropertyListValidator}\label{wxlistofstringslistvalidator}
+
+\overview{Validator classes}{validatorclasses}
+
+This class validates a list of strings for a list view. When editing the property,
+a dialog box is presented for adding, deleting or editing entries in the list.
+At present no constraints may be supplied.
+
+You can construct a string list property value by constructing a wxStringList object.
+
+For example:
+
+\begin{verbatim}
+  myListValidatorRegistry.RegisterValidator((wxString)"stringlist",
+      new wxListOfStringsListValidator);
+
+  wxStringList *strings = new wxStringList("earth", "fire", "wind", "water", NULL);
+
+  sheet->AddProperty(new wxProperty("fred", strings, "stringlist"));
+\end{verbatim}
+
+\membersection{wxListOfStringsListValidator::wxListofStringsListValidator}
+
+\func{void}{wxListOfStringsListValidator}{\param{long}{ flags=0}}
+
+Constructor.
+
+\section{\class{wxProperty}: wxObject}\label{wxproperty}
+
+The {\bf wxProperty} class represents a property, with a \helpref{wxPropertyValue}{wxpropertyvalue}\rtfsp
+containing the actual value, a name a role, an optional validator, and
+an optional associated window. 
+
+A property might correspond to an actual C++ data member, or it
+might correspond to a conceptual property, such as the width of a window.
+There is no explicit data member {\it wxWindow::width}, but it may be convenient
+to invent such a property for the purposes of editing attributes of the window.
+The properties in the property sheet can be mapped to ``reality" by
+whatever means (in this case by calling wxWindow::SetSize when the user has
+finished editing the property sheet).
+
+A validator may be associated with the property in order to ensure that this and
+only this validator will be used for editing and validating the property.
+An alternative method is to use the {\it role} parameter to specify what kind
+of validator would be appropriate; for example, specifying ``filename" for the role
+would allow the property view to find an appropriate validator at edit time.
+
+
+\membersection{wxProperty::wxProperty}
+
+\func{void}{wxProperty}{\void}
+
+\func{void}{wxProperty}{\param{wxProperty\& }{prop}}
+
+\func{void}{wxProperty}{\param{wxString}{ name}, \param{wxString}{ role}, \param{wxPropertyValidator *}{validator=NULL}}
+
+\func{void}{wxProperty}{\param{wxString}{ name}, \param{const wxPropertyValue\&}{ val}, \param{wxString}{ role}, \param{wxPropertyValidator *}{validator=NULL}}
+
+Constructors.
+
+\membersection{wxProperty::\destruct{wxProperty}}
+
+\func{void}{\destruct{wxProperty}}{\void}
+
+Destructor. Destroys the wxPropertyValue, and the property validator if there is one. However, if the
+actual C++ value in the wxPropertyValue is a pointer, the data in that variable is not destroyed.
+
+\membersection{wxProperty::GetValue}
+
+\func{wxPropertyValue\&}{GetValue}{\void}
+
+Returns a reference to the property value.
+
+\membersection{wxProperty::GetValidator}
+
+\func{wxPropertyValidator *}{GetValidator}{\void}
+
+Returns a pointer to the associated property validator (if any).
+
+\membersection{wxProperty::GetName}
+
+\func{wxString\&}{GetName}{\void}
+
+Returns the name of the property.
+
+\membersection{wxProperty::GetRole}
+
+\func{wxRole\&}{GetRole}{\void}
+
+Returns the role of the property, to be used when choosing an appropriate validator.
+
+\membersection{wxProperty::GetWindow}
+
+\func{wxWindow *}{GetWindow}{\void}
+
+Returns the window associated with the property (if any).
+
+\membersection{wxProperty::SetValue}
+
+\func{void}{SetValue}{\param{wxPropertyValue\&}{ val}}
+
+Sets the value of the property.
+
+\membersection{wxProperty::SetName}
+
+\func{void}{SetName}{\param{wxString\&}{ name}}
+
+Sets the name of the property.
+
+\membersection{wxProperty::SetRole}
+
+\func{void}{SetRole}{\param{wxString\&}{ role}}
+
+Sets the role  of the property.
+
+\membersection{wxProperty::SetValidator}
+
+\func{void}{SetValidator}{\param{wxPropertyValidator *}{validator}}
+
+Sets the validator: this will be deleted when the property is deleted.
+
+\membersection{wxProperty::SetWindow}
+
+\func{void}{SetWindow}{\param{wxWindow *}{win}}
+
+Sets the window associated with the property.
+
+\membersection{wxProperty::operator $=$}
+
+\func{void}{operator $=$}{\param{const wxPropertyValue\&}{ val}}
+
+Assignment operator.
+
+\section{\class{wxPropertyFormValidator}: wxPropertyValidator}\label{wxpropertyformvalidator}
+
+The {\bf wxPropertyFormValidator} abstract class is the root of classes that define validation
+for a wxPropertyFormView.
+
+
+\section{\class{wxPropertyFormDialog}: wxDialogBox}\label{wxpropertyformdialog}
+
+The {\bf wxPropertyFormDialog} class is a prepackaged dialog which can
+be used for viewing a form property sheet. Pass a property form view object, and the dialog
+will pass OnClose and OnDefaultAction listbox messages to the view class for
+processing.
+
+\membersection{wxPropertyFormDialog::wxPropertyFormDialog}
+
+\func{void}{wxPropertyFormDialog}{\param{wxPropertyFormView *}{view}, \param{wxWindow *}{parent}, \param{char *}{title},
+ \param{Bool}{ modal=FALSE}, \param{int}{ x=-1}, \param{int}{ y=-1}, \param{int}{ width=-1}, \param{int}{height=-1},
+ \param{long}{ style=wxDEFAULT\_DIALOG\_STYLE}, \param{char *}{name=``dialogBox"}}
+
+Constructor.
+
+\membersection{wxPropertyFormDialog::\destruct{wxPropertyFormDialog}}
+
+\func{void}{\destruct{wxPropertyFormDialog}}{\void}
+
+Destructor.
+
+
+\section{\class{wxPropertyFormFrame}: wxFrame}\label{wxpropertyformframe}
+
+The {\bf wxPropertyFormFrame} class is a prepackaged frame which can
+be used for viewing a property form. Pass a property form view object, and the frame
+will pass OnClose messages to the view class for processing.
+
+Call Initialize to create the panel and associate the view; override OnCreatePanel
+if you wish to use a panel class other than the default wxPropertyFormPanel.
+
+\membersection{wxPropertyFormFrame::wxPropertyFormFrame}
+
+\func{void}{wxPropertyFormFrame}{\param{wxPropertyFormView *}{view}, \param{wxFrame *}{parent}, \param{char *}{title},
+ \param{int}{ x=-1}, \param{int}{ y=-1}, \param{int}{ width=-1}, \param{int}{height=-1},
+ \param{long}{ style=wxSDI $\|$ wxDEFAULT\_FRAME}, \param{char *}{name=``frame"}}
+
+Constructor.
+
+\membersection{wxPropertyFormFrame::\destruct{wxPropertyFormFrame}}
+
+\func{void}{\destruct{wxPropertyFormFrame}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyFormFrame::GetPropertyPanel}
+
+\func{wxPanel *}{GetPropertyPanel}{\void}
+
+Returns the panel associated with the frame.
+
+\membersection{wxPropertyFormFrame::Initialize}
+
+\func{Bool}{Initialize}{\void}
+
+Must be called to create the panel and associate the view with the panel and frame.
+
+\membersection{wxPropertyFormFrame::OnCreatePanel}
+
+\func{wxPanel *}{OnCreatePanel}{\param{wxFrame *}{parent}, \param{wxPropertyFormView *}{view}}
+
+Creates a panel. Override this to create a panel type other than wxPropertyFormPanel.
+
+
+\section{\class{wxPropertyFormPanel}: wxPanel}\label{wxpropertyformpanel}
+
+The {\bf wxPropertyFormPanel} class is a prepackaged panel which can
+be used for viewing a property form. Pass a property form view object, and the panel
+will pass OnDefaultAction listbox messages to the view class for
+processing.
+
+\membersection{wxPropertyFormPanel::wxPropertyFormPanel}
+
+\func{void}{wxPropertyFormPanel}{\param{wxPropertyFormView *}{view}, \param{wxWindow *}{parent},
+ \param{int}{ x=-1}, \param{int}{ y=-1}, \param{int}{ width=-1}, \param{int}{height=-1},
+ \param{long}{ style=0}, \param{char *}{name=``panel"}}
+
+Constructor.
+
+\membersection{wxPropertyFormPanel::\destruct{wxPropertyFormPanel}}
+
+\func{void}{\destruct{wxPropertyFormPanel}}{\void}
+
+Destructor.
+
+
+
+\section{\class{wxPropertyFormValidator}: wxPropertyValidator}\label{wxpropertyformvalidatir}
+
+\overview{wxPropertyFormValidator overview}{wxpropertyformvalidatoroverview}
+
+The {\bf wxPropertyFormValidator} class defines a base class for form validators. By overriding virtual functions,
+the programmer can create custom behaviour for kinds of property.
+
+\membersection{wxPropertyFormValidator::wxPropertyFormValidator}
+
+\func{void}{wxPropertyFormValidator}{\param{long}{ flags = 0}}
+
+Constructor.
+
+\membersection{wxPropertyFormValidator::\destruct{wxPropertyFormValidator}}
+
+\func{void}{\destruct{wxPropertyFormValidator}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyFormValidator::OnCommand}
+
+\func{Bool}{OnCommand}{\param{wxProperty *}{property}, \param{wxPropertyFormView *}{view},
+ \param{wxWindow *}{parentWindow}, \param{wxCommandEvent\& }{event}}
+
+Called when the control corresponding to the property receives a command (if not intercepted
+by a callback associated with the actual control).
+
+\membersection{wxPropertyFormValidator::OnCheckValue}
+
+\func{Bool}{OnCheckValue}{\param{wxProperty *}{property}, \param{wxPropertyFormView *}{view},
+ \param{wxWindow *}{parentWindow}}
+ 
+Called when the view checks the property value. The value checked by this validator should be taken from the
+panel item corresponding to the property.
+
+\membersection{wxPropertyFormValidator::OnDisplayValue}
+
+\func{Bool}{OnDisplayValue}{\param{wxProperty *}{property}, \param{wxPropertyFormView *}{view},
+ \param{wxWindow *}{parentWindow}}
+
+Should display the property value in the appropriate control.
+ 
+\membersection{wxPropertyFormValidator::OnDoubleClick}
+
+\func{Bool}{OnDoubleClick}{\param{wxProperty *}{property}, \param{wxPropertyFormView *}{view},
+ \param{wxWindow *}{parentWindow}}
+
+Called when the control corresponding to the property is double clicked (listboxes only).
+
+\membersection{wxPropertyFormValidator::OnRetrieveValue}
+
+\func{Bool}{OnRetrieveValue}{\param{wxProperty *}{property}, \param{wxPropertyFormView *}{view},
+ \param{wxWindow *}{parentWindow}}
+
+Should do the transfer from the property editing area to the property itself.
+
+
+\section{\class{wxPropertyFormView}: wxPropertyView}\label{wxpropertyformview}
+
+\overview{wxPropertyFormView overview}{wxpropertyformviewoverview}
+
+The {\bf wxPropertyFormView} class shows a wxPropertySheet as a view onto a panel or dialog
+box which has already been created.
+
+\membersection{wxPropertyFormView::wxPropertyFormView}
+
+\func{void}{wxPropertyFormView}{\param{long}{ flags = 0}}
+
+Constructor.
+
+\membersection{wxPropertyFormView::\destruct{wxPropertyFormView}}
+
+\func{void}{\destruct{wxPropertyFormView}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyFormView::AssociateNames}\label{wxpropertyformviewassociatenames}
+
+\func{void}{AssociateNames}{\void}
+
+Associates the properties with the controls on the panel. For each panel item, if the
+panel item name is the same as a property name, the two objects will be associated.
+This function should be called manually since the programmer may wish to do the
+association manually.
+
+\membersection{wxPropertyFormView::Check}\label{wxpropertyformviewcheck}
+
+\func{Bool}{Check}{\void}
+
+Checks all properties by calling the appropriate validators; returns FALSE if a validation failed.
+
+\membersection{wxPropertyFormView::GetPanel}\label{wxpropertyformviewgetpanel}
+
+\func{wxPanel *}{GetPanel}{\void}
+
+Returns the panel associated with the view.
+
+\membersection{wxPropertyFormView::GetManagedWindow}\label{wxpropertyformviewgetmanagedwindow}
+
+\func{wxWindow *}{GetManagedWindow}{\void}
+
+Returns the managed window (a frame or dialog) associated with the view.
+
+\membersection{wxPropertyFormView::OnOk}\label{wxpropertyformviewonok}
+
+\func{void}{OnOk}{\void}
+
+Virtual function that will be called when the OK button on the physical window is pressed.
+By default, checks and updates the form values, closes and deletes the frame or dialog, then deletes the view.
+
+\membersection{wxPropertyFormView::OnCancel}\label{wxpropertyformviewoncancel}
+
+\func{void}{OnCancel}{\void}
+
+Virtual function that will be called when the Cancel button on the physical window is pressed.
+By default, closes and deletes the frame or dialog, then deletes the view.
+
+\membersection{wxPropertyFormView::OnHelp}\label{wxpropertyformviewonhelp}
+
+\func{void}{OnHelp}{\void}
+
+Virtual function that will be called when the Help button on the physical window is pressed.
+This needs to be overridden by the application for anything interesting to happen.
+
+\membersection{wxPropertyFormView::OnRevert}\label{wxpropertyformviewonrevert}
+
+\func{void}{OnRevert}{\void}
+
+Virtual function that will be called when the Revert button on the physical window is pressed.
+By default transfers the wxProperty values to the panel items (in effect
+undoing any unsaved changes in the items).
+
+\membersection{wxPropertyFormView::OnUpdate}\label{wxpropertyformviewonupdate}
+
+\func{void}{OnUpdate}{\void}
+
+Virtual function that will be called when the Update button on the physical window is pressed.
+By defaults transfers the displayed values to the wxProperty objects.
+
+\membersection{wxPropertyFormView::SetManagedWindow}\label{wxpropertyformviewsetmanagedwindow}
+
+\func{void}{SetManagedWindow}{\param{wxWindow *}{win}}
+
+Sets the managed window (a frame or dialog) associated with the view.
+
+\membersection{wxPropertyFormView::TransferToDialog}\label{wxpropertyformviewtransfertodialog}
+
+\func{Bool}{TransferToDialog}{\void}
+
+Transfers property values to the controls in the dialog.
+
+\membersection{wxPropertyFormView::TransferToPropertySheet}\label{wxpropertyformviewtransfertopropertysheet}
+
+\func{Bool}{TransferToPropertySheet}{\void}
+
+Transfers property values from the controls in the dialog to the property sheet.
+
+
+\section{\class{wxPropertyListDialog}: wxDialogBox}\label{wxpropertylistdialog}
+
+The {\bf wxPropertyListDialog} class is a prepackaged dialog which can
+be used for viewing a property list. Pass a property list view object, and the dialog
+will pass OnClose and OnDefaultAction listbox messages to the view class for
+processing.
+
+\membersection{wxPropertyListDialog::wxPropertyListDialog}
+
+\func{void}{wxPropertyListDialog}{\param{wxPropertyListView *}{view}, \param{wxWindow *}{parent}, \param{char *}{title},
+ \param{Bool}{ modal=FALSE}, \param{int}{ x=-1}, \param{int}{ y=-1}, \param{int}{ width=-1}, \param{int}{height=-1},
+ \param{long}{ style=wxDEFAULT\_DIALOG\_STYLE}, \param{char *}{name=``dialogBox"}}
+
+Constructor.
+
+\membersection{wxPropertyListDialog::\destruct{wxPropertyListDialog}}
+
+\func{void}{\destruct{wxPropertyListDialog}}{\void}
+
+Destructor.
+
+
+\section{\class{wxPropertyListFrame}: wxFrame}\label{wxpropertylistframe}
+
+The {\bf wxPropertyListFrame} class is a prepackaged frame which can
+be used for viewing a property list. Pass a property list view object, and the frame
+will pass OnClose messages to the view class for processing.
+
+Call Initialize to create the panel and associate the view; override OnCreatePanel
+if you wish to use a panel class other than the default wxPropertyListPanel.
+
+\membersection{wxPropertyListFrame::wxPropertyListFrame}
+
+\func{void}{wxPropertyListFrame}{\param{wxPropertyListView *}{view}, \param{wxFrame *}{parent}, \param{char *}{title},
+ \param{int}{ x=-1}, \param{int}{ y=-1}, \param{int}{ width=-1}, \param{int}{height=-1},
+ \param{long}{ style=wxSDI $\|$ wxDEFAULT\_FRAME}, \param{char *}{name=``frame"}}
+
+Constructor.
+
+\membersection{wxPropertyListFrame::\destruct{wxPropertyListFrame}}
+
+\func{void}{\destruct{wxPropertyListFrame}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyListFrame::GetPropertyPanel}
+
+\func{wxPanel *}{GetPropertyPanel}{\void}
+
+Returns the panel associated with the frame.
+
+\membersection{wxPropertyListFrame::Initialize}
+
+\func{Bool}{Initialize}{\void}
+
+Must be called to create the panel and associate the view with the panel and frame.
+
+\membersection{wxPropertyListFrame::OnCreatePanel}
+
+\func{wxPanel *}{OnCreatePanel}{\param{wxFrame *}{parent}, \param{wxPropertyListView *}{view}}
+
+Creates a panel. Override this to create a panel type other than wxPropertyListPanel.
+
+
+\section{\class{wxPropertyListPanel}: wxPanel}\label{wxpropertylistpanel}
+
+The {\bf wxPropertyListPanel} class is a prepackaged panel which can
+be used for viewing a property list. Pass a property list view object, and the panel
+will pass OnDefaultAction listbox messages to the view class for
+processing.
+
+\membersection{wxPropertyListPanel::wxPropertyListPanel}
+
+\func{void}{wxPropertyListPanel}{\param{wxPropertyListView *}{view}, \param{wxWindow *}{parent},
+ \param{int}{ x=-1}, \param{int}{ y=-1}, \param{int}{ width=-1}, \param{int}{height=-1},
+ \param{long}{ style=0}, \param{char *}{name=``panel"}}
+
+Constructor.
+
+\membersection{wxPropertyListPanel::\destruct{wxPropertyListPanel}}
+
+\func{void}{\destruct{wxPropertyListPanel}}{\void}
+
+Destructor.
+
+
+
+
+\section{\class{wxPropertyListValidator}: wxPropertyValidator}\label{wxpropertylistvalidator}
+
+\overview{wxPropertyListValidator overview}{wxpropertylistvalidatoroverview}
+
+The {\bf wxPropertyListValidator} abstract class is the base class for
+deriving validators for property lists.
+
+\membersection{wxPropertyListValidator::wxPropertyListValidator}
+
+\func{void}{wxPropertyListValidator}{\param{long}{ flags = wxPROP\_ALLOW\_TEXT\_EDITING}}
+
+Constructor.
+
+\membersection{wxPropertyListValidator::\destruct{wxPropertyListValidator}}
+
+\func{void}{\destruct{wxPropertyListValidator}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyListValidator::OnCheckValue}
+
+\func{Bool}{OnCheckValue}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+ \param{wxWindow *}{parentWindow}}
+ 
+Called when the Tick (Confirm) button is pressed or focus is list. Return FALSE if the value
+was invalid, which is a signal restores the old value. Return TRUE if the value was valid.
+
+\membersection{wxPropertyListValidator::OnClearControls}
+
+\func{Bool}{OnClearControls}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+ \param{wxWindow *}{parentWindow}}
+ 
+Allows the clearing (enabling, disabling) of property list controls, when the focus leaves the current property.
+
+\membersection{wxPropertyListValidator::OnClearDetailControls}
+
+\func{Bool}{OnClearDetailControls}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+ \param{wxWindow *}{parentWindow}}
+ 
+Called when the focus is lost, if the validator is in detailed editing mode.
+
+\membersection{wxPropertyListValidator::OnDisplayValue}
+
+\func{Bool}{OnDisplayValue}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+ \param{wxWindow *}{parentWindow}}
+
+Should display the value in the appropriate controls. The default implementation gets the
+textual value from the property and inserts it into the text edit control.
+ 
+\membersection{wxPropertyListValidator::OnDoubleClick}
+
+\func{Bool}{OnDoubleClick}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+ \param{wxWindow *}{parentWindow}}
+
+Called when the property is double clicked. Extra functionality can be provided,
+such as cycling through possible values.
+
+\membersection{wxPropertyListValidator::OnEdit}
+
+\func{Bool}{OnEdit}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+ \param{wxWindow *}{parentWindow}}
+ 
+Called when the Edit (detailed editing) button is pressed. The default implementation
+calls wxPropertyListView::BeginDetailedEditing; a filename validator (for example) overrides
+this function to show the file selector.
+
+\membersection{wxPropertyListValidator::OnPrepareControls}
+
+\func{Bool}{OnPrepareControls}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+ \param{wxWindow *}{parentWindow}}
+
+Called to allow the validator to setup the display, such enabling or disabling buttons, and
+setting the values and selection in the standard listbox control (the one optionally used for displaying
+value options).
+
+\membersection{wxPropertyListValidator::OnPrepareDetailControls}
+
+\func{Bool}{OnPrepareDetailControls}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+ \param{wxWindow *}{parentWindow}}
+ 
+Called when the property is edited `in detail', i.e. when the Edit button is pressed.
+
+\membersection{wxPropertyListValidator::OnRetrieveValue}
+
+\func{Bool}{OnRetrieveValue}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+ \param{wxWindow *}{parentWindow}}
+
+Called when Tick (Confirm) is pressed or focus is lost or view wants to update
+the property list. Should do the transfer from the property editing area to the property itself
+
+\membersection{wxPropertyListValidator::OnSelect}
+
+\func{Bool}{OnSelect}{\param{Bool}{ select}, \param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+ \param{wxWindow *}{parentWindow}}
+
+Called when the property is selected or deselected: typically displays the value
+in the edit control (having chosen a suitable control to display: (non)editable text or listbox).
+
+\membersection{wxPropertyListValidator::OnValueListSelect}
+
+\func{Bool}{OnValueListSelect}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+ \param{wxWindow *}{parentWindow}}
+
+Called when the value listbox is selected. The default behaviour is to copy
+string to text control, and retrieve the value into the property.
+
+
+
+\section{\class{wxPropertyListView}: wxPropertyView}\label{wxpropertylistview}
+
+\overview{wxPropertyListView overview}{wxpropertylistviewoverview}
+
+The {\bf wxPropertyListView} class shows a wxPropertySheet as a Visual Basic-style property list.
+
+\membersection{wxPropertyListView::wxPropertyListView}
+
+\func{void}{wxPropertyListView}{\param{long}{ flags = wxPROP\_BUTTON\_DEFAULT}}
+
+Constructor.
+
+The {\it flags} argument can be a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item wxPROP\_BUTTON\_CLOSE
+\item wxPROP\_BUTTON\_OK
+\item wxPROP\_BUTTON\_CANCEL
+\item wxPROP\_BUTTON\_CHECK\_CROSS
+\item wxPROP\_BUTTON\_HELP
+\item wxPROP\_DYNAMIC\_VALUE\_FIELD
+\item wxPROP\_PULLDOWN
+\end{itemize}
+
+\membersection{wxPropertyListView::\destruct{wxPropertyListView}}
+
+\func{void}{\destruct{wxPropertyListView}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyListView::AssociatePanel}\label{wxpropertylistviewassociatepanel}
+
+\func{void}{AssociatePanel}{\param{wxPanel *}{panel}}
+
+Associates the window on which the controls will be displayed, with the view (sets an internal pointer to the window).
+
+\membersection{wxPropertyListView::BeginShowingProperty}\label{wxpropertylistviewbeginshowingproperty}
+
+\func{Bool}{BeginShowingProperty}{\param{wxProperty *}{property}}
+
+Finds the appropriate validator and loads the property into the controls, by calling
+wxPropertyValidator::OnPrepareControls and then wxPropertyListView::DisplayProperty.
+
+\membersection{wxPropertyListView::DisplayProperty}\label{wxpropertylistviewdisplayproperty}
+
+\func{Bool}{DisplayProperty}{\param{wxProperty *}{property}}
+
+Calls wxPropertyValidator::OnDisplayValue for the current property's validator. This function
+gets called by wxPropertyListView::BeginShowingProperty, which is in turn called
+from ShowProperty, called by OnPropertySelect, called by the listbox callback when selected.
+
+\membersection{wxPropertyListView::EndShowingProperty}\label{wxpropertylistviewendshowingproperty}
+
+\func{Bool}{EndShowingProperty}{\param{wxProperty *}{property}}
+
+Finds the appropriate validator and unloads the property from the controls, by calling
+wxPropertyListView::RetrieveProperty, wxPropertyValidator::OnClearControls and (if we're in
+detailed editing mdoe) wxPropertyValidator::OnClearDetailControls.
+
+\membersection{wxPropertyListView::GetPanel}\label{wxpropertylistviewgetpanel}
+
+\func{wxPanel *}{GetPanel}{\void}
+
+Returns the panel associated with the view.
+
+\membersection{wxPropertyListView::GetManagedWindow}\label{wxpropertylistviewgetmanagedwindow}
+
+\func{wxWindow *}{GetManagedWindow}{\void}
+
+Returns the managed window (a frame or dialog) associated with the view.
+
+\membersection{wxPropertyListView::GetWindowCancelButton}\label{wxpropertylistviewgetwindowcancelbutton}
+
+\func{wxButton *}{GetWindowCancelButton}{\void}
+
+Returns the window cancel button, if any.
+
+\membersection{wxPropertyListView::GetWindowCloseButton}\label{wxpropertylistviewgetwindowclosebutton}
+
+\func{wxButton *}{GetWindowCloseButton}{\void}
+
+Returns the window close or OK button, if any.
+
+\membersection{wxPropertyListView::GetWindowHelpButton}\label{wxpropertylistviewgetwindowhelpbutton}
+
+\func{wxButton *}{GetWindowHelpButton}{\void}
+
+Returns the window help button, if any.
+
+\membersection{wxPropertyListView::SetManagedWindow}\label{wxpropertylistviewsetmanagedwindow}
+
+\func{void}{SetManagedWindow}{\param{wxWindow *}{win}}
+
+Sets the managed window (a frame or dialog) associated with the view.
+
+\membersection{wxPropertyListView::UpdatePropertyDisplayInList}\label{wxpropertylistviewupdatepropdisplay}
+
+\func{Bool}{UpdatePropertyDisplayInList}{\param{wxProperty *}{property}}
+
+Updates the display for the given changed property.
+
+\membersection{wxPropertyListView::UpdatePropertyList}\label{wxpropertylistviewupdateproplist}
+
+\func{Bool}{UpdatePropertyList}{\param{Bool }{clearEditArea = TRUE}}
+
+Updates the whole property list display.
+
+
+\section{\class{wxPropertySheet}: wxObject}\label{wxpropertysheet}
+
+\overview{wxPropertySheet overview}{wxpropertysheetoverview}
+
+The {\bf wxPropertySheet} class is used for storing a number of
+wxProperty objects (essentially names and values).
+
+\membersection{wxPropertySheet::wxPropertySheet}
+
+\func{void}{wxPropertySheet}{\void}
+
+Constructor.
+
+\membersection{wxPropertySheet::\destruct{wxPropertySheet}}
+
+\func{void}{\destruct{wxPropertySheet}}{\void}
+
+Destructor. Destroys all contained properties.
+
+\membersection{wxPropertySheet::AddProperty}\label{wxpropertysheetaddproperty}
+
+\func{void}{AddProperty}{\param{wxProperty *}{property}}
+
+Adds a property to the sheet.
+
+\membersection{wxPropertySheet::Clear}\label{wxpropertysheetclear}
+
+\func{void}{Clear}{\void}
+
+Clears all the properties from the sheet (deleting them).
+
+\membersection{wxPropertySheet::GetProperties}\label{wxpropertysheetgetproperties}
+
+\func{wxList\&}{GetProperties}{\void}
+
+Returns a reference to the internal list of properties.
+
+\membersection{wxPropertySheet::GetProperty}\label{wxpropertysheetgetproperty}
+
+\func{wxProperty *}{GetProperty}{\param{char *}{name}}
+
+Gets a property by name.
+
+\membersection{wxPropertySheet::SetAllModified}
+
+\func{void}{SetAllModified}{\param{Bool}{ flag}}
+
+Sets the `modified' flag of each property value.
+
+
+
+\section{\class{wxPropertyValidator}: wxEvtHandler}\label{wxpropertyvalidator}
+
+\overview{wxPropertyValidator overview}{wxpropertyvalidatoroverview}
+
+The {\bf wxPropertyValidator} abstract class is the base class for deriving
+validators for properties.
+
+\membersection{wxPropertyValidator::wxPropertyValidator}
+
+\func{void}{wxPropertyValidator}{\param{long}{ flags = 0}}
+
+Constructor.
+
+\membersection{wxPropertyValidator::\destruct{wxPropertyValidator}}
+
+\func{void}{\destruct{wxPropertyValidator}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyValidator::GetFlags}
+
+\func{long}{GetFlags}{\void}
+
+Returns the flags for the validator.
+
+\membersection{wxPropertyValidator::GetValidatorProperty}
+
+\func{wxProperty *}{GetValidatorProperty}{\void}
+
+Gets the property for the validator.
+
+\membersection{wxPropertyValidator::SetValidatorProperty}
+
+\func{void}{SetValidatorProperty}{\param{wxProperty *}{property}}
+
+Sets the property for the validator.
+
+
+\section{\class{wxPropertyValidatorRegistry}: wxHashTable}\label{wxpropertyvalidatorregistry}
+
+The {\bf wxPropertyValidatorRegistry} class is used for storing validators,
+indexed by the `role name' of the property, by which groups of property
+can be identified for the purpose of validation and editing.
+
+\membersection{wxPropertyValidatorRegistry::wxPropertyValidatorRegistry}
+
+\func{void}{wxPropertyValidatorRegistry}{\void}
+
+Constructor.
+
+\membersection{wxPropertyValidatorRegistry::\destruct{wxPropertyValidatorRegistry}}
+
+\func{void}{\destruct{wxPropertyValidatorRegistry}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyValidatorRegistry::Clear}
+
+\func{void}{ClearRegistry}{\void}
+
+Clears the registry, deleting the validators.
+
+\membersection{wxPropertyValidatorRegistry::GetValidator}
+
+\func{wxPropertyValidator *}{GetValidator}{\param{wxString\& }{roleName}}
+
+Retrieve a validator by the property role name.
+
+\membersection{wxPropertyValidatorRegistry::RegisterValidator}\label{wxpropertyvalidatorregistervalidator}
+
+\func{void}{RegisterValidator}{\param{wxString\& }{roleName}, \param{wxPropertyValidator *}{validator}}
+
+Register a validator with the registry. {\it roleName} is a name indicating the
+role of the property, such as ``filename''. Later, when a validator is chosen for
+editing a property, this role name is matched against the class names of the property,
+if the property does not already have a validator explicitly associated with it.
+
+
+\section{\class{wxPropertyValue}: wxObject}\label{wxpropertyvalue}
+
+The {\bf wxPropertyValue} class represents the value of a property,
+and is normally associated with a wxProperty object.
+
+A wxPropertyValue has one of the following types:
+
+\begin{itemize}\itemsep=0pt
+\item wxPropertyValueNull
+\item wxPropertyValueInteger
+\item wxPropertyValueReal
+\item wxPropertyValueBool
+\item wxPropertyValueString
+\item wxPropertyValueList
+\item wxPropertyValueIntegerPtr
+\item wxPropertyValueRealPtr
+\item wxPropertyValueBoolPtr
+\item wxPropertyValueStringPtr
+\end{itemize}
+
+\membersection{wxPropertyValue::wxPropertyValue}
+
+\func{void}{wxPropertyValue}{\void}
+
+Default constructor.
+
+\func{void}{wxPropertyValue}{\param{const wxPropertyValue\& }{copyFrom}}
+
+Copy constructor.
+
+\func{void}{wxPropertyValue}{\param{char *}{val}}
+
+Construction from a string value.
+
+\func{void}{wxPropertyValue}{\param{long}{ val}}
+
+Construction from an integer value. You may need to cast to (long) to
+avoid confusion with other constructors (such as the Bool constructor).
+
+\func{void}{wxPropertyValue}{\param{Bool}{ val}}
+
+Construction from a boolean value.
+
+\func{void}{wxPropertyValue}{\param{float}{ val}}
+
+Construction from a floating point value.
+
+\func{void}{wxPropertyValue}{\param{double}{ val}}
+
+Construction from a floating point value.
+
+\func{void}{wxPropertyValue}{\param{wxList *}{ val}}
+
+Construction from a list of wxPropertyValue objects. The
+list, but not each contained wxPropertyValue, will be deleted
+by the constructor. The wxPropertyValues will be assigned to
+this wxPropertyValue list. In other words, so do not delete wxList or
+its data after calling this constructor.
+
+\func{void}{wxPropertyValue}{\param{wxStringList *}{ val}}
+
+Construction from a list of strings. The list (including the strings
+contained in it) will be deleted by the constructor, so do not
+destroy {\it val} explicitly.
+
+\func{void}{wxPropertyValue}{\param{char **}{val}}
+
+Construction from a string pointer.
+
+\func{void}{wxPropertyValue}{\param{long *}{val}}
+
+Construction from an integer pointer.
+
+\func{void}{wxPropertyValue}{\param{Bool *}{val}}
+
+Construction from an boolean pointer.
+
+\func{void}{wxPropertyValue}{\param{float *}{val}}
+
+Construction from a floating point pointer.
+
+The last four constructors use pointers to various C++ types, and do not
+store the types themselves; this allows the values to stand in for actual
+data values defined elsewhere.
+
+\membersection{wxPropertyValue::\destruct{wxPropertyValue}}
+
+\func{void}{\destruct{wxPropertyValue}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyValue::Append}
+
+\func{void}{Append}{\param{wxPropertyValue *}{expr}}
+
+Appends a property value to the list.
+
+\membersection{wxPropertyValue::BoolValue}
+
+\func{Bool}{BoolValue}{\void}
+
+Returns the boolean value.
+
+\membersection{wxPropertyValue::BoolValuePtr}
+
+\func{Bool *}{BoolValuePtr}{\void}
+
+Returns the pointer to the boolean value.
+
+\membersection{wxPropertyValue::ClearList}
+
+\func{void}{ClearList}{\void}
+
+Deletes the contents of the list.
+
+\membersection{wxPropertyValue::Delete}
+
+\func{void}{Delete}{\param{wxPropertyValue *}{expr}}
+
+Deletes {\it expr} from this list.
+
+\membersection{wxPropertyValue::GetFirst}
+
+\func{wxPropertyValue *}{GetFirst}{\void}
+
+Gets the first value in the list.
+
+\membersection{wxPropertyValue::GetLast}
+
+\func{wxPropertyValue *}{GetFirst}{\void}
+
+Gets the last value in the list.
+
+\membersection{wxPropertyValue::GetModified}
+
+\func{Bool}{GetModified}{\void}
+
+Returns TRUE if the value was modified since being created
+(or since SetModified was called).
+
+\membersection{wxPropertyValue::GetNext}
+
+\func{wxPropertyValue *}{GetNext}{\void}
+
+Gets the next value in the list (the one after `this').
+
+\membersection{wxPropertyValue::GetStringRepresentation}
+
+\func{wxString}{GetStringRepresentation}{\void}
+
+Gets a string representation of the value.
+
+\membersection{wxPropertyValue::IntegerValue}
+
+\func{long}{IntegerValue}{\void}
+
+Returns the integer value.
+
+\membersection{wxPropertyValue::Insert}
+
+\func{void}{Insert}{\param{wxPropertyValue *}{expr}}
+
+Inserts a property value at the front of a list.
+
+\membersection{wxPropertyValue::IntegerValuePtr}
+
+\func{long *}{IntegerValuePtr}{\void}
+
+Returns the pointer to the integer value.
+
+\membersection{wxPropertyValue::Nth}
+
+\func{wxPropertyValue *}{Nth}{\param{int}{ n}}
+
+Returns the nth value of a list expression (starting from zero).
+
+\membersection{wxPropertyValue::Number}
+
+\func{int}{Number}{\void}
+
+Returns the number of elements in a list expression.
+
+\membersection{wxPropertyValue::RealValue}
+
+\func{float}{RealValue}{\void}
+
+Returns the floating point value.
+
+\membersection{wxPropertyValue::RealValuePtr}
+
+\func{float *}{RealValuePtr}{\void}
+
+Returns the pointer to the floating point value.
+
+\membersection{wxPropertyValue::SetModified}
+
+\func{void}{SetModified}{\param{Bool}{ flag}}
+
+Sets the `modified' flag.
+
+\membersection{wxPropertyValue::StringValue}
+
+\func{char *}{StringValue}{\void}
+
+Returns the string value.
+
+\membersection{wxPropertyValue::StringValuePtr}
+
+\func{char **}{StringValuePtr}{\void}
+
+Returns the pointer to the string value.
+
+\membersection{wxPropertyValue::Type}
+
+\func{wxPropertyValueType}{Type}{\void}
+
+Returns the value type.
+
+\membersection{wxPropertyValue::operator $=$}
+
+\func{void}{operator $=$}{\param{const wxPropertyValue\& }{val}}
+
+\func{void}{operator $=$}{\param{const char *}{val}}
+
+\func{void}{operator $=$}{\param{const long }{val}}
+
+\func{void}{operator $=$}{\param{const Bool }{val}}
+
+\func{void}{operator $=$}{\param{const float }{val}}
+
+\func{void}{operator $=$}{\param{const char **}{val}}
+
+\func{void}{operator $=$}{\param{const long *}{val}}
+
+\func{void}{operator $=$}{\param{const Bool *}{val}}
+
+\func{void}{operator $=$}{\param{const float *}{val}}
+
+Assignment operators.
+
+
+
+\section{\class{wxPropertyView}: wxEvtHandler}\label{wxpropertyview}
+
+\overview{wxPropertyView overview}{wxpropertyviewoverview}
+
+The {\bf wxPropertyView} abstract class is the base class for views
+of property sheets, acting as intermediaries between properties and
+actual windows.
+
+\membersection{wxPropertyView::wxPropertyView}
+
+\func{void}{wxPropertyView}{\param{long}{ flags = wxPROP\_BUTTON\_DEFAULT}}
+
+Constructor.
+
+The {\it flags} argument can be a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item wxPROP\_BUTTON\_CLOSE
+\item wxPROP\_BUTTON\_OK
+\item wxPROP\_BUTTON\_CANCEL
+\item wxPROP\_BUTTON\_CHECK\_CROSS
+\item wxPROP\_BUTTON\_HELP
+\item wxPROP\_DYNAMIC\_VALUE\_FIELD
+\item wxPROP\_PULLDOWN
+\end{itemize}
+
+\membersection{wxPropertyView::\destruct{wxPropertyView}}
+
+\func{void}{\destruct{wxPropertyView}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyView::AddRegistry}\label{wxpropertyviewaddregistry}
+
+\func{void}{AddRegistry}{\param{wxPropertyValidatorRegistry *}{registry}}
+
+Adds a registry (list of property validators) the view's list of registries, which is initially empty.
+
+\membersection{wxPropertyView::FindPropertyValidator}\label{wxpropertyviewfindpropertyvalidator}
+
+\func{wxPropertyValidator *}{FindPropertyValidator}{\param{wxProperty *}{property}}
+
+Finds the property validator that is most appropriate to this property.
+
+\membersection{wxPropertyView::GetPropertySheet}\label{wxpropertyviewgetpropertysheet}
+
+\func{wxPropertySheet *}{GetPropertySheet}{\void}
+
+Gets the property sheet for this view.
+
+\membersection{wxPropertyView::GetRegistryList}\label{wxpropertyviewgetregistrylist}
+
+\func{wxList\&}{GetRegistryList}{\void}
+
+Returns a reference to the list of property validator registries.
+
+\membersection{wxPropertyView::OnOk}\label{wxpropertyviewonok}
+
+\func{void}{OnOk}{\void}
+
+Virtual function that will be called when the OK button on the physical window is pressed (if it exists).
+
+\membersection{wxPropertyView::OnCancel}\label{wxpropertyviewoncancel}
+
+\func{void}{OnCancel}{\void}
+
+Virtual function that will be called when the Cancel button on the physical window is pressed (if it exists).
+
+\membersection{wxPropertyView::OnClose}\label{wxpropertyviewonclose}
+
+\func{Bool}{OnClose}{\void}
+
+Virtual function that will be called when the physical window is closed. The default implementation returns FALSE.
+
+\membersection{wxPropertyView::OnHelp}\label{wxpropertyviewonhelp}
+
+\func{void}{OnHelp}{\void}
+
+Virtual function that will be called when the Help button on the physical window is pressed (if it exists).
+
+\membersection{wxPropertyView::OnPropertyChanged}\label{wxpropertyviewonpropertychanged}
+
+\func{void}{OnPropertyChanged}{\param{wxProperty *}{property}}
+
+Virtual function called by a view or validator when a property's value changed. Validators
+must be written correctly for this to be called. You can override this function
+to respond immediately to property value changes.
+
+\membersection{wxPropertyView::OnUpdateView}\label{wxpropertyviewonupdateview}
+
+\func{Bool}{OnUpdateView}{\void}
+
+Called by the viewed object to update the view. The default implementation just returns
+FALSE.
+
+\membersection{wxPropertyView::SetPropertySheet}\label{wxpropertyviewsetpropertysheet}
+
+\func{void}{SetPropertySheet}{\param{wxPropertySheet *}{sheet}}
+
+Sets the property sheet for this view.
+
+\membersection{wxPropertyView::ShowView}\label{wxpropertyviewshowview}
+
+\func{void}{ShowView}{\param{wxPropertySheet *}{sheet}, \param{wxPanel *}{panel}}
+
+Associates this view with the given panel, and shows the view.
+
+\section{\class{wxRealFormValidator}: wxPropertyFormValidator}\label{wxrealformvalidator}
+
+\overview{Validator classes}{validatorclasses}
+
+This class validates a range of real values for form views. The associated panel item must be a wxText.
+
+\membersection{wxRealFormValidator::wxRealFormValidator}
+
+\func{void}{wxRealFormValidator}{\param{float }{min=0.0}, \param{float }{max=0.0},
+ \param{long}{ flags=0}}
+
+Constructor. Assigning zero to minimum and maximum values indicates that there is no range to check.
+
+
+\section{\class{wxStringFormValidator}: wxPropertyFormValidator}\label{wxstringformvalidator}
+
+\overview{Validator classes}{validatorclasses}
+
+This class validates a string value for a form view, with an optional choice of possible values.
+The associated panel item must be a wxText, wxListBox or wxChoice. For wxListBox and wxChoice items,
+if the item is empty, the validator attempts to initialize the item from the strings in
+the validator. Note that this does not happen for XView wxChoice items since XView cannot reinitialize a wxChoice.
+ 
+\membersection{wxStringFormValidator::wxStringFormValidator}
+
+\func{void}{wxStringFormValidator}{\param{wxStringList *}{list=NULL}, \param{long}{ flags=0}}
+
+Constructor. Supply a list of strings to indicate a choice, or no strings to allow the
+user to freely edit the string. The string list will be deleted when the validator is deleted.
+
+
+\section{\class{wxRealListValidator}: wxPropertyListValidator}\label{wxreallistvalidator}
+
+\overview{Validator classes}{validatorclasses}
+
+This class validates a range of real values for property lists.
+
+\membersection{wxRealListValidator::wxreallistvalidator}
+
+\func{void}{wxRealListValidator}{\param{float }{min=0.0}, \param{float }{max=0.0},
+ \param{long}{ flags=wxPROP\_ALLOW\_TEXT\_EDITING}}
+
+Constructor. Assigning zero to minimum and maximum values indicates that there is no range to check.
+
+
+\section{\class{wxStringListValidator}: wxPropertyListValidator}\label{wxstringlistvalidator}
+
+\overview{Validator classes}{validatorclasses}
+
+This class validates a string value, with an optional choice of possible values.
+
+\membersection{wxStringListValidator::wxStringListValidator}
+
+\func{void}{wxStringListValidator}{\param{wxStringList *}{list=NULL}, \param{long}{ flags=0}}
+
+Constructor. Supply a list of strings to indicate a choice, or no strings to allow the
+user to freely edit the string. The string list will be deleted when the validator is deleted.
+
+
+\chapter{Classes by category}\label{classesbycat}
+
+A classification of property sheet classes by category.
+
+\section{Data classes}
+
+\begin{itemize}\itemsep=0pt
+\item \helpref{wxProperty}{wxproperty}
+\item \helpref{wxPropertyValue}{wxpropertyvalue}
+\item \helpref{wxPropertySheet}{wxpropertysheet}
+\end{itemize}
+
+
+\section{Validator classes}\label{validatorclasses}
+
+Validators check that the values the user has entered for a property are
+valid. They can also define specific ways of entering data, such as a
+file selector for a filename, and they are responsible for transferring
+values between the wxProperty and the physical display. 
+
+Base classes:
+
+\begin{itemize}\itemsep=0pt
+\item \helpref{wxPropertyValidator}{wxproperty}
+\item \helpref{wxPropertyListValidator}{wxpropertylistvalidator}
+\item \helpref{wxPropertyFormValidator}{wxpropertyformvalidator}
+\end{itemize}
+
+List view validators:
+
+\begin{itemize}\itemsep=0pt
+\item \helpref{wxBoolListValidator}{wxboollistvalidator}
+\item \helpref{wxFilenameListValidator}{wxfilenamelistvalidator}
+\item \helpref{wxIntegerListValidator}{wxintegerlistvalidator}
+\item \helpref{wxListOfStringsListValidator}{wxlistofstringslistvalidator}
+\item \helpref{wxRealListValidator}{wxreallistvalidator}
+\item \helpref{wxStringListValidator}{wxstringlistvalidator}
+\end{itemize}
+
+Form view validators:
+
+\begin{itemize}\itemsep=0pt
+\item \helpref{wxBoolFormValidator}{wxboolformvalidator}
+\item \helpref{wxIntegerFormValidator}{wxintegerformvalidator}
+\item \helpref{wxRealFormValidator}{wxrealformvalidator}
+\item \helpref{wxStringFormValidator}{wxstringformvalidator}
+\end{itemize}
+
+\section{View classes}\label{viewclasses}
+
+View classes mediate between a property sheet and a physical window.
+
+\begin{itemize}\itemsep=0pt
+\item \helpref{wxPropertyView}{wxpropertyview}
+\item \helpref{wxPropertyListView}{wxpropertylistview}
+\item \helpref{wxPropertyFormView}{wxpropertyformview}
+\end{itemize}
+
+\section{Window classes}\label{windowclasses}
+
+The class library defines some window classes that can be used as-is with a suitable
+view class and property sheet.
+
+\begin{itemize}\itemsep=0pt
+\item \helpref{wxPropertyFormFrame}{wxpropertyformframe}
+\item \helpref{wxPropertyFormDialog}{wxpropertyformdialog}
+\item \helpref{wxPropertyFormPanel}{wxpropertyformpanel}
+\item \helpref{wxPropertyListFrame}{wxpropertylistframe}
+\item \helpref{wxPropertyListDialog}{wxpropertylistdialog}
+\item \helpref{wxPropertyListPanel}{wxpropertylistpanel}
+\end{itemize}
+
+\section{Registry classes}
+
+A validator registry is a list of validators that can be applied to properties in a property sheet.
+There may be one or more registries per property view.
+
+\begin{itemize}\itemsep=0pt
+\item \helpref{wxPropertyValidatorRegistry}{wxpropertyvalidatorregistry}
+\end{itemize}
+
+
+\chapter{Topic overviews}\label{overviews}
+
+This chapter contains a selection of topic overviews.
+
+\section{Property classes overview}\label{propertyoverview}
+
+The property classes help a programmer to express relationships between
+data and physical windows, in particular:
+
+\begin{itemize}\itemsep=0pt
+\item the transfer of data to and from the physical controls;
+\item the behaviour of various controls and custom windows for particular
+types of data;
+\item the validation of data, notifying the user when incorrect data is entered,
+or even better, constraining the input so only valid data can be entered.
+\end{itemize}
+
+With a consistent framework, the programmer should be able to use existing
+components and design new ones in a principled manner, to solve many data entry
+requirements.
+
+Each datum is represented in a \helpref{wxProperty}{wxproperty}, which has a name and a value.
+Various C++ types are permitted in the value of a property, and the property can store a pointer
+to the data instead of a copy of the data. A \helpref{wxPropertySheet}{wxpropertysheet} represents a number of these properties.
+
+These two classes are independent from the way in which the data is visually manipulated. To
+mediate between property sheets and windows, the abstract class \helpref{wxPropertyView}{wxpropertyview} is
+available for programmers to derive new kinds of view. One kind of view that is available is the \helpref{wxPropertyListView}{wxpropertylistview},
+which displays the data in a Visual Basic-style list, with a small number of controls for editing
+the currently selected property. Another is \helpref{wxPropertyFormView}{wxpropertyformview} which
+mediates between an existing dialog or panel and the property sheet.
+
+The hard work of mediation is actually performed by validators, which are instances of classes
+derived from \helpref{wxPropertyValidator}{wxpropertyvalidator}. A validator is associated with
+a particular property and is responsible for
+responding to user interface events, and displaying, updating and checking the property value.
+Because a validator's behaviour depends largely on the kind of view being used, there has to be
+a separate hierarchy of validators for each class of view. So for wxPropertyListView, there is
+an abstract class \helpref{wxPropertyListValidator}{wxpropertylistvalidator} from which concrete
+classes are derived, such as \helpref{wxRealListValidator}{wxreallistvalidator} and
+\rtfsp\helpref{wxStringListValidator}{wxstringlistvalidator}.
+
+A validator can be explicitly set for a property, so there is no doubt which validator
+should be used to edit that property. However, it is also possible to define a registry
+of validators, and have the validator chosen on the basis of the {\it role} of the property.
+So a property with a ``filename" role would match the ``filename" validator, which pops
+up a file selector when the user double clicks on the property.
+
+You don't have to define your own frame or window classes: there are some predefined
+that will work with the property list view. See \helpref{Window classes}{windowclasses} for
+further details.
+
+\subsection{Example 1: Property list view}
+
+The following code fragment shows the essentials of creating a registry of
+standard validators, a property sheet containing some properties, and
+a property list view and dialog or frame. RegisterValidators will be
+called on program start, and PropertySheetTest is called in response to a
+menu command.
+
+Note how some properties are created with an explicit reference to
+a validator, and others are provided with a ``role'' which can be matched
+against a validator in the registry.
+
+The interface generated by this test program is shown in the section \helpref{Appearance and
+behaviour of a property list view}{appearance}.
+
+\begin{verbatim}
+void RegisterValidators(void)
+{
+  myListValidatorRegistry.RegisterValidator((wxString)"real", new wxRealListValidator);
+  myListValidatorRegistry.RegisterValidator((wxString)"string", new wxStringListValidator);
+  myListValidatorRegistry.RegisterValidator((wxString)"integer", new wxIntegerListValidator);
+  myListValidatorRegistry.RegisterValidator((wxString)"bool", new wxBoolListValidator);
+}
+
+void PropertyListTest(Bool useDialog)
+{
+  wxPropertySheet *sheet = new wxPropertySheet;
+
+  sheet->AddProperty(new wxProperty("fred", 1.0, "real"));
+  sheet->AddProperty(new wxProperty("tough choice", (Bool)TRUE, "bool"));
+  sheet->AddProperty(new wxProperty("ian", (long)45, "integer", new wxIntegerListValidator(-50, 50)));
+  sheet->AddProperty(new wxProperty("bill", 25.0, "real", new wxRealListValidator(0.0, 100.0)));
+  sheet->AddProperty(new wxProperty("julian", "one", "string"));
+  sheet->AddProperty(new wxProperty("bitmap", "none", "string", new wxFilenameListValidator("Select a bitmap file", "*.bmp")));
+  wxStringList *strings = new wxStringList("one", "two", "three", NULL);
+  sheet->AddProperty(new wxProperty("constrained", "one", "string", new wxStringListValidator(strings)));
+
+  wxPropertyListView *view =
+    new wxPropertyListView(NULL,
+     wxPROP_BUTTON_CHECK_CROSS|wxPROP_DYNAMIC_VALUE_FIELD|wxPROP_PULLDOWN);
+
+  wxDialogBox *propDialog = NULL;
+  wxPropertyListFrame *propFrame = NULL;
+  if (useDialog)
+  {
+    propDialog = new wxPropertyListDialog(view, NULL, "Property Sheet Test", TRUE, -1, -1, 400, 500);
+  }
+  else
+  {
+    propFrame = new wxPropertyListFrame(view, NULL, "Property Sheet Test", -1, -1, 400, 500);
+  }
+  
+  view->AddRegistry(&myListValidatorRegistry);
+
+  if (useDialog)
+  {
+    view->ShowView(sheet, propDialog);
+    propDialog->Centre(wxBOTH);
+    propDialog->Show(TRUE);
+  }
+  else
+  {
+    propFrame->Initialize();
+    view->ShowView(sheet, propFrame->GetPropertyPanel());
+    propFrame->Centre(wxBOTH);
+    propFrame->Show(TRUE);
+  }
+}
+\end{verbatim}
+
+\subsection{Example 2: Property form view}
+
+This example is similar to Example 1, but uses a property form view to
+edit a property sheet using a predefined dialog box.
+
+\begin{verbatim}
+void RegisterValidators(void)
+{
+  myFormValidatorRegistry.RegisterValidator((wxString)"real", new wxRealFormValidator);
+  myFormValidatorRegistry.RegisterValidator((wxString)"string", new wxStringFormValidator);
+  myFormValidatorRegistry.RegisterValidator((wxString)"integer", new wxIntegerFormValidator);
+  myFormValidatorRegistry.RegisterValidator((wxString)"bool", new wxBoolFormValidator);
+}
+
+void PropertyFormTest(Bool useDialog)
+{
+  wxPropertySheet *sheet = new wxPropertySheet;
+
+  sheet->AddProperty(new wxProperty("fred", 25.0, "real", new wxRealFormValidator(0.0, 100.0)));
+  sheet->AddProperty(new wxProperty("tough choice", (Bool)TRUE, "bool"));
+  sheet->AddProperty(new wxProperty("ian", (long)45, "integer", new wxIntegerFormValidator(-50, 50)));
+  sheet->AddProperty(new wxProperty("julian", "one", "string"));
+  wxStringList *strings = new wxStringList("one", "two", "three", NULL);
+  sheet->AddProperty(new wxProperty("constrained", "one", "string", new wxStringFormValidator(strings)));
+
+  wxPropertyFormView *view = new wxPropertyFormView(NULL);
+
+  wxDialogBox *propDialog = NULL;
+  wxPropertyFormFrame *propFrame = NULL;
+  if (useDialog)
+  {
+    propDialog = new wxPropertyFormDialog(view, NULL, "Property Form Test", TRUE, -1, -1, 400, 300);
+  }
+  else
+  {
+    propFrame = new wxPropertyFormFrame(view, NULL, "Property Form Test", -1, -1, 400, 300);
+    propFrame->Initialize();
+  }
+  
+  wxPanel *panel = propDialog ? propDialog : propFrame->GetPropertyPanel();
+  panel->SetLabelPosition(wxVERTICAL);
+  
+  // Add items to the panel
+  
+  (void) new wxButton(panel, (wxFunction)NULL, "OK", -1, -1, -1, -1, 0, "ok");
+  (void) new wxButton(panel, (wxFunction)NULL, "Cancel", -1, -1, 80, -1, 0, "cancel");
+  (void) new wxButton(panel, (wxFunction)NULL, "Update", -1, -1, 80, -1, 0, "update");
+  (void) new wxButton(panel, (wxFunction)NULL, "Revert", -1, -1, -1, -1, 0, "revert");
+  panel->NewLine();
+  
+  // The name of this text item matches the "fred" property
+  (void) new wxText(panel, (wxFunction)NULL, "Fred", "", -1, -1, 90, -1, 0, "fred");
+  (void) new wxCheckBox(panel, (wxFunction)NULL, "Yes or no", -1, -1, -1, -1, 0, "tough choice");
+  (void) new wxSlider(panel, (wxFunction)NULL, "Sliding scale", 0, -50, 50, 100, -1, -1, wxHORIZONTAL, "ian");
+  panel->NewLine();
+  (void) new wxListBox(panel, (wxFunction)NULL, "Constrained", wxSINGLE, -1, -1, 100, 90, 0, NULL, 0, "constrained");
+
+  view->AddRegistry(&myFormValidatorRegistry);
+
+  if (useDialog)
+  {
+    view->ShowView(sheet, propDialog);
+    view->AssociateNames();
+    view->TransferToDialog();
+    propDialog->Centre(wxBOTH);
+    propDialog->Show(TRUE);
+  }
+  else
+  {
+    view->ShowView(sheet, propFrame->GetPropertyPanel());
+    view->AssociateNames();
+    view->TransferToDialog();
+    propFrame->Centre(wxBOTH);
+    propFrame->Show(TRUE);
+  }
+}
+\end{verbatim}
+
+\section{Validator classes overview}\label{validatoroverview}
+
+Classes: \helpref{Validator classes}{validatorclasses}
+
+The validator classes provide functionality for mediating between a wxProperty and
+the actual display. There is a separate family of validator classes for each
+class of view, since the differences in user interface for these views implies
+that little common functionality can be shared amongst validators.
+
+\subsection{wxPropertyValidator overview}\label{wxpropertyvalidatoroverview}
+
+Class: \helpref{wxPropertyValidator}{wxpropertyvalidator}
+
+This class is the root of all property validator classes. It contains a small
+amount of common functionality, including functions to convert between
+strings and C++ values.
+
+A validator is notionally an object which sits between a property and its displayed
+value, and checks that the value the user enters is correct, giving an error message
+if the validation fails. In fact, the validator does more than that, and is akin to
+a view class but at a finer level of detail. It is also responsible for
+loading the dialog box control with the value from the property, putting it back
+into the property, preparing special controls for editing the value, and
+may even invoke special dialogs for editing the value in a convenient way.
+
+In a property list dialog, there is quite a lot of scope for supplying custom dialogs,
+such as file or colour selectors. For a form dialog, there is less scope because
+there is no concept of `detailed editing' of a value: one control is associated with
+one property, and there is no provision for invoking further dialogs. The reader
+may like to work out how the form view could be extended to provide some of the
+functionality of the property list!
+
+Validator objects may be associated explictly with a wxProperty, or they may be
+indirectly associated by virtue of a property `kind' that matches validators having
+that kind. In the latter case, such validators are stored in a validator registry
+which is passed to the view before the dialog is shown. If the validator takes
+arguments, such as minimum and maximum values in the case of a wxIntegerListValidator,
+then the validator must be associated explicitly with the property. The validator
+will be deleted when the property is deleted.
+
+\subsection{wxPropertyListValidator overview}\label{wxpropertylistvalidatoroverview}
+
+Class: \helpref{wxPropertyListValidator}{wxpropertylistvalidator}
+
+This class is the abstract base class for property list view validators.
+The list view acts upon a user interface containing a list of properties,
+a text item for direct property value editing, confirm/cancel buttons for the value,
+a pulldown list for making a choice between values, and OK/Cancel/Help buttons
+for the dialog (see \helpref{property list appearance}{appearance}).
+
+By overriding virtual functions, the programmer can create custom
+behaviour for different kinds of property. Custom behaviour can use just the
+available controls on the property list dialog, or the validator can
+invoke custom editors with quite different controls, which pop up in
+`detailed editing' mode.
+
+See the detailed class documentation for the members you should override
+to give your validator appropriate behaviour.
+
+\subsection{wxPropertyFormValidator overview}\label{wxpropertyformvalidatoroverview}
+
+This class is the abstract base class for property form view validators.
+The form view acts upon an existing dialog box or panel, where either the
+panel item names correspond to property names, or the programmer has explicitly
+associated the panel item with the property.
+
+By overriding virtual functions, the programmer determines how
+values are displayed or retrieved, and the checking that the validator does.
+
+See the detailed class documentation for the members you should override
+to give your validator appropriate behaviour.
+
+\section{View classes overview}\label{viewoverview}
+
+Classes: \helpref{View classes}{viewclasses}
+
+An instance of a view class relates a property sheet with an actual window.
+Currently, there are two classes of view: wxPropertyListView and wxPropertyFormView.
+
+\subsection{wxPropertyView overview}\label{wxpropertyviewoverview}
+
+Class: \helpref{wxPropertyView}{wxpropertyview}
+
+This is the abstract base class for property views.
+
+\subsection{wxPropertyListView overview}\label{wxpropertylistviewoverview}
+
+Class: \helpref{wxPropertyListView}{wxpropertylistview}
+
+The property list view defines the relationship between a property sheet and
+a property list dialog or panel. It manages user interface events such as
+clicking on a property, pressing return in the text edit field, and clicking
+on Confirm or Cancel. These events cause member functions of the
+class to be called, and these in turn may call member functions of
+the appropriate validator to be called, to prepare controls, check the property value,
+invoke detailed editing, etc.
+
+\subsection{wxPropertyFormView overview}\label{wxpropertyformviewoverview}
+
+Class: \helpref{wxPropertyFormView}{wxpropertyformview}
+
+The property form view manages the relationship between a property sheet
+and an existing dialog or panel.
+
+You must first create a panel or dialog box for the view to work on.
+The panel should contain panel items with names that correspond to
+properties in your property sheet; or you can explicitly set the
+panel item for each property.
+
+Apart from any custom panel items that you wish to control independently
+of the property-editing items, wxPropertyFormView takes over the
+processing of item events. It can also control normal dialog behaviour such
+as OK, Cancel, so you should also create some standard buttons that the property view
+can recognise. Just create the buttons with standard names and the view
+will do the rest. The following button names are recognised:
+
+\begin{itemize}\itemsep=0pt
+\item {\bf ok}: indicates the OK button. Calls wxPropertyFormView::OnOk. By default,
+checks and updates the form values, closes and deletes the frame or dialog, then deletes the view.
+\item {\bf cancel}: indicates the Cancel button. Calls wxPropertyFormView::OnCancel. By default,
+closes and deletes the frame or dialog, then deletes the view.
+\item {\bf help}: indicates the Help button. Calls wxPropertyFormView::OnHelp. This needs
+to be overridden by the application for anything interesting to happen.
+\item {\bf revert}: indicates the Revert button. Calls wxPropertyFormView::OnRevert,
+which by default transfers the wxProperty values to the panel items (in effect
+undoing any unsaved changes in the items).
+\item {\bf update}: indicates the Revert button. Calls wxPropertyFormView::OnUpdate, which
+by defaults transfers the displayed values to the wxProperty objects.
+\end{itemize}
+
+\section{wxPropertySheet overview}\label{wxpropertysheetoverview}
+
+Classes: \helpref{wxPropertySheet}{wxpropertysheet}, \helpref{wxProperty}{wxproperty}, \helpref{wxPropertyValue}{wxpropertyvalue}
+
+A property sheet defines zero or more properties. This is a bit like an explicit representation of
+a C++ object. wxProperty objects can have values which are pointers to C++ values, or they
+can allocate their own storage for values.
+
+Because the property sheet representation is explicit and can be manipulated by
+a program, it is a convenient form to be used for a variety of
+editing purposes. wxPropertyListView and wxPropertyFormView are two classes that
+specify the relationship between a property sheet and a user interface. You could imagine
+other uses for wxPropertySheet, for example to generate a form-like user interface without
+the need for GUI programming. Or for storing the names and values of command-line switches, with the
+option to subsequently edit these values using a wxPropertyListView.
+
+A typical use for a property sheet is to represent values of an object
+which are only implicit in the current representation of it. For
+example, in Visual Basic and similar programming environments, you can
+`edit a button', or rather, edit the button's properties.  One of the
+properties you can edit is {\it width} - but there is no explicit
+representation of width in a wxWindows button; instead, you call SetSize
+and GetSize members. To translate this into a consisent,
+property-oriented scheme, we could derive a new class
+wxButtonWithProperties, which has two new functions: SetProperty and
+GetProperty.  SetProperty accepts a property name and a value, and calls
+an appropriate function for the property that is being passed.
+GetProperty accepts a property name, returning a property value. So
+instead of having to use the usual arbitrary set of C++ member functions
+to set or access attributes of a window, programmer deals merely with
+SetValue/GetValue, and property names and values.
+We now have a single point at which we can modify or query an object by specifying
+names and values at run-time. (The implementation of SetProperty and GetProperty
+is probably quite messy and involves a large if-then-else statement to
+test the property name and act accordingly.)
+
+When the user invokes the property editor for a wxButtonWithProperties, the system
+creates a wxPropertySheet with `imaginary' properties such as width, height, font size
+and so on. For each property, wxButtonWithProperties::GetProperty is called, and the result is
+passed to the corresponding wxProperty. The wxPropertySheet is passed to a wxPropertyListView
+as described elsewhere, and the user edits away. When the user has finished editing, the system calls
+wxButtonWithProperties::SetProperty to transfer the wxProperty value back into the button
+by way of an appropriate call, wxWindow::SetSize in the case of width and height properties.
+
+\end{comment}

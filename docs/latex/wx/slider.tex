@@ -1,0 +1,352 @@
+\section{\class{wxSlider}}\label{wxslider}
+
+A slider is a control with a handle which can be pulled
+back and forth to change the value.
+
+In Windows versions below Windows 95, a scrollbar is used to simulate the slider. In Windows 95,
+the track bar control is used.
+
+Slider events are handled in the same way as a scrollbar.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxSL\_HORIZONTAL}}{Displays the slider horizontally.}
+\twocolitem{\windowstyle{wxSL\_VERTICAL}}{Displays the slider vertically.}
+\twocolitem{\windowstyle{wxSL\_AUTOTICKS}}{Displays tick marks.}
+\twocolitem{\windowstyle{wxSL\_LABELS}}{Displays minimum, maximum and value labels.}
+\twocolitem{\windowstyle{wxSL\_LEFT}}{Displays ticks on the left, if a vertical slider.}
+\twocolitem{\windowstyle{wxSL\_RIGHT}}{Displays ticks on the right, if a vertical slider.}
+\twocolitem{\windowstyle{wxSL\_TOP}}{Displays ticks on the top, if a horizontal slider.}
+\twocolitem{\windowstyle{wxSL\_SELRANGE}}{Allows the user to select a range on the slider. Windows 95 only.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview}, \helpref{wxScrollBar}{wxscrollbar}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxSlider::wxSlider}\label{wxsliderconstr}
+
+\func{}{wxSlider}{\void}
+
+Default slider.
+
+\func{}{wxSlider}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id}, \param{const int }{value },\rtfsp
+\param{const int}{ minValue}, \param{const int}{ maxValue},\rtfsp
+\param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{const long}{ style = wxSL\_HORIZONTAL},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``slider"}}
+
+Constructor, creating and showing a slider.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{value}{Initial position for the slider.}
+
+\docparam{minValue}{Minimum slider position.}
+
+\docparam{maxValue}{Maximum slider position.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then a default size is chosen.}
+
+\docparam{style}{Window style. See \helpref{wxSlider}{wxslider}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxSlider::Create}{wxslidercreate}, \helpref{wxValidator}{wxvalidator}
+
+\membersection{wxSlider::\destruct{wxSlider}}
+
+\func{void}{\destruct{wxSlider}}{\void}
+
+Destructor, destroying the slider.
+
+\membersection{wxSlider::ClearSel}\label{wxsliderclearsel}
+
+\func{void}{ClearSel}{\void}
+
+Clears the selection, for a slider with the {\bf wxSL\_SELRANGE} style.
+
+\wxheading{Remarks}
+
+Windows 95 only.
+
+\membersection{wxSlider::ClearTicks}\label{wxsliderclearticks}
+
+\func{void}{ClearTicks}{\void}
+
+Clears the ticks.
+
+\wxheading{Remarks}
+
+Windows 95 only.
+
+\membersection{wxSlider::Create}\label{wxslidercreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxWindowID }{id}, \param{const int }{value },\rtfsp
+\param{const int}{ minValue}, \param{const int}{ maxValue},\rtfsp
+\param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{const long}{ style = wxSL\_HORIZONTAL},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``slider"}}
+
+Used for two-step slider construction. See \helpref{wxSlider::wxSlider}{wxsliderconstr}\rtfsp
+for further details.
+
+\membersection{wxSlider::GetLineSize}\label{wxslidergetlinesize}
+
+\constfunc{int}{GetLineSize}{\void}
+
+Returns the line size.
+
+\wxheading{See also}
+
+\helpref{wxSlider::SetLineSize}{wxslidersetlinesize}
+
+\membersection{wxSlider::GetMax}\label{wxslidergetmax}
+
+\constfunc{int}{GetMax}{\void}
+
+Gets the maximum slider value.
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetMin}{wxslidergetmin}, \helpref{wxSlider::SetRange}{wxslidersetrange}
+
+\membersection{wxSlider::GetMin}\label{wxslidergetmin}
+
+\constfunc{int}{GetMin}{\void}
+
+Gets the minimum slider value.
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetMin}{wxslidergetmin}, \helpref{wxSlider::SetRange}{wxslidersetrange}
+
+\membersection{wxSlider::GetPageSize}\label{wxslidergetpagesize}
+
+\constfunc{int}{GetPageSize}{\void}
+
+Returns the page size.
+
+\wxheading{See also}
+
+\helpref{wxSlider::SetPageSize}{wxslidersetpagesize}
+
+\membersection{wxSlider::GetSelEnd}\label{wxslidergetselend}
+
+\constfunc{int}{GetSelEnd}{\void}
+
+Returns the selection end point.
+
+\wxheading{Remarks}
+
+Windows 95 only.
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetSelStart}{wxslidergetselstart}, \helpref{wxSlider::SetSelection}{wxslidersetselection}
+
+\membersection{wxSlider::GetSelStart}\label{wxslidergetselstart}
+
+\constfunc{int}{GetSelStart}{\void}
+
+Returns the selection start point.
+
+\wxheading{Remarks}
+
+Windows 95 only.
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetSelEnd}{wxslidergetselend}, \helpref{wxSlider::SetSelection}{wxslidersetselection}
+
+\membersection{wxSlider::GetThumbLength}\label{wxslidergetthumblength}
+
+\constfunc{int}{GetThumbLength}{\void}
+
+Returns the thumb length.
+
+\wxheading{Remarks}
+
+Windows 95 only.
+
+\wxheading{See also}
+
+\helpref{wxSlider::SetThumbLength}{wxslidersetthumblength}
+
+\membersection{wxSlider::GetTickFreq}\label{wxslidergettickfreq}
+
+\constfunc{int}{GetTickFreq}{\void}
+
+Returns the tick frequency.
+
+\wxheading{Remarks}
+
+Windows 95 only.
+
+\wxheading{See also}
+
+\helpref{wxSlider::SetTickFreq}{wxslidersettickfreq}
+
+\membersection{wxSlider::GetValue}\label{wxslidergetvalue}
+
+\constfunc{int}{GetValue}{\void}
+
+Gets the current slider value.
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetMin}{wxslidergetmin}, \helpref{wxSlider::GetMax}{wxslidergetmax},\rtfsp
+\helpref{wxSlider::SetValue}{wxslidersetvalue}
+
+\membersection{wxSlider::SetRange}\label{wxslidersetrange}
+
+\func{void}{SetRange}{\param{const int}{ minValue}, \param{const int}{ maxValue}}
+
+Sets the minimum and maximum slider values.
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetMin}{wxslidergetmin}, \helpref{wxSlider::GetMax}{wxslidergetmax}
+
+\membersection{wxSlider::SetTickFreq}\label{wxslidersettickfreq}
+
+\func{void}{SetTickFreq}{\param{const int }{n}, \param{const int }{pos}}
+
+Sets the tick mark frequency and position.
+
+\wxheading{Parameters}
+
+\docparam{n}{Frequency. For example, if the frequency is set to two, a tick mark is displayed for
+every other increment in the slider's range.}
+
+\docparam{pos}{Position. Must be greater than zero. TODO: what is this for?}
+
+\wxheading{Remarks}
+
+Windows 95 only.
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetTickFreq}{wxslidergettickfreq}
+
+\membersection{wxSlider::SetLineSize}\label{wxslidersetlinesize}
+
+\func{void}{SetLineSize}{\param{const int }{lineSize}}
+
+Sets the line size for the slider.
+
+\wxheading{Parameters}
+
+\docparam{lineSize}{The number of steps the slider moves when the user moves it up or down a line.}
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetLineSize}{wxslidergetlinesize}
+
+\membersection{wxSlider::SetPageSize}\label{wxslidersetpagesize}
+
+\func{void}{SetPageSize}{\param{const int }{pageSize}}
+
+Sets the page size for the slider.
+
+\wxheading{Parameters}
+
+\docparam{pageSize}{The number of steps the slider moves when the user pages up or down.}
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetPageSize}{wxslidergetpagesize}
+
+\membersection{wxSlider::SetSelection}\label{wxslidersetselection}
+
+\func{void}{SetSelection}{\param{const int }{startPos}, \param{const int }{endPos}}
+
+Sets the selection.
+
+\wxheading{Parameters}
+
+\docparam{startPos}{The selection start position.}
+
+\docparam{endPos}{The selection end position.}
+
+\wxheading{Remarks}
+
+Windows 95 only.
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetSelStart}{wxslidergetselstart}, \helpref{wxSlider::GetSelEnd}{wxslidergetselend}
+
+\membersection{wxSlider::SetThumbLength}\label{wxslidersetthumblength}
+
+\func{void}{SetThumbLength}{\param{const int }{len}}
+
+Sets the slider thumb length.
+
+\wxheading{Parameters}
+
+\docparam{len}{The thumb length.}
+
+\wxheading{Remarks}
+
+Windows 95 only.
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetThumbLength}{wxslidergetthumblength}
+
+\membersection{wxSlider::SetTick}\label{wxslidersettick}
+
+\func{void}{SetTick}{\param{const int}{ tickPos}}
+
+Sets a tick position.
+
+\wxheading{Parameters}
+
+\docparam{tickPos}{The tick position.}
+
+\wxheading{Remarks}
+
+Windows 95 only.
+
+\wxheading{See also}
+
+\helpref{wxSlider::SetTickFreq}{wxslidersettickfreq}
+
+\membersection{wxSlider::SetValue}\label{wxslidersetvalue}
+
+\func{void}{SetValue}{\param{const int}{ value}}
+
+Sets the slider position.
+
+\wxheading{Parameters}
+
+\docparam{value}{The slider position.}
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetValue}{wxslidergetvalue}
+

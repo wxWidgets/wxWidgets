@@ -1,0 +1,85 @@
+\section{Bitmaps overview}\label{wxbitmapoverview}
+
+Classes: \helpref{wxBitmap}{wxbitmap}, \helpref{wxBitmapHandler}{wxbitmaphandler}, \helpref{wxIcon}{wxicon}, \helpref{wxCursor}{wxcursor}.
+
+The wxBitmap class encapsulates the concept of a platform-dependent bitmap,
+either monochrome or colour. Platform-specific methods for creating a
+wxBitmap object from an existing file are catered for, and
+this is an occasion where conditional compilation will sometimes be
+required.
+
+A bitmap created dynamically or loaded from a file can be selected
+into a memory device context (instance of \helpref{wxMemoryDC}{wxmemorydc}). This
+enables the bitmap to be copied to a canvas or memory device context
+using \helpref{wxDC::Blit}{wxdcblit}, or to be used as a drawing surface.  The {\bf
+wxToolBarSimple} class is implemented using bitmaps, and the toolbar demo
+shows one of the toolbar bitmaps being used for drawing a miniature
+version of the graphic which appears on the main canvas.
+
+See \helpref{wxMemoryDC}{wxmemorydc} for an example of drawing onto a bitmap.
+
+The following shows the conditional compilation required to load a
+bitmap in X and in Windows 3. The alternative is to use the string
+version of the bitmap constructor, which loads a file under X and a
+resource under Windows 3, but has the disadvantage of requiring the
+X icon file to be available at run-time.
+
+\begin{verbatim}
+#ifdef wx_x
+#include "aiai.xbm"
+#endif
+#ifdef wx_msw
+  wxIcon *icon = new wxBitmap("aiai");
+#endif
+#ifdef wx_x
+  wxIcon *icon = new wxBitmap(aiai_bits, aiai_width, aiai_height);
+#endif
+\end{verbatim}
+
+\subsection{Loading bitmaps: further information}
+
+There is provision for a number of bitmap
+formats via the standard wxBitmap class. These facilities can
+be enabled or disabled using settings in wx\_setup.h.
+
+XPM colour pixmaps may be loaded and saved under Windows and X, with
+some restrictions imposed by the lack of colourmap facility when
+using XPM files. The user may elect to use XPM files as a cross-platform
+stabdard, or translate between XPM and BMP files using a suitable
+utility.
+
+Also, under Windows, DIBs (device independent bitmaps with extension BMP)
+may be dynamically loaded and saved. Under X, GIF and BMP files may be
+loaded but not saved.
+
+\subsection{Bitmap format handlers}
+
+To provide extensibility, the functionality for loading and saving bitmap formats
+is not implemented in the wxBitmap class, but in a number of handler classes,
+derived from wxBitmapHandler. There is a static list of handlers which wxBitmap
+examines when a file load/save operation is requested. Some handlers are provided as standard, but if you
+have special requirements, you may wish to initialise the wxBitmap class with
+some extra handlers which you write yourself or receive from a third party.
+
+To add a handler object to wxBitmap, your application needs to include the header which implements it, and
+then call the static function \helpref{wxBitmap::AddHandler}{wxbitmapaddhandler}. For example:
+
+{\small
+\begin{verbatim}
+  #include "JPEGBitmapHandler.h"
+  ...
+  // Initialisation
+  wxBitmap::AddHandler(new wxJPEGBitmapHandler);
+  ...
+\end{verbatim}
+}
+
+Assuming wxJPEGBitmapHandler has been written correctly, you should now be able to load and save JPEG files
+using the usual wxBitmap API.
+
+To see how bitmap handlers are implemented, please look at the files {\tt bitmap.h} and {\tt bitmap.cpp}.
+
+\subsection{wxIcon overview}\label{wxiconoverview}
+
+TODO.
+

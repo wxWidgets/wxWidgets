@@ -1,0 +1,266 @@
+\section{\class{wxColour}}\label{wxcolour}
+
+A colour is an object representing a combination of Red, Green, and Blue (RGB) intensity values,
+and is used to determine drawing colours. See the
+entry for \helpref{wxColourDatabase}{wxcolourdatabase} for how a pointer to a predefined,
+named colour may be returned instead of creating a new colour.
+
+Valid RGB values are in the range 0 to 255.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxColourDatabase}{wxcolourdatabase}, \helpref{wxPen}{wxpen}, \helpref{wxBrush}{wxbrush},\rtfsp
+\helpref{wxColourDialog}{wxcolourdialog}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxColour::wxColour}\label{wxcolourconstr}
+
+\func{}{wxColour}{\void}
+
+Default constructor.
+
+\func{}{wxColour}{\param{const unsigned char}{ red}, \param{const unsigned char}{ green}, \param{const unsigned char}{ blue}}
+
+Constructs a colour from red, green and blue values.
+
+\func{}{wxColour}{\param{const wxString\& }{colourNname}}
+
+Constructs a colour object using a colour name
+listed in {\bf wxTheColourDatabase}.
+
+\wxheading{Parameters}
+
+\docparam{red}{The red value.}
+
+\docparam{green}{The green value.}
+
+\docparam{blue}{The blue value.}
+
+\docparam{colourName}{The colour name.}
+
+\wxheading{See also}
+
+\helpref{wxColourDatabase}{wxcolourdatabase}
+
+\membersection{wxColour::Blue}\label{wxcolourblue}
+
+\constfunc{unsigned char}{Blue}{\void}
+
+Returns the blue intensity.
+
+\membersection{wxColour::GetPixel}\label{wxcolourgetpixel}
+
+\constfunc{long}{GetPixel}{\void}
+
+Returns a pixel value which is platform-dependent. On Windows, a COLORREF is returned.
+On X, an allocated pixel value is returned.
+
+-1 is returned if the pixel is invalid (on X, unallocated).
+
+\membersection{wxColour::Green}\label{wxcolourgreen}
+
+\constfunc{unsigned char}{Green}{\void}
+
+Returns the green intensity.
+
+\membersection{wxColour::Ok}\label{wxcolourok}
+
+\constfunc{bool}{Ok}{\void}
+
+Returns TRUE if the colour object is valid (the colour has been initialised with RGB values).
+
+\membersection{wxColour::Red}\label{wxcolourred}
+
+\constfunc{unsigned char}{Red}{\void}
+
+Returns the red intensity.
+
+\membersection{wxColour::Set}\label{wxcolourset}
+
+\func{void}{Set}{\param{const unsigned char}{ red}, \param{const unsigned char}{ green}, \param{const unsigned char}{ blue}}
+
+Sets the RGB intensity values.
+
+\membersection{wxColour::operator $=$}\label{wxcolourassign}
+
+\func{wxColour\&}{operator $=$}{\param{const wxColour\&}{ colour}}
+
+Assignment operator, taking another colour object.
+
+\func{wxColour\&}{operator $=$}{\param{const wxString\&}{ colourName}}
+
+Assignment operator, using a colour name to be found in the colour database.
+
+\wxheading{See also}
+
+\helpref{wxColourDatabase}{wxcolourdatabase}
+
+\membersection{wxColour::operator $==$}\label{wxcolourequality}
+
+\func{bool}{operator $==$}{\param{const wxColour\&}{ colour}}
+
+Tests the equality of two colours by comparing individual red, green blue colours.
+
+TODO: this may be different on platforms other than Windows - no reference counting
+is done on Windows.
+
+\membersection{wxColour::operator $!=$}\label{wxcolourinequality}
+
+\func{bool}{operator $!=$}{\param{const wxColour\&}{ colour}}
+
+Tests the inequality of two colours by comparing individual red, green blue colours.
+
+TODO: this may be different on platforms other than Windows - no reference counting
+is done on Windows.
+
+\section{\class{wxColourData}}\label{wxcolourdata}
+
+This class holds a variety of information related to colour dialogs.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxColour}{wxcolour}, \helpref{wxColourDialog}{wxcolourdialog}, \helpref{wxColourDialog overview}{wxcolourdialogoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxColourData::wxColourData}\label{wxcolourdataconstr}
+
+\func{}{wxColourData}{\void}
+
+Constructor. Initializes the custom colours to white, the {\it data colour} setting
+to black, and the {\it choose full} setting to TRUE.
+
+\membersection{wxColourData::\destruct{wxColourData}}
+
+\func{}{\destruct{wxColourData}}{\void}
+
+Destructor.
+
+\membersection{wxColourData::GetChooseFull}\label{wxcolourdatagetchoosefull}
+
+\constfunc{bool}{GetChooseFull}{\void}
+
+Under Windows, determines whether the Windows colour dialog will display the full dialog
+with custom colour selection controls. Has no meaning under other platforms.
+
+The default value is TRUE.
+
+\membersection{wxColourData::GetColour}\label{wxcolourdatagetcolour}
+
+\constfunc{wxColour\&}{GetColour}{\void}
+
+Gets the current colour associated with the colour dialog.
+
+The default colour is black.
+
+\membersection{wxColourData::GetCustomColour}\label{wxcolourdatagetcustomcolour}
+
+\constfunc{wxColour\&}{GetCustomColour}{\param{const int}{ i}}
+
+Gets the {\it i}th custom colour associated with the colour dialog. {\it i} should
+be an integer between 0 and 15.
+
+The default custom colours are all white.
+
+\membersection{wxColourData::SetChooseFull}\label{wxcolourdatasetchoosefull}
+
+\func{void}{SetChooseFull}{\param{const bool }{flag}}
+
+Under Windows, tells the Windows colour dialog to display the full dialog
+with custom colour selection controls. Under other platforms, has no effect.
+
+The default value is TRUE.
+
+\membersection{wxColourData::SetColour}\label{wxcolourdatasetcolour}
+
+\func{void}{SetColour}{\param{const wxColour\&}{ colour}}
+
+Sets the default colour for the colour dialog.
+
+The default colour is black.
+
+\membersection{wxColourData::SetCustomColour}\label{wxcolourdatasetcustomcolour}
+
+\func{void}{SetColour}{\param{const int}{ i}, \param{const wxColour\&}{ colour}}
+
+Sets the {\it i}th custom colour for the colour dialog. {\it i} should
+be an integer between 0 and 15.
+
+The default custom colours are all white.
+
+\membersection{wxColourData::operator $=$}\label{wxcolourdataassign}
+
+\func{void}{operator $=$}{\param{const wxColourData\&}{ data}}
+
+Assingment operator for the colour data.
+
+\section{\class{wxColourDatabase}}\label{wxcolourdatabase}
+
+wxWindows maintains a database of standard RGB colours for a predefined
+set of named colours (such as ``BLACK'', ``LIGHT GREY''). The
+application may add to this set if desired by using {\it Append}.  There
+is only one instance of this class: {\bf wxTheColourDatabase}.
+
+\wxheading{Derived from}
+
+\helpref{wxList}{wxlist}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Remarks}
+
+The colours in the standard database are as follows:
+
+AQUAMARINE, BLACK, BLUE, BLUE VIOLET, BROWN, CADET BLUE, CORAL,
+CORNFLOWER BLUE, CYAN, DARK GREY, DARK GREEN, DARK OLIVE GREEN, DARK
+ORCHID, DARK SLATE BLUE, DARK SLATE GREY DARK TURQUOISE, DIM GREY,
+FIREBRICK, FOREST GREEN, GOLD, GOLDENROD, GREY, GREEN, GREEN YELLOW,
+INDIAN RED, KHAKI, LIGHT BLUE, LIGHT GREY, LIGHT STEEL BLUE, LIME GREEN,
+MAGENTA, MAROON, MEDIUM AQUAMARINE, MEDIUM BLUE, MEDIUM FOREST GREEN,
+MEDIUM GOLDENROD, MEDIUM ORCHID, MEDIUM SEA GREEN, MEDIUM SLATE BLUE,
+MEDIUM SPRING GREEN, MEDIUM TURQUOISE, MEDIUM VIOLET RED, MIDNIGHT BLUE,
+NAVY, ORANGE, ORANGE RED, ORCHID, PALE GREEN, PINK, PLUM, PURPLE, RED,
+SALMON, SEA GREEN, SIENNA, SKY BLUE, SLATE BLUE, SPRING GREEN, STEEL
+BLUE, TAN, THISTLE, TURQUOISE, VIOLET, VIOLET RED, WHEAT, WHITE, YELLOW,
+YELLOW GREEN.
+
+\wxheading{See also}
+
+\helpref{wxColour}{wxcolour}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxColourDatabase::wxColourDatabase}\label{wxcolourdatabaseconstr}
+
+\func{}{wxColourDatabase}{\void}
+
+Constructs the colour database.
+
+\membersection{wxColourDatabase::FindColour}\label{wxcolourdatabasefindcolour}
+
+\func{wxColour*}{FindColour}{\param{const wxString\& }{colourName}}
+
+Finds a colour given the name. Returns NULL if not found.
+
+\membersection{wxColourDatabase::FindName}\label{wxcolourdatabasefindname}
+
+\constfunc{wxString}{FindName}{\param{const wxColour\&}{ colour}}
+
+Finds a colour name given the colour. Returns NULL if not found.
+
+\membersection{wxColourDatabase::Initialize}\label{wxcolourdatabaseinitialize}
+
+\func{void}{Initialize}{\void}
+
+Initializes the database with a number of stock colours.  Called by wxWindows
+on start-up.
+
+

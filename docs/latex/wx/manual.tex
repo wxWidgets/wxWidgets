@@ -1,0 +1,124 @@
+\documentstyle[a4,makeidx,verbatim,texhelp,fancyhea,mysober,mytitle]{report}
+\newcommand{\indexit}[1]{#1\index{#1}}%
+\newcommand{\pipe}[0]{$\|$\ }%
+\definecolour{black}{0}{0}{0}%
+\definecolour{cyan}{0}{255}{255}%
+\definecolour{green}{0}{255}{0}%
+\definecolour{magenta}{255}{0}{255}%
+\definecolour{red}{255}{0}{0}%
+\definecolour{blue}{0}{0}{200}%
+\definecolour{yellow}{255}{255}{0}%
+\definecolour{white}{255}{255}{255}%
+%
+\input psbox.tex
+% Remove this for processing with dvi2ps instead of dvips
+%\special{!/@scaleunit 1 def}
+\parskip=10pt
+\parindent=0pt
+\title{User Manual for wxWindows 2.0: a portable C++ GUI toolkit}
+\winhelponly{\author{by Julian Smart and Markus Holzem
+%\winhelponly{\\$$\image{1cm;0cm}{wxwin.wmf}$$}
+}}
+\winhelpignore{\author{Julian Smart and Markus Holzem}
+\date{October 21st 1997}
+}
+\makeindex
+\begin{document}
+\maketitle
+\pagestyle{fancyplain}
+\bibliographystyle{plain}
+\setheader{{\it CONTENTS}}{}{}{}{}{{\it CONTENTS}}
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+\pagenumbering{roman}
+\tableofcontents
+
+% A special table of contents for the WinHelp manual
+\begin{comment}
+\winhelponly{
+\chapter*{wxWindows class library reference}\label{winhelpcontents}
+
+\center{
+%\image{}{wxwin.wmf}
+}%
+
+\sethotspotcolour{off}%
+\sethotspotunderline{on}%
+\large{
+\image{}{cpp.bmp} \helpref{Alphabetical class reference}{classref}
+
+\image{}{shelves.bmp} \helpref{Classes by category}{classesbycat}
+
+\image{}{book1.bmp} \helpref{Topic overviews}{overviews}
+
+\image{}{hand1.bmp} \helpref{Guide to wxWindows}{wxwinchapters}
+}
+\sethotspotcolour{on}%
+\sethotspotunderline{on}%
+
+\chapter*{Overview of wxWindows}\label{wxwinchapters}
+
+\helpref{Introduction}{introduction}\\
+%\helpref{Resource guide}{resguide}\\
+%\helpref{Comparison with other GUI models}{comparison}\\
+%\helpref{Multi-platform development with wxWindows}{multiplat}\\
+%\helpref{Tutorial}{tutorial}\\
+\helpref{The wxWindows resource system}{resourceformats}\\
+\helpref{Utilities}{utilities}\\
+\helpref{Programming strategies}{strategies}\\
+\helpref{Bugs and future directions}{bugs}\\
+\helpref{References}{bibliography}
+}
+\end{comment}
+
+\chapter*{Copyright notice}
+\setheader{{\it COPYRIGHT}}{}{}{}{}{{\it COPYRIGHT}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+\begin{center}
+Copyright (c) 1997 Julian Smart and Markus Holzem\\
+Portions (c) 1996 Artificial Intelligence Applications Institute\\
+\end{center}
+
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose is hereby granted without fee, provided that the
+above copyright notice, author statement and this permission notice appear in
+all copies of this software and related documentation.
+
+THE SOFTWARE IS PROVIDED ``AS-IS'' AND WITHOUT WARRANTY OF ANY KIND, EXPRESS,
+IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF
+MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+
+IN NO EVENT SHALL THE ARTIFICIAL INTELLIGENCE APPLICATIONS INSTITUTE OR THE
+UNIVERSITY OF EDINBURGH OR JULIAN SMART OR MARKUS HOLZEM BE LIABLE FOR ANY SPECIAL, INCIDENTAL, INDIRECT OR
+CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER OR NOT ADVISED OF THE POSSIBILITY OF
+DAMAGE, AND ON ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH
+THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+\input{body.tex}
+\helpinput{classes.tex}
+\helpinput{category.tex}
+\helpinput{topics.tex}
+
+\newpage
+
+% Puts books in the bibliography without needing to cite them in the
+% text
+\nocite{helpbook}%
+\nocite{wong93}%
+\nocite{pree94}%
+\nocite{gamma95}%
+\nocite{smart95a}%
+\nocite{smart95b}%
+
+\bibliography{refs}
+\addcontentsline{toc}{chapter}{Bibliography}
+\setheader{{\it REFERENCES}}{}{}{}{}{{\it REFERENCES}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+\newpage
+\addcontentsline{toc}{chapter}{Index}
+\setheader{{\it INDEX}}{}{}{}{}{{\it INDEX}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+\printindex
+\end{document}

@@ -1,0 +1,76 @@
+\section{\class{wxMask}}\label{wxmask}
+
+This class encapsulates a monochrome mask bitmap, where the masked area is black and
+the unmasked area is white.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Remarks}
+
+A mask may be associated with a \helpref{wxBitmap}{wxbitmap}. It is used in \helpref{wxDC::Blit}{wxdcblit} when
+the source device context is a \helpref{wxMemoryDC}{wxmemorydc} with wxBitmap selected into it that
+contains a mask.
+
+\wxheading{See also}
+
+\helpref{wxBitmap}{wxbitmap}, \helpref{wxDC::Blit}{wxdcblit}, \helpref{wxMemoryDC}{wxmemorydc}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMask::wxMask}\label{wxmaskconstr}
+
+\func{}{wxMask}{\void}
+
+Default constructor.
+
+\func{}{wxMask}{\param{const wxBitmap\& }{bitmap}}
+
+Constructs a mask from a monochrome bitmap.
+
+\func{}{wxMask}{\param{const wxBitmap\& }{bitmap}, \param{const wxColour\& }{colour}}
+
+Constructs a mask from a bitmap and a colour that indicates the background.
+
+\func{}{wxMask}{\param{const wxBitmap\& }{bitmap}, \param{int}{ index}}
+
+Constructs a mask from a bitmap and a palette index that indicates the background.
+
+\wxheading{Parameters}
+
+\docparam{bitmap}{A valid bitmap.}
+
+\docparam{colour}{A colour specifying the transparency RGB values.}
+
+\docparam{index}{Index into a palette, specifying the transparency colour.}
+
+\membersection{wxMask::\destruct{wxMask}}
+
+\func{}{\destruct{wxMask}}{\void}
+
+Destroys the wxMask object and the underlying bitmap data.
+
+\membersection{wxMask::Create}\label{wxmaskcreate}
+
+\func{bool}{Create}{\param{const wxBitmap\& }{bitmap}}
+
+Constructs a mask from a monochrome bitmap.
+
+\func{bool}{Create}{\param{const wxBitmap\& }{bitmap}, \param{const wxColour\& }{colour}}
+
+Constructs a mask from a bitmap and a colour that indicates the background.
+
+\func{bool}{Create}{\param{const wxBitmap\& }{bitmap}, \param{int}{ index}}
+
+Constructs a mask from a bitmap and a palette index that indicates the background.
+
+\wxheading{Parameters}
+
+\docparam{bitmap}{A valid bitmap.}
+
+\docparam{colour}{A colour specifying the transparency RGB values.}
+
+\docparam{index}{Index into a palette, specifying the transparency colour.}
+
+

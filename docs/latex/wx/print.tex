@@ -1,0 +1,650 @@
+\section{\class{wxPrintData}}\label{wxprintdata}
+
+This class holds a variety of information related to print dialogs.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxPrintDialog}{wxprintdialog}, \helpref{wxPrintDialog Overview}{wxprintdialogoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPrintData::wxPrintData}
+
+\func{}{wxPrintData}{\void}
+
+Constructor.
+
+\membersection{wxPrintData::\destruct{wxPrintData}}
+
+\func{}{\destruct{wxPrintData}}{\void}
+
+Destructor.
+
+\membersection{wxPrintData::EnableHelp}\label{wxprintdataenablehelp}
+
+\func{void}{EnableHelp}{\param{bool }{flag}}
+
+Enables or disables the `Help' button.
+
+\membersection{wxPrintData::EnablePageNumbers}\label{wxprintdataenablepagenumbers}
+
+\func{void}{EnablePageNumbers}{\param{bool }{flag}}
+
+Enables or disables the `Page numbers' controls.
+
+\membersection{wxPrintData::EnablePrintToFile}\label{wxprintdataenableprinttofile}
+
+\func{void}{EnablePrintToFile}{\param{bool }{flag}}
+
+Enables or disables the `Print to file' checkbox.
+
+\membersection{wxPrintData::EnableSelection}\label{wxprintdataenableselection}
+
+\func{void}{EnableSelection}{\param{bool }{flag}}
+
+Enables or disables the `Selection' radio button.
+
+\membersection{wxPrintData::GetAllPages}\label{wxprintdatagetallpages}
+
+\func{bool}{GetAllPages}{\void}
+
+Returns TRUE if the user requested that all pages be printed.
+
+\membersection{wxPrintData::GetCollate}\label{wxprintdatagetcollate}
+
+\func{bool}{GetCollate}{\void}
+
+Returns TRUE if the user requested that the document(s) be collated.
+
+\membersection{wxPrintData::GetFromPage}\label{wxprintdatagetfrompage}
+
+\func{int}{GetFromPage}{\void}
+
+Returns the {\it from} page number, as entered by the user.
+
+\membersection{wxPrintData::GetMaxPage}\label{wxprintdatagetmaxpage}
+
+\func{int}{GetMaxPage}{\void}
+
+Returns the {\it maximum} page number.
+
+\membersection{wxPrintData::GetMinPage}\label{wxprintdatagetminpage}
+
+\func{int}{GetMinPage}{\void}
+
+Returns the {\it minimum} page number.
+
+\membersection{wxPrintData::GetNoCopies}\label{wxprintdatagetnocopies}
+
+\func{int}{GetNoCopies}{\void}
+
+Returns the number of copies requested by the user.
+
+\membersection{wxPrintData::GetOrientation}\label{wxprintdatagetorientation}
+
+\func{int}{GetOrientation}{\void}
+
+Gets the orientation. This can be wxLANDSCAPE or wxPORTRAIT.
+
+\membersection{wxPrintData::GetToPage}\label{wxprintdatagettopage}
+
+\func{int}{GetToPage}{\void}
+
+Returns the {\it to} page number, as entered by the user.
+
+\membersection{wxPrintData::SetCollate}\label{wxprintdatasetcollate}
+
+\func{void}{SetCollate}{\param{bool }{flag}}
+
+Sets the 'Collate' checkbox to TRUE or FALSE.
+
+\membersection{wxPrintData::SetFromPage}\label{wxprintdatasetfrompage}
+
+\func{void}{SetFromPage}{\param{int }{page}}
+
+Sets the {\it from} page number.
+
+\membersection{wxPrintData::SetMaxPage}\label{wxprintdatasetmaxpage}
+
+\func{void}{SetMaxPage}{\param{int }{page}}
+
+Sets the {\it maximum} page number.
+
+\membersection{wxPrintData::SetMinPage}\label{wxprintdatasetminpage}
+
+\func{void}{SetMinPage}{\param{int }{page}}
+
+Sets the {\it minimum} page number.
+
+\membersection{wxPrintData::SetOrientation}\label{wxprintdatasetorientation}
+
+\func{void}{SetOrientation}{\param{int }{orientation}}
+
+Sets the orientation. This can be wxLANDSCAPE or wxPORTRAIT.
+
+\membersection{wxPrintData::SetNoCopies}\label{wxprintdatasetnocopies}
+
+\func{void}{SetNoCopies}{\param{int }{n}}
+
+Sets the default number of copies to be printed out.
+
+\membersection{wxPrintData::SetPrintToFile}\label{wxprintdatasetprinttofile}
+
+\func{void}{SetPrintToFile}{\param{bool }{flag}}
+
+Sets the 'Print to file' checkbox to TRUE or FALSE.
+
+\membersection{wxPrintData::SetSetupDialog}\label{wxprintdatasetsetupdialog}
+
+\func{void}{SetSetupDialog}{\param{bool }{flag}}
+
+Determines whether the dialog to be shown will be the Print dialog
+(pass FALSE) or Print Setup dialog (pass TRUE).
+
+Note that the setup dialog is obsolete from
+Windows 95, though retained for backward compatibility.
+
+\membersection{wxPrintData::SetToPage}\label{wxprintdatasettopage}
+
+\func{void}{SetToPage}{\param{int }{page}}
+
+Sets the {\it to} page number.
+
+\section{\class{wxPrintDialog}}\label{wxprintdialog}
+
+This class represents the print and print setup common dialogs.
+You may obtain a \helpref{wxPrinterDC}{wxprinterdc} device context from
+a successfully dismissed print dialog.
+
+\wxheading{Derived from}
+
+\helpref{wxDialog}{wxdialog}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxPrintDialog Overview}{wxprintdialogoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPrintDialog::wxPrintDialog}
+
+\func{}{wxPrintDialog}{\param{wxWindow* }{parent}, \param{wxPrintData* }{data = NULL}}
+
+Constructor. Pass a parent window, and optionally a pointer to a block of print
+data, which will be copied to the print dialog's print data.
+
+\wxheading{See also}
+
+\helpref{wxPrintData}{wxprintdata}
+
+\membersection{wxPrintDialog::\destruct{wxPrintDialog}}
+
+\func{}{\destruct{wxPrintDialog}}{\void}
+
+Destructor. If wxPrintDialog::GetPrintDC has {\it not} been called,
+the device context obtained by the dialog (if any) will be deleted.
+
+\membersection{wxPrintDialog::GetPrintData}\label{wxprintdialoggetprintdata}
+
+\func{wxPrintData\&}{GetPrintData}{\void}
+
+Returns the \helpref{print data}{wxprintdata} associated with the print dialog.
+
+\membersection{wxPrintDialog::GetPrintDC}\label{wxprintdialoggetprintdc}
+
+\func{wxDC* }{GetPrintDC}{\void}
+
+Returns the device context created by the print dialog, if any.
+When this function has been called, the ownership of the device context
+is transferred to the application, so it must then be deleted
+explicitly.
+
+\membersection{wxPrintDialog::ShowModal}\label{wxprintdialogshowmodal}
+
+\func{int}{ShowModal}{\void}
+
+Shows the dialog, returning wxID\_OK if the user pressed OK, and wxID\_CANCEL
+otherwise. After this function is called, a device context may
+be retrievable using \helpref{wxPrintDialog::GetPrintDC}{wxprintdialoggetprintdc}.
+
+\section{\class{wxPrinter}}\label{wxprinter}
+
+This class represents the Windows or PostScript printer, and is the vehicle through
+which printing may be launched by an application. Printing can also
+be achieved through using of lower functions and classes, but
+this and associated classes provide a more convenient and general
+method of printing.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{Printing framework overview}{printingoverview}, \helpref{wxPrinterDC}{wxprinterdc}, \helpref{wxPrintDialog}{wxprintdialog},\rtfsp
+\helpref{wxPrintout}{wxprintout}, \helpref{wxPrintPreview}{wxprintpreview}.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPrinter::wxPrinter}
+
+\func{}{wxPrinter}{\param{wxPrintData* }{data = NULL}}
+
+Constructor. Pass an optional pointer to a block of print
+data, which will be copied to the printer object's print data.
+
+\wxheading{See also}
+
+\helpref{wxPrintData}{wxprintdata}
+
+\membersection{wxPrinter::\destruct{wxPrinter}}
+
+\func{}{\destruct{wxPrinter}}{\void}
+
+Destructor.
+
+\membersection{wxPrinter::Abort}\label{wxprinterabort}
+
+\func{bool}{Abort}{\void}
+
+Returns TRUE if the user has aborted the print job.
+
+\membersection{wxPrinter::CreateAbortWindow}\label{wxprintercreateabortwindow}
+
+\func{void}{CreateAbortWindow}{\param{wxWindow* }{parent}, \param{wxPrintout* }{printout}}
+
+Creates the default printing abort window, with a cancel button.
+
+\membersection{wxPrinter::GetPrintData}\label{wxprintergetprintdata}
+
+\func{wxPrintData\&}{GetPrintData}{\void}
+
+Returns the \helpref{print data}{wxprintdata} associated with the printer object.
+
+\membersection{wxPrinter::Print}\label{wxprinterprint}
+
+\func{bool}{Print}{\param{wxWindow *}{parent}, \param{wxPrintout *}{printout}, \param{bool }{prompt=TRUE}}
+
+Starts the printing process. Provide a parent window, a user-defined wxPrintout object which controls
+the printing of a document, and whether the print dialog should be invoked first.
+
+Print could return FALSE if there was a problem initializing the printer device context
+(current printer not set, for example).
+
+\membersection{wxPrinter::PrintDialog}\label{wxprinterprintdialog}
+
+\func{bool}{PrintDialog}{\param{wxWindow *}{parent}}
+
+Invokes the print dialog.
+
+\membersection{wxPrinter::ReportError}\label{wxprinterreporterror}
+
+\func{void}{ReportError}{\param{wxWindow *}{parent}, \param{wxPrintout *}{printout}, \param{const wxString\& }{message}}
+
+Default error-reporting function.
+
+\membersection{wxPrinter::Setup}\label{wxprintersetup}
+
+\func{void}{Setup}{\param{wxWindow *}{parent}}
+
+Invokes the print setup dialog. Note that the setup dialog is obsolete from
+Windows 95, though retained for backward compatibility.
+
+\section{\class{wxPrinterDC}}\label{wxprinterdc}
+
+A printer device context is specific to Windows, and allows access to
+any printer with a Windows driver. See \helpref{wxDC}{wxdc} for further information
+on device contexts, and \helpref{wxDC::GetSize}{wxdcgetsize} for advice on
+achieving the correct scaling for the page.
+
+\wxheading{Derived from}
+
+\helpref{wxDC}{wxdc}\\
+\helpref{wxObject}{wxdc}
+
+\wxheading{See also}
+
+\helpref{wxDC}{wxdc}, \helpref{Printing framework overview}{printingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPrinterDC::wxPrinterDC}
+
+\func{}{wxPrinterDC}{\param{const wxString\& }{driver}, \param{const wxString\& }{device}, \param{const wxString\& }{output},
+ \param{const bool }{interactive = TRUE}, \param{const int }{orientation = wxPORTRAIT}}
+
+Constructor. With empty strings for the first three arguments, the default printer dialog is
+displayed. {\it device} indicates the type of printer and {\it output}
+is an optional file for printing to. The {\it driver} parameter is
+currently unused.  Use the {\it Ok} member to test whether the
+constructor was successful in creating a useable device context.
+
+\section{\class{wxPrintout}}\label{wxprintout}
+
+This class encapsulates the functionality of printing out an
+application document. A new class must be derived and members
+overridden to respond to calls such as OnPrintPage and HasPage.
+Instances of this class are passed to wxPrinter::Print or a
+wxPrintPreview object to initiate printing or previewing.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{Printing framework overview}{printingoverview}, \helpref{wxPrinterDC}{wxprinterdc}, \helpref{wxPrintDialog}{wxprintdialog},\rtfsp
+\helpref{wxPrinter}{wxprinter}, \helpref{wxPrintPreview}{wxprintpreview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPrintout::wxPrintout}
+
+\func{}{wxPrintout}{\param{const wxString\& }{title = "Printout"}}
+
+Constructor. Pass an optional title argument (currently unused).
+
+\membersection{wxPrintout::\destruct{wxPrintout}}
+
+\func{}{\destruct{wxPrintout}}{\void}
+
+Destructor.
+
+\membersection{wxPrintout::GetDC}\label{wxprintoutgetdc}
+
+\func{wxDC *}{GetDC}{\void}
+
+Returns the device context associated with the printout (given to the printout at start of
+printing or previewing). This will be a wxPrinterDC if printing under Windows,
+a wxPostScriptDC if printing on other platforms, and a wxMemoryDC if previewing.
+
+\membersection{wxPrintout::GetPageInfo}\label{wxprintoutgetpageinfo}
+
+\func{void}{GetPageInfo}{\param{int *}{minPage}, \param{int *}{maxPage}, \param{int *}{pageFrom}, \param{int *}{pageTo}}
+
+Called by the framework to obtain information from the application about minimum and maximum page values that
+the user can select, and the required page range to be printed. By default this
+returns 1, 32000 for the page minimum and maximum values, and 1, 1 for the required page range.
+
+If {\it minPage} is zero, the page number controls in the print dialog will be disabled.
+
+\membersection{wxPrintout::GetPageSizeMM}\label{wxprintoutgetpagesizemm}
+
+\func{void}{GetPageSizeMM}{\param{int *}{w}, \param{int *}{h}}
+
+Returns the size of the printer page in millimetres.
+
+\membersection{wxPrintout::GetPageSizePixels}\label{wxprintoutgetpagesizepixels}
+
+\func{void}{GetPageSizePixels}{\param{int *}{w}, \param{int *}{h}}
+
+Returns the size of the printer page in pixels. These may not be the
+same as the values returned from \helpref{wxDC::GetSize}{wxdcgetsize} if
+the printout is being used for previewing, since in this case, a
+memory device context is used, using a bitmap size reflecting the current
+preview zoom. The application must take this discrepancy into account if
+previewing is to be supported.
+
+\membersection{wxPrintout::GetPPIPrinter}\label{wxprintoutgetppiprinter}
+
+\func{void}{GetPPIPrinter}{\param{int *}{w}, \param{int *}{h}}
+
+Returns the number of pixels per logical inch of the printer device context.
+Dividing the printer PPI by the screen PPI can give a suitable scaling
+factor for drawing text onto the printer. Remember to multiply
+this by a scaling factor to take the preview DC size into account.
+
+\membersection{wxPrintout::GetPPIScreen}\label{wxprintoutgetppiscreen}
+
+\func{void}{GetPPIScreen}{\param{int *}{w}, \param{int *}{h}}
+
+Returns the number of pixels per logical inch of the screen device context.
+Dividing the printer PPI by the screen PPI can give a suitable scaling
+factor for drawing text onto the printer. Remember to multiply
+this by a scaling factor to take the preview DC size into account.
+
+\membersection{wxPrintout::HasPage}\label{wxprintouthaspage}
+
+\func{bool}{HasPage}{\param{int}{ pageNum}}
+
+Should be overriden to return TRUE if the document has this page, or FALSE
+if not. Returning FALSE signifies the end of the document. By default,
+HasPage behaves as if the document has only one page.
+
+\membersection{wxPrintout::IsPreview}\label{wxprintoutispreview}
+
+\func{bool}{IsPreview}{\void}
+
+Returns TRUE if the printout is currently being used for previewing.
+
+\membersection{wxPrintout::OnBeginDocument}\label{wxprintoutonbegindocument}
+
+\func{bool}{OnBeginDocument}{\param{int}{ startPage}, \param{int}{ endPage}}
+
+Called by the framework at the start of document printing. Return FALSE from
+this function cancels the print job. OnBeginDocument is called once for every
+copy printed.
+
+The base wxPrintout::OnBeginDocument {\it must} be called (and the return value
+checked) from within the overriden function, since it calls wxDC::StartDoc.
+
+\membersection{wxPrintout::OnEndDocument}\label{wxprintoutonenddocument}
+
+\func{void}{OnEndDocument}{\void}
+
+Called by the framework at the end of document printing. OnEndDocument
+is called once for every copy printed.
+
+The base wxPrintout::OnEndDocument {\it must} be called
+from within the overriden function, since it calls wxDC::EndDoc.
+
+\membersection{wxPrintout::OnBeginPrinting}\label{wxprintoutonbeginprinting}
+
+\func{void}{OnBeginPrinting}{\void}
+
+Called by the framework at the start of printing. OnBeginPrinting is called once for every
+print job (regardless of how many copies are being printed).
+
+\membersection{wxPrintout::OnEndPrinting}\label{wxprintoutonendprinting}
+
+\func{void}{OnEndPrinting}{\void}
+
+Called by the framework at the end of printing. OnEndPrinting
+is called once for every print job (regardless of how many copies are being printed).
+
+\membersection{wxPrintout::OnPreparePrinting}\label{wxprintoutonprepareprinting}
+
+\func{void}{OnPreparePrinting}{\void}
+
+Called once by the framework before any other demands are made of the
+wxPrintout object. This gives the object an opportunity to calculate the
+number of pages in the document, for example.
+
+\membersection{wxPrintout::OnPrintPage}\label{wxprintoutonprintpage}
+
+\func{bool}{OnPrintPage}{\param{int}{ pageNum}}
+
+Called by the framework when a page should be printed. Returning FALSE cancels
+the print job. The application can use wxPrintout::GetDC to obtain a device
+context to draw on.
+
+\section{\class{wxPrintPreview}}\label{wxprintpreview}
+
+\overview{Printing framework overview}{printingoverview}
+
+Objects of this class manage the print preview process. The object is passed
+a wxPrintout object, and the wxPrintPreview object itself is passed to
+a wxPreviewFrame object. Previewing is started by initializing and showing
+the preview frame. Unlike wxPrinter::Print, flow of control returns to the application
+immediately after the frame is shown.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\overview{Printing framework overview}{printingoverview}, \helpref{wxPrinterDC}{wxprinterdc}, \helpref{wxPrintDialog}{wxprintdialog},\rtfsp
+\helpref{wxPrintout}{wxprintout}, \helpref{wxPrinter}{wxprinter},\rtfsp
+\helpref{wxPreviewCanvas}{wxpreviewcanvas}, \helpref{wxPreviewControlBar}{wxpreviewcontrolbar},\rtfsp
+\helpref{wxPreviewFrame}{wxpreviewframe}.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPrintPreview::wxPrintPreview}
+
+\func{}{wxPrintPreview}{\param{wxPrintout* }{printout}, \param{wxPrintout* }{printoutForPrinting},
+\param{wxPrintData* }{data=NULL}}
+
+Constructor. Pass a printout object, an optional printout object to be
+used for actual printing, and the address of an optional
+block of printer data, which will be copied to the print preview object's
+print data.
+
+If {\it printoutForPrinting} is non-NULL, a {\bf Print...} button will be placed on the
+preview frame so that the user can print directly from the preview interface.
+
+Do not explicitly delete the printout objects once this destructor has been
+called, since they will be deleted in the wxPrintPreview constructor.
+The same does not apply to the {\it data} argument.
+
+Test the Ok member to check whether the wxPrintPreview object was created correctly.
+Ok could return FALSE if there was a problem initializing the printer device context
+(current printer not set, for example).
+
+\membersection{wxPrintPreview::\destruct{wxPrintPreview}}
+
+\func{}{\destruct{wxPrinter}}{\void}
+
+Destructor. Deletes both print preview objects, so do not destroy these objects
+in your application.
+
+\membersection{wxPrintPreview::DrawBlankPage}\label{wxprintpreviewdrawblankpage}
+
+\func{bool}{DrawBlankPage}{\param{wxWindow* }{window}}
+
+Draws a representation of the blank page into the preview window. Used
+internally.
+
+\membersection{wxPrintPreview::GetCanvas}\label{wxprintpreviewgetcanvas}
+
+\func{wxWindow* }{GetCanvas}{\void}
+
+Gets the preview window used for displaying the print preview image.
+
+\membersection{wxPrintPreview::GetCurrentPage}\label{wxprintpreviewgetcurrentpage}
+
+\func{int}{GetCurrentPage}{\void}
+
+Gets the page currently being previewed.
+
+\membersection{wxPrintPreview::GetFrame}\label{wxprintpreviewgetframe}
+
+\func{wxFrame *}{GetFrame}{\void}
+
+Gets the frame used for displaying the print preview canvas
+and control bar.
+
+\membersection{wxPrintPreview::GetMaxPage}\label{wxprintpreviewgetmaxpage}
+
+\func{int}{GetMaxPage}{\void}
+
+Returns the maximum page number.
+
+\membersection{wxPrintPreview::GetMinPage}\label{wxprintpreviewgetminpage}
+
+\func{int}{GetMinPage}{\void}
+
+Returns the minimum page number.
+
+\membersection{wxPrintPreview::GetPrintData}\label{wxprintpreviewgetprintdata}
+
+\func{wxPrintData\&}{GetPrintData}{\void}
+
+Returns a reference to the internal print data.
+
+\membersection{wxPrintPreview::GetPrintout}\label{wxprintpreviewgetprintout}
+
+\func{wxPrintout *}{GetPrintout}{\void}
+
+Gets the preview printout object associated with the wxPrintPreview object.
+
+\membersection{wxPrintPreview::GetPrintoutForPrinting}\label{wxprintpreviewgetprintoutforprinting}
+
+\func{wxPrintout *}{GetPrintoutForPrinting}{\void}
+
+Gets the printout object to be used for printing from within the preview interface,
+or NULL if none exists.
+
+\membersection{wxPrintPreview::Ok}\label{wxprintpreviewok}
+
+\func{bool}{Ok}{\void}
+
+Returns TRUE if the wxPrintPreview is valid, FALSE otherwise. It could return FALSE if there was a
+problem initializing the printer device context (current printer not set, for example).
+
+\membersection{wxPrintPreview::PaintPage}\label{wxprintpreviewpaintpage}
+
+\func{bool}{PaintPage}{\param{wxWindow* }{window}}
+
+This refreshes the preview window with the preview image.
+It must be called from the preview window's OnPaint member.
+
+The implementation simply blits the preview bitmap onto
+the canvas, creating a new preview bitmap if none exists.
+
+\membersection{wxPrintPreview::Print}\label{wxprintpreviewprint}
+
+\func{bool}{Print}{\param{bool }{prompt}}
+
+Invokes the print process using the second wxPrintout object
+supplied in the wxPrintPreview constructor.
+Will normally be called by the {\bf Print...} panel item on the
+preview frame's control bar.
+
+\membersection{wxPrintPreview::RenderPage}\label{wxprintpreviewrenderpage}
+
+\func{bool}{RenderPage}{\param{int }{pageNum}}
+
+Renders a page into a wxMemoryDC. Used internally by wxPrintPreview.
+
+\membersection{wxPrintPreview::SetCanvas}\label{wxprintpreviewsetcanvas}
+
+\func{void}{SetCanvas}{\param{wxWindow* }{window}}
+
+Sets the window to be used for displaying the print preview image.
+
+\membersection{wxPrintPreview::SetCurrentPage}\label{wxprintpreviewsetcurrentpage}
+
+\func{void}{SetCurrentPage}{\param{int}{ pageNum}}
+
+Sets the current page to be previewed.
+
+\membersection{wxPrintPreview::SetFrame}\label{wxprintpreviewsetframe}
+
+\func{void}{SetFrame}{\param{wxFrame *}{frame}}
+
+Sets the frame to be used for displaying the print preview canvas
+and control bar.
+
+\membersection{wxPrintPreview::SetPrintout}\label{wxprintpreviewsetprintout}
+
+\func{void}{SetPrintout}{\param{wxPrintout *}{printout}}
+
+Associates a printout object with the wxPrintPreview object.
+
+\membersection{wxPrintPreview::SetZoom}\label{wxprintpreviewsetzoom}
+
+\func{void}{SetZoom}{\param{int}{ percent}}
+
+Sets the percentage preview zoom, and refreshes the preview canvas
+accordingly.
+
+

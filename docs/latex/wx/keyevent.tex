@@ -1,0 +1,197 @@
+\section{\class{wxKeyEvent}}\label{wxkeyevent}
+
+This event class contains information about keypress (character) events. See \helpref{wxWindow::OnChar}{wxwindowonchar}.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}
+
+\wxheading{Event table macros}
+
+To process a key event, use these event handler macros to direct input to member
+functions that take a wxKeyEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_CHAR(func)}}{Process a wxEVT\_CHAR event.}
+\twocolitem{{\bf EVT\_CHAR\_HOOK(func)}}{Process a wxEVT\_CHAR\_HOOK event.}
+\end{twocollist}%
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxKeyEvent::m\_altDown}
+
+\member{bool}{m\_altDown}
+
+TRUE if the Alt key is pressed down.
+
+\membersection{wxKeyEvent::m\_controlDown}
+
+\member{bool}{m\_controlDown}
+
+TRUE if control is pressed down.
+
+\membersection{wxKeyEvent::m\_keyCode}
+
+\member{long}{m\_keyCode}
+
+Virtual keycode. An enumerated type, one of:
+
+\begin{verbatim}
+ WXK_BACK    = 8
+ WXK_TAB     = 9
+ WXK_RETURN  = 13
+ WXK_ESCAPE  = 27
+ WXK_SPACE   = 32
+ WXK_DELETE  = 127
+
+ WXK_START   = 300
+ WXK_LBUTTON
+ WXK_RBUTTON
+ WXK_CANCEL
+ WXK_MBUTTON
+ WXK_CLEAR
+ WXK_SHIFT
+ WXK_CONTROL
+ WXK_MENU
+ WXK_PAUSE
+ WXK_CAPITAL
+ WXK_PRIOR
+ WXK_NEXT
+ WXK_END
+ WXK_HOME
+ WXK_LEFT
+ WXK_UP
+ WXK_RIGHT
+ WXK_DOWN
+ WXK_SELECT
+ WXK_PRINT
+ WXK_EXECUTE
+ WXK_SNAPSHOT
+ WXK_INSERT
+ WXK_HELP
+ WXK_NUMPAD0
+ WXK_NUMPAD1
+ WXK_NUMPAD2
+ WXK_NUMPAD3
+ WXK_NUMPAD4
+ WXK_NUMPAD5
+ WXK_NUMPAD6
+ WXK_NUMPAD7
+ WXK_NUMPAD8
+ WXK_NUMPAD9
+ WXK_MULTIPLY
+ WXK_ADD
+ WXK_SEPARATOR
+ WXK_SUBTRACT
+ WXK_DECIMAL
+ WXK_DIVIDE
+ WXK_F1
+ WXK_F2
+ WXK_F3
+ WXK_F4
+ WXK_F5
+ WXK_F6
+ WXK_F7
+ WXK_F8
+ WXK_F9
+ WXK_F10
+ WXK_F11
+ WXK_F12
+ WXK_F13
+ WXK_F14
+ WXK_F15
+ WXK_F16
+ WXK_F17
+ WXK_F18
+ WXK_F19
+ WXK_F20
+ WXK_F21
+ WXK_F22
+ WXK_F23
+ WXK_F24
+ WXK_NUMLOCK
+ WXK_SCROLL 
+\end{verbatim}
+
+\membersection{wxKeyEvent::m\_metaDown}
+
+\member{bool}{m\_metaDown}
+
+TRUE if the Meta key is pressed down.
+
+\membersection{wxKeyEvent::m\_shiftDown}
+
+\member{bool}{m\_shiftDown}
+
+TRUE if shift is pressed down.
+
+\membersection{wxKeyEvent::m\_x}
+
+\member{int}{m\_x}
+
+X position of the event.
+
+\membersection{wxKeyEvent::m\_y}
+
+\member{int}{m\_y}
+
+Y position of the event.
+
+\membersection{wxKeyEvent::wxKeyEvent}
+
+\func{}{wxKeyEvent}{\param{WXTYPE}{ keyEventType}}
+
+Constructor. Currently, the only valid event types are wxEVT\_CHAR and wxEVT\_CHAR\_HOOK.
+
+\membersection{wxKeyEvent::AltDown}
+
+\func{bool}{AltDown}{\void}
+
+Returns TRUE if the Alt key was down at the time of the key event.
+
+\membersection{wxKeyEvent::ControlDown}
+
+\func{bool}{ControlDown}{\void}
+
+Returns TRUE if the control key was down at the time of the key event.
+
+\membersection{wxKeyEvent::GetX}
+
+\func{float}{GetX}{\void}
+
+Returns the X position of the event.
+
+\membersection{wxKeyEvent::GetY}
+
+\func{float}{GetY}{\void}
+
+Returns the Y position of the event.
+
+\membersection{wxKeyEvent::KeyCode}
+
+\func{long}{KeyCode}{\void}
+
+Returns the virtual key code. ASCII events return normal ASCII values,
+while non-ASCII events return values such as {\bf WXK\_LEFT} for the
+left cursor key. See {\tt wx\_defs.h} for a full list of the virtual key codes.
+
+\membersection{wxKeyEvent::MetaDown}
+
+\func{bool}{MetaDown}{\void}
+
+Returns TRUE if the Meta key was down at the time of the key event.
+
+\membersection{wxKeyEvent::Position}
+
+\func{void}{Position}{\param{float *}{x}, \param{float *}{y}}
+
+Obtains the position at which the key was pressed.
+
+\membersection{wxKeyEvent::ShiftDown}
+
+\func{bool}{ShiftDown}{\void}
+
+Returns TRUE if the shift key was down at the time of the key event.
+
+

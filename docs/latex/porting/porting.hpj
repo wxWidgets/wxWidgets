@@ -1,0 +1,17 @@
+[OPTIONS]
+BMROOT=d:\wx2\docs/latex/porting ; Assume that bitmaps are where the source is
+TITLE=wxWindows Porting Guide
+CONTENTS=Contents
+COMPRESS=HIGH
+
+[FILES]
+porting.rtf
+
+[CONFIG]
+CreateButton("Up", "&Up", "JumpId(`porting.hlp', `Contents')")
+BrowseButtons()
+
+[MAP]
+
+[BITMAPS]
+

@@ -1,0 +1,37 @@
+\section{\class{wxControl}}\label{wxcontrol}
+
+This is the base class for a control or `widget'.
+
+A control is generally a small window which processes user input and/or displays one or more item
+of data.
+
+\wxheading{Derived from}
+
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxValidator}{wxvalidator}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxControl::Command}\label{wxcontrolcommand}
+
+\func{void}{Command}{\param{wxCommandEvent\& }{event}}
+
+Simulates the effect of the user issuing a command to the item. See \helpref{wxCommandEvent}{wxcommandevent}.
+
+\membersection{wxControl::GetLabel}\label{wxcontrolgetlabel}
+
+\func{wxString\&}{GetLabel}{\void}
+
+Returns the control's text.
+
+\membersection{wxControl::SetLabel}\label{wxcontrolsetlabel}
+
+\func{void}{SetLabel}{\param{const wxString\& }{label}}
+
+Sets the item's text.
+

@@ -1,0 +1,34 @@
+\section{\class{wxPostScriptDC}}\label{wxpostscriptdc}
+
+This defines the wxWindows Encapsulated PostScript device context,
+which can write PostScript files on any platform. See \helpref{wxDC}{wxdc} for
+descriptions of the member functions.
+
+\wxheading{Derived from}
+
+\helpref{wxDC}{wxdc}\\
+\helpref{wxObject}{wxobject}
+
+\membersection{wxPostScriptDC::wxPostScriptDC}
+
+\func{}{wxPostScriptDC}{\param{const wxString\& }{output}, \param{bool }{interactive = TRUE},\\
+  \param{wxWindow *}{parent}}
+
+Constructor. {\it output} is an optional file for printing to, and if
+\rtfsp{\it interactive} is TRUE a dialog box will be displayed for adjusting
+various parameters. {\it parent} is the parent of the printer dialog box.
+
+Use the {\it Ok} member to test whether the constructor was successful
+in creating a useable device context.
+
+See \helpref{Printer settings}{printersettings} for functions to set and
+get PostScript printing settings.
+
+\membersection{wxPostScriptDC::GetStream}
+
+\func{ostream *}{GetStream}{\void}
+
+Returns the stream currently being used to write PostScript output. Use this
+to insert any PostScript code that is outside the scope of wxPostScriptDC.
+
+

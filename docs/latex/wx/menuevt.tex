@@ -1,0 +1,53 @@
+\section{\class{wxMenuEvent}}\label{wxmenuevent}
+
+This class is used for a variety of menu-related events. Note that
+these do not include menu command events.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Event table macros}
+
+To process a menu event, use these event handler macros to direct input to member
+functions that take a wxMenuEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_MENU\_CHAR(func)}}{Process a wxEVT\_MENU\_CHAR event (a keypress
+when a menu is showing). Windows only. TODO}
+\twocolitem{{\bf EVT\_MENU\_INIT(func)}}{Process a wxEVT\_MENU\_INIT event (the menu
+is about to pop up). Windows only. TODO}
+\twocolitem{{\bf EVT\_MENU\_HIGHLIGHT(func)}}{Process a wxEVT\_MENU\_HIGHLIGHT event (a menu
+item is being highlighted). Windows only.}
+\twocolitem{{\bf EVT\_POPUP\_MENU(func)}}{Process a wxEVT\_POPUP\_MENU event (a menu
+item is being highlighted). Windows only. TODO}
+\twocolitem{{\bf EVT\_CONTEXT\_MENU(func)}}{Process a wxEVT\_CONTEXT\_MENU event (F1 has
+been pressed with a particular menu item highlighted). Windows only. TODO}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{wxWindow::OnMenuHighlight}{wxwindowonmenuhighlight}, \helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMenuEvent::wxMenuEvent}
+
+\func{}{wxMenuEvent}{\param{WXTYPE }{id = 0}, \param{int }{id = 0}, \param{wxDC* }{dc = NULL}}
+
+Constructor.
+
+\membersection{wxMenuEvent::m\_menuId}
+
+\member{int}{m\_menuId}
+
+The relevant menu identifier.
+
+\membersection{wxMenuEvent::GetMenuId}\label{wxmenueventgetmenuid}
+
+\constfunc{int}{GetMenuId}{\void}
+
+Returns the menu identifier associated with the event.
+

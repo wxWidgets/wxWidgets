@@ -1,0 +1,335 @@
+\section{\class{wxDocManager}}\label{wxdocmanager}
+
+The wxDocManager class is part of the document/view framework supported by wxWindows,
+and cooperates with the \helpref{wxView}{wxview}, \helpref{wxDocument}{wxdocument}\rtfsp
+and \helpref{wxDocTemplate}{wxdoctemplate} classes.
+
+\wxheading{Derived from}
+
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxDocManager overview}{wxdocmanageroverview}, \helpref{wxDocument}{wxdocument},\rtfsp
+\helpref{wxView}{wxview}, \helpref{wxDocTemplate}{wxdoctemplate}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDocManager::m\_currentView}
+
+\member{wxView*}{m\_currentView}
+
+The currently active view.
+
+\membersection{wxDocManager::m\_defaultDocumentNameCounter}
+
+\member{int}{m\_defaultDocumentNameCounter}
+
+Stores the integer to be used for the next default document name.
+
+\membersection{wxDocManager::m\_fileHistory}
+
+\member{wxFileHistory*}{m\_fileHistory}
+
+A pointer to an instance of \helpref{wxFileHistory}{wxfilehistory},
+which manages the history of recently-visited files on the File menu.
+
+\membersection{wxDocManager::m\_maxDocsOpen}
+
+\member{int}{m\_maxDocsOpen}
+
+Stores the maximum number of documents that can be opened before
+existing documents are closed. By default, this is 10,000.
+
+\membersection{wxDocManager::m\_docs}
+
+\member{wxList}{m\_docs}
+
+A list of all documents.
+
+\membersection{wxDocManager::m\_flags}
+
+\member{long}{m\_flags}
+
+Stores the flags passed to the constructor.
+
+\membersection{wxDocManager::m\_templates}
+
+\member{wxList}{mnTemplates}
+
+A list of all document templates.
+
+\membersection{wxDocManager::wxDocManager}
+
+\func{void}{wxDocManager}{\param{long}{ flags = wxDEFAULT\_DOCMAN\_FLAGS}, \param{bool}{ initialize = TRUE}}
+
+Constructor. Create a document manager instance dynamically near the start of your application
+before doing any document or view operations.
+
+{\it flags} is currently unused.
+
+If {\it initialize} is TRUE, the \helpref{Initialize}{wxdocmanagerinitialize} function will be called
+to create a default history list object. If you derive from wxDocManager, you may wish to call the
+base constructor with FALSE, and then call Initialize in your own constructor, to allow
+your own Initialize or OnCreateFileHistory functions to be called.
+
+\membersection{wxDocManager::\destruct{wxDocManager}}
+
+\func{void}{\destruct{wxDocManager}}{\void}
+
+Destructor.
+
+\membersection{wxDocManager::ActivateView}
+
+\func{void}{ActivateView}{\param{wxView* }{doc}, \param{bool}{ activate}, \param{bool}{ deleting}}
+
+Sets the current view.
+
+\membersection{wxDocManager::AddDocument}
+
+\func{void}{AddDocument}{\param{wxDocument *}{doc}}
+
+Adds the document to the list of documents.
+
+\membersection{wxDocManager::AddFileToHistory}
+
+\func{void}{AddFileToHistory}{\param{const wxString\& }{filename}}
+
+Adds a file to the file history list, if we have a pointer to an appropriate file menu.
+
+\membersection{wxDocManager::AssociateTemplate}
+
+\func{void}{AssociateTemplate}{\param{wxDocTemplate *}{temp}}
+
+Adds the template to the document manager's template list.
+
+\membersection{wxDocManager::CreateDocument}
+
+\func{wxDocument*}{CreateDocument}{\param{const wxString\& }{path}, \param{long}{ flags}}
+
+Creates a new document in a manner determined by the {\it flags} parameter, which can be:
+
+\begin{itemize}\itemsep=0pt
+\item wxDOC\_NEW Creates a fresh document.
+\item wxDOC\_SILENT Silently loads the given document file.
+\end{itemize}
+
+If wxDOC\_NEW is present, a new document will be created and returned, possibly after
+asking the user for a template to use if there is more than one document template.
+If wxDOC\_SILENT is present, a new document will be created and the given file loaded
+into it. If neither of these flags is present, the user will be presented with
+a file selector for the file to load, and the template to use will be determined by the
+extension (Windows) or by popping up a template choice list (other platforms).
+
+If the maximum number of documents has been reached, this function
+will delete the oldest currently loaded document before creating a new one.
+
+\membersection{wxDocManager::CreateView}
+
+\func{wxView*}{CreateView}{\param{wxDocument*}{doc}, \param{long}{ flags}}
+
+Creates a new view for the given document. If more than one view is allowed for the
+document (by virtue of multiple templates mentioning the same document type), a choice
+of view is presented to the user.
+
+\membersection{wxDocManager::DisassociateTemplate}
+
+\func{void}{DisassociateTemplate}{\param{wxDocTemplate *}{temp}}
+
+Removes the template from the list of templates.
+
+\membersection{wxDocManager::FileHistoryLoad}
+
+\func{void}{FileHistoryLoad}{\param{const wxString\& }{resourceFile}, \param{const wxString\& }{sectionName}}
+
+Loads the file history from a resource file, using the given section. This must be called
+explicitly by the application.
+
+\membersection{wxDocManager::FileHistorySave}
+
+\func{void}{FileHistorySave}{\param{const wxString\& }{resourceFile}, \param{const wxString\& }{sectionName}}
+
+Saves the file history into a resource file, using the given section. This must be called
+explicitly by the application.
+
+\membersection{wxDocManager::FileHistoryUseMenu}
+
+\func{void}{FileHistoryUseMenu}{\param{wxMenu *}{menu}}
+
+Use this menu for appending recently-visited document filenames, for convenient
+access. Calling this function with a valid menu pointer enables the history
+list functionality.
+
+\membersection{wxDocManager::FindTemplateForPath}
+
+\func{wxDocTemplate *}{FindTemplateForPath}{\param{const wxString\& }{path}}
+
+Given a path, try to find template that matches the extension. This is only
+an approximate method of finding a template for creating a document.
+
+\membersection{wxDocManager::GetCurrentDocument}
+
+\func{wxDocument *}{GetCurrentDocument}{\void}
+
+Returns the document associated with the currently active view (if any).
+
+\membersection{wxDocManager::GetCurrentView}
+
+\func{wxView *}{GetCurrentView}{\void}
+
+Returns the currently active view 
+
+\membersection{wxDocManager::GetDocuments}
+
+\func{wxList\&}{GetDocuments}{\void}
+
+Returns a reference to the list of documents.
+
+\membersection{wxDocManager::GetFileHistory}
+
+\func{wxFileHistory *}{GetFileHistory}{\void}
+
+Returns a pointer to file history.
+
+\membersection{wxDocManager::GetMaxDocsOpen}
+
+\func{int}{GetMaxDocsOpen}{\void}
+
+Returns the number of documents that can be open simultaneously.
+
+\membersection{wxDocManager::GetNoHistoryFiles}
+
+\func{int}{GetNoHistoryFiles}{\void}
+
+Returns the number of files currently stored in the file history.
+
+\membersection{wxDocManager::Initialize}\label{wxdocmanagerinitialize}
+
+\func{bool}{Initialize}{\void}
+
+Initializes data; currently just calls OnCreateFileHistory. Some data cannot
+always be initialized in the constructor because the programmer must be given
+the opportunity to override functionality. If OnCreateFileHistory was called
+from the constructor, an overridden virtual OnCreateFileHistory would not be
+called due to C++'s `interesting' constructor semantics. In fact Initialize
+\rtfsp{\it is} called from the wxDocManager constructor, but this can be
+vetoed by passing FALSE to the second argument, allowing the derived class's
+constructor to call Initialize, possibly calling a different OnCreateFileHistory
+from the default.
+
+The bottom line: if you're not deriving from Initialize, forget it and
+construct wxDocManager with no arguments.
+
+\membersection{wxDocManager::MakeDefaultName}
+
+\func{bool}{MakeDefaultName}{\param{const wxString\& }{buf}}
+
+Copies a suitable default name into {\it buf}. This is implemented by
+appending an integer counter to the string {\bf unnamed} and incrementing
+the counter.
+
+\membersection{wxDocManager::OnCreateFileHistory}
+
+\func{wxFileHistory *}{OnCreateFileHistory}{\void}
+
+A hook to allow a derived class to create a different type of file history. Called
+from \helpref{Initialize}{wxdocmanagerinitialize}.
+
+\membersection{wxDocManager::OnFileClose}
+
+\func{void}{OnFileClose}{\void}
+
+Closes and deletes the currently active document.
+
+\membersection{wxDocManager::OnFileNew}
+
+\func{void}{OnFileNew}{\void}
+
+Creates a document from a list of templates (if more than one template).
+
+\membersection{wxDocManager::OnFileOpen}
+
+\func{void}{OnFileOpen}{\void}
+
+Creates a new document and reads in the selected file.
+
+\membersection{wxDocManager::OnFileSave}
+
+\func{void}{OnFileSave}{\void}
+
+Saves the current document by calling wxDocument::Save for the current document.
+
+\membersection{wxDocManager::OnFileSaveAs}
+
+\func{void}{OnFileSaveAs}{\void}
+
+Calls wxDocument::SaveAs for the current document.
+
+\membersection{wxDocManager::OnMenuCommand}
+
+\func{void}{OnMenuCommand}{\param{int}{ cmd}}
+
+Processes menu commands routed from child or parent frames. This deals
+with the following predefined menu item identifiers:
+
+\begin{itemize}\itemsep=0pt
+\item wxID\_OPEN Creates a new document and opens a file into it.
+\item wxID\_CLOSE Closes the current document.
+\item wxID\_NEW Creates a new document.
+\item wxID\_SAVE Saves the document.
+\item wxID\_SAVE\_AS Saves the document into a specified filename.
+\end{itemize}
+
+Unrecognized commands are routed to the currently active wxView's OnMenuCommand.
+
+\membersection{wxDocManager::RemoveDocument}
+
+\func{void}{RemoveDocument}{\param{wxDocument *}{doc}}
+
+Removes the document from the list of documents.
+
+\membersection{wxDocManager::SelectDocumentPath}
+
+\func{wxDocTemplate *}{SelectDocumentPath}{\param{wxDocTemplate **}{templates},
+ \param{int}{ noTemplates}, \param{const wxString\& }{path}, \param{const wxString\& }{bufSize},
+ \param{long}{ flags}, \param{bool}{ save}}
+
+Under Windows, pops up a file selector with a list of filters corresponding to document templates.
+The wxDocTemplate corresponding to the selected file's extension is returned.
+
+On other platforms, if there is more than one document template a choice list is popped up,
+followed by a file selector.
+
+This function is used in wxDocManager::CreateDocument.
+
+\membersection{wxDocManager::SelectDocumentType}
+
+\func{wxDocTemplate *}{SelectDocumentType}{\param{wxDocTemplate **}{templates},
+ \param{int}{ noTemplates}}
+
+Returns a document template by asking the user (if there is more than one template).
+This function is used in wxDocManager::CreateDocument.
+
+\membersection{wxDocManager::SelectViewType}
+
+\func{wxDocTemplate *}{SelectViewType}{\param{wxDocTemplate **}{templates},
+ \param{int}{ noTemplates}}
+
+Returns a document template by asking the user (if there is more than one template),
+displaying a list of valid views. This function is used in wxDocManager::CreateView.
+The dialog normally won't appear because the array of templates only contains
+those relevant to the document in question, and often there will only be one such.
+
+\membersection{wxDocManager::SetMaxDocsOpen}
+
+\func{void}{SetMaxDocsOpen}{\param{int}{ n}}
+
+Sets the maximum number of documents that can be open at a time. By default, this
+is 10,000. If you set it to 1, existing documents will be saved and deleted
+when the user tries to open or create a new one (similar to the behaviour
+of Windows Write, for example). Allowing multiple documents gives behaviour
+more akin to MS Word and other Multiple Document Interface applications.
+
+
+

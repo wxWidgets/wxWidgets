@@ -1,0 +1,217 @@
+\section{\class{wxList}}\label{wxlist}
+
+This class provides linked list functionality for wxWindows, and for an application
+if it wishes.  Depending on the form of constructor used, a list can be keyed on
+integer or string keys to provide a primitive look-up ability. See \helpref{wxHashTable}{wxhashtable}\rtfsp
+for a faster method of storage when random access is required.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Example}
+
+It is very common to iterate on a list as follows:
+
+\begin{verbatim}
+  ...
+  wxPoint *point1 = new wxPoint(100, 100);
+  wxPoint *point2 = new wxPoint(200, 200);
+
+  wxList SomeList;
+  SomeList.Append(point1);
+  SomeList.Append(point2);
+
+  ...
+
+  wxNode *node = SomeList.First();
+  while (node)
+  {
+    wxPoint *point = (wxPoint *)node->Data();
+    ...
+    node = node->Next();
+  }
+\end{verbatim}
+
+To delete nodes in a list as the list is being traversed, replace
+
+\begin{verbatim}
+    ...
+    node = node->Next();
+    ...
+\end{verbatim}
+
+with
+
+\begin{verbatim}
+    ...
+    delete point;
+    delete node;
+    node = SomeList.First();
+    ...
+\end{verbatim}
+
+See \helpref{wxNode}{wxnode} for members that retrieve the data associated with a node, and
+members for getting to the next or previous node.
+
+Note that a cast is required when retrieving the data from a node.  Although a
+node is defined to store objects of type {\bf wxObject} and derived types, other
+types (such as char*) may be used with appropriate casting.
+
+\wxheading{See also}
+
+\helpref{wxNode}{wxnode}, \helpref{wxStringList}{wxstringlist}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxList::wxList}
+
+\func{}{wxList}{\void}
+
+\func{}{wxList}{\param{unsigned int}{ key\_type}}
+
+\func{}{wxList}{\param{int}{ n}, \param{wxObject *}{objects[]}}
+
+\func{}{wxList}{\param{wxObject *}{object}, ...}
+
+Constructors. {\it key\_type} is one of wxKEY\_NONE, wxKEY\_INTEGER, or wxKEY\_STRING,
+and indicates what sort of keying is required (if any).
+
+{\it objects} is an array of {\it n} objects with which to initialize the list.
+
+The variable-length argument list constructor must be supplied with a
+terminating NULL.
+
+\membersection{wxList::\destruct{wxList}}
+
+\func{}{\destruct{wxList}}{\void}
+
+Destroys the list.  Also destroys any remaining nodes, but does not destroy
+client data held in the nodes.
+
+\membersection{wxList::Append}
+
+\func{wxNode *}{Append}{\param{wxObject *}{object}}
+
+\func{wxNode *}{Append}{\param{long}{ key}, \param{wxObject *}{object}}
+
+\func{wxNode *}{Append}{\param{const wxString\& }{key}, \param{wxObject *}{object}}
+
+Appends a new {\bf wxNode} to the end of the list and puts a pointer to the
+\rtfsp{\it object} in the node.  The last two forms store a key with the object for
+later retrieval using the key. The new node is returned in each case.
+
+The key string is copied and stored by the list implementation.
+
+\membersection{wxList::Clear}
+
+\func{void}{Clear}{\void}
+
+Clears the list (but does not delete the client data stored with each node).
+
+\membersection{wxList::DeleteContents}
+
+\func{void}{DeleteContents}{\param{bool}{ destroy}}
+
+If {\it destroy} is TRUE, instructs the list to call {\it delete} on the client contents of
+a node whenever the node is destroyed. The default is FALSE.
+
+\membersection{wxList::DeleteNode}
+
+\func{bool}{DeleteNode}{\param{wxNode *}{node}}
+
+Deletes the given node from the list, returning TRUE if successful.
+
+\membersection{wxList::DeleteObject}
+
+\func{bool}{DeleteObject}{\param{wxObject *}{object}}
+
+Finds the given client {\it object} and deletes the appropriate node from the list, returning
+TRUE if successful. The application must delete the actual object separately.
+
+\membersection{wxList::Find}
+
+\func{wxNode *}{Find}{\param{long}{ key}}
+
+\func{wxNode *}{Find}{\param{const wxString\& }{key}}
+
+Returns the node whose stored key matches {\it key}. Use on a keyed list only.
+
+\membersection{wxList::First}
+
+\func{wxNode *}{First}{\void}
+
+Returns the first node in the list (NULL if the list is empty).
+
+\membersection{wxList::Insert}
+
+\func{wxNode *}{Insert}{\param{wxObject *}{object}}
+
+Insert object at front of list.
+
+\func{wxNode *}{Insert}{\param{wxNode *}{position}, \param{wxObject *}{object}}
+
+Insert object before {\it position}.
+
+
+\membersection{wxList::Last}
+
+\func{wxNode *}{Last}{\void}
+
+Returns the last node in the list (NULL if the list is empty).
+
+\membersection{wxList::Member}
+
+\func{wxNode *}{Member}{\param{wxObject *}{object}}
+
+Returns the node associated with {\it object} if it is in the list, NULL otherwise.
+
+\membersection{wxList::Nth}
+
+\func{wxNode *}{Nth}{\param{int}{ n}}
+
+Returns the {\it nth} node in the list, indexing from zero (NULL if the list is empty
+or the nth node could not be found).
+
+\membersection{wxList::Number}
+
+\func{int}{Number}{\void}
+
+Returns the number of elements in the list.
+
+\membersection{wxList::Sort}
+
+\func{void}{Sort}{\param{wxSortCompareFunction}{ compfunc}}
+
+\begin{verbatim}
+  // Type of compare function for list sort operation (as in 'qsort')
+  typedef int (*wxSortCompareFunction)(const void *elem1, const void *elem2);
+\end{verbatim}
+
+Allows the sorting of arbitrary lists by giving
+a function to compare two list elements. We use the system {\bf qsort} function
+for the actual sorting process. The sort function receives pointers to wxObject pointers (wxObject **),
+so be careful to dereference appropriately.
+
+Example:
+
+\begin{verbatim}
+  int listcompare(const void *arg1, const void *arg2)
+  {
+    return(compare(**(wxString **)arg1,    // use the wxString 'compare'
+                   **(wxString **)arg2));  // function 
+  }
+
+  void main()
+  {
+    wxList list;
+
+    list.Append(new wxString("DEF"));
+    list.Append(new wxString("GHI"));
+    list.Append(new wxString("ABC"));
+    list.Sort(listcompare);
+  }
+\end{verbatim}
+
+

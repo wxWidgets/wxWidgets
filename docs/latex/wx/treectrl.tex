@@ -1,0 +1,387 @@
+\section{\class{wxTreeCtrl}}\label{wxtreectrl}
+
+A tree control presents information as a hierarchy, with items that may be expanded
+to show further items. Items in a tree control are referenced by long integer handles.
+
+To intercept events from a tree control, use the event table macros described in \helpref{wxTreeEvent}{wxtreeevent}.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxTR\_HAS\_BUTTONS}}{Use this style to show + and - buttons to the
+left of parent items.}
+\twocolitem{\windowstyle{wxTR\_EDIT\_LABELS}}{Use this style if you wish the user to be
+able to edit labels in the tree control.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{See also}
+
+\helpref{wxTreeCtrl overview}{wxtreectrloverview}, \helpref{wxListBox}{wxlistbox}, \helpref{wxListCtrl}{wxlistctrl},\rtfsp
+\helpref{wxImageList}{wximagelist}, \helpref{wxTreeEvent}{wxtreeevent}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTreeCtrl::wxTreeCtrl}\label{wxtreectrlconstr}
+
+\func{}{wxTreeCtrl}{\void}
+
+Default constructor.
+
+\func{}{wxTreeCtrl}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id},\rtfsp
+\param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{const long}{ style = wxTR\_HAS\_BUTTONS}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
+
+Constructor, creating and showing a tree control.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then the window is sized
+appropriately.}
+
+\docparam{style}{Window style. See \helpref{wxTreeCtrl}{wxtreectrl}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxTreeCtrl::Create}{wxtreectrlcreate}, \helpref{wxValidator}{wxvalidator}
+
+\membersection{wxTreeCtrl::\destruct{wxTreeCtrl}}
+
+\func{void}{\destruct{wxTreeCtrl}}{\void}
+
+Destructor, destroying the list control.
+
+\membersection{wxTreeCtrl::Create}\label{wxtreectrlcreate}
+
+\func{bool}{wxTreeCtrl}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id},\rtfsp
+\param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{const long}{ style = wxTR\_HAS\_BUTTONS}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
+
+Creates the tree control. See \helpref{wxTreeCtrl::wxTreeCtrl}{wxtreectrlconstr} for further details.
+
+\membersection{wxTreeCtrl::DeleteAllItems}\label{wxtreectrldeleteallitems}
+
+\func{bool}{DeleteAllItems}{\void}
+
+Deletes all the items in the control.
+
+\membersection{wxTreeCtrl::DeleteItem}\label{wxtreectrldeleteitem}
+
+\func{bool}{DeleteItem}{\param{const long }{item}}
+
+Deletes the specified item.
+
+\membersection{wxTreeCtrl::Edit}\label{wxtreectrledit}
+
+\func{wxTextCtrl\&}{Edit}{\param{const long }{item}}
+
+Starts editing the label of the given item, returning the text control that the tree control uses for editing.
+
+\membersection{wxTreeCtrl::EnsureVisible}\label{wxtreectrlensurevisible}
+
+\func{bool}{EnsureVisible}{\param{const long }{item}}
+
+Scrolls and/or expands items to ensure that the given item is visible.
+
+\membersection{wxTreeCtrl::ExpandItem}\label{wxtreectrlexpanditem}
+
+\func{bool}{ExpandItem}{\param{const long }{item}, \param{const int }{action}}
+
+Expands the given item.
+
+{\it action} may be one of:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxTREE\_EXPAND\_EXPAND}}{Expands the item.}
+\twocolitem{\windowstyle{wxTREE\_EXPAND\_COLLAPSE}}{Collapses the item.}
+\twocolitem{\windowstyle{wxTREE\_EXPAND\_COLLAPSE\_RESET}}{Collapses the item and removes the child items.}
+\twocolitem{\windowstyle{wxTREE\_EXPAND\_TOGGLE}}{Expands if the item is collapsed, collapses if the item is expanded.}
+\end{twocollist}
+
+\membersection{wxTreeCtrl::GetChild}\label{wxtreectrlgetchild}
+
+\constfunc{long}{GetChild}{\param{const long }{item}}
+
+Call this function to retrieve the tree view item that is the first child of the item specified by {\it item}.
+
+\membersection{wxTreeCtrl::GetCount}\label{wxtreectrlgetcount}
+
+\constfunc{int}{GetCount}{\void}
+
+Returns the number of items in the control.
+
+\membersection{wxTreeCtrl::GetEditControl}\label{wxtreectrlgeteditcontrol}
+
+\constfunc{wxTextCtrl\&}{GetEditControl}{\void}
+
+Returns the edit control used to edit a label.
+
+\membersection{wxTreeCtrl::GetFirstVisibleItem}\label{wxtreectrlgetfirstvisibleitem}
+
+\constfunc{long}{GetFirstVisibleItem}{\void}
+
+Returns the first visible item.
+
+\membersection{wxTreeCtrl::GetImageList}\label{wxtreectrlgetimagelist}
+
+\constfunc{wxImageList*}{GetImageList}{\param{const int }{which = wxIMAGE\_LIST\_NORMAL}}
+
+Returns the specified image list. {\it which} may be one of:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxIMAGE\_LIST\_NORMAL}}{The normal (large icon) image list.}
+\twocolitem{\windowstyle{wxIMAGE\_LIST\_SMALL}}{The small icon image list.}
+\twocolitem{\windowstyle{wxIMAGE\_LIST\_STATE}}{The user-defined state image list (unimplemented).}
+\end{twocollist}
+
+\membersection{wxTreeCtrl::GetIndent}\label{wxtreectrlgetindent}
+
+\constfunc{int}{GetIndent}{\void}
+
+Returns the current tree control indentation.
+
+\membersection{wxTreeCtrl::GetItem}\label{wxtreectrlgetitem}
+
+\constfunc{bool}{GetItem}{\param{wxTreeItem\& }{info}}
+
+Gets information about the item. See \helpref{wxTreeCtrl::SetItem}{wxtreectrlsetitem} for more
+information.
+
+\membersection{wxTreeCtrl::GetItemData}\label{wxtreectrlgetitemdata}
+
+\constfunc{long}{GetItemData}{\param{const long }{item}}
+
+Returns the client data associated with the item, if any.
+
+\membersection{wxTreeCtrl::GetItemRect}\label{wxtreectrlgetitemrect}
+
+\constfunc{bool}{GetItemRect}{\param{const long }{item}, \param{wxRect\& }{rect}, \param{bool }{textOnly = FALSE}}
+
+Returns the position and size of the rectangle bounding the item.
+
+\membersection{wxTreeCtrl::GetItemState}\label{wxtreectrlgetitemstate}
+
+\constfunc{int}{GetItemState}{\param{const long }{item}, \param{const long }{stateMask}}
+
+Gets the item state. For a list of state flags, see \helpref{wxTreeCtrl::SetItem}{wxtreectrlsetitem}.
+
+\membersection{wxTreeCtrl::GetItemText}\label{wxtreectrlgetitemtext}
+
+\constfunc{wxString}{GetItemText}{\param{const long }{item}}
+
+Returns the item label.
+
+\membersection{wxTreeCtrl::GetNextItem}\label{wxtreectrlgetnextitem}
+
+\constfunc{long}{GetNextItem}{\param{const long }{item}, \param{int }{code}}
+
+Searches for an item using the given criterion, starting from {\it item}.
+
+Returns the item or 0 if unsuccessful.
+
+{\it code} can be one of:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxTREE\_NEXT\_CARET}{Retrieves the currently selected item.}
+\twocolitem{wxTREE\_NEXT\_CHILD}{Retrieves the first child item. The hItem parameter must be NULL.}
+\twocolitem{wxTREE\_NEXT\_DROPHILITE}{Retrieves the item that is the target of a drag-and-drop operation.}
+\twocolitem{wxTREE\_NEXT\_FIRSTVISIBLE}{Retrieves the first visible item.}
+\twocolitem{wxTREE\_NEXT\_NEXT}{Retrieves the next sibling item.}
+\twocolitem{wxTREE\_NEXT\_NEXTVISIBLE}{Retrieves the next visible item that follows the specified item.}
+\twocolitem{wxTREE\_NEXT\_PARENT}{Retrieves the parent of the specified item.}
+\twocolitem{wxTREE\_NEXT\_PREVIOUS}{Retrieves the previous sibling item.}
+\twocolitem{wxTREE\_NEXT\_PREVIOUSVISIBLE}{Retrieves the first visible item that precedes the specified item.}
+\twocolitem{wxTREE\_NEXT\_ROOT}{Retrieves the first child item of the root item of which the specified item is a part.}
+\end{twocollist}
+
+\membersection{wxTreeCtrl::GetNextVisibleItem}\label{wxtreectrlgetnextvisibleitem}
+
+\constfunc{long}{GetNextVisibleItem}{\param{const long }{item}}
+
+Returns the next visible item.
+
+\membersection{wxTreeCtrl::GetParent}\label{wxtreectrlgetparent}
+
+\constfunc{long}{GetParent}{\param{const long }{item}}
+
+Returns the item's parent.
+
+\membersection{wxTreeCtrl::GetRootItem}\label{wxtreectrlgetrootitem}
+
+\constfunc{long}{GetRootItem}{\void}
+
+Returns the root item for the tree control.
+
+\membersection{wxTreeCtrl::GetSelection}\label{wxtreectrlgetselection}
+
+\constfunc{long}{GetSelection}{\void}
+
+Returns the selection, or 0 if there is no selection.
+
+\membersection{wxTreeCtrl::HitTest}\label{wxtreectrlhittest}
+
+\func{long}{HitTest}{\param{const wxPoint\& }{point}, \param{int\& }{flags}}
+
+Calculates which (if any) item is under the given point, returning extra information
+in {\it flags}. {\it flags} is a bitlist of the following:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxTREE\_HITTEST\_ABOVE}{Above the client area.}
+\twocolitem{wxTREE\_HITTEST\_BELOW}{Below the client area.}
+\twocolitem{wxTREE\_HITTEST\_NOWHERE}{In the client area but below the last item.}
+\twocolitem{wxTREE\_HITTEST\_ONITEMBUTTON}{On the button associated with an item.}
+\twocolitem{wxTREE\_HITTEST\_ONITEMICON}{On the bitmap associated with an item.}
+\twocolitem{wxTREE\_HITTEST\_ONITEMINDENT}{In the indentation associated with an item.}
+\twocolitem{wxTREE\_HITTEST\_ONITEMLABEL}{On the label (string) associated with an item.}
+\twocolitem{wxTREE\_HITTEST\_ONITEMRIGHT}{In the area to the right of an item.}
+\twocolitem{wxTREE\_HITTEST\_ONITEMSTATEICON}{On the state icon for a tree view item that is in a user-defined state.}
+\twocolitem{wxTREE\_HITTEST\_TOLEFT}{To the right of the client area.}
+\twocolitem{wxTREE\_HITTEST\_TORIGHT}{To the left of the client area.}
+\end{twocollist}
+
+\membersection{wxTreeCtrl::InsertItem}\label{wxtreectrlinsertitem}
+
+\func{long}{InsertItem}{\param{const long }{parent}, \param{wxTreeItem\& }{info}, \param{const long }{insertAfter = wxTREE\_INSERT\_LAST}}
+
+Inserts an item. For more information on {\it info}, see \helpref{wxTreeCtrl::SetItem}{wxtreectrlsetitem}.
+
+\func{long}{InsertItem}{\param{const long }{parent}, \param{const wxString\& }{label}, \param{const int }{image = -1}, \param{const int }{selImage = -1}, \param{const long }{insertAfter = wxTREE\_INSERT\_LAST}}
+
+Inserts an item.
+
+If {\it image} > -1 and {\it selImage} is -1, the same image is used for
+both selected and unselected items.
+
+\membersection{wxTreeCtrl::ItemHasChildren}\label{wxtreectrlitemhaschildren}
+
+\constfunc{bool}{ItemHasChildren}{\param{const long }{item}}
+
+Returns TRUE if the item has children.
+
+\membersection{wxTreeCtrl::ScrollTo}\label{wxtreectrlscrollto}
+
+\func{bool}{ScrollTo}{\param{const long }{item}}
+
+selects the specified item and scrolls the item into view,
+
+\membersection{wxTreeCtrl::SelectItem}\label{wxtreectrlselectitem}
+
+\func{bool}{SelectItem}{\param{const long }{item}}
+
+Selects the given item.
+
+\membersection{wxTreeCtrl::SetIndent}\label{wxtreectrlsetindent}
+
+\func{void}{SetIndent}{\param{int }{indent}}
+
+Sets the indentation for the tree control.
+
+\membersection{wxTreeCtrl::SetImageList}\label{wxtreectrlsetimagelist}
+
+\func{void}{SetImageList}{\param{wxImageList*}{ imageList}, \param{const int }{which = wxIMAGE\_LIST\_NORMAL}}
+
+Sets the image list. {\it which} should be one of wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL and
+wxIMAGE\_LIST\_STATE.
+
+\membersection{wxTreeCtrl::SetItem}\label{wxtreectrlsetitem}
+
+\func{bool}{SetItem}{\param{wxTreeItem\& }{info}}
+
+Sets the properties of the item.
+
+The members of wxTreeItem are as follows:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{m\_mask}{A bitlist specifying the valid members. See below for mask flags.}
+\twocolitem{m\_itemId}{The item identifier.}
+\twocolitem{m\_state}{The item state. See below for state flags.}
+\twocolitem{m\_stateMask}{A bitlist specifying the valid contents of {\it m\_state}. These flags
+are taken from the same set of symbols as {\it m\_state}.}
+\twocolitem{m\_text}{The item label.}
+\twocolitem{m\_image}{The item image index (an index into the appropriate image list).}
+\twocolitem{m\_selectedImage}{The item selected index (an index into the appropriate image list).}
+\twocolitem{m\_children}{The number of child items that this item has.}
+\twocolitem{m\_data}{The application-defined data associated with this item.}
+\end{twocollist}
+
+Valid mask flags are:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxTREE\_MASK\_HANDLE}{The {\it m\_itemId} member is valid.}
+\twocolitem{wxTREE\_MASK\_STATE}{The {\it m\_state} member is valid.}
+\twocolitem{wxTREE\_MASK\_TEXT}{The {\it m\_text} member is valid.}
+\twocolitem{wxTREE\_MASK\_IMAGE}{The {\it m\_image} member is valid.}
+\twocolitem{wxTREE\_MASK\_SELECTED\_IMAGE}{The {\it m\_selectedImage} member is valid.}
+\twocolitem{wxTREE\_MASK\_CHILDREN}{The {\it m\_children} member is valid.}
+\twocolitem{wxTREE\_MASK\_DATA}{The {\it m\_data} member is valid.}
+\end{twocollist}
+
+Valid state and state mask flags are:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxTREE\_STATE\_BOLD}{The label is emboldened.}
+\twocolitem{wxTREE\_STATE\_DROPHILITED}{The item indicates it is a drop target.}
+\twocolitem{wxTREE\_STATE\_EXPANDED}{The item is expanded.}
+\twocolitem{wxTREE\_STATE\_EXPANDEDONCE}{The item's list of child items has been expanded at least once.}
+\twocolitem{wxTREE\_STATE\_FOCUSED}{The item has the focus, so it is surrounded by a standard focus rectangle.
+Only one item can have the focus.}
+\twocolitem{wxTREE\_STATE\_SELECTED}{The item is selected.}
+\twocolitem{wxTREE\_STATE\_CUT}{The item is selected as part of a cut and paste operation.}
+\end{twocollist}
+
+\membersection{wxTreeCtrl::SetItemImage}\label{wxtreectrlsetitemimage}
+
+\func{bool}{SetItemImage}{\param{const long }{item}, \param{const int }{image}, \param{const int }{selImage}}
+
+Sets the item image and selected image. These are indices into the assciated image list.
+
+\membersection{wxTreeCtrl::SetItemState}\label{wxtreectrlsetitemstate}
+
+\func{bool}{SetItemState}{\param{const long }{item}, \param{const long }{state}, \param{const long }{stateMask}}
+
+Sets the item state. See \helpref{wxTreeCtrl::SetItem}{wxtreectrlsetitem} for valid state and state mask flags.
+
+\membersection{wxTreeCtrl::SetItemText}\label{wxtreectrlsetitemtext}
+
+\func{void}{SetItemText}{\param{const long }{item}, \param{const wxString\& }{text}}
+
+Sets the item label.
+
+\membersection{wxTreeCtrl::SetItemData}\label{wxtreectrlsetitemdata}
+
+\func{bool}{SetItemData}{\param{const long }{item}, \param{long }{data}}
+
+Sets the item client data.
+
+\membersection{wxTreeCtrl::SortChildren}\label{wxtreectrlsortchildren}
+
+\func{bool}{SortChildren}{\param{const long }{item}}
+
+Sorts the children of the given item in ascending alphabetical order.
+

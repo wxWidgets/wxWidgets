@@ -1,0 +1,924 @@
+\chapter{Introduction}\label{introduction}
+\pagenumbering{arabic}%
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+\section{What is wxWindows?}
+
+wxWindows is a C++ framework providing GUI (Graphical User
+Interface) and other facilities on more than one platform.  It currently
+supports subsets of Motif, Xt and MS Windows (16-bit, Windows 95 and Windows NT).
+
+wxWindows was originally developed at the Artificial Intelligence
+Applications Institute, University of Edinburgh, for internal use.
+wxWindows has been released into the public domain in the hope
+that others will also find it useful. Version 2.0 is written and
+maintained by Julian Smart and Markus Holzem, with support from users.
+
+This manual discusses wxWindows in the context of multi-platform
+development.\helpignore{For more detail on the wxWindows version 2.0 API
+(Application Programming Interface) please refer to the separate
+wxWindows reference manual.}
+
+Please note that in the following, ``MS Windows" often refers to all
+platforms related to Microsoft Windows, including 16-bit and 32-bit
+variants, unless otherwise stated. All trademarks are acknowledged.
+
+\section{Why another cross-platform development tool?}
+
+wxWindows was developed to provide a cheap and flexible way to maximize
+investment in GUI application development.  While a number of commercial
+class libraries already exist for cross-platform development,
+none met all of the following criteria:
+
+\begin{enumerate}\itemsep=0pt
+\item low price;
+\item source availability;
+\item simplicity of programming;
+\item support for a wide range of compilers.
+\end{enumerate}
+
+As public domain software and a project open to everyone, wxWindows has
+benefited from comments, ideas, bug fixes, enhancements and the sheer
+enthusiasm of users, especially via the Internet. This gives wxWindows a
+certain advantage over its commercial brothers, and a robustness against
+the transience of one individual or company. This openness and
+availability of source code is especially important when the future of
+thousands of lines of application code may depend upon the longevity of
+the underlying class library.
+
+In writing wxWindows, completeness has sometimes been traded for
+portability and simplicity of programming. Version 2.0 goes much
+further than previous versions in terms of generality and features,
+allowing applications to be produced
+that are often indistinguishable from those produced using single-platform
+toolkits
+such as Motif and MFC.
+
+wxWindows 2.0 currently maps to two native APIs: Motif and
+MS Windows. An Xt port is also in preparation.
+
+The importance of using a platform-independent class library cannot be
+overstated, since GUI application development is very time-consuming,
+and sustained popularity of particular GUIs cannot be guaranteed.
+Code can very quickly become obsolete if it addresses the wrong
+platform or audience.  wxWindows helps to insulate the programmer from
+these winds of change. Although wxWindows may not be suitable for
+every application, it provides access to most of the functionality a
+GUI program normally requires, plus some extras such as form
+construction, interprocess communication and PostScript output, and
+can of course be extended as needs dictate.  As a bonus, it provides
+a cleaner programming interface than the native
+APIs. Programmers may find it worthwhile to use wxWindows even if they
+are developing on only one platform.
+
+It is impossible to sum up the functionality of wxWindows in a few paragraphs, but
+here are some of the benefits:
+
+\begin{itemize}\itemsep=0pt
+\item Low cost (free, in fact!)
+\item You get the source.
+\item Several example programs.
+\item Over 200 pages of printable and on-line documentation.
+\item Simple-to-use, object-oriented API.
+\item Graphics calls include splines, polylines, rounded rectangles, etc.
+\item Constraint-based layout option.
+\item Print/preview and document/view architectures.
+\item Status line facility, toolbar
+\item Easy, object-oriented interprocess comms (DDE subset) under UNIX and
+MS Windows.
+\item Encapsulated PostScript generation under UNIX, normal MS Windows printing on the
+PC.
+\item MDI support under Windows.
+\item Can be used to create DLLs under Windows, dynamic libraries on the Sun.
+\item Common dialogs for file browsing, printing, colour selection, etc.
+\item Under MS Windows, support for creating metafiles and copying
+them to the clipboard.
+\item Hypertext help facility, with an API for invocation from applications.
+\item Dialog Editor for building dialogs.
+\end{itemize}
+
+\section{Changes from version 1.xx}\label{versionchanges}
+
+These are a few of the major differences between versions 1.xx and 2.0.
+
+Removals:
+
+\begin{itemize}\itemsep=0pt
+\item XView is no longer supported;
+\item Mac is not yet supported;
+\item all controls (panel items) no longer have labels attached to them;
+\item wxForm removed;
+\item wxCanvasDC, wxPanelDC removed (replaced by wxClientDC, wxWindowDC, wxPaintDC which
+can be used for any window);
+\item wxMultiText, wxTextWindow, wxText removed and replaced by wxTextCtrl;
+\item classes no longer divided into generic and platform-specific parts, for efficiency.
+\end{itemize}
+
+Additions and changes:
+
+\begin{itemize}\itemsep=0pt
+\item class hierarchy changed, and restrictions about subwindow nesting lifted;
+\item header files reorganised to conform to normal C++ standards;
+\item classes less dependent on each another, to reduce executable size;
+\item wxString used instead of char* wherever possible;
+\item the number of separate but mandatory utilities reduced;
+\item the event system has been overhauled, with
+virtual functions and callbacks being replaced with MFC-like event tables;
+\item new controls, such as wxTreeCtrl, wxListCtrl, wxSpinButton;
+\item less inconsistency about what events can be handled, so for example
+mouse clicks or key presses on controls can now be intercepted;
+\item the status bar is now a separate class, wxStatusBar, and is
+implemented in generic wxWindows code;
+\item some renaming of controls for greater consistency;
+\item wxBitmap has the notion of bitmap handlers to allow for extension to new formats
+without ifdefing;
+\item new dialogs: wxPageSetupDialog, wxFileDialog, wxDirDialog,
+wxMessageDialog, wxSingleChoiceDialog, wxTextEntryDialog;
+\item GDI objects are reference-counted and are now passed to most functions
+by reference, making memory management far easier;
+\item wxSystemSettings class allows querying for various system-wide properties
+such as dialog font, colours, user interface element sizes, and so on;
+\item better platform look and feel conformance;
+\item toolbar functionality now separated out into a family of classes with the
+same API;
+\item device contexts are no longer accessed using wxWindow::GetDC - they are created
+temporarily with the window as an argument;
+\item events from sliders and scrollbars can be handled more flexibly;
+\item the handling of window close events has been changed in line with the new
+event system, but backward {\bf OnClose} compatibility has been retained;
+\item the concept of {\it validator} has been added to allow much easier coding of
+the relationship between controls and application data;
+\item the documentation has been revised, with more cross-referencing.
+\end{itemize}
+
+Platform-specific changes:
+
+\begin{itemize}\itemsep=0pt
+\item The Windows header file (windows.h) is no longer included by wxWindows headers;
+\item wx.dll supported under Visual C++;
+\item the full range of Windows 95 window decorations are supported, such as modal frame
+borders;
+\item MDI classes brought out of wxFrame into separate classes, and made more flexible.
+\end{itemize}
+
+\section{wxWindows requirements}\label{requirements}
+
+To make use of wxWindows, you currently need one or both of the
+following setups.
+
+(a) PC:
+
+\begin{enumerate}\itemsep=0pt
+\item A 486 or higher PC running MS Windows.
+\item One of Microsoft Visual C++, Borland C++, Watcom C++, MetroWerks C++,
+Symantec C++, GNU-WIN32.
+\item At least 30 MB of disk space.
+\end{enumerate}
+
+(b) UNIX:
+
+\begin{enumerate}\itemsep=0pt
+\item Almost any C++ compiler, including GNU C++.
+\item Almost any UNIX workstation (VMS is supported too) and Motif 1.2 or higher (not necessary
+for the Xt version)
+\item At least 30 MB of disk space.
+\end{enumerate}
+
+\section{Availability and location of wxWindows}
+
+wxWindows is currently available from the Artificial Intelligence
+Applications Institute by anonymous FTP and World Wide Web:
+
+\begin{verbatim}
+  ftp://ftp.aiai.ed.ac.uk/pub/packages/wxwin
+  http://web.ukonline.co.uk/julian.smart/wxwin
+\end{verbatim}
+
+\section{Acknowledgments}
+
+Thanks are due to the AIAI for being willing to release wxWindows into
+the public domain, and to our patient wives Harriet and Tanja.
+
+The Internet has been an essential prop when coming up against tricky
+problems. Thanks to those who answered our
+queries or submitted bug fixes and enhancements; wxWindows is very
+much a team effort.
+
+Hermann Dunkel contributed XPM support; Arthur Seaton wrote the memory
+checking code; Olaf Klein and Patrick Halke wrote the ODBC classes;
+Harri Pasanen and Robin Dunn wrote wxPython and contributed to the
+wxExtend library.
+
+Markus Holzem write the Xt port. Jonathan Tonberg, Bill Hale,
+Cecil Coupe, Thomaso Paoletti, Thomas Fettig, and others slaved away
+writing the Mac port.  Keith Gary Boyce ported wxWindows to the free
+GNU-WIN32 compiler, refusing to give up when shortcuts were suggested.
+
+Many thanks also to: Timothy Peters, Jamshid Afshar, Patrick Albert, C. Buckley,
+Robin Corbet, Harco de Hilster, Josep Fortiana, Torsten Liermann, Tatu
+M\"{a}nnist\"{o}, Ian Perrigo, Giordano Pezzoli, Petr Smilauer, Neil Smith,
+Kari Syst\"{a}, Jyrki Tuomi, Edward Zimmermann, Ian Brown, and many
+others.
+
+`Graphplace', the basis for the wxGraphLayout library, is copyright Dr. Jos
+T.J. van Eijndhoven of Eindhoven University of Technology. The code has
+been used in wxGraphLayout with his permission.
+
+We also acknowledge the author of XFIG, the excellent UNIX drawing tool,
+from the source of which we have borrowed some spline drawing code.
+His copyright is included below.
+
+{\it XFig2.1 is copyright (c) 1985 by Supoj Sutanthavibul. Permission to
+use, copy, modify, distribute, and sell this software and its
+documentation for any purpose is hereby granted without fee, provided
+that the above copyright notice appear in all copies and that both that
+copyright notice and this permission notice appear in supporting
+documentation, and that the name of M.I.T. not be used in advertising or
+publicity pertaining to distribution of the software without specific,
+written prior permission.  M.I.T. makes no representations about the
+suitability of this software for any purpose.  It is provided ``as is''
+without express or implied warranty.}
+
+\chapter{Multi-platform development with wxWindows}\label{multiplat}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+This chapter describes the practical details of using wxWindows. Please
+see the file install.txt for up-to-date installation instructions, and
+changes.txt for differences between versions.
+
+\section{Include files}
+
+The main include file is {\tt "wx.h"}; this includes the most commonly
+used modules of wxWindows.
+
+To save on compilation time, include only those header files relevant to the
+source file. If you are using precompiled headers, you should include
+the following section before any other includes:
+
+\begin{verbatim}
+// For compilers that support precompilation, includes "wx.h".
+#include "wx_prec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+... include minimum set of files necessary here ...
+#endif
+
+... now your other include files ...
+\end{verbatim}
+
+The file {\tt "wx\_prec.h"} includes {\tt "wx.h"}. Although this incantation
+may seem quirky, it is in fact the end result of a lot of experimentation,
+and several Windows compilers to use precompilation (those tested are Microsoft Visual C++, Borland C++
+and Watcom C++).
+
+Borland precompilation is largely automatic. Visual C++ requires specification of {\tt "wx\_prec.h"} as
+the file to use for precompilation. Watcom C++ is automatic apart from the specification of
+the .pch file. Watcom C++ is strange in requiring the precompiled header to be used only for
+object files compiled in the same directory as that in which the precompiled header was created.
+Therefore, the wxWindows Watcom C++ makefiles go through hoops deleting and recreating
+a single precompiled header file for each module, thus preventing an accumulation of many
+multi-megabyte .pch files.
+
+\section{Libraries}
+
+Under UNIX, use the library libwx\_motif.a
+(Motif).  Under Windows, use the library wx.lib for stand-alone Windows
+applications, or wxdll.lib for creating DLLs.
+
+\section{Configuration}
+
+The following lists the options configurable in the file
+\rtfsp{\tt include/base/wx\_setup.h.} Some settings are a matter
+of taste, some help with platform-specific problems, and
+others can be set to minimize the size of the library.
+
+\subsection{General features}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{USE\_CLIPBOARD}{If 1, clipboard code is compiled (Windows only).}
+\twocolitem{USE\_CONSTRAINTS}{If 1, the constaint-based window layout system is compiled.}
+\twocolitem{USE\_DOC\_VIEW\_ARCHITECTURE}{If 1, wxDocument, wxView and related classes are compiled.}
+\twocolitem{USE\_DYNAMIC\_CLASSES}{If 1, the run-time class macros and classes are compiled. Recommended,
+and necessary for the document/view framework.}
+\twocolitem{USE\_EXTENDED\_STATICS}{If 1, wxStaticItem code is compiled for enhanced panel decorative items.
+Not rigorously tested, and not documented.}
+\twocolitem{USE\_HELP}{If 1, interface to help system is compiled.}
+\twocolitem{USE\_GAUGE}{If 1, the wxGauge class compiled.}
+\twocolitem{USE\_GLOBAL\_MEMORY\_OPERATORS}{If 1, redefines global new and delete operators to be compatible
+with the extended arguments of the debugging wxObject new and delete operators. If this causes problems
+for your compiler, set to 0.}
+\twocolitem{USE\_GNU\_WXSTRING}{If 1, the enhanced GNU wxString and regular expression class are compiled
+in place of the normal wxString class. See contrib/wxstring for details.}
+\twocolitem{USE\_IMAGE\_LOADING\_IN\_MSW}{Use code to allow dynamic .BMP loading
+under MS Windows.}
+\twocolitem{USE\_IMAGE\_LOADING\_IN\_X}{Use code in utils/image to allow dynamic .BMP/.GIF loading
+under X.}
+\twocolitem{USE\_RESOURCE\_LOADING\_IN\_MSW}{Use code to allow dynamic .ICO/.CUR loading
+under MS Windows.}
+\twocolitem{USE\_IPC}{If 1, interprocess communication code is compiled.}
+\twocolitem{USE\_MEMORY\_TRACING}{If 1, enables debugging versions of wxObject::new and wxObject::delete
+if the value of DEBUG is defined to more than 0.}
+\twocolitem{USE\_METAFILE}{If 1, Windows Metafile code is compiled.}
+\twocolitem{USE\_PANEL\_IN\_PANEL}{If 1, experimental panel-in-panel code is used
+for common dialog boxes. Not recommended, since tab traversal can suffer.}
+\twocolitem{USE\_POSTSCRIPT}{If 1, PostScript code is compiled.}
+\twocolitem{USE\_POSTSCRIPT\_ARCHITECTURE\_IN\_MSW}{Set to 1 to enable the printing architecture
+to make use of either native Windows printing facilities, or the wxPostScriptDC class depending
+on the wxApp::SetPrintMode setting.}
+\twocolitem{USE\_PRINTING\_ARCHITECTURE}{If 1, wxPrinter, wxPrintout and related classes are compiled
+for the print/preview framework.}
+\twocolitem{USE\_RESOURCES}{If 1, win.ini or .Xdefaults-style resource read/write code is compiled.}
+\twocolitem{USE\_SCROLLBAR}{If 1, wxScrollBar class is compiled. Not rigorously tested, and not documented.}
+\twocolitem{USE\_SPLINES}{If 1, spline code is compiled.}
+\twocolitem{USE\_TOOLBAR}{If 1, the wxToolBar class is compiled.}
+\twocolitem{USE\_TYPEDEFS}{If 1, a typedef will be used for wxPoint instead of
+a class declaration, to reduce overhead and avoid a Microsoft C++ memory bug.}
+\twocolitem{USE\_VLBOX}{If 1, wxVirtListBox code is compiled for a virtual listbox item.
+Not rigorously tested, and not documented.}
+\twocolitem{USE\_WX\_RESOURCES}{If 1, wxWindows resource file (.WXR) code is compiled.}
+\twocolitem{USE\_XFIG\_SPLINE\_CODE}{If 1, XFig-derived code is used for spline
+drawing. If 0, AIAI code is used, which is slower.}
+\twocolitem{USE\_XPM\_IN\_X}{If 1, XPM (colour pixmap) facilities will be compiled and used
+in wxBitmap under X.}
+\twocolitem{USE\_XPM\_IN\_MSW}{If 1, XPM (colour pixmap) facilities will be compiled and used
+in wxBitmap under MS Windows.}
+\end{twocollist}
+
+\subsection{X features}
+
+\begin{twocollist}
+\twocolitem{DEFAULT\_FILE\_SELECTOR\_SIZE}{Let Motif choose the size of
+XmFileSelectionBox. Otherwise, size is 500x600.}
+\twocolitem{PIXEL0\_DISABLE}{Define to disallow allocation of pixel 0 (wxXOR problem).}
+\twocolitem{USE\_GADGETS}{Use gadgets where possible rather than Widgets for items.
+Default is to use Gadgets.}
+\twocolitem{USE\_BUTTON\_GADGET}{Use gadgets for buttons. This can intefere with
+default button selection, so the default is zero.}
+\end{twocollist}
+
+\subsection{Windows and NT features}
+
+\begin{twocollist}
+\twocolitem{CTL3D}{CTL3D should only be used for 16-bit Windows programs.
+On Windows 95 and NT, native 3D effects are used. If you want to
+use it and don't already have CTL3D installed, copy the files in
+contrib/ctl3d to appropriate places (ctl3dv2.lib/ctl3d32.lib into your compiler lib
+directory, ctl3d.h into an include directory, and ctl3dv2.dll into
+windows/system). You may need to find a compiler-specific version of ctl3dv2.lib
+or ctl3d32.lib. Define CTL3D to be 1 in wx\_setup.h and link your executables with ctl3dv2.lib
+or ctl3d32.lib.}
+\twocolitem{USE\_ITSY\_BITSY}{If 1, compiles in code to support tiny window titlebars.}
+\twocolitem{USE\_ODBC}{If 1, compiles wxDatabase and wxRecordSet classes for ODBC
+access. Requires sql.h, sqlext.h files if set to 1 (see topic on database support).}
+\end{twocollist}
+
+\section{Makefiles}
+
+At the moment there is no attempt to make UNIX makefiles and
+PC makefiles compatible, i.e. one makefile is required for
+each environment.
+
+Sample makefiles for UNIX (suffix .UNX), MS C++ (suffix .DOS and .NT), Borland
+C++ (.BCC) and Symantec C++ (.SC) are included for the library, demos
+and utilities. The NT, Borland and Symantec makefiles cannot be
+guaranteed to be up-to-date since the author does not have
+these compilers.
+
+The controlling makefile for wxWindows is in the platform-specific
+directory, such as {\tt src/msw} or {\tt src/x}. This makefile will
+recursively execute the makefile in {\tt src/base}.
+
+\subsection{Windows makefiles}
+
+For Microsoft C++, normally it is only necessary to type {\tt nmake -f
+makefile.dos} (or an alias or batch file which does this). By default,
+binaries are made with debugging information, and no optimization. Use
+FINAL=1 on the command line to remove debugging information (this only
+really necessary at the link stage), and DLL=1 to make a DLL version of
+the library, if building a library.
+
+\subsection{UNIX makefiles}
+
+TODO.
+
+Debugging information is included by default; you may add DEBUG= as an
+argument to make to compile without it, or use the UNIX {\bf strip}
+command to remove debugging information from an executable.
+
+\normalbox{{\it Important note:} Most compiler flags are kept centrally in
+src/make.env, which is included by all other makefiles. This is the
+file to edit to tailor wxWindows compilation to your environment.}
+
+\section{Windows-specific files}
+
+wxWindows application compilation under MS Windows requires at least two
+extra files, resource and module definition files.
+
+\subsection{Resource file}\label{resources}
+
+The least that must be defined in the Windows resource file (extension RC)
+is the following statement:
+
+\begin{verbatim}
+rcinclude wx.rc
+\end{verbatim}
+
+which includes essential internal wxWindows definitions.  The resource script
+may also contain references to icons, cursors, etc., for example:
+
+\begin{verbatim}
+wxicon icon wx.ico
+\end{verbatim}
+
+The icon can then be referenced by name when creating a frame icon. See
+the MS Windows SDK documentation.
+
+\normalbox{Note: include wx.rc {\it after} any ICON statements
+so programs that search your executable for icons (such
+as the Program Manager) find your application icon first.}
+
+\subsection{Module definition file}
+
+A module definition file (extension DEF) looks like the following:
+
+\begin{verbatim}
+NAME         Hello
+DESCRIPTION  'Hello'
+EXETYPE      WINDOWS
+STUB         'WINSTUB.EXE'
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE MULTIPLE
+HEAPSIZE     1024
+STACKSIZE    8192
+\end{verbatim}
+
+The only lines which will usually have to be changed per application are
+NAME and DESCRIPTION.
+
+\section{Memory models and memory allocation}\label{memorymodels}
+
+Under UNIX, memory allocation isn't a problem. Under Windows, the only
+really viable way to go is to use the large model, which uses the global
+heap instead of the local heap for memory allocation. Unless more than
+one read-write data segment is used,% (see \helpref{large data}{largedata}
+large model programs may still have multiple instances under MS
+C/C++ 7. Microsoft give the following guidelines for producing
+multiple-instance large model programs:
+
+\begin{itemize}\itemsep=0pt
+\item Do not use {\tt /ND} to name extra data segments unless the segment is READONLY.
+\item Use the .DEF file to mark extra data segments READONLY.
+\item Do not use \_\_far or FAR to mark data items.
+\item Use {\tt /PACKDATA} to combine data segments.
+\item Use {\tt /Gt65500 /Gx} to force all data into the default data segment.
+\end{itemize}
+
+Even with the single-instance limitation, the productivity benefit is
+worth it in the majority of cases. Note that some other multi-platform
+class libraries also have this restriction. (If more than one instance
+really is required, create several copies of the program with different
+names.)
+
+Having chosen the large model, just use C++ `new', `delete' (and if
+necessary `malloc' and `free') in the normal way. The only restrictions
+now encountered are a maximum of 64 KB for a single program segment and
+for a single data item, unless huge model is selected.
+
+For Borland users, use the data threshold switch, and the following is
+also recommended:
+
+\begin{itemize}\itemsep=0pt
+\item Check ``Automatic Far Data Segments"
+\item Check ``Put Constant Strings into Code Segment"
+\end{itemize}
+
+See also the Frequently Asked Questions document for further details
+on using Borland with wxWindows.
+
+\subsection{Allocating and deleting wxWindows objects}
+
+In general, classes derived from wxWindow must dynamically allocated
+with {\it new} and deleted with {\it delete}. If you delete a window,
+all of its children and descendants will be automatically deleted,
+so you don't need to delete these descendants explicitly.
+
+Don't statically create a window unless you know that the window
+cannot be deleted dynamically. Modal dialogs, such as those used
+in the {\tt dialogs} sample, can usually be created statically,
+if you know that the OK or Cancel button does not destroy the dialog.
+
+Most drawing objects, such as wxPen, wxBrush, wxFont, and wxBitmap, should be
+created dynamically. They are cleaned up automatically on program exit.
+wxColourMap is an exception to this rule (currently). In particular,
+do not attempt to create these objects globally before OnInit() has a chance
+to be called, because wxWindows might not have done essential internal initialisation
+(including creation of lists containing all instances of wxPen, wxBrush etc.)
+
+If you decide to allocate a C++ array of objects (such as wxBitmap) that may
+be cleaned up by wxWindows, make sure you delete the array explicitly
+before wxWindows has a chance to do so on exit, since calling {\it delete} on
+array members will cause memory problems.
+
+wxColour can be created statically: it is not automatically cleaned
+up and is unlikely to be shared between other objects; it is lightweight
+enough for copies to be made.
+
+Beware of deleting objects such as a wxPen or wxBitmap if they are still in use.
+Windows is particularly sensitive to this: so make sure you
+make calls like wxDC::SetPen(NULL) or wxDC::SelectObject(NULL) before deleting
+a drawing object that may be in use. Code that doesn't do this will probably work
+fine on some platforms, and then fail under Windows.
+
+\section{Dynamic Link Libraries}
+
+wxWindows may be used to produce DLLs which run under MS Windows. Note that
+this is not the same thing as having wxWindows as a DLL, which is not
+currently possible. For Microsoft C++, use the makefile with the argument DLL=1 to produce
+a version of the wxWindows library which may be used in a DLL application.
+There is a bug in Microsoft C++ which makes the compiler complain about returned floats,
+which goes away when the {\tt /Os} option is used, which is why that flag is
+set in the makefile.
+
+For making wxWindows as a Sun dynamic library, there are comments in the
+UNIX makefile for the appropriate flags for AT\&T C++. Sorry, I haven't
+investigated the flags needed for other compilers.
+
+\section{Conditional compilation}
+
+One of the purposes of wxWindows is to reduce the need for conditional
+compilation in source code, which can be messy and confusing to follow.
+However, sometimes it is necessary to incorporate platform-specific
+features (such as metafile use under MS Windows). The following identifiers
+may be used for this purpose, along with any user-supplied ones:
+
+\begin{itemize}
+\item {\tt wx\_x} - for code which should work under any X toolkit
+\item {\tt wx\_motif} - for code which should work under Motif only
+\item {\tt wx\_msw} - for code which should work under Microsoft Windows only
+\item {\tt wx\_xt} - for code which should work under Xt only
+\end{itemize}
+
+For example:
+
+\begin{verbatim}
+  ...
+#ifdef wx_x
+  (void)wxMessageBox("Sorry, metafiles not available under X.");
+#endif
+#ifdef wx_msw
+  wxMetaFileDC dc;
+  DrawIt(dc);
+  wxMetaFile *mf = dc.Close();
+  mf->SetClipboard();
+  delete mf;
+#endif
+  ...
+\end{verbatim}
+
+\section{Building on-line help}
+
+wxWindows has its own help system from version 1.30: wxHelp. It can be
+used to view the wxWindows class library reference, and also to provide
+on-line help for your wxWindows applications. The API, made accessible
+by including {\tt wx\_help.h}, allows you to load files and display
+specific sections, using DDE to communicate between the application and
+wxHelp.
+
+wxHelp files can be marked up by hand from ASCII files within wxHelp,
+or may be generated from other files, as is the case with the wxWindows
+documentation.
+
+It is possible to use the platform-specific help
+system (e.g. WinHelp) instead of wxHelp.
+
+See {\tt install.txt}, the wxHelp documentation (in {\tt
+utils/wxhelp/docs}) and \helpref{wxHelp}{wxhelp} for further details.
+
+\section{C++ issues}
+
+There are cases where a C++ program will compile and run fine under one
+environment, and then fail to compile using a different compiler. Some
+caveats are given below, from experience with the GNU C++ compiler (GCC)
+and MS C/C++ compiler version 7.
+
+\subsection{Templates}
+
+wxWindows does not use templates for two main reasons: one, it is a
+notoriously unportable feature, and two, the author is irrationally
+suspicious of them and prefers to use casts. More compilers are
+now implementing templates, and so it will probably be safe to use
+them soon without fear of portability problems.
+
+\subsection{Precompiled headers}
+
+Some compilers, such as Borland C++ and Microsoft C++, support
+precompiled headers. This can save a great deal of compiling time. The
+recommended approach is to precompile {\tt ``wx.h''}, using this
+precompiled header for compiling both wxWindows itself and any
+wxWindows applications. For Windows compilers, two dummy source files
+are provided (one for normal applications and one for creating DLLs)
+to allow initial creation of the precompiled header.
+
+However, there are several downsides to using precompiled headers. One
+is that to take advantage of the facility, you often need to include
+more header files than would normally be the case. This means that
+changing a header file will cause more recompilations (in the case of
+wxWindows, everything needs to be recompiled since everything includes
+{\tt ``wx.h''}!)
+
+A related problem is that for compilers that don't have precompiled
+headers, including a lot of header files slows down compilation
+considerably. For this reason, you will find (in the common
+X and Windows parts of the library) conditional
+compilation that under UNIX, includes a minimal set of headers;
+and when using Visual C++, includes {\tt wx.h}. This should help provide
+the optimal compilation for each compiler, although it is
+biassed towards the precompiled headers facility available
+in Microsoft C++.
+
+\section{File handling}
+
+When building an application which may be used under different
+environments, one difficulty is coping with documents which may be
+moved to different directories on other machines. Saving a file which
+has pointers to full pathnames is going to be inherently unportable. One
+approach is to store filenames on their own, with no directory
+information.  The application searches through a number of locally
+defined directories to find the file. To support this, the class {\bf
+wxPathList} makes adding directories and searching for files easy, and
+the global function {\bf FileNameFromPath} allows the application to
+strip off the filename from the path if the filename must be stored.
+This has undesirable ramifications for people who have documents of the
+same name in different directories.
+
+As regards the limitations of DOS 8+3 single-case filenames versus
+unrestricted UNIX filenames, the best solution is to use DOS filenames
+for your application, and also for document filenames {\it if} the user
+is likely to be switching platforms regularly. Obviously this latter
+choice is up to the application user to decide.  Some programs (such as
+YACC and LEX) generate filenames incompatible with DOS; the best
+solution here is to have your UNIX makefile rename the generated files
+to something more compatible before transferring the source to DOS.
+Transferring DOS files to UNIX is no problem, of course, apart from EOL
+conversion for which there should be a utility available (such as
+dos2unix).
+
+See also the File Functions section of the reference manual for
+descriptions of miscellaneous file handling functions.
+
+\chapter{Utilities supplied with wxWindows}\label{utilities}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+A number of `extras' are supplied with wxWindows, to complement
+the GUI functionality in the main class library. These are found
+below the utils directory and usually have their own source, library
+and documentation directories. For larger user-contributed packages,
+see the directory /pub/packages/wxwin/contrib.
+
+\section{wxHelp}\label{wxhelp}
+
+wxHelp is a stand-alone program, written using wxWindows,
+for displaying hypertext help. It is necessary since not all target
+systems (notably X) supply an adequate
+standard for on-line help. wxHelp is modelled on the MS Windows help
+system, with contents, search and browse buttons, but does not reformat
+text to suit the size of window, as WinHelp does, and its input files
+are uncompressed ASCII with some embedded font commands and an .xlp
+extension. Most wxWindows documentation (user manuals and class
+references) is supplied in wxHelp format, and also in Windows Help
+format.
+
+Note that an application can be programmed to use Windows Help under
+MS Windows, and wxHelp under X. An alternative help viewer under X is
+Mosaic, a World Wide Web viewer that uses HTML as its native hypertext
+format. However, this is not currently integrated with wxWindows
+applications.
+
+wxHelp works in two modes---edit and end-user. In edit mode, an ASCII
+file may be marked up with different fonts and colours, and divided into
+sections. In end-user mode, no editing is possible, and the user browses
+principally by clicking on highlighted blocks.
+
+When an application invokes wxHelp, subsequent sections, blocks or
+files may be viewed using the same instance of wxHelp since the two
+programs are linked using wxWindows interprocess communication
+facilities. When the application exits, that application's instance of
+wxHelp may be made to exit also.  See the {\bf wxHelpInstance} entry in the
+reference section for how an application controls wxHelp.
+
+\section{Tex2RTF}\label{textortf}
+
+Supplied with wxWindows is a utility called Tex2RTF for converting\rtfsp
+\LaTeX\ manuals to the following formats:
+
+\begin{description}
+\item[wxHelp]
+wxWindows help system format (XLP).
+\item[Linear RTF]
+Rich Text Format suitable for importing into a word processor.
+\item[Windows Help RTF]
+Rich Text Format suitable for compiling into a WinHelp HLP file with the
+help compiler.
+\item[HTML]
+HTML is the native format for Mosaic, the main hypertext viewer for
+the World Wide Web. Since it is freely available it is a good candidate
+for being the wxWindows help system under X, as an alternative to wxHelp.
+\end{description}
+
+Tex2RTF is used for the wxWindows manuals and can be used independently
+by authors wishing to create on-line and printed manuals from the same\rtfsp
+\LaTeX\ source.  Please see the separate documentation for Tex2RTF.
+
+\section{wxTreeLayout}
+
+This is a simple class library for drawing trees in a reasonably pretty
+fashion. It provides only minimal default drawing capabilities, since
+the algorithm is meant to be used for implementing custom tree-based
+tools.
+
+Directed graphs may also be drawn using this library, if cycles are
+removed before the nodes and arcs are passed to the algorithm.
+
+Tree displays are used in many applications: directory browsers,
+hypertext systems, class browsers, and decision trees are a few
+possibilities.
+
+See the separate manual and the directory utils/wxtree.
+
+\section{wxGraphLayout}
+
+The wxGraphLayout class is based on a tool called `graphplace' by Dr.
+Jos T.J. van Eijndhoven of Eindhoven University of Technology. Given a
+(possibly cyclic) directed graph, it does its best to lay out the nodes
+in a sensible manner. There are many applications (such as diagramming)
+where it is required to display a graph with no human intervention. Even
+if manual repositioning is later required, this algorithm can make a good
+first attempt.
+
+See the separate manual and the directory utils/wxgraph. 
+
+\section{wxImage}\label{wximage}
+
+This is a collection of GIF/BMP/XBM bitmap loading and displaying
+routines for X.
+
+\section{MFUTILS}\label{mfutils}
+
+A very modest step towards reading Windows metafiles on the
+any platform. Julian Smart's ClockWorks program demonstrates
+how extremely simple metafiles may be read and displayed (in this
+case, to be used as clock hands).
+
+\section{Colours}\label{coloursampler}
+
+A colour sampler for viewing colours and their names on each
+platform.
+
+%
+\chapter{Tutorial}\label{tutorial}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+To be written.
+
+\chapter{Programming strategies}\label{strategies}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+This chapter is intended to list strategies that may be useful when
+writing and debugging wxWindows programs. If you have any good tips,
+please submit them for inclusion here.
+
+\section{Strategies for reducing programming errors}
+
+\subsection{Use ASSERT}
+
+Although I haven't done this myself within wxWindows, it is good
+practice to use ASSERT statements liberally, that check for conditions that
+should or should not hold, and print out appropriate error messages.
+These can be compiled out of a non-debugging version of wxWindows
+and your application. Using ASSERT is an example of `defensive programming':
+it can alert you to problems later on.
+
+\subsection{Use wxString in preference to character arrays}
+
+Using wxString can be much safer and more convenient than using char *.
+Again, I haven't practised what I'm preaching, but I'm now trying to use
+wxString wherever possible. You can reduce the possibility of memory
+leaks substantially, and it's much more convenient to use the overloaded
+operators than functions such as strcmp. wxString won't add a significant
+overhead to your program; the overhead is compensated for by easier
+manipulation (which means less code).
+
+The same goes for other data types: use classes wherever possible.
+
+\section{Strategies for portability}
+
+\subsection{Use relative positioning or constraints}
+
+Don't use absolute panel item positioning if you can avoid it. Different GUIs have
+very differently sized panel items. Consider using the constraint system, although this
+can be complex to program. If you needs are simple, the default relative positioning
+behaviour may be adequate (using default position values and wxPanel::NewLine).
+
+Alternatively, you could use alternative .wrc (wxWindows resource files) on different
+platforms, with slightly different dimensions in each. Or space your panel items out
+to avoid problems.
+
+\subsection{Use wxWindows resource files}
+
+Use .wrc (wxWindows resource files) where possible, because they can be easily changed
+independently of source code. Bitmap resources can be set up to load different
+kinds of bitmap depending on platform (see the section on resource files).
+
+\section{Strategies for debugging}
+
+\subsection{Positive thinking}
+
+It's common to blow up the problem in one's imagination, so that it seems to threaten
+weeks, months or even years of work. The problem you face may seem insurmountable:
+but almost never is. Once you have been programming for some time, you will be able
+to remember similar incidents that threw you into the depths of despair. But
+remember, you always solved the problem, somehow!
+
+Perseverance is often the key, even though a seemingly trivial problem
+can take an apparently inordinate amount of time to solve. In the end,
+you will probably wonder why you worried so much. That's not to say it
+isn't painful at the time. Try not to worry -- there are many more important
+things in life.
+
+\subsection{Simplify the problem}
+
+Reduce the code exhibiting the problem to the smallest program possible
+that exhibits the problem. If it is not possible to reduce a large and
+complex program to a very small program, then try to ensure your code
+doesn't hide the problem (you may have attempted to minimize the problem
+in some way: but now you want to expose it).
+
+With luck, you can add a small amount of code that causes the program
+to go from functioning to non-functioning state. This should give a clue
+to the problem. In some cases though, such as memory leaks or wrong
+deallocation, this can still give totally spurious results!
+
+\subsection{Genetic mutation}
+
+If we had sophisticated genetic algorithm tools that could be applied
+to programming, we could use them. Until then, a common -- if rather irrational --
+technique is to just make arbitrary changes to the code until something
+different happens. You may have an intuition why a change will make a difference;
+otherwise, just try altering the order of code, comment lines out, anything
+to get over an impasse. Obviously, this is usually a last resort.
+
+\subsection{Use a debugger}
+
+This sounds like facetious advice, but it's surprising how often people
+don't use a debugger. Often it's an overhead to install or learn how to
+use a debugger, but it really is essential for anything but the most
+trivial programs. Some platforms don't allow for debugging, such
+as WIN32s under Windows 3.x. In this case, you might be advised to
+debug under 16-bit Windows and when you're confident, compile for
+WIN32s. In fact WIN32s can be very strict about bad memory handling,
+so testing out under WIN32s is a good thing to do even if you're
+not going to distribute this version. (Unless you've got a good memory checking,
+utility, of course!) Tracking bugs under WIN32s can involve a lot of debug message
+insertion and relinking, so make sure your compiler has a fast linker
+(e.g. Watcom, Symantec).
+
+\subsection{Use tracing code}
+
+You can use wxDebugMsg statements (or the wxDebugStreamBuf class) to
+output to a debugging window such as DBWIN under Windows, or standard
+error under X. If compiling in DEBUG mode, you can use TRACE statements
+that will be compiled out of the final build of your application.
+
+Using tracing statements may be more convenient than using the debugger
+in some circumstances (such as when your debugger doesn't support a lot
+of debugging code, or you wish to print a bunch of variables).
+
+\subsection{Use wxObject::Dump and the wxDebugContext class}
+
+It's good practice to implement the Dump member function for all
+classes derived from wxObject. You can then make use of wxDebugContext
+to dump out information on all objects in the program, if DEBUG is
+defined to be more than zero. You can use wxDebugContext to check for
+memory leaks and corrupt memory. See the debugging topic in the
+reference manual for more information.
+
+\subsection{Check Windows debug messages}
+
+Under Windows, it's worth running your program with DBWIN running or
+some other program that shows Windows-generated debug messages. It's
+possible it'll show invalid handles being used. You may have fun seeing
+what commercial programs cause these normally hidden errors! Microsoft
+recommend using the debugging version of Windows, which shows up even
+more problems. However, I doubt it's worth the hassle for most
+applications. wxWindows is designed to minimize the possibility of such
+errors, but they can still happen occasionally, slipping through unnoticed
+because they are not severe enough to cause a crash.

@@ -1,0 +1,130 @@
+\section{Window deletion overview}\label{windowdeletionoverview}
+
+Classes: \helpref{wxCloseEvent}{wxcloseevent}, \helpref{wxWindow}{wxwindow}
+
+Window deletion can be a confusing subject, so this overview is provided
+to make it clear when and how you delete windows, or respond to user requests
+to close windows.
+
+\wxheading{What is the sequence of events in a window deletion?}
+
+When the user clicks on the system close button or system close command,
+in a frame or a dialog, wxWindows calls \helpref{wxWindow::Close}{wxwindowclose}.
+
+This function then generates a \helpref{wxCloseEvent}{wxcloseevent} event which
+can be handled by the application (by using an EVT\_CLOSE event table entry). It is the duty of the application to
+define a suitable event handler, and decide whether or not to destroy the window.
+If the application is for some reason forcing the application to close,
+the window should always be destroyed, otherwise there is the option to
+ignore the request, or maybe wait until the user has answered a question
+before deciding whether it's safe to close.
+
+The wxCloseEvent handler should only call \helpref{wxWindow::Destroy}{wxwindowdestroy} to
+delete the window, and not use the {\bf delete} operator. This is because
+for some window classes, wxWindows delays actual deletion of the window until all events have been processed,
+since otherwise there is the danger that events will be sent to a non-existent window.
+
+\wxheading{How can the application close a window itself?}
+
+Your application can use the \helpref{wxWindow::Close}{wxwindowclose} event just as
+the framework does. Pass a TRUE argument to this function to tell the event handler
+that we definitely want to delete the frame.
+
+If for some reason you don't wish to use the {\bf Close} function to delete a window, at least use
+the {\bf Destroy} function so that wxWindows can decide when it's safe to delete the window.
+
+\wxheading{What is the default behaviour?}
+
+By default, the close event handlers for wxFrame and wxDialog
+both call the old \helpref{wxWindow::OnClose}{wxwindowonclose} handler
+for backward compatibility. So you can still use the old form if you wish.
+
+In addition, the default close event handler for wxDialog simulates a Cancel command,
+generating a wxID\_CANCEL event. Since the handler for this cancel event might
+itself call {\bf Close}, there is a check for infinite looping.
+
+Under Windows, wxDialog also defines a handler for \helpref{wxWindow::OnCharHook}{wxwindowoncharhook} that
+generates a Cancel event if the Escape key has been pressed.
+
+\wxheading{What should I do when the user calls up Exit from a menu?}
+
+You can simply call \helpref{wxWindow::Close}{wxwindowclose} on the frame. This
+will invoke your own close event handler which may destroy the frame.
+
+You can do checking to see if your application can be safely exited at this point,
+either from within your close event handler, or from within your exit menu command
+handler. For example, you may wish to check that all files have been saved.
+Give the user a chance to save and quit, to not save but quit anyway, or to cancel
+the exit command altogether.
+
+\wxheading{What should I do to upgrade my 1.xx OnClose to 2.0?}
+
+In wxWindows 1.xx, the {\bf OnClose} function did not actually delete 'this', but signalled
+to the calling function (either {\bf Close}, or the wxWindows framework) to delete
+or not delete the window.
+
+You can still use this function unchanged in 2.0, but it's worth upgrading to
+the new method in case future versions of wxWindows does not support the old one.
+
+To update your code, you should provide an event table entry in your frame or
+dialog, using the EVT\_CLOSE macro. The event handler function might look like this:
+
+{\small%
+\begin{verbatim}
+  void MyFrame::OnCloseWindow(wxCloseEvent& event)
+  {
+    // If the application forces the deletion,
+    // obey without question.
+    if (event.GetForce())
+    {
+      this->Destroy();
+      return;
+    }
+
+    // Otherwise...
+    if (MyDataHasBeenModified())
+    {
+      wxMessageDialog* dialog = new wxMessageDialog(this,
+        "Save changed data?", "My app", wxYES_NO|wxCANCEL);
+
+      int ans = dialog->ShowModal();
+      dialog->Close(TRUE);
+
+      switch (ans)
+      {
+        case wxID_YES:      // Save, then destroy, quitting app
+          SaveMyData();
+          this->Destroy();
+          break;
+        case wxID_NO:       // Don't save; just destroy, quitting app
+          this->Destroy();
+          break;
+        case wxID_CANCEL:   // Do nothing - so don't quit app.
+        default:
+          break;
+      }
+    }
+  }
+\end{verbatim}
+}%
+
+\wxheading{How do I exit the application gracefully?}
+
+A wxWindows application automatically exits when the top frame (returned
+from \helpref{wxApp::OnInit}{wxapponinit}) is destroyed. This may be modified
+in later versions to exit only when the {\it last} top-level frame is destroyed.
+
+\wxheading{Do child windows get deleted automatically?}
+
+Yes, child windows are deleted from within the parent destructor. This includes any children
+that are themselves frames or dialogs, so you may wish to close these child frame or dialog windows
+explicitly from within the parent close handler.
+
+\wxheading{What about other kinds of window?}
+
+So far we've been talking about `managed' windows, i.e. frames and dialogs. Windows
+with parents, such as controls, don't have delayed destruction and don't usually have
+close event handlers, though you can implement them if you wish. For consistency,
+continue to use the \helpref{wxWindow::Destroy}{wxwindowdestroy} function instead
+of the {\bf delete} operator when deleting these kinds of windows explicitly.
+

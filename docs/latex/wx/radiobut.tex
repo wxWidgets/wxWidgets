@@ -1,0 +1,95 @@
+\section{\class{wxRadioButton}}\label{wxradiobutton}
+
+A radio button item is a button which usually denotes one of several mutually
+exclusive options. It has a text label next to a (usually) round button.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Window styles}
+
+There are no specific styles for this class.
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview}, \helpref{wxRadioBox}{wxradiobox},\rtfsp
+\helpref{wxCheckBox}{wxcheckbox}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRadioButton::wxRadioButton}\label{wxradiobuttonconstr}
+
+\func{}{wxRadioButton}{\void}
+
+Default constructor.
+
+\func{}{wxRadioButton}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id}, \param{const wxString\& }{label},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{const long}{ style = 0},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``radioButton"}}
+
+Constructor, creating and showing a radio button.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{label}{Label for the radio button.}
+
+\docparam{pos}{Window position. If the position (-1, -1) is specified then a default position is chosen.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then a default size is chosen.}
+
+\docparam{style}{Window style. See \helpref{wxRadioButton}{wxradiobutton}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxRadioButton::Create}{wxradiobuttoncreate}, \helpref{wxValidator}{wxvalidator}
+
+\membersection{wxRadioButton::\destruct{wxRadioButton}}
+
+\func{void}{\destruct{wxRadioButton}}{\void}
+
+Destructor, destroying the radio button item.
+
+\membersection{wxRadioButton::Create}\label{wxradiobuttoncreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{const wxWindowID}{ id}, \param{const wxString\& }{label},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{const long}{ style = 0},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``radioButton"}}
+
+Creates the choice for two-step construction. See \helpref{wxRadioButton::wxRadioButton}{wxradiobuttonconstr} for
+further details.
+
+\membersection{wxRadioButton::GetValue}\label{wxradiobuttongetvalue}
+
+\constfunc{bool}{GetValue}{\void}
+
+Returns TRUE if the radio button is depressed, FALSE otherwise.
+
+\membersection{wxRadioButton::SetValue}\label{wxradiobuttonsetvalue}
+
+\func{void}{SetValue}{\param{const bool}{ value}}
+
+Sets the radio button to selected or deselected status.
+
+\wxheading{Parameters}
+
+\docparam{value}{TRUE to select, FALSE to deselect.}
+
+

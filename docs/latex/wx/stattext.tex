@@ -1,0 +1,84 @@
+\section{\class{wxStaticText}}\label{wxstatictext}
+
+A static text control displays one or more lines of read-only text.
+
+TODO: should a static text have a validator? E.g. if you wanted
+to use it to initialise the control with some text taken from
+the validator.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Window styles}
+
+There are no special styles for this control.
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{See also}
+
+\helpref{wxStaticBitmap}{wxstaticbitmap}, \helpref{wxStaticBox}{wxstaticbox}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxStaticText::wxStaticText}\label{wxstatictextconstr}
+
+\func{}{wxStaticText}{\void}
+
+Default constructor.
+
+\func{}{wxStaticText}{\param{wxWindow* }{parent}, \param{const wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{label = ``"}, \param{const wxPosition\& }{pos}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{const long}{ style = 0}, \param{const wxString\& }{name = ``staticText"}}
+
+Constructor, creating and showing a text control.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Should not be NULL.}
+
+\docparam{id}{Control identifier. A value of -1 denotes a default value.}
+
+\docparam{label}{Text label.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size.}
+
+\docparam{style}{Window style. See \helpref{wxStaticText}{wxstatictext}.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxStaticText::Create}{wxstatictextcreate}
+
+\membersection{wxStaticText::Create}\label{wxstatictextcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{label = ``"}, \param{const wxPosition\& }{pos}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{const long}{ style = 0}, \param{const wxString\& }{name = ``staticText"}}
+
+Creation function, for two-step construction. For details see \helpref{wxStaticText::wxStaticText}{wxstatictextconstr}.
+
+\membersection{wxStaticText::GetLabel}\label{wxstatictextgetlabel}
+
+\constfunc{wxString}{GetLabel}{\void}
+
+Returns the contents of the control.
+
+\membersection{wxStaticText::SetLabel}\label{wxstatictextsetlabel}
+
+\func{virtual void}{SetLabel}{\param{const wxString\& }{ label}}
+
+Sets the static text label.
+
+\wxheading{Parameters}
+
+\docparam{label}{The new label to set. It may contain newline characters.}
+
+

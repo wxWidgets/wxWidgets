@@ -1,0 +1,130 @@
+\section{\class{wxHelpInstance}}\label{wxhelpinstance}
+
+NOTE: this documentation is out of date (see comments below).
+
+The {\bf wxHelpInstance} class implements the interface by which
+applications may invoke wxHelp to provide on-line help. Each instance
+of the class maintains one connection to an instance of wxHelp which
+belongs to the application, and which is shut down when the Quit
+member of {\bf wxHelpInstance} is called (for example in the {\bf
+OnClose} member of an application's main frame). Under MS Windows,
+there is currently only one instance of wxHelp which is used by all
+applications.
+
+Since there is a DDE link between the two programs, each subsequent
+request to display a file or section uses the existing instance of
+wxHelp, rather than starting a new instance each time. wxHelp thus
+appears to the user to be an extension of the current application.
+wxHelp may also be invoked independently of a client application.
+
+Normally an application will create an instance of {\bf
+wxHelpInstance} when it starts, and immediately call {\bf Initialize}\rtfsp
+to associate a filename with it. wxHelp will only get run, however,
+just before the first call to display something. See the test program
+supplied with the wxHelp source.
+
+Include the file {\tt wx\_help.h} to use this API, even if you have
+included {\tt wx.h}.
+
+If you give TRUE to the constructor, you can use the native help system
+where appropriate (currently under Windows only). Omit the file extension
+to allow wxWindows to choose the appropriate file for the platform.
+
+TODO: no longer derive this from a client class, but maybe have several implementations,
+e.g. wxHelpInstanceBase, wxHelpInstanceDDE, wxHelpInstanceWinHelp, wxHelpInstanceHTML, etc.
+
+\wxheading{Derivation}
+
+TODO
+
+\wxheading{See also}
+
+TODO
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxHelpInstance::wxHelpInstance}
+
+\func{}{wxHelpInstance}{\param{bool}{ native}}
+
+Constructs a help instance object, but does not invoke wxHelp.
+If {\it native} is TRUE, tries to use the native help system where
+possible (Windows Help under MS Windows, wxHelp on other platforms).
+
+\membersection{wxHelpInstance::\destruct{wxHelpInstance}}
+
+\func{}{\destruct{wxHelpInstance}}{\void}
+
+Destroys the help instance, closing down wxHelp for this application
+if it is running.
+
+\membersection{wxHelpInstance::Initialize}
+
+\func{void}{Initialize}{\param{const wxString\& }{file}, \param{int}{ server = -1}}
+
+Initializes the help instance with a help filename, and optionally a server (socket)
+number (one is chosen at random if this parameter is omitted). Does not invoke wxHelp.
+This must be called directly after the help instance object is created and before
+any attempts to communicate with wxHelp.
+
+You may omit the file extension, and in fact this is recommended if you
+wish to support .xlp files under X and .hlp under Windows.
+
+\membersection{wxHelpInstance::DisplayBlock}
+
+\func{bool}{DisplayBlock}{\param{long}{ blockNo}}
+
+If wxHelp is not running, runs wxHelp and displays the file at the given block number.
+If using Windows Help, displays the file at the given context number.
+
+\membersection{wxHelpInstance::DisplayContents}
+
+\func{bool}{DisplayContents}{\void}
+
+If wxHelp is not running, runs wxHelp (or Windows Help) and displays the
+contents (the first section of the file).
+
+\membersection{wxHelpInstance::DisplaySection}
+
+\func{bool}{DisplaySection}{\param{int}{ sectionNo}}
+
+If wxHelp is not running, runs wxHelp and displays the given section.
+Sections are numbered starting from 1, and section numbers may be viewed by running
+wxHelp in edit mode.
+
+\membersection{wxHelpInstance::KeywordSearch}
+
+\func{bool}{KeywordSearch}{\param{const wxString\& }{keyWord}}
+
+If wxHelp (or Windows Help) is not running, runs wxHelp (or Windows
+Help), and searches for sections matching the given keyword. If one
+match is found, the file is displayed at this section. If more than one
+match is found, the Search dialog is displayed with the matches (wxHelp)
+or the first topic is displayed (Windows Help).
+
+\membersection{wxHelpInstance::LoadFile}
+
+\func{bool}{LoadFile}{\param{const wxString\& }{file = NULL}}
+
+If wxHelp (or Windows Help) is not running, runs wxHelp (or Windows
+Help), and loads the given file. If the filename is not supplied or is
+NULL, the file specified in {\bf Initialize} is used. If wxHelp is
+already displaying the specified file, it will not be reloaded. This
+member function may be used before each display call in case the user
+has opened another file.
+
+\membersection{wxHelpInstance::OnQuit}
+
+\func{bool}{OnQuit}{\void}
+
+Overridable member called when this application's wxHelp is quit
+(no effect if Windows Help is being used instead).
+
+\membersection{wxHelpInstance::Quit}
+
+\func{bool}{Quit}{\void}
+
+If wxHelp is running, quits wxHelp by disconnecting (no effect for Windows
+Help).
+
+

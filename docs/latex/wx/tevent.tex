@@ -1,0 +1,188 @@
+\section{Event handling overview}\label{eventhandlingoverview}
+
+Classes: \helpref{wxEvtHandler}{wxevthandler}, \helpref{wxWindow}{wxwindow}, \helpref{wxEvent}{wxevent}
+
+\subsection{Introduction}
+
+Before version 2.0 of wxWindows, events were handled by the application
+either by supplying callback functions, or by overriding virtual member
+functions such as {\bf OnSize}.
+
+From wxWindows 2.0, {\it event tables} are used instead, with a few exceptions.
+
+An event table is placed in an implementation file to tell wxWindows how to map
+events to member functions. These member functions are not virtual functions, but
+they all similar in form: they take a single wxEvent-derived argument, and have a void return
+type.
+
+Here's an example of an event table.
+
+\begin{verbatim}
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+  EVT_MENU    (wxID_EXIT, MyFrame::OnExit)
+  EVT_MENU    (DO_TEST,   MyFrame::DoTest)
+  EVT_SIZE    (           MyFrame::OnSize)
+  EVT_BUTTON  (BUTTON1,   MyFrame::OnButton1)
+END_EVENT_TABLE()
+\end{verbatim}
+
+The first two entries map menu commands to two different member functions. The EVT\_SIZE macro
+doesn't need a window identifier, since normally you are only interested in the
+current window's size events. (In fact you could intercept a particular window's size event
+by using EVT\_CUSTOM(wxEVT\_SIZE, id, func).)
+
+The EVT\_BUTTON macro demonstrates that the originating event does not have to come from
+the window class implementing the event table - if the event source is a button within a panel within a frame, this will still
+work, because event tables are searched up through the hierarchy of windows. In this
+case, the button's event table will be searched, then the parent panel's, then the frame's.
+
+As mentioned before, the member functions that handle events do not have to be virtual.
+These member functions take an event argument, and the class of event differs according
+to the type of event and the class of the originating window. For size
+events, \helpref{wxSizeEvent}{wxsizeevent} is used. For menu commands and most control
+commands (such as button presses), \helpref{wxCommandEvent}{wxcommandevent} is used.
+When controls get more complicated, then specific event classes are used, such
+as \helpref{wxTreeEvent}{wxtreeevent} for events from \helpref{wxTreeCtrl}{wxtreectrl} windows.
+
+As well as the event table in the implementation file, there must be a DECLARE\_EVENT\_TABLE
+macro in the class definition. For example:
+
+{\small%
+\begin{verbatim}
+class MyFrame: public wxFrame {
+
+  DECLARE_DYNAMIC_CLASS(MyFrame)
+
+public:
+  ...
+  void OnExit(wxCommandEvent& event);
+  void OnSize(wxSizeEvent& event);
+protected:
+  int       m_count;
+  ...
+  DECLARE_EVENT_TABLE()
+};
+\end{verbatim}
+}%
+
+\subsection{How events are processed}\label{eventprocessing}
+
+When an event is received from the windowing system, wxWindows calls \helpref{wxEvtHandler::ProcessEvent}{wxevthandlerprocessevent} on
+the first event handler object belonging to the window generating the event.
+
+The normal order of event table searching by ProcessEvent is as follows:
+
+\begin{enumerate}\itemsep=0pt
+\item If the object is disabled (via a call to \helpref{wxEvtHandler::SetEvtHandlerEnabled}{wxevthandlersetevthandlerenabled})
+the function skips to step (6).
+\item If the object is a wxWindow, {\bf ProcessEvent} is recursively called on the window's\rtfsp
+\helpref{wxValidator}{wxvalidator}. If this returns TRUE, the function exits.
+\item {\bf SearchEventTable} is called for this event handler. If this fails, the base
+class table is tried, and so on until no more tables exist or an appropriate function was found,
+in which case the function exits.
+\item The search is applied down the entire chain of event handlers (usually the chain has a length
+of one). If this succeeds, the function exits.
+\item If the object is a wxWindow and the event is a wxCommandEvent, {\bf ProcessEvent} is
+recursively applied to the parent window's event handler. If this returns TRUE, the function exits.
+\item Finally, {\bf ProcessEvent} is called on the wxApp object.
+\end{enumerate}
+
+Note that your application may wish to override ProcessEvent to redirect processing of
+events. This is done in the document/view framework, for example, to allow event handlers
+to be defined in the document or view.
+
+\subsection{Pluggable event handlers}
+
+In fact, you don't have to derive a new class from a window class
+if you don't want to. You can derive a new class from wxEvtHandler instead,
+defining the appropriate event table, and then call
+\rtfsp\helpref{wxWindow::SetEventHandler}{wxwindowseteventhandler} (or, preferably,
+\rtfsp\helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler}) to make this
+event handler the object that responds to events. This way, you can avoid
+a lot of class derivation, and use the same event handler object to
+handle events from instances of different classes. If you ever have to call a window's event handler
+manually, use the GetEventHandler function to retrieve the window's event handler and use that
+to call the member function. By default, GetEventHandler returns a pointer to the window itself
+unless an application has redirected event handling using SetEventHandler or PushEventHandler.
+
+One use of PushEventHandler is to temporarily or permanently change the
+behaviour of the GUI. For example, you might want to invoke a dialog editor
+in your application that changes aspects of dialog boxes. You can
+grab all the input for an existing dialog box, and edit it `in situ',
+before restoring its behaviour to normal. So even if the application
+has derived new classes to customize behaviour, your utility can indulge
+in a spot of body-snatching. It could be a useful technique for on-line
+tutorials, too, where you take a user through a serious of steps and
+don't want them to diverge from the lesson. Here, you can examine the events
+coming from buttons and windows, and if acceptable, pass them through to
+the original event handler. Use PushEventHandler/PopEventHandler
+to form a chain of event handlers, where each handler processes a different
+range of events independently from the other handlers.
+
+\subsection{Event macros summary}\label{eventmacros}
+
+\wxheading{Specifying an event table}
+
+\twocolwidtha{8cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{EVT\_CUSTOM(eventId, id, func)}}{Allows you to add a custom event table
+entry by specifying the event identifier (such as wxEVT\_SIZE), the window identifier,
+and a member function to call.}
+\twocolitem{\windowstyle{EVT\_CUSTOM\_RANGE(eventId, id1, id2, func)}}{The same as EVT\_CUSTOM,
+but responds to a range of window identifiers.}
+\end{twocollist}
+
+\wxheading{Generic event table macros}
+
+\twocolwidtha{8cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{EVT\_CUSTOM(eventId, id, func)}}{Allows you to add a custom event table
+entry by specifying the event identifier (such as wxEVT\_SIZE), the window identifier,
+and a member function to call.}
+\twocolitem{\windowstyle{EVT\_CUSTOM\_RANGE(eventId, id1, id2, func)}}{The same as EVT\_CUSTOM,
+but responds to a range of window identifiers.}
+\twocolitem{\windowstyle{EVT\_COMMAND(eventId, id, func)}}{The same as EVT\_CUSTOM, but
+expects a member function with a wxCommandEvent argument.}
+\twocolitem{\windowstyle{EVT\_COMMAND\_RANGE(eventId, id1, id2, func)}}{The same as EVT\_CUSTOM\_RANGE, but
+expects a member function with a wxCommandEvent argument.}
+\end{twocollist}
+
+\wxheading{Macros listed by event class}
+
+The documentation for specific event macros is organised by event class. Please refer
+to these sections for details.
+
+\twocolwidtha{8cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxActivateEvent}{wxactivateevent}}{The EVT\_ACTIVATE and EVT\_ACTIVATE\_APP macros intercept
+activation and deactivation events.}
+\twocolitem{\helpref{wxCommandEvent}{wxcommandevent}}{A range of commonly-used control events.}
+\twocolitem{\helpref{wxCloseEvent}{wxcloseevent}}{The EVT\_CLOSE macro handles window closure
+called via \helpref{wxWindow::Close}{wxwindowclose}.}
+\twocolitem{\helpref{wxDropFilesEvent}{wxdropfilesevent}}{The EVT\_DROP\_FILES macros handles
+file drop events.}
+\twocolitem{\helpref{wxEraseEvent}{wxeraseevent}}{The EVT\_ERASE\_BACKGROUND macro is used to handle window erase requests.}
+\twocolitem{\helpref{wxFocusEvent}{wxfocusevent}}{The EVT\_SET\_FOCUS and EVT\_KILL\_FOCUS macros are used to handle keybaord focus events.}
+\twocolitem{\helpref{wxKeyEvent}{wxkeyevent}}{EVT\_CHAR and EVT\_CHAR\_HOOK macros handle keyboard
+input for any window.}
+\twocolitem{\helpref{wxIdleEvent}{wxidleevent}}{The EVT\_IDLE macro handle application idle events
+(to process background tasks, for example).}
+\twocolitem{\helpref{wxInitDialogEvent}{wxinitdialogevent}}{The EVT\_INIT\_DIALOG macro is used
+to handle dialog initialisation.}
+\twocolitem{\helpref{wxListEvent}{wxlistevent}}{These macros handle \helpref{wxListCtrl}{wxlistctrl} events.}
+\twocolitem{\helpref{wxMenuEvent}{wxmenuevent}}{These macros handle special menu events (not menu commands).}
+\twocolitem{\helpref{wxMouseEvent}{wxmouseevent}}{Mouse event macros can handle either individual
+mouse events or all mouse events.}
+\twocolitem{\helpref{wxMoveEvent}{wxmoveevent}}{The EVT\_MOVE macro is used to handle a window move.}
+\twocolitem{\helpref{wxUpdateUIEvent}{wxupdateuievent}}{The EVT\_UPDATE\_UI macro is used to handle user interface
+update pseudo-events, which are generated to give the application the chance to update the visual state of menus,
+toolbars and controls.}
+\twocolitem{\helpref{wxPaintEvent}{wxpaintevent}}{The EVT\_PAINT macro is used to handle window paint requests.}
+\twocolitem{\helpref{wxScrollEvent}{wxscrollevent}}{These macros are used to handle scroll events from
+windows, \helpref{wxScrollBar}{wxscrollbar}, and \helpref{wxSpinButton}{wxspinbutton}.}
+\twocolitem{\helpref{wxSizeEvent}{wxsizeevent}}{The EVT\_SIZE macro is used to handle a window resize.}
+\twocolitem{\helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent}}{The EVT\_SYS\_COLOUR\_CHANGED macro is used to handle
+events informing the application that the user has changed the system colours (Windows only).}
+\twocolitem{\helpref{wxTreeEvent}{wxtreeevent}}{These macros handle \helpref{wxTreeCtrl}{wxtreectrl} events.}
+\end{twocollist}
+

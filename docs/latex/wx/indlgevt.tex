@@ -1,0 +1,34 @@
+\section{\class{wxInitDialogEvent}}\label{wxinitdialogevent}
+
+A wxInitDialogEvent is sent as a dialog or panel is being initialised.
+Handlers for this event can transfer data to the window.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Event table macros}
+
+To process an activate event, use these event handler macros to direct input to a member
+function that takes a wxInitDialogEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_INIT\_DIALOG(func)}}{Process a wxEVT\_INIT\_DIALOG event.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{wxWindow::OnInitDialog}{wxwindowoninitdialog},\rtfsp
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxInitDialogEvent::wxInitDialogEvent}
+
+\func{}{wxInitDialogEvent}{\param{int }{id = 0}}
+
+Constructor.
+
+
