@@ -33,8 +33,10 @@ def bitmapFromFile(filename):
 #----------------------------------------------------------------------
 
 class SplashScreen(wxFrame):
-    def __init__(self, parent, ID=-1, title="SplashScreen", style=wxSTAY_ON_TOP,
-                 duration=1500, bitmapfile="bitmaps/splashscreen.bmp", callback = None):
+    def __init__(self, parent, ID=-1, title="SplashScreen",
+                 style=wxSIMPLE_BORDER|wxSTAY_ON_TOP,
+                 duration=1500, bitmapfile="bitmaps/splashscreen.bmp",
+                 callback = None):
         '''
         parent, ID, title, style -- see wxFrame
         duration -- milliseconds to display the splash screen
@@ -72,6 +74,10 @@ class SplashScreen(wxFrame):
         self.timer = SplashTimer(callback)
         self.timer.Start(duration, 1) # one-shot only
         EVT_LEFT_DOWN(self, self.OnMouseClick)
+
+    def OnPaint(self, event):
+        dc = wxPaintDC(self)
+        dc.DrawBitmap(self.bitmap, 0,0, false)
 
 
     def OnSplashExitDefault(self, event=None):
