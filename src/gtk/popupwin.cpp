@@ -230,8 +230,8 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     gtk_signal_connect( GTK_OBJECT(m_widget), "focus",
         GTK_SIGNAL_FUNC(gtk_dialog_focus_callback), (gpointer)this );
 
-    g_signal_connect (GTK_OBJECT(m_widget), "button_press_event",
-		    G_CALLBACK(gtk_popup_button_press), (gpointer)this );
+    gtk_signal_connect (GTK_OBJECT(m_widget), "button_press_event",
+        GTK_SIGNAL_FUNC(gtk_popup_button_press), (gpointer)this );
         
     return TRUE;
 }
