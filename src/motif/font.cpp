@@ -186,7 +186,7 @@ wxFontRefData::~wxFontRefData()
 // wxFont
 // ----------------------------------------------------------------------------
 
-wxFont(const wxNativeFontInfo& info)
+wxFont::wxFont(const wxNativeFontInfo& info)
 {
     Init();
 
