@@ -26,11 +26,16 @@ processed (and call \helpref{Detach()}{wxprocessdetach} for others).
 
 \membersection{wxProcess::wxProcess}\label{wxprocessconstr}
 
-\func{}{wxProcess}{\param{wxEvtHandler *}{ parent = NULL}, \param{int}{ id = -1}}
+\func{}{wxProcess}{\param{wxEvtHandler *}{ parent = NULL}, \param{bool}{ needPipe = FALSE}, \param{int}{ id = -1}}
 
 Constructs a process object. {\it id} is only used in the case you want to
 use wxWindows events. It identifies this object, or another window that will
 receive the event.
+
+If you set {\it needPipe} to TRUE, wxExecute will try to open a couple of pipes
+to catch the subprocess stdio. The caught input stream is returned by
+GetOutputStream() as a non-seekable stream. The caught output stream is returned
+by GetInputStream() as a non-seekable stream.
 
 If the {\it parent} parameter is different from NULL, it will receive
 a wxEVT\_END\_PROCESS notification event (you should insert EVT\_END\_PROCESS
@@ -61,6 +66,20 @@ and in this case it {\bf should not delete} the wxProcess object, but
 from its parent, no notification events will be sent to the parent and the
 object will delete itself upon reception of the process termination
 notification.
+
+\membersection{wxProcess::GetInputStream}\label{wxprocessgetinputstream}
+
+\constfunc{wxInputStream* }{GetInputStream}{\void}
+
+It returns a input stream correspoding to the output stream of the subprocess.
+If it is NULL, you have not set needPipe to TRUE.
+
+\membersection{wxProcess::GetInputStream}\label{wxprocessgetinputstream}
+
+\constfunc{wxInputStream* }{GetInputStream}{\void}
+
+It returns a output stream corresponding to the input stream of the subprocess. 
+If it is NULL, you have not set needPipe to TRUE.
 
 \membersection{wxProcess::OnTerminate}\label{wxprocessonterminate}
 

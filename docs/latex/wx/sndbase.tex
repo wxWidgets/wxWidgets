@@ -200,17 +200,25 @@ will not block for this buffer size.
 
 \func{bool}{SetSoundFormat}{\param{const wxSoundFormatBase\& }{format}}
 
-SetSoundFormat is one of the key function of the wxSoundStream object. It specifies
-the sound format the user needs. SetSoundFormat tries to apply the format to the
-current sound stream (it can be a sound file or a sound driver). 
-Then, either it manages to apply it and it returns {\bf TRUE}, or it could not and
-it returns {\bf FALSE}. In this case, you must check the error with
-\helpref{wxSoundStream::GetError}{wxsoundstreamgeterror}. See 
-\helpref{wxSoundStream errors section}{wxsoundstream} for more details.
+SetSoundFormat is one of the key function of the wxSoundStream object.
+It specifies the sound format the user needs. SetSoundFormat tries to
+apply the format to the current sound stream (it can be a sound file or a
+sound driver). Then, either it manages to apply it and it returns {\bf TRUE},
+or it could not and it returns {\bf FALSE}. In this case, you must check
+the error with
+\helpref{wxSoundStream::GetError}{wxsoundstreamgeterror}. See
+\helpref{wxSoundStream errors section}{wxsoundstreamerrors} for more details.
 
-\wxheading{Remark}
+
+\wxheading{Note}
 
 The {\bf format} object can be destroyed after the call. The object does not need it.
+
+\wxheading{Note}
+
+If the error is {\bf wxSOUND\_NOTEXACT}, the stream tries to find the best
+approaching format and setups it. You can check the format which it applied
+with \helpref{wxSoundStream::GetSoundFormat}{wxsoundstreamgetsoundformat}.
 
 %%
 %% GetSoundFormat
@@ -229,9 +237,9 @@ the stream itself.
 
 \func{void}{Register}{\param{int }{evt}, \param{wxSoundCallback }{cbk}, \param{void* }{cdata}}
 
-It installs a C callback for wxSoundStream events. The C callbacks are still useful
-to avoid hard inheritance. You can install only one callback per event. Each callback
-has its callback data.
+It installs a C callback for wxSoundStream events. The C callbacks are still
+useful to avoid hard inheritance. You can install only one callback per event.
+Each callback has its callback data.
 
 %%
 %% StartProduction
@@ -240,38 +248,41 @@ has its callback data.
 
 \func{bool}{StartProduction}{\param{int }{evt}}
 
-Starts the async notifier. After this call, the stream begins either 
-recording or playing or the two at the same time.
+StartProduction starts the sound streaming. {\it evt} may be one of
+{\bf wxSOUND\_INPUT}, {\bf wxSOUND\_OUTPUT} or {\bf wxSOUND\_DUPLEX}.
+You cannot specify several flags at the same time. Starting the production
+may automaticaly in position of buffer underrun (only in the case you activated
+recording). Actually this may happen the sound IO queue is too short.
+It is also advised that you fill quickly enough the sound IO queue when the
+driver requests it (through a wxSoundEvent).
 
 \membersection{wxSoundStream::StopProduction}\label{wxsoundstreamstopproduction}
-
 \func{bool}{StopProduction}{\void}
 
-Stops the async notifier.
+I stops the async notifier and the sound streaming straightly.
 
 \membersection{wxSoundStream::SetEventHandler}\label{wxsoundstreamseteventhandler}
-
 \func{void}{SetEventHandler}{\param{wxSoundStream* }{handler}}
 
 Sets the event handler: if it is non-null, all events are routed to it.
 
 \membersection{wxSoundStream::GetError}\label{wxsoundstreamgeterror}
-
 \constfunc{wxSoundError}{GetError}{\void}
 
-\membersection{wxSoundStream::GetLastAccess}\label{wxsoundstreamgetlastaccess}
+It returns the last error which occured.
 
+\membersection{wxSoundStream::GetLastAccess}\label{wxsoundstreamgetlastaccess}
 \constfunc{wxUint32}{GetLastAccess}{\void}
 
-\membersection{wxSoundStream::QueueFilled}\label{wxsoundstreamqueuefilled}
+It returns the number of bytes which were effectively written to/read from the sound stream.
 
+\membersection{wxSoundStream::QueueFilled}\label{wxsoundstreamqueuefilled}
 \constfunc{bool}{QueueFilled}{\void}
 
-This is only useful for device (I think).
+It returns whether the sound IO queue is full. When it is full, the next IO call will block
+until the IO queue has at least one empty entry.
 
 \membersection{wxSoundStream::OnSoundEvent}\label{wxsoundstreamonsoundevent}
-
 \func{void}{OnSoundEvent}{\param{int }{evt}}
 
-Handles event.
-
+It is called by the wxSoundStream when a new sound event occured.
