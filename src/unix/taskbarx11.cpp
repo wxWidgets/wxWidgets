@@ -32,6 +32,7 @@
 #include "wx/sizer.h"
 #include "wx/dcclient.h"
 #include "wx/log.h"
+#include "wx/image.h"
 
 #ifdef __VMS
 #pragma message disable nosimpint
@@ -310,7 +311,6 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 {
     if (!m_iconWnd)
         return false;
-    wxSize size(m_iconWnd->GetClientSize());
     m_iconWnd->PopupMenu(menu);
     return true;
 }
