@@ -1280,11 +1280,21 @@ void wxExit()
 }
 
 // Yield to incoming messages
+
+static bool gs_inYield = FALSE;
+
 bool wxYield()
 {
     // disable log flushing from here because a call to wxYield() shouldn't
     // normally result in message boxes popping up &c
     wxLog::Suspend();
+
+#ifdef __WXDEBUG__    
+    if (gs_inYield)
+        wxFAIL_MSG( wxT("wxYield called recursively" ) );
+#endif
+    
+    gs_inYield = TRUE;
 
     // we don't want to process WM_QUIT from here - it should be processed in
     // the main event loop in order to stop it
@@ -1307,7 +1317,18 @@ bool wxYield()
     // let the logs be flashed again
     wxLog::Resume();
 
+    gs_inYield = FALSE;
+
     return TRUE;
+}
+
+// Yield to incoming messages; but fail silently if recursion is detected.
+bool wxYieldIfNeeded()
+{
+    if (gs_inYield)
+        return FALSE;
+        
+    return wxYield();
 }
 
 bool wxHandleFatalExceptions(bool doit)

@@ -855,12 +855,22 @@ void wxCYield()
 }
 
 // Yield to other processes
+
+static bool gs_inYield = FALSE;
+
 bool wxYield()
 {
-#if wxUSE_THREADS
-  YieldToAnyThread() ;
+#ifdef __WXDEBUG__    
+    if (gs_inYield)
+        wxFAIL_MSG( wxT("wxYield called recursively" ) );
 #endif
-  EventRecord event ;
+
+    gs_inYield = TRUE;
+    
+#if wxUSE_THREADS
+    YieldToAnyThread() ;
+#endif
+    EventRecord event ;
 
 	long sleepTime = 0 ; //::GetCaretTime();
 
@@ -870,7 +880,19 @@ bool wxYield()
 	}
 
 	wxMacProcessNotifierAndPendingEvents() ;
-  return TRUE;
+
+    gs_inYield = FALSE;
+    
+    return TRUE;
+}
+
+// Yield to incoming messages; but fail silently if recursion is detected.
+bool wxYieldIfNeeded()
+{
+    if (gs_inYield)
+        return FALSE;
+        
+    return wxYield();
 }
 
 // platform specifics

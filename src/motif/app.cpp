@@ -736,8 +736,18 @@ void wxExit()
 }
 
 // Yield to other processes
+
+static bool gs_inYield = FALSE;
+
 bool wxYield()
 {
+#ifdef __WXDEBUG__    
+    if (gs_inYield)
+        wxFAIL_MSG( wxT("wxYield called recursively" ) );
+#endif
+    
+    gs_inYield = TRUE;
+
     while (wxTheApp && wxTheApp->Pending())
         wxTheApp->Dispatch();
 
@@ -746,8 +756,20 @@ bool wxYield()
     XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
 #endif
 
+    gs_inYield = FALSE;
+
     return TRUE;
 }
+
+// Yield to incoming messages; but fail silently if recursion is detected.
+bool wxYieldIfNeeded()
+{
+    if (gs_inYield)
+        return FALSE;
+        
+    return wxYield();
+}
+
 
 // TODO use XmGetPixmap (?) to get the really standard icons!
 
