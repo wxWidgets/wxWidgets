@@ -146,7 +146,6 @@ public:
     // same as DoSetSize() for the client size
     virtual void DoSetClientSize(int width, int height);
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
-    virtual WXWidget GetHandle() const;
 
 // ---------------------------------------------------------------------------
 // wxWindowBase virtual implementations that need to be overriden
@@ -225,6 +224,11 @@ public:
     void OnPaint(wxPaintEvent& event);
     void OnIdle(wxIdleEvent& event);
 
+    // Accessors
+
+    WXHWND GetHWND() const { return m_hWnd; }
+    void   SetHWND(WXHWND hWnd) { m_hWnd = hWnd; }
+    virtual WXWidget GetHandle() const { return GetHWND(); }
 
 public:
 // ---------------------------------------------------------------------------
@@ -239,13 +243,24 @@ public:
     // a toolbar that it manages itself).
     virtual void AdjustForParentClientOrigin(int& x, int& y, int sizeFlags);
 
+    // Windows subclassing
+    void SubclassWin(WXHWND hWnd);
+    void UnsubclassWin();
+
+    WXFARPROC OS2GetOldWndProc() const { return m_oldWndProc; }
+    void OS2SetOldWndProc(WXFARPROC proc) { m_oldWndProc = proc; }
+
+    wxWindow *FindItem(long id) const;
+    wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const;
+
+    // Determine whether 3D effects are wanted
+    WXDWORD Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D) const;
+
+    // PM only: TRUE if this control is part of the main control
+    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
+
     // Executes the default message
     virtual long Default();
-
-/* TODO: you may need something like this
-  // Determine whether 3D effects are wanted
-  virtual WXDWORD Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D);
-*/
 
     // Constraint implementation
     void UnsetConstraints(wxLayoutConstraints *c);
@@ -268,6 +283,7 @@ protected:
     wxButton *            m_defaultItem;
 
 public:
+    WXFARPROC             m_oldWndProc;
     int                   m_returnCode;
     bool                  m_isBeingDeleted;
     bool                  m_isShown;
@@ -287,8 +303,6 @@ DECLARE_EVENT_TABLE()
 private:
     void   Init();
     void   PMDetachWindowMenu();
-    WXHWND GetHwnd() const { return m_hWnd; }
-    void   SetHwnd(WXHWND hWnd) { m_hWnd = hWnd; }
 };
 
 ////////////////////////////////////////////////////////////////////////

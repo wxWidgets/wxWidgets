@@ -173,8 +173,8 @@ wxWindow::~wxWindow()
     DestroyChildren();
     if (m_hWnd)
     {
-        if(!WinDestroyWindow(GetHwnd()))
-            wxLogLastError("DestroyWindow");
+        if(!WinDestroyWindow(GetHWND()))
+            wxLogLastError(_T("DestroyWindow"));
         // remove hWnd <-> wxWindow association
         wxRemoveHandleAssociation(this);
     }
@@ -495,12 +495,6 @@ wxObject* wxWindow::GetChild(int number) const
     return((wxObject*)this);
 }
 
-WXWidget wxWindow::GetHandle() const
-{
-    // TODO:
-    return((WXWidget)m_hWnd);
-}
-
 void wxWindow::PMDetachWindowMenu()
 {
     if ( m_hMenu )
@@ -551,5 +545,105 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd)
 void wxRemoveHandleAssociation(wxWindow *win)
 {
     wxWinHandleList->DeleteObject(win);
+}
+
+void wxWindow::SubclassWin(WXHWND hWnd)
+{
+    wxASSERT_MSG( !m_oldWndProc, _T("subclassing window twice?") );
+
+    HWND hwnd = (HWND)hWnd;
+/*
+* TODO: implement something like this:
+*   wxCHECK_RET( ::IsWindow(hwnd), _T("invalid HWND in SubclassWin") );
+*
+*   wxAssociateWinWithHandle(hwnd, this);
+*
+*   m_oldWndProc = (WXFARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
+*   SetWindowLong(hwnd, GWL_WNDPROC, (LONG) wxWndProc);
+*/
+}
+
+void wxWindow::UnsubclassWin()
+{
+/*
+* TODO:
+
+    wxRemoveHandleAssociation(this);
+
+    // Restore old Window proc
+    HWND hwnd = GetHwnd();
+    if ( hwnd )
+    {
+        m_hWnd = 0;
+
+        wxCHECK_RET( ::IsWindow(hwnd), _T("invalid HWND in UnsubclassWin") );
+
+        FARPROC farProc = (FARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
+        if ( (m_oldWndProc != 0) && (farProc != (FARPROC) m_oldWndProc) )
+        {
+            SetWindowLong(hwnd, GWL_WNDPROC, (LONG) m_oldWndProc);
+            m_oldWndProc = 0;
+        }
+    }
+*/
+}
+
+WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle,
+                                     bool *want3D) const
+{
+   DWORD exStyle; // remove after implementation doe
+/* TODO:  this ought to be fun
+*
+    // If matches certain criteria, then assume no 3D effects
+    // unless specifically requested (dealt with in MakeExtendedStyle)
+    if ( !GetParent() || !IsKindOf(CLASSINFO(wxControl)) || (m_windowStyle & wxNO_BORDER) )
+    {
+        *want3D = FALSE;
+        return MakeExtendedStyle(m_windowStyle, FALSE);
+    }
+
+    // Determine whether we should be using 3D effects or not.
+    bool nativeBorder = FALSE; // by default, we don't want a Win95 effect
+
+    // 1) App can specify global 3D effects
+    *want3D = wxTheApp->GetAuto3D();
+
+    // 2) If the parent is being drawn with user colours, or simple border specified,
+    // switch effects off. TODO: replace wxUSER_COLOURS with wxNO_3D
+    if ( GetParent() && (GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS) || (m_windowStyle & wxSIMPLE_BORDER) )
+        *want3D = FALSE;
+
+    // 3) Control can override this global setting by defining
+    // a border style, e.g. wxSUNKEN_BORDER
+    if ( m_windowStyle & wxSUNKEN_BORDER  )
+        *want3D = TRUE;
+
+    // 4) If it's a special border, CTL3D can't cope so we want a native border
+    if ( (m_windowStyle & wxDOUBLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
+        (m_windowStyle & wxSTATIC_BORDER) )
+    {
+        *want3D = TRUE;
+        nativeBorder = TRUE;
+    }
+
+    // 5) If this isn't a Win95 app, and we are using CTL3D, remove border
+    // effects from extended style
+#if wxUSE_CTL3D
+    if ( *want3D )
+        nativeBorder = FALSE;
+#endif
+
+    DWORD exStyle = MakeExtendedStyle(m_windowStyle, !nativeBorder);
+
+    // If we want 3D, but haven't specified a border here,
+    // apply the default border style specified.
+    // TODO what about non-Win95 WIN32? Does it have borders?
+#if defined(__WIN95__) && !wxUSE_CTL3D
+    if ( defaultBorderStyle && (*want3D) && ! ((m_windowStyle & wxDOUBLE_BORDER) || (m_windowStyle & wxRAISED_BORDER ) ||
+        (m_windowStyle & wxSTATIC_BORDER) || (m_windowStyle & wxSIMPLE_BORDER) ))
+        exStyle |= defaultBorderStyle; // WS_EX_CLIENTEDGE;
+#endif
+*/
+    return exStyle;
 }
 

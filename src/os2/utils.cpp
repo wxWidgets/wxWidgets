@@ -27,9 +27,6 @@
 #include "wx/timer.h"
 #include "wx/intl.h"
 
-#define INCL_OS2
-#define INCL_PM
-
 #include <ctype.h>
 #include <direct.h>
 
@@ -43,14 +40,17 @@
 #include <errno.h>
 #include <stdarg.h>
 
+#define INCL_OS2
+#define INCL_PM
+#include <os2.h>
 #include<netdb.h>
 #include<upm.h>
 
 // In the WIN.INI file
-static const wxChar WX_SECTION[] = "wxWindows";
-static const wxChar eHOSTNAME[]  = "HostName";
-static const wxChar eUSERID[]    = "UserId";
-static const wxChar eUSERNAME[]  = "UserName";
+static const wxChar WX_SECTION[] = _T("wxWindows");
+static const wxChar eHOSTNAME[]  = _T("HostName");
+static const wxChar eUSERID[]    = _T("UserId");
+static const wxChar eUSERNAME[]  = _T("UserName");
 
 // For the following functions we SHOULD fill in support
 // for Windows-NT (which I don't know) as I assume it begin
@@ -125,8 +125,8 @@ int wxKill(long pid, int sig)
 bool wxShell(const wxString& command)
 {
   wxChar *shell;
-  if ((shell = wxGetenv("COMSPEC")) == NULL)
-    shell = "\\CMD.EXE";
+  if ((shell = wxGetenv(_T("COMSPEC"))) == NULL)
+    shell = _T("\\CMD.EXE");
 
   wxChar tmp[255];
   if (command != "")
@@ -290,7 +290,7 @@ bool wxWriteResource(const wxString& section, const wxString& entry, int value, 
 
 bool wxGetResource(const wxString& section, const wxString& entry, wxChar **value, const wxString& file)
 {
-  static const wxChar defunkt[] = "$$default";
+  static const wxChar defunkt[] = _T("$$default");
   if (file != "")
   {
     int n = GetPrivateProfileString((PCSZ)WXSTRINGCAST section, (PCSZ)WXSTRINGCAST entry, (PCSZ)defunkt,
@@ -373,7 +373,7 @@ void wxBeginBusyCursor(wxCursor *cursor)
 void wxEndBusyCursor()
 {
     wxCHECK_RET( gs_wxBusyCursorCount > 0,
-                 "no matching wxBeginBusyCursor() for wxEndBusyCursor()");
+                 _T("no matching wxBeginBusyCursor() for wxEndBusyCursor()"));
 
     if ( --gs_wxBusyCursorCount == 0 )
     {
@@ -420,10 +420,10 @@ wxChar *wxGetUserHome (const wxString& user)
     wxChar tmp[64];
     if (wxGetUserId(tmp, sizeof(tmp)/sizeof(char))) {
       // Guests belong in the temp dir
-      if (wxStricmp(tmp, "annonymous") == 0) {
-        if ((home = wxGetenv("TMP")) != NULL ||
-            (home = wxGetenv("TMPDIR")) != NULL ||
-            (home = wxGetenv("TEMP")) != NULL)
+      if (wxStricmp(tmp, _T("annonymous")) == 0) {
+        if ((home = wxGetenv(_T("TMP"))) != NULL ||
+            (home = wxGetenv(_T("TMPDIR"))) != NULL ||
+            (home = wxGetenv(_T("TEMP"))) != NULL)
             return *home ? home : (wxChar*)_T("\\");
       }
       if (wxStricmp(tmp, WXSTRINGCAST user1) == 0)
@@ -431,7 +431,7 @@ wxChar *wxGetUserHome (const wxString& user)
     }
   }
   if (user1 == _T(""))
-    if ((home = wxGetenv("HOME")) != NULL)
+    if ((home = wxGetenv(_T("HOME"))) != NULL)
     {
       wxStrcpy(wxBuffer, home);
       Unix2DosFilename(wxBuffer);
@@ -457,7 +457,7 @@ bool wxCheckForInterrupt(wxWindow *wnd)
     return TRUE;//*** temporary?
   }
   else{
-    wxFAIL_MSG("wnd==NULL !!!");
+    wxFAIL_MSG(_T("wnd==NULL !!!"));
 
     return FALSE;//*** temporary?
   }

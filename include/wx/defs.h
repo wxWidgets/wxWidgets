@@ -1476,6 +1476,8 @@ typedef long            WXLPARAM;
 #else
 #  define WXWPARAM      MPARAM
 #  define WXLPARAM      MPARAM
+#  define RECT          RECTL
+#  define LOGFONT       FATTRS
 #endif
 typedef unsigned long   WXCOLORREF;
 typedef void *          WXRGNDATA;

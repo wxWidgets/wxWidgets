@@ -63,10 +63,10 @@ typedef MRESULT (APIENTRY * WndProcCast) (HWND, ULONG, MPARAM, MPARAM);
     #define IBS_HORZCAPTION    0x4000L
     #define IBS_VERTCAPTION    0x8000L
 
-    UINT    WINAPI ibGetCaptionSize( HWND hWnd  ) ;
-    UINT    WINAPI ibSetCaptionSize( HWND hWnd, UINT nSize ) ;
-    LRESULT WINAPI ibDefWindowProc( HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam ) ;
-    VOID    WINAPI ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
+    UINT    APIENTRY ibGetCaptionSize( HWND hWnd  ) ;
+    UINT    APIENTRY ibSetCaptionSize( HWND hWnd, UINT nSize ) ;
+    MRESULT APIENTRY ibDefWindowProc( HWND hWnd, ULONG ulMsg, MPARAM wParam, MPARAM lParam ) ;
+    VOID    APIENTRY ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
 #endif // wxUSE_ITSY_BITSY
 
 /*
@@ -76,10 +76,10 @@ typedef MRESULT (APIENTRY * WndProcCast) (HWND, ULONG, MPARAM, MPARAM);
 
 #define STATIC_CLASS     _T("STATIC")
 #define STATIC_FLAGS     (SS_TEXT|DT_LEFT|SS_LEFT|WS_VISIBLE)
-#define CHECK_CLASS      "BUTTON"
+#define CHECK_CLASS      _T("BUTTON")
 #define CHECK_FLAGS      (BS_AUTOCHECKBOX|WS_TABSTOP)
 #define CHECK_IS_FAFA   FALSE
-#define RADIO_CLASS      "BUTTON"
+#define RADIO_CLASS      _T("BUTTON" )
 #define RADIO_FLAGS      (BS_AUTORADIOBUTTON|WS_VISIBLE)
 #define RADIO_SIZE       20
 #define RADIO_IS_FAFA   FALSE
@@ -107,8 +107,7 @@ typedef MRESULT (APIENTRY * WndProcCast) (HWND, ULONG, MPARAM, MPARAM);
 
 // Generic subclass proc, for panel item moving/sizing and intercept
 // EDIT control VK_RETURN messages
-extern LONG APIENTRY _EXPORT
-  wxSubclassedGenericControlProc(WXHWND hWnd, WXDWORD message, WXWPARAM wParam, WXLPARAM lParam);
+extern LONG APIENTRY wxSubclassedGenericControlProc(WXHWND hWnd, WXDWORD message, WXWPARAM wParam, WXLPARAM lParam);
 
 // ---------------------------------------------------------------------------
 // constants which might miss from some compilers' headers
@@ -155,7 +154,7 @@ extern LONG APIENTRY _EXPORT
 // ---------------------------------------------------------------------------
 
 // The MakeProcInstance version of the function wxSubclassedGenericControlProc
-WXDLLEXPORT_DATA(extern FARPROC) wxGenericControlSubClassProc;
+WXDLLEXPORT_DATA(extern) wxGenericControlSubClassProc;
 WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
 

@@ -21,7 +21,7 @@
 #include "wx/app.h"
 #include "wx/dcclient.h"
 #endif
-
+#include "wx/os2/private.h"
 #include "wx/control.h"
 
 #if !USE_SHARED_LIBRARY
@@ -50,18 +50,18 @@ wxControl::~wxControl()
 
 bool wxControl::OS2CreateControl(const wxChar *classname, WXDWORD style)
 {
-    m_hWnd = (WXHWND)::CreateWindowEx
-                       (
-                        GetExStyle(style),  // extended style
-                        classname,          // the kind of control to create
-                        NULL,               // the window name
-                        style,              // the window style
-                        0, 0, 0, 0,         // the window position and size
-                        GetHwndOf(GetParent()),  // parent
-                        (HMENU)GetId(),     // child id
-                        wxGetInstance(),    // app instance
-                        NULL                // creation parameters
-                       );
+    m_hWnd = (WXHWND)::WinCreateWindow( GetHwndOf(GetParent())
+                                       ,classname
+                                       ,NULL
+                                       ,style
+                                       ,0,0,0,0
+                                       ,NULLHANDLE
+                                       ,HWND_TOP
+                                       ,(HMENU)GetId()
+                                       ,NULL
+                                       ,NULL
+                                      );
+
 
     if ( !m_hWnd )
     {
@@ -107,6 +107,7 @@ bool wxControl::OS2OnNotify(int idCtrl,
 {
     wxCommandEvent event(wxEVT_NULL, m_windowId);
     wxEventType eventType = wxEVT_NULL;
+/* TODO:
     NMHDR *hdr1 = (NMHDR*) lParam;
     switch ( hdr1->code )
     {
@@ -141,7 +142,7 @@ bool wxControl::OS2OnNotify(int idCtrl,
         default:
             return wxWindow::OS2OnNotify(idCtrl, lParam, result);
     }
-
+*/
     event.SetEventType(eventType);
     event.SetEventObject(this);
 
@@ -177,10 +178,12 @@ WXDWORD wxControl::GetExStyle(WXDWORD& style) const
     bool want3D;
     WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
 
-    // Even with extended styles, need to combine with WS_BORDER
-    // for them to look right.
+    // Even with extended styles, need to combine with FS_BORDER
+    // for them to look right.  Check it out later, base window style does
+    // not designate BORDERS.  Down in Frame and And controls.
+
     if ( want3D || wxStyleHasBorder(m_windowStyle) )
-        style |= WS_BORDER;
+        style |= FS_BORDER;
 
     return exStyle;
 }
@@ -196,26 +199,26 @@ WXDWORD wxControl::GetExStyle(WXDWORD& style) const
 // to calculate largest bounding rectangle.
 void wxFindMaxSize(WXHWND wnd, RECT *rect)
 {
-    int left = rect->left;
-    int right = rect->right;
-    int top = rect->top;
-    int bottom = rect->bottom;
+    int left = rect->xLeft;
+    int right = rect->xRight;
+    int top = rect->yTop;
+    int bottom = rect->yBottom;
 
-    GetWindowRect((HWND) wnd, rect);
+    ::WinQueryWindowRect((HWND) wnd, rect);
 
     if (left < 0)
         return;
 
-    if (left < rect->left)
-        rect->left = left;
+    if (left < rect->xLeft)
+        rect->xLeft = left;
 
-    if (right > rect->right)
-        rect->right = right;
+    if (right > rect->xRight)
+        rect->xRight = right;
 
-    if (top < rect->top)
-        rect->top = top;
+    if (top < rect->yTop)
+        rect->yTop = top;
 
-    if (bottom > rect->bottom)
-        rect->bottom = bottom;
+    if (bottom > rect->yBottom)
+        rect->yBottom = bottom;
 }
 
