@@ -265,13 +265,17 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
         case kEventControlHiliteChanged :
                 thisWindow->MacHiliteChanged() ;
             break ;
+#endif
+        // we emulate this event under Carbon CFM
         case kEventControlSetFocusPart :
             {
                 Boolean focusEverything = false ;
                 ControlPartCode controlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
+#ifdef __WXMAC_OSX__
                 if ( cEvent.GetParameter<Boolean>(kEventParamControlFocusEverything , &focusEverything ) == noErr )
                 {
                 }
+#endif
                 if ( controlPart == kControlFocusNoPart )
                 {
         #if wxUSE_CARET
@@ -305,7 +309,6 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     result = noErr ;
             }
             break ;
-#endif
         case kEventControlHit :
             {
                 result = thisWindow->MacControlHit( handler , event ) ;
@@ -753,38 +756,7 @@ wxWindowMac::~wxWindowMac()
 
     m_isBeingDeleted = TRUE;
 
-    if ( m_peer )
-    {
-        // deleting a window while it is shown invalidates the region occupied by border or
-        // focus
-        int outerBorder = MacGetLeftBorderSize() ;
-        if ( m_peer->NeedsFocusRect() && m_peer->HasFocus() )
-            outerBorder += 4 ;
-
-        if ( IsShown() && ( outerBorder > 0 ) )
-        {
-            // as the borders are drawn on the parent we have to properly invalidate all these areas
-            RgnHandle updateInner = NewRgn() , updateOuter = NewRgn() , updateTotal = NewRgn() ;
-
-            Rect rect ;
-
-            m_peer->GetRect( &rect ) ;
-            RectRgn( updateInner , &rect ) ;
-            InsetRect( &rect , -outerBorder , -outerBorder ) ;
-            RectRgn( updateOuter , &rect ) ;
-            DiffRgn( updateOuter , updateInner ,updateOuter ) ;
-            wxPoint parent(0,0);
-            GetParent()->MacWindowToRootWindow( &parent.x , &parent.y ) ;
-            parent -= GetParent()->GetClientAreaOrigin() ;
-            OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
-            CopyRgn( updateOuter , updateTotal ) ;
-
-            GetParent()->m_peer->SetNeedsDisplay( true , updateTotal ) ;
-            DisposeRgn(updateOuter) ;
-            DisposeRgn(updateInner) ;
-            DisposeRgn(updateTotal) ;
-        }
-    }
+    MacInvalidateBorders() ;
 
 #ifndef __WXUNIVERSAL__
     // VS: make sure there's no wxFrame with last focus set to us:
@@ -903,7 +875,7 @@ bool wxWindowMac::Create(wxWindowMac *parent, wxWindowID id,
 //            | kControlWantsIdle
             ;
 
-        m_peer = new wxMacControl() ;
+        m_peer = new wxMacControl(this) ;
         ::CreateUserPaneControl( MAC_WXHWND(GetParent()->MacGetTopLevelWindowRef()) , &bounds, features , m_peer->GetControlRefAddr() );
 
 
@@ -1347,7 +1319,6 @@ void wxWindowMac::MacRootWindowToClient( int *x , int *y ) const
 
 void wxWindowMac::MacWindowToRootWindow( int *x , int *y ) const
 {
- #if TARGET_API_MAC_OSX
     wxPoint pt ;
     if ( x ) pt.x = *x ;
     if ( y ) pt.y = *y ;
@@ -1365,15 +1336,6 @@ void wxWindowMac::MacWindowToRootWindow( int *x , int *y ) const
 
     if ( x ) *x = (int) pt.x ;
     if ( y ) *y = (int) pt.y ;
- #else
-    if ( !IsTopLevel() )
-    {
-        Rect bounds ;
-        m_peer->GetRect( &bounds ) ;
-        if(x)   *x += bounds.left - MacGetLeftBorderSize() ;
-        if(y)   *y += bounds.top - MacGetTopBorderSize() ;
-    }
-#endif
 }
 
 void wxWindowMac::MacWindowToRootWindow( short *x , short *y ) const
@@ -1388,7 +1350,6 @@ void wxWindowMac::MacWindowToRootWindow( short *x , short *y ) const
 
 void wxWindowMac::MacRootWindowToWindow( int *x , int *y ) const
 {
- #if TARGET_API_MAC_OSX
     wxPoint pt ;
     if ( x ) pt.x = *x ;
     if ( y ) pt.y = *y ;
@@ -1402,15 +1363,6 @@ void wxWindowMac::MacRootWindowToWindow( int *x , int *y ) const
 
     if ( x ) *x = (int) pt.x ;
     if ( y ) *y = (int) pt.y ;
- #else
-    if ( !IsTopLevel() )
-    {
-        Rect bounds ;
-        m_peer->GetRect( &bounds ) ;
-        if(x)   *x -= bounds.left + MacGetLeftBorderSize() ;
-        if(y)   *y -= bounds.top + MacGetTopBorderSize() ;
-    }
-#endif
 }
 
 void wxWindowMac::MacRootWindowToWindow( short *x , short *y ) const
@@ -1668,6 +1620,138 @@ void wxWindowMac::DoSetToolTip(wxToolTip *tooltip)
 
 #endif // wxUSE_TOOLTIPS
 
+void wxWindowMac::MacInvalidateBorders() 
+{
+    if ( m_peer == NULL )
+        return ;
+
+    bool vis = MacIsReallyShown() ;
+    if ( !vis )
+        return ;
+        
+    int outerBorder = MacGetLeftBorderSize() ;
+    if ( m_peer->NeedsFocusRect() && m_peer->HasFocus() )
+        outerBorder += 4 ;
+
+    if ( outerBorder == 0 )
+        return ;
+        
+    // now we know that we have something to do at all    
+
+    // as the borders are drawn on the parent we have to properly invalidate all these areas
+    RgnHandle   updateInner = NewRgn() , 
+                updateOuter = NewRgn() ;
+
+    // this rectangle is in HIViewCoordinates under OSX and in Window Coordinates under Carbon
+    Rect rect ;
+    m_peer->GetRect( &rect ) ;
+    RectRgn( updateInner , &rect ) ;
+    InsetRect( &rect , -outerBorder , -outerBorder ) ;
+    RectRgn( updateOuter , &rect ) ;
+    DiffRgn( updateOuter , updateInner ,updateOuter ) ;
+#ifdef __WXMAC_OSX__
+    GetParent()->m_peer->SetNeedsDisplay( true , updateOuter ) ;
+#else
+    WindowRef tlw = (WindowRef) MacGetTopLevelWindowRef() ;
+    if ( tlw )
+        InvalWindowRgn( tlw , updateOuter ) ;
+#endif
+    DisposeRgn(updateOuter) ;
+    DisposeRgn(updateInner) ;
+/*
+            RgnHandle updateInner = NewRgn() , updateOuter = NewRgn() ;
+            RectRgn( updateInner , &rect ) ;
+            InsetRect( &rect , -4 , -4 ) ;
+            RectRgn( updateOuter , &rect ) ;
+            DiffRgn( updateOuter , updateInner ,updateOuter ) ;
+            wxPoint parent(0,0);
+            GetParent()->MacWindowToRootWindow( &parent.x , &parent.y ) ;
+            parent -= GetParent()->GetClientAreaOrigin() ;
+            OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
+            GetParent()->m_peer->SetNeedsDisplay( true , updateOuter ) ;
+            DisposeRgn(updateOuter) ;
+            DisposeRgn(updateInner) ;
+*/
+/*
+    if ( m_peer )
+    {
+        // deleting a window while it is shown invalidates the region occupied by border or
+        // focus
+
+        if ( IsShown() && ( outerBorder > 0 ) )
+        {
+            // as the borders are drawn on the parent we have to properly invalidate all these areas
+            RgnHandle updateInner = NewRgn() , updateOuter = NewRgn() , updateTotal = NewRgn() ;
+
+            Rect rect ;
+
+            m_peer->GetRect( &rect ) ;
+            RectRgn( updateInner , &rect ) ;
+            InsetRect( &rect , -outerBorder , -outerBorder ) ;
+            RectRgn( updateOuter , &rect ) ;
+            DiffRgn( updateOuter , updateInner ,updateOuter ) ;
+            wxPoint parent(0,0);
+            GetParent()->MacWindowToRootWindow( &parent.x , &parent.y ) ;
+            parent -= GetParent()->GetClientAreaOrigin() ;
+            OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
+            CopyRgn( updateOuter , updateTotal ) ;
+
+            GetParent()->m_peer->SetNeedsDisplay( true , updateTotal ) ;
+            DisposeRgn(updateOuter) ;
+            DisposeRgn(updateInner) ;
+            DisposeRgn(updateTotal) ;
+        }
+    }
+*/
+#if 0
+    Rect r = wxMacGetBoundsForControl(this , wxPoint( actualX,actualY), wxSize( actualWidth, actualHeight ) , false ) ;
+
+    int outerBorder = MacGetLeftBorderSize() ;
+    if ( m_peer->NeedsFocusRect() && m_peer->HasFocus() )
+        outerBorder += 4 ;
+
+    if ( vis && ( outerBorder > 0 ) )
+    {
+        // as the borders are drawn on the parent we have to properly invalidate all these areas
+        RgnHandle updateInner = NewRgn() , updateOuter = NewRgn() , updateTotal = NewRgn() ;
+
+        Rect rect ;
+
+        m_peer->GetRect( &rect ) ;
+        RectRgn( updateInner , &rect ) ;
+        InsetRect( &rect , -outerBorder , -outerBorder ) ;
+        RectRgn( updateOuter , &rect ) ;
+        DiffRgn( updateOuter , updateInner ,updateOuter ) ;
+        /*
+        wxPoint parent(0,0);
+#if TARGET_API_MAC_OSX
+        // no offsetting needed when compositing
+#else
+        GetParent()->MacWindowToRootWindow( &parent.x , &parent.y ) ;
+        parent -= GetParent()->GetClientAreaOrigin() ;
+        OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
+#endif
+        */
+        CopyRgn( updateOuter , updateTotal ) ;
+
+        rect = r ;
+        RectRgn( updateInner , &rect ) ;
+        InsetRect( &rect , -outerBorder , -outerBorder ) ;
+        RectRgn( updateOuter , &rect ) ;
+        DiffRgn( updateOuter , updateInner ,updateOuter ) ;
+/*
+        OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
+*/
+        UnionRgn( updateOuter , updateTotal , updateTotal ) ;
+
+        GetParent()->m_peer->SetNeedsDisplay( true , updateTotal  ) ;
+        DisposeRgn(updateOuter) ;
+        DisposeRgn(updateInner) ;
+        DisposeRgn(updateTotal) ;
+    }
+#endif
+}
+
 void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
 {
     // this is never called for a toplevel window, so we know we have a parent
@@ -1715,48 +1799,9 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
     {
         // we don't adjust twice for the origin
         Rect r = wxMacGetBoundsForControl(this , wxPoint( actualX,actualY), wxSize( actualWidth, actualHeight ) , false ) ;
-        bool vis = m_peer->IsVisible();
+        bool vis = MacIsReallyShown() ;
 
-        int outerBorder = MacGetLeftBorderSize() ;
-        if ( m_peer->NeedsFocusRect() && m_peer->HasFocus() )
-            outerBorder += 4 ;
-
-        if ( vis && ( outerBorder > 0 ) )
-        {
-            // as the borders are drawn on the parent we have to properly invalidate all these areas
-            RgnHandle updateInner = NewRgn() , updateOuter = NewRgn() , updateTotal = NewRgn() ;
-
-            Rect rect ;
-
-            m_peer->GetRect( &rect ) ;
-            RectRgn( updateInner , &rect ) ;
-            InsetRect( &rect , -outerBorder , -outerBorder ) ;
-            RectRgn( updateOuter , &rect ) ;
-            DiffRgn( updateOuter , updateInner ,updateOuter ) ;
-            wxPoint parent(0,0);
-#if TARGET_API_MAC_OSX
-            // no offsetting needed when compositing
-#else
-            GetParent()->MacWindowToRootWindow( &parent.x , &parent.y ) ;
-            parent -= GetParent()->GetClientAreaOrigin() ;
-            OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
-#endif
-            CopyRgn( updateOuter , updateTotal ) ;
-
-            rect = r ;
-            RectRgn( updateInner , &rect ) ;
-            InsetRect( &rect , -outerBorder , -outerBorder ) ;
-            RectRgn( updateOuter , &rect ) ;
-            DiffRgn( updateOuter , updateInner ,updateOuter ) ;
-
-            OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
-            UnionRgn( updateOuter , updateTotal , updateTotal ) ;
-
-            GetParent()->m_peer->SetNeedsDisplay( true , updateTotal  ) ;
-            DisposeRgn(updateOuter) ;
-            DisposeRgn(updateInner) ;
-            DisposeRgn(updateTotal) ;
-        }
+        MacInvalidateBorders() ;
 
         // the HIViewSetFrame call itself should invalidate the areas, but when testing with the UnicodeTextCtrl it does not !
         if ( vis )
@@ -1765,6 +1810,8 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         m_peer->SetRect( &r ) ;
         if ( vis )
             m_peer->SetVisibility( true , true ) ;
+
+        MacInvalidateBorders() ;
 
         MacRepositionScrollBars() ;
         if ( doMove )
@@ -2168,7 +2215,7 @@ void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
         InvalWindowRgn( (WindowRef) MacGetTopLevelWindowRef() , updateRgn ) ;
         DisposeRgn(updateRgn) ;
 */
-    if ( m_peer->IsVisible())
+    if ( MacIsReallyShown() )
     {
         m_peer->SetVisibility( false , false ) ;
         m_peer->SetVisibility( true , true ) ;
@@ -2420,6 +2467,8 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
     else
 #endif
     {
+#ifdef __WXMAC_OSX__
+        // as the non OSX Version is already working in window relative coordinates, it's not needed
         wxTopLevelWindowMac* top = MacGetTopLevelWindow();
         if (top)
         {
@@ -2430,6 +2479,7 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
             rect.top += pt.y ;
             rect.bottom += pt.y ;
         }
+#endif 
 
         if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
         {
@@ -2680,13 +2730,22 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
     {
  #if !wxMAC_USE_CORE_GRAPHICS
         wxMacWindowStateSaver sv( this ) ;
-
-        int w , h ;
-        int x , y ;
-        x = y = 0 ;
-        MacWindowToRootWindow( &x , &y ) ;
-        GetSize( &w , &h ) ;
-        Rect rect = {y , x , h + y , w + x } ;
+        Rect rect ;
+        m_peer->GetRect( &rect ) ;
+        InsetRect( &rect, -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
+#ifdef __WXMAC_OSX__
+        // as the non OSX Version is already working in window relative coordinates, it's not needed
+        wxTopLevelWindowMac* top = MacGetTopLevelWindow();
+        if (top)
+        {
+            wxPoint pt(0,0) ;
+            wxMacControl::Convert( &pt , GetParent()->m_peer , top->m_peer ) ;
+            rect.left += pt.x ;
+            rect.right += pt.x ;
+            rect.top += pt.y ;
+            rect.bottom += pt.y ;
+        }
+#endif
 
         if ( event.GetEventType() == wxEVT_SET_FOCUS )
             DrawThemeFocusRect( &rect , true ) ;
@@ -2697,18 +2756,7 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
             // as this erases part of the frame we have to redraw borders
             // and because our z-ordering is not always correct (staticboxes)
             // we have to invalidate things, we cannot simple redraw
-            RgnHandle updateInner = NewRgn() , updateOuter = NewRgn() ;
-            RectRgn( updateInner , &rect ) ;
-            InsetRect( &rect , -4 , -4 ) ;
-            RectRgn( updateOuter , &rect ) ;
-            DiffRgn( updateOuter , updateInner ,updateOuter ) ;
-            wxPoint parent(0,0);
-            GetParent()->MacWindowToRootWindow( &parent.x , &parent.y ) ;
-            parent -= GetParent()->GetClientAreaOrigin() ;
-            OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
-            GetParent()->m_peer->SetNeedsDisplay( true , updateOuter ) ;
-            DisposeRgn(updateOuter) ;
-            DisposeRgn(updateInner) ;
+            MacInvalidateBorders() ;
         }
 #else
         GetParent()->Refresh() ;
@@ -2859,7 +2907,7 @@ wxRegion wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
     Rect r ;
     RgnHandle visRgn = NewRgn() ;
     RgnHandle tempRgn = NewRgn() ;
-    if ( !m_isBeingDeleted && m_peer->IsVisible())
+    if ( !m_isBeingDeleted && MacIsReallyShown() /*m_peer->IsVisible() */ )
     {
         m_peer->GetRect( &r ) ;
         r.left -= MacGetLeftBorderSize() ;
