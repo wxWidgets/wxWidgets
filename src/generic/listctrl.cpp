@@ -1704,7 +1704,7 @@ void wxListMainWindow::DeleteLine( wxListLineData *line )
 
 void wxListMainWindow::EditLabel( long item )
 {
-    wxCHECK_RET( ((size_t)item < m_lines.GetCount()), 
+    wxCHECK_RET( ((size_t)item < m_lines.GetCount()),
                  wxT("wrong index in wxListCtrl::Edit()") );
 
     m_currentEdit = &m_lines[(size_t)item];
@@ -1769,6 +1769,7 @@ void wxListMainWindow::OnRenameAccept()
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
 {
+    event.SetEventObject( GetParent() );
     if (GetParent()->GetEventHandler()->ProcessEvent( event)) return;
 
     if (!m_current) return;
@@ -1888,7 +1889,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             else if (event.ShiftDown())
             {
                 size_t j;
-                
+
                 m_current = line;
 
                 int numOfCurrent = -1;
@@ -2096,7 +2097,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             if (index != wxNOT_FOUND)
             {
                 index -= steps;
-                if (index < 0) index = 0;          
+                if (index < 0) index = 0;
                 OnArrowChar( &m_lines[index], event.ShiftDown() );
             }
             break;
@@ -2117,7 +2118,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             if (index != wxNOT_FOUND)
             {
                 index += steps;
-                if ((size_t)index >= m_lines.GetCount()) 
+                if ((size_t)index >= m_lines.GetCount())
                     index = m_lines.GetCount()-1;
                 OnArrowChar( &m_lines[index], event.ShiftDown() );
             }
@@ -2145,7 +2146,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                 if (index != wxNOT_FOUND)
                 {
                     index += m_visibleLines;
-                    if ((size_t)index >= m_lines.GetCount()) 
+                    if ((size_t)index >= m_lines.GetCount())
                         index = m_lines.GetCount()-1;
                     OnArrowChar( &m_lines[index], event.ShiftDown() );
                 }
@@ -2382,7 +2383,7 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
         wxClientDC dc(this);
         dc.SetFont( GetFont() );
         int max = 10;
-        
+
         for (size_t i = 0; i < m_lines.GetCount(); i++)
         {
             wxListLineData *line = &m_lines[i];
@@ -2955,6 +2956,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     else
     {
         m_lines.Add( line );
+        item.m_itemId = m_lines.GetCount();
     }
 }
 
