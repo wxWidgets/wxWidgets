@@ -247,6 +247,25 @@ class wxImagePtr(wxObjectPtr):
     def Replace(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_Replace,(self,) + _args, _kwargs)
         return val
+    def ConvertToMono(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_ConvertToMono,(self,) + _args, _kwargs)
+        if val: val = wxImagePtr(val) ; val.thisown = 1
+        return val
+    def SetOption(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_SetOption,(self,) + _args, _kwargs)
+        return val
+    def SetOptionInt(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_SetOptionInt,(self,) + _args, _kwargs)
+        return val
+    def GetOption(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetOption,(self,) + _args, _kwargs)
+        return val
+    def GetOptionInt(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetOptionInt,(self,) + _args, _kwargs)
+        return val
+    def HasOption(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_HasOption,(self,) + _args, _kwargs)
+        return val
     def CountColours(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_CountColours,(self,) + _args, _kwargs)
         return val
