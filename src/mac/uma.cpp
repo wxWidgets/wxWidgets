@@ -589,7 +589,6 @@ OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState )
 }
 
 static OSStatus helpMenuStatus = noErr ;
-static MenuRef helpMenuHandle = NULL ;
 static MenuItemIndex firstCustomItemIndex = 0 ;
 
 OSStatus UMAGetHelpMenu(
@@ -599,13 +598,11 @@ OSStatus UMAGetHelpMenu(
 #if TARGET_CARBON
   return HMGetHelpMenu( outHelpMenu , outFirstCustomItemIndex ) ;
 #else
-  if ( helpMenuHandle == NULL )
+  MenuRef helpMenuHandle ;
+  helpMenuStatus = HMGetHelpMenuHandle( &helpMenuHandle ) ;
+  if ( firstCustomItemIndex == 0 && helpMenuStatus == noErr )
   {
-    helpMenuStatus = HMGetHelpMenuHandle( &helpMenuHandle ) ;
-    if ( helpMenuStatus == noErr )
-    {
-      firstCustomItemIndex = CountMenuItems( helpMenuHandle ) + 1 ;
-    }
+    firstCustomItemIndex = CountMenuItems( helpMenuHandle ) + 1 ;
   }
   if ( outFirstCustomItemIndex )
   {
