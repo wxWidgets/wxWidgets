@@ -186,7 +186,7 @@ public:
     HWND m_hNotifyWnd;      //Window to use for MCI events
     bool m_bVideo;          //Whether or not we have video
 
-    DECLARE_DYNAMIC_CLASS(wxMCIMediaBackend);
+    DECLARE_DYNAMIC_CLASS(wxMCIMediaBackend)
 };
 
 //---------------------------------------------------------------------------

@@ -892,7 +892,7 @@ private:
     wxGrid * m_view;
     wxGridCellAttrProvider *m_attrProvider;
 
-    DECLARE_ABSTRACT_CLASS( wxGridTableBase );
+    DECLARE_ABSTRACT_CLASS(wxGridTableBase)
     DECLARE_NO_COPY_CLASS(wxGridTableBase)
 };
 

@@ -200,7 +200,7 @@ protected:
     bool m_bLoaded;
     bool m_bLoop;
 
-    DECLARE_DYNAMIC_CLASS(wxMediaCtrl);
+    DECLARE_DYNAMIC_CLASS(wxMediaCtrl)
 };
 
 // ----------------------------------------------------------------------------
@@ -262,7 +262,7 @@ public:
     virtual wxMediaState GetState()
     {   return wxMEDIASTATE_STOPPED;    }
 
-    DECLARE_CLASS(wxMediaBackend)
+    DECLARE_DYNAMIC_CLASS(wxMediaBackend)
 };
 
 //Event ID to give to our events
