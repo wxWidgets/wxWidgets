@@ -29,6 +29,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+#include "wx/defs.h"
 #endif //WX_PRECOMP
 
 #if wxUSE_POPUPWIN
