@@ -19,6 +19,24 @@
  */
 #define wxABORT_ON_CONFIG_ERROR
 
+/*
+   global features
+ */
+
+/* GUI build by default */
+#if !defined(wxUSE_GUI)
+#   define wxUSE_GUI 1
+#endif /* !defined(wxUSE_GUI) */
+
+/* wxBase doesn't need compatibility settings as it's a new port */
+#if !wxUSE_GUI
+#   undef WXWIN_COMPATIBILITY
+#   undef WXWIN_COMPATIBILITY_2
+#   undef WXWIN_COMPATIBILITY_2_2
+#   define WXWIN_COMPATIBILITY 0
+#   define WXWIN_COMPATIBILITY_2 0
+#   define WXWIN_COMPATIBILITY_2_2 0
+#endif /* !wxUSE_GUI */
 
 /*
    tests for non GUI features
