@@ -1079,6 +1079,14 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     wxBitmap use_bitmap = bitmap;
     if ((w != ww) || (h != hh))
         use_bitmap = use_bitmap.Rescale( 0, 0, ww, hh, ww, hh );
+   
+#if !GTK_CHECK_VERSION(2,2,0)
+    // NB: We can't render pixbufs with GTK+ < 2.2, we need to use pixmaps code.
+    //     Pixbufs-based bitmaps with alpha channel don't have a mask, so we
+    //     have to call GetPixmap() here -- it converts the pixbuf into pixmap
+    //     and also creates the mask as a side-effect:
+    use_bitmap.GetPixmap();
+#endif
     
     // apply mask if any
     GdkBitmap *mask = (GdkBitmap *) NULL;
