@@ -7,8 +7,8 @@
 Installation on UNIX
 --------------------
 
-XRCed requires wxGTK and wxPython greater than 2.3.2, and Python 2.2 (it may
-work with earlier version, but was not tested).
+XRCed requires wxGTK and wxPython greater or equal to 2.3.3, and Python 2.2 
+(it may work with earlier version, but was not tested).
 
 Of course wxGTK's XRC library (libwxxrc) and it's python module must
 be installed.
