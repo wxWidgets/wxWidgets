@@ -554,10 +554,7 @@ void wxMenuBar::MacInstallMenuBar()
 //RN: under 10.3 it is a standard to include a seperator between About and Preferences
 //    10.2 and less are inconsistant about this, but in the interest of being more
 //    consistant with future OS's, we're choosing to include the seperator.
-#if TARGET_API_MAC_OSX
     MacInsertMenuItem( appleMenu , "\p-" , 0 ) ;
-#endif
-
     MacInsertMenuItem( appleMenu , "\pAbout..." , 0 ) ;
     MacInsertMenu( appleMenu , 0 ) ;
 
