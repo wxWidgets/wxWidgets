@@ -281,6 +281,7 @@ bool wxApp::Initialize()
 
     LOGBRUSH lb;
     lb.lbStyle = BS_PATTERN;
+    lb.lbColor = 0;
     lb.lbHatch = (int)LoadBitmap( wxhInstance, wxT("wxDISABLE_BUTTON_BITMAP") );
     if ( lb.lbHatch )
     {
