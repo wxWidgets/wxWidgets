@@ -333,6 +333,7 @@ void GaugeWidgetsPage::OnButtonSetRange(wxCommandEvent& WXUNUSED(event))
     if ( !m_textRange->GetValue().ToULong(&val) )
         return;
 
+    m_range = val;
     m_gauge->SetRange(val);
 }
 
