@@ -57,6 +57,8 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "wxPython.h"
 #include "wx/xrc/xmlres.h"
+#include <wx/filesys.h>
+#include <wx/fs_mem.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -95,39 +97,7 @@ static void *SwigwxXmlResourceTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxXmlResourceEmpty(_swigarg0) (new wxXmlResource(_swigarg0))
-static PyObject *_wrap_new_wxXmlResourceEmpty(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxXmlResource * _result;
-    int  _arg0 = (int ) (wxXRC_USE_LOCALE);
-    char *_kwnames[] = { "flags", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|i:new_wxXmlResourceEmpty",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxXmlResource *)new_wxXmlResourceEmpty(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxXmlResource_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-static wxXmlResource *new_wxXmlResource(const wxString *filemask,int flags) {
-            wxXmlResource* res = new wxXmlResource(*filemask, flags);
-            res->InitAllHandlers();
-            return res;
-        }
-
+#define new_wxXmlResource(_swigarg0,_swigarg1) (new wxXmlResource(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxXmlResource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxXmlResource * _result;
@@ -147,7 +117,7 @@ static PyObject *_wrap_new_wxXmlResource(PyObject *self, PyObject *args, PyObjec
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxXmlResource *)new_wxXmlResource(_arg0,_arg1);
+    _result = (wxXmlResource *)new_wxXmlResource(*_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -162,6 +132,33 @@ static PyObject *_wrap_new_wxXmlResource(PyObject *self, PyObject *args, PyObjec
     if (_obj0)
         delete _arg0;
 }
+    return _resultobj;
+}
+
+#define new_wxEmptyXmlResource(_swigarg0) (new wxXmlResource(_swigarg0))
+static PyObject *_wrap_new_wxEmptyXmlResource(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxXmlResource * _result;
+    int  _arg0 = (int ) (wxXRC_USE_LOCALE);
+    char *_kwnames[] = { "flags", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|i:new_wxEmptyXmlResource",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxXmlResource *)new_wxEmptyXmlResource(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxXmlResource_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
     return _resultobj;
 }
 
@@ -221,6 +218,69 @@ static PyObject *_wrap_wxXmlResource_Load(PyObject *self, PyObject *args, PyObje
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (bool )wxXmlResource_Load(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+static bool  wxXmlResource_LoadFromString(wxXmlResource *self,const wxString & data) {
+            static int s_memFileIdx = 0;
+
+            // Check for memory FS. If not present, load the handler:
+            wxMemoryFSHandler::AddFile(wxT("XRC_resource/dummy_file"),
+                                       wxT("dummy data"));
+            wxFileSystem fsys;
+            wxFSFile *f = fsys.OpenFile(wxT("memory:XRC_resource/dummy_file"));
+            wxMemoryFSHandler::RemoveFile(wxT("XRC_resource/dummy_file"));
+            if (f)
+                delete f;
+            else
+                wxFileSystem::AddHandler(new wxMemoryFSHandler);
+
+            // Now put the resource data into the memory FS
+            wxString filename(wxT("XRC_resource/data_string_"));
+            filename << s_memFileIdx;
+            s_memFileIdx += 1;
+            wxMemoryFSHandler::AddFile(filename, data);
+
+            // Load the "file" into the resource object
+            bool retval = self->Load(wxT("memory:") + filename );
+
+            return retval;
+        }
+static PyObject *_wrap_wxXmlResource_LoadFromString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxXmlResource * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","data", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxXmlResource_LoadFromString",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxXmlResource_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxXmlResource_LoadFromString. Expected _wxXmlResource_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxXmlResource_LoadFromString(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1088,10 +1148,11 @@ static PyMethodDef xrccMethods[] = {
 	 { "wxXmlResource_ClearHandlers", (PyCFunction) _wrap_wxXmlResource_ClearHandlers, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_AddHandler", (PyCFunction) _wrap_wxXmlResource_AddHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_InitAllHandlers", (PyCFunction) _wrap_wxXmlResource_InitAllHandlers, METH_VARARGS | METH_KEYWORDS },
+	 { "wxXmlResource_LoadFromString", (PyCFunction) _wrap_wxXmlResource_LoadFromString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_Load", (PyCFunction) _wrap_wxXmlResource_Load, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxXmlResource", (PyCFunction) _wrap_delete_wxXmlResource, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxEmptyXmlResource", (PyCFunction) _wrap_new_wxEmptyXmlResource, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxXmlResource", (PyCFunction) _wrap_new_wxXmlResource, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxXmlResourceEmpty", (PyCFunction) _wrap_new_wxXmlResourceEmpty, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus

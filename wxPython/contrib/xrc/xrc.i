@@ -16,6 +16,8 @@
 %{
 #include "wxPython.h"
 #include "wx/xrc/xmlres.h"
+#include <wx/filesys.h>
+#include <wx/fs_mem.h>
 %}
 
 //---------------------------------------------------------------------------
@@ -46,21 +48,16 @@ enum wxXmlResourceFlags
 class wxXmlResource : public wxObject
 {
 public:
-    // Ctor.
+    // Ctors.
     // Flags: wxXRC_USE_LOCALE
     //              translatable strings will be translated via _()
     //        wxXRC_NO_SUBCLASSING
     //              subclass property of object nodes will be ignored
     //              (useful for previews in XRC editors)
-    %name(wxXmlResourceEmpty)wxXmlResource(int flags = wxXRC_USE_LOCALE);   // TODO, a better %name
-
-    %addmethods {
-        wxXmlResource(const wxString* filemask, int flags = wxXRC_USE_LOCALE) {
-            wxXmlResource* res = new wxXmlResource(*filemask, flags);
-            res->InitAllHandlers();
-            return res;
-        }
-    }
+    wxXmlResource(const wxString& filemask, int flags = wxXRC_USE_LOCALE);
+    %name(wxEmptyXmlResource) wxXmlResource(int flags = wxXRC_USE_LOCALE);
+    %pragma(python) addtomethod = "__init__:self.InitAllHandlers()"
+    %pragma(python) addtomethod = "wxEmptyXmlResource:val.InitAllHandlers()"
 
     ~wxXmlResource();
 
@@ -68,6 +65,34 @@ public:
     // Loads resources from XML files that match given filemask.
     // This method understands VFS (see filesys.h).
     bool Load(const wxString& filemask);
+
+    %addmethods {
+        bool LoadFromString(const wxString& data) {
+            static int s_memFileIdx = 0;
+
+            // Check for memory FS. If not present, load the handler:
+            wxMemoryFSHandler::AddFile(wxT("XRC_resource/dummy_file"),
+                                       wxT("dummy data"));
+            wxFileSystem fsys;
+            wxFSFile *f = fsys.OpenFile(wxT("memory:XRC_resource/dummy_file"));
+            wxMemoryFSHandler::RemoveFile(wxT("XRC_resource/dummy_file"));
+            if (f)
+                delete f;
+            else
+                wxFileSystem::AddHandler(new wxMemoryFSHandler);
+
+            // Now put the resource data into the memory FS
+            wxString filename(wxT("XRC_resource/data_string_"));
+            filename << s_memFileIdx;
+            s_memFileIdx += 1;
+            wxMemoryFSHandler::AddFile(filename, data);
+
+            // Load the "file" into the resource object
+            bool retval = self->Load(wxT("memory:") + filename );
+
+            return retval;
+        }
+    }
 
     // Initialize handlers for all supported controls/windows. This will
     // make the executable quite big because it forces linking against

@@ -62,6 +62,9 @@ class wxXmlResourcePtr(wxObjectPtr):
     def Load(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlResource_Load,(self,) + _args, _kwargs)
         return val
+    def LoadFromString(self, *_args, **_kwargs):
+        val = apply(xrcc.wxXmlResource_LoadFromString,(self,) + _args, _kwargs)
+        return val
     def InitAllHandlers(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlResource_InitAllHandlers,(self,) + _args, _kwargs)
         return val
@@ -121,14 +124,16 @@ class wxXmlResourcePtr(wxObjectPtr):
         return "<C wxXmlResource instance at %s>" % (self.this,)
 class wxXmlResource(wxXmlResourcePtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(xrcc.new_wxXmlResourceEmpty,_args,_kwargs)
+        self.this = apply(xrcc.new_wxXmlResource,_args,_kwargs)
         self.thisown = 1
+        self.InitAllHandlers()
 
 
 
-def wxXmlResource(*_args,**_kwargs):
-    val = wxXmlResourcePtr(apply(xrcc.new_wxXmlResource,_args,_kwargs))
+def wxEmptyXmlResource(*_args,**_kwargs):
+    val = wxXmlResourcePtr(apply(xrcc.new_wxEmptyXmlResource,_args,_kwargs))
     val.thisown = 1
+    val.InitAllHandlers()
     return val
 
 

@@ -16,13 +16,22 @@ class TestPanel(wxPanel):
         label = wxStaticText(self, -1, "The lower panel was built from this XML:")
         label.SetFont(wxFont(12, wxSWISS, wxNORMAL, wxBOLD))
 
-        text = wxTextCtrl(self, -1, open(RESFILE).read(),
+        resourceText = open(RESFILE).read()
+        text = wxTextCtrl(self, -1, resourceText,
                           style=wxTE_READONLY|wxTE_MULTILINE)
         text.SetInsertionPoint(0)
 
         line = wxStaticLine(self, -1)
 
-        res = wxXmlResource(RESFILE)
+        if 0:
+            # XML Resources can be loaded from a file like this:
+            res = wxXmlResource(RESFILE)
+        else:
+            # or from a string, like this:
+            res = wxEmptyXmlResource()
+            res.LoadFromString(resourceText)
+
+        # Now create a panel from the resource data
         panel = res.LoadPanel(self, "MyPanel")
 
         # and do the layout
@@ -48,3 +57,11 @@ def runTest(frame, nb, log):
 
 overview = """
 """
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+
