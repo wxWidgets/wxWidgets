@@ -324,11 +324,11 @@ private:
 */
 struct wxLayoutStyleInfo
 {
-   wxLayoutStyleInfo(int ifamily = wxDEFAULT,
-                     int isize = WXLO_DEFAULTFONTSIZE,
-                     int istyle = wxNORMAL,
-                     int iweight = wxNORMAL,
-                     int iul = FALSE,
+   wxLayoutStyleInfo(int ifamily = -1,
+                     int isize = -1,
+                     int istyle = -1,
+                     int iweight = -1,
+                     int iul = -1,
                      wxColour *fg = NULL,
                      wxColour *bg = NULL);
    wxLayoutStyleInfo & operator=(const wxLayoutStyleInfo &right);
@@ -783,9 +783,11 @@ public:
    bool MoveCursorHorizontally(int n);
    /** Move cursor to the left or right counting in words
        @param n = number of positions in words
+       @param untilNext: puts the cursor at the start of the next word if true,
+              leaves it at the end of the current one otherwise
        @return bool if it could be moved
    */
-   bool MoveCursorWord(int n);
+   bool MoveCursorWord(int n, bool untilNext = true);
 
    /// Move cursor to end of line.
    void MoveCursorToEndOfLine(void)
@@ -1070,9 +1072,9 @@ public:
    /// Discard the current selection
    void DiscardSelection();
    /// Are we still selecting text?
-   bool IsSelecting(void);
+   bool IsSelecting(void) const;
    /// Is the given point (text coords) selected?
-   bool IsSelected(const wxPoint &cursor);
+   bool IsSelected(const wxPoint &cursor) const;
    /// Do we have a non null selection?
    bool HasSelection() const
       { return m_Selection.m_valid || m_Selection.m_selecting; }
@@ -1140,9 +1142,11 @@ private:
    /// selection.state and begin/end coordinates
    struct Selection
    {
-      Selection() { m_valid = false; m_selecting = false; }
+      Selection() { m_valid = m_selecting = m_discarded = false; }
+
       bool m_valid;
       bool m_selecting;
+      bool m_discarded; // may be TRUE only until the next redraw
 
       // returns true if we already have the screen coordinates of the
       // selection start and end

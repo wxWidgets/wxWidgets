@@ -36,8 +36,9 @@ enum
    WXLOWIN_MENU_TYPEWRITER,
    WXLOWIN_MENU_SANSSERIF,
    WXLOWIN_MENU_RCLICK,
-   WXLOWIN_MENU_LCLICK,
    WXLOWIN_MENU_DBLCLICK,
+   WXLOWIN_MENU_LDOWN,
+   WXLOWIN_MENU_LUP,
    WXLOWIN_MENU_MOUSEMOVE,
    WXLOWIN_MENU_LAST = WXLOWIN_MENU_MOUSEMOVE
 };
@@ -133,7 +134,8 @@ public:
    void OnUpdateMenuBold(wxUpdateUIEvent& event);
    void OnUpdateMenuItalic(wxUpdateUIEvent& event);
    void OnMenu(wxCommandEvent& event);
-   void OnLeftMouseClick(wxMouseEvent& event)  { OnMouse(WXLOWIN_MENU_LCLICK, event); }
+   void OnLeftMouseDown(wxMouseEvent& event)   { OnMouse(WXLOWIN_MENU_LDOWN, event); }
+   void OnLeftMouseUp(wxMouseEvent& event)     { OnMouse(WXLOWIN_MENU_LUP, event); }
    void OnRightMouseClick(wxMouseEvent& event) { OnMouse(WXLOWIN_MENU_RCLICK, event); }
    void OnMouseDblClick(wxMouseEvent& event)   { OnMouse(WXLOWIN_MENU_DBLCLICK, event); }
    void OnMouseMove(wxMouseEvent &event)       { OnMouse(WXLOWIN_MENU_MOUSEMOVE, event) ; }

@@ -6,9 +6,9 @@
  * $Id$
  *******************************************************************/
 
-// ===========================================================================
+// ============================================================================
 // declarations
-// ===========================================================================
+// ============================================================================
 
 // ----------------------------------------------------------------------------
 // headers
@@ -89,7 +89,8 @@ BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
    EVT_CHAR     (wxLayoutWindow::OnChar)
    EVT_KEY_UP   (wxLayoutWindow::OnKeyUp)
 
-   EVT_LEFT_DOWN(wxLayoutWindow::OnLeftMouseClick)
+   EVT_LEFT_DOWN(wxLayoutWindow::OnLeftMouseDown)
+   EVT_LEFT_UP(wxLayoutWindow::OnLeftMouseUp)
    EVT_RIGHT_DOWN(wxLayoutWindow::OnRightMouseClick)
    EVT_LEFT_DCLICK(wxLayoutWindow::OnMouseDblClick)
    EVT_MOTION    (wxLayoutWindow::OnMouseMove)
@@ -103,9 +104,16 @@ BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
    EVT_KILL_FOCUS(wxLayoutWindow::OnKillFocus)
 END_EVENT_TABLE()
 
-// ===========================================================================
+// ----------------------------------------------------------------------------
+// function prototypes
+// ----------------------------------------------------------------------------
+
+/// returns TRUE if keyCode is one of arrows/home/end/page{up|down} keys
+static bool IsDirectionKey(long keyCode);
+
+// ============================================================================
 // implementation
-// ===========================================================================
+// ============================================================================
 
 /* LEAVE IT HERE UNTIL WXGTK WORKS AGAIN!!! */
 #ifdef __WXGTK__
@@ -212,8 +220,10 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    findPos.x -= WXLO_XOFFSET;
    findPos.y -= WXLO_YOFFSET;
 
-   if(findPos.x < 0) findPos.x = 0;
-   if(findPos.y < 0) findPos.y = 0;
+   if(findPos.x < 0)
+       findPos.x = 0;
+   if(findPos.y < 0)
+       findPos.y = 0;
 
    m_ClickPosition = wxPoint(event.GetX(), event.GetY());
 
@@ -223,98 +233,116 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
                                                    &cursorPos, &found);
    wxLayoutObject::UserData *u = obj ? obj->GetUserData() : NULL;
 
-   //has the mouse only been moved?
-   if(eventId == WXLOWIN_MENU_MOUSEMOVE)
+   // has the mouse only been moved?
+   switch ( eventId )
    {
-      // found is only true if we are really over an object, not just
-      // behind it
-      if(found && u && ! m_Selecting)
-      {
-         if(!m_HandCursor)
-            SetCursor(wxCURSOR_HAND);
-         m_HandCursor = TRUE;
-         if(m_StatusBar && m_StatusFieldLabel != -1)
+      case WXLOWIN_MENU_MOUSEMOVE:
+         // found is only true if we are really over an object, not just
+         // behind it
+         if(found && u && ! m_Selecting)
          {
-            const wxString &label = u->GetLabel();
-            if(label.Length())
-               m_StatusBar->SetStatusText(label,
-                                          m_StatusFieldLabel);
-         }
-      }
-      else
-      {
-         if(m_HandCursor)
-            SetCursor(wxCURSOR_IBEAM);
-         m_HandCursor = FALSE;
-         if(m_StatusBar && m_StatusFieldLabel != -1)
-            m_StatusBar->SetStatusText("", m_StatusFieldLabel);
-      }
-      if(event.LeftIsDown())
-      {
-         if(! m_Selecting)
-         {
-            m_llist->StartSelection(wxPoint(-1, -1), m_ClickPosition);
-            m_Selecting = true;
-            DoPaint();  // TODO: we don't have to redraw everything!
+            if(!m_HandCursor)
+               SetCursor(wxCURSOR_HAND);
+            m_HandCursor = TRUE;
+            if(m_StatusBar && m_StatusFieldLabel != -1)
+            {
+               const wxString &label = u->GetLabel();
+               if(label.Length())
+                  m_StatusBar->SetStatusText(label,
+                                             m_StatusFieldLabel);
+            }
          }
          else
          {
+            if(m_HandCursor)
+               SetCursor(wxCURSOR_IBEAM);
+            m_HandCursor = FALSE;
+            if(m_StatusBar && m_StatusFieldLabel != -1)
+               m_StatusBar->SetStatusText("", m_StatusFieldLabel);
+         }
+
+         // selecting?
+         if ( event.LeftIsDown() )
+         {
+            wxASSERT_MSG( m_Selecting, "should be set in OnMouseLeftDown" );
+
             m_llist->ContinueSelection(cursorPos, m_ClickPosition);
             DoPaint();  // TODO: we don't have to redraw everything!
          }
-      }
-      if(m_Selecting && ! event.LeftIsDown())
-      {
-         m_llist->EndSelection(cursorPos, m_ClickPosition);
-         m_Selecting = false;
-         DoPaint();     // TODO: we don't have to redraw everything!
-      }
 
-      if ( u )
-      {
-         u->DecRef();
-         u = NULL;
-      }
-   }
-   else if(eventId == WXLOWIN_MENU_LCLICK)
-   {
-      // always move cursor to mouse click:
-      m_llist->MoveCursorTo(cursorPos);
+         if ( u )
+         {
+            u->DecRef();
+            u = NULL;
+         }
+         break;
 
-      // clicking a mouse removes the selection
-      if ( m_llist->HasSelection() )
-      {
-         m_llist->DiscardSelection();
-         DoPaint();     // TODO: we don't have to redraw everything!
-      }
+      case WXLOWIN_MENU_LDOWN:
+         {
+             // always move cursor to mouse click:
+             m_llist->MoveCursorTo(cursorPos);
 
-      // Calculate where the top of the visible area is:
-      int x0, y0;
-      ViewStart(&x0,&y0);
-      int dx, dy;
-      GetScrollPixelsPerUnit(&dx, &dy);
-      x0 *= dx; y0 *= dy;
+             // clicking a mouse removes the selection
+             if ( m_llist->HasSelection() )
+             {
+                m_llist->DiscardSelection();
+                DoPaint();     // TODO: we don't have to redraw everything!
+             }
 
-      wxPoint offset(-x0+WXLO_XOFFSET, -y0+WXLO_YOFFSET);
+             // Calculate where the top of the visible area is:
+             int x0, y0;
+             ViewStart(&x0,&y0);
+             int dx, dy;
+             GetScrollPixelsPerUnit(&dx, &dy);
+             x0 *= dx; y0 *= dy;
 
-      if(m_CursorVisibility == -1)
-         m_CursorVisibility = 1;
+             wxPoint offset(-x0+WXLO_XOFFSET, -y0+WXLO_YOFFSET);
 
-      if(m_CursorVisibility != 0)
-      {
-         // draw a thick cursor for    editable windows with focus
-         m_llist->DrawCursor(dc, m_HaveFocus && IsEditable(), offset);
-      }
+             if(m_CursorVisibility == -1)
+                m_CursorVisibility = 1;
 
-      // VZ: this should be unnecessary because mouse can only click on a
-      //     visible part of the canvas
+             if(m_CursorVisibility != 0)
+             {
+                // draw a thick cursor for    editable windows with focus
+                m_llist->DrawCursor(dc, m_HaveFocus && IsEditable(), offset);
+             }
+
+             // VZ: this should be unnecessary because mouse can only click on a
+             //     visible part of the canvas
 #if 0
-      ScrollToCursor();
+             ScrollToCursor();
 #endif // 0
 
 #ifdef __WXGTK__
-      DoPaint(); // DoPaint suppresses flicker under GTK
+             DoPaint(); // DoPaint suppresses flicker under GTK
 #endif // wxGTK
+
+             // start selection
+             m_llist->StartSelection(wxPoint(-1, -1), m_ClickPosition);
+             m_Selecting = true;
+         }
+         break;
+
+      case WXLOWIN_MENU_LUP:
+         if ( m_Selecting )
+         {
+            m_llist->EndSelection();
+            m_Selecting = false;
+
+            DoPaint();     // TODO: we don't have to redraw everything!
+         }
+         break;
+
+      case WXLOWIN_MENU_DBLCLICK:
+         // select a word under cursor
+         m_llist->MoveCursorTo(cursorPos);
+         m_llist->MoveCursorWord(-1);
+         m_llist->StartSelection();
+         m_llist->MoveCursorWord(1, false);
+         m_llist->EndSelection();
+
+         DoPaint();     // TODO: we don't have to redraw everything!
+         break;
    }
 
    // notify about mouse events?
@@ -344,9 +372,10 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
       u->DecRef();
 }
 
-/*
- * Some simple keyboard handling.
- */
+// ----------------------------------------------------------------------------
+// keyboard handling.
+// ----------------------------------------------------------------------------
+
 void
 wxLayoutWindow::OnChar(wxKeyEvent& event)
 {
@@ -360,24 +389,32 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    }
 #endif
 
-   if(! m_Selecting && event.ShiftDown())
+   wxASSERT_MSG( !m_Selecting || event.ShiftDown(),
+                 "m_Selecting is normally reset in OnKeyUp() when Shift "
+                 "goes up!" );
+
+   if ( !m_Selecting && m_llist->HasSelection() )
    {
-      switch(keyCode)
+      // pressing any non-arrow key replaces the selection
+      if ( !IsDirectionKey(keyCode) )
       {
-      case WXK_UP:
-      case WXK_DOWN:
-      case WXK_RIGHT:
-      case WXK_LEFT:
-      case WXK_PRIOR:
-      case WXK_NEXT:
-      case WXK_HOME:
-      case WXK_END:
+         m_llist->DeleteSelection();
+      }
+      else if ( !event.ShiftDown() )
+      {
+         m_llist->DiscardSelection();
+      }
+   }
+
+   // <Shift>+<arrow> starts selection
+   if ( event.ShiftDown() && IsDirectionKey(keyCode) )
+   {
+      if ( !m_Selecting )
+      {
          m_Selecting = true;
          m_llist->StartSelection();
-         break;
-      default:
-         ;
       }
+      //else: just continue the old selection
    }
 
    // If needed, make cursor visible:
@@ -505,7 +542,8 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                   m_llist->Delete(1);
                break;
             case WXK_BACK: // backspace
-               if(m_llist->MoveCursorHorizontally(-1)) m_llist->Delete(1);
+               if(m_llist->MoveCursorHorizontally(-1))
+                  m_llist->Delete(1);
                break;
             case WXK_RETURN:
                if(m_WrapMargin > 0)
@@ -528,15 +566,11 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
          SetModified();
       }// if(IsEditable())
    }// first switch()
-   if(m_Selecting)
+
+   if ( m_Selecting )
    {
-      if(event.ShiftDown())
-         m_llist->ContinueSelection();
-      else
-      {
-         m_llist->EndSelection();
-         m_Selecting = false;
-      }
+      // continue selection to the current (new) cursor position
+      m_llist->ContinueSelection();
    }
 
    // we must call ResizeScrollbars() before ScrollToCursor(), otherwise the
@@ -551,11 +585,12 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
 void
 wxLayoutWindow::OnKeyUp(wxKeyEvent& event)
 {
-   if(event.KeyCode() == WXK_SHIFT && m_llist->IsSelecting())
+   if ( event.KeyCode() == WXK_SHIFT && m_Selecting )
    {
       m_llist->EndSelection();
       m_Selecting = false;
    }
+
    event.Skip();
 }
 
@@ -822,6 +857,10 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
    }
 }
 
+// ----------------------------------------------------------------------------
+// clipboard operations
+// ----------------------------------------------------------------------------
+
 void
 wxLayoutWindow::Paste(void)
 {
@@ -926,6 +965,11 @@ wxLayoutWindow::Cut(void)
    else
       return FALSE;
 }
+
+// ----------------------------------------------------------------------------
+// searching
+// ----------------------------------------------------------------------------
+
 bool
 wxLayoutWindow::Find(const wxString &needle,
                      wxPoint * fromWhere)
@@ -949,6 +993,10 @@ wxLayoutWindow::Find(const wxString &needle,
    }
    return false;
 }
+
+// ----------------------------------------------------------------------------
+// popup menu stuff
+// ----------------------------------------------------------------------------
 
 wxMenu *
 wxLayoutWindow::MakeFormatMenu()
@@ -1014,6 +1062,10 @@ void wxLayoutWindow::OnMenu(wxCommandEvent& event)
    }
 }
 
+// ----------------------------------------------------------------------------
+// focus
+// ----------------------------------------------------------------------------
+
 void
 wxLayoutWindow::OnSetFocus(wxFocusEvent &ev)
 {
@@ -1026,4 +1078,27 @@ wxLayoutWindow::OnKillFocus(wxFocusEvent &ev)
 {
    m_HaveFocus = false;
    ev.Skip();
+}
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+static bool IsDirectionKey(long keyCode)
+{
+   switch(keyCode)
+   {
+      case WXK_UP:
+      case WXK_DOWN:
+      case WXK_RIGHT:
+      case WXK_LEFT:
+      case WXK_PRIOR:
+      case WXK_NEXT:
+      case WXK_HOME:
+      case WXK_END:
+         return true;
+
+      default:
+         return false;
+   }
 }

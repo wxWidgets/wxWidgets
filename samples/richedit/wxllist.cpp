@@ -642,6 +642,8 @@ wxLayoutLine::wxLayoutLine(wxLayoutLine *prev, wxLayoutList *llist)
       m_Next->MoveLines(+1);
       m_Next->RecalculatePositions(1,llist);
    }
+
+   m_StyleInfo = llist->GetDefaultStyleInfo();
 }
 
 wxLayoutLine::~wxLayoutLine()
@@ -1131,12 +1133,18 @@ wxLayoutLine::Layout(wxDC &dc,
                else
                   str = WXLO_CURSORCHAR;
                dc.GetTextExtent(str, &width, &height, &descent);
-               wxASSERT(cursorSize);
-               // Just in case some joker inserted an empty string object:
-               if(width == 0) width = WXLO_MINIMUM_CURSOR_WIDTH;
-               if(height == 0) height = sizeObj.y;
-               cursorSize->x = width;
-               cursorSize->y = height;
+
+               if ( cursorSize )
+               {
+                  // Just in case some joker inserted an empty string object:
+                  if(width == 0)
+                     width = WXLO_MINIMUM_CURSOR_WIDTH;
+                  if(height == 0)
+                     height = sizeObj.y;
+                  cursorSize->x = width;
+                  cursorSize->y = height;
+               }
+
                cursorFound = true; // no more checks
             }
             else
@@ -1206,7 +1214,7 @@ wxLayoutLine::Layout(wxDC &dc,
    }
 
    // We need to check whether we found a valid cursor size:
-   if(cursorPos)
+   if(cursorPos && cursorSize)
    {
       // this might be the case if the cursor is at the end of the
       // line or on a command object:
@@ -1755,7 +1763,7 @@ wxLayoutList::MoveCursorHorizontally(int n)
 }
 
 bool
-wxLayoutList::MoveCursorWord(int n)
+wxLayoutList::MoveCursorWord(int n, bool untilNext)
 {
    wxCHECK_MSG( m_CursorLine, false, "no current line" );
    wxCHECK_MSG( n == -1 || n == +1, false, "not implemented yet" );
@@ -1805,25 +1813,41 @@ wxLayoutList::MoveCursorWord(int n)
 
          if ( canAdvance )
          {
-            const char *start = tobj->GetText().c_str();
+            const wxString& text = tobj->GetText();
+            const char *start = text.c_str();
+            const char *end = start + text.length();
             const char *p = start + offset;
 
+            if ( n < 0 )
+            {
+               if ( offset > 0 )
+                  p--;
+            }
+
             // to the beginning/end of the next/prev word
-            while ( isspace(*p) )
+            while ( p >= start && p < end && isspace(*p) )
             {
                n > 0 ? p++ : p--;
             }
 
             // go to the end/beginning of the word (in a broad sense...)
-            while ( p >= start && !isspace(*p) )
+            while ( p >= start && p < end && !isspace(*p) )
             {
                n > 0 ? p++ : p--;
             }
 
             if ( n > 0 )
             {
-               // now advance to the beginning of the next word
-               while ( isspace(*p) )
+               if ( untilNext )
+               {
+                  // now advance to the beginning of the next word
+                  while ( isspace(*p) && p < end )
+                     p++;
+               }
+            }
+            else // backwards
+            {
+               if ( isspace(*p) )
                   p++;
             }
 
@@ -2185,6 +2209,23 @@ wxLayoutList::Draw(wxDC &dc,
 {
    wxLayoutLine *line = m_FirstLine;
 
+   if ( m_Selection.m_discarded )
+   {
+      // calculate them if we don't have them already
+      if ( !m_Selection.HasValidScreenCoords() )
+      {
+         m_Selection.m_ScreenA = GetScreenPos(dc, m_Selection.m_CursorA);
+         m_Selection.m_ScreenB = GetScreenPos(dc, m_Selection.m_CursorB);
+      }
+
+      // invalidate the area which was previousle selected - and which is not
+      // selected any more
+      SetUpdateRect(m_Selection.m_ScreenA);
+      SetUpdateRect(m_Selection.m_ScreenB);
+
+      m_Selection.m_discarded = false;
+   }
+
    /* We need to re-layout all dirty lines to update styleinfos
       etc. However, somehow we don't find all dirty lines... */
    Layout(dc); //,-1,true); //FIXME
@@ -2438,28 +2479,17 @@ wxLayoutList::DiscardSelection()
 
    m_Selection.m_valid =
    m_Selection.m_selecting = false;
-
-   // invalidate the area which was previousle selected - and which is not
-   // selected any more
-   if ( m_Selection.HasValidScreenCoords() )
-   {
-      SetUpdateRect(m_Selection.m_ScreenA);
-      SetUpdateRect(m_Selection.m_ScreenB);
-   }
-   else
-   {
-       // TODO
-   }
+   m_Selection.m_discarded = true;
 }
 
 bool
-wxLayoutList::IsSelecting(void)
+wxLayoutList::IsSelecting(void) const
 {
    return m_Selection.m_selecting;
 }
 
 bool
-wxLayoutList::IsSelected(const wxPoint &cursor)
+wxLayoutList::IsSelected(const wxPoint &cursor) const
 {
    if ( !HasSelection() )
       return false;
