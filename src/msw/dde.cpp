@@ -129,7 +129,7 @@ static wxList wxAtomTable(wxKEY_STRING);
 static wxList wxDDEClientObjects;
 static wxList wxDDEServerObjects;
 
-static bool DDEInitialized = FALSE;
+static bool DDEInitialized = false;
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -142,7 +142,7 @@ class wxDDEModule : public wxModule
 {
 public:
     wxDDEModule() {}
-    bool OnInit() { return TRUE; }
+    bool OnInit() { return true; }
     void OnExit() { wxDDECleanUp(); }
 
 private:
@@ -180,20 +180,20 @@ extern void wxDDEInitialize()
         }
         else
         {
-            DDEInitialized = TRUE;
+            DDEInitialized = true;
         }
     }
 }
 
 void wxDDECleanUp()
 {
-    wxDDEClientObjects.DeleteContents(TRUE);
+    wxDDEClientObjects.DeleteContents(true);
     wxDDEClientObjects.Clear();
-    wxDDEClientObjects.DeleteContents(FALSE);
+    wxDDEClientObjects.DeleteContents(false);
 
-    wxDDEServerObjects.DeleteContents(TRUE);
+    wxDDEServerObjects.DeleteContents(true);
     wxDDEServerObjects.Clear();
-    wxDDEServerObjects.DeleteContents(FALSE);
+    wxDDEServerObjects.DeleteContents(false);
 
     wxAtomTable.Clear();
 
@@ -211,23 +211,23 @@ void wxDDECleanUp()
 // Global find connection
 static wxDDEConnection *DDEFindConnection(HCONV hConv)
 {
-  wxNode *node = wxDDEServerObjects.First();
+  wxNode *node = wxDDEServerObjects.GetFirst();
   wxDDEConnection *found = NULL;
   while (node && !found)
   {
-    wxDDEServer *object = (wxDDEServer *)node->Data();
+    wxDDEServer *object = (wxDDEServer *)node->GetData();
     found = object->FindConnection((WXHCONV) hConv);
-    node = node->Next();
+    node = node->GetNext();
   }
   if (found)
       return found;
 
-  node = wxDDEClientObjects.First();
+  node = wxDDEClientObjects.GetFirst();
   while (node && !found)
   {
-    wxDDEClient *object = (wxDDEClient *)node->Data();
+    wxDDEClient *object = (wxDDEClient *)node->GetData();
     found = object->FindConnection((WXHCONV) hConv);
-    node = node->Next();
+    node = node->GetNext();
   }
   return found;
 }
@@ -235,38 +235,38 @@ static wxDDEConnection *DDEFindConnection(HCONV hConv)
 // Global delete connection
 static void DDEDeleteConnection(HCONV hConv)
 {
-  wxNode *node = wxDDEServerObjects.First();
-  bool found = FALSE;
+  wxNode *node = wxDDEServerObjects.GetFirst();
+  bool found = false;
   while (node && !found)
   {
-    wxDDEServer *object = (wxDDEServer *)node->Data();
+    wxDDEServer *object = (wxDDEServer *)node->GetData();
     found = object->DeleteConnection((WXHCONV) hConv);
-    node = node->Next();
+    node = node->GetNext();
   }
   if (found)
     return;
 
-  node = wxDDEClientObjects.First();
+  node = wxDDEClientObjects.GetFirst();
   while (node && !found)
   {
-    wxDDEClient *object = (wxDDEClient *)node->Data();
+    wxDDEClient *object = (wxDDEClient *)node->GetData();
     found = object->DeleteConnection((WXHCONV) hConv);
-    node = node->Next();
+    node = node->GetNext();
   }
 }
 
 // Find a server from a service name
 static wxDDEServer *DDEFindServer(const wxString& s)
 {
-  wxNode *node = wxDDEServerObjects.First();
+  wxNode *node = wxDDEServerObjects.GetFirst();
   wxDDEServer *found = NULL;
   while (node && !found)
   {
-    wxDDEServer *object = (wxDDEServer *)node->Data();
+    wxDDEServer *object = (wxDDEServer *)node->GetData();
 
     if (object->GetServiceName() == s)
       found = object;
-    else node = node->Next();
+    else node = node->GetNext();
   }
   return found;
 }
@@ -291,10 +291,10 @@ bool wxDDEServer::Create(const wxString& server)
         DDELogError(wxString::Format(_("Failed to register DDE server '%s'"),
                                      server.c_str()));
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 wxDDEServer::~wxDDEServer()
@@ -311,22 +311,22 @@ wxDDEServer::~wxDDEServer()
 
     wxDDEServerObjects.DeleteObject(this);
 
-    wxNode *node = m_connections.First();
+    wxNode *node = m_connections.GetFirst();
     while (node)
     {
-        wxDDEConnection *connection = (wxDDEConnection *)node->Data();
-        wxNode *next = node->Next();
+        wxDDEConnection *connection = (wxDDEConnection *)node->GetData();
+        wxNode *next = node->GetNext();
         connection->SetConnected(false);
         connection->OnDisconnect(); // May delete the node implicitly
         node = next;
     }
 
     // If any left after this, delete them
-    node = m_connections.First();
+    node = m_connections.GetFirst();
     while (node)
     {
-        wxDDEConnection *connection = (wxDDEConnection *)node->Data();
-        wxNode *next = node->Next();
+        wxDDEConnection *connection = (wxDDEConnection *)node->GetData();
+        wxNode *next = node->GetNext();
         delete connection;
         node = next;
     }
@@ -339,14 +339,14 @@ wxConnectionBase *wxDDEServer::OnAcceptConnection(const wxString& /* topic */)
 
 wxDDEConnection *wxDDEServer::FindConnection(WXHCONV conv)
 {
-    wxNode *node = m_connections.First();
+    wxNode *node = m_connections.GetFirst();
     wxDDEConnection *found = NULL;
     while (node && !found)
     {
-        wxDDEConnection *connection = (wxDDEConnection *)node->Data();
+        wxDDEConnection *connection = (wxDDEConnection *)node->GetData();
         if (connection->m_hConv == conv)
             found = connection;
-        else node = node->Next();
+        else node = node->GetNext();
     }
     return found;
 }
@@ -354,17 +354,17 @@ wxDDEConnection *wxDDEServer::FindConnection(WXHCONV conv)
 // Only delete the entry in the map, not the actual connection
 bool wxDDEServer::DeleteConnection(WXHCONV conv)
 {
-    wxNode *node = m_connections.First();
-    bool found = FALSE;
+    wxNode *node = m_connections.GetFirst();
+    bool found = false;
     while (node && !found)
     {
-        wxDDEConnection *connection = (wxDDEConnection *)node->Data();
+        wxDDEConnection *connection = (wxDDEConnection *)node->GetData();
         if (connection->m_hConv == conv)
         {
-            found = TRUE;
+            found = true;
             delete node;
         }
-        else node = node->Next();
+        else node = node->GetNext();
     }
     return found;
 }
@@ -383,18 +383,18 @@ wxDDEClient::wxDDEClient()
 wxDDEClient::~wxDDEClient()
 {
     wxDDEClientObjects.DeleteObject(this);
-    wxNode *node = m_connections.First();
+    wxNode *node = m_connections.GetFirst();
     while (node)
     {
-        wxDDEConnection *connection = (wxDDEConnection *)node->Data();
+        wxDDEConnection *connection = (wxDDEConnection *)node->GetData();
         delete connection;  // Deletes the node implicitly (see ~wxDDEConnection)
-        node = m_connections.First();
+        node = m_connections.GetFirst();
     }
 }
 
 bool wxDDEClient::ValidHost(const wxString& /* host */)
 {
-    return TRUE;
+    return true;
 }
 
 wxConnectionBase *wxDDEClient::MakeConnection(const wxString& WXUNUSED(host),
@@ -431,14 +431,14 @@ wxConnectionBase *wxDDEClient::OnMakeConnection()
 
 wxDDEConnection *wxDDEClient::FindConnection(WXHCONV conv)
 {
-    wxNode *node = m_connections.First();
+    wxNode *node = m_connections.GetFirst();
     wxDDEConnection *found = NULL;
     while (node && !found)
     {
-        wxDDEConnection *connection = (wxDDEConnection *)node->Data();
+        wxDDEConnection *connection = (wxDDEConnection *)node->GetData();
         if (connection->m_hConv == conv)
             found = connection;
-        else node = node->Next();
+        else node = node->GetNext();
     }
     return found;
 }
@@ -446,17 +446,17 @@ wxDDEConnection *wxDDEClient::FindConnection(WXHCONV conv)
 // Only delete the entry in the map, not the actual connection
 bool wxDDEClient::DeleteConnection(WXHCONV conv)
 {
-    wxNode *node = m_connections.First();
-    bool found = FALSE;
+    wxNode *node = m_connections.GetFirst();
+    bool found = false;
     while (node && !found)
     {
-        wxDDEConnection *connection = (wxDDEConnection *)node->Data();
+        wxDDEConnection *connection = (wxDDEConnection *)node->GetData();
         if (connection->m_hConv == conv)
         {
-            found = TRUE;
+            found = true;
             delete node;
         }
-        else node = node->Next();
+        else node = node->GetNext();
     }
     return found;
 }
@@ -660,7 +660,7 @@ bool wxDDEConnection::Advise(const wxString& item,
 bool wxDDEConnection::OnDisconnect()
 {
     delete this;
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -697,7 +697,7 @@ _DDECallback(WORD wType,
                         connection->m_hConv = 0;
                         connection->m_topicName = topic;
                         DDECurrentlyConnecting = connection;
-                        return (DDERETURN)(DWORD)TRUE;
+                        return (DDERETURN)(DWORD)true;
                     }
                 }
                 break;
@@ -709,7 +709,7 @@ _DDECallback(WORD wType,
                 {
                     DDECurrentlyConnecting->m_hConv = (WXHCONV) hConv;
                     DDECurrentlyConnecting = NULL;
-                    return (DDERETURN)(DWORD)TRUE;
+                    return (DDERETURN)(DWORD)true;
                 }
                 break;
             }
@@ -723,7 +723,7 @@ _DDECallback(WORD wType,
                     if (connection->OnDisconnect())
                     {
                         DDEDeleteConnection(hConv);  // Delete mapping: hConv => connection
-                        return (DDERETURN)(DWORD)TRUE;
+                        return (DDERETURN)(DWORD)true;
                     }
                 }
                 break;
@@ -925,11 +925,11 @@ static HSZ DDEGetAtom(const wxString& string)
 {
     wxNode *node = wxAtomTable.Find(string);
     if (node)
-        return (HSZ)node->Data();
+        return (HSZ)node->GetData();
     else
     {
         DDEAddAtom(string);
-        return (HSZ)(wxAtomTable.Find(string)->Data());
+        return (HSZ)(wxAtomTable.Find(string)->GetData());
     }
 }
 
