@@ -311,6 +311,9 @@ public:
     virtual void SetAttr(wxGridCellAttr *attr, int row, int col);
     virtual void SetRowAttr(wxGridCellAttr *attr, int row);
     virtual void SetColAttr(wxGridCellAttr *attr, int col);
+
+    // these functions must be called whenever some rows/cols are deleted
+    // because the internal data must be updated then
     void UpdateAttrRows( size_t pos, int numRows );
     void UpdateAttrCols( size_t pos, int numCols );
 

@@ -637,29 +637,29 @@ void wxGridCellAttrData::UpdateAttrRows( size_t pos, int numRows )
     for ( size_t n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords = m_attrs[n].coords;
-	wxCoord row = coords.GetRow();
-	if ((size_t)row >= pos)
-	{
-	    if (numRows > 0)
-	    {
-	        // If rows inserted, include row counter where necessary
-		coords.SetRow(row + numRows);
-	    }
-	    else if (numRows < 0)
-	    {
-		// If rows deleted ...
-	        if ((size_t)row >= pos - numRows)
-		{
-		    // ...either decrement row counter (if row still exists)...
-		    coords.SetRow(row + numRows);
-		}
-		else
-		{
-		    // ...or remove the attribute
-		    m_attrs.RemoveAt((size_t)n);
-		    n--; count--;
-		}
-	    }
+        wxCoord row = coords.GetRow();
+        if ((size_t)row >= pos)
+        {
+            if (numRows > 0)
+            {
+                // If rows inserted, include row counter where necessary
+                coords.SetRow(row + numRows);
+            }
+            else if (numRows < 0)
+            {
+                // If rows deleted ...
+                if ((size_t)row >= pos - numRows)
+                {
+                    // ...either decrement row counter (if row still exists)...
+                    coords.SetRow(row + numRows);
+                }
+                else
+                {
+                    // ...or remove the attribute
+                    m_attrs.RemoveAt((size_t)n);
+                    n--; count--;
+                }
+            }
         }
     }
 }
@@ -670,29 +670,29 @@ void wxGridCellAttrData::UpdateAttrCols( size_t pos, int numCols )
     for ( size_t n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords = m_attrs[n].coords;
-	wxCoord col = coords.GetCol();
-	if ( (size_t)col >= pos )
-	{
-	    if ( numCols > 0 )
-	    {
-		// If rows inserted, include row counter where necessary
-		coords.SetCol(col + numCols);
-	    }
-	    else if (numCols < 0)
-	    {
-		// If rows deleted ...
-	        if ((size_t)col >= pos - numCols)
-		{
-		    // ...either decrement row counter (if row still exists)...
-	            coords.SetCol(col + numCols);
-		}
-		else
-		{
-		    // ...or remove the attribute
-		    m_attrs.RemoveAt((size_t)n);
-		    n--; count--;
-		}
-	    }
+        wxCoord col = coords.GetCol();
+        if ( (size_t)col >= pos )
+        {
+            if ( numCols > 0 )
+            {
+                // If rows inserted, include row counter where necessary
+                coords.SetCol(col + numCols);
+            }
+            else if (numCols < 0)
+            {
+                // If rows deleted ...
+                if ((size_t)col >= pos - numCols)
+                {
+                    // ...either decrement row counter (if row still exists)...
+                    coords.SetCol(col + numCols);
+                }
+                else
+                {
+                    // ...or remove the attribute
+                    m_attrs.RemoveAt((size_t)n);
+                    n--; count--;
+                }
+            }
         }
     }
 }
@@ -771,25 +771,25 @@ void wxGridRowOrColAttrData::UpdateAttrRowsOrCols( size_t pos, int numRowsOrCols
     for ( size_t n = 0; n < count; n++ )
     {
         int & rowOrCol = m_rowsOrCols[n];
-	if ( (size_t)rowOrCol >= pos )
-	{
-	    if ( numRowsOrCols > 0 )
-	    {
-		// If rows inserted, include row counter where necessary
-		rowOrCol += numRowsOrCols;
-	    }
-	    else if ( numRowsOrCols < 0)
-	    {
-		// If rows deleted, either decrement row counter (if row still exists)
-		if ((size_t)rowOrCol >= pos - numRowsOrCols)
-		    rowOrCol += numRowsOrCols;
-		else
-		{
-		    m_rowsOrCols.RemoveAt((size_t)n);
-		    m_attrs.RemoveAt((size_t)n);
-		    n--; count--;
-		}
-	    }
+        if ( (size_t)rowOrCol >= pos )
+        {
+            if ( numRowsOrCols > 0 )
+            {
+                // If rows inserted, include row counter where necessary
+                rowOrCol += numRowsOrCols;
+            }
+            else if ( numRowsOrCols < 0)
+            {
+                // If rows deleted, either decrement row counter (if row still exists)
+                if ((size_t)rowOrCol >= pos - numRowsOrCols)
+                    rowOrCol += numRowsOrCols;
+                else
+                {
+                    m_rowsOrCols.RemoveAt((size_t)n);
+                    m_attrs.RemoveAt((size_t)n);
+                    n--; count--;
+                }
+            }
         }
     }
 }
@@ -869,7 +869,7 @@ void wxGridCellAttrProvider::UpdateAttrRows( size_t pos, int numRows )
     {
         m_data->m_cellAttrs.UpdateAttrRows( pos, numRows );
 
-	m_data->m_rowAttrs.UpdateAttrRowsOrCols( pos, numRows );
+        m_data->m_rowAttrs.UpdateAttrRowsOrCols( pos, numRows );
     }
 }
 
@@ -879,7 +879,7 @@ void wxGridCellAttrProvider::UpdateAttrCols( size_t pos, int numCols )
     {
         m_data->m_cellAttrs.UpdateAttrCols( pos, numCols );
 
-	m_data->m_colAttrs.UpdateAttrRowsOrCols( pos, numCols );
+        m_data->m_colAttrs.UpdateAttrRowsOrCols( pos, numCols );
     }
 }
 
@@ -2832,10 +2832,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
             wxClientDC dc( m_gridWin );
             PrepareDC( dc );
-	    y = wxMax( y,
-		       m_rowBottoms[m_dragRowOrCol] -
-		       m_rowHeights[m_dragRowOrCol] +
-		       WXGRID_MIN_ROW_HEIGHT );
+            y = wxMax( y,
+                    m_rowBottoms[m_dragRowOrCol] -
+                    m_rowHeights[m_dragRowOrCol] +
+                    WXGRID_MIN_ROW_HEIGHT );
             dc.SetLogicalFunction(wxINVERT);
             if ( m_dragLastPos >= 0 )
             {
@@ -2852,9 +2852,9 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
             wxClientDC dc( m_gridWin );
             PrepareDC( dc );
-	    x = wxMax( x,
-		       m_colRights[m_dragRowOrCol] -
-		       m_colWidths[m_dragRowOrCol] + WXGRID_MIN_COL_WIDTH );
+            x = wxMax( x,
+                    m_colRights[m_dragRowOrCol] -
+                    m_colWidths[m_dragRowOrCol] + WXGRID_MIN_COL_WIDTH );
             dc.SetLogicalFunction(wxINVERT);
             if ( m_dragLastPos >= 0 )
             {
@@ -3700,7 +3700,10 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
         // Clear the old current cell highlight
         wxRect r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
-	m_currentCellCoords = coords;	// Otherwise refresh redraws the highlight!
+
+        // Otherwise refresh redraws the highlight!
+        m_currentCellCoords = coords;
+
         m_gridWin->Refresh( FALSE, &r );
     }
 
