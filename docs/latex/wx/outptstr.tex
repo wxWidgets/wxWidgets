@@ -11,10 +11,6 @@
 
 <wx/stream.h>
 
-\wxheading{See also}
-
-\helpref{wxStreamBuffer}{wxstreambuffer}
-
 % -----------
 % ctor & dtor
 % -----------
@@ -24,22 +20,11 @@
 
 Creates a dummy wxOutputStream object.
 
-\func{}{wxOutputStream}{\param{wxStreamBuffer*}{ sbuf}}
-
-Creates an input stream using the specified stream buffer \it{sbuf}. This
-stream buffer can point to another stream.
-
 \membersection{wxOutputStream::\destruct{wxOutputStream}}
 
 \func{}{\destruct{wxOutputStream}}{\void}
 
 Destructor.
-
-\membersection{wxOutputStream::OutputStreamBuffer}
-
-\func{wxStreamBuffer *}{OutputStreamBuffer}{\void}
-
-Returns the stream buffer associated with the output stream.
 
 \membersection{wxOutputStream::LastWrite}
 

@@ -180,7 +180,7 @@ bool wxHTTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
 bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 {
   wxChar *tmp_buf;
-  wxCharBuffer buf("");
+  wxChar buf[200];
   const wxWX2MBbuf pathbuf;
   wxString tmp_str;
 

@@ -11,10 +11,6 @@
 
 <wx/stream.h>
 
-\wxheading{See also}
-
-\helpref{wxStreamBuffer}{wxstreambuffer}
-
 % -----------
 % ctor & dtor
 % -----------
@@ -23,11 +19,6 @@
 \func{}{wxInputStream}{\void}
 
 Creates a dummy input stream.
-
-\func{}{wxInputStream}{\param{wxStreamBuffer *}{sbuf}}
-
-Creates an input stream using the specified stream buffer \it{sbuf}. This
-stream buffer can point to another stream.
 
 \membersection{wxInputStream::\destruct{wxInputStream}}
 
@@ -40,12 +31,6 @@ Destructor.
 \func{char}{GetC}{\void}
 
 Returns the first character in the input queue and removes it.
-
-\membersection{wxInputStream::InputStreamBuffer}
-
-\func{wxStreamBuffer*}{InputStreamBuffer}{\void}
-
-Returns the stream buffer associated with the input stream.
 
 \membersection{wxInputStream::LastRead}
 
@@ -95,4 +80,23 @@ Changes the stream current position.
 \constfunc{off\_t}{TellI}{\void}
 
 Returns the current stream position.
+
+\membersection{wxInputStream::Ungetch}\label{wxinputstream_ungetch}
+
+\func{size\_t}{Ungetch}{\param{const char*}{ buffer}, \param{size\_t}{ size}}
+
+This function is only useful in \it{read} mode. It is the manager of the "Write-Back"
+buffer. This buffer acts like a temporary buffer where datas which has to be
+read during the next read IO call are put. This is useful when you get a big
+block of data which you didn't want to read: you can replace them at the top
+of the input queue by this way.
+
+\wxheading{Return value}
+
+Returns the amount of bytes saved in the Write-Back buffer.
+
+\func{bool}{Ungetch}{\param{char }{c}}
+
+This function acts like the previous one except that it takes only one
+character: it is sometimes shorter to use than the generic function.
 

@@ -132,25 +132,6 @@ are cached in a buffer before being sent in one block to the stream.
 
 See \helpref{Read}{wxstreambufferread}.
 
-\membersection{wxStreamBuffer::WriteBack}\label{wxstreambufferwriteback}
-
-\func{size\_t}{WriteBack}{\param{const char*}{ buffer}, \param{size\_t}{ size}}
-
-This function is only useful in \it{read} mode. It is the manager of the "Write-Back"
-buffer. This buffer acts like a temporary buffer where datas which has to be 
-read during the next read IO call are put. This is useful when you get a big
-block of data which you didn't want to read: you can replace them at the top
-of the input queue by this way.
-
-\wxheading{Return value}
-
-Returns the amount of bytes saved in the Write-Back buffer.
-
-\func{size\_t}{WriteBack}{\param{char }{c}}
-
-This function acts like the previous one except that it takes only one
-character: it is sometimes shorter to use than the generic function.
-
 \membersection{wxStreamBuffer::GetChar}
 
 \func{char}{GetChar}{\void}
