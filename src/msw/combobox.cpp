@@ -332,8 +332,13 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height)
     int cx, cy;
     wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
 
+    // what should the height of the drop down list be? we choose 10 items by
+    // default and also 10 items max (if we always use n, the list will never
+    // have vertical scrollbar)
     int n = GetCount();
     if ( !n )
+        n = 10;
+    else if ( n > 10 )
         n = 10;
 
     height = n * EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
