@@ -20,6 +20,7 @@
 #include "wx/list.h"
 #include "wx/cmndata.h"
 #include "wx/string.h"
+#include "wx/frame.h"
 
 #if wxUSE_PRINTING_ARCHITECTURE
     #include "wx/print.h"
