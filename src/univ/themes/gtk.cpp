@@ -257,7 +257,7 @@ public:
     virtual wxSize GetFrameMinSize(int flags) const;
     virtual wxSize GetFrameIconSize() const;
     virtual int HitTestFrame(const wxRect& rect, const wxPoint& pt, int flags) const;
-    
+
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpFocus,
                                  wxBitmap *bmpPressed,
@@ -601,7 +601,7 @@ private:
     wxInputHandler *GetDefaultInputHandler();
 
     wxGTKRenderer *m_renderer;
-    
+
     wxGTKArtProvider *m_artProvider;
 
     // the names of the already created handlers and the handlers themselves
@@ -631,6 +631,7 @@ wxGTKTheme::wxGTKTheme()
     m_scheme = NULL;
     m_renderer = NULL;
     m_handlerDefault = NULL;
+    m_artProvider = NULL;
 }
 
 wxGTKTheme::~wxGTKTheme()
@@ -645,6 +646,7 @@ wxGTKTheme::~wxGTKTheme()
     delete m_handlerDefault;
     delete m_renderer;
     delete m_scheme;
+    wxArtProvider::RemoveProvider(m_artProvider);
 }
 
 wxRenderer *wxGTKTheme::GetRenderer()
@@ -1324,7 +1326,7 @@ void wxGTKRenderer::DrawCheckItem(wxDC& dc,
     DrawCheckButton(dc, _T(""), bitmap, rectBitmap, flags & ~wxCONTROL_FOCUSED);
 
     wxRect rectLabel = rect;
-    wxCoord shift = rectBitmap.width + 2*GetCheckItemMargin(); 
+    wxCoord shift = rectBitmap.width + 2*GetCheckItemMargin();
     rectLabel.x += shift;
     rectLabel.width -= shift;
     DrawItem(dc, label, rectLabel, flags);

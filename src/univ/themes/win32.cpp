@@ -1176,6 +1176,7 @@ wxWin32Theme::wxWin32Theme()
     m_scheme = NULL;
     m_renderer = NULL;
     m_handlerDefault = NULL;
+    m_artProvider = NULL;
 }
 
 wxWin32Theme::~wxWin32Theme()
@@ -1191,6 +1192,7 @@ wxWin32Theme::~wxWin32Theme()
 
     delete m_renderer;
     delete m_scheme;
+    wxArtProvider::RemoveProvider(m_artProvider);
 }
 
 wxRenderer *wxWin32Theme::GetRenderer()
