@@ -5,6 +5,7 @@ set DOCDIR=%WXWIN%\docs
 cd %DOCDIR%\latex\wx
 mkdir %DOCDIR%\html\wx
 copy *.gif %DOCDIR%\html\wx
+copy *.css %DOCDIR%\html\wx
 start /wait tex2rtf %DOCDIR%\latex\wx\manual.tex %DOCDIR%\html\wx\wx.htm -twice -html -macros %DOCDIR%\latex\wx\tex2rtf_css.ini
 
 erase %DOCDIR%\html\wx\*.con

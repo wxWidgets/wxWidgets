@@ -109,7 +109,6 @@ Source: "wx\py\*.txt";                         DestDir: "{app}\wx\py"; Component
 Source: "wx\py\*.ico";                         DestDir: "{app}\wx\py"; Components: core
 Source: "wx\py\*.png";                         DestDir: "{app}\wx\py"; Components: core
 Source: "wx\py\tests\*.py";                    DestDir: "{app}\wx\py\tests"; Components: core
-Source: "wx\py\wxd\*.py";                      DestDir: "{app}\wx\py\wxd"; Components: core
 Source: "wx\tools\*.py";                       DestDir: "{app}\wx\tools"; Components: core
 Source: "wx\tools\XRCed\*.txt";                DestDir: "{app}\wx\tools\XRCed"; Components: core
 Source: "wx\tools\XRCed\sawfishrc";            DestDir: "{app}\wx\tools\XRCed"; Components: core
@@ -282,8 +281,6 @@ Type: files; Name: "{app}\wx\py\*.pyc";
 Type: files; Name: "{app}\wx\py\*.pyo";
 Type: files; Name: "{app}\wx\py\tests\*.pyc";
 Type: files; Name: "{app}\wx\py\tests\*.pyo";
-Type: files; Name: "{app}\wx\py\wxd\*.pyc";
-Type: files; Name: "{app}\wx\py\wxd\*.pyo";
 Type: files; Name: "{app}\wx\tools\*.pyc";
 Type: files; Name: "{app}\wx\tools\*.pyo";
 Type: files; Name: "{app}\wx\tools\XRCed\*.pyc";
