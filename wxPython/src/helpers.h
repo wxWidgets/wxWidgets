@@ -2114,7 +2114,6 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* ro;                                                       \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(i)", a));     \
         }                                                                       \
         wxPyEndBlockThreads();                                                  \
