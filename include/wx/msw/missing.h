@@ -159,7 +159,7 @@ typedef struct tagNMLVDISPINFOW {
 #endif
 #endif
 
-#if defined(__GNUWIN32__) && !defined(HDN_GETDISPINFOW)
+#if (defined(__GNUWIN32__) || defined __BORLANDC__) && !defined(HDN_GETDISPINFOW)
 #define HDN_GETDISPINFOW (HDN_FIRST-29)
 typedef struct {
         NMHDR hdr;
