@@ -133,12 +133,15 @@ WXDLLEXPORT bool wxGetEmailAddress(char *buf, int maxSize);
 
 // Get hostname.
 WXDLLEXPORT bool wxGetHostName(char *buf, int maxSize);
+WXDLLEXPORT bool wxGetHostName(wxString& buf);
 
 // Get user ID e.g. jacs
 WXDLLEXPORT bool wxGetUserId(char *buf, int maxSize);
+WXDLLEXPORT bool wxGetUserId(wxString& buf);
 
 // Get user name e.g. Julian Smart
 WXDLLEXPORT bool wxGetUserName(char *buf, int maxSize);
+WXDLLEXPORT bool wxGetUserName(wxString& buf);
 
 /*
  * Strip out any menu codes
@@ -185,12 +188,19 @@ WXDLLEXPORT int wxGetOsVersion(int *majorVsn= (int *) NULL,int *minorVsn= (int *
 class WXDLLEXPORT wxCursor;
 WXDLLEXPORT_DATA(extern wxCursor*) wxHOURGLASS_CURSOR;
 WXDLLEXPORT void wxBeginBusyCursor(wxCursor *cursor = wxHOURGLASS_CURSOR);
- 
+
 // Restore cursor to normal
 WXDLLEXPORT void wxEndBusyCursor(void);
  
 // TRUE if we're between the above two calls
 WXDLLEXPORT bool wxIsBusy(void);
+
+// Convenience class so we can just create a wxBusyCursor object on the stack
+class WXDLLEXPORT wxBusyCursor
+{
+    inline wxBusyCursor(wxCursor* cursor = wxHOURGLASS_CURSOR) { wxBeginBusyCursor(cursor); }
+    inline ~wxBusyCursor() { wxEndBusyCursor(); }
+};
 
 /* Error message functions used by wxWindows */
 

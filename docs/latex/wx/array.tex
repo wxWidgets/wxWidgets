@@ -304,7 +304,7 @@ WX_DEFINE_OBJARRAY(wxArrayOfMyClass);
 
 \membersection{WX\_CLEAR\_ARRAY}\label{wxcleararray}
 
-\func{\void}{WX\_CLEAR\_ARRAY}{\param{wxArray\& }{array}}
+\func{void}{WX\_CLEAR\_ARRAY}{\param{wxArray\& }{array}}
 
 This macro may be used to delete all elements of the array before emptying it.
 It can not be used with wxObjArrays - but they will delete their elements anyhow
@@ -312,9 +312,9 @@ when you call Empty().
 
 \membersection{Default constructors}\label{wxarrayctordef}
 
-\func{}{wxArray}{}
+\func{}{wxArray}{\void}
 
-\func{}{wxObjArray}{}
+\func{}{wxObjArray}{\void}
 
 Default constructor initializes an empty array object.
 
@@ -359,17 +359,17 @@ done by wxArray and wxSortedArray versions - you may use
 
 \membersection{wxArray::Add}\label{wxarrayadd}
 
-\func{\void}{Add}{\param{T }{item}}
+\func{void}{Add}{\param{T }{item}}
 
-\func{\void}{Add}{\param{T *}{item}}
+\func{void}{Add}{\param{T *}{item}}
 
-\func{\void}{Add}{\param{T \&}{item}}
+\func{void}{Add}{\param{T \&}{item}}
 
 Appends a new element to the array (where {\it T} is the type of the array
 elements.)
 
 The first version is used with wxArray and wxSortedArray. The second and the
-third are used with wxObjArray. There is an {\bf important difference} between
+third are used with wxObjArray. There is an important difference between
 them: if you give a pointer to the array, it will take ownership of it, i.e.
 will delete it when the item is deleted from the array. If you give a reference
 to the array, however, the array will make a copy of the item and will not take
@@ -378,7 +378,7 @@ because the other array types never take ownership of their elements.
 
 \membersection{wxArray::Alloc}\label{wxarrayalloc}
 
-\func{\void}{Alloc}{\param{size\_t }{count}}
+\func{void}{Alloc}{\param{size\_t }{count}}
 
 Preallocates memory for a given number of array elements. It is worth calling
 when the number of items which are going to be added to the array is known in
@@ -387,7 +387,7 @@ has enough memory for the given number of items, nothing happens.
 
 \membersection{wxArray::Clear}\label{wxarrayclear}
 
-\func{\void}{Clear}{\void}
+\func{void}{Clear}{\void}
 
 This function does the same as \helpref{Empty()}{wxarrayempty} and additionally
 frees the memory allocated to the array.
@@ -410,11 +410,11 @@ pointer to the removed element.
 
 \membersection{wxArray::Empty}\label{wxarrayempty}
 
-\func{\void}{Empty}{\void}
+\func{void}{Empty}{\void}
 
 Empties the array. For wxObjArray classes, this destroys all of the array
 elements. For wxArray and wxSortedArray this does nothing except marking the
-array of being empty - this function does not free the allocated memory, use
+array of being empty - this function does not free the allocated memory, use 
 \helpref{Clear()}{wxarrayclear} for this.
 
 \membersection{wxArray::GetCount}\label{wxarraygetcount}
@@ -443,14 +443,14 @@ parameter doesn't make sense for it).
 
 \membersection{wxArray::Insert}\label{wxarrayinsert}
 
-\func{\void}{Insert}{\param{T }{item}, \param{size\_t }{n}}
+\func{void}{Insert}{\param{T }{item}, \param{size\_t }{n}}
 
-\func{\void}{Insert}{\param{T *}{item}, \param{size\_t }{n}}
+\func{void}{Insert}{\param{T *}{item}, \param{size\_t }{n}}
 
-\func{\void}{Insert}{\param{T \&}{item}, \param{size\_t }{n}}
+\func{void}{Insert}{\param{T \&}{item}, \param{size\_t }{n}}
 
-Insert a new item into the array before the item {\it n} - thus, {\it
-Insert(something, 0u}} will insert an item in such way that it will become the
+Insert a new item into the array before the item {\it n} - thus, {\it Insert(something, 0u)} will
+insert an item in such way that it will become the
 first array element.
 
 Please see \helpref{Add()}{wxarrayadd} for explanation of the differences
@@ -458,7 +458,7 @@ between the overloaded versions of this function.
 
 \membersection{wxArray::IsEmpty}\label{wxarrayisempty}
 
-\constfunc{bool}{IsEmpty}{}
+\constfunc{bool}{IsEmpty}{\void}
 
 Returns TRUE if the array is empty, FALSE otherwise.
 
@@ -506,7 +506,7 @@ elements of a wxArray (supposed to contain pointers).
 
 \membersection{wxArray::Shrink}\label{wxarrayshrink}
 
-\func{\void}{Shrink}{\void}
+\func{void}{Shrink}{\void}
 
 Frees all memory unused by the array. If the program knows that no new items
 will be added to the array it may call Shrink() to reduce its memory usage.
@@ -515,7 +515,7 @@ allocated again.
 
 \membersection{wxArray::Sort}\label{wxarraysort}
 
-\func{\void}{Sort}{\param{CMPFUNC<T> }{compareFunction}}
+\func{void}{Sort}{\param{CMPFUNC<T> }{compareFunction}}
 
 The notation CMPFUNC<T> should be read as if we had the following declaration:
 
@@ -523,7 +523,7 @@ The notation CMPFUNC<T> should be read as if we had the following declaration:
 template int CMPFUNC(T *first, T *second);
 \end{verbatim}
 
-where {\it T} is the type of the array elements. I.e. it is a function returning
+where {\it T} is the type of the array elements. I.e. it is a function returning 
 {\it int} which is passed two arguments of type {\it T *}.
 
 Sorts the array using the specified compare function: this function should

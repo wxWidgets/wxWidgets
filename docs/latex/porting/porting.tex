@@ -278,6 +278,8 @@ If you used device context functions with wxPoint or wxIntPoint before, please n
 that wxPoint now contains integer members, and there is a new class wxRealPoint. wxIntPoint
 no longer exists.
 
+wxMetaFile and wxMetaFileDC have been renamed to wxMetafile and wxMetafileDC.
+
 \chapter{Miscellaneous}
 
 \section{Strings}
@@ -327,14 +329,7 @@ Try to use the {\bf const} keyword in your own code where possible.
 Some wxWindows 1.xx functionality has been left to ease the transition to 2.0. This functionality
 (usually) only works if you compile with WXWIN\_COMPATIBILITY set to 1.
 
-TODO
-
-OnMenuCommand, OnSize, OnActivate, OnPaint, others?? can all be prefixed with Old (e.g. OldOnMenuCommand)
-and will work as before. You are encouraged to convert your code to the new forms, but
-this will allow you to get your applications up and running a little more quickly.
-
-OnClose can be used as-is without an 'Old' prefix, but officially the OnCloseWindow event table handler should be
-used instead.
+Mostly this defines old names to be the new names (e.g. wxRectangle is defined to be wxRect).
 
 \chapter{Quick reference}\label{quickreference}
 

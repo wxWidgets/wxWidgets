@@ -33,13 +33,6 @@ public:
       { id = iid; url = iurl; doc = idoc; }
 };
 
-
-struct wxBusyCursor
-{
-   wxBusyCursor() { wxBeginBusyCursor(); }
-   ~wxBusyCursor() { wxEndBusyCursor(); }
-};
-
 IMPLEMENT_ABSTRACT_CLASS(wxHTMLHelpControllerBase, wxHelpControllerBase)
    
 /**

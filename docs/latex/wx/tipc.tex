@@ -1,12 +1,35 @@
 \section{Interprocess communication overview}\label{ipcoverview}
 
-Classes: \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEConnection}{wxddeconnection},
-\rtfsp\helpref{wxDDEClient}{wxddeclient}.
+Classes: \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEConnection}{wxddeconnection}, 
+\helpref{wxDDEClient}{wxddeclient}, 
+\helpref{wxTCPServer}{wxtcpserver}, \helpref{wxTCPConnection}{wxtcpconnection}, 
+\helpref{wxTCPClient}{wxtcpclient}
 
-TODO: rewrite.
+wxWindows has a number of different classes to help with interprocess communication
+and network programming. This section only discusses one family of classes - the DDE-like
+protocol - but here's a list of other useful classes:
 
-The following describes how wxWindows implements DDE.  The following
-three classes are central.
+\begin{itemize}\itemsep=0pt
+\item \helpref{wxSocketEvent}{wxsocketevent}, 
+\helpref{wxSocketBase}{wxsocketbase}, 
+\helpref{wxSocketClient}{wxsocketclient}, 
+\helpref{wxSocketServer}{wxsocketserver}: classes for the low-level TCP/IP API.
+\item \helpref{wxProtocol}{wxprotocol}, \helpref{wxURL}{wxurl}, \helpref{wxFTP}{wxftp}, wxHTTP: classes
+for programming popular Internet protocols.
+\end{itemize}
+
+Further information on these classes will be available in due course.
+
+wxWindows has a high-level protocol based on Windows DDE.
+There are two implementations of this DDE-like protocol:
+one using real DDE running on Windows only, and another using TCP/IP (sockets) that runs
+on most platforms. Since the API is the same apart from the names of the classes, you
+should find it easy to switch between the two implementations.
+
+The following description refers to 'DDE' but remember that the equivalent wxTCP... classes
+can be used in much the same way.
+
+Three classes are central to the DDE API:
 
 \begin{enumerate}\itemsep=0pt
 \item wxDDEClient. This represents the client application, and is used
@@ -25,7 +48,7 @@ element of some messages. To create a connection (a conversation in
 Windows parlance), the client application sends the message
 MakeConnection to the client object, with a string service name to
 identify the server and a topic name to identify the topic for the
-duration of the connection. Under UNIX, the service name must contain an
+duration of the connection. Under Unix, the service name must contain an
 integer port identifier.
 
 The server then responds and either vetos the connection or allows it.
@@ -58,7 +81,7 @@ an appropriate connection object.
 \item Provide handlers for various messages that are sent to the client
 side of a wxDDEConnection.
 \item When appropriate, create a new connection by sending a MakeConnection
-message to the client object, with arguments host name (processed in UNIX only),
+message to the client object, with arguments host name (processed in Unix only),
 service name, and topic name for this connection. The client object will call OnMakeConnection
 to create a connection object of the desired type.
 \item Use the wxDDEConnection member functions to send messages to the server.
@@ -99,15 +122,11 @@ using the Execute, Request, and Poke commands from the client, together
 with an Advise loop: selecting an item in the server list box causes
 that item to be highlighted in the client list box.
 
-See also the source for wxHelp, which is a DDE server, and the files
-wx\_help.h and wx\_help.cc which implement the client interface to
-wxHelp.
-
 \subsection{More DDE details}
 
 A wxDDEClient object represents the client part of a client-server DDE
 (Dynamic Data Exchange) conversation (available in both
-Windows and UNIX).
+Windows and Unix).
 
 To create a client which can communicate with a suitable server,
 you need to derive a class from wxDDEConnection and another from wxDDEClient.
@@ -124,7 +143,7 @@ class MyConnection: public wxDDEConnection
  public:
   MyConnection(void)::wxDDEConnection(ipc_buffer, 3999) {}
   ~MyConnection(void) { }
-  Bool OnAdvise(char *topic, char *item, char *data, int size, int format)
+  bool OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format)
   { wxMessageBox(topic, data); }
 };
 
@@ -132,7 +151,7 @@ class MyClient: public wxDDEClient
 {
  public:
   MyClient(void) {}
-  wxDDEConnection *OnMakeConnection(void) { return new MyConnection; }
+  wxConnectionBase *OnMakeConnection(void) { return new MyConnection; }
 };
 
 \end{verbatim}
@@ -140,8 +159,7 @@ class MyClient: public wxDDEClient
 Here, {\bf MyConnection} will respond to \helpref{OnAdvise}{wxddeconnectiononadvise} messages sent
 by the server.
 
-When the client application starts, it must first call \helpref{wxIPCInitialize}{wxipcinitialize}\rtfsp
-before creating an instance of the derived wxDDEClient. In the following, command line
+When the client application starts, it must create an instance of the derived wxDDEClient. In the following, command line
 arguments are used to pass the host name (the name of the machine the server is running
 on) and the server name (identifying the server process). Calling \helpref{wxDDEClient::MakeConnection}{wxddeclientmakeconnection}\rtfsp
 implicitly creates an instance of {\bf MyConnection} if the request for a
@@ -149,29 +167,22 @@ connection is accepted, and the client then requests an {\it Advise} loop
 from the server, where the server calls the client when data has changed.
 
 \begin{verbatim}
-  wxIPCInitialize();
-
-  char *server = "4242";
-  char hostName[256];
-  wxGetHostName(hostName, sizeof(hostName));
-
-  char *host = hostName;
-
-  if (argc > 1)
-    server = argv[1];
-  if (argc > 2)
-    host = argv[2];
+  wxString server = "4242";
+  wxString hostName;
+  wxGetHostName(hostName);
 
   // Create a new client
   MyClient *client = new MyClient;
-  the_connection = (MyConnection *)client->MakeConnection(host, server, "IPC TEST");
+  connection = (MyConnection *)client->MakeConnection(hostName, server, "IPC TEST");
 
-  if (!the_connection)
+  if (!connection)
   {
     wxMessageBox("Failed to make connection to server", "Client Demo Error");
     return NULL;
   }
-  the_connection->StartAdvise("Item");
+  connection->StartAdvise("Item");
 \end{verbatim}
 
+Note that it is no longer necessary to call wxDDEInitialize or wxDDECleanUp, since
+wxWindows will do this itself if necessary.
 

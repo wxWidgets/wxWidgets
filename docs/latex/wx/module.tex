@@ -10,6 +10,27 @@ and add the DECLARE\_DYNAMIC\_CLASS and IMPLEMENT\_DYNAMIC\_CLASS to header and 
 create an instance of each, and call each OnInit function. On exit, wxWindows will call the OnExit
 function for each module instance.
 
+Note that your module class does not have to be in a header file.
+
+For example:
+
+\begin{verbatim}
+  // A module to allow DDE initialization/cleanup
+  // without calling these functions from app.cpp or from
+  // the user's application.
+
+  class wxDDEModule: public wxModule
+  {
+  DECLARE_DYNAMIC_CLASS(wxDDEModule)
+  public:
+      wxDDEModule() {}
+      bool OnInit() { wxDDEInitialize(); return TRUE; };
+      void OnExit() { wxDDECleanUp(); };
+  };
+
+  IMPLEMENT_DYNAMIC_CLASS(wxDDEModule, wxModule)
+\end{verbatim}
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}

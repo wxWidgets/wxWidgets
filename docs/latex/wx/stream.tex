@@ -1,4 +1,4 @@
-\section{\class{wxStreamBuffer}}\label{wxstreambuf}
+\section{\class{wxStreamBuffer}}\label{wxstreambuffer}
 
 \wxheading{Derived from}
 
@@ -28,7 +28,7 @@ wxStreamBuffer::write, wxStreamBuffer::read\_write.
 
 \func{}{wxStreamBuffer}{\param{BufMode}{ mode}}
 
-Constructor, creates a new empty stream buffer which won't flush any datas
+Constructor, creates a new empty stream buffer which won't flush any data
 to a stream. \it{mode} specifies the type of the buffer (read, write, read\_write).
 
 \membersection{wxStreamBuffer::wxStreamBuffer}
@@ -39,7 +39,7 @@ Constructor, creates a new stream buffer from the specified stream \it{buffer}.
 
 \membersection{wxStreamBuffer::\destruct{wxStreamBuffer}}
 
-\func{}{\destruct{wxStreamBuffer}}
+\func{}{wxStreamBuffer}{\destruct{wxStreamBuffer}}
 
 Destructor, destroys the stream buffer.
 
@@ -56,7 +56,7 @@ Reads a block of the specified \it{size} and stores datas in \it{buffer}.
 
 It returns the real read size. If returned size is different of the specified 
 \it{size}, an error occured and should be tested using 
-\helpref{GetError}{wxstreambasegeterror}.
+\helpref{LastError}{wxstreambaselasterror}.
 
 \membersection{wxStreamBuffer::Read}\label{wxstreambufreadbuf}
 
@@ -110,7 +110,7 @@ Puts a single char to the stream buffer.
 
 Gets the current position in the \it{stream}.
 
-\membersection{wxStreamBuffer::Seek}
+\membersection{wxStreamBuffer::Seek}\label{wxstreambufferseek}
 
 \func{off\_t}{Seek}{\param{off\_t }{pos}, \param{wxSeekMode }{mode}}
 

@@ -1,12 +1,12 @@
 /*
  * File:	client.cpp
  * Purpose:	wxSocket: client demo
- * Author:	LAVAUX Guilhem (from minimal.cc)
+ * Author:	LAVAUX Guilhem
  * Created:	June 1997
  * Updated:	
- * Copyright:	(c) 1993, AIAI, University of Edinburgh
- *		(C) 1997, LAVAUX Guilhem
+ * Copyright:	(c) 1997, LAVAUX Guilhem
  */
+
 #ifdef __GNUG__
 #pragma implementation
 #pragma interface
@@ -22,9 +22,14 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
+
 #include "wx/socket.h"
 #include "wx/url.h"
 #include "wx/protocol/http.h"
+
+#if defined(__WXMOTIF__) || defined(__WXGTK__)
+#include "mondrian.xpm"
+#endif
 
 // Define a new application type
 class MyApp: public wxApp
@@ -88,12 +93,7 @@ bool MyApp::OnInit(void)
   MyFrame *frame = new MyFrame();
 
   // Give it an icon
-#ifdef wx_msw
-  frame->SetIcon(new wxIcon("mondrian"));
-#endif
-#ifdef wx_x
-  frame->SetIcon(new wxIcon("mondrian.xbm"));
-#endif
+  frame->SetIcon(wxICON(mondrian));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu();
@@ -116,7 +116,7 @@ bool MyApp::OnInit(void)
   frame->SetMenuBar(menu_bar);
 
   // Make a panel with a message
-  (void)new wxPanel(frame, 0, 0, 300, 100);
+  (void)new wxPanel(frame, -1, wxPoint(0, 0), wxSize(300, 100));
 
   // Show the frame
   frame->Show(TRUE);

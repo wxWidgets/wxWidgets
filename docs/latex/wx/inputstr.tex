@@ -1,0 +1,94 @@
+% -----------------------------------------------------------------------------
+% wxInputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxInputStream}}\label{wxinputstream}
+
+\wxheading{Derived from}
+
+\helpref{wxStreamBase}{wxstreambase}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreambuffer}
+
+% -----------
+% ctor & dtor
+% -----------
+\membersection{wxInputStream::wxInputStream}
+
+\func{}{wxInputStream}{\void}
+
+Creates a dummy input stream.
+
+\func{}{wxInputStream}{\param{wxStreamBuffer *}{sbuf}}
+
+Creates an input stream using the specified stream buffer \it{sbuf}. This
+stream buffer can point to another stream.
+
+\membersection{wxInputStream::\destruct{wxInputStream}}
+
+\func{}{\destruct{wxInputStream}}{\void}
+
+Destructor.
+
+% -----------
+% IO function
+% -----------
+\membersection{wxInputStream::Peek}
+
+\func{char}{Peek}{\void}
+
+Returns the first character in the input queue without removing it.
+
+\membersection{wxInputStream::GetC}
+
+\func{char}{GetC}{\void}
+
+Returns the first character in the input queue and removes it.
+
+\membersection{wxInputStream::Read}
+
+\func{wxInputStream\&}{Read}{\param{void *}{buffer}, \param{size_t}{ size}}
+
+Reads the specified amount of bytes and stores the data in \it{buffer}.
+
+\it{WARNING!} The buffer absolutely needs to have at least the specified size.
+
+This function returns a reference on the current object, so the user can test
+any states of the stream right away.
+
+\func{wxInputStream\&}{Read}{\param{wxOutputStream\&}{ stream_out}}
+
+Reads data from the input queue and stores it in the specified output stream.
+The data is read until an error is raised by one of the two streams.
+
+% ------------------
+% Position functions
+% ------------------
+\membersection{wxInputStream::SeekI}
+
+\func{off_t}{SeekI}{\param{off_t}{ pos}, \param{wxSeekMode}{ mode = wxFromStart}}
+
+Changes the stream current position.
+
+\membersection{wxInputStream::TellI}
+
+\constfunc{off_t}{TellI}{\void}
+
+Returns the current stream position.
+
+% ---------------
+% State functions
+% ---------------
+\membersection{wxInputStream::InputStreamBuffer}
+
+\func{wxStreamBuffer*}{InputStreamBuffer}{\void}
+
+Returns the stream buffer associated with the input stream.
+
+\membersection{wxInputStream::LastRead}
+
+\constfunc{size_t}{LastRead}{\void}
+
+Returns the last number of bytes read.
+

@@ -53,6 +53,19 @@ Using makefiles:
 3. Change directory to wx\samples and type 'nmake -f makefile.vc'
    to make all the samples. You can also make them individually.
 
+To build the release version using makefiles, add FINAL=1 to your
+nmake invocation, both when building the library and for samples.
+
+Use the 'clean' target to clean all objects, libraries and
+executables.
+
+To build the DLL version using makefiles:
+
+1. Change directory to wx\src\msw. Type 'nmake -f makefile.vc dll pch'
+   to make both a suitable DLL and import library, and to build a
+   suitable precompiled header file for compiling applications.
+2. Invoke a sample makefile with 'nmake -f makefile.vc WXUSINGDLL=1'.
+
 Note (1): if you wish to use templates, please edit
 include\wx\msw\setup.h and set wxUSE_DEBUG_NEW_ALWAYS to 0.
 Without this, the redefinition of 'new' will cause problems in
@@ -71,6 +84,12 @@ Visual C++ 1.5 compilation
    make the wxWindows core library.
 3. Change directory to a sample, such as wx\samples\minimal, and
    type 'nmake -f makefile.dos'.
+
+Add FINAL=1 to your makefile invocation to build the release
+versions of the library and samples.
+
+Use the 'clean' target to clean all objects, libraries and
+executables.
 
 Borland C++ 4.5/5.0 compilation
 -------------------------------

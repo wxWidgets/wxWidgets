@@ -20,13 +20,6 @@
 #include   <sys/stat.h>
 #include   <unistd.h>
 
-
-struct wxBusyCursor
-{
-   wxBusyCursor() { wxBeginBusyCursor(); }
-   ~wxBusyCursor() { wxEndBusyCursor(); }
-};
-
 IMPLEMENT_CLASS(wxExtHelpController, wxHTMLHelpControllerBase)
    
 /**

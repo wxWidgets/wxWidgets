@@ -1,7 +1,6 @@
+\section{\class{wxMetafile}}\label{wxmetafile}
 
-\section{\class{wxMetaFile}}\label{wxmetafile}
-
-A {\bf wxMetaFile} represents the MS Windows metafile object, so metafile
+A {\bf wxMetafile} represents the MS Windows metafile object, so metafile
 operations have no effect in X. In wxWindows, only sufficient functionality
 has been provided for copying a graphic to the clipboard; this may be extended
 in a future version. Presently, the only way of creating a metafile
@@ -13,43 +12,43 @@ is to use a wxMetafileDC.
 
 \wxheading{See also}
 
-\helpref{wxMetaFileDC}{wxmetafiledc}
+\helpref{wxMetafileDC}{wxmetafiledc}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxMetaFile::wxMetaFile}
+\membersection{wxMetafile::wxMetafile}
 
-\func{}{wxMetaFile}{\param{const wxString\& }{filename = ""}}
+\func{}{wxMetafile}{\param{const wxString\& }{filename = ""}}
 
 Constructor. If a filename is given, the Windows disk metafile is
 read in. Check whether this was performed successfully by
-using the \helpref{wxMetaFile::Ok}{wxmetafileok} member.
+using the \helpref{wxMetafile::Ok}{wxmetafileok} member.
 
-\membersection{wxMetaFile::\destruct{wxMetaFile}}
+\membersection{wxMetafile::\destruct{wxMetafile}}
 
-\func{}{\destruct{wxMetaFile}}{\void}
+\func{}{\destruct{wxMetafile}}{\void}
 
 Destructor.
 
-\membersection{wxMetaFile::Ok}\label{wxmetafileok}
+\membersection{wxMetafile::Ok}\label{wxmetafileok}
 
 \func{bool}{Ok}{\void}
 
 Returns TRUE if the metafile is valid.
 
-\membersection{wxMetaFile::Play}\label{wxmetafileplay}
+\membersection{wxMetafile::Play}\label{wxmetafileplay}
 
 \func{bool}{Play}{\param{wxDC *}{dc}}
 
 Plays the metafile into the given device context, returning
 TRUE if successful.
 
-\membersection{wxMetaFile::SetClipboard}
+\membersection{wxMetafile::SetClipboard}
 
 \func{bool}{SetClipboard}{\param{int}{ width = 0}, \param{int}{ height = 0}}
 
 Passes the metafile data to the clipboard. The metafile can no longer be
-used for anything, but the wxMetaFile object must still be destroyed by
+used for anything, but the wxMetafile object must still be destroyed by
 the application.
 
 Below is a example of metafle, metafile device context and clipboard use
@@ -58,11 +57,11 @@ are passed to the clipboard, making use of the device context's ability
 to keep track of the maximum extent of drawing commands.
 
 \begin{verbatim}
-  wxMetaFileDC dc;
+  wxMetafileDC dc;
   if (dc.Ok())
   {
     Draw(dc, FALSE);
-    wxMetaFile *mf = dc.Close();
+    wxMetafile *mf = dc.Close();
     if (mf)
     {
       bool success = mf->SetClipboard((int)(dc.MaxX() + 10), (int)(dc.MaxY() + 10));
@@ -71,23 +70,23 @@ to keep track of the maximum extent of drawing commands.
   }
 \end{verbatim}
 
-\section{\class{wxMetaFileDC}}\label{wxmetafiledc}
+\section{\class{wxMetafileDC}}\label{wxmetafiledc}
 
 This is a type of device context that allows a metafile object to be
 created (Windows only), and has most of the characteristics of a normal
-\rtfsp{\bf wxDC}. The \helpref{wxMetaFileDC::Close}{wxmetafiledcclose} member must be called after drawing into the
+\rtfsp{\bf wxDC}. The \helpref{wxMetafileDC::Close}{wxmetafiledcclose} member must be called after drawing into the
 device context, to return a metafile. The only purpose for this at
-present is to allow the metafile to be copied to the clipboard (see \helpref{wxMetaFile}{wxmetafile}).
+present is to allow the metafile to be copied to the clipboard (see \helpref{wxMetafile}{wxmetafile}).
 
 Adding metafile capability to an application should be easy if you
-already write to a wxDC; simply pass the wxMetaFileDC to your drawing
+already write to a wxDC; simply pass the wxMetafileDC to your drawing
 function instead. You may wish to conditionally compile this code so it
 is not compiled under X (although no harm will result if you leave it
 in).
 
 Note that a metafile saved to disk is in standard Windows metafile format,
 and cannot be imported into most applications. To make it importable,
-call the function \helpref{::wxMakeMetaFilePlaceable}{wxmakemetafileplaceable} after
+call the function \helpref{::wxMakeMetafilePlaceable}{wxmakemetafileplaceable} after
 closing your disk-based metafile device context.
 
 \wxheading{Derived from}
@@ -97,29 +96,28 @@ closing your disk-based metafile device context.
 
 \wxheading{See also}
 
-\helpref{wxMetaFile}{wxmetafile}, \helpref{wxDC}{wxdc}
+\helpref{wxMetafile}{wxmetafile}, \helpref{wxDC}{wxdc}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxMetaFileDC::wxMetaFileDC}
+\membersection{wxMetafileDC::wxMetafileDC}
 
-\func{}{wxMetaFileDC}{\param{const wxString\& }{filename = ""}}
+\func{}{wxMetafileDC}{\param{const wxString\& }{filename = ""}}
 
 Constructor. If no filename is passed, the metafile is created
 in memory.
 
-\membersection{wxMetaFileDC::\destruct{wxMetaFileDC}}
+\membersection{wxMetafileDC::\destruct{wxMetafileDC}}
 
-\func{}{\destruct{wxMetaFileDC}}{\void}
+\func{}{\destruct{wxMetafileDC}}{\void}
 
 Destructor.
 
-\membersection{wxMetaFileDC::Close}\label{wxmetafiledcclose}
+\membersection{wxMetafileDC::Close}\label{wxmetafiledcclose}
 
-\func{wxMetaFile *}{Close}{\void}
+\func{wxMetafile *}{Close}{\void}
 
 This must be called after the device context is finished with. A
 metafile is returned, and ownership of it passes to the calling
 application (so it should be destroyed explicitly).
-
 

@@ -31,7 +31,7 @@
 #include "wx/app.h"
 #endif
 
-#include "wx/msw/private.h"
+#include "wx/module.h"
 #include "wx/dde.h"
 
 #ifndef __TWIN32__
@@ -40,6 +40,7 @@
 #endif
 #endif
 
+#include "wx/msw/private.h"
 #include <windows.h>
 #include <ddeml.h>
 #include <string.h>
@@ -119,6 +120,21 @@ void wxDDECleanUp()
   if (DDEDefaultIPCBuffer)
     delete [] DDEDefaultIPCBuffer ;
 }
+
+// A module to allow DDE initialization/cleanup
+// without calling these functions from app.cpp or from
+// the user's application.
+
+class wxDDEModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxDDEModule)
+public:
+    wxDDEModule() {}
+    bool OnInit() { wxDDEInitialize(); return TRUE; };
+    void OnExit() { wxDDECleanUp(); };
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxDDEModule, wxModule)
 
 // Global find connection
 static wxDDEConnection *DDEFindConnection(HCONV hConv)

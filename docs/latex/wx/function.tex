@@ -18,7 +18,7 @@ Returns TRUE if the directory exists.
 
 \func{void}{Dos2UnixFilename}{\param{const wxString\& }{s}}
 
-Converts a DOS to a UNIX filename by replacing backslashes with forward
+Converts a DOS to a Unix filename by replacing backslashes with forward
 slashes.
 
 \membersection{::wxFileExists}
@@ -84,7 +84,7 @@ pointer for long-term use.
 
 \func{void}{wxUnix2DosFilename}{\param{const wxString\& }{s}}
 
-Converts a UNIX to a DOS filename by replacing forward
+Converts a Unix to a DOS filename by replacing forward
 slashes with backslashes.
 
 \membersection{::wxConcatFiles}
@@ -168,7 +168,7 @@ is allocated for the temporary filename using {\it new}.
 
 Under Windows, the filename will include the drive and name of the
 directory allocated for temporary files (usually the contents of the
-TEMP variable). Under UNIX, the {\tt /tmp} directory is used.
+TEMP variable). Under Unix, the {\tt /tmp} directory is used.
 
 It is the application's responsibility to create and delete the file.
 
@@ -444,12 +444,12 @@ Returns TRUE if the display is colour, FALSE otherwise.
 
 Returns the depth of the display (a value of 1 denotes a monochrome display).
 
-\membersection{::wxMakeMetaFilePlaceable}\label{wxmakemetafileplaceable}
+\membersection{::wxMakeMetafilePlaceable}\label{wxmakemetafileplaceable}
 
-\func{bool}{wxMakeMetaFilePlaceable}{\param{const wxString\& }{filename}, \param{int }{minX}, \param{int }{minY},
+\func{bool}{wxMakeMetafilePlaceable}{\param{const wxString\& }{filename}, \param{int }{minX}, \param{int }{minY},
  \param{int }{maxX}, \param{int }{maxY}, \param{float }{scale=1.0}}
 
-Given a filename for an existing, valid metafile (as constructed using \helpref{wxMetaFileDC}{wxmetafiledc})
+Given a filename for an existing, valid metafile (as constructed using \helpref{wxMetafileDC}{wxmetafiledc})
 makes it into a placeable metafile by prepending a header containing the given
 bounding box. The bounding box may be obtained from a device context after drawing
 into it, using the functions wxDC::MinX, wxDC::MinY, wxDC::MaxX and wxDC::MaxY.
@@ -676,7 +676,7 @@ Passes data to the clipboard.
 \item wxCF\_TEXT or wxCF\_OEMTEXT: {\it data} is a null-terminated text string.
 \item wxCF\_BITMAP: {\it data} is a wxBitmap.
 \item wxCF\_DIB: {\it data} is a wxBitmap. The bitmap is converted to a DIB (device independent bitmap).
-\item wxCF\_METAFILE: {\it data} is a wxMetaFile. {\it width} and {\it height} are used to give recommended dimensions.
+\item wxCF\_METAFILE: {\it data} is a wxMetafile. {\it width} and {\it height} are used to give recommended dimensions.
 \end{itemize}
 
 The clipboard must have previously been opened for this call to succeed.
@@ -705,7 +705,7 @@ Use \helpref{wxEndBusyCursor}{wxendbusycursor} to revert the cursor back
 to its previous state. These two calls can be nested, and a counter
 ensures that only the outer calls take effect.
 
-See also \helpref{wxIsBusy}{wxisbusy}.
+See also \helpref{wxIsBusy}{wxisbusy}, \helpref{wxBusyCursor}{wxbusycursor}.
 
 \membersection{::wxBell}
 
@@ -729,12 +729,33 @@ if wxWindows does not get a chance to do it.
 Creates and returns an object of the given class, if the class has been
 registered with the dynamic class system using DECLARE... and IMPLEMENT... macros.
 
-\membersection{::wxDebugMsg}
+\membersection{::wxDDECleanUp}\label{wxddecleanup}
+
+\func{void}{wxDDECleanUp}{\void}
+
+Called when wxWindows exits, to clean up the DDE system. This no longer needs to be
+called by the application.
+
+See also helpref{wxDDEInitialize}{wxddeinitialize}.
+
+\membersection{::wxDDEInitialize}\label{wxddeinitialize}
+
+\func{void}{wxDDEInitialize}{\void}
+
+Initializes the DDE system. May be called multiple times without harm.
+
+This no longer needs to be called by the application: it will be called
+by wxWindows if necessary.
+
+See also \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEClient}{wxddeclient}, \helpref{wxDDEConnection}{wxddeconnection}, 
+\helpref{wxDDECleanUp}{wxddecleanup}.
+
+\membersection{::wxDebugMsg}\label{wxdebugmsg}
 
 \func{void}{wxDebugMsg}{\param{const wxString\& }{fmt}, \param{...}{}}
 
 Display a debugging message; under Windows, this will appear on the
-debugger command window, and under UNIX, it will be written to standard
+debugger command window, and under Unix, it will be written to standard
 error.
 
 The syntax is identical to {\bf printf}: pass a format string and a
@@ -779,14 +800,14 @@ wxWindows initialization under Windows (for applications constructed as a DLL).
 
 \func{int}{wxEntry}{\param{int}{ argc}, \param{const wxString\& *}{argv}}
 
-wxWindows initialization under UNIX.
+wxWindows initialization under Unix.
 
 \membersection{::wxError}\label{wxerror}
 
 \func{void}{wxError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Internal Error"}}
 
 Displays {\it msg} and continues. This writes to standard error under
-UNIX, and pops up a message box under Windows. Used for internal
+Unix, and pops up a message box under Windows. Used for internal
 wxWindows errors. See also \helpref{wxFatalError}{wxfatalerror}.
 
 \membersection{::wxEndBusyCursor}\label{wxendbusycursor}
@@ -796,15 +817,15 @@ wxWindows errors. See also \helpref{wxFatalError}{wxfatalerror}.
 Changes the cursor back to the original cursor, for all windows in the application.
 Use with \helpref{wxBeginBusyCursor}{wxbeginbusycursor}.
 
-See also \helpref{wxIsBusy}{wxisbusy}.
+See also \helpref{wxIsBusy}{wxisbusy}, \helpref{wxBusyCursor}{wxbusycursor}.
 
 \membersection{::wxExecute}\label{wxexecute}
 
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{bool }{sync = FALSE}, \param{wxProcess *}{callback = NULL}}
 
-\func{long}{wxExecute}{\param{const wxString\& *}{argv}, \param{bool }{sync = FALSE}, \param{wxProcess *}{callback = NULL}}
+\func{long}{wxExecute}{\param{char **}{argv}, \param{bool }{sync = FALSE}, \param{wxProcess *}{callback = NULL}}
 
-Executes another program in UNIX or Windows.
+Executes another program in Unix or Windows.
 
 The first form takes a command string, such as {\tt "emacs file.txt"}.
 
@@ -837,7 +858,7 @@ application. See \helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow} and \h
 
 \func{void}{wxFatalError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Fatal Error"}}
 
-Displays {\it msg} and exits. This writes to standard error under UNIX,
+Displays {\it msg} and exits. This writes to standard error under Unix,
 and pops up a message box under Windows. Used for fatal internal
 wxWindows errors. See also \helpref{wxError}{wxerror}.
 
@@ -883,7 +904,7 @@ Under X only, returns the current display name. See also \helpref{wxSetDisplayNa
 
 \func{wxString}{wxGetHomeDir}{\param{const wxString\& }{buf}}
 
-Fills the buffer with a string representing the user's home directory (UNIX only).
+Fills the buffer with a string representing the user's home directory (Unix only).
 
 \membersection{::wxGetHostName}
 
@@ -891,7 +912,7 @@ Fills the buffer with a string representing the user's home directory (UNIX only
 
 Copies the host name of the machine the program is running on into the
 buffer {\it buf}, of maximum size {\it bufSize}, returning TRUE if
-successful. Under UNIX, this will return a machine name. Under Windows,
+successful. Under Unix, this will return a machine name. Under Windows,
 this returns ``windows''.
 
 \membersection{::wxGetElapsedTime}\label{wxgetelapsedtime}
@@ -905,13 +926,13 @@ by this call.
 
 See also \helpref{wxTimer}{wxtimer}.
 
-\membersection{::wxGetFreeMemory}
+\membersection{::wxGetFreeMemory}\label{wxgetfreememory}
 
 \func{long}{wxGetFreeMemory}{\void}
 
 Returns the amount of free memory in Kbytes under environments which
 support it, and -1 if not supported. Currently, returns a positive value
-under Windows, and -1 under UNIX.
+under Windows, and -1 under Unix.
 
 \membersection{::wxGetMousePosition}
 
@@ -956,7 +977,7 @@ Gets a resource value from the resource database (for example, WIN.INI, or
 .Xdefaults). If {\it file} is NULL, WIN.INI or .Xdefaults is used,
 otherwise the specified file is used.
 
-Under X, if an application class (wxApp::wx\_class) has been defined,
+Under X, if an application class (wxApp::GetClassName) has been defined,
 it is appended to the string /usr/lib/X11/app-defaults/ to try to find
 an applications default file when merging all resource databases.
 
@@ -966,7 +987,7 @@ if the value exists in the resource file. It saves a separate
 test for that resource's existence, and it also allows
 the overloading of the function for different types.
 
-See also \helpref{wxWriteResource}{wxwriteresource}.
+See also \helpref{wxWriteResource}{wxwriteresource}, \helpref{wxConfigBase}{wxconfigbase}.
 
 \membersection{::wxGetUserId}
 
@@ -988,7 +1009,7 @@ Under Windows, this returns ``unknown''.
 
 \func{int}{wxKill}{\param{long}{ pid}, \param{int}{ sig}}
 
-Under UNIX (the only supported platform), equivalent to the UNIX kill function.
+Under Unix (the only supported platform), equivalent to the Unix kill function.
 Returns 0 on success, -1 on failure.
 
 Tip: sending a signal of 0 to a process returns -1 if the process does not exist.
@@ -1001,29 +1022,14 @@ It does not raise a signal in the receiving process.
 Initializes the generic clipboard system by creating an instance of
 the class \helpref{wxClipboard}{wxclipboard}.
 
-\membersection{::wxIPCCleanUp}\label{wxipccleanup}
-
-\func{void}{wxIPCCleanUp}{\void}
-
-Call this when your application is terminating, if you have
-called \helpref{wxIPCInitialize}{wxipcinitialize}.
-
-\membersection{::wxIPCInitialize}\label{wxipcinitialize}
-
-\func{void}{wxIPCInitialize}{\void}
-
-Initializes for interprocess communication operation. May
-be called multiple times without harm.
-
-See also \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEClient}{wxddeclient}, \helpref{wxDDEConnection}{wxddeconnection}
-and the relevant section of the user manual.
-
 \membersection{::wxIsBusy}\label{wxisbusy}
 
 \func{bool}{wxIsBusy}{\void}
 
 Returns TRUE if between two \helpref{wxBeginBusyCursor}{wxbeginbusycursor} and\rtfsp
 \helpref{wxEndBusyCursor}{wxendbusycursor} calls.
+
+See also \helpref{wxBusyCursor}{wxbusycursor}.
 
 \membersection{::wxLoadUserResource}\label{wxloaduserresource}
 
@@ -1083,11 +1089,11 @@ specified, then just the shell is spawned.
 
 See also \helpref{wxExecute}{wxexecute}.
 
-\membersection{::wxSleep}
+\membersection{::wxSleep}\label{wxsleep}
 
 \func{void}{wxSleep}{\param{int}{ secs}}
 
-Under X, sleeps for the specified number of seconds.
+Sleeps for the specified number of seconds.
 
 \membersection{::wxStripMenuCodes}
 
@@ -1165,9 +1171,9 @@ Under X, the resource databases are cached until the internal function
 all updated resource databases are written to their files.
 
 Note that it is considered bad manners to write to the .Xdefaults
-file under UNIX, although the WIN.INI file is fair game under Windows.
+file under Unix, although the WIN.INI file is fair game under Windows.
 
-See also \helpref{wxGetResource}{wxgetresource}.
+See also \helpref{wxGetResource}{wxgetresource}, \helpref{wxConfigBase}{wxconfigbase}.
 
 \membersection{::wxYield}
 

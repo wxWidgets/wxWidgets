@@ -811,3 +811,41 @@ int	isascii( int c )
 	return ( c >= 0 && c < 128 ) ;
 }
 #endif
+
+// Overloaded functions, taking a wxString
+bool wxGetHostName(wxString& name)
+{
+    bool success = wxGetHostName(wxBuffer, 500);
+    if (success)
+    {
+        name = wxBuffer;
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+bool wxGetUserId(wxString& buf)
+{
+    bool success = wxGetUserId(wxBuffer, 500);
+    if (success)
+    {
+        buf = wxBuffer;
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+bool wxGetUserName(wxString& buf)
+{
+    bool success = wxGetUserName(wxBuffer, 500);
+    if (success)
+    {
+        buf = wxBuffer;
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+

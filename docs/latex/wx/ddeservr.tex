@@ -1,16 +1,19 @@
 \section{\class{wxDDEServer}}\label{wxddeserver}
 
 A wxDDEServer object represents the server part of a client-server DDE
-(Dynamic Data Exchange) conversation (available under both Windows
-and UNIX).
+(Dynamic Data Exchange) conversation.
+
+This DDE-based implementation is
+available on Windows only, but a platform-independent, socket-based version
+of this API is available using \helpref{wxTCPServer}{wxtcpserver}.
 
 \wxheading{Derived from}
 
-wxDDEObject
+wxServerBase
 
 \wxheading{See also}
 
-\helpref{IPC overview}{ipcoverview}
+\helpref{wxDDEClient}{wxddeclient}, \helpref{wxDDEConnection}{wxddeconnection}, \helpref{IPC overview}{ipcoverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -31,7 +34,7 @@ number is already in use).
 
 \membersection{wxDDEServer::OnAcceptConnection}\label{wxddeserveronacceptconnection}
 
-\func{wxDDEConnection *}{OnAcceptConnection}{\param{const wxString\& }{topic}}
+\func{virtual wxConnectionBase *}{OnAcceptConnection}{\param{const wxString\& }{topic}}
 
 When a client calls {\bf MakeConnection}, the server receives the
 message and this member is called. The application should derive a
