@@ -502,6 +502,12 @@ bool wxWindowMSW::Enable(bool enable)
     if ( hWnd )
         ::EnableWindow(hWnd, (BOOL)enable);
 
+    // the logic below doesn't apply to the top level windows -- otherwise
+    // showing a modal dialog would result in total greying out (and ungreying
+    // out later) of everything which would be really ugly
+    if ( IsTopLevel() )
+        return TRUE;
+
     // when the parent is disabled, all of its children should be disabled as
     // well but when it is enabled back, only those of the children which
     // hadn't been already disabled in the beginning should be enabled again,
