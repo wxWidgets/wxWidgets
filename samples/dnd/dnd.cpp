@@ -972,7 +972,7 @@ void DnDFrame::OnPasteBitmap(wxCommandEvent& WXUNUSED(event))
     }
 
     wxBitmapDataObject data;
-    if ( !wxTheClipboard->GetData(&data) )
+    if ( !wxTheClipboard->GetData(data) )
     {
         wxLogError(_T("Can't paste bitmap from the clipboard"));
     }
@@ -1029,7 +1029,7 @@ void DnDFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
     }
 
     wxTextDataObject text;
-    if ( !wxTheClipboard->GetData(&text) )
+    if ( !wxTheClipboard->GetData(text) )
     {
         wxLogError(_T("Can't paste data from the clipboard"));
     }
@@ -1305,7 +1305,7 @@ void DnDShapeFrame::OnCopyShape(wxCommandEvent& event)
 void DnDShapeFrame::OnPasteShape(wxCommandEvent& event)
 {
     DnDShapeDataObject shapeDataObject(NULL);
-    if ( wxTheClipboard->GetData(&shapeDataObject) )
+    if ( wxTheClipboard->GetData(shapeDataObject) )
     {
         SetShape(shapeDataObject.GetShape());
     }
@@ -1328,9 +1328,15 @@ void DnDShapeFrame::OnUpdateUIPaste(wxUpdateUIEvent& event)
 void DnDShapeFrame::OnPaint(wxPaintEvent& event)
 {
     if ( m_shape )
-        m_shape->Draw(wxPaintDC(this));
+    {
+        wxPaintDC dc(this);
+
+        m_shape->Draw(dc);
+    }
     else
+    {
         event.Skip();
+    }
 }
 
 // ----------------------------------------------------------------------------
