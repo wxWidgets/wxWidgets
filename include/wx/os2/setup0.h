@@ -34,8 +34,11 @@
 
 #define wxUSE_NET_API          1 // Utilize OS/2's UPM netapi's
 
+#define wxUSE_DATETIME         1 // Utilize the date-time classes
+
 #define wxUSE_CONFIG           1
                                 // Use wxConfig, with CreateConfig in wxApp
+
 #define wxUSE_POSTSCRIPT  1
                             // 0 for no PostScript device context
 #define wxUSE_AFM_FOR_POSTSCRIPT 1
@@ -73,40 +76,61 @@
 #define wxUSE_DRAG_AND_DROP 1
                                 // 0 for no drag and drop
 
+#define wxUSE_CONTROLS     1    // Do not change
+#define wxUSE_POPUPWIN     0    // OS/2 does not use this
+
+// Recommended setting: 1
+#define wxUSE_BUTTON       1    // wxButton
+#define wxUSE_BMPBUTTON    1    // wxBitmapButton
+#define wxUSE_CALENDARCTRL 1    // wxCalendarCtrl
+#define wxUSE_CHECKBOX     1    // wxCheckBox
+#define wxUSE_CHECKLISTBOX 1    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
+#define wxUSE_CHOICE       1    // wxChoice
+#define wxUSE_COMBOBOX     1    // wxComboBox
+#define wxUSE_GAUGE        1    // wxGauge
+#define wxUSE_LISTBOX      1    // wxListBox
+#define wxUSE_LISTCTRL     1    // wxListCtrl
+#define wxUSE_RADIOBOX     1    // wxRadioBox
+#define wxUSE_RADIOBTN     1    // wxRadioButton
+#define wxUSE_SCROLLBAR    1    // wxScrollBar
+#define wxUSE_SLIDER       1    // wxSlider
+#define wxUSE_SPINBTN      1    // wxSpinButton
+#define wxUSE_SPINCTRL     1    // wxSpinCtrl
+#define wxUSE_STATBOX      1    // wxStaticBox
+#define wxUSE_STATLINE     1    // wxStaticLine
+#define wxUSE_STATTEXT     1    // wxStaticText
+#define wxUSE_STATBMP      1    // wxStaticBitmap
+#define wxUSE_TEXTCTRL     1    // wxTextCtrl
+#define wxUSE_TOGGLEBTN    1    // requires wxButton
+#define wxUSE_TREECTRL     1    // wxTreeCtrl
+#define wxUSE_CHOICEDLG    1
+#define wxUSE_COLOURDLG    1
+#define wxUSE_DATAOBJ      1
+#define wxUSE_FILEDLG      1
+#define wxUSE_FONTDLG      1
+#define wxUSE_FONTMAP      1
+#define wxUSE_GRID         1
+#define wxUSE_IMAGLIST     1
+#define wxUSE_LOGGUI       1
+#define wxUSE_LOGWINDOW    1
+#define wxUSE_LOG_DIALOG   1
+#define wxUSE_MIMETYPE     1
+#define wxUSE_MSGDLG       1
+#define wxUSE_NOTEBOOK     1
+#define wxUSE_SPLITTER     1
+#define wxUSE_STOPWATCH    1
+#define wxUSE_TAB_DIALOG   1
+#define wxUSE_WXHTML_HELP  1
 #define wxUSE_BUTTONBAR     1
                                     // Define 1 to use buttonbar classes (enhanced toolbar
                                     // for MS Windows)
-#define wxUSE_GAUGE         1
-                                    // Define 1 to use Microsoft's gauge (Windows)
-                                    // or Bull's gauge (Motif) library (both in contrib).
-#define wxUSE_COMBOBOX      1
-                                    // Define 1 to use COMBOXBOX control (Windows)
-                                    // or FWW's ComboBox widget (Motif).
-#define wxUSE_CHOICE      1
-                                    // Define 1 to use CHOICE
 
 #define wxUSE_RADIOBUTTON   1
                                     // Define 1 to use radio button control
-#define wxUSE_RADIOBTN   1
-                                    // Unfortunately someone introduced this one, too
 
 #define wxUSE_SCROLLBAR   1
                                     // Define 1 to compile contributed wxScrollBar class
 
-#define wxUSE_CHECKBOX 1
-                                    // Define 1 to compile checkbox
-
-#define wxUSE_LISTBOX 1
-                                    // Define 1 to compile listbox
-
-#define wxUSE_SPINBTN 1
-                                    // Define 1 to compile spin button
-
-// use wxStaticLine class (separator line in the dialog)?
-#define wxUSE_STATLINE 1
-
-#define wxUSE_CHECKLISTBOX 1
-                                    // Define 1 to compile check listbox
 #define wxUSE_CARET       1
                                     // Define 1 to use wxCaret class
 #define wxUSE_TREECTRL    1
@@ -251,6 +275,7 @@
 #define wxUSE_ZIPSTREAM     1
                                   // input stream for reading from zip archives
 
+#define wxUSE_TIMER         1     // use the timer class
 /*
  * Finer detail
  *
@@ -263,6 +288,8 @@
 
 // use wxFile class - required by i18n code, wxConfig and others - recommended
 #define wxUSE_FILE                1
+
+#define wxUSE_FFILE         1
 
 // use wxTextFile class: requires wxFile, required by wxConfig
 #define wxUSE_TEXTFILE            1
@@ -306,6 +333,7 @@
 
 #define wxUSE_NEW_GRID 1
                                 // Define 1 to use the new drid classes
+
 /*
  * Any platform
  *

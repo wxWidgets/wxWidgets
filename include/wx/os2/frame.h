@@ -178,10 +178,13 @@ protected:
     // helper
     void         DetachMenuBar(void);
 
+#if wxUSE_MENUS_NATIVE
+    // perform MSW-specific action when menubar is changed
+    virtual void AttachMenuBar(wxMenuBar* pMenubar);
     // a plug in for MDI frame classes which need to do something special when
     // the menubar is set
     virtual void InternalSetMenuBar(void);
-
+#endif
     // propagate our state change to all child frames
     void IconizeChildFrames(bool bIconize);
 

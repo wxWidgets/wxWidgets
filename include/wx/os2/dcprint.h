@@ -52,8 +52,8 @@ protected:
                         ,wxCoord vYsrc
                         ,int     nRop = wxCOPY
                         ,bool    bUseMask = FALSE
-                        ,wxCoord xsrcMask = -1
-                        ,wxCoord ysrcMask = -1
+                        ,wxCoord vXsrcMask = -1
+                        ,wxCoord vYsrcMask = -1
                        );
 
     // init the dc

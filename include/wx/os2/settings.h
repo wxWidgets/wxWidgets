@@ -24,15 +24,6 @@ public:
     static wxColour    GetSystemColour(int index);
     static wxFont      GetSystemFont(int index);
     static int         GetSystemMetric(int index);
-    static void        SetOption( const wxString& rsName
-                                 ,const wxString& rsValue
-                                );
-    static void        SetOption( const wxString& rsName
-                                 ,int             nValue
-                                );
-    static wxString    GetOption(const wxString& rsName) ;
-    static int         GetOptionInt(const wxString& rsName) ;
-    static bool        HasOption(const wxString& rsName) ;
 }; // end of CLASS wxSystemSettings
 
 #endif

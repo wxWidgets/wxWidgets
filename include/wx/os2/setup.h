@@ -121,7 +121,6 @@
 #define wxUSE_STOPWATCH    1
 #define wxUSE_TAB_DIALOG   1
 #define wxUSE_WXHTML_HELP  1
-
 #define wxUSE_BUTTONBAR     1
                                     // Define 1 to use buttonbar classes (enhanced toolbar
                                     // for MS Windows)

@@ -67,6 +67,34 @@
 
 #define     wx_round(a)    (int)((a)+.5)
 
+#if wxUSE_DC_CACHEING
+/*
+ * Cached blitting, maintaining a cache
+ * of bitmaps required for transparent blitting
+ * instead of constant creation/deletion
+ */
+
+class wxDCCacheEntry : public wxObject
+{
+public:
+    wxDCCacheEntry( WXHBITMAP hBitmap
+                   ,int       nWidth
+                   ,int       nHeight
+                   ,int       nDepth
+                  );
+    wxDCCacheEntry( HPS   hPS
+                   ,int   nDepth
+                  );
+    ~wxDCCacheEntry();
+
+    WXHBITMAP                       m_hBitmap;
+    HPS                             m_hPS;
+    int                             m_nWidth;
+    int                             m_nHeight;
+    int                             m_nDepth;
+}; // end of CLASS wxDCCacheEntry
+#endif
+
 class WXDLLEXPORT wxDC : public wxDCBase
 {
     DECLARE_DYNAMIC_CLASS(wxDC)
@@ -159,6 +187,20 @@ public:
 
     void            UpdateClipBox();
 
+#if wxUSE_DC_CACHEING
+    static wxDCCacheEntry* FindBitmapInCache( HPS hPS
+                                             ,int nWidth
+                                             ,int nHeight
+                                            );
+    static wxDCCacheEntry* FindDCInCache( wxDCCacheEntry* pNotThis
+                                         ,HPS             hPS
+                                        );
+
+    static void AddToBitmapCache(wxDCCacheEntry* pEntry);
+    static void AddToDCCache(wxDCCacheEntry* pEntry);
+    static void ClearCache(void);
+#endif
+
 protected:
     virtual void DoFloodFill( wxCoord         vX
                              ,wxCoord         vY
@@ -250,8 +292,8 @@ protected:
                         ,wxCoord vYsrc
                         ,int     nRop = wxCOPY
                         ,bool    bUseMask = FALSE
-                        ,wxCoord xsrcMask = -1
-                        ,wxCoord ysrcMask = -1
+                        ,wxCoord vXsrcMask = -1
+                        ,wxCoord vYsrcMask = -1
                        );
 
     virtual void DoSetClippingRegionAsRegion(const wxRegion& rRegion);
@@ -337,6 +379,11 @@ public:
     WXHBRUSH                        m_hOldBrush;
     WXHFONT                         m_hOldFont;
     WXHPALETTE                      m_hOldPalette;
-};
+
+#if wxUSE_DC_CACHEING
+    static wxList                   m_svBitmapCache;
+    static wxList                   m_svDCCache;
+#endif
+}; // end of CLASS wxDC
 #endif
     // _WX_DC_H_
