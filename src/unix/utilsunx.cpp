@@ -40,6 +40,7 @@
 #include <fcntl.h>          // for O_WRONLY and friends
 #include <time.h>           // nanosleep() and/or usleep()
 #include <ctype.h>          // isspace()
+
 #ifdef HAVE_UNAME
     #include <sys/utsname.h> // for uname()
 #endif // HAVE_UNAME
@@ -64,25 +65,6 @@
         #endif // Sun/!Sun
     };
 #endif // Unices without usleep()
-
-// many versions of Unices have this function, but it is not defined in system
-// headers - please add your system here if it is the case for your OS.
-// SunOS (and Solaris) and DG-UX are like this.
-#ifdef HAVE_WAIT4
-  #if defined(__SOLARIS__) || defined(__osf__)
-    extern "C"
-    {
-        pid_t wait4(pid_t pid, int *statusp, int options,
-                    struct rusage *rusage);
-    }
-  #endif
-
-  #define wxWait4(pid, stat, flags, rusage) wait4(pid, stat, flags, rusage)
-#else
-    // no wait4() at all on these systems
-    // TODO verify whether wait3() really works in this situation
-    #define wxWait4(pid, stat, flags, rusage) wait3(stat, flags, rusage)
-#endif // HAVE_WAIT4
 
 // ============================================================================
 // implementation
@@ -143,47 +125,60 @@ long wxExecute( const wxString& command, bool sync, wxProcess *process )
     char quotechar = '\0'; // is arg quoted?
     bool escaped = FALSE;
 
+    // split the command line in arguments
     do
     {
         argument="";
         quotechar = '\0';
+
         // eat leading whitespace:
-        while(*cptr && isspace(*cptr))
+        while ( isspace(*cptr) )
             cptr++;
-        if(*cptr == '\'' || *cptr == '"')
+
+        if ( *cptr == '\'' || *cptr == '"' )
             quotechar = *cptr++;
+
         do
         {
-            if(*cptr == '\\' && ! escaped)
+            if ( *cptr == '\\' && ! escaped )
             {
                 escaped = TRUE;
                 cptr++;
                 continue;
             }
+
             // all other characters:
-            argument += *cptr ++;
+            argument += *cptr++;
             escaped = FALSE;
-            // Have we reached the end of the argument?
-            if((*cptr == quotechar && ! escaped)
-               || (quotechar == '\0' && isspace(*cptr))
-               || *cptr == '\0')
+
+            // have we reached the end of the argument?
+            if ( (*cptr == quotechar && ! escaped)
+                 || (quotechar == '\0' && isspace(*cptr))
+                 || *cptr == '\0' )
             {
-                wxASSERT(argc < WXEXECUTE_NARGS);
-                argv[argc] = new char[argument.Len()+1];
+                wxASSERT_MSG( argc < WXEXECUTE_NARGS,
+                              "too many arguments in wxExecute" );
+
+                argv[argc] = new char[argument.length() + 1];
                 strcpy(argv[argc], argument.c_str());
                 argc++;
+
                 // if not at end of buffer, swallow last character:
-                if(*cptr) cptr++;
+                if(*cptr)
+                    cptr++;
+
                 break; // done with this one, start over
             }
-        }while(*cptr);
-    }while(*cptr);
+        } while(*cptr);
+    } while(*cptr);
     argv[argc] = NULL;
-    
+
+    // do execute the command
     long lRc = wxExecute(argv, sync, process);
 
+    // clean up
     argc = 0;
-    while(argv[argc])
+    while( argv[argc] )
         delete [] argv[argc++];
 
     return lRc;
@@ -204,13 +199,26 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
 {
     int pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
 
+    // waitpid is POSIX so should be available everywhere, however on older
+    // systems wait() might be used instead in a loop (until the right pid
+    // terminates)
     int status = 0;
-    wxWait4(pid, &status, 0, (rusage *) NULL);
+    if ( waitpid(pid, &status, 0) == -1 || !WIFEXITED(status) )
+    {
+        wxLogSysError(_("Waiting for subprocess termination failed"));
+    }
+    else
+    {
+        // notify user about termination if required
+        if (proc_data->process)
+        {
+            proc_data->process->OnTerminate(proc_data->pid,
+                                            WEXITSTATUS(status));
+        }
+    }
 
-    if (proc_data->process)
-        proc_data->process->OnTerminate(proc_data->pid, status);
-
-    if (proc_data->pid > 0)
+    // clean up
+    if ( proc_data->pid > 0 )
     {
         delete proc_data;
     }
