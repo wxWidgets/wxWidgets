@@ -410,6 +410,9 @@ public:
     // Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
     virtual void DoToolbarUpdates();
 
+    // Don't want toolbars to accept the focus
+    virtual bool AcceptsFocus() const { return FALSE; }
+
 protected:
     // to implement in derived classes
     // -------------------------------

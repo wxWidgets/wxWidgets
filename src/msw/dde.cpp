@@ -518,15 +518,26 @@ bool wxDDEConnection::Disconnect()
 bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
 {
     DWORD result;
-    if (size < 0)
+    if ( size < 0 )
     {
         size = wxStrlen(data) + 1;
     }
 
-    bool ok = DdeClientTransaction((LPBYTE)data, size,
+    HDDEDATA hData = DdeCreateDataHandle(DDEIdInst, (LPBYTE)data, size,
+                                         0, 0, format, 0);
+    if ( !hData )
+    {
+        DDELogError(_T("Failed to create DDE data handle"));
+
+        return FALSE;
+    }
+
+    // size == -1 is special and means that we pass a DDE data handle
+    size = -1;
+    bool ok = DdeClientTransaction((LPBYTE)hData, size,
                                     GetHConv(),
                                     NULL,
-                                    format,
+                                    0, //format,
                                     XTYP_EXECUTE,
                                     DDE_TIMEOUT,
                                     &result) != 0;

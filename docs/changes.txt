@@ -22,7 +22,9 @@ wxBase:
 
 wxMSW:
 
+- wxMSW focus handling problems (notable with toolbars and splitters) fixed
 - wxListCtrl attributes are handled correctly when inserting/deleting/sorting
+- wxPrinterDC resource leak fixed
 
 2.2.6
 -----

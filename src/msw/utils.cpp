@@ -548,9 +548,15 @@ wxString wxGetOsDescription()
             case VER_PLATFORM_WIN32_WINDOWS:
                 str.Printf(_("Windows 9%c"),
                            info.dwMinorVersion == 0 ? _T('5') : _T('8'));
-                if ( !wxIsEmpty(info.szCSDVersion) )
                 {
-                    str << _T(" (") << info.szCSDVersion << _T(')');
+                    // we need to trim it as under my version of Win98 this is
+                    // just a space and "( )" at the end looks quite ugly
+                    wxString ver = info.szCSDVersion;
+                    ver.Trim();
+                    if ( !ver.IsEmpty() )
+                    {
+                        str << _T(" (") << ver << _T(')');
+                    }
                 }
                 break;
 
