@@ -190,9 +190,13 @@ protected:
 
     wxString  m_fileName;
 
+    // call this to increase the size limit (will do nothing if the current
+    // limit is big enough)
+    void AdjustSpaceLimit();
+
     virtual void DoSetSize(int x, int y,
-            int width, int height,
-            int sizeFlags = wxSIZE_AUTO);
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
 
 private:
     DECLARE_EVENT_TABLE()

@@ -154,6 +154,7 @@ MSWOBJS = \
   button.$(OBJSUFF) \
   checkbox.$(OBJSUFF) \
   checklst.$(OBJSUFF) \
+  caret.$(OBJSUFF) \
   choice.$(OBJSUFF) \
   clipbrd.$(OBJSUFF) \
   colordlg.$(OBJSUFF) \

@@ -144,13 +144,16 @@ public:
     virtual void OnDefaultAction(wxControl * WXUNUSED(initiatingItem)) { }
 #endif // WXWIN_COMPATIBILITY
 
-    // caret manipulation (MSW only)
-    virtual void CreateCaret(int w, int h);
-    virtual void CreateCaret(const wxBitmap *bitmap);
-    virtual void DestroyCaret();
-    virtual void ShowCaret(bool show);
-    virtual void SetCaretPos(int x, int y);
-    virtual void GetCaretPos(int *x, int *y) const;
+#if wxUSE_CARET
+    // caret manipulation (old MSW only functions, see wxCaret class for the
+    // new API)
+    void CreateCaret(int w, int h);
+    void CreateCaret(const wxBitmap *bitmap);
+    void DestroyCaret();
+    void ShowCaret(bool show);
+    void SetCaretPos(int x, int y);
+    void GetCaretPos(int *x, int *y) const;
+#endif // wxUSE_CARET
 
     // Native resource loading (implemented in src/msw/nativdlg.cpp)
     // FIXME: should they really be all virtual?
@@ -373,12 +376,6 @@ protected:
     bool                  m_mouseInWindow:1;
     bool                  m_doubleClickAllowed:1;
     bool                  m_winCaptured:1;
-
-    // Caret data
-    bool                  m_caretEnabled:1;
-    bool                  m_caretShown:1;
-    int                   m_caretWidth;
-    int                   m_caretHeight;
 
     // the size of one page for scrolling
     int                   m_xThumbSize;

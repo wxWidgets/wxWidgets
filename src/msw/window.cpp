@@ -61,6 +61,10 @@
     #include "wx/tooltip.h"
 #endif
 
+#if wxUSE_CARET
+    #include "wx/caret.h"
+#endif // wxUSE_CARET
+
 #include "wx/intl.h"
 #include "wx/log.h"
 
@@ -230,12 +234,6 @@ void wxWindow::Init()
     // MSW specific
     m_doubleClickAllowed = 0;
     m_winCaptured = FALSE;
-
-    // caret stuff: initially there is no caret at all
-    m_caretWidth =
-    m_caretHeight = 0;
-    m_caretEnabled =
-    m_caretShown = FALSE;
 
     m_isBeingDeleted = FALSE;
     m_oldWndProc = 0;
@@ -1296,51 +1294,47 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
     if ( externalLeading ) *externalLeading = tm.tmExternalLeading;
 }
 
+#if wxUSE_CARET
 // ---------------------------------------------------------------------------
 // Caret manipulation
 // ---------------------------------------------------------------------------
 
 void wxWindow::CreateCaret(int w, int h)
 {
-    m_caretWidth = w;
-    m_caretHeight = h;
-    m_caretEnabled = TRUE;
+    SetCaret(new wxCaret(this, w, h));
 }
 
 void wxWindow::CreateCaret(const wxBitmap *WXUNUSED(bitmap))
 {
-    // Not implemented
+    wxFAIL_MSG("not implemented");
 }
 
 void wxWindow::ShowCaret(bool show)
 {
-    if ( m_caretEnabled )
-    {
-        if ( show )
-            ::ShowCaret(GetHwnd());
-        else
-            ::HideCaret(GetHwnd());
-        m_caretShown = show;
-    }
+    wxCHECK_RET( m_caret, "no caret to show" );
+
+    m_caret->Show(show);
 }
 
 void wxWindow::DestroyCaret()
 {
-    m_caretEnabled = FALSE;
+    SetCaret(NULL);
 }
 
 void wxWindow::SetCaretPos(int x, int y)
 {
-    ::SetCaretPos(x, y);
+    wxCHECK_RET( m_caret, "no caret to move" );
+
+    m_caret->Move(x, y);
 }
 
 void wxWindow::GetCaretPos(int *x, int *y) const
 {
-    POINT point;
-    ::GetCaretPos(&point);
-    *x = point.x;
-    *y = point.y;
+    wxCHECK_RET( m_caret, "no caret to get position of" );
+
+    m_caret->GetPosition(x, y);
 }
+#endif // wxUSE_CARET
 
 // ===========================================================================
 // pre/post message processing
@@ -2089,7 +2083,22 @@ bool wxWindow::MSWCreate(int id,
             return FALSE;
         }
 
-        ::MoveWindow(GetHwnd(), x1, y1, width1, height1, FALSE);
+        // ::SetWindowLong(GWL_EXSTYLE) doesn't work for the dialogs, so try
+        // to take care of (at least some) extended style flags ourselves
+        if ( extendedStyle & WS_EX_TOPMOST )
+        {
+            if ( !::SetWindowPos(GetHwnd(), HWND_TOPMOST, 0, 0, 0, 0,
+                                 SWP_NOSIZE | SWP_NOMOVE) )
+            {
+                wxLogLastError("SetWindowPos");
+            }
+        }
+
+        // move the dialog to its initial position without forcing repainting
+        if ( !::MoveWindow(GetHwnd(), x1, y1, width1, height1, FALSE) )
+        {
+            wxLogLastError("MoveWindow");
+        }
     }
     else
     {
@@ -2277,20 +2286,13 @@ bool wxWindow::HandleActivate(int state,
 
 bool wxWindow::HandleSetFocus(WXHWND WXUNUSED(hwnd))
 {
+#if wxUSE_CARET
     // Deal with caret
-    if ( m_caretEnabled && (m_caretWidth > 0) && (m_caretHeight > 0) )
+    if ( m_caret )
     {
-        if ( ::CreateCaret(GetHwnd(), NULL, m_caretWidth, m_caretHeight) )
-        {
-            if ( m_caretShown )
-            {
-                if ( !::ShowCaret(GetHwnd()) )
-                    wxLogLastError("ShowCaret");
-            }
-        }
-        else
-            wxLogLastError("CreateCaret");
+        m_caret->OnSetFocus();
     }
+#endif // wxUSE_CARET
 
     // panel wants to track the window which was the last to have focus in it
     wxWindow *parent = GetParent();
@@ -2307,12 +2309,13 @@ bool wxWindow::HandleSetFocus(WXHWND WXUNUSED(hwnd))
 
 bool wxWindow::HandleKillFocus(WXHWND WXUNUSED(hwnd))
 {
+#if wxUSE_CARET
     // Deal with caret
-    if ( m_caretEnabled )
+    if ( m_caret )
     {
-        if ( !::DestroyCaret() )
-            wxLogLastError("DestroyCaret");
+        m_caret->OnKillFocus();
     }
+#endif // wxUSE_CARET
 
     wxFocusEvent event(wxEVT_KILL_FOCUS, m_windowId);
     event.SetEventObject(this);

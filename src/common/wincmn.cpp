@@ -53,6 +53,10 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
+#if wxUSE_CARET
+    #include "wx/caret.h"
+#endif // wxUSE_CARET
+
 // ----------------------------------------------------------------------------
 // static data
 // ----------------------------------------------------------------------------
@@ -136,6 +140,10 @@ void wxWindowBase::InitBase()
 #if wxUSE_TOOLTIPS
     m_tooltip = (wxToolTip *)NULL;
 #endif // wxUSE_TOOLTIPS
+
+#if wxUSE_CARET
+    m_caret = (wxCaret *)NULL;
+#endif // wxUSE_CARET
 }
 
 // common part of window creation process
@@ -180,6 +188,11 @@ wxWindowBase::~wxWindowBase()
     wxTopLevelWindows.DeleteObject(this);
 
     wxASSERT_MSG( GetChildren().GetCount() == 0, _T("children not destroyed") );
+
+#if wxUSE_CARET
+    if ( m_caret )
+        delete m_caret;
+#endif // wxUSE_CARET
 
     if ( m_windowValidator )
         delete m_windowValidator;
@@ -511,6 +524,24 @@ bool wxWindowBase::SetFont(const wxFont& font)
 
     return TRUE;
 }
+
+#if wxUSE_CARET
+void wxWindowBase::SetCaret(wxCaret *caret)
+{
+    if ( m_caret )
+    {
+        delete m_caret;
+    }
+
+    m_caret = caret;
+
+    if ( m_caret )
+    {
+        wxASSERT_MSG( m_caret->GetWindow() == this,
+                      "caret should be created associated to this window" );
+    }
+}
+#endif // wxUSE_CARET
 
 // ----------------------------------------------------------------------------
 // validators

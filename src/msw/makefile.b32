@@ -172,6 +172,7 @@ MSWOBJS = \
   $(MSWDIR)\bmpbuttn.obj \
   $(MSWDIR)\brush.obj \
   $(MSWDIR)\button.obj \
+  $(MSWDIR)\caret.obj \
   $(MSWDIR)\checkbox.obj \
   $(MSWDIR)\checklst.obj \
   $(MSWDIR)\choice.obj \
@@ -320,11 +321,13 @@ $(MSWDIR)\brush.obj:     $(MSWDIR)\brush.$(SRCSUFF)
 
 $(MSWDIR)\button.obj:     $(MSWDIR)\button.$(SRCSUFF)
 
-$(MSWDIR)\choice.obj:     $(MSWDIR)\choice.$(SRCSUFF)
+$(MSWDIR)\caret.obj:     $(MSWDIR)\caret.$(SRCSUFF)
 
 $(MSWDIR)\checkbox.obj:     $(MSWDIR)\checkbox.$(SRCSUFF)
 
 $(MSWDIR)\checklst.obj:     $(MSWDIR)\checklst.$(SRCSUFF)
+
+$(MSWDIR)\choice.obj:     $(MSWDIR)\choice.$(SRCSUFF)
 
 $(MSWDIR)\clipbrd.obj:     $(MSWDIR)\clipbrd.$(SRCSUFF)
 

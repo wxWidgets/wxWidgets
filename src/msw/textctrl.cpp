@@ -235,7 +235,7 @@ void wxTextCtrl::AdoptAttributesFromHWND()
 {
   wxWindow::AdoptAttributesFromHWND();
 
-  HWND hWnd = (HWND) GetHWND();
+  HWND hWnd = GetHwnd();
   long style = GetWindowLong((HWND) hWnd, GWL_STYLE);
 
   // retrieve the style to see whether this is an edit or richedit ctrl
@@ -283,12 +283,7 @@ void wxTextCtrl::SetupColours()
 
 wxString wxTextCtrl::GetValue() const
 {
-    int length = GetWindowTextLength((HWND) GetHWND());
-    char *s = new char[length+1];
-    GetWindowText((HWND) GetHWND(), s, length+1);
-    wxString str(s);
-    delete[] s;
-  return str;
+    return wxGetWindowText(GetHWND());
 }
 
 void wxTextCtrl::SetValue(const wxString& value)
@@ -317,11 +312,13 @@ void wxTextCtrl::SetValue(const wxString& value)
       j ++;
     }
     tmp[j] = 0;
-    SetWindowText((HWND) GetHWND(), tmp);
+    SetWindowText(GetHwnd(), tmp);
     delete[] tmp;
   }
   else
-    SetWindowText((HWND) GetHWND(), (const char *)value);
+    SetWindowText(GetHwnd(), (const char *)value);
+
+  AdjustSpaceLimit();
 }
 
 void wxTextCtrl::DoSetSize(int x, int y, int width, int height, int sizeFlags)
@@ -369,7 +366,7 @@ void wxTextCtrl::DoSetSize(int x, int y, int width, int height, int sizeFlags)
   if (control_width <= 0)
     control_width = DEFAULT_ITEM_WIDTH;
 
-  MoveWindow((HWND) GetHWND(), (int)control_x, (int)control_y,
+  MoveWindow(GetHwnd(), (int)control_x, (int)control_y,
                               (int)control_width, (int)control_height, TRUE);
 }
 
@@ -378,7 +375,7 @@ void wxTextCtrl::Copy()
 {
     if (CanCopy())
     {
-        HWND hWnd = (HWND) GetHWND();
+        HWND hWnd = GetHwnd();
         SendMessage(hWnd, WM_COPY, 0, 0L);
     }
 }
@@ -387,7 +384,7 @@ void wxTextCtrl::Cut()
 {
     if (CanCut())
     {
-        HWND hWnd = (HWND) GetHWND();
+        HWND hWnd = GetHwnd();
         SendMessage(hWnd, WM_CUT, 0, 0L);
     }
 }
@@ -396,20 +393,20 @@ void wxTextCtrl::Paste()
 {
     if (CanPaste())
     {
-        HWND hWnd = (HWND) GetHWND();
+        HWND hWnd = GetHwnd();
         SendMessage(hWnd, WM_PASTE, 0, 0L);
     }
 }
 
 void wxTextCtrl::SetEditable(bool editable)
 {
-  HWND hWnd = (HWND) GetHWND();
+  HWND hWnd = GetHwnd();
   SendMessage(hWnd, EM_SETREADONLY, (WPARAM)!editable, (LPARAM)0L);
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)
 {
-  HWND hWnd = (HWND) GetHWND();
+  HWND hWnd = GetHwnd();
 #ifdef __WIN32__
 #if wxUSE_RICHEDIT
   if ( m_isRich)
@@ -447,18 +444,18 @@ long wxTextCtrl::GetInsertionPoint() const
     CHARRANGE range;
     range.cpMin = 0;
     range.cpMax = 0;
-    SendMessage((HWND) GetHWND(), EM_EXGETSEL, 0, (LPARAM) &range);
+    SendMessage(GetHwnd(), EM_EXGETSEL, 0, (LPARAM) &range);
     return range.cpMin;
   }
 #endif
 
-  DWORD Pos=(DWORD)SendMessage((HWND) GetHWND(), EM_GETSEL, 0, 0L);
+  DWORD Pos=(DWORD)SendMessage(GetHwnd(), EM_GETSEL, 0, 0L);
   return Pos&0xFFFF;
 }
 
 long wxTextCtrl::GetLastPosition() const
 {
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
 
     // Will always return a number > 0 (according to docs)
     int noLines = (int)SendMessage(hWnd, EM_GETLINECOUNT, (WPARAM)0, (LPARAM)0L);
@@ -476,7 +473,7 @@ long wxTextCtrl::GetLastPosition() const
 void wxTextCtrl::Replace(long from, long to, const wxString& value)
 {
 #if wxUSE_CLIPBOARD
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
     long fromChar = from;
     long toChar = to;
 
@@ -500,7 +497,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
 
 void wxTextCtrl::Remove(long from, long to)
 {
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
     long fromChar = from;
     long toChar = to;
 
@@ -515,7 +512,7 @@ void wxTextCtrl::Remove(long from, long to)
 
 void wxTextCtrl::SetSelection(long from, long to)
 {
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
     long fromChar = from;
     long toChar = to;
     // if from and to are both -1, it means
@@ -584,10 +581,12 @@ bool wxTextCtrl::LoadFile(const wxString& file)
   no_lines++;
       }
 
-//      SendMessage((HWND) GetHWND(), WM_SETTEXT, 0, (LPARAM)tmp_buffer);
-      SetWindowText((HWND) GetHWND(), tmp_buffer);
-      SendMessage((HWND) GetHWND(), EM_SETMODIFY, FALSE, 0L);
+      SetWindowText(GetHwnd(), tmp_buffer);
+      SendMessage(GetHwnd(), EM_SETMODIFY, FALSE, 0L);
       farfree(tmp_buffer);
+
+      // update the size limit if needed
+      AdjustSpaceLimit();
 
       return TRUE;
   }
@@ -613,9 +612,9 @@ bool wxTextCtrl::SaveFile(const wxString& file)
         return FALSE;
 
     // This will only save 64K max
-    unsigned long nbytes = SendMessage((HWND) GetHWND(), WM_GETTEXTLENGTH, 0, 0);
+    unsigned long nbytes = SendMessage(GetHwnd(), WM_GETTEXTLENGTH, 0, 0);
     char *tmp_buffer = (char*)farmalloc((size_t)(nbytes+1));
-    SendMessage((HWND) GetHWND(), WM_GETTEXT, (WPARAM)(nbytes+1), (LPARAM)tmp_buffer);
+    SendMessage(GetHwnd(), WM_GETTEXT, (WPARAM)(nbytes+1), (LPARAM)tmp_buffer);
     char *pstr = tmp_buffer;
 
     // Convert \r\n to just \n
@@ -627,7 +626,7 @@ bool wxTextCtrl::SaveFile(const wxString& file)
     }
 
     farfree(tmp_buffer);
-    SendMessage((HWND) GetHWND(), EM_SETMODIFY, FALSE, 0L);
+    SendMessage(GetHwnd(), EM_SETMODIFY, FALSE, 0L);
 
     return TRUE;
 }
@@ -651,8 +650,10 @@ void wxTextCtrl::WriteText(const wxString& text)
       j ++;
     }
     newtext[j] = 0;
-    SendMessage((HWND) GetHWND(), EM_REPLACESEL, 0, (LPARAM)newtext);
+    SendMessage(GetHwnd(), EM_REPLACESEL, 0, (LPARAM)newtext);
     delete[] newtext;
+
+    AdjustSpaceLimit();
 }
 
 void wxTextCtrl::AppendText(const wxString& text)
@@ -663,18 +664,18 @@ void wxTextCtrl::AppendText(const wxString& text)
 
 void wxTextCtrl::Clear()
 {
-    SetWindowText((HWND) GetHWND(), "");
+    SetWindowText(GetHwnd(), "");
 }
 
 bool wxTextCtrl::IsModified() const
 {
-    return (SendMessage((HWND) GetHWND(), EM_GETMODIFY, 0, 0) != 0);
+    return (SendMessage(GetHwnd(), EM_GETMODIFY, 0, 0) != 0);
 }
 
 // Makes 'unmodified'
 void wxTextCtrl::DiscardEdits()
 {
-  SendMessage((HWND) GetHWND(), EM_SETMODIFY, FALSE, 0L);
+  SendMessage(GetHwnd(), EM_SETMODIFY, FALSE, 0L);
 }
 
 /*
@@ -684,12 +685,12 @@ void wxTextCtrl::DiscardEdits()
 
 int wxTextCtrl::GetNumberOfLines() const
 {
-    return (int)SendMessage((HWND) GetHWND(), EM_GETLINECOUNT, (WPARAM)0, (LPARAM)0);
+    return (int)SendMessage(GetHwnd(), EM_GETLINECOUNT, (WPARAM)0, (LPARAM)0);
 }
 
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
 
     // This gets the char index for the _beginning_ of this line
     int charIndex = (int)SendMessage(hWnd, EM_LINEINDEX, (WPARAM)y, (LPARAM)0);
@@ -698,7 +699,7 @@ long wxTextCtrl::XYToPosition(long x, long y) const
 
 void wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
 
     // This gets the line number containing the character
     int lineNo = (int)SendMessage(hWnd, EM_LINEFROMCHAR, (WPARAM)pos, (LPARAM)0);
@@ -711,7 +712,7 @@ void wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 
 void wxTextCtrl::ShowPosition(long pos)
 {
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
 
     // To scroll to a position, we pass the number of lines and characters
     // to scroll *by*. This means that we need to:
@@ -737,14 +738,14 @@ void wxTextCtrl::ShowPosition(long pos)
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
     long charIndex = XYToPosition(0, lineNo);
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
     int len = (int)SendMessage(hWnd, EM_LINELENGTH, (WPARAM)charIndex, (LPARAM)0);
     return len;
 }
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
     *(WORD *)wxBuffer = 512;
     int noChars = (int)SendMessage(hWnd, EM_GETLINE, (WPARAM)lineNo, (LPARAM)wxBuffer);
     wxBuffer[noChars] = 0;
@@ -773,7 +774,7 @@ bool wxTextCtrl::CanPaste() const
     if (m_isRich)
     {
         int dataFormat = 0; // 0 == any format
-        return (::SendMessage( (HWND) GetHWND(), EM_CANPASTE, (WPARAM) (UINT) dataFormat, 0) != 0);
+        return (::SendMessage( GetHwnd(), EM_CANPASTE, (WPARAM) (UINT) dataFormat, 0) != 0);
     }
 #endif
     if (!IsEditable())
@@ -794,7 +795,7 @@ void wxTextCtrl::Undo()
 {
     if (CanUndo())
     {
-        ::SendMessage((HWND) GetHWND(), EM_UNDO, 0, 0);
+        ::SendMessage(GetHwnd(), EM_UNDO, 0, 0);
     }
 }
 
@@ -803,18 +804,18 @@ void wxTextCtrl::Redo()
     if (CanRedo())
     {
         // Same as Undo, since Undo undoes the undo, i.e. a redo.
-        ::SendMessage((HWND) GetHWND(), EM_UNDO, 0, 0);
+        ::SendMessage(GetHwnd(), EM_UNDO, 0, 0);
     }
 }
 
 bool wxTextCtrl::CanUndo() const
 {
-    return (::SendMessage((HWND) GetHWND(), EM_CANUNDO, 0, 0) != 0);
+    return (::SendMessage(GetHwnd(), EM_CANUNDO, 0, 0) != 0);
 }
 
 bool wxTextCtrl::CanRedo() const
 {
-    return (::SendMessage((HWND) GetHWND(), EM_CANUNDO, 0, 0) != 0);
+    return (::SendMessage(GetHwnd(), EM_CANUNDO, 0, 0) != 0);
 }
 
 // If the return values from and to are the same, there is no
@@ -825,7 +826,7 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
     if (m_isRich)
     {
         CHARRANGE charRange;
-        ::SendMessage((HWND) GetHWND(), EM_EXGETSEL, 0, (LPARAM) (CHARRANGE*) & charRange);
+        ::SendMessage(GetHwnd(), EM_EXGETSEL, 0, (LPARAM) (CHARRANGE*) & charRange);
 
         *from = charRange.cpMin;
         *to = charRange.cpMax;
@@ -837,7 +838,7 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
     WPARAM wParam = (WPARAM) (DWORD*) & dwStart; // receives starting position
     LPARAM lParam = (LPARAM) (DWORD*) & dwEnd;   // receives ending position
 
-    ::SendMessage((HWND) GetHWND(), EM_GETSEL, wParam, lParam);
+    ::SendMessage(GetHwnd(), EM_GETSEL, wParam, lParam);
 
     *from = dwStart;
     *to = dwEnd;
@@ -845,7 +846,8 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 
 bool wxTextCtrl::IsEditable() const
 {
-    long style = ::GetWindowLong((HWND) GetHWND(), GWL_STYLE);
+    long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+
     return ((style & ES_READONLY) == 0);
 }
 
@@ -1137,78 +1139,62 @@ long wxTextCtrl::MSWGetDlgCode()
 
 bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
-/*
-  // Debugging
-  wxDebugMsg("Edit control %d: ", (int)id);
-  switch (param)
-  {
-    case EN_SETFOCUS:
-      wxDebugMsg("EN_SETFOCUS\n");
-      break;
-    case EN_KILLFOCUS:
-      wxDebugMsg("EN_KILLFOCUS\n");
-      break;
-    case EN_CHANGE:
-      wxDebugMsg("EN_CHANGE\n");
-      break;
-    case EN_UPDATE:
-      wxDebugMsg("EN_UPDATE\n");
-      break;
-    case EN_ERRSPACE:
-      wxDebugMsg("EN_ERRSPACE\n");
-      break;
-    case EN_MAXTEXT:
-      wxDebugMsg("EN_MAXTEXT\n");
-      break;
-    case EN_HSCROLL:
-      wxDebugMsg("EN_HSCROLL\n");
-      break;
-    case EN_VSCROLL:
-      wxDebugMsg("EN_VSCROLL\n");
-      break;
-    default:
-      wxDebugMsg("Unknown EDIT notification\n");
-      break;
-  }
-*/
-  switch (param)
-  {
-    case EN_SETFOCUS:
-    case EN_KILLFOCUS:
-      {
-        wxFocusEvent event(param == EN_KILLFOCUS ? wxEVT_KILL_FOCUS
-                                                 : wxEVT_SET_FOCUS,
-                           m_windowId);
-        event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent(event);
-      }
-      break;
+    switch (param)
+    {
+        case EN_SETFOCUS:
+        case EN_KILLFOCUS:
+            {
+                wxFocusEvent event(param == EN_KILLFOCUS ? wxEVT_KILL_FOCUS
+                        : wxEVT_SET_FOCUS,
+                        m_windowId);
+                event.SetEventObject( this );
+                GetEventHandler()->ProcessEvent(event);
+            }
+            break;
 
-    case EN_CHANGE:
-      {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
-        wxString val(GetValue());
-        if ( !val.IsNull() )
-          event.m_commandString = WXSTRINGCAST val;
-        event.SetEventObject( this );
-        ProcessCommand(event);
-      }
-      break;
+        case EN_CHANGE:
+            {
+                wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
+                wxString val(GetValue());
+                if ( !val.IsNull() )
+                    event.m_commandString = WXSTRINGCAST val;
+                event.SetEventObject( this );
+                ProcessCommand(event);
+            }
+            break;
 
-    // the other notification messages are not processed
-    case EN_UPDATE:
-    case EN_ERRSPACE:
-    case EN_MAXTEXT:
-    case EN_HSCROLL:
-    case EN_VSCROLL:
-    default:
-      return FALSE;
-  }
+        case EN_ERRSPACE:
+            // the text size limit has been hit - increase it
+            AdjustSpaceLimit();
+            break;
 
-  // processed
-  return TRUE;
+            // the other notification messages are not processed
+        case EN_UPDATE:
+        case EN_MAXTEXT:
+        case EN_HSCROLL:
+        case EN_VSCROLL:
+        default:
+            return FALSE;
+    }
+
+    // processed
+    return TRUE;
 }
 
+void wxTextCtrl::AdjustSpaceLimit()
+{
+    unsigned int len = ::GetWindowTextLength(GetHwnd()),
+    limit = ::SendMessage(GetHwnd(), EM_GETLIMITTEXT, 0, 0);
+    if ( len > limit )
+    {
+        limit = len + 0x8000;    // 32Kb
+
+        if ( m_isRich || limit > 0xffff )
+            ::SendMessage(GetHwnd(), EM_LIMITTEXT, 0, limit);
+        else
+            ::SendMessage(GetHwnd(), EM_LIMITTEXT, limit, 0);
+    }
+}
 
 // For Rich Edit controls. Do we need it?
 #if 0

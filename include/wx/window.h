@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        window.h
-// Purpose:     wxWindowBase class - the interface of wxWindowBase
+// Purpose:     wxWindowBase class - the interface of wxWindow
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     01/02/97
@@ -34,6 +34,7 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxCaret;
 class WXDLLEXPORT wxClientData;
 class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxCursor;
@@ -475,6 +476,13 @@ public:
     const wxFont& GetFont() const { return m_font; }
     wxFont& GetFont() { return m_font; }
 
+#if wxUSE_CARET
+        // associate a caret with the window
+    void SetCaret(wxCaret *caret);
+        // get the current caret (may be NULL)
+    wxCaret *GetCaret() const { return m_caret; }
+#endif // wxUSE_CARET
+
         // get the (average) character size for the current font
     virtual int GetCharHeight() const = 0;
     virtual int GetCharWidth() const = 0;
@@ -657,6 +665,10 @@ protected:
     wxCursor             m_cursor;
     wxFont               m_font;
     wxColour             m_backgroundColour, m_foregroundColour;
+
+#if wxUSE_CARET
+    wxCaret             *m_caret;
+#endif // wxUSE_CARET
 
     // the region which should be repainted in response to paint event
     wxRegion             m_updateRegion;

@@ -147,6 +147,7 @@ MSWOBJS = \
   $(MSWDIR)\button.obj \
   $(MSWDIR)\checkbox.obj \
   $(MSWDIR)\checklst.obj \
+  $(MSWDIR)\caret.obj \
   $(MSWDIR)\choice.obj \
   $(MSWDIR)\clipbrd.obj \
   $(MSWDIR)\colordlg.obj \
@@ -313,6 +314,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(MSWDIR)/button.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(MSWDIR)/caret.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

@@ -130,6 +130,7 @@ MSWOBJS = \
   $(MSWDIR)\button.obj \
   $(MSWDIR)\checkbox.obj \
   $(MSWDIR)\checklst.obj \
+  $(MSWDIR)\caret.obj \
   $(MSWDIR)\choice.obj \
   $(MSWDIR)\clipbrd.obj \
   $(MSWDIR)\colordlg.obj \

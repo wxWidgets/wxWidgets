@@ -116,6 +116,7 @@ MSWOBJS = \
   button.obj \
   checkbox.obj \
   checklst.obj \
+  caret.obj \
   choice.obj \
   clipbrd.obj \
   colordlg.obj \
@@ -242,6 +243,9 @@ brush.obj:     $(MSWDIR)\brush.cpp
 
 button.obj:     $(MSWDIR)\button.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\button.cpp /BINARY button.obj
+
+caret.obj:     $(MSWDIR)\caret.cpp
+  $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\caret.cpp /BINARY caret.obj
 
 choice.obj:     $(MSWDIR)\choice.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\choice.cpp /BINARY choice.obj

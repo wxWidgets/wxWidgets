@@ -143,28 +143,16 @@ bool wxNotebook::Create(wxWindow *parent,
   if (m_windowStyle & wxNB_FIXEDWIDTH)
     tabStyle |= TCS_FIXEDWIDTH ;
 
-  // create the tab control.
-  m_hWnd = (WXHWND)CreateWindowEx
-    (
-      0,                                      // extended style
-      WC_TABCONTROL,                          // class name for the tab control
-      "",                                     // no caption
-      tabStyle,                               // style
-      pos.x, pos.y, size.x, size.y,           // size and position
-      (HWND)parent->GetHWND(),                // parent window
-      (HMENU)m_windowId,                      // child id
-      wxGetInstance(),                        // current instance
-      NULL                                    // no class data
-    );
-
-  if ( m_hWnd == 0 ) {
-    wxLogSysError("Can't create the notebook control");
+  if ( !MSWCreate(GetId(), GetParent(), WC_TABCONTROL,
+                  this, NULL, pos.x, pos.y, size.x, size.y,
+                  tabStyle, NULL, 0) )
+  {
     return FALSE;
   }
 
   // Not all compilers recognise SetWindowFont
-  ::SendMessage((HWND) m_hwnd, WM_SETFONT,
-                  (WPARAM)::GetStockObject(DEFAULT_GUI_FONT),TRUE);
+  ::SendMessage(GetHwnd(), WM_SETFONT,
+                (WPARAM)::GetStockObject(DEFAULT_GUI_FONT), TRUE);
 
 
   if ( parent != NULL )
