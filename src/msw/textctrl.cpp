@@ -533,6 +533,11 @@ void wxTextCtrl::SetValue(const wxString& value)
     {
         DoWriteText(value, FALSE /* not selection only */);
     }
+    else // same text
+    {
+        // still send an event for consistency
+        SendUpdateEvent();
+    }
 
     // we should reset the modified flag even if the value didn't really change
 
