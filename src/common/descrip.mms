@@ -42,6 +42,7 @@ OBJECTS = \
 		appcmn.obj,\
 		choiccmn.obj,\
 		clipcmn.obj,\
+		clntdata.obj,\
 		cmdline.obj,\
 		cmndata.obj,\
 		config.obj,\
@@ -152,6 +153,7 @@ SOURCES = \
 		appcmn.cpp,\
 		choiccmn.cpp,\
 		clipcmn.cpp,\
+		clntdata.cpp,\
 		cmdline.cpp,\
 		cmndata.cpp,\
 		config.cpp,\
@@ -293,8 +295,9 @@ lexer.c : lexer.l
 appcmn.obj : appcmn.cpp
 choiccmn.obj : choiccmn.cpp
 clipcmn.obj : clipcmn.cpp
-cmndata.obj : cmndata.cpp
+clntdata.obj : clntdata.cpp
 cmdline.obj : cmdline.cpp
+cmndata.obj : cmndata.cpp
 config.obj : config.cpp
 containr.obj : containr.cpp
 cshelp.obj : cshelp.cpp
