@@ -262,7 +262,7 @@ def selectBeforePopup(event):
 
     Works with both single-select and multi-select lists."""
     ctrl = event.GetEventObject()
-    if isinstance(ctrl, wxListCtrl):
+    if isinstance(ctrl, wx.ListCtrl):
         n, flags = ctrl.HitTest(event.GetPosition())
         if n >= 0:
             if not ctrl.GetItemState(n, wx.LIST_STATE_SELECTED):
