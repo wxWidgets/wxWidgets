@@ -10519,6 +10519,34 @@ static PyObject *_wrap_wxGenericDirCtrl_GetFilterListCtrl(PyObject *self, PyObje
     return _resultobj;
 }
 
+#define wxGenericDirCtrl_ReCreateTree(_swigobj)  (_swigobj->ReCreateTree())
+static PyObject *_wrap_wxGenericDirCtrl_ReCreateTree(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDirCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGenericDirCtrl_ReCreateTree",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_ReCreateTree. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxGenericDirCtrl_ReCreateTree(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxDirFilterListCtrlTowxChoice(void *ptr) {
     wxDirFilterListCtrl *src;
     wxChoice *dest;
@@ -10750,6 +10778,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxDirFilterListCtrl_Create", (PyCFunction) _wrap_wxDirFilterListCtrl_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreDirFilterListCtrl", (PyCFunction) _wrap_new_wxPreDirFilterListCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxDirFilterListCtrl", (PyCFunction) _wrap_new_wxDirFilterListCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_ReCreateTree", (PyCFunction) _wrap_wxGenericDirCtrl_ReCreateTree, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGenericDirCtrl_GetFilterListCtrl", (PyCFunction) _wrap_wxGenericDirCtrl_GetFilterListCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGenericDirCtrl_GetTreeCtrl", (PyCFunction) _wrap_wxGenericDirCtrl_GetTreeCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGenericDirCtrl_GetRootId", (PyCFunction) _wrap_wxGenericDirCtrl_GetRootId, METH_VARARGS | METH_KEYWORDS },

@@ -54,19 +54,19 @@ class wxGLContextPtr(wxObjectPtr):
             except:
                 pass
     def SetCurrent(self, *_args, **_kwargs):
-        val = apply(glcanvasc.wxGLContext_SetCurrent,(self,) + _args, _kwargs)
+        val = glcanvasc.wxGLContext_SetCurrent(self, *_args, **_kwargs)
         return val
     def SetColour(self, *_args, **_kwargs):
-        val = apply(glcanvasc.wxGLContext_SetColour,(self,) + _args, _kwargs)
+        val = glcanvasc.wxGLContext_SetColour(self, *_args, **_kwargs)
         return val
     def SwapBuffers(self, *_args, **_kwargs):
-        val = apply(glcanvasc.wxGLContext_SwapBuffers,(self,) + _args, _kwargs)
+        val = glcanvasc.wxGLContext_SwapBuffers(self, *_args, **_kwargs)
         return val
     def GetWindow(self, *_args, **_kwargs):
-        val = apply(glcanvasc.wxGLContext_GetWindow,(self,) + _args, _kwargs)
+        val = glcanvasc.wxGLContext_GetWindow(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxGLContext instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxGLContext instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxGLContext(wxGLContextPtr):
     def __init__(self,this):
         self.this = this
@@ -79,30 +79,30 @@ class wxGLCanvasPtr(wxWindowPtr):
         self.this = this
         self.thisown = 0
     def SetCurrent(self, *_args, **_kwargs):
-        val = apply(glcanvasc.wxGLCanvas_SetCurrent,(self,) + _args, _kwargs)
+        val = glcanvasc.wxGLCanvas_SetCurrent(self, *_args, **_kwargs)
         return val
     def SetColour(self, *_args, **_kwargs):
-        val = apply(glcanvasc.wxGLCanvas_SetColour,(self,) + _args, _kwargs)
+        val = glcanvasc.wxGLCanvas_SetColour(self, *_args, **_kwargs)
         return val
     def SwapBuffers(self, *_args, **_kwargs):
-        val = apply(glcanvasc.wxGLCanvas_SwapBuffers,(self,) + _args, _kwargs)
+        val = glcanvasc.wxGLCanvas_SwapBuffers(self, *_args, **_kwargs)
         return val
     def GetContext(self, *_args, **_kwargs):
-        val = apply(glcanvasc.wxGLCanvas_GetContext,(self,) + _args, _kwargs)
+        val = glcanvasc.wxGLCanvas_GetContext(self, *_args, **_kwargs)
         if val: val = wxGLContextPtr(val) 
         return val
     def __repr__(self):
-        return "<C wxGLCanvas instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxGLCanvas instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxGLCanvas(wxGLCanvasPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(glcanvasc.new_wxGLCanvas,_args,_kwargs)
+        self.this = glcanvasc.new_wxGLCanvas(*_args,**_kwargs)
         self.thisown = 1
         self._setOORInfo(self)
 
 
 
 def wxGLCanvasWithContext(*_args,**_kwargs):
-    val = wxGLCanvasPtr(apply(glcanvasc.new_wxGLCanvasWithContext,_args,_kwargs))
+    val = wxGLCanvasPtr(glcanvasc.new_wxGLCanvasWithContext(*_args,**_kwargs))
     val.thisown = 1
     val._setOORInfo(self)
     return val
