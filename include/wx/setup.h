@@ -66,6 +66,6 @@
 
 #endif
 
-#include "chkconf.h"
+#include "wx/chkconf.h"
 
 #endif /* _WX_SETUP_H_BASE_ */
