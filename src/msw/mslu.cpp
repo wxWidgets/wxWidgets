@@ -46,10 +46,6 @@
 #include <io.h>
 #include <sys/stat.h>
 
-#ifdef __GNUWIN32__
-    #include <wchar.h>
-#endif
-
 #ifdef __VISUALC__
     #include <direct.h>
 #endif

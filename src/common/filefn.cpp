@@ -105,7 +105,6 @@
     #include <unix.h>
 #endif
 
-#include "wx/setup.h"
 #include "wx/log.h"
 
 // No, Cygwin doesn't appear to have fnmatch.h after all.
@@ -124,7 +123,7 @@
         #ifdef __CYGWIN__
             #include <sys/cygwin.h>
         #endif
-        #include <wchar.h>
+
         #ifndef __TWIN32__
             #include <sys/unistd.h>
         #endif
