@@ -107,20 +107,14 @@ compiler used.
 
 \subsection{Hardware type}\label{hardwareconst}
 
-% Note: previous documentation referred to __SMARTPHONE__ as a generic (non-MS-specific) symbol
-% but we should go back to using it for a specific SDK, because trying to be
-% generic doesn't really work
-
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\_\_SMARTPHONE\_\_}{Microsoft-powered mobile devices with phone buttons and a small display}
+\twocolitem{\_\_SMARTPHONE\_\_}{Generic mobile devices with phone buttons and a small display}
+\twocolitem{\_\_PDA\_\_}{Personal digital assistant, usually with touch screen}
+\twocolitem{\_\_HANDHELD\_\_}{Small but powerful computer, usually with a keyboard}
 \twocolitem{\_\_POCKETPC\_\_}{Microsoft-powered PocketPC devices with touch-screen}
 \twocolitem{\_\_WINCE\_STANDARDSDK\_\_}{Microsoft-powered Windows CE devices, for generic Windows CE applications}
 \twocolitem{\_\_WINCE\_NET\_\_}{Microsoft-powered Windows CE .NET devices (\_WIN32\_WCE is 400 or greater)}
-% Note to doc writers: these symbols are pretty useless because of the blurred
-% dividing lines between these machines, plus they're not actually used.
-%\twocolitem{\_\_PDA\_\_}{Personal digital assistant usually with touch screen and
-%middle sized screen (not yet defined anywhere)}
-%\twocolitem{\_\_HANDHELD\_\_}{Small enough but powerful computer (not yet defined anywhere)}
+\twocolitem{WIN32\_PLATFORM\_WFSP}{Microsoft-powered smartphone}
 \end{twocollist}
 
 

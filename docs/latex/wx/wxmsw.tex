@@ -57,11 +57,14 @@ an application that has been tailored for Windows CE use.
 
 \subsubsection{Testing for WinCE SDKs}
 
-Use these preprocessor symbols to test for the different SDKS:
+Use these preprocessor symbols to test for the different types of device or SDK:
 
 \begin{twocollist}\itemsep=0pt
+\twocolitem{\_\_SMARTPHONE\_\_}{Generic mobile devices with phone buttons and a small display}
+\twocolitem{\_\_PDA\_\_}{Generic mobile devices with no phone}
+\twocolitem{\_\_HANDHELDPC\_\_}{Generic mobile device with a keyboard}
 \twocolitem{\_\_WXWINCE\_\_}{Microsoft-powered Windows CE devices, whether PocketPC, Smartphone or Standard SDK}
-\twocolitem{\_\_SMARTPHONE\_\_}{Microsoft-powered mobile devices with phone buttons and a small display}
+\twocolitem{WIN32\_PLATFORM\_WFSP}{Microsoft-powered smartphone}
 \twocolitem{\_\_POCKETPC\_\_}{Microsoft-powered PocketPC devices with touch-screen}
 \twocolitem{\_\_WINCE\_STANDARDSDK\_\_}{Microsoft-powered Windows CE devices, for generic Windows CE applications}
 \twocolitem{\_\_WINCE\_NET\_\_}{Microsoft-powered Windows CE .NET devices (\_WIN32\_WCE is 400 or greater)}
