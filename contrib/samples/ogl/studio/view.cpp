@@ -160,7 +160,7 @@ bool csDiagramView::OnClose(bool deleteWindow)
   csDiagramDocument *diagramDoc = (csDiagramDocument *)GetDocument();
   diagramDoc->GetDiagram()->SetCanvas(NULL);
 
-  canvas->Clear();
+  canvas->ClearBackground();
   canvas->SetDiagram(NULL);
   canvas->SetView(NULL);
   canvas = NULL;
@@ -177,7 +177,7 @@ bool csDiagramView::OnClose(bool deleteWindow)
   {
     frame->Destroy();
   }
-  
+
   return TRUE;
 }
 
