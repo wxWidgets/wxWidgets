@@ -266,11 +266,11 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         SetTimeLabel(0, m_elapsed);
     }
 
-    // Update the display (especially on X, GTK)
-    wxYield();
-
 #ifdef __WXMAC__
     Update();
+#else
+    // Update the display (especially on X, GTK)
+    wxYield();
 #endif
 }
 
@@ -331,7 +331,11 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
     {
         m_msg->SetLabel(newmsg);
 
+#ifdef __WXMAC__
+        wxYieldIfNeeded() ;
+#else
         wxYield();
+#endif
     }
 
     if ( (m_elapsed || m_remaining || m_estimated) && (value != 0) )
@@ -370,7 +374,11 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
                 m_msg->SetLabel(_("Done."));
             }
 
+#ifdef __WXMAC__
+            wxYieldIfNeeded() ;
+#else
             wxYield();
+#endif
 
             (void)ShowModal();
         }
@@ -387,7 +395,11 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
     else
     {
         // update the display
+#ifdef __WXMAC__
+        wxYieldIfNeeded() ;
+#else
         wxYield();
+#endif
     }
 
 #ifdef __WXMAC__
