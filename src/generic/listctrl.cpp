@@ -2832,12 +2832,17 @@ long wxListMainWindow::FindItem(long start, long data)
 
 long wxListMainWindow::HitTest( int x, int y, int &flags )
 {
+    wxClientDC dc(this);
+    PrepareDC(dc);
+    wxCoord cx = dc.DeviceToLogicalX( x );
+    wxCoord cy = dc.DeviceToLogicalY( y );
+
     wxNode *node = m_lines.First();
     int count = 0;
     while (node)
     {
         wxListLineData *line = (wxListLineData*)node->Data();
-        long ret = line->IsHit( x, y );
+        long ret = line->IsHit( cx, cy );
         if (ret & flags)
         {
             flags = (int)ret;
