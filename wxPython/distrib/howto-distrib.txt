@@ -130,7 +130,7 @@ wx/wxPython dir:
   non-standard libs and such that may be on my main development
   machine.  There are RH-9 VMware VMs both on Cyclops and on Xavier
   that are setup to do this, with both Python 2.2 and 2.3 installed,
-  gtk+12 and gtk+2 devel libs, etc. As the root user, do the
+  gtk+1.2 and gtk+2 devel libs, etc. As the root user, do the
   following:
 
      mkdir /tmp/build
