@@ -5952,7 +5952,7 @@ bool wxGrid::IsCellEditControlDisplayed() const
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
         wxGridCellAttr* attr = GetCellAttr(row, col);
-        wxGridCellEditor* editor = attr->GetEditor(this, row, col);
+        wxGridCellEditor* editor = attr->GetEditor((wxGrid*) this, row, col);
         if ( editor && editor->IsCreated() )
         {
             wxWindow *control = editor->GetControl(); 

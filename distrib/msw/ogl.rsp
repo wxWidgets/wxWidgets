@@ -36,7 +36,7 @@ contrib/samples/ogl/ogledit/*.rc
 contrib/samples/ogl/ogledit/*.def
 contrib/samples/ogl/ogledit/*.xbm
 contrib/samples/ogl/ogledit/make*.*
-contrib/samples/ogl/ogledit/Makefile
+contrib/samples/ogl/ogledit/Makefile.in
 contrib/samples/ogl/ogledit/*.txt
 contrib/samples/ogl/ogledit/*.ico
 contrib/samples/ogl/ogledit/*.bmp
@@ -54,7 +54,7 @@ contrib/samples/ogl/studio/*.rc
 contrib/samples/ogl/studio/*.def
 contrib/samples/ogl/studio/*.xbm
 contrib/samples/ogl/studio/make*.*
-contrib/samples/ogl/studio/Makefile
+contrib/samples/ogl/studio/Makefile.in
 contrib/samples/ogl/studio/*.txt
 contrib/samples/ogl/studio/*.ico
 contrib/samples/ogl/studio/*.bmp
