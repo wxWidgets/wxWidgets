@@ -16,23 +16,11 @@
 // headers
 // ----------------------------------------------------------------------------
 
-// compatible (even if incorrect) behaviour by default: derive wxIcon from
-// wxBitmap
-#ifndef wxICON_IS_BITMAP
-    #define wxICON_IS_BITMAP 1
-#endif
-
 #include "wx/bitmap.h"
-#if wxICON_IS_BITMAP
+#include "wx/os2/gdiimage.h"
 
-    #define wxIconRefDataBase   wxBitmapRefData
-    #define wxIconBase          wxBitmap
-#else
-    #include "wx/os2/gdiimage.h"
-
-    #define wxIconRefDataBase   wxGDIImageRefData
-    #define wxIconBase          wxGDIImage
-#endif
+#define wxIconRefDataBase   wxGDIImageRefData
+#define wxIconBase          wxGDIImage
 
 class WXDLLEXPORT wxIconRefData: public wxIconRefDataBase
 {

@@ -183,14 +183,7 @@ void MyFrame::AddSampleText(wxLayoutList *llist)
    llist->LineBreak();
 
     llist->Insert(_T("Hello "));
-    wxBitmap *icon =
-#if wxICON_IS_BITMAP
-        new wxIcon(Micon_xpm)
-#else
-        new wxBitmap (wxIcon(Micon_xpm))
-#endif
-
-        ;
+    wxBitmap *icon = new wxBitmap (wxIcon(Micon_xpm));
 
     llist->Insert(new wxLayoutObjectIcon(icon));
     llist->SetFontWeight(wxBOLD);

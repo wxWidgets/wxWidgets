@@ -1047,28 +1047,6 @@ Recommended setting: 0 (please update your code)
             <setting type="bool-check">
                 <active>1</active>
                 <enabled>1</enabled>
-                <name>wxFONT_SIZE_COMPATIBILITY</name>
-                <description>&lt;B&gt;Define as 1 for font size to be backward compatible to 1.63 and earlier.&lt;/B&gt;&lt;P&gt;
-
-1.64 and later define point sizes to be compatible with Windows.&lt;P&gt;
-
-Default is 0.
-</description>
-                <default-state>1</default-state>
-                <requires></requires>
-                <precludes></precludes>
-                <enabled-if></enabled-if>
-                <enabled-if-not></enabled-if-not>
-                <indeterminate-if></indeterminate-if>
-                <exclusivity></exclusivity>
-                <context>__WXMSW__</context>
-                <configure-command></configure-command>
-                <help-topic>wxFont</help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>1</active>
-                <enabled>1</enabled>
                 <name>wxDIALOG_UNIT_COMPATIBILITY</name>
                 <description>&lt;B&gt;Set to 0 for accurate dialog units, else 1 to be as per 2.1.16 and before.&lt;/B&gt;&lt;P&gt;
 
