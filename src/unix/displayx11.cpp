@@ -41,18 +41,11 @@ extern "C" {
   #include <X11/extensions/xf86vmode.h>
 }
 
-//free private data common to x (usually s3) servers
-#define wxClearXVM(vm)  if(vm.privsize) XFree(vm.c_private)
 class wxDisplayUnixPriv
 {
   public:
     wxRect m_rect;
     int m_depth;
-    XF86VidModeModeInfo m_DefaultVidMode; 
-    ~wxDisplayUnixPriv()
-    {
-        wxClearXVM(m_DefaultVidMode);
-    }
 };
 
 size_t wxDisplayBase::GetCount()
@@ -112,7 +105,6 @@ int wxDisplayBase::GetFromPoint(const wxPoint &p)
 
     return -1;
   }
-  
 }
 
 wxDisplay::wxDisplay(size_t index) : wxDisplayBase ( index ), m_priv( new wxDisplayUnixPriv )
@@ -135,30 +127,6 @@ wxDisplay::wxDisplay(size_t index) : wxDisplayBase ( index ), m_priv( new wxDisp
     m_priv->m_rect = wxRect(0, 0, size.GetWidth(), size.GetHeight());
     m_priv->m_depth = wxDisplayDepth();
   }
-
-
-  XF86VidModeModeLine VM;
-  int nDotClock;
-
-  XF86VidModeGetModeLine((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),
-                         &nDotClock, &VM);
-
-  //A XF86VidModeModeLine is a XF86ModeModeInfo without the dotclock
-  //field.  It would be nice to mayby use a memcpy() here instead of
-  //all this?
-  m_priv->m_DefaultVidMode.dotclock = nDotClock;
-  m_priv->m_DefaultVidMode.hdisplay = VM.hdisplay;
-  m_priv->m_DefaultVidMode.hsyncstart = VM.hsyncstart;
-  m_priv->m_DefaultVidMode.hsyncend = VM.hsyncend;
-  m_priv->m_DefaultVidMode.htotal = VM.htotal;
-  m_priv->m_DefaultVidMode.hskew = VM.hskew;
-  m_priv->m_DefaultVidMode.vdisplay = VM.vdisplay;
-  m_priv->m_DefaultVidMode.vsyncstart = VM.vsyncstart;
-  m_priv->m_DefaultVidMode.vsyncend = VM.vsyncend;
-  m_priv->m_DefaultVidMode.vtotal = VM.vtotal;
-  m_priv->m_DefaultVidMode.flags = VM.flags;
-  m_priv->m_DefaultVidMode.privsize = VM.privsize;
-  m_priv->m_DefaultVidMode.c_private = VM.c_private;
 }
 
 wxDisplay::~wxDisplay()
@@ -186,8 +154,14 @@ wxString wxDisplay::GetName() const
 //  info about xf86 video mode extensions
 //
 
-#define wxCVM(v) wxVideoMode(v.hdisplay, v.vdisplay, v.dotclock /*BPP in X? */,((v.hsyncstart + v.vsyncstart) / 2) )
-#define wxCVM2(v) wxVideoMode(v.hdisplay, v.vdisplay, 0 /*BPP in X? */,((v.hsyncstart + v.vsyncstart) / 2) )
+//free private data common to x (usually s3) servers
+#define wxClearXVM(vm)  if(vm.privsize) XFree(vm.c_private)
+
+//Correct res rate from GLFW, which probably has the perfect license :)
+#define wxCRR2(v,dc) (int) (((1000.0f * (float) dc) /*PIXELS PER SECOND */) / ((float) v.htotal * v.vtotal /*PIXELS PER FRAME*/) + 0.5f)
+#define wxCRR(v) wxCRR2(v,v.dotclock)
+#define wxCVM2(v, dc) wxVideoMode(v.hdisplay, v.vdisplay, DefaultDepth((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay())), wxCRR2(v,dc))
+#define wxCVM(v) wxCVM2(v, v.dotclock)
 
 wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
 {
@@ -206,9 +180,9 @@ wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
         for (int i = 0; i < nNumModes; ++i)
         {
             if (mode == wxDefaultVideoMode || //According to display.h All modes valid if dafault mode...
-                mode.Matches(wxCVM2((*ppXModes[i]))) ) //...?
+                mode.Matches(wxCVM((*ppXModes[i]))) ) //...?
             {
-                Modes.Add(wxCVM2((*ppXModes[i])));
+                Modes.Add(wxCVM((*ppXModes[i])));
             }
             wxClearXVM((*ppXModes[i]));
         //  XFree(ppXModes[i]); //supposed to free?
@@ -225,17 +199,17 @@ wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
 
 wxVideoMode wxDisplay::GetCurrentMode() const
 {
-    return wxCVM2(m_priv->m_DefaultVidMode);
+  XF86VidModeModeLine VM;
+  int nDotClock;
+  XF86VidModeGetModeLine((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),
+                         &nDotClock, &VM);
+  wxClearXVM(VM);
+  return wxCVM2(VM, nDotClock);
 }
 
 bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 {
-    if (mode == wxDefaultVideoMode)
-    {
-        return XF86VidModeSwitchToMode((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),
-                             &m_priv->m_DefaultVidMode) == TRUE;
-    }
-    else //This gets kind of tricky AND complicated :) :\ :( :)
+    //This gets kind of tricky AND complicated :) :\ :( :)
     {
         bool bRet = false;
         //Some variables..
@@ -244,12 +218,26 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 
         if(XF86VidModeGetAllModeLines((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()), &nNumModes, &ppXModes) == TRUE)
         {
+            if (mode == wxDefaultVideoMode)
+            {
+                bRet = XF86VidModeSwitchToMode((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),
+                             ppXModes[0]) == TRUE;
+
+                for (int i = 0; i < nNumModes; ++i)
+                {
+                    wxClearXVM((*ppXModes[i]));
+                //  XFree(ppXModes[i]); //supposed to free?
+                }
+                XFree(ppXModes);
+
+                return bRet;
+            }
             for (int i = 0; i < nNumModes; ++i)
             {
                 if (!bRet &&
                     ppXModes[i]->hdisplay == mode.w &&
                     ppXModes[i]->vdisplay == mode.h &&
-                    ((ppXModes[i]->hsyncstart + ppXModes[i]->vsyncstart) / 2) == mode.refresh)
+                    wxCRR((*ppXModes[i])) == mode.refresh)
                 {
                     //switch!
                     bRet = XF86VidModeSwitchToMode((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),
