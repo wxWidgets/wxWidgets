@@ -17,7 +17,7 @@
 
 #else
 
-#include <expat_config.h>
+#include "expat_config.h"
 
 #ifdef __declspec
 #define XMLPARSEAPI(type) type __cdecl
