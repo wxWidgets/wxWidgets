@@ -143,11 +143,14 @@ public:
     // so should be there for all platforms
     void OnActivate(wxActivateEvent &WXUNUSED(event)) { }
 
-#ifdef __WXPM__
-    // because of OS/2's backwards coordinate system we need something
-    // to call to position child windows anytime we get resized.
-    virtual void AlterChildPos(void) = 0; // OS/2 child control positioning
-#endif
+    // Override in derived, platfrom specific, class if your OS coordinate
+    // system uses anything other than the top left as 0,0.  The second
+    // method updates any internal sizing parameters such as OS/2's SWP struct
+    inline virtual void AlterChildPos(void) { }
+    inline virtual void UpdateInternalSize( wxWindow* WXUNUSED(pChild)
+                                           ,int WXUNUSED(nHeight)
+                                          ) { }
+
 protected:
     // the frame client to screen translation should take account of the
     // toolbar which may shift the origin of the client area
@@ -164,9 +167,6 @@ protected:
     // (menubar, toolbar and statusbar are excluded from automatic layout)
     virtual bool IsOneOfBars(const wxWindow *WXUNUSED(win)) const { return FALSE; }
 
-#ifdef __WXPM__
-    SWP                             m_vSwpClient;
-#endif
     DECLARE_EVENT_TABLE()
 };
 
