@@ -65,7 +65,7 @@ bool wxStaticText::Create(wxWindow *parent,
     // because the label is not yet created and because SetLabel() has a side
     // effect of changing the control size which might not be desirable
     wxControl::SetLabel(label);
-    m_widget = gtk_label_new( m_label.mbc_str() );
+    m_widget = gtk_label_new( wxGTK_CONV( m_label ) );
     
     GtkJustification justify;
     if ( style & wxALIGN_CENTER )
@@ -119,7 +119,7 @@ void wxStaticText::SetLabel( const wxString &label )
 {
     wxControl::SetLabel(label);
 
-    gtk_label_set( GTK_LABEL(m_widget), m_label.mbc_str() );
+    gtk_label_set( GTK_LABEL(m_widget), wxGTK_CONV( m_label ) );
 
     // adjust the label size to the new label unless disabled
     if (!HasFlag(wxST_NO_AUTORESIZE))
