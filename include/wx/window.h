@@ -102,6 +102,10 @@ enum wxWindowVariant
     wxWINDOW_VARIANT_MAX
 };
 
+#if wxUSE_SYSTEM_OPTIONS
+    #define wxWINDOW_DEFAULT_VARIANT wxT("window-default-variant")
+#endif
+
 // ----------------------------------------------------------------------------
 // (pseudo)template list classes
 // ----------------------------------------------------------------------------

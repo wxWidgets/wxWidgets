@@ -77,6 +77,10 @@
     #include "wx/caret.h"
 #endif // wxUSE_CARET
 
+#if wxUSE_SYSTEM_OPTIONS
+	#include "wx/sysopt.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // static data
 // ----------------------------------------------------------------------------
@@ -193,6 +197,12 @@ wxWindowBase::wxWindowBase()
     m_maxVirtualHeight = wxDefaultCoord;
 
     m_windowVariant = wxWINDOW_VARIANT_NORMAL;
+#if wxUSE_SYSTEM_OPTIONS
+    if ( wxSystemOptions::HasOption(wxWINDOW_DEFAULT_VARIANT) )
+    {
+       m_windowVariant = (wxWindowVariant) wxSystemOptions::GetOptionInt( wxWINDOW_DEFAULT_VARIANT ) ;
+    }
+#endif
 
     // Whether we're using the current theme for this window (wxGTK only for now)
     m_themeEnabled = false;
