@@ -71,17 +71,100 @@ bool wxOwnerDrawn::OnMeasureItem(
 {
     wxMemoryDC                      vDC;
 
-    vDC.SetFont(GetFont());
 
     wxString                        sStr = wxStripMenuCodes(m_strName);
 
+    //
+    // If we have a valid accel string, then pad out
+    // the menu string so the menu and accel string are not
+    // placed ontop of eachother.
+    if (!m_strAccel.empty() )
+    {
+        sStr.Pad(sStr.Length()%8);
+        sStr += m_strAccel;
+    }
+    vDC.SetFont(GetFont());
     vDC.GetTextExtent( sStr
                       ,(long *)pWidth
                       ,(long *)pHeight
                      );
+    if (!m_strAccel.IsEmpty())
+    {
+        //
+        // Measure the accelerator string, and add it's width to
+        // the total item width, plus 16 (Accelerators are right justified,
+        // with the right edge of the text rectangle 16 pixels left of
+        // the right edge of the menu)
+        //
+        int                         nAccelWidth;
+        int                         nAccelHeight;
 
-    (*pHeight) = (*pHeight) + 2;
-    m_nHeight = *pHeight;        // remember height for use in OnDrawItem
+        vDC.GetTextExtent( m_strAccel
+                          ,&nAccelWidth
+                          ,&nAccelHeight
+                         );
+        *pWidth += nAccelWidth;
+    }
+
+    //
+    // Add space at the end of the menu for the submenu expansion arrow
+    // this will also allow offsetting the accel string from the right edge
+    //
+    *pWidth += GetDefaultMarginWidth() * 1.5;
+
+    //
+    // JACS: items still look too tightly packed, so adding 5 pixels.
+    //
+    (*pHeight) += 5;
+
+    //
+    // Ray Gilbert's changes - Corrects the problem of a BMP
+    // being placed next to text in a menu item, and the BMP does
+    // not match the size expected by the system.  This will
+    // resize the space so the BMP will fit.  Without this, BMPs
+    // must be no larger or smaller than 16x16.
+    //
+    if (m_bmpChecked.Ok())
+    {
+        //
+        // Is BMP height larger then text height?
+        //
+        size_t                      nAdjustedHeight = m_bmpChecked.GetHeight() +
+                                                      wxSystemSettings::GetMetric(wxSYS_EDGE_Y);
+        if (*pHeight < nAdjustedHeight)
+            *pHeight = nAdjustedHeight;
+
+        //
+        // Does BMP encroach on default check menu position?
+        //
+        size_t                      nAdjustedWidth = m_bmpChecked.GetWidth() +
+                                                     (wxSystemSettings::GetMetric(wxSYS_EDGE_X) * 2);
+
+        //
+        // Do we need to widen margin to fit BMP?
+        //
+        if ((size_t)GetMarginWidth() < nAdjustedWidth)
+            SetMarginWidth(nAdjustedWidth);
+
+        //
+        // Add the size of the bitmap to our total size...
+        //
+        *pWidth += GetMarginWidth();
+    }
+
+    //
+    // Add the size of the bitmap to our total size - even if we don't have
+    // a bitmap we leave room for one...
+    //
+    *pWidth += GetMarginWidth();
+
+    //
+    // Make sure that this item is at least as
+    // tall as the user's system settings specify
+    //
+    if (*pHeight < m_nMinHeight)
+        *pHeight = m_nMinHeight;
+    m_nHeight = *pHeight;                // remember height for use in OnDrawItem
     return TRUE;
 } // end of wxOwnerDrawn::OnMeasureItem
 

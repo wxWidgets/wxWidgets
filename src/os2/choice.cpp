@@ -185,6 +185,16 @@ void wxChoice::SetString(
 )
 {
     SHORT                           nIndexType = 0;
+    void*                           pData;
+
+    if ( m_clientDataItemsType != wxClientData_None )
+    {
+        pData = DoGetItemClientData(n);
+    }
+    else // no client data
+    {
+        pData = NULL;
+    }
 
     ::WinSendMsg(GetHwnd(), LM_DELETEITEM, (MPARAM)n, 0);
 
@@ -197,6 +207,13 @@ void wxChoice::SetString(
                  ,(MPARAM)nIndexType
                  ,(MPARAM)rsStr.c_str()
                 );
+
+    if (pData)
+    {
+        DoSetItemClientData( n
+                            ,pData
+                           );
+    }
 } // end of wxChoice::SetString
 
 wxString wxChoice::GetString(

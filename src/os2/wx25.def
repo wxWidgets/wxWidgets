@@ -1,10 +1,10 @@
-LIBRARY WX23 INITINSTANCE TERMINSTANCE
+LIBRARY WX25 INITINSTANCE TERMINSTANCE
 PROTMODE
 DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx24\WxWindows\lib\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1969,7 +1969,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX24\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2364,6 +2364,8 @@ EXPORTS
       ms_root__16wxLocalFSHandler
       ;wxFileSystemHandler::GetMimeTypeFromExt(const wxString&)
       GetMimeTypeFromExt__19wxFileSystemHandlerFRC8wxString
+      ;wxFileSystem::URLToFileName(const wxString&)
+      URLToFileName__12wxFileSystemFRC8wxString
       ;wxFSFile::sm_classwxFSFile
       sm_classwxFSFile__8wxFSFile
       ;wxFileSystemModule::sm_classwxFileSystemModule
@@ -2376,6 +2378,8 @@ EXPORTS
       CleanUpHandlers__12wxFileSystemFv
       ;wxFileSystemHandler::GetLeftLocation(const wxString&) const
       GetLeftLocation__19wxFileSystemHandlerCFRC8wxString
+      ;wxFileSystem::FileNameToURL(const wxFileName&)
+      FileNameToURL__12wxFileSystemFRC10wxFileName
       ;wxConstructorForwxFileSystem()
       wxConstructorForwxFileSystem__Fv
       ;wxFileSystemHandler::GetProtocol(const wxString&) const
@@ -2443,6 +2447,8 @@ EXPORTS
       GetFamilyString__10wxFontBaseCFv
       ;wxFontBase::SetDefaultEncoding(wxFontEncoding)
       SetDefaultEncoding__10wxFontBaseF14wxFontEncoding
+      ;wxFontBase::New(int,wxFontFamily,int,const wxString&,wxFontEncoding)
+      New__10wxFontBaseFi12wxFontFamilyT1RC8wxString14wxFontEncoding
       ;wxFontBase::IsFixedWidth() const
       IsFixedWidth__10wxFontBaseCFv
       ;wxFontBase::New(int,int,int,int,unsigned long,const wxString&,wxFontEncoding)
@@ -6278,7 +6284,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX24\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -7246,6 +7252,8 @@ EXPORTS
       wxMB2WC__FPwPCcUi
       ;wxSnprintf_(char*,unsigned int,const char*,...)
       wxSnprintf___FPcUiPCce
+      ;wxStrdupW(const wchar_t*)
+      wxStrdupW__FPCw
       ;wxWC2MB(char*,const wchar_t*,unsigned int)
       wxWC2MB__FPcPCwUi
       ;wxOKlibc()
@@ -8128,6 +8136,12 @@ EXPORTS
       LookupAttr__6wxGridCFiT1PP14wxGridCellAttr
       ;wxGridCellAttrProvider::InitData()
       InitData__22wxGridCellAttrProviderFv
+      ;wxGridCellNumberEditor::GetValue() const
+      GetValue__22wxGridCellNumberEditorCFv
+      ;wxGridCellChoiceEditor::GetValue() const
+      GetValue__22wxGridCellChoiceEditorCFv
+      ;wxGridCellBoolEditor::GetValue() const
+      GetValue__20wxGridCellBoolEditorCFv
       ;wxGrid::GetSelectionMode() const
       GetSelectionMode__6wxGridCFv
       ;wxGridCellAttr::GetRenderer(wxGrid*,int,int) const
@@ -8544,6 +8558,8 @@ EXPORTS
       IsSelection__6wxGridFv
       ;wxGrid::IsCellEditControlEnabled() const
       IsCellEditControlEnabled__6wxGridCFv
+      ;wxGridCellTextEditor::GetValue() const
+      GetValue__20wxGridCellTextEditorCFv
       ;wxGrid::GetSelectionBlockBottomRight() const
       GetSelectionBlockBottomRight__6wxGridCFv
       ;wxGridCornerLabelWindow::GetEventTable() const
@@ -9917,6 +9933,8 @@ EXPORTS
       GetEventTable__23wxGenericMDIParentFrameCFv
       ;wxGenericMDIParentFrame::GetClientWindow() const
       GetClientWindow__23wxGenericMDIParentFrameCFv
+      ;wxMDIParentFrame::GetActiveChild() const
+      GetActiveChild__16wxMDIParentFrameCFv
       ;wxGenericMDIChildFrame::Create(wxGenericMDIParentFrame*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
       Create__22wxGenericMDIChildFrameFP23wxGenericMDIParentFrameiRC8wxStringRC7wxPointRC6wxSizelT3
       ;wxGenericMDIChildFrame::OnMenuHighlight(wxMenuEvent&)
@@ -10131,6 +10149,8 @@ EXPORTS
       sm_eventTable__16wxProgressDialog
       ;wxProgressDialog::sm_eventTableEntries
       sm_eventTableEntries__16wxProgressDialog
+      ;wxProgressDialog::Show(unsigned long)
+      Show__16wxProgressDialogFUl
       ;wxProgressDialog::OnCancel(wxCommandEvent&)
       OnCancel__16wxProgressDialogFR14wxCommandEvent
       ;wxProgressDialog::ReenableOtherWindows()
@@ -10831,6 +10851,8 @@ EXPORTS
       SetItemImage__17wxGenericTreeCtrlFRC12wxTreeItemIdi14wxTreeItemIcon
       ;wxGenericTreeCtrl::SelectItem(const wxTreeItemId&,unsigned long,unsigned long)
       SelectItem__17wxGenericTreeCtrlFRC12wxTreeItemIdUlT2
+      ;wxGenericTreeCtrl::ResetTextControl()
+      ResetTextControl__17wxGenericTreeCtrlFv
       ;wxGenericTreeCtrl::GetButtonsImageList() const
       GetButtonsImageList__17wxGenericTreeCtrlCFv
       ;wxTreeTextCtrl::AcceptChanges()
@@ -10879,6 +10901,8 @@ EXPORTS
       SetItemBackgroundColour__17wxGenericTreeCtrlFRC12wxTreeItemIdRC8wxColour
       ;wxTreeTextCtrl::GetEventTable() const
       GetEventTable__14wxTreeTextCtrlCFv
+      ;wxGenericTreeCtrl::GetEditControl() const
+      GetEditControl__17wxGenericTreeCtrlCFv
       ;wxTreeTextCtrl::Finish()
       Finish__14wxTreeTextCtrlFv
       ;wxGenericTreeCtrl::FillArray(wxGenericTreeItem*,wxArrayTreeItemIds&) const
@@ -10930,6 +10954,8 @@ EXPORTS
       __dt__20wxHtmlHelpControllerFv
       ;wxHtmlHelpController::OnCloseFrame(wxCloseEvent&)
       OnCloseFrame__20wxHtmlHelpControllerFR12wxCloseEvent
+      ;wxHtmlHelpController::AddBook(const wxFileName&,unsigned long)
+      AddBook__20wxHtmlHelpControllerFRC10wxFileNameUl
       ;wxHtmlHelpController::wxHtmlHelpController(int)
       __ct__20wxHtmlHelpControllerFi
       ;wxHtmlHelpController::DisplayContents()
@@ -14155,8 +14181,6 @@ EXPORTS
       wxConstructorForwxScrollBar__Fv
       ;wxScrollBar::~wxScrollBar()
       __dt__11wxScrollBarFv
-      ;wxScrollBar::GetEventTable() const
-      GetEventTable__11wxScrollBarCFv
       ;wxScrollBar::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
       Create__11wxScrollBarFP8wxWindowiRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
       ;wxScrollBar::SetScrollbar(int,int,int,int,unsigned long)
@@ -14164,14 +14188,10 @@ EXPORTS
       ;wxScrollBar::GetThumbPosition() const
       GetThumbPosition__11wxScrollBarCFv
       __vft11wxScrollBar8wxObject
-      ;wxScrollBar::sm_eventTableEntries
-      sm_eventTableEntries__11wxScrollBar
       ;wxScrollBar::sm_classwxScrollBar
       sm_classwxScrollBar__11wxScrollBar
       ;wxScrollBar::Command(wxCommandEvent&)
       Command__11wxScrollBarFR14wxCommandEvent
-      ;wxScrollBar::sm_eventTable
-      sm_eventTable__11wxScrollBar
   ;From object file:  ..\os2\settings.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSystemSettingsModule::sm_classwxSystemSettingsModule
@@ -14572,16 +14592,19 @@ EXPORTS
       Remove__10wxTextCtrlFlT1
       ;wxTextCtrl::SetSelection(long,long)
       SetSelection__10wxTextCtrlFlT1
-      ;wxTextCtrl::Copy()
-      Copy__10wxTextCtrlFv
+      ;wxTextCtrl::~wxTextCtrl()
+      __dt__10wxTextCtrlFv
       ;wxTextCtrl::SetStyle(long,long,const wxTextAttr&)
       SetStyle__10wxTextCtrlFlT1RC10wxTextAttr
+      ;wxTextCtrl::Copy()
+      Copy__10wxTextCtrlFv
       ;wxTextCtrl::CanRedo() const
       CanRedo__10wxTextCtrlCFv
       ;wxTextCtrl::OS2GetStyle(long,unsigned long*) const
       OS2GetStyle__10wxTextCtrlCFlPUl
       ;wxTextCtrl::sm_classwxTextCtrl
       sm_classwxTextCtrl__10wxTextCtrl
+      __vft10wxTextCtrl8wxObject
       ;wxTextCtrl::ShowPosition(long)
       ShowPosition__10wxTextCtrlFl
       ;wxTextCtrl::SetWindowStyleFlag(long)

@@ -2234,6 +2234,8 @@ static void wxYieldForCommandsOnly()
     {
         wxTheApp->DoMessage((WXMSG*)&vMsg);
     }
+    if (vMsg.msg == WM_QUIT)
+        ::WinPostMsg(NULL, WM_QUIT, 0, 0);
 }
 #endif // wxUSE_MENUS_NATIVE
 
