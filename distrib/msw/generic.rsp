@@ -629,6 +629,7 @@ samples/image/*.ico
 samples/image/*.cur
 samples/image/*.txt
 samples/image/*.pro
+samples/image/*.ani
 
 samples/internat/*.cpp
 samples/internat/*.h
