@@ -54,39 +54,49 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
     // the panel itself should never get the focus at all but if it does happen
     // temporarily (as it seems to do under wxGTK), at the very least don't
     // forget our previous m_winLastFocused
-    if ( win == m_winParent )
-        return;
-
-    // if we're setting the focus
-    if ( win )
+    if ( win != m_winParent )
     {
-        // find the last _immediate_ child which got focus but be prepared to
-        // handle the case when win == m_winParent as well
-        wxWindow *winParent = win;
-        while ( winParent != m_winParent )
+        // if we're setting the focus
+        if ( win )
         {
-            win = winParent;
-            winParent = win->GetParent();
+            // find the last _immediate_ child which got focus
+            wxWindow *winParent = win;
+            while ( winParent != m_winParent )
+            {
+                win = winParent;
+                winParent = win->GetParent();
 
-            // Yes, this can happen, though in a totally pathological case.
-            // like when detaching a menubar from a frame with a child which
-            // has pushed itself as an event handler for the menubar.  (wxGtk)
+                // Yes, this can happen, though in a totally pathological case.
+                // like when detaching a menubar from a frame with a child
+                // which has pushed itself as an event handler for the menubar.
+                // (under wxGTK)
 
-            wxASSERT_MSG( winParent, _T("Setting last-focus for a window that is not our child?") );
+                wxASSERT_MSG( winParent,
+                              _T("Setting last focus for a window that is not our child?") );
+            }
+        }
+
+        m_winLastFocused = win;
+
+        if ( win )
+        {
+            wxLogTrace(_T("focus"), _T("Set last focus to %s(%s)"),
+                       win->GetClassInfo()->GetClassName(),
+                       win->GetLabel().c_str());
+        }
+        else
+        {
+            wxLogTrace(_T("focus"), _T("No more last focus"));
         }
     }
 
-    m_winLastFocused = win;
-
-    if ( win )
+    // propagate the last focus upwards so that our parent can set focus back
+    // to us if it loses it now and regains later
+    wxWindow *parent = m_winParent->GetParent();
+    if ( parent )
     {
-        wxLogTrace(_T("focus"), _T("Set last focus to %s(%s)"),
-                   win->GetClassInfo()->GetClassName(),
-                   win->GetLabel().c_str());
-    }
-    else
-    {
-        wxLogTrace(_T("focus"), _T("No more last focus"));
+        wxChildFocusEvent eventFocus(m_winParent);
+        parent->GetEventHandler()->ProcessEvent(eventFocus);
     }
 }
 
@@ -352,19 +362,21 @@ bool wxControlContainer::SetFocusToChild()
 bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
 {
     wxCHECK_MSG( win, FALSE, _T("wxSetFocusToChild(): invalid window") );
+    wxCHECK_MSG( childLastFocused, FALSE,
+                 _T("wxSetFocusToChild(): NULL child poonter") );
 
     if ( *childLastFocused )
     {
-        // It might happen that the window got reparented or no longer accepts
-        // the focus.
-        if ( (*childLastFocused)->GetParent() == win &&
-             (*childLastFocused)->AcceptsFocusFromKeyboard() )
+        // It might happen that the window got reparented
+        if ( (*childLastFocused)->GetParent() == win )
         {
             wxLogTrace(_T("focus"),
                        _T("SetFocusToChild() => last child (0x%08x)."),
                        (*childLastFocused)->GetHandle());
 
-            (*childLastFocused)->SetFocusFromKbd();
+            // not SetFocusFromKbd(): we're restoring focus back to the old
+            // window and not setting it as the result of a kbd action
+            (*childLastFocused)->SetFocus();
             return TRUE;
         }
         else
