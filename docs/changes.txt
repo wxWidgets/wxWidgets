@@ -90,6 +90,10 @@ wxMotif
   does not support all the features other ports do); refer to wxFileDialog
   documentation for a detailed explanation
 - implemented wxWakeUpIdle
+- for Motif 2.0, used the native combobox widget instead of the GPL'd
+  xmcombo; xmcombo is still used for Motif 1.x and Lesstif when compiled
+  with Motif 1.x compatibility
+- implemented wxToggleButton
 
 OLD CHANGES
 ===========

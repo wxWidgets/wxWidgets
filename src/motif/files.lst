@@ -565,6 +565,7 @@ ALL_HEADERS = \
 		motif/statbox.h \
 		motif/stattext.h \
 		motif/textctrl.h \
+		motif/tglbtn.h \
 		motif/timer.h \
 		motif/toolbar.h \
 		motif/toplevel.h \

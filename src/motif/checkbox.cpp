@@ -20,6 +20,7 @@
 #include "wx/defs.h"
 
 #include "wx/checkbox.h"
+#include "wx/tglbtn.h"
 #include "wx/utils.h"
 
 #ifdef __VMS__
@@ -104,7 +105,7 @@ void wxCheckBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
     if (item->InSetValue())
         return;
 
-    wxCommandEvent event (wxEVT_COMMAND_CHECKBOX_CLICKED, item->GetId());
+    wxCommandEvent event (item->m_evtType, item->GetId());
     event.SetInt((int) item->GetValue ());
     event.SetEventObject(item);
     item->ProcessCommand (event);
@@ -130,3 +131,46 @@ void wxCheckBox::ChangeBackgroundColour()
            XmNselectColor, selectPixel,
         NULL);
 }
+
+///////////////////////////////////////////////////////////////////////////////
+// wxToggleButton
+///////////////////////////////////////////////////////////////////////////////
+
+#if wxUSE_TOGGLEBTN
+
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED)
+IMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxControl)
+
+bool wxToggleButton::Create( wxWindow* parent, wxWindowID id,
+                             const wxString& label,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             long style,
+                             const wxValidator& val,
+                             const wxString &name )
+{
+    if( !wxCheckBox::Create( parent, id, label, pos, size, style, val, name ) )
+        return false;
+
+    XtVaSetValues( (Widget)m_mainWidget,
+                   XmNindicatorSize, 0,
+#if XmVersion >= 2000
+                   XmNindicatorOn, XmINDICATOR_NONE,
+#else
+                   XmNindicatorOn, False,
+#endif
+                   XmNfillOnSelect, False,
+                   XmNshadowThickness, 2,
+                   XmNalignment, XmALIGNMENT_CENTER,
+                   XmNmarginLeft, 0,
+                   XmNmarginRight, 0,
+                   NULL );
+
+    // set it again, because the XtVaSetValue above resets it
+    if( size.x != -1 || size.y != -1 )
+        SetSize( size );
+
+    return true;
+}
+
+#endif // wxUSE_TOGGLEBUTTON

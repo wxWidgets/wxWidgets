@@ -1200,6 +1200,7 @@ statbmp.h	MotifH
 statbox.h	MotifH
 stattext.h	MotifH
 textctrl.h	MotifH
+tglbtn.h	MotifH
 timer.h	MotifH
 toolbar.h	MotifH
 toplevel.h	MotifH

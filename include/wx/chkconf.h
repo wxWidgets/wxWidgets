@@ -996,10 +996,6 @@
 #  undef wxUSE_TAB_DIALOG
 #  define wxUSE_TAB_DIALOG 1
 #endif
-#if defined(__WXMOTIF__) && wxUSE_TOGGLEBTN
-#  undef wxUSE_TOGGLEBTN
-#  define wxUSE_TOGGLEBTN 0
-#endif
 
 /* wxMGL-specific dependencies */
 #ifdef __WXMGL__

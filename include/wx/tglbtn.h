@@ -30,9 +30,9 @@ END_DECLARE_EVENT_TYPES()
     #include "wx/msw/tglbtn.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/tglbtn.h"
-/*
 # elif defined(__WXMOTIF__)
-#  include "wx/motif/tglbtn.h"
+    #include "wx/motif/tglbtn.h"
+/*
 # elif defined(__WXMAC__)
 #  include "wx/mac/tglbtn.h"
 # elif defined(__WXPM__)

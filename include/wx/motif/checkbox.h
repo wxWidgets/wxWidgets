@@ -26,13 +26,15 @@ class WXDLLEXPORT wxCheckBox: public wxCheckBoxBase
     DECLARE_DYNAMIC_CLASS(wxCheckBox)
         
 public:
-    inline wxCheckBox() { }
+    inline wxCheckBox() { Init(); }
     inline wxCheckBox(wxWindow *parent, wxWindowID id, const wxString& label,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0,
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxCheckBoxNameStr)
     {
+        Init();
+
         Create(parent, id, label, pos, size, style, validator, name);
     }
     
@@ -47,6 +49,17 @@ public:
     
     // Implementation
     virtual void ChangeBackgroundColour();
+private:
+    // common part of all constructors
+    void Init()
+    {
+        m_evtType = wxEVT_COMMAND_CHECKBOX_CLICKED;
+    }
+
+    // public for the callback
+public:
+    // either exEVT_COMMAND_CHECKBOX_CLICKED or ..._TOGGLEBUTTON_CLICKED
+    wxEventType m_evtType;
 };
 
 #endif
