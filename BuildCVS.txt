@@ -129,15 +129,19 @@ sure that your configure setup is basically sound.)
 
 To cross compile the windows library, do
 -> cd win32
+Now run configure. There are two ways to do this
+-> ../configure --host=i586-mingw32 --build=i586-linux --with-mingw \
+   --enable-dnd=no
+where --build= should read whatever platform you're building on. Configure
+will notice that build and host platforms differ, and automatically prepend
+i586-mingw32- to gcc, ar, ld, etc (make sure they're in the PATH!). 
+The other way to run configure is by specifying the names of the binaries 
+yourself:
 -> CC=i586-mingw32-gcc CXX=i586-mingw32-g++ RANLIB=i586-mingw32-ranlib \
    DLLTOOL=i586-mingw32-dlltool LD=i586-mingw32-ld NM=i586-mingw32-nm \
    ../configure --host=i586-mingw32 --with-mingw --enable-dnd=no
 
-(assuming you're using mingw32)
-
-The important thing to notice here is that we suply configure with the names
-of all the non-default binutils (make sure they're in the PATH!), and that 
-we tell configure to build for the host platform i586-mingw32. 
+(all assuming you're using mingw32)
 Drag'n'drop is disabled because mingw32 lacks (AFAIK) OLE headers.
 
 Configure will conclude that shared libraries are out of the question and
@@ -170,3 +174,4 @@ default wx resources into libwx_msw.a?) [ No we can't; the linker won't
 link it in... you have to supply an object file ]
 - dynamic libraries
 - static executables are HUGE -- there must be room for improvement.
+

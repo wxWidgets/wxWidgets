@@ -18,7 +18,7 @@ dnl ---------------------------------------------------------------------------
 dnl the file passed to AC_INIT should be specific to our package
 AC_INIT(wx-config.in)
 
-AC_CANONICAL_HOST
+AC_CANONICAL_SYSTEM
 
 dnl When making releases do:
 dnl
@@ -770,11 +770,15 @@ AC_CACHE_SAVE
 dnl cross-compiling support: we're cross compiling if the build system is
 dnl different from the target one (assume host and target be always the same)
 if eval "test $host != $build"; then
-  if eval "test $build != NONE"; then
-    CC="$build-gcc"
-    CXX="$build-g++"
-    RANLIB="$build-ranlib"
-    NM="$build-nm"
+  if eval "test $host_alias != NONE"; then
+    CC=$host_alias-gcc 
+    CXX=$host_alias-c++ 
+    AR=$host_alias-ar
+    RANLIB=$host_alias-ranlib
+    DLLTOOL=$host_alias-dlltool 
+    LD=$host_alias-ld 
+    NM=$host_alias-nm
+    STRIP=$host_alias-strip
   fi
 fi
 
