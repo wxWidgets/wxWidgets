@@ -128,7 +128,8 @@ class TestTreeCtrlPanel(wx.Panel):
 
 
     def OnEndEdit(self, event):
-        self.log.WriteText("OnEndEdit\n")
+        self.log.WriteText("OnEndEdit: %s %s\n" %
+                           (event.IsEditCancelled(), event.GetLabel()) )
         # show how to reject edit, we'll not allow any digits
         for x in event.GetLabel():
             if x in string.digits:
