@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -92,23 +92,23 @@ char *wxGetUserHome( const wxString &user )
 {
   struct passwd *who = (struct passwd *) NULL;
 
-  if (user.IsNull() || (user== "")) 
+  if (user.IsNull() || (user== ""))
   {
-	register char *ptr;
+        register char *ptr;
 
-	if ((ptr = getenv("HOME")) != NULL) 
-	    return ptr;
-	if ((ptr = getenv("USER")) != NULL
-	|| (ptr = getenv("LOGNAME")) != NULL) {
-	    who = getpwnam(ptr);
-	}
-	// We now make sure the the user exists!
-	if (who == NULL)
-	    who = getpwuid(getuid());
-  } 
+        if ((ptr = getenv("HOME")) != NULL)
+            return ptr;
+        if ((ptr = getenv("USER")) != NULL
+        || (ptr = getenv("LOGNAME")) != NULL) {
+            who = getpwnam(ptr);
+        }
+        // We now make sure the the user exists!
+        if (who == NULL)
+            who = getpwuid(getuid());
+  }
   else
     who = getpwnam (user);
-    
+
   return who ? who->pw_dir : (char*)NULL;
 };
 
@@ -127,9 +127,9 @@ bool wxGetHostName(char *buf, int sz)
     //struct hostent *h;
     // Get hostname
     if (gethostname(name, sizeof(name)/sizeof(char)-1) == -1)
-	return FALSE;
+        return FALSE;
     if (getdomainname(domain, sizeof(domain)/sizeof(char)-1) == -1)
-	return FALSE;
+        return FALSE;
     // Get official full name of host
     // doesn't return the full qualified name, replaced by following
     // code (KB)
@@ -155,8 +155,8 @@ bool wxGetUserId(char *buf, int sz)
 
     *buf = '\0';
     if ((who = getpwuid(getuid ())) != NULL) {
-	strncpy (buf, who->pw_name, sz-1);
-	return TRUE;
+        strncpy (buf, who->pw_name, sz-1);
+        return TRUE;
     }
     return FALSE;
 }
@@ -165,13 +165,13 @@ bool wxGetUserName(char *buf, int sz)
 {
     struct passwd *who;
     char *comma;
-    
+
     *buf = '\0';
     if ((who = getpwuid (getuid ())) != NULL) {
        comma = strchr(who->pw_gecos,'c');
        if(comma) *comma = '\0'; // cut off non-name comment fields
        strncpy (buf, who->pw_gecos, sz - 1);
-	return TRUE;
+        return TRUE;
     }
     return FALSE;
 }
@@ -184,7 +184,7 @@ void wxDebugMsg( const char *format, ... )
 {
   va_list ap;
   va_start( ap, format );
-  vfprintf( stderr, format, ap ); 
+  vfprintf( stderr, format, ap );
   fflush( stderr );
   va_end(ap);
 };
@@ -235,7 +235,7 @@ static void GTK_EndProcessDetector(gpointer data, gint source,
 
   pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
 
-  /* wait4 is not part of any standard, use at own risk 
+  /* wait4 is not part of any standard, use at own risk
    * not sure what wait4 does, but wait3 seems to be closest, whats a digit ;-)
    * --- offer@sgi.com */
 #if !defined(__sgi)
@@ -262,7 +262,7 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
     int end_proc_detect[2];
 
     if (*argv == NULL)
-	return 0;
+        return 0;
 
     /* Create pipes */
     if (pipe(end_proc_detect) == -1) {
@@ -277,24 +277,24 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
     pid_t pid = fork();
 #endif
     if (pid == -1) {
-	perror ("fork failed");
-	return 0;
+        perror ("fork failed");
+        return 0;
     } else if (pid == 0) {
         /* Close fd not useful */
         close(end_proc_detect[0]); // close reading side
 
-	/* child */
+        /* child */
 #ifdef _AIX
-	execvp ((const char *)*argv, (const char **)argv);
+        execvp ((const char *)*argv, (const char **)argv);
 #else
-	execvp (*argv, argv);
+        execvp (*argv, argv);
 #endif
-	if (errno == ENOENT)
-	    wxError("command not found", *argv);
-	else
-	    perror (*argv);
-	wxError("could not execute", *argv);
-	_exit (-1);
+        if (errno == ENOENT)
+            wxError("command not found", *argv);
+        else
+            perror (*argv);
+        wxError("could not execute", *argv);
+        _exit (-1);
     }
 
     close(end_proc_detect[1]); // close writing side
@@ -329,7 +329,7 @@ long wxExecute( const wxString& command, bool sync, wxProcess *process )
     tmp[sizeof (tmp) / sizeof (char) - 1] = '\0';
     argv[argc++] = strtok (tmp, IFS);
     while ((argv[argc++] = strtok((char *) NULL, IFS)) != NULL)
-	/* loop */ ;
+        /* loop */ ;
     return wxExecute(argv, sync, process);
 };
 

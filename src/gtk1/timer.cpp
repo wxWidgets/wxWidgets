@@ -19,53 +19,50 @@
 // wxTimer
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTimer,wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxTimer,wxObject)
 
 gint timeout_callback( gpointer data )
 {
   wxTimer *timer = (wxTimer*)data;
   timer->Notify();
-  if (timer->OneShot()) timer->Stop();
+
+  if ( timer->OneShot() )
+    timer->Stop();
+
   return TRUE;
 }
 
-wxTimer::wxTimer(void)
+wxTimer::wxTimer()
 {
   m_tag = -1;
   m_time = 1000;
   m_oneShot = FALSE;
 }
 
-wxTimer::~wxTimer(void)
+wxTimer::~wxTimer()
 {
   Stop();
 }
 
-int wxTimer::Interval(void)
+bool wxTimer::Start( int millisecs, bool oneShot )
 {
-  return m_time;
-}
+  if ( millisecs != -1 )
+    m_time = millisecs;
 
-bool wxTimer::OneShot(void)
-{
-  return m_oneShot;
-}
-
-void wxTimer::Notify(void)
-{
-}
-
-void wxTimer::Start( int millisecs, bool oneShot )
-{
-  if (millisecs != -1) m_time = millisecs;
   m_oneShot = oneShot;
+
   m_tag = gtk_timeout_add( millisecs, timeout_callback, this );
+
+  return TRUE;
 }
 
-void wxTimer::Stop(void)
+void wxTimer::Stop()
 {
-  if (m_tag != -1)
+  if ( m_tag != -1 )
+  {
     gtk_timeout_remove( m_tag );
-  m_tag = -1;
+
+    m_tag = -1;
+  }
 }
 

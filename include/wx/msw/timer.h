@@ -18,27 +18,35 @@
 
 #include "wx/object.h"
 
-class WXDLLEXPORT wxTimer: public wxObject
+class WXDLLEXPORT wxTimer : public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxTimer)
+public:
+    wxTimer();
+    ~wxTimer();
 
- public:
-  bool oneShot ;
-  int  milli ;
-  int  lastMilli ;
+    virtual bool Start(int milliseconds = -1,
+                       bool one_shot = FALSE); // Start timer
+    virtual void Stop();                       // Stop timer
 
-  long id;
- public:
-  wxTimer(void);
-  ~wxTimer(void);
-  virtual bool Start(int milliseconds = -1,bool one_shot = FALSE); // Start timer
-  virtual void Stop(void);                   // Stop timer
-  virtual void Notify(void) = 0;             // Override this member
-  inline int Interval(void) { return milli ; }; // Returns the current interval time (0 if stop)
+    virtual void Notify() = 0;                 // Override this member
+
+    // Returns the current interval time (0 if stop)
+    int Interval() const { return milli; };
+    bool OneShot() const { return oneShot; }
+
+protected:
+    bool oneShot ;
+    int  milli ;
+    int  lastMilli ;
+
+    long id;
+
+private:
+    DECLARE_ABSTRACT_CLASS(wxTimer)
 };
 
 // Timer functions (milliseconds)
-void WXDLLEXPORT wxStartTimer(void);
+void WXDLLEXPORT wxStartTimer();
 // Gets time since last wxStartTimer or wxGetElapsedTime
 long WXDLLEXPORT wxGetElapsedTime(bool resetTimer = TRUE);
 
@@ -46,7 +54,7 @@ long WXDLLEXPORT wxGetElapsedTime(bool resetTimer = TRUE);
 bool WXDLLEXPORT wxGetLocalTime(long *timeZone, int *dstObserved);
 
 // Get number of seconds since 00:00:00 GMT, Jan 1st 1970.
-long WXDLLEXPORT wxGetCurrentTime(void);
+long WXDLLEXPORT wxGetCurrentTime();
 
 #endif
     // _WX_TIMERH_

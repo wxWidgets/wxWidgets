@@ -86,7 +86,7 @@ class wxTextCtrl: public wxControl, public streambuf
     void Cut();
     void Copy();
     void Paste();
-    void Delete();
+    void Clear();
 
     void OnChar( wxKeyEvent &event );
 

@@ -108,7 +108,7 @@ LIB_CPP_SRC=\
  gtk/tbargtk.cpp \
  gtk/textctrl.cpp \
  gtk/timer.cpp \
- gtk/treectrl.cpp \
+ generic/treectrl.cpp \
  gtk/utilsgtk.cpp \
  gtk/utilsres.cpp \
  gtk/window.cpp \

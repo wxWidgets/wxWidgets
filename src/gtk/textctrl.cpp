@@ -41,7 +41,7 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
   EVT_CHAR(wxTextCtrl::OnChar)
 END_EVENT_TABLE()
 
-wxTextCtrl::wxTextCtrl(void) : streambuf()
+wxTextCtrl::wxTextCtrl() : streambuf()
 {
   if (allocate()) setp(base(),ebuf());
 
@@ -149,7 +149,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
   return TRUE;
 }
 
-wxString wxTextCtrl::GetValue(void) const
+wxString wxTextCtrl::GetValue() const
 {
   wxString tmp;
   if (m_windowStyle & wxTE_MULTILINE)
@@ -228,7 +228,7 @@ long wxTextCtrl::XYToPosition( long x, long y )
 {
 }
 
-int wxTextCtrl::GetNumberOfLines(void)
+int wxTextCtrl::GetNumberOfLines()
 {
 }
 
@@ -242,7 +242,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
     gtk_entry_set_position( GTK_ENTRY(m_text), tmp );
 }
 
-void wxTextCtrl::SetInsertionPointEnd(void)
+void wxTextCtrl::SetInsertionPointEnd()
 {
   int pos = 0;
   if (m_windowStyle & wxTE_MULTILINE)
@@ -270,12 +270,12 @@ void wxTextCtrl::ShowPosition( long WXUNUSED(pos) )
   wxFAIL_MSG(_("wxTextCtrl::ShowPosition not implemented"));
 }
 
-long wxTextCtrl::GetInsertionPoint(void) const
+long wxTextCtrl::GetInsertionPoint() const
 {
   return (long) GTK_EDITABLE(m_text)->current_pos;
 }
 
-long wxTextCtrl::GetLastPosition(void) const
+long wxTextCtrl::GetLastPosition() const
 {
   int pos = 0;
   if (m_windowStyle & wxTE_MULTILINE)
@@ -298,22 +298,22 @@ void wxTextCtrl::Replace( long from, long to, const wxString &value )
   gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &pos );
 }
 
-void wxTextCtrl::Cut(void)
+void wxTextCtrl::Cut()
 {
   gtk_editable_cut_clipboard( GTK_EDITABLE(m_text), 0 );
 }
 
-void wxTextCtrl::Copy(void)
+void wxTextCtrl::Copy()
 {
   gtk_editable_copy_clipboard( GTK_EDITABLE(m_text), 0 );
 }
 
-void wxTextCtrl::Paste(void)
+void wxTextCtrl::Paste()
 {
   gtk_editable_paste_clipboard( GTK_EDITABLE(m_text), 0 );
 }
 
-void wxTextCtrl::Delete(void)
+void wxTextCtrl::Clear()
 {
   SetValue( "" );
 }
@@ -350,7 +350,7 @@ int wxTextCtrl::overflow( int WXUNUSED(c) )
   return EOF;
 }
 
-int wxTextCtrl::sync(void)
+int wxTextCtrl::sync()
 {
   int len = pptr() - pbase();
   char *txt = new char[len+1];
@@ -362,7 +362,7 @@ int wxTextCtrl::sync(void)
   return 0;
 }
 
-int wxTextCtrl::underflow(void)
+int wxTextCtrl::underflow()
 {
   return EOF;
 }
@@ -415,7 +415,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
   return *this;
 }
 
-GtkWidget* wxTextCtrl::GetConnectWidget(void)
+GtkWidget* wxTextCtrl::GetConnectWidget()
 {
   return GTK_WIDGET(m_text);
 }

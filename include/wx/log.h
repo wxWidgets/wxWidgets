@@ -188,6 +188,8 @@ protected:
   ostream *m_ostr;
 };
 
+#ifndef wxUSE_NOGUI
+
 // log everything to a text window (GUI only of course)
 class WXDLLEXPORT wxLogTextCtrl : public wxLogStream
 {
@@ -268,6 +270,8 @@ private:
   wxLog      *m_pOldLog;        // previous log target
   wxLogFrame *m_pLogFrame;      // the log frame
 };
+
+#endif // wxUSE_NOGUI
 
 // ----------------------------------------------------------------------------
 // /dev/null log target: suppress logging until this object goes out of scope

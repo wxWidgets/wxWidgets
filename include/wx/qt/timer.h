@@ -6,7 +6,7 @@
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TIMER_H_
@@ -20,22 +20,29 @@
 
 class WXDLLEXPORT wxTimer: public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxTimer)
+public:
+    wxTimer();
+    ~wxTimer();
 
- public:
-  wxTimer();
-  ~wxTimer();
-  virtual bool Start(int milliseconds = -1,bool one_shot = FALSE); // Start timer
-  virtual void Stop();                   // Stop timer
-  virtual void Notify() = 0;             // Override this member
-  inline int Interval() { return m_milli ; }; // Returns the current interval time (0 if stop)
+    virtual bool Start(int milliseconds = -1,
+                       bool one_shot = FALSE); // Start timer
+    virtual void Stop();                       // Stop timer
+
+    virtual void Notify() = 0;                 // Override this member
+
+    // Returns the current interval time (0 if stop)
+    int Interval() const { return milli; };
+    bool OneShot() const { return oneShot; }
 
 protected:
-  bool      m_oneShot ;
-  int       m_milli ;
-  int       m_lastMilli ;
-  long      m_id;
+    bool oneShot ;
+    int  milli ;
+    int  lastMilli ;
 
+    long id;
+
+private:
+    DECLARE_ABSTRACT_CLASS(wxTimer)
 };
 
 /* Note: these are implemented in common/timercmn.cpp, so need to implement them separately.

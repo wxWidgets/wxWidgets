@@ -31,23 +31,26 @@ class wxTimer;
 
 class wxTimer: public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxTimer)
+public:
+    wxTimer();
+    ~wxTimer();
 
-  public:
+    int Interval() const { return m_time; }
 
-    wxTimer(void);
-    ~wxTimer(void);
-    int Interval(void);
-    bool OneShot(void);
-    virtual void Notify(void);
-    void Start( int millisecs = -1, bool oneShot = FALSE );
-    void Stop(void);
-    
-  private:
-  
+    bool OneShot() const { return m_oneShot; }
+
+    virtual bool Start( int millisecs = -1, bool oneShot = FALSE );
+    virtual void Stop();
+
+    virtual void Notify() = 0;  // override this
+
+protected:
     int  m_tag;
     int  m_time;
     bool m_oneShot;
+
+private:
+    DECLARE_ABSTRACT_CLASS(wxTimer)
 };
 
 #endif // __GTKTIMERH__

@@ -387,6 +387,7 @@ void wxLogStream::DoLogString(const char *szString)
   (*m_ostr) << szString << endl << flush;
 }
 
+#ifndef   wxUSE_NOGUI
 // ----------------------------------------------------------------------------
 // wxLogTextCtrl implementation
 // ----------------------------------------------------------------------------
@@ -409,8 +410,6 @@ wxLogTextCtrl::~wxLogTextCtrl()
 // ----------------------------------------------------------------------------
 // wxLogGui implementation
 // ----------------------------------------------------------------------------
-
-#ifndef   wxUSE_NOGUI
 
 wxLogGui::wxLogGui()
 {
@@ -960,22 +959,26 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
     // send it to the normal log destination
     wxLogDebug(szBuf);
 
-    strcat(szBuf, _("\nDo you want to stop the program?"
-                    "\nYou can also choose [Cancel] to suppress "
-                    "further warnings."));
+    #ifdef wxUSE_NOGUI
+      Trap();
+    #else
+      strcat(szBuf, _("\nDo you want to stop the program?"
+                      "\nYou can also choose [Cancel] to suppress "
+                      "further warnings."));
 
-    switch ( wxMessageBox(szBuf, _("Debug"),
-                          wxYES_NO | wxCANCEL | wxICON_STOP ) ) {
-      case wxYES:
-        Trap();
-        break;
+      switch ( wxMessageBox(szBuf, _("Debug"),
+                            wxYES_NO | wxCANCEL | wxICON_STOP ) ) {
+        case wxYES:
+          Trap();
+          break;
 
-      case wxCANCEL:
-        s_bNoAsserts = TRUE;
-        break;
+        case wxCANCEL:
+          s_bNoAsserts = TRUE;
+          break;
 
-      //case wxNO: nothing to do
-    }
+        //case wxNO: nothing to do
+      }
+    #endif // USE_NOGUI
   }
 
   s_bInAssert = FALSE;

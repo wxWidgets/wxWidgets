@@ -69,6 +69,8 @@
 #include "wx/string.h"
 #include "wx/wxexpr.h"
 
+#include "wx/settings.h"
+
 // Forward (private) declarations
 bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db);
 wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, bool isPanel = FALSE);
