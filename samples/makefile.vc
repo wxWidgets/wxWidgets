@@ -92,10 +92,10 @@ all:
         nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\menu
         nmake -f makefile.vc $(MAKEFLAGS)
-!if "$(FINAL)" == "0"
-        cd $(WXDIR)\samples\memcheck
-        nmake -f makefile.vc $(MAKEFLAGS)
-!endif
+#!if "$(FINAL)" == "0"
+#        cd $(WXDIR)\samples\memcheck
+#        nmake -f makefile.vc $(MAKEFLAGS)
+#!endif
 !if "$(COMPIL)"==""
         cd $(WXDIR)\samples\mfc
         nmake -f makefile.vc $(MAKEFLAGS)
