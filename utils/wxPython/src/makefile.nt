@@ -23,6 +23,10 @@ FINAL=0
 # be a directory contained in a PYTHONPATH directory.
 TARGETDIR=..
 
+# Set this to 1 for make to pre-compile the Python modules, 0 to
+# just copy the sources and let Python compile them at the first
+# runtime.
+COMPILEPY=0
 
 #----------------------------------------------------------------------
 
@@ -83,8 +87,10 @@ wxclean:
 
 
 pycfiles : $(PYMODULES)
+!if "$(COMPILEPY)" == "1"
 	$(PYTHONDIR)\python $(PYTHONDIR)\Lib\compileall.py -l $(TARGETDIR)
 	$(PYTHONDIR)\python -O $(PYTHONDIR)\Lib\compileall.py -l $(TARGETDIR)
+!endif
 
 #----------------------------------------------------------------------
 
@@ -179,6 +185,9 @@ $(TARGETDIR)\cmndlgs.py   : cmndlgs.py
 #------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.2  1998/08/14 03:34:23  RD
+# made pre-compiling the python files optional
+#
 # Revision 1.1  1998/08/09 08:25:51  RD
 # Initial version
 #
