@@ -162,22 +162,24 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
         }
         map.erase( name ) ;
     }
-
-    for( wxPropertyInfoMap::iterator iter = map.begin() ; iter != map.end() ; ++iter )
-    {
-        const wxPropertyInfo* prop = iter->second ;
-        if ( prop->GetFlags() & wxPROP_OBJECT_GRAPH )
+    { // Extra block for broken compilers
+        for( wxPropertyInfoMap::iterator iter = map.begin() ; iter != map.end() ; ++iter )
         {
-            WriteOneProperty( obj , prop->GetDeclaringClass() , prop , persister , data ) ;
+            const wxPropertyInfo* prop = iter->second ;
+            if ( prop->GetFlags() & wxPROP_OBJECT_GRAPH )
+            {
+                WriteOneProperty( obj , prop->GetDeclaringClass() , prop , persister , data ) ;
+            }
         }
     }
-
-    for( wxPropertyInfoMap::iterator iter = map.begin() ; iter != map.end() ; ++iter )
-    {
-        const wxPropertyInfo* prop = iter->second ;
-        if ( !(prop->GetFlags() & wxPROP_OBJECT_GRAPH) )
+    { // Extra block for broken compilers
+        for( wxPropertyInfoMap::iterator iter = map.begin() ; iter != map.end() ; ++iter )
         {
-            WriteOneProperty( obj , prop->GetDeclaringClass() , prop , persister , data ) ;
+            const wxPropertyInfo* prop = iter->second ;
+            if ( !(prop->GetFlags() & wxPROP_OBJECT_GRAPH) )
+            {
+                WriteOneProperty( obj , prop->GetDeclaringClass() , prop , persister , data ) ;
+            }
         }
     }
 }

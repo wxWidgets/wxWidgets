@@ -79,7 +79,7 @@ wxEND_FLAGS( wxPanelStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxPanel, wxWindow,"wx/panel.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxPanel)
-    wxPROPERTY_FLAGS( WindowStyle , wxPanelStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY_FLAGS( WindowStyle , wxPanelStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 // style wxTAB_TRAVERSAL
 wxEND_PROPERTIES_TABLE()
 

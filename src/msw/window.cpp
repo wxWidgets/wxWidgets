@@ -287,11 +287,11 @@ wxBEGIN_PROPERTIES_TABLE(wxWindow)
 	wxEVENT_PROPERTY( Destroy , wxEVT_DESTROY , wxWindowDestroyEvent )
     // Always constructor Properties first
 
-    wxREADONLY_PROPERTY( Parent,wxWindow*, GetParent,  , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxREADONLY_PROPERTY( Parent,wxWindow*, GetParent, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	wxPROPERTY( Id,wxWindowID, SetId, GetId, -1, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
 	wxPROPERTY( Position,wxPoint, SetPosition , GetPosition, wxPoint(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // pos
 	wxPROPERTY( Size,wxSize, SetSize, GetSize, wxSize(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // size
-    wxPROPERTY( WindowStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( WindowStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 
     // Then all relations of the object graph
 
@@ -299,9 +299,9 @@ wxBEGIN_PROPERTIES_TABLE(wxWindow)
 
    // and finally all other properties
 
-	wxPROPERTY( ExtraStyle , long , SetExtraStyle , GetExtraStyle , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // extstyle
-	wxPROPERTY( BackgroundColour , wxColour , SetBackgroundColour , GetBackgroundColour , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // bg
-	wxPROPERTY( ForegroundColour , wxColour , SetForegroundColour , GetForegroundColour , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // fg
+	wxPROPERTY( ExtraStyle , long , SetExtraStyle , GetExtraStyle , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // extstyle
+	wxPROPERTY( BackgroundColour , wxColour , SetBackgroundColour , GetBackgroundColour , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // bg
+	wxPROPERTY( ForegroundColour , wxColour , SetForegroundColour , GetForegroundColour , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // fg
 	wxPROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	wxPROPERTY( Shown , bool , Show , IsShown , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 #if 0

@@ -49,27 +49,40 @@
 
 // we will move this later to defs.h
 
-#if !wxCHECK_GCC_VERSION( 3 , 4 )
+#if defined(__GNUC__) && !wxCHECK_GCC_VERSION( 3 , 4 )
 #  define wxUSE_MEMBER_TEMPLATES 0
 #endif
 
-#ifdef _MSC_VER
-#  if _MSC_VER <= 1200
-#    define wxUSE_MEMBER_TEMPLATES 0
-#  endif
+#if defined(_MSC_VER) && _MSC_VER <= 1200
+#  define wxUSE_MEMBER_TEMPLATES 0
+#  define wxUSE_FUNC_TEMPLATE_POINTER 0
 #endif
 
 #ifndef wxUSE_MEMBER_TEMPLATES
-#define wxUSE_MEMBER_TEMPLATES 1
+#  define wxUSE_MEMBER_TEMPLATES 1
+#endif
+
+#ifndef wxUSE_FUNC_TEMPLATE_POINTER
+#  define wxUSE_FUNC_TEMPLATE_POINTER 1
 #endif
 
 #if wxUSE_MEMBER_TEMPLATES
-#define wxTEMPLATED_MEMBER_CALL( method , type ) method<type>()
-#define wxTEMPLATED_MEMBER_FIX( type )
+#  define wxTEMPLATED_MEMBER_CALL( method , type ) method<type>()
+#  define wxTEMPLATED_MEMBER_FIX( type )
 #else
-#define wxTEMPLATED_MEMBER_CALL( method , type ) method((type*)NULL)
-#define wxTEMPLATED_MEMBER_FIX( type ) type* =NULL
+#  define wxTEMPLATED_MEMBER_CALL( method , type ) method((type*)NULL)
+#  define wxTEMPLATED_MEMBER_FIX( type ) type* =NULL
 #endif
+
+#if defined(_MSC_VER) && _MSC_VER <= 1200
+#  define wxTEMPLATED_FUNCTION_FIX( type ) , wxTEMPLATED_MEMBER_FIX(type)
+#  define wxINFUNC_CLASS_TYPE_FIX( type ) typedef type type;
+#else
+#  define wxTEMPLATED_FUNCTION_FIX( type )
+#  define wxINFUNC_CLASS_TYPE_FIX( type )
+#endif
+
+#define EMPTY_MACROVALUE /**/
 
 class WXDLLIMPEXP_BASE wxObject;
 class WXDLLIMPEXP_BASE wxClassInfo;
@@ -79,6 +92,18 @@ class WXDLLIMPEXP_BASE wxObjectRefData;
 class WXDLLIMPEXP_BASE wxEvent;
 
 typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
+
+#if wxUSE_FUNC_TEMPLATE_POINTER
+#  define wxTO_STRING(type) wxToStringConverter<type>  
+#  define wxTO_STRING_IMP(type)
+#  define wxFROM_STRING(type) wxFromStringConverter<type>
+#  define wxFROM_STRING_IMP(type)
+#else
+#  define wxTO_STRING(type) ToString##type
+#  define wxTO_STRING_IMP(type) inline void ToString##type( const wxxVariant& data , wxString &result ) { wxToStringConverter<type>(data, result); }
+#  define wxFROM_STRING(type) FromString##type
+#  define wxFROM_STRING_IMP(type) inline void FromString##type( const wxString& data , wxxVariant &result ) { wxFromStringConverter<type>(data, result); }
+#endif
 
 // ----------------------------------------------------------------------------
 // Enum Support
@@ -149,7 +174,9 @@ private :
 } \
     void FromLong##e( long data , wxxVariant& result ) { result = wxxVariant((e)data) ;} \
     void ToLong##e( const wxxVariant& data , long &result ) { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get , e) ;} \
-    wxEnumTypeInfo s_typeInfo##e(wxT_ENUM , &s_enumData##e , &wxToStringConverter<e> , &wxFromStringConverter<e> , &ToLong##e , &FromLong##e , typeid(e).name() ) ;
+    wxTO_STRING_IMP( e ) \
+    wxFROM_STRING_IMP( e ) \
+    wxEnumTypeInfo s_typeInfo##e(wxT_ENUM , &s_enumData##e , &wxTO_STRING( e ) , &wxFROM_STRING( e ) , &ToLong##e , &FromLong##e , typeid(e).name() ) ;
 
 // ----------------------------------------------------------------------------
 // Set Support
@@ -234,7 +261,9 @@ void wxSetToString( wxString &s , const wxBitset<e> &data )
 } \
     void FromLong##SetName( long data , wxxVariant& result ) { result = wxxVariant(SetName((unsigned long)data)) ;} \
     void ToLong##SetName( const wxxVariant& data , long &result ) { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get , SetName).to_ulong() ;} \
-    wxEnumTypeInfo s_typeInfo##SetName(wxT_SET , &s_enumData##e , &wxToStringConverter<SetName> , &wxFromStringConverter<SetName> , &ToLong##SetName , &FromLong##SetName, typeid(SetName).name() ) ;  \
+    wxTO_STRING_IMP( SetName ) \
+    wxFROM_STRING_IMP( SetName ) \
+    wxEnumTypeInfo s_typeInfo##SetName(wxT_SET , &s_enumData##e , &wxTO_STRING( SetName ) , &wxFROM_STRING( SetName ) , &ToLong##SetName , &FromLong##SetName, typeid(SetName).name() ) ;  \
 }
 
 template<typename e>
@@ -299,7 +328,9 @@ void wxFlagsToString( wxString &s , const e& data )
 } \
     void FromLong##e( long data , wxxVariant& result ) { result = wxxVariant(e(data)) ;} \
     void ToLong##e( const wxxVariant& data , long &result ) { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get , e).m_data ;} \
-    wxEnumTypeInfo s_typeInfo##e(wxT_SET , &s_enumData##e , &wxToStringConverter<e> , &wxFromStringConverter<e> , &ToLong##e , &FromLong##e, typeid(e).name()  ) ;
+    wxTO_STRING_IMP( e ) \
+    wxFROM_STRING_IMP( e ) \
+    wxEnumTypeInfo s_typeInfo##e(wxT_SET , &s_enumData##e , &wxTO_STRING( e ) , &wxFROM_STRING( e ) , &ToLong##e , &FromLong##e, typeid(e).name()  ) ;
 // ----------------------------------------------------------------------------
 // Type Information
 // ----------------------------------------------------------------------------
@@ -532,8 +563,15 @@ template<typename T> const wxTypeInfo* wxGetTypeInfo( T * ) { return wxTypeInfo:
 
 // this macro is for usage with custom, non-object derived classes and structs, wxPoint is such a custom type
 
+#if wxUSE_FUNC_TEMPLATE_POINTER
 #define wxCUSTOM_TYPE_INFO( e , toString , fromString ) \
     wxCustomTypeInfo s_typeInfo##e(typeid(e).name() , &toString , &fromString) ;
+#else
+#define wxCUSTOM_TYPE_INFO( e , toString , fromString ) \
+    void ToString##e( const wxxVariant& data , wxString &result ) { toString(data, result); } \
+    void FromString##e( const wxString& data , wxxVariant &result ) { fromString(data, result); } \
+    wxCustomTypeInfo s_typeInfo##e(typeid(e).name() , &ToString##e , &FromString##e) ;
+#endif
 
 #define wxCOLLECTION_TYPE_INFO( element , collection ) \
     wxCollectionTypeInfo s_typeInfo##collection( typeid(element).name() , NULL , NULL , typeid(collection).name() ) ;
@@ -600,7 +638,7 @@ public :
     template<typename T> T& Get(wxTEMPLATED_MEMBER_FIX(T))
     {
         wxxVariantDataT<T> *dataptr = dynamic_cast<wxxVariantDataT<T>*> (m_data) ;
-        wxASSERT_MSG( dataptr , wxT("Cast not possible") ) ;
+        wxASSERT_MSG( dataptr , wxString::Format(wxT("Cast to %s not possible"), typeid(T).name()) ) ;
         return dataptr->Get() ;
     }
 
@@ -608,13 +646,13 @@ public :
     template<typename T> const T& Get(wxTEMPLATED_MEMBER_FIX(T)) const
     {
         const wxxVariantDataT<T> *dataptr = dynamic_cast<const wxxVariantDataT<T>*> (m_data) ;
-        wxASSERT_MSG( dataptr , wxT("Cast not possible") ) ;
+        wxASSERT_MSG( dataptr , wxString::Format(wxT("Cast to %s not possible"), typeid(T).name()) ) ;
         return dataptr->Get() ;
     }
 
     bool IsEmpty() const { return m_data == NULL ; }
 
-    template<typename T> bool HasData() const
+    template<typename T> bool HasData(wxTEMPLATED_MEMBER_FIX(T)) const
     {
         const wxxVariantDataT<T> *dataptr = dynamic_cast<const wxxVariantDataT<T>*> (m_data) ;
         return dataptr != NULL ;
@@ -666,10 +704,10 @@ template<typename T>
 void wxStringWriteValue( wxString &s , const T &data);
 
 template<typename T>
-void wxToStringConverter( const wxxVariant &v, wxString &s) { wxStringWriteValue( s , v.wxTEMPLATED_MEMBER_CALL(Get , T) ) ; }
+void wxToStringConverter( const wxxVariant &v, wxString &s wxTEMPLATED_FUNCTION_FIX(T)) { wxStringWriteValue( s , v.wxTEMPLATED_MEMBER_CALL(Get , T) ) ; }
 
 template<typename T>
-void wxFromStringConverter( const wxString &s, wxxVariant &v) { T d ; wxStringReadValue( s , d ) ; v = wxxVariant(d) ; } \
+void wxFromStringConverter( const wxString &s, wxxVariant &v wxTEMPLATED_FUNCTION_FIX(T)) { T d ; wxStringReadValue( s , d ) ; v = wxxVariant(d) ; } 
 
 // ----------------------------------------------------------------------------
 // Property Support
@@ -726,17 +764,17 @@ private :
 } ;
 
 
-
 #define wxSETTER( property, Klass, valueType, setterMethod ) \
 class wxSetter##property : public wxSetter \
 { \
 public: \
+    wxINFUNC_CLASS_TYPE_FIX(Klass) \
     wxSetter##property() : wxSetter( wxT(#setterMethod) ) {} \
     ~wxSetter##property() {} \
     void Set( wxObject *object, const wxxVariant &variantValue ) const \
 { \
     Klass *obj = dynamic_cast<Klass*>(object) ;  \
-    if ( variantValue.HasData<valueType>() ) \
+    if ( variantValue.wxTEMPLATED_MEMBER_CALL(HasData, valueType) ) \
     obj->setterMethod(variantValue.wxTEMPLATED_MEMBER_CALL(Get , valueType)) ; \
             else \
             obj->setterMethod(*variantValue.wxTEMPLATED_MEMBER_CALL(Get , valueType*)) ; \
@@ -747,6 +785,7 @@ public: \
 class wxGetter##property : public wxGetter \
 { \
 public : \
+    wxINFUNC_CLASS_TYPE_FIX(Klass) \
     wxGetter##property() : wxGetter( wxT(#gettermethod) ) {} \
     ~wxGetter##property() {} \
     void Get( const wxObject *object , wxxVariant &result) const \
@@ -760,12 +799,13 @@ public : \
 class wxAdder##property : public wxAdder \
 { \
 public: \
+    wxINFUNC_CLASS_TYPE_FIX(Klass) \
     wxAdder##property() : wxAdder( wxT(#addermethod) ) {} \
     ~wxAdder##property() {} \
     void Add( wxObject *object, const wxxVariant &variantValue ) const \
 { \
     Klass *obj = dynamic_cast<Klass*>(object) ;  \
-    if ( variantValue.HasData<valueType>() ) \
+    if ( variantValue.wxTEMPLATED_MEMBER_CALL(HasData, valueType) ) \
     obj->addermethod(variantValue.wxTEMPLATED_MEMBER_CALL(Get , valueType)) ; \
             else \
             obj->addermethod(*variantValue.wxTEMPLATED_MEMBER_CALL(Get , valueType*)) ; \
@@ -776,6 +816,7 @@ public: \
 class wxCollectionGetter##property : public wxCollectionGetter \
 { \
 public : \
+    wxINFUNC_CLASS_TYPE_FIX(Klass) \
     wxCollectionGetter##property() : wxCollectionGetter( wxT(#gettermethod) ) {} \
     ~wxCollectionGetter##property() {} \
     void Get( const wxObject *object , wxxVariantArray &result) const \
@@ -1086,7 +1127,7 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo* , wxPropertyInfoMap , clas
 #define wxHIDE_PROPERTY( pname ) \
     static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(void).name() ,NULL , wxxVariant() , wxPROP_DONT_STREAM , wxEmptyString , wxEmptyString ) ;
 
-#define wxPROPERTY( pname , type , setter , getter ,defaultValue , flags , help , group) \
+#define wxPROPERTY( pname , type , setter , getter , defaultValue , flags , help , group) \
     wxSETTER( pname , class_t , type , setter ) \
     static wxSetter##pname _setter##pname ; \
     wxGETTER( pname , class_t , type , getter ) \

@@ -53,12 +53,15 @@ template<> void wxStringWriteValue(wxString &s , const wxColour &data )
         data.Red(), data.Green(), data.Blue() );
 }
 
-IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( wxColour , wxObject , "wx/colour.h" ,  &wxToStringConverter<wxColour> , &wxFromStringConverter<wxColour>)
+wxTO_STRING_IMP( wxColour )
+wxFROM_STRING_IMP( wxColour )
+  
+IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( wxColour , wxObject , "wx/colour.h" ,  &wxTO_STRING( wxColour ) , &wxFROM_STRING( wxColour ))
 
 wxBEGIN_PROPERTIES_TABLE(wxColour)
-    wxREADONLY_PROPERTY( Red, unsigned char, Red,  , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-    wxREADONLY_PROPERTY( Green, unsigned char, Green,  , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-    wxREADONLY_PROPERTY( Blue, unsigned char, Blue,  , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxREADONLY_PROPERTY( Red, unsigned char, Red, EMPTY_MACROVALUE , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxREADONLY_PROPERTY( Green, unsigned char, Green, EMPTY_MACROVALUE , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxREADONLY_PROPERTY( Blue, unsigned char, Blue, EMPTY_MACROVALUE , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
 wxCONSTRUCTOR_3( wxColour, unsigned char, Red, unsigned char, Green, unsigned char, Blue )

@@ -242,17 +242,32 @@ template<> void wxStringWriteValue(wxString &s , const wxString &data )
 // built-ins
 //
 
-wxBuiltInTypeInfo s_typeInfovoid( wxT_VOID , NULL , NULL , typeid(void).name() ) ;
-wxBuiltInTypeInfo s_typeInfobool( wxT_BOOL , &wxToStringConverter<bool> , &wxFromStringConverter<bool>, typeid(bool).name()) ;
-wxBuiltInTypeInfo s_typeInfochar( wxT_CHAR , &wxToStringConverter<char> , &wxFromStringConverter<char>, typeid(char).name()) ;
-wxBuiltInTypeInfo s_typeInfounsignedchar( wxT_UCHAR , &wxToStringConverter< unsigned char > , &wxFromStringConverter<unsigned char>, typeid(unsigned char).name()) ;
-wxBuiltInTypeInfo s_typeInfoint( wxT_INT , &wxToStringConverter<int> , &wxFromStringConverter<int>, typeid(int).name()) ;
-wxBuiltInTypeInfo s_typeInfounsignedint( wxT_UINT , &wxToStringConverter<unsigned int> , &wxFromStringConverter<unsigned int>, typeid(unsigned int).name()) ;
-wxBuiltInTypeInfo s_typeInfolong( wxT_LONG , &wxToStringConverter<long> , &wxFromStringConverter<long>, typeid(long).name()) ;
-wxBuiltInTypeInfo s_typeInfounsignedlong( wxT_ULONG , &wxToStringConverter<unsigned long> , &wxFromStringConverter<unsigned long>, typeid(unsigned long).name()) ;
-wxBuiltInTypeInfo s_typeInfofloat( wxT_FLOAT , &wxToStringConverter<float> , &wxFromStringConverter<float>, typeid(float).name()) ;
-wxBuiltInTypeInfo s_typeInfodouble( wxT_DOUBLE , &wxToStringConverter<double> , &wxFromStringConverter<double>, typeid(double).name()) ;
-wxBuiltInTypeInfo s_typeInfowxString( wxT_STRING , &wxToStringConverter<wxString> , &wxFromStringConverter<wxString>, typeid(wxString).name()) ;
+#if wxUSE_FUNC_TEMPLATE_POINTER
+#define wxBUILTIN_TYPE_INFO( element , type ) \
+    wxBuiltInTypeInfo s_typeInfo##type(element , &wxToStringConverter<type> , &wxFromStringConverter<type> , typeid(type).name()) ;
+#else
+#define wxBUILTIN_TYPE_INFO( element , type ) \
+    void _toString##element( const wxxVariant& data , wxString &result ) { wxToStringConverter<type>(data, result); } \
+    void _fromString##element( const wxString& data , wxxVariant &result ) { wxFromStringConverter<type>(data, result); } \
+    wxBuiltInTypeInfo s_typeInfo##type(element , &_toString##element , &_fromString##element , typeid(type).name()) ;
+#endif
+
+typedef unsigned char unsigned_char;
+typedef unsigned int unsigned_int;
+typedef unsigned long unsigned_long;
+
+wxBuiltInTypeInfo s_typeInfovoid( wxT_VOID , NULL , NULL , typeid(void).name());
+wxBUILTIN_TYPE_INFO( wxT_BOOL ,  bool);
+wxBUILTIN_TYPE_INFO( wxT_CHAR ,  char);
+wxBUILTIN_TYPE_INFO( wxT_UCHAR , unsigned_char);
+wxBUILTIN_TYPE_INFO( wxT_INT , int);
+wxBUILTIN_TYPE_INFO( wxT_UINT , unsigned_int);
+wxBUILTIN_TYPE_INFO( wxT_LONG , long);
+wxBUILTIN_TYPE_INFO( wxT_ULONG , unsigned_long);
+wxBUILTIN_TYPE_INFO( wxT_FLOAT , float);
+wxBUILTIN_TYPE_INFO( wxT_DOUBLE , double);
+wxBUILTIN_TYPE_INFO( wxT_STRING , wxString);
+
 
 // this are compiler induced specialization which are never used anywhere
 
@@ -508,13 +523,16 @@ void wxClassInfo::AddToPropertyCollection(wxObject *object, const wxChar *proper
     accessor->AddToPropertyCollection( object , value ) ;
 }
 
-void wxClassInfo::GetProperties( wxPropertyInfoMap &map ) const
+// void wxClassInfo::GetProperties( wxPropertyInfoMap &map ) const 
+// The map parameter (the name map that is) seems something special
+// to MSVC and so we use a other name.
+void wxClassInfo::GetProperties( wxPropertyInfoMap &infomap ) const 
 {
     const wxPropertyInfo *pi = GetFirstProperty() ;
     while( pi ) 
     {
-        if ( map.find( pi->GetName() ) == map.end() )
-            map[pi->GetName()] = (wxPropertyInfo*) pi ;
+        if ( infomap.find( pi->GetName() ) == infomap.end() )
+            infomap[pi->GetName()] = (wxPropertyInfo*) pi ;
 
         pi = pi->GetNext() ;
     }
@@ -522,7 +540,7 @@ void wxClassInfo::GetProperties( wxPropertyInfoMap &map ) const
     const wxClassInfo** parents = GetParents() ;
     for ( int i = 0 ; parents[i] ; ++ i )
     {
-        parents[i]->GetProperties( map ) ;
+        parents[i]->GetProperties( infomap ) ;
     }
 }
 
