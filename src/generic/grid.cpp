@@ -7524,6 +7524,16 @@ void wxGrid::ForceRefresh()
     EndBatch();
 }
 
+bool wxGrid::Enable(bool enable)
+{
+    if ( !wxScrolledWindow::Enable(enable) )
+        return false;
+
+    // redraw in the new state
+    m_gridWin->Refresh();
+
+    return true;
+}
 
 //
 // ------ Edit control functions
