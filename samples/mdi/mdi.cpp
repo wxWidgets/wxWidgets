@@ -434,7 +434,7 @@ void MyChild::OnChangeTitle(wxCommandEvent& WXUNUSED(event))
     wxString title = wxGetTextFromUser(_T("Enter the new title for MDI child"),
                                        _T("MDI sample question"),
                                        s_title,
-                                       GetParent()->GetParent());
+                                       GetParent());
     if ( !title )
         return;
 
