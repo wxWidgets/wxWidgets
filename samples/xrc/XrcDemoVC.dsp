@@ -1,27 +1,27 @@
-# Microsoft Developer Studio Project File - Name="XmlDemoVC" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="XrcDemoVC" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=XmlDemoVC - Win32 Debug
+CFG=XrcDemoVC - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "XmlDemoVC.mak".
-!MESSAGE 
+!MESSAGE NMAKE /f "XrcDemoVC.mak".
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "XmlDemoVC.mak" CFG="XmlDemoVC - Win32 Debug"
-!MESSAGE 
+!MESSAGE NMAKE /f "XrcDemoVC.mak" CFG="XrcDemoVC - Win32 Debug"
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "XmlDemoVC - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "XmlDemoVC - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "XmlDemoVC - Win32 Debug DLL" (based on "Win32 (x86) Application")
-!MESSAGE "XmlDemoVC - Win32 Release DLL" (based on "Win32 (x86) Application")
-!MESSAGE 
+!MESSAGE "XrcDemoVC - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "XrcDemoVC - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "XrcDemoVC - Win32 Debug DLL" (based on "Win32 (x86) Application")
+!MESSAGE "XrcDemoVC - Win32 Release DLL" (based on "Win32 (x86) Application")
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -31,7 +31,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "XmlDemoVC - Win32 Release"
+!IF  "$(CFG)" == "XrcDemoVC - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -58,7 +58,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib winmm.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wx.lib png.lib zlib.lib jpeg.lib tiff.lib wxxrc.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libci.lib" /nodefaultlib:"msvcrtd.lib" /out:"Release/xmldemo.exe" /libpath:"../../../lib" /libpath:"../../../contrib/lib"
 
-!ELSEIF  "$(CFG)" == "XmlDemoVC - Win32 Debug"
+!ELSEIF  "$(CFG)" == "XrcDemoVC - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -84,7 +84,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib winmm.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wxd.lib pngd.lib zlibd.lib jpegd.lib tiffd.lib wxxrcd.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libcid.lib" /nodefaultlib:"msvcrt.lib" /out:"Debug/xmldemo.exe" /pdbtype:sept /libpath:"../../../lib" /libpath:"../../../contrib/lib"
 
-!ELSEIF  "$(CFG)" == "XmlDemoVC - Win32 Debug DLL"
+!ELSEIF  "$(CFG)" == "XrcDemoVC - Win32 Debug DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -110,7 +110,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib winmm.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wxdlld.lib wxxrcd.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libcid.lib" /out:"DebugDLL/xmldemo.exe" /pdbtype:sept /libpath:"../../../lib" /libpath:"../../../contrib/lib"
 
-!ELSEIF  "$(CFG)" == "XmlDemoVC - Win32 Release DLL"
+!ELSEIF  "$(CFG)" == "XrcDemoVC - Win32 Release DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -141,26 +141,26 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "XmlDemoVC - Win32 Release"
-# Name "XmlDemoVC - Win32 Debug"
-# Name "XmlDemoVC - Win32 Debug DLL"
-# Name "XmlDemoVC - Win32 Release DLL"
+# Name "XrcDemoVC - Win32 Release"
+# Name "XrcDemoVC - Win32 Debug"
+# Name "XrcDemoVC - Win32 Debug DLL"
+# Name "XrcDemoVC - Win32 Release DLL"
 # Begin Source File
 
 SOURCE=.\xmldemo.cpp
 
-!IF  "$(CFG)" == "XmlDemoVC - Win32 Release"
+!IF  "$(CFG)" == "XrcDemoVC - Win32 Release"
 
-!ELSEIF  "$(CFG)" == "XmlDemoVC - Win32 Debug"
+!ELSEIF  "$(CFG)" == "XrcDemoVC - Win32 Debug"
 
 # SUBTRACT CPP /YX /Yc /Yu
 
-!ELSEIF  "$(CFG)" == "XmlDemoVC - Win32 Debug DLL"
+!ELSEIF  "$(CFG)" == "XrcDemoVC - Win32 Debug DLL"
 
 # SUBTRACT BASE CPP /YX /Yc /Yu
 # SUBTRACT CPP /YX /Yc /Yu
 
-!ELSEIF  "$(CFG)" == "XmlDemoVC - Win32 Release DLL"
+!ELSEIF  "$(CFG)" == "XrcDemoVC - Win32 Release DLL"
 
 !ENDIF 
 
