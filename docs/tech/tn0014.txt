@@ -33,7 +33,7 @@ of an <object> or <object_ref> node. In the example bellow, <pos>, <label> and
 <style> are attributes, while neither <resource> nor either of <object>s is:
 
     <?xml version="1.0" encoding="utf-8">
-    <resource version="2.3.0.1">
+    <resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
         <object class="wxPanel">
             <style>wxSUNKEN_BORDER</style>
             <object class="wxStaticText">
@@ -46,7 +46,8 @@ of an <object> or <object_ref> node. In the example bellow, <pos>, <label> and
 2. Elementary description
 -------------------------
 
-XRC resource file is a well-formed XML 1.0 document. 
+XRC resource file is a well-formed XML 1.0 document. All elements of XRC file are
+from the http://www.wxwindows.org/wxxrc namespace. 
 
 The root node of XRC document must be <resource>. The <resource> node has 
 optional "version" property. Default version  (in absence of the version 
@@ -61,6 +62,10 @@ the second etc.
 
 Differences between versions are described within this document in paragraphs
 entitled "Version Note". 
+
+The <resource> node contains namespace declaration, too:
+
+    <resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
 
 The <resource> node is only allowed to have <object> and <object_ref>
 subnodes, all of which must have the "name" property.
