@@ -1917,7 +1917,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                     dc.DrawLine(0, cy, clientSize.x, cy);
                 }
                 // Draw last line
-                if (i == (GetItemCount() - 1))
+                if (i == itemCount - 1)
                 {
                     cy = itemRect.GetBottom();
                     dc.DrawLine(0, cy, clientSize.x, cy);
@@ -1925,7 +1925,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             }
         }
     }
-    i = (GetItemCount() - 1);
+    i = itemCount - 1;
     if (drawVRules && (i > -1))
     {
         wxRect firstItemRect;
