@@ -473,6 +473,36 @@ static char * page_xpm[] = {
 			      
 			      
 //-----------------------------------------------------------------------------
+// globals
+//-----------------------------------------------------------------------------
+
+wxDropSource *gs_currentDropSource = (wxDropSource*) NULL;
+
+//-----------------------------------------------------------------------------
+// "drop_enter_event"
+//-----------------------------------------------------------------------------
+
+static void gtk_target_enter_callback( GtkWidget *WXUNUSED(widget), 
+                                       GdkEventDropEnter *WXUNUSED(event), 
+			               wxDropTarget *target )
+{
+    if (target)
+        target->OnEnter();
+}
+
+//-----------------------------------------------------------------------------
+// "drop_leave_event"
+//-----------------------------------------------------------------------------
+
+static void gtk_target_leave_callback( GtkWidget *WXUNUSED(widget), 
+                                       GdkEventDropLeave *WXUNUSED(event), 
+			               wxDropTarget *target )
+{
+    if (target)
+        target->OnLeave();
+}
+
+//-----------------------------------------------------------------------------
 // "drop_data_available_event"
 //-----------------------------------------------------------------------------
 
@@ -563,6 +593,12 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
   
     gtk_signal_connect( GTK_OBJECT(widget), "drop_data_available_event",
       GTK_SIGNAL_FUNC(gtk_target_callback), (gpointer) this );
+      
+    gtk_signal_connect( GTK_OBJECT(widget), "drop_enter_event",
+      GTK_SIGNAL_FUNC(gtk_target_enter_callback), (gpointer) this );
+      
+    gtk_signal_connect( GTK_OBJECT(widget), "drop_leave_event",
+      GTK_SIGNAL_FUNC(gtk_target_leave_callback), (gpointer) this );
 }
 
 // ----------------------------------------------------------------------------
@@ -673,7 +709,7 @@ wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
 
 static void
 shape_motion (GtkWidget      *widget, 
-	      GdkEventMotion */*event*/);
+	      GdkEventMotion * /*event*/);
 	      
 //-----------------------------------------------------------------------------
 // drag request
@@ -773,7 +809,7 @@ void wxDropSource::SetData( wxDataObject &data )
 
 wxDropSource::~wxDropSource(void)
 {
-//  if (m_data) delete m_data;
+//    if (m_data) delete m_data;
 
     g_blockEventsOnDrag = FALSE;
 }
@@ -870,8 +906,12 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
     wxGetMousePosition( &x, &y );  
   
     gdk_dnd_display_drag_cursor( x, y, FALSE, TRUE );
-  
+    
+    gs_currentDropSource = this;
+    
     while (gdk_dnd.drag_really || gdk_dnd.drag_perhaps) wxYield();
+    
+    gs_currentDropSource = (wxDropSource*) NULL;
   
     UnregisterWindow();
   
@@ -969,7 +1009,7 @@ shape_released (GtkWidget *widget)
 
 static void
 shape_motion (GtkWidget      *widget, 
-	      GdkEventMotion */*event*/)
+	      GdkEventMotion * /*event*/ )
 {
   gint xp, yp;
   CursorOffset * p;
@@ -981,8 +1021,11 @@ shape_motion (GtkWidget      *widget,
    * Can't use event->x / event->y here 
    * because I need absolute coordinates.
    */
+   
   gdk_window_get_pointer (root_win, &xp, &yp, &mask);
   gtk_widget_set_uposition (widget, xp  - p->x, yp  - p->y);
+  
+  if (gs_currentDropSource) gs_currentDropSource->GiveFeedback( wxDragCopy, FALSE );
 }
 
 GtkWidget *

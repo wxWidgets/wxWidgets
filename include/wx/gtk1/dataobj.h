@@ -115,6 +115,8 @@ public:
 
   wxBitmapDataObject(void) {}
   
+  wxBitmapDataObject( const wxBitmap& bitmap ) { m_bitmap = bitmap; }
+  
   virtual wxDataFormat GetFormat() const
     { return wxDF_BITMAP; }
     

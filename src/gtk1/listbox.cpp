@@ -244,10 +244,13 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
                             (GtkSignalFunc)gtk_listbox_button_press_callback, 
 			    (gpointer) this );
 	
-        gtk_signal_connect( GTK_OBJECT(list_item), 
+	if (m_hasCheckBoxes)
+	{
+            gtk_signal_connect( GTK_OBJECT(list_item), 
 	                    "key_press_event",
                             (GtkSignalFunc)gtk_listbox_key_press_callback, 
 			    (gpointer)this );
+	}
 	
         ConnectWidget( list_item );	
 	
@@ -308,10 +311,13 @@ void wxListBox::AppendCommon( const wxString &item )
                         (GtkSignalFunc)gtk_listbox_button_press_callback, 
 			(gpointer) this );
     
-    gtk_signal_connect( GTK_OBJECT(list_item), 
+    if (m_hasCheckBoxes)
+    {
+       gtk_signal_connect( GTK_OBJECT(list_item), 
 	                "key_press_event",
                         (GtkSignalFunc)gtk_listbox_key_press_callback, 
-			(gpointer)this );    
+			(gpointer)this );
+    }
 	
     gtk_widget_show( list_item );
 

@@ -79,4 +79,4 @@ Q. Where to send comments,
 A. To Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>,
       wxWindows list <wxwin-developers@wx.dent.med.uni-muenchen.de>,
       /dev/null (platform-dependent),
-      wxWindows dev team Suiss banc account.
+      wxWindows dev team Swiss banc account.

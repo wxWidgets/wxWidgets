@@ -38,7 +38,7 @@ enum wxDragResult
 Default/wxGTK-specific constructor. If you use the default constructor you must
 call \helpref{wxDropSource::SetData}{wxdropsourcesetdata} later.
 
-{\it win} is only used by wxGTK. TODO: in what circumstances?
+{\it win} is required by wxGTK and therefore should always be set.
 
 \func{}{wxDropSource}{\param{wxDataObject }{\&data}, \param{wxWindow }{*win = NULL}}
 
@@ -64,7 +64,8 @@ Sets the data \helpref{data object}{wxdataobject} associated with the drop sourc
 
 Do it (call this in response to a mouse button press, for example).
 
-If {\bf bAllowMove} is FALSE, data can only be copied.
+If {\bf bAllowMove} is FALSE, data can only be copied. Under GTK, data
+is always copied.
 
 \membersection{wxDropSource::GiveFeedback}\label{wxdropsourcegivefeedback}
 
@@ -76,9 +77,9 @@ slow.
 
 \wxheading{Parameters}
 
-\docparam{effect}{The effect to implement. One of wxDragCopy, wxDragMove.}
+\docparam{effect}{The effect to implement. One of wxDragCopy, wxDragMove. MSW only. }
 
-\docparam{bScrolling}{TRUE if the window is scrolling.}
+\docparam{bScrolling}{TRUE if the window is scrolling. MSW only. }
 
 \wxheading{Return value}
 

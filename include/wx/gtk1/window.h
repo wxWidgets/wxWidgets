@@ -272,6 +272,7 @@ public:
   virtual wxString GetLabel() const;
 
   void OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event) ) {};
+  void OnKeyDown( wxKeyEvent &event );
 
   virtual bool IsShown() const;
 
