@@ -55,7 +55,9 @@
 #define CALLBACK
 #define SQL_API				EXPORT CALLBACK
 
+#ifndef __EMX__
 typedef void *HWND;
+#endif
 #endif
 
 typedef void *SQLHWND;
