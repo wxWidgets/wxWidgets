@@ -97,6 +97,26 @@ WX_DEFINE_OBJARRAY(wxGridCellCoordsArray)
 WX_DEFINE_OBJARRAY(wxGridCellWithAttrArray)
 
 // ----------------------------------------------------------------------------
+// events
+// ----------------------------------------------------------------------------
+
+const int wxEVT_GRID_CELL_LEFT_CLICK = wxNewEventType();
+const int wxEVT_GRID_CELL_RIGHT_CLICK = wxNewEventType();
+const int wxEVT_GRID_CELL_LEFT_DCLICK = wxNewEventType();
+const int wxEVT_GRID_CELL_RIGHT_DCLICK = wxNewEventType();
+const int wxEVT_GRID_LABEL_LEFT_CLICK = wxNewEventType();
+const int wxEVT_GRID_LABEL_RIGHT_CLICK = wxNewEventType();
+const int wxEVT_GRID_LABEL_LEFT_DCLICK = wxNewEventType();
+const int wxEVT_GRID_LABEL_RIGHT_DCLICK = wxNewEventType();
+const int wxEVT_GRID_ROW_SIZE = wxNewEventType();
+const int wxEVT_GRID_COL_SIZE = wxNewEventType();
+const int wxEVT_GRID_RANGE_SELECT = wxNewEventType();
+const int wxEVT_GRID_CELL_CHANGE = wxNewEventType();
+const int wxEVT_GRID_SELECT_CELL = wxNewEventType();
+const int wxEVT_GRID_EDITOR_SHOWN = wxNewEventType();
+const int wxEVT_GRID_EDITOR_HIDDEN = wxNewEventType();
+
+// ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
