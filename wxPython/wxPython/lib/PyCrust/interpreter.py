@@ -2,7 +2,7 @@
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
-__version__ = "$Revision$"[11:-2]
+__revision__ = "$Revision$"[11:-2]
 
 import os
 import sys
@@ -13,7 +13,7 @@ import introspect
 class Interpreter(InteractiveInterpreter):
     """PyCrust Interpreter based on code.InteractiveInterpreter."""
     
-    revision = __version__
+    revision = __revision__
     
     def __init__(self, locals=None, rawin=None, \
                  stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr):

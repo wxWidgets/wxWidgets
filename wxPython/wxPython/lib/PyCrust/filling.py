@@ -3,7 +3,7 @@ the local namespace or any object."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
-__version__ = "$Revision$"[11:-2]
+__revision__ = "$Revision$"[11:-2]
 
 from wxPython.wx import *
 from wxPython.stc import *
@@ -19,7 +19,7 @@ class FillingTree(wxTreeCtrl):
     """PyCrust FillingTree based on wxTreeCtrl."""
     
     name = 'PyCrust Filling Tree'
-    revision = __version__
+    revision = __revision__
 
     def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
                  size=wxDefaultSize, style=wxTR_HAS_BUTTONS, \
@@ -203,7 +203,7 @@ class FillingText(wxStyledTextCtrl):
     """PyCrust FillingText based on wxStyledTextCtrl."""
     
     name = 'PyCrust Filling Text'
-    revision = __version__
+    revision = __revision__
 
     def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
                  size=wxDefaultSize, style=wxCLIP_CHILDREN):
@@ -265,7 +265,7 @@ class Filling(wxSplitterWindow):
     """PyCrust Filling based on wxSplitterWindow."""
     
     name = 'PyCrust Filling'
-    revision = __version__
+    revision = __revision__
     
     def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
                  size=wxDefaultSize, style=wxSP_3D, name='Filling Window', \
@@ -288,7 +288,7 @@ class FillingFrame(wxFrame):
     """Frame containing the PyCrust filling, or namespace tree component."""
     
     name = 'PyCrust Filling Frame'
-    revision = __version__
+    revision = __revision__
     
     def __init__(self, parent=None, id=-1, title='PyFilling', \
                  pos=wxDefaultPosition, size=wxDefaultSize, \

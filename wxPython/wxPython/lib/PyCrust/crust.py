@@ -2,7 +2,7 @@
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
-__version__ = "$Revision$"[11:-2]
+__revision__ = "$Revision$"[11:-2]
 
 from wxPython.wx import *
 from shell import Shell
@@ -14,7 +14,7 @@ class Crust(wxSplitterWindow):
     """PyCrust Crust based on wxSplitterWindow."""
     
     name = 'PyCrust Crust'
-    revision = __version__
+    revision = __revision__
     
     def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
                  size=wxDefaultSize, style=wxSP_3D, name='Crust Window', \
@@ -42,7 +42,7 @@ class CrustFrame(wxFrame, ShellMenu):
     """Frame containing all the PyCrust components."""
     
     name = 'PyCrust Frame'
-    revision = __version__
+    revision = __revision__
     
     def __init__(self, parent=None, id=-1, title='PyCrust', \
                  pos=wxDefaultPosition, size=wxDefaultSize, \
@@ -52,7 +52,7 @@ class CrustFrame(wxFrame, ShellMenu):
         """Create a PyCrust CrustFrame instance."""
         wxFrame.__init__(self, parent, id, title, pos, size, style)
         intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % VERSION
-        intro += '\nSponsored by Orbtech - Your Source For Python Development Services'
+        intro += '\nSponsored by Orbtech - Specializing in Python Application Development'
         self.CreateStatusBar()
         self.SetStatusText(intro.replace('\n', ', '))
         if wxPlatform == '__WXMSW__':

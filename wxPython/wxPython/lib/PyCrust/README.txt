@@ -23,12 +23,6 @@ Have you ever tried to bake a pie without one? Well, you
 shouldn't build a Python program without a PyCrust either.
 
 
-Where can I get the latest release of PyCrust?
-----------------------------------------------
-The latest PyCrust releases are available at:
-http://sourceforge.net/project/showfiles.php?group_id=31263
-
-
 What else do I need to use PyCrust?
 -----------------------------------
 PyCrust requires Python 2.1 or later, and wxPython 2.3.1 or later.
@@ -37,30 +31,34 @@ Python is available at http://www.python.org/.
 wxPython is available at http://www.wxpython.org/.
 
 
+Where can I get the latest version of PyCrust?
+----------------------------------------------
+The latest production version ships with wxPython.
+The latest developer version is available in CVS at:
+http://sourceforge.net/cvs/?group_id=31263
+
+
 Where is the PyCrust project hosted?
 ------------------------------------
 At SourceForge, of course. The SourceForge summary page:
 http://sourceforge.net/projects/pycrust/
 
 
-Does PyCrust have a mailing list full of wonderful people?
-----------------------------------------------------------
-As a matter of fact, we do. Join the PyCrust mailing lists at:
-http://sourceforge.net/mail/?group_id=31263
-
-
 I found a bug in PyCrust, what do I do with it?
 -----------------------------------------------
-You can send it to me at pobrien@orbtech.com, or, preferably,
-submit a bug report on our bug tracker at SourceForge:
-http://sourceforge.net/tracker/?group_id=31263
+You can send it to me at pobrien@orbtech.com.
 
 
 I want a new feature added to PyCrust. Will you do it?
 ------------------------------------------------------
 Flattery and money will get you anything. Short of that, you
-can try posting a request on our feature tracker at SourceForge:
-http://sourceforge.net/tracker/?group_id=31263
+can send me a request and I'll see what I can do.
+
+
+Does PyCrust have a mailing list full of wonderful people?
+----------------------------------------------------------
+As a matter of fact, we do. Join the PyCrust mailing lists at:
+http://sourceforge.net/mail/?group_id=31263
 
 
 What is the CVS information for this README file?

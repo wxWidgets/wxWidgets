@@ -2,7 +2,7 @@
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
-__version__ = "$Revision$"[11:-2]
+__revision__ = "$Revision$"[11:-2]
 
 class PseudoKeyword:
     """A callable class that calls a method passed as a parameter.
@@ -27,8 +27,10 @@ class PseudoKeyword:
     def __init__(self, method):
         """Create a callable object that executes method when called."""
         
-        # XXX Should probably check that this is a callable object.
-        self.method = method
+        if callable(method):
+            self.method = method
+        else:
+            raise ValueError, 'method must be callable'
         
     def __call__(self, *args, **kwds):
         self.method(*args, **kwds)
@@ -63,7 +65,10 @@ class PseudoFile:
 class PseudoFileIn(PseudoFile):
     
     def __init__(self, readline):
-        self.readline = readline
+        if callable(readline):
+            self.readline = readline
+        else:
+            raise ValueError, 'readline must be callable'
     
     def isatty(self):
         return 1
@@ -72,7 +77,10 @@ class PseudoFileIn(PseudoFile):
 class PseudoFileOut(PseudoFile):
     
     def __init__(self, write):
-        self.write = write
+        if callable(write):
+            self.write = write
+        else:
+            raise ValueError, 'write must be callable'
     
     def isatty(self):
         return 1
@@ -81,7 +89,10 @@ class PseudoFileOut(PseudoFile):
 class PseudoFileErr(PseudoFile):
 
     def __init__(self, write):
-        self.write = write
+        if callable(write):
+            self.write = write
+        else:
+            raise ValueError, 'write must be callable'
         
     def isatty(self):
         return 1

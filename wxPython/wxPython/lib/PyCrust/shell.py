@@ -6,7 +6,7 @@ Sponsored by Orbtech - Your Source For Python Development Services"""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
-__version__ = "$Revision$"[11:-2]
+__revision__ = "$Revision$"[11:-2]
 
 from wxPython.wx import *
 from wxPython.stc import *
@@ -52,7 +52,7 @@ class ShellFacade:
     still accessible, even though only some are visible to the user."""
 
     name = 'PyCrust Shell Interface'
-    revision = __version__
+    revision = __revision__
 
     def __init__(self, other):
         """Create a ShellFacade instance."""
@@ -128,7 +128,7 @@ class Shell(wxStyledTextCtrl):
     """PyCrust Shell based on wxStyledTextCtrl."""
 
     name = 'PyCrust Shell'
-    revision = __version__
+    revision = __revision__
 
     def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
                  size=wxDefaultSize, style=wxCLIP_CHILDREN, introText='', \
@@ -231,18 +231,9 @@ class Shell(wxStyledTextCtrl):
     def setBuiltinKeywords(self):
         """Create pseudo keywords as part of builtins.
 
-        This is a rather clever hack that sets "close", "exit" and "quit"
-        to a PseudoKeyword object so that we can make them do what we want.
-        In this case what we want is to call our self.quit() method.
-        The user can type "close", "exit" or "quit" without the final parens.
+        This simply sets "close", "exit" and "quit" to a helpful string.
         """
-## POB: This is having some weird side-effects so I'm taking it out.
-##        import __builtin__
-##        from pseudo import PseudoKeyword
-##        __builtin__.close = __builtin__.exit = __builtin__.quit = \
-##            PseudoKeyword(self.quit)
         import __builtin__
-        from pseudo import PseudoKeyword
         __builtin__.close = __builtin__.exit = __builtin__.quit = \
             'Click on the close button to leave the application.'
 
@@ -322,6 +313,7 @@ class Shell(wxStyledTextCtrl):
             if self.AutoCompActive(): self.AutoCompCancel()
             # Get the command between the prompt and the cursor.
             # Add the '(' to the end of the command.
+            self.ReplaceSelection('')
             command = self.GetTextRange(stoppos, currpos) + '('
             self.write('(')
             if self.autoCallTip: self.autoCallTipShow(command)
@@ -939,21 +931,17 @@ class ShellMenu:
 
         m = self.autocompMenu = wxMenu()
         m.Append(ID_AUTOCOMP_SHOW, 'Show Auto Completion', \
-                 'Show auto completion during dot syntax', \
-                 kind=wxITEM_CHECK)
+                 'Show auto completion during dot syntax', 1)
         m.Append(ID_AUTOCOMP_INCLUDE_MAGIC, 'Include Magic Attributes', \
-                 'Include attributes visible to __getattr__ and __setattr__', \
-                 kind=wxITEM_CHECK)
+                 'Include attributes visible to __getattr__ and __setattr__', 1)
         m.Append(ID_AUTOCOMP_INCLUDE_SINGLE, 'Include Single Underscores', \
-                 'Include attibutes prefixed by a single underscore', \
-                 kind=wxITEM_CHECK)
+                 'Include attibutes prefixed by a single underscore', 1)
         m.Append(ID_AUTOCOMP_INCLUDE_DOUBLE, 'Include Double Underscores', \
-                 'Include attibutes prefixed by a double underscore', \
-                 kind=wxITEM_CHECK)
+                 'Include attibutes prefixed by a double underscore', 1)
 
         m = self.calltipsMenu = wxMenu()
         m.Append(ID_CALLTIPS_SHOW, 'Show Call Tips', \
-                 'Show call tips with argument specifications', kind=wxITEM_CHECK)
+                 'Show call tips with argument specifications', 1)
 
         m = self.optionsMenu = wxMenu()
         m.AppendMenu(ID_AUTOCOMP, '&Auto Completion', self.autocompMenu, \
@@ -1091,7 +1079,7 @@ class ShellFrame(wxFrame, ShellMenu):
     """Frame containing the PyCrust shell component."""
 
     name = 'PyCrust Shell Frame'
-    revision = __version__
+    revision = __revision__
 
     def __init__(self, parent=None, id=-1, title='PyShell', \
                  pos=wxDefaultPosition, size=wxDefaultSize, \
@@ -1100,7 +1088,7 @@ class ShellFrame(wxFrame, ShellMenu):
         """Create a PyCrust ShellFrame instance."""
         wxFrame.__init__(self, parent, id, title, pos, size, style)
         intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % VERSION
-        intro += '\nSponsored by Orbtech - Your Source For Python Development Services'
+        intro += '\nSponsored by Orbtech - Specializing in Python Application Development'
         self.CreateStatusBar()
         self.SetStatusText(intro.replace('\n', ', '))
         if wxPlatform == '__WXMSW__':
