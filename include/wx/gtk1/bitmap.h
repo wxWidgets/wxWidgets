@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -25,6 +25,11 @@
 // classes
 //-----------------------------------------------------------------------------
 
+class wxDC;
+class wxPaintDC;
+class wxMemoryDC;
+class wxToolBarGTK;
+
 class wxMask;
 class wxBitmap;
 
@@ -44,8 +49,13 @@ class wxMask: public wxObject
     wxMask( const wxBitmap& bitmap );
     ~wxMask(void);
 
-  public:
+  private:
   
+    friend wxBitmap;
+    friend wxDC;
+    friend wxPaintDC;
+    friend wxToolBarGTK;
+    
     GdkBitmap *GetBitmap(void) const;
     
   protected:
@@ -58,6 +68,7 @@ class wxMask: public wxObject
 // wxBitmap
 //-----------------------------------------------------------------------------
 
+// CMB 20/5/98: added xbm constructor and GetBitmap() method
 class wxBitmap: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxBitmap)
@@ -66,6 +77,7 @@ class wxBitmap: public wxObject
 
     wxBitmap(void);
     wxBitmap( const int width, const int height, const int depth = -1 );
+    wxBitmap( const char bits[], const int width, const int height, const int depth = 1 );
     wxBitmap( char **bits );
     wxBitmap( const wxBitmap& bmp );
     wxBitmap( const wxBitmap* bmp );
@@ -93,9 +105,15 @@ class wxBitmap: public wxObject
     wxPalette *GetColourMap(void) const
       { return GetPalette(); };
 
-  public:
+  private:
+  
+    friend wxDC;
+    friend wxPaintDC;
+    friend wxMemoryDC;
+    friend wxToolBarGTK;
 
     GdkPixmap *GetPixmap(void) const;
+    GdkBitmap *GetBitmap(void) const;
     
     // no data :-)
 };

@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -60,6 +60,7 @@ GdkBitmap *wxMask::GetBitmap(void) const
 // wxBitmap
 //-----------------------------------------------------------------------------
 
+// CMB 20/5/98: added m_bitmap for GdkBitmaps
 class wxBitmapRefData: public wxObjectRefData
 {
   public:
@@ -68,6 +69,7 @@ class wxBitmapRefData: public wxObjectRefData
     ~wxBitmapRefData(void);
   
     GdkPixmap      *m_pixmap;
+    GdkBitmap      *m_bitmap;
     wxMask         *m_mask;
     int             m_width;
     int             m_height;
@@ -78,6 +80,7 @@ class wxBitmapRefData: public wxObjectRefData
 wxBitmapRefData::wxBitmapRefData(void)
 {
   m_pixmap = NULL;
+  m_bitmap = NULL;
   m_mask = NULL;
   m_width = 0;
   m_height = 0;
@@ -91,6 +94,7 @@ wxBitmapRefData::~wxBitmapRefData(void)
   if (m_pixmap) gdk_imlib_free_pixmap( m_pixmap );
 #else
   if (m_pixmap) gdk_pixmap_unref( m_pixmap );
+  if (m_bitmap) gdk_bitmap_unref( m_bitmap );
 #endif
   if (m_mask) delete m_mask;
   if (m_palette) delete m_palette;
@@ -158,12 +162,26 @@ wxBitmap::wxBitmap( const wxBitmap* bmp )
    
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 };
-  
+
 wxBitmap::wxBitmap( const wxString &filename, const int type )
 {
   LoadFile( filename, type );
 };
 
+// CMB 15/5/98: add constructor for xbm bitmaps
+wxBitmap::wxBitmap( const char bits[], const int width, const int height, const int WXUNUSED(depth))
+{
+  m_refData = new wxBitmapRefData();
+
+  M_BMPDATA->m_mask = NULL;
+  M_BMPDATA->m_bitmap = 
+    gdk_bitmap_create_from_data( (GdkWindow*) &gdk_root_parent, (gchar *) bits, width, height );
+  gdk_window_get_size( M_BMPDATA->m_bitmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
+  M_BMPDATA->m_bpp = 1;
+
+  if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
+}
+  
 wxBitmap::~wxBitmap(void)
 {
   if (wxTheBitmapList) wxTheBitmapList->DeleteObject(this);
@@ -289,5 +307,11 @@ GdkPixmap *wxBitmap::GetPixmap(void) const
 {
   if (!Ok()) return NULL;
   return M_BMPDATA->m_pixmap;
+};
+  
+GdkBitmap *wxBitmap::GetBitmap(void) const
+{
+  if (!Ok()) return NULL;
+  return M_BMPDATA->m_bitmap;
 };
   

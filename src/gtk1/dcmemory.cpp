@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,15 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
   m_selected = bitmap;
   if (m_selected.Ok())
   {
-    m_window = m_selected.GetPixmap();
+    if (m_selected.GetPixmap())
+    {
+      m_window = m_selected.GetPixmap();
+    }
+    else
+    {
+      m_window = m_selected.GetBitmap();
+    }
+    
     SetUpDC();
   }
   else

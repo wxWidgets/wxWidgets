@@ -146,10 +146,6 @@ wxPen::wxPen(const wxString& col, const int Width, const int Style)
   M_PENDATA->m_dash = 0 ;
   M_PENDATA->m_hPen = 0 ;
 
-  // In Windows, only a pen of width = 1 can be dotted or dashed!
-  if ((Style == wxDOT) || (Style == wxLONG_DASH) || (Style == wxSHORT_DASH) || (Style == wxDOT_DASH))
-    M_PENDATA->m_width = 1;
-    
   RealizeResource();
 
   if ( wxThePenList )
@@ -176,7 +172,8 @@ bool wxPen::RealizeResource(void)
     if (M_PENDATA->m_join==wxJOIN_ROUND        &&
         M_PENDATA->m_cap==wxCAP_ROUND          &&
         M_PENDATA->m_style!=wxUSER_DASH        &&
-        M_PENDATA->m_style!=wxSTIPPLE
+        M_PENDATA->m_style!=wxSTIPPLE          &&
+        M_PENDATA->m_width <= 1
        )
       M_PENDATA->m_hPen = (WXHPEN) CreatePen(wx2msPenStyle(M_PENDATA->m_style), M_PENDATA->m_width, ms_colour);
     else

@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -41,6 +41,7 @@ class WXDLLEXPORT wxMemoryDC: public wxPaintDC
     void GetSize( int *width, int *height );
 
   private: 
+    friend wxPaintDC;
     wxBitmap  m_selected;
 };
 

@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -361,10 +361,25 @@ void wxDC::CalcBoundingBox( long x, long y )
 
 void wxDC::ComputeScaleAndOrigin(void)
 {
+  // CMB: copy scale to see if it changes
+  double origScaleX = m_scaleX;
+  double origScaleY = m_scaleY;
+
   m_scaleX = m_logicalScaleX * m_userScaleX;
   m_scaleY = m_logicalScaleY * m_userScaleY;
 
   m_deviceOriginX = m_internalDeviceOriginX + m_externalDeviceOriginX;
   m_deviceOriginY = m_internalDeviceOriginY + m_externalDeviceOriginY;
+
+  // CMB: if scale has changed call SetPen to recalulate the line width 
+  if (m_scaleX != origScaleX || m_scaleY != origScaleY)
+  {
+    // this is a bit artificial, but we need to force wxDC to think
+    // the pen has changed
+    wxPen* pen = GetPen();
+    wxPen tempPen;
+    m_pen = tempPen;
+    SetPen(pen);
+  }
 };
 

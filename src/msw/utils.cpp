@@ -419,66 +419,52 @@ void wxBell(void)
 #endif
 }
 
+// Chris Breeze 27/5/98: revised WIN32 code to
+// detect WindowsNT correctly
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
   extern char *wxOsVersion;
-  if (majorVsn)
-    *majorVsn = 0;
-  if (minorVsn)
-    *minorVsn = 0;
-    
-  int retValue ;
-#ifndef __WIN32__
-#ifdef __WINDOWS_386__
-  retValue = wxWIN386;
-#else
+  if (majorVsn) *majorVsn = 0;
+  if (minorVsn) *minorVsn = 0;
 
-#if !defined(__WATCOMC__) && !defined(__GNUWIN32__) && USE_PENWINDOWS
+#ifdef WIN32
+  OSVERSIONINFO info;
+  memset(&info, 0, sizeof(OSVERSIONINFO));
+  info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+  if (GetVersionEx(&info))
+  {
+    if (majorVsn) *majorVsn = info.dwMajorVersion;
+    if (minorVsn) *minorVsn = info.dwMinorVersion;
+    switch (info.dwPlatformId)
+	{
+	case VER_PLATFORM_WIN32s:
+		return wxWIN32S;
+		break;
+	case VER_PLATFORM_WIN32_WINDOWS:
+		return wxWIN95;
+		break;
+	case VER_PLATFORM_WIN32_NT:
+		return wxWINDOWS_NT;
+		break;
+	}
+  }
+  return wxWINDOWS;	// error if we get here, return generic value
+#else
+  // Win16 code...
+  int retValue ;
+#  ifdef __WINDOWS_386__
+  retValue = wxWIN386;
+#  else
+#    if !defined(__WATCOMC__) && !defined(GNUWIN32)
   extern HANDLE hPenWin;
   retValue = hPenWin ? wxPENWINDOWS : wxWINDOWS ;
-#endif
-
-#endif
-#else
-  DWORD Version = GetVersion() ;
-  WORD  lowWord  = LOWORD(Version) ;
-  
-  if (wxOsVersion)
-  {
-    if (strcmp(wxOsVersion, "Win95") == 0)
-      return wxWIN95;
-    else if (strcmp(wxOsVersion, "Win32s") == 0)
-      return wxWIN32S;
-    else if (strcmp(wxOsVersion, "Windows") == 0)
-      return wxWINDOWS;
-    else if (strcmp(wxOsVersion, "WinNT") == 0)
-      return wxWINDOWS_NT;
-  }
-  bool  Win32s  = (( Version & 0x80000000 ) != 0);
-  bool  Win95   = (( Version & 0xFF ) >= 4);
-  bool  WinNT   = Version < 0x80000000;
-
-  // Get the version number
-  if (majorVsn)
-	  *majorVsn = LOBYTE( lowWord );
-  if (minorVsn)
-	  *minorVsn = HIBYTE( lowWord );
-
-  if (Win95)
-    return wxWIN95;
-  else if (Win32s)
-    return wxWIN32S;
-  else if (WinNT)
-    return wxWINDOWS_NT;
-  else
-    return wxWINDOWS;
-    
-//  retValue = ((high & 0x8000)==0) ? wxWINDOWS_NT : wxWIN32S ;
-#endif
+#    endif
+#  endif
   // @@@@ To be completed. I don't have the manual here...
   if (majorVsn) *majorVsn = 3 ;
   if (minorVsn) *minorVsn = 1 ;
   return retValue ;
+#endif
 }
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)

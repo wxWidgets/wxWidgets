@@ -100,6 +100,7 @@ public:
   virtual void SetSystemScale(double x, double y);
   virtual void SetLogicalOrigin(long x, long y);
   virtual void SetDeviceOrigin(long x, long y);
+  virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
   // This group of functions does actual conversion
   // of the input, as you'd expect.
@@ -216,6 +217,9 @@ protected:
 
   double             m_userScaleX;
   double             m_userScaleY;
+
+  int                m_signX;		// Used by SetAxisOrientation() to
+  int                m_signY;		// invert the axes
 
   int               m_mappingMode;
 

@@ -51,8 +51,10 @@ public:
 // (e.g. hello.cpp).
 // Now IMPLEMENT_APP should add this code if required.
 
-#if defined(AIX) || defined(AIX4) /* || defined(____HPUX__) */
-#define IMPLEMENT_WXWIN_MAIN int main(int argc, char *argv[]) { return wxEntry(argc, argv); }
+#if defined(__AIX__) || defined(__SUN__) || defined(__HPUX__)
+#define IMPLEMENT_WXWIN_MAIN \
+extern int wxEntry( int argc, char *argv[] ); \
+int main(int argc, char *argv[]) { return wxEntry(argc, argv); }
 #else
 #define IMPLEMENT_WXWIN_MAIN
 #endif

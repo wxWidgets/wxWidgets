@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/dcclient.h"
+#include "wx/dcmemory.h"
 
 //-----------------------------------------------------------------------------
 // local data
@@ -34,6 +35,49 @@ static GdkPixmap **hatch_bitmap = NULL;
 //-----------------------------------------------------------------------------
 
 #define RAD2DEG 57.2957795131
+
+//-----------------------------------------------------------------------------
+// temporary implementation of the missing GDK function
+//-----------------------------------------------------------------------------
+#include "gdk/gdkprivate.h"
+void gdk_draw_bitmap	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  GdkDrawable  *src,
+			  gint		xsrc,
+			  gint		ysrc,
+			  gint		xdest,
+			  gint		ydest,
+			  gint		width,
+			  gint		height)
+{
+  GdkWindowPrivate *drawable_private;
+  GdkWindowPrivate *src_private;
+  GdkGCPrivate *gc_private;
+
+  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (src != NULL);
+  g_return_if_fail (gc != NULL);
+
+  drawable_private = (GdkWindowPrivate*) drawable;
+  src_private = (GdkWindowPrivate*) src;
+  if (drawable_private->destroyed || src_private->destroyed)
+    return;
+  gc_private = (GdkGCPrivate*) gc;
+
+  if (width == -1)
+    width = src_private->width;
+  if (height == -1)
+    height = src_private->height;
+
+  XCopyPlane (drawable_private->xdisplay,
+	     src_private->xwindow,
+	     drawable_private->xwindow,
+	     gc_private->xgc,
+	     xsrc, ysrc,
+	     width, height,
+	     xdest, ydest,
+	     1);
+}
 
 //-----------------------------------------------------------------------------
 // wxPaintDC
@@ -159,19 +203,22 @@ void wxPaintDC::DrawEllipticArc( long x, long y, long width, long height, double
 {
   if (!Ok()) return;
   
-  if (width<0) { width=-width; x=x-width; }
-  if (height<0) { height=-height; y=y-height; }
-
   long xx = XLOG2DEV(x);    
   long yy = YLOG2DEV(y);
-  long ww = XLOG2DEVREL(width); 
-  long hh = YLOG2DEVREL(height);
+  long ww = m_signX * XLOG2DEVREL(width); 
+  long hh = m_signY * YLOG2DEVREL(height);
   
+  // CMB: handle -ve width and/or height
+  if (ww < 0) { ww = -ww; xx = xx - ww; }
+  if (hh < 0) { hh = -hh; yy = yy - hh; }
+  
+  long start = long(sa * 64.0);
+  long end = long(ea * 64.0);
   if (m_brush.GetStyle() != wxTRANSPARENT)
-    gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww-1, hh-1, 0, long(sa*64) );
+    gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, start, end );
   
   if (m_pen.GetStyle() != wxTRANSPARENT)
-    gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, 0, long(ea*64) );
+    gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, start, end );
 };
 
 void wxPaintDC::DrawPoint( long x, long y )
@@ -236,9 +283,16 @@ void wxPaintDC::DrawRectangle( long x, long y, long width, long height )
 
   long xx = XLOG2DEV(x);
   long yy = YLOG2DEV(y);
-  long ww = XLOG2DEVREL(width);
-  long hh = YLOG2DEVREL(height);
+  long ww = m_signX * XLOG2DEVREL(width);
+  long hh = m_signY * YLOG2DEVREL(height);
     
+  // CMB: draw nothing if transformed w or h is 0
+  if (ww == 0 || hh == 0) return;
+
+  // CMB: handle -ve width and/or height
+  if (ww < 0) { ww = -ww; xx = xx - ww; }
+  if (hh < 0) { hh = -hh; yy = yy - hh; }
+
   if (m_brush.GetStyle() != wxTRANSPARENT)
     gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy, ww, hh );
     
@@ -250,22 +304,48 @@ void wxPaintDC::DrawRoundedRectangle( long x, long y, long width, long height, d
 {
   if (!Ok()) return;
   
-  if (width<0) { width=-width; x=x-width; }
-  if (height<0) { height=-height; y=y-height; }
-
   if (radius < 0.0) radius = - radius * ((width < height) ? width : height);
   
   long xx = XLOG2DEV(x);    
   long yy = YLOG2DEV(y);
-  long ww = XLOG2DEVREL(width); 
-  long hh = YLOG2DEVREL(height);
+  long ww = m_signX * XLOG2DEVREL(width); 
+  long hh = m_signY * YLOG2DEVREL(height);
   long rr = XLOG2DEVREL((long)radius);
+
+  // CMB: handle -ve width and/or height
+  if (ww < 0) { ww = -ww; xx = xx - ww; }
+  if (hh < 0) { hh = -hh; yy = yy - hh; }
+
+  // CMB: if radius is zero use DrawRectangle() instead to avoid
+  // X drawing errors with small radii
+  if (rr == 0)
+  {
+    DrawRectangle( x, y, width, height );
+    return;
+  }
+
+  // CMB: draw nothing if transformed w or h is 0
+  if (ww == 0 || hh == 0) return;
+
+  // CMB: adjust size if outline is drawn otherwise the result is
+  // 1 pixel too wide and high
+  if (m_pen.GetStyle() != wxTRANSPARENT)
+  {
+    ww--;
+    hh--;
+  }
+
+  // CMB: ensure dd is not larger than rectangle otherwise we
+  // get an hour glass shape
   long dd = 2 * rr;
+  if (dd > ww) dd = ww;
+  if (dd > hh) dd = hh;
+  rr = dd / 2;
 
   if (m_brush.GetStyle() != wxTRANSPARENT)
   {
-    gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx+rr, yy, ww-dd, hh );
-    gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd );
+    gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
+    gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
     gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
     gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
     gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
@@ -289,13 +369,14 @@ void wxPaintDC::DrawEllipse( long x, long y, long width, long height )
 {
   if (!Ok()) return;
   
-  if (width<0) { width=-width; x=x-width; }
-  if (height<0) { height=-height; y=y-height; }
-
   long xx = XLOG2DEV(x);    
   long yy = YLOG2DEV(y);
-  long ww = XLOG2DEVREL(width); 
-  long hh = YLOG2DEVREL(height);
+  long ww = m_signX * XLOG2DEVREL(width); 
+  long hh = m_signY * YLOG2DEVREL(height);
+
+  // CMB: handle -ve width and/or height
+  if (ww < 0) { ww = -ww; xx = xx - ww; }
+  if (hh < 0) { hh = -hh; yy = yy - hh; }
   
   if (m_brush.GetStyle() != wxTRANSPARENT)
     gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
@@ -342,8 +423,26 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
 {
   if (!Ok()) return FALSE;
   
-  wxClientDC *csrc = (wxClientDC*)source;
+  // CMB 20/5/98: add blitting of bitmaps
+  if (source->IsKindOf(CLASSINFO(wxMemoryDC)))
+  {
+    wxMemoryDC* srcDC = (wxMemoryDC*)source;
+	GdkBitmap* bmap = srcDC->m_selected.GetBitmap();
+    if (bmap)
+    {
+      gdk_draw_bitmap (
+          m_window,
+          m_textGC,
+          bmap,
+          source->DeviceToLogicalX(xsrc), source->DeviceToLogicalY(ysrc),
+          XLOG2DEV(xdest), YLOG2DEV(ydest),
+          source->DeviceToLogicalXRel(width), source->DeviceToLogicalYRel(height)
+          );
+      return TRUE;
+    }
+  }
 
+  wxClientDC *csrc = (wxClientDC*)source;
   gdk_window_copy_area ( m_window, m_penGC,
     XLOG2DEV(xdest), YLOG2DEV(ydest),
     csrc->GetWindow(),
@@ -366,6 +465,16 @@ void wxPaintDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(us
   if (!Ok()) return;
   
   GdkFont *font = m_font.GetInternalFont( m_scaleY );
+
+  // CMB 21/5/98: draw text background if mode is wxSOLID
+  if (m_backgroundMode == wxSOLID)
+  {
+    long width = gdk_string_width( font, text );
+    long height = font->ascent + font->descent;
+    gdk_gc_set_foreground( m_textGC, m_textBackgroundColour.GetColor() );
+    gdk_draw_rectangle( m_window, m_textGC, TRUE, x, y, width, height );
+    gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
+  }
   gdk_draw_string( m_window, font, m_textGC, 
     XLOG2DEV(x), 
     YLOG2DEV(y) + font->ascent, text );
@@ -383,8 +492,8 @@ void wxPaintDC::GetTextExtent( const wxString &string, long *width, long *height
   if (!Ok()) return;
   
   GdkFont *font = m_font.GetInternalFont( m_scaleY );
-  if (width) (*width) = gdk_string_width( font, string );
-  if (height) (*height) = font->ascent + font->descent;
+  if (width) (*width) = long(gdk_string_width( font, string ) / m_scaleX);
+  if (height) (*height) = long((font->ascent + font->descent) / m_scaleY);
 };
 
 long wxPaintDC::GetCharWidth(void)
@@ -429,6 +538,18 @@ void wxPaintDC::SetPen( const wxPen &pen )
   if (!m_pen.Ok()) return;
   
   gint width = m_pen.GetWidth();
+  // CMB: if width is non-zero scale it with the dc
+  if (width <= 0)
+  {
+    width = 1;
+  }
+  else
+  {
+    // X doesn't allow different width in x and y and so we take
+    // the average
+    double w = 0.5 + (abs(XLOG2DEVREL(width)) + abs(YLOG2DEVREL(width))) / 2.0;
+    width = (int)w;
+  }
   
   GdkLineStyle lineStyle = GDK_LINE_SOLID;
   switch (m_pen.GetStyle())
@@ -443,7 +564,7 @@ void wxPaintDC::SetPen( const wxPen &pen )
   GdkCapStyle capStyle = GDK_CAP_ROUND;
   switch (m_pen.GetCap())
   {
-    case wxCAP_ROUND:      { capStyle = GDK_CAP_ROUND;      break; };
+    case wxCAP_ROUND:      { capStyle = (width <= 1) ? GDK_CAP_NOT_LAST : GDK_CAP_ROUND; break; };
     case wxCAP_PROJECTING: { capStyle = GDK_CAP_PROJECTING; break; };
     case wxCAP_BUTT:       { capStyle = GDK_CAP_BUTT;       break; };
   };
@@ -540,8 +661,9 @@ void wxPaintDC::SetTextBackground( const wxColour &col )
   gdk_gc_set_background( m_textGC, m_textBackgroundColour.GetColor() );
 };
 
-void wxPaintDC::SetBackgroundMode( int WXUNUSED(mode) )
+void wxPaintDC::SetBackgroundMode( int mode )
 {
+  m_backgroundMode = mode;
 };
 
 void wxPaintDC::SetPalette( const wxPalette& WXUNUSED(palette) )

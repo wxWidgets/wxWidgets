@@ -108,6 +108,8 @@ wxDC::wxDC(void)
   m_logicalScaleY = 1.0;
   m_userScaleX = 1.0;
   m_userScaleY = 1.0;
+  m_signX = 1;
+  m_signY = 1;
   m_systemScaleX = 1.0;
   m_systemScaleY = 1.0;
   m_mappingMode = MM_TEXT;
@@ -574,11 +576,6 @@ void wxDC::DrawArc(long x1,long y1,long x2,long y2,double xc,double yc)
   CalcBoundingBox((xc+radius), (yc+radius));
 }
 
-void wxDC::DrawEllipticArc(long WXUNUSED(x),long WXUNUSED(y),long WXUNUSED(w),long WXUNUSED(h),double WXUNUSED(sa),double WXUNUSED(ea))
-{
-  // Not implemented
-}
-
 void wxDC::DrawPoint(long x, long y)
 {
 // BUGBUG - is this necessary?
@@ -817,6 +814,51 @@ void wxDC::DrawEllipse(long x, long y, long width, long height)
   BeginDrawing();
 
   (void)Ellipse((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
+
+  EndDrawing();
+
+  CalcBoundingBox(x, y);
+  CalcBoundingBox(x2, y2);
+}
+
+// Chris Breeze 20/5/98: first implementation of DrawEllipticArc on Windows
+void wxDC::DrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
+{
+// BUGBUG - is this necessary?
+  if (m_pen.Ok() && m_autoSetting)
+    SetPen(m_pen) ;
+
+  long x2 = (x+w);
+  long y2 = (y+h);
+
+  BeginDrawing();
+
+  const double deg2rad = 3.14159265359 / 180.0;
+  int rx1 = XLOG2DEV(x+w/2);
+  int ry1 = YLOG2DEV(y+h/2);
+  int rx2 = rx1;
+  int ry2 = ry1;
+  rx1 += (int)(100.0 * abs(w) * cos(sa * deg2rad));
+  ry1 -= (int)(100.0 * abs(h) * m_signY * sin(sa * deg2rad));
+  rx2 += (int)(100.0 * abs(w) * cos(ea * deg2rad));
+  ry2 -= (int)(100.0 * abs(h) * m_signY * sin(ea * deg2rad));
+
+  // draw pie with NULL_PEN first and then outline otherwise a line is
+  // drawn from the start and end points to the centre
+  HPEN orig_pen = ::SelectObject((HDC) m_hDC, ::GetStockObject(NULL_PEN));
+  if (m_signY > 0)
+  {
+    (void)Pie((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2)+1, YLOG2DEV(y2)+1,
+	    rx1, ry1, rx2, ry2);
+  }
+  else
+  {
+    (void)Pie((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y)-1, XLOG2DEV(x2)+1, YLOG2DEV(y2),
+	    rx1, ry1-1, rx2, ry2-1);
+  }
+  ::SelectObject((HDC) m_hDC, orig_pen);
+  (void)Arc((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2),
+	  rx1, ry1, rx2, ry2);
 
   EndDrawing();
 
@@ -1260,6 +1302,14 @@ void wxDC::SetUserScale(double x, double y)
   SetMapMode(m_mappingMode);
 }
 
+void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)
+{
+  m_signX = xLeftRight ? 1 : -1;
+  m_signY = yBottomUp ? -1 : 1;
+
+  SetMapMode(m_mappingMode);
+}
+
 void wxDC::SetSystemScale(double x, double y)
 {
   m_systemScaleX = x;
@@ -1294,42 +1344,42 @@ void wxDC::SetDeviceOrigin(long x, long y)
 
 long wxDC::DeviceToLogicalX(long x) const
 {
-	return (long) (((x) - m_deviceOriginX)/(m_logicalScaleX*m_userScaleX*m_systemScaleX) - m_logicalOriginX) ;
+	return (long) (((x) - m_deviceOriginX)/(m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX) - m_logicalOriginX) ;
 }
 
 long wxDC::DeviceToLogicalXRel(long x) const
 {
-	return (long) ((x)/(m_logicalScaleX*m_userScaleX*m_systemScaleX)) ;
+	return (long) ((x)/(m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX)) ;
 }
 
 long wxDC::DeviceToLogicalY(long y) const
 {
-   	return (long) (((y) - m_deviceOriginY)/(m_logicalScaleY*m_userScaleY*m_systemScaleY) - m_logicalOriginY) ;
+   	return (long) (((y) - m_deviceOriginY)/(m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY) - m_logicalOriginY) ;
 }
 
 long wxDC::DeviceToLogicalYRel(long y) const
 {
-	return (long) ((y)/(m_logicalScaleY*m_userScaleY*m_systemScaleY)) ;
+	return (long) ((y)/(m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY)) ;
 }
 
 long wxDC::LogicalToDeviceX(long x) const
 {
-	return (long) (floor((x) - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_systemScaleX + m_deviceOriginX) ;
+	return (long) (floor((x) - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX + m_deviceOriginX) ;
 }
 
 long wxDC::LogicalToDeviceXRel(long x) const
 {
-	return (long) (floor(x)*m_logicalScaleX*m_userScaleX*m_systemScaleX) ;
+	return (long) (floor(x)*m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX) ;
 }
 
 long wxDC::LogicalToDeviceY(long y) const
 {
-	return (long) (floor((y) - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_systemScaleY + m_deviceOriginY);
+	return (long) (floor((y) - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY + m_deviceOriginY);
 }
 
 long wxDC::LogicalToDeviceYRel(long y) const
 {
-	return (long) (floor(y)*m_logicalScaleY*m_userScaleY*m_systemScaleY) ;
+	return (long) (floor(y)*m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY) ;
 }
 
 // This group of functions may not do any conversion
@@ -1394,6 +1444,19 @@ bool wxDC::Blit(long xdest, long ydest, long width, long height,
   long ydest1 = ydest;
   long xsrc1 = xsrc;
   long ysrc1 = ysrc;
+
+  // Chris Breeze 18/5/98: use text foreground/background colours
+  // when blitting from 1-bit bitmaps
+  COLORREF old_textground = ::GetTextColor((HDC)m_hDC);
+  COLORREF old_background = ::GetBkColor((HDC)m_hDC);
+  if (m_textForegroundColour.Ok())
+  {
+	::SetTextColor((HDC) m_hDC, m_textForegroundColour.GetPixel() ) ;
+  }
+  if (m_textBackgroundColour.Ok())
+  {
+	::SetBkColor((HDC) m_hDC, m_textBackgroundColour.GetPixel() ) ;
+  }
 
   DWORD dwRop = rop == wxCOPY ? SRCCOPY :
                 rop == wxCLEAR ? WHITENESS :
@@ -1483,6 +1546,8 @@ bool wxDC::Blit(long xdest, long ydest, long width, long height,
       success = (BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height, (HDC) source->m_hDC,
                             xsrc1, ysrc1, dwRop) != 0);
   }
+  ::SetTextColor((HDC)m_hDC, old_textground);
+  ::SetBkColor((HDC)m_hDC, old_background);
   source->EndDrawing();
   EndDrawing();
 
