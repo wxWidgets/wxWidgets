@@ -742,11 +742,26 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     switch ( style & wxICON_MASK )
     {
         case wxICON_ERROR:
-            bitmap = wxArtProvider::GetIcon(wxART_ERROR, wxART_MESSAGE_BOX); break;
+            bitmap = wxArtProvider::GetIcon(wxART_ERROR, wxART_MESSAGE_BOX);
+#ifdef __WXPM__
+            bitmap.SetId(wxICON_SMALL_ERROR);
+#endif
+            break;
+
         case wxICON_INFORMATION:
-            bitmap = wxArtProvider::GetIcon(wxART_INFORMATION, wxART_MESSAGE_BOX); break;
+            bitmap = wxArtProvider::GetIcon(wxART_INFORMATION, wxART_MESSAGE_BOX);
+#ifdef __WXPM__
+            bitmap.SetId(wxICON_SMALL_INFO);
+#endif
+            break;
+
         case wxICON_WARNING:
-            bitmap = wxArtProvider::GetIcon(wxART_WARNING, wxART_MESSAGE_BOX); break;
+            bitmap = wxArtProvider::GetIcon(wxART_WARNING, wxART_MESSAGE_BOX);
+#ifdef __WXPM__
+            bitmap.SetId(wxICON_SMALL_WARNING);
+#endif
+            break;
+
         default:
             wxFAIL_MSG(_T("incorrect log style"));
     }
