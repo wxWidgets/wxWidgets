@@ -457,7 +457,7 @@ void wxChoice::DoGetSize(int *w, int *h) const
     // total height of the control including the drop down list -- but only
     // sometimes, and normally it isn't... I have no idea about what to do with
     // this
-    wxControl::DoGetSize(w, h);
+    wxControl::DoGetSize(w, h);    
 }
 
 void wxChoice::DoSetSize(int x, int y,
@@ -486,6 +486,11 @@ void wxChoice::DoSetSize(int x, int y,
 
     wxControl::DoSetSize(x, y, width, height, sizeFlags);
 
+    // I'm commenting this out since the code appears to make choices
+    // and comboxes too high when they have associated sizers. I'm sure this
+    // is not the end of the story, which is why I'm leaving it #if'ed out for
+    // now. JACS.
+#if 0
     // if the height specified for the visible part of the control is
     // different from the current one, we need to change it separately
     // as it is not affected by normal WM_SETSIZE
@@ -498,6 +503,7 @@ void wxChoice::DoSetSize(int x, int y,
             SendMessage(GetHwnd(), CB_SETITEMHEIGHT, (WPARAM)-1, h + delta);
         }
     }
+#endif
 }
 
 wxSize wxChoice::DoGetBestSize() const
