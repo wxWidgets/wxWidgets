@@ -2119,8 +2119,8 @@ This macro is defined for the platforms with a native 64 bit integer type and
 allows to define 64 bit compile time constants:
 
 \begin{verbatim}
-    #ifdef wxLongLong\_t
-        wxLongLong\_t ll = wxLL(0x1234567890abcdef);
+    #ifdef wxLongLong_t
+        wxLongLong_t ll = wxLL(0x1234567890abcdef);
     #endif
 \end{verbatim}
 
@@ -2135,8 +2135,8 @@ which 64 bit integer numbers (i.e. those of type {\tt wxLongLong\_t}) can be
 printed. Example of using it:
 
 \begin{verbatim}
-    #ifdef wxLongLong\_t
-        wxLongLong\_t ll = wxLL(0x1234567890abcdef);
+    #ifdef wxLongLong_t
+        wxLongLong_t ll = wxLL(0x1234567890abcdef);
         printf("Long long = %" wxLongLongFmtSpec "x\n", ll);
     #endif
 \end{verbatim}

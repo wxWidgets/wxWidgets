@@ -35,21 +35,21 @@ sent as the user drags the thumbtrack).}
 
 
 
-\wxheading{The difference between {\tt EVT_SCROLL_THUMBRELEASE} and {\tt EVT_SCROLL_ENDSCROLL}}
+\wxheading{The difference between {\tt EVT\_SCROLL\_THUMBRELEASE} and {\tt EVT\_SCROLL\_ENDSCROLL}}
 
-The {\tt EVT_SCROLL_THUMBRELEASE} event is only emitted when actually dragging
-the thumb using the mouse and releasing it (This {\tt EVT_SCROLL_THUMBRELEASE}
-event is also followed by an {\tt EVT_SCROLL_ENDSCROLL} event).
+The {\tt EVT\_SCROLL\_THUMBRELEASE} event is only emitted when actually dragging
+the thumb using the mouse and releasing it (This {\tt EVT\_SCROLL\_THUMBRELEASE}
+event is also followed by an {\tt EVT\_SCROLL\_ENDSCROLL} event).
 
-The {\tt EVT_SCROLL_ENDSCROLL} event also occurs when using the keyboard to
+The {\tt EVT\_SCROLL\_ENDSCROLL} event also occurs when using the keyboard to
 change the thumb position, and when clicking next to the thumb (In all these
-cases the {\tt EVT_SCROLL_THUMBRELEASE} event does not happen).
+cases the {\tt EVT\_SCROLL\_THUMBRELEASE} event does not happen).
 
-In short, the {\tt EVT_SCROLL_ENDSCROLL} event is triggered when scrolling/
+In short, the {\tt EVT\_SCROLL\_ENDSCROLL} event is triggered when scrolling/
 moving has finished. The only exception (unfortunately) is that changing the
-thumb position using the mousewheel does give a {\tt EVT_SCROLL_THUMBRELEASE}
-event but NOT an {\tt EVT_SCROLL_ENDSCROLL} event.
+thumb position using the mousewheel does give a {\tt EVT\_SCROLL\_THUMBRELEASE}
+event but NOT an {\tt EVT\_SCROLL\_ENDSCROLL} event.
 
 Please see the widgets sample ("Slider" page) to see the difference
-between {\tt EVT_SCROLL_THUMBRELEASE} and {\tt EVT_SCROLL_ENDSCROLL} in action.
+between {\tt EVT\_SCROLL\_THUMBRELEASE} and {\tt EVT\_SCROLL\_ENDSCROLL} in action.
 
