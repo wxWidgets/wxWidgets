@@ -24,7 +24,9 @@
 #if wxUSE_DRAG_AND_DROP
 #include "wx/dnd.h"
 #endif
+#if wxUSE_TOOLTIPS
 #include "wx/tooltip.h"
+#endif
 #include "wx/menu.h"
 #include "wx/statusbr.h"
 #include "wx/intl.h"
