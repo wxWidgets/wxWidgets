@@ -385,15 +385,6 @@ bool wxNotebook::DeleteAllPages()
   return TRUE;
 }
 
-// add a page to the notebook
-bool wxNotebook::AddPage(wxNotebookPage *pPage,
-                         const wxString& strText,
-                         bool bSelect,
-                         int imageId)
-{
-  return InsertPage(GetPageCount(), pPage, strText, bSelect, imageId);
-}
-
 // same as AddPage() but does it at given position
 bool wxNotebook::InsertPage(int nPage,
                             wxNotebookPage *pPage,
@@ -405,6 +396,8 @@ bool wxNotebook::InsertPage(int nPage,
     wxCHECK_MSG( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), FALSE,
                  _T("invalid index in wxNotebook::InsertPage") );
 
+    wxASSERT_MSG( pPage->GetParent() == this,
+                    _T("notebook pages must have notebook as parent") );
 
     // add a new tab to the control
     // ----------------------------
