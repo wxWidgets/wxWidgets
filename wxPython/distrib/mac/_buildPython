@@ -13,7 +13,7 @@ progDir="`dirname \"$0\"`"
 defDstPath="/projects/wx/wxPython/dist"
 
 pkgName="MachoPython"
-version=2.2.1-2
+version=2.2.1-3
 dmgRoot="dmg-root"
 pkgRoot="pkg-root"
 sitePkgDir="$pkgRoot/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER/site-packages"
@@ -106,7 +106,7 @@ done
 
 cat > pythonw <<EOF
 #!/bin/sh
-exec /Applicaitons/Python.app/Contents/MacOS/python $@
+exec /Applicaitons/Python.app/Contents/MacOS/python \$@
 EOF
 chmod +x pythonw
 cd $curDir
