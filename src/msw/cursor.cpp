@@ -37,6 +37,7 @@
     #include "wx/cursor.h"
 #endif
 
+#include "wx/module.h"
 #include "wx/msw/private.h"
 #include "wx/msw/dib.h"
 
