@@ -54,8 +54,8 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
-    IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
+IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
 
 // ----------------------------------------------------------------------------
 // wxSpinButton

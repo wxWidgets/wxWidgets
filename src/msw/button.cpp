@@ -305,7 +305,7 @@ static void DrawRect(HDC hdc, const RECT& r)
 void wxButton::MakeOwnerDrawn()
 {
     long style = GetWindowLong(GetHwnd(), GWL_STYLE);
-    if ( !(style & BS_OWNERDRAW) )
+    if ( (style & BS_OWNERDRAW) != BS_OWNERDRAW )
     {
         // make it so
         style |= BS_OWNERDRAW;
@@ -473,6 +473,12 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
         InflateRect(&rectFocus, -4, -4);
 
         DrawFocusRect(hdc, &rectFocus);
+    }
+
+    if ( pushed )
+    {
+        // the label is shifted by 1 pixel to create "pushed" effect
+        OffsetRect(&rectBtn, 1, 1);
     }
 
     DrawButtonText(hdc, &rectBtn, GetLabel(),

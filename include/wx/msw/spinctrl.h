@@ -63,9 +63,14 @@ protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
 
+    // the handler for wxSpinButton events
+    void OnSpinChange(wxSpinEvent& event);
+
     WXHWND m_hwndBuddy;
 
+private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
+    DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_MSW_SPINCTRL_H_

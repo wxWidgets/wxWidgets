@@ -50,7 +50,11 @@
 // macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
+
+BEGIN_EVENT_TABLE(wxSpinCtrl, wxSpinButton)
+    EVT_SPIN(-1, wxSpinCtrl::OnSpinChange)
+END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // constants
@@ -199,6 +203,24 @@ bool wxSpinCtrl::SetFont(const wxFont& font)
     (void)::SendMessage((HWND)m_hwndBuddy, WM_SETFONT, (WPARAM)hFont, TRUE);
 
     return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// event processing
+// ----------------------------------------------------------------------------
+
+void wxSpinCtrl::OnSpinChange(wxSpinEvent& eventSpin)
+{
+    wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());
+    event.SetEventObject(this);
+    event.SetInt(eventSpin.GetPosition());
+
+    (void)GetEventHandler()->ProcessEvent(event);
+
+    if ( eventSpin.GetSkipped() )
+    {
+        event.Skip();
+    }
 }
 
 // ----------------------------------------------------------------------------

@@ -83,7 +83,7 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
         !CreateBase( parent, id, pos, new_size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxSpinCtrl creation failed") );
-	return FALSE;
+        return FALSE;
     }
 
     m_oldPos = initial;
@@ -196,13 +196,13 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
         wxWindow *top_frame = m_parent;
         while (top_frame->GetParent() && !(top_frame->GetParent()->m_isFrame))
             top_frame = top_frame->GetParent();
-	GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
+        GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
 
-	if (window->default_widget)
+        if (window->default_widget)
         {
             gtk_widget_activate (window->default_widget);
-	    return;
-	}
+            return;
+        }
     }
 
     event.Skip();
