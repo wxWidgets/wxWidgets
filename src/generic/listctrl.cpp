@@ -1424,6 +1424,14 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     ke.SetEventObject( parent );
     if (parent->GetEventHandler()->ProcessEvent( ke )) return;
   
+    if (event.KeyCode() == WXK_TAB)
+    {
+        wxNavigationKeyEvent nevent;
+        nevent.SetDirection( !event.ShiftDown() );
+        nevent.SetCurrentFocus( m_parent );
+        if (m_parent->GetEventHandler()->ProcessEvent( nevent )) return;
+    }
+  
     /* no item -> nothing to do */
     if (!m_current)
     {

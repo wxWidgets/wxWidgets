@@ -1980,11 +1980,13 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
         if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
         int border = 0;
+	int bottom_border = 0;
 
         if (GTK_WIDGET_CAN_DEFAULT(m_widget))
 	{
 	    /* the default button has a border around it */
-	    border = 5;
+	    border = 6;
+	    bottom_border = 5;
 	}
 
 	/* this is the result of hours of debugging: the following code
@@ -2013,7 +2015,7 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 			      m_x-border, 
 			      m_y-border,
 			      m_width+2*border, 
-			      m_height+2*border );
+			      m_height+border+bottom_border );
     }
 
     m_sizeSet = TRUE;

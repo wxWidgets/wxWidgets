@@ -178,7 +178,7 @@ void MyFrame::OnAddPage(wxCommandEvent& WXUNUSED(event))
   wxPanel *panel = new wxPanel( m_notebook, -1 );
   (void)new wxButton( panel, -1, "Button", wxPoint( 10,10 ), wxSize(-1,-1) );
   m_notebook->AddPage( panel, "Added" );
-  m_notebook->SetSelection( m_notebook->GetPageCount()-1 );
+//  m_notebook->SetSelection( m_notebook->GetPageCount()-1 );
 }
 
 void MyFrame::OnDeletePage(wxCommandEvent& WXUNUSED(event))

@@ -256,7 +256,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
             gtk_text_set_editable( GTK_TEXT(m_text), 1 );
     }
 
-    SetBackgroundColour( parent->GetBackgroundColour() );
+    SetBackgroundColour( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW) );
     SetForegroundColour( parent->GetForegroundColour() );
 
     Show( TRUE );
