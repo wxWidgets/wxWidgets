@@ -65,7 +65,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
   GtkFileSelection *sel = GTK_FILE_SELECTION(m_widget);
 
   m_path.Append(m_dir);
-  if(m_path.Last()!='/') m_path.Append('/');
+  if(! m_path.IsEmpty() && m_path.Last()!='/') m_path.Append('/');
   m_path.Append(m_fileName);
 
   if(m_path.Length()>1) gtk_file_selection_set_filename(sel,m_path);
