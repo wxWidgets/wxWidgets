@@ -164,7 +164,9 @@ public:
 
 class wxPrintDialogData : public wxObject {
 public:
+    %nokwargs wxPrintDialogData;
     wxPrintDialogData();
+    wxPrintDialogData(const wxPrintData& printData);
     ~wxPrintDialogData();
 
     int GetFromPage() const;
@@ -458,9 +460,13 @@ public:
 
 class wxPrintPreview : public wxObject {
 public:
+    %nokwargs wxPrintPreview;
     wxPrintPreview(wxPyPrintout* printout,
                    wxPyPrintout* printoutForPrinting,
-                   wxPrintData* data=NULL);
+                   wxPrintDialogData *data=NULL);
+    wxPrintPreview(wxPyPrintout* printout,
+                  wxPyPrintout* printoutForPrinting,
+                  wxPrintData* data);
 
     virtual bool SetCurrentPage(int pageNum);
     int GetCurrentPage();
@@ -547,6 +553,11 @@ class wxPyPrintPreview : public wxPrintPreview
 public:
     wxPyPrintPreview(wxPyPrintout* printout,
                      wxPyPrintout* printoutForPrinting,
+                     wxPrintDialogData* data=NULL)
+        : wxPrintPreview(printout, printoutForPrinting, data)
+    {}
+    wxPyPrintPreview(wxPyPrintout* printout,
+                     wxPyPrintout* printoutForPrinting,
                      wxPrintData* data=NULL)
         : wxPrintPreview(printout, printoutForPrinting, data)
     {}
@@ -585,10 +596,13 @@ class wxPyPrintPreview : public wxPrintPreview
 {
 public:
     %pythonAppend wxPyPrintPreview   "self._setCallbackInfo(self, PyPrintPreview)"
-
+    %nokwargs wxPyPrintPreview;
     wxPyPrintPreview(wxPyPrintout* printout,
                      wxPyPrintout* printoutForPrinting,
-                     wxPrintData* data=NULL);
+                     wxPrintDialogData* data=NULL);
+    wxPyPrintPreview(wxPyPrintout* printout,
+                     wxPyPrintout* printoutForPrinting,
+                     wxPrintData* data);
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     

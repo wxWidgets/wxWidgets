@@ -100,22 +100,23 @@ class TestPrintPanel(wx.Panel):
 
         self.printData = wx.PrintData()
         self.printData.SetPaperId(wx.PAPER_LETTER)
-
+        self.printData.SetPrintMode(wx.PRINT_MODE_PRINTER)
+        
         self.box = wx.BoxSizer(wx.VERTICAL)
         self.canvas = ScrolledWindow.MyCanvas(self)
         self.box.Add(self.canvas, 1, wx.GROW)
 
         subbox = wx.BoxSizer(wx.HORIZONTAL)
         btn = wx.Button(self, ID_Setup, "Print Setup")
-        self.Bind(wx.EVT_BUTTON, self.OnPrintSetup, id=ID_Setup)
+        self.Bind(wx.EVT_BUTTON, self.OnPrintSetup, btn)
         subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
         btn = wx.Button(self, ID_Preview, "Print Preview")
-        self.Bind(wx.EVT_BUTTON, self.OnPrintPreview, id=ID_Preview)
+        self.Bind(wx.EVT_BUTTON, self.OnPrintPreview, btn)
         subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
         btn = wx.Button(self, ID_Print, "Print")
-        self.Bind(wx.EVT_BUTTON, self.OnDoPrint, id=ID_Print)
+        self.Bind(wx.EVT_BUTTON, self.OnDoPrint, btn)
         subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
         self.box.Add(subbox, 0, wx.GROW)
@@ -125,8 +126,8 @@ class TestPrintPanel(wx.Panel):
 
 
     def OnPrintSetup(self, event):
-        printerDialog = wx.PrintDialog(self)
-        printerDialog.GetPrintDialogData().SetPrintData(self.printData)
+        data = wx.PrintDialogData(self.printData)
+        printerDialog = wx.PrintDialog(self, data)
         printerDialog.GetPrintDialogData().SetSetupDialog(True)
         printerDialog.ShowModal();
         self.printData = printerDialog.GetPrintDialogData().GetPrintData()
@@ -135,9 +136,10 @@ class TestPrintPanel(wx.Panel):
 
     def OnPrintPreview(self, event):
         self.log.WriteText("OnPrintPreview\n")
+        data = wx.PrintDialogData(self.printData)
         printout = MyPrintout(self.canvas, self.log)
         printout2 = MyPrintout(self.canvas, self.log)
-        self.preview = wx.PrintPreview(printout, printout2, self.printData)
+        self.preview = wx.PrintPreview(printout, printout2, data)
 
         if not self.preview.Ok():
             self.log.WriteText("Houston, we have a problem...\n")
@@ -153,12 +155,12 @@ class TestPrintPanel(wx.Panel):
 
 
     def OnDoPrint(self, event):
-        pdd = wx.PrintDialogData()
-        pdd.SetPrintData(self.printData)
+        pdd = wx.PrintDialogData(self.printData)
+        pdd.SetToPage(2)
         printer = wx.Printer(pdd)
         printout = MyPrintout(self.canvas, self.log)
 
-        if not printer.Print(self.frame, printout):
+        if not printer.Print(self.frame, printout, True):
             wx.MessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wx.OK)
         else:
             self.printData = printer.GetPrintDialogData().GetPrintData()
