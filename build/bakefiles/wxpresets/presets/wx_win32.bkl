@@ -115,8 +115,8 @@ FIXME: this template has (at least) the following bugs:
         <if cond="WX_DEBUG=='1' and WX_UNICODE=='0'">d</if>
         <if cond="WX_DEBUG=='0' and WX_UNICODE=='1'">u</if>
     </set>
-    <set var="WXSUBLIBPOSTFIX">
-        <if cond="WX_DEBUG=='1' and WX_UNICODE=='0'">d</if>
+    <set var="WX3RDPARTLIBPOSTFIX">
+        <if cond="WX_DEBUG=='1'">d</if>
     </set>
 
     <set var="WXLIBPATH">
@@ -188,15 +188,15 @@ FIXME: this template has (at least) the following bugs:
         <__wx-libs-point/>
 
         <!-- wx 3rd party libs, always use them: -->
-        <sys-lib>wxtiff$(WXSUBLIBPOSTFIX)</sys-lib> 
-        <sys-lib>wxjpeg$(WXSUBLIBPOSTFIX)</sys-lib> 
-        <sys-lib>wxpng$(WXSUBLIBPOSTFIX)</sys-lib> 
-        <sys-lib>wxzlib$(WXSUBLIBPOSTFIX)</sys-lib> 
-        <!-- For regex we won't use the WXSUBLIBPOSTIX postfix: 
+        <sys-lib>wxtiff$(WX3RDPARTLIBPOSTFIX)</sys-lib> 
+        <sys-lib>wxjpeg$(WX3RDPARTLIBPOSTFIX)</sys-lib> 
+        <sys-lib>wxpng$(WX3RDPARTLIBPOSTFIX)</sys-lib> 
+        <sys-lib>wxzlib$(WX3RDPARTLIBPOSTFIX)</sys-lib> 
+        <!-- For regex we won't use the WX3RDPARTLIBPOSTIX postfix: 
              unliked tiff, jpeg, png, zlib, expat, when building
              in Unicode mode, the "u" suffix is appended to regex -->
         <sys-lib>wxregex$(WXLIBPOSTFIX)</sys-lib> 
-        <sys-lib>wxexpat$(WXSUBLIBPOSTFIX)</sys-lib>
+        <sys-lib>wxexpat$(WX3RDPARTLIBPOSTFIX)</sys-lib>
    
         <!-- link-in system libs that wx depends on: -->
         <!-- If on borland, we don't need to do much            -->
