@@ -579,7 +579,7 @@ public: \
 //     count on it)!
 #define WX_CLEAR_HASH_MAP(type, hashmap)                                     \
     {                                                                        \
-        type##::iterator it, en;                                             \
+        type::iterator it, en;                                               \
         for( it = (hashmap).begin(), en = (hashmap).end(); it != en; ++it )  \
             delete it->second;                                               \
         (hashmap).clear();                                                   \
