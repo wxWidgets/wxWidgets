@@ -21,6 +21,7 @@ samples/erase/Makefile.in
 samples/exec/Makefile.in
 samples/event/Makefile.in
 samples/grid/Makefile.in
+samples/keyboard/Makefile.in
 samples/newgrid/Makefile.in
 samples/help/Makefile.in
 samples/internat/Makefile.in
@@ -40,14 +41,20 @@ samples/html/zip/Makefile.in
 samples/image/Makefile.in
 samples/joytest/Makefile.in
 samples/layout/Makefile.in
+samples/listbox/Makefile.in
 samples/listctrl/Makefile.in
 samples/mdi/Makefile.in
 samples/minifram/Makefile.in
 samples/minimal/Makefile.in
+samples/mobile/Makefile.in
+samples/mobile/wxedit/Makefile.in
+samples/mobile/styles/Makefile.in
+samples/multimon/Makefile.in
 samples/notebook/Makefile.in
 samples/printing/Makefile.in
 samples/proplist/Makefile.in
 samples/propsize/Makefile.in
+samples/richedit/Makefile.in
 samples/rotate/Makefile.in
 samples/sashtest/Makefile.in
 samples/scroll/Makefile.in
@@ -89,6 +96,8 @@ utils/Makefile.in
 utils/hhp2cached/Makefile.in
 utils/emulator/Makefile.in
 utils/emulator/src/Makefile.in
+utils/helpview/Makefile.in
+utils/helpview/src/Makefile.in
 
 contrib/Makefile.in
 contrib/src/Makefile.in

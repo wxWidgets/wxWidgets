@@ -23,7 +23,11 @@ utils/tex2rtf/src/*.ico
 utils/tex2rtf/src/*.def
 utils/tex2rtf/src/*.rc
 
-utils/tex2rtf/tools/*
+utils/tex2rtf/tools/*.1
+utils/tex2rtf/tools/*.exe
+utils/tex2rtf/tools/*.lex
+utils/tex2rtf/tools/*.rea
+utils/tex2rtf/tools/*.txt
 
 utils/tex2rtf/distrib/*.sh
 utils/tex2rtf/distrib/*.bat

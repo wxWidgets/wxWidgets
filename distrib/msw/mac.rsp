@@ -6,7 +6,7 @@ docs/mac/*.hqx
 
 distrib/msw/*.rsp
 distrib/msw/*.bat
-distrib/mac/*
+distrib/mac/*-sh
 
 src/*.mcp
 src/jpeg/*.mcp
@@ -25,6 +25,11 @@ src/mac/*.c
 src/mac/*.r
 src/mac/*.h
 src/mac/*.lst
+src/mac/morefile/*.c
+src/mac/morefile/*.h
+src/mac/Info.plist.in
+src/mac/wxmac.icns
+src/macsock/sock_PPC.lib
 
 src/mac/cdef/*.h
 src/mac/cdef/*.c

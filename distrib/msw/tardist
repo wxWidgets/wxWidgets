@@ -7,6 +7,12 @@
 # because there's not enough space on the command line, plus we need to ignore the
 # blank lines.
 
+TAR=tar
+ARCH=`arch`
+if [ "$ARCH" = "ppc" ]; then
+  TAR=gnutar
+fi
+
 expandlines()
 {
     toexpand=$1
@@ -73,97 +79,208 @@ echo Tarring...
 ### Generic
 cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp > /tmp/wxgen_in.txt
 expandlines /tmp/wxgen_in.txt /tmp/wxgen.txt
-tar cvf $2/wxWindows-${WXVER}-gen.tar -T /tmp/wxgen.txt
+$TAR cf $2/wxWindows-${WXVER}-gen.tar -T /tmp/wxgen.txt
 gzip $2/wxWindows-${WXVER}-gen.tar
 mv $2/wxWindows-${WXVER}-gen.tar.gz $2/wxWindows-${WXVER}-gen.tgz
 
 ### wxGTK
-cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/gtk.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxgtk_in.txt
+cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/gtk.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxgtk_in.txt
 expandlines /tmp/wxgtk_in.txt /tmp/wxgtk.txt
-tar cvf $2/wxGTK-${WXVER}.tar -T /tmp/wxgtk.txt
+$TAR cf $2/wxGTK-${WXVER}.tar -T /tmp/wxgtk.txt
+
+echo Re-tarring wxGTK in a subdirectory...
+cd $2
+mkdir wxWindows-${WXVER}
+cd wxWindows-${WXVER}
+$TAR xf ../wxGTK-${WXVER}.tar
+cd ..
+rm -f wxGTK-${WXVER}.tar
+$TAR cf $2/wxGTK-${WXVER}.tar wxWindows-${WXVER}/*
+rm -f -r wxWindows-${WXVER}
 gzip $2/wxGTK-${WXVER}.tar
 
 ### wxMotif
 cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxmotif_in.txt
 expandlines /tmp/wxmotif_in.txt /tmp/wxmotif.txt
-tar cvf $2/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
+$TAR cf $2/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
+
+echo Re-tarring wxMotif in a subdirectory...
+cd $2
+mkdir wxWindows-${WXVER}
+cd wxWindows-${WXVER}
+$TAR xf ../wxMotif-${WXVER}.tar
+cd ..
+rm -f wxMotif-${WXVER}.tar
+$TAR cf $2/wxMotif-${WXVER}.tar wxWindows-${WXVER}/*
+rm -f -r wxWindows-${WXVER}
 gzip $2/wxMotif-${WXVER}.tar
 
 ### wxX11: combined wxMotif and wxX11 distributions
 cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/univ.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxx11_in.txt
 expandlines /tmp/wxx11_in.txt /tmp/wxx11.txt
-tar cvf $2/wxX11-${WXVER}.tar -T /tmp/wxx11.txt
+$TAR cf $2/wxX11-${WXVER}.tar -T /tmp/wxx11.txt
+
+echo Re-tarring wxX11 in a subdirectory...
+cd $2
+mkdir wxWindows-${WXVER}
+cd wxWindows-${WXVER}
+$TAR xf ../wxX11-${WXVER}.tar
+cd ..
+rm -f wxX11-${WXVER}.tar
+$TAR cf $2/wxX11-${WXVER}.tar wxWindows-${WXVER}/*
+rm -f -r wxWindows-${WXVER}
 gzip $2/wxX11-${WXVER}.tar
 
 ### wxMSW
 # cat $1/distrib/msw/msw.rsp $1/distrib/msw/vc.rsp $1/distrib/msw/bc.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxmsw_in.txt
 # expandlines /tmp/wxmsw_in.txt /tmp/wxmsw.txt
-# tar cvf $2/wxMSW-${WXVER}.tar -T /tmp/wxmsw.txt
+# $TAR cf $2/wxMSW-${WXVER}.tar -T /tmp/wxmsw.txt
 # gzip $2/wxMSW-${WXVER}.tar
 
 ### wxMac
-cat $1/distrib/msw/mac.rsp $1/distrib/msw/cw.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxmac_in.txt
+cat $1/distrib/msw/mac.rsp $1/distrib/msw/generic.rsp $1/distrib/msw/cw.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxmac_in.txt
 expandlines /tmp/wxmac_in.txt /tmp/wxmac.txt
-tar cvf $2/wxMac-${WXVER}.tar -T /tmp/wxmac.txt
+$TAR cf $2/wxMac-${WXVER}.tar -T /tmp/wxmac.txt
+
+echo Re-tarring wxMac in a subdirectory...
+cd $2
+mkdir wxWindows-${WXVER}
+cd wxWindows-${WXVER}
+$TAR xf ../wxMac-${WXVER}.tar
+cd ..
+rm -f wxMac-${WXVER}.tar
+$TAR cf $2/wxMac-${WXVER}.tar wxWindows-${WXVER}/*
+rm -f -r wxWindows-${WXVER}
 gzip $2/wxMac-${WXVER}.tar
 
 ### Doc sources
 cat $1/distrib/msw/docsrc.rsp > /tmp/docsrc_in.txt
 expandlines /tmp/docsrc_in.txt /tmp/docsrc.txt
-tar cvf $2/wxWindows-${WXVER}-doc.tar -T /tmp/docsrc.txt
+$TAR cf $2/wxWindows-${WXVER}-doc.tar -T /tmp/docsrc.txt
+
+echo Re-tarring docs in a subdirectory...
+cd $2
+mkdir wxWindows-${WXVER}
+cd wxWindows-${WXVER}
+$TAR xf ../wxWindows-${WXVER}-doc.tar
+cd ..
+rm -f wxWindows-${WXVER}-doc.tar
+$TAR cf $2/wxWindows-${WXVER}-doc.tar wxWindows-${WXVER}/*
+rm -f -r wxWindows-${WXVER}
 gzip $2/wxWindows-${WXVER}-doc.tar
 
 ### HTML docs
 cat $1/distrib/msw/wx_html.rsp > /tmp/html_in.txt
 expandlines /tmp/html_in.txt /tmp/html.txt
-tar cvf $2/wxWindows-${WXVER}-htm.tar -T /tmp/html.txt
-gzip $2/wxWindows-${WXVER}-htm.tar
+$TAR cf $2/wxWindows-${WXVER}-html.tar -T /tmp/html.txt
+
+echo Re-tarring HTML in a subdirectory...
+cd $2
+mkdir wxWindows-${WXVER}
+cd wxWindows-${WXVER}
+$TAR xf ../wxWindows-${WXVER}-html.tar
+cd ..
+rm -f wxWindows-${WXVER}-html.tar
+$TAR cf $2/wxWindows-${WXVER}-html.tar wxWindows-${WXVER}/*
+rm -f -r wxWindows-${WXVER}
+gzip $2/wxWindows-${WXVER}-html.tar
 
 ### PDF docs
 cat $1/distrib/msw/wx_pdf.rsp > /tmp/pdf_in.txt
 expandlines /tmp/pdf_in.txt /tmp/pdf.txt
-tar cvf $2/wxWindows-${WXVER}-pdf.tar -T /tmp/pdf.txt
+$TAR cf $2/wxWindows-${WXVER}-pdf.tar -T /tmp/pdf.txt
+
+echo Re-tarring PDF in a subdirectory...
+cd $2
+mkdir wxWindows-${WXVER}
+cd wxWindows-${WXVER}
+$TAR xf ../wxWindows-${WXVER}-pdf.tar
+cd ..
+rm -f wxWindows-${WXVER}-pdf.tar
+$TAR cf $2/wxWindows-${WXVER}-pdf.tar wxWindows-${WXVER}/*
+rm -f -r wxWindows-${WXVER}
 gzip $2/wxWindows-${WXVER}-pdf.tar
 
 ### Tex2RTF
 cat $1/distrib/msw/tex2rtf.rsp > /tmp/tex2rtf_in.txt
 expandlines /tmp/tex2rtf_in.txt /tmp/tex2rtf.txt
-tar cvf $2/tex2rtf2-${WXVER}.tar -T /tmp/tex2rtf.txt
-gzip $2/tex2rtf2-${WXVER}.tar
+$TAR cf $2/wxWindows-${WXVER}-tex2rtf.tar -T /tmp/tex2rtf.txt
+
+echo Re-tarring Tex2RTF in a subdirectory...
+cd $2
+mkdir wxWindows-${WXVER}
+cd wxWindows-${WXVER}
+$TAR xf ../wxWindows-${WXVER}-tex2rtf.tar
+cd ..
+rm -f wxWindows-${WXVER}-tex2rtf.tar
+$TAR cf $2/wxWindows-${WXVER}-tex2rtf.tar wxWindows-${WXVER}/*
+rm -f -r wxWindows-${WXVER}
+gzip $2/wxWindows-${WXVER}-tex2rtf.tar
 
 ### OGL
 cat $1/distrib/msw/ogl.rsp > /tmp/ogl_in.txt
 expandlines /tmp/ogl_in.txt /tmp/ogl.txt
-tar cvf $2/ogl3-${WXVER}.tar -T /tmp/ogl.txt
-gzip $2/ogl3-${WXVER}.tar
+$TAR cf $2/wxWindows-${WXVER}-ogl.tar -T /tmp/ogl.txt
+
+echo Re-tarring OGL in a subdirectory...
+cd $2
+mkdir wxWindows-${WXVER}
+cd wxWindows-${WXVER}
+$TAR xf ../wxWindows-${WXVER}-ogl.tar
+cd ..
+rm -f wxWindows-${WXVER}-ogl.tar
+$TAR cf $2/wxWindows-${WXVER}-ogl.tar wxWindows-${WXVER}/*
+rm -f -r wxWindows-${WXVER}
+gzip $2/wxWindows-${WXVER}-ogl.tar
 
 ### JPEG
 cat $1/distrib/msw/jpeg.rsp > /tmp/jpeg_in.txt
 expandlines /tmp/jpeg_in.txt /tmp/wxx11.txt
-tar cvf $2/jpeg-${WXVER}.tar -T /tmp/jpeg.txt
-gzip $2/jpeg-${WXVER}.tar
+$TAR cf $2/wxWindows-${WXVER}-jpeg.tar -T /tmp/jpeg.txt
+
+echo Re-tarring docs in a subdirectory...
+cd $2
+mkdir wxWindows-${WXVER}
+cd wxWindows-${WXVER}
+$TAR xf ../wxWindows-${WXVER}-jpeg.tar
+cd ..
+rm -f wxWindows-${WXVER}-jpeg.tar
+$TAR cf $2/wxWindows-${WXVER}-jpeg.tar wxWindows-${WXVER}/*
+rm -f -r wxWindows-${WXVER}
+gzip $2/wxWindows-${WXVER}-jpeg.tar
 
 ### TIFF
 cat $1/distrib/msw/tiff.rsp > /tmp/tiff_in.txt
 expandlines /tmp/tiff_in.txt /tmp/tiff.txt
-tar cvf $2/tiff-${WXVER}.tar -T /tmp/tiff.txt
-gzip $2/tiff-${WXVER}.tar
+$TAR cf $2/wxWindows-${WXVER}-tiff.tar -T /tmp/tiff.txt
+
+echo Re-tarring docs in a subdirectory...
+cd $2
+mkdir wxWindows-${WXVER}
+cd wxWindows-${WXVER}
+$TAR xf ../wxWindows-${WXVER}-tiff.tar
+cd ..
+rm -f wxWindows-${WXVER}-tiff.tar
+$TAR cf $2/wxWindows-${WXVER}-tiff.tar wxWindows-${WXVER}/*
+rm -f -r wxWindows-${WXVER}
+gzip $2/wxWindows-${WXVER}-tiff.tar
 
 # Copy readme and other files
 cp $1/docs/readme.txt $2/readme-${WXVER}.txt
 cp $1/docs/changes.txt $2/changes-${WXVER}.txt
-cp $1/docs/mgl/readme.txt $2/readme_mgl-${WXVER}.txt
-cp $1/docs/mgl/install.txt $2/install_mgl-${WXVER}.txt
-cp $1/docs/x11/readme.txt $2/readme_x11-${WXVER}.txt
-cp $1/docs/x11/readme-nanox.txt $2/readme_nanox-${WXVER}.txt
-cp $1/docs/x11/install.txt $2/install_x11-${WXVER}.txt
-cp $1/docs/motif/readme.txt $2/readme_motif-${WXVER}.txt
-cp $1/docs/motif/install.txt $2/install_motif-${WXVER}.txt
-cp $1/docs/msw/readme.txt $2/readme_msw-${WXVER}.txt
-cp $1/docs/msw/install.txt $2/install_msw-${WXVER}.txt
-cp $1/docs/gtk/readme.txt $2/readme_gtk-${WXVER}.txt
-cp $1/docs/gtk/install.txt $2/install_gtk-${WXVER}.txt
-cp $1/docs/mac/readme.txt $2/readme_mac-${WXVER}.txt
-cp $1/docs/mac/install.txt $2/install_mac-${WXVER}.txt
+cp $1/docs/mgl/readme.txt $2/readme-mgl-${WXVER}.txt
+cp $1/docs/mgl/install.txt $2/install-mgl-${WXVER}.txt
+cp $1/docs/x11/readme.txt $2/readme-x11-${WXVER}.txt
+cp $1/docs/x11/readme-nanox.txt $2/readme-nanox-${WXVER}.txt
+cp $1/docs/x11/install.txt $2/install-x11-${WXVER}.txt
+cp $1/docs/motif/readme.txt $2/readme-motif-${WXVER}.txt
+cp $1/docs/motif/install.txt $2/install-motif-${WXVER}.txt
+cp $1/docs/msw/readme.txt $2/readme-msw-${WXVER}.txt
+cp $1/docs/msw/install.txt $2/install-msw-${WXVER}.txt
+cp $1/docs/gtk/readme.txt $2/readme-gtk-${WXVER}.txt
+cp $1/docs/gtk/install.txt $2/install-gtk-${WXVER}.txt
+cp $1/docs/mac/readme.txt $2/readme-mac-${WXVER}.txt
+cp $1/docs/mac/install.txt $2/install-mac-${WXVER}.txt
+cp $1/docs/os2/install.txt $2/install-os2-${WXVER}.txt
 
 echo Done!

@@ -128,6 +128,9 @@ samples/joytest/joytest.dsw
 samples/layout/layout.dsp
 samples/layout/layout.dsw
 
+samples/listbox/lboxtest.dsp
+samples/listbox/lboxtest.dsw
+
 samples/listctrl/listctrl.dsp
 samples/listctrl/listctrl.dsw
 
@@ -149,6 +152,12 @@ samples/minimal/minimalUniv.dsp
 
 samples/minifram/minifram.dsp
 samples/minifram/minifram.dsw
+
+samples/mobile/styles/styles.dsp
+samples/mobile/wxedit/wxedit.dsw
+
+samples/multimon/multimon_test.dsp
+samples/multimon/multimon_test.dsw
 
 samples/nativdlg/nativdlg.dsp
 samples/nativdlg/nativdlg.dsw

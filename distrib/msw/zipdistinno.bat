@@ -63,12 +63,29 @@ Rem zip32 -@ -u %dest\wxMSW-%version%.zip < %src\distrib\msw\wx_chm.rsp
 Rem zip32 -@ -u %dest\wxMSW-%version%.zip  < %src\distrib\msw\jpeg.rsp
 Rem zip32 -@ -u %dest\wxMSW-%version%.zip < %src\distrib\msw\tiff.rsp
 
+Rem Zip up the complete wxOS2-xxx.zip file
+zip32 -@ %dest\wxOS2-%version%.zip < %src\distrib\msw\generic.rsp
+zip32 -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\os2.rsp
+zip32 -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\wx_chm.rsp
+zip32 -@ -u %dest%\wxOS2-%version%.zip  < %src\distrib\msw\jpeg.rsp
+zip32 -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\tiff.rsp
+zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\tiff.rsp
+zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\jpeg.rsp
+zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\utils.rsp
+zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
+zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\dialoged.rsp
+zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\ogl.rsp
+zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\xml.rsp
+zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\contrib.rsp
+zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\makefile.rsp
+
 echo Zipping wxMac distribution
 zip32 -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\generic.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\mac.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\cw.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tiff.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\jpeg.rsp
+zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\utils.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\dialoged.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\ogl.rsp
@@ -140,26 +157,27 @@ zip32 -@ %dest\wxxrc-%version%.zip < %src\distrib\msw\xml.rsp
 zip32 -@ %dest\contrib-%version%.zip < %src\distrib\msw\contrib.rsp
 
 rem Dialog Editor source and binary
-erase %dest\dialoged_source.zip
-zip32 -@ %dest\dialoged_source.zip < %src\distrib\msw\dialoged.rsp
-zip32 -j %dest\dialoged-%version%.zip %dest\dialoged_source.zip %src\bin\dialoged.exe %src\docs\winhelp\dialoged.hlp %src\docs\winhelp\dialoged.cnt
-erase %dest\dialoged_source.zip
+erase %dest\dialoged-source.zip
+zip32 -@ %dest\dialoged-source.zip < %src\distrib\msw\dialoged.rsp
+zip32 -j %dest\dialoged-%version%.zip %dest\dialoged-source.zip %src\bin\dialoged.exe %src\docs\winhelp\dialoged.hlp %src\docs\winhelp\dialoged.cnt
+erase %dest\dialoged-source.zip
 
 rem Misc. utils not in the main distribution
 zip32 -@ %dest\utils-%version%.zip < %src\distrib\msw\utils.rsp
 zip32 -@ -u %dest\utils-%version%.zip < %src\distrib\msw\utilmake.rsp
 
 copy %src\docs\changes.txt %dest\changes-%version%.txt
-copy %src\docs\msw\install.txt %dest\install_msw-%version%.txt
-copy %src\docs\mac\install.txt %dest\install_mac-%version%.txt
-copy %src\docs\motif\install.txt %dest\install_motif-%version%.txt
-copy %src\docs\gtk\install.txt %dest\install_gtk-%version%.txt
+copy %src\docs\msw\install.txt %dest\install-msw-%version%.txt
+copy %src\docs\mac\install.txt %dest\install-mac-%version%.txt
+copy %src\docs\motif\install.txt %dest\install-motif-%version%.txt
+copy %src\docs\gtk\install.txt %dest\install-gtk-%version%.txt
 copy %src\docs\readme.txt %dest\readme-%version%.txt
-copy %src\docs\motif\readme.txt %dest\readme_motif-%version%.txt
-copy %src\docs\gtk\readme.txt %dest\readme_gtk-%version%.txt
-copy %src\docs\msw\readme.txt %dest\readme_msw-%version%.txt
-copy %src\docs\mac\readme.txt %dest\readme_mac-%version%.txt
-copy %src\docs\readme_vms.txt %dest\readme_vms-%version%.txt
+copy %src\docs\motif\readme.txt %dest\readme-motif-%version%.txt
+copy %src\docs\gtk\readme.txt %dest\readme-gtk-%version%.txt
+copy %src\docs\msw\readme.txt %dest\readme-msw-%version%.txt
+copy %src\docs\mac\readme.txt %dest\readme-mac-%version%.txt
+copy %src\docs\os2\install.txt %dest\install-os2-%version%.txt
+copy %src\docs\readme_vms.txt %dest\readme-vms-%version%.txt
 copy %src\docs\motif\makewxmotif %dest\makewxmotif-%version%
 copy %src\docs\gtk\makewxgtk %dest\makewxgtk-%version%
 

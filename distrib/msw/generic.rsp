@@ -79,6 +79,7 @@ src/common/unzip.h
 src/common/*.l
 src/common/*.y
 src/common/*.inc
+src/common/base.rc
 
 src/generic/*.cpp
 src/generic/*.c
@@ -709,6 +710,14 @@ samples/layout/*.rc
 samples/layout/*.bmp
 samples/layout/*.pro
 
+samples/listbox/*.cpp
+samples/listbox/*.h
+samples/listbox/*.def
+samples/listbox/*.rc
+samples/listbox/*.txt
+samples/listbox/makefile*
+samples/listbox/*.xpm
+
 samples/listctrl/*.cpp
 samples/listctrl/*.h
 samples/listctrl/*.def
@@ -787,6 +796,26 @@ samples/minifram/*.bmp
 samples/minifram/*.pro
 samples/minifram/bitmaps/*.bmp
 samples/minifram/bitmaps/*.xpm
+
+samples/mobile/styles/*.cpp
+samples/mobile/styles/*.h
+samples/mobile/styles/*.xpm
+samples/mobile/styles/*.jpg
+samples/mobile/wxedit/*.cpp
+samples/mobile/wxedit/*.h
+samples/mobile/wxedit/*.xpm
+
+samples/multimon/*.h
+samples/multimon/*.cpp
+samples/multimon/*.def
+samples/multimon/*.rc
+samples/multimon/makefile*
+samples/multimon/*.xbm
+samples/multimon/*.xpm
+samples/multimon/*.txt
+samples/multimon/*.ico
+samples/multimon/*.bmp
+samples/multimon/*.pro
 
 samples/newgrid/*.cpp
 samples/newgrid/*.h
