@@ -962,7 +962,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
                                                &xfontname);
                 if ( font )
                 {
-                    M_FONTDATA->m_nativeFontInfo.ReInit(xfontname);
+                    M_FONTDATA->ReInit(xfontname);
                 }
             }
         }
