@@ -23,6 +23,8 @@
 #ifndef WX_PRECOMP
 #endif
 
+#include "wx/arrstr.h"
+
 #include "tex2any.h"
 #include "tex2rtf.h"
 #include "table.h"
@@ -175,12 +177,17 @@ void SetCurrentSubsubsectionName(wxChar *s, wxChar *file)
   SetCurrentTopic(s);
 }
 
+
+// mapping between fileId and filenames if truncateFilenames=false:
+static wxArrayString gs_filenames;
+
+
 /*
  * Close former filedescriptor and reopen using another filename.
  *
  */
 
-void ReopenFile(FILE **fd, wxChar **fileName)
+void ReopenFile(FILE **fd, wxChar **fileName, const wxChar *label)
 {
   if (*fd)
   {
@@ -190,9 +197,15 @@ void ReopenFile(FILE **fd, wxChar **fileName)
   fileId ++;
   wxChar buf[400];
   if (truncateFilenames)
+  {
     wxSprintf(buf, _T("%s%d.htm"), FileRoot, fileId);
+  }
   else
-    wxSprintf(buf, _T("%s%d.html"), FileRoot, fileId);
+  {
+    wxSprintf(buf, _T("%s_%s.html"), FileRoot, label);
+    gs_filenames.SetCount(fileId + 1);
+    gs_filenames[fileId] = buf;
+  }
   if (*fileName) delete[] *fileName;
   *fileName = copystring(wxFileNameFromPath(buf));
   *fd = wxFopen(buf, _T("w"));
@@ -703,7 +716,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       startedSections = TRUE;
 
       wxChar *topicName = FindTopicName(GetNextChunk());
-      ReopenFile(&Chapters, &ChaptersName);
+      ReopenFile(&Chapters, &ChaptersName, topicName);
       AddTexRef(topicName, ChaptersName, ChapterNameString);
 
       SetCurrentChapterName(topicName, ChaptersName);
@@ -774,7 +787,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       startedSections = TRUE;
 
       wxChar *topicName = FindTopicName(GetNextChunk());
-      ReopenFile(&Sections, &SectionsName);
+      ReopenFile(&Sections, &SectionsName, topicName);
       AddTexRef(topicName, SectionsName, SectionNameString);
 
       SetCurrentSectionName(topicName, SectionsName);
@@ -869,7 +882,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
           if ( !combineSubSections )
           {
             SetCurrentOutput(NULL);
-            ReopenFile(&Subsections, &SubsectionsName);
+            ReopenFile(&Subsections, &SubsectionsName, topicName);
             AddTexRef(topicName, SubsectionsName, SubsectionNameString);
             SetCurrentSubsectionName(topicName, SubsectionsName);
             if (htmlWorkshopFiles) HTMLWorkshopAddToContents(2, topicName, SubsectionsName);
@@ -950,7 +963,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         if ( !combineSubSections )
         {
             SetCurrentOutput(NULL);
-            ReopenFile(&Subsubsections, &SubsubsectionsName);
+            ReopenFile(&Subsubsections, &SubsubsectionsName, topicName);
             AddTexRef(topicName, SubsubsectionsName, SubsubsectionNameString);
             SetCurrentSubsubsectionName(topicName, SubsubsectionsName);
             if (htmlWorkshopFiles) HTMLWorkshopAddToContents(3, topicName, SubsubsectionsName);
@@ -2692,7 +2705,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
   {
     if (start && (arg_no == 1))
     {
-      ReopenFile(&Chapters, &ChaptersName);
+      ReopenFile(&Chapters, &ChaptersName, _T("bibliography"));
       AddTexRef(_T("bibliography"), ChaptersName, _T("bibliography"));
       SetCurrentSubsectionName(_T("bibliography"), ChaptersName);
 
@@ -3000,7 +3013,7 @@ bool HTMLGo(void)
         if (truncateFilenames)
           wxSprintf(firstFileName, _T("%s1.htm"), FileRoot);
         else
-          wxSprintf(firstFileName, _T("%s1.html"), FileRoot);
+          wxStrcpy(firstFileName, gs_filenames[1].c_str());
 
         wxFprintf(tmpTitle, _T("<FRAMESET COLS=\"30%%,70%%\">\n"));
 
@@ -3162,7 +3175,7 @@ void GenerateHTMLWorkshopFiles(wxChar *fname)
     if (truncateFilenames)
       wxSprintf(buf, _T("%s%d.htm"), wxFileNameFromPath(FileRoot), i);
     else
-      wxSprintf(buf, _T("%s%d.html"), wxFileNameFromPath(FileRoot), i);
+      wxStrcpy(buf, wxFileNameFromPath(gs_filenames[i].c_str()));
     wxFprintf(f, _T("%s\n"), buf);
   }
   fclose(f);
