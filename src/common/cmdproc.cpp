@@ -93,7 +93,12 @@ bool wxCommandProcessor::Submit(wxCommand *command, bool storeIt)
     wxCHECK_MSG( command, FALSE, _T("no command in wxCommandProcessor::Submit") );
 
     if ( !DoCommand(*command) )
+    {
+        // the user code expects the command to be deleted anyhow
+        delete command;
+
         return FALSE;
+    }
 
     if ( storeIt )
         Store(command);
