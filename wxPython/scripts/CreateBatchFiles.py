@@ -13,24 +13,31 @@
 import sys, os
 
 python = sys.executable
+pythonw = ow.path.join(os.path.split(python)[0], 'pythonw.exe')
 scriptdir = os.getcwd()
 
-scripts = [ "img2png",
-            "img2py",
-            "img2xpm",
-            "xrced",
+scripts = [ ("img2png", 0),
+            ("img2py",  0),
+            ("img2xpm", 0),
+            ("xrced",   1),
+            ("pyshell", 1),
+            ("pycrust", 1),
             ]
 
 template = """\
 @echo off
-%(python)s %(scriptdir)s\\%(script)s %%1 %%2 %%3 %%4 %%5 %%6 %%7 %%8 %%9
+
+%s %s\\%s %%1 %%2 %%3 %%4 %%5 %%6 %%7 %%8 %%9
 """
 
-for script in scripts:
+for script, usegui in scripts:
     batfile = os.path.join(scriptdir, script + '.bat')
     print "Creating", batfile
     f = open(batfile, 'w')
-    f.write(template % vars())
+    if usegui:
+        f.write(template % (pythonw, scriptdir, script))
+    else:
+        f.write(template % (python, scriptdir, script))
     f.close()
 
 
