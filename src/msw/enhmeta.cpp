@@ -33,6 +33,7 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
+    #include "wx/intl.h"
 #endif //WX_PRECOMP
 
 #include "wx/metafile.h"
