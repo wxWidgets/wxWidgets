@@ -353,7 +353,7 @@ wxRendererGeneric::DrawComboBoxDropButton(wxWindow *win,
     dc.SetPen(wxPen(win->GetBackgroundColour()));
     dc.DrawRectangle(rect);
 
-    wxPoint pt[3] =
+    wxPoint pt[] =
     {
         wxPoint(),
         wxPoint(rect.width, 0),
@@ -361,7 +361,7 @@ wxRendererGeneric::DrawComboBoxDropButton(wxWindow *win,
     };
     dc.SetBrush(wxBrush(win->GetForegroundColour()));
     dc.SetPen(wxPen(win->GetForegroundColour()));
-    dc.DrawPolygon(3, pt, rect.x, rect.y);
+    dc.DrawPolygon(WXSIZEOF(pt), pt, rect.x, rect.y);
 }
 
 
