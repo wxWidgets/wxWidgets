@@ -429,7 +429,7 @@ lexer.c:	$(COMMDIR)/lexer.l
 -include $(DEPFILES)
 
 afminstall: preinstall
-	$(INSTALL) -d $(datadir)
+	@if test ! -d $(datadir); then $(INSTALL) -d $(datadir); fi
 	$(INSTALL) -d $(datadir)/wx
 	$(INSTALL) -d $(datadir)/wx/afm
 	$(INSTALL) -d $(datadir)/wx/gs_afm
@@ -443,9 +443,9 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLKIT_N
 	@echo " Installing wxWindows..."
 	@echo " "
 
-	$(INSTALL) -d $(prefix)
-	$(INSTALL) -d $(bindir)
-	$(INSTALL) -d $(libdir)
+	@if test ! -d $(prefix); then $(INSTALL) -d $(prefix); fi
+	@if test ! -d $(bindir); then $(INSTALL) -d $(bindir); fi
+	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
 
 	$(INSTALL_SCRIPT) $(top_builddir)/wx@TOOLKIT_NAME@-config $(bindir)/wx@TOOLKIT_NAME@-config
 	cd $(bindir) && rm -f wx-config && $(LN_S) wx@TOOLKIT_NAME@-config wx-config
@@ -468,10 +468,10 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLKIT_N
 	  echo "$(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p"; \
 	done
 
-	$(INSTALL) -d $(localedir)
+	@if test ! -d $(localedir); then $(INSTALL) -d $(localedir); fi
 	@for p in $(WX_LINGUAS); do \
-	  $(INSTALL) -d $(localedir)/$$p; \
-	  $(INSTALL) -d $(localedir)/$$p/LC_MESSAGES; \
+	  if test ! -d $(localedir)/$$p; then $(INSTALL) -d $(localedir)/$$p; fi;\
+	  if test ! -d $(localedir)/$$p/LC_MESSAGES; then $(INSTALL) -d $(localedir)/$$p/LC_MESSAGES; fi;\
 	  $(INSTALL_DATA) $(top_srcdir)/locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo; \
 	  echo "$(INSTALL_DATA) $(top_srcdir)/locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo"; \
 	done
@@ -480,7 +480,7 @@ preinstall_gl: $(top_builddir)/lib/@WX_TARGET_LIBRARY_GL@
 	@echo " "
 	@echo " Installing wxWindows OpenGl add-on..."
 	@echo " "
-	$(INSTALL) -d $(libdir)
+	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
 	$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_TARGET_LIBRARY_GL@ $(libdir)/@WX_TARGET_LIBRARY_GL@
 
 install: @AFMINSTALL@ @WX_ALL_INSTALLED@
