@@ -1275,8 +1275,6 @@ void wxWindowMac::MacRootWindowToWindow( short *x , short *y ) const
 
 void wxWindowMac::MacGetContentAreaInset( int &left , int &top , int &right , int &bottom )
 {
-    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
-
     RgnHandle rgn = NewRgn() ;
     if ( m_peer->GetRegion( kControlContentMetaPart , rgn ) == noErr )
     {
@@ -1328,7 +1326,6 @@ wxSize wxWindowMac::DoGetSizeFromClientSize( const wxSize & size )  const
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindowMac::DoGetClientSize(int *x, int *y) const
 {
-    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
     int ww, hh;
 
     RgnHandle rgn = NewRgn() ;
@@ -1796,11 +1793,16 @@ void wxWindowMac::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 wxPoint wxWindowMac::GetClientAreaOrigin() const
 {
-    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
     RgnHandle rgn = NewRgn() ;
     Rect content ;
-    m_peer->GetRegion( kControlContentMetaPart , rgn ) ;
-    GetRegionBounds( rgn , &content ) ;
+    if ( m_peer->GetRegion( kControlContentMetaPart , rgn ) )
+    {
+        GetRegionBounds( rgn , &content ) ;
+    }
+    else
+    {
+        content.left = content.top = 0 ;
+    }
     DisposeRgn( rgn ) ;
     return wxPoint( content.left + MacGetLeftBorderSize(  ) , content.top + MacGetTopBorderSize(  ) );
 }
