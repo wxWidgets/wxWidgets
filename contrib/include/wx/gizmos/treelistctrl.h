@@ -59,7 +59,7 @@ public:
         m_selected_image = -1;
         m_text = text;
         m_width = width;
-    	m_shown = shown;
+        m_shown = shown;
         m_alignment = alignment;
     }
 
@@ -69,7 +69,7 @@ public:
         m_selected_image = other.m_selected_image;
         m_text = other.m_text;
         m_width = other.m_width;
-    	m_shown = other.m_shown;
+        m_shown = other.m_shown;
         m_alignment = other.m_alignment;
     }
 
@@ -443,6 +443,7 @@ public:
     // select this item
     void SelectItem(const wxTreeItemId& item, bool unselect_others=TRUE,
                     bool extended_select=FALSE);
+    void SelectAll(bool extended_select=FALSE);
     // make sure this item is visible (expanding the parent item and/or
     // scrolling to this item if necessary)
     void EnsureVisible(const wxTreeItemId& item);

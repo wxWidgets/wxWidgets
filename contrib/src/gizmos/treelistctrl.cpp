@@ -41,8 +41,6 @@
 #include <wx/scrolwin.h>
 
 #include "wx/gizmos/treelistctrl.h"
-//#include "treelistctrl.h"
-
 
 #ifdef __WXGTK__
     #include <gtk/gtk.h>
@@ -468,6 +466,7 @@ public:
         // select this item
     void SelectItem(const wxTreeItemId& item, bool unselect_others=TRUE,
                     bool extended_select=FALSE);
+    void SelectAll(bool extended_select=FALSE);
         // make sure this item is visible (expanding the parent item and/or
         // scrolling to this item if necessary)
     void EnsureVisible(const wxTreeItemId& item);
@@ -1181,6 +1180,8 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     int numColumns = GetColumnCount();
     for ( int i = 0; i < numColumns && x < w; i++ )
     {
+        if (!GetColumnShown (i)) continue;
+
         wxTreeListColumnInfo& column = GetColumn(i);
         int wCol = column.GetWidth();
 
@@ -1686,13 +1687,13 @@ wxTreeListItem *wxTreeListItem::HitTest(const wxPoint& point,
         return res;
     }
 
-	wxTreeListHeaderWindow* header_win = theCtrl->m_owner->GetHeaderWindow();
+    wxTreeListHeaderWindow* header_win = theCtrl->m_owner->GetHeaderWindow();
     if (point.x >= header_win->GetWidth())
         column = -1;
     else if(flags & wxTREE_HITTEST_ONITEMINDENT) {
         int x = 0;
         for(size_t i = 0; i < theCtrl->GetMainColumn(); ++i) {
-    	    if (!header_win->GetColumnShown(i)) continue;
+            if (!header_win->GetColumnShown(i)) continue;
             int w = header_win->GetColumnWidth(i);
             if(point.x >= x && point.x < x+w) {
                 flags ^= wxTREE_HITTEST_ONITEMINDENT;
@@ -1706,11 +1707,11 @@ wxTreeListItem *wxTreeListItem::HitTest(const wxPoint& point,
         int x = 0;
         size_t i;
         for(i = 0; i < theCtrl->GetMainColumn()+1; ++i) {
-	        if (!header_win->GetColumnShown(i)) continue;
+            if (!header_win->GetColumnShown(i)) continue;
             x += header_win->GetColumnWidth(i);
         }
         for(i = theCtrl->GetMainColumn()+1; i < theCtrl->GetColumnCount(); ++i) {
-	        if (!header_win->GetColumnShown(i)) continue;
+            if (!header_win->GetColumnShown(i)) continue;
             int w = header_win->GetColumnWidth(i);
             if(point.x >= x && point.x < x+w) {
                 flags ^= wxTREE_HITTEST_ONITEMRIGHT;
@@ -2839,6 +2840,39 @@ void wxTreeListMainWindow::SelectItem(const wxTreeItemId& itemId,
         m_current->SetHilight(select);
         RefreshLine( m_current );
     }
+
+    event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
+    GetEventHandler()->ProcessEvent( event );
+}
+
+void wxTreeListMainWindow::SelectAll(bool extended_select)
+{
+    wxCHECK_RET( GetWindowStyleFlag() & wxTR_MULTIPLE, wxT("invalid tree style") );
+
+    wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGING, m_owner->GetId() );
+    event.SetItem( GetRootItem() );
+    event.SetOldItem( (long) m_current );
+    event.SetEventObject( /*this*/m_owner );
+    // TODO : Here we don't send any selection mode yet !
+
+    if(m_owner->GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed())
+        return;
+
+    // shift press
+    if (!extended_select)
+    {
+
+    }
+    else
+    {
+
+    }
+    long cookie = 0;
+    wxTreeItemId root = GetRootItem();
+    wxTreeListItem *first = (wxTreeListItem *)GetFirstChild (root, cookie).m_pItem;
+    wxTreeListItem *last = (wxTreeListItem *)GetLastChild (GetRootItem()).m_pItem;
+    if (TagAllChildrenUntilLast (first, last, true)) return;
+    TagNextChildren (first, last, true);
 
     event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
     GetEventHandler()->ProcessEvent( event );
@@ -4682,6 +4716,9 @@ void wxTreeListCtrl::SelectItem(const wxTreeItemId& item, bool unselect_others,
                                 bool extended_select)
 { m_main_win->SelectItem(item, unselect_others, extended_select); }
 
+void wxTreeListCtrl::SelectAll(bool extended_select)
+{ m_main_win->SelectAll(extended_select); }
+
 void wxTreeListCtrl::EnsureVisible(const wxTreeItemId& item)
 { m_main_win->EnsureVisible(item); }
 
@@ -4775,7 +4812,9 @@ int wxTreeListCtrl::GetColumnImage(size_t column) const
 
 void wxTreeListCtrl::ShowColumn(size_t column, bool shown)
 {
-    m_header_win->SetColumn(column, GetColumn(column).SetShown(shown));
+    wxASSERT_MSG( column != GetMainColumn(),
+                  wxT("The main column may not be hidden") );
+    m_header_win->SetColumn(column, GetColumn(column).SetShown(GetMainColumn()? true: shown));
 }
 
 bool wxTreeListCtrl::IsColumnShown(size_t column) const
@@ -4802,3 +4841,4 @@ void wxTreeListCtrl::Refresh(bool erase, const wxRect* rect)
 
 void wxTreeListCtrl::SetFocus()
 { m_main_win->SetFocus(); }
+
