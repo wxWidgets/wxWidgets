@@ -342,6 +342,10 @@ SOURCE=.\scintilla\src\LexOthers.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\scintilla\src\LexPOV.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\scintilla\src\LexPascal.cxx
 # End Source File
 # Begin Source File

@@ -45,6 +45,7 @@ OBJECTS = &
 	LexLisp.obj		        &
 	LexLua.obj		        &
 	LexOthers.obj		    &
+	LexPOV.obj		    &
 	LexPascal.obj		    &
 	LexPerl.obj		        &
 	LexPython.obj		    &

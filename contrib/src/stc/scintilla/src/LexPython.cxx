@@ -431,7 +431,7 @@ static void FoldPyDoc(unsigned int startPos, int length, int /*initStyle - unuse
 }
 
 static const char * const pythonWordListDesc[] = {
-	"Python keywords",
+	"Keywords",
 	0
 };
 

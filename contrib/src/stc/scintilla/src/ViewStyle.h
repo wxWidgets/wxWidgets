@@ -63,6 +63,11 @@ public:
 	ColourPair foldmarginColour;
 	bool foldmarginHighlightColourSet;
 	ColourPair foldmarginHighlightColour;
+	bool hotspotForegroundSet;
+	ColourPair hotspotForeground;
+	bool hotspotBackgroundSet;
+	ColourPair hotspotBackground;
+	bool hotspotUnderline;
 	/// Margins are ordered: Line Numbers, Selection Margin, Spacing Margin
 	enum { margins=3 };
 	int leftMarginWidth;	///< Spacing margin on left of text

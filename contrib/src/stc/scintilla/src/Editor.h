@@ -58,6 +58,10 @@ public:
 	int *positions;
 	char bracePreviousStyles[2];
 
+	// Hotspot support
+	int hsStart;
+	int hsEnd;
+
 	// Wrapped line support
 	int widthLine;
 	int lines;
@@ -128,40 +132,6 @@ public:
 		else
 			len = 0;
 		rectangular = rectangular_;
-	}
-};
-
-/**
- * A smart pointer class to ensure Surfaces are set up and deleted correctly.
- */
-class AutoSurface {
-private:
-	Surface *surf;
-public:
-	AutoSurface(int codePage) {
-		surf = Surface::Allocate();
-		if (surf) {
-			surf->Init();
-			surf->SetUnicodeMode(SC_CP_UTF8 == codePage);
-			surf->SetDBCSMode(codePage);
-		}
-	}
-	AutoSurface(SurfaceID sid, int codePage) {
-		surf = Surface::Allocate();
-		if (surf) {
-			surf->Init(sid);
-			surf->SetUnicodeMode(SC_CP_UTF8 == codePage);
-			surf->SetDBCSMode(codePage);
-		}
-	}
-	~AutoSurface() {
-		delete surf;
-	}
-	Surface *operator->() const {
-		return surf;
-	}
-	operator Surface *() const {
-		return surf;
 	}
 };
 
@@ -282,6 +252,10 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int foldFlags;
 	ContractionState cs;
 
+	// Hotspot support
+	int hsStart;
+	int hsEnd;
+
 	// Wrapping support
 	enum { eWrapNone, eWrapWord } wrapState;
 	int wrapWidth;
@@ -355,14 +329,14 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	LineLayout *RetrieveLineLayout(int lineNumber);
 	void LayoutLine(int line, Surface *surface, ViewStyle &vstyle, LineLayout *ll,
 		int width=LineLayout::wrapWidthInfinite);
-	ColourAllocated TextBackground(ViewStyle &vsDraw, bool overrideBackground, ColourAllocated background, bool inSelection, int styleMain, int i, LineLayout *ll);
+	ColourAllocated TextBackground(ViewStyle &vsDraw, bool overrideBackground, ColourAllocated background, bool inSelection, bool inHotspot, int styleMain, int i, LineLayout *ll);
 	void DrawIndentGuide(Surface *surface, int lineVisible, int lineHeight, int start, PRectangle rcSegment, bool highlight);
 	void DrawEOL(Surface *surface, ViewStyle &vsDraw, PRectangle rcLine, LineLayout *ll,
 		int line, int lineEnd, int xStart, int subLine, int subLineStart,
 		bool overrideBackground, ColourAllocated background);
 	void DrawLine(Surface *surface, ViewStyle &vsDraw, int line, int lineVisible, int xStart,
 		PRectangle rcLine, LineLayout *ll, int subLine=0);
-    void RefreshPixMaps(Surface *surfaceWindow);
+	void RefreshPixMaps(Surface *surfaceWindow);
 	void Paint(Surface *surfaceWindow, PRectangle rcArea);
 	long FormatRange(bool draw, RangeToFormat *pfr);
 	int TextWidth(int style, const char *text);
@@ -402,6 +376,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void NotifySavePoint(bool isSavePoint);
 	void NotifyModifyAttempt();
 	virtual void NotifyDoubleClick(Point pt, bool shift);
+	void NotifyHotSpotClicked(int position, bool shift, bool ctrl, bool alt);
+	void NotifyHotSpotDoubleClicked(int position, bool shift, bool ctrl, bool alt);
 	void NotifyUpdateUI();
 	void NotifyPainted();
 	bool NotifyMarginClick(Point pt, bool shift, bool ctrl, bool alt);
@@ -474,6 +450,11 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void EnsureLineVisible(int lineDoc, bool enforcePolicy);
 	int ReplaceTarget(bool replacePatterns, const char *text, int length=-1);
 
+	bool PositionIsHotspot(int position);
+	bool PointIsHotspot(Point pt);
+	void SetHotSpotRange(Point *pt);
+	void GetHotSpotRange(int& hsStart, int& hsEnd);
+
 	int CodePage() const;
 
 	virtual sptr_t DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) = 0;
@@ -485,6 +466,45 @@ public:
 	virtual sptr_t WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
 	// Public so scintilla_set_id can use it.
 	int ctrlID;
+	friend class AutoSurface;
+};
+
+/**
+ * A smart pointer class to ensure Surfaces are set up and deleted correctly.
+ */
+class AutoSurface {
+private:
+	Surface *surf;
+public:
+	AutoSurface(Editor *ed) : surf(0) {
+		if (ed->wMain.GetID()) {
+			surf = Surface::Allocate();
+			if (surf) {
+				surf->Init(ed->wMain.GetID());
+				surf->SetUnicodeMode(SC_CP_UTF8 == ed->CodePage());
+				surf->SetDBCSMode(ed->CodePage());
+			}
+		}
+	}
+	AutoSurface(SurfaceID sid, Editor *ed) : surf(0) {
+		if (ed->wMain.GetID()) {
+			surf = Surface::Allocate();
+			if (surf) {
+				surf->Init(sid, ed->wMain.GetID());
+				surf->SetUnicodeMode(SC_CP_UTF8 == ed->CodePage());
+				surf->SetDBCSMode(ed->CodePage());
+			}
+		}
+	}
+	~AutoSurface() {
+		delete surf;
+	}
+	Surface *operator->() const {
+		return surf;
+	}
+	operator Surface *() const {
+		return surf;
+	}
 };
 
 #endif

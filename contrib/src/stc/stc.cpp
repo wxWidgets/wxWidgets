@@ -85,6 +85,10 @@ DEFINE_EVENT_TYPE( wxEVT_STC_START_DRAG )
 DEFINE_EVENT_TYPE( wxEVT_STC_DRAG_OVER )
 DEFINE_EVENT_TYPE( wxEVT_STC_DO_DROP )
 DEFINE_EVENT_TYPE( wxEVT_STC_ZOOM )
+DEFINE_EVENT_TYPE( wxEVT_STC_HOTSPOT_CLICK )
+DEFINE_EVENT_TYPE( wxEVT_STC_HOTSPOT_DCLICK )
+DEFINE_EVENT_TYPE( wxEVT_STC_CALLTIP_CLICK )
+
 
 
 BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
@@ -571,6 +575,11 @@ void wxStyledTextCtrl::StyleSetCase(int style, int caseForce) {
 // Set the character set of the font in a style.
 void wxStyledTextCtrl::StyleSetCharacterSet(int style, int characterSet) {
     SendMsg(2066, style, characterSet);
+}
+
+// Set a style to be a hotspot or not.
+void wxStyledTextCtrl::StyleSetHotSpot(int style, bool hotspot) {
+    SendMsg(2409, style, hotspot);
 }
 
 // Set the foreground colour of the selection and whether to use this setting.
@@ -1348,6 +1357,16 @@ void wxStyledTextCtrl::CallTipSetBackground(const wxColour& back) {
     SendMsg(2205, wxColourAsLong(back), 0);
 }
 
+// Set the foreground colour for the call tip.
+void wxStyledTextCtrl::CallTipSetForeground(const wxColour& fore) {
+    SendMsg(2206, wxColourAsLong(fore), 0);
+}
+
+// Set the foreground colour for the highlighted part of the call tip.
+void wxStyledTextCtrl::CallTipSetForegroundHighlight(const wxColour& fore) {
+    SendMsg(2207, wxColourAsLong(fore), 0);
+}
+
 // Find the display line of a document line taking hidden lines into account.
 int wxStyledTextCtrl::VisibleFromDocLine(int line) {
     return SendMsg(2220, line, 0);
@@ -1553,7 +1572,6 @@ void wxStyledTextCtrl::TargetFromSelection() {
 }
 
 // Join the lines in the target.
-// This is an experimental feature and may be changed or removed.
 void wxStyledTextCtrl::LinesJoin() {
     SendMsg(2288, 0, 0);
 }
@@ -1869,6 +1887,21 @@ void wxStyledTextCtrl::SetPrintWrapMode(int mode) {
 // Is printing line wrapped.
 int wxStyledTextCtrl::GetPrintWrapMode() {
     return SendMsg(2407, 0, 0);
+}
+
+// Set a fore colour for active hotspots.
+void wxStyledTextCtrl::SetHotspotActiveForeground(bool useSetting, const wxColour& fore) {
+    SendMsg(2410, useSetting, wxColourAsLong(fore));
+}
+
+// Set a back colour for active hotspots.
+void wxStyledTextCtrl::SetHotspotActiveBackground(bool useSetting, const wxColour& back) {
+    SendMsg(2411, useSetting, wxColourAsLong(back));
+}
+
+// Enable / Disable underlining active hotspots.
+void wxStyledTextCtrl::SetHotspotActiveUnderline(bool underline) {
+    SendMsg(2412, underline, 0);
 }
 
 // Start notifying the container of all key presses and commands.
@@ -2312,6 +2345,18 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
 
     case SCN_ZOOM:
         evt.SetEventType(wxEVT_STC_ZOOM);
+        break;
+
+    case SCN_HOTSPOTCLICK:
+        evt.SetEventType(wxEVT_STC_HOTSPOT_CLICK);
+        break;
+
+    case SCN_HOTSPOTDOUBLECLICK:
+        evt.SetEventType(wxEVT_STC_HOTSPOT_DCLICK);
+        break;
+
+    case SCN_CALLTIPCLICK:
+        evt.SetEventType(wxEVT_STC_CALLTIP_CLICK);
         break;
 
     default:

@@ -74,7 +74,7 @@ public:
 			if (ch >= 0x100)
 				currentPos++;
 			ch = chNext;
-			GetNextChar(currentPos);
+			GetNextChar(currentPos + ((ch >= 0x100) ? 1 : 0));
 		} else {
 			atLineStart = false;
 			chPrev = ' ';

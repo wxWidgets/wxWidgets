@@ -37,6 +37,7 @@ public:
 		markType = SC_MARK_CIRCLE;
 		fore = ColourDesired(0,0,0);
 		back = ColourDesired(0xff,0xff,0xff);
+		delete pxpm;
 		pxpm = NULL;
 		return *this;
 	}

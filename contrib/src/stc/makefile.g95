@@ -36,6 +36,7 @@ OBJECTS = \
 	$(S)/LexLisp.$(OBJSUFF)		\
 	$(S)/LexLua.$(OBJSUFF)		\
 	$(S)/LexOthers.$(OBJSUFF)	\
+	$(S)/LexPOV.$(OBJSUFF)		\
 	$(S)/LexPascal.$(OBJSUFF)	\
 	$(S)/LexPerl.$(OBJSUFF)		\
 	$(S)/LexPython.$(OBJSUFF)	\

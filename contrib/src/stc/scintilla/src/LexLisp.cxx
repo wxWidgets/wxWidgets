@@ -192,4 +192,9 @@ static void FoldLispDoc(unsigned int startPos, int length, int /* initStyle */, 
 	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
 }
 
-LexerModule lmLISP(SCLEX_LISP, ColouriseLispDoc, "lisp", FoldLispDoc);
+static const char * const lispWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+LexerModule lmLISP(SCLEX_LISP, ColouriseLispDoc, "lisp", FoldLispDoc, lispWordListDesc);

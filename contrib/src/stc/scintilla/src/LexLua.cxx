@@ -297,4 +297,14 @@ static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, W
 	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
 }
 
-LexerModule lmLua(SCLEX_LUA, ColouriseLuaDoc, "lua", FoldLuaDoc);
+static const char * const luaWordListDesc[] = {
+	"Keywords",
+	"Basic functions",
+	"String & math functions",
+	"I/O & system facilities",
+	"XXX",
+	"XXX",
+	0
+};
+
+LexerModule lmLua(SCLEX_LUA, ColouriseLuaDoc, "lua", FoldLuaDoc, luaWordListDesc);

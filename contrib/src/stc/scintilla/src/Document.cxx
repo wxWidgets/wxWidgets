@@ -720,6 +720,33 @@ void Document::ConvertLineEnds(int eolModeSet) {
 	EndUndoAction();
 }
 
+int Document::ParaDown(int pos) {
+	int line = LineFromPosition(pos);
+	while (line < LinesTotal() && LineStart(line) != LineEnd(line)) { // skip non-empty lines
+		line++;
+	}
+	while (line < LinesTotal() && LineStart(line) == LineEnd(line)) { // skip empty lines
+		line++;
+	}
+	if (line < LinesTotal())
+		return LineStart(line);
+	else // end of a document
+		return LineEnd(line-1);
+}
+
+int Document::ParaUp(int pos) {
+	int line = LineFromPosition(pos);
+	line--;
+	while (line >= 0 && LineStart(line) == LineEnd(line)) { // skip empty lines
+		line--;
+	}
+	while (line >= 0 && LineStart(line) != LineEnd(line)) { // skip non-empty lines
+		line--;
+	}
+	line++;
+	return LineStart(line);
+}
+
 Document::charClassification Document::WordCharClass(unsigned char ch) {
 	if ((SC_CP_UTF8 == dbcsCodePage) && (ch >= 0x80))
 		return ccWord;
@@ -847,7 +874,7 @@ public:
  * Has not been tested with backwards DBCS searches yet.
  */
 long Document::FindText(int minPos, int maxPos, const char *s,
-                        bool caseSensitive, bool word, bool wordStart, bool regExp,
+                        bool caseSensitive, bool word, bool wordStart, bool regExp, bool posix,
                         int *length) {
 	if (regExp) {
 		if (!pre)
@@ -864,7 +891,7 @@ long Document::FindText(int minPos, int maxPos, const char *s,
 		startPos = MovePositionOutsideChar(startPos, 1, false);
 		endPos = MovePositionOutsideChar(endPos, 1, false);
 
-		const char *errmsg = pre->Compile(s, *length, caseSensitive);
+		const char *errmsg = pre->Compile(s, *length, caseSensitive, posix);
 		if (errmsg) {
 			return -1;
 		}
@@ -888,16 +915,30 @@ long Document::FindText(int minPos, int maxPos, const char *s,
 		for (int line = lineRangeStart; line != lineRangeBreak; line += increment) {
 			int startOfLine = LineStart(line);
 			int endOfLine = LineEnd(line);
-			if ((increment == 1) && (line == lineRangeStart)) {
-				if ((startPos != startOfLine) && (s[0] == '^'))
-					continue;	// Can't match start of line if start position after start of line
-				startOfLine = startPos;
+			if (increment == 1) {
+				if (line == lineRangeStart) {
+					if ((startPos != startOfLine) && (s[0] == '^'))
+						continue;	// Can't match start of line if start position after start of line
+					startOfLine = startPos;
+				}
+				if (line == lineRangeEnd) {
+					if ((endPos != endOfLine) && (searchEnd == '$'))
+						continue;	// Can't match end of line if end position before end of line
+					endOfLine = endPos;
+				}
+			} else {
+				if (line == lineRangeEnd) {
+					if ((endPos != startOfLine) && (s[0] == '^'))
+						continue;	// Can't match start of line if end position after start of line
+					startOfLine = endPos;
+				}
+				if (line == lineRangeStart) {
+					if ((startPos != endOfLine) && (searchEnd == '$'))
+						continue;	// Can't match end of line if start position before end of line
+					endOfLine = startPos;
+				}
 			}
-			if ((increment == 1) && (line == lineRangeEnd)) {
-				if ((endPos != endOfLine) && (searchEnd == '$'))
-					continue;	// Can't match end of line if end position before end of line
-				endOfLine = endPos;
-			}
+
 			DocumentIndexer di(this, endOfLine);
 			int success = pre->Execute(di, startOfLine, endOfLine);
 			if (success) {
@@ -905,7 +946,8 @@ long Document::FindText(int minPos, int maxPos, const char *s,
 				lenRet = pre->eopat[0] - pre->bopat[0];
 				if (increment == -1) {
 					// Check for the last match on this line.
-					while (success && (pre->eopat[0] < endOfLine)) {
+					int repetitions = 1000;	// Break out of infinite loop
+					while (success && (pre->eopat[0] < endOfLine) && (repetitions--)) {
 						success = pre->Execute(di, pre->eopat[0], endOfLine);
 						if (success) {
 							if (pre->eopat[0] <= minPos) {
@@ -1298,6 +1340,19 @@ int Document::WordPartRight(int pos) {
 			++pos;
 	} else {
 		++pos;
+	}
+	return pos;
+}
+
+int Document::ExtendStyleRange(int pos, int delta) {
+	int sStart = cb.StyleAt(pos);
+	if (delta < 0) {
+		while (pos > 0 && (cb.StyleAt(pos) == sStart))
+			pos--;
+		pos++;
+	} else {
+		while (pos < (Length()) && (cb.StyleAt(pos) == sStart))
+			pos++;
 	}
 	return pos;
 }

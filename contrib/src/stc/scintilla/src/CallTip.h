@@ -15,9 +15,17 @@ class CallTip {
 	int endHighlight;
 	char *val;
 	Font font;
+	int xUp;
+	int xDown;
+	int lineHeight;
+	int offsetMain;
 	// Private so CallTip objects can not be copied
 	CallTip(const CallTip &) {}
 	CallTip &operator=(const CallTip &) { return *this; }
+	void DrawChunk(Surface *surface, int &x, const char *s,
+		int posStart, int posEnd, int ytext, PRectangle rcClient,
+		bool highlight, bool draw);
+	int PaintContents(Surface *surfaceWindow, bool draw);
 
 public:
 	Window wCallTip;
@@ -30,6 +38,7 @@ public:
 	ColourPair colourShade;
 	ColourPair colourLight;
 	int codePage;
+	int clickPlace;
 
 	CallTip();
 	~CallTip();
@@ -39,9 +48,11 @@ public:
 
 	void PaintCT(Surface *surfaceWindow);
 
+	void MouseClick(Point pt);
+
 	/// Setup the calltip and return a rectangle of the area required.
 	PRectangle CallTipStart(int pos, Point pt, const char *defn,
-		const char *faceName, int size, int codePage_);
+		const char *faceName, int size, int codePage_, Window &wParent);
 
 	void CallTipCancel();
 

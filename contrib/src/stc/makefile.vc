@@ -41,6 +41,7 @@ OBJECTS = \
 	$(D)\LexLisp.obj		\
 	$(D)\LexLua.obj			\
 	$(D)\LexOthers.obj		\
+	$(D)\LexPOV.obj			\
 	$(D)\LexPascal.obj		\
 	$(D)\LexPerl.obj		\
 	$(D)\LexPython.obj		\

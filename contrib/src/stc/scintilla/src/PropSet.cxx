@@ -185,7 +185,8 @@ SString PropSet::GetExpanded(const char *key) {
 SString PropSet::Expand(const char *withVars) {
 	char *base = StringDup(withVars);
 	char *cpvar = strstr(base, "$(");
-	while (cpvar) {
+	int maxExpands = 1000;	// Avoid infinite expansion of recursive definitions
+	while (cpvar && (maxExpands > 0)) {
 		char *cpendvar = strchr(cpvar, ')');
 		if (cpendvar) {
 			int lenvar = cpendvar - cpvar - 2;  	// Subtract the $()
@@ -201,6 +202,7 @@ SString PropSet::Expand(const char *withVars) {
 			base = newbase;
 		}
 		cpvar = strstr(base, "$(");
+		maxExpands--;
 	}
 	SString sret = base;
 	delete []base;
@@ -304,7 +306,8 @@ SString PropSet::GetWild(const char *keybase, const char *filename) {
 SString PropSet::GetNewExpand(const char *keybase, const char *filename) {
 	char *base = StringDup(GetWild(keybase, filename).c_str());
 	char *cpvar = strstr(base, "$(");
-	while (cpvar) {
+	int maxExpands = 1000;	// Avoid infinite expansion of recursive definitions
+	while (cpvar && (maxExpands > 0)) {
 		char *cpendvar = strchr(cpvar, ')');
 		if (cpendvar) {
 			int lenvar = cpendvar - cpvar - 2;  	// Subtract the $()
@@ -320,6 +323,7 @@ SString PropSet::GetNewExpand(const char *keybase, const char *filename) {
 			base = newbase;
 		}
 		cpvar = strstr(base, "$(");
+		maxExpands--;
 	}
 	SString sret = base;
 	delete []base;

@@ -109,6 +109,12 @@ public:
 		return (right > other.left) && (left < other.right) &&
 			(bottom > other.top) && (top < other.bottom);
 	}
+	void Move(int xDelta, int yDelta) {
+		left += xDelta;
+		top += yDelta;
+		right += xDelta;
+		bottom += yDelta;
+	}
 	int Width() { return right - left; }
 	int Height() { return bottom - top; }
 };
@@ -299,9 +305,9 @@ public:
 	virtual ~Surface() {};
 	static Surface *Allocate();
 
-	virtual void Init()=0;
-	virtual void Init(SurfaceID sid)=0;
-	virtual void InitPixMap(int width, int height, Surface *surface_)=0;
+	virtual void Init(WindowID wid)=0;
+	virtual void Init(SurfaceID sid, WindowID wid)=0;
+	virtual void InitPixMap(int width, int height, Surface *surface_, WindowID wid)=0;
 
 	virtual void Release()=0;
 	virtual bool Initialised()=0;
@@ -371,7 +377,7 @@ public:
 	void InvalidateAll();
 	void InvalidateRectangle(PRectangle rc);
 	virtual void SetFont(Font &font);
-	enum Cursor { cursorInvalid, cursorText, cursorArrow, cursorUp, cursorWait, cursorHoriz, cursorVert, cursorReverseArrow };
+	enum Cursor { cursorInvalid, cursorText, cursorArrow, cursorUp, cursorWait, cursorHoriz, cursorVert, cursorReverseArrow, cursorHand };
 	void SetCursor(Cursor curs);
 	void SetTitle(const char *s);
 private:
@@ -446,6 +452,7 @@ public:
 	static const char *DefaultFont();
 	static int DefaultFontSize();
 	static unsigned int DoubleClickTime();
+	static bool MouseButtonBounce();
 	static void DebugDisplay(const char *s);
 	static bool IsKeyDown(int key);
 	static long SendScintilla(

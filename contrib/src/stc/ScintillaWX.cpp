@@ -72,27 +72,36 @@ void  wxSTCDropTarget::OnLeave() {
 
 class wxSTCCallTip : public wxSTCCallTipBase {
 public:
-    wxSTCCallTip(wxWindow* parent, CallTip* ct)
-        : wxSTCCallTipBase(parent, param2)
+    wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx)
+        : wxSTCCallTipBase(parent, param2),
+          m_ct(ct), m_swx(swx)
         {
-            m_ct = ct;
         }
 
     ~wxSTCCallTip() {
-        if (HasCapture()) ReleaseMouse();
     }
+
+    bool AcceptsFocus() const { return FALSE; }
 
     void OnPaint(wxPaintEvent& evt) {
         wxPaintDC dc(this);
         Surface* surfaceWindow = Surface::Allocate();
-        surfaceWindow->Init(&dc);
+        surfaceWindow->Init(&dc, m_ct->wDraw.GetID());
         m_ct->PaintCT(surfaceWindow);
+        surfaceWindow->Release();
         delete surfaceWindow;
     }
 
     void OnFocus(wxFocusEvent& event) {
         GetParent()->SetFocus();
         event.Skip();
+    }
+
+    void OnLeftDown(wxMouseEvent& event) {
+        wxPoint pt = event.GetPosition();
+        Point p(pt.x, pt.y);
+        m_ct->MouseClick(p);
+        m_swx->CallTipClick();
     }
 
 #if wxUSE_POPUPWIN && wxSTC_USE_POPUP
@@ -105,32 +114,18 @@ public:
             GetParent()->ClientToScreen(NULL, &y);
         wxSTCCallTipBase::DoSetSize(x, y, width, height, sizeFlags);
     }
-
-    virtual bool Show( bool show = TRUE ) {
-        bool retval = wxSTCCallTipBase::Show(show);
-        if (show)
-            CaptureMouse();
-        else
-            if (HasCapture()) ReleaseMouse();
-        return retval;
-    }
-
-    void OnLeftDown(wxMouseEvent& ) {
-        Show(FALSE);
-    }
 #endif
 
 private:
-    CallTip*    m_ct;
+    CallTip*      m_ct;
+    ScintillaWX*  m_swx;
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(wxSTCCallTip, wxSTCCallTipBase)
     EVT_PAINT(wxSTCCallTip::OnPaint)
     EVT_SET_FOCUS(wxSTCCallTip::OnFocus)
-#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
     EVT_LEFT_DOWN(wxSTCCallTip::OnLeftDown)
-#endif
 END_EVENT_TABLE()
 
 
@@ -389,8 +384,10 @@ bool ScintillaWX::CanPaste() {
 }
 
 void ScintillaWX::CreateCallTipWindow(PRectangle) {
-    ct.wCallTip = new wxSTCCallTip(stc, &ct);
-    ct.wDraw = ct.wCallTip;
+    if (! ct.wCallTip.Created() ) {
+        ct.wCallTip = new wxSTCCallTip(stc, &ct, this);
+        ct.wDraw = ct.wCallTip;
+    }
 }
 
 
@@ -441,32 +438,32 @@ long ScintillaWX::WndProc(unsigned int iMessage, unsigned long wParam, long lPar
           // because of the little tweak that needs done below for wxGTK.
           // When updating new versions double check that this is still
           // needed, and that any new code there is copied here too.
+          Point pt = LocationFromPosition(wParam);
+          char* defn = reinterpret_cast<char *>(lParam);
           AutoCompleteCancel();
-          if (!ct.wCallTip.Created()) {
-              Point pt = LocationFromPosition(wParam);
-              pt.y += vs.lineHeight;
-              PRectangle rc = ct.CallTipStart(currentPos, pt,
-                                              reinterpret_cast<char *>(lParam),
-                                              vs.styles[STYLE_DEFAULT].fontName,
-                                              vs.styles[STYLE_DEFAULT].sizeZoomed,
-                                              IsUnicodeMode());
-              // If the call-tip window would be out of the client
-              // space, adjust so it displays above the text.
-              PRectangle rcClient = GetClientRectangle();
-              if (rc.bottom > rcClient.bottom) {
+          pt.y += vs.lineHeight;
+          PRectangle rc = ct.CallTipStart(currentPos, pt,
+                                          defn,
+                                          vs.styles[STYLE_DEFAULT].fontName,
+                                          vs.styles[STYLE_DEFAULT].sizeZoomed,
+                                          IsUnicodeMode(),
+                                          wMain);
+          // If the call-tip window would be out of the client
+          // space, adjust so it displays above the text.
+          PRectangle rcClient = GetClientRectangle();
+          if (rc.bottom > rcClient.bottom) {
 #ifdef __WXGTK__
-                  int offset = int(vs.lineHeight * 1.25)  + rc.Height();
+              int offset = int(vs.lineHeight * 1.25)  + rc.Height();
 #else
-                  int offset = vs.lineHeight + rc.Height();
+              int offset = vs.lineHeight + rc.Height();
 #endif
-                  rc.top -= offset;
-                  rc.bottom -= offset;
-              }
-              // Now display the window.
-              CreateCallTipWindow(rc);
-              ct.wCallTip.SetPositionRelative(rc, wMain);
-              ct.wCallTip.Show();
+              rc.top -= offset;
+              rc.bottom -= offset;
           }
+          // Now display the window.
+          CreateCallTipWindow(rc);
+          ct.wCallTip.SetPositionRelative(rc, wMain);
+          ct.wCallTip.Show();
           break;
       }
 
@@ -485,7 +482,7 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
 
     paintState = painting;
     Surface* surfaceWindow = Surface::Allocate();
-    surfaceWindow->Init(dc);
+    surfaceWindow->Init(dc, wMain.GetID());
     rcPaint = PRectangleFromwxRect(rect);
     PRectangle rcClient = GetClientRectangle();
     paintingAllText = rcPaint.Contains(rcClient);
@@ -781,7 +778,7 @@ void ScintillaWX::FullPaint() {
     paintingAllText = true;
     wxClientDC dc(stc);
     Surface* surfaceWindow = Surface::Allocate();
-    surfaceWindow->Init(&dc);
+    surfaceWindow->Init(&dc, wMain.GetID());
 
     dc.BeginDrawing();
     ClipChildren(dc, rcPaint);

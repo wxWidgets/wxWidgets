@@ -43,6 +43,8 @@ cmdValues = [ (2300, 2349),
               (2390, 2393),
               (2395, 2396),
               2404,
+              (2413, 2416),
+              (2450, 2454),
             ]
 
 
@@ -453,9 +455,14 @@ methodOverrideMap = {
     'GetDirectFunction' : (None, 0, 0, 0),
     'GetDirectPointer' : (None, 0, 0, 0),
 
-    'CallTipPosStart' : ('CallTipPosAtStart', 0, 0, 0),
-    'CallTipSetHlt' : ('CallTipSetHighlight', 0, 0, 0),
-    'CallTipSetBack' : ('CallTipSetBackground', 0, 0, 0),
+    'CallTipPosStart'   : ('CallTipPosAtStart', 0, 0, 0),
+    'CallTipSetHlt'     : ('CallTipSetHighlight', 0, 0, 0),
+    'CallTipSetBack'    : ('CallTipSetBackground', 0, 0, 0),
+    'CallTipSetFore'    : ('CallTipSetForeground', 0, 0, 0),
+    'CallTipSetForeHlt' : ('CallTipSetForegroundHighlight', 0, 0, 0),
+
+    'SetHotspotActiveFore' : ('SetHotspotActiveForeground', 0, 0, 0),
+    'SetHotspotActiveBack' : ('SetHotspotActiveBackground', 0, 0, 0),
 
 
     'ReplaceTarget' :
@@ -544,6 +551,9 @@ methodOverrideMap = {
     'GetFocus'  : ('GetSTCFocus', 0, 0, 0),
 
 
+    'LoadLexerLibrary' : (None, 0,0,0),
+
+
 
     # Remove all methods that are key commands since they can be
     # executed with CmdKeyExecute
@@ -592,7 +602,16 @@ methodOverrideMap = {
     'LineScrollDown' : (None, 0, 0, 0),
     'LineScrollUp' : (None, 0, 0, 0),
     'DeleteBackNotLine' : (None, 0, 0, 0),
-
+    'HomeWrap' : (None, 0, 0, 0),
+    'HomeWrapExtend' : (None, 0, 0, 0),
+    'LineEndWrap' : (None, 0, 0, 0),
+    'LineEndWrapExtend' : (None, 0, 0, 0),
+    'VCHomeWrap' : (None, 0, 0, 0),
+    'VCHomeWrapExtend' : (None, 0, 0, 0),
+    'ParaDown' : (None, 0, 0, 0),
+    'ParaDownExtend' : (None, 0, 0, 0),
+    'ParaUp' : (None, 0, 0, 0),
+    'ParaUpExtend' : (None, 0, 0, 0),
 
 
 

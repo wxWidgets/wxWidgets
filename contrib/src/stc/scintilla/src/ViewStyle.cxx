@@ -79,6 +79,12 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	foldmarginHighlightColourSet = source.foldmarginHighlightColourSet;
 	foldmarginHighlightColour.desired = source.foldmarginHighlightColour.desired;
 
+	hotspotForegroundSet = source.hotspotForegroundSet;
+	hotspotForeground.desired = source.hotspotForeground.desired;
+	hotspotBackgroundSet = source.hotspotBackgroundSet;
+	hotspotBackground.desired = source.hotspotBackground.desired;
+	hotspotUnderline = source.hotspotUnderline;
+
 	whitespaceForegroundSet = source.whitespaceForegroundSet;
 	whitespaceForeground.desired = source.whitespaceForeground.desired;
 	whitespaceBackgroundSet = source.whitespaceBackgroundSet;
@@ -153,6 +159,12 @@ void ViewStyle::Init() {
 	caretWidth = 1;
 	someStylesProtected = false;
 
+	hotspotForegroundSet = false;
+	hotspotForeground.desired = ColourDesired(0, 0, 0xff);
+	hotspotBackgroundSet = false;
+	hotspotBackground.desired = ColourDesired(0xff, 0xff, 0xff);
+	hotspotUnderline = true;
+
 	leftMarginWidth = 1;
 	rightMarginWidth = 1;
 	ms[0].symbol = false;
@@ -206,6 +218,8 @@ void ViewStyle::RefreshColourPalette(Palette &pal, bool want) {
 	pal.WantFind(caretcolour, want);
 	pal.WantFind(caretLineBackground, want);
 	pal.WantFind(edgecolour, want);
+	pal.WantFind(hotspotForeground, want);
+	pal.WantFind(hotspotBackground, want);
 }
 
 void ViewStyle::Refresh(Surface &surface) {
@@ -248,7 +262,7 @@ void ViewStyle::ResetDefaultStyle() {
 		ColourDesired(0xff,0xff,0xff),
 	        Platform::DefaultFontSize(), fontNames.Save(Platform::DefaultFont()),
 		SC_CHARSET_DEFAULT,
-		false, false, false, false, Style::caseMixed, true, true);
+		false, false, false, false, Style::caseMixed, true, true, false);
 }
 
 void ViewStyle::ClearStyles() {

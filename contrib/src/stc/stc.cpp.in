@@ -85,6 +85,10 @@ DEFINE_EVENT_TYPE( wxEVT_STC_START_DRAG )
 DEFINE_EVENT_TYPE( wxEVT_STC_DRAG_OVER )
 DEFINE_EVENT_TYPE( wxEVT_STC_DO_DROP )
 DEFINE_EVENT_TYPE( wxEVT_STC_ZOOM )
+DEFINE_EVENT_TYPE( wxEVT_STC_HOTSPOT_CLICK )
+DEFINE_EVENT_TYPE( wxEVT_STC_HOTSPOT_DCLICK )
+DEFINE_EVENT_TYPE( wxEVT_STC_CALLTIP_CLICK )
+
 
 
 BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
@@ -573,6 +577,18 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
 
     case SCN_ZOOM:
         evt.SetEventType(wxEVT_STC_ZOOM);
+        break;
+
+    case SCN_HOTSPOTCLICK:
+        evt.SetEventType(wxEVT_STC_HOTSPOT_CLICK);
+        break;
+
+    case SCN_HOTSPOTDOUBLECLICK:
+        evt.SetEventType(wxEVT_STC_HOTSPOT_DCLICK);
+        break;
+
+    case SCN_CALLTIPCLICK:
+        evt.SetEventType(wxEVT_STC_CALLTIP_CLICK);
         break;
 
     default:

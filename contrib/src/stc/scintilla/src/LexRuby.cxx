@@ -352,4 +352,9 @@ static void FoldRbDoc(unsigned int startPos, int length, int initStyle,
 	}
 }
 
-LexerModule lmRuby(SCLEX_RUBY, ColouriseRbDoc, "ruby", FoldRbDoc);
+static const char * const rubyWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+LexerModule lmRuby(SCLEX_RUBY, ColouriseRbDoc, "ruby", FoldRbDoc, rubyWordListDesc);

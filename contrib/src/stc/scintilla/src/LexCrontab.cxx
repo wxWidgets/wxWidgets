@@ -208,4 +208,11 @@ static void ColouriseNncrontabDoc(unsigned int startPos, int length, int, WordLi
 	delete []buffer;
 }
 
-LexerModule lmNncrontab(SCLEX_NNCRONTAB, ColouriseNncrontabDoc, "nncrontab");
+static const char * const cronWordListDesc[] = {
+	"Section keywords and Forth words",
+	"nnCrontab keywords",
+	"Modifiers",
+	0
+};
+
+LexerModule lmNncrontab(SCLEX_NNCRONTAB, ColouriseNncrontabDoc, "nncrontab", 0, cronWordListDesc);

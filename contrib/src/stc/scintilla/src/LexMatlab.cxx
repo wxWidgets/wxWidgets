@@ -165,4 +165,9 @@ static void FoldMatlabDoc(unsigned int startPos, int length, int,
 	}
 }
 
-LexerModule lmMatlab(SCLEX_MATLAB, ColouriseMatlabDoc, "matlab", FoldMatlabDoc);
+static const char * const matlabWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+LexerModule lmMatlab(SCLEX_MATLAB, ColouriseMatlabDoc, "matlab", FoldMatlabDoc, matlabWordListDesc);

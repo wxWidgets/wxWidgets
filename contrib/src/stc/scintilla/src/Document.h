@@ -192,7 +192,7 @@ public:
 	int NextWordStart(int pos, int delta);
 	int Length() { return cb.Length(); }
 	long FindText(int minPos, int maxPos, const char *s,
-		bool caseSensitive, bool word, bool wordStart, bool regExp, int *length);
+		bool caseSensitive, bool word, bool wordStart, bool regExp, bool posix, int *length);
 	long FindText(int iMessage, unsigned long wParam, long lParam);
 	const char *SubstituteByPosition(const char *text, int *length);
 	int LinesTotal();
@@ -220,6 +220,9 @@ public:
 	bool IsWordPartSeparator(char ch);
 	int WordPartLeft(int pos);
 	int WordPartRight(int pos);
+	int ExtendStyleRange(int pos, int delta);
+	int ParaUp(int pos);
+	int ParaDown(int pos);
 
 private:
 	charClassification WordCharClass(unsigned char ch);
