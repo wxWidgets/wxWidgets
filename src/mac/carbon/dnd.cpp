@@ -211,7 +211,7 @@ bool wxDropTarget::GetData()
                   {
                     HFSFlavor* theFile = (HFSFlavor*) theData ;
                     wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec ) ;
-                    m_dataObject->SetData( format , name.Length() + 1, name ) ;
+                    ((wxFileDataObject*)m_dataObject)->AddFile( name ) ;
                   }
                   else
                   {
