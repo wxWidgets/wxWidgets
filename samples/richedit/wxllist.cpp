@@ -2389,10 +2389,10 @@ wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos,
       line = line->GetNextLine();
    }
 
+   bool didFind = line != NULL;
+
    if ( !line )
    {
-      if ( found )
-          *found = false;
       // use the last line:
       line = lastline;
    }
@@ -2406,8 +2406,9 @@ wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos,
                                            pos.x,
                                            cursorPos ? &cursorPos->x : NULL,
                                            &foundinline);
-   if(found)
-      *found = *found && foundinline;
+   if ( found )
+      *found = didFind && foundinline;
+
    return (i == NULLIT) ? NULL : *i;
 
 }
@@ -2955,8 +2956,8 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
 
    psdc.GetSize(&m_PageWidth, &m_PageHeight);
 
-   // This sets a left/top origin of 10% and 7%:
-   m_Offset = wxPoint((10*m_PageWidth)/100, (7*m_PageHeight)/100);
+   // This sets a left/top origin of 15% and 5%:
+   m_Offset = wxPoint((15*m_PageWidth)/100, (5*m_PageHeight)/100);
 
    // This is the length of the printable area.
    m_PrintoutHeight = m_PageHeight - 2*m_Offset.y;

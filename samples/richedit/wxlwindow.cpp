@@ -544,6 +544,9 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                Copy();
                break;
             case WXK_DELETE :
+               if(! deletedSelection)
+                  m_llist->DeleteWord();
+               break;
             case 'd':
                if(! deletedSelection) // already done
                   m_llist->Delete(1);
