@@ -70,6 +70,10 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
     // allow TABbing from one window to the other
     style |= wxTAB_TRAVERSAL;
 
+    // we don't need to be completely repainted after resize and doing it
+    // results in horrible flicker
+    style |= wxNO_FULL_REPAINT_ON_RESIZE;
+
     if (!wxWindow::Create(parent, id, pos, size, style, name))
         return FALSE;
 
