@@ -329,9 +329,9 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
 
     long nFields = wxGetNumberFromUser
                    (
-                    "Select the number of fields in the status bar",
-                    "Fields:",
-                    "wxWindows statusbar sample",
+                    _T("Select the number of fields in the status bar"),
+                    _T("Fields:"),
+                    _T("wxWindows statusbar sample"),
                     sb->GetFieldsCount(),
                     1, 5,
                     this
@@ -345,7 +345,7 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
         static const int widthsFor3Fields[] = { -1, -2, -1 };
         static const int widthsFor4Fields[] = { 100, -1, 100, -2, 100 };
 
-        static const int *widths[] =
+        static const int *widthsAll[] =
         {
             NULL,               // 1 field: default
             widthsFor2Fields,   // 2 fields: 1 fixed, 1 var
@@ -354,11 +354,26 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
             NULL                // 5 fields: default (all have same width)
         };
 
-        sb->SetFieldsCount(nFields, widths[nFields - 1]);
+        const int * const widths = widthsAll[nFields - 1];
+        sb->SetFieldsCount(nFields, widths);
 
-        wxLogStatus(this,
-                    wxString::Format(wxT("Status bar now has %ld fields"),
-                                     nFields));
+        wxString s;
+        for ( long n = 0; n < nFields; n++ )
+        {
+            if ( widths )
+            {
+                if ( widths[n] > 0 )
+                    s.Printf(_T("fixed (%d)"), widths[n]);
+                else
+                    s.Printf(_T("variable (*%d)"), -widths[n]);
+            }
+            else
+            {
+                s = _T("default");
+            }
+
+            SetStatusText(s, n);
+        }
     }
     else
     {
