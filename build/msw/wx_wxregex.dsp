@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="wxregex" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="wx_wxregex" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 

@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="wxjpeg" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="wx_wxjpeg" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 

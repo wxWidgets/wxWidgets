@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="base" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="wx_base" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -1232,6 +1232,10 @@ SOURCE=..\..\include\wx\snglinst.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\stack.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\stockitem.h
 # End Source File
 # Begin Source File
 

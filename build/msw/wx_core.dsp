@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="core" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="wx_core" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -1530,6 +1530,65 @@ SOURCE=..\..\src\msw\dib.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\dirdlg.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
 # End Source File
 # Begin Source File
 
@@ -1963,128 +2022,10 @@ SOURCE=..\..\src\msw\gsockmsw.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\helpchm.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\msw\helpwin.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
@@ -4004,6 +3945,10 @@ SOURCE=..\..\src\generic\accel.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\busyinfo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\choicbkg.cpp
 # End Source File
 # Begin Source File
 
@@ -7426,6 +7371,10 @@ SOURCE=..\..\include\wx\msw\enhmeta.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\evtloop.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\fdrepdlg.h
 # End Source File
 # Begin Source File
@@ -7463,14 +7412,6 @@ SOURCE=..\..\include\wx\msw\glcanvas.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\helpbest.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\helpchm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\helpwin.h
 # End Source File
 # Begin Source File
 
@@ -8111,6 +8052,10 @@ SOURCE=..\..\include\wx\choicdlg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\choice.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\choicebk.h
 # End Source File
 # Begin Source File
 

@@ -230,6 +230,7 @@ wx/regex.h
 wx/scopeguard.h
 wx/snglinst.h
 wx/stack.h
+wx/stockitem.h
 wx/stopwatch.h
 wx/strconv.h
 wx/stream.h

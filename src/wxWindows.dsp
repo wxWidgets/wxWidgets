@@ -325,10 +325,6 @@ SOURCE=.\common\bookctrl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\buttoncmn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\choiccmn.cpp
 # End Source File
 # Begin Source File
@@ -892,6 +888,10 @@ SOURCE=.\generic\busyinfo.cpp
 # Begin Source File
 
 SOURCE=.\generic\calctrl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\choicbkg.cpp
 # End Source File
 # Begin Source File
 
@@ -1781,6 +1781,10 @@ SOURCE=..\include\wx\choicdlg.h
 # Begin Source File
 
 SOURCE=..\include\wx\choice.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\choicebk.h
 # End Source File
 # Begin Source File
 
@@ -2904,6 +2908,10 @@ SOURCE=..\include\wx\msw\enhmeta.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\evtloop.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\fdrepdlg.h
 # End Source File
 # Begin Source File
@@ -2953,14 +2961,6 @@ SOURCE=..\include\wx\msw\gsockmsw.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\helpbest.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\helpchm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\helpwin.h
 # End Source File
 # Begin Source File
 
