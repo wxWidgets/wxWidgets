@@ -9,7 +9,6 @@ SDEPS = config.bkl common.bkl common_samples.bkl
 MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl opengl.bkl wxwin.py
 AUTOCONF_ALL = \
 	../../Makefile.in \
-	../../configure \
 	../../contrib/samples/animate/Makefile.in \
 	../../contrib/samples/svg/Makefile.in \
 	../../contrib/samples/xrc/Makefile.in \
@@ -499,7 +498,6 @@ watcom: $(WATCOM_ALL)
 clean:
 	rm -f ../../autoconf_inc.m4
 	rm -f ../../Makefile.in
-	rm -f ../../configure
 	rm -f ../../contrib/samples/animate/Makefile.in
 	rm -f ../../contrib/samples/svg/Makefile.in
 	rm -f ../../contrib/samples/xrc/Makefile.in
@@ -979,8 +977,6 @@ clean:
 library: ../../Makefile.in ../makefile.bcc ../makefile.vc ../makefile.wat ../makefile.gcc
 
 ../../autoconf_inc.m4: ../../Makefile.in
-../../configure: ../../autoconf_inc.m4
-	(cd ../.. ; aclocal && autoconf)
 
 Makefile: regenMakefile.py
 	./regenMakefile.py

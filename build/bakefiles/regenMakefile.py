@@ -23,7 +23,7 @@ MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl opengl.bkl w
 
 lines = {}
 all = {}
-all['autoconf'] = ['../../configure']
+all['autoconf'] = []
 
 linesCur = None
 
@@ -171,8 +171,6 @@ clean:
 library: ../../Makefile.in ../makefile.bcc ../makefile.vc ../makefile.wat ../makefile.gcc
 
 ../../autoconf_inc.m4: ../../Makefile.in
-../../configure: ../../autoconf_inc.m4
-\t(cd ../.. ; aclocal && autoconf)
 
 Makefile: regenMakefile.py
 \t./regenMakefile.py
