@@ -50,7 +50,7 @@ class Buffer:
         editor = self.editor
         pos = editor.GetCurrentPos()
         line = editor.LineFromPosition(pos) + 1
-        col = editor.GetColumn(pos) + 1
+        col = editor.GetColumn(pos)
         status = (self.doc.filepath or self.name, line, col)
         return status
 
