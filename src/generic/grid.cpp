@@ -4748,11 +4748,12 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 // Otherwise fall through to default
 
             default:
-                // alphanumeric keys enable the cell edit control
+                // alphanumeric keys or F2 (special key just for this) enable
+                // the cell edit control
                 if ( !(event.AltDown() ||
                        event.MetaDown() ||
                        event.ControlDown()) &&
-                     isalnum(event.KeyCode()) &&
+                     (isalnum(event.KeyCode()) || event.KeyCode() == WXK_F2) &&
                      !IsCellEditControlEnabled() &&
                      CanEnableCellControl() )
                 {
