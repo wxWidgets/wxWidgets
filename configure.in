@@ -5448,7 +5448,7 @@ fi
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"
 
 dnl remove the extra white space from the cc/c++/ld options
-CPPFLAGS=`echo $INCLUDES $CPPFLAGS | sed 's/ \\+/ /g'`
+CPPFLAGS=`echo $WXDEBUG_DEFINE $INCLUDES $CPPFLAGS | sed 's/ \\+/ /g'`
 CFLAGS=`echo $CODE_GEN_FLAGS $EXTRA_CFLAGS $CFLAGS $CXXWARNINGS | sed 's/ \\+/ /g'`
 CXXFLAGS=`echo $CODE_GEN_FLAGS $CODE_GEN_FLAGS_CXX $EXTRA_CFLAGS $CXXFLAGS $CXXWARNINGS | sed 's/ \+/ /g'`
     
