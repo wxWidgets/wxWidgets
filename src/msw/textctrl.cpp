@@ -659,14 +659,6 @@ void wxTextCtrl::SetEditable(bool editable)
 void wxTextCtrl::SetInsertionPoint(long pos)
 {
     SetSelection(pos, pos);
-
-#if wxUSE_RICHEDIT
-    if ( !IsRich() )
-#endif
-    {
-        static const wxChar *nothing = _T("");
-        SendMessage(GetHwnd(), EM_REPLACESEL, 0, (LPARAM)nothing);
-    }
 }
 
 void wxTextCtrl::SetInsertionPointEnd()
@@ -806,7 +798,41 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
 
     if ( scrollCaret )
     {
+#if wxUSE_RICHEDIT
+        // EM_SCROLLCARET doesn't work for me with the richedit controls
+        // unless it has focus although I don't see any mention of it in the
+        // docs - this is the only workaround I found. Of course it's not
+        // perfect as it adds the dummy focus set/kill events but it's still
+        // better than nothing
+        HWND hwndFocusOld;
+        if ( IsRich() )
+        {
+            hwndFocusOld = ::GetFocus();
+            if ( hwndFocusOld == GetHwnd() )
+            {
+                // don't change focus
+                hwndFocusOld = 0;
+            }
+
+            if ( hwndFocusOld )
+            {
+                ::SetFocus(GetHwnd());
+            }
+        }
+        else // not rich
+        {
+            hwndFocusOld = 0;
+        }
+#endif // wxUSE_RICHEDIT
+
         SendMessage(hWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
+
+#if wxUSE_RICHEDIT
+        if ( hwndFocusOld )
+        {
+            ::SetFocus(hwndFocusOld);
+        }
+#endif // wxUSE_RICHEDIT
     }
 #else // Win16
     // WPARAM is 0: selection is scrolled into view
@@ -821,7 +847,7 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
 void wxTextCtrl::Replace(long from, long to, const wxString& value)
 {
     // Set selection and remove it
-    DoSetSelection(from, to, FALSE);
+    DoSetSelection(from, to, FALSE /* don't scroll caret into view */);
 
     SendMessage(GetHwnd(), EM_REPLACESEL,
 #ifdef __WIN32__
@@ -1509,7 +1535,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 
     if ( changeSel )
     {
-        DoSetSelection(start, end, FALSE);
+        DoSetSelection(start, end, FALSE /* don't scroll caret into view */);
     }
 
     // initialize CHARFORMAT struct
