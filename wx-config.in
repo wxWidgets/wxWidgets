@@ -48,7 +48,7 @@ while test $# -gt 0; do
         fi
       fi
       includes="$includes -I@libdir@/wx/include"
-      echo $includes -D__USE_WXCONFIG__ @CODE_GEN_FLAGS@ @WXDEBUG_DEFINE@ @TOOLKIT_DEF@ @WXCONFIG_INCLUDE@
+      echo $includes -D__USE_WXCONFIG__ @CODE_GEN_FLAGS@ @CODE_GEN_FLAGS_CXX@ @WXDEBUG_DEFINE@ @TOOLKIT_DEF@ @WXCONFIG_INCLUDE@
       ;;
     --libs)
       if test @libdir@ != /usr/lib ; then
