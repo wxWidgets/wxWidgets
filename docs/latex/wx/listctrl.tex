@@ -610,6 +610,30 @@ the given {\it column} for the specified {\tt item}.
 \helpref{OnGetItemImage}{wxlistctrlongetitemimage},\\
 \helpref{OnGetItemAttr}{wxlistctrlongetitemattr}
 
+\membersection{wxListCtrl::RefreshItem}\label{wxlistctrlrefreshitem}
+
+\func{void}{RefreshItem}{\param{long }{item}}
+
+Redraws the given {\it item}. This is only useful for the virtual list controls
+as without calling this function the displayed value of the item doesn't change
+even when the underlying data does change.
+
+\wxheading{See also}
+
+\helpref{RefreshItems}{wxlistctrlrefreshitems}
+
+
+\membersection{wxListCtrl::RefreshItems}\label{wxlistctrlrefreshitems}
+
+\func{void}{RefreshItems}{\param{long }{itemFrom}, \param{long }{itemTo}}
+
+Redraws the items between {\it itemFrom} and {\it itemTo}. The starting item
+must be less than or equal to the ending one.
+
+Just as \helpref{RefreshItem}{wxlistctrlrefreshitem} this is only useful for
+virtual list controls.
+
+
 \membersection{wxListCtrl::ScrollList}\label{wxlistctrlscrolllist}
 
 \func{bool}{ScrollList}{\param{int }{dx}, \param{int }{dy}}
