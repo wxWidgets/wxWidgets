@@ -4378,9 +4378,18 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
     }
 
     wxKeyEvent event(CreateKeyEvent(wxEVT_CHAR, id, lParam, wParam));
-    if ( ctrlDown )
+
+    // the alphanumeric keys produced by pressing AltGr+something on European
+    // keyboards have both Ctrl and Alt modifiers which may confuse the user
+    // code as, normally, keys with Ctrl and/or Alt don't result in anything
+    // alphanumeric, so pretend that there are no modifiers at all (the
+    // KEY_DOWN event would still have the correct modifiers if they're really
+    // needed)
+    if ( event.m_controlDown && event.m_altDown &&
+            (id >= 32 && id < 256) )
     {
-        event.m_controlDown = TRUE;
+        event.m_controlDown =
+        event.m_altDown = FALSE;
     }
 
     return GetEventHandler()->ProcessEvent(event);
