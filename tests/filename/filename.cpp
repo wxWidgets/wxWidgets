@@ -138,11 +138,11 @@ void FileNameTestCase::TestSplit()
 void FileNameTestCase::TestSetPath()
 {
     wxFileName fn(_T("d:\\test\\foo.bar"), wxPATH_DOS);
-    fn.SetPath(_T("c:\\temp"));
-    CPPUNIT_ASSERT( fn == _T("c:\\temp\\foo.bar") );
+    fn.SetPath(_T("c:\\temp"), wxPATH_DOS);
+    CPPUNIT_ASSERT( fn.SameAs(wxFileName(_T("c:\\temp\\foo.bar"), wxPATH_DOS)) );
 
-    fn = _T("/usr/bin/ls");
-    fn.SetPath(_T("/usr/local/bin"));
-    CPPUNIT_ASSERT( fn == _T("/usr/local/bin/ls") );
+    fn = wxFileName(_T("/usr/bin/ls"), wxPATH_UNIX);
+    fn.SetPath(_T("/usr/local/bin"), wxPATH_UNIX);
+    CPPUNIT_ASSERT( fn.SameAs(wxFileName(_T("/usr/local/bin/ls"), wxPATH_UNIX)) );
 }
 
