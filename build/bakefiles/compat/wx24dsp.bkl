@@ -25,6 +25,7 @@
         <define-tag name="define"/>
         <define-tag name="include"/>
         <define-tag name="install-to"/>
+        <define-tag name="install-if"/>
         <define-tag name="lib-path"/>
         <define-tag name="precomp-headers"/>
         <define-tag name="precomp-headers-gen"/>
