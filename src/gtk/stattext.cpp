@@ -81,6 +81,8 @@ bool wxStaticText::Create(wxWindow *parent,
     m_parent->DoAddChild( this );
 
     PostCreation();
+    
+    ApplyWidgetStyle();
 
     wxControl::SetFont( parent->GetFont() );
     

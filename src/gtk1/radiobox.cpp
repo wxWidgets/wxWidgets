@@ -183,6 +183,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     m_parent->DoAddChild( this );
 
     PostCreation();
+    
+    ApplyWidgetStyle();
 
     SetLabel( title );
 
