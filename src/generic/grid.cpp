@@ -602,6 +602,8 @@ void wxGridTextCtrl::OnKeyDown( wxKeyEvent& ev )
         case WXK_DOWN:
         case WXK_LEFT:
         case WXK_RIGHT:
+        case WXK_PRIOR:
+        case WXK_NEXT:
         case WXK_RETURN:
             if ( m_isCellControl )
             {
@@ -805,10 +807,9 @@ void wxGrid::Init()
                                          wxGRID_CELLCTRL,
                                          "",
                                          wxPoint(1,1),
-                                         wxSize(1,1),
-                                         wxNO_BORDER
+                                         wxSize(1,1)
 #ifdef __WXMSW__
-                                         | wxTE_MULTILINE | wxTE_NO_VSCROLL
+                                         , wxTE_MULTILINE | wxTE_NO_VSCROLL
 #endif
                                          );
                                          
@@ -3035,13 +3036,13 @@ void wxGrid::DrawCellHighlight( wxDC& dc, int row, int col )
         y = m_rowBottoms[row] - m_rowHeights[row];
         if ( y >= ch ) return;
 
-        dc.SetLogicalFunction( wxXOR );
+        dc.SetLogicalFunction( wxINVERT );
         dc.SetPen( wxPen(GetCellHighlightColour(), 2, wxSOLID) );
         dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
-        dc.DrawRectangle( x, y,
-                          m_colWidths[col] + 2,
-                          m_rowHeights[row] + 2 );
+        dc.DrawRectangle( x-2, y-2,
+                          m_colWidths[col] + 6,
+                          m_rowHeights[row] + 6 );
 
         dc.SetLogicalFunction( wxCOPY );
     }
@@ -3076,7 +3077,8 @@ void wxGrid::DrawCell( int row, int col )
 //
 void wxGrid::HideCurrentCellHighlight( wxDC& dc )
 {
-    if ( m_currentCellHighlighted  &&
+    if ( !m_cellEditCtrlEnabled  &&
+         m_currentCellHighlighted  &&
          m_currentCellCoords != wxGridNoCellCoords )
     {
         DrawCellHighlight( dc, m_currentCellCoords );
@@ -3089,7 +3091,8 @@ void wxGrid::HideCurrentCellHighlight( wxDC& dc )
 //
 void wxGrid::ShowCurrentCellHighlight( wxDC& dc )
 {
-    if ( !m_currentCellHighlighted  &&
+    if ( !m_cellEditCtrlEnabled  &&
+         !m_currentCellHighlighted  &&
          m_currentCellCoords != wxGridNoCellCoords )
     {
         DrawCellHighlight( dc, m_currentCellCoords );
@@ -3587,6 +3590,9 @@ void wxGrid::EnableCellEditControl( bool enable )
     if ( m_cellEditCtrl &&
          enable != m_cellEditCtrlEnabled )
     {
+        wxClientDC dc( this );
+        
+        HideCurrentCellHighlight( dc );
         HideCellEditControl();
         SaveEditControlValue();
         
@@ -3594,6 +3600,7 @@ void wxGrid::EnableCellEditControl( bool enable )
 
         SetEditControlValue();
         ShowCellEditControl();
+        ShowCurrentCellHighlight( dc );
     }
 }
 
