@@ -375,9 +375,6 @@ public:
     // called when the window is about to be destroyed
     virtual void MSWDestroyWindow();
 
-    // Detach "Window" menu from menu bar so it doesn't get deleted
-    void MSWDetachWindowMenu();
-
     // this function should return the brush to paint the window background
     // with or 0 for the default brush
     virtual WXHBRUSH OnCtlColor(WXHDC hDC,

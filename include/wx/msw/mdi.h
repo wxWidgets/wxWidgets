@@ -66,7 +66,7 @@ public:
     // just return a new class)
     virtual wxMDIClientWindow *OnCreateClient(void);
 
-//    WXHMENU GetWindowHMENU() const { return m_windowMenu; }
+    // MDI windows menu
     wxMenu* GetWindowMenu() const { return m_windowMenu; };
     void SetWindowMenu(wxMenu* menu) ;
 
