@@ -28,6 +28,8 @@ class WXDLLEXPORT wxGDIImageRefData;
 class WXDLLEXPORT wxGDIImageHandler;
 class WXDLLEXPORT wxGDIImage;
 
+WX_DECLARE_LIST(wxGDIImageHandler, wxGDIImageHandlerList);
+
 // ----------------------------------------------------------------------------
 // wxGDIImageRefData: common data fields for all derived classes
 // ----------------------------------------------------------------------------
@@ -135,7 +137,7 @@ class WXDLLEXPORT wxGDIImage : public wxGDIObject
 {
 public:
     // handlers list interface
-    static wxList& GetHandlers() { return ms_handlers; }
+    static wxGDIImageHandlerList& GetHandlers() { return ms_handlers; }
 
     static void AddHandler(wxGDIImageHandler *handler);
     static void InsertHandler(wxGDIImageHandler *handler);
@@ -186,7 +188,7 @@ protected:
     // create the data for the derived class here
     virtual wxGDIImageRefData *CreateData() const = 0;
 
-    static wxList ms_handlers;
+    static wxGDIImageHandlerList ms_handlers;
 };
 
 #endif // _WX_MSW_GDIIMAGE_H_

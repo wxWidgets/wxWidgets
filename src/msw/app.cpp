@@ -1140,24 +1140,22 @@ bool wxApp::SendIdleEvents()
 // Send idle event to window and all subwindows
 bool wxApp::SendIdleEvents(wxWindow* win)
 {
-    bool needMore = FALSE;
-
     wxIdleEvent event;
     event.SetEventObject(win);
     win->GetEventHandler()->ProcessEvent(event);
 
-    if (event.MoreRequested())
-        needMore = TRUE;
+    bool needMore = event.MoreRequested();
 
-    wxWindowList::Node* node = win->GetChildren().GetFirst();
-    while (node)
+    wxWindowList::Node *node = win->GetChildren().GetFirst();
+    while ( node )
     {
-        wxWindow* win = node->GetData();
+        wxWindow *win = node->GetData();
         if (SendIdleEvents(win))
             needMore = TRUE;
 
         node = node->GetNext();
     }
+
     return needMore;
 }
 

@@ -100,12 +100,15 @@ class WXDLLEXPORT wxDDEServer: public wxServerBase
   wxDDEConnection *FindConnection(WXHCONV conv);
   bool DeleteConnection(WXHCONV conv);
   inline wxString& GetServiceName(void) const { return (wxString&) m_serviceName; }
-  inline wxList& GetConnections(void) const { return (wxList&) m_connections; }
+    inline wxDDEConnectionList& GetConnections(void) const
+    {
+        return (wxDDEConnectionList&) m_connections;
+    }
 
- protected:
-  int       m_lastError;
-  wxString  m_serviceName;
-  wxList    m_connections;
+protected:
+    int       m_lastError;
+    wxString  m_serviceName;
+    wxDDEConnectionList m_connections;
 };
 
 class WXDLLEXPORT wxDDEClient: public wxClientBase
@@ -126,11 +129,15 @@ class WXDLLEXPORT wxDDEClient: public wxClientBase
   // Find/delete wxDDEConnection corresponding to the HCONV
   wxDDEConnection *FindConnection(WXHCONV conv);
   bool DeleteConnection(WXHCONV conv);
-  inline wxList& GetConnections(void) const { return (wxList&) m_connections; }
 
- protected:
-  int       m_lastError;
-  wxList    m_connections;
+    inline wxDDEConnectionList& GetConnections(void) const
+    {
+        return (wxDDEConnectionList&) m_connections;
+    }
+
+protected:
+    int       m_lastError;
+    wxDDEConnectionList m_connections;
 };
 
 void WXDLLEXPORT wxDDEInitialize();

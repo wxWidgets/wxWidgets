@@ -557,10 +557,10 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
 
     if ( IsMdiCommandId(id) )
     {
-        wxWindowList::Node* node = GetChildren().GetFirst();
+        wxWindowList::Node *node = GetChildren().GetFirst();
         while ( node )
         {
-            wxWindow* child = node->GetData();
+            wxWindow *child = node->GetData();
             if ( child->GetHWND() )
             {
                 long childId = wxGetWindowId(child->GetHWND());
@@ -1245,14 +1245,18 @@ void wxMDIClientWindow::DoSetSize(int x, int y, int width, int height, int sizeF
     {
         if (GetParent())
         {
-            wxWindowList::Node* node = GetParent()->GetChildren().GetFirst();
+            wxWindowList::Node *node = GetParent()->GetChildren().GetFirst();
             while (node)
             {
-                wxWindow* child = node->GetData();
+                wxWindow *child = node->GetData();
                 if (child->IsKindOf(CLASSINFO(wxMDIChildFrame)))
                 {
-                    HWND hWnd = (HWND) child->GetHWND();
-                   ::RedrawWindow(hWnd, NULL, NULL, RDW_FRAME|RDW_ALLCHILDREN|RDW_INVALIDATE );
+                   ::RedrawWindow(GetHwndOf(child),
+                                  NULL,
+                                  NULL,
+                                  RDW_FRAME |
+                                  RDW_ALLCHILDREN |
+                                  RDW_INVALIDATE);
                 }
                 node = node->GetNext();
             }

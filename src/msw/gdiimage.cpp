@@ -45,6 +45,10 @@
 #include "wx/msw/gdiimage.h"
 #include "wx/bitmap.h"
 
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(wxGDIImageHandlerList);
+
+
 #ifdef __WIN16__
 #   include "wx/msw/curico.h"
 #endif // __WIN16__
@@ -191,7 +195,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxICOResourceHandler, wxObject)
 // implementation
 // ============================================================================
 
-wxList wxGDIImage::ms_handlers;
+wxGDIImageHandlerList wxGDIImage::ms_handlers;
 
 // ----------------------------------------------------------------------------
 // wxGDIImage functions forwarded to wxGDIImageRefData
@@ -241,10 +245,10 @@ bool wxGDIImage::RemoveHandler(const wxString& name)
 
 wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& name)
 {
-    wxNode *node = ms_handlers.GetFirst();
+    wxGDIImageHandlerList::Node *node = ms_handlers.GetFirst();
     while ( node )
     {
-        wxGDIImageHandler *handler = (wxGDIImageHandler *)node->GetData();
+        wxGDIImageHandler *handler = node->GetData();
         if ( handler->GetName() == name )
             return handler;
         node = node->GetNext();
@@ -256,10 +260,10 @@ wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& name)
 wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& extension,
                                            long type)
 {
-    wxNode *node = ms_handlers.GetFirst();
+    wxGDIImageHandlerList::Node *node = ms_handlers.GetFirst();
     while ( node )
     {
-        wxGDIImageHandler *handler = (wxGDIImageHandler *)node->GetData();
+        wxGDIImageHandler *handler = node->GetData();
         if ( (handler->GetExtension() = extension) &&
              (type == -1 || handler->GetType() == type) )
         {
@@ -273,10 +277,10 @@ wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& extension,
 
 wxGDIImageHandler *wxGDIImage::FindHandler(long type)
 {
-    wxNode *node = ms_handlers.GetFirst();
+    wxGDIImageHandlerList::Node *node = ms_handlers.GetFirst();
     while ( node )
     {
-        wxGDIImageHandler *handler = (wxGDIImageHandler *)node->GetData();
+        wxGDIImageHandler *handler = node->GetData();
         if ( handler->GetType() == type )
             return handler;
 
@@ -288,11 +292,11 @@ wxGDIImageHandler *wxGDIImage::FindHandler(long type)
 
 void wxGDIImage::CleanUpHandlers()
 {
-    wxNode *node = ms_handlers.GetFirst();
+    wxGDIImageHandlerList::Node *node = ms_handlers.GetFirst();
     while ( node )
     {
-        wxGDIImageHandler *handler = (wxGDIImageHandler *)node->GetData();
-        wxNode *next = node->GetNext();
+        wxGDIImageHandler *handler = node->GetData();
+        wxGDIImageHandlerList::Node *next = node->GetNext();
         delete handler;
         delete node;
         node = next;

@@ -49,13 +49,16 @@
     #include <shellapi.h>
 #endif
 
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(wxTaskBarIconList);
+
 LRESULT APIENTRY _EXPORT wxTaskBarIconWindowProc( HWND hWnd, unsigned msg,
                                      UINT wParam, LONG lParam );
 
 wxChar *wxTaskBarWindowClass = (wxChar*) wxT("wxTaskBarWindowClass");
 
-wxList wxTaskBarIcon::sm_taskBarIcons;
-bool   wxTaskBarIcon::sm_registeredClass = false;
+wxTaskBarIconList wxTaskBarIcon::sm_taskBarIcons;
+bool   wxTaskBarIcon::sm_registeredClass = FALSE;
 UINT   wxTaskBarIcon::sm_taskbarMsg = 0;
 
 DEFINE_EVENT_TYPE( wxEVT_TASKBAR_MOVE )
@@ -247,10 +250,10 @@ void wxTaskBarIcon::_OnRButtonDClick(wxEvent& e)  { OnRButtonDClick(e); }
 
 wxTaskBarIcon* wxTaskBarIcon::FindObjectForHWND(WXHWND hWnd)
 {
-    wxNode *node = sm_taskBarIcons.GetFirst();
+    wxTaskBarIconList::Node *node = sm_taskBarIcons.GetFirst();
     while (node)
     {
-        wxTaskBarIcon* obj = (wxTaskBarIcon*) node->GetData();
+        wxTaskBarIcon *obj = node->GetData();
         if (obj->GetHWND() == hWnd)
             return obj;
         node = node->GetNext();
@@ -372,7 +375,7 @@ long wxTaskBarIcon::WindowProc( WXHWND hWnd, unsigned int msg, unsigned int wPar
 LRESULT APIENTRY _EXPORT wxTaskBarIconWindowProc( HWND hWnd, unsigned msg,
                                      UINT wParam, LONG lParam )
 {
-    wxTaskBarIcon* obj = wxTaskBarIcon::FindObjectForHWND((WXHWND) hWnd);
+    wxTaskBarIcon *obj = wxTaskBarIcon::FindObjectForHWND((WXHWND) hWnd);
     if (obj)
         return obj->WindowProc((WXHWND) hWnd, msg, wParam, lParam);
     else

@@ -1,6 +1,17 @@
 #ifndef _WX_DDE_H_BASE_
 #define _WX_DDE_H_BASE_
 
+#include "wx/list.h"
+
+class wxDDEClient;
+class wxDDEServer;
+class wxDDEConnection;
+
+WX_DECLARE_LIST(wxDDEClient, wxDDEClientList);
+WX_DECLARE_LIST(wxDDEServer, wxDDEServerList);
+WX_DECLARE_LIST(wxDDEConnection, wxDDEConnectionList);
+
+
 #if defined(__WXMSW__)
 #include "wx/msw/dde.h"
 #elif defined(__WXMOTIF__)

@@ -17,9 +17,13 @@
 #pragma interface "taskbar.h"
 #endif
 
-#include <wx/event.h>
-#include <wx/list.h>
-#include <wx/icon.h>
+#include "wx/event.h"
+#include "wx/list.h"
+#include "wx/icon.h"
+
+class wxTaskBarIcon;
+
+WX_DECLARE_LIST(wxTaskBarIcon, wxTaskBarIconList);
 
 class WXDLLEXPORT wxTaskBarIcon: public wxEvtHandler {
     DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
@@ -58,7 +62,7 @@ public:
 protected:
     WXHWND          m_hWnd;
     bool            m_iconAdded;
-    static wxList   sm_taskBarIcons;
+    static wxTaskBarIconList sm_taskBarIcons;
     static bool     sm_registeredClass;
     static unsigned int sm_taskbarMsg;
 
