@@ -686,6 +686,10 @@ void wxRadioBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style( m_widget, style );
 
+#ifdef __WXGTK20__
+    gtk_widget_modify_style(GTK_FRAME(m_widget)->label_widget, style);
+#endif
+
     wxList::compatibility_iterator node = m_boxes.GetFirst();
     while (node)
     {
