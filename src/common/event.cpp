@@ -82,6 +82,7 @@ wxEvent::wxEvent(int theId)
   m_timeStamp = 0;
   m_id = theId;
   m_skipped = FALSE;
+  m_callbackUserData = NULL;
 }
 
 /*
@@ -250,6 +251,7 @@ wxEvtHandler::wxEvtHandler(void)
   m_nextHandler = NULL;
   m_previousHandler = NULL;
   m_enabled = TRUE;
+  m_dynamicEvents = NULL;
 }
 
 wxEvtHandler::~wxEvtHandler(void)
@@ -260,6 +262,18 @@ wxEvtHandler::~wxEvtHandler(void)
 
   if (m_nextHandler)
     m_nextHandler->m_previousHandler = m_previousHandler;
+    
+  if (m_dynamicEvents)
+  {
+    wxNode *node = m_dynamicEvents->First();
+    while (node)
+    {
+      wxEventTableEntry *entry = (wxEventTableEntry*)node->Data();
+      delete entry;
+      node = node->Next();
+    }
+    delete m_dynamicEvents;
+  };
 }
 
 /*
@@ -271,6 +285,12 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
   // An event handler can be enabled or disabled
   if ( GetEvtHandlerEnabled() )
   {
+    // Handle per-instance dynamic event tables first
+  
+    if (SearchDynamicEventTable( event )) return TRUE;
+
+    // Then static per-class event tables  
+  
     const wxEventTable *table = GetEventTable();
 
     // Try the associated validator first, if this is a window.
@@ -341,7 +361,8 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
             (commandId >= table.entries[i].m_id && commandId <= table.entries[i].m_lastId))))
     {
 	  	event.Skip(FALSE);
-
+                event.m_callbackUserData = table.entries[i].m_callbackUserData;
+	
         (this->*((wxEventFunction) (table.entries[i].m_fn)))(event);
 
 		if ( event.GetSkipped() )
@@ -353,6 +374,58 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
   }
   return FALSE;
 }
+
+void wxEvtHandler::Connect( const int id, const int lastId,
+                            const int eventType, 
+		            wxObjectEventFunction func,
+		            wxObject *userData )
+{
+  wxEventTableEntry *entry = new wxEventTableEntry;
+  entry->m_id = id;
+  entry->m_lastId = lastId;
+  entry->m_eventType = eventType;
+  entry->m_fn = func;
+  entry->m_callbackUserData = userData;
+  
+  if (!m_dynamicEvents) 
+    m_dynamicEvents = new wxList;
+    
+  m_dynamicEvents->Append( (wxObject*) entry );
+}
+
+bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
+{
+  if (!m_dynamicEvents) return FALSE;
+  
+  int commandId = event.GetId();
+  
+  wxNode *node = m_dynamicEvents->First();
+  while (node)
+  {
+    wxEventTableEntry *entry = (wxEventTableEntry*)node->Data();
+    if (entry->m_fn)
+    {
+    if ((event.GetEventType() == entry->m_eventType) &&
+        (entry->m_id == -1 ||     // Match, if event spec says any id will do (id == -1)
+        (entry->m_lastId == -1 && commandId == entry->m_id) ||
+        (entry->m_lastId != -1 &&
+        (commandId >= entry->m_id && commandId <= entry->m_lastId))))
+       {
+	  event.Skip(FALSE);
+          event.m_callbackUserData = entry->m_callbackUserData;
+	
+          (this->*((wxEventFunction) (entry->m_fn)))(event);
+
+	  if (event.GetSkipped()) 
+	    return FALSE;
+	  else
+            return TRUE;
+       }
+    };
+    node = node->Next();
+  }
+  return FALSE;
+};
 
 #if WXWIN_COMPATIBILITY
 void wxEvtHandler::OldOnMenuCommand(int cmd)
