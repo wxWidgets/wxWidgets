@@ -20,15 +20,21 @@
         <if cond="SHARED=='1'">WXUSINGDLL</if>
     </set>
     
-    <template id="wx_sample" template="wx">
+    <template id="wx_sample_b" template="wx">
         <include>$(SRCDIR)</include>
         <!-- Always link against the wxWin library in monolithic build: -->
         <sys-lib>$(WXLIB_MONO)</sys-lib>
         <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
         <define>$(DLLFLAG)</define>
+    </template>
+    
+    <template id="wx_sample" template="wx_sample_b">
         <app-type>gui</app-type>
-
         <mac-res cond="FORMAT=='autoconf'">$(MACOSX_RESOURCES)</mac-res>
+    </template>
+    
+    <template id="wx_sample_console" template="wx_sample_b">
+        <app-type>console</app-type>
     </template>
 
     
