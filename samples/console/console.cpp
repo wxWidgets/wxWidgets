@@ -89,8 +89,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_HASHMAP
-    #define TEST_FILENAME
+    #define TEST_THREADS
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -4599,7 +4598,7 @@ void MyDetachedThread::OnExit()
         gs_cond.Signal();
 }
 
-void TestDetachedThreads()
+static void TestDetachedThreads()
 {
     puts("\n*** Testing detached threads ***");
 
@@ -4625,7 +4624,7 @@ void TestDetachedThreads()
     puts("");
 }
 
-void TestJoinableThreads()
+static void TestJoinableThreads()
 {
     puts("\n*** Testing a joinable thread (a loooong calculation...) ***");
 
@@ -4637,7 +4636,7 @@ void TestJoinableThreads()
            (unsigned long)thread.Wait());
 }
 
-void TestThreadSuspend()
+static void TestThreadSuspend()
 {
     puts("\n*** Testing thread suspend/resume functions ***");
 
@@ -4676,7 +4675,7 @@ void TestThreadSuspend()
     puts("");
 }
 
-void TestThreadDelete()
+static void TestThreadDelete()
 {
     // As above, using Sleep() is only for testing here - we must use some
     // synchronisation object instead to ensure that the thread is still
@@ -4730,6 +4729,92 @@ void TestThreadDelete()
     puts("\nDeleted a joinable thread which already terminated.");
 
     puts("");
+}
+
+// wxCondition test code
+// ----------------------------------------------------------------------------
+
+class MyWaitingThread : public wxThread
+{
+public:
+    MyWaitingThread(wxCondition *condition)
+    {
+        m_condition = condition;
+
+        Create();
+    }
+
+    virtual ExitCode Entry()
+    {
+        printf("Thread %lu has started running.", GetId());
+        fflush(stdout);
+
+        gs_cond.Signal();
+
+        printf("Thread %lu starts to wait...\n", GetId());
+        fflush(stdout);
+
+        m_condition->Wait();
+
+        printf("Thread %lu finished to wait, exiting.\n", GetId());
+        fflush(stdout);
+
+        return 0;
+    }
+
+private:
+    wxCondition *m_condition;
+};
+
+static void TestThreadConditions()
+{
+    wxCondition condition;
+
+    // create and launch threads
+    MyWaitingThread *threads[2];
+
+    size_t n;
+    for ( n = 0; n < WXSIZEOF(threads); n++ )
+    {
+        threads[n] = new MyWaitingThread(&condition);
+    }
+
+    for ( n = 0; n < WXSIZEOF(threads); n++ )
+    {
+        threads[n]->Run();
+    }
+
+    // wait until all threads run
+    printf("Main thread is waiting for the threads to start: ");
+    fflush(stdout);
+
+    size_t nRunning = 0;
+    while ( nRunning < WXSIZEOF(threads) )
+    {
+        gs_cond.Wait();
+
+        putchar('.');
+        fflush(stdout);
+
+        nRunning++;
+    }
+
+    puts("\nMain thread: all threads started up.");
+    fflush(stdout);
+
+    // now wake them up
+#if 0
+    printf("Main thread: about to signal the condition.\n");
+    fflush(stdout);
+    condition.Signal();
+#endif // 0
+
+    printf("Main thread: about to broadcast the condition.\n");
+    fflush(stdout);
+    condition.Broadcast();
+
+    // give them time to terminate (dirty)
+    wxThread::Sleep(300);
 }
 
 #endif // TEST_THREADS
@@ -5502,18 +5587,15 @@ int main(int argc, char **argv)
     if ( nCPUs != -1 )
         wxThread::SetConcurrency(nCPUs);
 
-    if ( argc > 1 && argv[1][0] == 't' )
-        wxLog::AddTraceMask("thread");
-
-    if ( 1 )
+    if ( 0 )
+    {
         TestDetachedThreads();
-    if ( 1 )
         TestJoinableThreads();
-    if ( 1 )
         TestThreadSuspend();
-    if ( 1 )
         TestThreadDelete();
+    }
 
+    TestThreadConditions();
 #endif // TEST_THREADS
 
 #ifdef TEST_LONGLONG
