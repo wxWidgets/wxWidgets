@@ -68,10 +68,11 @@
    just the version number
  */
 
-// wxLogChain class available
+/* wxLogChain class available */
 #define wxHAS_LOG_CHAIN
 
-// define this when wxDC::Blit() respects SetDeviceOrigin() in wxGTK
+/* define this when wxDC::Blit() respects SetDeviceOrigin() in wxGTK */
 #undef wxHAS_WORKING_GTK_DC_BLIT
 
 #endif /* _WX_SETUP_H_BASE_ */
+
