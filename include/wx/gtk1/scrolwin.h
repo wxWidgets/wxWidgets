@@ -185,7 +185,7 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
-    DECLARE_ABSTRACT_CLASS(wxScrolledWindow)
+    DECLARE_DYNAMIC_CLASS(wxScrolledWindow)
 };
 
 #endif
