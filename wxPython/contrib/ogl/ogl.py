@@ -15,6 +15,8 @@ from events import *
 
 from streams import *
 
+from utils import *
+
 from mdi import *
 
 from frames import *
@@ -38,8 +40,6 @@ from printfw import *
 from sizers import *
 
 from filesys import *
-
-from utils import *
 
 from oglbasic import *
 
