@@ -1361,6 +1361,11 @@ dnl default CFLAGS (something like "-g -O2") -- we don't need this as we add
 dnl -g and -O flags ourselves below
 CFLAGS=${CFLAGS:=}
 AC_PROG_CC
+AC_WX_METROWERKS_EXTO
+if test "x$wx_cv_c_exto" '!=' "x"; then
+    unset ac_cv_prog_cc_g
+    _AC_PROG_CC_G
+fi
 AC_BAKEFILE_PROG_MWCC
 
 dnl is -traditional needed for correct compilations
@@ -1379,6 +1384,11 @@ dnl
 dnl see CFLAGS line above
 CXXFLAGS=${CXXFLAGS:=}
 AC_PROG_CXX
+AC_WX_METROWERKS_EXTO
+if test "x$wx_cv_cxx_exto" '!=' "x"; then
+    unset ac_cv_prog_cxx_g
+    _AC_PROG_CXX_G
+fi
 AC_BAKEFILE_PROG_MWCXX
 
 AC_LANG_RESTORE

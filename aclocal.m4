@@ -22,6 +22,46 @@ dnl Version: $Id$
 dnl ---------------------------------------------------------------------------
 
 dnl ===========================================================================
+dnl macros to detect specialty compiler options
+dnl ===========================================================================
+
+dnl Figure out if we need to pass -ext o to compiler (MetroWerks)
+AC_DEFUN([AC_WX_METROWERKS_EXTO],
+[AC_CACHE_CHECK([if the _AC_LANG compiler requires -ext o], wx_cv_[]_AC_LANG_ABBREV[]_exto,
+dnl First create an empty conf test
+[AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+dnl Now remove .o and .c.o or .cc.o
+rm -f conftest.$ac_objext conftest.$ac_ext.o
+dnl Now compile the test
+AS_IF([AC_TRY_EVAL(ac_compile)],
+dnl If the test succeeded look for conftest.c.o or conftest.cc.o
+[for ac_file in `(ls conftest.* 2>/dev/null)`; do
+    case $ac_file in
+        conftest.$ac_ext.o)
+            wx_cv_[]_AC_LANG_ABBREV[]_exto="-ext o"
+            ;;
+        *)
+            ;;
+    esac
+done],
+[AC_MSG_FAILURE([cannot figure out if compiler needs -ext o: cannot compile])
+]) dnl AS_IF
+
+rm -f conftest.$ac_ext.o conftest.$ac_objext conftest.$ac_ext
+]) dnl AC_CACHE_CHECK
+
+if test "x$wx_cv_[]_AC_LANG_ABBREV[]_exto" '!=' "x"; then
+    if test "[]_AC_LANG_ABBREV[]" = "c"; then
+        CFLAGS="$wx_cv_[]_AC_LANG_ABBREV[]_exto $CFLAGS"
+    fi
+    if test "[]_AC_LANG_ABBREV[]" = "cxx"; then
+        CXXFLAGS="$wx_cv_[]_AC_LANG_ABBREV[]_exto $CXXFLAGS"
+    fi
+fi
+]) dnl AC_DEFUN
+
+
+dnl ===========================================================================
 dnl macros to find the a file in the list of include/lib paths
 dnl ===========================================================================
 
