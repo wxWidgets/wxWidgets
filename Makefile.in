@@ -3262,7 +3262,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_paletteg.o \
 	monodll_statusbr.o \
 	monodll_tabg.o \
-	monodll_timer.o
+	monodll_timer.o \
+	monodll_gsockosx.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS =  \
 	monodll_accel.o \
@@ -3660,7 +3661,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_paletteg.o \
 	monolib_statusbr.o \
 	monolib_tabg.o \
-	monolib_timer.o
+	monolib_timer.o \
+	monolib_gsockosx.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_1 =  \
 	monolib_accel.o \
@@ -4058,7 +4060,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_paletteg.o \
 	coredll_statusbr.o \
 	coredll_tabg.o \
-	coredll_timer.o
+	coredll_timer.o \
+	coredll_gsockosx.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_2 =  \
 	coredll_accel.o \
@@ -4456,7 +4459,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_paletteg.o \
 	corelib_statusbr.o \
 	corelib_tabg.o \
-	corelib_timer.o
+	corelib_timer.o \
+	corelib_gsockosx.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_3 =  \
 	corelib_accel.o \
@@ -8117,8 +8121,11 @@ coredll_gsockmot.o: $(srcdir)/src/motif/gsockmot.c $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
 
-coredll_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(COREDLL_ODEP)
-	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(COREDLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
 
 coredll_gsockpm.o: $(srcdir)/src/os2/gsockpm.c $(COREDLL_ODEP)
 	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
@@ -10228,8 +10235,11 @@ corelib_gsockmot.o: $(srcdir)/src/motif/gsockmot.c $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
 
-corelib_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(CORELIB_ODEP)
-	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(CORELIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
 
 corelib_gsockpm.o: $(srcdir)/src/os2/gsockpm.c $(CORELIB_ODEP)
 	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
@@ -12907,8 +12917,11 @@ monodll_gsockmot.o: $(srcdir)/src/motif/gsockmot.c $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
-monodll_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(MONODLL_ODEP)
-	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
 monodll_gsockpm.o: $(srcdir)/src/os2/gsockpm.c $(MONODLL_ODEP)
 	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
@@ -15513,8 +15526,11 @@ monolib_gsockmot.o: $(srcdir)/src/motif/gsockmot.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
 
-monolib_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(MONOLIB_ODEP)
-	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
 
 monolib_gsockpm.o: $(srcdir)/src/os2/gsockpm.c $(MONOLIB_ODEP)
 	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
