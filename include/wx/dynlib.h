@@ -229,8 +229,8 @@ extern wxLibraries wxTheLibraries;
 // ----------------------------------------------------------------------------
 
 #define WXDLL_ENTRY_FUNCTION() \
-extern "C" wxClassInfo *wxGetClassFirst(); \
-wxClassInfo *wxGetClassFirst() { \
+extern "C" WXEXPORT wxClassInfo *wxGetClassFirst(); \
+const wxClassInfo *wxGetClassFirst() { \
   return wxClassInfo::GetFirst(); \
 }
 
