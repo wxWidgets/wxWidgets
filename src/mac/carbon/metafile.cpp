@@ -166,7 +166,6 @@ bool wxMetaFile::Play(wxDC *dc)
         return FALSE;
         
     {
-        PicHandle pict = (PicHandle) GetHMETAFILE() ;
 #if wxMAC_USE_CORE_GRAPHICS
         QDPictRef cgPictRef = M_METAFILEDATA->m_qdPictRef ;
         CGContextRef cg = dynamic_cast<wxMacCGContext*>(dc->GetGraphicContext())->GetNativeContext() ;
@@ -178,6 +177,7 @@ bool wxMetaFile::Play(wxDC *dc)
         QDPictDrawToCGContext( cg , bounds , cgPictRef ) ;
         CGContextRestoreGState( cg ) ;
 #else
+        PicHandle pict = (PicHandle) GetHMETAFILE() ;
         wxMacPortSetter helper( dc ) ;
         DrawPicture( pict , &(**pict).picFrame ) ;
 #endif
