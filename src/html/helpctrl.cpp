@@ -162,16 +162,16 @@ bool wxHtmlHelpController::Initialize(const wxString& file)
     wxSplitPath(file, & dir, & filename, & ext);
 
     if (!dir.IsEmpty())
-        dir = dir + wxString(_("/"));
+        dir = dir + wxString(wxT("/"));
 
     // Try to find a suitable file
-    wxString actualFilename = dir + filename + wxString(_(".zip"));
+    wxString actualFilename = dir + filename + wxString(wxT(".zip"));
     if (!wxFileExists(actualFilename))
     {
-        actualFilename = dir + filename + wxString(_(".htb"));
+        actualFilename = dir + filename + wxString(wxT(".htb"));
         if (!wxFileExists(actualFilename))
         {
-            actualFilename = dir + filename + wxString(_(".hhp"));
+            actualFilename = dir + filename + wxString(wxT(".hhp"));
             if (!wxFileExists(actualFilename))
                 return FALSE;
         }
