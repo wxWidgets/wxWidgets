@@ -153,7 +153,7 @@ def GetCentredTextExtent(dc, text_list, xpos = 0, ypos = 0, width = 0, height = 
 
     max_width = 0
     for line in text_list:
-        current_width, char_height = dc.GetTextExtent(line)
+        current_width, char_height = dc.GetTextExtent(line.GetText())
         if current_width > max_width:
             max_width = current_width
 

@@ -521,7 +521,7 @@ class Shape(ShapeEvtHandler):
         # Don't try to resize an object with more than one image (this
         # case should be dealt with by overriden handlers)
         if (region.GetFormatMode() & FORMAT_SIZE_TO_CONTENTS) and \
-           region.GetFormattedText().GetCount() and \
+           len(region.GetFormattedText()) and \
            len(self._regions) == 1 and \
            not Shape.GraphicsInSizeToContents:
 
