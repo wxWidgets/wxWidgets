@@ -23,6 +23,8 @@ public:
     ~wxMemoryDC(void);
     virtual void SelectObject(const wxBitmap& bitmap);
     virtual void DoGetSize(int *width, int *height) const;
+
+    virtual void Clear();
 protected:
     wxBitmap m_selectedBitmap;
     WX_NSImage m_cocoaNSImage;

@@ -20,6 +20,8 @@
 #import <AppKit/NSImage.h>
 #import <AppKit/NSAffineTransform.h>
 #import <AppKit/NSGraphicsContext.h>
+#import <AppKit/NSColor.h>
+#import <AppKit/NSBezierPath.h>
 
 //-----------------------------------------------------------------------------
 // wxMemoryDC
@@ -148,5 +150,22 @@ bool wxMemoryDC::CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
         
     [context restoreGraphicsState];
     return false;
+}
+
+void wxMemoryDC::Clear()
+{
+    if(!CocoaTakeFocus()) return;
+
+    NSGraphicsContext *context = [NSGraphicsContext currentContext];
+    [context saveGraphicsState];
+
+    [m_backgroundBrush.GetNSColor() set];
+    NSRect rect;
+    rect.origin.x = 0;
+    rect.origin.y = 0;
+    rect.size = [m_cocoaNSImage size];
+    [NSBezierPath fillRect:rect];
+
+    [context restoreGraphicsState];
 }
 
