@@ -250,7 +250,7 @@ wxLog *wxLog::GetActiveTarget()
     if ( !s_bInGetActiveTarget ) {
       s_bInGetActiveTarget = TRUE;
 
-      #ifdef  WX_TEST_MINIMAL
+      #ifdef  wxUSE_NOGUI
         ms_pLogger = new wxLogStderr;
       #else
         // ask the application to create a log target for us
@@ -410,7 +410,7 @@ wxLogTextCtrl::~wxLogTextCtrl()
 // wxLogGui implementation
 // ----------------------------------------------------------------------------
 
-#ifndef   WX_TEST_MINIMAL
+#ifndef   wxUSE_NOGUI
 
 wxLogGui::wxLogGui()
 {
@@ -804,7 +804,7 @@ wxLogWindow::~wxLogWindow()
   delete m_pLogFrame;
 }
 
-#endif  //WX_TEST_MINIMAL
+#endif  //wxUSE_NOGUI
 
 // ============================================================================
 // Global functions/variables
