@@ -549,6 +549,7 @@ bool wxDebugReport::DoProcess()
 
 #if wxUSE_ZIPSTREAM
 
+// leave the default name wxZipOutputStreamPtr free for users
 wxDECLARE_SCOPED_PTR(wxZipOutputStream, wxDbgZipOutputStreamPtr)
 wxDEFINE_SCOPED_PTR(wxZipOutputStream, wxDbgZipOutputStreamPtr)
 
@@ -565,6 +566,10 @@ bool wxDebugReportCompress::DoProcess()
     // create the streams
     wxFileName fn(GetDirectory(), GetReportName(), _T("zip"));
     wxFFileOutputStream os(fn.GetFullPath(), _T("wb"));
+
+    // create this one on the heap as a workaround since otherwise the mingw
+    // 3.2.3 linker cannot find ~wxZipOutputStream() when building a dll
+    // version of the library.
     wxDbgZipOutputStreamPtr zos(new wxZipOutputStream(os, 9));
 
     // add all files to the ZIP one
