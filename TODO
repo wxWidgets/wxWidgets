@@ -14,12 +14,13 @@ samples:
 
 wxTextCtrl
 
-*!  call to RefreshLineRange() from Replace() is broken
-*!  display corrupted when typing text in quickly (caret problem?)
+*!! display corrupted when typing text in quickly (even single line)
 *   caret leaves traces under wxGTK
 ?   text ctrl display pb when text is truncated
 *   remember selection when losing/gaining activation
 *   too much is refreshed when double clicking (word select)
+
+*   scrolling by dragging mouse outside the window
 
 All
 

@@ -28,7 +28,7 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_FILE
+#if wxUSE_FFILE
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
@@ -258,4 +258,4 @@ size_t wxFFile::Length() const
     return (size_t)-1;
 }
 
-#endif // wxUSE_FILE
+#endif // wxUSE_FFILE

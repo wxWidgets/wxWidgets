@@ -20,11 +20,6 @@
 
 #include "wx/defs.h"
 
-#if !wxUSE_FILE
-    #undef wxUSE_TEXTFILE
-    #define wxUSE_TEXTFILE 0
-#endif // wxUSE_FILE
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------

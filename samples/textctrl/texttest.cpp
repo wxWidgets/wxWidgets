@@ -67,6 +67,7 @@ enum
     TextTest_Add,
     TextTest_Insert,
     TextTest_Clear,
+    TextTest_Load,
 
     TextTest_Password,
     TextTest_WrapLines,
@@ -133,6 +134,7 @@ protected:
     void OnButtonInsert(wxCommandEvent& event);
     void OnButtonAdd(wxCommandEvent& event);
     void OnButtonClear(wxCommandEvent& event);
+    void OnButtonLoad(wxCommandEvent& event);
 
     void OnButtonQuit(wxCommandEvent& event);
 
@@ -231,6 +233,7 @@ BEGIN_EVENT_TABLE(TextTestFrame, wxFrame)
     EVT_BUTTON(TextTest_Clear, TextTestFrame::OnButtonClear)
     EVT_BUTTON(TextTest_Add, TextTestFrame::OnButtonAdd)
     EVT_BUTTON(TextTest_Insert, TextTestFrame::OnButtonInsert)
+    EVT_BUTTON(TextTest_Load, TextTestFrame::OnButtonLoad)
 
     EVT_UPDATE_UI(TextTest_Clear, TextTestFrame::OnUpdateUIClearButton)
 
@@ -305,9 +308,6 @@ TextTestFrame::TextTestFrame(const wxString& title)
        the pane containing the textctrl itself and the lower pane containing
        the buttons which allow to add/change/delete strings to/from it.
     */
-    wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL),
-            *sizerUp = new wxBoxSizer(wxHORIZONTAL),
-            *sizerLeft;
 
     // upper left pane
     static const wxString modes[] =
@@ -326,7 +326,7 @@ TextTestFrame::TextTestFrame(const wxString& title)
     m_chkWrapLines = new wxCheckBox(m_panel, TextTest_WrapLines, _T("Line &wrap"));
     m_chkReadonly = new wxCheckBox(m_panel, -1, _T("&Read-only mode"));
 
-    sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
+    wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
     sizerLeft->Add(m_radioTextLines, 0, wxGROW | wxALL, 5);
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
@@ -347,6 +347,9 @@ TextTestFrame::TextTestFrame(const wxString& title)
     btn = new wxButton(m_panel, TextTest_Insert, _T("&Insert text"));
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
 
+    btn = new wxButton(m_panel, TextTest_Load, _T("&Load file"));
+    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
+
     btn = new wxButton(m_panel, TextTest_Clear, _T("&Clear"));
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
 
@@ -363,20 +366,20 @@ TextTestFrame::TextTestFrame(const wxString& title)
                     _T("Current pos:"),
                     m_textPosCur
                   ),
-                  0, wxGROW | wxRIGHT, 5);
+                  0, wxRIGHT, 5);
     sizerRow->Add(CreateTextWithLabelSizer
                   (
                     _T("Col:"),
                     m_textColCur
                   ),
-                  0, wxGROW | wxLEFT | wxRIGHT, 5);
+                  0, wxLEFT | wxRIGHT, 5);
     sizerRow->Add(CreateTextWithLabelSizer
                   (
                     _T("Row:"),
                     m_textRowCur
                   ),
-                  0, wxGROW | wxLEFT, 5);
-    sizerMiddleDown->Add(sizerRow, 0, wxALL | wxGROW, 5);
+                  0, wxLEFT, 5);
+    sizerMiddleDown->Add(sizerRow, 0, wxALL, 5);
 
     m_textLineLast = CreateInfoText();
     m_textPosLast = CreateInfoText();
@@ -389,7 +392,7 @@ TextTestFrame::TextTestFrame(const wxString& title)
                           _T("Last position:"),
                           m_textPosLast
                         ),
-                        0, wxALL | wxGROW, 5
+                        0, wxALL, 5
                      );
 
     m_textSelFrom = CreateInfoText();
@@ -403,11 +406,11 @@ TextTestFrame::TextTestFrame(const wxString& title)
                           _T("to"),
                           m_textSelTo
                         ),
-                        0, wxALL | wxGROW, 5
+                        0, wxALL, 5
                      );
     wxSizer *sizerMiddle = new wxBoxSizer(wxVERTICAL);
-    sizerMiddle->Add(sizerMiddleUp, 1, wxGROW, 5);
-    sizerMiddle->Add(sizerMiddleDown, 1, wxGROW | wxTOP, 5);
+    sizerMiddle->Add(sizerMiddleUp, 0, wxGROW);
+    sizerMiddle->Add(sizerMiddleDown, 0, wxGROW | wxTOP, 5);
 
     // I don't understand what's going on :-(
 #ifdef __WXGTK__
@@ -428,8 +431,9 @@ TextTestFrame::TextTestFrame(const wxString& title)
                            );
 
     // the 3 panes panes compose the upper part of the window
+    wxSizer *sizerUp = new wxBoxSizer(wxHORIZONTAL);
     sizerUp->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerUp->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
+    sizerUp->Add(sizerMiddle, 0, wxGROW | wxALL, 10);
     sizerUp->Add(m_sizerText, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // the lower one only has the log textctrl and a button to clear it
@@ -457,7 +461,8 @@ TextTestFrame::TextTestFrame(const wxString& title)
     sizerDown->Add(sizerBtns, 0, wxALL | wxALIGN_RIGHT, 5);
 
     // put everything together
-    sizerTop->Add(sizerUp, 1, wxGROW | (wxALL & ~(wxTOP | wxBOTTOM)), 10);
+    wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
+    sizerTop->Add(sizerUp, 1, wxGROW | wxRIGHT | wxLEFT, 10);
     sizerTop->Add(0, 5, 0, wxGROW); // spacer in between
     sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
 
@@ -487,7 +492,7 @@ wxTextCtrl *TextTestFrame::CreateInfoText()
     if ( !s_maxWidth )
     {
         // calc it once only
-        GetTextExtent(_T("99999"), &s_maxWidth, NULL);
+        GetTextExtent(_T("9999999"), &s_maxWidth, NULL);
     }
 
     wxTextCtrl *text = new wxTextCtrl(m_panel, -1, _T(""),
@@ -676,6 +681,21 @@ void TextTestFrame::OnButtonClear(wxCommandEvent& WXUNUSED(event))
 {
     m_text->Clear();
     m_text->SetFocus();
+}
+
+void TextTestFrame::OnButtonLoad(wxCommandEvent& WXUNUSED(event))
+{
+    // search for the file in several dirs where it's likely to be
+    wxPathList pathlist;
+    pathlist.Add(_T("."));
+    pathlist.Add(_T(".."));
+    pathlist.Add(_T("../../../samples/texttest"));
+
+    wxString filename = pathlist.FindValidPath(_T("texttest.cpp"));
+    if ( !filename )
+        wxLogError(_T("File texttest.cpp not found."));
+    else if ( !m_text->LoadFile(filename) )
+        wxLogError(_T("Error loading file."));
 }
 
 void TextTestFrame::OnUpdateUIClearButton(wxUpdateUIEvent& event)

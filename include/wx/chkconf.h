@@ -115,6 +115,8 @@
 #   endif
 #endif /* wxUSE_RADIOBTN */
 
+/* I wonder if we shouldn't just remove all occurrences of
+   wxUSE_DYNAMIC_CLASSES from the sources? */
 #if !defined(wxUSE_DYNAMIC_CLASSES) || !wxUSE_DYNAMIC_CLASSES
 #   if wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DYNAMIC_CLASSES must be defined as 1"

@@ -24,6 +24,18 @@
  */
 
 /*
+   Optimisation hints from PureQuantify:
+
+   1. wxStringTokenize is the slowest part of Replace
+   2. GetDC/ReleaseDC are very slow, avoid calling them several times
+   3. GetCharHeight() should be cached too
+   4. wxClientDC construction/destruction in HitTestLine is horribly expensive
+
+   For line wrapping controls HitTest2 takes 50% of program time. The results
+   of GetRowsPerLine and GetPartOfWrappedLine *MUST* be cached.
+ */
+
+/*
    Some terminology:
 
    Everywhere in this file LINE refers to a logical line of text, and ROW to a
@@ -1828,32 +1840,59 @@ void wxTextCtrl::UpdateLastVisible()
     if ( !IsSingleLine() )
         return;
 
-    // OPT: estimate the correct value first, just adjust it later
-
-    wxString text;
-    wxCoord w, wOld;
-
-    w =
-    wOld = 0;
-
-    m_colLastVisible = m_colStart;
-
-    const wxChar *pc = m_value.c_str() + (size_t)m_colStart;
-    for ( ; *pc; pc++ )
+    // use (efficient) HitTestLine to find the last visible character
+    wxString text = m_value.Mid((size_t)m_colStart /* to the end */);
+    wxTextCoord col;
+    switch ( HitTestLine(text, m_rectText.width, &col) )
     {
-        text += *pc;
-        wOld = w;
-        w = GetTextWidth(text);
-        if ( w > m_rectText.width )
-        {
-            // this char is too much
-            break;
-        }
+        case wxTE_HT_BEYOND:
+            // everything is visible
+            m_colLastVisible = text.length();
 
-        m_colLastVisible++;
+            // calc it below
+            m_posLastVisible = -1;
+            break;
+
+           /*
+        case wxTE_HT_BEFORE:
+        case wxTE_HT_BELOW:
+            */
+        default:
+            wxFAIL_MSG(_T("unexpected HitTestLine() return value"));
+            // fall through
+
+        case wxTE_HT_ON_TEXT:
+            if ( col > 0 )
+            {
+                // the last entirely seen character is the previous one because
+                // this one is only partly visible - unless the width of the
+                // string is exactly the max width
+                m_posLastVisible = GetTextWidth(text.Truncate(col + 1));
+                if ( m_posLastVisible > m_rectText.width )
+                {
+                    // this character is not entirely visible, take the
+                    // previous one
+                    col--;
+
+                    // recalc it
+                    m_posLastVisible = -1;
+                }
+                //else: we can just see it
+
+                m_colLastVisible = col;
+            }
+            break;
     }
 
-    m_posLastVisible = wOld;
+    // calculate the width of the text really shown
+    if ( m_posLastVisible == -1 )
+    {
+        m_posLastVisible = GetTextWidth(text.Truncate(m_colLastVisible + 1));
+    }
+
+    // current value is relative the start of the string text which starts at
+    // m_colStart, we need an absolute offset into string
+    m_colLastVisible += m_colStart;
 
     wxLogTrace(_T("text"), _T("Last visible column/position is %d/%ld"),
                m_colLastVisible, m_posLastVisible);
@@ -1918,12 +1957,15 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
                 // the last entirely seen character is the previous one because
                 // this one is only partly visible - unless the width of the
                 // string is exactly the max width
-                wReal = GetTextWidth(s.Truncate(col));
+                wReal = GetTextWidth(s.Truncate(col + 1));
                 if ( wReal > m_rectText.width )
                 {
                     // this character is not entirely visible, take the
                     // previous one
                     col--;
+
+                    // recalc the width
+                    wReal = -1;
                 }
                 //else: we can just see it
 
@@ -2639,7 +2681,7 @@ void wxTextCtrl::UpdateScrollbars()
     // is our height enough to show all items?
     wxTextCoord nRows = GetNumberOfRowsBefore(GetNumberOfLines());
     wxCoord lineHeight = GetCharHeight();
-    bool showScrollbarY = nRows*lineHeight > size.y;
+    bool showScrollbarY = !IsSingleLine() && nRows*lineHeight > size.y;
 
     // is our width enough to show the longest line?
     wxCoord charWidth, maxWidth;
@@ -3072,12 +3114,6 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
             if ( colEnd > m_colLastVisible )
             {
                 colEnd = m_colLastVisible;
-
-                // we don't draw the last character because it may be shown
-                // only partially in single line mode (in multi line we can't
-                // avoid showing parts of characters anyhow)
-                if ( colEnd > colStart )
-                    colEnd--;
             }
         }
 

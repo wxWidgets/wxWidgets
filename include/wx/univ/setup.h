@@ -55,6 +55,7 @@
 #define wxUSE_ZLIB          0
 #define wxUSE_APPLE_IEEE          0
 #define wxUSE_FILE                0
+#define wxUSE_FFILE               1
 #define wxUSE_TEXTFILE            0
 #define wxUSE_INTL                0
 #define wxUSE_MENUS 0

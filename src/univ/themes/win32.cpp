@@ -349,6 +349,17 @@ public:
                            bool pressed);
 };
 
+class wxWin32TextCtrlInputHandler : public wxStdTextCtrlInputHandler
+{
+public:
+    wxWin32TextCtrlInputHandler(wxInputHandler *handler)
+        : wxStdTextCtrlInputHandler(handler) { }
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+};
+
 // ----------------------------------------------------------------------------
 // wxWin32ColourScheme: uses (default) Win32 colours
 // ----------------------------------------------------------------------------
@@ -770,7 +781,7 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
         else if ( control == wxINP_HANDLER_CHECKLISTBOX )
             handler = new wxStdCheckListboxInputHandler(GetDefaultInputHandler());
         else if ( control == wxINP_HANDLER_TEXTCTRL )
-            handler = new wxStdTextCtrlInputHandler(GetDefaultInputHandler());
+            handler = new wxWin32TextCtrlInputHandler(GetDefaultInputHandler());
         else
             handler = GetDefaultInputHandler();
 
@@ -2121,3 +2132,42 @@ bool wxWin32CheckboxInputHandler::HandleKey(wxControl *control,
 
     return FALSE;
 }
+
+// ----------------------------------------------------------------------------
+// wxWin32TextCtrlInputHandler
+// ----------------------------------------------------------------------------
+
+bool wxWin32TextCtrlInputHandler::HandleKey(wxControl *control,
+                                            const wxKeyEvent& event,
+                                            bool pressed)
+{
+    // handle only MSW-specific text bindings here, the others are handled in
+    // the base class
+    if ( pressed )
+    {
+        int keycode = event.GetKeyCode();
+
+        wxControlAction action;
+        if ( keycode == WXK_DELETE && event.ShiftDown() )
+        {
+            action = wxACTION_TEXT_CUT;
+        }
+        else if ( keycode == WXK_INSERT )
+        {
+            if ( event.ControlDown() )
+                action = wxACTION_TEXT_COPY;
+            else if ( event.ShiftDown() )
+                action = wxACTION_TEXT_PASTE;
+        }
+
+        if ( action != wxACTION_NONE )
+        {
+            control->PerformAction(action);
+
+            return TRUE;
+        }
+    }
+
+    return wxStdTextCtrlInputHandler::HandleKey(control, event, pressed);
+}
+
