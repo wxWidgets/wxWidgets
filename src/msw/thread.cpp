@@ -629,6 +629,9 @@ void wxThreadInternal::SetPriority(unsigned int priority)
 
 bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
 {
+    wxASSERT_MSG( m_state == STATE_NEW && !m_hThread,
+                    _T("Create()ing thread twice?") );
+
     // for compilers which have it, we should use C RTL function for thread
     // creation instead of Win32 API one because otherwise we will have memory
     // leaks if the thread uses C RTL (and most threads do)
@@ -673,8 +676,6 @@ bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
     {
         SetPriority(m_priority);
     }
-
-    m_state = STATE_NEW;
 
     return TRUE;
 }
