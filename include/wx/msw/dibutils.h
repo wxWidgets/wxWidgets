@@ -40,84 +40,84 @@ typedef     HANDLE             HDIB;
    External function declarations
  **************************************************************************/
 
-void        ClearSystemPalette(void);
-PDIB        DibOpenFile(LPTSTR szFile);  
-int 			DibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi);
-BOOL        DibSetUsage(PDIB pdib, HPALETTE hpal,UINT wUsage);
-PDIB        DibCreate(int bits, int dx, int dy);
-BOOL        DibMapToPalette(PDIB pdib, HPALETTE hpal);
-HPALETTE MakePalette(const BITMAPINFO FAR* Info, UINT flags);
+void        wxClearSystemPalette(void);
+PDIB        wxDibOpenFile(LPTSTR szFile);  
+int 			wxDibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi);
+BOOL        wxDibSetUsage(PDIB pdib, HPALETTE hpal,UINT wUsage);
+PDIB        wxDibCreate(int bits, int dx, int dy);
+BOOL        wxDibMapToPalette(PDIB pdib, HPALETTE hpal);
+HPALETTE wxMakePalette(const BITMAPINFO FAR* Info, UINT flags);
 
 /****************************************************************************
    Internal function declarations
  ***************************************************************************/
 
-PDIB        DibReadBitmapInfo(HFILE fh);
+PDIB        wxDibReadBitmapInfo(HFILE fh);
 
 /****************************************************************************
    DIB macros.
  ***************************************************************************/
 
 #ifdef  WIN32
-	 #define HandleFromDib(lpbi) GlobalHandle(lpbi)
+	 #define wxHandleFromDib(lpbi) GlobalHandle(lpbi)
 #else
-    #define HandleFromDib(lpbi) (HANDLE)GlobalHandle(SELECTOROF(lpbi))
+    #define wxHandleFromDib(lpbi) (HANDLE)GlobalHandle(SELECTOROF(lpbi))
 #endif
 
-#define DibFromHandle(h)        (PDIB)GlobalLock(h)
+#define wxDibFromHandle(h)        (PDIB)GlobalLock(h)
 
-#define DibFree(pdib)           GlobalFreePtr(pdib)
+#define wxDibFree(pdib)           GlobalFreePtr(pdib)
 
-#define WIDTHBYTES(i)           ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define wxWIDTHBYTES(i)           ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
 
-#define DibWidth(lpbi)          (UINT)(((LPBITMAPINFOHEADER)(lpbi))->biWidth)
-#define DibHeight(lpbi)         (UINT)(((LPBITMAPINFOHEADER)(lpbi))->biHeight)
-#define DibBitCount(lpbi)       (UINT)(((LPBITMAPINFOHEADER)(lpbi))->biBitCount)
-#define DibCompression(lpbi)    (DWORD)(((LPBITMAPINFOHEADER)(lpbi))->biCompression)
+#define wxDibWidth(lpbi)          (UINT)(((LPBITMAPINFOHEADER)(lpbi))->biWidth)
+#define wxDibHeight(lpbi)         (UINT)(((LPBITMAPINFOHEADER)(lpbi))->biHeight)
+#define wxDibBitCount(lpbi)       (UINT)(((LPBITMAPINFOHEADER)(lpbi))->biBitCount)
+#define wxDibCompression(lpbi)    (DWORD)(((LPBITMAPINFOHEADER)(lpbi))->biCompression)
 
-#define DibWidthBytesN(lpbi, n) (UINT)WIDTHBYTES((UINT)(lpbi)->biWidth * (UINT)(n))
-#define DibWidthBytes(lpbi)     DibWidthBytesN(lpbi, (lpbi)->biBitCount)
+#define wxDibWidthBytesN(lpbi, n) (UINT)wxWIDTHBYTES((UINT)(lpbi)->biWidth * (UINT)(n))
+#define wxDibWidthBytes(lpbi)     wxDibWidthBytesN(lpbi, (lpbi)->biBitCount)
 
-#define DibSizeImage(lpbi)      ((lpbi)->biSizeImage == 0 \
-                                    ? ((DWORD)(UINT)DibWidthBytes(lpbi) * (DWORD)(UINT)(lpbi)->biHeight) \
+#define wxDibSizeImage(lpbi)      ((lpbi)->biSizeImage == 0 \
+                                    ? ((DWORD)(UINT)wxDibWidthBytes(lpbi) * (DWORD)(UINT)(lpbi)->biHeight) \
                                     : (lpbi)->biSizeImage)
 
-#define DibSize(lpbi)           ((lpbi)->biSize + (lpbi)->biSizeImage + (int)(lpbi)->biClrUsed * sizeof(RGBQUAD))
-#define DibPaletteSize(lpbi)    (DibNumColors(lpbi) * sizeof(RGBQUAD))
+#define wxDibSize(lpbi)           ((lpbi)->biSize + (lpbi)->biSizeImage + (int)(lpbi)->biClrUsed * sizeof(RGBQUAD))
+#define wxDibPaletteSize(lpbi)    (wxDibNumColors(lpbi) * sizeof(RGBQUAD))
 
-#define DibFlipY(lpbi, y)       ((int)(lpbi)->biHeight-1-(y))
+#define wxDibFlipY(lpbi, y)       ((int)(lpbi)->biHeight-1-(y))
 
 //HACK for NT BI_BITFIELDS DIBs
 #ifdef WIN32
-    #define DibPtr(lpbi)            ((lpbi)->biCompression == BI_BITFIELDS \
-                                       ? (LPVOID)(DibColors(lpbi) + 3) \
-                                       : (LPVOID)(DibColors(lpbi) + (UINT)(lpbi)->biClrUsed))
+    #define wxDibPtr(lpbi)            ((lpbi)->biCompression == BI_BITFIELDS \
+                                       ? (LPVOID)(wxDibColors(lpbi) + 3) \
+                                       : (LPVOID)(wxDibColors(lpbi) + (UINT)(lpbi)->biClrUsed))
 #else
-	 #define DibPtr(lpbi)            (LPVOID)(DibColors(lpbi) + (UINT)(lpbi)->biClrUsed)
+	 #define wxDibPtr(lpbi)            (LPVOID)(wxDibColors(lpbi) + (UINT)(lpbi)->biClrUsed)
 #endif
 
-#define DibColors(lpbi)         ((RGBQUAD FAR *)((LPBYTE)(lpbi) + (int)(lpbi)->biSize))
+#define wxDibColors(lpbi)         ((RGBQUAD FAR *)((LPBYTE)(lpbi) + (int)(lpbi)->biSize))
 
-#define DibNumColors(lpbi)      ((lpbi)->biClrUsed == 0 && (lpbi)->biBitCount <= 8 \
+#define wxDibNumColors(lpbi)      ((lpbi)->biClrUsed == 0 && (lpbi)->biBitCount <= 8 \
                                     ? (int)(1 << (int)(lpbi)->biBitCount)          \
                                     : (int)(lpbi)->biClrUsed)
 
-#define DibXYN(lpbi,pb,x,y,n)   (LPVOID)(                                     \
+#define wxDibXYN(lpbi,pb,x,y,n)   (LPVOID)(                                     \
                                 (BYTE _huge *)(pb) +                          \
                                 (UINT)((UINT)(x) * (UINT)(n) / 8u) +          \
-                                ((DWORD)DibWidthBytesN(lpbi,n) * (DWORD)(UINT)(y)))
+                                ((DWORD)wxDibWidthBytesN(lpbi,n) * (DWORD)(UINT)(y)))
 
-#define DibXY(lpbi,x,y)         DibXYN(lpbi,DibPtr(lpbi),x,y,(lpbi)->biBitCount)
+#define wxDibXY(lpbi,x,y)         wxDibXYN(lpbi,wxDibPtr(lpbi),x,y,(lpbi)->biBitCount)
 
-#define FixBitmapInfo(lpbi)     if ((lpbi)->biSizeImage == 0)                 \
-												(lpbi)->biSizeImage = DibSizeImage(lpbi); \
+#define wxFixBitmapInfo(lpbi)     if ((lpbi)->biSizeImage == 0)                 \
+												(lpbi)->biSizeImage = wxDibSizeImage(lpbi); \
                                 if ((lpbi)->biClrUsed == 0)                   \
-                                    (lpbi)->biClrUsed = DibNumColors(lpbi);
+                                    (lpbi)->biClrUsed = wxDibNumColors(lpbi);
 
 //                                if ((lpbi)->biCompression == BI_BITFIELDS && (lpbi)->biClrUsed == 0)
 //                                    ; // (lpbi)->biClrUsed = 3;                    
 
-#define DibInfo(pDIB)     ((BITMAPINFO FAR *)(pDIB))
+#define wxDibInfo(pDIB)     ((BITMAPINFO FAR *)(pDIB))
 
 /***************************************************************************/
 
