@@ -675,6 +675,14 @@
 #   endif
 #endif /* !defined(wxUSE_TREECTRL) */
 
+#ifndef wxUSE_DISPLAY
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DISPLAY must be defined."
+#   else
+#       define wxUSE_DISPLAY 0
+#   endif
+#endif /* !defined(wxUSE_TREECTRL) */
+
 #ifndef wxUSE_WXHTML_HELP
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_WXHTML_HELP must be defined."
@@ -1139,6 +1147,26 @@
 #       endif
 #   endif
 #endif /* wxUSE_FILEDLG */
+
+#if !wxUSE_TOOLBAR
+#   if wxUSE_TOOLBAR_NATIVE
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_TOOLBAR is set to 0 but wxUSE_TOOLBAR_NATIVE is set to 1"
+#        else
+#            undef wxUSE_TOOLBAR_NATIVE
+#            define wxUSE_TOOLBAR_NATIVE 0
+#        endif
+#   endif
+
+#   if wxUSE_TOOLBAR_SIMPLE
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_TOOLBAR is set to 0 but wxUSE_TOOLBAR_SIMPLE is set to 1"
+#        else
+#            undef wxUSE_TOOLBAR_SIMPLE
+#            define wxUSE_TOOLBAR_SIMPLE 0
+#        endif
+#   endif
+#endif
 
 #if !wxUSE_IMAGLIST
 #   if wxUSE_TREECTRL || wxUSE_NOTEBOOK || wxUSE_LISTCTRL
