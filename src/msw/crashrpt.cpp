@@ -1118,7 +1118,7 @@ bool wxHandleFatalExceptions(bool doit)
                          );
 
         wxStrncat(gs_reportFilename, fname,
-                  WXSIZEOF(gs_reportFilename) - strlen(gs_reportFilename) - 1);
+                  WXSIZEOF(gs_reportFilename) - wxStrlen(gs_reportFilename) - 1);
     }
 
     return true;
