@@ -152,6 +152,14 @@ current platform's standards.  You simply need to add each `wx.Button`
 to the sizer, and be sure to create the buttons using the standard
 ID's.  Then call `Finalize` and the sizer will take care of the rest.
 
+wxMSW Toolbar: pass correct tool id (and not always -1) to the
+EVT_TOOL_RCLICKED handler
+
+wxGTK: Applied patched for combo box SELECTED events (no longer get
+lots of surplus events)
+
+wxGTK: Applied patch for proper menu highlight colour detection in
+wx.SystemSettings.
 
 
 
@@ -512,6 +520,9 @@ in the PyShell::
 	...     app.Yield(True)
 	...     wx.MilliSleep(10)
 
+
+wxGTK: Applied wxNO_BORDER patch (#1098374) for text control and combo
+box.
 
 
 
