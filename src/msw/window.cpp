@@ -1201,7 +1201,6 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
         }
 
-#if 0
     case WM_KEYDOWN:
     {
         MSWOnKeyDown((WORD) wParam, lParam);
@@ -1224,7 +1223,6 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             return Default();
         break;
     }
-#endif
 
     case WM_KEYUP:
     {
@@ -1933,7 +1931,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
         bool bCtrlDown = (::GetKeyState(VK_CONTROL) & 0x100) != 0;
 
         // WM_GETDLGCODE: if the control wants it for itself, don't process it
-        // (except for Ctrl-Tab combination which is always processed)
+        // (except for Ctrl-Tab/Enter combinations which are always processed)
         LONG lDlgCode = 0;
         if ( bProcess && !bCtrlDown ) {
             lDlgCode = ::SendMessage(msg->hwnd, WM_GETDLGCODE, 0, 0);
@@ -1973,10 +1971,19 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                     if ( !GetDefaultItem() ) {
                         // but if there is not it makes sense to make it work
                         // like a TAB
+                        if ( bCtrlDown || (lDlgCode & DLGC_WANTMESSAGE == 0) )
+                        {
+                            // nothing to do - all variables are already set
 
-                        // nothing to do - all variables are already set
-
-                        break;
+                            break;
+                        }
+                        else
+                        {
+                            // control wants to process Enter itself, don't
+                            // call IsDialogMessage() which would interpret
+                            // it
+                            return FALSE;
+                        }
                     }
                     //else: fall through and don't process the message
 

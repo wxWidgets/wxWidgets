@@ -63,7 +63,7 @@ public:
                const wxPoint &pos, const wxSize &size, int style = 0)
         : wxTextCtrl(parent, id, value, pos, size, style) { }
 
-    void OnChar(wxKeyEvent& event);
+    void OnKeyDown(wxKeyEvent& event);
 
 private:
     DECLARE_EVENT_TABLE()
@@ -125,6 +125,7 @@ class MyFrame: public wxFrame
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnIdle( wxIdleEvent& event );
+    void OnSize( wxSizeEvent& event );
 
   DECLARE_EVENT_TABLE()
 };
@@ -176,10 +177,10 @@ bool MyApp::OnInit(void)
 //----------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
-    EVT_CHAR(MyTextCtrl::OnChar)
+    EVT_KEY_DOWN(MyTextCtrl::OnKeyDown)
 END_EVENT_TABLE()
 
-void MyTextCtrl::OnChar(wxKeyEvent& event)
+void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
     switch ( event.KeyCode() )
     {
@@ -314,8 +315,9 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_BUTTON    (ID_MOVE_END_ENTRY,       MyPanel::OnMoveToEndOfEntry)
 END_EVENT_TABLE()
 
-MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
-  wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) )
+MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
+       : m_notebook(NULL), m_text(NULL),
+         wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) )
 {
 //  SetBackgroundColour("cadet blue");
 
@@ -432,7 +434,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   panel = new wxPanel(m_notebook);
   m_textentry = new MyTextCtrl( panel, -1, "Write text here.", wxPoint(10,10), wxSize(320,28),
                                 wxTE_PROCESS_ENTER);
-  (*m_textentry) << " More text.";
+  (*m_textentry) << " More text.";          // this text is appended
+  m_textentry->SetInsertionPoint(0);
+  m_textentry->WriteText("Less text.");     // this text is prepended
+
   m_multitext = new MyTextCtrl( panel, ID_TEXT, "And here.", wxPoint(10,50), wxSize(320,70),
                                 wxTE_MULTILINE );
   (*m_multitext) << " More text.\nPress function keys to test different \nwxTextCtrl functions.";
@@ -608,16 +613,16 @@ void MyPanel::OnPageChanged( wxNotebookEvent &event )
 
 void MyPanel::OnListBox( wxCommandEvent &event )
 {
-  m_text->WriteText( "ListBox selection string is: " );
-  m_text->WriteText( event.GetString() );
-  m_text->WriteText( "\n" );
+  m_text->AppendText( "ListBox selection string is: " );
+  m_text->AppendText( event.GetString() );
+  m_text->AppendText( "\n" );
 }
 
 void MyPanel::OnListBoxDoubleClick( wxCommandEvent &event )
 {
-  m_text->WriteText( "ListBox double click string is: " );
-  m_text->WriteText( event.GetString() );
-  m_text->WriteText( "\n" );
+  m_text->AppendText( "ListBox double click string is: " );
+  m_text->AppendText( event.GetString() );
+  m_text->AppendText( "\n" );
 }
 
 void MyPanel::OnListBoxButtons( wxCommandEvent &event )
@@ -626,7 +631,7 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
   {
     case ID_LISTBOX_ENABLE:
     {
-      m_text->WriteText("Checkbox clicked.\n");
+      m_text->AppendText("Checkbox clicked.\n");
       wxCheckBox *cb = (wxCheckBox*)event.GetEventObject();
       if (event.GetInt())
         cb->SetToolTip( "Click to enable listbox" );
@@ -672,9 +677,9 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
 
 void MyPanel::OnChoice( wxCommandEvent &event )
 {
-  m_text->WriteText( "Choice selection string is: " );
-  m_text->WriteText( event.GetString() );
-  m_text->WriteText( "\n" );
+  m_text->AppendText( "Choice selection string is: " );
+  m_text->AppendText( event.GetString() );
+  m_text->AppendText( "\n" );
 }
 
 void MyPanel::OnChoiceButtons( wxCommandEvent &event )
@@ -722,9 +727,9 @@ void MyPanel::OnChoiceButtons( wxCommandEvent &event )
 
 void MyPanel::OnCombo( wxCommandEvent &event )
 {
-  m_text->WriteText( "ComboBox selection string is: " );
-  m_text->WriteText( event.GetString() );
-  m_text->WriteText( "\n" );
+  m_text->AppendText( "ComboBox selection string is: " );
+  m_text->AppendText( event.GetString() );
+  m_text->AppendText( "\n" );
 }
 
 void MyPanel::OnComboButtons( wxCommandEvent &event )
@@ -772,9 +777,9 @@ void MyPanel::OnComboButtons( wxCommandEvent &event )
 
 void MyPanel::OnRadio( wxCommandEvent &event )
 {
-  m_text->WriteText( "RadioBox selection string is: " );
-  m_text->WriteText( event.GetString() );
-  m_text->WriteText( "\n" );
+  m_text->AppendText( "RadioBox selection string is: " );
+  m_text->AppendText( event.GetString() );
+  m_text->AppendText( "\n" );
 }
 
 void MyPanel::OnRadioButtons( wxCommandEvent &event )
@@ -834,13 +839,14 @@ MyPanel::~MyPanel()
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(MINIMAL_QUIT,   MyFrame::OnQuit)
     EVT_MENU(MINIMAL_ABOUT,  MyFrame::OnAbout)
+    EVT_SIZE(MyFrame::OnSize)
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
        : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
-    CreateStatusBar();
+    CreateStatusBar(2);
 
     (void)new MyPanel( this, 10, 10, 300, 100 );
 }
@@ -854,6 +860,15 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
   wxMessageDialog dialog(this, "This is a control sample", "About Controls", wxOK );
   dialog.ShowModal();
+}
+
+void MyFrame::OnSize( wxSizeEvent& event )
+{
+    wxString msg;
+    msg.Printf("%dx%d", event.GetSize().x, event.GetSize().y);
+    SetStatusText(msg, 1);
+
+    event.Skip();
 }
 
 void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )

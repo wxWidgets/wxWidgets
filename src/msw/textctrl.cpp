@@ -125,6 +125,9 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   long msStyle = ES_LEFT | WS_VISIBLE | WS_CHILD | WS_TABSTOP;
   if (m_windowStyle & wxTE_MULTILINE)
   {
+    wxASSERT_MSG( !(m_windowStyle & wxTE_PROCESS_ENTER),
+                  "wxTE_PROCESS_ENTER style is ignored for multiline controls" );
+
     msStyle |= ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL ; // WS_BORDER
     m_windowStyle |= wxTE_PROCESS_ENTER;
   }
@@ -630,9 +633,14 @@ void wxTextCtrl::WriteText(const wxString& text)
     delete[] newtext;
 }
 
+void wxTextCtrl::AppendText(const wxString& text)
+{
+    SetInsertionPointEnd();
+    WriteText(text);
+}
+
 void wxTextCtrl::Clear()
 {
-//    SendMessage((HWND) GetHWND(), WM_SETTEXT, 0, (LPARAM)"");
     SetWindowText((HWND) GetHWND(), "");
 }
 
@@ -809,7 +817,7 @@ int wxTextCtrl::overflow(int c)
   txt[plen] = (char)c;     // append c
   txt[plen+xtra] = '\0';   // append '\0' or overwrite c
     // If the put area already contained \0, output will be truncated there
-  WriteText(txt);
+  AppendText(txt);
     delete[] txt;
   }
 
@@ -874,15 +882,15 @@ int wxTextCtrl::underflow()
 
 wxTextCtrl& wxTextCtrl::operator<<(const wxString& s)
 {
-  WriteText(s);
-  return *this;
+    AppendText(s);
+    return *this;
 }
 
 wxTextCtrl& wxTextCtrl::operator<<(float f)
 {
     wxString str;
     str.Printf("%.2f", f);
-    WriteText(str);
+    AppendText(str);
     return *this;
 }
 
@@ -890,7 +898,7 @@ wxTextCtrl& wxTextCtrl::operator<<(double d)
 {
     wxString str;
     str.Printf("%.2f", d);
-    WriteText(str);
+    AppendText(str);
     return *this;
 }
 
@@ -898,7 +906,7 @@ wxTextCtrl& wxTextCtrl::operator<<(int i)
 {
     wxString str;
     str.Printf("%d", i);
-    WriteText(str);
+    AppendText(str);
     return *this;
 }
 
@@ -906,7 +914,7 @@ wxTextCtrl& wxTextCtrl::operator<<(long i)
 {
     wxString str;
     str.Printf("%ld", i);
-    WriteText(str);
+    AppendText(str);
     return *this;
 }
 
@@ -916,7 +924,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
 
     buf[0] = c;
     buf[1] = 0;
-    WriteText(buf);
+    AppendText(buf);
     return *this;
 }
 
@@ -969,23 +977,32 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         case WXK_RETURN:
             wxASSERT_MSG( m_windowStyle & wxTE_PROCESS_ENTER,
                           "this text ctrl should never receive return" );
+            if ( m_windowStyle & wxTE_MULTILINE == 0 )
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
                 event.SetEventObject( this );
                 if ( GetEventHandler()->ProcessEvent(event) )
                     return;
             }
+            //else: multiline controls need Enter for themselves
+
+            break;
 
         case WXK_TAB:
-            // only produce navigation event if we don't process TAB ourself
-            if ( !(m_windowStyle & wxTE_PROCESS_TAB) )
+            // only produce navigation event if we don't process TAB ourself or
+            // if it's a Shift-Tab keypress (we assume nobody will ever need
+            // this key combo for himself)
+            //
+            // NB: Notice that Ctrl-Tab is handled elsewhere and Alt-Tab is
+            //     handled by Windows
+            if ( event.ShiftDown() || !(m_windowStyle & wxTE_PROCESS_TAB) )
             {
-                wxNavigationKeyEvent event;
-                event.SetDirection(!(::GetKeyState(VK_SHIFT) & 0x100));
-                event.SetWindowChange(FALSE);
-                event.SetEventObject(this);
+                wxNavigationKeyEvent eventNav;
+                eventNav.SetDirection(!event.ShiftDown());
+                eventNav.SetWindowChange(FALSE);
+                eventNav.SetEventObject(this);
     
-                if ( GetEventHandler()->ProcessEvent(event) )
+                if ( GetEventHandler()->ProcessEvent(eventNav) )
                     return;
             }
     }

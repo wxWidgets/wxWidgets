@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TEXTCTRL_H_
@@ -51,7 +51,7 @@ class WXDLLEXPORT wxTextCtrl: public wxControl
 
 {
   DECLARE_DYNAMIC_CLASS(wxTextCtrl)
-    
+
 public:
   // creation
   // --------
@@ -68,14 +68,14 @@ public:
   {
     Create(parent, id, value, pos, size, style, validator, name);
   }
-  
+
   bool Create(wxWindow *parent, wxWindowID id,
               const wxString& value = wxEmptyString,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize, long style = wxTE_PROCESS_TAB,
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name = wxTextCtrlNameStr);
-  
+
   // accessors
   // ---------
   virtual wxString GetValue() const ;
@@ -91,12 +91,12 @@ public:
   void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
     { wxWindow::SetSize(rect, sizeFlags); }
   void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
-  
+
   // Clipboard operations
   virtual void Copy();
   virtual void Cut();
   virtual void Paste();
-  
+
   virtual void SetInsertionPoint(long pos);
   virtual void SetInsertionPointEnd();
   virtual long GetInsertionPoint() const ;
@@ -105,42 +105,43 @@ public:
   virtual void Remove(long from, long to);
   virtual void SetSelection(long from, long to);
   virtual void SetEditable(bool editable);
-  
+
   // streambuf implementation
 #ifndef NO_TEXT_WINDOW_STREAM
   int overflow(int i);
   int sync();
   int underflow();
 #endif
-  
+
   wxTextCtrl& operator<<(const wxString& s);
   wxTextCtrl& operator<<(int i);
   wxTextCtrl& operator<<(long i);
   wxTextCtrl& operator<<(float f);
   wxTextCtrl& operator<<(double d);
   wxTextCtrl& operator<<(const char c);
-  
+
   virtual bool LoadFile(const wxString& file);
   virtual bool SaveFile(const wxString& file);
   virtual void WriteText(const wxString& text);
+  virtual void AppendText(const wxString& text);
   virtual void DiscardEdits();
   virtual bool IsModified() const;
-  
+
 #if WXWIN_COMPATIBILITY
   inline bool Modified() const { return IsModified(); }
 #endif
-  
+
   virtual long XYToPosition(long x, long y) const ;
   virtual void PositionToXY(long pos, long *x, long *y) const ;
   virtual void ShowPosition(long pos);
   virtual void Clear();
-  
+
   // callbacks
   // ---------
   void OnDropFiles(wxDropFilesEvent& event);
   void OnChar(wxKeyEvent& event); // Process 'enter' if required
   void OnEraseBackground(wxEraseEvent& event);
-  
+
   // Implementation
   // --------------
   virtual void Command(wxCommandEvent& event);
@@ -154,18 +155,18 @@ public:
   virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                               WXUINT message, WXWPARAM wParam,
                               WXLPARAM lParam);
-  
+
   virtual void AdoptAttributesFromHWND();
   virtual void SetupColours();
   virtual long MSWGetDlgCode();
-  
+
 protected:
 #if wxUSE_RICHEDIT
   bool      m_isRich; // Are we using rich text edit to implement this?
 #endif
 
   wxString  m_fileName;
-  
+
   DECLARE_EVENT_TABLE()
 };
 
