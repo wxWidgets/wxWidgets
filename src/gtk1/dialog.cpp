@@ -44,7 +44,7 @@ extern wxList wxPendingDelete;
 
 bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxDialog *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     win->Close();
@@ -58,7 +58,7 @@ bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED
 
 static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxDialog *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return;
@@ -75,14 +75,14 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
 // "configure_event"
 //-----------------------------------------------------------------------------
 
-static gint 
+static gint
 #if (GTK_MINOR_VERSON > 0)
 gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxDialog *win )
 #else
 gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxDialog *win )
 #endif
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
@@ -109,19 +109,22 @@ gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *e
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
-/* we cannot MWM hints and icons before the widget has been realized, 
+/* we cannot MWM hints and icons before the widget has been realized,
    so we do this directly after realization */
 
-static gint 
+static gint
 gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
+    // FIXME I don't know when does it appear, but it's not in 1.2.2
+#if GTK_CHECK_VERSION(1, 2, 3)
     /* I haven't been able to set the position of
        the dialog before it is shown, so I set the
        position in "realize" */
     gtk_window_reposition( GTK_WINDOW(widget), win->m_x, win->m_y );
+#endif // GTK > 1.2.2
 
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
@@ -135,7 +138,7 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
        This avoids the problem, but looks odd. What shall we do?
     */
     decor |= GDK_DECOR_RESIZEH;
-    
+
     if ((win->GetWindowStyle() & wxCAPTION) != 0)
         decor |= GDK_DECOR_TITLE;
     if ((win->GetWindowStyle() & wxSYSTEM_MENU) != 0)
@@ -151,7 +154,7 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
     if ((win->GetWindowStyle() & wxMAXIMIZE_BOX) != 0)
     {
         decor |= GDK_DECOR_MAXIMIZE;
-        func |= GDK_FUNC_MAXIMIZE;           
+        func |= GDK_FUNC_MAXIMIZE;
     }
     if ((win->GetWindowStyle() & wxRESIZE_BORDER) != 0)
     {
@@ -160,20 +163,20 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
     }
     gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
     gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
-      
+
     /* GTK's shrinking/growing policy */
     if ((win->GetWindowStyle() & wxRESIZE_BORDER) == 0)
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
     else
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
-    
+
     /* set size hints */
     gint flag =	GDK_HINT_POS;
     if ((win->GetMinWidth() != -1) || (win->GetMinHeight() != -1)) flag |= GDK_HINT_MIN_SIZE;
     if ((win->GetMaxWidth() != -1) || (win->GetMaxHeight() != -1)) flag |= GDK_HINT_MAX_SIZE;
     if (flag)
     {
-        gdk_window_set_hints( win->m_widget->window, 
+        gdk_window_set_hints( win->m_widget->window,
 	                      win->m_x, win->m_y,
 			      win->GetMinWidth(), win->GetMinHeight(),
 			      win->GetMaxWidth(), win->GetMaxHeight(),
@@ -187,10 +190,10 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
         win->m_icon = wxNullIcon;
         win->SetIcon( icon );
     }
-    
+
     return FALSE;
 }
-    
+
 //-----------------------------------------------------------------------------
 // InsertChild for wxDialog
 //-----------------------------------------------------------------------------
@@ -266,15 +269,15 @@ bool wxDialog::Create( wxWindow *parent,
     }
 
     m_insertCallback = (wxInsertChildFunction) wxInsertChildInDialog;
-    
+
     m_widget = gtk_window_new( GTK_WINDOW_DIALOG );
-    
+
     if ((m_parent) && (GTK_IS_WINDOW(m_parent->m_widget)))
         gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
-    
+
     if (!name.IsEmpty())
         gtk_window_set_wmclass( GTK_WINDOW(m_widget), name.mb_str(), name.mb_str() );
-    
+
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
@@ -310,7 +313,7 @@ bool wxDialog::Create( wxWindow *parent,
 wxDialog::~wxDialog()
 {
     m_isBeingDeleted = TRUE;
-    
+
     wxTopLevelWindows.DeleteObject( this );
 
     if (wxTheApp->GetTopWindow() == this)
@@ -491,6 +494,8 @@ void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
     if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
+    // FIXME I don't know when does it appear, but it's not in 1.2.2
+#if GTK_CHECK_VERSION(1, 2, 3)
     if ((m_x != -1) || (m_y != -1))
     {
         if ((m_x != old_x) || (m_y != old_y))
@@ -500,6 +505,7 @@ void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
             gtk_window_reposition( GTK_WINDOW(m_widget), m_x, m_y );
         }
     }
+#endif // GTK > 1.2.2
 
     if ((m_width != old_width) || (m_height != old_height))
     {
@@ -595,7 +601,7 @@ int wxDialog::ShowModal()
     }
 
     wxBusyCursorSuspender cs; // temporarily suppress the busy cursor
-    
+
     Show( TRUE );
 
     m_modalShowing = TRUE;

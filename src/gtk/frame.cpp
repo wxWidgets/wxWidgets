@@ -207,11 +207,14 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
     if (g_isIdle)
         wxapp_install_idle_handler();
 
+    // FIXME I don't know when does it appear, but it's not in 1.2.2
+#if GTK_CHECK_VERSION(1, 2, 3)
     /* I haven't been able to set the position of
        the dialog before it is shown, so I set the
        position in "realize" */
-    printf( "%d %d\n", win->m_x, win->m_y );
+    wxLogDebug( "%d %d\n", win->m_x, win->m_y );
     gtk_window_reposition( GTK_WINDOW(widget), win->m_x, win->m_y );
+#endif // GTK > 1.2.2
 
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
@@ -566,6 +569,8 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
     if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
+    // FIXME I don't know when does it appear, but it's not in 1.2.2
+#if GTK_CHECK_VERSION(1, 2, 3)
     if ((m_x != -1) || (m_y != -1))
     {
         if ((m_x != old_x) || (m_y != old_y))
@@ -573,6 +578,7 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
             gtk_window_reposition( GTK_WINDOW(m_widget), m_x, m_y );
         }
     }
+#endif // GTK > 1.2.2
 
     if ((m_width != old_width) || (m_height != old_height))
     {
