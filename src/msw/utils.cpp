@@ -731,6 +731,16 @@ bool wxDirExists(const wxString& dir)
 #endif
 }
 
+wxString WXDLLEXPORT wxGetWindowText(WXHWND hWnd)
+{
+    wxString str;
+    int len = GetWindowTextLength((HWND)hWnd) + 1;
+    GetWindowText((HWND)hWnd, str.GetWriteBuf(len), len);
+    str.UngetWriteBuf();
+
+    return str;
+}
+
 #if 0
 //------------------------------------------------------------------------
 // wild character routines

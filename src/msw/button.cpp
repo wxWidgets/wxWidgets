@@ -30,7 +30,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 #endif
 
-#define BUTTON_HEIGHT_FACTOR (EDIT_CONTROL_FACTOR * 1.1)
+#define BUTTON_HEIGHT_FROM_CHAR_HEIGHT(cy) (11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)/10)
 
 // Buttons
 
@@ -135,7 +135,7 @@ void wxButton::SetSize(int x, int y, int width, int height, int sizeFlags)
     actualHeight = hh;
   else if (height == -1)
   {
-    actualHeight = (int)(cyf*BUTTON_HEIGHT_FACTOR) ;
+    actualHeight = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(cyf);
   }
 
   MoveWindow((HWND) GetHWND(), x1, y1, actualWidth, actualHeight, TRUE);

@@ -204,7 +204,7 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
   int cy;
   wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
-  float control_width, control_height;
+  int control_width, control_height;
 
   // Ignore height parameter because height doesn't
   // mean 'initially displayed' height, it refers to the
@@ -219,20 +219,23 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
   {
     // Find the longest string
     if (m_noStrings == 0)
-      control_width = (float)100.0;
+    {
+      control_width = 100;
+    }
     else
     {
       int len, ht;
-      float longest = (float)0.0;
+      int longest = 0;
       int i;
       for (i = 0; i < m_noStrings; i++)
       {
         wxString str(GetString(i));
         GetTextExtent(str, &len, &ht, NULL, NULL,GetFont());
-        if ( len > longest) longest = len;
+        if ( len > longest)
+            longest = len;
       }
 
-      control_width = (float)(int)(longest + cx*5);
+      control_width = longest + cx*5;
     }
   }
 
@@ -240,25 +243,26 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
   if (h1 <= 0)
   {
     if (m_noStrings == 0)
-      h1 = (int)(EDIT_CONTROL_FACTOR*cy*10.0);
-    else h1 = (int)(EDIT_CONTROL_FACTOR*cy*(wxMin(10, m_noStrings) + 1));
+        h1 = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*10;
+    else
+        h1 = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*(wxMin(10, m_noStrings) + 1);
   }
 
   // If non-default width...
   if (w1 >= 0)
-    control_width = (float)w1;
+    control_width = w1;
 
-  control_height = (float)h1;
+  control_height = h1;
 
   // Calculations may have made text size too small
   if (control_height <= 0)
-    control_height = (float)(int)(cy*EDIT_CONTROL_FACTOR) ;
+    control_height = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
   if (control_width <= 0)
-    control_width = (float)100.0;
+    control_width = 100;
 
-  MoveWindow((HWND) GetHWND(), x1, y1,
-                              (int)control_width, (int)control_height, TRUE);
+  MoveWindow((HWND)GetHWND(), x1, y1,
+             control_width, control_height, TRUE);
 }
 
 WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,

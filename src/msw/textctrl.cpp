@@ -321,7 +321,7 @@ void wxTextCtrl::SetSize(int x, int y, int width, int height, int sizeFlags)
 
   wxGetCharSize(GetHWND(), &cx, &cy,GetFont());
 
-  float control_width, control_height, control_x, control_y;
+  int control_width, control_height, control_x, control_y;
 
   // If we're prepared to use the existing size, then...
   if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
@@ -333,17 +333,17 @@ void wxTextCtrl::SetSize(int x, int y, int width, int height, int sizeFlags)
   if (w1<=0)
     w1 = DEFAULT_ITEM_WIDTH;
 
-  control_x = (float)x1;
-  control_y = (float)y1;
-  control_width = (float)w1;
-  control_height = (float)h1;
+  control_x = x1;
+  control_y = y1;
+  control_width = w1;
+  control_height = h1;
 
   // Calculations may have made text size too small
   if (control_height <= 0)
-    control_height = (float)(int)(cy*EDIT_CONTROL_FACTOR) ;
+    control_height = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
   if (control_width <= 0)
-    control_width = (float)DEFAULT_ITEM_WIDTH;
+    control_width = DEFAULT_ITEM_WIDTH;
 
   MoveWindow((HWND) GetHWND(), (int)control_x, (int)control_y,
                               (int)control_width, (int)control_height, TRUE);

@@ -55,6 +55,13 @@
 #define CONST_CAST ((wxFileConfig *)this)->
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+#ifndef MAX_PATH
+  #define MAX_PATH 512
+#endif
+
+// ----------------------------------------------------------------------------
 // global functions declarations
 // ----------------------------------------------------------------------------
 
@@ -87,15 +94,10 @@ wxString wxFileConfig::GetGlobalDir()
   #ifdef __UNIX__
     strDir = "/etc/";
   #elif defined(__WXSTUBS__)
-    // TODO
-    wxASSERT( TRUE ) ;
+    wxASSERT_MSG( FALSE, "TODO" ) ;
   #else // Windows
-    #ifndef _MAX_PATH
-      #define _MAX_PATH 512
-    #endif
-
-    char szWinDir[_MAX_PATH];
-    ::GetWindowsDirectory(szWinDir, _MAX_PATH);
+    char szWinDir[MAX_PATH];
+    ::GetWindowsDirectory(szWinDir, MAX_PATH);
 
     strDir = szWinDir;
     strDir << '\\';
@@ -107,30 +109,8 @@ wxString wxFileConfig::GetGlobalDir()
 wxString wxFileConfig::GetLocalDir()
 {
   wxString strDir;
-
-  #ifdef __UNIX__
-    const char *szHome = getenv("HOME");
-    if ( szHome == NULL ) {
-      // we're homeless...
-      wxLogWarning(_("can't find user's HOME, using current directory."));
-      strDir = ".";
-    }
-    else
-       strDir = szHome;
-    strDir << '/'; // a double slash is no problem, a missin one yes
-  #else   // Windows
-    #ifdef  __WIN32__
-      const char *szHome = getenv("HOMEDRIVE");
-      if ( szHome != NULL )
-        strDir << szHome;
-      szHome = getenv("HOMEPATH");
-      if ( szHome != NULL )
-        strDir << szHome;
-    #else   // Win16
-      // Win16 has no idea about home, so use the current directory instead
-      strDir = ".\\";
-    #endif  // WIN16/32
-  #endif  // UNIX/Win
+  
+  wxGetHomeDir(&strDir);
 
   return strDir;
 }

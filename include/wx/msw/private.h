@@ -126,8 +126,9 @@ VOID    WINAPI ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
 #define MEANING_CHARACTER '0'
 #define DEFAULT_ITEM_WIDTH  200
 #define DEFAULT_ITEM_HEIGHT 80
-#define EDIT_CONTROL_FACTOR (15.0/10.0)
-                                        // Scale font to get edit control height
+
+// Scale font to get edit control height
+#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (3*(cy)/2)
 
 // Generic subclass proc, for panel item moving/sizing and intercept
 // EDIT control VK_RETURN messages
@@ -146,6 +147,9 @@ WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
 
 wxWindow* WXDLLEXPORT wxFindControlFromHandle(WXHWND hWnd);
 void WXDLLEXPORT wxAddControlHandle(WXHWND hWnd, wxWindow *item);
+
+// Safely get the window text (i.e. without using fixed size buffer)
+extern wxString WXDLLEXPORT wxGetWindowText(WXHWND hWnd);
 
 #if !defined(__WIN32__) && !defined(WS_EX_CLIENTEDGE)
 #define WS_EX_CLIENTEDGE 0

@@ -268,8 +268,9 @@ wxLog *wxLog::GetActiveTarget()
 wxLog *wxLog::SetActiveTarget(wxLog *pLogger, bool bNoFlashOld)
 {
   // flush the old messages before changing
-  if ( (ms_pLogger != NULL) && !bNoFlashOld )
+  if ( (ms_pLogger != NULL) && !bNoFlashOld ) {
     ms_pLogger->Flush();
+  }
 
   wxLog *pOldLogger = ms_pLogger;
   ms_pLogger = pLogger;
@@ -737,13 +738,29 @@ void wxLogWindow::DoLog(wxLogLevel level, const char *szString)
     ((wxLogWindow *)m_pOldLog)->DoLog(level, szString);
   }
 
-  // don't put trace messages in the text window for 2 reasons:
-  // 1) there are too many of them
-  // 2) they may provoke other trace messages thus sending a program into an
-  //    infinite loop
-  if ( m_pLogFrame && level != wxLOG_Trace ) {
-    // and this will format it nicely and call our DoLogString()
-    wxLog::DoLog(level, szString);
+  if ( m_pLogFrame ) {
+    switch ( level ) {
+      case wxLOG_Status:
+        // by default, these messages are ignored by wxLog, so process
+        // them ourselves
+        {
+          wxString str = TimeStamp();
+          str << _("Status: ") << szString;
+          DoLogString(str);
+        }
+        break;
+
+      // don't put trace messages in the text window for 2 reasons:
+      // 1) there are too many of them
+      // 2) they may provoke other trace messages thus sending a program
+      //    into an infinite loop
+      case wxLOG_Trace:
+        break;
+
+      default:
+        // and this will format it nicely and call our DoLogString()
+        wxLog::DoLog(level, szString);
+    }
   }
 
   m_bHasMessages = TRUE;

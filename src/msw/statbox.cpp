@@ -125,24 +125,22 @@ void wxStaticBox::SetSize(int x, int y, int width, int height, int sizeFlags)
     GetSize(&w1, &h1);
   }
 
-  char buf[300];
-
   int current_width;
 
   int cx;
   int cy;
   int cyf;
 
-  HWND button = (HWND)m_hWnd;
   wxGetCharSize(GetHWND(), &cx, &cy,GetFont());
 
-  GetWindowText(button, buf, 300);
-  GetTextExtent(buf, &current_width, &cyf,NULL,NULL,GetFont());
-  if (w1 < 0)
-   w1 = (int)(current_width + 3*cx) ;
-  if (h1<0)
-    h1 = (int)(cyf*EDIT_CONTROL_FACTOR) ;
-  MoveWindow(button, x1, y1, w1, h1, TRUE);
+  GetTextExtent(wxGetWindowText(m_hWnd), &current_width, &cyf,
+                NULL,NULL,GetFont());
+  if ( w1 < 0 )
+   w1 = current_width + 3*cx;
+  if ( h1 < 0 )
+    h1 = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cyf);
+
+  MoveWindow((HWND)m_hWnd, x1, y1, w1, h1, TRUE);
 }
 
 WXHBRUSH wxStaticBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,

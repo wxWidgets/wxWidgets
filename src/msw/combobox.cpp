@@ -139,10 +139,9 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-wxString wxComboBox::GetValue(void) const
+wxString wxComboBox::GetValue() const
 {
-  GetWindowText((HWND) GetHWND(), wxBuffer, 500);
-  return wxString(wxBuffer);
+  return wxGetWindowText(GetHWND());
 }
 
 void wxComboBox::SetValue(const wxString& value)
@@ -179,19 +178,19 @@ void wxComboBox::SetValue(const wxString& value)
 }
 
 // Clipboard operations
-void wxComboBox::Copy(void)
+void wxComboBox::Copy()
 {
   HWND hWnd = (HWND) GetHWND();
   SendMessage(hWnd, WM_COPY, 0, 0L);
 }
 
-void wxComboBox::Cut(void)
+void wxComboBox::Cut()
 {
   HWND hWnd = (HWND) GetHWND();
   SendMessage(hWnd, WM_CUT, 0, 0L);
 }
 
-void wxComboBox::Paste(void)
+void wxComboBox::Paste()
 {
   HWND hWnd = (HWND) GetHWND();
   SendMessage(hWnd, WM_PASTE, 0, 0L);
@@ -219,7 +218,7 @@ void wxComboBox::SetInsertionPoint(long pos)
 */
 }
 
-void wxComboBox::SetInsertionPointEnd(void)
+void wxComboBox::SetInsertionPointEnd()
 {
 /*
   long pos = GetLastPosition();
@@ -227,7 +226,7 @@ void wxComboBox::SetInsertionPointEnd(void)
 */
 }
 
-long wxComboBox::GetInsertionPoint(void) const
+long wxComboBox::GetInsertionPoint() const
 {
 /*
   DWORD Pos=(DWORD)SendMessage((HWND) GetHWND(), EM_GETSEL, 0, 0L);
@@ -236,7 +235,7 @@ long wxComboBox::GetInsertionPoint(void) const
   return 0;
 }
 
-long wxComboBox::GetLastPosition(void) const
+long wxComboBox::GetLastPosition() const
 {
 /*
     HWND hWnd = (HWND) GetHWND();

@@ -256,7 +256,11 @@ void wxColourDatabase::Initialize ()
 
 wxColour *wxColourDatabase::FindColour(const wxString& colour)
 {
-  wxNode *node = Find((char *) (const char *)colour);
+  // VZ: make the comparaison case insensitive
+  wxString str = colour;
+  str.MakeUpper();
+
+  wxNode *node = Find(str);
   if (node)
     return (wxColour *)node->Data();
     
@@ -289,6 +293,11 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
 
 #ifdef __WXMOTIF__
     Display *display = XtDisplay((Widget) wxTheApp->GetTopLevelWidget()) ;
+#endif
+#ifdef __XVIEW__
+    Xv_Screen screen = xv_get(xview_server, SERVER_NTH_SCREEN, 0);
+    Xv_opaque root_window = xv_get(screen, XV_ROOT);
+    Display *display = (Display *)xv_get(root_window, XV_DISPLAY);
 #endif
 
     /* MATTHEW: [4] Use wxGetMainColormap */
