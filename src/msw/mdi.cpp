@@ -1088,7 +1088,8 @@ bool wxMDIChildFrame::ResetWindowStyle(void *vrect)
     wxMDIChildFrame* pChild = pFrameWnd->GetActiveChild();
     if (!pChild || (pChild == this))
     {
-        DWORD dwStyle = ::GetWindowLong(GetWinHwnd(pFrameWnd->GetClientWindow()), GWL_EXSTYLE);
+        HWND hwndClient = GetWinHwnd(pFrameWnd->GetClientWindow());
+        DWORD dwStyle = ::GetWindowLong(hwndClient, GWL_STYLE);
         DWORD dwThisStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
         DWORD dwNewStyle = dwStyle;
         if (pChild != NULL && (dwThisStyle & WS_MAXIMIZE))
@@ -1098,15 +1099,16 @@ bool wxMDIChildFrame::ResetWindowStyle(void *vrect)
 
         if (dwStyle != dwNewStyle)
         {
-            HWND hwnd = GetWinHwnd(pFrameWnd->GetClientWindow());
-            ::RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ALLCHILDREN);
-            ::SetWindowLong(hwnd, GWL_EXSTYLE, dwNewStyle);
-            ::SetWindowPos(hwnd, NULL, 0, 0, 0, 0,
+            // force update of everything
+            ::RedrawWindow(hwndClient, NULL, NULL,
+                           RDW_INVALIDATE | RDW_ALLCHILDREN);
+            ::SetWindowLong(hwndClient, GWL_EXSTYLE, dwNewStyle);
+            ::SetWindowPos(hwndClient, NULL, 0, 0, 0, 0,
                            SWP_FRAMECHANGED | SWP_NOACTIVATE |
                            SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
                            SWP_NOCOPYBITS);
             if (rect)
-                ::GetClientRect(hwnd, rect);
+                ::GetClientRect(hwndClient, rect);
 
             return TRUE;
         }

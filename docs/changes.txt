@@ -16,6 +16,7 @@ wxBase:
 wxMSW:
 
 - threads: bug in wxCondition::Broadcast fixed (Pieter van der Meulen)
+- fixed bug in MDI children flags (mis)handling
 
 2.2.0
 -----
