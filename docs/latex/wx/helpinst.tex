@@ -116,6 +116,14 @@ This function is for backward compatibility only, and applications should use \h
 If the help viewer is not running, runs it and displays the
 contents.
 
+\membersection{wxHelpController::DisplayContextPopup}\label{wxhelpcontrollerdisplaycontextpopup}
+
+\func{virtual bool}{DisplayContextPopup}{\param{int }{contextId}}
+
+Displays the section as a popup window using a context id.
+
+Returns FALSE if unsuccessful or not implemented.
+
 \membersection{wxHelpController::DisplaySection}\label{wxhelpcontrollerdisplaysection}
 
 \func{virtual bool}{DisplaySection}{\param{const wxString\&}{ section}}
@@ -145,6 +153,14 @@ If the help viewer is not running, runs it and displays the given section.
 {\it wxHtmlHelpController:} {\it sectionNo} is an identifier as specified in the {\tt .hhc} file. See \helpref{Help files format}{helpformat}.
 
 See also the help sample for notes on how to specify section numbers for various help file formats.
+
+\membersection{wxHelpController::DisplayTextPopup}\label{wxhelpcontrollerdisplaytextpopup}
+
+\func{virtual bool}{DisplayTextPopup}{\param{const wxString\&}{ text}, \param{const wxPoint\& }{pos}}
+
+Displays the text in a popup window, if possible.
+
+Returns FALSE if unsuccessful or not implemented.
 
 \membersection{wxHelpController::GetFrameParameters}\label{wxhelpcontrollergetframeparameters}
 

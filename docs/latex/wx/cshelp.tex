@@ -10,6 +10,17 @@ For example:
   wxContextHelp contextHelp(myWindow);
 \end{verbatim}
 
+There are a couple of ways to invoke this behaviour implicitly:
+
+\begin{itemize}
+\item Use the wxDIALOG\_EX\_CONTEXTHELP style for a dialog (Windows only). This will put a question mark
+in the titlebar, and Windows will put the application into context-sensitive help mode automatically,
+with further programming.
+\item Create a \helpref{wxContextHelpButton}{wxcontexthelpbutton}, whose predefined behaviour is to create a context help object.
+Normally you will write your application so that this button is only added to a dialog for non-Windows platforms
+(use wxDIALOG\_EX\_CONTEXTHELP on Windows).
+\end{itemize}
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
@@ -20,8 +31,9 @@ For example:
 
 \wxheading{See also}
 
-\helpref{wxHelpEvent}{wxhelpevent},\rtfsp
-\helpref{wxHelpController}{wxhelpcontroller}
+\helpref{wxHelpEvent}{wxhelpevent}, 
+\helpref{wxHelpController}{wxhelpcontroller}, 
+\helpref{wxContextHelpButton}{wxcontexthelpbutton}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -55,4 +67,64 @@ This function only returns when the event loop has finished.
 \func{bool}{EndContextHelp}{\void}
 
 Ends context-sensitive help mode. Not normally called by the application.
+
+\section{\class{wxContextHelpButton}}\label{wxcontexthelpbutton}
+
+Instances of this class may be used to add a question mark button that when pressed, puts the
+application into context-help mode. It does this by creating a \helpref{wxContextHelp}{wxcontexthelp} object which itself
+generates a wxEVT\_HELP event when the user clicks on a window.
+
+On Windows, you may add a question-mark icon to a dialog by use of the wxDIALOG\_EX\_CONTEXTHELP extra style, but
+on other platforms you will have to add a button explicitly, usually next to OK, Cancel or similar buttons.
+
+\wxheading{Derived from}
+
+\helpref{wxBitmapButton}{wxbitmapbutton}\\
+\helpref{wxButton}{wxbutton}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/cshelp.h>
+
+\wxheading{See also}
+
+\helpref{wxBitmapButton}{wxbitmapbutton}, \helpref{wxContextHelp}{wxcontexthelp}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxContextHelpButton::wxContextHelpButton}\label{wxcontexthelpbuttonconstr}
+
+\func{}{wxContextHelpButton}{\void}
+
+Default constructor.
+
+\func{}{wxContextHelpButton}{
+\param{wxWindow* }{parent}, 
+\param{wxWindowID }{id = wxID\_CONTEXT_HELP}, 
+\param{const wxPoint\& }{pos = wxDefaultPosition}, 
+\param{const wxSize\& }{size = wxDefaultSize}, 
+\param{long }{style = wxBU\_AUTODRAW}}
+
+Constructor, creating and showing a context help button.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Button identifier. Defaults to wxID\_CONTEXT\_HELP.}
+
+\docparam{pos}{Button position.}
+
+\docparam{size}{Button size. If the default size (-1, -1) is specified then the button is sized
+appropriately for the question mark bitmap.}
+
+\docparam{style}{Window style.}
+
+\wxheading{Remarks}
+
+Normally you need pass only the parent window to the constructor, and use the defaults for the remaining parameters.
 

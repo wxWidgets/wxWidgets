@@ -1,0 +1,42 @@
+\section{\class{wxHelpControllerHelpProvider}}\label{wxhelpcontrollerhelpprovider}
+
+wxHelpControllerHelpProvider is an implementation of wxHelpProvider which supports
+both context identifiers and plain text help strings. If the help text is an integer,
+it is passed to wxHelpController::DisplayContextPopup. Otherwise, it shows the string
+in a tooltip as per wxSimpleHelpProvider.
+
+You can use the convenience function {\bf wxContextId} to convert an integer context
+id to a string for passing to \helpref{wxWindow::SetHelpText}{wxwindowsethelptext}.
+
+\wxheading{Derived from}
+
+\helpref{wxSimpleHelpProvider}{wxsimplehelpprovider}\\
+\helpref{wxHelpProvider}{wxhelpprovider}
+
+\wxheading{See also}
+
+\helpref{wxHelpProvider}{wxhelpprovider}, \helpref{wxSimpleHelpProvider}{wxsimplehelpprovider}, 
+\helpref{wxHelpContext}{wxhelpcontext}, \helpref{wxWindow::SetHelpText}{wxwindowsethelptext}, 
+\helpref{wxWindow::GetHelpText}{wxwindowgethelptext}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxHelpControllerHelpProvider::wxHelpControllerHelpProvider}\label{wxhelpcontrollerhelpproviderwxhelpcontrollerhelpprovider}
+
+\func{}{wxHelpControllerHelpProvider}{\param{wxHelpControllerBase* }{hc = NULL}}
+
+Note that the instance doesn't own the help controller. The help controller
+should be deleted separately.
+
+\membersection{wxHelpControllerHelpProvider::SetHelpController}\label{wxhelpcontrollerhelpprovidersethelpcontroller}
+
+\func{void}{SetHelpController}{\param{wxHelpControllerBase* }{hc}}
+
+Sets the help controller associated with this help provider.
+
+\membersection{wxHelpControllerHelpProvider::GetHelpController}\label{wxhelpcontrollerhelpprovidergethelpcontroller}
+
+\constfunc{wxHelpControllerBase*}{GetHelpController}{\void}
+
+Returns the help controller associated with this help provider.
+

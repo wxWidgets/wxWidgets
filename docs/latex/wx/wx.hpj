@@ -1,5 +1,5 @@
 [OPTIONS]
-BMROOT=p:\wx23\wxWind~1\docs/latex/wx ; Assume that bitmaps are where the source is
+BMROOT=. ; Assume that bitmaps are where the source is
 TITLE=wxWindows Manual
 CONTENTS=Contents
 COMPRESS=HIGH
