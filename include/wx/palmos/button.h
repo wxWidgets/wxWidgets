@@ -51,7 +51,6 @@ public:
 
     // implementation from now on
     virtual void Command(wxCommandEvent& event);
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
 
     virtual void ApplyParentThemeBackground(const wxColour& bg)
     {
@@ -72,7 +71,6 @@ protected:
 
     // usually overridden base class virtuals
     virtual wxSize DoGetBestSize() const;
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const ;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxButton)

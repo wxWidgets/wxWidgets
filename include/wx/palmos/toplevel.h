@@ -81,6 +81,9 @@ public:
     void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
     wxWindow *GetLastFocus() const { return m_winLastFocused; }
 
+    // interface to native frame structure
+    FormType *GetForm();
+
 protected:
     // common part of all ctors
     void Init();

@@ -2,10 +2,10 @@
 // Name:        src/palmos/slider.cpp
 // Purpose:     wxSlider
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -28,8 +28,7 @@
 #include "wx/slider.h"
 #endif
 
-#include "wx/palmos/slider.h"
-#include "wx/palmos/private.h"
+#include "wx/toplevel.h"
 
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxSliderStyle )
@@ -110,22 +109,74 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-    return false;
-}
+    wxWindow* parentTLW = GetParent();
+    while ( parentTLW && !parentTLW->IsTopLevel() )
+    {
+        parentTLW = parentTLW->GetParent();
+    }
+    wxTopLevelWindowPalm* tlw = wxDynamicCast(parentTLW, wxTopLevelWindowPalm);
+    if(!tlw)
+        return false;
+    FormType* form = tlw->GetForm();
 
-bool wxSlider::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
-                             WXWORD WXUNUSED(pos), WXHWND control)
-{
-    return false;
+    SetParent(parent);
+
+    SliderControlType *slider = CtlNewSliderControl (
+                                   (void **)&form,
+                                   id,
+                                   feedbackSliderCtl,
+                                   NULL,
+                                   0,
+                                   0,
+                                   pos.x,
+                                   pos.y,
+                                   size.x,
+                                   size.y,
+                                   minValue,
+                                   maxValue,
+                                   1,
+                                   value
+                              );
+
+    m_control = (ControlType*) slider;
+
+    if(m_control==NULL)
+        return false;
+
+    Show();
+    return true;
 }
 
 wxSlider::~wxSlider()
 {
 }
 
+int wxSlider::GetMin() const
+{
+    uint16_t ret;
+    CtlGetSliderValues(m_control, &ret, NULL, NULL, NULL);
+    return ret;
+}
+
+int wxSlider::GetMax() const
+{
+    uint16_t ret;
+    CtlGetSliderValues(m_control, NULL, &ret, NULL, NULL);
+    return ret;
+}
+
+int wxSlider::GetPageSize() const
+{
+    uint16_t ret;
+    CtlGetSliderValues(m_control, NULL, NULL, &ret, NULL);
+    return ret;
+}
+
 int wxSlider::GetValue() const
 {
-    return 0;
+    uint16_t ret;
+    CtlGetSliderValues(m_control, NULL, NULL, NULL, &ret);
+    return ret;
 }
 
 void wxSlider::SetValue(int value)
@@ -155,23 +206,12 @@ void wxSlider::SetRange(int minValue, int maxValue)
 {
 }
 
-WXHBRUSH wxSlider::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
-{
-    return 0;
-}
-
 void wxSlider::SetTickFreq(int n, int pos)
 {
 }
 
 void wxSlider::SetPageSize(int pageSize)
 {
-}
-
-int wxSlider::GetPageSize() const
-{
-  return 0;
 }
 
 void wxSlider::ClearSel()
@@ -218,18 +258,8 @@ void wxSlider::SetTick(int tickPos)
 {
 }
 
-bool wxSlider::ContainsHWND(WXHWND hWnd) const
-{
-    return false;
-}
-
 void wxSlider::Command (wxCommandEvent & event)
 {
-}
-
-bool wxSlider::Show(bool show)
-{
-    return false;
 }
 
 #endif // wxUSE_SLIDER

@@ -2,10 +2,10 @@
 // Name:        wx/palmos/slider95.h
 // Purpose:     wxSlider class
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -48,16 +48,14 @@ public:
 
     void GetPosition(int *x, int *y) const;
 
-    bool Show(bool show = TRUE);
-
     void SetRange(int minValue, int maxValue);
 
-    int GetMin() const { return m_rangeMin; }
-    int GetMax() const { return m_rangeMax; }
+    int GetMin() const;
+    int GetMax() const;
 
     // For trackbars only
     void SetTickFreq(int n, int pos);
-    int GetTickFreq() const { return m_tickFreq; }
+    int GetTickFreq() const { return GetPageSize(); }
     void SetPageSize(int pageSize);
     int GetPageSize() const;
     void ClearSel();
@@ -71,28 +69,10 @@ public:
     int GetThumbLength() const;
     void SetTick(int tickPos);
 
-    // IMPLEMENTATION
-    WXHWND GetStaticMin() const { return m_staticMin; }
-    WXHWND GetStaticMax() const { return m_staticMax; }
-    WXHWND GetEditValue() const { return m_staticValue; }
-    virtual bool ContainsHWND(WXHWND hWnd) const;
-
+    // implementation
     void Command(wxCommandEvent& event);
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-    virtual bool MSWOnScroll(int orientation, WXWORD wParam,
-                             WXWORD pos, WXHWND control);
 
 protected:
-    WXHWND        m_staticMin;
-    WXHWND        m_staticMax;
-    WXHWND        m_staticValue;
-    int           m_rangeMin;
-    int           m_rangeMax;
-    int           m_pageSize;
-    int           m_lineSize;
-    int           m_tickFreq;
-
     virtual void DoGetSize(int *width, int *height) const;
 
     virtual void DoSetSize(int x, int y,

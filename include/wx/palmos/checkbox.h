@@ -2,10 +2,10 @@
 // Name:        wx/palmos/checkbox.h
 // Purpose:     wxCheckBox class
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -45,9 +45,6 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const;
 
-    virtual void SetLabel(const wxString& label);
-
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual void Command(wxCommandEvent& event);
 
 protected:

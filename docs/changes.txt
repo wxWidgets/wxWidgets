@@ -114,6 +114,9 @@ wxPalmOS:
 - native wxColourDialog implementation
 - native wxSystemSettings colours
 - native wxButton implementation
+- native wxCheckBox implementation
+- native wxSlider implementation
+- native wxToggleButton implementation
 
 
 2.5.3

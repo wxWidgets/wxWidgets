@@ -2,10 +2,10 @@
 // Name:        src/palmos/control.cpp
 // Purpose:     wxControl class
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -39,6 +39,10 @@
 #endif
 
 #include "wx/control.h"
+#include "wx/toplevel.h"
+#include "wx/button.h"
+#include "wx/checkbox.h"
+#include "wx/tglbtn.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -92,8 +96,19 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
                                   const wxPoint& pos,
                                   const wxSize& size)
 {
-    FormType* form = FrmGetActiveForm ();
-    m_control = CtlNewControl (
+    wxWindow* parentTLW = parent;
+    while ( parentTLW && !parentTLW->IsTopLevel() )
+    {
+        parentTLW = parentTLW->GetParent();
+    }
+    wxTopLevelWindowPalm* tlw = wxDynamicCast(parentTLW, wxTopLevelWindowPalm);
+    if(!tlw)
+        return false;
+    FormType* form = tlw->GetForm();
+
+    SetParent(parent);
+
+    m_control = CtlNewControl(
                     (void **)&form,
                     id,
                     style,
@@ -110,8 +125,6 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
     if(m_control==NULL)
         return false;
 
-    form = FrmGetActiveForm ();
-    m_objectIndex = FrmGetObjectIndex(form, id);
     Show();
     return true;
 }
@@ -158,10 +171,34 @@ bool wxControl::IsShown() const
 bool wxControl::Show( bool show )
 {
     if(show)
-        FrmShowObject(FrmGetActiveForm(), m_objectIndex);
+        CtlShowControl(m_control);
     else
-        FrmHideObject(FrmGetActiveForm(), m_objectIndex);
+        CtlHideControl(m_control);
     return true;
+}
+
+void wxControl::SetLabel(const wxString& label)
+{
+    // setting in wrong control causes crash
+    if ( ( wxDynamicCast(this,wxButton) != NULL ) ||
+         ( wxDynamicCast(this,wxCheckBox) != NULL ) ||
+         ( wxDynamicCast(this,wxToggleButton) != NULL ) )
+    {
+        CtlSetLabel(m_control,label);
+    }
+}
+
+wxString wxControl::GetLabel()
+{
+    // setting in wrong control causes crash
+    if ( wxDynamicCast(this,wxButton) ||
+         wxDynamicCast(this,wxCheckBox) ||
+         wxDynamicCast(this,wxToggleButton) )
+    {
+        return CtlGetLabel(m_control);
+    }
+
+    return wxEmptyString;
 }
 
 /* static */ wxVisualAttributes

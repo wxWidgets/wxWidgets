@@ -210,6 +210,11 @@ bool wxTopLevelWindowPalm::EnableCloseButton(bool enable)
     return false;
 }
 
+FormType *wxTopLevelWindowPalm::GetForm()
+{
+    return FrmGetActiveForm ();
+}
+
 #ifndef __WXWINCE__
 
 bool wxTopLevelWindowPalm::SetShape(const wxRegion& region)

@@ -2,10 +2,10 @@
 // Name:        src/palmos/checkbox.cpp
 // Purpose:     wxCheckBox
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -35,20 +35,6 @@
     #include "wx/brush.h"
     #include "wx/dcscreen.h"
     #include "wx/settings.h"
-#endif
-
-#include "wx/palmos/private.h"
-
-#ifndef BST_UNCHECKED
-    #define BST_UNCHECKED 0x0000
-#endif
-
-#ifndef BST_CHECKED
-    #define BST_CHECKED 0x0001
-#endif
-
-#ifndef BST_INDETERMINATE
-    #define BST_INDETERMINATE 0x0002
 #endif
 
 // ============================================================================
@@ -112,11 +98,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 // wxCheckBox
 // ----------------------------------------------------------------------------
 
-bool wxCheckBox::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
-{
-    return true;
-}
-
 bool wxCheckBox::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxString& label,
@@ -125,11 +106,8 @@ bool wxCheckBox::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString& name)
 {
-    return false;
-}
-
-void wxCheckBox::SetLabel(const wxString& label)
-{
+    wxControl::PalmCreateControl(checkboxCtl, parent, id, label, pos, size);
+    return true;
 }
 
 wxSize wxCheckBox::DoGetBestSize() const
@@ -149,10 +127,6 @@ bool wxCheckBox::GetValue() const
 void wxCheckBox::Command(wxCommandEvent& event)
 {
 }
-
-wxCOMPILE_TIME_ASSERT(wxCHK_UNCHECKED == BST_UNCHECKED
-    && wxCHK_CHECKED == BST_CHECKED
-    && wxCHK_UNDETERMINED == BST_INDETERMINATE, EnumValuesIncorrect);
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
 {

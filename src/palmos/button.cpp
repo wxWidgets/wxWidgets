@@ -135,15 +135,6 @@ wxButton::~wxButton()
 }
 
 // ----------------------------------------------------------------------------
-// flags
-// ----------------------------------------------------------------------------
-
-WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
-{
-    return 0;
-}
-
-// ----------------------------------------------------------------------------
 // size management including autosizing
 // ----------------------------------------------------------------------------
 
@@ -187,15 +178,6 @@ bool wxButton::SendClickEvent()
 
 void wxButton::Command(wxCommandEvent & event)
 {
-}
-
-// ----------------------------------------------------------------------------
-// event/message handlers
-// ----------------------------------------------------------------------------
-
-bool wxButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
-{
-    return false;
 }
 
 #endif // wxUSE_BUTTON

@@ -34,6 +34,8 @@ END_DECLARE_EVENT_TYPES()
     #include "wx/motif/tglbtn.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/tglbtn.h"
+#elif defined(__WXPALMOS__)
+    #include "wx/palmos/tglbtn.h"
 /*
 # elif defined(__WXPM__)
 #  include "wx/os2/tglbtn.h"

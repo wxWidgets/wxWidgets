@@ -2,10 +2,10 @@
 // Name:        wx/palmos/control.h
 // Purpose:     wxControl class
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -49,6 +49,9 @@ public:
 
     virtual bool Show( bool show = true );
     virtual bool IsShown() const;
+
+    virtual void SetLabel(const wxString& label);
+    virtual wxString GetLabel();
 
     // implementation from now on
     // --------------------------
@@ -103,7 +106,6 @@ protected:
     wxArrayLong m_subControls;
 
     ControlType *m_control;
-    uint16_t m_objectIndex;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxControl)

@@ -108,6 +108,8 @@ private:
     #include "wx/cocoa/slider.h"
 #elif defined(__WXPM__)
     #include "wx/os2/slider.h"
+#elif defined(__WXPALMOS__)
+    #include "wx/palmos/slider.h"
 #endif
 
 #endif // wxUSE_SLIDER

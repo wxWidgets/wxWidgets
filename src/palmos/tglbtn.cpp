@@ -3,10 +3,10 @@
 // Purpose:     Definition of the wxToggleButton class, which implements a
 //              toggle button.
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -24,8 +24,6 @@
     #pragma hdrstop
 #endif
 
-#include "wx/tglbtn.h"
-
 #if wxUSE_TOGGLEBTN
 
 #ifndef WX_PRECOMP
@@ -37,7 +35,7 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
-#include "wx/palmos/private.h"
+#include "wx/tglbtn.h"
 
 // ----------------------------------------------------------------------------
 // macros
@@ -45,8 +43,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxControl)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED)
-
-#define BUTTON_HEIGHT_FROM_CHAR_HEIGHT(cy) (11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)/10)
 
 // ============================================================================
 // implementation
@@ -56,15 +52,6 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED)
 // wxToggleButton
 // ----------------------------------------------------------------------------
 
-bool wxToggleButton::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
-{
-   wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
-   event.SetInt(GetValue());
-   event.SetEventObject(this);
-   ProcessCommand(event);
-   return TRUE;
-}
-
 // Single check box item
 bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxString& label,
@@ -73,21 +60,13 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString& name)
 {
-    return false;
+    wxControl::PalmCreateControl(pushButtonCtl, parent, id, label, pos, size);
+    return true;
 }
 
 wxBorder wxToggleButton::GetDefaultBorder() const
 {
     return wxBORDER_NONE;
-}
-
-WXDWORD wxToggleButton::MSWGetStyle(long style, WXDWORD *exstyle) const
-{
-    return 0;
-}
-
-void wxToggleButton::SetLabel(const wxString& label)
-{
 }
 
 wxSize wxToggleButton::DoGetBestSize() const
@@ -98,10 +77,6 @@ wxSize wxToggleButton::DoGetBestSize() const
 void wxToggleButton::SetValue(bool val)
 {
 }
-
-#ifndef BST_CHECKED
-#define BST_CHECKED 0x0001
-#endif
 
 bool wxToggleButton::GetValue() const
 {

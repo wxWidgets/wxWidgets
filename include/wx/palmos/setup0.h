@@ -512,7 +512,7 @@
 #define wxUSE_BUTTON       1    // wxButton
 #define wxUSE_BMPBUTTON    0    // wxBitmapButton
 #define wxUSE_CALENDARCTRL 0    // wxCalendarCtrl
-#define wxUSE_CHECKBOX     0    // wxCheckBox
+#define wxUSE_CHECKBOX     1    // wxCheckBox
 #define wxUSE_CHECKLISTBOX 0    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
 #define wxUSE_CHOICE       0    // wxChoice
 #define wxUSE_COMBOBOX     0    // wxComboBox
@@ -523,7 +523,7 @@
 #define wxUSE_RADIOBOX     0    // wxRadioBox
 #define wxUSE_RADIOBTN     0    // wxRadioButton
 #define wxUSE_SCROLLBAR    0    // wxScrollBar
-#define wxUSE_SLIDER       0    // wxSlider
+#define wxUSE_SLIDER       1    // wxSlider
 #define wxUSE_SPINBTN      0    // wxSpinButton
 #define wxUSE_SPINCTRL     0    // wxSpinCtrl
 #define wxUSE_STATBOX      0    // wxStaticBox
@@ -531,7 +531,7 @@
 #define wxUSE_STATTEXT     0    // wxStaticText
 #define wxUSE_STATBMP      0    // wxStaticBitmap
 #define wxUSE_TEXTCTRL     0    // wxTextCtrl
-#define wxUSE_TOGGLEBTN    0    // requires wxButton
+#define wxUSE_TOGGLEBTN    1    // requires wxButton
 #define wxUSE_TREECTRL     0    // wxTreeCtrl
 
 // Use a status bar class? Depending on the value of wxUSE_NATIVE_STATUSBAR
