@@ -2213,6 +2213,8 @@ void wxWindow::OnInternalIdle()
 
     if (cursor.Ok() && m_currentGdkCursor != cursor)
     {
+        m_currentGdkCursor = cursor;
+	
         if (m_wxwindow)
         {
             GdkWindow *window = m_wxwindow->window;
@@ -2232,8 +2234,6 @@ void wxWindow::OnInternalIdle()
             if (window)
                gdk_window_set_cursor( window, cursor.GetCursor() );
         }
-
-        m_currentGdkCursor = cursor;
     }
 
     UpdateWindowUI();

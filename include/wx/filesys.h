@@ -13,9 +13,13 @@
 #pragma interface
 #endif
 
-#include <wx/stream.h>
-#include <wx/mimetype.h>
-#include <wx/url.h>
+#include "wx/setup.h"
+
+#if (wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
+
+#include "wx/stream.h"
+#include "wx/mimetype.h"
+#include "wx/url.h"
 
 
 class wxFSFile;
@@ -191,4 +195,8 @@ special characters :
 
 */
 
-#endif // __FILESYS_H__
+#endif
+  // (wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
+
+#endif 
+  // __FILESYS_H__
