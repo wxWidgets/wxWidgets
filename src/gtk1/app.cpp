@@ -49,7 +49,8 @@ wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NUL
 
 extern bool g_isIdle;
 
-bool g_mainThreadLocked = FALSE;
+bool   g_mainThreadLocked = FALSE;
+gint   g_pendingTag = 0;
 
 GtkWidget *wxRootWindow = (GtkWidget*) NULL;
 
@@ -59,6 +60,7 @@ GtkWidget *wxRootWindow = (GtkWidget*) NULL;
 
 /* forward declaration */
 gint   wxapp_idle_callback( gpointer WXUNUSED(data) );
+gint   wxapp_pending_callback( gpointer WXUNUSED(data) );
 void   wxapp_install_idle_handler();
 
 #if wxUSE_THREADS
@@ -106,8 +108,7 @@ bool wxYield()
     /* it's necessary to call ProcessIdle() to update the frames sizes which
        might have been changed (it also will update other things set from
        OnUpdateUI() which is a nice (and desired) side effect) */
-    while (wxTheApp->ProcessIdle())
-        ;
+    while (wxTheApp->ProcessIdle()) { }
 
     // let the logs be flashed again
     wxLog::Resume();
@@ -139,40 +140,63 @@ void wxWakeUpIdle()
 // local functions
 //-----------------------------------------------------------------------------
 
-gint wxapp_idle_callback( gpointer WXUNUSED(data) )
+gint wxapp_pending_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp) return TRUE;
-
+    
     // when getting called from GDK's time-out handler
     // we are no longer within GDK's grab on the GUI
     // thread so we must lock it here ourselves
     gdk_threads_enter();
 
-    /* we don't want any more idle events until the next event is
-       sent to wxGTK */
-    gtk_idle_remove( wxTheApp->m_idleTag );
-    wxTheApp->m_idleTag = 0;
+    // Sent idle event to all who request them
+    wxTheApp->ProcessPendingEvents();
 
-    /* indicate that we are now in idle mode - even so deeply
+    g_pendingTag = 0;
+
+    // Release lock again
+    gdk_threads_leave();
+
+    // Return FALSE to indicate that no more idle events are
+    // to be sent (single shot instead of continuous stream)
+    return FALSE;
+}
+
+gint wxapp_idle_callback( gpointer WXUNUSED(data) )
+{
+    if (!wxTheApp) return TRUE;
+    
+    // when getting called from GDK's time-out handler
+    // we are no longer within GDK's grab on the GUI
+    // thread so we must lock it here ourselves
+    gdk_threads_enter();
+
+    // Sent idle event to all who request them
+    while (wxTheApp->ProcessIdle()) { }
+
+    /* Indicate that we are now in idle mode - even so deeply
        in idle mode that we don't get any idle events anymore.
        this is like wxMSW where an idle event is sent only
        once each time after the event queue has been completely
        emptied */
     g_isIdle = TRUE;
+    wxTheApp->m_idleTag = 0;
 
-    /* sent idle event to all who request them */
-    while (wxTheApp->ProcessIdle()) { }
-
-    // release lock again
+    // Release lock again
     gdk_threads_leave();
 
-    return TRUE;
+    // Return FALSE to indicate that no more idle events are
+    // to be sent (single shot instead of continuous stream)
+    return FALSE;
 }
 
 void wxapp_install_idle_handler()
 {
     wxASSERT_MSG( wxTheApp->m_idleTag == 0, wxT("attempt to install idle handler twice") );
 
+    if (g_pendingTag == 0)
+        g_pendingTag = gtk_idle_add_priority( 900, wxapp_pending_callback, (gpointer) NULL );
+        
     /* This routine gets called by all event handlers
        indicating that the idle is over. It may also
        get called from other thread for sending events
@@ -186,8 +210,14 @@ void wxapp_install_idle_handler()
 
 #if wxUSE_THREADS
 
+static int g_threadUninstallLevel = 0;
+
 void wxapp_install_thread_wakeup()
 {
+    g_threadUninstallLevel++;
+    
+    if (g_threadUninstallLevel != 1) return;
+
     if (wxTheApp->m_wakeUpTimerTag) return;
 
     wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 50, wxapp_wakeup_timerout_callback, (gpointer) NULL );
@@ -195,6 +225,10 @@ void wxapp_install_thread_wakeup()
 
 void wxapp_uninstall_thread_wakeup()
 {
+    g_threadUninstallLevel--;
+    
+    if (g_threadUninstallLevel != 0) return;
+
     if (!wxTheApp->m_wakeUpTimerTag) return;
 
     gtk_timeout_remove( wxTheApp->m_wakeUpTimerTag );
@@ -575,10 +609,16 @@ int wxEntryStart( int argc, char *argv[] )
 {
 #if wxUSE_THREADS
     /* GTK 1.2 up to version 1.2.3 has broken threads */
+#ifdef __VMS__
+   if ((vms_gtk_major_version() == 1) &&
+        (vms_gtk_minor_version() == 2) &&
+        (vms_gtk_micro_version() < 4))
+#else
    if ((gtk_major_version == 1) &&
         (gtk_minor_version == 2) &&
         (gtk_micro_version < 4))
-     {
+#endif
+    {
         printf( "wxWindows warning: GUI threading disabled due to outdated GTK version\n" );
     }
     else
