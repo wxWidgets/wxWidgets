@@ -57,6 +57,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_ICON_TEXT_VIEW, MyFrame::OnIconTextView)
     EVT_MENU(LIST_SMALL_ICON_VIEW, MyFrame::OnSmallIconView)
     EVT_MENU(LIST_SMALL_ICON_TEXT_VIEW, MyFrame::OnSmallIconTextView)
+    EVT_MENU(LIST_TOGGLE_FIRST, MyFrame::OnToggleFirstSel)
     EVT_MENU(LIST_DESELECT_ALL, MyFrame::OnDeselectAll)
     EVT_MENU(LIST_SELECT_ALL, MyFrame::OnSelectAll)
     EVT_MENU(LIST_DELETE_ALL, MyFrame::OnDeleteAll)
@@ -165,6 +166,7 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menuView->Append(LIST_SMALL_ICON_TEXT_VIEW,     "Small icon &view with text\tF6");
 
     wxMenu *menuList = new wxMenu;
+    menuList->Append(LIST_TOGGLE_FIRST, "&Toggle first item\tCtrl-T");
     menuList->Append(LIST_DESELECT_ALL, "&Deselect All\tCtrl-D");
     menuList->Append(LIST_SELECT_ALL, "S&elect All\tCtrl-A");
     menuList->AppendSeparator();
@@ -256,6 +258,11 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
             "About list test", wxOK|wxCANCEL);
 
     dialog.ShowModal();
+}
+
+void MyFrame::OnToggleFirstSel(wxCommandEvent& WXUNUSED(event))
+{
+    m_listCtrl->SetItemState(0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
 void MyFrame::OnDeselectAll(wxCommandEvent& WXUNUSED(event))

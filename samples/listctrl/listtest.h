@@ -66,6 +66,7 @@ public:
     void OnIconTextView(wxCommandEvent& event);
     void OnSmallIconView(wxCommandEvent& event);
     void OnSmallIconTextView(wxCommandEvent& event);
+    void OnToggleFirstSel(wxCommandEvent& event);
     void OnDeselectAll(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
     void OnDeleteAll(wxCommandEvent& event);
@@ -107,6 +108,7 @@ enum
     LIST_SET_FG_COL,
     LIST_SET_BG_COL,
     LIST_TOGGLE_MULTI_SEL,
+    LIST_TOGGLE_FIRST,
 
     LIST_CTRL                   = 1000
 };
