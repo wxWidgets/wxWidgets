@@ -1317,19 +1317,12 @@ void wxBoxSizer::RecalcSizes()
         return;
 
     int delta = 0;
-    int extra = 0;
     if (m_stretchable)
     {
         if (m_orient == wxHORIZONTAL)
-        {
-            delta = (m_size.x - m_fixedWidth) / m_stretchable;
-            extra = (m_size.x - m_fixedWidth) % m_stretchable;
-        }
+            delta = m_size.x - m_fixedWidth;
         else
-        {
-            delta = (m_size.y - m_fixedHeight) / m_stretchable;
-            extra = (m_size.y - m_fixedHeight) % m_stretchable;
-        }
+            delta = m_size.y - m_fixedHeight;
     }
 
     wxPoint pt( m_position );
@@ -1341,10 +1334,6 @@ void wxBoxSizer::RecalcSizes()
 
         if (item->IsShown())
         {
-            int weight = 1;
-            if (item->GetProportion())
-                weight = item->GetProportion();
-
             wxSize size( item->CalcMin() );
 
             if (m_orient == wxVERTICAL)
@@ -1352,8 +1341,9 @@ void wxBoxSizer::RecalcSizes()
                 wxCoord height = size.y;
                 if (item->GetProportion())
                 {
-                    height = (delta * weight) + extra;
-                    extra = 0; // only the first item will get the remainder as extra size
+                    // Because of at least one visible item has non-zero
+                    // proportion then m_stretchable is not zero
+                    height = (delta * item->GetProportion()) / m_stretchable;
                 }
 
                 wxPoint child_pos( pt );
@@ -1377,8 +1367,9 @@ void wxBoxSizer::RecalcSizes()
                 wxCoord width = size.x;
                 if (item->GetProportion())
                 {
-                    width = (delta * weight) + extra;
-                    extra = 0; // only the first item will get the remainder as extra size
+                    // Because of at least one visible item has non-zero
+                    // proportion then m_stretchable is not zero
+                    width = (delta * item->GetProportion()) / m_stretchable;
                 }
 
                 wxPoint child_pos( pt );
@@ -1414,26 +1405,41 @@ wxSize wxBoxSizer::CalcMin()
     m_fixedWidth = 0;
     m_fixedHeight = 0;
 
-    // Find how long each stretch unit needs to be
-    int                      stretchSize = 1;
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-
     while (node)
     {
-        wxSizerItem     *item = node->GetData();
+        wxSizerItem *item = node->GetData();
+
+        if (item->IsShown() && item->GetProportion() != 0)
+            m_stretchable += item->GetProportion();
+
+        node = node->GetNext();
+    }
+
+    // Total minimum size (width or height) of sizer
+    int maxMinSize = 0;
+
+    node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem *item = node->GetData();
 
         if (item->IsShown() && item->GetProportion() != 0)
         {
             int stretch = item->GetProportion();
             wxSize size( item->CalcMin() );
-            int sizePerStretch;
+            int minSize;
+            
             // Integer division rounded up is (a + b - 1) / b
+            // Round up needed in order to guarantee that all
+            // all items will have size not less then their min size
             if (m_orient == wxHORIZONTAL)
-                sizePerStretch = ( size.x + stretch - 1 ) / stretch;
+                minSize = ( size.x*m_stretchable + stretch - 1)/stretch;
             else
-                sizePerStretch = ( size.y + stretch - 1 ) / stretch;
-            if (sizePerStretch > stretchSize)
-                stretchSize = sizePerStretch;
+                minSize = ( size.y*m_stretchable + stretch - 1)/stretch;
+            
+            if (minSize > maxMinSize)
+                maxMinSize = minSize;
         }
         node = node->GetNext();
     }
@@ -1442,33 +1448,19 @@ wxSize wxBoxSizer::CalcMin()
     node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem     *item = node->GetData();
+        wxSizerItem *item = node->GetData();
 
         if (item->IsShown())
         {
-            m_stretchable += item->GetProportion();
-
             wxSize size( item->CalcMin() );
             if (item->GetProportion() != 0)
             {
                 if (m_orient == wxHORIZONTAL)
-                    size.x = stretchSize * item->GetProportion();
+                    size.x = (maxMinSize*item->GetProportion())/m_stretchable;
                 else
-                    size.y = stretchSize * item->GetProportion();
-            }
-
-            if (m_orient == wxHORIZONTAL)
-            {
-                m_minWidth += size.x;
-                m_minHeight = wxMax( m_minHeight, size.y );
+                    size.y = (maxMinSize*item->GetProportion())/m_stretchable;
             }
             else
-            {
-                m_minHeight += size.y;
-                m_minWidth = wxMax( m_minWidth, size.x );
-            }
-
-            if (item->GetProportion() == 0)
             {
                 if (m_orient == wxVERTICAL)
                 {
@@ -1480,6 +1472,17 @@ wxSize wxBoxSizer::CalcMin()
                     m_fixedWidth += size.x;
                     m_fixedHeight = wxMax( m_fixedHeight, size.y );
                 }
+            }
+
+            if (m_orient == wxHORIZONTAL)
+            {
+                m_minWidth += size.x;
+                m_minHeight = wxMax( m_minHeight, size.y );
+            }
+            else
+            {
+                m_minHeight += size.y;
+                m_minWidth = wxMax( m_minWidth, size.x );
             }
         }
         node = node->GetNext();
