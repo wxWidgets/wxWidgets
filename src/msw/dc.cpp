@@ -1357,31 +1357,37 @@ void wxDC::SetPen(const wxPen& pen)
 {
     WXMICROWIN_CHECK_HDC
 
-    // Set the old object temporarily, in case the assignment deletes an object
-    // that's not yet selected out.
-    if (m_oldPen)
-    {
-        ::SelectObject(GetHdc(), (HPEN) m_oldPen);
-        m_oldPen = 0;
-    }
+    if ( pen == m_pen )
+        return;
 
-    m_pen = pen;
-
-    if (!m_pen.Ok())
+    if ( pen.Ok() )
     {
-        if (m_oldPen)
-            ::SelectObject(GetHdc(), (HPEN) m_oldPen);
-        m_oldPen = 0;
-    }
-
-    if (m_pen.Ok())
-    {
-        if (m_pen.GetResourceHandle())
+        HGDIOBJ hpen = ::SelectObject(GetHdc(), GetHpenOf(pen));
+        if ( hpen == HGDI_ERROR )
         {
-            HPEN p = (HPEN) ::SelectObject(GetHdc(), (HPEN)m_pen.GetResourceHandle());
-            if (!m_oldPen)
-                m_oldPen = (WXHPEN) p;
+            wxLogLastError(_T("SelectObject(pen)"));
         }
+        else // selected ok
+        {
+            if ( !m_oldPen )
+                m_oldPen = (WXHPEN)hpen;
+
+            m_pen = pen;
+        }
+    }
+    else // invalid pen, reset the current pen
+    {
+        if ( m_oldPen )
+        {
+            if ( ::SelectObject(GetHdc(), (HPEN) m_oldPen) == HGDI_ERROR )
+            {
+                wxLogLastError(_T("SelectObject(old pen)"));
+            }
+
+            m_oldPen = NULL;
+        }
+
+        m_pen = wxNullPen;
     }
 }
 
