@@ -475,9 +475,9 @@ size_t wxStringBase::find(const wxStringBase& str, size_t nStart) const
   wxASSERT( nStart <= length() );
 
   //anchor
-  const wxChar* p = wxMemchr(c_str() + nStart, 
-                    str.c_str()[0], 
-                    length() - nStart);
+  const wxChar* p = (const wxChar*)wxMemchr(c_str() + nStart, 
+                                            str.c_str()[0], 
+                                            length() - nStart);
  
   if(!p)
       return npos;
@@ -486,9 +486,9 @@ size_t wxStringBase::find(const wxStringBase& str, size_t nStart) const
         wxMemcmp(p, str.c_str(), str.length()) )
   {
       //anchor again
-      p = wxMemchr(++p, 
-                    str.c_str()[0], 
-                    length() - (p - c_str()));
+      p = (const wxChar*)wxMemchr(++p, 
+                                  str.c_str()[0], 
+                                  length() - (p - c_str()));
 
       if(!p)
           return npos;
@@ -506,7 +506,7 @@ size_t wxStringBase::find(wxChar ch, size_t nStart) const
 {
   wxASSERT( nStart <= length() );
 
-  const wxChar *p = wxMemchr(c_str() + nStart, ch, length() - nStart);
+  const wxChar *p = (const wxChar*)wxMemchr(c_str() + nStart, ch, length() - nStart);
 
   return p == NULL ? npos : p - c_str();
 }
