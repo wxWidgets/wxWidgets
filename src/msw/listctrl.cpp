@@ -40,8 +40,8 @@
 
 #include "wx/textctrl.h"
 #include "wx/imaglist.h"
-
 #include "wx/listctrl.h"
+#include "wx/dcclient.h"
 
 #include "wx/msw/private.h"
 
