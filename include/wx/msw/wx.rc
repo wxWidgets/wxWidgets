@@ -105,3 +105,9 @@ csquery                 BITMAP "wx/msw/csquery.bmp"
 // For obtaining the RGB values of standard colours
 wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 
+//////////////////////////////////////////////////////////////////////////////
+//
+// Manifest file for Windows XP
+//
+
+1 24 "wx/msw/wx.manifest"
