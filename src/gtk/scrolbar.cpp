@@ -82,14 +82,15 @@ static void gtk_scrollbar_callback( GtkAdjustment *adjust, wxScrollBar *win )
 // "button_press_event" from slider
 //-----------------------------------------------------------------------------
 
-static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget), 
-                                                 GdkEventButton *WXUNUSED(gdk_event), 
+static gint gtk_scrollbar_button_press_callback( GtkRange *widget, 
+                                                 GdkEventButton *gdk_event, 
                                                  wxScrollBar *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    win->m_isScrolling = TRUE;
 //  g_blockEventsOnScroll = TRUE;  doesn't work in DialogEd
+
+    win->m_isScrolling = (gdk_event->window == widget->slider);
   
     return FALSE;
 }
@@ -104,20 +105,22 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
 {
     if (g_isIdle) wxapp_install_idle_handler();
     
-    wxASSERT( win->m_isScrolling );
-
-    win->m_isScrolling = FALSE;
 //  g_blockEventsOnScroll = FALSE;
   
-    wxEventType command = wxEVT_SCROLL_THUMBTRACK;
-    int value = (int)ceil(win->m_adjust->value);
-    int dir = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
+    if (win->m_isScrolling)
+    {
+        wxEventType command = wxEVT_SCROLL_THUMBTRACK;
+        int value = (int)ceil(win->m_adjust->value);
+        int dir = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
 
-    wxScrollEvent event( command, value, dir );
-    event.SetScrolling( FALSE );
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
+        wxScrollEvent event( command, value, dir );
+        event.SetScrolling( FALSE );
+        event.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent( event );
+    }
       
+    win->m_isScrolling = FALSE;
+    
     return FALSE;
 }
 
@@ -209,7 +212,16 @@ void wxScrollBar::SetThumbPosition( int viewStart )
     if (fabs(fpos-m_adjust->value) < 0.2) return;
     m_adjust->value = fpos;
   
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_adjust), 
+                        (GtkSignalFunc) gtk_scrollbar_callback, 
+                        (gpointer) this );
+                        
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
+    
+    gtk_signal_connect( GTK_OBJECT(m_adjust), 
+                        "value_changed",
+                        (GtkSignalFunc) gtk_scrollbar_callback, 
+                        (gpointer) this );
 }
 
 void wxScrollBar::SetScrollbar( int position, int thumbSize, int range, int pageSize,

@@ -1581,6 +1581,7 @@ static void gtk_window_hscroll_callback( GtkAdjustment *adjust, wxWindow *win )
 // "changed" from m_vAdjust
 //-----------------------------------------------------------------------------
 
+/*
 static void gtk_window_vscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
     DEBUG_MAIN_THREAD
@@ -1598,11 +1599,13 @@ static void gtk_window_vscroll_change_callback( GtkWidget *WXUNUSED(widget), wxW
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 }
+*/
 
 //-----------------------------------------------------------------------------
 // "changed" from m_hAdjust
 //-----------------------------------------------------------------------------
 
+/*
 static void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
     DEBUG_MAIN_THREAD
@@ -1620,13 +1623,14 @@ static void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxW
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 }
+*/
 
 //-----------------------------------------------------------------------------
 // "button_press_event" from scrollbar
 //-----------------------------------------------------------------------------
 
-static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
-                                                 GdkEventButton *WXUNUSED(gdk_event),
+static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
+                                                 GdkEventButton *gdk_event,
                                                  wxWindow *win)
 {
     DEBUG_MAIN_THREAD
@@ -1634,13 +1638,8 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-//  don't test here as we can release the mouse while being over
-//  a different window than the slider
-//
-//    if (gdk_event->window != widget->slider) return FALSE;
-
     g_blockEventsOnScroll = TRUE;
-    win->m_isScrolling = TRUE;
+    win->m_isScrolling = (gdk_event->window == widget->slider);
 
     return FALSE;
 }
@@ -1655,38 +1654,39 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 {
     DEBUG_MAIN_THREAD
 
-
 //  don't test here as we can release the mouse while being over
 //  a different window than the slider
 //
 //    if (gdk_event->window != widget->slider) return FALSE;
 
-    wxASSERT( win->m_isScrolling );
-
     g_blockEventsOnScroll = FALSE;
-    win->m_isScrolling = FALSE;
 
-    wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
-    int value = -1;
-    int dir = -1;
+    if (win->m_isScrolling)
+    {
+        wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
+        int value = -1;
+        int dir = -1;
     
-    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(win->m_widget);
-    if (widget == GTK_RANGE(scrolledWindow->hscrollbar))
-    {
-        value = (int)(win->m_hAdjust->value+0.5);
-        dir = wxHORIZONTAL;
-    }
-    if (widget == GTK_RANGE(scrolledWindow->vscrollbar))
-    {
-        value = (int)(win->m_vAdjust->value+0.5);
-        dir = wxVERTICAL;
+        GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(win->m_widget);
+        if (widget == GTK_RANGE(scrolledWindow->hscrollbar))
+        {
+            value = (int)(win->m_hAdjust->value+0.5);
+            dir = wxHORIZONTAL;
+        }
+        if (widget == GTK_RANGE(scrolledWindow->vscrollbar))
+        {
+            value = (int)(win->m_vAdjust->value+0.5);
+            dir = wxVERTICAL;
+        }
+        
+        wxScrollWinEvent event( command, value, dir );
+        event.SetScrolling( FALSE );
+        event.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent( event );
     }
 
-    wxScrollWinEvent event( command, value, dir );
-    event.SetScrolling( FALSE );
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
-
+    win->m_isScrolling = FALSE;
+    
     return FALSE;
 }
 
@@ -2119,10 +2119,12 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     gtk_signal_connect( GTK_OBJECT(m_vAdjust), "value_changed",
           (GtkSignalFunc) gtk_window_vscroll_callback, (gpointer) this );
 
+/*
     gtk_signal_connect( GTK_OBJECT(m_hAdjust), "changed",
           (GtkSignalFunc) gtk_window_hscroll_change_callback, (gpointer) this );
     gtk_signal_connect(GTK_OBJECT(m_vAdjust), "changed",
           (GtkSignalFunc) gtk_window_vscroll_change_callback, (gpointer) this );
+*/
 
     gtk_widget_show( m_wxwindow );
 
@@ -3333,23 +3335,31 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
 
     if (orient == wxHORIZONTAL)
     {
+/*
         gtk_signal_disconnect_by_func( GTK_OBJECT(m_hAdjust),
             (GtkSignalFunc) gtk_window_hscroll_change_callback, (gpointer) this );
+*/
     
         gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
         
+/*
         gtk_signal_connect( GTK_OBJECT(m_hAdjust), "changed",
             (GtkSignalFunc) gtk_window_hscroll_change_callback, (gpointer) this );
+*/
     }
     else
     {
+/*
         gtk_signal_disconnect_by_func( GTK_OBJECT(m_vAdjust),
             (GtkSignalFunc) gtk_window_vscroll_change_callback, (gpointer) this );
+*/
 
         gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
         
+/*
         gtk_signal_connect( GTK_OBJECT(m_vAdjust), "changed",
             (GtkSignalFunc) gtk_window_vscroll_change_callback, (gpointer) this );
+*/
     }
 }
 
