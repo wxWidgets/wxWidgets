@@ -108,6 +108,7 @@ public:
   // for wxTreeCtrl usage only
   wxTreeItemId(GtkTreeItem *itemId) { m_itemId = itemId; }
   operator GtkTreeItem *() const { return m_itemId; }
+  void operator =(GtkTreeItem *item) { m_itemId = item; }
 
 protected:
   GtkTreeItem *m_itemId;
@@ -126,25 +127,18 @@ protected:
 // Because the objects of this class are deleted by the tree, they should
 // always be allocated on the heap!
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxTreeItemData {
-friend class wxTreeCtrl;
+class WXDLLEXPORT wxTreeItemData : private wxTreeItemId {
 public:
-  // creation/destruction
-  // --------------------
-      // default ctor
-  wxTreeItemData() { }
+    // default ctor/copy ctor/assignment operator are ok
 
-      // default copy ctor/assignment operator are ok
-      // dtor is virtual and all the items are deleted by the tree control
-      // when it's deleted, so you normally don't have to care about freeing
-      // memory allocated in your wxTreeItemData-derived class
-  virtual ~wxTreeItemData() { }
+    // dtor is virtual and all the items are deleted by the tree control when
+    // it's deleted, so you normally don't have to care about freeing memory
+    // allocated in your wxTreeItemData-derived class
+    virtual ~wxTreeItemData() { }
 
-  // accessor: get the item associated with us
-  const wxTreeItemId& GetItemId() const { return m_itemId; }
-
-protected:
-  wxTreeItemId m_itemId;
+    // accessors: set/get the item associated with this node
+    void SetId(const wxTreeItemId& id) { m_itemId = id; }
+    const wxTreeItemId& GetId() const { return (wxTreeItemId&) m_itemId; }
 };
 
 class WXDLLEXPORT wxTreeCtrl: public wxControl {

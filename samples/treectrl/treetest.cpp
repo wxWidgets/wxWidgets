@@ -195,7 +195,7 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
 void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
                                     size_t depth)
 {
-  long rootId = AddRoot("Root",
+  wxTreeItemId rootId = AddRoot("Root",
                         TreeCtrlIcon_Folder, TreeCtrlIcon_Folder,
                         new MyTreeItemData("Root item"));
 
