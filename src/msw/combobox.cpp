@@ -241,41 +241,41 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
 
 WXLRESULT wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    bool isSize = false;
-    long fromOld, toOld;
+    // TODO: handle WM_CTLCOLOR messages from our EDIT control to be able to
+    //       set its colour correctly (to be the same as our own one)
 
-    // handle WM_CTLCOLOR messages from our EDIT control to be able to set its
-    // colour correctly (to be the same as our own one)
     switch ( nMsg )
     {
         case CB_SETCURSEL:
             // Selection was set with SetSelection.  Update the value too.
             if ((int)wParam > GetCount())
-                m_value = wxEmptyString;
+                m_value.clear();
             else
                 m_value = GetString(wParam);
             m_selectionOld = -1;
             break;
+
         case WM_SIZE:
-            GetSelection(&fromOld, &toOld);
-            isSize = true;
-            break;
+            {
+                // combobox selection sometimes spontaneously changes when its
+                // size changes, restore it to the old value if necessary
+                long fromOld, toOld;
+                GetSelection(&fromOld, &toOld);
+                WXLRESULT result = wxChoice::MSWWindowProc(nMsg, wParam, lParam);
+
+                long fromNew, toNew;
+                GetSelection(&fromNew, &toNew);
+
+                if ( fromOld != fromNew || toOld != toNew )
+                {
+                    SetSelection(fromOld, toOld);
+                }
+
+                return result;
+            }
     }
 
-    WXLRESULT result = wxChoice::MSWWindowProc(nMsg, wParam, lParam);
-
-    if(isSize)
-    {
-        long fromNew, toNew;
-        GetSelection(&fromNew, &toNew);
-
-        if ( fromOld != fromNew || toOld != toNew )
-        {
-            SetSelection(fromOld, toOld);
-        }
-    }
-
-    return result;
+    return wxChoice::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
