@@ -1129,10 +1129,6 @@ void wxGrid::Init()
 
 void wxGrid::CalcDimensions()
 {
-    // This avoids a crash in SetScrollbars
-    //
-    if ( !m_displayed ) return;
-    
     int cw, ch;
     GetClientSize( &cw, &ch );
 
