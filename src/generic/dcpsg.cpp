@@ -1479,11 +1479,8 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
 
     int size = m_font.GetPointSize();
 
-    long by = y + (long)floor( double(size) * 2.0 / 3.0 ); // approximate baseline
-
-    // FIXME only correct for 90 degrees
     fprintf(m_pstream, "%d %d moveto\n",
-            LogicalToDeviceX((wxCoord)(x + size)), LogicalToDeviceY((wxCoord)by) );
+            LogicalToDeviceX(x), LogicalToDeviceY(y));
 
     char buffer[100];
     sprintf(buffer, "%.8f rotate\n", angle);
