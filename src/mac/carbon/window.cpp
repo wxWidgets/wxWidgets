@@ -1192,10 +1192,11 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
     if( dx == 0 && dy ==0 )
         return ;
         
-    wxClientDC dc(this) ;
-    wxMacPortSetter helper(&dc) ;
 
     {
+        wxClientDC dc(this) ;
+        wxMacPortSetter helper(&dc) ;
+
         int width , height ;
         GetClientSize( &width , &height ) ;
 
@@ -1218,7 +1219,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         GetWindowUpdateRgn( rootWindow , formerUpdateRgn ) ;
         Point pt = {0,0} ;
         LocalToGlobal( &pt ) ;
-        OffsetRgn( updateRgn , -pt.h , -pt.v ) ;
+        OffsetRgn( formerUpdateRgn , -pt.h , -pt.v ) ;
         SectRgn( formerUpdateRgn , scrollRgn , formerUpdateRgn ) ;
         if ( !EmptyRgn( formerUpdateRgn ) )
         {
@@ -1559,7 +1560,6 @@ void wxWindowMac::Update()
     ::SetPort( UMAGetWindowPort( rootWindow ) ) ;
     Point pt = {0,0} ;
     LocalToGlobal( &pt ) ;
-    ::GlobalToLocal( &pt ) ;
     ::SetPort( port ) ;
     OffsetRgn( updateRgn , -pt.h , -pt.v ) ;
     // translate to window local coordinates
@@ -1733,10 +1733,32 @@ void wxWindowMac::MacRedraw( WXHRGN updatergnr , long time, bool erase)
         DisposeRgn( ownUpdateRgn ) ;
         if ( !m_updateRegion.Empty() )
         {
+            wxWindowList hiddenWindows ;
+            for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
+            {
+                wxControl *child = wxDynamicCast( ( wxWindow*)node->GetData() , wxControl ) ;
+
+                if ( child && child->MacGetRootWindow() == window && child->IsShown() && child->GetMacControl() )
+                {
+                    SetControlVisibility( (ControlHandle) child->GetMacControl() , false , false ) ;
+                    hiddenWindows.Append( child ) ;
+                }
+            }
+            
             wxPaintEvent event;
             event.m_timeStamp = time ;
             event.SetEventObject(this);
             GetEventHandler()->ProcessEvent(event);
+ 
+            for (wxWindowListNode *node = hiddenWindows.GetFirst(); node; node = node->GetNext())
+            {
+                wxControl *child = wxDynamicCast( ( wxWindow*)node->GetData() , wxControl ) ;
+
+                if ( child && child->GetMacControl() )
+                {
+                    SetControlVisibility( (ControlHandle) child->GetMacControl() , true , false ) ;
+                }
+            }
         }
     }
 
