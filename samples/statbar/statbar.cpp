@@ -17,11 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "statbar.cpp"
-    #pragma interface "statbar.cpp"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
