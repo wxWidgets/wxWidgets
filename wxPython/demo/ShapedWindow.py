@@ -16,17 +16,22 @@ class TestFrame(wxFrame):
         EVT_MOTION(self, self.OnMouseMove)
         EVT_RIGHT_UP(self, self.OnExit)
         EVT_PAINT(self, self.OnPaint)
-        EVT_SIZE(self, self.OnSize)
 
         self.bmp = images.getTuxBitmap()
         w, h = self.bmp.GetWidth(), self.bmp.GetHeight()
-        #self.SetClientSize( (w, h) )
-        self.SetToolTipString("Right-click to close the window")
-        s = wxStaticText(self, -1, "Double-click the image to set the window shape",
-                         pos = (w+10, h))
-        s.SetFont(wxFont(12, wxSWISS, wxNORMAL, wxBOLD))
-        s.SetSize(s.GetBestSize())
-        self.Fit()
+        self.SetClientSize( (w, h) )
+        self.SetToolTipString("Right-click to close the window\n"
+                              "Double-click the image to set/unset the window shape")
+
+        if wxPlatform == "__WXGTK__":
+            # wxGTK requires that the window be created before you can
+            # set its shape, so delay the call to SetWindowShape until
+            # this event.
+            EVT_WINDOW_CREATE(self, self.SetWindowShape)
+        else:
+            # On wxMSW the window has already been created, so go for it.
+            self.SetWindowShape()
+
 
 
     def SetWindowShape(self, *evt):
@@ -45,9 +50,6 @@ class TestFrame(wxFrame):
     def OnPaint(self, evt):
         dc = wxPaintDC(self)
         dc.DrawBitmap(self.bmp, 0,0, True)
-
-    def OnSize(self, evt):
-        pass
 
     def OnExit(self, evt):
         self.Close()
