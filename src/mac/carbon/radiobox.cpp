@@ -494,11 +494,6 @@ wxSize wxRadioBox::DoGetBestSize() const
    maxWidth = -1;
    maxHeight = -1;
 
-   // handle radio box title as well
-   GetTextExtent(GetTitle(), &eachWidth, NULL);
-   eachWidth  = (int)(eachWidth + RADIO_SIZE);
-   if (maxWidth < eachWidth)     maxWidth = eachWidth;
-
    for (int i = 0 ; i < m_noItems; i++)
    {
         GetTextExtent(GetString(i), &eachWidth, &eachHeight);
@@ -510,6 +505,13 @@ wxSize wxRadioBox::DoGetBestSize() const
 
     totHeight = GetRowCount() * (maxHeight + charHeight/2) + charHeight * 3/2;
     totWidth  = GetColumnCount() * (maxWidth + charWidth) + charWidth;
+
+    // handle radio box title as well
+    GetTextExtent(GetTitle(), &eachWidth, NULL);
+    eachWidth  = (int)(eachWidth + RADIO_SIZE) + 3 * charWidth ;
+    if (totWidth < eachWidth)     
+        totWidth = eachWidth;
+
    return wxSize(totWidth, totHeight);
 }
 //-------------------------------------------------------------------------------------
