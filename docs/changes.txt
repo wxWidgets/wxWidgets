@@ -94,7 +94,8 @@ All:
   (as in 2.5.0).
 - added some extra convenience functions to wxRect such as
   GetBottomRight (Hajo Kirchhoff)
-- Changed built-in regex library to a unicode-compatible one (Ryan Norton)
+- changed built-in regex library to a Unicode-compatible version based
+  on TCL sources (Ryan Norton, M. J. Wetherell)
 - added extra convenience functions to wxPoint for adding a
   wxSize (Wlodzimierz Skiba)
 - intermediate wxIPaddress class added to prepare for
