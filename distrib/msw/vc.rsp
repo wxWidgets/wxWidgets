@@ -184,8 +184,8 @@ samples/notebook/notebook.dsw
 samples/oleauto/oleauto.dsp
 samples/oleauto/oleauto.dsw
 
-samples/ownerdrw/ownerDrw.dsp
-samples/ownerdrw/ownerDrw.dsw
+samples/ownerdrw/ownerdrw.dsp
+samples/ownerdrw/ownerdrw.dsw
 
 samples/png/png.dsp
 samples/png/png.dsw
@@ -319,10 +319,10 @@ contrib/samples/xrc/XrcDemoVC.dsp
 contrib/samples/xrc/XrcDemoVC.dsw
 
 contrib/src/mmedia/MmediaVC.dsp
-contrib/src/mmedia/MMediaVC.dsw
+contrib/src/mmedia/MmediaVC.dsw
 
-contrib/samples/mmedia/MmboardVC.dsp
-contrib/samples/mmedia/MmboardVC.dsw
+contrib/samples/mmedia/MMboardVC.dsp
+contrib/samples/mmedia/MMboardVC.dsw
 
 contrib/src/stc/StcVC.dsp
 contrib/src/stc/StcVC.dsw

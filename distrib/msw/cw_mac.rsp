@@ -166,8 +166,8 @@ utils/tex2rtf/src/*.mcp
 utils/hhp2cached/*M?.xml
 utils/hhp2cached/*.mcp
 
-utils/helpgen/src/*M?.xml
-utils/helpgen/src/*.mcp
+utils/HelpGen/src/*M?.xml
+utils/HelpGen/src/*.mcp
 
 demos/bombs/*M?.xml
 demos/bombs/*.mcp

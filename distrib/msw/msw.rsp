@@ -7,6 +7,8 @@ lib/watcom/*.txt
 lib/watcom/*.lib
 lib/watcom/*.bat
 lib/bcc16/*.lib
+lib/_sc/*.txt
+lib/_sc/*.def
 
 docs/licence.txt
 docs/msw/*.txt
@@ -43,7 +45,8 @@ src/makelib.g95
 src/makesl.env
 src/makeprog.sl
 src/makelib.sl
-src/salford.lnk
+src/makelib.sc
+src/makeprog.sc
 src/maketwin.env
 src/makeprog.twn
 src/makelib.twn
