@@ -380,7 +380,6 @@ MyFrame::MyFrame(wxFrame* parent,
        : wxFrame(parent, id, title, pos, size, style)
 {
     m_tbar = NULL;
-    m_textWindow = new wxTextCtrl(this, -1, _T(""), wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
 
     m_smallToolbar = TRUE;
     m_horzToolbar = TRUE;
@@ -458,6 +457,8 @@ MyFrame::MyFrame(wxFrame* parent,
 
     // Create the toolbar
     RecreateToolbar();
+
+    m_textWindow = new wxTextCtrl(this, -1, _T(""), wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
 }
 
 #if USE_GENERIC_TBAR
