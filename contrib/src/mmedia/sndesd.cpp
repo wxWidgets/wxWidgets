@@ -60,30 +60,30 @@ wxSoundStreamESD::wxSoundStreamESD(const wxString& hostname)
     return;
 #else
     wxSoundFormatPcm pcm_default;
-    
+
     // First, we make some basic test: is there ESD on this computer ?
     m_esd_ok = false;
-    
+
     if (hostname.IsNull())
-        m_fd_output = esd_play_stream(ESD_PLAY | ESD_STREAM, 22050, 
+        m_fd_output = esd_play_stream(ESD_PLAY | ESD_STREAM, 22050,
                                       hostname.mb_str(), MY_ESD_NAME);
     else
-        m_fd_output = esd_play_stream(ESD_PLAY | ESD_STREAM, 22050, 
+        m_fd_output = esd_play_stream(ESD_PLAY | ESD_STREAM, 22050,
                                       NULL, MY_ESD_NAME);
     if (m_fd_output == -1) {
         // Answer: no. We return with an error.
         m_snderror = wxSOUND_INVDEV;
         return;
     }
-    
+
     // Close this unuseful stream.
     esd_close(m_fd_output);
-    
+
     m_hostname = hostname;
-    
+
     // Set the default audio format
     SetSoundFormat(pcm_default);
-    
+
     // Initialize some variable
     m_snderror = wxSOUND_NOERROR;
     m_esd_stop = true;
@@ -113,19 +113,20 @@ wxSoundStream& wxSoundStreamESD::Read(void *buffer, wxUint32 len)
     return *this;
 #else
     int ret;
-    
+
     if (m_esd_stop) {
         m_snderror = wxSOUND_NOTSTARTED;
         return *this;
     }
-    
-    m_lastcount = (wxUint32)ret = read(m_fd_input, buffer, len);
-    
+
+    ret = read(m_fd_input, buffer, len);
+    m_lastcount = (wxUint32)ret;
+
     if (ret < 0)
         m_snderror = wxSOUND_IOERROR;
     else
         m_snderror = wxSOUND_NOERROR;
-    
+
     return *this;
 #endif // defined HAVE_ESD_H
 }
@@ -146,16 +147,17 @@ wxSoundStream& wxSoundStreamESD::Write(const void *buffer, wxUint32 len)
         m_snderror = wxSOUND_NOTSTARTED;
         return *this;
     }
-    
-    m_lastcount = (wxUint32)ret = write(m_fd_output, buffer, len);
-    
+
+    ret = write(m_fd_output, buffer, len);
+    m_lastcount = (wxUint32)ret;
+
     if (ret < 0)
         m_snderror = wxSOUND_IOERROR;
   else
       m_snderror = wxSOUND_NOERROR;
-    
+
     m_q_filled = true;
-    
+
     return *this;
 #endif // defined HAVE_ESD_H
 }
@@ -171,7 +173,7 @@ bool wxSoundStreamESD::SetSoundFormat(const wxSoundFormatBase& format)
     return false;
 #else
     wxSoundFormatPcm *pcm_format;
-    
+
     if (format.GetType() != wxSOUND_PCM) {
         m_snderror = wxSOUND_INVFRMT;
         return false;
@@ -181,20 +183,20 @@ bool wxSoundStreamESD::SetSoundFormat(const wxSoundFormatBase& format)
         m_snderror = wxSOUND_INVDEV;
         return false;
     }
-    
+
     if (m_sndformat)
         delete m_sndformat;
-    
+
     m_sndformat = format.Clone();
     if (!m_sndformat) {
         m_snderror = wxSOUND_MEMERROR;
         return false;
     }
     pcm_format = (wxSoundFormatPcm *)m_sndformat;
-    
+
     // Detect the best format
     DetectBest(pcm_format);
-    
+
     m_snderror = wxSOUND_NOERROR;
     if (*pcm_format != format) {
         m_snderror = wxSOUND_NOEXACT;
@@ -213,7 +215,7 @@ static void _wxSound_OSS_CBack(gpointer data, int source,
                                GdkInputCondition condition)
 {
     wxSoundStreamESD *esd = (wxSoundStreamESD *)data;
-    
+
     switch (condition) {
         case GDK_INPUT_READ:
             esd->WakeUpEvt(wxSOUND_INPUT);
@@ -254,27 +256,27 @@ bool wxSoundStreamESD::StartProduction(int evt)
         m_snderror = wxSOUND_INVDEV;
         return false;
     }
-    
+
     if (!m_esd_stop)
         StopProduction();
-    
+
     pcm = (wxSoundFormatPcm *)m_sndformat;
-    
+
     flag |= (pcm->GetBPS() == 16) ? ESD_BITS16 : ESD_BITS8;
     flag |= (pcm->GetChannels() == 2) ? ESD_STEREO : ESD_MONO;
-    
+
     if ((evt & wxSOUND_OUTPUT) != 0) {
         flag |= ESD_PLAY | ESD_STREAM;
         m_fd_output = esd_play_stream(flag, pcm->GetSampleRate(), NULL,
                                       MY_ESD_NAME);
-    } 
-    
+    }
+
     if ((evt & wxSOUND_INPUT) != 0) {
         flag |= ESD_RECORD | ESD_STREAM;
         m_fd_input = esd_record_stream(flag, pcm->GetSampleRate(), NULL,
                                        MY_ESD_NAME);
     }
-    
+
 #ifdef __WXGTK__
     if ((evt & wxSOUND_OUTPUT) != 0) {
         m_tag_output = gdk_input_add(m_fd_output, GDK_INPUT_WRITE,
@@ -285,10 +287,10 @@ bool wxSoundStreamESD::StartProduction(int evt)
                                     _wxSound_OSS_CBack, (gpointer)this);
     }
 #endif
-  
+
     m_esd_stop = false;
     m_q_filled = false;
-    
+
     return true;
 #endif // defined HAVE_ESD_H
 }
@@ -304,7 +306,7 @@ bool wxSoundStreamESD::StopProduction()
 #else
     if (m_esd_stop)
         return false;
-    
+
     if (m_fd_input != -1) {
         esd_close(m_fd_input);
 #ifdef __WXGTK__
@@ -317,7 +319,7 @@ bool wxSoundStreamESD::StopProduction()
         gdk_input_remove(m_tag_output);
 #endif
     }
-    
+
     m_fd_input = -1;
     m_fd_output= -1;
     m_esd_stop = true;
@@ -339,10 +341,10 @@ void wxSoundStreamESD::DetectBest(wxSoundFormatPcm *pcm)
 
     // We change neither the number of channels nor the sample rate
     // because ESD is clever.
-    
+
     best_pcm.SetSampleRate(pcm->GetSampleRate());
     best_pcm.SetChannels(pcm->GetChannels());
-    
+
     // It supports 16 bits
     if (pcm->GetBPS() >= 16)
         best_pcm.SetBPS(16);
@@ -351,7 +353,7 @@ void wxSoundStreamESD::DetectBest(wxSoundFormatPcm *pcm)
 
     best_pcm.SetOrder(wxLITTLE_ENDIAN);
     best_pcm.Signed(true);
-    
+
     // Finally recopy the new format
     *pcm = best_pcm;
 #endif // defined HAVE_ESD_H
