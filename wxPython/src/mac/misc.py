@@ -575,6 +575,8 @@ wxGetOsVersion = miscc.wxGetOsVersion
 
 wxGetOsDescription = miscc.wxGetOsDescription
 
+wxShutdown = miscc.wxShutdown
+
 wxSleep = miscc.wxSleep
 
 wxUsleep = miscc.wxUsleep
@@ -612,6 +614,8 @@ def wxGetAccelFromString(*_args, **_kwargs):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxSHUTDOWN_POWEROFF = miscc.wxSHUTDOWN_POWEROFF
+wxSHUTDOWN_REBOOT = miscc.wxSHUTDOWN_REBOOT
 wxLeft = miscc.wxLeft
 wxTop = miscc.wxTop
 wxRight = miscc.wxRight
