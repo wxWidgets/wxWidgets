@@ -217,8 +217,7 @@ bool wxTextFile::Open()
 // if it fails, it assumes the native type for our platform.
 wxTextFileType wxTextFile::GuessType() const
 {
-  // file should be opened and we must be in it's beginning
-  wxASSERT( m_file.IsOpened() && m_file.Tell() == 0 );
+  wxASSERT( IsOpened() );
 
   // scan the file lines
   size_t nUnix = 0,     // number of '\n's alone
