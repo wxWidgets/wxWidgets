@@ -317,14 +317,14 @@ int gifDecoder::readgif(IMAGEN *img)
     /* skip most extensions */
     while (mygetc() == 0x21)               /* separator */
     {
-        wxLogDebug("ugh");
+        wxLogDebug(_T("ugh"));
         if (mygetc() == 0xF9)              /* graphic control ext. */
         {
-	    wxLogDebug("...");
+	    wxLogDebug(_T("..."));
             f->Read(buf, 6);
-	    wxLogDebug("buf[1] is %i (%i)", buf[1], buf[1] & 0x01);
+	    wxLogDebug(_T("buf[1] is %i (%i)"), buf[1], buf[1] & 0x01);
             if (buf[1] & 0x01) {
-	    wxLogDebug("setting transparen %i", buf[4]);
+	    wxLogDebug(_T("setting transparen %i"), buf[4]);
                 img->transparent = buf[4];
 	    }
         }
@@ -414,12 +414,12 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream )
     }
 
     if (igif.transparent != -1) {
-        wxLogDebug("oko");
+        wxLogDebug(_T("oko"));
         image->SetMaskColour(pal[3 * (igif.transparent) + 0], pal[3 * (igif.transparent) + 0], pal[3 * (igif.transparent) + 0]);
         image->SetMask(TRUE);
     }
 
-    wxLogDebug("(unsigned int)%i", (unsigned int)-1);
+    wxLogDebug(_T("(unsigned int)%i"), (unsigned int)-1);
     free(igif.pal);
     free(igif.p);
     return TRUE;
