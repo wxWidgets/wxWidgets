@@ -161,6 +161,7 @@
     src/common/fs_mem.cpp
     src/common/msgout.cpp
     src/common/utilscmn.cpp
+    src/common/event.cpp
 </set>
 <set var="BASE_CMN_HDR">
     wx/arrimpl.cpp
@@ -290,7 +291,6 @@
     src/generic/treectlg.cpp
     src/generic/wizard.cpp
     src/common/appcmn.cpp
-    src/common/event.cpp
     src/common/fontmap.cpp
     src/common/accesscmn.cpp
     src/common/artprov.cpp
