@@ -99,6 +99,8 @@ bool wxToolBar95::Create(wxWindow *parent,
                          long style,
                          const wxString& name)
 {
+  m_hWnd = 0;
+
   m_backgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
                                 GetGValue(GetSysColor(COLOR_BTNFACE)),
                                 GetBValue(GetSysColor(COLOR_BTNFACE)));

@@ -720,12 +720,33 @@ public:
  wxEVT_PAINT_ICON
  */
 
+#if defined(__WXDEBUG__) && defined(__WXMSW__)
+    // see comments in src/msw/dcclient.cpp where g_isPainting is defined
+    extern int g_isPainting;
+#endif // debug
+
 class WXDLLEXPORT wxPaintEvent : public wxEvent
 {
     DECLARE_DYNAMIC_CLASS(wxPaintEvent)
 
 public:
-    wxPaintEvent(int Id = 0) { m_eventType = wxEVT_PAINT; m_id = Id; }
+    wxPaintEvent(int Id = 0)
+    {
+        m_eventType = wxEVT_PAINT;
+        m_id = Id;
+
+#if defined(__WXDEBUG__) && defined(__WXMSW__)
+        // set the internal flag for the duration of processing of WM_PAINT
+        g_isPainting++;
+#endif // debug
+    }
+
+#if defined(__WXDEBUG__) && defined(__WXMSW__)
+    ~wxPaintEvent()
+    {
+        g_isPainting--;
+    }
+#endif // debug
 };
 
 // Erase background event class

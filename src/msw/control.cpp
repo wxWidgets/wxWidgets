@@ -56,15 +56,6 @@ wxControl::wxControl()
 wxControl::~wxControl()
 {
     m_isBeingDeleted = TRUE;
-
-    // If we delete an item, we should initialize the parent panel,
-    // because it could now be invalid.
-    wxWindow *parent = (wxWindow *)GetParent();
-    if (parent)
-    {
-        if (parent->GetDefaultItem() == (wxButton*) this)
-            parent->SetDefaultItem(NULL);
-    }
 }
 
 bool wxControl::ProcessCommand(wxCommandEvent& event)

@@ -119,17 +119,6 @@ wxMenu *wxCurrentPopupMenu = NULL;
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern wxChar wxCanvasClassName[];
 
-#ifdef __WXDEBUG__
-    // see comments in dcclient.cpp where g_isPainting is defined
-    extern bool g_isPainting;
-
-    inline static void wxStartPainting() { g_isPainting = TRUE; }
-    inline static void wxEndPainting() { g_isPainting = FALSE; }
-#else // !debug
-    inline static void wxStartPainting() { }
-    inline static void wxEndPainting() { }
-#endif // debug/!debug
-
 // ---------------------------------------------------------------------------
 // private functions
 // ---------------------------------------------------------------------------
@@ -1421,27 +1410,16 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
                 case VK_RETURN:
                     {
-                        if ( lDlgCode & DLGC_WANTMESSAGE )
+                        if ( (lDlgCode & DLGC_WANTMESSAGE) && !bCtrlDown )
                         {
                             // control wants to process Enter itself, don't
                             // call IsDialogMessage() which would interpret
                             // it
                             return FALSE;
                         }
-#ifndef __WIN16__
-                        wxButton *btnDefault = GetDefaultItem();
-                        if ( btnDefault && !bCtrlDown )
-                        {
-                            // if there is a default button, Enter should
-                            // press it
-                            (void)::SendMessage((HWND)btnDefault->GetHWND(),
-                                                BM_CLICK, 0, 0);
-                            return TRUE;
-                        }
-                        // else: but if there is not it makes sense to make it
+                        // else: but if it does not it makes sense to make it
                         //       work like a TAB - and that's what we do.
                         //       Note that Ctrl-Enter always works this way.
-#endif
                     }
                     break;
 
@@ -1688,9 +1666,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
 
         case WM_PAINT:
-            wxStartPainting();
             processed = HandlePaint();
-            wxEndPainting();
             break;
 
         case WM_CLOSE:
@@ -1814,7 +1790,10 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 case VK_RETURN:
                 case VK_BACK:
                 case VK_TAB:
-                    processed = TRUE;
+                    // but set processed to FALSE, not TRUE to still pass them to
+                    // the control's default window proc - otherwise built-in
+                    // keyboard handling won't work
+                    processed = FALSE;
 
                     break;
 

@@ -79,7 +79,7 @@ static PAINTSTRUCT g_paintStruct;
     // created in resopnse to WM_PAINT message - doing this from elsewhere is a
     // common programming error among wxWindows programmers and might lead to
     // very subtle and difficult to debug refresh/repaint bugs.
-    bool g_isPainting = FALSE;
+    int g_isPainting = 0;
 #endif // __WXDEBUG__
 
 // ===========================================================================
@@ -110,7 +110,11 @@ wxWindowDC::~wxWindowDC()
   {
     SelectOldObjects(m_hDC);
 
-    ::ReleaseDC(GetWinHwnd(m_canvas), GetHdc());
+    if ( !::ReleaseDC(GetWinHwnd(m_canvas), GetHdc()) )
+    {
+        wxLogLastError("ReleaseDC");
+    }
+
     m_hDC = 0;
   }
 
@@ -178,7 +182,7 @@ wxPaintDC::wxPaintDC(wxWindow *canvas)
     wxCHECK_RET( canvas, _T("NULL canvas in wxPaintDC ctor") );
 
 #ifdef __WXDEBUG__
-    if ( !g_isPainting )
+    if ( g_isPainting <= 0 )
     {
         wxFAIL_MSG( _T("wxPaintDC may be created only in EVT_PAINT handler!") );
 
@@ -208,6 +212,8 @@ wxPaintDC::~wxPaintDC()
 {
     if ( m_hDC )
     {
+        SelectOldObjects(m_hDC);
+
         size_t index;
         wxPaintDCInfo *info = FindInCache(&index);
 
@@ -220,6 +226,9 @@ wxPaintDC::~wxPaintDC()
             ms_cache.Remove(index);
         }
         //else: cached DC entry is still in use
+
+        // prevent the base class dtor from ReleaseDC()ing it again
+        m_hDC = 0;
     }
 }
 

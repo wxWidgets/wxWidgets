@@ -181,11 +181,6 @@ public:
     void OnEraseBackground(wxEraseEvent& event);
     void OnIdle(wxIdleEvent& event);
 
-    // a window may have a default button
-    // TODO move into wxPanel and/or wxFrame
-    wxButton *GetDefaultItem() const { return m_btnDefault; }
-    void SetDefaultItem(wxButton *btn) { m_btnDefault = btn; }
-
 public:
     // For implementation purposes - sometimes decorations make the client area
     // smaller

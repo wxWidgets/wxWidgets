@@ -24,7 +24,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 class WXDLLEXPORT wxPanel : public wxWindow
 {
 public:
-    wxPanel();
+    wxPanel() { Init(); }
     
     // Old-style constructor (no default values for coordinates to avoid
     // ambiguity with the new one)
@@ -33,6 +33,8 @@ public:
             long style = wxTAB_TRAVERSAL | wxNO_BORDER,
             const wxString& name = wxPanelNameStr)
     {
+        Init();
+
         Create(parent, -1, wxPoint(x, y), wxSize(width, height), style, name);
     }
     
@@ -58,7 +60,13 @@ public:
     // to the dialog via validators.
     virtual void InitDialog();
 
-    // implementation
+    // a default button is activated when Enter is pressed
+    wxButton *GetDefaultItem() const { return m_btnDefault; }
+    void SetDefaultItem(wxButton *btn) { m_btnDefault = btn; }
+
+    // implementation from now on
+    // --------------------------
+
         // responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     
@@ -73,8 +81,14 @@ public:
     long GetLastFocus() const { return m_lastFocus; }
 
 protected:
+    // common part of all ctors
+    void Init();
+
     // the child which had the focus last time this panel was activated
     long m_lastFocus;
+
+    // a default button or NULL
+    wxButton *m_btnDefault;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPanel)

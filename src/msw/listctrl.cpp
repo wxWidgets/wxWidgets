@@ -9,6 +9,14 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "listctrl.h"
 #endif
@@ -24,30 +32,42 @@
     #include "wx/wx.h"
 #endif
 
-#if defined(__WIN95__)
+#ifdef __WIN95__
 
 #include "wx/listctrl.h"
 #include "wx/log.h"
 
 #include "wx/msw/private.h"
 
-#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__)
+#ifdef __GNUWIN32__
+    #include "wx/msw/gnuwin32/extra.h"
+#else
     #include <commctrl.h>
 #endif
 
-#ifndef __TWIN32__
-    #ifdef __GNUWIN32__
-        #include "wx/msw/gnuwin32/extra.h"
-    #endif
-#endif
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
 
 static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_ITEM& tvItem);
 static void wxConvertFromMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_ITEM& tvItem, HWND getFullInfo = 0);
+
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
     IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
 #endif // USE_SHARED_LIBRARY
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxListCtrl construction
+// ----------------------------------------------------------------------------
 
 wxListCtrl::wxListCtrl()
 {
@@ -96,18 +116,32 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     m_windowId = (id == -1) ? NewControlId() : id;
 
-    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP;
+    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
+                   LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS;
+    if ( wxStyleHasBorder(m_windowStyle) )
+        wstyle |= WS_BORDER;
+    m_baseStyle = wstyle;
+
+    if ( !DoCreateControl(x, y, width, height) )
+        return FALSE;
+
+    if (parent)
+        parent->AddChild(this);
+
+    return TRUE;
+}
+
+bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
+{
+    DWORD wstyle = m_baseStyle;
 
     bool want3D;
-    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
+    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
 
     // Even with extended styles, need to combine with WS_BORDER
     // for them to look right.
-    if ( want3D || wxStyleHasBorder(m_windowStyle) )
+    if ( want3D )
         wstyle |= WS_BORDER;
-
-    wstyle |= LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS   ;
-    m_baseStyle = wstyle;
 
     long oldStyle = 0; // Dummy
     wstyle |= ConvertToMSWStyle(oldStyle, m_windowStyle);
@@ -117,13 +151,14 @@ bool wxListCtrl::Create(wxWindow *parent,
                                     WC_LISTVIEW,
                                     _T(""),
                                     wstyle,
-                                    x, y, width, height,
-                                    (HWND) parent->GetHWND(),
+                                    x, y, w, h,
+                                    GetWinHwnd(GetParent()),
                                     (HMENU)m_windowId,
                                     wxGetInstance(),
                                     NULL);
 
-    if ( !m_hWnd ) {
+    if ( !m_hWnd )
+    {
         wxLogError(_T("Can't create list control window."));
 
         return FALSE;
@@ -134,20 +169,38 @@ bool wxListCtrl::Create(wxWindow *parent,
 #ifdef ListView_SetExtendedListViewStyle
     if ( wstyle & LVS_REPORT )
     {
-        ListView_SetExtendedListViewStyle((HWND)GetHWND(),
-                                           LVS_EX_FULLROWSELECT);
+        ListView_SetExtendedListViewStyle(GetHwnd(),
+                                          LVS_EX_FULLROWSELECT);
     }
 #endif // ListView_SetExtendedListViewStyle
 
     wxSystemSettings settings;
     SetBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_WINDOW));
-    SetForegroundColour(parent->GetForegroundColour());
+    SetForegroundColour(GetParent()->GetForegroundColour());
 
-    if (parent) parent->AddChild(this);
-
-    SubclassWin((WXHWND) m_hWnd);
+    SubclassWin(m_hWnd);
 
     return TRUE;
+}
+
+void wxListCtrl::UpdateStyle()
+{
+    if ( GetHWND() )
+    {
+        // The new window view style
+        long dummy;
+        DWORD dwStyleNew = ConvertToMSWStyle(dummy, m_windowStyle);
+        dwStyleNew |= m_baseStyle;
+
+        // Get the current window style. 
+        DWORD dwStyleOld = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+
+        // Only set the window style if the view bits have changed. 
+        if ( dwStyleOld != dwStyleNew )
+        {
+            ::SetWindowLong(GetHwnd(), GWL_STYLE, dwStyleNew);
+        }
+    }
 }
 
 wxListCtrl::~wxListCtrl()
@@ -161,6 +214,10 @@ wxListCtrl::~wxListCtrl()
     }
 }
 
+// ----------------------------------------------------------------------------
+// set/get/change style
+// ----------------------------------------------------------------------------
+
 // Add or remove a single window style
 void wxListCtrl::SetSingleStyle(long style, bool add)
 {
@@ -170,11 +227,11 @@ void wxListCtrl::SetSingleStyle(long style, bool add)
     if ( add )
     {
         if ( style & wxLC_MASK_TYPE)
-            flag = flag & ~wxLC_MASK_TYPE ;
+            flag = flag & ~wxLC_MASK_TYPE;
         if ( style & wxLC_MASK_ALIGN )
-            flag = flag & ~wxLC_MASK_ALIGN ;
+            flag = flag & ~wxLC_MASK_ALIGN;
         if ( style & wxLC_MASK_SORT )
-            flag = flag & ~wxLC_MASK_SORT ;
+            flag = flag & ~wxLC_MASK_SORT;
     }
 
     if ( flag & style )
@@ -192,7 +249,7 @@ void wxListCtrl::SetSingleStyle(long style, bool add)
 
     m_windowStyle = flag;
 
-    RecreateWindow();
+    UpdateStyle();
 }
 
 // Set the whole window style
@@ -200,61 +257,7 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 {
     m_windowStyle = flag;
 
-    RecreateWindow();
-}
-
-void wxListCtrl::RecreateWindow()
-{
-    if ( GetHWND() )
-    {
-        long oldStyle = 0;
-        long style = ConvertToMSWStyle(oldStyle, m_windowStyle);
-        style |= m_baseStyle;
-        //      ::SetWindowLong((HWND) GetHWND(), GWL_STYLE, style);
-
-        // The following recreation of the window appears to be necessary
-        // because SetWindowLong doesn't seem to do it.
-
-        int x, y, width, height;
-        GetPosition(&x, &y);
-        GetSize(&width, &height);
-
-        UnsubclassWin();
-        ::DestroyWindow((HWND) GetHWND());
-
-        // Experimental
-        // Recreate the ListView control: unfortunately I can't
-        // make it work by using SetWindowLong.
-        bool want3D;
-        WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
-        HWND hWndListControl = CreateWindowEx(exStyle,
-                WC_LISTVIEW,
-                _T(""),
-                style,
-                x, y, width, height,
-                (HWND) GetParent()->GetHWND(),
-                (HMENU)m_windowId,
-                wxGetInstance(),
-                NULL );
-
-        m_hWnd = (WXHWND) hWndListControl;
-        SubclassWin((WXHWND) m_hWnd);
-
-#ifdef ListView_SetExtendedListViewStyle
-        if ( style & LVS_REPORT )
-        {
-            ListView_SetExtendedListViewStyle((HWND)GetHWND(),
-                                              LVS_EX_FULLROWSELECT);
-        }
-#endif // ListView_SetExtendedListViewStyle
-
-        if ( m_imageListNormal )
-            SetImageList(m_imageListNormal, wxIMAGE_LIST_NORMAL);
-        if ( m_imageListSmall )
-            SetImageList(m_imageListSmall, wxIMAGE_LIST_SMALL);
-        if ( m_imageListState )
-            SetImageList(m_imageListState, wxIMAGE_LIST_STATE);
-    }
+    UpdateStyle();
 }
 
 // Can be just a single style, or a bitlist
@@ -358,6 +361,10 @@ long wxListCtrl::ConvertToMSWStyle(long& oldStyle, long style) const
     return wstyle;
 }
 
+// ----------------------------------------------------------------------------
+// accessors
+// ----------------------------------------------------------------------------
+
 // Sets the background colour (GetBackgroundColour already implicit in
 // wxWindow class)
 bool wxListCtrl::SetBackgroundColour(const wxColour& col)
@@ -365,7 +372,7 @@ bool wxListCtrl::SetBackgroundColour(const wxColour& col)
     if ( !wxWindow::SetBackgroundColour(col) )
         return FALSE;
 
-    ListView_SetBkColor((HWND) GetHWND(), PALETTERGB(col.Red(), col.Green(), col.Blue()));
+    ListView_SetBkColor(GetHwnd(), PALETTERGB(col.Red(), col.Green(), col.Blue()));
 
     return TRUE;
 }
@@ -385,7 +392,7 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
         lvCol.cchTextMax = 512;
     }
 
-    bool success = (ListView_GetColumn((HWND) GetHWND(), col, & lvCol) != 0);
+    bool success = (ListView_GetColumn(GetHwnd(), col, & lvCol) != 0);
 
     //  item.m_subItem = lvCol.iSubItem;
     item.m_width = lvCol.cx;
@@ -447,13 +454,13 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
     }
     lvCol.mask |= LVCF_SUBITEM;
     lvCol.iSubItem = col;
-    return (ListView_SetColumn((HWND) GetHWND(), col, & lvCol) != 0);
+    return (ListView_SetColumn(GetHwnd(), col, & lvCol) != 0);
 }
 
 // Gets the column width
 int wxListCtrl::GetColumnWidth(int col) const
 {
-    return ListView_GetColumnWidth((HWND) GetHWND(), col);
+    return ListView_GetColumnWidth(GetHwnd(), col);
 }
 
 // Sets the column width
@@ -469,7 +476,7 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
     else if ( width2 == wxLIST_AUTOSIZE_USEHEADER)
         width2 = LVSCW_AUTOSIZE_USEHEADER;
 
-    return (ListView_SetColumnWidth((HWND) GetHWND(), col2, width2) != 0);
+    return (ListView_SetColumnWidth(GetHwnd(), col2, width2) != 0);
 }
 
 // Gets the number of items that can fit vertically in the
@@ -478,7 +485,7 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
 // or small icon view)
 int wxListCtrl::GetCountPerPage(void) const
 {
-    return ListView_GetCountPerPage((HWND) GetHWND());
+    return ListView_GetCountPerPage(GetHwnd());
 }
 
 // Gets the edit control for editing labels.
@@ -512,7 +519,7 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     }
 
     if (info.m_mask & wxLIST_MASK_DATA)
-        lvItem.mask |= LVIF_PARAM ;
+        lvItem.mask |= LVIF_PARAM;
 
     if ( info.m_mask & wxLIST_MASK_STATE )
     {
@@ -544,7 +551,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
     item.cchTextMax = 0;
-    return (ListView_SetItem((HWND) GetHWND(), &item) != 0);
+    return (ListView_SetItem(GetHwnd(), &item) != 0);
 }
 
 long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)
@@ -568,7 +575,7 @@ int wxListCtrl::GetItemState(long item, long stateMask) const
 {
     wxListItem info;
 
-    info.m_mask = wxLIST_MASK_STATE ;
+    info.m_mask = wxLIST_MASK_STATE;
     info.m_stateMask = stateMask;
     info.m_itemId = item;
 
@@ -583,7 +590,7 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 {
     wxListItem info;
 
-    info.m_mask = wxLIST_MASK_STATE ;
+    info.m_mask = wxLIST_MASK_STATE;
     info.m_state = state;
     info.m_stateMask = stateMask;
     info.m_itemId = item;
@@ -596,7 +603,7 @@ bool wxListCtrl::SetItemImage(long item, int image, int selImage)
 {
     wxListItem info;
 
-    info.m_mask = wxLIST_MASK_IMAGE ;
+    info.m_mask = wxLIST_MASK_IMAGE;
     info.m_image = image;
     info.m_itemId = item;
 
@@ -608,7 +615,7 @@ wxString wxListCtrl::GetItemText(long item) const
 {
     wxListItem info;
 
-    info.m_mask = wxLIST_MASK_TEXT ;
+    info.m_mask = wxLIST_MASK_TEXT;
     info.m_itemId = item;
 
     if (!GetItem(info))
@@ -621,7 +628,7 @@ void wxListCtrl::SetItemText(long item, const wxString& str)
 {
     wxListItem info;
 
-    info.m_mask = wxLIST_MASK_TEXT ;
+    info.m_mask = wxLIST_MASK_TEXT;
     info.m_itemId = item;
     info.m_text = str;
 
@@ -633,7 +640,7 @@ long wxListCtrl::GetItemData(long item) const
 {
     wxListItem info;
 
-    info.m_mask = wxLIST_MASK_DATA ;
+    info.m_mask = wxLIST_MASK_DATA;
     info.m_itemId = item;
 
     if (!GetItem(info))
@@ -646,7 +653,7 @@ bool wxListCtrl::SetItemData(long item, long data)
 {
     wxListItem info;
 
-    info.m_mask = wxLIST_MASK_DATA ;
+    info.m_mask = wxLIST_MASK_DATA;
     info.m_itemId = item;
     info.m_data = data;
 
@@ -667,9 +674,9 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
         code2 = LVIR_LABEL;
 
 #ifdef __WXWINE__
-    bool success = (ListView_GetItemRect((HWND) GetHWND(), (int) item, &rect2 ) != 0);
+    bool success = (ListView_GetItemRect(GetHwnd(), (int) item, &rect2 ) != 0);
 #else
-    bool success = (ListView_GetItemRect((HWND) GetHWND(), (int) item, &rect2, code2) != 0);
+    bool success = (ListView_GetItemRect(GetHwnd(), (int) item, &rect2, code2) != 0);
 #endif
 
     rect.x = rect2.left;
@@ -684,7 +691,7 @@ bool wxListCtrl::GetItemPosition(long item, wxPoint& pos) const
 {
     POINT pt;
 
-    bool success = (ListView_GetItemPosition((HWND) GetHWND(), (int) item, &pt) != 0);
+    bool success = (ListView_GetItemPosition(GetHwnd(), (int) item, &pt) != 0);
 
     pos.x = pt.x; pos.y = pt.y;
     return success;
@@ -693,13 +700,13 @@ bool wxListCtrl::GetItemPosition(long item, wxPoint& pos) const
 // Sets the item position.
 bool wxListCtrl::SetItemPosition(long item, const wxPoint& pos)
 {
-    return (ListView_SetItemPosition((HWND) GetHWND(), (int) item, pos.x, pos.y) != 0);
+    return (ListView_SetItemPosition(GetHwnd(), (int) item, pos.x, pos.y) != 0);
 }
 
 // Gets the number of items in the list control
 int wxListCtrl::GetItemCount(void) const
 {
-    return ListView_GetItemCount((HWND) GetHWND());
+    return ListView_GetItemCount(GetHwnd());
 }
 
 // Retrieves the spacing between icons in pixels.
@@ -707,19 +714,19 @@ int wxListCtrl::GetItemCount(void) const
 // view, otherwise the large icon view.
 int wxListCtrl::GetItemSpacing(bool isSmall) const
 {
-    return ListView_GetItemSpacing((HWND) GetHWND(), (BOOL) isSmall);
+    return ListView_GetItemSpacing(GetHwnd(), (BOOL) isSmall);
 }
 
 // Gets the number of selected items in the list control
 int wxListCtrl::GetSelectedItemCount(void) const
 {
-    return ListView_GetSelectedCount((HWND) GetHWND());
+    return ListView_GetSelectedCount(GetHwnd());
 }
 
 // Gets the text colour of the listview
 wxColour wxListCtrl::GetTextColour(void) const
 {
-    COLORREF ref = ListView_GetTextColor((HWND) GetHWND());
+    COLORREF ref = ListView_GetTextColor(GetHwnd());
     wxColour col(GetRValue(ref), GetGValue(ref), GetBValue(ref));
     return col;
 }
@@ -727,14 +734,14 @@ wxColour wxListCtrl::GetTextColour(void) const
 // Sets the text colour of the listview
 void wxListCtrl::SetTextColour(const wxColour& col)
 {
-    ListView_SetTextColor((HWND) GetHWND(), PALETTERGB(col.Red(), col.Blue(), col.Green()));
+    ListView_SetTextColor(GetHwnd(), PALETTERGB(col.Red(), col.Blue(), col.Green()));
 }
 
 // Gets the index of the topmost visible item when in
 // list or report view
 long wxListCtrl::GetTopItem(void) const
 {
-    return (long) ListView_GetTopIndex((HWND) GetHWND());
+    return (long) ListView_GetTopIndex(GetHwnd());
 }
 
 // Searches for an item, starting from 'item'.
@@ -769,7 +776,7 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
     if ( state & wxLIST_STATE_SELECTED )
         flags |= LVNI_SELECTED;
 
-    return (long) ListView_GetNextItem((HWND) GetHWND(), item, flags);
+    return (long) ListView_GetNextItem(GetHwnd(), item, flags);
 }
 
 
@@ -808,11 +815,12 @@ void wxListCtrl::SetImageList(wxImageList *imageList, int which)
         flags = LVSIL_STATE;
         m_imageListState = imageList;
     }
-    ListView_SetImageList((HWND) GetHWND(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
+    ListView_SetImageList(GetHwnd(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
 }
 
+// ----------------------------------------------------------------------------
 // Operations
-////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------
 
 // Arranges the items
 bool wxListCtrl::Arrange(int flag)
@@ -827,37 +835,45 @@ bool wxListCtrl::Arrange(int flag)
     else if ( flag == wxLIST_ALIGN_SNAP_TO_GRID )
         code = LVA_SNAPTOGRID;
 
-    return (ListView_Arrange((HWND) GetHWND(), code) != 0);
+    return (ListView_Arrange(GetHwnd(), code) != 0);
 }
 
 // Deletes an item
 bool wxListCtrl::DeleteItem(long item)
 {
-    return (ListView_DeleteItem((HWND) GetHWND(), (int) item) != 0);
+    return (ListView_DeleteItem(GetHwnd(), (int) item) != 0);
 }
 
 // Deletes all items
 bool wxListCtrl::DeleteAllItems()
 {
-    return (ListView_DeleteAllItems((HWND) GetHWND()) != 0);
+    return (ListView_DeleteAllItems(GetHwnd()) != 0);
 }
 
 // Deletes all items
 bool wxListCtrl::DeleteAllColumns()
 {
-    int i;
-    for ( i = 0; i < m_colCount; i++)
+    while ( m_colCount > 0 )
     {
-        if (ListView_DeleteColumn((HWND) GetHWND(), 0) != 0)
-            m_colCount --;
+        if ( ListView_DeleteColumn(GetHwnd(), 0) == 0 )
+        {
+            wxLogLastError("ListView_DeleteColumn");
+
+            return FALSE;
+        }
+
+        m_colCount--;
     }
-    return (m_colCount == 0);
+
+    wxASSERT_MSG( m_colCount == 0, _T("no columns should be left") );
+
+    return TRUE;
 }
 
 // Deletes a column
 bool wxListCtrl::DeleteColumn(int col)
 {
-    bool success = (ListView_DeleteColumn((HWND) GetHWND(), col) != 0);
+    bool success = (ListView_DeleteColumn(GetHwnd(), col) != 0);
 
     if ( success && (m_colCount > 0) )
         m_colCount --;
@@ -876,7 +892,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 {
     wxASSERT( (textControlClass->IsKindOf(CLASSINFO(wxTextCtrl))) );
 
-    HWND hWnd = (HWND) ListView_EditLabel((HWND) GetHWND(), item);
+    HWND hWnd = (HWND) ListView_EditLabel(GetHwnd(), item);
 
     if (m_textCtrl)
     {
@@ -900,7 +916,7 @@ bool wxListCtrl::EndEditLabel(bool cancel)
 
     /* I don't know how to implement this: there's no such macro as ListView_EndEditLabelNow.
      * ???
-     bool success = (ListView_EndEditLabelNow((HWND) GetHWND(), cancel) != 0);
+     bool success = (ListView_EndEditLabelNow(GetHwnd(), cancel) != 0);
 
      if (m_textCtrl)
      {
@@ -918,7 +934,7 @@ bool wxListCtrl::EndEditLabel(bool cancel)
 // Ensures this item is visible
 bool wxListCtrl::EnsureVisible(long item)
 {
-    return (ListView_EnsureVisible((HWND) GetHWND(), (int) item, FALSE) != 0);
+    return (ListView_EnsureVisible(GetHwnd(), (int) item, FALSE) != 0);
 }
 
 // Find an item whose label matches this string, starting from the item after 'start'
@@ -932,7 +948,7 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
         findInfo.flags |= LVFI_STRING;
     findInfo.psz = WXSTRINGCAST str;
 
-    return ListView_FindItem((HWND) GetHWND(), (int) start, & findInfo);
+    return ListView_FindItem(GetHwnd(), (int) start, & findInfo);
 }
 
 // Find an item whose data matches this data, starting from the item after 'start'
@@ -944,7 +960,7 @@ long wxListCtrl::FindItem(long start, long data)
     findInfo.flags = LVFI_PARAM;
     findInfo.lParam = data;
 
-    return ListView_FindItem((HWND) GetHWND(), (int) start, & findInfo);
+    return ListView_FindItem(GetHwnd(), (int) start, & findInfo);
 }
 
 // Find an item nearest this position in the specified direction, starting from
@@ -967,7 +983,7 @@ long wxListCtrl::FindItem(long start, const wxPoint& pt, int direction)
     else if ( direction == wxLIST_FIND_RIGHT )
         findInfo.vkDirection = VK_RIGHT;
 
-    return ListView_FindItem((HWND) GetHWND(), (int) start, & findInfo);
+    return ListView_FindItem(GetHwnd(), (int) start, & findInfo);
 }
 
 // Determines which item (if any) is at the specified point,
@@ -978,7 +994,7 @@ long wxListCtrl::HitTest(const wxPoint& point, int& flags)
     hitTestInfo.pt.x = (int) point.x;
     hitTestInfo.pt.y = (int) point.y;
 
-    ListView_HitTest((HWND) GetHWND(), & hitTestInfo);
+    ListView_HitTest(GetHwnd(), & hitTestInfo);
 
     flags = 0;
     if ( hitTestInfo.flags & LVHT_ABOVE )
@@ -998,7 +1014,7 @@ long wxListCtrl::HitTest(const wxPoint& point, int& flags)
     if ( hitTestInfo.flags & LVHT_TORIGHT )
         flags |= wxLIST_HITTEST_TORIGHT;
 
-    return (long) hitTestInfo.iItem ;
+    return (long) hitTestInfo.iItem;
 }
 
 // Inserts an item, returning the index of the new item if successful,
@@ -1008,7 +1024,7 @@ long wxListCtrl::InsertItem(wxListItem& info)
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
 
-    return (long) ListView_InsertItem((HWND) GetHWND(), & item);
+    return (long) ListView_InsertItem(GetHwnd(), & item);
 }
 
 long wxListCtrl::InsertItem(long index, const wxString& label)
@@ -1087,7 +1103,7 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
     lvCol.mask |= LVCF_SUBITEM;
     lvCol.iSubItem = col;
 
-    bool success = ListView_InsertColumn((HWND) GetHWND(), col, & lvCol) != -1;
+    bool success = ListView_InsertColumn(GetHwnd(), col, & lvCol) != -1;
     if ( success )
     {
         m_colCount++;
@@ -1124,7 +1140,7 @@ long wxListCtrl::InsertColumn(long col, const wxString& heading, int format,
 // to scroll. If in report view mode, y specifies the number of lines to scroll.
 bool wxListCtrl::ScrollList(int dx, int dy)
 {
-    return (ListView_Scroll((HWND) GetHWND(), dx, dy) != 0);
+    return (ListView_Scroll(GetHwnd(), dx, dy) != 0);
 }
 
 // Sort items.
@@ -1140,8 +1156,12 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 // data is arbitrary data to be passed to the sort function.
 bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
 {
-    return (ListView_SortItems((HWND) GetHWND(), (PFNLVCOMPARE) fn, data) != 0);
+    return (ListView_SortItems(GetHwnd(), (PFNLVCOMPARE) fn, data) != 0);
 }
+
+// ----------------------------------------------------------------------------
+// message processing
+// ----------------------------------------------------------------------------
 
 bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
 {
@@ -1159,7 +1179,8 @@ bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
         ProcessCommand(event);
         return TRUE;
     }
-    else return FALSE;
+    else
+        return FALSE;
 }
 
 bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
@@ -1191,7 +1212,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 eventType = wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
                 LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(this, event.m_item, info->item, (HWND) GetHWND());
+                wxConvertFromMSWListItem(this, event.m_item, info->item, GetHwnd());
                 break;
             }
 
@@ -1221,22 +1242,29 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
                 LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(this, event.m_item, info->item, (HWND) GetHWND());
+                wxConvertFromMSWListItem(this, event.m_item, info->item, GetHwnd());
                 if ( info->item.pszText == NULL || info->item.iItem == -1 )
                     event.m_cancelled = TRUE;
                 break;
             }
         case LVN_GETDISPINFO:
+                return FALSE;
+
+                // this provokes stack overflow: indeed, wxConvertFromMSWListItem()
+                // sends us WM_NOTIFY! As it doesn't do anything for now, just leave
+                // it out.
+#if 0
             {
-                //      return FALSE;
                 // TODO: some text buffering here, I think
                 // TODO: API for getting Windows to retrieve values
                 // on demand.
                 eventType = wxEVT_COMMAND_LIST_GET_INFO;
                 LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(this, event.m_item, info->item, (HWND) GetHWND());
+                wxConvertFromMSWListItem(this, event.m_item, info->item, GetHwnd());
                 break;
             }
+#endif // 0
+
         case LVN_INSERTITEM:
             {
                 eventType = wxEVT_COMMAND_LIST_INSERT_ITEM;
@@ -1264,22 +1292,53 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     return FALSE;
                 break;
             }
+
         case LVN_KEYDOWN:
             {
-                eventType = wxEVT_COMMAND_LIST_KEY_DOWN;
                 LV_KEYDOWN *info = (LV_KEYDOWN *)lParam;
-                event.m_code = wxCharCodeMSWToWX(info->wVKey);
+                WORD wVKey = info->wVKey;
+
+                // get the current selection
+                long lItem = GetNextItem(-1,
+                                         wxLIST_NEXT_ALL,
+                                         wxLIST_STATE_SELECTED);
+
+                // <Enter> or <Space> activate the selected item if any
+                if ( lItem != -1 && (wVKey == VK_RETURN || wVKey == VK_SPACE) )
+                {
+                    // TODO this behaviour probably should be optional
+                    eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+                    event.m_itemIndex = lItem;
+                }
+                else
+                {
+                    eventType = wxEVT_COMMAND_LIST_KEY_DOWN;
+                    event.m_code = wxCharCodeMSWToWX(wVKey);
+                }
                 break;
             }
+
+        case NM_DBLCLK:
+            // if the user processes it in wxEVT_COMMAND_LEFT_CLICK(), don't do
+            // anything else
+            if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
+            {
+                return TRUE;
+            }
+
+            // else translate it into wxEVT_COMMAND_LIST_ITEM_ACTIVATED event
+            eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+            break;
+
         case LVN_SETDISPINFO:
             {
                 eventType = wxEVT_COMMAND_LIST_SET_INFO;
                 LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(this, event.m_item, info->item, (HWND) GetHWND());
+                wxConvertFromMSWListItem(this, event.m_item, info->item, GetHwnd());
                 break;
             }
 
-        default :
+        default:
             return wxControl::MSWOnNotify(idCtrl, lParam, result);
     }
 
@@ -1321,6 +1380,10 @@ wxChar *wxListCtrl::AddPool(const wxString& str)
     return (wxChar *)node->Data();
 }
 
+// ----------------------------------------------------------------------------
+// wxListItem
+// ----------------------------------------------------------------------------
+
 // List item structure
 wxListItem::wxListItem()
 {
@@ -1359,9 +1422,9 @@ static void wxConvertFromMSWListItem(const wxListCtrl *ctrl, wxListItem& info, L
             lvItem.pszText = new wxChar[513];
             lvItem.cchTextMax = 512;
         }
-        //    lvItem.mask |= TVIF_HANDLE | TVIF_STATE | TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_CHILDREN | TVIF_PARAM ;
-        lvItem.mask |= LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM ;
-        ::SendMessage(getFullInfo, LVM_GETITEM, 0, (LPARAM)& lvItem) ;
+        //    lvItem.mask |= TVIF_HANDLE | TVIF_STATE | TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_CHILDREN | TVIF_PARAM;
+        lvItem.mask |= LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
+        ::SendMessage(getFullInfo, LVM_GETITEM, 0, (LPARAM)& lvItem);
     }
 
     if ( lvItem.mask & LVIF_STATE )
@@ -1370,27 +1433,27 @@ static void wxConvertFromMSWListItem(const wxListCtrl *ctrl, wxListItem& info, L
 
         if ( lvItem.stateMask & LVIS_CUT)
         {
-            info.m_stateMask |= wxLIST_STATE_CUT ;
+            info.m_stateMask |= wxLIST_STATE_CUT;
             if ( lvItem.state & LVIS_CUT )
-                info.m_state |= wxLIST_STATE_CUT ;
+                info.m_state |= wxLIST_STATE_CUT;
         }
         if ( lvItem.stateMask & LVIS_DROPHILITED)
         {
-            info.m_stateMask |= wxLIST_STATE_DROPHILITED ;
+            info.m_stateMask |= wxLIST_STATE_DROPHILITED;
             if ( lvItem.state & LVIS_DROPHILITED )
-                info.m_state |= wxLIST_STATE_DROPHILITED ;
+                info.m_state |= wxLIST_STATE_DROPHILITED;
         }
         if ( lvItem.stateMask & LVIS_FOCUSED)
         {
-            info.m_stateMask |= wxLIST_STATE_FOCUSED ;
+            info.m_stateMask |= wxLIST_STATE_FOCUSED;
             if ( lvItem.state & LVIS_FOCUSED )
-                info.m_state |= wxLIST_STATE_FOCUSED ;
+                info.m_state |= wxLIST_STATE_FOCUSED;
         }
         if ( lvItem.stateMask & LVIS_SELECTED)
         {
-            info.m_stateMask |= wxLIST_STATE_SELECTED ;
+            info.m_stateMask |= wxLIST_STATE_SELECTED;
             if ( lvItem.state & LVIS_SELECTED )
-                info.m_state |= wxLIST_STATE_SELECTED ;
+                info.m_state |= wxLIST_STATE_SELECTED;
         }
     }
 
@@ -1415,14 +1478,14 @@ static void wxConvertFromMSWListItem(const wxListCtrl *ctrl, wxListItem& info, L
         if (lvItem.pszText)
             delete[] lvItem.pszText;
     }
-    lvItem.mask = oldMask ;
+    lvItem.mask = oldMask;
 }
 
 static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_ITEM& lvItem)
 {
-    lvItem.iItem = (int) info.m_itemId ;
+    lvItem.iItem = (int) info.m_itemId;
 
-    lvItem.iImage = info.m_image ;
+    lvItem.iImage = info.m_image;
     lvItem.lParam = info.m_data;
     lvItem.stateMask = 0;
     lvItem.state = 0;
@@ -1431,10 +1494,10 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_
 
     if (info.m_mask & wxLIST_MASK_STATE)
     {
-        lvItem.mask |= LVIF_STATE ;
+        lvItem.mask |= LVIF_STATE;
         if (info.m_stateMask & wxLIST_STATE_CUT)
         {
-            lvItem.stateMask |= LVIS_CUT ;
+            lvItem.stateMask |= LVIS_CUT;
             if (info.m_state & wxLIST_STATE_CUT)
                 lvItem.state |= LVIS_CUT;
         }
@@ -1460,14 +1523,14 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_
 
     if (info.m_mask & wxLIST_MASK_TEXT)
     {
-        lvItem.mask |= LVIF_TEXT ;
+        lvItem.mask |= LVIF_TEXT;
         if ( ctrl->GetWindowStyleFlag() & wxLC_USER_TEXT )
         {
             lvItem.pszText = LPSTR_TEXTCALLBACK;
         }
         else
         {
-            lvItem.pszText = WXSTRINGCAST info.m_text ;
+            lvItem.pszText = WXSTRINGCAST info.m_text;
             if ( lvItem.pszText )
                 lvItem.cchTextMax = info.m_text.Length();
             else
@@ -1475,16 +1538,19 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_
         }
     }
     if (info.m_mask & wxLIST_MASK_IMAGE)
-        lvItem.mask |= LVIF_IMAGE ;
+        lvItem.mask |= LVIF_IMAGE;
     if (info.m_mask & wxLIST_MASK_DATA)
-        lvItem.mask |= LVIF_PARAM ;
+        lvItem.mask |= LVIF_PARAM;
 }
 
+// ----------------------------------------------------------------------------
 // List event
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
 
 wxListEvent::wxListEvent(wxEventType commandType, int id)
-: wxNotifyEvent(commandType, id)
+           : wxNotifyEvent(commandType, id)
 {
     m_code = 0;
     m_itemIndex = 0;
@@ -1492,5 +1558,5 @@ wxListEvent::wxListEvent(wxEventType commandType, int id)
     m_cancelled = FALSE;
 }
 
-#endif
+#endif // __WIN95__
 

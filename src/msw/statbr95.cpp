@@ -191,7 +191,7 @@ void wxStatusBar95::SetFieldsWidth()
   }
 
   if ( !StatusBar_SetParts(hwnd, m_nFields, pWidths) ) {
-    wxLogDebug(_T("StatusBar_SetParts failed."));
+    wxLogLastError(_T("StatusBar_SetParts"));
   }
 
   delete [] pWidths;
@@ -200,7 +200,7 @@ void wxStatusBar95::SetFieldsWidth()
 void wxStatusBar95::SetStatusText(const wxString& strText, int nField)
 {
   if ( !StatusBar_SetText(hwnd, nField, strText) ) {
-    wxLogDebug(_T("StatusBar_SetText failed"));
+    wxLogLastError(_T("StatusBar_SetText"));
   }
 }
 

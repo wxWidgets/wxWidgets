@@ -40,9 +40,10 @@ END_EVENT_TABLE()
 
 #endif
 
-wxPanel::wxPanel()
+void wxPanel::Init()
 {
     m_lastFocus = 0;
+    m_btnDefault = (wxButton *)NULL;
 }
 
 bool wxPanel::Create(wxWindow *parent, wxWindowID id,
@@ -51,8 +52,6 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
                      long style,
                      const wxString& name)
 {
-    m_lastFocus = 0;
-
     bool ret = wxWindow::Create(parent, id, pos, size, style, name);
 
     if ( ret )

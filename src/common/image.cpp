@@ -15,7 +15,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #include "wx/image.h"
@@ -32,13 +32,11 @@
 #include <string.h>
 
 #ifdef __SALFORDC__
-#ifdef FAR
-#undef FAR
-#endif
+    #undef FAR
 #endif
 
 #ifdef __WXMSW__
-#include <windows.h>
+    #include "wx/msw/private.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -49,8 +47,8 @@ class wxImageRefData: public wxObjectRefData
 {
 
 public:
-    wxImageRefData(void);
-    ~wxImageRefData(void);
+    wxImageRefData();
+    ~wxImageRefData();
 
     int             m_width;
     int             m_height;
@@ -60,7 +58,7 @@ public:
     bool            m_ok;
 };
 
-wxImageRefData::wxImageRefData(void)
+wxImageRefData::wxImageRefData()
 {
     m_width = 0;
     m_height = 0;
@@ -72,7 +70,7 @@ wxImageRefData::wxImageRefData(void)
     m_hasMask = FALSE;
 }
 
-wxImageRefData::~wxImageRefData(void)
+wxImageRefData::~wxImageRefData()
 {
     if (m_data) free( m_data );
 }
@@ -84,7 +82,7 @@ wxList wxImage::sm_handlers;
 #define M_IMGDATA ((wxImageRefData *)m_refData)
 
 #if !USE_SHARED_LIBRARIES
-IMPLEMENT_DYNAMIC_CLASS(wxImage, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxImage, wxObject)
 #endif
 
 wxImage::wxImage()

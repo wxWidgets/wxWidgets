@@ -171,9 +171,10 @@ wxDialog::~wxDialog()
 
   wxTopLevelWindows.DeleteObject(this);
 
+  Show(FALSE);
+
   if (m_modalShowing)
   {
-    Show(FALSE);
     // For some reason, wxWindows can activate another task altogether
     // when a frame is destroyed after a modal dialog has been invoked.
     // Try to bring the parent to the top.
@@ -185,13 +186,9 @@ wxDialog::~wxDialog()
   }
 
   m_modalShowing = FALSE;
-  if ( GetHWND() )
-    ShowWindow((HWND) GetHWND(), SW_HIDE);
 
   if ( (GetWindowStyleFlag() & wxDIALOG_MODAL) != wxDIALOG_MODAL )
     wxModelessWindows.DeleteObject(this);
-
-  UnsubclassWin();
 
   // If this is the last top-level window, exit.
   if (wxTheApp && (wxTopLevelWindows.Number() == 0))

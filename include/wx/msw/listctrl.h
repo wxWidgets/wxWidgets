@@ -69,8 +69,6 @@
      - in Win95, you can be called back to supply other information
        besides text, such as state information. This saves no memory
        and is probably superfluous to requirements.
-     - discover why SetWindowLong doesn't properly change the
-       style, requiring RecreateWindow instead.
      - testing of whole API, extending current sample.
 
 
@@ -411,8 +409,8 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   virtual bool MSWCommand(WXUINT param, WXWORD id);
   virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
-  // Recreate window - seems to be necessary when changing a style.
-  void RecreateWindow();
+  // bring the control in sync with current m_windowStyle value
+  void UpdateStyle();
 
   // Add to pool: necessary because Windows needs to have a string
   // still exist across 3 callbacks.
@@ -430,6 +428,8 @@ protected:
   int               m_colCount;   // Windows doesn't have GetColumnCount so must
                                   // keep track of inserted/deleted columns
 
+private:
+  bool DoCreateControl(int x, int y, int w, int h);
 };
 
 class WXDLLEXPORT wxListEvent : public wxNotifyEvent
