@@ -4,18 +4,19 @@ wxSizer is the abstract base class used for laying out subwindows in a window. Y
 cannot use wxSizer directly; instead, you'll have to use \helpref{wxBoxSizer}{wxboxsizer}
 or \helpref{wxStaticBoxSizer}{wxstaticboxsizer}.
 
-The layout algorithm used by sizers in wxWindows closely related to layout
+The layout algorithm used by sizers in wxWindows is closely related to layout
 in other GUI toolkits, such as Java's AWT, the GTK toolkit or the Qt toolkit. It is
 based upon the idea of the individual subwindows reporting their minimal required
 size and their ability to get stretched if the size of the parent window has changed.
 This will most often mean, that the programmer does not set the original size of
-the dialog in the beginning, rather the top-most sizer will get queried and it will
-then query its children. Its children can be normal windows or other sizers, so that
-a hierachy of sizer can be constructed. Note that sizer are not derived from wxWindows
-and thus do not interfere with tab ordering and require very little resources compared
+a dialog in the beginning, rather the dialog will assigned a sizer and this sizer
+will be queried about the recommended size. The sizer in turn will query its
+children, which can be normal windows, empty space or other sizers, so that
+a hierarchy of sizers can be constructed. Note that wxSizer does not derive from wxWindow
+and thus do not interfere with tab ordering and requires very little resources compared
 to a real window on screen.
 
-What makes sizers so well fitted for use in wxWindows, is the fact that every control
+What makes sizers so well fitted for use in wxWindows is the fact that every control
 reports its own minimal size and the algorithm can handle differences in font sizes
 or different window (dialog item) sizes on different platforms without problems. If e.g.
 the standard font as well as the overall design of Motif widgets requires more space than
@@ -66,7 +67,7 @@ sizer and thus to create hierarchies of sizers (typically a vertical box as the 
 horizontal boxes on the level beneath).}
 
 \docparam{width and height}{The dimension of a spacer to be added to the sizer. Adding spacers to sizers
-gives more flexilibilty in the design of dialogs; imagine for example a vertical box with two buttons at the
+gives more flexilibilty in the design of dialogs; imagine for example a horizontal box with two buttons at the
 bottom of a dialog: you might want to insert a space between the two buttons and make that space stretchable
 using the {\it option} flag and the result will be that the left button will be aligned with the left
 side of the dialog and the right button with the right side - the space in between will shrink and grow with
