@@ -657,8 +657,10 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
     if (!m_previewCanvas)
     {
-        wxMessageBox(_("wxPrintPreviewBase::RenderPage: must use wxPrintPreviewBase::SetCanvas to let me know about the canvas!"),
-            _("Print Preview Failure"), wxOK);
+        wxFAIL_MSG(_T("wxPrintPreviewBase::RenderPage: must use "
+                      "wxPrintPreviewBase::SetCanvas to let me "
+                      "know about the canvas!"));
+
         return FALSE;
     }
     m_previewCanvas->GetSize(&canvasWidth, &canvasHeight);
