@@ -207,20 +207,10 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
 
   long x, y;
 
-#if defined(__WXPM__)
-  long decsent;
-
-  dc.GetTextExtent(text, &x, &y,&decsent);
-  int xpos = rect.x + leftMargin;
-  int ypos = (int) (((rect.height - y + 1) / 2 ) + rect.y + decsent ) ;
-
-#else
   dc.GetTextExtent(text, &x, &y);
 
   int xpos = rect.x + leftMargin;
   int ypos = (int) (((rect.height - y) / 2 ) + rect.y + 0.5) ;
-
-#endif // __WXPM__
 
 #if defined( __WXGTK__ ) || defined(__WXMAC__)
   xpos++;
