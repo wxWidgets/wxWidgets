@@ -3045,7 +3045,7 @@ fi
 
 if test "$wxUSE_UNICODE" = yes; then
     dnl look if we have wide char IO functions
-    AC_CHECK_FUNCS(fputwc wprintf)
+    AC_CHECK_FUNCS(fputwc wprintf vswprintf)
 fi
 
 dnl the following tests are for Unix(like) systems only
