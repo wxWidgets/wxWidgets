@@ -1143,6 +1143,7 @@
 
 #undef wxUSE_ODBC
 #define wxUSE_ODBC                0
+#endif
 
 #if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
 // BC++ 4.0 can't compile JPEG library
