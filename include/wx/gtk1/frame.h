@@ -65,6 +65,8 @@ public:
                                          long style = wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE,
                                          wxWindowID id = 0,
                                          const wxString& name = wxStatusLineNameStr);
+                                         
+    void SetStatusBar(wxStatusBar *statbar);
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR

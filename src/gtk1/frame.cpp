@@ -675,6 +675,16 @@ wxStatusBar* wxFrame::CreateStatusBar(int number,
     return wxFrameBase::CreateStatusBar( number, style, id, name );
 }
 
+void wxFrame::SetStatusBar(wxStatusBar *statbar)
+{
+    bool hadStatBar = m_frameStatusBar != NULL;
+    
+    wxFrameBase::SetStatusBar(statbar);
+    
+    if (hadStatBar && !m_frameToolBar) 
+        GtkUpdateSize();
+}
+
 void wxFrame::PositionStatusBar()
 {
     if ( !m_frameStatusBar )
