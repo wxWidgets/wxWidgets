@@ -264,7 +264,7 @@ BOOL CTheApp::OnIdle(LONG lCount)
 bool MyApp::OnInit(void)
 {
   // Don't exit app when the top level frame is deleted
-//  SetExitOnFrameDelete(FALSE);
+  SetExitOnFrameDelete(TRUE);
   
   wxFrame* frame = CreateFrame();
   return TRUE;
