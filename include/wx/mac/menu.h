@@ -173,7 +173,7 @@ public:
 
     // if the menubar is modified, the display is not updated automatically,
     // call this function to update it (m_menuBarFrame should be !NULL)
-    void Refresh();
+    void Refresh(bool eraseBackground = TRUE, const wxRect *rect = (const wxRect *) NULL);
 
   void MacInstallMenuBar() ;
   void MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, int macMenuItemNum) ;

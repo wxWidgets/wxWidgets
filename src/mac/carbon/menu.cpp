@@ -577,7 +577,7 @@ wxMenuBar::~wxMenuBar()
 
 }
 
-void wxMenuBar::Refresh()
+void wxMenuBar::Refresh(bool WXUNUSED(eraseBackground), const wxRect *WXUNUSED(rect))
 {
     wxCHECK_RET( IsAttached(), wxT("can't refresh unatteched menubar") );
 
