@@ -706,7 +706,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         if (image.HasMask())
         {
             GC gc = XCreateGC( xdisplay, (Pixmap) GetMask()->GetBitmap(), 0, NULL );
-            XPutImage( xdisplay, (Pixmap) GetMask()->GetBitmap(), gc, data_image, 0, 0, 0, 0, width, height );
+            XPutImage( xdisplay, (Pixmap) GetMask()->GetBitmap(), gc, mask_image, 0, 0, 0, 0, width, height );
 
             XDestroyImage( mask_image );
             XFreeGC( xdisplay, gc );
