@@ -98,6 +98,8 @@ AUTOCONF_ALL = \
 	../../samples/oleauto/Makefile.in \
 	../../samples/opengl/Makefile.in \
 	../../samples/opengl/cube/Makefile.in \
+	../../samples/opengl/isosurf/Makefile.in \
+	../../samples/opengl/penguin/Makefile.in \
 	../../samples/ownerdrw/Makefile.in \
 	../../samples/png/Makefile.in \
 	../../samples/printing/Makefile.in \
@@ -206,7 +208,9 @@ BORLAND_ALL = \
 	../../samples/notebook/makefile.bcc \
 	../../samples/oleauto/makefile.bcc \
 	../../samples/opengl/cube/makefile.bcc \
+	../../samples/opengl/isosurf/makefile.bcc \
 	../../samples/opengl/makefile.bcc \
+	../../samples/opengl/penguin/makefile.bcc \
 	../../samples/ownerdrw/makefile.bcc \
 	../../samples/png/makefile.bcc \
 	../../samples/printing/makefile.bcc \
@@ -316,7 +320,9 @@ MINGW_ALL = \
 	../../samples/notebook/makefile.gcc \
 	../../samples/oleauto/makefile.gcc \
 	../../samples/opengl/cube/makefile.gcc \
+	../../samples/opengl/isosurf/makefile.gcc \
 	../../samples/opengl/makefile.gcc \
+	../../samples/opengl/penguin/makefile.gcc \
 	../../samples/ownerdrw/makefile.gcc \
 	../../samples/png/makefile.gcc \
 	../../samples/printing/makefile.gcc \
@@ -426,7 +432,9 @@ MSVC_ALL = \
 	../../samples/notebook/makefile.vc \
 	../../samples/oleauto/makefile.vc \
 	../../samples/opengl/cube/makefile.vc \
+	../../samples/opengl/isosurf/makefile.vc \
 	../../samples/opengl/makefile.vc \
+	../../samples/opengl/penguin/makefile.vc \
 	../../samples/ownerdrw/makefile.vc \
 	../../samples/png/makefile.vc \
 	../../samples/printing/makefile.vc \
@@ -534,6 +542,8 @@ MSVC6PRJ_ALL = \
 	../../samples/notebook/notebook.dsw \
 	../../samples/oleauto/oleauto.dsw \
 	../../samples/opengl/cube/cube.dsw \
+	../../samples/opengl/isosurf/isosurf.dsw \
+	../../samples/opengl/penguin/penguin.dsw \
 	../../samples/ownerdrw/ownerdrw.dsw \
 	../../samples/png/png.dsw \
 	../../samples/printing/printing.dsw \
@@ -643,7 +653,9 @@ WATCOM_ALL = \
 	../../samples/notebook/makefile.wat \
 	../../samples/oleauto/makefile.wat \
 	../../samples/opengl/cube/makefile.wat \
+	../../samples/opengl/isosurf/makefile.wat \
 	../../samples/opengl/makefile.wat \
+	../../samples/opengl/penguin/makefile.wat \
 	../../samples/ownerdrw/makefile.wat \
 	../../samples/png/makefile.wat \
 	../../samples/printing/makefile.wat \
@@ -767,6 +779,8 @@ clean:
 	rm -f ../../samples/oleauto/Makefile.in
 	rm -f ../../samples/opengl/Makefile.in
 	rm -f ../../samples/opengl/cube/Makefile.in
+	rm -f ../../samples/opengl/isosurf/Makefile.in
+	rm -f ../../samples/opengl/penguin/Makefile.in
 	rm -f ../../samples/ownerdrw/Makefile.in
 	rm -f ../../samples/png/Makefile.in
 	rm -f ../../samples/printing/Makefile.in
@@ -874,7 +888,9 @@ clean:
 	rm -f ../../samples/notebook/makefile.bcc
 	rm -f ../../samples/oleauto/makefile.bcc
 	rm -f ../../samples/opengl/cube/makefile.bcc
+	rm -f ../../samples/opengl/isosurf/makefile.bcc
 	rm -f ../../samples/opengl/makefile.bcc
+	rm -f ../../samples/opengl/penguin/makefile.bcc
 	rm -f ../../samples/ownerdrw/makefile.bcc
 	rm -f ../../samples/png/makefile.bcc
 	rm -f ../../samples/printing/makefile.bcc
@@ -983,7 +999,9 @@ clean:
 	rm -f ../../samples/notebook/makefile.gcc
 	rm -f ../../samples/oleauto/makefile.gcc
 	rm -f ../../samples/opengl/cube/makefile.gcc
+	rm -f ../../samples/opengl/isosurf/makefile.gcc
 	rm -f ../../samples/opengl/makefile.gcc
+	rm -f ../../samples/opengl/penguin/makefile.gcc
 	rm -f ../../samples/ownerdrw/makefile.gcc
 	rm -f ../../samples/png/makefile.gcc
 	rm -f ../../samples/printing/makefile.gcc
@@ -1092,7 +1110,9 @@ clean:
 	rm -f ../../samples/notebook/makefile.vc
 	rm -f ../../samples/oleauto/makefile.vc
 	rm -f ../../samples/opengl/cube/makefile.vc
+	rm -f ../../samples/opengl/isosurf/makefile.vc
 	rm -f ../../samples/opengl/makefile.vc
+	rm -f ../../samples/opengl/penguin/makefile.vc
 	rm -f ../../samples/ownerdrw/makefile.vc
 	rm -f ../../samples/png/makefile.vc
 	rm -f ../../samples/printing/makefile.vc
@@ -1199,6 +1219,8 @@ clean:
 	rm -f ../../samples/notebook/notebook.dsw
 	rm -f ../../samples/oleauto/oleauto.dsw
 	rm -f ../../samples/opengl/cube/cube.dsw
+	rm -f ../../samples/opengl/isosurf/isosurf.dsw
+	rm -f ../../samples/opengl/penguin/penguin.dsw
 	rm -f ../../samples/ownerdrw/ownerdrw.dsw
 	rm -f ../../samples/png/png.dsw
 	rm -f ../../samples/printing/printing.dsw
@@ -1307,7 +1329,9 @@ clean:
 	rm -f ../../samples/notebook/makefile.wat
 	rm -f ../../samples/oleauto/makefile.wat
 	rm -f ../../samples/opengl/cube/makefile.wat
+	rm -f ../../samples/opengl/isosurf/makefile.wat
 	rm -f ../../samples/opengl/makefile.wat
+	rm -f ../../samples/opengl/penguin/makefile.wat
 	rm -f ../../samples/ownerdrw/makefile.wat
 	rm -f ../../samples/png/makefile.wat
 	rm -f ../../samples/printing/makefile.wat
@@ -1343,6 +1367,7 @@ library: ../../Makefile.in ../makefile.bcc ../makefile.vc ../makefile.wat ../mak
 
 ../../src/wxWindows.dsp: monolithic.bkl files.bkl
 	$(BAKEFILE) -Icompat -fwx24dsp -DUSE_GUI=1 -DWXUNIV=0 -o$@ wx.bkl
+	touch $@
 
 Makefile: regenMakefile.py
 	./regenMakefile.py
@@ -2951,6 +2976,26 @@ Makefile: regenMakefile.py
 	touch $@
 
 
+../../samples/opengl/isosurf/Makefile.in: $(SDEPS) ../../samples/opengl/isosurf/isosurf.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/opengl/isosurf/isosurf.bkl
+	touch $@
+../../samples/opengl/isosurf/makefile.bcc: $(SDEPS) ../../samples/opengl/isosurf/isosurf.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/isosurf/isosurf.bkl
+	touch $@
+../../samples/opengl/isosurf/makefile.vc: $(SDEPS) ../../samples/opengl/isosurf/isosurf.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/isosurf/isosurf.bkl
+	touch $@
+../../samples/opengl/isosurf/makefile.gcc: $(SDEPS) ../../samples/opengl/isosurf/isosurf.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/isosurf/isosurf.bkl
+	touch $@
+../../samples/opengl/isosurf/makefile.wat: $(SDEPS) ../../samples/opengl/isosurf/isosurf.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/isosurf/isosurf.bkl
+	touch $@
+../../samples/opengl/isosurf/isosurf.dsw: $(SDEPS) ../../samples/opengl/isosurf/isosurf.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../samples/opengl/isosurf/isosurf.bkl
+	touch $@
+
+
 ../../samples/opengl/Makefile.in: $(SDEPS) ../../samples/opengl/opengl_samples.bkl
 	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/opengl/opengl_samples.bkl
 	touch $@
@@ -2965,6 +3010,26 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/opengl/makefile.wat: $(SDEPS) ../../samples/opengl/opengl_samples.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl_samples.bkl
+	touch $@
+
+
+../../samples/opengl/penguin/Makefile.in: $(SDEPS) ../../samples/opengl/penguin/penguin.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/opengl/penguin/penguin.bkl
+	touch $@
+../../samples/opengl/penguin/makefile.bcc: $(SDEPS) ../../samples/opengl/penguin/penguin.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/penguin/penguin.bkl
+	touch $@
+../../samples/opengl/penguin/makefile.vc: $(SDEPS) ../../samples/opengl/penguin/penguin.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/penguin/penguin.bkl
+	touch $@
+../../samples/opengl/penguin/makefile.gcc: $(SDEPS) ../../samples/opengl/penguin/penguin.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/penguin/penguin.bkl
+	touch $@
+../../samples/opengl/penguin/makefile.wat: $(SDEPS) ../../samples/opengl/penguin/penguin.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/penguin/penguin.bkl
+	touch $@
+../../samples/opengl/penguin/penguin.dsw: $(SDEPS) ../../samples/opengl/penguin/penguin.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../samples/opengl/penguin/penguin.bkl
 	touch $@
 
 
