@@ -187,27 +187,25 @@ GaugeWidgetsPage::GaugeWidgetsPage(wxNotebook *notebook,
     wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change gauge value"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
-    wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    wxStaticText *label = new wxStaticText(this, -1, _T("Current value"));
-    wxTextCtrl *text = new wxTextCtrl(this, GaugePage_CurValueText, _T(""));
+    wxTextCtrl *text;
+    wxSizer *sizerRow = CreateSizerWithTextAndLabel(_T("Current value"),
+                                                    GaugePage_CurValueText,
+                                                    &text);
     text->SetEditable(FALSE);
-    sizerRow->Add(label, 0, wxRIGHT, 5);
-    sizerRow->Add(text, 1, wxLEFT, 5);
+
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
-    sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(this, GaugePage_SetValue, _T("Set &value"));
-    m_textValue = new wxTextCtrl(this, GaugePage_ValueText, _T(""));
-    sizerRow->Add(btn, 0, wxRIGHT, 5);
-    sizerRow->Add(m_textValue, 1, wxLEFT, 5);
+    sizerRow = CreateSizerWithTextAndButton(GaugePage_SetValue,
+                                            _T("Set &value"),
+                                            GaugePage_ValueText,
+                                            &m_textValue);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
-    sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(this, GaugePage_SetRange, _T("Set &range"));
-    m_textRange = new wxTextCtrl(this, GaugePage_RangeText,
-                                 wxString::Format(_T("%lu"), m_range));
-    sizerRow->Add(btn, 0, wxRIGHT, 5);
-    sizerRow->Add(m_textRange, 1, wxLEFT, 5);
+    sizerRow = CreateSizerWithTextAndButton(GaugePage_SetRange,
+                                            _T("Set &range"),
+                                            GaugePage_RangeText,
+                                            &m_textRange);
+    m_textRange->SetValue(wxString::Format(_T("%lu"), m_range));
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(this, GaugePage_Progress, _T("Simulate &progress"));

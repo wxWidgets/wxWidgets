@@ -170,6 +170,8 @@ WX_DEFINE_ARRAY(WidgetsPage *, ArrayWidgetsPage);
 IMPLEMENT_APP(WidgetsApp)
 
 #ifdef __WXUNIVERSAL__
+    #include "wx/univ/theme.h"
+
     WX_USE_THEME(win32);
     WX_USE_THEME(gtk);
 #endif // __WXUNIVERSAL__
@@ -316,15 +318,10 @@ void WidgetsFrame::OnButtonClearLog(wxCommandEvent& event)
 }
 
 // ----------------------------------------------------------------------------
-// WidgetsPage and WidgetsPageInfo
+// WidgetsPageInfo
 // ----------------------------------------------------------------------------
 
 WidgetsPageInfo *WidgetsPage::ms_widgetPages = NULL;
-
-WidgetsPage::WidgetsPage(wxNotebook *notebook)
-           : wxPanel(notebook, -1)
-{
-}
 
 WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
                : m_label(label)
@@ -334,3 +331,45 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
     m_next = WidgetsPage::ms_widgetPages;
     WidgetsPage::ms_widgetPages = this;
 }
+
+// ----------------------------------------------------------------------------
+// WidgetsPage
+// ----------------------------------------------------------------------------
+
+WidgetsPage::WidgetsPage(wxNotebook *notebook)
+           : wxPanel(notebook, -1)
+{
+}
+
+wxSizer *WidgetsPage::CreateSizerWithText(wxControl *control,
+                                          wxWindowID id,
+                                          wxTextCtrl **ppText)
+{
+    wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
+    wxTextCtrl *text = new wxTextCtrl(this, id, _T(""));
+    sizerRow->Add(control, 0, wxRIGHT | wxALIGN_CENTRE_VERTICAL, 5);
+    sizerRow->Add(text, 1, wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
+
+    if ( ppText )
+        *ppText = text;
+
+    return sizerRow;
+}
+
+// create a sizer containing a label and a text ctrl
+wxSizer *WidgetsPage::CreateSizerWithTextAndLabel(const wxString& label,
+                                                  wxWindowID id,
+                                                  wxTextCtrl **ppText)
+{
+    return CreateSizerWithText(new wxStaticText(this, -1, label), id, ppText);
+}
+
+// create a sizer containing a button and a text ctrl
+wxSizer *WidgetsPage::CreateSizerWithTextAndButton(wxWindowID idBtn,
+                                                   const wxString& label,
+                                                   wxWindowID id,
+                                                   wxTextCtrl **ppText)
+{
+    return CreateSizerWithText(new wxButton(this, idBtn, label), id, ppText);
+}
+

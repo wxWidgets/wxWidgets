@@ -13,6 +13,9 @@
 #define _WX_SAMPLE_WIDGETS_H_
 
 class WXDLLEXPORT wxNotebook;
+class WXDLLEXPORT wxSizer;
+class WXDLLEXPORT wxTextCtrl;
+
 class WXDLLEXPORT WidgetsPageInfo;
 
 // all source files use wxImageList
@@ -27,6 +30,28 @@ class WidgetsPage : public wxPanel
 public:
     WidgetsPage(wxNotebook *notebook);
 
+protected:
+    // several helper functions for page creation
+
+    // create a horz sizer containing the given control and the text ctrl
+    // (pointer to which will be saved in the provided variable if not NULL)
+    // with the specified id
+    wxSizer *CreateSizerWithText(wxControl *control,
+                                 wxWindowID id = -1,
+                                 wxTextCtrl **ppText = NULL);
+
+    // create a sizer containing a label and a text ctrl
+    wxSizer *CreateSizerWithTextAndLabel(const wxString& label,
+                                         wxWindowID id = -1,
+                                         wxTextCtrl **ppText = NULL);
+
+    // create a sizer containing a button and a text ctrl
+    wxSizer *CreateSizerWithTextAndButton(wxWindowID idBtn,
+                                          const wxString& labelBtn,
+                                          wxWindowID id = -1,
+                                          wxTextCtrl **ppText = NULL);
+
+public:
     // the head of the linked list containinginfo about all pages
     static WidgetsPageInfo *ms_widgetPages;
 };
