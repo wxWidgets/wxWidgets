@@ -111,7 +111,7 @@ class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
     virtual void Remove(long from, long to);
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
-    virtual int GetCount() const { return m_choice->GetCount() ; }
+    virtual int GetCount() const ;
     wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
 
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
