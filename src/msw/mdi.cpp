@@ -222,6 +222,9 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
 
   wxModelessWindows.Append(this);
 
+  // unlike (almost?) all other windows, frames are created hidden
+  m_isShown = FALSE;
+
   return TRUE;
 }
 
