@@ -130,11 +130,6 @@ public:
     virtual void SetPalette(const wxPalette& palette) = 0;
 #endif // wxUSE_PALETTE
 
-#if WXWIN_COMPATIBILITY
-    wxPalette *GetColourMap() const { return GetPalette(); }
-    void SetColourMap(wxPalette *cmap) { SetPalette(*cmap); };
-#endif // WXWIN_COMPATIBILITY
-
     // copies the contents and mask of the given (colour) icon to the bitmap
     virtual bool CopyFromIcon(const wxIcon& icon) = 0;
 
