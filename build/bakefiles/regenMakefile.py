@@ -64,11 +64,23 @@ def addMakefile(bake, makedirs, deps=[], args={}):
 # -----------------------------------------------
 
 # main makefile:
-addMakefile('wx.bkl', {'all':'..','autoconf':'../..'}, [ '$(MDEPS)' ])
+addMakefile('wx.bkl', {'all':'..','autoconf':'../..'}, [ '$(MDEPS)' ],
+            args={
+                'borland':'-DOPTIONS_FILE=config.bcc',
+                'msvc':'-DOPTIONS_FILE=config.vc',
+                'mingw':'-DOPTIONS_FILE=config.gcc',
+                'watcom':'-DOPTIONS_FILE=config.wat',
+            })
 
 # samples main makefile:
 addMakefile('../../samples/samples.bkl', {'all':'../../samples'},
-            args={'autoconf':'-DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4'})
+            args={
+            'autoconf':'-DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4',
+            'borland':'-DOPTIONS_FILE=../build/config.bcc -DWRITE_OPTIONS_FILE=0',
+            'msvc':'-DOPTIONS_FILE=../build/config.vc -DWRITE_OPTIONS_FILE=0',
+            'mingw':'-DOPTIONS_FILE=../build/config.gcc -DWRITE_OPTIONS_FILE=0',
+            'watcom':'-DOPTIONS_FILE=../build/config.wat -DWRITE_OPTIONS_FILE=0',
+            })
 
 
 CONTRIB_DIR = 1
@@ -84,13 +96,19 @@ def onSubmakefile(type, dirname, names):
     if type==SAMPLES_DIR:
         prefix = ''.join(['../' for i in range(0,depth)])
         dirflags = '-DWXTOPDIR=%s../' % prefix
+        cfgbase = '%s../build/config.' % prefix
     elif type==CONTRIB_DIR:
         dirflags = '-DSRCDIR=../../src/%s' % dirname.split('/')[-1]
         dirflags += ' -DWXTOPDIR=../../../'
+        cfgbase = '../../../build/config.'
 
     args = {
         'not_autoconf':dirflags,
         'autoconf':'-DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4',
+        'msvc':'-DOPTIONS_FILE='+cfgbase+'vc -DWRITE_OPTIONS_FILE=0',
+        'mingw':'-DOPTIONS_FILE='+cfgbase+'gcc -DWRITE_OPTIONS_FILE=0',
+        'borland':'-DOPTIONS_FILE='+cfgbase+'bcc -DWRITE_OPTIONS_FILE=0',
+        'watcom':'-DOPTIONS_FILE='+cfgbase+'wat -DWRITE_OPTIONS_FILE=0',
     }
     
     for bake in bakes:
