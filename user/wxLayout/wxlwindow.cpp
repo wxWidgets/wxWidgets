@@ -18,7 +18,9 @@
 #     include "gui/wxMenuDefs.h"
 #     include "gui/wxMApp.h"
 #   endif // USE_PCH
+
 #   include "gui/wxlwindow.h"
+#   include "gui/wxlparser.h"
 #else
 #   ifdef   __WXMSW__
 #       include <windows.h>
@@ -26,15 +28,23 @@
 #       undef GetCharWidth
 #       undef StartDoc
 #   endif
+
 #   include "wxlwindow.h"
 #   include "wxlparser.h"
 #endif
 
-#include <ctype.h>
 #include <wx/clipbrd.h>
+#include <wx/dataobj.h>
 
+#include <ctype.h>
+
+/// offsets to put a nice frame around text
 #define WXLO_XOFFSET   4
 #define WXLO_YOFFSET   4
+
+/// offset to the right and bottom for when to redraw scrollbars
+#define   WXLO_ROFFSET   20
+#define   WXLO_BOFFSET   20
 
 BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
    EVT_PAINT    (wxLayoutWindow::OnPaint)
@@ -61,6 +71,7 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    m_bitmap = new wxBitmap(4,4);
    m_bitmapSize = wxPoint(4,4);
    m_llist = new wxLayoutList();
+   m_BGbitmap = NULL;
    SetWrapMargin(0);
    wxPoint max = m_llist->GetSize();
    SetScrollbars(10, 20 /*lineHeight*/, max.x/10+1, max.y/20+1);
@@ -75,7 +86,8 @@ wxLayoutWindow::~wxLayoutWindow()
    delete m_memDC; // deletes bitmap automatically (?)
    delete m_bitmap;
    delete m_llist;
-   delete m_PopupMenu; 
+   delete m_PopupMenu;
+   SetBackgroundBitmap(NULL);
 }
 
 #ifdef __WXMSW__
@@ -93,6 +105,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    wxPaintDC dc( this );
    PrepareDC( dc );     
    SetFocus();
+
    
    wxPoint findPos;
    findPos.x = dc.DeviceToLogicalX(event.GetX());
@@ -103,13 +116,13 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 
    if(findPos.x < 0) findPos.x = 0;
    if(findPos.y < 0) findPos.y = 0;
-   
+
+   m_ClickPosition = wxPoint(event.GetX(), event.GetY());
 #ifdef WXLAYOUT_DEBUG
    wxLogDebug("wxLayoutWindow::OnMouse: (%d, %d) -> (%d, %d)",
               event.GetX(), event.GetY(), findPos.x, findPos.y);
 #endif
 
-   m_ClickPosition = findPos;
    wxPoint cursorPos;
    wxLayoutObject *obj = m_llist->FindObjectScreen(dc, findPos, &cursorPos);
 
@@ -136,7 +149,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
       && (! obj || (obj && obj->GetUserData() == NULL))
       )
    {
-      PopupMenu(m_PopupMenu, event.GetX(), event.GetY());
+      PopupMenu(m_PopupMenu, m_ClickPosition.x, m_ClickPosition.y);
       return;
    }
    // find the object at this position
@@ -261,6 +274,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       }
    }
    SetDirty();
+   SetModified();
    DoPaint(true); // paint and scroll to cursor
 }
 
@@ -278,7 +292,7 @@ wxLayoutWindow::DoPaint(bool scrollToCursor)
 #ifdef __WXGTK__
    InternalPaint();
 #else
-   Refresh();
+   Refresh(FALSE); // Causes bad flicker under wxGTK!!!
 #endif
 }
 
@@ -298,8 +312,11 @@ wxLayoutWindow::InternalPaint(void)
    // Get the size of the visible window:
    GetClientSize(&x1,&y1);
    wxASSERT(x1 > 0);
-
    wxASSERT(y1 > 0);
+   // As we have the values anyway, use them to avoid unnecessary
+   // scrollbar updates.
+   if(x1 > m_maxx) m_maxx = x1;  
+   if(y1 > m_maxy) m_maxy = y1;
 
    // Maybe we need to change the scrollbar sizes or positions,
    // so layout the list and check:
@@ -344,17 +361,46 @@ wxLayoutWindow::InternalPaint(void)
    // Device origins on the memDC are suspect, we translate manually
    // with the translate parameter of Draw().
    m_memDC->SetDeviceOrigin(0,0);
-   m_memDC->Clear();
+   m_memDC->SetBackgroundMode(wxTRANSPARENT);
+   m_memDC->SetBrush(wxBrush(*m_llist->GetDefaults()->GetBGColour(), wxSOLID));                                  
+   m_memDC->SetPen(wxPen(*m_llist->GetDefaults()->GetBGColour(),0,wxTRANSPARENT));                               
+   m_memDC->SetLogicalFunction(wxCOPY);
+   if(m_BGbitmap)
+   {
+      CoordType
+         y, x,
+         w = m_BGbitmap->GetWidth(),
+         h = m_BGbitmap->GetHeight();
+      for(y = 0; y < y1; y+=h)
+         for(x = 0; x < x1; x+=w)
+            m_memDC->DrawBitmap(*m_BGbitmap, x, y);
+   }
+   else
+      m_memDC->DrawRectangle(0,0,x1, y1);
 
    // The offsets give the window a tiny border on the left and top, looks nice.
    wxPoint offset(-x0+WXLO_XOFFSET,-y0+WXLO_YOFFSET);
    m_llist->Draw(*m_memDC,offset);
    if(IsEditable())
       m_llist->DrawCursor(*m_memDC,m_HaveFocus,offset);
-   // Now copy everything to the screen:
-   dc.Blit(x0,y0,x1,y1,m_memDC,0,0,wxCOPY,FALSE);
 
-   
+   // Now copy everything to the screen:
+   wxRegionIterator ri ( GetUpdateRegion() );
+   if(ri)
+      while(ri)
+      {
+         dc.Blit(x0+ri.GetX(),y0+ri.GetY(),ri.GetW(),ri.GetH(),
+                 m_memDC,ri.GetX(),ri.GetY(),wxCOPY,FALSE);
+         ri++;
+      }
+   else
+      // If there are no update rectangles, we got called to reflect 
+      // a change in the list. Currently there is no mechanism to
+      // easily find out which bits need updating, so we update
+      // all. The wxLayoutList could handle this, creating a list or
+      // at least one large rectangle of changes. FIXME
+      dc.Blit(x0,y0,x1,y1,m_memDC,0,0,wxCOPY,FALSE);
+
    ResetDirty();
 }
 
@@ -363,15 +409,16 @@ void
 wxLayoutWindow::ResizeScrollbars(bool exact)
 {
    wxPoint max = m_llist->GetSize();
-
+   
    if(max.x > m_maxx || max.y > m_maxy
-      || max.x < (7*m_maxx)/10 || max.y << (7*m_maxy)/10
+      || max.x > m_maxx-WXLO_ROFFSET || max.y > m_maxy-WXLO_BOFFSET
       || exact)
    {
-      if(! exact)  // add an extra 20% to the sizes to avoid future updates
+      if(! exact) 
       {
-         max.x = (12*max.x)/10;  // 12/20 = 120%
-         max.y = (12*max.y)/10;
+         // add an extra bit to the sizes to avoid future updates
+         max.x = max.x+WXLO_ROFFSET;  
+         max.y = max.y+WXLO_BOFFSET;
       }
       ViewStart(&m_ViewStartX, &m_ViewStartY);
       SetScrollbars(10, 20, max.x/10+1,max.y/20+1,m_ViewStartX,m_ViewStartY,true);

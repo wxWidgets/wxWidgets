@@ -6,10 +6,6 @@
  * $Id$
  *******************************************************************/
 
-/*
-  
- */
- 
 #ifdef __GNUG__
 #pragma implementation "wxllist.h"
 #endif
@@ -59,19 +55,35 @@
 
 /// Use this character to estimate a cursor size when none is available.
 #define WXLO_CURSORCHAR   "E"
-
-/// Helper function, allows me to compare to wxPoints
+/** @name Helper functions */
+//@{
+/// allows me to compare to wxPoints
 bool operator ==(wxPoint const &p1, wxPoint const &p2)
 {
    return p1.x == p2.x && p1.y == p2.y;
 }
 
-/// Helper function, allows me to compare to wxPoints
+/// allows me to compare to wxPoints
 bool operator !=(wxPoint const &p1, wxPoint const &p2)
 {
    return p1.x != p2.x || p1.y != p2.y;
 }
 
+/// grows a wxRect so that it includes the given point
+
+static void GrowRect(wxRect &r, const wxPoint & p)
+{
+   if(r.x > p.x)
+      r.x = p.x;
+   else if(r.x + r.width < p.x)
+      r.width = p.x - r.x;
+   
+   if(r.y > p.y)
+      r.y = p.y;
+   else if(r.y + r.height < p.y)
+      r.height = p.y - r.y;
+}
+//@}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 
@@ -367,7 +379,7 @@ wxLayoutObjectList::iterator
 wxLayoutLine::FindObjectScreen(wxDC &dc, CoordType xpos, CoordType *cxpos) const
 {
    wxASSERT(cxpos);
-   wxASSERT(xpos);
+   wxASSERT(cxpos);
    wxLayoutObjectList::iterator i;
    CoordType x = 0, cx = 0, width;
    
@@ -698,6 +710,7 @@ wxLayoutLine::Layout(wxDC &dc, wxPoint *cursorPos,
    if(m_Next && objHeight != oldHeight)
       m_Next->RecalculatePositions();
 
+   // We need to check whether we found a valid cursor size:
    if(cursorPos)
    {
       // this might be the case if the cursor is at the end of the
@@ -814,7 +827,7 @@ wxLayoutLine::GetWrapPosition(CoordType column)
       {
          do
          {
-            if( isspace(((wxLayoutObjectText*)*i)->GetText()[offset]))
+            if( isspace(((wxLayoutObjectText*)*i)->GetText()[(size_t)offset]))
                return column;
             else
             {
@@ -867,6 +880,7 @@ wxLayoutList::wxLayoutList()
 {
    m_DefaultSetting = NULL;
    m_FirstLine = NULL;
+   InvalidateUpdateRect();
    Clear();
 }
 
@@ -1228,10 +1242,14 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom) const
       if(bottom != -1 && line->GetPosition().y > bottom) break;
       line = line->GetNextLine();
    }
+
+///FIXME: disabled for now
+#if 0
    // can only be 0 if we are on the first line and have no next line
    wxASSERT(m_CursorSize.x != 0 || (m_CursorLine &&
                                     m_CursorLine->GetNextLine() == NULL &&
                                     m_CursorLine == m_FirstLine));
+#endif
 }
 
 void
@@ -1242,13 +1260,17 @@ wxLayoutList::Draw(wxDC &dc, wxPoint const &offset,
 
    Layout(dc, bottom);
    m_DefaultSetting->Draw(dc, wxPoint(0,0));
+   wxBrush *brush = new wxBrush(*m_ColourBG, wxSOLID);
+   dc.SetBrush(*brush);
+   delete brush;
+   
    while(line)
    {
       // only draw if between top and bottom:
       if((top == -1 || line->GetPosition().y >= top))
          line->Draw(dc, offset);
       // little condition to speed up redrawing:
-      if(bottom != -1 && line->GetPosition().y > bottom) break;
+      if(bottom != -1 && line->GetPosition().y + line->GetHeight() > bottom) break;
       line = line->GetNextLine();
    }
    // can only be 0 if we are on the first line and have no next line
@@ -1291,18 +1313,19 @@ wxLayoutList::GetSize(void) const
    if(! line)
       return wxPoint(0,0);
 
-   wxPoint max(0,0);
+   wxPoint maxPoint(0,0);
    
    // find last line:
    while(line)
    {
-      if(line->GetWidth() > max.x) max.x = line->GetWidth();
+      if(line->GetWidth() > maxPoint.x)
+          maxPoint.x = line->GetWidth();
       last = line;
       line = line->GetNextLine();
    }
 
-   max.y = last->GetPosition().y + last->GetHeight();
-   return max;
+   maxPoint.y = last->GetPosition().y + last->GetHeight();
+   return maxPoint;
 }
 
 void
@@ -1325,7 +1348,6 @@ wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
    dc.SetBrush(*wxBLACK_BRUSH);
    dc.SetLogicalFunction(wxXOR);
    dc.SetPen(wxPen(*wxBLACK,1,wxSOLID));
-   dc.SetLogicalFunction(wxXOR);
    if(active)
       dc.DrawRectangle(coords.x, coords.y, m_CursorSize.x,
                        m_CursorSize.y);
@@ -1333,9 +1355,26 @@ wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
       dc.DrawLine(coords.x, coords.y+m_CursorSize.y-1,
                   coords.x+m_CursorSize.x, coords.y+m_CursorSize.y-1);
    dc.SetLogicalFunction(wxCOPY);
-   dc.SetBrush(wxNullBrush);
+   //dc.SetBrush(wxNullBrush);
 }
 
+/** Called by the objects to update the update rectangle.
+    @param p a point to include in it
+*/
+void
+wxLayoutList::SetUpdateRect(const wxPoint &p)
+{
+   if(m_UpdateRectValid)
+      GrowRect(m_UpdateRect, p);
+   else
+   {
+      m_UpdateRect.x = p.x;
+      m_UpdateRect.y = p.y;
+      m_UpdateRect.width = 4; // large enough to avoid surprises from
+      m_UpdateRect.height = 4;// wxGTK :-)
+      m_UpdateRectValid = true;
+   }
+}
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -1445,13 +1484,9 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
    m_PrintoutHeight = (int)( m_PrintoutHeight / scale); // we want to use the real paper height
    
    
-   m_NumOfPages = (int)( m_llist->GetSize().y / (float)(m_PrintoutHeight) + 0.5);
+   m_NumOfPages = 1 +
+      (int)( m_llist->GetSize().y / (float)(m_PrintoutHeight));
 
-   // This is a crude hack to get it right for very small
-   // printouts. No idea why this is required, I thought +0.5 would do 
-   // the job. :-(
-   if(m_NumOfPages == 0 && m_llist->GetSize().y > 0)
-      m_NumOfPages = 1;
    *minPage = 1;
    *maxPage = m_NumOfPages;
 

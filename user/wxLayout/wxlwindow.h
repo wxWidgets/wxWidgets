@@ -68,10 +68,19 @@ public:
       {
          GetLayoutList()->Clear(family,size,style,weight,underline,fg,bg);
          SetBackgroundColour(*GetLayoutList()->GetDefaults()->GetBGColour());
+         ResizeScrollbars(true);
          SetDirty();
+         SetModified(false);
          DoPaint();
       }
-
+   /** Sets a background image, only used on screen, not on printouts.
+       @param bitmap a pointer to a wxBitmap or NULL to remove it
+   */
+   void SetBackgroundBitmap(wxBitmap *bitmap = NULL)
+      {
+         if(m_BGbitmap) delete m_BGbitmap;
+         m_BGbitmap = bitmap;
+      }
    /// Enable or disable editing, i.e. processing of keystrokes.
    void SetEditable(bool toggle) { m_Editable = toggle; }
    /// Query whether list can be edited by user.
@@ -136,6 +145,12 @@ public:
    //@}
    /// Redraws the window, used by DoPaint() or OnPaint().
    void InternalPaint(void);
+
+   /// Has list been modified/edited?
+   bool IsModified(void) const { return m_Modified; }
+   /// Mark list as modified or unchanged.
+   void SetModified(bool modified = true) { m_Modified = modified; }
+
 protected:   
    /// generic function for mouse events processing
    void OnMouse(int eventId, wxMouseEvent& event);
@@ -163,17 +178,19 @@ protected:
 private:
    /// The layout list to be displayed.
    wxLayoutList *m_llist;
-
    /// Can user edit the window?
    bool m_Editable;
    /// wrap margin
    CoordType    m_WrapMargin;
-   /// Is list dirty?
+   /// Is list dirty (for redraws, internal use)?
    bool         m_Dirty;
+   /// Has list been edited?
+   bool         m_Modified;
    wxMemoryDC  *m_memDC;
    wxBitmap    *m_bitmap;
    wxPoint      m_bitmapSize;
-
+   /// a pointer to a bitmap for the background
+   wxBitmap    *m_BGbitmap;
    DECLARE_EVENT_TABLE()
 };
 

@@ -20,20 +20,21 @@ enum wxLayoutExportType
 {
    WXLO_EXPORT_TEXT,        
    WXLO_EXPORT_HTML,        
-   WXLO_EXPORT_OBJECT
+   WXLO_EXPORT_OBJECT,
+   // this can be caused by empty lines:
+   WXLO_EXPORT_EMPTYLINE
 };
 
 enum wxLayoutExportMode
 {
-   WXLO_EXPORT_AS_MASK = 0x0f,
    WXLO_EXPORT_AS_TEXT = 0x00,
    WXLO_EXPORT_AS_TEXT_AND_COMMANDS = 0x01,
    WXLO_EXPORT_AS_HTML = 0x02,
    WXLO_EXPORT_AS_OBJECTS = 0x03,
-   
-   WXLO_EXPORT_WITH_MASK = 0xf0,
-   WXLO_EXPORT_WITH_CRLF = 0x00,
-   WXLO_EXPORT_WITH_LF_ONLY = 0x10
+
+   // non 0:
+   WXLO_EXPORT_WITH_CRLF = 0x10,
+   WXLO_EXPORT_WITH_LF_ONLY = 0x20
 };
 
 struct wxLayoutExportObject
@@ -72,15 +73,17 @@ void wxLayoutImportText(wxLayoutList *list, wxString const &str,
                         int withflag = WXLO_EXPORT_WITH_CRLF);
 
 wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
-                               int mode = WXLO_EXPORT_AS_TEXT|WXLO_EXPORT_WITH_CRLF); 
+                                     int mode = WXLO_EXPORT_AS_TEXT,
+                                     int flags = WXLO_EXPORT_WITH_CRLF); 
 #else
 /// import text into a wxLayoutList (including linefeeds):
 void wxLayoutImportText(wxLayoutList *list, wxString const &str,
                         int withflag = WXLO_EXPORT_WITH_LF_ONLY);
 
-/// export text in a given format FIXME-MT: not thread safe, uses static variable
+/// export text in a given format
 wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
-                                     int mode = WXLO_EXPORT_AS_TEXT|WXLO_EXPORT_WITH_LF_ONLY
+                                     int mode = WXLO_EXPORT_AS_TEXT,
+                                     int flags = WXLO_EXPORT_WITH_LF_ONLY
                                      );
 #endif
 
