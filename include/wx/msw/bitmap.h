@@ -131,6 +131,7 @@ public:
   wxBitmap(const char bits[], const int width, const int height, const int depth = 1);
 
 #if USE_XPM_IN_MSW
+  class wxItem;
   // Initialize with XPM data
   wxBitmap(const char **data, wxItem *anItem = NULL);
 #endif
