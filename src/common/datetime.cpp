@@ -92,7 +92,7 @@
 #endif // broken strptime()
 
 #ifndef WX_TIMEZONE
-    #if defined(__MINGW32__) || defined(__VISAGECPP__)
+    #if defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
         #define WX_TIMEZONE _timezone
     #else // unknown platform - try timezone
         #define WX_TIMEZONE timezone
@@ -2196,7 +2196,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
     }
 
     // and now the interesting part: the timezone
-    int offset;
+    wxDateTime_t offset;
     if ( *p == _T('-') || *p == _T('+') )
     {
         // the explicit offset given: it has the form of hhmm

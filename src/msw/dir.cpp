@@ -267,9 +267,12 @@ bool wxDirData::Read(wxString *filename)
     if ( !IsFindDataOk(m_finddata) )
     {
         // open first
-        wxString filespec;
-        filespec << m_dirname << _T('\\')
-                 << (!m_filespec ? _T("*.*") : m_filespec.c_str());
+        wxString filespec = m_dirname;
+        if ( !wxEndsWithPathSeparator(filespec) )
+        {
+            filespec += _T('\\');
+        }
+        filespec += (!m_filespec ? _T("*.*") : m_filespec.c_str());
 
         m_finddata = FindFirst(filespec, PTR_TO_FINDDATA);
 

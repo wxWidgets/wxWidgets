@@ -41,6 +41,8 @@
     #define wxLongLongIsLong
 #elif (defined(__VISUALC__) && defined(__WIN32__)) || defined( __VMS__ )
     #define wxLongLong_t __int64
+#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x530)
+    #define wxLongLong_t __int64
 #elif defined(__GNUG__)
     #define wxLongLong_t long long
 #elif defined(__MWERKS__)
@@ -53,7 +55,9 @@
 #else // no native long long type
     // we don't give warnings for the compilers we know about that they don't
     // have any 64 bit integer type
-    #if !defined(__VISAGECPP__) && !defined(__VISUALC__)
+    #if !defined(__VISAGECPP__) && \
+        !defined(__VISUALC__) && \
+        !defined(__BORLANDC__
         #warning "Your compiler does not appear to support 64 bit integers, "\
                  "using emulation class instead."
     #endif // known compilers without long long

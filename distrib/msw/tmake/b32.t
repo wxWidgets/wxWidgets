@@ -333,7 +333,7 @@ $(CFG): makefile.b32
 -WE
 -tWM
 
--I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/xpm
+-I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/xpm;$(WXDIR)/src/tiff
 -I$(WXDIR)\include\wx\msw\gnuwin32
 
 -L$(BCCDIR)\lib
