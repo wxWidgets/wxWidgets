@@ -50,6 +50,7 @@ def addMakefile(bake, makedirs, deps=[], args={}):
     dep = string.join(deps + [bake], ' ')
 
     add(bake, makedirs, 'Makefile.in', dep, 'autoconf', args)
+    add(bake, makedirs, 'makefile.bcc', dep, 'borland', args)
 
 
 
