@@ -659,12 +659,17 @@ bool wxToolBar::Realize()
             if ( tool->IsButton() )
             {
                 const wxBitmap& bmp = tool->GetNormalBitmap();
+
+                const int w = bmp.GetWidth();
+                const int h = bmp.GetHeight();
+
                 if ( bmp.Ok() )
                 {
-                    int xOffset = wxMax(0, (m_defaultWidth - bmp.GetWidth())/2);
-                    int yOffset = wxMax(0, (m_defaultHeight - bmp.GetHeight())/2);
+                    int xOffset = wxMax(0, (m_defaultWidth - w)/2);
+                    int yOffset = wxMax(0, (m_defaultHeight - h)/2);
+
                     // notice the last parameter: do use mask
-                    dcAllButtons.DrawBitmap(bmp, x+xOffset, yOffset, true);
+                    dcAllButtons.DrawBitmap(bmp, x + xOffset, yOffset, true);
                 }
                 else
                 {
@@ -675,31 +680,34 @@ bool wxToolBar::Realize()
                 if ( m_disabledImgList )
                 {
                     wxBitmap bmpDisabled = tool->GetDisabledBitmap();
+#if wxUSE_IMAGE
                     if ( !bmpDisabled.Ok() )
                     {
-#if wxUSE_IMAGE
                         // no disabled bitmap specified but we still need to
                         // fill the space in the image list with something, so
                         // we grey out the normal bitmap
-                        wxImage img = bmp.ConvertToImage();
-#if 0
-                        img.SetMaskColour(wxLIGHT_GREY->Red(),
-                                          wxLIGHT_GREY->Green(),
-                                          wxLIGHT_GREY->Blue());
-#endif
                         wxImage imgGreyed;
-                        wxCreateGreyedImage(img, imgGreyed);
+                        wxCreateGreyedImage(bmp.ConvertToImage(), imgGreyed);
+
+                        // we need to have light grey background colour for
+                        // MapBitmap() to work correctly
+                        for ( int y = 0; y < h; y++ )
+                        {
+                            for ( int x = 0; x < w; x++ )
+                            {
+                                if ( imgGreyed.IsTransparent(x, y) )
+                                    imgGreyed.SetRGB(x, y,
+                                                     wxLIGHT_GREY->Red(),
+                                                     wxLIGHT_GREY->Green(),
+                                                     wxLIGHT_GREY->Blue());
+                            }
+                        }
 
                         bmpDisabled = wxBitmap(imgGreyed);
-#if 0
-                        bmpDisabled.SetMask(new wxMask(bmpDisabled, *wxLIGHT_GREY));
-
-                        MapBitmap(bmpDisabled.GetHBITMAP(),
-                                  bmpDisabled.GetWidth(),
-                                  bmpDisabled.GetHeight());
-#endif // 0
-#endif // wxUSE_IMAGE
                     }
+#endif // wxUSE_IMAGE
+
+                    MapBitmap(bmpDisabled.GetHBITMAP(), w, h);
 
                     m_disabledImgList->Add(bmpDisabled);
                 }
