@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // Id:
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -69,7 +69,7 @@ wxGenericTreeItem::wxGenericTreeItem( wxGenericTreeItem *parent, const wxTreeIte
 
 void wxGenericTreeItem::SetItem( const wxTreeItem &item, wxDC *dc )
 {
-  if ((item.m_mask & wxTREE_MASK_HANDLE) == wxTREE_MASK_HANDLE) 
+  if ((item.m_mask & wxTREE_MASK_HANDLE) == wxTREE_MASK_HANDLE)
     m_itemId = item.m_itemId;
   if ((item.m_mask & wxTREE_MASK_STATE) == wxTREE_MASK_STATE)
     m_state = item.m_state;
@@ -212,8 +212,7 @@ long wxGenericTreeItem::HitTest( const wxPoint& point, int &flags )
         (point.x < m_xCross+5) &&
         (point.y > m_yCross-5) &&
         (point.y < m_yCross+5) &&
-	(m_hasChildren)
-       )
+        (m_hasChildren))
     {
       flags = wxTREE_HITTEST_ONITEMBUTTON;
       return m_itemId;
@@ -408,25 +407,25 @@ long wxTreeCtrl::InsertItem( const long parent, const wxString& label, const int
     item.m_selectedImage = selImage;
     item.m_mask |= wxTREE_MASK_SELECTED_IMAGE;
   };
-  
+
   wxClientDC dc(this);
   wxGenericTreeItem *new_child = new wxGenericTreeItem( p, item, &dc );
-  if (p) 
+  if (p)
     p->AddChild( new_child );
   else
     m_anchor = new_child;
-    
+
   if (p)
   {
     CalculatePositions();
-    
+
     int ch = 0;
     GetClientSize( NULL, &ch );
-    
+
     wxRectangle rect;
     rect.x = 0; rect.y = 0;
     rect.width = 10000; rect.height = ch;
-    
+
     PrepareDC( dc );
     if (p->m_children.Number() == 1)
     {
@@ -438,23 +437,23 @@ long wxTreeCtrl::InsertItem( const long parent, const wxString& label, const int
       wxGenericTreeItem* last_child = (wxGenericTreeItem*)node->Data();
       rect.y = dc.LogicalToDeviceY( last_child->m_y );
     };
-    
+
     long doX = 0;
     long doY = 0;
     dc.GetDeviceOrigin( &doX, &doY );
     rect.height = ch-rect.y-doY;
-    
+
     AdjustMyScrollbars();
-    
+
     if (rect.height > 0) Refresh( FALSE, &rect);
   }
   else
   {
     AdjustMyScrollbars();
-    
+
     Refresh();
   };
-  
+
   return m_lastId;
 };
 
@@ -487,25 +486,25 @@ long wxTreeCtrl::InsertItem( const long parent, wxTreeItem &info, const long WXU
   {
     ret = info.m_itemId;
   };
-  
+
   wxClientDC dc(this);
   wxGenericTreeItem *new_child = new wxGenericTreeItem( p, info, &dc );
-  if (p) 
+  if (p)
     p->AddChild( new_child );
   else
     m_anchor = new_child;
-    
+
   if (p)
   {
     CalculatePositions();
-    
+
     int ch = 0;
     GetClientSize( NULL, &ch );
-    
+
     wxRectangle rect;
     rect.x = 0; rect.y = 0;
     rect.width = 10000; rect.height = ch;
-    
+
     PrepareDC( dc );
     if (p->m_children.Number() == 1)
     {
@@ -517,23 +516,23 @@ long wxTreeCtrl::InsertItem( const long parent, wxTreeItem &info, const long WXU
       wxGenericTreeItem* last_child = (wxGenericTreeItem*)node->Data();
       rect.y = dc.LogicalToDeviceY( last_child->m_y );
     };
-    
+
     long doX = 0;
     long doY = 0;
     dc.GetDeviceOrigin( &doX, &doY );
     rect.height = ch-rect.y-doY;
-    
+
     AdjustMyScrollbars();
-    
+
     if (rect.height > 0) Refresh( FALSE, &rect);
   }
   else
   {
     AdjustMyScrollbars();
-    
+
     Refresh();
   };
-  
+
   info.m_mask = oldMask;
   return ret;
 };
@@ -557,10 +556,10 @@ bool wxTreeCtrl::ExpandItem( const long item, const int action )
       {
         wxGenericTreeItem *child = (wxGenericTreeItem*)node->Data();
         child->SendDelete( this );
-	delete node;
-	node = i->m_children.First();
+        delete node;
+        node = i->m_children.First();
       };
-      
+
       int cw = 0;
       int ch = 0;
       GetClientSize( &cw, &ch );
@@ -570,12 +569,12 @@ bool wxTreeCtrl::ExpandItem( const long item, const int action )
       wxClientDC dc(this);
       PrepareDC(dc);
       rect.y = dc.LogicalToDeviceY( i->m_y );
-      
+
       long doY = 0;
       dc.GetDeviceOrigin( NULL, &doY );
       rect.height = ch-rect.y-doY;
       Refresh( TRUE, &rect );
-      
+
       AdjustMyScrollbars();
       break;
     };
@@ -724,29 +723,31 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
   {
     wxGenericTreeItem *child = (wxGenericTreeItem *)node->Data();
     dc.SetPen( m_dottedPen );
-    
+
     child->SetCross( horizX+15, y );
-    
+
     if (!node->Next())
     {
       if (level != 0) oldY -= (m_lineHeight-5);
       dc.DrawLine( horizX, oldY, horizX, y );
     };
-    
+
     child->m_x = horizX+33;
     child->m_y = y-m_lineHeight/3;
     child->m_height = m_lineHeight;
-    
+
     if (IsExposed( 0, child->m_y-2, 10000, m_lineHeight+4 ))
     {
-      int startX,endX; 
-      if ((node->Previous()) || (level != 0)) 
-        startX = horizX; else startX = horizX-10;
-      if (child->HasChildren()) 
-        endX = horizX+10; else endX = horizX+30;
+      int startX = horizX,
+          endX = horizX + 10;
+
+      if (!(node->Previous()) && (level == 0))
+        startX -= 10;
+      if (!child->HasChildren())
+        endX += 20;
       dc.DrawLine( startX, y, endX, y );
-      
-      if  (child->HasChildren())
+
+      if (child->HasChildren())
       {
         dc.DrawLine( horizX+20, y, horizX+30, y );
         dc.SetPen( *wxGREY_PEN );
@@ -756,34 +757,42 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
         if (child->HasPlus())
           dc.DrawLine( horizX+15, y-2, horizX+15, y+2 );
       };
-    
-      if (child->HasHilight())
-      {
-	dc.SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-	dc.SetBrush( *m_hilightBrush );
-	if (m_hasFocus)
-	  dc.SetPen( wxBLACK_PEN );
-	else
-	  dc.SetPen( wxTRANSPARENT_PEN );
-	long tw = 0;
-	long th = 0;
-	dc.GetTextExtent( child->m_text, &tw, &th );
-	dc.DrawRectangle( child->m_x-2, child->m_y-2, tw+4, th+4 );
-      };
-      
-      dc.DrawText( child->m_text, child->m_x, child->m_y );
 
       if (child->HasHilight())
       {
-	dc.SetTextForeground( *wxBLACK );
-	dc.SetBrush( *wxWHITE_BRUSH );
-	dc.SetPen( *wxBLACK_PEN );
-      };
-      
+        dc.SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
+#if 0 // VZ: this code leaves horizontal stripes when item is unselected
+        dc.SetBrush( *m_hilightBrush );
+        if (m_hasFocus)
+          dc.SetPen( wxBLACK_PEN );
+        else
+          dc.SetPen( wxTRANSPARENT_PEN );
+        long tw, th;
+        dc.GetTextExtent( child->m_text, &tw, &th );
+        dc.DrawRectangle( child->m_x-2, child->m_y-2, tw+4, th+4 );
+#else
+        int modeOld = dc.GetBackgroundMode();
+        dc.SetTextBackground( *wxBLACK );
+        dc.SetBackgroundMode(wxSOLID);
+#endif // 0
+
+        dc.DrawText( child->m_text, child->m_x, child->m_y );
+
+#if 0 // VZ: same as above
+        dc.SetPen( *wxBLACK_PEN );
+#else
+        dc.SetBackgroundMode(modeOld);
+        dc.SetTextBackground( *wxWHITE );
+        dc.SetBrush( *wxWHITE_BRUSH );
+#endif
+        dc.SetTextForeground( *wxBLACK );
+      }
+      else
+        dc.DrawText( child->m_text, child->m_x, child->m_y );
     };
-          
+
     y += m_lineHeight;
-    if (child->NumberOfVisibleChildren() > 0) 
+    if (child->NumberOfVisibleChildren() > 0)
       PaintLevel( child, dc, level+1, y );
     node = node->Next();
   };
@@ -794,16 +803,16 @@ void wxTreeCtrl::OnPaint( const wxPaintEvent &WXUNUSED(event) )
   if (!m_anchor) return;
 
   if (!m_dc)
-  { 
+  {
     m_dc = new wxPaintDC(this);
     PrepareDC( *m_dc );
   };
-    
+
   m_dc->SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
-  
+
   m_dc->SetPen( m_dottedPen );
   m_lineHeight = (int)(m_dc->GetCharHeight() + 4);
-  
+
   int y = m_lineHeight / 2 + 2;
   PaintLevel( m_anchor, *m_dc, 0, y );
 };
@@ -829,21 +838,22 @@ void wxTreeCtrl::OnMouse( const wxMouseEvent &event )
 {
   if (!event.LeftDown() &&
       !event.LeftDClick()) return;
-  
+
   wxClientDC dc(this);
   PrepareDC(dc);
   long x = dc.DeviceToLogicalX( (long)event.GetX() );
   long y = dc.DeviceToLogicalY( (long)event.GetY() );
-  
+
   int flag = 0;
   long id = HitTest( wxPoint(x,y), flag );
-  if (id == -1) return;
+  if (id == -1)
+    return;
   wxGenericTreeItem *item = FindItem( id );
-  
+
   if (!item) return;
   if ((flag != wxTREE_HITTEST_ONITEMBUTTON) &&
       (flag != wxTREE_HITTEST_ONITEMLABEL)) return;
-  
+
   if (m_current != item)
   {
     if (m_current)
@@ -856,9 +866,10 @@ void wxTreeCtrl::OnMouse( const wxMouseEvent &event )
     RefreshLine( m_current );
     m_current->SendSelected( this );
   };
-  
-  if (event.LeftDClick()) m_current->SendKeyDown( this );
-  
+
+  if (event.LeftDClick())
+    m_current->SendKeyDown( this );
+
   if (flag == wxTREE_HITTEST_ONITEMBUTTON)
   {
     ExpandItem( item->m_itemId, wxTREE_EXPAND_TOGGLE );
@@ -874,37 +885,40 @@ void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxPaintDC &dc, int lev
   {
     wxGenericTreeItem *child = (wxGenericTreeItem *)node->Data();
     dc.SetPen( m_dottedPen );
-    
-    int startX,endX; 
-    if ((node->Previous()) || (level != 0)) 
-      startX = horizX; else startX = horizX-10;
-    if (child->HasChildren()) 
-      endX = horizX+10; else endX = horizX+30;
-    
+
+    int startX = horizX,
+        endX = horizX + 10;
+
+    if (!node->Previous() && (level == 0))
+      startX -= 10;
+    if (!child->HasChildren())
+      endX += 20;
+
     child->m_x = horizX+33;
     child->m_y = y-m_lineHeight/3-2;
     child->m_height = m_lineHeight;
-    
+
     y += m_lineHeight;
-    if (child->NumberOfVisibleChildren() > 0) 
+    if (child->NumberOfVisibleChildren() > 0)
       CalculateLevel( child, dc, level+1, y );
-      
+
     node = node->Next();
   };
 };
 
 void wxTreeCtrl::CalculatePositions(void)
 {
-  if (!m_anchor) return;
- 
+  if (!m_anchor)
+    return;
+
   wxClientDC dc(this);
   PrepareDC( dc );
-    
+
   dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
-  
+
   dc.SetPen( m_dottedPen );
   m_lineHeight = (int)(dc.GetCharHeight() + 4);
-  
+
   int y = m_lineHeight / 2 + 2;
   CalculateLevel( m_anchor, dc, 0, y );
 };
