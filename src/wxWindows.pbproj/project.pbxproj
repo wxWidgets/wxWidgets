@@ -380,7 +380,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				HEADER_SEARCH_PATHS = "\"${DERIVED_SOURCES_DIR}/include\" ../include mac/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
+				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/3.1;
 				LIBRARY_STYLE = DYNAMIC;
 				OPTIMIZATION_CFLAGS = "-O0";
@@ -412,7 +412,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${DERIVED_SOURCES_DIR}\"";
+			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${SYMROOT}\"";
 		};
 		CA89560204D6EE8C00000080 = {
 			buildActionMask = 2147483647;
@@ -3173,7 +3173,7 @@
 				DEBUGGING_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				HEADER_SEARCH_PATHS = "\"${DERIVED_SOURCES_DIR}/include\" ../include mac/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
+				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_STYLE = DYNAMIC;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -DWXMAKINGDLL -D__WXMAC__ -DwxUSE_BASE=1 -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
@@ -3205,7 +3205,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${DERIVED_SOURCES_DIR}\"";
+			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${SYMROOT}\"";
 		};
 		CA8957A704D707E000000080 = {
 			buildActionMask = 2147483647;
@@ -6136,7 +6136,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${DERIVED_SOURCES_DIR}\"";
+			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${SYMROOT}\"";
 		};
 		F5955E9D02CBA8B501000133 = {
 			fileRef = F5A8619E01FA022C0175ACA7;
@@ -15793,7 +15793,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				HEADER_SEARCH_PATHS = "\"${DERIVED_SOURCES_DIR}/include\" ../include mac/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
+				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_STYLE = STATIC;
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -D__WXDEBUG__ -D__WXMAC__ -DwxUSE_BASE=1 -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
@@ -16235,7 +16235,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${DERIVED_SOURCES_DIR}\"";
+			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${SYMROOT}\"";
 		};
 		F5CC83D90379C17C01000133 = {
 			fileEncoding = 30;
@@ -16842,7 +16842,7 @@
 				DEBUGGING_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				HEADER_SEARCH_PATHS = "\"${DERIVED_SOURCES_DIR}/include\" ../include mac/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
+				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_STYLE = STATIC;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -D__WXMAC__ -DwxUSE_BASE=1 -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
