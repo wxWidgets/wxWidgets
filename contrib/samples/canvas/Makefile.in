@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SAMPLES=mmedia ogl stc gizmos canvas
+CONTRIB_SAMPLES=test
 
 all:
 	@for d in $(CONTRIB_SAMPLES); do (cd $$d && $(MAKE)); done
