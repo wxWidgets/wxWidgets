@@ -3,6 +3,13 @@
 #ifndef _WX_MSW_GCCPRIV_H_
 #define _WX_MSW_GCCPRIV_H_
 
+#if defined( __MINGW32__ )
+    #include <_mingw.h>
+    #if __MINGW32_MAJOR_VERSION >= 1
+        #define HAVE_W32API_H
+    #endif
+#endif
+
 // check for MinGW/Cygwin w32api version ( releases >= 0.5, only )
 #if defined( HAVE_W32API_H )
 #include <w32api.h>

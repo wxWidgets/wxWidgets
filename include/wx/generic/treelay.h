@@ -16,6 +16,13 @@
 #pragma interface "wxtree.h"
 #endif
 
+#ifndef WX_PRECOMP
+#include <wx/object.h>
+class wxList;
+class wxDC;
+class wxMouseEvent;
+#endif
+
 #include <wx/string.h>
 
 class WXDLLEXPORT wxTreeLayout: public wxObject

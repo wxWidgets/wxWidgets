@@ -185,8 +185,8 @@ bool wxCHMHelpController::DisplayContextPopup(int contextId)
     popup.idString = contextId ;
 
     GetCursorPos(& popup.pt);
-    popup.clrForeground = -1;
-    popup.clrBackground = -1;
+    popup.clrForeground = (COLORREF)-1;
+    popup.clrBackground = (COLORREF)-1;
     popup.rcMargins.top = popup.rcMargins.left = popup.rcMargins.right = popup.rcMargins.bottom = -1;
     popup.pszFont = NULL;
     popup.pszText = NULL;
@@ -202,8 +202,8 @@ bool wxCHMHelpController::DisplayTextPopup(const wxString& text, const wxPoint& 
     popup.hinst = (HINSTANCE) wxGetInstance();
     popup.idString = 0 ;
     popup.pt.x = pos.x; popup.pt.y = pos.y;
-    popup.clrForeground = -1;
-    popup.clrBackground = -1;
+    popup.clrForeground = (COLORREF)-1;
+    popup.clrBackground = (COLORREF)-1;
     popup.rcMargins.top = popup.rcMargins.left = popup.rcMargins.right = popup.rcMargins.bottom = -1;
     popup.pszFont = NULL;
     popup.pszText = (const wxChar*) text;

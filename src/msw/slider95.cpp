@@ -25,6 +25,7 @@
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
 #include "wx/brush.h"
+#include "wx/slider.h"
 #endif
 
 #ifdef __WIN95__

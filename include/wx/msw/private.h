@@ -14,6 +14,10 @@
 #ifndef _WX_PRIVATE_H_
 #define _WX_PRIVATE_H_
 
+#ifndef STRICT
+    #define STRICT 1
+#endif
+
 #include <windows.h>
 
 #ifdef __WXMICROWIN__

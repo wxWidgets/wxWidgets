@@ -21,6 +21,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+#include "wx/dc.h"
+#include "wx/event.h"
 #endif
 
 #if wxUSE_TREELAYOUT

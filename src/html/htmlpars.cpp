@@ -219,7 +219,9 @@ wxHtmlEntitiesParser::wxHtmlEntitiesParser()
 
 wxHtmlEntitiesParser::~wxHtmlEntitiesParser()
 {
+#if wxUSE_WCHAR_T && !wxUSE_UNICODE
     delete m_conv;
+#endif
 }
 
 void wxHtmlEntitiesParser::SetEncoding(wxFontEncoding encoding)

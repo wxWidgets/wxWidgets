@@ -865,7 +865,7 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
     if ( dwRet != 0 )
     {
         wxLogError(_("Failed to %s dialup connection: %s"),
-                   async ? _("initiate") : _("establish"),
+                   wxString(async ? _("initiate") : _("establish")).c_str(),
                    GetErrorString(dwRet).c_str());
 
         // we should still call RasHangUp() if we got a non 0 connection
