@@ -46,6 +46,7 @@
 #include "bitmaps/undo.xpm"
 #include "bitmaps/redo.xpm"
 #include "bitmaps/helpcs.xpm"
+#include "bitmaps/go.xpm"
 
 IMPLEMENT_CLASS(ctMainFrame, wxDocParentFrame)
 
@@ -82,6 +83,8 @@ BEGIN_EVENT_TABLE(ctMainFrame, wxDocParentFrame)
     EVT_UPDATE_UI(ctID_SAVE_CONFIGURE_COMMAND, ctMainFrame::OnUpdateDisable)
 
     EVT_UPDATE_UI(wxID_FIND, ctMainFrame::OnUpdateDisable)
+
+    EVT_UPDATE_UI(ctID_GO, ctMainFrame::OnUpdateDisable)
 END_EVENT_TABLE()
 
 // Define my frame constructor
@@ -222,7 +225,7 @@ void ctMainFrame::InitToolBar(wxToolBar* toolBar)
     toolBarBitmaps[3] = wxBitmap(copy_xpm);
     toolBarBitmaps[4] = wxBitmap(cut_xpm);
     toolBarBitmaps[5] = wxBitmap(paste_xpm);
-//    toolBarBitmaps[6] = wxBitmap(print_xpm);
+    toolBarBitmaps[6] = wxBitmap(go_xpm);
     toolBarBitmaps[7] = wxBitmap(help_xpm);
     toolBarBitmaps[10] = wxBitmap(undo_xpm);
     toolBarBitmaps[11] = wxBitmap(redo_xpm);
@@ -240,6 +243,8 @@ void ctMainFrame::InitToolBar(wxToolBar* toolBar)
     toolBar->AddSeparator();
     toolBar->AddTool(wxID_UNDO, toolBarBitmaps[10], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Undo"));
     toolBar->AddTool(wxID_REDO, toolBarBitmaps[11], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Redo"));
+    toolBar->AddSeparator();
+    toolBar->AddTool(ctID_GO, toolBarBitmaps[6], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Save setup.h or configurewx.sh"));
     toolBar->AddSeparator();
     toolBar->AddTool(ctID_ITEM_HELP, toolBarBitmaps[12], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Show help for this option"));
     toolBar->AddTool(wxID_HELP_CONTEXT, toolBarBitmaps[13], wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, wxT("Show help on the clicked item"));
@@ -265,6 +270,8 @@ wxMenuBar* ctMainFrame::CreateMenuBar()
     fileMenu->AppendSeparator();
     fileMenu->Append(ctID_SAVE_SETUP_FILE, wxT("Save Setup.&h...\tCtrl+H"), wxT("Save the setup.h file"));
     fileMenu->Append(ctID_SAVE_CONFIGURE_COMMAND, wxT("Save Configure Script...\tCtrl+G"), wxT("Save the configure script file"));
+    fileMenu->AppendSeparator();
+    fileMenu->Append(ctID_GO, wxT("&Go\tF5"), wxT("Quick-save the setup.h or configure.sh file"));
     fileMenu->AppendSeparator();
     fileMenu->Append(wxID_EXIT, wxT("E&xit\tAlt+F4"), wxT("Exit the application"));
 

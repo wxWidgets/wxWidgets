@@ -91,6 +91,9 @@ BEGIN_EVENT_TABLE(ctConfigToolView, wxView)
     EVT_MENU(wxID_FIND, ctConfigToolView::OnFind)
     EVT_UPDATE_UI(wxID_FIND, ctConfigToolView::OnUpdateFind)
 
+    EVT_MENU(ctID_GO, ctConfigToolView::OnGo)
+    EVT_UPDATE_UI(ctID_GO, ctConfigToolView::OnUpdateGo)
+
 END_EVENT_TABLE()
 
 ctConfigToolView::ctConfigToolView()
@@ -352,10 +355,16 @@ void ctConfigToolView::OnIconLeftDown(ctConfigTreeCtrl* treeControl, ctConfigIte
         SyncItem(treeControl, item);
 
         wxList considered;
-        item->PropagateChange(considered);
         if ((item->GetType() == ctTypeBoolRadio || item->GetType() == ctTypeRadioGroup) && item->IsEnabled())
         {
             item->PropagateRadioButton(considered);
+        }
+        item->PropagateChange(considered);
+
+        // Update the setup.h and configure text
+        if (wxGetApp().GetMainFrame()->GetMainNotebook()->GetSelection() > 0)
+        {
+            RegenerateSetup();
         }
     }
 }
@@ -905,7 +914,9 @@ void ctConfigToolView::OnSaveSetupFile(wxCommandEvent& event)
     wxString setupStr = doc->GenerateSetup();
 
     wxString filename = _T("setup.h");
-    wxString path = doc->GetFrameworkDir(FALSE);
+    wxString path = wxGetApp().GetSettings().m_lastSetupSaveDir;
+    if (path.IsEmpty())
+        path = doc->GetFrameworkDir(FALSE);
     wxString wildcard = _T("Header files (*.h)|*.h|All files (*.*)|*.*");
     
     wxFileDialog dialog(wxTheApp->GetTopWindow(),
@@ -916,8 +927,7 @@ void ctConfigToolView::OnSaveSetupFile(wxCommandEvent& event)
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString fullPath = dialog.GetPath();
-
-        // TODO: save last saved path in settings.
+        wxGetApp().GetSettings().m_lastSetupSaveDir = wxPathOnly(fullPath);
 
         wxFileOutputStream stream(fullPath);
         if (!stream.Ok())
@@ -936,7 +946,9 @@ void ctConfigToolView::OnSaveConfigureCommand(wxCommandEvent& event)
     wxString configureStr = doc->GenerateConfigureCommand();
 
     wxString filename = _T("configurewx.sh");
-    wxString path = doc->GetFrameworkDir(FALSE);
+    wxString path = wxGetApp().GetSettings().m_lastSetupSaveDir;
+    if (path.IsEmpty())
+        path = doc->GetFrameworkDir(FALSE);
     wxString wildcard = _T("Shell script files (*.sh)|*.sh|All files (*.*)|*.*");
     
     wxFileDialog dialog(wxTheApp->GetTopWindow(),
@@ -947,8 +959,7 @@ void ctConfigToolView::OnSaveConfigureCommand(wxCommandEvent& event)
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString fullPath = dialog.GetPath();
-
-        // TODO: save last saved path in settings.
+        wxGetApp().GetSettings().m_lastSetupSaveDir = wxPathOnly(fullPath);
 
         wxFileOutputStream stream(fullPath);
         if (!stream.Ok())
@@ -1001,6 +1012,75 @@ void ctConfigToolView::OnFind(wxCommandEvent& event)
 void ctConfigToolView::OnUpdateFind(wxUpdateUIEvent& event)
 {
     event.Enable(TRUE);
+}
+
+/// Save default file type
+void ctConfigToolView::OnGo(wxCommandEvent& event)
+{
+    ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
+    wxString path = wxGetApp().GetSettings().m_lastSetupSaveDir;
+    if (!path.IsEmpty())
+    {
+        if (wxGetApp().GetSettings().m_defaultFileKind == wxT("Setup file"))
+        {
+            // setup.h
+            wxString setupStr = doc->GenerateSetup();
+
+            wxString fullPath = path + wxFILE_SEP_PATH + wxT("setup.h");
+            if (wxFileExists(fullPath))
+            {
+                wxString msg;
+                msg.Printf(wxT("Overwrite existing file %s?"), (const wxChar*) fullPath);
+                int ans = wxMessageBox(msg, _("Save Setup File"), wxICON_QUESTION|wxYES_NO|wxCANCEL);
+                if (ans == wxCANCEL)
+                    return;
+                if (ans == wxNO)
+                    return;
+            }
+            wxFileOutputStream stream(fullPath);
+            if (!stream.Ok())
+            {
+                wxMessageBox(_("Sorry, could not save this file."), _("Save Setup File"), wxICON_EXCLAMATION|wxOK);
+                return;
+            }
+            stream << setupStr;
+        }
+        else if (wxGetApp().GetSettings().m_defaultFileKind == wxT("Configure script"))
+        {
+            // configurewx.sh
+            wxString configureStr = doc->GenerateConfigureCommand();
+
+            wxString fullPath = path + wxFILE_SEP_PATH + wxT("configurewx.sh");
+            if (wxFileExists(fullPath))
+            {
+                wxString msg;
+                msg.Printf(wxT("Overwrite existing file %s?"), (const wxChar*) fullPath);
+                int ans = wxMessageBox(msg, _("Save Configure Script"), wxICON_QUESTION|wxYES_NO|wxCANCEL);
+                if (ans == wxCANCEL)
+                    return;
+                if (ans == wxNO)
+                    return;
+            }
+            wxFileOutputStream stream(fullPath);
+            if (!stream.Ok())
+            {
+                wxMessageBox(_("Sorry, could not save this file."), _("Save Configure Script"), wxICON_EXCLAMATION|wxOK);
+                return;
+            }
+            stream << configureStr;
+        }
+        else
+        {
+            wxMessageBox(wxT("Unrecognised default file type."));
+        }
+    }
+}
+
+/// Update
+void ctConfigToolView::OnUpdateGo(wxUpdateUIEvent& event)
+{
+    wxString path = wxGetApp().GetSettings().m_lastSetupSaveDir;
+    event.Enable(!path.IsEmpty());
 }
 
 //----------------------------------------------------------------------------

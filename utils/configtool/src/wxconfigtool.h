@@ -136,6 +136,7 @@ DECLARE_APP(ctApp)
 // File menu ids
 #define ctID_SAVE_SETUP_FILE                1001
 #define ctID_SAVE_CONFIGURE_COMMAND         1002
+#define ctID_GO                             1003
 
 // Edit menu ids
 #define ctID_ADD_ITEM                       1030

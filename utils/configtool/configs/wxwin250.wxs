@@ -10,6 +10,7 @@
         <precludes></precludes>
         <enabled-if></enabled-if>
         <enabled-if-not></enabled-if-not>
+        <indeterminate-if></indeterminate-if>
         <exclusivity></exclusivity>
         <context></context>
         <configure-command></configure-command>
@@ -27,6 +28,7 @@ There may be several targets per platform; for example on MS Windows, you can ch
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -45,6 +47,7 @@ This port is for Windows 9x, ME, NT, 2K, XP, using the native widgets.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity>MGL,X11,Mac Carbon,GTK+ 1.x,Motif,OS/2,Mac Cocoa,GTK+ 2.x,Wine,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-msw</configure-command>
@@ -53,7 +56,7 @@ This port is for Windows 9x, ME, NT, 2K, XP, using the native widgets.
             </setting>
             <setting type="bool-radio">
                 <active>1</active>
-                <enabled>1</enabled>
+                <enabled>0</enabled>
                 <name>Windows/Universal</name>
                 <description>&lt;b&gt;Windows/Universal&lt;/b&gt;&lt;P&gt;
 
@@ -63,6 +66,7 @@ A port for MS Windows, using the wxUniversal widget set.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity>GTK+ 1.x,GTK+ 2.x,Mac Carbon,Mac Cocoa,MGL,Motif,OS/2,Windows,Wine,X11</exclusivity>
                 <context></context>
                 <configure-command>--with-msw</configure-command>
@@ -82,6 +86,7 @@ This port is based on the wxUniversal widgets.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity>MGL,Mac Carbon,Windows,GTK+ 1.x,Motif,OS/2,Mac Cocoa,GTK+ 2.x,Wine,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-x11</configure-command>
@@ -101,6 +106,7 @@ A port for Mac OS 9 and Mac OS 10.x.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity>MGL,X11,Windows,GTK+ 1.x,Motif,OS/2,Mac Cocoa,GTK+ 2.x,Wine,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-mac</configure-command>
@@ -119,6 +125,7 @@ This port uses the Cocoa API on Mac OS X.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity>GTK+ 2.x,GTK+ 1.x,Mac Carbon,MGL,Motif,Windows,OS/2,Wine,X11,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-cocoa</configure-command>
@@ -138,6 +145,7 @@ This port is based on the GTK+ 1.x and 2.x widget set.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity>MGL,X11,Mac Carbon,Windows,Motif,OS/2,Mac Cocoa,GTK+ 2.x,Wine,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-gtk</configure-command>
@@ -156,6 +164,7 @@ This port uses GTK+ 2.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity>Mac Cocoa,GTK+ 1.x,Mac Carbon,MGL,Motif,Windows,OS/2,Wine,X11,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-gtk2</configure-command>
@@ -175,6 +184,7 @@ This port uses Motif 1.x/2.x or Lesstif.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity>MGL,X11,Mac Carbon,Windows,GTK+ 1.x,OS/2,Mac Cocoa,GTK+ 2.x,Wine,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-motif</configure-command>
@@ -193,6 +203,7 @@ This port uses OS/2 Presentation Manager.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity>GTK+ 1.x,Mac Carbon,MGL,Motif,Windows,X11,Mac Cocoa,GTK+ 2.x,Wine,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-pm</configure-command>
@@ -201,7 +212,7 @@ This port uses OS/2 Presentation Manager.</description>
             </setting>
             <setting type="bool-radio">
                 <active>1</active>
-                <enabled>0</enabled>
+                <enabled>1</enabled>
                 <name>Wine</name>
                 <description>&lt;B&gt;Wine port&lt;/B&gt;&lt;P&gt;
 
@@ -211,6 +222,7 @@ The wxMSW port built for Wine (Windows emulation library).</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity>Mac Cocoa,GTK+ 1.x,GTK+ 2.x,Mac Carbon,MGL,Motif,Windows,OS/2,X11,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-wine</configure-command>
@@ -229,234 +241,426 @@ This port is based on the wxUniversal widgets.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity>X11,Mac Carbon,Windows,GTK+ 1.x,Motif,OS/2,Mac Cocoa,Wine,GTK+ 2.x,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-mgl</configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
             </setting>
-        </setting>
-        <setting type="group">
-            <active>1</active>
-            <enabled>0</enabled>
-            <name>Build options</name>
-            <description>&lt;B&gt;Build options&lt;/B&gt;&lt;P&gt;
+            <setting type="group">
+                <active>1</active>
+                <enabled>0</enabled>
+                <name>Target symbols</name>
+                <description>&lt;B&gt;Build options&lt;/B&gt;&lt;P&gt;
 
 Major build options.</description>
-            <default-state>1</default-state>
-            <requires></requires>
-            <precludes></precludes>
-            <enabled-if></enabled-if>
-            <enabled-if-not></enabled-if-not>
-            <exclusivity></exclusivity>
-            <context></context>
-            <configure-command></configure-command>
-            <help-topic></help-topic>
-            <notes></notes>
-            <setting type="bool-check">
-                <active>1</active>
-                <enabled>1</enabled>
-                <name>wxUSE_GUI</name>
-                <description>&lt;B&gt;Use GUI&lt;/B&gt;&lt;P&gt;
-
-If on, builds a GUI version of the library as opposed to wxBase. Currently, this needs to be enabled.</description>
                 <default-state>1</default-state>
                 <requires></requires>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
-                <exclusivity></exclusivity>
-                <context></context>
-                <configure-command>--enable-gui</configure-command>
-                <help-topic></help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>0</active>
-                <enabled>1</enabled>
-                <name>__WXMSW__</name>
-                <description>This is enabled if the relevant platform settings are enabled.</description>
-                <default-state>1</default-state>
-                <requires>Windows,Wine,Windows/Universal</requires>
-                <precludes></precludes>
-                <enabled-if>Windows,Wine,Windows/Universal</enabled-if>
-                <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>0</active>
-                <enabled>0</enabled>
-                <name>__WXGTK__</name>
-                <description>This is enabled if the relevant platform settings are enabled.
+                <setting type="bool-check">
+                    <active>1</active>
+                    <enabled>1</enabled>
+                    <name>wxUSE_GUI</name>
+                    <description>&lt;B&gt;Use GUI&lt;/B&gt;&lt;P&gt;
+
+If on, builds a GUI version of the library as opposed to wxBase. Currently, this needs to be enabled.</description>
+                    <default-state>1</default-state>
+                    <requires></requires>
+                    <precludes></precludes>
+                    <enabled-if></enabled-if>
+                    <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
+                    <exclusivity></exclusivity>
+                    <context></context>
+                    <configure-command>--enable-gui</configure-command>
+                    <help-topic></help-topic>
+                    <notes></notes>
+                </setting>
+                <setting type="bool-check">
+                    <active>0</active>
+                    <enabled>1</enabled>
+                    <name>__WXMSW__</name>
+                    <description>This is enabled if the relevant platform settings are enabled.</description>
+                    <default-state>1</default-state>
+                    <requires>Windows,Wine,Windows/Universal</requires>
+                    <precludes></precludes>
+                    <enabled-if>Windows,Wine,Windows/Universal</enabled-if>
+                    <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
+                    <exclusivity></exclusivity>
+                    <context></context>
+                    <configure-command></configure-command>
+                    <help-topic></help-topic>
+                    <notes></notes>
+                </setting>
+                <setting type="bool-check">
+                    <active>0</active>
+                    <enabled>0</enabled>
+                    <name>__WXGTK__</name>
+                    <description>This is enabled if the relevant platform settings are enabled.
 </description>
-                <default-state>1</default-state>
-                <requires>GTK+ 1.x,GTK+ 2.x</requires>
-                <precludes></precludes>
-                <enabled-if>GTK+ 1.x,GTK+ 2.x</enabled-if>
-                <enabled-if-not></enabled-if-not>
-                <exclusivity></exclusivity>
-                <context></context>
-                <configure-command></configure-command>
-                <help-topic></help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>0</active>
-                <enabled>0</enabled>
-                <name>__WXGTK20__</name>
-                <description>This is enabled if the relevant platform settings are enabled.
+                    <default-state>1</default-state>
+                    <requires>GTK+ 1.x,GTK+ 2.x</requires>
+                    <precludes></precludes>
+                    <enabled-if>GTK+ 1.x,GTK+ 2.x</enabled-if>
+                    <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
+                    <exclusivity></exclusivity>
+                    <context></context>
+                    <configure-command></configure-command>
+                    <help-topic></help-topic>
+                    <notes></notes>
+                </setting>
+                <setting type="bool-check">
+                    <active>0</active>
+                    <enabled>0</enabled>
+                    <name>__WXGTK20__</name>
+                    <description>This is enabled if the relevant platform settings are enabled.
 </description>
-                <default-state>1</default-state>
-                <requires>GTK+ 2.x</requires>
-                <precludes></precludes>
-                <enabled-if>GTK+ 2.x</enabled-if>
-                <enabled-if-not></enabled-if-not>
-                <exclusivity></exclusivity>
-                <context></context>
-                <configure-command></configure-command>
-                <help-topic></help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>0</active>
-                <enabled>0</enabled>
-                <name>__WXX11__</name>
-                <description>This is enabled if the relevant platform settings are enabled.
+                    <default-state>1</default-state>
+                    <requires>GTK+ 2.x</requires>
+                    <precludes></precludes>
+                    <enabled-if>GTK+ 2.x</enabled-if>
+                    <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
+                    <exclusivity></exclusivity>
+                    <context></context>
+                    <configure-command></configure-command>
+                    <help-topic></help-topic>
+                    <notes></notes>
+                </setting>
+                <setting type="bool-check">
+                    <active>0</active>
+                    <enabled>0</enabled>
+                    <name>__WXX11__</name>
+                    <description>This is enabled if the relevant platform settings are enabled.
 </description>
-                <default-state>1</default-state>
-                <requires>X11</requires>
-                <precludes></precludes>
-                <enabled-if>X11</enabled-if>
-                <enabled-if-not></enabled-if-not>
-                <exclusivity></exclusivity>
-                <context></context>
-                <configure-command></configure-command>
-                <help-topic></help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>0</active>
-                <enabled>0</enabled>
-                <name>__WXMOTIF__</name>
-                <description>This is enabled if the relevant platform settings are enabled.
+                    <default-state>1</default-state>
+                    <requires>X11</requires>
+                    <precludes></precludes>
+                    <enabled-if>X11</enabled-if>
+                    <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
+                    <exclusivity></exclusivity>
+                    <context></context>
+                    <configure-command></configure-command>
+                    <help-topic></help-topic>
+                    <notes></notes>
+                </setting>
+                <setting type="bool-check">
+                    <active>0</active>
+                    <enabled>0</enabled>
+                    <name>__WXMOTIF__</name>
+                    <description>This is enabled if the relevant platform settings are enabled.
 </description>
-                <default-state>1</default-state>
-                <requires>Motif</requires>
-                <precludes></precludes>
-                <enabled-if>Motif</enabled-if>
-                <enabled-if-not></enabled-if-not>
-                <exclusivity></exclusivity>
-                <context></context>
-                <configure-command></configure-command>
-                <help-topic></help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>0</active>
-                <enabled>0</enabled>
-                <name>__WXMAC__</name>
-                <description>This is enabled if the relevant platform settings are enabled.
+                    <default-state>1</default-state>
+                    <requires>Motif</requires>
+                    <precludes></precludes>
+                    <enabled-if>Motif</enabled-if>
+                    <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
+                    <exclusivity></exclusivity>
+                    <context></context>
+                    <configure-command></configure-command>
+                    <help-topic></help-topic>
+                    <notes></notes>
+                </setting>
+                <setting type="bool-check">
+                    <active>0</active>
+                    <enabled>0</enabled>
+                    <name>__WXMAC__</name>
+                    <description>This is enabled if the relevant platform settings are enabled.
 </description>
-                <default-state>1</default-state>
-                <requires>Mac Carbon</requires>
-                <precludes></precludes>
-                <enabled-if>Mac Carbon</enabled-if>
-                <enabled-if-not></enabled-if-not>
-                <exclusivity></exclusivity>
-                <context></context>
-                <configure-command></configure-command>
-                <help-topic></help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>0</active>
-                <enabled>0</enabled>
-                <name>__WXCOCOA__</name>
-                <description>This is enabled if the relevant platform settings are enabled.
+                    <default-state>1</default-state>
+                    <requires>Mac Carbon</requires>
+                    <precludes></precludes>
+                    <enabled-if>Mac Carbon</enabled-if>
+                    <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
+                    <exclusivity></exclusivity>
+                    <context></context>
+                    <configure-command></configure-command>
+                    <help-topic></help-topic>
+                    <notes></notes>
+                </setting>
+                <setting type="bool-check">
+                    <active>0</active>
+                    <enabled>0</enabled>
+                    <name>__WXCOCOA__</name>
+                    <description>This is enabled if the relevant platform settings are enabled.
 </description>
-                <default-state>1</default-state>
-                <requires>Mac Cocoa</requires>
-                <precludes></precludes>
-                <enabled-if>Mac Cocoa</enabled-if>
-                <enabled-if-not></enabled-if-not>
-                <exclusivity></exclusivity>
-                <context></context>
-                <configure-command></configure-command>
-                <help-topic></help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>0</active>
-                <enabled>0</enabled>
-                <name>__WXPM__</name>
-                <description>This is enabled if the relevant platform settings are enabled.
+                    <default-state>1</default-state>
+                    <requires>Mac Cocoa</requires>
+                    <precludes></precludes>
+                    <enabled-if>Mac Cocoa</enabled-if>
+                    <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
+                    <exclusivity></exclusivity>
+                    <context></context>
+                    <configure-command></configure-command>
+                    <help-topic></help-topic>
+                    <notes></notes>
+                </setting>
+                <setting type="bool-check">
+                    <active>0</active>
+                    <enabled>0</enabled>
+                    <name>__WXPM__</name>
+                    <description>This is enabled if the relevant platform settings are enabled.
 </description>
-                <default-state>1</default-state>
-                <requires>OS/2</requires>
-                <precludes></precludes>
-                <enabled-if>OS/2</enabled-if>
-                <enabled-if-not></enabled-if-not>
-                <exclusivity></exclusivity>
-                <context></context>
-                <configure-command></configure-command>
-                <help-topic></help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>0</active>
-                <enabled>0</enabled>
-                <name>__WXMGL__</name>
-                <description>This is enabled if the relevant platform settings are enabled.
+                    <default-state>1</default-state>
+                    <requires>OS/2</requires>
+                    <precludes></precludes>
+                    <enabled-if>OS/2</enabled-if>
+                    <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
+                    <exclusivity></exclusivity>
+                    <context></context>
+                    <configure-command></configure-command>
+                    <help-topic></help-topic>
+                    <notes></notes>
+                </setting>
+                <setting type="bool-check">
+                    <active>0</active>
+                    <enabled>0</enabled>
+                    <name>__WXMGL__</name>
+                    <description>This is enabled if the relevant platform settings are enabled.
 </description>
-                <default-state>1</default-state>
-                <requires>MGL</requires>
-                <precludes></precludes>
-                <enabled-if>MGL</enabled-if>
-                <enabled-if-not></enabled-if-not>
-                <exclusivity></exclusivity>
-                <context></context>
-                <configure-command></configure-command>
-                <help-topic></help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>0</active>
-                <enabled>1</enabled>
-                <name>__WXUNIVERSAL__</name>
-                <description>This is enabled if the relevant platform settings are enabled.
+                    <default-state>1</default-state>
+                    <requires>MGL</requires>
+                    <precludes></precludes>
+                    <enabled-if>MGL</enabled-if>
+                    <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
+                    <exclusivity></exclusivity>
+                    <context></context>
+                    <configure-command></configure-command>
+                    <help-topic></help-topic>
+                    <notes></notes>
+                </setting>
+                <setting type="bool-check">
+                    <active>0</active>
+                    <enabled>0</enabled>
+                    <name>__WXUNIVERSAL__</name>
+                    <description>This is enabled if the relevant platform settings are enabled.
 </description>
-                <default-state>1</default-state>
-                <requires>X11,MGL,Windows/Universal</requires>
-                <precludes></precludes>
-                <enabled-if>X11,MGL,Windows/Universal</enabled-if>
-                <enabled-if-not></enabled-if-not>
-                <exclusivity></exclusivity>
-                <context></context>
-                <configure-command></configure-command>
-                <help-topic></help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>0</active>
-                <enabled>1</enabled>
-                <name>wxUSE_UNIVERSAL</name>
-                <description>&lt;B&gt;Universal&lt;/B&gt;&lt;P&gt;
+                    <default-state>1</default-state>
+                    <requires>X11,MGL,Windows/Universal</requires>
+                    <precludes></precludes>
+                    <enabled-if>X11,MGL,Windows/Universal</enabled-if>
+                    <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
+                    <exclusivity></exclusivity>
+                    <context></context>
+                    <configure-command></configure-command>
+                    <help-topic></help-topic>
+                    <notes></notes>
+                </setting>
+                <setting type="bool-check">
+                    <active>0</active>
+                    <enabled>0</enabled>
+                    <name>wxUSE_UNIVERSAL</name>
+                    <description>&lt;B&gt;Universal&lt;/B&gt;&lt;P&gt;
 
 Specifies if wxUniversal should be used instead of native widgets.&lt;P&gt;
 
 If the selected port in &lt;B&gt;Platform&lt;/B&gt; is a wxUniversal port, this setting is enabled and is not user-editable. Otherwise, it can be enabled or disabled. However this doesn't necessarily mean that the configuration is supported for any given platform.</description>
-                <default-state>0</default-state>
-                <requires>__WXUNIVERSAL__</requires>
+                    <default-state>0</default-state>
+                    <requires>__WXUNIVERSAL__</requires>
+                    <precludes></precludes>
+                    <enabled-if>__WXUNIVERSAL__</enabled-if>
+                    <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
+                    <exclusivity></exclusivity>
+                    <context></context>
+                    <configure-command>--enable-universal</configure-command>
+                    <help-topic></help-topic>
+                    <notes></notes>
+                </setting>
+            </setting>
+        </setting>
+        <setting type="group">
+            <active>1</active>
+            <enabled>0</enabled>
+            <name>Build configuration</name>
+            <description>&lt;B&gt;Build configuration&lt;/B&gt;&lt;P&gt;
+
+Select a high-level build configuration. This will change other settings. This is a way of selecting a configuration that is compatible both with configure and makefiles.</description>
+            <default-state>1</default-state>
+            <requires></requires>
+            <precludes></precludes>
+            <enabled-if></enabled-if>
+            <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
+            <exclusivity></exclusivity>
+            <context></context>
+            <configure-command></configure-command>
+            <help-topic></help-topic>
+            <notes></notes>
+            <setting type="bool-radio">
+                <active>1</active>
+                <enabled>1</enabled>
+                <name>Debug ANSI Static</name>
+                <description>&lt;B&gt;Debug ANSI Static&lt;/B&gt;&lt;P&gt;
+</description>
+                <default-state>1</default-state>
+                <requires></requires>
                 <precludes></precludes>
-                <enabled-if>__WXUNIVERSAL__</enabled-if>
+                <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
-                <exclusivity></exclusivity>
+                <indeterminate-if></indeterminate-if>
+                <exclusivity>Release ANSI Static,Debug Unicode Static,Release Unicode Static,Debug ANSI Shared,Release ANSI Shared,Debug Unicode Shared,Release Unicode Shared,Custom</exclusivity>
                 <context></context>
-                <configure-command>--enable-universal</configure-command>
+                <configure-command></configure-command>
+                <help-topic></help-topic>
+                <notes></notes>
+            </setting>
+            <setting type="bool-radio">
+                <active>1</active>
+                <enabled>0</enabled>
+                <name>Release ANSI Static</name>
+                <description>&lt;B&gt;Debug ANSI Static&lt;/B&gt;&lt;P&gt;
+</description>
+                <default-state>1</default-state>
+                <requires></requires>
+                <precludes></precludes>
+                <enabled-if></enabled-if>
+                <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
+                <exclusivity>Debug ANSI Static,Debug Unicode Static,Release Unicode Static,Debug ANSI Shared,Release ANSI Shared,Debug Unicode Shared,Release Unicode Shared,Custom</exclusivity>
+                <context></context>
+                <configure-command></configure-command>
+                <help-topic></help-topic>
+                <notes></notes>
+            </setting>
+            <setting type="bool-radio">
+                <active>1</active>
+                <enabled>0</enabled>
+                <name>Debug Unicode Static</name>
+                <description>&lt;B&gt;Debug ANSI Static&lt;/B&gt;&lt;P&gt;
+</description>
+                <default-state>1</default-state>
+                <requires></requires>
+                <precludes></precludes>
+                <enabled-if></enabled-if>
+                <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
+                <exclusivity>Debug ANSI Static,Release ANSI Static,Release Unicode Static,Debug ANSI Shared,Release ANSI Shared,Debug Unicode Shared,Release Unicode Shared,Custom</exclusivity>
+                <context></context>
+                <configure-command></configure-command>
+                <help-topic></help-topic>
+                <notes></notes>
+            </setting>
+            <setting type="bool-radio">
+                <active>1</active>
+                <enabled>0</enabled>
+                <name>Release Unicode Static</name>
+                <description>&lt;B&gt;Debug ANSI Static&lt;/B&gt;&lt;P&gt;
+</description>
+                <default-state>1</default-state>
+                <requires></requires>
+                <precludes></precludes>
+                <enabled-if></enabled-if>
+                <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
+                <exclusivity>Debug ANSI Static,Release ANSI Static,Debug Unicode Static,Debug ANSI Shared,Release ANSI Shared,Debug Unicode Shared,Release Unicode Shared,Custom</exclusivity>
+                <context></context>
+                <configure-command></configure-command>
+                <help-topic></help-topic>
+                <notes></notes>
+            </setting>
+            <setting type="bool-radio">
+                <active>1</active>
+                <enabled>0</enabled>
+                <name>Debug ANSI Shared</name>
+                <description>&lt;B&gt;Debug ANSI Static&lt;/B&gt;&lt;P&gt;
+</description>
+                <default-state>1</default-state>
+                <requires></requires>
+                <precludes></precludes>
+                <enabled-if></enabled-if>
+                <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
+                <exclusivity>Debug ANSI Static,Release ANSI Static,Debug Unicode Static,Release Unicode Static,Release ANSI Shared,Debug Unicode Shared,Release Unicode Shared,Custom</exclusivity>
+                <context></context>
+                <configure-command></configure-command>
+                <help-topic></help-topic>
+                <notes></notes>
+            </setting>
+            <setting type="bool-radio">
+                <active>1</active>
+                <enabled>0</enabled>
+                <name>Release ANSI Shared</name>
+                <description>&lt;B&gt;Debug ANSI Static&lt;/B&gt;&lt;P&gt;
+</description>
+                <default-state>1</default-state>
+                <requires></requires>
+                <precludes></precludes>
+                <enabled-if></enabled-if>
+                <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
+                <exclusivity>Debug ANSI Static,Release ANSI Static,Debug Unicode Static,Release Unicode Static,Debug ANSI Shared,Debug Unicode Shared,Release Unicode Shared,Custom</exclusivity>
+                <context></context>
+                <configure-command></configure-command>
+                <help-topic></help-topic>
+                <notes></notes>
+            </setting>
+            <setting type="bool-radio">
+                <active>1</active>
+                <enabled>0</enabled>
+                <name>Debug Unicode Shared</name>
+                <description></description>
+                <default-state>1</default-state>
+                <requires></requires>
+                <precludes></precludes>
+                <enabled-if></enabled-if>
+                <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
+                <exclusivity>Debug ANSI Static,Release ANSI Static,Debug Unicode Static,Release Unicode Static,Debug ANSI Shared,Release ANSI Shared,Release Unicode Shared,Custom</exclusivity>
+                <context></context>
+                <configure-command></configure-command>
+                <help-topic></help-topic>
+                <notes></notes>
+            </setting>
+            <setting type="bool-radio">
+                <active>1</active>
+                <enabled>0</enabled>
+                <name>Release Unicode Shared</name>
+                <description></description>
+                <default-state>1</default-state>
+                <requires></requires>
+                <precludes></precludes>
+                <enabled-if></enabled-if>
+                <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
+                <exclusivity>Debug ANSI Static,Release ANSI Static,Debug Unicode Static,Release Unicode Static,Debug ANSI Shared,Release ANSI Shared,Debug Unicode Shared,Custom</exclusivity>
+                <context></context>
+                <configure-command></configure-command>
+                <help-topic></help-topic>
+                <notes></notes>
+            </setting>
+            <setting type="bool-radio">
+                <active>1</active>
+                <enabled>0</enabled>
+                <name>Custom</name>
+                <description></description>
+                <default-state>1</default-state>
+                <requires></requires>
+                <precludes></precludes>
+                <enabled-if></enabled-if>
+                <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
+                <exclusivity>Debug ANSI Static,Release ANSI Static,Debug Unicode Static,Release Unicode Static,Debug ANSI Shared,Release ANSI Shared,Debug Unicode Shared,Release Unicode Shared</exclusivity>
+                <context></context>
+                <configure-command></configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
             </setting>
@@ -473,6 +677,7 @@ A variety of options, mostly specific to Unix compilers.</description>
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -487,11 +692,12 @@ A variety of options, mostly specific to Unix compilers.</description>
 Use the dmalloc library.&lt;P&gt;
 
 See: http://dmalloc.com.</description>
-                <default-state>1</default-state>
+                <default-state>0</default-state>
                 <requires></requires>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--with-dmalloc</configure-command>
@@ -499,20 +705,21 @@ See: http://dmalloc.com.</description>
                 <notes></notes>
             </setting>
             <setting type="bool-check">
-                <active>1</active>
+                <active>0</active>
                 <enabled>0</enabled>
                 <name>wxUSE_SHARED</name>
                 <description>&lt;B&gt;Shared library&lt;/B&gt;&lt;P&gt;
 
 Use a shared library.</description>
                 <default-state>1</default-state>
-                <requires></requires>
+                <requires>Debug Unicode Shared,Debug ANSI Shared,Release Unicode Shared,Release ANSI Shared</requires>
                 <precludes></precludes>
-                <enabled-if></enabled-if>
+                <enabled-if>Debug Unicode Shared,Debug ANSI Shared,Release Unicode Shared,Release ANSI Shared</enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if>Custom</indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
-                <configure-command>--with-shared</configure-command>
+                <configure-command>--enable-shared</configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
             </setting>
@@ -528,24 +735,26 @@ Set the DT_SONAME field in ELF shared libraries</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
-                <configure-command>--with-soname</configure-command>
+                <configure-command>--enable-soname</configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
             </setting>
             <setting type="bool-check">
-                <active>1</active>
+                <active>0</active>
                 <enabled>0</enabled>
                 <name>wxUSE_OPTIMISE</name>
                 <description>&lt;B&gt;Optimise&lt;/B&gt;&lt;P&gt;
 
 Create optimised code.</description>
                 <default-state>1</default-state>
-                <requires></requires>
+                <requires>Release ANSI Static,Release Unicode Static,Release Unicode Shared</requires>
                 <precludes></precludes>
-                <enabled-if></enabled-if>
+                <enabled-if>Release ANSI Static,Release Unicode Static,Release Unicode Shared</enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if>Custom</indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-optimise</configure-command>
@@ -553,38 +762,40 @@ Create optimised code.</description>
                 <notes></notes>
             </setting>
             <setting type="bool-check">
-                <active>1</active>
-                <enabled>0</enabled>
+                <active>0</active>
+                <enabled>1</enabled>
                 <name>wxUSE_DEBUG</name>
                 <description>&lt;B&gt;Use debugging information&lt;/B&gt;&lt;P&gt;
 
 Same as wxUSE_DEBUG_FLAG (set __WXDEBUG__ flag) and wxUSE_DEBUG_INFO (create code with debugging information).</description>
                 <default-state>1</default-state>
-                <requires></requires>
+                <requires>Debug ANSI Static,Debug Unicode Static,Debug ANSI Shared,Debug Unicode Shared</requires>
                 <precludes></precludes>
-                <enabled-if></enabled-if>
+                <enabled-if>Debug ANSI Static,Debug Unicode Static,Debug ANSI Shared,Debug Unicode Shared</enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if>Custom</indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
-                <configure-command>--with-debug</configure-command>
+                <configure-command>--enable-debug</configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
             </setting>
             <setting type="bool-check">
-                <active>1</active>
-                <enabled>0</enabled>
+                <active>0</active>
+                <enabled>1</enabled>
                 <name>wxUSE_DEBUG_GDB</name>
                 <description>&lt;B&gt;GDB debugging information&lt;/B&gt;&lt;P&gt;
 
 Create code with extra GDB debugging information.</description>
                 <default-state>1</default-state>
-                <requires></requires>
+                <requires>wxUSE_DEBUG</requires>
                 <precludes></precludes>
-                <enabled-if></enabled-if>
+                <enabled-if>wxUSE_DEBUG</enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if>Custom</indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
-                <configure-command>--with-debug_gdb</configure-command>
+                <configure-command>--enable-debug_gdb</configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
             </setting>
@@ -595,14 +806,15 @@ Create code with extra GDB debugging information.</description>
                 <description>&lt;B&gt;Profiling information&lt;/B&gt;&lt;P&gt;
 
 Create code with profiling information.</description>
-                <default-state>1</default-state>
+                <default-state>0</default-state>
                 <requires></requires>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
-                <configure-command>--with-profile</configure-command>
+                <configure-command>--enable-profile</configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
             </setting>
@@ -618,9 +830,10 @@ Create code without RTTI (Run-time type) information.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
-                <configure-command>--with-no_rtti</configure-command>
+                <configure-command>--enable-no_rtti</configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
             </setting>
@@ -631,14 +844,15 @@ Create code without RTTI (Run-time type) information.</description>
                 <description>&lt;B&gt;No exception handling&lt;/B&gt;&lt;P&gt;
 
 Create code without C++ exceptions handling.</description>
-                <default-state>1</default-state>
+                <default-state>0</default-state>
                 <requires></requires>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
-                <configure-command>--with-no_exceptions</configure-command>
+                <configure-command>--enable-no_exceptions</configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
             </setting>
@@ -646,15 +860,16 @@ Create code without C++ exceptions handling.</description>
                 <active>1</active>
                 <enabled>0</enabled>
                 <name>wxUSE_PERMISSIVE</name>
-                <description></description>
-                <default-state>1</default-state>
+                <description>&lt;b&gt;Permissive&lt;/b&gt;&lt;P&gt;</description>
+                <default-state>0</default-state>
                 <requires></requires>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
-                <configure-command>--with-permissive</configure-command>
+                <configure-command>--enable-permissive</configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
             </setting>
@@ -665,14 +880,15 @@ Create code without C++ exceptions handling.</description>
                 <description>&lt;B&gt;No dependency information&lt;/B&gt;&lt;P&gt;
 
 Create code without dependency information.</description>
-                <default-state>1</default-state>
+                <default-state>0</default-state>
                 <requires></requires>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
-                <configure-command>--with-no_deps</configure-command>
+                <configure-command>--enable-no_deps</configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
             </setting>
@@ -685,11 +901,12 @@ Create code without dependency information.</description>
 Output the rpath flag from wx-config.&lt;P&gt;
 
 If you enable this setting, please enter the path into the &lt;b&gt;value&lt;/b&gt; property.</description>
-                <default-state>1</default-state>
+                <default-state>0</default-state>
                 <requires></requires>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-rpath</configure-command>
@@ -702,15 +919,16 @@ Enter the RPATH directory here."></value>
             <setting type="bool-check">
                 <active>1</active>
                 <enabled>0</enabled>
-                <name>wxUSE_WXPRINTFV</name>
+                <name>wxUSE_EXPERIMENTAL_PRINTF</name>
                 <description>&lt;B&gt;Use wxWindows implementation of wxPrintfv&lt;/B&gt;&lt;P&gt;
 
 Check to use the wxWindows implementation.</description>
-                <default-state>1</default-state>
+                <default-state>0</default-state>
                 <requires></requires>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-wxprintfv</configure-command>
@@ -728,6 +946,7 @@ Check to use the wxWindows implementation.</description>
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -749,6 +968,7 @@ Default is 0. Recommended setting: 0 (in fact the compatibility code is now very
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
@@ -770,6 +990,7 @@ Recommended setting: 0 (please update your code instead!)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-compat20</configure-command>
@@ -791,6 +1012,7 @@ The default is 0. Recommended setting: 0 (please update your code)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-compat22</configure-command>
@@ -815,6 +1037,7 @@ Recommended setting: 0 (please update your code)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-compat24</configure-command>
@@ -836,6 +1059,7 @@ Default is 0.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context>__WXMSW__</context>
                 <configure-command></configure-command>
@@ -857,6 +1081,7 @@ Default is 1. Recommended setting: 0 (the new calculations are more correct!)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context>__WXMSW__</context>
                 <configure-command></configure-command>
@@ -885,6 +1110,7 @@ and if __NO_VC_CRTDBG__ is not defined.
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -905,6 +1131,7 @@ Default is 0. Recommended setting: 0&lt;P&gt;
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-debug_cntxt</configure-command>
@@ -926,6 +1153,7 @@ Default is 0. Recommended setting: 1 if you are not using a memory debugging too
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-mem_tracing</configure-command>
@@ -950,6 +1178,7 @@ Default: 0. Recommended setting: 0
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
@@ -971,6 +1200,7 @@ Default: 0. Recommended setting: 0
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
@@ -994,6 +1224,7 @@ Default: 1. Recommended setting: 1 if your compiler supports it.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context>__WXMSW__</context>
                 <configure-command>--enable-catch_segvs</configure-command>
@@ -1011,13 +1242,14 @@ Default: 1. Recommended setting: 1 if your compiler supports it.
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
             <help-topic></help-topic>
             <notes></notes>
             <setting type="bool-check">
-                <active>1</active>
+                <active>0</active>
                 <enabled>0</enabled>
                 <name>wxUSE_UNICODE</name>
                 <description>&lt;B&gt;Unicode mode&lt;/B&gt;&lt;P&gt;
@@ -1028,11 +1260,12 @@ Unicode is currently only fully supported under Windows NT/2000/XP (Windows 9x d
 
 Default: 0. Recommended setting: 0 (unless you only plan to use Windows NT/2000/XP)
 </description>
-                <default-state>1</default-state>
+                <default-state>0</default-state>
                 <requires></requires>
-                <precludes></precludes>
-                <enabled-if></enabled-if>
+                <precludes>Debug ANSI Static,Release ANSI Static,Debug ANSI Shared,Release ANSI Shared</precludes>
+                <enabled-if>Debug Unicode Static,Release Unicode Static,Debug Unicode Shared,Release Unicode Shared</enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if>Custom</indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-unicode</configure-command>
@@ -1064,6 +1297,7 @@ Default: 0. Recommended setting: 0 (1 if you want to deploy Unicode apps on 9x s
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context>__WXMSW__</context>
                 <configure-command>--enable-mslu</configure-command>
@@ -1087,6 +1321,7 @@ Default: 1. Recommended setting: 1
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
@@ -1106,6 +1341,7 @@ Default: 1. Recommended setting: 1
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -1126,6 +1362,7 @@ Default: 1. Recommended setting: 1 (always)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-log</configure-command>
@@ -1143,6 +1380,7 @@ Default: 1. Recommended setting: 1 (always)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-logwin</configure-command>
@@ -1159,6 +1397,7 @@ Default: 1. Recommended setting: 1 (always)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-loggui</configure-command>
@@ -1175,6 +1414,7 @@ Default: 1. Recommended setting: 1 (always)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-logdialog</configure-command>
@@ -1192,6 +1432,7 @@ Default: 1. Recommended setting: 1 (always)
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -1213,6 +1454,7 @@ Default: 1. Recommended setting: 1
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-streams</configure-command>
@@ -1230,6 +1472,7 @@ Default: 1</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-zipstream</configure-command>
@@ -1252,6 +1495,7 @@ Default: 0
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-std_iostreams</configure-command>
@@ -1273,6 +1517,7 @@ Default: 1. Recommended setting: 1. wxFile is highly recommended as it is requir
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-file</configure-command>
@@ -1293,6 +1538,7 @@ Default: 1. Recommended setting: 1.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-ffile</configure-command>
@@ -1314,6 +1560,7 @@ Default: 1. Recommended setting: 1 (but may be safely disabled if you don't use 
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
@@ -1332,6 +1579,7 @@ This class is required by wxTextFile.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-textbuf</configure-command>
@@ -1350,6 +1598,7 @@ Requires wxFile and wxTextBuffer, required by wxFileConfig.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-textfile</configure-command>
@@ -1370,6 +1619,7 @@ Default: 1.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-config</configure-command>
@@ -1394,6 +1644,7 @@ Default: 1. Recommended setting: 1
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
@@ -1412,6 +1663,7 @@ Default: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-mimetype</configure-command>
@@ -1430,6 +1682,7 @@ Enable virtual file systems (required by wxHTML)</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-filesystem</configure-command>
@@ -1450,6 +1703,7 @@ Default: 1
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-fs_zip</configure-command>
@@ -1468,6 +1722,7 @@ Default: 1</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-fs_inet</configure-command>
@@ -1493,6 +1748,7 @@ Default: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-xresources</configure-command>
@@ -1516,6 +1772,7 @@ Recommended setting: whatever your compiler likes more
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
@@ -1534,6 +1791,7 @@ Clear to disable large file support (-D_LARGE_FILES).</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-largefile</configure-command>
@@ -1551,6 +1809,7 @@ Clear to disable large file support (-D_LARGE_FILES).</description>
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -1573,6 +1832,7 @@ Default: 1. Recommended setting: 1
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-longlong</configure-command>
@@ -1594,6 +1854,7 @@ Default: 1. Recommended setting: 1 unless you don't like the licence terms (unli
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-apple_ieee</configure-command>
@@ -1614,6 +1875,7 @@ Default: 1 Recommended setting: 1 if your compiler supports it.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--with-regex</configure-command>
@@ -1634,6 +1896,7 @@ Check to use the built-in version of the library, clear to use the wxWindows ver
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-geometry</configure-command>
@@ -1651,6 +1914,7 @@ Check to use the built-in version of the library, clear to use the wxWindows ver
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -1674,6 +1938,7 @@ Requires: wxUSE_LONGLONG. Default: 1
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-datetime</configure-command>
@@ -1692,6 +1957,7 @@ Default: 1.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-timer</configure-command>
@@ -1710,6 +1976,7 @@ Default: 1. Needed by wxSocket.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-stopwatch</configure-command>
@@ -1727,6 +1994,7 @@ Default: 1. Needed by wxSocket.</description>
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -1747,6 +2015,7 @@ Default: 1. Recommended setting: 1
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-dialupman</configure-command>
@@ -1767,6 +2036,7 @@ Default: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-sockets</configure-command>
@@ -1789,6 +2059,7 @@ Default: 1
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-protocol</configure-command>
@@ -1806,6 +2077,7 @@ Default: 1
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-protocol-file</configure-command>
@@ -1822,6 +2094,7 @@ Default: 1
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-protocol-ftp</configure-command>
@@ -1838,6 +2111,7 @@ Default: 1
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-protocol-http</configure-command>
@@ -1854,6 +2128,7 @@ Default: 1
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-url</configure-command>
@@ -1875,6 +2150,7 @@ Default: 1. Recommended value: 1.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-ipc</configure-command>
@@ -1892,6 +2168,7 @@ Default: 1. Recommended value: 1.</description>
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -1909,6 +2186,7 @@ On MS Windows, depending on the value of wxUSE_NATIVE_STATUSBAR, either wxStatus
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-statusbar</configure-command>
@@ -1927,6 +2205,7 @@ Default: 1. Recommended setting: 1 (there is no advantage in using the generic o
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command></configure-command>
@@ -1950,6 +2229,7 @@ Default: 1. Recommended setting: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-toolbar</configure-command>
@@ -1965,6 +2245,7 @@ Default: 1. Recommended setting: 1</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-tbarnative</configure-command>
@@ -1983,6 +2264,7 @@ This must be enabled if wxUSE_TOOLBAR_NATIVE is disabled.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not>wxUSE_TOOLBAR_NATIVE</enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-tbarsmpl</configure-command>
@@ -2002,6 +2284,7 @@ wxGrid class.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-grid</configure-command>
@@ -2018,6 +2301,7 @@ wxGrid class.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-sash</configure-command>
@@ -2034,6 +2318,7 @@ wxGrid class.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-splitter</configure-command>
@@ -2050,6 +2335,7 @@ wxGrid class.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--with-opengl</configure-command>
@@ -2069,6 +2355,7 @@ Enables the popup window class.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-popupwin</configure-command>
@@ -2089,6 +2376,7 @@ This is used to implement tooltips on some ports.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-tipwindow</configure-command>
@@ -2107,6 +2395,7 @@ Use the wxMiniFrame class. Not implemented on all platforms.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-miniframe</configure-command>
@@ -2126,6 +2415,7 @@ Use the wxMiniFrame class. Not implemented on all platforms.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-controls</configure-command>
@@ -2141,6 +2431,7 @@ Use the wxMiniFrame class. Not implemented on all platforms.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-button</configure-command>
@@ -2157,6 +2448,7 @@ Use the wxMiniFrame class. Not implemented on all platforms.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-bmpbutton</configure-command>
@@ -2175,6 +2467,7 @@ A calendar control.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-calendar</configure-command>
@@ -2191,6 +2484,7 @@ A calendar control.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-checkbox</configure-command>
@@ -2207,6 +2501,7 @@ A calendar control.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-checklst</configure-command>
@@ -2224,6 +2519,7 @@ A calendar control.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-choice</configure-command>
@@ -2240,6 +2536,7 @@ A calendar control.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-combobox</configure-command>
@@ -2256,6 +2553,7 @@ A calendar control.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-gauge</configure-command>
@@ -2272,6 +2570,7 @@ A calendar control.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-listbox</configure-command>
@@ -2288,6 +2587,7 @@ A calendar control.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-listctrl</configure-command>
@@ -2309,6 +2609,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-notebook</configure-command>
@@ -2325,6 +2626,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-radiobox</configure-command>
@@ -2341,6 +2643,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-radiobtn</configure-command>
@@ -2357,6 +2660,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-scrollbar</configure-command>
@@ -2373,6 +2677,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-slider</configure-command>
@@ -2389,6 +2694,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-spinbtn</configure-command>
@@ -2405,6 +2711,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-spinctrl</configure-command>
@@ -2421,6 +2728,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-statbox</configure-command>
@@ -2437,6 +2745,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-statline</configure-command>
@@ -2453,6 +2762,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-stattext</configure-command>
@@ -2469,6 +2779,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-staticbmp</configure-command>
@@ -2485,6 +2796,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-textctrl</configure-command>
@@ -2501,6 +2813,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-togglebtn</configure-command>
@@ -2517,6 +2830,7 @@ Default: 1.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-treectrl</configure-command>
@@ -2537,6 +2851,7 @@ Features relating to images</description>
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -2555,6 +2870,7 @@ This class is needed by wxNotebook, wxTreeCtrl and wxListCtrl.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-imaglist</configure-command>
@@ -2582,6 +2898,7 @@ Recommended setting: default or 0 for everything for portable programs.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context>__WXMSW__</context>
                 <configure-command>--enable-metafile</configure-command>
@@ -2599,6 +2916,7 @@ Enhanced metafile (recommended).</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command></configure-command>
@@ -2615,6 +2933,7 @@ Enhanced metafile (recommended).</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command></configure-command>
@@ -2636,6 +2955,7 @@ Default: 1. Recommended value: 1.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-dragimage</configure-command>
@@ -2658,6 +2978,7 @@ Default: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-image</configure-command>
@@ -2676,6 +2997,7 @@ Set to 1 for PNG format support (requires libpng). Also requires wxUSE_ZLIB.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--with-libpng</configure-command>
@@ -2698,6 +3020,7 @@ Set to 1 for JPEG format support (requires libjpeg).
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--with-libjpeg</configure-command>
@@ -2721,6 +3044,7 @@ Set to 1 for TIFF format support (requires libtiff).
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--with-libtiff</configure-command>
@@ -2744,6 +3068,7 @@ Set to 1 for read-only GIF format support.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-gif</configure-command>
@@ -2763,6 +3088,7 @@ Set to 1 for PNM format support.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-pnm</configure-command>
@@ -2782,6 +3108,7 @@ Set to 1 for PCX format support.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-pcx</configure-command>
@@ -2801,6 +3128,7 @@ Set to 1 for PCX format support.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-iff</configure-command>
@@ -2820,6 +3148,7 @@ Set to 1 for XPM format support.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-xpm</configure-command>
@@ -2838,6 +3167,7 @@ Set to 1 for MS Icons and Cursors format support.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command>--enable-icocur</configure-command>
@@ -2858,6 +3188,7 @@ Set to 1 to enable the wxPalette class.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-palette</configure-command>
@@ -2878,6 +3209,7 @@ wxColourDialog and wxDirDialog.</description>
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -2898,6 +3230,7 @@ Default: 0. Recommended setting: 0
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
@@ -2921,6 +3254,7 @@ Default: 1. Recommended setting: 1 (unless it really doesn't work)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-commondlg</configure-command>
@@ -2940,6 +3274,7 @@ wxBusyInfo displays window with a message when the app is busy. Works in the sam
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-busyinfo</configure-command>
@@ -2959,6 +3294,7 @@ wxBusyInfo displays window with a message when the app is busy. Works in the sam
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-choicedlg</configure-command>
@@ -2980,6 +3316,7 @@ Default: 1. Recommended setting: 1
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-coldlg</configure-command>
@@ -3001,6 +3338,7 @@ Default: 1. Recommended setting: 1.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-dirdlg</configure-command>
@@ -3022,6 +3360,7 @@ Default: 1. Recommended setting: 1 (used in many places in the library itself)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-filedlg</configure-command>
@@ -3041,6 +3380,7 @@ Default: 1. Recommended setting: 1 (used in many places in the library itself)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-finddlg</configure-command>
@@ -3062,6 +3402,7 @@ Default: 1. Recommended setting: 1 (used in the library itself)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-fontdlg</configure-command>
@@ -3081,6 +3422,7 @@ Default: 1. Recommended setting: 1 (used in the library itself)
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
@@ -3100,6 +3442,7 @@ Progress dialog class for lengthy operations
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-msgdlg</configure-command>
@@ -3120,6 +3463,7 @@ Support for startup tips.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-tipdlg</configure-command>
@@ -3139,6 +3483,7 @@ Text entry dialog and wxGetTextFromUser function.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-textdlg</configure-command>
@@ -3157,6 +3502,7 @@ Number entry dialog. This option is not currently used.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-numberdlg</configure-command>
@@ -3175,6 +3521,7 @@ A splash window.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-splash</configure-command>
@@ -3193,6 +3540,7 @@ The wizard dialog.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-wizarddlg</configure-command>
@@ -3212,6 +3560,7 @@ This category consists of large components, such as the printing and document/vi
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -3227,6 +3576,7 @@ This category consists of large components, such as the printing and document/vi
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-docview</configure-command>
@@ -3243,6 +3593,7 @@ This category consists of large components, such as the printing and document/vi
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-mdi</configure-command>
@@ -3262,6 +3613,7 @@ Your application can still print without this, but it is highly recommended that
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-printarch</configure-command>
@@ -3280,6 +3632,7 @@ The wxHTML subsystem consists of wxHtmlWindow, wxHtmlHelpController, wxHtmlEasyP
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-html</configure-command>
@@ -3297,6 +3650,7 @@ The wxHTML subsystem consists of wxHtmlWindow, wxHtmlHelpController, wxHtmlEasyP
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -3315,6 +3669,7 @@ Default: 1 Recommended setting: 1 (can be set to 0 if you don't use the command 
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-cmdline</configure-command>
@@ -3339,6 +3694,7 @@ Default: 1. Recommended setting: 0 unless you do plan to develop MT applications
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-threads</configure-command>
@@ -3358,6 +3714,7 @@ _() macro, wxLocale class. Requires wxTextFile.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-intl</configure-command>
@@ -3379,6 +3736,7 @@ Default: 1. Required by wxUSE_DIALUP_MANAGER.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-dynlib</configure-command>
@@ -3397,6 +3755,7 @@ Experimental, don't use for now</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-dynamicloader</configure-command>
@@ -3415,6 +3774,7 @@ Default: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-fontmap</configure-command>
@@ -3433,6 +3793,7 @@ A class for setting miscellaneous options that do not fit in with the wxWindows 
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-sysoptions</configure-command>
@@ -3451,6 +3812,7 @@ Simple .wav class for short sounds.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-wave</configure-command>
@@ -3467,6 +3829,7 @@ Simple .wav class for short sounds.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-accel</configure-command>
@@ -3484,6 +3847,7 @@ under Windows).</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-caret</configure-command>
@@ -3507,6 +3871,7 @@ Recommended setting: 1 if you need it, can be safely set to 0 otherwise
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-display</configure-command>
@@ -3525,6 +3890,7 @@ wxMenu, wxMenuBar. Should not be disabled.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-menus</configure-command>
@@ -3541,6 +3907,7 @@ wxMenu, wxMenuBar. Should not be disabled.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-validators</configure-command>
@@ -3559,11 +3926,12 @@ Requires wxUSE_OLE.&lt;P&gt;
 
 Default: 0. Recommended setting: 0
 </description>
-                <default-state>1</default-state>
+                <default-state>0</default-state>
                 <requires></requires>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-accessibility</configure-command>
@@ -3585,6 +3953,7 @@ Default: 1. Recommended value: 1
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-snglinst</configure-command>
@@ -3605,6 +3974,7 @@ Default: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-constraints</configure-command>
@@ -3625,6 +3995,7 @@ Default: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-splines</configure-command>
@@ -3645,6 +4016,7 @@ NOW MANDATORY: don't change.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
@@ -3663,6 +4035,7 @@ Default: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--with-zlib</configure-command>
@@ -3686,6 +4059,7 @@ Data transfer encompasses clipboard and drag-and-drop operations.</description>
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -3705,6 +4079,7 @@ Default: 1. Recommended value: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-clipboard</configure-command>
@@ -3726,6 +4101,7 @@ Default: 1. Recommended value: 1
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-dataobj</configure-command>
@@ -3747,6 +4123,7 @@ Default: 1. Recommended value: 1
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-dnd</configure-command>
@@ -3764,6 +4141,7 @@ Default: 1. Recommended value: 1
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -3783,6 +4161,7 @@ Default: 1.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-help</configure-command>
@@ -3802,6 +4181,7 @@ Default: 1.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command>--enable-mshtmlhelp</configure-command>
@@ -3822,6 +4202,7 @@ Default: 1</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-htmlhelp</configure-command>
@@ -3839,6 +4220,7 @@ Default: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-tooltips</configure-command>
@@ -3858,6 +4240,7 @@ Settings for various input devices.</description>
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -3877,6 +4260,7 @@ Default: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context>__WXMSW__</context>
                 <configure-command></configure-command>
@@ -3897,6 +4281,7 @@ Default: 1</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-joystick</configure-command>
@@ -3916,6 +4301,7 @@ See also: &lt;font color="#0000FF"&gt;Large components&lt;/font&gt; for wxUSE_PR
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -3933,6 +4319,7 @@ Enables PostScript printing support.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--enable-postscript</configure-command>
@@ -3951,6 +4338,7 @@ Set to 1 to use font metric files in GetTextExtent.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command></configure-command>
@@ -3969,6 +4357,7 @@ Enables PostScript on MS Windows.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command></configure-command>
@@ -3987,6 +4376,7 @@ Enables PostScript on MS Windows.</description>
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -4002,11 +4392,12 @@ Enables wxDb and related classes for
 accessing ODBC on all supported platforms.&lt;P&gt;
 
 Default: 0</description>
-                <default-state>1</default-state>
+                <default-state>0</default-state>
                 <requires></requires>
                 <precludes>wxUSE_UNICODE</precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command>--with-odbc</configure-command>
@@ -4028,6 +4419,7 @@ Default: 1
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command></configure-command>
@@ -4045,11 +4437,12 @@ member variables.  With a setting of 1, full backward compatability with the 2.0
 
 Default: 0
 </description>
-                    <default-state>1</default-state>
+                    <default-state>0</default-state>
                     <requires></requires>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command></configure-command>
@@ -4068,6 +4461,7 @@ Default: 0
             <precludes></precludes>
             <enabled-if></enabled-if>
             <enabled-if-not></enabled-if-not>
+            <indeterminate-if></indeterminate-if>
             <exclusivity></exclusivity>
             <context></context>
             <configure-command></configure-command>
@@ -4083,6 +4477,7 @@ Default: 0
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
@@ -4103,6 +4498,7 @@ Default: 1. Recommended setting: 1, set to 0 for a small library size reduction.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command></configure-command>
@@ -4124,6 +4520,7 @@ Default: 1 for compilers which support it  Recommended setting: 1, only set it t
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command></configure-command>
@@ -4144,6 +4541,7 @@ Default: 1</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command></configure-command>
@@ -4165,6 +4563,7 @@ Default: 0. Recommended setting: 0 unless you really have to use MFC
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command></configure-command>
@@ -4186,6 +4585,7 @@ Default: 1. Recommended setting: 1
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command>--enable-ole</configure-command>
@@ -4205,6 +4605,7 @@ Set to 1 to compile MS Windows XP theme engine support.
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command></configure-command>
@@ -4225,6 +4626,7 @@ Set to 1 to auto-adapt to MS Windows XP themes where possible
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command></configure-command>
@@ -4245,6 +4647,7 @@ Default: 1</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command></configure-command>
@@ -4265,6 +4668,7 @@ Default: 0
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXMSW__</context>
                     <configure-command></configure-command>
@@ -4282,6 +4686,7 @@ Default: 0
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
+                <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
                 <configure-command></configure-command>
@@ -4299,6 +4704,7 @@ Try to compile and run a test GTK program.</description>
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXGTK__</context>
                     <configure-command>--enable-gtktest</configure-command>
@@ -4317,6 +4723,7 @@ Prefix where GTK+ is installed (optional). Type the prefix into the &lt;b&gt;val
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXGTK__</context>
                     <configure-command>--with-gtk-prefix</configure-command>
@@ -4338,6 +4745,7 @@ Exec prefix where GTK+ is installed (optional). Type the prefix into the &lt;b&g
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context>__WXGTK__</context>
                     <configure-command>--with-gtk-exec-prefix</configure-command>
@@ -4359,6 +4767,7 @@ Search for libiconv in DIR/include and DIR/lib. Type the prefix into the &lt;b&g
                     <precludes></precludes>
                     <enabled-if></enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--with-libiconv-prefix</configure-command>
@@ -4370,18 +4779,19 @@ Type the prefix into the <B>value</B> property."></value>
                 </setting>
                 <setting type="bool-check">
                     <active>0</active>
-                    <enabled>1</enabled>
+                    <enabled>0</enabled>
                     <name>wxUSE_X</name>
                     <description>&lt;B&gt;Use X&lt;/B&gt;&lt;P&gt;
 
 Use the X window system.</description>
                     <default-state>1</default-state>
-                    <requires></requires>
+                    <requires>__WXGTK__,__WXMOTIF__,__WXX11__</requires>
                     <precludes></precludes>
-                    <enabled-if></enabled-if>
+                    <enabled-if>__WXGTK__,__WXMOTIF__,__WXX11__</enabled-if>
                     <enabled-if-not></enabled-if-not>
+                    <indeterminate-if></indeterminate-if>
                     <exclusivity></exclusivity>
-                    <context>__WXGTK__</context>
+                    <context></context>
                     <configure-command>--with-x</configure-command>
                     <help-topic></help-topic>
                     <notes></notes>

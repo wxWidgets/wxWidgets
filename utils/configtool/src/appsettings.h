@@ -87,7 +87,7 @@ public:
     bool GetFirstTimeRun() const { return m_firstTimeRun; }
 
 public:
-    wxString                m_currentDocumentDir; // Not yet used
+    wxString                m_lastSetupSaveDir; // Not yet used
     wxString                m_lastDocument;       // Last document
     bool                    m_showToolBar;
     bool                    m_smallToolbar;
@@ -117,6 +117,9 @@ public:
     int                     m_mainSashSize;
     bool                    m_showTrayIcon;
     bool                    m_trayIconIsShown;
+
+    // "Setup file" or "Configure script"
+    wxString                m_defaultFileKind;
 
     // Search settings
     bool                    m_matchCase;

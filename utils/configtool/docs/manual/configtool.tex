@@ -386,6 +386,8 @@ with files.
 \twocolitem{{\bf Save Setup.h...} (Ctrl+H)}{Saves the generated setup.h file in the specified location.}
 \twocolitem{{\bf Save Configure Script...} (Ctrl+G)}{Saves the generated script containing a configure command in the specified location.}
 \twocolitem{\hrule}{\htmlonly{\hrule}}
+\twocolitem{{\bf Go} (F5)}{Saves the generated setup.h file or configurewx.sh script (according to the default setting) in the last-saved.}
+\twocolitem{\hrule}{\htmlonly{\hrule}}
 \twocolitem{{\bf Exit} (Alt+F4)}{Exits the program.}
 \end{twocollist}
 
@@ -493,6 +495,8 @@ commands.
 \twocolitem{\image{}{copy.png}{\bf  Copy}}{Copies the selected option to an internal clipboard.}
 \twocolitem{\image{}{cut.png}{\bf  Cut}}{Cuts the selected option and copies it to the internal clipboard..}
 \twocolitem{\image{}{paste.png}{\bf  Paste}}{Pastes the option from the clipboard to the configuration tree.}
+\twocolitem{\hrule}{\htmlonly{\hrule}}
+\twocolitem{\image{}{go.png}{\bf Go}}{Saves the generated setup.h file or configurewx.sh script (according to the default setting) in the last-saved.}
 \twocolitem{\hrule}{\htmlonly{\hrule}}
 \twocolitem{\image{}{help.png}{\bf  Help}}{Shows the wxWindows manual topic for the
 \twocolitem{\image{}{helpcs.png}{\bf  Context Help}}{Shows a context-sensitive help
@@ -605,6 +609,11 @@ or group. For each radio option, all other mutually
 exclusive options need to be listed. See the
 {\bf Target} group for an example of this.
 
+The results of these dependencies can be overridden by
+indeterminate-if, which is done last of all and can
+make the option user-selectable when otherwise it
+would be constrained to be enabled or disabled.
+
 \section{How \ctshortname generates the configure commands}
 
 If the {\bf configure} property isn't empty,
@@ -657,8 +666,8 @@ if the option is constrained to always be disabled
 or enabled in the current context, then it is greyed out
 (deactivated) to prevent the user from changing the state.
 
-There are four kinds of dependencies: requires, precludes,
-enabled-if, and enabled-if-not. Each one represents a
+There are five kinds of dependencies: requires, precludes,
+enabled-if, enabled-if-not, and indeterminate-if. Each one represents a
 relationship between the current option (a) and one
 or more named options (b). For the sake of argument
 we will consider only one other option, but multiple
@@ -714,6 +723,24 @@ For example, wxUSE_TOOLBAR_SIMPLE enabled-if-not wxUSE_TOOLBAR_NATIVE.
     0        1
     1        1
 \end{verbatim}
+
+5. a {\bf indeterminate-if} b
+
+For example, wxUSE_UNICODE indeterminate-if Custom.
+
+\begin{verbatim}
+    a        b
+
+    ?        1
+\end{verbatim}
+
+This overrides all the other dependencies, and allows you
+to make an option user-choosable in some circumstances,
+when otherwise it would be constrained to be either enabled or
+disabled. You may need to use an intermediate option to
+make sensible use of this: for example make the intermediate
+option dependent on a number of factors, such as Unicode not being
+available on some platforms.
 
 \section{How to specify platform-specific dependencies}\label{platformdependencies}
 

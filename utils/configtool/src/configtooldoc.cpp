@@ -575,6 +575,7 @@ void ctConfigToolDoc::RefreshDependencies(ctConfigItem* item)
     wxString precludes = item->GetPropertyString(wxT("precludes"));
     wxString enabledIf = item->GetPropertyString(wxT("enabled-if"));
     wxString enabledIfNot = item->GetPropertyString(wxT("enabled-if-not"));
+    wxString indeterminateIf = item->GetPropertyString(wxT("indeterminate-if"));
     wxString context = item->GetPropertyString(wxT("context"));
 
     if (!requires.IsEmpty())
@@ -588,6 +589,9 @@ void ctConfigToolDoc::RefreshDependencies(ctConfigItem* item)
 
     if (!enabledIf.IsEmpty())
         item->StringToArray(enabledIf, requiresArr);
+
+    if (!indeterminateIf.IsEmpty())
+        item->StringToArray(indeterminateIf, requiresArr);
 
     // Add the parent to the list of dependencies, if the
     // parent is a check or radio group.

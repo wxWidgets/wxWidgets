@@ -82,28 +82,28 @@ void ctSettingsDialog::CreateControls()
     wxNotebookSizer* item3Sizer = new wxNotebookSizer(item3);
     ctGeneralSettingsDialog* item4 = new ctGeneralSettingsDialog(item3, ID_GENERAL_SETTINGS_DIALOG, wxDefaultPosition, wxSize(100, 80), 0);
     item3->AddPage(item4, _("General"));
-    ctLocationSettingsDialog* item9 = new ctLocationSettingsDialog(item3, ID_LOCATION_SETTINGS_DIALOG, wxDefaultPosition, wxSize(100, 80), 0);
-    item3->AddPage(item9, _("Locations"));
+    ctLocationSettingsDialog* item11 = new ctLocationSettingsDialog(item3, ID_LOCATION_SETTINGS_DIALOG, wxDefaultPosition, wxSize(100, 80), 0);
+    item3->AddPage(item11, _("Locations"));
     item2->Add(item3Sizer, 0, wxGROW|wxALL, 5);
 
-    wxBoxSizer* item19 = new wxBoxSizer(wxHORIZONTAL);
-    item2->Add(item19, 0, wxGROW|wxALL, 5);
+    wxBoxSizer* item21 = new wxBoxSizer(wxHORIZONTAL);
+    item2->Add(item21, 0, wxGROW|wxALL, 5);
 
-    item19->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    item21->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item21 = new wxButton(item1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0);
-    item21->SetDefault();
-    item19->Add(item21, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxButton* item23 = new wxButton(item1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0);
+    item23->SetDefault();
+    item21->Add(item23, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item22 = new wxButton(item1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0);
-    item19->Add(item22, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxButton* item24 = new wxButton(item1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0);
+    item21->Add(item24, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item23 = new wxButton(item1, wxID_HELP, _("&Help"), wxDefaultPosition, wxDefaultSize, 0);
-    item19->Add(item23, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxButton* item25 = new wxButton(item1, wxID_HELP, _("&Help"), wxDefaultPosition, wxDefaultSize, 0);
+    item21->Add(item25, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 #if defined(__WXGTK__) || defined(__WXMAC__)
-    wxContextHelpButton* item24 = new wxContextHelpButton(item1, wxID_CONTEXT_HELP, wxDefaultPosition, wxSize(20, -1), wxBU_AUTODRAW);
-    item19->Add(item24, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxContextHelpButton* item26 = new wxContextHelpButton(item1, wxID_CONTEXT_HELP, wxDefaultPosition, wxSize(20, -1), wxBU_AUTODRAW);
+    item21->Add(item26, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 #endif
 
     GetSizer()->Fit(this);
@@ -219,17 +219,38 @@ void ctGeneralSettingsDialog::CreateControls()
 
     wxCheckBox* item7 = new wxCheckBox(item4, ID_LOAD_LAST_DOCUMENT, _("&Load last document"), wxDefaultPosition, wxDefaultSize, 0);
     item7->SetValue(FALSE);
+    item7->SetHelpText(_("Check to load the last document on startup"));
+    if (ShowToolTips())
+        item7->SetToolTip(_("Check to load the last document on startup"));
     item6->Add(item7, 0, wxALIGN_LEFT|wxALL, 5);
 
     wxCheckBox* item8 = new wxCheckBox(item4, ID_SHOW_TOOLTIPS, _("&Show tooltips"), wxDefaultPosition, wxDefaultSize, 0);
     item8->SetValue(FALSE);
+    item8->SetHelpText(_("Check to show tooltips"));
+    if (ShowToolTips())
+        item8->SetToolTip(_("Check to show tooltips"));
     item6->Add(item8, 0, wxALIGN_LEFT|wxALL, 5);
+
+    wxStaticText* item9 = new wxStaticText(item4, wxID_STATIC, _("&Default file kind to save when using the Go command:"), wxDefaultPosition, wxDefaultSize, 0);
+    item6->Add(item9, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+
+    wxString item10Strings[] = {
+        _("Setup file"),
+        _("Configure script")
+    };
+    wxChoice* item10 = new wxChoice(item4, ID_DEFAULT_FILE_KIND, wxDefaultPosition, wxSize(200, -1), 2, item10Strings, 0);
+    item10->SetStringSelection(_("Setup file"));
+    item10->SetHelpText(_("Select the default kind of file to save using Go"));
+    if (ShowToolTips())
+        item10->SetToolTip(_("Select the default kind of file to save using Go"));
+    item6->Add(item10, 0, wxGROW|wxALL, 5);
 
     GetSizer()->Fit(this);
 ////@end ctGeneralSettingsDialog content construction
 
     FindWindow(ID_LOAD_LAST_DOCUMENT)->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_loadLastDocument));
     FindWindow(ID_SHOW_TOOLTIPS)->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_useToolTips));
+    FindWindow(ID_DEFAULT_FILE_KIND)->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_defaultFileKind));
 }
 
 /*!
@@ -282,36 +303,45 @@ void ctLocationSettingsDialog::CreateControls()
 {    
 ////@begin ctLocationSettingsDialog content construction
 
-    ctLocationSettingsDialog* item9 = this;
+    ctLocationSettingsDialog* item11 = this;
 
-    wxBoxSizer* item10 = new wxBoxSizer(wxVERTICAL);
-    item9->SetSizer(item10);
-    item9->SetAutoLayout(TRUE);
+    wxBoxSizer* item12 = new wxBoxSizer(wxVERTICAL);
+    item11->SetSizer(item12);
+    item11->SetAutoLayout(TRUE);
 
-    wxStaticBox* item11Static = new wxStaticBox(item9, -1, _("Locations"));
-    wxStaticBoxSizer* item11 = new wxStaticBoxSizer(item11Static, wxVERTICAL);
-    item10->Add(item11, 1, wxGROW|wxALL, 5);
+    wxStaticBox* item13Static = new wxStaticBox(item11, -1, _("Locations"));
+    wxStaticBoxSizer* item13 = new wxStaticBoxSizer(item13Static, wxVERTICAL);
+    item12->Add(item13, 1, wxGROW|wxALL, 5);
 
-    wxStaticText* item12 = new wxStaticText(item9, wxID_STATIC, _("&wxWindows hierarchy:"), wxDefaultPosition, wxDefaultSize, 0);
-    item11->Add(item12, 0, wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE, 5);
+    wxStaticText* item14 = new wxStaticText(item11, wxID_STATIC, _("&wxWindows hierarchy:"), wxDefaultPosition, wxDefaultSize, 0);
+    item13->Add(item14, 0, wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxBoxSizer* item13 = new wxBoxSizer(wxHORIZONTAL);
-    item11->Add(item13, 0, wxGROW, 5);
+    wxBoxSizer* item15 = new wxBoxSizer(wxHORIZONTAL);
+    item13->Add(item15, 0, wxGROW, 5);
 
-    wxTextCtrl* item14 = new wxTextCtrl(item9, ID_WXWIN_HIERARCHY, _(""), wxDefaultPosition, wxSize(200, -1), 0);
-    item13->Add(item14, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxTextCtrl* item16 = new wxTextCtrl(item11, ID_WXWIN_HIERARCHY, _(""), wxDefaultPosition, wxSize(200, -1), 0);
+    item16->SetHelpText(_("Enter the root path of the wxWindows hierarchy"));
+    if (ShowToolTips())
+        item16->SetToolTip(_("Enter the root path of the wxWindows hierarchy"));
+    item15->Add(item16, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item15 = new wxButton(item9, ID_CHOOSE_WXWIN_HIERARCHY, _("&Choose..."), wxDefaultPosition, wxDefaultSize, 0);
-    item13->Add(item15, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxButton* item17 = new wxButton(item11, ID_CHOOSE_WXWIN_HIERARCHY, _("&Choose..."), wxDefaultPosition, wxDefaultSize, 0);
+    item17->SetHelpText(_("Click to choose the root path of the wxWindows hierarchy\\n"));
+    if (ShowToolTips())
+        item17->SetToolTip(_("Click to choose the root path of the wxWindows hierarchy\\n"));
+    item15->Add(item17, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* item16 = new wxBoxSizer(wxHORIZONTAL);
-    item11->Add(item16, 0, wxGROW, 5);
+    wxBoxSizer* item18 = new wxBoxSizer(wxHORIZONTAL);
+    item13->Add(item18, 0, wxGROW, 5);
 
-    item16->Add(60, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    item18->Add(60, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxCheckBox* item18 = new wxCheckBox(item9, ID_USE_WXWIN, _("&Use WXWIN environment variable"), wxDefaultPosition, wxDefaultSize, 0);
-    item18->SetValue(FALSE);
-    item16->Add(item18, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxCheckBox* item20 = new wxCheckBox(item11, ID_USE_WXWIN, _("&Use WXWIN environment variable"), wxDefaultPosition, wxDefaultSize, 0);
+    item20->SetValue(FALSE);
+    item20->SetHelpText(_("Check to use the value of WXWIN instead"));
+    if (ShowToolTips())
+        item20->SetToolTip(_("Check to use the value of WXWIN instead"));
+    item18->Add(item20, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     GetSizer()->Fit(this);
 ////@end ctLocationSettingsDialog content construction

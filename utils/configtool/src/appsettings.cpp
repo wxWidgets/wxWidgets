@@ -75,6 +75,7 @@ ctSettings::ctSettings()
     m_frameworkDir = wxEmptyString;
     m_matchWholeWord = FALSE;
     m_matchCase = FALSE;
+    m_defaultFileKind = wxT("Setup file");
 }
 
 // Copy constructor
@@ -95,7 +96,7 @@ void ctSettings::operator = (const ctSettings& settings)
 
 void ctSettings::Copy (const ctSettings& settings)
 {
-    m_currentDocumentDir = settings.m_currentDocumentDir;
+    m_lastSetupSaveDir = settings.m_lastSetupSaveDir;
     m_lastDocument = settings.m_lastDocument;
     m_showToolBar = settings.m_showToolBar;
     m_frameSize = settings.m_frameSize;
@@ -118,12 +119,13 @@ void ctSettings::Copy (const ctSettings& settings)
     m_frameworkDir = settings.m_frameworkDir;
     m_matchWholeWord = settings.m_matchWholeWord;
     m_matchCase = settings.m_matchCase;
+    m_defaultFileKind  = settings.m_defaultFileKind ;
 }
 
 // Do some initialisation within stApp::OnInit
 bool ctSettings::Init()
 {
-    m_currentDocumentDir = wxEmptyString;
+    m_lastSetupSaveDir = wxEmptyString;
     if (m_userName.IsEmpty())
         m_userName = wxGetUserName();
 
@@ -164,7 +166,7 @@ bool ctSettings::LoadConfig()
     wxConfig config(wxGetApp().GetSettings().GetAppName(), wxT("wxWindows"));
 
     config.Read(wxT("Files/LastFile"), & m_lastFilename);
-    config.Read(wxT("Files/DocumentDir"), & m_currentDocumentDir);
+    config.Read(wxT("Files/LastSetupSaveDir"), & m_lastSetupSaveDir);
     config.Read(wxT("Files/ExportDir"), & m_exportDir);
     config.Read(wxT("Files/FrameworkDir"), & m_frameworkDir);
     config.Read(wxT("Files/UseEnvironmentVariable"), (bool*) & m_useEnvironmentVariable);
@@ -179,6 +181,7 @@ bool ctSettings::LoadConfig()
     config.Read(wxT("Misc/ShowTrayIcon"), (bool*) & m_showTrayIcon);
     config.Read(wxT("Misc/MatchWholeWord"), (bool*) & m_matchWholeWord);
     config.Read(wxT("Misc/MatchCase"), (bool*) & m_matchCase);
+    config.Read(wxT("Misc/BuildMode"), & m_defaultFileKind );
 
     m_noUses ++;
 
@@ -224,7 +227,7 @@ bool ctSettings::SaveConfig()
     wxConfig config(wxGetApp().GetSettings().GetAppName(), wxT("wxWindows"));
 
     config.Write(wxT("Files/LastFile"), m_lastFilename);
-    config.Write(wxT("Files/DocumentDir"), m_currentDocumentDir);
+    config.Write(wxT("Files/LastSetupSaveDir"), m_lastSetupSaveDir);
     config.Write(wxT("Files/ExportDir"), m_exportDir);
     config.Write(wxT("Files/FrameworkDir"), m_frameworkDir);
     config.Write(wxT("Files/UseEnvironmentVariable"), m_useEnvironmentVariable);
@@ -239,6 +242,7 @@ bool ctSettings::SaveConfig()
     config.Write(wxT("Misc/ShowTrayIcon"), (long) m_showTrayIcon);
     config.Write(wxT("Misc/MatchWholeWord"), (long) m_matchWholeWord);
     config.Write(wxT("Misc/MatchCase"), (long) m_matchCase);
+    config.Write(wxT("Misc/BuildMode"), m_defaultFileKind);
 
     config.Write(wxT("Windows/ShowToolBar"), m_showToolBar);
     config.Write(wxT("Windows/WindowX"), (long) m_frameSize.x);

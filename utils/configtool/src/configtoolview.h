@@ -199,6 +199,14 @@ public:
     /// Update find text
     void OnUpdateFind(wxUpdateUIEvent& event);
 
+    // Go (now: save setup.h or configurewx.sh. later: invoke configure/make)
+
+    /// Save default file type
+    void OnGo(wxCommandEvent& event);
+
+    /// Update
+    void OnUpdateGo(wxUpdateUIEvent& event);
+
 DECLARE_EVENT_TABLE()
 
 protected:

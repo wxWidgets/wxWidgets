@@ -222,6 +222,12 @@ void ctConfigItem::InitProperties()
 
     m_properties.AddProperty(
         new ctProperty(
+        wxT("<B>Indeterminate-if</B><P> When any of these settings are 1, this setting becomes active and indeterminate. Taking wxUSE_UNICODE as an example:<P>If Custom is 1, wxUSE_UNICODE is indeterminate."),
+        wxVariant(wxT(""), wxT("indeterminate-if")),
+        wxT("configitems")));
+
+    m_properties.AddProperty(
+        new ctProperty(
         wxT("<B>Exclusivity</B><P> The settings that are mutually exclusive with this one."),
         wxVariant(wxT(""), wxT("exclusivity")),
         wxT("configitems")));
@@ -266,6 +272,7 @@ void ctConfigItem::ApplyProperty(ctProperty* prop, const wxVariant& oldValue)
         name == wxT("precludes") ||
         name == wxT("enabled-if") ||
         name == wxT("enabled-if-not") ||
+        name == wxT("indeterminate-if") ||
         name == wxT("context"))
     {
         doc->RefreshDependencies();
@@ -481,11 +488,14 @@ bool ctConfigItem::IsInActiveContext()
 /// then this one is disabled (and inactive).
 void ctConfigItem::EvaluateDependencies()
 {
+    // For debugging purposes
+    wxString name = GetName();
     wxList items;
     wxString requires = GetPropertyString(wxT("requires"));
     wxString precludes = GetPropertyString(wxT("precludes"));
     wxString enabledIf = GetPropertyString(wxT("enabled-if"));
     wxString enabledIfNot = GetPropertyString(wxT("enabled-if-not"));
+    wxString indeterminateIf = GetPropertyString(wxT("indeterminate-if"));
 
     bool active = TRUE;
     bool enabled = IsEnabled();
@@ -581,6 +591,7 @@ void ctConfigItem::EvaluateDependencies()
         for ( wxNode* node = items.GetFirst(); node; node = node->GetNext() )
         {
             ctConfigItem* otherItem = (ctConfigItem*) node->GetData();
+            wxString otherName = otherItem->GetName();
             
             if (inActiveContext && otherItem->IsInActiveContext())
             {
@@ -608,6 +619,7 @@ void ctConfigItem::EvaluateDependencies()
     {
         StringToItems(GetDocument()->GetTopItem(), precludes, items);
         int enabledCount = 0;
+        // int disabledCount = 0;
         int inContextCount = 0;
 
         for ( wxNode* node = items.GetFirst(); node; node = node->GetNext() )
@@ -616,20 +628,55 @@ void ctConfigItem::EvaluateDependencies()
             
             if (inActiveContext && otherItem->IsInActiveContext())
             {
-                // Make this enabled and inactive, _unless_ it's
-                // already been explicitly disabled in the previous
-                // requires evaluation (it really _has_ to be off)
+                // Make this disabled and inactive, _unless_ it's
+                // already been explicitly enabled in the previous
+                // requires evaluation (it really _has_ to be on)
+//                if (!otherItem->IsEnabled())
+                if (otherItem->IsEnabled())
+                {
+                    enabledCount ++;
+                    // disabledCount ++;
+                }
+                inContextCount ++;
+            }
+        }
+        // Disable if there were no related items that were disabled
+        if (inContextCount > 0 && (enabledCount > 0) && !explicitlyEnabled)
+//        if (inContextCount > 0 && (disabledCount > 0) && !explicitlyEnabled)
+        {
+            enabled = FALSE;
+            active = FALSE;
+            explicitlyDisabled = TRUE;
+        }
+    }
+
+    // Indeterminate overrides the others, and
+    // makes the item active.
+    items.Clear();
+    if (!indeterminateIf.IsEmpty())
+    {
+        StringToItems(GetDocument()->GetTopItem(), indeterminateIf, items);
+        int enabledCount = 0;
+        int inContextCount = 0;
+
+        for ( wxNode* node = items.GetFirst(); node; node = node->GetNext() )
+        {
+            ctConfigItem* otherItem = (ctConfigItem*) node->GetData();
+            
+            if (inActiveContext && otherItem->IsInActiveContext())
+            {
                 if (otherItem->IsEnabled())
                 {
                     enabledCount ++;
                 }
+                inContextCount ++;
             }
         }
-        // Disable if there were no related items that were disabled
-        if (inContextCount > 0 && (enabledCount == inContextCount) && !explicitlyEnabled)
+        if (inContextCount > 0 && enabledCount > 0)
         {
-            enabled = FALSE;
-            active = FALSE;
+            active = TRUE;
+            explicitlyEnabled = FALSE;
+            explicitlyDisabled = FALSE;
         }
     }
 
@@ -637,6 +684,13 @@ void ctConfigItem::EvaluateDependencies()
     // context is active. If not, make this inactive.
     if (!IsInActiveContext())
         active = FALSE;
+    else
+    {        
+        // If we didn't explicitly enable or disable it,
+        // then we should make it active.
+        if (!explicitlyEnabled && !explicitlyDisabled)
+            active = TRUE;
+    }
 
     SetActive(active);
 
