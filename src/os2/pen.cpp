@@ -108,6 +108,10 @@ wxPen::wxPen(
         wxThePenList->AddPen(this);
 } // end of wxPen::wxPen
 
+int wx2os2PenStyle(
+  int                               nWxStyle
+);
+
 bool wxPen::RealizeResource()
 {
     BOOL                            bOk;

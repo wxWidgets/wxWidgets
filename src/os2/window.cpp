@@ -35,6 +35,7 @@
     #include "wx/scrolwin.h"
     #include "wx/radiobox.h"
     #include "wx/slider.h"
+    #include "wx/statbox.h"
     #include "wx/statusbr.h"
     #include "wx/toolbar.h"
     #include "wx/settings.h"
@@ -2932,7 +2933,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
             if ( bProcessed )
             {
                 // we never set focus from here
-                mResult = FALSE;
+                mResult = (MRESULT)FALSE;
             }
             break;
 

@@ -24,6 +24,9 @@
     #include "wx/icon.h"
     #include "wx/msgdlg.h"
     #include "wx/module.h"
+#if wxUSE_STATUSBAR
+    #include "wx/statusbr.h"
+#endif
 #endif
 
 #include "wx/dcprint.h"

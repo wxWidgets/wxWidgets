@@ -9,6 +9,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef __GNUG__
+    #pragma implementation "timer.h"
+#endif
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -51,8 +55,8 @@ void wxTimer::Init()
 
 wxTimer::~wxTimer()
 {
-    Stop();
     wxTimer::Stop();
+
     wxTimerList.DeleteObject(this);
 }
 
@@ -164,8 +168,8 @@ ULONG wxTimerProc(
     wxNode*                         pNode = wxTimerList.Find((ULONG)nIdTimer);
 
     wxCHECK_MSG(pNode, 0, wxT("bogus timer id in wxTimerProc") );
-
-    wxProcessTimer(*(wxTimer *)pNode->Data());
+    if (pNode)
+      wxProcessTimer(*(wxTimer *)pNode->Data());
     return 0;
 }
 
