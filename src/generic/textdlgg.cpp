@@ -135,7 +135,7 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
-    if ( ( style & wxCENTRE ) == wxCENTRE )
+    if ( style & wxCENTRE )
         Centre( wxBOTH );
 
     m_textctrl->SetSelection(-1, -1);
