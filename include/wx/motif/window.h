@@ -97,7 +97,9 @@ public:
     
     // Accept files for dragging
     virtual void DragAcceptFiles(bool accept);
-    
+
+    virtual wxPoint GetClientAreaOrigin() const;
+
     // Get the unique identifier of a window
     virtual WXWidget GetHandle() const { return GetMainWidget(); }
     
@@ -291,7 +293,7 @@ protected:
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();
-    
+
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
