@@ -198,7 +198,9 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
    Centre(wxCENTER_FRAME | wxBOTH);
 
    if(m_disableParentOnly)
-      m_parent->Enable(FALSE);
+   {
+      if(m_parent)  m_parent->Enable(FALSE);
+   }
    else
       wxEnableTopLevelWindows(FALSE);
 
@@ -285,7 +287,9 @@ void wxProgressDialog::OnClose(wxCloseEvent& event)
 wxProgressDialog::~wxProgressDialog()
 {
    if ( m_disableParentOnly )
-      m_parent->Enable(TRUE);
+   {
+      if(m_parent) m_parent->Enable(TRUE);
+   }
    else
       wxEnableTopLevelWindows(TRUE);
    if (m_time) delete m_time;
