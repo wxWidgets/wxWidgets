@@ -10,6 +10,7 @@
 #include "wx/gtk/win_gtk.h"
 #include "gtk/gtksignal.h"
 #include "gtk/gtknotebook.h"
+#include "gtk/gtkscrolledwindow.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -536,15 +537,15 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
         child = children->data;
         children = children->next;
  
-        /* please look at the text in wxWindow::DoSetSize() on why the
-           test GTK_WIDGET_REALIZED() has to be here */
         if (GTK_WIDGET_VISIBLE (child->widget))
         { 
+/*          please look at the text in wxWindow::DoSetSize() on why the
+            test GTK_WIDGET_REALIZED() has to be here   */
 /*          if (GTK_IS_NOTEBOOK(child->widget) && !GTK_WIDGET_REALIZED(child->widget))
             {
 	        gtk_widget_queue_resize( child->widget );
 	    }
-	    else */
+	    else  */
 	    {
 	        child_allocation.x = child->x;
 	        child_allocation.y = child->y;

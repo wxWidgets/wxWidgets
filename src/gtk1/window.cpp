@@ -661,7 +661,10 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 
 static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxWindow *win )
 {
-    if ( !win->m_hasVMT )
+    if (!win->m_hasVMT)
+        return;
+
+    if (gdk_event->window != win->m_wxwindow->window) 
         return;
 
     win->GetUpdateRegion().Union( gdk_event->area.x,
@@ -669,20 +672,23 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
                                   gdk_event->area.width,
                                   gdk_event->area.height );
 
-    if ( gdk_event->count > 0 )
+    if (gdk_event->count > 0)
         return;
-
-/*
-    printf( "OnExpose from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
-*/
 
     wxPaintEvent event( win->GetId() );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 
+/*
+    wxPrintf( "OnExpose from " );
+    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+        wxPrintf( win->GetClassInfo()->GetClassName() );
+    wxPrintf( " %d %d %d %d\n", (int)gdk_event->area.x,
+                                (int)gdk_event->area.y,
+                                (int)gdk_event->area.width,
+                                (int)gdk_event->area.height );
+*/
+    
     win->GetUpdateRegion().Clear();
 }
 
@@ -703,6 +709,17 @@ static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle 
 
     wxPaintEvent event( win->GetId() );
     event.SetEventObject( win );
+    
+/*
+    wxPrintf( "OnDraw from " );
+    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+        printf( win->GetClassInfo()->GetClassName() );
+    wxPrintf( " %d %d %d %d\n", (int)rect->x,
+                                (int)rect->y,
+                                (int)rect->width,
+                                (int)rect->height );
+*/
+
     win->GetEventHandler()->ProcessEvent( event );
 
     win->GetUpdateRegion().Clear();
@@ -2243,32 +2260,29 @@ void wxWindow::DoSetClientSize( int width, int height )
         int dw = 0;
         int dh = 0;
 
-        if (!m_hasScrolling)
-        {
-            GtkStyleClass *window_class = m_wxwindow->style->klass;
-
-            if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
-            {
-                dw += 2 * window_class->xthickness;
-                dh += 2 * window_class->ythickness;
-            }
-        }
-        else
-        {
-            GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
-            GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
+        GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
+        GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
 
 #if (GTK_MINOR_VERSION == 0)
-            GtkWidget *viewport = scroll_window->viewport;
-            GtkStyleClass *viewport_class = viewport->style->klass;
+        GtkWidget *viewport = scroll_window->viewport;
+        GtkStyleClass *viewport_class = viewport->style->klass;
 
-            if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
-            {
-                dw += 2 * viewport_class->xthickness;
-                dh += 2 * viewport_class->ythickness;
-            }
+        if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
+        {
+            dw += 2 * viewport_class->xthickness;
+            dh += 2 * viewport_class->ythickness;
+        }
+#else
+        if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
+        {
+	    /* when using GTK 1.2 we set the border size to 2 */
+            dw += 2 * 2; 
+            dh += 2 * 2;
+        }
 #endif
 
+        if (HasScrolling())
+        {
 /*
             GtkWidget *hscrollbar = scroll_window->hscrollbar;
             GtkWidget *vscrollbar = scroll_window->vscrollbar;
@@ -2307,31 +2321,28 @@ void wxWindow::DoGetClientSize( int *width, int *height ) const
         int dw = 0;
         int dh = 0;
 
-        if (!m_hasScrolling)
-        {
-            GtkStyleClass *window_class = m_wxwindow->style->klass;
-
-            if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
-            {
-                dw += 2 * window_class->xthickness;
-                dh += 2 * window_class->ythickness;
-            }
-        }
-        else
-        {
-            GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
-            GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
+        GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
+        GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
 
 #if (GTK_MINOR_VERSION == 0)
-            GtkWidget *viewport = scroll_window->viewport;
-            GtkStyleClass *viewport_class = viewport->style->klass;
+        GtkWidget *viewport = scroll_window->viewport;
+        GtkStyleClass *viewport_class = viewport->style->klass;
 
-            if ( HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER) )
-            {
-                dw += 2 * viewport_class->xthickness;
-                dh += 2 * viewport_class->ythickness;
-            }
+        if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
+        {
+            dw += 2 * viewport_class->xthickness;
+            dh += 2 * viewport_class->ythickness;
+        }
+#else
+        if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
+        {
+	    /* when using GTK 1.2 we set the border size to 2 */
+            dw += 2 * 2; 
+            dh += 2 * 2;
+        }
 #endif
+        if (HasScrolling())
+        {
 /*
             GtkWidget *hscrollbar = scroll_window->hscrollbar;
             GtkWidget *vscrollbar = scroll_window->vscrollbar;
@@ -2350,7 +2361,7 @@ void wxWindow::DoGetClientSize( int *width, int *height ) const
                 dh += 15;   /* dh += hscrollbar->allocation.height; */
                 dh += scroll_class->scrollbar_spacing;
             }
-        }
+	}
 
         if (width) (*width) = m_width - dw;
         if (height) (*height) = m_height - dh;
