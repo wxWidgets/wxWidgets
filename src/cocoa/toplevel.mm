@@ -34,6 +34,7 @@
 
 #import <AppKit/NSView.h>
 #import <AppKit/NSWindow.h>
+#import <AppKit/NSPanel.h>
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -59,6 +60,26 @@ void wxTopLevelWindowCocoa::Init()
     m_closed = false;
 }
 
+unsigned int wxTopLevelWindowCocoa::NSWindowStyleForWxStyle(long style)
+{
+    unsigned int styleMask = 0;
+    if(style & wxCAPTION)
+        styleMask |= NSTitledWindowMask;
+    if(style & wxMINIMIZE_BOX)
+        styleMask |= NSMiniaturizableWindowMask;
+    #if 0
+    if(style & wxMAXIMIZE_BOX)
+        styleMask |= NSWindowMask;
+        #endif
+    if(style & wxCLOSE_BOX)
+        styleMask |= NSClosableWindowMask;
+    if(style & wxRESIZE_BORDER)
+        styleMask |= NSResizableWindowMask;
+    if(style & wxSIMPLE_BORDER)
+        styleMask |= NSBorderlessWindowMask;
+    return styleMask;
+}
+
 bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
                                  wxWindowID winid,
                                  const wxString& title,
@@ -76,24 +97,28 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
     if ( parent )
         parent->AddChild(this);
 
-    // TODO: get rect from given position/size
-    NSRect cocoaRect =  NSMakeRect(100,100,200,200);
+    unsigned int cocoaStyle = NSWindowStyleForWxStyle(style);
+    if(style & wxFRAME_TOOL_WINDOW)
+        cocoaStyle |= NSUtilityWindowMask;
 
-    // TODO: Set flags given wxWindows style
-    unsigned int cocoaStyle = 0;
-    cocoaStyle |= NSTitledWindowMask;
-    cocoaStyle |= NSClosableWindowMask;
-    cocoaStyle |= NSMiniaturizableWindowMask;
-    cocoaStyle |= NSResizableWindowMask;
+    // NOTE: y-origin needs to be flipped.
+    NSRect cocoaRect = [NSWindow contentRectForFrameRect:NSMakeRect(pos.x,pos.y,size.x,size.y) styleMask:cocoaStyle];
 
     m_cocoaNSWindow = NULL;
     m_cocoaNSView = NULL;
-    SetNSWindow([[NSWindow alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO]);
+    if(style & wxFRAME_TOOL_WINDOW)
+        SetNSWindow([[NSPanel alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO]);
+    else
+        SetNSWindow([[NSWindow alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO]);
     // NOTE: SetNSWindow has retained the Cocoa object for this object.
     // Because we do not release on close, the following release matches the
     // above alloc and thus the retain count will be 1.
     [m_cocoaNSWindow release];
 
+    if(style & wxFRAME_NO_TASKBAR)
+        [m_cocoaNSWindow setExcludedFromWindowsMenu: YES];
+    if(style & wxSTAY_ON_TOP)
+        [m_cocoaNSWindow setLevel:NSFloatingWindowLevel];
     [m_cocoaNSWindow setTitle:wxNSStringWithWxString(title)];
     return TRUE;
 }

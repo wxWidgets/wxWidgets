@@ -73,6 +73,7 @@ protected:
     WX_NSWindow m_cocoaNSWindow;
     static wxCocoaNSWindowHash sm_cocoaHash;
     virtual void CocoaReplaceView(WX_NSView oldView, WX_NSView newView);
+    static unsigned int NSWindowStyleForWxStyle(long style);
 
 // ------------------------------------------------------------------------
 // Implementation
