@@ -1,6 +1,0 @@
-usr/bin/wxgtk-config
-usr/lib/wx/include/wx/gtk/setup.h
-usr/lib/libwx_gtk-*.so
-usr/lib/libwx_gtk.so
-usr/lib/libwx_gtk_gl*.so
-
