@@ -65,6 +65,15 @@ http://sal.kachinatech.com/index.shtml: SAL (Scientific Applications on Linux)
    is a collection of information and links to software that will be of interest
    to scientists and engineers.
 
+MacDev developers list
+
+To submit a posting to MacDev-1, mailto:press_releases@mactech.com.  To
+subscribe to MacDev-1, send mail to listserv@listmail.xplain.com with
+the SUBJECT line reading "SUBSCRIBE MACDEV-1".  To unsubscribe, the
+SUBJECT line should read "UNSUBSCRIBE MACDEV-1".
+
+ct-Newsticker : mailto:presse@ct.heise.de
+
 List of sites and addresses from tn0013.txt:
 
 a) FreshMeat:
@@ -144,4 +153,6 @@ comp.windows.x.announce
 
 news@macnn.com
 adcnews@apple.com
+presse@ct.heise.de
+press_releases@mactech.com
 
