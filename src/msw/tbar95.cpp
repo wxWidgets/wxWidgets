@@ -875,7 +875,30 @@ bool wxToolBar::Realize()
                             // radio items
                             button.fsState |= TBSTATE_CHECKED;
 
-                            tool->Toggle(true);
+                            if (tool->Toggle(true))
+                            {
+                                DoToggleTool(tool, true);
+                            }
+                        }
+                        else if (tool->IsToggled())
+                        {
+                            wxToolBarToolsList::compatibility_iterator nodePrev = node->GetPrevious();
+                            int prevIndex = i - 1;
+                            while ( nodePrev )
+                            {
+                                TBBUTTON& prevButton = buttons[prevIndex];
+                                wxToolBarToolBase *tool = nodePrev->GetData();
+                                if ( !tool->IsButton() || tool->GetKind() != wxITEM_RADIO )
+                                    break;
+                                
+                                if ( tool->Toggle(false) )
+                                {
+                                    DoToggleTool(tool, false);
+                                }
+                                prevButton.fsState = TBSTATE_ENABLED;
+                                nodePrev = nodePrev->GetPrevious();
+                                prevIndex--;
+                            }                            
                         }
 
                         isRadio = true;
