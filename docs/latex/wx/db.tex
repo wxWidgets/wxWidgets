@@ -1961,7 +1961,7 @@ Accessor function to set the user ID for this class instance.
 
 Accessor function to assign the user ID for this class instance.
 
-\section{\class{wxDbIndexDef}}\label{wxdbIndexdef}
+\section{\class{wxDbIndexDef}}\label{wxdbindexdef}
 
 Used in creation of non-primary indexes.  Currently there are no member
 functions for this class.
@@ -2032,7 +2032,7 @@ with the wxDbTable class.
 \begin{itemize}\itemsep=0pt
 \item \helpref{wxDbColDef}{wxdbcoldef}
 \item \helpref{wxDbColDataPtr}{wxdbcoldataptr}
-\item \helpref{wxDbIndexDef}{wxdbIndexdef}
+\item \helpref{wxDbIndexDef}{wxdbindexdef}
 \end{itemize}
 
 \wxheading{Constants}
@@ -2434,7 +2434,7 @@ take advantage of those indexes.
 space of the datasource.}
 \docparam{unique}{Indicates if this index is unique.}
 \docparam{numIndexColumns}{Number of columns in the index.}
-\docparam{pIndexDefs}{A pointer to an array wxDbIndexDef structures. }
+\docparam{pIndexDefs}{A pointer to an array \helpref{wxDbIndexDef}{wxdbindexdef} structures. }
 \docparam{attemptDrop}{{\it OPTIONAL}.  Indicates if the function should try
 to execute a \helpref{wxDbTable::DropIndex}{wxdbtabledropindex} on the index
 name provided before trying to create the index name.  Default is true.}
@@ -2456,9 +2456,9 @@ In the third parameter, specify how many columns are in your index.  This
 number must match the number of columns defined in the 'pIndexDefs' parameter.
 
 The fourth parameter specifies which columns make up the index using the
-wxDbIndexDef structure.  For each column in the index, you must specify two
+\helpref{wxDbIndexDef}{wxdbindexdef} structure.  For each column in the index, you must specify two
 things, the column name and the sort order (ascending / descending).  See
-the example below to see how to build and pass in the wxDbIndexDef structure.
+the example below to see how to build and pass in the \helpref{wxDbIndexDef}{wxdbindexdef} structure.
 
 The fifth parameter is provided to handle the differences in datasources as
 to whether they will automatically overwrite existing indexes with the same
