@@ -95,6 +95,7 @@
         <define>SCI_LEXER</define>
         <define>LINK_LEXERS</define>
         <sources>$(STC_SRC)</sources>
+        <cppflags-borland>-w-8027</cppflags-borland>
     </template>
 
     <dll id="stcdll" template="wx_contrib_dll,stc_base" cond="SHARED=='1'">
@@ -105,7 +106,7 @@
     </dll>
 
     <lib id="stclib" template="wx_contrib_lib,stc_base" cond="SHARED=='0'"/>
-    
+
     <set var="MSVC6PRJ_MERGED_TARGETS" append="1">stc=stclib+stcdll</set>
 
 </makefile>

@@ -34,7 +34,7 @@ STCDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\src\stc\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\stc\..\..\include -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS -w-8027 \
 	-DWXUSINGDLL -DWXMAKINGDLL_STC $(CPPFLAGS) $(CXXFLAGS)
 STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_PlatWX.obj \
@@ -114,8 +114,8 @@ STCLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\src\stc\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\stc\..\..\include -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS -w-8027 \
+	$(CPPFLAGS) $(CXXFLAGS)
 STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_PlatWX.obj \
 	$(OBJS)\stclib_ScintillaWX.obj \
