@@ -115,6 +115,7 @@ treelay.cpp	Generic
 wizard.cpp	Generic
 
 appcmn.cpp	Common	Base
+bmpbase.cpp	Common	NotGTK,NotOS2,NotMSW,NotX,NotMicro
 choiccmn.cpp	Common
 clipcmn.cpp	Common
 clntdata.cpp	Common	Base
@@ -1460,7 +1461,6 @@ settings.cpp	MGL	LowLevel
 timer.cpp	MGL	LowLevel
 window.cpp	MGL	LowLevel
 utils.cpp	MGL	LowLevel
-bmpbase.cpp	MGL	LowLevel
 
 #wxMicroWindows
 app.cpp	Micro	LowLevel
