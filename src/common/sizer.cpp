@@ -52,7 +52,6 @@ wxSizerItem::wxSizerItem( int width, int height, int option, int flag, int borde
     , m_border( border )
     , m_flag( flag )
     , m_show( TRUE )                    // Cannot be changed
-    , m_deleteItem( FALSE )             // unused for spacer
     , m_userData( userData )
 {
     SetRatio( m_size );
@@ -66,7 +65,6 @@ wxSizerItem::wxSizerItem( wxWindow *window, int option, int flag, int border, wx
     , m_border( border )
     , m_flag( flag )
     , m_show( TRUE )
-    , m_deleteItem( FALSE )             // currently unused for window
     , m_userData( userData )
 {
     // aspect ratio calculated from initial size
@@ -83,7 +81,6 @@ wxSizerItem::wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxOb
     , m_flag( flag )
     , m_show( TRUE )
     , m_ratio( 0 )
-    , m_deleteItem( TRUE )              // we delete sizer items by default.
     , m_userData( userData )
 {
     // m_minSize is calculated later
@@ -92,12 +89,9 @@ wxSizerItem::wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxOb
 
 wxSizerItem::~wxSizerItem()
 {
-    // User data is bound to the sizeritem, always delete it.
     if (m_userData)
         delete m_userData;
-
-    // To be able to Detach a sizer, we must be able to veto its deletion here.
-    if (m_deleteItem && m_sizer)
+    if (m_sizer)
         delete m_sizer;
 }
 
@@ -373,7 +367,7 @@ bool wxSizer::Detach( wxSizer *sizer )
         wxSizerItem *item = (wxSizerItem*)node->Data();
         if (item->GetSizer() == sizer)
         {
-            item->SetDeleteItem( FALSE );
+            item->DetachSizer();
             m_children.DeleteNode( node );
             return TRUE;
         }
@@ -390,7 +384,7 @@ bool wxSizer::Detach( int pos )
     wxNode *node = m_children.Nth( pos );
     if (!node) return FALSE;
 
-    ( (wxSizerItem*)node->Data() )->SetDeleteItem( FALSE );
+    ( (wxSizerItem*)node->Data() )->DetachSizer();
     m_children.DeleteNode( node );
 
     return TRUE;

@@ -50,6 +50,10 @@ public:
     
     virtual void DeleteWindows();
 
+    // Enable deleting the SizerItem without destroying the contained sizer.
+    void DetachSizer()
+        { m_sizer = 0; }
+
     virtual wxSize GetSize();
     virtual wxSize CalcMin();
     virtual void SetDimension( wxPoint pos, wxSize size );
@@ -82,8 +86,6 @@ public:
         { m_border = border; }
     void Show ( bool show )
         { m_show = show; }
-    void SetDeleteItem( bool deleteItem = TRUE )
-        { m_deleteItem = deleteItem; }
 
     wxWindow *GetWindow() const
         { return m_window; }
@@ -123,11 +125,6 @@ protected:
     //      but this would cause precision loss when the window
     //      is shrinked.  it is safer to preserve initial value.
     float        m_ratio;
-
-    // If TRUE, and the item is a sizer, delete it when the
-    // sizeritem is destroyed.  Not used for any other type
-    // of item right now.
-    bool        m_deleteItem;
 
     wxObject    *m_userData;
 
