@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        display.cpp
 // Purpose:     Mac implementation of wxDisplay class
-// Author:      Brian Victor
-// Modified by: Royce Mitchell III & Ryan Norton
+// Author:      Ryan Norton & Brian Victor
+// Modified by: Royce Mitchell III 
 // Created:     06/21/02
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
@@ -244,10 +244,14 @@ wxArrayVideoModes
     	DMListType pModes;
     	DMDisplayModeListIteratorUPP uppMLI;
     	DisplayIDType nDisplayID;
+        OSErr err;
 
-    	wxASSERT(DMGetDisplayIDByGDevice(m_priv->m_hndl, &nDisplayID, false) == noErr);	
+        err = DMGetDisplayIDByGDevice(m_priv->m_hndl, &nDisplayID, false);
+    	wxASSERT(err == noErr);	
+        
     	//Create a new list...
-    	wxASSERT_MSG(DMNewDisplayModeList(nDisplayID, NULL, NULL, &nNumModes, 							&pModes) == noErr, wxT("Could not create a new display mode list") );
+        err = DMNewDisplayModeList(nDisplayID, NULL, NULL, &nNumModes, &pModes);
+    	wxASSERT_MSG(err == noErr, wxT("Could not create a new display mode list") );
 
     	uppMLI = NewDMDisplayModeListIteratorUPP(DMModeListIteratorProc);
     	wxASSERT(uppMLI);
@@ -257,11 +261,13 @@ wxArrayVideoModes
     	sModeInfo.pMatchMode = &mode;
     	for (DMListIndexType i = 0; i < nNumModes; ++i)
     	{
-    	    wxASSERT(DMGetIndexedDisplayModeFromList(pModes, i, NULL,
-    					      uppMLI, &sModeInfo) == noErr);
+            err = DMGetIndexedDisplayModeFromList(pModes, i, NULL, uppMLI, &sModeInfo);
+    	    wxASSERT(err == noErr);
     	}
     	DisposeDMDisplayModeListIteratorUPP(uppMLI);
-    	wxASSERT(DMDisposeList(pModes) == noErr);	
+        
+        err = DMDisposeList(pModes);
+    	wxASSERT(err == noErr);	
     }
     else //DM 1.0, 1.2, 1.x
     {
@@ -290,11 +296,14 @@ wxVideoMode wxDisplay::GetCurrentMode() const
     	    DMListType pModes;
     		DMDisplayModeListIteratorUPP uppMLI;
     	    DisplayIDType nDisplayID;
+            OSErr err;
 
-    	    wxASSERT(DMGetDisplayIDByGDevice(m_priv->m_hndl, &nDisplayID, false) == noErr);
+            err = DMGetDisplayIDByGDevice(m_priv->m_hndl, &nDisplayID, false);
+    	    wxASSERT(err == noErr);
+            
     	    //Create a new list...
-    	    wxASSERT_MSG(DMNewDisplayModeList(nDisplayID, NULL, NULL, &nNumModes, &pModes) == noErr,
-    				  wxT("Could not create a new display mode list") );
+            err = DMNewDisplayModeList(nDisplayID, NULL, NULL, &nNumModes, &pModes);
+    	    wxASSERT_MSG(err == noErr, wxT("Could not create a new display mode list") );
     		
     		uppMLI = NewDMDisplayModeListIteratorUPP(DMModeTransProc);
     		wxASSERT(uppMLI);
@@ -304,8 +313,8 @@ wxVideoMode wxDisplay::GetCurrentMode() const
     		sModeInfo.psMode = &sMode;
     		for (DMListIndexType i = 0; i < nNumModes; ++i)
     		{
-    			wxASSERT(DMGetIndexedDisplayModeFromList(pModes, i, NULL,
-    											uppMLI, &sModeInfo) == noErr);
+                err = DMGetIndexedDisplayModeFromList(pModes, i, NULL, uppMLI, &sModeInfo);
+    			wxASSERT(err == noErr);
 
     			if ( sModeInfo.bMatched == true )
     			{
@@ -315,7 +324,9 @@ wxVideoMode wxDisplay::GetCurrentMode() const
     		}
 
     	    DisposeDMDisplayModeListIteratorUPP(uppMLI);
-    	    wxASSERT(DMDisposeList(pModes) == noErr);
+            
+            err = DMDisposeList(pModes);
+    	    wxASSERT(err == noErr);
     	}
     	else //Can't get current mode?
     	{
@@ -368,11 +379,14 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
     	DMListType pModes;
     	DMDisplayModeListIteratorUPP uppMLI;
     	DisplayIDType nDisplayID;
+        OSErr err;
 
-    	wxASSERT(DMGetDisplayIDByGDevice(m_priv->m_hndl, &nDisplayID, false) == noErr);
+        err = DMGetDisplayIDByGDevice(m_priv->m_hndl, &nDisplayID, false);
+    	wxASSERT(err == noErr);
+        
     	//Create a new list...
-    	wxASSERT_MSG(DMNewDisplayModeList(nDisplayID, NULL, NULL, &nNumModes, &pModes) == noErr,
-    			  wxT("Could not create a new display mode list") );
+        err = DMNewDisplayModeList(nDisplayID, NULL, NULL, &nNumModes, &pModes);
+    	wxASSERT_MSG(err == noErr, wxT("Could not create a new display mode list") );
 
     	uppMLI = NewDMDisplayModeListIteratorUPP(DMModeInfoProc);
     	wxASSERT(uppMLI);
@@ -383,8 +397,9 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
     	unsigned int i;
     	for(i = 0; i < nNumModes; ++i)
     	{
-    		wxASSERT(DMGetIndexedDisplayModeFromList(pModes, i, NULL,
-    										   uppMLI, &sModeInfo) == noErr);
+            err = DMGetIndexedDisplayModeFromList(pModes, i, NULL, uppMLI, &sModeInfo);
+    		wxASSERT(err == noErr);
+            
     		if (sModeInfo.bMatched == true)
     		{
     			sMode = sModeInfo.sMode;
@@ -395,7 +410,9 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
     		return false;
 
     	DisposeDMDisplayModeListIteratorUPP(uppMLI);
-    	wxASSERT(DMDisposeList(pModes) == noErr);
+    	
+        err = DMDisposeList(pModes);
+        wxASSERT(err == noErr);
 
     	// For the really paranoid -
     	// 	    unsigned long flags;
