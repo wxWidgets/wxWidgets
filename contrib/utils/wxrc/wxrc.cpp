@@ -86,13 +86,30 @@ public:
     const ArrayOfXRCWidgetData& GetWidgetData(){
         return m_wdata;
     }
-    void GenerateHeaderCode(wxFFile& file){
+
+    bool IsRealClass(const wxString& name)
+    {
+        if (name == _T("tool") || name == _T("unknown") ||
+            name == _T("notebookpage") || name == _T("separator") ||
+            name == _T("sizeritem") ||
+            name == _T("wxMenuItem"))
+        {
+            return false;
+        }
+        return true;
+    }
+    
+    void GenerateHeaderCode(wxFFile& file)
+    {
 
         file.Write(_T("class ") + m_className + _T(" : public ") + m_parentClassName
                    + _T(" {\nprotected:\n"));
         size_t i;
-        for(i=0;i<m_wdata.Count();++i){
+        for(i=0;i<m_wdata.Count();++i)
+        {
             const XRCWidgetData& w = m_wdata.Item(i);
+	        if( !IsRealClass(w.GetClass()) ) continue;
+    	    if( w.GetName().Length() == 0 ) continue;
             file.Write(
                 _T(" ") + w.GetClass() + _T("* ") + w.GetName()
                 + _T(";\n"));
@@ -103,8 +120,11 @@ public:
                    +  _T("\",\"")
                    +  m_parentClassName
                    +  _T("\");\n"));
-        for(i=0;i<m_wdata.Count();++i){
+        for(i=0;i<m_wdata.Count();++i)
+        {
             const XRCWidgetData& w = m_wdata.Item(i);
+	        if( !IsRealClass(w.GetClass()) ) continue;
+    	    if( w.GetName().Length() == 0 ) continue;
             file.Write( _T("  ")
                         + w.GetName()
                         + _T(" = XRCCTRL(*this,\"")
@@ -592,7 +612,7 @@ _T("\n"));
 
 void XmlResApp::GenCPPHeader()
 {
-    wxString fileSpec = (parOutput.BeforeLast('.')).AfterLast('/');
+    wxString fileSpec = ((parOutput.BeforeLast('.')).AfterLast('/')).AfterLast('\\');
     wxString heaFileName = fileSpec + _T(".h");
 
     wxFFile file(heaFileName, wxT("wt"));
