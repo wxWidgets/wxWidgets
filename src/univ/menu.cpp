@@ -136,7 +136,7 @@ public:
     virtual void OnDismiss();
 
     // called when a submenu is dismissed
-    void OnSubmenuDismiss() { m_hasOpenSubMenu = false; }
+    void OnSubmenuDismiss(bool dismissParent);
 
     // get the currently selected item (may be NULL)
     wxMenuItem *GetCurrentItem() const
@@ -358,7 +358,7 @@ void wxPopupMenuWindow::ChangeCurrent(wxMenuItemList::compatibility_iterator nod
             if ( item->IsSubMenu() && item->GetSubMenu()->IsShown() )
             {
                 item->GetSubMenu()->Dismiss();
-                OnSubmenuDismiss();
+                OnSubmenuDismiss( false );
             }
 
             RefreshItem(item);
@@ -463,7 +463,7 @@ void wxPopupMenuWindow::Dismiss()
         wxCHECK_RET( win, _T("opened submenu is not opened?") );
 
         win->Dismiss();
-        OnSubmenuDismiss();
+        OnSubmenuDismiss( false );
     }
 
     wxPopupTransientWindow::Dismiss();
@@ -474,6 +474,15 @@ void wxPopupMenuWindow::OnDismiss()
     // when we are dismissed because the user clicked elsewhere or we lost
     // focus in any other way, hide the parent menu as well
     HandleDismiss(true);
+}
+
+void wxPopupMenuWindow::OnSubmenuDismiss(bool dismissParent)
+{
+    m_hasOpenSubMenu = false;
+
+    // we are closing whole menu so remove current highlight
+    if ( dismissParent )
+        ResetCurrent();
 }
 
 void wxPopupMenuWindow::HandleDismiss(bool dismissParent)
@@ -1307,7 +1316,7 @@ void wxMenu::OnDismiss(bool dismissParent)
         wxPopupMenuWindow *win = m_menuParent->m_popupMenu;
         if ( win )
         {
-            win->OnSubmenuDismiss();
+            win->OnSubmenuDismiss( true );
         }
         else
         {
