@@ -528,7 +528,6 @@ variable fields.
 \pythonnote{Only a single parameter is required, a Python list of
 integers.}
 
-
 \membersection{wxFrame::SetToolBar}\label{wxframesettoolbar}
 
 \func{void}{SetToolBar}{\param{wxToolBar*}{ toolBar}}
@@ -553,4 +552,23 @@ Sets the frame title.
 \wxheading{See also}
 
 \helpref{wxFrame::GetTitle}{wxframegettitle}
+
+\membersection{wxFrame::ShowFullScreen}\label{wxframeshowfullscreen}
+
+\func{bool}{ShowFullScreen}{\param{bool}{ show}, \param{long}{ style = wxFULLSCREEN\_ALL}}
+
+Passing TRUE to {\it shows} shows the frame full-screen, and passing FALSE restores the frame
+again. {\it style} is a bit list containing some or all of the following values, which
+indicate what elements of the frame to hide in full-screen mode:
+
+\begin{itemize}\itemsep=0pt
+\item wxFULLSCREEN\_NOMENUBAR
+\item wxFULLSCREEN\_NOTOOLBAR
+\item wxFULLSCREEN\_NOSTATUSBAR
+\item wxFULLSCREEN\_NOBORDER
+\item wxFULLSCREEN\_NOCAPTION
+\item wxFULLSCREEN\_ALL (all of the above)
+\end{itemize}
+
+This function only works on Windows and has not been tested with MDI frames.
 

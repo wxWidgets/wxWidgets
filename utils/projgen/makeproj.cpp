@@ -274,7 +274,7 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("TaskbarVC", "tbtest", dir + wxString("/samples/taskbar"), wxStringList("tbtest.cpp", "tbtest.h", 0));
     GenerateSample("TextVC", "text", dir + wxString("/samples/text"), wxStringList("text.cpp", 0));
     GenerateSample("ThreadVC", "test", dir + wxString("/samples/thread"), wxStringList("test.cpp", 0));
-    GenerateSample("ToolbarVC", "test", dir + wxString("/samples/toolbar"), wxStringList("test.cpp", "test.h", 0));
+    GenerateSample("ToolbarVC", "toolbar", dir + wxString("/samples/toolbar"), wxStringList("toolbar.cpp", 0));
     GenerateSample("TreectrlVC", "treetest", dir + wxString("/samples/treectrl"), wxStringList("treetest.cpp", "treetest.h", 0));
     GenerateSample("TypetestVC", "typetest", dir + wxString("/samples/typetest"), wxStringList("typetest.cpp", "typetest.h", 0));
     GenerateSample("ValidateVC", "validate", dir + wxString("/samples/validate"), wxStringList("validate.cpp", "validate.h", 0));

@@ -171,7 +171,12 @@ Code' (and no others). This will then work.
 
 Similarly, in VC++ 4, optimization can cause internal compiler
 errors, so edit src\makevc.env and change /O1 to /Od before
-trying build a release version of the library.
+trying build a release version of the library. Or, type:
+
+nmake -f makefile.vc noopt FINAL=1
+
+and then resume compilation in the normal way. This will build
+troublesome files with no optimization.
 
 Note (4): some crash problems can be due to inconsistent compiler
 options. If strange/weird/impossible things start to happen please
@@ -423,38 +428,30 @@ and other intermediate compiler files.
 
 Notes:
 
-- See also the Cygwin/Mingw32 on the web site or CD-ROM for
-  further information about using wxWindows with these compilers.
+1. See also the Cygwin/Mingw32 on the web site or CD-ROM for
+   further information about using wxWindows with these compilers.
 
-- libwx.a is 48 MB or more - but much less if compiled with no
-  debug info (-g0) and level 4 optimization (-O4).
+2. libwx.a is 48 MB or more - but much less if compiled with no
+   debug info (-g0) and level 4 optimization (-O4).
 
-- install.exe doesn't have built-in decompression because lzexpand.lib
-  isn't available with Cygwin. However, you can use it with external
-  decompression utilities.
+3. There's a bug in Mingw32 headers for some early distributions.
 
-- There's a bug in Mingw32 headers for some early distributions.
+   in include/windows32/defines.h, where it says:
 
-  in include/windows32/defines.h, where it says:
+   #define LPSTR_TEXTCALLBACKA (LPSTR)-1L)
 
-  #define LPSTR_TEXTCALLBACKA (LPSTR)-1L)
+   it should say:
 
-  it should say:
+   #define LPSTR_TEXTCALLBACKA ((LPSTR)-1L)
 
-  #define LPSTR_TEXTCALLBACKA ((LPSTR)-1L)
+   (a missing bracket).
 
-  (a missing bracket).
+4. If there's a problem with the copy command in
+   src/msw/makefile.g95, you may need to change the COPY and
+   COPYSEP variables in makeg95.env.
 
-- If there's a problem with the copy command in
-  src/msw/makefile.g95, you may need to change the relevant
-  section to the following:
-
-  COPY = command /c copy
-  $(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
-      $(COPY) ..\\common\\dosyacc.c ..\\common\\y_tab.c
-
-  $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
-      $(COPY) ..\\common\\doslex.c ..\\common\\lex_yy.c
+5. If there's a problem executing the windres program, try
+   commenting out RCPREPROCESSOR in makeg95.env.
 
 References:
 
@@ -496,3 +493,4 @@ General Notes
   include/wx/msw/setup.h is missing. This is deliberate, to avoid
   developers' different setup.h configurations getting confused.
   Please copy setup0.h to setup.h before compiling.
+
