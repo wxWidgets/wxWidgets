@@ -2507,12 +2507,10 @@ bool wxLocale::AddCatalog(const wxChar *szDomain)
 // accessors for locale-dependent data
 // ----------------------------------------------------------------------------
 
-#if 0
-
 #ifdef __WXMSW__
 
 /* static */
-wxString wxLocale::GetInfo(wxLocaleInfo index)
+wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 {
     wxString str;
     wxChar buffer[256];
@@ -2520,13 +2518,14 @@ wxString wxLocale::GetInfo(wxLocaleInfo index)
     buffer[0] = wxT('\0');
     switch (index)
     {
-        case wxSYS_DECIMAL_SEPARATOR:
+        case wxLOCALE_DECIMAL_POINT:
             count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, buffer, 256);
             if (!count)
                 str << ".";
             else
                 str << buffer;
             break;
+#if 0
         case wxSYS_LIST_SEPARATOR:
             count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLIST, buffer, 256);
             if (!count)
@@ -2541,6 +2540,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index)
             else
                 str << buffer;
             break;
+#endif
         default:
             wxFAIL_MSG("Unknown System String !");
     }
@@ -2550,14 +2550,37 @@ wxString wxLocale::GetInfo(wxLocaleInfo index)
 #else // !__WXMSW__
 
 /* static */
-wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory)
+wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 {
-    return wxEmptyString;
-}
+    struct lconv *locale_info = localeconv();
+    switch (cat)
+    {
+        case wxLOCALE_CAT_NUMBER:
+            switch (index)
+            {
+                case wxLOCALE_THOUSANDS_SEP:
+                    return locale_info->thousands_sep;
+                case wxLOCALE_DECIMAL_POINT:
+                    return locale_info->decimal_point;
+                default:
+                    return wxEmptyString;
+            }
+        case wxLOCALE_CAT_MONEY:
+            switch (index)
+            {
+                case wxLOCALE_THOUSANDS_SEP:
+                    return locale_info->mon_thousands_sep;
+                case wxLOCALE_DECIMAL_POINT:
+                    return locale_info->mon_decimal_point;
+                default:
+                    return wxEmptyString;
+            }
+        default:
+            return wxEmptyString;
+    }
+}      
 
 #endif // __WXMSW__/!__WXMSW__
-
-#endif // 0
 
 // ----------------------------------------------------------------------------
 // global functions and variables

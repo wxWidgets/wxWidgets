@@ -41,6 +41,7 @@
     #include "wx/checkbox.h"
     #include "wx/combobox.h"
     #include "wx/valtext.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/textfile.h"
@@ -1067,7 +1068,8 @@ void wxGridCellFloatEditor::Reset()
 void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
 {
     int keycode = event.GetKeyCode();
-        if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-' || keycode == '.'
+        if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-'
+            || keycode == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER)[0]
             || keycode ==  WXK_NUMPAD0
             || keycode ==  WXK_NUMPAD1
             || keycode ==  WXK_NUMPAD2
@@ -1167,9 +1169,11 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
                 return TRUE;
 
             default:
-                // additionally accept 'e' as in '1e+6'
+                // additionally accept 'e' as in '1e+6', also '-', '+', and '.'
                 if ( (keycode < 128) &&
-                     (wxIsdigit(keycode) || tolower(keycode) == 'e') )
+                     (wxIsdigit(keycode) || tolower(keycode) == 'e' ||
+                      keycode == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER)[0] || 
+                      keycode == '+' || keycode == '-') )
                     return TRUE;
         }
     }
