@@ -833,7 +833,7 @@ public:
     // returns true if the string is empty
   bool empty() const { return IsEmpty(); }
     // inform string about planned change in size
-  void reserve(size_t size) { Alloc(size); }
+  void reserve(size_t sz) { Alloc(sz); }
 
   // lib.string.access
     // return the character at position n
