@@ -405,39 +405,25 @@ long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
     switch ( message )
     {
-#if 0 // now that we got owner window right it doesn't seem to be needed
-        case WM_ACTIVATE:
-            switch ( LOWORD(wParam) )
-            {
-                case WA_ACTIVE:
-                case WA_CLICKACTIVE:
-                    if ( IsModalShowing() && GetParent() )
-                    {
-                        // bring the owner window to top as the standard dialog
-                        // boxes do
-                        if ( !::SetWindowPos
-                                (
-                                    GetHwndOf(GetParent()),
-                                    GetHwnd(),
-                                    0, 0,
-                                    0, 0,
-                                    SWP_NOACTIVATE |
-                                    SWP_NOMOVE |
-                                    SWP_NOSIZE
-                                ) )
-                        {
-                            wxLogLastError(wxT("SetWindowPos(SWP_NOACTIVATE)"));
-                        }
-                    }
-                    // fall through to process it normally as well
-            }
-            break;
-#endif // 0
-
         case WM_CLOSE:
             // if we can't close, tell the system that we processed the
             // message - otherwise it would close us
             processed = !Close();
+            break;
+
+        case WM_SIZE:
+            // the Windows dialogs unfortunately are not meant to be resizeable
+            // at all and their standard class doesn't include CS_[VH]REDRAW
+            // styles which means that the window is not refreshed properly
+            // after the resize and no amount of WS_CLIPCHILDREN/SIBLINGS can
+            // help with it - so we have to refresh it manually which certainly
+            // creates flicker but at least doesn't show garbage on the screen
+            rc = wxWindow::MSWWindowProc(message, wParam, lParam);
+            processed = TRUE;
+            if ( !HasFlag(wxNO_FULL_REPAINT_ON_RESIZE) )
+            {
+                Refresh();
+            }
             break;
 
 #ifndef __WXMICROWIN__
