@@ -98,6 +98,16 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     static const wxString wxPyBitmapString(wxT("bitmap"));
     static const wxString wxPyIconString(wxT("icon"));
     static const wxString wxPyFontString(wxT("font"));
+
+class wxPyXmlSubclassFactory : public wxXmlSubclassFactory
+{
+public:
+    wxPyXmlSubclassFactory() {}
+    DEC_PYCALLBACK_OBJECT_STRING_pure(Create);
+    PYPRIVATE;
+};
+
+IMP_PYCALLBACK_OBJECT_STRING_pure(wxPyXmlSubclassFactory, wxXmlSubclassFactory, Create);
  // C++ version of Python aware wxXmlResourceHandler, for the pure virtual
    // callbacks, as well as to make some protected things public so they can
    // be wrapped.
@@ -110,34 +120,6 @@ public:
 
     DEC_PYCALLBACK_OBJECT__pure(DoCreateResource);
     DEC_PYCALLBACK_BOOL_NODE_pure(CanHandle);
-
-//     wxObject* DoCreateResource() {
-//         wxObject* rv = NULL;
-//         wxPyBeginBlockThreads();
-//         if (wxPyCBH_findCallback(m_myInst, "DoCreateResource")) {
-//             PyObject* ro;
-//             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
-//             if (ro) {
-//                 SWIG_GetPtrObj(ro, (void **)&rv, "_wxObject_p");
-//                 Py_DECREF(ro);
-//             }
-//         }
-//         wxPyEndBlockThreads();
-//         return rv;
-//     }
-
-//     bool CanHandle(wxXmlNode* a) {
-//         bool rv=FALSE;
-//         wxPyBeginBlockThreads();
-//         if (wxPyCBH_findCallback(m_myInst, "CanHandle")) {
-//             PyObject* obj = wxPyConstructObject((void*)a, "wxXmlNode", 0);
-//             rv = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
-//             Py_DECREF(obj);
-//         }
-//         wxPyEndBlockThreads();
-//         return rv;
-//     }
-
 
 
     // accessors for protected members
@@ -568,6 +550,33 @@ static PyObject *_wrap_wxXmlResource_ClearHandlers(PyObject *self, PyObject *arg
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxXmlResource_ClearHandlers(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxXmlResource_AddSubclassFactory(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyXmlSubclassFactory * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "factory", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxXmlResource_AddSubclassFactory",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyXmlSubclassFactory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxXmlResource_AddSubclassFactory. Expected _wxPyXmlSubclassFactory_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxXmlResource::AddSubclassFactory(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1518,6 +1527,70 @@ static PyObject *_wrap_wxXmlResource_GetFlags(PyObject *self, PyObject *args, Py
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define new_wxXmlSubclassFactory() (new wxPyXmlSubclassFactory())
+static PyObject *_wrap_new_wxXmlSubclassFactory(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyXmlSubclassFactory * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxXmlSubclassFactory",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPyXmlSubclassFactory *)new_wxXmlSubclassFactory();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyXmlSubclassFactory_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxXmlSubclassFactory__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxXmlSubclassFactory__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyXmlSubclassFactory * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxXmlSubclassFactory__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyXmlSubclassFactory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxXmlSubclassFactory__setCallbackInfo. Expected _wxPyXmlSubclassFactory_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxXmlSubclassFactory__setCallbackInfo(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -4990,6 +5063,8 @@ static PyMethodDef xrccMethods[] = {
 	 { "wxXmlProperty_GetValue", (PyCFunction) _wrap_wxXmlProperty_GetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlProperty_GetName", (PyCFunction) _wrap_wxXmlProperty_GetName, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxXmlProperty", (PyCFunction) _wrap_new_wxXmlProperty, METH_VARARGS | METH_KEYWORDS },
+	 { "wxXmlSubclassFactory__setCallbackInfo", (PyCFunction) _wrap_wxXmlSubclassFactory__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxXmlSubclassFactory", (PyCFunction) _wrap_new_wxXmlSubclassFactory, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_GetFlags", (PyCFunction) _wrap_wxXmlResource_GetFlags, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_Set", (PyCFunction) _wrap_wxXmlResource_Set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_Get", (PyCFunction) _wrap_wxXmlResource_Get, METH_VARARGS | METH_KEYWORDS },
@@ -5011,6 +5086,7 @@ static PyMethodDef xrccMethods[] = {
 	 { "wxXmlResource_LoadMenuBarOnFrame", (PyCFunction) _wrap_wxXmlResource_LoadMenuBarOnFrame, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_LoadMenuBar", (PyCFunction) _wrap_wxXmlResource_LoadMenuBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_LoadMenu", (PyCFunction) _wrap_wxXmlResource_LoadMenu, METH_VARARGS | METH_KEYWORDS },
+	 { "wxXmlResource_AddSubclassFactory", (PyCFunction) _wrap_wxXmlResource_AddSubclassFactory, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_ClearHandlers", (PyCFunction) _wrap_wxXmlResource_ClearHandlers, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_InsertHandler", (PyCFunction) _wrap_wxXmlResource_InsertHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_AddHandler", (PyCFunction) _wrap_wxXmlResource_AddHandler, METH_VARARGS | METH_KEYWORDS },

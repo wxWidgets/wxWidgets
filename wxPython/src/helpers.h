@@ -451,10 +451,10 @@ extern wxPyApp *wxPythonApp;
 #define IMP_PYCALLBACK__(CLASS, PCLASS, CBNAME)                         \
     void CLASS::CBNAME() {                                              \
         bool found;                                                     \
-        wxPyBeginBlockThreads();                    \
+        wxPyBeginBlockThreads();                                        \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))          \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));        \
-        wxPyEndBlockThreads();                                     \
+        wxPyEndBlockThreads();                                          \
         if (! found)                                                    \
             PCLASS::CBNAME();                                           \
     }                                                                   \
@@ -1870,6 +1870,29 @@ extern wxPyApp *wxPythonApp;
                 SWIG_GetPtrObj(ro, (void **)&rv, "_wxObject_p");                \
                 Py_DECREF(ro);                                                  \
             }                                                                   \
+        }                                                                       \
+        wxPyEndBlockThreads();                                                  \
+        return rv;                                                              \
+    }
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_OBJECT_STRING_pure(CBNAME)                               \
+    wxObject* CBNAME(const wxString& a);
+
+#define IMP_PYCALLBACK_OBJECT_STRING_pure(CLASS, PCLASS, CBNAME)                \
+    wxObject* CLASS::CBNAME(const wxString& a) {                                \
+        wxObject* rv = NULL;                                                    \
+        wxPyBeginBlockThreads();                                                \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
+            PyObject* so = wx2PyString(a);                                      \
+            PyObject* ro;                                                       \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)", so));   \
+            if (ro) {                                                           \
+                SWIG_GetPtrObj(ro, (void **)&rv, "_wxObject_p");                \
+                Py_DECREF(ro);                                                  \
+            }                                                                   \
+            Py_DECREF(so);                                                      \
         }                                                                       \
         wxPyEndBlockThreads();                                                  \
         return rv;                                                              \

@@ -152,6 +152,24 @@ def wxEmptyXmlResource(*_args,**_kwargs):
     return val
 
 
+class wxXmlSubclassFactoryPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(xrcc.wxXmlSubclassFactory__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxXmlSubclassFactory instance at %s>" % (self.this,)
+class wxXmlSubclassFactory(wxXmlSubclassFactoryPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(xrcc.new_wxXmlSubclassFactory,_args,_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxXmlSubclassFactory)
+
+
+
+
 class wxXmlPropertyPtr :
     def __init__(self,this):
         self.this = this
@@ -474,6 +492,8 @@ class wxXmlResourceHandler(wxXmlResourceHandlerPtr):
 
 #-------------- FUNCTION WRAPPERS ------------------
 
+wxXmlResource_AddSubclassFactory = xrcc.wxXmlResource_AddSubclassFactory
+
 wxXmlResource_GetXRCID = xrcc.wxXmlResource_GetXRCID
 
 def wxXmlResource_Get(*_args, **_kwargs):
@@ -515,3 +535,35 @@ wxXML_HTML_DOCUMENT_NODE = xrcc.wxXML_HTML_DOCUMENT_NODE
 wxTheXmlResource = wxXmlResource_Get()
 
 wx.wxXmlNodePtr = wxXmlNodePtr
+
+
+
+
+#----------------------------------------------------------------------
+#  Create a factory for handling the subclass property of the object tag.
+
+
+def _my_import(name):
+    mod = __import__(name)
+    components = string.split(name, '.')
+    for comp in components[1:]:
+        mod = getattr(mod, comp)
+    return mod
+
+
+class wxXmlSubclassFactory_Python(wxXmlSubclassFactory):
+    def __init__(self):
+        wxXmlSubclassFactory.__init__(self)
+
+    def Create(self, className):
+        assert className.find('.') != -1, "Module name must be specified!"
+        mname = className[:className.rfind('.')]
+        cname = className[className.rfind('.')+1:]
+        module = _my_import(mname)
+        klass = getattr(module, cname)
+        inst = klass()
+        return inst
+
+
+wxXmlResource_AddSubclassFactory(wxXmlSubclassFactory_Python())
+
