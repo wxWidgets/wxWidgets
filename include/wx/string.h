@@ -362,14 +362,14 @@ public:
   bool IsEmpty() const { return Len() == 0; }
     // empty string is "FALSE", so !str will return TRUE
   bool operator!() const { return IsEmpty(); }
+    // truncate the string to given length
+  wxString& Truncate(size_t uiLen);
     // empty string contents
   void Empty()
   {
-    if ( !IsEmpty() )
-      Reinit();
+    Truncate(0);
 
-    // should be empty
-    wxASSERT( GetStringData()->nDataLength == 0 );
+    wxASSERT_MSG( IsEmpty(), _T("string not empty after call to Empty()?") );
   }
     // empty the string and free memory
   void Clear()
@@ -671,8 +671,6 @@ public:
   wxString& Trim(bool bFromRight = TRUE);
       // add nCount copies chPad in the beginning or at the end (default)
   wxString& Pad(size_t nCount, wxChar chPad = wxT(' '), bool bFromRight = TRUE);
-      // truncate string to given length
-  wxString& Truncate(size_t uiLen);
 
   // searching and replacing
       // searching (return starting index, or -1 if not found)
@@ -831,16 +829,17 @@ public:
   wxString& append(size_t n, wxChar ch) { return Pad(n, ch); }
 
     // same as `this_string = str'
-  wxString& assign(const wxString& str) { return (*this) = str; }
+  wxString& assign(const wxString& str)
+    { return *this = str; }
     // same as ` = str[pos..pos + n]
   wxString& assign(const wxString& str, size_t pos, size_t n)
-    { return *this = wxString((const wxChar *)str + pos, n); }
+    { Empty(); return Append(str.c_str() + pos, n); }
     // same as `= first n (or all if n == npos) characters of sz'
   wxString& assign(const wxChar *sz, size_t n = npos)
-    { return *this = wxString(sz, n); }
+    { Empty(); return Append(sz, n == npos ? wxStrlen(sz) : n); }
     // same as `= n copies of ch'
   wxString& assign(size_t n, wxChar ch)
-    { return *this = wxString(ch, n); }
+    { Empty(); return Append(ch, n); }
 
     // insert another string
   wxString& insert(size_t nPos, const wxString& str);
