@@ -798,7 +798,7 @@ static wxBitmap *GetEnlargeBitmap()
         s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
 
         #if defined(__WXMSW__) || defined(__WXPM__)
-	    s_bitmap = new wxBitmap("plot_enl_bmp", wxBITMAP_TYPE_RESOURCE);
+            s_bitmap = new wxBitmap("plot_enl_bmp", wxBITMAP_TYPE_RESOURCE);
         #else
             s_bitmap = new wxBitmap( plot_enl_xpm );
         #endif
@@ -874,8 +874,8 @@ static wxBitmap *GetUpBitmap()
         s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
 
         #if defined(__WXMSW__) || defined(__WXPM__)
-	    s_bitmap = new wxBitmap("plot_up_bmp", wxBITMAP_TYPE_RESOURCE);
-        #else                               
+            s_bitmap = new wxBitmap("plot_up_bmp", wxBITMAP_TYPE_RESOURCE);
+        #else
             s_bitmap = new wxBitmap( plot_up_xpm );
         #endif
     }
