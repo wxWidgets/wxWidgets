@@ -58,6 +58,10 @@ int main()
     TestBitmap();
 #endif
 
+#ifdef TEST_FONT
+    TestFont();
+#endif
+
     delete g_displayDC;
     MGL_exit();
     return 0;

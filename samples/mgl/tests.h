@@ -3,8 +3,8 @@
 
 
 //#define TEST_DC
-#define TEST_BITMAP
-
+//#define TEST_BITMAP
+#define TEST_FONT
 
 
 #define SIZEX 1024
@@ -17,4 +17,8 @@ extern void RenderTest2(wxDC& dc);
 
 #ifdef TEST_BITMAP
 extern void TestBitmap();
+#endif
+
+#ifdef TEST_FONT
+extern void TestFont();
 #endif

@@ -27,18 +27,21 @@ void TestDC()
 
 class MyApp : public wxApp
 {
-    public:
-        virtual bool OnInit()
-        {
-	    wxImage::AddHandler(new wxPNGHandler);
+public:
+    virtual bool OnInit()
+    {
+        wxImage::AddHandler(new wxPNGHandler);
 #ifdef TEST_DC
-            TestDC();
+        TestDC();
 #endif
 #ifdef TEST_BITMAP
-            TestBitmap();
+        TestBitmap();
 #endif
-            return FALSE;
-        }
+#ifdef TEST_FONT
+        TestFont();
+#endif
+        return FALSE;
+    }
 };
 
 IMPLEMENT_APP(MyApp)
