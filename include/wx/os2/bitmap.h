@@ -55,6 +55,7 @@ public:
 
     wxDC*                           m_pSelectedInto;
     HPS                             m_hPresentationSpace;
+    LONG                            m_lId;
 
     // optional mask for transparent drawing
     wxMask*                         m_pBitmapMask;
@@ -209,6 +210,10 @@ public:
 
     // An OS/2 version that probably doesn't do anything like the msw version
     wxBitmap GetBitmapForDC(wxDC& rDc) const;
+
+    inline LONG GetId() const
+      { return (GetBitmapData() ? GetBitmapData()->m_lId : 0L); }
+
 
 protected:
     // common part of all ctors
