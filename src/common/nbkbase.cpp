@@ -98,7 +98,7 @@ wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage)
     {
         sizeTotal.x += 90;
 #ifdef __WXMAC__
-        sizeTotal.y += 20;
+        sizeTotal.y += 28;
 #else
         sizeTotal.y += 10;
 #endif
@@ -106,11 +106,12 @@ wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage)
     else
     {
 #ifdef __WXMAC__
-        sizeTotal.x += 32;   // This is OK for Aqua.
+        sizeTotal.x += 34;   // This is OK for Aqua.
+        sizeTotal.y += 46;
 #else
         sizeTotal.x += 10;
-#endif
         sizeTotal.y += 40;
+#endif
     }
 
     return sizeTotal;

@@ -508,7 +508,12 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
         if ( m_splitMode == wxSPLIT_VERTICAL )
         {
             dc.SetPen(*m_facePen);
+            // How to test for Aqua?
+#ifdef __DARWIN__
+            dc.SetBrush(*wxWHITE_BRUSH);
+#else
             dc.SetBrush(*m_faceBrush);
+#endif
             dc.DrawRectangle(m_sashPosition + 2, 0 , m_sashSize - 4, h );
 
             dc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -520,13 +525,19 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
             dc.SetPen(*m_hilightPen);
             dc.DrawLine(m_sashPosition+1, m_borderSize - 2, m_sashPosition+1, h - m_borderSize+2);
 
+#ifndef __DARWIN__
             dc.SetPen(*m_mediumShadowPen);
+#endif
                         int yMedium = m_borderSize ? h-m_borderSize+1 : h ;
             dc.DrawLine(m_sashPosition+m_sashSize-2, xShadow, m_sashPosition+m_sashSize-2, yMedium);
 
+#ifdef __DARWIN__
+            dc.SetPen(*m_lightShadowPen);
+#else
             dc.SetPen(*m_darkShadowPen);
+#endif
             dc.DrawLine(m_sashPosition+m_sashSize-1, m_borderSize, m_sashPosition+m_sashSize-1, h-m_borderSize );
-
+            
             // Draw the top and bottom edges of the sash, if requested
             if (GetWindowStyle() & wxSP_FULLSASH)
             {
@@ -542,7 +553,12 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
         else
         {
             dc.SetPen(*m_facePen);
+            // How to test for Aqua?
+#ifdef __DARWIN__
+            dc.SetBrush(*wxWHITE_BRUSH);
+#else
             dc.SetBrush(*m_faceBrush);
+#endif
             dc.DrawRectangle( m_borderSize-2, m_sashPosition + 2, w-m_borderSize+2, m_sashSize - 4);
 
             dc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -553,10 +569,16 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
             dc.SetPen(*m_hilightPen);
             dc.DrawLine(m_borderSize-2, m_sashPosition+1, w-m_borderSize+1, m_sashPosition+1);
 
+#ifndef __DARWIN__
             dc.SetPen(*m_mediumShadowPen);
+#endif
             dc.DrawLine(m_borderSize-1, m_sashPosition+m_sashSize-2, w-m_borderSize+1, m_sashPosition+m_sashSize-2);
 
+#ifdef __DARWIN__
+            dc.SetPen(*m_lightShadowPen);
+#else
             dc.SetPen(*m_darkShadowPen);
+#endif
             dc.DrawLine(m_borderSize, m_sashPosition+m_sashSize-1, w-m_borderSize, m_sashPosition+m_sashSize-1);
 
             // Draw the left and right edges of the sash, if requested
