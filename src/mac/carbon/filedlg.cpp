@@ -441,7 +441,7 @@ int wxFileDialog::ShowModal()
             if (err != noErr)
                 break;
 
-            CFURLRef fullURLRef;
+            CFURLRef fullURLRef = 0 ;
             if (m_dialogStyle & wxSAVE)
             {
                 CFURLRef parentURLRef = ::CFURLCreateFromFSRef(NULL, &theFSRef);
