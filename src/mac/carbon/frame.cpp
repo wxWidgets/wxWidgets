@@ -117,7 +117,7 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
 
 void wxFrame::PositionStatusBar()
 {
-    if (m_frameStatusBar )
+    if (m_frameStatusBar && m_frameStatusBar->IsShown() )
     {
         int w, h;
         GetClientSize(&w, &h);
@@ -224,7 +224,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
     wxTopLevelWindow::DoGetClientSize( x , y ) ;
     
 #if wxUSE_STATUSBAR
-    if ( GetStatusBar() && y )
+    if ( GetStatusBar() && GetStatusBar()->IsShown() && y )
     {
         if ( y) *y -= WX_MAC_STATUSBAR_HEIGHT;
     }
@@ -289,7 +289,7 @@ void wxFrame::PositionToolBar()
 
     GetSize( &cw , &ch ) ;
 
-    if ( GetStatusBar() )
+    if ( GetStatusBar() && GetStatusBar()->IsShown())
     {
       int statusX, statusY;
       GetStatusBar()->GetClientSize(&statusX, &statusY);
