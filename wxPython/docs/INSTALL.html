@@ -65,9 +65,11 @@ all.</p>
 </li>
 <li><p class="first">In addition to building wxPython as described in BUILD.txt, you can
 install it to Python's site-packages dir, as well as some scripts
-into the same bin dir used by Python by using this command:</p>
+into the same bin dir used by Python by using this command, plus
+whatever WXPORT, UNICODE, etc. settings you used for the initial
+build step:</p>
 <pre class="literal-block">
-python2.3 setup.py install
+python2.3 setup.py install 
 </pre>
 <p>If you would like to install to some place besides the prefix where
 Python is installed, (such as to your home directory) then you can
@@ -105,9 +107,9 @@ machines be careful to install to /Library/Python/2.3.  To
 complicate things further, the Jaguar version, or a custom build
 you do yourself will end up in /Library/Frameworks even on
 Panther...</li>
-<li>You need to use pythonw at the command line or PythonLauncher app
-to run wxPython apps, otherwise the app will not be able to fully
-use the GUI display.</li>
+<li>You need to use pythonw at the command line or the PythonLauncher
+app to run wxPython apps, otherwise the app will not be able to
+fully use the GUI display.</li>
 </ol>
 </div>
 <div class="section" id="installing-on-windows">

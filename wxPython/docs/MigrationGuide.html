@@ -376,7 +376,7 @@ be used from XRC.</p>
 <p>You should not use AddWindow, AddSizer, AddSpacer (and similar for
 Insert, Prepend, and etc.) methods any longer.  Just use Add and the
 wrappers will figure out what to do.  <strong>[Changed in 2.5.2.x]</strong>
-AddWindow, AddSize, AddSpacer and etc. will now issue a
+AddWindow, AddSizer, AddSpacer and etc. will now issue a
 DeprecationWarning.</p>
 <p><strong>[Changed in 2.5.2.x]</strong> The Sizers have had some fundamental internal
 changes in the 2.5.2.x release intended to make them do more of the
@@ -674,7 +674,7 @@ later into the main namespace via Python code.</p>
 the &quot;internal&quot; module names have changed, but you shouldn't have been
 using them anyway so it shouldn't bother you. ;-) In case you were
 erroneously using them in 2.4, here are the internal extension modules
-no longer exist:</p>
+that no longer exist:</p>
 <blockquote>
 <ul class="simple">
 <li>clip_dnd</li>
@@ -715,8 +715,93 @@ the objects in these modules only via the wx or wxPython.wx packages:</p>
 <p>The help module no longer exists and the classes therein are now part
 of the core module imported with wxPython.wx or the wx package.</p>
 </div>
-<div class="section" id="other-stuff">
-<h1><a name="other-stuff">Other Stuff</a></h1>
+<div class="section" id="wx-taskbaricon">
+<h1><a name="wx-taskbaricon">wx.TaskBarIcon</a></h1>
+<p><strong>[Changed in 2.5.3.x]</strong></p>
+<p>wx.TaskbarIcon now works on all three platforms, although for wxGTK it
+depends on support from the Window Manager.  On OS X the icon replaces
+the application's icon on the dock and when you right click on it the
+app's default popup menu is merged with the wx.TaskBarIcon's menu.
+Because of how it is implemented on the Mac using the Dock most of the
+TaskBarIcon events will _not_ be emitted on that platform, but since
+98% of the time you simply want to display an icon and have a popup
+menu it shouldn't be much of a problem.  You can still use the other
+events on the other platforms, you'll just want to be sure that you
+can do everything you want via the menu too.</p>
+<p>Since popping up a menu is the most common thing to do with a
+TaskBarIcon the class has some new built in functionality to
+facilitate that.  To use the TaskBarIcon in this new way, simply
+derive a new class from TaskBarIcon and implement a CreatePopupMenu
+method that creates and returns the menu.  That's all there is to it,
+besides binding event handlers for the menu items of course.  Take a
+look at the DemoTaskBarIcon class in the demo/Main.py module for an
+example.</p>
+<p><strong>NOTE</strong>:  Unfortunately due to being able to support virtualizing
+CreatePopupMenu the C++ TaskBarIcon instance now holds a reference to
+the Python instance, and so you will need to explicitly Destroy() your
+TaskBarIcon instance when you are done with it.  (Like you do with
+wx.Dialogs.)  If you don't destroy it then wxWidgets will assume that
+you want the app to keep running with just the icon in the task bar
+and the MainLoop will not exit.</p>
+</div>
+<div class="section" id="version-number-change">
+<h1><a name="version-number-change">Version Number Change</a></h1>
+<p><strong>[Changed in 2.5.3.x]</strong></p>
+<p>Starting with 2.5.3.0 the Unicode versions of wxPython will no longer
+have a 'u' appended to the fourth component of the version number.
+Please check for the presence of &quot;unicode&quot; in the <cite>wx.PlatformInfo</cite>
+tuple instead.  (This tuple of strings has been available since the
+first 2.5 version.) For example:</p>
+<pre class="literal-block">
+if &quot;unicode&quot; in wx.PlatformInfo:
+    # do whatever
+    ...
+</pre>
+</div>
+<div class="section" id="multi-version-installs">
+<h1><a name="multi-version-installs">Multi-Version Installs</a></h1>
+<p><strong>[Changed in 2.5.3.x]</strong></p>
+<p>Starting with 2.5.3.0 the wx and wxPython pacakge directories will be
+installed in a subdirectory of the site-packages directory, instead of
+directly in site-pacakges.  This is done to help facilitate having
+multiple versions of wxPython installed side-by-side.  Why would you
+want to do this?  One possible scenario is you have an app that
+requires wxPython 2.4 but you want to use the newest 2.5 to do your
+development with.  Or perhaps you want to be able to test your app
+with several different versions of wxPython to ensure compatibility.
+Before everyone panics, rest asured that if you only install one
+version of wxPython then you should notice no difference in how
+things work.</p>
+<p>In addition to installing wxPython into a &quot;versioned&quot; subdirectory of
+site-packages, a file named <cite>wx.pth</cite> is optionally installed that will
+contain the name of the versioned subdirectory.  This will cause that
+subdirectory to be automatically added to the sys.path and so doing an
+&quot;import wx&quot; will find the package in the subdirectory like like it
+would have if it was still located directly in site-packages.  I say
+&quot;optionally&quot; above because that is how you can control which install
+of wxPython is the default one.  Which ever version installs the
+wx.pth file will be the one that is imported with a plain &quot;import wx&quot;
+statement.  Of course you can always manipulate that by editing the
+wx.pth file, or by setting PYTHONPATH in the environment, or by the
+method described in the next paragraph.</p>
+<p>Finally, a new module named wxversion.py is installed to the
+site-pacakges directory.  It can be used to manipulate the sys.path at
+runtime so your applications can select which version of wxPython they
+would like to to have imported.  You use it like this:</p>
+<pre class="literal-block">
+import wxversion
+wxversion.require(&quot;2.4&quot;)
+import wx
+</pre>
+<p>Then eventhough a 2.5 version of wxPython may be the default the
+application that does the above the first time that wx is imported
+will actually get a 2.4 version.  <strong>NOTE:</strong> There isn't actually a 2.4
+version of wxPython that supports this, but there will be.</p>
+<p>Please see this wiki page for more details, HowTo's and FAQ's:
+<a class="reference" href="http://wiki.wxpython.org/index.cgi/MultiVersionInstalls">http://wiki.wxpython.org/index.cgi/MultiVersionInstalls</a></p>
+</div>
+<div class="section" id="miscellaneous-stuff">
+<h1><a name="miscellaneous-stuff">Miscellaneous Stuff</a></h1>
 <p>wxPyDefaultPosition and wxPyDefaultSize are gone.  Use the
 wxDefaultPosition and wxDefaultSize objects instead.</p>
 <p>Similarly, the wxSystemSettings backwards compatibiility aliases for
@@ -742,15 +827,6 @@ wxPyTypeCast at all.</p>
 there are compatibility aliases for much of the above items.</p>
 <p>The wxWave class has been renamed to wxSound, and now has a slightly
 different API.</p>
-<p>wx.TaskbarIcon works on wxGTK-based platforms (for some window
-managers,) however you have to manage it a little bit more than you
-did before.  Basically, the app will treat it like a top-level frame
-in that if the wx.TaskBarIcon still exists when all the frames are
-closed then the app will still not exit.  You need to ensure that the
-wx.TaskBarIcon is destroyed when your last Frame is closed.  For
-wxPython apps it is usually enough if your main frame object holds the
-only reference to the wx.TaskBarIcon, then when the frame is closed
-Python reference counting takes care of the rest.</p>
 <p>Before Python 2.3 it was possible to pass a floating point object as a
 parameter to a function that expected an integer, and the
 PyArg_ParseTuple family of functions would automatically convert to

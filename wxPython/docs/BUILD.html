@@ -14,7 +14,7 @@
 development and testing, and is meant to help other people that want
 to do the same thing.  I'll assume that you are using either a CVS
 snapshot from <a class="reference" href="http://wxWidgets.org/snapshots/">http://wxWidgets.org/snapshots/</a>, a checkout from CVS, or
-one of the released wxPythonSrc-2.5.* tarballs.  I'll also assume that
+one of the released wxPython-src-2.5.* tarballs.  I'll also assume that
 you know your way around your system, the compiler, etc. and most
 importantly, that you know what you are doing!  ;-)</p>
 <p>If you want to also install the version of wxPython you build to be in
@@ -25,29 +25,29 @@ you only use the instructions in this <a class="reference" href="BUILD.html">BUI
 will end up with a separate installation of wxPython and you can
 switch back and forth between this and the release version that you
 may already have installed.</p>
-<p>If you want to make changes to any of the <tt class="literal"><span class="pre">*.i</span></tt> files, (SWIG interface
-definition files,) or to regenerate the extension sources or renamer
-modules, then you will need an up to date version of SWIG.  Either get
-and build the current CVS version, or version 1.3.20, and then apply
-the patches in wxPython/SWIG.  See the README.txt in that dir for
-details about each patch and also info about those that may already
-have been applied to the SWIG sources.  If you install this build of
-SWIG to a location that is not on the PATH (so it doesn't interfere
-with an existing SWIG install for example) then you can set a setup.py
-command-line variable named SWIG to be the full path name of the
-executable and the wxPython build will use it.  See below for an
-example.</p>
+<p>If you want to make changes to any of the <tt class="literal"><span class="pre">*.i</span></tt> files, (SWIG
+interface definition files,) or to regenerate the extension sources or
+renamer modules, then you will need an up to date version of SWIG,
+plus some patches.  Get the sources for version 1.3.22, and then apply
+the patches in wxPython/SWIG and then build SWIG like normal.  See the
+README.txt in the wxPython/SWIG dir for details about each patch and
+also info about those that may already have been applied to the SWIG
+sources.  If you install this build of SWIG to a location that is not
+on the PATH (so it doesn't interfere with an existing SWIG install for
+example) then you can set a setup.py command-line variable named SWIG
+to be the full path name of the executable and the wxPython build will
+use it.  See below for an example.</p>
 <p>In the text below I'll use WXDIR with environment variable syntax
-(either $WXDIR or %WXDIR%) to refer to the top level directory were
+(either $WXDIR or %WXDIR%) to refer to the top level directory where
 your wxWidgerts and wxPython sources are located.  It will equate to
 whereever you checked out the wxWidgets module from CVS, or untarred
-the wxPythonSrc tarball to.  You can either substitute the $WXDIR text
+the wxPython-src tarball to.  You can either substitute the $WXDIR text
 below with your actual dir, or set the value in the environment and
 use it just like you see it below.</p>
 <p>If you run into what appears to be compatibility issues between
 wxWidgets and wxPython while building wxPython, be sure you are using
-the wxWidgets sources included with the wxPythonSrc tarball or the CVS
-snapshot, and not a previously installed version or a version
+the wxWidgets sources included with the wxPython-src tarball or the
+CVS snapshot, and not a previously installed version or a version
 installed from one of the standard wxWidgets installers.  With the
 &quot;unstable&quot; releases (have a odd-numbered minor release value, where
 the APIs are allowed to change) there are often significant
@@ -81,23 +81,28 @@ cd bld
 </pre>
 <p>On OS X of course you'll want to use --with-mac instead of
 --with-gtk.</p>
-<p><strong>NOTE</strong>: Due to a recent change there is a dependency problem in the
-multilib builds of wxWidgets on OSX, so I have switched to a
-monolithic build on that platform.  (IOW, all of the core code in
-one shared library instead of several.)  I would also expect other
-unix builds to do just fine with a monolithic library, but I havn't
-tested it in a while so your mileage may vary.  Anyway, to switch
+<p><strong>NOTE</strong>: Due to a recent change there is currently a dependency
+problem in the multilib builds of wxWidgets on OSX, so I have
+switched to using a monolithic build.  That means that all of the
+core wxWidgets code is placed in in one shared library instead of
+several.  wxPython can be used with either mode, so use whatever
+suits you on Linux and etc. but use monolithic on OSX.  To switch
 to the monolithic build of wxWidgets just add this configure flag:</p>
 <pre class="literal-block">
 --enable-monolithic \
 </pre>
-<p>By default GTK2 will be selected if it is on your build system.  To
-force the use of GTK 1.2.x add this flag:</p>
+<p>By default GTK2 will be selected if its development pacakge is
+installed on your build system.  To force the use of GTK 1.2.x
+instead add this flag:</p>
 <pre class="literal-block">
 --disable-gtk2 \
 </pre>
-<p>To make the wxWidgets build be Unicode enabled (strongly
-recommended if you are building with GTK2) then add:</p>
+<p>To make the wxWidgets build be unicode enabled (strongly
+recommended if you are building with GTK2) then add the following.
+When wxPython is unicode enabled then all strings that are passed
+to wx functions and methods will first be converted to unicode
+objects, and any 'strings' returned from wx functions and methods
+will actually be unicode objects.:</p>
 <pre class="literal-block">
 --enable-unicode \
 </pre>
@@ -131,8 +136,7 @@ dir I don't lose my scripts too.)  This is what it looks like:</p>
 make $* \
     &amp;&amp; make -C contrib/src/gizmos $* \
     &amp;&amp; make -C contrib/src/ogl CXXFLAGS=&quot;-DwxUSE_DEPRECATED=0&quot; $* \
-    &amp;&amp; make -C contrib/src/stc $* \
-    &amp;&amp; make -C contrib/src/xrc $* 
+    &amp;&amp; make -C contrib/src/stc $* 
 </pre>
 <p>So you just use .make as if it where make, but don't forget to set
 the execute bit on .make first!:</p>
@@ -178,7 +182,7 @@ WX_CONFIG=/opt/wx/2.5/bin/wx-config
 GTK2.  If you built wxWidgets to use GTK 1.2.x then you should add
 this flag to the command-line:</p>
 <pre class="literal-block">
-WXPORT=gtk2 
+WXPORT=gtk 
 </pre>
 <p>If you would like to do a Unicode enabled build (all strings sent
 to or retruned from wx functions are Unicode objects) and your
@@ -251,6 +255,12 @@ or python23_d.dll.  If you don't need to trace through the C/C++ parts
 of the code with the debugger then building the normal (or hybrid)
 version is fine, and you can use the regular python executables with
 it.</p>
+<p>Starting with 2.5.3.0 wxPython can be built for either the monlithic
+or the multi-lib wxWidgets builds.  (Monolithic means that all the
+core wxWidgets code is in one DLL, and multi-lib means that the core
+code is divided into multiple DLLs.)  To select which one to use
+specify the MONOLITHIC flag for both the wxWidgets build and the
+wxPython build as shown below, setting it to either 0 or 1.</p>
 <p>Just like the unix versions I also use some scripts to help me build
 wxWidgets, but I use some non-standard stuff to do it.  So if you have
 bash (cygwin or probably MSYS too) or 4NT plus unix-like cat and sed
@@ -343,7 +353,7 @@ clean up the build:</p>
 executing nmake with a bunch of extra command line parameters.
 The base set are:</p>
 <pre class="literal-block">
--f makefile.vc OFFICIAL_BUILD=1 SHARED=1 MONOLITHIC=0 USE_OPENGL=1
+-f makefile.vc OFFICIAL_BUILD=1 SHARED=1 MONOLITHIC=1 USE_OPENGL=1
 </pre>
 <p>If doing a debug build then add:</p>
 <pre class="literal-block">
@@ -363,7 +373,6 @@ same command from the following directories in order to build the
 contrib libraries:</p>
 <pre class="literal-block">
     %WXDIR%\contrib\build\gizmos
-    %WXDIR%\contrib\build\xrc
     %WXDIR%\contrib\build\stc
     %WXDIR%\contrib\build\ogl
 
@@ -385,10 +394,11 @@ version the rest of the time.  If you ever do want to install the
 development version please refer to INSTALL.txt.</p>
 <p>Change to the %WXDIR%\wxPython dir and run the this command,
 making sure that you use the version of python that you want to
-build for (if you have more than one on your system):</p>
+build for (if you have more than one on your system) and to match
+the MONOLITHIC flag with how you built wxWidgets:</p>
 <pre class="literal-block">
 cd %WXDIR%\wxPython
-python setup.py build_ext --inplace 
+python setup.py build_ext --inplace MONOLITHIC=1
 </pre>
 <p>If you are wanting to have the source files regenerated with swig,
 then you need to turn on the USE_SWIG flag and optionally tell it
