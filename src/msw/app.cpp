@@ -557,7 +557,7 @@ void wxApp::CleanUp()
     // blocks that aren't part of the wxDebugContext itself,
     // as a special case. Then when dumping we need to ignore
     // wxDebugContext, too.
-    if (wxDebugContext::CountObjectsLeft() > 0)
+    if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
     {
         wxLogDebug("There were memory leaks.");
         wxDebugContext::Dump();
