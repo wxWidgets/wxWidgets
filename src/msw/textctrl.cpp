@@ -175,8 +175,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if (m_windowStyle & wxTE_READONLY)
         msStyle |= ES_READONLY;
 
-    if (m_windowStyle & wxHSCROLL)
-        msStyle |= (WS_HSCROLL | ES_AUTOHSCROLL);
     if (m_windowStyle & wxTE_PASSWORD) // hidden input
         msStyle |= ES_PASSWORD;
 
@@ -237,7 +235,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 #ifndef RICHEDIT_CLASS
                 wxString RICHEDIT_CLASS;
                 RICHEDIT_CLASS.Printf(_T("RichEdit%d0"), ver);
-#ifdef wxUSE_UNICODE
+#if wxUSE_UNICODE
                 RICHEDIT_CLASS += _T('W');
 #else // ANSI
                 RICHEDIT_CLASS += _T('A');
@@ -264,7 +262,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     //     might be -1 in which case we should use the default values (and
     //     SetSize called below takes care of it)
     m_hWnd = (WXHWND)::CreateWindowEx(exStyle,
-                                      windowClass,
+                                      windowClass.c_str(),
                                       NULL,
                                       msStyle,
                                       0, 0, 0, 0,
@@ -374,9 +372,9 @@ wxString wxTextCtrl::GetValue() const
 #if wxUSE_RICHEDIT
     if ( m_isRich )
     {
-        wxString str;
-
         int len = GetWindowTextLength(GetHwnd()) + 1;
+
+        wxString str;
         wxChar *p = str.GetWriteBuf(len);
 
         TEXTRANGE textRange;
@@ -418,8 +416,8 @@ void wxTextCtrl::SetValue(const wxString& value)
     if ( (value.length() > 0x400) || (value != GetValue()) )
     {
         wxString valueDos = wxTextFile::Translate(value, wxTextFileType_Dos);
-
-        SetWindowText(GetHwnd(), valueDos);
+                               
+        SetWindowText(GetHwnd(), valueDos.c_str());
 
         AdjustSpaceLimit();
     }
@@ -857,11 +855,13 @@ bool wxTextCtrl::CanRedo() const
 // implemenation details
 // ----------------------------------------------------------------------------
 
+/*
 void wxTextCtrl::Command(wxCommandEvent & event)
 {
     SetValue(event.GetString());
     ProcessCommand (event);
 }
+*/
 
 void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 {
@@ -927,11 +927,9 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         case EN_CHANGE:
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
-                wxString val(GetValue());
-                if ( !val.IsNull() )
-                    event.m_commandString = WXSTRINGCAST val;
                 event.SetEventObject( this );
-                ProcessCommand(event);
+                event.SetString( GetValue() );
+                ProcessCommand( event );
             }
             break;
 
