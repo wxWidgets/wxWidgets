@@ -273,6 +273,15 @@ class wxBrushPtr :
     def Ok(self):
         val = gdic.wxBrush_Ok(self.this)
         return val
+    def SetColour(self,arg0):
+        val = gdic.wxBrush_SetColour(self.this,arg0.this)
+        return val
+    def SetStipple(self,arg0):
+        val = gdic.wxBrush_SetStipple(self.this,arg0.this)
+        return val
+    def SetStyle(self,arg0):
+        val = gdic.wxBrush_SetStyle(self.this,arg0)
+        return val
     def __repr__(self):
         return "<C wxBrush instance>"
 class wxBrush(wxBrushPtr):
@@ -380,12 +389,10 @@ class wxDCPtr :
     def GetBackground(self):
         val = gdic.wxDC_GetBackground(self.this)
         val = wxBrushPtr(val)
-        val.thisown = 1
         return val
     def GetBrush(self):
         val = gdic.wxDC_GetBrush(self.this)
         val = wxBrushPtr(val)
-        val.thisown = 1
         return val
     def GetCharHeight(self):
         val = gdic.wxDC_GetCharHeight(self.this)
@@ -399,7 +406,6 @@ class wxDCPtr :
     def GetFont(self):
         val = gdic.wxDC_GetFont(self.this)
         val = wxFontPtr(val)
-        val.thisown = 1
         return val
     def GetLogicalFunction(self):
         val = gdic.wxDC_GetLogicalFunction(self.this)
@@ -413,7 +419,6 @@ class wxDCPtr :
     def GetPen(self):
         val = gdic.wxDC_GetPen(self.this)
         val = wxPenPtr(val)
-        val.thisown = 1
         return val
     def GetPixel(self,arg0,arg1):
         val = gdic.wxDC_GetPixel(self.this,arg0,arg1)
@@ -588,6 +593,20 @@ class wxPaintDCPtr(wxDCPtr):
 class wxPaintDC(wxPaintDCPtr):
     def __init__(self,arg0) :
         self.this = gdic.new_wxPaintDC(arg0.this)
+        self.thisown = 1
+
+
+
+
+class wxWindowDCPtr(wxDCPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxWindowDC instance>"
+class wxWindowDC(wxWindowDCPtr):
+    def __init__(self,arg0) :
+        self.this = gdic.new_wxWindowDC(arg0.this)
         self.thisown = 1
 
 

@@ -163,11 +163,29 @@ class wxToolBarPtr(wxControlPtr):
     def GetToolEnabled(self,arg0):
         val = stattoolc.wxToolBar_GetToolEnabled(self.this,arg0)
         return val
+    def GetToolLongHelp(self,arg0):
+        val = stattoolc.wxToolBar_GetToolLongHelp(self.this,arg0)
+        return val
+    def GetToolPacking(self):
+        val = stattoolc.wxToolBar_GetToolPacking(self.this)
+        return val
+    def GetToolSeparation(self):
+        val = stattoolc.wxToolBar_GetToolSeparation(self.this)
+        return val
+    def GetToolShortHelp(self,arg0):
+        val = stattoolc.wxToolBar_GetToolShortHelp(self.this,arg0)
+        return val
     def GetToolState(self,arg0):
         val = stattoolc.wxToolBar_GetToolState(self.this,arg0)
         return val
     def Realize(self):
         val = stattoolc.wxToolBar_Realize(self.this)
+        return val
+    def SetToolLongHelp(self,arg0,arg1):
+        val = stattoolc.wxToolBar_SetToolLongHelp(self.this,arg0,arg1)
+        return val
+    def SetToolShortHelp(self,arg0,arg1):
+        val = stattoolc.wxToolBar_SetToolShortHelp(self.this,arg0,arg1)
         return val
     def SetMargins(self,arg0):
         val = stattoolc.wxToolBar_SetMargins(self.this,arg0.this)

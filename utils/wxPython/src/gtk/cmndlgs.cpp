@@ -384,8 +384,9 @@ static PyObject *_wrap_wxColourDialog_GetColourData(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    _result = new wxColourData (wxColourDialog_GetColourData(_arg0));
-    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColourData_p");
+    wxColourData & _result_ref = wxColourDialog_GetColourData(_arg0);
+    _result = (wxColourData *) &_result_ref;
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxColourData_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -407,6 +408,234 @@ static PyObject *_wrap_wxColourDialog_ShowModal(PyObject *self, PyObject *args) 
         }
     }
     _result = (int )wxColourDialog_ShowModal(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static void *SwigwxDirDialogTowxDialog(void *ptr) {
+    wxDirDialog *src;
+    wxDialog *dest;
+    src = (wxDirDialog *) ptr;
+    dest = (wxDialog *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxDirDialogTowxPanel(void *ptr) {
+    wxDirDialog *src;
+    wxPanel *dest;
+    src = (wxDirDialog *) ptr;
+    dest = (wxPanel *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxDirDialogTowxWindow(void *ptr) {
+    wxDirDialog *src;
+    wxWindow *dest;
+    src = (wxDirDialog *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxDirDialogTowxEvtHandler(void *ptr) {
+    wxDirDialog *src;
+    wxEvtHandler *dest;
+    src = (wxDirDialog *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+#define new_wxDirDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxDirDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_new_wxDirDialog(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxDirDialog * _result;
+    wxWindow * _arg0;
+    char * _arg1 = "Choose a directory";
+    char * _arg2 = "";
+    long  _arg3 = 0;
+    wxPoint * _arg4 = &wxPyDefaultPosition;
+    char * _argc0 = 0;
+    char * _argc4 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s|ssls:new_wxDirDialog",&_argc0,&_arg1,&_arg2,&_arg3,&_argc4)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDirDialog. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argc4) {
+        if (SWIG_GetPtr(_argc4,(void **) &_arg4,"_wxPoint_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxDirDialog. Expected _wxPoint_p.");
+        return NULL;
+        }
+    }
+    _result = (wxDirDialog *)new_wxDirDialog(_arg0,_arg1,_arg2,_arg3,*_arg4);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxDirDialog_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxDirDialog_GetPath(_swigobj)  (_swigobj->GetPath())
+static PyObject *_wrap_wxDirDialog_GetPath(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxDirDialog * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxDirDialog_GetPath",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDirDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirDialog_GetPath. Expected _wxDirDialog_p.");
+        return NULL;
+        }
+    }
+    _result = new wxString (wxDirDialog_GetPath(_arg0));
+{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxDirDialog_GetMessage(_swigobj)  (_swigobj->GetMessage())
+static PyObject *_wrap_wxDirDialog_GetMessage(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxDirDialog * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxDirDialog_GetMessage",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDirDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirDialog_GetMessage. Expected _wxDirDialog_p.");
+        return NULL;
+        }
+    }
+    _result = new wxString (wxDirDialog_GetMessage(_arg0));
+{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxDirDialog_GetStyle(_swigobj)  (_swigobj->GetStyle())
+static PyObject *_wrap_wxDirDialog_GetStyle(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _result;
+    wxDirDialog * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxDirDialog_GetStyle",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDirDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirDialog_GetStyle. Expected _wxDirDialog_p.");
+        return NULL;
+        }
+    }
+    _result = (long )wxDirDialog_GetStyle(_arg0);
+    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxDirDialog_SetMessage(_swigobj,_swigarg0)  (_swigobj->SetMessage(_swigarg0))
+static PyObject *_wrap_wxDirDialog_SetMessage(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxDirDialog * _arg0;
+    wxString * _arg1;
+    char * _argc0 = 0;
+    PyObject * _obj1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sO:wxDirDialog_SetMessage",&_argc0,&_obj1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDirDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirDialog_SetMessage. Expected _wxDirDialog_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1));
+}
+    wxDirDialog_SetMessage(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxDirDialog_SetPath(_swigobj,_swigarg0)  (_swigobj->SetPath(_swigarg0))
+static PyObject *_wrap_wxDirDialog_SetPath(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxDirDialog * _arg0;
+    wxString * _arg1;
+    char * _argc0 = 0;
+    PyObject * _obj1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sO:wxDirDialog_SetPath",&_argc0,&_obj1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDirDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirDialog_SetPath. Expected _wxDirDialog_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1));
+}
+    wxDirDialog_SetPath(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxDirDialog_ShowModal(_swigobj)  (_swigobj->ShowModal())
+static PyObject *_wrap_wxDirDialog_ShowModal(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxDirDialog * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxDirDialog_ShowModal",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDirDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirDialog_ShowModal. Expected _wxDirDialog_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxDirDialog_ShowModal(_arg0);
     _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -3281,6 +3510,13 @@ static PyMethodDef cmndlgscMethods[] = {
 	 { "wxFileDialog_GetFilename", _wrap_wxFileDialog_GetFilename, 1 },
 	 { "wxFileDialog_GetDirectory", _wrap_wxFileDialog_GetDirectory, 1 },
 	 { "new_wxFileDialog", _wrap_new_wxFileDialog, 1 },
+	 { "wxDirDialog_ShowModal", _wrap_wxDirDialog_ShowModal, 1 },
+	 { "wxDirDialog_SetPath", _wrap_wxDirDialog_SetPath, 1 },
+	 { "wxDirDialog_SetMessage", _wrap_wxDirDialog_SetMessage, 1 },
+	 { "wxDirDialog_GetStyle", _wrap_wxDirDialog_GetStyle, 1 },
+	 { "wxDirDialog_GetMessage", _wrap_wxDirDialog_GetMessage, 1 },
+	 { "wxDirDialog_GetPath", _wrap_wxDirDialog_GetPath, 1 },
+	 { "new_wxDirDialog", _wrap_new_wxDirDialog, 1 },
 	 { "wxColourDialog_ShowModal", _wrap_wxColourDialog_ShowModal, 1 },
 	 { "wxColourDialog_GetColourData", _wrap_wxColourDialog_GetColourData, 1 },
 	 { "new_wxColourDialog", _wrap_new_wxColourDialog, 1 },
@@ -3326,6 +3562,8 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxFileDialog",SwigwxFileDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxFileDialog",SwigwxFileDialogTowxEvtHandler);
+	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxDirDialog",SwigwxDirDialogTowxEvtHandler);
+	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxDirDialog",SwigwxDirDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxColourDialog",SwigwxColourDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxColourDialog",SwigwxColourDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxEvtHandler",0);
@@ -3360,6 +3598,8 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxPanel","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxFileDialog",SwigwxFileDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_wxFileDialog",SwigwxFileDialogTowxPanel);
+	 SWIG_RegisterMapping("_wxPanel","_class_wxDirDialog",SwigwxDirDialogTowxPanel);
+	 SWIG_RegisterMapping("_wxPanel","_wxDirDialog",SwigwxDirDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxColourDialog",SwigwxColourDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_wxColourDialog",SwigwxColourDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxPanel",0);
@@ -3380,6 +3620,8 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxDialog","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxDialog);
 	 SWIG_RegisterMapping("_class_wxDialog","_class_wxFileDialog",SwigwxFileDialogTowxDialog);
 	 SWIG_RegisterMapping("_class_wxDialog","_wxFileDialog",SwigwxFileDialogTowxDialog);
+	 SWIG_RegisterMapping("_class_wxDialog","_class_wxDirDialog",SwigwxDirDialogTowxDialog);
+	 SWIG_RegisterMapping("_class_wxDialog","_wxDirDialog",SwigwxDirDialogTowxDialog);
 	 SWIG_RegisterMapping("_class_wxDialog","_class_wxColourDialog",SwigwxColourDialogTowxDialog);
 	 SWIG_RegisterMapping("_class_wxDialog","_wxColourDialog",SwigwxColourDialogTowxDialog);
 	 SWIG_RegisterMapping("_class_wxDialog","_wxDialog",0);
@@ -3394,6 +3636,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPrintDialog","_class_wxPrintDialog",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
+	 SWIG_RegisterMapping("_wxWindowDC","_class_wxWindowDC",0);
 	 SWIG_RegisterMapping("_wxColourDialog","_class_wxColourDialog",0);
 	 SWIG_RegisterMapping("_wxPrintData","_class_wxPrintData",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
@@ -3408,6 +3651,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_unsigned_long","_long",0);
 	 SWIG_RegisterMapping("_class_wxRect","_wxRect",0);
 	 SWIG_RegisterMapping("_class_wxDC","_wxDC",0);
+	 SWIG_RegisterMapping("_class_wxDirDialog","_wxDirDialog",0);
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxAcceleratorEntry","_class_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxPanel","_class_wxMessageDialog",SwigwxMessageDialogTowxPanel);
@@ -3424,6 +3668,8 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxPanel","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxPanel);
 	 SWIG_RegisterMapping("_class_wxPanel","_class_wxFileDialog",SwigwxFileDialogTowxPanel);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxFileDialog",SwigwxFileDialogTowxPanel);
+	 SWIG_RegisterMapping("_class_wxPanel","_class_wxDirDialog",SwigwxDirDialogTowxPanel);
+	 SWIG_RegisterMapping("_class_wxPanel","_wxDirDialog",SwigwxDirDialogTowxPanel);
 	 SWIG_RegisterMapping("_class_wxPanel","_class_wxColourDialog",SwigwxColourDialogTowxPanel);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxColourDialog",SwigwxColourDialogTowxPanel);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxPanel",0);
@@ -3455,6 +3701,8 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxWindow","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxFileDialog",SwigwxFileDialogTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxFileDialog",SwigwxFileDialogTowxWindow);
+	 SWIG_RegisterMapping("_class_wxWindow","_class_wxDirDialog",SwigwxDirDialogTowxWindow);
+	 SWIG_RegisterMapping("_class_wxWindow","_wxDirDialog",SwigwxDirDialogTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxColourDialog",SwigwxColourDialogTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxColourDialog",SwigwxColourDialogTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxWindow",0);
@@ -3468,6 +3716,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxMemoryDC","_class_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_class_wxPrintDialog","_wxPrintDialog",0);
 	 SWIG_RegisterMapping("_wxPaintDC","_class_wxPaintDC",0);
+	 SWIG_RegisterMapping("_class_wxWindowDC","_wxWindowDC",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
 	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
@@ -3492,6 +3741,8 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxDialog","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxDialog);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxFileDialog",SwigwxFileDialogTowxDialog);
 	 SWIG_RegisterMapping("_wxDialog","_wxFileDialog",SwigwxFileDialogTowxDialog);
+	 SWIG_RegisterMapping("_wxDialog","_class_wxDirDialog",SwigwxDirDialogTowxDialog);
+	 SWIG_RegisterMapping("_wxDialog","_wxDirDialog",SwigwxDirDialogTowxDialog);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxColourDialog",SwigwxColourDialogTowxDialog);
 	 SWIG_RegisterMapping("_wxDialog","_wxColourDialog",SwigwxColourDialogTowxDialog);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxDialog",0);
@@ -3527,6 +3778,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxBitmap","_wxBitmap",0);
 	 SWIG_RegisterMapping("_class_wxMemoryDC","_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_wxMenuBar","_class_wxMenuBar",0);
+	 SWIG_RegisterMapping("_wxDirDialog","_class_wxDirDialog",0);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxPrintDialog",SwigwxPrintDialogTowxEvtHandler);
@@ -3541,6 +3793,8 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxFileDialog",SwigwxFileDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxFileDialog",SwigwxFileDialogTowxEvtHandler);
+	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxDirDialog",SwigwxDirDialogTowxEvtHandler);
+	 SWIG_RegisterMapping("_wxEvtHandler","_wxDirDialog",SwigwxDirDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxColourDialog",SwigwxColourDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxColourDialog",SwigwxColourDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxEvtHandler",0);
@@ -3568,6 +3822,8 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxWindow","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxFileDialog",SwigwxFileDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxFileDialog",SwigwxFileDialogTowxWindow);
+	 SWIG_RegisterMapping("_wxWindow","_class_wxDirDialog",SwigwxDirDialogTowxWindow);
+	 SWIG_RegisterMapping("_wxWindow","_wxDirDialog",SwigwxDirDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxColourDialog",SwigwxColourDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxColourDialog",SwigwxColourDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxWindow",0);

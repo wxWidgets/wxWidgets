@@ -2349,6 +2349,86 @@ static PyObject *_wrap_wxBrush_Ok(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxBrush_SetColour(_swigobj,_swigarg0)  (_swigobj->SetColour(_swigarg0))
+static PyObject *_wrap_wxBrush_SetColour(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxBrush * _arg0;
+    wxColour * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxBrush_SetColour",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxBrush_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBrush_SetColour. Expected _wxBrush_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBrush_SetColour. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+    wxBrush_SetColour(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxBrush_SetStipple(_swigobj,_swigarg0)  (_swigobj->SetStipple(_swigarg0))
+static PyObject *_wrap_wxBrush_SetStipple(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxBrush * _arg0;
+    wxBitmap * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxBrush_SetStipple",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxBrush_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBrush_SetStipple. Expected _wxBrush_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBrush_SetStipple. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    wxBrush_SetStipple(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxBrush_SetStyle(_swigobj,_swigarg0)  (_swigobj->SetStyle(_swigarg0))
+static PyObject *_wrap_wxBrush_SetStyle(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxBrush * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxBrush_SetStyle",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxBrush_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBrush_SetStyle. Expected _wxBrush_p.");
+        return NULL;
+        }
+    }
+    wxBrush_SetStyle(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define delete_wxDC(_swigobj) (delete _swigobj)
 static PyObject *_wrap_delete_wxDC(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -3053,8 +3133,9 @@ static PyObject *_wrap_wxDC_GetBackground(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxBrush (wxDC_GetBackground(_arg0));
-    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBrush_p");
+    wxBrush & _result_ref = wxDC_GetBackground(_arg0);
+    _result = (wxBrush *) &_result_ref;
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBrush_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -3076,8 +3157,9 @@ static PyObject *_wrap_wxDC_GetBrush(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxBrush (wxDC_GetBrush(_arg0));
-    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBrush_p");
+    wxBrush & _result_ref = wxDC_GetBrush(_arg0);
+    _result = (wxBrush *) &_result_ref;
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBrush_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -3202,8 +3284,9 @@ static PyObject *_wrap_wxDC_GetFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxFont (wxDC_GetFont(_arg0));
-    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    wxFont & _result_ref = wxDC_GetFont(_arg0);
+    _result = (wxFont *) &_result_ref;
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -3288,8 +3371,9 @@ static PyObject *_wrap_wxDC_GetPen(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxPen (wxDC_GetPen(_arg0));
-    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPen_p");
+    wxPen & _result_ref = wxDC_GetPen(_arg0);
+    _result = (wxPen *) &_result_ref;
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPen_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -4357,6 +4441,37 @@ static PyObject *_wrap_new_wxPaintDC(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+static void *SwigwxWindowDCTowxDC(void *ptr) {
+    wxWindowDC *src;
+    wxDC *dest;
+    src = (wxWindowDC *) ptr;
+    dest = (wxDC *) src;
+    return (void *) dest;
+}
+
+#define new_wxWindowDC(_swigarg0) (new wxWindowDC(_swigarg0))
+static PyObject *_wrap_new_wxWindowDC(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxWindowDC * _result;
+    wxWindow * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:new_wxWindowDC",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxWindowDC. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    _result = (wxWindowDC *)new_wxWindowDC(_arg0);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindowDC_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static void *SwigwxPostScriptDCTowxDC(void *ptr) {
     wxPostScriptDC *src;
     wxDC *dest;
@@ -4576,6 +4691,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "delete_wxPalette", _wrap_delete_wxPalette, 1 },
 	 { "new_wxPalette", _wrap_new_wxPalette, 1 },
 	 { "new_wxPostScriptDC", _wrap_new_wxPostScriptDC, 1 },
+	 { "new_wxWindowDC", _wrap_new_wxWindowDC, 1 },
 	 { "new_wxPaintDC", _wrap_new_wxPaintDC, 1 },
 	 { "new_wxClientDC", _wrap_new_wxClientDC, 1 },
 	 { "wxScreenDC_EndDrawingOnTop", _wrap_wxScreenDC_EndDrawingOnTop, 1 },
@@ -4651,6 +4767,9 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxDC_Blit", _wrap_wxDC_Blit, 1 },
 	 { "wxDC_BeginDrawing", _wrap_wxDC_BeginDrawing, 1 },
 	 { "delete_wxDC", _wrap_delete_wxDC, 1 },
+	 { "wxBrush_SetStyle", _wrap_wxBrush_SetStyle, 1 },
+	 { "wxBrush_SetStipple", _wrap_wxBrush_SetStipple, 1 },
+	 { "wxBrush_SetColour", _wrap_wxBrush_SetColour, 1 },
 	 { "wxBrush_Ok", _wrap_wxBrush_Ok, 1 },
 	 { "wxBrush_GetStyle", _wrap_wxBrush_GetStyle, 1 },
 	 { "wxBrush_GetStipple", _wrap_wxBrush_GetStipple, 1 },
@@ -4789,6 +4908,8 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxPostScriptDC",SwigwxPostScriptDCTowxDC);
 	 SWIG_RegisterMapping("_wxDC","_wxPostScriptDC",SwigwxPostScriptDCTowxDC);
+	 SWIG_RegisterMapping("_wxDC","_class_wxWindowDC",SwigwxWindowDCTowxDC);
+	 SWIG_RegisterMapping("_wxDC","_wxWindowDC",SwigwxWindowDCTowxDC);
 	 SWIG_RegisterMapping("_wxDC","_class_wxPaintDC",SwigwxPaintDCTowxDC);
 	 SWIG_RegisterMapping("_wxDC","_wxPaintDC",SwigwxPaintDCTowxDC);
 	 SWIG_RegisterMapping("_wxDC","_class_wxClientDC",SwigwxClientDCTowxDC);
@@ -4814,6 +4935,7 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_wxBitmap","_wxIcon",SwigwxIconTowxBitmap);
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
+	 SWIG_RegisterMapping("_wxWindowDC","_class_wxWindowDC",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
@@ -4825,6 +4947,8 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_class_wxRect","_wxRect",0);
 	 SWIG_RegisterMapping("_class_wxDC","_class_wxPostScriptDC",SwigwxPostScriptDCTowxDC);
 	 SWIG_RegisterMapping("_class_wxDC","_wxPostScriptDC",SwigwxPostScriptDCTowxDC);
+	 SWIG_RegisterMapping("_class_wxDC","_class_wxWindowDC",SwigwxWindowDCTowxDC);
+	 SWIG_RegisterMapping("_class_wxDC","_wxWindowDC",SwigwxWindowDCTowxDC);
 	 SWIG_RegisterMapping("_class_wxDC","_class_wxPaintDC",SwigwxPaintDCTowxDC);
 	 SWIG_RegisterMapping("_class_wxDC","_wxPaintDC",SwigwxPaintDCTowxDC);
 	 SWIG_RegisterMapping("_class_wxDC","_class_wxClientDC",SwigwxClientDCTowxDC);
@@ -4855,6 +4979,7 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_signed_short","_short",0);
 	 SWIG_RegisterMapping("_wxMemoryDC","_class_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_wxPaintDC","_class_wxPaintDC",0);
+	 SWIG_RegisterMapping("_class_wxWindowDC","_wxWindowDC",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
 	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);

@@ -33,8 +33,10 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.2  1998/12/16 22:12:20  RD
- * Tweaks needed to be able to build wxPython with wxGTK.
+ * Revision 1.3  1998/12/17 17:53:31  RD
+ * wxPython 0.5.2
+ * Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
+ * versions are much closer now!
  *
  ************************************************************************/
 
@@ -1677,7 +1679,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TAB_SEL_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_TAB_SEL_CHANGING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING));
-	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.5.1"));
+	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.5.2"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
@@ -1774,6 +1776,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_uint","_int",0);
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxEvent",0);
+	 SWIG_RegisterMapping("_wxCheckListBox","_class_wxCheckListBox",0);
 	 SWIG_RegisterMapping("_wxGridEvent","_class_wxGridEvent",0);
 	 SWIG_RegisterMapping("_wxRect","_class_wxRect",0);
 	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxCommandEvent",0);
@@ -1786,6 +1789,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPrintDialog","_class_wxPrintDialog",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
+	 SWIG_RegisterMapping("_wxWindowDC","_class_wxWindowDC",0);
 	 SWIG_RegisterMapping("_wxScrollBar","_class_wxScrollBar",0);
 	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
 	 SWIG_RegisterMapping("_wxToolBarTool","_class_wxToolBarTool",0);
@@ -1817,6 +1821,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxPyApp","_class_wxPyApp",0);
 	 SWIG_RegisterMapping("_wxMDIParentFrame","_class_wxMDIParentFrame",0);
 	 SWIG_RegisterMapping("_class_wxTreeEvent","_wxTreeEvent",0);
+	 SWIG_RegisterMapping("_class_wxDirDialog","_wxDirDialog",0);
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxFocusEvent","_class_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_wxMaximizeEvent","_class_wxMaximizeEvent",0);
@@ -1864,6 +1869,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxMemoryDC","_class_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_class_wxPrintDialog","_wxPrintDialog",0);
 	 SWIG_RegisterMapping("_wxPaintDC","_class_wxPaintDC",0);
+	 SWIG_RegisterMapping("_class_wxWindowDC","_wxWindowDC",0);
 	 SWIG_RegisterMapping("_class_wxFocusEvent","_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_class_wxMaximizeEvent","_wxMaximizeEvent",0);
 	 SWIG_RegisterMapping("_wxStatusBar","_class_wxStatusBar",0);
@@ -1941,6 +1947,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxShowEvent","_wxShowEvent",0);
 	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_wxGauge","_class_wxGauge",0);
+	 SWIG_RegisterMapping("_class_wxCheckListBox","_wxCheckListBox",0);
 	 SWIG_RegisterMapping("_class_wxGridEvent","_wxGridEvent",0);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxCommandEvent",0);
 	 SWIG_RegisterMapping("_class_wxClientDC","_wxClientDC",0);
@@ -1953,6 +1960,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxMemoryDC","_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_wxMenuBar","_class_wxMenuBar",0);
 	 SWIG_RegisterMapping("_wxTreeEvent","_class_wxTreeEvent",0);
+	 SWIG_RegisterMapping("_wxDirDialog","_class_wxDirDialog",0);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxPyApp",SwigwxPyAppTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxPyApp",SwigwxPyAppTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxEvtHandler",0);

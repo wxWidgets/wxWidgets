@@ -22,6 +22,10 @@
 #include <wx/checklst.h>
 #endif
 #endif
+
+#ifdef __WXGTK__
+#include <wx/checklst.h>
+#endif
 %}
 
 //----------------------------------------------------------------------
@@ -479,7 +483,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.10  1998/12/17 17:52:19  RD
+// wxPython 0.5.2
+// Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
+// versions are much closer now!
+//
 // Revision 1.9  1998/12/17 14:07:29  RR
+//
 //   Removed minor differences between wxMSW and wxGTK
 //
 // Revision 1.8  1998/12/15 20:41:15  RD

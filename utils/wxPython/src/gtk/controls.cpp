@@ -63,6 +63,10 @@ extern PyObject *SWIG_newvarlink(void);
 #endif
 #endif
 
+#ifdef __WXGTK__
+#include <wx/checklst.h>
+#endif
+
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
@@ -448,6 +452,165 @@ static PyObject *_wrap_wxBitmapButton_GetBitmapLabel(PyObject *self, PyObject *a
     _result = (wxBitmap *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
     _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxBitmapButton_GetBitmapDisabled(_swigobj)  (_swigobj->GetBitmapDisabled())
+static PyObject *_wrap_wxBitmapButton_GetBitmapDisabled(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxBitmapButton * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxBitmapButton_GetBitmapDisabled",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxBitmapButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmapButton_GetBitmapDisabled. Expected _wxBitmapButton_p.");
+        return NULL;
+        }
+    }
+    wxBitmap & _result_ref = wxBitmapButton_GetBitmapDisabled(_arg0);
+    _result = (wxBitmap *) &_result_ref;
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxBitmapButton_GetBitmapFocus(_swigobj)  (_swigobj->GetBitmapFocus())
+static PyObject *_wrap_wxBitmapButton_GetBitmapFocus(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxBitmapButton * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxBitmapButton_GetBitmapFocus",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxBitmapButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmapButton_GetBitmapFocus. Expected _wxBitmapButton_p.");
+        return NULL;
+        }
+    }
+    wxBitmap & _result_ref = wxBitmapButton_GetBitmapFocus(_arg0);
+    _result = (wxBitmap *) &_result_ref;
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxBitmapButton_GetBitmapSelected(_swigobj)  (_swigobj->GetBitmapSelected())
+static PyObject *_wrap_wxBitmapButton_GetBitmapSelected(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxBitmapButton * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxBitmapButton_GetBitmapSelected",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxBitmapButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmapButton_GetBitmapSelected. Expected _wxBitmapButton_p.");
+        return NULL;
+        }
+    }
+    wxBitmap & _result_ref = wxBitmapButton_GetBitmapSelected(_arg0);
+    _result = (wxBitmap *) &_result_ref;
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxBitmapButton_SetBitmapDisabled(_swigobj,_swigarg0)  (_swigobj->SetBitmapDisabled(_swigarg0))
+static PyObject *_wrap_wxBitmapButton_SetBitmapDisabled(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxBitmapButton * _arg0;
+    wxBitmap * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxBitmapButton_SetBitmapDisabled",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxBitmapButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmapButton_SetBitmapDisabled. Expected _wxBitmapButton_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmapButton_SetBitmapDisabled. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    wxBitmapButton_SetBitmapDisabled(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxBitmapButton_SetBitmapFocus(_swigobj,_swigarg0)  (_swigobj->SetBitmapFocus(_swigarg0))
+static PyObject *_wrap_wxBitmapButton_SetBitmapFocus(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxBitmapButton * _arg0;
+    wxBitmap * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxBitmapButton_SetBitmapFocus",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxBitmapButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmapButton_SetBitmapFocus. Expected _wxBitmapButton_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmapButton_SetBitmapFocus. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    wxBitmapButton_SetBitmapFocus(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxBitmapButton_SetBitmapSelected(_swigobj,_swigarg0)  (_swigobj->SetBitmapSelected(_swigarg0))
+static PyObject *_wrap_wxBitmapButton_SetBitmapSelected(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxBitmapButton * _arg0;
+    wxBitmap * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxBitmapButton_SetBitmapSelected",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxBitmapButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmapButton_SetBitmapSelected. Expected _wxBitmapButton_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxBitmapButton_SetBitmapSelected. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    wxBitmapButton_SetBitmapSelected(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -2589,6 +2752,172 @@ static PyObject *_wrap_wxListBox_SetStringSelection(PyObject *self, PyObject *ar
     if (_obj1)
         delete _arg1;
 }
+    return _resultobj;
+}
+
+static void *SwigwxCheckListBoxTowxListBox(void *ptr) {
+    wxCheckListBox *src;
+    wxListBox *dest;
+    src = (wxCheckListBox *) ptr;
+    dest = (wxListBox *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxCheckListBoxTowxControl(void *ptr) {
+    wxCheckListBox *src;
+    wxControl *dest;
+    src = (wxCheckListBox *) ptr;
+    dest = (wxControl *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxCheckListBoxTowxWindow(void *ptr) {
+    wxCheckListBox *src;
+    wxWindow *dest;
+    src = (wxCheckListBox *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxCheckListBoxTowxEvtHandler(void *ptr) {
+    wxCheckListBox *src;
+    wxEvtHandler *dest;
+    src = (wxCheckListBox *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+#define new_wxCheckListBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8) (new wxCheckListBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8))
+static PyObject *_wrap_new_wxCheckListBox(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxCheckListBox * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1;
+    wxPoint * _arg2 = &wxPyDefaultPosition;
+    wxSize * _arg3 = &wxPyDefaultSize;
+    int  _arg4 = 0;
+    wxString * _arg5 = NULL;
+    long  _arg6 = 0;
+    wxValidator * _arg7 = &wxPyDefaultValidator;
+    char * _arg8 = "listBox";
+    char * _argc0 = 0;
+    char * _argc2 = 0;
+    char * _argc3 = 0;
+    PyObject * _obj5 = 0;
+    char * _argc7 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si|ssOlss:new_wxCheckListBox",&_argc0,&_arg1,&_argc2,&_argc3,&_obj5,&_arg6,&_argc7,&_arg8)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxCheckListBox. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxPoint_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxCheckListBox. Expected _wxPoint_p.");
+        return NULL;
+        }
+    }
+    if (_argc3) {
+        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_wxSize_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxCheckListBox. Expected _wxSize_p.");
+        return NULL;
+        }
+    }
+    if (_obj5)
+{
+    _arg5 = wxString_LIST_helper(_obj5);
+    if (_arg5 == NULL) {
+        return NULL;
+    }
+}
+    if (_argc7) {
+        if (SWIG_GetPtr(_argc7,(void **) &_arg7,"_wxValidator_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of new_wxCheckListBox. Expected _wxValidator_p.");
+        return NULL;
+        }
+    }
+{
+    _arg4 = PyList_Size(_obj5);
+}
+    _result = (wxCheckListBox *)new_wxCheckListBox(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7,_arg8);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxCheckListBox_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+{
+    delete [] _arg5;
+}
+    return _resultobj;
+}
+
+#define wxCheckListBox_IsChecked(_swigobj,_swigarg0)  (_swigobj->IsChecked(_swigarg0))
+static PyObject *_wrap_wxCheckListBox_IsChecked(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCheckListBox * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxCheckListBox_IsChecked",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxCheckListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCheckListBox_IsChecked. Expected _wxCheckListBox_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxCheckListBox_IsChecked(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxCheckListBox_Check(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Check(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxCheckListBox_Check(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxCheckListBox * _arg0;
+    int  _arg1;
+    bool  _arg2 = (1);
+    char * _argc0 = 0;
+    int tempbool2;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si|i:wxCheckListBox_Check",&_argc0,&_arg1,&tempbool2)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxCheckListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCheckListBox_Check. Expected _wxCheckListBox_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+    wxCheckListBox_Check(_arg0,_arg1,_arg2);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxCheckListBox_GetItemHeight(_swigobj)  (_swigobj->GetItemHeight())
+static PyObject *_wrap_wxCheckListBox_GetItemHeight(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxCheckListBox * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxCheckListBox_GetItemHeight",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxCheckListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCheckListBox_GetItemHeight. Expected _wxCheckListBox_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxCheckListBox_GetItemHeight(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -4995,6 +5324,10 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxTextCtrl_Copy", _wrap_wxTextCtrl_Copy, 1 },
 	 { "wxTextCtrl_Clear", _wrap_wxTextCtrl_Clear, 1 },
 	 { "new_wxTextCtrl", _wrap_new_wxTextCtrl, 1 },
+	 { "wxCheckListBox_GetItemHeight", _wrap_wxCheckListBox_GetItemHeight, 1 },
+	 { "wxCheckListBox_Check", _wrap_wxCheckListBox_Check, 1 },
+	 { "wxCheckListBox_IsChecked", _wrap_wxCheckListBox_IsChecked, 1 },
+	 { "new_wxCheckListBox", _wrap_new_wxCheckListBox, 1 },
 	 { "wxListBox_SetStringSelection", _wrap_wxListBox_SetStringSelection, 1 },
 	 { "wxListBox_SetString", _wrap_wxListBox_SetString, 1 },
 	 { "wxListBox_SetSelection", _wrap_wxListBox_SetSelection, 1 },
@@ -5063,6 +5396,12 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxCheckBox_GetValue", _wrap_wxCheckBox_GetValue, 1 },
 	 { "new_wxCheckBox", _wrap_new_wxCheckBox, 1 },
 	 { "wxBitmapButton_SetBitmapLabel", _wrap_wxBitmapButton_SetBitmapLabel, 1 },
+	 { "wxBitmapButton_SetBitmapSelected", _wrap_wxBitmapButton_SetBitmapSelected, 1 },
+	 { "wxBitmapButton_SetBitmapFocus", _wrap_wxBitmapButton_SetBitmapFocus, 1 },
+	 { "wxBitmapButton_SetBitmapDisabled", _wrap_wxBitmapButton_SetBitmapDisabled, 1 },
+	 { "wxBitmapButton_GetBitmapSelected", _wrap_wxBitmapButton_GetBitmapSelected, 1 },
+	 { "wxBitmapButton_GetBitmapFocus", _wrap_wxBitmapButton_GetBitmapFocus, 1 },
+	 { "wxBitmapButton_GetBitmapDisabled", _wrap_wxBitmapButton_GetBitmapDisabled, 1 },
 	 { "wxBitmapButton_GetBitmapLabel", _wrap_wxBitmapButton_GetBitmapLabel, 1 },
 	 { "new_wxBitmapButton", _wrap_new_wxBitmapButton, 1 },
 	 { "wxButton_SetDefault", _wrap_wxButton_SetDefault, 1 },
@@ -5106,6 +5445,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxScrollBar",SwigwxScrollBarTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxTextCtrl",SwigwxTextCtrlTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxTextCtrl",SwigwxTextCtrlTowxEvtHandler);
+	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxCheckListBox",SwigwxCheckListBoxTowxEvtHandler);
+	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxCheckListBox",SwigwxCheckListBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxListBox",SwigwxListBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxListBox",SwigwxListBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxStaticText",SwigwxStaticTextTowxEvtHandler);
@@ -5168,6 +5509,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_uint","_int",0);
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxEvent",0);
+	 SWIG_RegisterMapping("_wxCheckListBox","_class_wxCheckListBox",0);
 	 SWIG_RegisterMapping("_wxRect","_class_wxRect",0);
 	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxCommandEvent",0);
 	 SWIG_RegisterMapping("_wxSizeEvent","_class_wxSizeEvent",0);
@@ -5178,6 +5520,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxRadioBox","_class_wxRadioBox",0);
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
+	 SWIG_RegisterMapping("_wxWindowDC","_class_wxWindowDC",0);
 	 SWIG_RegisterMapping("_wxScrollBar","_class_wxScrollBar",0);
 	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
@@ -5212,6 +5555,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxLayoutConstraints","_class_wxLayoutConstraints",0);
 	 SWIG_RegisterMapping("_wxMenu","_class_wxMenu",0);
 	 SWIG_RegisterMapping("_class_wxMoveEvent","_wxMoveEvent",0);
+	 SWIG_RegisterMapping("_wxListBox","_class_wxCheckListBox",SwigwxCheckListBoxTowxListBox);
+	 SWIG_RegisterMapping("_wxListBox","_wxCheckListBox",SwigwxCheckListBoxTowxListBox);
 	 SWIG_RegisterMapping("_wxListBox","_class_wxListBox",0);
 	 SWIG_RegisterMapping("_wxScreenDC","_class_wxScreenDC",0);
 	 SWIG_RegisterMapping("_WXTYPE","_short",0);
@@ -5234,6 +5579,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxWindow","_wxScrollBar",SwigwxScrollBarTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxTextCtrl",SwigwxTextCtrlTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxTextCtrl",SwigwxTextCtrlTowxWindow);
+	 SWIG_RegisterMapping("_class_wxWindow","_class_wxCheckListBox",SwigwxCheckListBoxTowxWindow);
+	 SWIG_RegisterMapping("_class_wxWindow","_wxCheckListBox",SwigwxCheckListBoxTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxListBox",SwigwxListBoxTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxListBox",SwigwxListBoxTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxStaticText",SwigwxStaticTextTowxWindow);
@@ -5268,6 +5615,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_signed_short","_short",0);
 	 SWIG_RegisterMapping("_wxMemoryDC","_class_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_wxPaintDC","_class_wxPaintDC",0);
+	 SWIG_RegisterMapping("_class_wxWindowDC","_wxWindowDC",0);
 	 SWIG_RegisterMapping("_class_wxFocusEvent","_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_class_wxMaximizeEvent","_wxMaximizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
@@ -5290,6 +5638,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxControl","_wxScrollBar",SwigwxScrollBarTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_class_wxTextCtrl",SwigwxTextCtrlTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_wxTextCtrl",SwigwxTextCtrlTowxControl);
+	 SWIG_RegisterMapping("_wxControl","_class_wxCheckListBox",SwigwxCheckListBoxTowxControl);
+	 SWIG_RegisterMapping("_wxControl","_wxCheckListBox",SwigwxCheckListBoxTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_class_wxListBox",SwigwxListBoxTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_wxListBox",SwigwxListBoxTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_class_wxStaticText",SwigwxStaticTextTowxControl);
@@ -5309,6 +5659,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxControl","_class_wxButton",SwigwxButtonTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_wxButton",SwigwxButtonTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_class_wxControl",0);
+	 SWIG_RegisterMapping("_class_wxListBox","_class_wxCheckListBox",SwigwxCheckListBoxTowxListBox);
+	 SWIG_RegisterMapping("_class_wxListBox","_wxCheckListBox",SwigwxCheckListBoxTowxListBox);
 	 SWIG_RegisterMapping("_class_wxListBox","_wxListBox",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
@@ -5364,6 +5716,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxControl","_wxScrollBar",SwigwxScrollBarTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_class_wxTextCtrl",SwigwxTextCtrlTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_wxTextCtrl",SwigwxTextCtrlTowxControl);
+	 SWIG_RegisterMapping("_class_wxControl","_class_wxCheckListBox",SwigwxCheckListBoxTowxControl);
+	 SWIG_RegisterMapping("_class_wxControl","_wxCheckListBox",SwigwxCheckListBoxTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_class_wxListBox",SwigwxListBoxTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_wxListBox",SwigwxListBoxTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_class_wxStaticText",SwigwxStaticTextTowxControl);
@@ -5395,6 +5749,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxShowEvent","_wxShowEvent",0);
 	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_wxGauge","_class_wxGauge",0);
+	 SWIG_RegisterMapping("_class_wxCheckListBox","_wxCheckListBox",0);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxCommandEvent",0);
 	 SWIG_RegisterMapping("_class_wxClientDC","_wxClientDC",0);
 	 SWIG_RegisterMapping("_class_wxSizeEvent","_wxSizeEvent",0);
@@ -5416,6 +5771,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxScrollBar",SwigwxScrollBarTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxTextCtrl",SwigwxTextCtrlTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxTextCtrl",SwigwxTextCtrlTowxEvtHandler);
+	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxCheckListBox",SwigwxCheckListBoxTowxEvtHandler);
+	 SWIG_RegisterMapping("_wxEvtHandler","_wxCheckListBox",SwigwxCheckListBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxListBox",SwigwxListBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxListBox",SwigwxListBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxStaticText",SwigwxStaticTextTowxEvtHandler);
@@ -5460,6 +5817,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxWindow","_wxScrollBar",SwigwxScrollBarTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxTextCtrl",SwigwxTextCtrlTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxTextCtrl",SwigwxTextCtrlTowxWindow);
+	 SWIG_RegisterMapping("_wxWindow","_class_wxCheckListBox",SwigwxCheckListBoxTowxWindow);
+	 SWIG_RegisterMapping("_wxWindow","_wxCheckListBox",SwigwxCheckListBoxTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxListBox",SwigwxListBoxTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxListBox",SwigwxListBoxTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxStaticText",SwigwxStaticTextTowxWindow);

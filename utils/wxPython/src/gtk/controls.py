@@ -63,6 +63,27 @@ class wxBitmapButtonPtr(wxButtonPtr):
         val = controlsc.wxBitmapButton_GetBitmapLabel(self.this)
         val = wxBitmapPtr(val)
         return val
+    def GetBitmapDisabled(self):
+        val = controlsc.wxBitmapButton_GetBitmapDisabled(self.this)
+        val = wxBitmapPtr(val)
+        return val
+    def GetBitmapFocus(self):
+        val = controlsc.wxBitmapButton_GetBitmapFocus(self.this)
+        val = wxBitmapPtr(val)
+        return val
+    def GetBitmapSelected(self):
+        val = controlsc.wxBitmapButton_GetBitmapSelected(self.this)
+        val = wxBitmapPtr(val)
+        return val
+    def SetBitmapDisabled(self,arg0):
+        val = controlsc.wxBitmapButton_SetBitmapDisabled(self.this,arg0.this)
+        return val
+    def SetBitmapFocus(self,arg0):
+        val = controlsc.wxBitmapButton_SetBitmapFocus(self.this,arg0.this)
+        return val
+    def SetBitmapSelected(self,arg0):
+        val = controlsc.wxBitmapButton_SetBitmapSelected(self.this,arg0.this)
+        return val
     def SetBitmapLabel(self,arg0):
         val = controlsc.wxBitmapButton_SetBitmapLabel(self.this,arg0.this)
         return val
@@ -403,6 +424,36 @@ class wxListBox(wxListBoxPtr):
         except: pass
         args = tuple(argl)
         self.this = apply(controlsc.new_wxListBox,(arg0.this,arg1,)+args)
+        self.thisown = 1
+        wx._StdWindowCallbacks(self)
+
+
+
+
+class wxCheckListBoxPtr(wxListBoxPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def IsChecked(self,arg0):
+        val = controlsc.wxCheckListBox_IsChecked(self.this,arg0)
+        return val
+    def Check(self,arg0,*args):
+        val = apply(controlsc.wxCheckListBox_Check,(self.this,arg0,)+args)
+        return val
+    def GetItemHeight(self):
+        val = controlsc.wxCheckListBox_GetItemHeight(self.this)
+        return val
+    def __repr__(self):
+        return "<C wxCheckListBox instance>"
+class wxCheckListBox(wxCheckListBoxPtr):
+    def __init__(self,arg0,arg1,*args) :
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        try: argl[1] = argl[1].this
+        except: pass
+        args = tuple(argl)
+        self.this = apply(controlsc.new_wxCheckListBox,(arg0.this,arg1,)+args)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 

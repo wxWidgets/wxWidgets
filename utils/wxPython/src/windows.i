@@ -15,12 +15,7 @@
 
 %{
 #include "helpers.h"
-
 #include <wx/menuitem.h>
-
-#ifdef __WXMSW__
-#include <wx/minifram.h>  // needed ?
-#endif
 %}
 
 //----------------------------------------------------------------------
@@ -315,8 +310,8 @@ public:
     void Enable(int id, bool enable);
     bool Enabled(int id);
     int FindMenuItem(const wxString& menuString, const wxString& itemString);
-    wxMenuItem * FindItemForId(int id);
 #ifdef __WXMSW__
+    wxMenuItem * FindItemForId(int id);
     void EnableTop(int pos, bool enable);
     wxString GetHelpString(int id);
     wxString GetLabel(int id);
@@ -346,7 +341,7 @@ public:
     void SetHelp(const wxString& strHelp);
     void Enable(bool bDoEnable = TRUE);
     void Check(bool bDoCheck = TRUE);
-    
+
 #ifdef __WXMSW__
     void DeleteSubMenu();
 #endif
@@ -356,7 +351,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.10  1998/12/17 17:52:20  RD
+// wxPython 0.5.2
+// Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
+// versions are much closer now!
+//
 // Revision 1.9  1998/12/17 14:07:46  RR
+//
 //   Removed minor differences between wxMSW and wxGTK
 //
 // Revision 1.8  1998/12/16 22:10:56  RD

@@ -52,7 +52,6 @@ class wxColourDialogPtr(wxDialogPtr):
     def GetColourData(self):
         val = cmndlgsc.wxColourDialog_GetColourData(self.this)
         val = wxColourDataPtr(val)
-        val.thisown = 1
         return val
     def ShowModal(self):
         val = cmndlgsc.wxColourDialog_ShowModal(self.this)
@@ -66,6 +65,43 @@ class wxColourDialog(wxColourDialogPtr):
         except: pass
         args = tuple(argl)
         self.this = apply(cmndlgsc.new_wxColourDialog,(arg0.this,)+args)
+        self.thisown = 1
+        wx._StdDialogCallbacks(self)
+
+
+
+
+class wxDirDialogPtr(wxDialogPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetPath(self):
+        val = cmndlgsc.wxDirDialog_GetPath(self.this)
+        return val
+    def GetMessage(self):
+        val = cmndlgsc.wxDirDialog_GetMessage(self.this)
+        return val
+    def GetStyle(self):
+        val = cmndlgsc.wxDirDialog_GetStyle(self.this)
+        return val
+    def SetMessage(self,arg0):
+        val = cmndlgsc.wxDirDialog_SetMessage(self.this,arg0)
+        return val
+    def SetPath(self,arg0):
+        val = cmndlgsc.wxDirDialog_SetPath(self.this,arg0)
+        return val
+    def ShowModal(self):
+        val = cmndlgsc.wxDirDialog_ShowModal(self.this)
+        return val
+    def __repr__(self):
+        return "<C wxDirDialog instance>"
+class wxDirDialog(wxDirDialogPtr):
+    def __init__(self,arg0,*args) :
+        argl = map(None,args)
+        try: argl[3] = argl[3].this
+        except: pass
+        args = tuple(argl)
+        self.this = apply(cmndlgsc.new_wxDirDialog,(arg0.this,)+args)
         self.thisown = 1
         wx._StdDialogCallbacks(self)
 

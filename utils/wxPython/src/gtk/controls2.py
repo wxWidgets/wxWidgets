@@ -150,6 +150,12 @@ class wxListCtrlPtr(wxControlPtr):
     def DeleteColumn(self,arg0):
         val = controls2c.wxListCtrl_DeleteColumn(self.this,arg0)
         return val
+    def DeleteAllColumns(self):
+        val = controls2c.wxListCtrl_DeleteAllColumns(self.this)
+        return val
+    def ClearAll(self):
+        val = controls2c.wxListCtrl_ClearAll(self.this)
+        return val
     def EnsureVisible(self,arg0):
         val = controls2c.wxListCtrl_EnsureVisible(self.this,arg0)
         return val
@@ -561,6 +567,11 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def IsBold(self,arg0):
         val = controls2c.wxTreeCtrl_IsBold(self.this,arg0.this)
+        return val
+    def HitTest(self,arg0):
+        val = controls2c.wxTreeCtrl_HitTest(self.this,arg0.this)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
         return val
     def __repr__(self):
         return "<C wxTreeCtrl instance>"

@@ -1183,8 +1183,10 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.2  1998/12/16 22:12:22  RD
-# Tweaks needed to be able to build wxPython with wxGTK.
+# Revision 1.3  1998/12/17 17:53:33  RD
+# wxPython 0.5.2
+# Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
+# versions are much closer now!
 #
 # Revision 1.7  1998/11/25 08:45:21  RD
 #
