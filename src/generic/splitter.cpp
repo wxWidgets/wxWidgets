@@ -152,40 +152,22 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         {
             CaptureMouse();
 
-            // Required for X to specify that
-            // that we wish to draw on top of all windows
-            // - and we optimise by specifying the area
-            // for creating the overlap window.
-            wxScreenDC::StartDrawingOnTop(this);
-
-            // We don't say we're dragging yet; we leave that
-            // decision for the Dragging() branch, to ensure
-            // the user has dragged a little bit.
-            m_dragMode = wxSPLIT_DRAG_LEFT_DOWN;
-            m_firstX = x;
-            m_firstY = y;
+            m_dragMode = wxSPLIT_DRAG_DRAGGING;
+	    
+            DrawSashTracker(x, y);
+            m_oldX = x;
+            m_oldY = y;
+	    return;
         }
-    }
-    else if ( event.LeftUp() && m_dragMode == wxSPLIT_DRAG_LEFT_DOWN )
-    {
-        // Wasn't a proper drag
-        ReleaseMouse();
-        wxScreenDC::EndDrawingOnTop();
-        m_dragMode = wxSPLIT_DRAG_NONE;
-
-        SetCursor(*wxSTANDARD_CURSOR);
     }
     else if (event.LeftUp() && m_dragMode == wxSPLIT_DRAG_DRAGGING)
     {
         // We can stop dragging now and see what we've got.
         m_dragMode = wxSPLIT_DRAG_NONE;
         ReleaseMouse();
+	
         // Erase old tracker
         DrawSashTracker(m_oldX, m_oldY);
-
-        // End drawing on top (frees the window used for drawing
-        // over the screen)
-        wxScreenDC::EndDrawingOnTop();
 
         int w, h;
         GetClientSize(&w, &h);
@@ -217,7 +199,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 m_sashPosition = x;
             }
         }
-        else
+        else  // m_splitMode == wxSPLIT_VERTICAL
         {
             if ( !OnSashPositionChange(y) )
                 return;
@@ -244,9 +226,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             {
                 m_sashPosition = y;
             }
-        }
+        } // m_splitMode == wxSPLIT_VERTICAL
         SizeWindows();
-    }
+    }  // left up && dragging
     else if (event.Moving() && !event.Dragging())
     {
         // Just change the cursor if required
@@ -266,46 +248,20 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             SetCursor(*wxSTANDARD_CURSOR);
         }
     }
-    else if ( (event.Dragging() && (m_dragMode == wxSPLIT_DRAG_DRAGGING)) ||
-              (event.Dragging() && SashHitTest(x, y, 4)) )
+    else if (event.Dragging() && (m_dragMode == wxSPLIT_DRAG_DRAGGING)) 
     {
-         if ( m_splitMode == wxSPLIT_VERTICAL )
-         {
-            SetCursor(*m_sashCursorWE);
-         }
-         else
-         {
-            SetCursor(*m_sashCursorNS);
-         }
+        // Erase old tracker
+        DrawSashTracker(m_oldX, m_oldY);
 
-        // Detect that this is really a drag: we've moved more than 1 pixel either way
-        if ((m_dragMode == wxSPLIT_DRAG_LEFT_DOWN) &&
-//                (abs((int)x - m_firstX) > 1 || abs((int)y - m_firstY) > 1) )
-                (abs((int)x - m_firstX) > 0 || abs((int)y - m_firstY) > 1) )
-        {
-            m_dragMode = wxSPLIT_DRAG_DRAGGING;
-            DrawSashTracker(x, y);
-        }
-        else
-        {
-          if ( m_dragMode == wxSPLIT_DRAG_DRAGGING )
-          {
-            // Erase old tracker
-            DrawSashTracker(m_oldX, m_oldY);
-
-            // Draw new one
-            DrawSashTracker(x, y);
-          }
-        }
+        // Draw new one
+        DrawSashTracker(x, y);
+	    
         m_oldX = x;
         m_oldY = y;
     }
     else if ( event.LeftDClick() )
     {
         OnDoubleClickSash(x, y);
-    }
-    else
-    {
     }
 }
 

@@ -400,7 +400,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
         while (node)
         {
             wxWindow *child = (wxWindow*)node->Data();
-            if ((child->m_x <= event.m_x) &&
+            if ((child->m_wxwindow == (GtkWidget*) NULL) &&
+	        (child->m_x <= event.m_x) &&
                 (child->m_y <= event.m_y) &&
                 (child->m_x+child->m_width  >= event.m_x) &&
                 (child->m_y+child->m_height >= event.m_y))
@@ -473,7 +474,8 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
         while (node)
         {
             wxWindow *child = (wxWindow*)node->Data();
-            if ((child->m_x <= event.m_x) &&
+            if ((child->m_wxwindow == (GtkWidget*) NULL) &&
+	        (child->m_x <= event.m_x) &&
                 (child->m_y <= event.m_y) &&
                 (child->m_x+child->m_width  >= event.m_x) &&
                 (child->m_y+child->m_height >= event.m_y))
@@ -513,7 +515,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
       printf( win->GetClassInfo()->GetClassName() );
     printf( ".\n" );
-*/
+*/    
 
     wxMouseEvent event( wxEVT_MOTION );
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
@@ -536,7 +538,8 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
         while (node)
         {
             wxWindow *child = (wxWindow*)node->Data();
-            if ((child->m_x <= event.m_x) &&
+            if ((child->m_wxwindow == (GtkWidget*) NULL) &&
+	        (child->m_x <= event.m_x) &&
                 (child->m_y <= event.m_y) &&
                 (child->m_x+child->m_width  >= event.m_x) &&
                 (child->m_y+child->m_height >= event.m_y))
@@ -654,7 +657,24 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     wxMouseEvent event( wxEVT_ENTER_WINDOW );
     event.SetEventObject( win );
+    
+    int x = 0;
+    int y = 0;
+    GdkModifierType state = (GdkModifierType)0;
+    
+    gdk_window_get_pointer( widget->window, &x, &y, &state );
+    
+    event.m_shiftDown = (state & GDK_SHIFT_MASK);
+    event.m_controlDown = (state & GDK_CONTROL_MASK);
+    event.m_altDown = (state & GDK_MOD1_MASK);
+    event.m_metaDown = (state & GDK_MOD2_MASK);
+    event.m_leftDown = (state & GDK_BUTTON1_MASK);
+    event.m_middleDown = (state & GDK_BUTTON2_MASK);
+    event.m_rightDown = (state & GDK_BUTTON3_MASK);
 
+    event.m_x = (long)x;
+    event.m_y = (long)y;
+    
     if (win->GetEventHandler()->ProcessEvent( event ))
        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "enter_notify_event" );
 
@@ -686,6 +706,23 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
     event.SetEventObject( win );
 
+    int x = 0;
+    int y = 0;
+    GdkModifierType state = (GdkModifierType)0;
+    
+    gdk_window_get_pointer( widget->window, &x, &y, &state );
+    
+    event.m_shiftDown = (state & GDK_SHIFT_MASK);
+    event.m_controlDown = (state & GDK_CONTROL_MASK);
+    event.m_altDown = (state & GDK_MOD1_MASK);
+    event.m_metaDown = (state & GDK_MOD2_MASK);
+    event.m_leftDown = (state & GDK_BUTTON1_MASK);
+    event.m_middleDown = (state & GDK_BUTTON2_MASK);
+    event.m_rightDown = (state & GDK_BUTTON3_MASK);
+
+    event.m_x = (long)x;
+    event.m_y = (long)y;
+    
     if (win->GetEventHandler()->ProcessEvent( event ))
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "leave_notify_event" );
 
