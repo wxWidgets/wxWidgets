@@ -36,7 +36,7 @@
 #include <string.h>
 #include <fcntl.h>
 
-#ifdef __WINCE__
+#ifdef __WXWINCE__
 
 int wxOpen(const wxChar *filename, int oflag, int WXUNUSED(pmode))
 {
@@ -211,4 +211,4 @@ int wxFsync(int WXUNUSED(fd))
     return 0;
 }
 
-#endif //__WINCE__
+#endif //__WXWINCE__

@@ -129,7 +129,7 @@ enum wxSeekMode
 
 // Wrappers around Win32 api functions like CreateFile, ReadFile and such
 // Implemented in filefnwce.cpp
-#if defined( __WINCE__)
+#if defined( __WXWINCE__)
     typedef __int64 wxFileOffset;
     #define wxFileOffsetFmtSpec _("I64")
     int wxOpen(const wxChar *filename, int oflag, int WXUNUSED(pmode));
