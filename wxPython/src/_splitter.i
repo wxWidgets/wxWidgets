@@ -274,12 +274,12 @@ showing the top-level window.", "");
 
     DocDeclStr(
         void , SetSashSize(int width),
-        "Sets the sash size", "");
+        "Sets the sash size.  Currently a NOP.", "");
     
 
     DocDeclStr(
         void , SetBorderSize(int width),
-        "Sets the border size", "");
+        "Sets the border size. Currently a NOP.", "");
     
 
     DocDeclStr(
