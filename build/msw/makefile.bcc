@@ -732,7 +732,8 @@ WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_pngwtran.obj \
 	$(OBJS)\wxpng_pngwutil.obj
 WXREGEX_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -w-8004 -w-8012 -w-8057 -w-8066 $(CPPFLAGS) $(CFLAGS)
+	$(__OPTIMIZEFLAG) -tWM -I..\..\include -I$(SETUPHDIR) -w-8004 -w-8012 -w-8057 \
+	-w-8066 $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_regcomp.obj \
 	$(OBJS)\wxregex_regexec.obj \
