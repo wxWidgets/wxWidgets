@@ -72,8 +72,7 @@ WX_DEFINE_LIST(wxHtmlProcessorList);
 //-----------------------------------------------------------------------------
 
 
-wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-                long style, const wxString& name) : wxScrolledWindow(parent, id, pos, size, style | wxVSCROLL | wxHSCROLL, name)
+void wxHtmlWindow::Init()
 {
     m_tmpMouseMoved = FALSE;
     m_tmpLastLink = NULL;
@@ -87,15 +86,26 @@ wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
     m_Cell = NULL;
     m_Parser = new wxHtmlWinParser(this);
     m_Parser->SetFS(m_FS);
-    SetBorders(10);
     m_HistoryPos = -1;
     m_HistoryOn = TRUE;
     m_History = new wxHtmlHistoryArray;
     m_Processors = NULL;
-    m_Style = style;
-    SetPage(wxT("<html><body></body></html>"));
+    m_Style = 0;
+    SetBorders(10);
 }
 
+bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id, 
+                          const wxPoint& pos, const wxSize& size,
+                          long style, const wxString& name) 
+{
+    if (!wxScrolledWindow::Create(parent, id, pos, size, 
+                                  style | wxVSCROLL | wxHSCROLL, name))
+        return FALSE;
+
+    m_Style = style;
+    SetPage(wxT("<html><body></body></html>"));
+    return TRUE;
+}
 
 
 wxHtmlWindow::~wxHtmlWindow()

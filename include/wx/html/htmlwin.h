@@ -49,13 +49,23 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
     friend class wxHtmlWinModule;
 
 public:
-    wxHtmlWindow() : wxScrolledWindow() {}
+    wxHtmlWindow() { Init(); }
     wxHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxHW_SCROLLBAR_AUTO,
-                 const wxString& name = wxT("htmlWindow"));
+                 const wxString& name = wxT("htmlWindow"))
+    {
+        Init();
+        Create(parent, id, pos, size, style, name);
+    }
     ~wxHtmlWindow();
+
+    bool Create(wxWindow *parent, wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxHW_SCROLLBAR_AUTO,
+                const wxString& name = wxT("htmlWindow"));
 
     // Set HTML page and display it. !! source is HTML document itself,
     // it is NOT address/filename of HTML document. If you want to
@@ -153,6 +163,8 @@ public:
     virtual bool AcceptsFocusFromKeyboard() const { return FALSE; }
 
 protected:
+    void Init();
+
     // Scrolls to anchor of this name. (Anchor is #news
     // or #features etc. it is part of address sometimes:
     // http://www.ms.mff.cuni.cz/~vsla8348/wxhtml/index.html#news)
